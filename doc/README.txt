@@ -154,5 +154,5 @@ who wrote plugins, and the users for their feedback and comments.
 
 Have fun!
 
-Slava Pestov
+-- Slava Pestov
 <sp@gjt.org>

@@ -158,6 +158,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		{
 			public void run()
 			{
+				System.err.println(Buffer.this + ": load cleanup");
+
 				undo = new UndoManager();
 				setFlag(LOADING,false);
 
@@ -1823,6 +1825,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.155  2000/06/06 04:38:08  sp
+ * WorkThread's AWT request stuff reworked
+ *
  * Revision 1.154  2000/06/05 08:22:25  sp
  * bug fixes
  *

@@ -250,6 +250,7 @@ public class SendDialog extends EnhancedDialog implements ActionListener
 			}
 
 			out.write("From: " + from);
+			out.write(CRLF);
 			out.write("To: " + to);
 			out.write(CRLF);
 			out.write("Subject: " + subject);

@@ -67,7 +67,7 @@ public class home extends EditAction
 		int[] positions = { firstIndent, firstOfLine, firstVisible };
 		int count;
 		if(!jEdit.getBooleanProperty("view.homeEnd"))
-			count = 2;
+			count = 1;
 		else if(inputHandler.getLastAction() == this)
 		{
 			count = Math.min(positions.length,inputHandler

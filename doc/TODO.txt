@@ -1,8 +1,6 @@
 JEDIT TO DO
 
-Update plugin manager screenshots in docs
-'installed but not loaded' list doesn't work -- newly installed plugins
-don't appear
+- Update plugin manager screenshots in docs
 
 Later:
 

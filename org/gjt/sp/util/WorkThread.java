@@ -45,16 +45,18 @@ public class WorkThread extends Thread
 	{
 		// if inAWT is set and there are no requests
 		// pending, execute it immediately
-		if(requestCount == 0 && inAWT && SwingUtilities.isEventDispatchThread())
+		if(inAWT && requestCount == 0 && awtRequestCount == 0
+			&& SwingUtilities.isEventDispatchThread())
 		{
-			Log.log(Log.DEBUG,this,"AWT immediate: " + run);
+			Log.log(Log.ERROR,this,"AWT immediate: " + run);
 			run.run();
 			return;
 		}
 
+		Request request = new Request(run,inAWT);
+
 		synchronized(lock)
 		{
-			Request request = new Request(run,inAWT);
 			if(firstRequest == null && lastRequest == null)
 				firstRequest = lastRequest = request;
 			else
@@ -87,6 +89,17 @@ public class WorkThread extends Thread
 					Log.log(Log.ERROR,this,ie);
 				}
 			}
+
+			// FIXME: when called from a non-AWT thread,
+			// waitForRequests() will return before all
+			// AWT runnables have completed
+			if(SwingUtilities.isEventDispatchThread())
+			{
+				Log.log(Log.ERROR,this,"waitForRequests() running"
+					+ " remaining AWT runnables");
+				// do any queued AWT runnables
+				doAWTRequests();
+			}
 		}
 	}
 
@@ -100,7 +113,7 @@ public class WorkThread extends Thread
 
 	public void run()
 	{
-		Log.log(Log.DEBUG,this,"Work request thread starting");
+		Log.log(Log.ERROR,this,"Work request thread starting");
 
 		for(;;)
 		{
@@ -113,6 +126,12 @@ public class WorkThread extends Thread
 	private Request firstRequest;
 	private Request lastRequest;
 	private int requestCount;
+
+	// AWT thread magic
+	private boolean awtRunnerQueued;
+	private Request firstAWTRequest;
+	private Request lastAWTRequest;
+	private int awtRequestCount;
 
 	private void doRequests()
 	{
@@ -138,39 +157,43 @@ public class WorkThread extends Thread
 		}
 	}
 
+	private void doAWTRequests()
+	{
+		Log.log(Log.ERROR,this,"Running requests in AWT thread");
+
+		while(firstAWTRequest != null)
+		{
+			doAWTRequest(getNextAWTRequest());
+		}
+
+		Log.log(Log.ERROR,this,"AWT requests done");
+	}
+
 	private void doRequest(final Request request)
 	{
 		if(request.inAWT)
 		{
-			// this hack ensures that requestCount is zero only
-			// when there are really no requests running
-			Runnable r = new Runnable()
+			Log.log(Log.ERROR,this,"Adding to queue and starting AWT runner: "
+				+ request.run);
+
+			synchronized(lock)
 			{
-				public void run()
+				if(firstAWTRequest == null && lastAWTRequest == null)
+					firstAWTRequest = lastAWTRequest = request;
+				else
 				{
-					Log.log(Log.DEBUG,WorkThread.class,
-						"Running in AWT thread: "
-						+ request.run);
-
-					try
-					{
-						request.run.run();
-					}
-					catch(Throwable t)
-					{
-						Log.log(Log.ERROR,WorkThread.class,"Exception "
-							+ "in AWT thread:");
-						Log.log(Log.ERROR,WorkThread.class,t);
-					}
-
-					requestCount--;
+					lastAWTRequest.next = request;
+					lastAWTRequest = request;
 				}
-			};
-			SwingUtilities.invokeLater(r);
+
+				awtRequestCount++;
+
+				queueAWTRunner();
+			}
 		}
 		else
 		{
-			Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: "
+			Log.log(Log.ERROR,WorkThread.class,"Running in work thread: "
 				+ request.run);
 			try
 			{
@@ -186,6 +209,42 @@ public class WorkThread extends Thread
 		}
 	}
 
+	public void doAWTRequest(Request request)
+	{
+		Log.log(Log.ERROR,this,"Running in AWT thread: " + request.run);
+
+		try
+		{
+			request.run.run();
+		}
+		catch(Throwable t)
+		{
+			Log.log(Log.ERROR,WorkThread.class,"Exception "
+				+ "in AWT thread:");
+			Log.log(Log.ERROR,WorkThread.class,t);
+		}
+
+		awtRequestCount--;
+
+		// since this is also counted as a normal request...
+		requestCount--;
+	}
+
+	private void queueAWTRunner()
+	{
+		synchronized(lock)
+		{
+			if(awtRunnerQueued)
+				Log.log(Log.ERROR,this,"AWT runner already queued");
+			else
+			{
+				awtRunnerQueued = true;
+				SwingUtilities.invokeLater(new RunRequestsInAWTThread());
+				Log.log(Log.ERROR,this,"AWT runner queued");
+			}
+		}
+	}
+
 	private Request getNextRequest()
 	{
 		synchronized(lock)
@@ -196,6 +255,17 @@ public class WorkThread extends Thread
 				lastRequest = null;
 			return request;
 		}
+	}
+
+	private Request getNextAWTRequest()
+	{
+		// no need to sync on lock since our only caller already
+		// does it
+		Request request = firstAWTRequest;
+		firstAWTRequest = firstAWTRequest.next;
+		if(firstAWTRequest == null)
+			lastAWTRequest = null;
+		return request;
 	}
 
 	class Request
@@ -211,11 +281,29 @@ public class WorkThread extends Thread
 			this.inAWT = inAWT;
 		}
 	}
+
+	class RunRequestsInAWTThread implements Runnable
+	{
+		public void run()
+		{
+			Log.log(Log.ERROR,this,"Running");
+
+			awtRunnerQueued = false;
+
+			if(awtRequestCount == 0)
+				Log.log(Log.ERROR,this,"Oops");
+			else
+				doAWTRequests();
+		}
+	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/06/06 04:38:09  sp
+ * WorkThread's AWT request stuff reworked
+ *
  * Revision 1.6  2000/05/21 06:06:43  sp
  * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
  *

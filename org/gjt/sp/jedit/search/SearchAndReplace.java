@@ -387,6 +387,8 @@ loop:			for(;;)
 				// Wait for buffer to finish loading
 				VFSManager.waitForRequests();
 
+				System.err.println(buffer + ": replace-all");
+
 				// Leave buffer in a consistent state if
 				// an error occurs
 				try
@@ -541,6 +543,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/06/06 04:38:09  sp
+ * WorkThread's AWT request stuff reworked
+ *
  * Revision 1.32  2000/05/04 10:37:04  sp
  * Wasting time
  *

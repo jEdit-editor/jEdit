@@ -9,6 +9,12 @@ JEDIT 2.5 VERSION HISTORY
 - By not specifying a 'To:' field, the 'Send' command could trigger anti-spam
   filters
 - 'Latest Version' plugin could throw a NoSuchMethodError
+- Home/end keys would behave incorrectly if smart home/end was disabled
+  (since 2.5pre5)
+- End key could throw an exception (since 2.5pre5)
+- Plugin manager didn't show newly installed JARs in list (since 2.5pre3)
+- WorkThread.waitForRequests() had a subtle bug, which only manifested
+  when doing a replace all with the directory file set (since 2.5pre1)
 
 * Version 2.5pre5
 

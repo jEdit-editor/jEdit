@@ -58,10 +58,7 @@ public class end extends EditAction
 			+ textArea.getVisibleLines();
 
 		if(lastVisibleLine >= textArea.getLineCount())
-		{
-			lastVisibleLine = Math.min(textArea.getLineCount(),
-				lastVisibleLine);
-		}
+			lastVisibleLine = textArea.getLineCount() - 1;
 		else if(lastVisibleLine <= textArea.getElectricScroll())
 			lastVisibleLine = 0;
 		else
@@ -72,7 +69,7 @@ public class end extends EditAction
 		int[] positions = { lastIndent, lastOfLine, lastVisible };
 		int count;
 		if(!jEdit.getBooleanProperty("view.homeEnd"))
-			count = 2;
+			count = 1;
 		else if(inputHandler.getLastAction() == this)
 		{
 			count = Math.min(positions.length,inputHandler
