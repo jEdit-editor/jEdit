@@ -115,14 +115,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 		/* Session management */
 		saveDesktop = new JCheckBox(jEdit.getProperty(
 			"options.general.saveDesktop"));
-		saveDesktop.getModel().setSelected(jEdit.getBooleanProperty(
-			"saveDesktop"));
+		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
 		addComponent(saveDesktop);
 
 		/* Show buffer tabs */
 		showBufferTabs = new JCheckBox(jEdit.getProperty(
 			"options.general.showBufferTabs"));
-		showBufferTabs.getModel().setSelected(jEdit.getBooleanProperty(
+		showBufferTabs.setSelected(jEdit.getBooleanProperty(
 			"view.showBufferTabs"));
 		addComponent(showBufferTabs);
 
@@ -140,36 +139,33 @@ public class GeneralOptionPane extends AbstractOptionPane
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.general.showFullPath"));
-		showFullPath.getModel().setSelected(jEdit.getBooleanProperty(
+		showFullPath.setSelected(jEdit.getBooleanProperty(
 			"view.showFullPath"));
 		addComponent(showFullPath);
 
 		/* Sort buffer list */
 		sortBuffers = new JCheckBox(jEdit.getProperty(
 			"options.general.sortBuffers"));
-		sortBuffers.getModel().setSelected(jEdit.getBooleanProperty(
-			"sortBuffers"));
+		sortBuffers.setSelected(jEdit.getBooleanProperty("sortBuffers"));
 		addComponent(sortBuffers);
 
 		/* Sort buffers by names */
 		sortByName = new JCheckBox(jEdit.getProperty(
 			"options.general.sortByName"));
-		sortByName.getModel().setSelected(jEdit.getBooleanProperty(
-			"sortByName"));
+		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
 		addComponent(sortByName);
 
 		/* Check mod status on focus */
 		checkModStatus = new JCheckBox(jEdit.getProperty(
 			"options.general.checkModStatus"));
-		checkModStatus.getModel().setSelected(jEdit.getBooleanProperty(
+		checkModStatus.setSelected(jEdit.getBooleanProperty(
 			"view.checkModStatus"));
 		addComponent(checkModStatus);
 
 		/* Tokenize files on load */
 		tokenize = new JCheckBox(jEdit.getProperty(
 			"options.general.tokenize"));
-		tokenize.getModel().setSelected(jEdit.getBooleanProperty(
-			"buffer.tokenize"));
+		tokenize.setSelected(jEdit.getBooleanProperty("buffer.tokenize"));
 		addComponent(tokenize);
 	}
 
@@ -177,8 +173,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	{
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
-		jEdit.setBooleanProperty("saveDesktop",saveDesktop.getModel()
-			.isSelected());
+		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
 		jEdit.setProperty("autosave",autosave.getText());
@@ -202,20 +197,17 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
-		jEdit.setBooleanProperty("view.showBufferTabs",showBufferTabs.getModel()
+		jEdit.setBooleanProperty("view.showBufferTabs",showBufferTabs
 			.isSelected());
 		jEdit.setProperty("view.bufferTabsPos",String.valueOf(
 			bufferTabsPos.getSelectedIndex() + 1));
-		jEdit.setBooleanProperty("view.showFullPath",showFullPath.getModel()
+		jEdit.setBooleanProperty("view.showFullPath",showFullPath
 			.isSelected());
-		jEdit.setBooleanProperty("sortBuffers",sortBuffers.getModel()
+		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
+		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
+		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
 			.isSelected());
-		jEdit.setBooleanProperty("sortByName",sortByName.getModel()
-			.isSelected());
-		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus.getModel()
-			.isSelected());
-		jEdit.setBooleanProperty("buffer.tokenize",tokenize.getModel()
-			.isSelected());
+		jEdit.setBooleanProperty("buffer.tokenize",tokenize.isSelected());
 	}
 
 	// private members

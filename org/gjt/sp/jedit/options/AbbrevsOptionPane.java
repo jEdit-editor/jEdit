@@ -87,7 +87,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 	protected void _save()
 	{
-		Abbrevs.setExpandOnInput(expandOnInput.getModel().isSelected());
+		Abbrevs.setExpandOnInput(expandOnInput.isSelected());
 
 		Abbrevs.setGlobalAbbrevs(globalAbbrevs.toHashtable());
 
@@ -324,6 +324,9 @@ class Abbrev
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.4  2000/04/16 08:56:24  sp
  * Option pane updates
  *

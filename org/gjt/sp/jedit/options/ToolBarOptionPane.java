@@ -52,14 +52,13 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		/* Show toolbar */
 		showToolbar = new JCheckBox(jEdit.getProperty(
 			"options.general.showToolbar"));
-		showToolbar.getModel().setSelected(jEdit.getBooleanProperty(
-			"view.showToolbar"));
+		showToolbar.setSelected(jEdit.getBooleanProperty("view.showToolbar"));
 		panel.add(showToolbar);
 
 		/* Show search bar */
 		showSearchbar = new JCheckBox(jEdit.getProperty(
 			"options.general.showSearchbar"));
-		showSearchbar.getModel().setSelected(jEdit.getBooleanProperty(
+		showSearchbar.setSelected(jEdit.getBooleanProperty(
 			"view.showSearchbar"));
 		panel.add(showSearchbar);
 
@@ -166,9 +165,9 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 	protected void _save()
 	{
-		jEdit.setBooleanProperty("view.showToolbar",showToolbar.getModel()
+		jEdit.setBooleanProperty("view.showToolbar",showToolbar
 			.isSelected());
-		jEdit.setBooleanProperty("view.showSearchbar",showSearchbar.getModel()
+		jEdit.setBooleanProperty("view.showSearchbar",showSearchbar
 			.isSelected());
 
 		StringBuffer buf = new StringBuffer();
@@ -351,7 +350,7 @@ class ToolBarAddDialog extends EnhancedDialog
 
 		separator = new JRadioButton(jEdit.getProperty("options.toolbar"
 			+ ".add.separator"));
-		separator.getModel().setSelected(true);
+		separator.setSelected(true);
 		separator.addActionListener(actionHandler);
 		grp.add(separator);
 		radioPanel.add(separator);
@@ -375,7 +374,7 @@ class ToolBarAddDialog extends EnhancedDialog
 		labelPanel.add(builtin = new JRadioButton(jEdit.getProperty(
 			"options.toolbar.add.builtin")));
 		builtin.addActionListener(actionHandler);
-		builtin.getModel().setSelected(true);
+		builtin.setSelected(true);
 		grp.add(builtin);
 		labelPanel.add(file = new JRadioButton(jEdit.getProperty(
 			"options.toolbar.add.file")));
@@ -434,13 +433,13 @@ class ToolBarAddDialog extends EnhancedDialog
 		if(!isOK)
 			return null;
 
-		if(separator.getModel().isSelected())
+		if(separator.isSelected())
 			return new ToolBarOptionPane.Button("-",null,null,"-");
-		else if(action.getModel().isSelected())
+		else if(action.isSelected())
 		{
 			Icon icon;
 			String iconName;
-			if(builtin.getModel().isSelected())
+			if(builtin.isSelected())
 			{
 				ToolBarOptionPane.IconListEntry selectedIcon =
 					(ToolBarOptionPane.IconListEntry)
@@ -478,11 +477,11 @@ class ToolBarAddDialog extends EnhancedDialog
 
 	private void updateEnabled()
 	{
-		boolean enabled = action.getModel().isSelected();
+		boolean enabled = action.isSelected();
 		builtin.setEnabled(enabled);
 		file.setEnabled(enabled);
-		builtinCombo.setEnabled(enabled && builtin.getModel().isSelected());
-		fileButton.setEnabled(enabled && file.getModel().isSelected());
+		builtinCombo.setEnabled(enabled && builtin.isSelected());
+		fileButton.setEnabled(enabled && file.isSelected());
 		list.setEnabled(enabled);
 	}
 
@@ -533,6 +532,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.3  2000/05/20 07:02:04  sp
  * Documentation updates, tool bar editor finished, a few other enhancements
  *

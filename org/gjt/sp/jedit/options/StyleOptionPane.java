@@ -467,10 +467,10 @@ implements ActionListener, KeyListener
 		JPanel panel = new JPanel();
 		panel.add(italics = new JCheckBox(
 			jEdit.getProperty("styleEditor.italics")));
-		italics.getModel().setSelected(style.isItalic());
+		italics.setSelected(style.isItalic());
 		panel.add(bold = new JCheckBox(
 			jEdit.getProperty("styleEditor.bold")));
-		bold.getModel().setSelected(style.isBold());
+		bold.setSelected(style.isBold());
 		panel.add(new JLabel(
 			jEdit.getProperty("styleEditor.fgColor")));
 		panel.add(fgColor = new JButton("    "));
@@ -561,15 +561,15 @@ implements ActionListener, KeyListener
 		if (bgColor.getBackground().equals(GUIUtilities.parseColor(jEdit.getProperty("view.bgColor"))))
 		{
 			return new SyntaxStyle(fgColor.getBackground(),null,
-					italics.getModel().isSelected(),
-					bold.getModel().isSelected());
+					italics.isSelected(),
+					bold.isSelected());
 		}
 		else
 		{
 			return new SyntaxStyle(fgColor.getBackground(),
 					bgColor.getBackground(),
-					italics.getModel().isSelected(),
-					bold.getModel().isSelected());
+					italics.isSelected(),
+					bold.isSelected());
 		}
 	}
 
@@ -585,6 +585,9 @@ implements ActionListener, KeyListener
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.14  2000/04/16 08:56:24  sp
  * Option pane updates
  *

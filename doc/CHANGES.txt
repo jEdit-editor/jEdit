@@ -15,6 +15,7 @@ JEDIT 2.5 VERSION HISTORY
 + Bug Fixes
 
 - FTP didn't work at all (since 2.5pre3)
+- Fixed NPE that could occur when performing an undo (since 2.5pre1)
 
 * Version 2.5pre3
 

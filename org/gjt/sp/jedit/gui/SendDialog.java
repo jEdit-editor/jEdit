@@ -112,13 +112,12 @@ implements ActionListener, Runnable
 		constraints.anchor = constraints.WEST;
 		selectionOnly = new JCheckBox(jEdit.getProperty(
 			"send.selectionOnly"));
-		selectionOnly.getModel().setSelected(
-			jEdit.getBooleanProperty("send.selectionOnly.value"));
+		selectionOnly.setSelected(jEdit.getBooleanProperty(
+			"send.selectionOnly.value"));
 		layout.setConstraints(selectionOnly,constraints);
 		panel.add(selectionOnly);
 
 		getContentPane().add(BorderLayout.NORTH,panel);
-		getContentPane().add(BorderLayout.CENTER,new JSeparator());
 
 		buttons = new JPanel();
 		send = new JButton(jEdit.getProperty("send.send"));
@@ -144,8 +143,7 @@ implements ActionListener, Runnable
 		String from = this.from.getText();
 		String to = this.to.getText();
 		String subject = this.subject.getText();
-		boolean selectionOnly = this.selectionOnly.getModel()
-			.isSelected();
+		boolean selectionOnly = this.selectionOnly.isSelected();
 
 		if(smtp.length() == 0 || from.length() == 0
 			|| to.length() == 0)
@@ -347,7 +345,7 @@ implements ActionListener, Runnable
 		jEdit.setProperty("send.to.value",to.getText());
 		jEdit.setProperty("send.subject.value",subject.getText());
 		jEdit.setBooleanProperty("send.selectionOnly.value",
-			selectionOnly.getModel().isSelected());
+			selectionOnly.isSelected());
 
 		if(thread != null)
 			thread.stop();

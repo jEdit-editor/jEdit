@@ -121,7 +121,7 @@ public class ModeOptionPane extends AbstractOptionPane
 
 	private void saveMode()
 	{
-		current.useDefaults = useDefaults.getModel().isSelected();
+		current.useDefaults = useDefaults.isSelected();
 		current.filenameGlob = filenameGlob.getText();
 		current.firstlineGlob = firstlineGlob.getText();
 		current.tabSize = (String)tabSize.getSelectedItem();
@@ -130,10 +130,10 @@ public class ModeOptionPane extends AbstractOptionPane
 		current.boxComment = boxComment.getText();
 		current.blockComment = blockComment.getText();
 		current.noWordSep = noWordSep.getText();
-		current.noTabs = noTabs.getModel().isSelected();
-		current.indentOnEnter = indentOnEnter.getModel().isSelected();
-		current.indentOnTab = indentOnTab.getModel().isSelected();
-		current.syntax = syntax.getModel().isSelected();
+		current.noTabs = noTabs.isSelected();
+		current.indentOnEnter = indentOnEnter.isSelected();
+		current.indentOnTab = indentOnTab.isSelected();
+		current.syntax = syntax.isSelected();
 	}
 
 	private void selectMode()
@@ -142,7 +142,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		current.edited = true;
 		current.mode.loadIfNecessary();
 
-		useDefaults.getModel().setSelected(current.useDefaults);
+		useDefaults.setSelected(current.useDefaults);
 		filenameGlob.setText(current.filenameGlob);
 		firstlineGlob.setText(current.firstlineGlob);
 		tabSize.setSelectedItem(current.tabSize);
@@ -151,10 +151,10 @@ public class ModeOptionPane extends AbstractOptionPane
 		boxComment.setText(current.boxComment);
 		blockComment.setText(current.blockComment);
 		noWordSep.setText(current.noWordSep);
-		noTabs.getModel().setSelected(current.noTabs);
-		indentOnTab.getModel().setSelected(current.indentOnTab);
-		indentOnEnter.getModel().setSelected(current.indentOnEnter);
-		syntax.getModel().setSelected(current.syntax);
+		noTabs.setSelected(current.noTabs);
+		indentOnTab.setSelected(current.indentOnTab);
+		indentOnEnter.setSelected(current.indentOnEnter);
+		syntax.setSelected(current.syntax);
 
 		updateEnabled();
 	}
@@ -188,7 +188,7 @@ public class ModeOptionPane extends AbstractOptionPane
 			else if(evt.getSource() == useDefaults)
 			{
 				modeProps[mode.getSelectedIndex()].useDefaults =
-					useDefaults.getModel().isSelected();
+					useDefaults.isSelected();
 				updateEnabled();
 			}
 		}
@@ -280,6 +280,9 @@ public class ModeOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.1  2000/05/13 05:13:31  sp
  * Mode option pane
  *

@@ -2142,7 +2142,8 @@ public class JEditTextArea extends JComponent
 		{
 			super.undo();
 
-			focusedComponent.select(start,end);
+			if(focusedComponent != null)
+				focusedComponent.select(start,end);
 		}
 
 		public boolean addEdit(UndoableEdit edit)
@@ -2180,6 +2181,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.64  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.63  2000/05/14 10:55:22  sp
  * Tool bar editor started, improved view registers dialog box
  *

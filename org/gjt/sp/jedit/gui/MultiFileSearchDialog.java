@@ -59,7 +59,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		current = new JRadioButton(jEdit.getProperty("multifile.current"));
 		if(fileset instanceof CurrentBufferSet)
-			current.getModel().setSelected(true);
+			current.setSelected(true);
 		current.addActionListener(actionHandler);
 		grp.add(current);
 		cons.gridy++;
@@ -68,7 +68,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		all = new JRadioButton(jEdit.getProperty("multifile.all"));
 		if(fileset instanceof AllBufferSet)
-			all.getModel().setSelected(true);
+			all.setSelected(true);
 		all.addActionListener(actionHandler);
 		grp.add(all);
 		cons.gridy++;
@@ -78,7 +78,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		selected = new JRadioButton(jEdit.getProperty("multifile.selected"));
 		if(fileset instanceof BufferListSet
 			&& !(fileset instanceof DirectoryListSet))
-			selected.getModel().setSelected(true);
+			selected.setSelected(true);
 		selected.addActionListener(actionHandler);
 		grp.add(selected);
 		cons.gridy++;
@@ -94,7 +94,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		directory = new JRadioButton(jEdit.getProperty("multifile.directory"));
 		if(fileset instanceof DirectoryListSet)
-			directory.getModel().setSelected(true);
+			directory.setSelected(true);
 		directory.addActionListener(actionHandler);
 		grp.add(directory);
 		cons.gridy++;
@@ -139,11 +139,11 @@ public class MultiFileSearchDialog extends EnhancedDialog
 	// EnhancedDialog implementation
 	public void ok()
 	{
-		if(current.getModel().isSelected())
+		if(current.isSelected())
 			fileset = new CurrentBufferSet();
-		else if(all.getModel().isSelected())
+		else if(all.isSelected())
 			fileset = new AllBufferSet();
-		else if(selected.getModel().isSelected())
+		else if(selected.isSelected())
 		{
 			Object[] values = bufferList.getSelectedValues();
 			if(values == null || values.length == 0)
@@ -154,12 +154,11 @@ public class MultiFileSearchDialog extends EnhancedDialog
 			else
 				fileset = new BufferListSet(values);
 		}
-		else if(directory.getModel().isSelected())
+		else if(directory.isSelected())
 		{
 			String _directory = directoryPath.getText();
 			String _glob = (String)directoryGlob.getSelectedItem();
-			boolean _recurse = directoryRecurse.getModel()
-				.isSelected();
+			boolean _recurse = directoryRecurse.isSelected();
 
 			jEdit.setBooleanProperty("multifile.directory.recurse.value",_recurse);
 
@@ -207,8 +206,8 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 	private void updateEnabled()
 	{
-		bufferList.setEnabled(selected.getModel().isSelected());
-		if(directory.getModel().isSelected())
+		bufferList.setEnabled(selected.isSelected());
+		if(directory.isSelected())
 		{
 			directoryPath.setEnabled(true);
 			directoryChoose.setEnabled(true);
@@ -331,7 +330,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		directoryRecurse = new JCheckBox(jEdit.getProperty("multifile"
 			+ ".directory.recurse"));
-		directoryRecurse.getModel().setSelected(jEdit.getBooleanProperty(
+		directoryRecurse.setSelected(jEdit.getBooleanProperty(
 			"multifile.directory.recurse.value"));
 		directoryRecurse.addActionListener(new ActionHandler());
 		box3.add(BorderLayout.EAST,directoryRecurse);
@@ -373,6 +372,9 @@ public class MultiFileSearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.13  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

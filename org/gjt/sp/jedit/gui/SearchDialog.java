@@ -51,8 +51,7 @@ public class SearchDialog extends EnhancedDialog
 		regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp"),SearchAndReplace.getRegexp());
 		multifile = new JCheckBox();
-		multifile.getModel().setSelected(!(fileset
-			instanceof CurrentBufferSet));
+		multifile.setSelected(!(fileset instanceof CurrentBufferSet));
 		multifileBtn = new JButton(jEdit.getProperty(
 			"search.multifile"));
 		findBtn = new JButton(jEdit.getProperty("search.findBtn"));
@@ -147,15 +146,15 @@ public class SearchDialog extends EnhancedDialog
 		replace.addCurrentToHistory();
 		SearchAndReplace.setReplaceString(replace.getText());
 		jEdit.setBooleanProperty("search.keepDialog.toggle",keepDialog
-			.getModel().isSelected());
-		SearchAndReplace.setIgnoreCase(ignoreCase.getModel().isSelected());
-		SearchAndReplace.setRegexp(regexp.getModel().isSelected());
+			.isSelected());
+		SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
+		SearchAndReplace.setRegexp(regexp.isSelected());
 		SearchAndReplace.setSearchFileSet(fileset);
 	}
 
 	private void disposeOrKeepDialog()
 	{
-		if(keepDialog.getModel().isSelected())
+		if(keepDialog.isSelected())
 			return;
 		dispose();
 	}
@@ -168,8 +167,7 @@ public class SearchDialog extends EnhancedDialog
 		{
 			fileset = fs;
 		}
-		multifile.getModel().setSelected(!(
-			fileset instanceof CurrentBufferSet));
+		multifile.setSelected(!(fileset instanceof CurrentBufferSet));
 	}
 
 	class ActionHandler implements ActionListener
@@ -210,7 +208,7 @@ public class SearchDialog extends EnhancedDialog
 			}
 			else if(source == multifile)
 			{
-				if(multifile.getModel().isSelected())
+				if(multifile.isSelected())
 					showMultiFileDialog();
 				else
 					fileset = new CurrentBufferSet();
@@ -222,6 +220,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.10  2000/05/04 10:37:04  sp
  * Wasting time
  *

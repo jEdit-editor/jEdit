@@ -245,7 +245,7 @@ class ContextAddDialog extends EnhancedDialog
 
 		separator = new JRadioButton(jEdit.getProperty("options.context"
 			+ ".add.separator"));
-		separator.getModel().setSelected(true);
+		separator.setSelected(true);
 		separator.addActionListener(actionHandler);
 		grp.add(separator);
 		radioPanel.add(separator);
@@ -298,9 +298,9 @@ class ContextAddDialog extends EnhancedDialog
 		if(!isOK)
 			return null;
 
-		if(separator.getModel().isSelected())
+		if(separator.isSelected())
 			return new ContextOptionPane.MenuItem("-","-");
-		else if(action.getModel().isSelected())
+		else if(action.isSelected())
 		{
 			return (ContextOptionPane.MenuItem)list.getSelectedValue();
 		}
@@ -334,6 +334,9 @@ class ContextAddDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.7  2000/05/20 07:02:04  sp
  * Documentation updates, tool bar editor finished, a few other enhancements
  *

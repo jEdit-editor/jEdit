@@ -90,13 +90,13 @@ public class SearchBar extends JToolBar
 
 	public void setIncremental(boolean incremental)
 	{
-		this.incremental.getModel().setSelected(incremental);
+		this.incremental.setSelected(incremental);
 		update();
 	}
 
 	public void update()
 	{
-		if(incremental.getModel().isSelected())
+		if(incremental.isSelected())
 		{
 			multifile.setSelected(false);
 			multifile.setEnabled(false);
@@ -104,9 +104,9 @@ public class SearchBar extends JToolBar
 		}
 		else
 		{
-			ignoreCase.getModel().setSelected(SearchAndReplace.getIgnoreCase());
-			regexp.getModel().setSelected(SearchAndReplace.getRegexp());
-			multifile.getModel().setSelected(!(SearchAndReplace.getSearchFileSet()
+			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
+			regexp.setSelected(SearchAndReplace.getRegexp());
+			multifile.setSelected(!(SearchAndReplace.getSearchFileSet()
 				instanceof CurrentBufferSet));
 			multifile.setEnabled(true);
 			multifileBtn.setEnabled(true);
@@ -126,8 +126,7 @@ public class SearchBar extends JToolBar
 			.getSearchFileSet();
 		if(fs != null)
 			SearchAndReplace.setSearchFileSet(fs);
-		multifile.getModel().setSelected(!(
-			SearchAndReplace.getSearchFileSet()
+		multifile.setSelected(!(SearchAndReplace.getSearchFileSet()
 			instanceof CurrentBufferSet));
 	}
 
@@ -164,7 +163,7 @@ public class SearchBar extends JToolBar
 				{
 					new SearchDialog(view,null);
 				}
-				else if(incremental.getModel().isSelected())
+				else if(incremental.isSelected())
 				{
 					// on enter, start search from end
 					// of current match to find next one
@@ -188,12 +187,12 @@ public class SearchBar extends JToolBar
 			else if(evt.getSource() == ignoreCase)
 			{
 				SearchAndReplace.setIgnoreCase(ignoreCase
-					.getModel().isSelected());
+					.isSelected());
 			}
 			else if(evt.getSource() == regexp)
 			{
 				SearchAndReplace.setRegexp(regexp
-					.getModel().isSelected());
+					.isSelected());
 			}
 			else if(source == multifileBtn)
 			{
@@ -201,7 +200,7 @@ public class SearchBar extends JToolBar
 			}
 			else if(source == multifile)
 			{
-				if(multifile.getModel().isSelected())
+				if(multifile.isSelected())
 					showMultiFileDialog();
 				else
 					SearchAndReplace.setSearchFileSet(
@@ -217,9 +216,11 @@ public class SearchBar extends JToolBar
 			// on insert, start search from beginning of
 			// current match. This will continue to highlight
 			// the current match until another match is found
-			if(incremental.getModel().isSelected())
+			if(incremental.isSelected())
+			{
 				incrementalSearch(view.getTextArea()
 					.getSelectionStart());
+			}
 		}
 
 		public void removeUpdate(DocumentEvent evt)
@@ -227,7 +228,7 @@ public class SearchBar extends JToolBar
 			// on backspace, restart from beginning
 			// when we write reverse search, implement real
 			// backtracking
-			if(incremental.getModel().isSelected())
+			if(incremental.isSelected())
 			{
 				String text = find.getText();
 				if(text != null && text.length() != 0)
@@ -255,6 +256,9 @@ public class SearchBar extends JToolBar
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.13  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.12  2000/05/13 05:13:31  sp
  * Mode option pane
  *

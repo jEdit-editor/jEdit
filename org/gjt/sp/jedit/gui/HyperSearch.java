@@ -71,8 +71,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp"),SearchAndReplace.getRegexp());
 		multifile = new JCheckBox();
-		multifile.getModel().setSelected(!(fileset
-			instanceof CurrentBufferSet));
+		multifile.setSelected(!(fileset instanceof CurrentBufferSet));
 		multifileBtn = new JButton(jEdit.getProperty(
 			"search.multifile"));
 		box.add(ignoreCase);
@@ -143,8 +142,8 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 	{
 		find.addCurrentToHistory();
 		SearchAndReplace.setSearchString(find.getText());
-		SearchAndReplace.setIgnoreCase(ignoreCase.getModel().isSelected());
-		SearchAndReplace.setRegexp(regexp.getModel().isSelected());
+		SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
+		SearchAndReplace.setRegexp(regexp.isSelected());
 		SearchAndReplace.setSearchFileSet(fileset);
 	}
 
@@ -253,11 +252,8 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		SearchFileSet fs = new MultiFileSearchDialog(
 			view,fileset).getSearchFileSet();
 		if(fs != null)
-		{
 			fileset = fs;
-		}
-		multifile.getModel().setSelected(!(
-			fileset instanceof CurrentBufferSet));
+		multifile.setSelected(!(fileset instanceof CurrentBufferSet));
 		updateStatus();
 	}
 
@@ -355,7 +351,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 				showMultiFileDialog();
 			else if(source == multifile)
 			{
-				if(multifile.getModel().isSelected())
+				if(multifile.isSelected())
 					showMultiFileDialog();
 				else
 					fileset = new CurrentBufferSet();
@@ -365,7 +361,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 	class MouseHandler extends MouseAdapter
 	{
-		public void mousePressed(MouseEvent evt)
+		public void mouseClicked(MouseEvent evt)
 		{
 			int index = results.locationToIndex(evt.getPoint());
 			if(index == -1)
@@ -493,6 +489,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.61  2000/05/21 03:00:51  sp
+ * Code cleanups and bug fixes
+ *
  * Revision 1.60  2000/05/20 07:02:04  sp
  * Documentation updates, tool bar editor finished, a few other enhancements
  *
