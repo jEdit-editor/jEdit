@@ -127,6 +127,11 @@ public class JARClassLoader extends ClassLoader
 		return (JARClassLoader)classLoaders.elementAt(index);
 	}
 
+	public static int getClassLoaderCount()
+	{
+		return classLoaders.size();
+	}
+
 	// private members
 
 	/* Loading of plugin classes is deferred until all JARs
@@ -345,6 +350,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/02/07 06:35:52  sp
+ * Options dialog box updates
+ *
  * Revision 1.26  2000/01/30 04:23:23  sp
  * New about box, minor bug fixes and updates here and there
  *
@@ -375,22 +383,4 @@ public class JARClassLoader extends ClassLoader
  *
  * Revision 1.17  1999/10/05 04:43:58  sp
  * Minor bug fixes and updates
- *
- * Revision 1.16  1999/10/04 03:20:51  sp
- * Option pane change, minor tweaks and bug fixes
- *
- * Revision 1.15  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.13  1999/08/21 01:48:18  sp
- * jEdit 2.0pre8
- *
- * Revision 1.12  1999/06/07 09:02:40  sp
- * Minor JAR loader tweak
- *
- * Revision 1.11  1999/05/22 08:33:53  sp
- * FAQ updates, mode selection tweak, patch mode update, javadoc updates, JDK 1.1.8 fix
- *
- * Revision 1.10  1999/05/15 00:29:19  sp
- * Prev error bug fix, doc updates, tips updates
  */

@@ -58,8 +58,8 @@ Clancy Malcolm - PHP3 syntax highlighting
 Jason Ginchereau - Buffer tabs code
 Jonathan Revusky - Python syntax highlighting
 Juha Lindfors - IDL syntax highlighting
-Mike Dillon - TSQL syntax highlighting, faster literal search, gutter,
-many other patches
+Mike Dillon - TSQL syntax highlighting, gutter, new options dialog box,
+	faster literal search, many other patches
 Ralf Engels - PostScript syntax highlighting
 Tal Davidson - Original syntax highlighting engine
 Valery Kondakoff - Complete Word command

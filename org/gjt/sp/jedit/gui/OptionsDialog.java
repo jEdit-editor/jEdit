@@ -41,35 +41,42 @@ public class OptionsDialog extends EnhancedDialog
 {
 	public OptionsDialog(View view)
 	{
-		super(view,jEdit.getProperty("options.title"),true);
+		super(view, jEdit.getProperty("options.title"), true);
 
 		view.showWaitCursor();
 
 		getContentPane().setLayout(new BorderLayout());
-		panes = new Hashtable();
+
+		JPanel stage = new JPanel(new BorderLayout(4, 8));
+		stage.setBorder(BorderFactory.createCompoundBorder(
+			new SoftBevelBorder(SoftBevelBorder.RAISED),
+			BorderFactory.createEmptyBorder(2, 2, 2, 2)));
+		getContentPane().add(stage, BorderLayout.CENTER);
+
+		// currentLabel displays the path of the currently selected
+		// OptionPane at the top of the stage area
+		currentLabel = new JLabel();
+		currentLabel.setHorizontalAlignment(JLabel.LEFT);
+		currentLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 1,
+			0, Color.black));
+		stage.add(currentLabel, BorderLayout.NORTH);
 
 		cardPanel = new JPanel(new CardLayout());
-		cardPanel.setBorder(new CompoundBorder(new BevelBorder(
-			BevelBorder.RAISED), new EmptyBorder(2, 2, 2, 2)));
+		stage.add(cardPanel, BorderLayout.CENTER);
 
-		getContentPane().add(cardPanel, BorderLayout.CENTER);
-
-		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
-		DefaultTreeModel paneTreeModel = new DefaultTreeModel(rootNode);
-
-		jEditNode = new DefaultMutableTreeNode("jedit");
-		rootNode.add(jEditNode);
-
-		pluginsNode = new DefaultMutableTreeNode("plugins");
-
-		paneTree = new JTree(paneTreeModel);
+		paneTree = new JTree(createOptionTreeModel());
 		paneTree.setCellRenderer(new PaneNameRenderer());
 		paneTree.putClientProperty("JTree.lineStyle", "Angled");
+		paneTree.setShowsRootHandles(true);
 		paneTree.setRootVisible(false);
-		getContentPane().add(new JScrollPane(paneTree),
+		getContentPane().add(new JScrollPane(paneTree,
+			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
 			BorderLayout.WEST);
 
 		JPanel buttons = new JPanel();
+		getContentPane().add(buttons, BorderLayout.SOUTH);
+
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(this);
 		buttons.add(ok);
@@ -77,48 +84,25 @@ public class OptionsDialog extends EnhancedDialog
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
 		buttons.add(cancel);
-		getContentPane().add(buttons, BorderLayout.SOUTH);
+/* 		apply = new JButton(jEdit.getProperty("common.apply"));
+		apply.addActionListener(this);
+		buttons.add(apply); */
 
-		addOptionPane(new GeneralOptionPane(), jEditNode);
-		addOptionPane(new EditorOptionPane(), jEditNode);
-		addOptionPane(new GutterOptionPane(), jEditNode);
-		addOptionPane(new StyleOptionPane(), jEditNode);
-		addOptionPane(new FileFilterOptionPane(), jEditNode);
+		// compute the jEdit branch
+		TreePath jEditPath = new TreePath(new Object[]{ paneTree
+			.getModel().getRoot(), jEditGroup });
 
-		OptionGroup shortcutsGroup = new OptionGroup("shortcuts");
-		shortcutsGroup.addOptionPane(new CommandShortcutsOptionPane());
-		shortcutsGroup.addOptionPane(new MacroShortcutsOptionPane());
-		addOptionGroup(shortcutsGroup, jEditNode);
-
-		addOptionPane(new AbbrevsOptionPane(), jEditNode);
-
-		// Query plugins for option panes
-		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
-		{
-			try
-			{
-				plugins[i].createOptionPanes(this);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR, this,
-					"Error creating option pane");
-				Log.log(Log.ERROR, this, t);
-			}
-		}
-
-		if(pluginsNode.getChildCount() != 0)
-			rootNode.add(pluginsNode);
-
-		paneTree.expandPath(new TreePath(paneTreeModel.getPathToRoot(
-			jEditNode)));
-		paneTree.expandPath(new TreePath(paneTreeModel.getPathToRoot(
-			pluginsNode)));
-
+		// register the Options dialog as a TreeSelectionListener.
+		// this is done before the initial selection to ensure that the
+		// first selected OptionPane is displayed on startup.
 		paneTree.getSelectionModel().addTreeSelectionListener(this);
 
-		paneTree.setSelectionRow(1);
+		// select the first member of the jEdit group
+		paneTree.setSelectionPath(jEditPath.pathByAddingChild(
+			jEditGroup.getMember(0)));
+
+		// register the MouseHandler to open and close branches
+		paneTree.addMouseListener(new MouseHandler());
 
 		view.hideWaitCursor();
 
@@ -131,34 +115,18 @@ public class OptionsDialog extends EnhancedDialog
 
 	public void addOptionGroup(OptionGroup group)
 	{
-		addOptionGroup(group, pluginsNode);
+		addOptionGroup(group, pluginsGroup);
 	}
 
 	public void addOptionPane(OptionPane pane)
 	{
-		addOptionPane(pane, pluginsNode);
+		addOptionPane(pane, pluginsGroup);
 	}
 
 	// EnhancedDialog implementation
 	public void ok()
 	{
-		Enumeration enum = panes.elements();
-		while(enum.hasMoreElements())
-		{
-			try
-			{
-				((OptionPane)enum.nextElement()).save();
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,this,"Error saving option pane");
-				Log.log(Log.ERROR,this,t);
-			}
-		}
-
-		/* This will fire the PROPERTIES_CHANGED event */
-		jEdit.propertiesChanged();
-		dispose();
+		ok(true);
 	}
 
 	public void cancel()
@@ -167,52 +135,157 @@ public class OptionsDialog extends EnhancedDialog
 	}
 	// end EnhancedDialog implementation
 
+	public void ok(boolean dispose)
+	{
+		OptionTreeModel m = (OptionTreeModel) paneTree
+			.getModel();
+		((OptionGroup) m.getRoot()).save();
+
+		/* This will fire the PROPERTIES_CHANGED event */
+		jEdit.propertiesChanged();
+
+		// get rid of this dialog if necessary
+		if (dispose) dispose();
+	}
+
 	public void actionPerformed(ActionEvent evt)
 	{
 		Object source = evt.getSource();
+
 		if(source == ok)
+		{
 			ok();
+		}
 		else if(source == cancel)
+		{
 			cancel();
+		}
+		else if(source == apply)
+		{
+			ok(false);
+		}
 	}
 
 	public void valueChanged(TreeSelectionEvent evt)
 	{
-		TreePath selection = evt.getPath();
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-			selection.getLastPathComponent();
+		TreePath path = evt.getPath();
 
-		if (node.isLeaf())
+		if (path == null || !(path.getLastPathComponent() instanceof
+			OptionPane)) return;
+
+		Object[] nodes = path.getPath();
+
+		StringBuffer buf = new StringBuffer();
+
+		String name = null;
+
+		int lastIdx = nodes.length - 1;
+
+		for (int i = paneTree.isRootVisible() ? 0 : 1;
+			i <= lastIdx; i++)
 		{
-			String cardName = (String) node.getUserObject();
+			if (nodes[i] instanceof OptionPane)
+			{
+				name = ((OptionPane)nodes[i]).getName();
+			}
+			else if (nodes[i] instanceof OptionGroup)
+			{
+				name = ((OptionGroup)nodes[i]).getName();
+			}
+			else
+			{
+				continue;
+			}
 
-			currentPane = cardName;
+			if (name != null)
+			{
+				String label = jEdit.getProperty("options." +
+					name + ".label");
 
-			((CardLayout)cardPanel.getLayout()).show(cardPanel,
-				cardName);
+				if (label == null)
+				{
+					buf.append(name);
+				}
+				else
+				{
+					buf.append(label);
+				}
+			}
+
+			if (i != lastIdx) buf.append(": ");
 		}
-		else
-		{
-			paneTree.expandPath(selection);
-		}
+
+		currentLabel.setText(buf.toString());
+		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
 	}
 
 	// private members
 	private Hashtable panes;
 	private JTree paneTree;
 	private JPanel cardPanel;
+	private JLabel currentLabel;
 	private JButton ok;
 	private JButton cancel;
-	private DefaultMutableTreeNode jEditNode;
-	private DefaultMutableTreeNode pluginsNode;
-	private String currentPane;
+	private JButton apply;
+	private OptionGroup jEditGroup;
+	private OptionGroup pluginsGroup;
 
-	private void addOptionGroup(OptionGroup group, DefaultMutableTreeNode node)
+	private OptionTreeModel createOptionTreeModel()
 	{
-		DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(
-			group.getName());
+		OptionTreeModel paneTreeModel = new OptionTreeModel();
+		OptionGroup rootGroup = (OptionGroup) paneTreeModel.getRoot();
 
-		Enumeration enum = group.getMembers();
+		// initialize the jEdit branch of the options tree
+		jEditGroup = new OptionGroup("jedit");
+
+		addOptionPane(new GeneralOptionPane(), jEditGroup);
+		addOptionPane(new EditorOptionPane(), jEditGroup);
+		addOptionPane(new GutterOptionPane(), jEditGroup);
+		addOptionPane(new StyleOptionPane(), jEditGroup);
+		addOptionPane(new FileFilterOptionPane(), jEditGroup);
+
+		// create the Shortcuts sub-branch
+		OptionGroup shortcutsGroup = new OptionGroup("shortcuts");
+		shortcutsGroup.addOptionPane(new CommandShortcutsOptionPane());
+		shortcutsGroup.addOptionPane(new MacroShortcutsOptionPane());
+		addOptionGroup(shortcutsGroup, jEditGroup);
+
+		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
+
+		addOptionGroup(jEditGroup, rootGroup);
+
+		// initialize the Plugins branch of the options tree
+		pluginsGroup = new OptionGroup("plugins");
+
+		// Query plugins for option panes
+		EditPlugin[] plugins = jEdit.getPlugins();
+		for(int i = 0; i < plugins.length; i++)
+		{
+			EditPlugin ep = plugins[i];
+			try
+			{
+				ep.createOptionPanes(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR, ep,
+					"Error creating option pane");
+				Log.log(Log.ERROR, ep, t);
+			}
+		}
+
+		// only add the Plugins branch if there are OptionPanes
+		if (pluginsGroup.getMemberCount() > 0)
+		{
+			addOptionGroup(pluginsGroup, rootGroup);
+		}
+
+		return paneTreeModel;
+	}
+
+	private void addOptionGroup(OptionGroup child, OptionGroup parent)
+	{
+		Enumeration enum = child.getMembers();
 
 		while (enum.hasMoreElements())
 		{
@@ -220,26 +293,49 @@ public class OptionsDialog extends EnhancedDialog
 
 			if (elem instanceof OptionPane)
 			{
-				addOptionPane((OptionPane) elem, groupNode);
+				addOptionPane((OptionPane) elem, child);
 			}
 			else if (elem instanceof OptionGroup)
 			{
-				addOptionGroup((OptionGroup) elem, groupNode);
+				addOptionGroup((OptionGroup) elem, child);
 			}
 		}
 
-		node.add(groupNode);
+		parent.addOptionGroup(child);
 	}
 
-	private void addOptionPane(OptionPane pane, DefaultMutableTreeNode node)
+	private void addOptionPane(OptionPane pane, OptionGroup parent)
 	{
 		String name = pane.getName();
 
-		node.add(new DefaultMutableTreeNode(name, false));
-
 		cardPanel.add(pane.getComponent(), name);
 
-		panes.put(name, pane);
+		parent.addOptionPane(pane);
+	}
+
+	class MouseHandler extends MouseAdapter
+	{
+		public void mouseClicked(MouseEvent evt)
+		{
+			TreePath path = paneTree.getPathForLocation(evt.getX(),
+				evt.getY());
+
+			if (path == null) return;
+
+			Object node = path.getLastPathComponent();
+
+			if (node instanceof OptionGroup)
+			{
+				if (paneTree.isCollapsed(path))
+				{
+					paneTree.expandPath(path);
+				}
+				else
+				{
+					paneTree.collapsePath(path);
+				}
+			}
+		}
 	}
 
 	class PaneNameRenderer extends JLabel implements TreeCellRenderer
@@ -247,7 +343,11 @@ public class OptionsDialog extends EnhancedDialog
 		public PaneNameRenderer()
 		{
 			setOpaque(true);
-			setFont(UIManager.getFont("Tree.font"));
+
+			paneFont = UIManager.getFont("Tree.font");
+			groupFont = new Font(paneFont.getName(),
+				paneFont.getStyle() | Font.BOLD,
+				paneFont.getSize());
 		}
 
 		public Component getTreeCellRendererComponent(JTree tree,
@@ -267,29 +367,215 @@ public class OptionsDialog extends EnhancedDialog
 				setForeground(tree.getForeground());
 			}
 
-			String name = value.toString();
+			String name = null;
 
-			String label = jEdit.getProperty(
-				"options." + name + ".label");
+			if (value instanceof OptionGroup)
+			{
+				name = ((OptionGroup)value).getName();
+				setFont(groupFont);
+			}
+			else if (value instanceof OptionPane)
+			{
+				name = ((OptionPane)value).getName();
+				setFont(paneFont);
+			}
 
-			if (label == null) label = name;
+			if (name == null)
+			{
+				setText(null);
+			}
+			else
+			{
+				String label = jEdit.getProperty("options." +
+					name + ".label");
 
-			setText(label);
+				if (label == null)
+				{
+					setText(name);
+				}
+				else
+				{
+					setText(label);
+				}
+			}
 
 			setBorder(hasFocus ? focusBorder : noFocusBorder);
 
 			return this;
 		}
 
-		private Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
-		private Border focusBorder = new LineBorder(UIManager.getColor(
-			"Tree.selectionBorderColor"), 1);
+		private Border noFocusBorder = BorderFactory.createEmptyBorder(
+			1, 1, 1, 1);
+		private Border focusBorder = BorderFactory.createLineBorder(
+			UIManager.getColor("Tree.selectionBorderColor"));
+
+		private Font paneFont;
+		private Font groupFont;
+	}
+
+	class OptionTreeModel implements TreeModel
+	{
+		public void addTreeModelListener(TreeModelListener l)
+		{
+			listenerList.add(TreeModelListener.class, l);
+		}
+
+		public void removeTreeModelListener(TreeModelListener l)
+		{
+			listenerList.remove(TreeModelListener.class, l);
+		}
+
+		public Object getChild(Object parent, int index)
+		{
+			if (parent instanceof OptionGroup)
+			{
+				return ((OptionGroup)parent).getMember(index);
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public int getChildCount(Object parent)
+		{
+			if (parent instanceof OptionGroup)
+			{
+				return ((OptionGroup)parent).getMemberCount();
+			}
+			else
+			{
+				return 0;
+			}
+		}
+
+		public int getIndexOfChild(Object parent, Object child)
+		{
+			if (parent instanceof OptionGroup)
+			{
+				return ((OptionGroup)parent)
+					.getMemberIndex(child);
+			}
+			else
+			{
+				return -1;
+			}
+		}
+
+		public Object getRoot()
+		{
+			return root;
+		}
+
+		public boolean isLeaf(Object node)
+		{
+			return node instanceof OptionPane;
+		}
+
+		public void valueForPathChanged(TreePath path, Object newValue)
+		{
+			// this model may not be changed by the TableCellEditor
+		}
+
+		protected void fireNodesChanged(Object source, Object[] path,
+			int[] childIndices, Object[] children)
+		{
+			Object[] listeners = listenerList.getListenerList();
+
+			TreeModelEvent modelEvent = null;
+			for (int i = listeners.length - 2; i >= 0; i -= 2)
+			{
+				if (listeners[i] != TreeModelListener.class)
+					continue;
+
+				if (modelEvent == null)
+				{
+					modelEvent = new TreeModelEvent(source,
+						path, childIndices, children);
+				}
+
+				((TreeModelListener)listeners[i + 1])
+					.treeNodesChanged(modelEvent);
+			}
+		}
+
+		protected void fireNodesInserted(Object source, Object[] path,
+			int[] childIndices, Object[] children)
+		{
+			Object[] listeners = listenerList.getListenerList();
+
+			TreeModelEvent modelEvent = null;
+			for (int i = listeners.length - 2; i >= 0; i -= 2)
+			{
+				if (listeners[i] != TreeModelListener.class)
+					continue;
+
+				if (modelEvent == null)
+				{
+					modelEvent = new TreeModelEvent(source,
+						path, childIndices, children);
+				}
+
+				((TreeModelListener)listeners[i + 1])
+					.treeNodesInserted(modelEvent);
+			}
+		}
+
+		protected void fireNodesRemoved(Object source, Object[] path,
+			int[] childIndices, Object[] children)
+		{
+			Object[] listeners = listenerList.getListenerList();
+
+			TreeModelEvent modelEvent = null;
+			for (int i = listeners.length - 2; i >= 0; i -= 2)
+			{
+				if (listeners[i] != TreeModelListener.class)
+					continue;
+
+				if (modelEvent == null)
+				{
+					modelEvent = new TreeModelEvent(source,
+						path, childIndices, children);
+				}
+
+				((TreeModelListener)listeners[i + 1])
+					.treeNodesRemoved(modelEvent);
+			}
+		}
+
+		protected void fireTreeStructureChanged(Object source,
+			Object[] path, int[] childIndices, Object[] children)
+		{
+			Object[] listeners = listenerList.getListenerList();
+
+			TreeModelEvent modelEvent = null;
+			for (int i = listeners.length - 2; i >= 0; i -= 2)
+			{
+				if (listeners[i] != TreeModelListener.class)
+					continue;
+
+				if (modelEvent == null)
+				{
+					modelEvent = new TreeModelEvent(source,
+						path, childIndices, children);
+				}
+
+				((TreeModelListener)listeners[i + 1])
+					.treeStructureChanged(modelEvent);
+			}
+		}
+
+		private OptionGroup root = new OptionGroup("root");
+		private EventListenerList listenerList = new EventListenerList();
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/02/07 06:35:53  sp
+ * Options dialog box updates
+ *
  * Revision 1.16  2000/02/04 07:56:10  sp
  * Documentation updates, some other stuff
  *

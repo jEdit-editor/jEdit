@@ -3031,7 +3031,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  </sect1>
 </chapter>
 
-<chapter id=plugins><title>Installing and Using Plugins</>
+<chapter id=plugins><title>Using Plugins</>
  <para>
   jEdit supports plugins, loadable modules of code that extend the
   editor's functionality. This chapter covers installation and usage

@@ -3,13 +3,14 @@ JEDIT TO DO
 ------- 2.3 to do -------
 
 - Double-click drag doesn't work backwards
-- CaretUndo doesn't work on 'redo'
-- Document option groups
-- Update window-editor-* screenshots
 - Fix gutter repaint bug
+- Document option group API
+- Update window-editor-* and dialog-options-* screenshots
+- Document PluginManager
 
 ------- Later -------
 
+- Need to set caret on 'redo'
 - Check file modification status on focus
 - Having more than 2 split panes should be possible
 - load/saveCaretInfo() save data in split.n.<property name> so that we

@@ -1,5 +1,15 @@
 JEDIT VERSION HISTORY
 
+* Version 2.3pre5
+
++ Enhancements
+
+- Options dialog box looks better (Mike Dillon)
+
++ Bug Fixes
+
+- Options dialog box didn't display 'plugins' branch sometimes
+
 * Version 2.3pre4
 
 + New Features

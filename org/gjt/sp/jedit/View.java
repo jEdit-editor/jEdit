@@ -158,14 +158,16 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane == null)
 		{
-			JComponent oldParent = (JComponent)textArea.getParent();
+			JEditTextArea oldTextArea = textArea;
+			textArea = createTextArea();
+			JComponent oldParent = (JComponent)oldTextArea.getParent();
 
 			saveCaretInfo();
-			splitPane = new JSplitPane(orientation,textArea,
-				textArea = createTextArea());
-			initTextArea(textArea);
-			loadCaretInfo();
+			splitPane = new JSplitPane(orientation,
+				oldTextArea,textArea);
 			splitPane.setBorder(null);
+			initTextArea(textArea,oldTextArea);
+			loadCaretInfo();
 			if(bufferTabs != null)
 				bufferTabs.update();
 			else
@@ -195,9 +197,10 @@ public class View extends JFrame implements EBComponent
 		if(splitPane != null)
 		{
 			boolean left = (splitPane.getLeftComponent() == textArea);
-			JEditTextArea textArea = (JEditTextArea)(left ?
+			JEditTextArea oldTextArea = (JEditTextArea)(left ?
 				splitPane.getRightComponent()
 				: splitPane.getLeftComponent());
+			JEditTextArea newTextArea = textArea;
 			JComponent parent = (JComponent)splitPane.getParent();
 			parent.remove(splitPane);
 			splitPane = null;
@@ -205,11 +208,11 @@ public class View extends JFrame implements EBComponent
 				bufferTabs.update();
 			else
 			{
-				parent.add(textArea);
+				parent.add(newTextArea);
 				parent.revalidate();
 			}
 
-			EditBus.send(new ViewUpdate(this,textArea,
+			EditBus.send(new ViewUpdate(this,oldTextArea,
 				ViewUpdate.TEXTAREA_DESTROYED));
 		}
 
@@ -480,6 +483,13 @@ public class View extends JFrame implements EBComponent
 		saveCaretInfo();
 		EditBus.removeFromBus(this);
 		dispose();
+
+		JEditTextArea[] textAreas = getTextAreas();
+		for(int i = 0; i < textAreas.length; i++)
+		{
+			EditBus.send(new ViewUpdate(this,textAreas[i],
+				ViewUpdate.TEXTAREA_DESTROYED));
+		}
 	}
 
 	// private members
@@ -1335,6 +1345,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.138  2000/02/07 06:35:52  sp
+ * Options dialog box updates
+ *
  * Revision 1.137  2000/02/04 05:50:27  sp
  * More gutter updates from mike
  *
