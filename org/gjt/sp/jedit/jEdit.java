@@ -586,8 +586,6 @@ public class jEdit
 		if(grammars == null)
 			return;
 
-		MiscUtilities.quicksort(grammars,new MiscUtilities.StringICaseCompare());
-
 		String grammar, fileName;
 
 		FileReader reader;
@@ -618,7 +616,6 @@ public class jEdit
 					GenericTokenMarker.addTokenMarker(
 						newMode.getName(),
 						newMode.createTokenMarker());
-					addMode(newMode);
 				}
 			}
 		}
@@ -1503,6 +1500,18 @@ public class jEdit
 			new File(path).mkdirs();
 			loadModes(path);
 		}
+
+		/* Sort mode list */
+		MiscUtilities.quicksort(modes,new ModeCompare());
+	}
+
+	static class ModeCompare implements MiscUtilities.Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			return ((Mode)obj1).getName().compareTo(
+				((Mode)obj2).getName());
+		}
 	}
 
 	/**
@@ -1941,6 +1950,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.203  2000/03/28 11:32:55  sp
+ * Mode list sorted
+ *
  * Revision 1.202  2000/03/27 07:31:22  sp
  * We now use Log.log() in some places instead of System.err.println, HTML mode
  * now supports <script> tags, external delegation bug fix
