@@ -36,7 +36,7 @@ public class HistoryTextField extends JTextField
 	 */
 	public HistoryTextField(String name)
 	{
-		this(name,false);
+		this(name,false,true);
 	}
 
 	/**
@@ -50,10 +50,28 @@ public class HistoryTextField extends JTextField
 	 */
 	public HistoryTextField(String name, boolean instantPopups)
 	{
+		this(name,instantPopups,true);
+	}
+
+	/**
+	 * Creates a new history text field.
+	 * @param name The history model name
+	 * @param instantPopup If true, selecting a value from the history
+	 * popup will immediately fire an ActionEvent. If false, the user
+	 * will have to press 'Enter' first
+	 * @param enterAddsToHistory If true, pressing the Enter key will
+	 * automatically add the currently entered text to the history.
+	 *
+	 * @since jEdit 2.6pre5
+	 */
+	public HistoryTextField(String name, boolean instantPopups,
+		boolean enterAddsToHistory)
+	{
 		historyModel = HistoryModel.getModel(name);
 		addMouseListener(new MouseHandler());
 
 		this.instantPopups = instantPopups;
+		this.enterAddsToHistory = enterAddsToHistory;
 
 		index = -1;
 	}
@@ -111,7 +129,8 @@ public class HistoryTextField extends JTextField
 		{
 			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
 			{
-				addCurrentToHistory();
+				if(enterAddsToHistory)
+					addCurrentToHistory();
 				fireActionPerformed();
 				evt.consume();
 			}
@@ -147,6 +166,7 @@ public class HistoryTextField extends JTextField
 	private HistoryModel historyModel;
 	private JPopupMenu popup;
 	private boolean instantPopups;
+	private boolean enterAddsToHistory;
 	private String current;
 	private int index;
 
@@ -315,6 +335,9 @@ public class HistoryTextField extends JTextField
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.34  2000/08/16 08:47:19  sp
  * Stuff
  *

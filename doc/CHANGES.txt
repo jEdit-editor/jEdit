@@ -1,5 +1,55 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6pre5
+
++ New Features
+
+- Rudimentary keyboard navigation added to VFS browser, only supported
+  in list view currently:
+  - typing first few characters of a file's name selects it
+  - 'Enter' or 'Right Arrow' opens the currently selected file/directory
+    (unless one of the two text fields has focus, of course)
+  - 'Left' goes to parent directory (ditto)
+  - This is in addition to the keys already supported by Swing, such as
+    Up/Down to select the previous/next item in the list, etc
+
++ Enhancements
+
+- The selection is preserved across directory reloads in the VFS browser
+- Slightly tweaked auto indent
+- New method: View.setKeyEventHandlingComponent(Component comp). If comp
+  is non-null, all key events will be forwarded to it. Useful when
+  displaying popup windows and such
+- The 'Complete Word' command now displays the list of completions in a
+  popup window below the caret, instead of a separate dialog box. This
+  makes it faster and less intrusive
+- Settings are now saved in the Search & Replace and HyperSearch dialog
+  boxes even if 'Cancel' is clicked
+
++ Bug Fixes
+
+- VFS browser couldn't list files on any VFS except for the FileVFS
+- Using the Global Options dialog box while a VFS browser was open would
+  leave the VFS browser's file list blank
+- Pressing the 'Up' button in the VFS browser while viewing the 'roots:'
+  or 'favorites:' locations would throw an NPE
+- Pressing Enter in the VFS browser's path field also updates the filter,
+  and vice versa. Previously, you had to press Enter in both fields if
+  you wanted to view a different path with a different filter
+- Keys pressed in text components inside views are no longer passed to
+  the view's input handler if the text component can handle that key
+- The 'Insert Literal' (C+e C+v) command would beep every time it was
+  used to insert a character
+- Changing a dockable window's position in the Global Options dialog box
+  while the dockable is visible and then closing the dockable would
+  reset its position to what it was previously
+
++ API Changes
+
+- Signature of Buffer.indentLine() method changed to:
+  boolean indentLine(JEditTextArea textArea, int line,
+          boolean canIncreaseIndent, boolean canDecreaseIndent)
+
 * Version 2.6pre4
 
 + New Features

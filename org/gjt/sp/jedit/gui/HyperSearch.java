@@ -165,10 +165,8 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 	public void cancel()
 	{
-		if(thread != null)
-			thread.stop();
-
 		EditBus.removeFromBus(this);
+		save();
 		dispose();
 	}
 	// end EnhancedDialog implementation
@@ -479,6 +477,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.67  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.66  2000/08/16 08:47:19  sp
  * Stuff
  *
@@ -511,28 +512,5 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
  *
  * Revision 1.56  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.55  2000/04/27 08:32:57  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.54  2000/04/25 03:32:40  sp
- * Even more VFS hacking
- *
- * Revision 1.53  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.52  2000/04/03 10:22:24  sp
- * Search bar
- *
- * Revision 1.51  2000/04/01 12:21:27  sp
- * mode cache implemented
- *
- * Revision 1.50  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
- *
- * Revision 1.49  2000/02/01 06:12:33  sp
- * Gutter added (still not fully functional)
  *
  */

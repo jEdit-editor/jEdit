@@ -47,7 +47,7 @@ public class FileVFS extends VFS
 			| RENAME_CAP | MKDIR_CAP;
 	}
 
-	public String getFileParent(String path)
+	public String getParentOfPath(String path)
 	{
 		File[] roots = fsView.getRoots();
 		for(int i = 0; i < roots.length; i++)
@@ -56,12 +56,17 @@ public class FileVFS extends VFS
 				return FileRootsVFS.PROTOCOL + ":";
 		}
 
-		return MiscUtilities.getFileParent(path);
+		return MiscUtilities.getParentOfPath(path);
 	}
 
 	public String constructPath(String parent, String path)
 	{
 		return MiscUtilities.constructPath(parent,path);
+	}
+
+	public char getFileSeparator()
+	{
+		return File.separatorChar;
 	}
 
 	public boolean load(View view, Buffer buffer, String path)
@@ -312,6 +317,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.20  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

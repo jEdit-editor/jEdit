@@ -692,11 +692,6 @@ pasteprev.title=Paste Previous
 pasteprev.caption=Previous clippings:
 pasteprev.insert=Insert
 
-# Complete word dialog
-complete-word.title=Complete Word
-complete-word.caption=Possible completions for "{0}":
-complete-word.insert=Insert
-
 # File changed on disk dialogs
 filechanged.title=File Changed on Disk
 filechanged-save.message=The file {0}\n\
@@ -1117,6 +1112,8 @@ vfs.browser.default-filter=[^#]*[^~#]
 
 vfs.browser.up.label=Parent Directory
 vfs.browser.up.icon=FolderUp.gif
+vfs.browser.up-menu.label=Parent Directories
+vfs.browser.up-menu.icon=ToolbarMenu.gif
 vfs.browser.reload.label=Reload Directory
 vfs.browser.reload.icon=Reload.gif
 vfs.browser.roots.label=Local Drives

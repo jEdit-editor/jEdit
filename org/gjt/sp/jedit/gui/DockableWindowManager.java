@@ -210,7 +210,7 @@ public class DockableWindowManager extends JPanel
 			throw new IllegalArgumentException("This DockableWindowManager"
 				+ " does not have a window named " + name);
 
-		saveEntry(entry);
+		entry.container.saveDockableWindow(entry.win);
 
 		entry.container.removeDockableWindow(entry.win);
 		windows.remove(name);
@@ -261,7 +261,7 @@ public class DockableWindowManager extends JPanel
 		while(enum.hasMoreElements())
 		{
 			Entry entry = (Entry)enum.nextElement();
-			saveEntry(entry);
+			entry.container.saveDockableWindow(entry.win);
 			entry.container.removeDockableWindow(entry.win);
 		}
 
@@ -352,13 +352,6 @@ public class DockableWindowManager extends JPanel
 		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"vfs.browser");
 	}
 
-	private void saveEntry(Entry entry)
-	{
-		jEdit.setProperty(entry.win.getName() + ".dock-position",
-			entry.position);
-		entry.container.saveDockableWindow(entry.win);
-	}
-
 	static class Entry
 	{
 		DockableWindow win;
@@ -397,6 +390,9 @@ public class DockableWindowManager extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.3  2000/08/19 08:26:27  sp
  * More docking API tweaks
  *

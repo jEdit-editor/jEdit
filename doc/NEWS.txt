@@ -38,6 +38,13 @@ The bracket matching feature now takes syntax information into acount,
 so brackets in string literals and comments should no longer cause
 problems.
 
+* Improved abbreviation expansion
+
+Abbreviation expansions can contain multiple lines, and the final caret
+position can be specified. Also, if automatic abbreviation expansion is
+enabled, only the space bar, not any non-alphanumeric character as
+before now expands abbrevs.
+
 * User interface improvements
 
 Macros can now be added to the tool bar and text area right-click menu,

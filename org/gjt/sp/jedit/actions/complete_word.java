@@ -19,7 +19,9 @@
 
 package org.gjt.sp.jedit.actions;
 
+import javax.swing.SwingUtilities;
 import java.awt.event.ActionEvent;
+import java.awt.Point;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.CompleteWord;
 import org.gjt.sp.jedit.textarea.*;
@@ -44,9 +46,10 @@ public class complete_word extends EditAction
 
 		// first, we get the word before the caret
 
-		String line = textArea.getLineText(textArea.getCaretLine());
+		int lineIndex = textArea.getCaretLine();
+		String line = textArea.getLineText(lineIndex);
 		int dot = textArea.getCaretPosition() - textArea.getLineStartOffset(
-			textArea.getCaretLine());
+			lineIndex);
 		if(dot == 0)
 		{
 			view.getToolkit().beep();
@@ -125,7 +128,11 @@ public class complete_word extends EditAction
 		// show dialog box if > 1
 		else
 		{
-			new CompleteWord(view,word,completions);
+			Point location = new Point(textArea.offsetToX(lineIndex,wordStart),
+				textArea.getPainter().getFontMetrics().getHeight()
+				* (lineIndex - textArea.getFirstLine() + 1));
+			SwingUtilities.convertPointToScreen(location,textArea);
+			new CompleteWord(view,word,completions,location);
 		}
 	}
 

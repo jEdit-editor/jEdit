@@ -39,6 +39,9 @@ public class indent_lines extends EditAction
 
 		String actionCommand = evt.getActionCommand();
 
+		// when indenting on { or }, we don't want to increase the indent.
+		boolean canIncreaseIndent;
+
 		/* This action is invoked with an action command when
 		* the user presses } or some 'indentCloseBrackets' key.
 		* The idea is that when the user presses } in a Java file,
@@ -71,7 +74,11 @@ public class indent_lines extends EditAction
 
 			if(!ok)
 				return;
+
+			canIncreaseIndent = false;
 		}
+		else
+			canIncreaseIndent = true;
 
 		int start = textArea.getSelectionStartLine();
 		int end = textArea.getSelectionEndLine();
@@ -79,7 +86,7 @@ public class indent_lines extends EditAction
 		buffer.beginCompoundEdit();
 		for(int i = start; i <= end; i++)
 		{
-			buffer.indentLine(textArea,i,true);
+			buffer.indentLine(textArea,i,canIncreaseIndent,true);
 		}
 		buffer.endCompoundEdit();
 	}

@@ -1421,23 +1421,27 @@ public class JEditTextArea extends JComponent
 		if(view.isClosed())
 			return;
 
-		if(view.getRootPane().getGlassPane().isVisible())
-		{
-			super.processKeyEvent(evt);
-			return;
-		}
-
 		InputHandler inputHandler = view.getInputHandler();
+		KeyListener keyEventInterceptor = view.getKeyEventInterceptor();
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_TYPED:
-			inputHandler.keyTyped(evt);
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyTyped(evt);
+			else
+				inputHandler.keyTyped(evt);
 			break;
 		case KeyEvent.KEY_PRESSED:
-			inputHandler.keyPressed(evt);
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyPressed(evt);
+			else
+				inputHandler.keyPressed(evt);
 			break;
 		case KeyEvent.KEY_RELEASED:
-			inputHandler.keyReleased(evt);
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyReleased(evt);
+			else
+				inputHandler.keyReleased(evt);
 			break;
 		}
 
@@ -2157,6 +2161,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.78  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.77  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

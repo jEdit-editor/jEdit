@@ -110,7 +110,7 @@ public class VFSManager
 	public static VFS getVFSForPath(String path)
 	{
 		if(MiscUtilities.isURL(path))
-			return getVFSForProtocol(path);
+			return getVFSForProtocol(MiscUtilities.getProtocolOfURL(path));
 		else
 			return fileVFS;
 	}
@@ -312,7 +312,7 @@ public class VFSManager
 		if(parent)
 		{
 			sendVFSUpdate(vfs,path,false);
-			sendVFSUpdate(vfs,vfs.getFileParent(path),false);
+			sendVFSUpdate(vfs,vfs.getParentOfPath(path),false);
 		}
 		else
 		{
@@ -370,8 +370,8 @@ public class VFSManager
 
 	// private members
 	private static WorkThreadPool ioThreadPool;
-	private static VFS fileVFS = new FileVFS();
-	private static VFS urlVFS = new UrlVFS();
+	private static VFS fileVFS;
+	private static VFS urlVFS;
 	private static Hashtable vfsHash;
 	private static Hashtable protocolHash;
 	private static Hashtable loginHash;
@@ -391,14 +391,16 @@ public class VFSManager
 			count = 4;
 		}
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
+		fileVFS = new FileVFS();
+		urlVFS = new UrlVFS();
 		vfsHash = new Hashtable();
 		protocolHash = new Hashtable();
 		loginHash = new Hashtable();
 		vfsUpdateLock = new Object();
 		vfsUpdates = new Vector();
 		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
-		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
 		registerVFS(FtpVFS.PROTOCOL,new FtpVFS());
+		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
 	}
 
 	private VFSManager() {}
@@ -407,6 +409,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.20  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.19  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *
@@ -433,24 +438,5 @@ public class VFSManager
  *
  * Revision 1.11  2000/07/19 11:45:18  sp
  * I/O requests can be aborted now
- *
- * Revision 1.10  2000/07/19 08:35:59  sp
- * plugin devel docs updated, minor other changes
- *
- * Revision 1.9  2000/06/12 02:43:29  sp
- * pre6 almost ready
- *
- * Revision 1.8  2000/05/21 06:06:43  sp
- * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
- *
- * Revision 1.7  2000/05/01 11:53:24  sp
- * More icons added to toolbar, minor updates here and there
- *
- * Revision 1.6  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
- *
- * Revision 1.5  2000/04/27 08:32:57  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
  *
  */

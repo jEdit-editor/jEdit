@@ -59,8 +59,6 @@ public class insert_literal extends EditAction
 				textArea.overwriteSetSelectedText(buf.toString());
 			}
 		}
-
-		view.getToolkit().beep();
 	}
 
 	public boolean isRepeatable()

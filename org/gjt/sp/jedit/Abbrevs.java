@@ -121,7 +121,7 @@ public class Abbrevs
 				// don't do any indentation at all
 				for(int i = line + 1; i < line + expand.lineCount; i++)
 				{
-					buffer.indentLine(textArea,i,true);
+					buffer.indentLine(textArea,i,true,true);
 				}
 			}
 			catch(BadLocationException bl)
@@ -466,6 +466,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/08/29 07:47:10  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.14  2000/08/23 09:51:48  sp
  * Documentation updates, abbrev updates, bug fixes
  *

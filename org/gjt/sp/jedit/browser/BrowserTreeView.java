@@ -87,10 +87,7 @@ public class BrowserTreeView extends BrowserView
 	public void directoryLoaded(Vector directory)
 	{
 		if(currentlyLoadingTreeNode == rootNode)
-		{
 			rootNode.setUserObject(browser.getDirectory());
-			scroller.getViewport().setViewPosition(new Point(0,0));
-		}
 
 		currentlyLoadingTreeNode.removeAllChildren();
 
@@ -144,12 +141,17 @@ public class BrowserTreeView extends BrowserView
 			reloadDirectory(rootNode,path);
 		else if(browserDir.startsWith(FileRootsVFS.PROTOCOL))
 		{
-			if(!MiscUtilities.isURL(path) || MiscUtilities.getFileProtocol(path)
+			if(!MiscUtilities.isURL(path) || MiscUtilities.getProtocolOfURL(path)
 				.equals("file"))
 				reloadDirectory(rootNode,path);
 		}
 		else if(path.startsWith(browserDir))
 			reloadDirectory(rootNode,path);
+	}
+
+	public Component getDefaultFocusComponent()
+	{
+		return tree;
 	}
 
 	// private members
@@ -323,6 +325,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.8  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

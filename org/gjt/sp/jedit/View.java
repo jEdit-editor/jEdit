@@ -89,6 +89,27 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Returns the listener that will handle all key events in this
+	 * view, if any.
+	 */
+	public final KeyListener getKeyEventInterceptor()
+	{
+		return keyEventInterceptor;
+	}
+
+	/**
+	 * Sets the listener that will handle all key events in this
+	 * view. For example, the complete word command uses this so
+	 * that all key events are passed to the word list popup while
+	 * it is visible.
+	 * @param comp The component
+	 */
+	public void setKeyEventInterceptor(KeyListener listener)
+	{
+		this.keyEventInterceptor = listener;
+	}
+
+	/**
 	 * Returns the input handler.
 	 */
 	public final InputHandler getInputHandler()
@@ -595,23 +616,35 @@ public class View extends JFrame implements EBComponent
 		if(evt.isConsumed())
 			return;
 
-		// possible workaround for bug some people have experienced,
-		// where both the find text field and the text area handle
-		// a key stroke
-		if(getFocusOwner() instanceof JTextField)
-			return;
+		// JTextComponents don't consume events...
+		if(evt.getSource() instanceof JTextComponent)
+		{
+			Keymap keymap = ((JTextComponent)evt.getSource())
+				.getKeymap();
+			if(keymap.getAction(KeyStroke.getKeyStrokeForEvent(evt))
+				!= null)
+				return;
+		}
 
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_TYPED:
-			if(inputHandler.isPrefixActive())
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyTyped(evt);
+			else if(inputHandler.isPrefixActive())
 				inputHandler.keyTyped(evt);
 			break;
 		case KeyEvent.KEY_PRESSED:
-			inputHandler.keyPressed(evt);
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyPressed(evt);
+			else
+				inputHandler.keyPressed(evt);
 			break;
 		case KeyEvent.KEY_RELEASED:
-			inputHandler.keyReleased(evt);
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyReleased(evt);
+			else
+				inputHandler.keyReleased(evt);
 			break;
 		}
 
@@ -642,6 +675,7 @@ public class View extends JFrame implements EBComponent
 
 	private StatusBar status;
 
+	private KeyListener keyEventInterceptor;
 	private InputHandler inputHandler;
 
 	private int waitCount;
@@ -1021,6 +1055,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.193  2000/08/29 07:47:11  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.192  2000/08/19 08:26:26  sp
  * More docking API tweaks
  *
@@ -1050,23 +1087,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.183  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
- *
- * Revision 1.182  2000/07/12 09:11:38  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.181  2000/07/03 03:32:15  sp
- * *** empty log message ***
- *
- * Revision 1.180  2000/06/25 03:19:41  sp
- * View.setInputHandler() method added
- *
- * Revision 1.179  2000/06/12 02:43:29  sp
- * pre6 almost ready
- *
- * Revision 1.178  2000/06/05 08:22:25  sp
- * bug fixes
- *
- * Revision 1.177  2000/06/02 02:21:05  sp
- * minor bug fixes
  *
  */

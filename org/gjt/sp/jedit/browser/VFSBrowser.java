@@ -89,7 +89,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		layout.setConstraints(label,cons);
 		pathAndFilterPanel.add(label);
 
-		pathField = new HistoryTextField("vfs.browser.path",true);
+		pathField = new HistoryTextField("vfs.browser.path",true,false);
 
 		// because its preferred size can be quite wide, we
 		// don't want it to make the browser way too big,
@@ -101,6 +101,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		pathField.addActionListener(new ActionHandler());
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
+
 		layout.setConstraints(pathField,cons);
 		pathAndFilterPanel.add(pathField);
 
@@ -158,7 +159,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(view != null)
 				{
 					Buffer buffer = view.getBuffer();
-					path = buffer.getVFS().getFileParent(
+					path = buffer.getVFS().getParentOfPath(
 						buffer.getPath());
 				}
 				else
@@ -218,6 +219,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 			|| path.endsWith(java.io.File.separator)))
 			path = path.substring(0,path.length() - 1);
 
+		if(path.startsWith("file:"))
+			path = path.substring(5);
+
 		this.path = path;
 
 		pathField.setText(path);
@@ -254,7 +258,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void delete(String path)
 	{
-		if(FavoritesVFS.PROTOCOL.equals(MiscUtilities.getFileProtocol(path)))
+		if(MiscUtilities.isURL(path) && FavoritesVFS.PROTOCOL.equals(
+			MiscUtilities.getProtocolOfURL(path)))
 		{
 			Object[] args = { path.substring(FavoritesVFS.PROTOCOL.length() + 1) };
 			int result = JOptionPane.showConfirmDialog(this,
@@ -303,7 +308,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFS vfs = VFSManager.getVFSForPath(from);
 
-		to = vfs.constructPath(vfs.getFileParent(from),to);
+		to = vfs.constructPath(vfs.getParentOfPath(from),to);
 
 		VFSSession session = vfs.createVFSSession(from,this);
 		if(session == null)
@@ -392,6 +397,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 		add(BorderLayout.CENTER,browserView);
 
 		revalidate();
+
+		// path is null when we are called from the constructor
+		if(path != null)
+			reloadDirectory(false);
 	}
 
 	public VFS.DirectoryEntry[] getSelectedFiles()
@@ -416,10 +425,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			public void run()
 			{
-				if(list == null)
-					return;
-
 				Vector directoryVector = new Vector();
+
+				if(list == null)
+				{
+					browserView.directoryLoaded(directoryVector);
+					return;
+				}
+
 				for(int i = 0; i < list.length; i++)
 				{
 					VFS.DirectoryEntry file = list[i];
@@ -566,6 +579,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
 		toolBar.add(up = createToolButton("up"));
+		// see comment in UpMenuButton class to find out why we
+		// pass it the up button
+		toolBar.add(new UpMenuButton(up));
 		toolBar.add(reload = createToolButton("reload"));
 		toolBar.addSeparator();
 		toolBar.add(roots = createToolButton("roots"));
@@ -655,13 +671,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == pathField)
-			{
-				String path = pathField.getText();
-				if(path != null)
-					setDirectory(path);
-			}
-			else if(source == filterField)
+			if(source == pathField || source == filterField)
 			{
 				try
 				{
@@ -670,7 +680,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 						filter = "*";
 					filenameFilter = new RE(MiscUtilities
 						.globToRE(filter),RE.REG_ICASE);
-					reloadDirectory(false);
 				}
 				catch(Exception e)
 				{
@@ -680,11 +689,15 @@ public class VFSBrowser extends JPanel implements EBComponent
 					GUIUtilities.error(VFSBrowser.this,
 						"vfs.browser.bad-filter",args);
 				}
+
+				String path = pathField.getText();
+				if(path != null)
+					setDirectory(path);
 			}
 			else if(source == up)
 			{
 				VFS vfs = VFSManager.getVFSForPath(path);
-				setDirectory(vfs.getFileParent(path));
+				setDirectory(vfs.getParentOfPath(path));
 			}
 			else if(source == reload)
 				reloadDirectory(true);
@@ -697,11 +710,80 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(view != null)
 				{
 					Buffer buffer = view.getBuffer();
-					setDirectory(buffer.getVFS().getFileParent(
+					setDirectory(buffer.getVFS().getParentOfPath(
 						buffer.getPath()));
 				}
 				else
 					getToolkit().beep();
+			}
+		}
+	}
+
+	class UpMenuButton extends JButton
+	{
+		UpMenuButton(JButton upButton)
+		{
+			// for a better-looking GUI, we display the popup
+			// as if it is from the 'up' button, not the arrow
+			// to the right of it
+			this.upButton = upButton;
+
+			setIcon(GUIUtilities.loadToolBarIcon(
+				jEdit.getProperty("vfs.browser.up-menu.icon")));
+			UpMenuButton.this.setToolTipText(jEdit.getProperty(
+				"vfs.browser.up-menu.label"));
+
+			UpMenuButton.this.setRequestFocusEnabled(false);
+			setMargin(new Insets(0,0,0,0));
+			UpMenuButton.this.addMouseListener(new MouseHandler());
+		}
+
+		// private members
+		private JButton upButton;
+		private JPopupMenu popup;
+
+		private void createPopup()
+		{
+			popup = new JPopupMenu();
+			ActionHandler actionHandler = new ActionHandler();
+
+			VFS vfs = VFSManager.getVFSForPath(path);
+			String dir = vfs.getParentOfPath(path);
+			for(;;)
+			{
+				JMenuItem menuItem = new JMenuItem(dir);
+				menuItem.addActionListener(actionHandler);
+				popup.add(menuItem);
+				String parentDir = vfs.getParentOfPath(dir);
+				if(parentDir.equals(dir))
+					break;
+				else
+					dir = parentDir;
+			}
+		}
+
+		class ActionHandler implements ActionListener
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				setDirectory(evt.getActionCommand());
+			}
+		}
+
+		class MouseHandler extends MouseAdapter
+		{
+			public void mousePressed(MouseEvent evt)
+			{
+				if(popup == null || !popup.isVisible())
+				{
+					createPopup();
+					popup.show(upButton,0,upButton.getHeight());
+				}
+				else
+				{
+					popup.setVisible(false);
+					popup = null;
+				}
 			}
 		}
 	}
@@ -797,15 +879,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 			{
 				String actionCommand = evt.getActionCommand();
 				if(actionCommand.equals("list"))
-				{
 					setBrowserView(new BrowserListView(VFSBrowser.this));
-					reloadDirectory(false);
-				}
 				else if(actionCommand.equals("tree"))
-				{
 					setBrowserView(new BrowserTreeView(VFSBrowser.this));
-					reloadDirectory(false);
-				}
 				else if(actionCommand.equals("showHiddenFiles"))
 				{
 					showHiddenFiles = !showHiddenFiles;
@@ -879,6 +955,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.18  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.17  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

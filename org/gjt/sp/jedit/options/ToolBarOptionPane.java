@@ -553,7 +553,7 @@ class ToolBarAddDialog extends EnhancedDialog
 				if(fileIcon == null)
 					directory = null;
 				else
-					directory = MiscUtilities.getFileParent(fileIcon);
+					directory = MiscUtilities.getParentOfPath(fileIcon);
 				String path = GUIUtilities.showFileDialog(null,directory,
 					JFileChooser.OPEN_DIALOG);
 				if(path != null)
@@ -579,6 +579,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.8  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *

@@ -62,10 +62,10 @@ public class FtpVFS extends VFS
 			+ "@" + newSession.get(VFSSession.HOSTNAME_KEY);
 	}
 
-	public String getFileParent(String path)
+	public String getParentOfPath(String path)
 	{
 		FtpAddress address = new FtpAddress(path);
-		address.path = MiscUtilities.getFileParent(address.path);
+		address.path = MiscUtilities.getParentOfPath(address.path);
 		return address.toString();
 	}
 
@@ -285,7 +285,7 @@ public class FtpVFS extends VFS
 				if(dirEntry == null)
 					return null;
 				else if(dirEntry.type == __LINK)
-					resolveSymlink(session,getFileParent(path),
+					resolveSymlink(session,getParentOfPath(path),
 						dirEntry,comp);
 				return dirEntry;
 			}
@@ -568,6 +568,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.23  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

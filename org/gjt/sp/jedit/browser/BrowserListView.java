@@ -24,7 +24,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.*;
 
 /**
  * Originally taken from QuickFile, adapted for VFS browser and file chooser.
@@ -45,6 +45,7 @@ public class BrowserListView extends BrowserView
 		else
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		list.addKeyListener(new KeyHandler());
 		list.addMouseListener(new MouseHandler());
 		list.setVisibleRowCount(10);
 
@@ -62,12 +63,38 @@ public class BrowserListView extends BrowserView
 
 	public void directoryLoaded(Vector directory)
 	{
+		// preserve selected files so user won't be annoyed by
+		// automatic updates
+		VFS.DirectoryEntry[] selected = getSelectedFiles();
+		String[] selectedNames = new String[selected.length];
+		for(int i = 0; i < selected.length; i++)
+		{
+			selectedNames[i] = selected[i].name;
+		}
+
 		if(directory == null)
 			list.setListData(new Object[0]);
 		else
 			list.setListData(directory);
 
-		//scroller.getViewport().setViewPosition(new Point(0,0));
+		// restore selection
+		if(selectedNames.length != 0)
+		{
+			for(int i = 0; i < directory.size(); i++)
+			{
+				VFS.DirectoryEntry file = (VFS.DirectoryEntry)directory
+					.elementAt(i);
+				String name = file.name;
+				for(int j = 0; j < selectedNames.length; j++)
+				{
+					if(selectedNames[j].equals(name))
+					{
+						list.addSelectionInterval(i,i);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	public void updateFileView()
@@ -81,11 +108,75 @@ public class BrowserListView extends BrowserView
 			browser.reloadDirectory(true);
 	}
 
+	public Component getDefaultFocusComponent()
+	{
+		return list;
+	}
+
 	// private members
 	private JList list;
 	private JScrollPane scroller;
 
 	private static FileCellRenderer renderer = new FileCellRenderer();
+
+	class KeyHandler extends KeyAdapter
+	{
+		StringBuffer typeSelectBuffer = new StringBuffer();
+		Timer timer = new Timer(0,new ClearTypeSelect());
+
+		public void keyTyped(KeyEvent evt)
+		{
+			char ch = evt.getKeyChar();
+			typeSelectBuffer.append(ch);
+			doTypeSelect(typeSelectBuffer.toString());
+
+			timer.stop();
+			timer.setInitialDelay(500);
+			timer.setRepeats(false);
+			timer.start();
+		}
+
+		public void keyPressed(KeyEvent evt)
+		{
+			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+			{
+				browser.filesActivated();
+				evt.consume();
+			}
+			else if(evt.getKeyCode() == KeyEvent.VK_LEFT)
+			{
+				VFS vfs = VFSManager.getVFSForPath(browser
+					.getDirectory());
+				browser.setDirectory(vfs.getParentOfPath(
+					browser.getDirectory()));
+			}
+		}
+
+		private void doTypeSelect(String str)
+		{
+			ListModel model = list.getModel();
+			for(int i = 0; i < model.getSize(); i++)
+			{
+				VFS.DirectoryEntry file = (VFS.DirectoryEntry)
+					model.getElementAt(i);
+				if(file.name.regionMatches(true,0,str,0,str.length()))
+				{
+					list.setSelectedIndex(i);
+					list.ensureIndexIsVisible(i);
+					browser.filesSelected();
+					return;
+				}
+			}
+		}
+
+		class ClearTypeSelect implements ActionListener
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				typeSelectBuffer.setLength(0);
+			}
+		}
+	}
 
 	class MouseHandler extends MouseAdapter
 	{
@@ -126,6 +217,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.7  2000/08/20 07:29:30  sp
  * I/O and VFS browser improvements
  *

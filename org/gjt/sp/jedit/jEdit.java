@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.04.00";
+		return "02.06.05.00";
 	}
 
 	/**
@@ -1044,13 +1044,16 @@ public class jEdit
 				parent = file.getParent();
 		}
 
-		String protocol = MiscUtilities.getFileProtocol(path);
-		if(protocol == null)
+		String protocol;
+		if(MiscUtilities.isURL(path))
+		{
+			protocol = MiscUtilities.getProtocolOfURL(path);
+			if(protocol.equals("file"))
+				path = path.substring(5);
+		}
+		else
 			protocol = "file";
-
-		if(path.startsWith("file:"))
-			path = path.substring(5);
-
+			
 		if(protocol.equals("file"))
 			path = MiscUtilities.constructPath(parent,path);
 
@@ -1099,23 +1102,22 @@ public class jEdit
 				parent = file.getParent();
 		}
 
-		String protocol = MiscUtilities.getFileProtocol(path);
-		if(protocol == null)
+		String protocol;
+		if(MiscUtilities.isURL(path))
+		{
+			protocol = MiscUtilities.getProtocolOfURL(path);
+			if(protocol.equals("file"))
+				path = path.substring(5);
+		}
+		else
 			protocol = "file";
-
-		if(path.startsWith("file:"))
-			path = path.substring(5);
-
+			
 		if(protocol.equals("file"))
 			path = MiscUtilities.constructPath(parent,path);
 
-		Buffer buffer = buffersFirst;
-		while(buffer != null)
-		{
-			if(buffer.getPath().equals(path))
-				return buffer;
-			buffer = buffer.next;
-		}
+		Buffer buffer = getBuffer(path);
+		if(buffer != null)
+			return buffer;
 
 		buffer = new Buffer(null,path,readOnly,newFile,true,null);
 		if(!buffer.load(view,false))
@@ -2318,6 +2320,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.272  2000/08/29 07:47:11  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.271  2000/08/22 07:25:00  sp
  * Improved abbrevs, bug fixes
  *

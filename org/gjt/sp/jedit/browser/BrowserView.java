@@ -59,6 +59,11 @@ public abstract class BrowserView extends JPanel
 	 */
 	public abstract void reloadDirectory(String path);
 
+	/**
+	 * Returns the component that is to have focus by default.
+	 */
+	public abstract Component getDefaultFocusComponent();
+
 	// protected members
 	protected VFSBrowser browser;
 
@@ -72,6 +77,9 @@ public abstract class BrowserView extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.4  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

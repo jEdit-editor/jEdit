@@ -45,7 +45,7 @@ public class indent_on_tab extends EditAction
                 if(selStart == selEnd
 			&& buffer.getBooleanProperty("indentOnTab")
 			&& buffer.indentLine(textArea,textArea
-			.getSelectionStartLine(),false))
+			.getSelectionStartLine(),true,false))
                 {
 				return;
                 }

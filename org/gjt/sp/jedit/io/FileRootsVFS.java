@@ -41,8 +41,13 @@ public class FileRootsVFS extends VFS
 	public int getCapabilities()
 	{
 		// BROWSE_CAP not set because we don't want the VFS browser
-		// to create the default 'favorites' button on the tool bar
+		// to create the default 'favorites' item in the 'More' menu
 		return 0 /* BROWSE_CAP | */;
+	}
+
+	public String getParentOfPath(String path)
+	{
+		return PROTOCOL + ":";
 	}
 
 	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
@@ -77,6 +82,9 @@ public class FileRootsVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.2  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

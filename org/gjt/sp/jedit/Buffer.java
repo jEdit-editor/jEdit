@@ -858,14 +858,17 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * and return true, or return false if a normal tab is to be inserted.
 	 * @param textArea The text area
 	 * @param line The line number to indent
-	 * @param force If true, the line will be indented even if it already
-	 * has the right amount of indent
+	 * @param canIncreaseIndent If false, nothing will be done if the
+	 * calculated indent is greater than the current
+	 * @param canDecreaseIndent If false, nothing will be done if the
+	 * calculated indent is less than the current
 	 * @return true if the tab key event should be swallowed (ignored)
 	 * false if a real tab should be inserted
 	 */
 	// XXX: having to pass a textArea around sucks! Should update this
 	// method to use Elements one day
-	public boolean indentLine(JEditTextArea textArea, int lineIndex, boolean force)
+	public boolean indentLine(JEditTextArea textArea, int lineIndex,
+		boolean canIncreaseIndent, boolean canDecreaseIndent)
 	{
 		if(lineIndex == 0)
 			return false;
@@ -1052,9 +1055,10 @@ public class Buffer extends PlainDocument implements EBComponent
 			if(prevLineMatches)
 				prevLineIndent += tabSize;
 
-			// Insert a tab if line already has correct indent
-			// and force is not set
-			if(!force && lineIndent >= prevLineIndent)
+			if(!canDecreaseIndent && prevLineIndent <= lineIndent)
+				return false;
+
+			if(!canIncreaseIndent && prevLineIndent >= lineIndent)
 				return false;
 
 			// Do it
@@ -1457,7 +1461,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	private VFS vfs;
 	private File autosaveFile;
 	private String path;
-	private String protocol;
 	private String name;
 	private Mode mode;
 	private TokenMarker tokenMarker;
@@ -1471,17 +1474,10 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	private void setPath(String path)
 	{
-		protocol = MiscUtilities.getFileProtocol(path);
-		if(protocol == null)
-			protocol = "file";
-
-		if(path.startsWith("file:"))
-			path = path.substring(5);
-
 		this.path = path;
 		name = MiscUtilities.getFileName(path);
 
-		vfs = VFSManager.getVFSForProtocol(protocol);
+		vfs = VFSManager.getVFSForPath(path);
 		if(vfs instanceof FileVFS)
 		{
 			file = new File(path);
@@ -1665,6 +1661,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.175  2000/08/29 07:47:10  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.174  2000/08/23 09:51:48  sp
  * Documentation updates, abbrev updates, bug fixes
  *

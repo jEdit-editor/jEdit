@@ -143,11 +143,22 @@ public class MiscUtilities
 	}
 
 	/**
-	 * Returns the directory of the specified path.
-	 * @param path The path name
+	 * @deprecated Call getParentOfPath() instead
 	 */
 	public static String getFileParent(String path)
 	{
+		return getParentOfPath(path);
+	}
+
+	/**
+	 * Returns the parent of the specified path.
+	 * @param path The path name
+	 * @since jEdit 2.6pre5
+	 */
+	public static String getParentOfPath(String path)
+	{
+		// ignore last character of path to properly handle
+		// paths like /foo/bar/
 		int count = Math.max(0,path.length() - 2);
 		int index = path.lastIndexOf(File.separatorChar,count);
 		if(index == -1)
@@ -160,6 +171,47 @@ public class MiscUtilities
 		}
 
 		return path.substring(0,index + 1);
+	}
+
+	/**
+	 * @deprecated Call getProtocolOfURL() instead
+	 */
+	public static String getFileProtocol(String url)
+	{
+		return getProtocolOfURL(url);
+	}
+
+	/**
+	 * Returns the protocol specified by a URL.
+	 * @param url The URL
+	 * @since jEdit 2.6pre5
+	 */
+	public static String getProtocolOfURL(String url)
+	{
+		return url.substring(0,url.indexOf(':'));
+	}
+
+	/**
+	 * Checks if the specified string is a URL.
+	 * @param str The string to check
+	 * @return True if the string is a URL, false otherwise
+	 */
+	public static boolean isURL(String str)
+	{
+		int fsIndex = Math.max(str.indexOf(File.separatorChar),
+			str.indexOf('/'));
+		if(fsIndex == 0) // /etc/passwd
+			return false;
+		else if(fsIndex == 2) // C:\AUTOEXEC.BAT
+			return false;
+
+		int cIndex = str.indexOf(':');
+		if(cIndex <= 1) // D:\WINDOWS
+			return false;
+		else if(fsIndex != -1 && cIndex > fsIndex) // /tmp/RTF::read.pm
+			return false;
+
+		return true;
 	}
 
 	/**
@@ -256,54 +308,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 				buf.append(' ');
 		}
 		return buf.toString();
-	}
-
-	/**
-	 * Returns the protocol specifier in a path name.
-	 * @param path The path name
-	 * @since jEdit 2.5pre1
-	 */
-	public static String getFileProtocol(String path)
-	{
-		int fsIndex = Math.max(path.indexOf(File.separatorChar),
-			path.indexOf('/'));
-		if(fsIndex == 0) // /etc/passwd
-			return null;
-		else if(fsIndex == 2) // C:\AUTOEXEC.BAT
-			return null;
-		else if(fsIndex == -1)
-			fsIndex = path.length();
-
-		int cIndex = path.indexOf(':');
-		if(cIndex <= 1) // D:\WINDOWS
-			return null;
-		else if(cIndex > fsIndex) // /tmp/RTF::read.pm
-			return null;
-
-		return path.substring(0,cIndex);
-	}
-
-	/**
-	 * Checks if the specified string is a URL.
-	 * @param path The string to check
-	 * @return True if the string is a URL, false otherwise
-	 */
-	public static boolean isURL(String path)
-	{
-		int fsIndex = Math.max(path.indexOf(File.separatorChar),
-			path.indexOf('/'));
-		if(fsIndex == 0) // /etc/passwd
-			return false;
-		else if(fsIndex == 2) // C:\AUTOEXEC.BAT
-			return false;
-
-		int cIndex = path.indexOf(':');
-		if(cIndex <= 1) // D:\WINDOWS
-			return false;
-		else if(fsIndex != -1 && cIndex > fsIndex) // /tmp/RTF::read.pm
-			return false;
-
-		return true;
 	}
 
 	/**
@@ -682,6 +686,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  2000/08/29 07:47:10  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.38  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

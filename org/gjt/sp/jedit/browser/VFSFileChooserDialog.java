@@ -51,7 +51,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		else
 		{
 			name = MiscUtilities.getFileName(path);
-			path = MiscUtilities.getFileParent(path);
+			path = MiscUtilities.getParentOfPath(path);
 		}
 
 		browser = new VFSBrowser(view,path,mode,multipleSelection);
@@ -83,7 +83,11 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			panel.add(Box.createHorizontalStrut(12));
 		}
 		else
+		{
+			GUIUtilities.requestFocus(this,browser.getBrowserView()
+				.getDefaultFocusComponent());
 			panel.add(Box.createGlue());
+		}
 
 		ok = new JButton(jEdit.getProperty("vfs.browser.dialog."
 			+ (mode == VFSBrowser.OPEN_DIALOG ? "open" : "save")));
@@ -99,8 +103,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			panel.add(Box.createGlue());
 
 		content.add(BorderLayout.SOUTH,panel);
-
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog."
@@ -279,6 +281,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.9  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

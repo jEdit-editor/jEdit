@@ -106,13 +106,13 @@ public abstract class VFS
 	}
 
 	/**
-	 * Returns the parent of the specified URL. This must be
-	 * overridden to return a non-null value, otherwise browsing this
-	 * filesystem will not work.
-	 * @param url The URL
-	 * @since jEdit 2.6pre2
+	 * Returns the parent of the specified path. This must be
+	 * overridden to return a non-null value for browsing of this
+	 * filesystem to work.
+	 * @param path The path
+	 * @since jEdit 2.6pre5
 	 */
-	public String getFileParent(String url)
+	public String getParentOfPath(String path)
 	{
 		return null;
 	}
@@ -129,6 +129,15 @@ public abstract class VFS
 	public String constructPath(String parent, String path)
 	{
 		return null;
+	}
+
+	/**
+	 * Returns the file separator used by this VFS.
+	 * @since jEdit 2.6pre5
+	 */
+	public char getFileSeprator()
+	{
+		return '/';
 	}
 
 	/**
@@ -204,13 +213,13 @@ public abstract class VFS
 	/**
 	 * Returns the specified directory entry.
 	 * @param session The session
-	 * @param url The URL
+	 * @param path The path
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
 	 * @return The specified directory entry, or null if it doesn't exist.
 	 * @since jEdit 2.6pre2
 	 */
-	public DirectoryEntry _getDirectoryEntry(VFSSession session, String url,
+	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
 		Component comp)
 		throws IOException
 	{
@@ -254,12 +263,12 @@ public abstract class VFS
 	/**
 	 * Deletes the specified URL.
 	 * @param session The VFS session
-	 * @param url The URL
+	 * @param path The path
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurs
 	 * @since jEdit 2.6pre2
 	 */
-	public boolean _delete(VFSSession session, String url, Component comp)
+	public boolean _delete(VFSSession session, String path, Component comp)
 		throws IOException
 	{
 		return false;
@@ -270,8 +279,8 @@ public abstract class VFS
 	 * URLs between directories, however others may not. Do not rely on
 	 * this behavior.
 	 * @param session The VFS session
-	 * @param from The URL
-	 * @param to The new URL
+	 * @param from The old path
+	 * @param to The new path
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurs
 	 * @since jEdit 2.6pre2
@@ -367,6 +376,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.18  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.17  2000/08/23 09:51:48  sp
  * Documentation updates, abbrev updates, bug fixes
  *
@@ -396,27 +408,5 @@ public abstract class VFS
  *
  * Revision 1.8  2000/07/26 07:48:45  sp
  * stuff
- *
- * Revision 1.7  2000/07/19 08:35:59  sp
- * plugin devel docs updated, minor other changes
- *
- * Revision 1.6  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
- *
- * Revision 1.5  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.4  2000/04/27 08:32:57  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.3  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.2  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.1  2000/04/24 04:45:37  sp
- * New I/O system started, and a few minor updates
  *
  */

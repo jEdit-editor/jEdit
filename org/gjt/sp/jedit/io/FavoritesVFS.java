@@ -54,6 +54,11 @@ public class FavoritesVFS extends VFS
 		return /* BROWSE_CAP | */ DELETE_CAP;
 	}
 
+	public String getParentOfPath(String path)
+	{
+		return PROTOCOL + ":";
+	}
+
 	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
 		Component comp)
 	{
@@ -136,6 +141,9 @@ public class FavoritesVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.5  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

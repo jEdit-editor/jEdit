@@ -286,7 +286,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		String path;
 		if(view.getBuffer().getVFS() instanceof FileVFS)
 		{
-			path = MiscUtilities.getFileParent(
+			path = MiscUtilities.getParentOfPath(
 				view.getBuffer().getPath());
 		}
 		else
@@ -389,6 +389,9 @@ public class MultiFileSearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.15  2000/06/04 08:57:35  sp
  * GUI updates, bug fixes
  *

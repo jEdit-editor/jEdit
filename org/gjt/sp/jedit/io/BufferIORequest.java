@@ -84,7 +84,7 @@ public class BufferIORequest extends WorkRequest
 		this.vfs = vfs;
 		this.path = path;
 
-		markersPath = MiscUtilities.getFileParent(path)
+		markersPath = vfs.getParentOfPath(path)
 			+ '.' + MiscUtilities.getFileName(path)
 			+ ".marks";
 	}
@@ -698,6 +698,9 @@ public class BufferIORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/29 07:47:13  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.1  2000/08/23 09:51:48  sp
  * Documentation updates, abbrev updates, bug fixes
  *

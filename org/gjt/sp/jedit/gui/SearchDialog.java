@@ -151,6 +151,7 @@ public class SearchDialog extends EnhancedDialog
 
 	public void cancel()
 	{
+		save();
 		GUIUtilities.saveGeometry(this,"search");
 		dispose();
 	}
@@ -254,6 +255,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/08/29 07:47:12  sp
+ * Improved complete word, type-select in VFS browser, bug fixes
+ *
  * Revision 1.15  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

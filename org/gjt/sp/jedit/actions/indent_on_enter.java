@@ -44,7 +44,7 @@ public class indent_on_enter extends EditAction
                 if(selStart == selEnd
 			&& buffer.getBooleanProperty("indentOnEnter"))
 		{
-			buffer.indentLine(textArea,textArea.getCaretLine(),false);
+			buffer.indentLine(textArea,textArea.getCaretLine(),true,false);
                 }
         }
 }
