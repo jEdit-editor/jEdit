@@ -298,8 +298,8 @@ public class BrowserView extends JPanel
 					evt.consume();
 					break;
 				case KeyEvent.VK_LEFT:
-					if(tree.getMinSelectionRow() == 0
-						|| tree.getMinSelectionRow() == 1)
+					if(tree.getMinSelectionRow() == -1
+						|| tree.getMinSelectionRow() == 0)
 					{
 						String directory = browser.getDirectory();
 						browser.setDirectory(VFSManager.getVFSForPath(

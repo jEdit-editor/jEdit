@@ -61,6 +61,8 @@ automatically restores it when a recent file is opened.
 
 * Scrolling improvements
 
+The line containing the caret is centered when scrolling long distances.
+
 The horizontal scroll bar width is now set according to the longest
 visible line.
 

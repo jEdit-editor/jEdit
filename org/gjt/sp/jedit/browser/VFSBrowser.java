@@ -156,7 +156,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 
 		HistoryModel filterModel = HistoryModel.getModel("vfs.browser.filter");
 		String filter;
-		if(mode == BROWSER)
+		if(mode == BROWSER || !jEdit.getBooleanProperty(
+			"vfs.browser.currentBufferFilter"))
 		{
 			filter = jEdit.getProperty("vfs.browser.last-filter");
 			if(filter == null)
@@ -221,7 +222,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		super.removeNotify();
 		jEdit.setBooleanProperty("vfs.browser.filter-enabled",
 			filterCheckbox.isSelected());
-		if(mode == BROWSER)
+		if(mode == BROWSER || !jEdit.getBooleanProperty(
+			"vfs.browser.currentBufferFilter"))
 		{
 			jEdit.setProperty("vfs.browser.last-filter",
 				filterField.getText());

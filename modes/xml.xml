@@ -7,7 +7,7 @@
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{xml,dtd,sgml,sgm}" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.xml" />
 		<PROPERTY NAME="firstlineGlob" VALUE="*&lt;\?xml*" />
 	</PROPS>
 	<RULES>
@@ -92,6 +92,12 @@
 			<END>--&gt;</END>
 		</SPAN>
 
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>--</BEGIN>
+			<END>--</END>
+		</SPAN>
+
 		<!-- Parameter entities -->
 		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
 			<BEGIN>%</BEGIN>
@@ -143,6 +149,12 @@
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>--</BEGIN>
+			<END>--</END>
 		</SPAN>
 
 		<SPAN TYPE="LITERAL1">

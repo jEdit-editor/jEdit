@@ -130,8 +130,8 @@ public class Mode
 	{
 		String prefix = "mode." + name + ".";
 
-		if(jEdit.getBooleanProperty(prefix + "customSettings"))
-		{
+		//if(jEdit.getBooleanProperty(prefix + "customSettings"))
+		//{
 			String property = jEdit.getProperty(prefix + key);
 			if(property != null)
 			{
@@ -146,7 +146,7 @@ public class Mode
 				}
 				return value;
 			}
-		}
+		//}
 
 		Object value = props.get(key);
 		if(value != null)

@@ -58,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.00.05.00";
+		return "03.00.99.00";
 	}
 
 	/**
@@ -163,56 +163,41 @@ public class jEdit
 
 		if(portFile != null && new File(portFile).exists())
 		{
-			int port;
-			String key;
+			int port, key;
 			try
 			{
 				BufferedReader in = new BufferedReader(new FileReader(portFile));
 				port = Integer.parseInt(in.readLine());
-				key = in.readLine();
+				key = Integer.parseInt(in.readLine());
 				in.close();
 
-				StringBuffer buf = new StringBuffer();
-				buf.append(key);
-				buf.append('\n');
+				Socket socket = new Socket(InetAddress.getLocalHost(),port);
+				Writer out = new OutputStreamWriter(socket.getOutputStream());
+				out.write(String.valueOf(key));
+				out.write('\n');
 
 				if(!defaultSession)
 				{
 					if(session != null)
-						buf.append("session=" + session + "\n");
+						out.write("session=" + session + "\n");
 					else
-						buf.append("nosession\n");
+						out.write("nosession\n");
 				}
 				if(newView)
-					buf.append("newview\n");
-				buf.append("parent=" + userDir + "\n");
-				buf.append("--\n");
+					out.write("newview\n");
+				out.write("parent=" + userDir + "\n");
+				out.write("--\n");
 
 				for(int i = 0; i < args.length; i++)
 				{
 					if(args[i] != null)
 					{
-						buf.append(args[i]);
-						buf.append('\n');
+						out.write(args[i]);
+						out.write('\n');
 					}
 				}
 
-				byte[] bytes = buf.toString().getBytes("UTF8");
-				DatagramPacket packet = new DatagramPacket(
-					bytes,bytes.length,
-					InetAddress.getLocalHost(),
-					port);
-				DatagramSocket socket = new DatagramSocket();
-				socket.send(packet);
-
-				// wait for an ACK
-				packet = new DatagramPacket(new byte[0],0);
-
-				// wait up to 1 sec for other instance to
-				// respond.
-				socket.setSoTimeout(1000);
-				socket.receive(packet);
-				socket.close();
+				out.close();
 
 				System.exit(0);
 			}
@@ -621,8 +606,8 @@ public class jEdit
 			if(plugin.equals("BeanShell.jar")
 				|| plugin.equals("bsh-1.0.jar"))
 			{
-				Log.log(Log.WARNING,jEdit.class,"Not loading"
-					+ " obsolete plugin: " + path);
+				String[] args = { plugin };
+				GUIUtilities.error(null,"plugin.obsolete",args);
 				continue;
 			}
 

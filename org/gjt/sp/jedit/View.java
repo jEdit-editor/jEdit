@@ -881,27 +881,13 @@ public class View extends JFrame implements EBComponent
 		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
 			if(toolBar != null)
-			{
-				Component[] components = toolBars.getComponents();
-				for(int i = 0; i < components.length; i++)
-				{
-					if(components[i] == toolBar)
-					{
-						toolBars.remove(toolBar);
-						toolBar = GUIUtilities.loadToolBar("view.toolbar");
-						toolBar.add(Box.createGlue());
-						toolBars.add(toolBar,i);
-						getRootPane().revalidate();
-						return;
-					}
-				}
-			}
-			else
-			{
-				toolBar = GUIUtilities.loadToolBar("view.toolbar");
-				toolBar.add(Box.createGlue());
-				addToolBar(toolBar);
-			}
+				toolBars.remove(toolBar);
+
+			toolBar = GUIUtilities.loadToolBar("view.toolbar");
+			toolBar.add(Box.createGlue());
+
+			toolBars.add(toolBar,0);
+			getRootPane().revalidate();
 		}
 		else if(toolBar != null)
 		{

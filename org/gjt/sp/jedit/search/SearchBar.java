@@ -41,7 +41,7 @@ public class SearchBar extends JPanel
 
 		JLabel label = new JLabel(jEdit.getProperty("view.search.find"));
 		label.setFont(boldFont);
-		label.setBorder(new EmptyBorder(0,0,0,12));
+		label.setBorder(new EmptyBorder(0,2,0,12));
 		add(label,BorderLayout.WEST);
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());

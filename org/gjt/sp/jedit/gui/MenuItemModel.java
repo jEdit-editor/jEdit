@@ -32,29 +32,42 @@ public class MenuItemModel
 	{
 		this.name = name;
 
-		String actionName;
-		int index = name.indexOf('@');
-		if(index != -1)
+		// HACK
+		if(name.startsWith("play-macro@"))
 		{
-			arg = name.substring(index+1);
-			actionName = name.substring(0,index);
+			Macros.Macro macro = Macros.getMacro(name.substring(11));
+			label = macro.name;
+			int index = label.lastIndexOf('/');
+			label = label.substring(index + 1)
+				.replace('_',' ');
+			action = macro.action;
 		}
 		else
 		{
-			arg = null;
-			actionName = name;
-			action = jEdit.getAction(name);
+			String actionName;
+			int index = name.indexOf('@');
+			if(index != -1)
+			{
+				arg = name.substring(index+1);
+				actionName = name.substring(0,index);
+			}
+			else
+			{
+				arg = null;
+				actionName = name;
+				action = jEdit.getAction(name);
+			}
+			action = jEdit.getAction(actionName);
+
+			label = jEdit.getProperty(name.concat(".label"));
+			if(label == null)
+				label = name;
 		}
-		action = jEdit.getAction(actionName);
 
-		label = jEdit.getProperty(name.concat(".label"));
-		if(label == null)
-			label = name;
-
-		index = label.indexOf('$');
+		int index = label.indexOf('$');
 		if(index != -1 && label.length() - index > 1)
 		{
-                        mnemonic = Character.toLowerCase(label.charAt(index + 1));
+			mnemonic = Character.toLowerCase(label.charAt(index + 1));
 			label = label.substring(0,index).concat(label.substring(++index));
 		}
 		else
@@ -114,10 +127,7 @@ public class MenuItemModel
 	 */
 	public boolean isTransient()
 	{
-		if(action == null)
-			return false;
-
-		if(action.getName().equals("play-macro"))
+		if(name.startsWith("play-macro@"))
 			return true;
 		else
 			return false;
@@ -132,35 +142,3 @@ public class MenuItemModel
 	protected EditAction action;
 	protected String arg;
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.16  2000/11/16 04:01:12  sp
- * BeanShell macros started
- *
- * Revision 1.15  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.14  2000/08/10 08:30:40  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.13  2000/07/26 07:48:44  sp
- * stuff
- *
- * Revision 1.12  2000/07/12 09:11:38  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.11  2000/06/29 06:20:45  sp
- * Tool bar icon code bug fix
- *
- * Revision 1.10  2000/05/14 10:55:22  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.9  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
- *
- * Revision 1.8  2000/04/18 11:44:31  sp
- * Context menu editor finished
- *
- */

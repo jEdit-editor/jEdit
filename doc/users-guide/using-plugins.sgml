@@ -32,8 +32,8 @@
    plugin installer dialog box.
   </para>
   <para>
-   Plugins to install can be selected from the list. Multiple plugins
-   can be selected by holding down <keycap>Control</>.
+   Plugins to install can be selected by clicking the check box next to
+   their names.
   </para>
   <para>
    Radio buttons in the plugin installer dialog box select the location
@@ -68,9 +68,8 @@
    click the <guibutton>Update Plugins</> button in the plugin manager.
    The plugin manager will then connect to the jEdit web site and
    compare currently installed plugins against the latest available ones.
-   Plugins to update can be selected from the resulting list. Multiple
-   plugins can be selected by holding down <keycap>Control</>.
-   Clicking <guibutton>Update</> will begin
+   Plugins to update can be selected by clicking the check box next to
+   their names. Clicking <guibutton>Update</> will begin
    downloading the updated plugins.
   </para>
   <note>

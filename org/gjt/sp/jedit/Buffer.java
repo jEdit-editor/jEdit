@@ -660,6 +660,13 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			public void run()
 			{
+				// Saving a NEW_FILE will create a file on
+				// disk, thus file system browsers must reload
+				if(getFlag(NEW_FILE) || !getPath().equals(oldPath))
+					VFSManager.sendVFSUpdate(getVFS(),getPath(),true);
+
+				setFlag(IO,false);
+
 				if(rename)
 				{
 					// we do a write lock so that the
@@ -695,15 +702,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 					if(file != null)
 						modTime = file.lastModified();
-				}
 
-				setFlag(IO,false);
-
-				if(!getPath().equals(oldPath))
-					VFSManager.sendVFSUpdate(getVFS(),getPath(),true);
-
-				if(rename)
-				{
 					EditBus.send(new BufferUpdate(Buffer.this,
 						BufferUpdate.DIRTY_CHANGED));
 				}

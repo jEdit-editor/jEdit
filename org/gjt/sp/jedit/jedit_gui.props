@@ -147,7 +147,8 @@ view.search.find=Search for:
 ### CONTEXT MENUS
 ###
 view.context=undo redo - cut copy paste paste-previous - select-all \
-	select-none - view-registers - to-upper to-lower
+	select-none - view-registers - to-upper to-lower - \
+	eval-selection
 
 view.gutter.context=toggle-gutter toggle-line-numbers save-gutter-size
 
@@ -881,6 +882,10 @@ plugin.dep-class.title=Unsatisfied Dependency
 plugin.dep-class.message=The plugin {0} requires the class {1}.\n\
 	Try installing the appropriate plugin or class library.
 
+plugin.obsolete.title=Obsolete Plugin
+plugin.obsolete.message=The plugin {0} is obsolete.\n\
+	Please remove it.
+
 # Macro dialogs
 macro-input.title=Macro Input
 macro-error.title=Macro Error
@@ -965,8 +970,8 @@ options.gutter.currentLineHighlight=Current line highlighting
 options.color.label=Colors
 options.color.object=Object
 options.color.color=Color
-options.color.bgColor=View background
-options.color.fgColor=View foreground
+options.color.bgColor=Text background
+options.color.fgColor=Text foreground
 options.color.caretColor=Caret
 options.color.selectionColor=Selection
 options.color.lineHighlightColor=Line highlight
@@ -1104,10 +1109,8 @@ options.browser.sortFiles=Sort file list
 options.browser.sortIgnoreCase=Case insensitive sort
 options.browser.sortMixFilesAndDirs=Mix files and directories
 options.browser.doubleClickClose=Double-clicking an open file closes it
-
-options.browser.filters=Additional Filename Filters
-options.browser.filters.name=Name
-options.browser.filters.glob=Glob pattern
+options.browser.currentBufferFilter=Filter in file dialogs is \
+	current buffer extension
 
 # Font selector
 font-selector.title=Font Selector

@@ -86,6 +86,13 @@ public class BrowserOptionPane extends AbstractOptionPane
 		doubleClickClose.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".doubleClickClose"));
 		addComponent(doubleClickClose);
+
+		/* Base filter in open/save dialogs on current buffer name */
+		currentBufferFilter = new JCheckBox(jEdit.getProperty("options.browser"
+			+ ".currentBufferFilter"));
+		currentBufferFilter.setSelected(jEdit.getBooleanProperty("vfs.browser"
+			+ ".currentBufferFilter"));
+		addComponent(currentBufferFilter);
 	}
 
 	public void _save()
@@ -103,6 +110,8 @@ public class BrowserOptionPane extends AbstractOptionPane
 			sortMixFilesAndDirs.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.doubleClickClose",
 			doubleClickClose.isSelected());
+		jEdit.setBooleanProperty("vfs.browser.currentBufferFilter",
+			currentBufferFilter.isSelected());
 	}
 
 	// private members
@@ -112,11 +121,15 @@ public class BrowserOptionPane extends AbstractOptionPane
 	private JCheckBox sortIgnoreCase;
 	private JCheckBox sortMixFilesAndDirs;
 	private JCheckBox doubleClickClose;
+	private JCheckBox currentBufferFilter;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/12/24 02:54:48  sp
+ * fixing bugs
+ *
  * Revision 1.6  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

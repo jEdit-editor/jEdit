@@ -260,6 +260,7 @@ vfs.browser.sortFiles=true
 vfs.browser.sortMixFilesAndDirs=false
 vfs.browser.sortIgnoreCase=true
 vfs.browser.doubleClickClose=false
+vfs.browser.currentBufferFilter=true
 
 # Can be one of: buffer, home, last
 vfs.browser.defaultPath=buffer

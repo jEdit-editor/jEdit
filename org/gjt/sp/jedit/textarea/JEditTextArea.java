@@ -1992,6 +1992,12 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextCharacter(boolean select)
 	{
+		if(!select && selectionStart != selectionEnd)
+		{
+			setCaretPosition(selectionEnd);
+			return;
+		}
+
 		int caret = getCaretPosition();
 		if(caret == buffer.getLength())
 			getToolkit().beep();
@@ -2002,12 +2008,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 			if(select)
 				select(getMarkPosition(),caret);
 			else
-			{
-				if(selectionStart != selectionEnd)
-					setCaretPosition(selectionEnd);
-				else
-					setCaretPosition(caret);
-			}
+				setCaretPosition(caret);
 		}
 	}
 
@@ -2203,6 +2204,12 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevCharacter(boolean select)
 	{
+		if(!select && selectionStart != selectionEnd)
+		{
+			setCaretPosition(selectionStart);
+			return;
+		}
+
 		int caret = getCaretPosition();
 		if(caret == 0)
 			getToolkit().beep();
@@ -2213,17 +2220,12 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			if(select)
 				select(getMarkPosition(),caret);
 			else
-			{
-				if(selectionStart != selectionEnd)
-					setCaretPosition(selectionStart);
-				else
-					setCaretPosition(caret);
-			}
+				setCaretPosition(caret);
 		}
 	}
 
 	/**
-	 * Movse the caret to the previous line.
+	 * Moves the caret to the previous line.
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevLine(boolean select)
@@ -3181,7 +3183,7 @@ forward_scan:		do
 			Point location = new Point(offsetToX(lineIndex,wordStart),
 				painter.getFontMetrics().getHeight()
 				* (lineIndex - firstLine + 1));
-			SwingUtilities.convertPointToScreen(location,this);
+			SwingUtilities.convertPointToScreen(location,painter);
 			new CompleteWord(view,word,completions,location);
 		}
 	}

@@ -611,7 +611,7 @@ loop:		for(;;)
 					+ fileset.getCode() + ");");
 			}
 
-			recorder.record(action);
+			recorder.record("SearchAndReplace." + action);
 		}
 	}
 }

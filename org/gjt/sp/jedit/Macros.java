@@ -134,6 +134,7 @@ public class Macros
 	{
 		macroList = new Vector();
 		macroHierarchy = new Vector();
+		macroHash = new Hashtable();
 
 		systemMacroPath = MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"macros");
@@ -175,6 +176,16 @@ public class Macros
 	public static Vector getMacroList()
 	{
 		return macroList;
+	}
+
+	/**
+	 * Returns the macro with the specified name.
+	 * @param macro The macro's name
+	 * @since jEdit 2.6pre1
+	 */
+	public static Macro getMacro(String macro)
+	{
+		return (Macro)macroHash.get(macro);
 	}
 
 	/**
@@ -362,6 +373,7 @@ public class Macros
 
 	private static Vector macroList;
 	private static Vector macroHierarchy;
+	private static Hashtable macroHash;
 	private static String lastMacro;
 
 	static
@@ -388,6 +400,7 @@ public class Macros
 				Macro newMacro = new Macro(name,file.getPath());
 				vector.addElement(newMacro);
 				macroList.addElement(name);
+				macroHash.put(name,newMacro);
 			}
 			else if(file.isDirectory())
 			{

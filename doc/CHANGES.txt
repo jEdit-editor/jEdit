@@ -1,5 +1,34 @@
 JEDIT 3.0 VERSION HISTORY
 
+* Version 3.0final
+
++ Enhancements
+
+- The 'filter in file dialogs is current buffer extension' feature in
+  the file system browser is now configurable
+- Improved plugin manager's install and update dialog boxes
+
++ Neutral
+
+- Search->Quick HyperSearch no longer records a useless
+  'view.quickHyperSearch()' command in macros
+
++ Bug Fixes
+
+- Saving a new file didn't refresh file system browsers that were
+  viewing the directory where the file was saved
+- Enabling or disabling the search bar didn't take effect in currently
+  opened views if the tool bar was also enabled
+- UDP edit server had a number of problems, so I've reverted to the old
+  TCP edit server. I'll debug the UDP server in jEdit 3.1
+- The installer created an invalid batch file on Windows
+- Adding macros to the context menu and tool bar hasn't worked since
+  2.7pre2. Bugs like this make me wonder if anyone actually USES
+  jEdit...
+- Complete word popup would be offset horizontally a little if the
+  gutter was visible
+- Recorded search and replace actions didn't work
+
 * Version 3.0pre5
 
 + New Features

@@ -23,7 +23,7 @@
 		<WHITESPACE>    </WHITESPACE>
 
 		<!-- Documentation comment -->
-		<SPAN TYPE="COMMENT2" DELEGATE="JAVADOC">
+		<SPAN TYPE="COMMENT2" DELEGATE="java::JAVADOC">
 			<BEGIN>/**</BEGIN>
 			<END>*/</END>
 		</SPAN>
@@ -153,28 +153,6 @@
 			<KEYWORD3>properties</KEYWORD3>
 
 
-		</KEYWORDS>
-	</RULES>
-
-	<RULES SET="JAVADOC" DEFAULT="COMMENT2">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>    </WHITESPACE>
-
-		<KEYWORDS>
-			<LABEL>@author</LABEL>
-			<LABEL>@deprecated</LABEL>
-			<LABEL>@docRoot</LABEL>
-			<LABEL>@exception</LABEL>
-			<LABEL>@link</LABEL>
-			<LABEL>@param</LABEL>
-			<LABEL>@return</LABEL>
-			<LABEL>@see</LABEL>
-			<LABEL>@serialData</LABEL>
-			<LABEL>@serialField</LABEL>
-			<LABEL>@since</LABEL>
-			<LABEL>@throws</LABEL>
-			<LABEL>@version</LABEL>
 		</KEYWORDS>
 	</RULES>
 </MODE>

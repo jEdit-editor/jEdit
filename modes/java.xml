@@ -149,6 +149,12 @@
 		<!-- so that @link{...} is highlighted -->
 		<SEQ TYPE="COMMENT2">{</SEQ>
 
+		<!-- HTML tags -->
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
 		<KEYWORDS>
 			<LABEL>@author</LABEL>
 			<LABEL>@beaninfo</LABEL>

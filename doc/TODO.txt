@@ -2,11 +2,7 @@ Here is my to do list for jEdit 3.1. Tell me what you think.
 
 * Folding
 
-'foldMode' buffer local property is either 'manual', 'embedded',
-or 'indent'.
-
-In 'manual' mode, folds can be added manually using various commands,
-and are saved to .<filename>.folds.
+'foldMode' buffer local property is either 'embedded' or 'indent'.
 
 In 'embedded' mode, buffers are scanned for customizable start/end
 strings; for example, { and }.
@@ -25,19 +21,13 @@ if selected, widens the gutter appropriately and shows line numbers.
 The gutter will no longer be resizable, and it's size will instead be
 determined by the width of the longest line number.
 
+Make the marker/register highlight configurable.
+
 * LineInfo array moved
 
 The lineInfo array and associated methods (markTokens(), insertLines(),
 deleteLines()) will be moved from the TokenMarker class to the Buffer
 class.
-
-* Image preview
-
-When opening a buffer, if its filename matches a glob
-(*.{gif,jpg,jpeg,png}) the resulting buffer will be read only with no
-text inside. The contents of the file will be loaded into an 'image'
-buffer-local property. The text area will check for this property and if
-it exists, display the image.
 
 * Make split configuration persistent
 
@@ -46,9 +36,20 @@ in which.
 
 * Simplify XMode DTD
 
-- Remove WHITESPACE rule
 - Remove KEYWORDS.IGNORE_CASE attribute; instead, keywords will inherit
   the setting of the RULES.IGNORE_CASE attribute
+- Rename RULES.SET to RULES.NAME
+
+* XMode rule inclusion
+
+A new tag will be added:
+
+<INCLUDE NAME="<ruleset name>" />
+
+This tag will copy all rules from the specified ruleset to the current
+ruleset. This will reduce rule duplication by allowing, for example,
+XML-derived modes (HTML, ASP, JSP, PHP, ...) to share a common set of
+rules.
 
 * Change mode loading code
 
@@ -89,6 +90,20 @@ speed things up a lot.
 When saving a file, it will first be saved to .<filename>.save, and
 only then renamed to <filename> if the save was successful.
 
+* Preserving file permissions on Unix
+
+The j editor has platform-independent code to get/set file permissions.
+Use it.
+
+API:
+- VFS.DirectoryEntry.permissions variable
+- VFS.setPermissions() method
+
+* WhiteSpace plugin
+
+Perhaps integrate it into the core? It will improve performance
+considerably.
+
 * Minor changes
 
 - The File->Current Directory menu will not list backups and autosaves.
@@ -100,6 +115,9 @@ only then renamed to <filename> if the save was successful.
 - The abbrev option pane will edit the currently selected abbrev in a
   text area.
 
+- The shortcuts option panes will support grabbing keys from the
+  keyboard, and assignment of more than one shortcut per command.
+
 - When running with the Metal L&F, the docking area border will look
   like a split pane divider
 
@@ -110,15 +128,25 @@ only then renamed to <filename> if the save was successful.
   flag in buffer options dialog, automatic detect when read only
   status is changed on disk
 
-* UI changes
+- File system browser: change 'Open in new view' to 'Open in new split'
 
-I think the marker commands should be moved from the 'Search' menu to an
-'Edit->Markers' submenu. The 'clear marker' and 'go to marker' submenus
-will be replaced with commands that display a list dialog box. I haven't
-decided what keyboard shortcuts these commands will have yet.
+- Make modifier code keyboard layout-neutral: handle modifier+key char
+  in keyTyped()
+
+- Bracket double click behavior is really annoying - make if configurable
+
+* UI changes
 
 The Edit menu should be simplified. The 'Selection', 'Lines',
 'Paragraphs' and 'Brackets' submenus should be merged and reorganized
 into 'Text' and 'Source Code' submenus.
+
+* Documentation
+
+Migrate to DocBook/XML.
+
+* Feature removals
+
+- Markers will be removed
 
 -- Slava Pestov <sp@gjt.org>

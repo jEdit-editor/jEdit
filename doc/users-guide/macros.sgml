@@ -112,7 +112,7 @@
    macro recorded to the <filename>Temporary_Macro.bsh</> buffer.
   </para>
  </sect1>
- <sect1 id=macro-writing><title>Evaluating BeanShell Expressions</>
+ <sect1 id=beanshell-expr><title>Evaluating BeanShell Expressions</>
   <indexterm><primary>Utilities menu</></indexterm>
   <indexterm><primary>Evaluate Selection command</></indexterm>
   <indexterm><primary>Evaluate command</></indexterm>
