@@ -42,6 +42,12 @@ public class GutterOptionPane extends AbstractOptionPane
 			jEdit.getProperty("view.gutter.lineNumbers")));
 		addComponent(lineNumbersEnabled);
 
+		currentLineHighlightEnabled = new JCheckBox(jEdit.getProperty(
+			"options.gutter.currentLineHighlight"));
+		currentLineHighlightEnabled.getModel().setSelected("yes".equals(
+			jEdit.getProperty("view.gutter.highlightCurrentLine")));
+		addComponent(currentLineHighlightEnabled);
+
 		gutterWidth = new JTextField(jEdit.getProperty(
 			"view.gutter.width"));
 		addComponent(jEdit.getProperty("options.gutter.width"),
@@ -103,6 +109,8 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterExpanded.getModel().isSelected() ? "no" : "yes");
 		jEdit.setProperty("view.gutter.lineNumbers", lineNumbersEnabled
 			.getModel().isSelected() ? "yes" : "no");
+		jEdit.setProperty("view.gutter.highlightCurrentLine",
+			currentLineHighlightEnabled.getModel().isSelected() ? "yes" : "no");
 		jEdit.setProperty("view.gutter.width", gutterWidth.getText());
 		jEdit.setProperty("view.gutter.borderWidth",
 			gutterBorderWidth.getText());
@@ -131,6 +139,7 @@ public class GutterOptionPane extends AbstractOptionPane
 
 	private JCheckBox gutterExpanded;
 	private JCheckBox lineNumbersEnabled;
+	private JCheckBox currentLineHighlightEnabled;
 	private JTextField gutterWidth;
 	private JTextField gutterBorderWidth;
 	private JTextField highlightInterval;

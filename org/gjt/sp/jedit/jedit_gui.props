@@ -750,6 +750,7 @@ options.styles.eolMarkerColor=EOL markers
 options.styles.gutterBgColor=Gutter background
 options.styles.gutterFgColor=Gutter foreground
 options.styles.gutterHighlightColor=Gutter highlight
+options.styles.gutterCurrentLineColor=Gutter current line
 options.styles.gutterBorderColor=Gutter border
 options.styles.comment1Style=Comment 1
 options.styles.comment2Style=Comment 2
@@ -781,6 +782,7 @@ options.gutter.label=Gutter
 options.gutter.expanded=Gutter expanded by default
 options.gutter.interval=Line highlight interval (0=none):\ 
 options.gutter.lineNumbers=Line numbering enabled
+options.gutter.currentLineHighlight=Current line highlight enabled
 options.gutter.width=Gutter width:\ 
 options.gutter.borderWidth=Gutter border width:\ 
 options.gutter.font=Gutter font:\ 

@@ -387,7 +387,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public final void invalidateLine(int line)
 	{
-		repaint(0,textArea.lineToY(line) + fm.getMaxDescent() + fm.getLeading(),
+		repaint(0,textArea.lineToY(line) + fm.getDescent() + fm.getLeading(),
 			getWidth(),fm.getHeight());
 	}
 
@@ -398,7 +398,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public final void invalidateLineRange(int firstLine, int lastLine)
 	{
-		repaint(0,textArea.lineToY(firstLine) + fm.getMaxDescent() + fm.getLeading(),
+		repaint(0,textArea.lineToY(firstLine) + fm.getDescent() + fm.getLeading(),
 			getWidth(),(lastLine - firstLine + 1) * fm.getHeight());
 	}
 
@@ -555,7 +555,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	protected void paintLineHighlight(Graphics gfx, int line, int y)
 	{
 		int height = fm.getHeight();
-		y += fm.getLeading() + fm.getMaxDescent();
+		y += fm.getLeading() + fm.getDescent();
 
 		int selectionStart = textArea.getSelectionStart();
 		int selectionEnd = textArea.getSelectionEnd();
@@ -626,7 +626,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		int position = textArea.getBracketPosition();
 		if(position == -1)
 			return;
-		y += fm.getLeading() + fm.getMaxDescent();
+		y += fm.getLeading() + fm.getDescent();
 		int x = textArea.offsetToX(line,position);
 		gfx.setColor(bracketHighlightColor);
 		// Hack!!! Since there is no fast way to get the character
@@ -646,7 +646,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int caretWidth = ((blockCaret ||
 				textArea.isOverwriteEnabled()) ?
 				fm.charWidth('w') : 1);
-			y += fm.getLeading() + fm.getMaxDescent();
+			y += fm.getLeading() + fm.getDescent();
 			int height = fm.getHeight();
 			
 			gfx.setColor(caretColor);
@@ -667,6 +667,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/03/21 07:18:53  sp
+ * bug fixes
+ *
  * Revision 1.26  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes

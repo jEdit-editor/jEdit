@@ -457,7 +457,7 @@ public class JEditTextArea extends JComponent
 	{
 		FontMetrics fm = painter.getFontMetrics();
 		return (line - firstLine) * fm.getHeight()
-			- (fm.getLeading() + fm.getMaxDescent());
+			- (fm.getLeading() + fm.getDescent());
 	}
 
 	/**
@@ -1079,6 +1079,17 @@ public class JEditTextArea extends JComponent
 			painter.invalidateLineRange(selectionStartLine,selectionEndLine);
 			painter.invalidateLineRange(newStartLine,newEndLine);
 
+			// repaint the gutter if the current line changes and current
+			// line highlighting is enabled
+			if ((newStartLine != selectionStartLine || newEndLine
+				!= selectionEndLine || newBias != biasLeft)
+				&& gutter.isCurrentLineHighlightEnabled())
+			{
+				gutter.invalidateLine(biasLeft ? selectionStartLine
+					: selectionEndLine);
+				gutter.invalidateLine(newBias ? newStartLine : newEndLine);
+			}
+
 			document.addUndoableEdit(new CaretUndo(
 				selectionStart,selectionEnd,
 				newStart,newEnd));
@@ -1691,7 +1702,7 @@ public class JEditTextArea extends JComponent
 		else
 		{
 			painter.invalidateLineRange(line,firstLine + visibleLines);
-			gutter.repaint();
+			gutter.invalidateLineRange(line,firstLine + visibleLines);
 			updateScrollBars();
 		}
 	}
@@ -2266,6 +2277,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.48  2000/03/21 07:18:53  sp
+ * bug fixes
+ *
  * Revision 1.47  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes

@@ -654,12 +654,16 @@ public class View extends JFrame implements EBComponent
 		{
 			// retain the default highlight interval
 		}
+		gutter.setCurrentLineHighlightEnabled("yes".equals(jEdit.getProperty(
+			"view.gutter.highlightCurrentLine")));
 		gutter.setBackground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.bgColor")));
 		gutter.setForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.fgColor")));
 		gutter.setHighlightedForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.highlightColor")));
+		gutter.setCurrentLineForeground(GUIUtilities.parseColor(
+			jEdit.getProperty("view.gutter.currentLineColor")));
 		String alignment = jEdit.getProperty(
 			"view.gutter.numberAlignment");
 		if ("right".equals(alignment))
@@ -797,13 +801,14 @@ public class View extends JFrame implements EBComponent
 		myGutter.setCollapsed(gutter.isCollapsed());
 		myGutter.setLineNumberingEnabled(gutter.isLineNumberingEnabled());
 		myGutter.setHighlightInterval(gutter.getHighlightInterval());
+		myGutter.setCurrentLineHighlightEnabled(gutter.isCurrentLineHighlightEnabled());
 		myGutter.setLineNumberAlignment(gutter.getLineNumberAlignment());
 		myGutter.setFont(gutter.getFont());
 		myGutter.setBorder(gutter.getBorder());
 		myGutter.setBackground(gutter.getBackground());
 		myGutter.setForeground(gutter.getForeground());
-		myGutter.setHighlightedForeground(
-			gutter.getHighlightedForeground());
+		myGutter.setHighlightedForeground(gutter.getHighlightedForeground());
+		myGutter.setCurrentLineForeground(gutter.getCurrentLineForeground());
 
 		textArea.setCaretBlinkEnabled(copy.isCaretBlinkEnabled());
 		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
@@ -1412,6 +1417,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.145  2000/03/21 07:18:53  sp
+ * bug fixes
+ *
  * Revision 1.144  2000/03/20 06:06:36  sp
  * Mode internals cleaned up
  *

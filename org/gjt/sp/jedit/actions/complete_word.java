@@ -85,7 +85,7 @@ public class complete_word extends EditAction
 			for(int j = 0; j < len; j++)
 			{
 				char c = line.charAt(j);
-				if(Character.isWhitespace(c) || noWordSep.indexOf(c) != -1)
+				if(!Character.isLetterOrDigit(c) && noWordSep.indexOf(c) == -1)
 				{
 					if(line.regionMatches(j + 1,word,0,wordLen))
 					{

@@ -160,7 +160,7 @@ class ColorTableModel extends AbstractTableModel
 
 	ColorTableModel()
 	{
-		colorChoices = new Vector(7);
+		colorChoices = new Vector(12);
 		addColorChoice("options.styles.bgColor","view.bgColor");
 		addColorChoice("options.styles.fgColor","view.fgColor");
 		addColorChoice("options.styles.caretColor","view.caretColor");
@@ -178,6 +178,8 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.fgColor");
 		addColorChoice("options.styles.gutterHighlightColor",
 			"view.gutter.highlightColor");
+		addColorChoice("options.styles.gutterCurrentLineColor",
+			"view.gutter.currentLineColor");
 		addColorChoice("options.styles.gutterBorderColor",
 			"view.gutter.borderColor");
 	}
@@ -547,6 +549,9 @@ implements ActionListener, KeyListener
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/03/21 07:18:53  sp
+ * bug fixes
+ *
  * Revision 1.9  2000/02/04 05:50:27  sp
  * More gutter updates from mike
  *

@@ -259,7 +259,7 @@ public class Abbrevs
 		{
 			if(line.length() == 0)
 				continue;
-			else if(line.startsWith("["))
+			else if(line.startsWith("[") && line.indexOf('|') == -1)
 			{
 				if(line.equals("[global]"))
 					currentAbbrevs = globalAbbrevs;
@@ -323,8 +323,6 @@ public class Abbrevs
 		while(keys.hasMoreElements())
 		{
 			String abbrev = (String)keys.nextElement();
-			if(abbrev.startsWith("["))
-				out.write('\\');
 			out.write(abbrev);
 			out.write('|');
 			out.write(MiscUtilities.charsToEscapes((String)values.nextElement()));
@@ -374,6 +372,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/03/21 07:18:53  sp
+ * bug fixes
+ *
  * Revision 1.8  2000/03/11 03:02:15  sp
  * 2.3final
  *

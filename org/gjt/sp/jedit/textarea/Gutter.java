@@ -52,6 +52,7 @@ public class Gutter extends JComponent implements SwingConstants
 		setBackground(defaults.gutterBgColor);
 		setForeground(defaults.gutterFgColor);
 		setHighlightedForeground(defaults.gutterHighlightColor);
+		setCurrentLineForeground(defaults.gutterCurrentLineColor);
 
 		setFont(defaults.gutterFont);
 
@@ -88,21 +89,31 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
 		int lineHeight = pfm.getHeight();
-		int baseline = (int) Math.round((this.baseline + lineHeight -
-			pfm.getMaxDescent()) / 2.0);
 
-		int firstLine = textArea.getFirstLine() + 1;
-		int lastLine = firstLine + (getHeight() / lineHeight);
+		Rectangle clip = gfx.getClipBounds();
 
-		int firstValidLine = (int) Math.max(1, firstLine);
-		int lastValidLine = (int) Math.min(textArea.getLineCount(),
-			lastLine);
+		int baseline = (clip.y - clip.y % lineHeight) + (int) Math.round(
+			(this.baseline + lineHeight - pfm.getDescent()) / 2.0);
+
+		int firstLine = clip.y / lineHeight + textArea.getFirstLine() + 1;
+		int lastLine = firstLine + clip.height / lineHeight;
+		int caretLine = textArea.getCaretLine() + 1;
+
+		int firstValidLine = firstLine > 1 ? firstLine : 1;
+		int lastValidLine = (lastLine > textArea.getLineCount())
+			? textArea.getLineCount() : lastLine;
+
+		boolean highlightCurrentLine = currentLineHighlightEnabled
+			&& (textArea.getSelectionStart() == textArea.getSelectionEnd());
 
 		gfx.setFont(getFont());
 
-		gfx.setColor(getForeground());
+		Color fg = getForeground();
+		Color hfg = getHighlightedForeground();
+		Color clfg = getCurrentLineForeground();
 
 		String number;
+		int offset;
 
 		for (int line = firstLine; line <= lastLine;
 			line++, baseline += lineHeight)
@@ -112,8 +123,6 @@ public class Gutter extends JComponent implements SwingConstants
 				continue;
 
 			number = Integer.toString(line);
-
-			int offset;
 
 			switch (alignment)
 			{
@@ -129,16 +138,20 @@ public class Gutter extends JComponent implements SwingConstants
 				offset = 1;
 			}
 
-			if (interval > 1 && line % interval == 0)
+			if (line == caretLine && highlightCurrentLine)
 			{
-				gfx.setColor(getHighlightedForeground());
-				gfx.drawString(number, ileft + offset, baseline);
-				gfx.setColor(getForeground());
+				gfx.setColor(clfg);
+			}
+			else if (interval > 1 && line % interval == 0)
+			{
+				gfx.setColor(hfg);
 			}
 			else
 			{
-				gfx.drawString(number, ileft + offset, baseline);
+				gfx.setColor(fg);
 			}
+
+			gfx.drawString(number, ileft + offset, baseline);
 		}
 	}
 
@@ -157,6 +170,27 @@ public class Gutter extends JComponent implements SwingConstants
 		{
 			highlights.paintHighlight(gfx, line, y);
 		}
+	}
+
+	/**
+	* Marks a line as needing a repaint.
+	* @param line The line to invalidate
+	*/
+	public final void invalidateLine(int line)
+	{
+		repaint(0,textArea.lineToY(line) + fm.getDescent() + fm.getLeading(),
+			getWidth(),fm.getHeight());
+	}
+
+	/**
+	* Marks a range of lines as needing a repaint.
+	* @param firstLine The first line to invalidate
+	* @param lastLine The last line to invalidate
+	*/
+	public final void invalidateLineRange(int firstLine, int lastLine)
+	{
+		repaint(0,textArea.lineToY(firstLine) + fm.getDescent() + fm.getLeading(),
+			getWidth(),(lastLine - firstLine + 1) * fm.getHeight());
 	}
 
 	/**
@@ -214,16 +248,7 @@ public class Gutter extends JComponent implements SwingConstants
 		super.setFont(font);
 
 		fm = getFontMetrics(font);
-		baseline = fm.getHeight() - fm.getMaxDescent();
-	}
-
-	/**
-	 * Set the foreground color for highlighted line numbers
-	 * @param highlight The highlight color
-	 */
-	public void setHighlightedForeground(Color highlight)
-	{
-		intervalHighlight = highlight;
+		baseline = fm.getAscent();
 	}
 
 	/**
@@ -234,6 +259,21 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		return intervalHighlight;
 	}
+
+	public void setHighlightedForeground(Color highlight)
+	{
+		intervalHighlight = highlight;
+	}
+
+	public Color getCurrentLineForeground()
+ 	{
+		return currentLineHighlight;
+	}
+
+	public void setCurrentLineForeground(Color highlight)
+	{
+		currentLineHighlight = highlight;
+ 	}
 
 	/**
 	 * Set the width of the expanded gutter
@@ -385,6 +425,20 @@ public class Gutter extends JComponent implements SwingConstants
 		repaint();
 	}
 
+	public boolean isCurrentLineHighlightEnabled()
+	{
+		return currentLineHighlightEnabled;
+	}
+
+	public void setCurrentLineHighlightEnabled(boolean enabled)
+	{
+		if (currentLineHighlightEnabled == enabled) return;
+
+		currentLineHighlightEnabled = enabled;
+
+		repaint();
+	}
+
 	public JPopupMenu getContextMenu()
 	{
 		return context;
@@ -410,6 +464,7 @@ public class Gutter extends JComponent implements SwingConstants
 	private Dimension collapsedSize = new Dimension(0,0);
 
 	private Color intervalHighlight;
+	private Color currentLineHighlight;
 
 	private FontMetrics fm;
 
@@ -417,6 +472,7 @@ public class Gutter extends JComponent implements SwingConstants
 
 	private int interval = 0;
 	private boolean lineNumberingEnabled = true;
+	private boolean currentLineHighlightEnabled = false;
 	private boolean collapsed = false;
 
 	class GutterMouseListener extends MouseAdapter

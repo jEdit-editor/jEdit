@@ -143,6 +143,9 @@ view.gutter.fgColor=#8080c0
 # Gutter highlight color
 view.gutter.highlightColor=black
 
+# Gutter current line highlight color
+view.gutter.currentLineColor=#d04040
+
 # Gutter border color
 view.gutter.borderColor=gray
 
@@ -173,6 +176,9 @@ view.gutter.numberAlignment=right
 
 # Gutter line numbers are highlighted at this interval
 view.gutter.highlightInterval=5
+
+# Gutter displays line numbers
+view.gutter.highlightCurrentLine=yes
 
 # Expand abbrevs when user finishes typing a word
 view.expandOnInput=no

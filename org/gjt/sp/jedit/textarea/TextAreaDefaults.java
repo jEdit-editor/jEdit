@@ -48,6 +48,7 @@ public class TextAreaDefaults
 	public Color gutterBgColor;
 	public Color gutterFgColor;
 	public Color gutterHighlightColor;
+	public Color gutterCurrentLineColor;
 	public Color gutterBorderColor;
 	public int gutterBorderWidth;
 	public int gutterNumberAlignment;
@@ -91,6 +92,7 @@ public class TextAreaDefaults
 			DEFAULTS.gutterBgColor = Color.white;
 			DEFAULTS.gutterFgColor = Color.black;
 			DEFAULTS.gutterHighlightColor = new Color(0x8080c0);
+			DEFAULTS.gutterCurrentLineColor = new Color(0xd04040);
 			DEFAULTS.gutterBorderColor = Color.gray;
 			DEFAULTS.gutterBorderWidth = 4;
 			DEFAULTS.gutterNumberAlignment = Gutter.RIGHT;

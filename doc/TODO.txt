@@ -1,5 +1,7 @@
 JEDIT TO DO
 
+- Gutter's new repaint stuff is broken
+
 - Integrate XMode
 - Option pane for changing mode-specific tab size, indent, comment
   characters, and so on

@@ -1,5 +1,18 @@
 JEDIT VERSION HISTORY
 
+* Version 2.4pre2
+
++ New Features
+
+- The current line is highlighted in the gutter now
+
++ Bug Fixes
+
+- 'Complete Word' didn't find all completions (since 2.4pre1)
+- Inserting lines at the end of non-text files didn't work properly (since
+  2.4pre1)
+- File modification on focus didn't work very well (since 2.4pre1)
+
 * Version 2.4pre1
 
 + New Features

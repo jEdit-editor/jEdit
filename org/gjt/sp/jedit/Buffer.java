@@ -370,9 +370,13 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void checkModTime(View view)
 	{
+		long oldModTime = modTime;
 		long newModTime = file.lastModified();
-		if(newModTime > modTime)
+
+		if(newModTime > oldModTime)
 		{
+			modTime = newModTime;
+
 			String prop = (isDirty() ? "filechanged-dirty.message"
 				: "filechanged-focus.message");
 
@@ -1774,6 +1778,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.130  2000/03/21 07:18:53  sp
+ * bug fixes
+ *
  * Revision 1.129  2000/03/20 06:06:36  sp
  * Mode internals cleaned up
  *
