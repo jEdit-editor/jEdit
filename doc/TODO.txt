@@ -1,32 +1,19 @@
 JEDIT TO DO
 
+- CVS: remove save-log, clear-log
 - Focus breaks when saving or switching buffers
 
 - C/S+TAB to navigate around view's components
 - Directory search: current buffer's dir is the default
-- Incremental search
-- View tiling
-- Keystroke to switch between two must recently edited buffers
-- Having more than 2 split panes should be possible
-- load/saveCaretInfo() save data in split.n.<property name> so that we
-  don't have to unsplit when switching buffers, closing, reloading, etc
-  - XXX: this will make the caret handling in split() a bit tricky
-  - load/saveCaretInfo(int n) -- n=-1 for temporary saving, eg in
-    split()
+- Next split pane/prev split pane commands bound to C+e ( and C+e )
+- Next view/prev view commands bound to C+e [ and C+e ]
 - Check file modification status on focus and buffer switch
   - Buffer.checkModStatus() method
-- Double-click drag doesn't work backwards
 - 'Uncomment' command that removes comment strings from selected text
-
-- Remove 'Clear Activity Log', 'Save Activity Log' actions, make them
-  buttons in the activity log window
+- Having more than 2 split panes should be possible
 - Option pane for changing mode-specific tab size, indent, comment
   characters, and so on
-- EditAction.isEnabled() method -- write new EditAction.Model class
-- If there is > 1 possible match, complete-word should list them in a
-  dialog box
-- Write an InputHandler subclass that displays the current repeat count,
-  if any, in the view's status bar
+- Double-click drag doesn't work backwards
 - Plugin devel manual needs more work:
   - document views, buffers
   - document GUIUtilities.load/saveGeometry
@@ -35,6 +22,20 @@ JEDIT TO DO
   - each section should have some sample source code
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
   to 'Advanced Features'
+
+- load/saveCaretInfo() save data in split.n.<property name> so that we
+  don't have to unsplit when switching buffers, closing, reloading, etc
+  - XXX: this will make the caret handling in split() a bit tricky
+  - load/saveCaretInfo(int n) -- n=-1 for temporary saving, eg in
+    split()
+- View tiling
+- Keystroke to switch between two must recently edited buffers
+- Incremental search
+- EditAction.isEnabled() method -- write new EditAction.Model class
+- If there is > 1 possible match, complete-word should list them in a
+  dialog box
+- Write an InputHandler subclass that displays the current repeat count,
+  if any, in the view's status bar
 - Integrate XMode
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Write custom 'document' class; Swing implementation has a few

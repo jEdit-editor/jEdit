@@ -2260,13 +2260,6 @@ public class JEditTextArea extends JComponent
 			select(start,end);
 		}
 
-		public void redo() throws CannotRedoException
-		{
-			super.redo();
-
-			select(newStart,newEnd);
-		}
-
 		public boolean addEdit(UndoableEdit edit)
 		{
 			if(edit instanceof CaretUndo)
@@ -2302,6 +2295,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.45  2000/02/27 00:39:51  sp
+ * Misc changes
+ *
  * Revision 1.44  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *

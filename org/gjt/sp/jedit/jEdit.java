@@ -1408,7 +1408,6 @@ public class jEdit
 		addAction("block-comment");
 		addAction("box-comment");
 		addAction("buffer-options");
-		addAction("clear-log");
 		addAction("clear-marker");
 		addAction("clear-register");
 		addAction("close-all");
@@ -1477,7 +1476,6 @@ public class jEdit
 		addAction("save-all");
 		addAction("save-as");
 		addAction("save-gutter-size");
-		addAction("save-log");
 		addAction("save-session");
 		addAction("scroll-line");
 		addAction("search-and-replace");
@@ -1791,6 +1789,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.194  2000/02/27 00:39:50  sp
+ * Misc changes
+ *
  * Revision 1.193  2000/02/24 04:13:06  sp
  * Bug fixes, misc updates, etc
  *

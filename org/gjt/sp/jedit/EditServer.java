@@ -252,7 +252,7 @@ class EditServer extends Thread
 		// Create new view
 		if(reuseView)
 		{
-			view = jEdit.getViews()[0];
+			view = jEdit.getFirstView();
 			TSsetBuffer(view,buffer);
 			view.requestFocus();
 			view.toFront();
@@ -265,6 +265,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/02/27 00:39:50  sp
+ * Misc changes
+ *
  * Revision 1.7  2000/02/20 03:14:13  sp
  * jEdit.getBrokenPlugins() method
  *

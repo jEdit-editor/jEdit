@@ -1,6 +1,6 @@
 /*
  * LogViewer.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,8 @@ package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -31,6 +33,18 @@ public class LogViewer extends JFrame
 		super(jEdit.getProperty("log-viewer.title"));
 
 		setIconImage(GUIUtilities.getEditorIcon());
+
+		JPanel panel = new JPanel();
+
+		clear = new JButton(jEdit.getProperty("log-viewer.clear"));
+		clear.addActionListener(new ActionHandler());
+		panel.add(clear);
+
+		save = new JButton(jEdit.getProperty("log-viewer.save"));
+		save.addActionListener(new ActionHandler());
+		panel.add(save);
+
+		getContentPane().add(BorderLayout.NORTH,panel);
 
 		JTextArea textArea = new JTextArea(24,80);
 		textArea.setDocument(Log.getLogDocument());
@@ -49,5 +63,39 @@ public class LogViewer extends JFrame
 	{
 		GUIUtilities.saveGeometry(this,"log-viewer");
 		super.dispose();
+	}
+
+	// private members
+	private JButton clear, save;
+
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			if(evt.getSource() == clear)
+			{
+				Log.clearLog();
+			}
+			else
+			{
+				String path = GUIUtilities.showFileDialog(null,
+					MiscUtilities.constructPath(null,"jedit.log"),
+					JFileChooser.SAVE_DIALOG);
+
+				if(path != null)
+				{
+					try
+					{
+						Log.saveLog(path);
+					}
+					catch(IOException io)
+					{
+						Log.log(Log.ERROR,this,io);
+						String[] args = { io.getMessage() };
+						GUIUtilities.error(LogViewer.this,"ioerror",args);
+					}
+				}
+			}
+		}
 	}
 }

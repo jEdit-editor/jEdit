@@ -24,8 +24,8 @@ section 11 and 12 of the GPL for details.
 
 * jEdit on the Internet
 
-The jEdit homepage, located at <http://www.gjt.org/~sp/jedit.html>
-contains the latest version of jEdit, along with plugin downloads.
+The jEdit homepage, located at <http://jedit.sourceforge.net> contains
+the latest version of jEdit, along with plugin downloads.
 
 There are three mailing lists dedicated to jEdit; an announcement
 list that is very low traffic, a general discussion list, and a
@@ -42,12 +42,12 @@ so on.
 
 An HTML version of the documentation is included in the base jEdit
 distribution; a pretty PDF version can be obtained from
-<http://www.gjt.org/~sp/jedit-download.html>. Other formats such as text
-only, RTF and DVI can be generated from the SGML source.
+<http://jedit.sourceforge.net/jedit-download.html>.
 
-To view the HTML version, select `Help->Help Contents' in jEdit, or open
-doc/jeditdocs/index.html in a WWW browser such as Netscape. To view the
-PDF, open jedit-<version>.pdf in a PDF viewer such as Adobe Acrobat.
+To view the HTML version, select `Help->jEdit User Guide' in jEdit, or
+open `doc/jeditdocs/index.html' in a WWW browser such as Netscape. To
+view the PDF, open jedit-<version>.pdf in a PDF viewer such as Adobe
+Acrobat.
 
 * Credits
 
@@ -61,7 +61,7 @@ Jason Ginchereau - Buffer tabs code
 Jonathan Revusky - Python syntax highlighting
 Juha Lindfors - IDL syntax highlighting
 Mike Dillon - TSQL syntax highlighting, gutter, new options dialog box,
-	faster literal search, many other patches
+faster literal search, many other patches
 Ralf Engels - PostScript syntax highlighting
 Tal Davidson - Original syntax highlighting engine
 Valery Kondakoff - Complete Word command

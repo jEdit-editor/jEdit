@@ -202,20 +202,16 @@ public class JARClassLoader extends ClassLoader
 
 			if(version == null)
 			{
-				Log.log(Log.ERROR,this,"Plugin " +
+				Log.log(Log.WARNING,this,"Plugin " +
 					name + " doesn't"
-					+ " specify a 'version' property.");
-				Log.log(Log.ERROR,this,"This property"
-					+ " must be defined for the plugin manager"
-					+ " to work.");
-				jEdit.addBrokenPlugin(fileName,name);
-				return;
+					+ " have a 'version' property.");
+				version = "";
 			}
 			else
-			{
-				Log.log(Log.NOTICE,this,"Starting plugin " + name
-					+ " (version " + version + ")");
-			}
+				version = " (version " + version + ")";
+
+			Log.log(Log.NOTICE,this,"Starting plugin " + name
+					+ version);
 
 			jEdit.addPlugin((EditPlugin)clazz.newInstance());
 		}
@@ -409,6 +405,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  2000/02/27 00:39:50  sp
+ * Misc changes
+ *
  * Revision 1.29  2000/02/20 03:14:13  sp
  * jEdit.getBrokenPlugins() method
  *

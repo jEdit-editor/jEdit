@@ -297,8 +297,6 @@ utils=new-view \
       save-session \
       - \
       log-viewer \
-      save-log \
-      clear-log \
       - \
       buffer-options \
       global-options
@@ -312,9 +310,7 @@ split-vertical.label=Split $Vertically
 unsplit.label=Uns$plit
 toggle-gutter.label=Gutter E$xpanded
 toggle-line-numbers.label=Line Nu$mbering
-log-viewer.label=Show $Activity Log...
-save-log.label=Save Ac$tivity Log...
-clear-log.label=C$lear Activity Log
+log-viewer.label=$Activity Log...
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 
@@ -454,7 +450,7 @@ view.status.insert-literal=Insert without expanding:
 # About dialog
 about.title=About jEdit
 about.message=jEdit {0}\n\
-	<http://www.gjt.org/~sp/jedit.html>\n\
+	<http://jedit.sourceforge.net>\n\
 	jEdit was written by Slava Pestov with code\n\
 	contributions from several others. It is released\n\
 	under the GNU General Public License.\n\
@@ -779,3 +775,5 @@ helpviewer.forward=Forward
 
 # Activity log
 log-viewer.title=Activity Log
+log-viewer.clear=Clear Log
+log-viewer.save=Save Log
