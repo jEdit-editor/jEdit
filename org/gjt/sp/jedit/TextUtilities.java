@@ -94,15 +94,13 @@ public class TextUtilities
 
 		int count;
 
-		TokenMarker tokenMarker = buffer.getTokenMarker();
-
 		// Get the syntax token at 'offset'
 		// only tokens with the same type will be checked for
 		// the corresponding bracket
 		byte idOfBracket = Token.NULL;
 
-		TokenMarker.LineInfo lineInfo = tokenMarker.markTokens(buffer,line);
-		Token lineTokens = lineInfo.firstToken;
+		Buffer.LineInfo lineInfo = buffer.markTokens(line);
+		Token lineTokens = lineInfo.getFirstToken();
 
 		int tokenListOffset = 0;
 		for(;;)
@@ -141,7 +139,7 @@ public class TextUtilities
 				int scanStartOffset;
 				if(i != line)
 				{
-					lineTokens = tokenMarker.markTokens(buffer,i).lastToken;
+					lineTokens = buffer.markTokens(i).getLastToken();
 					tokenListOffset = scanStartOffset = lineLength - 1;
 				}
 				else
@@ -221,7 +219,7 @@ public class TextUtilities
 				int scanStartOffset;
 				if(i != line)
 				{
-					lineTokens = tokenMarker.markTokens(buffer,i).firstToken;
+					lineTokens = buffer.markTokens(i).getFirstToken();
 					tokenListOffset = 0;
 					scanStartOffset = 0;
 				}
@@ -531,6 +529,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2001/01/25 02:03:37  sp
+ * Started folding, messed up some code, added a few bugs
+ *
  * Revision 1.6  2000/11/23 08:34:10  sp
  * Search and replace UI improvements
  *

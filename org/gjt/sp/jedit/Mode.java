@@ -81,15 +81,6 @@ public class Mode
 	}
 
 	/**
-	 * Returns a copy of the token marker specified with
-	 * <code>setTokenMarker()</code>.
-	 */
-	public TokenMarker createTokenMarker()
-	{
-		return (TokenMarker)getTokenMarker().clone();
-	}
-
-	/**
 	 * Returns the token marker specified with
 	 * <code>setTokenMarker()</code>. Should only be called by
 	 * <code>TokenMarker.getExternalRuleSet()</code>.

@@ -1541,6 +1541,7 @@ public class jEdit
 		if(view != null)
 		{
 			view.showWaitCursor();
+			view.saveSplitConfig();
 			view.getEditPane().saveCaretInfo();
 		}
 

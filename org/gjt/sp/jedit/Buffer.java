@@ -82,11 +82,10 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void propertiesChanged()
 	{
-		setFlag(SYNTAX,getBooleanProperty("syntax"));
-		if(getFlag(SYNTAX))
-			setTokenMarker(mode.createTokenMarker());
+		if(getBooleanProperty("syntax"))
+			setTokenMarker(mode.getTokenMarker());
 		else
-			setTokenMarker(jEdit.getMode("text").createTokenMarker());
+			setTokenMarker(jEdit.getMode("text").getTokenMarker());
 
 		if(undo != null)
 		{
@@ -196,14 +195,11 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		int lineCount = getDefaultRootElement().getElementCount();
 
-		TokenMarker tokenMarker;
+		/* TokenMarker tokenMarker;
 		if(syntax)
 			tokenMarker = this.tokenMarker;
 		else
-		{
-			tokenMarker = jEdit.getMode("text").createTokenMarker();
-			tokenMarker.insertLines(0,lineCount);
-		}
+			tokenMarker = jEdit.getMode("text").getTokenMarker(); */
 
 		SyntaxStyle[] styles = view.getTextArea().getPainter().getStyles();
 		TabExpander expander = null;
@@ -288,8 +284,7 @@ public class Buffer extends PlainDocument implements EBComponent
 				x += lineNumberWidth + fm.charWidth('0');
 			}
 
-			tokenMarker.paintSyntaxLine(this,i,
-				styles,expander,gfx,Color.white,x,y);
+			paintSyntaxLine(i,styles,expander,gfx,Color.white,x,y);
 
 			int bottomOfPage = pageHeight - bottomMargin - lineHeight;
 			if(printFooter)
@@ -749,13 +744,21 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void checkModTime(View view)
 	{
-		if(!jEdit.getBooleanProperty("view.checkModStatus"))
-			return;
-
 		// don't do these checks while a save is in progress,
 		// because for a moment newModTime will be greater than
 		// oldModTime, due to the multithreading
 		if(file == null || getFlag(NEW_FILE) || getFlag(IO))
+			return;
+
+		boolean newReadOnly = !file.canWrite();
+		if(newReadOnly != getFlag(READ_ONLY))
+		{
+			setFlag(READ_ONLY,newReadOnly);
+			EditBus.send(new BufferUpdate(this,
+				BufferUpdate.DIRTY_CHANGED));
+		}
+
+		if(!jEdit.getBooleanProperty("view.checkModStatus"))
 			return;
 
 		long oldModTime = modTime;
@@ -1663,20 +1666,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Sets the token marker that is to be used to split lines of
-	 * this document up into tokens.
-	 * @param tm The new token marker
-	 */
-	public void setTokenMarker(TokenMarker tm)
-	{
-		if(tm == null)
-			throw new NullPointerException("token marker cannot be null");
-
-		tokenMarker = tm;
-		tokenMarker.insertLines(0,getDefaultRootElement().getElementCount());
-	}
-
-	/**
 	 * @deprecated Don't call this method.
 	 */
 	public void tokenizeLines() {}
@@ -1690,7 +1679,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void tokenizeLines(int start, int len)
 	{
-		tokenMarker.linesChanged(start,len);
+		linesChanged(start,len);
 
 		Segment lineSegment = new Segment();
 		Element map = getDefaultRootElement();
@@ -1698,7 +1687,259 @@ public class Buffer extends PlainDocument implements EBComponent
 		len += start;
 
 		for(int i = start; i < len; i++)
-			tokenMarker.markTokens(this,i);
+			markTokens(i);
+	}
+
+	/**
+	 * Paints the specified line onto the graphics context.
+	 * @param buffer The buffer
+	 * @param lineIndex The line
+	 * @param styles The syntax style list
+	 * @param expander The tab expander used to determine tab stops. May
+	 * be null
+	 * @param gfx The graphics context
+	 * @param x The x co-ordinate
+	 * @param y The y co-ordinate
+	 * @return The x co-ordinate, plus the width of the painted string
+	 * @since jEdit 3.1pre1
+	 */
+	public int paintSyntaxLine(int lineIndex, SyntaxStyle[] styles,
+		TabExpander expander, Graphics gfx, Color background,
+		int x, int y)
+	{
+		LineInfo info = lineInfo[lineIndex];
+
+		if(info.tokensValid)
+		{
+			// have to do this 'manually'
+			Element lineElement = getDefaultRootElement()
+				.getElement(lineIndex);
+			int lineStart = lineElement.getStartOffset();
+			try
+			{
+				getText(lineStart,lineElement.getEndOffset()
+					- lineStart - 1,line);
+			}
+			catch(BadLocationException e)
+			{
+				Log.log(Log.ERROR,this,e);
+			}
+		}
+		else
+			markTokens(lineIndex);
+
+		Token tokens = info.firstToken;
+
+		// the above should leave the text in the 'line' segment
+
+		Font defaultFont = gfx.getFont();
+		Color defaultColor = gfx.getColor();
+
+		int originalOffset = line.offset, originalCount = line.count;
+
+		int offset = 0;
+		for(;;)
+		{
+			byte id = tokens.id;
+			if(id == Token.END)
+				break;
+
+			int length = tokens.length;
+			line.count = length;
+			if(id == Token.NULL)
+			{
+				if(!defaultColor.equals(gfx.getColor()))
+					gfx.setColor(defaultColor);
+				if(!defaultFont.equals(gfx.getFont()))
+					gfx.setFont(defaultFont);
+			}
+			else
+			{
+				Color bg = styles[id].getBackgroundColor();
+				if (bg != null)
+				{
+					FontMetrics fm = styles[id].getFontMetrics(defaultFont);
+					int width   = Utilities.getTabbedTextWidth(line, fm, x, expander, 0); 
+					int height  = fm.getHeight();
+					int descent = fm.getDescent();
+					int leading = fm.getLeading();
+					gfx.setColor(background);
+					gfx.setXORMode(bg);
+					gfx.fillRect(x, y - height + descent + leading, width, height);
+					gfx.setPaintMode();
+				}
+
+				styles[id].setGraphicsFlags(gfx,defaultFont);
+			}
+
+			x = Utilities.drawTabbedText(line,x,y,gfx,expander,0);
+			line.offset += length;
+			offset += length;
+
+			tokens = tokens.next;
+		}
+
+		line.offset = originalOffset;
+		line.count = originalCount;
+
+		return x;
+	}
+
+	/**
+	 * Returns the syntax tokens for the specified line.
+	 * @param lineIndex The line number
+	 * @since jEdit 3.1pre1
+	 */
+	public LineInfo markTokens(int lineIndex)
+	{
+		LineInfo info = lineInfo[lineIndex];
+
+		/* If cached tokens are valid, return 'em */
+		if(info.tokensValid)
+			return info;
+
+		//long _start = System.currentTimeMillis();
+
+		/*
+		 * Else, go up to 100 lines back, looking for a line with
+		 * cached tokens. Tokenize from that line to this line.
+		 */
+		int start = Math.max(0,lineIndex - 100) - 1;
+		int end = Math.max(0,lineIndex - 100);
+
+		for(int i = lineIndex - 1; i > end; i--)
+		{
+			if(lineInfo[i].tokensValid)
+			{
+				start = i;
+				break;
+			}
+		}
+
+		LineInfo prev;
+		if(start == -1)
+			prev = null;
+		else
+			prev = lineInfo[start];
+
+		//System.err.println("i=" + lineIndex + ",start=" + start);
+		Element map = getDefaultRootElement();
+
+		for(int i = start + 1; i <= lineIndex; i++)
+		{
+			info = lineInfo[i];
+			if(info.tokensValid)
+			{
+				prev = info;
+				continue;
+			}
+
+			Element lineElement = map.getElement(i);
+			int lineStart = lineElement.getStartOffset();
+			try
+			{
+				getText(lineStart,lineElement.getEndOffset()
+					- lineStart - 1,line);
+			}
+			catch(BadLocationException e)
+			{
+				Log.log(Log.ERROR,this,e);
+			}
+
+			/* Prepare for tokenization */
+			info.lastToken = null;
+
+			ParserRule oldRule = info.context.inRule;
+			TokenMarker.LineContext oldParent = info.context.parent;
+
+			tokenMarker.markTokens(prev,info,line);
+
+			ParserRule newRule = info.context.inRule;
+			TokenMarker.LineContext newParent = info.context.parent;
+
+			info.tokensValid = true;
+
+			if(i != lastTokenizedLine)
+			{
+				nextLineRequested = false;
+				lastTokenizedLine = i;
+			}
+
+			nextLineRequested |= (oldRule != newRule || oldParent != newParent);
+
+			info.addToken(0,Token.END);
+
+			prev = info;
+		}
+
+		if(nextLineRequested && lineCount - lineIndex > 1)
+		{
+			linesChanged(lineIndex + 1,lineCount - lineIndex - 1);
+		}
+
+		//System.err.println(System.currentTimeMillis() - _start);
+
+		return info;
+	}
+
+	/**
+	 * Store the width of a line, in pixels.
+	 * @param lineIndex The line number
+	 * @param width The width
+	 * @since jEdit 3.1pre1
+	 */
+	public boolean setLineWidth(int lineIndex, int width)
+	{
+		LineInfo info = lineInfo[lineIndex];
+		int oldWidth = info.width;
+		info.width = width;
+		return width != oldWidth;
+	}
+
+	/**
+	 * Returns the maximum line width in the specified line range.
+	 * @param start The first line
+	 * @param len The number of lines
+	 * @since jEdit 3.1pre1
+	 */
+	public int getMaxLineWidth(int start, int len)
+	{
+		int retVal = 0;
+		for(int i = start; i <= start + len; i++)
+		{
+			if(i >= lineCount)
+				break;
+			retVal = Math.max(lineInfo[i].width,retVal);
+		}
+		return retVal;
+	}
+
+	/*
+	 * Returns true if the next line should be repainted. This
+	 * will return true after a line has been tokenized that starts
+	 * a multiline token that continues onto the next line.
+	 */
+	public boolean isNextLineRequested()
+	{
+		return nextLineRequested;
+	}
+
+	/**
+	 * Returns the line info object for the specified line.
+	 * @since jEdit 3.1pre1
+	 */
+	public LineInfo getLineInfo(int line)
+	{
+		return lineInfo[line];
+	}
+
+	/**
+	 * Returns the link list of folds.
+	 * @since jEdit 3.1pre1
+	 */
+	public Fold getFolds()
+	{
+		return folds;
 	}
 
 	/**
@@ -1865,6 +2106,18 @@ public class Buffer extends PlainDocument implements EBComponent
 	Buffer(View view, String path, boolean readOnly,
 		boolean newFile, boolean temp, Hashtable props)
 	{
+		folds = new Fold();
+		folds.lineCount = 1;
+		folds.visibility = Fold.ALL_LINES_VISIBLE;
+		folds.level = 0;
+
+		lineCount = 1;
+		lineInfo = new LineInfo[1];
+		lineInfo[0] = new LineInfo();
+		lineInfo[0].fold = folds;
+
+		folds.firstLine = lineInfo[0];
+
 		setDocumentProperties(new BufferProps());
 		clearProperties();
 
@@ -1935,7 +2188,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	// protected members
 	
 	/**
-	 * We overwrite this method to update the token marker
+	 * We overwrite this method to update the line info array
 	 * state immediately so that any event listeners get a
 	 * consistent token marker.
 	 */
@@ -1948,14 +2201,13 @@ public class Buffer extends PlainDocument implements EBComponent
 			int index = ch.getIndex();
 			int len = ch.getChildrenAdded().length -
 				ch.getChildrenRemoved().length;
-			tokenMarker.linesChanged(index,
-				tokenMarker.getLineCount() - index);
-			tokenMarker.insertLines(ch.getIndex() + 1,len);
+			linesChanged(index,lineCount - index);
+			insertLines(ch.getIndex() + 1,len);
 			index += (len + 1);
 		}
 		else
 		{
-			tokenMarker.linesChanged(getDefaultRootElement()
+			linesChanged(getDefaultRootElement()
 				.getElementIndex(evt.getOffset()),1);
 		}
 
@@ -1963,7 +2215,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 	
 	/**
-	 * We overwrite this method to update the token marker
+	 * We overwrite this method to update the line info array
 	 * state immediately so that any event listeners get a
 	 * consistent token marker.
 	 */
@@ -1976,13 +2228,12 @@ public class Buffer extends PlainDocument implements EBComponent
 			int index = ch.getIndex();
 			int len = ch.getChildrenRemoved().length -
 				ch.getChildrenAdded().length;
-			tokenMarker.linesChanged(index,
-				tokenMarker.getLineCount() - index);
-			tokenMarker.deleteLines(index + 1,len);
+			linesChanged(index,lineCount - index);
+			deleteLines(index + 1,len);
 		}
 		else
 		{
-			tokenMarker.linesChanged(getDefaultRootElement()
+			linesChanged(getDefaultRootElement()
 				.getElementIndex(evt.getOffset()),1);
 		}
 
@@ -2012,9 +2263,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	private static final int AUTOSAVE_DIRTY = 5;
 	private static final int DIRTY = 6;
 	private static final int READ_ONLY = 7;
-	private static final int SYNTAX = 8;
-	private static final int UNDO_IN_PROGRESS = 9;
-	private static final int TEMPORARY = 10;
+	private static final int UNDO_IN_PROGRESS = 8;
+	private static final int TEMPORARY = 9;
 
 	private int flags;
 
@@ -2025,7 +2275,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	private String path;
 	private String name;
 	private Mode mode;
-	private TokenMarker tokenMarker;
+
 	private MyUndoManager undo;
 	private UndoableEdit saveUndo;
 	private CompoundEdit compoundEdit;
@@ -2034,6 +2284,17 @@ public class Buffer extends PlainDocument implements EBComponent
 	private Vector markers;
 	private int savedSelStart;
 	private int savedSelEnd;
+
+	// Syntax highlighting
+	private TokenMarker tokenMarker;
+	private Segment line = new Segment(new char[0],0,0);
+	private LineInfo[] lineInfo;
+	private int lineCount;
+	private int lastTokenizedLine = -1;
+	private boolean nextLineRequested;
+
+	// Folding
+	private Fold folds;
 
 	private void setPath(String path)
 	{
@@ -2183,6 +2444,123 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 	}
 
+	private void setTokenMarker(TokenMarker tokenMarker)
+	{
+		this.tokenMarker = tokenMarker;
+
+		ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
+		for(int i = 0; i < lineCount; i++)
+		{
+			lineInfo[i].context = new TokenMarker.LineContext(null,mainSet);
+		}
+	}
+
+	/**
+	 * Informs the token marker that lines have been inserted into
+	 * the document. This inserts a gap in the <code>lineInfo</code>
+	 * array.
+	 * @param index The first line number
+	 * @param lines The number of lines 
+	 */
+	private void insertLines(int index, int lines)
+	{
+		if(lines <= 0)
+			return;
+		lineCount += lines;
+
+		if(lineInfo.length <= lineCount)
+		{
+			LineInfo[] lineInfoN = new LineInfo[(lineCount + 1) * 2];
+			System.arraycopy(lineInfo,0,lineInfoN,0,
+					 lineInfo.length);
+			lineInfo = lineInfoN;
+		}
+
+		Fold fold = lineInfo[index - 1].fold;
+		fold.lineCount += lines;
+
+		int len = index + lines;
+		System.arraycopy(lineInfo,index,lineInfo,len,
+			lineInfo.length - len);
+
+		ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
+		for(int i = 0; i < lines; i++)
+		{
+			LineInfo info = new LineInfo();
+			info.context = new TokenMarker.LineContext(null,mainSet);
+			info.fold = fold;
+			lineInfo[index + i] = info;
+		}
+	}
+	
+	/**
+	 * Informs the token marker that line have been deleted from
+	 * the document. This removes the lines in question from the
+	 * <code>lineInfo</code> array.
+	 * @param index The first line number
+	 * @param lines The number of lines
+	 */
+	private void deleteLines(int index, int lines)
+	{
+		if (lines <= 0)
+			return;
+
+		int len = index + lines;
+
+		// delete all folds between the two lines.
+		Fold first = lineInfo[index].fold;
+		Fold last = lineInfo[len - 1].fold;
+
+		if(first != last)
+		{
+			// you are not expected to understand this
+			int _lines = 0;
+			Fold fold = first.next;
+			while(fold != last.prev)
+				_lines += fold.lineCount;
+
+			first.lineCount -= (lines - _lines);
+			first.next = last.next;
+			if(last.next != null)
+				last.next.prev = first;
+		}
+		else
+			first.lineCount -= lines;
+
+		// this can happen if we delete, eg, 5 lines from a 5 line fold
+		if(first.lineCount == 0)
+		{
+			if(first.next != null)
+			{
+				if(folds == first)
+					folds = first.next;
+
+				first.next.prev = first.prev;
+			}
+
+			if(first.prev != null)
+				first.prev.next = first.next;
+		}
+
+		lineCount -= lines;
+		System.arraycopy(lineInfo,len,lineInfo,
+			index,lineInfo.length - len);
+	}
+
+	/**
+	 * Informs the token marker that lines have changed. This will
+	 * invalidate any cached tokens.
+	 * @param index The first line number
+	 * @param lines The number of lines
+	 */
+	private void linesChanged(int index, int lines)
+	{
+		for(int i = 0; i < lines; i++)
+		{
+			lineInfo[index + i].tokensValid = false;
+		}
+	}
+
 	static class PrintTabExpander implements TabExpander
 	{
 		private int leftMargin;
@@ -2199,6 +2577,221 @@ public class Buffer extends PlainDocument implements EBComponent
 			int ntabs = ((int)x - leftMargin) / tabSize;
 			return (ntabs + 1) * tabSize + leftMargin;
 		}
+	}
+
+	/**
+	 * Inner class for storing information about tokenized lines.
+	 */
+	public static class LineInfo
+	{
+		/**
+		 * Do not use this variable. The only reason it is public
+		 * is so that classes in the 'syntax' package can use it.
+		 */
+		public TokenMarker.LineContext context;
+
+		/**
+		 * Returns the fold containing this line.
+		 * @since jEdit 3.1pre1
+		 */
+		public Fold getFold()
+		{
+			return fold;
+		}
+
+		/**
+		 * Returns the first syntax token.
+		 * @since jEdit 3.1pre1
+		 */
+		public Token getFirstToken()
+		{
+			return firstToken;
+		}
+
+		/**
+		 * Returns the last syntax token.
+		 * @since jEdit 3.1pre1
+		 */
+		public Token getLastToken()
+		{
+			return lastToken;
+		}
+
+		/**
+		 * Do not call this method. The only reason it is public
+		 * is so that classes in the 'syntax' package can call it.
+		 */
+		public void addToken(int length, byte id)
+		{
+			if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
+				throw new InternalError("Invalid id: " + id);
+
+			if(length == 0 && id != Token.END)
+				return;
+
+			if(firstToken == null)
+			{
+				firstToken = new Token(length,id);
+				lastToken = firstToken;
+			}
+			else if(lastToken == null)
+			{
+				lastToken = firstToken;
+				firstToken.length = length;
+				firstToken.id = id;
+			}
+			else if(lastToken.id == id)
+			{
+				lastToken.length += length;
+			}
+			else if(lastToken.next == null)
+			{
+				lastToken.next = new Token(length,id);
+				lastToken.next.prev = lastToken;
+				lastToken = lastToken.next;
+			}
+			else
+			{
+				lastToken = lastToken.next;
+				lastToken.length = length;
+				lastToken.id = id;
+			}
+		}
+
+		// package-private members
+		Fold fold;
+		Token firstToken;
+		Token lastToken;
+		boolean tokensValid;
+		int width;
+	}
+
+	/**
+	 * Class representing a fold.
+	 */
+	public static class Fold
+	{
+		public static final int NO_LINES_VISIBLE = 0;
+		public static final int ONE_LINE_VISIBLE = 1;
+		public static final int ALL_LINES_VISIBLE = 2;
+
+		/**
+		 * Returns the first line of the fold.
+		 * @since jEdit 3.1pre1
+		 */
+		public LineInfo getFirstLine()
+		{
+			return firstLine;
+		}
+
+		/**
+		 * Returns the previous fold in the list.
+		 * @since jEdit 3.1pre1
+		 */
+		public Fold getPreviousFold()
+		{
+			return prev;
+		}
+
+		/**
+		 * Returns the next fold in the list.
+		 * @since jEdit 3.1pre1
+		 */
+		public Fold getNextFold()
+		{
+			return next;
+		}
+
+		/**
+		 * Returns the number of lines in the fold.
+		 * @since jEdit 3.1pre1
+		 */
+		public int getLineCount()
+		{
+			return lineCount;
+		}
+
+		/**
+		 * Returns the visibility mode of the fold.
+		 * @since jEdit 3.1pre1
+		 */
+		public int getVisibility()
+		{
+			return visibility;
+		}
+
+		/**
+		 * Expands this fold and all subsequent folds with a
+		 * higher fold level.
+		 * @since jEdit 3.1pre1
+		 */
+		public void expand()
+		{
+			if(level == 0)
+				return;
+
+			Fold fold = this;
+			while(fold != null)
+			{
+				if(fold.level <= level)
+					break;
+				else if(fold.level > level + 1)
+					fold.visibility = ONE_LINE_VISIBLE;
+				else
+					fold.visibility = ALL_LINES_VISIBLE;
+				fold = fold.next;
+			}
+		}
+
+		/**
+		 * Collapses this fold and all subsequent folds with a
+		 * higher fold level.
+		 * @since jEdit 3.1pre1
+		 */
+		public void collapse()
+		{
+			if(level == 0)
+				return;
+
+			visibility = ONE_LINE_VISIBLE;
+			Fold fold = next;
+			while(fold != null)
+			{
+				if(fold.level <= level)
+					break;
+				fold.visibility = NO_LINES_VISIBLE;
+				fold = fold.next;
+			}
+		}
+
+		/**
+		 * Returns the fold level.
+		 * @since jEdit 3.1pre1
+		 */
+		public int getLevel()
+		{
+			return level;
+		}
+
+		/**
+		 * Sets the fold level.
+		 * @param level The desired fold level, >= 0
+		 * @since jEdit 3.1pre1
+		 */
+		public void setLevel(int level)
+		{
+			if(level < 0)
+				level = 0;
+			this.level = level;
+		}
+		
+		// package-private members
+		LineInfo firstLine;
+		Fold prev;
+		Fold next;
+		int lineCount;
+		int visibility;
+		int level;
 	}
 
 	// A dictionary that looks in the mode and editor properties

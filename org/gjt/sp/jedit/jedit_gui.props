@@ -904,7 +904,8 @@ options.general.history=Maximum history list length:
 options.general.saveCaret=Save caret positions in recent file list
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
-options.general.checkModStatus=Check file modification time on focus
+options.general.checkModStatus=Warn if file is modified on disk by another \
+	program
 options.general.showFullPath=Show full path of buffers in title bar
 options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher
@@ -957,6 +958,7 @@ options.color.gutterHighlightColor=Gutter highlight
 options.color.gutterCurrentLineColor=Current line in gutter
 options.color.gutterMarkerColor=Markers in gutter
 options.color.gutterRegisterColor=Registers in gutter
+options.color.gutterFoldColor=Fold markers in gutter
 options.color.gutterFocusBorderColor=Focused gutter border
 options.color.gutterNoFocusBorderColor=Unfocused gutter border
 options.color.dockingBorderColor=Docked window border

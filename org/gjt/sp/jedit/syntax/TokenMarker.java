@@ -1,6 +1,6 @@
 /*
  * TokenMarker.java - Tokenizes lines of text
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  * Copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -21,7 +21,6 @@
 package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.*;
-import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -36,7 +35,7 @@ import org.gjt.sp.util.Log;
  *
  * @see org.gjt.sp.jedit.syntax.Token
  */
-public class TokenMarker implements Cloneable
+public class TokenMarker
 {
 	// major actions (total: 8)
 	public static final int MAJOR_ACTIONS = 0x000000FF;
@@ -63,7 +62,6 @@ public class TokenMarker implements Cloneable
 	public TokenMarker()
 	{
 		ruleSets = new Hashtable(64);
-		lineInfo = new LineInfo[0];
 	}
 
 	public void addRuleSet(String setName, ParserRuleSet rules)
@@ -73,6 +71,11 @@ public class TokenMarker implements Cloneable
 		if (setName == null) setName = "MAIN";
 
 		ruleSets.put(rulePfx.concat(setName), rules);
+	}
+
+	public ParserRuleSet getMainRuleSet()
+	{
+		return getRuleSet(rulePfx + "MAIN");
 	}
 
 	public ParserRuleSet getRuleSet(String setName)
@@ -97,17 +100,7 @@ public class TokenMarker implements Cloneable
 			else
 			{
 				TokenMarker marker = mode.getTokenMarker();
-
-				if (marker == null)
-				{
-					Log.log(Log.ERROR,TokenMarker.class,
-					"Cannot delegate to plain text mode");
-					rules = null;
-				}
-				else
-				{
-					rules = marker.getRuleSet(setName);
-				}
+				rules = marker.getRuleSet(setName);
 			}
 
 			// store external ParserRuleSet in the local hashtable for
@@ -137,341 +130,18 @@ public class TokenMarker implements Cloneable
 	}
 
 	/**
-	 * Paints the specified line onto the graphics context.
-	 * @param buffer The buffer
-	 * @param lineIndex The line
-	 * @param styles The syntax style list
-	 * @param expander The tab expander used to determine tab stops. May
-	 * be null
-	 * @param gfx The graphics context
-	 * @param x The x co-ordinate
-	 * @param y The y co-ordinate
-	 * @return The x co-ordinate, plus the width of the painted string
-	 * @since jEdit 2.7pre1
+	 * Do not call this method directly; call Buffer.markTokens() instead.
 	 */
-	public int paintSyntaxLine(Buffer buffer, int lineIndex,
-		SyntaxStyle[] styles, TabExpander expander, Graphics gfx,
-		Color background, int x, int y)
-	{
-		LineInfo info = lineInfo[lineIndex];
-		if(info.tokensValid)
-		{
-			// have to do this 'manually'
-			Element lineElement = buffer.getDefaultRootElement()
-				.getElement(lineIndex);
-			int lineStart = lineElement.getStartOffset();
-			try
-			{
-				buffer.getText(lineStart,lineElement.getEndOffset()
-					- lineStart - 1,line);
-			}
-			catch(BadLocationException e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-		}
-		else
-			markTokens(buffer,lineIndex);
-
-		Token tokens = info.firstToken;
-
-		// the above should leave the text in the 'line' segment
-
-		Font defaultFont = gfx.getFont();
-		Color defaultColor = gfx.getColor();
-
-		int originalOffset = line.offset, originalCount = line.count;
-
-		int offset = 0;
-		for(;;)
-		{
-			byte id = tokens.id;
-			if(id == Token.END)
-				break;
-
-			int length = tokens.length;
-			line.count = length;
-			if(id == Token.NULL)
-			{
-				if(!defaultColor.equals(gfx.getColor()))
-					gfx.setColor(defaultColor);
-				if(!defaultFont.equals(gfx.getFont()))
-					gfx.setFont(defaultFont);
-			}
-			else
-			{
-				Color bg = styles[id].getBackgroundColor();
-				if (bg != null)
-				{
-					FontMetrics fm = styles[id].getFontMetrics(defaultFont);
-					int width   = Utilities.getTabbedTextWidth(line, fm, x, expander, 0); 
-					int height  = fm.getHeight();
-					int descent = fm.getDescent();
-					int leading = fm.getLeading();
-					gfx.setColor(background);
-					gfx.setXORMode(bg);
-					gfx.fillRect(x, y - height + descent + leading, width, height);
-					gfx.setPaintMode();
-				}
-
-				styles[id].setGraphicsFlags(gfx,defaultFont);
-			}
-
-			x = Utilities.drawTabbedText(line,x,y,gfx,expander,0);
-			line.offset += length;
-			offset += length;
-
-			tokens = tokens.next;
-		}
-
-		line.offset = originalOffset;
-		line.count = originalCount;
-
-		return x;
-	}
-
-	/**
-	 * Returns the syntax tokens for the specified line.
-	 * @param buffer The buffer
-	 * @param lineIndex The line number
-	 * @since jEdit 2.6pre9
-	 */
-	public LineInfo markTokens(Buffer buffer, int lineIndex)
-	{
-		LineInfo info = lineInfo[lineIndex];
-
-		/* If cached tokens are valid, return 'em */
-		if(info.tokensValid)
-			return info;
-
-		//long _start = System.currentTimeMillis();
-
-		/*
-		 * Else, go up to 100 lines back, looking for a line with
-		 * cached tokens. Tokenize from that line to this line.
-		 */
-		int start = Math.max(0,lineIndex - 100) - 1;
-		int end = Math.max(0,lineIndex - 100);
-
-		for(int i = lineIndex - 1; i > end; i--)
-		{
-			if(lineInfo[i].tokensValid)
-			{
-				start = i;
-				break;
-			}
-		}
-
-		LineInfo prev;
-		if(start == -1)
-			prev = null;
-		else
-			prev = lineInfo[start];
-
-		//System.err.println("i=" + lineIndex + ",start=" + start);
-		Element map = buffer.getDefaultRootElement();
-
-		for(int i = start + 1; i <= lineIndex; i++)
-		{
-			info = lineInfo[i];
-			if(info.tokensValid)
-			{
-				prev = info;
-				continue;
-			}
-
-			Element lineElement = map.getElement(i);
-			int lineStart = lineElement.getStartOffset();
-			try
-			{
-				buffer.getText(lineStart,lineElement.getEndOffset()
-					- lineStart - 1,line);
-			}
-			catch(BadLocationException e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-
-			/* Prepare for tokenization */
-			info.lastToken = null;
-
-			ParserRule oldRule = info.context.inRule;
-			LineContext oldParent = info.context.parent;
-			markTokensImpl(prev,info);
-			ParserRule newRule = info.context.inRule;
-			LineContext newParent = info.context.parent;
-
-			info.tokensValid = true;
-
-			if(i != lastTokenizedLine)
-			{
-				nextLineRequested = false;
-				lastTokenizedLine = i;
-			}
-
-			nextLineRequested |= (oldRule != newRule || oldParent != newParent);
-
-			addToken(info,0,Token.END);
-
-			prev = info;
-		}
-
-		if(nextLineRequested && length - lineIndex > 1)
-		{
-			linesChanged(lineIndex + 1,length - lineIndex - 1);
-		}
-
-		//System.err.println(System.currentTimeMillis() - _start);
-
-		return info;
-	}
-
-	/**
-	 * Store the width of a line, in pixels.
-	 * @param lineIndex The line number
-	 * @param width The width
-	 */
-	public boolean setLineWidth(int lineIndex, int width)
-	{
-		LineInfo info = lineInfo[lineIndex];
-		int oldWidth = info.width;
-		info.width = width;
-		return width != oldWidth;
-	}
-
-	/**
-	 * Returns the maximum line width in the specified line range.
-	 * @param start The first line
-	 * @param len The number of lines
-	 */
-	public int getMaxLineWidth(int start, int len)
-	{
-		int retVal = 0;
-		for(int i = start; i <= start + len; i++)
-		{
-			if(i >= length)
-				break;
-			retVal = Math.max(lineInfo[i].width,retVal);
-		}
-		return retVal;
-	}
-
-	/**
-	 * Informs the token marker that lines have been inserted into
-	 * the document. This inserts a gap in the <code>lineInfo</code>
-	 * array.
-	 * @param index The first line number
-	 * @param lines The number of lines 
-	 */
-	public void insertLines(int index, int lines)
-	{
-		if(lines <= 0)
-			return;
-		length += lines;
-		ensureCapacity(length);
-		int len = index + lines;
-		System.arraycopy(lineInfo,index,lineInfo,len,
-			lineInfo.length - len);
-
-		ParserRuleSet mainSet = getRuleSet(rulePfx.concat("MAIN"));
-
-		for(int i = index + lines - 1; i >= index; i--)
-		{
-			lineInfo[i] = new LineInfo();
-			lineInfo[i].context = new LineContext(null, mainSet);
-		}
-	}
-	
-	/**
-	 * Informs the token marker that line have been deleted from
-	 * the document. This removes the lines in question from the
-	 * <code>lineInfo</code> array.
-	 * @param index The first line number
-	 * @param lines The number of lines
-	 */
-	public void deleteLines(int index, int lines)
-	{
-		if (lines <= 0)
-			return;
-		int len = index + lines;
-		length -= lines;
-		System.arraycopy(lineInfo,len,lineInfo,
-			index,lineInfo.length - len);
-	}
-
-	/**
-	 * Informs the token marker that lines have changed. This will
-	 * invalidate any cached tokens.
-	 * @param index The first line number
-	 * @param lines The number of lines
-	 */
-	public void linesChanged(int index, int lines)
-	{
-		for(int i = 0; i < lines; i++)
-		{
-			lineInfo[index + i].tokensValid = false;
-		}
-	}
-
-	/**
-	 * Returns the number of lines in this token marker.
-	 */
-	public int getLineCount()
-	{
-		return length;
-	}
-
-	/*
-	 * Returns true if the next line should be repainted. This
-	 * will return true after a line has been tokenized that starts
-	 * a multiline token that continues onto the next line.
-	 */
-	public boolean isNextLineRequested()
-	{
-		return nextLineRequested;
-	}
-
-	public Object clone()
-	{
-		return new TokenMarker(this);
-	}
-
-	// private members
-	private static final int SOFT_SPAN = MARK_FOLLOWING | NO_WORD_BREAK;
-
-	private String name;
-	private String rulePfx;
-	private Hashtable ruleSets;
-
-	private Segment line = new Segment(new char[0],0,0);
-
-	private LineInfo[] lineInfo;
-	private int length;
-	private int lastTokenizedLine = -1;
-	private boolean nextLineRequested;
-
-	private LineContext context;
-	private Segment pattern = new Segment(new char[0],0,0);
-	private int lastOffset;
-	private int lastKeyword;
-	private int lineLength;
-	private int pos;
-	private boolean escaped;
-
-	private TokenMarker(TokenMarker copy)
-	{
-		name = copy.name;
-		rulePfx = copy.rulePfx;
-		ruleSets = copy.ruleSets;
-		lineInfo = new LineInfo[0];	
-	}
-
-	private void markTokensImpl(LineInfo prevInfo, LineInfo info)
+	public void markTokens(Buffer.LineInfo prevInfo,
+		Buffer.LineInfo info, Segment line)
 	{
 		LineContext lastContext = (prevInfo == null ? null
 			: prevInfo.context);
-		if(lastContext == null) lastContext = new LineContext(null,
-			getRuleSet(rulePfx.concat("MAIN")));
+		if(lastContext == null)
+		{
+			lastContext = new LineContext(null,
+				getRuleSet(rulePfx.concat("MAIN")));
+		}
 
 		context = info.context;
 
@@ -524,19 +194,19 @@ public class TokenMarker implements Cloneable
 						{
 							if (context.inRule == null)
 							{
-								markKeyword(info,line, lastKeyword, pos);
+								markKeyword(info,line,lastKeyword,pos);
 
-								addToken(info,pos - lastOffset,
+								info.addToken(pos - lastOffset,
 									context.rules.getDefault());
 							}
 							else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
 							{
-								addToken(info,pos - lastOffset,
+								info.addToken(pos - lastOffset,
 									context.inRule.token);
 							}
 							else
 							{
-								addToken(info,pos - lastOffset, Token.INVALID);
+								info.addToken(pos - lastOffset, Token.INVALID);
 							}
 						}
 
@@ -544,12 +214,12 @@ public class TokenMarker implements Cloneable
 
 						if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
-							addToken(info,pattern.count,
+							info.addToken(pattern.count,
 								context.rules.getDefault());
 						}
 						else
 						{
-							addToken(info,pattern.count,context.inRule.token);
+							info.addToken(pattern.count,context.inRule.token);
 						}
 
 						context.inRule = null;
@@ -641,7 +311,7 @@ public class TokenMarker implements Cloneable
 		{
 			if (context.inRule == null)
 			{
-				addToken(info,lineLength - lastOffset,
+				info.addToken(lineLength - lastOffset,
 					context.rules.getDefault());
 			}
 			else if (
@@ -649,12 +319,12 @@ public class TokenMarker implements Cloneable
 				(context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) != 0
 			)
 			{
-				addToken(info,lineLength - lastOffset,Token.INVALID);
+				info.addToken(lineLength - lastOffset,Token.INVALID);
 				context.inRule = null;
 			}
 			else
 			{
-				addToken(info,lineLength - lastOffset,context.inRule.token);
+				info.addToken(lineLength - lastOffset,context.inRule.token);
 
 				if((context.inRule.action & MARK_FOLLOWING) == MARK_FOLLOWING)
 				{
@@ -666,6 +336,21 @@ public class TokenMarker implements Cloneable
 		info.context = context;
 	}
 
+	// private members
+	private static final int SOFT_SPAN = MARK_FOLLOWING | NO_WORD_BREAK;
+
+	private String name;
+	private String rulePfx;
+	private Hashtable ruleSets;
+
+	private LineContext context;
+	private Segment pattern = new Segment(new char[0],0,0);
+	private int lastOffset;
+	private int lastKeyword;
+	private int lineLength;
+	private int pos;
+	private boolean escaped;
+
 	/**
 	 * Checks if the rule matches the line at the current position
 	 * and handles the rule if it does match
@@ -674,7 +359,8 @@ public class TokenMarker implements Cloneable
 	 * @return true,  keep checking other rules
 	 *     <br>false, stop checking other rules
 	 */
-	private boolean handleRule(LineInfo info, Segment line, ParserRule checkRule)
+	private boolean handleRule(Buffer.LineInfo info, Segment line,
+		ParserRule checkRule)
 	{
 		if (pattern.count == 0) return true;
 
@@ -717,11 +403,11 @@ public class TokenMarker implements Cloneable
 		{
 			if ((context.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
 			{
-				addToken(info,pos - lastOffset, Token.INVALID);
+				info.addToken(pos - lastOffset, Token.INVALID);
 			}
 			else
 			{
-				addToken(info,pos - lastOffset,context.inRule.token);
+				info.addToken(pos - lastOffset,context.inRule.token);
 			}
 			lastOffset = lastKeyword = pos;
 			context.inRule = null;
@@ -755,7 +441,7 @@ public class TokenMarker implements Cloneable
 				// mark previous sequence as NULL (plain text)
 				if (lastOffset < pos)
 				{
-					addToken(info,pos - lastOffset,
+					info.addToken(pos - lastOffset,
 						context.rules.getDefault());
 				}
 			}
@@ -764,7 +450,7 @@ public class TokenMarker implements Cloneable
 			{
 			case 0:
 				// this is a plain sequence rule
-				addToken(info,pattern.count,checkRule.token);
+				info.addToken(pattern.count,checkRule.token);
 				lastOffset = pos + pattern.count;
 
 				break;
@@ -775,7 +461,7 @@ public class TokenMarker implements Cloneable
 				{
 					if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 					{
-						addToken(info,pattern.count,
+						info.addToken(pattern.count,
 							context.rules.getDefault());
 						lastOffset = pos + pattern.count;
 					}
@@ -796,12 +482,12 @@ public class TokenMarker implements Cloneable
 					{
 						if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
-							addToken(info,pattern.count,
+							info.addToken(pattern.count,
 								context.rules.getDefault());
 						}
 						else
 						{
-							addToken(info,pattern.count,checkRule.token);
+							info.addToken(pattern.count,checkRule.token);
 						}
 						lastOffset = pos + pattern.count;
 
@@ -813,14 +499,14 @@ public class TokenMarker implements Cloneable
 			case EOL_SPAN:
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					addToken(info,pattern.count,
+					info.addToken(pattern.count,
 						context.rules.getDefault());
-					addToken(info,lineLength - (pos + pattern.count),
+					info.addToken(lineLength - (pos + pattern.count),
 						checkRule.token);
 				}
 				else
 				{
-					addToken(info,lineLength - pos,
+					info.addToken(lineLength - pos,
 						checkRule.token);
 				}
 				lastOffset = lineLength;
@@ -831,20 +517,20 @@ public class TokenMarker implements Cloneable
 			case MARK_PREVIOUS:
 				if (lastKeyword > lastOffset)
 				{
-					addToken(info, lastKeyword - lastOffset,
+					info.addToken(lastKeyword - lastOffset,
 						context.rules.getDefault());
 					lastOffset = lastKeyword;
 				}
 
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					addToken(info, pos - lastOffset, checkRule.token);
-					addToken(info, pattern.count,
+					info.addToken(pos - lastOffset, checkRule.token);
+					info.addToken(pattern.count,
 						context.rules.getDefault());
 				}
 				else
 				{
-					addToken(info, pos - lastOffset + pattern.count,
+					info.addToken(pos - lastOffset + pattern.count,
 						checkRule.token);
 				}
 				lastOffset = pos + pattern.count;
@@ -854,7 +540,7 @@ public class TokenMarker implements Cloneable
 				context.inRule = checkRule;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					addToken(info,pattern.count,
+					info.addToken(pattern.count,
 						context.rules.getDefault());
 					lastOffset = pos + pattern.count;
 				}
@@ -880,13 +566,13 @@ public class TokenMarker implements Cloneable
 				context.inRule = null;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					addToken(info,pos - lastOffset,checkRule.token);
-					addToken(info,pattern.count,
+					info.addToken(pos - lastOffset,checkRule.token);
+					info.addToken(pattern.count,
 						context.rules.getDefault());
 				}
 				else
 				{
-					addToken(info,(pos + pattern.count) - lastOffset,
+					info.addToken((pos + pattern.count) - lastOffset,
 						checkRule.token);
 				}
 				lastKeyword = lastOffset = pos + pattern.count;
@@ -899,7 +585,8 @@ public class TokenMarker implements Cloneable
 		return true;
 	}
 
-	private void markKeyword(LineInfo info, Segment line, int start, int end)
+	private void markKeyword(Buffer.LineInfo info, Segment line,
+		int start, int end)
 	{
 		KeywordMap keywords = context.rules.getKeywords();
 
@@ -987,10 +674,10 @@ loop:			for(int i = 0; i < len; i++)
 			{
 				if(start != lastOffset)
 				{
-					addToken(info,start - lastOffset,
+					info.addToken(start - lastOffset,
 						context.rules.getDefault());
 				}
-				addToken(info,len,Token.DIGIT);
+				info.addToken(len,Token.DIGIT);
 				lastKeyword = lastOffset = end;
 
 				return;
@@ -1005,93 +692,13 @@ loop:			for(int i = 0; i < len; i++)
 			{
 				if(start != lastOffset)
 				{
-					addToken(info,start - lastOffset,
+					info.addToken(start - lastOffset,
 						context.rules.getDefault());
 				}
-				addToken(info,len, id);
+				info.addToken(len, id);
 				lastKeyword = lastOffset = end;
 			}
 		}
-	}
-
-	private void ensureCapacity(int index)
-	{
-		if(lineInfo.length <= index)
-		{
-			LineInfo[] lineInfoN = new LineInfo[(index + 1) * 2];
-			System.arraycopy(lineInfo,0,lineInfoN,0,
-					 lineInfo.length);
-			lineInfo = lineInfoN;
-		}
-	}
-
-	private void addToken(LineInfo info, int length, byte id)
-	{
-		if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
-			throw new InternalError("Invalid id: " + id);
-
-		if(length == 0 && id != Token.END)
-			return;
-
-		if(info.firstToken == null)
-		{
-			info.firstToken = new Token(length,id);
-			info.lastToken = info.firstToken;
-		}
-		else if(info.lastToken == null)
-		{
-			info.lastToken = info.firstToken;
-			info.firstToken.length = length;
-			info.firstToken.id = id;
-		}
-		else if(info.lastToken.id == id)
-		{
-			info.lastToken.length += length;
-		}
-		else if(info.lastToken.next == null)
-		{
-			info.lastToken.next = new Token(length,id);
-			info.lastToken.next.prev = info.lastToken;
-			info.lastToken = info.lastToken.next;
-		}
-		else
-		{
-			info.lastToken = info.lastToken.next;
-			info.lastToken.length = length;
-			info.lastToken.id = id;
-		}
-	}
-
-	/**
-	 * Inner class for storing information about tokenized lines.
-	 */
-	public static class LineInfo
-	{
-		/**
-		 * The first token of this line.
-		 */
-		public Token firstToken;
-
-		/**
-		 * The last token of this line.
-		 */
-		public Token lastToken;
-
-		/**
-		 * True if the tokens can be used, false if markTokensImpl()
-		 * needs to be called.
-		 */
-		/* package-private */ boolean tokensValid;
-
-		/**
-		 * The line context.
-		 */
-		/* package-private */ LineContext context;
-
-		/**
-		 * The line width.
-		 */
-		/* package-private */ int width;
 	}
 
 	public static class LineContext

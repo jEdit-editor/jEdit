@@ -1,6 +1,6 @@
 /*
  * TextAreaPainter.java - Paints the text area
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 import java.awt.event.MouseEvent;
 import java.awt.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.Log;
 
@@ -359,6 +360,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		updateTabSize();
 
+		Buffer buffer = textArea.getBuffer();
+
 		Rectangle clipRect = gfx.getClipBounds();
 
 		gfx.setColor(getBackground());
@@ -379,26 +382,25 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		try
 		{
-			TokenMarker tokenMarker = textArea.getTokenMarker();
 			int maxWidth = textArea.maxHorizontalScrollWidth;
 
 			boolean updateMaxHorizontalScrollWidth = false;
 			for(int line = firstInvalid; line <= lastInvalid; line++)
 			{
-				boolean valid = textArea.getBuffer().isLoaded()
+				boolean valid = buffer.isLoaded()
 					&& line >= 0 && line < lineCount;
 
-				int width = paintLine(gfx,tokenMarker,valid,line,x)
+				int width = paintLine(gfx,valid,line,x)
 					- x + 5 /* Yay */;
 				if(valid)
 				{
-					tokenMarker.setLineWidth(line,width);
+					buffer.setLineWidth(line,width);
 					if(width > maxWidth)
 						updateMaxHorizontalScrollWidth = true;
 				}
 			}
 
-			if(tokenMarker.isNextLineRequested())
+			if(buffer.isNextLineRequested())
 			{
 				int h = clipRect.y + clipRect.height;
 				repaint(0,h,getWidth(),getHeight() - h);
@@ -523,8 +525,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private TextAreaHighlight highlights;
 
-	private int paintLine(Graphics gfx, TokenMarker tokenMarker,
-		boolean valid, int line, int x)
+	private int paintLine(Graphics gfx, boolean valid, int line, int x)
 	{
 		int y = textArea.lineToY(line);
 
@@ -547,8 +548,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			gfx.setFont(defaultFont);
 			gfx.setColor(defaultColor);
 
-			x = tokenMarker.paintSyntaxLine(textArea.getBuffer(),line,
-				styles,this,gfx,getBackground(),x,y + fm.getHeight());
+			x = textArea.getBuffer().paintSyntaxLine(line,
+				styles,this,gfx,getBackground(),x,
+				y + fm.getHeight());
 
 			if(eolMarkers)
 			{
@@ -698,56 +700,3 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.50  2001/01/24 02:14:13  sp
- * funky undo, thanks Romain
- *
- * Revision 1.49  2000/11/11 02:59:31  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.48  2000/11/07 10:08:33  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.47  2000/11/05 05:25:46  sp
- * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
- *
- * Revision 1.46  2000/11/05 00:44:15  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.45  2000/11/02 09:19:34  sp
- * more features
- *
- * Revision 1.44  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.43  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.42  2000/10/12 09:28:27  sp
- * debugging and polish
- *
- * Revision 1.41  2000/09/26 10:19:47  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.40  2000/07/22 03:27:04  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.39  2000/07/14 06:00:45  sp
- * bracket matching now takes syntax info into account
- *
- * Revision 1.38  2000/06/24 06:24:56  sp
- * work thread bug fixes
- *
- * Revision 1.37  2000/05/23 04:04:53  sp
- * Marker highlight updates, next/prev-marker actions
- *
- * Revision 1.36  2000/05/22 12:05:46  sp
- * Markers are highlighted in the gutter, bug fixes
- *
- * Revision 1.35  2000/05/10 08:22:21  sp
- * EOL marker bug fix, documentation updates
- *
- */

@@ -136,6 +136,8 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.markerColor");
 		addColorChoice("options.color.gutterRegisterColor",
 			"view.gutter.registerColor");
+		addColorChoice("options.color.gutterFoldColor",
+			"view.gutter.foldColor");
 		addColorChoice("options.color.gutterFocusBorderColor",
 			"view.gutter.focusBorderColor");
 		addColorChoice("options.color.gutterNoFocusBorderColor",

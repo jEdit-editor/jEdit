@@ -262,7 +262,7 @@ public class EditPane extends JPanel implements EBComponent
 	}
 
 	// package-private members
-	EditPane(View view, EditPane editPane, Buffer buffer)
+	EditPane(View view, Buffer buffer)
 	{
 		super(new BorderLayout());
 
@@ -283,12 +283,7 @@ public class EditPane extends JPanel implements EBComponent
 		propertiesChanged();
 
 		if(buffer == null)
-		{
-			if(editPane != null)
-				setBuffer(editPane.getBuffer());
-			else
-				setBuffer(jEdit.getFirstBuffer());
-		}
+			setBuffer(jEdit.getFirstBuffer());
 		else
 			setBuffer(buffer);
 
@@ -390,6 +385,8 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getProperty("view.gutter.fgColor")));
 		gutter.setHighlightedForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.highlightColor")));
+		gutter.setFoldColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.gutter.foldColor")));
 		markerHighlight.setMarkerHighlightColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.markerColor")));
 		markerHighlight.setRegisterHighlightColor(GUIUtilities.parseColor(

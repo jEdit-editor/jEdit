@@ -77,12 +77,12 @@ actually a Java bug, or a well-known problem.
   - On Windows, edit the `jEdit.bat' file and change the line that looks
     like so:
 
-    set JAVA_HEAP_SIZE=16
+    set JAVA_HEAP_SIZE=32
 
   - On Unix, edit the `jedit' shell script and change the line that
     looks like so:
 
-    JAVA_HEAP_SIZE=16
+    JAVA_HEAP_SIZE=32
 
   In both cases, replace `16' with the desired heap size, in megabytes.
   For best results, use a heap size of about 2.5 times the largest file

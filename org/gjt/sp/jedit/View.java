@@ -1,6 +1,6 @@
 /*
  * View.java - jEdit view
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,7 +190,7 @@ public class View extends JFrame implements EBComponent
 	{
 		editPane.saveCaretInfo();
 		EditPane oldEditPane = editPane;
-		setEditPane(createEditPane(oldEditPane,null));
+		setEditPane(createEditPane(oldEditPane.getBuffer()));
 		editPane.loadCaretInfo();
 
 		JComponent oldParent = (JComponent)oldEditPane.getParent();
@@ -677,8 +677,9 @@ public class View extends JFrame implements EBComponent
 		help = GUIUtilities.loadMenu(this,"help-menu");
 		plugins = GUIUtilities.loadMenu(this,"plugins");
 
-		editPane = createEditPane(null,buffer);
-		dockableWindowManager.add(editPane);
+		Component comp = restoreSplitConfig(buffer,
+			jEdit.getProperty("view.splits"));
+		dockableWindowManager.add(comp);
 
 		updateMarkerMenus();
 		updateMacrosMenu();
@@ -709,12 +710,24 @@ public class View extends JFrame implements EBComponent
 		dockableWindowManager.init();
 	}
 
+	void saveSplitConfig()
+	{
+		StringBuffer splitConfig = new StringBuffer();
+		if(splitPane != null)
+			saveSplitConfig(splitPane,splitConfig);
+		else
+			splitConfig.append('+');
+		jEdit.setProperty("view.splits",splitConfig.reverse().toString());
+	}
+
 	void close()
 	{
 		closed = true;
 
 		// save dockable window geometry, and close 'em
 		dockableWindowManager.close();
+
+		saveSplitConfig();
 
 		GUIUtilities.saveGeometry(this,"view");
 		EditBus.removeFromBus(this);
@@ -862,6 +875,70 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
+	/*
+	 * The split config is recorded in a simple RPN "language":
+	 * + pushes a new edit pane onto the stack
+	 * - pops the two topmost elements off the stack, creates a
+	 * vertical split
+	 * | pops the two topmost elements off the stack, creates a
+	 * horizontal split
+	 *
+	 * Note that after saveSplitConfig() is called, we have to
+	 * reverse the RPN "program" because this method appends
+	 * stuff to the end, so the bottom-most nodes end up at the
+	 * end
+	 */
+	public void saveSplitConfig(JSplitPane splitPane,
+		StringBuffer splitConfig)
+	{
+		splitConfig.append(splitPane.getOrientation()
+			== JSplitPane.VERTICAL_SPLIT ? '-' : '|');
+
+		Component left = splitPane.getLeftComponent();
+		if(left instanceof JSplitPane)
+			saveSplitConfig((JSplitPane)left,splitConfig);
+		else
+			splitConfig.append('+');
+
+		Component right = splitPane.getLeftComponent();
+		if(right instanceof JSplitPane)
+			saveSplitConfig((JSplitPane)right,splitConfig);
+		else
+			splitConfig.append('+');
+	}
+
+	public Component restoreSplitConfig(Buffer buffer, String splitConfig)
+	{
+		Stack stack = new Stack();
+
+		for(int i = 0; i < splitConfig.length(); i++)
+		{
+			switch(splitConfig.charAt(i))
+			{
+			case '+':
+				stack.push(editPane = createEditPane(buffer));
+				editPane.loadCaretInfo();
+				break;
+			case '-':
+				stack.push(splitPane = new JSplitPane(
+					JSplitPane.VERTICAL_SPLIT,
+					(Component)stack.pop(),
+					(Component)stack.pop()));
+				splitPane.setBorder(null);
+				break;
+			case '|':
+				stack.push(splitPane = new JSplitPane(
+					JSplitPane.HORIZONTAL_SPLIT,
+					(Component)stack.pop(),
+					(Component)stack.pop()));
+				splitPane.setBorder(null);
+				break;
+			}
+		}
+
+		return (Component)stack.peek();
+	}
+
 	/**
 	 * Reloads various settings from the properties.
 	 */
@@ -911,9 +988,9 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	private EditPane createEditPane(EditPane pane, Buffer buffer)
+	private EditPane createEditPane(Buffer buffer)
 	{
-		EditPane editPane = new EditPane(this,pane,buffer);
+		EditPane editPane = new EditPane(this,buffer);
 		JEditTextArea textArea = editPane.getTextArea();
 		textArea.addFocusListener(new FocusHandler());
 		EditBus.send(new EditPaneUpdate(editPane,EditPaneUpdate.CREATED));

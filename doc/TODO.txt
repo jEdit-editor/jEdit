@@ -14,17 +14,6 @@ Folding commands will be in the View->Folding menu.
 
 Fold arrows will be shown in the gutter.
 
-* LineInfo array moved
-
-The lineInfo array and associated methods (markTokens(), insertLines(),
-deleteLines()) will be moved from the TokenMarker class to the Buffer
-class.
-
-* Make split configuration persistent
-
-The editor will remember all split locations and what buffers were open
-in which.
-
 * XMode rule inclusion
 
 A new tag will be added:
@@ -55,15 +44,8 @@ only then renamed to <filename> if the save was successful.
 - The shortcuts option panes will support grabbing keys from the
   keyboard, and assignment of more than one shortcut per command.
 
-- When running with the Metal L&F, the docking area border will look
-  like a split pane divider
-
 - Improve next/prev-paragraph commands -- if a line contains ONLY
   whitespace, treat it as a paragraph separator
-
-- Better support for read-only files: option for changing read only
-  flag in buffer options dialog, automatic detect when read only
-  status is changed on disk
 
 - File system browser: change 'Open in new view' to 'Open in new split'
 

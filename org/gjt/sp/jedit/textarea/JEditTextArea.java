@@ -252,6 +252,24 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Returns the fold containing the first visible line.
+	 * @since jEdit 3.1pre1
+	 */
+	public final Buffer.Fold getFirstLineFold()
+	{
+		return firstLineFold;
+	}
+
+	/**
+	 * Returns the offset of the first line inside its fold.
+	 * @since jEdit 3.1pre1
+	 */
+	public final int getFirstLineFoldOffset()
+	{
+		return firstLineFoldOffset;
+	}
+
+	/**
 	 * Sets the line displayed at the text area's origin.
 	 */
 	public void setFirstLine(int firstLine)
@@ -270,7 +288,38 @@ public class JEditTextArea extends JComponent
 
 		maxHorizontalScrollWidth = 0;
 
-		if(firstLine != vertical.getValue())
+		// we need to determine what fold contains the first line,
+		// as well as the offset within that fold
+		Buffer.Fold fold = buffer.getFolds();
+		int totalLineCount = 0;
+		int virtualLineCount = 0;
+		for(;;)
+		{
+			int foldLineCount = fold.getLineCount();
+			if(totalLineCount + foldLineCount > firstLine)
+				break;
+
+			totalLineCount += foldLineCount;
+
+			switch(fold.getVisibility())
+			{
+			case Buffer.Fold.ALL_LINES_VISIBLE:
+				virtualLineCount += foldLineCount;
+				break;
+			case Buffer.Fold.ONE_LINE_VISIBLE:
+				virtualLineCount++;
+				break;
+			}
+
+			fold = fold.getNextFold();
+		}
+
+		firstLineFold = fold;
+		firstLineFoldOffset = firstLine - totalLineCount;
+		if(fold.getVisibility() == Buffer.Fold.ALL_LINES_VISIBLE)
+			virtualLineCount += firstLineFoldOffset;
+
+		if(/* virtualLineCount */firstLine != vertical.getValue())
 			updateScrollBars();
 
 		painter.repaint();
@@ -525,8 +574,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public int offsetToX(int line, int offset)
 	{
-		TokenMarker tokenMarker = getTokenMarker();
-		Token tokens = tokenMarker.markTokens(buffer,line).firstToken;
+		Token tokens = buffer.markTokens(line).getFirstToken();
 
 		FontMetrics fm = painter.getFontMetrics();
 
@@ -578,8 +626,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public int xToOffset(int line, int x)
 	{
-		TokenMarker tokenMarker = getTokenMarker();
-		Token tokens = tokenMarker.markTokens(buffer,line).firstToken;
+		Token tokens = buffer.markTokens(line).getFirstToken();
 
 		FontMetrics fm = painter.getFontMetrics();
 
@@ -688,25 +735,6 @@ public class JEditTextArea extends JComponent
 		updateScrollBars();
 		painter.repaint();
 		gutter.repaint();
-	}
-
-	/**
-	 * Returns the buffer's token marker. Equivalent to calling
-	 * <code>getBuffer().getTokenMarker()</code>.
-	 */
-	public final TokenMarker getTokenMarker()
-	{
-		return buffer.getTokenMarker();
-	}
-
-	/**
-	 * Sets the buffer's token marker. Equivalent to calling
-	 * <code>getBuffer().setTokenMarker()</code>.
-	 * @param tokenMarker The token marker
-	 */
-	public final void setTokenMarker(TokenMarker tokenMarker)
-	{
-		buffer.setTokenMarker(tokenMarker);
 	}
 
 	/**
@@ -3299,7 +3327,7 @@ forward_scan:		do
 
 	void updateMaxHorizontalScrollWidth()
 	{
-		int _maxHorizontalScrollWidth = getTokenMarker().getMaxLineWidth(
+		int _maxHorizontalScrollWidth = buffer.getMaxLineWidth(
 			firstLine,visibleLines);
 		if(_maxHorizontalScrollWidth != maxHorizontalScrollWidth)
 		{
@@ -3371,6 +3399,9 @@ forward_scan:		do
 	private boolean blink;
 
 	private int firstLine;
+	private Buffer.Fold firstLineFold;
+	private int firstLineFoldOffset;
+
 	private int visibleLines;
 	private int electricScroll;
 

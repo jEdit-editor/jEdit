@@ -366,19 +366,20 @@ public interface DockableWindowContainer
 				if(color1 == null || color2 == null)
 					return;
 
-				for(int i = 0; i < width / 4 + 1; i++)
+				for(int i = 0; i < width / 4 - 1; i++)
 				{
 					g.setColor(color1);
-					g.drawLine(x + i * 4,y + 3,x + i * 4,y + 3);
+					g.drawLine(x + i * 4 + 2,y + 3,
+						x + i * 4 + 2,y + 3);
 					g.setColor(color2);
-					g.drawLine(x + i * 4 + 1,y + 4,
-						x + i * 4 + 1,y + 4);
+					g.drawLine(x + i * 4 + 3,y + 4,
+						x + i * 4 + 3,y + 4);
 					g.setColor(color1);
-					g.drawLine(x + i * 4 + 2,y + 5,
-						x + i * 4 + 2,y + 5);
+					g.drawLine(x + i * 4 + 4,y + 5,
+						x + i * 4 + 4,y + 5);
 					g.setColor(color2);
-					g.drawLine(x + i * 4 + 3,y + 6,
-						x + i * 4 + 3,y + 6);
+					g.drawLine(x + i * 4 + 5,y + 6,
+						x + i * 4 + 5,y + 6);
 				}
 			}
 
@@ -390,19 +391,20 @@ public interface DockableWindowContainer
 				if(color1 == null || color2 == null)
 					return;
 
-				for(int i = 0; i < height / 4 + 1; i++)
+				for(int i = 0; i < height / 4 - 1; i++)
 				{
 					g.setColor(color1);
-					g.drawLine(x + 3,y + i * 4,x + 3,y + i * 4);
+					g.drawLine(x + 3,y + i * 4 + 2,
+						x + 3,y + i * 4 + 2);
 					g.setColor(color2);
-					g.drawLine(x + 4,y + i * 4 + 1,
-						x + 4,y + i * 4 + 1);
+					g.drawLine(x + 4,y + i * 4 + 3,
+						x + 4,y + i * 4 + 3);
 					g.setColor(color1);
-					g.drawLine(x + 5,y + i * 4 + 2,
-						x + 5,y + i * 4 + 2);
+					g.drawLine(x + 5,y + i * 4 + 4,
+						x + 5,y + i * 4 + 4);
 					g.setColor(color2);
-					g.drawLine(x + 6,y + i * 4 + 3,
-						x + 6,y + i * 4 + 3);
+					g.drawLine(x + 6,y + i * 4 + 5,
+						x + 6,y + i * 4 + 5);
 				}
 			}
 		}
