@@ -850,7 +850,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 		setPath();
 
-		newFile = (newFile || !file.exists());
+		if(url == null)
+			newFile |= !file.exists();
+
 		setFlag(NEW_FILE,newFile);
 
 		// New files are initialized immediately since it
@@ -1533,6 +1535,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.123  2000/02/10 08:32:51  sp
+ * Bug fixes, doc updates
+ *
  * Revision 1.122  2000/01/28 00:20:58  sp
  * Lots of stuff
  *
@@ -1562,7 +1567,4 @@ loop:		for(int i = 0; i < markers.size(); i++)
  *
  * Revision 1.113  1999/12/07 08:16:55  sp
  * Reload bug nailed to the wall
- *
- * Revision 1.112  1999/12/07 07:19:36  sp
- * Buffer loading code cleaned up
  */

@@ -80,7 +80,6 @@ public abstract class InputHandler extends KeyAdapter
 	public static final ActionListener SELECT_PREV_PAGE = new prev_page(true);
 	public static final ActionListener SELECT_PREV_WORD = new prev_word(true);
 	public static final ActionListener REPEAT = new repeat();
-	public static final ActionListener TOGGLE_RECT = new toggle_rect();
 
 	// Default action
 	public static final ActionListener INSERT_CHAR = new insert_char();
@@ -122,7 +121,6 @@ public abstract class InputHandler extends KeyAdapter
 		actions.put("select-prev-page",SELECT_PREV_PAGE);
 		actions.put("select-prev-word",SELECT_PREV_WORD);
 		actions.put("repeat",REPEAT);
-		actions.put("toggle-rect",TOGGLE_RECT);
 		actions.put("insert-char",INSERT_CHAR);
 	}
 
@@ -1080,16 +1078,6 @@ public abstract class InputHandler extends KeyAdapter
 		}
 	}
 
-	public static class toggle_rect implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			JEditTextArea textArea = getTextArea(evt);
-			textArea.setSelectionRectangular(
-				!textArea.isSelectionRectangular());
-		}
-	}
-
 	public static class insert_char implements ActionListener,
 		InputHandler.NonRepeatable
 	{
@@ -1117,6 +1105,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/02/10 08:32:51  sp
+ * Bug fixes, doc updates
+ *
  * Revision 1.19  2000/01/28 00:20:58  sp
  * Lots of stuff
  *

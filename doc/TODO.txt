@@ -4,11 +4,11 @@ JEDIT TO DO
 
 - Double-click drag doesn't work backwards
 - Fix gutter repaint bug
-- Document option group API
-- Update window-editor-* and dialog-options-* screenshots
+- Focus is broken with buffertabs
 
 ------- Later -------
 
+- EditAction.isEnabled() method
 - Need to set caret on 'redo'
 - Check file modification status on focus
 - Having more than 2 split panes should be possible

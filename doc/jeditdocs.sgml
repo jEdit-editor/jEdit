@@ -3151,14 +3151,10 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  <para>
   This chapter overviews jEdit plugin development. A knowledge
   of Java, Swing, and JDK tools (<application>javac</>,
-  <application>jar</>, and so on) is assumed. This chapter
-  is meant to be read together with the jEdit API documentation; the
-  text in this chapter presents brief <quote>cookbook</>-style instructions
-  for the most common tasks, while the API documentation gives more
-  detail and in-depth coverage - if you know what you're looking for.
-  And of course, learning any sort of programming is difficult unless you
-  look at examples and experiment; having the source to a couple of
-  plugins will definitely help.
+  <application>jar</>, and so on) is assumed. This chapter only
+  convers the most frequently used jEdit APIs and services; you will
+  still need to study the source of a few other plugins, and possibly
+  jEdit itself, to write a good plugin.
  </para>
  <para>
   This section is still under construction; more is still to come.
@@ -3612,10 +3608,19 @@ import org.gjt.sp.jedit.View;</>
   <para>
    The Global Options dialog box is a common location for changing editor-wide
    settings, including plugin settings.
-   Each pane in the dialog box is actually an implementation of the
+   Plugins can add panes, as well as groups of panes to this dialog box.
+   If your plugin has lots of options that can be
+   set, it might be a good idea to create multiple option panes and
+   group them.
+  </para>
+  <para>
+   Each pane in an implementation of the
    <classname>org.gjt.sp.jedit.OptionPane</> interface - though most plugins
    will subclass the <classname>org.gjt.sp.jedit.AbstractOptionPane</> class
-   which provides a default layout implementation.
+   which provides a default layout implementation. Groups of option panes
+   are implemented using the <classname>org.gjt.sp.jedit.OptionGroup</>
+   class. Option groups are containers to which other option panes and
+   groups can be added.
   </para>
   <indexterm><primary>interface</><secondary>OptionPane</></indexterm>
   <indexterm><primary>class</><secondary>AbstractOptionPane</></indexterm>
@@ -3624,7 +3629,6 @@ import org.gjt.sp.jedit.View;</>
 implements OptionPane
 {
         public OptionPane(String name);
-        public String getName();
         public void save();
         public void addComponent(String label, Component comp);
         public void addComponent(Component comp);
@@ -3661,7 +3665,38 @@ implements OptionPane
    The <function>addOptionPane()</> method adds the specified option pane to an
    options dialog instance. You will almost always call this method from a
    plugin's <function>createOptionPanes()</> method, which is invoked every
-   time the Plugin Options dialog box is displayed.
+   time the Global Options dialog box is displayed.
+  </para>
+  <indexterm><primary>class</><secondary>OptionGroup</></indexterm>
+  <bridgehead renderas=sect3>OptionGroup class</>
+  <programlisting>public class OptionGroup
+implements OptionGroup
+{
+        public OptionGroup(String name);
+        public void addOptionPane(OptionPane pane);
+        public void addOptionGroup(OptionGroup group);
+}</programlisting>
+  <para>
+   Like option panes, each option group has a label which is obtained
+   from the <property>options.<replaceable>name</>.label</> property.
+   Option panes and other groups can be added using the
+   <function>addOptionPane()</> and <function>addOptionGroup()</> methods.
+  </para>
+  <indexterm><primary>method</><secondary>addOptionGroup() of OptionsGroup class</></indexterm>
+  <bridgehead renderas=sect3>OptionsDialog.addOptionGroup() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import org.gjt.sp.jedit.OptionGroup;</>
+   <funcprototype>
+    <funcdef>public void <function>addOptionGroup</></funcdef>
+    <paramdef>OptionGroup <parameter>group</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   The <function>addOptionGroup()</> method adds the specified option
+   group to an
+   options dialog instance. You will almost always call this method from a
+   plugin's <function>createOptionPanes()</> method, which is invoked every
+   time the Global Options dialog box is displayed.
   </para>
   <indexterm><primary>class</><secondary>EditPlugin</></indexterm>
   <indexterm><primary>method</><secondary>createOptionPanes() of EditPlugin class</></indexterm>
@@ -3677,8 +3712,10 @@ implements OptionPane
    The Plugin Options dialog box invokes the
    <function>createOptionPanes()</> method of each plugin when it is being
    displayed. The canonical implementation
-   would add a new <classname>OptionPane</> instance to the options dialog
-   using the <function>addOptionPane()</> method.
+   would add an<classname>OptionPane</> or <classname>OptionGroup</> instance
+   to the options dialog
+   using the <function>addOptionPane()</> or  <function>addOptionGroup()</>
+   methods.
   </para>
  </sect1>
  <sect1 id=plugin-dialogs><title>Canned Dialog Boxes</>

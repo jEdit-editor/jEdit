@@ -11,7 +11,11 @@ JEDIT VERSION HISTORY
 
 - Options dialog box didn't display 'plugins' branch sometimes (since 2.3pre4)
 - Problems would maifest if you selected the buffer list search set but
-  didn't actually specify any buffers (since ???)
+  didn't actually specify any buffers
+- Some files were missing from jedit-sources fileset
+- Opening URLs didn't work (since jEdit 2.2pre7)
+- The 'Rectangular Selection' action appeared twice in the command list in
+  the key binding editor (since 2.3pre2)
 
 * Version 2.3pre4
 
