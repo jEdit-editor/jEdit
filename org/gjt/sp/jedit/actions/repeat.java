@@ -29,11 +29,8 @@ public class repeat extends EditAction
 		View view = getView(evt);
 		view.getInputHandler().setRepeatEnabled(true);
 		String actionCommand = evt.getActionCommand();
-		if(actionCommand != null)
-		{
-			view.getInputHandler().setRepeatCount(
-				Integer.parseInt(actionCommand));
-		}
+		view.getInputHandler().setRepeatCount(
+			Integer.parseInt(actionCommand));
 	}
 
 	public boolean isRepeatable()
@@ -44,5 +41,10 @@ public class repeat extends EditAction
 	public boolean isRecordable()
 	{
 		return false;
+	}
+
+	public boolean needsActionCommand()
+	{
+		return true;
 	}
 }

@@ -1903,11 +1903,11 @@ public class jEdit
 		addAction("box-comment");
 		addAction("buffer-options");
 		addAction("clear-directory-cache");
-		addAction("clear-marker");
 		addAction("clear-register");
 		addAction("close-all");
 		addAction("close-buffer");
 		addAction("close-view");
+		addAction("command-line");
 		addAction("complete-word");
 		addAction("copy");
 		addAction("copy-string-register");
@@ -1932,7 +1932,6 @@ public class jEdit
 		addAction("forget-passwords");
 		addAction("global-options");
 		addAction("goto-line");
-		addAction("goto-marker");
 		addAction("goto-register");
 		addAction("help");
 		addAction("home");
@@ -1941,7 +1940,6 @@ public class jEdit
 		addAction("indent-lines");
 		addAction("indent-on-enter");
 		addAction("indent-on-tab");
-		addAction("insert-char");
 		addAction("insert-literal");
 		addAction("input");
 		addAction("io-progress-monitor");
@@ -1962,13 +1960,11 @@ public class jEdit
 		addAction("next-split");
 		addAction("next-word");
 		addAction("open-file");
-		addAction("open-path");
 		addAction("overwrite");
 		addAction("paste");
 		addAction("paste-previous");
 		addAction("paste-string-register");
 		addAction("play-last-macro");
-		addAction("play-macro");
 		addAction("play-temp-macro");
 		addAction("prev-bracket-exp");
 		addAction("prev-buffer");
@@ -1987,7 +1983,6 @@ public class jEdit
 		addAction("reload");
 		addAction("reload-all");
 		addAction("reload-modes");
-		addAction("repeat");
 		addAction("replace-all");
 		addAction("replace-in-selection");
 		addAction("rescan-macros");
@@ -1999,7 +1994,6 @@ public class jEdit
 		addAction("scroll-line");
 		addAction("select-all");
 		addAction("select-block");
-		addAction("select-buffer");
 		addAction("select-caret-register");
 		addAction("select-document-end");
 		addAction("select-document-home");
@@ -2023,9 +2017,6 @@ public class jEdit
 		addAction("set-caret-register");
 		addAction("set-filename-register");
 		addAction("set-marker");
-		addAction("set-replace-string");
-		addAction("set-search-parameters");
-		addAction("set-search-string");
 		addAction("shift-left");
 		addAction("shift-right");
 		addAction("split-horizontal");
@@ -2044,9 +2035,17 @@ public class jEdit
 		addAction("wing-comment");
 		addAction("word-count");
 
-		// this is the default action. We override the text area's
-		// one to handle abbrev expansion
-		inputHandler.setInputAction(getAction("insert-char"));
+		// Preload these actions so that needsActionCommand()
+		// will return the correct value (for command line autocompletion)
+		addAction(new org.gjt.sp.jedit.actions.clear_marker());
+		addAction(new org.gjt.sp.jedit.actions.goto_marker());
+		addAction(new org.gjt.sp.jedit.actions.insert_char());
+		addAction(new org.gjt.sp.jedit.actions.play_macro());
+		addAction(new org.gjt.sp.jedit.actions.repeat());
+		addAction(new org.gjt.sp.jedit.actions.select_buffer());
+		addAction(new org.gjt.sp.jedit.actions.set_replace_string());
+		addAction(new org.gjt.sp.jedit.actions.set_search_parameters());
+		addAction(new org.gjt.sp.jedit.actions.set_search_string());
 
 		// Preload these actions so that isToggle()
 		// will return the correct value
@@ -2054,6 +2053,10 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.toggle_line_numbers());
 		addAction(new org.gjt.sp.jedit.actions.toggle_rect());
 		addAction(new org.gjt.sp.jedit.actions.vfs_browser());
+
+		// this is the default action. We override the text area's
+		// one to handle abbrev expansion
+		inputHandler.setInputAction(getAction("insert-char"));
 	}
 
 	/**
@@ -2350,6 +2353,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.274  2000/09/01 11:31:00  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.273  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

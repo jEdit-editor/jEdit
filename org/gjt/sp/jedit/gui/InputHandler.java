@@ -74,17 +74,7 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public boolean isPrefixActive()
 	{
-		return (grabAction != null || repeat);
-	}
-
-	/**
-	 * Grabs the next key typed event and invokes the specified
-	 * action with the key as a the action command.
-	 * @param action The action
-	 */
-	public void grabNextKeyStroke(EditAction action)
-	{
-		grabAction = action;
+		return repeat;
 	}
 
 	/**
@@ -106,10 +96,10 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		this.repeat = repeat;
 		if(!repeat)
+		{
 			repeatCount = 0;
-
-		if(view != null)
-			view.updateCaretStatus();
+			view.getCommandLine().setState(CommandLine.NULL_STATE);
+		}
 	}
 
 	/**
@@ -127,9 +117,6 @@ public abstract class InputHandler extends KeyAdapter
 	public void setRepeatCount(int repeatCount)
 	{
 		this.repeatCount = repeatCount;
-
-		if(view != null)
-			view.updateCaretStatus();
 	}
 
 	/**
@@ -248,71 +235,39 @@ public abstract class InputHandler extends KeyAdapter
 		else
 			action.actionPerformed(evt);
 
-		// do recording. Notice that we do no recording whatsoever
-		// for actions that grab keys
-		if(grabAction == null)
+		if(recorder != null)
 		{
-			if(recorder != null)
+			if(action.isRecordable())
 			{
-				if(action.isRecordable())
+				if(_repeatCount != 1)
 				{
-					if(_repeatCount != 1)
-					{
-						recorder.actionPerformed(
-							jEdit.getAction("repeat"),
-							String.valueOf(_repeatCount));
-					}
-
-					recorder.actionPerformed(action,actionCommand);
+					recorder.actionPerformed(
+						jEdit.getAction("repeat"),
+						String.valueOf(_repeatCount));
 				}
-			}
 
-			// If repeat was true originally, clear it
-			// Otherwise it might have been set by the action, etc
-			if(_repeat)
-				setRepeatEnabled(false);
+				recorder.actionPerformed(action,actionCommand);
+			}
+		}
+
+		// If repeat was true originally, clear it
+		// Otherwise it might have been set by the action, etc
+		if(_repeat)
+		{
+			setRepeatEnabled(false);
+			view.getCommandLine().setState(CommandLine.NULL_STATE);
 		}
 	}
 
 	// protected members
 	protected View view;
 	protected EditAction inputAction;
-	protected EditAction grabAction;
 	protected boolean repeat;
 	protected int repeatCount;
 	protected InputHandler.MacroRecorder recorder;
 
 	protected EditAction lastAction;
 	protected int lastActionCount;
-
-	/**
-	 * If a key is being grabbed, this method should be called with
-	 * the appropriate key event. It executes the grab action with
-	 * the typed character as the parameter.
-	 */
-	protected void handleGrabAction(KeyEvent evt)
-	{
-		// Clear it *before* it is executed so that executeAction()
-		// resets the repeat count
-		EditAction _grabAction = grabAction;
-		grabAction = null;
-
-		char keyChar = evt.getKeyChar();
-		int keyCode = evt.getKeyCode();
-
-		String arg;
-
-		if(keyChar != KeyEvent.VK_UNDEFINED)
-			arg = String.valueOf(keyChar);
-		else if(keyCode == KeyEvent.VK_TAB)
-			arg = "\t";
-		else if(keyCode == KeyEvent.VK_ENTER)
-			arg = "\n";
-		else
-			arg = "\0";
-
-		executeAction(_grabAction,evt.getSource(),arg);
-	}
 
 	/**
 	 * Macro recorder.
@@ -326,6 +281,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/09/01 11:31:01  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.10  2000/08/10 11:55:58  sp
  * VFS browser toolbar improved a little bit, font selector tweaks
  *
@@ -352,8 +310,5 @@ public abstract class InputHandler extends KeyAdapter
  *
  * Revision 1.2  2000/04/30 07:27:13  sp
  * Ftp VFS hacking, bug fixes
- *
- * Revision 1.1  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
  *
  */

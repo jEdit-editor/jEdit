@@ -41,8 +41,8 @@ public class insert_literal extends EditAction
 
 		if(str == null)
 		{
-			view.showStatus(jEdit.getProperty("view.status.insert-literal"));
-			view.getInputHandler().grabNextKeyStroke(this);
+			view.getCommandLine().promptOneChar(jEdit.getProperty(
+				"view.status.insert-literal"),this);
 			return;
 		}
 		else

@@ -37,6 +37,7 @@ JEDIT 2.6 VERSION HISTORY
 - Documentation updates
 - The window docking code is now slightly more resistent to broken dockables
   being added
+- Undoing all changes up to a save now clears the dirty flag
 
 + Bug Fixes
 
@@ -60,6 +61,10 @@ JEDIT 2.6 VERSION HISTORY
 - jEdit would hang if buffer list sorting was enabled and a buffer was
   saved to a file name which would re-sort it to the beginning or end of
   the list
+- Abbreviations containing backslash characters would not be expanded
+  properly sometimes
+- The last line of multi-line abbreviations wasn't indented
+- Under very rare circumstances, undos would throw IllegalArgumentExceptions
 
 + API Changes
 

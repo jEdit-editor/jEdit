@@ -33,35 +33,36 @@ public class StatusBar extends JPanel
 	public StatusBar(View view)
 	{
 		super(new BorderLayout());
-		setBorder(new EmptyBorder(0,1,0,1));
 
 		this.view = view;
-		Border border = new CompoundBorder(new EmptyBorder(2,1,2,1),
-			new LineBorder(UIManager.getColor("Label.foreground")));
-		border = new CompoundBorder(border,new EmptyBorder(2,1,2,1));
-		Font font = new Font("Dialog",Font.BOLD,10);
+		Border border = new EmptyBorder(2,2,2,2);
+
+		Font font = new Font("Dialog",Font.BOLD,10); //UIManager.getFont("Label.font");
+		Color color = UIManager.getColor("Button.foreground");
 
 		caret = new CaretStatus();
 		caret.setBorder(border);
 		caret.setFont(font);
+		caret.setForeground(color);
 		add(BorderLayout.WEST,caret);
 
 		statusMessage = new JLabel();
 		statusMessage.setBorder(border);
 		statusMessage.setFont(font);
+		statusMessage.setForeground(color);
 		add(BorderLayout.CENTER,statusMessage);
 
 		Box box = new Box(BoxLayout.X_AXIS);
 
-		bufferStatus = new JLabel();
-		bufferStatus.setBorder(border);
-		bufferStatus.setFont(font);
-		box.add(bufferStatus);
-
 		ioProgress = new IOProgress();
 		ioProgress.setBorder(border);
 		ioProgress.setFont(font);
+		ioProgress.setForeground(color);
 		box.add(ioProgress);
+
+		bufferStatus = new JLabel();
+		bufferStatus.setBorder(border);
+		box.add(bufferStatus);
 
 		add(BorderLayout.EAST,box);
 
@@ -70,29 +71,25 @@ public class StatusBar extends JPanel
 
 	public void showStatus(String message)
 	{
-		if(message == null)
-			message = view.getBuffer().getPath();
+		if(message == null && view.getInputHandler().getMacroRecorder() != null)
+			message = jEdit.getProperty("view.status.recording");
 
-		statusMessage.setText(message);
+		if(message == null)
+		{
+			add(BorderLayout.WEST,caret);
+			statusMessage.setText(view.getBuffer().getPath());
+		}
+		else
+		{
+			remove(caret);
+			statusMessage.setText(message);
+		}
 	}
 
 	public void updateBufferStatus()
 	{
-		Buffer buffer = view.getBuffer();
-		StringBuffer buf = new StringBuffer();
-		if(buffer.isDirty())
-			buf.append(jEdit.getProperty("view.status.modified"));
-		if(buffer.isNewFile())
-			buf.append(jEdit.getProperty("view.status.new"));
-		if(buffer.isReadOnly())
-			buf.append(jEdit.getProperty("view.status.read-only"));
-		if(view.getInputHandler().getMacroRecorder() != null)
-			buf.append(jEdit.getProperty("view.status.recording"));
-		if(buf.length() == 0)
-			buf.append(jEdit.getProperty("view.status.ok"));
-
-		bufferStatus.setText(buf.toString());
-		statusMessage.setText(buffer.getPath());
+		bufferStatus.setIcon(view.getBuffer().getIcon());
+		showStatus(null);
 	}
 
 	public void updateCaretStatus()
@@ -127,25 +124,10 @@ public class StatusBar extends JPanel
 			int start = textArea.getLineStartOffset(currLine);
 			int numLines = textArea.getLineCount();
 
-			String str;
-			if(view.getInputHandler().isRepeatEnabled())
-			{
-				int repeatCount = view.getInputHandler()
-					.getRepeatCount();
-				if(repeatCount == 0)
-					str = "";
-				else
-					str = String.valueOf(repeatCount);
-				Object[] args = { str };
-				str = jEdit.getProperty("view.status.repeat",args);
-			}
-			else
-			{
-				str = ("col " + ((dot - start) + 1) + " line "
-					+ (currLine + 1) + "/"
-					+ numLines + " "
-					+ (((currLine + 1) * 100) / numLines) + "%");
-			}
+			String str = ("col " + ((dot - start) + 1) + " line "
+				+ (currLine + 1) + "/"
+				+ numLines + " "
+				+ (((currLine + 1) * 100) / numLines) + "%");
 
 			Insets insets = CaretStatus.this.getBorder()
 				.getBorderInsets(this);
@@ -179,7 +161,6 @@ public class StatusBar extends JPanel
 			IOProgress.this.setDoubleBuffered(true);
 			IOProgress.this.setForeground(UIManager.getColor("Label.foreground"));
 			IOProgress.this.setBackground(UIManager.getColor("Label.background"));
-			IOProgress.this.addMouseListener(new MouseHandler());
 		}
 
 		public void addNotify()
@@ -263,20 +244,15 @@ public class StatusBar extends JPanel
 		{
 			return getPreferredSize();
 		}
-
-		class MouseHandler extends MouseAdapter
-		{
-			public void mouseClicked(MouseEvent evt)
-			{
-				new IOProgressMonitor();
-			}
-		}
 	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/09/01 11:31:01  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.7  2000/07/26 07:48:44  sp
  * stuff
  *

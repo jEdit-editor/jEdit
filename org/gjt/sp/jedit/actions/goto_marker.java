@@ -37,4 +37,9 @@ public class goto_marker extends EditAction
 		else
 			view.getToolkit().beep();
 	}
+
+	public boolean needsActionCommand()
+	{
+		return true;
+	}
 }

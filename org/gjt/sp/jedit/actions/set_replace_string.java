@@ -29,4 +29,9 @@ public class set_replace_string extends EditAction
 	{
 		SearchAndReplace.setReplaceString(evt.getActionCommand());
 	}
+
+	public boolean needsActionCommand()
+	{
+		return true;
+	}
 }

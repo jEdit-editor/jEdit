@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.gui.CommandLine;
 import org.gjt.sp.jedit.*;
 
 public class open_file extends EditAction
@@ -28,6 +29,29 @@ public class open_file extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
+		String path = evt.getActionCommand();
+
+		if(path == null)
+		{
+			CommandLine commandLine = getCommandLine(evt);
+			System.err.println(commandLine);
+			if(commandLine != null)
+			{
+				commandLine.promptLine(jEdit.getProperty(
+					"view.status.open-file"),this);
+			}
+			else
+				showOpenDialog(view);
+		}
+		else if(path.length() == 0)
+			showOpenDialog(view);
+		else
+			jEdit.openFile(view,path);
+
+	}
+
+	private void showOpenDialog(View view)
+	{
 		String[] files = GUIUtilities.showVFSFileDialog(view,null,
 			VFSBrowser.OPEN_DIALOG,true);
 

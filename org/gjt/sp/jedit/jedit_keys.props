@@ -131,4 +131,4 @@ prev-line.shortcut=UP
 select-prev-line.shortcut=S+UP
 next-line.shortcut=DOWN
 select-next-line.shortcut=S+DOWN
-repeat.shortcut=C+ENTER
+command-line.shortcut=C+ENTER

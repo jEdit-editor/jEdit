@@ -34,7 +34,7 @@ public class stop_recording extends EditAction
 		}
 
 		Macros.endRecording(view);
-		view.updateBufferStatus();
+		view.showStatus(null);
 	}
 
 	public boolean isRecordable()

@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
 import java.util.EventObject;
+import org.gjt.sp.jedit.gui.CommandLine;
 import org.gjt.sp.util.Log;
 
 /**
@@ -123,6 +124,23 @@ public abstract class EditAction implements ActionListener
 	}
 
 	/**
+	 * Returns the command line this action was invoked from, or null
+	 * if it wasn't invoked from the command line.
+	 * @since jEdit 2.6pre5
+	 */
+	public static CommandLine getCommandLine(EventObject evt)
+	{
+		if(evt != null)
+		{
+			Object o = evt.getSource();
+			if(o instanceof Component)
+				return getCommandLine((Component)o);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Finds the view parent of the specified component.
 	 * @since jEdit 2.2pre4
 	 */
@@ -132,6 +150,26 @@ public abstract class EditAction implements ActionListener
 		{
 			if(comp instanceof View)
 				return (View)comp;
+			else if(comp instanceof JPopupMenu)
+				comp = ((JPopupMenu)comp).getInvoker();
+			else if(comp != null)
+				comp = comp.getParent();
+			else
+				break;
+		}
+		return null;
+	}
+
+	/**
+	 * Finds the command line parent of the specified component.
+	 * @since jEdit 2.6pre5
+	 */
+	public static CommandLine getCommandLine(Component comp)
+	{
+		for(;;)
+		{
+			if(comp instanceof CommandLine)
+				return (CommandLine)comp;
 			else if(comp instanceof JPopupMenu)
 				comp = ((JPopupMenu)comp).getInvoker();
 			else if(comp != null)
@@ -178,6 +216,16 @@ public abstract class EditAction implements ActionListener
 	public boolean isRecordable()
 	{
 		return true;
+	}
+
+	/**
+	 * Returns if this edit action requires an action command. If
+	 * it does, it will not appear in the command line's auto-complete
+	 * list. Returns false by default.
+	 */
+	public boolean needsActionCommand()
+	{
+		return false;
 	}
 
 	public boolean isWrapper()
@@ -246,7 +294,7 @@ public abstract class EditAction implements ActionListener
 				// Let input handler do recording, repeating,
 				// etc.
 				view.getInputHandler().executeAction(action,
-					view.getTextArea(),evt.getActionCommand());
+					evt.getSource(),evt.getActionCommand());
 			}
 		}
 
@@ -272,6 +320,14 @@ public abstract class EditAction implements ActionListener
 				return false;
 			else
 				return action.isSelected(comp);
+		}
+
+		public boolean needsActionCommand()
+		{
+			if(action == null)
+				return false;
+			else
+				return action.needsActionCommand();
 		}
 
 		public boolean isWrapper()
@@ -316,6 +372,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/09/01 11:31:00  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.26  2000/07/15 02:45:22  sp
  * Minor changes to core for EditBuddy plugin
  *

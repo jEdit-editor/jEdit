@@ -67,7 +67,7 @@ public class CurrentDirectoryMenu extends JMenu
 			addSeparator();
 
 			JMenu current = this;
-			EditAction action = jEdit.getAction("open-path");
+			EditAction action = jEdit.getAction("open-file");
 			String[] list = dir.list();
 			if(list != null)
 			{

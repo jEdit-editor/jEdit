@@ -36,10 +36,10 @@ public class paste_string_register extends EditAction
 		}
 
 		String actionCommand = evt.getActionCommand();
-		if(actionCommand == null || actionCommand.length() != 1)
+		if(actionCommand == null)
 		{
-			view.showStatus(jEdit.getProperty("view.status.paste-string-register"));
-			view.getInputHandler().grabNextKeyStroke(this);
+			view.getCommandLine().promptOneChar(jEdit.getProperty(
+				"view.status.paste-string-register"),this);
 		}
 		else
 		{

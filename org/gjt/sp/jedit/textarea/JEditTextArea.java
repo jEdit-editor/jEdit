@@ -2122,17 +2122,29 @@ public class JEditTextArea extends JComponent
 		{
 			super.undo();
 
-			System.err.println(focusedComponent.getBuffer().getLength() + "," + this);
-
-			if(focusedComponent != null)
-				focusedComponent.select(start,end);
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					if(focusedComponent != null)
+					{
+						int length = focusedComponent
+							.getBuffer().getLength();
+						if(start < length && end < length)
+							focusedComponent.select(start,end);
+						else
+							Log.log(Log.WARNING,this,
+								start + " or " + end
+								+ " > " + length + "??!!");
+					}
+				}
+			});
 		}
 
 		public boolean addEdit(UndoableEdit edit)
 		{
 			if(edit instanceof CaretUndo)
 			{
-				System.err.println("killing " + edit);
 				edit.die();
 
 				return true;
@@ -2159,6 +2171,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.80  2000/09/01 11:31:01  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.79  2000/08/31 02:54:01  sp
  * Improved activity log, bug fixes
  *
@@ -2188,26 +2203,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.70  2000/06/24 06:24:55  sp
  * work thread bug fixes
- *
- * Revision 1.69  2000/06/02 08:43:03  sp
- * Printing fixes and enhancements, other bug fixes
- *
- * Revision 1.68  2000/06/02 02:21:06  sp
- * minor bug fixes
- *
- * Revision 1.67  2000/05/24 07:56:05  sp
- * bug fixes
- *
- * Revision 1.66  2000/05/23 04:04:52  sp
- * Marker highlight updates, next/prev-marker actions
- *
- * Revision 1.65  2000/05/22 12:05:45  sp
- * Markers are highlighted in the gutter, bug fixes
- *
- * Revision 1.64  2000/05/21 03:00:51  sp
- * Code cleanups and bug fixes
- *
- * Revision 1.63  2000/05/14 10:55:22  sp
- * Tool bar editor started, improved view registers dialog box
  *
  */

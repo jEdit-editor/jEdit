@@ -32,4 +32,9 @@ public class clear_marker extends EditAction
 			view.getToolkit().beep();
 		buffer.removeMarker(evt.getActionCommand());
 	}
+
+	public boolean needsActionCommand()
+	{
+		return true;
+	}
 }

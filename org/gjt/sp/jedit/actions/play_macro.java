@@ -60,4 +60,9 @@ public class play_macro extends EditAction
 	{
 		return false;
 	}
+
+	public boolean needsActionCommand()
+	{
+		return true;
+	}
 }

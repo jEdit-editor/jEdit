@@ -119,7 +119,7 @@ public class Abbrevs
 
 				// note that if expand.lineCount is 0, we
 				// don't do any indentation at all
-				for(int i = line + 1; i < line + expand.lineCount; i++)
+				for(int i = line + 1; i <= line + expand.lineCount; i++)
 				{
 					buffer.indentLine(textArea,i,true,true);
 				}
@@ -179,6 +179,8 @@ public class Abbrevs
 					backslash = true;
 				else if(backslash)
 				{
+					backslash = false;
+
 					if(ch == '|')
 						caretPosition = buf.length();
 					else if(ch == 'n')
@@ -466,6 +468,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/09/01 11:31:00  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.15  2000/08/29 07:47:10  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

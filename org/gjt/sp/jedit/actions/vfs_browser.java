@@ -21,15 +21,48 @@ package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.Component;
+import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.browser.VFSBrowserDockable;
-import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
+import org.gjt.sp.jedit.gui.CommandLine;
+import org.gjt.sp.jedit.*;
 
 public class vfs_browser extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		getView(evt).getDockableWindowManager().toggleDockableWindow(
-			VFSBrowserDockable.NAME);
+		View view = getView(evt);
+		DockableWindowManager dockableWindowManager
+			= view.getDockableWindowManager();
+		String actionCommand = evt.getActionCommand();
+
+		if(actionCommand == null)
+		{
+			CommandLine commandLine = getCommandLine(evt);
+			if(commandLine != null)
+			{
+				commandLine.promptLine(jEdit.getProperty(
+					"view.status.vfs-browser"),this);
+			}
+			else
+			{
+				dockableWindowManager.toggleDockableWindow(
+					VFSBrowserDockable.NAME);
+			}
+		}
+		else if(actionCommand.length() == 0)
+		{
+			dockableWindowManager.toggleDockableWindow(
+					VFSBrowserDockable.NAME);
+		}
+		else
+		{
+			dockableWindowManager.showDockableWindow(VFSBrowserDockable.NAME);
+			VFSBrowser browser = (VFSBrowser)dockableWindowManager
+				.getDockableWindow(VFSBrowserDockable.NAME)
+				.getComponent();
+			browser.setDirectory(actionCommand);
+		}
 	}
 
 	public boolean isToggle()

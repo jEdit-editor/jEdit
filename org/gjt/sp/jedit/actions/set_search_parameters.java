@@ -51,4 +51,9 @@ public class set_search_parameters extends EditAction
 					new AllBufferSet());
 		}
 	}
+
+	public boolean needsActionCommand()
+	{
+		return true;
+	}
 }

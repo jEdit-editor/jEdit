@@ -35,19 +35,22 @@ public class goto_line extends EditAction
 
 		int line = 0;
 
-		if(view.getInputHandler().isRepeatEnabled())
-			line = view.getInputHandler().getRepeatCount();
+		String actionCommand = evt.getActionCommand();
+		if(actionCommand == null)
+		{
+			view.getCommandLine().promptLine(jEdit.getProperty(
+				"view.status.goto-line"),this);
+			return;
+		}
 		else
 		{
-			String str = (String)GUIUtilities.input(view,"gotoline",null);
-			if(str == null)
-				return;
 			try
 			{
-				line = Integer.parseInt(str);
+				line = Integer.parseInt(actionCommand);
 			}
 			catch(NumberFormatException nf)
-			{}
+			{
+			}
 		}
 
 		Element map = buffer.getDefaultRootElement();

@@ -42,10 +42,10 @@ public class cut_string_register extends EditAction
 			return;
 
 		String actionCommand = evt.getActionCommand();
-		if(actionCommand == null || actionCommand.length() != 1)
+		if(actionCommand == null)
 		{
-			view.showStatus(jEdit.getProperty("view.status.cut-string-register"));
-			view.getInputHandler().grabNextKeyStroke(this);
+			view.getCommandLine().promptOneChar(jEdit.getProperty(
+				"view.status.cut-string-register"),this);
 		}
 		else
 		{

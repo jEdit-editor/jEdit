@@ -19,7 +19,7 @@
 
 package org.gjt.sp.jedit;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -624,6 +624,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.16  2000/09/01 11:31:00  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.15  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

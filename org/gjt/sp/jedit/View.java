@@ -89,6 +89,15 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Returns the command line prompt.
+	 * @since jEdit 2.6pre5
+	 */
+	public final CommandLine getCommandLine()
+	{
+		return commandLine;
+	}
+
+	/**
 	 * Returns the listener that will handle all key events in this
 	 * view, if any.
 	 */
@@ -421,6 +430,51 @@ public class View extends JFrame implements EBComponent
 			return null;
 	}
 
+	/**
+	 * Forwards key events directly to the input handler.
+	 * This is slightly faster than using a KeyListener
+	 * because some Swing overhead is avoided.
+	 */
+	public void processKeyEvent(KeyEvent evt)
+	{
+		if(evt.isConsumed())
+			return;
+
+		// JTextComponents don't consume events...
+		if(getFocusOwner() instanceof JTextComponent)
+		{
+			Keymap keymap = ((JTextComponent)getFocusOwner())
+				.getKeymap();
+			if(keymap.getAction(KeyStroke.getKeyStrokeForEvent(evt)) != null)
+				return;
+		}
+
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_TYPED:
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyTyped(evt);
+			else if(inputHandler.isPrefixActive())
+				inputHandler.keyTyped(evt);
+			break;
+		case KeyEvent.KEY_PRESSED:
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyPressed(evt);
+			else
+				inputHandler.keyPressed(evt);
+			break;
+		case KeyEvent.KEY_RELEASED:
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyReleased(evt);
+			else
+				inputHandler.keyReleased(evt);
+			break;
+		}
+
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
+	}
+
 	// package-private members
 	View prev;
 	View next;
@@ -460,8 +514,13 @@ public class View extends JFrame implements EBComponent
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
 
+		Box statusBox = new Box(BoxLayout.Y_AXIS);
 		status = new StatusBar(this);
-		getContentPane().add(BorderLayout.SOUTH,status);
+		statusBox.add(status);
+		commandLine = new CommandLine(this);
+		statusBox.add(commandLine);
+
+		getContentPane().add(BorderLayout.SOUTH,statusBox);
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
@@ -604,54 +663,6 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	// protected members
-
-	/**
-	 * Forwards key events directly to the input handler.
-	 * This is slightly faster than using a KeyListener
-	 * because some Swing overhead is avoided.
-	 */
-	protected void processKeyEvent(KeyEvent evt)
-	{
-		if(evt.isConsumed())
-			return;
-
-		// JTextComponents don't consume events...
-		if(evt.getSource() instanceof JTextComponent)
-		{
-			Keymap keymap = ((JTextComponent)evt.getSource())
-				.getKeymap();
-			if(keymap.getAction(KeyStroke.getKeyStrokeForEvent(evt))
-				!= null)
-				return;
-		}
-
-		switch(evt.getID())
-		{
-		case KeyEvent.KEY_TYPED:
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyTyped(evt);
-			else if(inputHandler.isPrefixActive())
-				inputHandler.keyTyped(evt);
-			break;
-		case KeyEvent.KEY_PRESSED:
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyPressed(evt);
-			else
-				inputHandler.keyPressed(evt);
-			break;
-		case KeyEvent.KEY_RELEASED:
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyReleased(evt);
-			else
-				inputHandler.keyReleased(evt);
-			break;
-		}
-
-		if(!evt.isConsumed())
-			super.processKeyEvent(evt);
-	}
-
 	// private members
 	private boolean closed;
 
@@ -674,6 +685,7 @@ public class View extends JFrame implements EBComponent
 	private JSplitPane splitPane;
 
 	private StatusBar status;
+	private CommandLine commandLine;
 
 	private KeyListener keyEventInterceptor;
 	private InputHandler inputHandler;
@@ -788,7 +800,7 @@ public class View extends JFrame implements EBComponent
 	{
 		if(recent.getMenuComponentCount() != 0)
 			recent.removeAll();
-		EditAction action = jEdit.getAction("open-path");
+		EditAction action = jEdit.getAction("open-file");
 		String[] recentArray = jEdit.getRecent();
 		if(recentArray.length == 0)
 		{
@@ -1056,6 +1068,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.195  2000/09/01 11:31:00  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.194  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

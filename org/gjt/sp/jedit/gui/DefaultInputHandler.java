@@ -149,13 +149,6 @@ public class DefaultInputHandler extends InputHandler
 			|| keyCode == KeyEvent.VK_TAB
 			|| keyCode == KeyEvent.VK_ESCAPE)
 		{
-			if(grabAction != null)
-			{
-				handleGrabAction(evt);
-				evt.consume();
-				return;
-			}
-
 			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
 				modifiers);
 			Object o = currentBindings.get(keyStroke);
@@ -230,28 +223,9 @@ public class DefaultInputHandler extends InputHandler
 
 				currentBindings = bindings;
 
-				if(grabAction != null)
-				{
-					handleGrabAction(evt);
-					evt.consume();
-					return;
-				}
-
-				// 0-9 adds another 'digit' to the repeat number
-				if(repeat && Character.isDigit(c))
-				{
-					setRepeatCount(repeatCount * 10
-						+ (c - '0'));
-					evt.consume();
-					return;
-				}
-
 				executeAction(inputAction,evt.getSource(),
 					String.valueOf(evt.getKeyChar()));
 				evt.consume();
-
-				repeatCount = 0;
-				repeat = false;
 			}
 		}
 	}
@@ -337,6 +311,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/09/01 11:31:00  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.2  2000/04/30 07:27:13  sp
  * Ftp VFS hacking, bug fixes
  *

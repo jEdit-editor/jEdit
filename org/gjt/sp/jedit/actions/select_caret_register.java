@@ -31,10 +31,10 @@ public class select_caret_register extends EditAction
 		JEditTextArea textArea = view.getTextArea();
 
 		String actionCommand = evt.getActionCommand();
-		if(actionCommand == null || actionCommand.length() != 1)
+		if(actionCommand == null)
 		{
-			view.showStatus(jEdit.getProperty("view.status.select-caret-register"));
-			view.getInputHandler().grabNextKeyStroke(this);
+			view.getCommandLine().promptOneChar(jEdit.getProperty(
+				"view.status.select-caret-register"),this);
 		}
 		else
 		{

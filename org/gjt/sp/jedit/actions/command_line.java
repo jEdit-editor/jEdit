@@ -1,6 +1,6 @@
 /*
- * insert_char.java - Action
- * Copyright (C) 1999 Slava Pestov
+ * command_line.java
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,37 +20,18 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 
-public class insert_char extends EditAction
+public class command_line extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		JEditTextArea textArea = view.getTextArea();
-		if(!textArea.isEditable())
-		{
-			view.getToolkit().beep();
-			return;
-		}
+		InputHandler input = view.getInputHandler();
+		int repeatCount = input.getRepeatCount();
 
-		String str = evt.getActionCommand();
-
-		char ch = str.charAt(0);
-		if(Abbrevs.getExpandOnInput() && ch == ' ')
-		{
-			if(Abbrevs.expandAbbrev(view,false))
-				return;
-		}
-
-		int repeatCount = view.getInputHandler().getRepeatCount();
-
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < repeatCount; i++)
-			buf.append(str);
-		textArea.overwriteSetSelectedText(buf.toString());
+		view.getCommandLine().getTextField().requestFocus();
 	}
 
 	public boolean isRepeatable()
@@ -58,8 +39,8 @@ public class insert_char extends EditAction
 		return false;
 	}
 
-	public boolean needsActionCommand()
+	public boolean isRecordable()
 	{
-		return true;
+		return false;
 	}
 }

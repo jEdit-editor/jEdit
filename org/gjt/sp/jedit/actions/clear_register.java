@@ -29,10 +29,10 @@ public class clear_register extends EditAction
 		View view = getView(evt);
 
 		String actionCommand = evt.getActionCommand();
-		if(actionCommand == null || actionCommand.length() != 1)
+		if(actionCommand == null)
 		{
-			view.showStatus(jEdit.getProperty("view.status.clear-register"));
-			view.getInputHandler().grabNextKeyStroke(this);
+			view.getCommandLine().promptOneChar(jEdit.getProperty(
+				"view.status.clear-string-register"),this);
 		}
 		else
 		{

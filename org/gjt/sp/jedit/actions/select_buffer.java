@@ -28,4 +28,9 @@ public class select_buffer extends EditAction
 	{
 		getView(evt).setBuffer(jEdit.getBuffer(evt.getActionCommand()));
 	}
+
+	public boolean needsActionCommand()
+	{
+		return true;
+	}
 }

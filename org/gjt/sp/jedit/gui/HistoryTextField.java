@@ -67,7 +67,8 @@ public class HistoryTextField extends JTextField
 	public HistoryTextField(String name, boolean instantPopups,
 		boolean enterAddsToHistory)
 	{
-		historyModel = HistoryModel.getModel(name);
+		if(name != null)
+			historyModel = HistoryModel.getModel(name);
 		addMouseListener(new MouseHandler());
 
 		this.instantPopups = instantPopups;
@@ -83,7 +84,10 @@ public class HistoryTextField extends JTextField
 	 */
 	public void setModel(String name)
 	{
-		historyModel = HistoryModel.getModel(name);
+		if(name == null)
+			historyModel = null;
+		else
+			historyModel = HistoryModel.getModel(name);
 		index = -1;
 	}
 
@@ -92,7 +96,8 @@ public class HistoryTextField extends JTextField
 	 */
 	public void addCurrentToHistory()
 	{
-		historyModel.addItem(getText());
+		if(historyModel != null)
+			historyModel.addItem(getText());
 		index = 0;
 	}
 
@@ -172,6 +177,9 @@ public class HistoryTextField extends JTextField
 
 	private void doBackwardSearch()
 	{
+		if(historyModel == null)
+			return;
+
 		if(getSelectionEnd() != getDocument().getLength())
 		{
 			setCaretPosition(getDocument().getLength());
@@ -201,6 +209,9 @@ public class HistoryTextField extends JTextField
 
 	private void doForwardSearch()
 	{
+		if(historyModel == null)
+			return;
+
 		if(getSelectionEnd() != getDocument().getLength())
 		{
 			setCaretPosition(getDocument().getLength());
@@ -230,6 +241,9 @@ public class HistoryTextField extends JTextField
 
 	private void historyPrevious()
 	{
+		if(historyModel == null)
+			return;
+
 		if(index == historyModel.getSize() - 1)
 			getToolkit().beep();
 		else if(index == -1)
@@ -249,6 +263,9 @@ public class HistoryTextField extends JTextField
 
 	private void historyNext()
 	{
+		if(historyModel == null)
+			return;
+
 		if(index == -1)
 			getToolkit().beep();
 		else if(index == 0)
@@ -264,6 +281,11 @@ public class HistoryTextField extends JTextField
 
 	private void showPopupMenu(String text, int x, int y)
 	{
+		if(historyModel == null)
+			return;
+
+		requestFocus();
+
 		if(popup != null && popup.isVisible())
 		{
 			popup.setVisible(false);
@@ -335,6 +357,9 @@ public class HistoryTextField extends JTextField
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  2000/09/01 11:31:00  sp
+ * Rudimentary 'command line', similar to emacs minibuf
+ *
  * Revision 1.35  2000/08/29 07:47:12  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *
@@ -364,11 +389,5 @@ public class HistoryTextField extends JTextField
  *
  * Revision 1.26  1999/05/08 00:13:00  sp
  * Splash screen change, minor documentation update, toolbar API fix
- *
- * Revision 1.25  1999/05/05 07:20:45  sp
- * jEdit 1.6pre5
- *
- * Revision 1.24  1999/05/04 04:51:25  sp
- * Fixed HistoryTextField for Swing 1.1.1
  *
  */
