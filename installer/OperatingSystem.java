@@ -1,6 +1,6 @@
 /*
  * OperatingSystem.java
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,8 +52,6 @@ public abstract class OperatingSystem
 		String osName = System.getProperty("os.name");
 		if(osName.indexOf("Windows") != -1)
 			os = new Windows();
-		else if(osName.indexOf("MacOS X") != -1)
-			os = new MacOSX();
 		else if(osName.indexOf("Mac") != -1)
 			os = new MacOS();
 		else if(osName.indexOf("OS/2") != -1)
@@ -64,7 +62,7 @@ public abstract class OperatingSystem
 		return os;
 	}
 
-	public static class MacOSX extends OperatingSystem
+	public static class MacOS extends OperatingSystem
 	{
 		public String getInstallDirectory(String name, String version)
 		{
@@ -104,12 +102,24 @@ public abstract class OperatingSystem
 			out.write("exec "
 				+ System.getProperty("java.home")
 				+ "/bin/java -mx${JAVA_HEAP_SIZE}m ${"
-				+ name.toUpperCase()
-				+ "} -classpath \"${CLASSPATH}:"
-				+ installDir + File.separator
-				+ name.toLowerCase() + ".jar\" "
-				+ installer.getProperty("app.main.class")
-				+ " $@\n");
+				+ name.toUpperCase() + "} ");
+
+			String jar = installDir + File.separator
+				+ name.toLowerCase() + ".jar";
+
+			if(System.getProperty("java.version").compareTo("1.2") >= 0)
+			{
+				out.write("-jar \"" + jar + "\" ");
+			}
+			else
+			{
+				out.write("-classpath \"${CLASSPATH}:"
+					+ jar + "\" "
+					+ installer.getProperty("app.main.class"));
+			}
+
+			out.write(" $@\n");
+
 			out.close();
 
 			// Make it executable
@@ -172,14 +182,6 @@ public abstract class OperatingSystem
 			catch(InterruptedException ie)
 			{
 			}
-		}
-	}
-
-	public static class MacOS extends OperatingSystem
-	{
-		public String getInstallDirectory(String name, String version)
-		{
-			return name + " " + version;
 		}
 	}
 

@@ -48,8 +48,7 @@
    on Unix systems, usually you would
    run the <quote>jedit</quote> command at the command line,
    or select jEdit from a menu; on Windows, you might
-   double click on the jEdit launcher icon. Specific instructions for
-   using the Windows launcher can be found in
+   use the jEditLauncher package, which is documented in
    <xref linkend="starting-windows" />.
   </para>
   <para>
@@ -98,11 +97,52 @@
    </para>
   </sidebar>
  </sect1>
- <sect1 id="starting-windows"><title>Using the Windows Launcher</title>
+ <sect1 id="starting-windows"><title>Starting jEdit on Windows</title>
   <para>
-   Not finished.
+   On Windows, jEdit comes with <emphasis>jEditLauncher</emphasis> - an optional
+   package of components that make it easy to start jEdit, manage its command
+   line settings, and launch files and macro scripts.
+  </para>
+
+  <para>
+   The jEditLauncher package provides three shortcuts for running jEdit:  one in
+   the desktop's <guilabel>Start</guilabel> menu, a entry in the Programs menu, and
+   a second shortcut on your desktop.  Any of these may be deleted or moved without
+   affecting jEdit's operation.  To launch jEdit, simply select one of these shortcuts
+   as you would for any Windows application.
+  </para>
+
+  <para>
+   The jEditLauncher package includes a utility for changing the command line
+   parameters that are stored with jEditLauncher and used everytime it runs jEdit.
+   You can change the Java interpreter used to launch jEdit, the amount of heap memory,
+   the working directory and other command line parameters.  To make these changes,
+   select <guilabel>Set jEdit Parameters</guilabel> from the jEdit group in
+   the Programs menu, or run <userinput>jedit /p</userinput> from a command
+   line that has jEdit's installation directory in its search path.  A dialog
+   will appear that allows you to change and save a new set of command line
+   parameters.
+  </para>
+
+  <para>
+   The package also add menu items to the context or <quote>right-click</quote>
+   menu displayed by the Windows shell when you click on a file item in the
+   desktop window, a Windows Explorer window or a standard file selection dialog.
+   The menu entries allow  you to open selected files in jEdit, starting the
+   aplication if necessary. It will also allow you to open all files in a
+   directory with a given extension with a single menu selection. If a BeanShell
+   macro script with a <filename>.bsh</filename> extension is selected, the menu
+   includes the option of running that script within jEdit. If you have the
+   <application>JDiff</application> plugin installed with jEdit, you can also
+   select two files and have jEdit compare them in a side-by-side graphical display.
+  </para>
+
+  <para>
+   For a more detailed description of all features found in
+   the jEditLauncher package, see <xref linkend="launcher-guide"/>.
   </para>
  </sect1>
+
  <sect1 id="cli-usage"><title>Command Line Usage</title>
   <para>
    On operating systems that support a command line, jEdit can be passed
@@ -117,6 +157,11 @@
   <para>
    A number of options can also be specified to control several obscure features.
    They are listed in the following table.
+  </para>
+  <para>
+   The optional <application>jEditLauncher</application> package for Windows
+   supports a few additional command line parameters; see <xref
+   linkend="launcher-starting" />.
   </para>
   <informaltable>
    <tgroup cols="2">
@@ -133,45 +178,19 @@
       See <xref linkend="starting" />.</entry>
      </row>
      <row>
-      <entry>-bshclient</entry>
-      <entry>This is an advanced feature. It reads a BeanShell script from
-      standard input and sends it to an already running instance of jEdit for
-      evaluation.</entry>
-     </row>
-     <row>
-      <entry>-newview</entry>
-      <entry>Only valid when connecting to another instance.
-      Instead of opening files in an existing view, they will be opened
-      in a new view.
-      </entry>
-     </row>
-     <row>
       <entry>-norestore</entry>
       <entry>jEdit will not attempt to restore previously open files on
       startup. This feature can also be set permanently in the
       <guibutton>Loading and Saving</guibutton> pane of the
       <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-      dialog box; see <xref linkend="global-opts" />. Has no effect when
-      connecting to another instance via the edit server.
+      dialog box; see <xref linkend="global-opts" />.
       </entry>
      </row>
      <row>
-      <entry>-noserver</entry>
-      <entry>Disables the edit server. Does not attempt to
-      connect to the server, and does not start one either. For
-      information about the edit server, see <xref linkend="starting" />.</entry>
-     </row>
-     <row>
-      <entry>-nosettings</entry>
-      <entry>Starts jEdit without loading user-specific settings.
-      See <xref linkend="settings-directory" />.</entry>
-     </row>
-     <row>
-      <entry>-nostartupscripts</entry>
-      <entry>Does not run any startup scripts.
-      See <xref linkend="startup-scripts" />.
-      Has no effect
-      when connecting to another instance via the edit server.</entry>
+      <entry>-run=<replaceable>script</replaceable></entry>
+      <entry>Runs the specified BeanShell script. There can only be one
+      of these parameters on the command line. See
+      <xref linkend="scripts-command-line" /> for details.</entry>
      </row>
      <row>
       <entry>-server</entry>
@@ -185,12 +204,30 @@
       parameter are relative to the settings directory.</entry>
      </row>
      <row>
+      <entry>-noserver</entry>
+      <entry>Does not attempt to
+      connect to a running edit server, and does not start one either. For
+      information about the edit server, see <xref linkend="starting" />.</entry>
+     </row>
+     <row>
       <entry>-settings=<replaceable>dir</replaceable></entry>
       <entry>Loads and saves the user-specific settings from
       the directory named <replaceable>dir</replaceable>, instead of the
       default <filename><replaceable>user.home</replaceable>/.jedit</filename>.
       <replaceable>dir</replaceable> will
       be created if it does not exist. Has no effect
+      when connecting to another instance via the edit server.</entry>
+     </row>
+     <row>
+      <entry>-nosettings</entry>
+      <entry>Starts jEdit without loading user-specific settings.
+      See <xref linkend="settings-directory" />.</entry>
+     </row>
+     <row>
+      <entry>-nostartupscripts</entry>
+      <entry>Causes jEdit to not run any startup scripts.
+      See <xref linkend="startup-scripts" />.
+      Has no effect
       when connecting to another instance via the edit server.</entry>
      </row>
      <row>

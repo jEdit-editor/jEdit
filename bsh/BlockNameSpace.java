@@ -47,7 +47,7 @@ package	bsh;
 	BSHForStatement (see notes there).
 */
 class BlockNameSpace extends NameSpace 
-	{
+{
 
     public BlockNameSpace( NameSpace parent ) 
 		throws EvalError

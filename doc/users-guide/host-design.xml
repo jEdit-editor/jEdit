@@ -315,6 +315,8 @@
   <classname>EditBus</classname> class.
 </para>
 
+</sect2>
+
 <sect2 id="host-display-message">
 <title>Message Routing and Dockable Window Creation</title>
 

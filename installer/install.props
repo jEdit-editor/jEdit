@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=3.2pre6
+app.version=3.2pre7
 
 # Info to display on first page of installer
 app.readme=readme.html
@@ -17,22 +17,22 @@ app.main.class=org.gjt.sp.jedit.jEdit
 # Each component must have a name, a size, and a 'fileset'. The fileset is the
 # name of a resource, relative to the root of the JAR, where the list of files
 # is stored, newline delimited
-comp.count=4
+comp.count=5
 
 comp.0.name=jEdit text editor
-comp.0.size=1850
+comp.0.size=1944
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
-comp.1.size=134
+comp.1.size=128
 comp.1.fileset=jedit-macros
 
 comp.2.name=HTTP firewall support (Java 2 only)
-comp.2.size=14
+comp.2.size=16
 comp.2.fileset=jedit-firewall
 
 comp.3.name=Windows launcher and context menu addition (Windows only)
-comp.3.size=176
+comp.3.size=240
 comp.3.fileset=jedit-windows
 comp.3.os=Windows
 

@@ -55,7 +55,7 @@
       <application>jedit.exe</application> supports four command-line
       options, in
       addition to the options supported on any platform (which are
-      documented in <xref linkend="cli-usage"/ >).
+      documented in <xref linkend="cli-usage" />).
       If any of these options
       are invoked correctly, the application will not load files or
       execute jEdit.

@@ -39,15 +39,16 @@ import java.io.IOException;
 import java.io.*;
 
 /**
-	Manage all classloading in BeanShell.
-	Allows classpath extension and class file reloading.
+	BshClassManager manages all classloading in BeanShell.
+	It also supports a dynamically loaded extension (bsh.classpath package)
+	which allows classpath extension and class file reloading.
 
-	Currently relies on 1.2 for BshClassLoader and weak references.
-	Is there a workaround for weak refs?  If so we could make this work
-	with 1.1 by supplying our own classloader code...
+	Currently the extension relies on 1.2 for BshClassLoader and weak 
+	references.  
 
-	@see http://www.beanshell.org/manual/classloading.html for details
+	See http://www.beanshell.org/manual/classloading.html for details
 	on the bsh classloader architecture.
+	<p>
 
 	Bsh has a multi-tiered class loading architecture.  No class loader is
 	used unless/until the classpath is modified or a class is reloaded.
@@ -112,6 +113,8 @@ public abstract class BshClassManager
 		@return the BshClassManager singleton or null, indicating no
 		class manager is available.
 	*/
+// Note: this should probably throw Capabilities.Unavailable instead of
+// returning null
 	public static BshClassManager getClassManager() 
 	{
 		// Bootstrap the class manager if it exists
@@ -229,14 +232,15 @@ public abstract class BshClassManager
 		i.e. if no explicit classpath management is done from the script
 		(addClassPath(), setClassPath(), reloadClasses()) then BeanShell will
 		only use the supplied classloader.  If additional classpath management
-		is done then BeanShell will perform that "on top of" the supplied
+		is done then BeanShell will perform that in addition to the supplied
 		external classloader.
+		However BeanShell is not currently able to reload
+		classes supplied through the external classloader.
 	*/
 	public static void setClassLoader( ClassLoader externalCL ) 
 	{
 		externalClassLoader = externalCL;
-		if(getClassManager() != null)
-			getClassManager().classLoaderChanged();
+		//getClassManager().classLoaderChanged();
 	}
 
 	// end static methods

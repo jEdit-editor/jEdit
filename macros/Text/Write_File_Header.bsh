@@ -56,7 +56,7 @@ void writeFileHeader()
 	 */
 	String makeHeaderText(String name, String path, String author, String desc)
 	{
-		tag = buffer.getMode().getProperty("blockComment");
+		tag = buffer.getMode().getProperty("lineComment");
 		if(tag == null)
 			tag = "//";
 		tagNL = tag.concat("\n");

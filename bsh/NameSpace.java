@@ -134,30 +134,40 @@ public class NameSpace
 		if ( variables == null )
 			variables =	new Hashtable();
 
-		if ( value == null )
+		// hack... should factor this out...
+		if ( value == null ) {
 			variables.remove(name);
-		else {
-			// Locate the variable definition if it exists
-			// if strictJava then recurse, else default local scope
-			Object current = getVariableImpl( name, Interpreter.strictJava );
-			//Object current = variables.get(name);
-
-			if ( (current != null) && (current instanceof TypedVariable) )
-			{
-System.err.println("found typed var: "+current);
-				try {
-					((TypedVariable)current).setValue(value);
-				} catch(EvalError e) {
-					throw new EvalError(
-						"Typed variable: " + name + ": " + e.getMessage());
-				} 
-			} else
-				if ( Interpreter.strictJava )
-					throw new EvalError(
-						"Assignment to undeclared variable: "+name );
-				else
-					variables.put(name, value);
+			return;
 		}
+
+		// Locate the variable definition if it exists
+		// if strictJava then recurse, else default local scope
+		boolean recurse = Interpreter.strictJava;
+		Object current = getVariableImpl( name, recurse );
+
+//if ( Interpreter.strictJava )
+//System.err.println("recursing, found: "+current);
+		//Object current = variables.get(name);
+
+		// found a typed variable
+		if ( (current != null) && (current instanceof TypedVariable) )
+		{
+//System.err.println("found typed var: "+current);
+			try {
+				((TypedVariable)current).setValue(value);
+			} catch(EvalError e) {
+				throw new EvalError(
+					"Typed variable: " + name + ": " + e.getMessage());
+			} 
+		} else
+			if ( Interpreter.strictJava )
+				throw new EvalError(
+					"(Strict Java mode) Assignment to undeclared variable: "
+					+name );
+			else {
+//System.err.println("untyped assignment: "+name);
+				variables.put(name, value);
+			}
     }
 
 	/**
@@ -308,7 +318,7 @@ System.err.println("found typed var: "+current);
 			val	= variables.get(name);
 
 		if ( recurse && (val == null) && (parent != null) )
-			val	= parent.getVariable(name, recurse);
+			val	= parent.getVariableImpl(name, recurse);
 
 //System.err.println("getVarImpl name: "+name+", val ="+val);
 		return val;
