@@ -34,6 +34,9 @@ JEDIT 3.1 VERSION HISTORY
 - MenuBarModel, MenuModel, MenuItemModel, ToolBarModel classes removed.
   Since plugins do not use these classes directly, it should not cause
   any breakage.
+- invalidateLine(), invalidateLineRange() methods in Gutter and
+  TextAreaPainter classes replaced by methods with same names in
+  JEditTextArea class
 
 + Bug Fixes
 

@@ -108,7 +108,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setCaretColor(Color caretColor)
 	{
 		this.caretColor = caretColor;
-		invalidateSelectedLines();
+		textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setSelectionColor(Color selectionColor)
 	{
 		this.selectionColor = selectionColor;
-		invalidateSelectedLines();
+		textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setLineHighlightColor(Color lineHighlightColor)
 	{
 		this.lineHighlightColor = lineHighlightColor;
-		invalidateSelectedLines();
+		textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setLineHighlightEnabled(boolean lineHighlight)
 	{
 		this.lineHighlight = lineHighlight;
-		invalidateSelectedLines();
+		textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setBracketHighlightColor(Color bracketHighlightColor)
 	{
 		this.bracketHighlightColor = bracketHighlightColor;
-		invalidateLine(textArea.getBracketLine());
+		textArea.invalidateLine(textArea.getBracketLine());
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setBracketHighlightEnabled(boolean bracketHighlight)
 	{
 		this.bracketHighlight = bracketHighlight;
-		invalidateLine(textArea.getBracketLine());
+		textArea.invalidateLine(textArea.getBracketLine());
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setBlockCaretEnabled(boolean blockCaret)
 	{
 		this.blockCaret = blockCaret;
-		invalidateSelectedLines();
+		textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -369,8 +369,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		int x = textArea.getHorizontalOffset();
 
-		// We don't use yToLine() here because that method doesn't
-		// return lines past the end of the buffer
 		int height = fm.getHeight();
 		int firstLine = textArea.getFirstLine();
 		int firstInvalid = firstLine + clipRect.y / height;
@@ -378,7 +376,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		// of the font height, we subtract 1 from it, otherwise one
 		// too many lines will always be painted.
 		int lastInvalid = firstLine + (clipRect.y + clipRect.height - 1) / height;
-		int lineCount = textArea.getLineCount();
+		int lineCount = textArea.getVirtualLineCount();
+
+		int y = (clipRect.y - clipRect.y % height);
 
 		try
 		{
@@ -390,14 +390,29 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				boolean valid = buffer.isLoaded()
 					&& line >= 0 && line < lineCount;
 
-				int width = paintLine(gfx,valid,line,x)
+				int physicalLine;
+				if(valid)
+					physicalLine = buffer.virtualToPhysical(line);
+				else
+				{
+					int virtualLineCount = buffer.getVirtualLineCount();
+					physicalLine = buffer.virtualToPhysical(
+						virtualLineCount - 1)
+						+ (line - virtualLineCount);
+				}
+
+				int width = paintLine(gfx,buffer,valid,line,
+					physicalLine,x,y)
 					- x + 5 /* Yay */;
+
 				if(valid)
 				{
-					buffer.setLineWidth(line,width);
+					buffer.setLineWidth(physicalLine,width);
 					if(width > maxWidth)
 						updateMaxHorizontalScrollWidth = true;
 				}
+
+				y += height;
 			}
 
 			if(buffer.isNextLineRequested())
@@ -416,36 +431,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				+ lastInvalid + "}:");
 			Log.log(Log.ERROR,this,e);
 		}
-	}
-
-	/**
-	 * Marks a line as needing a repaint.
-	 * @param line The line to invalidate
-	 */
-	public final void invalidateLine(int line)
-	{
-		repaint(0,textArea.lineToY(line) + fm.getDescent() + fm.getLeading(),
-			getWidth(),fm.getHeight());
-	}
-
-	/**
-	 * Marks a range of lines as needing a repaint.
-	 * @param firstLine The first line to invalidate
-	 * @param lastLine The last line to invalidate
-	 */
-	public final void invalidateLineRange(int firstLine, int lastLine)
-	{
-		repaint(0,textArea.lineToY(firstLine) + fm.getDescent() + fm.getLeading(),
-			getWidth(),(lastLine - firstLine + 1) * fm.getHeight());
-	}
-
-	/**
-	 * Repaints the lines containing the selection.
-	 */
-	public final void invalidateSelectedLines()
-	{
-		invalidateLineRange(textArea.getSelectionStartLine(),
-			textArea.getSelectionEndLine());
 	}
 
 	/**
@@ -525,19 +510,18 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private TextAreaHighlight highlights;
 
-	private int paintLine(Graphics gfx, boolean valid, int line, int x)
+	private int paintLine(Graphics gfx, Buffer buffer, boolean valid,
+		int virtualLine, int physicalLine, int x, int y)
 	{
-		int y = textArea.lineToY(line);
+		paintHighlight(gfx,physicalLine,y,valid);
 
-		paintHighlight(gfx,line,y,valid);
+		int firstLine = textArea.getFirstLine();
 
 		if(maxLineLen != 0 && wrapGuide)
 		{
 			gfx.setColor(wrapGuideColor);
-			int firstLine = textArea.getFirstLine();
-			gfx.drawLine(x + maxLineLen,(line - firstLine) * fm.getHeight(),
-				x + maxLineLen,
-				(line - firstLine + 1) * fm.getHeight());
+			gfx.drawLine(x + maxLineLen,y,x + maxLineLen,
+				y + fm.getHeight());
 		}
 
 		if(valid)
@@ -548,45 +532,63 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			gfx.setFont(defaultFont);
 			gfx.setColor(defaultColor);
 
-			x = textArea.getBuffer().paintSyntaxLine(line,
-				styles,this,gfx,getBackground(),x,
-				y + fm.getHeight());
+			int baseLine = y + fm.getHeight()
+				- fm.getLeading() - fm.getDescent();
+
+			x = buffer.paintSyntaxLine(physicalLine,styles,
+				this,gfx,getBackground(),x,baseLine);
 
 			if(eolMarkers)
 			{
 				gfx.setFont(defaultFont);
 				gfx.setColor(eolMarkerColor);
-				gfx.drawString(".",x,y + fm.getHeight());
+				gfx.drawString(".",x,baseLine);
 			}
 
-			if(valid && line == textArea.getCaretLine() && textArea.isCaretVisible())
-				paintCaret(gfx,line,y);
+			if(physicalLine == textArea.getCaretLine()
+				&& textArea.isCaretVisible())
+				paintCaret(gfx,physicalLine,y);
+
+			if(physicalLine != buffer.getLineCount() - 1)
+			{
+				Buffer.LineInfo next = buffer.getLineInfo(physicalLine + 1);
+				if(!next.isVisible())
+				{
+					gfx.setColor(defaultColor);
+					gfx.drawLine(0,y + fm.getHeight() - 1,
+						x,y + fm.getHeight() - 1);
+				}
+			}
 		}
 
 		return x;
 	}
 
-	private void paintHighlight(Graphics gfx, int line, int y, boolean valid)
+	private void paintHighlight(Graphics gfx, int physicalLine,
+		int y, boolean valid)
 	{
 		if(valid)
 		{
-			if(line >= textArea.getSelectionStartLine()
-				&& line <= textArea.getSelectionEndLine())
-				paintLineHighlight(gfx,line,y);
+			if(physicalLine >= textArea.getSelectionStartLine()
+				&& physicalLine <= textArea.getSelectionEndLine())
+				paintLineHighlight(gfx,physicalLine,y);
 
-			if(bracketHighlight && line == textArea.getBracketLine()
+			if(bracketHighlight
+				&& physicalLine == textArea.getBracketLine()
 				&& textArea.isHighlightVisible())
-				paintBracketHighlight(gfx,line,y);
+				paintBracketHighlight(gfx,physicalLine,y);
 		}
 
 		if(highlights != null)
-			highlights.paintHighlight(gfx,line,y);
+		{
+			highlights.paintHighlight(gfx,physicalLine,
+				y - fm.getLeading() - fm.getDescent());
+		}
 	}
 
-	private void paintLineHighlight(Graphics gfx, int line, int y)
+	private void paintLineHighlight(Graphics gfx, int physicalLine, int y)
 	{
 		int height = fm.getHeight();
-		y += fm.getLeading() + fm.getDescent();
 
 		int selectionStart = textArea.getSelectionStart();
 		int selectionEnd = textArea.getSelectionEnd();
@@ -605,16 +607,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			int selectionStartLine = textArea.getSelectionStartLine();
 			int selectionEndLine = textArea.getSelectionEndLine();
-			int lineStart = textArea.getLineStartOffset(line);
+			int lineStart = textArea.getLineStartOffset(physicalLine);
 
 			int x1, x2;
 			if(textArea.isSelectionRectangular())
 			{
-				int lineLen = textArea.getLineLength(line);
-				x1 = textArea.offsetToX(line,Math.min(lineLen,
+				int lineLen = textArea.getLineLength(physicalLine);
+				x1 = textArea.offsetToX(physicalLine,Math.min(lineLen,
 					selectionStart - textArea.getLineStartOffset(
 					selectionStartLine)));
-				x2 = textArea.offsetToX(line,Math.min(lineLen,
+				x2 = textArea.offsetToX(physicalLine,Math.min(lineLen,
 					selectionEnd - textArea.getLineStartOffset(
 					selectionEndLine)));
 				if(x1 == x2)
@@ -622,21 +624,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 			else if(selectionStartLine == selectionEndLine)
 			{
-				x1 = textArea.offsetToX(line,
+				x1 = textArea.offsetToX(physicalLine,
 					selectionStart - lineStart);
-				x2 = textArea.offsetToX(line,
+				x2 = textArea.offsetToX(physicalLine,
 					selectionEnd - lineStart);
 			}
-			else if(line == selectionStartLine)
+			else if(physicalLine == selectionStartLine)
 			{
-				x1 = textArea.offsetToX(line,
+				x1 = textArea.offsetToX(physicalLine,
 					selectionStart - lineStart);
 				x2 = getWidth();
 			}
-			else if(line == selectionEndLine)
+			else if(physicalLine == selectionEndLine)
 			{
 				x1 = 0;
-				x2 = textArea.offsetToX(line,
+				x2 = textArea.offsetToX(physicalLine,
 					selectionEnd - lineStart);
 			}
 			else
@@ -652,13 +654,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	}
 
-	private void paintBracketHighlight(Graphics gfx, int line, int y)
+	private void paintBracketHighlight(Graphics gfx, int physicalLine, int y)
 	{
 		int position = textArea.getBracketPosition();
 		if(position == -1)
 			return;
-		y += fm.getLeading() + fm.getDescent();
-		int x = textArea.offsetToX(line,position);
+
+		int x = textArea.offsetToX(physicalLine,position);
 		gfx.setColor(bracketHighlightColor);
 		// Hack!!! Since there is no fast way to get the character
 		// from the bracket matching routine, we use ( since all
@@ -667,14 +669,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			fm.getHeight() - 1);
 	}
 
-	private void paintCaret(Graphics gfx, int line, int y)
+	private void paintCaret(Graphics gfx, int physicalLine, int y)
 	{
 		int offset = textArea.getCaretPosition() 
-			- textArea.getLineStartOffset(line);
-		int caretX = textArea.offsetToX(line,offset);
+			- textArea.getLineStartOffset(physicalLine);
+		int caretX = textArea.offsetToX(physicalLine,offset);
 		int height = fm.getHeight();
-
-		y += fm.getLeading() + fm.getDescent();
 
 		gfx.setColor(caretColor);
 

@@ -62,43 +62,61 @@ public class Gutter extends JComponent implements SwingConstants
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
 		Color fg = getForeground();
 
-		int baseline = (clip.y - clip.y % lineHeight) + (int) Math.round(
-			(this.baseline + lineHeight - pfm.getDescent()) / 2.0);
-
-		int firstValidLine = firstLine >= 0 ? firstLine : 0;
-		int lastValidLine = (lastLine >= textArea.getLineCount())
-			? textArea.getLineCount() - 1 : lastLine;
+		int baseline = (int) Math.round((this.baseline + lineHeight
+			- pfm.getDescent()) / 2.0);
 
 		boolean highlightCurrentLine = currentLineHighlightEnabled
 			&& (textArea.getSelectionStart() == textArea.getSelectionEnd());
 
-		int y = 0;
+		int y = (clip.y - clip.y % lineHeight);
 
 		Buffer buffer = textArea.getBuffer();
+
+		int firstValidLine = firstLine >= 0 ? firstLine : 0;
+		int lastValidLine = (lastLine >= buffer.getVirtualLineCount())
+			? buffer.getVirtualLineCount() - 1 : lastLine;
 
 		for (int line = firstLine; line <= lastLine;
 			line++, y += lineHeight)
 		{
-			if (highlights != null)
-				highlights.paintHighlight(gfx, line, y);
+			boolean valid = (line >= firstValidLine && line <= lastValidLine);
 
-			if (line < firstValidLine || line > lastValidLine)
-				continue;
-
-			Buffer.LineInfo info = buffer.getLineInfo(line);
-			if(info.getFold().getFirstLine() == info)
+			// highlights need the physical, not virtual line
+			int physicalLine;
+			if(valid)
+				physicalLine = buffer.virtualToPhysical(line);
+			else
 			{
-				gfx.setColor(foldColor);
-				if(info.getFold().getVisibility() == Buffer.Fold.ALL_LINES_VISIBLE)
-					gfx.drawRect(2,y + (lineHeight - 6) / 2,6,6);
-				else
-					gfx.fillRect(2,y + (lineHeight - 6) / 2,6,6);
+				int virtualLineCount = buffer.getVirtualLineCount();
+				physicalLine = buffer.virtualToPhysical(
+					virtualLineCount - 1)
+					+ (line - virtualLineCount);
+			}
+
+			if(highlights != null)
+				highlights.paintHighlight(gfx, physicalLine, y);
+
+			if(!valid)
+				return;
+
+			if(physicalLine != textArea.getLineCount() - 1)
+			{
+				Buffer.LineInfo info = buffer.getLineInfo(physicalLine);
+				Buffer.LineInfo next = buffer.getLineInfo(physicalLine + 1);
+				if(info.getFoldLevel() < next.getFoldLevel())
+				{
+					gfx.setColor(foldColor);
+					if(next.isVisible())
+						gfx.drawRect(2,y + (lineHeight - 6) / 2,6,6);
+					else
+						gfx.fillRect(2,y + (lineHeight - 6) / 2,6,6);
+				}
 			}
 
 			if (!expanded)
 				continue;
 
-			String number = Integer.toString(line + 1);
+			String number = Integer.toString(physicalLine + 1);
 
 			int offset;
 			switch (alignment)
@@ -124,29 +142,6 @@ public class Gutter extends JComponent implements SwingConstants
 
 			gfx.drawString(number, ileft + offset, baseline + y);
 		}
-	}
-
-	/**
-	* Marks a line as needing a repaint.
-	* @param line The line to invalidate
-	*/
-	public final void invalidateLine(int line)
-	{
-		FontMetrics pfm = textArea.getPainter().getFontMetrics();
-		repaint(0,textArea.lineToY(line) + pfm.getDescent() + pfm.getLeading(),
-			getWidth(),pfm.getHeight());
-	}
-
-	/**
-	* Marks a range of lines as needing a repaint.
-	* @param firstLine The first line to invalidate
-	* @param lastLine The last line to invalidate
-	*/
-	public final void invalidateLineRange(int firstLine, int lastLine)
-	{
-		FontMetrics pfm = textArea.getPainter().getFontMetrics();
-		repaint(0,textArea.lineToY(firstLine) + pfm.getDescent() + pfm.getLeading(),
-			getWidth(),(lastLine - firstLine + 1) * pfm.getHeight());
 	}
 
 	/**
@@ -422,8 +417,28 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		public void mousePressed(MouseEvent e)
 		{
-			if(e.getClickCount() == 2)
-				toggleExpanded();
+			if(e.getX() < ileft)
+			{
+				Buffer buffer = textArea.getBuffer();
+
+				int line = e.getY() / textArea.getPainter()
+					.getFontMetrics().getHeight()
+					+ textArea.getFirstLine();
+
+				if(line > buffer.getVirtualLineCount() - 1)
+					return;
+
+				line = buffer.virtualToPhysical(line);
+				Buffer.LineInfo info = buffer.getLineInfo(line);
+				Buffer.LineInfo next = buffer.getLineInfo(line + 1);
+				if(info.getFoldLevel() < next.getFoldLevel())
+				{
+					if(next.isVisible())
+						buffer.collapseFoldAt(line);
+					else
+						buffer.expandFoldAt(line);
+				}
+			}
 			else
 			{
 				e.translatePoint(-getWidth(),0);
