@@ -25,8 +25,18 @@ import java.util.*;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
+/**
+ * A history list. One history list can be used by several history text
+ * fields.
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class HistoryModel
 {
+	/**
+	 * Creates a new history list. Calling this is normally not
+	 * necessary.
+	 */
 	public HistoryModel(String name)
 	{
 		this.name = name;
@@ -43,6 +53,11 @@ public class HistoryModel
 		data = new Vector(max);
 	}
 
+	/**
+	 * Adds an item to the end of this history list, trimming the list
+	 * to the maximum number of items if necessary.
+	 * @param text The item
+	 */
 	public void addItem(String text)
 	{
 		if(text == null || text.length() == 0)
@@ -58,21 +73,37 @@ public class HistoryModel
 			data.removeElementAt(getSize() - 1);
 	}
 
+	/**
+	 * Returns an item from the history list.
+	 * @param index The index
+	 */
 	public String getItem(int index)
 	{
 		return (String)data.elementAt(index);
 	}
 
+	/**
+	 * Returns the number of elements in this history list.
+	 */
 	public int getSize()
 	{
 		return data.size();
 	}
 
+	/**
+	 * Returns the name of this history list. This can be passed
+	 * to the HistoryTextField constructor.
+	 */
 	public String getName()
 	{
 		return name;
 	}
 
+	/**
+	 * Returns a named model. If the specified model does not
+	 * already exist, it will be created.
+	 * @param name The model name
+	 */
 	public static HistoryModel getModel(String name)
 	{
 		if(models == null)
@@ -88,6 +119,11 @@ public class HistoryModel
 		return model;
 	}
 
+	/**
+	 * Loads the history from the specified file. jEdit calls this
+	 * on startup.
+	 * @param path The file path
+	 */
 	public static void loadHistory(String path)
 	{
 		if(models == null)
@@ -141,6 +177,11 @@ public class HistoryModel
 		}
 	}
 
+	/**
+	 * Saves the history to the specified file. jEdit calls this when
+	 * it is exiting.
+	 * @param path The file path
+	 */
 	public static void saveHistory(String path)
 	{
 		try
@@ -266,6 +307,9 @@ public class HistoryModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  1999/11/21 07:59:30  sp
+ * JavaDoc updates
+ *
  * Revision 1.8  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

@@ -71,7 +71,7 @@ public class jEdit
 		Log.redirectStdio();
 
 		// Log some stuff
-		Log.log(Log.MESSAGE,jEdit.class,"jEdit version " + getVersion());
+		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
 
 		// Parse command line
 		boolean endOpts = false;
@@ -430,7 +430,7 @@ public class jEdit
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,jEdit.class,"Cannot load"
-					+ " plugin");
+					+ " plugin " + plugin);
 				Log.log(Log.ERROR,jEdit.class,io);
 			}
 		}
@@ -1525,6 +1525,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.158  1999/11/21 07:59:30  sp
+ * JavaDoc updates
+ *
  * Revision 1.157  1999/11/21 03:40:18  sp
  * Parts of EditBus not used by core moved to EditBus.jar
  *

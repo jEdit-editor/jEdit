@@ -30,11 +30,24 @@ import java.awt.event.*;
  */
 public class HistoryTextField extends JTextField
 {
+	/**
+	 * Creates a new history text field.
+	 * @param name The history model name
+	 */
 	public HistoryTextField(String name)
 	{
 		this(name,false);
 	}
 
+	/**
+	 * Creates a new history text field.
+	 * @param name The history model name
+	 * @param instantPopup If true, selecting a value from the history
+	 * popup will immediately fire an ActionEvent. If false, the user
+	 * will have to press 'Enter' first
+	 *
+	 * @since jEdit 2.2pre5
+	 */
 	public HistoryTextField(String name, boolean instantPopups)
 	{
 		historyModel = HistoryModel.getModel(name);
@@ -46,23 +59,36 @@ public class HistoryTextField extends JTextField
 		index = -1;
 	}
 
+	/**
+	 * Adds the currently entered item to the history.
+	 */
 	public void addCurrentToHistory()
 	{
 		historyModel.addItem(getText());
 		index = 0;
 	}
 
+	/**
+	 * Sets the displayed text.
+	 */
 	public void setText(String text)
 	{
 		super.setText(text);
 		index = -1;
 	}
 
+	/**
+	 * Returns the underlying history model.
+	 */
 	public HistoryModel getModel()
 	{
 		return historyModel;
 	}
 
+	/**
+	 * Fires an action event to all listeners. This is public so
+	 * that inner classes can access it.
+	 */
 	public void fireActionPerformed()
 	{
 		super.fireActionPerformed();
@@ -311,6 +337,9 @@ public class HistoryTextField extends JTextField
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  1999/11/21 07:59:30  sp
+ * JavaDoc updates
+ *
  * Revision 1.30  1999/11/16 08:21:20  sp
  * Various fixes, attempt at beefing up expand-abbrev
  *

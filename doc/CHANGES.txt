@@ -5,13 +5,18 @@ JEDIT VERSION HISTORY
 + New Features
 
 - Some parts of the EditBus plugin integrated into the core, old event
-  system removed
+  system removed.
+  - if your plugin only uses the ViewUpdate, BufferUpdate, PropertiesChanged
+    and MacrosChanged messages, it will no longer require EditBus.jar.
+  - however, if your plugin uses the GetShell or GetOutput messages,
+    it will still need EditBus.jar to operate.
 - New methods in TextUtilities class:
   findWordStart(String line, int pos, String noWordSep)
   findWordEnd(String line, int pos, String noWordSep)
 - The painting of invalid lines can now be toggled in File->Global
   Options->Editor
 - Expand Abbreviation now supports multiple matches (Valery Kondakoff)
+- doc/NEWS.txt file written :-)
 
 + Enhancements
 
@@ -19,7 +24,7 @@ JEDIT VERSION HISTORY
   searching
 - 'New View' button added to tool bar
 - Fixed several files to compile with the jikes 'pedantic' option (+P)
-- Minor changes to the API documentation
+- API documentation updated
 
 + Bug Fixes
 
@@ -31,17 +36,11 @@ JEDIT VERSION HISTORY
 - GUIUtilities.java didn't compile with the JDK 1.3 javac (since 2.2pre5)
 - The source parameter to the log() method was ignored when logging exceptions
   (since 2.2pre2)
-- Error line numbers were displayed off-by-one (since EditBus 0.4)
 - HyperSearch didn't deal with closed buffers correctly (since 1.7pre2???)
 
 + API Changes
 
 - Plugins that rely on the old event system will no longer work
-- EditBus command messages have changed:
-  - Shell interface and GetShells message replaces ExecuteCommand
-    and StopCommand messages
-  - GetOutput.addReturn() renamed to GetOutput.setOutput()
-  - This breaks Console 1.9 and earlier; use 1.9.1 or later
 
 * Version 2.2pre5
 

@@ -1,14 +1,81 @@
 MAJOR CHANGES IN JEDIT 2.2 SINCE 2.1
 
-- XXX: will need to mention:
-  - activity log
-  - file encoding can be changed
-  - recursive directory search
-  - new 'close all' dialog box
-  - auto indent updates
-  - session load/save
-  - move caret on undo
-  - highlights on the text area (= ErrorList plugin)
-  - menu item selections and tool bar clicks can be recorded to macros
-  - recordable search and replace
-  - integrated EditBus
+The following is an overview of changes in jEdit 2.2 since 2.1. A complete
+list can be found in the file doc/CHANGES.txt.
+
+* Directory Search
+
+jEdit can now search inside all files in a directory. It can even
+recurse into subdirectories. The original implementation of this was
+written by Andreas Schaefer <andreas.schaefer@ubs.com>, but I rewrote it
+from scratch because the original had a few problems.
+
+* Updated 'Expand Abbreviation' command
+
+The 'Expand Abbreviation' command now cycles through all available
+matches, instead of only locating the first one. The code to do this was
+contributed by Valery Kondakoff <strauss@orc.ru>.
+
+* New 'Close All' dialog box
+
+Previously, exiting jEdit or closing all buffers would ask if each
+unsaved buffer should be saved, one-by-one. Now, all unsaved buffers are
+listed in one dialog box.
+
+* More intelligent auto indent
+
+Pressing '}' in an edit mode that supports bracket indentation (C, C++,
+IDL, Java, JavaScript) now immediately re-indents the line accordingly.
+
+* Improved undo
+
+Invoking 'Undo' or 'Redo' now moves the caret to the location of the
+change. Previously, there was no way to know exactly what was undone.
+
+* Session loading and saving
+
+All jEdit versions since 1.3 could save the list of open files on exit,
+and restore those files the next time it was started. jEdit 2.2 takes
+this one step further, allowing you to create multiple such 'sessions',
+and load and save them while the editor is running.
+
+* Macro recorder updates
+
+Previously, only key strokes were recorded in macros. Now, menu item
+selections, tool bar clicks, and even search and replace operations are
+recorded.
+
+* Extensible text area
+
+jEdit's text area component now allows custom 'highlighters' to be
+added. A highlighter is a piece of code that is called each time a line
+is painted. The ErrorList plugin, for example, uses a highlighter to
+paint errors in the text as wavy red underlines.
+
+* EditBus message passing integrated
+
+The EditBus system allows plugins to communicate and exchange data with
+one another by sending typed messages. Previously, the EditBus classes
+were distributed as a separate plugin. Now, most of EditBus has been
+moved into the core. The EditBus plugin still remains, however; it
+contains a few message types that are only used by plugins.
+
+The event system has been removed, because EditBus messages can be used
+to accomplish the same thing. Plugins that depend on the event system
+will no longer work with jEdit 2.2. Fortunately, most plugins that used
+the event system have been updated for EditBus already; check out jEdit
+Plugin Central <http://www.icg-online.de/jedit>.
+
+* Activity log
+
+jEdit now saves all thrown exceptions, as well as various informational
+messages, to an 'activity log'. The activity log can be viewed with
+the 'Help->Show Activity Log' command. It can also be saved to a file
+with 'Help->Save Activity Log'.
+
+* File encoding can be set
+
+While this is not a very major feature, it is probably one of the most
+frequently requested ones. The file encoding used for reading and
+writing files can now be changed, so you can edit files written in
+non-Latin1 (human) languages.

@@ -30,8 +30,18 @@ import java.net.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
+/**
+ * jEdit's HTML viewer. It uses a Swing JEditorPane to display the HTML,
+ * and implements a URL history.
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class HelpViewer extends JFrame
 {
+	/**
+	 * Creates a new help viewer for the specified URL.
+	 * @param url The URL
+	 */
 	public HelpViewer(URL url)
 	{
 		super(jEdit.getProperty("helpviewer.title"));

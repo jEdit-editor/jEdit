@@ -31,7 +31,32 @@ import java.util.Vector;
 import org.gjt.sp.jedit.syntax.*;
 
 /**
- * jEdit's text area component.
+ * jEdit's text area component. It is more suited for editing program
+ * source code than JEditorPane, because it drops the unnecessary features
+ * (images, variable-width lines, and so on) and adds a whole bunch of
+ * useful goodies such as:
+ * <ul>
+ * <li>More flexible key binding scheme
+ * <li>Supports macro recorders
+ * <li>Rectangular selection
+ * <li>Bracket highlighting
+ * <li>Syntax highlighting
+ * <li>Command repetition
+ * <li>Block caret can be enabled
+ * </ul>
+ * It is also faster and doesn't have as many problems. It can be used
+ * in other applications; the only other part of jEdit it depends on is
+ * the syntax package.<p>
+ *
+ * To use it in your app, treat it like any other component, for example:
+ * <pre>JEditTextArea ta = new JEditTextArea();
+ * ta.setTokenMarker(new JavaTokenMarker());
+ * ta.setText("public class Test {\n"
+ *     + "    public static void main(String[] args) {\n"
+ *     + "        System.out.println(\"Hello World\");\n"
+ *     + "    }\n"
+ *     + "}");</pre>
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -1986,12 +2011,57 @@ public class JEditTextArea extends JComponent
 
 			// Ok, it's not a bracket... select the word
 			String lineText = getLineText(line);
+			char ch = lineText.charAt(Math.max(0,offset - 1));
+
+			String noWordSep = (String)document.getProperty("noWordSep");
+			if(noWordSep == null)
+				noWordSep = "";
+
+			// If the user clicked on a non-letter char,
+			// we select the surrounding non-letters
+			boolean selectNoLetter = (!Character
+				.isLetterOrDigit(ch)
+				&& noWordSep.indexOf(ch) == -1);
+
+			int wordStart = 0;
+
+			for(int i = offset - 1; i >= 0; i--)
+			{
+				ch = lineText.charAt(i);
+				if(selectNoLetter ^ (!Character
+					.isLetterOrDigit(ch) &&
+					noWordSep.indexOf(ch) == -1))
+				{
+					wordStart = i + 1;
+					break;
+				}
+			}
+
+			int wordEnd = lineText.length();
+			for(int i = offset; i < lineText.length(); i++)
+			{
+				ch = lineText.charAt(i);
+				if(selectNoLetter ^ (!Character
+					.isLetterOrDigit(ch) &&
+					noWordSep.indexOf(ch) == -1))
+				{
+					wordEnd = i;
+					break;
+				}
+			}
+
+			int lineStart = getLineStartOffset(line);
+			select(lineStart + wordStart,lineStart + wordEnd);
+
+			/*
+			String lineText = getLineText(line);
 			String noWordSep = (String)document.getProperty("noWordSep");
 			int wordStart = TextUtilities.findWordStart(lineText,offset,noWordSep);
 			int wordEnd = TextUtilities.findWordEnd(lineText,offset,noWordSep);
 
 			int lineStart = getLineStartOffset(line);
 			select(lineStart + wordStart,lineStart + wordEnd);
+			*/
 		}
 
 		private void doTripleClick(MouseEvent evt, int line,
@@ -2063,6 +2133,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  1999/11/21 07:59:30  sp
+ * JavaDoc updates
+ *
  * Revision 1.29  1999/11/21 03:40:18  sp
  * Parts of EditBus not used by core moved to EditBus.jar
  *

@@ -59,7 +59,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 		/* Default file encoding */
 		String[] encodings = {
-			"ASCII", "ISO8859_1", "UTF8", "Cp850", "Cp1252",
+			"ASCII", "8859_1", "UTF8", "Cp850", "Cp1252",
 			"MacRoman", "KOI8_R", "Unicode"
 		};
 

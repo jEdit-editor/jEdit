@@ -27,14 +27,18 @@ import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.GUIUtilities;
 
 /**
- * Mega hackery in this class.
- * <ul>
- * <li>Painting of custom strings (for the multi-key accelerators)
- * <li>Support for null action commands
- * </ul>
+ * jEdit's custom menu item. It adds support for multi-key shortcuts.
  */
 public class EnhancedMenuItem extends JMenuItem
 {
+	/**
+	 * Creates a new menu item. Most plugins should call
+	 * GUIUtilities.loadMenuItem() instead.
+	 * @param label The menu item label
+	 * @param keyBinding The key binding
+	 * @param action The edit action
+	 * @param actionCommand The action command
+	 */
 	public EnhancedMenuItem(String label, String keyBinding,
 		EditAction action, String actionCommand)
 	{
@@ -82,6 +86,9 @@ public class EnhancedMenuItem extends JMenuItem
 		}
 	}
 
+	/**
+	 * We override this so that null action commands are supported.
+	 */
 	public String getActionCommand()
 	{
 		return getModel().getActionCommand();

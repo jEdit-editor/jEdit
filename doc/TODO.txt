@@ -2,11 +2,7 @@ JEDIT TO DO
 
 ------- 2.2 to do -------
 
-- Open URL: no trailing file separator
-- Double click: 'bob|fred' with point at |
-- Expand abbreviation sucks:
-  - > 1 match on one line doesn't work
-  - need to finish match cycling
+- Proofread docs
 
 ------- 2.3+ -------
 
@@ -33,8 +29,6 @@ JEDIT TO DO
 
 + Somewhat pointless changes that probably won't be made that make sense anyway:
 
-- jEdit defines its own 'Action' shell for executing actions
-- Macros can be written using any shell; special #!<shell> lines switch
 - File=NewFile NewView
   NewFile.label=New File
   # multiple actions can be specified:
@@ -53,8 +47,6 @@ JEDIT TO DO
   {
   	abstract void execute(View view, String parameter);
   }
-- With all this breakage, why not break a little more? Move EBPlugin
-  functionality to EditPlugin, mark EBPlugin as @deprecated
 - With the number of plugins already out there, must preserve backwards
   compatibility
 - What about InputHandlers? Should Command be moved to org.gjt.sp.util, with

@@ -26,8 +26,13 @@ import java.awt.Component;
 import java.util.*;
 
 /**
- * An abstract class for a key event handler. Concrete implementations
- * provide specific keystroke to action mappings.
+ * An input handler converts the user's key strokes into concrete actions.
+ * It also takes care of macro recording and action repetition.<p>
+ *
+ * This class provides all the necessary support code for an input
+ * handler, but doesn't actually do any key binding logic. It is up
+ * to the implementations of this class to do so.
+ *
  * @author Slava Pestov
  * @version $Id$
  * @see org.gjt.sp.jedit.textarea.DefaultInputHandler
@@ -38,7 +43,8 @@ public abstract class InputHandler extends KeyAdapter
 	 * If this client property is set to Boolean.TRUE on the text area,
 	 * the home/end keys will support 'smart' BRIEF-like behaviour
 	 * (one press = start/end of line, two presses = start/end of
-	 * viewscreen, three presses = start/end of document)
+	 * viewscreen, three presses = start/end of document). By default,
+	 * this property is not set.
 	 */
 	public static final String SMART_HOME_END_PROPERTY = "InputHandler.homeEnd";
 
@@ -114,6 +120,7 @@ public abstract class InputHandler extends KeyAdapter
 
 	/**
 	 * Returns a named text area action.
+	 * @param name The action name
 	 */
 	public static ActionListener getAction(String name)
 	{
@@ -121,7 +128,8 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	/**
-	 * Returns an action's name.
+	 * Returns the name of the specified text area action.
+	 * @param listener The action
 	 */
 	public static String getActionName(ActionListener listener)
 	{
@@ -146,6 +154,9 @@ public abstract class InputHandler extends KeyAdapter
 
 	/**
 	 * Adds the default key bindings to this input handler.
+	 * This should not be called in the constructor of this
+	 * input handler, because applications might load the
+	 * key bindings from a file, etc.
 	 */
 	public abstract void addDefaultKeyBindings();
 
@@ -1012,6 +1023,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  1999/11/21 07:59:30  sp
+ * JavaDoc updates
+ *
  * Revision 1.11  1999/11/21 03:40:18  sp
  * Parts of EditBus not used by core moved to EditBus.jar
  *
