@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The jEdit Settings Directory</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.5 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Customizing jEdit"
+HREF="customizing.html"><LINK
+REL="PREVIOUS"
+TITLE="The Global Options Dialog Box"
+HREF="global-opts.html"><LINK
+REL="NEXT"
+TITLE="Installing and Using Plugins"
+HREF="plugins.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.5 User's Guide</H1
+><P
+><A
+HREF="plugins.html"
+>Next</A
+>, <A
+HREF="global-opts.html"
+>Prev</A
+></P
+><H2
+>Chapter 8. Customizing jEdit</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="SETTINGS-DIRECTORY"
+>The jEdit Settings Directory</A
+></H1
+><P
+>   jEdit stores all settings, macros, sessions and so on as files
+   inside its <I
+CLASS="FIRSTTERM"
+>settings directory</I
+>. In most cases, editing these
+   files is not necessary, since graphical tools and commands can do the
+   job. However, being familiar with the structure of the settings directory
+   still comes in handy
+   in certain situations, for example when you want to copy jEdit settings
+   between computers.
+  </P
+><P
+>   The location of the settings
+   directory is system-specific; to find out what it is, look in the
+   activity log (see <A
+HREF="activity-log.html"
+>the section called <I
+>The Activity Log</I
+> in Chapter 3</A
+>) for a message like the
+   following:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>[message] jEdit: Settings directory is /home/slava/.jedit</PRE
+></TD
+></TR
+></TABLE
+><P
+>   If you would like jEdit to store its settings in a different directory,
+   you can specify the <B
+CLASS="COMMAND"
+>-settings</B
+> switch on the command line.
+   For example, the following will instruct jEdit to store all settings
+   in the <TT
+CLASS="FILENAME"
+>jedit</TT
+> directory of the <TT
+CLASS="FILENAME"
+>C:</TT
+> drive:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>C:\jedit&gt;</TT
+> <TT
+CLASS="USERINPUT"
+><B
+>jedit -settings=C:\</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+><P
+>   The <B
+CLASS="COMMAND"
+>-nosettings</B
+> switch will force jEdit to not look for
+   or create a settings directory.
+  </P
+><P
+>   By default, jEdit creates the following files inside the settings directory;
+   plugins may add more:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>abbrevs</TT
+> - a plain text file which
+   stores all defined abbreviations</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>history</TT
+> - a plain text file which
+   stores history lists, used by
+   history text fields and the
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Paste Previous</SPAN
+> command. See
+   <A
+HREF="history.html"
+>the section called <I
+>History Text Fields</I
+> in Chapter 7</A
+> and <A
+HREF="clipboard.html"
+>the section called <I
+>The Clipboard</I
+> in Chapter 3</A
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>jars</TT
+> - a directory where plugins can be
+   installed; see
+   <A
+HREF="plugins.html"
+>Chapter 9</A
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>macros</TT
+> - a directory where macros can be
+   stored; see
+   <A
+HREF="macros.html"
+>the section called <I
+>Macros</I
+> in Chapter 4</A
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>mode-cache</TT
+> - a binary file which stores
+   information about all available edit modes so that they can be loaded
+   on demand. See <A
+HREF="modes.html"
+>Chapter 5</A
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>modes</TT
+> - a directory where edit modes can be
+   stored; see <A
+HREF="modes.html"
+>Chapter 5</A
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>PluginManager.backup</TT
+> - when the plugin
+   manager is asked to update or remove a plugin, it doesn't actually
+   delete it from disk; instead, it is moved to this directory. It may be
+   worthwhile to empty out its contents occasionally. See <A
+HREF="plugins.html"
+>Chapter 9</A
+>
+   for information about the plugin manager</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>PluginManager.download</TT
+> - this directory
+   is usually empty. It only contains files while the plugin manager is
+   downloading a plugin. See <A
+HREF="plugins.html"
+>Chapter 9</A
+>
+   for information about the plugin manager</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>properties</TT
+> - a plain text file where the
+   bulk of jEdit's settings are stored</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>server</TT
+> - a plain text file that only exists
+   while the edit server is running. The port number and authorization key
+   is stored here. See <A
+HREF="server.html"
+>Appendix B</A
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>sessions</TT
+> - a directory where saved sessions can
+   be stored; see <A
+HREF="advanced-features.html#SESSIONS"
+>the section called <I
+>Saving and Loading Sessions</I
+> in Chapter 4</A
+></P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="customizing.html"
+>Up</A
+><BR><A
+HREF="global-opts.html"
+>Prev</A
+>: The Global Options Dialog Box<BR><A
+HREF="plugins.html"
+>Next</A
+>: Installing and Using Plugins<BR></DIV
+></BODY
+></HTML
+>

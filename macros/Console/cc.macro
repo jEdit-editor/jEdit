@@ -1,4 +1,4 @@
 # This macro saves the current file and executes cc in the console.
 
 save
-console@cc $f
+console@cc \$f

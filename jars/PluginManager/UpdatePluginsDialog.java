@@ -27,11 +27,10 @@ import org.gjt.sp.jedit.*;
 
 public class UpdatePluginsDialog extends EnhancedDialog
 {
-	public UpdatePluginsDialog(View view)
+	public UpdatePluginsDialog(PluginManager dialog)
 	{
-		super(view,jEdit.getProperty("update-plugins.title"),true);
-
-		this.view = view;
+		super(JOptionPane.getFrameForComponent(dialog),
+			jEdit.getProperty("update-plugins.title"),true);
 
 		getContentPane().add(BorderLayout.NORTH,new JLabel(
 			jEdit.getProperty("update-plugins.caption")));
@@ -152,8 +151,6 @@ public class UpdatePluginsDialog extends EnhancedDialog
 	}
 
 	// private members
-	private View view;
-
 	private JList plugins;
 	private JLabel name;
 	private JLabel author;
@@ -228,7 +225,8 @@ public class UpdatePluginsDialog extends EnhancedDialog
 
 		public void run()
 		{
-			PluginList.Plugin[] pluginList = new PluginList(view).getPlugins();
+			PluginList.Plugin[] pluginList = new PluginList(
+				UpdatePluginsDialog.this).getPlugins();
 
 			// only add plugins that are already installed,
 			// and don't add freshly installed ones

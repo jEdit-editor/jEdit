@@ -59,8 +59,9 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >O</B
 >) pops
-   up a dialog box allowing you to browse the file system and select a
-   file. <SPAN
+   up a dialog box allowing you to browse and search the file system and
+   select a
+   file to open. <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
@@ -155,7 +156,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN214"
+NAME="AEN216"
 >Searching for Files</A
 ></H2
 ><P
@@ -163,22 +164,26 @@ NAME="AEN214"
 CLASS="GUIMENUITEM"
 >Open File</SPAN
 > dialog box has a widget for quickly
-    searching the filesystem. You can search for files with a specific
-    name and/or modification time. The search is started from the currently
+    searching the filesystem for files with a specific
+    name and/or modification time. The search is performed from the currently
     selected directory.
    </P
 ><P
->    In the <SPAN
+>    File names to search for can be specified in the <SPAN
 CLASS="GUIBUTTON"
 >Name</SPAN
-> tab, all options should be self explanatory
-    except for the "Pattern" option, which allows you
-    to enter a glob pattern that filenames will be matched against (see
-    <A
+> tab.
+    The options in the combo box left of the text field allow you to specify
+    how file names will be matched. Selecting "is" will only match
+    files whose name is exactly that specified in the text field.
+    "Contains", "starts with", "ends with" should be
+    self-explanatory. "Pattern" will treat the contents of the
+    text field as a glob pattern (see <A
 HREF="globs.html"
 >Appendix D</A
-> for information about
-    glob patterns).
+>) and match
+    file names against that. If "Ignore Case" is selected, all
+    file name matching will be case-insensitive.
    </P
 ><P
 >    The <SPAN
@@ -189,6 +194,21 @@ CLASS="GUIBUTTON"
     matched files's modification time must be in. The "big bang"
     and "big crunch" options allow you to specify an unbounded time
     range.
+   </P
+><P
+>    Clicking <SPAN
+CLASS="GUIBUTTON"
+>Start</SPAN
+> will begin the search. While a search is
+    in progress, it can be interrupted by clicking <SPAN
+CLASS="GUIBUTTON"
+>Stop</SPAN
+>.
+    Found files will be listed in the <SPAN
+CLASS="GUIBUTTON"
+>Results</SPAN
+> tab; double-clicking
+    on one will select it in the file chooser.
    </P
 ></DIV
 ></DIV

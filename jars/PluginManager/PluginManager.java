@@ -35,8 +35,6 @@ public class PluginManager extends EnhancedDialog
 	{
 		super(view,jEdit.getProperty("plugin-manager.title"),true);
 
-		this.view = view;
-
 		JPanel panel = new JPanel(new BorderLayout());
 		tree = new JTree();
 		tree.setCellRenderer(new Renderer());
@@ -93,8 +91,7 @@ public class PluginManager extends EnhancedDialog
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(view);
 		show();
 	}
 
@@ -109,7 +106,7 @@ public class PluginManager extends EnhancedDialog
 	}
 
 	// private members
-	private View view;
+	private String[][] plugins;
 	private JTree tree;
 	private JLabel path;
 	private JLabel name;
@@ -125,33 +122,38 @@ public class PluginManager extends EnhancedDialog
 		DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode();
 		DefaultTreeModel treeModel = new DefaultTreeModel(treeRoot);
 
-		String[][] plugins = PluginManagerPlugin.getPluginsEx();
+		plugins = PluginManagerPlugin.getPluginsEx();
 
 		DefaultMutableTreeNode loadedTree = new DefaultMutableTreeNode(
 			jEdit.getProperty("plugin-manager.loaded"),true);
 		String[] loaded = plugins[0];
-		String[] classes = plugins[1];
+		String[] loadedJARs = plugins[1];
 
 		for(int i = 0; i < loaded.length; i++)
 		{
-			String path = loaded[i];
+			String path = loadedJARs[i];
 
 			// skip removed plugins
 			if(!new File(path).exists())
 				continue;
 			loadedTree.insert(new DefaultMutableTreeNode(
-				new Entry(path,classes[i]),false),
+				new Entry(path,loaded[i]),false),
 				loadedTree.getChildCount());
 		}
 
 		DefaultMutableTreeNode notLoadedTree = new DefaultMutableTreeNode(
 			jEdit.getProperty("plugin-manager.not-loaded"),true);
 		String[] notLoaded = plugins[2];
+		String[] notLoadedJARs = plugins[3];
 		for(int i = 0; i < notLoaded.length; i++)
 		{
-			String path = notLoaded[i];
+			String path = notLoadedJARs[i];
+
+			// skip removed plugins
+			if(!new File(path).exists())
+				continue;
 			notLoadedTree.insert(new DefaultMutableTreeNode(
-				new Entry(path,null),false),i);
+				new Entry(path,notLoaded[i]),false),i);
 		}
 
 		treeRoot.insert(loadedTree,0);
@@ -227,7 +229,7 @@ public class PluginManager extends EnhancedDialog
 				setCursor(Cursor.getPredefinedCursor(
 					Cursor.WAIT_CURSOR));
 
-				if(PluginManagerPlugin.removePlugins(view,array))
+				if(PluginManagerPlugin.removePlugins(PluginManager.this,array))
 					updateTree();
 
 				setCursor(Cursor.getPredefinedCursor(
@@ -235,12 +237,12 @@ public class PluginManager extends EnhancedDialog
 			}
 			else if(source == update)
 			{
-				if(PluginManagerPlugin.updatePlugins(view))
+				if(PluginManagerPlugin.updatePlugins(PluginManager.this))
 					updateTree();
 			}
 			else if(source == install)
 			{
-				if(PluginManagerPlugin.installPlugins(view))
+				if(PluginManagerPlugin.installPlugins(PluginManager.this))
 					updateTree();
 			}
 		}

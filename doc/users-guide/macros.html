@@ -352,7 +352,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1359"
+NAME="AEN1371"
 >Prompting for Input</A
 ></H2
 ><P
@@ -384,7 +384,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1367"
+NAME="AEN1379"
 >Registers in Macros</A
 ></H2
 ><P
@@ -414,7 +414,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1374"
+NAME="AEN1386"
 >Some Sample Macros</A
 ></H2
 ><P
@@ -457,7 +457,29 @@ paste
     text with HTML <SPAN
 CLASS="MARKUP"
 >&lt;B&gt;</SPAN
-> tags:
+> tags (if the <TT
+CLASS="FILENAME"
+>$$</TT
+> bit looks
+    a bit strange, keep in mind that <TT
+CLASS="FILENAME"
+>$<TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+></TT
+>
+    is expanded to the contents of the register named <TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+>,
+    and that the <TT
+CLASS="FILENAME"
+>$</TT
+> register is an alias for the clipboard):
    </P
 ><TABLE
 BORDER="0"
@@ -467,17 +489,8 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
-># Cut selected text to clipboard
-cut
-
-# Insert opening tag
-insert-char@&lt;B&gt;
-
-# Insert clipboard contents
-paste
-
-# Insert closing tag
-insert-char@&lt;/B&gt;</PRE
+>cut
+insert-char@&lt;B&gt;$$&lt;/B&gt;</PRE
 ></TD
 ></TR
 ></TABLE

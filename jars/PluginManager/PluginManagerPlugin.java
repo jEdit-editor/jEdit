@@ -76,29 +76,8 @@ public class PluginManagerPlugin extends EBPlugin
 		}
 	}
 
-	public static String getPluginPath(String clazz)
-	{
-		EditPlugin plugin = jEdit.getPlugin(clazz);
-		if(plugin != null)
-		{
-			JARClassLoader loader = (JARClassLoader)plugin
-				.getClass().getClassLoader();
-			return loader.getPath();
-		}
-		else
-		{
-			EditPlugin.Broken[] broken = jEdit.getBrokenPlugins();
-			for(int i = 0; i < broken.length; i++)
-			{
-				EditPlugin.Broken b = broken[i];
-				if(b.clazz.equals(clazz))
-					return b.jar;
-			}
-		}
-
-		return null;
-	}
-
+	// returns an array of all installed plugins' path names
+	// used by install and update functions
 	public static String[] getPlugins()
 	{
 		Vector installed = new Vector();
@@ -140,74 +119,55 @@ public class PluginManagerPlugin extends EBPlugin
 		return retVal;
 	}
 
+	// returns loaded and not loaded plugin lists
 	public static String[][] getPluginsEx()
 	{
-		String[][] retVal = new String[3][];
+		String[][] retVal = new String[4][];
 
-		Vector loadedPlugins = new Vector();
 		Vector loaded = new Vector();
+		Vector loadedJARs = new Vector();
 		Vector notLoaded = new Vector();
-		EditPlugin[] plugins = jEdit.getPlugins();
+		Vector notLoadedJARs = new Vector();
 
-		for(int i = 0; i < plugins.length; i++)
+		EditPlugin.JAR[] jars = jEdit.getPluginJARs();
+		for(int i = 0; i < jars.length; i++)
 		{
-			EditPlugin plugin = plugins[i];
-			String name = plugin.getClass().getName();
-			if(!name.endsWith("Plugin"))
+			EditPlugin.JAR jar = jars[i];
+			EditPlugin[] plugins = jar.getPlugins();
+			if(plugins.length == 0)
+			{
+				// if there are no plugins in this JAR,
+				// list it as loaded
+				String name = MiscUtilities.getFileName(jar.getPath());
+				loaded.addElement(name);
+				loadedJARs.addElement(jar.getPath());
 				continue;
-
-			JARClassLoader loader = (JARClassLoader)plugin
-				.getClass().getClassLoader();
-			String path = loader.getPath();
-			if(loaded.indexOf(path) == -1)
-			{
-				loaded.addElement(path);
-				loadedPlugins.addElement(name);
 			}
-		}
 
-		String sysDir = MiscUtilities.constructPath(
-			jEdit.getJEditHome(),"jars");
-		String[] sysDirList = new File(sysDir).list();
-		if(sysDirList != null)
-		{
-			for(int i = 0; i < sysDirList.length; i++)
+			for(int j = 0; j < plugins.length; j++)
 			{
-				String file = sysDirList[i];
-				if(!file.toLowerCase().endsWith(".jar"))
-						continue;
-				file = MiscUtilities.constructPath(sysDir,file);
-				if(loaded.indexOf(file) == -1)
-					notLoaded.addElement(file);
-			}
-		}
-
-		String settings = jEdit.getSettingsDirectory();
-		if(settings != null)
-		{
-			String userDir = MiscUtilities.constructPath(
-				settings,"jars");
-			String[] userDirList = new File(userDir).list();
-			if(userDirList != null)
-			{
-				for(int i = 0; i < userDirList.length; i++)
+				EditPlugin plugin = plugins[j];
+				if(plugin instanceof EditPlugin.Broken)
 				{
-					String file = userDirList[i];
-					if(!file.toLowerCase().endsWith(".jar"))
-						continue;
-					file = MiscUtilities.constructPath(userDir,file);
-					if(loaded.indexOf(file) == -1)
-						notLoaded.addElement(file);
+					notLoaded.addElement(plugin.getClassName());
+					notLoadedJARs.addElement(jar.getPath());
+				}
+				else
+				{
+					loaded.addElement(plugin.getClassName());
+					loadedJARs.addElement(jar.getPath());
 				}
 			}
 		}
 
 		retVal[0] = new String[loaded.size()];
 		loaded.copyInto(retVal[0]);
-		retVal[1] = new String[loadedPlugins.size()];
-		loadedPlugins.copyInto(retVal[1]);
+		retVal[1] = new String[loadedJARs.size()];
+		loadedJARs.copyInto(retVal[1]);
 		retVal[2] = new String[notLoaded.size()];
 		notLoaded.copyInto(retVal[2]);
+		retVal[3] = new String[notLoadedJARs.size()];
+		notLoadedJARs.copyInto(retVal[3]);
 
 		return retVal;
 	}
@@ -217,17 +177,10 @@ public class PluginManagerPlugin extends EBPlugin
 	{
 		Vector retVal = new Vector();
 
-		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
+		EditPlugin.JAR[] jars = jEdit.getPluginJARs();
+		for(int i = 0; i < jars.length; i++)
 		{
-			retVal.addElement(MiscUtilities.getFileName(((JARClassLoader)
-				plugins[i].getClass().getClassLoader()).getPath()));
-		}
-
-		EditPlugin.Broken[] broken = jEdit.getBrokenPlugins();
-		for(int i = 0; i < broken.length; i++)
-		{
-			retVal.addElement(MiscUtilities.getFileName(broken[i].jar));
+			retVal.addElement(jars[i].getPath());
 		}
 
 		String[] array = new String[retVal.size()];
@@ -235,7 +188,7 @@ public class PluginManagerPlugin extends EBPlugin
 		return array;
 	}
 
-	public static boolean removePlugins(View view, String[] plugins)
+	public static boolean removePlugins(PluginManager dialog, String[] plugins)
 	{
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < plugins.length; i++)
@@ -245,7 +198,7 @@ public class PluginManagerPlugin extends EBPlugin
 		}
 		String[] args = { buf.toString() };
 
-		int result = JOptionPane.showConfirmDialog(view,
+		int result = JOptionPane.showConfirmDialog(dialog,
 			jEdit.getProperty("remove-plugins.message",args),
 			jEdit.getProperty("remove-plugins.title"),
 			JOptionPane.YES_NO_OPTION,
@@ -262,20 +215,20 @@ public class PluginManagerPlugin extends EBPlugin
 		for(int i = 0; i < plugins.length; i++)
 		{
 			String plugin = plugins[i];
-			ok |= removePlugin(view,plugin);
+			ok |= removePlugin(dialog,plugin);
 		}
 
 		if(ok)
-			GUIUtilities.message(view,"remove-plugins.done",new String[0]);
+			GUIUtilities.message(dialog,"remove-plugins.done",new String[0]);
 
 		return ok;
 	}
 
-	public static boolean installPlugins(View view)
+	public static boolean installPlugins(PluginManager dialog)
 	{
-		InstallPluginsDialog dialog = new InstallPluginsDialog(view);
-		String[] urls = dialog.getPluginURLs();
-		String dir = dialog.getInstallDirectory();
+		InstallPluginsDialog installPlugins = new InstallPluginsDialog(dialog);
+		String[] urls = installPlugins.getPluginURLs();
+		String dir = installPlugins.getInstallDirectory();
 		if(urls != null && dir != null)
 		{
 			String[] dirs = new String[urls.length];
@@ -284,9 +237,9 @@ public class PluginManagerPlugin extends EBPlugin
 				dirs[i] = dir;
 			}
 
-			if(installPlugins(view,urls,dirs))
+			if(installPlugins(dialog,urls,dirs))
 			{
-				GUIUtilities.message(view,"install-plugins.done",
+				GUIUtilities.message(dialog,"install-plugins.done",
 					new String[0]);
 				return true;
 			}
@@ -294,10 +247,10 @@ public class PluginManagerPlugin extends EBPlugin
 		return false;
 	}
 
-	public static boolean updatePlugins(View view)
+	public static boolean updatePlugins(PluginManager dialog)
 	{
-		UpdatePluginsDialog dialog = new UpdatePluginsDialog(view);
-		PluginList.Plugin[] plugins = dialog.getPlugins();
+		UpdatePluginsDialog updatePlugins = new UpdatePluginsDialog(dialog);
+		PluginList.Plugin[] plugins = updatePlugins.getPlugins();
 		if(plugins != null)
 		{
 			String sysPluginDir = MiscUtilities.constructPath(
@@ -308,7 +261,7 @@ public class PluginManagerPlugin extends EBPlugin
 			for(int i = 0; i < urls.length; i++)
 			{
 				String url = plugins[i].download;
-				String path = getPluginPath(plugins[i].clazz);
+				String path = plugins[i].path;
 
 				File jarFile = new File(path);
 				File srcFile = new File(path.substring(0,
@@ -322,9 +275,9 @@ public class PluginManagerPlugin extends EBPlugin
 				dirs[i] = jarFile.getParent();
 			}
 
-			if(installPlugins(view,urls,dirs))
+			if(installPlugins(dialog,urls,dirs))
 			{
-				GUIUtilities.message(view,"update-plugins.done",
+				GUIUtilities.message(dialog,"update-plugins.done",
 					new String[0]);
 				return true;
 			}
@@ -363,7 +316,7 @@ public class PluginManagerPlugin extends EBPlugin
 		return backupDir.getPath();
 	}
 
-	private static boolean removePlugin(View view, String plugin)
+	private static boolean removePlugin(PluginManager dialog, String plugin)
 	{
 		// move JAR first
 		File jarFile = new File(plugin);
@@ -377,16 +330,17 @@ public class PluginManagerPlugin extends EBPlugin
 		if(!ok)
 		{
 			String[] args = { jarFile.getName() };
-			GUIUtilities.error(view,"remove-plugins.error",args);
+			GUIUtilities.error(dialog,"remove-plugins.error",args);
 		}
 
 		return ok;
 	}
 
-	private static boolean installPlugins(View view, String[] urls, String[] dirs)
+	private static boolean installPlugins(PluginManager dialog,
+		String[] urls, String[] dirs)
 	{
-		PluginDownloadProgress progress = new PluginDownloadProgress(view,
-			urls,dirs);
+		PluginDownloadProgress progress = new PluginDownloadProgress(
+			dialog,urls,dirs);
 
 		return progress.isOK();
 	}

@@ -1,4 +1,4 @@
-# A makefile file for jEdit 2.4
+# A makefile file for jEdit 2.5
 # Based on jmk makefile
 #
 # To recompile jEdit, start jmk in the root of the jEdit directory structure.
@@ -6,7 +6,7 @@
 # jEdit buffer-local properties:
 # :tabSize=4:noTabs=yes:
 
-cmd_javac = "jikes" "-deprecation" "+D" "+P";
+cmd_javac = "jikes" "-deprecation" "+D";
 #cmd_javac = "javac" "-g";
 cmd_jar = "jar";
 

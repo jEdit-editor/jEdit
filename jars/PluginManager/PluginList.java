@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+import java.awt.Component;
 import java.io.*;
 import java.net.*;
 import java.util.Vector;
@@ -25,7 +26,7 @@ import org.gjt.sp.util.Log;
 
 public class PluginList
 {
-	public PluginList(View view)
+	public PluginList(Component comp)
 	{
 		Vector pluginVector = new Vector();
 
@@ -77,7 +78,7 @@ public class PluginList
 		{
 			Log.log(Log.ERROR,this,io);
 			String[] args = { io.getMessage() };
-			GUIUtilities.error(view,"plugin-list.ioerror",args);
+			GUIUtilities.error(comp,"plugin-list.ioerror",args);
 		}
 		catch(Exception e)
 		{
@@ -100,6 +101,7 @@ public class PluginList
 	{
 		public String name;
 		public String jar;
+		public String path;
 		public String clazz;
 		public String author;
 		public String currVersion;
@@ -116,35 +118,21 @@ public class PluginList
 
 		void setClassAndVersion()
 		{
-			EditPlugin[] plugins = jEdit.getPlugins();
-			for(int i = 0; i < plugins.length; i++)
+			EditPlugin.JAR[] jars = jEdit.getPluginJARs();
+			for(int i = 0; i < jars.length; i++)
 			{
-				EditPlugin plugin = plugins[i];
-				JARClassLoader loader = (JARClassLoader)plugin
-					.getClass().getClassLoader();
-				if(plugin.getClass().getName().endsWith("Plugin")
-					&& MiscUtilities.getFileName(
-					loader.getPath()).equals(jar))
+				EditPlugin.JAR checkJar = jars[i];
+				EditPlugin[] plugins = checkJar.getPlugins();
+				if(plugins.length == 0)
+					continue;
+				String clazz = plugins[0].getClassName();
+				String path = checkJar.getPath();
+				if(MiscUtilities.getFileName(path).equals(jar))
 				{
-					clazz = plugin.getClass().getName();
 					currVersion = jEdit.getProperty(
 						"plugin." + clazz + ".version");
+					this.path = path;
 					break;
-				}
-			}
-
-			if(clazz != null)
-			{
-				EditPlugin.Broken[] broken = jEdit.getBrokenPlugins();
-				for(int i = 0; i < broken.length; i++)
-				{
-					EditPlugin.Broken b = broken[i];
-					if(b.jar.equals(jar))
-					{
-						clazz = b.clazz;
-						currVersion = jEdit.getProperty(
-							"plugin." + clazz + ".version");
-					}
 				}
 			}
 		}

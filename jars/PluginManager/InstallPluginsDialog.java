@@ -27,11 +27,10 @@ import org.gjt.sp.jedit.*;
 
 public class InstallPluginsDialog extends EnhancedDialog
 {
-	public InstallPluginsDialog(View view)
+	public InstallPluginsDialog(PluginManager dialog)
 	{
-		super(view,jEdit.getProperty("install-plugins.title"),true);
-
-		this.view = view;
+		super(JOptionPane.getFrameForComponent(dialog),
+			jEdit.getProperty("install-plugins.title"),true);
 
 		getContentPane().add(BorderLayout.NORTH,new JLabel(
 			jEdit.getProperty("install-plugins.caption")));
@@ -127,10 +126,8 @@ public class InstallPluginsDialog extends EnhancedDialog
 
 		thread = new LoadThread();
 
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(dialog);
 		show();
 	}
 
@@ -191,8 +188,6 @@ public class InstallPluginsDialog extends EnhancedDialog
 	}
 
 	// private members
-	private View view;
-
 	private JList plugins;
 	private JLabel name;
 	private JLabel author;
@@ -261,7 +256,8 @@ public class InstallPluginsDialog extends EnhancedDialog
 
 		public void run()
 		{
-			PluginList.Plugin[] pluginList = new PluginList(view).getPlugins();
+			PluginList.Plugin[] pluginList = new PluginList(
+				InstallPluginsDialog.this).getPlugins();
 
 			// skip plugins that are already installed
 			String[] installed = PluginManagerPlugin.getPlugins();

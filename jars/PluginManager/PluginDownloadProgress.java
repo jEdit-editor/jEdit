@@ -25,9 +25,11 @@ import org.gjt.sp.jedit.*;
 
 public class PluginDownloadProgress extends JDialog
 {
-	public PluginDownloadProgress(View view, String[] urls, String[] dirs)
+	public PluginDownloadProgress(PluginManager dialog, String[] urls,
+		String[] dirs)
 	{
-		super(view,jEdit.getProperty("download-progress.title"),true);
+		super(JOptionPane.getFrameForComponent(dialog),
+			jEdit.getProperty("download-progress.title"),true);
 
 		count = urls.length;
 
@@ -46,18 +48,17 @@ public class PluginDownloadProgress extends JDialog
 		panel.add(stop);
 		getContentPane().add(BorderLayout.SOUTH,panel);
 
-		thread = new PluginDownloadThread(view,this,urls,dirs);
+		thread = new PluginDownloadThread(this,urls,dirs);
+
+		addWindowListener(new WindowHandler());
 
 		pack();
 
 		Dimension screen = getToolkit().getScreenSize();
 		Dimension size = getSize();
 		size.width = Math.max(size.width,500);
-		setBounds((screen.width - size.width) / 2,
-			(screen.height - size.height) / 2,
-			size.width, size.height);
-
-		addWindowListener(new WindowHandler());
+		getRootPane().setPreferredSize(size);
+		setLocationRelativeTo(dialog);
 
 		show();
 	}

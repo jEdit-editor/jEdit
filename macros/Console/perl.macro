@@ -1,4 +1,4 @@
 # This macro saves the current file and executes perl in the console.
 
 save
-console@perl $f
+console@perl \$f

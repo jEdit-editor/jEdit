@@ -26,13 +26,11 @@ import org.gjt.sp.util.Log;
 
 public class PluginDownloadThread extends Thread
 {
-	public PluginDownloadThread(View view,
-		PluginDownloadProgress progress,
+	public PluginDownloadThread(PluginDownloadProgress progress,
 		String[] urls, String[] dirs)
 	{
 		super("Plugin downloader");
 
-		this.view = view;
 		this.progress = progress;
 		this.urls = urls;
 		this.dirs = dirs;
@@ -59,7 +57,7 @@ public class PluginDownloadThread extends Thread
 			catch(IOException io)
 			{
 				String[] args = { io.getMessage() };
-				GUIUtilities.error(view,"ioerror",args);
+				GUIUtilities.error(progress,"ioerror",args);
 
 				Log.log(Log.ERROR,this,io);
 
@@ -75,7 +73,6 @@ public class PluginDownloadThread extends Thread
 	}
 
 	// private members
-	private View view;
 	private PluginDownloadProgress progress;
 	private String[] urls;
 	private String[] dirs;

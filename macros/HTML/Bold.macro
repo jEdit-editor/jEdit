@@ -1,5 +1,4 @@
-# This macro surrounds the word under the cursor with HTML <b> tags.
+# This macro surrounds the selection with HTML <b> tags.
 
-select-word
 cut
 insert-char@<b>$$</b>

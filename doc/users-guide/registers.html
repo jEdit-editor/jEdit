@@ -47,17 +47,18 @@ NAME="REGISTERS"
 >   A <I
 CLASS="FIRSTTERM"
 >register</I
-> is place where you can save a string or caret
+> is place where you can save a text string or caret
    position for later use.
-   Each register has a single-character name and can contain a string or a
-   caret position. The number of registers
-   is limited by how many keys can be typed on your keyboard. Registers are
-   global to the editor; all buffers and views share the same set.
-   Registers are not saved across editing sessions. The register
+   Each register has a single-character name and the number of available
+   registers is limited by how many keys can be typed on your keyboard.
+   Register contents are global to the editor; all buffers and views share
+   the same set. Registers are not persistent and their contents are lost when
+   jEdit exits. The register
    <TT
 CLASS="FILENAME"
 >$</TT
-> is an alias for the clipboard.
+> is an alias for the clipboard, and therefore registers can
+   be considered as an extension of the clipboard concept.
   </P
 ><P
 >   <SPAN
@@ -73,7 +74,9 @@ CLASS="GUIMENUITEM"
    (keyboard equivalent: <B
 CLASS="KEYCAP"
 >F6</B
->) lists all defined registers.
+>) displays a dialog box for
+   viewing register contents. The combo box lists all defined registers;
+   selecting one will display its contents and type (text or position).
    It is not possible to change or add registers in this
    dialog box; it is only for viewing.
   </P
@@ -88,8 +91,8 @@ CLASS="FIGURE"
 SRC="../images/dialog-view-registers.gif"></P
 ></DIV
 ><P
->   Register manipulation commands grab the next character entered at the
-   keyboard and use that as the register to operate on. So to copy the
+>   All other register manipulation commands grab the next character entered
+   at the keyboard and use that as the register to operate on. So to copy the
    selection to register <TT
 CLASS="FILENAME"
 >X</TT
@@ -117,8 +120,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="STRING-REGISTERS"
->String Registers</A
+NAME="TEXT-REGISTERS"
+>Text Registers</A
 ></H2
 ><P
 >    <SPAN
@@ -255,7 +258,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="POS-REGISTERS"
->Caret Registers</A
+>Position Registers</A
 ></H2
 ><P
 >    <SPAN
@@ -266,7 +269,7 @@ CLASS="GUISUBMENU"
 >Registers</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Save Caret to Register</SPAN
+>Save Position to Register</SPAN
 >
     (keyboard equivalent: <B
 CLASS="KEYCAP"
@@ -277,7 +280,7 @@ CLASS="KEYCAP"
 >)
     reads the next character entered at the keyboard, and stores the current
     buffer name and caret position in that register. Because buffer names
-    are saved in caret registers, you can use them to quickly flip between
+    are saved in position registers, you can use them to quickly flip between
     multiple buffers.
    </P
 ><P
@@ -321,7 +324,7 @@ CLASS="KEYCAP"
 >U</B
 >)
     reads the next character entered at the keyboard, and creates a selection
-    from the caret position to the offset specified in that register.
+    from the current caret position to the offset specified in that register.
     Keep in mind that if the register points to a different buffer than the
     current one, the resulting selection may be meaningless.
    </P
@@ -334,7 +337,7 @@ CLASS="GUISUBMENU"
 >Registers</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Swap Caret with Register</SPAN
+>Swap Position with Register</SPAN
 >
     (keyboard equivalent: <B
 CLASS="KEYCAP"
@@ -373,10 +376,10 @@ NAME="FILENAME-REGISTERS"
 >File Name Registers</A
 ></H2
 ><P
->    Registers can also be used to store file names to visit. Internally,
-    jEdit makes no distinction between a file name and string register;
+>    Registers can also be used to store file names to edit. Internally,
+    jEdit makes no distinction between a file name and text register;
     so for example, you can paste a
-    filename register into a buffer to get the file's name.
+    file name register into a buffer to get the file's name.
    </P
 ><P
 >    <SPAN
@@ -387,7 +390,8 @@ CLASS="GUISUBMENU"
 >Registers</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Save Filename to Register</SPAN
+>Save File
+    Name to Register</SPAN
 >
     (keyboard equivalent: <B
 CLASS="KEYCAP"
@@ -404,7 +408,7 @@ CLASS="KEYCAP"
 >F</B
 >) reads the next
     character entered at the keyboard and stores the current buffer's path
-    name to that register.
+    name in that register.
    </P
 ><P
 >    <SPAN
@@ -426,7 +430,7 @@ CLASS="KEYCAP"
 >)
     reads the next character entered at the keyboard and opens the file
     whose name is stored in that register. This is the same command
-    used to go to a caret register.
+    used to go to a position register.
    </P
 ></DIV
 ></DIV

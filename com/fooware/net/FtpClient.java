@@ -5,6 +5,9 @@
 *************************************************************************/
 
 // Modified by Slava Pestov to use org.gjt.sp.util.Log for debugging.
+// Also modified by Slava Pestov to work on MacOS (we now always print
+// \r\n instead of using println(), which sends a platform-specific
+// line separator)
 
 package com.fooware.net;
 
@@ -58,7 +61,8 @@ public class FtpClient {
             debugString = "PASS <password removed for security>";
 
         debug("sending command", debugString);
-        out.println(command);
+        out.print(command);
+	out.print("\r\n");
         setResponse();
     }
 

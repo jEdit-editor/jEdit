@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="Buffer-Local Properties"
 HREF="buffer-local.html"><LINK
 REL="NEXT"
-TITLE="Installing and Using Plugins"
-HREF="plugins.html"></HEAD
+TITLE="The jEdit Settings Directory"
+HREF="settings-directory.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,7 +26,7 @@ CLASS="NAVHEADER"
 >jEdit 2.5 User's Guide</H1
 ><P
 ><A
-HREF="plugins.html"
+HREF="settings-directory.html"
 >Next</A
 >, <A
 HREF="buffer-local.html"
@@ -63,7 +63,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2664"
+NAME="AEN2689"
 >The General Pane</A
 ></H2
 ><P
@@ -229,7 +229,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2725"
+NAME="AEN2750"
 >The Editor Pane</A
 ></H2
 ><P
@@ -362,7 +362,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2791"
+NAME="AEN2818"
 >The Gutter Pane</A
 ></H2
 ><P
@@ -382,7 +382,46 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2798"
+NAME="AEN2825"
+>The Edit Modes Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Edit Modes</SPAN
+> pane allows you to change a subset of
+    the global editor settings on a per-mode basis. The combo box
+    labelled "edit mode" selects the edit mode whose settings
+    are to be changed. If the "use default settings" check box is
+    selected,
+    the edit mode will use the global editor settings. Otherwise, the
+    settings can be customized and they will only apply to this mode.
+   </P
+><P
+>    The "file name glob" and "first line glob" fields allow
+    you to specify a glob pattern that names and first lines of buffers
+    will be matched against. The remaining fields and flags are the same
+    as in the <SPAN
+CLASS="GUIBUTTON"
+>Editor</SPAN
+> pane.
+   </P
+><P
+>    This option pane does not change mode definition files on disk; it
+    merely writes values to the user properties file which override those
+    in mode files. To find out how to edit mode files directly, see
+    <A
+HREF="modes.html"
+>Chapter 5</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2839"
 >The Colors &amp; Styles Pane</A
 ></H2
 ><P
@@ -400,7 +439,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2818"
+NAME="AEN2859"
 >The File Filters Pane</A
 ></H2
 ><P
@@ -409,12 +448,12 @@ CLASS="GUIBUTTON"
 >File Filters</SPAN
 > pane allows you to add custom file filters
     to the open file and save dialog boxes. Note that only user-defined
-    file filters can be added and changed here; to change the filters used
-    to pick a file's edit mode, you must edit the mode's XML file. See
-    <A
-HREF="modes.html"
->Chapter 5</A
-> for details.
+    file filters can be added and changed here; filters used
+    to pick a file's edit mode can be changed in the <SPAN
+CLASS="GUIBUTTON"
+>Edit Modes</SPAN
+>
+    pane.
    </P
 ><P
 >    Filters are added and removed in a rather peculiar fashion in this pane.
@@ -436,7 +475,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2826"
+NAME="AEN2867"
 >The Context Menu Pane</A
 ></H2
 ><P
@@ -468,7 +507,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2834"
+NAME="AEN2875"
 >The Abbreviations Pane</A
 ></H2
 ><P
@@ -580,7 +619,17 @@ SRC="../images/dialog-options-editor.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-4. The Gutter pane of the Global Options dialog box</B
+>Figure 8-4. The Edit Modes pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-modes.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-5. The Gutter pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
@@ -590,7 +639,7 @@ SRC="../images/dialog-options-gutter.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-5. The Colors &amp; Styles pane of the Global Options dialog box</B
+>Figure 8-6. The Colors &amp; Styles pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
@@ -600,7 +649,7 @@ SRC="../images/dialog-options-styles.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-6. The File Filters pane of the Global Options dialog box</B
+>Figure 8-7. The File Filters pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
@@ -610,7 +659,7 @@ SRC="../images/dialog-options-filters.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-7. The Abbreviations pane of the Global Options dialog box</B
+>Figure 8-8. The Abbreviations pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
@@ -620,7 +669,7 @@ SRC="../images/dialog-options-abbrevs.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-8. The Context Menu pane of the Global Options dialog box</B
+>Figure 8-9. The Context Menu pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
@@ -630,7 +679,7 @@ SRC="../images/dialog-options-context.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-9. The Command Shortcuts pane of the Global Options dialog box</B
+>Figure 8-10. The Command Shortcuts pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
@@ -640,7 +689,7 @@ SRC="../images/dialog-options-cmd-shortcuts.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-10. The Macro Shortcuts pane of the Global Options dialog box</B
+>Figure 8-11. The Macro Shortcuts pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
@@ -660,9 +709,9 @@ HREF="customizing.html"
 HREF="buffer-local.html"
 >Prev</A
 >: Buffer-Local Properties<BR><A
-HREF="plugins.html"
+HREF="settings-directory.html"
 >Next</A
->: Installing and Using Plugins<BR></DIV
+>: The jEdit Settings Directory<BR></DIV
 ></BODY
 ></HTML
 >
