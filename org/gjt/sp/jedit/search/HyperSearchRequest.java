@@ -158,10 +158,10 @@ loop:			for(;;)
 			buffer.readUnlock();
 		}
 
-		resultTreeRoot.insert(bufferNode,resultTreeRoot.getChildCount());
-
 		if(resultCount != 0)
 		{
+			resultTreeRoot.insert(bufferNode,resultTreeRoot.getChildCount());
+
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()

@@ -5,9 +5,9 @@ TO DO
 - wait for John to send uninstall.exe
 - check out latest jEditLauncher sources
 - finish console 3.0
-- next time i'm making an RPM, fix the shell script
 - -1 being passed to virtualToPhysical() by documentChanged()
 - formatting problems in user's guide in table cells
+- next time i'm making an RPM, fix the shell script
 - FTP plugin: investigate soft links
 - FTP plugin: not saving files, allegedly?
 - FTP plugin: better error messages

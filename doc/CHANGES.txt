@@ -1,6 +1,6 @@
 JEDIT 3.2 VERSION HISTORY
 
-* Version 3.2final
+* Version 3.2pre7
 
 + Enhancements
 
@@ -21,6 +21,10 @@ JEDIT 3.2 VERSION HISTORY
 - GrabKeyDialog bug fix for JDK 1.4 (Alan Moore)
 - roots: virtual filesystem didn't list all filesystem roots on JDK 1.4
 - Possible workaround for window positioning bugs on Unix with KDE 2
+- jEditLauncher used a Windows API call only available on Windows 98 and
+  2000
+- All files in the search set would be listed in the HyperSearch results
+  window, even files which do not contain the search string
 
 * Version 3.2pre6
 
