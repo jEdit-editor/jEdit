@@ -32,20 +32,27 @@ public abstract class OperatingSystem
 
 	public void mkdirs(String directory) throws IOException
 	{
-		new File(directory).mkdirs();
+		File file = new File(directory);
+		if(!file.exists())
+			file.mkdirs();
 	}
 
 	public static OperatingSystem getOperatingSystem()
 	{
+		if(os != null)
+			return os;
+
 		String osName = System.getProperty("os.name");
 		if(osName.indexOf("Windows") != -1)
-			return new Windows();
+			os = new Windows();
 		else if(osName.indexOf("Mac") != -1)
-			return new MacOS();
+			os = new MacOS();
 		else if(osName.indexOf("OS/2") != -1)
-			return new HalfAnOS();
+			os = new HalfAnOS();
 		else
-			return new Unix();
+			os = new Unix();
+
+		return os;
 	}
 
 	public static class Unix extends OperatingSystem
@@ -60,21 +67,6 @@ public abstract class OperatingSystem
 		{
 			return "/usr/local/bin";
 		}
-
-		/** maybe this is what causes the fd leak? */
-		/* public void mkdirs(String directory) throws IOException
-		{
-			// make it executable
-			String[] mkdirArgs = { "mkdir", "-m", "755",
-				"-p", directory };
-			try
-			{
-				Runtime.getRuntime().exec(mkdirArgs).waitFor();
-			}
-			catch(InterruptedException e)
-			{
-			}
-		} */
 
 		public void createScript(SIMInstaller installer,
 			String installDir, String binDir, String name)
@@ -103,7 +95,33 @@ public abstract class OperatingSystem
 
 			// Make it executable
 			String[] chmodArgs = { "chmod", "755", script };
-			Runtime.getRuntime().exec(chmodArgs);
+			exec(chmodArgs);
+		}
+
+		public void mkdirs(String directory) throws IOException
+		{
+			File file = new File(directory);
+			if(!file.exists())
+			{
+				String[] mkdirArgs = { "mkdir", "-m", "755",
+					"-p", directory };
+				exec(mkdirArgs);
+			}
+		}
+
+		public void exec(String[] args) throws IOException
+		{
+			Process proc = Runtime.getRuntime().exec(args);
+			proc.getInputStream().close();
+			proc.getOutputStream().close();
+			proc.getErrorStream().close();
+			try
+			{
+				proc.waitFor();
+			}
+			catch(InterruptedException ie)
+			{
+			}
 		}
 	}
 
@@ -167,4 +185,7 @@ public abstract class OperatingSystem
 			return null;
 		}
 	}
+
+	// private members
+	private static OperatingSystem os;
 }

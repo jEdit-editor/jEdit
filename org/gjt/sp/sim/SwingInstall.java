@@ -35,8 +35,6 @@ implements ActionListener, ChangeListener
 	{
 		installer = new SIMInstaller();
 
-		os = OperatingSystem.getOperatingSystem();
-
 		appName = installer.getProperty("app.name");
 		appVersion = installer.getProperty("app.version");
 
@@ -125,7 +123,6 @@ implements ActionListener, ChangeListener
 
 	// package-private members
 	SIMInstaller installer;
-	OperatingSystem os;
 	String appName;
 	String appVersion;
 
@@ -160,31 +157,17 @@ implements ActionListener, ChangeListener
 		Vector components = new Vector();
 		int size = 0;
 
-		JPanel userComp = selectCompTab.userComp;
+		JPanel comp = selectCompTab.comp;
 
-		for(int i = 0; i < userComp.getComponentCount(); i++)
+		for(int i = 0; i < comp.getComponentCount(); i++)
 		{
-			if(((JCheckBox)userComp.getComponent(i))
+			if(((JCheckBox)comp.getComponent(i))
 				.getModel().isSelected())
 			{
 				size += installer.getIntProperty(
-					"comp.user." + i + ".size");
+					"comp." + i + ".size");
 				components.addElement(installer.getProperty(
-					"comp.user." + i + ".fileset"));
-			}
-		}
-
-		JPanel develComp = selectCompTab.develComp;
-
-		for(int i = 0; i < develComp.getComponentCount(); i++)
-		{
-			if(((JCheckBox)develComp.getComponent(i))
-				.getModel().isSelected())
-			{
-				size += installer.getIntProperty(
-					"comp.devel." + i + ".size");
-				components.addElement(installer.getProperty(
-					"comp.devel." + i + ".fileset"));
+					"comp." + i + ".fileset"));
 			}
 		}
 
@@ -195,7 +178,7 @@ implements ActionListener, ChangeListener
 
 		SwingProgress progress = new SwingProgress(appName);
 		InstallThread thread = new InstallThread(
-			installer,os,progress,
+			installer,progress,
 			(installDir == null ? null : installDir),
 			(binDir == null ? null : binDir.getText()),
 			size,components);
@@ -253,7 +236,8 @@ implements ActionListener, ChangeListener
 
 			add(BorderLayout.NORTH,caption);
 
-			String _binDir = os.getShortcutDirectory();
+			String _binDir = OperatingSystem.getOperatingSystem()
+				.getShortcutDirectory();
 
 			Box box = new Box(BoxLayout.Y_AXIS);
 
@@ -272,7 +256,8 @@ implements ActionListener, ChangeListener
 
 			Box fields = new Box(BoxLayout.Y_AXIS);
 			fields.add(installDir = new JTextField());
-			installDir.setText(os.getInstallDirectory(appName,appVersion));
+			installDir.setText(OperatingSystem.getOperatingSystem()
+				.getInstallDirectory(appName,appVersion));
 
 			fields.add(Box.createVerticalStrut(5));
 			if(_binDir != null)
@@ -322,8 +307,7 @@ implements ActionListener, ChangeListener
 	class SelectComponents extends JPanel
 	implements ActionListener
 	{
-		JPanel userComp;
-		JPanel develComp;
+		JPanel comp;
 		JLabel sizeLabel;
 
 		SelectComponents()
@@ -345,22 +329,11 @@ implements ActionListener, ChangeListener
 			layout.setConstraints(caption,cons);
 			add(caption);
 
-			userComp = createUserPanel();
-			userComp.setBorder(new TitledBorder("Components for users"));
+			comp = createCompPanel();
 
 			cons.gridy++;
-			layout.setConstraints(userComp,cons);
-			add(userComp);
-
-			develComp = createDevelPanel();
-			develComp.setBorder(new TitledBorder("Components for developers"));
-
-			if(develComp.getComponentCount() != 0)
-			{
-				cons.gridy++;
-				layout.setConstraints(develComp,cons);
-				add(develComp);
-			}
+			layout.setConstraints(comp,cons);
+			add(comp);
 
 			sizeLabel = new JLabel("",SwingConstants.LEFT);
 			cons.gridy++;
@@ -375,35 +348,16 @@ implements ActionListener, ChangeListener
 			updateSize();
 		}
 
-		private JPanel createUserPanel()
+		private JPanel createCompPanel()
 		{
-			int count = installer.getIntProperty("comp.user.count");
+			int count = installer.getIntProperty("comp.count");
 			JPanel panel = new JPanel(new GridLayout(count,1));
 
 			for(int i = 0; i < count; i++)
 			{
 				JCheckBox checkBox = new JCheckBox(
-					installer.getProperty("comp.user." + i + ".name")
-					+ " (" + installer.getProperty("comp.user." + i + ".size")
-					+ "Kb)");
-				checkBox.getModel().setSelected(true);
-				checkBox.addActionListener(this);
-				panel.add(checkBox);
-			}
-
-			return panel;
-		}
-
-		private JPanel createDevelPanel()
-		{
-			int count = installer.getIntProperty("comp.devel.count");
-			JPanel panel = new JPanel(new GridLayout(count,1));
-
-			for(int i = 0; i < count; i++)
-			{
-				JCheckBox checkBox = new JCheckBox(
-					installer.getProperty("comp.devel." + i + ".name")
-					+ " (" + installer.getProperty("comp.devel." + i + ".size")
+					installer.getProperty("comp." + i + ".name")
+					+ " (" + installer.getProperty("comp." + i + ".size")
 					+ "Kb)");
 				checkBox.getModel().setSelected(true);
 				checkBox.addActionListener(this);
@@ -417,23 +371,13 @@ implements ActionListener, ChangeListener
 		{
 			int size = 0;
 
-			for(int i = 0; i < userComp.getComponentCount(); i++)
+			for(int i = 0; i < comp.getComponentCount(); i++)
 			{
-				if(((JCheckBox)userComp.getComponent(i))
+				if(((JCheckBox)comp.getComponent(i))
 					.getModel().isSelected())
 				{
 					size += installer.getIntProperty(
-						"comp.user." + i + ".size");
-				}
-			}
-
-			for(int i = 0; i < develComp.getComponentCount(); i++)
-			{
-				if(((JCheckBox)develComp.getComponent(i))
-					.getModel().isSelected())
-				{
-					size += installer.getIntProperty(
-						"comp.devel." + i + ".size");
+						"comp." + i + ".size");
 				}
 			}
 

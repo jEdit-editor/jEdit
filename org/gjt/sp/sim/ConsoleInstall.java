@@ -1,6 +1,6 @@
 /*
  * ConsoleInstall.java - Text-only installer
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@ public class ConsoleInstall
 	{
 		installer = new SIMInstaller();
 
-		OperatingSystem os = OperatingSystem.getOperatingSystem();
-
 		String appName = installer.getProperty("app.name");
 		String appVersion = installer.getProperty("app.version");
 
@@ -38,7 +36,10 @@ public class ConsoleInstall
 
 		System.out.println("*** SIM - installing " + appName);
 
-		String installDir = os.getInstallDirectory(appName,appVersion);
+		OperatingSystem os = OperatingSystem.getOperatingSystem();
+
+		String installDir = OperatingSystem.getOperatingSystem()
+			.getInstallDirectory(appName,appVersion);
 
 		System.out.print("Installation directory [" + installDir + "]: ");
 		System.out.flush();
@@ -47,7 +48,8 @@ public class ConsoleInstall
 		if(_installDir.length() != 0)
 			installDir = _installDir;
 
-		String binDir = os.getShortcutDirectory();
+		String binDir = OperatingSystem.getOperatingSystem()
+			.getShortcutDirectory();
 
 		if(binDir != null)
 		{
@@ -59,19 +61,18 @@ public class ConsoleInstall
 				binDir = _binDir;
 		}
 
-		int userCompCount = installer.getIntProperty("comp.user.count");
-		int develCompCount = installer.getIntProperty("comp.devel.count");
-		Vector components = new Vector(userCompCount + develCompCount);
+		int compCount = installer.getIntProperty("comp.count");
+		Vector components = new Vector(compCount);
 
-		System.out.println("*** User components");
-		for(int i = 0; i < userCompCount; i++)
+		System.out.println("*** Program components to install");
+		for(int i = 0; i < compCount; i++)
 		{
-			String fileset = installer.getProperty("comp.user." + i + ".fileset");
+			String fileset = installer.getProperty("comp." + i + ".fileset");
 
 			System.out.print("Install "
-				+ installer.getProperty("comp.user." + i + ".name")
+				+ installer.getProperty("comp." + i + ".name")
 				+ " ("
-				+ installer.getProperty("comp.user." + i + ".size")
+				+ installer.getProperty("comp." + i + ".size")
 				+ "Kb) [Y/n]? ");
 
 			String line = readLine(in);
@@ -80,30 +81,10 @@ public class ConsoleInstall
 				components.addElement(fileset);
 		}
 
-		if(develCompCount != 0)
-			System.out.println("*** Developer components");
-
-		for(int i = 0; i < develCompCount; i++)
-		{
-			String fileset = installer.getProperty("comp.devel." + i + ".fileset");
-
-			System.out.print("Install "
-				+ installer.getProperty("comp.devel." + i + ".name")
-				+ " ("
-				+ installer.getProperty("comp.devel." + i + ".size")
-				+ "Kb) [Y/n]? ");
-
-			String line = readLine(in);
-			if(line.length() != 0 && (line.charAt(0) != 'n'
-				&& line.charAt(0) != 'N'))
-				components.addElement(fileset);
-		}
-
 		System.out.println("*** Starting installation...");
 		ConsoleProgress progress = new ConsoleProgress();
 		InstallThread thread = new InstallThread(
-			installer,os,progress,
-			installDir,binDir,
+			installer,progress,installDir,binDir,
 			0 /* XXX */,components);
 		thread.start();
 	}

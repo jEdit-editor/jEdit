@@ -1,6 +1,6 @@
 /*
  * InstallThread.java - Performs actual installation
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,12 @@ import java.util.Vector;
 
 public class InstallThread extends Thread
 {
-	public InstallThread(SIMInstaller installer, OperatingSystem os,
-		Progress progress, String installDir, String binDir,
-		int size, Vector components)
+	public InstallThread(SIMInstaller installer, Progress progress,
+		String installDir, String binDir, int size, Vector components)
 	{
 		super("SIM install thread");
 
 		this.installer = installer;
-		this.os = os;
 		this.progress = progress;
 		this.installDir = installDir;
 		this.binDir = binDir;
@@ -50,28 +48,42 @@ public class InstallThread extends Thread
 	{
 		progress.setMaximum(size * 1024);
 
-		String filesetDir = installer.getProperty("app.fileset.dir");
-		String dataDir = installer.getProperty("app.data.dir");
-
 		try
 		{
-			for(int i = 0; i < components.size(); i++)
+			Archive archive = new Archive(getClass()
+				.getResourceAsStream("/data.sim"));
+			String name;
+			boolean write = false;
+			while((name = archive.nextEntry()) != null)
 			{
-				String comp = (String)components.elementAt(i);
-				installPackage(comp,filesetDir,dataDir);
-
-				if(Thread.interrupted())
+				if(name.startsWith("FILESET_"))
 				{
-					progress.aborted();
-					return;
+					if(components.indexOf(name.substring(8)) != -1)
+						write = true;
+					else
+						write = false;
+				}
+				else
+				{
+					if(write)
+					{
+						String outfile = installDir
+							+ File.separatorChar
+							+ name.replace('/',
+							File.separatorChar);
+						copy(archive.readEntry(),outfile);
+					}
+					else
+						archive.skipEntry();
 				}
 			}
 
 			// create it in case it doesn't already exist
 			if(binDir != null)
-				os.mkdirs(binDir);
+				OperatingSystem.getOperatingSystem().mkdirs(binDir);
 
-			os.createScript(installer,installDir,binDir,
+			OperatingSystem.getOperatingSystem().createScript(
+				installer,installDir,binDir,
 				installer.getProperty("app.name"));
 		}
 		catch(IOException io)
@@ -83,24 +95,20 @@ public class InstallThread extends Thread
 		progress.done();
 	}
 
-	public void copy(String infile, String outfile)
-		throws IOException
+	// private members
+	private SIMInstaller installer;
+	private Progress progress;
+	private String installDir;
+	private String binDir;
+	private int size;
+	private Vector components;
+	private byte[] buf;
+
+	private void copy(InputStream in, String outfile) throws IOException
 	{
-		InputStream _in = getClass().getResourceAsStream(infile);
-
-		if(_in == null)
-		{
-			throw new FileNotFoundException("File not found"
-				+ " in JAR: " + infile);
-		}
-
-		BufferedInputStream in = new BufferedInputStream(_in);
-
 		File outFile = new File(outfile);
 
-		// XXX: this will create problems when we allow directories
-		// to be part of file sets
-		os.mkdirs(outFile.getParent());
+		OperatingSystem.getOperatingSystem().mkdirs(outFile.getParent());
 
 		BufferedOutputStream out = new BufferedOutputStream(
 			new FileOutputStream(outFile));
@@ -128,33 +136,5 @@ public class InstallThread extends Thread
 
 		in.close();
 		out.close();
-	}
-
-	// private members
-	private SIMInstaller installer;
-	private OperatingSystem os;
-	private Progress progress;
-	private String installDir;
-	private String binDir;
-	private int size;
-	private Vector components;
-	private byte[] buf;
-
-	private void installPackage(String comp, String filesetDir, String dataDir)
-		throws IOException
-	{
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-			getClass().getResourceAsStream(filesetDir + "/" + comp)));
-
-		String path;
-		while((path = in.readLine()) != null)
-		{
-			String infile = dataDir + "/" + path;
-			String outfile = installDir + File.separatorChar
-				+ path.replace('/',File.separatorChar);
-			copy(infile,outfile);
-		}
-
-		in.close();
 	}
 }
