@@ -759,17 +759,16 @@ are useful in some situations. They include the following:</para>
     being edited. It is derived from Java's <classname>JComponent</classname> class.
 </para>
 
-<!-- <para>
-    There are many methods in <classname>JEditTextArea</classname> that can
-    be helpful in writing macros. The methods that deal with selecting text,
-    many of which are new to version 3.2 of jEdit, rely upon a new
-    <classname>Selection</classname> class and its derived classes.  The new
+<para>
+    Methods in this class that deal with selecting text
+    rely upon classes derived from jEdit's
+    <classname>Selection</classname> class. The
     <quote>Selection API</quote> permits selection and concurrent manipulation
     of multiple, non-contiguous regions of text. After describing the
     selection classes, we will outline the selection methods
     of <classname>JEditTextArea</classname>, followed by a listing of
     other methods in this class that are useful in writing macros.
-</para> -->
+</para>
 
 <sect2 id="class-selection"><title>Class Selection</title>
   <para>
@@ -1310,22 +1309,6 @@ JEditTextArea</title>
 </para>
 </listitem>
 
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>scrollToCaret</function></funcdef>
-  <paramdef>boolean <parameter>doElectricScroll</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Scrolls the text area to ensure that the caret is visible. The
-    <parameter>doElectricScroll</parameter> parameter detemines whether
-    <quote>electric scrolling</quote> will occur. This leaves a minimum
-    number of lines between the caret line and the top and bottom of the
-    editing pane.
-</para>
-</listitem>
-
 
 </itemizedlist>
 
@@ -1484,6 +1467,130 @@ JEditTextArea</title>
 
 </itemizedlist>
 
+
+</sect3>
+
+<!-- open sect3 -->
+<sect3 id="class-jedittextarea-scrolling">
+<title>Methods for scrolling the text area</title>
+
+<itemizedlist>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>scrollUpLine</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>scrollUpPage</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>scrollDownLine</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>scrollUpPage</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public void <function>scrollToCaret</function></funcdef>
+  <paramdef>boolean <parameter>doElectricScroll</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Scrolls the text area to ensure that the caret is visible. The
+    <parameter>doElectricScroll</parameter> parameter detemines whether
+    <quote>electric scrolling</quote> will occur. This leaves a minimum
+    number of lines between the caret line and the top and bottom of the
+    editing pane.
+</para>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>centerCaret</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+  <para>
+    Scrolls the text area so that the line containing the edit caret is
+    vertically centered.
+  </para>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+    <funcdef>public void <function>setFirstLine</function></funcdef>
+     <paramdef>int <parameter>firstLine</parameter></paramdef>
+   </funcprototype>
+ </funcsynopsis>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public int <function>getFirstLine</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+  <para>
+    This pair of methods deals with the line number of the first line
+    displayed at the top of the text area. Lines that are hidden by folds or
+    narrowing are ignored when making this <quote>virtual</quote> line
+    count, so the line number will not necessarily conform to the line
+    numbers displayed in the text area's gutter. In addition, the virtual
+    line index is zero-based, so <function>getFirstLine()</function> will
+    always return zero for the first line of text.
+  </para>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+    <funcdef>public void <function>setElectricScroll</function></funcdef>
+     <paramdef>int <parameter>electricScroll</parameter></paramdef>
+   </funcprototype>
+ </funcsynopsis>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public int <function>getElectricScroll</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+  <para>
+    The <quote>electric scroll</quote> attribute is the number of lines
+    above and below the editing caret that always remain visible when
+    scrolling.
+  </para>
+</listitem>
+</itemizedlist>
 
 </sect3>
 
@@ -1656,6 +1763,90 @@ JEditTextArea</title>
 </itemizedlist>
 </sect3>
 
+<!-- open sect3 -->
+<sect3 id="class-jedittextarea-modify">
+<title>Methods for modifying text</title>
+
+<itemizedlist>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>toLowerCase</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>toUpperCase</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+  <para>
+    These two methods operate on all selected text, including multiple
+    selections.
+  </para>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>joinLines</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+  <para>
+    Joins the current line with the following line.
+  </para>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>setOverwriteEnabled</function></funcdef>
+      <paramdef>boolean <parameter>overwrite</parameter></paramdef>
+    </funcprototype>
+  </funcsynopsis>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public boolean <function>isOverwriteEnabled</function></funcdef>
+      <void/>
+    </funcprototype>
+  </funcsynopsis>
+  <para>
+    Sets and gets whether added text will overwrite text at the editing
+    caret or whether it will be inserted immediately to the right of the
+    caret.
+  </para>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>public void <function>userInput</function></funcdef>
+      <paramdef>char <parameter>ch</parameter></paramdef>
+    </funcprototype>
+    <para>
+      Inserts the character at the editing caret as if it were typed at
+      the keyboard (keyboard input is actually passed to this method).
+      Unlike <function>setSelectedText()</function> or
+      <function>insertString()</function> in the
+      <classname>Buffer</classname> class, this method triggers
+      any active text formatting features such as auto indent,
+      abbreviation expansion and word wrap.
+    </para>
+  </funcsynopsis>
+</listitem>
+
+</itemizedlist>
+
+</sect3>
 
 <sect3 id="class-jedittextarea-commment">
 <title>Methods for creating comments</title>
@@ -1872,7 +2063,7 @@ JEditTextArea</title>
       </funcprototype>
     </funcsynopsis>
     <para>
-      These method returns the size of an inital indentation at the beginning
+      These methods return the size of an initial indentation at the beginning
       of a line and the distance between tab stops, each measured in
       character columns. If these properties are not individually set for
       a specific buffer, they are inherited from the properties of the buffer's
@@ -2972,7 +3163,7 @@ This class is another collection of <type>static</type> utility methods.
  </funcprototype>
 </funcsynopsis>
 <para>
-    Returns the directory containing the specified file.
+    Returns the directory containing the specified local file.
     <!-- XXX: for local files only -->
 </para>
 </listitem>
@@ -3064,7 +3255,8 @@ This class is another collection of <type>static</type> utility methods.
 
 <para>
     When writing macros, keep in mind that
-    except under Java 2 version 1.3, BeanShell cannot implement arbitrary interfaces
+    under Java versions earlier than 1.3, BeanShell cannot implement
+    arbitrary interfaces
     such as <classname>Compare</classname> (although, as we have noted
     in <xref linkend="macro-tips-BeanShell-interface" />,
     a BeanShell method can

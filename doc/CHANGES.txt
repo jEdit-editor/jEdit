@@ -22,10 +22,11 @@ JEDIT 3.2 VERSION HISTORY
 + Bug Fixes
 
 - C+. and C+, bug fix, again
-- Help viewer tree would should tooltips in wrong place
+- Help viewer tree would showed tooltips in wrong place
 - Replacing text with multiple selections active caused the text to be
   inserted in the wrong place
 - Reverse search didn't work sometimes
+- AltGR key works on JDK 1.4 again
 
 + API Changes
 

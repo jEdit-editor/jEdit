@@ -426,11 +426,6 @@ public class HistoryTextField extends JTextField
 		{
 			g.translate(x+w-WIDTH,y-1);
 
-			// background
-			g.setColor(UIManager.getColor(/* c.isEnabled()
-				? "Menu.background" : */ "TextField.background"));
-			g.fillRect(0,0,WIDTH-1,h);
-
 			//if(c.isEnabled())
 			//{
 			//	// vertical separation line

@@ -53,7 +53,7 @@ public class KeyEventWorkaround
 			if((ch < 0x20 || ch == 0x7f || ch == 0xff) && ch != '\b')
 				return null;
 
-			if(evt.isControlDown() || evt.isAltDown()
+			if((evt.isControlDown() ^ evt.isAltDown())
 				|| evt.isMetaDown())
 				return null;
 
