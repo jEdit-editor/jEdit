@@ -1,5 +1,17 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6pre2
+
++ Enhancements
+
+- VFS code cleaned up somewhat
+
++ Bug Fixes
+
+- Plugins couldn't be removed on systems that disallow removing open files,
+  such as Windows (since 2.6pre1)
+- FtpVFS.getFileLength() always returned 0 (since 2.6pre1)
+
 * Version 2.6pre1
 
 + New Features

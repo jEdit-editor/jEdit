@@ -44,7 +44,6 @@ public class FtpBrowser extends JDialog
 		content.setBorder(new EmptyBorder(12,12,12,0));
 		setContentPane(content);
 
-		this.view = view;
 		this.type = type;
 
 		// Get default values for fields from buffer's current
@@ -57,10 +56,10 @@ public class FtpBrowser extends JDialog
 			host = address.host + ":" + address.port;
 			user = address.user;
 			if(user == null)
-				user = (String)buffer.getProperty(FtpVFS.USERNAME_PROPERTY);
+				user = (String)buffer.getVFSSession().get(FtpVFS.USERNAME_KEY);
 			password = address.password;
 			if(password == null)
-				password = (String)buffer.getProperty(FtpVFS.PASSWORD_PROPERTY);
+				password = (String)buffer.getVFSSession().get(FtpVFS.PASSWORD_KEY);
 			path = address.path;
 			if(type == OPEN)
 				path = MiscUtilities.getFileParent(path);
@@ -205,8 +204,6 @@ public class FtpBrowser extends JDialog
 	}
 
 	// private members
-	private View view;
-
 	private int type;
 	private JTextField hostField, userField, pathField;
 	private JPasswordField passwordField;
@@ -425,7 +422,8 @@ public class FtpBrowser extends JDialog
 
 			String password = new String(passwordField.getPassword());
 
-			client = FtpVFS.createFtpClient(view,host,port,user,password,false);
+			client = FtpVFS.createFtpClient(FtpBrowser.this,host,
+				port,user,password,false);
 
 			SwingUtilities.invokeLater(new Runnable()
 			{
@@ -669,7 +667,7 @@ public class FtpBrowser extends JDialog
 
 			if(path == null)
 			{
-				view.getToolkit().beep();
+				getToolkit().beep();
 				return;
 			}
 
@@ -706,6 +704,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/07/29 12:24:08  sp
+ * More VFS work, VFS browser started
+ *
  * Revision 1.11  2000/07/26 07:48:44  sp
  * stuff
  *

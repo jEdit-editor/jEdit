@@ -19,12 +19,14 @@
 
 package org.gjt.sp.jedit.io;
 
+import java.awt.Component;
 import java.io.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 
 /**
- * A virtual filesystem implementation.
+ * A virtual filesystem implementation. Note tha methods whose names are
+ * prefixed with "_" are called from the I/O thread.
  * @param author Slava Pestov
  * @author $Id$
  */
@@ -64,6 +66,22 @@ public abstract class VFS
 	public abstract String showSaveDialog(View view, Buffer buffer);
 
 	/**
+	 * Starts a VFS session. This method is called from the AWT thread,
+	 * so it should not do any I/O. It could, however, prompt for
+	 * a login name and password, for example.
+	 * @param session The VFS session
+	 * @param comp The component that will parent error dialog boxes
+	 * @return True if everything is okay, false if the user cancelled
+	 * the operation
+	 * @since jEdit 2.6pre2
+	 */
+	public boolean setupVFSSession(VFSSession session, Component comp)
+	{
+		session.setOwnerVFS(this);
+		return true;
+	}
+
+	/**
 	 * Loads the specified buffer. The default implementation posts
 	 * an I/O request to the I/O thread.
 	 * @param view The view
@@ -72,7 +90,11 @@ public abstract class VFS
 	 */
 	public boolean load(View view, Buffer buffer, String path)
 	{
-		VFSManager.addIORequest(IORequest.LOAD,view,buffer,path,this);
+		if(!setupVFSSession(buffer.getVFSSession(),view))
+			return false;
+
+		VFSManager.runInWorkThread(new IORequest(IORequest.LOAD,
+			view,buffer,path,this));
 		return true;
 	}
 
@@ -85,11 +107,59 @@ public abstract class VFS
 	 */
 	public boolean save(View view, Buffer buffer, String path)
 	{
-		VFSManager.addIORequest(IORequest.SAVE,view,buffer,path,this);
+		if(!setupVFSSession(buffer.getVFSSession(),view))
+			return false;
+
+		VFSManager.runInWorkThread(new IORequest(IORequest.SAVE,
+			view,buffer,path,this));
 		return true;
 	}
 
 	// the remaining methods are only called from the I/O thread
+
+	/**
+	 * Lists the specified directory. Note that this must be a full
+	 * URL, including the host name, path name, and so on. The
+	 * username and password is obtained from the session.
+	 * @param session The session
+	 * @param directory The directory
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurred
+	 * @since jEdit 2.6pre2
+	 */
+	public DirectoryEntry[] _listDirectory(VFSSession session, String directory,
+		Component comp)
+		throws IOException
+	{
+		return null;
+	}
+
+	/**
+	 * A directory entry.
+	 * @since jEdit 2.6pre2
+	 */
+	public static class DirectoryEntry implements Serializable
+	{
+		public static final int FILE = 0;
+		public static final int DIRECTORY = 1;
+		public static final int LINK = 2;
+
+		public String name;
+		public int type;
+		public long length;
+
+		public DirectoryEntry(String name, int type, long length)
+		{
+			this.name = name;
+			this.type = type;
+			this.length = length;
+		}
+
+		public String toString()
+		{
+			return name + "," + type + "," + length;
+		}
+	}
 
 	/**
 	 * Returns true if this VFS supports file deletion. This is required
@@ -101,17 +171,30 @@ public abstract class VFS
 	}
 
 	/**
-	 * Deletes the specified file. By default, this does nothing.
+	 * Deletes the specified URL.
+	 * @param session The VFS session
+	 * @param url The URL
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurs
+	 * @since jEdit 2.6pre2
 	 */
-	public void _delete(Buffer buffer, String path)
+	public void _delete(VFSSession session, String url, Component comp)
+		throws IOException
 	{
 	}
 
 	/**
-	 * Returns the length of the specified file. Can return 0 if this
+	 * Returns the length of the specified URL. Can return 0 if this
 	 * filesystem doesn't support a way of obtaining the file size.
+	 * @param session The VFS session
+	 * @param url The URL
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurs
+	 * @since jEdit 2.6pre2
 	 */
-	public long _getFileLength(Buffer buffer, String path)
+	public long _getFileLength(VFSSession session, String url,
+		Component comp)
+		throws IOException
 	{
 		return 0;
 	}
@@ -135,26 +218,56 @@ public abstract class VFS
 	/**
 	 * Creates an input stream. This method is called from the I/O
 	 * thread.
-	 * @param view The view
-	 * @param buffer The buffer
+	 * @param session the VFS session
 	 * @param path The path
 	 * @param ignoreErrors If true, file not found errors should be
 	 * ignored
+	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException If an I/O error occurs
+	 * @since jEdit 2.6pre2
 	 */
-	public abstract  InputStream _createInputStream(View view, Buffer buffer,
-		String path, boolean ignoreErrors) throws IOException;
+	public abstract InputStream _createInputStream(VFSSession session,
+		String path, boolean ignoreErrors, Component comp)
+		throws IOException;
 
 	/**
 	 * Creates an output stream. This method is called from the I/O
 	 * thread.
-	 * @param view The view
-	 * @param buffer The buffer
+	 * @param session the VFS session
 	 * @param path The path
+	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException If an I/O error occurs
+	 * @since jEdit 2.6pre2
 	 */
-	public abstract OutputStream _createOutputStream(View view, Buffer buffer,
-		String path) throws IOException;
+	public abstract OutputStream _createOutputStream(VFSSession session,
+		String path, Component comp)
+		throws IOException;
+
+	/**
+	 * Finishes the specified VFS session. This must be called
+	 * after all I/O with this VFS is complete, to avoid leaving
+	 * stale network connections and such.
+	 * @param session The VFS session
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurred
+	 * @since jEdit 2.6pre2
+	 */
+	public void _endVFSSession(VFSSession session, Component comp)
+		throws IOException
+	{
+		if(session.getOwnerVFS() == this)
+			session.setOwnerVFS(null);
+		else if(session.getOwnerVFS() == null)
+		{
+			throw new IllegalArgumentException("_endSession()"
+				+ " called on an unowned session");
+		}
+		else
+		{
+			throw new IllegalArgumentException("_endSession()"
+				+ " called on a session that is not mine");
+		}
+	}
 
 	// private members
 	private String name;
@@ -163,6 +276,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/07/29 12:24:08  sp
+ * More VFS work, VFS browser started
+ *
  * Revision 1.8  2000/07/26 07:48:45  sp
  * stuff
  *

@@ -30,6 +30,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.DirectoryCache;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.util.Log;
@@ -56,7 +57,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.01.00";
+		return "02.06.02.00";
 	}
 
 	/**
@@ -675,6 +676,23 @@ public class jEdit
 	}
 
 	/**
+	 * Returns the JAR with the specified path name.
+	 * @param path The path name
+	 * @since jEdit 2.6pre1
+	 */
+	public static EditPlugin.JAR getPluginJAR(String path)
+	{
+		for(int i = 0; i < jars.size(); i++)
+		{
+			EditPlugin.JAR jar = (EditPlugin.JAR)jars.elementAt(i);
+			if(jar.getPath().equals(path))
+				return jar;
+		}
+
+		return null;
+	}
+
+	/**
 	 * Returns the JAR at the specified index.
 	 * @since jEdit 2.5pre3
 	 */
@@ -1043,8 +1061,17 @@ public class jEdit
 			path = MiscUtilities.constructPath(parent,path);
 
 		Buffer buffer = buffersFirst;
+
+		// XXX
+		Vector _history = new Vector();
+
 		while(buffer != null)
 		{
+			if(_history.contains(buffer))
+				throw new InternalError("AIEE!!! " + _history);
+			else
+				_history.addElement(buffer);
+
 			if(buffer.getPath().equals(path))
 			{
 				if(view != null)
@@ -1590,7 +1617,7 @@ public class jEdit
 	 */
 	public static void exit(View view, boolean reallyExit)
 	{
-		// Wait for all requests to finish
+		// Wait for pending I/O requests
 		VFSManager.waitForRequests();
 
 		// Even if reallyExit is false, we still exit properly
@@ -1649,6 +1676,9 @@ public class jEdit
 
 		// Save settings
 		saveSettings();
+
+		// Remove cached directory listings
+		DirectoryCache.flushAllCachedDirectories();
 
 		// Byebye...
 		System.exit(0);
@@ -1909,6 +1939,7 @@ public class jEdit
 		addAction("find");
 		addAction("find-next");
 		addAction("find-selection");
+		addAction("flush-directory-cache");
 		addAction("global-options");
 		addAction("goto-line");
 		addAction("goto-marker");
@@ -2021,6 +2052,7 @@ public class jEdit
 		addAction("undo");
 		addAction("unsplit");
 		addAction("untab");
+		addAction("vfs-browser");
 		addAction("view-registers");
 		addAction("wing-comment");
 		addAction("word-count");
@@ -2312,6 +2344,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.259  2000/07/29 12:24:07  sp
+ * More VFS work, VFS browser started
+ *
  * Revision 1.258  2000/07/26 07:48:44  sp
  * stuff
  *

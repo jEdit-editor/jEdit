@@ -356,22 +356,27 @@ utils=repeat \
       load-session \
       save-session \
       - \
+      vfs-browser \
+      - \
       io-progress-monitor \
       log-viewer \
       - \
-      buffer-options \
-      global-options \
+      flush-directory-cache \
+      reload-modes \
       - \
-      reload-modes
+      buffer-options \
+      global-options
 utils.label=$Utilities
 repeat.label=$Repeat Next Command
 load-session.label=$Load Session...
 save-session.label=$Save Session...
+vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$Activity Log...
+flush-directory-cache.label=Flush Remote Directory $Cache
+reload-modes.label=Reloa$d Edit Modes
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
-reload-modes.label=Reloa$d Edit Modes
 
 ### Macros menu
 macros=record-macro \
@@ -481,11 +486,6 @@ view.gutter.register=Register "{0}" points to this line
 view.gutter.marker=Marker "{0}" points to this line
 
 # Status messages
-view.status.load=Loading {0}
-view.status.load-markers=Loading markers for {0}
-view.status.save=Saving {0}
-view.status.save-markers=Saving markers for {0}
-view.status.autosave=Autosaving {0}
 view.status.cut-string-register=Cut to register:
 view.status.copy-string-register=Copy to register:
 view.status.append-string-register=Append to register:
@@ -1093,7 +1093,6 @@ abort.message=Are you sure you want to abort the currently executing\n\
 	input/output request? If you are aborting a file save, this may\n\
 	result in data loss.
 
-
 # Multiple I/O requst error
 buffer-multiple-io.title=I/O Error
 buffer-multiple-io.message=You cannot execute more than one input/output\n\
@@ -1106,6 +1105,10 @@ login.title=Log in
 login.caption=Enter user name and password for {0}:
 login.user=User name:
 login.password=Password:
+
+# VFS browser dialog box
+vfs.browser.title=File System Browser
+vfs.browser.directory=Directory:
 
 # Browser dialog box
 vfs.ftp.browser.open-title=Open from FTP Server
@@ -1124,6 +1127,14 @@ vfs.ftp.browser.refresh=Refresh
 
 # Menu item label
 vfs.ftp.label=FTP Server...
+
+# Status bar messages
+vfs.status.load=Loading {0}
+vfs.status.load-markers=Loading markers for {0}
+vfs.status.save=Saving {0}
+vfs.status.save-markers=Saving markers for {0}
+vfs.status.autosave=Autosaving {0}
+vfs.status.listing-directory=Listing {0}
 
 # Connect error
 vfs.ftp.connect-error.title=Cannot Connect

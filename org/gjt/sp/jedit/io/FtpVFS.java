@@ -20,9 +20,10 @@
 package org.gjt.sp.jedit.io;
 
 import com.fooware.net.*;
+import java.awt.Component;
 import java.io.*;
 import java.net.*;
-import java.util.Hashtable;
+import java.util.*;
 import org.gjt.sp.jedit.gui.LoginDialog;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -34,23 +35,15 @@ import org.gjt.sp.util.Log;
  */
 public class FtpVFS extends VFS
 {
-	public static final String CLIENT_PROPERTY = "FtpVFS__client";
-	public static final String USERNAME_PROPERTY = "FtpVFS__username";
-	public static final String PASSWORD_PROPERTY = "FtpVFS__password";
+	public static final String CLIENT_KEY = "FtpVFS__client";
+	public static final String USERNAME_KEY = "FtpVFS__username";
+	public static final String PASSWORD_KEY = "FtpVFS__password";
 
-	/**
-	 * Creates a new FTP virtual filesystem.
-	 */
 	public FtpVFS()
 	{
 		super("ftp");
 	}
 
-	/**
-	 * Displays an open dialog box and returns the selected pathname.
-	 * @param view The view
-	 * @param buffer The buffer
-	 */
 	public Buffer showOpenDialog(View view, Buffer buffer)
 	{
 		FtpBrowser browser = new FtpBrowser(view,buffer,FtpBrowser.OPEN);
@@ -58,222 +51,239 @@ public class FtpVFS extends VFS
 			return null;
 
 		Hashtable props = new Hashtable();
-		props.put(PASSWORD_PROPERTY,browser.getPassword());
+		props.put(PASSWORD_KEY,browser.getPassword());
 		return jEdit.openFile(view,null,browser.getPath(),false,false,props);
 	}
 
-	/**
-	 * Displays a save dialog box and returns the selected pathname.
-	 * @param view The view
-	 * @param buffer The buffer
-	 */
 	public String showSaveDialog(View view, Buffer buffer)
 	{
 		FtpBrowser browser = new FtpBrowser(view,buffer,FtpBrowser.SAVE);
 		if(!browser.isOK())
 			return null;
 
-		buffer.putProperty(PASSWORD_PROPERTY,browser.getPassword());
+		buffer.putProperty(PASSWORD_KEY,browser.getPassword());
 		return browser.getPath();
 	}
 
-	/**
-	 * Loads the specified buffer.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param path The path
-	 */
-	public boolean load(View view, Buffer buffer, String path)
+	public boolean setupVFSSession(VFSSession session, Component comp)
 	{
-		// since files may be loaded at startup, try to hide
-		// the splash screen first
-		GUIUtilities.hideSplashScreen();
+		super.setupVFSSession(session,comp);
 
-		if(doLogin(view,buffer,path))
-			return super.load(view,buffer,path);
-		else
-			return false;
-	}
+		String path = (String)session.get(VFSSession.PATH_KEY);
+		String savedUser = (String)session.get(USERNAME_KEY);
+		String savedPassword = (String)session.get(PASSWORD_KEY);
 
-	/**
-	 * Saves the specifies buffer.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param path The path
-	 */
-	public boolean save(View view, Buffer buffer, String path)
-	{
-		if(doLogin(view,buffer,path))
+		try
 		{
-			VFSManager.addIORequest(IORequest.SAVE,view,buffer,path,this);
+			FtpAddress address = new FtpAddress(path);
+
+			if(address.user == null)
+				address.user = savedUser;
+			if(address.password == null)
+				address.password = savedPassword;
+
+			if(address.user == null || address.password == null)
+			{
+				/* since this can be called at startup time,
+				 * we need to hide the splash screen. */
+				GUIUtilities.hideSplashScreen();
+
+				LoginDialog dialog = new LoginDialog(comp,address.host,
+					address.user,address.password);
+				if(!dialog.isOK())
+					return false;
+
+				address.user = dialog.getUser();
+				address.password = dialog.getPassword();
+			}
+
+			session.put(USERNAME_KEY,address.user);
+			session.put(PASSWORD_KEY,address.password);
+
 			return true;
 		}
-		else
+		catch(IllegalArgumentException ia)
+		{
+			// FtpAddress.<init> can throw this
 			return false;
+		}
 	}
 
-	/**
-	 * Returns true if this VFS supports file deletion. This is required
-	 * for marker saving to work.
-	 */
+	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
+		Component comp) throws IOException
+	{
+		VFS.DirectoryEntry[] directory = DirectoryCache.getCachedDirectory(url);
+		if(directory != null)
+			return directory;
+
+		FtpAddress address = new FtpAddress(url);
+		FtpClient client = getFtpClient(session,address,true,comp);
+		if(client == null)
+			return null;
+
+		BufferedReader in = null;
+		Vector directoryVector = new Vector();
+		try
+		{
+			client.dataPort();
+			Reader _in = client.list();
+			if(_in == null)
+			{
+				String[] args = { url, client.getResponse().toString() };
+				VFSManager.error(comp,"vfs.ftp.list-error",args);
+				return null;
+			}
+
+			in = new BufferedReader(_in);
+			String line;
+			while((line = in.readLine()) != null)
+			{
+				if(line.startsWith("total"))
+					continue;
+
+				VFS.DirectoryEntry entry = lineToDirectoryEntry(line);
+				if(entry.name.equals(".") || entry.name.equals(".."))
+					continue;
+
+				directoryVector.addElement(entry);
+			}
+
+			in.close();
+
+			directory = new VFS.DirectoryEntry[directoryVector.size()];
+			directoryVector.copyInto(directory);
+			DirectoryCache.setCachedDirectory(url,directory);
+			return directory;
+		}
+		finally
+		{
+			if(in != null)
+			{
+				try
+				{
+					in.close();
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,this,e);
+				}
+			}
+		}
+	}
+
 	public boolean _canDelete()
 	{
 		return true;
 	}
 
-	/**
-	 * Deletes the specified file.
-	 */
-	public void _delete(Buffer buffer, String path)
+	public void _delete(VFSSession session, String url, Component comp)
+		throws IOException
 	{
-		FtpAddress address = new FtpAddress(path);
-		FtpClient client = getFtpClient(null,buffer,address,true);
+		FtpAddress address = new FtpAddress(url);
+		FtpClient client = getFtpClient(session,address,true,comp);
 		if(client == null)
 			return;
 
-		try
-		{
-			client.delete(address.path);
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
-		}
+		client.delete(address.path);
+
+		DirectoryCache.flushCachedDirectory(MiscUtilities.getFileParent(url));
 	}
 
-	/**
-	 * Returns the length of the specified file.
-	 */
-	public long _getFileLength(Buffer buffer, String path)
+	public long _getFileLength(VFSSession session, String url, Component comp)
+		throws IOException
 	{
-		FtpAddress address = new FtpAddress(path);
-		FtpClient client = getFtpClient(null,buffer,address,true);
+		FtpAddress address = new FtpAddress(url);
+		FtpClient client = getFtpClient(session,address,true,comp);
 		if(client == null)
 			return 0L;
 
-		try
+		client.dataPort();
+		Reader _reader = client.list(address.path);
+		if(_reader == null)
 		{
-			BufferedReader reader = new BufferedReader(client.list(
-				address.path));
-			String line = reader.readLine();
-			reader.close();
-			if(line != null)
-			{
-				System.err.println(extractLength(line));
-				return Long.parseLong(extractLength(line));
-			}
-			else
-				return 0L;
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
+			// eg, file not found
 			return 0L;
 		}
-	}
 
-	/**
-	 * A buffer has been loaded. This method is called from the I/O
-	 * thread.
-	 * @param buffer The buffer
-	 * @exception IOException If an I/O error occurs
-	 */
-	public void _loadComplete(Buffer buffer) throws IOException
-	{
-		try
+		BufferedReader reader = new BufferedReader(_reader);
+		String line = reader.readLine();
+		reader.close();
+		if(line != null)
 		{
-			FtpClient client = (FtpClient)buffer.getProperty(CLIENT_PROPERTY);
-			if(client != null)
-				client.logout();
+			VFS.DirectoryEntry entry = lineToDirectoryEntry(line);
+			return entry.length;
 		}
-		finally
-		{
-			// even if we are aborted...
-			buffer.getDocumentProperties().remove(CLIENT_PROPERTY);
-		}
+		else
+			return 0L;
 	}
 
-	/**
-	 * A buffer has been saved. This method is called from the I/O
-	 * thread.
-	 * @param buffer The buffer
-	 * @exception IOException If an I/O error occurs
-	 */
-	public void _saveComplete(Buffer buffer) throws IOException
-	{
-		// does the same thing
-		_loadComplete(buffer);
-	}
-
-	/**
-	 * Creates an input stream. This method is called from the I/O
-	 * thread.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param path The path
-	 * @param ignoreErrors If true, file not found errors should be
-	 * ignored
-	 * @exception IOException If an I/O error occurs
-	 */
-	public InputStream _createInputStream(View view, Buffer buffer,
-		String path, boolean ignoreErrors) throws IOException
+	public InputStream _createInputStream(VFSSession session, String path,
+		boolean ignoreErrors, Component comp) throws IOException
 	{
 		FtpAddress address = new FtpAddress(path);
-		FtpClient client = getFtpClient(view,buffer,address,ignoreErrors);
+		FtpClient client = getFtpClient(session,address,ignoreErrors,comp);
 		if(client == null)
 			return null;
 
 		client.dataPort();
 		InputStream in = client.retrieveStream(address.path);
+
 		if(in == null)
 		{
 			if(!ignoreErrors)
 			{
 				String[] args = { address.host, address.port, address.path,
 					client.getResponse().toString() };
-				VFSManager.error(view,"vfs.ftp.download-error",args);
+				VFSManager.error(comp,"vfs.ftp.download-error",args);
 			}
-			client.logout();
-			buffer.getDocumentProperties().remove(CLIENT_PROPERTY);
-			return null;
 		}
-		else
-			return in;
+
+		return in;
 	}
 
-	/**
-	 * Creates an output stream. This method is called from the I/O
-	 * thread.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param path The path
-	 * @exception IOException If an I/O error occurs
-	 */
-	public OutputStream _createOutputStream(View view, Buffer buffer, String path)
-		throws IOException
+	public OutputStream _createOutputStream(VFSSession session, String path,
+		Component comp) throws IOException
 	{
 		FtpAddress address = new FtpAddress(path);
-		FtpClient client = getFtpClient(view,buffer,address,false);
+		FtpClient client = getFtpClient(session,address,false,comp);
 		if(client == null)
 			return null;
 
 		client.dataPort();
 		OutputStream out = client.storeStream(address.path);
+
 		if(out == null)
 		{
 			String[] args = { address.host, address.port, address.path,
 				client.getResponse().toString() };
-			VFSManager.error(view,"vfs.ftp.upload-error",args);
-			client.logout();
-			buffer.getDocumentProperties().remove(CLIENT_PROPERTY);
-			return null;
+			VFSManager.error(comp,"vfs.ftp.upload-error",args);
 		}
-		else
-			return out;
+
+		DirectoryCache.flushCachedDirectory(MiscUtilities.getFileParent(path));
+
+		return out;
+	}
+
+	public void _endVFSSession(VFSSession session, Component comp)
+		throws IOException
+	{
+		try
+		{
+			FtpClient client = (FtpClient)session.get(CLIENT_KEY);
+			if(client != null)
+				client.logout();
+		}
+		finally
+		{
+			// even if we are aborted...
+			session.remove(CLIENT_KEY);
+		}
+
+		super._endVFSSession(session,comp);
 	}
 
 	// package-private members
-	static FtpClient createFtpClient(View view, String host, String port,
+	static FtpClient createFtpClient(Component comp, String host, String port,
 		String user, String password, boolean ignoreErrors)
 	{
 		FtpClient client = new FtpClient();
@@ -287,7 +297,7 @@ public class FtpVFS extends VFS
 				if(!ignoreErrors)
 				{
 					String[] args = { host,port, client.getResponse().toString() };
-					VFSManager.error(view,"vfs.ftp.connect-error",args);
+					VFSManager.error(comp,"vfs.ftp.connect-error",args);
 				}
 				return null;
 			}
@@ -299,7 +309,7 @@ public class FtpVFS extends VFS
 				{
 					String[] args = { host, port, user,
 						client.getResponse().toString() };
-					VFSManager.error(view,"vfs.ftp.login-error",args);
+					VFSManager.error(comp,"vfs.ftp.login-error",args);
 				}
 				client.logout();
 				return null;
@@ -312,7 +322,7 @@ public class FtpVFS extends VFS
 				{
 					String[] args = { host, port, user,
 						client.getResponse().toString() };
-					VFSManager.error(view,"vfs.ftp.login-error",args);
+					VFSManager.error(comp,"vfs.ftp.login-error",args);
 				}
 				client.logout();
 				return null;
@@ -327,8 +337,8 @@ public class FtpVFS extends VFS
 			if(ignoreErrors)
 				return null;
 
-			String[] args = { host,port, client.getResponse().toString() };
-			VFSManager.error(view,"vfs.ftp.connect-error",args);
+			String[] args = { host, port, client.getResponse().toString() };
+			VFSManager.error(comp,"vfs.ftp.connect-error",args);
 			return null;
 		}
 		catch(IOException io)
@@ -337,101 +347,98 @@ public class FtpVFS extends VFS
 				return null;
 
 			String[] args = { io.getMessage() };
-			VFSManager.error(view,"ioerror",args);
+			VFSManager.error(comp,"ioerror",args);
 			return null;
 		}
 	}
 
-	boolean doLogin(View view, Buffer buffer, String path)
-	{
-		String savedUser = (String)buffer.getProperty(USERNAME_PROPERTY);
-		String savedPassword = (String)buffer.getProperty(PASSWORD_PROPERTY);
-
-		try
-		{
-			FtpAddress address = new FtpAddress(path);
-
-			if(address.user == null)
-				address.user = savedUser;
-			if(address.password == null)
-				address.password = savedPassword;
-
-			if(address.user == null || address.password == null)
-			{
-				LoginDialog dialog = new LoginDialog(view,address.host,
-					address.user,address.password);
-				if(!dialog.isOK())
-					return false;
-
-				address.user = dialog.getUser();
-				address.password = dialog.getPassword();
-			}
-
-			buffer.putProperty(USERNAME_PROPERTY,address.user);
-			buffer.putProperty(PASSWORD_PROPERTY,address.password);
-
-			return true;
-		}
-		catch(IllegalArgumentException ia)
-		{
-			// FtpAddress.<init> can throw this
-			return false;
-		}
-	}
-
 	// private members
-	private FtpClient getFtpClient(View view, Buffer buffer,
-		FtpAddress address, boolean ignoreErrors)
+	private FtpClient getFtpClient(VFSSession session, FtpAddress address,
+		boolean ignoreErrors, Component comp)
 	{
-		FtpClient client = (FtpClient)buffer.getProperty(CLIENT_PROPERTY);
+		FtpClient client = (FtpClient)session.get(CLIENT_KEY);
 		if(client == null)
 		{
 			if(address.user == null)
-				address.user = (String)buffer.getProperty(USERNAME_PROPERTY);
+				address.user = (String)session.get(USERNAME_KEY);
 			if(address.password == null)
-				address.password = (String)buffer.getProperty(PASSWORD_PROPERTY);
+				address.password = (String)session.get(PASSWORD_KEY);
 
-			client = createFtpClient(view,address.host,address.port,
+			client = createFtpClient(comp,address.host,address.port,
 				address.user,address.password,ignoreErrors);
-			buffer.putProperty(CLIENT_PROPERTY,client);
+			session.put(CLIENT_KEY,client);
 		}
 
 		return client;
 	}
 
-	// extract file length from LIST output
-	private String extractLength(String line)
+	// Convert a line of LIST output to a VFS.DirectoryEntry
+	private VFS.DirectoryEntry lineToDirectoryEntry(String line)
 	{
-		int fieldCount = 0;
-		boolean lastWasSpace = false;
+		int type;
+		switch(line.charAt(0))
+		{
+		case 'd':
+			type = VFS.DirectoryEntry.DIRECTORY;
+			break;
+		case 'l':
+			// XXX: need to resolve link
+			// fall through for now
+		default:
+			type = VFS.DirectoryEntry.FILE;
+			break;
+		}
+
+		// first, extract the fifth field, which is the file size
 		int i;
+		int j = 0;
+		boolean lastWasSpace = false;
+		int fieldCount = 0;
+
+		long length = 0L;
+		String name = null;
+
 		for(i = 0; i < line.length(); i++)
 		{
 			if(line.charAt(i) == ' ')
 			{
-				if(lastWasSpace)
-					continue;
-				else
-				{
-					lastWasSpace = true;
-					fieldCount++;
-				}
+				lastWasSpace = true;
 			}
 			else
 			{
+				if(lastWasSpace)
+				{
+					fieldCount++;
+
+					if(fieldCount == 4)
+						j = i;
+					else if(fieldCount == 5)
+					{
+						length = Long.parseLong(
+							line.substring(j,i).trim());
+					}
+					else if(fieldCount == 8)
+					{
+						name = line.substring(i);
+						break;
+					}
+				}
+
 				lastWasSpace = false;
-				if(fieldCount == 8)
-					break;
 			}
 		}
 
-		int j;
-		for(j = i; j < line.length(); j++)
-		{
-			if(line.charAt(j) == ' ')
-				break;
-		}
+		if(line.charAt(0) == 'l')
+			name = name.substring(name.indexOf("-> "));
 
-		return line.substring(i,j - i);
+		return new VFS.DirectoryEntry(name,type,length);
 	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.11  2000/07/29 12:24:08  sp
+ * More VFS work, VFS browser started
+ *
+ */

@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.io;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import java.awt.Component;
 import java.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -34,19 +35,11 @@ public class FileVFS extends VFS
 {
 	public static final String BACKED_UP_PROPERTY = "FileVFS__backedUp";
 
-	/**
-	 * Creates a new local filesystem.
-	 */
 	public FileVFS()
 	{
 		super("file");
 	}
 
-	/**
-	 * Displays an open dialog box and returns the selected pathname.
-	 * @param view The view
-	 * @param buffer The buffer
-	 */
 	public Buffer showOpenDialog(View view, Buffer buffer)
 	{
 		String parent;
@@ -64,11 +57,6 @@ public class FileVFS extends VFS
 			return null;
 	}
 
-	/**
-	 * Displays a save dialog box and returns the selected pathname.
-	 * @param view The view
-	 * @param buffer The buffer
-	 */
 	public String showSaveDialog(View view, Buffer buffer)
 	{
 		String path;
@@ -101,33 +89,52 @@ public class FileVFS extends VFS
 			return null;
 	}
 
-	/**
-	 * Loads the specified buffer. The default implementation posts
-	 * an I/O request to the I/O thread.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param path The path
-	 */
 	public boolean load(View view, Buffer buffer, String path)
 	{
-		File file = new File(path);
+		File file = buffer.getFile();
 
-		if(!checkFile(view,buffer,file))
+		if(!file.exists())
+		{
+			if(buffer != null)
+			{
+				buffer.setNewFile(true);
+				buffer.setDirty(false);
+			}
 			return false;
+		}
+		else
+			buffer.setReadOnly(!file.canWrite());
+
+		if(file.isDirectory())
+		{
+			String[] args = { file.getPath() };
+			GUIUtilities.error(view,"open-directory",args);
+			if(buffer != null)
+			{
+				buffer.setNewFile(false);
+				buffer.setDirty(false);
+			}
+			return false;
+		}
+
+		if(!file.canRead())
+		{
+			String[] args = { file.getPath() };
+			GUIUtilities.error(view,"no-read",args);
+			if(buffer != null)
+			{
+				buffer.setNewFile(false);
+				buffer.setDirty(false);
+			}
+			return false;
+		}
 
 		return super.load(view,buffer,path);
 	}
 
-	/**
-	 * Saves the specifies buffer. The default implementation posts
-	 * an I/O request to the I/O thread.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param path The path
-	 */
 	public boolean save(View view, Buffer buffer, String path)
 	{
-		File file = new File(path);
+		File file = buffer.getFile();
 
 		// Check that we can actually write to the file
 		if((file.exists() && !file.canWrite())
@@ -142,43 +149,48 @@ public class FileVFS extends VFS
 		return super.save(view,buffer,path);
 	}
 
-	/**
-	 * Returns true if this VFS supports file deletion. This is required
-	 * for marker saving to work.
-	 */
+	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
+		Component comp)
+	{
+		File directory = new File(url);
+		String[] list = directory.list();
+		if(list == null)
+			return null;
+
+		VFS.DirectoryEntry[] list2 = new VFS.DirectoryEntry[list.length];
+		for(int i = 0; i < list.length; i++)
+		{
+			String name = list[i];
+			File file = new File(directory,name);
+			int type;
+			if(file.isDirectory())
+				type = VFS.DirectoryEntry.DIRECTORY;
+			else
+				type = VFS.DirectoryEntry.FILE;
+
+			list2[i] = new VFS.DirectoryEntry(name,type,file.length());
+		}
+
+		return list2;
+	}
+
 	public boolean _canDelete()
 	{
 		return true;
 	}
 
-	/**
-	 * Deletes the specified file.
-	 */
-	public void _delete(Buffer buffer, String path)
+	public void _delete(VFSSession session, String path, Component comp)
 	{
 		new File(path).delete();
 	}
 
-	/**
-	 * Returns the length of the specified file.
-	 */
-	public long _getFileLength(Buffer buffer, String path)
+	public long _getFileLength(VFSSession session, String path, Component comp)
 	{
 		return new File(path).length();
 	}
 
-	/**
-	 * Creates an input stream. This method is called from the I/O
-	 * thread.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param path The path
-	 * @param ignoreErrors If true, file not found errors should be
-	 * ignored
-	 * @exception IOException If an I/O error occurs
-	 */
-	public InputStream _createInputStream(View view, Buffer buffer,
-		String path, boolean ignoreErrors) throws IOException
+	public InputStream _createInputStream(VFSSession session, String path,
+		boolean ignoreErrors, Component comp) throws IOException
 	{
 		try
 		{
@@ -193,16 +205,8 @@ public class FileVFS extends VFS
 		}
 	}
 
-	/**
-	 * Creates an output stream. This method is called from the I/O
-	 * thread.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param path The path
-	 * @exception IOException If an I/O error occurs
-	 */
-	public OutputStream _createOutputStream(View view, Buffer buffer, String path)
-		throws IOException
+	public OutputStream _createOutputStream(VFSSession session, String path,
+		Component comp) throws IOException
 	{
 		return new FileOutputStream(path);
 	}
@@ -216,7 +220,7 @@ public class FileVFS extends VFS
 		if(buffer.getProperty(BACKED_UP_PROPERTY) != null)
 			return;
 		buffer.putProperty(BACKED_UP_PROPERTY,Boolean.TRUE);
-		
+
 		// Fetch properties
 		int backups;
 		try
@@ -288,45 +292,12 @@ public class FileVFS extends VFS
 				+ "1" + backupSuffix));
 		}
 	}
-
-	private boolean checkFile(View view, Buffer buffer, File file)
-	{
-		if(!file.exists())
-		{
-			if(buffer != null)
-			{
-				buffer.setNewFile(true);
-				buffer.setDirty(false);
-			}
-			return false;
-		}
-		else
-			buffer.setReadOnly(!file.canWrite());
-
-		if(file.isDirectory())
-		{
-			String[] args = { file.getPath() };
-			GUIUtilities.error(view,"open-directory",args);
-			if(buffer != null)
-			{
-				buffer.setNewFile(false);
-				buffer.setDirty(false);
-			}
-			return false;
-		}
-
-		if(!file.canRead())
-		{
-			String[] args = { file.getPath() };
-			GUIUtilities.error(view,"no-read",args);
-			if(buffer != null)
-			{
-				buffer.setNewFile(false);
-				buffer.setDirty(false);
-			}
-			return false;
-		}
-
-		return true;
-	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.9  2000/07/29 12:24:08  sp
+ * More VFS work, VFS browser started
+ *
+ */

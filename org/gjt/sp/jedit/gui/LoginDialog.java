@@ -28,10 +28,10 @@ import org.gjt.sp.jedit.*;
 
 public class LoginDialog extends EnhancedDialog implements ActionListener
 {
-	public LoginDialog(View view, String host, String user, String password)
+	public LoginDialog(Component comp, String host, String user, String password)
 	{
-		super(view,jEdit.getProperty("login.title"),true);
-		this.view = view;
+		super(JOptionPane.getFrameForComponent(comp),
+			jEdit.getProperty("login.title"),true);
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,0));
@@ -65,7 +65,7 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 			: passwordField));
 
 		pack();
-		setLocationRelativeTo(view);
+		setLocationRelativeTo(comp);
 		show();
 	}
 
@@ -121,7 +121,6 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 	}
 
 	// private members
-	private View view;
 	private JTextField userField;
 	private JPasswordField passwordField;
 	private String user;
@@ -172,6 +171,9 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/07/29 12:24:08  sp
+ * More VFS work, VFS browser started
+ *
  * Revision 1.5  2000/06/04 08:57:35  sp
  * GUI updates, bug fixes
  *

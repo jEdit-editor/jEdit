@@ -253,8 +253,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		VFSManager.addIORequest(IORequest.AUTOSAVE,null,this,
-			autosaveFile.getPath(),VFSManager.getFileVFS());
+		VFSManager.runInWorkThread(new IORequest(IORequest.AUTOSAVE,
+			null,this,autosaveFile.getPath(),VFSManager.getFileVFS()));
 	}
 
 	/**
@@ -414,6 +414,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public VFS getVFS()
 	{
 		return vfs;
+	}
+
+	/**
+	 * Returns the virtual filesystem session. Should only be
+	 * called by the classes in the <code>org.gjt.sp.jedit.io</code>
+	 * package.
+	 */
+	public VFSSession getVFSSession()
+	{
+		return vfsSession;
 	}
 
 	/**
@@ -1441,6 +1451,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	private long modTime;
 	private File file;
 	private VFS vfs;
+	private VFSSession vfsSession;
 	private File autosaveFile;
 	private String path;
 	private String protocol;
@@ -1471,12 +1482,15 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		{
 			file = new File(path);
 
-			// if we don't do this, the autosave of a file won't be
+			// if we don't do this, the autosave file won't be
 			// deleted after a save as
 			if(autosaveFile != null)
 				autosaveFile.delete();
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
 		}
+
+		vfsSession = new VFSSession();
+		vfsSession.put(VFSSession.PATH_KEY,path);
 	}
 
 	private boolean recoverAutosave(final View view)
@@ -1650,6 +1664,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.165  2000/07/29 12:24:07  sp
+ * More VFS work, VFS browser started
+ *
  * Revision 1.164  2000/07/26 07:48:43  sp
  * stuff
  *

@@ -135,17 +135,18 @@ public class IORequest extends WorkRequest
 	private void load()
 	{
 		InputStream in = null;
+		VFSSession session = buffer.getVFSSession();
 
 		try
 		{
 			try
 			{
 				String[] args = { MiscUtilities.getFileName(path) };
-				setStatus(jEdit.getProperty("view.status.load",args));
+				setStatus(jEdit.getProperty("vfs.status.load",args));
 				setAbortable(true);
 
-				long length = vfs._getFileLength(buffer,path);
-				in = vfs._createInputStream(view,buffer,path,false);
+				long length = vfs._getFileLength(session,path,view);
+				in = vfs._createInputStream(session,path,false,view);
 				if(in == null)
 					return;
 
@@ -164,13 +165,13 @@ public class IORequest extends WorkRequest
 			try
 			{
 				String[] args = { MiscUtilities.getFileName(path) };
-				setStatus(jEdit.getProperty("view.status.load-markers",args));
+				setStatus(jEdit.getProperty("vfs.status.load-markers",args));
 
 				// just before inserting the text into the
 				// buffer, read() calls setAbortable(false)
 				setAbortable(true);
 
-				in = vfs._createInputStream(view,buffer,markersPath,true);
+				in = vfs._createInputStream(session,markersPath,true,view);
 				if(in != null)
 					readMarkers(buffer,in);
 			}
@@ -192,16 +193,22 @@ public class IORequest extends WorkRequest
 				}
 			}
 		}
-
-		try
+		finally
 		{
-			vfs._loadComplete(buffer);
-		}
-		catch(IOException io)
-		{
-		}
-		catch(WorkThread.Abort a)
-		{
+			try
+			{
+				vfs._loadComplete(buffer);
+				vfs._endVFSSession(session,view);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				String[] args = { io.getMessage() };
+				VFSManager.error(view,"ioerror",args);
+			}
+			catch(WorkThread.Abort a)
+			{
+			}
 		}
 	}
 
@@ -490,11 +497,12 @@ public class IORequest extends WorkRequest
 	private void save()
 	{
 		OutputStream out = null;
+		VFSSession session = buffer.getVFSSession();
 
 		try
 		{
 			String[] args = { MiscUtilities.getFileName(path) };
-			setStatus(jEdit.getProperty("view.status.save",args));
+			setStatus(jEdit.getProperty("vfs.status.save",args));
 
 			// the entire save operation can be aborted...
 			setAbortable(true);
@@ -503,7 +511,7 @@ public class IORequest extends WorkRequest
 			{
 				buffer.readLock();
 
-				out = vfs._createOutputStream(view,buffer,path);
+				out = vfs._createOutputStream(session,path,view);
 				if(out == null)
 					return;
 
@@ -516,13 +524,13 @@ public class IORequest extends WorkRequest
 				// Otherwise, we will accumilate stale marks files.
 				if(vfs._canDelete() && buffer.getMarkerCount() != 0)
 				{
-					setStatus(jEdit.getProperty("view.status.save-markers",args));
-					out = vfs._createOutputStream(view,buffer,markersPath);
+					setStatus(jEdit.getProperty("vfs.status.save-markers",args));
+					out = vfs._createOutputStream(session,markersPath,view);
 					if(out != null)
 						writeMarkers(buffer,out);
 				}
 				else
-					vfs._delete(buffer,markersPath);
+					vfs._delete(session,markersPath,view);
 			}
 			catch(BadLocationException bl)
 			{
@@ -552,16 +560,22 @@ public class IORequest extends WorkRequest
 				}
 			}
 		}
-
-		try
+		finally
 		{
-			vfs._saveComplete(buffer);
-		}
-		catch(IOException io)
-		{
-		}
-		catch(WorkThread.Abort a)
-		{
+			try
+			{
+				vfs._saveComplete(buffer);
+				vfs._endVFSSession(session,view);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				String[] args = { io.getMessage() };
+				VFSManager.error(view,"ioerror",args);
+			}
+			catch(WorkThread.Abort a)
+			{
+			}
 		}
 	}
 
@@ -569,10 +583,15 @@ public class IORequest extends WorkRequest
 	{
 		OutputStream out = null;
 
+		// since autosave is only supported for local files,
+		// we don't do any of the setupSession()/endSession()
+		// stuff (it isn't necessary)
+		VFSSession session = buffer.getVFSSession();
+
 		try
 		{
 			String[] args = { MiscUtilities.getFileName(path) };
-			setStatus(jEdit.getProperty("view.status.autosave",args));
+			setStatus(jEdit.getProperty("vfs.status.autosave",args));
 
 			// the entire save operation can be aborted...
 			setAbortable(true);
@@ -581,7 +600,7 @@ public class IORequest extends WorkRequest
 			{
 				buffer.readLock();
 
-				out = vfs._createOutputStream(view,buffer,path);
+				out = vfs._createOutputStream(session,path,view);
 				if(out == null)
 					return;
 
@@ -673,6 +692,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.16  2000/07/29 12:24:08  sp
+ * More VFS work, VFS browser started
+ *
  * Revision 1.15  2000/07/26 07:48:45  sp
  * stuff
  *

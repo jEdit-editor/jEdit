@@ -151,24 +151,6 @@ public class VFSManager
 	}
 
 	/**
-	 * Aborts the currently running I/O request.
-	 */
-	public static void abortCurrentRequest()
-	{
-		//ioThread.abortCurrentRequest();
-	}
-
-	/**
-	 * Adds an I/O request to the work thread.
-	 * @since jEdit 2.5pre1
-	 */
-	public static void addIORequest(int type, View view, Buffer buffer,
-		String path, VFS vfs)
-	{
-		ioThreadPool.addWorkRequest(new IORequest(type,view,buffer,path,vfs),false);
-	}
-
-	/**
 	 * Executes the specified runnable in the AWT thread once all
 	 * pending I/O requests are complete.
 	 * @since jEdit 2.5pre1
@@ -176,6 +158,15 @@ public class VFSManager
 	public static void runInAWTThread(Runnable run)
 	{
 		ioThreadPool.addWorkRequest(run,true);
+	}
+
+	/**
+	 * Executes the specified runnable in one of the I/O threads.
+	 * @since jEdit 2.6pre2
+	 */
+	public static void runInWorkThread(Runnable run)
+	{
+		ioThreadPool.addWorkRequest(run,false);
 	}
 
 	/**
@@ -243,6 +234,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.15  2000/07/29 12:24:08  sp
+ * More VFS work, VFS browser started
+ *
  * Revision 1.14  2000/07/26 07:48:45  sp
  * stuff
  *
@@ -273,11 +267,5 @@ public class VFSManager
  * Revision 1.5  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature
- *
- * Revision 1.4  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.3  2000/04/25 03:32:40  sp
- * Even more VFS hacking
  *
  */

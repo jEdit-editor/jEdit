@@ -108,6 +108,24 @@ public class JARClassLoader extends ClassLoader
 		return "jeditresource:" + jar.getIndex() + "/" + name;
 	}
 
+	/**
+	 * Closes the ZIP file. This plugin will no longer be usable
+	 * after this.
+	 * @since jEdit 2.6pre1
+	 */
+	public void closeZipFile()
+	{
+		closed = true;
+		try
+		{
+			zipFile.close();
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+		}
+	}
+
 	// package-private members
 	void loadAllPlugins()
 	{
@@ -136,6 +154,7 @@ public class JARClassLoader extends ClassLoader
 	private EditPlugin.JAR jar;
 	private Vector pluginClasses = new Vector();
 	private ZipFile zipFile;
+	private boolean closed;
 
 	private void loadPluginClass(String name)
 		throws Exception
@@ -321,7 +340,11 @@ public class JARClassLoader extends ClassLoader
 
 		try
 		{
-			ZipEntry entry = zipFile.getEntry(name);
+			ZipEntry entry;
+			if(closed)
+				entry = null;
+			else
+				entry = zipFile.getEntry(name);
 
 			if(entry == null)
 			{
@@ -369,6 +392,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.37  2000/07/29 12:24:07  sp
+ * More VFS work, VFS browser started
+ *
  * Revision 1.36  2000/05/14 10:55:21  sp
  * Tool bar editor started, improved view registers dialog box
  *
