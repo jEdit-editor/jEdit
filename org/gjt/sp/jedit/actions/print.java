@@ -140,7 +140,6 @@ public class print extends EditAction
 
 		int lineNumberDigits = (int)Math.ceil(Math.log(
 			textArea.getLineCount()) / Math.log(10));
-		System.err.println(lineNumberDigits);
 
 		for(int i = 0; i < textArea.getLineCount(); i++)
 		{

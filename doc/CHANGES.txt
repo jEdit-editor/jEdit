@@ -16,6 +16,11 @@ JEDIT 2.6 VERSION HISTORY
 - Documentation updates
 - Deleting, renaming, etc macros from the VFS browser will now update the
   macros list
+- Installer source code now included in jEdit download
+- Installer source code cleaned up a bit
+- When the complete word or complete action popups are visible, the 'Tab'
+  key will select the current item
+- Literal search code updates (Mike Dillon)
 
 + Neutral
 
@@ -40,6 +45,9 @@ JEDIT 2.6 VERSION HISTORY
 - Nested compound edits have been broken since some 2.6preX release, so stuff
   like a 'Replace All' would take several invocations of 'Undo' to fully
   reverse
+- Having an unmatched ')' in a regular expression should no longer throw
+  an ArrayIndexOutOfBoundsException (Alan Moore)
+- Removed useless debugging message from Print command
 
 + API Changes
 

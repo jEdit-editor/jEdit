@@ -431,8 +431,6 @@ public class CommandLine extends JPanel
 				{
 					if(getText().length() == 0 && Character.isDigit(ch))
 						handleDigit(evt);
-					else if(ch == ' ')
-						handleTopLevelEnter(evt);
 					else
 						super.processKeyEvent(evt);
 				}
@@ -482,7 +480,9 @@ public class CommandLine extends JPanel
 						handleTopLevelUp(evt);
 					else if(modifiers == 0 && keyCode == KeyEvent.VK_DOWN)
 						handleTopLevelDown(evt);
-					else if(modifiers == 0 && keyCode == KeyEvent.VK_ENTER)
+					else if(modifiers == 0
+						&& (keyCode == KeyEvent.VK_ENTER
+						|| keyCode == KeyEvent.VK_TAB))
 						handleTopLevelEnter(evt);
 					else
 						super.processKeyEvent(evt);
@@ -732,7 +732,8 @@ public class CommandLine extends JPanel
 					hideCompletionWindow();
 					textField.requestFocus();
 				}
-				else if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+				else if(evt.getKeyCode() == KeyEvent.VK_ENTER
+					|| evt.getKeyCode() == KeyEvent.VK_TAB)
 				{
 					executeAction((String)list.getSelectedValue());
 				}
@@ -752,6 +753,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/09/30 01:17:00  sp
+ * *** empty log message ***
+ *
  * Revision 1.6  2000/09/26 10:19:46  sp
  * Bug fixes, spit and polish
  *

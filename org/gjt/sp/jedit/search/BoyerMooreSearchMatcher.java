@@ -1,7 +1,7 @@
 /*
  * BoyerMooreSearchMatcher.java - Literal pattern String matcher utilizing the
  *         Boyer-Moore algorithm
- * Copyright (C) 1999 mike dillon
+ * Copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 
 package org.gjt.sp.jedit.search;
 
+import org.gjt.sp.util.Log;
+
 public class BoyerMooreSearchMatcher implements SearchMatcher
 {
 	/**
@@ -32,8 +34,14 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	public BoyerMooreSearchMatcher(String pattern, String replace,
 		boolean ignoreCase)
 	{
-		this.pattern = ((ignoreCase) ? pattern.toUpperCase() : pattern)
-			.toCharArray();
+		if (ignoreCase)
+		{
+			this.pattern = pattern.toUpperCase().toCharArray();
+		}
+		else
+		{
+			this.pattern = pattern.toCharArray();
+		}
 		this.replace = replace;
 		this.ignoreCase = ignoreCase;
 
@@ -59,8 +67,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		}
 		else
 		{
-			int[] match = { pos, pos + pattern.length };
-			return match;
+			return new int[] { pos, pos + pattern.length };
 		}
 	}
 
@@ -80,12 +87,15 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		while ((pos = match(chars, lastMatch)) != -1)
 		{
 			if (buf == null)
+			{
 				buf = new StringBuffer(chars.length);
+			}
 
 			if (pos != lastMatch)
 			{
 				buf.append(chars, lastMatch, pos - lastMatch);
 			}
+
 			buf.append(replace);
 
 			lastMatch = pos + pattern.length;
@@ -99,43 +109,87 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		{
 			if(lastMatch < chars.length)
 			{
-				buf.append(chars, lastMatch, chars.length -
-					lastMatch);
+				buf.append(chars, lastMatch,
+					chars.length - lastMatch);
 			}
+
 			return buf.toString();
 		}
 	}
 
+	/*
+	 *  a good introduction to the Boyer-Moore fast string matching
+	 *  algorithm may be found on Moore's website at:
+	 *
+	 *   http://www.cs.utexas.edu/users/moore/best-ideas/string-searching/
+	 *
+	 */
 	public int match(char[] text, int offset)
 	{
-		int i = (offset >= 0) ? offset : 0;
-		int last_i = text.length - pattern.length;
-		int first_j = pattern.length - 1;
-		int j;
+		// position variable for pattern start
+		int anchor = offset;
+
+		// position variable for pattern test position
+		int pos;
+
+		// last possible start position of a match with this pattern;
+		// this is negative if the pattern is longer than the text
+		// causing the search loop below to immediately fail
+		int last_anchor = text.length - pattern.length;
+
+		// each time the pattern is checked, we start this many
+		// characters ahead of 'anchor'
+		int pattern_end = pattern.length - 1;
 
 		char ch = 0;
 
-		while (i <= last_i)
+		int bad_char;
+		int good_suffix;
+
+		// the search works by starting the anchor (first character
+		// of the pattern) at the initial offset. as long as the
+		// anchor is far enough from the enough of the text for the
+		// pattern to match, and until the pattern matches, we
+		// compare the pattern to the text from the last character
+		// to the first character in reverse order. where a character
+		// in the pattern mismatches, we use the two heuristics
+		// based on the mismatch character and its position in the
+		// pattern to determine the furthest we can move the anchor
+		// without missing any potential pattern matches.
+SEARCH:
+		while (anchor <= last_anchor)
 		{
-			for (j = first_j; j >= 0; --j)
+			for (pos = pattern_end; pos >= 0; --pos)
 			{
-				ch = text[i + j];
-				if (ignoreCase) ch = Character.toUpperCase(ch);
-				if (ch != pattern[j]) break;
+				ch = ignoreCase
+					? Character.toUpperCase(text[anchor + pos])
+					: text[anchor + pos];
+
+				// pattern test
+				if (ch != pattern[pos])
+				{
+					// character mismatch, determine how many characters to skip
+
+					// heuristic #1
+					bad_char = pos - skip[getSkipIndex(ch)];
+
+					// heuristic #2
+					good_suffix = suffix[pos];
+
+					// skip the greater of the two distances provided by the
+					// heuristics
+					anchor += (bad_char > good_suffix) ? bad_char : good_suffix;
+
+					// go back to the while loop
+					continue SEARCH;
+				}
 			}
 
-			if (j >= 0)
-			{
-				int bc = j + 1 - skip[getSkipIndex(ch)];
-				int gs = suffix[j];
-				i += (bc > gs) ? bc : gs;
-			}
-			else
-			{
-				return i;
-			}
+			// MATCH: return the position of its first character
+			return anchor;
 		}
 
+		// MISMATCH: return -1 as defined by API
 		return -1;
 	}
 
@@ -149,25 +203,54 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	private int[] suffix;
 
 	// Boyer-Moore helper methods
+
+	/*
+	 *  the 'skip' array is used to determine for each index in the
+	 *  hashed alphabet how many characters can be skipped if
+	 *  a mismatch occurs on a characater hashing to that index.
+	 */
 	private void generateSkipArray()
 	{
+		// initialize the skip array to all zeros
 		skip = new int[256];
 
-		char ch;
+		// leave the table cleanly-initialized for an empty pattern
+		if (pattern.length == 0) return;
+
 		int pos = 0;
 
-		while (pos < pattern.length)
+		do
 		{
-			ch = pattern[pos];
-			skip[getSkipIndex(ch)] = ++pos;
+			skip[getSkipIndex(pattern[pos])] = pos;
 		}
+		while (++pos < pattern.length);
 	}
 
+	/*
+	 *  to avoid our skip table having a length of 2 ^ 16, we hash each
+	 *  character of the input into a character in the alphabet [\x00-\xFF]
+	 *  using the lower 8 bits of the character's value (resulting in
+	 *  a more reasonable skip table of length 2 ^ 8).
+	 *
+	 *  the result of this is that more than one character can hash to the
+	 *  same index, but since the skip table encodes the position of
+	 *  occurence of the character furthest into the string with a particular
+	 *  index (whether or not it is the only character with that index), an
+	 *  index collision only means that that this heuristic will give a
+	 *  sub-optimal skip (i.e. a complete skip table could use the differences
+	 *  between colliding characters to maximal effect, at the expense of
+	 *  building a table that is over 2 orders of magnitude larger and very
+	 *  sparse).
+	 */
 	private static final int getSkipIndex(char ch)
 	{
 		return ((int) ch) & 0x000000FF;
 	}
 
+	/*
+	 *  XXX: hairy code that is basically just a functional(?) port of some
+	 *  other code i barely understood
+	 */
 	private void generateSuffixArray()
 	{
 		int m = pattern.length;
@@ -178,7 +261,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		int[] tmp = new int[j];
 		tmp[m] = j;
 
-		for (int i = m; i > 0; i--)
+		for (int i = m; i > 0; --i)
 		{
 			while (j <= m && pattern[i - 1] != pattern[j - 1])
 			{
@@ -197,12 +280,18 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 
 		for (j = 0; j <= m; j++)
 		{
-			if (suffix[j] == 0)
-				suffix[j] = k;
-			if (j == k)
-				k = tmp[k];
-		}
+			// the code above builds a 1-indexed suffix array,
+			// but we shift it to be 0-indexed, ignoring the
+			// original 0-th element
+			if (j > 0)
+			{
+				suffix[j - 1] = (suffix[j] == 0) ? k : suffix[j];
+			}
 
-		System.arraycopy(suffix, 1, suffix, 0, m);
+			if (j == k)
+			{
+				k = tmp[k];
+			}
+		}
 	}
 }
