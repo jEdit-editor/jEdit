@@ -5,10 +5,15 @@ JEDIT VERSION HISTORY
 + Enhancements
 
 - Buffer tabs position (top, left, right, bottom) can now be set
+- Buffer tabs now show tool tips with the full path of buffers
+- Better regexp and ignore case icons (Valery Kondakoff)
 
 + Bug Fixes
 
 - Buffer tabs are now implemented differently, and should work better
+- Fixed a very minor memory leak (buffers would sometimes retain pointers
+  to closed views' text areas) (since 1.7pre5)
+- Docking plugins should now work (since 2.3pre2)
 
 * Version 2.3pre2
 

@@ -67,15 +67,15 @@ public class BufferTabs extends JTabbedPane
 		int selectedIndex = getSelectedIndex();
 
 		buffers.insertElementAt(buffer,index);
-		insertTab(getTabLabel(buffer),null,new Magic(buffer),null,index);
+		insertTab(buffer.getName(),getIcon(buffer),
+			new Magic(buffer),buffer.getPath(),
+			index);
 
 		if(index <= selectedIndex)
 		{
 			selectedIndex++;
 			setSelectedIndex(selectedIndex);
 		}
-
-		view.focusOnTextArea();
 	}
 
 	public void removeBufferTab(Buffer buffer)
@@ -104,13 +104,13 @@ public class BufferTabs extends JTabbedPane
 
 	public void updateBufferTab(Buffer buffer)
 	{
-		// if dirty is now true, we just update the tab's label,
+		// if dirty is now true, we just update the tab's icon,
 		// otherwise, the name might have changed (dirty = false
 		// means just saved)
 		if(buffer.isDirty())
 		{
 			int index = buffer.getIndex();
-			setTitleAt(index,getTabLabel(buffer));
+			setIconAt(index,getIcon(buffer));
 		}
 		else
 		{
@@ -144,14 +144,32 @@ public class BufferTabs extends JTabbedPane
 	private boolean removing;
 	private boolean updating;
 
-	private String getTabLabel(Buffer buffer)
+	private static ImageIcon newDirtyIcon, newIcon, dirtyIcon, normalIcon;
+	static
 	{
-		Object[] args = { buffer.getName(),
-			new Integer(buffer.isReadOnly() ? 1 : 0),
-			new Integer(buffer.isDirty() ? 1: 0),
-			new Integer(buffer.isNewFile() ? 1: 0)};
+		newDirtyIcon = new ImageIcon(BufferTabs.class.getResource(
+			"/org/gjt/sp/jedit/new_dirty.gif"));
+		newIcon = new ImageIcon(BufferTabs.class.getResource(
+			"/org/gjt/sp/jedit/new.gif"));
+		dirtyIcon = new ImageIcon(BufferTabs.class.getResource(
+			"/org/gjt/sp/jedit/dirty.gif"));
+		normalIcon = new ImageIcon(BufferTabs.class.getResource(
+			"/org/gjt/sp/jedit/normal.gif"));
+	}
 
-		return jEdit.getProperty("view.title",args);
+	private ImageIcon getIcon(Buffer buffer)
+	{
+		if(buffer.isNew())
+		{
+			if(buffer.isDirty())
+				return newDirtyIcon;
+			else
+				return newIcon;
+		}
+		else if(buffer.isDirty())
+			return dirtyIcon;
+		else
+			return normalIcon;
 	}
 
 	class ChangeHandler implements ChangeListener
@@ -199,6 +217,8 @@ public class BufferTabs extends JTabbedPane
 		{
 			this.add(BorderLayout.CENTER,textArea);
 			this.revalidate();
+
+			view.focusOnTextArea();
 		}
 	}
 }

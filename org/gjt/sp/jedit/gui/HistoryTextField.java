@@ -60,6 +60,17 @@ public class HistoryTextField extends JTextField
 	}
 
 	/**
+	 * Sets the history list model.
+	 * @param name The model name
+	 * @since jEdit 2.3pre3
+	 */
+	public void setModel(String name)
+	{
+		historyModel = HistoryModel.getModel(name);
+		index = -1;
+	}
+
+	/**
 	 * Adds the currently entered item to the history.
 	 */
 	public void addCurrentToHistory()
@@ -337,6 +348,9 @@ public class HistoryTextField extends JTextField
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/01/29 01:56:51  sp
+ * Buffer tabs updates, some other stuff
+ *
  * Revision 1.31  1999/11/21 07:59:30  sp
  * JavaDoc updates
  *

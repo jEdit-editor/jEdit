@@ -1,15 +1,16 @@
 JEDIT TO DO
 
+------- 2.3 to do -------
+
 - Get dude to fix line-state problem in PostScript token marker
 - jikes segfaults with PSTokenMarker.java -- why?
 - Finish double click drag
-- better ignore case, regexp icons
 - Need to redo window-editor-* snapshots in icewm
+- BeanShell edit mode
+- Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
+  to TextAreaHighlight and use that same interface to paint stuff in the
+  gutter
 - CaretUndo acts weird on 'redo' sometimes
-- Don't just blindly call updateBracketHighlight() all the time, only
-  call it if bracket highlighted region becomes dirty
-- Write an InputHandler subclass that displays the current repeat count,
-  if any, in the view's status bar
 - If no abbrev found, C+e C+x should ask if it should be added
 - If there is > 1 possible match, complete-word should list them in a
   dialog box
@@ -20,41 +21,32 @@ JEDIT TO DO
     instead wait for the buffer created event (if there will be one)
   - if the buffer is not temporary, create positions cos it's going stay
     open
-- Clean way of embedding token markers in one another, so that HTMLTokenMarker
-  can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
-  -- TokenMarker.markTokensImpl changed to:
-     markTokensImpl(byte token, Segment line, int lineIndex, String end);
-     -- Parent token marker stored in child's 'parent' instance var, for addToken()
-  -- TokenMarker.delegate(TokenMarker tm, Segment line, int lineIndex, String end);
-  -- LineInfo changed to:
-     class LineInfo
-     {
-             byte token;
-	     String end;
-	     TokenMarker child;
-     }
-  -- markTokensImpl() can return Token.DELEGATE_END if it finds an 'end' token,
-     it is then the job of the delegate() caller to add the end token
-  -- markTokens() checks if lineInfo.child is valid, if so, immediately
-     calls markTokensImpl() of child
-  -- more than one level of embedding will require a major reworking of the
-     syntax system, so don't do it for now
 - 'Uncomment' command, removes comment strings from selected text
-- Menu bar and tool bar loading needs to work outside of views
-- Reverse search. Until gnu.regexp supports this, it can't be done very easily
-- Integrate XMode
+- Split window functionality
+- Incremental search
+- Indent selected lines function
+- Buffer tabs icons
+
+------- Later -------
+
 - EnhancedDialog and EnhancedFrame that automatically load/save geometry
   and/or center themselves on the screen
 - Beef up 'Marker' class to support file/line number/message stuff, EditBus
   will also use it for errors
-- Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
-  to TextAreaHighlight and use that same interface to paint stuff in the
-  gutter
+- Write an InputHandler subclass that displays the current repeat count,
+  if any, in the view's status bar
+- Don't just blindly call updateBracketHighlight() all the time, only
+  call it if bracket highlighted region becomes dirty
 - Plugin devel manual needs more work:
   - document views, buffers
   - document GUIUtilities.load/saveGeometry
   - how to write edit modes and token markers
   - how to write text area hilites
+- Menu bar and tool bar loading needs to work outside of views
+- Integrate XMode
+- Reverse search. Until gnu.regexp supports this, it can't be done very easily
+- More than one level of token marker delegation (required for XMode
+  integration)
 - Folding
 
 ------- JDK 1.2 -------

@@ -373,8 +373,6 @@ public class View extends JFrame implements EBComponent
 		saveCaretInfo();
 		EditBus.removeFromBus(this);
 		dispose();
-
-		buffer.removeDocumentListener(textArea);
 	}
 
 	// private members
@@ -593,26 +591,35 @@ public class View extends JFrame implements EBComponent
 
 	private void initBufferTabs()
 	{
+		Container c = (bufferTabs != null ? bufferTabs.getParent()
+			: textArea.getParent());
+		if(c == null)
+			c = getContentPane();
+
 		if("on".equals(jEdit.getProperty("view.showBufferTabs")))
 		{
 			if(bufferTabs == null)
 			{
 				bufferTabs = new BufferTabs(this,textArea);
-				getContentPane().remove(textArea);
-				getContentPane().add(BorderLayout.CENTER,bufferTabs);
-			}
+				c.remove(textArea);
 
-			bufferTabs.setTabPlacement(Integer.parseInt(
-				jEdit.getProperty("view.bufferTabsPos")));
+				// BorderLayout adds to center by default,
+				// but this will also work with other layouts.
+				c.add(bufferTabs);
+			}
 		}
 		else
 		{
 			if(bufferTabs != null)
 			{
-				getContentPane().remove(bufferTabs);
+				c.remove(bufferTabs);
 				bufferTabs = null;
+				c.add(textArea);
 			}
-			getContentPane().add(BorderLayout.CENTER,textArea);
+			else if(textArea.getParent() == null)
+			{
+			c.add(textArea);
+			}
 		}
 
 		getRootPane().revalidate();
@@ -1040,6 +1047,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.128  2000/01/29 01:56:51  sp
+ * Buffer tabs updates, some other stuff
+ *
  * Revision 1.127  2000/01/28 09:24:16  sp
  * Buffer tabs updated (uses better impl == less bugs)
  *

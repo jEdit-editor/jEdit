@@ -684,6 +684,7 @@ public class JEditTextArea extends JComponent
 		this.document = document;
 
 		document.addDocumentListener(documentHandler);
+		documentHandlerInstalled = true;
 
 		select(0,0);
 		updateScrollBars();
@@ -1507,14 +1508,36 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Called by the AWT when this component is added to a parent.
+	 * Adds document listener.
+	 */
+	public void addNotify()
+	{
+		super.addNotify();
+
+		if(!documentHandlerInstalled)
+		{
+			documentHandlerInstalled = true;
+			document.addDocumentListener(documentHandler);
+		}
+	}
+
+	/**
 	 * Called by the AWT when this component is removed from it's parent.
-	 * This stops clears the currently focused component.
+	 * This clears the pointer to the currently focused component.
+	 * Also removes document listener.
 	 */
 	public void removeNotify()
 	{
 		super.removeNotify();
 		if(focusedComponent == this)
 			focusedComponent = null;
+
+		if(documentHandlerInstalled)
+		{
+			document.removeDocumentListener(documentHandler);
+			documentHandlerInstalled = false;
+		}
 	}
 
 	/**
@@ -1574,6 +1597,7 @@ public class JEditTextArea extends JComponent
 	protected InputHandler inputHandler;
 	protected SyntaxDocument document;
 	protected DocumentHandler documentHandler;
+	protected boolean documentHandlerInstalled;
 
 	protected Segment lineSegment;
 
@@ -2218,6 +2242,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.40  2000/01/29 01:56:51  sp
+ * Buffer tabs updates, some other stuff
+ *
  * Revision 1.39  2000/01/28 00:20:58  sp
  * Lots of stuff
  *
