@@ -10,13 +10,14 @@ JEDIT VERSION HISTORY
 
 - Closing a buffer will now go to the most recently edited buffer, rather
   than the previous one
+- Makefile updates (arh14@cornell.edu)
 
 + Bug Fixes
 
 - 'Complete Word' didn't find all completions (since 2.4pre1)
 - Inserting lines at the end of non-text files didn't work properly (since
   2.4pre1)
-- File modification on focus didn't work very well (since 2.4pre1)
+- File modification check on focus didn't work very well (since 2.4pre1)
 - Fixed possible ClassCastException with plugin manager (since 2.3pre5)
 
 * Version 2.4pre1

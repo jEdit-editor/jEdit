@@ -43,6 +43,8 @@ implements ActionListener, MouseListener
 
 		words.addMouseListener(this);
 		words.setSelectedIndex(0);
+		words.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 		insert = new JButton(jEdit.getProperty("complete-word.insert"));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		content.setLayout(new BorderLayout());

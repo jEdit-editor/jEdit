@@ -172,10 +172,10 @@ public class SyntaxDocument extends PlainDocument
 				getDefaultRootElement());
 			if(ch != null)
 			{
+				tokenMarker.linesChanged(ch.getIndex(),2);
 				tokenMarker.deleteLines(ch.getIndex() + 1,
 					ch.getChildrenRemoved().length -
 					ch.getChildrenAdded().length);
-				tokenMarker.linesChanged(ch.getIndex(),2);
 			}
 			else
 			{
@@ -191,6 +191,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/03/24 04:52:17  sp
+ * bug fixing
+ *
  * Revision 1.16  2000/03/21 07:18:53  sp
  * bug fixes
  *
