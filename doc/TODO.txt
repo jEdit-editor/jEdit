@@ -4,7 +4,6 @@ JEDIT TO DO
 
 - Double-click drag doesn't work backwards
 - Focus is broken with buffertabs
-- Document plugin dep
 
 ------- 2.4 to do -------
 

@@ -155,6 +155,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			view.hideWaitCursor();
 
 		setFlag(LOADED,true);
+
+		// fire LOADING event
+		EditBus.send(new BufferUpdate(this,BufferUpdate.LOADING));
 	}
 
 	/**
@@ -294,6 +297,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			// reposition in buffer list if it is sorted
 			jEdit.updatePosition(this);
 
+			if(name.toLowerCase().endsWith(".macro"))
+				Macros.loadMacros();
+
 			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
 
 			autosaveFile.delete();
@@ -371,6 +377,14 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
+	 * Returns true if this buffer has been loaded from disk.
+	 */
+	public final boolean isLoaded()
+	{
+		return getFlag(LOADED);
+	}
+
+	/**
 	 * Returns true if this is an untitled file, false otherwise.
 	 */
 	public final boolean isNewFile()
@@ -415,11 +429,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			setFlag(DIRTY,false);
 
 		if(d != old_d)
-		{
 			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
-			if(name.toLowerCase().endsWith(".macro"))
-				Macros.loadMacros();
-		}
 	}
 
 	/**
@@ -1167,9 +1177,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			setDirty(false);
 
 			modTime = file.lastModified();
-
-			// fire LOADING event
-			EditBus.send(new BufferUpdate(this,BufferUpdate.LOADING));
 		}
 		catch(BadLocationException bl)
 		{
@@ -1535,6 +1542,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.124  2000/02/17 05:37:59  sp
+ * Bug fixes
+ *
  * Revision 1.123  2000/02/10 08:32:51  sp
  * Bug fixes, doc updates
  *
@@ -1565,6 +1575,4 @@ loop:		for(int i = 0; i < markers.size(); i++)
  * Revision 1.114  1999/12/10 03:22:46  sp
  * Bug fixes, old loading code is now used again
  *
- * Revision 1.113  1999/12/07 08:16:55  sp
- * Reload bug nailed to the wall
  */

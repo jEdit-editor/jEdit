@@ -7,6 +7,7 @@ JEDIT VERSION HISTORY
 - MiscUtilities.compareVersions() method compares strings of the form
   XX.YY.ZZ
 - 'plugin <name> <version>' dependency added
+- Buffer.isLoaded() method added (required for EditBus plugin)
 
 + Enhancements
 
@@ -32,6 +33,7 @@ JEDIT VERSION HISTORY
 - Up/Down arrow keys should be more robust now (since 1.7pre5)
 - 'Spaces to Tabs' didn't work (since 2.1pre1!!! From now on, I promise
   I will test jEdit features better :-) )
+- Saving a macro file didn't reload macros
 
 * Version 2.3pre5
 
