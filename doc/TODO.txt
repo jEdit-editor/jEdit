@@ -12,8 +12,7 @@ JEDIT TO DO
 ------- Stuff for 2.3pre3+ -------
 
 - 'Uncomment' command, removes comment strings from selected text
-- 'Window Home' and 'Window End' actions bound to A+HOME and A+END
-- Remove 'smart' home/end
+- Remove 'smart' home/end?
 - HyperSearch - when doing a directory search, all buffers with matches
   are kept open, they should be closed
   - to fix this, HyperSearch should check if getNextBuffer() returns a

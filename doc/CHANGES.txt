@@ -20,7 +20,7 @@ JEDIT VERSION HISTORY
 - Enhanced help menu
 - Files with extension '.php' are now recognized as PHP3 files
 - Documentation updates
-- .xsd, .rdf and .rss files are now opened in XML mode
+- .xsd, .xsl, .dtd, .rdf and .rss files are now opened in XML mode
 
 + Bug Fixes
 
