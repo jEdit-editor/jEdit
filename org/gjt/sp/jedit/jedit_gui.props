@@ -269,8 +269,6 @@ replace-in-selection.label=$Replace in Selection
 replace-all.label=Replace $All
 hypersearch.label=$HyperSearch...
 hypersearch-selection.label=HyperSearch for Se$lection...
-ignore-case.label=I$gnore Case
-regexp.label=Regu$lar Expressions
 multifile-search.label=M$ultifile Search Settings...
 set-marker.label=Set $Marker...
 clear-marker.label=Clear Marker
@@ -370,6 +368,14 @@ toggle-rect.label=Rectangle Select On/Off
 repeat.label=Enter Repeat Count
 
 ###
+### OTHER ACTIONS NOT LISTED IN MENUS
+###
+
+ignore-case.label=Ignore Case
+regexp.label=Regular Expressions
+insert-literal.label=Insert Without Expanding
+
+###
 ### VIEW STUFF
 ###
 
@@ -392,6 +398,7 @@ view.status.goto-register=Go to register?
 view.status.select-caret-register=Select to register?
 view.status.exchange-caret-register=Swap caret with register?
 view.status.clear-register=Clear register?
+view.status.insert-literal=Insert without expanding
 
 ###
 ### VARIOUS DIALOGS

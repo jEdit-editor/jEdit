@@ -1,50 +1,72 @@
 JEDIT TO DO
 
-------- Stuff for 2.3pre1 -------
+------- Stuff for 2.3pre2 -------
 
-- Need to redo these snapshots: window-editor-*, view-registers,
-  paste-prev
-- complete-word shouldn't scan entire document every time a match needs
-  to be completed, also storing view/textArea instances in actions is
-  not a good idea
+- Need to redo window-editor-* snapshots in icewm
 - better ignore case, regexp icons
-
-------- After 2.3pre1 -------
-
-- Integrate BufferTabs into the core
-- Write an InputHandler subclass that displays the current repeat count,
-  if any, in the view's status bar
+- Clean way of embedding token markers in one another, so that HTMLTokenMarker
+  can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
+  -- TokenMarker.markTokensImpl changed to:
+     markTokensImpl(byte token, Segment line, int lineIndex, String end);
+     -- Parent token marker stored in child's 'parent' instance var, for addToken()
+  -- TokenMarker.delegate(TokenMarker tm, Segment line, int lineIndex, String end);
+  -- LineInfo changed to:
+     class LineInfo
+     {
+             byte token;
+	     String end;
+	     TokenMarker child;
+     }
+  -- markTokensImpl() can return Token.DELEGATE_END if it finds an 'end' token,
+     it is then the job of the delegate() caller to add the end token
+  -- markTokens() checks if lineInfo.child is valid, if so, immediately
+     calls markTokensImpl() of child
+  -- more than one level of embedding will require a major reworking of the
+     syntax system, so don't do it for now
 - CaretUndo acts weird on 'redo' sometimes
+- 'Uncomment' command, removes comment strings from selected text
 - Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
   to TextAreaHighlight and use that same interface to paint stuff in the
   gutter
+- HyperSearch - when doing a directory search, all buffers with matches
+  are kept open, they should be closed
+  - to fix this, HyperSearch should check if getNextBuffer() returns a
+    temporary buffer, if so, it shouldn't create any positions, and
+    instead wait for the buffer created event (if there will be one)
+  - if the buffer is not temporary, create positions cos it's going stay
+    open
+- Beef up 'Marker' class to support this sort of file/line number/message
+  thing, EditBus will also use it for errors
+- Write an InputHandler subclass that displays the current repeat count,
+  if any, in the view's status bar
+
+------- Maybe in 2.3 -------
+
+- Document EditBus in plugin development docs
+- complete-word shouldn't scan entire document every time a match needs
+  to be completed, also storing view/textArea instances in actions is
+  not a good idea
+- insert-char performs indent on \n and \t. InputHandlers pass \n and \t
+  to the input action. InputHandler.insert-{tab,break} removed.
+- Macros -- \n, \t in action command
+- Integrate BufferTabs into the core
 - (??? WHY?) Higlight.paintHighlight(): instead of passing y co-ordinate,
   pass a rectangle with line bounds. Maybe rework TextAreaPainter internals
   to use a rectangle also, it could simplify some things. If one rectangle
   instance is stored and reused, it would not slow things down
-- Beef up 'Marker' class to support this sort of file/line number/message
-  thing, EditBus will also use it for errors
-- HyperSearch - when doing a directory search, all buffers with matches
-  are kept open, they should be closed (fixing this is non-trivial!)
-- Clean way of embedding token markers in one another, so that HTMLTokenMarker
-  can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
-- Macros -- \n, \t in action command, indent-on-enter/-tab record themselves
-  as insert-char@\n and @\t if disabled
-- 'Uncomment' command, removes comment strings from selected text
-- Bookmarks and history window in help viewer
-- context-sensitive edit modes - Buffer.getMode(int line) method. For example,
-  pressing C+e C+c will insert /* */ in an HTML SCRIPT tag, but <!-- --> in
-  normal HTML
+
+------- Probably not in 2.3 -------
+
 - Menu bar and tool bar loading needs to work outside of views
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
 - Enhanced printing:
   - print selection only
   - print line numbers option
-- Document EditBus in plugin development docs
 
-------- Installer to do -------
+------- Installer -------
 
 - Check version of existing 'simlaunch' program before overwriting
 - Store human-readable strings in a property file for easier localization
 - Bad file number I/O error - file descriptor leak somewhere?
+- Create a homepage for it

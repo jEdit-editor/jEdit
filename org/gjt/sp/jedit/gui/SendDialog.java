@@ -310,7 +310,7 @@ implements ActionListener, Runnable
 		Object source = evt.getSource();
 		if(source == send)
 			ok();
-		else if(source == send)
+		else if(source == cancel)
 			cancel();
 	}
 

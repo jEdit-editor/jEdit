@@ -1381,6 +1381,7 @@ public class jEdit
 		addAction("indent-on-enter");
 		addAction("indent-on-tab");
 		addAction("insert-char");
+		addAction("insert-literal");
 		addAction("join-lines");
 		addAction("load-session");
 		addAction("locate-bracket");
@@ -1689,6 +1690,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.175  1999/12/24 01:20:20  sp
+ * Bug fixing and other stuff for 2.3pre1
+ *
  * Revision 1.174  1999/12/20 08:38:43  sp
  * Abbrevs option pane
  *

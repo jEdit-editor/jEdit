@@ -43,11 +43,19 @@ public class ViewRegisters extends EnhancedDialog
 			if(reg == null)
 				continue;
 
+			String name;
+			if(i == '\n')
+				name = "\n";
+			else if(i == '\t')
+				name = "\t";
+			else
+				name = String.valueOf((char)i);
+
 			String value = reg.toString();
 			if(value == null)
 				continue;
 
-			strings.addElement((char)i + ": " + value);
+			strings.addElement(name + ": " + value);
 		}
 
 		JList registerList = new JList(strings);

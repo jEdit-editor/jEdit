@@ -1507,14 +1507,25 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    mode-specific ones only affect one particular edit mode.
   </para>
   <para>
+   There are two ways to expand an abbrev. Firstly,
    <guimenu>Edit</>&gt;<guimenuitem>Expand Abbreviation</> (keyboard
    shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>B</></keycombo>) will attempt to
+   <keycombo><keycap>Control</><keycap>X</></keycombo>) will attempt to
    expand the word before the caret. It will beep if no expansion could
-   be found. Also, if automatic abbreviation expansion is enabled, entering
+   be found. Secondly, if automatic abbreviation expansion is enabled, entering
    a non-alphanumeric character will automatically try to expand the word
    before the caret. This is a very powerful feature, but it takes some
    getting used to, hence it is disabled by default.
+  </para>
+  <para>
+   If automatic expansion
+   is enabled and you want to enter a non-alphanumeric character without
+   expanding the current word, prefix the character with
+   <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>V</></keycombo>. For example,
+   to enter a space without expanding the current word, you would type
+   <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>V</></keycombo> <keycap>Space</>.
   </para>
   <para>
    Abbreviations can be edited in the <guibutton>Abbreviations</> tab
@@ -2175,6 +2186,15 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     closing curly bracket (<quote>}</>), a level of indentation is
     removed.
    </para>
+   <para>
+    If you want to insert a literal tab or newline while indent on tab
+    or indent on enter is enabled, prefix the tab or newline with
+    <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>V</></keycombo>. For example,
+    to create a new line without any indentation, type
+    <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>V</></keycombo> <keycap>Enter</>.
+   </para>
   </sect2>
  </sect1>
  <sect1 id=commenting><title>Commenting Out Code</>
@@ -2748,8 +2768,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     <listitem><para>The maximum number of entires to store in a history list.
     History lists are used by the search and replace features to store
     previously entered search strings. They are also used to store previously
-    pasted strings. See <xref id=history>, <xref id=clipboard> and
-    <xref id=registers>.</para></listitem>
+    pasted strings. See <xref linkend=history>, <xref linkend=clipboard> and
+    <xref linkend=registers>.</para></listitem>
     <listitem><para>Number of backups to make when saving buffers - if this
     is set to <quote>0</>, no backups will be made at all. If set to
     <quote>1</>, only one backup will be made. Values higher than
@@ -3926,8 +3946,7 @@ implements OptionPane
      <listitem><para><command>\W</> matches any non-word (alphanumeric)
      character</></listitem>
      <listitem><para><command>\<replaceable>x</></command> matches the
-     character</></listitem>
-     <listitem><para><replaceable>x</>, if <replaceable>x</> is not one of the above
+     character <replaceable>x</>, if <replaceable>x</> is not one of the above
      listed escape sequences.</></listitem>
     </itemizedlist>
    </listitem>
@@ -4083,9 +4102,9 @@ implements OptionPane
   the new features be used. One that particularly
   impressed me was John Jensen's <application>TextEdit</>.
   It's most interesting feature was a plugin system; it could
-  load external JAR files to extend the editor. TextEdit got me into
-  text editors again. It was a neat idea, but TextEdit didn't take it far
-  enough; for example, plugins we limited to filtering the selected text,
+  load external JAR files to extend the editor.
+  It was a neat idea, but TextEdit didn't take it far
+  enough; for example, plugins were limited to filtering the selected text,
   and couldn't do much else.
  </para>
  <para>
@@ -4129,11 +4148,11 @@ implements OptionPane
  <bridgehead renderas=sect2>jEdit 1.0 and 1.1</>
  <para>
   In September 1998, after only about a month of development, jEdit 1.0 was
-  released. I labelled this version <quote>1.0</> because I never
+  released. At this time, I never
   intended it to be anything more than a trivial text editor.
   jEdit 1.1 was released approximately one month
   later, but it only added a few minor features, and was still rather
-  spartan.
+  limited.
  </para>
  <bridgehead renderas=sect2>jEdit 1.2</>
  <para>

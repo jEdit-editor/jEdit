@@ -127,9 +127,13 @@ public class SearchDialog extends EnhancedDialog
 	// EnhancedDialog implementation
 	public void ok()
 	{
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
 		save();
 		if(SearchAndReplace.find(view))
 			disposeOrKeepDialog();
+
+		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void cancel()
@@ -208,11 +212,15 @@ public class SearchDialog extends EnhancedDialog
 			}
 			else if(source == replaceAll)
 			{
+				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
 				save();
 				if(SearchAndReplace.replaceAll(view))
 					disposeOrKeepDialog();
 				else
 					getToolkit().beep();
+
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 			else if(source == multifileBtn)
 			{
@@ -232,6 +240,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  1999/12/24 01:20:20  sp
+ * Bug fixing and other stuff for 2.3pre1
+ *
  * Revision 1.5  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *

@@ -390,8 +390,22 @@ public abstract class InputHandler extends KeyAdapter
 		// resets the repeat count
 		ActionListener _grabAction = grabAction;
 		grabAction = null;
-		executeAction(_grabAction,evt.getSource(),
-			String.valueOf(evt.getKeyChar()));
+
+		char keyChar = evt.getKeyChar();
+		int keyCode = evt.getKeyCode();
+
+		String arg;
+
+		if(keyChar != KeyEvent.VK_UNDEFINED)
+			arg = String.valueOf(keyChar);
+		else if(keyCode == KeyEvent.VK_TAB)
+			arg = "\t";
+		else if(keyCode == KeyEvent.VK_ENTER)
+			arg = "\n";
+		else
+			arg = "\0";
+
+		executeAction(_grabAction,evt.getSource(),arg);
 	}
 
 	/**
@@ -1099,6 +1113,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  1999/12/24 01:20:20  sp
+ * Bug fixing and other stuff for 2.3pre1
+ *
  * Revision 1.15  1999/12/19 11:14:29  sp
  * Static abbrev expansion started
  *

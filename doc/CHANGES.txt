@@ -8,13 +8,15 @@ JEDIT VERSION HISTORY
   - Expand current word by pressing C+e C+b, or entering a non-alphanumeric
     character
   - Abbreviations can be edited in File->Global Options->Abbreviations
+  - To insert a character without expanding the current word, type
+    C+e C+v <character>. C+e C+v can also be used to insert a literal tab
+    or enter if indent on tab or indent on enter is enabled
 - Buttons added to tool bar for changing ignore case, regexp, multifile search
   options
 
 + Enhancements
 
-- 'Expand Abbreviation' renamed to 'Complete Word' -- old name was a bit
-  confusing
+- 'Expand Abbreviation' renamed to 'Complete Word'
 - Pressing '}' now only reindents the line in C derived modes (C++, Java, etc)
 - Changes to the key bindings take effect immediately; no need to restart
 - Shortcuts option pane split into 'command shortcuts' and 'macro
@@ -27,6 +29,8 @@ JEDIT VERSION HISTORY
 - The cursor no longer jumps to the end of the buffer when reload-all is
   invoked
 - Documentation updates
+- The wait cursor is now shown in the search&replace dialog box when
+  doing a 'replace all'
 
 + Bug Fixes
 
@@ -38,6 +42,7 @@ JEDIT VERSION HISTORY
 - The NEW_FILE flag wasn't set for new files until an attempt was made
   to load them from disk, this caused problems with BufferTabs, etc
   (since 2.2pre8)
+- The 'Cancel' button in the send dialog did nothing (since 2.2pre6)
 
 * Version 2.2final
 

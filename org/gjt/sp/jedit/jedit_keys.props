@@ -98,6 +98,7 @@ exit.shortcut=C+e C+q
 open-selection.shortcut=C+e C+s
 tab.shortcut=C+e C+t
 untab.shortcut=C+e C+u
+insert-literal.shortcut=C+e C+v
 close-view.shortcut=C+e C+w
 redo.shortcut=C+e C+z
 expand-abbrev.shortcut=C+e C+x
