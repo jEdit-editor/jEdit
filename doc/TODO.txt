@@ -14,6 +14,13 @@ JEDIT TO DO
   - how to write text area and gutter hilites
 - Mode editor
 - Piece content
+- Maybe cursor beyond EOL?
+- Buffer tabs:
+  - trunicate long file names (should be configurable)
+  - customizable font size?
+- Customizable undo queue size
+- 'input' action: eg: 'input@a@Enter your name:' would store the user's
+  input in register 'a', or clear it if they clicked 'Cancel'
 
 Later:
 
@@ -24,6 +31,8 @@ Later:
 - Files should be opened and saved in a background thread. HyperSearch should
   be threaded as well
 - i18n support - bidi, input methods, localizable GUI, etc
+- Pluggable 'Storage' interfaces. We could have 'FTPStorage',
+  'FileStorage', 'URLStorage', 'SSHStorage', 'ZIPStorage', 'CVSStorage', etc
 
 When we switch to Java 2:
 - drag and drop

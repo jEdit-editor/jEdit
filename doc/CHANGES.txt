@@ -1,5 +1,16 @@
 JEDIT VERSION HISTORY
 
+* Version 2.4final
+
++ Enhancements
+
+- The text area should now retain focus when switching windows
+
++ Bug Fixes
+
+- Context menus were not added to newly created text areas when splitting
+  (since 2.4pre7)
+
 * Version 2.4pre7
 
 + New Features

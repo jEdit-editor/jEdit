@@ -472,6 +472,7 @@ public class View extends JFrame implements EBComponent
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
+		addFocusListener(new FocusHandler());
 	}
 
 	void close()
@@ -799,6 +800,10 @@ public class View extends JFrame implements EBComponent
 		textArea.setElectricScroll(copy.getElectricScroll());
 
 		myPainter.setStyles(painter.getStyles());
+
+		// Set up the right-click popup menu
+		textArea.setRightClickPopup(GUIUtilities
+			.loadPopupMenu(this,"view.context"));
 	}
 
 	private void loadToolBars()
@@ -1245,15 +1250,33 @@ public class View extends JFrame implements EBComponent
 
 	class FocusHandler implements FocusListener
 	{
+		boolean searchBarHasFocus;
+
 		public void focusGained(FocusEvent evt)
 		{
-			textArea = (JEditTextArea)evt.getSource();
+			if(evt.getSource() instanceof View)
+			{
+				if(searchBarHasFocus)
+					searchBar.getField().requestFocus();
+				else
+					textArea.requestFocus();
+			}
+			else
+				textArea = (JEditTextArea)evt.getSource();
+
 			if(checkModStatus)
 				buffer.checkModTime(View.this);
 		}
 
 		public void focusLost(FocusEvent evt)
 		{
+			if(evt.getSource() instanceof View)
+			{
+				if(searchBar != null)
+					searchBarHasFocus = (searchBar.getField().hasFocus());
+				else
+					searchBarHasFocus = false;
+			}
 		}
 	}
 
@@ -1366,6 +1389,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.159  2000/04/21 05:32:20  sp
+ * Focus tweak
+ *
  * Revision 1.158  2000/04/18 08:27:52  sp
  * Context menu editor started
  *

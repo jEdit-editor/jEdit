@@ -50,6 +50,8 @@ class EditServer extends Thread
 
 			Log.log(Log.DEBUG,this,"jEdit server started on port "
 				+ socket.getLocalPort());
+			Log.log(Log.DEBUG,this,"Authorization key is "
+				+ authKey);
 		}
 		catch(IOException io)
 		{
@@ -265,6 +267,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/04/21 05:32:20  sp
+ * Focus tweak
+ *
  * Revision 1.9  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes
