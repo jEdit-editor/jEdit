@@ -1,7 +1,5 @@
 JEDIT TO DO
 
-CVS: Abbrevs.java, default.abbrevs, insert-char in actions package
-
 ------- Stuff for 2.3pre1 -------
 
 + Cleanups / Fixes
@@ -10,8 +8,10 @@ CVS: Abbrevs.java, default.abbrevs, insert-char in actions package
 
 + Features
 
-- [REMIND]: before releasing pre1, disable abbrevs by default as not to
+- Before releasing pre1, disable abbrevs by default as not to
   confuse users
+
+- Better ignore case/regexp/multifile options icons
 
 - Edit abbrevs in global options
 

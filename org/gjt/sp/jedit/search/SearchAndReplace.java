@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.search;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.JOptionPane;
+import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -42,6 +43,8 @@ public class SearchAndReplace
 	{
 		SearchAndReplace.search = search;
 		matcher = null;
+
+		EditBus.send(new SearchSettingsChanged(null));
 	}
 
 	/**
@@ -60,6 +63,8 @@ public class SearchAndReplace
 	{
 		SearchAndReplace.replace = replace;
 		matcher = null;
+
+		EditBus.send(new SearchSettingsChanged(null));
 	}
 
 	/**
@@ -79,6 +84,8 @@ public class SearchAndReplace
 	{
 		SearchAndReplace.ignoreCase = ignoreCase;
 		matcher = null;
+
+		EditBus.send(new SearchSettingsChanged(null));
 	}
 
 	/**
@@ -100,6 +107,8 @@ public class SearchAndReplace
 	{
 		SearchAndReplace.regexp = regexp;
 		matcher = null;
+
+		EditBus.send(new SearchSettingsChanged(null));
 	}
 
 	/**
@@ -120,6 +129,8 @@ public class SearchAndReplace
 	public static void setSearchMatcher(SearchMatcher matcher)
 	{
 		SearchAndReplace.matcher = matcher;
+
+		EditBus.send(new SearchSettingsChanged(null));
 	}
 
 	/**
@@ -137,9 +148,11 @@ public class SearchAndReplace
 			return null;
 
 		if(regexp)
-			return new RESearchMatcher(search,replace,ignoreCase);
+			matcher = new RESearchMatcher(search,replace,ignoreCase);
 		else
-			return new LiteralSearchMatcher(search,replace,ignoreCase);
+			matcher = new LiteralSearchMatcher(search,replace,ignoreCase);
+
+		return matcher;
 	}
 
 	/**
@@ -149,6 +162,8 @@ public class SearchAndReplace
 	public static void setSearchFileSet(SearchFileSet fileset)
 	{
 		SearchAndReplace.fileset = fileset;
+
+		EditBus.send(new SearchSettingsChanged(null));
 	}
 
 	/**
@@ -498,6 +513,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  1999/12/20 06:05:27  sp
+ * Search settings buttons on tool bar, static abbrevs
+ *
  * Revision 1.22  1999/12/10 03:22:47  sp
  * Bug fixes, old loading code is now used again
  *

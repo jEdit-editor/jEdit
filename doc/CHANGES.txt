@@ -13,6 +13,8 @@ JEDIT VERSION HISTORY
 - View status bar code improvements
 - New methods in MiscUtilities class: charsToEscapes() and escapesToChars()
 - Cancelling a 'save as' when exiting from jEdit now aborts the exit
+- Regexps are only longer compiled once in a multifile search; this should
+  make things faster when regexps are enabled
 
 + Bug Fixes
 

@@ -33,4 +33,10 @@ public class multifile_search extends EditAction
 		if(fileset != null)
 			SearchAndReplace.setSearchFileSet(fileset);
 	}
+
+	public boolean isSelected(java.awt.Component comp)
+	{
+		return !(SearchAndReplace.getSearchFileSet() instanceof
+			CurrentBufferSet);
+	}
 }

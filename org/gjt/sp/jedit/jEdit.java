@@ -1379,6 +1379,7 @@ public class jEdit
 		addAction("help");
 		addAction("hypersearch");
 		addAction("hypersearch-selection");
+		addAction("ignore-case");
 		addAction("indent-line");
 		addAction("indent-on-enter");
 		addAction("indent-on-tab");
@@ -1413,6 +1414,7 @@ public class jEdit
 		addAction("redo");
 		addAction("reload");
 		addAction("reload-all");
+		addAction("regexp");
 		addAction("replace-all");
 		addAction("replace-in-selection");
 		addAction("rescan-macros");
@@ -1690,6 +1692,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.173  1999/12/20 06:05:26  sp
+ * Search settings buttons on tool bar, static abbrevs
+ *
  * Revision 1.172  1999/12/19 11:14:28  sp
  * Static abbrev expansion started
  *

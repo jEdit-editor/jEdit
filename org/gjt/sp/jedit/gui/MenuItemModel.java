@@ -89,16 +89,7 @@ public class MenuItemModel
 
 	public JButton createButton()
 	{
-		JButton button = new JButton(icon);
-		Insets zeroInsets = new Insets(0,0,0,0);
-		button.setMargin(zeroInsets);
-		button.setRequestFocusEnabled(false);
-
-		button.setToolTipText(toolTip);
-
-		button.addActionListener(action);
-		button.setActionCommand(arg);
-		return button;
+		return new EnhancedButton(icon,toolTip,action,arg);
 	}
 
 	// protected members

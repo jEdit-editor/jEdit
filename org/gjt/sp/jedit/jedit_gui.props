@@ -34,6 +34,9 @@ cut.icon=Cut.gif
 copy.icon=Copy.gif
 paste.icon=Paste.gif
 help.icon=Help.gif
+ignore-case.icon=IgnoreCase.gif
+regexp.icon=Regexp.gif
+multifile-search.icon=Folder.gif
 
 view.quicksearch=Find:\ 
 
@@ -252,6 +255,9 @@ search=find \
        hypersearch \
        hypersearch-selection \
        - \
+# Will add these when isToggle() for built-in actions supported
+#      ignore-case \
+#      regexp \
        multifile-search \
        - \
        set-marker \
@@ -266,6 +272,8 @@ replace-in-selection.label=$Replace in Selection
 replace-all.label=Replace $All
 hypersearch.label=$HyperSearch...
 hypersearch-selection.label=HyperSearch for Se$lection...
+ignore-case.label=I$gnore Case
+regexp.label=Regu$lar Expressions
 multifile-search.label=M$ultifile Search Settings...
 set-marker.label=Set $Marker...
 clear-marker.label=Clear Marker

@@ -547,6 +547,12 @@ public class View extends JFrame implements EBComponent
 			propertiesChanged();
 		else if(msg instanceof MacrosChanged)
 			updateMacrosMenu();
+		else if(msg instanceof SearchSettingsChanged)
+		{
+			ignoreCase.repaint();
+			regexp.repaint();
+			multifile.repaint();
+		}
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
 	}
@@ -651,6 +657,13 @@ public class View extends JFrame implements EBComponent
 	private Box toolBars;
 	private JToolBar toolBar;
 	private HistoryTextField quicksearch;
+
+	// we need to keep these instances so that we can call repaint()
+	// when search & replace settings change
+	private JButton ignoreCase;
+	private JButton regexp;
+	private JButton multifile;
+
 	private JEditTextArea textArea;
 	private StatusBar status;
 
@@ -703,6 +716,12 @@ public class View extends JFrame implements EBComponent
 				box.add(quicksearch);
 				box.add(Box.createVerticalGlue());
 				toolBar.add(box);
+				toolBar.add(ignoreCase = GUIUtilities.loadToolButton(
+					"ignore-case"));
+				toolBar.add(regexp = GUIUtilities.loadToolButton(
+					"regexp"));
+				toolBar.add(multifile = GUIUtilities.loadToolButton(
+					"multifile-search"));
 			}
 			if(toolBar.getParent() == null)
 				addToolBar(toolBar);
@@ -924,6 +943,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.117  1999/12/20 06:05:26  sp
+ * Search settings buttons on tool bar, static abbrevs
+ *
  * Revision 1.116  1999/12/19 11:14:28  sp
  * Static abbrev expansion started
  *
