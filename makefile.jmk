@@ -62,6 +62,7 @@ jedit_pkgs = "com/microstar/xml"
 
 jedit_srcs = (subst ".java", ".class", (glob (join jedit_pkgs, "/*.java")));
 jedit_mf = (cat jedit_pkg "/jedit.manifest");
+doc_pgks = (subst "/", ".", jedit_pkgs);
 
 bsh_pkgs = "bsh" "bsh/lib" "bsh/commands";
 bsh_srcs = (subst ".java", ".class", (glob (join bsh_pkgs, "/*.java")));
@@ -88,6 +89,7 @@ jar = "jedit.jar";
         "org/gjt/sp/jedit/default.abbrevs"
         "org/gjt/sp/jedit/actions.xml"
         "org/gjt/sp/jedit/actions.dtd"
+        "org/gjt/sp/jedit/catalog.dtd"
         "org/gjt/sp/jedit/xmode.dtd"
 	"bsh/lib/defaultImports"
 	"bsh/lib/javaPackages");
@@ -101,7 +103,7 @@ jar = "jedit.jar";
 "javadoc":;
 {
     -mkdir "doc/api";
-    exec "javadoc" "-d" "doc/api" jedit_pkgs;
+      exec "javadoc" "-d" "doc/api" doc_pgks;
 }
 
 ".PHONY": "all" "javadoc" "everything";

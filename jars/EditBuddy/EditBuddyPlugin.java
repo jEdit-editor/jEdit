@@ -97,6 +97,5 @@ public class EditBuddyPlugin extends EBPlugin
 			jEdit.resetProperty(action + ".icon");
 		}
 		jEdit.resetProperty("view.toolbar");
-		GUIUtilities.invalidateMenuModels();
 	}
 }

@@ -1,3 +1,31 @@
-// Inserts the current date at the caret position
-import java.util.Date;
-textArea.setSelectedText(new Date().toString());
+// Inserts the current date and Internet Time at the caret position
+// "Internet Time" is a new and easy way to measure time across the world
+// To find more "Internet Time"-related information go to
+// http://www.swatch.com/alu_beat/fs_itime.html
+
+// Wed Jan 31 03:12:33 AKST 2001 @550 /Internet Time/
+
+import java.util.*;
+
+Calendar rightNow = Calendar.getInstance();
+
+// zone offset with daylight savings
+int zoffset = (rightNow.get(Calendar.ZONE_OFFSET) +
+			rightNow.get(Calendar.DST_OFFSET)) / 60000;
+
+// parsing current hour, minute and second
+double h = rightNow.get(Calendar.HOUR_OF_DAY);
+double m = rightNow.get(Calendar.MINUTE);
+double s = rightNow.get(Calendar.SECOND);
+
+// calculating internet time
+double swatch = Math.floor
+                ((h * 3600 + ((m - zoffset + 60) * 60) + s) * 1000 / 86400);
+if (swatch >= 1000)
+	swatch -= 1000;
+else if (swatch < 0)
+	swatch += 1000;
+	
+// inserting date and internet time to textarea
+textArea.setSelectedText(Calendar.getInstance().getTime().toString() + " @" +
+                           (int)swatch + " /Internet Time/");

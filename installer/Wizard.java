@@ -27,15 +27,11 @@ import java.awt.*;
  * An abstract class that steps the user through a set of pages. Used by
  * SwingInstall.
  */
-public abstract class Wizard extends JComponent
+public abstract class Wizard extends JPanel
 {
-	public Wizard(Color highlight, Icon logo, String cancelButtonLabel,
-		String prevButtonLabel, String nextButtonLabel,
-		String finishButtonLabel)
+	public Wizard(String cancelButtonLabel, String prevButtonLabel,
+		String nextButtonLabel, String finishButtonLabel)
 	{
-		this.highlight = highlight;
-		this.logo = logo;
-
 		ActionHandler actionHandler = new ActionHandler();
 
 		cancelButton = new JButton(cancelButtonLabel);
@@ -67,33 +63,11 @@ public abstract class Wizard extends JComponent
 		pageChanged();
 	}
 
-	public void paintComponent(Graphics g)
-	{
-		int topBorder = logo.getIconHeight() + PADDING * 2;
-		int sideBorder = PADDING * 2;
-		int bottomBorder = cancelButton.getPreferredSize().height + PADDING * 2;
-
-		g.setColor(highlight);
-		g.fillRect(0,0,getWidth(),getHeight());
-
-		logo.paintIcon(this,g,sideBorder + (getWidth() - PADDING * 4
-			- logo.getIconWidth()) / 2,PADDING);
-
-		int width = getWidth() - sideBorder * 2;
-		int height = getHeight() - topBorder - bottomBorder;
-
-		g.setColor(getBackground());
-		g.fillRoundRect(sideBorder,topBorder,width,height,
-			PADDING * 2,PADDING * 2);
-	}
-
 	// protected members
 	protected abstract void cancelCallback();
 	protected abstract void finishCallback();
 
 	// private members
-	private Color highlight;
-	private Icon logo;
 	private JButton cancelButton;
 	private JButton prevButton;
 	private JButton nextButton;
@@ -160,33 +134,14 @@ public abstract class Wizard extends JComponent
 				dim.height = Math.max(_dim.height,dim.height);
 			}
 
-			dim.width = Math.max(logo.getIconWidth()
-				- PADDING * 2,dim.width);
-
-			dim.width += PADDING * 6;
-			dim.height += (logo.getIconHeight() + cancelButton
-				.getPreferredSize().height + PADDING * 6);
+			dim.width += PADDING * 2;
+			dim.height += PADDING * 2;
 			return dim;
 		}
 
 		public Dimension minimumLayoutSize(Container parent)
 		{
-			Dimension dim = new Dimension();
-
-			for(int i = 0; i < pages.length; i++)
-			{
-				Dimension _dim = pages[i].getMinimumSize();
-				dim.width = Math.max(_dim.width,dim.width);
-				dim.height = Math.max(_dim.height,dim.height);
-			}
-
-			dim.width = Math.max(logo.getIconWidth()
-				- PADDING * 2,dim.width);
-
-			dim.width += PADDING * 6;
-			dim.height += (logo.getIconHeight() + cancelButton
-				.getPreferredSize().height + PADDING * 6);
-			return dim;
+			return preferredLayoutSize(parent);
 		}
 
 		public void layoutContainer(Container parent)
@@ -198,30 +153,28 @@ public abstract class Wizard extends JComponent
 			buttonSize.width = Math.max(buttonSize.width,prevButton.getPreferredSize().width);
 			buttonSize.width = Math.max(buttonSize.width,nextButton.getPreferredSize().width);
 
-			int topBorder = logo.getIconHeight() + PADDING * 2;
-			int sideBorder = PADDING * 2;
-			int bottomBorder = buttonSize.height + PADDING * 2;
+			int bottomBorder = buttonSize.height + PADDING;
 
 			// cancel button goes on far left
-			cancelButton.setBounds(sideBorder,size.height - buttonSize.height
+			cancelButton.setBounds(PADDING,size.height - buttonSize.height
 				- PADDING,buttonSize.width,buttonSize.height);
 
 			// prev and next buttons are on the right
-			prevButton.setBounds(size.width - buttonSize.width * 2 - 6 - sideBorder,
+			prevButton.setBounds(size.width - buttonSize.width * 2 - 6 - PADDING,
 				size.height - buttonSize.height - PADDING,
 				buttonSize.width,buttonSize.height);
 
-			nextButton.setBounds(size.width - buttonSize.width - sideBorder,
+			nextButton.setBounds(size.width - buttonSize.width - PADDING,
 				size.height - buttonSize.height - PADDING,
 				buttonSize.width,buttonSize.height);
 
 			// calculate size for current page
 			Rectangle currentPageBounds = new Rectangle();
-			currentPageBounds.x = PADDING * 3;
-			currentPageBounds.y = topBorder + PADDING;
-			currentPageBounds.width = size.width - PADDING * 6;
-			currentPageBounds.height = size.height - topBorder
-				- bottomBorder - PADDING * 2;
+			currentPageBounds.x = PADDING;
+			currentPageBounds.y = PADDING;
+			currentPageBounds.width = size.width - PADDING * 2;
+			currentPageBounds.height = size.height - PADDING
+				- bottomBorder - PADDING;
 
 			for(int i = 0; i < pages.length; i++)
 			{

@@ -1,5 +1,5 @@
 /*
- *  gnu/regexp/CharIndexedReader.java
+ *  gnu/regexp/CharIndexedInputStream.java
  *  Copyright (C) 1998 Wes Biggs
  *
  *  This library is free software; you can redistribute it and/or modify

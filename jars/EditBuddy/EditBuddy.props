@@ -1,9 +1,9 @@
 ### plugin properties
 plugin.EditBuddyPlugin.name=Edit Buddy
 plugin.EditBuddyPlugin.author=Slava Pestov
-plugin.EditBuddyPlugin.version=0.3
+plugin.EditBuddyPlugin.version=0.3.1
 plugin.EditBuddyPlugin.docs=EditBuddy.html
-plugin.EditBuddyPlugin.depend.0=jedit 02.07.03.00
+plugin.EditBuddyPlugin.depend.0=jedit 03.01.01.00
 
 ### First time dialog box
 welcome.title=Welcome to jEdit

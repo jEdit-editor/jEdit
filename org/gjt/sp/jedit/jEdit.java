@@ -483,7 +483,7 @@ public class jEdit
 		 * - if default equals value, ignore
 		 * - if default doesn't equal value, set user
 		 */
-		if(value == null)
+		if(value == null || value.length() == 0)
 		{
 			String prop = (String)defaultProps.get(name);
 			if(prop == null || prop.length() == 0)

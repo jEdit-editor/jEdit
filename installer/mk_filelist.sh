@@ -12,6 +12,7 @@ echo jars/LatestVersion.jar >> installer/jedit-program
 echo jars/EditBuddy.jar >> installer/jedit-program
 echo site-props/*.props >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
+echo modes/catalog >> installer/jedit-program
 find doc -type f -name \*.txt >> installer/jedit-program
 find macros -name \*.bsh >> installer/jedit-program
 

@@ -100,7 +100,7 @@ public abstract class OperatingSystem
 			FileWriter out = new FileWriter(script);
 			out.write("#!/bin/sh\n");
 			out.write("# Java heap size, in megabytes (see doc/README.txt)\n");
-			out.write("JAVA_HEAP_SIZE=16\n");
+			out.write("JAVA_HEAP_SIZE=32\n");
 			out.write("exec "
 				+ System.getProperty("java.home")
 				+ "/bin/java -mx${JAVA_HEAP_SIZE}m ${"
@@ -166,7 +166,7 @@ public abstract class OperatingSystem
 
 			FileWriter out = new FileWriter(script);
 			out.write("rem Java heap size, in megabytes (see doc/README.txt)\r\n");
-			out.write("@set JAVA_HEAP_SIZE=16\r\n");
+			out.write("@set JAVA_HEAP_SIZE=32\r\n");
 			out.write("\"" + System.getProperty("java.home")
 				+ "\\bin\\java\" -mx%JAVA_HEAP_SIZE%m"
 				+ " -classpath \"%CLASSPATH%;"
