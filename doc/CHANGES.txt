@@ -8,6 +8,11 @@ JEDIT 3.0 VERSION HISTORY
 - The bracket matching code now only checks syntax tokens of the same type
   as the bracket for matches. As a result, string literals and comments
   containing brackets should no longer cause problems
+- New 'EditBuddy' plugin, included in the jEdit distribution, displays
+  'initial setup' and 'new version' wizards when jEdit is first run and
+  when a new version is installed, respectively. These wizards help you
+  configure firewall settings, install and update plugins, view the
+  change log, and other such stuff.
 
 + Enhancements
 
@@ -19,6 +24,8 @@ JEDIT 3.0 VERSION HISTORY
   the Buffers menu
 - Registers and markers are now highlighted using different colors in the
   gutter
+- The plugin manager now deletes files for real when removing and upgrading
+  plugins; previously, it shoved them in a 'backup' directory
 
 + Incompatibilities
 
@@ -38,3 +45,5 @@ JEDIT 3.0 VERSION HISTORY
   findMatchingBracket(SyntaxDocument doc, int line, int offset)
 - Return type of TokenMarker.markTokens() changed from Token to
   TokenMarker.LineInfo
+- EditActions can now be invoked without a view (of course the action
+  will still fail if it calls EditAction.getView())

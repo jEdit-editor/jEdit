@@ -235,8 +235,19 @@ public abstract class EditAction implements ActionListener
 
 			View view = EditAction.getView(evt);
 
-			view.getInputHandler().executeAction(action,
-				view.getTextArea(),evt.getActionCommand());
+			if(view == null)
+			{
+				// Only EditBuddy should be doing this.
+				// just invoke the action directly.
+				action.actionPerformed(evt);
+			}
+			else
+			{
+				// Let input handler do recording, repeating,
+				// etc.
+				view.getInputHandler().executeAction(action,
+					view.getTextArea(),evt.getActionCommand());
+			}
 		}
 
 		/**
@@ -305,6 +316,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/07/15 02:45:22  sp
+ * Minor changes to core for EditBuddy plugin
+ *
  * Revision 1.25  2000/04/28 09:29:11  sp
  * Key binding handling improved, VFS updates, some other stuff
  *
@@ -331,14 +345,5 @@ public abstract class EditAction implements ActionListener
  *
  * Revision 1.17  1999/12/06 00:06:14  sp
  * Bug fixes
- *
- * Revision 1.16  1999/11/28 00:33:06  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
- *
- * Revision 1.15  1999/11/27 06:01:20  sp
- * Faster file loading, geometry fix
- *
- * Revision 1.14  1999/11/07 06:51:43  sp
- * Check box menu items supported
  *
  */
