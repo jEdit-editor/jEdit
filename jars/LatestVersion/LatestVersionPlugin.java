@@ -18,22 +18,22 @@
  */
 
 import javax.swing.JOptionPane;
+import java.util.Vector;
 import org.gjt.sp.jedit.event.*;
 import org.gjt.sp.jedit.*;
 
-public class LatestVersionPlugin implements Plugin
+public class LatestVersionPlugin extends EditPlugin
 {
 	public void start()
 	{
 		jEdit.addAction(new version_check_settings());
 		jEdit.addAction(new version_check_now());
-		jEdit.addPluginMenu("version-check.menu");
-
 		jEdit.addEditorListener(new EditorHandler());
 	}
 
-	public void stop()
+	public void createMenuItems(View view, Vector menus, Vector menuItems)
 	{
+		menus.addElement(GUIUtilities.loadMenu(view,"version-check.menu"));
 	}
 
 	public static void doVersionCheckConfirm(View view)

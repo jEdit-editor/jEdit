@@ -1,0 +1,27 @@
+# A plugin makefile
+#
+# To recompile this plugin, start jmk in the plugin's source directory.
+#
+# jEdit buffer-local properties:
+# :mode=makefile:tabSize=4:noTabs=yes:
+# :indentOpenBrackets={:indentCloseBrackets=}:
+
+cmd_javac = "javac";
+cmd_jar = "jar";
+
+srcs = (subst ".java", ".class", (glob "*.java"));
+jar = "../LatestVersion.jar";
+
+"all": jar;
+
+"%.class" : "%.java";
+{
+    exec cmd_javac <;
+}
+
+jar: srcs;
+{
+    exec cmd_jar "cfM0" @ (glob "*.class" "*.gif" "*.html" "*.props");
+}
+
+".PHONY": "all";

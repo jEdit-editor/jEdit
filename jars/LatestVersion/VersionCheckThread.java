@@ -31,7 +31,6 @@ public class VersionCheckThread extends Thread
 
 	public void run()
 	{
-		System.out.println("Starting version check");
 		try
 		{
 			URL url = new URL(jEdit.getProperty("version-check.url"));
@@ -72,15 +71,12 @@ public class VersionCheckThread extends Thread
 
 			jEdit.setProperty("version-check.last-time",String.valueOf(
 				System.currentTimeMillis()));
-
-			System.out.println("Version check successful");
 		}
 		catch(Exception e)
 		{
 			System.out.println("Error with version check: "
 				+ e.toString());
 		}
-				
 	}
 
 	// private members

@@ -1,10 +1,10 @@
 plugin.LatestVersionPlugin.name=Latest Version Check
 plugin.LatestVersionPlugin.author=Slava Pestov
-plugin.LatestVersionPlugin.version=1.1
+plugin.LatestVersionPlugin.version=1.1.1
 plugin.LatestVersionPlugin.docs=index.html
 
 plugin.LatestVersionPlugin.depend.0=jdk 1.1
-plugin.LatestVersionPlugin.depend.1=jedit 02.00.99.00
+plugin.LatestVersionPlugin.depend.1=jedit 02.01.01.00
 
 version-check.menu=version-check-now version-check-settings
 version-check.menu.label=Automatic Release Notification
@@ -38,5 +38,5 @@ version-check.new-version.message=\
 	Automatic release notification can be disabled with\n\
 	Plugins->Automatic Release Notification->Enable/Disable Notification.
 
-version-check.url=http://www.geocities.com/SiliconValley/Heights/7925/jEdit-version.txt
+version-check.url=http://www.geocities.com/slava_pestov/jEdit-version.txt
 version-check.interval=7
