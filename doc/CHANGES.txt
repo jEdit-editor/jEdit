@@ -1,5 +1,28 @@
 JEDIT 2.7 VERSION HISTORY
 
+* Version 2.7pre3
+
++ Enhancements
+
+- Search and replace changes:
+  - Search and replace and HyperSearch dialog boxes merged into one;
+    HyperSearch feature can be enabled by selecting the 'Batch' radio button.
+  - Multiple file search settings are accessable directly from search and
+    replace dialog box
+  - HyperSearch results are displayed in a dockable window
+  - HyperSearch can be performed from the search bar, too
+  - Multiple file search can no longer be done from the search bar
+- Much faster bracket highlighting
+
++ Bug Fixes
+
+- HyperSearch.java didn't compile
+- CS+LEFT selected the previous paragraph, not the previous word as
+  intended
+- Disabling the search bar caused problems
+- Word wrap would wrap the line of the text was on the wrap column; it
+  should've only wrapped it if was beyond the wrap column
+
 * Version 2.7pre2
 
 + New Features

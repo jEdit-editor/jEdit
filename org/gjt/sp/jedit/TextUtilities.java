@@ -43,6 +43,30 @@ public class TextUtilities
 	public static int findMatchingBracket(Buffer buffer, int line, int offset)
 		throws BadLocationException
 	{
+		return findMatchingBracket(buffer,line,offset,0,
+			buffer.getDefaultRootElement().getElementCount());
+	}
+
+	/**
+	 * Returns the offset of the bracket matching the one at the
+	 * specified offset of the buffer, or -1 if the bracket is
+	 * unmatched (or if the character is not a bracket).
+	 * @param buffer The buffer
+	 * @param line The line
+	 * @param offset The offset within that line
+	 * @param startLine The first line to scan. This is used to speed up
+	 * on-screen bracket matching because only visible lines need to be
+	 * scanned
+	 * @param endLine The last line to scan. This is used to speed up
+	 * on-screen bracket matching because only visible lines need to be
+	 * scanned
+	 * @exception BadLocationException If an out-of-bounds access
+	 * was attempted on the buffer's text
+	 * @since jEdit 2.7pre3
+	 */
+	public static int findMatchingBracket(Buffer buffer, int line, int offset,
+		int startLine, int endLine) throws BadLocationException
+	{
 		if(buffer.getLength() == 0)
 			return -1;
 
@@ -104,7 +128,7 @@ public class TextUtilities
 
 			count = 0;
 
-			for(int i = line; i >= 0; i--)
+			for(int i = line; i >= startLine; i--)
 			{
 				// get text
 				lineElement = map.getElement(i);
@@ -186,7 +210,7 @@ public class TextUtilities
 
 			count = 0;
 
-			for(int i = line; i < map.getElementCount(); i++)
+			for(int i = line; i < endLine; i++)
 			{
 				// get text
 				lineElement = map.getElement(i);
@@ -507,6 +531,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/11/23 08:34:10  sp
+ * Search and replace UI improvements
+ *
  * Revision 1.5  2000/11/13 11:19:26  sp
  * Search bar reintroduced, more BeanShell stuff
  *

@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.gui;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.msg.CreateDockableWindow;
+import org.gjt.sp.jedit.search.BatchSearchResults;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import javax.swing.*;
@@ -100,6 +101,13 @@ public class DockableWindowManager extends JPanel
 					addDockableWindow(name);
 			}
 		}
+
+		// do this after adding dockables because addDockableWindow()
+		// sets 'collapsed' to false
+		top.setCollapsed(jEdit.getBooleanProperty("view.dock.top.collapsed"));
+		left.setCollapsed(jEdit.getBooleanProperty("view.dock.left.collapsed"));
+		bottom.setCollapsed(jEdit.getBooleanProperty("view.dock.bottom.collapsed"));
+		right.setCollapsed(jEdit.getBooleanProperty("view.dock.right.collapsed"));
 	}
 
 	/**
@@ -385,6 +393,7 @@ public class DockableWindowManager extends JPanel
 	{
 		EditBus.addToBus(new DefaultFactory());
 		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"vfs.browser");
+		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"batch-search-results");
 	}
 
 	static class Entry
@@ -417,39 +426,12 @@ public class DockableWindowManager extends JPanel
 					cmsg.setDockableWindow(new VFSBrowser(
 						cmsg.getView(),null));
 				}
+				else if(name.equals("batch-search-results"))
+				{
+					cmsg.setDockableWindow(new BatchSearchResults(
+						cmsg.getView()));
+				}
 			}
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.9  2000/11/19 07:51:25  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.8  2000/11/12 05:36:49  sp
- * BeanShell integration started
- *
- * Revision 1.7  2000/11/05 05:25:46  sp
- * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
- *
- * Revision 1.6  2000/11/02 09:19:33  sp
- * more features
- *
- * Revision 1.5  2000/08/31 02:54:00  sp
- * Improved activity log, bug fixes
- *
- * Revision 1.4  2000/08/29 07:47:12  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.3  2000/08/19 08:26:27  sp
- * More docking API tweaks
- *
- * Revision 1.2  2000/08/17 08:04:10  sp
- * Marker loading bug fixed, docking option pane
- *
- * Revision 1.1  2000/08/13 07:35:24  sp
- * Dockable window API
- *
- */

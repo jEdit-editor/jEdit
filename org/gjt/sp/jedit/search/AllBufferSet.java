@@ -1,6 +1,6 @@
 /*
  * AllBufferSet.java - All buffer matcher
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,90 +19,65 @@
 
 package org.gjt.sp.jedit.search;
 
+import gnu.regexp.*;
+import java.util.Vector;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * A file set for searching all open buffers.
  * @author Slava Pestov
  * @version $Id$
  */
-public class AllBufferSet implements SearchFileSet
+public class AllBufferSet extends BufferListSet
 {
 	/**
-	 * Returns the first buffer to search.
-	 * @param view The view performing the search
+	 * Creates a new all buffer set.
+	 * @param glob The filename glob
+	 * @since jEdit 2.7pre3
 	 */
-	public Buffer getFirstBuffer(View view)
+	public AllBufferSet(String glob)
 	{
-		return jEdit.getFirstBuffer();
+		super(listFiles(glob));
+
+		this.glob = glob;
 	}
 
 	/**
-	 * Returns the next buffer to search.
-	 * @param view The view performing the search
-	 * @param buffer The last buffer searched
+	 * Returns the filename filter.
+	 * @since jEdit 2.7pre3
 	 */
-	public Buffer getNextBuffer(View view, Buffer buffer)
+	public String getFileFilter()
 	{
-		if(buffer == null)
-			return view.getBuffer();
-		else
+		return glob;
+	}
+
+	// private members
+	private String glob;
+
+	private static Vector listFiles(String glob)
+	{
+		Buffer[] buffers = jEdit.getBuffers();
+		Vector vector = new Vector(buffers.length);
+
+		RE filter;
+		try
 		{
-			Buffer buf = jEdit.getFirstBuffer();
-			do
-			{
-				if(buf == buffer)
-				{
-					if(buf.getNext() != null)
-						return buf.getNext();
-					else
-						return null;
-				}
-			}
-			while((buf = buf.getNext()) != null);
+			filter = new RE(MiscUtilities.globToRE(glob));
 		}
-		throw new InternalError("Huh? Buffer not on list?");
-	}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,DirectoryListSet.class,e);
+			return vector;
+		}
 
-	/**
-	 * Called if the specified buffer was found to have a match.
-	 * @param buffer The buffer
-	 */
-	public void matchFound(Buffer buffer) {}
+		for(int i = 0; i < buffers.length; i++)
+		{
+			Buffer buffer = buffers[i];
+			if(filter.isMatch(buffer.getName()))
+				vector.addElement(buffer.getPath());
+		}
 
-	/**
-	 * Returns the number of buffers in this file set.
-	 */
-	public int getBufferCount()
-	{
-		return jEdit.getBufferCount();
+		return vector;
 	}
 }
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.8  2000/05/14 10:55:22  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.7  1999/11/28 00:33:07  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
- *
- * Revision 1.6  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
- *
- * Revision 1.5  1999/10/03 03:47:16  sp
- * Minor stupidity, IDL mode
- *
- * Revision 1.4  1999/10/02 01:12:36  sp
- * Search and replace updates (doesn't work yet), some actions moved to TextTools
- *
- * Revision 1.3  1999/06/09 07:28:10  sp
- * Multifile search and replace tweaks, removed console.html
- *
- * Revision 1.2  1999/06/09 05:22:11  sp
- * Find next now supports multi-file searching, minor Perl mode tweak
- *
- * Revision 1.1  1999/06/03 08:24:13  sp
- * Fixing broken CVS
- *
- */

@@ -3488,7 +3488,7 @@ forward_scan:		do
 				lastWasSpace = false;
 			}
 
-			if(logicalLength + strLen >= maxLineLen && lastWordOffset != -1)
+			if(logicalLength + strLen > maxLineLen && lastWordOffset != -1)
 			{
 				// break line at lastWordOffset
 				try
@@ -3566,7 +3566,9 @@ forward_scan:		do
 		try
 		{
 			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,line,offset - 1);
+				buffer,line,offset - 1,
+				firstLine,Math.min(getLineCount(),
+				firstLine + visibleLines));
 			if(bracketOffset != -1)
 			{
 				bracketLine = getLineOfOffset(bracketOffset);
@@ -4249,6 +4251,9 @@ forward_scan:		do
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.102  2000/11/23 08:34:11  sp
+ * Search and replace UI improvements
+ *
  * Revision 1.101  2000/11/19 07:51:26  sp
  * Documentation updates, bug fixes
  *

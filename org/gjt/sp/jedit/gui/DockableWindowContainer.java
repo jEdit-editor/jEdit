@@ -64,9 +64,6 @@ public interface DockableWindowContainer
 				dimension = -1;
 			}
 
-			collapsed = jEdit.getBooleanProperty("view.dock."
-				+ position + ".collapsed");
-
 			MouseHandler mouseHandler = new MouseHandler();
 			addMouseListener(mouseHandler);
 			addMouseMotionListener(mouseHandler);
@@ -172,6 +169,8 @@ public interface DockableWindowContainer
 			setSelectedComponent(win.getComponent());
 			if(dimension == 0)
 				dimension = -1;
+
+			collapsed = false;
 
 			revalidate();
 		}
@@ -354,56 +353,3 @@ public interface DockableWindowContainer
 		private String name;
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.16  2000/11/12 05:36:49  sp
- * BeanShell integration started
- *
- * Revision 1.15  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.14  2000/11/05 05:25:46  sp
- * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
- *
- * Revision 1.13  2000/11/02 09:19:33  sp
- * more features
- *
- * Revision 1.12  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.11  2000/10/12 09:28:27  sp
- * debugging and polish
- *
- * Revision 1.10  2000/09/26 10:19:46  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.9  2000/09/09 04:00:34  sp
- * 2.6pre6
- *
- * Revision 1.8  2000/09/07 04:46:08  sp
- * bug fixes
- *
- * Revision 1.7  2000/09/06 04:39:47  sp
- * bug fixes
- *
- * Revision 1.6  2000/08/22 07:25:00  sp
- * Improved abbrevs, bug fixes
- *
- * Revision 1.5  2000/08/20 07:29:30  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.4  2000/08/19 08:26:26  sp
- * More docking API tweaks
- *
- * Revision 1.3  2000/08/17 08:04:10  sp
- * Marker loading bug fixed, docking option pane
- *
- * Revision 1.2  2000/08/15 08:07:11  sp
- * A bunch of bug fixes
- *
- * Revision 1.1  2000/08/13 07:35:24  sp
- * Dockable window API
- *
- */

@@ -1,6 +1,6 @@
 /*
  * DirectoryListSet.java - Directory list matcher
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,9 +35,32 @@ public class DirectoryListSet extends BufferListSet
 	public DirectoryListSet(String directory, String glob, boolean recurse)
 	{
 		super(listFiles(directory,glob,recurse));
+
+		this.directory = directory;
+		this.glob = glob;
+		this.recurse = recurse;
+	}
+
+	public String getDirectory()
+	{
+		return directory;
+	}
+
+	public String getFileFilter()
+	{
+		return glob;
+	}
+
+	public boolean isRecursive()
+	{
+		return recurse;
 	}
 
 	// private members
+	private String directory;
+	private String glob;
+	private boolean recurse;
+
 	/**
 	 * One day this might become public and move to MiscUtilities...
 	 */
@@ -113,23 +136,3 @@ public class DirectoryListSet extends BufferListSet
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.5  2000/08/16 08:47:19  sp
- * Stuff
- *
- * Revision 1.4  2000/08/01 11:44:15  sp
- * More VFS browser work
- *
- * Revision 1.3  2000/07/19 08:35:59  sp
- * plugin devel docs updated, minor other changes
- *
- * Revision 1.2  1999/11/07 06:51:43  sp
- * Check box menu items supported
- *
- * Revision 1.1  1999/11/06 02:49:53  sp
- * Added missing files
- *
- */

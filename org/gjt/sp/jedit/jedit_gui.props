@@ -72,7 +72,6 @@ icons=Blank24.gif \
 	Unsplit24.gif
 
 view.search.find=Search for:
-view.search.incremental=Incremental
 
 ###
 ### CONTEXT MENUS
@@ -289,11 +288,10 @@ search=find \
        replace-and-find-next \
        replace-all \
        - \
-       hypersearch \
-       hypersearch-selection \
-       - \
        quick-search \
-       incremental-search \
+       batch-search \
+       - \
+       batch-search-results \
        - \
        set-marker \
        prev-marker \
@@ -307,10 +305,9 @@ find-selection.label=F$ind Selection...
 replace-in-selection.label=$Replace in Selection
 replace-and-find-next.label=Re$place and Find Next
 replace-all.label=Replace $All
-hypersearch.label=$HyperSearch...
-hypersearch-selection.label=HyperSearch for Se$lection...
-quick-search.label=$Quick Search
-incremental-search.label=$Incremental Search
+quick-search.label=Quick $Incremental Search
+batch-search.label=$Quick Batch Search
+batch-search-results.label=$Batch Search Results
 set-marker.label=Set $Marker...
 no-markers.label=No Markers Defined
 prev-marker.label=Go to $Previous Marker
@@ -631,60 +628,67 @@ unknown-action.message=Unknown action "{0}".
 
 # Search and replace dialog
 search.title=Search And Replace
-search.find=Search for: (up arrow recalls previous)
+
+search.find=Search for: (press up arrow to recall previous)
 search.find.mnemonic=s
 search.replace=Replace with:
-search.replace.mnemonic=r
-search.keepDialog=Keep Dialog 
-search.keepDialog.mnemonic=k
-search.ignoreCase=Ignore Case
-search.ignoreCase.mnemonic=i
-search.regexp=Regexp
+search.replace.mnemonic=w
+
+search.keep=Keep dialog
+search.keep.mnemonic=k
+search.case=Ignore case
+search.case.mnemonic=g
+search.regexp=Regular expressions
 search.regexp.mnemonic=x
-search.multifile=Multi File...
-search.multifile.mnemonic=m
+
+search.mode=Search mode:
+search.normal=Normal
+search.normal.mnemonic=n
+search.incremental=Incremental
+search.incremental.mnemonic=i
+search.batch=Batch
+search.batch.mnemonic=b
+
+search.fileset=Search in:
+search.current=Current buffer
+search.current.mnemonic=c
+search.all=All buffers
+search.all.mnemonic=l
+search.directory=Directory:
+search.directory.mnemonic=d
+
+search.batch-results=Show batch search results in:
+search.window=Window
+search.window.mnemonic=w
+search.buffer=New buffer
+search.buffer.mnemonic=u
+
+search.directoryField=Directory:
+search.directoryField.mnemonic=t
+search.filterField=Filter:
+search.filterField.mnemonic=f
+search.subdirs=Search subdirectories
+search.subdirs.mnemonic=h
+search.choose=Choose...
+search.choose.mnemonic=o
+
 search.findBtn=Find
 search.replaceBtn=Replace
-search.replaceBtn.mnemonic=p
-search.replaceFind=Replace & Find
-search.replaceFind.mnemonic=l
-search.replaceAll=Replace All
-search.replaceAll.mnemonic=a
-
-# Multifile search dialog
-multifile.title=Multi File Search Settings
-multifile.caption=File set to search:
-multifile.current=Search in current buffer only
-multifile.all=Search in all buffers
-multifile.selected=Search in selected buffers:
-multifile.directory=Search in a directory:
-
-multifile.directory.path=Path:
-multifile.directory.choose=Choose...
-multifile.directory.glob=Filter:
-multifile.directory.glob.value=*
-multifile.directory.recurse=Search subdirectories
-multifile.directory.recurse.value=on
-
-# Invalid fileset dialog
-invalid-fileset.title=Invalid Fileset
-invalid-fileset.message=You have specified a fileset with no files in it.\n\
-	For multi file search to work, you must specify one or more files\n\
-	to search in.\n\
-	\n\
-	If you were attempting a directory search, then perhaps the glob\n\
-	pattern you specified is invalid.
+search.replaceBtn.mnemonic=r
+search.replaceAndFindBtn=Replace & Find
+search.replaceAndFindBtn.mnemonic=p
+search.replaceAllBtn=Replace All
+search.replaceAllBtn.mnemonic=a
 
 # Keep searching dialog
 keepsearching.title=No More Matches Found
 keepsearching.message=No more matches were found. Continue search from\n\
 	beginning?
 
-# Hypersearch dialog
-hypersearch.title=HyperSearch
-hypersearch.find=Search for: (up arrow recalls previous)
-hypersearch.start=Start
-hypersearch.stop=Stop
+# Batch search results dialog
+batch-search-results.title=Batch Search Results
+
+batch-search.status=Batch search
 
 # Replace all results
 replace-results.title=Replacement Complete

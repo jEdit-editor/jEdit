@@ -57,8 +57,8 @@ public class CaretStatus extends JComponent
 		int start = textArea.getLineStartOffset(currLine);
 		int numLines = textArea.getLineCount();
 
-		String str = ((dot - start) + 1) + " : " + (currLine + 1)
-			+ " / " + numLines;
+		String str = "col " + ((dot - start) + 1) + " : line "
+			+ (currLine + 1) + " / " + numLines;
 
 		g.drawString(str,2,(getHeight() + fm.getAscent()) / 2 - 1);
 	}
@@ -67,7 +67,7 @@ public class CaretStatus extends JComponent
 	{
 		FontMetrics fm = getToolkit().getFontMetrics(getFont());
 
-		return new Dimension(fm.stringWidth("999 : 9999 / 9999"),
+		return new Dimension(fm.stringWidth("col 999 : line 9999 / 9999"),
 			fm.getHeight());
 	}
 

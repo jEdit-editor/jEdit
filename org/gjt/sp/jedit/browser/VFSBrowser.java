@@ -106,7 +106,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		layout.setConstraints(label,cons);
 		pathAndFilterPanel.add(label);
 
-		pathField = new HistoryTextField("vfs.browser.path",true,false);
+		pathField = new HistoryTextField("directory",true,false);
 
 		// because its preferred size can be quite wide, we
 		// don't want it to make the browser way too big,
@@ -136,7 +136,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		layout.setConstraints(filterCheckbox,cons);
 		pathAndFilterPanel.add(filterCheckbox);
 
-		filterField = new HistoryTextField("vfs.browser.filter",true);
+		filterField = new HistoryTextField("filter",true);
 		filterField.addActionListener(actionHandler);
 
 		cons.gridx = 1;
@@ -875,6 +875,9 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 /*
  * Change Log:
  * $Log$
+ * Revision 1.29  2000/11/23 08:34:10  sp
+ * Search and replace UI improvements
+ *
  * Revision 1.28  2000/11/19 07:51:25  sp
  * Documentation updates, bug fixes
  *

@@ -184,6 +184,7 @@ public class BufferIORequest extends WorkRequest
 			{
 				String[] args = { MiscUtilities.getFileName(path) };
 				setStatus(jEdit.getProperty("vfs.status.load-markers",args));
+				setAbortable(true);
 
 				in = vfs._createInputStream(session,markersPath,true,view);
 				if(in != null)
@@ -223,6 +224,8 @@ public class BufferIORequest extends WorkRequest
 			{
 			}
 		}
+
+		setAbortable(false);
 	}
 
 	/**
@@ -415,6 +418,8 @@ public class BufferIORequest extends WorkRequest
 			// Add remaining stuff from buffer
 			sbuf.append(buf,lastLine,len - lastLine);
 		}
+
+		setAbortable(false);
 
 		if(!insert)
 		{
@@ -771,6 +776,9 @@ public class BufferIORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/11/23 08:34:11  sp
+ * Search and replace UI improvements
+ *
  * Revision 1.4  2000/11/11 02:59:30  sp
  * FTP support moved out of the core into a plugin
  *

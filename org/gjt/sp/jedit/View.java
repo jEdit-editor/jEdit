@@ -31,6 +31,7 @@ import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.search.SearchBar;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
@@ -69,7 +70,7 @@ public class View extends JFrame implements EBComponent
 	 * Quick search.
 	 * @since jEdit 2.7pre2
 	 */
-	public void quickSearch()
+	public void quickIncrementalSearch()
 	{
 		if(searchBar == null)
 		{
@@ -77,16 +78,16 @@ public class View extends JFrame implements EBComponent
 			return;
 		}
 
-		searchBar.setIncremental(false);
+		searchBar.setBatch(false);
 		searchBar.getField().setText(getTextArea().getSelectedText());
 		searchBar.getField().requestFocus();
 	}
 
 	/**
-	 * Incremental search.
+	 * Quick batch search.
 	 * @since jEdit 2.7pre2
 	 */
-	public void incrementalSearch()
+	public void quickBatchSearch()
 	{
 		if(searchBar == null)
 		{
@@ -94,7 +95,7 @@ public class View extends JFrame implements EBComponent
 			return;
 		}
 
-		searchBar.setIncremental(true);
+		searchBar.setBatch(true);
 		searchBar.getField().setText(getTextArea().getSelectedText());
 		searchBar.getField().requestFocus();
 	}
@@ -564,7 +565,10 @@ public class View extends JFrame implements EBComponent
 		else if(msg instanceof MacrosChanged)
 			updateMacrosMenu();
 		else if(msg instanceof SearchSettingsChanged)
-			searchBar.update();
+		{
+			if(searchBar != null)
+				searchBar.update();
+		}
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
 	}
@@ -913,7 +917,7 @@ public class View extends JFrame implements EBComponent
 				addToolBar(searchBar);
 			}
 		}
-		else
+		else if(searchBar != null)
 		{
 			removeToolBar(searchBar);
 			searchBar = null;
@@ -1236,6 +1240,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.210  2000/11/23 08:34:10  sp
+ * Search and replace UI improvements
+ *
  * Revision 1.209  2000/11/16 04:01:11  sp
  * BeanShell macros started
  *

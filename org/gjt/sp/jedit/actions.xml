@@ -35,6 +35,21 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="batch-search">
+	<CODE>
+		view.quickBatchSearch();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="batch-search-results">
+	<CODE>
+		view.getDockableWindowManager().toggleDockableWindow("batch-search-results");
+	</CODE>
+	<IS_SELECTED>
+		return view.getDockableWindowManager().isDockableWindowVisible("batch-search-results");
+	</IS_SELECTED>
+</ACTION>
+
 <ACTION NAME="browse-system-macros">
 	<CODE>
 		Macros.browseSystemMacros(view);
@@ -323,24 +338,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="hypersearch">
-	<CODE>
-		SearchAndReplace.showHyperSearchDialog(view,null);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="hypersearch-selection">
-	<CODE>
-		SearchAndReplace.showHyperSearchDialog(view,textArea.getSelectedText());
-	</CODE>
-</ACTION>
-
-<ACTION NAME="incremental-search">
-	<CODE>
-		view.incrementalSearch();
-	</CODE>
-</ACTION>
-
 <ACTION NAME="indent-lines">
 	<CODE>
 		textArea.indentSelectedLines();
@@ -547,7 +544,7 @@
 
 <ACTION NAME="quick-search" NO_RECORD="TRUE">
 	<CODE>
-		view.quickSearch();
+		view.quickIncrementalSearch();
 	</CODE>
 </ACTION>
 
@@ -866,7 +863,7 @@
 
 <ACTION NAME="select-prev-word">
 	<CODE>
-		textArea.goToPrevParagraph(true);
+		textArea.goToPrevWord(true);
 	</CODE>
 </ACTION>
 

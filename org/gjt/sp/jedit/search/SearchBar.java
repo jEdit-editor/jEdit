@@ -17,15 +17,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.search;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.*;
-import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.util.Log;
 
 public class SearchBar extends JPanel
@@ -61,14 +61,8 @@ public class SearchBar extends JPanel
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createHorizontalStrut(12));
-		buttons.add(incremental = new JCheckBox(jEdit.getProperty(
-			"view.search.incremental")));
-		incremental.setFont(boldFont);
-		incremental.addActionListener(new ActionHandler());
-		incremental.setMargin(margin);
-		buttons.add(Box.createHorizontalStrut(2));
 		buttons.add(ignoreCase = new JCheckBox(jEdit.getProperty(
-			"search.ignoreCase")));
+			"search.case")));
 		ignoreCase.setFont(boldFont);
 		ignoreCase.addActionListener(new ActionHandler());
 		ignoreCase.setMargin(margin);
@@ -79,14 +73,11 @@ public class SearchBar extends JPanel
 		regexp.addActionListener(new ActionHandler());
 		regexp.setMargin(margin);
 		buttons.add(Box.createHorizontalStrut(2));
-		buttons.add(multifile = new JCheckBox());
-		multifile.addActionListener(new ActionHandler());
-		multifile.setMargin(margin);
-		buttons.add(multifileBtn = new JButton(jEdit.getProperty(
-			"search.multifile")));
-		multifileBtn.setFont(boldFont);
-		multifileBtn.addActionListener(new ActionHandler());
-		multifileBtn.setMargin(margin);
+		buttons.add(batch = new JCheckBox(jEdit.getProperty(
+			"search.batch")));
+		batch.setFont(boldFont);
+		batch.addActionListener(new ActionHandler());
+		batch.setMargin(margin);
 
 		update();
 
@@ -98,47 +89,21 @@ public class SearchBar extends JPanel
 		return find;
 	}
 
-	public void setIncremental(boolean incremental)
+	public void setBatch(boolean batch)
 	{
-		this.incremental.setSelected(incremental);
-		update();
+		this.batch.setSelected(batch);
 	}
 
 	public void update()
 	{
-		if(incremental.isSelected())
-		{
-			multifile.setSelected(false);
-			multifile.setEnabled(false);
-			multifileBtn.setEnabled(false);
-		}
-		else
-		{
-			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
-			regexp.setSelected(SearchAndReplace.getRegexp());
-			multifile.setSelected(!(SearchAndReplace.getSearchFileSet()
-				instanceof CurrentBufferSet));
-			multifile.setEnabled(true);
-			multifileBtn.setEnabled(true);
-		}
+		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
+		regexp.setSelected(SearchAndReplace.getRegexp());
 	}
 
 	// private members
 	private View view;
 	private HistoryTextField find;
-	private JCheckBox incremental, ignoreCase, regexp, multifile;
-	private JButton multifileBtn;
-
-	private void showMultiFileDialog()
-	{
-		SearchFileSet fs = new MultiFileSearchDialog(
-			view,SearchAndReplace.getSearchFileSet())
-			.getSearchFileSet();
-		if(fs != null)
-			SearchAndReplace.setSearchFileSet(fs);
-		multifile.setSelected(!(SearchAndReplace.getSearchFileSet()
-			instanceof CurrentBufferSet));
-	}
+	private JCheckBox ignoreCase, regexp, batch;
 
 	private void incrementalSearch(int start)
 	{
@@ -173,7 +138,14 @@ public class SearchBar extends JPanel
 				{
 					SearchAndReplace.showSearchDialog(view,null);
 				}
-				else if(incremental.isSelected())
+				else if(batch.isSelected())
+				{
+					find.addCurrentToHistory();
+					find.setText(null);
+					SearchAndReplace.setSearchString(text);
+					SearchAndReplace.batchSearch(view);
+				}
+				else
 				{
 					// on enter, start search from end
 					// of current match to find next one
@@ -181,18 +153,14 @@ public class SearchBar extends JPanel
 					incrementalSearch(view.getTextArea()
 						.getSelectionEnd());
 				}
-				else
-				{
-					find.addCurrentToHistory();
-					find.setText(null);
-					SearchAndReplace.setSearchString(text);
-					SearchAndReplace.find(view);
-					view.getEditPane().focusOnTextArea();
-				}
 			}
-			else if(evt.getSource() == incremental)
+			else if(evt.getSource() == batch)
 			{
-				update();
+				if(batch.isSelected())
+				{
+					jEdit.setProperty("search.mode.value",
+						"batch");
+				}
 			}
 			else if(evt.getSource() == ignoreCase)
 			{
@@ -204,18 +172,6 @@ public class SearchBar extends JPanel
 				SearchAndReplace.setRegexp(regexp
 					.isSelected());
 			}
-			else if(source == multifileBtn)
-			{
-				showMultiFileDialog();
-			}
-			else if(source == multifile)
-			{
-				if(multifile.isSelected())
-					showMultiFileDialog();
-				else
-					SearchAndReplace.setSearchFileSet(
-						new CurrentBufferSet());
-			}
 		}
 	}
 
@@ -226,7 +182,7 @@ public class SearchBar extends JPanel
 			// on insert, start search from beginning of
 			// current match. This will continue to highlight
 			// the current match until another match is found
-			if(incremental.isSelected())
+			if(!batch.isSelected())
 			{
 				incrementalSearch(view.getTextArea()
 					.getSelectionStart());
@@ -238,7 +194,7 @@ public class SearchBar extends JPanel
 			// on backspace, restart from beginning
 			// when we write reverse search, implement real
 			// backtracking
-			if(incremental.isSelected())
+			if(!batch.isSelected())
 			{
 				String text = find.getText();
 				if(text != null && text.length() != 0)
@@ -262,59 +218,3 @@ public class SearchBar extends JPanel
 		}
 	}
 }
-
-/*
- * ActionLog:
- * $Log$
- * Revision 1.18  2000/11/19 07:51:25  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.17  2000/11/16 10:25:18  sp
- * More macro work
- *
- * Revision 1.16  2000/11/13 11:19:28  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.14  2000/06/03 07:28:26  sp
- * User interface updates, bug fixes
- *
- * Revision 1.13  2000/05/21 03:00:51  sp
- * Code cleanups and bug fixes
- *
- * Revision 1.12  2000/05/13 05:13:31  sp
- * Mode option pane
- *
- * Revision 1.11  2000/05/12 11:07:39  sp
- * Bug fixes, documentation updates
- *
- * Revision 1.10  2000/05/09 10:51:52  sp
- * New status bar, a few other things
- *
- * Revision 1.9  2000/05/07 07:29:02  sp
- * Splitting fixes
- *
- * Revision 1.8  2000/05/07 05:48:30  sp
- * You can now edit several buffers side-by-side in a split view
- *
- * Revision 1.7  2000/05/05 11:08:26  sp
- * Johnny Ryall
- *
- * Revision 1.6  2000/05/04 10:37:04  sp
- * Wasting time
- *
- * Revision 1.5  2000/04/25 03:32:40  sp
- * Even more VFS hacking
- *
- * Revision 1.4  2000/04/08 06:10:51  sp
- * Digit highlighting, search bar bug fix
- *
- * Revision 1.3  2000/04/06 09:28:08  sp
- * Better plugin error reporting, search bar updates
- *
- * Revision 1.2  2000/04/06 02:22:12  sp
- * Incremental search, documentation updates
- *
- * Revision 1.1  2000/04/04 04:53:26  sp
- * added SearchBar.java
- *
- */

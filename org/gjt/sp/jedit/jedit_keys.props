@@ -7,13 +7,13 @@
 help.shortcut=F1
 
 # Single key
+# Unused: h
 select-all.shortcut=C+a
 complete-word.shortcut=C+b
 copy.shortcut=C+c
 delete-line.shortcut=C+d
 find.shortcut=C+f
 find-next.shortcut=C+g
-hypersearch.shortcut=C+h
 indent-lines.shortcut=C+i
 join-lines.shortcut=C+j
 exchange-caret-register.shortcut=C+k
@@ -37,7 +37,7 @@ split-horizontal.shortcut=C+2
 split-vertical.shortcut=C+3
 expand-abbrev.shortcut=C+SEMICOLON
 quick-search.shortcut=C+COMMA
-incremental-search.shortcut=C+PERIOD
+batch-search.shortcut=C+PERIOD
 scroll-up-page.shortcut=A+QUOTE
 scroll-up-line.shortcut=C+QUOTE
 scroll-down-line.shortcut=C+SLASH
@@ -48,13 +48,12 @@ prev-split.shortcut=A+PAGE_UP
 next-split.shortcut=A+PAGE_DOWN
 
 # C+e
-# Unused d, e, n, p, q, u, x, y
+# Unused d, e, h, n, p, q, u, x, y
 replace-all.shortcut=C+e C+a
 box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
 find-selection.shortcut=C+e C+f
 replace-and-find-next.shortcut=C+e C+g
-hypersearch-selection.shortcut=C+e C+h
 center-caret.shortcut=C+e C+i
 scroll-to-current-line.shortcut=C+e C+j
 block-comment.shortcut=C+e C+k

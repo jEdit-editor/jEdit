@@ -23,7 +23,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.JOptionPane;
 import java.awt.Component;
-import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
@@ -52,25 +51,6 @@ public class SearchAndReplace
 		{
 			dialog = new SearchDialog(view);
 			view.getRootPane().putClientProperty(SEARCH_DIALOG_KEY,dialog);
-		}
-
-		dialog.setSearchString(defaultFind);
-	}
-
-	/**
-	 * Displays the HyperSearch dialog box for the specified view.
-	 * @param view The view
-	 * @param defaultFind The initial search string
-	 * @since jEdit 2.7pre1
-	 */
-	public static void showHyperSearchDialog(View view, String defaultFind)
-	{
-		HyperSearch dialog = (HyperSearch)view.getRootPane()
-			.getClientProperty(HYPERSEARCH_DIALOG_KEY);
-		if(dialog == null)
-		{
-			dialog = new HyperSearch(view);
-			view.getRootPane().putClientProperty(HYPERSEARCH_DIALOG_KEY,dialog);
 		}
 
 		dialog.setSearchString(defaultFind);
@@ -225,6 +205,36 @@ public class SearchAndReplace
 	public static SearchFileSet getSearchFileSet()
 	{
 		return fileset;
+	}
+
+	/**
+	 * Performs a batch search.
+	 * @param view The view
+	 * @since jEdit 2.7pre3
+	 */
+	public static boolean batchSearch(View view)
+	{
+		view.getDockableWindowManager().addDockableWindow(
+			BatchSearchResults.NAME);
+		BatchSearchResults results = (BatchSearchResults)
+			view.getDockableWindowManager()
+			.getDockableWindow(BatchSearchResults.NAME);
+
+		try
+		{
+			VFSManager.runInWorkThread(new BatchSearchRequest(view,
+				getSearchMatcher(),results.getTreeModel()));
+			return true;
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,SearchAndReplace.class,e);
+			Object[] args = { e.getMessage() };
+			if(args[0] == null)
+				args[0] = e.toString();
+			GUIUtilities.error(view,"searcherror",args);
+			return false;
+		}
 	}
 
 	/**
@@ -543,7 +553,6 @@ loop:		for(;;)
 
 	// private members
 	private static final String SEARCH_DIALOG_KEY = "SearchDialog";
-	private static final String HYPERSEARCH_DIALOG_KEY = "HyperSearch";
 
 	private static String search;
 	private static String replace;
@@ -591,48 +600,3 @@ loop:		for(;;)
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.42  2000/11/19 07:51:25  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.41  2000/11/16 10:25:18  sp
- * More macro work
- *
- * Revision 1.40  2000/11/16 04:01:12  sp
- * BeanShell macros started
- *
- * Revision 1.39  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.38  2000/11/05 00:44:15  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.37  2000/11/02 09:19:34  sp
- * more features
- *
- * Revision 1.36  2000/10/13 06:57:20  sp
- * Edit User/System Macros command, gutter mouse handling improved
- *
- * Revision 1.35  2000/08/16 08:47:19  sp
- * Stuff
- *
- * Revision 1.34  2000/06/12 02:43:30  sp
- * pre6 almost ready
- *
- * Revision 1.33  2000/06/06 04:38:09  sp
- * WorkThread's AWT request stuff reworked
- *
- * Revision 1.32  2000/05/04 10:37:04  sp
- * Wasting time
- *
- * Revision 1.31  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.30  2000/04/27 08:32:57  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- */
