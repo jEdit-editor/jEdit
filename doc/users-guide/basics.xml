@@ -200,6 +200,8 @@
    linkend="markers" />)</para></listitem>
    <listitem><para>The current buffer's edit mode. See <xref
    linkend="modes" />.</para></listitem>
+   <listitem><para>The current buffer's character encoding. See <xref
+   linkend="encodings" />.</para></listitem>
    <listitem><para>If multiple selection is enabled, the text
    <literal>multi</literal> is shown in black, otherwise it will be grayed out.
    Pressing

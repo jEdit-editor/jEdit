@@ -1,89 +1,28 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
-<chapter id="modes"><title>Edit Modes</title>
+<chapter id="writing-modes"><title>Writing Edit Modes</title>
  <para>
-  An <firstterm>edit mode</firstterm> is an editor configuration intended to
-  edit a specific type of file. Edit modes can specify syntax highlighting
-  rules, auto indent behavior, and various useful customizations.
+  For general information about edit modes, see <xref linkend="modes" />.
+  This section only covers writing your own edit modes.
  </para>
- <sect1 id="mode-selection"><title>Mode Selection</title>
+ <para>
+  Edit modes are defined using XML, the <firstterm>extensible markup
+  language</firstterm>; mode files have the extension
+  <filename>.xml</filename>. XML is a very simple language, and as a result
+  edit modes are easy to create and modify. This section will
+  start with a short XML primer, followed by detailed information about
+  each supported tag and highlighting rule.
+ </para>
+ <sidebar><title>Reload Edit Modes command</title>
   <para>
-   When a file is opened, jEdit first checks the file name against a list
-   of known patterns. For example, files whose names end with <quote>.c</quote>
-   are edited in C mode, and files named <filename>Makefile</filename> are
-   edited in Makefile mode. If a suitable match based on file name cannot be
-   found, jEdit checks the first line of the file. For example, files whose
-   first line is <quote>#!/bin/sh</quote> are edited in shell script mode.
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
+   reloads all edit mode XML files from disk. It is very useful when writing
+   edit modes because it lets you see changes take effect without having to
+   restart jEdit.
   </para>
-  <para>
-   If automatic mode selection is not appropriate, the edit mode can
-   be specified manually. To set the current buffer's edit mode
-   on a one-time basis, specify it in the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-   dialog box. To have a buffer open with a specific edit mode every time,
-   place the following in one of the first 10 lines of the buffer,
-   where <replaceable>edit mode</replaceable> is the name of the desired edit
-   mode:
-  </para>
-  <screen>:mode=<replaceable>edit mode</replaceable>:</screen>
- </sect1>
- <sect1 id="syntax-hilite"><title>Syntax Highlighting</title>
-  <para>
-   Syntax highlighting is the display of programming language
-   tokens using different fonts and colors. This makes the code
-   easier to follow and errors such as misplaced quotes easier to spot.
-   All edit modes except for
-   the plain text mode perform syntax highlighting.
-  </para>
-  <para>
-   The colors and styles used to highlight syntax tokens can be changed
-   in the <guibutton>Styles</guibutton> pane of the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
-  </para>
-  <para>
-   Syntax highlighting can be enabled or disabled in one of
-   several ways:
-  </para>
-  <itemizedlist>
-   <listitem><para>On a global or mode-specific
-   basis in the
-   <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
-   of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box.</para></listitem>
-   <listitem><para>In the current buffer
-   for the duration of the editing session in the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-   dialog box.</para></listitem>
-   <listitem><para>In the current buffer for future editing sessions, by placing
-   the following in one of the first 10 lines of the buffer, where
-   <replaceable>flag</replaceable> is either <quote>true</quote> or
-   <quote>false</quote>:
-   </para>
-   <screen>:syntax=<replaceable>flag</replaceable>:</screen>
-   </listitem>
-  </itemizedlist>
- </sect1>
- <sect1 id="writing-modes"><title>Writing Edit Modes</title>
-  <para>
-   Edit modes are defined using XML, the <firstterm>extensible markup
-   language</firstterm>; mode files have the extension
-   <filename>.xml</filename>. XML is a very simple language, and as a result
-   edit modes are easy to create and modify. This section will
-   start with a short XML primer, followed by detailed information about
-   each supported tag and highlighting rule.
-  </para>
-  <sidebar><title>Reload Edit Modes command</title>
-   <para>
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
-    reloads all edit mode XML files from disk. It is very useful when writing
-    edit modes because it lets you see changes take effect without having to
-    restart jEdit.
-   </para>
-  </sidebar>
-
-  <sect2 id="xml-primer"><title>An XML Primer</title>
+ </sidebar>
+ <sect1 id="xml-primer"><title>An XML Primer</title>
   <para>
    A very simple edit mode looks like so:
   </para>
@@ -143,74 +82,72 @@
    Now that the basics of XML have been covered, the rest of this
    section will cover each construct in detail.
   </para>
-  </sect2>
-  <sect2 id="mode-preamble"><title>The Preamble</title>
+ </sect1>
+ <sect1 id="mode-preamble"><title>The Preamble and MODE tag</title>
    <para>
     Each mode definition must begin with the following:
    </para>
    <programlisting>&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE MODE SYSTEM "xmode.dtd"&gt;</programlisting>
-  </sect2>
-  <sect2 id="mode-tag"><title>The MODE Tag</title>
-   <para>
-    Each mode definition must contain at least one <literal>MODE</literal>
-    tag. All other tags (<literal>PROPS</literal>, <literal>RULES</literal>)
-    must be placed inside the <literal>MODE</literal> tag.
+  <para>
+   Each mode definition must also contain exactly one <literal>MODE</literal>
+   tag. All other tags (<literal>PROPS</literal>, <literal>RULES</literal>)
+   must be placed inside the <literal>MODE</literal> tag.
+  </para>
+ </sect1>
+ <sect1 id="mode-tag-props"><title>The PROPS Tag</title>
+  <para>
+   The <literal>PROPS</literal> tag and the <literal>PROPERTY</literal> tags
+   inside it are used to define mode-specific
+   properties. Each <literal>PROPERTY</literal> tag must have a
+   <literal>NAME</literal> attribute set to the property's name, and a
+   <literal>VALUE</literal> attribute with the property's value.
+  </para>
+  <para>
+   All buffer-local properties listed in <xref linkend="buffer-local" />
+   may be given values in edit modes. In addition, the following mode
+   properties have no buffer-local equivalent:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>indentCloseBrackets</literal> -
+   A list of characters (usually brackets) that subtract indent from
+   the <emphasis>current</emphasis> line. For example, in Java mode this
+   property is set to <quote>}</quote>.</para></listitem>
+   <listitem><para><literal>indentOpenBrackets</literal> -
+   A list of characters (usually brackets) that add indent to
+   the <emphasis>next</emphasis> line. For example, in Java mode this
+   property is set to <quote>{</quote>.</para></listitem>
+   <listitem><para><literal>indentPrevLine</literal> -
+   When indenting a line, jEdit checks if the previous line matches
+   the regular expression stored in this property. If it does, a level
+   of indent is added. For example, in Java mode this regular expression
+   matches language constructs such as
+   <quote>if</quote>, <quote>else</quote>, <quote>while</quote>, etc.</para>
+   </listitem>
+   <listitem><para><literal>doubleBracketIndent</literal> -
+   If a line matches the <literal>indentPrevLine</literal> regular
+   expression and the next line contains an opening bracket,
+   a level of indent will not be added to the next line, unless
+   this property is set to <quote>true</quote>. For example, with this
+   property set to <quote>false</quote>, Java code will be indented like so:
    </para>
-  </sect2>
-  <sect2 id="mode-tag-props"><title>The PROPS Tag</title>
-   <para>
-    The <literal>PROPS</literal> tag and the <literal>PROPERTY</literal> tags
-    inside it are used to define mode-specific
-    properties. Each <literal>PROPERTY</literal> tag must have a
-    <literal>NAME</literal> attribute set to the property's name, and a
-    <literal>VALUE</literal> attribute with the property's value.
-   </para>
-   <para>
-    All buffer-local properties listed in <xref linkend="buffer-local" />
-    may be given values in edit modes. In addition, the following mode
-    properties have no buffer-local equivalent:
-   </para>
-   <itemizedlist>
-    <listitem><para><literal>indentCloseBrackets</literal> -
-    A list of characters (usually brackets) that subtract indent from
-    the <emphasis>current</emphasis> line. For example, in Java mode this
-    property is set to <quote>}</quote>.</para></listitem>
-    <listitem><para><literal>indentOpenBrackets</literal> -
-    A list of characters (usually brackets) that add indent to
-    the <emphasis>next</emphasis> line. For example, in Java mode this
-    property is set to <quote>{</quote>.</para></listitem>
-    <listitem><para><literal>indentPrevLine</literal> -
-    When indenting a line, jEdit checks if the previous line matches
-    the regular expression stored in this property. If it does, a level
-    of indent is added. For example, in Java mode this regular expression
-    matches language constructs such as
-    <quote>if</quote>, <quote>else</quote>, <quote>while</quote>, etc.</para>
-    </listitem>
-    <listitem><para><literal>doubleBracketIndent</literal> -
-    If a line matches the <literal>indentPrevLine</literal> regular
-    expression and the next line contains an opening bracket,
-    a level of indent will not be added to the next line, unless
-    this property is set to <quote>true</quote>. For example, with this
-    property set to <quote>false</quote>, Java code will be indented like so:
-    </para>
-    <programlisting>while(objects.hasMoreElements())
+   <programlisting>while(objects.hasMoreElements())
 {
         ((Drawable)objects.nextElement()).draw();
 }</programlisting>
-    <para>
-      On the other hand, settings this property to <quote>true</quote> will
-      give the following result:
-    </para>
-      <programlisting>while(objects.hasMoreElements())
+   <para>
+     On the other hand, settings this property to <quote>true</quote> will
+     give the following result:
+   </para>
+     <programlisting>while(objects.hasMoreElements())
         {
                 ((Drawable)objects.nextElement()).draw();
         }</programlisting></listitem>
-   </itemizedlist>
-   <para>
-    Here is the complete <literal>&lt;PROPS&gt;</literal> tag for Java mode:
-   </para>
-   <programlisting>&lt;PROPS&gt;
+  </itemizedlist>
+  <para>
+   Here is the complete <literal>&lt;PROPS&gt;</literal> tag for Java mode:
+  </para>
+  <programlisting>&lt;PROPS&gt;
     &lt;PROPERTY NAME="indentOpenBrackets" VALUE="{" /&gt;
     &lt;PROPERTY NAME="indentCloseBrackets" VALUE="}" /&gt;
     &lt;PROPERTY NAME="indentPrevLine" VALUE="\s*(((if|while)
@@ -222,57 +159,57 @@
     &lt;PROPERTY NAME="noWordSep" VALUE="_" /&gt;
     &lt;PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" /&gt;
 &lt;/PROPS&gt;</programlisting>
-  </sect2>
-  <sect2 id="mode-tag-rules"><title>The RULES Tag</title>
-   <para>
-    <literal>RULES</literal> tags must be placed inside the
-    <literal>MODE</literal> tag. Each <literal>RULES</literal> tag defines a
-    <firstterm>ruleset</firstterm>. A ruleset consists of a number of
-    <firstterm>parser rules</firstterm>, with each parser
-    rule specifying how to highlight a specific syntax token. There must
-    be at least one ruleset in each edit mode. There can also be more
-    than one, with different rulesets being used to highlight different
-    parts of a buffer (for example, in HTML mode, one rule set
-    highlights HTML tags, and another highlights inline JavaScript).
-    For information about using more
-    than one ruleset, see <xref linkend="mode-rule-span" />.
-   </para>
-   <para>
-    The <literal>RULES</literal> tag supports the following attributes, all of
-    which are optional:
-   </para>
-   <itemizedlist>
-    <listitem><para><literal>SET</literal> - the name of this ruleset.
-    All rulesets other than the first must have a name.
-    </para></listitem>
-    <listitem><para><literal>HIGHLIGHT_DIGITS</literal> - if set to
-    <literal>TRUE</literal>, digits (0-9, as well as hexadecimal literals
-    prefixed with <quote>0x</quote>) will be highlighted with the
-    <classname>DIGIT</classname> token type. Default is <literal>FALSE</literal>.
-    </para></listitem>
-    <listitem><para><literal>IGNORE_CASE</literal> - if set to
-    <literal>FALSE</literal>, matches will be case sensitive. Otherwise, case
-    will not matter. Default is <literal>TRUE</literal>.
-    </para></listitem>
-    <listitem><para><literal>DEFAULT</literal> - the token type for
-    text which doesn't match
-    any specific rule. Default is <literal>NULL</literal>. See
-    <xref linkend="mode-syntax-tokens" /> for a list of token types.
-    </para></listitem>
-   </itemizedlist>
-   <para>
-    Each child element of the <literal>RULES</literal> tag defines a parser rule.
-    More specific rules must be defined before general ones; for
-    example, a rule matching the string <quote>hello</quote> rule must
-    be placed before one matching <quote>he</quote>.
-   </para>
-   <para>
-    Here is an example <literal>RULES</literal> tag:
-   </para>
-   <programlisting>&lt;RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"&gt;
+ </sect1>
+ <sect1 id="mode-tag-rules"><title>The RULES Tag</title>
+  <para>
+   <literal>RULES</literal> tags must be placed inside the
+   <literal>MODE</literal> tag. Each <literal>RULES</literal> tag defines a
+   <firstterm>ruleset</firstterm>. A ruleset consists of a number of
+   <firstterm>parser rules</firstterm>, with each parser
+   rule specifying how to highlight a specific syntax token. There must
+   be at least one ruleset in each edit mode. There can also be more
+   than one, with different rulesets being used to highlight different
+   parts of a buffer (for example, in HTML mode, one rule set
+   highlights HTML tags, and another highlights inline JavaScript).
+   For information about using more
+   than one ruleset, see <xref linkend="mode-rule-span" />.
+  </para>
+  <para>
+   The <literal>RULES</literal> tag supports the following attributes, all of
+   which are optional:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>SET</literal> - the name of this ruleset.
+   All rulesets other than the first must have a name.
+   </para></listitem>
+   <listitem><para><literal>HIGHLIGHT_DIGITS</literal> - if set to
+   <literal>TRUE</literal>, digits (0-9, as well as hexadecimal literals
+   prefixed with <quote>0x</quote>) will be highlighted with the
+   <classname>DIGIT</classname> token type. Default is <literal>FALSE</literal>.
+   </para></listitem>
+   <listitem><para><literal>IGNORE_CASE</literal> - if set to
+   <literal>FALSE</literal>, matches will be case sensitive. Otherwise, case
+   will not matter. Default is <literal>TRUE</literal>.
+   </para></listitem>
+   <listitem><para><literal>DEFAULT</literal> - the token type for
+   text which doesn't match
+   any specific rule. Default is <literal>NULL</literal>. See
+   <xref linkend="mode-syntax-tokens" /> for a list of token types.
+   </para></listitem>
+  </itemizedlist>
+  <para>
+   Each child element of the <literal>RULES</literal> tag defines a parser rule.
+   More specific rules must be defined before general ones; for
+   example, a rule matching the string <quote>hello</quote> rule must
+   be placed before one matching <quote>he</quote>.
+  </para>
+  <para>
+   Here is an example <literal>RULES</literal> tag:
+  </para>
+  <programlisting>&lt;RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"&gt;
     <replaceable>...</replaceable>
 &lt;/RULES&gt;</programlisting>
-  <sect3 id="mode-rule-terminate"><title>The TERMINATE Rule</title>
+  <sect2 id="mode-rule-terminate"><title>The TERMINATE Rule</title>
    <para>
     The <literal>TERMINATE</literal> rule specifies that parsing should stop
     after the specified number of characters have been read from a line. The
@@ -284,8 +221,8 @@
     This rule is used in Patch mode, for example, because only the first
     character of each line affects highlighting. 
    </para>
-  </sect3>
-  <sect3 id="mode-rule-whitespace"><title>The WHITESPACE Rule</title>
+  </sect2>
+  <sect2 id="mode-rule-whitespace"><title>The WHITESPACE Rule</title>
    <para>
     The <literal>WHITESPACE</literal> rule specifies characters which are to
     be treated as keyword delimiters.
@@ -294,8 +231,8 @@
    </para>
    <programlisting>&lt;WHITESPACE&gt; &lt;/WHITESPACE&gt;
 &lt;WHITESPACE&gt;        &lt;/WHITESPACE&gt;</programlisting>
-  </sect3>
-  <sect3 id="mode-rule-span"><title>The SPAN Rule</title>
+  </sect2>
+  <sect2 id="mode-rule-span"><title>The SPAN Rule</title>
    <para>
     The <literal>SPAN</literal> rule highlights text between a start
     and end string. The start and end strings are specified inside
@@ -354,8 +291,8 @@
    &lt;BEGIN&gt;&amp;lt;style&amp;gt;&lt;/BEGIN&gt;
    &lt;END&gt;&amp;lt;/style&amp;gt;&lt;/END&gt;
 &lt;/SPAN&gt;</programlisting>
-  </sect3>
-  <sect3 id="mode-rule-eol-span"><title>The EOL_SPAN Rule</title>
+  </sect2>
+  <sect2 id="mode-rule-eol-span"><title>The EOL_SPAN Rule</title>
    <para>
     An <literal>EOL_SPAN</literal> is similar to a <literal>SPAN</literal>
     except that highlighting stops at the end of the line, not after the end
@@ -378,8 +315,8 @@
     Here is an <literal>EOL_SPAN</literal> that highlights C++ comments:
    </para>
    <programlisting>&lt;EOL_SPAN TYPE="COMMENT1"&gt;//&lt;/EOL_SPAN&gt;</programlisting>
-  </sect3>
-  <sect3 id="mode-rule-mark-prev"><title>The MARK_PREVIOUS Rule</title>
+  </sect2>
+  <sect2 id="mode-rule-mark-prev"><title>The MARK_PREVIOUS Rule</title>
    <para>
     The <literal>MARK_PREVIOUS</literal> rule highlights from the end of the
     previous syntax token to the matched text. The text to match
@@ -404,8 +341,8 @@
    </para>
    <programlisting>&lt;MARK_PREVIOUS AT_LINE_START="TRUE"
     EXCLUDE_MATCH="TRUE"&gt;:&lt;/MARK_PREVIOUS&gt;</programlisting>
-  </sect3>
-  <sect3 id="mode-rule-mark-following"><title>The MARK_FOLLOWING Rule</title>
+  </sect2>
+  <sect2 id="mode-rule-mark-following"><title>The MARK_FOLLOWING Rule</title>
    <para>
     The <literal>MARK_FOLLOWING</literal> rule highlights from the start of the
     match to the next syntax token. The text to match
@@ -428,8 +365,8 @@
     (<quote>$CLASSPATH</quote>, <quote>$IFS</quote>, etc):
    </para>
    <programlisting>&lt;MARK_FOLLOWING TYPE="KEYWORD2"&gt;$&lt;/MARK_FOLLOWING&gt;</programlisting>
-  </sect3>
-  <sect3 id="mode-rule-seq"><title>The SEQ Rule</title>
+  </sect2>
+  <sect2 id="mode-rule-seq"><title>The SEQ Rule</title>
    <para>
     The <literal>SEQ</literal> rule highlights fixed sequences of text. The text
     to highlight is specified between opening and closing <literal>SEQ</literal>
@@ -450,8 +387,8 @@
 &lt;SEQ TYPE="OPERATOR"&gt;-&lt;/SEQ&gt;
 &lt;SEQ TYPE="OPERATOR"&gt;*&lt;/SEQ&gt;
 &lt;SEQ TYPE="OPERATOR"&gt;/&lt;/SEQ&gt;</programlisting>
-  </sect3>
-  <sect3 id="mode-rule-keywords"><title>The KEYWORDS Rule</title>
+  </sect2>
+  <sect2 id="mode-rule-keywords"><title>The KEYWORDS Rule</title>
    <para>
     There can only be one <literal>KEYWORDS</literal> tag per ruleset.
     The <literal>KEYWORDS</literal> rule defines keywords to highlight.
@@ -477,8 +414,8 @@
    &lt;KEYWORD3&gt;int&lt;/KEYWORD3&gt;
    &lt;KEYWORD3&gt;void&lt;/KEYWORD3&gt;
 &lt;/KEYWORDS&gt;</programlisting>
-  </sect3>
-  <sect3 id="mode-syntax-tokens"><title>Token Types</title>
+  </sect2>
+  <sect2 id="mode-syntax-tokens"><title>Token Types</title>
    <para>
     Parser rules can highlight tokens using any of the following token
     types:
@@ -515,10 +452,9 @@
    <listitem><para><literal>OPERATOR</literal>
    </para></listitem>
    </itemizedlist>
-  </sect3>
   </sect2>
  </sect1>
- <sect1 id="mode-catalog"><title>Installing Edit Modes</title>
+ <sect1 id="installing-modes"><title>Installing Edit Modes</title>
   <para>
    There are two locations where new
    edit modes can be installed; the <filename>modes</filename> subdirectory of

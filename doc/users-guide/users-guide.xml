@@ -10,30 +10,30 @@
 
 <!ENTITY basics SYSTEM "basics.xml">
 <!ENTITY files SYSTEM "files.xml">
-<!ENTITY textedit SYSTEM "text-edit.xml">
-<!ENTITY modes SYSTEM "modes.xml">
-<!ENTITY sourceedit SYSTEM "source-edit.xml">
+<!ENTITY text-edit SYSTEM "text-edit.xml">
+<!ENTITY source-edit SYSTEM "source-edit.xml">
 <!ENTITY customizing SYSTEM "customizing.xml">
-<!ENTITY usingplugins SYSTEM "using-plugins.xml">
+<!ENTITY writing-modes SYSTEM "writing-modes.xml">
 <!ENTITY shortcuts SYSTEM "shortcuts.xml">
 <!ENTITY history SYSTEM "history.xml">
 <!ENTITY globs SYSTEM "globs.xml">
 <!ENTITY regexps SYSTEM "regexps.xml">
-<!ENTITY activitylog SYSTEM "activity-log.xml">
-<!ENTITY cliusage SYSTEM "cli-usage.xml">
+<!ENTITY activity-log SYSTEM "activity-log.xml">
+<!ENTITY cli-usage SYSTEM "cli-usage.xml">
 
 <!ENTITY macro-basics SYSTEM "macro-basics.xml">
 <!ENTITY simple-macros SYSTEM "simple-macros.xml">
 <!ENTITY dialog-macro SYSTEM "dialog-macro.xml">
 <!ENTITY macro-tips SYSTEM "macro-tips.xml">
 <!ENTITY api-guide SYSTEM "api-guide.xml">
-<!ENTITY macro-index SYSTEM "macro-index.xml"> ]>
+<!ENTITY macro-index SYSTEM "macro-index.xml">
+
+<!ENTITY using-plugins SYSTEM "using-plugins.xml"> ]>
 
 <book>
 
 <bookinfo>
  <title>jEdit 3.2 User's Guide</title>
- <subtitle>http://www.jedit.org</subtitle>
  <authorgroup>
   <author><firstname>Slava</firstname><surname>Pestov</surname></author>
   <author><firstname>John</firstname><surname>Gellene</surname></author>
@@ -57,26 +57,29 @@
 <part id="using-jedit"><title>Using jEdit</title>
  &basics;
  &files;
- &textedit;
- &modes;
- &sourceedit;
+ &text-edit;
+ &source-edit;
  &customizing;
- &usingplugins;
+ &writing-modes;
  &shortcuts;
  &history;
  &globs;
  &regexps;
- &activitylog;
- &cliusage;
+ &activity-log;
+ &cli-usage;
 </part>
 
-<part id="macros"><title>Extending jEdit With Macros</title>
+<part id="macros"><title>Macros</title>
  &macro-basics;
  &simple-macros;
  &dialog-macro;
  &macro-tips;
  &api-guide;
  &macro-index;
+</part>
+
+<part id="plugins"><title>Plugins</title>
+ &using-plugins;
 </part>
 
 </book>

@@ -10,6 +10,24 @@
    closed.
   </para>
   <para>
+   The following settings may be changed here:
+  </para>
+  <itemizedlist>
+   <listitem><para>The edit mode (see <xref linkend="modes" />)</para></listitem>
+   <listitem><para>The tab width (see <xref linkend="indent" />)</para></listitem>
+   <listitem><para>The indent width</para></listitem>
+   <listitem><para>The wrap column (see <xref linkend="entering-text" />)
+   </para></listitem>
+   <listitem><para>The line separator (see <xref linkend="line-separators" />)
+   </para></listitem>
+   <listitem><para>If syntax highlighting should be enabled
+   (see <xref linkend="syntax-hilite" />)
+   </para></listitem>
+   <listitem><para>If auto indent and soft tabs should be enabled
+   (see <xref linkend="indent" />)
+   </para></listitem>
+  </itemizedlist>
+  <para>
    The <quote>Corresponding buffer-local
    properties</quote> text field displays buffer-local properties that
    duplicate the current settings in the dialog box.
@@ -249,6 +267,10 @@
    is always blank. When the last line is changed, a new, blank, line
    is added.
   </para>
+  <para>
+   See <xref linkend="positional-params" /> for information about positional
+   parameters in abbreviations.
+  </para>
   <bridgehead renderas="sect3">The Printing Pane</bridgehead>
   <para>
    The <guibutton>Printing</guibutton> option pane lets you customize the
@@ -314,16 +336,17 @@
    contains the full activity log. See <xref linkend="activity-log" />.
    </para></listitem>
    <listitem><para><filename>history</filename> - a plain text file which
-   stores history lists, used by
-   history text fields and the
+   stores history lists, used by history text fields and the
    <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste Previous</guimenuitem> command.
    See <xref linkend="text-transfer" /> and <xref linkend="history" />.
    </para></listitem>
    <listitem><para><filename>properties</filename> - a plain text file which
    stores the majority of jEdit's settings.</para></listitem>
-   <listitem><para><filename>recent</filename> - a plain text file which stores
-   the list of recently opened files and where the caret was positioned within
-   them.</para></listitem>
+   <listitem><para><filename>recent.xml</filename> - an XML file which stores
+   the list of recently opened files. jEdit remembers the caret position,
+   selection state and character encoding of each recent file, and
+   automatically restores those values when one of the files in the list is
+   opened.</para></listitem>
    <listitem><para><filename>server</filename> - a plain text file that only
    exists while jEdit is running. The edit server's port number and
    authorization key is stored here. See <xref linkend="starting" />.

@@ -109,7 +109,7 @@
     dialog box.
    </para>
   </sect2>
-  <sect2><title>Line Separators</title>
+  <sect2 id="line-separators"><title>Line Separators</title>
    <para>
     The three major operating systems use different conventions to mark
     line endings in text files.
@@ -126,10 +126,126 @@
    </para>
   </sect2>
  </sect1>
+ <sect1 id="encodings"><title>Character Encodings</title>
+  <para>
+   Internally, Java programs like jEdit represent letters of text as
+   16-bit numerical values in the Unicode character set. Unicode is a
+   standardized character set that can be used to represent almost all human
+   languages. Unicode is very easy to work with from a programmer's point of
+   view, because characters in practically any human language can be written
+   without having to add specific support for each language.
+  </para>
+  <para>
+   Unfortunately, most other programs use far less flexible methods of storing
+   text; therefore, if jEdit loaded and saved all files as raw Unicode, it would
+   be useless, because most programs would not be able to make sense of the
+   16-bit values.
+  </para>
+  <para>
+   To get around this, jEdit converts Unicode characters to other character
+   encodings and vice versa when loading and saving files. jEdit can use any
+   encoding supported by the Java platform.
+  </para>
+  <para>
+   Firstly, the default encoding, used to load and save files for which no
+   other encoding is specified, can be set in the <guibutton>Loading and
+   Saving</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box. The setting is presented as an editable combo box; the combo box
+   contains a few of the more frequently used encodings, but the Java platform
+   defines practically hundreds more you can use.
+  </para>
+  <para>
+   Unfortunately, there
+   is no programmical way to obtain a list of all supported encodings, and the
+   set is constantly changing with each Java version. So to play it safe, jEdit
+   has a few pre-defined defaults, but allows you to use any other supported
+   encoding, assuming you know its name.
+  </para>
+  <para>
+   Unless you change the default encoding, jEdit will use your operating
+   system's native encoding; <literal>MacRoman</literal> on the MacOS,
+   <literal>Cp1252</literal> on Windows, and <literal>8859_1</literal> on
+   Unix.
+  </para>
+  <para>
+   The <guimenu>File</guimenu>&gt;<guisubmenu>Open With Encoding</guisubmenu>
+   lets you open a file with an encoding other than the default. The menu
+   contains a set of items, one for each common encoding, along with
+   <guimenuitem>System Default</guimenuitem> and <guimenuitem>jEdit
+   Default</guimenuitem> commands. Invoking a menu item displays the usual
+   file dialog box, and opens the selected file with the chosen encoding.
+  </para>
+  <para>
+   The <guimenu>Open With Other Encoding</guimenu> command in the same menu
+   lets you enter an arbitriary encoding name, assuming it is supported by
+   your Java implementation.
+  </para>
+  <para>
+   Once a file has been loaded into memory, the encoding to use when saving it
+   can be set in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+   Options</guimenuitem> dialog box.
+  </para>
+  <para>
+   The current buffer's encoding is shown in the status bar. If a file is opened
+   without an explicit encoding specified, jEdit will use the encoding last used
+   when working with that file, if the file is in the recent file list.
+   Otherwise, the default encoding will be used.
+  </para>
+  <sect2><title>Commonly Used Encodings</title>
+   <para>
+    The most frequently-used character encoding is ASCII, or <quote>American 
+    Standard Code for Information Interchange</quote>. ASCII encodes Latin
+    letters used in English, in addition to numbers and a range of punctuation.
+    The ASCII character set consists of 127 characters only, and it is unsuitable
+    for anything but English text (and other file types which only use English
+    characters, like most program source). jEdit will load and save files as
+    7-bit ASCII if the <literal>ASCII</literal> encoding is used.
+   </para>
+   <para>
+    Because ASCII is unsuitable for international use, most operating
+    systems use an 8-bit extension of ASCII, with the first 127 characters
+    remaining the same, and the rest used to encode accents, ulmauts, and
+    various less frequently used typographical marks. Unfortunately, the three
+    major
+    operating systems all extend ASCII in a different way. Files written by
+    Macintosh programs can be read using the <literal>MacRoman</literal>
+    encoding; Windows text files are usually stored as
+    <literal>Cp1252</literal>. In the Unix world, the <literal>8859_1</literal>
+    (otherwise known as Latin1) character encoding has found widespread usage.
+   </para>
+   <para>
+    Windows users are accustomized to dealing with files in a wide range of
+    character sets, known as <firstterm>code pages</firstterm>. Java supports a
+    large number of code pages; the encoding name consists of the text
+    <quote>Cp</quote>, followed by a number.
+   </para>
+   <para>
+    Raw Unicode files are quite rare, but can be read and written with the
+    <literal>Unicode</literal> encoding.
+    One reason raw Unicode has not found widespread usage for storing files on
+    disk is that each character takes up 16 bits. Most other character sets
+    devote 8 bits per character, which saves space. The <literal>UTF8</literal>
+    encoding encodes frequently-used Unicode characters as 8 bits, with
+    less-frequent ones stretching up to 24 bits. This saves space but allows the
+    full range of Unicode characters to be represented.
+   </para>
+   <para>
+    Many common cross-platform international character sets are supported;
+    <literal>KOI8_R</literal> for Russian text, <literal>Big5</literal> and
+    <literal>GBK</literal> for Chinese, and <literal>SJIS</literal> for
+    Japanese.
+   </para>
+   <para>
+    Java even supports a few downright obscure encodings, such as the
+    <literal>EBCDIC</literal> character encoding used on IBM mainframes.
+   </para>
+  </sect2>
+ </sect1>
  <sect1 id="vfs-browser"><title>The File System Browser</title>
   <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>File System
-   Browser</guimenuitem> displays a file system browser window.
+   Browser</guimenuitem> displays a file system browser.
    By default, the file system browser is shown in a floating window;
    it can be set to dock into the view in the <guibutton>Docking</guibutton>
    pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
@@ -200,8 +316,9 @@
    containing commands for manipulating that file, in addition to all the
    commands from the <guibutton>More</guibutton> menu.
    If the file is already open, the popup will have commands to
-   display it in the current view, display it in a new view, or close it.
-   Unopened file popups have commands for opening, deleting and renaming.
+   display it or close it.
+   Unopened file popups have commands for opening, opening with a different
+   encoding, deleting and renaming.
    Note that attempting to delete a directory containing files
    will give an error;
    only empty directories may be deleted.

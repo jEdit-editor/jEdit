@@ -1,7 +1,7 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
-<chapter id="plugins"><title>Installing and Using Plugins</title>
+<chapter id="using-plugins"><title>Installing and Using Plugins</title>
  <para>
   Plugins are loadable modules of code that extend jEdit's
   functionality. This chapter only covers installing and updating

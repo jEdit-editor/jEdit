@@ -308,7 +308,7 @@ public class jEdit
 			HistoryModel.loadHistory(history);
 
 			File recent = new File(MiscUtilities.constructPath(
-				settingsDirectory,"recent"));
+				settingsDirectory,"recent.xml"));
 			if(recent.exists())
 				recentModTime = recent.lastModified();
 			BufferHistory.load(recent);
@@ -1752,7 +1752,7 @@ public class jEdit
 		{
 			// Save the recent file list
 			File file = new File(MiscUtilities.constructPath(
-				settingsDirectory, "recent"));
+				settingsDirectory, "recent.xml"));
 			if(file.exists() && file.lastModified() != recentModTime)
 			{
 				Log.log(Log.WARNING,jEdit.class,file + " changed"

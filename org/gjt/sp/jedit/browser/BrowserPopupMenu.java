@@ -53,7 +53,6 @@ public class BrowserPopupMenu extends JPopupMenu
 				if(browser.getMode() == VFSBrowser.BROWSER)
 				{
 					add(createMenuItem("open"));
-					add(createOpenEncodingMenu());
 					add(createMenuItem("insert"));
 					add(createMenuItem("close"));
 				}

@@ -55,6 +55,8 @@ JEDIT 3.2 VERSION HISTORY
 - The edit server now explicitly uses the UTF8 encoding when reading
   and writing from/to the socket, instead of using the JVM default
 - Improved reporting of I/O errors throughout the editor
+- The buffer history (formely $HOME/.jedit/recent) is now written to
+  $HOME/.jedit/recent.xml, as XML
 
 + Bug Fixes
 

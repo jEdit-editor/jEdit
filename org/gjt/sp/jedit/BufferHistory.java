@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import com.microstar.xml.*;
 import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.textarea.*;
@@ -70,42 +71,26 @@ public class BufferHistory
 			max = 50;
 		}
 
+		Log.log(Log.MESSAGE,jEdit.class,"Loading recent file list " + file);
+
+		RecentHandler handler = new RecentHandler();
+		XmlParser parser = new XmlParser();
+		parser.setHandler(handler);
 		try
 		{
-			BufferedReader in = new BufferedReader(
-				new FileReader(file));
-
-			String line;
-			while((line = in.readLine()) != null)
-			{
-				int index1 = line.indexOf('\t');
-
-				String path = line.substring(0,index1);
-
-				int index2 = line.indexOf('\t',index1 + 1);
-				int caret;
-				String selection;
-				if(index2 == -1)
-				{
-					caret = Integer.parseInt(line.substring(
-							index1 + 1));
-					selection = null;
-				}
-				else
-				{
-					caret = Integer.parseInt(line.substring(
-							index1 + 1,index2));
-					selection = line.substring(index2 + 1);
-				}
-
-				history.addElement(new Entry(path,caret,selection,null));
-			}
-
-			in.close();
+			BufferedReader in = new BufferedReader(new FileReader(file));
+			parser.parse(null, null, in);
 		}
-		catch(FileNotFoundException e)
+		catch(XmlException xe)
 		{
-			Log.log(Log.NOTICE,BufferHistory.class,e);
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,BufferHistory.class,file + ":" + line
+				+ ": " + message);
+		}
+		catch(FileNotFoundException fnf)
+		{
+			Log.log(Log.DEBUG,BufferHistory.class,fnf);
 		}
 		catch(Exception e)
 		{
@@ -115,6 +100,8 @@ public class BufferHistory
 
 	public static void save(File file)
 	{
+		Log.log(Log.MESSAGE,jEdit.class,"Saving recent file list " + file);
+
 		String lineSep = System.getProperty("line.separator");
 
 		try
@@ -122,18 +109,54 @@ public class BufferHistory
 			BufferedWriter out = new BufferedWriter(
 				new FileWriter(file));
 
+			out.write("<?xml version=\"1.0\"?>");
+			out.write(lineSep);
+			out.write("<!DOCTYPE RECENT SYSTEM \"recent.dtd\">");
+			out.write(lineSep);
+			out.write("<RECENT>");
+			out.write(lineSep);
+
 			Enumeration enum = history.elements();
 			while(enum.hasMoreElements())
 			{
+				out.write("<ENTRY>");
+				out.write(lineSep);
+
 				Entry entry = (Entry)enum.nextElement();
+
+				out.write("<PATH><![CDATA[");
 				out.write(entry.path);
-				out.write('\t');
+				out.write("]]></PATH>");
+				out.write(lineSep);
+
+				out.write("<CARET>");
 				out.write(String.valueOf(entry.caret));
-				out.write('\t');
-				if(entry.selection != null)
+				out.write("</CARET>");
+				out.write(lineSep);
+
+				if(entry.selection != null
+					&& entry.selection.length() > 0)
+				{
+					out.write("<SELECTION>");
 					out.write(entry.selection);
+					out.write("</SELECTION>");
+					out.write(lineSep);
+				}
+
+				if(entry.encoding != null)
+				{
+					out.write("<ENCODING>");
+					out.write(entry.encoding);
+					out.write("</ENCODING>");
+					out.write(lineSep);
+				}
+
+				out.write("</ENTRY>");
 				out.write(lineSep);
 			}
+
+			out.write("</RECENT>");
+			out.write(lineSep);
 
 			out.close();
 		}
@@ -155,14 +178,14 @@ public class BufferHistory
 			|| File.separatorChar == ':');
 	}
 
-	private static void addEntry(Entry entry)
+	/* private */ static void addEntry(Entry entry)
 	{
 		history.insertElementAt(entry,0);
 		while(history.size() > max)
 			history.removeElementAt(history.size() - 1);
 	}
 
-	private static void removeEntry(String path)
+	/* private */ static void removeEntry(String path)
 	{
 		Enumeration enum = history.elements();
 		for(int i = 0; i < history.size(); i++)
@@ -247,5 +270,65 @@ public class BufferHistory
 			this.selection = selection;
 			this.encoding = encoding;
 		}
+	}
+
+	static class RecentHandler extends HandlerBase
+	{
+		public Object resolveEntity(String publicId, String systemId)
+		{
+			if("recent.dtd".equals(systemId))
+			{
+				try
+				{
+					return new BufferedReader(new InputStreamReader(
+						getClass().getResourceAsStream("recent.dtd")));
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,this,"Error while opening"
+						+ " recent.dtd:");
+					Log.log(Log.ERROR,this,e);
+				}
+			}
+
+			return null;
+		}
+
+		public void doctypeDecl(String name, String publicId,
+			String systemId) throws Exception
+		{
+			if("RECENT".equals(name))
+				return;
+
+			Log.log(Log.ERROR,this,"recent.xml: DOCTYPE must be RECENT");
+		}
+
+		public void endElement(String name)
+		{
+			if(name.equals("ENTRY"))
+				addEntry(new Entry(path,caret,selection,encoding));
+			else if(name.equals("PATH"))
+				path = charData;
+			else if(name.equals("CARET"))
+				caret = Integer.parseInt(charData);
+			else if(name.equals("SELECTION"))
+				selection = charData;
+			else if(name.equals("ENCODING"))
+				encoding = charData;
+		}
+
+		public void charData(char[] ch, int start, int length)
+		{
+			charData = new String(ch,start,length);
+		}
+
+		// end HandlerBase implementation
+
+		// private members
+		private String path;
+		private int caret;
+		private String selection;
+		private String encoding;
+		private String charData;
 	}
 }

@@ -2,6 +2,73 @@
 <!-- :indentSize=1:noTabs=true: -->
 
 <chapter id="source-edit"><title>Editing Source Code</title>
+ <sect1 id="modes"><title>Edit Modes</title>
+  <para>
+   An <firstterm>edit mode</firstterm> is an editor configuration intended to
+   edit a specific type of file. Edit modes can specify syntax highlighting
+   rules, auto indent behavior, and various useful customizations. This section
+   only covers the basics of edit modes; information about writing your own edit
+   modes can be found in <xref linkend="writing-modes" />.
+  </para>
+  <sect2 id="mode-selection"><title>Mode Selection</title>
+   <para>
+    When a file is opened, jEdit first checks the file name against a list
+    of known patterns. For example, files whose names end with <quote>.c</quote>
+    are edited in C mode, and files named <filename>Makefile</filename> are
+    edited in Makefile mode. If a suitable match based on file name cannot be
+    found, jEdit checks the first line of the file. For example, files whose
+    first line is <quote>#!/bin/sh</quote> are edited in shell script mode.
+   </para>
+   <para>
+    If automatic mode selection is not appropriate, the edit mode can
+    be specified manually. To set the current buffer's edit mode
+    on a one-time basis, specify it in the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+    dialog box. To have a buffer open with a specific edit mode every time,
+    place the following in one of the first 10 lines of the buffer,
+    where <replaceable>edit mode</replaceable> is the name of the desired edit
+    mode:
+   </para>
+   <screen>:mode=<replaceable>edit mode</replaceable>:</screen>
+  </sect2>
+  <sect2 id="syntax-hilite"><title>Syntax Highlighting</title>
+   <para>
+    Syntax highlighting is the display of programming language
+    tokens using different fonts and colors. This makes the code
+    easier to follow and errors such as misplaced quotes easier to spot.
+    All edit modes except for
+    the plain text mode perform syntax highlighting.
+   </para>
+   <para>
+    The colors and styles used to highlight syntax tokens can be changed
+    in the <guibutton>Styles</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box.
+   </para>
+   <para>
+    Syntax highlighting can be enabled or disabled in one of
+    several ways:
+   </para>
+   <itemizedlist>
+    <listitem><para>On a global or mode-specific
+    basis in the
+    <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
+    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+    Options</guimenuitem> dialog box.</para></listitem>
+    <listitem><para>In the current buffer
+    for the duration of the editing session in the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+    dialog box.</para></listitem>
+    <listitem><para>In the current buffer for future editing sessions, by placing
+    the following in one of the first 10 lines of the buffer, where
+    <replaceable>flag</replaceable> is either <quote>true</quote> or
+    <quote>false</quote>:
+    </para>
+    <screen>:syntax=<replaceable>flag</replaceable>:</screen>
+    </listitem>
+   </itemizedlist>
+  </sect2>
+ </sect1>
  <sect1 id="abbrevs"><title>Abbreviations</title>
   <para>
    Using abbreviations reduces the time spent typing long but commonly used
@@ -37,7 +104,7 @@
    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
    <keycap>V</keycap> <keycap>Space</keycap>.
   </para>
-  <sect2><title>Positional Parameters</title>
+  <sect2 id="positional-params"><title>Positional Parameters</title>
    <para>
     Positional parameters are an advanced feature that make abbreviations much
     more useful. The best way to describe them is with an example.
@@ -49,7 +116,7 @@
    <programlisting>for(int $1 = 0; $1 &lt; $2; $1++)</programlisting>
    <para>
     Now, simply entering <quote>F</quote> in the buffer and expanding it will
-    insert the above text. However, if you expand <quote>F#j#array.length#</quote>,
+    insert the above text. However, if you expand <literal>F#j#array.length#</literal>,
     the following will be inserted:
    </para>
    <programlisting>for(int j = 0; j &lt; array.length; j++)</programlisting>
