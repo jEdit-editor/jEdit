@@ -259,19 +259,21 @@ public class OptionsDialog extends EnhancedDialog
 
 		addOptionPane(new GeneralOptionPane(), jEditGroup);
 		addOptionPane(new TextAreaOptionPane(), jEditGroup);
+		addOptionPane(new StyleOptionPane(), jEditGroup);
 		addOptionPane(new EditorOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
-		addOptionPane(new StyleOptionPane(), jEditGroup);
-		addOptionPane(new FileFilterOptionPane(), jEditGroup);
-		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
 		addOptionPane(new ToolBarOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
+		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
 
 		// create the Shortcuts sub-branch
 		OptionGroup shortcutsGroup = new OptionGroup("shortcuts");
 		shortcutsGroup.addOptionPane(new CommandShortcutsOptionPane());
 		shortcutsGroup.addOptionPane(new MacroShortcutsOptionPane());
 		addOptionGroup(shortcutsGroup, jEditGroup);
+
+		addOptionPane(new BrowserOptionPane(), jEditGroup);
+		addOptionPane(new FileFilterOptionPane(), jEditGroup);
 
 		addOptionGroup(jEditGroup, rootGroup);
 
@@ -594,6 +596,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/08/11 09:06:52  sp
+ * Browser option pane
+ *
  * Revision 1.28  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *

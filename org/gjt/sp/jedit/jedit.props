@@ -249,3 +249,6 @@ vfs.browser.sortIgnoreCase=true
 
 # Can be one of: buffer, home, last
 vfs.browser.defaultPath=buffer
+
+# Can be either list or tree
+vfs.browser.defaultView=list

@@ -131,9 +131,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
 
-		setBrowserView(new BrowserListView(this));
-
 		propertiesChanged();
+
 		int lastFilter;
 		try
 		{
@@ -705,6 +704,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		filterCombo.setModel(new DefaultComboBoxModel(filters));
 
+		String defaultView = jEdit.getProperty("vfs.browser.defaultView");
+		/* if(defaultView.equals("list"))
+			setBrowserView(new BrowserListView(this));
+		else */ if(defaultView.equals("tree"))
+			setBrowserView(new BrowserTreeView(this));
+		else // default
+			setBrowserView(new BrowserListView(this));
+
 		// unless we're being called from the constructor, reload
 		// directory so that new sorting settings take effect.
 		if(path != null)
@@ -908,6 +915,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/08/11 09:06:52  sp
+ * Browser option pane
+ *
  * Revision 1.10  2000/08/10 11:55:58  sp
  * VFS browser toolbar improved a little bit, font selector tweaks
  *

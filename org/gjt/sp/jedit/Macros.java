@@ -312,8 +312,12 @@ public class Macros
 	private static void playMacroFromBuffer(View view, String macro,
 		Buffer buffer)
 	{
+		Buffer _viewBuffer = view.getBuffer();
+
 		try
 		{
+			_viewBuffer.beginCompoundEdit();
+
 			Element map = buffer.getDefaultRootElement();
 			for(int i = 0; i < map.getElementCount(); i++)
 			{
@@ -330,12 +334,20 @@ public class Macros
 		{
 			Log.log(Log.ERROR,Macros.class,bl);
 		}
+		finally
+		{
+			_viewBuffer.endCompoundEdit();
+		}
 	}
 
 	private static void playMacroFromFile(View view, String macro, String path)
 	{
+		Buffer _viewBuffer = view.getBuffer();
+
 		try
 		{
+			_viewBuffer.beginCompoundEdit();
+
 			BufferedReader in = new BufferedReader(new FileReader(path));
 
 			String line;
@@ -354,6 +366,10 @@ public class Macros
 			Log.log(Log.ERROR,Macros.class,io);
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(view,"ioerror",args);
+		}
+		finally
+		{
+			_viewBuffer.endCompoundEdit();
 		}
 	}
 
@@ -497,6 +513,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2000/08/11 09:06:51  sp
+ * Browser option pane
+ *
  * Revision 1.33  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

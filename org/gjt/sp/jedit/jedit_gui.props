@@ -889,6 +889,41 @@ options.textarea.gutter.interval=Line highlight interval (0=none):
 options.textarea.gutter.lineNumbers=Line numbering enabled
 options.textarea.gutter.currentLineHighlight=Current line highlight enabled
 
+options.styles.label=Colors & Styles
+options.styles.colors=Colors:
+options.styles.styles=Styles:
+options.styles.object=Object
+options.styles.color=Color
+options.styles.style=Style
+options.styles.bgColor=View background
+options.styles.fgColor=View foreground
+options.styles.caretColor=Caret
+options.styles.selectionColor=Selection
+options.styles.lineHighlightColor=Line highlight
+options.styles.bracketHighlightColor=Bracket highlight
+options.styles.eolMarkerColor=EOL markers
+options.styles.gutterBgColor=Gutter background
+options.styles.gutterFgColor=Gutter foreground
+options.styles.gutterHighlightColor=Gutter highlight
+options.styles.gutterCurrentLineColor=Current line in gutter
+options.styles.gutterMarkerColor=Markers in gutter
+options.styles.gutterRegisterColor=Registers in gutter
+options.styles.gutterFocusBorderColor=Focused gutter border
+options.styles.gutterNoFocusBorderColor=Unfocused gutter border
+options.styles.comment1Style=Comment 1
+options.styles.comment2Style=Comment 2
+options.styles.literal1Style=Literal 1
+options.styles.literal2Style=Literal 2
+options.styles.labelStyle=Label
+options.styles.keyword1Style=Keyword 1
+options.styles.keyword2Style=Keyword 2
+options.styles.keyword3Style=Keyword 3
+options.styles.functionStyle=Function
+options.styles.markupStyle=Markup
+options.styles.operatorStyle=Operator
+options.styles.digitStyle=Digit
+options.styles.invalidStyle=Invalid token
+
 options.editor.label=Editor
 options.editor.global=Default editor settings
 options.editor.defaultMode=Default edit mode:
@@ -926,54 +961,6 @@ options.print.margin.left=Left:
 options.print.margin.bottom=Bottom:
 options.print.margin.right=Right:
 
-options.styles.label=Colors & Styles
-options.styles.colors=Colors:
-options.styles.styles=Styles:
-options.styles.object=Object
-options.styles.color=Color
-options.styles.style=Style
-options.styles.bgColor=View background
-options.styles.fgColor=View foreground
-options.styles.caretColor=Caret
-options.styles.selectionColor=Selection
-options.styles.lineHighlightColor=Line highlight
-options.styles.bracketHighlightColor=Bracket highlight
-options.styles.eolMarkerColor=EOL markers
-options.styles.gutterBgColor=Gutter background
-options.styles.gutterFgColor=Gutter foreground
-options.styles.gutterHighlightColor=Gutter highlight
-options.styles.gutterCurrentLineColor=Current line in gutter
-options.styles.gutterMarkerColor=Markers in gutter
-options.styles.gutterRegisterColor=Registers in gutter
-options.styles.gutterFocusBorderColor=Focused gutter border
-options.styles.gutterNoFocusBorderColor=Unfocused gutter border
-options.styles.comment1Style=Comment 1
-options.styles.comment2Style=Comment 2
-options.styles.literal1Style=Literal 1
-options.styles.literal2Style=Literal 2
-options.styles.labelStyle=Label
-options.styles.keyword1Style=Keyword 1
-options.styles.keyword2Style=Keyword 2
-options.styles.keyword3Style=Keyword 3
-options.styles.functionStyle=Function
-options.styles.markupStyle=Markup
-options.styles.operatorStyle=Operator
-options.styles.digitStyle=Digit
-options.styles.invalidStyle=Invalid token
-
-options.filters.label=File Filters
-options.filters.caption=Additional filters to display in file chooser:
-options.filters.name=Name
-options.filters.re=Glob pattern
-
-options.abbrevs.label=Abbreviations
-options.abbrevs.set=Abbrev set:
-options.abbrevs.expandOnInput=Automatically expand abbrevs when they are typed
-options.abbrevs.abbrev=Abbrev
-options.abbrevs.expand=Expansion
-options.abbrevs.sort.abbrev=Sort by abbrev
-options.abbrevs.sort.expand=Sort by expansion
-
 options.toolbar.label=Tool Bar
 options.toolbar.showToolbar=Show tool bar
 options.toolbar.showSearchbar=Show search bar
@@ -1005,6 +992,14 @@ options.context.add.separator=Separator
 options.context.add.action=Command:
 options.context.add.macro=Macro:
 
+options.abbrevs.label=Abbreviations
+options.abbrevs.set=Abbrev set:
+options.abbrevs.expandOnInput=Automatically expand abbrevs when they are typed
+options.abbrevs.abbrev=Abbrev
+options.abbrevs.expand=Expansion
+options.abbrevs.sort.abbrev=Sort by abbrev
+options.abbrevs.sort.expand=Sort by expansion
+
 options.keys.name=Command
 options.keys.binding=Keyboard shortcut
 options.keys.sort.label=Sort by label
@@ -1013,6 +1008,25 @@ options.keys.sort.shortcut=Sort by shortcut
 options.command-keys.label=Commands
 
 options.macro-keys.label=Macros
+
+options.browser.label=VFS Browser
+options.browser.defaultPath=Default path:
+options.browser.defaultPath.buffer=Current buffer directory
+options.browser.defaultPath.home=Home directory
+options.browser.defaultPath.last=Most recently visited directory
+options.browser.defaultView=Default browser view:
+options.browser.defaultView.list=List
+options.browser.defaultView.tree=Tree
+options.browser.doubleClickClose=Double-click closes open files
+options.browser.showHiddenFiles=Show hidden files
+options.browser.sortFiles=Sort file list
+options.browser.sortIgnoreCase=Case insensitive sort
+options.browser.sortMixFilesAndDirs=Mix files and directories
+
+options.filters.label=File Filters
+options.filters.caption=Additional filters to display in file system browser:
+options.filters.name=Name
+options.filters.re=Glob pattern
 
 # Font selector
 font-selector.title=Font Selector

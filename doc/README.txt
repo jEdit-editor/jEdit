@@ -161,8 +161,9 @@ Romain Guy - POVRay
 
 If you are not on the above list but think you should be, e-mail me.
 
-In addition to the above people, I would like to thank all the people
-who wrote plugins, and the users for their feedback and comments.
+In addition to the above people, I would like to thank the plugin
+developers for their plugins, and the users for their feedback and
+comments.
 
 Have fun!
 

@@ -29,12 +29,12 @@ import org.gjt.sp.jedit.*;
  */
 public class HTMLActionButton extends JButton
 {
-	public String getAction()
+	public String getEditAction()
 	{
 		return action;
 	}
 
-	public void setAction(String action)
+	public void setEditAction(String action)
 	{
 		this.action = action;
 		int index = action.indexOf('@');

@@ -28,6 +28,7 @@ JEDIT 2.6 VERSION HISTORY
 - Global Options dialog box re-arranged somewhat
 - 'Send' command moved to a plugin, out of the core
 - Repeated actions can now be undone in one operation
+- Macro invocations can now be undone in one operation
 
 + Bug Fixes
 
@@ -40,6 +41,7 @@ JEDIT 2.6 VERSION HISTORY
 - Macros invoked using keyboard shortcuts would always fail with a
   "macro not found" error (since 2.6pre1)
 - 'HTML/Close Tag' macro called on non-existent goto-end-indent action
+- HTMLActionButton.java didn't compile on JDK 1.3 (since 2.6pre1)
 
 + API Changes
 

@@ -1,6 +1,6 @@
 /*
  * TextAreaOptionPane.java - Text area options panel
- * Copyright (C) 1998, 2000, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  * Copyright (C) 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -258,6 +258,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/11 09:06:52  sp
+ * Browser option pane
+ *
  * Revision 1.1  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *
