@@ -1,49 +1,23 @@
 - update to new gnu.regexp version
-
-* Folding
-
 - expand-one-level command
 - inserting text causes random problems with folding
 - undo causes problems sometimes (is this related to folding at all?)
 - sometimes fold markers are not repainted in gutter
-- visibleLine handling a bit broken
-- deleting line still broken
 - scrolling bug
 - replace all fucks shit up
-
-* XMode rule inclusion
-
-A new tag will be added:
-
-<INCLUDE SET="<ruleset name>" />
-
-This tag will copy all rules from the specified ruleset to the current
-ruleset. This will reduce rule duplication by allowing, for example,
-XML-derived modes (HTML, ASP, JSP, PHP, ...) to share a common set of
-rules.
-
-* More reliable saving
-
-When saving a file, it will first be saved to .<filename>.save, and
-only then renamed to <filename> if the save was successful.
-
-* Minor changes
-
+- press enter on a fold start line fucks up
+- XMode rule inclusion
+- when saving local files, save to .<filename>.save, then rename to
+  <filename>
 - The File->Current Directory menu will not list backups and autosaves.
-- All available fonts will be shown in the font selector.
 - The base Metal L&F font will be configurable.
-- File system browser: change 'Open in new view' to 'Open in new split'
-- Make modifier code keyboard layout-neutral: handle modifier+key char
-  in keyTyped()
 - Bracket double click behavior is really annoying - make if configurable
 - finish persistent splits
 - finish \t in abbrevs
-- initial open bug still exists with brackets
-- Binding to <any prefix> SPACE doesn't work
-
-* Two-pane view in filesystem browser
-
-* Documentation
-
-- Migrate to DocBook/XML
-- Update docs
+- Two-pane view in filesystem browser
+- Migrate documentation to DocBook/XML
+- Folding docs - in source-edit.sgml
+- store docked window sizes, instead of size of entire area
+- confirm() method in GUIUtilities
+- dump keys macro
+- .description plugin property

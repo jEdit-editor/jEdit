@@ -59,7 +59,7 @@ public class BrowserPopupMenu extends JPopupMenu
 				if(file.type == VFS.DirectoryEntry.DIRECTORY
 					|| file.type == VFS.DirectoryEntry.FILESYSTEM)
 				{
-					add(createMenuItem("goto"));
+					add(createMenuItem("browse"));
 				}
 				else if(browser.getMode() != VFSBrowser.BROWSER)
 				{
@@ -160,7 +160,7 @@ public class BrowserPopupMenu extends JPopupMenu
 				if(buffer != null)
 					jEdit.closeBuffer(view,buffer);
 			}
-			else if(actionCommand.equals("goto"))
+			else if(actionCommand.equals("browse"))
 				browser.setDirectory(file.path);
 			else if(evt.getActionCommand().equals("rename"))
 				browser.rename(file.path);

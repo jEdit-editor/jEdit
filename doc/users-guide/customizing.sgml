@@ -224,8 +224,8 @@
   </para>
   <bridgehead renderas=sect3>The Shortcut Editing Panes</>
   <para>
-   The <guibutton>Command Shortcuts</>, <guibutton>Macro Shortcuts</> and
-   <guibutton>Plugin Shortcuts</> option panes let you change keyboard
+   The <guibutton>Command Shortcuts</>, <guibutton>Plugin Shortcuts</> and
+   <guibutton>Macro Shortcuts</> option panes let you change keyboard
    shortcuts. Each command can have up to two shortcuts associated with it.
   </para>
   <para>

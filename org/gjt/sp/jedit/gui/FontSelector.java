@@ -1,6 +1,7 @@
 /*
  * FontSelector.java - Font selector
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
+ * Portions copyright (C) 1999 Jason Ginchereau
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +22,7 @@ package org.gjt.sp.jedit.gui;
 
 import java.awt.event.*;
 import java.awt.*;
+import java.util.Vector;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -219,10 +221,46 @@ class FontSelectorDialog extends EnhancedDialog
 	private JButton ok;
 	private JButton cancel;
 
+	/**
+	 * For some reason the default Java fonts show up in the
+	 * list with .bold, .bolditalic, and .italic extensions.
+	 */
+	private static final String[] HIDEFONTS = {
+		".bold",
+		".italic"
+	};
+
 	private String[] getFontList()
 	{
-		// XXX
-		return getToolkit().getFontList();
+		try
+		{
+			Class GEClass = Class.forName("java.awt.GraphicsEnvironment");
+			Object GEInstance = GEClass.getMethod("getLocalGraphicsEnvironment", null).invoke(null, null);
+
+			String[] nameArray = (String[])
+			GEClass.getMethod("getAvailableFontFamilyNames", null).invoke(GEInstance, null);
+			Vector nameVector = new Vector(nameArray.length);
+
+			for(int i = 0, j; i < nameArray.length; i++)
+			{
+				for(j = 0; j < HIDEFONTS.length; j++)
+				{
+					if(nameArray[i].indexOf(HIDEFONTS[j]) >= 0)
+						break;
+				}
+
+				if(j == HIDEFONTS.length)
+					nameVector.addElement(nameArray[i]);
+			}
+
+			String[] _array = new String[nameVector.size()];
+			nameVector.copyInto(_array);
+			return _array;
+		}
+		catch(Exception ex)
+		{
+			return Toolkit.getDefaultToolkit().getFontList();
+		}
 	}
 
 	private JPanel createTextFieldAndListPanel(String label,
@@ -320,14 +358,3 @@ class FontSelectorDialog extends EnhancedDialog
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.2  2000/08/10 11:55:58  sp
- * VFS browser toolbar improved a little bit, font selector tweaks
- *
- * Revision 1.1  2000/08/10 08:30:40  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- */

@@ -214,9 +214,8 @@ public class JEditTextArea extends JComponent
 			{
 				// this will call updateScrollBars(), so
 				// just return...
-				int newFirstLine = lineCount - visibleLines;
-				if(newFirstLine != firstLine
-					&& newFirstLine >= 0)
+				int newFirstLine = Math.max(0,lineCount - visibleLines);
+				if(newFirstLine != firstLine)
 				{
 					setFirstLine(newFirstLine);
 					return;
@@ -269,6 +268,11 @@ public class JEditTextArea extends JComponent
 		physFirstLine = buffer.virtualToPhysical(this.firstLine);
 
 		maxHorizontalScrollWidth = 0;
+
+		// hack so that if we scroll and the matching bracket
+		// comes into view, it is highlighted
+		//if(bracketPosition == -1)
+		//	updateBracketHighlight();
 
 		if(this.firstLine != vertical.getValue())
 			updateScrollBars();
@@ -1252,9 +1256,6 @@ public class JEditTextArea extends JComponent
 			if(!buffer.isLineVisible(selectionEndLine))
 				buffer.expandFoldAt(selectionEndLine);
 
-			updateBracketHighlight(newEndLine,newEnd
-				- getLineStartOffset(newEndLine));
-
 			fireCaretEvent();
 		}
 
@@ -1272,6 +1273,8 @@ public class JEditTextArea extends JComponent
 
 		if(focusedComponent == this)
 			scrollToCaret(doElectricScroll);
+
+		updateBracketHighlight();
 	}
 
 	/**
@@ -3779,7 +3782,7 @@ forward_scan:		do
 		return line.substring(offset,wordEnd);
 	}
 
-	private void updateBracketHighlight(int line, int offset)
+	private void updateBracketHighlight()
 	{
 		if(!painter.isBracketHighlightEnabled())
 			return;
@@ -3787,26 +3790,31 @@ forward_scan:		do
 		if(bracketLine != -1)
 			invalidateLine(bracketLine);
 
+		int line = getCaretLine();
+		int offset = getCaretPosition() - getLineStartOffset(line);
+
 		if(offset == 0)
 		{
 			bracketPosition = bracketLine = -1;
 			return;
 		}
 
-		int lastLine;
+		int endLine;
 		if(visibleLines == 0)
-			lastLine = buffer.getLineCount();
+			endLine = buffer.getLineCount();
 		else
 		{
-			lastLine = buffer.virtualToPhysical(
-				Math.min(getVirtualLineCount(),
+			endLine = Math.min(buffer.getLineCount(),
+				buffer.virtualToPhysical(
 				firstLine + visibleLines));
 		}
+
+		int beginLine = Math.min(line,physFirstLine);
 
 		try
 		{
 			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,line,offset - 1,physFirstLine,lastLine);
+				buffer,line,offset - 1,beginLine,endLine);
 			if(bracketOffset != -1)
 			{
 				bracketLine = getLineOfOffset(bracketOffset);
@@ -3818,7 +3826,7 @@ forward_scan:		do
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 		}
 
 		bracketLine = bracketPosition = -1;
@@ -4093,8 +4101,6 @@ forward_scan:		do
 	{
 		public void insertUpdate(DocumentEvent evt)
 		{
-			documentChanged(evt);
-
 			if(!buffer.isLoaded())
 				return;
 
@@ -4127,16 +4133,14 @@ forward_scan:		do
 				select(newStart,newEnd,true);
 			else
 			{
-				int caretLine = getCaretLine();
-				updateBracketHighlight(caretLine,getCaretPosition()
-					- getLineStartOffset(caretLine));
+				updateBracketHighlight();
 			}
+
+			documentChanged(evt);
 		}
 
 		public void removeUpdate(DocumentEvent evt)
 		{
-			documentChanged(evt);
-
 			if(!buffer.isLoaded())
 				return;
 
@@ -4175,11 +4179,9 @@ forward_scan:		do
 			if(change)
 				select(newStart,newEnd,false);
 			else
-			{
-				int caretLine = getCaretLine();
-				updateBracketHighlight(caretLine,getCaretPosition()
-					- getLineStartOffset(caretLine));
-			}
+				updateBracketHighlight();
+
+			documentChanged(evt);
 		}
 
 		public void changedUpdate(DocumentEvent evt) {}

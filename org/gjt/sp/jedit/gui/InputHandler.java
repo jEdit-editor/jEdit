@@ -1,6 +1,6 @@
 /*
  * InputHandler.java - Manages key bindings and executes actions
- * Copyright (C) 1999, 2001 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

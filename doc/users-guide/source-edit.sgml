@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <chapter id=source-edit><title>Editing Source Code</>
  <sect1 id=abbrevs><title>Abbreviations</>

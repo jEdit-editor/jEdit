@@ -1096,8 +1096,7 @@ options.keys.shortcut1=Primary shortcut
 options.keys.shortcut2=Alternative shortcut
 
 grab-key.title=Specify Shortcut
-grab-key.caption=Press the sequence of keys you want associated \
-	with the command "{0}", then click OK.
+grab-key.caption=Press the desired shortcut for "{0}", then click OK.
 
 options.command-keys.label=Command Shortcuts
 
@@ -1202,14 +1201,14 @@ vfs.browser.synchronize.icon=Import24.gif
 vfs.browser.more.label=More
 vfs.browser.more.icon=ToolbarMenu.gif
 
-vfs.browser.menu.close.label=Close Selected File
-vfs.browser.menu.open.label=Open Selected File
-vfs.browser.menu.open-view.label=Open Selected File in New View
-vfs.browser.menu.insert.label=Insert File
-vfs.browser.menu.goto.label=Go to Selected Directory
+vfs.browser.menu.close.label=Close
+vfs.browser.menu.open.label=Open
+vfs.browser.menu.open-view.label=Open in New View
+vfs.browser.menu.insert.label=Insert
+vfs.browser.menu.browse.label=Browse
 vfs.browser.menu.choose.label=Choose
-vfs.browser.menu.delete.label=Delete Selected File...
-vfs.browser.menu.rename.label=Rename Selected File...
+vfs.browser.menu.delete.label=Delete...
+vfs.browser.menu.rename.label=Rename...
 
 vfs.browser.menu.show-hidden-files.label=Show Hidden Files
 vfs.browser.menu.new-file.label=New File

@@ -148,6 +148,9 @@
 		<!-- so that @link{...} is highlighted -->
 		<SEQ TYPE="COMMENT2">{</SEQ>
 
+		<!-- so that *@param is highlighted -->
+		<SEQ TYPE="COMMENT2">*</SEQ>
+
 		<!-- HTML tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
 			<BEGIN>&lt;</BEGIN>

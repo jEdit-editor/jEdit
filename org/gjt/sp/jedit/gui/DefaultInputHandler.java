@@ -1,6 +1,6 @@
 /*
  * DefaultInputHandler.java - Default implementation of an input handler
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,60 +133,73 @@ public class DefaultInputHandler extends InputHandler
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 
-		if(modifiers == 0 && bindings == currentBindings
-			&& (keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_TAB))
+		if(modifiers == 0
+			&& bindings == currentBindings
+			&& (keyCode == KeyEvent.VK_ENTER
+			|| keyCode == KeyEvent.VK_TAB))
 		{
 			userInput((char)keyCode);
 			evt.consume();
 			return;
 		}
 
-		if((modifiers & ~KeyEvent.SHIFT_MASK) != 0
-			|| evt.isActionKey()
-			|| keyCode == KeyEvent.VK_BACK_SPACE
-			|| keyCode == KeyEvent.VK_DELETE
-			|| keyCode == KeyEvent.VK_ESCAPE
-			|| keyCode == KeyEvent.VK_ENTER
-			|| keyCode == KeyEvent.VK_TAB)
+		if((modifiers & ~KeyEvent.SHIFT_MASK) == 0)
 		{
-			readNextChar = null;
-
-			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
-				modifiers);
-			Object o = currentBindings.get(keyStroke);
-			if(o == null)
+			// if modifier active, handle all keys, otherwise
+			// only some
+			switch(keyCode)
 			{
-				// Don't beep if the user presses some
-				// key we don't know about unless a
-				// prefix is active. Otherwise it will
-				// beep when caps lock is pressed, etc.
-				if(currentBindings != bindings)
-				{
-					Toolkit.getDefaultToolkit().beep();
-					// F10 should be passed on, but C+e F10
-					// shouldn't
-					repeatCount = 0;
-					repeat = false;
-					evt.consume();
-				}
-				currentBindings = bindings;
-				return;
+			case KeyEvent.VK_BACK_SPACE:
+			case KeyEvent.VK_DELETE:
+			case KeyEvent.VK_ESCAPE:
+			case KeyEvent.VK_ENTER:
+			case KeyEvent.VK_TAB:
+				break;
+			default:
+				if(!evt.isActionKey())
+					return;
+				else
+					break;
 			}
-			else if(o instanceof EditAction)
+		}
+
+		readNextChar = null;
+
+		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
+			modifiers);
+		Object o = currentBindings.get(keyStroke);
+		if(o == null)
+		{
+			// Don't beep if the user presses some
+			// key we don't know about unless a
+			// prefix is active. Otherwise it will
+			// beep when caps lock is pressed, etc.
+			if(currentBindings != bindings)
 			{
-				currentBindings = bindings;
-
-				invokeAction((EditAction)o);
-
+				Toolkit.getDefaultToolkit().beep();
+				// F10 should be passed on, but C+e F10
+				// shouldn't
+				repeatCount = 0;
+				repeat = false;
 				evt.consume();
-				return;
 			}
-			else if(o instanceof Hashtable)
-			{
-				currentBindings = (Hashtable)o;
-				evt.consume();
-				return;
-			}
+			currentBindings = bindings;
+			return;
+		}
+		else if(o instanceof EditAction)
+		{
+			currentBindings = bindings;
+
+			invokeAction((EditAction)o);
+
+			evt.consume();
+			return;
+		}
+		else if(o instanceof Hashtable)
+		{
+			currentBindings = (Hashtable)o;
+			evt.consume();
+			return;
 		}
 	}
 
@@ -195,7 +208,6 @@ public class DefaultInputHandler extends InputHandler
 	 */
 	public void keyTyped(KeyEvent evt)
 	{
-		int modifiers = evt.getModifiers();
 		char c = evt.getKeyChar();
 
 		// ignore
@@ -204,7 +216,16 @@ public class DefaultInputHandler extends InputHandler
 
 		if(currentBindings != bindings)
 		{
-			KeyStroke keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c));
+			KeyStroke keyStroke;
+
+			// this is a hack. a literal space is impossible to
+			// insert in a key binding string, but you can write
+			// SPACE.
+			if(c == ' ')
+				keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0);
+			else
+				keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c));
+
 			Object o = currentBindings.get(keyStroke);
 
 			if(o instanceof Hashtable)

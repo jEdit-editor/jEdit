@@ -11,13 +11,22 @@ JEDIT 3.1 VERSION HISTORY
   original file name in the text entry field
 - 'Insert File' and 'New File' commands in filesystem browser's
   right-click menu
+- The font selector now shows all available fonts on Java 2, not just
+  the 5 built-in ones
+- The shortcut option pane key grabbing code is now more reliable
 
 + Bug Fixes
 
 - Adding new abbrevs in the Abbreviations option pane didn't work
 - Macro shortcuts didn't appear in menus (but they still worked)
-- The 'Center Caret on Screen' command didn't work if portions of the
-  buffer were folded
+- The 'Center Caret on Screen' command didn't work properly if portions
+  of the buffer were folded
+- When deleting a range of lines, problems would occur if the second
+  line in the range was folded away
+- The vertical scroll bar would not be updated properly sometimes
+- Bracket highlighting behaves better of the matching bracket is
+  initially not visible on the viewscreen
+- Binding commands to <prefix> SPACE didn't work
 
 * Version 3.1pre1
 

@@ -84,7 +84,7 @@ actually a Java bug, or a well-known problem.
 
     JAVA_HEAP_SIZE=32
 
-  In both cases, replace `16' with the desired heap size, in megabytes.
+  In both cases, replace `32' with the desired heap size, in megabytes.
   For best results, use a heap size of about 2.5 times the largest file
   size you plan to edit.
 
@@ -93,7 +93,7 @@ actually a Java bug, or a well-known problem.
   Java.
 
 - Edit modes you write will not be available in the editor until you add
-  an entry to the 'catalog' file in the appropriate modes directory.
+  an entry to the `catalog' file in the appropriate modes directory.
 
 - International keyboards, input methods, composed keys, etc. might not
   work properly. As I do not have an international keyboard, this will

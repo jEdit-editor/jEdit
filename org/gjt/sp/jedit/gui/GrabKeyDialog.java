@@ -45,7 +45,7 @@ public class GrabKeyDialog extends JDialog
 		content.add(BorderLayout.NORTH,label);
 
 		shortcut = new JTextField(40);
-		shortcut.setEditable(false);
+		shortcut.setEnabled(false);
 		content.add(BorderLayout.CENTER,shortcut);
 
 		JPanel buttons = new JPanel();
@@ -82,14 +82,19 @@ public class GrabKeyDialog extends JDialog
 			return null;
 	}
 
-	protected void processKeyEvent(KeyEvent evt)
+	protected void processKeyEvent(KeyEvent _evt)
 	{
-		evt = KeyEventWorkaround.processKeyEvent(evt);
-		if(evt == null)
+		if(_evt.getID() != KeyEvent.KEY_PRESSED)
 			return;
 
-		if(evt.getID() == KeyEvent.KEY_RELEASED)
+		KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
+		if(evt == null)
+		{
+			Log.log(Log.DEBUG,this,"Event " + _evt + " filtered");
 			return;
+		}
+		else
+			Log.log(Log.DEBUG,this,"Event " + _evt + " passed");
 
 		StringBuffer keyString = new StringBuffer(
 			shortcut.getText());
@@ -98,56 +103,45 @@ public class GrabKeyDialog extends JDialog
 			keyString.append(' ');
 
 		int modifiers = evt.getModifiers();
+		boolean appendPlus = false;
 
 		if((modifiers & InputEvent.CTRL_MASK) != 0)
+		{
 			keyString.append('C');
+			appendPlus = true;
+		}
 
 		if((modifiers & InputEvent.ALT_MASK) != 0)
+		{
 			keyString.append('A');
+			appendPlus = true;
+		}
 
 		if((modifiers & InputEvent.META_MASK) != 0)
+		{
 			keyString.append('M');
+			appendPlus = true;
+		}
 
 		// don't want Shift+'d' recorded as S+D
 		if(evt.getID() != KeyEvent.KEY_TYPED
 			&& (modifiers & InputEvent.SHIFT_MASK) != 0)
+		{
 			keyString.append('S');
+			appendPlus = true;
+		}
 
-		if(modifiers != 0)
+		if(appendPlus)
 			keyString.append('+');
 
-		if(evt.getID() == KeyEvent.KEY_TYPED)
-		{
-			char keyChar = evt.getKeyChar();
-			if(keyChar != ' ' && keyChar != '\n' && keyChar != '\t')
-				keyString.append(keyChar);
-		}
-		else
-		{
-			String symbolicName;
-			int keyCode = evt.getKeyCode();
+		int keyCode = evt.getKeyCode();
 
-			if((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z)
-				|| (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9))
-			{
-				if(modifiers == 0)
-					return;
-				else
-				{
-					symbolicName = String.valueOf(Character
-						.toLowerCase((char)keyCode));
-				}
-			}
-			else
-			{
-				symbolicName = getSymbolicName(keyCode);
+		String symbolicName = getSymbolicName(keyCode);
 
-				if(symbolicName == null)
-					return;
-			}
+		if(symbolicName == null)
+			return;
 
-			keyString.append(symbolicName);
-		}
+		keyString.append(symbolicName);
 
 		shortcut.setText(keyString.toString());
 	}
@@ -161,6 +155,9 @@ public class GrabKeyDialog extends JDialog
 		return false;
 	}
 
+	// private members
+
+	// this is a bad hack
 	private JTextField shortcut;
 	private JButton ok;
 	private JButton cancel;
@@ -170,6 +167,10 @@ public class GrabKeyDialog extends JDialog
 	{
 		if(keyCode == KeyEvent.VK_UNDEFINED)
 			return null;
+		/* else if(keyCode == KeyEvent.VK_OPEN_BRACKET)
+			return "[";
+		else if(keyCode == KeyEvent.VK_CLOSE_BRACKET)
+			return "]"; */
 
 		if(keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z)
 			return String.valueOf(Character.toLowerCase((char)keyCode));

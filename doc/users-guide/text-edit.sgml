@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <chapter id=editing><title>Editing Text</>
  <sect1 id=caret><title>Moving The Caret</>
@@ -162,7 +162,8 @@
    not behave entirely like you expect because  of various indentation
    features; see <xref linkend=indent> for details.
   </para>
-  <para>   The simplest way to delete text is with the
+  <para>
+   The simplest way to delete text is with the
    <keycap>Backspace</> and <keycap>Delete</> keys. If nothing is
    selected, they delete the character before or after the caret,
    respectively. If a selection exists, both delete the
@@ -214,14 +215,16 @@
    <keycap>Backspace</> or <keycap>Delete</> deletes the word
    before or after the caret, respectively.
   </para>
-  <para>   <guimenu>Edit</>&gt;<guimenuitem>Word Count</>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Word Count</>
    displays a dialog box with the number of characters,
    words and lines in the current buffer.
   </para>
   <!-- <figure><title>The word count dialog box</>
    <graphic scale=50 fileref=dialog-wordcount></>
   </figure> -->
-  <para>   <guimenu>Edit</>&gt;<guimenuitem>Complete Word</> (shortcut:
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Complete Word</> (shortcut:
    <keycombo><keycap>Control</><keycap>B</></keycombo>) searches the
    current buffer for possible completions of the current word.
    This feature be used to avoid retyping
@@ -262,7 +265,8 @@
    <keycombo><keycap>Control</><keycap>L</></keycombo>) selects all text
    between between two specified line numbers, inclusive.
   </para>
-  <para>   <guimenu>Edit</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Join
+  <para>
+   <guimenu>Edit</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Join
    Lines</> (shortcut: <keycombo><keycap>Control</><keycap>J</></keycombo>)
    removes any whitespace from the start of the next line and joins it with
    the current line. For example, invoking <guimenuitem>Join Lines</>
@@ -274,7 +278,8 @@
    Will change it to:
   </para>
   <screen>new Widget(Foo.createDefaultFoo());</screen>
-  <para>   <guimenu>Edit</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Delete Line</>
+  <para>
+   <guimenu>Edit</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Delete Line</>
    (shortcut: <keycombo><keycap>Control</><keycap>D</></keycombo>)
    deletes the current line.
   </para>
@@ -292,7 +297,8 @@
    <keycombo><keycap>Shift</><keycap>Delete</></keycombo>) deletes all
    text from the caret to the end of the current line.
   </para>
-  <para>   <guimenu>Edit</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Remove
+  <para>
+   <guimenu>Edit</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Remove
    Trailing Whitespace</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycap>R</>) removes all whitespace from the end of each selected line, or
@@ -315,7 +321,8 @@
    in addition to the above
    extends the selection, a paragraph at a time.
   </para>
-  <para>   <guimenu>Edit</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Select
+  <para>
+   <guimenu>Edit</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Select
    Paragraph</> (shortcut:
    <keycombo><keycap>Control</><keycap>E</></>
    <keycap>P</>)
@@ -337,7 +344,8 @@
   </para>
  </sect1>
  <sect1 id=clipboard><title>The Clipboard</>
-  <para>   <guimenu>Edit</>&gt;<guimenuitem>Cut</>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Cut</>
    (shortcut: <keycombo><keycap>Control</><keycap>X</></keycombo>)
    places the selected text in the clipboard and removes it from the
    buffer.

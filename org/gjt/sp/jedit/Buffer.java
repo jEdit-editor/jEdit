@@ -3074,17 +3074,13 @@ loop:				for(int i = 0; i < count; i++)
 		/* update the virtual -> physical mapping if the deleted
 		 * lines are actually visible */
 		int virtualLine = physicalToVirtual(index);
-		if(info.visible)
-		{
-			len = physicalToVirtual(len);
-			virtualLineCount -= (len - virtualLine);
 
-			//System.err.println("copy from " + len + " to " + virtualLine);
-			System.arraycopy(virtualLines,len,virtualLines,
-				virtualLine,virtualLines.length - len);
-		}
-		else
-			len = virtualLine;
+		len = physicalToVirtual(len);
+		virtualLineCount -= (len - virtualLine);
+
+		//System.err.println("copy from " + len + " to " + virtualLine);
+		System.arraycopy(virtualLines,len,virtualLines,
+			virtualLine,virtualLines.length - len);
 
 		for(int i = virtualLine; i < virtualLineCount; i++)
 		{
