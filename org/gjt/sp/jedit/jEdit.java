@@ -1338,6 +1338,7 @@ public class jEdit
 			+ 10 /* give plugins some space */);
 
 		addMode("bat");
+		addMode("bsh");
 		addMode("c");
 		addMode("cc");
 		addMode("eiffel");
@@ -1768,6 +1769,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.187  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.186  2000/01/29 08:18:08  sp
  * bug fixes, misc updates
  *

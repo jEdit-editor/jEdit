@@ -158,6 +158,18 @@ mode.bat.blockComment=rem
 mode.bat.tokenMarker=org.gjt.sp.jedit.syntax.BatchFileTokenMarker
 mode.bat.filenameGlob=*.bat
 
+# BeanShell mode
+mode.bsh.label=BeanShell Scripts
+mode.bsh.blockComment=//
+mode.bsh.boxComment=\ *
+mode.bsh.commentStart=/*
+mode.bsh.commentEnd=*/
+mode.bsh.indentOpenBrackets={
+mode.bsh.indentCloseBrackets=}
+mode.bsh.noWordSep=_
+mode.bsh.tokenMarker=org.gjt.sp.jedit.syntax.BeanShellTokenMarker
+mode.bsh.filenameGlob=*.bsh
+
 # C mode
 mode.c.label=C Source Files
 mode.c.blockComment=//
@@ -237,7 +249,7 @@ mode.javascript.filenameGlob=*.js
 mode.makefile.label=Makefiles
 mode.makefile.blockComment=#
 mode.makefile.tokenMarker=org.gjt.sp.jedit.syntax.MakefileTokenMarker
-mode.makefile.filenameGlob=*makefile*
+mode.makefile.filenameGlob=*makefile
 
 # Patch mode
 mode.patch.label=Patch Files

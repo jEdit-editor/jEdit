@@ -30,7 +30,7 @@ public class JavaScriptTokenMarker extends CTokenMarker
 {
 	public JavaScriptTokenMarker()
 	{
-		super(false,getKeywords());
+		super(false,false,getKeywords());
 	}
 
 	public static KeywordMap getKeywords()
@@ -66,6 +66,9 @@ public class JavaScriptTokenMarker extends CTokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.3  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

@@ -47,133 +47,147 @@ public class PostScriptTokenMarker extends TokenMarker
 		int length   = line.count + offset;
 		boolean backslash = false;
 
+		int braceCount;
+		if(lineIndex == 0)
+			braceCount = 0;
+		else
+		{
+			braceCount = ((Integer)lineInfo[lineIndex-1].obj)
+				.intValue();
+		}
+
 loop:		for(int i = offset; i < length; i++)
 		{
 			int  i1 = (i+1);
 			char c  = array[i];
-			char c1 = ' ';
+			char c1;
 			if( i1<array.length )
-			    c1 = array[i1];
+				c1 = array[i1];
+			else
+				c1 = ' ';
 
 			if(c == '\\')
-			    {
-                                backslash = !backslash;
-                                continue;
-			    }
-			else 
-			    backslash = false;
+			{
+				backslash = !backslash;
+				continue;
+			}
 
 
 			switch(token)
 			{
 			case Token.NULL:
+				backslash = false;
 				switch(c)
 				{
 				case '(':  // string
-				    doKeyword(line,i,c);
-				    {
-					addToken(i - lastOffset,token);
-					token = Token.LITERAL1;
-					lastOffset = lastKeyword = i;
-					braceCount = 1;
-				    }
-				    break;
-				case '<':
-				    doKeyword(line,i,c);
-
-				    addToken(i - lastOffset,token);
-				    token = Token.LITERAL2;
-				    lastOffset = lastKeyword = i;
-				    break;
-				case '/':
-				    doKeyword(line,i,c);
-
-				    addToken(i - lastOffset, token );
-				    token = Token.LABEL;
-				    lastOffset = lastKeyword = i;
-				    break;
-				case '%': // read comment 
-				    // (there are only one line comments in postscript, so there are no problems)
-				    doKeyword(line,i,c);
-				    if(length - i > 1)
+					doKeyword(line,i,c);
 					{
-					    switch(array[i1])
+						addToken(i - lastOffset,token);
+						token = Token.LITERAL1;
+						lastOffset = lastKeyword = i;
+						braceCount = 1;
+					}
+					break;
+				case '<':
+					doKeyword(line,i,c);
+
+					addToken(i - lastOffset,token);
+					token = Token.LITERAL2;
+					lastOffset = lastKeyword = i;
+					break;
+				case '/':
+					doKeyword(line,i,c);
+
+					addToken(i - lastOffset, token );
+					token = Token.LABEL;
+					lastOffset = lastKeyword = i;
+					break;
+				case '%': // read comment 
+					doKeyword(line,i,c);
+					if(length - i > 1)
+					{
+						switch(array[i1])
 						{
 						case '%':
 						case '?':
 						case '!':
-						    addToken(i - lastOffset,token);
-						    addToken(length - i,Token.COMMENT2);
-						    lastOffset = lastKeyword = length;
-						    break loop;
+							addToken(i - lastOffset,token);
+							addToken(length - i,Token.COMMENT2);
+							lastOffset = lastKeyword = length;
+							break loop;
 						default:
-						    addToken(i - lastOffset,token);
-						    addToken(length - i,Token.COMMENT1);
-						    lastOffset = lastKeyword = length;
-						    break loop;
+							addToken(i - lastOffset,token);
+							addToken(length - i,Token.COMMENT1);
+							lastOffset = lastKeyword = length;
+							break loop;
 						}
 					}
-				    break;
+					break;
 				default:
-				    if( Character.isWhitespace(c) || 
-					c1=='[' || c1==']' || c1=='{' || c1=='}' )
-					doKeyword(line,i,c);
-				    break;
+					if( Character.isWhitespace(c) || 
+						c1=='[' || c1==']' || c1=='{' || c1=='}' )
+						doKeyword(line,i,c);
+					break;
 				}
 				break;
 			case Token.LITERAL1: // in string
-			    switch( c )
+				if(backslash)
+				{
+					backslash = false;
+					continue;
+				}
+				switch( c )
 				{
 				case ')':
-				    if( !backslash )
+					braceCount--;
+					if( braceCount <= 0 )
 					{
-					    braceCount--;
-					    if( braceCount <= 0 )
-						{
-						    addToken(i1 - lastOffset,token);
-						    token = Token.NULL;
-						    lastOffset = lastKeyword = i1;
-						}
+						addToken(i1 - lastOffset,token);
+						token = Token.NULL;
+						lastOffset = lastKeyword = i1;
 					}
-				    break;
+					break;
 				case '(':
-				    if( !backslash )
 					braceCount++;
-				    break;
-				default:
+					break;
 				}
-			    backslash = false;
-			    break;
-
+				break;
 			case Token.LITERAL2:
-			    if( c == '>' )
+				if(backslash)
 				{
-				    addToken(i1 - lastOffset,Token.LITERAL1);
-				    token = Token.NULL;
-				    lastOffset = lastKeyword = i1;
+					backslash = false;
+					continue;
 				}
-			    break;
+				if(c == '>')
+				{
+					addToken(i1 - lastOffset,Token.LITERAL1);
+					token = Token.NULL;
+					lastOffset = lastKeyword = i1;
+				}
+				break;
 			case Token.LABEL:
-			    if( Character.isWhitespace(c1) || 
-				c1=='[' || c1==']' || c1=='{' || c1=='}' )
+				if( Character.isWhitespace(c1) || 
+					c1=='[' || c1==']' || c1=='{' || c1=='}' )
 				{
-				    addToken(i1 - lastOffset,token);
-				    // doKeyword(line,i,c);
-				    token = Token.NULL;
-				    lastOffset = lastKeyword = i1;
+					addToken(i1 - lastOffset,token);
+					// doKeyword(line,i,c);
+					token = Token.NULL;
+					lastOffset = lastKeyword = i1;
 				}
-			    break;  
+				break;
 			default:
-			    throw new InternalError("Invalid state: "
-						    + token);
+				throw new InternalError("Invalid state: "
+							+ token);
 			}
 		}
 
 		if(token == Token.NULL)
-		    doKeyword(line,length,'\0');
+			doKeyword(line,length,'\0');
 
 		addToken(length - lastOffset,token);
-		
+
+		lineInfo[lineIndex].obj = new Integer(braceCount);
+
 		return token;
 	}
 
@@ -245,30 +259,30 @@ loop:		for(int i = offset; i < length; i++)
 	private int lastOffset;
 	private int lastKeyword;
 
-	/** number of open braces (for string) */
-	private int braceCount; 
-
 	private boolean doKeyword(Segment line, int i, char c)
 	{
-	    int i1 = i+1;
-	    
-	    int len = i - lastKeyword;
-	    byte id = keywords.lookup(line,lastKeyword,len);
-	    if(id != Token.NULL)
+		int i1 = i+1;
+
+		int len = i - lastKeyword;
+		byte id = keywords.lookup(line,lastKeyword,len);
+		if(id != Token.NULL)
 		{
-		    if(lastKeyword != lastOffset)
+			if(lastKeyword != lastOffset)
 			addToken(lastKeyword - lastOffset,Token.NULL);
-		    addToken(len,id);
-		    lastOffset = i;
+			addToken(len,id);
+			lastOffset = i;
 		}
-	    lastKeyword = i1;
-	    return false;
+		lastKeyword = i1;
+		return false;
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.1  2000/01/22 22:25:08  sp
  * PostScript edit mode, other misc updates
  *

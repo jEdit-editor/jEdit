@@ -1,6 +1,6 @@
 /*
  * HyperSearch.java - HyperSearch dialog
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,15 +149,25 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		if(msg instanceof BufferUpdate)
 		{
 			BufferUpdate bmsg = (BufferUpdate)msg;
-			if(bmsg.getWhat() == BufferUpdate.CLOSED)
+			Buffer buffer = bmsg.getBuffer();
+			if(bmsg.getWhat() == BufferUpdate.CREATED)
 			{
-				Buffer buffer = bmsg.getBuffer();
 				for(int i = resultModel.getSize() - 1; i >= 0; i--)
 				{
 					SearchResult result = (SearchResult)resultModel
 						.elementAt(i);
-					if(result.buffer == buffer)
-						resultModel.removeElementAt(i);
+					if(buffer.getPath().equals(result.path))
+						result.bufferOpened(buffer);
+				}
+			}
+			else if(bmsg.getWhat() == BufferUpdate.CLOSED)
+			{
+				for(int i = resultModel.getSize() - 1; i >= 0; i--)
+				{
+					SearchResult result = (SearchResult)resultModel
+						.elementAt(i);
+					if(buffer == result.buffer)
+						result.bufferClosed();
 				}
 			}
 		}
@@ -195,8 +205,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 			do
 			{
-				if(doHyperSearch(buffer,matcher))
-					fileset.matchFound(buffer);
+				doHyperSearch(buffer,matcher);
 			}
 			while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 
@@ -224,19 +233,16 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 		Element map = buffer.getDefaultRootElement();
 		int lines = map.getElementCount();
-		for(int i = 1; i <= lines; i++)
+		for(int i = 0; i < lines; i++)
 		{
-			Element lineElement = map.getElement(i - 1);
+			Element lineElement = map.getElement(i);
 			int start = lineElement.getStartOffset();
 			String lineString = buffer.getText(start,
 				lineElement.getEndOffset() - start - 1);
 			int[] match = matcher.nextMatch(lineString);
 			if(match != null)
 			{
-				resultModel.addElement(
-					new SearchResult(buffer,
-					buffer.createPosition(start + match[0]),
-					buffer.createPosition(start + match[1])));
+				resultModel.addElement(new SearchResult(buffer,i));
 				retVal = true;
 			}
 		}
@@ -258,23 +264,25 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 	class SearchResult
 	{
+		String path;
 		Buffer buffer;
-		Position start;
-		Position end;
+		int line;
+		Position linePos;
 		String str; // cached for speed
 
-		SearchResult(Buffer buffer, Position start, Position end)
+		SearchResult(Buffer buffer, int line)
 		{
-			this.buffer = buffer;
-			this.start = start;
-			this.end = end;
-			Element map = buffer.getDefaultRootElement();
-			int line = map.getElementIndex(start.getOffset());
+			if(!buffer.isTemporary())
+				bufferOpened(buffer);
+			path = buffer.getPath();
+			this.line = line;
+
 			str = buffer.getName() + ":" + (line + 1) + ":"
-				+ getLine(map.getElement(line));
+				+ getLine(buffer,buffer.getDefaultRootElement()
+				.getElement(line));
 		}
 
-		String getLine(Element elem)
+		String getLine(Buffer buffer, Element elem)
 		{
 			if(elem == null)
 				return "";
@@ -289,6 +297,37 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 				Log.log(Log.ERROR,this,bl);
 				return "";
 			}
+		}
+
+		public void bufferOpened(Buffer buffer)
+		{
+			this.buffer = buffer;
+			buffer.loadIfNecessary(null);
+			Element map = buffer.getDefaultRootElement();
+			Element elem = map.getElement(line);
+			if(elem == null)
+				elem = map.getElement(map.getElementCount()-1);
+			try
+			{
+				linePos = buffer.createPosition(elem.getStartOffset());
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+		}
+
+		public void bufferClosed()
+		{
+			buffer = null;
+			linePos = null;
+		}
+
+		public Buffer getBuffer()
+		{
+			if(buffer == null)
+				jEdit.openFile(null,null,path,false,false);
+			return buffer;
 		}
 
 		public String toString()
@@ -326,12 +365,11 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 				return;
 
 			SearchResult result = (SearchResult)results.getSelectedValue();
-			Buffer buffer = result.buffer;
-			int start = result.start.getOffset();
-			int end = result.end.getOffset();
+			Buffer buffer = result.getBuffer();
+			int pos = result.linePos.getOffset();
 
 			view.setBuffer(buffer);
-			view.getTextArea().select(start,end);
+			view.getTextArea().setCaretPosition(pos);
 		}
 	}
 }
@@ -339,6 +377,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.48  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.47  1999/12/05 03:01:05  sp
  * Perl token marker bug fix, file loading is deferred, style option pane fix
  *
@@ -368,12 +409,5 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
  *
  * Revision 1.38  1999/10/11 07:14:22  sp
  * matchFound()
- *
- * Revision 1.37  1999/10/02 01:12:36  sp
- * Search and replace updates (doesn't work yet), some actions moved to TextTools
- *
- * Revision 1.36  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
  *
  */

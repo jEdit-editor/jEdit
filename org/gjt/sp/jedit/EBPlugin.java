@@ -30,15 +30,6 @@ import org.gjt.sp.jedit.gui.OptionsDialog;
 public abstract class EBPlugin extends EditPlugin implements EBComponent
 {
 	/**
-	 * @deprecated Store your plugin's name in a 'static final'
-	 * variable and use that instead of this method
-	 */
-	public String getName()
-	{
-		return name;
-	}
-
-	/**
 	 * Handles a message sent on the EditBus. The default
 	 * implementation ignores the message.
 	 */
@@ -48,11 +39,5 @@ public abstract class EBPlugin extends EditPlugin implements EBComponent
 	protected EBPlugin()
 	{
 		EditBus.addToBus(this);
-		name = getClass().getName();
-		if(name.endsWith("Plugin"))
-			name = name.substring(0,name.length() - 6);
 	}
-
-	// private members
-	private String name;
 }

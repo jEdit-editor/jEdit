@@ -30,7 +30,7 @@ public class JavaTokenMarker extends CTokenMarker
 {
 	public JavaTokenMarker()
 	{
-		super(false,getKeywords());
+		super(false,true,getKeywords());
 	}
 
 	public static KeywordMap getKeywords()
@@ -97,6 +97,9 @@ public class JavaTokenMarker extends CTokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.5  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

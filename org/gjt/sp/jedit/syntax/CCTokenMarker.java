@@ -30,7 +30,7 @@ public class CCTokenMarker extends CTokenMarker
 {
 	public CCTokenMarker()
 	{
-		super(true,getKeywords());
+		super(true,false,getKeywords());
 	}
 
 	public static KeywordMap getKeywords()
@@ -127,6 +127,9 @@ public class CCTokenMarker extends CTokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.6  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

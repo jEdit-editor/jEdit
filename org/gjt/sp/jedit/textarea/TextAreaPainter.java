@@ -295,41 +295,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Adds a custom highlight painter.
 	 * @param highlight The highlight
 	 */
-	public void addCustomHighlight(Highlight highlight)
+	public void addCustomHighlight(TextAreaHighlight highlight)
 	{
 		highlight.init(textArea,highlights);
 		highlights = highlight;
-	}
-
-	/**
-	 * Highlight interface.
-	 */
-	public interface Highlight
-	{
-		/**
-		 * Called after the highlight painter has been added.
-		 * @param textArea The text area
-		 * @param next The painter this one should delegate to
-		 */
-		void init(JEditTextArea textArea, Highlight next);
-
-		/**
-		 * This should paint the highlight and delgate to the
-		 * next highlight painter.
-		 * @param gfx The graphics context
-		 * @param line The line number
-		 * @param y The y co-ordinate of the line
-		 */
-		void paintHighlight(Graphics gfx, int line, int y);
-
-		/**
-		 * Returns the tool tip to display at the specified
-		 * location. If this highlighter doesn't know what to
-		 * display, it should delegate to the next highlight
-		 * painter.
-		 * @param evt The mouse event
-		 */
-		String getToolTipText(MouseEvent evt);
 	}
 
 	/**
@@ -505,7 +474,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	protected int tabSize;
 	protected FontMetrics fm;
 
-	protected Highlight highlights;
+	protected TextAreaHighlight highlights;
 
 	protected void paintLine(Graphics gfx, TokenMarker tokenMarker,
 		int line, int x)
@@ -708,6 +677,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.24  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

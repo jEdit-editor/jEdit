@@ -211,7 +211,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(c == '*' && length - i > 1 && array[i1] == '/')
 				{
-					addToken((i+=2) - lastOffset,Token.COMMENT2);
+					addToken((i+=2) - lastOffset,Token.COMMENT1);
 					lastOffset = lastKeyword = i;
 					token = JAVASCRIPT;
 				}
@@ -236,6 +236,9 @@ loop:		for(int i = offset; i < length; i++)
 		case JAVASCRIPT:
 			doKeyword(line,length,'\0');
 			addToken(length - lastOffset,Token.NULL);
+			break;
+		case Token.COMMENT2:
+			addToken(length - lastOffset,Token.COMMENT1);
 			break;
 		default:
 			addToken(length - lastOffset,token);
@@ -272,6 +275,9 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.34  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

@@ -2,24 +2,12 @@ JEDIT TO DO
 
 ------- 2.3 to do -------
 
-- Get dude to fix line-state problem in PostScript token marker
-- jikes segfaults with PSTokenMarker.java -- why?
-- Finish double click drag
-- BeanShell edit mode
-- Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
-  to TextAreaHighlight and use that same interface to paint stuff in the
-  gutter
+- Double-click drag doesn't work backwards
+- Integrate Mike Dillon's "Gutter" code
 - CaretUndo acts weird on 'redo' sometimes
 - If no abbrev found, C+e C+x should ask if it should be added
 - If there is > 1 possible match, complete-word should list them in a
   dialog box
-- HyperSearch - when doing a directory search, all buffers with matches
-  are kept open, they should be closed
-  - to fix this, HyperSearch should check if getNextBuffer() returns a
-    temporary buffer, if so, it shouldn't create any positions, and
-    instead wait for the buffer created event (if there will be one)
-  - if the buffer is not temporary, create positions cos it's going stay
-    open
 - 'Uncomment' command that removes comment strings from selected text
 - Incremental search
 
@@ -56,8 +44,3 @@ When we switch to JDK 1.2, do this:
   - print line numbers option
 - Wait cursor hack in event queue
 - Proper font list in global options
-
-------- Installer -------
-
-- Store human-readable strings in a property file for easier localization
-- Create a homepage for it

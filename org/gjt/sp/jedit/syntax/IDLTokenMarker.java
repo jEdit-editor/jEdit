@@ -32,7 +32,7 @@ public class IDLTokenMarker extends CTokenMarker
 {
 	public IDLTokenMarker()
 	{
-		super(true,getKeywords());
+		super(true,false,getKeywords());
 	}
 
 	public static KeywordMap getKeywords()
@@ -89,6 +89,9 @@ public class IDLTokenMarker extends CTokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.2  1999/12/18 06:10:56  sp
  * 2.2final, finally
  *

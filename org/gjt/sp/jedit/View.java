@@ -158,6 +158,8 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane == null)
 		{
+			JComponent oldParent = (JComponent)textArea.getParent();
+
 			saveCaretInfo();
 			splitPane = new JSplitPane(orientation,textArea,
 				textArea = createTextArea());
@@ -168,9 +170,8 @@ public class View extends JFrame implements EBComponent
 				bufferTabs.update();
 			else
 			{
-				JComponent parent = (JComponent)textArea.getParent();
-				parent.add(splitPane);
-				parent.revalidate();
+				oldParent.add(splitPane);
+				oldParent.revalidate();
 			}
 		}
 		else
@@ -199,7 +200,10 @@ public class View extends JFrame implements EBComponent
 			if(bufferTabs != null)
 				bufferTabs.update();
 			else
+			{
+				parent.add(textArea);
 				parent.revalidate();
+			}
 		}
 
 		focusOnTextArea();
@@ -1229,6 +1233,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.131  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.130  2000/01/29 08:18:08  sp
  * bug fixes, misc updates
  *

@@ -9,6 +9,7 @@ JEDIT VERSION HISTORY
 - 'Indent Line' command replaced with 'Indent Selected Lines' -- it
   indents all lines in the selection, or the current line if nothing
   is selected
+- BeanShell syntax highlighting for .bsh files
 
 + Enhancements
 
@@ -16,6 +17,10 @@ JEDIT VERSION HISTORY
 - Buffer tabs now show tool tips with the full path of buffers
 - Better regexp and ignore case icons (Valery Kondakoff)
 - Documentation updates
+- HyperSearch no longer keeps all buffers with search results open
+- JavaDoc comments (/** */) are now only treated specially in Java mode;
+  they have no special meaning in other C-derived languages, such as
+  C++, IDL, JavaScript or BeanShell
 
 + Bug Fixes
 
@@ -23,12 +28,18 @@ JEDIT VERSION HISTORY
 - Fixed a very minor memory leak (buffers would sometimes retain pointers
   to closed views' text areas) (since 1.7pre5)
 - Docked plugins didn't work (Jason Ginchereau) (since 2.3pre2)
+- PostScript token marker didn't handle string literals very well
+  (since 2.3pre2)
 
 + API Changes
 
 - Because of the split pane code, plugins should now add highlighters
   when they receive the ViewUpdate.TEXTAREA_CREATED message, instead of
   ViewUpdate.CREATED as before
+- TextAreaPainter.Highlight renamed to TextAreaHighlight -- in the
+  future, this interface will be used to paint highlights in the
+  gutter
+- EBPlugin.getName() removed
 
 * Version 2.3pre2
 

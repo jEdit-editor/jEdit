@@ -30,12 +30,13 @@ public class CTokenMarker extends TokenMarker
 {
 	public CTokenMarker()
 	{
-		this(true,getKeywords());
+		this(true,false,getKeywords());
 	}
 
-	public CTokenMarker(boolean cpp, KeywordMap keywords)
+	public CTokenMarker(boolean cpp, boolean javadoc, KeywordMap keywords)
 	{
 		this.cpp = cpp;
+		this.javadoc = javadoc;
 		this.keywords = keywords;
 	}
 
@@ -121,7 +122,8 @@ loop:		for(int i = offset; i < length; i++)
 						case '*':
 							addToken(i - lastOffset,token);
 							lastOffset = lastKeyword = i;
-							if(length - i > 2 && array[i+2] == '*')
+							if(javadoc && length - i > 2
+								&& array[i+2] == '*')
 								token = Token.COMMENT2;
 							else
 								token = Token.COMMENT1;
@@ -259,6 +261,7 @@ loop:		for(int i = offset; i < length; i++)
 	private static KeywordMap cKeywords;
 
 	private boolean cpp;
+	private boolean javadoc;
 	private KeywordMap keywords;
 	private int lastOffset;
 	private int lastKeyword;
@@ -284,6 +287,9 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  2000/01/29 10:12:43  sp
+ * BeanShell edit mode, bug fixes
+ *
  * Revision 1.34  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *
