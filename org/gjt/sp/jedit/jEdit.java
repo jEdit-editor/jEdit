@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.03.07.00";
+		return "02.03.99.00";
 	}
 
 	/**
@@ -376,15 +376,25 @@ public class jEdit
 	}
 
 	/**
-	 * Sets a property to a new value. This method does not override
-	 * properties set in the user property list, nor are the
-	 * properties set with this method saved in the user properties.
+	 * Sets a property to a new value. Properties set using this
+	 * method are not saved to the user properties list.
 	 * @param name The property
 	 * @param value The new value
+	 * @since jEdit 2.3final
+	 */
+	public static final void setTemporaryProperty(String name, String value)
+	{
+		props.remove(name);
+		defaultProps.put(name,value);
+	}
+
+	/**
+	 * @deprecated As of jEdit 2.3final. Use setTemporaryProperty()
+	 * instead.
 	 */
 	public static final void setDefaultProperty(String name, String value)
 	{
-		defaultProps.put(name,value);
+		setTemporaryProperty(name,value);
 	}
 
 	/**
@@ -1789,6 +1799,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.195  2000/03/04 03:39:54  sp
+ * *** empty log message ***
+ *
  * Revision 1.194  2000/02/27 00:39:50  sp
  * Misc changes
  *
@@ -1818,14 +1831,5 @@ public class jEdit
  *
  * Revision 1.185  2000/01/29 03:27:20  sp
  * Split window functionality added
- *
- * Revision 1.184  2000/01/28 09:24:16  sp
- * Buffer tabs updated (uses better impl == less bugs)
- *
- * Revision 1.183  2000/01/28 00:25:47  sp
- * Minor tweak
- *
- * Revision 1.182  2000/01/28 00:20:58  sp
- * Lots of stuff
  *
  */

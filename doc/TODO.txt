@@ -1,8 +1,8 @@
 JEDIT TO DO
 
-- CVS: remove save-log, clear-log
 - Focus breaks when saving or switching buffers
 
+- Get rid of build numbers; MiscUtilities.compareJEditVersions() method
 - C/S+TAB to navigate around view's components
 - Directory search: current buffer's dir is the default
 - Next split pane/prev split pane commands bound to C+e ( and C+e )

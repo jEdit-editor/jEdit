@@ -1,5 +1,22 @@
 JEDIT VERSION HISTORY
 
+* Version 2.3final
+
++ Enhancements
+
+- Errors are no longer printed when a .marks file cannot be read
+
++ Bug Fixes
+
+- PluginManager's update function didn't work properly with BeanShell and
+  Console plugins
+- Fixed possible path-separator issue in PluginManager
+
++ API Changes
+
+- jEdit.setDefaultProperty() deprecated; use jEdit.setTemporaryProperty()
+  instead
+
 * Version 2.3pre7
 
 + Enhancements

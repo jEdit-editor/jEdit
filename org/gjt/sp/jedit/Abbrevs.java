@@ -347,7 +347,7 @@ public class Abbrevs
 			null,options,options[0]);
 
 		String expand = textField.getText();
-		if(expand == null || retVal == 2)
+		if(expand == null || (retVal != 0 && retVal != 1))
 			return;
 
 		if(retVal == 1)
@@ -371,6 +371,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/03/04 03:39:54  sp
+ * *** empty log message ***
+ *
  * Revision 1.6  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *

@@ -1309,7 +1309,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 						}
 						catch(NumberFormatException nf)
 						{
-							Log.log(Log.ERROR,this,nf);
+							//Log.log(Log.ERROR,this,nf);
 							start = 0;
 						}
 					}
@@ -1322,7 +1322,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 						}
 						catch(NumberFormatException nf)
 						{
-							Log.log(Log.ERROR,this,nf);
+							//Log.log(Log.ERROR,this,nf);
 							end = 0;
 						}
 						addMarker(name,start,end);
@@ -1547,6 +1547,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.126  2000/03/04 03:39:54  sp
+ * *** empty log message ***
+ *
  * Revision 1.125  2000/02/20 03:14:13  sp
  * jEdit.getBrokenPlugins() method
  *
