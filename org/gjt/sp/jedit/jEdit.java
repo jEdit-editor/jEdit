@@ -2130,22 +2130,8 @@ public class jEdit
 
 		addAction("end");
 		addAction("home");
-		addAction("input");
-		addAction("next-line");
-		addAction("next-page");
-		addAction("prev-line");
-		addAction("prev-page");
-		addAction("select-block");
 		addAction("select-end");
 		addAction("select-home");
-		addAction("select-next-line");
-		addAction("select-next-page");
-		addAction("select-prev-line");
-		addAction("select-prev-page");
-
-		// Preload these actions so that needsActionCommand()
-		// will return the correct value (for command line autocompletion)
-		addAction(new org.gjt.sp.jedit.actions.play_macro());
 	}
 
 	/**
@@ -2473,6 +2459,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.294  2000/11/16 10:25:16  sp
+ * More macro work
+ *
  * Revision 1.293  2000/11/16 04:01:11  sp
  * BeanShell macros started
  *

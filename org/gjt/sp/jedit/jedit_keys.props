@@ -5,20 +5,6 @@
 
 # Function keys
 help.shortcut=F1
-reload.shortcut=F2
-reload-all.shortcut=S+F2
-close-all.shortcut=F3
-save-all.shortcut=F4
-paste-previous.shortcut=F5
-view-registers.shortcut=S+F5
-docking-top-expanded.shortcut=F6
-docking-bottom-expanded.shortcut=F7
-docking-left-expanded.shortcut=F8
-docking-right-expanded.shortcut=F9
-prev-buffer.shortcut=F11
-next-buffer.shortcut=F12
-prev-split.shortcut=C+F11
-next-split.shortcut=C+F12
 
 # Single key
 select-all.shortcut=C+a
@@ -45,6 +31,7 @@ cut.shortcut=C+x
 goto-register.shortcut=C+y
 undo.shortcut=C+z
 toggle-rect.shortcut=C+BACK_SLASH
+recent-buffer.shortcut=C+BACK_QUOTE
 unsplit.shortcut=C+1
 split-horizontal.shortcut=C+2
 split-vertical.shortcut=C+3
@@ -55,8 +42,13 @@ scroll-up-page.shortcut=A+QUOTE
 scroll-up-line.shortcut=C+QUOTE
 scroll-down-line.shortcut=C+SLASH
 scroll-down-page.shortcut=A+SLASH
+prev-buffer.shortcut=C+PAGE_UP
+next-buffer.shortcut=C+PAGE_DOWN
+prev-split.shortcut=A+PAGE_UP
+next-split.shortcut=A+PAGE_DOWN
 
 # C+e
+# Unused d, e, n, p, q, u, x, y
 replace-all.shortcut=C+e C+a
 box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
@@ -68,21 +60,25 @@ scroll-to-current-line.shortcut=C+e C+j
 block-comment.shortcut=C+e C+k
 select-line-range.shortcut=C+e C+l
 set-marker.shortcut=C+e C+m
-new-view.shortcut=C+e C+n
 open-path.shortcut=C+e C+o
 replace-in-selection.shortcut=C+e C+r
+save-all.shortcut=C+e C+s
 toggle-gutter.shortcut=C+e C+t
-insert-literal.shortcut=C+e C+v
-close-view.shortcut=C+e C+w
+paste-previous.shortcut=C+e C+v
+close-all.shortcut=C+e C+w
 redo.shortcut=C+e C+z
 
+docking-top-expanded.shortcut=C+e 1
+docking-bottom-expanded.shortcut=C+e 2
+docking-left-expanded.shortcut=C+e 3
+docking-right-expanded.shortcut=C+e 4
 delete-paragraph.shortcut=C+e d
 format-paragraph.shortcut=C+e f
 select-line.shortcut=C+e l
 select-paragraph.shortcut=C+e p
 remove-trailing-ws.shortcut=C+e r
+insert-literal.shortcut=C+e v
 select-word.shortcut=C+e w
-recent-buffer.shortcut=C+e TAB
 prev-bracket.shortcut=C+e [
 next-bracket.shortcut=C+e ]
 
@@ -143,4 +139,4 @@ prev-line.shortcut=UP
 select-prev-line.shortcut=S+UP
 next-line.shortcut=DOWN
 select-next-line.shortcut=S+DOWN
-command-line.shortcut=C+ENTER
+repeat.shortcut=C+ENTER

@@ -420,12 +420,24 @@ loop:		for(int i = 0; i < str.length(); i++)
 	}
 
 	/**
-	 * Converts newlines and tabs in the specified string to
-	 * "\n" and "\t".
+	 * Escapes newlines, tabs, backslashes, quotes in the specified
+	 * string.
 	 * @param str The string
 	 * @since jEdit 2.3pre1
 	 */
 	public static String charsToEscapes(String str)
+	{
+		return charsToEscapes(str,false);
+	}
+
+	/**
+	 * Escapes newlines, tabs, backslashes, quotes in the specified
+	 * string.
+	 * @param str The string
+	 * @param history jEdit histrory files require additional escaping
+	 * @since jEdit 2.7pre2
+	 */
+	public static String charsToEscapes(String str, boolean history)
 	{
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < str.length(); i++)
@@ -440,10 +452,28 @@ loop:		for(int i = 0; i < str.length(); i++)
 				buf.append("\\t");
 				break;
 			case '[':
-				buf.append("\\[");
+				if(history)
+					buf.append("\\[");
+				else
+					buf.append(c);
 				break;
 			case ']':
-				buf.append("\\]");
+				if(history)
+					buf.append("\\]");
+				else
+					buf.append(c);
+				break;
+			case '"':
+				if(history)
+					buf.append(c);
+				else
+					buf.append("\\\"");
+				break;
+			case '\'':
+				if(history)
+					buf.append(c);
+				else
+					buf.append("\\\'");
 				break;
 			case '\\':
 				buf.append("\\\\");
@@ -696,6 +726,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.41  2000/11/16 10:25:16  sp
+ * More macro work
+ *
  * Revision 1.40  2000/11/02 09:19:31  sp
  * more features
  *

@@ -211,7 +211,7 @@ public class HistoryModel
 				for(int i = 0; i < model.getSize(); i++)
 				{
 					out.write(MiscUtilities.charsToEscapes(
-						model.getItem(i)));
+						model.getItem(i),true));
 					out.write(lineSep);
 				}
 			}
@@ -239,6 +239,9 @@ public class HistoryModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/11/16 10:25:17  sp
+ * More macro work
+ *
  * Revision 1.12  2000/07/19 08:35:59  sp
  * plugin devel docs updated, minor other changes
  *

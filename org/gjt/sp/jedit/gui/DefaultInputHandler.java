@@ -121,7 +121,7 @@ public class DefaultInputHandler extends InputHandler
 	 */
 	public boolean isPrefixActive()
 	{
-		return super.isPrefixActive() || (bindings != currentBindings);
+		return bindings != currentBindings;
 	}
 
 	/**
@@ -221,7 +221,13 @@ public class DefaultInputHandler extends InputHandler
 			currentBindings = bindings;
 		}
 
-		userInput(c);
+		if(repeat && Character.isDigit(c))
+		{
+			repeatCount *= 10;
+			repeatCount += (c - '0');
+		}
+		else
+			userInput(c);
 	}
 
 	/**
@@ -305,6 +311,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/11/16 10:25:17  sp
+ * More macro work
+ *
  * Revision 1.8  2000/11/16 04:01:11  sp
  * BeanShell macros started
  *

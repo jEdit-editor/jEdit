@@ -80,7 +80,7 @@ view.search.incremental=Incremental
 view.context=undo redo - cut copy paste paste-previous - select-all \
 	select-none - view-registers - unsplit \
 	split-horizontal split-vertical - record-temp-macro \
-	stop-recording play-temp-macro
+	stop-recording run-temp-macro
 
 view.gutter.context=toggle-gutter toggle-line-numbers save-gutter-size
 save-gutter-size.label=Save Gutter Size
@@ -387,7 +387,12 @@ docking-left-expanded.label=Left Area Expanded
 docking-right-expanded.label=Right Area Expanded
 
 ### Utilities menu
-utils=command-line \
+utils=repeat \
+      insert-literal \
+      - \
+      eval \
+      eval-selection \
+      run-script \
       - \
       vfs-browser \
       io-progress-monitor \
@@ -400,12 +405,16 @@ utils=command-line \
       buffer-options \
       global-options
 utils.label=$Utilities
-command-line.label=$jEdit Command Line
+repeat.label=$Repeat Next Command
+insert-literal.label=$Insert Next Character Literally
+eval.label=$Evaluate...
+eval-selection.label=E$valuate Selection
+run-script.label=Run $Script...
 vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$View Activity Log...
 update-log.label=Update Activity $Log on Disk
-reload-modes.label=$Reload Edit Modes
+reload-modes.label=Reload $Edit Modes
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 
@@ -413,8 +422,6 @@ global-options.label=$Global Options...
 macros=record-macro \
        record-temp-macro \
        stop-recording \
-       - \
-       input \
        - \
        run-temp-macro \
        run-last-macro \
@@ -428,7 +435,6 @@ macros.label=$Macros
 record-macro.label=$Record Macro...
 record-temp-macro.label=Record $to Temporary Buffer
 stop-recording.label=$Stop Recording
-input.label=Prompt for $Input...
 run-temp-macro.label=Run Tem$porary Macro
 run-last-macro.label=Run $Last Macro
 browse-system-macros.label=Browse S$ystem Macros
@@ -463,7 +469,7 @@ help-copying.label=GNU General Public License
 
 macro.temp.header=// This is a temporary macro. First, check over the\n\
                   // commands to make sure this is what you intended.\n\
-                  // Then, to execute this macro, switch to the buffer\n\
+                  // Then, to run this macro, switch to the buffer\n\
                   // where you would like to execute it and press C+m C+p.
 
 macro.header=// This is a recorded macro. First, check over the\n\
@@ -475,7 +481,6 @@ macro.header=// This is a recorded macro. First, check over the\n\
 ### COMMANDS THAT DON'T APPEAR IN MENUS
 ###
 
-insert-literal.label=Insert Without Expanding
 backspace.label=Delete Previous Character
 backspace-word.label=Delete Previous Word
 delete.label=Delete Next Character
@@ -613,25 +618,12 @@ reload-all.message=Are you sure you want to reload all buffers from disk?\n\
 already-recording.title=Already Recording
 already-recording.message=A macro recording is already in progress.
 
-# Macro recording not in progress dialog
-not-recording.title=Not Recording
-not-recording.message=A macro is not currently being recorded.
-
 # Record macro dialog
 record.title=Record Macro
 record.message=Macro name:
 
-# Macro error dialog
-macro-error.title=Unknown Action
-macro-error.message=Unknown action "{2}" while executing macro {0}\n\
-	(line {1}).
-
-# Macro not found dialog
-macro-not-found.title=Macro Not Found
-macro-not-found.message=Macro "{0}" does not exist.
-
 # Some features don't work with -nosettings dialog
-no-settings.title=Feature Disabled
+no-settings.title=Feature Unavailable
 no-settings.message=jEdit was started with the -nosettings switch.\n\
 	To use this feature, you must start jEdit without that switch.
 
@@ -832,6 +824,26 @@ macro-input.register=Store in register:
 macro-input.no-record.title=Not Recording
 macro-input.no-record.message=This command is only useful while recording\n\
 	a macro.
+
+# BeanShell stuff
+
+beanshell-error.title=BeanShell Execution Error
+beanshell-error.message=While executing:\n\
+	\n\
+	{0}\n\
+	\n\
+	The following error was encountered:\n\
+	\n\
+	{1}
+
+beanshell-notfound.title=BeanShell Script Not Found
+beanshell-notfound.message=The BeanShell script {0} doesn't exist.
+
+beanshell-eval-input.title=Evaluate BeanShell Expression
+beanshell-eval-input.message=BeanShell expression:
+
+beanshell-eval.title=BeanShell Evaluation Result
+beanshell-eval.message={0}
 
 # Buffer options dialog
 buffer-options.title=Buffer Options

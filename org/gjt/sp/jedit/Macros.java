@@ -161,7 +161,7 @@ public class Macros
 			{
 				public void actionPerformed(ActionEvent evt)
 				{
-					Macros.runMacro(getView(evt),path);
+					BeanShell.runScript(getView(evt),path);
 				}
 
 				public boolean isWrapper()
@@ -289,15 +289,6 @@ public class Macros
 	}
 
 	/**
-	 * Returns if a macro is currently being run.
-	 * @since jEdit 2.7pre2
-	 */
-	public static boolean isMacroRunning()
-	{
-		return macroRunning;
-	}
-
-	/**
 	 * Runs the temporary macro.
 	 * @param view The view
 	 * @since jEdit 2.7pre2
@@ -312,35 +303,11 @@ public class Macros
 			return;
 		}
 
-		lastMacro = null;
+		lastMacro = MiscUtilities.constructPath(
+			jEdit.getSettingsDirectory(),"macros",
+			"Temporary_Macro.bsh");
 
-		// This hackery is necessary to prevent actions inside the
-		// macro from picking up the repeat count
-		InputHandler inputHandler = view.getInputHandler();
-		int repeatCount = inputHandler.getRepeatCount();
-		inputHandler.setRepeatEnabled(false);
-
-		try
-		{
-			macroRunning = true;
-
-			for(int i = repeatCount; i > 0; i--)
-			{
-				Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
-					jEdit.getSettingsDirectory(),"macros","Temporary_Macro.bsh"));
-				if(buffer == null)
-				{
-					view.getToolkit().beep();
-					return;
-				}
-
-				runMacroFromBuffer(view,"Temporary_Macro.bsh",buffer);
-			}
-		}
-		finally
-		{
-			macroRunning = false;
-		}
+		BeanShell.runScript(view,lastMacro);
 	}
 
 	/**
@@ -351,49 +318,9 @@ public class Macros
 	public static void runLastMacro(View view)
 	{
 		if(lastMacro == null)
-			runTemporaryMacro(view);
+			view.getToolkit().beep();
 		else
-			runMacro(view,lastMacro);
-	}
-
-	/**
-	 * Runs a macro.
-	 * @param view The view
-	 * @param name The macro name
-	 * @since jEdit 2.7pre2
-	 */
-	public static void runMacro(View view, String name)
-	{
-		lastMacro = name;
-
-		// This hackery is necessary to prevent actions inside the
-		// macro from picking up the repeat count
-		InputHandler inputHandler = view.getInputHandler();
-		int repeatCount = inputHandler.getRepeatCount();
-		inputHandler.setRepeatEnabled(false);
-
-		try
-		{
-			macroRunning = true;
-
-			for(int i = repeatCount; i > 0; i--)
-			{
-				String fileName = MiscUtilities.constructPath(
-					jEdit.getSettingsDirectory(),"macros",name);
-
-				// Check if it's open
-				Buffer buffer = jEdit.getBuffer(fileName);
-
-				if(buffer == null)
-					runMacroFromFile(view,name,fileName);
-				else
-					runMacroFromBuffer(view,name,buffer);
-			}
-		}
-		finally
-		{
-			macroRunning = false;
-		}
+			BeanShell.runScript(view,lastMacro);
 	}
 
 	// private members
@@ -403,8 +330,6 @@ public class Macros
 	private static Vector macroList;
 	private static Vector macroHierarchy;
 	private static String lastMacro;
-
-	private static boolean macroRunning;
 
 	static
 	{
@@ -425,7 +350,7 @@ public class Macros
 			File file = new File(directory,fileName);
 			if(fileName.toLowerCase().endsWith(".bsh"))
 			{
-				String label = fileName.substring(0,fileName.length() - 6);
+				String label = fileName.substring(0,fileName.length() - 4);
 				String name = path + label;
 				Macro newMacro = new Macro(name,file.getPath());
 				vector.addElement(newMacro);
@@ -453,44 +378,6 @@ public class Macros
 
 		view.setRecordingStatus(true);
 		view.setMacroRecorder(new Recorder(view,buffer));
-	}
-
-	private static void runMacroFromBuffer(View view, String macro,
-		Buffer buffer)
-	{
-		Buffer _viewBuffer = view.getBuffer();
-
-		try
-		{
-			_viewBuffer.beginCompoundEdit();
-
-			//
-		}
-		finally
-		{
-			_viewBuffer.endCompoundEdit();
-		}
-	}
-
-	private static void runMacroFromFile(View view, String macro, String path)
-	{
-		Buffer _viewBuffer = view.getBuffer();
-
-		try
-		{
-			_viewBuffer.beginCompoundEdit();
-
-		}
-		/*catch(IOException io)
-		{
-			Log.log(Log.ERROR,Macros.class,io);
-			String[] args = { io.getMessage() };
-			GUIUtilities.error(view,"ioerror",args);
-		}*/
-		finally
-		{
-			_viewBuffer.endCompoundEdit();
-		}
 	}
 
 	static class MacrosEBComponent implements EBComponent
@@ -567,25 +454,7 @@ public class Macros
 
 		public void record(int repeat, char ch)
 		{
-			String charStr;
-			switch(ch)
-			{
-			case '\t':
-				charStr = "\\t";
-				break;
-			case '\n':
-				charStr = "\\n";
-				break;
-			case '\\':
-				charStr = "\\\\";
-				break;
-			case '"':
-				charStr = "\\\"";
-				break;
-			default:
-				charStr = String.valueOf(ch);
-				break;
-			}
+			String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
 
 			record(repeat,"textArea.userInput(\"" + charStr + "\");");
 		}
@@ -626,6 +495,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.44  2000/11/16 10:25:16  sp
+ * More macro work
+ *
  * Revision 1.43  2000/11/16 04:01:10  sp
  * BeanShell macros started
  *

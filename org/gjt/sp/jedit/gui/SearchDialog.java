@@ -159,7 +159,7 @@ public class SearchDialog extends EnhancedDialog
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 		save();
-		if(SearchAndReplace.find(view,SearchDialog.this))
+		if(SearchAndReplace.find(view))
 			closeOrKeepDialog();
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -269,7 +269,7 @@ public class SearchDialog extends EnhancedDialog
 			else if(source == replaceBtn)
 			{
 				save();
-				if(SearchAndReplace.replace(view,SearchDialog.this))
+				if(SearchAndReplace.replace(view))
 					closeOrKeepDialog();
 				else
 					getToolkit().beep();
@@ -277,7 +277,7 @@ public class SearchDialog extends EnhancedDialog
 			else if(source == replaceFind)
 			{
 				save();
-				if(SearchAndReplace.replace(view,SearchDialog.this))
+				if(SearchAndReplace.replace(view))
 					ok();
 				else
 					getToolkit().beep();
@@ -287,7 +287,7 @@ public class SearchDialog extends EnhancedDialog
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 				save();
-				if(SearchAndReplace.replaceAll(view,SearchDialog.this))
+				if(SearchAndReplace.replaceAll(view))
 					closeOrKeepDialog();
 				else
 					getToolkit().beep();
@@ -312,6 +312,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/11/16 10:25:18  sp
+ * More macro work
+ *
  * Revision 1.20  2000/11/05 00:44:14  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

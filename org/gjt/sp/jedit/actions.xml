@@ -19,7 +19,7 @@
 
 <ACTION NAME="append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.append(textArea,__char__)");
+		view.getInputHandler().readNextChar("Registers.append(textArea,__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -73,7 +73,7 @@
 
 <ACTION NAME="clear-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.clearRegister(__char__)");
+		view.getInputHandler().readNextChar("Registers.clearRegister(__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -109,7 +109,7 @@
 
 <ACTION NAME="copy-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.copy(textArea,__char__)");
+		view.getInputHandler().readNextChar("Registers.copy(textArea,__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -121,7 +121,7 @@
 
 <ACTION NAME="cut-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.cut(textArea,__char__)");
+		view.getInputHandler().readNextChar("Registers.cut(textArea,__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -209,9 +209,21 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="eval">
+	<ACTION_PERFORMED>
+		BeanShell.eval(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="eval-selection">
+	<ACTION_PERFORMED>
+		BeanShell.evalSelection(view,textArea);
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="exchange-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.exchangeCaretRegister(editPane,__char__)");
+		view.getInputHandler().readNextChar("Registers.exchangeCaretRegister(editPane,__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -265,7 +277,7 @@
 
 <ACTION NAME="goto-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.goToRegister(editPane,__char__)");
+		view.getInputHandler().readNextChar("Registers.goToRegister(editPane,__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -331,7 +343,7 @@
 
 <ACTION NAME="insert-literal">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("textArea.setSelectedText(new String(__char__))");
+		view.getInputHandler().readNextChar("textArea.setSelectedText(String.valueOf(__char__));");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -379,7 +391,7 @@
 
 <ACTION NAME="next-bracket">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getNextBracket());
+		textArea.goToNextBracket(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -391,19 +403,31 @@
 
 <ACTION NAME="next-char">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getNextCharacter());
+		textArea.goToNextCharacter(false);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="next-line">
+	<ACTION_PERFORMED>
+		textArea.goToNextLine(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="next-marker">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getNextMarker());
+		textArea.goToNextMarker(false);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="next-page">
+	<ACTION_PERFORMED>
+		textArea.goToNextPage(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="next-paragraph">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getNextParagraph());
+		textArea.goToNextParagraph(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -415,7 +439,7 @@
 
 <ACTION NAME="next-word">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getNextWord());
+		textArea.goToNextWord(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -445,13 +469,13 @@
 
 <ACTION NAME="paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.paste(textArea,__char__)");
+		view.getInputHandler().readNextChar("Registers.paste(textArea,__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="prev-bracket">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getPrevBracket());
+		textArea.goToPrevBracket(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -463,19 +487,31 @@
 
 <ACTION NAME="prev-char">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getPrevCharacter());
+		textArea.goToPrevCharacter(false);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="prev-line">
+	<ACTION_PERFORMED>
+		textArea.goToPrevLine(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="prev-marker">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getPrevMarker());
+		textArea.goToPrevMarker(false);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="prev-page">
+	<ACTION_PERFORMED>
+		textArea.goToPrevPage(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="prev-paragraph">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getPrevParagraph());
+		textArea.goToPrevParagraph(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -487,7 +523,7 @@
 
 <ACTION NAME="prev-word">
 	<ACTION_PERFORMED>
-		textArea.setCaretPosition(textArea.getPrevWord());
+		textArea.goToPrevWord(false);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -497,7 +533,7 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="quick-search">
+<ACTION NAME="quick-search" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
 		view.quickSearch();
 	</ACTION_PERFORMED>
@@ -551,22 +587,28 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="replace-all" AUTO_RECORD="false">
+<ACTION NAME="replace-all" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
 		SearchAndReplace.replaceAll(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="replace-and-find-next" AUTO_RECORD="false">
+<ACTION NAME="replace-and-find-next" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
 		if(SearchAndReplace.replace(view))
 			SearchAndReplace.find(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="replace-in-selection" AUTO_RECORD="false">
+<ACTION NAME="replace-in-selection" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
 		SearchAndReplace.replace(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="repeat" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().setRepeatEnabled(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -579,6 +621,12 @@
 <ACTION NAME="run-last-macro" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
 		Macros.runLastMacro(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="run-script">
+	<ACTION_PERFORMED>
+		BeanShell.showRunScriptDialog(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -660,9 +708,15 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="select-block">
+	<ACTION_PERFORMED>
+		textArea.selectBlock();
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="select-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.selectCaretRegister(editPane,__char__)");
+		view.getInputHandler().readNextChar("Registers.selectCaretRegister(editPane,__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -704,31 +758,43 @@
 
 <ACTION NAME="select-next-bracket">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getNextBracket());
+		textArea.goToNextBracket(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-next-char">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getNextCharacter());
+		textArea.goToNextCharacter(true);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="select-next-line">
+	<ACTION_PERFORMED>
+		textArea.goToNextLine(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-next-marker">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getNextMarker());
+		textArea.goToNextMarker(true);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="select-next-page">
+	<ACTION_PERFORMED>
+		textArea.goToNextPage(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-next-paragraph">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getNextParagraph());
+		textArea.goToNextParagraph(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-next-word">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getNextWord());
+		textArea.goToNextWord(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -738,39 +804,57 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="select-prev-bracket">
+	<ACTION_PERFORMED>
+		textArea.goToPrevBracket(true);
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="select-prev-char">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getPrevCharacter());
+		textArea.goToPrevChar(true);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="select-prev-line">
+	<ACTION_PERFORMED>
+		textArea.goToPrevLine(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-prev-marker">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getPrevMarker());
+		textArea.goToPrevMarker(true);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="select-prev-page">
+	<ACTION_PERFORMED>
+		textArea.goToPrevPage(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-prev-paragraph">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getPrevParagraph());
+		textArea.goToPrevParagraph(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-prev-word">
 	<ACTION_PERFORMED>
-		textArea.moveCaretPosition(textArea.getPrevWord());
+		textArea.goToPrevParagraph(true);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="set-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.setCaretRegister(editPane,__char__)");
+		view.getInputHandler().readNextChar("Registers.setCaretRegister(editPane,__char__);");
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="set-filename-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		view.getInputHandler().readNextChar("Registers.setRegister(__char__,buffer.getPath())");
+		view.getInputHandler().readNextChar("Registers.setRegister(__char__,buffer.getPath());");
 	</ACTION_PERFORMED>
 </ACTION>
 

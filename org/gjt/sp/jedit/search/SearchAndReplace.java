@@ -244,7 +244,7 @@ public class SearchAndReplace
 			return false;
 		}
 
-		record(view,"SearchAndReplace.find(view)");
+		record(view,"SearchAndReplace.find(view);",false,true);
 
 		view.showWaitCursor();
 
@@ -278,7 +278,7 @@ loop:			for(;;)
 				}
 
 				/* Don't do this when playing a macro */
-				if(Macros.isMacroRunning())
+				if(BeanShell.isScriptRunning())
 					break loop;
 
 				int result = JOptionPane.showConfirmDialog(view,
@@ -367,7 +367,7 @@ loop:			for(;;)
 			return false;
 		}
 
-		record(view,"SearchAndReplace.replace(view)");
+		record(view,"SearchAndReplace.replace(view);",true,false);
 
 		try
 		{
@@ -410,7 +410,7 @@ loop:			for(;;)
 		int fileCount = 0;
 		int occurCount = 0;
 
-		record(view,"SearchAndReplace.replaceAll(view)");
+		record(view,"SearchAndReplace.replaceAll(view);",true,true);
 
 		view.showWaitCursor();
 
@@ -457,7 +457,7 @@ loop:			for(;;)
 		}
 
 		/* Don't do this when playing a macro, cos it's annoying */
-		if(!Macros.isMacroRunning())
+		if(!BeanShell.isScriptRunning())
 		{
 			if(fileCount == 0)
 				view.getToolkit().beep();
@@ -552,34 +552,42 @@ loop:		for(;;)
 	private static SearchMatcher matcher;
 	private static SearchFileSet fileset;
 
-	private static void record(View view, String action)
+	private static void record(View view, String action,
+		boolean recordReplaceString, boolean recordFileSet)
 	{
 		Macros.Recorder recorder = view.getMacroRecorder();
 
 		if(recorder != null)
 		{
-			/* recorder.record("SearchAndReplace.setSearchString(");
-			recorder.actionPerformed(jEdit.getAction("set-replace-string"),
-				replace);
+			recorder.record("SearchAndReplace.setSearchString(\""
+				+ MiscUtilities.charsToEscapes(search) + "\");");
 
-			StringBuffer buf = new StringBuffer();
-			if(regexp)
-				buf.append("regexp ");
-			else
-				buf.append("literal ");
-			if(ignoreCase)
-				buf.append("icase");
-			else
-				buf.append("case");
-			if(fileset instanceof CurrentBufferSet)
-				buf.append(" current");
-			else if(fileset instanceof AllBufferSet)
-				buf.append(" all");
+			if(recordReplaceString)
+			{
+				recorder.record("SearchAndReplace.setReplaceString(\""
+					+ MiscUtilities.charsToEscapes(replace) + "\");");
+			}
 
-			recorder.actionPerformed(jEdit.getAction("set-search-parameters"),
-				buf.toString());
+			recorder.record("SearchAndReplace.setIgnoreCase("
+				+ ignoreCase + ");");
+			recorder.record("SearchAndReplace.setRegexp("
+				+ regexp + ");");
 
-			recorder.actionPerformed(jEdit.getAction(action),null); */
+			if(recordFileSet)
+			{
+				if(fileset instanceof CurrentBufferSet)
+				{
+					recorder.record("SearchAndReplace.setSearchFileSet("
+					+ "new CurrentBufferSet());");
+				}
+				else if(fileset instanceof AllBufferSet)
+				{
+					recorder.record("SearchAndReplace.setSearchFileSet("
+						+ "new AllBufferSet());");
+				}
+			}
+
+			recorder.record(action);
 		}
 	}
 }
@@ -587,6 +595,9 @@ loop:		for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.41  2000/11/16 10:25:18  sp
+ * More macro work
+ *
  * Revision 1.40  2000/11/16 04:01:12  sp
  * BeanShell macros started
  *

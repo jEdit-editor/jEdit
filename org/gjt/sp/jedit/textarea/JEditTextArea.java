@@ -1937,49 +1937,104 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Returns the offset of the next closing bracket.
+	 * Moves the caret to the next closing bracket.
 	 * @since jEdit 2.7pre2.
 	 */
-	public int getNextBracket()
+	public void goToNextBracket(boolean select)
 	{
 		int caret = getCaretPosition();
 
 		String text = getText(caret,buffer.getLength() - caret - 1);
+
+		boolean ok = false;
 
 loop:		for(int i = 0; i < text.length(); i++)
 		{
 			switch(text.charAt(i))
 			{
 			case ')': case ']': case '}':
-				return caret + i + 1;
+				ok = true;
+				caret = caret + i + 1;
+				break loop;
 			}
 		}
 
-		return buffer.getLength();
+		if(!ok)
+			getToolkit().beep();
+		else
+		{
+			if(select)
+				select(getMarkPosition(),caret);
+			else
+				setCaretPosition(caret);
+		}
 	}
 
 	/**
-	 * Returns the offset of the next character.
+	 * Moves the caret to the next character.
 	 * @since jEdit 2.7pre2.
 	 */
-	public int getNextCharacter()
+	public void goToNextCharacter(boolean select)
 	{
 		int caret = getCaretPosition();
 		if(caret == buffer.getLength())
-			return caret;
+			getToolkit().beep();
 		else
-			return caret + 1;
+		{
+			caret++;
+
+			if(select)
+				select(getMarkPosition(),caret);
+			else
+			{
+				if(selectionStart != selectionEnd)
+					setCaretPosition(selectionEnd);
+				else
+					setCaretPosition(caret);
+			}
+		}
 	}
 
 	/**
-	 * Returns the offset of the next marker.
+	 * Movse the caret to the next line.
 	 * @since jEdit 2.7pre2
 	 */
-	public int getNextMarker()
+	public void goToNextLine(boolean select)
+	{
+		int caret = getCaretPosition();
+		int line = getCaretLine();
+
+		if(line == getLineCount() - 1)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int magic = getMagicCaretPosition();
+		if(magic == -1)
+		{
+			magic = offsetToX(line,caret - getLineStartOffset(line));
+		}
+
+		caret = getLineStartOffset(line + 1)
+			+ xToOffset(line + 1,magic + 1);
+		if(select)
+			select(getMarkPosition(),caret);
+		else
+			setCaretPosition(caret);
+		setMagicCaretPosition(magic);
+	}
+
+	/**
+	 * Moves the caret to the next marker.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToNextMarker(boolean select)
 	{
 		int caret = getCaretPosition();
 		Vector markers = buffer.getMarkers();
 		Marker marker = null;
+
 		for(int i = 0; i < markers.size(); i++)
 		{
 			Marker _marker = (Marker)markers.elementAt(i);
@@ -1990,36 +2045,85 @@ loop:		for(int i = 0; i < text.length(); i++)
 			}
 		}
 
-		if(marker != null)
-			return marker.getStart();
+		if(marker == null)
+			view.getToolkit().beep();
 		else
-			return buffer.getLength();
+		{
+			caret = marker.getStart();
+
+			if(select)
+				select(getMarkPosition(),caret);
+			else
+				setCaretPosition(caret);
+		}
 	}
 
 	/**
-	 * Returns the offset of the next paragraph.
+	 * Moves the caret to the next screenful.
+	 * @since jEdit 2.7pre2.
+	 */
+	public void goToNextPage(boolean select)
+	{
+		int lineCount = getLineCount();
+		int caret = getCaretPosition();
+		int line = getCaretLine();
+
+		int magic = getMagicCaretPosition();
+		if(magic == -1)
+		{
+			magic = offsetToX(line,caret - getLineStartOffset(line));
+		}
+
+		if(firstLine + visibleLines * 2 >= lineCount - 1)
+			setFirstLine(lineCount - visibleLines);
+		else
+			setFirstLine(firstLine + visibleLines);
+
+		line = Math.min(lineCount - 1,line + visibleLines);
+		caret = getLineStartOffset(line) + xToOffset(line,magic + 1);
+		if(select)
+			select(getMarkPosition(),caret);
+		else
+			setCaretPosition(caret);
+
+		setMagicCaretPosition(magic);
+	}
+
+	/**
+	 * Moves the caret to the start of the next paragraph.
 	 * @since jEdit 2.7pre2
 	 */
-	public int getNextParagraph()
+	public void goToNextParagraph(boolean select)
 	{
 		int lineNo = getCaretLine();
+
+		int caret = -1;
 
 		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(getLineLength(i) == 0)
 			{
-				return getLineStartOffset(i);
+				caret = getLineStartOffset(i);
+				break;
 			}
 		}
 
-		return buffer.getLength();
+		if(caret == -1)
+			getToolkit().beep();
+		else
+		{
+			if(select)
+				select(getMarkPosition(),caret);
+			else
+				setCaretPosition(caret);
+		}
 	}
 
 	/**
-	 * Returns the offset of the next word.
+	 * Moves the caret to the start of the next word.
 	 * @since jEdit 2.7pre2
 	 */
-	public int getNextWord()
+	public void goToNextWord(boolean select)
 	{
 		int caret = getCaretPosition();
 		int line = getCaretLine();
@@ -2032,8 +2136,10 @@ loop:		for(int i = 0; i < text.length(); i++)
 		{
 			if(lineStart + caret == buffer.getLength())
 			{
-				return lineStart + caret;
+				getToolkit().beep();
+				return;
 			}
+
 			caret++;
 		}
 		else
@@ -2042,47 +2148,103 @@ loop:		for(int i = 0; i < text.length(); i++)
 			caret = TextUtilities.findWordEnd(lineText,caret + 1,noWordSep);
 		}
 
-		return lineStart + caret;
+		caret += lineStart;
+		if(select)
+			select(getMarkPosition(),caret);
+		else
+			setCaretPosition(caret);
 	}
 
 	/**
-	 * Returns the offset of the previous bracket.
+	 * Moves the caret to the previous bracket.
 	 * @since jEdit 2.7pre2
 	 */
-	public int getPrevBracket()
+	public void goToPrevBracket(boolean select)
 	{
 		String text = getText(0,getCaretPosition());
+
+		int caret = -1;
 
 loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		{
 			switch(text.charAt(i))
 			{
 			case '(': case '[': case '{':
-				return i;
+				caret = i;
+				break loop;
 			}
 		}
 
-		return 0;
+		if(caret == -1)
+			getToolkit().beep();
+		else
+		{
+			if(select)
+				select(getMarkPosition(),caret);
+			else
+				setCaretPosition(caret);
+		}
 	}
 
 	/**
-	 * Returns the offset of the previous character.
+	 * Moves the caret to the previous character.
 	 * @since jEdit 2.7pre2.
 	 */
-	public int getPrevCharacter()
+	public void goToPrevCharacter(boolean select)
 	{
 		int caret = getCaretPosition();
 		if(caret == 0)
-			return caret;
+			getToolkit().beep();
 		else
-			return caret - 1;
+		{
+			caret--;
+
+			if(select)
+				select(getMarkPosition(),caret);
+			else
+			{
+				if(selectionStart != selectionEnd)
+					setCaretPosition(selectionStart);
+				else
+					setCaretPosition(caret);
+			}
+		}
 	}
 
 	/**
-	 * Returns the offset of the previous marker.
+	 * Movse the caret to the previous line.
 	 * @since jEdit 2.7pre2
 	 */
-	public int getPrevMarker()
+	public void goToPrevLine(boolean select)
+	{
+		int caret = getCaretPosition();
+		int line = getCaretLine();
+
+		if(line == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int magic = getMagicCaretPosition();
+		if(magic == -1)
+		{
+			magic = offsetToX(line,caret - getLineStartOffset(line));
+		}
+
+		caret = getLineStartOffset(line - 1) + xToOffset(line - 1,magic + 1);
+		if(select)
+			select(getMarkPosition(),caret);
+		else
+			setCaretPosition(caret);
+		setMagicCaretPosition(magic);
+	}
+
+	/**
+	 * Moves the caret to the previous marker.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToPrevMarker(boolean select)
 	{
 		int caret = getCaretPosition();
 
@@ -2098,36 +2260,85 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			}
 		}
 
-		if(marker != null)
-			return marker.getStart();
+		if(marker == null)
+			getToolkit().beep();
 		else
-			return 0;
+		{
+			caret = marker.getStart();
+
+			if(select)
+				select(getMarkPosition(),caret);
+			else
+				setCaretPosition(caret);
+		}
 	}
 
 	/**
-	 * Returns the offset of the previous paragraph.
+	 * Moves the caret to the previous screenful.
 	 * @since jEdit 2.7pre2
 	 */
-	public int getPrevParagraph()
+	public void goToPrevPage(boolean select)
+	{
+		int caret = getCaretPosition();
+		int line = getCaretLine();
+
+		if(firstLine < visibleLines)
+			setFirstLine(0);
+		else
+			setFirstLine(firstLine - visibleLines);
+
+		int magic = getMagicCaretPosition();
+		if(magic == -1)
+		{
+			magic = offsetToX(line,caret - getLineStartOffset(line));
+		}
+
+		line = Math.max(0,line - visibleLines);
+		caret = getLineStartOffset(line) + xToOffset(line,magic + 1);
+
+		if(select)
+			select(getMarkPosition(),caret);
+		else
+			setCaretPosition(caret);
+
+		setMagicCaretPosition(magic);
+	}
+
+	/**
+	 * Moves the caret to the start of the previous paragraph.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToPrevParagraph(boolean select)
 	{
 		int lineNo = getCaretLine();
+
+		int caret = -1;
 
 		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			if(getLineLength(i) == 0)
 			{
-				return getLineStartOffset(i);
+				caret = getLineStartOffset(i);
+				break;
 			}
 		}
 
-		return 0;
+		if(caret == -1)
+			getToolkit().beep();
+		else
+		{
+			if(select)
+				select(getMarkPosition(),caret);
+			else
+				setCaretPosition(caret);
+		}
 	}
 
 	/**
-	 * Returns the offset of the previous word.
+	 * Moves the caret to the start of the previous word.
 	 * @since jEdit 2.7pre2
 	 */
-	public int getPrevWord()
+	public void goToPrevWord(boolean select)
 	{
 		int caret = getCaretPosition();
 		int line = getCaretLine();
@@ -2140,7 +2351,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		{
 			if(lineStart == 0)
 			{
-				return 0;
+				view.getToolkit().beep();
+				return;
 			}
 			caret--;
 		}
@@ -2150,7 +2362,12 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			caret = TextUtilities.findWordStart(lineText,caret - 1,noWordSep);
 		}
 
-		return lineStart + caret;
+		caret += lineStart;
+
+		if(select)
+			select(getMarkPosition(),caret);
+		else
+			setCaretPosition(caret);
 	}
 
 	/**
@@ -2489,6 +2706,80 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		}
 
 		getToolkit().beep();
+	}
+
+	// Eliminates lots of switch() statements
+	private final String openBrackets = "([{";
+	private final String closeBrackets = ")]}";
+
+	/**
+	 * Selects the code block surrounding the caret.
+	 * @since jEdit 2.7pre2
+	 */
+	public void selectBlock()
+	{
+		int start = selectionStart;
+		int end = selectionEnd;
+		String text = textArea.getText(0,buffer.getLength());
+
+		// Scan backwards, trying to find a bracket
+		int count = 1;
+		char openBracket = '\0';
+		char closeBracket = '\0';
+
+		// We can't do the backward scan if start == 0
+		if(start == 0)
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
+backward_scan:	while(--start > 0)
+		{
+			char c = text.charAt(start);
+			int index = openBrackets.indexOf(c);
+			if(index != -1)
+			{
+				if(--count == 0)
+				{
+					openBracket = c;
+					closeBracket = closeBrackets.charAt(index);
+					break backward_scan;
+				}
+			}
+			else if(closeBrackets.indexOf(c) != -1)
+				count++;
+		}
+
+		// Reset count
+		count = 1;
+
+		// Scan forward, matching that bracket
+		if(openBracket == '\0')
+		{
+			getToolkit().beep();
+			return;
+		}
+		else
+		{
+forward_scan:		do
+			{
+				char c = text.charAt(end);
+				if(c == closeBracket)
+				{
+					if(--count == 0)
+					{
+						end++;
+						break forward_scan;
+					}
+				}
+				else if(c == openBracket)
+					count++;
+			}
+			while(++end < buffer.getLength());
+		}
+
+		select(start,end);
 	}
 
 	/**
@@ -3748,6 +4039,9 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.99  2000/11/16 10:25:19  sp
+ * More macro work
+ *
  * Revision 1.98  2000/11/13 11:19:28  sp
  * Search bar reintroduced, more BeanShell stuff
  *

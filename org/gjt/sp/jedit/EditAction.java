@@ -165,6 +165,7 @@ public abstract class EditAction implements ActionListener
 	/**
 	 * Returns if this edit action should not be repeated. Returns false
 	 * by default.
+	 * @since jEdit 2.7pre2
 	 */
 	public boolean noRepeat()
 	{
@@ -174,6 +175,7 @@ public abstract class EditAction implements ActionListener
 	/**
 	 * Returns if this edit action should not be recorded. Returns false
 	 * by default.
+	 * @since jEdit 2.7pre2
 	 */
 	public boolean noRecord()
 	{
@@ -186,7 +188,8 @@ public abstract class EditAction implements ActionListener
 	 */
 	public String getCode()
 	{
-		return "// fixme";
+		return "view.getInputHandler().executeAction("
+			+ "jEdit.getAction(\"" + name + "\"),view,null)";
 	}
 
 	// private members
@@ -315,6 +318,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  2000/11/16 10:25:16  sp
+ * More macro work
+ *
  * Revision 1.30  2000/11/16 04:01:10  sp
  * BeanShell macros started
  *

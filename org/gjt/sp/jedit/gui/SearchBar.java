@@ -186,7 +186,7 @@ public class SearchBar extends JPanel
 					find.addCurrentToHistory();
 					find.setText(null);
 					SearchAndReplace.setSearchString(text);
-					SearchAndReplace.find(view,view);
+					SearchAndReplace.find(view);
 					view.getEditPane().focusOnTextArea();
 				}
 			}
@@ -266,6 +266,9 @@ public class SearchBar extends JPanel
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.17  2000/11/16 10:25:18  sp
+ * More macro work
+ *
  * Revision 1.16  2000/11/13 11:19:28  sp
  * Search bar reintroduced, more BeanShell stuff
  *

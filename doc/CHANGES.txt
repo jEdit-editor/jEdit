@@ -18,6 +18,16 @@ JEDIT 2.7 VERSION HISTORY
 - I have decided that the 'command line' really sucks. So the old jEdit 2.5
   search bar is back. Now that BeanShell is integrated, the command line isn't
   as useful anyway.
+- Key binding changes:
+  - insert-literal is now bound to C+e v
+  - save-all is now bound to C+e C+s
+  - paste-previous is now bound to C+e C+v
+  - the docking collapse/expand commands are now bound to C+e 1,2,3,4
+  - next/prev-buffer is now bound to C+PAGE_UP and C+PAGE_DOWN
+  - next/prev-split is now bound to A+PAGE_UP and A+PAGE_DOWN
+  - recent-buffer is now bound to C+`
+  - close-all is now bound to C+e C+w
+  - reload, reload-all and new-view no longer have keyboard shortcuts
 
 + Bug Fixes
 

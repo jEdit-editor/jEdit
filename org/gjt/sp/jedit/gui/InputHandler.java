@@ -74,7 +74,7 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public boolean isPrefixActive()
 	{
-		return repeat;
+		return false;
 	}
 
 	/**
@@ -95,8 +95,7 @@ public abstract class InputHandler extends KeyAdapter
 	public void setRepeatEnabled(boolean repeat)
 	{
 		this.repeat = repeat;
-		if(!repeat)
-			repeatCount = 0;
+		repeatCount = 0;
 	}
 
 	/**
@@ -104,7 +103,7 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public int getRepeatCount()
 	{
-		return (repeat ? repeatCount : 1);
+		return (repeat && repeatCount > 0 ? repeatCount : 1);
 	}
 
 	/**
@@ -232,41 +231,37 @@ public abstract class InputHandler extends KeyAdapter
 
 	protected void invokeReadNextChar(char ch)
 	{
-		String charStr;
-		switch(ch)
-		{
-		case '\t':
-			charStr = "\\t";
-			break;
-		case '\n':
-			charStr = "\\n";
-			break;
-		case '\\':
-			charStr = "\\\\";
-			break;
-		case '\'':
-			charStr = "\\\'";
-			break;
-		default:
-			charStr = String.valueOf(ch);
-			break;
-		}
+		String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
 
 		int index = readNextChar.indexOf("__char__");
 		if(index != -1)
 		{
-			readNextChar = readNextChar.substring(0,index)
+			BeanShell.eval(view,readNextChar.substring(0,index)
 				+ '\'' + charStr + '\''
-				+ readNextChar.substring(index + 8);
+				+ readNextChar.substring(index + 8));
 		}
+
+		Macros.Recorder recorder = view.getMacroRecorder();
+		if(recorder != null)
+			recorder.record(repeatCount,readNextChar);
 
 		if(repeat && repeatCount != 1)
 		{
-			readNextChar = "for(int i = 1; i < " + repeatCount
-				+ "; i++)\n{\n" + readNextChar + "\n}";
+			Buffer buffer = view.getBuffer();
+
+			try
+			{
+				buffer.beginCompoundEdit();
+	
+				BeanShell.eval(view,"for(int i = 1; i < " + repeatCount
+					+ "; i++)\n{\n" + readNextChar + "\n}");
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
 		}
 
-		BeanShell.eval(view,readNextChar);
 		readNextChar = null;
 	}
 
@@ -296,6 +291,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/11/16 10:25:18  sp
+ * More macro work
+ *
  * Revision 1.17  2000/11/16 04:01:11  sp
  * BeanShell macros started
  *
