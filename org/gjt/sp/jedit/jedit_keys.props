@@ -78,6 +78,7 @@ select-paragraph.shortcut=C+e p
 remove-trailing-ws.shortcut=C+e r
 insert-literal.shortcut=C+e v
 select-word.shortcut=C+e w
+expand-all-folds.shortcut=C+e x
 prev-bracket.shortcut=C+e [
 next-bracket.shortcut=C+e ]
 

@@ -25,7 +25,7 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 
-public class AddAbbrevDialog extends EnhancedDialog
+public class AddAbbrevDialog extends JDialog
 {
 	public AddAbbrevDialog(View view, String abbrev)
 	{
@@ -64,16 +64,6 @@ public class AddAbbrevDialog extends EnhancedDialog
 		pack();
 		setLocationRelativeTo(view);
 		show();
-	}
-
-	public void ok()
-	{
-		// do nothing when Enter pressed
-	}
-
-	public void cancel()
-	{
-		dispose();
 	}
 
 	// private members

@@ -2,6 +2,11 @@ JEDIT 3.1 VERSION HISTORY
 
 * Version 3.1pre2
 
++ New Features
+
+- If a macro named 'Startup' exists, it is now run on startup
+- 'Expand All Folds' command
+
 + Enhancements
 
 - HTML-like modes (ASP, JSP, PHP, SHTML, XSL) now handle <!...>
@@ -14,6 +19,9 @@ JEDIT 3.1 VERSION HISTORY
 - The font selector now shows all available fonts on Java 2, not just
   the 5 built-in ones
 - The shortcut option pane key grabbing code is now more reliable
+- Improved XML mode
+- The File->Current Directory menu no longer displays autosave and
+  backup files
 
 + Bug Fixes
 
@@ -27,6 +35,18 @@ JEDIT 3.1 VERSION HISTORY
 - Bracket highlighting behaves better of the matching bracket is
   initially not visible on the viewscreen
 - Binding commands to <prefix> SPACE didn't work
+- Having non-existent filenames in the catalog should no longer cause
+  problems
+- Invalid tool bar buttons will no longer cause jEdit to not start
+- A bug in the VFS layer caused the make directory command to fail on
+  FTP servers if jEdit was running on Windows
+- Keyboard shortcuts assigned to plugins using the old actions API
+  didn't work
+- There was no way to enter newlines in the abbrev editor
+- File.getCanonicalPath() is called again to get rid of 8.3 filenames
+  on Windows
+- Abbrevs added using the 'Expand Abbreviation' command were not being
+  saved
 
 * Version 3.1pre1
 

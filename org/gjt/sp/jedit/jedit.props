@@ -170,9 +170,6 @@ view.gutter.markerColor=#ccffcc
 # Gutter register highlight color
 view.gutter.registerColor=#ffffcc
 
-# Gutter fold color
-view.gutter.foldColor=#808080
-
 # Gutter border colors
 view.gutter.focusBorderColor=#8080ff
 view.gutter.noFocusBorderColor=#808080

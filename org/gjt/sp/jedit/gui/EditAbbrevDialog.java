@@ -25,7 +25,7 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 
-public class EditAbbrevDialog extends EnhancedDialog
+public class EditAbbrevDialog extends JDialog
 {
 	public EditAbbrevDialog(Component comp, String abbrev, String expansion)
 	{
@@ -64,17 +64,6 @@ public class EditAbbrevDialog extends EnhancedDialog
 		show();
 	}
 
-	public void ok()
-	{
-		isOK = true;
-		dispose();
-	}
-
-	public void cancel()
-	{
-		dispose();
-	}
-
 	public String getExpansion()
 	{
 		if(!isOK)
@@ -94,11 +83,10 @@ public class EditAbbrevDialog extends EnhancedDialog
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			Object source = evt.getSource();
-			if(source == ok)
-				ok();
-			else if(source == cancel)
-				cancel();
+			if(evt.getSource() == ok)
+				isOK = true;
+
+			dispose();
 		}
 	}
 }

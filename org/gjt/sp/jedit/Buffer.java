@@ -2425,6 +2425,27 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
+	 * Expand all folds in the specified document.
+	 * @since jEdit 3.1pre1
+	 */
+	public void expandAllFolds()
+	{
+		if(virtualLines.length <= lineCount)
+		{
+			int[] virtualLinesN = new int[(lineCount + 1) * 2];
+			System.arraycopy(virtualLines,0,
+				virtualLinesN,0,virtualLines.length);
+			virtualLines = virtualLinesN;
+		}
+
+		virtualLineCount = lineCount;
+		for(int i = 0; i < lineCount; i++)
+			virtualLines[i] = i;
+
+		fireFoldStructureChanged();
+	}
+
+	/**
 	 * Adds a fold listener.
 	 * @param listener The listener
 	 * @since jEdit 3.1pre1

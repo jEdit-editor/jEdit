@@ -1,5 +1,5 @@
+- document Startup macro
 - update to new gnu.regexp version
-- expand-one-level command
 - inserting text causes random problems with folding
 - undo causes problems sometimes (is this related to folding at all?)
 - sometimes fold markers are not repainted in gutter
@@ -9,7 +9,6 @@
 - XMode rule inclusion
 - when saving local files, save to .<filename>.save, then rename to
   <filename>
-- The File->Current Directory menu will not list backups and autosaves.
 - The base Metal L&F font will be configurable.
 - Bracket double click behavior is really annoying - make if configurable
 - finish persistent splits
@@ -17,7 +16,6 @@
 - Two-pane view in filesystem browser
 - Migrate documentation to DocBook/XML
 - Folding docs - in source-edit.sgml
-- store docked window sizes, instead of size of entire area
 - confirm() method in GUIUtilities
-- dump keys macro
 - .description plugin property
+- scrollbar bug

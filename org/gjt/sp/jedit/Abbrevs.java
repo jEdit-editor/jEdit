@@ -265,6 +265,7 @@ public class Abbrevs
 	public static void addGlobalAbbrev(String abbrev, String expansion)
 	{
 		globalAbbrevs.put(abbrev,expansion);
+		abbrevsChanged = true;
 	}
 
 	/**
@@ -283,6 +284,7 @@ public class Abbrevs
 			modes.put(mode,modeAbbrevs);
 		}
 		modeAbbrevs.put(abbrev,expansion);
+		abbrevsChanged = true;
 	}
 
 	// package-private members

@@ -418,11 +418,14 @@ toggle-synchro-scroll.label=Synchronized Scrolling
 folding=collapse-fold \
 	expand-fold \
 	- \
-	expand-folds
+	expand-folds \
+	expand-all-folds
+
 folding.label=Folding
 collapse-fold.label=Collapse Fold
 expand-fold.label=Expand Fold
 expand-folds.label=Expand Folds [x]
+expand-all-folds.label=Expand All Folds
 
 splitting=unsplit \
 	  split-horizontal \

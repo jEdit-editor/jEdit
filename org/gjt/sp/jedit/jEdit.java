@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
-import org.gjt.sp.jedit.syntax.XModeHandler;
+import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -282,7 +282,6 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 		initSiteProperties();
 		initUserProperties();
-		GUIUtilities.advanceSplashProgress();
 		initActions();
 		initPlugins();
 
@@ -309,14 +308,8 @@ public class jEdit
 		sortBuffers = getBooleanProperty("sortBuffers");
 		sortByName = getBooleanProperty("sortByName");
 
-		propertiesChanged();
 		initPLAF();
-		SearchAndReplace.load();
-
 		initModes();
-		Macros.loadMacros();
-
-		FavoritesVFS.loadFavorites();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -326,6 +319,13 @@ public class jEdit
 			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
 				.loadAllPlugins();
 		}
+
+		GUIUtilities.advanceSplashProgress();
+
+		SearchAndReplace.load();
+		Macros.loadMacros();
+		FavoritesVFS.loadFavorites();
+		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -367,6 +367,14 @@ public class jEdit
 					if(bufferCount == 0)
 						newFile(null);
 					newView(null,_buffer);
+				}
+
+				// execute startup macro
+				Macros.Macro macro = Macros.getMacro("Startup");
+				if(macro != null)
+				{
+					Log.log(Log.NOTICE,jEdit.class,"Running startup macro");
+					BeanShell.runScript(viewsFirst,macro.path,false);
 				}
 
 				GUIUtilities.hideSplashScreen();
@@ -893,6 +901,11 @@ public class jEdit
 				Object[] args = { fileName, new Integer(line), message };
 				GUIUtilities.error(null,"xmode-parse",args);
 			}
+
+			// give it an empty token marker to avoid problems
+			TokenMarker marker = new TokenMarker();
+			marker.addRuleSet("MAIN",new ParserRuleSet());
+			mode.setTokenMarker(marker);
 		}
 	}
 

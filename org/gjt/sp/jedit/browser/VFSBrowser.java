@@ -388,7 +388,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		if(newDirectory == null)
 			return;
 
-		VFS vfs = VFSManager.getVFSForPath(newDirectory);
+		VFS vfs = VFSManager.getVFSForPath(path);
 
 		// path is the currently viewed directory in the browser
 		newDirectory = vfs.constructPath(path,newDirectory);

@@ -640,10 +640,17 @@ loop:		for(int i = 0; i < str.length(); i++)
 		if(File.separatorChar == '\\')
 		{
 			// get rid of mixed paths on Windows
-			return path.replace('/','\\');
+			path = path.replace('/','\\');
 		}
-		else
+
+		try
+		{
+			return new File(path).getCanonicalPath();
+		}
+		catch(Exception e)
+		{
 			return path;
+		}
 	}
 
 	private static void quicksort(Object[] obj, int _start, int _end,

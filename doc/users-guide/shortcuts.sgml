@@ -555,9 +555,15 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
-      <keycap>Enter</> <keycap><replaceable>level</></keycap>
+      <keycap>Enter</> <keycap><replaceable>level</></keycap></entry>
       <entry>Expand folds with level less than <replaceable>level</>,
       collapse all others.
+      </entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
+      <keycap>X</></entry>
+      <entry>Expand all folds.
       </entry>
      </row>
     </tbody>

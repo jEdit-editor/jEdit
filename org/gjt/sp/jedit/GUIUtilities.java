@@ -271,7 +271,11 @@ public class GUIUtilities
 				if(button.equals("-"))
 					toolBar.addSeparator();
 				else
-					toolBar.add(loadToolButton(button));
+				{
+					JButton b = loadToolButton(button);
+					if(b != null)
+						toolBar.add(b);
+				}
 			}
 		}
 
@@ -312,7 +316,17 @@ public class GUIUtilities
 				label = prettifyMenuLabel(label);
 		}
 
-		Icon icon = loadIcon(jEdit.getProperty(name + ".icon"));
+		Icon icon;
+		String iconName = jEdit.getProperty(name + ".icon");
+		if(iconName != null)
+		{
+			icon = loadIcon(iconName);
+			if(icon == null)
+				return null;
+		}
+		else
+			return null;
+
 		String toolTip = label;
 		String shortcut = jEdit.getProperty(name + ".shortcut");
 		if(shortcut != null)

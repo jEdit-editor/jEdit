@@ -260,6 +260,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="expand-all-folds">
+	<CODE>
+		buffer.expandAllFolds();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="exit">
 	<CODE>
 		jEdit.exit(view,true);

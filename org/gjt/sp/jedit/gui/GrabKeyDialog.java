@@ -44,7 +44,7 @@ public class GrabKeyDialog extends JDialog
 
 		content.add(BorderLayout.NORTH,label);
 
-		shortcut = new JTextField(40);
+		shortcut = new JTextField();
 		shortcut.setEnabled(false);
 		content.add(BorderLayout.CENTER,shortcut);
 
