@@ -24,6 +24,7 @@ import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
 public class CloseDialog extends EnhancedDialog
@@ -136,6 +137,7 @@ public class CloseDialog extends EnhancedDialog
 					Buffer buffer = jEdit.getBuffer(path);
 					if(!buffer.save(view,null,true))
 						return;
+					VFSManager.waitForRequests();
 					jEdit._closeBuffer(view,buffer);
 					bufferModel.removeElement(path);
 				}

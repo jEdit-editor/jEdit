@@ -210,6 +210,9 @@ Jonathan Revusky:
 Juha Lindfors:
 	- IDL syntax highlighting
 
+Gili Tzabari:
+	- OS/2 start script
+
 Kristian Ovaska:
 	- x86 Assembly, Haskell, Pascal syntax highlighting
 

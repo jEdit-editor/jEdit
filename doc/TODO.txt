@@ -17,6 +17,7 @@ might never be implemented at all.
 - start preparing for web start (handle jEditHome == null, jedit_jnlp.jar)
 - when loading a plugin, check if all the jars are present?
 - 'find' -vs- 'find in files'?
+- newline at the end of BeanShell scripts causes problems
 
 - reverse regexp search
 - hypersearch: select button, clear button

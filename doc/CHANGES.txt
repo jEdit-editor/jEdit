@@ -48,6 +48,7 @@ JEDIT 3.2 VERSION HISTORY
 - -nostartupmacro command line switch
 - Improved 'View Registers' dialog box
 - The gutter now shows marker tooltips immediately
+- Minor improvements made to installer
 
 + Neutral
 
@@ -84,6 +85,8 @@ JEDIT 3.2 VERSION HISTORY
 - If the caret was at the beginning of the line, prev-word would move it
   to the beginning of the previous line, not the end of the previous
   line as you would expect
+- Fixed possible NPE when closing files due to jEdit.removeBufferFromList()
+  being called twice
 
 + API Changes
 

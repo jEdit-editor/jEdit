@@ -709,7 +709,7 @@
    <itemizedlist><listitem><para><varname>_0</> -- the text to be replaced</para>
    </listitem><listitem><para><varname>_1</> - <varname>_9</> -- if regular
    expressions are enabled, these contain the values of saved subexpressions.
-   </para></listitem>
+   </para></listitem></itemizedlist>
    <para>
     BeanShell syntax and features are covered in great detail in <xref
     linkend=macros>, but here are some examples:

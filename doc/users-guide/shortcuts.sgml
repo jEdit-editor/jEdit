@@ -346,7 +346,7 @@
 
  <bridgehead renderas=sect1>Clipboard and Registers</>
   <para>
-   For details, see <xref linkend=clipboard>.
+   For details, see <xref linkend=text-transfer>.
   </para>
   <informaltable frame=none>
    <tgroup cols=2>

@@ -313,7 +313,7 @@
    stores history lists, used by
    history text fields and the
    <guimenu>Edit</>&gt;<guimenuitem>Paste Previous</> command. See
-   <xref linkend=clipboard> and <xref linkend=history>.</para></listitem>
+   <xref linkend=text-transfer> and <xref linkend=history>.</para></listitem>
    <listitem><para><filename>properties</> - a plain text file which
    stores the majority of jEdit's settings.</para></listitem>
    <listitem><para><filename>recent</> - a plain text file which stores

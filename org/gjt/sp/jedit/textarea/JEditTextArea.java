@@ -3021,11 +3021,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			if(s.startLine != s.endLine)
 			{
 				if(s.startLine != caretLine)
-					buffer.addMarker('\0',s.startLine);
+					buffer.addMarker('\0',s.start);
 			}
 
 			if(s.endLine != caretLine)
-				buffer.addMarker('\0',s.endLine);
+				buffer.addMarker('\0',s.end);
 		}
 
 		buffer.addMarker('\0',caret);
