@@ -328,32 +328,44 @@ implements ActionListener, ChangeListener
 
 		SelectComponents()
 		{
-			setLayout(new BorderLayout());
+			GridBagLayout layout = new GridBagLayout();
+			setLayout(layout);
+			GridBagConstraints cons = new GridBagConstraints();
+			cons.anchor = GridBagConstraints.NORTHWEST;
+			cons.fill = GridBagConstraints.HORIZONTAL;
+			cons.weightx = 1.0f;
+			cons.weighty = 1.0f;
+			cons.gridy = 1;
 
 			JLabel caption = new JLabel("Step 2 - specify"
 				+ " components to install");
 			Font font = caption.getFont();
 			caption.setFont(new Font(font.getFamily(),font.getStyle(),24));
 
-			add(BorderLayout.NORTH,caption);
-
-			Box box = new Box(BoxLayout.Y_AXIS);
+			layout.setConstraints(caption,cons);
+			add(caption);
 
 			userComp = createUserPanel();
 			userComp.setBorder(new TitledBorder("Components for users"));
 
-			box.add(userComp);
+			cons.gridy++;
+			layout.setConstraints(userComp,cons);
+			add(userComp);
 
 			develComp = createDevelPanel();
 			develComp.setBorder(new TitledBorder("Components for developers"));
 
 			if(develComp.getComponentCount() != 0)
-				box.add(develComp);
+			{
+				cons.gridy++;
+				layout.setConstraints(develComp,cons);
+				add(develComp);
+			}
 
-			box.add(sizeLabel = new JLabel("",SwingConstants.LEFT));
-
-			box.add(Box.createGlue());
-			add(BorderLayout.CENTER,box);
+			sizeLabel = new JLabel("",SwingConstants.LEFT);
+			cons.gridy++;
+			layout.setConstraints(sizeLabel,cons);
+			add(sizeLabel);
 
 			updateSize();
 		}
