@@ -893,37 +893,25 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public void <function>blockComment</></>
+  <funcdef>public void <function>lineComment</></>
   <paramdef></>
  </funcprototype>
 </funcsynopsis>
 <para>
-    This creates a block-style comment for each line in the selected text.
+    This inserts the line comment string at the beginning of each selected line.
 </para>
 </listitem>
 
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public void <function>boxComment</></>
+  <funcdef>public void <function>rangeComment</></>
   <paramdef></>
  </funcprototype>
 </funcsynopsis>
 <para>
-    This creates a box-style comment encompassing the line in the selected text.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>wingCommnt</></>
-  <paramdef></>
- </funcprototype>
-</funcsynopsis>
-<para>
-    This creates a comment, using a single set of comment delimiters,
-    beginning and ending with the selected text.
+    This surrounds each selected text chunk with
+    the comment start and end strings.
 </para>
 </listitem>
 

@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -58,7 +59,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.02.01.00";
+		return "03.02.02.00";
 	}
 
 	/**
@@ -303,7 +304,6 @@ public class jEdit
 		SearchAndReplace.load();
 		FavoritesVFS.loadFavorites();
 		Macros.loadMacros();
-		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -313,6 +313,9 @@ public class jEdit
 			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
 				.loadAllPlugins();
 		}
+
+		// Must be after plugins are started!!!
+		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -1206,6 +1209,9 @@ public class jEdit
 		{
 			int caret = BufferHistory.getCaretPosition(path);
 			props.put(Buffer.CARET,new Integer(caret));
+			Selection[] selection = BufferHistory.getSelection(path);
+			if(selection != null)
+				props.put(Buffer.SELECTION,selection);
 		}
 
 		final Buffer newBuffer = new Buffer(view,path,readOnly,
@@ -1402,7 +1408,9 @@ public class jEdit
 			view.getEditPane().saveCaretInfo();
 			Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
 			int caret = (_caret == null ? 0 : _caret.intValue());
-			BufferHistory.setCaretPosition(buffer.getPath(),caret);
+
+			BufferHistory.setEntry(buffer.getPath(),caret,
+				(Selection[])buffer.getProperty(Buffer.SELECTION));
 		}
 
 		removeBufferFromList(buffer);
@@ -1472,7 +1480,8 @@ public class jEdit
 			{
 				Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
 				int caret = (_caret == null ? 0 : _caret.intValue());
-				BufferHistory.setCaretPosition(buffer.getPath(),caret);
+				BufferHistory.setEntry(buffer.getPath(),caret,
+					(Selection[])buffer.getProperty(Buffer.SELECTION));
 			}
 
 			buffer.close();
@@ -1681,20 +1690,15 @@ public class jEdit
 		// (for the sake of plugins that add stuff to views)
 		newView.pack();
 
+		// newView.setSize(view.getSize()) creates incorrectly
+		// sized views, for some reason...
 		if(view != null)
 		{
-			newView.setSize(view.getSize());
-			Point location = view.getLocation();
-			location.x += 20;
-			location.y += 20;
-			newView.setLocation(location);
-
+			GUIUtilities.saveGeometry(view,"view");
 			view.hideWaitCursor();
 		}
-		else
-		{
-			GUIUtilities.loadGeometry(newView,"view");
-		}
+
+		GUIUtilities.loadGeometry(newView,"view");
 
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));

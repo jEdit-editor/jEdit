@@ -45,7 +45,7 @@ public class SearchAndReplace
 	 * @param defaultFind The initial search string
 	 * @since jEdit 2.7pre1
 	 */
-	public static void showSearchDialog(View view, String defaultFind)
+	/* public static void showSearchDialog(View view, String defaultFind)
 	{
 		SearchDialog dialog = (SearchDialog)view.getRootPane()
 			.getClientProperty(SEARCH_DIALOG_KEY);
@@ -56,7 +56,7 @@ public class SearchAndReplace
 		}
 
 		dialog.setSearchString(defaultFind);
-	}
+	} */
 
 	/**
 	 * Sets the current search string.
@@ -754,7 +754,7 @@ loop:		for(;;)
 	// private members
 
 	// used to cache search dialogs in view client properties
-	private static final String SEARCH_DIALOG_KEY = "SearchDialog";
+	//private static final String SEARCH_DIALOG_KEY = "SearchDialog";
 
 	private static String search;
 	private static String replace;

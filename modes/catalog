@@ -156,6 +156,9 @@
 <MODE NAME="vbscript"		FILE="vbscript.xml"
 				FILE_NAME_GLOB="*.{vbs,bas,cls}" />
 
+<MODE NAME="verilog"		FILE="verilog.xml"
+				FILE_NAME_GLOB="*.{ver,v}" />
+
 <MODE NAME="vhdl"		FILE="vhdl.xml"
 				FILE_NAME_GLOB="*.vh*" />
 

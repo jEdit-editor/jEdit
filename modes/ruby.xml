@@ -9,7 +9,6 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="=begin" />
 		<PROPERTY NAME="commentEnd" VALUE="=end" />
-		<PROPERTY NAME="boxComment" VALUE=" *" />
 		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>

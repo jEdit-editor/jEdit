@@ -1,5 +1,40 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2pre2
+
++ New Features
+
+- This was actually added in 3.2pre1, not 3.2pre2, but I forgot to
+  mention it to the change log. 'BeanShell search and replace' lets you
+  replace occurences of a search string (or regexp) with the result of a
+  BeanShell code snippet. For example, you can use it to convert all
+  tags in an HTML file to lower case.
+- Verilog syntax highlighting (Wojciech Stryjewski)
+
++ Enhancements
+
+- The current selection state is preserved in the buffer history (along
+  with the caret position)
+- Improved PHP syntax highlighting (Daniel Beckham)
+
++ Neutral
+
+- Modes no longer define a 'boxComment' property
+
++ Bug Fixes
+
+- Fixed a compile error with Java 1.3
+- 'Line Comment' threw an ArrayIndexOutOfBounds exception
+- jEdit formely cached the find dialog for each view after it had been
+  displayed once, reusing the dialog box subsequent times. However, some
+  Java versions seem to have rather buggy code for showing and hiding
+  windows. So this feature has been removed.
+- Current line highlight was not painted in the gutter
+- Plugin shortcuts didn't work due to a change in 3.2pre1
+- Ugly workaround for the bug where BeanShell would barf if a script did
+  not end with a newline
+- JSP mode now highlights JSP comments correctly (<%-- ... --%>)
+
 * Version 3.2pre1
 
 + New Features

@@ -254,6 +254,9 @@ Tal Davidson:
 Tom Locke:
 	- Reverse search
 
+Wojciech Stryjewski:
+	- Verilog syntax highlighting
+
 If you are not on the above list but think you should be, e-mail me.
 
 In addition to the above people, I would like to thank the plugin

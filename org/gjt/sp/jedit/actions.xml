@@ -299,7 +299,7 @@
 
 <ACTION NAME="find" NO_RECORD="TRUE">
 	<CODE>
-		SearchAndReplace.showSearchDialog(view,null);
+		new SearchDialog(view,null);
 	</CODE>
 </ACTION>
 
@@ -319,7 +319,7 @@
 
 <ACTION NAME="find-selection" NO_RECORD="TRUE">
 	<CODE>
-		SearchAndReplace.showSearchDialog(view,textArea.getSelectedText());
+		new SearchDialog(view,textArea.getSelectedText());
 	</CODE>
 </ACTION>
 

@@ -4,16 +4,17 @@ This list is a real mess... Note that not all these changes will be
 implemented in jEdit 3.2. Some might appear in a future version, some
 might never be implemented at all.
 
-- what to do with boxComment property?
-- update buffer history for multiple selection
+- catch MalformedInputException and display a better error message
+- see if new beanshell fixes trailing \n bug
+- cvs add verilog.xml
+- a 'reinsertOnNextLine' regexp for word wrap?
 - reload edit modes command
 - start preparing for web start (handle jEditHome == null, jedit_jnlp.jar)
 - when loading a plugin, check if all the jars are present?
 - 'find' -vs- 'find in files'?
-- having no newline at the end of BeanShell scripts causes problems
 - finish new plugin manager
 - scrollToCaret() doesn't always work
-- better docs about multiple selection
+- better docs about multiple selection & q copy
 - reverse regexp search
 - hypersearch: select button, clear button
 - XThis: don't throw exceptions for non-existent methods
@@ -22,6 +23,16 @@ might never be implemented at all.
 - most recently deleted text in ^ register?
 - web start version
 - failed saves should not clear the dirty flag
+- enter:
+hello
+{
+	1
+	2
+	3
+	4
+}
+
+Delete hello, then {
 
 + editing
  - improved rectangular selections

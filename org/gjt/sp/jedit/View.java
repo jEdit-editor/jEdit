@@ -862,7 +862,6 @@ public class View extends JFrame implements EBComponent
 			{
 			case '+':
 				stack.push(editPane = createEditPane(buffer));
-				editPane.loadCaretInfo();
 				break;
 			case '-':
 				stack.push(splitPane = new JSplitPane(

@@ -31,7 +31,9 @@ import javax.swing.undo.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
@@ -3073,7 +3075,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		try
 		{
-			for(int i = 0; i <= lines.length; i++)
+			for(int i = 0; i < lines.length; i++)
 			{
 				buffer.insertString(getLineStartOffset(lines[i]),
 					comment,null);
@@ -4261,41 +4263,10 @@ forward_scan:		do
 			else
 				continue;
 
-			// if the first non-whitespace string of the
-			// line is the lineComment or boxComment
-			// string, insert that string on the next
-			// line as well
-			String nextLineStart = null;
-			String lineComment = (String)buffer.getProperty("lineComment");
-			if(lineComment != null)
-			{
-				char[] lineCommentChars = lineComment.toCharArray();
-				if(TextUtilities.regionMatches(true,lineSegment,
-					    lineSegment.offset + initialWhiteSpaceLength,
-					    lineCommentChars))
-					    nextLineStart = lineComment;
-			}
-
-			// undocumented feature!
-			String boxComment = (String)buffer.getProperty("boxComment");
-			if(boxComment != null)
-			{
-				char[] boxCommentChars = boxComment.toCharArray();
-				if(TextUtilities.regionMatches(true,lineSegment,
-					    lineSegment.offset + initialWhiteSpaceLength,
-					    boxCommentChars))
-					    nextLineStart = boxComment;
-			}
-
 			try
 			{
 				buffer.beginCompoundEdit();
 				buffer.insertString(insertNewLineAt,"\n",null);
-				if(nextLineStart != null)
-				{
-					buffer.insertString(insertNewLineAt + 1,
-						nextLineStart,null);
-				}
 				buffer.indentLine(line + 1,true,true);
 			}
 			finally

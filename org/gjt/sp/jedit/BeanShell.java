@@ -136,10 +136,10 @@ public class BeanShell
 				
 		if(buffer != null && buffer.isLoaded())
 		{
-			Segment seg = new Segment();
+			StringBuffer buf = new StringBuffer();
 			try
 			{
-				buffer.getText(0,buffer.getLength(),seg);
+				buf.append(buffer.getText(0,buffer.getLength()));
 			}
 			catch(BadLocationException e)
 			{
@@ -147,7 +147,10 @@ public class BeanShell
 				throw new InternalError();
 			}
 
-			in = new CharArrayReader(seg.array,seg.offset,seg.count);
+			// Ugly workaround for a BeanShell bug
+			buf.append("\n");
+
+			in = new StringReader(buf.toString());
 		}
 		else
 		{

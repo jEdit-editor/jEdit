@@ -6,7 +6,6 @@
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="boxComment" VALUE="--" />
 	</PROPS>
 	<RULES>
 		<!-- whitespace: (space and tab) -->

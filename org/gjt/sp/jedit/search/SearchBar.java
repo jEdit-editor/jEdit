@@ -117,7 +117,7 @@ public class SearchBar extends JPanel
 		{
 			jEdit.setBooleanProperty("search.hypersearch.toggle",
 				hyperSearch.isSelected());
-			SearchAndReplace.showSearchDialog(view,null);
+			new SearchDialog(view,null);
 		}
 		else if(hyperSearch.isSelected())
 		{

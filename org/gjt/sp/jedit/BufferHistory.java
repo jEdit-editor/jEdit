@@ -1,6 +1,6 @@
 /*
  * BufferHistory.java - Remembers caret positions 
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,8 @@
 package org.gjt.sp.jedit;
 
 import java.io.*;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.*;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 public class BufferHistory
@@ -32,10 +32,16 @@ public class BufferHistory
 		return (entry == null ? 0 : entry.caret);
 	}
 
-	public static void setCaretPosition(String path, int caret)
+	public static Selection[] getSelection(String path)
+	{
+		Entry entry = getEntry(path);
+		return (entry == null ? null : stringToSelection(entry.selection));
+	}
+
+	public static void setEntry(String path, int caret, Selection[] selection)
 	{
 		removeEntry(path);
-		addEntry(new Entry(path,caret));
+		addEntry(new Entry(path,caret,selectionToString(selection)));
 	}
 
 	public static Vector getBufferHistory()
@@ -62,10 +68,27 @@ public class BufferHistory
 			String line;
 			while((line = in.readLine()) != null)
 			{
-				int index = line.indexOf('\t');
-				String path = line.substring(0,index);
-				int caret = Integer.parseInt(line.substring(index+1));
-				addEntry(new Entry(path,caret));
+				int index1 = line.indexOf('\t');
+
+				String path = line.substring(0,index1);
+
+				int index2 = line.indexOf('\t',index1 + 1);
+				int caret;
+				String selection;
+				if(index2 == -1)
+				{
+					caret = Integer.parseInt(line.substring(
+							index1 + 1));
+					selection = null;
+				}
+				else
+				{
+					caret = Integer.parseInt(line.substring(
+							index1 + 1,index2));
+					selection = line.substring(index2);
+				}
+
+				addEntry(new Entry(path,caret,selection));
 			}
 
 			in.close();
@@ -96,6 +119,9 @@ public class BufferHistory
 				out.write(entry.path);
 				out.write('\t');
 				out.write(String.valueOf(entry.caret));
+				out.write('\t');
+				if(entry.selection != null)
+					out.write(String.valueOf(entry.selection));
 				out.write(lineSep);
 			}
 
@@ -161,15 +187,69 @@ public class BufferHistory
 		}
 	}
 
+	private static String selectionToString(Selection[] s)
+	{
+		if(s == null)
+			return null;
+
+		StringBuffer buf = new StringBuffer();
+
+		for(int i = 0; i < s.length; i++)
+		{
+			if(i != 0)
+				buf.append(' ');
+
+			Selection sel = s[i];
+			if(sel instanceof Selection.Range)
+				buf.append("range ");
+			else //if(sel instanceof Selection.Rect)
+				buf.append("rect ");
+			buf.append(sel.getStart());
+			buf.append(' ');
+			buf.append(sel.getEnd());
+		}
+
+		return buf.toString();
+	}
+
+	private static Selection[] stringToSelection(String s)
+	{
+		if(s == null)
+			return null;
+
+		Vector selection = new Vector();
+		StringTokenizer st = new StringTokenizer(s);
+
+		while(st.hasMoreTokens())
+		{
+			String type = st.nextToken();
+			int start = Integer.parseInt(st.nextToken());
+			int end = Integer.parseInt(st.nextToken());
+			Selection sel;
+			if(type.equals("range"))
+				sel = new Selection.Range(start,end);
+			else //if(type.equals("rect"))
+				sel = new Selection.Rect(start,end);
+
+			selection.addElement(sel);
+		}
+
+		Selection[] returnValue = new Selection[selection.size()];
+		selection.copyInto(returnValue);
+		return returnValue;
+	}
+
 	public static class Entry
 	{
 		public String path;
 		public int caret;
+		public String selection;
 
-		public Entry(String path, int caret)
+		public Entry(String path, int caret, String selection)
 		{
 			this.path = path;
 			this.caret = caret;
+			this.selection = selection;
 		}
 	}
 }

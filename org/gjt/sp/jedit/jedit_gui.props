@@ -1044,7 +1044,6 @@ options.mode.filenameGlob=File name glob:
 options.mode.firstlineGlob=First line glob:
 options.mode.commentStart=Comment start:
 options.mode.commentEnd=Comment end:
-options.mode.boxComment=Box comment:
 options.mode.lineComment=Line comment:
 options.mode.noWordSep=Extra word characters:
 

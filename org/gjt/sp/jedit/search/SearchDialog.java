@@ -38,7 +38,7 @@ import org.gjt.sp.util.Log;
  */
 public class SearchDialog extends EnhancedDialog
 {
-	public SearchDialog(View view)
+	public SearchDialog(View view, String searchString)
 	{
 		super(view,jEdit.getProperty("search.title"),false);
 
@@ -56,16 +56,6 @@ public class SearchDialog extends EnhancedDialog
 
 		content.add(BorderLayout.EAST,createButtonsPanel());
 
-		pack();
-		jEdit.unsetProperty("search.width");
-		jEdit.unsetProperty("search.d-width");
-		jEdit.unsetProperty("search.height");
-		jEdit.unsetProperty("search.d-height");
-		GUIUtilities.loadGeometry(this,"search");
-	}
-
-	public void setSearchString(String searchString)
-	{
 		find.setText(searchString);
 		find.selectAll();
 
@@ -130,23 +120,21 @@ public class SearchDialog extends EnhancedDialog
 			searchSubDirectories.setSelected(true);
 		}
 
+		keepDialog.setSelected(jEdit.getBooleanProperty(
+			"search.keepDialog.toggle"));
+
+		hyperSearch.setSelected(jEdit.getBooleanProperty(
+			"search.hypersearch.toggle"));
+
 		updateEnabled();
 
-		if(!isVisible())
-		{
-			keepDialog.setSelected(jEdit.getBooleanProperty(
-				"search.keepDialog.toggle"));
-
-			hyperSearch.setSelected(jEdit.getBooleanProperty(
-				"search.hypersearch.toggle"));
-
-			setVisible(true);
-		}
-
-		toFront();
-		requestFocus();
-
-		GUIUtilities.requestFocus(this,find);
+		pack();
+		jEdit.unsetProperty("search.width");
+		jEdit.unsetProperty("search.d-width");
+		jEdit.unsetProperty("search.height");
+		jEdit.unsetProperty("search.d-height");
+		GUIUtilities.loadGeometry(this,"search");
+		show();
 	}
 
 	public void ok()

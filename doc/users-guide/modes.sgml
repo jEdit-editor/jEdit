@@ -203,7 +203,6 @@
     &lt;PROPERTY NAME="doubleBracketIndent" VALUE="false" /&gt;
     &lt;PROPERTY NAME="commentStart" VALUE="/*" /&gt;
     &lt;PROPERTY NAME="commentEnd" VALUE="*/" /&gt;
-    &lt;PROPERTY NAME="boxComment" VALUE="*" /&gt;
     &lt;PROPERTY NAME="blockComment" VALUE="//" /&gt;
     &lt;PROPERTY NAME="noWordSep" VALUE="_" /&gt;
     &lt;PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" /&gt;

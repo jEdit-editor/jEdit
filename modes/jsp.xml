@@ -18,6 +18,12 @@
 			<END>--&gt;</END>
 		</SPAN>
 
+		<!-- JSP comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;%--</BEGIN>
+			<END>--%&gt;</END>
+		</SPAN>
+
 		<!-- markup tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>

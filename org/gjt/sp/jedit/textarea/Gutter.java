@@ -66,7 +66,7 @@ public class Gutter extends JComponent implements SwingConstants
 			- pfm.getDescent()) / 2.0);
 
 		boolean highlightCurrentLine = currentLineHighlightEnabled
-			&& textArea.selection == null;
+			&& textArea.selection.size() == 0;
 
 		int y = (clip.y - clip.y % lineHeight);
 
@@ -120,10 +120,13 @@ public class Gutter extends JComponent implements SwingConstants
 				break;
 			case LEFT: default:
 				offset = 0;
+				break;
 			}
 
 			if (physicalLine == textArea.getCaretLine() && highlightCurrentLine)
+			{
 				gfx.setColor(currentLineHighlight);
+			}
 			else if (interval > 1 && (line + 1) % interval == 0)
 				gfx.setColor(intervalHighlight);
 			else
