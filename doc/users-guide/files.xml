@@ -297,8 +297,7 @@
    field. A subset of the current directory to display can be specified in the
    form of a glob pattern in the <guibutton>Filter</guibutton> text field.
    See <xref linkend="globs" /> for information about glob patterns.
-   Pressing the <keycap>Up</keycap> and <keycap>Down</keycap> keys in both text
-   fields recalls previously entered strings; see <xref linkend="history" />
+   Both text fields remember previously entered strings; see <xref linkend="history" />
    for details.
   </para>
   <para>

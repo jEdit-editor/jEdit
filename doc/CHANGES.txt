@@ -16,11 +16,16 @@ JEDIT 3.2 VERSION HISTORY
   filesystems, like the Archive plugin VFS
 - Improved JSP syntax highlighting (Daiji Takamori)
 - Nicer looking history text fields (Dirk Moebius)
+- C+Home and C+End no longer deactivate selections in multiple selection
+  mode
 
 + Bug Fixes
 
 - C+. and C+, bug fix, again
 - Help viewer tree would should tooltips in wrong place
+- Replacing text with multiple selections active caused the text to be
+  inserted in the wrong place
+- Reverse search didn't work sometimes
 
 + API Changes
 

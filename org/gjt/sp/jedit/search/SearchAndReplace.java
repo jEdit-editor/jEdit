@@ -380,6 +380,8 @@ loop:			for(;;)
 						else 
 							start = s.getEnd();
 					}
+					else if(reverse)
+						start = buffer.getLength();
 					else
 						start = 0;
 
@@ -456,7 +458,10 @@ loop:			for(;;)
 		SearchMatcher matcher = getSearchMatcher(true);
 
 		Segment text = new Segment();
-		buffer.getText(start,buffer.getLength() - start,text);
+		if(reverse)
+			buffer.getText(0,start,text);
+		else
+			buffer.getText(start,buffer.getLength() - start,text);
 
 		int[] match = matcher.nextMatch(text);
 		if(match != null)
@@ -464,9 +469,11 @@ loop:			for(;;)
 			fileset.matchFound(buffer);
 			view.setBuffer(buffer);
 			JEditTextArea textArea = view.getTextArea();
-			textArea.setSelection(new Selection.Range(start + match[0],
-				start + match[1]));
-			textArea.moveCaretPosition(start + match[1]);
+			int matchStart = (reverse ? 0 : start);
+			textArea.setSelection(new Selection.Range(
+				matchStart + match[0],
+				matchStart + match[1]));
+			textArea.moveCaretPosition(matchStart + match[1]);
 			return true;
 		}
 		else

@@ -166,7 +166,7 @@ public class BufferListSet implements SearchFileSet
 					public void run()
 					{
 						retVal[0] = jEdit.openTemporary(null,null,
-							path,false,false);
+							path,false);
 					}
 				});
 				return retVal[0];
@@ -178,6 +178,6 @@ public class BufferListSet implements SearchFileSet
 			}
 		}
 		else
-			return jEdit.openTemporary(null,null,path,false,false);
+			return jEdit.openTemporary(null,null,path,false);
 	}
 }

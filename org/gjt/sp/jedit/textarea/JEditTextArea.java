@@ -1633,10 +1633,10 @@ public class JEditTextArea extends JComponent
 				+ " read only");
 		}
 
-		buffer.beginCompoundEdit();
-
 		try
 		{
+			buffer.beginCompoundEdit();
+
 			if(s instanceof Selection.Rect)
 			{
 				Element map = buffer.getDefaultRootElement();
@@ -1694,7 +1694,7 @@ public class JEditTextArea extends JComponent
 			else
 			{
 				buffer.remove(s.start,s.end - s.start);
-				if(selectedText != null)
+				if(selectedText != null && selectedText.length() != 0)
 				{
 					buffer.insertString(s.start,
 						selectedText,null);
@@ -1712,7 +1712,8 @@ public class JEditTextArea extends JComponent
 			buffer.endCompoundEdit();
 		}
 
-		selectNone();
+		// no no no!!!!
+		//selectNone();
 	}
 
 	/**
@@ -1722,6 +1723,12 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setSelectedText(String selectedText)
 	{
+		if(!isEditable())
+		{
+			throw new InternalError("Text component"
+				+ " read only");
+		}
+
 		Selection[] selection = getSelection();
 		if(selection.length == 0)
 		{
@@ -1737,9 +1744,18 @@ public class JEditTextArea extends JComponent
 		}
 		else
 		{
-			for(int i = 0; i < selection.length; i++)
+			try
 			{
-				setSelectedText(selection[i],selectedText);
+				buffer.beginCompoundEdit();
+
+				for(int i = 0; i < selection.length; i++)
+				{
+					setSelectedText(selection[i],selectedText);
+				}
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
 			}
 		}
 
@@ -2048,19 +2064,7 @@ public class JEditTextArea extends JComponent
 		}
 
 		if(selection.size() != 0)
-		{
-			try
-			{
-				buffer.beginCompoundEdit();
-				Selection[] selection = getSelection();
-				for(int i = 0; i < selection.length; i++)
-					setSelectedText(selection[i],null);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-		}
+			setSelectedText("");
 		else
 		{
 			if(caret == 0)
@@ -2093,17 +2097,8 @@ public class JEditTextArea extends JComponent
 
 		if(selection.size() != 0)
 		{
-			try
-			{
-				buffer.beginCompoundEdit();
-				Selection[] selection = getSelection();
-				for(int i = 0; i < selection.length; i++)
-					setSelectedText(selection[i],null);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
+			setSelectedText("");
+			return;
 		}
 
 		int lineStart = getLineStartOffset(caretLine);
@@ -2150,19 +2145,7 @@ public class JEditTextArea extends JComponent
 		}
 
 		if(selection.size() != 0)
-		{
-			try
-			{
-				buffer.beginCompoundEdit();
-				Selection[] selection = getSelection();
-				for(int i = 0; i < selection.length; i++)
-					setSelectedText(selection[i],null);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-		}
+			setSelectedText(null);
 		else
 		{
 			if(caret == buffer.getLength())
@@ -2346,17 +2329,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 		if(selection.size() != 0)
 		{
-			try
-			{
-				buffer.beginCompoundEdit();
-				Selection[] selection = getSelection();
-				for(int i = 0; i < selection.length; i++)
-					setSelectedText(selection[i],null);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
+			setSelectedText("");
+			return;
 		}
 
 		int lineStart = getLineStartOffset(caretLine);
@@ -4887,6 +4861,7 @@ forward_scan:		do
 					s.startLine = getLineOfOffset(s.start);
 					s.endLine = getLineOfOffset(s.end);
 					invalidateLineRange(s.startLine,s.endLine);
+					System.err.println(i + ": " + s);
 				}
 			}
 

@@ -227,13 +227,19 @@
 
 <ACTION NAME="document-end">
 	<CODE>
-		textArea.setCaretPosition(buffer.getLength());
+		if(textArea.isMultipleSelectionEnabled())
+			textArea.moveCaretPosition(buffer.getLength());
+		else
+			textArea.setCaretPosition(buffer.getLength());
 	</CODE>
 </ACTION>
 
 <ACTION NAME="document-home">
 	<CODE>
-		textArea.setCaretPosition(0);
+		if(textArea.isMultipleSelectionEnabled())
+			textArea.moveCaretPosition(0);
+		else
+			textArea.setCaretPosition(0);
 	</CODE>
 </ACTION>
 

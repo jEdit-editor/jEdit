@@ -201,8 +201,6 @@ public class EditPane extends JPanel implements EBComponent
 			textArea.getFirstLine()));
 		buffer.putProperty(Buffer.SCROLL_HORIZ,new Integer(
 			textArea.getHorizontalOffset()));
-		buffer.putProperty(Buffer.OVERWRITE,new Boolean(
-			textArea.isOverwriteEnabled()));
 	}
 
 	/**
@@ -216,7 +214,6 @@ public class EditPane extends JPanel implements EBComponent
 
 		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
 		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
-		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
 
 		if(caret != null)
 		{
@@ -232,9 +229,6 @@ public class EditPane extends JPanel implements EBComponent
 
 		if(horizontalOffset != null)
 			textArea.setHorizontalOffset(horizontalOffset.intValue());
-
-		if(overwrite != null)
-			textArea.setOverwriteEnabled(overwrite.booleanValue());
 	}
 
 	public void handleMessage(EBMessage msg)

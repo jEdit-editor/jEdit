@@ -703,8 +703,7 @@
    </para>
    <para>
     The search string can be entered in the <guibutton>Search for</guibutton>
-    text field. Pressing the <keycap>Up</keycap> and <keycap>Down</keycap> keys
-    in this text field recalls previously entered strings; see
+    text field. This text field remembers previously entered strings; see
     <xref linkend="history" /> for details.
    </para>
    <para>
@@ -761,11 +760,8 @@
     behaviors.
    </para>
    <para>
-    Pressing the
-    <keycap>Up</keycap> and <keycap>Down</keycap> keys in the replacement
-    text field
-    recalls previously entered strings; see <xref linkend="history" /> for
-    details.
+    The replace string text field remembers previously entered strings;
+    see <xref linkend="history" /> for details.
    </para>
    <para>
     Clicking <guibutton>Replace</guibutton> will perform a replacement in each
@@ -867,9 +863,8 @@
     a long time and consume a large amount of memory.
    </para>
    <para>
-    Pressing the <keycap>Up</keycap> and <keycap>Down</keycap> keys in the
-    <guibutton>Filter</guibutton> and <guibutton>Directory</guibutton> text
-    fields recalls previously entered strings; see <xref linkend="history" />
+    The <guibutton>Directory</guibutton> and <guibutton>Filter</guibutton>
+    text fields remember previously entered strings; see <xref linkend="history" />
     for details.
    </para>
    <para>
@@ -913,9 +908,8 @@
    <para>
     If the <guibutton>HyperSearch</guibutton> check box is selected, entering a
     search string and pressing <keycap>Enter</keycap> will perform a
-    HyperSearch. When in HyperSearch mode, the <keycap>Up</keycap> and
-    <keycap>Down</keycap> keys can be used to recall previously entered
-    strings; see <xref linkend="history" /> for details.
+    HyperSearch. When in HyperSearch mode, the search bar remembers
+    previously entered strings; see <xref linkend="history" /> for details.
    </para>
    <para>
     The search bar can be accessed from the keyboard using the

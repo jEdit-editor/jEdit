@@ -3,10 +3,10 @@ TO DO
 + before 3.2final:
 
 - formatting problems in user's guide in table cells
-- reverse search doesn't work?
 
 + next major release (4.0):
 
+- select-* actions: add to selection in multi-select mode
 - appendix in plugin guide on contributing plugins
 - Macros.confirm()
 - saving a read-only file: show a confirmation dialog box
@@ -137,7 +137,6 @@ TO DO
 - GUIUtilities method that makes sure popups appear within the screen
   bounds
 - vfs browser: >1 request error when clicking 'up'?
-- broken reverse search?
 - prev line fold gutter bug
 - tabbing to text area fails
 - zlib decompression errors in plugin manager

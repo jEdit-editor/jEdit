@@ -66,7 +66,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	public static final String SELECTION = "Buffer__selection";
 	public static final String SCROLL_VERT = "Buffer__scrollVert";
 	public static final String SCROLL_HORIZ = "Buffer__scrollHoriz";
-	public static final String OVERWRITE = "Buffer__overwrite";
 
 	/**
 	 * Character encoding used when loading and saving.

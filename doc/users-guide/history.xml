@@ -22,7 +22,8 @@
   beginning with the text already entered in the text field.
  </para>
  <para>
-  Clicking the text field with the right mouse button will display
+  Clicking the triangle to the right of the text field, or
+  clicking with the right-mouse button anywhere else will display
   a pop-up menu of all previously entered strings; selecting one will
   input it into the text field. Holding down <keycap>Shift</keycap>
   while clicking will display a menu of all previously entered

@@ -125,7 +125,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	public int match(char[] text, int offset, int length)
 	{
 		// position variable for pattern start
-		int anchor = reverseSearch ? offset - 1 : offset;
+		int anchor = reverseSearch ? length - 1 : offset;
 
 		// position variable for pattern test position
 		int pos;
@@ -134,7 +134,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		// this is negative if the pattern is longer than the text
 		// causing the search loop below to immediately fail
 		int last_anchor = reverseSearch
-			? pattern.length - 1
+			? offset + pattern.length - 1
 			: length - pattern.length;
 
 		// each time the pattern is checked, we start this many
@@ -188,7 +188,7 @@ SEARCH:
 			}
 
 			// MATCH: return the position of its first character
-			return reverseSearch ? anchor - (pattern.length - 1) : anchor;
+			return (reverseSearch ? anchor - pattern_end : anchor);
 		}
 
 		// MISMATCH: return -1 as defined by API

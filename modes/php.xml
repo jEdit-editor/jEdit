@@ -220,6 +220,7 @@
 			<KEYWORD1>array</KEYWORD1>
 			<KEYWORD1>isset</KEYWORD1>
 			<KEYWORD1>echo</KEYWORD1>
+			<KEYWORD1>var</KEYWORD1>
 
 			<KEYWORD3>__LINE__</KEYWORD3>
 			<KEYWORD3>__FILE__</KEYWORD3>
@@ -593,6 +594,7 @@
 			<KEYWORD2>escapeshellarg</KEYWORD2>
 			<KEYWORD2>escapeshellcmd</KEYWORD2>
 			<KEYWORD2>exec</KEYWORD2>
+			<KEYWORD2>exit</KEYWORD2>
 			<KEYWORD2>exp</KEYWORD2>
 			<KEYWORD2>explode</KEYWORD2>
 			<KEYWORD2>extension_loaded</KEYWORD2>
