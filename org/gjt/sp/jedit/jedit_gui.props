@@ -39,7 +39,7 @@ ignore-case.icon=IgnoreCase.gif
 regexp.icon=Regexp.gif
 multifile-search.icon=Multifile.gif
 
-view.search.find=Search for:\ 
+view.search.find=Find:\ 
 view.search.incremental=Incremental
 
 ###
@@ -358,7 +358,6 @@ help-menu=about \
      - \
      help@README.txt \
      help@NEWS.txt \
-     help@FAQ.txt \
      help@CHANGES.txt \
      help@TODO.txt \
      -
@@ -367,7 +366,6 @@ about.label=About jEdit...
 help.label=jEdit User Guide
 help@README.txt.label=jEdit Read Me
 help@NEWS.txt.label=Major Changes in jEdit 2.4
-help@FAQ.txt.label=Frequenty Asked Questions
 help@CHANGES.txt.label=Version History
 help@TODO.txt.label=To Do and Known Bugs
 
