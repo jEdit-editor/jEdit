@@ -374,6 +374,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/03/11 03:02:15  sp
+ * 2.3final
+ *
  * Revision 1.7  2000/03/04 03:39:54  sp
  * *** empty log message ***
  *

@@ -183,7 +183,7 @@ public class PluginManager extends EnhancedDialog
 		public String toString()
 		{
 			if(clazz == null)
-				return PluginManagerPlugin.getLastPathComponent(path);
+				return MiscUtilities.getFileName(path);
 			else
 			{
 				String name = jEdit.getProperty("plugin."

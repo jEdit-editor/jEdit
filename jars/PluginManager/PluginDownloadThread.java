@@ -47,8 +47,7 @@ public class PluginDownloadThread extends Thread
 			try
 			{
 				String url = urls[i];
-				String fileName = PluginManagerPlugin
-					.getLastPathComponent(url);
+				String fileName = MiscUtilities.getFileName(url);
 				progress.downloading(fileName);
 				String path = download(fileName,url);
 
@@ -61,6 +60,8 @@ public class PluginDownloadThread extends Thread
 			{
 				String[] args = { io.getMessage() };
 				GUIUtilities.error(view,"ioerror",args);
+
+				Log.log(Log.ERROR,this,io);
 
 				progress.done(false);
 			}

@@ -77,6 +77,7 @@ public class PluginList
 		{
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(view,"ioerror",args);
+			Log.log(Log.ERROR,this,io);
 		}
 		catch(Exception e)
 		{
@@ -122,7 +123,7 @@ public class PluginList
 				JARClassLoader loader = (JARClassLoader)plugin
 					.getClass().getClassLoader();
 				if(plugin.getClass().getName().endsWith("Plugin")
-					&& PluginManagerPlugin.getLastPathComponent(
+					&& MiscUtilities.getFileName(
 					loader.getPath()).equals(jar))
 				{
 					clazz = plugin.getClass().getName();

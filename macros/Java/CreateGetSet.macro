@@ -47,7 +47,7 @@ insert-char@;
 
 # }
 indent-on-enter
-indent-line@}
+indent-lines@}
 indent-on-enter
 
 # public void setFoo(Foo foo)
@@ -74,7 +74,7 @@ insert-char@;
 
 # }
 indent-on-enter
-indent-line@}
+indent-lines@}
 indent-on-enter
 
 # private Foo foo;

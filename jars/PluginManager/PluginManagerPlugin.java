@@ -76,15 +76,6 @@ public class PluginManagerPlugin extends EBPlugin
 		}
 	}
 
-	public static String getLastPathComponent(String path)
-	{
-		int index = path.lastIndexOf(File.separatorChar);
-		if(index == -1)
-			index = path.lastIndexOf('/');
-
-		return path.substring(index + 1);
-	}
-
 	public static String getPluginPath(String clazz)
 	{
 		EditPlugin plugin = jEdit.getPlugin(clazz);
@@ -229,14 +220,14 @@ public class PluginManagerPlugin extends EBPlugin
 		EditPlugin[] plugins = jEdit.getPlugins();
 		for(int i = 0; i < plugins.length; i++)
 		{
-			retVal.addElement(getLastPathComponent(((JARClassLoader)
+			retVal.addElement(MiscUtilities.getFileName(((JARClassLoader)
 				plugins[i].getClass().getClassLoader()).getPath()));
 		}
 
 		EditPlugin.Broken[] broken = jEdit.getBrokenPlugins();
 		for(int i = 0; i < broken.length; i++)
 		{
-			retVal.addElement(getLastPathComponent(broken[i].jar));
+			retVal.addElement(MiscUtilities.getFileName(broken[i].jar));
 		}
 
 		String[] array = new String[retVal.size()];
