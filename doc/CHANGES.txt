@@ -7,6 +7,9 @@ JEDIT VERSION HISTORY
 - In C-like modes, the indent will be shifted if the previous line contains
   an 'if', 'else', 'while', 'for' or 'case' statement. This is implemented
   using a regular expression in the 'indentPrevLine' buffer-local property
+- The Firewall plugin by Dirk Moebius <dmoebius@gmx.net> is now included
+  in the core download. The Firewall plugin allows you to use the plugin
+  manager and latest version check behind a firewall
 
 + Enhancements
 
@@ -18,6 +21,7 @@ JEDIT VERSION HISTORY
 - Text area actions are now implementations of the EditAction class. This
   simplifies matters in a few places
 - New jEdit.getBooleanProperty() and setBooleanProperty() methods
+- Documentation updates
 
 + Bug Fixes
 

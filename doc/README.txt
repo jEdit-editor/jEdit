@@ -108,9 +108,10 @@ actually a Java bug, or a well-known problem.
 The following people contributed large amounts of code to the jEdit core:
 
 Andre Kaplan - Syntax token background highlighting
+Dirk Moebius - HTTP firewall plugin
 Jason Ginchereau - Buffer tabs code
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
-dialog box, faster literal search, many other patches
+	dialog box, faster literal search, many other patches
 Tal Davidson - Original syntax highlighting engine
 Valery Kondakoff - Old Complete Word command
 

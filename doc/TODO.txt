@@ -1,31 +1,32 @@
 JEDIT TO DO
 
+2.4:
+
 - do MARK_PREVIOUS before markKeyword()
 - write 'indentPrevLine' regexp for Perl mode, maybe others
 - Double-click drag doesn't work backwards
+
+3.0:
+
 - XMode:
   - better error reporting
   - regexps
-  - mode editor
-- Reverse search
-- New document model
-- Word wrap
-- Folding
-- i18n support - bidi, input methods, locale-sensitive GUI, etc
+- Editable toolbar and context menu
+- XML-driven auto indent
 - Plugin devel manual needs more work:
   - document views, buffers
-  - document GUIUtilities.load/saveGeometry
   - how to write text area and gutter hilites
-- Editable toolbar and context menu
-- Possible auto indent improvements:
-  - don't do indentation inside comments
-  - skip brackets in string literals
-  - automatically shift indent left the line after one indented using
-    'indentPrevLine'
-  - 'unindentThisLine' regexp
+- New document model
+- Folding
+
+3.1:
+
+- Mode editor
+- Word wrap
+- Reverse search
+- i18n support - bidi, input methods, locale-sensitive GUI, etc
 
 When we switch to JDK 1.2:
 - drag and drop
 - Use collections
 - Enhanced printing
-- Integrate HTTP proxy support
