@@ -178,22 +178,6 @@ public class GUIUtilities
 	}
 
 	/**
-	 * Loads an icon image. If it is already loaded, a cached version will
-	 * be returned.
-	 * @param url The URL to load the icon from
-	 */
-	public static ImageIcon loadImageIcon(URL url)
-	{
-		ImageIcon icon = (ImageIcon)icons.get(url);
-		if(icon != null)
-			return icon;
-
-		icon = new ImageIcon(url);
-		icons.put(url,icon);
-		return icon;
-	}
-
-	/**
 	 * `Prettifies' a menu item label by removing the `$' sign and the
 	 * training ellipisis, if any. This can be used to process the
 	 * contents of an <i>action</i>.label property.
@@ -588,7 +572,6 @@ public class GUIUtilities
 	// unique because of properties, we can store all in one
 	// hashtable.
 	private static Hashtable menus = new Hashtable();
-	private static Hashtable icons = new Hashtable();
 
 	private GUIUtilities() {}
 
@@ -663,6 +646,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.45  1999/12/14 04:20:35  sp
+ * Various updates, PHP3 mode added
+ *
  * Revision 1.44  1999/11/27 06:01:20  sp
  * Faster file loading, geometry fix
  *

@@ -1953,6 +1953,12 @@ so you can edit files written in non-Latin1 (human) languages.
        </entry>
       </row>
       <row>
+       <entry>php3</>
+       <entry>PHP3 edit mode. Automatically selected for files with
+       extension <quote>.php3</>, <quote>.phtml</> or <quote>.inc</>.
+       </entry>
+      </row>
+      <row>
        <entry>props</>
        <entry>Java property file and MS-DOS INI edit mode. Automatically
        selected for files with extension <quote>.props</> or <quote>.ini</>,

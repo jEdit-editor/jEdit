@@ -240,6 +240,12 @@ mode.perl.tokenMarker=org.gjt.sp.jedit.syntax.PerlTokenMarker
 mode.perl.filenameGlob=*.p[lm]
 mode.perl.firstlineGlob=#!*perl*
 
+# PHP3 mode (contributed by Clancy Malcolm <clancy@cyber.com.au>)
+mode.php3.label=PHP3 Files
+mode.php3.filenameGlob=*.{php3,phtml,inc}
+mode.php3.commentStart=<!--
+mode.php3.commentEnd=-->
+
 # Props mode
 mode.props.label=Property Files
 mode.props.blockComment=#

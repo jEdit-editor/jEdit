@@ -397,14 +397,16 @@ about.message=jEdit version {0}\n\
 	See the README.txt file for redistribution information and warranty\n\
 	disclamer.\n\
 	\n\
-	The following people have written plugins or contributed code to jEdit:\n\
+	At the time this version of jEdit was released, the following people\n\
+	are known to have have written plugins or contributed code to jEdit:\n\
 	\n\
 	Andre Kaplan, Andreas Schaefer, Artur Biesiadowski, Aziz Sharif,\n\
-	Chris Laird, George Latkiewicz, Henrik Falk, Jason Ginchereau,\n\
-	Jonathan Revusky, Juha Lindfors, Kevin A. Burton, Mike Dillon,\n\
-	Nathan Tenney, Romain Guy, Tal Davison and Valery Kondakoff.\n\
+	Chris Laird, Clancy Malcolm, Dirk Moebius, George Latkiewicz,\n\
+	Henrik Falk, Jason Ginchereau, Jonathan Revusky, Juha Lindfors,\n\
+	Kevin A. Burton, Oliver Rutherford, Mike Dillon, Nathan Tenney,\n\
+	Romain Guy, Steve Jakob, Tal Davison and Valery Kondakoff.\n\
 	\n\
-	Thanks for your help!
+	If you have written a plugin and are not on this list, e-mail me!
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error

@@ -1267,7 +1267,7 @@ public class jEdit
 	{
 		/* Try to guess the eventual size to avoid unnecessary
 		 * copying */
-		modes = new Vector(18 /* modes built into jEdit */
+		modes = new Vector(19 /* modes built into jEdit */
 			+ 10 /* give plugins some space */);
 
 		addMode("bat");
@@ -1281,6 +1281,7 @@ public class jEdit
 		addMode("makefile");
 		addMode("patch");
 		addMode("perl");
+		addMode("php3");
 		addMode("props");
 		addMode("python");
 		addMode("shell");
@@ -1653,6 +1654,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.170  1999/12/14 04:20:35  sp
+ * Various updates, PHP3 mode added
+ *
  * Revision 1.169  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

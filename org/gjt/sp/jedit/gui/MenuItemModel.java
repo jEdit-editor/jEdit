@@ -65,7 +65,7 @@ public class MenuItemModel
 			URL url = getClass().getResource("/org/gjt/sp/jedit/toolbar/" + iconName);
 			if(url != null)
 			{
-				icon = GUIUtilities.loadImageIcon(url);
+				icon = new ImageIcon(url);
 				toolTip = GUIUtilities.prettifyMenuLabel(label);
 				if(shortcut != null)
 					toolTip = toolTip + " (" + shortcut + ")";

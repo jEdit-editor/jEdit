@@ -1097,10 +1097,17 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			// For `reload' command
 			remove(0,getLength());
 
-			// Chop trailing newline (if any)
+			// Chop trailing newline and/or ^Z (if any)
 			int length = sbuf.length();
-			if(length != 0 && sbuf.charAt(length - 1) == '\n')
-				sbuf.setLength(length - 1);
+			if(length != 0)
+			{
+				char ch = sbuf.charAt(length - 1);
+				if(length >= 2 && ch == 0x1a /* DOS ^Z */
+					&& sbuf.charAt(length - 2) == '\n')
+					sbuf.setLength(length - 2);
+				else if(ch == '\n')
+					sbuf.setLength(length - 1);
+			}
 
 			insertString(0,sbuf.toString(),null);
 
@@ -1496,6 +1503,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.117  1999/12/14 04:20:35  sp
+ * Various updates, PHP3 mode added
+ *
  * Revision 1.116  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

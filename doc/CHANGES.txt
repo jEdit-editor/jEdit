@@ -5,11 +5,21 @@ JEDIT VERSION HISTORY
 Syntax package is now GPL'd again. When we LGPL'd it, jEdit had no IDE
 features, so it was natural to let commercial IDEs use it; after all, we
 weren't competing. Now that a range of plugins are being written for
-jEdit which give it some degree of IDE functionality, we were basically
-giving the competition a free ride.
+jEdit which give it IDE-like functionality, we were basically giving the
+competition a free ride.
 
 jEdit 2.1 and 2.0 are still available on the net, and they have LGPL'd
 syntax packages. So closed-source programs can still use the older code.
+
++ New Features
+
+- PHP3 mode added (Clancy Malcolm)
+
++ Enhancements
+
+- jEdit now ignores ^Z (0x1a) characters at the end of files. DOS-derived
+  operating systems (Windows, OS/2) sometimes append these characters to
+  text files
 
 + Bug Fixes
 
@@ -23,6 +33,8 @@ syntax packages. So closed-source programs can still use the older code.
 
 - Minor changes to EditBus. This breaks all plugins using the extra
   messages in EditBus.jar
+- Removed the GUIUtilities.loadImageIcon() method, since the AWT caches
+  loaded images anyway
 
 * Version 2.2pre9
 
