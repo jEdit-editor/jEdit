@@ -133,7 +133,7 @@ public class Abbrevs
 	 * @param globalAbbrevs The new global abbrev set
 	 * @since jEdit 2.3pre1
 	 */
-	public static void getGlobalAbbrevs(Hashtable globalAbbrevs)
+	public static void setGlobalAbbrevs(Hashtable globalAbbrevs)
 	{
 		Abbrevs.globalAbbrevs = globalAbbrevs;
 	}
@@ -152,7 +152,7 @@ public class Abbrevs
 	 * @param globalAbbrevs The new global abbrev set
 	 * @since jEdit 2.3pre1
 	 */
-	public static void getModeAbbrevs(Hashtable modes)
+	public static void setModeAbbrevs(Hashtable modes)
 	{
 		Abbrevs.modes = modes;
 	}
@@ -165,17 +165,7 @@ public class Abbrevs
 		globalAbbrevs = new Hashtable();
 		modes = new Hashtable();
 
-		try
-		{
-			Log.log(Log.MESSAGE,Abbrevs.class,"Loading default.abbrevs");
-			loadAbbrevs(new InputStreamReader(Abbrevs.class
-				.getResourceAsStream("default.abbrevs")));
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,Abbrevs.class,"Error while loading default.abbrevs");
-			Log.log(Log.ERROR,Abbrevs.class,e);
-		}
+		boolean loaded = false;
 
 		String settings = jEdit.getSettingsDirectory();
 		if(settings != null)
@@ -186,6 +176,7 @@ public class Abbrevs
 			{
 				Log.log(Log.MESSAGE,Abbrevs.class,"Loading " + path);
 				loadAbbrevs(new FileReader(path));
+				loaded = true;
 			}
 			catch(FileNotFoundException fnf)
 			{
@@ -196,12 +187,45 @@ public class Abbrevs
 				Log.log(Log.ERROR,Abbrevs.class,e);
 			}
 		}
+
+		// only load global abbrevs if user abbrevs file could not be loaded
+		if(!loaded)
+		{
+			try
+			{
+				Log.log(Log.MESSAGE,Abbrevs.class,"Loading default.abbrevs");
+				loadAbbrevs(new InputStreamReader(Abbrevs.class
+					.getResourceAsStream("default.abbrevs")));
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,Abbrevs.class,"Error while loading default.abbrevs");
+				Log.log(Log.ERROR,Abbrevs.class,e);
+			}
+		}
 	}
 
 	static void save()
 	{
 		jEdit.setProperty("view.expandOnInput",expandOnInput
 			? "yes" : "no");
+
+		String settings = jEdit.getSettingsDirectory();
+		if(settings != null)
+		{
+			String path = MiscUtilities.constructPath(settings,"abbrevs");
+
+			try
+			{
+				Log.log(Log.MESSAGE,Abbrevs.class,"Saving " + path);
+				saveAbbrevs(new FileWriter(path));
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,Abbrevs.class,"Error while saving " + path);
+				Log.log(Log.ERROR,Abbrevs.class,e);
+			}
+		}
 	}
 
 	// private members
@@ -247,6 +271,48 @@ public class Abbrevs
 			}
 		}
 
-		_in.close();
+		in.close();
+	}
+
+	private static void saveAbbrevs(Writer _out) throws Exception
+	{
+		BufferedWriter out = new BufferedWriter(_out);
+		String lineSep = System.getProperty("line.separator");
+
+		// write global abbrevs
+		out.write("[global]");
+		out.write(lineSep);
+
+		saveAbbrevs(out,globalAbbrevs);
+
+		// write mode abbrevs
+		Enumeration keys = modes.keys();
+		Enumeration values = modes.elements();
+		while(keys.hasMoreElements())
+		{
+			out.write('[');
+			out.write((String)keys.nextElement());
+			out.write(']');
+			out.write(lineSep);
+			saveAbbrevs(out,(Hashtable)values.nextElement());
+		}
+
+		out.close();
+	}
+
+	private static void saveAbbrevs(Writer out, Hashtable abbrevs)
+		throws Exception
+	{
+		String lineSep = System.getProperty("line.separator");
+
+		Enumeration keys = abbrevs.keys();
+		Enumeration values = abbrevs.elements();
+		while(keys.hasMoreElements())
+		{
+			out.write((String)keys.nextElement());
+			out.write('|');
+			out.write(MiscUtilities.charsToEscapes((String)values.nextElement()));
+			out.write(lineSep);
+		}
 	}
 }

@@ -133,10 +133,10 @@ public class HistoryModel
 		try
 		{
 			BufferedReader in = new BufferedReader(new FileReader(path));
-	
+
 			HistoryModel currentModel = null;
 			String line;
-	
+
 			while((line = in.readLine()) != null)
 			{
 				if(line.startsWith("[") && line.endsWith("]"))
@@ -160,7 +160,7 @@ public class HistoryModel
 						.escapesToChars(line));
 				}
 			}
-	
+
 			if(currentModel != null)
 			{
 				models.put(currentModel.getName(),currentModel);
@@ -185,6 +185,7 @@ public class HistoryModel
 	 */
 	public static void saveHistory(String path)
 	{
+		String lineSep = System.getProperty("line.separator");
 		try
 		{
 			BufferedWriter out = new BufferedWriter(
@@ -204,13 +205,14 @@ public class HistoryModel
 
 				out.write('[');
 				out.write(model.getName());
-				out.write("]\r\n");
+				out.write(']');
+				out.write(lineSep);
 
 				for(int i = 0; i < model.getSize(); i++)
 				{
 					out.write(MiscUtilities.charsToEscapes(
 						model.getItem(i)));
-					out.write("\r\n");
+					out.write(lineSep);
 				}
 			}
 
@@ -237,6 +239,9 @@ public class HistoryModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  1999/12/21 06:50:51  sp
+ * Documentation updates, abbrevs option pane finished, bug fixes
+ *
  * Revision 1.10  1999/12/19 11:14:29  sp
  * Static abbrev expansion started
  *

@@ -134,8 +134,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		setFlag(LOADED,false);
 
-		undo = null;
-
 		if(!getFlag(NEW_FILE))
 		{
 			read(view);
@@ -494,7 +492,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void addUndoableEdit(UndoableEdit edit)
 	{
-		if(undo == null || getFlag(UNDO_IN_PROGRESS))
+		if(getFlag(UNDO_IN_PROGRESS))
 			return;
 
 		// Ignore insificant edits if the redo queue is non-empty.
@@ -822,8 +820,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 		setPath();
 
-		newFile = (newFile || !file.exists());
-		setFlag(NEW_FILE,newFile);
+		setFlag(NEW_FILE,newFile || !file.exists());
 
 		// New files are initialized immediately since it
 		// only takes 1 ms or so
@@ -1487,7 +1484,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	{
 		public void undoableEditHappened(UndoableEditEvent evt)
 		{
-			if(getFlag(LOADED))
+			if(getFlag(LOADED) && undo != null)
 				addUndoableEdit(evt.getEdit());
 		}
 	}
@@ -1514,6 +1511,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.118  1999/12/21 06:50:50  sp
+ * Documentation updates, abbrevs option pane finished, bug fixes
+ *
  * Revision 1.117  1999/12/14 04:20:35  sp
  * Various updates, PHP3 mode added
  *

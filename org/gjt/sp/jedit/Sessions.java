@@ -90,6 +90,7 @@ public class Sessions
 	{
 		view.saveCaretInfo();
 
+		String lineSep = System.getProperty("line.separator");
 		String filename = createSessionFileName(session);
 		Log.log(Log.DEBUG,Sessions.class,"Saving session " + filename);
 
@@ -102,7 +103,7 @@ public class Sessions
 			while(buffer != null)
 			{
 				writeSessionCommand(view,buffer,out);
-				out.write("\r\n");
+				out.write(lineSep);
 				buffer = buffer.getNext();
 			}
 
@@ -221,6 +222,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  1999/12/21 06:50:51  sp
+ * Documentation updates, abbrevs option pane finished, bug fixes
+ *
  * Revision 1.10  1999/11/30 01:37:35  sp
  * New view icon, shortcut pane updates, session bug fix
  *

@@ -18,7 +18,7 @@ jE|jEdit
 gta|getTextArea()
 gb|getBuffer()
 gv|getView(evt)
-gp|getPropertyarea
+gp|getProperty
 ogs|org.gjt.sp
 ogsj|org.gjt.sp.jedit
 ogsjt|org.gjt.sp.jedit.textarea
@@ -29,6 +29,8 @@ logw|Log.log(Log.WARNING
 logn|Log.log(Log.NOTICE
 logm|Log.log(Log.MESSAGE
 logd|Log.log(Log.DEBUG
+hme|hasMoreElements
+ne|nextElement
 
 [html]
 EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>

@@ -474,7 +474,8 @@ public class GUIUtilities
 		win.setSize(width,height);
 
 		// workaround for broken Linux JDK
-		win.addWindowListener(new LinuxWorkaround(win,x,y,width,height));
+		if(System.getProperty("os.name").indexOf("Linux") != -1)
+			win.addWindowListener(new LinuxWorkaround(win,x,y,width,height));
 	}
 
 	static class LinuxWorkaround extends WindowAdapter
@@ -493,8 +494,7 @@ public class GUIUtilities
 
 		public void windowOpened(WindowEvent evt)
 		{
-			//Insets insets = win.getInsets();
-			win.setLocation(x /*- insets.left*/,y /*- insets.top*/);
+			win.setLocation(x,y);
 			win.setSize(width,height);
 
 			win.removeWindowListener(this);
@@ -647,6 +647,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.49  1999/12/21 06:50:50  sp
+ * Documentation updates, abbrevs option pane finished, bug fixes
+ *
  * Revision 1.48  1999/12/20 08:38:43  sp
  * Abbrevs option pane
  *

@@ -255,9 +255,6 @@ search=find \
        hypersearch \
        hypersearch-selection \
        - \
-# Will add these when isToggle() for built-in actions supported
-#      ignore-case \
-#      regexp \
        multifile-search \
        - \
        set-marker \

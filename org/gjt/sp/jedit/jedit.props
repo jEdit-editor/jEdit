@@ -124,7 +124,7 @@ view.electricBorders=3
 view.homeEnd=yes
 
 # Expand abbrevs when user finishes typing a word
-view.expandOnInput=yes
+view.expandOnInput=no
 
 # Syntax styles
 view.style.comment1=style:i

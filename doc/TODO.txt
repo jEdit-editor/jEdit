@@ -3,10 +3,8 @@ JEDIT TO DO
 ------- Stuff for 2.3pre1 -------
 
 - Better ignore case/regexp/multifile options icons
-- Create window-editor-quicksearch screenshot
-- Edit abbrevs in global options
-- Document static abbrevs
-- Retake all docs snapshots with the sawmill window manager
+- Retake all docs snapshots with the icewm window manager
+- Remove dialog-options-shortcuts.gif from the CVS
 
 ------- After 2.3pre1 -------
 

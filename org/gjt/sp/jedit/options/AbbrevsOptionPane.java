@@ -78,7 +78,18 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	public void save()
 	{
 		Abbrevs.setExpandOnInput(expandOnInput.getModel().isSelected());
-		//abbrevsModel.save();
+
+		Abbrevs.setGlobalAbbrevs(globalAbbrevs.toHashtable());
+
+		Hashtable modeHash = new Hashtable();
+		Enumeration keys = modeAbbrevs.keys();
+		Enumeration values = modeAbbrevs.elements();
+		while(keys.hasMoreElements())
+		{
+			modeHash.put(keys.nextElement(),((AbbrevsModel)values.nextElement())
+				.toHashtable());
+		}
+		Abbrevs.setModeAbbrevs(modeHash);
 	}
 
 	// private members
@@ -161,6 +172,21 @@ class AbbrevsModel extends AbstractTableModel
 	{
 		MiscUtilities.quicksort(abbrevs,new AbbrevCompare(col));
 		fireTableDataChanged();
+	}
+
+	public Hashtable toHashtable()
+	{
+		Hashtable hash = new Hashtable();
+		for(int i = 0; i < abbrevs.size(); i++)
+		{
+			Abbrev abbrev = (Abbrev)abbrevs.elementAt(i);
+			if(abbrev.abbrev.length() > 0
+				&& abbrev.expand.length() > 0)
+			{
+				hash.put(abbrev.abbrev,abbrev.expand);
+			}
+		}
+		return hash;
 	}
 
 	public int getColumnCount()
@@ -288,6 +314,9 @@ class Abbrev
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/12/21 06:50:51  sp
+ * Documentation updates, abbrevs option pane finished, bug fixes
+ *
  * Revision 1.1  1999/12/20 08:38:43  sp
  * Abbrevs option pane
  *
