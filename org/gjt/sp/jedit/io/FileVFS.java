@@ -257,7 +257,9 @@ public class FileVFS extends VFS
 	public boolean _rename(Object session, String from, String to,
 		Component comp)
 	{
-		boolean retVal = new File(from).renameTo(new File(to));
+		File _to = new File(to);
+		_to.delete();
+		boolean retVal = new File(from).renameTo(_to);
 		VFSManager.sendVFSUpdate(this,from,true);
 		VFSManager.sendVFSUpdate(this,to,true);
 		return retVal;

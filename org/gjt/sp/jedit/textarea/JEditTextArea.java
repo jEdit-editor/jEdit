@@ -443,19 +443,23 @@ public class JEditTextArea extends JComponent
 			int startLine, endLine;
 			Selection s = getSelectionAtOffset(caret);
 			if(s == null)
+			{
 				startLine = endLine = buffer.physicalToVirtual(caretLine);
+			}
 			else
 			{
 				startLine = buffer.physicalToVirtual(s.startLine);
 				endLine = buffer.physicalToVirtual(s.endLine);
 			}
 
-			// center {markLine,caretLine} on screen
-			firstLine = (visibleLines + startLine - endLine) / 2;
- 			firstLine = Math.max(startLine - visibleLines
-				+ electricScroll + 1,firstLine);
- 			firstLine = Math.min(endLine /* + visibleLines */
-				- electricScroll,firstLine);
+			if(endLine - startLine <= visibleLines)
+				firstLine = (startLine + endLine - visibleLines) / 2;
+			else
+				firstLine = buffer.physicalToVirtual(caretLine) - visibleLines / 2;
+
+			firstLine = Math.min(firstLine,buffer.getVirtualLineCount()
+				- visibleLines);
+			firstLine = Math.max(firstLine,0);
 
 			changed = true;
 		}

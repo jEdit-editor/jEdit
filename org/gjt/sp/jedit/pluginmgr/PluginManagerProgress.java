@@ -27,36 +27,37 @@ import org.gjt.sp.jedit.*;
 
 public class PluginManagerProgress extends JDialog
 {
-	public PluginManagerProgress(JDialog dialog, Roster roster)
+	public PluginManagerProgress(JDialog dialog, String caption, Roster roster)
 	{
-		super(JOptionPane.getFrameForComponent(dialog),
-			jEdit.getProperty("plugin-manager.progress.title"),true);
+		super(JOptionPane.getFrameForComponent(dialog),caption,true);
 
 		this.roster = roster;
 
-		JPanel content = new JPanel(new BorderLayout());
+		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		message = new JLabel("...");
-		message.setBorder(new EmptyBorder(0,0,12,0));
-		content.add(BorderLayout.NORTH,message);
+		globalProgress = new JProgressBar();
+		globalProgress.setStringPainted(true);
+		globalProgress.setString(caption);
 
-		progress = new JProgressBar();
-		progress.setStringPainted(true);
-		content.add(BorderLayout.CENTER,progress);
+		count = roster.getOperationCount();
+
+		globalProgress.setMaximum(count);
+		content.add(BorderLayout.NORTH,globalProgress);
+
+		localProgress = new JProgressBar();
+		localProgress.setStringPainted(true);
+		content.add(BorderLayout.CENTER,localProgress);
 
 		stop = new JButton(jEdit.getProperty("plugin-manager.progress.stop"));
 		stop.addActionListener(new ActionHandler());
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(12,0,0,0));
 		panel.add(Box.createGlue());
 		panel.add(stop);
 		panel.add(Box.createGlue());
 		content.add(BorderLayout.SOUTH,panel);
-
-		count = roster.getOperationCount();
 
 		addWindowListener(new WindowHandler());
 
@@ -98,7 +99,7 @@ public class PluginManagerProgress extends JDialog
 		{
 			public void run()
 			{
-				progress.setMaximum(total);
+				localProgress.setMaximum(total);
 			}
 		});
 	}
@@ -109,7 +110,7 @@ public class PluginManagerProgress extends JDialog
 		{
 			public void run()
 			{
-				progress.setValue(value);
+				localProgress.setValue(value);
 			}
 		});
 	}
@@ -118,36 +119,42 @@ public class PluginManagerProgress extends JDialog
 	{
 		this.ok |= ok;
 
-		if(!ok || done == count)
+		try
 		{
-			SwingUtilities.invokeLater(new Runnable()
+			if(!ok || done == count)
 			{
-				public void run()
+				SwingUtilities.invokeAndWait(new Runnable()
 				{
-					dispose();
-					if(ok)
+					public void run()
 					{
-						GUIUtilities.message(PluginManagerProgress.this,
-							"plugin-manager.done",null);
+						dispose();
+						if(ok)
+						{
+							GUIUtilities.message(PluginManagerProgress.this,
+								"plugin-manager.done",null);
+						}
+						else
+						{
+							GUIUtilities.message(PluginManagerProgress.this,
+								"plugin-manager.failed",null);
+						}
 					}
-					else
+				});
+			}
+			else
+			{
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
 					{
-						GUIUtilities.message(PluginManagerProgress.this,
-							"plugin-manager.failed",null);
+						globalProgress.setValue(done++);
+						localProgress.setValue(0);
 					}
-				}
-			});
+				});
+			}
 		}
-		else
+		catch(Exception e)
 		{
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					progress.setValue(0);
-				}
-			});
-			done++;
 		}
 	}
 
@@ -159,8 +166,7 @@ public class PluginManagerProgress extends JDialog
 	// private members
 	private Thread thread;
 
-	private JLabel message;
-	private JProgressBar progress;
+	private JProgressBar globalProgress, localProgress;
 	private JButton stop;
 	private int count;
 	private int done = 1;
@@ -177,7 +183,7 @@ public class PluginManagerProgress extends JDialog
 			{
 				public void run()
 				{
-					message.setText(msg + " (" + done + "/" + count + ")");
+					localProgress.setString(msg);
 				}
 			});
 		}

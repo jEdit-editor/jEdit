@@ -265,9 +265,12 @@ class Roster
 
 			byte[] buf = new byte[4096];
 			int copied = 0;
-			int count;
-loop:			while((count = in.read(buf,0,buf.length)) != -1)
+loop:			for(;;)
 			{
+				int count = in.read(buf,0,buf.length);
+				if(count == -1)
+					break loop;
+
 				if(doProgress)
 				{
 					copied += count;

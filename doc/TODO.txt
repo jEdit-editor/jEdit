@@ -1,7 +1,10 @@
 TO DO
 
-- scrollToCaret() doesn't always work: eg, select-document-end
-
+- large selections make the text area trip
+- plugin manager: aborts not handled gracefully
+- plugin manager: clicking stop in plugin list progress shouldn't leak fds
+- narrow indicator in status
+- encoding indicator in status (or buffer selector)
 - replace in sel doesn't work if rect
 - test edit server
 - broken reverse search
@@ -15,7 +18,6 @@ TO DO
 - macros in web start version
 - caret event not always fired
 - XThis: don't throw exceptions for non-existent methods
-- C+ENTER: display prompt
 - need to track down s.end < s.start cases
 - jEditLauncher
 - scroll lock key toggles 'scroll mode'

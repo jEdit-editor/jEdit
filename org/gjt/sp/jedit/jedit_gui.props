@@ -596,10 +596,11 @@ view.gutter.marker=Marker: {0}
 
 # Status messages
 view.status.recording=Macro recording
-view.status.register-prompt=Press a key to specify register name
-view.status.marker-prompt=Press a key to specify marker shortcut
-view.status.expand-folds=Press 0-9 to specify fold level
-view.status.insert-literal=Press key to insert literally
+view.status.repeat=Enter repeat count: {0}
+view.status.register-prompt=Press key to specify register name:
+view.status.marker-prompt=Press key to specify marker shortcut:
+view.status.expand-folds=Press 0-9 to specify fold level:
+view.status.insert-literal=Press key to insert literally:
 
 # Printing
 print.page=Page {0}
@@ -939,6 +940,10 @@ beanshell-eval.message={0}
 
 macro-not-recording.title=Not Recording
 macro-not-recording.message=A macro is not currently being recorded.
+
+# Large repeat count warning
+large-repeat-count.title=Large Repeat Count
+large-repeat-count.message=Are you sure you want to invoke "{0}" {1} times?
 
 # Buffer options dialog
 buffer-options.title=Buffer Options
@@ -1405,7 +1410,9 @@ install-plugins.none=none
 install-plugins.install=Install
 
 ### plugin progress
-plugin-manager.progress.title=Performing Operations
+plugin-manager.progress.removing-task=Removing Plugins
+plugin-manager.progress.updating-task=Updating Plugins
+plugin-manager.progress.installing-task=Installing Plugins
 plugin-manager.progress.removing=Removing {0}
 plugin-manager.progress.downloading=Downloading {0}
 plugin-manager.progress.installing=Installing {0}

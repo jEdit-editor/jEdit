@@ -85,7 +85,15 @@ public class StatusBar extends JPanel
 	{
 		if(message == null)
 		{
-			if(view.getMacroRecorder() != null)
+			InputHandler inputHandler = view.getInputHandler();
+			if(inputHandler.isRepeatEnabled())
+			{
+				int repeatCount = inputHandler.getRepeatCount();
+
+				this.message.setText(jEdit.getProperty("view.status.repeat",
+					new Object[] { repeatCount == 1 ? "" : String.valueOf(repeatCount) }));
+			}
+			else if(view.getMacroRecorder() != null)
 				this.message.setText(jEdit.getProperty("view.status.recording"));
 			else
 				this.message.setText(null);

@@ -251,6 +251,7 @@ public class DefaultInputHandler extends InputHandler
 		{
 			repeatCount *= 10;
 			repeatCount += (c - '0');
+			view.getStatus().setMessage(null);
 		}
 		else
 			userInput(c);

@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import java.awt.event.*;
 import java.awt.Component;
@@ -96,6 +97,7 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		this.repeat = repeat;
 		repeatCount = 0;
+		view.getStatus().setMessage(null);
 	}
 
 	/**
@@ -114,6 +116,7 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		repeat = true;
 		this.repeatCount = repeatCount;
+		view.getStatus().setMessage(null);
 	}
 
 	/**
@@ -185,6 +188,29 @@ public abstract class InputHandler extends KeyAdapter
 			action.invoke(view);
 		else
 		{
+			// stop people doing dumb stuff like C+e 100 C+n
+			if(_repeatCount > REPEAT_COUNT_THRESHOLD)
+			{
+				String label = jEdit.getProperty(action.getName() + ".label");
+				if(label == null)
+					label = action.getName();
+				else
+					label = GUIUtilities.prettifyMenuLabel(label);
+
+				Object[] pp = { label, new Integer(_repeatCount) };
+					
+				if(GUIUtilities.confirm(view,"large-repeat-count",pp,
+					JOptionPane.WARNING_MESSAGE,
+					JOptionPane.YES_NO_OPTION)
+					!= JOptionPane.YES_OPTION)
+				{
+					repeat = false;
+					repeatCount = 0;
+					view.getStatus().setMessage(null);
+					return;
+				}
+			}
+
 			try
 			{
 				buffer.beginCompoundEdit();
@@ -214,10 +240,13 @@ public abstract class InputHandler extends KeyAdapter
 
 			repeat = false;
 			repeatCount = 0;
+			view.getStatus().setMessage(null);
 		}
 	}
 
 	// protected members
+	private static final int REPEAT_COUNT_THRESHOLD = 20;
+
 	protected View view;
 	protected boolean repeat;
 	protected int repeatCount;

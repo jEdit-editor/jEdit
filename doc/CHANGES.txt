@@ -1,5 +1,23 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2pre3
+
++ Enhancements
+
+- Improved progress bar window in plugin manager
+- Specifying a repeat count greater than 20 displays a confirmation
+  dialog box
+- C+ENTER displays a prompt now
+
++ Bug Fixes
+
+- plugins.dtd was missing from jedit.jar, thus the new plugin manager
+  didn't work
+- FileVFS._rename() didn't work if the destination file already exists
+  on Windows. This caused problems when saving files, for example,
+  because #<filename>#save# would never be renamed to <filename>
+- Fixed several bugs in the 'scroll to caret' code
+
 * Version 3.2pre2
 
 + New Features
