@@ -1,8 +1,8 @@
-<!-- VBScript mode by Andre Kaplan -->
-
 <?XML VERSION="1.0"?>
+
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
+<!-- VBScript mode by Andre Kaplan -->
 <MODE NAME="vbscript">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="VBScript" />

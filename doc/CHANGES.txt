@@ -1,5 +1,20 @@
 JEDIT VERSION HISTORY
 
+* Version 2.4pre6
+
++ Enhancements
+
+- XML mode now opens all files whose first line contains <?xml in XML mode
+- XSL mode now highlights JavaScript in <xsl:script> and <xsl:eval> tags
+  (Oliver Rutherfurd)
+- jEdit will now display more meaningful error messages when you try to
+  open a directory, or a file with insufficent permissions
+
++ Bug Fixes
+
+- If an error occurred while loading or saving a file, jEdit would claim that
+  the file had been modified on disk (since 2.4pre1)
+
 * Version 2.4pre5
 
 + New Features

@@ -1,10 +1,9 @@
-<!-- Eiffel mode, by Slava Pestov. Based on EiffelTokenMarker by
-  -- Artur Biesiadowski -->
-
 <?XML VERSION="1.0"?>
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
+<!-- Eiffel mode, by Slava Pestov. Based on EiffelTokenMarker by
+  -- Artur Biesiadowski -->
 <MODE NAME="eiffel">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="Eiffel" />

@@ -473,9 +473,20 @@ ioerror.title=I/O Error
 # {0} - the error message
 ioerror.message=An I/O error occurred ({0})
 
-# File not found dialog, {0}=file name
-filenotfound.title=File Not Found
-filenotfound.message=File not found: {0}
+# Cannot open directory dialog box
+open-directory.title=Cannot Open Directory
+open-directory.message={0} is a directory.\n\
+	Directories cannot be opened for editing.
+
+# Cannot read dialog box
+no-read.title=Cannot Open File
+no-read.message=Cannot read from {0}.\n\
+	This probably means you have insufficent permissions.
+
+# Cannot write dialog box
+no-write.title=Cannot Save File
+no-write.message=Cannot save to {0}.\n\
+	This probably means you have insufficent permissions.
 
 # Open URL dialog
 openurl.title=Open URL

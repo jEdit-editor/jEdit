@@ -1,9 +1,8 @@
-<!-- COBOL mode, by Matthias Schneider -->
-
 <?XML VERSION="1.0"?>
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
+<!-- COBOL mode, by Matthias Schneider -->
 <MODE NAME="cobol">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="COBOL" />

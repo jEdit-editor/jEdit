@@ -1,9 +1,8 @@
-<!-- Ruby mode by Ian Maclean -->
-
 <?XML VERSION="1.0"?>
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
+<!-- Ruby mode by Ian Maclean -->
 <MODE NAME="ruby">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="Ruby" />

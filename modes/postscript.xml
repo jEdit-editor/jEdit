@@ -1,10 +1,9 @@
-<!-- PostScript mode, by Slava Pestov. Based on PostScriptTokenMarker by
-  -- Ralf Engels -->
-
 <?XML VERSION="1.0"?>
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
+<!-- PostScript mode, by Slava Pestov. Based on PostScriptTokenMarker by
+  -- Ralf Engels -->
 <MODE NAME="postscript">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="PostScript" />

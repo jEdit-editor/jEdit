@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 
-<!DOCTYPE MODE SYSTEM "xmode.dtd">
+<!DOCTYPE MODE>
 
 <MODE NAME="xsl">
 	<PROPS>
@@ -13,6 +13,18 @@
 		<!-- WHITE SPACE ( SPACE, TAB ) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
+		
+		<!-- JavaScript -->
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;xsl:script</BEGIN>
+			<END>&lt;/xsl:script&gt;</END>
+		</SPAN>
+		
+		<!-- JavaScript -->
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;xsl:eval&gt;</BEGIN>
+			<END>&lt;/xsl:eval&gt;</END>
+		</SPAN>
 		
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>

@@ -1,10 +1,9 @@
-<!-- Povray mode, by Slava Pestov
-  -- based on PovrayTokenMarker, by Romain Guy -->
-
 <?XML VERSION="1.0"?>
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
+<!-- Povray mode, by Slava Pestov
+  -- based on PovrayTokenMarker, by Romain Guy -->
 <MODE NAME="povray">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="C" />

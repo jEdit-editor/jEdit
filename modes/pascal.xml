@@ -4,7 +4,6 @@
 
 <!-- Pascal mode by Kristian Ovaska.
   -- Delphi 3 was used as reference. -->
-
 <MODE NAME="pascal">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="Pascal" />

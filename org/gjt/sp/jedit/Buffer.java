@@ -174,8 +174,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			{
 				File autosaveTmp = new File(autosaveFile
 					.getPath().concat("+tmp+#"));
-				save(new FileOutputStream(autosaveTmp));
-				/* workaround for JDK 1.2 bug */
+				write(new FileOutputStream(autosaveTmp));
 				autosaveFile.delete();
 				autosaveTmp.renameTo(autosaveFile);
 				/* XXX race alert if setDirty() runs here */
@@ -273,6 +272,14 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			saveFile = new File(path);
 		}
 
+		// Check that we can actually write to the file
+		if(saveFile.exists() && !saveFile.canWrite())
+		{
+			String[] args = { path };
+			GUIUtilities.error(view,"no-write",args);
+			return false;
+		}
+
 		// A save is definately going to occur; show the wait cursor
 		// and fire BUFFER_SAVING event
 		if(view != null)
@@ -295,7 +302,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				out = new FileOutputStream(saveFile);
 			if(path.endsWith(".gz"))
 				out = new GZIPOutputStream(out);
-			save(out);
+			write(out);
 			url = saveUrl;
 
 			file = saveFile;
@@ -323,8 +330,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
 
 			autosaveFile.delete();
-			modTime = file.lastModified();
-
 			returnValue = true;
 		}
 		catch(IOException io)
@@ -339,6 +344,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			Log.log(Log.ERROR,this,bl);
 			returnValue = false;
 		}
+
+		modTime = file.lastModified();
 
 		// Hide wait cursor
 		if(view != null)
@@ -1217,8 +1224,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 */
 	private void read(View view, File file)
 	{
-		if(file.exists())
-			setFlag(READ_ONLY,!file.canWrite());
+		modTime = file.lastModified();
 
 		InputStream _in;
 		URLConnection connection = null;
@@ -1230,7 +1236,12 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			if(url != null)
 				_in = url.openStream();
 			else
+			{
+				if(!checkFile(view,file))
+					return;
 				_in = new FileInputStream(file);
+			}
+
 			if(name.endsWith(".gz"))
 				_in = new GZIPInputStream(_in);
 			InputStreamReader in = new InputStreamReader(_in,
@@ -1382,8 +1393,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 			setFlag(NEW_FILE,false);
 			setDirty(false);
-
-			modTime = file.lastModified();
 		}
 		catch(BadLocationException bl)
 		{
@@ -1391,6 +1400,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 		catch(FileNotFoundException fnf)
 		{
+			// can't happen?
 			setFlag(NEW_FILE,true);
 			Log.log(Log.NOTICE,this,fnf);
 		}
@@ -1400,6 +1410,38 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			Object[] args = { io.toString() };
 			GUIUtilities.error(view,"ioerror",args);
 		}
+	}
+
+	private boolean checkFile(View view, File file)
+	{
+		if(!file.exists())
+		{
+			setFlag(NEW_FILE,true);
+			setDirty(false);
+			return false;
+		}
+		else
+			setFlag(READ_ONLY,!file.canWrite());
+
+		if(file.isDirectory())
+		{
+			String[] args = { file.getPath() };
+			GUIUtilities.error(view,"open-directory",args);
+			setFlag(NEW_FILE,false);
+			setDirty(false);
+			return false;
+		}
+
+		if(!file.canRead())
+		{
+			String[] args = { file.getPath() };
+			GUIUtilities.error(view,"no-read",args);
+			setFlag(NEW_FILE,false);
+			setDirty(false);
+			return false;
+		}
+
+		return true;
 	}
 
 	private void processProperty(String prop)
@@ -1573,7 +1615,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	}
 
 	// Saving is much simpler than loading :-)
-	private void save(OutputStream _out)
+	private void write(OutputStream _out)
 		throws IOException, BadLocationException
 	{
 		BufferedWriter out = new BufferedWriter(
@@ -1775,6 +1817,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.136  2000/04/14 07:02:42  sp
+ * Better error handling, XML files updated
+ *
  * Revision 1.135  2000/04/10 08:46:16  sp
  * Autosave recovery support, documentation updates
  *

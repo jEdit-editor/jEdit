@@ -8,7 +8,8 @@
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{xml,dtd,rdf,sgml,sgm}" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.{xml,dtd,sgml,sgm}" />
+		<PROPERTY NAME="firstlineGlob" VALUE=".*<\?xml.*" />
 	</PROPS>
 	<RULES>
 		<!-- whitespace: (space and tab) -->
