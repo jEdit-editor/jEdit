@@ -129,7 +129,8 @@ public class Gutter extends JComponent implements SwingConstants
 			else
 				gfx.setColor(fg);
 
-			gfx.drawString(number, ileft + offset, baseline + y);
+			gfx.drawString(number, FOLD_MARKER_SIZE + offset,
+				baseline + y);
 		}
 	}
 
@@ -196,18 +197,16 @@ public class Gutter extends JComponent implements SwingConstants
 
 		if (border == null)
 		{
-			ileft = FOLD_MARKER_SIZE;
 			collapsedSize.width = 0;
 			collapsedSize.height = 0;
 		}
 		else
 		{
 			Insets insets = border.getBorderInsets(this);
-			ileft = FOLD_MARKER_SIZE + insets.left;
-			collapsedSize.width = ileft + insets.right;
+			collapsedSize.width = FOLD_MARKER_SIZE + insets.right;
 			collapsedSize.height = gutterSize.height
 				= insets.top + insets.bottom;
-			gutterSize.width = ileft + insets.right
+			gutterSize.width = FOLD_MARKER_SIZE + insets.right
 				+ fm.stringWidth("12345");
 		}
 	}
@@ -382,7 +381,6 @@ public class Gutter extends JComponent implements SwingConstants
 	private TextAreaHighlight highlights;
 
 	private int baseline;
-	private int ileft;
 
 	private Dimension gutterSize = new Dimension(0,0);
 	private Dimension collapsedSize = new Dimension(0,0);
@@ -406,7 +404,7 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		public void mousePressed(MouseEvent e)
 		{
-			if(e.getX() < ileft)
+			if(e.getX() < getWidth() - borderWidth * 2)
 			{
 				Buffer buffer = textArea.getBuffer();
 
@@ -435,16 +433,22 @@ public class Gutter extends JComponent implements SwingConstants
 
 		public void mouseDragged(MouseEvent e)
 		{
-			e.translatePoint(-getWidth(),0);
-			textArea.mouseHandler.mouseDragged(e);
+			if(e.getX() >= getWidth() - borderWidth * 2)
+			{
+				e.translatePoint(-getWidth(),0);
+				textArea.mouseHandler.mouseDragged(e);
+			}
 		}
 
 		public void mouseMoved(MouseEvent e) {}
 
 		public void mouseReleased(MouseEvent e)
 		{
-			e.translatePoint(-getWidth(),0);
-			textArea.mouseHandler.mouseReleased(e);
+			if(e.getX() >= getWidth() - borderWidth * 2)
+			{
+				e.translatePoint(-getWidth(),0);
+				textArea.mouseHandler.mouseReleased(e);
+			}
 		}
 	}
 }

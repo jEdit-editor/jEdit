@@ -51,6 +51,7 @@ public class BrowserPopupMenu extends JPopupMenu
 			{
 				add(createMenuItem("open"));
 				add(createMenuItem("open-view"));
+				add(createMenuItem("insert"));
 				add(createMenuItem("close"));
 			}
 			else
@@ -69,6 +70,7 @@ public class BrowserPopupMenu extends JPopupMenu
 				{
 					add(createMenuItem("open"));
 					add(createMenuItem("open-view"));
+					add(createMenuItem("insert"));
 				}
 	
 				if(rename)
@@ -88,6 +90,7 @@ public class BrowserPopupMenu extends JPopupMenu
 		add(showHiddenFiles);
 
 		addSeparator();
+		add(createMenuItem("new-file"));
 		add(createMenuItem("new-directory"));
 
 		addSeparator();
@@ -147,6 +150,8 @@ public class BrowserPopupMenu extends JPopupMenu
 				if(buffer != null)
 					jEdit.newView(view,buffer);
 			}
+			else if(actionCommand.equals("insert"))
+				view.getBuffer().insert(view,file.path);
 			else if(actionCommand.equals("choose"))
 				browser.filesActivated();
 			else if(actionCommand.equals("close"))
@@ -165,6 +170,23 @@ public class BrowserPopupMenu extends JPopupMenu
 			{
 				browser.setShowHiddenFiles(!browser.getShowHiddenFiles());
 				browser.reloadDirectory();
+			}
+			else if(actionCommand.equals("new-file"))
+			{
+				VFS.DirectoryEntry[] selected = browser.getSelectedFiles();
+				if(selected.length >= 1)
+				{
+					VFS.DirectoryEntry file = selected[0];
+					if(file.type == VFS.DirectoryEntry.DIRECTORY)
+						jEdit.newFile(view,file.path);
+					else
+					{
+						VFS vfs = VFSManager.getVFSForPath(file.path);
+						jEdit.newFile(view,vfs.getParentOfPath(file.path));
+					}
+				}
+				else
+					jEdit.newFile(view,null);
 			}
 			else if(actionCommand.equals("new-directory"))
 				browser.mkdir();

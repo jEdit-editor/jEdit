@@ -2,7 +2,6 @@
 <!-- :indentSize=1:noTabs=yes: -->
 
 <chapter id=macros><title>Macros and Scripting</>
- <indexterm><primary>BeanShell</></indexterm>
  <para>
   A <firstterm>macro</> is a miniature program that can be
   run with a single menu item selection, keystroke, or tool bar
@@ -27,10 +26,6 @@
    settings directory is system-specific; see
    <xref linkend=settings-directory> for details.
   </para>
-  <indexterm><primary>Macros menu</></indexterm>
-  <indexterm><primary>Rescan Macros command</></indexterm>
-  <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>Utilities menu</></indexterm>
   <para>
    The <guimenu>Macros</> menu lists all known macros, in addition
    to commands for working with them. To play a macro, select it from
@@ -51,8 +46,6 @@
   </para>
  </sect1>
  <sect1 id=macro-record><title>Recording Macros</>
-  <indexterm><primary>Macros menu</></indexterm>
-  <indexterm><primary>Record Macro command</></indexterm>
   <para>
    <guimenu>Macros</>&gt;<guimenuitem>Record Macro</> (shortcut:
    <keycombo><keycap>Control</><keycap>M</></keycombo>
@@ -66,7 +59,6 @@
    the text selection commands or arrow keys when recording macros
    instead.
   </para>
-  <indexterm><primary>Stop Recording command</></indexterm>
   <para>
    <guimenu>Macros</>&gt;<guimenuitem>Stop Recording</> (shortcut:
    <keycombo><keycap>Control</><keycap>M</></keycombo>
@@ -84,15 +76,12 @@
    times, using the temporary macro feature is easier than saving a new
    macro file.
   </para>
-  <indexterm><primary>Macros menu</></indexterm>
-  <indexterm><primary>Record Temporary Macro command</></indexterm>
   <para>
    <guimenu>Macros</>&gt;<guimenuitem>Record Temporary Macro</> (shortcut:
    <keycombo><keycap>Control</><keycap>M</></keycombo>
    <keycombo><keycap>Control</><keycap>M</></keycombo>) begins recording
    to a buffer named <filename>Temporary_Macro.bsh</>.
   </para>
-  <indexterm><primary>Stop Recording command</></indexterm>
   <para>
    <guimenu>Macros</>&gt;<guimenuitem>Stop Recording</>
    (shortcut: <keycombo><keycap>Control</><keycap>M</></>
@@ -104,7 +93,6 @@
    buffer before playing it back--but if you do, it will become
    an ordinary macro, displayed in the <guimenu>Macros</> menu.
   </para>
-  <indexterm><primary>Play Temporary Macro command</></indexterm>
   <para>
    <guimenu>Macros</>&gt;<guimenuitem>Play Temporary Macro</> (shortcut:
    <keycombo><keycap>Control</><keycap>M</></keycombo>
@@ -113,9 +101,6 @@
   </para>
  </sect1>
  <sect1 id=beanshell-expr><title>Evaluating BeanShell Expressions</>
-  <indexterm><primary>Utilities menu</></indexterm>
-  <indexterm><primary>Evaluate Selection command</></indexterm>
-  <indexterm><primary>Evaluate command</></indexterm>
   <para>
    <guimenu>Utilities</>&gt;<guimenuitem>Evaluate BeanShell Expression</>
    prompts for a BeanShell expression, evaluates it, and displays the

@@ -2,18 +2,13 @@
 <!-- :indentSize=1:noTabs=yes: -->
 
 <chapter id=modes><title>Edit Modes</>
- <indexterm><primary>syntax highlighting</></indexterm>
- <indexterm><primary>auto indent</></indexterm>
- <indexterm><primary>edit modes</></indexterm>
  <para>
   An <firstterm>edit mode</> is an editor configuration intended to
   edit a specific type of file. Edit modes can specify syntax highlighting
   rules, auto indent behavior, and various useful customizations.
  </para>
  <sect1 id=mode-selection><title>Mode Selection</>
-  <para>
-   <indexterm><primary>file name extensions</></indexterm>
-   When a file is opened, jEdit first checks the file name against a list
+  <para>   When a file is opened, jEdit first checks the file name against a list
    of known patterns. For example, files whose names end with <quote>.c</>
    are edited in C mode, and files named <filename>Makefile</> are edited in
    Makefile mode. If a suitable match based on file name cannot be found,
@@ -31,45 +26,7 @@
   </para>
   <screen>:mode=<replaceable>edit mode</>:</screen>
  </sect1>
- <sect1 id=installing-modes><title>Installing New Edit Modes</>
-  <indexterm><primary>Utilities menu</></indexterm>
-  <indexterm><primary>Activity Log command</></indexterm>
-  <indexterm><primary>Reload Edit Modes command</></indexterm>
-  <indexterm><primary>activity log</></>
-  <para>
-   Edit modes are defined in XML, the <firstterm>extensible markup
-   language</>; mode files have the extension <filename>.xml</>.
-  </para>
-  <para>
-   There are two locations where new
-   edit modes can be installed; the <filename>modes</> subdirectory of
-   the jEdit settings directory, and the
-   <filename>modes</> subdirectory of the jEdit install directory.
-   The location of the settings directory is operating system-specific;
-   see <xref linkend=settings-directory>.
-  </para>
-  <para>
-   Individual mode files are only loaded and parsed when a buffer using
-   the mode in question is opened. For auto-loading to work, a
-   <firstterm>mode cache</> file is maintained. The mode cache must be
-   rebuilt after edit modes are added or removed using the
-   <guimenu>Utilities</>&gt;<guimenuitem>Reload Edit Modes</> command.
-  </para>
-  <tip>
-   <para>
-    The <guimenu>Utilities</>&gt;<guimenuitem>Reload
-    Edit Modes</> command is very helpful when you are writing your own
-    edit modes because it lets you see changes to a mode definition
-    file take effect without having to restart jEdit.
-   </para>
-  </tip>
- </sect1>
  <sect1 id=syntax-hilite><title>Syntax Highlighting</>
-  <indexterm><primary>buffer-local properties</>
-  <secondary>syntax</></indexterm>
-  <indexterm><primary>syntax highlighting</></indexterm>
-  <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>Utilities menu</></indexterm>
   <para>
    Syntax highlighting is the display of programming language
    tokens using different fonts and colors. This makes the code
@@ -110,26 +67,22 @@
  </sect1>
  <sect1 id=writing-modes><title>Writing Edit Modes</>
   <para>
+   Edit modes are defined using XML, the <firstterm>extensible markup
+   language</>; mode files have the extension <filename>.xml</>.
    XML is a very simple language, and as a result edit modes are easy to
    create and modify. This section will
    start with a short XML primer, followed by detailed information about
    each supported tag and highlighting rule.
   </para>
   <sect2 id=xml-primer><title>An XML Primer</title>
-  <indexterm><primary>tags</><secondary>!DOCTYPE</></>
-  <indexterm><primary>processing instructions (in XML)</></>
   <para>
-   Create a new file named <filename>my-mode.xml</> with the following
-   contents:
+   A very simple edit mode looks like so:
   </para>
   <programlisting>&lt;?xml version="1.0"?&gt;
 
 &lt;!DOCTYPE MODE SYSTEM "xmode.dtd"&gt;
 
 &lt;MODE NAME="my-mode"&gt;
-    &lt;PROPS&gt;
-        &lt;PROPERTY NAME="filenameGlob" VALUE="*.my" /&gt;
-    &lt;/PROPS&gt;
     &lt;RULES&gt;
         &lt;SPAN TYPE="COMMENT1"&gt;
             &lt;BEGIN&gt;/*&lt;/BEGIN&gt;
@@ -138,12 +91,7 @@
     &lt;/RULES&gt;
 &lt;/MODE&gt;</programlisting>
   <para>
-   Now, place it in one of the mode directories and invoke
-   <guimenu>Utilities</>&gt;<guimenuitem>Reload Edit Modes</>.
-   Congratulations, you've created your first edit mode.
-  </para>
-  <para>
-   In XML, each opening tag must have a corresponding closing tag.
+   Note that each opening tag must have a corresponding closing tag.
    If there is nothing between the opening and closing tags, for example
    <literal>&lt;TAG&gt;&lt;/TAG&gt;</>, the shorthand notation
    <literal>&lt;TAG /&gt;</> may be used. An example of this shorthand
@@ -180,7 +128,6 @@
   </para>
   </sect2>
   <sect2 id=mode-preamble><title>The Preamble</>
-   <indexterm><primary>tags</><secondary>!DOCTYPE</></>
    <para>
     Each mode definition must begin with the following:
    </para>
@@ -188,25 +135,13 @@
 &lt;!DOCTYPE MODE SYSTEM "xmode.dtd"&gt;</programlisting>
   </sect2>
   <sect2 id=mode-tag><title>The MODE Tag</>
-   <indexterm><primary>tags</><secondary>MODE</></>
-   <indexterm><primary>attributes</><secondary>NAME attribute of MODE tag</></>
    <para>
     Each mode definition must contain at least one <literal>MODE</>
     tag. All other tags (<literal>PROPS</>, <literal>RULES</>) must be
     placed inside the <literal>MODE</> tag.
-    The mode tag has one required attribute, <literal>NAME</>. It must
-    be set to the edit mode's name. The <literal>MODE</> tag for
-    Java mode looks as follows:
    </para>
-   <programlisting>&lt;MODE NAME="java"&gt;
-    <replaceable>...</>
-&lt;/MODE&gt;</programlisting>
   </sect2>
   <sect2 id=mode-tag-props><title>The PROPS Tag</>
-   <indexterm><primary>tags</><secondary>PROPS</></>
-   <indexterm><primary>tags</><secondary>PROPERTY</></>
-   <indexterm><primary>attributes</><secondary>NAME attribute of PROPERTY tag</></>
-   <indexterm><primary>attributes</><secondary>VALUE attribute of PROPERTY tag</></>
    <para>
     The <literal>PROPS</> tag and the <literal>PROPERTY</> tags inside it
     are used to define mode-specific
@@ -220,17 +155,6 @@
     properties have no buffer-local equivalent:
    </para>
    <itemizedlist>
-    <listitem><para><literal>filenameGlob</> - if a file's name matches this
-    glob pattern, it will be opened with this edit mode. See
-    <xref linkend=globs> for information about glob patterns.
-    In Java mode, for example, the value of this property is
-    <quote>*.java</>.
-    </para></listitem>
-    <listitem><para><literal>firstlineGlob</> - similar to
-    <literal>filenameGlob</>, except that it is applied to a buffer's
-    first line, instead of file name. In Perl mode, for example,
-    the value of this property is <quote>#!/*perl*</>.
-    </para></listitem>
     <listitem><para><literal>indentCloseBrackets</> -
     A list of characters (usually brackets) that subtract indent from
     the <emphasis>current</> line. For example, in Java mode this
@@ -276,17 +200,11 @@
     &lt;PROPERTY NAME="commentEnd" VALUE="*/" /&gt;
     &lt;PROPERTY NAME="boxComment" VALUE="*" /&gt;
     &lt;PROPERTY NAME="blockComment" VALUE="//" /&gt;
-    &lt;PROPERTY NAME="filenameGlob" VALUE="*.java" /&gt;
     &lt;PROPERTY NAME="noWordSep" VALUE="_" /&gt;
     &lt;PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" /&gt;
 &lt;/PROPS&gt;</>
   </sect2>
   <sect2 id=mode-tag-rules><title>The RULES Tag</>
-   <indexterm><primary>tags</><secondary>RULES</></>
-   <indexterm><primary>attributes</><secondary>IGNORE_CASE attribute of RULES tag</></>
-   <indexterm><primary>attributes</><secondary>HIGHLIGHT_DIGITS attribute of RULES tag</></>
-   <indexterm><primary>attributes</><secondary>DEFAULT attribute of RULES tag</></>
-   <indexterm><primary>attributes</><secondary>SET attribute of RULES tag</></>
    <para>
     <literal>RULES</> tags must be placed inside the <literal>MODE</> tag.
     Each <literal>RULES</> tag defines a <firstterm>ruleset</>.
@@ -337,8 +255,6 @@
     <replaceable>...</>
 &lt;/RULES&gt;</programlisting>
   <sect3 id=mode-rule-terminate><title>TERMINATE Rule</title>
-   <indexterm><primary>tags</><secondary>TERMINATE</></>
-   <indexterm><primary>attributes</><secondary>AT_CHAR attribute of TERMINATE tag</></>
    <para>
     The <literal>TERMINATE</> rule specifies that parsing should stop after
     the specified number of characters have been read from a line. The
@@ -353,7 +269,6 @@
    </para>
   </sect3>
   <sect3 id=mode-rule-whitespace><title>WHITESPACE Rule</title>
-   <indexterm><primary>tags</><secondary>WHITESPACE</></>
    <para>
     The <literal>WHITESPACE</> rule specifies characters which are to
     be treated as keyword delimiters.
@@ -364,15 +279,6 @@
 &lt;WHITESPACE&gt;        &lt;/WHITESPACE&gt;</>
   </sect3>
   <sect3 id=mode-rule-span><title>SPAN Rule</title>
-   <indexterm><primary>tags</><secondary>SPAN</></>
-   <indexterm><primary>tags</><secondary>BEGIN tag inside SPAN</></>
-   <indexterm><primary>tags</><secondary>END tag inside SPAN</></>
-   <indexterm><primary>attributes</><secondary>TYPE attribute of SPAN tag</></>
-   <indexterm><primary>attributes</><secondary>AT_LINE_START attribute of SPAN tag</></>
-   <indexterm><primary>attributes</><secondary>EXCLUDE_MATCH attribute of SPAN tag</></>
-   <indexterm><primary>attributes</><secondary>NO_WORD_BREAK attribute of SPAN tag</></>
-   <indexterm><primary>attributes</><secondary>NO_LINE_BREAK attribute of SPAN tag</></>
-   <indexterm><primary>attributes</><secondary>DELEGATE attribute of SPAN tag</></>
    <para>
     The <literal>SPAN</> rule highlights text between a start
     and end string. The start and end strings are specified inside
@@ -429,10 +335,6 @@
 &lt;/SPAN&gt;</programlisting>
   </sect3>
   <sect3 id=mode-rule-eol-span><title>EOL_SPAN Rule</title>
-   <indexterm><primary>tags</><secondary>EOL_SPAN</></>
-   <indexterm><primary>attributes</><secondary>TYPE attribute of EOL_SPAN tag</></>
-   <indexterm><primary>attributes</><secondary>AT_LINE_START attribute of EOL_SPAN tag</></>
-   <indexterm><primary>attributes</><secondary>EXCLUDE_MATCH attribute of EOL_SPAN tag</></>
    <para>
     An <literal>EOL_SPAN</> is similar to a <literal>SPAN</> except that
     highlighting stops at the end of the line, not after the end sequence
@@ -456,10 +358,6 @@
    <programlisting>&lt;EOL_SPAN TYPE="COMMENT1"&gt;//&lt;/EOL_SPAN&gt;</>
   </sect3>
   <sect3 id=mode-rule-mark-prev><title>MARK_PREVIOUS Rule</title>
-   <indexterm><primary>tags</><secondary>MARK_PREVIOUS</></>
-   <indexterm><primary>attributes</><secondary>TYPE attribute of MARK_PREVIOUS tag</></>
-   <indexterm><primary>attributes</><secondary>AT_LINE_START attribute of MARK_PREVIOUS tag</></>
-   <indexterm><primary>attributes</><secondary>EXCLUDE_MATCH attribute of MARK_PREVIOUS tag</></>
    <para>
     The <literal>MARK_PREVIOUS</> rule highlights from the end of the
     previous syntax token to the matched text. The text to match
@@ -484,10 +382,6 @@
     EXCLUDE_MATCH="TRUE"&gt;:&lt;/MARK_PREVIOUS&gt;</>
   </sect3>
   <sect3 id=mode-rule-mark-following><title>MARK_FOLLOWING Rule</title>
-   <indexterm><primary>tags</><secondary>MARK_FOLLOWING</></>
-   <indexterm><primary>attributes</><secondary>TYPE attribute of MARK_FOLLOWING tag</></>
-   <indexterm><primary>attributes</><secondary>AT_LINE_START attribute of MARK_FOLLOWING tag</></>
-   <indexterm><primary>attributes</><secondary>EXCLUDE_MATCH attribute of MARK_FOLLOWING tag</></>
    <para>
     The <literal>MARK_FOLLOWING</> rule highlights from the start of the
     match to the next syntax token. The text to match
@@ -511,9 +405,6 @@
    <programlisting>&lt;MARK_FOLLOWING TYPE="KEYWORD2"&gt;$&lt;/MARK_FOLLOWING&gt;</>
   </sect3>
   <sect3 id=mode-rule-seq><title>SEQ Rule</title>
-   <indexterm><primary>tags</><secondary>SEQ</></>
-   <indexterm><primary>attributes</><secondary>TYPE attribute of SEQ</></>
-   <indexterm><primary>attributes</><secondary>AT_LINE_START attribute of SEQ tag</></>
    <para>
     The <literal>SEQ</> rule highlights fixed sequences of text. The text
     to highlight is specified between opening and closing <literal>SEQ</>
@@ -535,8 +426,6 @@
 &lt;SEQ TYPE="OPERATOR"&gt;/&lt;/SEQ&gt;</>
   </sect3>
   <sect3 id=mode-rule-keywords><title>KEYWORDS Rule</title>
-   <indexterm><primary>tags</><secondary>KEYWORDS</></>
-   <indexterm><primary>attributes</><secondary>IGNORE_CASE attribute of KEYWORDS tag</></>
    <para>
     There can only be one <literal>KEYWORDS</> tag per ruleset.
     The <literal>KEYWORDS</> rule defines keywords to highlight.
@@ -601,5 +490,50 @@
    </itemizedlist>
   </sect3>
   </sect2>
+ </sect1>
+ <sect1 id=mode-catalog><title>Installing Edit Modes</title>
+  <para>
+   There are two locations where new
+   edit modes can be installed; the <filename>modes</> subdirectory of
+   the jEdit settings directory, and the
+   <filename>modes</> subdirectory of the jEdit install directory.
+   The location of the settings directory is operating system-specific;
+   see <xref linkend=settings-directory>.
+  </para>
+  <para>
+   Edit modes must be listed in a <firstterm>mode catalog</firstterm>
+   file, otherwise they will not be available to jEdit. There is a catalog
+   file in each mode directory, named <filename>catalog</filename>.
+  </para>
+  <para>
+   Catalogs are also written in XML. They consist of a <literal>MODES</>
+   tag, containing a number of <literal>MODE</> tags. Each mode tag
+   associates a mode name with an XML file and a filename and first line
+   glob. A sample mode catalog looks like follows:
+  </para>
+  <programlisting><![CDATA[<?xml version="1.0"?>
+<!DOCTYPE CATALOG SYSTEM "catalog.dtd">
+
+<MODES>
+    <MODE NAME="shellscript" FILE="shellscript.xml" FILE_NAME_GLOB="*.sh"
+        FIRST_LINE_GLOB="#!/*sh*" />
+</MODES>]]></programlisting>
+  <para>
+   The <literal>MODE</literal> tag supports the following attributes:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>NAME</literal> - the name of the edit mode, as it
+   will appear in the <guimenuitem>Buffer Options</> dialog box, and so on
+   </para></listitem>
+   <listitem><para><literal>FILE</literal> - the name of the XML file,
+   containing the mode definition</para></listitem>
+   <listitem><para><literal>FILE_NAME_GLOB</literal> - files whose names match
+   this glob pattern will be opened in this edit mode. See <xref linkend=globs>
+   for information about glob patterns</para></listitem>
+   <listitem><para><literal>FIRST_LINE_GLOB</literal> - files whose first line
+   matches
+   this glob pattern will be opened in this edit mode. See <xref linkend=globs>
+   for information about glob patterns</para></listitem>
+  </itemizedlist>
  </sect1>
 </chapter>

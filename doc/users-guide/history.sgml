@@ -2,10 +2,6 @@
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
 <appendix id=history><title>History Text Fields</>
- <indexterm><primary>history text fields</></indexterm>
- <indexterm><primary>file system browser</></indexterm>
- <indexterm><primary>Utilities menu</></indexterm>
- <indexterm><primary>Global Options command</></indexterm>
  <para>
   The text fields in the search and replace dialog box
   and file system browser remember the last 20 entered strings by

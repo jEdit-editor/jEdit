@@ -1,5 +1,24 @@
 JEDIT 3.1 VERSION HISTORY
 
+* Version 3.1pre2
+
++ Enhancements
+
+- HTML-like modes (ASP, JSP, PHP, SHTML, XSL) now handle <!...>
+  directives in a more consistent manner
+- Changed gutter mouse behavior
+- The 'Rename' dialog box in the filesystem browser now displays the
+  original file name in the text entry field
+- 'Insert File' and 'New File' commands in filesystem browser's
+  right-click menu
+
++ Bug Fixes
+
+- Adding new abbrevs in the Abbreviations option pane didn't work
+- Macro shortcuts didn't appear in menus (but they still worked)
+- The 'Center Caret on Screen' command didn't work if portions of the
+  buffer were folded
+
 * Version 3.1pre1
 
 + New Features

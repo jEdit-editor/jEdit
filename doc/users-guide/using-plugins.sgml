@@ -9,8 +9,6 @@
   <guimenu>Help</> menu.
  </para>
  <sect1 id=plugin-manager><title>The Plugin Manager</>
-  <indexterm><primary>Plugin Manager command</></indexterm>
-  <indexterm><primary>Plugins menu</></indexterm>
   <para>
    <guimenu>Plugins</>&gt;<guimenuitem>Plugin Manager</> displays
    the plugin manager window, which shows a list of installed plugins.

@@ -123,6 +123,13 @@ public class AbbrevEditor extends JPanel
 
 	public void setExpansion(String expansion)
 	{
+		if(expansion == null)
+		{
+			beforeCaret.setText(null);
+			afterCaret.setText(null);
+			return;
+		}
+
 		String beforeCaretText = null;
 		String afterCaretText = null;
 		StringBuffer buf = new StringBuffer();

@@ -1205,12 +1205,14 @@ vfs.browser.more.icon=ToolbarMenu.gif
 vfs.browser.menu.close.label=Close Selected File
 vfs.browser.menu.open.label=Open Selected File
 vfs.browser.menu.open-view.label=Open Selected File in New View
+vfs.browser.menu.insert.label=Insert File
 vfs.browser.menu.goto.label=Go to Selected Directory
 vfs.browser.menu.choose.label=Choose
 vfs.browser.menu.delete.label=Delete Selected File...
 vfs.browser.menu.rename.label=Rename Selected File...
 
 vfs.browser.menu.show-hidden-files.label=Show Hidden Files
+vfs.browser.menu.new-file.label=New File
 vfs.browser.menu.new-directory.label=New Directory...
 vfs.browser.menu.add-to-favorites.label=Add to Favorites
 vfs.browser.menu.go-to-favorites.label=Go to Favorites

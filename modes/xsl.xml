@@ -33,9 +33,9 @@
 			<BEGIN>&lt;xsl:comment&gt;</BEGIN>
 			<END>&lt;/xsl:comment&gt;</END>
 		</SPAN>
-		
+
 		<!-- DTD instructions -->
-		<SPAN TYPE="KEYWORD3">
+		<SPAN TYPE="KEYWORD2" DELEGATE="xml::DTD-TAGS">
 			<BEGIN>&lt;!</BEGIN>
 			<END>&gt;</END>
 		</SPAN>

@@ -203,7 +203,7 @@ public class Macros
 			this.name = name;
 			this.path = path;
 
-			action = new EditAction("irrelevant",false)
+			action = new EditAction(name,false)
 			{
 				public void invoke(View view)
 				{

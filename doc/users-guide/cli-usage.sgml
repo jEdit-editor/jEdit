@@ -2,12 +2,6 @@
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
 <appendix id=cli-usage><title>Command Line Usage</>
- <indexterm><primary>command line</></indexterm>
- <indexterm><primary>caret</></indexterm>
- <indexterm><primary>markers</></indexterm>
- <indexterm><primary>background mode</></indexterm>
- <indexterm><primary>edit server</></indexterm>
- <indexterm><primary>sessions</></indexterm>
  <para>
   On operating systems that support a command line, jEdit can be passed
   a multitude of options that control its behavior.
@@ -17,42 +11,8 @@
   position the caret on can be specified like so:
  </para>
  <screen><prompt>$ </><userinput>jedit MyApplet.java +line:10</>
-<prompt>$ </><userinput>jedit thesis.tex +marker:chapter5</>
-</screen>
- <indexterm><primary>command line</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-version</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-usage</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-nosettings</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-settings</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-session</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-noserver</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-server</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-nosessions</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-nosplash</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-newview</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-background</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>-nogui</></indexterm>
- <indexterm><primary>command line switches</>
- <secondary>- -</></indexterm>
- <indexterm><primary>moving the caret</>
- <secondary>to a line number</></indexterm>
- <indexterm><primary>Save Session command</></>
- <indexterm><primary>Global Options command</></>
- <indexterm><primary>File menu</></>
- <indexterm><primary>Utilities menu</></>
- <informaltable><!-- <title>Table of command line switches</> -->
+<prompt>$ </><userinput>jedit thesis.tex +marker:chapter5</></screen>
+<informaltable><!-- <title>Table of command line switches</> -->
   <tgroup cols=2>
    <colspec colnum=1 colwidth=1.5in>
    <thead>

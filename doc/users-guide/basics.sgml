@@ -3,7 +3,6 @@
 
 <chapter id=basics><title>Basic Concepts</>
  <sect1 id=menu-items><title>Conventions</>
-  <indexterm><primary>menu bar</></indexterm>
   <para>
    Whenever a specific menu item selection is referenced, the
    top level menu is listed first, followed by successive levels of submenus,
@@ -21,7 +20,6 @@
    <quote>[x]</quote> expect a character to be typed at the keyboard after
    being invoked.
   </para>
-  <indexterm><primary>keyboard shortcuts</></indexterm>
   <para>
    Many jEdit commands can be also be invoked using keystrokes. This speeds
    up editing by letting you keep your hands on the keyboard. Not all
@@ -35,12 +33,6 @@
   </para>
  </sect1>
  <sect1 id=starting><title>Starting jEdit</>
-  <indexterm><primary>command line</></indexterm>
-  <indexterm><primary>sessions</></indexterm>
-  <indexterm><primary>Windows</></indexterm>
-  <indexterm><primary>Unix</></indexterm>
-  <indexterm><primary>splash screen</></indexterm>
-  <indexterm><primary>edit server</></indexterm>
   <para>
    Exactly how jEdit is started depends on the operating system;
    on Unix systems, usually you would
@@ -55,7 +47,7 @@
    transferred to the running copy, and a second instance is not loaded.
    This saves time and memory if jEdit is started multiple times.
    Communication between instances of jEdit is implemented using
-   UDP/IP sockets; the initial instance is known as the
+   TCP/IP sockets; the initial instance is known as the
    <firstterm>server</>, and subsequent invocations are known as
    <firstterm>clients</>.
   </para>
@@ -74,7 +66,7 @@
   </para>
   <sidebar><title>The edit server and security</>
    <para>
-    Not only does the server pick a random UDP port number on startup,
+    Not only does the server pick a random TCP port number on startup,
     it also requires that clients provide an <firstterm>authorization
     key</>; a randomly-generated number only accessable to
     processes running on the local machine.
@@ -92,12 +84,6 @@
   </figure> -->
  </sect1>
  <sect1 id=buffers><title>Buffers</>
-  <indexterm><primary>buffers</></indexterm>
-  <indexterm><primary>text area</></indexterm>
-  <indexterm><primary>View menu</></indexterm>
-  <indexterm><primary>Go to Next Buffer command</></indexterm>
-  <indexterm><primary>Go to Previous Buffer command</></indexterm>
-  <indexterm><primary>Go to Last Edited Buffer</></indexterm>
   <para>
    Several files can be opened and edited at once.
    Each open file is referred to as a <firstterm>buffer</>.
@@ -129,16 +115,6 @@
   </para>
  </sect1>
  <sect1 id=views><title>Views</>
-  <indexterm><primary>views</></indexterm>
-  <indexterm><primary>View menu</></indexterm>
-  <indexterm><primary>New View command</></indexterm>
-  <indexterm><primary>Close View command</></indexterm>
-  <indexterm><primary>background mode</></indexterm>
-  <indexterm><primary>edit server</></indexterm>
-  <indexterm><primary>Split Horizontally command</></indexterm>
-  <indexterm><primary>Split Vertically command</></indexterm>
-  <indexterm><primary>Unsplit command</></indexterm>
-  <indexterm><primary>gutter</></indexterm>
   <para>
    Each editor window is referred to as a <firstterm>view</>.
    It is possible to have multiple views open at once, and each view can
@@ -213,26 +189,6 @@
   </figure> -->
  </sect1>
  <sect1 id=textarea><title>The Text Area</>
-  <indexterm><primary>text area</></indexterm>
-  <indexterm><primary>end of line markers</></indexterm>
-  <indexterm><primary>whitespace</></indexterm>
-  <indexterm><primary>Utilities menu</></indexterm>
-  <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>wrap guide</></indexterm>
-  <indexterm><primary>word wrap</></indexterm>
-  <indexterm><primary>wrap guide</></indexterm>
-  <indexterm><primary>tool bar</></indexterm>
-  <indexterm><primary>context menu</></indexterm>
-  <indexterm><primary>caret location</></indexterm>
-  <indexterm><primary>line numbers</></indexterm>
-  <indexterm><primary>gutter</></indexterm>
-  <indexterm><primary>View menu</></indexterm>
-  <indexterm><primary>Gutter Expanded command</></indexterm>
-  <indexterm><primary>Save Gutter Size command</></indexterm>
-  <indexterm><primary>markers</></indexterm>
-  <indexterm><primary>position registers</></indexterm>
-  <indexterm><primary>Windows</></indexterm>
-  <indexterm><primary>MacOS</></indexterm>
   <para>
    Text editing takes place in the text area. It behaves in a similar
    manner to many Windows and MacOS editors; the few
@@ -258,19 +214,14 @@
    The column and line number
    containing the caret, as well as the total number of lines in the buffer,
    is shown in the bottom-left corner of the text area.
-   In addition, the text area can optionally show line numbers next to
-   displayed lines in the so-called <firstterm>gutter</> area. To show the
-   gutter, either
-   double-click on the thin vertical strip to the left of the text area, or
-   invoke
-   <guimenu>View</>&gt;<guimenuitem>Gutter Expanded</> (shortcut:
+  </para>
+  <para>
+   The strip on the left of the text area is called a <firstterm>gutter</>.
+   The gutter displays marker and register locations; it will also display
+   line numbers if the 
+   <guimenu>View</>&gt;<guimenuitem>Line Numbers</> (shortcut:
    <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>T</></keycombo>). In addition to line
-   numbers, the gutter also indicates which lines have markers or position
-   registers pointing to them.
-   The gutter's width can be changed by dragging the mouse. The
-   <guimenu>View</>&gt;<guimenuitem>Save Gutter Size</> command makes
-   the gutter's current size the default for future sessions.
+   <keycombo><keycap>Control</><keycap>T</></keycombo>) command is invoked.
   </para>
   <!-- <figure><title>The editor window</title>
    <graphic scale=50 fileref=window-editor></>

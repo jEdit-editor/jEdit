@@ -159,7 +159,7 @@ view.gutter.bgColor=#ffffff
 view.gutter.fgColor=#000000
 
 # Gutter highlight color
-view.gutter.highlightColor=#8080c0
+view.gutter.highlightColor=#8080ff
 
 # Gutter current line highlight color
 view.gutter.currentLineColor=#d04040
@@ -174,7 +174,7 @@ view.gutter.registerColor=#ffffcc
 view.gutter.foldColor=#808080
 
 # Gutter border colors
-view.gutter.focusBorderColor=#d04040
+view.gutter.focusBorderColor=#8080ff
 view.gutter.noFocusBorderColor=#808080
 
 # Gutter font name

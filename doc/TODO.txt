@@ -1,3 +1,5 @@
+- update to new gnu.regexp version
+
 * Folding
 
 - expand-one-level command
@@ -5,6 +7,9 @@
 - undo causes problems sometimes (is this related to folding at all?)
 - sometimes fold markers are not repainted in gutter
 - visibleLine handling a bit broken
+- deleting line still broken
+- scrolling bug
+- replace all fucks shit up
 
 * XMode rule inclusion
 
@@ -41,4 +46,4 @@ only then renamed to <filename> if the save was successful.
 * Documentation
 
 - Migrate to DocBook/XML
-- Update docs for 3.1 goodies
+- Update docs

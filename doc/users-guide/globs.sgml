@@ -2,9 +2,6 @@
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
 <appendix id=globs><title>Glob Patterns</>
- <indexterm><primary>glob patterns</></indexterm>
- <indexterm><primary>Unix</></indexterm>
- <indexterm><primary>file system browser</></indexterm>
  <para>
   jEdit uses glob patterns similar to those in the various
   Unix shells to implement file name filters in the file system browser.

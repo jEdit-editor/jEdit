@@ -3,12 +3,6 @@
 
 <chapter id=source-edit><title>Editing Source Code</>
  <sect1 id=abbrevs><title>Abbreviations</>
-  <indexterm><primary>Edit menu</></indexterm>
-  <indexterm><primary>Expand Abbreviation command</></indexterm>
-  <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>Utilities menu</></indexterm>
-  <indexterm><primary>modes</></indexterm>
-  <indexterm><primary>buffers</></indexterm>
   <para>
    Using abbreviations reduces the time spent typing long but commonly used
    strings. For example, in Java mode, the abbreviation <quote>sout</> is
@@ -25,9 +19,9 @@
    <guimenu>Edit</>&gt;<guimenuitem>Expand Abbreviation</> (keyboard
    shortcut: <keycombo><keycap>Control</><keycap>;</></keycombo>)
    attempts to expand the word before the caret. If no expansion could
-   be found, it will offer to define one. 
+   be found, it will offer to define one.
   </para>
-  <para>
+  <!-- <para>
    The string <quote>\n</> in an abbreviation expansion inserts a newline,
    <quote>\t</> inserts a tab. The caret is located at
    the position of the string <quote>\|</>. The <quote>\|</> will
@@ -36,7 +30,7 @@
    <quote>SwingUtilities.invokeLater(\|);</>,
    the text <quote>SwingUtilities.invokeLater();</> will be inserted
    in the buffer, with the caret positioned between the brackets.
-  </para>
+  </para> -->
   <!-- <figure><title>The Add Abbreviation dialog box</>
    <graphic scale=50 fileref=dialog-add-abbrev></>
   </figure> -->
@@ -55,16 +49,6 @@
   </para>
  </sect1>
  <sect1 id=bracket-matching><title>Bracket Matching</>
-  <indexterm><primary>bracket matching</></indexterm>
-  <indexterm><primary>Locate Bracket command</></indexterm>
-  <indexterm><primary>Go to Previous Bracket command</></indexterm>
-  <indexterm><primary>Go to Next Bracket command</></indexterm>
-  <indexterm><primary>Edit menu</></indexterm>
-  <indexterm><primary>selecting</><secondary>code blocks</></indexterm>
-  <indexterm><primary>Select Code Block command</></indexterm>
-  <indexterm><primary>Brackets menu</></indexterm>
-  <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>Utilities menu</></indexterm>
   <para>
    Misplaced and unmatched brackets are one of the most common syntax
    errors encountered when writing code. jEdit has several features
@@ -78,7 +62,7 @@
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
   </para>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Brackets</>&gt;<guimenuitem>Go to Matching
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Go to Matching
    Bracket</> (shortcut: <keycombo><keycap>Control</><keycap>]</></keycombo>)
    goes to the bracket matching the one before the caret.
   </para>
@@ -87,18 +71,18 @@
    between the bracket and the one matching it.
   </para>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Brackets</>&gt;<guimenuitem>Select Code Block</>
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Select Code Block</>
    (shortcut: <keycombo><keycap>Control</><keycap>[</></keycombo>)
    selects all text between the two brackets nearest to the caret.
   </para>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Brackets</>&gt;<guimenuitem>Go to Previous
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Go to Previous
    Bracket</> (shortcut: <keycombo><keycap>Control</><keycap>E</></>
    <keycap>[</>)
    moves the caret to the previous opening bracket.
   </para>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Brackets</>&gt;<guimenuitem>Go to Next
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Go to Next
    Bracket</> (shortcut: <keycombo><keycap>Control</><keycap>E</></>
    <keycap>]</>)
    moves the caret to the next closing bracket.
@@ -116,14 +100,6 @@
   </figure> -->
  </sect1>
  <sect1 id=indent><title>Tabbing and Indentation</>
-  <indexterm><primary>buffer-local properties</>
-  <secondary>tabSize</></indexterm>
-  <indexterm><primary>buffer-local properties</>
-  <secondary>indentSize</></indexterm>
-  <indexterm><primary>tab width</></indexterm>
-  <indexterm><primary>indent width</></indexterm>
-  <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>Utilities menu</></indexterm>
   <para>
    jEdit makes a distinction between the <firstterm>tab width</>, which is
    is used when displaying tab characters, and the <firstterm>indent width</>,
@@ -149,29 +125,19 @@
    <screen>:tabSize=<replaceable>n</>:indentSize=<replaceable>m</>:</screen>
    </listitem>
   </itemizedlist>
-  <para>
-   <indexterm><primary>Shift Indent Left command</></indexterm>
-   <indexterm><primary>Shift Indent Right command</></indexterm>
-   <indexterm><primary>Selection menu</></indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
-   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guisubmenu>Shift Indent Left</>
+  <para>   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guisubmenu>Shift Indent Left</>
    (shortcut: <keycombo><keycap>Alt</><keycap>Left</></keycombo>)
    adds one level of indent to each selected line, or the current line
    if there is no selection.
   </para>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guisubmenu>Shift Indent Right</>
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guisubmenu>Shift Indent Right</>
    (shortcut: <keycombo><keycap>Alt</><keycap>Right</></keycombo>)
    removes one level of indent from each selected line, or the current line
    if there is no selection.
   </para>
   <sect2 id=soft-tabs><title>Soft Tabs</>
    <para>
-    <indexterm><primary>soft tabs</></indexterm>
-    <indexterm><primary>buffer-local properties</>
-    <secondary>noTabs</></indexterm>
-   <indexterm><primary>Global Options command</></indexterm>
-   <indexterm><primary>Utilities menu</></indexterm>
     Because files indented using tab characters may look less than ideal when
     viewed on a system with a different default tab size, it is sometimes
     desirable to use multiple spaces, known as <firstterm>soft tabs</>,
@@ -201,30 +167,16 @@
     Changing the soft tabs setting has no effect on existing tab characters;
     it only affects subsequently-inserted tabs.
    </para>
-   <indexterm><primary>selection</></indexterm>
-   <indexterm><primary>Spaces to Tabs command</></indexterm>
-   <indexterm><primary>Tabs to Spaces command</></indexterm>
-   <indexterm><primary>Selection menu</></indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
    <para>
-    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Spaces to Tabs</>
+    <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Spaces to Tabs</>
     converts soft tabs to hard tabs in the current selection.
    </para>
    <para>
-    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Tabs to Spaces</>
+    <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Tabs to Spaces</>
     converts hard tabs to soft tabs in the current selection.
    </para>
   </sect2>
   <sect2 id=autoindent><title>Automatic Indent</>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>indentOnEnter</></indexterm>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>indentOnTab</></indexterm>
-   <indexterm><primary>Indent Selected Lines command</></indexterm>
-   <indexterm><primary>Lines menu</></indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
-   <indexterm><primary>Global Options command</></indexterm>
-   <indexterm><primary>Utilities menu</></indexterm>
    <para>
     The auto indent feature inserts the appropriate number of tabs or
     spaces at the beginning of a line.
@@ -265,7 +217,7 @@
     is added and removed as necessary.
    </para>
    <para>
-    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guisubmenu>Indent
+    <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guisubmenu>Indent
     Selected Lines</>
     (shortcut: <keycombo><keycap>Control</><keycap>I</></keycombo>)
     indents all selected lines, or the current line if there is no
@@ -283,23 +235,13 @@
   </sect2>
  </sect1>
  <sect1 id=commenting><title>Commenting Out Code</>
-  <indexterm><primary>selection</></indexterm>
   <para>
    Most programming and markup languages support <quote>comments</>, or
    regions of  code which are ignored by the compiler/interpreter. jEdit
    has commands which make inserting comments more convenient.
   </para>
   <para>
-   <indexterm><primary>Wing Comment command</></indexterm>
-   <indexterm><primary>Selection menu</></indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>commentStart</></indexterm>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>commentEnd</></indexterm>
-   <indexterm><primary>Global Options command</></indexterm>
-   <indexterm><primary>Utilities menu</></indexterm>
-   <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Wing Comment</>
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Wing Comment</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>C</></keycombo>) encloses the
    selection with comment start and end strings. An example of Java
@@ -317,12 +259,9 @@
    of a buffer will change the wing comment strings to <quote>(*</> and
    <quote>*)</>:
   </para>
-   <screen>:commentStart=(*:commentEnd=*):</screen>
+  <screen>:commentStart=(*:commentEnd=*):</screen>
   <para>
-   <indexterm><primary>Box Comment command</></indexterm>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>boxComment</></indexterm>
-   <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Box Comment</>
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Box Comment</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>B</></keycombo>) encloses the
    selection with comment start and end strings, and places the box
@@ -342,10 +281,7 @@
   </para>
   <screen>:commentStart=(*:commentEnd=*):boxComment=**:</screen>
   <para>
-   <indexterm><primary>Block Comment command</></indexterm>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>blockComment</></indexterm>
-   <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Block Comment</>
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Block Comment</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>K</></keycombo>) inserts the
    block comment string at the start of each selected line.
@@ -362,5 +298,10 @@
    of a buffer will change the block comment string to <quote>#</>:
   </para>
   <screen>:blockComment=#:</screen>
+ </sect1>
+ <sect1 id=folding><title>Folding</>
+  <para>
+   foo
+  </para>
  </sect1>
 </chapter>

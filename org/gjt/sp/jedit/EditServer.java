@@ -252,9 +252,14 @@ class EditServer extends Thread
 				else if(command.startsWith("nosession"))
 					session = null;
 				else
+				{
 					Log.log(Log.ERROR,this,client
 						+ ": unknown server"
 						+ " command: " + command);
+					in.close();
+					socket.close();
+					stopServer();
+				}
 			}
 		}
 
@@ -293,61 +298,3 @@ class EditServer extends Thread
 			TSnewView(buffer);
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.20  2000/12/24 02:54:47  sp
- * fixing bugs
- *
- * Revision 1.18  2000/11/29 06:53:00  sp
- * DSSSL syntax highlighting, documentation updates, bug fixes
- *
- * Revision 1.17  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.16  2000/09/06 04:39:47  sp
- * bug fixes
- *
- * Revision 1.15  2000/08/20 07:29:30  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.14  2000/06/12 02:43:29  sp
- * pre6 almost ready
- *
- * Revision 1.13  2000/04/29 03:07:37  sp
- * Indentation rules updated, VFS displays wait cursor properly, background mode
- *
- * Revision 1.12  2000/04/27 08:32:57  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.11  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.10  2000/04/21 05:32:20  sp
- * Focus tweak
- *
- * Revision 1.9  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
- *
- * Revision 1.8  2000/02/27 00:39:50  sp
- * Misc changes
- *
- * Revision 1.7  2000/02/20 03:14:13  sp
- * jEdit.getBrokenPlugins() method
- *
- * Revision 1.6  2000/02/03 04:53:48  sp
- * Bug fixes and small updates
- *
- * Revision 1.5  2000/01/21 00:35:29  sp
- * Various updates
- *
- * Revision 1.4  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.3  1999/10/30 02:44:18  sp
- * Miscallaneous stuffs
- *
- */

@@ -175,6 +175,7 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 	private DefaultMutableTreeNode resultTreeRoot;
 	private DefaultTreeModel resultTreeModel;
 
+
 	class MouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
@@ -220,30 +221,20 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 		}
 	}
 
+
 	class ResultCellRenderer extends DefaultTreeCellRenderer
 	{
 		public Component getTreeCellRendererComponent(JTree tree,
 			Object value, boolean sel, boolean expanded,
 			boolean leaf, int row, boolean hasFocus)
 		{
-			super.getTreeCellRendererComponent(tree,value,sel,
+			Component comp = super.getTreeCellRendererComponent(tree,value,sel,
 				expanded,leaf,row,hasFocus);
-
-			setIcon(null);
-			Font font = UIManager.getFont("Label.font");
-			if(value instanceof String)
-			{
-				font = new Font(font.getFamily(),Font.BOLD,
-					font.getSize());
-			}
-			else
-			{
-				font = new Font(font.getFamily(),Font.PLAIN,
-					font.getSize());
-			}
-			ResultCellRenderer.this.setFont(font);
-
-			return this;
+			if (!(comp instanceof JLabel))
+				return comp;
+			JLabel label = (JLabel)comp;
+			label.setIcon(null);
+			return label;
 		}
 	}
 }

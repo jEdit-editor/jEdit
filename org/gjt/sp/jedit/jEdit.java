@@ -58,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.01.01.00";
+		return "03.01.02.00";
 	}
 
 	/**
@@ -1197,6 +1197,17 @@ public class jEdit
 	 */
 	public static Buffer newFile(View view)
 	{
+		return newFile(view,null);
+	}
+
+	/**
+	 * Creates a new `untitled' file.
+	 * @param view The view to create the file in
+	 * @param dir The directory to create the file in
+	 * @since jEdit 3.1pre2
+	 */
+	public static Buffer newFile(View view, String dir)
+	{
 		// If only one new file is open which is clean, just close
 		// it, which will create an 'Untitled-1'
 		if(buffersFirst != null && buffersFirst == buffersLast
@@ -1228,7 +1239,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		return openFile(view,null,"Untitled-" + (untitledCount+1),
+		return openFile(view,dir,"Untitled-" + (untitledCount+1),
 			false,true);
 	}
 

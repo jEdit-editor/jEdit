@@ -333,7 +333,7 @@ public class JEditTextArea extends JComponent
 	{
 		Element map = buffer.getDefaultRootElement();
 
-		int gotoLine = firstLine + visibleLines / 2;
+		int gotoLine = buffer.virtualToPhysical(firstLine + visibleLines / 2);
 
 		if(gotoLine < 0 || gotoLine >= map.getElementCount())
 		{

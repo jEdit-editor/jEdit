@@ -2,12 +2,6 @@
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
 <appendix id=activity-log><title>The Activity Log</>
- <indexterm><primary>Utilities menu</></indexterm>
- <indexterm><primary>Activity Log command</></indexterm>
- <indexterm><primary>activity log</></indexterm>
- <indexterm><primary>plugins</></indexterm>
- <indexterm><primary>error messages</></indexterm>
- <indexterm><primary>debugging messages</></indexterm>
  <para>
   The <firstterm>activity log</> is very useful for
   troubleshooting problems, and helps when developing plugins.

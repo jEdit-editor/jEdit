@@ -2,9 +2,6 @@
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
 <appendix id=regexps><title>Regular Expressions</>
- <indexterm><primary>regular expressions</></indexterm>
- <indexterm><primary>Search and Replace dialog box</></indexterm>
- <indexterm><primary>HyperSearch dialog box</></indexterm>
  <para>
   jEdit uses regular expressions to implement inexact search and replace.
   A regular expression consists of a string where some
