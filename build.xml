@@ -36,6 +36,7 @@
 			<include name="installer/*.java"/>
 			<include name="org/gjt/sp/jedit/**/*.java"/>
 			<exclude name="org/gjt/sp/jedit/Java14.java"/>
+			<exclude name="org/gjt/sp/jedit/print/BufferPrinter1_4.java"/>
 			<include name="org/gjt/sp/util/*.java"/>
 		</javac>
 	</target>
@@ -48,6 +49,7 @@
 			includeJavaRuntime="yes"
 		>
 			<include name="org/gjt/sp/jedit/Java14.java"/>
+			<include name="org/gjt/sp/jedit/print/BufferPrinter1_4.java"/>
 		</javac>
 	</target>
 
