@@ -3011,7 +3011,7 @@ loop:				for(int i = 0; i < count; i++)
 		this.path = path;
 
 		vfs = VFSManager.getVFSForPath(path);
-		if((vfs.getCapabilities() & VFS.WRITE_CAP) != 0)
+		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setReadOnly(true);
 
 		name = vfs.getFileName(path);
