@@ -1940,6 +1940,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.200  2000/03/26 03:35:32  sp
+ * Minor updates
+ *
  * Revision 1.199  2000/03/26 03:30:48  sp
  * XMode integrated
  *
@@ -1970,20 +1973,5 @@ public class jEdit
  *
  * Revision 1.190  2000/02/07 06:35:53  sp
  * Options dialog box updates
- *
- * Revision 1.189  2000/02/04 05:50:27  sp
- * More gutter updates from mike
- *
- * Revision 1.188  2000/02/02 06:23:44  sp
- * Gutter changes from mike
- *
- * Revision 1.187  2000/01/29 10:12:43  sp
- * BeanShell edit mode, bug fixes
- *
- * Revision 1.186  2000/01/29 08:18:08  sp
- * bug fixes, misc updates
- *
- * Revision 1.185  2000/01/29 03:27:20  sp
- * Split window functionality added
  *
  */
