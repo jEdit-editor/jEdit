@@ -80,6 +80,7 @@ public class SearchBar extends JPanel
 	public void setIncremental(boolean incremental)
 	{
 		this.incremental.getModel().setSelected(incremental);
+		update();
 	}
 
 	public void update()

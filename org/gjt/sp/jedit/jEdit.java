@@ -57,7 +57,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.04.99.01";
+		return "02.04.99.02";
 	}
 
 	/**
@@ -884,16 +884,8 @@ public class jEdit
 	}
 
 	/**
-	 * Opens a file.
-	 * @param view The view to open the file in
-	 * @param parent The parent directory of the file
-	 * @param path The path name of the file
-	 * @param readOnly True if the file should be read only
-	 * @param newFile True if the file should not be loaded from disk
-	 * @param reloadIfOpen If true and buffer is already open, user will
-	 * be prompted if it should be reloaded
-	 *
-	 * @since jEdit 2.4pre1
+	 * @deprecated This method will no longer be available in jEdit 2.5.
+	 * Use openFile(View,String,String,boolean,boolean) instead.
 	 */
 	public static Buffer openFile(View view, String parent, String path,
 		boolean readOnly, boolean newFile, boolean reloadIfOpen)
@@ -1938,7 +1930,7 @@ public class jEdit
 			{
 				int line = Integer.parseInt(marker.substring(1));
 				Element lineElement = buffer.getDefaultRootElement()
-					.getElement(line + 1);
+					.getElement(line - 1);
 				start = end = lineElement.getStartOffset();
 			}
 			catch(Exception e)

@@ -240,6 +240,7 @@ org/gjt/sp/jedit/gui/SendDialog.java
 org/gjt/sp/jedit/gui/SplashScreen.java
 org/gjt/sp/jedit/gui/ToolBarModel.java
 org/gjt/sp/jedit/gui/ViewRegisters.java
+org/gjt/sp/jedit/io/VFSManager.java
 org/gjt/sp/jedit/jEdit.java
 org/gjt/sp/jedit/jedit.manifest
 org/gjt/sp/jedit/jedit.props

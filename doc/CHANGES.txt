@@ -1,5 +1,37 @@
 JEDIT 2.4 VERSION HISTORY
 
+* Version 2.4.2
+
++ Bug Fixes
+
+- Having a 'case' on a line did not indent the next line correctly in
+  C-like modes (since 2.4pre6)
+- XML mode firstlineGlob was incorrect (since 2.4pre6)
+- TeX mode didn't define the block comment property (since 2.4pre2)
+- Reloading a file didn't update the buffers menu or title bar when
+  necessary
+- Marker goto (filename#marker) on the command line didn't work
+- jEdit should prompt to reload a file if the modification time becomes
+  older than when it was saved, as well
+- Auto indent would insert too much indentation if the same line contained
+  an 'indentPrevLine' statement and an opening bracket (since 2.4pre6)
+- 'Search->Toolbar Incremental Search' didn't disable the multifile
+  button (since 2.4pre4)
+- Reloading a dirty file didn't remove the autosave file
+
++ API Changes
+
+To ease the transition to the jEdit 2.5 I/O system, this release has a
+few API changes:
+
+- Buffer.getURL() deprecated
+- BufferUpdate.LOADING deprecated; use BufferUpdate.LOADED instead
+- A dummy VFSManager class has been added with the following methods:
+  - VFSManager.waitForRequests() -- in jEdit 2.4, returns immediately
+  - VFSManager.runInAWTThread() -- runs the specified runnable immediately
+- jEdit.openFile(View,String,String,boolean,boolean,boolean) deprecated;
+  use jEdit.openFile(View,String,String,boolean,boolean) instead
+
 * Version 2.4.1
 
 + Bug Fixes

@@ -61,9 +61,14 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	public static final Object SAVING = "SAVING";
 
 	/**
-	 * Buffer reloading.
+	 * @deprecated Use LOADED instead
 	 */
 	public static final Object LOADING = "LOADING";
+
+	/**
+	 * Buffer has been loaded.
+	 */
+	public static final Object LOADED = "LOADED";
 
 	/**
 	 * Creates a new buffer update message.

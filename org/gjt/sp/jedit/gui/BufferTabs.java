@@ -112,6 +112,8 @@ public class BufferTabs extends JTabbedPane
 		else
 		{
 			int oldIndex = buffers.indexOf(buffer);
+			if(oldIndex == -1)
+				return;
 
 			updating = true;
 

@@ -6,7 +6,7 @@
 # jEdit buffer-local properties:
 # :tabSize=4:noTabs=yes:
 
-cmd_javac = "jikes" "-deprecation" "+D" "+P";
+cmd_javac = "jikes" "-deprecation" "+D" "+P" "-O";
 #cmd_javac = "javac";
 cmd_jar = "jar";
 
@@ -52,6 +52,7 @@ jedit_pkgs = "com/microstar/xml"
     jedit_pkg
     "org/gjt/sp/jedit/actions"
     "org/gjt/sp/jedit/gui"
+    "org/gjt/sp/jedit/io"
     "org/gjt/sp/jedit/msg"
     "org/gjt/sp/jedit/options"
     "org/gjt/sp/jedit/proto/jeditresource"

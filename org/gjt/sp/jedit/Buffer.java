@@ -120,7 +120,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			if(!reload && autosaveFile.exists())
 				doLoad = recoverAutosave(view);
 			else
+			{
+				autosaveFile.delete();
 				doLoad = true;
+			}
 
 			if(doLoad)
 				read(view,file);
@@ -159,7 +162,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			_view = _view.getNext();
 		}
 
-		// fire LOADING event
+		EditBus.send(new BufferUpdate(this,BufferUpdate.LOADED));
+
+		// deprecated
 		EditBus.send(new BufferUpdate(this,BufferUpdate.LOADING));
 	}
 
@@ -362,7 +367,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		long oldModTime = modTime;
 		long newModTime = file.lastModified();
 
-		if(newModTime > oldModTime)
+		if(newModTime != oldModTime)
 		{
 			modTime = newModTime;
 
@@ -383,7 +388,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
-	 * Returns the URL this buffer is editing.
+	 * @deprecated Tis method will be removed in jEdit 2.5pre1.
 	 */
 	public final URL getURL()
 	{
@@ -432,7 +437,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
-	 * @deprecated Always returns true. Should no longer be called.
+	 * Always returns true in jEdit 2.4. In jEdit 2.5, this may
+	 * return false if the buffer is currently being loaded in
+	 * another thread.
 	 */
 	public final boolean isLoaded()
 	{
@@ -854,7 +861,24 @@ public class Buffer extends SyntaxDocument implements EBComponent
 					prevLineBrackets = Math.max(
 						prevLineBrackets-1,0);
 				else if(openBrackets.indexOf(c) != -1)
+				{
+					/*
+					 * If supressBracketAfterIndent is true
+					 * and we have something that looks like:
+					 * if(bob)
+					 * {
+					 * then the 'if' will not shift the indent,
+					 * because of the {.
+					 *
+					 * If supressBracketAfterIndent is false,
+					 * the above would be indented like:
+					 * if(bob)
+					 *         {
+					 */
+					if(!doubleBracketIndent)
+						prevLineMatches = false;
 					prevLineBrackets++;
+				}
 				break;
 			}
 		}
