@@ -56,7 +56,7 @@
 		</jar>
 	</target>
 
-	<!-- Generate docs with xsltproc tool from www.xmlsoft.org -->
+	<!-- Generate HTML docs with xsltproc tool from www.xmlsoft.org -->
 	<target name="docs-html-xsltproc">
 		<exec executable="xsltproc" dir="doc/users-guide">
 			<arg value="--catalogs"/>
@@ -65,12 +65,57 @@
 		</exec>
 	</target>
 
-	<!-- Generate docs with Xalan tool from xml.apache.org -->
+	<!-- Generate HTML docs with Xalan tool from xml.apache.org -->
 	<target name="docs-html-xalan">
 		<style
 			in="doc/users-guide/users-guide.xml"
 			destdir="doc/users-guide"
 			style="doc/users-guide/jedithtml.xsl"/>
+	</target>
+
+	<!-- Generate PDF docs with OpenJade tool from openjade.sf.net -->
+	<target name="docs-pdf-openjade">
+		<exec executable="openjade" dir="doc/users-guide">
+			<arg value="-d"/>
+			<arg value="jeditprint.xsl"/>
+			<arg value="-t"/>
+			<arg value="tex"/>
+			<arg value="/usr/share/sgml/xml.dcl"/>
+			<arg value="users-guide.xml"/>
+		</exec>
+		<exec executable="pdfjadetex" dir="doc/users-guide">
+			<arg value="users-guide.tex"/>
+		</exec>
+		<exec executable="pdfjadetex" dir="doc/users-guide">
+			<arg value="users-guide.tex"/>
+		</exec>
+		<exec executable="pdfjadetex" dir="doc/users-guide">
+			<arg value="users-guide.tex"/>
+		</exec>
+		<rename src="doc/users-guide/users-guide.pdf"
+			dest="doc/users-guide/users-guide-letter.pdf"/>
+	</target>
+
+	<target name="docs-pdf-openjade-a4">
+		<exec executable="openjade" dir="doc/users-guide">
+			<arg value="-d"/>
+			<arg value="jeditprint-a4.xsl"/>
+			<arg value="-t"/>
+			<arg value="tex"/>
+			<arg value="/usr/share/sgml/xml.dcl"/>
+			<arg value="users-guide.xml"/>
+		</exec>
+		<exec executable="pdfjadetex" dir="doc/users-guide">
+			<arg value="users-guide.tex"/>
+		</exec>
+		<exec executable="pdfjadetex" dir="doc/users-guide">
+			<arg value="users-guide.tex"/>
+		</exec>
+		<exec executable="pdfjadetex" dir="doc/users-guide">
+			<arg value="users-guide.tex"/>
+		</exec>
+		<rename src="doc/users-guide/users-guide.pdf"
+			dest="doc/users-guide/users-guide-a4.pdf"/>
 	</target>
 
 	<target name="clean">
