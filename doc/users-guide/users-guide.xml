@@ -42,13 +42,10 @@
 <book>
 
 <bookinfo>
- <title>jEdit 3.2 User's Guide</title>
- <authorgroup>
-  <author><firstname>Slava</firstname><surname>Pestov</surname></author>
-  <author><firstname>John</firstname><surname>Gellene</surname></author>
- </authorgroup>
+ <title>jEdit 3.2</title>
+ <subtitle>using, customizing, and extending</subtitle>
 
- <copyright><year>1998-2001</year><holder>Slava Pestov</holder></copyright>
+ <copyright><year>1998</year><year>2001</year><holder>Slava Pestov</holder></copyright>
  <copyright><year>2001</year><holder>John Gellene</holder></copyright>
  <legalnotice><title>Legal Notice</title>
   <para>
@@ -57,13 +54,26 @@
    any later version published by the Free Software Foundation; with no
    <quote>Invariant Sections</quote>, <quote>Front-Cover Texts</quote> or
    <quote>Back-Cover Texts</quote>, each as defined in the license. A copy of
-   the license is included in the file <filename>COPYING.DOC.txt</filename>
+   the license can be found in the file <filename>COPYING.DOC.txt</filename>
    included with jEdit.
   </para>
  </legalnotice>
 </bookinfo>
 
 <part id="using-jedit-part"><title>Using jEdit</title>
+ <partintro>
+  <para>
+   This part of the user's guide covers jEdit's text editing commands, along
+   with basic usage of macros and plugins. Information and developing macros and
+   plugins can be found in subsequent parts of the user's guide.
+  </para>
+
+  <para>
+   This part of the user's guide was written by Slava Pestov
+   (<email>slava@jedit.org</email>).
+  </para>
+ </partintro>
+
  &basics;
  &files;
  &text-edit;
@@ -81,6 +91,19 @@
 </part>
 
 <part id="writing-modes-part"><title>Writing Edit Modes</title>
+ <partintro>
+  <para>
+   This part of the user's guide covers writing edit modes for jEdit. Edit modes
+   specify syntax highlighting rules, auto indent behavior, and various other
+   customizations for editing different file types.
+  </para>
+
+  <para>
+   This part of the user's guide was written by Slava Pestov
+   (<email>slava@jedit.org</email>).
+  </para>
+ </partintro>
+
  &writing-modes;
  &mode-tips;
  &installing-modes;
@@ -94,6 +117,27 @@
 </part>
 
 <part id="writing-plugins-part"><title>Writing Plugins</title>
+ <partintro>
+  <para>
+   This part of the user's guide covers writing plugins for jEdit. A
+   <firstterm>plugin</firstterm> is an application which is loaded and runs
+   as part of another, host application. Plugins respond to user commands
+   and perform tasks that supplement the host application's features.
+  </para>
+
+  <para>
+   Like jEdit itself, plugins are written primarily in Java. While this
+   guide assumes some working knowledge of the language, you are not
+   required to be a Java wizard. If you can write a useful application of
+   any size in Java, you can write a plugin.
+  </para>
+
+  <para>
+   This part of the user's guide was written by John Gellene
+   (<email>jgellene@nyc.rr.com</email>).
+  </para>
+ </partintro>
+
  &plugin-intro;
  &host-design;
  &plugin-api;

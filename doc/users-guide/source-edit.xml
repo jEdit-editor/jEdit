@@ -4,11 +4,11 @@
 <chapter id="source-edit"><title>Editing Source Code</title>
  <sect1 id="modes"><title>Edit Modes</title>
   <para>
-   An <firstterm>edit mode</firstterm> is an editor configuration intended to
-   edit a specific type of file. Edit modes can specify syntax highlighting
-   rules, auto indent behavior, and various useful customizations. This section
-   only covers the basics of edit modes; information about writing your own edit
-   modes can be found in <xref linkend="writing-modes-part" />.
+   An <firstterm>edit mode</firstterm> specifies syntax highlighting
+   rules, auto indent behavior, and various other customizations for editing
+   a certain file type. This section
+   only covers using and selecting edit modes; information about writing your
+   own can be found in <xref linkend="writing-modes-part" />.
   </para>
   <sect2 id="mode-selection"><title>Mode Selection</title>
    <para>

@@ -7,25 +7,10 @@
 
 <!-- This is the introduction of the jEdit 3.2 Plugin Guide -->
 
-
-<chapter id="plugin-intro"><title>Introducing the Plugin API</title>
-
-<para>
-  This is a guide to writing plugins for jEdit. A
-  <firstterm>plugin</firstterm> is an application which is loaded and runs
-  as part of another, host application. Plugins respond to user commands
-  and perform tasks that supplement the host application's features.
-<para>
+<chapter id="plugin-intro"> <title>Introducing the Plugin API</title>
 
 <para>
-  Like jEdit itself, plugins are written primarily
-	in Java. Unavoidably, some working
-	knowledge of Java is required. But if you can write a useful
-  application	of any size in Java, you can write a plugin.
-</para>
-
-<para>
-  The <firstterm>jEdit plugin API</firstterm> provides a framework for
+  The <firstterm>jEdit Plugin API</firstterm> provides a framework for
   hosting plugin applications without imposing any
   requirements on the design or function of the plugin itself. You could
   write a application that performs spell checking, displays a clock or
@@ -50,33 +35,31 @@
 
 <itemizedlist>
 	<listitem><para>
-    Supplying information about the plugin itself, such as its name,
+    Ths plugin must supply information about itself, such as its name,
     version, author, and compatibility with versions of jEdit.
   </para></listitem>
 
 	<listitem><para>
-    Activating, displaying and deactivating the plugin.
+    The plugin must provide for activating, displaying and
+    deactivating itself upon direction from the host application,
+    typically in response to user input.
   </para></listitem>
 
   <listitem><para>
-    Providing a user interface for the plugin.
+    The plugin may, but need not, provide its own user interface.
   </para>
   <para>
-    While the plugin user interface can be shown in a standard
-    Java top-level container
-    (<classname>JWindow</classname>, <classname>JDialog</classname> or
-    <classname>JFrame</classname>) in many causes it is better to use
-    the jEdit dockable window API.
-  </para>
-
-  <para>
-    Using the dockable window API, plugin windows can be
-    configured to appear in a docking window adjacent to the main editing
-    area. They can also appear as a <quote>floating</quote>, top-level frame
-    window. The docking window scheme stacks plugins in sets of tabbed
-    panes. A set of panes can appear above, below or to the left or right of
-    the editing pane. The user controls whether and where a dockable
-    window may appear.
+    If the plugin has a visible interface, it can be shown in any object
+    derived from one of Java top-level container classes:
+    <classname>JWindow</classname>, <classname>JDialog</classname>,
+    <classname>JFrame</classname>. To integrate the plugin's display with
+    the host application, the Plugin API provides an dockable window
+    facility. It allows the plugin's visible components to appear in a
+    docking window adjacent to the main editing area. They can also appear
+    as a <quote>floating</quote>, top-level frame window. The docking window
+    scheme stacks plugins in sets of tabbed panes. A set of panes can appear
+    above, below or to the left or right of the editing pane. The user
+    controls whether and where a dockable window may appear.
   </para>
 
   <para>
@@ -88,44 +71,44 @@
   </listitem>
 
   <listitem><para>
-    Defining <glossterm>actions</glossterm> that jEdit
-    will perform on behalf of the plugin upon user request.
-    Actions are short snippets of BeanShell code that provide the
-    <quote>glue</quote> between a plugin's user interface and
-    implementation.
+    The plugin may (and typically does) define <firstterm>user
+    actions</firstterm> that jEdit will perform on behalf of the plugin upon
+    user request. User actions are short snippets of BeanShell code that
+    provide the <quote>glue</quote> between a user input and
+    specifc plugin routines.
   </para>
 
   <para>
-    Generally,
-    plugins display their available actions in submenus of the
-    <guimenu>Plugins</guimenu> menu; each menu item corresponds to
-    one action. The user can also add actions to
-    the tool bar and text area right-click menu, and assign them
-    keyboard shortcuts.
+    The Plugin API makes user actions available whether or not the plugin's
+    visible components have input focus. Generally, plugins display their
+    available actions in submenus of the application's
+    <guimenu>Plugins</guimenu> menu; each menu item corresponds to one
+    action. The user can also assign actions to keyboard shortcuts, buttons
+    on the application's tool bar and entries in the text area's context menu.
   </para>
 
   </listitem>
 
 	<listitem><para>
-    Providing a range of options that the user can modify to alter the
-    plugin's configuration.
+    The plugin may provide a range of options that the user can modify to
+    alter its configuration.
   </para>
 
   <para>
-    If a plugin provides configuration options, jEdit will make them
-    available in the <guilabel>Global Options</guilabel> dialog. Each
-    plugin with options is listed in the tree view in that dialog under
-    <guilabel>Plugin Options</guilabel>. Clicking on the tree node for a
-    plugin causes the corresponding set of options to be displayed.
+    If a plugin provides configuration options in accordance with the Plugin
+    API, jEdit will make them available in the <guilabel>Global
+    Options</guilabel> dialog. Each plugin with options is listed in the
+    tree view in that dialog under <guilabel>Plugin Options</guilabel>.
+    Clicking on the tree node for a plugin causes the corresponding set
+    of options to be displayed.
   </para>
   </listitem>
 </itemizedlist>
 
 <para>
-  Many of these are optional; it is possible to write a plugin that
-  does not provide actions, or configuration options, or dockable
-  windows, for example. The majority of plugins, plugins, however,
-  provide most of the above services.
+  As noted, many of these features are optional; it is possible to write
+  a plugin that does not provide actions, configuration options, or dockable
+  windows. The majority of plugins, however,  provide most of these services.
 </para>
 
 <para>
@@ -140,12 +123,16 @@
 
 <sidebar><title>Plugins and different jEdit versions</title>
   <para>
-    The jEdit plugin API changes with each jEdit release. While the
-    majority of plugins are unaffected by most changes and will continue
-    working, if you want your
-    plugin's user experience to be as smooth as possible, you should
-    monitor the jEdit change log and mailing lists for API changes and
-    update your plugin in a timely fashion.
+    As jEdit continues to evolve and improve, elements of the Plugin API or
+    jEdit's general API may change with a new jEdit release. For example,
+    version 3.2 of jEdit introduced a set of
+    <classname>Selection</classname> classes that enable multiple text
+    selections in the editing area. On occasion an API change will break
+    code used by plugins, although efforts are made to maintain or deprecate
+    plugin-related code where possible. While the majority of plugins are
+    unaffected by most changes and will continue working, it is a good idea
+    to monitor the jEdit change log and mailing lists for API changes and update
+    your plugin as necessary.
   </para>
 </sidebar>
 

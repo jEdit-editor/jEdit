@@ -9,6 +9,9 @@ TO DO
 - don't use hacked BeanShell 1.1a18
 - installing source for already installed plugins
 - API guide changes from John
+- save markers on close and don't set dirty flag
+- update macros for new BeanShell implied imports
+- write <partintro>'s for part 1, part 2
 
 + before 3.2final:
 
