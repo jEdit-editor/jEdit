@@ -10,6 +10,8 @@ JEDIT VERSION HISTORY
   indents all lines in the selection, or the current line if nothing
   is selected
 - BeanShell syntax highlighting for .bsh files
+- Gutter shows line numbers, plugins can add highlighters
+  (Mike Dillon)
 
 + Enhancements
 
@@ -43,9 +45,8 @@ JEDIT VERSION HISTORY
 - Because of the split pane code, plugins should now add highlighters
   when they receive the ViewUpdate.TEXTAREA_CREATED message, instead of
   ViewUpdate.CREATED as before
-- TextAreaPainter.Highlight renamed to TextAreaHighlight -- in the
-  future, this interface will be used to paint highlights in the
-  gutter
+- TextAreaPainter.Highlight renamed to TextAreaHighlight, because this
+  interface is now used to paint highlights in the gutter as well
 - EBPlugin.getName() removed
 
 * Version 2.3pre2

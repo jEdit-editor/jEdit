@@ -694,6 +694,13 @@ public class View extends JFrame implements EBComponent
 		myPainter.setForeground(painter.getForeground());
 		myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
 
+		Gutter myGutter = textArea.getGutter();
+		Gutter gutter = copy.getGutter();
+		myGutter.setGutterWidth(gutter.getGutterWidth());
+		myGutter.setCollapsed(gutter.isCollapsed());
+		myGutter.setLineNumberingEnabled(gutter.isLineNumberingEnabled());
+		myGutter.setHighlightInterval(gutter.getHighlightInterval());
+
 		textArea.setCaretBlinkEnabled(copy.isCaretBlinkEnabled());
 		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
 			copy.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
@@ -1258,6 +1265,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.134  2000/02/01 06:49:39  sp
+ * View.initTextArea() updated for gutter
+ *
  * Revision 1.133  2000/02/01 06:12:33  sp
  * Gutter added (still not fully functional)
  *
@@ -1287,20 +1297,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.124  2000/01/21 00:35:29  sp
  * Various updates
- *
- * Revision 1.123  2000/01/17 07:03:41  sp
- * File->Current Dir menu, other stuff
- *
- * Revision 1.122  2000/01/16 06:09:27  sp
- * Bug fixes
- *
- * Revision 1.121  2000/01/15 04:15:51  sp
- * Help menu updates, misc. GUI updates
- *
- * Revision 1.120  2000/01/14 04:23:50  sp
- * 2.3pre2 stuff
- *
- * Revision 1.119  1999/12/22 06:36:40  sp
- * 2.3pre1 stuff
  *
  */

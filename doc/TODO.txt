@@ -5,8 +5,7 @@ JEDIT TO DO
 - Double-click drag doesn't work backwards
 - CaretUndo doesn't work on 'redo'
 - Check file mod status on focus
-- Update initTextArea(Z,Z) method for gutter
-- Option pane for gutter
+- Option pane for gutter, customizable gutter font
 
 ------- Later -------
 
@@ -28,7 +27,7 @@ JEDIT TO DO
   - document views, buffers
   - document GUIUtilities.load/saveGeometry
   - how to write edit modes and token markers
-  - how to write text area hilites
+  - how to write text area and gutter hilites
 - Menu bar and tool bar loading needs to work outside of views
 - Integrate XMode
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
