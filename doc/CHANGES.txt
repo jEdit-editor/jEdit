@@ -5,6 +5,7 @@ JEDIT VERSION HISTORY
 + New Features
 
 - Scroll bar position is now saved while switching buffers
+- You can now sort by label or shortcut in the key binding editor
 
 + Enhancements
 

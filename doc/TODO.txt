@@ -8,9 +8,11 @@ JEDIT TO DO
   can be edited in the shortcuts option pane!)
 - jEdit.getBooleanProperty() for yes/no stuff
 - Plugin loading and startup is slow
+- Update docs for shortcut pane changes
 
 ------- Features -------
 
+- C+END/C+HOME
 - Word wrap
 - Write user and developer documentation for EditBus
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily

@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.options;
 
 import javax.swing.table.*;
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.textarea.InputHandler;
@@ -40,6 +41,15 @@ public class KeyTableOptionPane extends AbstractOptionPane
 		add(BorderLayout.NORTH,new JLabel(jEdit.getProperty("options"
 			+ ".keys.note")));
 		add(BorderLayout.CENTER,createKeyTableScroller());
+
+		JPanel panel = new JPanel();
+		label = new JButton(jEdit.getProperty("options.keys.sort.label"));
+		label.addActionListener(new ActionHandler());
+		panel.add(label);
+		shortcut = new JButton(jEdit.getProperty("options.keys.sort.shortcut"));
+		shortcut.addActionListener(new ActionHandler());
+		panel.add(shortcut);
+		add(BorderLayout.SOUTH,panel);
 	}
 
 	public void save()
@@ -49,6 +59,8 @@ public class KeyTableOptionPane extends AbstractOptionPane
 
 	// private members
 	private JTable keyTable;
+	private JButton label;
+	private JButton shortcut;
 	private KeyTableModel keyModel;
 
 	private JScrollPane createKeyTableScroller()
@@ -66,6 +78,14 @@ public class KeyTableOptionPane extends AbstractOptionPane
 	private KeyTableModel createKeyTableModel()
 	{
 		return new KeyTableModel();
+	}
+
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			keyModel.sort(evt.getSource() == label ? 0 : 1);
+		}
 	}
 }
 
@@ -108,8 +128,13 @@ class KeyTableModel extends AbstractTableModel
 		// Add macros
 		addMacroBindings(Macros.getMacros());
 
-		// Sort
-		MiscUtilities.quicksort(bindings,new KeyCompare());
+		sort(0);
+	}
+
+	public void sort(int col)
+	{
+		MiscUtilities.quicksort(bindings,new KeyCompare(col));
+		fireTableDataChanged();
 	}
 
 	public int getColumnCount()
@@ -190,13 +215,40 @@ class KeyTableModel extends AbstractTableModel
 			}
 		}
 	}
-		
+
 	class KeyCompare implements MiscUtilities.Compare
 	{
+		int col;
+
+		KeyCompare(int col)
+		{
+			this.col = col;
+		}
+
 		public int compare(Object obj1, Object obj2)
 		{
-			return ((KeyBinding)obj1).label.compareTo(
-				((KeyBinding)obj2).label);
+			KeyBinding k1 = (KeyBinding)obj1;
+			KeyBinding k2 = (KeyBinding)obj2;
+
+			String label1 = k1.label;
+			String label2 = k2.label;
+
+			if(col == 0)
+				return label1.compareTo(label2);
+			else
+			{
+				String shortcut1 = k1.shortcut;
+				String shortcut2 = k2.shortcut;
+
+				if(shortcut1 == null && shortcut2 != null)
+					return 1;
+				else if(shortcut2 == null && shortcut1 != null)
+					return -1;
+				else if(shortcut1 == null && shortcut2 == null)
+					return label1.compareTo(label2);
+				else
+					return shortcut1.compareTo(shortcut2);
+			}
 		}
 	}
 
@@ -218,6 +270,9 @@ class KeyTableModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  1999/11/30 01:37:35  sp
+ * New view icon, shortcut pane updates, session bug fix
+ *
  * Revision 1.8  1999/11/10 10:43:01  sp
  * Macros can now have shortcuts, various miscallaneous updates
  *

@@ -142,6 +142,8 @@ public class Sessions
 		String path = null;
 		Integer selStart = null;
 		Integer selEnd = null;
+		Integer firstLine = null;
+		Integer horizontalOffset = null;
 		boolean current = false;
 
 		StringTokenizer st = new StringTokenizer(line,"\t");
@@ -155,6 +157,10 @@ public class Sessions
 				selStart = new Integer(token.substring(9));
 			else if(token.startsWith("selEnd:"))
 				selEnd = new Integer(token.substring(7));
+			else if(token.startsWith("firstLine:"))
+				firstLine = new Integer(token.substring(10));
+			else if(token.startsWith("horizontalOffset:"))
+				horizontalOffset = new Integer(token.substring(17));
 			else if(token.equals("current"))
 				current = true;
 		}
@@ -164,10 +170,13 @@ public class Sessions
 
 		Buffer buffer = jEdit.openFile(null,null,path,false,false);
 
-		if(selStart != null && selEnd != null)
+		if(selStart != null && selEnd != null
+			&& firstLine != null && horizontalOffset != null)
 		{
 			buffer.putProperty(Buffer.SELECTION_START,selStart);
 			buffer.putProperty(Buffer.SELECTION_END,selEnd);
+			buffer.putProperty(Buffer.SCROLL_VERT,firstLine);
+			buffer.putProperty(Buffer.SCROLL_HORIZ,horizontalOffset);
 		}
 
 		return (current ? buffer : null);
@@ -184,14 +193,24 @@ public class Sessions
 
 		Integer start = (Integer)buffer.getProperty(Buffer.SELECTION_START);
 		Integer end = (Integer)buffer.getProperty(Buffer.SELECTION_END);
-		
-		if(start != null && end != null)
+		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
+		Integer horizontalOffset = (Integer)buffer.getProperty(
+			Buffer.SCROLL_HORIZ);
+
+		if(start != null && end != null
+			&& firstLine != null && horizontalOffset != null)
 		{
 			out.write("\tselStart:");
 			out.write(start.toString());
 
 			out.write("\tselEnd:");
 			out.write(end.toString());
+
+			out.write("\tfirstLine:");
+			out.write(firstLine.toString());
+
+			out.write("\thorizontalOffset:");
+			out.write(horizontalOffset.toString());
 		}
 
 		if(view.getBuffer() == buffer)
@@ -202,6 +221,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  1999/11/30 01:37:35  sp
+ * New view icon, shortcut pane updates, session bug fix
+ *
  * Revision 1.9  1999/11/29 02:45:50  sp
  * Scroll bar position saved when switching buffers
  *

@@ -22,7 +22,7 @@ view.toolbar=new-file new-view open-file close-file - save save-all - \
 	print - undo redo - cut copy paste - help
 
 new-file.icon=New.gif
-new-view.icon=Computer.gif
+new-view.icon=NewView.gif
 open-file.icon=Open.gif
 close-file.icon=Delete.gif
 save.icon=Save.gif
@@ -664,6 +664,8 @@ options.keys.label=Shortcuts
 options.keys.note=Restart jEdit for shortcut changes to take effect
 options.keys.name=Command
 options.keys.binding=Keyboard shortcut
+options.keys.sort.label=Sort by label
+options.keys.sort.shortcut=Sort by shortcut
 options.filters.label=File Filters
 options.filters.name=Name
 options.filters.re=Glob Pattern

@@ -372,17 +372,20 @@ public class View extends JFrame implements EBComponent
 		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
 		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
 
-		if(start != null && end != null && rectSel != null
-			&& firstLine != null && horizontalOffset != null
-			&& overwrite != null)
+		if(start != null && end != null
+			&& firstLine != null && horizontalOffset != null)
 		{
 			textArea.select(Math.min(start.intValue(),
 				buffer.getLength()),
 				Math.min(end.intValue(),
 				buffer.getLength()));
-			textArea.setSelectionRectangular(rectSel.booleanValue());
 			textArea.setFirstLine(firstLine.intValue());
 			textArea.setHorizontalOffset(horizontalOffset.intValue());
+		}
+
+		if(rectSel != null && overwrite != null)
+		{
+			textArea.setSelectionRectangular(rectSel.booleanValue());
 			textArea.setOverwriteEnabled(overwrite.booleanValue());
 		}
 
@@ -878,6 +881,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.113  1999/11/30 01:37:35  sp
+ * New view icon, shortcut pane updates, session bug fix
+ *
  * Revision 1.112  1999/11/29 02:45:50  sp
  * Scroll bar position saved when switching buffers
  *
