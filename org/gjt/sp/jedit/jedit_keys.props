@@ -41,9 +41,12 @@ repeat.shortcut=C+ENTER
 
 # Function keys
 help.shortcut=F1
-close-all.shortcut=F2
-save-all.shortcut=F3
-send.shortcut=F4
+reload.shortcut=F2
+reload-all.shortcut=S+F2
+close-all.shortcut=F3
+save-all.shortcut=S+F3
+load-session.shortcut=F4
+save-session.shortcut=S+F4
 paste-previous.shortcut=F5
 view-registers.shortcut=F6
 search-and-replace.shortcut=F7
@@ -56,6 +59,7 @@ next-buffer.shortcut=F12
 select-all.shortcut=C+a
 expand-abbrev.shortcut=C+b
 copy.shortcut=C+c
+delete-line.shortcut=C+d
 find.shortcut=C+f
 find-next.shortcut=C+g
 find-selection.shortcut=C+h
@@ -63,7 +67,6 @@ goto-end-indent.shortcut=C+i
 join-lines.shortcut=C+j
 exchange-caret-register.shortcut=C+k
 goto-line.shortcut=C+l
-set-marker.shortcut=C+m
 new-file.shortcut=C+n
 open-file.shortcut=C+o
 print.shortcut=C+p
@@ -76,20 +79,15 @@ cut.shortcut=C+x
 goto-register.shortcut=C+y
 undo.shortcut=C+z
 
-# C+d
-delete-line.shortcut=C+d C+d
-delete-paragraph.shortcut=C+d C+e
-delete-end-line.shortcut=C+d C+f
-delete-start-line.shortcut=C+d C+s
-
 # C+e
 box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
-select-none.shortcut=C+e C+d
+delete-paragraph.shortcut=C+e C+d
 indent-line.shortcut=C+e C+i
 scroll-line.shortcut=C+e C+j
 block-comment.shortcut=C+e C+k
 select-line-range.shortcut=C+e C+l
+set-marker.shortcut=C+e C+m
 new-view.shortcut=C+e C+n
 open-url.shortcut=C+e C+o
 exit.shortcut=C+e C+q
@@ -98,8 +96,13 @@ tab.shortcut=C+e C+t
 untab.shortcut=C+e C+u
 close-view.shortcut=C+e C+w
 redo.shortcut=C+e C+z
-prev-bracket-exp.shortcut=C+e C+[
-next-bracket-exp.shortcut=C+e C+]
+
+# C+m
+play-last-macro.shortcut=C+m C+l
+record-temp-macro.shortcut=C+m C+m
+play-temp-macro.shortcut=C+m C+p
+record-macro.shortcut=C+m C+r
+stop-recording.shortcut=C+m C+s
 
 # C+r
 append-string-register.shortcut=C+r C+a
@@ -109,18 +112,13 @@ clear-register.shortcut=C+r C+l
 paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x
 
-# C+e C+m
-play-last-macro.shortcut=C+e C+m C+l
-record-temp-macro.shortcut=C+e C+m C+m
-play-temp-macro.shortcut=C+e C+m C+p
-record-macro.shortcut=C+e C+m C+r
-stop-recording.shortcut=C+e C+m C+s
-
 # Other keys
 indent-on-tab.shortcut=TAB
 indent-on-enter.shortcut=ENTER
 select-block.shortcut=C+[
 locate-bracket.shortcut=C+]
+prev-bracket-exp.shortcut=CA+[
+next-bracket-exp.shortcut=CA+]
 prev-paragraph.shortcut=C+UP
 next-paragraph.shortcut=C+DOWN
 select-prev-paragraph.shortcut=CS+UP
@@ -128,3 +126,5 @@ select-next-paragraph.shortcut=CS+DOWN
 shift-left.shortcut=A+LEFT
 shift-right.shortcut=A+RIGHT
 select-none.shortcut=ESCAPE
+delete-end-line.shortcut=CS+BACK_SPACE
+delete-start-line.shortcut=CS+DELETE

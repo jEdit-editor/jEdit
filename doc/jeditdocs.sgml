@@ -151,8 +151,8 @@
    top level menu is listed, followed by successive levels of submenus,
    followed by the menu item itself. All menu components are separated
    by greater-than symbols (<quote>&gt;</>). For example,
-   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete
-   Line</> refers to the <guimenuitem>Delete Line</> item of the
+   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Indent
+   Line</> refers to the <guimenuitem>Indent Line</> item of the
    <guisubmenu>Lines</> submenu of the <guimenu>Edit</> menu.
   </para>
   <para>
@@ -179,9 +179,9 @@
    <keycap>Modifier</> is the modifier key that must be pressed in
    addition to <keycap>Key</> to invoke that command. When multiple
    keystrokes are present in a binding, they will be listed in order,
-   for example the shortcut for <guimenuitem>Delete Line</> is
-   <keycombo><keycap>Control</><keycap>D</></keycombo>
-   <keycombo><keycap>Control</><keycap>D</></keycombo>.
+   for example the shortcut for <guimenuitem>Indent Line</> is
+   <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>I</></keycombo>.
   </para>
  </sect1>
 </chapter>
@@ -627,12 +627,14 @@
     will be lost.
    </para>
    <para>
-    <guimenu>File</>&gt;<guimenuitem>Reload</> will discard your changes
+    <guimenu>File</>&gt;<guimenuitem>Reload</> (keyboard equivalent:
+    <keycap>F2</>) will discard your changes
     and instead reload the file from disk. If the buffer has unsaved changes,
     you will be asked for confirmation first.
    </para>
    <para>
-    <guimenu>File</>&gt;<guimenuitem>Reload All Buffers</> will discard your
+    <guimenu>File</>&gt;<guimenuitem>Reload All Buffers</> (keyboard equivalent:
+    <keycombo><keycap>Shift</><keycap>F2</></keycombo>) will discard your
     changes in <emphasis>all open buffers</>
     and reload them from disk. This command will ask for comfirmation first.
     It is useful after performing a CVS checkin or similar; CVS inserts
@@ -692,7 +694,8 @@
     <indexterm><primary>Save All Buffers command</></indexterm>
     <indexterm><primary>File menu</></indexterm>
     <guimenu>File</>&gt;<guimenuitem>Save All Buffers</>
-    (keyboard equivalent: <keycap>F3</>) will save all buffers;
+    (keyboard equivalent:
+    <keycap>F3</>) will save all buffers;
     a confirmation dialog box is issued first.
    </para>
   </sect2>
@@ -744,7 +747,7 @@
   <para>
    <indexterm><primary>Close All Buffers command</></indexterm>
    <guimenu>File</>&gt;<guimenuitem>Close All Buffers</>
-   (keyboard equivalent: <keycap>F2</>)
+   (keyboard equivalent: <keycombo><keycap>Shift</><keycap>F3</></>)
    will close all currently open buffers. If any buffers have unsaved
    changes, a dialog box will be displayed, listing them all. To discard
    changes to a buffer, select it from the list and click <guibutton>Discard
@@ -1014,8 +1017,8 @@
    <indexterm><primary>Lines menu</></indexterm>
    <indexterm><primary>Edit menu</></indexterm>
    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete Line</>
-   (keyboard equivalent: <keycombo><keycap>Control</><keycap>D</>
-   </keycombo> <keycombo><keycap>Control</><keycap>D</></keycombo>) will
+   (keyboard equivalent: <keycombo><keycap>Control</><keycap>D</></keycombo>)
+   will
    delete the line that the caret is positioned on.
   </para>
   <para>
@@ -1023,8 +1026,8 @@
    <indexterm><primary>Delete Paragraph command</></indexterm>
    <indexterm><primary>Paragraphs menu</></indexterm>
    <guimenu>Edit</>&gt;<guisubmenu>Paragraphs</>&gt;<guimenuitem>Delete
-   Paragraph</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>D</>
-   </keycombo> <keycombo><keycap>Control</><keycap>E</></keycombo>) will
+   Paragraph</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</>
+   </keycombo> <keycombo><keycap>Control</><keycap>D</></keycombo>) will
    delete the paragraph containing the caret.
   </para>
   <para>
@@ -1245,12 +1248,14 @@
    file.
   </para>
   <para>
-   <guimenu>File</>&gt;<guimenuitem>Load Session</> loads
+   <guimenu>File</>&gt;<guimenuitem>Load Session</> (keyboard equivalent:
+   <keycap>F4</>) loads
    a session while jEdit is running from a file specified in a file
    selection dialog box.
   </para>
   <para>
-   <guimenu>File</>&gt;<guimenuitem>Save Session</> saves the list of
+   <guimenu>File</>&gt;<guimenuitem>Save Session</> (keyboard equivalent:
+   <keycombo><keycap>Shift</><keycap>F4</></keycombo>) saves the list of
    all open files to a session specified in a file selection dialog box.
   </para>
  </sect1>
@@ -1276,6 +1281,7 @@
    <indexterm><primary>Search menu</></indexterm>
    <indexterm><primary>selection</></indexterm>
    <guimenu>Search</>&gt;<guimenuitem>Set Marker</> (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>M</></keycombo>) will prompt for
    a marker name (the default being the selected text) and set a
    marker at the caret position.
@@ -1576,7 +1582,6 @@
     most recently recorded or played macro can be invoked with the
     <guimenu>Macros</>&gt;<guimenuitem>Play Last Macro</> command (keyboard
     equivalent:
-    <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>M</></keycombo>
     <keycombo><keycap>Control</><keycap>L</></keycombo>
    </para>
@@ -1587,7 +1592,6 @@
    <para>
     <guimenu>Macros</>&gt;<guimenuitem>Record Macro</> (keyboard
     equivalent:
-    <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>M</></keycombo>
     <keycombo><keycap>Control</><keycap>R</></keycombo>) prompts for
     a macro name, and begins recording to a file with that name
@@ -1608,7 +1612,6 @@
    <para>
     <guimenu>Macros</>&gt;<guimenuitem>Stop Recording</> (keyboard
     equivalent:
-    <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>M</></keycombo>
     <keycombo><keycap>Control</><keycap>S</></keycombo>) stops any
     recording currently in progress. It also switches to the buffer where
@@ -1632,7 +1635,6 @@
    <para>
     <guimenu>Macros</>&gt;<guimenuitem>Record Temporary Macro</> (keyboard
     equivalent:
-    <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>M</></keycombo>
     <keycombo><keycap>Control</><keycap>M</></keycombo>) works in a
     similar fashion to the <guimenuitem>Record Macro</> command, except that
@@ -1651,7 +1653,6 @@
    <para>
     <guimenu>Macros</>&gt;<guimenuitem>Play Temporary Macro</> (keyboard
     equivalent:
-    <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>M</></keycombo>
     <keycombo><keycap>Control</><keycap>P</></keycombo>) plays the
     macro recorded to the <filename>__temporary__.macro</> buffer.
@@ -1705,8 +1706,8 @@
     <indexterm><primary>deleting</><secondary>to the start
     of the line</></indexterm>
     <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete to
-    Start of Line</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>D</></keycombo>
-    <keycombo><keycap>Control</><keycap>S</></keycombo>) deletes from the
+    Start of Line</> (keyboard equivalent: <keycombo><keycap>Control</>
+    <keycap>Control</><keycap>Backspace</></keycombo>) deletes from the
     start of the current line to the caret position.
    </para>
    <para>
@@ -1714,8 +1715,8 @@
     <indexterm><primary>deleting</><secondary>to the end
     of the line</></indexterm>
     <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete to
-    End of Line</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>D</></keycombo>
-    <keycombo><keycap>Control</><keycap>F</></keycombo>) deletes from the
+    End of Line</> (keyboard equivalent:
+    <keycombo><keycap>Control</><keycap>Control</><keycap>Delete</></keycombo>) deletes from the
     caret position to the end of the current line.
    </para>
    <para>
@@ -1936,8 +1937,8 @@
  <sect1 id=bracket-matching><title>Bracket Matching</>
   <indexterm><primary>bracket matching</></indexterm>
   <indexterm><primary>Locate Bracket command</></indexterm>
-  <indexterm><primary>Previous Bracket command</></indexterm>
-  <indexterm><primary>Next Bracket command</></indexterm>
+  <indexterm><primary>Go to Previous Bracket command</></indexterm>
+  <indexterm><primary>Go to Next Bracket command</></indexterm>
   <indexterm><primary>Edit menu</></indexterm>
   <indexterm><primary>selecting</><secondary>a code block</></indexterm>
   <indexterm><primary>Select Code Block command</></indexterm>
@@ -1970,15 +1971,13 @@
    will move the caret to the bracket matching the one before the caret.
   </para>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Previous Bracket</> (keyboard
-   equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>[</></keycombo>)
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Go to Previous Bracket</> (keyboard
+   equivalent: <keycombo><keycap>Control</><keycap>Alt</><keycap>[</></keycombo>)
    will move the caret to the previous open bracket.
   </para>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Next Bracket</> (keyboard
-   equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>]</></keycombo>)
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Go to Next Bracket</> (keyboard
+   equivalent: <keycombo><keycap>Control</><keycap>Alt</><keycap>]</></keycombo>)
    will move the caret to the next closed bracket.
   </para>
   <para>

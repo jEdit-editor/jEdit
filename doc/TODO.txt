@@ -7,6 +7,7 @@ JEDIT TO DO
   flexible, so that BeanShell and friends can also have shortcuts (that
   can be edited in the shortcuts option pane!)
 - jEdit.getBooleanProperty() for yes/no stuff
+- Only load plugin actions when necessary
 
 + Features
 

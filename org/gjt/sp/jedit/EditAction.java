@@ -20,9 +20,13 @@
 package org.gjt.sp.jedit;
 
 import javax.swing.JPopupMenu;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
 import java.util.EventObject;
+import org.gjt.sp.jedit.textarea.InputHandler;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.util.Log;
 
 /**
  * The class all jEdit actions must extend. It is an
@@ -59,7 +63,7 @@ import java.util.EventObject;
  * @see jEdit#getAction(String)
  * @see jEdit#getActions()
  * @see jEdit#addAction(org.gjt.sp.jedit.EditAction)
- * @see GUIUtilities#loadMenubar(org.gjt.sp.jedit.View,String)
+ * @see GUIUtilities#loadMenuItem(org.gjt.sp.jedit.View,String)
  */
 public abstract class EditAction implements ActionListener 
 {
@@ -148,11 +152,65 @@ public abstract class EditAction implements ActionListener
 
 	// private members
 	private String name;
+
+	public static class Wrapper extends EditAction
+		implements InputHandler.NonRepeatable,
+		InputHandler.NonRecordable
+	{
+		public Wrapper(String name)
+		{
+			super(name);
+		}
+
+		public Wrapper(EditAction action)
+		{
+			super(action.name);
+			this.action = action;
+		}
+
+		public void actionPerformed(ActionEvent evt)
+		{
+			View view = EditAction.getView(evt);
+			JEditTextArea textArea = view.getTextArea();
+
+			if(action == null)
+				loadAction();
+
+			textArea.getInputHandler().executeAction(action,
+				textArea,evt.getActionCommand());
+		}
+
+		// private members
+		private EditAction action;
+
+		private void loadAction()
+		{
+			String className = "org.gjt.sp.jedit.actions."
+				+ getName().replace('-','_');
+
+			Log.log(Log.DEBUG,this,"Loading action " + name +
+				" (class=" + className + ")");
+
+			try
+			{
+				action = (EditAction)Class.forName(className)
+					.newInstance();
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,"Cannot load action " + className);
+				Log.log(Log.ERROR,this,e);
+			}
+		}
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  1999/11/27 06:01:20  sp
+ * Faster file loading, geometry fix
+ *
  * Revision 1.14  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

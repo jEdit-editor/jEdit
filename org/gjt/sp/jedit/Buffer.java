@@ -58,12 +58,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public void propertiesChanged()
 	{
 		setFlag(SYNTAX,"on".equals(getProperty("syntax")));
-		Integer tabSize = (Integer)mode.getProperty("tabSize");
-		if(tabSize != null)
-			putProperty("tabSize",tabSize);
-		else
-			putProperty("tabSize",new Integer(jEdit.getProperty(
-				"buffer.tabSize")));
 	}
 
 	/**
@@ -192,14 +186,12 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			if(getFlag(NEW_FILE) || mode.getName().equals("text"))
 				setMode();
 			setFlag(AUTOSAVE_DIRTY,false);
-			setFlag(DIRTY,false);
+			setDirty(false);
 			setFlag(READ_ONLY,false);
 			setFlag(NEW_FILE,false);
 
 			autosaveFile.delete();
 			modTime = file.lastModified();
-
-		EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
 
 			returnValue = true;
 		}
@@ -242,21 +234,25 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		load(view);
 		loadMarkers();
 
-		// Maybe incorrect? Anyway people won't notice
+		// reload syntax flag
+		propertiesChanged();
 		setMode();
 
-		tokenizeLines();
+		if(tokenMarker != null)
+		{
+			tokenMarker.insertLines(0,getDefaultRootElement()
+				.getElementCount());
+			tokenizeLines();
+		}
+
+		setFlag(INIT,false);
 
 		// Clear dirty flag
-		setFlag(DIRTY,false);
+		setDirty(false);
 
 		// Hide the wait cursor
 		if(view != null)
 			view.hideWaitCursor();
-
-		EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
-
-		setFlag(INIT,false);
 	}
 
 	/**
@@ -353,7 +349,11 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			setFlag(DIRTY,false);
 
 		if(d != old_d)
+		{
 			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
+			if(name.toLowerCase().endsWith(".macro"))
+				Macros.loadMacros();
+		}
 	}
 
 	/**
@@ -875,6 +875,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		URLConnection connection = null;
 		StringBuffer sbuf = new StringBuffer(Math.max(
 			(int)file.length(),IOBUFSIZE * 4));
+		Vector lines = new Vector(1000);
 		try
 		{
 			
@@ -914,6 +915,8 @@ loop:		for(int i = 0; i < markers.size(); i++)
 						sbuf.append(buf,lastLine,i -
 							lastLine);
 						sbuf.append('\n');
+						lines.addElement(new Integer(
+							sbuf.length()));
 						lastLine = i + 1;
 						break;
 					case '\n':
@@ -931,6 +934,8 @@ loop:		for(int i = 0; i < markers.size(); i++)
 							sbuf.append(buf,lastLine,
 								i - lastLine);
 							sbuf.append('\n');
+							lines.addElement(new Integer(
+								sbuf.length()));
 							lastLine = i + 1;
 						}
 						break;
@@ -959,24 +964,32 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			// For `reload' command
 			remove(0,getLength());
 
-			insertString(0,sbuf.toString(),null);
+			getContent().insertString(0,sbuf.toString());
+
+			Element map = getDefaultRootElement();
+			Element[] elements = new Element[lines.size()];
+			for(int i = 0; i < lines.size(); i++)
+			{
+				int start;
+				if(i == 0)
+					start = 0;
+				else
+					start = ((Integer)lines.elementAt(i-1)).intValue();
+				int end = ((Integer)lines.elementAt(i)).intValue();
+				elements[i] = createLeafElement(map,null,
+					start,end);
+				if(i < 10)
+				{
+					String line = getText(start,
+						end - start);
+					processProperty(line);
+				}
+			}
+			((BranchElement)map).replace(0,map.getElementCount(),
+				elements);
+
 			setFlag(NEW_FILE,false);
 			modTime = file.lastModified();
-
-			// One day, we should interleave this code into
-			// the above loop for top hat efficency. But for
-			// now, this will suffice.
-			Element map = getDefaultRootElement();
-			for(int i = 0; i < 10; i++)
-			{
-				Element lineElement = map.getElement(i);
-				if(lineElement == null)
-					break;
-				String line = getText(lineElement.getStartOffset(),
-					lineElement.getEndOffset()
-					- lineElement.getStartOffset());
-				processProperty(line);
-			}
 		}
 		catch(BadLocationException bl)
 		{
@@ -1341,6 +1354,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.106  1999/11/27 06:01:20  sp
+ * Faster file loading, geometry fix
+ *
  * Revision 1.105  1999/11/19 08:54:51  sp
  * EditBus integrated into the core, event system gone, bug fixes
  *

@@ -36,19 +36,22 @@ import org.gjt.sp.jedit.GUIUtilities;
 public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
 	public EnhancedCheckBoxMenuItem(String label, String keyBinding,
-		EditAction action, ActionListener actionWrapper,
-		String actionCommand)
+		EditAction action, String actionCommand)
 	{
 		super(label);
 		this.keyBinding = keyBinding;
 		this.action = action;
 
-		if(actionWrapper != null)
-			addActionListener(actionWrapper);
+		if(action != null)
+		{
+			setEnabled(true);
+			addActionListener(action);
+		}
+		else
+			setEnabled(false);
 
 		setActionCommand(actionCommand);
 		setModel(new Model());
-		setEnabled(action != null);
 
 		acceleratorFont = UIManager
 			.getFont("MenuItem.acceleratorFont");

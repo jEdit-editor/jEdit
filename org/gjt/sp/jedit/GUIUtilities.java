@@ -212,31 +212,6 @@ public class GUIUtilities
 	}
 
 	/**
-	 * Creates an action listener that invokes the specified action,
-	 * taking into account the current repeat count, macro recorder,
-	 * and so on.
-	 */
-	public static ActionListener createActionWrapper(final ActionListener l)
-	{
-		if(l instanceof InputHandler.NonRepeatable &&
-			l instanceof InputHandler.NonRecordable)
-			return l;
-		else
-		{
-			return new ActionListener()
-			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					View view = EditAction.getView(evt);
-					JEditTextArea textArea = view.getTextArea();
-					textArea.getInputHandler().executeAction(l,textArea,
-						evt.getActionCommand());
-				}
-			};
-		}
-	}
-
-	/**
 	 * Displays a dialog box.
 	 * The title of the dialog is fetched from
 	 * the <code><i>name</i>.title</code> property. The message is fetched
@@ -485,9 +460,6 @@ public class GUIUtilities
 	 */
 	public static void loadGeometry(Window win, String name)
 	{
-		if(!"on".equals(jEdit.getProperty("saveGeometry")))
-			return;
-
 		int x, y, width, height;
 
 		try
@@ -554,9 +526,6 @@ public class GUIUtilities
 	 */
 	public static void saveGeometry(Window win, String name)
 	{
-		if(!"on".equals(jEdit.getProperty("saveGeometry")))
-			return;
-
 		Point location = win.getLocation();
 		Dimension size = win.getSize();
 		jEdit.setProperty(name + ".x",String.valueOf(location.x));
@@ -599,6 +568,7 @@ public class GUIUtilities
 	}
 
 	// package-private members
+	static JFileChooser chooser;
 
 	static void showSplashScreen()
 	{
@@ -613,20 +583,7 @@ public class GUIUtilities
 	}
 
 	// private members
-	static
-	{
-		EditBus.addToBus(new EBComponent()
-		{
-			public void handleMessage(EBMessage msg)
-			{
-				if(msg instanceof org.gjt.sp.jedit.msg.PropertiesChanged)
-					chooser = null;
-			}
-		});
-	}
-
 	private static SplashScreen splash;
-	private static JFileChooser chooser;
 	// since the names of menu items, menus, tool bars, etc are
 	// unique because of properties, we can store all in one
 	// hashtable.
@@ -706,6 +663,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.44  1999/11/27 06:01:20  sp
+ * Faster file loading, geometry fix
+ *
  * Revision 1.43  1999/11/26 01:18:49  sp
  * Optimizations, splash screen updates, misc stuff
  *

@@ -16,16 +16,6 @@ lineSep.windows=DOS/Windows (\\r\\n)
 lineSep.mac=MacOS (\\r)
 
 ###
-### JAR LOADER MESSAGES
-###
-
-jar.error.deps=Dependency check failed: {0}\n\
-	The following is required to use this plugin:
-jar.what.jdk=    Java version >= {0}
-jar.what.jedit=    jEdit version >= {0}
-jar.what.class=    Existance of class {0}
-
-###
 ### TOOLBAR
 ###
 view.toolbar=new-file new-view open-file close-file - save save-all - \
@@ -105,19 +95,19 @@ open-url.label=Open $URL...
 open-selection.label=Open Sele$ction
 open-recent.label=O$pen Recent
 no-recent.label=No Recent Files
-reload.label=Re$load
-reload-all.label=Reload All Buffers...
+reload.label=$Reload
+reload-all.label=Reload $All Buffers...
 close-file.label=$Close File
 close-all.label=Close All $Buffers
 close-view.label=Close Vie$w
-save.label=S$ave
+save.label=$Save
 save-as.label=Sa$ve As...
 save-url.label=Save $to URL...
-save-all.label=Save All Buffers...
+save-all.label=Save A$ll Buffers...
 send.label=Sen$d...
-print.label=Pr$int...
-load-session.label=Load Session...
-save-session.label=Save Session...
+print.label=$Print...
+load-session.label=Load S$ession...
+save-session.label=Save Sess$ion...
 buffer-options.label=Buffer Options...
 global-options.label=Global Options...
 plugin-options.label=Plugin Options...
@@ -148,7 +138,7 @@ edit=undo \
      %block
 edit.label=$Edit
 undo.label=$Undo
-redo.label=Re$do
+redo.label=$Redo
 cut.label=$Cut
 copy.label=C$opy
 paste.label=$Paste
@@ -160,7 +150,7 @@ select-line-range.label=Select L$ine Range...
 expand-abbrev.label=E$xpand Abbreviation
 tab.label=$Spaces to Tabs
 untab.label=$Tabs to Spaces
-word-count.label=Word Count...
+word-count.label=$Word Count...
 
 ### Line menu
 line=indent-line \
@@ -213,8 +203,8 @@ block=select-block \
 block.label=Source Code
 select-block.label=Select Code Block
 locate-bracket.label=Locate Bracket
-prev-bracket-exp.label=Previous Bracket
-next-bracket-exp.label=Next Bracket
+prev-bracket-exp.label=Go to Previous Bracket
+next-bracket-exp.label=Go to Next Bracket
 wing-comment.label=Wing Comment
 box-comment.label=Box Comment
 block-comment.label=Block Comment
@@ -239,10 +229,10 @@ cut-string-register.label=$Cut to Register
 copy-string-register.label=C$opy to Register
 append-string-register.label=$Append to Register
 paste-string-register.label=$Paste Register
-set-filename-register.label=Save File$name to Register
+set-filename-register.label=Save $Filename to Register
 set-caret-register.label=Save $Caret to Register
 goto-register.label=$Go to Register
-select-caret-register.label=Se$lect to Register
+select-caret-register.label=$Select to Register
 exchange-caret-register.label=S$wap Caret with Register
 clear-register.label=Clear Reg$ister
 view-registers.label=$View Registers...
@@ -269,12 +259,12 @@ search-and-replace.label=Sear$ch and Replace...
 find.label=$Find...
 find-next.label=Fin$d Next
 find-selection.label=F$ind Selection...
-replace-in-selection.label=Re$place in Selection
+replace-in-selection.label=$Replace in Selection
 replace-all.label=Replace $All
-hypersearch.label=H$yperSearch...
+hypersearch.label=$HyperSearch...
 hypersearch-selection.label=HyperSearch for Se$lection...
 multifile-search.label=M$ultifile Search Settings...
-set-marker.label=Set Mar$ker...
+set-marker.label=Set $Marker...
 clear-marker.label=Clear Marker
 goto-marker.label=Go to Marker
 no-markers.label=No Markers Defined
@@ -291,12 +281,12 @@ macros=record-macro \
        rescan-macros \
        -
 macros.label=$Macros
-record-macro.label=Re$cord Macro...
+record-macro.label=$Record Macro...
 record-temp-macro.label=Record $to Temporary Buffer
-stop-recording.label=St$op Recording
+stop-recording.label=$Stop Recording
 play-temp-macro.label=$Play Temporary Macro
 play-last-macro.label=P$lay Last Macro
-edit-macro.label=E$dit Macro...
+edit-macro.label=$Edit Macro...
 rescan-macros.label=Resca$n Macros
 no-macros.label=No Macros
 

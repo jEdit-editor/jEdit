@@ -1,5 +1,35 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2pre7
+
++ Enhancements
+
+- Built-in actions are now dynamically loaded as they are executed, this
+  improves startup time and memory consumption somewhat
+- The file loading code now bypasses the Swing document interface, so it
+  should run a little faster
+- jEdit no longer adds two components to the EditBus, this should make
+  things a tiny bit faster
+- Key binding changes:
+  C+d C+d: C+d
+  C+d C+e: C+e C+d
+  C+d C+s: CS+BACK_SPACE
+  C+d C+f: CS+DELETE
+  C+e C+[: CA+[
+  C+e C+]: CA+]
+  C+m: C+e C+m
+  C+e C+m XXX: C+m XXX
+  F2: F3
+  F3: S+F3
+  reload is now bound to F2
+  reload-all is now bound to S+F2
+  load-session is now bound to F4
+  save-session is now bound to S+F4
+
++ Bug Fixes
+
+- jEdit checked for a bogus 'saveGeometry' property (since 2.2pre5)
+
 * Version 2.2pre6
 
 + New Features

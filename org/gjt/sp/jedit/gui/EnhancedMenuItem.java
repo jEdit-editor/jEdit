@@ -42,28 +42,17 @@ public class EnhancedMenuItem extends JMenuItem
 	public EnhancedMenuItem(String label, String keyBinding,
 		EditAction action, String actionCommand)
 	{
-		this(label,keyBinding,action,GUIUtilities.createActionWrapper(
-			action),actionCommand);
-	}
-
-	/**
-	 * Creates a new menu item. Most plugins should call
-	 * GUIUtilities.loadMenuItem() instead.
-	 * @param label The menu item label
-	 * @param keyBinding The key binding
-	 * @param action The edit action
-	 * @param actionWrapper The action wrapper
-	 * @param actionCommand The action command
-	 */
-	public EnhancedMenuItem(String label, String keyBinding,
-		EditAction action, ActionListener actionWrapper,
-		String actionCommand)
-	{
 		super(label);
 		this.keyBinding = keyBinding;
 
 		if(action != null)
-			addActionListener(actionWrapper);
+		{
+			setEnabled(true);
+			addActionListener(action);
+		}
+		else
+			setEnabled(false);
+
 		setActionCommand(actionCommand);
 
 		acceleratorFont = UIManager
@@ -72,8 +61,6 @@ public class EnhancedMenuItem extends JMenuItem
 			.getColor("MenuItem.acceleratorForeground");
 		acceleratorSelectionForeground = UIManager
 			.getColor("MenuItem.acceleratorSelectionForeground");
-
-		setEnabled(action != null);
 	}
 
 	public Dimension getPreferredSize()

@@ -122,8 +122,7 @@ public class Macros
 	 * Starts recording a macro.
 	 * @param view The view
 	 * @param name The macro name
-	 * @param buffer The buffer to record to. I have no idea why this
-	 * method doesn't create this buffer for you...
+	 * @param buffer The buffer to record to
 	 */
 	public static void beginRecording(View view, String name, Buffer buffer)
 	{
@@ -239,13 +238,6 @@ public class Macros
 	public static String getLastMacro()
 	{
 		return lastMacro;
-	}
-
-	// package-private members
-	static void init()
-	{
-		EditBus.addToBus(new EBComponent());
-		loadMacros();
 	}
 
 	// private members
@@ -399,30 +391,14 @@ public class Macros
 			}
 		}
 	}
-
-	static class EBComponent implements org.gjt.sp.jedit.EBComponent
-	{
-		public void handleMessage(EBMessage msg)
-		{
-			if(msg instanceof BufferUpdate)
-				handleBufferUpdate((BufferUpdate)msg);
-		}
-
-		private void handleBufferUpdate(BufferUpdate msg)
-		{
-			Buffer buffer = msg.getBuffer();
-			if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
-			{
-				if(buffer.getPath().toLowerCase().endsWith(".macro"))
-					loadMacros();
-			}
-		}
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  1999/11/27 06:01:20  sp
+ * Faster file loading, geometry fix
+ *
  * Revision 1.15  1999/11/23 08:03:21  sp
  * Miscallaeneous stuff
  *
@@ -453,14 +429,5 @@ public class Macros
  *
  * Revision 1.6  1999/10/19 09:10:13  sp
  * pre5 bug fixing
- *
- * Revision 1.5  1999/10/17 04:16:28  sp
- * Bug fixing
- *
- * Revision 1.4  1999/10/16 09:43:00  sp
- * Final tweaking and polishing for jEdit 2.1final
- *
- * Revision 1.3  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
  *
  */

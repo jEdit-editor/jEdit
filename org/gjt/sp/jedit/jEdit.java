@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.02.06.00";
+		return "02.02.07.00";
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class jEdit
 		initActions();
 		initModes();
 		initKeyBindings();
-		Macros.init();
+		Macros.loadMacros();
 
 		// Start plugins
 		GUIUtilities.advanceProgress("Starting plugins...");
@@ -403,6 +403,9 @@ public class jEdit
 			maxRecent = 8;
 		}
 
+		// File filters might have changed
+		GUIUtilities.chooser = null;
+
 		EditBus.send(new PropertiesChanged(null));
 	}
 
@@ -488,7 +491,7 @@ public class jEdit
 	public static void addAction(EditAction action)
 	{
 		String name = action.getName();
-		actionHash.put(name,action);
+		actionHash.put(name,new EditAction.Wrapper(action));
 
 		// Register key binding
 		String binding = getProperty(name + ".shortcut");
@@ -527,6 +530,15 @@ public class jEdit
 	public static void addMode(Mode mode)
 	{
 		modes.addElement(mode);
+	}
+
+	/**
+	 * Registers an edit mode with the editor.
+	 * @param mode The edit mode name
+	 */
+	public static void addMode(String mode)
+	{
+		modes.addElement(new Mode(mode));
 	}
 
 	/**
@@ -1174,24 +1186,40 @@ public class jEdit
 		modes = new Vector(18 /* modes built into jEdit */
 			+ 10 /* give plugins some space */);
 
-		addMode(new Mode("bat"));
-		addMode(new Mode("c"));
-		addMode(new Mode("cc"));
-		addMode(new Mode("eiffel"));
-		addMode(new Mode("html"));
-		addMode(new Mode("idl"));
-		addMode(new Mode("java"));
-		addMode(new Mode("javascript"));
-		addMode(new Mode("makefile"));
-		addMode(new Mode("patch"));
-		addMode(new Mode("perl"));
-		addMode(new Mode("props"));
-		addMode(new Mode("python"));
-		addMode(new Mode("shell"));
-		addMode(new Mode("tex"));
-		addMode(new Mode("text"));
-		addMode(new Mode("tsql"));
-		addMode(new Mode("xml"));
+		addMode("bat");
+		addMode("c");
+		addMode("cc");
+		addMode("eiffel");
+		addMode("html");
+		addMode("idl");
+		addMode("java");
+		addMode("javascript");
+		addMode("makefile");
+		addMode("patch");
+		addMode("perl");
+		addMode("props");
+		addMode("python");
+		addMode("shell");
+		addMode("tex");
+		addMode("text");
+		addMode("tsql");
+		addMode("xml");
+	}
+
+	/**
+	 * Registers an action with the editor. This is for internal
+	 * use only.
+	 * @param action The action
+	 */
+	private static void addAction(String name)
+	{
+		EditAction.Wrapper action = new EditAction.Wrapper(name);
+		actionHash.put(name,action);
+
+		// Register key binding
+		String binding = getProperty(name + ".shortcut");
+		if(binding != null)
+			inputHandler.addKeyBinding(binding,action);
 	}
 
 	/**
@@ -1201,109 +1229,109 @@ public class jEdit
 	{
 		actionHash = new Hashtable();
 
-		addAction(new org.gjt.sp.jedit.actions.about());
-		addAction(new org.gjt.sp.jedit.actions.append_string_register());
-		addAction(new org.gjt.sp.jedit.actions.block_comment());
-		addAction(new org.gjt.sp.jedit.actions.box_comment());
-		addAction(new org.gjt.sp.jedit.actions.buffer_options());
-		addAction(new org.gjt.sp.jedit.actions.clear_log());
-		addAction(new org.gjt.sp.jedit.actions.clear_marker());
-		addAction(new org.gjt.sp.jedit.actions.clear_register());
-		addAction(new org.gjt.sp.jedit.actions.close_all());
-		addAction(new org.gjt.sp.jedit.actions.close_file());
-		addAction(new org.gjt.sp.jedit.actions.close_view());
-		addAction(new org.gjt.sp.jedit.actions.copy());
-		addAction(new org.gjt.sp.jedit.actions.copy_string_register());
-		addAction(new org.gjt.sp.jedit.actions.cut());
-		addAction(new org.gjt.sp.jedit.actions.cut_string_register());
-		addAction(new org.gjt.sp.jedit.actions.delete_end_line());
-		addAction(new org.gjt.sp.jedit.actions.delete_line());
-		addAction(new org.gjt.sp.jedit.actions.delete_paragraph());
-		addAction(new org.gjt.sp.jedit.actions.delete_start_line());
-		addAction(new org.gjt.sp.jedit.actions.edit_macro());
-		addAction(new org.gjt.sp.jedit.actions.exchange_caret_register());
-		addAction(new org.gjt.sp.jedit.actions.exit());
-		addAction(new org.gjt.sp.jedit.actions.expand_abbrev());
-		addAction(new org.gjt.sp.jedit.actions.find());
-		addAction(new org.gjt.sp.jedit.actions.find_next());
-		addAction(new org.gjt.sp.jedit.actions.find_selection());
-		addAction(new org.gjt.sp.jedit.actions.global_options());
-		addAction(new org.gjt.sp.jedit.actions.goto_end_indent());
-		addAction(new org.gjt.sp.jedit.actions.goto_line());
-		addAction(new org.gjt.sp.jedit.actions.goto_marker());
-		addAction(new org.gjt.sp.jedit.actions.goto_register());
-		addAction(new org.gjt.sp.jedit.actions.help());
-		addAction(new org.gjt.sp.jedit.actions.hypersearch());
-		addAction(new org.gjt.sp.jedit.actions.hypersearch_selection());
-		addAction(new org.gjt.sp.jedit.actions.indent_line());
-		addAction(new org.gjt.sp.jedit.actions.indent_on_enter());
-		addAction(new org.gjt.sp.jedit.actions.indent_on_tab());
-		addAction(new org.gjt.sp.jedit.actions.join_lines());
-		addAction(new org.gjt.sp.jedit.actions.load_session());
-		addAction(new org.gjt.sp.jedit.actions.locate_bracket());
-		addAction(new org.gjt.sp.jedit.actions.log_viewer());
-		addAction(new org.gjt.sp.jedit.actions.multifile_search());
-		addAction(new org.gjt.sp.jedit.actions.new_file());
-		addAction(new org.gjt.sp.jedit.actions.new_view());
-		addAction(new org.gjt.sp.jedit.actions.next_bracket_exp());
-		addAction(new org.gjt.sp.jedit.actions.next_buffer());
-		addAction(new org.gjt.sp.jedit.actions.next_paragraph());
-		addAction(new org.gjt.sp.jedit.actions.open_file());
-		addAction(new org.gjt.sp.jedit.actions.open_path());
-		addAction(new org.gjt.sp.jedit.actions.open_selection());
-		addAction(new org.gjt.sp.jedit.actions.open_url());
-		addAction(new org.gjt.sp.jedit.actions.paste());
-		addAction(new org.gjt.sp.jedit.actions.paste_previous());
-		addAction(new org.gjt.sp.jedit.actions.paste_string_register());
-		addAction(new org.gjt.sp.jedit.actions.play_last_macro());
-		addAction(new org.gjt.sp.jedit.actions.play_temp_macro());
-		addAction(new org.gjt.sp.jedit.actions.play_macro());
-		addAction(new org.gjt.sp.jedit.actions.plugin_options());
-		addAction(new org.gjt.sp.jedit.actions.prev_bracket_exp());
-		addAction(new org.gjt.sp.jedit.actions.prev_buffer());
-		addAction(new org.gjt.sp.jedit.actions.prev_paragraph());
-		addAction(new org.gjt.sp.jedit.actions.print());
-		addAction(new org.gjt.sp.jedit.actions.record_macro());
-		addAction(new org.gjt.sp.jedit.actions.record_temp_macro());
-		addAction(new org.gjt.sp.jedit.actions.redo());
-		addAction(new org.gjt.sp.jedit.actions.reload());
-		addAction(new org.gjt.sp.jedit.actions.reload_all());
-		addAction(new org.gjt.sp.jedit.actions.replace_all());
-		addAction(new org.gjt.sp.jedit.actions.replace_in_selection());
-		addAction(new org.gjt.sp.jedit.actions.rescan_macros());
-		addAction(new org.gjt.sp.jedit.actions.save());
-		addAction(new org.gjt.sp.jedit.actions.save_all());
-		addAction(new org.gjt.sp.jedit.actions.save_as());
-		addAction(new org.gjt.sp.jedit.actions.save_log());
-		addAction(new org.gjt.sp.jedit.actions.save_session());
-		addAction(new org.gjt.sp.jedit.actions.save_url());
-		addAction(new org.gjt.sp.jedit.actions.scroll_line());
-		addAction(new org.gjt.sp.jedit.actions.search_and_replace());
-		addAction(new org.gjt.sp.jedit.actions.select_all());
-		addAction(new org.gjt.sp.jedit.actions.select_block());
-		addAction(new org.gjt.sp.jedit.actions.select_buffer());
-		addAction(new org.gjt.sp.jedit.actions.select_caret_register());
-		addAction(new org.gjt.sp.jedit.actions.select_line_range());
-		addAction(new org.gjt.sp.jedit.actions.select_next_paragraph());
-		addAction(new org.gjt.sp.jedit.actions.select_none());
-		addAction(new org.gjt.sp.jedit.actions.select_prev_paragraph());
-		addAction(new org.gjt.sp.jedit.actions.set_caret_register());
-		addAction(new org.gjt.sp.jedit.actions.set_filename_register());
-		addAction(new org.gjt.sp.jedit.actions.set_replace_string());
-		addAction(new org.gjt.sp.jedit.actions.set_search_parameters());
-		addAction(new org.gjt.sp.jedit.actions.set_search_string());
-		addAction(new org.gjt.sp.jedit.actions.send());
-		addAction(new org.gjt.sp.jedit.actions.set_marker());
-		addAction(new org.gjt.sp.jedit.actions.shift_left());
-		addAction(new org.gjt.sp.jedit.actions.shift_right());
-		addAction(new org.gjt.sp.jedit.actions.stop_recording());
-		addAction(new org.gjt.sp.jedit.actions.tab());
-		addAction(new org.gjt.sp.jedit.actions.undo());
-		addAction(new org.gjt.sp.jedit.actions.untab());
-		addAction(new org.gjt.sp.jedit.actions.view_editbus());
-		addAction(new org.gjt.sp.jedit.actions.view_registers());
-		addAction(new org.gjt.sp.jedit.actions.wing_comment());
-		addAction(new org.gjt.sp.jedit.actions.word_count());
+		addAction("about");
+		addAction("append-string-register");
+		addAction("block-comment");
+		addAction("box-comment");
+		addAction("buffer-options");
+		addAction("clear-log");
+		addAction("clear-marker");
+		addAction("clear-register");
+		addAction("close-all");
+		addAction("close-file");
+		addAction("close-view");
+		addAction("copy");
+		addAction("copy-string-register");
+		addAction("cut");
+		addAction("cut-string-register");
+		addAction("delete-end-line");
+		addAction("delete-line");
+		addAction("delete-paragraph");
+		addAction("delete-start-line");
+		addAction("edit-macro");
+		addAction("exchange-caret-register");
+		addAction("exit");
+		addAction("expand-abbrev");
+		addAction("find");
+		addAction("find-next");
+		addAction("find-selection");
+		addAction("global-options");
+		addAction("goto-end-indent");
+		addAction("goto-line");
+		addAction("goto-marker");
+		addAction("goto-register");
+		addAction("help");
+		addAction("hypersearch");
+		addAction("hypersearch-selection");
+		addAction("indent-line");
+		addAction("indent-on-enter");
+		addAction("indent-on-tab");
+		addAction("join-lines");
+		addAction("load-session");
+		addAction("locate-bracket");
+		addAction("log-viewer");
+		addAction("multifile-search");
+		addAction("new-file");
+		addAction("new-view");
+		addAction("next-bracket-exp");
+		addAction("next-buffer");
+		addAction("next-paragraph");
+		addAction("open-file");
+		addAction("open-path");
+		addAction("open-selection");
+		addAction("open-url");
+		addAction("paste");
+		addAction("paste-previous");
+		addAction("paste-string-register");
+		addAction("play-last-macro");
+		addAction("play-temp-macro");
+		addAction("play-macro");
+		addAction("plugin-options");
+		addAction("prev-bracket-exp");
+		addAction("prev-buffer");
+		addAction("prev-paragraph");
+		addAction("print");
+		addAction("record-macro");
+		addAction("record-temp-macro");
+		addAction("redo");
+		addAction("reload");
+		addAction("reload-all");
+		addAction("replace-all");
+		addAction("replace-in-selection");
+		addAction("rescan-macros");
+		addAction("save");
+		addAction("save-all");
+		addAction("save-as");
+		addAction("save-log");
+		addAction("save-session");
+		addAction("save-url");
+		addAction("scroll-line");
+		addAction("search-and-replace");
+		addAction("select-all");
+		addAction("select-block");
+		addAction("select-buffer");
+		addAction("select-caret-register");
+		addAction("select-line-range");
+		addAction("select-next-paragraph");
+		addAction("select-none");
+		addAction("select-prev-paragraph");
+		addAction("set-caret-register");
+		addAction("set-filename-register");
+		addAction("set-replace-string");
+		addAction("set-search-parameters");
+		addAction("set-search-string");
+		addAction("send");
+		addAction("set-marker");
+		addAction("shift-left");
+		addAction("shift-right");
+		addAction("stop-recording");
+		addAction("tab");
+		addAction("undo");
+		addAction("untab");
+		addAction("view-editbus");
+		addAction("view-registers");
+		addAction("wing-comment");
+		addAction("word-count");
 	}
 
 	/**
@@ -1535,6 +1563,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.162  1999/11/27 06:01:20  sp
+ * Faster file loading, geometry fix
+ *
  * Revision 1.161  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *
@@ -1565,23 +1596,5 @@ public class jEdit
  * Revision 1.152  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support
- *
- * Revision 1.151  1999/11/07 06:51:43  sp
- * Check box menu items supported
- *
- * Revision 1.150  1999/11/06 02:06:50  sp
- * Logging updates, bug fixing, icons, various other stuff
- *
- * Revision 1.149  1999/10/31 08:31:36  sp
- * Minor fixes
- *
- * Revision 1.148  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.147  1999/10/30 02:44:18  sp
- * Miscallaneous stuffs
- *
- * Revision 1.146  1999/10/28 09:07:21  sp
- * Directory list search
  *
  */
