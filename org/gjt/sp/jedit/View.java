@@ -80,9 +80,6 @@ public class View extends JFrame implements EBComponent
 		if(this.buffer == buffer)
 			return;
 
-		if(buffer == null)
-			throw new NullPointerException("Buffer must be non-null");
-
 		// Ensure new buffer is valid
 		buffer.loadIfNecessary(this);
 
@@ -97,9 +94,7 @@ public class View extends JFrame implements EBComponent
 		this.buffer = buffer;
 
 		textArea.setDocument(buffer);
-
 		loadCaretInfo();
-
 		updateMarkerMenus();
 		updateTitle();
 		status.repaint();
@@ -108,13 +103,15 @@ public class View extends JFrame implements EBComponent
 		if(mode != null)
 			mode.enterView(this);
 
-		focusOnTextArea();
-
 		// Don't fire event for the initial buffer set
 		if(oldBuffer != null)
 			EditBus.send(new ViewUpdate(this,ViewUpdate.BUFFER_CHANGED));
 
+		if(bufferTabs != null)
+			bufferTabs.selectBufferTab(buffer);
 		updateBuffersMenu();
+
+		focusOnTextArea();
 	}
 
 	/**
@@ -152,8 +149,7 @@ public class View extends JFrame implements EBComponent
 	public void addToolBar(Component toolBar)
 	{
 		toolBars.add(toolBar);
-		invalidate();
-		validate();
+		getRootPane().revalidate();
 	}
 
 	/**
@@ -163,6 +159,7 @@ public class View extends JFrame implements EBComponent
 	public void removeToolBar(Component toolBar)
 	{
 		toolBars.remove(toolBar);
+		getRootPane().revalidate();
 	}
 
 	/**
@@ -359,12 +356,11 @@ public class View extends JFrame implements EBComponent
 			loadPropertiesFromView(view);
 
 		if(buffer == null)
-			setBuffer(jEdit.getLastBuffer());
+			setBuffer(jEdit.getFirstBuffer());
 		else
 			setBuffer(buffer);
 
 		getContentPane().add(BorderLayout.NORTH,toolBars);
-		getContentPane().add(BorderLayout.CENTER,textArea);
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
@@ -403,6 +399,7 @@ public class View extends JFrame implements EBComponent
 
 	private JEditTextArea textArea;
 	private StatusBar status;
+	private BufferTabs bufferTabs;
 
 	private int waitCount;
 
@@ -414,8 +411,11 @@ public class View extends JFrame implements EBComponent
 	private void propertiesChanged()
 	{
 		loadToolBar();
+		initBufferTabs();
 
 		showFullPath = "on".equals(jEdit.getProperty("view.showFullPath"));
+		if(buffer != null)
+			updateTitle();
 
 		String family = jEdit.getProperty("view.font");
 		int size;
@@ -526,6 +526,7 @@ public class View extends JFrame implements EBComponent
 	private void loadPropertiesFromView(View view)
 	{
 		loadToolBar();
+		initBufferTabs();
 
 		showFullPath = view.showFullPath;
 		TextAreaPainter painter = view.textArea.getPainter();
@@ -584,15 +585,39 @@ public class View extends JFrame implements EBComponent
 		{
 			removeToolBar(toolBar);
 			toolBar = null;
-			validate();
 		}
+	}
+
+	private void initBufferTabs()
+	{
+		if("on".equals(jEdit.getProperty("view.showBufferTabs")))
+		{
+			if(bufferTabs == null)
+			{
+				bufferTabs = new BufferTabs(this,textArea);
+				getContentPane().remove(textArea);
+				getContentPane().add(BorderLayout.CENTER,bufferTabs);
+			}
+		}
+		else
+		{
+			if(bufferTabs != null)
+			{
+				getContentPane().remove(bufferTabs);
+				bufferTabs = null;
+			}
+			getContentPane().add(BorderLayout.CENTER,textArea);
+		}
+
+		getRootPane().revalidate();
+		getRootPane().repaint();
 	}
 
 	/**
 	 * Updates the title bar and read only status of the text
 	 * area.
 	 */
-	public void updateTitle()
+	private void updateTitle()
 	{
 		Object[] args = { ((showFullPath && !buffer.isNewFile())
 			? buffer.getPath() : buffer.getName()),
@@ -850,7 +875,12 @@ public class View extends JFrame implements EBComponent
 	{
 		Buffer _buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.CREATED)
+		{
 			updateBuffersMenu();
+
+			if(bufferTabs != null)
+				bufferTabs.addBufferTab(_buffer);
+		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
 			if(_buffer == buffer)
@@ -864,12 +894,18 @@ public class View extends JFrame implements EBComponent
 
 			updateRecentMenu();
 			updateBuffersMenu();
+
+			if(bufferTabs != null)
+				bufferTabs.removeBufferTab(_buffer);
 		}
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
 			if(_buffer == buffer)
 				updateTitle();
 			updateBuffersMenu();
+
+			if(bufferTabs != null)
+				bufferTabs.updateBufferTab(_buffer);
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
 		{
@@ -990,6 +1026,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.126  2000/01/28 00:20:58  sp
+ * Lots of stuff
+ *
  * Revision 1.125  2000/01/22 23:36:42  sp
  * Improved file close behaviour
  *
@@ -1019,20 +1058,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.116  1999/12/19 11:14:28  sp
  * Static abbrev expansion started
- *
- * Revision 1.115  1999/12/11 06:34:39  sp
- * Bug fixes
- *
- * Revision 1.114  1999/12/05 03:01:05  sp
- * Perl token marker bug fix, file loading is deferred, style option pane fix
- *
- * Revision 1.113  1999/11/30 01:37:35  sp
- * New view icon, shortcut pane updates, session bug fix
- *
- * Revision 1.112  1999/11/29 02:45:50  sp
- * Scroll bar position saved when switching buffers
- *
- * Revision 1.111  1999/11/28 00:33:06  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
  *
  */

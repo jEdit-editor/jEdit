@@ -20,11 +20,11 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import javax.swing.text.BadLocationException;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.TextUtilities;
 
 public class select_word extends EditAction
 {
@@ -38,44 +38,17 @@ public class select_word extends EditAction
 		int lineStart = textArea.getLineStartOffset(line);
 		int offset = textArea.getCaretPosition() - lineStart;
 
+		if(textArea.getLineLength(line) == 0)
+			return;
+
 		String lineText = textArea.getLineText(line);
-		char ch = lineText.charAt(Math.max(0,offset - 1));
-
 		String noWordSep = (String)buffer.getProperty("noWordSep");
-		if(noWordSep == null)
-			noWordSep = "";
 
-		// If the user clicked on a non-letter char,
-		// we select the surrounding non-letters
-		boolean selectNoLetter = (!Character
-			.isLetterOrDigit(ch)
-			&& noWordSep.indexOf(ch) == -1);
+		if(offset == textArea.getLineLength(line))
+			offset--;
 
-		int wordStart = 0;
-		for(int i = offset - 1; i >= 0; i--)
-		{
-			ch = lineText.charAt(i);
-			if(selectNoLetter ^ (!Character
-				.isLetterOrDigit(ch) &&
-				noWordSep.indexOf(ch) == -1))
-			{
-				wordStart = i + 1;
-				break;
-			}
-		}
-
-		int wordEnd = lineText.length();
-		for(int i = offset; i < lineText.length(); i++)
-		{
-			ch = lineText.charAt(i);
-			if(selectNoLetter ^ (!Character
-				.isLetterOrDigit(ch) &&
-				noWordSep.indexOf(ch) == -1))
-			{
-				wordEnd = i;
-				break;
-			}
-		}
+		int wordStart = TextUtilities.findWordStart(lineText,offset,noWordSep);
+		int wordEnd = TextUtilities.findWordEnd(lineText,offset+1,noWordSep);
 
 		textArea.select(lineStart + wordStart,lineStart + wordEnd);
 	}

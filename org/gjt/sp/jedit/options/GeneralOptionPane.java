@@ -30,8 +30,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		super("general");
 
 		/* Look and feel */
-		addComponent(new JLabel(jEdit.getProperty("options.general.lf.note")));
-
 		lfs = UIManager.getInstalledLookAndFeels();
 		String[] names = new String[lfs.length];
 		String lf = UIManager.getLookAndFeel().getClass().getName();
@@ -124,12 +122,33 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"view.showToolbar")));
 		addComponent(showToolbar);
 
+		/* Show buffer tabs */
+		showBufferTabs = new JCheckBox(jEdit.getProperty(
+			"options.general.showBufferTabs"));
+		showBufferTabs.getModel().setSelected("on".equals(jEdit.getProperty(
+			"view.showBufferTabs")));
+		addComponent(showBufferTabs);
+
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.general.showFullPath"));
 		showFullPath.getModel().setSelected("on".equals(jEdit.getProperty(
 			"view.showFullPath")));
 		addComponent(showFullPath);
+
+		/* Sort buffer list */
+		sortBuffers = new JCheckBox(jEdit.getProperty(
+			"options.general.sortBuffers"));
+		sortBuffers.getModel().setSelected("on".equals(jEdit.getProperty(
+			"sortBuffers")));
+		addComponent(sortBuffers);
+
+		/* Sort buffers by names */
+		sortByName = new JCheckBox(jEdit.getProperty(
+			"options.general.sortByName"));
+		sortByName.getModel().setSelected("on".equals(jEdit.getProperty(
+			"sortByName")));
+		addComponent(sortByName);
 	}
 
 	public void save()
@@ -163,7 +182,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("view.showToolbar",showToolbar.getModel()
 			.isSelected() ? "on" : "off");
+		jEdit.setProperty("view.showBufferTabs",showBufferTabs.getModel()
+			.isSelected() ? "on" : "off");
 		jEdit.setProperty("view.showFullPath",showFullPath.getModel()
+			.isSelected() ? "on" : "off");
+		jEdit.setProperty("sortBuffers",sortBuffers.getModel()
+			.isSelected() ? "on" : "off");
+		jEdit.setProperty("sortByName",sortByName.getModel()
 			.isSelected() ? "on" : "off");
 	}
 
@@ -181,5 +206,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JComboBox lineSeparator;
 	private JCheckBox saveDesktop;
 	private JCheckBox showToolbar;
+	private JCheckBox showBufferTabs;
 	private JCheckBox showFullPath;
+	private JCheckBox sortBuffers;
+	private JCheckBox sortByName;
 }

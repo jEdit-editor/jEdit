@@ -1,6 +1,6 @@
 /*
  * JEditTextArea.java - jEdit's text component
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,13 +111,14 @@ public class JEditTextArea extends JComponent
 
 		// Load the defaults
 		setInputHandler(defaults.inputHandler);
-		setDocument(defaults.document);
 		editable = defaults.editable;
 		caretVisible = defaults.caretVisible;
 		caretBlinks = defaults.caretBlinks;
 		electricScroll = defaults.electricScroll;
 
 		popup = defaults.popup;
+
+		setDocument(new SyntaxDocument());
 
 		// We don't seem to get the initial focus event?
 		focusedComponent = this;
@@ -1667,6 +1668,11 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
+	// private members
+
+	// for event handlers only
+	private int clickCount;
+
 	class ScrollLayout implements LayoutManager
 	{
 		public void addLayoutComponent(String name, Component comp)
@@ -1934,10 +1940,99 @@ public class JEditTextArea extends JComponent
 
 			setSelectionRectangular((evt.getModifiers()
 				& InputEvent.CTRL_MASK) != 0);
-			select(getMarkPosition(),xyToOffset(evt.getX(),evt.getY()));
+
+			switch(clickCount)
+			{
+			case 1:
+				doSingleDrag(evt);
+				break;
+			case 2:
+				doDoubleDrag(evt);
+				break;
+			case 3:
+				doTripleDrag(evt);
+				break;
+			}
 		}
 
 		public void mouseMoved(MouseEvent evt) {}
+
+		private void doSingleDrag(MouseEvent evt)
+		{
+			select(getMarkPosition(),xyToOffset(
+				evt.getX(),evt.getY()));
+		}
+
+		private void doDoubleDrag(MouseEvent evt)
+		{
+			int markLine = getMarkLine();
+			int markLineStart = getLineStartOffset(markLine);
+			int markLineLength = getLineLength(markLine);
+			int mark = getMarkPosition() - markLineStart;
+
+			int line = yToLine(evt.getY());
+			int lineStart = getLineStartOffset(line);
+			int lineLength = getLineLength(line);
+			int offset = xToOffset(line,evt.getX());
+
+			String lineText = getLineText(line);
+			String markLineText = getLineText(markLine);
+			String noWordSep = (String)document.getProperty("noWordSep");
+
+			if(markLineStart + mark > lineStart + offset)
+			{
+				if(offset != 0 && offset != lineLength)
+				{
+					offset = TextUtilities.findWordStart(
+						lineText,offset,noWordSep);
+				}
+
+				if(markLineLength != 0)
+				{
+					mark = TextUtilities.findWordEnd(
+						markLineText,mark,noWordSep);
+				}
+			}
+			else
+			{
+				if(offset != 0 && lineLength != 0)
+				{
+					offset = TextUtilities.findWordEnd(
+						lineText,offset,noWordSep);
+				}
+
+				if(mark != 0 && mark != markLineLength)
+				{
+					mark = TextUtilities.findWordStart(
+						markLineText,mark,noWordSep);
+				}
+			}
+			select(markLineStart + mark,lineStart + offset);
+		}
+
+		private void doTripleDrag(MouseEvent evt)
+		{
+			int mark = getMarkLine();
+			int mouse = yToLine(evt.getY());
+			int offset = xToOffset(mouse,evt.getX());
+			if(mark > mouse)
+			{
+				mark = getLineEndOffset(mark) - 1;
+				if(offset == getLineLength(mouse))
+					mouse = getLineEndOffset(mouse) - 1;
+				else
+					mouse = getLineStartOffset(mouse);
+			}
+			else
+			{
+				mark = getLineStartOffset(mark);
+				if(offset == 0)
+					mouse = getLineStartOffset(mouse);
+				else
+					mouse = getLineEndOffset(mouse) - 1;
+			}
+			select(mark,mouse);
+		}
 	}
 
 	class FocusHandler implements FocusListener
@@ -1976,7 +2071,8 @@ public class JEditTextArea extends JComponent
 			int offset = xToOffset(line,evt.getX());
 			int dot = getLineStartOffset(line) + offset;
 
-			switch(evt.getClickCount())
+			clickCount = evt.getClickCount();
+			switch(clickCount)
 			{
 			case 1:
 				doSingleClick(evt,line,offset,dot);
@@ -2042,56 +2138,15 @@ public class JEditTextArea extends JComponent
 
 			// Ok, it's not a bracket... select the word
 			String lineText = getLineText(line);
-			char ch = lineText.charAt(Math.max(0,offset - 1));
-
 			String noWordSep = (String)document.getProperty("noWordSep");
-			if(noWordSep == null)
-				noWordSep = "";
+			if(offset == getLineLength(line))
+				offset--;
 
-			// If the user clicked on a non-letter char,
-			// we select the surrounding non-letters
-			boolean selectNoLetter = (!Character
-				.isLetterOrDigit(ch)
-				&& noWordSep.indexOf(ch) == -1);
-
-			int wordStart = 0;
-			for(int i = offset - 1; i >= 0; i--)
-			{
-				ch = lineText.charAt(i);
-				if(selectNoLetter ^ (!Character
-					.isLetterOrDigit(ch) &&
-					noWordSep.indexOf(ch) == -1))
-				{
-					wordStart = i + 1;
-					break;
-				}
-			}
-
-			int wordEnd = lineText.length();
-			for(int i = offset; i < lineText.length(); i++)
-			{
-				ch = lineText.charAt(i);
-				if(selectNoLetter ^ (!Character
-					.isLetterOrDigit(ch) &&
-					noWordSep.indexOf(ch) == -1))
-				{
-					wordEnd = i;
-					break;
-				}
-			}
-
-			int lineStart = getLineStartOffset(line);
-			select(lineStart + wordStart,lineStart + wordEnd);
-
-			/*
-			String lineText = getLineText(line);
-			String noWordSep = (String)document.getProperty("noWordSep");
 			int wordStart = TextUtilities.findWordStart(lineText,offset,noWordSep);
-			int wordEnd = TextUtilities.findWordEnd(lineText,offset,noWordSep);
+			int wordEnd = TextUtilities.findWordEnd(lineText,offset+1,noWordSep);
 
 			int lineStart = getLineStartOffset(line);
 			select(lineStart + wordStart,lineStart + wordEnd);
-			*/
 		}
 
 		private void doTripleClick(MouseEvent evt, int line,
@@ -2163,6 +2218,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  2000/01/28 00:20:58  sp
+ * Lots of stuff
+ *
  * Revision 1.38  2000/01/21 00:35:29  sp
  * Various updates
  *

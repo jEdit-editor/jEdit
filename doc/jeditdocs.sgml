@@ -169,8 +169,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
  <sect1 id=starting><title>Starting jEdit</>
   <indexterm><primary>command line</></indexterm>
   <indexterm><primary>editor window</></indexterm>
-  <indexterm><primary>session saving</></indexterm>
-  <indexterm><primary>desktop saving</></indexterm>
+  <indexterm><primary>sessions</></indexterm>
   <indexterm><primary>keyboard shortcuts</>
   <secondary>for accessing the menu bar</></indexterm>
   <para>
@@ -390,7 +389,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   </para>
   <para>
    All open buffers are listed in the <guimenu>Buffers</> menu; selecting
-   one will display that buffer in the current view.
+   one will display that buffer in the current view. The tabs that run
+   along the top of the text area can also be used to switch between
+   buffers. If you don't like the tabs, they can be disabled in
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>; see
+   <xref linkend=global-opts> for details.
   </para>
   <para>
    The title bar of views, as well as the entries in the
@@ -754,6 +757,15 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   from those text editors.
  </para>
  <sect1 id=caret><title>The Caret</>
+  <indexterm><primary>moving the caret</><secondary>by characters</></>
+  <indexterm><primary>moving the caret</><secondary>by lines</></>
+  <indexterm><primary>moving the caret</><secondary>to the start of a line</></>
+  <indexterm><primary>moving the caret</><secondary>to the end of a line</></>
+  <indexterm><primary>moving the caret</><secondary>to the start of the viewscreen</></>
+  <indexterm><primary>moving the caret</><secondary>to the end of the viewscreen</></>
+  <indexterm><primary>moving the caret</><secondary>to the start of the buffer</></>
+  <indexterm><primary>moving the caret</><secondary>to the end of the buffer</></>
+  <indexterm><primary>moving the caret</><secondary>by screenfuls</></>
   <para>
    The <firstterm>caret</> is the location where text editing takes place.
    To make changes to a buffer, the caret must first
@@ -853,8 +865,8 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    Now, entered text will not be <emphasis>inserted</>, but it will
    <emphasis>replace</> the existing text, character by character.
   </para>
+  <indexterm><primary>selection</></indexterm>
   <para>
-   <indexterm><primary>selection</></indexterm>
    Regardless if overstrike mode is on, entering text while a selection
    is active will replace the selection with the newly entered text.
   </para>
@@ -918,8 +930,8 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    jEdit only uses the latter; in fact, it is the only clipboard Java
    allows access to.
   </para>
+  <indexterm><primary>selection</></indexterm>
   <para>
-   <indexterm><primary>selection</></indexterm>
    <indexterm><primary>Copy command</></indexterm>
    <indexterm><primary>Edit menu</></indexterm>
    <guimenu>Edit</>&gt;<guimenuitem>Copy</>
@@ -967,6 +979,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   chapter covers some more advanced features.
  </para>
  <sect1 id=words><title>Working With Words</>
+  <indexterm><primary>moving the caret</><secondary>by words</></>
   <para>
    jEdit has a variety of commands for working with words. In jEdit,
    words are runs of text separated by non-alphanumeric characters.
@@ -1086,12 +1099,35 @@ http://www.sourceforge.net/mail/?group_id=588</>.
  </sect1>
  <sect1 id=paragraphs><title>Working With Paragraphs</>
   <para>
-   C+Up, C+Down, C+e C+d, Select-paragraph
+   As far as jEdit is concerned, a <quote>paragraph</> is a block of
+   text enclosed with double-newlines. This is also how <application>TeX</>
+   defines a paragraph. Note that jEdit doesn't parse HTML files for
+   <quote>&lt;P&gt;</> tags, nor does it support paragraphs delimited only
+   by a leading indent.
+  </para>
+  <indexterm><primary>Edit menu</></indexterm>
+   <indexterm><primary>Paragraphs menu</></indexterm>
+   <indexterm><primary>Selection menu</></indexterm>
+   <indexterm><primary>moving the caret</><secondary>by paragraphs</></>
+  <indexterm><primary>selecting text</><secondary>paragraphs</></>
+  <para>
+   <keycombo><keycap>Control</><keycap>Up</></keycombo> moves the
+   caret to the previous paragraph.
+   <keycombo><keycap>Control</><keycap>Down</></keycombo> moves the
+   caret to the next paragraph. Holding down shift in addition to one of
+   these keys will extend the selection, instead of moving the caret.
+  </para>
+  <para>
+   <indexterm><primary>Select Paragraph command</></indexterm>
+   <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Select
+   Paragraph</> will
+   select the paragraph containing the caret
+   The latter is primarily of use in macros, where mouse clicks
+   cannot be recorded (but menu item selections can).
   </para>
   <para>
    <indexterm><primary>deleting</><secondary>paragraphs</></indexterm>
    <indexterm><primary>Delete Paragraph command</></indexterm>
-   <indexterm><primary>Paragraphs menu</></indexterm>
    <guimenu>Edit</>&gt;<guisubmenu>Paragraphs</>&gt;<guimenuitem>Delete
    Paragraph</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</>
    </keycombo> <keycombo><keycap>Control</><keycap>D</></keycombo>) will
@@ -1183,6 +1219,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
  </sect1>
  <sect1 id=sessions><title>Saving and Loading Sessions</>
   <para>
+   <indexterm><primary>sessions</></>
    <indexterm><primary>command line switches</><secondary>-nosession</></indexterm>
    <indexterm><primary>command line switches</><secondary>-session</></indexterm>
    When working on a project, it can sometimes be convenient to save
@@ -2745,10 +2782,15 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     <listitem><para>If the current session should be automatically saved
     and restored when jEdit exits and starts up, respectively. See
     <xref linkend=sessions></para></listitem>
-    <listitem><para>If the tool bar/QuickSearch text field should be added to
-    views</para></listitem>
+    <listitem><para>If the tool bar/QuickSearch text field should be shown
+    </para></listitem>
+    <listitem><para>If buffer switching tabs should be shown
+    </para></listitem>
     <listitem><para>If the full path of buffers should be shown in view
     title bars, instead of just the name</para></listitem>
+    <listitem><para>If the buffer list should be sorted</para></listitem>
+    <listitem><para>If the buffer list should be sorted by file name,
+    rather than full path name</para></listitem>
    </itemizedlist>
    </sect2>
   <sect2><title>The Editor Pane</>
@@ -3713,6 +3755,214 @@ implements OptionPane
    the activity log:
   </para>
   <screen>Log.log(Log.NOTICE,this,"loading foo.dat...");</>
+ </sect1>
+ <sect1 id=plugin-editbus><title>The EditBus</>
+  <para>
+   The EditBus is a message passing system. Any number of components
+   can be connected to the bus. Each component can send messages, as
+   well as receive them.
+  </para>
+  <para>
+   jEdit itself sends various messages to the bus - buffers being opened
+   and closed, and so on. Plugins can also define their own message types
+   to communicate with each other. The jEdit core only includes a small
+   set of messages that are meant to be sent by jEdit itself only;
+   the EditBus plugin includes a wider range of messages that can be
+   used for inter-plugin communication. Get the EditBus plugin from
+   <ulink url="http://www.icg-online.de/jedit">http://www.icg-online.de/jedit</>.
+  </para>
+  <para>
+   Each message type is a subclass of <classname>EBMessage</>.
+   All messages included with jEdit live in the
+   <classname>org.gjt.sp.jedit.msg</> package.
+   Because messages are full-fledged objects, they can carry any type of
+   information.
+  </para>
+  <indexterm><primary>interface</><secondary>EBComponent</></indexterm>
+  <bridgehead renderas=sect3>EBComponent interface</>
+  <programlisting>public interface EBComponent
+{
+        public void handleMessage(EBMessage msg);
+}</programlisting>
+  <para>
+   Each component on the bus must implement this interface. When a message
+   is sent to the bus, the <function>handleMessage()</> method of each
+   component is called in turn. Typically, this method will check if the
+   message is of a known type using <function>instanceof</>, and take
+   appropriate action.
+  </para>
+  <indexterm><primary>class</><secondary>EditBus</></indexterm>
+  <indexterm><primary>method</><secondary>addToBus() of EditBus class</></indexterm>
+  <bridgehead renderas=sect3>EditBus.addToBus() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EditBus;</>
+   <funcprototype>
+    <funcdef>public static void <function>addToBus</></funcdef>
+    <paramdef>EBComponent <parameter>comp</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method adds the specified component to the bus. It will now
+   receive all messages sent to the bus. Note that to avoid memory
+   leaks, you must remember to remove components from the bus when
+   they are no longer needed.
+  </para>
+  <indexterm><primary>method</><secondary>removeFromBus() of EditBus class</></indexterm>
+  <bridgehead renderas=sect3>EditBus.removeFromBus() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EditBus;</>
+   <funcprototype>
+    <funcdef>public static void <function>removeFromBus</></funcdef>
+    <paramdef>EBComponent <parameter>comp</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method removes the specified component from the bus, hence it
+   will no longer receive any messages.
+  </para>
+  <indexterm><primary>class</><secondary>EBPlugin</></indexterm>
+  <bridgehead renderas=sect3>EBPlugin class</>
+  <programlisting>public abstract class EBPlugin extends EditPlugin
+implements EBComponent
+{
+        public void handleMessage(EBMessage msg);
+}</programlisting>
+  <para>
+   The <classname>EBPlugin</> class is identical to <classname>EditPlugin</>,
+   except that the plugin is automatically added to the bus. If your
+   plugin needs to receive messages, you can subclass <classname>EBPlugin</>.
+  </para>
+  <indexterm><primary>class</><secondary>EBMessage</></indexterm>
+  <bridgehead renderas=sect3>EBMessage interface</>
+  <programlisting>public abstract class EBMessage
+{
+        public EBMessage(EBComponent source);
+        public EBComponent getSource();
+        public void veto();
+        public boolean isVetoed();
+}</programlisting>
+  <para>
+   The <classname>org.gjt.sp.jedit.EBMessage</> class is the common
+   superclass of all
+   EditBus messages.
+   Most methods in this class should be self-explanatory, except
+   for the vetoing methods. Here is how it works; once you
+   <function>veto()</> a message, it will not propogate further
+   along the bus. The <function>isVetoed()</> method returns if the
+   method has already been vetoed.
+  </para>
+  <para>
+   The vetoing system is useful for messages that request some action
+   to be taken; if some component on the bus can perform the action,
+   it calls <function>veto()</>. The sender will then
+   check the return value of <function>isVetoed()</> and display an
+   error message
+   if it is false (meaning no-one
+   called <function>veto()</>).
+  </para>
+  <indexterm><primary>method</><secondary>send() of EditBus class</></indexterm>
+  <bridgehead renderas=sect3>EditBus.send() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;</>
+   <funcprototype>
+    <funcdef>public static void <function>send</></funcdef>
+    <paramdef>EBMessage <parameter>msg</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method sends the specified message to the
+   bus (ie, it calls the <function>handleMessage()</> method of each
+   component). Plugins should never send jEdit core messages (BufferUpdate,
+   ViewUpdate, etc) directly; only send messages intended to be sent
+   from plugins, for example the messages included in the EditBus plugin.
+  </para>
+  <sect2><title>BufferUpdate Message</>
+   <para>
+    This message is sent by jEdit when a buffer-related update occurs.
+    The <function>getBuffer()</> method of the
+    <classname>BufferUpdate</>
+    class returns the buffer involved. The <function>getWhat()</> method
+    returns one of the following:
+   </para>
+   <itemizedlist><listitem><para><command>BufferUpdate.CREATED</> - a
+   new buffer has been created</para></listitem>
+   <listitem><para><command>BufferUpdate.LOADING</> - a
+   buffer is being loaded from disk</para></listitem>
+   <listitem><para><command>BufferUpdate.DIRTY_CHANGED</> - the
+   <quote>dirty</> flag has changed; either the buffer has been saved, or
+   some changes have been made</para></listitem>
+   <listitem><para><command>BufferUpdate.MARKERS_CHANGED</> - a marker has
+   been added or removed</para></listitem>
+   <listitem><para><command>BufferUpdate.MODE_CHANGED</> - the buffer's
+   edit mode has changed</para></listitem>
+   <listitem><para><command>BufferUpdate.SAVING</> - a buffer is about to
+   be saved</para></listitem>
+   <listitem><para><command>BufferUpdate.CLOSED</> - a buffer has been
+   closed</para></listitem>
+   </itemizedlist>
+  </sect2>
+  <sect2><title>EditorExiting Message</>
+   <para>
+    This message is sent by jEdit just before it exits.
+    Hence, it is similar to the
+    <function>stop()</> method of a plugin, but it is not limited
+    to plugins.
+   </para>
+  </sect2>
+  <sect2><title>EditorStarted Message</>
+   <para>
+    This message is sent by jEdit after it has finished starting, but
+    before the initial view is created. Hence, it is similar to the
+    <function>start()</> method of a plugin, but it is not limited
+    to plugins.
+   </para>
+  </sect2>
+  <sect2><title>MacrosChanged Message</>
+   <indexterm><primary>Macros menu</></>
+   <para>
+    This message is sent by jEdit when the list of available macros changes.
+    Its main use is to keep the <guimenu>Macros</> menu up to date;
+    plugins will
+    almost never need to handle this message.
+   </para>
+  </sect2>
+  <sect2><title>PropertiesChanged Message</>
+   <indexterm><primary>Utilities menu</></>
+   <indexterm><primary>Global Options command</></>
+   <para>
+    This message is sent by jEdit after the
+    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+    dialog box is closed; your plugin should reload any
+    editable settings when it receives this message.
+   </para>
+  </sect2>
+  <sect2><title>SearchSettingsChanged Message</>
+   <para>
+    This message is sent by jEdit when search and replace flags (ignore case,
+    regular expression, multiple file search) are changed. Its main
+    use is to keepe buttons on a view's tool bar up to date; plugins will
+    almost never need to handle this message.
+   </para>
+  </sect2>
+  <sect2><title>ViewUpdate Message</>
+   <para>
+    This message is sent by jEdit when a view-related update occurs.
+    The <function>getView()</> method of the
+    <classname>BufferView</>
+    class returns the view involved. The <function>getWhat()</> method
+    returns one of the following:
+   </para>
+   <itemizedlist><listitem><para><command>ViewUpdate.CREATED</> - a
+   new view has been created</para></listitem>
+   <listitem><para><command>ViewUpdate.BUFFER_CHANGED</> - a view
+   is now editing a different buffer</para></listitem>
+   <listitem><para><command>ViewUpdate.CLOSED</> - a view has been
+   closed</para></listitem>
+   </itemizedlist>
+  </sect2>
  </sect1>
 </chapter>
 

@@ -481,6 +481,7 @@ public abstract class InputHandler extends KeyAdapter
 			if(start != textArea.getSelectionEnd())
 			{
 				textArea.setSelectedText("");
+				return;
 			}
 
 			int line = textArea.getCaretLine();
@@ -502,7 +503,8 @@ public abstract class InputHandler extends KeyAdapter
 			else
 			{
 				String noWordSep = (String)textArea.getDocument().getProperty("noWordSep");
-				caret = TextUtilities.findWordStart(lineText,caret,noWordSep);
+				caret = TextUtilities.findWordStart(lineText,
+					caret-1,noWordSep);
 			}
 
 			try
@@ -564,6 +566,7 @@ public abstract class InputHandler extends KeyAdapter
 			if(start != textArea.getSelectionEnd())
 			{
 				textArea.setSelectedText("");
+				return;
 			}
 
 			int line = textArea.getCaretLine();
@@ -585,7 +588,8 @@ public abstract class InputHandler extends KeyAdapter
 			else
 			{
 				String noWordSep = (String)textArea.getDocument().getProperty("noWordSep");
-				caret = TextUtilities.findWordEnd(lineText,caret,noWordSep);
+				caret = TextUtilities.findWordEnd(lineText,
+					caret+1,noWordSep);
 			}
 
 			try
@@ -901,7 +905,7 @@ public abstract class InputHandler extends KeyAdapter
 			else
 			{
 				String noWordSep = (String)textArea.getDocument().getProperty("noWordSep");
-				caret = TextUtilities.findWordEnd(lineText,caret,noWordSep);
+				caret = TextUtilities.findWordEnd(lineText,caret + 1,noWordSep);
 			}
 
 			if(select)
@@ -1049,7 +1053,7 @@ public abstract class InputHandler extends KeyAdapter
 			else
 			{
 				String noWordSep = (String)textArea.getDocument().getProperty("noWordSep");
-				caret = TextUtilities.findWordStart(lineText,caret,noWordSep);
+				caret = TextUtilities.findWordStart(lineText,caret - 1,noWordSep);
 			}
 
 			if(select)
@@ -1113,6 +1117,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/01/28 00:20:58  sp
+ * Lots of stuff
+ *
  * Revision 1.18  2000/01/21 00:35:29  sp
  * Various updates
  *

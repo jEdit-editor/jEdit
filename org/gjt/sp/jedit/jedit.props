@@ -29,6 +29,10 @@ backup.directory=
 backup.prefix=
 backup.suffix=~
 
+# Buffer list sorting
+sortBuffers=off
+sortByName=off
+
 ###
 ### BUFFER SETTINGS
 ### These can also be specified as buffer-local properties
@@ -76,6 +80,9 @@ buffer.syntax=on
 
 # Show toolbar? (on/off)
 view.showToolbar=on
+
+# Show buffer tabs? (on/off)
+view.showBufferTabs=on
 
 # Show full path in title bar? (on/off)
 view.showFullPath=off

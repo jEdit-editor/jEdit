@@ -43,8 +43,9 @@ view.quicksearch=Find:\
 ###
 ### CONTEXT MENU
 ###
-view.context=undo redo - cut copy paste paste-previous - scroll-line - \
-	view-registers - record-temp-macro stop-recording play-temp-macro
+view.context=undo redo - cut copy paste paste-previous - select-all \
+	select-none - scroll-line - view-registers - record-temp-macro \
+	stop-recording play-temp-macro
 
 ###
 ### MENUBAR
@@ -358,7 +359,7 @@ macro.temp.header=# This is a temporary macro. First, check over the\n\
                   # Then, to execute this macro, switch to the buffer\n\
                   # where you would like to execute it and press C+m C+p.
 
-macro.header=# This is a freshly recorded macro. First, check over the\n\
+macro.header=# This is a recorded macro. First, check over the\n\
              # commands to make sure this is what you intended. Then,\n\
              # save this buffer, and the macro should appear in the\n\
              # Macros menu.
@@ -440,24 +441,29 @@ view.status.insert-literal=Insert without expanding
 about.title=About jEdit
 about.message=jEdit version {0}\n\
 	\n\
-	jEdit was written by Slava Pestov with the help of several others.\n\
-	It is released under the GNU General Public License; see the\n\
-	README.txt file for more information.\n\
+	jEdit was written by Slava Pestov with the help of several\n\
+	others. It is released under the GNU General Public License;\n\
+	see the README.txt file for more information.\n\
 	\n\
-	Many thanks to the following people, who have contributed code\n\
-	to jEdit's core:\n\
+	The following people contributed code to the jEdit core:\n\
 	\n\
 	Artur Biesiadowski - Eiffel syntax highlighting\n\
 	Clancy Malcolm - PHP3 syntax highlighting\n\
+	Jason Ginchereau - Buffer tabs code\n\
 	Jonathan Revusky - Python syntax highlighting\n\
 	Juha Lindfors - IDL syntax highlighting\n\
 	Mike Dillon - TSQL syntax highlighting, faster literal search,\n\
 	options dialog updates, many bug fixes\n\
 	Ralf Engels - PostScript syntax highlighting\n\
-	Tal Davidson - Original syntax highlighting code\n\
+	Tal Davidson - Original syntax highlighting engine\n\
+	Valery Kondakoff - Complete word action\n\
 	\n\
-	Many others have also written plugins. If you are not on the\n\
-	above list but think you should be, e-mail me (<sp@gjt.org>).
+	If you are not on the above list but think you should be,\n\
+	e-mail me (<sp@gjt.org>).\n\
+	\n\
+	In addition to the above people, I would like to thank all\n\
+	the plugin authors for their wonderful plugins, and the\n\
+	users for their feedback and comments.
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
@@ -654,7 +660,6 @@ buffer_options.lineSeparator=Line separator:\
 # Global options dialog
 options.title=Global Options
 options.general.label=General
-options.general.lf.note=Restart jEdit for L&F changes to take effect
 options.general.lf=Swing look & feel:\ 
 options.general.encoding=File encoding:\ 
 options.general.autosave=Autosave frequency (secs):\ 
@@ -667,7 +672,10 @@ options.general.backupSuffix=Backup filename suffix:\
 options.general.lineSeparator=Default line separator:\ 
 options.general.saveDesktop=Save session on exit
 options.general.showToolbar=Show toolbar
+options.general.showBufferTabs=Show buffer tabs
 options.general.showFullPath=Show full path of buffers in title bar
+options.general.sortBuffers=Sort buffer list
+options.general.sortByName=Sort by file name only (instead of full path)
 options.editor.label=Editor
 options.editor.defaultMode=Default edit mode:\ 
 options.editor.font=Text font:\ 
@@ -715,7 +723,7 @@ options.styles.operatorStyle=Operator
 options.styles.invalidStyle=Invalid token
 options.filters.label=File Filters
 options.filters.name=Name
-options.filters.re=Glob Pattern
+options.filters.re=Glob pattern
 options.keys.name=Command
 options.keys.binding=Keyboard shortcut
 options.keys.sort.label=Sort by label

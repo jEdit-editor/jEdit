@@ -67,11 +67,18 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
-		// Yes, we want stdio to go to the log
-		Log.redirectStdio();
-
-		// Log some stuff
-		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
+		// for developers: run 'jedit 0' to get extensive logging
+		int level = Log.WARNING;
+		if(args.length >= 1)
+		{
+			String levelStr = args[0];
+			if(levelStr.length() == 1 && Character.isDigit(
+				levelStr.charAt(0)))
+			{
+				level = Integer.parseInt(levelStr);
+				args[0] = null;
+			}
+		}
 
 		// Parse command line
 		boolean endOpts = false;
@@ -87,7 +94,9 @@ public class jEdit
 		for(int i = 0; i < args.length; i++)
 		{
 			String arg = args[i];
-			if(arg.length() == 0)
+			if(arg == null)
+				continue;
+			else if(arg.length() == 0)
 				args[i] = null;
 			else if(arg.startsWith("-") && !endOpts)
 			{
@@ -137,6 +146,11 @@ public class jEdit
 			}
 		}
 
+		// Initialize the activity log
+		Log.init(true,level);
+
+		// Log some stuff
+		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
 		Log.log(Log.DEBUG,jEdit.class,"Settings directory is "
 			+ settingsDirectory);
 
@@ -215,6 +229,11 @@ public class jEdit
 				settingsDirectory,"history");
 			HistoryModel.loadHistory(history);
 		}
+
+		// Buffer sort
+		sortBuffers = "on".equals(getProperty("sortBuffers"));
+		sortByName = "on".equals(getProperty("sortByName"));
+
 		propertiesChanged();
 		initRecent();
 		initPLAF();
@@ -245,14 +264,15 @@ public class jEdit
 		// Load files specified on the command line
 		GUIUtilities.advanceProgress("Opening files...");
 
-		Buffer buffer = null;
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i] == null)
 				continue;
-			buffer = openFile(null,userDir,args[i],readOnly,false);
+			openFile(null,userDir,args[i],readOnly,false);
 		}
-		if(buffer == null)
+
+		Buffer buffer = null;
+		if(bufferCount == 0)
 		{
 			if(defaultSession)
 			{
@@ -262,8 +282,9 @@ public class jEdit
 			else
 				buffer = Sessions.loadSession(session,true);
 		}
-		if(buffer == null)
-			buffer = newFile(null);
+
+		if(bufferCount == 0)
+			newFile(null);
 
 		GUIUtilities.advanceProgress("Creating initial view...");
 
@@ -274,6 +295,8 @@ public class jEdit
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
+				EditBus.send(new EditorStarted(null));
+
 				newView(null,_buffer);
 				GUIUtilities.hideSplashScreen();
 			}
@@ -634,13 +657,13 @@ public class jEdit
 		buffer = new Buffer(url,path,readOnly,newFile,false);
 		addBufferToList(buffer);
 
+		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CREATED));
+
 		if(marker != null)
 			gotoMarker(buffer,null,marker);
 
 		if(view != null)
 			view.setBuffer(buffer);
-
-		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CREATED));
 
 		return buffer;
 	}
@@ -1095,7 +1118,9 @@ public class jEdit
 			((EditPlugin)plugins.elementAt(i)).stop();
 		}
 
-		
+		// Send EditorExiting
+		EditBus.send(new EditorExiting(null));
+
 		// Save various settings
 		if(settingsDirectory != null)
 		{
@@ -1135,6 +1160,20 @@ public class jEdit
 		System.exit(0);
 	}
 
+	// package-private members
+
+	/**
+	 * If buffer sorting is enabled, this repositions the buffer.
+	 */
+	static void updatePosition(Buffer buffer)
+	{
+		if(sortBuffers)
+		{
+			removeBufferFromList(buffer);
+			addBufferToList(buffer);
+		}
+	}
+
 	// private members
 	private static String jEditHome;
 	private static String settingsDirectory;
@@ -1152,6 +1191,8 @@ public class jEdit
 	private static WindowHandler windowHandler;
 
 	// buffer link list
+	private static boolean sortBuffers;
+	private static boolean sortByName;
 	private static int bufferCount;
 	private static Buffer buffersFirst;
 	private static Buffer buffersLast;
@@ -1195,6 +1236,11 @@ public class jEdit
 		System.out.println("Client-only options:");
 		System.out.println("	-reuseview: Don't open new view in");
 
+		System.out.println();
+		System.out.println("To set minimum activity log level,"
+			+ " specify a number as the first");
+		System.out.println("command line parameter"
+			+ " (1-9, 1 = debug, 9 = error)");
 		System.out.println();
 		System.out.println("Report bugs to Slava Pestov <sp@gjt.org>.");
 	}
@@ -1604,13 +1650,39 @@ public class jEdit
 		bufferCount++;
 
 		if(buffersFirst == null)
-			buffersFirst = buffersLast = buffer;
-		else
 		{
-			buffer.prev = buffersLast;
-			buffersLast.next = buffer;
-			buffersLast = buffer;
+			buffersFirst = buffersLast = buffer;
+			return;
 		}
+		else if(sortBuffers)
+		{
+			String name1 = (sortByName ? buffer.getName()
+				: buffer.getPath()).toLowerCase();
+
+			Buffer _buffer = buffersFirst;
+			while(_buffer != null)
+			{
+				String name2 = (sortByName ? _buffer.getName()
+					: _buffer.getPath()).toLowerCase();
+				if(name1.compareTo(name2) <= 0)
+				{
+					buffer.next = _buffer;
+					buffer.prev = _buffer.prev;
+					_buffer.prev = buffer;
+					if(_buffer != buffersFirst)
+						buffer.prev.next = buffer;
+					else
+						buffersFirst = buffer;
+					return;
+				}
+
+				_buffer = _buffer.next;
+			}
+		}
+
+		buffer.prev = buffersLast;
+		buffersLast.next = buffer;
+		buffersLast = buffer;
 	}
 
 	private static void removeBufferFromList(Buffer buffer)
@@ -1706,6 +1778,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.182  2000/01/28 00:20:58  sp
+ * Lots of stuff
+ *
  * Revision 1.181  2000/01/22 23:36:43  sp
  * Improved file close behaviour
  *
@@ -1735,14 +1810,5 @@ public class jEdit
  *
  * Revision 1.172  1999/12/19 11:14:28  sp
  * Static abbrev expansion started
- *
- * Revision 1.171  1999/12/19 08:12:34  sp
- * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
- *
- * Revision 1.170  1999/12/14 04:20:35  sp
- * Various updates, PHP3 mode added
- *
- * Revision 1.169  1999/12/13 03:40:29  sp
- * Bug fixes, syntax is now mostly GPL'd
  *
  */

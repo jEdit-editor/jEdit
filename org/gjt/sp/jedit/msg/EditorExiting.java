@@ -1,6 +1,6 @@
 /*
- * prev_buffer.java
- * Copyright (C) 1999, 2000 Slava Pestov
+ * EditorExiting.java - Message sent before the editor exits
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,19 +17,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.actions;
+package org.gjt.sp.jedit.msg;
 
-import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EBMessage;
 
-public class prev_buffer extends EditAction
+/**
+ * Message sent just before jEdit exits.
+ * @author Slava Pestov
+ * @version $Id$
+ *
+ * @since jEdit 2.3pre2
+ */
+public class EditorExiting extends EBMessage.NonVetoable
 {
-	public void actionPerformed(ActionEvent evt)
+	/**
+	 * Creates a new editor exiting message.
+	 * @param source The message source
+	 */
+	public EditorExiting(EBComponent source)
 	{
-		View view = getView(evt);
-		Buffer buffer = view.getBuffer().getPrev();
-		if(buffer == null)
-			buffer = jEdit.getLastBuffer();
-		view.setBuffer(buffer);
+		super(source);
 	}
 }

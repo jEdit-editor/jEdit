@@ -1,6 +1,6 @@
 /*
  * Log.java - A class for logging events
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,29 @@ public class Log
 	public static final int ERROR = 9;
 
 	/**
+	 * Initializes the log.
+	 * @param stdio If true, standard output and error will be
+	 * sent to the log
+	 * @param level Messages with this log level or higher will
+	 * be printed to the system console
+	 * @since jEdit 2.3pre1
+	 */
+	public static void init(boolean stdio, int level)
+	{
+		if(stdio)
+		{
+			if(System.out == realOut && System.err == realErr)
+			{
+				System.setOut(createPrintStream(NOTICE,null));
+				System.setErr(createPrintStream(ERROR,null));
+			}
+		}
+
+		Log.level = level;
+		clearLog();
+	}
+
+	/**
 	 * Returns the document where messages are logged. The document
 	 * of a Swing text area can be set to this to graphically view
 	 * log messages.
@@ -80,20 +103,6 @@ public class Log
 	public static Document getLogDocument()
 	{
 		return logDocument;
-	}
-
-	/**
-	 * Redirects standard output and error to the log. This can
-	 * only be called once.
-	 * @since jEdit 2.2pre2
-	 */
-	public static void redirectStdio()
-	{
-		if(System.out == realOut && System.err == realErr)
-		{
-			System.setOut(createPrintStream(NOTICE,null));
-			System.setErr(createPrintStream(ERROR,null));
-		}
 	}
 
 	/**
@@ -230,6 +239,7 @@ public class Log
 	// private members
 	private static Object LOCK = new Object();
 	private static Document logDocument;
+	private static int level;
 	private static PrintStream realOut;
 	private static PrintStream realErr;
 
@@ -239,7 +249,6 @@ public class Log
 		realErr = System.err;
 
 		logDocument = new PlainDocument();
-		clearLog();
 	}
 
 	private static PrintStream createPrintStream(final int urgency,
@@ -278,8 +287,13 @@ public class Log
 		message = source + ": " + message + '\n';
 		_log(urgency,message);
 
-		if(urgency >= WARNING)
-			realErr.print(message);
+		if(urgency >= level)
+		{
+			if(urgency == ERROR)
+				realErr.print(message);
+			else
+				realOut.print(message);
+		}
 	}
 
 	private static void _log(int urgency, String message)
@@ -319,6 +333,9 @@ public class Log
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/01/28 00:20:58  sp
+ * Lots of stuff
+ *
  * Revision 1.7  2000/01/14 04:23:50  sp
  * 2.3pre2 stuff
  *

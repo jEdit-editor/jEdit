@@ -263,7 +263,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		EditBus.send(new BufferUpdate(this,BufferUpdate.SAVING));
 
-		backup(view,saveFile);
+		backup(saveFile);
 
 		try
 		{
@@ -290,6 +290,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			setFlag(READ_ONLY,false);
 			setFlag(NEW_FILE,false);
 			setFlag(DIRTY,false);
+
+			// reposition in buffer list if it is sorted
+			jEdit.updatePosition(this);
+
 			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
 
 			autosaveFile.delete();
@@ -790,6 +794,23 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	public final Buffer getPrev()
 	{
 		return prev;
+	}
+
+	/**
+	 * Returns the position of this buffer in the buffer list.
+	 */
+	public final int getIndex()
+	{
+		int count = 0;
+		Buffer buffer = prev;
+		for(;;)
+		{
+			if(buffer == null)
+				break;
+			count++;
+			buffer = buffer.prev;
+		}
+		return count;
 	}
 
 	/**
@@ -1370,7 +1391,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	// The BACKED_UP flag prevents more than one backup from being
 	// written per session (I guess this should be made configurable
 	// in the future)
-	private void backup(View view, File file)
+	private void backup(File file)
 	{
 		if(getFlag(BACKED_UP))
 			return;
@@ -1409,12 +1430,10 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		
 		String name = file.getName();
 
-		boolean ok = true;
-
 		// If backups is 1, create ~ file
 		if(backups == 1)
 		{
-			ok &= file.renameTo(new File(backupDirectory,
+			file.renameTo(new File(backupDirectory,
 				backupPrefix + name + backupSuffix));
 		}
 		// If backups > 1, move old ~n~ files, create ~1~ file
@@ -1430,21 +1449,15 @@ loop:		for(int i = 0; i < markers.size(); i++)
 					backupPrefix + name + backupSuffix
 					+ i + backupSuffix);
 
-				ok &= backup.renameTo(new File(backupDirectory,
+				backup.renameTo(new File(backupDirectory,
 					backupPrefix + name + backupSuffix
 					+ (i+1) + backupSuffix));
 			}
 
-			ok &= file.renameTo(new File(backupDirectory,
+			file.renameTo(new File(backupDirectory,
 				backupPrefix + name + backupSuffix
 				+ "1" + backupSuffix));
 		}
-
-		/*if(!ok)
-		{
-			String[] args = { file.getPath() };
-			GUIUtilities.error(view,"backup-failed",args);
-		}*/
 	}
 
 	// A dictionary that looks in the mode and editor properties
@@ -1505,7 +1518,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		{
 			setDirty(true);
 		}
-	
+
 		public void removeUpdate(DocumentEvent evt)
 		{
 			setDirty(true);
@@ -1520,6 +1533,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.122  2000/01/28 00:20:58  sp
+ * Lots of stuff
+ *
  * Revision 1.121  2000/01/22 23:36:42  sp
  * Improved file close behaviour
  *
@@ -1549,10 +1565,4 @@ loop:		for(int i = 0; i < markers.size(); i++)
  *
  * Revision 1.112  1999/12/07 07:19:36  sp
  * Buffer loading code cleaned up
- *
- * Revision 1.111  1999/12/07 06:30:48  sp
- * Compile errors fixed, new 'new view' icon
- *
- * Revision 1.110  1999/12/05 03:01:05  sp
- * Perl token marker bug fix, file loading is deferred, style option pane fix
  */

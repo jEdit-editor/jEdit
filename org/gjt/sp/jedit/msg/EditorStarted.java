@@ -1,6 +1,7 @@
 /*
- * prev_buffer.java
- * Copyright (C) 1999, 2000 Slava Pestov
+ * EditorStarted.java - Message sent after editor is started, but before
+ * initial view is created
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,19 +18,27 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.actions;
+package org.gjt.sp.jedit.msg;
 
-import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EBMessage;
 
-public class prev_buffer extends EditAction
+/**
+ * Message sent after jEdit has finished starting up, but before the initial
+ * view is created.
+ * @author Slava Pestov
+ * @version $Id$
+ *
+ * @since jEdit 2.3pre2
+ */
+public class EditorStarted extends EBMessage.NonVetoable
 {
-	public void actionPerformed(ActionEvent evt)
+	/**
+	 * Creates a new editor started message.
+	 * @param source The message source
+	 */
+	public EditorStarted(EBComponent source)
 	{
-		View view = getView(evt);
-		Buffer buffer = view.getBuffer().getPrev();
-		if(buffer == null)
-			buffer = jEdit.getLastBuffer();
-		view.setBuffer(buffer);
+		super(source);
 	}
 }

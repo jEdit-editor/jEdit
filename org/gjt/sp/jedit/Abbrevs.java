@@ -73,7 +73,7 @@ public class Abbrevs
 		if(pos == 0)
 			return false;
 
-		int wordStart = TextUtilities.findWordStart(lineText,pos,
+		int wordStart = TextUtilities.findWordStart(lineText,pos - 1,
 			(String)buffer.getProperty("noWordSep"));
 
 		String abbrev = lineText.substring(wordStart,pos);

@@ -8,8 +8,21 @@ JEDIT VERSION HISTORY
   a file will open it
 - To Upper Case, To Lower Case and Select Word actions from TextTools plugin
   moved into the core (TextTools was written by Mike Dillon)
-- New Select Line, Select Paragraph actions (mainly useful in plugins)
+- New Select Line, Select Paragraph actions (mainly useful in macros)
 - PostScript syntax highlighting for .ps files (Ralf Engels)
+- EditorStarting message sent after jEdit has finished starting up, but
+  before first view is created
+- EditorExiting message sent when exiting, after plugin stop() methods
+  are called, but before user properties, etc are saved
+- If enabled in Utilities->Global Options, the buffer list will be kept
+  sorted
+- You can double-click-drag to extend the selection a word at a time, and
+  triple-click-drag to extend it a line at a time
+- BufferTabs plugin integrated into the core
+- Useful for plugin developers: you can now set the console log level
+  by specifying a digit (1-9) as the first command line parameter to
+  jEdit. For example, run 'jedit 1' to get all logged info printed to
+  the terminal
 
 + Enhancements
 
@@ -40,11 +53,21 @@ JEDIT VERSION HISTORY
   plugins don't seem to load (since 1.6pre6)
 - Editing with multiple views (or even using the forward delete key) could
   mess up the bracket highlighting (since 1.3pre3)
+- The -usage and -version flags didn't work (since 2.2pre2)
+- Obscure: jEdit.openFile() called view.setBuffer() before sending
+  BufferUpdate.CREATED message (since ???)
+- Delete word and backspace word didn't work properly if there was a
+  selection (since 2.2pre4)
 
 + API Changes
 
 - EBPlugin.getName() method deprecated, just use your plugin's name
   directly instead (or store it in a 'static final' constant, etc)
+
++ Installer
+
+- Possible workaround for Unix 'bad file number' bug
+- 'simlaunch' script no longer created
 
 * Version 2.3pre1
 

@@ -34,7 +34,6 @@ public class TextAreaDefaults
 	private static TextAreaDefaults DEFAULTS;
 
 	public InputHandler inputHandler;
-	public SyntaxDocument document;
 	public boolean editable;
 
 	public boolean caretVisible;
@@ -69,7 +68,6 @@ public class TextAreaDefaults
 
 			DEFAULTS.inputHandler = new DefaultInputHandler();
 			DEFAULTS.inputHandler.addDefaultKeyBindings();
-			DEFAULTS.document = new SyntaxDocument();
 			DEFAULTS.editable = true;
 
 			DEFAULTS.caretVisible = true;

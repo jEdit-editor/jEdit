@@ -144,7 +144,7 @@ public class TextUtilities
 	 */
 	public static int findWordStart(String line, int pos, String noWordSep)
 	{
-		char ch = line.charAt(pos - 1);
+		char ch = line.charAt(pos);
 
 		if(noWordSep == null)
 			noWordSep = "";
@@ -152,7 +152,7 @@ public class TextUtilities
 			&& noWordSep.indexOf(ch) == -1);
 
 		int wordStart = 0;
-		for(int i = pos - 1; i >= 0; i--)
+		for(int i = pos; i >= 0; i--)
 		{
 			ch = line.charAt(i);
 			if(selectNoLetter ^ (!Character.isLetterOrDigit(ch) &&
@@ -175,6 +175,9 @@ public class TextUtilities
 	 */
 	public static int findWordEnd(String line, int pos, String noWordSep)
 	{
+		if(pos != 0)
+			pos--;
+
 		char ch = line.charAt(pos);
 
 		if(noWordSep == null)
@@ -200,6 +203,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/01/28 00:20:58  sp
+ * Lots of stuff
+ *
  * Revision 1.5  1999/12/19 11:14:29  sp
  * Static abbrev expansion started
  *
