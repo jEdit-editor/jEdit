@@ -21,7 +21,7 @@ package org.gjt.sp.jedit.gui;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.msg.CreateDockableWindow;
-import org.gjt.sp.jedit.search.BatchSearchResults;
+import org.gjt.sp.jedit.search.HyperSearchResults;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import javax.swing.*;
@@ -393,7 +393,7 @@ public class DockableWindowManager extends JPanel
 	{
 		EditBus.addToBus(new DefaultFactory());
 		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"vfs.browser");
-		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"batch-search-results");
+		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"hypersearch-results");
 	}
 
 	static class Entry
@@ -426,9 +426,9 @@ public class DockableWindowManager extends JPanel
 					cmsg.setDockableWindow(new VFSBrowser(
 						cmsg.getView(),null));
 				}
-				else if(name.equals("batch-search-results"))
+				else if(name.equals("hypersearch-results"))
 				{
-					cmsg.setDockableWindow(new BatchSearchResults(
+					cmsg.setDockableWindow(new HyperSearchResults(
 						cmsg.getView()));
 				}
 			}

@@ -1,5 +1,5 @@
 /*
- * BatchSearchResult.java - Batch search result
+ * HyperSearchResult.java - HyperSearch result
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.Log;
 
-public class BatchSearchResult
+public class HyperSearchResult
 {
 	public String path;
 	public Buffer buffer;
@@ -32,7 +32,7 @@ public class BatchSearchResult
 	public Position linePos;
 	public String str; // cached for speed
 
-	public BatchSearchResult(Buffer buffer, int line)
+	public HyperSearchResult(Buffer buffer, int line)
 	{
 		path = buffer.getPath();
 		this.line = line;

@@ -77,7 +77,7 @@ public class SearchDialog extends EnhancedDialog
 			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 			regexp.setSelected(SearchAndReplace.getRegexp());
 
-			batchSearch.setSelected(jEdit.getBooleanProperty("search.batch.toggle"));
+			hyperSearch.setSelected(jEdit.getBooleanProperty("search.hypersearch.toggle"));
 
 			fileset = SearchAndReplace.getSearchFileSet();
 			if(fileset instanceof CurrentBufferSet)
@@ -142,9 +142,9 @@ public class SearchDialog extends EnhancedDialog
 			if(!save())
 				return;
 
-			if(batchSearch.isSelected())
+			if(hyperSearch.isSelected())
 			{
-				if(SearchAndReplace.batchSearch(view));
+				if(SearchAndReplace.hyperSearch(view));
 					closeOrKeepDialog();
 			}
 			else
@@ -174,7 +174,7 @@ public class SearchDialog extends EnhancedDialog
 	private HistoryTextField find, replace;
 
 	// search settings
-	private JCheckBox keepDialog, ignoreCase, regexp, batchSearch;
+	private JCheckBox keepDialog, ignoreCase, regexp, hyperSearch;
 	private JRadioButton searchCurrentBuffer, searchAllBuffers,
 		searchDirectory;
 
@@ -269,11 +269,11 @@ public class SearchDialog extends EnhancedDialog
 		searchSettings.add(searchDirectory);
 		searchDirectory.addActionListener(actionHandler);
 
-		batchSearch = new JCheckBox(jEdit.getProperty("search.batch"));
-		batchSearch.setMnemonic(jEdit.getProperty("search.batch.mnemonic")
+		hyperSearch = new JCheckBox(jEdit.getProperty("search.hypersearch"));
+		hyperSearch.setMnemonic(jEdit.getProperty("search.hypersearch.mnemonic")
 			.charAt(0));
-		searchSettings.add(batchSearch);
-		batchSearch.addActionListener(actionHandler);
+		searchSettings.add(hyperSearch);
+		hyperSearch.addActionListener(actionHandler);
 
 		return searchSettings;
 	}
@@ -402,7 +402,7 @@ public class SearchDialog extends EnhancedDialog
 
 	private void updateEnabled()
 	{
-		boolean replaceEnabled = !batchSearch.isSelected();
+		boolean replaceEnabled = !hyperSearch.isSelected();
 
 		replace.setEnabled(replaceEnabled);
 		replaceBtn.setEnabled(replaceEnabled);
@@ -466,7 +466,8 @@ public class SearchDialog extends EnhancedDialog
 		jEdit.setBooleanProperty("search.keepDialog.toggle",
 			keepDialog.isSelected());
 
-		jEdit.setBooleanProperty("search.batch.toggle",batchSearch.isSelected());
+		jEdit.setBooleanProperty("search.hypersearch.toggle",
+			hyperSearch.isSelected());
 
 		return true;
 	}
@@ -492,7 +493,7 @@ public class SearchDialog extends EnhancedDialog
 				SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
 			else if(source == regexp)
 				SearchAndReplace.setRegexp(regexp.isSelected());
-			else if(source == batchSearch
+			else if(source == hyperSearch
 				|| source == searchCurrentBuffer
 				|| source == searchAllBuffers
 				|| source == searchDirectory)

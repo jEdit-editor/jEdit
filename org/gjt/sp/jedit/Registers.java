@@ -93,12 +93,11 @@ public class Registers
 
 		Register reg = getRegister(register);
 
-		if(reg == null || reg.toString() == null)
-			setRegister(register,selection);
-		else
-		{
-			setRegister(register,reg.toString() + "\n" + selection);
-		}
+		if(reg != null && reg.toString() != null)
+			selection = reg.toString() + "\n" + selection;
+
+		setRegister(register,selection);
+		HistoryModel.getModel("clipboard").addItem(selection);
 	}
 
 	/**
@@ -621,6 +620,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/12/01 07:39:59  sp
+ * Batch search renamed to HyperSearch, bug fixes
+ *
  * Revision 1.15  2000/11/19 07:51:25  sp
  * Documentation updates, bug fixes
  *

@@ -208,24 +208,24 @@ public class SearchAndReplace
 	}
 
 	/**
-	 * Performs a batch search.
+	 * Performs a HyperSearch.
 	 * @param view The view
 	 * @since jEdit 2.7pre3
 	 */
-	public static boolean batchSearch(View view)
+	public static boolean hyperSearch(View view)
 	{
-		record(view,"batchSearch(view);",false,true);
+		record(view,"hyperSearch(view);",false,true);
 
 		view.getDockableWindowManager().addDockableWindow(
-			BatchSearchResults.NAME);
-		final BatchSearchResults results = (BatchSearchResults)
+			HyperSearchResults.NAME);
+		final HyperSearchResults results = (HyperSearchResults)
 			view.getDockableWindowManager()
-			.getDockableWindow(BatchSearchResults.NAME);
+			.getDockableWindow(HyperSearchResults.NAME);
 		results.searchStarted();
 
 		try
 		{
-			VFSManager.runInWorkThread(new BatchSearchRequest(view,
+			VFSManager.runInWorkThread(new HyperSearchRequest(view,
 				getSearchMatcher(),results.getTreeModel()));
 			return true;
 		}

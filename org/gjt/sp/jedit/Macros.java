@@ -543,6 +543,12 @@ public class Macros
 
 		private void dispose()
 		{
+			if(lastWasInput)
+			{
+				lastWasInput = false;
+				append("\");");
+			}
+
 			int lineCount = buffer.getDefaultRootElement()
 				.getElementCount();
 			for(int i = 0; i < lineCount; i++)

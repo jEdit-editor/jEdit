@@ -289,9 +289,9 @@ search=find \
        replace-all \
        - \
        quick-search \
-       batch-search \
+       hypersearch \
        - \
-       batch-search-results \
+       hypersearch-results \
        - \
        set-marker \
        prev-marker \
@@ -306,8 +306,8 @@ replace-in-selection.label=$Replace in Selection
 replace-and-find-next.label=Re$place and Find Next
 replace-all.label=Replace $All
 quick-search.label=Quick $Incremental Search
-batch-search.label=$Quick Batch Search
-batch-search-results.label=$Batch Search Results
+hypersearch.label=$Quick HyperSearch
+hypersearch-results.label=$HyperSearch Results
 set-marker.label=Set $Marker...
 no-markers.label=No Markers Defined
 prev-marker.label=Go to $Previous Marker
@@ -382,14 +382,7 @@ docking-left-expanded.label=Left Area Expanded
 docking-right-expanded.label=Right Area Expanded
 
 ### Utilities menu
-utils=repeat \
-      insert-literal \
-      - \
-      eval \
-      eval-selection \
-      run-script \
-      - \
-      vfs-browser \
+utils=vfs-browser \
       io-progress-monitor \
       - \
       log-viewer \
@@ -397,19 +390,19 @@ utils=repeat \
       - \
       reload-modes \
       - \
+      eval \
+      eval-selection \
+      - \
       buffer-options \
       global-options
 utils.label=$Utilities
-repeat.label=$Repeat Next Command [x]
-insert-literal.label=$Insert Next Character Literally [x]
-eval.label=$Evaluate...
-eval-selection.label=E$valuate Selection
-run-script.label=Run $Script...
 vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$View Activity Log...
 update-log.label=Update Activity $Log on Disk
-reload-modes.label=Reload $Edit Modes
+reload-modes.label=$Reload Edit Modes
+eval.label=$Evaluate BeanShell Expression...
+eval-selection.label=E$valuate Selection
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 
@@ -420,6 +413,7 @@ macros=record-macro \
        - \
        run-temp-macro \
        run-last-macro \
+       run-other-macro \
        - \
        browse-system-macros \
        browse-user-macros \
@@ -432,6 +426,7 @@ record-temp-macro.label=Record $Temporary Macro
 stop-recording.label=$Stop Recording
 run-temp-macro.label=Run Tem$porary Macro
 run-last-macro.label=Run $Last Macro
+run-other-macro.label=Run $Other Macro...
 browse-system-macros.label=Browse S$ystem Macros
 browse-user-macros.label=Browse $User Macros
 rescan-macros.label=Resca$n Macros
@@ -505,6 +500,8 @@ prev-line.label=Previous Line
 select-prev-line.label=Select Previous Line
 next-line.label=Next Line
 select-next-line.label=Select Next Line
+repeat.label=Repeat Next Command
+insert-literal.label=Insert Next Character Literally
 
 ###
 ### VIEW STUFF
@@ -529,7 +526,7 @@ print.page=Page {0}
 
 # About dialog
 about.title=About jEdit
-about.version=jEdit version {0}
+about.version=jEdit version: {0}
 about.caption=See Help->jEdit Read Me for more information
 
 # IO Error dialog, {0}=the error message
@@ -640,8 +637,8 @@ search.case=Ignore case
 search.case.mnemonic=g
 search.regexp=Regular expressions
 search.regexp.mnemonic=x
-search.batch=Batch
-search.batch.mnemonic=b
+search.hypersearch=HyperSearch
+search.hypersearch.mnemonic=h
 
 search.fileset=Search in:
 search.current=Current buffer
@@ -656,7 +653,7 @@ search.directoryField.mnemonic=t
 search.filterField=Filter:
 search.filterField.mnemonic=f
 search.subdirs=Search subdirectories
-search.subdirs.mnemonic=h
+search.subdirs.mnemonic=u
 search.choose=Choose...
 search.choose.mnemonic=o
 
@@ -673,9 +670,9 @@ keepsearching.title=No More Matches Found
 keepsearching.message=No more matches were found. Continue search from\n\
 	beginning?
 
-# Batch search results dialog
-batch-search-results.title=Batch Search Results
-batch-search.status=Batch search
+# HyperSearch results dialog
+hypersearch-results.title=HyperSearch Results
+hypersearch.status=HyperSearch
 
 # Replace all results
 replace-results.title=Replacement Complete

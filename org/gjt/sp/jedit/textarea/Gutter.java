@@ -533,7 +533,7 @@ public class Gutter extends JComponent implements SwingConstants
 					textArea.requestFocus();
 
 					context.show(Gutter.this,
-						e.getX(), e.getY());
+						e.getX()+1, e.getY()+1);
 				}
 			}
 			else if(e.getClickCount() == 2)

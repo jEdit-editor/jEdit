@@ -180,6 +180,7 @@ public class BrowserView extends JPanel
 		public void actionPerformed(ActionEvent evt)
 		{
 			typeSelectBuffer.setLength(0);
+			browser.filesSelected();
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*
- * BatchSearchRequest.java - Batch search request, run in I/O thread
+ * HyperSearchRequest.java - HyperSearch request, run in I/O thread
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -30,9 +30,9 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.*;
 
-public class BatchSearchRequest extends WorkRequest
+public class HyperSearchRequest extends WorkRequest
 {
-	public BatchSearchRequest(View view, SearchMatcher matcher,
+	public HyperSearchRequest(View view, SearchMatcher matcher,
 		DefaultTreeModel resultTreeModel)
 	{
 		this.view = view;
@@ -47,7 +47,7 @@ public class BatchSearchRequest extends WorkRequest
 	{
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 		setProgressMaximum(fileset.getBufferCount());
-		setStatus(jEdit.getProperty("batch-search.status"));
+		setStatus(jEdit.getProperty("hypersearch.status"));
 
 		try
 		{
@@ -62,7 +62,7 @@ public class BatchSearchRequest extends WorkRequest
 				do
 				{
 					setProgressValue(++current);
-					retVal |= doBatchSearch(buffer,matcher);
+					retVal |= doHyperSearch(buffer,matcher);
 				}
 				while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 			}
@@ -89,7 +89,7 @@ public class BatchSearchRequest extends WorkRequest
 	private DefaultTreeModel resultTreeModel;
 	private DefaultMutableTreeNode resultTreeRoot;
 
-	private boolean doBatchSearch(Buffer buffer, SearchMatcher matcher)
+	private boolean doHyperSearch(Buffer buffer, SearchMatcher matcher)
 		throws Exception
 	{
 		final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
@@ -125,7 +125,7 @@ loop:			for(;;)
 				line = newLine;
 
 				bufferNode.insert(new DefaultMutableTreeNode(
-					new BatchSearchResult(buffer,line),false),
+					new HyperSearchResult(buffer,line),false),
 					bufferNode.getChildCount());
 			}
 		}

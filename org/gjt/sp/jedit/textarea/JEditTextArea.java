@@ -1445,7 +1445,7 @@ public class JEditTextArea extends JComponent
 	 * @param ch The character
 	 * @see #setSelectedText(String)
 	 * @see #isOverwriteEnabled()
-	 * @since jEdit 2.7pre1
+	 * @since jEdit 2.7pre3
 	 */
 	public void userInput(char ch)
 	{
@@ -1469,7 +1469,10 @@ public class JEditTextArea extends JComponent
 				return;
 			else if(buffer.getBooleanProperty("noTabs"))
 			{
-				String line = getLineText(selectionStartLine);
+				int lineStart = getLineStartOffset(selectionStartLine);
+
+				String line = getText(lineStart,selectionStart
+					- lineStart);
 
 				setSelectedText(createSoftTab(line,
 					buffer.getTabSize()));
@@ -3450,11 +3453,15 @@ forward_scan:		do
 		int logicalLength = 0; // length with tabs expanded
 		int lastWordOffset = -1;
 		boolean lastWasSpace = true;
+		boolean initialWhiteSpace = true;
+		int initialWhiteSpaceLength = 0;
 		for(int i = 0; i < len; i++)
 		{
 			char ch = lineSegment.array[lineStart + i];
 			if(ch == '\t')
 			{
+				if(initialWhiteSpace)
+					initialWhiteSpaceLength = i + 1;
 				logicalLength += tabSize - (logicalLength % tabSize);
 				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
@@ -3464,6 +3471,8 @@ forward_scan:		do
 			}
 			else if(ch == ' ')
 			{
+				if(initialWhiteSpace)
+					initialWhiteSpaceLength = i + 1;
 				logicalLength++;
 				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
@@ -3473,6 +3482,7 @@ forward_scan:		do
 			}
 			else if(wordBreakChars != null && wordBreakChars.indexOf(ch) != -1)
 			{
+				initialWhiteSpace = false;
 				logicalLength++;
 				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
@@ -3482,42 +3492,61 @@ forward_scan:		do
 			}
 			else
 			{
+				initialWhiteSpace = false;
 				logicalLength++;
 				lastWasSpace = false;
 			}
 
+			int insertNewLineAt;
 			if(spaceInserted && logicalLength == maxLineLen)
-			{
-				// insert newline at the end of the line
-				try
-				{
-					buffer.beginCompoundEdit();
-					buffer.insertString(end - 1,"\n",null);
-					buffer.indentLine(line + 1,true,true);
-				}
-				finally
-				{
-					buffer.endCompoundEdit();
-				}
-
-				return true;
-			}
+				insertNewLineAt = end - 1;
 			else if(logicalLength >= maxLineLen && lastWordOffset != -1)
-			{
-				// break line at lastWordOffset
-				try
-				{
-					buffer.beginCompoundEdit();
-					buffer.insertString(lastWordOffset + start,"\n",null);
-					buffer.indentLine(line + 1,true,true);
-				}
-				finally
-				{
-					buffer.endCompoundEdit();
-				}
+				insertNewLineAt = lastWordOffset + start;
+			else
+				continue;
 
-				return true;
+			// if the first non-whitespace string of the
+			// line is the blockComment or boxComment
+			// string, insert that string on the next
+			// line as well
+			String nextLineStart = null;
+			String blockComment = (String)buffer.getProperty("blockComment");
+			if(blockComment != null)
+			{
+				char[] blockCommentChars = blockComment.toCharArray();
+				if(TextUtilities.regionMatches(true,lineSegment,
+					    lineSegment.offset + initialWhiteSpaceLength,
+					    blockCommentChars))
+					    nextLineStart = blockComment;
 			}
+
+			String boxComment = (String)buffer.getProperty("boxComment");
+			if(boxComment != null)
+			{
+				char[] boxCommentChars = boxComment.toCharArray();
+				if(TextUtilities.regionMatches(true,lineSegment,
+					    lineSegment.offset + initialWhiteSpaceLength,
+					    boxCommentChars))
+					    nextLineStart = boxComment;
+			}
+
+			try
+			{
+				buffer.beginCompoundEdit();
+				buffer.insertString(insertNewLineAt,"\n",null);
+				if(nextLineStart != null)
+				{
+					buffer.insertString(insertNewLineAt + 1,
+						nextLineStart,null);
+				}
+				buffer.indentLine(line + 1,true,true);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+
+			return true;
 		}
 
 		return false;
@@ -3904,7 +3933,7 @@ forward_scan:		do
 				newEnd = selectionEnd;
 
 			if(change)
-				select(newStart,newEnd,false);
+				select(newStart,newEnd,true);
 			else
 			{
 				int caretLine = getCaretLine();
@@ -3999,7 +4028,7 @@ forward_scan:		do
 				if(popup.isVisible())
 					popup.setVisible(false);
 				else
-					popup.show(painter,evt.getX(),evt.getY());
+					popup.show(painter,evt.getX()+1,evt.getY()+1);
 				return;
 			}
 

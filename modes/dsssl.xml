@@ -2,6 +2,9 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
+<!-- DSSSL is the Document Style Semantics Specification Language,
+     used by the Jade SGML documentation generation tool -->
+
 <MODE NAME="dsssl">
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />

@@ -11,7 +11,7 @@
 autosave=30
 
 # Maximum number of elements in a history list
-history=25
+history=20
 
 # Desktop saving toggle
 saveDesktop=true
@@ -144,10 +144,10 @@ view.homeEnd=true
 view.gutter.bgColor=#ffffff
 
 # Gutter foreground color
-view.gutter.fgColor=#8080c0
+view.gutter.fgColor=#000000
 
 # Gutter highlight color
-view.gutter.highlightColor=#000000
+view.gutter.highlightColor=#8080c0
 
 # Gutter current line highlight color
 view.gutter.currentLineColor=#d04040

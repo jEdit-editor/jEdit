@@ -73,11 +73,11 @@ public class SearchBar extends JPanel
 		regexp.addActionListener(new ActionHandler());
 		regexp.setMargin(margin);
 		buttons.add(Box.createHorizontalStrut(2));
-		buttons.add(batch = new JCheckBox(jEdit.getProperty(
-			"search.batch")));
-		batch.setFont(boldFont);
-		batch.addActionListener(new ActionHandler());
-		batch.setMargin(margin);
+		buttons.add(hyperSearch = new JCheckBox(jEdit.getProperty(
+			"search.hypersearch")));
+		hyperSearch.setFont(boldFont);
+		hyperSearch.addActionListener(new ActionHandler());
+		hyperSearch.setMargin(margin);
 
 		update();
 
@@ -89,14 +89,14 @@ public class SearchBar extends JPanel
 		return find;
 	}
 
-	public void setBatch(boolean batch)
+	public void setHyperSearch(boolean hyperSearch)
 	{
-		this.batch.setSelected(batch);
+		this.hyperSearch.setSelected(hyperSearch);
 	}
 
 	public void update()
 	{
-		find.setModel(batch.isSelected() ? "find" : null);
+		find.setModel(hyperSearch.isSelected() ? "find" : null);
 		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 		regexp.setSelected(SearchAndReplace.getRegexp());
 	}
@@ -104,16 +104,23 @@ public class SearchBar extends JPanel
 	// private members
 	private View view;
 	private HistoryTextField find;
-	private JCheckBox ignoreCase, regexp, batch;
+	private JCheckBox ignoreCase, regexp, hyperSearch;
 
-	private void incrementalSearch(int start)
+	private boolean incrementalSearch(int start)
 	{
+		/* For example, if the current fileset is a directory,
+		 * C+g will find the next match within that fileset.
+		 * This can be annoying if you have just done an
+		 * incremental search and want the next occurrence
+		 * in the current buffer. */
+		SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+
 		SearchAndReplace.setSearchString(find.getText());
 
 		try
 		{
 			if(SearchAndReplace.find(view,view.getBuffer(),start))
-				return;
+				return true;
 		}
 		catch(BadLocationException bl)
 		{
@@ -124,7 +131,7 @@ public class SearchBar extends JPanel
 			// invalid regexp, ignore
 		}
 
-		view.getToolkit().beep();
+		return false;
 	}
 
 	class ActionHandler implements ActionListener
@@ -137,31 +144,40 @@ public class SearchBar extends JPanel
 				String text = find.getText();
 				if(text.length() == 0)
 				{
-					jEdit.setBooleanProperty("search.batch.toggle",
-						batch.isSelected());
+					jEdit.setBooleanProperty("search.hypersearch.toggle",
+						hyperSearch.isSelected());
 					SearchAndReplace.showSearchDialog(view,null);
 				}
-				else if(batch.isSelected())
+				else if(hyperSearch.isSelected())
 				{
 					find.addCurrentToHistory();
 					find.setText(null);
 					SearchAndReplace.setSearchString(text);
 					SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
-					SearchAndReplace.batchSearch(view);
+					SearchAndReplace.hyperSearch(view);
 				}
 				else
 				{
 					// on enter, start search from end
 					// of current match to find next one
 					find.addCurrentToHistory();
-					incrementalSearch(view.getTextArea()
-						.getSelectionEnd());
+					if(!incrementalSearch(view.getTextArea()
+						.getSelectionEnd()))
+					{
+						// not found. start from
+						// beginning
+						if(!incrementalSearch(0))
+						{
+							// not found at all. beep.
+							getToolkit().beep();
+						}
+					}
 				}
 			}
-			else if(evt.getSource() == batch)
+			else if(evt.getSource() == hyperSearch)
 			{
-				jEdit.setBooleanProperty("search.batch.toggle",
-					batch.isSelected());
+				jEdit.setBooleanProperty("search.hypersearch.toggle",
+					hyperSearch.isSelected());
 				update();
 			}
 			else if(evt.getSource() == ignoreCase)
@@ -184,10 +200,11 @@ public class SearchBar extends JPanel
 			// on insert, start search from beginning of
 			// current match. This will continue to highlight
 			// the current match until another match is found
-			if(!batch.isSelected())
+			if(!hyperSearch.isSelected())
 			{
-				incrementalSearch(view.getTextArea()
-					.getSelectionStart());
+				if(!incrementalSearch(view.getTextArea()
+					.getSelectionStart()))
+					getToolkit().beep();
 			}
 		}
 
@@ -196,11 +213,17 @@ public class SearchBar extends JPanel
 			// on backspace, restart from beginning
 			// when we write reverse search, implement real
 			// backtracking
-			if(!batch.isSelected())
+			if(!hyperSearch.isSelected())
 			{
 				String text = find.getText();
 				if(text != null && text.length() != 0)
+				{
+					// don't beep if not found.
+					// subsequent beeps are very
+					// annoying when backspacing an
+					// invalid search string.
 					incrementalSearch(0);
+				}
 			}
 		}
 

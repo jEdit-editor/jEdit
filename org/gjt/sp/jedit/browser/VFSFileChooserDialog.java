@@ -134,12 +134,16 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				getToolkit().beep();
 				return;
 			}
-			else if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
+			else
 			{
 				VFS vfs = VFSManager.getVFSForPath(directory);
 				filename = vfs.constructPath(directory,filename);
-				if(vfs instanceof FileVFS && doFileExistsWarning(filename))
-					return;
+
+				if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
+				{
+					if(vfs instanceof FileVFS && doFileExistsWarning(filename))
+						return;
+				}
 			}
 		}
 		else
@@ -282,6 +286,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.16  2000/12/01 07:39:59  sp
+ * Batch search renamed to HyperSearch, bug fixes
+ *
  * Revision 1.15  2000/11/12 05:36:49  sp
  * BeanShell integration started
  *

@@ -155,6 +155,7 @@ public class BufferIORequest extends WorkRequest
 				String[] args = { MiscUtilities.getFileName(path) };
 				setStatus(jEdit.getProperty("vfs.status.load",args));
 				setAbortable(true);
+				setProgressValue(0);
 
 				VFS.DirectoryEntry entry = vfs._getDirectoryEntry(
 					session,path,view);
@@ -548,6 +549,7 @@ public class BufferIORequest extends WorkRequest
 					&& buffer.getMarkerCount() != 0)
 				{
 					setStatus(jEdit.getProperty("vfs.status.save-markers",args));
+					setProgressValue(0);
 					out = vfs._createOutputStream(session,markersPath,view);
 					if(out != null)
 						writeMarkers(buffer,out);
@@ -783,6 +785,9 @@ public class BufferIORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/12/01 07:39:59  sp
+ * Batch search renamed to HyperSearch, bug fixes
+ *
  * Revision 1.6  2000/11/27 02:22:16  sp
  * Type selection in file system browser, word wrap bug fixes, autosave race fix
  *

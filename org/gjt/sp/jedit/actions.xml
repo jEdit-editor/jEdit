@@ -35,18 +35,18 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="batch-search">
+<ACTION NAME="hypersearch">
 	<CODE>
-		view.quickBatchSearch();
+		view.quickHyperSearch();
 	</CODE>
 </ACTION>
 
-<ACTION NAME="batch-search-results">
+<ACTION NAME="hypersearch-results">
 	<CODE>
-		view.getDockableWindowManager().toggleDockableWindow("batch-search-results");
+		view.getDockableWindowManager().toggleDockableWindow("hypersearch-results");
 	</CODE>
 	<IS_SELECTED>
-		return view.getDockableWindowManager().isDockableWindowVisible("batch-search-results");
+		return view.getDockableWindowManager().isDockableWindowVisible("hypersearch-results");
 	</IS_SELECTED>
 </ACTION>
 
@@ -633,7 +633,7 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="run-script">
+<ACTION NAME="run-other-macro">
 	<CODE>
 		BeanShell.showRunScriptDialog(view);
 	</CODE>

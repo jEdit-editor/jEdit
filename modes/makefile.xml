@@ -7,7 +7,7 @@
 <MODE NAME="makefile">
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="#" />
-		<PROPERTY NAME="filenameGlob" VALUE="*makefile*" />
+		<PROPERTY NAME="filenameGlob" VALUE="*makefile" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->

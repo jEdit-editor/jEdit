@@ -163,6 +163,7 @@ Matthias Schneider - AWK, COBOL
 Michael P Jacobson - TCL
 Mike Dillon - ColdFusion, CSS, HTML, Java, JSP, LISP, Patch, PHP, SHTML,
 	TSQL, XML, XSL
+Nitsan Vardi - VHDL
 Ollie Rutherfurd - C#
 Ralf Engels - PostScript
 Romain Guy - POVRay

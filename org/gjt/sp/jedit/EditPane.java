@@ -81,16 +81,28 @@ public class EditPane extends JPanel implements EBComponent
 			view.updateMarkerMenus();
 
 			if(bufferSwitcher != null)
-				bufferSwitcher.setSelectedItem(buffer);
+			{
+				if(bufferSwitcher.getSelectedItem() != buffer)
+					bufferSwitcher.setSelectedItem(buffer);
+			}
 			caretStatus.repaint();
 
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
 				.BUFFER_CHANGED));
 		}
 
-		// only do this if we are the current edit pane
-		if(view.getEditPane() == this)
-			focusOnTextArea();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				// only do this if we are the current edit pane
+				if(view.getEditPane() == EditPane.this
+					&& !bufferSwitcher.isPopupVisible())
+				{
+					focusOnTextArea();
+				}
+			}
+		});
 
 		// Only do this after all I/O requests are complete
 		Runnable runnable = new Runnable()
@@ -676,6 +688,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.28  2000/12/01 07:39:58  sp
+ * Batch search renamed to HyperSearch, bug fixes
+ *
  * Revision 1.27  2000/11/13 11:19:26  sp
  * Search bar reintroduced, more BeanShell stuff
  *

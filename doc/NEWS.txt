@@ -16,17 +16,19 @@ so non-programmers can continue to use jEdit's macro features.
   window
 - Caret location information is now displayed in the bottom-left corner
   of the text area
+- A 'tip of the day' is now shown on jEdit startup (this can be
+  disabled)
 
 * Search and replace improvements
 
 - The search and replace and HyperSearch dialog boxes have been merged
 - Multiple line search and replace is now supported
-- The jEdit 2.5-style search bar is back.
+- The jEdit 2.5-style search bar is back
 
 * Word wrap
 
 jEdit now supports word wrap. Inserting characters beyond a specified
-wrap column will automatically insert a line break at the appropriate
+wrap column will automatically place a line break at the appropriate
 location.
 
 * Indent width -vs- tab width
@@ -45,15 +47,24 @@ The text area can now be scrolled from the keyboard using the commands
 in the View->Scrolling menu. (Contributed by Ollie Rutherfurd
 <oliver@rutherfurd.net>)
 
+* New miscellaneous commands
+
+- File->Insert File: inserts specified file into current buffer
+- File->Save a Copy As: saves buffer to a different file, and doesn't
+  rename the buffer
+
 * New edit modes
 
 Syntax highlighting was added for the following file types, bringing the
-total number of edit modes up to 43:
+total number of supported file types up to 43:
 
-- MASM/NASM assembly (contributed by Kristian Ovaska
-  <kristian.ovaska@helsinki.fi>)
-- C# (contributed by Ollie Rutherfurd <oliver@rutherfurd.net>)
+- Assembly (Intel x86 MASM/NASM)
+- C#
 - DSSSL
+
+Assembly syntax highlighting was contributed by Kristian Ovaska
+(<kristian.ovaska@helsinki.fi>). C# syntax highlighting was contributed
+by Ollie Rutherfurd (<oliver@rutherfurd.net>).
 
 * FTP support moved to a plugin
 

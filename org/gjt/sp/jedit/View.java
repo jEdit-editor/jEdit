@@ -78,16 +78,16 @@ public class View extends JFrame implements EBComponent
 			return;
 		}
 
-		searchBar.setBatch(false);
+		searchBar.setHyperSearch(false);
 		searchBar.getField().setText(getTextArea().getSelectedText());
 		searchBar.getField().requestFocus();
 	}
 
 	/**
-	 * Quick batch search.
+	 * Quick HyperSearch.
 	 * @since jEdit 2.7pre2
 	 */
-	public void quickBatchSearch()
+	public void quickHyperSearch()
 	{
 		if(searchBar == null)
 		{
@@ -95,7 +95,7 @@ public class View extends JFrame implements EBComponent
 			return;
 		}
 
-		searchBar.setBatch(true);
+		searchBar.setHyperSearch(true);
 		searchBar.getField().setText(getTextArea().getSelectedText());
 		searchBar.getField().requestFocus();
 	}

@@ -5,6 +5,8 @@ JEDIT 2.7 VERSION HISTORY
 + New Features
 
 - DSSSL syntax highlighting
+- A tip of the day is now shown when jEdit is started by the EditBuddy
+  plugin
 
 + Enhancements
 
@@ -13,6 +15,13 @@ JEDIT 2.7 VERSION HISTORY
 - Minor 'Go to Previous Paragraph' and 'Go to Next Paragraph' tweak
 - Minor installer UI tweaks
 - Documentation updates
+- Improved VHDL syntax highlighting (Dante Fabrizio and Nitsan Vardi)
+- The buffer switcher can now be navigated from the keyboard
+- When a line beginning with a block or box comment string is being
+  wrapped, that string is inserted in the next line as well
+- The 'Append to Register' command now adds the new text to the
+  clipboard history
+- EditBuddy's first-time and new-version wizards now look better
 
 + Neutral
 
@@ -22,6 +31,8 @@ JEDIT 2.7 VERSION HISTORY
 - -reuseview command line switch removed; now, client instances open
   buffers in existing views by default. To force a new view to be
   created by the client, specify the -newview switch.
+- Batch search feature renamed to 'HyperSearch' (this is what it used to
+  be called in previous jEdit versions)
 
 + Bug Fixes
 
@@ -34,6 +45,12 @@ JEDIT 2.7 VERSION HISTORY
 - Entering a blank file name filter in the search and replace dialog box
   now searches in all files. Previously, it would generate an empty file
   set
+- Soft tabs did not have the correct width if inserted in the middle of
+  a line
+- If the last action in a macro was an insertion, the trailing `");'
+  would not be inserted, and hence the macro would not run
+- Entering filenames in the filename field of the 'Open' dialog box
+  didn't work properly
 
 * Version 2.7pre3
 

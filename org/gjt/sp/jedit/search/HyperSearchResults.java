@@ -1,5 +1,5 @@
 /*
- * BatchSearchResults.java - Batch search results
+ * HyperSearchResults.java - HyperSearch results
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -37,16 +37,16 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.Log;
 
 /**
- * Batch search results window.
+ * HyperSearch results window.
  * @author Slava Pestov
  * @version $Id$
  */
-public class BatchSearchResults extends JPanel implements DockableWindow,
+public class HyperSearchResults extends JPanel implements DockableWindow,
 	EBComponent
 {
-	public static final String NAME = "batch-search-results";
+	public static final String NAME = "hypersearch-results";
 
-	public BatchSearchResults(View view)
+	public HyperSearchResults(View view)
 	{
 		super(new BorderLayout());
 
@@ -109,7 +109,7 @@ public class BatchSearchResults extends JPanel implements DockableWindow,
 					for(int j = bufferNode.getChildCount() - 1;
 						j >= 0; j--)
 					{
-						BatchSearchResult result = (BatchSearchResult)
+						HyperSearchResult result = (HyperSearchResult)
 							((DefaultMutableTreeNode)bufferNode
 							.getChildAt(j)).getUserObject();
 						if(buffer.getPath().equals(result.path))
@@ -127,7 +127,7 @@ public class BatchSearchResults extends JPanel implements DockableWindow,
 					for(int j = bufferNode.getChildCount() - 1;
 						j >= 0; j--)
 					{
-						BatchSearchResult result = (BatchSearchResult)
+						HyperSearchResult result = (HyperSearchResult)
 							((DefaultMutableTreeNode)bufferNode
 							.getChildAt(j)).getUserObject();
 						if(buffer.getPath().equals(result.path))
@@ -199,7 +199,7 @@ public class BatchSearchResults extends JPanel implements DockableWindow,
 			}
 			else
 			{
-				final BatchSearchResult result = (BatchSearchResult)value;
+				final HyperSearchResult result = (HyperSearchResult)value;
 				final Buffer buffer = result.getBuffer();
 
 				if(buffer == null)

@@ -1408,6 +1408,13 @@ public class jEdit
 	 */
 	public static void _closeBuffer(View view, Buffer buffer)
 	{
+		if(buffer.isClosed())
+		{
+			// can happen if the user presses C+w twice real
+			// quick and the buffer has unsaved changes
+			return;
+		}
+
 		removeBufferFromList(buffer);
 		buffer.close();
 
