@@ -165,6 +165,8 @@ public class Registers
 		if(!textArea.isEditable())
 			textArea.getToolkit().beep();
 
+		Register reg = getRegister(register);
+
 		if(reg == null)
 		{
 			textArea.getToolkit().beep();

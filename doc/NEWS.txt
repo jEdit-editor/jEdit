@@ -52,8 +52,13 @@ syntax highlighting modes. This makes writing your own modes easier; you
 no longer need to restart jEdit to see changes to mode files take
 effect.
 
-Syntax highlighting for Verilog, MIPS R2000 assembly and Occam files has
-been added.
+Syntax highlighting for the following file types has been added:
+
+- MIPS R2000 assembly
+- Occam
+- Omnimark
+- Velocity
+- Verilog
 
 * New version of BeanShell
 

@@ -165,7 +165,7 @@ jEdit depends on, and comes bundled with the following libraries:
 
 * Credits
 
-The following people contributed code and edit modes to the jEdit core:
+The following people contributed to the jEdit core:
 
 Alwyn Barry:
 	- Ada95 syntax highlighting
@@ -173,8 +173,6 @@ Alwyn Barry:
 Andre Kaplan:
 	- ASP, JavaScript, VBScript, BCEL syntax highlighting
 	- Syntax token background highlighting
-	- Andre has written lots of really cool plugins for jEdit. Check
-	  them out!
 
 Artur Biesiadowski:
 	- Eiffel syntax highlighting
@@ -196,6 +194,9 @@ Dirk Moebius:
 Dominic Stolerman:
 	- ML syntax highlighting
 
+Gili Tzabari:
+	- OS/2 start script
+
 Ian Maclean:
 	- Ruby syntax highlighting
 
@@ -206,9 +207,10 @@ Jerry McBride:
 	- NetRexx syntax highlighting
 
 John Gellene:
-	- Macros section of user's guide
+	- Writing macros section of user's guide
+	- Writing plugins section of user's guide
 	- A large number of sample macros
-	- Lots of other stuff too
+	- ... and more
 
 Jonathan Revusky:
 	- Python syntax highlighting
@@ -216,11 +218,11 @@ Jonathan Revusky:
 Juha Lindfors:
 	- IDL syntax highlighting
 
-Gili Tzabari:
-	- OS/2 start script
-
 Kristian Ovaska:
 	- Intel x86 Assembly, Haskell, Pascal syntax highlighting
+
+Lionel Fiol:
+	- Omnimark syntax highlighting
 
 Marc Rummel:
 	- MIPS R2000 Assembly syntax highlighting
@@ -242,17 +244,17 @@ Mike Dillon:
 	- ColdFusion, CSS, HTML, Java, JSP, LISP, Patch, PHP, SHTML,
 	  TSQL, XML, XSL syntax highlighting
 	- Plugin central (http://plugins.jedit.org) web master
-	- Lots more
+	- ... and more
 
 Nitsan Vardi:
 	- VHDL syntax highlighting
 
 Ollie Rutherfurd:
-	- Some commands in View->Scrolling menu
 	- C# syntax highlighting
 	- Improvements to XSL syntax highlighting
 	- Default set of XSL abbreviations included with jEdit
-	- Lots of other bug fixes and minor enhancements
+	- Some commands in View->Scrolling menu
+	- ... and more
 
 Peter Graves:
 	- Code for preserving file permissions on Unix was taken from
@@ -267,8 +269,11 @@ Romain Guy:
 Richard Beton:
 	- Occam syntax highlighting
 
+Saimon Moore:
+	- Velocity syntax highlighting
+
 Tal Davidson:
-	- Original syntax highlighting engine
+	- First implementation of syntax highlighting engine
 
 Tom Locke:
 	- Reverse search

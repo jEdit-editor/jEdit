@@ -7,22 +7,32 @@ TO DO
 + before 3.2pre5:
 
 - don't use hacked BeanShell 1.1a18
-- installing source for already installed plugins
-- API guide changes from John
 - save markers on close and don't set dirty flag
-- update macros for new BeanShell implied imports
-- write <partintro>'s for part 1, part 2
+- triple-click broken
+- s&r doesn't work
 
 + before 3.2final:
 
+- installing source for already installed plugins
+- update macros for new BeanShell implied imports
+- writing modes part:
+  - xml-primer
+  - writing-modes
+  - mode-tips
+    - delegate techniques
+      - start/end different from contents
+      - balancing brackets
+    - ... what else?
+  - installing-modes
+  
 - documentation:
   - update using-plugins
-  - write mode-tips
   - formatting problems in user's guide in table cells
   - document differences between web start and stand-alone version
   - JOptionPane not a good idea for getting user input?
-  - proofread documentation
   - BSH command reference in API guide <part>
+  - proofread documentation
+
 - 'rem' in vbscript
 - get web start to work
 - fix '... is not a function name' when running openjade

@@ -98,6 +98,9 @@
 <MODE NAME="occam"		FILE="occam.xml"
 				FILE_NAME_GLOB="*.icc" />
 
+<MODE NAME="omnimark"		FILE="omnimark.xml"
+				FILE_NAME_GLOB="*.x{om,in}" />
+
 <MODE NAME="pascal"		FILE="pascal.xml"
 				FILE_NAME_GLOB="*.pas" />
 
@@ -161,6 +164,9 @@
 
 <MODE NAME="vbscript"		FILE="vbscript.xml"
 				FILE_NAME_GLOB="*.{vbs,bas,cls}" />
+
+<MODE NAME="velocity"		FILE="velocity.xml"
+				FILE_NAME_GLOB="*.vw" />
 
 <MODE NAME="verilog"		FILE="verilog.xml"
 				FILE_NAME_GLOB="*.{ver,v}" />

@@ -16,12 +16,14 @@ JEDIT 3.2 VERSION HISTORY
   - Some jEdit code dealing with BeanShell has been cleaned up
   - bsh.util package included. This package contains a bunch of
     miscellaneous BeanShell scripts, like the BeanShell server
-- I have been improving and reorganizing the user's manual all throughout
-  the 3.2 series, and now I think it is almost ready. It now includes a
-  'Writing Plugins' section by John Gellene
+- John Gellene's 'plugin guide' added to user's guide. Note that a lot of
+  changes have been made to the user's guide in the 3.2 series, and it is
+  still a bit rough.
 - The three sample 'Hello' plugins included with the source download have
   been replaced with a single, more comprehensive demonstration plugin
   written by John Gellene named 'QuickNotepad'
+- Omnimark syntax highlighting (Lionel Fiol)
+- Velocity syntax highlighting (Saimon Moore)
 
 + Enhancements
 
