@@ -254,14 +254,14 @@ public class View extends JFrame
 
 		int count = macros.getMenuComponentCount();
 
-		createMacrosMenu(macros,new File(jEdit.getJEditHome()
-			+ File.separator + "macros"));
+		createMacrosMenu(macros,new File(MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"macros")));
 
 		String settings = jEdit.getSettingsDirectory();
 
 		if(settings != null)
-			createMacrosMenu(macros,new File(settings + File.separator
-				+ "macros"));
+			createMacrosMenu(macros,new File(MiscUtilities.constructPath(
+				settings,"macros")));
 
 		if(count == macros.getMenuComponentCount())
 			macros.add(GUIUtilities.loadMenuItem(this,"no-macros"));
@@ -868,6 +868,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.99  1999/10/28 09:07:21  sp
+ * Directory list search
+ *
  * Revision 1.98  1999/10/24 06:04:00  sp
  * QuickSearch in tool bar, auto indent updates, macro recorder updates
  *

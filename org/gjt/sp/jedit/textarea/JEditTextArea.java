@@ -1196,6 +1196,9 @@ public class JEditTextArea extends JComponent
 					document.remove(rectStart,Math.min(lineEnd - rectStart,
 						end - start));
 
+					if(selectedText == null)
+						continue;
+
 					currNewline = selectedText.indexOf('\n',lastNewline);
 					if(currNewline == -1)
 						currNewline = selectedText.length();
@@ -1207,7 +1210,8 @@ public class JEditTextArea extends JComponent
 						currNewline + 1);
 				}
 
-				if(currNewline != selectedText.length())
+				if(selectedText != null &&
+					currNewline != selectedText.length())
 				{
 					int offset = map.getElement(selectionEndLine)
 						.getEndOffset() - 1;
@@ -1220,8 +1224,11 @@ public class JEditTextArea extends JComponent
 			{
 				document.remove(selectionStart,
 					selectionEnd - selectionStart);
-				document.insertString(selectionStart,
-					selectedText,null);
+				if(selectedText != null)
+				{
+					document.insertString(selectionStart,
+						selectedText,null);
+				}
 			}
 		}
 		catch(BadLocationException bl)
@@ -2088,6 +2095,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  1999/10/28 09:07:21  sp
+ * Directory list search
+ *
  * Revision 1.25  1999/10/24 06:04:00  sp
  * QuickSearch in tool bar, auto indent updates, macro recorder updates
  *

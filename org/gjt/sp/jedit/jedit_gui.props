@@ -522,24 +522,19 @@ search.replaceAll=Replace All
 search.replaceAll.mnemonic=r
 
 # Multifile search dialog
-search.multifile.title=Multi File Search Settings
-search.multifile.caption=Search in the following buffer sets:
-search.multifile.current=Search in current buffer only
-search.multifile.all=Search in all buffers
-search.multifile.selected=Search in selected buffers
-search.multifile.directory=Search in a directory
-search.multifile.options=Fileset options
-search.multifile.no-options=No options
+multifile.title=Multi File Search Settings
+multifile.caption=Search in the following buffer sets:
+multifile.current=Search in current buffer only
+multifile.all=Search in all buffers
+multifile.selected=Search in selected buffers
+multifile.directory=Search in a directory
 
-search.multifile.directory.path=Path:\ 
-search.multifile.directory.choose=Choose
-search.multifile.directory.filter=Filename filter:\ 
-search.multifile.directory.recurse=Search subdirectories
-
-search.multifile.directory.path=Directory:\ 
-search.multifile.directory.choose=Choose...
-search.multifile.directory.glob=*
-search.multifile.directory.recurse=Recurse into subdirectories
+multifile.directory.path=Path:\ 
+multifile.directory.choose=Choose...
+multifile.directory.glob=Filter:\ 
+multifile.directory.glob.value=*
+multifile.directory.recurse=Search subdirectories
+multifile.directory.recurse.value=on
 
 # Keep searching dialog
 keepsearching.title=No More Matches Found

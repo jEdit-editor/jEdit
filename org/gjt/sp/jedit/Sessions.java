@@ -96,8 +96,7 @@ public class Sessions
 	public static String createSessionFileName(String session)
 	{
 		String filename = MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory() + File.separator
-			+ "sessions",session);
+			jEdit.getSettingsDirectory(),"sessions",session);
 
 		if(!filename.toLowerCase().endsWith(".session"))
 			filename = filename + ".session";
@@ -168,6 +167,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/10/28 09:07:21  sp
+ * Directory list search
+ *
  * Revision 1.1  1999/10/26 07:43:59  sp
  * Session loading and saving, directory list search started
  *

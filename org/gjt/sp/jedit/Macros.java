@@ -106,8 +106,7 @@ public class Macros
 		}
 
 		String fileName = MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory() + File.separator
-			+ "macros",name);
+			jEdit.getSettingsDirectory(),"macros",name);
 
 		// Check if it's open
 		Buffer buffer = jEdit.getBuffer(fileName);
@@ -302,6 +301,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/10/28 09:07:21  sp
+ * Directory list search
+ *
  * Revision 1.6  1999/10/19 09:10:13  sp
  * pre5 bug fixing
  *

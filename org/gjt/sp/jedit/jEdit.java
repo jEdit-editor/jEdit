@@ -71,8 +71,8 @@ public class jEdit
 		boolean endOpts = false;
 		boolean readOnly = false;
 		boolean reuseView = false;
-		settingsDirectory = System.getProperty("user.home") +
-			File.separator + ".jedit";
+		settingsDirectory = MiscUtilities.constructPath(
+			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
 		boolean defaultSession = true;
 		session = "default";
@@ -203,8 +203,8 @@ public class jEdit
 		initRecent();
 		if(settingsDirectory != null)
 		{
-			HistoryModel.loadHistory(settingsDirectory + File.separator
-				+ "history");
+			HistoryModel.loadHistory(MiscUtilities.constructPath(
+				settingsDirectory,"history"));
 		}
 		SearchAndReplace.load();
 
@@ -402,8 +402,8 @@ public class jEdit
 				continue;
 			try
 			{
-				new JARClassLoader(directory + File.separator
-					+ plugin);
+				new JARClassLoader(MiscUtilities.constructPath(
+					directory,plugin));
 			}
 			catch(IOException io)
 			{
@@ -986,8 +986,9 @@ public class jEdit
 			try
 			{
 				OutputStream out = new FileOutputStream(
-					settingsDirectory + File.separator
-					+ "properties");
+					MiscUtilities.constructPath(
+						settingsDirectory,
+						"properties"));
 				props.save(out,"Use the -nosettings switch"
 					+ " if you want to edit this file in jEdit");
 				out.close();
@@ -1126,7 +1127,6 @@ public class jEdit
 			else
 				jEditHome = System.getProperty("user.dir");
 		}
-		jEditHome = jEditHome + File.separator;
 
 		if(settingsDirectory != null)
 		{
@@ -1313,7 +1313,7 @@ public class jEdit
 	private static void initPlugins()
 	{
 		plugins = new Vector();
-		loadPlugins(jEditHome + "jars");
+		loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
 		if(settingsDirectory != null)
 		{
 			File jarsDirectory = new File(settingsDirectory,"jars");
@@ -1334,8 +1334,9 @@ public class jEdit
 		{
 			try
 			{
-				loadProps(new FileInputStream(settingsDirectory
-					+ File.separator + "properties"));
+				loadProps(new FileInputStream(
+					MiscUtilities.constructPath(
+					settingsDirectory,"properties")));
 			}
 			catch(FileNotFoundException fnf)
 			{
@@ -1536,6 +1537,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.146  1999/10/28 09:07:21  sp
+ * Directory list search
+ *
  * Revision 1.145  1999/10/26 07:43:59  sp
  * Session loading and saving, directory list search started
  *
@@ -1565,31 +1569,4 @@ public class jEdit
  *
  * Revision 1.136  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
- *
- * Revision 1.135  1999/10/07 04:57:13  sp
- * Images updates, globs implemented, file filter bug fix, close all command
- *
- * Revision 1.134  1999/10/06 08:39:46  sp
- * Fixes to repeating and macro features
- *
- * Revision 1.133  1999/10/05 10:55:29  sp
- * File dialogs open faster, and experimental keyboard macros
- *
- * Revision 1.132  1999/10/05 04:43:58  sp
- * Minor bug fixes and updates
- *
- * Revision 1.131  1999/10/04 03:20:51  sp
- * Option pane change, minor tweaks and bug fixes
- *
- * Revision 1.130  1999/10/03 03:47:15  sp
- * Minor stupidity, IDL mode
- *
- * Revision 1.129  1999/10/02 01:12:36  sp
- * Search and replace updates (doesn't work yet), some actions moved to TextTools
- *
- * Revision 1.128  1999/10/01 07:31:39  sp
- * RMI server replaced with socket-based server, minor changes
- *
- * Revision 1.127  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
  */

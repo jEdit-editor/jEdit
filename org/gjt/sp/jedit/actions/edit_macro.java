@@ -43,8 +43,9 @@ public class edit_macro extends EditAction
 			return;
 		}
 
-		String path = GUIUtilities.showFileDialog(view,settings
-			+ File.separator + "macros",JFileChooser.OPEN_DIALOG);
+		String path = GUIUtilities.showFileDialog(view,
+			MiscUtilities.constructPath(settings,"macros"),
+			JFileChooser.OPEN_DIALOG);
 		if(path != null)
 			jEdit.openFile(view,null,path,false,false);
 	}

@@ -83,6 +83,18 @@ public class MiscUtilities
 	}
 
 	/**
+	 * Constructs an absolute path name from three path components.
+	 * @param parent The parent directory
+	 * @param path1 The first path
+	 * @param path2 The second path
+	 */
+	public static String constructPath(String parent,
+		String path1, String path2)
+	{
+		return constructPath(constructPath(parent,path1),path2);
+	}
+
+	/**
 	 * Returns the number of leading white space characters in the
 	 * specified string.
 	 * @param str The string
@@ -405,6 +417,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  1999/10/28 09:07:21  sp
+ * Directory list search
+ *
  * Revision 1.19  1999/10/19 09:10:13  sp
  * pre5 bug fixing
  *

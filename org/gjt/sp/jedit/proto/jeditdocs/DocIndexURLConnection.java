@@ -33,7 +33,8 @@ public class DocIndexURLConnection extends URLConnection
 		StringBuffer buf = new StringBuffer();
 		buf.append(jEdit.getProperty("docindex.header"));
 
-		File docDir = new File(jEdit.getJEditHome() + File.separator + "doc");
+		File docDir = new File(MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"doc"));
 
 		// Text files
 		buf.append(jEdit.getProperty("docindex.general"));

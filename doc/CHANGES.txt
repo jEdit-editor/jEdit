@@ -4,6 +4,7 @@ JEDIT VERSION HISTORY
 
 + New Features
 
+- You can now search for strings inside all files in a directory, recursively
 - 'Clear Register' command (primarily for macros)
 - Macros are now also loaded from $JEDIT_HOME/macros
 - Some sample macros are now included with jEdit
@@ -18,6 +19,7 @@ JEDIT VERSION HISTORY
 + Enhancements
 
 - The caret is now moved to where the change was when Undo is invoked
+- Most path name constructs are now routed through constructPath()
 
 + Bug Fixes
 
@@ -30,6 +32,10 @@ JEDIT VERSION HISTORY
 - Several images have been removed from org.gjt.sp.jedit.toolbar package,
   so plugins that use them will have to include those images in their
   JAR file
+
++ Plugin Updates
+
+- Console 1.7.1
 
 * Version 2.1final
 

@@ -2463,6 +2463,20 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    the <guimenu>Search</> menu.
   </para>
   <para>
+   The first two file sets should be self-expanatory. With <quote>Search in
+   selected buffers</>, you must <keycap>Control</>-click to select
+   multiple buffers from the list.
+  </para>
+  <para>
+   <quote>Search in a directory</> requires you to specify a starting
+   path, a glob pattern that file names will be matched against
+   (see <xref linkend=globs>), and if the search should recurse into
+   subdirectories or not. Keep in mind that the resulting
+   search could require a very large number of files to be
+   opened, which might take a while, and/or use a large amount of
+   RAM.
+  </para>
+  <para>
    Once you have selected the appropriate buffer set and clicked
    <guibutton>OK</>, any subsequent search and replace operations
    will be performed on all specified buffers.
@@ -3405,6 +3419,7 @@ implements OptionPane
      <filename>$HOME/.jedit/sessions/<replaceable>name</></filename>.
      Sessions can be saved with the <guimenu>File</>&gt;<guimenuitem>Save
      Session</> command; see <xref linkend=sessions> for details.
+     </entry>
     </row>
     <row>
      <entry>-settings=<replaceable>dir</></entry>

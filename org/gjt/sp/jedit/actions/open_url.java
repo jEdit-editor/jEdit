@@ -35,7 +35,9 @@ public class open_url extends EditAction
 		View view = getView(evt);
 		Buffer buffer = view.getBuffer();
 		String path = GUIUtilities.input(view,"openurl",
-			buffer.getFile().getParent() + File.separator);
+			// the below trick ensures that the path ends with the
+			// file separator, without adding double file separators
+			MiscUtilities.constructPath(buffer.getFile().getParent(),""));
 		if(path != null)
 		{
 			jEdit.openFile(view,buffer.getFile().getParent(),

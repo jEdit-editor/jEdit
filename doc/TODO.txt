@@ -1,19 +1,24 @@
 JEDIT 2.2 TO DO
 
-------- pre1 -------
-
-- On some Java implementations, scrolling doesn't stop after mouse is released
-- Autoindent pasted text
-- Finish MultifileOptions
+- Directory list set is slow; investigate exactly what happends in openFile()
+  and closeBuffer(). Also; memory leaks?
 - Low-priority background thread that plugins can use to do background
   parsing, etc: jEdit.addWorkRequest(Runnable r), WorkerThread
-
-------- pre2+ -------
-
+- On some Java implementations, scrolling doesn't stop after mouse is released
+- Autoindent pasted text
 - Reverse search
 - Integrate XMode
 - Integrate EditBus if enough plugins take advantage of it
 - Word wrap
+- Pass -session= to server
+- HyperSearch: call doneWithBuffer() for all buffers
+- XML GUI. For example:
+  <textfield id=find text=search.find.value />
+  <button id=ok text=common.ok>
+   <action>set-search-string $find</>
+   <action>set-replace-string $replace</>
+   <action>find-next</>
+  </button>
 
 ------- Installer -------
 

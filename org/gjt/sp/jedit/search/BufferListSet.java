@@ -30,7 +30,8 @@ import org.gjt.sp.jedit.*;
 public class BufferListSet implements SearchFileSet
 {
 	/**
-	 * Creates a new buffer list search set.
+	 * Creates a new buffer list search set. This constructor is
+	 * only used by the multifile settings dialog box.
 	 * @param files The path names to search
 	 */
 	public BufferListSet(Object[] files)
@@ -38,7 +39,7 @@ public class BufferListSet implements SearchFileSet
 		this.files = new Vector(files.length);
 		for(int i = 0; i < files.length; i++)
 		{
-			this.files.addElement(files[i]);
+			this.files.addElement(((Buffer)files[i]).getPath());
 		}
 	}
 
@@ -67,6 +68,7 @@ public class BufferListSet implements SearchFileSet
 	 */
 	public Buffer getNextBuffer(View view, Buffer buffer)
 	{
+		System.out.println(buffer);
 		if(buffer == null)
 			return getBuffer((String)files.elementAt(0));
 		else
@@ -113,6 +115,9 @@ public class BufferListSet implements SearchFileSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  1999/10/28 09:07:21  sp
+ * Directory list search
+ *
  * Revision 1.8  1999/10/26 07:43:59  sp
  * Session loading and saving, directory list search started
  *
