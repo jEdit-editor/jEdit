@@ -1,5 +1,16 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0.3
+
++ Bug Fixes
+
+- Added missing check for control key being down in text area mouse
+  handler.
+
++ API Changes
+
+- Buffer.getRuleSetAtOffset() method is now public.
+
 * Version 4.0.2
 
 Note that jEdit 4.0.1 was never released.

@@ -1720,6 +1720,23 @@ public class Buffer implements EBComponent
 		setProperty(name,new Integer(value));
 	} //}}}
 
+	//{{{ getRuleSetAtOffset() method
+	/**
+	 * Returns the syntax highlighting ruleset at the specified offset.
+	 * @since jEdit 4.1pre1
+	 */
+	public ParserRuleSet getRuleSetAtOffset(int offset)
+	{
+		int line = getLineOfOffset(offset);
+		offset -= getLineStartOffset(line);
+		if(offset != 0)
+			offset--;
+
+		TokenList tokens = markTokens(line);
+		Token token = TextUtilities.getTokenAtOffset(tokens.getFirstToken(),offset);
+		return token.rules;
+	} //}}}
+
 	//{{{ getKeywordMapAtOffset() method
 	/**
 	 * Returns the syntax highlighting keyword map in effect at the
@@ -3452,19 +3469,6 @@ public class Buffer implements EBComponent
 		{
 			setFlag(INSIDE_INSERT,false);
 		}
-	} //}}}
-
-	//{{{ getRuleSetAtOffset() method
-	private ParserRuleSet getRuleSetAtOffset(int offset)
-	{
-		int line = getLineOfOffset(offset);
-		offset -= getLineStartOffset(line);
-		if(offset != 0)
-			offset--;
-
-		TokenList tokens = markTokens(line);
-		Token token = TextUtilities.getTokenAtOffset(tokens.getFirstToken(),offset);
-		return token.rules;
 	} //}}}
 
 	//{{{ Event firing methods

@@ -6194,17 +6194,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 			else
 			{
-				int offset = xyToOffset(evt.getX(),evt.getY(),false);
-				if(offset != buffer.getLength())
+				if(control)
 				{
-					buffer.getText(offset,1,lineSegment);
-					switch(lineSegment.array[lineSegment.offset])
+					int offset = xyToOffset(evt.getX(),evt.getY(),false);
+					if(offset != buffer.getLength())
 					{
-					case '(': case '[': case '{':
-					case ')': case ']': case '}':
-						moveCaretPosition(offset,false);
-						selectToMatchingBracket();
-						return;
+						buffer.getText(offset,1,lineSegment);
+						switch(lineSegment.array[lineSegment.offset])
+						{
+						case '(': case '[': case '{':
+						case ')': case ']': case '}':
+							moveCaretPosition(offset,false);
+							selectToMatchingBracket();
+							return;
+						}
 					}
 				}
 
