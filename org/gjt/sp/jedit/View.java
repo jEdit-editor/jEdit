@@ -1013,7 +1013,7 @@ public class View extends JFrame implements EBComponent
 				gotFocus = true;
 			}
 
-			Vector buffers = new Vector();
+			final Vector buffers = new Vector();
 			EditPane[] editPanes = getEditPanes();
 			for(int i = 0; i < editPanes.length; i++)
 			{
@@ -1025,8 +1025,20 @@ public class View extends JFrame implements EBComponent
 					buffers.addElement(buffer);
 			}
 
-			for(int i = 0; i < buffers.size(); i++)
-				((Buffer)buffers.elementAt(i)).checkModTime(View.this);
+			// People have reported hangs with JDK 1.4; might be
+			// caused by modal dialogs being displayed from
+			// windowActivated()
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					for(int i = 0; i < buffers.size(); i++)
+					{
+						((Buffer)buffers.elementAt(i))
+							.checkModTime(View.this);
+					}
+				}
+			});
 		}
 
 		public void windowClosing(WindowEvent evt)

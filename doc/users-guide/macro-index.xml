@@ -599,6 +599,21 @@
 </listitem>
 
 <listitem>
+    <para><filename>Make_Bug_Report.bsh</filename></para>
+    <abstract><para>
+      Creates a new buffer with installation and error information
+	    extracted from the activity log.
+    </para></abstract>
+	<para>
+	  The macro extracts initial messages written to the activity log
+	  describing the user's operating system, JDK, jEdit version and
+	  installed plugins. It then appends the last set of error messages
+	  written to the activity log.  The new text buffer can be saved and
+	  attached to an email message or a bug report made on SourceForge.
+	</para>
+  </listitem>
+  
+<listitem>
     <para><filename>Run_Macro_at_Caret.bsh</filename></para>
     <abstract><para>
         Executes the macro whose name appears at the editing caret.

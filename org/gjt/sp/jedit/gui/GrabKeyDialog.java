@@ -244,7 +244,9 @@ public class GrabKeyDialog extends JDialog
 		if(shortcut == null || shortcut.length() == 0)
 			return null;
 
+		String spacedShortcut = shortcut + " ";
 		Enumeration enum = allBindings.elements();
+
 		while(enum.hasMoreElements())
 		{
 			KeyBinding kb = (KeyBinding)enum.nextElement();
@@ -252,13 +254,14 @@ public class GrabKeyDialog extends JDialog
 			if(!kb.isAssigned())
 				continue;
 
+			String spacedKbShortcut = kb.shortcut + " ";
+
 			// eg, trying to bind C+n C+p if C+n already bound
-			if(shortcut.startsWith(kb.shortcut))
+			if(spacedShortcut.startsWith(spacedKbShortcut))
 				return kb;
 
 			// eg, trying to bind C+e if C+e is a prefix
-			if(kb.shortcut.startsWith(shortcut))
-//				&& kb.shortcut.length() > shortcut.length())
+			if(spacedKbShortcut.startsWith(spacedShortcut))
 			{
 				// create a temporary (synthetic) prefix
 				// KeyBinding, that won't be saved

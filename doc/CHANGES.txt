@@ -8,6 +8,7 @@ JEDIT 3.2 VERSION HISTORY
   bind a macro to '>' that in HTML mode inserts the appropriate closing
   tag automatically. Note that the actual character is not inserted, so
   the macro would need to insert '>' first itself.
+- 'Make Bug Report' macro (John Gellene)
 
 + Enhancements
 
@@ -24,8 +25,10 @@ JEDIT 3.2 VERSION HISTORY
   caused problems
 - Invoking menus using Alt-key mnemonics would insert the mnemonic
   character into the buffer on JDK 1.4
-- Fixed long-standing bug in scroll-to-caret bug
+- Fixed long-standing bug in scroll-to-caret code
 - C+. and C+, didn't set the history model of the search bar
+- Possible fix for jEdit hanging on JDK 1.4 when file modified on disk
+  by another program
 
 + API Changes
 

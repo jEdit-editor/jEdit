@@ -93,7 +93,7 @@ public class SearchBar extends JPanel
 	public void setHyperSearch(boolean hyperSearch)
 	{
 		jEdit.setBooleanProperty("view.search.hypersearch.toggle",hyperSearch);
-		find.setModel(hyperSearch.isSelected() ? "find" : null);
+		find.setModel(this.hyperSearch.isSelected() ? "find" : null);
 		this.hyperSearch.setSelected(hyperSearch);
 	}
 

@@ -2,16 +2,22 @@ TO DO
 
 + before 3.2final:
 
-- cvs remove plugin-api-guide.xml
-- proofread plugin guide
+- proofread plugin and API guide
 - formatting problems in user's guide in table cells
-- next time i'm making an RPM, fix the shell script
 - make sure pre9 alt key change didn't break altgr on java 1.4
-- F11 if F1 assigned, etc.
-- saving a read-only file: show a confirmation dialog box?
+- 3.2 RPMs:
+  jedit rpm: don't forget to include a non-broken shell script
+  jedit src rpm: with relatively easy build support
+  jedit-plugins rpm: binaries of all plugins compatible with 3.2
+  jedit-plugins src rpm: sources of all plugins compatible with 3.2
+  make plugin rpms relocatable
+  are plugin rpms worth it?
 
 + next major release (4.0):
 
+- Macros.confirm()
+- saving a read-only file: show a confirmation dialog box
+- jEdit.get/setInteger/Color/FontProperty()
 - new document model
 - when loading plugins and such, check for settingsDir == jEditHome
 - collapse-all-folds action that calls expandFolds(1)

@@ -164,7 +164,7 @@
   jEdit's <firstterm>EditBus</firstterm> object, which manages messaging
   between plugins and the host application. We will discuss the
   EditBus in more detail in <xref linkend="host-display-manager" />
-  and <xref linkend="api-plugin-classes" />.
+  and <xref linkend="api-message" />.
 </para>
 
 <para>

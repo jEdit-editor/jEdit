@@ -61,6 +61,9 @@ should specify your jEdit version, Java version, operating system, any
 relevant output from the activity log, and an e-mail address, in case we
 need further information to fix the bug.
 
+The 'Make Bug Report' macro included with jEdit (can be found in
+Macros->Misc) might be useful when preparing a bug report.
+
 If you would like to discuss the BeanShell scripting language,
 subscribe to one of the BeanShell mailing lists by visiting
 <http://www.beanshell.org/contact.html>.

@@ -61,7 +61,7 @@
   </para>
 
   <para>
-   <guimenu>Utilities</>&gt;<guimenuitem>Evaluate BeanShell
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
    Expression</guimenuitem> causes jEdit to display a text input dialog
    that asks you to type a single line of BeanShell commands. You can type
    more than one BeanShell statement so long as each of them ends with a
@@ -73,7 +73,7 @@
   </para>
 
   <para>
-   <guimenu>Utilities</>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
    evaluates the selected text as a BeanShell script and
    replaces the selected text with the return value of the last BeanShell
    statement.
