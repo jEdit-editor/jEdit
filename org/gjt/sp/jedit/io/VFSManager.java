@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.io;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
@@ -81,6 +82,9 @@ public class VFSManager
 	 */
 	public static void registerVFS(String protocol, VFS vfs)
 	{
+		Log.log(Log.DEBUG,VFSManager.class,"Registered "
+			+ vfs.getName() + " filesystem for "
+			+ protocol + " protocol");
 		vfsHash.put(protocol,vfs);
 	}
 
@@ -91,6 +95,14 @@ public class VFSManager
 	public static void unregisterVFS(String protocol)
 	{
 		vfsHash.remove(protocol);
+	}
+
+	/**
+	 * Returns an enumeration of all registered filesystems.
+	 */
+	public static Enumeration getFilesystems()
+	{
+		return vfsHash.elements();
 	}
 
 	/**
@@ -139,7 +151,13 @@ public class VFSManager
 	private static WorkThread ioThread = new WorkThread();
 	private static VFS fileVFS = new FileVFS();
 	private static VFS urlVFS = new UrlVFS();
-	private static Hashtable vfsHash = new Hashtable();
+	private static Hashtable vfsHash;
+
+	static
+	{
+		vfsHash = new Hashtable();
+		registerVFS("ftp",new FtpVFS());
+	}
 
 	private VFSManager() {}
 }
@@ -147,6 +165,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.1  2000/04/24 04:45:37  sp
  * New I/O system started, and a few minor updates
  *

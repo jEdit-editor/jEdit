@@ -101,13 +101,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
-	 * @deprecated No longer needed. Do not call this method.
-	 */
-	public void loadIfNecessary(View view)
-	{
-	}
-
-	/**
 	 * Loads the buffer from disk, even if it is loaded already.
 	 * @param view The view
 	 * @param reload If true, we automatically delete the autosave file,
@@ -132,7 +125,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 			if(doLoad)
 				vfs.load(view,this,path);
-			//vfs.loadMarkers(...)
 		}
 
 		// Do some stuff once loading is finished
@@ -140,18 +132,11 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		{
 			public void run()
 			{
-				if(!getFlag(TEMPORARY))
-				{
-					setMode();
-					propertiesChanged();
-					EditBus.addToBus(Buffer.this);
-				}
-
 				undo = new UndoManager();
-				// load undoCount property
-				propertiesChanged();
-
 				setFlag(LOADING,false);
+
+				if(getFlag(TEMPORARY))
+					return;
 
 				View _view = jEdit.getFirstView();
 				while(_view != null)
@@ -167,13 +152,19 @@ public class Buffer extends SyntaxDocument implements EBComponent
 						_view.getTextArea().setCaretPosition(0);
 						_view.getTextArea().repaint();
 					}
-		
+	
 					_view = _view.getNext();
 				}
 
-				// fire LOADED event
+				propertiesChanged();
+				setMode();
+				EditBus.addToBus(Buffer.this);
+
+				// send some EditBus messages
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.LOADED));
+				EditBus.send(new BufferUpdate(Buffer.this,
+					BufferUpdate.MARKERS_CHANGED));
 			}
 		});
 	}
@@ -234,6 +225,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(path == null && getFlag(NEW_FILE))
 			return saveAs(view);
 
+		setFlag(SAVING,true);
 		EditBus.send(new BufferUpdate(this,BufferUpdate.SAVING));
 
 		if(path == null)
@@ -242,7 +234,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		setPath(path);
 
 		if(!vfs.save(view,this,path))
+		{
+			setFlag(SAVING,false);
 			return false;
+		}
 
 		// Once save is complete, do a few other things
 		VFSManager.runInAWTThread(new Runnable()
@@ -254,6 +249,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				setFlag(NEW_FILE,false);
 				setFlag(UNTITLED,false);
 				setFlag(DIRTY,false);
+				setFlag(SAVING,false);
 
 				if(getFlag(NEW_FILE) || mode.getName().equals("text"))
 					setMode();
@@ -295,6 +291,12 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void checkModTime(View view)
 	{
+		// don't do these checks while a save is in progress,
+		// because for a moment newModTime will be greater than
+		// oldModTime, due to the multithreading
+		if(getFlag(NEW_FILE) || getFlag(SAVING))
+			return;
+
 		long oldModTime = modTime;
 		long newModTime = vfs.getLastModified(path);
 
@@ -366,7 +368,15 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public final boolean isLoaded()
 	{
-		return true;
+		return !getFlag(LOADING);
+	}
+
+	/**
+	 * Returns true if the buffer is currently being saved.
+	 */
+	public final boolean isSaving()
+	{
+		return getFlag(SAVING);
 	}
 
 	/**
@@ -991,7 +1001,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(!added)
 			markers.addElement(markerN);
 
-		EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
+		if(!getFlag(LOADING))
+			EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
 	}
 
 	/**
@@ -1008,7 +1019,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			if(marker.getName().equals(name))
 				markers.removeElementAt(i);
 		}
-		EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
+
+		if(!getFlag(LOADING))
+			EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
 	}
 	
 	/**
@@ -1346,7 +1359,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void _writeMarkers(OutputStream out) throws IOException
 	{
-		Writer o = new OutputStreamWriter(out);
+		Writer o = new BufferedWriter(new OutputStreamWriter(out));
 		Enumeration enum = getMarkers();
 		while(enum.hasMoreElements())
 		{
@@ -1480,14 +1493,15 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 	private static final int CLOSED = 0;
 	private static final int LOADING = 1;
-	private static final int NEW_FILE = 2;
-	private static final int UNTITLED = 3;
-	private static final int AUTOSAVE_DIRTY = 4;
-	private static final int DIRTY = 5;
-	private static final int READ_ONLY = 6;
-	private static final int SYNTAX = 7;
-	private static final int UNDO_IN_PROGRESS = 8;
-	private static final int TEMPORARY = 9;
+	private static final int SAVING = 2;
+	private static final int NEW_FILE = 3;
+	private static final int UNTITLED = 4;
+	private static final int AUTOSAVE_DIRTY = 5;
+	private static final int DIRTY = 6;
+	private static final int READ_ONLY = 7;
+	private static final int SYNTAX = 8;
+	private static final int UNDO_IN_PROGRESS = 9;
+	private static final int TEMPORARY = 10;
 
 	private int flags;
 
@@ -1516,6 +1530,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			path = path.substring(5);
 
 		this.path = path;
+		name = MiscUtilities.getFileName(path);
 
 		vfs = VFSManager.getVFSForProtocol(protocol);
 		if(vfs instanceof FileVFS)
@@ -1528,8 +1543,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				autosaveFile.delete();
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
 		}
-
-		name = MiscUtilities.getFileName(path);
 	}
 			
 	private void processProperty(String prop)
@@ -1707,6 +1720,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.140  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.139  2000/04/24 04:45:36  sp
  * New I/O system started, and a few minor updates
  *

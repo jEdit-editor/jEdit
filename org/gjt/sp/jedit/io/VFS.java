@@ -31,6 +31,25 @@ import org.gjt.sp.jedit.View;
 public abstract class VFS
 {
 	/**
+	 * Creates a new virtual filesystem.
+	 * @param name The name
+	 */
+	public VFS(String name)
+	{
+		this.name = name;
+	}
+
+	/**
+	 * Returns this VFS's name. The name is used to obtain the
+	 * menu item label stored in the <code>vfs.<i>name</i>.label</code>
+	 * by the 'Open From' and 'Save To' menus.
+	 */
+	public String getName()
+	{
+		return name;
+	}
+
+	/**
 	 * Displays an open dialog box and returns the selected pathname.
 	 * @param view The view
 	 * @param buffer The buffer
@@ -57,6 +76,11 @@ public abstract class VFS
 	}
 
 	/**
+	 * Called when the I/O thread has finished loading a buffer.
+	 */
+	public void loadCompleted(View view, Buffer buffer, String path) {}
+
+	/**
 	 * Saves the specifies buffer. The default implementation posts
 	 * an I/O request to the I/O thread.
 	 * @param view The view
@@ -68,6 +92,11 @@ public abstract class VFS
 		VFSManager.addIORequest(IORequest.SAVE,view,buffer,path,this);
 		return true;
 	}
+
+	/**
+	 * Called when the I/O thread has finished saving a buffer.
+	 */
+	public void saveCompleted(View view, Buffer buffer, String path) {}
 
 	/**
 	 * Returns the last time the specified path has been modified on disk
@@ -114,11 +143,17 @@ public abstract class VFS
 	 */
 	public abstract OutputStream _createOutputStream(View view, String path)
 		throws IOException;
+
+	// private members
+	private String name;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.1  2000/04/24 04:45:37  sp
  * New I/O system started, and a few minor updates
  *

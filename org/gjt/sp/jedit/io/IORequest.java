@@ -75,10 +75,8 @@ public class IORequest implements Runnable
 		String message = jEdit.getProperty("view.status." + status,args);
 		for(int i = 0; i < views.length; i++)
 		{
-			View view = views[i];
-			view.setEnabled(false);
-			view.showWaitCursor();
-			view.pushStatus(message);
+			views[i].showWaitCursor();
+			views[i].pushStatus(message);
 		}
 
 		try
@@ -100,10 +98,8 @@ public class IORequest implements Runnable
 
 		for(int i = 0; i < views.length; i++)
 		{
-			View view = views[i];
-			view.setEnabled(true);
-			view.hideWaitCursor();
-			view.popStatus();
+			views[i].hideWaitCursor();
+			views[i].popStatus();
 		}
 	}
 
@@ -126,36 +122,42 @@ public class IORequest implements Runnable
 	{
 		try
 		{
-			InputStream in = vfs._createInputStream(view,path);
-			if(in == null)
-				return;
-			if(path.endsWith(".gz"))
-				in = new GZIPInputStream(in);
+			try
+			{
+				InputStream in = vfs._createInputStream(view,path);
+				if(in == null)
+					return;
+				if(path.endsWith(".gz"))
+					in = new GZIPInputStream(in);
 
-			buffer._read(in);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
-			Object[] args = { io.toString() };
-			VFSManager.error(view,"ioerror",args);
-		}
+				buffer._read(in);
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				Object[] args = { io.toString() };
+				VFSManager.error(view,"ioerror",args);
+			}
 
-		try
-		{
-			System.err.println("Loading markers from " + markersPath);
-			InputStream in = vfs._createInputStream(view,markersPath);
-			if(in == null)
-				return;
-			buffer._readMarkers(in);
+			try
+			{
+				InputStream in = vfs._createInputStream(view,markersPath);
+				if(in == null)
+					return;
+				buffer._readMarkers(in);
+			}
+			catch(IOException io)
+			{
+				// ignore
+			}
 		}
-		catch(IOException io)
+		finally
 		{
-			// ignore
+			vfs.loadCompleted(view,buffer,path);
 		}
 	}
 
@@ -175,7 +177,6 @@ public class IORequest implements Runnable
 			// Otherwise, we will accumilate stale marks files.
 			if(vfs.canDelete() && buffer.getMarkerCount() != 0)
 			{
-				System.err.println("Saving markers to " + markersPath);
 				OutputStream output = vfs._createOutputStream(view,markersPath);
 				if(out == null)
 					return;
@@ -194,12 +195,19 @@ public class IORequest implements Runnable
 			Object[] args = { io.toString() };
 			VFSManager.error(view,"ioerror",args);
 		}
+		finally
+		{
+			vfs.saveCompleted(view,buffer,path);
+		}
 	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.1  2000/04/24 04:45:37  sp
  * New I/O system started, and a few minor updates
  *

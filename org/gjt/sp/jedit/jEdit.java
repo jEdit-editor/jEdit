@@ -252,8 +252,6 @@ public class jEdit
 			server = new EditServer(portFile);
 
 		// Load files specified on the command line
-		GUIUtilities.setProgressText("Opening files");
-
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i] == null)
@@ -899,8 +897,9 @@ public class jEdit
 	 *
 	 * @since jEdit 2.4pre1
 	 */
-	public static Buffer openFile(View view, String parent, String path,
-		boolean readOnly, boolean newFile, boolean reloadIfOpen)
+	public static Buffer openFile(final View view, String parent,
+		String path, boolean readOnly, boolean newFile,
+		boolean reloadIfOpen)
 	{
 		if(view != null && parent == null)
 		{
@@ -950,20 +949,17 @@ public class jEdit
 
 		EditBus.send(new BufferUpdate(newBuffer,BufferUpdate.CREATED));
 
-		if(marker != null)
+		VFSManager.runInAWTThread(new Runnable()
 		{
-			// only go to marker once I/O is complete
-			VFSManager.runInAWTThread(new Runnable()
+			public void run()
 			{
-				public void run()
-				{
+				if(marker != null)
 					gotoMarker(newBuffer,null,marker);
-				}
-			});
-		}
 
-		if(view != null)
-			view.setBuffer(newBuffer);
+				if(view != null)
+					view.setBuffer(newBuffer);
+			}
+		});
 
 		return newBuffer;
 	}
@@ -1714,6 +1710,7 @@ public class jEdit
 		addAction("next-split");
 		addAction("next-word");
 		addAction("open-file");
+		addAction("open-from");
 		addAction("open-path");
 		addAction("overwrite");
 		addAction("paste");
@@ -1745,6 +1742,7 @@ public class jEdit
 		addAction("save");
 		addAction("save-all");
 		addAction("save-as");
+		addAction("save-to");
 		addAction("save-gutter-size");
 		addAction("save-session");
 		addAction("scroll-line");
@@ -2147,6 +2145,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.224  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.223  2000/04/24 04:45:36  sp
  * New I/O system started, and a few minor updates
  *

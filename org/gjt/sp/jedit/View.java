@@ -29,6 +29,7 @@ import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.textarea.*;
@@ -81,7 +82,7 @@ public class View extends JFrame implements EBComponent
 	 * Sets the buffer being edited by this view.
 	 * @param buffer The buffer to edit.
 	 */
-	public void setBuffer(Buffer buffer)
+	public void setBuffer(final Buffer buffer)
 	{
 		if(this.buffer == buffer)
 			return;
@@ -95,7 +96,6 @@ public class View extends JFrame implements EBComponent
 		textArea.setDocument(buffer);
 		((StatusBar)textArea.getStatus()).repaint();
 
-		loadCaretInfo();
 		updateMarkerMenus();
 		updateTitle();
 
@@ -107,9 +107,17 @@ public class View extends JFrame implements EBComponent
 			bufferTabs.selectBufferTab(buffer);
 		updateBuffersMenu();
 
-		buffer.checkModTime(this);
-
 		focusOnTextArea();
+
+		// Only do this after all I/O requests are complete
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				loadCaretInfo();
+				buffer.checkModTime(View.this);
+			}
+		});
 	}
 
 	/**
@@ -309,16 +317,13 @@ public class View extends JFrame implements EBComponent
 		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
 		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
 
-		if(start != null && end != null)
+		if(start != null && end != null
+			&& firstLine != null && horizontalOffset != null)
 		{
 			textArea.select(Math.min(start.intValue(),
 				buffer.getLength()),
 				Math.min(end.intValue(),
 				buffer.getLength()));
-		}
-
-		if(firstLine != null && horizontalOffset != null)
-		{
 			textArea.setFirstLine(firstLine.intValue());
 			textArea.setHorizontalOffset(horizontalOffset.intValue());
 		}
@@ -414,6 +419,10 @@ public class View extends JFrame implements EBComponent
 	{
 		if(name.equals("buffers"))
 			return buffers;
+		else if(name.equals("open-from-menu"))
+			return openFrom;
+		else if(name.equals("save-to-menu"))
+			return saveTo;
 		else if(name.equals("recent-files"))
 			return recent;
 		else if(name.equals("current-directory"))
@@ -442,6 +451,8 @@ public class View extends JFrame implements EBComponent
 
 		// Dynamic menus
 		buffers = GUIUtilities.loadMenu(this,"buffers");
+		openFrom = GUIUtilities.loadMenu(this,"open-from-menu");
+		saveTo = GUIUtilities.loadMenu(this,"save-to-menu");
 		recent = GUIUtilities.loadMenu(this,"recent-files");
 		currentDirectory = new CurrentDirectoryMenu(this);
 		clearMarker = GUIUtilities.loadMenu(this,"clear-marker");
@@ -449,6 +460,7 @@ public class View extends JFrame implements EBComponent
 		macros = GUIUtilities.loadMenu(this,"macros");
 		help = GUIUtilities.loadMenu(this,"help-menu");
 		plugins = GUIUtilities.loadMenu(this,"plugins");
+		updateVFSMenus();
 		updateMacrosMenu();
 		updateHelpMenu();
 		updatePluginsMenu();
@@ -500,6 +512,8 @@ public class View extends JFrame implements EBComponent
 	private boolean closed;
 
 	private JMenu buffers;
+	private JMenu openFrom;
+	private JMenu saveTo;
 	private JMenu recent;
 	private JMenu currentDirectory;
 	private JMenu clearMarker;
@@ -988,7 +1002,42 @@ public class View extends JFrame implements EBComponent
 			buffers.add(menuItem);
 		}
 	}
-	
+
+	/**
+	 * Recreates the VFS open-from and save-to menus.
+	 */
+	private void updateVFSMenus()
+	{
+		EditAction openFromAction = jEdit.getAction("open-from");
+		EditAction saveToAction = jEdit.getAction("save-to");
+
+		Enumeration enum = VFSManager.getFilesystems();
+
+		Vector openFromItems = new Vector();
+		Vector saveToItems = new Vector();
+		while(enum.hasMoreElements())
+		{
+			VFS vfs = (VFS)enum.nextElement();
+			String name = vfs.getName();
+			String label = jEdit.getProperty("vfs." + name
+				+ ".label");
+			EnhancedMenuItem emi = new EnhancedMenuItem(
+				label,null,openFromAction,name);
+			openFromItems.addElement(emi);
+			emi = new EnhancedMenuItem(
+				label,null,saveToAction,name);
+			saveToItems.addElement(emi);
+		}
+
+		MiscUtilities.quicksort(openFromItems,new MenuItemCompare());
+		MiscUtilities.quicksort(saveToItems,new MenuItemCompare());
+		for(int i = 0; i < openFromItems.size(); i++)
+		{
+			openFrom.add((JMenuItem)openFromItems.elementAt(i));
+			saveTo.add((JMenuItem)saveToItems.elementAt(i));
+		}
+	}
+
 	/**
 	 * Recreates the recent menu.
 	 */
@@ -1213,8 +1262,7 @@ public class View extends JFrame implements EBComponent
 			updateRecentMenu();
 			updateBuffersMenu();
 		}
-		else if(msg.getWhat() == BufferUpdate.LOADING
-			|| msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
+		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
 			if(_buffer == buffer)
 				updateTitle();
@@ -1393,6 +1441,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.160  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.159  2000/04/21 05:32:20  sp
  * Focus tweak
  *

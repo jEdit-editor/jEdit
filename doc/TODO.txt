@@ -6,11 +6,15 @@ JEDIT TO DO
   - abort I/O requests with special IOAbort throwable which IORequest
     catches at top level
   - Show wait cursor only once for a set of requests
-  - Annoying flickering when setEnabled() called
-  - ESCAPE should abort I/O
-  - Cursor momentarily jumps to end of buffer on load
-  - File->Open from and File->Save to menus
+  - Filter events in view to implement ESCAPE, etc
   - Marker saving doesn't work
+  - All stuff which moves caret after opening a file is broken (search and
+    replace, #<marker name> on command line)
+  - FTP VFS
+  - If an error occurs while saving, we shouldn't clear the dirty flag
+    (impossible?)
+  - MiscUtilities.getFileProtocol() doesn't work if indexOf('/') is -1
+  - above needs to check for '/' *and* File.separator
 
 - text area doesn't lose focus sometimes
 - there are still problems with multiline tokens

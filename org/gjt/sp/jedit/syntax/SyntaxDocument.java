@@ -127,6 +127,17 @@ public class SyntaxDocument extends PlainDocument
 	 */
 	public void addUndoableEdit(UndoableEdit edit) {}
 
+	/**
+	 * Returns false if this syntax document is currently being loaded
+	 * in another thread.
+	 *
+	 * @since jEdit 2.5pre1
+	 */
+	public boolean isLoaded()
+	{
+		return true;
+	}
+
 	// protected members
 	protected TokenMarker tokenMarker;
 
@@ -195,6 +206,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.25  2000/04/17 07:40:51  sp
  * File dialog loaded in a background thread
  *

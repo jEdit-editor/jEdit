@@ -35,6 +35,14 @@ public class FileVFS extends VFS
 	public static final String BACKED_UP_PROPERTY = "FileVFS__backedUp";
 
 	/**
+	 * Creates a new local filesystem.
+	 */
+	public FileVFS()
+	{
+		super("file");
+	}
+
+	/**
 	 * Displays an open dialog box and returns the selected pathname.
 	 * @param view The view
 	 * @param buffer The buffer
@@ -114,13 +122,13 @@ public class FileVFS extends VFS
 	 * @param buffer The buffer
 	 * @param path The path
 	 */
-	public boolean save(View view, final Buffer buffer, String path)
+	public boolean save(View view, Buffer buffer, String path)
 	{
-		final File file = new File(path);
+		File file = new File(path);
 		long modTime = buffer.getLastModified();
 		long newModTime = file.lastModified();
 
-		if(newModTime > modTime)
+		if(!buffer.isNewFile() && newModTime > modTime)
 		{
 			Object[] args = { path };
 			int result = JOptionPane.showConfirmDialog(view,
@@ -133,7 +141,7 @@ public class FileVFS extends VFS
 		}
 
 		// Check that we can actually write to the file
-		if(file.exists() && !file.canWrite())
+		if(!new File(file.getParent()).canWrite())
 		{
 			String[] args = { path };
 			GUIUtilities.error(view,"no-write",args);
@@ -141,17 +149,12 @@ public class FileVFS extends VFS
 		}
 
 		backup(buffer,file);
-		super.save(view,buffer,path);
+		return super.save(view,buffer,path);
+	}
 
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				buffer.setLastModified(file.lastModified());
-			}
-		});
-
-		return true;
+	public void saveCompleted(View view, Buffer buffer, String path)
+	{
+		buffer.setLastModified(getLastModified(path));
 	}
 
 	/**

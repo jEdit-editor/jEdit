@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.search;
 
 import java.util.Vector;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -107,12 +108,17 @@ public class BufferListSet implements SearchFileSet
 
 	private Buffer getBuffer(String path)
 	{
-		return jEdit.openTemporary(null,null,path,false,false);
+		Buffer buffer = jEdit.openTemporary(null,null,path,false,false);
+		VFSManager.waitForRequests();
+		return buffer;
 	}
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.11  1999/11/28 00:33:07  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *
@@ -140,8 +146,5 @@ public class BufferListSet implements SearchFileSet
  *
  * Revision 1.3  1999/06/09 07:28:10  sp
  * Multifile search and replace tweaks, removed console.html
- *
- * Revision 1.2  1999/06/09 05:22:11  sp
- * Find next now supports multi-file searching, minor Perl mode tweak
  *
  */

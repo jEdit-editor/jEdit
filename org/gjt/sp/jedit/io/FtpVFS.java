@@ -1,5 +1,5 @@
 /*
- * UrlVFS.java - Url VFS
+ * FtpVFS.java - Ftp VFS
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,25 +19,24 @@
 
 package org.gjt.sp.jedit.io;
 
-import javax.swing.JOptionPane;
 import java.io.*;
 import java.net.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 /**
- * URL VFS.
+ * FTP VFS.
  * @author Slava Pestov
  * @version $Id$
  */
-public class UrlVFS extends VFS
+public class FtpVFS extends VFS
 {
 	/**
-	 * Creates a new URL VFS.
+	 * Creates a new FTP virtual filesystem.
 	 */
-	public UrlVFS()
+	public FtpVFS()
 	{
-		super("url");
+		super("ftp");
 	}
 
 	/**
@@ -47,7 +46,7 @@ public class UrlVFS extends VFS
 	 */
 	public String showOpenDialog(View view, Buffer buffer)
 	{
-		return GUIUtilities.input(view,"openurl",null);
+		return null;
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class UrlVFS extends VFS
 	 */
 	public String showSaveDialog(View view, Buffer buffer)
 	{
-		return GUIUtilities.input(view,"saveurl",null);
+		return null;
 	}
 
 	/**
@@ -70,17 +69,7 @@ public class UrlVFS extends VFS
 	public InputStream _createInputStream(View view, String path)
 		throws IOException
 	{
-		try
-		{
-			return new URL(path).openStream();
-		}
-		catch(MalformedURLException mu)
-		{
-			Log.log(Log.ERROR,this,mu);
-			String[] args = { path };
-			VFSManager.error(view,"badurl",args);
-			return null;
-		}
+		return null;
 	}
 
 	/**
@@ -93,17 +82,6 @@ public class UrlVFS extends VFS
 	public OutputStream _createOutputStream(View view, String path)
 		throws IOException
 	{
-		try
-		{
-			return new URL(path).openConnection()
-				.getOutputStream();
-		}
-		catch(MalformedURLException mu)
-		{
-			Log.log(Log.ERROR,this,mu);
-			String[] args = { path };
-			VFSManager.error(view,"badurl",args);
-			return null;
-		}
+		return null;
 	}
 }

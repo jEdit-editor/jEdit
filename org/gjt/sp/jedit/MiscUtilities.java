@@ -213,29 +213,46 @@ loop:		for(int i = 0; i < str.length(); i++)
 	/**
 	 * Returns the protocol specifier in a path name.
 	 * @param path The path name
+	 * @since jEdit 2.5pre1
 	 */
 	public static String getFileProtocol(String path)
 	{
-		return null;
+		int fsIndex = path.indexOf(File.separatorChar);
+		if(fsIndex == 0) // /etc/passwd
+			return null;
+		else if(fsIndex == 2) // C:\AUTOEXEC.BAT
+			return null;
+
+		int cIndex = path.indexOf(':');
+		if(cIndex <= 1) // D:\WINDOWS
+			return null;
+		else if(cIndex > fsIndex) // /tmp/RTF::read.pm
+			return null;
+
+		System.err.println("+++++++++" + path.substring(0,cIndex) + "+++++++++");
+		return path.substring(0,cIndex);
 	}
 
 	/**
 	 * Checks if the specified string is a URL.
-	 * @param str The string to check
+	 * @param path The string to check
 	 * @return True if the string is a URL, false otherwise
 	 */
-	public static boolean isURL(String str)
+	public static boolean isURL(String path)
 	{
-		int colonIndex = str.indexOf(':');
-		int spaceIndex = str.indexOf(' ');
-		if(spaceIndex == -1)
-			spaceIndex = str.length();
-
-		if(colonIndex > 1 /* fails for C:\... */
-			&& colonIndex < spaceIndex)
-			return true;
-		else
+		int fsIndex = path.indexOf(File.separatorChar);
+		if(fsIndex == 0) // /etc/passwd
 			return false;
+		else if(fsIndex == 2) // C:\AUTOEXEC.BAT
+			return false;
+
+		int cIndex = path.indexOf(':');
+		if(cIndex <= 1) // D:\WINDOWS
+			return false;
+		else if(cIndex > fsIndex) // /tmp/RTF::read.pm
+			return false;
+
+		return true;
 	}
 
 	/**
@@ -614,6 +631,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.28  2000/04/24 04:45:36  sp
  * New I/O system started, and a few minor updates
  *

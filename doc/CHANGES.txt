@@ -4,6 +4,11 @@ JEDIT 2.5 VERSION HISTORY
 
 + New Features
 
+- New I/O system.
+  - Multithreaded - this should improve perceived performance, and you
+    can abort lengthy I/O operations
+  - Supports pluggable 'virtual filesystems' which can support transparent
+    loading and saving of non-local files
 - Undo queue size can be set
 
 + Enhancements
@@ -24,3 +29,13 @@ JEDIT 2.5 VERSION HISTORY
 + API Changes
 
 - BufferUpdate.LOADING removed. Use BufferUpdate.LOADED instead
+- Deprecated Buffer.loadIfNecessary() method removed
+- Because of the new multithreaded I/O system, plugins that assume buffers
+  obtained with getBuffer() or openFile() always have valid data in them
+  will no longer work. You must now either:
+  - wait for all I/O requests to complete with VFSManager.waitForRequests()
+    this is not recommended as it ties up the AWT thread
+  - wait for the BufferUpdate.LOADED message to arrive
+  - add a runnable to the I/O thread with VFSManager.runInAWTThread().
+    Runnables added with this method are executed after all I/O requests
+    are completed.

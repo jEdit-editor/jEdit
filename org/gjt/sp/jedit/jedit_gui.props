@@ -72,6 +72,7 @@ recent-buffer.label=Go to $Last Edited Buffer
 file=new-file \
      open-file \
      open-path \
+     %open-from-menu \
      %recent-files \
      %current-directory \
      - \
@@ -83,6 +84,7 @@ file=new-file \
      - \
      save \
      save-as \
+     %save-to-menu \
      save-all \
      - \
      send \
@@ -93,6 +95,7 @@ file.label=$File
 new-file.label=$New File
 open-file.label=$Open File...
 open-path.label=Open Pa$th...
+open-from-menu.label=Open From
 recent-files.label=Recent Files
 current-directory.label=Current Directory
 current-directory.more.label=More
@@ -104,6 +107,7 @@ close-file.label=$Close File
 close-all.label=Close All $Buffers
 save.label=$Save
 save-as.label=Sa$ve As...
+save-to-menu.label=Save To
 save-all.label=Save A$ll Buffers...
 send.label=Sen$d...
 print.label=$Print...
@@ -914,3 +918,5 @@ log-viewer.save=Save Log
 ### MISC
 ###
 mode.text.label=Plain Text
+
+vfs.ftp.label=FTP Server...

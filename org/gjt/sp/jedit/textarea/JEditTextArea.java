@@ -1496,7 +1496,6 @@ public class JEditTextArea extends JComponent
 	{
 		super.addNotify();
 
-		//System.err.println("addNotify(): " + hasFocus());
 		if(hasFocus())
 		{
 			setCaretVisible(true);
@@ -1525,7 +1524,6 @@ public class JEditTextArea extends JComponent
 
 		if(focusedComponent == this)
 		{
-			//System.err.println("removeNotify(): focused = null");
 			focusedComponent = null;
 		}
 
@@ -1898,6 +1896,9 @@ public class JEditTextArea extends JComponent
 		{
 			documentChanged(evt);
 
+			if(!document.isLoaded())
+				return;
+
 			int offset = evt.getOffset();
 			int length = evt.getLength();
 
@@ -1932,6 +1933,9 @@ public class JEditTextArea extends JComponent
 		public void removeUpdate(DocumentEvent evt)
 		{
 			documentChanged(evt);
+
+			if(!document.isLoaded())
+				return;
 
 			int offset = evt.getOffset();
 			int length = evt.getLength();
@@ -2269,6 +2273,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.54  2000/04/24 11:00:23  sp
+ * More VFS hacking
+ *
  * Revision 1.53  2000/04/18 05:56:26  sp
  * Documentation updates
  *
@@ -2300,11 +2307,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.44  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
- *
- * Revision 1.43  2000/02/04 05:50:27  sp
- * More gutter updates from mike
- *
- * Revision 1.42  2000/02/01 06:12:33  sp
- * Gutter added (still not fully functional)
  *
  */
