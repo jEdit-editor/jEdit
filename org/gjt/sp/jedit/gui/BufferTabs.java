@@ -218,7 +218,7 @@ public class BufferTabs extends JTabbedPane
 
 		void update()
 		{
-			Component comp;
+			JComponent comp;
 			if(view.getSplitPane() == null)
 				comp = view.getTextArea();
 			else
@@ -227,11 +227,6 @@ public class BufferTabs extends JTabbedPane
 			this.revalidate();
 
 			view.focusOnTextArea();
-		}
-
-		public boolean isValidateRoot()
-		{
-			return true;
 		}
 	}
 }

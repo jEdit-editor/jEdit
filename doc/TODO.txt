@@ -8,6 +8,8 @@ JEDIT TO DO
 - Document gutter
 - Update window-editor-* screenshots
 - Update dialog-options-* screenshots
+- Merge in mike's latest gutter updates
+- Fix gutter repaint bug
 
 ------- Later -------
 
