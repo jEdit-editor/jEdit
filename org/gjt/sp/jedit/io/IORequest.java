@@ -522,7 +522,8 @@ public class IORequest extends WorkRequest
 
 				// We only save markers to VFS's that support deletion.
 				// Otherwise, we will accumilate stale marks files.
-				if(vfs._canDelete() && buffer.getMarkerCount() != 0)
+				if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0
+					&& buffer.getMarkerCount() != 0)
 				{
 					setStatus(jEdit.getProperty("vfs.status.save-markers",args));
 					out = vfs._createOutputStream(session,markersPath,view);
@@ -692,6 +693,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.17  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.16  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

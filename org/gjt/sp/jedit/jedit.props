@@ -242,3 +242,10 @@ print.margin.right=0.5
 ###
 
 vfs.browser.doubleClickClose=true
+vfs.browser.showHiddenFiles=false
+vfs.browser.sortFiles=true
+vfs.browser.sortMixFilesAndDirs=false
+vfs.browser.sortIgnoreCase=true
+
+# Can be one of: buffer, home, last
+vfs.browser.defaultPath=buffer

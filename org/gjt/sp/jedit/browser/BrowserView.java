@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.browser;
 
 import javax.swing.JPanel;
 import java.awt.*;
+import java.util.Vector;
 import org.gjt.sp.jedit.io.VFS;
 
 /**
@@ -36,15 +37,6 @@ public abstract class BrowserView extends JPanel
 	}
 
 	/**
-	 * Returns (0,0) to make it easier to use browser views in split
-	 * panes.
-	 */
-	public Dimension getMinimumSize()
-	{
-		return new Dimension(0,0);
-	}
-
-	/**
 	 * Returns the currently selected files.
 	 */
 	public abstract VFS.DirectoryEntry[] getSelectedFiles();
@@ -54,7 +46,7 @@ public abstract class BrowserView extends JPanel
 	 * @param path The directry path
 	 * @param directory The directory listing
 	 */
-	public abstract void directoryLoaded(String path, VFS.DirectoryEntry[] directory);
+	public abstract void directoryLoaded(String path, Vector directory);
 
 	/**
 	 * Called when a buffer is opened or closed. Views that reflect
@@ -73,6 +65,9 @@ public abstract class BrowserView extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.1  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

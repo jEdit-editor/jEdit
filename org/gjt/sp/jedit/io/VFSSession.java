@@ -32,7 +32,7 @@ import java.util.Hashtable;
  *
  * @since jEdit 2.6pre2
  */
-public class VFSSession
+public class VFSSession implements Cloneable
 {
 	/**
 	 * This key contains the path name of the buffer which created
@@ -96,6 +96,13 @@ public class VFSSession
 			this.owner = owner;
 	}
 
+	public Object clone()
+	{
+		VFSSession clone = new VFSSession();
+		clone.hashtable = (Hashtable)hashtable.clone();
+		return clone;
+	}
+
 	// private members
 	private VFS owner;
 	private Hashtable hashtable = new Hashtable();
@@ -104,6 +111,9 @@ public class VFSSession
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.1  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

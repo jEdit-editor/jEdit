@@ -19,8 +19,10 @@
 
 package org.gjt.sp.jedit.actions;
 
-import javax.swing.JFileChooser;
 import java.awt.event.ActionEvent;
+import java.util.Hashtable;
+import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.io.VFSSession;
 import org.gjt.sp.jedit.*;
 
 public class open_file extends EditAction
@@ -28,9 +30,23 @@ public class open_file extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		String path = GUIUtilities.showFileDialog(view,view.getBuffer()
-			.getPath(),JFileChooser.OPEN_DIALOG);
-		if(path != null)
-			jEdit.openFile(view,path);
+		VFSSession[] vfsSession = new VFSSession[1];
+		String[] files = GUIUtilities.showVFSFileDialog(view,null,
+			VFSBrowser.OPEN_DIALOG,vfsSession);
+
+		Buffer buffer = null;
+		if(files != null)
+		{
+			Hashtable props = new Hashtable();
+			props.put(Buffer.VFS_SESSION_HACK,vfsSession[0]);
+			for(int i = 0; i < files.length; i++)
+			{
+				buffer = jEdit.openFile(null,null,files[i],
+					false,false,props);
+			}
+		}
+
+		if(buffer != null)
+			view.setBuffer(buffer);
 	}
 }

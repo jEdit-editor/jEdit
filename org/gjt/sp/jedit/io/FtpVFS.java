@@ -44,6 +44,20 @@ public class FtpVFS extends VFS
 		super("ftp");
 	}
 
+	public int getCapabilities()
+	{
+		return READ_CAP | WRITE_CAP | LIST_CAP | DELETE_CAP
+			| RENAME_CAP | MKDIR_CAP;
+	}
+
+	public String constructPath(String parent, String path)
+	{
+		if(parent.endsWith("/"))
+			return parent + path;
+		else
+			return parent + '/' + path;
+	}
+
 	public boolean setupVFSSession(VFSSession session, Component comp)
 	{
 		super.setupVFSSession(session,comp);
@@ -105,7 +119,7 @@ public class FtpVFS extends VFS
 		try
 		{
 			client.dataPort();
-			Reader _in = client.list();
+			Reader _in = client.list(address.path);
 			if(_in == null)
 			{
 				String[] args = { url, client.getResponse().toString() };
@@ -154,11 +168,6 @@ public class FtpVFS extends VFS
 				}
 			}
 		}
-	}
-
-	public boolean _canDelete()
-	{
-		return true;
 	}
 
 	public void _delete(VFSSession session, String url, Component comp)
@@ -413,16 +422,20 @@ public class FtpVFS extends VFS
 		}
 
 		if(line.charAt(0) == 'l')
-			name = name.substring(name.indexOf("-> "));
+			name = name.substring(0,name.indexOf(" -> "));
 
 		// path is null; it will be created later, by _listDirectory()
-		return new VFS.DirectoryEntry(name,null,type,length);
+		return new VFS.DirectoryEntry(name,null,type,length,
+			name.charAt(0) == '.' /* isHidden */);
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.12  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

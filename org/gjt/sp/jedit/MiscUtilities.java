@@ -68,16 +68,11 @@ public class MiscUtilities
 	 */
 	public static String constructPath(String parent, String path)
 	{
-		// absolute pathnames
-		if(path.startsWith(File.separator))
+		if(new File(path).isAbsolute())
 			return canonPath(path);
-		// windows pathnames, eg C:\document
-		else if(path.length() >= 3 && path.charAt(1) == ':')
-			return canonPath(path);
-		// relative pathnames
 		else if(parent == null)
 			parent = System.getProperty("user.dir");
-		// do it!
+
 		if(parent.endsWith(File.separator))
 			return canonPath(parent + path);
 		else
@@ -157,6 +152,12 @@ public class MiscUtilities
 		int index = path.lastIndexOf(File.separatorChar,count);
 		if(index == -1)
 			index = path.lastIndexOf('/',count);
+		if(index == -1)
+		{
+			// this ensures that getFileParent("protocol:"), for
+			// example, is "protocol:" and not "".
+			index = path.lastIndexOf(':');
+		}
 
 		return path.substring(0,index + 1);
 	}
@@ -681,6 +682,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.33  2000/05/27 05:52:06  sp
  * Improved home/end actions
  *

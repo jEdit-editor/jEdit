@@ -27,6 +27,7 @@ import javax.swing.undo.*;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
+import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.syntax.*;
@@ -61,6 +62,17 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * Line separator property.
 	 */
 	public static final String LINESEP = "lineSeparator";
+
+	/**
+	 * This is a hack so that the user won't have to enter the FTP
+	 * password twice when opening an FTP URL from the browser.
+	 * The browser puts a VFSSession instance (which contains the
+	 * saved password) in the buffer-local property with this name.
+	 * The Buffer.setPath() method then queries this property, and
+	 * attempts to use the VFSSession contained in it.
+	 * @since jEdit 2.6pre2
+	 */
+	public static final String VFS_SESSION_HACK = "VFSSession__hack";
 
 	/**
 	 * Caret info properties.
@@ -263,34 +275,16 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean saveAs(View view)
 	{
-		String path;
-		if(vfs instanceof FileVFS)
-			path = null;
-		else
-			path = this.path;
+		VFSSession[] session = new VFSSession[1];
+		String[] files = GUIUtilities.showVFSFileDialog(view,path,
+			VFSBrowser.SAVE_DIALOG,session);
 
-		path = GUIUtilities.showFileDialog(view,path,
-			JFileChooser.SAVE_DIALOG);
-
-		if(path != null)
-		{
-			File _file = new File(path);
-			if(_file.exists())
-			{
-				Object[] args = { _file.getName() };
-				int result = JOptionPane.showConfirmDialog(view,
-					jEdit.getProperty("fileexists.message",args),
-					jEdit.getProperty("fileexists.title"),
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.WARNING_MESSAGE);
-				if(result != JOptionPane.YES_OPTION)
-					return false;
-			}
-
-			return save(view,path);
-		}
-		else
+		// files[] should have length 1, since the dialog type is
+		// SAVE_DIALOG
+		if(files == null)
 			return false;
+
+		return save(view,files[0]);
 	}
 
 	/**
@@ -1326,7 +1320,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	Buffer prev;
 	Buffer next;
 
-	/* compat */ public Buffer(View view, String path, boolean readOnly,
+	Buffer(View view, String path, boolean readOnly,
 		boolean newFile, boolean temp, Hashtable props)
 	{
 		setFlag(TEMPORARY,temp);
@@ -1512,7 +1506,14 @@ public class Buffer extends PlainDocument implements EBComponent
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
 		}
 
-		vfsSession = new VFSSession();
+		vfsSession = (VFSSession)getProperty(VFS_SESSION_HACK);
+		if(vfsSession != null)
+			vfsSession = (VFSSession)vfsSession.clone();
+		else
+			vfsSession = new VFSSession();
+
+		getDocumentProperties().remove(VFS_SESSION_HACK);
+
 		vfsSession.put(VFSSession.PATH_KEY,path);
 	}
 
@@ -1687,6 +1688,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.167  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.166  2000/07/30 09:04:18  sp
  * More VFS browser hacking
  *

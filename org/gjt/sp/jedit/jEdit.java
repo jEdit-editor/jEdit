@@ -351,24 +351,8 @@ public class jEdit
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
 					+ "complete");
 
-				// Show wait cursor while we do I/O
-				if(viewsFirst != null)
-					viewsFirst.showWaitCursor();
-
-				// Load filechooser in background
-				GUIUtilities.startLoadThread();
-
 				// Start I/O thread
 				VFSManager.start();
-			}
-		});
-
-		VFSManager.runInAWTThread(new Runnable() {
-			public void run()
-			{
-				// hide wait cursor once all I/O is complete
-				if(viewsFirst != null)
-					viewsFirst.hideWaitCursor();
 			}
 		});
 	}
@@ -2342,6 +2326,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.261  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.260  2000/07/30 09:04:18  sp
  * More VFS browser hacking
  *

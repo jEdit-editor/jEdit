@@ -21,8 +21,7 @@ package org.gjt.sp.jedit.io;
 
 import java.awt.Component;
 import java.io.*;
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
 
 /**
  * A virtual filesystem implementation. Note tha methods whose names are
@@ -32,6 +31,42 @@ import org.gjt.sp.jedit.View;
  */
 public abstract class VFS
 {
+	/**
+	 * Read capability.
+	 * @since jEdit 2.6pre2
+	 */
+	public static final int READ_CAP = 1 << 0;
+
+	/**
+	 * Write capability.
+	 * @since jEdit 2.6pre2
+	 */
+	public static final int WRITE_CAP = 1 << 1;
+
+	/**
+	 * List directory capability.
+	 * @since jEdit 2.6pre2
+	 */
+	public static final int LIST_CAP = 1 << 2;
+
+	/**
+	 * Delete file capability.
+	 * @since jEdit 2.6pre2
+	 */
+	public static final int DELETE_CAP = 1 << 3;
+
+	/**
+	 * Rename file capability.
+	 * @since jEdit 2.6pre2
+	 */
+	public static final int RENAME_CAP = 1 << 4;
+
+	/**
+	 * Make directory file capability.
+	 * @since jEdit 2.6pre2
+	 */
+	public static final int MKDIR_CAP = 1 << 5;
+
 	/**
 	 * Creates a new virtual filesystem.
 	 * @param name The name
@@ -49,6 +84,34 @@ public abstract class VFS
 	public String getName()
 	{
 		return name;
+	}
+
+	/**
+	 * Returns the capabilities of this VFS.
+	 * @since jEdit 2.6pre2
+	 */
+	public abstract int getCapabilities();
+
+	/**
+	 * Returns the parent of the specified directory. By default,
+	 * same as MiscUtilities.getFileParent().
+	 * @param path The directory
+	 */
+	public String getFileParent(String path)
+	{
+		return MiscUtilities.getFileParent(path);
+	}
+
+	/**
+	 * Constructs a path from the specified directory and
+	 * file name component. By default, same as
+	 * MiscUtilities.constructPath().
+	 * @param parent The parent directory
+	 * @param path The path
+	 */
+	public String constructPath(String parent, String path)
+	{
+		return MiscUtilities.constructPath(parent,path);
 	}
 
 	/**
@@ -128,34 +191,28 @@ public abstract class VFS
 	{
 		public static final int FILE = 0;
 		public static final int DIRECTORY = 1;
-		public static final int LINK = 2;
+		public static final int FILESYSTEM = 2;
 
 		public String name;
 		public String path;
 		public int type;
 		public long length;
+		public boolean hidden;
 
-		public DirectoryEntry(String name, String path, int type, long length)
+		public DirectoryEntry(String name, String path, int type,
+			long length, boolean hidden)
 		{
 			this.name = name;
 			this.path = path;
 			this.type = type;
 			this.length = length;
+			this.hidden = hidden;
 		}
 
 		public String toString()
 		{
 			return name;
 		}
-	}
-
-	/**
-	 * Returns true if this VFS supports file deletion. This is required
-	 * for marker saving to work. By default, this returns false.
-	 */
-	public boolean _canDelete()
-	{
-		return false;
 	}
 
 	/**
@@ -214,9 +271,12 @@ public abstract class VFS
 	 * @exception IOException If an I/O error occurs
 	 * @since jEdit 2.6pre2
 	 */
-	public abstract InputStream _createInputStream(VFSSession session,
+	public InputStream _createInputStream(VFSSession session,
 		String path, boolean ignoreErrors, Component comp)
-		throws IOException;
+		throws IOException
+	{
+		return null;
+	}
 
 	/**
 	 * Creates an output stream. This method is called from the I/O
@@ -227,9 +287,12 @@ public abstract class VFS
 	 * @exception IOException If an I/O error occurs
 	 * @since jEdit 2.6pre2
 	 */
-	public abstract OutputStream _createOutputStream(VFSSession session,
+	public OutputStream _createOutputStream(VFSSession session,
 		String path, Component comp)
-		throws IOException;
+		throws IOException
+	{
+		return null;
+	}
 
 	/**
 	 * Finishes the specified VFS session. This must be called
@@ -264,6 +327,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.10  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

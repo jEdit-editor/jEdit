@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.io;
 
+import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
 import java.io.*;
 import org.gjt.sp.jedit.*;
@@ -32,10 +33,33 @@ import org.gjt.sp.util.Log;
 public class FileVFS extends VFS
 {
 	public static final String BACKED_UP_PROPERTY = "FileVFS__backedUp";
+	public static final String FILESYSTEM_ROOTS_URL = "filesystems";
 
 	public FileVFS()
 	{
 		super("file");
+		fsView = FileSystemView.getFileSystemView();
+	}
+
+	public int getCapabilities()
+	{
+		return READ_CAP | WRITE_CAP | LIST_CAP | DELETE_CAP
+			| RENAME_CAP | MKDIR_CAP;
+	}
+
+	public String getFileParent(String path)
+	{
+		if(path.equals(FILESYSTEM_ROOTS_URL))
+			return FILESYSTEM_ROOTS_URL;
+
+		File[] roots = fsView.getRoots();
+		for(int i = 0; i < roots.length; i++)
+		{
+			if(roots[i].getPath().equals(path))
+				return FILESYSTEM_ROOTS_URL;
+		}
+
+		return MiscUtilities.getFileParent(path);
 	}
 
 	public boolean load(View view, Buffer buffer, String path)
@@ -101,6 +125,24 @@ public class FileVFS extends VFS
 	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
 		Component comp)
 	{
+		if(url.equals(FILESYSTEM_ROOTS_URL))
+		{
+			File[] roots = fsView.getRoots();
+
+			if(roots == null)
+				return null;
+
+			VFS.DirectoryEntry[] rootDE = new VFS.DirectoryEntry[roots.length];
+			for(int i = 0; i < roots.length; i++)
+			{
+				String name = roots[i].getPath();
+				rootDE[i] = new VFS.DirectoryEntry(name,name,
+					VFS.DirectoryEntry.FILESYSTEM,0L,false);
+			}
+
+			return rootDE;
+		}
+
 		File directory = new File(url);
 		String[] list = directory.list();
 		if(list == null)
@@ -118,15 +160,11 @@ public class FileVFS extends VFS
 			else
 				type = VFS.DirectoryEntry.FILE;
 
-			list2[i] = new VFS.DirectoryEntry(name,path,type,file.length());
+			list2[i] = new VFS.DirectoryEntry(name,path,type,file.length(),
+				fsView.isHiddenFile(file));
 		}
 
 		return list2;
-	}
-
-	public boolean _canDelete()
-	{
-		return true;
 	}
 
 	public void _delete(VFSSession session, String path, Component comp)
@@ -162,6 +200,8 @@ public class FileVFS extends VFS
 	}
 
 	// private members
+	private FileSystemView fsView;
+
 	// The BACKED_UP flag prevents more than one backup from being
 	// written per session (I guess this should be made configurable
 	// in the future)
@@ -247,6 +287,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.10  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

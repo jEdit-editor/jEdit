@@ -37,6 +37,19 @@ public class UrlVFS extends VFS
 		super("url");
 	}
 
+	public int getCapabilities()
+	{
+		return READ_CAP | WRITE_CAP;
+	}
+
+	public String constructPath(String parent, String path)
+	{
+		if(parent.endsWith("/"))
+			return parent + path;
+		else
+			return parent + '/' + path;
+	}
+
 	public InputStream _createInputStream(VFSSession session,
 		String path, boolean ignoreErrors, Component comp)
 		throws IOException
@@ -75,6 +88,9 @@ public class UrlVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.6  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

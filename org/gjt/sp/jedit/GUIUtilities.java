@@ -27,8 +27,11 @@ import java.io.File;
 import java.net.*;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSSession;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.util.Log;
 
@@ -361,9 +364,37 @@ public class GUIUtilities
 	}
 
 	/**
-	 * Displays a file selection dialog box. This is better than creating
-	 * your own <code>JFileChooser</code> because it supports file filters,
-	 * and reuses existing file choosers for maximum efficency.
+	 * Displays a VFS file selection dialog box.
+	 * @param view The view
+	 * @param path The initial directory to display. May be null
+	 * @param type The dialog type
+	 * @param vfsSession A VFS session stores username/password info
+	 * when dealing with remote servers, so that the user isn't prompted
+	 * twice for that info, once by the file chooser and second by the
+	 * Buffer.load() method. You should pass an array of length 1 so
+	 * that the VFS session can be stored here. If you don't need the
+	 * VFS session, just set this parameter to null.
+	 * @return The selected file(s)
+	 * @since jEdit 2.6pre2
+	 */
+	public static String[] showVFSFileDialog(View view, String path,
+		int type, VFSSession[] vfsSession)
+	{
+		VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
+			view,path,type);
+		String[] selectedFiles = fileChooser.getSelectedFiles();
+		if(selectedFiles == null)
+			return null;
+
+		if(vfsSession != null)
+			vfsSession[0] = fileChooser.getVFSSession();
+
+		return selectedFiles;
+	}
+
+	/**
+	 * Displays a standard file selection dialog box. You should use
+	 * the VFS file selected whenever possible, instead of this one.
 	 * @param view The view
 	 * @param file The file to select by default
 	 * @param type The dialog type
@@ -679,30 +710,6 @@ public class GUIUtilities
 	// package-private members
 	static JFileChooser chooser;
 
-	static void startLoadThread()
-	{
-		thread = new LoadThread();
-	}
-
-	static class LoadThread extends Thread
-	{
-		LoadThread()
-		{
-			super("jEdit file chooser load thread");
-			setPriority(Thread.MIN_PRIORITY);
-			start();
-		}
-
-		public void run()
-		{
-			Log.log(Log.DEBUG,LoadThread.class,"Loading file"
-				+ " dialog...");
-			getFileChooser(null);
-			Log.log(Log.DEBUG,LoadThread.class,"File dialog"
-				+ " loaded");
-		}
-	}
-
 	static void showSplashScreen()
 	{
 		splash = new SplashScreen();
@@ -715,8 +722,8 @@ public class GUIUtilities
 	}
 
 	// private members
-	private static LoadThread thread;
 	private static SplashScreen splash;
+
 	// since the names of menu items, menus, tool bars, etc are
 	// unique because of the property namespace, we can store all
 	// in one hashtable.
@@ -728,7 +735,7 @@ public class GUIUtilities
 
 	// Since only one file chooser is every visible at any one
 	// time, we can reuse 'em
-	private static synchronized JFileChooser getFileChooser(View view)
+	private static JFileChooser getFileChooser(View view)
 	{
 		if(chooser == null)
 		{
@@ -805,6 +812,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.71  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.70  2000/07/26 07:48:43  sp
  * stuff
  *
@@ -834,11 +844,5 @@ public class GUIUtilities
  *
  * Revision 1.61  2000/05/20 07:02:04  sp
  * Documentation updates, tool bar editor finished, a few other enhancements
- *
- * Revision 1.60  2000/05/16 10:47:40  sp
- * More work on toolbar editor, -gui command line switch
- *
- * Revision 1.59  2000/05/14 10:55:21  sp
- * Tool bar editor started, improved view registers dialog box
  *
  */

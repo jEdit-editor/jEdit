@@ -76,8 +76,9 @@ public class HelpfulJList extends JList implements MouseListener
 				Rectangle cellRect = new Rectangle(cellBounds.x,cellBounds.y,
 					 cellSize.width,cellBounds.height);
 
+				// XXX: this shouldn't be hardcoded!
 				if(!cellRectIsVisible(cellRect))
-					return new Point(cellRect.x + 20, cellRect.y);
+					return new Point(cellRect.x + 21, cellRect.y + 2);
 			}
 		}
 		return null;
@@ -86,9 +87,9 @@ public class HelpfulJList extends JList implements MouseListener
 	private final boolean cellRectIsVisible(Rectangle cellRect)
 	{
 		Rectangle vr = getVisibleRect();
-		return vr.contains(cellRect.x + 22, cellRect.y + 2) &&
-			vr.contains(cellRect.x + 22 + cellRect.width - 31,
-			cellRect.y + 2 + cellRect.height - 4);
+		return vr.contains(cellRect.x,cellRect.y) &&
+			vr.contains(cellRect.x + cellRect.width,
+			cellRect.y + cellRect.height);
 	}
 
 	public void mouseClicked(MouseEvent evt) {}
@@ -100,17 +101,15 @@ public class HelpfulJList extends JList implements MouseListener
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		toolTipInitialDelay = ttm.getInitialDelay();
 		toolTipReshowDelay = ttm.getReshowDelay();
-		ttm.setInitialDelay(0);
+		ttm.setInitialDelay(400);
 		ttm.setReshowDelay(0);
 	}
 
 	public void mouseExited(MouseEvent evt)
 	{
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
-		if(toolTipInitialDelay >= 0)
-			ttm.setInitialDelay(toolTipInitialDelay);
-		if(toolTipReshowDelay >= 0)
-			ttm.setReshowDelay(toolTipReshowDelay);
+		ttm.setInitialDelay(toolTipInitialDelay);
+		ttm.setReshowDelay(toolTipReshowDelay);
 	}
 
 	// private members
@@ -121,6 +120,9 @@ public class HelpfulJList extends JList implements MouseListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.1  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

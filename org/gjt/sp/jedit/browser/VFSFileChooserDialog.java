@@ -24,7 +24,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
-import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.gui.EnhancedDialog;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -36,14 +37,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 {
 	public VFSFileChooserDialog(View view, String path, int mode)
 	{
-		super(view,jEdit.getProperty("vfs.browser.dialog.title"),true);
+		super(view,jEdit.getProperty("vfs.browser.title"),true);
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
 		String name;
-		if(path.endsWith(File.separator) || path.endsWith("/"))
+		if(path == null || path.endsWith(File.separator) || path.endsWith("/"))
 			name = null;
 		else
 		{
@@ -66,7 +67,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 			filenameField = new JTextField(20);
 			filenameField.setText(name);
-			removeKeyListenerFrom(filenameField);
 			Dimension dim = filenameField.getPreferredSize();
 			dim.width = Integer.MAX_VALUE;
 			filenameField.setMaximumSize(dim);
@@ -111,6 +111,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 	public void ok()
 	{
+		VFS.DirectoryEntry[] files = browser.getSelectedFiles();
+		if(files.length == 0 || files[0].type != VFS.DirectoryEntry.FILE)
+			return;
+
 		if(filenameField != null && filenameField.getText() == null)
 		{
 			getToolkit().beep();
@@ -134,7 +138,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(filenameField != null)
 		{
 			String directory = browser.getDirectory();
-			String[] retVal = { directory + filenameField.getText() };
+			String[] retVal = { browser.getVFS().constructPath(
+				directory,filenameField.getText()) };
 			return retVal;
 		}
 		else
@@ -147,6 +152,11 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			}
 			return retVal;
 		}
+	}
+
+	public VFSSession getVFSSession()
+	{
+		return browser.getVFSSession();
 	}
 
 	// private members
@@ -180,11 +190,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		public void filesActivated(VFSBrowser browser, VFS.DirectoryEntry[] files)
 		{
-			if(files.length == 0)
-				return;
-
-			if(files[0].type == VFS.DirectoryEntry.FILE)
-				ok();
+			ok();
 		}
 	}
 }
@@ -192,6 +198,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.1  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

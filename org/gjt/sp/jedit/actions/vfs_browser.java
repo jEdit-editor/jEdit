@@ -27,6 +27,6 @@ public class vfs_browser extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		new VFSBrowserFrame(getView(evt),System.getProperty("user.home"));
+		new VFSBrowserFrame(getView(evt),null);
 	}
 }

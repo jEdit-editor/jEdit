@@ -127,3 +127,11 @@ public abstract class EnhancedDialog extends JDialog
 		}
 	}
 }
+
+/*
+ * Change Log:
+ * $Log$
+ * Revision 1.5  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
+ */

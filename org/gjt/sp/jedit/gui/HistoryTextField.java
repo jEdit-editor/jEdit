@@ -1,6 +1,6 @@
 /*
  * HistoryTextField.java - Text field with a history
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,6 @@ public class HistoryTextField extends JTextField
 	public HistoryTextField(String name, boolean instantPopups)
 	{
 		historyModel = HistoryModel.getModel(name);
-		addKeyListener(new KeyHandler());
 		addMouseListener(new MouseHandler());
 
 		this.instantPopups = instantPopups;
@@ -103,6 +102,45 @@ public class HistoryTextField extends JTextField
 	public void fireActionPerformed()
 	{
 		super.fireActionPerformed();
+	}
+
+	// protected members
+	protected void processKeyEvent(KeyEvent evt)
+	{
+		if(evt.getID() == KeyEvent.KEY_PRESSED)
+		{
+			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+			{
+				addCurrentToHistory();
+				fireActionPerformed();
+				evt.consume();
+			}
+			else if(evt.getKeyCode() == KeyEvent.VK_UP)
+			{
+				if((evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
+					doBackwardSearch();
+				else
+					historyPrevious();
+				evt.consume();
+			}
+			else if(evt.getKeyCode() == KeyEvent.VK_DOWN)
+			{
+				if((evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
+					doForwardSearch();
+				else
+					historyNext();
+				evt.consume();
+			}
+			else if(evt.getKeyCode() == KeyEvent.VK_TAB
+				&& (evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
+			{
+				doBackwardSearch();
+				evt.consume();
+			}
+		}
+
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
 	}
 
 	// private members
@@ -300,39 +338,6 @@ public class HistoryTextField extends JTextField
 		}
 	}
 
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-			{
-				addCurrentToHistory();
-			}
-			else if(evt.getKeyCode() == KeyEvent.VK_UP)
-			{
-				if((evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
-					doBackwardSearch();
-				else
-					historyPrevious();
-				evt.consume();
-			}
-			else if(evt.getKeyCode() == KeyEvent.VK_DOWN)
-			{
-				if((evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
-					doForwardSearch();
-				else
-					historyNext();
-				evt.consume();
-			}
-			else if(evt.getKeyCode() == KeyEvent.VK_TAB
-				&& (evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
-			{
-				doBackwardSearch();
-				evt.consume();
-			}
-		}
-	}
-
 	class MouseHandler extends MouseAdapter
 	{
 		public void mousePressed(MouseEvent evt)
@@ -348,6 +353,9 @@ public class HistoryTextField extends JTextField
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.32  2000/01/29 01:56:51  sp
  * Buffer tabs updates, some other stuff
  *
@@ -377,15 +385,5 @@ public class HistoryTextField extends JTextField
  *
  * Revision 1.23  1999/04/25 03:39:37  sp
  * Documentation updates, console updates, history text field updates
- *
- * Revision 1.22  1999/04/23 07:35:11  sp
- * History engine reworking (shared history models, history saved to
- * .jedit-history)
- *
- * Revision 1.21  1999/04/19 05:44:34  sp
- * GUI updates
- *
- * Revision 1.20  1999/03/28 01:36:24  sp
- * Backup system overhauled, HistoryTextField updates
  *
  */

@@ -65,9 +65,8 @@ public class BrowserListView extends BrowserView
 		return retVal;
 	}
 
-	public void directoryLoaded(String path, VFS.DirectoryEntry[] directory)
+	public void directoryLoaded(String path, Vector directory)
 	{
-		// XXX: filtering and sorting
 		if(directory == null)
 			list.setListData(new Object[0]);
 		else
@@ -127,6 +126,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.1  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

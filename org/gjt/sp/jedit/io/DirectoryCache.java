@@ -90,7 +90,7 @@ public class DirectoryCache
 			tmpFileCount++;
 			long time = System.currentTimeMillis();
 			String path = MiscUtilities.constructPath(cacheDirectory,
-				"cache-" + time + "-" + tmpFileCount + ".tmp");
+				"cache-" + tmpFileCount + "-" + time + ".tmp");
 
 			ObjectOutputStream out = null;
 			try
@@ -195,6 +195,9 @@ public class DirectoryCache
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.1  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

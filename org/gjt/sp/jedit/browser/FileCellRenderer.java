@@ -43,6 +43,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 
 		fileIcon = GUIUtilities.loadToolBarIcon("Document.gif");
 		dirIcon = GUIUtilities.loadToolBarIcon("Folder.gif");
+		filesystemIcon = GUIUtilities.loadToolBarIcon("CD.gif");
 	}
 
 	public Component getListCellRendererComponent(JList list, Object value,
@@ -127,6 +128,8 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 	{
 		if(file.type == VFS.DirectoryEntry.DIRECTORY)
 			return dirIcon;
+		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
+			return filesystemIcon;
 		else
 			return fileIcon;
 	}
@@ -140,6 +143,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 
 	private Icon fileIcon;
 	private Icon dirIcon;
+	private Icon filesystemIcon;
 
 	private Border border = new EmptyBorder(1,0,1,0);
 	private Color treeSelectionForeground;
@@ -151,6 +155,9 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/07/31 11:32:09  sp
+ * VFS file chooser is now in a minimally usable state
+ *
  * Revision 1.1  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *
