@@ -16,7 +16,7 @@
 		<echo file="doc/docbook-wrapper.xsl" append="true"
 			message=" xmlns:xsl='http://www.w3.org/1999/XSL/Transform'"/>
 		<echo file="doc/docbook-wrapper.xsl" append="true"
-			message=" xsl:version='1.0'&gt;"/>
+			message=" version='1.0'&gt;"/>
 		<echo file="doc/docbook-wrapper.xsl" append="true"
 			message="&lt;xsl:import href='${docbook.xsl}/html/chunk.xsl'/&gt;"/>
 		<echo file="doc/docbook-wrapper.xsl" append="true"
