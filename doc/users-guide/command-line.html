@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The jEdit Command Line</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.6 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Features"
+HREF="advanced-features.html"><LINK
+REL="PREVIOUS"
+TITLE="Markers"
+HREF="markers.html"><LINK
+REL="NEXT"
+TITLE="Rectangular Selection"
+HREF="rect-select.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.6 User's Guide</H1
+><P
+><A
+HREF="rect-select.html"
+>Next</A
+>, <A
+HREF="markers.html"
+>Prev</A
+></P
+><H2
+>Chapter 4. Advanced Features</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="COMMAND-LINE"
+>The jEdit Command Line</A
+></H1
+><P
+>   The so-called "jEdit command line" (has nothing to do with your
+   operating system's command line) will be instantly familiar to
+   users of Emacs, VIM, and many other editors. The command line allows
+   commands to be repeated and arbitriary editor actions to be invoked.
+   In addition, the register and quick search commands (see
+   <A
+HREF="registers.html"
+>the section called <I
+>Registers</I
+></A
+> and <A
+HREF="quick-search.html"
+>the section called <I
+>Quick Search</I
+> in Chapter 7</A
+>)
+   use it to prompt for input.
+  </P
+><P
+>   To activate the command line, either invoke the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>jEdit Command Line</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Enter</B
+>)
+   command, or simply click the mouse in the command line field at the
+   bottom of the view.
+  </P
+><P
+>   To repeat a command once the command line is active,
+   type a number using the digit keys (0-9), followed by a keystroke or menu
+   item selection. For example, to insert the "#" character 10 times,
+   you would press <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Enter</B
+>
+   <B
+CLASS="KEYCAP"
+>1</B
+> <B
+CLASS="KEYCAP"
+>0</B
+> <B
+CLASS="KEYCAP"
+>#</B
+>. To paste the clipboard contents
+   three times, press <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Enter</B
+>
+   <B
+CLASS="KEYCAP"
+>3</B
+> <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>V</B
+>.
+  </P
+><P
+>   To invoke an arbitriary action, start typing its name, instead of a repeat
+   count. Completion popups will appear while your are entering a name; press
+   <B
+CLASS="KEYCAP"
+>Enter</B
+> to invoke the action currently selected in the popup, and
+   press <B
+CLASS="KEYCAP"
+>Up</B
+> or <B
+CLASS="KEYCAP"
+>Down</B
+> to navigate the popup. Currently,
+   no complete documentation about jEdit's actions exists, but the two most
+   useful are:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><B
+CLASS="COMMAND"
+>open-file</B
+>: prompts for a path name and opens it
+   </P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>vfs-browser</B
+>: prompts for a path name and opens it
+   in the VFS browser</P
+></LI
+></UL
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>    jEdit's macro system (see <A
+HREF="macros.html"
+>the section called <I
+>Macros</I
+></A
+>) also relies on editor
+    actions; if you have ever looked at the source to a macro, you will
+    see similar names to those that appear in action name completion popups.
+    For this reason, the command line is a great tool when writing macros
+    by hand.
+   </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 4-5. The command line</B
+></P
+><P
+><IMG
+SRC="../images/window-editor-command-line.gif"></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="advanced-features.html"
+>Up</A
+><BR><A
+HREF="markers.html"
+>Prev</A
+>: Markers<BR><A
+HREF="rect-select.html"
+>Next</A
+>: Rectangular Selection<BR></DIV
+></BODY
+></HTML
+>

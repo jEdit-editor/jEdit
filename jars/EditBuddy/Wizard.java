@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -69,7 +70,7 @@ public abstract class Wizard extends JComponent
 		int sideBorder = PADDING * 2;
 		int bottomBorder = cancelButton.getPreferredSize().height + PADDING * 2;
 
-		g.setColor(new Color(0xff8e00));
+		g.setColor(new Color(204,204,204));
 		g.fillRect(0,0,getWidth(),getHeight());
 
 		g.setColor(Color.black);
@@ -108,12 +109,31 @@ public abstract class Wizard extends JComponent
 		return editorPane;
 	}
 
-	protected static JScrollPane createHTMLScrollPane(JComponent comp)
+	protected static JComponent createHTMLScrollPane(JComponent comp, String[] buttons)
 	{
 		JScrollPane scroller = new JScrollPane(comp);
 		scroller.setBorder(null);
 
-		return scroller;
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(BorderLayout.CENTER,scroller);
+		if(buttons != null)
+		{
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.setBackground(Color.white);
+			buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.X_AXIS));
+			buttonPanel.setBorder(new EmptyBorder(12,12,12,12));
+			buttonPanel.add(Box.createGlue());
+			for(int i = 0; i < buttons.length; i++)
+			{
+				if(i != 0)
+					buttonPanel.add(Box.createHorizontalStrut(6));
+				buttonPanel.add(new HTMLActionButton(buttons[i]));
+			}
+			buttonPanel.add(Box.createGlue());
+			panel.add(BorderLayout.SOUTH,buttonPanel);
+		}
+
+		return panel;
 	}
 
 	// private members

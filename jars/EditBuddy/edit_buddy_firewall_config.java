@@ -42,6 +42,6 @@ public class edit_buddy_firewall_config extends EditAction
 			return;
 		}
 
-		new OptionPaneDialog(null,optPane,false);
+		new OptionPaneDialog(null,optPane,true);
 	}
 }

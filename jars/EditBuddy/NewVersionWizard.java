@@ -35,11 +35,13 @@ public class NewVersionWizard extends Wizard
 		String[] args = { oldVersion, newVersion };
 		Component[] pages = {
 			createHTMLScrollPane(createHTMLView(jEdit.getProperty(
-				"edit-buddy.new-version.text",args))),
+				"edit-buddy.new-version.text",args)),null),
 			createHTMLScrollPane(createHTMLView(NewVersionWizard.class
-				.getResource("/update-plugins.html"))),
+				.getResource("/update-plugins.html")),
+				new String[] { "update-plugins" }),
 			createHTMLScrollPane(createHTMLView(NewVersionWizard.class
-				.getResource("/new-version-finished.html"))),
+				.getResource("/new-version-finished.html")),
+				new String[] { "view-changes" , "view-news" }),
 		};
 		return pages;
 	}

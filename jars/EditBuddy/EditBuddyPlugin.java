@@ -18,8 +18,11 @@
  */
 
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
-import org.gjt.sp.jedit.msg.EditorStarted;
+import java.util.StringTokenizer;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -34,36 +37,52 @@ public class EditBuddyPlugin extends EBPlugin
 		jEdit.addAction(new edit_buddy_firewall_config());
 		jEdit.addAction(new edit_buddy_plugin_install());
 		jEdit.addAction(new edit_buddy_plugin_update());
+
+		String build = jEdit.getProperty("update-plugins.last-version");
+
+		// reset toolbar when upgrading from 2.6pre6 to
+		// avoid confusion
+		if(build != null && build.compareTo("02.06.06.00") <= 0)
+			resetToolBar();
 	}
 
 	public void handleMessage(EBMessage msg)
 	{
-		if(msg instanceof EditorStarted)
+		if(msg instanceof ViewUpdate)
 		{
-			// use plugin manager's last-version property
-			// for backwards compatibility
-			String build = jEdit.getProperty("update-plugins.last-version");
-			String myBuild = jEdit.getBuild();
-			if(build == null)
+			ViewUpdate vmsg = (ViewUpdate)msg;
+			if(vmsg.getWhat() == ViewUpdate.CREATED)
 			{
-				doFirstTimeWizard();
-			}
-			else if(myBuild.compareTo(build) > 0)
-			{
-				doNewVersionWizard();
-			}
-			else if(myBuild.compareTo(build) < 0)
-			{
-				Log.log(Log.WARNING,EditBuddyPlugin.class,
-					"You downgraded from jEdit " + build
-					+ " to " + myBuild + "!");
-			}
+				View view = vmsg.getView();
 
-			jEdit.setProperty("update-plugins.last-version",myBuild);
+				// use plugin manager's last-version property
+				// for backwards compatibility
+				String build = jEdit.getProperty("update-plugins.last-version");
+
+				String myBuild = jEdit.getBuild();
+				if(build == null)
+				{
+					doFirstTimeWizard(view);
+				}
+				else if(myBuild.compareTo(build) > 0)
+				{
+					doNewVersionWizard(view);
+				}
+				else if(myBuild.compareTo(build) < 0)
+				{
+					Log.log(Log.WARNING,EditBuddyPlugin.class,
+						"You downgraded from jEdit " + build
+						+ " to " + myBuild + "!");
+				}
+
+				jEdit.setProperty("update-plugins.last-version",myBuild);
+
+				EditBus.removeFromBus(this);
+			}
 		}
 	}
 
-	public static void doFirstTimeWizard()
+	public static void doFirstTimeWizard(View view)
 	{
 		if(jEdit.getSettingsDirectory() == null)
 		{
@@ -74,10 +93,10 @@ public class EditBuddyPlugin extends EBPlugin
 		}
 
 		FirstTimeWizard wizard = new FirstTimeWizard();
-		doWizard("first-time",wizard);
+		doWizard(view,"first-time",wizard);
 	}
 
-	public static void doNewVersionWizard()
+	public static void doNewVersionWizard(View view)
 	{
 		if(jEdit.getSettingsDirectory() == null)
 		{
@@ -91,23 +110,42 @@ public class EditBuddyPlugin extends EBPlugin
 			MiscUtilities.buildToVersion(jEdit.getProperty(
 			"update-plugins.last-version")),
 			MiscUtilities.buildToVersion(jEdit.getBuild()));;
-		doWizard("new-version",wizard);
+		doWizard(view,"new-version",wizard);
 	}
 
 	// private members
-	private static void doWizard(String title, Wizard wizard)
+	private static void resetToolBar()
 	{
-		JDialog dialog = new JDialog(null,jEdit.getProperty(
-			"edit-buddy." + title + ".title"),true);
+		Log.log(Log.WARNING,EditBuddyPlugin.class,"Upgrading from jEdit"
+			+ " 2.6pre6 or earlier; resetting toolbar to defaults");
+
+		String toolbar = jEdit.getProperty("view.toolbar");
+		StringTokenizer st = new StringTokenizer(toolbar);
+		while(st.hasMoreTokens())
+		{
+			String action = st.nextToken();
+			jEdit.resetProperty(action + ".icon");
+		}
+		jEdit.resetProperty("view.toolbar");
+		GUIUtilities.invalidateMenuModels();
+	}
+
+	private static void doWizard(final View view, String title, Wizard wizard)
+	{
+		final JDialog dialog = new JDialog(view,jEdit.getProperty(
+			"edit-buddy." + title + ".title"),false);
 		wizard.setPreferredSize(new Dimension(640,480));
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setContentPane(wizard);
 		dialog.pack();
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setLocation((screen.width - dialog.getSize().width) / 2,
-			(screen.height - dialog.getSize().height) / 2);
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		GUIUtilities.hideSplashScreen();
-		dialog.show();
+		view.addWindowListener(new WindowAdapter()
+		{
+			public void windowOpened(WindowEvent evt)
+			{
+				dialog.setLocationRelativeTo(view);
+				dialog.show();
+			}
+		});
 	}
 }

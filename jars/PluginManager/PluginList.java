@@ -129,7 +129,6 @@ public class PluginList
 				else
 					clazz = null;
 				String path = checkJar.getPath();
-				System.err.println(jar + ":" + path);
 				if(MiscUtilities.getFileName(path).equals(jar))
 				{
 					currVersion = jEdit.getProperty(

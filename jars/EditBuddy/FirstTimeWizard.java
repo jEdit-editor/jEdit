@@ -39,14 +39,16 @@ public class FirstTimeWizard extends Wizard
 	{
 		Component[] pages = {
 			createHTMLScrollPane(createHTMLView(FirstTimeWizard.class
-				.getResource("/first-time.html"))),
+				.getResource("/first-time.html")),null),
 			new SettingsDirPanel(),
 			createHTMLScrollPane(createHTMLView(FirstTimeWizard.class
-				.getResource("/firewall.html"))),
+				.getResource("/firewall.html")),
+				new String[] { "firewall-config" }),
 			createHTMLScrollPane(createHTMLView(FirstTimeWizard.class
-				.getResource("/install-plugins.html"))),
+				.getResource("/install-plugins.html")),
+				new String[] { "install-plugins" }),
 			createHTMLScrollPane(createHTMLView(FirstTimeWizard.class
-				.getResource("/first-time-finished.html")))
+				.getResource("/first-time-finished.html")),null)
 		};
 		return pages;
 	}
@@ -60,7 +62,7 @@ public class FirstTimeWizard extends Wizard
 			String[] args = { jEdit.getSettingsDirectory() };
 			add(BorderLayout.NORTH,createHTMLScrollPane(
 				createHTMLView(jEdit.getProperty("edit-buddy.first-time"
-				+ ".settings-dir.text",args))));
+				+ ".settings-dir.text",args)),null));
 
 			DefaultListModel listModel = new DefaultListModel();
 			StringTokenizer st = new StringTokenizer(jEdit.getProperty(
@@ -80,7 +82,7 @@ public class FirstTimeWizard extends Wizard
 			add(BorderLayout.WEST,scroller);
 
 			description = createHTMLView(getClass().getResource("/settings-dir.html"));
-			add(BorderLayout.CENTER,createHTMLScrollPane(description));
+			add(BorderLayout.CENTER,createHTMLScrollPane(description,null));
 		}
 
 		// private members

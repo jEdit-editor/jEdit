@@ -54,6 +54,7 @@ jedit_pkgs = "com/microstar/xml"
     "org/gjt/sp/jedit/actions"
     "org/gjt/sp/jedit/browser"
     "org/gjt/sp/jedit/gui"
+    "org/gjt/sp/jedit/icons"
     "org/gjt/sp/jedit/io"
     "org/gjt/sp/jedit/msg"
     "org/gjt/sp/jedit/options"
@@ -61,7 +62,6 @@ jedit_pkgs = "com/microstar/xml"
     "org/gjt/sp/jedit/search"
     "org/gjt/sp/jedit/syntax"
     "org/gjt/sp/jedit/textarea"
-    "org/gjt/sp/jedit/toolbar"
     "org/gjt/sp/util";
 
 jedit_srcs = (subst ".java", ".class", (glob (join jedit_pkgs, "/*.java")));
@@ -77,11 +77,7 @@ jar = "jedit.jar";
 
 "all": srcs;
 {
-}
-
-jar: "all";
-{
-    exec cmd_jar "cmf0" jedit_mf @ (glob
+    exec cmd_jar "cmf0" jedit_mf jar (glob
         (join pkgs, "/*.class")
         (join pkgs, "/*.gif")
         (join pkgs, "/*.jpg")
@@ -106,4 +102,4 @@ jar: "all";
 }
 
 
-".PHONY": "all" "jar" "everything";
+".PHONY": "all" "everything";

@@ -7,7 +7,7 @@ find . -name \*.orig -exec rm {} \;
 find . -name \*.rej -exec rm {} \;
 find . -name \#\*\# -exec rm {} \;
 find . -name .\*.swp -exec rm {} \;
-find . -name \*.class -exec rm {} \;
+find org com gnu jars -name \*.class -exec rm {} \;
 find . -name .\#\* -exec rm {} \;
 find . -name .new\* -exec rm {} \;
 find . -name .directory -exec rm {} \;
