@@ -403,10 +403,10 @@ about.message=jEdit version {0} (Java {1}, {2} {3})\n\
 	disclamer.\n\
 	\n\
 	The following people have written plugins or contributed code to jEdit:\n\
-	Andreas Schaefer, Artur Biesiadowski, Aziz Sharif, Chris Laird,\n\
-	George Latkiewicz, Henrik Falk, Jason Ginchereau, Jonathan Revusky,\n\
-	Juha Lindfors, Kevin A. Burton, Mike Dillon, Nathan Tenney,\n\
-	Romain Guy, Tal Davison and Valery Kondakoff.\n\
+	Andre Kaplan, Andreas Schaefer, Artur Biesiadowski, Aziz Sharif,\n\
+	Chris Laird, George Latkiewicz, Henrik Falk, Jason Ginchereau,\n\
+	Jonathan Revusky, Juha Lindfors, Kevin A. Burton, Mike Dillon,\n\
+	Nathan Tenney, Romain Guy, Tal Davison and Valery Kondakoff.\n\
 	\n\
 	Thanks for your help!
 

@@ -50,7 +50,12 @@ import org.gjt.sp.util.Log;
  * use this property when reading/writing to the disk
  * </ul>
  *
- * Various other properties are also used by jEdit and plugin actions.
+ * Various other properties are also used by jEdit and plugin actions.<p>
+ *
+ * To improve jEdit's perceived speed, buffers are not loaded from disk
+ * until the user first interacts with them. Because of this, plugins and
+ * other jEdit modules must call the <code>loadIfNecessary()</code> method
+ * of a buffer before doing anything with it.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -82,6 +87,49 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public void propertiesChanged()
 	{
 		setFlag(SYNTAX,"on".equals(getProperty("syntax")));
+	}
+
+	/**
+	 * Loads a buffer from disk if it is not loaded already.
+	 * To make jEdit seem faster, files are not actually loaded
+	 * disk when opened. They are only loaded when they are used
+	 * for the first time.<p>
+	 *
+	 * This method must be called before doing anything with a buffer.
+	 * @param view The view
+	 */
+	public void loadIfNecessary(View view)
+	{
+		if(!getFlag(LOADED))
+		{
+			if(view != null)
+				view.showWaitCursor();
+
+			setMode(jEdit.getMode(jEdit.getProperty("buffer.defaultMode")));
+
+			if(!getFlag(NEW_FILE))
+			{
+				if(autosaveFile.exists())
+				{
+					Object[] args = { autosaveFile.getPath() };
+					GUIUtilities.message(view,"autosaveexists",args);
+				}
+				load(view);
+				loadMarkers();
+			}
+
+			if(!getFlag(TEMPORARY))
+			{
+				setMode();
+				propertiesChanged();
+				EditBus.addToBus(this);
+			}
+
+			if(view != null)
+				view.hideWaitCursor();
+
+			setFlag(LOADED,true);
+		}
 	}
 
 	/**
@@ -139,6 +187,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public boolean save(View view, String path)
 	{
+		// Do nothing if not loaded
+		if(!getFlag(LOADED))
+			return true;
+
 		if(path == null && getFlag(NEW_FILE))
 			return saveAs(view);
 
@@ -245,44 +297,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void reload(View view)
 	{
-		// Show the wait cursor
-		if(view != null)
-			view.showWaitCursor();
-
 		// Delete the autosave
 		autosaveFile.delete();
-
-		// This is so that `dirty' isn't set
-		setFlag(INIT,true);
 
 		// remove all lines from token marker
 		if(tokenMarker != null)
 			tokenMarker.deleteLines(0,getDefaultRootElement()
 				.getElementCount());
 
-		load(view);
-		loadMarkers();
-
-		// reload syntax flag
-		propertiesChanged();
-		setMode();
-
-		// add lines to token marker
-		if(tokenMarker != null)
-		{
-			tokenMarker.insertLines(0,getDefaultRootElement()
-				.getElementCount());
-			tokenizeLines();
-		}
-
-		setFlag(INIT,false);
-
-		// Clear dirty flag
-		setDirty(false);
-
-		// Hide the wait cursor
-		if(view != null)
-			view.hideWaitCursor();
+		setFlag(LOADED,false);
+		loadIfNecessary(view);
 	}
 
 	/**
@@ -368,7 +392,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		if(d)
 		{
-			if(getFlag(INIT) || getFlag(READ_ONLY))
+			if(!getFlag(LOADED) || getFlag(READ_ONLY))
 				return;
 			if(getFlag(DIRTY) && getFlag(AUTOSAVE_DIRTY))
 				return;
@@ -658,7 +682,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			return;
 		}
 		boolean added = false;
-		if(!getFlag(INIT))
+
+		// don't sort markers while buffer is being loaded
+		if(getFlag(LOADED))
 		{
 			for(int i = 0; i < markers.size(); i++)
 			{
@@ -750,63 +776,42 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	Buffer prev;
 	Buffer next;
 
-	Buffer(View view, URL url, String path, boolean readOnly,
+	Buffer(URL url, String path, boolean readOnly,
 		boolean newFile, boolean temp)
 	{
-		setFlag(INIT,true);
-		setFlag(TEMPORARY,temp);
-
 		this.url = url;
 		this.path = path;
+		setFlag(TEMPORARY,temp);
 		setFlag(NEW_FILE,newFile);
 		setFlag(READ_ONLY,readOnly);
 
-		setDocumentProperties(new BufferProps());
-		putProperty("i18n",Boolean.FALSE);
-		
-		undo = new UndoManager();
 		markers = new Vector();
+
+		undo = new UndoManager();
 		addDocumentListener(new DocumentHandler());
-
-		setPath();
-
-		// Set default mode
-		setMode(jEdit.getMode(jEdit.getProperty("buffer.defaultMode")));
-
-		if(!newFile)
-		{
-			if(autosaveFile.exists())
-			{
-				Object[] args = { autosaveFile.getPath() };
-				GUIUtilities.message(view,"autosaveexists",args);
-			}
-			load(view);
-			loadMarkers();
-		}
-
-
 		addUndoableEditListener(new UndoHandler());
 
-		if(!temp)
-		{
-			setMode();
-			propertiesChanged();
-			EditBus.addToBus(this);
-		}
+		setDocumentProperties(new BufferProps());
+		putProperty("i18n",Boolean.FALSE);
 
-		setFlag(INIT,false);
+		setPath();
 	}
 
 	void commitTemporary()
 	{
 		setFlag(TEMPORARY,false);
+		if(getFlag(LOADED))
+			EditBus.addToBus(this);
 	}
 
 	void close()
 	{
 		setFlag(CLOSED,true);
 		autosaveFile.delete();
-		EditBus.removeFromBus(this);
+
+		// Unloaded buffers are not on the bus
+		if(getFlag(LOADED))
+			EditBus.removeFromBus(this);
 	}
 
 	// private members
@@ -825,7 +830,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	}
 
 	private static final int CLOSED = 0;
-	private static final int INIT = 1;
+	private static final int LOADED = 1;
 	private static final int NEW_FILE = 2;
 	private static final int AUTOSAVE_DIRTY = 3;
 	private static final int DIRTY = 4;
@@ -1545,6 +1550,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.110  1999/12/05 03:01:05  sp
+ * Perl token marker bug fix, file loading is deferred, style option pane fix
+ *
  * Revision 1.109  1999/12/03 23:48:10  sp
  * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
  *

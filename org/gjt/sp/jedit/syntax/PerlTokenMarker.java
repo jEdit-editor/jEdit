@@ -476,15 +476,16 @@ loop:		for(int i = offset; i < length; i++)
 	// Converts < EOF >, < 'EOF' >, etc to <EOF>
 	private String createReadinString(char[] array, int start, int len)
 	{
-		int off = 0;
+		int idx1 = start;
+		int idx2 = start + len - 1;
 
-		while((off < len) && (!Character.isLetterOrDigit(array[start + off])))
-			off++;
+		while((idx1 <= idx2) && (!Character.isLetterOrDigit(array[idx1])))
+			idx1++;
 
-		while((off < len) && (!Character.isLetterOrDigit(array[start + len - 1])))
-			len--;
+		while((idx1 <= idx2) && (!Character.isLetterOrDigit(array[idx2])))
+			idx2--;
 
-		return new String(array,start + off,len);
+		return new String(array, idx1, idx2 - idx1 + 1);
 	}
 
 	private static KeywordMap perlKeywords;
@@ -724,6 +725,9 @@ loop:		for(int i = offset; i < length; i++)
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.10  1999/12/05 03:01:05  sp
+ * Perl token marker bug fix, file loading is deferred, style option pane fix
+ *
  * Revision 1.9  1999/09/30 12:21:05  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

@@ -59,7 +59,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		panel.add(new JLabel(jEdit.getProperty("hypersearch.find")),
 			BorderLayout.WEST);
 		find = new HistoryTextField("find");
-		find.setText(defaultFind);
+
 		panel.add(find, BorderLayout.CENTER);
 		content.add(panel, BorderLayout.NORTH);
 
@@ -100,6 +100,12 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		find.addActionListener(actionListener);
 		findBtn.addActionListener(actionListener);
 		close.addActionListener(actionListener);
+
+		if(defaultFind != null)
+		{
+			find.setText(defaultFind);
+			save();
+		}
 
 		EditBus.addToBus(this);
 
@@ -213,6 +219,8 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		throws Exception
 	{
 		boolean retVal = false;
+
+		buffer.loadIfNecessary(null);
 
 		Element map = buffer.getDefaultRootElement();
 		int lines = map.getElementCount();
@@ -331,6 +339,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.47  1999/12/05 03:01:05  sp
+ * Perl token marker bug fix, file loading is deferred, style option pane fix
+ *
  * Revision 1.46  1999/11/28 00:33:07  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *

@@ -1739,10 +1739,10 @@
     <guimenu>Edit</>&gt;<guimenuitem>Expand Abbreviation</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>B</></keycombo>) attempts to
-    compete the current word by scanning backwards in the buffer for
+    compete the current word by searching the buffer for
     other words beginning with the current word. Invoking it multiple times
-    will find earlier competions. This can be used to
-    complete long identifiers in program source, for example.
+    will cycle through all possible competions. This can be used to
+    enter previously typed, long identifiers in program source, for example.
    </para>
    <para>
     <indexterm><primary>buffer-local properties</>

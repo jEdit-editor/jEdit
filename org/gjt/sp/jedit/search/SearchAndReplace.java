@@ -238,7 +238,8 @@ loop:			for(;;)
 	}
 
 	/**
-	 * Finds the next instance of the search string in the specified buffer.
+	 * Finds the next instance of the search string in the specified
+	 * buffer. This calls <code>loadIfNecessary()</code> on the buffer.
 	 * @param view The view
 	 * @param buffer The buffer
 	 * @param start Location where to start the search
@@ -250,6 +251,9 @@ loop:			for(;;)
 		throws BadLocationException, IllegalArgumentException
 	{
 		SearchMatcher matcher = getSearchMatcher();
+
+		// Load buffer if necessary
+		buffer.loadIfNecessary(view);
 
 		String text = buffer.getText(start,
 			buffer.getLength() - start);
@@ -379,7 +383,7 @@ loop:			for(;;)
 
 	/**
 	 * Replaces all occurances of the search string with the replacement
-	 * string.
+	 * string. This calls <code>loadIfNecessary()</code> on the buffer.
 	 * @param view The view
 	 * @param buffer The buffer
 	 * @return True if the replace operation was successful, false
@@ -394,6 +398,9 @@ loop:			for(;;)
 		SearchMatcher matcher = getSearchMatcher();
 		if(matcher == null)
 			return 0;
+
+		// Load buffer if necessary
+		buffer.loadIfNecessary(view);
 
 		int lineCount = 0;
 		Element map = buffer.getDefaultRootElement();
@@ -488,6 +495,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  1999/12/05 03:01:05  sp
+ * Perl token marker bug fix, file loading is deferred, style option pane fix
+ *
  * Revision 1.20  1999/11/29 02:45:50  sp
  * Scroll bar position saved when switching buffers
  *

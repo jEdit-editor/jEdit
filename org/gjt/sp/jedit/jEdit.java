@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.02.07.00";
+		return "02.02.08.00";
 	}
 
 	/**
@@ -628,24 +628,14 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		// Show the wait cursor because there certainly is going
-		// to be a file load
-		if(view != null)
-			view.showWaitCursor();
-
-		buffer = new Buffer(view,url,path,readOnly,newFile,false);
+		buffer = new Buffer(url,path,readOnly,newFile,false);
 		addBufferToList(buffer);
 
 		if(marker != null)
 			gotoMarker(buffer,null,marker);
 
 		if(view != null)
-		{
 			view.setBuffer(buffer);
-
-			// Hide wait cursor
-			view.hideWaitCursor();
-		}
 
 		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CREATED));
 
@@ -692,7 +682,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		return new Buffer(view,url,path,readOnly,newFile,true);
+		return new Buffer(url,path,readOnly,newFile,true);
 	}
 
 	/**
@@ -708,7 +698,6 @@ public class jEdit
 
 		buffer.setMode();
 		buffer.propertiesChanged();
-		EditBus.addToBus(buffer);
 
 		addBufferToList(buffer);
 		buffer.commitTemporary();
@@ -1525,6 +1514,9 @@ public class jEdit
 		if(marker.length() == 0)
 			return;
 
+		// load buffer if necessary
+		buffer.loadIfNecessary(view);
+
 		int start, end;
 
 		// Handle line number
@@ -1659,6 +1651,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.166  1999/12/05 03:01:05  sp
+ * Perl token marker bug fix, file loading is deferred, style option pane fix
+ *
  * Revision 1.165  1999/12/03 23:48:10  sp
  * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
  *
@@ -1688,18 +1683,5 @@ public class jEdit
  *
  * Revision 1.156  1999/11/20 02:34:22  sp
  * more pre6 stuffs
- *
- * Revision 1.155  1999/11/19 08:54:51  sp
- * EditBus integrated into the core, event system gone, bug fixes
- *
- * Revision 1.154  1999/11/19 05:11:35  sp
- * Recent file list bug fix, HTML comment bug fix
- *
- * Revision 1.153  1999/11/16 08:21:20  sp
- * Various fixes, attempt at beefing up expand-abbrev
- *
- * Revision 1.152  1999/11/09 10:14:34  sp
- * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
- * word commands, check box menu item support
  *
  */

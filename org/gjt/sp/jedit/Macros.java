@@ -274,6 +274,8 @@ public class Macros
 	private static void playMacroFromBuffer(View view, String macro,
 		Buffer buffer)
 	{
+		buffer.loadIfNecessary(view);
+
 		try
 		{
 			Element map = buffer.getDefaultRootElement();
@@ -396,6 +398,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  1999/12/05 03:01:05  sp
+ * Perl token marker bug fix, file loading is deferred, style option pane fix
+ *
  * Revision 1.16  1999/11/27 06:01:20  sp
  * Faster file loading, geometry fix
  *

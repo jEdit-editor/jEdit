@@ -342,7 +342,8 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Sets the buffer being edited by this view.
+	 * Sets the buffer being edited by this view. This calls
+	 * <code>loadIfNecessary()</code> on the buffer.
 	 * @param buffer The buffer to edit.
 	 */
 	public void setBuffer(Buffer buffer)
@@ -351,7 +352,10 @@ public class View extends JFrame implements EBComponent
 			return;
 
 		if(buffer == null)
-			throw new NullPointerException("Not supported yet");
+			throw new NullPointerException("Buffer must be non-null");
+
+		// Ensure new buffer is valid
+		buffer.loadIfNecessary(this);
 
 		Buffer oldBuffer = this.buffer;
 		if(oldBuffer != null)
@@ -881,6 +885,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.114  1999/12/05 03:01:05  sp
+ * Perl token marker bug fix, file loading is deferred, style option pane fix
+ *
  * Revision 1.113  1999/11/30 01:37:35  sp
  * New view icon, shortcut pane updates, session bug fix
  *

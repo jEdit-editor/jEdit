@@ -450,8 +450,8 @@ implements ActionListener, KeyListener
 		panel.add(bold = new JCheckBox(
 			jEdit.getProperty("styleEditor.bold")));
 		bold.getModel().setSelected(style.isBold());
-		panel.add(new JLabel(jEdit.getProperty(
-			jEdit.getProperty("styleEditor.color"))));
+		panel.add(new JLabel(
+			jEdit.getProperty("styleEditor.color")));
 		panel.add(color = new JButton("    "));
 		color.setBackground(style.getColor());
 		color.setRequestFocusEnabled(false);
@@ -539,6 +539,9 @@ implements ActionListener, KeyListener
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/12/05 03:01:05  sp
+ * Perl token marker bug fix, file loading is deferred, style option pane fix
+ *
  * Revision 1.7  1999/10/04 03:20:51  sp
  * Option pane change, minor tweaks and bug fixes
  *
