@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class new_file extends EditAction
 {
-	public new_file()
-	{
-		super("new-file");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		jEdit.newFile(getView(evt));

@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.*;
 public class stop_recording extends EditAction
 implements org.gjt.sp.jedit.textarea.InputHandler.NonRecordable
 {
-	public stop_recording()
-	{
-		super("stop-recording");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

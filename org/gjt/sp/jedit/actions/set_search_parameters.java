@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 
 public class set_search_parameters extends EditAction
 {
-	public set_search_parameters()
-	{
-		super("set-search-parameters");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		String actionCommand = evt.getActionCommand();

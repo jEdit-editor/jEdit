@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.*;
 
 public class untab extends EditAction
 {
-	public untab()
-	{
-		super("untab");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -167,7 +167,7 @@ public class SearchAndReplace
 	public static boolean find(View view)
 	{
 		boolean repeat = false;
-		Buffer buffer = null;
+		Buffer buffer = fileset.getNextBuffer(view,null);
 
 		SearchMatcher matcher = getSearchMatcher();
 		if(matcher == null)
@@ -184,8 +184,7 @@ public class SearchAndReplace
 		{
 loop:			for(;;)
 			{
-				while((buffer = (repeat ? fileset.getFirstBuffer(view)
-					: fileset.getNextBuffer(view,buffer))) != null)
+				while(buffer != null)
 				{
 					int start;
 					if(view.getBuffer() == buffer && !repeat)
@@ -195,11 +194,12 @@ loop:			for(;;)
 						start = 0;
 					if(find(view,buffer,start))
 					{
+						fileset.matchFound(buffer);
 						view.hideWaitCursor();
 						return true;
 					}
-					fileset.doneWithBuffer(buffer);
-					repeat = false;
+
+					buffer = fileset.getNextBuffer(view,buffer);
 				}
 
 				int result = JOptionPane.showConfirmDialog(view,
@@ -210,7 +210,7 @@ loop:			for(;;)
 				if(result == JOptionPane.YES_OPTION)
 				{
 					// start search from beginning
-					buffer = null;
+					buffer = fileset.getFirstBuffer(view);
 					repeat = true;
 				}
 				else
@@ -336,9 +336,8 @@ loop:			for(;;)
 					{
 						fileCount++;
 						lineCount += retVal;
+						fileset.matchFound(buffer);
 					}
-					else
-						fileset.doneWithBuffer(buffer);
 				}
 				finally
 				{
@@ -482,6 +481,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  1999/11/28 00:33:07  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.18  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *
@@ -492,7 +494,7 @@ loop:			for(;;)
  * Mode system overhaul, close all dialog box, misc other stuff
  *
  * Revision 1.15  1999/10/11 07:14:22  sp
- * doneWithBuffer()
+ * matchFound()
  *
  * Revision 1.14  1999/10/06 05:52:34  sp
  * Macros were being played twice, dialog box shows how many replacements

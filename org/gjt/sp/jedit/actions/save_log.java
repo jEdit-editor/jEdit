@@ -27,11 +27,6 @@ import org.gjt.sp.util.Log;
 
 public class save_log extends EditAction
 {
-	public save_log()
-	{
-		super("save-log");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class indent_on_enter extends EditAction
 {
-        public indent_on_enter()
-        {
-                super("indent-on-enter");
-	}
-
         public void actionPerformed(ActionEvent evt)
         {
                 View view = getView(evt);

@@ -189,11 +189,11 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 			do
 			{
-				if(!doHyperSearch(buffer,matcher))
-					fileset.doneWithBuffer(buffer);
+				if(doHyperSearch(buffer,matcher))
+					fileset.matchFound(buffer);
 			}
 			while((buffer = fileset.getNextBuffer(view,buffer)) != null);
-	
+
 			if(resultModel.isEmpty())
 				view.getToolkit().beep();
 			results.setModel(resultModel);
@@ -331,6 +331,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.46  1999/11/28 00:33:07  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.45  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *
@@ -353,7 +356,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
  * New logging API, splash screen updates, bug fixes
  *
  * Revision 1.38  1999/10/11 07:14:22  sp
- * doneWithBuffer()
+ * matchFound()
  *
  * Revision 1.37  1999/10/02 01:12:36  sp
  * Search and replace updates (doesn't work yet), some actions moved to TextTools

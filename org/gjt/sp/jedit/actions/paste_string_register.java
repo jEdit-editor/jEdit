@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.*;
 public class paste_string_register extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public paste_string_register()
-	{
-		super("paste-string-register");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

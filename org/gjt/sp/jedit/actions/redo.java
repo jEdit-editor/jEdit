@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class redo extends EditAction
 {
-	public redo()
-	{
-		super("redo");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		if(!getBuffer(evt).redo())

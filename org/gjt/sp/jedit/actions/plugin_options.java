@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class plugin_options extends EditAction
 {
-	public plugin_options()
-	{
-		super("plugin-options");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		new PluginOptions(getView(evt));

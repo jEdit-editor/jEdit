@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class view_editbus extends EditAction
 {
-	public view_editbus()
-	{
-		super("view-editbus");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		new EditBusViewer();

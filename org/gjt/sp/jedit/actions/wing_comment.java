@@ -28,11 +28,6 @@ import org.gjt.sp.util.Log;
 
 public class wing_comment extends EditAction
 {
-	public wing_comment()
-	{
-		super("wing-comment");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

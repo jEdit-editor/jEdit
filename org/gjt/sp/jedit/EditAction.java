@@ -68,6 +68,14 @@ import org.gjt.sp.util.Log;
 public abstract class EditAction implements ActionListener 
 {
 	/**
+	 * Creates a new <code>EditAction</code>. This constructor
+	 * should be used by jEdit's own actions only.
+	 */
+	public EditAction()
+	{
+	}
+
+	/**
 	 * Creates a new <code>EditAction</code>.
 	 * @param name The name of the action
 	 */
@@ -180,6 +188,22 @@ public abstract class EditAction implements ActionListener
 				textArea,evt.getActionCommand());
 		}
 
+		public boolean isToggle()
+		{
+			if(action == null)
+				return false;
+			else
+				return action.isToggle();
+		}
+
+		public boolean isSelected(Component comp)
+		{
+			if(action == null)
+				return false;
+			else
+				return action.isSelected(comp);
+		}
+
 		// private members
 		private EditAction action;
 
@@ -208,6 +232,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  1999/11/28 00:33:06  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.15  1999/11/27 06:01:20  sp
  * Faster file loading, geometry fix
  *
@@ -238,8 +265,5 @@ public abstract class EditAction implements ActionListener
  *
  * Revision 1.6  1999/03/16 04:34:45  sp
  * HistoryTextField updates, moved generate-text to a plugin, fixed spelling mistake in EditAction Javadocs
- *
- * Revision 1.5  1999/03/12 07:23:19  sp
- * Fixed serious view bug, Javadoc updates
  *
  */

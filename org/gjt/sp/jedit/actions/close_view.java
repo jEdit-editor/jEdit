@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class close_view extends EditAction
 {
-	public close_view()
-	{
-		super("close-view");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		jEdit.closeView(getView(evt));

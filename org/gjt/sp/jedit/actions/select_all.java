@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class select_all extends EditAction
 {
-	public select_all()
-	{
-		super("select-all");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		getView(evt).getTextArea().selectAll();

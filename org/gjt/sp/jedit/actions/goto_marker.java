@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 
 public class goto_marker extends EditAction
 {
-	public goto_marker()
-	{
-		super("goto-marker");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

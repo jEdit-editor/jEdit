@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class select_buffer extends EditAction
 {
-	public select_buffer()
-	{
-		super("select-buffer");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		getView(evt).setBuffer(jEdit.getBuffer(evt.getActionCommand()));

@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.*;
 
 public class tab extends EditAction
 {
-	public tab()
-	{
-		super("tab");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
                 View view = getView(evt);

@@ -25,11 +25,6 @@ import org.gjt.sp.util.Log;
 
 public class clear_log extends EditAction
 {
-	public clear_log()
-	{
-		super("clear-log");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		Log.clearLog();

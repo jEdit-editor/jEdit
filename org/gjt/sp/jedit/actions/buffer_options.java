@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class buffer_options extends EditAction
 {
-	public buffer_options()
-	{
-		super("buffer-options");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		new BufferOptions(getView(evt));

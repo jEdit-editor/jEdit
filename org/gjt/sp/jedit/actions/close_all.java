@@ -24,13 +24,8 @@ import org.gjt.sp.jedit.*;
 
 public class close_all extends EditAction
 {
-	public close_all()
-	{
-		super("close-all");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
-		jEdit.closeAllBuffers(getView(evt));
+		jEdit.closeAllBuffers(getView(evt),false);
 	}
 }

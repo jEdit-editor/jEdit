@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.*;
 public class replace_in_selection extends EditAction
 implements InputHandler.NonRecordable
 {
-	public replace_in_selection()
-	{
-		super("replace-in-selection");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

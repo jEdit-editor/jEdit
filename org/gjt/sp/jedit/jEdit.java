@@ -611,7 +611,6 @@ public class jEdit
 		catch(MalformedURLException mu)
 		{
 			path = MiscUtilities.constructPath(parent,path);
-
 		}
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
@@ -634,7 +633,7 @@ public class jEdit
 		if(view != null)
 			view.showWaitCursor();
 
-		buffer = new Buffer(view,url,path,readOnly,newFile);
+		buffer = new Buffer(view,url,path,readOnly,newFile,false);
 		addBufferToList(buffer);
 
 		if(marker != null)
@@ -651,6 +650,70 @@ public class jEdit
 		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CREATED));
 
 		return buffer;
+	}
+
+	/**
+	 * Opens a temporary buffer. A temporary buffer is like a normal
+	 * buffer, except that an event is not fired, the the buffer is
+	 * not added to the buffers list.
+	 *
+	 * @param view The view to open the file in
+	 * @param parent The parent directory of the file
+	 * @param path The path name of the file
+	 * @param readOnly True if the file should be read only
+	 * @param newFile True if the file should not be loaded from disk
+	 */
+	public static Buffer openTemporary(View view, String parent,
+		String path, boolean readOnly, boolean newFile)
+	{
+		if(view != null && parent == null)
+			parent = view.getBuffer().getFile().getParent();
+
+		// Java doesn't currently support saving to file:// URLs,
+		// hence the crude hack here
+		if(path.startsWith("file:"))
+			path = path.substring(5);
+
+		URL url = null;
+		try
+		{
+			url = new URL(path);
+		}
+		catch(MalformedURLException mu)
+		{
+			path = MiscUtilities.constructPath(parent,path);
+		}
+
+		Buffer buffer = buffersFirst;
+		while(buffer != null)
+		{
+			if(buffer.getPath().equals(path))
+				return buffer;
+			buffer = buffer.next;
+		}
+
+		return new Buffer(view,url,path,readOnly,newFile,true);
+	}
+
+	/**
+	 * Adds a temporary buffer to the buffer list. This must be done
+	 * before allowing the user to interact with the buffer in any
+	 * way.
+	 * @param buffer The buffer
+	 */
+	public static void commitTemporary(Buffer buffer)
+	{
+		if(!buffer.isTemporary())
+			return;
+
+		buffer.setMode();
+		buffer.propertiesChanged();
+		EditBus.addToBus(buffer);
+
+		addBufferToList(buffer);
+		buffer.commitTemporary();
+
+		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CREATED));
 	}
 
 	/**
@@ -743,8 +806,11 @@ public class jEdit
 
 	/**
 	 * Closes all open buffers.
+	 * @param view The view
+	 * @param isExiting This must be true unless this method is
+	 * being called by the exit() method
 	 */
-	public static boolean closeAllBuffers(View view)
+	public static boolean closeAllBuffers(View view, boolean isExiting)
 	{
 		boolean dirty = false;
 
@@ -766,14 +832,23 @@ public class jEdit
 				return false;
 		}
 
-		// close remaining buffers (CloseDialog only touches dirty
-		// ones)
-		buffer = buffersFirst;
-		while(buffer != null)
+		if(isExiting)
+			return true;
+
+		// close remaining buffers (the close dialog only deals with
+		// dirty ones)
+		Buffer[] remaining = jEdit.getBuffers();
+		buffersFirst = buffersLast = null;
+		bufferCount = 0;
+
+		for(int i = 0; i < remaining.length; i++)
 		{
-			_closeBuffer(view,buffer);
-			buffer = buffer.next;
+			buffer = remaining[i];
+			buffer.close();
+			EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
 		}
+
+		newFile(view);
 
 		return true;
 	}
@@ -807,6 +882,14 @@ public class jEdit
 			buffer = buffer.next;
 		}
 		return buffers;
+	}
+
+	/**
+	 * Returns the number of open buffers.
+	 */
+	public static int getBufferCount()
+	{
+		return bufferCount;
 	}
 
 	/**
@@ -912,6 +995,14 @@ public class jEdit
 	}
 
 	/**
+	 * Returns the number of open views.
+	 */
+	public static int getViewCount()
+	{
+		return viewCount;
+	}
+
+	/**
 	 * Returns the first view.
 	 */
 	public static View getFirstView()
@@ -964,7 +1055,7 @@ public class jEdit
 			Sessions.saveSession(view,session);
 
 		// Close all buffers
-		if(!closeAllBuffers(view))
+		if(!closeAllBuffers(view,true))
 			return;
 
 		// Stop autosave thread
@@ -1563,6 +1654,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.163  1999/11/28 00:33:06  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.162  1999/11/27 06:01:20  sp
  * Faster file loading, geometry fix
  *

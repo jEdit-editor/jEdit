@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class exchange_caret_register extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public exchange_caret_register()
-	{
-		super("exchange-caret-register");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

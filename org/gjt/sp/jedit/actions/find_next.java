@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.*;
 public class find_next extends EditAction
 implements InputHandler.NonRecordable
 {
-	public find_next()
-	{
-		super("find-next");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

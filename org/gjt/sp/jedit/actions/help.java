@@ -28,11 +28,6 @@ import org.gjt.sp.util.Log;
 
 public class help extends EditAction
 {
-	public help()
-	{
-		super("help");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		try

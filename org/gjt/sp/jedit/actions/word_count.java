@@ -26,11 +26,6 @@ import org.gjt.sp.util.Log;
 
 public class word_count extends EditAction
 {
-	public word_count()
-	{
-		super("word-count");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

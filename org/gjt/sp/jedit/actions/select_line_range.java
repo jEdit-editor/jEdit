@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class select_line_range extends EditAction
 {
-	public select_line_range()
-	{
-		super("select-line-range");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		new SelectLineRange(getView(evt));

@@ -28,11 +28,6 @@ import org.gjt.sp.util.Log;
 
 public class shift_left extends EditAction
 {
-	public shift_left()
-	{
-		super("shift-left");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -28,11 +28,6 @@ import org.gjt.sp.util.Log;
 
 public class indent_on_tab extends EditAction
 {
-        public indent_on_tab()
-        {
-                super("indent-on-tab");
-        }
-
         public void actionPerformed(ActionEvent evt)
         {
                 View view = getView(evt);

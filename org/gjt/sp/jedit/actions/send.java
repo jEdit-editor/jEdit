@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class send extends EditAction
 {
-	public send()
-	{
-		super("send");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		new SendDialog(getView(evt));

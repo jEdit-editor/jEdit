@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class exit extends EditAction
 {
-	public exit()
-	{
-		super("exit");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		jEdit.exit(getView(evt));

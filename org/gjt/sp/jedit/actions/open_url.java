@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class open_url extends EditAction
 {
-	public open_url()
-	{
-		super("open-url");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

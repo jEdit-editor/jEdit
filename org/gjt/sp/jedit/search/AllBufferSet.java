@@ -65,14 +65,17 @@ public class AllBufferSet implements SearchFileSet
 	}
 
 	/**
-	 * Called if the specified buffer didn't have any matches.
+	 * Called if the specified buffer was found to have a match.
 	 * @param buffer The buffer
 	 */
-	public void doneWithBuffer(Buffer buffer) {}
+	public void matchFound(Buffer buffer) {}
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/11/28 00:33:07  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.6  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

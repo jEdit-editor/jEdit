@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 
 public class prev_paragraph extends EditAction
 {
-	public prev_paragraph()
-	{
-		super("prev-paragraph");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

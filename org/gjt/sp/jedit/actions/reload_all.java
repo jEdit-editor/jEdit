@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 
 public class reload_all extends EditAction
 {
-	public reload_all()
-	{
-		super("reload-all");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

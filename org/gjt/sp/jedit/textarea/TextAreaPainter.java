@@ -521,6 +521,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(paintInvalid)
 			{
 				styles[Token.INVALID].setGraphicsFlags(gfx,defaultFont);
+				paintHighlight(gfx,line,y);
 				gfx.drawString("~",0,y + fm.getHeight());
 			}
 		}
@@ -707,6 +708,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  1999/11/28 00:33:07  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.20  1999/11/26 01:18:50  sp
  * Optimizations, splash screen updates, misc stuff
  *

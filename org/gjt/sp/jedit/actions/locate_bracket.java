@@ -28,11 +28,6 @@ import org.gjt.sp.util.Log;
 
 public class locate_bracket extends EditAction
 {
-	public locate_bracket()
-	{
-		super("locate-bracket");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class cut extends EditAction
 implements InputHandler.NonRepeatable
 {
-	public cut()
-	{
-		super("cut");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		JEditTextArea textArea = getView(evt).getTextArea();

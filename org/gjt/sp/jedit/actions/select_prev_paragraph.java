@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 
 public class select_prev_paragraph extends EditAction
 {
-	public select_prev_paragraph()
-	{
-		super("select-prev-paragraph");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

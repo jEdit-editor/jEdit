@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 
 public class reload extends EditAction
 {
-	public reload()
-	{
-		super("reload");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -28,11 +28,6 @@ import org.gjt.sp.util.Log;
 
 public class block_comment extends EditAction
 {
-	public block_comment()
-	{
-		super("block-comment");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

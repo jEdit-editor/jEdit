@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class clear_register extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public clear_register()
-	{
-		super("clear-register");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

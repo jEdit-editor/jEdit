@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class play_temp_macro extends EditAction
 {
-	public play_temp_macro()
-	{
-		super("play-temp-macro");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

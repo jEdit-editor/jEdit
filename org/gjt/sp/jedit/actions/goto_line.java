@@ -29,11 +29,6 @@ import org.gjt.sp.util.Log;
 public class goto_line extends EditAction
 implements InputHandler.NonRepeatable
 {
-	public goto_line()
-	{
-		super("goto-line");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

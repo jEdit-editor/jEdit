@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class copy_string_register extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public copy_string_register()
-	{
-		super("copy-string-register");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

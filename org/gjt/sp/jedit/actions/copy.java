@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class copy extends EditAction
 implements InputHandler.NonRepeatable
 {
-	public copy()
-	{
-		super("copy");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		JEditTextArea textArea = getView(evt).getTextArea();

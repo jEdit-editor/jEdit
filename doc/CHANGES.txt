@@ -10,6 +10,11 @@ JEDIT VERSION HISTORY
   should run a little faster
 - jEdit no longer adds two components to the EditBus, this should make
   things a tiny bit faster
+- Faster jEdit.closeAllBuffers() method, jEdit shouldn't take as long to exit
+  and close all buffers
+- New concept of 'temporary buffers' speeds up recursive directory search
+  dramatically (the time to search in the org.gjt.sp.jedit.syntax package,
+  for example, has been cut from 20 seconds to 5!!!)
 - Key binding changes:
   C+d C+d: C+d
   C+d C+e: C+e C+d
@@ -29,6 +34,12 @@ JEDIT VERSION HISTORY
 + Bug Fixes
 
 - jEdit checked for a bogus 'saveGeometry' property (since 2.2pre5)
+- Fixed bug in globToRE() method (Mike Dillon) (since 2.1pre3)
+- Highlights are now drawn for invalid lines as well - so LineGuides will be
+  drawn on empty lines (since 1.7pre5???)
+- BufferListSet didn't properly search the last file (since 2.2pre4)
+- Hopefully fixed last remaining problems of multifile find-next
+  (problems with this have been around since 1.7pre3)
 
 * Version 2.2pre6
 
@@ -157,7 +168,7 @@ As of this version, plugins are no longer part of the core distribution.
   stop exceptions from being thrown while autosaving (since 2.1pre3)
 - Double clicking at position zero would throw an exception (since 1.7pre5)
 - A tag immediately after a comment was not highlighted properly in HTML mode
-  (since 1.7pre5)
+  (since 2.1pre1)
 
 + API Changes
 

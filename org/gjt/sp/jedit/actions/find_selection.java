@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class find_selection extends EditAction
 {
-	public find_selection()
-	{
-		super("find-selection");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

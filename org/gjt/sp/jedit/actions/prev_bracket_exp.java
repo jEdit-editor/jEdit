@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class prev_bracket_exp extends EditAction
 {
-	public prev_bracket_exp()
-	{
-		super("prev-bracket-exp");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

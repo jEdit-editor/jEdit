@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class save_url extends EditAction
 {
-	public save_url()
-	{
-		super("save-url");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 
 public class paste extends EditAction
 {
-	public paste()
-	{
-		super("paste");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

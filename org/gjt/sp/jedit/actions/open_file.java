@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.*;
 
 public class open_file extends EditAction
 {
-	public open_file()
-	{
-		super("open-file");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

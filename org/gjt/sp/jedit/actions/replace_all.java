@@ -28,11 +28,6 @@ import org.gjt.sp.jedit.*;
 public class replace_all extends EditAction
 implements InputHandler.NonRecordable
 {
-	public replace_all()
-	{
-		super("replace-all");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

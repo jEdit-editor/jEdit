@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class goto_register extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public goto_register()
-	{
-		super("goto-register");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

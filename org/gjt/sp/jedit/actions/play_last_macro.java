@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class play_last_macro extends EditAction
 {
-	public play_last_macro()
-	{
-		super("play-last-macro");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class cut_string_register extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public cut_string_register()
-	{
-		super("cut-string-register");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

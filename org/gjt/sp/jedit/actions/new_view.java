@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class new_view extends EditAction
 {
-	public new_view()
-	{
-		super("new-view");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

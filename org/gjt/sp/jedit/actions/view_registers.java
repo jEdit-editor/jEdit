@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class view_registers extends EditAction
 {
-	public view_registers()
-	{
-		super("view-registers");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		new ViewRegisters(getView(evt));

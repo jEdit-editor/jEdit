@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 
 public class edit_macro extends EditAction
 {
-	public edit_macro()
-	{
-		super("edit-macro");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -28,11 +28,6 @@ import org.gjt.sp.util.Log;
 
 public class box_comment extends EditAction
 {
-	public box_comment()
-	{
-		super("box-comment");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

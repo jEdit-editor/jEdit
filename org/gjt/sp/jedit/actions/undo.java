@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class undo extends EditAction
 {
-	public undo()
-	{
-		super("undo");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		if(!getBuffer(evt).undo())

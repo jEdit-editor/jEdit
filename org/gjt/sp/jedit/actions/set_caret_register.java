@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class set_caret_register extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public set_caret_register()
-	{
-		super("set-caret-register");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

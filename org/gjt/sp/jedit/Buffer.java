@@ -357,6 +357,17 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
+	 * Returns if this is a temporary buffer.
+	 * @see jEdit#openTemporary(View,String,String,boolean,boolean)
+	 * @see jEdit#commitTemporary(Buffer)
+	 * @since jEdit 2.2pre7
+	 */
+	public boolean isTemporary()
+	{
+		return getFlag(TEMPORARY);
+	}
+
+	/**
 	 * Undoes the most recent edit. Returns true if the undo was
 	 * successful.
 	 *
@@ -524,7 +535,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				this.mode.enterView(view);
 		}
 
-		EditBus.send(new BufferUpdate(this,BufferUpdate.MODE_CHANGED));
+		// this is always fired, but there is no need to do it
+		// for temp. buffers
+		if(!getFlag(TEMPORARY))
+			EditBus.send(new BufferUpdate(this,BufferUpdate.MODE_CHANGED));
 	}
 
 	/**
@@ -547,11 +561,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		String nogzName = name.substring(0,name.length() -
 			(name.endsWith(".gz") ? 3 : 0));
 		Element lineElement = getDefaultRootElement().getElement(0);
-		int start = lineElement.getStartOffset();
 		try
 		{
-			String line = getText(start,lineElement.getEndOffset()
-				- start - 1);
+			String line = getText(0,(lineElement == null
+				? 0 : lineElement.getEndOffset()-1));
 
 			Mode[] modes = jEdit.getModes();
 
@@ -731,9 +744,11 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	Buffer prev;
 	Buffer next;
 
-	Buffer(View view, URL url, String path, boolean readOnly, boolean newFile)
+	Buffer(View view, URL url, String path, boolean readOnly,
+		boolean newFile, boolean temp)
 	{
 		setFlag(INIT,true);
+		setFlag(TEMPORARY,temp);
 
 		this.url = url;
 		this.path = path;
@@ -752,9 +767,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		// Set default mode
 		setMode(jEdit.getMode(jEdit.getProperty("buffer.defaultMode")));
 
-		// Load syntax property
-		propertiesChanged();
-
 		if(!newFile)
 		{
 			if(autosaveFile.exists())
@@ -766,12 +778,22 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			loadMarkers();
 		}
 
-		setMode();
 
 		addUndoableEditListener(new UndoHandler());
-		EditBus.addToBus(this);
-		
+
+		if(!temp)
+		{
+			setMode();
+			propertiesChanged();
+			EditBus.addToBus(this);
+		}
+
 		setFlag(INIT,false);
+	}
+
+	void commitTemporary()
+	{
+		setFlag(TEMPORARY,false);
 	}
 
 	void close()
@@ -814,6 +836,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	private static final int SYNTAX = 7;
 	private static final int UNDO_IN_PROGRESS = 8;
 	private static final int RECT_SELECT = 9;
+	private static final int TEMPORARY = 10;
 
 	private int flags;
 
@@ -865,7 +888,135 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			autosaveFile.delete();
 		autosaveFile = new File(file.getParent(),'#' + name + '#');
 	}
-	
+
+	/*
+	 * The load() method reads in blocks from the input stream and
+	 * marks out which offsets are line breaks. It uses an instance
+	 * of this class to record that information. Using a Vector
+	 * of Integer instances would also work, but 6000 objects
+	 * floating around for no reason is not my idea of fun :-)
+	 *
+	 * Why mark out line breaks in the first place? We could just
+	 * pass the text to PlainDocument.insertString(), but it
+	 * would slow things down; why parse the text for line breaks
+	 * first in load() (which must do it), and then in insertString()?
+	 *
+	 * Instead, as of 2.2pre7, we remember the line break offsets
+	 * from the load() method and create an element map ourselves.
+	 * This speeds up the file loading by about 30%.
+	 */
+	private class LoadHelper
+	{
+		int[] lines = new int[1000];
+		int last;
+
+		void add(int line)
+		{
+			if(last >= lines.length)
+				enlarge();
+			lines[last++] = line;
+		}
+
+		void enlarge()
+		{
+			int[] newlines = new int[lines.length * 2];
+			System.arraycopy(lines,0,newlines,0,lines.length);
+			lines = newlines;
+		}
+
+		/*
+		 * This is not very obvious in the Swing docs, but
+		 * elements[i].end == elements[i+1].start. This
+		 * method takes advantage of that fact.
+		 *
+		 * Also, we assume that the default root element is
+		 * an instance of AbstractDocument.BranchElement.
+		 * This is not specified anywhere in the Swing docs,
+		 * so it could break! However, there is no other way
+		 * to do it as far as I can see.
+		 *
+		 * Notice that we also interleave the buffer-local
+		 * property code in.
+		 */
+		void createElements() throws BadLocationException
+		{
+			Element map = getDefaultRootElement();
+			Element[] elements = new Element[last];
+			for(int i = 0; i < last; i++)
+			{
+				int start;
+				if(i == 0)
+					start = 0;
+				else
+					start = lines[i-1];
+				int end = lines[i];
+				elements[i] = createLeafElement(map,null,
+					start,end);
+				if(i < 10)
+				{
+					String line = getText(start,
+						end - start);
+					processProperty(line);
+				}
+			}
+			((BranchElement)map).replace(0,map.getElementCount(),
+				elements);
+		}
+	}
+
+	/*
+	 * The most complicated method in this class :-) Read and understand
+	 * all these notes if you want to snarf this code for your own app;
+	 * it has a number of subtle behaviours which are not entirely
+	 * obvious.
+	 *
+	 * Some notes that will help future hackers:
+	 * - We use a StringBuffer because there is no way to pre-allocate
+	 *   in the GapContent - and adding text each time to the GapContent
+	 *   would be slow because it would require array enlarging, etc.
+	 *   Better to do as few gap inserts as possible.
+	 *
+	 * - The StringBuffer is pre-allocated to Math.max(fileSize,
+	 *   IOBUFSIZE * 4) because when loading from URLs, fileSize is 0
+	 *   and we don't want to StringBuffer to enlarge 1000000 times for
+	 *   large URLs
+	 *
+	 * - We read the stream in IOBUFSIZE (default: 32k) blocks, and
+	 *   loop over the read characters looking for line breaks.
+	 *   - a \r or \n causes a line to be added to the model, and appended
+	 *     to the string buffer
+	 *   - a \n immediately following an \r is ignored; so that Windows
+	 *     line endings are handled
+	 *
+	 * - This method remembers the line separator used in the file, and
+	 *   stores it in the lineSeparator buffer-local property. However,
+	 *   if the file contains, say, hello\rworld\n, lineSeparator will
+	 *   be set to \n, and the file will be saved as hello\nworld\n.
+	 *   Hence jEdit is not really appropriate for editing binary files.
+	 *
+	 * - We call getContent().insertString(), thus avoiding the slow
+	 *   PlainDocument.insertString(). But because Content.insertString()
+	 *   doesn't fire a document event, you have to update any
+	 *   line-dependent state, for example token marker line info,
+	 *   manually (see the reload() method; it calls
+	 *   TokenMarker.insertLines())
+	 *
+	 * - To make reloading a bit easier, this method automatically
+	 *   removes all data from the model before inserting it. This
+	 *   shouldn't cause any problems, as most documents will be
+	 *   empty before being loaded into anyway. However, notice that
+	 *   we call PlainDocument.remove() -- *NOT* Content.remove().
+	 *   So, a document event will be fired for the removal, but not
+	 *   the following insertion! Again, take this into account if
+	 *   you use token markers and such.
+	 *
+	 * - If the last character read from the file is a line separator,
+	 *   it is not added to the model! There are two reasons:
+	 *   - On Unix, all text files have a line separator at the end,
+	 *     there is no point wasting an empty screen line on that
+	 *   - Because save() appends a line separator after *every* line,
+	 *     it prevents the blank line count at the end from growing
+	 */
 	private void load(View view)
 	{
 		if(file.exists())
@@ -875,7 +1026,8 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		URLConnection connection = null;
 		StringBuffer sbuf = new StringBuffer(Math.max(
 			(int)file.length(),IOBUFSIZE * 4));
-		Vector lines = new Vector(1000);
+		LoadHelper lines = new LoadHelper();
+
 		try
 		{
 			
@@ -889,57 +1041,107 @@ loop:		for(int i = 0; i < markers.size(); i++)
 				jEdit.getProperty("buffer.encoding",
 				System.getProperty("file.encoding")));
 			char[] buf = new char[IOBUFSIZE];
-			int len; // Number of characters in buffer
-			int lineCount = 0;
-			boolean CRLF = false; // Windows line endings
-			boolean CROnly = false; // MacOS line endings
-			boolean lastWasCR = false; // Was the previous character CR?
+			// Number of characters in 'buf' array.
+			// InputStream.read() doesn't always fill the
+			// array (eg, the file size is not a multiple of
+			// IOBUFSIZE, or it is a GZipped file, etc)
+			int len;
+
+			// True if a \n was read after a \r. Usually
+			// means this is a DOS/Windows file
+			boolean CRLF = false;
+
+			// A \r was read, hence a MacOS file
+			boolean CROnly = false;
+
+			// Was the previous read character a \r?
+			// If we read a \n and this is true, we assume
+			// we have a DOS/Windows file
+			boolean lastWasCR = false;
 			
 			while((len = in.read(buf,0,buf.length)) != -1)
 			{
-				int lastLine = 0; // Offset of last line
+				// Offset of previous line, relative to
+				// the start of the I/O buffer (NOT
+				// relative to the start of the document)
+				int lastLine = 0;
+
 				for(int i = 0; i < len; i++)
 				{
+					// Look for line endings.
 					switch(buf[i])
 					{
 					case '\r':
-						if(lastWasCR) // \r\r, probably Mac
+						// If we read a \r and
+						// lastWasCR is also true,
+						// it is probably a Mac file
+						// (\r\r in stream)
+						if(lastWasCR)
 						{
 							CROnly = true;
 							CRLF = false;
 						}
+						// Otherwise set a flag,
+						// so that \n knows that last
+						// was a \r
 						else
 						{
 							lastWasCR = true;
 						}
+
+						// Insert a line
 						sbuf.append(buf,lastLine,i -
 							lastLine);
 						sbuf.append('\n');
-						lines.addElement(new Integer(
-							sbuf.length()));
+
+						// Add the line end to the
+						// LoadHelper
+						lines.add(sbuf.length());
+
+						// This is i+1 to take the
+						// trailing \n into account
 						lastLine = i + 1;
 						break;
 					case '\n':
-						if(lastWasCR) // \r\n, probably DOS
+						// If lastWasCR is true,
+						// we just read a \r followed
+						// by a \n. We specify that
+						// this is a Windows file,
+						// but take no further
+						// action and just ignore
+						// the \r.
+						if(lastWasCR)
 						{
 							CROnly = false;
 							CRLF = true;
 							lastWasCR = false;
+							// Bump lastLine so
+							// that the next line
+							// doesn't erronously
+							// pick up the \r
 							lastLine = i + 1;
 						}
-						else // Unix
+						// Otherwise, we found a \n
+						// that follows some other
+						// character, hence we have
+						// a Unix file
+						else
 						{
 							CROnly = false;
 							CRLF = false;
 							sbuf.append(buf,lastLine,
 								i - lastLine);
 							sbuf.append('\n');
-							lines.addElement(new Integer(
-								sbuf.length()));
+							lines.add(sbuf.length());
 							lastLine = i + 1;
 						}
 						break;
 					default:
+						// If we find some other
+						// character that follows
+						// a \r, so it is not a
+						// Windows file, and probably
+						// a Mac file
 						if(lastWasCR)
 						{
 							CROnly = true;
@@ -949,6 +1151,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 						break;
 					}
 				}
+				// Add remaining stuff from buffer
 				sbuf.append(buf,lastLine,len - lastLine);
 			}
 			if(CRLF)
@@ -958,6 +1161,8 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			else
 				putProperty(LINESEP,"\n");
 			in.close();
+
+			// Chop trailing newline (if any)
                         if(sbuf.length() != 0 && sbuf.charAt(sbuf.length() - 1) == '\n')
 				sbuf.setLength(sbuf.length() - 1);
 
@@ -965,30 +1170,10 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			remove(0,getLength());
 
 			getContent().insertString(0,sbuf.toString());
-
-			Element map = getDefaultRootElement();
-			Element[] elements = new Element[lines.size()];
-			for(int i = 0; i < lines.size(); i++)
-			{
-				int start;
-				if(i == 0)
-					start = 0;
-				else
-					start = ((Integer)lines.elementAt(i-1)).intValue();
-				int end = ((Integer)lines.elementAt(i)).intValue();
-				elements[i] = createLeafElement(map,null,
-					start,end);
-				if(i < 10)
-				{
-					String line = getText(start,
-						end - start);
-					processProperty(line);
-				}
-			}
-			((BranchElement)map).replace(0,map.getElementCount(),
-				elements);
+			lines.createElements();
 
 			setFlag(NEW_FILE,false);
+
 			modTime = file.lastModified();
 		}
 		catch(BadLocationException bl)
@@ -1152,6 +1337,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 	}
 
+	// Saving is much simpler than loading :-)
 	private void save(OutputStream _out)
 		throws IOException, BadLocationException
 	{
@@ -1209,6 +1395,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		o.close();
 	}
 
+	// The BACKED_UP flag prevents more than one backup from being
+	// written per session (I guess this should be made configurable
+	// in the future)
 	private void backup(View view, File file)
 	{
 		if(getFlag(BACKED_UP))
@@ -1286,6 +1475,8 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}*/
 	}
 
+	// A dictionary that looks in the mode and editor properties
+	// for default values
 	class BufferProps extends Hashtable
 	{
 		public Object get(Object key)
@@ -1354,6 +1545,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.107  1999/11/28 00:33:06  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.106  1999/11/27 06:01:20  sp
  * Faster file loading, geometry fix
  *
@@ -1383,7 +1577,4 @@ loop:		for(int i = 0; i < markers.size(); i++)
  *
  * Revision 1.97  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
- *
- * Revision 1.96  1999/10/16 09:43:00  sp
- * Final tweaking and polishing for jEdit 2.1final
  */

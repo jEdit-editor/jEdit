@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class save_as extends EditAction
 {
-	public save_as()
-	{
-		super("save-as");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -29,11 +29,6 @@ public class select_block extends EditAction
 	public final String openBrackets = "([{";
 	public final String closeBrackets = ")]}";
 
-	public select_block()
-	{
-		super("select-block");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -27,11 +27,6 @@ import org.gjt.sp.util.Log;
 
 public class delete_end_line extends EditAction
 {
-	public delete_end_line()
-	{
-		super("delete-end-line");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

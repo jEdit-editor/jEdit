@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class log_viewer extends EditAction
 {
-	public log_viewer()
-	{
-		super("log-viewer");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		new LogViewer(getView(evt));

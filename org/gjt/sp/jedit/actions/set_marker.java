@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class set_marker extends EditAction
 {
-	public set_marker()
-	{
-		super("set-marker");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

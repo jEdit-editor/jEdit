@@ -27,11 +27,6 @@ import org.gjt.sp.util.Log;
 
 public class record_macro extends EditAction
 {
-	public record_macro()
-	{
-		super("record-macro");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

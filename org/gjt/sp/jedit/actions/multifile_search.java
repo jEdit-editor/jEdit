@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class multifile_search extends EditAction
 {
-	public multifile_search()
-	{
-		super("multifile-search");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		SearchFileSet fileset = new MultiFileSearchDialog(getView(evt),

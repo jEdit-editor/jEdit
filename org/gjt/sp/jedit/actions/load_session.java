@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class load_session extends EditAction
 {
-	public load_session()
-	{
-		super("load-session");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

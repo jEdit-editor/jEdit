@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class rescan_macros extends EditAction
 {
-	public rescan_macros()
-	{
-		super("rescan-macros");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		Macros.loadMacros();

@@ -130,6 +130,15 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void updateBuffersMenu()
 	{
+		if(jEdit.getBufferCount() == 0)
+		{
+			// if this becomes zero, it is guaranteed that
+			// a new untitled buffer will open again. So
+			// we just ignore this and update the menu
+			// when the untitled buffer comes in
+			return;
+		}
+
 		// Because the buffers menu contains normal items as
 		// well as dynamically-generated stuff, we are careful
 		// to only remove the dynamic crap here...
@@ -141,8 +150,8 @@ public class View extends JFrame implements EBComponent
 				buffers.remove(i);
 		}
 
-		ButtonGroup grp = new ButtonGroup();
 		Buffer[] bufferArray = jEdit.getBuffers();
+		ButtonGroup grp = new ButtonGroup();
 		for(int i = 0; i < bufferArray.length; i++)
 		{
 			Buffer b = bufferArray[i];
@@ -847,6 +856,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.111  1999/11/28 00:33:06  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.110  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *

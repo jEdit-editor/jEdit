@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class clear_marker extends EditAction
 {
-	public clear_marker()
-	{
-		super("clear-marker");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

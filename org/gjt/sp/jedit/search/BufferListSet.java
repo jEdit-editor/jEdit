@@ -72,7 +72,7 @@ public class BufferListSet implements SearchFileSet
 		{
 			buffer = view.getBuffer();
 
-			for(int i = 0; i < files.size() - 1; i++)
+			for(int i = 0; i < files.size(); i++)
 			{
 				if(files.elementAt(i).equals(buffer.getPath()))
 					return buffer;
@@ -94,36 +94,28 @@ public class BufferListSet implements SearchFileSet
 	}
 
 	/**
-	 * Called if the specified buffer didn't have any matches.
+	 * Called if the specified buffer was found to have a match.
 	 * @param buffer The buffer
 	 */
-	public void doneWithBuffer(Buffer buffer)
+	public void matchFound(Buffer buffer)
 	{
-		// close it, but only if we opened it
-		if(buffer.getProperty(OPENED_PROP) != null && !buffer.isDirty())
-			jEdit.closeBuffer(null,buffer);
+		jEdit.commitTemporary(buffer);
 	}
 
 	// private members
 	private Vector files;
-	private static final String OPENED_PROP = "BufferListSet__opened";
 
 	private Buffer getBuffer(String path)
 	{
-		Buffer buffer = jEdit.getBuffer(path);
-		if(buffer != null)
-			return buffer;
-		else
-		{
-			buffer = jEdit.openFile(null,null,path,false,false);
-			buffer.putProperty(OPENED_PROP,Boolean.TRUE);
-			return buffer;
-		}
+		return jEdit.openTemporary(null,null,path,false,false);
 	}
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  1999/11/28 00:33:07  sp
+ * Faster directory search, actions slimmed down, faster exit/close-all
+ *
  * Revision 1.10  1999/10/30 02:44:18  sp
  * Miscallaneous stuffs
  *
@@ -151,8 +143,5 @@ public class BufferListSet implements SearchFileSet
  *
  * Revision 1.2  1999/06/09 05:22:11  sp
  * Find next now supports multi-file searching, minor Perl mode tweak
- *
- * Revision 1.1  1999/06/03 08:24:13  sp
- * Fixing broken CVS
  *
  */

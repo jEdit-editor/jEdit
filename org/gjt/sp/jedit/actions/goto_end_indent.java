@@ -27,11 +27,6 @@ import org.gjt.sp.util.Log;
 
 public class goto_end_indent extends EditAction
 {
-	public goto_end_indent()
-	{
-		super("goto-end-indent");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

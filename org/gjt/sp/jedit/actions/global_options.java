@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class global_options extends EditAction
 {
-	public global_options()
-	{
-		super("global-options");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		new GlobalOptions(getView(evt));

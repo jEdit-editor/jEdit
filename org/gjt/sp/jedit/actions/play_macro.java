@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class play_macro extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public play_macro()
-	{
-		super("play-macro");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class set_search_string extends EditAction
 {
-	public set_search_string()
-	{
-		super("set-search-string");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		SearchAndReplace.setSearchString(evt.getActionCommand());

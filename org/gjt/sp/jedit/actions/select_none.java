@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class select_none extends EditAction
 {
-	public select_none()
-	{
-		super("select-none");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		getView(evt).getTextArea().selectNone();

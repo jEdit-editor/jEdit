@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class hypersearch_selection extends EditAction
 {
-	public hypersearch_selection()
-	{
-		super("hypersearch-selection");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.*;
 public class search_and_replace extends EditAction
 implements InputHandler.NonRecordable
 {
-	public search_and_replace()
-	{
-		super("search-and-replace");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

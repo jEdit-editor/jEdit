@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 
 public class select_next_paragraph extends EditAction
 {
-	public select_next_paragraph()
-	{
-		super("select-next-paragraph");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

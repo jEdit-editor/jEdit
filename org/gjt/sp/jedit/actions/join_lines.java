@@ -27,11 +27,6 @@ import org.gjt.sp.util.Log;
 
 public class join_lines extends EditAction
 {
-	public join_lines()
-	{
-		super("join-lines");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

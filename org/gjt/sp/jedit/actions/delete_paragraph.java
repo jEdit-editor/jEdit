@@ -27,11 +27,6 @@ import org.gjt.sp.util.Log;
 
 public class delete_paragraph extends EditAction
 {
-	public delete_paragraph()
-	{
-		super("delete-paragraph");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class open_selection extends EditAction
 {
-	public open_selection()
-	{
-		super("open-selection");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

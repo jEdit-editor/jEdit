@@ -27,11 +27,6 @@ import org.gjt.sp.jedit.EditAction;
 public class paste_previous extends EditAction
 implements InputHandler.NonRepeatable
 {
-	public paste_previous()
-	{
-		super("paste-previous");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		new PastePrevious(getView(evt));

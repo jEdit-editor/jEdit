@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class about extends EditAction
 {
-	public about()
-	{
-		super("about");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		Object[] aboutArgs = { jEdit.getVersion(),

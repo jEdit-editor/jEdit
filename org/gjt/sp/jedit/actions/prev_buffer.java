@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class prev_buffer extends EditAction
 {
-	public prev_buffer()
-	{
-		super("prev-buffer");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

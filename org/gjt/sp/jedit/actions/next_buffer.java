@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class next_buffer extends EditAction
 {
-	public next_buffer()
-	{
-		super("next-buffer");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

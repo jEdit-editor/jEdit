@@ -1,5 +1,5 @@
 /*
- * EiffelTokenMarker.java - C token marker
+ * EiffelTokenMarker.java - Eiffel token marker
  * Copyright (C) 1999 Slava Pestov
  * Copyright (C) 1999 Artur Biesiadowski
  *

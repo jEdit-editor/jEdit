@@ -1,9 +1,9 @@
 MAJOR CHANGES IN JEDIT 2.2 SINCE 2.1
 
-The following is an overview of changes in jEdit 2.2 since 2.1. A complete
-list can be found in the file doc/CHANGES.txt.
+The following is an overview of changes in jEdit 2.2 since 2.1. A
+complete list can be found in the file doc/CHANGES.txt.
 
-* Directory Search
+* Directory search
 
 jEdit can now search inside all files in a directory. It can even
 recurse into subdirectories. The original implementation of this was
@@ -26,6 +26,17 @@ listed in one dialog box.
 
 Pressing '}' in an edit mode that supports bracket indentation (C, C++,
 IDL, Java, JavaScript) now immediately re-indents the line accordingly.
+
+* QuickSearch on toolbar
+
+The tool bar now has a text field for quick and easy searching, without
+having to bring up a Search and Replace dialog box.
+
+* Commands for deleting words
+
+Two new commands, `Backspace Word' (C+BACK_SPACE) and `Delete Word'
+(C+DELETE) have been added. They delete the word before and after the
+caret, respectively.
 
 * Improved undo
 
@@ -75,7 +86,14 @@ with 'Help->Save Activity Log'.
 
 * File encoding can be set
 
-While this is not a very major feature, it is probably one of the most
-frequently requested ones. The file encoding used for reading and
-writing files can now be changed, so you can edit files written in
-non-Latin1 (human) languages.
+The file encoding used for reading and writing files can now be changed,
+so you can edit files written in non-Latin1 (human) languages.
+
+* Speed improvements
+
+Various functions should now be performed faster:
+
+- Startup
+- File loading
+- New view creation
+- Exiting and closing all buffers

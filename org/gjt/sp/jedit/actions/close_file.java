@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class close_file extends EditAction
 {
-	public close_file()
-	{
-		super("close-file");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		jEdit.closeBuffer(getView(evt),getBuffer(evt));

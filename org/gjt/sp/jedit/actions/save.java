@@ -24,11 +24,6 @@ import org.gjt.sp.jedit.*;
 
 public class save extends EditAction
 {
-	public save()
-	{
-		super("save");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class open_path extends EditAction
 {
-	public open_path()
-	{
-		super("open-path");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		jEdit.openFile(getView(evt),null,evt.getActionCommand(),

@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.EditAction;
 
 public class set_replace_string extends EditAction
 {
-	public set_replace_string()
-	{
-		super("set-replace-string");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		SearchAndReplace.setReplaceString(evt.getActionCommand());

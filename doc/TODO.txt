@@ -1,19 +1,17 @@
 JEDIT TO DO
 
-+ Cleanups
+------- Cleanups -------
 
 - currently, Macros.java has a huge kudge to implement key bindings for
   macros. This is very stupid, and the menu code needs to be made more
   flexible, so that BeanShell and friends can also have shortcuts (that
   can be edited in the shortcuts option pane!)
 - jEdit.getBooleanProperty() for yes/no stuff
-- Only load plugin actions when necessary
+- Plugin loading and startup is slow
 
-+ Features
+------- Features -------
 
-- s/overwriteSetSelectedText/userInput/g. userInput() performs soft wrap
-- execute-command action for invoking EB shell commands from macros
-- Shell.waitFor()?
+- Word wrap
 - Write user and developer documentation for EditBus
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
@@ -25,7 +23,6 @@ JEDIT TO DO
 
 ------- Installer -------
 
-- Package and release
 - Check version of existing 'simlaunch' program before overwriting
 - Store human-readable strings in a property file for easier localization
 - Bad file number I/O error - file descriptor leak somewhere?

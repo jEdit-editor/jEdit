@@ -41,11 +41,6 @@ public class expand_abbrev extends EditAction
 	private int myLength;
 	private int[] array;
 
-	public expand_abbrev()
-	{
-		super("expand-abbrev");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 

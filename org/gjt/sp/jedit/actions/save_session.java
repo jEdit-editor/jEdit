@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class save_session extends EditAction
 {
-	public save_session()
-	{
-		super("save-session");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

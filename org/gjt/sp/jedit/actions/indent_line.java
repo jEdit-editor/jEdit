@@ -25,11 +25,6 @@ import org.gjt.sp.jedit.*;
 
 public class indent_line extends EditAction
 {
-        public indent_line()
-        {
-                super("indent-line");
-        }
-
         public void actionPerformed(ActionEvent evt)
         {
                 View view = getView(evt);

@@ -126,5 +126,5 @@ select-next-paragraph.shortcut=CS+DOWN
 shift-left.shortcut=A+LEFT
 shift-right.shortcut=A+RIGHT
 select-none.shortcut=ESCAPE
-delete-end-line.shortcut=CS+BACK_SPACE
-delete-start-line.shortcut=CS+DELETE
+delete-start-line.shortcut=CS+BACK_SPACE
+delete-end-line.shortcut=CS+DELETE

@@ -32,11 +32,6 @@ import org.gjt.sp.util.Log;
 
 public class print extends EditAction
 {
-	public print()
-	{
-		super("print");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

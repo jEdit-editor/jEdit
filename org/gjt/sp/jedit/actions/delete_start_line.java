@@ -27,11 +27,6 @@ import org.gjt.sp.util.Log;
 
 public class delete_start_line extends EditAction
 {
-	public delete_start_line()
-	{
-		super("delete-start-line");
-	}
-
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);

@@ -26,11 +26,6 @@ import org.gjt.sp.jedit.*;
 public class set_filename_register extends EditAction
 implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public set_filename_register()
-	{
-		super("set-filename-register");
-	}
-	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
