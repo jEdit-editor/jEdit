@@ -551,15 +551,15 @@ changedreload.message=File has been modified since last save;\n\
 # Autosave file exists dialog
 autosave-found.title=Autosave File Found
 # {0} - autosave file name
-autosave-found.message=An autosave file {0} was found!\n\
-	This probably means that jEdit crashed before you could save.\n\
-	Would you like to open the autosave file?
+autosave-found.message=An autosave file {0}\n\
+	was found! This probably means that jEdit crashed before you could\n\
+	save. Would you like to open the autosave file?
 
 autosave-loaded.title=Autosave File Loaded
-autosave-loaded.message=The autosave file {0} has been loaded.\n\
-	You should now check if it contains your unsaved data. If you would\n\
-	like to keep the autosaved changes, save the file. If you would like\n\
-	to discard them, select File->Reload.
+autosave-loaded.message=The autosave file {0}\n\
+	has been loaded. You should now check if it contains your unsaved\n\
+	data. If you would like to keep the autosaved changes, save the file.\n\
+	If you would like to discard them, select File->Reload.
 
 # Save all confirm dialog
 saveall.title=Save All Buffers

@@ -2,8 +2,10 @@ JEDIT TO DO
 
 2.4:
 
-- do MARK_PREVIOUS before markKeyword()
-- double-click drag doesn't work backwards
+- CVS: remove appendix02-regexp, appendix03-glob, appendix04-history
+  add: appendix02-server, appendix03-regexp, appendix04-glob, appendix05-history
+  add: window-splash.gif
+- do MARK_PREVIOUS after markKeyword()
 
 2.5:
 
@@ -16,16 +18,19 @@ JEDIT TO DO
   - document views, buffers
   - how to write text area and gutter hilites
 - Mode editor
+- Piece content
 
-3.0:
+Later:
 
 - New document model
 - Folding
 - Word wrap
 - Reverse search
-- i18n support - bidi, input methods, locale-sensitive GUI, etc
+- Files should be opened and saved in a background thread. HyperSearch should
+  be threaded as well
+- i18n support - bidi, input methods, localizable GUI, etc
 
-When we switch to JDK 1.2:
+When we switch to Java 2:
 - drag and drop
 - Use collections
 - Enhanced printing

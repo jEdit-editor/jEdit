@@ -1611,6 +1611,12 @@ public class JEditTextArea extends JComponent
 	protected int bracketLine;
 
 	protected int magicCaret;
+
+	// Offset where drag was started; used by double-click drag (word
+	// selection)
+	protected int dragStartLine;
+	protected int dragStartOffset;
+
 	protected boolean overwrite;
 	protected boolean rectSelect;
 
@@ -2004,10 +2010,9 @@ public class JEditTextArea extends JComponent
 
 		private void doDoubleDrag(MouseEvent evt)
 		{
-			int markLine = getMarkLine();
-			int markLineStart = getLineStartOffset(markLine);
-			int markLineLength = getLineLength(markLine);
-			int mark = getMarkPosition() - markLineStart;
+			int markLineStart = getLineStartOffset(dragStartLine);
+			int markLineLength = getLineLength(dragStartLine);
+			int mark = dragStartOffset;
 
 			int line = yToLine(evt.getY());
 			int lineStart = getLineStartOffset(line);
@@ -2015,10 +2020,10 @@ public class JEditTextArea extends JComponent
 			int offset = xToOffset(line,evt.getX());
 
 			String lineText = getLineText(line);
-			String markLineText = getLineText(markLine);
+			String markLineText = getLineText(dragStartLine);
 			String noWordSep = (String)document.getProperty("noWordSep");
 
-			if(markLineStart + mark > lineStart + offset)
+			if(markLineStart + dragStartOffset > lineStart + offset)
 			{
 				if(offset != 0 && offset != lineLength)
 				{
@@ -2046,6 +2051,7 @@ public class JEditTextArea extends JComponent
 						markLineText,mark,noWordSep);
 				}
 			}
+
 			select(markLineStart + mark,lineStart + offset);
 		}
 
@@ -2095,9 +2101,9 @@ public class JEditTextArea extends JComponent
 		{
 			requestFocus();
 
-			// Focus events not fired sometimes?
-			/*setCaretVisible(true);
-			focusedComponent = JEditTextArea.this;*/
+			// This is not done properly sometimes
+			focusedComponent = JEditTextArea.this;
+			setCaretVisible(true);
 
 			if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0
 				&& popup != null)
@@ -2106,22 +2112,22 @@ public class JEditTextArea extends JComponent
 				return;
 			}
 
-			int line = yToLine(evt.getY());
-			int offset = xToOffset(line,evt.getX());
-			int dot = getLineStartOffset(line) + offset;
+			dragStartLine = yToLine(evt.getY());
+			dragStartOffset = xToOffset(dragStartLine,evt.getX());
+			int dot = getLineStartOffset(dragStartLine) + dragStartOffset;
 
 			clickCount = evt.getClickCount();
 			switch(clickCount)
 			{
 			case 1:
-				doSingleClick(evt,line,offset,dot);
+				doSingleClick(evt,dot);
 				break;
 			case 2:
 				// It uses the bracket matching stuff, so
 				// it can throw a BLE
 				try
 				{
-					doDoubleClick(evt,line,offset,dot);
+					doDoubleClick(evt,dot);
 				}
 				catch(BadLocationException bl)
 				{
@@ -2129,13 +2135,12 @@ public class JEditTextArea extends JComponent
 				}
 				break;
 			case 3:
-				doTripleClick(evt,line,offset,dot);
+				doTripleClick(evt);
 				break;
 			}
 		}
 
-		private void doSingleClick(MouseEvent evt, int line, 
-			int offset, int dot)
+		private void doSingleClick(MouseEvent evt, int dot)
 		{
 			if((evt.getModifiers() & InputEvent.SHIFT_MASK) != 0)
 			{
@@ -2146,11 +2151,10 @@ public class JEditTextArea extends JComponent
 				setCaretPosition(dot);
 		}
 
-		private void doDoubleClick(MouseEvent evt, int line,
-			int offset, int dot) throws BadLocationException
+		private void doDoubleClick(MouseEvent evt, int dot) throws BadLocationException
 		{
 			// Ignore empty lines
-			if(getLineLength(line) == 0)
+			if(getLineLength(dragStartLine) == 0)
 				return;
 
 			try
@@ -2176,22 +2180,24 @@ public class JEditTextArea extends JComponent
 			}
 
 			// Ok, it's not a bracket... select the word
-			String lineText = getLineText(line);
+			String lineText = getLineText(dragStartLine);
 			String noWordSep = (String)document.getProperty("noWordSep");
-			if(offset == getLineLength(line))
-				offset--;
+			if(dragStartOffset == getLineLength(dragStartLine))
+				dragStartOffset--;
 
-			int wordStart = TextUtilities.findWordStart(lineText,offset,noWordSep);
-			int wordEnd = TextUtilities.findWordEnd(lineText,offset+1,noWordSep);
+			int wordStart = TextUtilities.findWordStart(lineText,
+				dragStartOffset,noWordSep);
+			int wordEnd = TextUtilities.findWordEnd(lineText,
+				dragStartOffset+1,noWordSep);
 
-			int lineStart = getLineStartOffset(line);
+			int lineStart = getLineStartOffset(dragStartLine);
 			select(lineStart + wordStart,lineStart + wordEnd);
 		}
 
-		private void doTripleClick(MouseEvent evt, int line,
-			int offset, int dot)
+		private void doTripleClick(MouseEvent evt)
 		{
-			select(getLineStartOffset(line),getLineEndOffset(line)-1);
+			select(getLineStartOffset(dragStartLine),
+				getLineEndOffset(dragStartLine)-1);
 		}
 	}
 
@@ -2263,6 +2269,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.53  2000/04/18 05:56:26  sp
+ * Documentation updates
+ *
  * Revision 1.52  2000/04/17 06:34:24  sp
  * More focus debugging, linesChanged() tweaked
  *

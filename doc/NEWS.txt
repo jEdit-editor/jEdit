@@ -1,5 +1,12 @@
 MAJOR CHANGES IN JEDIT 2.4 SINCE 2.3
 
+* User properties incompatibility
+
+After using the 'Global Options' dialog box in jEdit 2.4, you will no
+longer be able to use previous releases of jEdit; they will either
+throw exceptions or not work very well. This is because the format of
+'on/off' flags and syntax style properties has changed.
+
 * Major syntax highlighting changes
 
 The XMode syntax highlighting system, which allows syntax modes to be

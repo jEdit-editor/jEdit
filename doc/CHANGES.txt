@@ -7,6 +7,7 @@ JEDIT VERSION HISTORY
 - Firewall plugin sources moved to their own fileset
 - The 'Open' and 'Save As' dialog boxes are now loaded in a background thread
   with minimum priority once jEdit has started
+- Documentation updates
 
 + Bug Fixes
 
@@ -19,6 +20,8 @@ JEDIT VERSION HISTORY
   (since 2.4pre1)
 - select-document-home and select-document-end actions didn't have key bindings
   (since 2.4pre6)
+- Double-clicking and dragging backwards didn't select the word that you
+  double-clicked originally (since 2.3pre2)
 
 * Version 2.4pre6
 
@@ -158,7 +161,7 @@ error prevented 2.4pre2 from being installed properly.
 + Bug Fixes
 
 - jEdit didn't install due to an installer error (since 2.4pre2)
-- jEdit didn't check if the buffer changed on disk when switching buffesr
+- jEdit didn't check if the buffer changed on disk when switching buffers
   (since 2.4pre1)
 - The read only flag wasn't set on files (since 2.2 !!!)
 - Rule sets inherited the previous rule set's keyword map if no KEYWORDS
