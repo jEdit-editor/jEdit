@@ -1,15 +1,13 @@
 TO DO
 
-- wait for John to finish plugin guide
+- proofread plugin guide, add note about error reporting needing
+  EditBus and ErrorList plugins
 - wait for John to send uninstall.exe
 - check out latest jEditLauncher sources
-- adapt John's jEdit launcher docs to starting jEdit chapter
 - finish console 3.0
-- Java 1.3: pseudo-random window positioning
 - next time i'm making an RPM, fix the shell script
-- virtual line map: how can it get smaller than virtualLineCount?
+- -1 being passed to virtualToPhysical() by documentChanged()
 - formatting problems in user's guide in table cells
-- printing: header not printed
 - FTP plugin: investigate soft links
 - FTP plugin: not saving files, allegedly?
 - FTP plugin: better error messages

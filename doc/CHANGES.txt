@@ -10,6 +10,7 @@ JEDIT 3.2 VERSION HISTORY
   features
 - Transient status messages (replace all results, for example) are now
   shown for 10 seconds, instead of 2
+- Updated 'Writing Plugins' section of user's guide (John Gellene)
 
 + Bug Fixes
 
@@ -19,6 +20,7 @@ JEDIT 3.2 VERSION HISTORY
 - Printing didn't work on Java 2
 - GrabKeyDialog bug fix for JDK 1.4 (Alan Moore)
 - roots: virtual filesystem didn't list all filesystem roots on JDK 1.4
+- Possible workaround for window positioning bugs on Unix with KDE 2
 
 * Version 3.2pre6
 

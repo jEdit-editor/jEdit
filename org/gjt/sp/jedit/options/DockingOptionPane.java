@@ -271,6 +271,9 @@ class WindowTableModel extends AbstractTableModel
 		{
 			this.name = name;
 			title = jEdit.getProperty(name + ".title");
+			if(title == null)
+				title = name;
+
 			dockPosition = jEdit.getProperty(name + ".dock-position");
 			if(dockPosition == null)
 				dockPosition = DockableWindowManager.FLOATING;
@@ -299,6 +302,9 @@ class WindowTableModel extends AbstractTableModel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2001/07/24 08:15:44  sp
+ * plugin guide updated
+ *
  * Revision 1.3  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

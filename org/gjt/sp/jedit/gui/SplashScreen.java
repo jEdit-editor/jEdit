@@ -56,10 +56,10 @@ public class SplashScreen extends JWindow
 		setContentPane(splash);
 
 		Dimension screen = getToolkit().getScreenSize();
+		show();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
 			(screen.height - getSize().height) / 2);
-		show();
 	}
 
 	public void advance()

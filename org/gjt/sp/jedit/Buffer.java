@@ -39,21 +39,8 @@ import org.gjt.sp.util.Log;
 /**
  * An in-memory copy of an open file.<p>
  *
- * This is basically a Swing document with support for loading and
- * saving, and various other miscellanous things such as markers.<p>
- *
  * Buffers extend Swing document properties to obtain the default values
- * from jEdit's global properties.<p>
- *
- * The following properties are always defined:
- * <ul>
- * <li>tabSize: the tab size
- * <li>lineSeparator: default line separator. This is rarely useful,
- * because all buffers use "\n" as a separator in memory anyway. Only
- * use this property when reading/writing to the disk
- * </ul>
- *
- * Various other properties are also used by jEdit and plugin actions.
+ * from jEdit's global properties.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -243,6 +230,12 @@ public class Buffer extends PlainDocument implements EBComponent
 		int lineNumberDigits = (int)Math.ceil(Math.log(
 			lineCount) / Math.log(10));
 
+		int lineNumberWidth;
+		if(printLineNumbers)
+			lineNumberWidth = fm.charWidth('0') * lineNumberDigits;
+		else
+			lineNumberWidth = 0;
+
 		TextRenderer renderer = TextRenderer.createPrintTextRenderer();
 
 		renderer.configure(false,false);
@@ -260,7 +253,8 @@ public class Buffer extends PlainDocument implements EBComponent
 				fm = gfx.getFontMetrics();
 				lineHeight = fm.getHeight();
 				tabSize = getTabSize() * fm.charWidth(' ');
-				expander = new PrintTabExpander(leftMargin,tabSize);
+				expander = new PrintTabExpander(leftMargin
+					+ lineNumberWidth,tabSize);
 
 				y = topMargin + lineHeight - fm.getDescent()
 					- fm.getLeading();
@@ -284,7 +278,6 @@ public class Buffer extends PlainDocument implements EBComponent
 			int x = leftMargin;
 			if(printLineNumbers)
 			{
-				int lineNumberWidth = fm.charWidth('0') * lineNumberDigits;
 				String lineNumber = String.valueOf(i + 1);
 				gfx.drawString(lineNumber,(leftMargin + lineNumberWidth)
 					- fm.stringWidth(lineNumber),y);
@@ -439,7 +432,6 @@ public class Buffer extends PlainDocument implements EBComponent
 					BufferIORequest.LOAD_DATA);
 
 				undo = new MyUndoManager();
-				undo.addEdit(saveUndo = new SaveUndo());
 				try
 				{
 					undo.setLimit(Integer.parseInt(
@@ -714,12 +706,6 @@ public class Buffer extends PlainDocument implements EBComponent
 						setFlag(NEW_FILE,false);
 						setFlag(UNTITLED,false);
 						setFlag(DIRTY,false);
-
-						// can only have one of these in the queue
-						if(saveUndo != null)
-							saveUndo.die();
-
-						undo.addEdit(saveUndo = new SaveUndo());
 					}
 					finally
 					{
@@ -983,12 +969,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(DIRTY,false);
 			setFlag(AUTOSAVE_DIRTY,false);
-
-			// can only have one of these in the queue
-			if(saveUndo != null)
-				saveUndo.die();
-
-			undo.addEdit(saveUndo = new SaveUndo());
 		}
 
 		if(d != old_d)
@@ -2998,7 +2978,6 @@ loop:				for(int i = 0; i < count; i++)
 	private Mode mode;
 
 	private MyUndoManager undo;
-	private UndoableEdit saveUndo;
 	private CompoundEdit compoundEdit;
 	private boolean compoundEditNonEmpty;
 	private int compoundEditCount;
@@ -3492,68 +3471,6 @@ loop:				for(int i = 0; i < count; i++)
 		public UndoableEdit editToBeRedone()
 		{
 			return super.editToBeRedone();
-		}
-	}
-
-	class SaveUndo implements UndoableEdit
-	{
-		boolean dead;
-
-		public void undo()
-		{
-			//System.err.println("dirty false");
-			//if(!dead)
-			//	setDirty(false);
-		}
-
-		public boolean canUndo()
-		{
-			return true;
-		}
-
-		public void redo()
-		{
-			undo();
-		}
-
-		public boolean canRedo()
-		{
-			return true;
-		}
-
-		public boolean isSignificant()
-		{
-			return false;
-		}
-
-		public void die()
-		{
-			dead = true;
-		}
-
-		public boolean addEdit(UndoableEdit edit)
-		{
-			return false;
-		}
-
-		public boolean replaceEdit(UndoableEdit edit)
-		{
-			return false;
-		}
-
-		public String getPresentationName()
-		{
-			return null;
-		}
-
-		public String getUndoPresentationName()
-		{
-			return null;
-		}
-
-		public String getRedoPresentationName()
-		{
-			return null;
 		}
 	}
 
