@@ -564,13 +564,10 @@ public class TokenMarker implements Cloneable
 				}
 			}
 
-			/* check to see if previous sequence is a keyword.
-			 * skip this if the matching rule colorizes the previous
-			 * sequence. */
+			markKeyword(info, line, lastKeyword, pos);
+
 			if ((checkRule.action & MARK_PREVIOUS) != MARK_PREVIOUS)
 			{
-				markKeyword(info,line, lastKeyword, pos);
-
 				lastKeyword = pos + pattern.count;
 
 				if ((checkRule.action & WHITESPACE) == WHITESPACE)
@@ -592,6 +589,7 @@ public class TokenMarker implements Cloneable
 				// this is a plain sequence rule
 				addToken(info,pattern.count,checkRule.token);
 				lastOffset = pos + pattern.count;
+
 				break;
 			case SPAN:
 				context.inRule = checkRule;
@@ -625,7 +623,7 @@ public class TokenMarker implements Cloneable
 						{
 							addToken(info,pattern.count,checkRule.token);
 						}
-						lastKeyword = lastOffset = pos + pattern.count;
+						lastOffset = pos + pattern.count;
 
 						context = new LineContext(delegateSet, context);
 					}
@@ -648,20 +646,28 @@ public class TokenMarker implements Cloneable
 				lastOffset = lineLength;
 				lastKeyword = lineLength;
 				pos = lineLength;
+
 				return false;
 			case MARK_PREVIOUS:
+				/*if (lastKeyword > lastOffset)
+				{
+					addToken(info, lastKeyword - lastOffset,
+						context.rules.getDefault());
+					lastOffset = lastKeyword;
+				}*/
+
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					addToken(info,pos - lastOffset,checkRule.token);
-					addToken(info,pattern.count,
+					addToken(info, pos - lastOffset, checkRule.token);
+					addToken(info, pattern.count,
 						context.rules.getDefault());
 				}
 				else
 				{
-					addToken(info,(pos + pattern.count) - lastOffset,
+					addToken(info, pos - lastOffset + pattern.count,
 						checkRule.token);
 				}
-				lastOffset = pos + pattern.count;
+				lastOffset = lastKeyword = pos + pattern.count;
 
 				break;
 			case MARK_FOLLOWING:
@@ -681,6 +687,8 @@ public class TokenMarker implements Cloneable
 			default:
 				throw new InternalError("Unhandled major action");
 			}
+
+			lastKeyword = lastOffset;
 
 			pos += (pattern.count - 1); // move pos to last character of match sequence
 			return false; // break out of inner for loop to check next char
@@ -724,7 +732,7 @@ public class TokenMarker implements Cloneable
 			char[] array = line.array;
 			boolean octal = false;
 			boolean hex = false;
-	loop:		for(int i = 0; i < len; i++)
+loop:			for(int i = 0; i < len; i++)
 			{
 				char ch = array[start+i];
 				switch(ch)
@@ -745,9 +753,18 @@ public class TokenMarker implements Cloneable
 					}
 					else
 						break;
+				case 'd': case 'D': case 'f': case 'F':
+					if(hex)
+						continue loop;
+				case 'l': case 'L':
+					// len != 1 ensures that an 'l' by
+					// itself won't be highlighted
+					if(i == len-1 && len != 1)
+						continue loop;
+					else
+						break;
 				case 'a': case 'A': case 'b': case 'B':
-				case 'c': case 'C': case 'd': case 'D':
-				case 'e': case 'E': case 'f': case 'F':
+				case 'c': case 'C': case 'e': case 'E':
 					if(hex)
 						continue loop;
 					else
@@ -772,7 +789,7 @@ public class TokenMarker implements Cloneable
 						context.rules.getDefault());
 				}
 				addToken(info,len,Token.DIGIT);
-				lastOffset = end;
+				lastKeyword = lastOffset = end;
 
 				return;
 			}
@@ -790,7 +807,7 @@ public class TokenMarker implements Cloneable
 						context.rules.getDefault());
 				}
 				addToken(info,len, id);
-				lastOffset = end;
+				lastKeyword = lastOffset = end;
 			}
 		}
 	}
@@ -913,6 +930,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.48  2000/04/24 04:45:37  sp
+ * New I/O system started, and a few minor updates
+ *
  * Revision 1.47  2000/04/10 01:03:58  sp
  * SPAN fixes, <!DOCTYPE MODE SYSTEM "xmode.dtd"> added to mode files
  *

@@ -1,0 +1,48 @@
+JEDIT TO DO
+
+2.5:
+
+- VFS:
+  - abort I/O requests with special IOAbort throwable which IORequest
+    catches at top level
+  - Show wait cursor only once for a set of requests
+  - Annoying flickering when setEnabled() called
+  - ESCAPE should abort I/O
+  - Cursor momentarily jumps to end of buffer on load
+  - File->Open from and File->Save to menus
+  - Marker saving doesn't work
+
+- text area doesn't lose focus sometimes
+- there are still problems with multiline tokens
+- TokenMarker: MARK_PREVIOUS should mark to lastOffset not lastKeyword
+- XMode:
+  - better error reporting
+  - regexps
+- Editable toolbar
+- Add macros to context menu and toolbar
+- Plugin devel manual needs more work:
+  - document views, buffers
+  - how to write text area and gutter hilites
+- Mode editor
+- Buffer tabs:
+  - trunicate long file names (should be configurable)
+  - customizable font size?
+- 'input' action: eg: 'input@a@Enter your name:' would store the user's
+  input in register 'a', or clear it if they clicked 'Cancel'
+- Threaded HyperSearch
+- Backup directory: preserve full paths
+
+Later:
+
+- New document model
+- Folding
+- Word wrap
+- Reverse search
+- i18n support - bidi, input methods, localizable GUI, etc
+- Maybe cursor beyond EOL?
+- XML-driven auto indent?
+
+When we switch to Java 2:
+- drag and drop
+- Use collections
+- Enhanced printing

@@ -62,6 +62,9 @@ buffer.indentOnEnter=true
 # Default edit mode
 buffer.defaultMode=text
 
+# Undo queue size
+buffer.undoCount=100
+
 # Print margins (these cannot be set on a per-buffer basis currently.
 # Not much point fixing this though)
 buffer.margin.top=0.5
@@ -194,7 +197,7 @@ view.style.literal2=color:#650099 style:b
 view.style.keyword1=color:#000000 style:b
 view.style.keyword2=color:#ff00ff
 view.style.keyword3=color:#009600
-view.style.function=color:#d27e00
+view.style.function=color:#990033
 view.style.markup=color:#5e5e5e style:b
 view.style.label=color:#990033 bgColor:#cfcfcf style:b
 view.style.operator=color:#000000 style:b

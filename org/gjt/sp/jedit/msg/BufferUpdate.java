@@ -36,6 +36,11 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	public static final Object CREATED = "CREATED";
 
 	/**
+	 * Buffer loaded.
+	 */
+	public static final Object LOADED = "LOADED";
+
+	/**
 	 * Buffer closed.
 	 */
 	public static final Object CLOSED = "CLOSED";
@@ -59,16 +64,6 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	 * Buffer saving.
 	 */
 	public static final Object SAVING = "SAVING";
-
-	/**
-	 * @deprecated Use LOADED instead
-	 */
-	public static final Object LOADING = "LOADING";
-
-	/**
-	 * Buffer has been loaded.
-	 */
-	public static final Object LOADED = "LOADED";
 
 	/**
 	 * Creates a new buffer update message.

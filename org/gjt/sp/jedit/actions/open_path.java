@@ -1,6 +1,6 @@
 /*
  * open_path.java
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,14 +19,20 @@
 
 package org.gjt.sp.jedit.actions;
 
-import javax.swing.JFileChooser;
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
 public class open_path extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		jEdit.openFile(getView(evt),evt.getActionCommand());
+		View view = getView(evt);
+		String path = evt.getActionCommand();
+		if(path == null)
+			path = VFSManager.getUrlVFS().showOpenDialog(view,view.getBuffer());
+
+		if(path != null)
+			jEdit.openFile(view,path);
 	}
 }

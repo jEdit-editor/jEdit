@@ -30,6 +30,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.textarea.DefaultInputHandler;
 import org.gjt.sp.jedit.textarea.InputHandler;
@@ -57,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.04.99.02";
+		return "02.05.01.00";
 	}
 
 	/**
@@ -291,6 +292,9 @@ public class jEdit
 
 				// Load filechooser in background
 				GUIUtilities.startLoadThread();
+
+				// Start I/O thread
+				VFSManager.start();
 			}
 		});
 	}
@@ -884,37 +888,42 @@ public class jEdit
 	}
 
 	/**
-	 * @deprecated This method will no longer be available in jEdit 2.5.
-	 * Use openFile(View,String,String,boolean,boolean) instead.
+	 * Opens a file.
+	 * @param view The view to open the file in
+	 * @param parent The parent directory of the file
+	 * @param path The path name of the file
+	 * @param readOnly True if the file should be read only
+	 * @param newFile True if the file should not be loaded from disk
+	 * @param reloadIfOpen If true and buffer is already open, user will
+	 * be prompted if it should be reloaded
+	 *
+	 * @since jEdit 2.4pre1
 	 */
 	public static Buffer openFile(View view, String parent, String path,
 		boolean readOnly, boolean newFile, boolean reloadIfOpen)
 	{
 		if(view != null && parent == null)
-			parent = view.getBuffer().getFile().getParent();
-
-		int index = path.indexOf('#');
-		String marker = null;
-		if(index != -1)
 		{
-			marker = path.substring(index + 1);
-			path = path.substring(0,index);
+			File file = view.getBuffer().getFile();
+			if(file != null)
+				parent = file.getParent();
 		}
 
-		// Java doesn't currently support saving to file:// URLs,
-		// hence the crude hack here
+		int index = path.indexOf('#');
+		final String marker = (index != -1 ? path.substring(index + 1) : null);
+		if(index != -1)
+			path = path.substring(0,index);
+
+		String protocol = MiscUtilities.getFileProtocol(path);
+		if(protocol == null)
+			protocol = "file";
+
 		if(path.startsWith("file:"))
 			path = path.substring(5);
 
-		URL url = null;
-		try
-		{
-			url = new URL(path);
-		}
-		catch(MalformedURLException mu)
-		{
+		if(protocol.equals("file"))
 			path = MiscUtilities.constructPath(parent,path);
-		}
+
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
 		{
@@ -935,18 +944,28 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		buffer = new Buffer(url,path,readOnly,newFile,false);
-		addBufferToList(buffer);
+		final Buffer newBuffer = new Buffer(view,path,readOnly,
+			newFile,false);
+		addBufferToList(newBuffer);
 
-		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CREATED));
+		EditBus.send(new BufferUpdate(newBuffer,BufferUpdate.CREATED));
 
 		if(marker != null)
-			gotoMarker(buffer,null,marker);
+		{
+			// only go to marker once I/O is complete
+			VFSManager.runInAWTThread(new Runnable()
+			{
+				public void run()
+				{
+					gotoMarker(newBuffer,null,marker);
+				}
+			});
+		}
 
 		if(view != null)
-			view.setBuffer(buffer);
+			view.setBuffer(newBuffer);
 
-		return buffer;
+		return newBuffer;
 	}
 
 	/**
@@ -964,22 +983,21 @@ public class jEdit
 		String path, boolean readOnly, boolean newFile)
 	{
 		if(view != null && parent == null)
-			parent = view.getBuffer().getFile().getParent();
+		{
+			File file = view.getBuffer().getFile();
+			if(file != null)
+				parent = file.getParent();
+		}
 
-		// Java doesn't currently support saving to file:// URLs,
-		// hence the crude hack here
+		String protocol = MiscUtilities.getFileProtocol(path);
+		if(protocol == null)
+			protocol = "file";
+
 		if(path.startsWith("file:"))
 			path = path.substring(5);
 
-		URL url = null;
-		try
-		{
-			url = new URL(path);
-		}
-		catch(MalformedURLException mu)
-		{
+		if(protocol.equals("file"))
 			path = MiscUtilities.constructPath(parent,path);
-		}
 
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
@@ -989,7 +1007,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		return new Buffer(url,path,readOnly,newFile,true);
+		return new Buffer(null,path,readOnly,newFile,true);
 	}
 
 	/**
@@ -1080,6 +1098,7 @@ public class jEdit
 		}
 
 		_closeBuffer(view,buffer);
+
 		return true;
 	}
 
@@ -1103,6 +1122,9 @@ public class jEdit
 		// Create a new file when the last is closed
 		if(buffersFirst == null && buffersLast == null)
 			newFile(view);
+
+		// Wait for pending I/O requests
+		VFSManager.waitForRequests();
 	}
 
 	/**
@@ -1113,6 +1135,9 @@ public class jEdit
 	 */
 	public static boolean closeAllBuffers(View view, boolean isExiting)
 	{
+		// Wait for pending I/O requests
+		VFSManager.waitForRequests();
+
 		boolean dirty = false;
 
 		Buffer buffer = buffersFirst;
@@ -1381,77 +1406,20 @@ public class jEdit
 	 * should be saved first.
 	 * @param view The view from which this exit was called
 	 */
-	public static void exit(View view)
+	public static void exit(final View view)
 	{
-		if(settingsDirectory != null && session != null)
-			Sessions.saveSession(view,session);
+		// Wait for all requests to finish
+		VFSManager.waitForRequests();
 
-		// Close all buffers
-		if(!closeAllBuffers(view,true))
-			return;
-
-		// Stop autosave thread
-		autosave.stop();
-
-		// Stop server here
-		if(server != null)
-			server.stopServer();
-
-		// Save view properties here - save unregisters
-		// listeners, and we would have problems if the user
-		// closed a view but cancelled an unsaved buffer close
-		view.close();
-
-		// Stop all plugins
-		for(int i = 0; i < plugins.size(); i++)
+		// Give AWT thread a chance to display error dialog boxes
+		// by only exiting on the next event
+		VFSManager.runInAWTThread(new Runnable()
 		{
-			((EditPlugin)plugins.elementAt(i)).stop();
-		}
-
-		// Send EditorExiting
-		EditBus.send(new EditorExiting(null));
-
-		// Save various settings
-		if(settingsDirectory != null)
-		{
-			// Save the recent file list
-			for(int i = 0; i < recent.size(); i++)
+			public void run()
 			{
-				String file = (String)recent.elementAt(i);
-				setProperty("recent." + i,file);
+				_exit(view);
 			}
-			unsetProperty("recent." + maxRecent);
-
-			HistoryModel.saveHistory(MiscUtilities.constructPath(
-				settingsDirectory, "history"));
-
-			SearchAndReplace.save();
-			Abbrevs.save();
-
-			File file = new File(MiscUtilities.constructPath(
-				settingsDirectory,"properties"));
-			if(file.lastModified() > propsModTime)
-			{
-				Log.log(Log.WARNING,jEdit.class,file + " changed"
-					+ " on disk; will not save user properties");
-			}
-			else
-			{
-				try
-				{
-					OutputStream out = new FileOutputStream(file);
-					props.save(out,"jEdit properties");
-					out.close();
-				}
-				catch(IOException io)
-				{
-					Log.log(Log.ERROR,jEdit.class,io);
-				}
-			}
-		}
-
-		// Byebye...
-		System.exit(0);
+		});
 	}
 
 	// package-private members
@@ -1629,7 +1597,7 @@ public class jEdit
 				+ "- jedit.props\n"
 				+ "- jedit_gui.props\n"
 				+ "- jedit_keys.props\n"
-				+ "Try reinstalling jEdit.");
+				+ "jedit.jar is probably corrupt.");
 			Log.log(Log.ERROR,jEdit.class,e);
 			System.exit(1);
 		}
@@ -1747,7 +1715,6 @@ public class jEdit
 		addAction("next-word");
 		addAction("open-file");
 		addAction("open-path");
-		addAction("open-url");
 		addAction("overwrite");
 		addAction("paste");
 		addAction("paste-previous");
@@ -1930,7 +1897,7 @@ public class jEdit
 			{
 				int line = Integer.parseInt(marker.substring(1));
 				Element lineElement = buffer.getDefaultRootElement()
-					.getElement(line - 1);
+					.getElement(line + 1);
 				start = end = lineElement.getStartOffset();
 			}
 			catch(Exception e)
@@ -2100,11 +2067,89 @@ public class jEdit
 		if(recent.size() > maxRecent)
 			recent.removeElementAt(maxRecent);
 	}
+
+	// Exit bottom-half
+	private static void _exit(View view)
+	{
+		
+		if(settingsDirectory != null && session != null)
+			Sessions.saveSession(view,session);
+
+		// Close all buffers
+		if(!closeAllBuffers(view,true))
+			return;
+
+		// Stop autosave thread
+		autosave.stop();
+
+		// Stop server here
+		if(server != null)
+			server.stopServer();
+
+		// Save view properties here - save unregisters
+		// listeners, and we would have problems if the user
+		// closed a view but cancelled an unsaved buffer close
+		view.close();
+
+		// Stop all plugins
+		for(int i = 0; i < plugins.size(); i++)
+		{
+			((EditPlugin)plugins.elementAt(i)).stop();
+		}
+
+		// Send EditorExiting
+		EditBus.send(new EditorExiting(null));
+
+		// Save various settings
+		if(settingsDirectory != null)
+		{
+			// Save the recent file list
+			for(int i = 0; i < recent.size(); i++)
+			{
+				String file = (String)recent.elementAt(i);
+				setProperty("recent." + i,file);
+			}
+			unsetProperty("recent." + maxRecent);
+
+			HistoryModel.saveHistory(MiscUtilities.constructPath(
+				settingsDirectory, "history"));
+
+			SearchAndReplace.save();
+			Abbrevs.save();
+
+			File file = new File(MiscUtilities.constructPath(
+				settingsDirectory,"properties"));
+			if(file.lastModified() > propsModTime)
+			{
+				Log.log(Log.WARNING,jEdit.class,file + " changed"
+					+ " on disk; will not save user properties");
+			}
+			else
+			{
+				try
+				{
+					OutputStream out = new FileOutputStream(file);
+					props.save(out,"jEdit properties");
+					out.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,jEdit.class,io);
+				}
+			}
+		}
+
+		// Byebye...
+		System.exit(0);
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.223  2000/04/24 04:45:36  sp
+ * New I/O system started, and a few minor updates
+ *
  * Revision 1.222  2000/04/21 05:32:20  sp
  * Focus tweak
  *

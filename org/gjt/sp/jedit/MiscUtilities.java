@@ -211,6 +211,15 @@ loop:		for(int i = 0; i < str.length(); i++)
 	}
 
 	/**
+	 * Returns the protocol specifier in a path name.
+	 * @param path The path name
+	 */
+	public static String getFileProtocol(String path)
+	{
+		return null;
+	}
+
+	/**
 	 * Checks if the specified string is a URL.
 	 * @param str The string to check
 	 * @return True if the string is a URL, false otherwise
@@ -605,6 +614,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  2000/04/24 04:45:36  sp
+ * New I/O system started, and a few minor updates
+ *
  * Revision 1.27  2000/03/14 06:22:24  sp
  * Lots of new stuff
  *

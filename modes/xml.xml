@@ -9,7 +9,7 @@
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{xml,dtd,sgml,sgm}" />
-		<PROPERTY NAME="firstlineGlob" VALUE=".*<\?xml.*" />
+		<PROPERTY NAME="firstlineGlob" VALUE="*<\?xml*" />
 	</PROPS>
 	<RULES>
 		<!-- whitespace: (space and tab) -->

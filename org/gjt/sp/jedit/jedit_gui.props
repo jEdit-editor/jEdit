@@ -71,7 +71,7 @@ recent-buffer.label=Go to $Last Edited Buffer
 ### File menu
 file=new-file \
      open-file \
-     open-url \
+     open-path \
      %recent-files \
      %current-directory \
      - \
@@ -92,12 +92,13 @@ file=new-file \
 file.label=$File
 new-file.label=$New File
 open-file.label=$Open File...
-open-url.label=Open $URL...
-recent-files.label=$Recent Files
-current-directory.label=Curren$t Directory
+open-path.label=Open Pa$th...
+recent-files.label=Recent Files
+current-directory.label=Current Directory
 current-directory.more.label=More
+current-directory.not-local.label=Can only list on local filesystem
 no-recent.label=No Recent Files
-reload.label=Re$load
+reload.label=$Reload
 reload-all.label=Reload $All Buffers...
 close-file.label=$Close File
 close-all.label=Close All $Buffers
@@ -436,6 +437,8 @@ view.title=jEdit: {0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,c
 # Same as view.title but no leading 'jEdit:'
 view.buffer-label={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
 # Status messages
+view.status.loading=Loading {0}
+view.status.saving=Saving {0}
 view.status.recording=Macro recording
 view.status.cut-string-register=Cut to register:
 view.status.copy-string-register=Copy to register:
@@ -487,7 +490,7 @@ no-write.message=Cannot save to {0}.\n\
 
 # Open URL dialog
 openurl.title=Open URL
-openurl.message=URL to open:
+openurl.message=Enter a local path name or URL:
 
 # Malformed URL error
 badurl.title=Invalid URL
@@ -496,7 +499,7 @@ badurl.message=The following URL is invalid: {0}
 
 # Save To URL dialog
 saveurl.title=Save To URL
-saveurl.message=URL to save file to:
+saveurl.message=Enter a local path name or URL:
 
 # Send dialog
 send.title=Send
@@ -802,6 +805,7 @@ options.editor.italic=Italic
 options.editor.boldItalic=Bold Italic
 options.editor.fontsize=Text font size:\ 
 options.editor.tabSize=Tab width:\ 
+options.editor.undoCount=Number of undos:\ 
 options.editor.lineHighlight=Current line highlighting
 options.editor.bracketHighlight=Bracket highlighting
 options.editor.eolMarkers=EOL markers

@@ -40,7 +40,6 @@
 
 		<!-- some of these should be marked OPERATOR -->
 		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
 		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="NULL">!</SEQ>
 		<SEQ TYPE="NULL">&gt;=</SEQ>
@@ -65,6 +64,9 @@
 		<SEQ TYPE="NULL">[</SEQ>
 		<SEQ TYPE="NULL">?</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
+
+		<!-- Function calls -->
+		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 
 		<KEYWORDS IGNORE_CASE="FALSE">
 			<KEYWORD3>any</KEYWORD3>

@@ -48,7 +48,18 @@ public class CurrentDirectoryMenu extends JMenu
 			if(getMenuComponentCount() != 0)
 				removeAll();
 
-			File dir = new File(view.getBuffer().getFile().getParent());
+			File file = view.getBuffer().getFile();
+			if(file == null)
+			{
+				JMenuItem mi = new JMenuItem(jEdit.getProperty(
+					"current-directory.not-local"));
+				mi.setEnabled(false);
+				add(mi);
+				super.setPopupMenuVisible(b);
+				return;
+			}
+
+			File dir = new File(file.getParent());
 
 			JMenuItem mi = new JMenuItem(dir.getPath());
 			mi.setEnabled(false);
@@ -67,7 +78,7 @@ public class CurrentDirectoryMenu extends JMenu
 				{
 					String name = list[i];
 
-					File file = new File(dir,name);
+					file = new File(dir,name);
 					if(file.isDirectory())
 						continue;
 

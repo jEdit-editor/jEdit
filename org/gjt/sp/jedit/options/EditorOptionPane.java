@@ -82,6 +82,10 @@ public class EditorOptionPane extends AbstractOptionPane
 		tabSize.setSelectedItem(jEdit.getProperty("buffer.tabSize"));
 		addComponent(jEdit.getProperty("options.editor.tabSize"),tabSize);
 
+		/* Undo queue size */
+		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
+		addComponent(jEdit.getProperty("options.editor.undoCount"),undoCount);
+
 		/* Line highlight */
 		lineHighlight = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".lineHighlight"));
@@ -177,6 +181,7 @@ public class EditorOptionPane extends AbstractOptionPane
 			.getSelectedIndex()));
 		jEdit.setProperty("buffer.tabSize",(String)tabSize
 			.getSelectedItem());
+		jEdit.setProperty("buffer.undoCount",undoCount.getText());
 		jEdit.setBooleanProperty("view.lineHighlight",lineHighlight.getModel()
 			.isSelected());
 		jEdit.setBooleanProperty("view.bracketHighlight",bracketHighlight.getModel()
@@ -209,6 +214,7 @@ public class EditorOptionPane extends AbstractOptionPane
 	private JComboBox style;
 	private JComboBox size;
 	private JComboBox tabSize;
+	private JTextField undoCount;
 	private JCheckBox lineHighlight;
 	private JCheckBox bracketHighlight;
 	private JCheckBox eolMarkers;

@@ -1,6 +1,6 @@
 /*
  * open_file.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,10 +19,8 @@
 
 package org.gjt.sp.jedit.actions;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.*;
-import java.io.File;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
 public class open_file extends EditAction
@@ -30,8 +28,8 @@ public class open_file extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		String file = GUIUtilities.showFileDialog(view,view.getBuffer()
-			.getFile().getParent(),JFileChooser.OPEN_DIALOG);
+		String file = VFSManager.getFileVFS().showOpenDialog(view,
+			view.getBuffer());
 
 		if(file != null)
 			jEdit.openFile(view,file);

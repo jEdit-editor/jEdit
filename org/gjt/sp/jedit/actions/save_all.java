@@ -38,8 +38,6 @@ public class save_all extends EditAction
 		if(result != JOptionPane.YES_OPTION)
 			return;
 
-		view.showWaitCursor();
-
 		Buffer[] buffers = jEdit.getBuffers();
 		for(int i = 0; i < buffers.length; i++)
 		{
@@ -47,7 +45,5 @@ public class save_all extends EditAction
 			if(buffer.isDirty())
 				buffer.save(view,null);
 		}
-
-		view.hideWaitCursor();
 	}
 }

@@ -100,14 +100,11 @@ public class Sessions
 
 			while(buffer != null)
 			{
-				if(buffer.isUntitled())
+				if(!buffer.isUntitled())
 				{
-					buffer = buffer.getNext();
-					continue;
+					writeSessionCommand(view,buffer,out);
+					out.write(lineSep);
 				}
-
-				writeSessionCommand(view,buffer,out);
-				out.write(lineSep);
 				buffer = buffer.getNext();
 			}
 
@@ -226,6 +223,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/04/24 04:45:36  sp
+ * New I/O system started, and a few minor updates
+ *
  * Revision 1.14  2000/04/23 03:36:39  sp
  * Minor fixes
  *
