@@ -75,7 +75,19 @@ srcs = re_srcs jedit_srcs;
 
 jar = "jedit.jar";
 
-"all": jar;
+"all": srcs;
+{
+}
+
+jar: "all";
+{
+    exec cmd_jar "cmf0" jedit_mf @ (glob
+        (join pkgs, "/*.class")
+        (join pkgs, "/*.gif")
+        (join pkgs, "/*.jpg")
+        (join pkgs, "/*.props")
+	"org/gjt/sp/jedit/default.abbrevs");
+}
 
 "everything":;
 {
@@ -93,14 +105,5 @@ jar = "jedit.jar";
     exec cmd_javac <;
 }
 
-jar: srcs;
-{
-    exec cmd_jar "cmf0" jedit_mf @ (glob
-        (join pkgs, "/*.class")
-        (join pkgs, "/*.gif")
-        (join pkgs, "/*.jpg")
-        (join pkgs, "/*.props")
-	"org/gjt/sp/jedit/default.abbrevs");
-}
 
-".PHONY": "all";
+".PHONY": "all" "jar" "everything";
