@@ -131,6 +131,15 @@ actually a Java bug, or a well-known problem.
   from <http://java.sun.com/products/jfc>. Alternatively, upgrade to
   Java 2, which doesn't require you to install Swing separately.
 
+- The following two source files will not compile under Java 1.1:
+
+  bsh/XThis.java
+  org/gjt/sp/jedit/textarea/TextRenderer2D.java
+
+  These files use Java 2-specific features, and are only used when
+  running on Java 2. You can safely delete or ignore them if you only
+  plan on running jEdit in Java 1.1.
+
 * Libraries
 
 jEdit depends on, and comes bundled with the following libraries:

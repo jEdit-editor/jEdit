@@ -242,8 +242,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		int lineNumberDigits = (int)Math.ceil(Math.log(
 			lineCount) / Math.log(10));
 
-		TextRenderingManager renderer = TextRenderingManager
-			.createTextRenderingManager();
+		TextRenderer renderer = TextRenderer.createTextRenderer();
 
 		renderer.configure(false,false);
 
@@ -1756,7 +1755,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	public int paintSyntaxLine(int lineIndex, Graphics gfx, int _x, int _y,
 		TabExpander expander, boolean style, boolean color,
 		Font defaultFont, Color foreground, Color background,
-		SyntaxStyle[] styles, TextRenderingManager renderer)
+		SyntaxStyle[] styles, TextRenderer renderer)
 	{
 		float x = (float)_x;
 		float y = (float)_y;

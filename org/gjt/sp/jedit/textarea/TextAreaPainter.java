@@ -315,7 +315,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public void setAntiAliasEnabled(boolean antiAlias)
 	{
 		this.antiAlias = antiAlias;
-		textArea.getRenderingManager().configure(antiAlias,fracFontMetrics);
+		textArea.getTextRenderer().configure(antiAlias,fracFontMetrics);
 	}
 
 	/**
@@ -335,7 +335,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public void setFractionalFontMetricsEnabled(boolean fracFontMetrics)
 	{
 		this.fracFontMetrics = fracFontMetrics;
-		textArea.getRenderingManager().configure(antiAlias,fracFontMetrics);
+		textArea.getTextRenderer().configure(antiAlias,fracFontMetrics);
 	}
 
 	/**
@@ -409,7 +409,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		updateTabSize();
 
-		textArea.getRenderingManager().setupGraphics(gfx);
+		textArea.getTextRenderer().setupGraphics(gfx);
 
 		Buffer buffer = textArea.getBuffer();
 
@@ -587,7 +587,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			x = buffer.paintSyntaxLine(physicalLine,gfx,x,baseLine,
 				this,true,true,defaultFont,defaultColor,
 				getBackground(),styles,
-				textArea.getRenderingManager());
+				textArea.getTextRenderer());
 
 			if(eolMarkers)
 			{

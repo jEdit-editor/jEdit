@@ -58,7 +58,7 @@ public class JEditTextArea extends JComponent
 
 		// Initialize some misc. stuff
 		selection = new Vector();
-		renderingManager = TextRenderingManager.createTextRenderingManager();
+		renderer = TextRenderer.createTextRenderer();
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(view,this);
 		documentHandler = new DocumentHandler();
@@ -541,13 +541,13 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Returns the text rendering manager. You probably don't need to
-	 * use this class directly.
+	 * Returns the text renderer instance. This method is going away in
+	 * the next major release, so do not use it.
 	 * @since jEdit 3.2pre6
 	 */
-	public TextRenderingManager getRenderingManager()
+	public TextRenderer getTextRenderer()
 	{
-		return renderingManager;
+		return renderer;
 	}
 
 	/**
@@ -586,12 +586,12 @@ public class JEditTextArea extends JComponent
 
 			if(offset < len)
 			{
-				return (int)(x + renderingManager.charsWidth(
+				return (int)(x + renderer.charsWidth(
 					text,off,offset,font,x,painter));
 			}
 			else
 			{
-				x += renderingManager.charsWidth(
+				x += renderer.charsWidth(
 					text,off,len,font,x,painter);
 				off += len;
 				offset -= len;
@@ -627,8 +627,6 @@ public class JEditTextArea extends JComponent
 		char[] text = lineSegment.array;
 		int off = lineSegment.offset;
 
-		int width = horizontalOffset;
-
 		Toolkit toolkit = painter.getToolkit();
 		Font defaultFont = painter.getFont();
 		SyntaxStyle[] styles = painter.getStyles();
@@ -639,7 +637,7 @@ public class JEditTextArea extends JComponent
 		{
 			byte id = tokens.id;
 			if(id == Token.END)
-				return offset;
+				return lineSegment.count;
 
 			Font font;
 			if(id == Token.NULL)
@@ -649,17 +647,15 @@ public class JEditTextArea extends JComponent
 
 			int len = tokens.length;
 
-			int offset = renderingManager.xToOffset(text,off,len,font,
+			int offset = renderer.xToOffset(text,off,len,font,x,
 				painter,round,widthArray);
 
 			if(offset != -1)
-				return offset;
+				return offset - lineSegment.offset;
 
 			off += len;
 			tokens = tokens.next;
 		}
-
-		return lineSegment.count;
 	}
 
 	/**
@@ -4132,7 +4128,7 @@ forward_scan:		do
 	private static boolean multi;
 	private boolean overwrite;
 
-	private TextRenderingManager renderingManager;
+	private TextRenderer renderer;
 
 	private static void quicksort(int[] obj, int _start, int _end)
 	{
@@ -4954,7 +4950,7 @@ forward_scan:		do
 
 			dragStartLine = buffer.virtualToPhysical(yToLine(y));
 			dragStartOffset = xToOffset(dragStartLine,x);
-			dragStart = xyToOffset(x,y,painter.isBlockCaretEnabled());
+			dragStart = xyToOffset(x,y,!painter.isBlockCaretEnabled());
 
 			clickCount = evt.getClickCount();
 			switch(clickCount)
@@ -5102,7 +5098,7 @@ forward_scan:		do
 		private void doSingleDrag(MouseEvent evt, boolean rect)
 		{
 			int dot = xyToOffset(evt.getX(),evt.getY(),
-				painter.isBlockCaretEnabled());
+				!painter.isBlockCaretEnabled());
 			if(dot == caret)
 				return;
 

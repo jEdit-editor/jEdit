@@ -2748,7 +2748,8 @@ loop:		for(int i = 0; i < list.length; i++)
 			if(plugin.equals("BeanShell.jar")
 				|| plugin.equals("bsh-1.0.jar")
 				|| plugin.equals("EditBuddy.jar")
-				|| plugin.equals("PluginManager.jar"))
+				|| plugin.equals("PluginManager.jar")
+				|| plugin.equals("AntiAlias.jar"))
 			{
 				String[] args = { plugin };
 				GUIUtilities.error(null,"plugin.obsolete",args);

@@ -203,6 +203,7 @@
 			<LABEL>@since</LABEL>
 			<LABEL>@throws</LABEL>
 			<LABEL>@version</LABEL>
+			<LABEL>@spec</LABEL>
 		</KEYWORDS>
 	</RULES>
 

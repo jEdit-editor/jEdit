@@ -6,10 +6,9 @@ TO DO
 - printing: syntax output doesn't use print font!!!
 - console: add go to console action
 - console 3.0: MUST FINISH!!!
-- mention using Macros.message() in macro-tips
 - reload: preserve caret position
 - finish duplicate shortcut code
-- caret status: center text, don't put it at the bottom
+- cvs: remove *TextRenderingManager*, add TextRenderer*
 
 + lower priority/later:
 
@@ -22,8 +21,10 @@ TO DO
 - document differences between web start and stand-alone version
 - next time i'm making an RPM, fix the shell script
 - jEditLauncher
+- mention using Macros.message() in macro-tips
+- Ditch LatestVersion?
 
-+ bugs that need to be fixed at some stage:
++ bugs:
 
 - a line consisting entirely of spaces & word wrap
 - switching option panes real fast
@@ -43,48 +44,11 @@ TO DO
 - aborts not always fired
 - fix dragStart handling in DockableWindowContainer.TabbedPane
 - folding paint up bug
-- offsetToX() returning wrong location with some Java versions
 - expand-fold too aggressive
 - replace in sel doesn't work if rect
 - formatting problems in user's guide in table cells
 - macro guide: JOptionPane not a good idea for getting user input?
-
-+ later:
-
-- save markers on close and don't set dirty flag
-- custom splitter control?
-- swing font customization
-- much better rect select, along the lines of 'column mode'
-- scrolling while caret is on a bracket over long distances slows things
-  down
-- status bar: show recording status, line separator?
-- macros in web start version
-- scroll lock key toggles 'scroll mode'
-- rewritten folding: Fold object, pointer to next of curr. level, each
-  text area has visibility hashtable
-- explicit folding
-- fold browser
-- when loading a plugin, check if all the jars are present?
-- regexps in XMode
-- DELEGATE in EOL_SPAN
-- PHP mode: <?php echo "<?xml version='1.0'?>" ?>
-- reverse regexp search
-- a 'reinsertOnNextLine' regexp for hard word wrap?
-- soft wrap
-- support Shift-clicks in JTextComponents (impossible?)
-- support jEdit keyboard shortcuts in JTextComponents
-- support middle mouse button clicks in JTextComponents
-- docking improvements:
-  - multiple instances of a dockable
-  - make dockable menu items not be toggles.
-    - if floating, open new instance.
-    - if docked, go to existing instance, if not open, then open
-  - create non-menu 'toggle' actions, for those who want them
-  - each dockable has a close box in its tool bar; or a button that
-    shows a menu, with commands for moving the dockable, making it
-    floating, toggling auto-open, etc.
-  - require that each dockable have a tool bar with a close button?
-- per-mode encodings and line endings
+- scrolling while caret is on a bracket is slow
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
     ugly with different backgrounds
@@ -92,19 +56,3 @@ TO DO
   - selected borders in list, tree, table wrong colors
   - updateUI doesn't update tree colors
   - restart should not be necessary for 'globalColors' to take effect
-- maybe rewrite file restore to use XML -- allow plugins to read/write
-  arbitriary restore files? -- eg BufferList
-- finish persistent splits: resize splits to put them in the middle
-- edit server documentation
-- invert selection
-- hypersearch: select lines with matches
-- support for more token types, and in HTML mode, highlight different tag
-  types with different colors
-- {MARKUP,KEYWORD,COMMENT,LITERAL,OPERATOR,LABEL,FUNCTION}{1,2,3,4} token
-  types
-- new document model with sliding line map
-- keyboard selection in hypersearch
-- HTML mode: handle <SCRIPT LANGUAGE="..."> in a more flexible manner
-- fs browser: details view
-- fs browser: two pane view
-- JTreeTable control?

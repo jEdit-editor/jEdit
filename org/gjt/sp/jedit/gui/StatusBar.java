@@ -57,7 +57,6 @@ public class StatusBar extends JPanel
 		Border border = new BevelBorder(BevelBorder.LOWERED);
 
 		caretStatus = new VICaretStatus();
-		caretStatus.setFont(UIManager.getFont("Label.font"));
 		caretStatus.setBorder(border);
 		add(BorderLayout.WEST,caretStatus);
 
@@ -228,6 +227,13 @@ public class StatusBar extends JPanel
 		{
 			VICaretStatus.this.setForeground(UIManager.getColor("Button.foreground"));
 			VICaretStatus.this.setBackground(UIManager.getColor("Label.background"));
+			VICaretStatus.this.setFont(UIManager.getFont("Label.font"));
+
+			Dimension size = new Dimension(
+				VICaretStatus.this.getFontMetrics(
+				VICaretStatus.this.getFont())
+				.stringWidth(testStr),0);
+			VICaretStatus.this.setPreferredSize(size);
 		}
 
 		public void paintComponent(Graphics g)
@@ -288,20 +294,9 @@ public class StatusBar extends JPanel
 				(VICaretStatus.this.getHeight() + fm.getAscent()) / 2 - 1);
 		}
 
-		public Dimension getPreferredSize()
-		{
-			FontMetrics fm = VICaretStatus.this.getToolkit()
-				.getFontMetrics(VICaretStatus.this.getFont());
-			size = new Dimension(fm.stringWidth(testStr) + 6,
-				fm.getHeight());
-
-			return size;
-		}
-
 		// private members
 		private static final String testStr = "9999,999-999 99%";
 
-		private Dimension size;
 		private Segment seg = new Segment();
 
 		private int getVirtualPosition(int dot, Buffer buffer, JEditTextArea textArea)
