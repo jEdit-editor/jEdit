@@ -3999,6 +3999,11 @@ import org.gjt.sp.jedit.EditBus;</>
    new text area has been created - this message is sent when the view
    is split. The <function>getTextArea()</> method returns the new text
    area</para></listitem>
+   <listitem><para><command>ViewUpdate.TEXTAREA_DESTROYED</> - a
+   text area has been disposed of - this message is sent when the view
+   is unsplit. The <function>getTextArea()</> method returns the disposed
+   text
+   area</para></listitem>
    <listitem><para><command>ViewUpdate.BUFFER_CHANGED</> - a view
    is now editing a different buffer</para></listitem>
    <listitem><para><command>ViewUpdate.CLOSED</> - a view has been

@@ -2,6 +2,10 @@ JEDIT VERSION HISTORY
 
 * Version 2.3pre4
 
++ New Features
+
+- ViewUpdate.TEXTAREA_DESTROYED message fired when view is being unsplit
+
 + Enhancements
 
 - Gutter option pane, new toggle-gutter and toggle-line-numbers
@@ -12,6 +16,10 @@ JEDIT VERSION HISTORY
 - Fixed NullPointerException when doing search and replace with tool bar
   disabled (since 2.3pre1)
 - Buffer tabs position setting was broken (since 2.3pre3)
+- Reversed terminology on the split-horizontal and split-vertical
+  actions (since 2.3pre3)
+- Reload was broken with split panes (unfortunately, the only way to
+  fix this right now is to unsplit views when reloading)
 
 * Version 2.3pre3
 

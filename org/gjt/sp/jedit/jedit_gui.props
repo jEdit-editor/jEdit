@@ -44,7 +44,8 @@ view.quicksearch=Find:\
 ### CONTEXT MENU
 ###
 view.context=undo redo - cut copy paste paste-previous - select-all \
-	select-none - scroll-line - view-registers - record-temp-macro \
+	select-none - scroll-line - view-registers - unsplit \
+	split-horizontal split-vertical - record-temp-macro \
 	stop-recording play-temp-macro
 
 ###
@@ -283,8 +284,8 @@ utils=new-view \
       close-view \
       - \
       unsplit \
-      split-vertical \
       split-horizontal \
+      split-vertical \
       - \
       toggle-gutter \
       toggle-line-numbers \
@@ -303,10 +304,10 @@ load-session.label=$Load Session...
 save-session.label=$Save Session...
 new-view.label=$New View
 close-view.label=$Close View
-split-vertical.label=Split $Vertically
 split-horizontal.label=Split $Horizontally
+split-vertical.label=Split $Vertically
 unsplit.label=Uns$plit
-toggle-gutter.label=Gutt$er E$xpanded
+toggle-gutter.label=Gutter E$xpanded
 toggle-line-numbers.label=Line Nu$mbering
 log-viewer.label=Show $Activity Log...
 save-log.label=Save Ac$tivity Log...

@@ -50,7 +50,10 @@ public class reload extends EditAction
 		for(int i = 0; i < views.length; i++)
 		{
 			if(view.getBuffer() == buffer)
+			{
+				view.unsplit();
 				view.loadCaretInfo();
+			}
 		}
 	}
 }

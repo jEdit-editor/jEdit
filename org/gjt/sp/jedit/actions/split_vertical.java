@@ -28,6 +28,6 @@ public class split_vertical extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		view.split(JSplitPane.VERTICAL_SPLIT);
+		view.split(JSplitPane.HORIZONTAL_SPLIT);
 	}
 }

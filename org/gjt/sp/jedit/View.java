@@ -194,6 +194,10 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane != null)
 		{
+			boolean left = (splitPane.getLeftComponent() == textArea);
+			JEditTextArea textArea = (JEditTextArea)(left ?
+				splitPane.getRightComponent()
+				: splitPane.getLeftComponent());
 			JComponent parent = (JComponent)splitPane.getParent();
 			parent.remove(splitPane);
 			splitPane = null;
@@ -204,6 +208,9 @@ public class View extends JFrame implements EBComponent
 				parent.add(textArea);
 				parent.revalidate();
 			}
+
+			EditBus.send(new ViewUpdate(this,textArea,
+				ViewUpdate.TEXTAREA_DESTROYED));
 		}
 
 		focusOnTextArea();
@@ -696,6 +703,7 @@ public class View extends JFrame implements EBComponent
 		myPainter.setBackground(painter.getBackground());
 		myPainter.setForeground(painter.getForeground());
 		myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
+		myPainter.setStyles(painter.getStyles());
 
 		Gutter myGutter = textArea.getGutter();
 		Gutter gutter = copy.getGutter();
@@ -708,8 +716,6 @@ public class View extends JFrame implements EBComponent
 		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
 			copy.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
 		textArea.setElectricScroll(copy.getElectricScroll());
-
-		myPainter.setStyles(painter.getStyles());
 	}
 
 	private void loadToolBar()
@@ -1271,6 +1277,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.136  2000/02/02 07:52:32  sp
+ * bug fixes
+ *
  * Revision 1.135  2000/02/02 06:23:44  sp
  * Gutter changes from mike
  *

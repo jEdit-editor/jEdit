@@ -4,15 +4,16 @@ JEDIT TO DO
 
 - Double-click drag doesn't work backwards
 - CaretUndo doesn't work on 'redo'
-- Check file mod status on focus
+- Check file modification status on focus
 - Customizable gutter font and colors
 - Document gutter
-- ViewUpdate.TEXTAREA_DESTROYED
 
 ------- Later -------
 
 - Mark lines with caret registers on them in the gutter
 - Having more than 2 split panes should be possible
+- load/saveCaretInfo() save data in split.n.<property name> so that we
+  don't have to unsplit when switching buffers, closing, reloading, etc
 - Incremental search
 - If there is > 1 possible match, complete-word should list them in a
   dialog box

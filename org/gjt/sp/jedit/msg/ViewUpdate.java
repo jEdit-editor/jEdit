@@ -52,6 +52,11 @@ public class ViewUpdate extends EBMessage.NonVetoable
 	public static final Object TEXTAREA_CREATED = "TEXTAREA_CREATED";
 
 	/**
+	 * Text area created.
+	 */
+	public static final Object TEXTAREA_DESTROYED = "TEXTAREA_DESTROYED";
+
+	/**
 	 * Creates a new view update message.
 	 * @param view The view
 	 * @param textArea The text area

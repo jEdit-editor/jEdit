@@ -44,6 +44,7 @@ public class reload_all extends EditAction
 		for(int i = 0; i < views.length; i++)
 		{
 			view.saveCaretInfo();
+			view.unsplit();
 		}
 
 		Buffer[] buffers = jEdit.getBuffers();
