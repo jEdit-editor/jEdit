@@ -180,7 +180,7 @@
 		<delete dir="doc/api"/>
 		<mkdir dir="doc/api"/>
 
-		<javadoc packagenames="com.*, gnu.*, org.*"
+		<javadoc packagenames="bsh.*, com.*, gnu.*, org.*"
 			sourcepath="."
 			classpath="."
 			destdir="doc/api"
