@@ -908,6 +908,7 @@ options.general.ioThreadCount=Number of I/O threads:
 options.general.tokenize=Fully parse files for syntax info when loading
 
 options.general.ui=User interface
+options.general.lf.note=Restart jEdit for look & feel changes to take effect
 options.general.lf=Swing look & feel:
 options.general.showFullPath=Show full path of buffers in title bar
 options.general.showBufferTabs=Show buffer tabs
@@ -1146,6 +1147,12 @@ vfs.browser.addToFavorites.label=Add to Favorites
 vfs.browser.addToFavorites.icon=Plus.gif
 vfs.browser.gotoFavorites.label=Go to Favorites
 vfs.browser.gotoFavorites.icon=Favorite.gif
+vfs.browser.view.label=View
+vfs.browser.view.icon=ViewMenu.gif
+
+vfs.browser.view.list.label=List View
+vfs.browser.view.tree.label=Tree View
+vfs.browser.view.showHiddenFiles.label=Show Hidden Files
 
 vfs.browser.menu.close.label=Close
 vfs.browser.menu.open.label=Open in Current View

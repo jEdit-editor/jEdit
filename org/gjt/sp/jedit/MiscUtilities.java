@@ -119,7 +119,7 @@ public class MiscUtilities
 	 * @since jEdit 2.6pre2
 	 */
 	public static String constructPath(String parent,
-		String path1, String path2)
+		String path1, String path2, boolean canonical)
 	{
 		return constructPath(constructPath(parent,path1,false),path2,
 			canonical);
@@ -716,6 +716,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.37  2000/08/05 11:41:03  sp
+ * More VFS browser work
+ *
  * Revision 1.36  2000/08/05 07:16:11  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

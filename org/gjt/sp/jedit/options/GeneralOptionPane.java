@@ -143,6 +143,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addSeparator("options.general.ui");
 
 		/* Look and feel */
+		addComponent(new JLabel(jEdit.getProperty("options.general.lf.note")));
+
 		lfs = UIManager.getInstalledLookAndFeels();
 		String[] names = new String[lfs.length];
 		String lf = UIManager.getLookAndFeel().getClass().getName();
@@ -260,6 +262,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.39  2000/08/05 11:41:03  sp
+ * More VFS browser work
+ *
  * Revision 1.38  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

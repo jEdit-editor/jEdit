@@ -115,8 +115,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
 
-		browserView = new BrowserListView(this);
-		add(BorderLayout.CENTER,browserView);
+		setBrowserView(new BrowserListView(this));
 
 		propertiesChanged();
 		int lastFilter;
@@ -326,6 +325,19 @@ public class VFSBrowser extends JPanel implements EBComponent
 	public void setFilenameFilter(VFSFilter filenameFilter)
 	{
 		this.filenameFilter = filenameFilter;
+	}
+
+	public BrowserView getBrowserView()
+	{
+		return browserView;
+	}
+
+	public void setBrowserView(BrowserView browserView)
+	{
+		if(this.browserView != null)
+			remove(this.browserView);
+		this.browserView = browserView;
+		add(BorderLayout.CENTER,browserView);
 	}
 
 	public VFS.DirectoryEntry[] getSelectedFiles()
@@ -614,6 +626,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 			toolBar.add(createToolButton(vfs.getName(),true));
 		}
 
+		toolBar.addSeparator();
+		toolBar.add(new ViewMenuButton());
+
 		toolBar.add(Box.createGlue());
 		return toolBar;
 	}
@@ -729,11 +744,96 @@ public class VFSBrowser extends JPanel implements EBComponent
 			}
 		}
 	}
+
+	class ViewMenuButton extends JButton
+	{
+		ViewMenuButton()
+		{
+			setIcon(GUIUtilities.loadToolBarIcon(jEdit.getProperty(
+				"vfs.browser.view.icon")));
+			ViewMenuButton.this.setToolTipText(jEdit.getProperty("view.browser.label"));
+			ViewMenuButton.this.setRequestFocusEnabled(false);
+			setMargin(new Insets(0,0,0,0));
+			ViewMenuButton.this.addMouseListener(new MouseHandler());
+		}
+
+		// private members
+		private JPopupMenu popup;
+
+		private void createPopup()
+		{
+			popup = new JPopupMenu();
+			ButtonGroup grp = new ButtonGroup();
+
+			JRadioButtonMenuItem list = new JRadioButtonMenuItem(
+				jEdit.getProperty("vfs.browser.view.list.label"));
+			grp.add(list);
+			list.setActionCommand("list");
+			list.setSelected(browserView instanceof BrowserListView);
+			list.addActionListener(new ActionHandler());
+			popup.add(list);
+
+			JRadioButtonMenuItem tree = new JRadioButtonMenuItem(
+				jEdit.getProperty("vfs.browser.view.tree.label"));
+			grp.add(tree);
+			tree.setActionCommand("tree");
+			//tree.setSelected(browserView instanceof BrowserTreeView);
+			tree.addActionListener(new ActionHandler());
+			popup.add(tree);
+
+			popup.addSeparator();
+
+			JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
+				jEdit.getProperty("vfs.browser.view.showHiddenFiles.label"));
+			showHiddenFiles.setActionCommand("showHiddenFiles");
+			showHiddenFiles.setSelected(VFSBrowser.this.showHiddenFiles);
+			showHiddenFiles.addActionListener(new ActionHandler());
+			popup.add(showHiddenFiles);
+		}
+
+		class ActionHandler implements ActionListener
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				String actionCommand = evt.getActionCommand();
+				if(actionCommand.equals("list"))
+					setBrowserView(new BrowserListView(VFSBrowser.this));
+				else if(actionCommand.equals("tree"))
+					; //setBrowserView(new BrowserTreeView(VFSBrowser.this));
+				else if(actionCommand.equals("showHiddenFiles"))
+				{
+					showHiddenFiles = !showHiddenFiles;
+					reloadDirectory(false);
+				}
+			}
+		}
+
+		class MouseHandler extends MouseAdapter
+		{
+			public void mousePressed(MouseEvent evt)
+			{
+				if(popup == null || !popup.isVisible())
+				{
+					createPopup();
+					popup.show(ViewMenuButton.this,0,
+						ViewMenuButton.this.getHeight());
+				}
+				else
+				{
+					popup.setVisible(false);
+					popup = null;
+				}
+			}
+		}
+	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/08/05 11:41:03  sp
+ * More VFS browser work
+ *
  * Revision 1.6  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

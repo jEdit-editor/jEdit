@@ -43,7 +43,7 @@ public class IORequest extends WorkRequest
 	/**
 	 * Number of lines per progress increment.
 	 */
-	public static final int PROGRESS_INTERVAL = 100;
+	public static final int PROGRESS_INTERVAL = 300;
 
 	/**
 	 * Property loaded data is stored in.
@@ -700,6 +700,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.19  2000/08/05 11:41:03  sp
+ * More VFS browser work
+ *
  * Revision 1.18  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *
