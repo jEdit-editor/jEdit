@@ -16,9 +16,6 @@ recent=8
 # Maximum number of elements in a history list
 history=25
 
-# Geometry saving toggle
-saveGeometry=on
-
 # Desktop saving toggle
 saveDesktop=on
 

@@ -57,7 +57,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.02.04.00";
+		return "02.02.05.00";
 	}
 
 	/**
@@ -1571,6 +1571,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.153  1999/11/16 08:21:20  sp
+ * Various fixes, attempt at beefing up expand-abbrev
+ *
  * Revision 1.152  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

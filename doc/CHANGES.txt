@@ -1,5 +1,26 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2pre5
+
++ Enhancements
+
+- Workaround for broken geometry handling on Linux JDK
+- Documentation updates
+- New flag can be passed to HistoryTextField constructor; if true, selecting
+  something from the popup list will immediately fire an ActionEvent
+- Macro shortcut prefix is now C+e C+m again (used to be C+e m)
+- 'Block comment' now always inserts comments at the start of the line
+- New plugin template.jmk (Mike Dillon)
+
++ Bug Fixes
+
+- Shift+END didn't work properly (since 2.2pre4)
+- The Macros menu wasn't updated when a macro was added/removed (since 2.2pre4)
+- jedit.manifest file was not installed with the rest of the source code (since
+  2.1pre3)
+- Edit modes installed by plugins did not get a chance at automatically being
+  selected for a given file type (since 2.2pre1???)
+
 * Version 2.2pre4
 
 As of this version, plugins are no longer part of the core distribution.

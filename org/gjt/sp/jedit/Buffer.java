@@ -551,10 +551,10 @@ public class Buffer extends SyntaxDocument
 
 			Mode[] modes = jEdit.getModes();
 
-			// Plugin modes will appear first in the list
-			// (initPlugins() is called before initModes())
-			// so we start at 0
-			for(int i = 0; i < modes.length; i++)
+			// Plugin modes will appear last in the list
+			// (initPlugins() is called after initModes())
+			// so we start from the end
+			for(int i = modes.length - 1; i >= 0; i--)
 			{
 				if(modes[i].accept(this,nogzName,line))
 				{
@@ -1377,6 +1377,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.104  1999/11/16 08:21:19  sp
+ * Various fixes, attempt at beefing up expand-abbrev
+ *
  * Revision 1.103  1999/11/10 10:43:01  sp
  * Macros can now have shortcuts, various miscallaneous updates
  *

@@ -8,7 +8,6 @@ MAJOR CHANGES IN JEDIT 2.2 SINCE 2.1
   - auto indent updates
   - session load/save
   - move caret on undo
-  - bundled macros
   - highlights on the text area (= ErrorList plugin)
   - menu item selections and tool bar clicks can be recorded to macros
   - recordable search and replace

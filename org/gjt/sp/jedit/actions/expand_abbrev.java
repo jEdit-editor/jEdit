@@ -1,6 +1,6 @@
 /*
  * expand_abbrev.java
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,25 @@ public class expand_abbrev extends EditAction
 		int lineNo = textArea.getSelectionStartLine();	
 		int start = textArea.getLineStartOffset(lineNo);
 		int len = textArea.getLineEndOffset(lineNo) - start - 1;
+
+		// Support finding the previous match
+		if(view == lastView && buffer == lastBuffer
+			&& dot == lastDot + lastMatchLen)
+		{
+			Log.log(Log.ERROR,this,"hey bob");
+			dot = lastDot;
+			lineNo = lastMatch;
+		}
+		else
+		{
+			Log.log(Log.ERROR,this,"d=" + dot + ",ld=" + lastDot
+				+ ",lml=" + lastMatchLen);
+
+			lastView = view;
+			lastBuffer = buffer;
+			lastDot = dot;
+			lastMatchLen = 0;
+		}
 
 		String line;
 
@@ -116,6 +135,12 @@ loop2:					for(int j = index + 1; j < lineLen; j++)
 							}
 						}
 					}
+
+					buffer.remove(dot - lastMatchLen,lastMatchLen);
+
+					lastMatch = i - 1;
+					lastMatchLen = wordEnd - (index + word.length());
+
 					textArea.setSelectedText(
 						line.substring(index +
 						word.length(),wordEnd));
@@ -127,8 +152,18 @@ loop2:					for(int j = index + 1; j < lineLen; j++)
 		{
 			Log.log(Log.ERROR,this,bl);
 		}
+
+		lastMatchLen = 0;
+
 		view.getToolkit().beep();
 	}
+
+	// private members
+	private View lastView;
+	private Buffer lastBuffer;
+	private int lastDot = -1;
+	private int lastMatchLen;
+	private int lastMatch = -1;
 
 	private int getIndexOfWord(String line, String word, String separators)
 	{

@@ -31,7 +31,6 @@ import java.awt.Color;
  */
 public class TextAreaDefaults
 {
-	private static InputHandler DEFAULT_INPUT_HANDLER;
 	private static TextAreaDefaults DEFAULTS;
 
 	public InputHandler inputHandler;
@@ -67,13 +66,8 @@ public class TextAreaDefaults
 		{
 			DEFAULTS = new TextAreaDefaults();
 
-			if(DEFAULT_INPUT_HANDLER == null)
-			{
-				DEFAULT_INPUT_HANDLER = new DefaultInputHandler();
-				DEFAULT_INPUT_HANDLER.addDefaultKeyBindings();
-			}
-
-			DEFAULTS.inputHandler = DEFAULT_INPUT_HANDLER;
+			DEFAULTS.inputHandler = new DefaultInputHandler();
+			DEFAULTS.inputHandler.addDefaultKeyBindings();
 			DEFAULTS.document = new SyntaxDocument();
 			DEFAULTS.editable = true;
 

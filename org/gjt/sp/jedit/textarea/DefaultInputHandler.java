@@ -156,6 +156,13 @@ public class DefaultInputHandler extends InputHandler
 	{
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
+
+		if(keyCode == KeyEvent.VK_CONTROL ||
+			keyCode == KeyEvent.VK_SHIFT ||
+			keyCode == KeyEvent.VK_ALT ||
+			keyCode == KeyEvent.VK_META)
+			return;
+
 		if((modifiers & ~KeyEvent.SHIFT_MASK) != 0
 			|| evt.isActionKey()
 			|| keyCode == KeyEvent.VK_BACK_SPACE
@@ -349,6 +356,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  1999/11/16 08:21:20  sp
+ * Various fixes, attempt at beefing up expand-abbrev
+ *
  * Revision 1.15  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

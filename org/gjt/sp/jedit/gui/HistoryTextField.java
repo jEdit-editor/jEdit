@@ -32,9 +32,16 @@ public class HistoryTextField extends JTextField
 {
 	public HistoryTextField(String name)
 	{
+		this(name,false);
+	}
+
+	public HistoryTextField(String name, boolean instantPopups)
+	{
 		historyModel = HistoryModel.getModel(name);
 		addKeyListener(new KeyHandler());
 		addMouseListener(new MouseHandler());
+
+		this.instantPopups = instantPopups;
 
 		index = -1;
 	}
@@ -56,8 +63,14 @@ public class HistoryTextField extends JTextField
 		return historyModel;
 	}
 
+	public void fireActionPerformed()
+	{
+		super.fireActionPerformed();
+	}
+
 	// private members
 	private HistoryModel historyModel;
+	private boolean instantPopups;
 	private String current;
 	private int index;
 
@@ -242,6 +255,11 @@ public class HistoryTextField extends JTextField
 				setText(historyModel.getItem(ind));
 				index = ind;
 			}
+			if(instantPopups)
+			{
+				addCurrentToHistory();
+				fireActionPerformed();
+			}
 		}
 	}
 
@@ -293,6 +311,9 @@ public class HistoryTextField extends JTextField
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  1999/11/16 08:21:20  sp
+ * Various fixes, attempt at beefing up expand-abbrev
+ *
  * Revision 1.29  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *
@@ -323,14 +344,5 @@ public class HistoryTextField extends JTextField
  *
  * Revision 1.20  1999/03/28 01:36:24  sp
  * Backup system overhauled, HistoryTextField updates
- *
- * Revision 1.19  1999/03/27 03:22:16  sp
- * Number of items in a history list can now be set
- *
- * Revision 1.18  1999/03/27 03:08:55  sp
- * Changed max number of items in history to 25 from 100
- *
- * Revision 1.17  1999/03/21 08:37:16  sp
- * Slimmer action system, history text field update
  *
  */

@@ -623,12 +623,12 @@ public class GUIUtilities
 	 * @param win The window
 	 * @param name The window name
 	 */
-	public static void loadGeometry(Window win, String name)
+	public static void loadGeometry(final Window win, String name)
 	{
 		if(!"on".equals(jEdit.getProperty("saveGeometry")))
 			return;
 
-		int x, y, width, height;
+		final int x, y, width, height;
 
 		try
 		{
@@ -656,6 +656,19 @@ public class GUIUtilities
 
 		win.setLocation(x,y);
 		win.setSize(width,height);
+
+		// workaround for broken Linux JDK
+		win.addWindowListener(new WindowAdapter()
+		{
+			public void windowOpened(WindowEvent evt)
+			{
+				System.out.println("hi");
+				win.setLocation(x,y);
+				win.setSize(width,height);
+
+				win.removeWindowListener(this);
+			}
+		});
 	}
 
 	/**
@@ -828,6 +841,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.40  1999/11/16 08:21:20  sp
+ * Various fixes, attempt at beefing up expand-abbrev
+ *
  * Revision 1.39  1999/11/09 10:14:33  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

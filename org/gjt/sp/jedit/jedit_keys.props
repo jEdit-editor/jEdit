@@ -109,12 +109,12 @@ clear-register.shortcut=C+r C+l
 paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x
 
-# C+e m
-play-last-macro.shortcut=C+e m l
-record-temp-macro.shortcut=C+e m m
-play-temp-macro.shortcut=C+e m p
-record-macro.shortcut=C+e m r
-stop-recording.shortcut=C+e m s
+# C+e C+m
+play-last-macro.shortcut=C+e C+m C+l
+record-temp-macro.shortcut=C+e C+m C+m
+play-temp-macro.shortcut=C+e C+m C+p
+record-macro.shortcut=C+e C+m C+r
+stop-recording.shortcut=C+e C+m C+s
 
 # Other keys
 indent-on-tab.shortcut=TAB

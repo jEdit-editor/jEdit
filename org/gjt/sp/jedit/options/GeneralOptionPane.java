@@ -117,13 +117,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"saveDesktop")));
 		addComponent(saveDesktop);
 
-		/* Save window geometry */
-		saveGeometry = new JCheckBox(jEdit.getProperty(
-			"options.general.saveGeometry"));
-		saveGeometry.getModel().setSelected("on".equals(jEdit.getProperty(
-			"saveGeometry")));
-		addComponent(saveGeometry);
-
 		/* Show toolbar */
 		showToolbar = new JCheckBox(jEdit.getProperty(
 			"options.general.showToolbar"));
@@ -144,8 +137,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
 		jEdit.setProperty("saveDesktop",saveDesktop.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("saveGeometry",saveGeometry.getModel()
 			.isSelected() ? "on" : "off");
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
@@ -189,7 +180,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
 	private JCheckBox saveDesktop;
-	private JCheckBox saveGeometry;
 	private JCheckBox showToolbar;
 	private JCheckBox showFullPath;
 }

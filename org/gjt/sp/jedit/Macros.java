@@ -359,7 +359,7 @@ public class Macros
 
 	static class BufferHandler extends BufferAdapter
 	{
-		public void bufferDirtyChanged(EditorEvent evt)
+		public void bufferDirtyChanged(BufferEvent evt)
 		{
 			if(evt.getBuffer().getPath().toLowerCase()
 				.endsWith(".macro"))
@@ -398,6 +398,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  1999/11/16 08:21:20  sp
+ * Various fixes, attempt at beefing up expand-abbrev
+ *
  * Revision 1.11  1999/11/10 10:43:01  sp
  * Macros can now have shortcuts, various miscallaneous updates
  *

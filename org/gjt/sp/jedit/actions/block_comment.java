@@ -45,21 +45,17 @@ public class block_comment extends EditAction
 			return;
 		}
 		comment = comment + ' ';
-		int selectionStart = textArea.getSelectionStart();
-		int selectionEnd = textArea.getSelectionEnd();
 		int startLine = textArea.getSelectionStartLine();
 		int endLine = textArea.getSelectionEndLine();
-		Element map = buffer.getDefaultRootElement();
 
 		buffer.beginCompoundEdit();
 
 		try
 		{
-			buffer.insertString(selectionStart,comment,null);
-			for(int i = startLine + 1; i <= endLine; i++)
+			for(int i = startLine; i <= endLine; i++)
 			{
-				buffer.insertString(map.getElement(i)
-					.getStartOffset(),comment,null);
+				buffer.insertString(textArea.getLineStartOffset(i),
+					comment,null);
 			}
 		}
 		catch(BadLocationException bl)

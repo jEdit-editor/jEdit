@@ -85,7 +85,7 @@ public abstract class InputHandler extends KeyAdapter
 		actions.put("delete",DELETE);
 		actions.put("delete-word",DELETE_WORD);
 		actions.put("end",END);
-		actions.put("select-end",END);
+		actions.put("select-end",SELECT_END);
 		actions.put("insert-break",INSERT_BREAK);
 		actions.put("insert-tab",INSERT_TAB);
 		actions.put("home",HOME);
@@ -1098,6 +1098,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/11/16 08:21:20  sp
+ * Various fixes, attempt at beefing up expand-abbrev
+ *
  * Revision 1.7  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

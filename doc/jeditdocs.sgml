@@ -3175,8 +3175,11 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
 {
         public EditAction(String name);
         public String getName();
+        public boolean isToggle();
+        public boolean isSelected(Component comp);
         public abstract void actionPerformed(ActionEvent evt);
         public static Buffer getBuffer(ActionEvent evt);
+        public static View getView(Component comp);
         public static View getView(ActionEvent evt);
 }</programlisting>
   <para>
@@ -3206,6 +3209,37 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
    jEdit's built-in actions have all-lower case names, with words
    separated by dashes (<quote>-</>). You should follow this convention
    in your own plugins, too.
+  </para>
+  <indexterm><primary>method</><secondary>isToggle() of EditAction class</></indexterm>
+  <bridgehead renderas=sect3>EditAction.isToggle() method</>
+  <funcsynopsis>
+   <funcprototype>
+    <funcdef>public void <function>isToggle</></funcdef>
+    <void>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method returns true if the action should be represented as a check
+   box menu item, false if it should be a normal menu item. By default, it
+   returns <command>false</>; override it to return <command>true</> if you
+   want the action to be a toggle.
+  </para>
+  <indexterm><primary>method</><secondary>isSelected() of EditAction class</></indexterm>
+  <bridgehead renderas=sect3>EditAction.isSelected() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import java.awt.Component;</>
+   <funcprototype>
+    <funcdef>public void <function>isToggle</></funcdef>
+    <paramdef>Component <parameter>comp</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method is only called if <function>isToggle()</> returns
+   <command>true</>. It should return if the menu item's check box should be
+   selected. <parameter>comp</> is the component performing the query;
+   if the menu item state is determined on a per-view basis, you can pass
+   the component to the <function>getView()</> method to obtain the
+   current view instance.
   </para>
   <indexterm><primary>method</><secondary>actionPerformed() of EditAction class</></indexterm>
   <bridgehead renderas=sect3>EditAction.actionPerformed() constructor</>

@@ -1,20 +1,28 @@
 JEDIT TO DO
 
+- Expand abbreviation sucks:
+  - > 1 match on one line doesn't work
+  - need to finish match cycling
 - Integrate EditBus if enough plugins take advantage of it. This will also
   mean that jEdit will be able to take advantage of EditBus stuff; for
   example, the buffers menu could display which buffers have errors
-- Do searching in a background thread. This will use the work request thread
-  - For it to be fast, these methods would have to be thread safe:
+- Do searching in a background thread. For it to work properly, the following
+  methods will need to be made thread-safe:
     - jEdit.openFile()
     - jEdit.closeBuffer()
     - jEdit.getBuffer()
     - View.setBuffer()
     - JEditTextArea.select()
+  XXX: what about macros? Macros invoking multiple search and replace
+  operations rely on the actions being synchronous...
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
 - Word wrap. True word-wrap would require significant changes to the text area,
   and would probably slow things down (think yToLine()). Maybe some sort of
   'soft wrap' that inserts newlines into the text could be implemented instead?
+- Enhanced printing:
+  - print selection only
+  - print line numbers option
 
 ------- Installer -------
 
@@ -25,11 +33,21 @@ JEDIT TO DO
 ------- Ideas for plugins -------
 
 - Version control
-- Project manager
-- Application/applet/plugin wizard
 - Localizations for specific languages
 - Generic EditBus-aware plugin for invoking other programs inside the JVM
 - Debugger front-end
-- VI emulation
+- VI key binding emulation
 - Menu bar/right-click context menu/toolbar editor
 - Spelling checker
+- BeanShell is REALLY nifty! Wrap it in a plugin
+  - Use EditBus: supports execution from console, error list, etc
+  - One interpreter per view
+  - It should be possible to write entire plugins in BeanShell. Eg:
+    class SomePlugin extends BeanShellPlugin
+    {
+      public SomePlugin()
+      {
+        super("SomePlugin.bsh");
+      }
+    }
+    Where SomePlugin.bsh has all the code.
