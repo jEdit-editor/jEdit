@@ -1,10 +1,6 @@
 TO DO
 
-+ before 3.2final:
-
-- formatting problems in user's guide in table cells
-
-+ next major release (4.0):
++ features:
 
 - Jext-style undo to replace CaretUndo crap
 - select-* actions: add to selection in multi-select mode
@@ -127,6 +123,7 @@ TO DO
 .
 + bugs:
 
+- formatting problems in user's guide in table cells
 - finish persistent splits code
 - complete word: keys to navigate don't work with some Java versions
 - don't do #save# stuff if destination directory is not writeable

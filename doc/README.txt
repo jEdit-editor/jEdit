@@ -59,10 +59,10 @@ our bug tracker, located at <http://www.jedit.org/index.php?page=bugs>.
 When writing a bug report, please try to be as specific as possible. You
 should specify your jEdit version, Java version, operating system, any
 relevant output from the activity log, and an e-mail address, in case we
-need further information to fix the bug.
+need further information from you to fix the bug.
 
-The 'Make Bug Report' macro included with jEdit (can be found in
-Macros->Misc) might be useful when preparing a bug report.
+The 'Make Bug Report' macro included with jEdit, which can be found in
+Macros->Misc, might be useful when preparing a bug report.
 
 If you would like to discuss the BeanShell scripting language,
 subscribe to one of the BeanShell mailing lists by visiting
@@ -73,7 +73,7 @@ You may also contact me directly by e-mailing <slava@jedit.org>.
 * Common problems
 
 Before reporting a problem with jEdit, please make sure it is not
-actually a Java bug, or a well-known problem.
+actually a Java bug, or a well-known problem:
 
 - If you get an OutOfMemoryError while editing a large file, even if
   your computer has a large amount of RAM present, increase the Java
@@ -202,6 +202,7 @@ Denis Lambot:       - Selecting files from the keyboard in the file
                       system browser
 Dirk Moebius:       - HTTP firewall plugin
                     - Improved shortcuts option pane
+		    - Improved history text fields
                     - EditorExitRequested message code
                     - VariableGridLayout code
                     - Show Free Memory macro
@@ -213,8 +214,8 @@ Ian Maclean:        - Ruby edit mode
 Jason Ginchereau:   - Portions of QuickFile plugin are used in file
                       system browser
 Jerry McBride:      - NetRexx edit mode
-John Gellene:       - Writing macros section of user's guide
-                    - Writing plugins section of user's guide
+John Gellene:       - 'Writing macros' section of user's guide
+                    - 'Writing plugins' section of user's guide
                     - jEditLauncher for Windows
                     - A large number of sample macros
                     - ... and more
@@ -227,7 +228,7 @@ Matt Albrecht:      - Inform edit mode
 Matt Price:         - Visual Foxpro edit mode
 Matthias Schneider: - AWK, COBOL edit modes
 Michael Jacobson:   - TCL edit mode
-Mike Dillon:        - XMode syntax highlighting engine
+Mike Dillon:        - Syntax highlighting engine ("XMode")
                     - Gutter
                     - New options dialog box
                     - Faster literal search

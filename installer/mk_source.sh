@@ -15,4 +15,5 @@ cd ..
 tar cvfz jedit${1}source.tar.gz `find jEdit -type f \! \( -name Entries \
 	-o -name Root -o -name Entries.Static -o -name Repository \
 	-o -name \*.class -o -name \*.jar -o -name .\*.marks -o -name .xvpics \
-	-o -name \*.exe -o -name \*.dll -o -name \*.dl_ \)`
+	-o -name \*.exe -o -name \*.dll -o -name \*.dl_ \
+	-o -name \*.spec \)`

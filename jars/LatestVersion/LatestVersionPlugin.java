@@ -85,6 +85,6 @@ public class LatestVersionPlugin extends EditPlugin
 			args,JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
 
 		if(result == JOptionPane.YES_OPTION)
-			jEdit.openFile(view,null,url.toString(),true,false);
+			jEdit.openFile(view,url.toString());
 	}
 }

@@ -8,6 +8,7 @@ JEDIT 3.2 VERSION HISTORY
 - Changes to BeanShellAction to improve performance
 - jedit.spec file for creating RPM improved (Mike Dillon)
 - Documentation changes (John Gellene)
+- jEditLauncher updates (John Gellene)
 
 + Bug Fixes
 

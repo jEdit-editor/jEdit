@@ -135,8 +135,7 @@
         <para>
           The option <userinput>/u</userinput> will cause jEditLauncher
           to be uninstalled by removing its registry entries.
-          This option currently does not delete any jEditLauncher or
-          jEdit files.
+          This option does not delete any jEditLauncher or jEdit files.
         </para>
       </listitem>
     </itemizedlist>
