@@ -187,8 +187,10 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.currentLineColor");
 		addColorChoice("options.styles.gutterMarkerColor",
 			"view.gutter.markerColor");
-		addColorChoice("options.styles.gutterBorderColor",
-			"view.gutter.borderColor");
+		addColorChoice("options.styles.gutterFocusBorderColor",
+			"view.gutter.focusBorderColor");
+		addColorChoice("options.styles.gutterNoFocusBorderColor",
+			"view.gutter.noFocusBorderColor");
 	}
 
 	public int getColumnCount()
@@ -581,6 +583,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/07/12 09:11:38  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.17  2000/06/03 07:28:26  sp
  * User interface updates, bug fixes
  *

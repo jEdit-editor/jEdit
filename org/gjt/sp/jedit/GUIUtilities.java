@@ -132,19 +132,39 @@ public class GUIUtilities
 		if(menuitem == null)
 		{
 			menuitem = new MenuItemModel(name);
-			menus.put(name,menuitem);
+			if(!menuitem.isTransient())
+				menus.put(name,menuitem);
 		}
 		return menuitem;
 	}
 
 	/**
 	 * Creates a menu item.
-	 * @param view The view to load the menu for
+	 * @param name The menu item name
+	 * @since jEdit 3.0pre1
+	 */
+	public static JMenuItem loadMenuItem(String name)
+	{
+		// 'view' parameter is 'null' because MenuItemModel
+		// doesn't use it.
+
+		// ... but create() still needs a 'view' parameter
+		// because MenuModel (which subclasses MenuItemModel)
+		// needs it.
+		return loadMenuItemModel(name).create(null);
+	}
+
+	/**
+	 * @deprecated If you are writing a plugin that specifically
+	 * targets jEdit 3.0 or later, you should use the
+	 * <code>loadMenuItem()</code> method that doesn't take
+	 * the <code>view</code> parameter.
+	 * @param view Unused
 	 * @param name The menu item name
 	 */
 	public static JMenuItem loadMenuItem(View view, String name)
 	{
-		return loadMenuItemModel(name).create(view);
+		return loadMenuItem(name);
 	}
 
 	/**
@@ -762,6 +782,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.68  2000/07/12 09:11:37  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.67  2000/06/29 06:20:45  sp
  * Tool bar icon code bug fix
  *

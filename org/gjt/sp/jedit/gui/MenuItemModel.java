@@ -32,21 +32,32 @@ public class MenuItemModel
 	{
 		this.name = name;
 
+		String actionName;
 		int index = name.indexOf('@');
 		if(index != -1)
 		{
 			arg = name.substring(index+1);
-			action = jEdit.getAction(name.substring(0,index));
+			actionName = name.substring(0,index);
 		}
 		else
 		{
 			arg = null;
+			actionName = name;
 			action = jEdit.getAction(name);
 		}
+		action = jEdit.getAction(actionName);
 
-		label = jEdit.getProperty(name.concat(".label"));
-		if(label == null)
-			label = name;
+		if(actionName.equals("play-macro"))
+		{
+			index = arg.lastIndexOf('/');
+			label = arg.substring(index + 1).replace('_',' ');
+		}
+		else
+		{
+			label = jEdit.getProperty(name.concat(".label"));
+			if(label == null)
+				label = name;
+		}
 
 		index = label.indexOf('$');
 		if(index != -1 && label.length() - index > 1)
@@ -57,7 +68,7 @@ public class MenuItemModel
 		else
 			mnemonic = '\0';
 
-		// stuff for createButton();
+		// stuff for createButton():
 		String iconName = jEdit.getProperty(name + ".icon");
 		if(iconName != null)
 		{
@@ -69,6 +80,12 @@ public class MenuItemModel
 		}
 	}
 
+	// note that the 'view' parameter is unused by MenuItemModel
+	// and is only there so that subclassing by MenuModel will work.
+	// It may go away in the future (and in fact the entire
+	// Menu*Model API might change; plugins shouldn't call it
+	// directly, and instead use the wrapper methods in the
+	// GUIUtilities class).
 	public JMenuItem create(View view)
 	{
 		return create(view,true);
@@ -85,7 +102,7 @@ public class MenuItemModel
 		if(action != null && action.isToggle())
 			mi = new EnhancedCheckBoxMenuItem(label,action,arg);
 		else
-			mi = new EnhancedMenuItem(label,null,action,arg);
+			mi = new EnhancedMenuItem(label,action,arg);
 
 		if(setMnemonic && mnemonic != '\0')
 			mi.setMnemonic(mnemonic);
@@ -96,6 +113,22 @@ public class MenuItemModel
 	public EnhancedButton createButton()
 	{
 		return new EnhancedButton(icon,toolTip,action,arg);
+	}
+
+	/**
+	 * Some menu item models, such as macros, come and go, and should
+	 * not be cached.
+	 * @since jEdit 3.0pre1
+	 */
+	public boolean isTransient()
+	{
+		if(action == null)
+			return false;
+
+		if(action.getName().equals("play-macro"))
+			return true;
+		else
+			return false;
 	}
 
 	// protected members
@@ -111,6 +144,9 @@ public class MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/07/12 09:11:38  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.11  2000/06/29 06:20:45  sp
  * Tool bar icon code bug fix
  *

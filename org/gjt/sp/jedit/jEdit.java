@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.05.99.00";
+		return "03.00.01.00";
 	}
 
 	/**
@@ -2289,6 +2289,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.252  2000/07/12 09:11:38  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.251  2000/07/03 03:32:16  sp
  * *** empty log message ***
  *

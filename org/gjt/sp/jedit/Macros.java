@@ -27,7 +27,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
@@ -51,32 +51,58 @@ public class Macros
 	 */
 	public static void loadMacros()
 	{
-		macros = new Vector();
+		macroList = new Vector();
+		macroHierarchy = new Vector();
+		macrosHash = new Hashtable();
 
-		loadMacros(macros,"",new File(MiscUtilities.constructPath(
+		loadMacros(macroHierarchy,"",new File(MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"macros")));
 
 		String settings = jEdit.getSettingsDirectory();
 
 		if(settings != null)
 		{
-			loadMacros(macros,"",new File(MiscUtilities.constructPath(
+			loadMacros(macroHierarchy,"",new File(MiscUtilities.constructPath(
 				settings,"macros")));
 		}
+
+		// sort macro list
+		MiscUtilities.quicksort(macroList,new MiscUtilities.StringICaseCompare());
 
 		EditBus.send(new MacrosChanged(null));
 	}
 
 	/**
-	 * Returns a vector with all known macros in it. Each element of
-	 * this vector is either a Macro instance, or another vector.
-	 * If it is a vector, the first element is a string label, the
-	 * rest are again, either Macro instances or vectors.
-	 * @since jEdit 2.2pre4
+	 * Returns a vector hierarchy with all known macros in it.
+	 * Each element of this vector is either a macro name string,
+	 * or another vector. If it is a vector, the first element is a
+	 * string label, the rest are again, either macro name strings
+	 * or vectors.
+	 * @since jEdit 3.0pre1
 	 */
-	public static Vector getMacros()
+	public static Vector getMacroHierarchy()
 	{
-		return macros;
+		return macroHierarchy;
+	}
+
+	/**
+	 * Returns a single vector with all known macros in it. Each
+	 * element of this vector is a macro name string.
+	 * @since jEdit 3.0pre1
+	 */
+	public static Vector getMacroList()
+	{
+		return macroList;
+	}
+
+	/**
+	 * Returns the macro with the specified name.
+	 * @param macro The macro's name
+	 * @since jEdit 3.0pre1
+	 */
+	public static Macro getMacro(String macro)
+	{
+		return (Macro)macrosHash.get(macro);
 	}
 
 	/**
@@ -85,17 +111,15 @@ public class Macros
 	 */
 	public static class Macro
 	{
-		public String label;
 		public String name;
 		public String path;
 
-		public Macro(String label, String name, final String path)
+		public Macro(String name, final String path)
 		{
-			this.label = label;
 			this.name = name;
 			this.path = path;
 
-			String binding = jEdit.getProperty(name + ".shortcut");
+			String binding = jEdit.getProperty("play-macro@" + name + ".shortcut");
 			if(binding != null)
 			{
 				final EditAction action = jEdit.getAction("play-macro");
@@ -120,7 +144,7 @@ public class Macros
 		// for debugging
 		public String toString()
 		{
-			return label + ":" + name + ":" + path;
+			return name + ":" + path;
 		}
 	}
 
@@ -249,7 +273,9 @@ public class Macros
 	}
 
 	// private members
-	private static Vector macros;
+	private static Vector macroList;
+	private static Vector macroHierarchy;
+	private static Hashtable macrosHash;
 	private static String lastMacro;
 
 	private static void loadMacros(Vector vector, String path, File directory)
@@ -262,19 +288,22 @@ public class Macros
 
 		for(int i = 0; i < macroFiles.length; i++)
 		{
-			String name = macroFiles[i];
-			File file = new File(directory,name);
-			if(name.toLowerCase().endsWith(".macro"))
+			String fileName = macroFiles[i];
+			File file = new File(directory,fileName);
+			if(fileName.toLowerCase().endsWith(".macro"))
 			{
-				String label = name.substring(0,name.length() - 6);
-				vector.addElement(new Macro(label.replace('_',' '),
-					path + label,file.getPath()));
+				String label = fileName.substring(0,fileName.length() - 6);
+				String name = path + label;
+				Macro newMacro = new Macro(name,file.getPath());
+				macrosHash.put(name,newMacro);
+				vector.addElement(name);
+				macroList.addElement(name);
 			}
 			else if(file.isDirectory())
 			{
 				Vector submenu = new Vector();
-				submenu.addElement(name);
-				loadMacros(submenu,path + name + '/',file);
+				submenu.addElement(fileName);
+				loadMacros(submenu,path + fileName + '/',file);
 				vector.addElement(submenu);
 			}
 		}
@@ -468,6 +497,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/07/12 09:11:38  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.28  2000/06/04 08:57:35  sp
  * GUI updates, bug fixes
  *
@@ -491,11 +523,5 @@ public class Macros
  *
  * Revision 1.21  2000/04/14 11:57:38  sp
  * Text area actions moved to org.gjt.sp.jedit.actions package
- *
- * Revision 1.20  2000/04/01 12:21:27  sp
- * mode cache implemented
- *
- * Revision 1.19  1999/12/19 11:14:28  sp
- * Static abbrev expansion started
  *
  */

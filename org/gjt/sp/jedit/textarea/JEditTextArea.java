@@ -1998,6 +1998,10 @@ public class JEditTextArea extends JComponent
 		{
 			setCaretVisible(true);
 			focusedComponent = JEditTextArea.this;
+
+			// repaint the gutter so that the border color
+			// reflects the focus state
+			gutter.updateBorder();
 		}
 
 		public void focusLost(FocusEvent evt)
@@ -2006,6 +2010,10 @@ public class JEditTextArea extends JComponent
 			// so that caret undos use the most recently
 			// focused text area
 			//focusedComponent = null;
+
+			// repaint the gutter so that the border color
+			// reflects the focus state
+			gutter.updateBorder();
 		}
 	}
 
@@ -2184,6 +2192,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.71  2000/07/12 09:11:38  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.70  2000/06/24 06:24:55  sp
  * work thread bug fixes
  *

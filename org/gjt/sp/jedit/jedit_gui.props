@@ -78,23 +78,13 @@ view.context=undo redo - cut copy paste paste-previous - select-all \
 	split-horizontal split-vertical - record-temp-macro \
 	stop-recording play-temp-macro
 
-view.gutter.context=toggle-gutter toggle-line-numbers - save-gutter-size
+view.gutter.context=toggle-gutter toggle-line-numbers save-gutter-size
 save-gutter-size.label=Save Gutter Size
 
 ###
 ### MENUBAR
 ###
-view.mbar=buffers file edit search utils macros plugins help-menu
-
-### Buffers menu
-buffers=prev-buffer \
-	next-buffer \
-	recent-buffer \
-	-
-buffers.label=$Buffers
-prev-buffer.label=Go to $Previous Buffer
-next-buffer.label=Go to $Next Buffer
-recent-buffer.label=Go to $Last Edited Buffer
+view.mbar=file edit search view utils macros plugins help-menu
 
 ### File menu
 file=new-file \
@@ -161,8 +151,6 @@ edit=undo \
      goto-line \
      select-line-range \
      - \
-     repeat \
-     - \
      %select \
      %line \
      %paragraph \
@@ -182,7 +170,6 @@ complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
 goto-line.label=$Go to Line...
 select-line-range.label=$Select Line Range...
-repeat.label=Repea$t Next Command
 
 ### Selection menu
 select=select-word \
@@ -327,18 +314,44 @@ no-markers.label=No Markers Defined
 prev-marker.label=Go to $Previous Marker
 next-marker.label=Go to $Next Marker
 
+### View menu
+
+view=new-view \
+     close-view \
+     - \
+     unsplit \
+     split-horizontal \
+     split-vertical \
+     prev-split \
+     next-split \
+     - \
+     toggle-gutter \
+     toggle-line-numbers \
+     save-gutter-size \
+     - \
+     prev-buffer \
+     next-buffer \
+     recent-buffer \
+     %buffers
+view.label=$View
+new-view.label=$New View
+close-view.label=$Close View
+split-horizontal.label=Split $Horizontally
+split-vertical.label=Split $Vertically
+unsplit.label=$Unsplit
+prev-split.label=Go to Previous Split
+next-split.label=Go to Next Split
+toggle-gutter.label=$Gutter Expanded
+toggle-line-numbers.label=$Line Numbering
+prev-buffer.label=Go to Previous Buffer
+next-buffer.label=Go to Next Buffer
+recent-buffer.label=Go to Last $Edited Buffer
+
+### Buffers menu
+buffers.label=Current $Buffer
+
 ### Utilities menu
-utils=new-view \
-      close-view \
-      - \
-      unsplit \
-      split-horizontal \
-      split-vertical \
-      prev-split \
-      next-split \
-      - \
-      toggle-gutter \
-      toggle-line-numbers \
+utils=repeat \
       - \
       load-session \
       save-session \
@@ -350,21 +363,13 @@ utils=new-view \
       - \
       reload-modes
 utils.label=$Utilities
+repeat.label=$Repeat Next Command
 load-session.label=$Load Session...
 save-session.label=$Save Session...
-new-view.label=$New View
-close-view.label=$Close View
-split-horizontal.label=Split $Horizontally
-split-vertical.label=Split $Vertically
-unsplit.label=Uns$plit
-prev-split.label=Go to P$revious Split
-next-split.label=Go to N$ext Split
-toggle-gutter.label=Gutter E$xpanded
-toggle-line-numbers.label=Line Nu$mbering
 log-viewer.label=$Activity Log...
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
-reload-modes.label=Rel$oad Edit Modes
+reload-modes.label=Reloa$d Edit Modes
 
 ### Macros menu
 macros=record-macro \
@@ -407,7 +412,7 @@ help-menu.label=$Help
 about.label=About jEdit...
 help.label=jEdit User Guide
 help@README.txt.label=jEdit Read Me
-help@NEWS.txt.label=Major Changes in jEdit 2.5
+help@NEWS.txt.label=Major Changes in jEdit 3.0
 help@CHANGES.txt.label=Version History
 help@COPYING.txt.label=GNU General Public License
 
@@ -653,6 +658,10 @@ record.message=Macro name:
 macro-error.title=Macro Error
 macro-error.message=Unknown action "{2}" while executing macro {0}\n\
 	(line {1}).
+
+# Macro not found dialog
+macro-not-found.title=Macro Not Found
+macro-not-found.message=Macro "{0}" does not exist.
 
 # Some features don't work with -nosettings dialog
 no-settings.title=Feature Disabled
@@ -949,7 +958,8 @@ options.styles.gutterFgColor=Gutter foreground
 options.styles.gutterHighlightColor=Gutter highlight
 options.styles.gutterCurrentLineColor=Gutter current line
 options.styles.gutterMarkerColor=Gutter markers
-options.styles.gutterBorderColor=Gutter border
+options.styles.gutterFocusBorderColor=Focused gutter border
+options.styles.gutterNoFocusBorderColor=Unfocused gutter border
 options.styles.comment1Style=Comment 1
 options.styles.comment2Style=Comment 2
 options.styles.literal1Style=Literal 1
@@ -986,10 +996,11 @@ options.toolbar.moveDown=Move Down
 options.toolbar.add.title=Add Item
 options.toolbar.add.caption=Add to tool bar:
 options.toolbar.add.separator=Separator
-options.toolbar.add.action=Command:\ 
+options.toolbar.add.action=Command:
+options.toolbar.add.macro=Macro:
 options.toolbar.add.icon=Icon:
-options.toolbar.add.builtin=Built in:\ 
-options.toolbar.add.file=From file:\ 
+options.toolbar.add.builtin=Use built-in icon:
+options.toolbar.add.file=Load icon from file:
 options.toolbar.add.choose=Choose
 options.toolbar.add.no-icon=No icon selected
 
@@ -1002,7 +1013,8 @@ options.context.moveDown=Move Down
 options.context.add.title=Add Item
 options.context.add.caption=Add to context menu:
 options.context.add.separator=Separator
-options.context.add.action=Command:\ 
+options.context.add.action=Command:
+options.context.add.macro=Macro:
 
 options.keys.name=Command
 options.keys.binding=Keyboard shortcut

@@ -156,6 +156,8 @@ public class View extends JFrame implements EBComponent
 				public void run()
 				{
 					editPane.focusOnTextArea();
+					editPane.getTextArea().getGutter()
+						.updateBorder();
 				}
 			});
 		}
@@ -191,6 +193,8 @@ public class View extends JFrame implements EBComponent
 			public void run()
 			{
 				editPane.focusOnTextArea();
+				editPane.getTextArea().getGutter()
+					.updateBorder();
 			}
 		});
 	}
@@ -520,6 +524,7 @@ public class View extends JFrame implements EBComponent
 			return;
 		}
 
+/*
 		// Because the buffers menu contains normal items as
 		// well as dynamically-generated stuff, we are careful
 		// to only remove the dynamic crap here...
@@ -530,14 +535,15 @@ public class View extends JFrame implements EBComponent
 			else
 				buffers.remove(i);
 		}
+*/
+		buffers.removeAll();
 
 		Buffer[] bufferArray = jEdit.getBuffers();
 		ButtonGroup grp = new ButtonGroup();
 		for(int i = 0; i < bufferArray.length; i++)
 		{
 			Buffer b = bufferArray[i];
-			String name = b.getPath();
-			Object[] args = { name,
+			Object[] args = { b.getName(),
 				new Integer(b.isReadOnly() ? 1: 0),
 				new Integer(b.isDirty() ? 1 : 0),
 				new Integer(b.isNewFile() ? 1 : 0) };
@@ -546,7 +552,7 @@ public class View extends JFrame implements EBComponent
 					"view.buffer-label",args));
 			menuItem.addActionListener(jEdit.getAction("select-buffer"));
 			grp.add(menuItem);
-			menuItem.setActionCommand(name);
+			menuItem.setActionCommand(b.getPath());
 			if(editPane.getBuffer() == b)
 				menuItem.getModel().setSelected(true);
 			buffers.add(menuItem);
@@ -567,18 +573,17 @@ public class View extends JFrame implements EBComponent
 		Vector markers = editPane.getBuffer().getMarkers();
 		if(markers.size() == 0)
 		{
-			clearMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
-			gotoMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
+			clearMarker.add(GUIUtilities.loadMenuItem("no-markers"));
+			gotoMarker.add(GUIUtilities.loadMenuItem("no-markers"));
 			return;
 		}
 		for(int i = 0; i < markers.size(); i++)
 		{
 			String name = ((Marker)markers.elementAt(i)).getName();
 			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
-				null,clearMarkerAction,name);
+				clearMarkerAction,name);
 			clearMarker.add(menuItem);
-			menuItem = new EnhancedMenuItem(name,null,
-				gotoMarkerAction,name);
+			menuItem = new EnhancedMenuItem(name,gotoMarkerAction,name);
 			gotoMarker.add(menuItem);
 		}
 	}
@@ -770,11 +775,10 @@ public class View extends JFrame implements EBComponent
 			String name = vfs.getName();
 			String label = jEdit.getProperty("vfs." + name
 				+ ".label");
-			EnhancedMenuItem emi = new EnhancedMenuItem(
-				label,null,openFromAction,name);
+			EnhancedMenuItem emi = new EnhancedMenuItem(label,
+				openFromAction,name);
 			openFromItems.addElement(emi);
-			emi = new EnhancedMenuItem(
-				label,null,saveToAction,name);
+			emi = new EnhancedMenuItem(label,saveToAction,name);
 			saveToItems.addElement(emi);
 		}
 
@@ -798,14 +802,14 @@ public class View extends JFrame implements EBComponent
 		String[] recentArray = jEdit.getRecent();
 		if(recentArray.length == 0)
 		{
-			recent.add(GUIUtilities.loadMenuItem(this,"no-recent"));
+			recent.add(GUIUtilities.loadMenuItem("no-recent"));
 			return;
 		}
 		for(int i = 0; i < recentArray.length; i++)
 		{
 			String path = recentArray[i];
 			EnhancedMenuItem menuItem = new EnhancedMenuItem(path,
-				null,action,path);
+				action,path);
 			recent.add(menuItem);
 		}
 	}
@@ -828,29 +832,22 @@ public class View extends JFrame implements EBComponent
 
 		int count = macros.getMenuComponentCount();
 
-		Vector macroVector = Macros.getMacros();
+		Vector macroVector = Macros.getMacroHierarchy();
 		createMacrosMenu(macros,macroVector,0);
 
 		if(count == macros.getMenuComponentCount())
-			macros.add(GUIUtilities.loadMenuItem(this,"no-macros"));
+			macros.add(GUIUtilities.loadMenuItem("no-macros"));
 	}
 
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
-		EditAction action = jEdit.getAction("play-macro");
-
 		for(int i = start; i < vector.size(); i++)
 		{
 			Object obj = vector.elementAt(i);
-			if(obj instanceof Macros.Macro)
+			if(obj instanceof String)
 			{
-				Macros.Macro macro = (Macros.Macro)obj;
-				String label = macro.label;
-				String path = macro.path;
-				EnhancedMenuItem menuItem = new EnhancedMenuItem(
-					label,jEdit.getProperty(macro.name + ".shortcut"),
-					action,path);
-				menu.add(menuItem);
+				menu.add(GUIUtilities.loadMenuItem(
+					"play-macro@" + obj));
 			}
 			else if(obj instanceof Vector)
 			{
@@ -861,7 +858,7 @@ public class View extends JFrame implements EBComponent
 				if(submenu.getMenuComponentCount() == 0)
 				{
 					submenu.add(GUIUtilities.loadMenuItem(
-						this,"no-macros"));
+						"no-macros"));
 				}
 				menu.add(submenu);
 			}
@@ -898,7 +895,7 @@ public class View extends JFrame implements EBComponent
 
 		if(pluginMenus.isEmpty() && pluginMenuItems.isEmpty())
 		{
-			plugins.add(GUIUtilities.loadMenuItem(this,"no-plugins"));
+			plugins.add(GUIUtilities.loadMenuItem("no-plugins"));
 			return;
 		}
 
@@ -939,7 +936,7 @@ public class View extends JFrame implements EBComponent
 				if(label != null && docsURL != null)
 				{
 					help.add(new EnhancedMenuItem(label,
-						null,action,docsURL.toString()));
+						action,docsURL.toString()));
 				}
 			}
 		}
@@ -1047,6 +1044,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.182  2000/07/12 09:11:38  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.181  2000/07/03 03:32:15  sp
  * *** empty log message ***
  *

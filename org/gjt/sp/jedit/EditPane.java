@@ -369,7 +369,9 @@ public class EditPane extends JPanel implements EBComponent
 			int width = Integer.parseInt(jEdit.getProperty(
 				"view.gutter.borderWidth"));
 			gutter.setBorder(width, GUIUtilities.parseColor(
-				jEdit.getProperty("view.gutter.borderColor")),
+				jEdit.getProperty("view.gutter.focusBorderColor")),
+				GUIUtilities.parseColor(jEdit.getProperty(
+				"view.gutter.noFocusBorderColor")),
 				textArea.getPainter().getBackground());
 		}
 		catch(NumberFormatException nf)
@@ -479,7 +481,22 @@ public class EditPane extends JPanel implements EBComponent
 		myGutter.setCurrentLineHighlightEnabled(gutter.isCurrentLineHighlightEnabled());
 		myGutter.setLineNumberAlignment(gutter.getLineNumberAlignment());
 		myGutter.setFont(gutter.getFont());
-		myGutter.setBorder(gutter.getBorder());
+
+		try
+		{
+			int width = Integer.parseInt(jEdit.getProperty(
+				"view.gutter.borderWidth"));
+			myGutter.setBorder(width, GUIUtilities.parseColor(
+				jEdit.getProperty("view.gutter.focusBorderColor")),
+				GUIUtilities.parseColor(jEdit.getProperty(
+				"view.gutter.noFocusBorderColor")),
+				gutter.getBackground());
+		}
+		catch(NumberFormatException nf)
+		{
+			// retain the default border
+		}
+
 		myGutter.setBackground(gutter.getBackground());
 		myGutter.setForeground(gutter.getForeground());
 		myGutter.setHighlightedForeground(gutter.getHighlightedForeground());
@@ -584,6 +601,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/07/12 09:11:37  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.7  2000/06/24 03:46:48  sp
  * VHDL mode, bug fixing
  *

@@ -1,6 +1,6 @@
 /*
  * play_macro.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,15 @@ public class play_macro extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		String macro = evt.getActionCommand();
+		String macroName = evt.getActionCommand();
+
+		Macros.Macro macro = Macros.getMacro(macroName);
+		if(macro == null)
+		{
+			String[] args = { macroName };
+			GUIUtilities.error(view,"macro-not-found",args);
+			return;
+		}
 
 		// This hackery is necessary to prevent actions inside the
 		// macro from picking up the repeat count
@@ -39,7 +47,7 @@ public class play_macro extends EditAction
 
 		for(int i = repeatCount - 1; i >= 0; i--)
 		{
-			Macros.playMacro(view,macro);
+			Macros.playMacro(view,macro.path);
 		}
 	}
 

@@ -158,8 +158,9 @@ view.gutter.currentLineColor=#d04040
 # Gutter marker highlight color
 view.gutter.markerColor=#ccffcc
 
-# Gutter border color
-view.gutter.borderColor=#808080
+# Gutter border colors
+view.gutter.focusBorderColor=#d04040
+view.gutter.noFocusBorderColor=#808080
 
 # Gutter font name
 view.gutter.font=Monospaced
@@ -175,7 +176,7 @@ view.gutter.fontsize=10
 view.gutter.width=40
 
 # Gutter border width
-view.gutter.borderWidth=4
+view.gutter.borderWidth=2
 
 # Gutter collapsed/expanded by default
 view.gutter.collapsed=true

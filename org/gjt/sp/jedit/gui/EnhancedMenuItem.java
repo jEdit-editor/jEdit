@@ -1,6 +1,6 @@
 /*
  * EnhancedMenuItem.java - Menu item with user-specified accelerator string
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,23 +34,26 @@ public class EnhancedMenuItem extends JMenuItem
 	 * Creates a new menu item. Most plugins should call
 	 * GUIUtilities.loadMenuItem() instead.
 	 * @param label The menu item label
-	 * @param keyBinding The key binding
 	 * @param action The edit action
 	 * @param actionCommand The action command
 	 */
-	public EnhancedMenuItem(String label, String keyBinding,
-		EditAction action, String actionCommand)
+	public EnhancedMenuItem(String label, EditAction action, String actionCommand)
 	{
 		super(label);
 
-		this.keyBinding = keyBinding;
 		this.action = action;
 
 		if(action != null)
 		{
 			setEnabled(true);
 			addActionListener(action);
-			keyBindingProp = action.getName() + ".shortcut";
+			if(actionCommand == null)
+				keyBindingProp = action.getName() + ".shortcut";
+			else
+			{
+				keyBindingProp = action.getName() + "@"
+					+ actionCommand + ".shortcut";
+			}
 		}
 		else
 			setEnabled(false);
@@ -102,7 +105,6 @@ public class EnhancedMenuItem extends JMenuItem
 	}
 
 	// private members
-	private String keyBinding;
 	private String keyBindingProp;
 	private EditAction action;
 	private static Font acceleratorFont;
@@ -113,10 +115,8 @@ public class EnhancedMenuItem extends JMenuItem
 	{
 		if(action == null)
 			return null;
-		else if(keyBinding == null && getActionCommand() == null)
-			return jEdit.getProperty(keyBindingProp);
 		else
-			return keyBinding;
+			return jEdit.getProperty(keyBindingProp);
 	}
 
 	static

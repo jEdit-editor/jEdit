@@ -1,6 +1,6 @@
 /*
  * MacroShortcutsOptionPane.java - Macro shortcuts options panel
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,36 +48,26 @@ public class MacroShortcutsOptionPane extends ShortcutsOptionPane
 	protected Vector createBindings()
 	{
 		Vector bindings = new Vector();
-		Vector macros = Macros.getMacros();
+		Vector macroList = Macros.getMacroList();
 
-		addMacroBindings(macros,bindings);
+		for(int i = 0; i < macroList.size(); i++)
+		{
+			String name = (String)macroList.elementAt(i);
+			String actionName = "play-macro@" + name;
+			bindings.addElement(new KeyBinding(actionName,name,
+				jEdit.getProperty(actionName + ".shortcut")));
+		}
 
 		return bindings;
-	}
-
-	private void addMacroBindings(Vector macros, Vector bindings)
-	{
-		for(int i = 0; i < macros.size(); i++)
-		{
-			Object obj = macros.elementAt(i);
-			if(obj instanceof Macros.Macro)
-			{
-				Macros.Macro macro = (Macros.Macro)obj;
-				bindings.addElement(new KeyBinding(macro.name,
-					macro.name,
-					jEdit.getProperty(macro.name + ".shortcut")));
-			}
-			else if(obj instanceof Vector)
-			{
-				addMacroBindings((Vector)obj,bindings);
-			}
-		}
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/07/12 09:11:38  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.3  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

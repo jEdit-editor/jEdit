@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.options;
 
+import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -74,21 +75,19 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		{
 			String actionName = (String)st.nextToken();
 
+			String label = ContextOptionPane.getActionLabel(actionName);
+			if(label == null)
+				continue;
+
 			Icon icon;
-			String label;
 			String iconName;
 			if(actionName.equals("-"))
 			{
-				label = "-";
 				iconName = null;
 				icon = null;
 			}
 			else
 			{
-				label = jEdit.getProperty(actionName + ".label");
-				if(label == null)
-					continue;
-
 				iconName = jEdit.getProperty(actionName + ".icon");
 				if(iconName == null)
 					continue;
@@ -106,19 +105,26 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		add(BorderLayout.CENTER,new JScrollPane(list));
 
 		JPanel buttons = new JPanel();
+		buttons.setBorder(new EmptyBorder(3,0,0,0));
+		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
+		buttons.add(Box.createGlue());
 		ActionHandler actionHandler = new ActionHandler();
 		add = new JButton(jEdit.getProperty("options.toolbar.add"));
 		add.addActionListener(actionHandler);
 		buttons.add(add);
+		buttons.add(Box.createHorizontalStrut(6));
 		remove = new JButton(jEdit.getProperty("options.toolbar.remove"));
 		remove.addActionListener(actionHandler);
 		buttons.add(remove);
+		buttons.add(Box.createHorizontalStrut(6));
 		moveUp = new JButton(jEdit.getProperty("options.toolbar.moveUp"));
 		moveUp.addActionListener(actionHandler);
 		buttons.add(moveUp);
+		buttons.add(Box.createHorizontalStrut(6));
 		moveDown = new JButton(jEdit.getProperty("options.toolbar.moveDown"));
 		moveDown.addActionListener(actionHandler);
 		buttons.add(moveDown);
+		buttons.add(Box.createGlue());
 
 		updateButtons();
 		add(BorderLayout.SOUTH,buttons);
@@ -334,20 +340,26 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 class ToolBarAddDialog extends EnhancedDialog
 {
-	public ToolBarAddDialog(Component comp, ListModel actionsList,
-		ComboBoxModel iconList)
+	public ToolBarAddDialog(Component comp, ListModel actionsListModel,
+		ComboBoxModel iconListModel)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("options.toolbar.add.title"),true);
-		getContentPane().add(BorderLayout.NORTH,new JLabel(
+
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
+		content.add(BorderLayout.NORTH,new JLabel(
 			jEdit.getProperty("options.toolbar.add.caption")));
 
-		JPanel centerPanel = new JPanel(new BorderLayout());
+		JPanel mainPanel = new JPanel(new BorderLayout(0,6));
 		JPanel radioPanel = new JPanel(new GridLayout(2,1));
 
 		ActionHandler actionHandler = new ActionHandler();
 		ButtonGroup grp = new ButtonGroup();
 
+		// Add separator
 		separator = new JRadioButton(jEdit.getProperty("options.toolbar"
 			+ ".add.separator"));
 		separator.setSelected(true);
@@ -355,20 +367,38 @@ class ToolBarAddDialog extends EnhancedDialog
 		grp.add(separator);
 		radioPanel.add(separator);
 
+		// Add action
 		action = new JRadioButton(jEdit.getProperty("options.toolbar"
 			+ ".add.action"));
 		action.addActionListener(actionHandler);
 		grp.add(action);
 		radioPanel.add(action);
 
-		centerPanel.add(BorderLayout.NORTH,radioPanel);
+		mainPanel.add(BorderLayout.NORTH,radioPanel);
 
-		list = new JList(actionsList);
-		list.setVisibleRowCount(16);
-		centerPanel.add(BorderLayout.CENTER,new JScrollPane(list));
+		actionsList = new JList(actionsListModel);
+		actionsList.setVisibleRowCount(8);
 
-		JPanel iconPanel = new JPanel(new BorderLayout());
+		JPanel centerPanel = new JPanel(new BorderLayout(0,3));
+		centerPanel.add(BorderLayout.NORTH,new JScrollPane(actionsList));
+
+		// Add macro
+		macro = new JRadioButton(jEdit.getProperty("options.toolbar"
+			+ ".add.macro"));
+		macro.addActionListener(actionHandler);
+		grp.add(macro);
+		centerPanel.add(BorderLayout.CENTER,macro);
+
+		macrosList = new JList(Macros.getMacroList());
+		macrosList.setVisibleRowCount(8);
+		centerPanel.add(BorderLayout.SOUTH,new JScrollPane(macrosList));
+
+		mainPanel.add(BorderLayout.CENTER,centerPanel);
+
+		// Icon selection
+		JPanel iconPanel = new JPanel(new BorderLayout(0,3));
 		JPanel labelPanel = new JPanel(new GridLayout(2,1));
+		labelPanel.setBorder(new EmptyBorder(0,0,0,12));
 		JPanel compPanel = new JPanel(new GridLayout(2,1));
 		grp = new ButtonGroup();
 		labelPanel.add(builtin = new JRadioButton(jEdit.getProperty(
@@ -381,7 +411,7 @@ class ToolBarAddDialog extends EnhancedDialog
 		grp.add(file);
 		file.addActionListener(actionHandler);
 		iconPanel.add(BorderLayout.WEST,labelPanel);
-		builtinCombo = new JComboBox(iconList);
+		builtinCombo = new JComboBox(iconListModel);
 		builtinCombo.setRenderer(new ToolBarOptionPane.IconCellRenderer());
 		compPanel.add(builtinCombo);
 
@@ -393,27 +423,30 @@ class ToolBarAddDialog extends EnhancedDialog
 		fileButton.addActionListener(actionHandler);
 		compPanel.add(fileButton);
 		iconPanel.add(BorderLayout.CENTER,compPanel);
-		centerPanel.add(BorderLayout.SOUTH,iconPanel);
+		mainPanel.add(BorderLayout.SOUTH,iconPanel);
 
-		getContentPane().add(BorderLayout.CENTER,centerPanel);
+		content.add(BorderLayout.CENTER,mainPanel);
 
 		JPanel southPanel = new JPanel();
+		southPanel.setLayout(new BoxLayout(southPanel,BoxLayout.X_AXIS));
+		southPanel.setBorder(new EmptyBorder(12,0,0,0));
+		southPanel.add(Box.createGlue());
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(actionHandler);
 		getRootPane().setDefaultButton(ok);
 		southPanel.add(ok);
+		southPanel.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(actionHandler);
 		southPanel.add(cancel);
+		southPanel.add(Box.createGlue());
 
-		getContentPane().add(BorderLayout.SOUTH,southPanel);
+		content.add(BorderLayout.SOUTH,southPanel);
 
 		updateEnabled();
 
 		pack();
-		Dimension screen = getToolkit().getScreenSize();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(comp);
 		show();
 	}
 
@@ -435,7 +468,7 @@ class ToolBarAddDialog extends EnhancedDialog
 
 		if(separator.isSelected())
 			return new ToolBarOptionPane.Button("-",null,null,"-");
-		else if(action.isSelected())
+		else
 		{
 			Icon icon;
 			String iconName;
@@ -455,19 +488,33 @@ class ToolBarAddDialog extends EnhancedDialog
 					iconName = "blank-20.gif";
 			}
 
-			ToolBarOptionPane.Button button = (ToolBarOptionPane.Button)
-				list.getSelectedValue();
-			return new ToolBarOptionPane.Button(button.actionName,
-				iconName,icon,button.label);
+			String label;
+			String actionName;
+			if(action.isSelected())
+			{
+				ToolBarOptionPane.Button button =
+					(ToolBarOptionPane.Button)actionsList
+					.getSelectedValue();
+				label = button.label;
+				actionName = button.actionName;
+			}
+			else if(macro.isSelected())
+			{
+				actionName = "play-macro@" + macrosList.getSelectedValue();
+				label = ContextOptionPane.getActionLabel(actionName);
+			}
+			else
+				throw new InternalError();
+
+			return new ToolBarOptionPane.Button(actionName,
+				iconName,icon,label);
 		}
-		else
-			throw new InternalError();
 	}
 
 	// private members
 	private boolean isOK;
-	private JRadioButton separator, action;
-	private JList list;
+	private JRadioButton separator, action, macro;
+	private JList actionsList, macrosList;
 	private JRadioButton builtin;
 	private JComboBox builtinCombo;
 	private JRadioButton file;
@@ -477,12 +524,14 @@ class ToolBarAddDialog extends EnhancedDialog
 
 	private void updateEnabled()
 	{
-		boolean enabled = action.isSelected();
-		builtin.setEnabled(enabled);
-		file.setEnabled(enabled);
-		builtinCombo.setEnabled(enabled && builtin.isSelected());
-		fileButton.setEnabled(enabled && file.isSelected());
-		list.setEnabled(enabled);
+		actionsList.setEnabled(action.isSelected());
+		macrosList.setEnabled(macro.isSelected());
+
+		boolean iconControlsEnabled = !separator.isSelected();
+		builtin.setEnabled(iconControlsEnabled);
+		file.setEnabled(iconControlsEnabled);
+		builtinCombo.setEnabled(iconControlsEnabled && builtin.isSelected());
+		fileButton.setEnabled(iconControlsEnabled && file.isSelected());
 	}
 
 	class ActionHandler implements ActionListener
@@ -490,9 +539,7 @@ class ToolBarAddDialog extends EnhancedDialog
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == separator)
-				updateEnabled();
-			else if(source == action)
+			if(source instanceof JRadioButton)
 				updateEnabled();
 			else if(source == ok)
 				ok();
@@ -532,6 +579,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/07/12 09:11:38  sp
+ * macros can be added to context menu and tool bar, menu bar layout improved
+ *
  * Revision 1.5  2000/06/29 06:20:45  sp
  * Tool bar icon code bug fix
  *

@@ -82,7 +82,7 @@ public class CurrentDirectoryMenu extends JMenu
 					if(file.isDirectory())
 						continue;
 
-					mi = new EnhancedMenuItem(name,null,action,
+					mi = new EnhancedMenuItem(name,action,
 						file.getPath());
 
 					if(count++ > 20)

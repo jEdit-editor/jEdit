@@ -1,6 +1,6 @@
 /*
  * EnhancedCheckBoxMenuItem.java - Check box menu item
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,13 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 		{
 			setEnabled(true);
 			addActionListener(action);
-			keyBindingProp = action.getName() + ".shortcut";
+			if(actionCommand == null)
+				keyBindingProp = action.getName() + ".shortcut";
+			else
+			{
+				keyBindingProp = action.getName() + "@"
+					+ actionCommand + ".shortcut";
+			}
 		}
 		else
 			setEnabled(false);
@@ -95,7 +101,6 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	}
 
 	// private members
-	private String keyBinding;
 	private String keyBindingProp;
 	private EditAction action;
 	private static Font acceleratorFont;
@@ -106,10 +111,8 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		if(action == null)
 			return null;
-		else if(keyBinding == null && getActionCommand() == null)
-			return jEdit.getProperty(keyBindingProp);
 		else
-			return keyBinding;
+			return jEdit.getProperty(keyBindingProp);
 	}
 
 	static
