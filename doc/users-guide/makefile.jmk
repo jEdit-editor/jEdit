@@ -17,7 +17,7 @@
 
 "htmldocs":;
 {
-    exec "openjade" "-d" "jedithtml.dsl" "-D" "." "-t" "xml" "users-guide.sgml";
+    exec "openjade" "-d" "jedithtml.dsl" "-D" "." "-t" "sgml" "users-guide.sgml";
 }
 
 "pdfdocs":;

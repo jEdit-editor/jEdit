@@ -2,43 +2,28 @@ Here is my to do list for jEdit 3.1. Tell me what you think.
 
 * Folding
 
-When a file is being loaded, jEdit will scan for "{{{" and "}}}"
-strings, and insert folds at the appropriate locations.
+'foldMode' buffer local property is either 'manual', 'embedded',
+or 'indent'.
 
-+ Commands:
+In 'manual' mode, folds can be added manually using various commands,
+and are saved to .<filename>.folds.
 
-- View->Folding->Add Fold (C+e C+f): surrounds selection with
-  <commentStart>{{{<commentEnd> and <commentStart>}}}<commentEnd>
+In 'embedded' mode, buffers are scanned for customizable start/end
+strings; for example, { and }.
 
-- View->Folding->Expand Fold (A+ENTER): expands the fold at the current
-  line
+In 'indent' mode, folds are added on lines where the indent increases
+from the previous.
 
-- View->Folding->Collapse Fold (A+BACKSPACE): collapses
-
-- View->Folding->Expand All [0-9] (C+e ENTER n): expands all folds, up
-  to level n. If n is zero, all folds will be expanded
-
-- View->Folding->Collapse All [0-9] (C+e BACKSPACE n): collapses all
-  folds of level n
+Folding commands will be in the View->Folding menu.
 
 * Gutter changes
 
-Fold arrows will be shown in the gutter. Because of this, it will always
-have a minimal width; it won't be possible to collapse it fully. The
-'Gutter Expanded' command will be removed, replaced by a single 'Line
-Numbering' command which, if selected, widens the gutter appropriately
-and shows line numbers.
+Fold arrows will be shown in the gutter. The 'Gutter Expanded' command
+will be removed, replaced by a single 'Line Numbering' command which,
+if selected, widens the gutter appropriately and shows line numbers.
 
 The gutter will no longer be resizable, and it's size will instead be
 determined by the width of the longest line number.
-
-* Sessions
-
-When files are opened, they will automatically be added to the 'current'
-session. The 'Load Session' and 'Save Session' commands will be replaced
-with a 'Current Session' submenu in the Utilities menu. Selecting a new
-session will close all open buffers and load files from that session.
-I might rename sessions to 'workspaces'.
 
 * LineInfo array moved
 
@@ -48,7 +33,11 @@ class.
 
 * Simplify internals
 
-Remove the MenuItemModel, MenuModel, ToolBarModel classes.
+Remove the MenuItemModel, MenuModel, ToolBarModel classes. I once
+thought they would improve performance if multiple views were opened,
+but the improvement is very slight and complicates the code needlessly.
+In addition, opening multiple views is not as useful as it once was,
+because views can be split now.
 
 * Image preview
 
@@ -71,12 +60,23 @@ in which.
 
 * Change mode loading code
 
-The mode-cache thing was cool with a small number of modes, but if we
-ever start to see, say, 70 or 80 edit modes, creating the mode cache
-will be unbearably slow, even if it only has to be done once.
+Currently, the first time jEdit is run, it loads all edit modes into
+memory and writes out a 'mode cache' file. Subsequent launches only read
+the mode cache and autoload modes as needed.
 
-So, in 3.1 there won't be a mode cache at all. Instead, each mode
-directory will have a 'catalog' file, with the following contents:
+A consequence of this is that jEdit takes ages to start the first time
+it is run. Not only is this annoying, it also gives users a bad first
+impression.
+
+The reason each mode has to be loaded to create the cache, is that vital
+information, such as the mode's name, filename glob and first line glob
+is emedded in the mode file.
+
+However, if this information is moved out to a 'catalog' file, leaving
+only highlighting rules in the mode file, loading all edit modes at once
+will never be required.
+
+A catalog file could look like so:
 
 <MODES>
   <MODE NAME="java" FILENAME_GLOB="*.java" GRAMMAR="java.xml" />
@@ -84,23 +84,20 @@ directory will have a 'catalog' file, with the following contents:
   ... and so on ...
 </MODES>
 
-Mode files will no longer need to specify a name, or the firstline glob
-and filename glob properties.
+So basically, a catalog is a manually-created mode cache.
 
-This will make mode creation a bit harder but greatly speed up initial
-startup.
+* More edit modes
+
+- M4
+- Troff
+- TeXinfo
+- Verilog (use VerilogTokenMarker in Jext as a reference)
 
 * Faster HyperSearch
 
 When searching a directory, instead of loading each file into memory
 entirely, HyperSearch will read them from an input stream. This will
 speed things up a lot.
-
-* Two-pane view in file system browser
-
-An optional two-pane view, with a directory tree at the top and a file
-list at the bottom (or left and right, respectively; make this
-configurable).
 
 * Minor changes
 
@@ -118,6 +115,11 @@ configurable).
 
 - Search and replace: don't use search.{search,replace}.value properties
 
+- Search and replace: getFlag()/setFlag() methods replace manual
+  search.batch.value, search.keepDialog.value, etc property accesses
+
+- Improve next/prev-paragraph commands
+
 * UI changes
 
 I think the marker commands should be moved from the 'Search' menu to an
@@ -131,7 +133,6 @@ into 'Text' and 'Source Code' submenus.
 
 * API changes
 
-The lineInfo change will break Code2HTML. I don't anticipate any other
-major API changes.
+Deprecation will be used to prevent breaking plugins directly.
 
 -- Slava Pestov <sp@gjt.org>

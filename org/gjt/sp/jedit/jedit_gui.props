@@ -147,12 +147,9 @@ view.search.find=Search for:
 ### CONTEXT MENUS
 ###
 view.context=undo redo - cut copy paste paste-previous - select-all \
-	select-none - view-registers - unsplit \
-	split-horizontal split-vertical - record-temp-macro \
-	stop-recording run-temp-macro
+	select-none - view-registers - to-upper to-lower
 
 view.gutter.context=toggle-gutter toggle-line-numbers save-gutter-size
-save-gutter-size.label=Save Gutter Size
 
 ###
 ### MENUBAR
@@ -406,6 +403,7 @@ new-view.label=New $View
 close-view.label=$Close View
 toggle-gutter.label=$Gutter Expanded
 toggle-line-numbers.label=$Line Numbering
+save-gutter-size.label=Save Gutter Size
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
@@ -512,6 +510,7 @@ help-menu=about \
      - \
      help-readme \
      help-news \
+     help-todo \
      help-changes \
      help-copying \
      -
@@ -520,6 +519,7 @@ about.label=About jEdit...
 help.label=jEdit User Guide
 help-readme.label=jEdit Read Me
 help-news.label=Major Changes in jEdit 3.0
+help-todo.label=Changes Planned for jEdit 3.1
 help-changes.label=Version History
 help-copying.label=GNU General Public License
 
@@ -597,7 +597,7 @@ print.page=Page {0}
 # About dialog
 about.title=About jEdit
 about.version=jEdit version: {0}
-about.caption=See Help->jEdit Read Me for more information
+about.caption=jEdit web site: <http://jedit.sourceforge.net>
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
@@ -868,6 +868,10 @@ plugin.dep-jedit.message=The plugin {0} requires jEdit {1} or later,\n\
 plugin.dep-plugin.no-version.title=Unsatisfied Dependency
 plugin.dep-plugin.no-version.message=The plugin {0} requires version {1} or later of {2},\n\
 	but {2} does not appear to be installed.
+
+plugin.dep-plugin.broken.title=Unsatisfied Dependency
+plugin.dep-plugin.broken.message=The plugin {0} requires version {1} or later of {2},\n\
+	but an error prevented {2} from being loaded.
 
 plugin.dep-plugin.title=Unsatisfied Dependency
 plugin.dep-plugin.message=The plugin {0} requires version {1} or later of {2},\n\

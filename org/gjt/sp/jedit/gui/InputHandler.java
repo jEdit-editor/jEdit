@@ -223,9 +223,23 @@ public abstract class InputHandler extends KeyAdapter
 			invokeReadNextChar(ch);
 		else
 		{
+			JEditTextArea textArea = view.getTextArea();
 			int _repeatCount = getRepeatCount();
-			for(int i = 0; i < _repeatCount; i++)
-				view.getTextArea().userInput(ch);
+			if(_repeatCount == 1)
+				textArea.userInput(ch);
+			else
+			{
+				try
+				{
+					view.getBuffer().beginCompoundEdit();
+					for(int i = 0; i < _repeatCount; i++)
+						textArea.userInput(ch);
+				}
+				finally
+				{
+					view.getBuffer().endCompoundEdit();
+				}
+			}
 
 			Macros.Recorder recorder = view.getMacroRecorder();
 

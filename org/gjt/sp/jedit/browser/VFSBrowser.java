@@ -158,10 +158,9 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		String filter;
 		if(mode == BROWSER)
 		{
-			if(filterModel.getSize() == 0)
-				filter = jEdit.getProperty("vfs.browser.default-filter");
-			else
-				filter = filterModel.getItem(0);
+			filter = jEdit.getProperty("vfs.browser.default-filter");
+			if(filter == null)
+				filter = jEdit.getProperty("vfs.browser.last-filter");
 		}
 		else if(index == -1)
 			filter = jEdit.getProperty("vfs.browser.default-filter");
@@ -222,6 +221,11 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		super.removeNotify();
 		jEdit.setBooleanProperty("vfs.browser.filter-enabled",
 			filterCheckbox.isSelected());
+		if(mode == BROWSER)
+		{
+			jEdit.setProperty("vfs.browser.last-filter",
+				filterField.getText());
+		}
 		EditBus.removeFromBus(this);
 	}
 

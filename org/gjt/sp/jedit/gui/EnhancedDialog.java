@@ -19,7 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.JDialog;
+import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
@@ -108,6 +108,20 @@ public abstract class EnhancedDialog extends JDialog
 
 			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
 			{
+				// crusty workaround
+				Component comp = getFocusOwner();
+				while(comp != null)
+				{
+					if(comp instanceof JComboBox)
+					{
+						JComboBox combo = (JComboBox)comp;
+						combo.setSelectedItem(combo.getEditor().getItem());
+						break;
+					}
+
+					comp = comp.getParent();
+				}
+
 				ok();
 				evt.consume();
 			}
@@ -131,6 +145,9 @@ public abstract class EnhancedDialog extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/12/08 04:03:43  sp
+ * bug fixes
+ *
  * Revision 1.5  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

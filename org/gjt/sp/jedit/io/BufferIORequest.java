@@ -172,7 +172,9 @@ public class BufferIORequest extends WorkRequest
 				if(path.endsWith(".gz"))
 					in = new GZIPInputStream(in);
 
-				read(buffer,in,length,false);
+				String lineSeparator = read(buffer,in,length);
+				buffer.putProperty(Buffer.LINESEP,lineSeparator);
+				buffer.setNewFile(false);
 			}
 			catch(IOException io)
 			{
@@ -278,7 +280,7 @@ public class BufferIORequest extends WorkRequest
 	 * 
 	 * </ul>
 	 */
-	private void read(Buffer buffer, InputStream _in, long length, boolean insert)
+	private String read(Buffer buffer, InputStream _in, long length)
 		throws IOException
 	{
 		// only true if the file size is known
@@ -422,16 +424,13 @@ public class BufferIORequest extends WorkRequest
 
 		setAbortable(false);
 
-		if(!insert)
-		{
-			if(CRLF)
-				buffer.putProperty(Buffer.LINESEP,"\r\n");
-			else if(CROnly)
-				buffer.putProperty(Buffer.LINESEP,"\r");
-			else
-				buffer.putProperty(Buffer.LINESEP,"\n");
-			buffer.setNewFile(false);
-		}
+		String returnValue;
+		if(CRLF)
+			returnValue = "\r\n";
+		else if(CROnly)
+			returnValue = "\r";
+		else
+			returnValue = "\n";
 
 		in.close();
 
@@ -451,6 +450,8 @@ public class BufferIORequest extends WorkRequest
 		// we insert the loaded data into the buffer in the
 		// post-load cleanup runnable, which runs in the AWT thread.
 		buffer.putProperty(LOAD_DATA,sbuf);
+
+		return returnValue;
 	}
 
 	private void readMarkers(Buffer buffer, InputStream in)
@@ -741,7 +742,7 @@ public class BufferIORequest extends WorkRequest
 				if(path.endsWith(".gz"))
 					in = new GZIPInputStream(in);
 
-				read(buffer,in,length,true);
+				read(buffer,in,length);
 			}
 			catch(IOException io)
 			{
@@ -781,29 +782,3 @@ public class BufferIORequest extends WorkRequest
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.7  2000/12/01 07:39:59  sp
- * Batch search renamed to HyperSearch, bug fixes
- *
- * Revision 1.6  2000/11/27 02:22:16  sp
- * Type selection in file system browser, word wrap bug fixes, autosave race fix
- *
- * Revision 1.5  2000/11/23 08:34:11  sp
- * Search and replace UI improvements
- *
- * Revision 1.4  2000/11/11 02:59:30  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.3  2000/11/02 09:19:33  sp
- * more features
- *
- * Revision 1.2  2000/08/29 07:47:13  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.1  2000/08/23 09:51:48  sp
- * Documentation updates, abbrev updates, bug fixes
- *
- */

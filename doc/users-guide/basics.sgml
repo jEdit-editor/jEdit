@@ -76,22 +76,6 @@
    For more information about command line switches that control the
    server feature, see <xref linkend=cli-usage>.
   </para>
-  <para>
-   The first time jEdit is run, an <quote>initial setup
-   wizard</quote> is shown. This wizard helps
-   configure firewall settings (might be
-   necessary in order for plugin download to work) and downloads and
-   installs plugins (see <xref linkend=plugins> for
-   more information about plugins). Similarly, after upgrading to a new
-   jEdit version,
-   an <quote>update wizard</quote> will optionally
-   update installed plugins and
-   give pointers to what's new.
-  </para>
-  <para>
-   Both of these wizards are self-explanatory and very easy to use,
-   and therefore will not be covered in any more detail in this manual.
-  </para>
   <!-- <figure><title>The jEdit splash screen</>
    <graphic scale=50 fileref=window-splash></>
   </figure> -->

@@ -47,7 +47,7 @@ public class AboutDialog extends EnhancedDialog
 
 		JLabel splash = new JLabel(new ImageIcon(getClass().getResource(
 			"/org/gjt/sp/jedit/jedit_logo.gif")));
-		splash.setBorder(new MatteBorder(1,1,1,1,Color.black));
+		//splash.setBorder(new MatteBorder(1,1,1,1,Color.black));
 		panel.add(BorderLayout.CENTER,splash);
 
 		label = new JLabel(jEdit.getProperty("about.caption"),

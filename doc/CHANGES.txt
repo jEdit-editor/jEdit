@@ -8,8 +8,19 @@ JEDIT 3.0 VERSION HISTORY
   now based on the current buffer's extension
 - The shell script created by the installer to start jEdit no longer
   runs jEdit in the background
-- The modified flag is not set on buffers when the line separator is
+- The modified flag is now set on buffers when the line separator is
   changed in the Buffer Options dialog box
+- If, for example, C+ENTER 80 b was entered, all 80 insertions would
+  have to be undone one by one. Now, repeated insertions are batched in
+  a compound edit
+- Plugins are no longer loaded if plugins they depend on could not be
+  loaded
+- jEdit.bat file is created on Windows again
+
++ Neutral
+
+- 'New Version' wizard removed
+- 'First Time' wizard replaced with a 'Welcome to jEdit' window
 
 + Bug Fixes
 
@@ -20,7 +31,7 @@ JEDIT 3.0 VERSION HISTORY
 - Search strings would not always be added to the history in the search
   bar
 - The 'Record Macro' command created buffers with the '.macro'
-  extension, nt the '.bsh' extension as required
+  extension, not the '.bsh' extension as required
 - The commenting commands would insert spaces if comment properties were
   not defined in the current mode. Now, they beep
 - The 'Set Marker' command would beep needlessly before displaying the
@@ -28,6 +39,16 @@ JEDIT 3.0 VERSION HISTORY
 - The 'Run Last Macro' command didn't work
 - Scrolling using the arrow keys didn't perform synchronized scrolling
   if it was enabled
+- Character classes (eg, [[:alpha:]]) didn't work in regexps because
+  the corresponding syntax bit wasn't enabled
+- Fixed NullPointerException that would occur if the buffer switcher was
+  disabled
+- Search dialog is resizable again. Non-resizable dialogs caused
+  problems with some Java versions
+- Disabling the tip of the day didn't work
+- Workaround for bug found in some Java versions where pressing 'Enter'
+  in the buffer options dialog box while the focus was inside an
+  editable combo box didn't pick up the edit
 
 + API Changes
 

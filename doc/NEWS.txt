@@ -1,5 +1,18 @@
 MAJOR CHANGES IN JEDIT 3.0 SINCE 2.6
 
+* Contents
+
+- Macro system improvements
+- User interface improvements
+- Search and replace improvements
+- Word wrap
+- Indent width -vs- tab width
+- Caret positions saved in recent file list
+- Scrolling improvements
+- New miscellaneous commands
+- New edit modes
+- FTP support moved to a plugin
+
 * Macro system improvements
 
 The limited macro language used in jEdit 2.6 and earlier has been
@@ -46,7 +59,10 @@ the tab width (used when displaying tabs) can now be set separately.
 jEdit now remembers the caret position in recently opened files, and
 automatically restores it when a recent file is opened.
 
-* Scrolling commands
+* Scrolling improvements
+
+The horizontal scroll bar width is now set according to the longest
+visible line.
 
 The text area can now be scrolled from the keyboard using the commands
 in the View->Scrolling menu. (Contributed by Ollie Rutherfurd

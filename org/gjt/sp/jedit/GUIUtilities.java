@@ -715,8 +715,8 @@ public class GUIUtilities
 
 					if(!r.equals(desired))
 					{
-						Log.log(Log.DEBUG,GUIUtilities.class,
-							"Window resize blocked: " + win.getBounds());
+//						Log.log(Log.DEBUG,GUIUtilities.class,
+//							"Window resize blocked: " + win.getBounds());
 						win.setBounds(desired);
 					}
 				}

@@ -97,7 +97,8 @@ public class EditPane extends JPanel implements EBComponent
 			{
 				// only do this if we are the current edit pane
 				if(view.getEditPane() == EditPane.this
-					&& !bufferSwitcher.isPopupVisible())
+					&& (bufferSwitcher == null
+					|| !bufferSwitcher.isPopupVisible()))
 				{
 					focusOnTextArea();
 				}
@@ -688,6 +689,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.29  2000/12/08 04:03:42  sp
+ * bug fixes
+ *
  * Revision 1.28  2000/12/01 07:39:58  sp
  * Batch search renamed to HyperSearch, bug fixes
  *

@@ -129,6 +129,9 @@ public class SearchBar extends JPanel
 		catch(Exception ia)
 		{
 			// invalid regexp, ignore
+			// return true to avoid annoying beeping while
+			// typing a re
+			return true;
 		}
 
 		return false;

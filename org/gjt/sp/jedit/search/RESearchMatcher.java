@@ -1,6 +1,6 @@
 /*
  * RESearchMatcher.java - Regular expression matcher
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,13 @@ import org.gjt.sp.jedit.MiscUtilities;
 public class RESearchMatcher implements SearchMatcher
 {
 	/**
+	 * Perl5 syntax with character classes enabled.
+	 * @since jEdit 3.0pre5
+	 */
+	public static final RESyntax RE_SYNTAX_JEDIT = new RESyntax(
+		RESyntax.RE_SYNTAX_PERL5).set(RESyntax.RE_CHAR_CLASSES);
+
+	/**
 	 * Creates a new regular expression string matcher.
 	 * @param search The search string
 	 * @param replace The replacement string
@@ -47,7 +54,7 @@ public class RESearchMatcher implements SearchMatcher
 		try
 		{
 			re = new RE(search,(ignoreCase ? RE.REG_ICASE : 0)
-				| RE.REG_MULTILINE,RESyntax.RE_SYNTAX_PERL5);
+				| RE.REG_MULTILINE,RE_SYNTAX_JEDIT);
 		}
 		catch(REException e)
 		{
@@ -87,20 +94,3 @@ public class RESearchMatcher implements SearchMatcher
 	private String replace;
 	private RE re;
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.4  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.3  1999/06/06 05:05:25  sp
- * Search and replace tweaks, Perl/Shell Script mode updates
- *
- * Revision 1.2  1999/05/30 01:28:43  sp
- * Minor search and replace updates
- *
- * Revision 1.1  1999/05/29 08:06:56  sp
- * Search and replace overhaul
- *
- */

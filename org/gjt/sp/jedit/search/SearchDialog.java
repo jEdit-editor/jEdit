@@ -57,11 +57,11 @@ public class SearchDialog extends EnhancedDialog
 
 		content.add(BorderLayout.EAST,createButtonsPanel());
 
-		setResizable(false);
-
 		pack();
 		jEdit.unsetProperty("search.width");
+		jEdit.unsetProperty("search.d-width");
 		jEdit.unsetProperty("search.height");
+		jEdit.unsetProperty("search.d-height");
 		GUIUtilities.loadGeometry(this,"search");
 	}
 

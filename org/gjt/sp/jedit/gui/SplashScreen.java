@@ -33,23 +33,25 @@ public class SplashScreen extends JWindow
 	{
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-		JPanel splash = new JPanel(new BorderLayout());
+		JPanel splash = new JPanel(new BorderLayout(12,12));
+		splash.setBorder(new CompoundBorder(
+			new MatteBorder(1,1,1,1,Color.black),
+			new EmptyBorder(12,12,12,12)));
+		splash.setBackground(Color.white);
 		URL url = getClass().getResource("/org/gjt/sp/jedit/jedit_logo.gif");
 		if(url != null)
 		{
-			splash.add(new JLabel(new ImageIcon(url)),
-				BorderLayout.CENTER);
+			JLabel label = new JLabel(new ImageIcon(url));
+			//label.setBorder(new MatteBorder(1,1,1,1,Color.black));
+			splash.add(label,BorderLayout.CENTER);
 		}
 
 		progress = new JProgressBar(0,6);
 		progress.setStringPainted(true);
-		progress.setBorderPainted(false);
-		progress.setString("jEdit " + jEdit.getVersion()
-			+ " is starting up...");
-		progress.setBackground(Color.white);
+		//progress.setBorderPainted(false);
+		progress.setString("jEdit version: " + jEdit.getVersion());
+		//progress.setBackground(Color.white);
 		splash.add(BorderLayout.SOUTH,progress);
-
-		splash.setBorder(new MatteBorder(1,1,1,1,Color.black));
 
 		setContentPane(splash);
 

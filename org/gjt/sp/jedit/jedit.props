@@ -242,6 +242,9 @@ print.footer=true
 # Print line numbers?
 print.lineNumbers=true
 
+# Syntax highlighting?
+print.syntax=true
+
 # Margins
 print.margin.top=0.5
 print.margin.left=0.5

@@ -1,5 +1,15 @@
 JEDIT 3.0 README
 
+* Contents
+
+- About jEdit
+- jEdit on the Internet
+- Documentation
+- Common problems
+- Problems that occur with older Java versions
+- Libraries
+- Credits
+
 * About jEdit
 
 jEdit is an Open Source, cross platform text editor written in Java. It
@@ -12,36 +22,6 @@ jEdit requires either Java 1.1 with Swing 1.1, or Java 2 to work.
 jEdit is released under the _GNU General Public License_, which can be
 found in the COPYING.txt file. jEdit comes with ABSOLUTELY NO WARRANTY
 OF ANY KIND; see section 11 and 12 of the GPL for details.
-
-* Libraries
-
-jEdit depends on, and comes bundled with the following libraries:
-
-- gnu.regexp by the Free Software Foundation. This is used to implement
-  regular expression search and replace, among other things. gnu.regexp
-  is released under the _GNU Lesser General Public License_. The version
-  included with jEdit differs slightly from the latest official version.
-  The original can be found at <http://www.cacas.org/java/gnu/regexp/>.
-
-- AElfred XML parser by Microstar corporation. This is used by the
-  syntax highlighting code to parse mode files. This class library is
-  released under its own, non-GPL license, which reads as follows:
-
-  "AElfred is free for both commercial and non-commercial use and
-  redistribution, provided that Microstar's copyright and disclaimer are
-  retained intact.  You are free to modify AElfred for your own use and
-  to redistribute AElfred with your modifications, provided that the
-  modifications are clearly documented."
-
-  The complete AElfred package is located at <http://www.microstar.com>.
-
-- BeanShell scripting language, by Pat Niemeyer. This is used to
-  implement macros, among other things. The version included with jEdit
-  is basically a stripped down BeanShell 1.01, with a few minor changes.
-  The original package is located at <http://www.beanshell.org>.
-
-- The Sun Java look and Feel icon collection. The license may be found
-  in the ICONS.LICENSE.txt file.
 
 * jEdit on the Internet
 
@@ -74,55 +54,56 @@ Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
 * Documentation
 
-An HTML version of the jEdit user's guide is included with jEdit
-distribution; to view it, invoke `Help->jEdit User Guide' in jEdit, or
-open `doc/users-guide/index.html' in a WWW browser such as Netscape.
+An HTML version of the jEdit user's guide is included with jEdit; to
+view it, invoke `Help->jEdit User Guide' from jEdit's menu bar, or open
+`doc/users-guide/index.html' in a WWW browser such as Netscape.
 
 A PDF version can be obtained from <http://jedit.sourceforge.net>. It
 can be viewed in a PDF viewer such as Adobe Acrobat.
 
-* Common Problems
+* Common problems
 
 Before reporting a problem with jEdit, please make sure it is not
 actually a Java bug, or a well-known problem.
 
-- If a newly installed edit mode doesn't work, you probably need to
-  rebuild the edit mode cache with Utilities->Reload Edit Modes.
+- You must rebuild the mode cache with the `Utilities->Reload Edit Modes'
+  command after adding or removing edit modes, otherwise jEdit will not
+  notice the changes. Note that the mode cache is automatically rebuilt
+  after a new jEdit version is installed.
 
-- Printing doesn't work very well, especially on Java 2. This is almost
-  entirely Sun's fault. Their printing implementation is very buggy.
-  I hear printing works better with Java 2 version 1.3, though.
+- Printing doesn't work very well, especially on Java 2. There isn't
+  much I can do about this until Sun fixes several outstanding bugs in
+  Java.
 
-- Some Java versions, especially early Java 2 versions and some Linux
-  ports, have broken key binding handling; Alt-key mnemonics might not
-  work, some keystrokes might insert garbage into the text area, etc.
-  The more recent Java versions fix these problems, so upgrade if you
-  experience them.
-
-- The AltGR key doesn't work for some people. I'm not sure if this is a
-  jEdit bug, a Java bug or both. jEdit 2.6pre6 and later might fix this
-  problem.
-
-- On a related note, composed keys and input methods might not work
-  either, so international characters can be hard to type. I can't do
-  anything about this until someone submits code to add composed key
-  support to jEdit.
+- International keyboards, input methods, composed keys, etc. might not
+  work properly. As I do not have an international keyboard, this will
+  likely remain unfixed until someone submits the necessary code.
 
 - The Swing HTML component used by jEdit's help viewer is very buggy.
-  Although recent releases are getting better, it still renders some
-  HTML incorrectly and runs very slowly.
+  Although the jEdit online help works around many of the bugs, it still
+  renders some HTML incorrectly and runs very slowly.
 
-- On Unix, file permissions are reset to the defaults on save if backups
-  are enabled. There is no easy way to fix this except with native code.
-  If this really bugs you, disable backups in Utilities->Global Options.
+- On Unix, saving a file will reset its permissions to the defaults if
+  backups are enabled. There is no easy way to fix this. The only
+  workaround is to disable backups in Utilities->Global Options.
 
 - On Unix systems with X Windows, you might not be able to copy and
   paste between jEdit and other programs. This is mainly because Java
   can only access the system clipboard, and not the primary selection
-  buffer (which some programs use instead of the clipboard). The
-  XClipboard plugin available from <http://jedit.standmed.com> solves
-  part of the problem by allowing read-only access to the primary
-  selection buffer.
+  (which some programs use instead of the clipboard). The XClipboard
+  plugin available from <http://jedit.standmed.com> solves part of the
+  problem by allowing read-only access to the primary selection.
+
+- Because jEdit is written in Java, it will always be slower than a
+  native application. The performance gap can be narrowed by installing
+  a good virtual machine and just in time compiler.
+
+* Problems that occur with older Java versions
+
+- If you are having problems such as Alt-key mnemonics not working, or
+  keystrokes inserting garbage into the text area, make sure you are
+  running the very latest Java version for your platform. Some older
+  Java versions, especially on Linux, had buggy key handling.
 
 - If you are using Java 1.1 and get a `ClassNotFoundException:
   javax/swing/JWindow' or similar exception when starting jEdit,
@@ -130,9 +111,35 @@ actually a Java bug, or a well-known problem.
   from <http://java.sun.com/products/jfc>. Alternatively, upgrade to
   Java 2, which doesn't require you to install Swing separately.
 
-- Because jEdit is written in Java, it will always be slower than a
-  native application. The performance gap can be narrowed by installing
-  a good virtual machine and just in time compiler.
+* Libraries
+
+jEdit depends on, and comes bundled with the following libraries:
+
+- gnu.regexp by the Free Software Foundation. This is used to implement
+  regular expression search and replace, among other things. gnu.regexp
+  is released under the _GNU Lesser General Public License_. The version
+  included with jEdit differs slightly from the latest official version.
+  The original can be found at <http://www.cacas.org/java/gnu/regexp/>.
+
+- AElfred XML parser by Microstar corporation. This is used by the
+  syntax highlighting code to parse mode files. This class library is
+  released under its own, non-GPL license, which reads as follows:
+
+  "AElfred is free for both commercial and non-commercial use and
+  redistribution, provided that Microstar's copyright and disclaimer are
+  retained intact.  You are free to modify AElfred for your own use and
+  to redistribute AElfred with your modifications, provided that the
+  modifications are clearly documented."
+
+  The complete AElfred package is located at <http://www.microstar.com>.
+
+- BeanShell scripting language, by Pat Niemeyer. This is used to
+  implement macros, among other things. The version included with jEdit
+  is basically a stripped down BeanShell 1.01, with a few minor changes.
+  The original package is located at <http://www.beanshell.org>.
+
+- The Sun Java look and Feel icon collection. The license may be found
+  in the ICONS.LICENSE.txt file.
 
 * Credits
 
@@ -211,8 +218,6 @@ If you are not on the above list but think you should be, e-mail me.
 In addition to the above people, I would like to thank the plugin
 developers for their plugins, and the users for their feedback and
 comments.
-
-Have fun!
 
 -- Slava Pestov
 <sp@gjt.org>

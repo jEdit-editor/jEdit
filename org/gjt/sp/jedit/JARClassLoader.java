@@ -286,13 +286,20 @@ public class JARClassLoader extends ClassLoader
 				String currVersion = jEdit.getProperty("plugin." 
 					+ plugin + ".version");
 
+				if(jEdit.getPlugin(plugin) instanceof EditPlugin.Broken)
+				{
+					String[] args = { name, plugin };
+					GUIUtilities.error(null,"plugin.dep-plugin.broken",args);
+					return false;
+				}
+
 				if(currVersion == null)
 				{
 					String[] args = { name, needVersion, plugin };
 					GUIUtilities.error(null,"plugin.dep-plugin.no-version",args);
 					return false;
 				}
-				
+
 				if(MiscUtilities.compareVersions(currVersion,
 					needVersion) < 0)
 				{

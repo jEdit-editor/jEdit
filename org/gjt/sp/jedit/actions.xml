@@ -332,6 +332,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="help-todo">
+	<CODE>
+		HelpViewer.gotoFile("TODO.txt");
+	</CODE>
+</ACTION>
+
 <ACTION NAME="home" NO_RECORD="TRUE">
 	<CODE>
 		textArea.smartHome(false);

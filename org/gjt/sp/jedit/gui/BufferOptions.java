@@ -300,6 +300,8 @@ public class BufferOptions extends EnhancedDialog
 			throw new InternalError();
 
 		String oldLineSep = (String)buffer.getProperty("lineSeparator");
+		if(oldLineSep == null)
+			oldLineSep = System.getProperty("line.separator");
 		if(!oldLineSep.equals(lineSep))
 		{
 			buffer.putProperty("lineSeparator",lineSep);
@@ -392,6 +394,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/12/08 04:03:43  sp
+ * bug fixes
+ *
  * Revision 1.23  2000/12/06 07:00:40  sp
  * Lotsa bug fixes
  *

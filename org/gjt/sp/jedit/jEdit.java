@@ -283,6 +283,7 @@ public class jEdit
 		initSiteProperties();
 		initUserProperties();
 		GUIUtilities.advanceSplashProgress();
+		initActions();
 		initPlugins();
 
 		if(settingsDirectory != null)
@@ -312,7 +313,6 @@ public class jEdit
 		initPLAF();
 		SearchAndReplace.load();
 
-		initActions();
 		initModes();
 		Macros.loadMacros();
 
