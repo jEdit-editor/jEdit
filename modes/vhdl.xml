@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+
+<!-- VHDL mode, contributed by Dante Fabrizio -->
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE NAME="vhdl">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="VHDL" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.vhd" />
+		<PROPERTY NAME="blockComment" VALUE="--" />
+		<PROPERTY NAME="noWordSep" VALUE="_" />
+	</PROPS>
+	<RULES ESCAPE="\">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<EOL_SPAN TYPE="COMMENT1">--</EOL_SPAN>
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="NULL">(</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">/=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+
+		<SEQ TYPE="OPERATOR">**</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="NULL">}</SEQ>
+		<SEQ TYPE="NULL">{</SEQ>
+		<SEQ TYPE="NULL">.</SEQ>
+		<SEQ TYPE="NULL">,</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
+		<SEQ TYPE="NULL">]</SEQ>
+		<SEQ TYPE="NULL">[</SEQ>
+		<SEQ TYPE="NULL">?</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="NULL">:</SEQ>
+
+		<KEYWORDS IGNORE_CASE="TRUE">
+			<KEYWORD1>architecture</KEYWORD1>
+			<KEYWORD1>alias</KEYWORD1>
+ 			<KEYWORD1>assert</KEYWORD1>
+			<KEYWORD1>entity</KEYWORD1>
+			<KEYWORD1>process</KEYWORD1>
+			<KEYWORD1>variable</KEYWORD1>
+			<KEYWORD1>signal</KEYWORD1>
+			<KEYWORD1>in</KEYWORD1>
+			<KEYWORD1>out</KEYWORD1>
+			<KEYWORD1>inout</KEYWORD1>
+			<KEYWORD1>begin</KEYWORD1>
+			<KEYWORD1>end</KEYWORD1>
+			<KEYWORD1>component</KEYWORD1>
+			<KEYWORD1>use</KEYWORD1>
+			<KEYWORD1>library</KEYWORD1>
+			<KEYWORD1>loop</KEYWORD1>
+			<KEYWORD1>constant</KEYWORD1>
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>case</KEYWORD1>
+			<KEYWORD1>port</KEYWORD1>
+			<KEYWORD1>is</KEYWORD1>
+			<KEYWORD1>of</KEYWORD1>
+			<KEYWORD1>array</KEYWORD1>
+			<KEYWORD1>catch</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>default</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>elsif</KEYWORD1>
+			<KEYWORD1>when</KEYWORD1>
+			<KEYWORD1>then</KEYWORD1>
+			<KEYWORD1>downto</KEYWORD1>
+			<KEYWORD1>upto</KEYWORD1>
+			<KEYWORD1>extends</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>implements</KEYWORD1>
+			<KEYWORD1>instanceof</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>static</KEYWORD1>
+			<KEYWORD1>switch</KEYWORD1>
+			<KEYWORD1>type</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>others</KEYWORD1>
+			<KEYWORD1>all</KEYWORD1>
+			<KEYWORD1>record</KEYWORD1>
+ 			<KEYWORD1>range</KEYWORD1>
+ 			<KEYWORD1>wait</KEYWORD1>
+
+			<KEYWORD2>package</KEYWORD2>
+			<KEYWORD2>import</KEYWORD2>
+			<KEYWORD2>std_logic</KEYWORD2>
+			<KEYWORD2>std_ulogic</KEYWORD2>
+			<KEYWORD2>std_logic_vector</KEYWORD2>
+			<KEYWORD2>std_ulogic_vector</KEYWORD2>
+			<KEYWORD2>unsigned</KEYWORD2>
+			<KEYWORD2>signed</KEYWORD2>
+			<KEYWORD2>integer</KEYWORD2>
+			<KEYWORD2>natural</KEYWORD2>
+			<KEYWORD2>bit</KEYWORD2>
+			<KEYWORD2>bit_vector</KEYWORD2>
+			
+
+			<KEYWORD3>or</KEYWORD3>
+			<KEYWORD3>nor</KEYWORD3>
+			<KEYWORD3>not</KEYWORD3>
+			<KEYWORD3>nand</KEYWORD3>
+			<KEYWORD3>and</KEYWORD3>
+			<KEYWORD3>xnor</KEYWORD3>
+			<KEYWORD3>sll</KEYWORD3>
+			<KEYWORD3>srl</KEYWORD3>
+			<KEYWORD3>sla</KEYWORD3>
+			<KEYWORD3>sra</KEYWORD3>
+			<KEYWORD3>rol</KEYWORD3>
+			<KEYWORD3>ror</KEYWORD3>
+			<KEYWORD3>or</KEYWORD3>
+			<KEYWORD3>or</KEYWORD3>
+			<KEYWORD3>mod</KEYWORD3>
+			<KEYWORD3>rem</KEYWORD3>
+			<KEYWORD3>abs</KEYWORD3>
+
+			<FUNCTION>rising_edge</FUNCTION>
+			<FUNCTION>shift_left</FUNCTION>
+			<FUNCTION>shift_right</FUNCTION>
+			<FUNCTION>rotate_left</FUNCTION>
+			<FUNCTION>rotate_right</FUNCTION>
+			<FUNCTION>resize</FUNCTION>
+			<FUNCTION>std_match</FUNCTION>
+			<FUNCTION>to_integer</FUNCTION>
+			<FUNCTION>to_unsigned</FUNCTION>
+			<FUNCTION>to_signed</FUNCTION>
+			
+			<LITERAL2>false</LITERAL2>
+			<LITERAL2>true</LITERAL2>
+		</KEYWORDS>
+	</RULES>
+</MODE>

@@ -178,14 +178,15 @@ public class WorkThread extends Thread
 
 			synchronized(lock)
 			{
+				request.next = null;
+				request.alreadyRun = false;
+
 				if(firstAWTRequest == null && lastAWTRequest == null)
 					firstAWTRequest = lastAWTRequest = request;
 				else
 				{
 					lastAWTRequest.next = request;
 					lastAWTRequest = request;
-					request.next = null; // dequeue it
-					// from request queue
 				}
 
 				awtRequestCount++;
@@ -253,6 +254,10 @@ public class WorkThread extends Thread
 			firstRequest = firstRequest.next;
 			if(firstRequest == null)
 				lastRequest = null;
+
+			if(request.alreadyRun)
+				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
+			request.alreadyRun = true;
 			return request;
 		}
 	}
@@ -265,6 +270,10 @@ public class WorkThread extends Thread
 		firstAWTRequest = firstAWTRequest.next;
 		if(firstAWTRequest == null)
 			lastAWTRequest = null;
+
+		if(request.alreadyRun)
+				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
+			request.alreadyRun = true;
 		return request;
 	}
 
@@ -272,6 +281,8 @@ public class WorkThread extends Thread
 	{
 		Runnable run;
 		boolean inAWT;
+
+		boolean alreadyRun;
 
 		Request next;
 
@@ -297,6 +308,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/06/24 03:46:48  sp
+ * VHDL mode, bug fixing
+ *
  * Revision 1.9  2000/06/16 10:11:06  sp
  * Bug fixes ahoy
  *

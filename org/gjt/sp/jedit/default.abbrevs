@@ -34,3 +34,9 @@ ne|nextElement
 [html]
 EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>
 JEDITLINK|<a href="http://jedit.sourceforge.net">jEdit</a>
+
+[vhdl]
+sl|std_logic
+slv|std_logic_vector( x downto y )
+var|variable
+sig|signal

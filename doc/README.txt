@@ -53,6 +53,9 @@ list that is very low traffic, a general discussion list, and a
 development discussion list. To subscribe, unsubscribe or view list
 archives, visit <http://www.sourceforge.net/mail/?group_id=588>.
 
+The preferred way to report bugs and to suggest features is to use
+jEdit's bug tracker; <http://www.sourceforge.net/bugs/?group_id=588>.
+
 Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
 * Documentation
@@ -139,6 +142,7 @@ The following people contributed edit modes:
 Andre Kaplan - ASP, JavaScript, VBScript
 Artur Biesiadowski - Eiffel
 Clancy Malcolm - Original version of PHP3 mode
+Dante Fabrizio - VHDL
 Ian Maclean - Ruby
 Jonathan Revusky - Python
 Juha Lindfors - IDL

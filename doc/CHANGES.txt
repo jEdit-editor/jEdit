@@ -1,5 +1,23 @@
 JEDIT 2.5 VERSION HISTORY
 
+* Version 2.5pre8
+
++ New Features
+
+- VHDL edit mode (Dante Fabrizio)
+
++ Enhancements
+
+- jEdit plugin central will be moved to SourceForge soon. To make the
+  transition easier, the plugin manager has been updated to use the
+  SourceForge URL to receive plugin info
+
++ Bug Fixes
+
+- Another attempt to fix the 'async requests executed twice' bug (since 2.5pre6)
+- The help viewer would not work properly after being closed and reopened
+  (since 2.5pre7)
+
 * Version 2.5pre7
 
 + Bug Fixes

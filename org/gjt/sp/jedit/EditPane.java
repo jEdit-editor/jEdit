@@ -369,7 +369,8 @@ public class EditPane extends JPanel implements EBComponent
 			int width = Integer.parseInt(jEdit.getProperty(
 				"view.gutter.borderWidth"));
 			gutter.setBorder(width, GUIUtilities.parseColor(
-				jEdit.getProperty("view.gutter.borderColor")));
+				jEdit.getProperty("view.gutter.borderColor")),
+				textArea.getPainter().getBackground());
 		}
 		catch(NumberFormatException nf)
 		{
@@ -583,6 +584,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/06/24 03:46:48  sp
+ * VHDL mode, bug fixing
+ *
  * Revision 1.6  2000/05/23 04:04:52  sp
  * Marker highlight updates, next/prev-marker actions
  *

@@ -22,7 +22,7 @@ package org.gjt.sp.jedit.textarea;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.border.*;
 
 public class Gutter extends JComponent implements SwingConstants
 {
@@ -181,11 +181,13 @@ public class Gutter extends JComponent implements SwingConstants
 	 * Convenience method for setting a default matte border on the right
 	 * with the specified border width and color
 	 * @param width The border width (in pixels)
-	 * @param color The border color
+	 * @param color1 The inner border color
+	 * @param color2 The outer border color
 	 */
-	public void setBorder(int width, Color color)
+	public void setBorder(int width, Color color1, Color color2)
 	{
-		setBorder(BorderFactory.createMatteBorder(0,0,0,width,color));
+		setBorder(new CompoundBorder(new MatteBorder(0,0,0,width,color2),
+			new MatteBorder(0,0,0,width,color1)));
 	}
 
 	/*

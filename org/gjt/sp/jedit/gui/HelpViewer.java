@@ -175,7 +175,6 @@ public class HelpViewer extends EnhancedFrame
 	public void cancel()
 	{
 		GUIUtilities.saveGeometry(this,"helpviewer");
-		viewer.setText("");
 		setVisible(false);
 	}
 
@@ -255,6 +254,9 @@ public class HelpViewer extends EnhancedFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/06/24 03:46:48  sp
+ * VHDL mode, bug fixing
+ *
  * Revision 1.23  2000/06/16 10:11:06  sp
  * Bug fixes ahoy
  *
