@@ -1,0 +1,30 @@
+[global]
+EMAIL|sp@gjt.org
+HOMEPAGE|http://www.geocities.com/slava_pestov
+JEDIT|http://www.gjt.org/~sp/jedit.html
+
+[java]
+Ex|Exception
+IOEx|IOException
+Ob|Object
+St|String
+V|View
+B|Buffer
+JE|JEditTextArea
+jE|jEdit
+gta|getTextArea()
+gb|getBuffer()
+gv|getView(evt)
+ira|import java.awt
+irj|import java
+irs|import javax.swing
+iru|import java.util
+irj|import org.gjt.sp.jedit
+irjt|import org.gjt.sp.jedit.textarea
+irpju|import org.gjt.sp.util.
+serr|System.err.println(
+sout|System.out.println(
+
+[html]
+EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>
+HOMELINK|<a href="http://www.geocities.com/slava_pestov">http://www.geocities.com/slava_pestov</a>
