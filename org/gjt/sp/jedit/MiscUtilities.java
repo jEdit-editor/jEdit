@@ -628,9 +628,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 		// Finally the bug fix release
 		int bugfix = Integer.parseInt(build.substring(9,11));
 
-		return "" + major + "." + minor +
-			(beta == 99 && bugfix == 0 ? "final" :
-			(beta == 99 ? "." + bugfix : "pre" + beta));
+		return "" + major + "." + minor
+			+ (beta != 99 ? "pre" + beta : "")
+			+ (bugfix != 0 ? "." + bugfix : "");
 	}
 
 	// private members
@@ -726,6 +726,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.42  2000/12/06 07:00:40  sp
+ * Lotsa bug fixes
+ *
  * Revision 1.41  2000/11/16 10:25:16  sp
  * More macro work
  *

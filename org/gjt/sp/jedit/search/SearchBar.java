@@ -45,14 +45,14 @@ public class SearchBar extends JPanel
 		add(label,BorderLayout.WEST);
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
-		box.add(find = new HistoryTextField("find"));
+		box.add(find = new HistoryTextField("find",false,false));
 		find.setFont(plainFont);
 		Dimension min = find.getMinimumSize();
 		min.width = Integer.MAX_VALUE;
 		find.setMaximumSize(min);
-		ActionHandler handler = new ActionHandler();
+		ActionHandler actionHandler = new ActionHandler();
 		find.addKeyListener(new KeyHandler());
-		find.addActionListener(new ActionHandler());
+		find.addActionListener(actionHandler);
 		find.getDocument().addDocumentListener(new DocumentHandler());
 		box.add(Box.createGlue());
 		add(box,BorderLayout.CENTER);
@@ -64,19 +64,19 @@ public class SearchBar extends JPanel
 		buttons.add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.case")));
 		ignoreCase.setFont(boldFont);
-		ignoreCase.addActionListener(new ActionHandler());
+		ignoreCase.addActionListener(actionHandler);
 		ignoreCase.setMargin(margin);
 		buttons.add(Box.createHorizontalStrut(2));
 		buttons.add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
 		regexp.setFont(boldFont);
-		regexp.addActionListener(new ActionHandler());
+		regexp.addActionListener(actionHandler);
 		regexp.setMargin(margin);
 		buttons.add(Box.createHorizontalStrut(2));
 		buttons.add(hyperSearch = new JCheckBox(jEdit.getProperty(
 			"search.hypersearch")));
 		hyperSearch.setFont(boldFont);
-		hyperSearch.addActionListener(new ActionHandler());
+		hyperSearch.addActionListener(actionHandler);
 		hyperSearch.setMargin(margin);
 
 		update();
@@ -150,6 +150,7 @@ public class SearchBar extends JPanel
 				}
 				else if(hyperSearch.isSelected())
 				{
+					find.addCurrentToHistory();
 					find.setText(null);
 					SearchAndReplace.setSearchString(text);
 					SearchAndReplace.setSearchFileSet(new CurrentBufferSet());

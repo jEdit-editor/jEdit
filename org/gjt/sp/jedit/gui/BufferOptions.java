@@ -298,7 +298,13 @@ public class BufferOptions extends EnhancedDialog
 			lineSep = "\r";
 		else
 			throw new InternalError();
-		buffer.putProperty("lineSeparator",lineSep);
+
+		String oldLineSep = (String)buffer.getProperty("lineSeparator");
+		if(!oldLineSep.equals(lineSep))
+		{
+			buffer.putProperty("lineSeparator",lineSep);
+			buffer.setDirty(true);
+		}
 
 		buffer.putBooleanProperty("syntax",syntax.isSelected());
 		buffer.putBooleanProperty("indentOnTab",indentOnTab.isSelected());
@@ -386,6 +392,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/12/06 07:00:40  sp
+ * Lotsa bug fixes
+ *
  * Revision 1.22  2000/11/12 05:36:49  sp
  * BeanShell integration started
  *

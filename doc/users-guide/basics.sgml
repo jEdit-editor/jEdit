@@ -209,9 +209,9 @@
    the commands in the <guimenu>View</>&gt;<guisubmenu>Docking</> menu
    (shortcuts: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycap>1</>, <keycap>2</>, <keycap>3</>, <keycap>4</>) can be used
-   to collapse and expand the top, bottom, left and right docking areas,
-   respectively. Double-clicking on the borders of each area has the
-   same effect.
+   to show or hide the top, bottom, left and right docking areas,
+   respectively. Double-clicking on the borders of docking areas has
+   the same effect.
   </para>
   <!-- <figure><title>A view split into two panes</>
    <graphic scale=50 fileref=window-editor-split></>

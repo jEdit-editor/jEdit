@@ -196,6 +196,7 @@ public class Macros
 			{
 				public void invoke(View view)
 				{
+					lastMacro = path;
 					BeanShell.runScript(view,path,false);
 				}
 			};
@@ -248,7 +249,7 @@ public class Macros
 			Log.log(Log.ERROR,Macros.class,bl);
 		}
 
-		recordMacro(view,null,buffer);
+		recordMacro(view,buffer,true);
 	}
 
 	/**
@@ -280,7 +281,7 @@ public class Macros
 
 		Buffer buffer = jEdit.openFile(null,null,
 			MiscUtilities.constructPath(settings,"macros",
-			name + ".macro"),
+			name + ".bsh"),
 			false,true);
 
 		if(buffer == null)
@@ -296,7 +297,7 @@ public class Macros
 			Log.log(Log.ERROR,Macros.class,bl);
 		}
 
-		recordMacro(view,name,buffer);
+		recordMacro(view,buffer,false);
 	}
 
 	/**
@@ -314,7 +315,7 @@ public class Macros
 		else
 		{
 			view.setMacroRecorder(null);
-			if(lastMacro != null)
+			if(!recorder.temporary)
 				view.setBuffer(recorder.buffer);
 			recorder.dispose();
 		}
@@ -401,15 +402,16 @@ public class Macros
 	/**
 	 * Starts recording a macro.
 	 * @param view The view
-	 * @param name The macro name
 	 * @param buffer The buffer to record to
+	 * @param temporary True if this is a temporary macro
+	 * @since jEdit 3.0pre5
 	 */
-	private static void recordMacro(View view, String name, Buffer buffer)
+	private static void recordMacro(View view, Buffer buffer, boolean temporary)
 	{
-		lastMacro = name;
+		lastMacro = buffer.getPath();
 
 		view.setRecordingStatus(true);
-		view.setMacroRecorder(new Recorder(view,buffer));
+		view.setMacroRecorder(new Recorder(view,buffer,temporary));
 	}
 
 	static class MacrosEBComponent implements EBComponent
@@ -457,12 +459,15 @@ public class Macros
 	{
 		View view;
 		Buffer buffer;
+		boolean temporary;
+
 		boolean lastWasInput;
 
-		public Recorder(View view, Buffer buffer)
+		public Recorder(View view, Buffer buffer, boolean temporary)
 		{
 			this.view = view;
 			this.buffer = buffer;
+			this.temporary = temporary;
 			EditBus.addToBus(this);
 		}
 

@@ -4,14 +4,16 @@
 <chapter id=plugins><title>Installing and Using Plugins</>
  <para>
   Plugins are loadable modules of code that extend jEdit's
-  functionality. This chapter covers their installation and use.
+  functionality. This chapter only covers installing and updating
+  plugins. Usage instructions for individual plugins can be found in the
+  <guimenu>Help</> menu.
  </para>
  <sect1 id=plugin-manager><title>The Plugin Manager</>
   <indexterm><primary>Plugin Manager command</></indexterm>
   <indexterm><primary>Plugins menu</></indexterm>
   <para>
    <guimenu>Plugins</>&gt;<guimenuitem>Plugin Manager</> displays
-   the plugin manager window, which shows a list of all installed plugins.
+   the plugin manager window, which shows a list of installed plugins.
    Clicking on a plugin will display information about it.
   <!-- </para>
   <figure><title>The Plugin Manager window</>
@@ -47,6 +49,11 @@
    directory specified, clicking <guibutton>Install</> will begin
    downloading the new plugins.
   </para>
+  <note>
+   <para>
+    jEdit must be restarted before newly-installed plugins may be used.
+   </para>
+  </note>
   <!-- <figure><title>The Install New Plugins dialog box</>
    <graphic scale=50 fileref=dialog-pluginmgr-install></>
   </figure> -->
@@ -63,26 +70,19 @@
    compare currently installed plugins against the latest available ones.
    Plugins to update can be selected from the resulting list. Multiple
    plugins can be selected by holding down <keycap>Control</>.
-   Clicking <guibutton>Update</> will begin the
+   Clicking <guibutton>Update</> will begin
    downloading the updated plugins.
   </para>
+  <note>
+   <para>
+    jEdit must be restarted before updated plugins may be used.
+   </para>
+  </note>
   <!-- <figure><title>The Update Plugins dialog box</>
    <graphic scale=50 fileref=dialog-pluginmgr-update></>
   </figure> -->
   <!-- <figure><title>The plugin download dialog box</>
    <graphic scale=50 fileref=dialog-pluginmgr-download></>
   </figure> -->
- </sect1>
- <sect1 id=using-plugins><title>Using Plugins</>
-  <indexterm><primary>Plugins menu</></indexterm>
-  <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>Utilities menu</></indexterm>
-  <indexterm><primary>Help menu</></indexterm>
-  <para>
-   Most plugins have documentation listed in the <guimenu>Help</> menu.
-   Plugins usually add submenus or menu items to the
-   <guimenu>Plugins</> menu. Some plugins add panes to the
-   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
-  </para>
  </sect1>
 </chapter>

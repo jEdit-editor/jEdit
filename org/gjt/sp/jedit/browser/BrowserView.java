@@ -169,6 +169,7 @@ public class BrowserView extends JPanel
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
 	private DefaultMutableTreeNode currentlyLoadingTreeNode;
+	private BrowserPopupMenu popup;
 
 	private static FileCellRenderer renderer = new FileCellRenderer();
 
@@ -248,8 +249,8 @@ public class BrowserView extends JPanel
 
 	private void showFilePopup(VFS.DirectoryEntry file, Point point)
 	{
-		BrowserPopupMenu popup = new BrowserPopupMenu(browser,file);
-		popup.show(tree,point.x,point.y);
+		popup = new BrowserPopupMenu(browser,file);
+		popup.show(tree,point.x+1,point.y+1);
 	}
 
 	class BrowserJTree extends JTree
@@ -341,7 +342,7 @@ public class BrowserView extends JPanel
 				ttm.setReshowDelay(toolTipReshowDelay);
 				super.processMouseEvent(evt);
 				break;
-			case MouseEvent.MOUSE_PRESSED:
+			case MouseEvent.MOUSE_CLICKED:
 				if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 				{
 					TreePath path = tree.getPathForLocation(evt.getX(),evt.getY());
@@ -369,14 +370,34 @@ public class BrowserView extends JPanel
 					}
 				}
 				else if((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+					; // do nothing
+
+				super.processMouseEvent(evt);
+				break;
+			case MouseEvent.MOUSE_PRESSED:
+				if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 				{
+					if(popup != null && popup.isVisible())
+						popup.setVisible(false);
+
+					if(evt.getClickCount() == 2)
+						break;
+				}
+				else if((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+				{
+					if(popup != null && popup.isVisible())
+					{
+						popup.setVisible(false);
+						break;
+					}
+
 					TreePath path = tree.getPathForLocation(evt.getX(),evt.getY());
 					if(path == null)
 						showFilePopup(null,evt.getPoint());
 					else
 					{
-						if(!tree.isPathSelected(path))
-							tree.setSelectionPath(path);
+						tree.setSelectionPath(path);
+						browser.filesSelected();
 	
 						Object userObject = ((DefaultMutableTreeNode)path
 							.getLastPathComponent()).getUserObject();
@@ -388,10 +409,11 @@ public class BrowserView extends JPanel
 						}
 					}
 
-					return;
+					break;
 				}
 
-				// fall through
+				super.processMouseEvent(evt);
+				break;
 			default:
 				super.processMouseEvent(evt);
 				break;

@@ -126,8 +126,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		filterCheckbox.setMargin(new Insets(0,0,0,0));
 		filterCheckbox.setRequestFocusEnabled(false);
 		filterCheckbox.setBorder(new EmptyBorder(0,0,0,12));
-		filterCheckbox.setSelected(jEdit.getBooleanProperty(
-			"vfs.browser.filter-enabled"));
+		filterCheckbox.setSelected(mode != BROWSER ||
+			jEdit.getBooleanProperty("vfs.browser.filter-enabled"));
 		filterCheckbox.setForeground(UIManager.getColor("Label.foreground"));
 		filterCheckbox.addActionListener(actionHandler);
 		cons.gridx = 0;
@@ -151,12 +151,25 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 
 		propertiesChanged();
 
+		String name = view.getBuffer().getName();
+		int index = name.lastIndexOf('.');
+
 		HistoryModel filterModel = HistoryModel.getModel("vfs.browser.filter");
 		String filter;
-		if(filterModel.getSize() == 0)
+		if(mode == BROWSER)
+		{
+			if(filterModel.getSize() == 0)
+				filter = jEdit.getProperty("vfs.browser.default-filter");
+			else
+				filter = filterModel.getItem(0);
+		}
+		else if(index == -1)
 			filter = jEdit.getProperty("vfs.browser.default-filter");
 		else
-			filter = filterModel.getItem(0);
+		{
+			String ext = name.substring(index);
+			filter = "*" + ext;
+		}
 
 		filterField.setText(filter);
 		filterField.addCurrentToHistory();

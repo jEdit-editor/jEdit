@@ -103,10 +103,7 @@
   </para>
   <para>
    Rectangles can be deleted, copied, pasted, and operated on using any
-   other command. Note that because rectangular
-   selections are implemented using character offsets, rather than
-   absolute screen positions, they might not behave as you might expect
-   if proportional-width fonts or hard tabs are used.
+   other command.
   </para>
   <para>
    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Rectangular
@@ -114,6 +111,16 @@
    <keycombo><keycap>Control</><keycap>\</></keycombo>)
    toggles the current selection between range and rectangle mode.
   </para>
+  <note>
+   <para>
+    Rectangular selections are implemented using character offsets,
+    not absolute screen positions, so they might not behave as you might
+    expect if a proportional-width font is being used, or hard tabs are
+    enabled. For information about changing the font used in the text
+    area, see <xref linkend=global-opts>. For more information about
+    hard and soft tabs, see <xref linkend=soft-tabs>.
+   </para>
+  </note>
   <!-- <figure><title>A rectangular selection</>
    <graphic scale=50 fileref=window-editor-rect-sel></>
   </figure> -->
@@ -172,6 +179,14 @@
    To disable word wrap completely, set the wrap column to 0 using any of the
    above means.
   </para>
+  <note>
+   <para>
+    Word wrap is implemented using character offsets, not screen
+    positions, so it might not behave like you expect if a
+    proportional-width font is being used. For information about
+    changing the font used in the text area, see <xref linkend=global-opts>.
+   </para>
+  </note>
   <para>
    When inserting text,
    keep in mind that the <keycap>Tab</> and <keycap>Enter</> keys might
@@ -193,6 +208,30 @@
   <para>
    More advanced deletion commands are described in
    <xref linkend=words>, <xref linkend=lines> and <xref linkend=paragraphs>.
+  </para>
+ </sect1>
+ <sect1 id=undo-redo><title>Undo and Redo</>
+  <indexterm><primary>Undo command</></indexterm>
+  <indexterm><primary>Redo command</></indexterm>
+  <indexterm><primary>Edit menu</></indexterm>
+  <indexterm><primary>Global Options command</></indexterm>
+  <indexterm><primary>Utilities menu</></indexterm>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Undo</> (shortcut:
+   <keycombo><keycap>Control</><keycap>Z</></keycombo>) undoes the effects
+   of the most recent text editing command. For example, this can be used to
+   restore unintentionally deleted text. More complicated operations,
+   such as a search and replace, can also be undone. By default, the undo
+   queue remembers the last 100 edits; older edits are discarded.
+   The undo queue size can be changed in the <guibutton>Editing</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  </para>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Redo</> (shortcut:
+   <keycombo><keycap>Control</><keycap>R</></keycombo>) goes forward in the
+   undo queue, redoing changes which were undone. For example, if some
+   text was inserted, <guimenuitem>Undo</> will remove it from the buffer.
+   <guimenuitem>Redo</> will insert it again.
   </para>
  </sect1>
  <sect1 id=words><title>Working With Words</>
@@ -378,30 +417,6 @@
    changing the wrap column.
   </para>
  </sect1>
- <sect1 id=undo-redo><title>Undo and Redo</>
-  <indexterm><primary>Undo command</></indexterm>
-  <indexterm><primary>Redo command</></indexterm>
-  <indexterm><primary>Edit menu</></indexterm>
-  <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>Utilities menu</></indexterm>
-  <para>
-   <guimenu>Edit</>&gt;<guimenuitem>Undo</> (shortcut:
-   <keycombo><keycap>Control</><keycap>Z</></keycombo>) undoes the effects
-   of the most recent text editing command. For example, this can be used to
-   restore unintentionally deleted text. More complicated operations,
-   such as a search and replace, can also be undone. By default, the undo
-   queue remembers the last 100 edits; older edits are discarded.
-   The undo queue size can be changed in the <guibutton>Editing</> pane of the
-   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
-  </para>
-  <para>
-   <guimenu>Edit</>&gt;<guimenuitem>Redo</> (shortcut:
-   <keycombo><keycap>Control</><keycap>R</></keycombo>) goes forward in the
-   undo queue, redoing changes which were undone. For example, if some
-   text was inserted, <guimenuitem>Undo</> will remove it from the buffer.
-   <guimenuitem>Redo</> will insert it again.
-  </para>
- </sect1>
  <sect1 id=clipboard><title>The Clipboard</>
   <para>
    <indexterm><primary>Global Options command</></indexterm>
@@ -418,7 +433,7 @@
    buffer.
   </para>
   <para>
-   and <guimenu>Edit</>&gt;<guimenuitem>Copy</>
+   <guimenu>Edit</>&gt;<guimenuitem>Copy</>
    (shortcut: <keycombo><keycap>Control</><keycap>C</></keycombo>)
    places the selected text in the clipboard and leaves it in the
    buffer.
@@ -438,7 +453,7 @@
    changed in the <guibutton>General</> pane of the
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
   </para>
-  <sidebar>
+  <sidebar><title>The X Window System</>
    <para>
     <indexterm><primary>X Window System</></indexterm>
     The X Window System on Unix actually has two
@@ -446,8 +461,8 @@
     the so called <quote>primary selection</>, and the <quote>Motif
     clipboard</>. jEdit only uses the Motif clipboard. However, the
     XClipboard plugin
-    (see <xref linkend=plugins> for information about installing and
-    using plugins) allows read-only access to the primary selection.
+    (see <xref linkend=plugins> for information about installing
+    plugins) allows read-only access to the primary selection.
    </para>
   </sidebar>
   <!-- <figure><title>The Paste Previous dialog box</>
@@ -585,7 +600,7 @@
    lists all defined registers;
    selecting one will display its contents and type (text or position).
    It is not possible to change or add registers in this
-   dialog box; it is only for viewing.
+   dialog box; it is for viewing only.
   </para>
   <!-- <figure><title>The View Registers dialog box</>
    <graphic scale=50 fileref=dialog-view-registers></>
@@ -739,9 +754,8 @@
    <para>
     Clicking <guibutton>Replace</> will replace the current selection with the
     replacement string.
-    Clicking <guibutton>Replace &amp; Find</> will replace the current selection
-    with the replacement string, and locate the next occurrence of the search
-    string.
+    Clicking <guibutton>Replace &amp; Find</> will replace the current
+    selection, and locate the next occurrence of the search string.
     Clicking <guibutton>Replace All</> will replace all occurrences of the
     search string with the replacement string.
    </para>
@@ -802,9 +816,9 @@
    <para>
     Initially, the search bar is in <firstterm>incremental search</>
     mode. In incremental search mode, the first occurrence of the search
-    string in the buffer is located as is it is being typed. Subsequent
-    occurrences can be located by pressing <keycap>Enter</>.
-    Once the desired occurrence has been located, press <keycap>Escape</>
+    string is located in the current buffer as is it is being typed.
+    Subsequent occurrences can be located by pressing <keycap>Enter</>.
+    Once the desired occurrence has been found, press <keycap>Escape</>
     to return keyboard focus to the text area.
    </para>
    <para>
@@ -818,7 +832,7 @@
     The search bar can be accessed from the keyboard using the
     <guimenu>Search</>&gt;<guimenuitem>Quick Incremental Search</>
     (shortcut: <keycombo><keycap>Control</><keycap>,</></keycombo>)
-    and <guimenu>Search</>&gt;<guimenuitem>Quick Batch Search</>
+    and <guimenu>Search</>&gt;<guimenuitem>Quick HyoerSearch</>
     (shortcut: <keycombo><keycap>Control</><keycap>.</></keycombo>)
     commands.
    </para>

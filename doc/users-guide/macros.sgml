@@ -101,7 +101,7 @@
    ordinary macro.
    Once recording is complete, you don't need to save the
    <filename>Temporary_Macro.bsh</>
-   buffer before playing it back- but if you do, it will become
+   buffer before playing it back--but if you do, it will become
    an ordinary macro, displayed in the <guimenu>Macros</> menu.
   </para>
   <indexterm><primary>Play Temporary Macro command</></indexterm>

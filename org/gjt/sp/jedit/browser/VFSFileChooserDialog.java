@@ -121,12 +121,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		if(files.length == 0)
 		{
-			String directory;
-
-			if(files.length == 1 && files[0].type == VFS.DirectoryEntry.DIRECTORY)
-				directory = files[0].path;
-			else
-				directory = browser.getDirectory();
+			String directory = browser.getDirectory();
 
 			filename = filenameField.getText();
 			if(filename.length() == 0)
@@ -237,22 +232,26 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				return;
 			else if(files.length == 1)
 			{
-				filenameField.setEnabled(true);
 				VFS.DirectoryEntry file = files[0];
 				if(file.type == VFS.DirectoryEntry.FILE)
 				{
 					String path = file.path;
-					if(path.startsWith(browser.getDirectory()))
+					String directory = browser.getDirectory();
+					VFS vfs = VFSManager.getVFSForPath(directory);
+					String parent = vfs.getParentOfPath(path);
+					if(parent.endsWith("/") || parent.endsWith(File.separator))
+						parent = parent.substring(0,parent.length() - 1);
+					if(parent.equals(directory))
 						path = file.name;
 	
 					filenameField.setText(path);
 				}
+				else
+					filenameField.setText(null);
 			}
 			else
 			{
-				filenameField.setEnabled(false);
-				filenameField.setText(jEdit.getProperty(
-					"vfs.browser.dialog.multi-select"));
+				filenameField.setText(null);
 			}
 		}
 
@@ -282,50 +281,3 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.16  2000/12/01 07:39:59  sp
- * Batch search renamed to HyperSearch, bug fixes
- *
- * Revision 1.15  2000/11/12 05:36:49  sp
- * BeanShell integration started
- *
- * Revision 1.14  2000/11/02 09:19:33  sp
- * more features
- *
- * Revision 1.13  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.12  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.11  2000/10/15 04:10:34  sp
- * bug fixes
- *
- * Revision 1.10  2000/08/29 07:47:12  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.9  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.8  2000/08/24 08:17:46  sp
- * Bug fixing
- *
- * Revision 1.7  2000/08/22 07:25:00  sp
- * Improved abbrevs, bug fixes
- *
- * Revision 1.6  2000/08/16 12:14:29  sp
- * Passwords are now saved, bug fixes, documentation updates
- *
- * Revision 1.5  2000/08/13 07:35:23  sp
- * Dockable window API
- *
- * Revision 1.4  2000/08/10 11:55:58  sp
- * VFS browser toolbar improved a little bit, font selector tweaks
- *
- * Revision 1.3  2000/08/01 11:44:15  sp
- * More VFS browser work
- *
- */

@@ -489,6 +489,9 @@ public class JEditTextArea extends JComponent
 
 			if(!gutter.isCollapsed())
 				gutter.repaint();
+
+			view.synchroScrollVertical(this,firstLine);
+			view.synchroScrollHorizontal(this,horizontalOffset);
 		}
 	}
 
@@ -2578,7 +2581,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	public void blockComment()
 	{
 		String comment = (String)buffer.getProperty("blockComment");
-		if(!buffer.isEditable() || comment == null)
+		if(!buffer.isEditable() || comment == null || comment.length() == 0)
 		{
 			getToolkit().beep();
 			return;
@@ -2620,7 +2623,9 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		String commentEnd = (String)buffer.getProperty("commentEnd");
 		String boxComment = (String)buffer.getProperty("boxComment");
 		if(!buffer.isEditable() || commentStart == null
-			|| commentEnd == null || boxComment == null)
+			|| commentEnd == null || boxComment == null
+			|| commentStart.length() == 0 || commentEnd.length() == 0
+			|| boxComment.length() == 0)
 		{
 			getToolkit().beep();
 			return;
@@ -2671,7 +2676,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	{
 		String commentStart = (String)buffer.getProperty("commentStart");
 		String commentEnd = (String)buffer.getProperty("commentEnd");
-		if(!buffer.isEditable() || commentStart == null || commentEnd == null)
+		if(!buffer.isEditable() || commentStart == null || commentEnd == null
+			|| commentStart.length() == 0 || commentEnd.length() == 0)
 		{
 			getToolkit().beep();
 			return;
@@ -3055,13 +3061,19 @@ forward_scan:		do
 	 */
 	public void showSetMarkerDialog()
 	{
-		if(buffer.isEditable())
+		if(!buffer.isEditable())
+		{
 			getToolkit().beep();
+			return;
+		}
+
 		String marker = GUIUtilities.input(view,"setmarker",
 			getSelectedText());
 		if(marker != null)
+		{
 			buffer.addMarker(marker,getSelectionStart(),
 				getSelectionEnd());
+		}
 	}
 
 	/**

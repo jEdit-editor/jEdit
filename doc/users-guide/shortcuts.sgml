@@ -116,8 +116,8 @@
      <entry><keycombo><keycap>Control</><keycap>Enter</></keycombo>
      <keycap><replaceable>number</></keycap>
      <keycap><replaceable>command</></keycap></>
-     <entry>Repeat <replaceable>command</> (whether it be a keystroke,
-     menu item selection or tool bar click) <replaceable>number</> times.
+     <entry>Repeat the command (it can be a keystroke, menu item selection or
+     tool bar click) the specified number of times.
      </entry>
     </row>
    </tbody>
@@ -205,7 +205,7 @@
     <row>
      <entry><keycombo><keycap>Shift</><keycap>Page Up</></keycombo>;
      <keycombo><keycap>Shift</><keycap>Page Down</></keycombo></entry>
-     <entry>Extend selection one screenful.</entry>
+     <entry>Extend selection by one screenful.</entry>
     </row>
     <row>
      <entry><keycombo><keycap>Shift</><keycap>Home</></keycombo></entry>

@@ -57,8 +57,8 @@ public class jEdit
 	 */
 	public static String getBuild()
 	{
-		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "03.00.04.00";
+		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
+		return "03.00.05.00";
 	}
 
 	/**
@@ -1424,9 +1424,6 @@ public class jEdit
 			return;
 		}
 
-		removeBufferFromList(buffer);
-		buffer.close();
-
 		if(!buffer.isNewFile())
 		{
 			view.getEditPane().saveCaretInfo();
@@ -1434,6 +1431,9 @@ public class jEdit
 			int caret = (_caret == null ? 0 : _caret.intValue());
 			BufferHistory.setCaretPosition(buffer.getPath(),caret);
 		}
+
+		removeBufferFromList(buffer);
+		buffer.close();
 
 		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
 

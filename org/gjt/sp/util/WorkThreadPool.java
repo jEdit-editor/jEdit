@@ -86,7 +86,7 @@ public class WorkThreadPool
 		// pending, execute it immediately
 		if(inAWT && requestCount == 0 && awtRequestCount == 0)
 		{
-			Log.log(Log.DEBUG,this,"AWT immediate: " + run);
+// 			Log.log(Log.DEBUG,this,"AWT immediate: " + run);
 
 			if(SwingUtilities.isEventDispatchThread())
 				run.run();
@@ -328,7 +328,7 @@ public class WorkThreadPool
 
 	private void doAWTRequest(Request request)
 	{
-		Log.log(Log.DEBUG,this,"Running in AWT thread: " + request);
+//		Log.log(Log.DEBUG,this,"Running in AWT thread: " + request);
 
 		try
 		{
@@ -419,6 +419,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/12/06 07:00:41  sp
+ * Lotsa bug fixes
+ *
  * Revision 1.9  2000/11/21 02:58:04  sp
  * 2.7pre2 finished
  *

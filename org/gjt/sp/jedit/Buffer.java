@@ -194,8 +194,17 @@ public class Buffer extends PlainDocument implements EBComponent
 		String header = path;
 		String footer = new Date().toString();
 
-		TokenMarker tokenMarker = (syntax ? this.tokenMarker
-			: jEdit.getMode("text").createTokenMarker());
+		int lineCount = getDefaultRootElement().getElementCount();
+
+		TokenMarker tokenMarker;
+		if(syntax)
+			tokenMarker = this.tokenMarker;
+		else
+		{
+			tokenMarker = jEdit.getMode("text").createTokenMarker();
+			tokenMarker.insertLines(0,lineCount);
+		}
+
 		SyntaxStyle[] styles = view.getTextArea().getPainter().getStyles();
 		TabExpander expander = null;
 
@@ -233,8 +242,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		int tabSize = 0;
 		int lineHeight = 0;
 		int page = 0;
-
-		int lineCount = getDefaultRootElement().getElementCount();
 
 		int lineNumberDigits = (int)Math.ceil(Math.log(
 			lineCount) / Math.log(10));

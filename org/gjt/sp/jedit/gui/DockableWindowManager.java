@@ -206,7 +206,7 @@ public class DockableWindowManager extends JPanel
 				throw new InternalError("Unknown position: " + position);
 		}
 
-		Log.log(Log.DEBUG,this,"Adding " + win + " with position " + position);
+		Log.log(Log.DEBUG,this,"Adding " + name + " with position " + position);
 
 		container.addDockableWindow(win);
 		Entry entry = new Entry(win,position,container);
@@ -228,7 +228,7 @@ public class DockableWindowManager extends JPanel
 			return;
 		}
 
-		Log.log(Log.DEBUG,this,"Removing " + entry.win + " from "
+		Log.log(Log.DEBUG,this,"Removing " + name + " from "
 			+ entry.container);
 
 		entry.container.saveDockableWindow(entry.win);

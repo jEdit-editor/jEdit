@@ -1,0 +1,137 @@
+Here is my to do list for jEdit 3.1. Tell me what you think.
+
+* Folding
+
+When a file is being loaded, jEdit will scan for "{{{" and "}}}"
+strings, and insert folds at the appropriate locations.
+
++ Commands:
+
+- View->Folding->Add Fold (C+e C+f): surrounds selection with
+  <commentStart>{{{<commentEnd> and <commentStart>}}}<commentEnd>
+
+- View->Folding->Expand Fold (A+ENTER): expands the fold at the current
+  line
+
+- View->Folding->Collapse Fold (A+BACKSPACE): collapses
+
+- View->Folding->Expand All [0-9] (C+e ENTER n): expands all folds, up
+  to level n. If n is zero, all folds will be expanded
+
+- View->Folding->Collapse All [0-9] (C+e BACKSPACE n): collapses all
+  folds of level n
+
+* Gutter changes
+
+Fold arrows will be shown in the gutter. Because of this, it will always
+have a minimal width; it won't be possible to collapse it fully. The
+'Gutter Expanded' command will be removed, replaced by a single 'Line
+Numbering' command which, if selected, widens the gutter appropriately
+and shows line numbers.
+
+The gutter will no longer be resizable, and it's size will instead be
+determined by the width of the longest line number.
+
+* Sessions
+
+When files are opened, they will automatically be added to the 'current'
+session. The 'Load Session' and 'Save Session' commands will be replaced
+with a 'Current Session' submenu in the Utilities menu. Selecting a new
+session will close all open buffers and load files from that session.
+I might rename sessions to 'workspaces'.
+
+* LineInfo array moved
+
+The lineInfo array and associated methods (markTokens(), insertLines(),
+deleteLines()) will be moved from the TokenMarker class to the Buffer
+class.
+
+* Simplify internals
+
+Remove the MenuItemModel, MenuModel, ToolBarModel classes.
+
+* Image preview
+
+When opening a buffer, if its filename matches a glob
+(*.{gif,jpg,jpeg,png}) the resulting buffer will be read only with no
+text inside. The contents of the file will be loaded into an 'image'
+buffer-local property. The text area will check for this property and if
+it exists, display the image.
+
+* Make split configuration persistent
+
+The editor will remember all split locations and what buffers were open
+in which.
+
+* Simplify XMode DTD
+
+- Remove WHITESPACE rule
+- Remove KEYWORDS.IGNORE_CASE attribute; instead, keywords will inherit
+  the setting of the RULES.IGNORE_CASE attribute
+
+* Change mode loading code
+
+The mode-cache thing was cool with a small number of modes, but if we
+ever start to see, say, 70 or 80 edit modes, creating the mode cache
+will be unbearably slow, even if it only has to be done once.
+
+So, in 3.1 there won't be a mode cache at all. Instead, each mode
+directory will have a 'catalog' file, with the following contents:
+
+<MODES>
+  <MODE NAME="java" FILENAME_GLOB="*.java" GRAMMAR="java.xml" />
+  <MODE NAME="shellscript" FIRSTLINE_GLOB="#!*sh*" GRAMMAR="shellscript.xml" />
+  ... and so on ...
+</MODES>
+
+Mode files will no longer need to specify a name, or the firstline glob
+and filename glob properties.
+
+This will make mode creation a bit harder but greatly speed up initial
+startup.
+
+* Faster HyperSearch
+
+When searching a directory, instead of loading each file into memory
+entirely, HyperSearch will read them from an input stream. This will
+speed things up a lot.
+
+* Two-pane view in file system browser
+
+An optional two-pane view, with a directory tree at the top and a file
+list at the bottom (or left and right, respectively; make this
+configurable).
+
+* Minor changes
+
+- The File->Current Directory menu will not list backups and autosaves.
+
+- All available fonts will be shown in the font selector.
+
+- The base Metal L&F font will be configurable.
+
+- The abbrev option pane will edit the currently selected abbrev in a
+  text area.
+
+- When running with the Metal L&F, the docking area border will look
+  like a split pane divider
+
+- Search and replace: don't use search.{search,replace}.value properties
+
+* UI changes
+
+I think the marker commands should be moved from the 'Search' menu to an
+'Edit->Markers' submenu. The 'clear marker' and 'go to marker' submenus
+will be replaced with commands that display a list dialog box. I haven't
+decided what keyboard shortcuts these commands will have yet.
+
+The Edit menu should be simplified. The 'Selection', 'Lines',
+'Paragraphs' and 'Brackets' submenus should be merged and reorganized
+into 'Text' and 'Source Code' submenus.
+
+* API changes
+
+The lineInfo change will break Code2HTML. I don't anticipate any other
+major API changes.
+
+-- Slava Pestov <sp@gjt.org>

@@ -33,6 +33,10 @@ import org.gjt.sp.util.Log;
 
 public class BeanShell
 {
+	/**
+	 * Evaluates the text selected in the specified text area.
+	 * @since jEdit 2.7pre2
+	 */
 	public static void evalSelection(View view, JEditTextArea textArea)
 	{
 		String command = textArea.getSelectedText();
@@ -46,6 +50,10 @@ public class BeanShell
 			textArea.setSelectedText(returnValue.toString());
 	}
 
+	/**
+	 * Prompts for a BeanShell expression to evaluate;
+	 * @since jEdit 2.7pre2
+	 */
 	public static void showEvaluateDialog(View view)
 	{
 		String command = GUIUtilities.input(view,"beanshell-eval-input",null);
@@ -82,6 +90,10 @@ public class BeanShell
 		}
 	}
 
+	/**
+	 * Prompts for a BeanShell script to run.
+	 * @since jEdit 2.7pre2
+	 */
 	public static void showRunScriptDialog(View view)
 	{
 		String path = GUIUtilities.showFileDialog(view,
@@ -90,6 +102,10 @@ public class BeanShell
 			runScript(view,path,false);
 	}
 
+	/**
+	 * Runs a BeanShell script.
+	 * @since jEdit 2.7pre3
+	 */
 	public static void runScript(View view, String path,
 		boolean rethrowBshErrors)
 	{
@@ -164,6 +180,14 @@ public class BeanShell
 		}
 	}
 
+	/**
+	 * Evaluates the specified BeanShell expression.
+	 * @param view The view (may be null)
+	 * @param command The expression
+	 * @param rethrowBshErrors If true, BeanShell errors will
+	 * be re-thrown to the caller
+	 * @since jEdit 2.7pre3
+	 */
 	public static Object eval(View view, String command,
 		boolean rethrowBshErrors)
 	{
@@ -225,6 +249,7 @@ public class BeanShell
 	 * @param view The view
 	 * @param method The method reference
 	 * @param args Arguments to pass the method
+	 * @since jEdit 2.7pre2
 	 */
 	public static Object invokeMethod(View view, BshMethod method, Object[] args)
 	{
@@ -275,6 +300,15 @@ public class BeanShell
 	public static boolean isScriptRunning()
 	{
 		return running;
+	}
+
+	/**
+	 * Returns the BeanShell interpreter instance.
+	 * @since jEdit 3.0pre5
+	 */
+	public static Interpreter getInterpreter()
+	{
+		return interp;
 	}
 
 	static void init()

@@ -77,6 +77,12 @@ buffer.syntax=true
 # Wrap column
 buffer.maxLineLen=80
 
+# Word break characters
+buffer.wordBreakChars=
+
+# Non-alphanumeric word characters
+buffer.noWordSep=
+
 ###
 ### VIEW SETTINGS
 ###

@@ -41,9 +41,8 @@
    Directory</> menu lists all files in the current buffer's directory.
   </para>
   <para>
-   Recent files are listed in
-   the <guimenu>File</>&gt;<guimenuitem>Recent Files</> menu. When a
-   recent file is opened, the caret
+   The <guimenu>File</>&gt;<guimenuitem>Recent Files</> menu lists
+   recent files. When a recent file is opened, the caret
    is automatically moved to its previous location in that file.
    The number of recent files to remember can be changed and caret
    position saving can be disabled in the <guibutton>General</> pane of the
@@ -56,6 +55,13 @@
   <!-- <figure><title>The Open File dialog box</>
    <graphic scale=50 fileref=dialog-open></>
   </figure> -->
+  <sidebar><title>GZipped Files</>
+   <para>
+    jEdit supports transparent editing of GZipped files; files with
+    the <filename>.gz</> extension are automatically decompressed before
+    loading, and compressed when saving.
+   </para>
+  </sidebar>
  </sect1>
  <sect1 id=saving><title>Saving Files</>
   <para>
@@ -99,13 +105,18 @@
     such. Every 30 seconds, all buffers with unsaved changes are
     written out to their respective file names, enclosed in hash
     (<quote>#</>) characters. For example, <filename>program.c</> will
-    be autosaved to <filename>#program.c#</>. Because saving a buffer using
+    be autosaved to <filename>#program.c#</>.
+   </para>
+   <para>
+    Saving a buffer using
     one of the commands in the previous section automatically deletes the
-    autosave file, they will never be visible during normal operation.
-    However, if jEdit crashes before you have a
-    chance to save, the autosave file will remain, along with your unsaved
-    changes, and jEdit will offer to recover the autosaved data next time the
-    original file is opened.
+    autosave file, so they will only ever be visible in the unlikely
+    event of a jEdit (or operating system) crash.
+   </para>
+   <para>
+    If an autosave file is
+    found while a buffer is being loaded, jEdit will offer to recover the
+    autosaved data.
    </para>
    <!-- <figure><title>Dialog box shown if a file has autosaved changes</>
     <graphic fileref=dialog-autosave scale=50></>
@@ -147,36 +158,6 @@
     <guibutton>Loading and Saving</> pane of the
     <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
    </para>
-  </sect2>
-  <sect2><title>When Another Application Modifies the File</>
-   <indexterm><primary>Reload command</></indexterm>
-   <indexterm><primary>Reload All Buffers command</></indexterm>
-   <indexterm><primary>File menu</></indexterm>
-   <indexterm><primary>Utilities menu</></indexterm>
-   <indexterm><primary>Global Options command</></indexterm>
-   <para>
-    If an open buffer is modified on disk by another application, a warning
-    dialog box is displayed, offering to either continue editing
-    (and lose changes made by the other application)
-    or reload the buffer from disk. This feature can be disabled in the
-    <guibutton>General</> pane of the
-    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
-   </para>
-   <para>
-    <guimenu>File</>&gt;<guimenuitem>Reload</>
-    can be used to reload the current buffer from disk at any other
-    time; a confirmation dialog box will be displayed first if the buffer
-    has unsaved changes.
-   </para>
-   <para>
-    <guimenu>File</>&gt;<guimenuitem>Reload All Buffers</> discards
-    unsaved changes in all open buffers and reload them from disk,
-    asking for confirmation first.
-   </para>
-   <!-- <figure><title>Warning message displayed when another application
-   changed the file on disk</>
-    <graphic scale=50 fileref=dialog-diskmod></>
-   </figure> -->
   </sect2>
  </sect1>
  <sect1 id=vfs-browser><title>The File System Browser</>
@@ -287,6 +268,36 @@
   </para>
   <!-- <figure><title>The stand-alone VFS Browser</>
    <graphic fileref=window-vfs-browser scale=50></>
+  </figure> -->
+ </sect1>
+ <sect1 id=reloading><title>Reloading Files</>
+  <indexterm><primary>Reload command</></indexterm>
+  <indexterm><primary>Reload All Buffers command</></indexterm>
+  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>Utilities menu</></indexterm>
+  <indexterm><primary>Global Options command</></indexterm>
+  <para>
+   If an open buffer is modified on disk by another application, a warning
+   dialog box is displayed, offering to either continue editing
+   (and lose changes made by the other application)
+   or reload the buffer from disk (and lose any usaved changes). This
+   feature can be disabled in the <guibutton>General</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Reload</> can be used to discard
+   unsaved changes and reload the current buffer from disk at any other
+   time; a confirmation dialog box will be displayed first if the buffer
+   has unsaved changes.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Reload All Buffers</> discards
+   unsaved changes in all open buffers and reload them from disk,
+   asking for confirmation first.
+  </para>
+  <!-- <figure><title>Warning message displayed when another application
+  changed the file on disk</>
+   <graphic scale=50 fileref=dialog-diskmod></>
   </figure> -->
  </sect1>
  <sect1 id=threaded-io><title>Multi-threaded I/O</>

@@ -1,5 +1,38 @@
 JEDIT 3.0 VERSION HISTORY
 
+* Version 3.0pre5
+
++ Enhancements
+
+- The default filter in the 'Open File' and 'Save As' dialog boxes is
+  now based on the current buffer's extension
+- The shell script created by the installer to start jEdit no longer
+  runs jEdit in the background
+- The modified flag is not set on buffers when the line separator is
+  changed in the Buffer Options dialog box
+
++ Bug Fixes
+
+- Printing didn't work if syntax highlighting was disabled
+- Multiple file selection in the 'Open File' dialog box didn't work
+- Several typos in the documentation fixed
+- Double-clicking on directories in the file system browser didn't work
+- Search strings would not always be added to the history in the search
+  bar
+- The 'Record Macro' command created buffers with the '.macro'
+  extension, nt the '.bsh' extension as required
+- The commenting commands would insert spaces if comment properties were
+  not defined in the current mode. Now, they beep
+- The 'Set Marker' command would beep needlessly before displaying the
+  prompt dialog
+- The 'Run Last Macro' command didn't work
+- Scrolling using the arrow keys didn't perform synchronized scrolling
+  if it was enabled
+
++ API Changes
+
+- BeanShell.getInterpreter() method added
+
 * Version 3.0pre4
 
 I have decided to renumber this version as 3.0, because the addition of

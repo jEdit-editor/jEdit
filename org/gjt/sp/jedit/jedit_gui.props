@@ -894,7 +894,7 @@ beanshell-error.message=While executing:\n\
 	{1}
 
 beanshell-notfound.title=BeanShell Script Not Found
-beanshell-notfound.message=The BeanShell script {0} doesn't exist.
+beanshell-notfound.message=The BeanShell script {0} does not exist.
 
 beanshell-eval-input.title=Evaluate BeanShell Expression
 beanshell-eval-input.message=BeanShell expression:
@@ -1206,7 +1206,6 @@ vfs.browser.menu.go-to-favorites.label=Go to Favorites
 vfs.browser.dialog.open=Open
 vfs.browser.dialog.save=Save
 vfs.browser.dialog.filename=File name:
-vfs.browser.dialog.multi-select=Multiple files selected
 
 vfs.browser.bad-filter.title=Invalid Filter
 vfs.browser.bad-filter.message=The filter {0} is invalid ({1})

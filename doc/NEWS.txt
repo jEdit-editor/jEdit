@@ -20,7 +20,7 @@ so non-programmers can continue to use jEdit's macro features.
   of the text area
 - Some of the larger option panes in the 'Utilities->Global Options'
   dialog box have been split into multiple panes, for a less cluttered
-  apperance
+  appearance
 - A 'tip of the day' is now shown on jEdit startup (this can be
   disabled)
 

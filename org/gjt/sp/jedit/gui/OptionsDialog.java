@@ -113,9 +113,6 @@ public class OptionsDialog extends EnhancedDialog
 		paneTree.setSelectionPath(jEditPath.pathByAddingChild(
 			jEditGroup.getMember(0)));
 
-		// register the MouseHandler to open and close branches
-		paneTree.addMouseListener(new MouseHandler());
-
 		view.hideWaitCursor();
 
 		pack();
@@ -334,31 +331,6 @@ public class OptionsDialog extends EnhancedDialog
 		cardPanel.add(pane.getComponent(), name);
 
 		parent.addOptionPane(pane);
-	}
-
-	class MouseHandler extends MouseAdapter
-	{
-		public void mouseClicked(MouseEvent evt)
-		{
-			TreePath path = paneTree.getPathForLocation(evt.getX(),
-				evt.getY());
-
-			if (path == null) return;
-
-			Object node = path.getLastPathComponent();
-
-			if (node instanceof OptionGroup)
-			{
-				if (paneTree.isCollapsed(path))
-				{
-					paneTree.expandPath(path);
-				}
-				else
-				{
-					paneTree.collapsePath(path);
-				}
-			}
-		}
 	}
 
 	class PaneNameRenderer extends JLabel implements TreeCellRenderer
@@ -592,41 +564,3 @@ public class OptionsDialog extends EnhancedDialog
 		private EventListenerList listenerList = new EventListenerList();
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.34  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.33  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.32  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.31  2000/08/20 07:29:31  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.30  2000/08/17 08:04:10  sp
- * Marker loading bug fixed, docking option pane
- *
- * Revision 1.29  2000/08/11 09:06:52  sp
- * Browser option pane
- *
- * Revision 1.28  2000/08/10 08:30:41  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.27  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.26  2000/07/15 10:10:18  sp
- * improved printing
- *
- * Revision 1.25  2000/05/14 10:55:22  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.24  2000/05/13 05:13:31  sp
- * Mode option pane
- *
- */

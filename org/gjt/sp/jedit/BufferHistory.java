@@ -127,15 +127,20 @@ public class BufferHistory
 
 	private static Entry getEntry(String path)
 	{
-		if(pathsCaseInsensitive)
-			path = path.toLowerCase();
-
 		Enumeration enum = history.elements();
 		while(enum.hasMoreElements())
 		{
 			Entry entry = (Entry)enum.nextElement();
-			if(entry.path.equals(path))
-				return entry;
+			if(pathsCaseInsensitive)
+			{
+				if(entry.path.equalsIgnoreCase(path))
+					return entry;
+			}
+			else
+			{
+				if(entry.path.equals(path))
+					return entry;
+			}
 		}
 
 		return null;

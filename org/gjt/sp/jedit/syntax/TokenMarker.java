@@ -962,6 +962,15 @@ loop:			for(int i = 0; i < len; i++)
 						continue loop;
 					else
 						break;
+				case '.': case '-':
+					// normally, this shouldn't be
+					// necessary, because most modes
+					// define '.' and '-' SEQs. However,
+					// in props mode, we can't define
+					// such a SEQ because it would
+					// break the AT_LINE_START
+					// MARK_PREVIOUS rule.
+					continue loop;
 				default:
 					break;
 				}
@@ -1123,48 +1132,3 @@ loop:			for(int i = 0; i < len; i++)
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.58  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.57  2000/11/05 00:44:15  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.56  2000/11/02 09:19:34  sp
- * more features
- *
- * Revision 1.55  2000/10/15 04:10:35  sp
- * bug fixes
- *
- * Revision 1.54  2000/10/12 09:28:27  sp
- * debugging and polish
- *
- * Revision 1.53  2000/09/23 03:01:11  sp
- * pre7 yayayay
- *
- * Revision 1.52  2000/07/14 06:00:45  sp
- * bracket matching now takes syntax info into account
- *
- * Revision 1.51  2000/06/30 09:08:09  sp
- * SHTML mode, SPAN+EXCLUDE_MATCH bug fix
- *
- * Revision 1.50  2000/04/27 08:32:58  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.49  2000/04/25 03:32:40  sp
- * Even more VFS hacking
- *
- * Revision 1.48  2000/04/24 04:45:37  sp
- * New I/O system started, and a few minor updates
- *
- * Revision 1.47  2000/04/10 01:03:58  sp
- * SPAN fixes, <!DOCTYPE MODE SYSTEM "xmode.dtd"> added to mode files
- *
- * Revision 1.46  2000/04/09 10:41:26  sp
- * NO_WORD_BREAK SPANs fixed, action tokens removed
- *
- */

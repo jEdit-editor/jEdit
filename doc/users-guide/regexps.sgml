@@ -43,8 +43,7 @@
   <replaceable>c</></para></listitem>
   <listitem><para><literal>[<replaceable>a-z</>]</literal> matches any character in the
   range <replaceable>a</> to <replaceable>z</>, inclusive.
-  A leading or trailing dash will be interpreted
-  literally.</para></listitem>
+  A leading or trailing dash will be interpreted literally</para></listitem>
  </itemizedlist>
  <para>
   Within a character class expression, the following sequences have special meaning:
@@ -68,17 +67,17 @@
  <itemizedlist>
   <listitem><para><literal>(<replaceable>abc</>)</> matches whatever the expression
   <replaceable>abc</> would match, and saves it as a subexpression.
-  Also used for grouping.</para></listitem>
+  Also used for grouping</para></listitem>
   <listitem><para><literal>(?:<replaceable>...</>)</> pure grouping operator, does not
   save contents</para></listitem>
   <listitem><para><literal>(?#<replaceable>...</>)</> embedded comment, ignored by
   engine</para></listitem>
   <listitem><para><literal>\<replaceable>n</></> where 0 &lt; <replaceable>n</> &lt; 10,
   matches the same thing the <replaceable>n</>th
-  subexpression matched. Can only be used in the search string.</para></listitem>
+  subexpression matched. Can only be used in the search string</para></listitem>
   <listitem><para><literal>$<replaceable>n</></> where 0 &lt; <replaceable>n</> &lt; 10,
   substituted with the text matched by the <replaceable>n</>th
-  subexpression. Can only be used in the replacement string.</para></listitem>
+  subexpression. Can only be used in the replacement string</para></listitem>
  </itemizedlist>
  <bridgehead renderas=sect3>Branching (Alternation) Operator</>
  <itemizedlist>

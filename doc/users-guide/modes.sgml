@@ -150,8 +150,8 @@
    is the <literal>&lt;PROPERTY&gt;</> tag above.
   </para>
   <para>
-   XML is case sensitive. <literal>SPAN</> is not the same
-   as <literal>Span</> or <literal>span</>.
+   XML is case sensitive. <literal>Span</> or <literal>span</>
+   is not the same as <literal>SPAN</>.
   </para>
   <para>
    To insert a special character such as &lt; or &gt; literally in XML
@@ -167,11 +167,13 @@
    <listitem><para><literal>&amp;amp;</> - The ampersand (&amp;) character</></>
   </itemizedlist>
   <para>
-   For example, to highlight <quote>&lt;</> as an <classname>OPERATOR</> in
-   Java mode, you can't write <literal>&lt;SEQ TYPE="OPERATOR"&gt;&lt;&lt;/SEQ&gt;</>
-   because that would cause a syntax error. Instead, you must write:
+   For example, the following will cause a syntax error:
   </para>
-  <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;&amp;lt;&lt;/SEQ&gt;</>
+  <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;&amp;&lt;/SEQ&gt;</>
+  <para>
+   Instead, you must write:
+  </para>
+  <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;&amp;amp;&lt;/SEQ&gt;</>
   <para>
    Now that the basics of XML have been covered, the rest of this
    section will cover each construct in detail.
@@ -241,7 +243,8 @@
     When indenting a line, jEdit checks if the previous line matches
     the regular expression stored in this property. If it does, a level
     of indent is added. For example, in Java mode this regular expression
-    matches <quote>if</>, <quote>else</>, <quote>while</>, etc.</para>
+    matches language constructs such as
+    <quote>if</>, <quote>else</>, <quote>while</>, etc.</para>
     </listitem>
     <listitem><para><literal>doubleBracketIndent</> -
     If a line matches the <literal>indentPrevLine</> regular
@@ -267,8 +270,7 @@
     &lt;PROPERTY NAME="indentOpenBrackets" VALUE="{" /&gt;
     &lt;PROPERTY NAME="indentCloseBrackets" VALUE="}" /&gt;
     &lt;PROPERTY NAME="indentPrevLine" VALUE="\s*(((if|while)
-        \s*\(|else|case|default)[^;]*
-        |for\s*\(.*)" /&gt;
+        \s*\(|else|case|default)[^;]*|for\s*\(.*)" /&gt;
     &lt;PROPERTY NAME="doubleBracketIndent" VALUE="false" /&gt;
     &lt;PROPERTY NAME="commentStart" VALUE="/*" /&gt;
     &lt;PROPERTY NAME="commentEnd" VALUE="*/" /&gt;
@@ -340,12 +342,15 @@
    <para>
     The <literal>TERMINATE</> rule specifies that parsing should stop after
     the specified number of characters have been read from a line. The
-    number of characters to terminate after is be specified with the
-    <literal>AT_CHAR</> attribute. This is
-    used in Patch mode, for example, because only the first character
-    of each line affects highlighting. Here is an example:
+    number of characters to terminate after should be specified with the
+    <literal>AT_CHAR</> attribute. Here is an example:
    </para>
    <programlisting>&lt;TERMINATE AT_CHAR="1" /&gt;</programlisting>
+   <para>
+    This rule is
+    used in Patch mode, for example, because only the first character
+    of each line affects highlighting. 
+   </para>
   </sect3>
   <sect3 id=mode-rule-whitespace><title>WHITESPACE Rule</title>
    <indexterm><primary>tags</><secondary>WHITESPACE</></>
@@ -416,7 +421,7 @@
 &lt;/SPAN&gt;</programlisting>
    <para>
     Here is a <literal>SPAN</> that highlights HTML cascading stylesheets inside
-    <literal>STYLE</> tags by delegating to the CSS ruleset in another mode:
+    <literal>&lt;STYLE&gt;</> tags by delegating to the CSS ruleset in another mode:
    </para>
    <programlisting>&lt;SPAN TYPE="MARKUP" DELEGATE="css::MAIN"&gt;
    &lt;BEGIN&gt;&amp;lt;style&amp;gt;&lt;/BEGIN&gt;

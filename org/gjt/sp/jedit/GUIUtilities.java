@@ -670,10 +670,10 @@ public class GUIUtilities
 		Rectangle required = new Rectangle(x - adjust_x,
 			y - adjust_y,width - adjust_width,
 			height - adjust_height);
-		Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
-			+ ": desired geometry is " + desired);
-		Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
-			+ ": setting geometry to " + required);
+// 		Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
+// 			+ ": desired geometry is " + desired);
+// 		Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
+// 			+ ": setting geometry to " + required);
 		win.setBounds(required);
 
 		if(File.separatorChar == '/') // ie, Unix
@@ -734,8 +734,8 @@ public class GUIUtilities
 
 					if(!r.equals(desired))
 					{
-						Log.log(Log.DEBUG,GUIUtilities.class,
-							"Window resize blocked: " + win.getBounds());
+// 						Log.log(Log.DEBUG,GUIUtilities.class,
+// 							"Window resize blocked: " + win.getBounds());
 						win.setBounds(desired);
 					}
 				}
@@ -752,8 +752,8 @@ public class GUIUtilities
 
 				
 				Rectangle r = win.getBounds();
-				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
-					+ name + ": bounds after opening: " + r);
+// 				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
+// 					+ name + ": bounds after opening: " + r);
 
 				if(r.x != desired.x || r.y != desired.y
 					|| r.width != desired.width
@@ -874,46 +874,4 @@ public class GUIUtilities
 		EDITOR_WINDOW_ICON = loadIcon("jedit_icon1.gif");
 		PLUGIN_WINDOW_ICON = loadIcon("jedit_icon2.gif");
 	}
-
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.78  2000/10/30 07:14:03  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.77  2000/09/23 03:01:09  sp
- * pre7 yayayay
- *
- * Revision 1.76  2000/09/04 06:34:53  sp
- * bug fixes
- *
- * Revision 1.75  2000/08/16 12:14:29  sp
- * Passwords are now saved, bug fixes, documentation updates
- *
- * Revision 1.74  2000/08/10 08:30:40  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.73  2000/08/06 09:44:27  sp
- * VFS browser now has a tree view, rename command
- *
- * Revision 1.72  2000/08/01 11:44:14  sp
- * More VFS browser work
- *
- * Revision 1.71  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.70  2000/07/26 07:48:43  sp
- * stuff
- *
- * Revision 1.69  2000/07/14 06:00:44  sp
- * bracket matching now takes syntax info into account
- *
- * Revision 1.68  2000/07/12 09:11:37  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.67  2000/06/29 06:20:45  sp
- * Tool bar icon code bug fix
- *
- */

@@ -35,7 +35,7 @@
    <guibutton>Abbrevs</> pane of the
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
    If enabled, pressing the space bar will automatically expand
-   the word before the caret, if it is a valid abbreviation.
+   the word before the caret, assuming it is a valid abbreviation.
   </para>
   <para>
    If automatic expansion
@@ -70,14 +70,16 @@
   <para>
    <guimenu>Edit</>&gt;<guisubmenu>Brackets</>&gt;<guimenuitem>Go to Matching
    Bracket</> (shortcut: <keycombo><keycap>Control</><keycap>]</></keycombo>)
-   moves the caret to the bracket matching the one before the caret.
+   goes to the bracket matching the one before the caret.
+  </para>
+  <para>
+   Double-clicking on a bracket in the text area will select all text
+   between the bracket and the one matching it.
   </para>
   <para>
    <guimenu>Edit</>&gt;<guisubmenu>Brackets</>&gt;<guimenuitem>Select Code Block</>
    (shortcut: <keycombo><keycap>Control</><keycap>[</></keycombo>)
-   selects the code block containing the caret. A code block is
-   a bracket-delimited range of text. Double-clicking on a
-   bracket in the text area also has the same effect.
+   selects all text between the two brackets nearest to the caret.
   </para>
   <para>
    <guimenu>Edit</>&gt;<guisubmenu>Brackets</>&gt;<guimenuitem>Go to Previous
@@ -153,7 +155,7 @@
    removes one level of indent from each selected line, or the current line
    if there is no selection.
   </para>
-  <sect2 id=indent-softtabs><title>Soft Tabs</>
+  <sect2 id=soft-tabs><title>Soft Tabs</>
    <para>
     <indexterm><primary>soft tabs</></indexterm>
     <indexterm><primary>buffer-local properties</>
@@ -289,7 +291,7 @@
    <indexterm><primary>Utilities menu</></indexterm>
    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Wing Comment</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>C</></keycombo>) will enclose the
+   <keycombo><keycap>Control</><keycap>C</></keycombo>) encloses the
    selection with comment start and end strings. An example of Java
    wing commented code looks like so:
   </para>
@@ -312,7 +314,7 @@
    <secondary>boxComment</></indexterm>
    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Box Comment</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>B</></keycombo>) will enclose the
+   <keycombo><keycap>Control</><keycap>B</></keycombo>) encloses the
    selection with comment start and end strings, and places the box
    comment string at the start of each line. An example of Java
    box commented code looks like so:
@@ -335,7 +337,7 @@
    <secondary>blockComment</></indexterm>
    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Block Comment</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>K</></keycombo>) will place the
+   <keycombo><keycap>Control</><keycap>K</></keycombo>) inserts the
    block comment string at the start of each selected line.
    An example of Java block commented code looks like so:
   </para>

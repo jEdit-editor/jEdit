@@ -186,7 +186,7 @@ public class WorkThread extends Thread
 
 	private void doRequest(WorkThreadPool.Request request)
 	{
-		Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: " + request);
+// 		Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: " + request);
 
 		try
 		{
@@ -223,41 +223,3 @@ public class WorkThread extends Thread
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.17  2000/11/21 02:58:04  sp
- * 2.7pre2 finished
- *
- * Revision 1.16  2000/07/26 07:48:46  sp
- * stuff
- *
- * Revision 1.15  2000/07/22 03:27:04  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.14  2000/07/21 10:23:49  sp
- * Multiple work threads
- *
- * Revision 1.13  2000/07/19 11:45:18  sp
- * I/O requests can be aborted now
- *
- * Revision 1.12  2000/07/03 03:32:16  sp
- * *** empty log message ***
- *
- * Revision 1.11  2000/06/24 06:24:56  sp
- * work thread bug fixes
- *
- * Revision 1.10  2000/06/24 03:46:48  sp
- * VHDL mode, bug fixing
- *
- * Revision 1.9  2000/06/16 10:11:06  sp
- * Bug fixes ahoy
- *
- * Revision 1.8  2000/06/12 02:43:30  sp
- * pre6 almost ready
- *
- * Revision 1.7  2000/06/06 04:38:09  sp
- * WorkThread's AWT request stuff reworked
- *
- */

@@ -33,12 +33,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
-		/* Session management */
-		saveDesktop = new JCheckBox(jEdit.getProperty(
-			"options.loadsave.saveDesktop"));
-		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
-		addComponent(saveDesktop);
-
 		/* Default file encoding */
 		String[] encodings = {
 			"ASCII", "8859_1", "UTF8", "Cp850", "Cp1252",
@@ -96,11 +90,16 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		ioThreadCount = new JTextField(jEdit.getProperty("ioThreadCount"));
 		addComponent(jEdit.getProperty("options.loadsave.ioThreadCount"),
 			ioThreadCount);
+
+		/* Session management */
+		saveDesktop = new JCheckBox(jEdit.getProperty(
+			"options.loadsave.saveDesktop"));
+		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
+		addComponent(saveDesktop);
 	}
 
 	public void _save()
 	{
-		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
 		jEdit.setProperty("autosave",autosave.getText());
@@ -123,10 +122,10 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
+		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
 	}
 
 	// private members
-	private JCheckBox saveDesktop;
 	private JComboBox encoding;
 	private JTextField autosave;
 	private JTextField backups;
@@ -135,15 +134,5 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
 	private JTextField ioThreadCount;
+	private JCheckBox saveDesktop;
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.2  2000/12/03 08:16:18  sp
- * Documentation updates
- *
- * Revision 1.1  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- */

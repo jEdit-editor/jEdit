@@ -214,36 +214,36 @@
   </para>
   <bridgehead renderas=sect3>The Colors Pane</>
   <para>
-   The <guibutton>Colors</> pane lets you change
+   The <guibutton>Colors</> option pane lets you change
    the text area's color scheme.
   </para>
   <bridgehead renderas=sect3>The Styles Pane</>
   <para>
-   The <guibutton>Styles</> pane lets you change
+   The <guibutton>Styles</> option pane lets you change
    the text styles and colors used for syntax highlighting.
   </para>
   <bridgehead renderas=sect3>The Docking Pane</>
   <para>
-   The <guibutton>Docking</> pane lets you specify which dockable
+   The <guibutton>Docking</> option pane lets you specify which dockable
    windows should be floating, and which should be docked in the view.
   </para>
    <bridgehead renderas=sect3>The Context Menu Pane</>
   <para>
-   The <guibutton>Context Menu</> pane lets you edit the text area's
+   The <guibutton>Context Menu</> option pane lets you edit the text area's
    right-click context menu.
   </para>
  <bridgehead renderas=sect3>The Tool Bar Pane</>
   <para>
-   The <guibutton>Tool Bar</> pane lets you customize the tool bar,
+   The <guibutton>Tool Bar</> option pane lets you edit the tool bar,
    or disable it completely.
   </para>
  <bridgehead renderas=sect3>The Shortcut Editing Panes</>
  <indexterm><primary>keyboard shortcuts</>
  <secondary>customizing</></indexterm>
   <para>
-   The <guibutton>Command Shortcuts</> pane lets you change
+   The <guibutton>Command Shortcuts</> option pane lets you change
    keyboard shortcuts associated with commands. The <guibutton>Macro
-   Shortcuts</> pane
+   Shortcuts</> option pane
    lets you assign keyboard shortcuts to macros.
   </para>
   <para>
@@ -256,9 +256,9 @@
   <itemizedlist>
    <listitem><para><command>C</> - the <keycap>Control</> key</para></listitem>
    <listitem><para><command>A</> - the <keycap>Alt</> key (<keycap>Option</>
-   on MacOS)</para></listitem>
+   on Macintosh computers)</para></listitem>
    <listitem><para><command>S</> - the <keycap>Shift</> key</para></listitem>
-   <listitem><para><command>M</> - the <keycap>Command</> key (MacOS
+   <listitem><para><command>M</> - the <keycap>Command</> key (Macintosh
    only)</para></listitem>
   </itemizedlist>
 <para>
@@ -322,7 +322,7 @@
   </para>
   <bridgehead renderas=sect3>The Abbreviations Pane</>
   <para>
-   The <guibutton>Abbreviations</> pane lets you enable or disable
+   The <guibutton>Abbreviations</> option pane lets you enable or disable
    automatic abbreviation expansion, and edit currently defined
    abbreviations.
   </para>
@@ -351,13 +351,13 @@
   <indexterm><primary>File menu</></indexterm>
   <indexterm><primary>Print command</></indexterm>
   <para>
-   The <guibutton>Printing</> pane lets you customize the appearance of
+   The <guibutton>Printing</> option pane lets you customize the appearance of
    printed output.
   </para>
   <bridgehead renderas=sect3>The File System Browser Pane</>
   <indexterm><primary>file system browser</></indexterm>
   <para>
-   The <guibutton>File System Browser</> pane lets you customize
+   The <guibutton>File System Browser</> option pane lets you customize
    jEdit's file system browser.
   </para>
  </sect1>
@@ -396,10 +396,10 @@
   <screen><prompt>C:\jedit&gt;</> <userinput>jedit -settings=C:\jedit</></>
   <para>
    The <command>-nosettings</> switch will force jEdit to not look for
-   or create a settings directory, and use the default settings instead.
+   or create a settings directory. Default settings will be used instead.
   </para>
   <para>
-   By default, jEdit creates the following files and directories
+   jEdit creates the following files and directories
    inside the settings directory; plugins may add more:
   </para>
   <itemizedlist>
