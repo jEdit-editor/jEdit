@@ -1,10 +1,9 @@
 JEDIT TO DO
 
-- Open -- replace untitled broken
-
 + Features
 
 - Incremental search
+- 'Background' mode
 - XMode:
   - better error reporting
   - faster tokenizing of files

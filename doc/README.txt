@@ -14,6 +14,18 @@ jEdit uses gnu.regexp by the Free Software Foundation. Only the parts of
 gnu.regexp used by jEdit are included - the complete package can be
 found at <http://www.cacas.org/java/gnu/regexp/>.
 
+jEdit also uses the AElfred XML parser by Microstar corporation. This
+class library is released under its own (non-GPL) license, which reads as
+follows:
+
+  AElfred is free for both commercial and non-commercial use and
+  redistribution, provided that Microstar's copyright and disclaimer are
+  retained intact.  You are free to modify AElfred for your own use and
+  to redistribute AElfred with your modifications, provided that the
+  modifications are clearly documented.
+
+The complete AElfred package can be found at <http://www.microstar.com>.
+
 * jEdit's License
 
 jEdit is released under the GNU General Public License, which can

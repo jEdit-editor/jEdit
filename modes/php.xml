@@ -9,7 +9,7 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{php,php3,phtml}" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.{php3,php,phtml}" />
 		<PROPERTY NAME="firstlineGlob" VALUE="&lt;?php" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
@@ -74,17 +74,33 @@
 			<END>%&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>
+	</RULES>
+
+	<RULES SET="LITERAL" DEFAULT="LITERAL1">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>    </WHITESPACE>
+
+		<SPAN TYPE="LABEL" DELEGATE="PHP">
+			<BEGIN>&lt;?php</BEGIN>
+			<END>?&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="PHP">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
 	</RULES>
 
 	<RULES SET="PHP" ESCAPE="\">

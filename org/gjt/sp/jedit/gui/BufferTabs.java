@@ -136,7 +136,7 @@ public class BufferTabs extends JTabbedPane
 
 		if(index == selectedIndex)
 			update();
-		else
+		else if(index < getComponentCount())
 			setSelectedIndex(index);
 	}
 

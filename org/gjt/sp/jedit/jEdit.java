@@ -1918,10 +1918,10 @@ public class jEdit
 			&& buffersFirst.isUntitled()
 			&& !buffersFirst.isDirty())
 		{
-			System.err.println("replacing untitled");
-			EditBus.send(new BufferUpdate(buffersFirst,
-				BufferUpdate.CLOSED));
+			Buffer oldBuffersFirst = buffersFirst;
 			buffersFirst = buffersLast = buffer;
+			EditBus.send(new BufferUpdate(oldBuffersFirst,
+				BufferUpdate.CLOSED));
 			return;
 		}
 
@@ -2058,6 +2058,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.209  2000/04/05 08:33:42  sp
+ * BufferTabs bug fix
+ *
  * Revision 1.208  2000/04/03 10:22:24  sp
  * Search bar
  *

@@ -9,6 +9,7 @@ JEDIT VERSION HISTORY
 - ASP mode (Andre Kaplan)
 - New 'search bar' with incremental search support replaces QuickSearch
   field on toolbar
+- PHP mode updates (Mike Dillon)
 
 + Enhancements
 
