@@ -73,8 +73,16 @@ public class RESearchMatcher implements SearchMatcher
 		REMatch match = re.getMatch(new CharIndexedSegment(text,0));
 		if(match == null)
 			return null;
-		int[] result = { match.getStartIndex(),
-			match.getEndIndex() };
+
+		int start = match.getStartIndex();
+		int end = match.getEndIndex();
+		if(start == end)
+		{
+			// searched for (), or ^, or $, or other 'empty' regexp
+			return null;
+		}
+
+		int[] result = { start, end };
 		return result;
 	}
 

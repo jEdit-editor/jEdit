@@ -25,8 +25,9 @@ import javax.swing.text.Segment;
 import javax.swing.tree.*;
 import javax.swing.SwingUtilities;
 import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.*;
 
@@ -55,23 +56,40 @@ public class HyperSearchRequest extends WorkRequest
 
 			Buffer buffer = fileset.getFirstBuffer(view);
 
-			boolean retVal = false;
+			int resultCount = 0;
+			int bufferCount = 0;
 
 			if(buffer != null)
 			{
 				do
 				{
 					setProgressValue(++current);
-					retVal |= doHyperSearch(buffer,matcher);
+					int thisResultCount = doHyperSearch(buffer,matcher);
+					if(thisResultCount != 0)
+					{
+						bufferCount++;
+						resultCount += thisResultCount;
+					}
 				}
 				while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 			}
 
-			if(!retVal)
+			// retarded javac limitations force us to do this
+			// crap here
+			final Object[] pp = { new Integer(resultCount),
+				new Integer(bufferCount) };
+			final boolean resultsFound = (resultCount != 0);
+
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				view.getToolkit().beep();
-				return;
-			}
+				public void run()
+				{
+					if(resultsFound)
+						GUIUtilities.message(view,"hypersearch-done",pp);
+					else
+						GUIUtilities.message(view,"hypersearch-no-results",null);
+				}
+			});
 		}
 		catch(Exception e)
 		{
@@ -92,10 +110,12 @@ public class HyperSearchRequest extends WorkRequest
 	private DefaultTreeModel resultTreeModel;
 	private DefaultMutableTreeNode resultTreeRoot;
 
-	private boolean doHyperSearch(Buffer buffer, SearchMatcher matcher)
+	private int doHyperSearch(Buffer buffer, SearchMatcher matcher)
 		throws Exception
 	{
 		setAbortable(false);
+
+		int resultCount = 0;
 
 		final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
 			buffer.getPath());
@@ -129,6 +149,8 @@ loop:			for(;;)
 
 				line = newLine;
 
+				resultCount++;
+
 				bufferNode.insert(new DefaultMutableTreeNode(
 					new HyperSearchResult(buffer,line),false),
 					bufferNode.getChildCount());
@@ -139,21 +161,21 @@ loop:			for(;;)
 			buffer.readUnlock();
 		}
 
-		if(bufferNode.getChildCount() == 0)
-			return false;
-
-		SwingUtilities.invokeLater(new Runnable()
+		if(resultCount != 0)
 		{
-			public void run()
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				resultTreeRoot.insert(bufferNode,
-					resultTreeRoot.getChildCount());
-				resultTreeModel.reload(resultTreeRoot);
-			}
-		});
+				public void run()
+				{
+					resultTreeRoot.insert(bufferNode,
+						resultTreeRoot.getChildCount());
+					resultTreeModel.reload(resultTreeRoot);
+				}
+			});
+		}
 
 		setAbortable(true);
 
-		return true;
+		return resultCount;
 	}
 }

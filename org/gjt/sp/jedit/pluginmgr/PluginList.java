@@ -207,14 +207,10 @@ class PluginList
 					installed);
 			}
 
-			roster.addOperation(new Roster.Install(branch.download,
+			roster.addOperation(new Roster.Install((downloadSource
+				? branch.downloadSource : branch.download),
 				installDirectory));
 
-			if(downloadSource)
-			{
-				roster.addOperation(new Roster.Install(branch.downloadSource,
-					installDirectory));
-			}
 		}
 
 		public String toString()

@@ -6,10 +6,18 @@ JEDIT 3.2 VERSION HISTORY
 
 - Occam syntax highlighting (Richard Beton)
 - The icons in the file system browser can be toggled on and off
+- A dialog box is now displayed after a HyperSearch has been performed,
+  showing the number of results found
 
 + Enhancements
 
 - You can now choose if you want to download plugin source, or only binaries
+
++ Bug Fixes
+
+- Searching for certain regular expressions (like (), ^, %, etc) would
+  cause an infinite loop
+- Some of the links in the help viewer table of contents didn't work
 
 * Version 3.2pre3
 

@@ -685,6 +685,7 @@ loop:		for(;;)
 				break loop;
 			int _start = occur[0] + offset;
 			int _end = occur[1] - occur[0];
+
 			String found = buffer.getText(_start,_end);
 			String subst = matcher.substitute(found);
 

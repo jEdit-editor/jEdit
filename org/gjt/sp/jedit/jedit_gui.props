@@ -772,6 +772,12 @@ keepsearching.message=No more matches were found. Continue search from\n\
 hypersearch-results.title=HyperSearch Results
 hypersearch.status=HyperSearch
 
+hypersearch-no-results.title=HyperSearch Complete
+hypersearch-no-results.message=No occurences of the search string were found.
+
+hypersearch-done.title=HyperSearch Complete
+hypersearch-done.message=Found {0} occurence(s) in {1} buffer(s).
+
 # Replace all results
 replace-results.title=Replacement Complete
 replace-results.message=Replaced {0} occurence(s) in {1} buffer(s).

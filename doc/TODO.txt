@@ -1,5 +1,11 @@
 TO DO
 
+- FTP plugin: soft links???
+
+- document icon toggle in vfs browser
+- C+\
+- help viewer: links to .txt files
+- console: deleting backup files
 - finish converting docs to xml
 - support middle mouse button clicks, Shift-clicks in JTextComponents
 - support jEdit keyboard shortcuts in JTextComponents

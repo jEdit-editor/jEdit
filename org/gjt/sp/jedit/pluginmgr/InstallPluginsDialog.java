@@ -104,7 +104,7 @@ class InstallPluginsDialog extends EnhancedDialog
 		panel3.add(BorderLayout.NORTH,new JScrollPane(description));
 		if(mode == INSTALL)
 		{
-			JPanel panel4 = new JPanel(new BorderLayout());
+			JPanel panel4 = new JPanel(new BorderLayout(0,3));
 
 			ButtonGroup grp = new ButtonGroup();
 			installUser = new JRadioButton();

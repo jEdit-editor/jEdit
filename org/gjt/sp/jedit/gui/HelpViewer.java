@@ -154,11 +154,24 @@ public class HelpViewer extends JFrame
 		// stick around
 		viewer.setCursor(Cursor.getDefaultCursor());
 
+		int index = url.indexOf('#');
+
 		URL _url = null;
 		try
 		{
 			if(!MiscUtilities.isURL(url))
-				_url = getClass().getResource("/doc/" + url);
+			{
+				// this is fucked up because #foo can't be passed
+				// to getResource()
+				_url = getClass().getResource("/doc/" + (index != -1
+					? url.substring(0,index)
+					: url));
+				if(index != -1)
+				{
+					_url = new URL(_url.getProtocol(),_url.getHost(),
+						_url.getFile() + url.substring(index));
+				}
+			}
 			else
 				_url = new URL(url);
 
@@ -193,7 +206,7 @@ public class HelpViewer extends JFrame
 		}
 
 		// select the appropriate tree node.
-		int index = url.lastIndexOf("/doc/");
+		index = url.lastIndexOf("/doc/");
 		if(index != -1)
 			url = url.substring(index + 5);
 
