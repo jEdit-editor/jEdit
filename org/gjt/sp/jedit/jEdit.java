@@ -58,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.01.99.00";
+		return "03.02.01.00";
 	}
 
 	/**
@@ -2220,7 +2220,7 @@ public class jEdit
 
 		public void run()
 		{
-			int start, end;
+			int pos;
 
 			// Handle line number
 			if(marker.startsWith("+line:"))
@@ -2230,7 +2230,7 @@ public class jEdit
 					int line = Integer.parseInt(marker.substring(6));
 					Element lineElement = buffer.getDefaultRootElement()
 						.getElement(line - 1);
-					start = end = lineElement.getStartOffset();
+					pos = lineElement.getStartOffset();
 				}
 				catch(Exception e)
 				{
@@ -2240,18 +2240,20 @@ public class jEdit
 			// Handle marker
 			else if(marker.startsWith("+marker:"))
 			{
-				Marker m = buffer.getMarker(marker.substring(8));
+				if(marker.length() != 9)
+					return;
+
+				Marker m = buffer.getMarker(marker.charAt(8));
 				if(m == null)
 					return;
-				start = m.getStart();
-				end = m.getEnd();
+				pos = m.getPosition();
 			}
 			// Can't happen
 			else
 				throw new InternalError();
 
-			buffer.putProperty(Buffer.SELECTION_START,new Integer(start));
-			buffer.putProperty(Buffer.SELECTION_END,new Integer(end));
+			buffer.putProperty(Buffer.SELECTION_START,new Integer(pos));
+			buffer.putProperty(Buffer.SELECTION_END,new Integer(pos));
 			buffer.getDocumentProperties().remove(Buffer.SCROLL_HORIZ);
 			buffer.getDocumentProperties().remove(Buffer.SCROLL_VERT);
 		}

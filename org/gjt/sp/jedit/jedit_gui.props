@@ -164,7 +164,7 @@ view.context=undo redo - cut copy paste paste-previous - select-all \
 ###
 ### MENUBAR
 ###
-view.mbar=file edit search view utils macros plugins help-menu
+view.mbar=file edit search markers view utils macros plugins help-menu
 
 ### File menu
 file=new-file \
@@ -212,6 +212,8 @@ edit=undo \
      - \
      cut \
      copy \
+     cut-append \
+     copy-append \
      paste \
      paste-previous \
      - \
@@ -236,15 +238,17 @@ undo.label=$Undo
 redo.label=$Redo
 cut.label=$Cut
 copy.label=C$opy
+cut-append.label=Cu$t Append
+copy-append.label=Copy $Append
 paste.label=$Paste
 paste-previous.label=Paste Pre$vious...
-select-all.label=Select $All
+select-all.label=Select A$ll
 select-none.label=Select $None
 word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
 goto-line.label=$Go to Line...
-select-line-range.label=Select Line Range...
+select-line-range.label=Select Li$ne Range...
 toggle-rect.label=Rectangular $Selection
 
 ### Text menu
@@ -309,27 +313,17 @@ next-bracket.label=Go to Next Bracket
 ### Registers menu
 registers=cut-string-register \
           copy-string-register \
-	  append-string-register \
+	  cut-append-string-register \
+	  copy-append-string-register \
 	  paste-string-register \
-	  - \
-	  set-caret-register \
-	  goto-caret-register \
-	  select-caret-register \
-	  exchange-caret-register \
-	  - \
-	  clear-register \
 	  - \
 	  view-registers
 registers.label=Registers
 cut-string-register.label=Cut to Register [x]
 copy-string-register.label=Copy to Register [x]
-append-string-register.label=Append to Register [x]
+cut-append-string-register.label=Cut Append to Register [x]
+copy-append-string-register.label=Copy Append to Register [x]
 paste-string-register.label=Paste Register [x]
-set-caret-register.label=Save Position to Register [x]
-goto-caret-register.label=Go to Position in Register [x]
-select-caret-register.label=Select to Position in Register [x]
-exchange-caret-register.label=Swap Position with Register [x]
-clear-register.label=Clear Register [x]
 view-registers.label=View Registers...
 
 ### Search menu
@@ -345,13 +339,7 @@ search=find \
        quick-search \
        hypersearch \
        - \
-       hypersearch-results \
-       - \
-       set-marker \
-       prev-marker \
-       next-marker \
-       %clear-marker \
-       %goto-marker
+       hypersearch-results
 search.label=$Search
 find.label=$Find...
 find-next.label=Fin$d Next
@@ -363,15 +351,35 @@ replace-all.label=Replace $All
 quick-search.label=Quick $Incremental Search
 hypersearch.label=$Quick HyperSearch
 hypersearch-results.label=$HyperSearch Results
-set-marker.label=Set $Marker...
-no-markers.label=No Markers Defined
+
+### Markers menu
+markers=add-marker \
+	  add-marker-shortcut \
+	  - \
+	  goto-marker \
+	  select-marker \
+	  swap-marker \
+	  - \
+	  remove-marker \
+	  remove-all-markers \
+	  - \
+	  prev-marker \
+	  next-marker \
+	  -
+markers.label=$Markers
+add-marker.label=$Add Marker
+add-marker-shortcut.label=Add Marker $With Shortcut [x]
+goto-marker.label=$Go to Marker [x]
+select-marker.label=$Select to Marker [x]
+swap-marker.label=Swa$p Caret and Marker [x]
+remove-marker.label=$Remove Marker from Current Line
+remove-all-markers.label=Re$move All Markers
 prev-marker.label=Go to $Previous Marker
 next-marker.label=Go to $Next Marker
-clear-marker.label=Clear Marker
-goto-marker.label=Go to Marker
+no-markers.label=No Markers
+markers.blank-line=[Blank line]
 
 ### View menu
-
 view=new-view \
      close-view \
      - \
@@ -490,7 +498,7 @@ macros=record-macro \
        - \
        rescan-macros \
        -
-macros.label=$Macros
+macros.label=Ma$cros
 record-macro.label=$Record Macro...
 record-temp-macro.label=Record $Temporary Macro
 stop-recording.label=$Stop Recording
@@ -584,8 +592,8 @@ select-prev-word.label=Select Previous Word
 view.title=jEdit - 
 
 # Gutter highlight
-view.gutter.register=Register "{0}" points to this line
-view.gutter.marker=Marker "{0}" points to this line
+view.gutter.marker.no-name=Marker is set here
+view.gutter.marker=Marker with shortcut "{0}" is set here
 
 # Status messages
 view.status.recording=(recording)
@@ -800,10 +808,7 @@ selectlinerange.end=End line:
 view-registers.title=Registers
 view-registers.caption=Register:
 view-registers.clipboard=$ (clipboard)
-view-registers.type=Type:
-view-registers.text=text
-view-registers.position=position
-view-registers.other=other
+view-registers.selection=% (selection)
 view-registers.none=No registers defined
 
 # Close all buffers dialog
@@ -973,7 +978,7 @@ options.gutter.numberAlignment=Line number alignment:
 options.gutter.interval=Line highlight interval:
 options.gutter.lineNumbers=Line numbering
 options.gutter.currentLineHighlight=Current line highlighting
-options.gutter.markerHighlight=Indicate markers and position registers
+options.gutter.markerHighlight=Indicate marker positions
 
 options.color.label=Colors
 options.color.object=Object
@@ -991,7 +996,6 @@ options.color.gutterFgColor=Gutter foreground
 options.color.gutterHighlightColor=Gutter highlight
 options.color.gutterCurrentLineColor=Current line in gutter
 options.color.gutterMarkerColor=Markers in gutter
-options.color.gutterRegisterColor=Registers in gutter
 options.color.gutterFoldColor=Fold markers in gutter
 options.color.gutterFocusBorderColor=Focused gutter border
 options.color.gutterNoFocusBorderColor=Unfocused gutter border
@@ -1157,8 +1161,8 @@ helpviewer.forward=Forward
 helpviewer.toc.welcome=Welcome to jEdit
 helpviewer.toc.misc=Miscellaneous Documentation
 helpviewer.toc.readme=jEdit Read Me
-helpviewer.toc.news=Major Changes in jEdit 3.1
-helpviewer.toc.todo=Changes Planned for jEdit 3.2
+helpviewer.toc.news=Major Changes in jEdit 3.2
+helpviewer.toc.todo=To Do List and Known Bugs
 helpviewer.toc.changes=Version History
 helpviewer.toc.copying=GNU General Public License
 helpviewer.toc.copying-doc=GNU Free Documentation License

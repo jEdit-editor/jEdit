@@ -452,68 +452,28 @@ public class BufferIORequest extends WorkRequest
 		return returnValue;
 	}
 
-	private void readMarkers(Buffer buffer, InputStream in)
+	private void readMarkers(Buffer buffer, InputStream _in)
 		throws IOException
 	{
 		// For `reload' command
 		buffer.removeAllMarkers();
 
-		StringBuffer buf = new StringBuffer();
-		int c;
-		boolean eof = false;
-		String name = null;
-		int start = -1;
-		int end = -1;
-		for(;;)
-		{
-			if(eof)
-				break;
-			switch(c = in.read())
-			{
-			case -1:
-				eof = true;
-			case ';': case '\n': case '\r':
-				if(buf.length() == 0)
-					continue;
-				String str = buf.toString();
-				buf.setLength(0);
-				if(name == null)
-					name = str;
-				else if(start == -1)
-				{
-					try
-					{
-						start = Integer.parseInt(str);
-					}
-					catch(NumberFormatException nf)
-					{
-						//Log.log(Log.ERROR,this,nf);
-						start = 0;
-					}
-				}
-				else if(end == -1)
-				{
-					try
-					{
-						end = Integer.parseInt(str);
-					}
-					catch(NumberFormatException nf)
-					{
-						//Log.log(Log.ERROR,this,nf);
-						end = 0;
-					}
+		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
 
-					buffer.addMarker(name,start,end);
-					name = null;
-					start = -1;
-					end = -1;
-				}
-				break;
-			default:
-				buf.append((char)c);
-				break;
-			}
+		String line;
+		while((line = in.readLine()) != null)
+		{
+			// compatibility kludge for jEdit 3.1 and earlier
+			if(!line.startsWith("!"))
+				continue;
+
+			char shortcut = line.charAt(1);
+			int start = line.indexOf(';');
+			int end = line.indexOf(';',start + 1);
+			int position = Integer.parseInt(line.substring(start + 1,end));
+			buffer.addMarker(shortcut,position);
 		}
+
 		in.close();
 	}
 
@@ -545,7 +505,7 @@ public class BufferIORequest extends WorkRequest
 				// We only save markers to VFS's that support deletion.
 				// Otherwise, we will accumilate stale marks files.
 				if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0
-					&& buffer.getMarkerCount() != 0)
+					&& buffer.getMarkers().size() != 0)
 				{
 					setStatus(jEdit.getProperty("vfs.status.save-markers",args));
 					setProgressValue(0);
@@ -704,11 +664,14 @@ public class BufferIORequest extends WorkRequest
 		for(int i = 0; i < markers.size(); i++)
 		{
 			Marker marker = (Marker)markers.elementAt(i);
-			o.write(marker.getName());
+			o.write('!');
+			o.write(marker.getShortcut());
 			o.write(';');
-			o.write(String.valueOf(marker.getStart()));
+
+			String pos = String.valueOf(marker.getPosition());
+			o.write(pos);
 			o.write(';');
-			o.write(String.valueOf(marker.getEnd()));
+			o.write(pos);
 			o.write('\n');
 		}
 		o.close();

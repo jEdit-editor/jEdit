@@ -581,10 +581,8 @@ public class View extends JFrame implements EBComponent
 			return recent;
 		else if(name.equals("current-directory"))
 			return currentDirectory;
-		else if(name.equals("clear-marker"))
-			return clearMarker;
-		else if(name.equals("goto-marker"))
-			return gotoMarker;
+		else if(name.equals("markers"))
+			return markers;
 		else if(name.equals("macros"))
 			return macros;
 		else if(name.equals("plugins"))
@@ -673,8 +671,7 @@ public class View extends JFrame implements EBComponent
 		// Dynamic menus
 		recent = GUIUtilities.loadMenu(this,"recent-files");
 		currentDirectory = new CurrentDirectoryMenu(this);
-		clearMarker = GUIUtilities.loadMenu(this,"clear-marker");
-		gotoMarker = GUIUtilities.loadMenu(this,"goto-marker");
+		markers = new MarkersMenu(this);
 		macros = GUIUtilities.loadMenu(this,"macros");
 		help = GUIUtilities.loadMenu(this,"help-menu");
 		plugins = GUIUtilities.loadMenu(this,"plugins");
@@ -684,7 +681,6 @@ public class View extends JFrame implements EBComponent
 			/* jEdit.getProperty("view.splits") */;
 		dockableWindowManager.add(comp);
 
-		updateMarkerMenus();
 		updateMacrosMenu();
 		updatePluginsMenu();
 		//updateHelpMenu();
@@ -742,8 +738,8 @@ public class View extends JFrame implements EBComponent
 
 		// null some variables so that retaining references
 		// to closed views won't hurt as much.
-		recent = currentDirectory = clearMarker
-			= gotoMarker = macros = plugins = help = null;
+		recent = currentDirectory = markers
+			= macros = plugins = help = null;
 		toolBars = null;
 		toolBar = null;
 		searchBar = null;
@@ -781,59 +777,6 @@ public class View extends JFrame implements EBComponent
 		setTitle(title.toString());
 	}
 
-	/**
-	 * Recreates the goto marker and clear marker menus.
-	 */
-	void updateMarkerMenus()
-	{
-		if(clearMarker.getMenuComponentCount() != 0)
-			clearMarker.removeAll();
-		if(gotoMarker.getMenuComponentCount() != 0)
-			gotoMarker.removeAll();
-
-		ActionListener clearMarkerAction = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				Buffer buffer = getBuffer();
-				if(buffer.isReadOnly())
-					getToolkit().beep();
-				buffer.removeMarker(evt.getActionCommand());
-			}
-		};
-
-		ActionListener gotoMarkerAction = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				JEditTextArea textArea = getTextArea();
-				Marker marker = getBuffer().getMarker(evt.getActionCommand());
-				if(marker != null)
-					textArea.select(marker.getStart(),marker.getEnd());
-			}
-		};
-
-		Vector markers = editPane.getBuffer().getMarkers();
-		if(markers.size() == 0)
-		{
-			clearMarker.add(GUIUtilities.loadMenuItem("no-markers"));
-			gotoMarker.add(GUIUtilities.loadMenuItem("no-markers"));
-			return;
-		}
-
-		for(int i = 0; i < markers.size(); i++)
-		{
-			String name = ((Marker)markers.elementAt(i)).getName();
-			JMenuItem menuItem = new JMenuItem(name);
-			menuItem.addActionListener(clearMarkerAction);
-			clearMarker.add(menuItem);
-
-			menuItem = new JMenuItem(name);
-			menuItem.addActionListener(gotoMarkerAction);
-			gotoMarker.add(menuItem);
-		}
-	}
-
 	// private members
 	private boolean closed;
 
@@ -841,8 +784,7 @@ public class View extends JFrame implements EBComponent
 
 	private JMenu recent;
 	private JMenu currentDirectory;
-	private JMenu clearMarker;
-	private JMenu gotoMarker;
+	private JMenu markers;
 	private JMenu macros;
 	private JMenu plugins;
 	private JMenu help;
@@ -1002,10 +944,7 @@ public class View extends JFrame implements EBComponent
 
 	private void setEditPane(EditPane editPane)
 	{
-		EditPane oldPane = this.editPane;
 		this.editPane = editPane;
-		if(oldPane.getBuffer() != editPane.getBuffer())
-			updateMarkerMenus();
 	}
 
 	/**
@@ -1247,11 +1186,6 @@ public class View extends JFrame implements EBComponent
 				}
 			}
 		}
-		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
-		{
-			if(buffer == getBuffer())
-				updateMarkerMenus();
-		}
 	}
 
 	class FocusHandler extends FocusAdapter
@@ -1284,7 +1218,20 @@ public class View extends JFrame implements EBComponent
 				gotFocus = true;
 			}
 
-			editPane.getBuffer().checkModTime(View.this);
+			Vector buffers = new Vector();
+			EditPane[] editPanes = getEditPanes();
+			for(int i = 0; i < editPanes.size(); i++)
+			{
+				Buffer buffer = ((EditPane)editPanes[i])
+					.getBuffer();
+				if(buffers.contains(buffer))
+					continue;
+				else
+					buffers.addElement(buffer);
+			}
+
+			for(int i = 0; i < buffers.size(); i++)
+				((Buffer)buffers.elementAt(i)).checkModTime(View.this);
 		}
 
 		public void windowClosing(WindowEvent evt)

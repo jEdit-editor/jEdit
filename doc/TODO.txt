@@ -11,38 +11,17 @@ might never be implemented at all.
    eg $0.toLowerCase(). That would be rather cool.
  - don't clear hypersearch results between subsequent searches, instead
    have a 'Clear' button in the results window
- - hypersearch: select all found results
+ - hypersearch: select all found results using dicont. select
 
-+ merge position registers and markers
- - Markers top level menu:
-    Add Marker (C+e C+m)
-    Add Marker With Shortcut [x] (C+t)
-    Go to Marker With Shortcut [x] (C+y)
-    Select to Marker With Shortcut [x] (C+u)
-    Swap Caret With Marker [x] (C+k)
-    Clear Marker (???)
-    Clear All Markers
-    Go to Previous Marker
-    Go to Next Marker
-    ----
-    <list of markers>
-
- - each marker's "name" is the line of text (w/o whitespace) containing it.
- - the shortcut is a single key, used by the register-like commands.
- - markers are still persistent, etc.
- - config option for controlling marker persistance
+- config option for controlling marker persistance
 
 + editing
- - most recently selected text stored in % register, middle mouse button
-    inserts contents of that register
- - magic caret code a bit annoying
  - wing comment with rect sel active puts comment start/end at the
     beginning/end of each selected chunk
  - improved rectangular selections
  - soft wrap
  - discontinuous selection
    - Edit->Discontinuous Selection command
- - cut-append, copy-append, cut-append-register actions
  - Bracket double click behavior is really annoying - make if configurable
 
 + folding
@@ -76,7 +55,8 @@ might never be implemented at all.
    calls getParentOfPath()?)
  - encoding option in VFS browser
  - when saving local files, save to .<filename>.save, then rename to
-   <filename>
+   <filename>; maybe backups on non-local fs's (but then would have to
+   eliminate numbered backup support)
  - aborts not always fired
  - encoding option in VFS browser
  - Two-pane view in filesystem browser
@@ -93,12 +73,9 @@ might never be implemented at all.
  - fix dragStart handling in DockableWindowContainer.TabbedPane
  - C+i in shortcuts editor
  - 'new view' creates incorrectly sized views due to Java bugs
+ - status bar for displaying readNextChar() prompts
 
 + beanshell
- - print() in BeanShell
- - actions.xml ACTIONS::ACTION attributes:
-   NO_READ_ONLY, NO_DISCONT_SEL -- automatic error msg if read only or
-   selection is discont.
  - improve handling of __char__
  - BeanShell class uses deprecated showFileDialog() method
  - runmacro= switch, nomacro switch
@@ -109,6 +86,8 @@ might never be implemented at all.
  - documentation: merge 'Text Registers' and 'The Clipboard' sections,
    also mention MMB in those sections. Merge 'Markers' and 'Position
    Registers'.
+ - update macro guide for misc. API changes:
+   - markers, registers, should probably be mentioned?
  - Include John's upcoming plugin guide
 
 + misc

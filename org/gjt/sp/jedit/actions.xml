@@ -17,9 +17,16 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+<ACTION NAME="add-marker">
 	<CODE>
-		view.getInputHandler().readNextChar("Registers.append(textArea,__char__);");
+		buffer.addMarker('\0',textArea.getCaretPosition());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="add-marker-shortcut" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			"buffer.addMarker(__char__,textArea.getCaretPosition())");
 	</CODE>
 </ACTION>
 
@@ -86,12 +93,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="clear-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		view.getInputHandler().readNextChar("Registers.clearRegister(__char__);");
-	</CODE>
-</ACTION>
-
 <ACTION NAME="close-all">
 	<CODE>
 		jEdit.closeAllBuffers(view);
@@ -128,6 +129,18 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="copy-append">
+	<CODE>
+		Registers.append(textArea,'$',"\n",false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="copy-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar("Registers.append(textArea,__char__,\"\\n\",false);");
+	</CODE>
+</ACTION>
+
 <ACTION NAME="copy-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar("Registers.copy(textArea,__char__);");
@@ -137,6 +150,18 @@
 <ACTION NAME="cut">
 	<CODE>
 		Registers.cut(textArea,'$');
+	</CODE>
+</ACTION>
+
+<ACTION NAME="cut-append">
+	<CODE>
+		Registers.append(textArea,'$',"\n",true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="cut-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar("Registers.append(textArea,__char__,\"\\n\",true);");
 	</CODE>
 </ACTION>
 
@@ -248,12 +273,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="exchange-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		view.getInputHandler().readNextChar("Registers.exchangeCaretRegister(editPane,__char__);");
-	</CODE>
-</ACTION>
-
 <ACTION NAME="expand-abbrev">
 	<CODE>
 		Abbrevs.expandAbbrev(view,true);
@@ -328,57 +347,22 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="goto-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		view.getInputHandler().readNextChar("Registers.goToCaretRegister(editPane,__char__);");
-	</CODE>
-</ACTION>
-
 <ACTION NAME="goto-line">
 	<CODE>
 		textArea.showGoToLineDialog();
 	</CODE>
 </ACTION>
 
+<ACTION NAME="goto-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			"textArea.goToMarker(__char__,false)");
+	</CODE>
+</ACTION>
+
 <ACTION NAME="help">
 	<CODE>
 		new HelpViewer("users-guide/index.html");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="help-changes">
-	<CODE>
-		new HelpViewer("CHANGES.txt");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="help-copying">
-	<CODE>
-		new HelpViewer("COPYING.txt");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="help-copying-doc">
-	<CODE>
-		new HelpViewer("COPYING.DOC.txt");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="help-news">
-	<CODE>
-		new HelpViewer("NEWS.txt");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="help-readme">
-	<CODE>
-		new HelpViewer("README.txt");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="help-todo">
-	<CODE>
-		new HelpViewer("TODO.txt");
 	</CODE>
 </ACTION>
 
@@ -634,11 +618,17 @@
 	</CODE>
 </ACTION>
 
-<!-- <ACTION NAME="reload-modes">
+<ACTION NAME="remove-all-markers">
 	<CODE>
-		jEdit.reloadModes(view);
+		buffer.removeAllMarkers();
 	</CODE>
-</ACTION> -->
+</ACTION>
+
+<ACTION NAME="remove-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		buffer.removeMarker(textArea.getCaretLine());
+	</CODE>
+</ACTION>
 
 <ACTION NAME="remove-trailing-ws">
 	<CODE>
@@ -761,12 +751,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="select-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		view.getInputHandler().readNextChar("Registers.selectCaretRegister(editPane,__char__);");
-	</CODE>
-</ACTION>
-
 <ACTION NAME="select-fold">
 	<CODE>
 		textArea.selectFold();
@@ -818,6 +802,13 @@
 <ACTION NAME="select-document-home">
 	<CODE>
 		textArea.moveCaretPosition(0);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			"textArea.goToMarker(__char__,true)");
 	</CODE>
 </ACTION>
 
@@ -911,18 +902,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="set-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		view.getInputHandler().readNextChar("Registers.setCaretRegister(editPane,__char__);");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="set-marker">
-	<CODE>
-		textArea.showSetMarkerDialog();
-	</CODE>
-</ACTION>
-
 <ACTION NAME="shift-left">
 	<CODE>
 		textArea.shiftIndentLeft();
@@ -956,6 +935,13 @@
 <ACTION NAME="stop-recording" NO_RECORD="TRUE">
 	<CODE>
 		Macros.stopRecording(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="swap-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			"textArea.swapMarkerAndCaret(__char__)");
 	</CODE>
 </ACTION>
 

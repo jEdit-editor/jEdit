@@ -80,7 +80,6 @@ public class EditPane extends JPanel implements EBComponent
 		if(!init)
 		{
 			view.updateTitle();
-			view.updateMarkerMenus();
 
 			if(bufferSwitcher != null)
 			{
@@ -393,8 +392,6 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getProperty("view.gutter.foldColor")));
 		markerHighlight.setMarkerHighlightColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.markerColor")));
-		markerHighlight.setRegisterHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.registerColor")));
 		markerHighlight.setHighlightEnabled(jEdit.getBooleanProperty(
 			"view.gutter.markerHighlight"));
 		gutter.setCurrentLineForeground(GUIUtilities.parseColor(
@@ -613,6 +610,8 @@ public class EditPane extends JPanel implements EBComponent
 		public void caretUpdate(CaretEvent evt)
 		{
 			caretStatus.repaint();
+			if(evt.getDot() != evt.getMark())
+				Registers.setRegister('%',textArea.getSelectedText());
 		}
 	}
 }

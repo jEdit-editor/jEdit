@@ -110,7 +110,7 @@ class ColorTableModel extends AbstractTableModel
 
 	ColorTableModel()
 	{
-		colorChoices = new Vector(17);
+		colorChoices = new Vector(16);
 		addColorChoice("options.color.bgColor","view.bgColor");
 		addColorChoice("options.color.fgColor","view.fgColor");
 		addColorChoice("options.color.caretColor","view.caretColor");
@@ -134,8 +134,6 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.currentLineColor");
 		addColorChoice("options.color.gutterMarkerColor",
 			"view.gutter.markerColor");
-		addColorChoice("options.color.gutterRegisterColor",
-			"view.gutter.registerColor");
 		addColorChoice("options.color.gutterFoldColor",
 			"view.gutter.foldColor");
 		addColorChoice("options.color.gutterFocusBorderColor",

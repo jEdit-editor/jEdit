@@ -7,3 +7,27 @@ import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.*;
+
+print(arg)
+{
+	if(arg == null)
+		arg = "null";
+
+	if(arg instanceof Object [])
+	{
+		len = arg.length;
+		print("Array: "+arg +" {");
+		for(int i=0; i< len; i++ )
+		{
+			print(arg[i]);
+		}
+		print("}");
+	}
+	else
+	{
+		if(console != null)
+			console.printPlain(arg);
+		else
+			Log.log(Log.WARNING,BeanShell.class,arg);
+	}
+}

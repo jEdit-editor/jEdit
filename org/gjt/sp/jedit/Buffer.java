@@ -2557,7 +2557,7 @@ loop:				for(int i = 0; i < count; i++)
 
 	/**
 	 * Returns a vector of markers.
-	 * @since jEdit 2.5pre4
+	 * @since jEdit 3.2pre1
 	 */
 	public final Vector getMarkers()
 	{
@@ -2565,42 +2565,42 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
-	 * Returns the number of markers in this buffer.
-	 * @since jEdit 2.5pre1
-	 */
-	public final int getMarkerCount()
-	{
-		return markers.size();
-	}
-
-	/**
 	 * Adds a marker to this buffer.
-	 * @param name The name of the marker
-	 * @param start The start offset of the marker
-	 * @param end The end offset of this marker
+	 * @param pos The position of the marker
+	 * @param shortcut The shortcut ('\0' if none)
+	 * @since jEdit 3.2pre1
 	 */
-	public void addMarker(String name, int start, int end)
+	public void addMarker(char shortcut, int pos)
 	{
 		if(!getFlag(READ_ONLY))
 			setDirty(true);
 
-		name = name.replace(';',' ');
-		Marker markerN = new Marker(this,name,start,end);
+		Marker markerN = new Marker(this,shortcut,pos);
 		boolean added = false;
+
+		Element map = getDefaultRootElement();
+		int line = map.getElementIndex(pos);
 
 		// don't sort markers while buffer is being loaded
 		if(!getFlag(LOADING))
 		{
-			markerN.createPositions();
+			markerN.createPosition();
 
 			for(int i = 0; i < markers.size(); i++)
 			{
 				Marker marker = (Marker)markers.elementAt(i);
-				if(marker.getName().equals(name))
+				if((shortcut != '\0' && marker.getShortcut() == shortcut)
+					|| map.getElementIndex(marker.getPosition())
+					== line)
 				{
 					markers.removeElementAt(i);
 				}
-				if(marker.getStart() > start)
+			}
+
+			for(int i = 0; i < markers.size(); i++)
+			{
+				Marker marker = (Marker)markers.elementAt(i);
+				if(marker.getPosition() > pos)
 				{
 					markers.insertElementAt(markerN,i);
 					added = true;
@@ -2620,25 +2620,46 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
-	 * Removes the marker with the specified name.
-	 * @param name The name of the marker to remove
+	 * Returns the first marker at the specified line.
+	 * @param line The line number
+	 * @since jEdit 3.2pre2
 	 */
-	public void removeMarker(String name)
+	public Marker getMarkerAtLine(int line)
 	{
-		setDirty(true);
+		Element map = getDefaultRootElement();
 
 		for(int i = 0; i < markers.size(); i++)
 		{
 			Marker marker = (Marker)markers.elementAt(i);
-			if(marker.getName().equals(name))
-				markers.removeElementAt(i);
+			if(map.getElementIndex(marker.getPosition()) == line)
+				return marker;
 		}
 
-		if(!getFlag(LOADING))
+		return null;
+	}
+
+	/**
+	 * Removes all markers at the specified line.
+	 * @param line The line number
+	 * @since jEdit 3.2pre2
+	 */
+	public void removeMarker(int line)
+	{
+		Element map = getDefaultRootElement();
+
+		for(int i = 0; i < markers.size(); i++)
 		{
-			EditBus.send(new BufferUpdate(this,null,
-				BufferUpdate.MARKERS_CHANGED));
+			Marker marker = (Marker)markers.elementAt(i);
+			if(map.getElementIndex(marker.getPosition()) == line)
+			{
+				setDirty(true);
+				markers.removeElementAt(i);
+				i--;
+			}
 		}
+
+		EditBus.send(new BufferUpdate(this,null,
+			BufferUpdate.MARKERS_CHANGED));
 	}
 
 	/**
@@ -2651,24 +2672,22 @@ loop:				for(int i = 0; i < count; i++)
 
 		markers.removeAllElements();
 
-		if(!getFlag(LOADING))
-		{
-			EditBus.send(new BufferUpdate(this,null,
-				BufferUpdate.MARKERS_CHANGED));
-		}
+		EditBus.send(new BufferUpdate(this,null,
+			BufferUpdate.MARKERS_CHANGED));
 	}
 
 	/**
-	 * Returns the marker with the specified name.
-	 * @param name The marker name
+	 * Returns the marker with the specified shortcut.
+	 * @param shortcut The shortcut
+	 * @since jEdit 3.2pre2
 	 */
-	public Marker getMarker(String name)
+	public Marker getMarker(char shortcut)
 	{
 		Enumeration enum = markers.elements();
 		while(enum.hasMoreElements())
 		{
 			Marker marker = (Marker)enum.nextElement();
-			if(marker.getName().equals(name))
+			if(marker.getShortcut() == shortcut)
 				return marker;
 		}
 		return null;
@@ -2998,7 +3017,7 @@ loop:				for(int i = 0; i < count; i++)
 			for(int i = 0; i < markers.size(); i++)
 			{
 				((Marker)markers.elementAt(i))
-					.createPositions();
+					.createPosition();
 			}
 		}
 		catch(BadLocationException bl)

@@ -1476,7 +1476,10 @@ public class JEditTextArea extends JComponent
 	 */
 	public final int getMagicCaretPosition()
 	{
-		return magicCaret;
+		return (magicCaret == -1
+			? offsetToX(selectionStartLine,selectionStart
+				- getLineStartOffset(selectionStartLine))
+			: magicCaret);
 	}
 
 	/**
@@ -2107,7 +2110,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
-		int magic = magicCaret;
+		int magic = getMagicCaretPosition();
 
 		int nextLine = buffer.getNextVisibleLine(line);
 
@@ -2139,7 +2142,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 		for(int i = 0; i < markers.size(); i++)
 		{
 			Marker _marker = (Marker)markers.elementAt(i);
-			if(_marker.getStart() > caret)
+			if(_marker.getPosition() > caret)
 			{
 				marker = _marker;
 				break;
@@ -2150,7 +2153,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 			view.getToolkit().beep();
 		else
 		{
-			caret = marker.getStart();
+			caret = marker.getPosition();
 
 			if(select)
 				select(getMarkPosition(),caret);
@@ -2169,7 +2172,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
-		int magic = magicCaret;
+		int magic = getMagicCaretPosition();
 
 		if(firstLine + visibleLines * 2 >= lineCount - 1)
 			setFirstLine(lineCount - visibleLines);
@@ -2344,7 +2347,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
-		int magic = magicCaret;
+		int magic = getMagicCaretPosition();
 
 		int prevLine = buffer.getPrevVisibleLine(line);
 		if(prevLine == -1)
@@ -2374,7 +2377,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		for(int i = markers.size() - 1; i >= 0; i--)
 		{
 			Marker _marker = (Marker)markers.elementAt(i);
-			if(_marker.getStart() < caret)
+			if(_marker.getPosition() < caret)
 			{
 				marker = _marker;
 				break;
@@ -2385,7 +2388,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			getToolkit().beep();
 		else
 		{
-			caret = marker.getStart();
+			caret = marker.getPosition();
 
 			if(select)
 				select(getMarkPosition(),caret);
@@ -2408,7 +2411,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		else
 			setFirstLine(firstLine - visibleLines);
 
-		int magic = magicCaret;
+		int magic = getMagicCaretPosition();
 
 		line = buffer.virtualToPhysical(Math.max(0,
 			buffer.physicalToVirtual(line) - visibleLines));
@@ -2713,6 +2716,51 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			select(getMarkPosition(),lastVisible);
 		else
 			setCaretPosition(lastVisible);
+	}
+
+	/**
+	 * Moves the caret to the marker with the specified shortcut.
+	 * @param shortcut The shortcut
+	 * @param select True if the selection should be extended,
+	 * false otherwise
+	 * @since jEdit 3.2pre2
+	 */
+	public void goToMarker(char shortcut, boolean select)
+	{
+		Marker marker = buffer.getMarker(shortcut);
+		if(marker == null)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int pos = marker.getPosition();
+
+		if(select)
+			select(getMarkPosition(),pos);
+		else
+			setCaretPosition(pos);
+	}
+
+	/**
+	 * Moves the caret to the marker with the specified shortcut,
+	 * then sets the marker position to the former caret position.
+	 * @param shortcut The shortcut
+	 * @since jEdit 3.2pre2
+	 */
+	public void swapMarkerAndCaret(char shortcut)
+	{
+		Marker marker = buffer.getMarker(shortcut);
+		if(marker == null)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int caret = getCaretPosition();
+
+		setCaretPosition(marker.getPosition());
+		buffer.addMarker(shortcut,caret);
 	}
 
 	/**
@@ -3231,21 +3279,6 @@ forward_scan:		do
 		catch(BadLocationException bl)
 		{
 			Log.log(Log.ERROR,this,bl);
-		}
-	}
-
-	/**
-	 * Displays the 'set marker' dialog box.
-	 * @since jEdit 2.7pre2
-	 */
-	public void showSetMarkerDialog()
-	{
-		String marker = GUIUtilities.input(view,"setmarker",
-			getSelectedText());
-		if(marker != null)
-		{
-			buffer.addMarker(marker,getSelectionStart(),
-				getSelectionEnd());
 		}
 	}
 
@@ -4188,15 +4221,9 @@ forward_scan:		do
 				newEnd = selectionEnd;
 
 			if(change)
-			{
-				int oldMagic = magicCaret;
 				select(newStart,newEnd,true);
-				magicCaret = oldMagic;
-			}
 			else
-			{
 				updateBracketHighlight();
-			}
 
 			documentChanged(evt);
 		}
@@ -4239,11 +4266,7 @@ forward_scan:		do
 				newEnd = selectionEnd;
 
 			if(change)
-			{
-				int oldMagic = magicCaret;
 				select(newStart,newEnd,false);
-				magicCaret = oldMagic;
-			}
 			else
 				updateBracketHighlight();
 
@@ -4346,7 +4369,16 @@ forward_scan:		do
 
 		private void doSingleClick(MouseEvent evt, int dot)
 		{
-			if((evt.getModifiers() & InputEvent.SHIFT_MASK) != 0)
+			if((evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
+			{
+				select(dot,dot,false);
+
+				if(!isEditable())
+					getToolkit().beep();
+				else
+					Registers.paste(JEditTextArea.this,'%');
+			}
+			else if((evt.getModifiers() & InputEvent.SHIFT_MASK) != 0)
 			{
 				rectSelect = (evt.getModifiers() & InputEvent.CTRL_MASK) != 0;
 				select(getMarkPosition(),dot,false);

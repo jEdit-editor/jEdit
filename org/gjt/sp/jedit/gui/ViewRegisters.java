@@ -62,6 +62,8 @@ public class ViewRegisters extends EnhancedDialog
 				index = registerCombo.getItemCount();
 				name = jEdit.getProperty("view-registers.clipboard");
 			}
+			else if(i == '%')
+				name = jEdit.getProperty("view-registers.selection");
 			else
 				name = String.valueOf((char)i);
 
@@ -84,10 +86,7 @@ public class ViewRegisters extends EnhancedDialog
 		panel.add(Box.createHorizontalStrut(12));
 		panel.add(registerCombo);
 		panel.add(Box.createGlue());
-		panel.add(new JLabel(jEdit.getProperty("view-registers.type")));
 		panel.add(Box.createHorizontalStrut(12));
-		type = new JLabel();
-		panel.add(type);
 		content.add(BorderLayout.NORTH,panel);
 
 		contentTextArea = new JTextArea(10,80);
@@ -128,7 +127,6 @@ public class ViewRegisters extends EnhancedDialog
 
 	// private members
 	private JComboBox registerCombo;
-	private JLabel type;
 	private Vector contents;
 	private JTextArea contentTextArea;
 	private JButton close;
@@ -146,16 +144,6 @@ public class ViewRegisters extends EnhancedDialog
 				if(reg == null)
 					return;
 
-				String typeString;
-				if(reg instanceof Registers.StringRegister
-					|| reg instanceof Registers.ClipboardRegister)
-					typeString = jEdit.getProperty("view-registers.text");
-				else if(reg instanceof Registers.CaretRegister)
-					typeString = jEdit.getProperty("view-registers.position");
-				else
-					typeString = jEdit.getProperty("view-registers.unknown");
-
-				type.setText(typeString);
 				contentTextArea.setText(reg.toString());
 			}
 			else if(evt.getSource() == close)

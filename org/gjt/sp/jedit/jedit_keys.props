@@ -16,19 +16,19 @@ find-next.shortcut=C+g
 find-prev.shortcut=C+h
 indent-lines.shortcut=C+i
 join-lines.shortcut=C+j
-exchange-caret-register.shortcut=C+k
+swap-marker.shortcut=C+k
 goto-line.shortcut=C+l
 new-file.shortcut=C+n
 open-file.shortcut=C+o
 print.shortcut=C+p
 exit.shortcut=C+q
 save.shortcut=C+s
-set-caret-register.shortcut=C+t
-select-caret-register.shortcut=C+u
+add-marker-shortcut.shortcut=C+t
+select-marker.shortcut=C+u
 paste.shortcut=C+v
 close-buffer.shortcut=C+w
 cut.shortcut=C+x
-goto-caret-register.shortcut=C+y
+goto-marker.shortcut=C+y
 undo.shortcut=C+z
 toggle-rect.shortcut=C+BACK_SLASH
 recent-buffer.shortcut=C+BACK_QUOTE
@@ -48,8 +48,8 @@ prev-textarea.shortcut=A+PAGE_UP
 next-textarea.shortcut=A+PAGE_DOWN
 
 # C+e
-# Unused d, e, f, h, n, p, q, u, x, y
-replace-all.shortcut=C+e C+a
+# Unused d, e, f, h, n, p, q, x, y
+copy-append.shortcut=C+e C+a
 box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
 find-selection.shortcut=C+e C+f
@@ -58,11 +58,12 @@ center-caret.shortcut=C+e C+i
 scroll-to-current-line.shortcut=C+e C+j
 block-comment.shortcut=C+e C+k
 select-line-range.shortcut=C+e C+l
-set-marker.shortcut=C+e C+m
+add-marker.shortcut=C+e C+m
 open-path.shortcut=C+e C+o
 replace-in-selection.shortcut=C+e C+r
 save-all.shortcut=C+e C+s
 toggle-line-numbers.shortcut=C+e C+t
+cut-append.shortcut=C+e C+u
 paste-previous.shortcut=C+e C+v
 close-all.shortcut=C+e C+w
 redo.shortcut=C+e C+z
@@ -93,9 +94,10 @@ record-macro.shortcut=C+m C+r
 stop-recording.shortcut=C+m C+s
 
 # C+r
-append-string-register.shortcut=C+r C+a
+copy-append-string-register.shortcut=C+r C+a
 copy-string-register.shortcut=C+r C+c
 clear-register.shortcut=C+r C+l
+cut-append-string-register.shortcut=C+r C+u
 paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x
 
