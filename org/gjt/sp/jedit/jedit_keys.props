@@ -48,11 +48,10 @@ prev-split.shortcut=A+PAGE_UP
 next-split.shortcut=A+PAGE_DOWN
 
 # C+e
-# Unused d, e, h, n, p, q, u, x, y
+# Unused d, e, f, h, n, p, q, u, x, y
 replace-all.shortcut=C+e C+a
 box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
-find-selection.shortcut=C+e C+f
 replace-and-find-next.shortcut=C+e C+g
 center-caret.shortcut=C+e C+i
 scroll-to-current-line.shortcut=C+e C+j
@@ -97,7 +96,7 @@ cut-string-register.shortcut=C+r C+x
 
 # Other keys
 select-block.shortcut=C+[
-locate-bracket.shortcut=C+]
+match-bracket.shortcut=C+]
 prev-paragraph.shortcut=C+UP
 next-paragraph.shortcut=C+DOWN
 select-prev-paragraph.shortcut=CS+UP

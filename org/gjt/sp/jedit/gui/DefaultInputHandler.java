@@ -199,7 +199,7 @@ public class DefaultInputHandler extends InputHandler
 		char c = evt.getKeyChar();
 
 		// ignore
-		if(ch == '\b')
+		if(c == '\b')
 			return;
 
 		if(currentBindings != bindings)
@@ -312,6 +312,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/11/26 07:23:57  sp
+ * Documentation updates
+ *
  * Revision 1.11  2000/11/26 01:43:35  sp
  * x86 assembly mode, various other stuff
  *

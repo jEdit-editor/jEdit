@@ -134,8 +134,10 @@ public class SearchBar extends JPanel
 			if(evt.getSource() == find)
 			{
 				String text = find.getText();
-				if(text == null && text.length() == 0)
+				if(text.length() == 0)
 				{
+					jEdit.setBooleanProperty("search.batch.toggle",
+						batch.isSelected());
 					SearchAndReplace.showSearchDialog(view,null);
 				}
 				else if(batch.isSelected())

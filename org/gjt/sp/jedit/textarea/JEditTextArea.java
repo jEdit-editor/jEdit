@@ -2898,9 +2898,9 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 	/**
 	 * Moves the caret to the bracket matching the one before the caret.
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 2.7pre3
 	 */
-	public void locateBracket()
+	public void goToMatchingBracket()
 	{
 		int line = getCaretLine();
 		int dot = getCaretPosition() - getLineStartOffset(line);

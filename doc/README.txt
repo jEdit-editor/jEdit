@@ -33,12 +33,12 @@ jEdit depends on, and comes bundled with the following class libraries:
   to redistribute AElfred with your modifications, provided that the
   modifications are clearly documented."
 
-  The complete AElfred package can be found at <http://www.microstar.com>.
+  The complete AElfred package is located at <http://www.microstar.com>.
 
-- BeanShell scripting language, by Pat Niemeyer. This is used to implement
-  macros, among other things. The version included with jEdit is basically
-  a stripped down BeanShell 1.01, with a few minor changes. The original
-  package can be downloaded from <http://www.beanshell.org>.
+- BeanShell scripting language, by Pat Niemeyer. This is used to
+  implement macros, among other things. The version included with jEdit
+  is basically a stripped down BeanShell 1.01, with a few minor changes.
+  The original package is located at <http://www.beanshell.org>.
 
 * jEdit on the Internet
 
@@ -135,7 +135,7 @@ actually a Java bug, or a well-known problem.
 
 * Credits
 
-The following people contributed large amounts of code to the jEdit core:
+The following people contributed code to the jEdit core:
 
 Andre Kaplan - Syntax token background highlighting
 Dirk Moebius - HTTP firewall plugin
@@ -144,7 +144,8 @@ Jason Ginchereau - Portions of QuickFile plugin code are used in the
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
 	dialog box, faster literal search, many other patches
 Ollie Rutherfurd - Some commands in View->Scrolling menu
-Tal Davidson - Original syntax highlighting engine
+Tal Davidson - Original syntax highlighting engine (since rewritten
+several times)
 
 The following people contributed edit modes:
 
@@ -159,6 +160,8 @@ Juha Lindfors - IDL
 Kristian Ovaska - x86 Assembly, Haskell, Pascal
 Matthias Schneider - AWK, COBOL
 Michael P Jacobson - TCL
+Mike Dillon - ColdFusion, CSS, HTML, Java, JSP, LISP, Patch, PHP, SHTML,
+	TSQL, XML, XSL
 Ollie Rutherfurd - C#
 Ralf Engels - PostScript
 Romain Guy - POVRay

@@ -374,15 +374,15 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="locate-bracket">
-	<CODE>
-		textArea.locateBracket();
-	</CODE>
-</ACTION>
-
 <ACTION NAME="log-viewer">
 	<CODE>
 		jEdit.showActivityLog();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="match-bracket">
+	<CODE>
+		textArea.goToMatchingBracket();
 	</CODE>
 </ACTION>
 
