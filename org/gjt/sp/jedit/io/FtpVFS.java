@@ -232,6 +232,28 @@ public class FtpVFS extends VFS
 		return client.getResponse().isPositiveCompletion();
 	}
 
+	public boolean _rename(VFSSession session, String from, String to,
+		Component comp) throws IOException
+	{
+		FtpAddress address = new FtpAddress(from);
+		FtpClient client = _getFtpClient(session,address,true,comp);
+		if(client == null)
+			return false;
+
+		VFS.DirectoryEntry directoryEntry = _getDirectoryEntry(
+			session,from,comp);
+
+		client.renameFrom(address.path);
+		client.renameTo(new FtpAddress(to).path);
+
+		if(directoryEntry.type == VFS.DirectoryEntry.DIRECTORY)
+			DirectoryCache.flushCachedDirectory(from);
+
+		DirectoryCache.flushCachedDirectory(getFileParent(from));
+
+		return client.getResponse().isPositiveCompletion();
+	}
+
 	public boolean _mkdir(VFSSession session, String directory, Component comp)
 		throws IOException
 	{
@@ -504,6 +526,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.16  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

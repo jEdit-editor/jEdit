@@ -544,30 +544,6 @@ no-write.title=Cannot Save File
 no-write.message=Cannot save to {0}.\n\
 	This probably means you have insufficent permissions.
 
-# Find accessory in open/save dialog boxes?
-findAccessory.find=Find
-findAccessory.start=Start
-findAccessory.stop=Stop
-findAccessory.name=Name
-findAccessory.date=Date
-findAccessory.content=Content
-findAccessory.found=Found
-findAccessory.bang=The big bang
-findAccessory.crunch=The big crunch
-findAccessory.yesterday=Yesterday
-findAccessory.today=Today
-findAccessory.now=Now
-findAccessory.modified=Modified
-findAccessory.format=mm/dd/yyyy
-findAccessory.from=Between:
-findAccessory.to=And:
-findAccessory.pattern=Pattern
-findAccessory.contains=Contains
-findAccessory.is=Is
-findAccessory.starts=Starts with
-findAccessory.ends=Ends with
-findAccessory.ignorecase=Ignore case
-
 # Open URL dialog
 openurl.title=Open URL
 openurl.message=Enter a local path name or URL:
@@ -1163,12 +1139,27 @@ vfs.browser.menu.select.label=Select
 vfs.browser.menu.delete.label=Delete
 vfs.browser.menu.rename.label=Rename
 
+vfs.browser.files-favorites.title=Cannot Add Files to Favorites
+vfs.browser.files-favorites.message=Only directories can be added to the favorites list.
+
+vfs.browser.tree.loading=Loading...
+
 vfs.browser.delete-confirm.title=Delete File Confirmation
 vfs.browser.delete-confirm.message=Are you sure you want to delete\n\
 	{0}?
 
 vfs.browser.delete-error.title=Cannot Delete File
 vfs.browser.delete-error.message=An error occurred while attempting\n\
+	to delete {0}.
+
+vfs.browser.rename.title=Rename File
+vfs.browser.rename.message=Enter a new name for {0}:
+
+vfs.browser.rename-exists.title=Rename Error
+vfs.browser.rename-exists.message=A file named {0} already exists.
+
+vfs.browser.rename-error.title=Rename Error
+vfs.browser.rename-error.message=An error occurred while attempting\n\
 	to delete {0}.
 
 vfs.browser.mkdir.title=New Directory
@@ -1194,6 +1185,7 @@ vfs.status.save-markers=Saving markers for {0}
 vfs.status.autosave=Autosaving {0}
 vfs.status.listing-directory=Listing {0}
 vfs.status.deleting=Deleting {0}
+vfs.status.renaming=Renaming {0} to {1}
 
 # Connect error
 vfs.ftp.connect-error.title=Cannot Connect

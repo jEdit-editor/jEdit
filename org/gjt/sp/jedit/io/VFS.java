@@ -107,27 +107,29 @@ public abstract class VFS
 	}
 
 	/**
-	 * Returns the parent of the specified URL. By default,
-	 * same as MiscUtilities.getFileParent().
+	 * Returns the parent of the specified URL. This must be
+	 * overridden to return a non-null value, otherwise browsing this
+	 * filesystem will not work.
 	 * @param url The URL
 	 * @since jEdit 2.6pre2
 	 */
 	public String getFileParent(String url)
 	{
-		return MiscUtilities.getFileParent(url);
+		return null;
 	}
 
 	/**
 	 * Constructs a path from the specified directory and
-	 * file name component. By default, same as
-	 * MiscUtilities.constructPath().
+	 * file name component. This must be overridden to return a
+	 * non-null value, otherwise browsing this filesystem will
+	 * not work.
 	 * @param parent The parent directory
 	 * @param path The path
 	 * @since jEdit 2.6pre2
 	 */
 	public String constructPath(String parent, String path)
 	{
-		return MiscUtilities.constructPath(parent,path);
+		return null;
 	}
 
 	/**
@@ -205,6 +207,7 @@ public abstract class VFS
 	 * @param url The URL
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
+	 * @return The specified directory entry, or null if it doesn't exist.
 	 * @since jEdit 2.6pre2
 	 */
 	public DirectoryEntry _getDirectoryEntry(VFSSession session, String url,
@@ -258,6 +261,23 @@ public abstract class VFS
 	 */
 	public boolean _delete(VFSSession session, String url, Component comp)
 		throws IOException
+	{
+		return false;
+	}
+
+	/**
+	 * Renames the specified URL. Some filesystems might support moving
+	 * URLs between directories, however others may not. Do not rely on
+	 * this behavior.
+	 * @param session The VFS session
+	 * @param from The URL
+	 * @param to The new URL
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurs
+	 * @since jEdit 2.6pre2
+	 */
+	public boolean _rename(VFSSession session, String from, String to,
+		Component comp) throws IOException
 	{
 		return false;
 	}
@@ -359,6 +379,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.14  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.13  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

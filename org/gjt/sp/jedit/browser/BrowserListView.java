@@ -20,13 +20,11 @@
 
 package org.gjt.sp.jedit.browser;
 
-import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.io.VFS;
-import org.gjt.sp.jedit.jEdit;
 
 /**
  * Originally taken from QuickFile, adapted for VFS browser and file chooser.
@@ -62,7 +60,7 @@ public class BrowserListView extends BrowserView
 		return retVal;
 	}
 
-	public void directoryLoaded(String path, Vector directory)
+	public void directoryLoaded(Vector directory)
 	{
 		if(directory == null)
 			list.setListData(new Object[0]);
@@ -73,6 +71,11 @@ public class BrowserListView extends BrowserView
 	public void updateFileView()
 	{
 		list.repaint();
+	}
+
+	public void reloadDirectory(String path)
+	{
+		browser.reloadDirectory(true);
 	}
 
 	// private members
@@ -119,6 +122,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.4  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

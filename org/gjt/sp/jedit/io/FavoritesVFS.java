@@ -113,6 +113,7 @@ public class FavoritesVFS extends VFS
 				jEdit.setProperty("vfs.favorite." + i,
 					(String)favorites.elementAt(i));
 			}
+			jEdit.unsetProperty("vfs.favorite." + favorites.size());
 		}
 	}
 
@@ -124,6 +125,9 @@ public class FavoritesVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.2  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

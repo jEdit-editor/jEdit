@@ -58,6 +58,11 @@ public class FileVFS extends VFS
 		return MiscUtilities.getFileParent(path);
 	}
 
+	public String constructPath(String parent, String path)
+	{
+		return MiscUtilities.constructPath(parent,path,false);
+	}
+
 	public boolean load(View view, Buffer buffer, String path)
 	{
 		File file = buffer.getFile();
@@ -142,6 +147,9 @@ public class FileVFS extends VFS
 		Component comp)
 	{
 		File file = new File(path);
+		if(!file.exists())
+			return null;
+
 		int type;
 		if(file.isDirectory())
 			type = VFS.DirectoryEntry.DIRECTORY;
@@ -149,14 +157,20 @@ public class FileVFS extends VFS
 			type = VFS.DirectoryEntry.FILE;
 
 		return new VFS.DirectoryEntry(file.getName(),
-			MiscUtilities.constructPath(null,path,true),path,type,
-			file.length(),fsView.isHiddenFile(file));
+			path,path,type,file.length(),fsView.isHiddenFile(file));
 	}
 
 	public boolean _delete(VFSSession session, String path, Component comp)
 	{
 		return new File(path).delete();
 	}
+
+	public boolean _rename(VFSSession session, String from, String to,
+		Component comp)
+	{
+		return new File(from).renameTo(new File(to));
+	}
+
 
 	public boolean _mkdir(VFSSession session, String directory, Component comp)
 	{
@@ -273,6 +287,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.13  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

@@ -43,16 +43,21 @@ public abstract class BrowserView extends JPanel
 
 	/**
 	 * A directory has been loaded.
-	 * @param path The directry path
 	 * @param directory The directory listing
 	 */
-	public abstract void directoryLoaded(String path, Vector directory);
+	public abstract void directoryLoaded(Vector directory);
 
 	/**
 	 * Called when a buffer is opened or closed. Views that reflect
 	 * this should update themselves accordingly in this method.
 	 */
 	public abstract void updateFileView();
+
+	/**
+	 * So that the tree view can update only the appropriate branch,
+	 * instead of the whole tree.
+	 */
+	public abstract void reloadDirectory(String path);
 
 	// protected members
 	protected VFSBrowser browser;
@@ -67,6 +72,9 @@ public abstract class BrowserView extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.3  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

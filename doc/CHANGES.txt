@@ -13,6 +13,9 @@ JEDIT 2.6 VERSION HISTORY
   - Tooltips are shown for obscured and truncated file names
   - More flexible sorting
   - Frequently-visited directories can be stored in a 'favorites' list
+  - Optional 'tree view' allows quick viewing of an entire directory
+    hierarchy
+  - Hidden files can optionally be displayed
   - Geometry of file chooser is saved
 - Utilities->File System Browser displays a stand-alone version of the file
   chooser
@@ -41,6 +44,9 @@ JEDIT 2.6 VERSION HISTORY
   to specify if the final path should be canonical (ie, symlinks resolved)
   or not
 - New AbstractOptionPane.addSeparator(String) method
+- New methods added to GUIUtilities class:
+  input(Component comp, String name, String[] args, String def);
+  inputProperty(Component comp, String name, String[] args, String def);
 
 * Version 2.6pre1
 

@@ -120,8 +120,8 @@ public class IORequest extends WorkRequest
 			typeString = "UNKNOWN!!!";
 		}
 
-		return getClass().getName() + "[type=" + typeString + ",view="
-			+ view + ",buffer=" + buffer + ",vfs=" + vfs + "]";
+		return getClass().getName() + "[type=" + typeString
+			+ ",buffer=" + buffer + ",vfs=" + vfs + "]";
 	}
 
 	// private members
@@ -700,6 +700,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.20  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.19  2000/08/05 11:41:03  sp
  * More VFS browser work
  *

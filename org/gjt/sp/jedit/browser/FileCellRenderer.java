@@ -44,6 +44,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		fileIcon = GUIUtilities.loadToolBarIcon("Document.gif");
 		dirIcon = GUIUtilities.loadToolBarIcon("Folder.gif");
 		filesystemIcon = GUIUtilities.loadToolBarIcon("CD.gif");
+		loadingIcon = GUIUtilities.loadToolBarIcon("Reload.gif");
 	}
 
 	public Component getListCellRendererComponent(JList list, Object value,
@@ -84,21 +85,10 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 	{
 		if(treeCellRenderer == null)
 		{
-			treeCellRenderer = new JLabel()
-			{
-				public Dimension getPreferredSize()
-				{
-					// this prevents the "..." from showing up
-					Dimension d = super.getPreferredSize();
-					if(d != null) d = new Dimension(d.width + 10, d.height);
-					return d;
-				}
-			};
+			treeCellRenderer = new JLabel();
+			treeCellRenderer.setBorder(border);
 			treeCellRenderer.setOpaque(true);
 		}
-
-		VFS.DirectoryEntry file = (VFS.DirectoryEntry)value;
-		boolean opened = (jEdit.getBuffer(file.path) != null);
 
 		if(sel)
 		{
@@ -110,10 +100,33 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 			treeCellRenderer.setBackground(treeNoSelectionBackground);
 			treeCellRenderer.setForeground(treeNoSelectionForeground);
 		}
-		treeCellRenderer.setFont(getFontForFile(opened));
-		treeCellRenderer.setIcon(getIconForFile(file));
-		treeCellRenderer.setText(file.name);
+
 		treeCellRenderer.setEnabled(tree.isEnabled());
+
+		DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)value;
+		Object userObject = treeNode.getUserObject();
+		if(userObject instanceof VFS.DirectoryEntry)
+		{
+			VFS.DirectoryEntry file = (VFS.DirectoryEntry)userObject;
+
+			boolean opened = (jEdit.getBuffer(file.path) != null);
+
+			treeCellRenderer.setFont(getFontForFile(opened));
+			treeCellRenderer.setIcon(getIconForFile(file));
+			treeCellRenderer.setText(file.name);
+		}
+		else if(userObject instanceof BrowserTreeView.LoadingPlaceholder)
+		{
+			treeCellRenderer.setFont(getFontForFile(false));
+			treeCellRenderer.setIcon(loadingIcon);
+			treeCellRenderer.setText(jEdit.getProperty("vfs.browser.tree.loading"));
+		}
+		else if(userObject instanceof String)
+		{
+			treeCellRenderer.setFont(getFontForFile(false));
+			treeCellRenderer.setIcon(dirIcon);
+			treeCellRenderer.setText((String)userObject);
+		}
 
 		return treeCellRenderer;
 	}
@@ -144,6 +157,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 	private Icon fileIcon;
 	private Icon dirIcon;
 	private Icon filesystemIcon;
+	private Icon loadingIcon;
 
 	private Border border = new EmptyBorder(1,0,1,0);
 	private Color treeSelectionForeground;
@@ -155,6 +169,9 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.2  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

@@ -137,7 +137,7 @@ public class BrowserPopupMenu extends JPopupMenu
 			}
 			else if(evt.getActionCommand().equals("rename"))
 			{
-				//
+				browser.rename(file.path);
 			}
 			else if(evt.getActionCommand().equals("delete"))
 			{
@@ -150,6 +150,9 @@ public class BrowserPopupMenu extends JPopupMenu
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.1  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

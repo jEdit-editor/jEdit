@@ -201,15 +201,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 	public void setDirectory(String path)
 	{
 		this.path = path;
-		if(MiscUtilities.isURL(path))
-		{
-			vfs = VFSManager.getVFSForProtocol(MiscUtilities
-				.getFileProtocol(path));
-		}
-		else
-			vfs = VFSManager.getFileVFS();
-
-		vfsSession.put(VFSSession.PATH_KEY,path);
 
 		pathField.setText(path);
 		pathField.addCurrentToHistory();
@@ -222,12 +213,27 @@ public class VFSBrowser extends JPanel implements EBComponent
 		if(flushCache)
 			DirectoryCache.flushCachedDirectory(path);
 
+		loadDirectory(path);
+	}
+
+	public void loadDirectory(String path)
+	{
+		if(MiscUtilities.isURL(path))
+		{
+			vfs = VFSManager.getVFSForProtocol(MiscUtilities
+				.getFileProtocol(path));
+		}
+		else
+			vfs = VFSManager.getFileVFS();
+
+		vfsSession.put(VFSSession.PATH_KEY,path);
+
 		if(!vfs.setupVFSSession(vfsSession,this))
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,this,
-			vfsSession,vfs,path));
+			vfsSession,vfs,path,null));
 	}
 
 	public void delete(String path)
@@ -246,15 +252,29 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.DELETE,this,
-			vfsSession,vfs,path));
+			vfsSession,vfs,path,null));
 
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				reloadDirectory(true);
-			}
-		});
+		reloadDirectorySafely(vfs.getFileParent(path));
+	}
+
+	public void rename(String from)
+	{
+		String[] args = { from };
+		String to = GUIUtilities.input(this,"vfs.browser.rename",
+			args,null);
+		if(to == null)
+			return;
+
+		to = vfs.constructPath(vfs.getFileParent(from),to);
+
+		if(!vfs.setupVFSSession(vfsSession,this))
+			return;
+
+		VFSManager.runInWorkThread(new BrowserIORequest(
+			BrowserIORequest.RENAME,this,
+			vfsSession,vfs,from,to));
+
+		reloadDirectorySafely(vfs.getFileParent(from));
 	}
 
 	public void mkdir()
@@ -271,15 +291,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
-			vfsSession,vfs,newDirectory));
+			vfsSession,vfs,newDirectory,null));
 
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				reloadDirectory(true);
-			}
-		});
+		reloadDirectorySafely(vfs.getFileParent(newDirectory));
 	}
 
 	public View getView()
@@ -338,6 +352,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 			remove(this.browserView);
 		this.browserView = browserView;
 		add(BorderLayout.CENTER,browserView);
+
+		revalidate();
+
+		if(path != null)
+			reloadDirectory(false);
 	}
 
 	public VFS.DirectoryEntry[] getSelectedFiles()
@@ -383,7 +402,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 						new FileCompare());
 				}
 
-				browserView.directoryLoaded(path,directoryVector);
+				browserView.directoryLoaded(directoryVector);
 			}
 		});
 	}
@@ -653,6 +672,17 @@ public class VFSBrowser extends JPanel implements EBComponent
 		return button;
 	}
 
+	private void reloadDirectorySafely(final String directory)
+	{
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				browserView.reloadDirectory(directory);
+			}
+		});
+	}
+
 	private void handleViewUpdate(ViewUpdate vmsg)
 	{
 		if(vmsg.getWhat() == ViewUpdate.CLOSED
@@ -728,8 +758,32 @@ public class VFSBrowser extends JPanel implements EBComponent
 			}
 			else if(source == addToFavorites)
 			{
-				FavoritesVFS.addToFavorites(path);
-				reloadDirectory(true);
+				// if any directories are selected, add them,
+				// otherwise add current directory
+				Vector toAdd = new Vector();
+				VFS.DirectoryEntry[] selected = getSelectedFiles();
+				for(int i = 0; i < selected.length; i++)
+				{
+					VFS.DirectoryEntry file = selected[i];
+					if(file.type == VFS.DirectoryEntry.FILE)
+					{
+						GUIUtilities.error(VFSBrowser.this,
+							"vfs.browser.files-favorites",null);
+						return;
+					}
+					else
+						toAdd.addElement(file.path);
+				}
+
+				if(toAdd.size() != 0)
+				{
+					for(int i = 0; i < toAdd.size(); i++)
+					{
+						FavoritesVFS.addToFavorites((String)toAdd.elementAt(i));
+					}
+				}
+				else
+					FavoritesVFS.addToFavorites(path);
 			}
 			else if(source == gotoFavorites)
 				setDirectory(FavoritesVFS.PROTOCOL + ":");
@@ -777,7 +831,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				jEdit.getProperty("vfs.browser.view.tree.label"));
 			grp.add(tree);
 			tree.setActionCommand("tree");
-			//tree.setSelected(browserView instanceof BrowserTreeView);
+			tree.setSelected(browserView instanceof BrowserTreeView);
 			tree.addActionListener(new ActionHandler());
 			popup.add(tree);
 
@@ -799,7 +853,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(actionCommand.equals("list"))
 					setBrowserView(new BrowserListView(VFSBrowser.this));
 				else if(actionCommand.equals("tree"))
-					; //setBrowserView(new BrowserTreeView(VFSBrowser.this));
+					setBrowserView(new BrowserTreeView(VFSBrowser.this));
 				else if(actionCommand.equals("showHiddenFiles"))
 				{
 					showHiddenFiles = !showHiddenFiles;
@@ -831,6 +885,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.7  2000/08/05 11:41:03  sp
  * More VFS browser work
  *

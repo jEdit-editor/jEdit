@@ -44,24 +44,31 @@ public class BrowserIORequest extends WorkRequest
 	public static final int DELETE = 1;
 
 	/**
+	 * Rename file I/O request.
+	 */
+	public static final int RENAME = 2;
+
+	/**
 	 * Make directory I/O request.
 	 */
-	public static final int MKDIR = 2;
+	public static final int MKDIR = 3;
 
 	/**
 	 * Creates a new browser I/O request.
 	 * @param type The request type
 	 * @param browser The VFS browser instance
-	 * @param path The path name to operate on
+	 * @param path1 The first path name to operate on
+	 * @param path2 The second path name to operate on
 	 */
 	public BrowserIORequest(int type, VFSBrowser browser,
-		VFSSession session, VFS vfs, String path)
+		VFSSession session, VFS vfs, String path1, String path2)
 	{
 		this.type = type;
 		this.browser = browser;
 		this.session = session;
 		this.vfs = vfs;
-		this.path = path;
+		this.path1 = path1;
+		this.path2 = path2;
 	}
 
 	public void run()
@@ -74,10 +81,40 @@ public class BrowserIORequest extends WorkRequest
 		case DELETE:
 			delete();
 			break;
+		case RENAME:
+			rename();
+			break;
 		case MKDIR:
 			mkdir();
 			break;
 		}
+	}
+
+	public String toString()
+	{
+		String typeString;
+		switch(type)
+		{
+		case LIST_DIRECTORY:
+			typeString = "LIST_DIRECTORY";
+			break;
+		case DELETE:
+			typeString = "DELETE";
+			break;
+		case RENAME:
+			typeString = "RENAME";
+			break;
+		case MKDIR:
+			typeString = "MKDIR";
+			break;
+		default:
+			typeString = "UNKNOWN!!!";
+			break;
+		}
+
+		return getClass().getName() + "[type=" + typeString
+			+ ",vfs=" + vfs + ",path1=" + path1
+			+ ",path2=" + path2 + "]";
 	}
 
 	// private members
@@ -85,7 +122,8 @@ public class BrowserIORequest extends WorkRequest
 	private VFSBrowser browser;
 	private VFSSession session;
 	private VFS vfs;
-	private String path;
+	private String path1;
+	private String path2;
 
 	private void listDirectory()
 	{
@@ -94,12 +132,12 @@ public class BrowserIORequest extends WorkRequest
 		try
 		{
 			setAbortable(true);
-			String[] args = { path };
+			String[] args = { path1 };
 			setStatus(jEdit.getProperty("vfs.status.listing-directory",args));
 
 			try
 			{
-				directory = vfs._listDirectory(session,path,browser);
+				directory = vfs._listDirectory(session,path1,browser);
 			}
 			catch(IOException io)
 			{
@@ -132,13 +170,58 @@ public class BrowserIORequest extends WorkRequest
 		try
 		{
 			setAbortable(true);
-			String[] args = { path };
+			String[] args = { path1 };
 			setStatus(jEdit.getProperty("vfs.status.deleting",args));
 
 			try
 			{
-				if(!vfs._delete(session,path,browser))
+				if(!vfs._delete(session,path1,browser))
 					VFSManager.error(browser,"vfs.browser.delete-error",args);
+			}
+			catch(IOException io)
+			{
+				args[0] = io.getMessage();
+				VFSManager.error(browser,"ioerror",args);
+			}
+		}
+		catch(WorkThread.Abort a)
+		{
+		}
+		finally
+		{
+			try
+			{
+				vfs._endVFSSession(session,browser);
+			}
+			catch(IOException io)
+			{
+				String[] args = { io.getMessage() };
+				VFSManager.error(browser,"ioerror",args);
+			}
+		}
+	}
+
+	private void rename()
+	{
+		try
+		{
+			setAbortable(true);
+			String[] args = { path1, path2 };
+			setStatus(jEdit.getProperty("vfs.status.renaming",args));
+
+			try
+			{
+				VFS.DirectoryEntry file = vfs._getDirectoryEntry(
+					session,path2,browser);
+				if(file != null)
+					VFSManager.error(browser,"vfs.browser.rename-exists",
+						new String[] { path2 });
+				else
+				{
+					if(!vfs._rename(session,path1,path2,browser))
+						VFSManager.error(browser,"vfs.browser.rename-error",
+							new String[] { path1 });
+				}
 			}
 			catch(IOException io)
 			{
@@ -168,12 +251,12 @@ public class BrowserIORequest extends WorkRequest
 		try
 		{
 			setAbortable(true);
-			String[] args = { path };
+			String[] args = { path1 };
 			setStatus(jEdit.getProperty("vfs.status.mkdir",args));
 
 			try
 			{
-				if(!vfs._mkdir(session,path,browser))
+				if(!vfs._mkdir(session,path1,browser))
 					VFSManager.error(browser,"vfs.browser.mkdir-error",args);
 			}
 			catch(IOException io)
@@ -203,6 +286,9 @@ public class BrowserIORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.2  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

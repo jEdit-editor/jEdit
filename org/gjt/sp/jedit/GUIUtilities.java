@@ -331,10 +331,43 @@ public class GUIUtilities
 	 */
 	public static String input(Component comp, String name, Object def)
 	{
+		return input(comp,name,null,def);
+	}
+
+	/**
+	 * Displays an input dialog box and returns any text the user entered.
+	 * The title of the dialog is fetched from
+	 * the <code><i>name</i>.title</code> property. The message is fetched
+	 * from the <code><i>name</i>.message</code> property.
+	 * @param comp The component to display the dialog for
+	 * @param name The name of the dialog
+	 * @param def The property whose text to display in the input field
+	 */
+	public static String inputProperty(Component comp, String name,
+		String def)
+	{
+		return inputProperty(comp,name,null,def);
+	}
+
+	/**
+	 * Displays an input dialog box and returns any text the user entered.
+	 * The title of the dialog is fetched from
+	 * the <code><i>name</i>.title</code> property. The message is fetched
+	 * from the <code><i>name</i>.message</code> property.
+	 * @param comp The component to display the dialog for
+	 * @param name The name of the dialog
+	 * @param def The text to display by default in the input field
+	 * @param args Positional parameters to be substituted into the
+	 * message text
+	 * @since jEdit 2.6pre2
+	 */
+	public static String input(Component comp, String name,
+		String[] args, Object def)
+	{
 		hideSplashScreen();
 
 		String retVal = (String)JOptionPane.showInputDialog(comp,
-			jEdit.getProperty(name.concat(".message")),
+			jEdit.getProperty(name.concat(".message"),args),
 			jEdit.getProperty(name.concat(".title")),
 			JOptionPane.QUESTION_MESSAGE,null,null,def);
 		return retVal;
@@ -347,14 +380,18 @@ public class GUIUtilities
 	 * from the <code><i>name</i>.message</code> property.
 	 * @param comp The component to display the dialog for
 	 * @param name The name of the dialog
+	 * @param args Positional parameters to be substituted into the
+	 * message text
 	 * @param def The property whose text to display in the input field
+	 * @since jEdit 2.6pre2
 	 */
-	public static String inputProperty(Component comp, String name, String def)
+	public static String inputProperty(Component comp, String name,
+		String[] args, String def)
 	{
 		hideSplashScreen();
 
 		String retVal = (String)JOptionPane.showInputDialog(comp,
-			jEdit.getProperty(name.concat(".message")),
+			jEdit.getProperty(name.concat(".message"),args),
 			jEdit.getProperty(name.concat(".title")),
 			JOptionPane.QUESTION_MESSAGE,
 			null,null,jEdit.getProperty(def));
@@ -736,6 +773,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.73  2000/08/06 09:44:27  sp
+ * VFS browser now has a tree view, rename command
+ *
  * Revision 1.72  2000/08/01 11:44:14  sp
  * More VFS browser work
  *
