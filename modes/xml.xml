@@ -1,0 +1,153 @@
+<?XML VERSION="1.0" ?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="xml">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="XML [XMode]" />
+		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
+		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+		<PROPERTY NAME="boxComment" VALUE="--" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.{xml,dtd,rdf}" />
+	</PROPS>
+	<RULES>
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- DTD Entity declarations -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="ENTITY-TAGS">
+			<BEGIN>&lt;!ENTITY</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- CDATA sections -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="CDATA">
+			<BEGIN>&lt;![CDATA[</BEGIN>
+			<END>]]&gt;</END>
+		</SPAN>
+
+		<!-- DTD instructions -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="DTD-TAGS">
+			<BEGIN>&lt;!</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- PI directives -->
+		<SPAN TYPE="KEYWORD3">
+			<BEGIN>&lt;?</BEGIN>
+			<END>?&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- SGML entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	</RULES>
+	<RULES SET="TAGS" DEFAULT="KEYWORD1">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SEQ TYPE="NONE">=</SEQ>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+	</RULES>
+	<RULES SET="DTD-TAGS" DEFAULT="KEYWORD2">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- Parameter entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>%</BEGIN>
+			<END>;</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SEQ TYPE="NONE">=</SEQ>
+		<SEQ TYPE="OPERATOR">(</SEQ>
+		<SEQ TYPE="OPERATOR">)</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">?</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">,</SEQ>
+
+		<KEYWORDS>
+			<KEYWORD1>CDATA</KEYWORD1>
+			<KEYWORD1>EMPTY</KEYWORD1>
+			<KEYWORD1>INCLUDE</KEYWORD1>
+			<KEYWORD1>IGNORE</KEYWORD1>
+			<KEYWORD1>NDATA</KEYWORD1>
+			<KEYWORD1>#IMPLIED</KEYWORD1>
+			<KEYWORD1>#PCDATA</KEYWORD1>
+			<KEYWORD1>#REQUIRED</KEYWORD1>
+		</KEYWORDS>
+	</RULES>
+	<RULES SET="ENTITY-TAGS" DEFAULT="KEYWORD2">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SEQ TYPE="OPERATOR">=</SEQ>
+
+		<SEQ TYPE="OPERATOR">%</SEQ>
+
+		<KEYWORDS>
+			<KEYWORD1>SYSTEM</KEYWORD1>
+		</KEYWORDS>
+	</RULES>
+	<RULES SET="CDATA" DEFAULT="COMMENT2">
+		<!-- no rules -->
+	</RULES>
+</MODE>

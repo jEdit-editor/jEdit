@@ -1,0 +1,73 @@
+<!-- Makefile mode, by Slava Pestov -->
+
+<?XML VERSION="1.0"?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="makefile">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="Makefile [XMode]" />
+		<PROPERTY NAME="blockComment" VALUE="#" />
+		<PROPERTY NAME="filenameGlob" VALUE="*makefile*" />
+	</PROPS>
+	<RULES ESCAPE="\">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- Comment -->
+		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
+
+		<!-- $(...) variables -->
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
+			<BEGIN>$(</BEGIN>
+			<END>)</END>
+		</SPAN>
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
+			<BEGIN>${</BEGIN>
+			<END>}</END>
+		</SPAN>
+
+		<MARK_FOLLOWING TYPE="KEYWORD2">$</MARK_FOLLOWING>
+
+		<!-- Literals -->
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>`</BEGIN>
+			<END>`</END>
+		</SPAN>
+
+		<MARK_PREVIOUS TYPE="LABEL">:</MARK_PREVIOUS>
+
+		<KEYWORDS IGNORE_CASE="FALSE">
+			<KEYWORD1>subst</KEYWORD1>
+			<KEYWORD1>addprefix</KEYWORD1>
+			<KEYWORD1>addsuffix</KEYWORD1>
+			<KEYWORD1>basename</KEYWORD1>
+			<KEYWORD1>dir</KEYWORD1>
+			<KEYWORD1>filter</KEYWORD1>
+			<KEYWORD1>filter-out</KEYWORD1>
+			<KEYWORD1>findstring</KEYWORD1>
+			<KEYWORD1>firstword</KEYWORD1>
+			<KEYWORD1>foreach</KEYWORD1>
+			<KEYWORD1>join</KEYWORD1>
+			<KEYWORD1>notdir</KEYWORD1>
+			<KEYWORD1>origin</KEYWORD1>
+			<KEYWORD1>patsubst</KEYWORD1>
+			<KEYWORD1>shell</KEYWORD1>
+			<KEYWORD1>sort</KEYWORD1>
+			<KEYWORD1>strip</KEYWORD1>
+			<KEYWORD1>suffix</KEYWORD1>
+			<KEYWORD1>wildcard</KEYWORD1>
+			<KEYWORD1>word</KEYWORD1>
+			<KEYWORD1>words</KEYWORD1>
+		</KEYWORDS>
+	</RULES>
+</MODE>

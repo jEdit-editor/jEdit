@@ -1,0 +1,175 @@
+<?XML VERSION="1.0"?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="asp">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="ASP (JScript) [XMode]" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="boxComment" VALUE="*" />
+		<PROPERTY NAME="blockComment" VALUE="//" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.asp" />
+		<PROPERTY NAME="firstlineGlob" VALUE="<%@" />
+	</PROPS>
+	<RULES>
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASP">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASP">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASP">
+			<BEGIN>&lt;script</BEGIN>
+			<END>&lt;/script</END>
+		</SPAN>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+			<BEGIN>&lt;/</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- SGML entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	</RULES>
+
+	<RULES SET="TAGS" DEFAULT="KEYWORD1">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="LABEL" DELEGATE="PHP">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="PHP">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+	</RULES>
+
+	<RULES SET="ASP" ESCAPE="\">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="NULL">(</SEQ>
+		<MARK_FOLLOWING TYPE="KEYWORD3"
+			NO_WORD_BREAK="TRUE">$</MARK_FOLLOWING>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">,</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
+		<SEQ TYPE="NULL">]</SEQ>
+		<SEQ TYPE="NULL">[</SEQ>
+		<SEQ TYPE="NULL">?</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="NULL">:</SEQ>
+
+		<KEYWORDS IGNORE_CASE="TRUE">
+			<!-- Language constructs (24) -->
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>switch</KEYWORD1>
+			<KEYWORD1>case</KEYWORD1>
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>function</KEYWORD1>
+			<KEYWORD1>class</KEYWORD1>
+			<KEYWORD1>new</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>default</KEYWORD1>
+			<KEYWORD1>global</KEYWORD1>
+			<KEYWORD1>static</KEYWORD1>
+			<KEYWORD1>var</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
+			<KEYWORD1>catch</KEYWORD1>
+			<KEYWORD1>delete</KEYWORD1>
+			<KEYWORD1>unescape</KEYWORD1>
+			<KEYWORD1>escape</KEYWORD1>
+			
+			<LITERAL2>false</LITERAL2>
+			<LITERAL2>null</LITERAL2>
+			<LITERAL2>this</LITERAL2>
+			<LITERAL2>true</LITERAL2>
+			<LITERAL2>Language</LITERAL2>
+
+			<LITERAL2>NaN</LITERAL2>
+			<LITERAL2>undefined</LITERAL2>
+
+			<LITERAL2>String</LITERAL2>
+			<LITERAL2>Date</LITERAL2>
+			<LITERAL2>Integer</LITERAL2>
+			<LITERAL2>Number</LITERAL2>
+
+			<LITERAL2>Response</LITERAL2>
+			<LITERAL2>Application</LITERAL2>
+			<LITERAL2>Request</LITERAL2>
+			<LITERAL2>Application</LITERAL2>
+
+		</KEYWORDS>
+	</RULES>
+</MODE>

@@ -1,0 +1,102 @@
+<!-- Python mode, by Slava Pestov. Based on PythonTokenMarker by
+  -- Jonathan Revusky -->
+
+<?XML VERSION="1.0"?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="python">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="Python [XMode]" />
+		<PROPERTY NAME="blockComment" VALUE="#" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.py" />
+		<PROPERTY NAME="noWordSep" VALUE="_" />
+	</PROPS>
+	<RULES ESCAPE="\">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- Comment -->
+		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
+
+		<!-- Triple-quotes -->
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"""</BEGIN>
+			<END>"""</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'''</BEGIN>
+			<END>'''</END>
+		</SPAN>
+
+		<!-- Standard literals -->
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="NULL">(</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="NULL">}</SEQ>
+		<SEQ TYPE="NULL">{</SEQ>
+		<SEQ TYPE="NULL">.</SEQ>
+		<SEQ TYPE="NULL">,</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
+		<SEQ TYPE="NULL">]</SEQ>
+		<SEQ TYPE="NULL">[</SEQ>
+		<SEQ TYPE="NULL">?</SEQ>
+		<SEQ TYPE="NULL">:</SEQ>
+
+		<KEYWORDS IGNORE_CASE="FALSE">
+			<KEYWORD3>and</KEYWORD3>
+			<KEYWORD3>not</KEYWORD3>
+			<KEYWORD3>or</KEYWORD3>
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>assert</KEYWORD1>
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>elif</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>except</KEYWORD1>
+			<KEYWORD1>exec</KEYWORD1>
+			<KEYWORD1>finally</KEYWORD1>
+			<KEYWORD1>raise</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD2>def</KEYWORD2>
+			<KEYWORD2>class</KEYWORD2>
+			<KEYWORD2>del</KEYWORD2>
+			<KEYWORD2>from</KEYWORD2>
+			<KEYWORD2>global</KEYWORD2>
+			<KEYWORD2>import</KEYWORD2>
+			<KEYWORD2>in</KEYWORD2>
+			<KEYWORD2>is</KEYWORD2>
+			<KEYWORD2>lambda</KEYWORD2>
+			<KEYWORD2>pass</KEYWORD2>
+			<KEYWORD2>print</KEYWORD2>
+		</KEYWORDS>
+	</RULES>
+</MODE>

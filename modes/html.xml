@@ -1,0 +1,54 @@
+<?XML VERSION="1.0"?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="html">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="HTML [XMode]" />
+		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
+		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+		<PROPERTY NAME="boxComment" VALUE="--" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.{htm,html}" />
+	</PROPS>
+	<RULES>
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+			<BEGIN>&lt;/</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- SGML entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	</RULES>
+
+	<RULES SET="TAGS" DEFAULT="KEYWORD1">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SEQ TYPE="OPERATOR">=</SEQ>
+	</RULES>
+</MODE>

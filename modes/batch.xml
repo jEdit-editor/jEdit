@@ -1,0 +1,39 @@
+<!-- MS-DOS batch file mode, by Slava Pestov -->
+
+<?XML VERSION="1.0"?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="batch">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="MS-DOS Batch [XMode]" />
+		<PROPERTY NAME="blockComment" VALUE="rem " />
+		<PROPERTY NAME="filenameGlob" VALUE="*.bat" />
+	</PROPS>
+	<RULES ESCAPE="\" IGNORE_CASE="TRUE">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- 'echo off' statements -->
+		<SEQ TYPE="KEYWORD3">@</SEQ>
+
+		<!-- labels -- eg :test -->
+		<EOL_SPAN TYPE="LABEL" AT_LINE_START="TRUE">:</EOL_SPAN>
+
+		<!-- comments -->
+		<EOL_SPAN TYPE="COMMENT1">REM</EOL_SPAN>
+
+		<!-- literals -->
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<!-- variables -->
+		<MARK_FOLLOWING TYPE="KEYWORD2">%1</MARK_FOLLOWING>
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
+			<BEGIN>%</BEGIN>
+			<END>%</END>
+		</SPAN>
+	</RULES>
+</MODE>

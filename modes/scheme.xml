@@ -1,0 +1,31 @@
+<?XML VERSION="1.0"?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="scheme">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="Scheme [XMode]" />
+		<PROPERTY NAME="commentStart" VALUE="#| " />
+		<PROPERTY NAME="commentEnd" VALUE=" |#" />
+		<PROPERTY NAME="boxComment" VALUE=" | " />
+		<PROPERTY NAME="blockComment" VALUE=";" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.scm" />
+	</PROPS>
+	<RULES>
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>#|</BEGIN>
+			<END>|#</END>
+		</SPAN>
+		<SEQ TYPE="NULL">'(</SEQ>
+		<SEQ TYPE="NULL">(</SEQ>
+		<SEQ TYPE="NULL">)</SEQ>
+		<MARK_FOLLOWING TYPE="LITERAL1">'</MARK_FOLLOWING>
+		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+	</RULES>
+</MODE>

@@ -1,0 +1,123 @@
+<?xml version='1.0'?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="xsl">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="XSL [XMode]" />
+		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
+		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.xsl" />
+	</PROPS>
+	<RULES>
+		<!-- WHITE SPACE ( SPACE, TAB ) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+		
+		<SPAN TYPE="COMMENT2">
+			<BEGIN>&lt;xsl:comment&gt;</BEGIN>
+			<END>&lt;/xsl:comment&gt;</END>
+		</SPAN>
+		
+		<!-- DTD instructions -->
+		<SPAN TYPE="KEYWORD3">
+			<BEGIN>&lt;!</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- PI directives -->
+		<SPAN TYPE="KEYWORD3">
+			<BEGIN>&lt;?</BEGIN>
+			<END>?&gt;</END>
+		</SPAN>
+		
+		<!-- XSL TAGS -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
+			<BEGIN>&lt;xsl</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+		
+		<!-- XSL TAGS -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
+			<BEGIN>&lt;xsl</BEGIN>
+			<END>/&gt;</END>
+		</SPAN>
+		
+		<!-- XSL TAGS -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
+			<BEGIN>&lt;/xsl</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+		
+		<!-- HTML TAGS -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="HTMLTAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+		
+		<!-- HTML TAGS -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="HTMLTAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>/&gt;</END>
+		</SPAN>
+		
+		<!-- HTML TAGS -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="HTMLTAGS">
+			<BEGIN>&lt;/</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+		
+		<!-- ENTITY REFERENCES -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+		
+	</RULES>
+	
+	<!-- HTML TAGS -->
+	<RULES SET="HTMLTAGS" DEFAULT="KEYWORD1">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		
+		<SEQ TYPE="NULL">=</SEQ>
+		
+	</RULES>
+	
+	<!-- XSL TAGS -->
+	<RULES SET="XSLTAGS" DEFAULT="KEYWORD2">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		
+		<SEQ TYPE="NULL">=</SEQ>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+		
+	</RULES>
+	
+</MODE>
+

@@ -1,0 +1,1137 @@
+<?XML VERSION="1.0"?>
+
+<!DOCTYPE MODE>
+
+<MODE NAME="php">
+	<PROPS>
+		<PROPERTY NAME="label" VALUE="PHP [XMode]" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="boxComment" VALUE="*" />
+		<PROPERTY NAME="blockComment" VALUE="//" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.{php,php3,phtml}" />
+		<PROPERTY NAME="firstlineGlob" VALUE="&lt;?php" />
+		<PROPERTY NAME="noWordSep" VALUE="_" />
+	</PROPS>
+	<RULES>
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="LABEL" DELEGATE="PHP">
+			<BEGIN>&lt;?php</BEGIN>
+			<END>?&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="PHP">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+			<BEGIN>&lt;/</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- SGML entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	</RULES>
+
+	<RULES SET="TAGS" DEFAULT="KEYWORD1">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="LABEL" DELEGATE="PHP">
+			<BEGIN>&lt;?php</BEGIN>
+			<END>?&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="PHP">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+<!--
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SEQ TYPE="OPERATOR">=</SEQ>
+-->
+	</RULES>
+
+	<RULES SET="PHP" ESCAPE="\">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="NULL">(</SEQ>
+		<MARK_FOLLOWING TYPE="KEYWORD3"
+			NO_WORD_BREAK="TRUE">$</MARK_FOLLOWING>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
+		<SEQ TYPE="NULL">}</SEQ>
+		<SEQ TYPE="NULL">{</SEQ>
+		<SEQ TYPE="NULL">,</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
+		<SEQ TYPE="NULL">]</SEQ>
+		<SEQ TYPE="NULL">[</SEQ>
+		<SEQ TYPE="NULL">?</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="NULL">:</SEQ>
+
+		<KEYWORDS IGNORE_CASE="TRUE">
+			<!-- Language constructs (24) -->
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>elseif</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>endif</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>endfor</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>endwhile</KEYWORD1>
+			<KEYWORD1>switch</KEYWORD1>
+			<KEYWORD1>case</KEYWORD1>
+			<KEYWORD1>endswitch</KEYWORD1>
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>define</KEYWORD1>
+			<KEYWORD1>include</KEYWORD1>
+			<KEYWORD1>require</KEYWORD1>
+			<KEYWORD1>function</KEYWORD1>
+			<KEYWORD1>class</KEYWORD1>
+			<KEYWORD1>new</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>old_function</KEYWORD1>
+			<KEYWORD1>default</KEYWORD1>
+			<KEYWORD1>global</KEYWORD1>
+			<KEYWORD1>static</KEYWORD1>
+
+			<KEYWORD3>__LINE__</KEYWORD3>
+			<KEYWORD3>__FILE__</KEYWORD3>
+
+			<!-- Adabas D functions (16) -->
+	<!-- 		<KEYWORD2>ada_afetch</KEYWORD2>
+			<KEYWORD2>ada_autocommit</KEYWORD2>
+			<KEYWORD2>ada_close</KEYWORD2>
+			<KEYWORD2>ada_commit</KEYWORD2>
+			<KEYWORD2>ada_connect</KEYWORD2>
+			<KEYWORD2>ada_exec</KEYWORD2>
+			<KEYWORD2>ada_fetchrow</KEYWORD2>
+			<KEYWORD2>ada_fieldname</KEYWORD2>
+			<KEYWORD2>ada_fieldnum</KEYWORD2>
+			<KEYWORD2>ada_fieldtype</KEYWORD2>
+			<KEYWORD2>ada_freeresult</KEYWORD2>
+			<KEYWORD2>ada_numfields</KEYWORD2>
+			<KEYWORD2>ada_numrows</KEYWORD2>
+			<KEYWORD2>ada_result</KEYWORD2>
+			<KEYWORD2>ada_resultall</KEYWORD2>
+			<KEYWORD2>ada_rollback</KEYWORD2> -->
+
+			<!-- Apache functions (4) -->
+			<KEYWORD2>apache_lookup_uri</KEYWORD2>
+			<KEYWORD2>apache_note</KEYWORD2>
+			<KEYWORD2>getallheaders</KEYWORD2>
+			<KEYWORD2>virtual</KEYWORD2>
+
+			<!-- Array functions (23) -->
+			<KEYWORD2>array</KEYWORD2>
+			<KEYWORD2>array_walk</KEYWORD2>
+			<KEYWORD2>arsort</KEYWORD2>
+			<KEYWORD2>asort</KEYWORD2>
+			<KEYWORD2>count</KEYWORD2>
+			<KEYWORD2>current</KEYWORD2>
+			<KEYWORD2>each</KEYWORD2>
+			<KEYWORD2>end</KEYWORD2>
+			<KEYWORD2>key</KEYWORD2>
+			<KEYWORD2>ksort</KEYWORD2>
+			<KEYWORD2>list</KEYWORD2>
+			<KEYWORD2>next</KEYWORD2>
+			<KEYWORD2>pos</KEYWORD2>
+			<KEYWORD2>prev</KEYWORD2>
+			<KEYWORD2>range</KEYWORD2>
+			<KEYWORD2>reset</KEYWORD2>
+			<KEYWORD2>rsort</KEYWORD2>
+			<KEYWORD2>shuffle</KEYWORD2>
+			<KEYWORD2>sizeof</KEYWORD2>
+			<KEYWORD2>sort</KEYWORD2>
+			<KEYWORD2>uasort</KEYWORD2>
+			<KEYWORD2>uksort</KEYWORD2>
+			<KEYWORD2>usort</KEYWORD2>
+
+			<!-- aspell functions (4) -->
+	<!-- 		<KEYWORD2>aspell_check</KEYWORD2>
+			<KEYWORD2>aspell_check_raw</KEYWORD2>
+			<KEYWORD2>aspell_new</KEYWORD2>
+			<KEYWORD2>aspell_suggest</KEYWORD2> -->
+
+			<!-- BC functions (9) -->
+	<!-- 		<KEYWORD2>bcadd</KEYWORD2>
+			<KEYWORD2>bccomp</KEYWORD2>
+			<KEYWORD2>bcdiv</KEYWORD2>
+			<KEYWORD2>bcmod</KEYWORD2>
+			<KEYWORD2>bcmul</KEYWORD2>
+			<KEYWORD2>bcpow</KEYWORD2>
+			<KEYWORD2>bcscale</KEYWORD2>
+			<KEYWORD2>bcsqrt</KEYWORD2>
+			<KEYWORD2>bcsub</KEYWORD2> -->
+
+			<!-- Calendar functions (10) -->
+	<!-- 		<KEYWORD2>frenchtojd</KEYWORD2>
+			<KEYWORD2>gregoriantojd</KEYWORD2>
+			<KEYWORD2>jddayofweek</KEYWORD2>
+			<KEYWORD2>jdmonthname</KEYWORD2>
+			<KEYWORD2>jdtofrench</KEYWORD2>
+			<KEYWORD2>jdtogregorian</KEYWORD2>
+			<KEYWORD2>jdtojewish</KEYWORD2>
+			<KEYWORD2>jdtojulian</KEYWORD2>
+			<KEYWORD2>jewishtojd</KEYWORD2>
+			<KEYWORD2>juliantojd</KEYWORD2> -->
+
+			<!-- Date functions (10) -->
+			<KEYWORD2>checkdate</KEYWORD2>
+			<KEYWORD2>date</KEYWORD2>
+			<KEYWORD2>getdate</KEYWORD2>
+			<KEYWORD2>gettimeofday</KEYWORD2>
+			<KEYWORD2>gmdate</KEYWORD2>
+			<KEYWORD2>gmmktime</KEYWORD2>
+			<KEYWORD2>microtime</KEYWORD2>
+			<KEYWORD2>mktime</KEYWORD2>
+			<KEYWORD2>strftime</KEYWORD2>
+			<KEYWORD2>time</KEYWORD2>
+
+			<!-- dba functions -->
+	<!-- 		<KEYWORD2>dba_close</KEYWORD2>
+			<KEYWORD2>dba_delete</KEYWORD2>
+			<KEYWORD2>dba_exists</KEYWORD2>
+			<KEYWORD2>dba_fetch</KEYWORD2>
+			<KEYWORD2>dba_firstkey</KEYWORD2>
+			<KEYWORD2>dba_insert</KEYWORD2>
+			<KEYWORD2>dba_nextkey</KEYWORD2>
+			<KEYWORD2>dba_open</KEYWORD2>
+			<KEYWORD2>dba_optimize</KEYWORD2>
+			<KEYWORD2>dba_popen</KEYWORD2>
+			<KEYWORD2>dba_replace</KEYWORD2>
+			<KEYWORD2>dba_sync</KEYWORD2> -->
+
+			<!-- dBase functions -->
+	<!-- 		<KEYWORD2>dbase_add_record</KEYWORD2>
+			<KEYWORD2>dbase_close</KEYWORD2>
+			<KEYWORD2>dbase_create</KEYWORD2>
+			<KEYWORD2>dbase_delete_record</KEYWORD2>
+			<KEYWORD2>dbase_get_record</KEYWORD2>
+			<KEYWORD2>dbase_numfields</KEYWORD2>
+			<KEYWORD2>dbase_numrecords</KEYWORD2>
+			<KEYWORD2>dbase_open</KEYWORD2>
+			<KEYWORD2>dbase_pack</KEYWORD2> -->
+
+			<!-- DBM functions -->
+	<!-- 		<KEYWORD2>dblist</KEYWORD2>
+			<KEYWORD2>dbmclose</KEYWORD2>
+			<KEYWORD2>dbmdelete</KEYWORD2>
+			<KEYWORD2>dbmexists</KEYWORD2>
+			<KEYWORD2>dbmfetch</KEYWORD2>
+			<KEYWORD2>dbmfirstkey</KEYWORD2>
+			<KEYWORD2>dbminsert</KEYWORD2>
+			<KEYWORD2>dbmnextkey</KEYWORD2>
+			<KEYWORD2>dbmopen</KEYWORD2>
+			<KEYWORD2>dbmreplace</KEYWORD2> -->
+
+			<!-- Directory functions -->
+	<!-- 		<KEYWORD2>chdir</KEYWORD2>
+			<KEYWORD2>closedir</KEYWORD2>
+			<KEYWORD2>dir</KEYWORD2>
+			<KEYWORD2>opendir</KEYWORD2>
+			<KEYWORD2>readdir</KEYWORD2>
+			<KEYWORD2>rewinddir</KEYWORD2> -->
+
+			<!-- Dynamic Loading functions -->
+			<KEYWORD2>dl</KEYWORD2>
+
+			<!-- Program Execution functions -->
+			<KEYWORD2>escapeshellcmd</KEYWORD2>
+			<KEYWORD2>exec</KEYWORD2>
+			<KEYWORD2>passthru</KEYWORD2>
+			<KEYWORD2>system</KEYWORD2>
+
+			<!-- filePro functions -->
+	<!-- 		<KEYWORD2>filepro</KEYWORD2>
+			<KEYWORD2>filepro_fieldcount</KEYWORD2>
+			<KEYWORD2>filepro_fieldname</KEYWORD2>
+			<KEYWORD2>filepro_fieldtype</KEYWORD2>
+			<KEYWORD2>filepro_fieldwidth</KEYWORD2>
+			<KEYWORD2>filepro_retrieve</KEYWORD2>
+			<KEYWORD2>filepro_rowcount</KEYWORD2> -->
+
+			<!-- Filesystem functions -->
+			<KEYWORD2>basename</KEYWORD2>
+			<KEYWORD2>chgrp</KEYWORD2>
+			<KEYWORD2>chmod</KEYWORD2>
+			<KEYWORD2>chown</KEYWORD2>
+			<KEYWORD2>clearstatcache</KEYWORD2>
+			<KEYWORD2>copy</KEYWORD2>
+			<KEYWORD2>delete</KEYWORD2>
+			<KEYWORD2>dirname</KEYWORD2>
+			<KEYWORD2>diskfreespace</KEYWORD2>
+			<KEYWORD2>fclose</KEYWORD2>
+			<KEYWORD2>feof</KEYWORD2>
+			<KEYWORD2>fgetc</KEYWORD2>
+			<KEYWORD2>fgetcsv</KEYWORD2>
+			<KEYWORD2>fgets</KEYWORD2>
+			<KEYWORD2>fgetss</KEYWORD2>
+			<KEYWORD2>file</KEYWORD2>
+			<KEYWORD2>file_exists</KEYWORD2>
+			<KEYWORD2>fileatime</KEYWORD2>
+			<KEYWORD2>filectime</KEYWORD2>
+			<KEYWORD2>filegroup</KEYWORD2>
+			<KEYWORD2>fileinode</KEYWORD2>
+			<KEYWORD2>filemtime</KEYWORD2>
+			<KEYWORD2>fileowner</KEYWORD2>
+			<KEYWORD2>fileperms</KEYWORD2>
+			<KEYWORD2>filesize</KEYWORD2>
+			<KEYWORD2>filetype</KEYWORD2>
+			<KEYWORD2>flock</KEYWORD2>
+			<KEYWORD2>fopen</KEYWORD2>
+			<KEYWORD2>fpassthru</KEYWORD2>
+			<KEYWORD2>fputs</KEYWORD2>
+			<KEYWORD2>fread</KEYWORD2>
+			<KEYWORD2>fseek</KEYWORD2>
+			<KEYWORD2>ftell</KEYWORD2>
+			<KEYWORD2>fwrite</KEYWORD2>
+			<KEYWORD2>is_dir</KEYWORD2>
+			<KEYWORD2>is_executable</KEYWORD2>
+			<KEYWORD2>is_file</KEYWORD2>
+			<KEYWORD2>is_link</KEYWORD2>
+			<KEYWORD2>is_readable</KEYWORD2>
+			<KEYWORD2>is_writeable</KEYWORD2>
+			<KEYWORD2>link</KEYWORD2>
+			<KEYWORD2>linkinfo</KEYWORD2>
+			<KEYWORD2>lstat</KEYWORD2>
+			<KEYWORD2>mkdir</KEYWORD2>
+			<KEYWORD2>pclose</KEYWORD2>
+			<KEYWORD2>popen</KEYWORD2>
+			<KEYWORD2>readfile</KEYWORD2>
+			<KEYWORD2>readlink</KEYWORD2>
+			<KEYWORD2>rename</KEYWORD2>
+			<KEYWORD2>rewind</KEYWORD2>
+			<KEYWORD2>rmdir</KEYWORD2>
+			<KEYWORD2>set_file_buffer</KEYWORD2>
+			<KEYWORD2>stat</KEYWORD2>
+			<KEYWORD2>symlink</KEYWORD2>
+			<KEYWORD2>tempnam</KEYWORD2>
+			<KEYWORD2>touch</KEYWORD2>
+			<KEYWORD2>umask</KEYWORD2>
+			<KEYWORD2>unlink</KEYWORD2>
+
+			<!-- HTTP functions -->
+			<KEYWORD2>header</KEYWORD2>
+			<KEYWORD2>setcookie</KEYWORD2>
+
+			<!-- Hyperwave functions -->
+	<!-- 		<KEYWORD2>hw_changeobject</KEYWORD2>
+			<KEYWORD2>hw_children</KEYWORD2>
+			<KEYWORD2>hw_childrenobj</KEYWORD2>
+			<KEYWORD2>hw_close</KEYWORD2>
+			<KEYWORD2>hw_connect</KEYWORD2>
+			<KEYWORD2>hw_cp</KEYWORD2>
+			<KEYWORD2>hw_deleteobject</KEYWORD2>
+			<KEYWORD2>hw_docbyanchor</KEYWORD2>
+			<KEYWORD2>hw_docbyanchorobj</KEYWORD2>
+			<KEYWORD2>hw_documentattributes</KEYWORD2>
+			<KEYWORD2>hw_documentbodytag</KEYWORD2>
+			<KEYWORD2>hw_documentcontent</KEYWORD2>
+			<KEYWORD2>hw_documentsetcontent</KEYWORD2>
+			<KEYWORD2>hw_documentsize</KEYWORD2>
+			<KEYWORD2>hw_edittext</KEYWORD2>
+			<KEYWORD2>hw_error</KEYWORD2>
+			<KEYWORD2>hw_errormsg</KEYWORD2>
+			<KEYWORD2>hw_free_document</KEYWORD2>
+			<KEYWORD2>hw_getanchors</KEYWORD2>
+			<KEYWORD2>hw_getanchorsobj</KEYWORD2>
+			<KEYWORD2>hw_getandlock</KEYWORD2>
+			<KEYWORD2>hw_getchildcoll</KEYWORD2>
+			<KEYWORD2>hw_getchildcollobj</KEYWORD2>
+			<KEYWORD2>hw_getchilddoccoll</KEYWORD2>
+			<KEYWORD2>hw_getchilddoccollobj</KEYWORD2>
+			<KEYWORD2>hw_getobject</KEYWORD2>
+			<KEYWORD2>hw_getobjectbyquery</KEYWORD2>
+			<KEYWORD2>hw_getobjectbyquerycoll</KEYWORD2>
+			<KEYWORD2>hw_getobjectbyquerycollobj</KEYWORD2>
+			<KEYWORD2>hw_getobjectbyqueryobj</KEYWORD2>
+			<KEYWORD2>hw_getparents</KEYWORD2>
+			<KEYWORD2>hw_getparentsobj</KEYWORD2>
+			<KEYWORD2>hw_getremote</KEYWORD2>
+			<KEYWORD2>hw_getremotechildren</KEYWORD2>
+			<KEYWORD2>hw_getsrcbydestobj</KEYWORD2>
+			<KEYWORD2>hw_gettext</KEYWORD2>
+			<KEYWORD2>hw_getusername</KEYWORD2>
+			<KEYWORD2>hw_identify</KEYWORD2>
+			<KEYWORD2>hw_incollections</KEYWORD2>
+			<KEYWORD2>hw_info</KEYWORD2>
+			<KEYWORD2>hw_inscoll</KEYWORD2>
+			<KEYWORD2>hw_insdoc</KEYWORD2>
+			<KEYWORD2>hw_insertdocument</KEYWORD2>
+			<KEYWORD2>hw_insertobject</KEYWORD2>
+			<KEYWORD2>hw_modifyobject</KEYWORD2>
+			<KEYWORD2>hw_mv</KEYWORD2>
+			<KEYWORD2>hw_new_document</KEYWORD2>
+			<KEYWORD2>hw_objrec2array</KEYWORD2>
+			<KEYWORD2>hw_outputdocument</KEYWORD2>
+			<KEYWORD2>hw_pconnect</KEYWORD2>
+			<KEYWORD2>hw_pipedocument</KEYWORD2>
+			<KEYWORD2>hw_root</KEYWORD2>
+			<KEYWORD2>hw_unlock</KEYWORD2> -->
+
+			<!-- Graphics functions -->
+			<KEYWORD2>getimagesize</KEYWORD2>
+	<!-- 		<KEYWORD2>imagearc</KEYWORD2>
+			<KEYWORD2>imagechar</KEYWORD2>
+			<KEYWORD2>imagecharup</KEYWORD2>
+			<KEYWORD2>imagecolorallocate</KEYWORD2>
+			<KEYWORD2>imagecolorat</KEYWORD2>
+			<KEYWORD2>imagecolorclosest</KEYWORD2>
+			<KEYWORD2>imagecolorexact</KEYWORD2>
+			<KEYWORD2>imagecolorresolve</KEYWORD2>
+			<KEYWORD2>imagecolorset</KEYWORD2>
+			<KEYWORD2>imagecolorsforindex</KEYWORD2>
+			<KEYWORD2>imagecolorstotal</KEYWORD2>
+			<KEYWORD2>imagecolortransparent</KEYWORD2>
+			<KEYWORD2>imagecopyresized</KEYWORD2>
+			<KEYWORD2>imagecreate</KEYWORD2>
+			<KEYWORD2>imagecreatefromgif</KEYWORD2>
+			<KEYWORD2>imagedashedline</KEYWORD2>
+			<KEYWORD2>imagedestroy</KEYWORD2>
+			<KEYWORD2>imagefill</KEYWORD2>
+			<KEYWORD2>imagefilledpolygon</KEYWORD2>
+			<KEYWORD2>imagefilledrectangle</KEYWORD2>
+			<KEYWORD2>imagefilltoborder</KEYWORD2>
+			<KEYWORD2>imagefontheight</KEYWORD2>
+			<KEYWORD2>imagefontwidth</KEYWORD2>
+			<KEYWORD2>imagegif</KEYWORD2>
+			<KEYWORD2>imageinterlace</KEYWORD2>
+			<KEYWORD2>imageline</KEYWORD2>
+			<KEYWORD2>imageloadfont</KEYWORD2>
+			<KEYWORD2>imagepolygon</KEYWORD2>
+			<KEYWORD2>imagerectangle</KEYWORD2>
+			<KEYWORD2>imagesetpixel</KEYWORD2>
+			<KEYWORD2>imagestring</KEYWORD2>
+			<KEYWORD2>imagestringup</KEYWORD2>
+			<KEYWORD2>imagesx</KEYWORD2>
+			<KEYWORD2>imagesy</KEYWORD2>
+			<KEYWORD2>imagettfbbox</KEYWORD2>
+			<KEYWORD2>imagettftext</KEYWORD2> -->
+
+			<!-- IMAP functions -->
+	<!-- 		<KEYWORD2>imap_8bit</KEYWORD2>
+			<KEYWORD2>imap_append</KEYWORD2>
+			<KEYWORD2>imap_base64</KEYWORD2>
+			<KEYWORD2>imap_binary</KEYWORD2>
+			<KEYWORD2>imap_body</KEYWORD2>
+			<KEYWORD2>imap_check</KEYWORD2>
+			<KEYWORD2>imap_clearflag_full</KEYWORD2>
+			<KEYWORD2>imap_close</KEYWORD2>
+			<KEYWORD2>imap_createmailbox</KEYWORD2>
+			<KEYWORD2>imap_delete</KEYWORD2>
+			<KEYWORD2>imap_deletemailbox</KEYWORD2>
+			<KEYWORD2>imap_expunge</KEYWORD2>
+			<KEYWORD2>imap_fetchbody</KEYWORD2>
+			<KEYWORD2>imap_fetchheader</KEYWORD2>
+			<KEYWORD2>imap_fetchstructure</KEYWORD2>
+			<KEYWORD2>imap_header</KEYWORD2>
+			<KEYWORD2>imap_headers</KEYWORD2>
+			<KEYWORD2>imap_listmailbox</KEYWORD2>
+			<KEYWORD2>imap_listsubscribed</KEYWORD2>
+			<KEYWORD2>imap_mail_copy</KEYWORD2>
+			<KEYWORD2>imap_mail_move</KEYWORD2>
+			<KEYWORD2>imap_mailboxmsginfo</KEYWORD2>
+			<KEYWORD2>imap_num_msg</KEYWORD2>
+			<KEYWORD2>imap_num_recent</KEYWORD2>
+			<KEYWORD2>imap_open</KEYWORD2>
+			<KEYWORD2>imap_ping</KEYWORD2>
+			<KEYWORD2>imap_qprint</KEYWORD2>
+			<KEYWORD2>imap_renamemailbox</KEYWORD2>
+			<KEYWORD2>imap_reopen</KEYWORD2>
+			<KEYWORD2>imap_rfc822_parse_adrlist</KEYWORD2>
+			<KEYWORD2>imap_rfc822_write_address</KEYWORD2>
+			<KEYWORD2>imap_scanmailbox</KEYWORD2>
+			<KEYWORD2>imap_setflag_full</KEYWORD2>
+			<KEYWORD2>imap_sort</KEYWORD2>
+			<KEYWORD2>imap_subscribe</KEYWORD2>
+			<KEYWORD2>imap_uid</KEYWORD2>
+			<KEYWORD2>imap_undelete</KEYWORD2>
+			<KEYWORD2>imap_unsubscribe</KEYWORD2> -->
+
+			<!-- PHP options/info functions -->
+			<KEYWORD2>error_log</KEYWORD2>
+			<KEYWORD2>error_reporting</KEYWORD2>
+			<KEYWORD2>getenv</KEYWORD2>
+			<KEYWORD2>get_cfg_var</KEYWORD2>
+			<KEYWORD2>get_current_user</KEYWORD2>
+			<KEYWORD2>get_magic_quotes_gpc</KEYWORD2>
+			<KEYWORD2>get_magic_quotes_runtime</KEYWORD2>
+			<KEYWORD2>getlastmod</KEYWORD2>
+			<KEYWORD2>getmyinode</KEYWORD2>
+			<KEYWORD2>getmypid</KEYWORD2>
+			<KEYWORD2>getmyuid</KEYWORD2>
+			<KEYWORD2>getrusage</KEYWORD2>
+			<KEYWORD2>phpinfo</KEYWORD2>
+			<KEYWORD2>phpversion</KEYWORD2>
+			<KEYWORD2>putenv</KEYWORD2>
+			<KEYWORD2>set_magic_quotes_runtime</KEYWORD2>
+			<KEYWORD2>set_time_limit</KEYWORD2>
+
+			<!-- Informix functions -->
+	<!-- 		<KEYWORD2>ifx_affected_rows</KEYWORD2>
+			<KEYWORD2>ifx_blobinfile_mode</KEYWORD2>
+			<KEYWORD2>ifx_byteasvarchar</KEYWORD2>
+			<KEYWORD2>ifx_close</KEYWORD2>
+			<KEYWORD2>ifx_connect</KEYWORD2>
+			<KEYWORD2>ifx_copy_blob</KEYWORD2>
+			<KEYWORD2>ifx_create_blob</KEYWORD2>
+			<KEYWORD2>ifx_create_char</KEYWORD2>
+			<KEYWORD2>ifx_do</KEYWORD2>
+			<KEYWORD2>ifx_error</KEYWORD2>
+			<KEYWORD2>ifx_errormsg</KEYWORD2>
+			<KEYWORD2>ifx_fetch_row</KEYWORD2>
+			<KEYWORD2>ifx_fieldproperties</KEYWORD2>
+			<KEYWORD2>ifx_fieldtypes</KEYWORD2>
+			<KEYWORD2>ifx_free_blob</KEYWORD2>
+			<KEYWORD2>ifx_free_char</KEYWORD2>
+			<KEYWORD2>ifx_free_result</KEYWORD2>
+			<KEYWORD2>ifx_get_blob</KEYWORD2>
+			<KEYWORD2>ifx_get_char</KEYWORD2>
+			<KEYWORD2>ifx_getsqlca</KEYWORD2>
+			<KEYWORD2>ifx_htmltbl_result</KEYWORD2>
+			<KEYWORD2>ifx_nullformat</KEYWORD2>
+			<KEYWORD2>ifx_num_fields</KEYWORD2>
+			<KEYWORD2>ifx_num_rows</KEYWORD2>
+			<KEYWORD2>ifx_pconnect</KEYWORD2>
+			<KEYWORD2>ifx_prepare</KEYWORD2>
+			<KEYWORD2>ifx_query</KEYWORD2>
+			<KEYWORD2>ifx_textasvarchar</KEYWORD2>
+			<KEYWORD2>ifx_update_blob</KEYWORD2>
+			<KEYWORD2>ifx_update_char</KEYWORD2>
+			<KEYWORD2>ifxus_close_slob</KEYWORD2>
+			<KEYWORD2>ifxus_create_slob</KEYWORD2>
+			<KEYWORD2>ifxus_free_slob</KEYWORD2>
+			<KEYWORD2>ifxus_open_slob</KEYWORD2>
+			<KEYWORD2>ifxus_read_slob</KEYWORD2>
+			<KEYWORD2>ifxus_seek_slob</KEYWORD2>
+			<KEYWORD2>ifxus_tell_slob</KEYWORD2>
+			<KEYWORD2>ifxus_write_slob</KEYWORD2> -->
+
+			<!-- InterBase functions -->
+	<!-- 		<KEYWORD2>ibase_bind</KEYWORD2>
+			<KEYWORD2>ibase_close</KEYWORD2>
+			<KEYWORD2>ibase_connect</KEYWORD2>
+			<KEYWORD2>ibase_execute</KEYWORD2>
+			<KEYWORD2>ibase_fetch_row</KEYWORD2>
+			<KEYWORD2>ibase_free_query</KEYWORD2>
+			<KEYWORD2>ibase_free_result</KEYWORD2>
+			<KEYWORD2>ibase_pconnect</KEYWORD2>
+			<KEYWORD2>ibase_prepare</KEYWORD2>
+			<KEYWORD2>ibase_query</KEYWORD2>
+			<KEYWORD2>ibase_timefmt</KEYWORD2> -->
+
+			<!-- LDAP functions -->
+	<!-- 		<KEYWORD2>ldap_add</KEYWORD2>
+			<KEYWORD2>ldap_bind</KEYWORD2>
+			<KEYWORD2>ldap_close</KEYWORD2>
+			<KEYWORD2>ldap_connect</KEYWORD2>
+			<KEYWORD2>ldap_count_entries</KEYWORD2>
+			<KEYWORD2>ldap_delete</KEYWORD2>
+			<KEYWORD2>ldap_dn2ufn</KEYWORD2>
+			<KEYWORD2>ldap_explode_dn</KEYWORD2>
+			<KEYWORD2>ldap_first_attribute</KEYWORD2>
+			<KEYWORD2>ldap_first_entry</KEYWORD2>
+			<KEYWORD2>ldap_free_result</KEYWORD2>
+			<KEYWORD2>ldap_get_attributes</KEYWORD2>
+			<KEYWORD2>ldap_get_dn</KEYWORD2>
+			<KEYWORD2>ldap_get_entries</KEYWORD2>
+			<KEYWORD2>ldap_get_values</KEYWORD2>
+			<KEYWORD2>ldap_list</KEYWORD2>
+			<KEYWORD2>ldap_mod_add</KEYWORD2>
+			<KEYWORD2>ldap_mod_del</KEYWORD2>
+			<KEYWORD2>ldap_mod_replace</KEYWORD2>
+			<KEYWORD2>ldap_modify</KEYWORD2>
+			<KEYWORD2>ldap_next_attribute</KEYWORD2>
+			<KEYWORD2>ldap_next_entry</KEYWORD2>
+			<KEYWORD2>ldap_read</KEYWORD2>
+			<KEYWORD2>ldap_search</KEYWORD2>
+			<KEYWORD2>ldap_unbind</KEYWORD2> -->
+
+			<!-- Mail functions -->
+			<KEYWORD2>mail</KEYWORD2>
+
+			<!-- Mathematical functions -->
+			<KEYWORD2>abs</KEYWORD2>
+			<KEYWORD2>acos</KEYWORD2>
+			<KEYWORD2>asin</KEYWORD2>
+			<KEYWORD2>atan</KEYWORD2>
+			<KEYWORD2>atan2</KEYWORD2>
+			<KEYWORD2>base_convert</KEYWORD2>
+			<KEYWORD2>bindec</KEYWORD2>
+			<KEYWORD2>ceil</KEYWORD2>
+			<KEYWORD2>cos</KEYWORD2>
+			<KEYWORD2>decbin</KEYWORD2>
+			<KEYWORD2>dechex</KEYWORD2>
+			<KEYWORD2>decoct</KEYWORD2>
+			<KEYWORD2>exp</KEYWORD2>
+			<KEYWORD2>floor</KEYWORD2>
+			<KEYWORD2>getrandmax</KEYWORD2>
+			<KEYWORD2>hexdec</KEYWORD2>
+			<KEYWORD2>log</KEYWORD2>
+			<KEYWORD2>log10</KEYWORD2>
+			<KEYWORD2>max</KEYWORD2>
+			<KEYWORD2>min</KEYWORD2>
+			<KEYWORD2>mt_getrandmax</KEYWORD2>
+			<KEYWORD2>mt_rand</KEYWORD2>
+			<KEYWORD2>mt_srand</KEYWORD2>
+			<KEYWORD2>number_format</KEYWORD2>
+			<KEYWORD2>octdec</KEYWORD2>
+			<KEYWORD2>pi</KEYWORD2>
+			<KEYWORD2>pow</KEYWORD2>
+			<KEYWORD2>rand</KEYWORD2>
+			<KEYWORD2>round</KEYWORD2>
+			<KEYWORD2>sin</KEYWORD2>
+			<KEYWORD2>sqrt</KEYWORD2>
+			<KEYWORD2>srand</KEYWORD2>
+			<KEYWORD2>tan</KEYWORD2>
+
+			<!-- mcrypt functions -->
+	<!-- 		<KEYWORD2>mcrypt_cbc</KEYWORD2>
+			<KEYWORD2>mcrypt_cfb</KEYWORD2>
+			<KEYWORD2>mcrypt_create_iv</KEYWORD2>
+			<KEYWORD2>mcrypt_ecb</KEYWORD2>
+			<KEYWORD2>mcrypt_get_block_size</KEYWORD2>
+			<KEYWORD2>mcrypt_get_cipher_name</KEYWORD2>
+			<KEYWORD2>mcrypt_get_key_size</KEYWORD2>
+			<KEYWORD2>mcrypt_ofb</KEYWORD2> -->
+
+			<!-- Miscellaneous functions -->
+			<KEYWORD2>connection_aborted</KEYWORD2>
+			<KEYWORD2>connection_status</KEYWORD2>
+			<KEYWORD2>connection_timeout</KEYWORD2>
+			<KEYWORD2>die</KEYWORD2>
+			<KEYWORD2>eval</KEYWORD2>
+			<KEYWORD2>exit</KEYWORD2>
+			<KEYWORD2>extract</KEYWORD2>
+			<KEYWORD2>function_exists</KEYWORD2>
+			<KEYWORD2>ignore_user_abort</KEYWORD2>
+			<KEYWORD2>iptcparse</KEYWORD2>
+			<KEYWORD2>leak</KEYWORD2>
+			<KEYWORD2>pack</KEYWORD2>
+			<KEYWORD2>register_shutdown_function</KEYWORD2>
+			<KEYWORD2>serialize</KEYWORD2>
+			<KEYWORD2>sleep</KEYWORD2>
+			<KEYWORD2>uniqid</KEYWORD2>
+			<KEYWORD2>unpack</KEYWORD2>
+			<KEYWORD2>unserialize</KEYWORD2>
+			<KEYWORD2>usleep</KEYWORD2>
+
+			<!-- mSQL functions -->
+	<!-- 		<KEYWORD2>msql</KEYWORD2>
+			<KEYWORD2>msql_affected_rows</KEYWORD2>
+			<KEYWORD2>msql_close</KEYWORD2>
+			<KEYWORD2>msql_connect</KEYWORD2>
+			<KEYWORD2>msql_create_db</KEYWORD2>
+			<KEYWORD2>msql_createdb</KEYWORD2>
+			<KEYWORD2>msql_data_seek</KEYWORD2>
+			<KEYWORD2>msql_dbname</KEYWORD2>
+			<KEYWORD2>msql_drop_db</KEYWORD2>
+			<KEYWORD2>msql_dropdb</KEYWORD2>
+			<KEYWORD2>msql_error</KEYWORD2>
+			<KEYWORD2>msql_fetch_array</KEYWORD2>
+			<KEYWORD2>msql_fetch_field</KEYWORD2>
+			<KEYWORD2>msql_fetch_object</KEYWORD2>
+			<KEYWORD2>msql_fetch_row</KEYWORD2>
+			<KEYWORD2>msql_field_seek</KEYWORD2>
+			<KEYWORD2>msql_fieldflags</KEYWORD2>
+			<KEYWORD2>msql_fieldlen</KEYWORD2>
+			<KEYWORD2>msql_fieldname</KEYWORD2>
+			<KEYWORD2>msql_fieldtable</KEYWORD2>
+			<KEYWORD2>msql_fieldtype</KEYWORD2>
+			<KEYWORD2>msql_free_result</KEYWORD2>
+			<KEYWORD2>msql_freeresult</KEYWORD2>
+			<KEYWORD2>msql_list_dbs</KEYWORD2>
+			<KEYWORD2>msql_list_fields</KEYWORD2>
+			<KEYWORD2>msql_list_tables</KEYWORD2>
+			<KEYWORD2>msql_listdbs</KEYWORD2>
+			<KEYWORD2>msql_listfields</KEYWORD2>
+			<KEYWORD2>msql_listtables</KEYWORD2>
+			<KEYWORD2>msql_num_fields</KEYWORD2>
+			<KEYWORD2>msql_num_rows</KEYWORD2>
+			<KEYWORD2>msql_numfields</KEYWORD2>
+			<KEYWORD2>msql_numrows</KEYWORD2>
+			<KEYWORD2>msql_pconnect</KEYWORD2>
+			<KEYWORD2>msql_query</KEYWORD2>
+			<KEYWORD2>msql_regcase</KEYWORD2>
+			<KEYWORD2>msql_result</KEYWORD2>
+			<KEYWORD2>msql_select_db</KEYWORD2>
+			<KEYWORD2>msql_selectdb</KEYWORD2>
+			<KEYWORD2>msql_tablename</KEYWORD2> -->
+
+			<!-- M$ SQL Server functions -->
+	<!-- 		<KEYWORD2>mssql_affected_rows</KEYWORD2>
+			<KEYWORD2>mssql_close</KEYWORD2>
+			<KEYWORD2>mssql_connect</KEYWORD2>
+			<KEYWORD2>mssql_data_seek</KEYWORD2>
+			<KEYWORD2>mssql_fetch_array</KEYWORD2>
+			<KEYWORD2>mssql_fetch_field</KEYWORD2>
+			<KEYWORD2>mssql_fetch_object</KEYWORD2>
+			<KEYWORD2>mssql_fetch_row</KEYWORD2>
+			<KEYWORD2>mssql_field_seek</KEYWORD2>
+			<KEYWORD2>mssql_free_result</KEYWORD2>
+			<KEYWORD2>mssql_num_fields</KEYWORD2>
+			<KEYWORD2>mssql_num_rows</KEYWORD2>
+			<KEYWORD2>mssql_pconnect</KEYWORD2>
+			<KEYWORD2>mssql_query</KEYWORD2>
+			<KEYWORD2>mssql_result</KEYWORD2>
+			<KEYWORD2>mssql_select_db</KEYWORD2> -->
+
+			<!-- MySQL functions -->
+			<KEYWORD2>mysql_affected_rows</KEYWORD2>
+			<KEYWORD2>mysql_close</KEYWORD2>
+			<KEYWORD2>mysql_connect</KEYWORD2>
+			<KEYWORD2>mysql_create_db</KEYWORD2>
+			<KEYWORD2>mysql_data_seek</KEYWORD2>
+			<KEYWORD2>mysql_db_query</KEYWORD2>
+			<KEYWORD2>mysql_dbname</KEYWORD2>
+			<KEYWORD2>mysql_drop_db</KEYWORD2>
+			<KEYWORD2>mysql_errno</KEYWORD2>
+			<KEYWORD2>mysql_error</KEYWORD2>
+			<KEYWORD2>mysql_fetch_array</KEYWORD2>
+			<KEYWORD2>mysql_fetch_field</KEYWORD2>
+			<KEYWORD2>mysql_fetch_lengths</KEYWORD2>
+			<KEYWORD2>mysql_fetch_object</KEYWORD2>
+			<KEYWORD2>mysql_fetch_row</KEYWORD2>
+			<KEYWORD2>mysql_field_flags</KEYWORD2>
+			<KEYWORD2>mysql_field_len</KEYWORD2>
+			<KEYWORD2>mysql_field_name</KEYWORD2>
+			<KEYWORD2>mysql_field_seek</KEYWORD2>
+			<KEYWORD2>mysql_field_table</KEYWORD2>
+			<KEYWORD2>mysql_field_type</KEYWORD2>
+			<KEYWORD2>mysql_free_result</KEYWORD2>
+			<KEYWORD2>mysql_insert_id</KEYWORD2>
+			<KEYWORD2>mysql_list_dbs</KEYWORD2>
+			<KEYWORD2>mysql_list_fields</KEYWORD2>
+			<KEYWORD2>mysql_list_tables</KEYWORD2>
+			<KEYWORD2>mysql_num_fields</KEYWORD2>
+			<KEYWORD2>mysql_num_rows</KEYWORD2>
+			<KEYWORD2>mysql_pconnect</KEYWORD2>
+			<KEYWORD2>mysql_query</KEYWORD2>
+			<KEYWORD2>mysql_result</KEYWORD2>
+			<KEYWORD2>mysql_select_db</KEYWORD2>
+			<KEYWORD2>mysql_tablename</KEYWORD2>
+
+			<!-- Sybase functions -->
+	<!-- 		<KEYWORD2>sybase_affected_rows</KEYWORD2>
+			<KEYWORD2>sybase_close</KEYWORD2>
+			<KEYWORD2>sybase_connect</KEYWORD2>
+			<KEYWORD2>sybase_data_seek</KEYWORD2>
+			<KEYWORD2>sybase_fetch_array</KEYWORD2>
+			<KEYWORD2>sybase_fetch_field</KEYWORD2>
+			<KEYWORD2>sybase_fetch_object</KEYWORD2>
+			<KEYWORD2>sybase_fetch_row</KEYWORD2>
+			<KEYWORD2>sybase_field_seek</KEYWORD2>
+			<KEYWORD2>sybase_free_result</KEYWORD2>
+			<KEYWORD2>sybase_num_fields</KEYWORD2>
+			<KEYWORD2>sybase_num_rows</KEYWORD2>
+			<KEYWORD2>sybase_pconnect</KEYWORD2>
+			<KEYWORD2>sybase_query</KEYWORD2>
+			<KEYWORD2>sybase_result</KEYWORD2>
+			<KEYWORD2>sybase_select_db</KEYWORD2> -->
+
+			<!-- Network functions -->
+			<KEYWORD2>checkdnsrr</KEYWORD2>
+			<KEYWORD2>closelog</KEYWORD2>
+			<KEYWORD2>debugger_off</KEYWORD2>
+			<KEYWORD2>debugger_on</KEYWORD2>
+			<KEYWORD2>fsockopen</KEYWORD2>
+			<KEYWORD2>gethostbyaddr</KEYWORD2>
+			<KEYWORD2>gethostbyname</KEYWORD2>
+			<KEYWORD2>gethostbynamel</KEYWORD2>
+			<KEYWORD2>getmxrr</KEYWORD2>
+			<KEYWORD2>openlog</KEYWORD2>
+			<KEYWORD2>pfsockopen</KEYWORD2>
+			<KEYWORD2>set_socket_blocking</KEYWORD2>
+			<KEYWORD2>syslog</KEYWORD2>
+
+			<!-- ODBC functions -->
+			<KEYWORD2>odbc_autocommit</KEYWORD2>
+			<KEYWORD2>odbc_binmode</KEYWORD2>
+			<KEYWORD2>odbc_close</KEYWORD2>
+			<KEYWORD2>odbc_close_all</KEYWORD2>
+			<KEYWORD2>odbc_commit</KEYWORD2>
+			<KEYWORD2>odbc_connect</KEYWORD2>
+			<KEYWORD2>odbc_cursor</KEYWORD2>
+			<KEYWORD2>odbc_do</KEYWORD2>
+			<KEYWORD2>odbc_exec</KEYWORD2>
+			<KEYWORD2>odbc_execute</KEYWORD2>
+			<KEYWORD2>odbc_fetch_into</KEYWORD2>
+			<KEYWORD2>odbc_fetch_row</KEYWORD2>
+			<KEYWORD2>odbc_field_len</KEYWORD2>
+			<KEYWORD2>odbc_field_name</KEYWORD2>
+			<KEYWORD2>odbc_field_type</KEYWORD2>
+			<KEYWORD2>odbc_free_result</KEYWORD2>
+			<KEYWORD2>odbc_longreadlen</KEYWORD2>
+			<KEYWORD2>odbc_num_fields</KEYWORD2>
+			<KEYWORD2>odbc_num_rows</KEYWORD2>
+			<KEYWORD2>odbc_pconnect</KEYWORD2>
+			<KEYWORD2>odbc_prepare</KEYWORD2>
+			<KEYWORD2>odbc_result</KEYWORD2>
+			<KEYWORD2>odbc_result_all</KEYWORD2>
+			<KEYWORD2>odbc_rollback</KEYWORD2>
+			<KEYWORD2>odbc_setoption</KEYWORD2>
+
+			<!-- Oracle 8 functions -->
+	<!-- 		<KEYWORD2>ocibindbyname</KEYWORD2>
+			<KEYWORD2>ocicolumnisnull</KEYWORD2>
+			<KEYWORD2>ocicolumnsize</KEYWORD2>
+			<KEYWORD2>ocicommit</KEYWORD2>
+			<KEYWORD2>ocidefinebyname</KEYWORD2>
+			<KEYWORD2>ociexecute</KEYWORD2>
+			<KEYWORD2>ocifetch</KEYWORD2>
+			<KEYWORD2>ocifetchinto</KEYWORD2>
+			<KEYWORD2>ocilogoff</KEYWORD2>
+			<KEYWORD2>ocilogon</KEYWORD2>
+			<KEYWORD2>ocinumrows</KEYWORD2>
+			<KEYWORD2>ociresult</KEYWORD2>
+			<KEYWORD2>ocirollback</KEYWORD2> -->
+
+			<!-- Oracle functions -->
+	<!-- 		<KEYWORD2>ora_bind</KEYWORD2>
+			<KEYWORD2>ora_close</KEYWORD2>
+			<KEYWORD2>ora_columnname</KEYWORD2>
+			<KEYWORD2>ora_columntype</KEYWORD2>
+			<KEYWORD2>ora_commit</KEYWORD2>
+			<KEYWORD2>ora_commitoff</KEYWORD2>
+			<KEYWORD2>ora_commiton</KEYWORD2>
+			<KEYWORD2>ora_error</KEYWORD2>
+			<KEYWORD2>ora_errorcode</KEYWORD2>
+			<KEYWORD2>ora_exec</KEYWORD2>
+			<KEYWORD2>ora_fetch</KEYWORD2>
+			<KEYWORD2>ora_getcolumn</KEYWORD2>
+			<KEYWORD2>ora_logoff</KEYWORD2>
+			<KEYWORD2>ora_logon</KEYWORD2>
+			<KEYWORD2>ora_open</KEYWORD2>
+			<KEYWORD2>ora_parse</KEYWORD2>
+			<KEYWORD2>ora_rollback</KEYWORD2> -->
+
+			<!-- PDF functions -->
+	<!-- 		<KEYWORD2>pdf_add_outline</KEYWORD2>
+			<KEYWORD2>pdf_arc</KEYWORD2>
+			<KEYWORD2>pdf_begin_page</KEYWORD2>
+			<KEYWORD2>pdf_circle</KEYWORD2>
+			<KEYWORD2>pdf_clip</KEYWORD2>
+			<KEYWORD2>pdf_close</KEYWORD2>
+			<KEYWORD2>pdf_close_image</KEYWORD2>
+			<KEYWORD2>pdf_closepath</KEYWORD2>
+			<KEYWORD2>pdf_closepath_fill_stroke</KEYWORD2>
+			<KEYWORD2>pdf_closepath_stroke</KEYWORD2>
+			<KEYWORD2>pdf_continue_text</KEYWORD2>
+			<KEYWORD2>pdf_curveto</KEYWORD2>
+			<KEYWORD2>pdf_end_page</KEYWORD2>
+			<KEYWORD2>pdf_endpath</KEYWORD2>
+			<KEYWORD2>pdf_execute_image</KEYWORD2>
+			<KEYWORD2>pdf_fill</KEYWORD2>
+			<KEYWORD2>pdf_fill_stroke</KEYWORD2>
+			<KEYWORD2>pdf_get_info</KEYWORD2>
+			<KEYWORD2>pdf_lineto</KEYWORD2>
+			<KEYWORD2>pdf_moveto</KEYWORD2>
+			<KEYWORD2>pdf_open</KEYWORD2>
+			<KEYWORD2>pdf_open_jpeg</KEYWORD2>
+			<KEYWORD2>pdf_place_image</KEYWORD2>
+			<KEYWORD2>pdf_put_image</KEYWORD2>
+			<KEYWORD2>pdf_rect</KEYWORD2>
+			<KEYWORD2>pdf_restore</KEYWORD2>
+			<KEYWORD2>pdf_rotate</KEYWORD2>
+			<KEYWORD2>pdf_save</KEYWORD2>
+			<KEYWORD2>pdf_scale</KEYWORD2>
+			<KEYWORD2>pdf_set_char_spacing</KEYWORD2>
+			<KEYWORD2>pdf_set_duration</KEYWORD2>
+			<KEYWORD2>pdf_set_font</KEYWORD2>
+			<KEYWORD2>pdf_set_horiz_scaling</KEYWORD2>
+			<KEYWORD2>pdf_set_info_author</KEYWORD2>
+			<KEYWORD2>pdf_set_info_creator</KEYWORD2>
+			<KEYWORD2>pdf_set_info_keywords</KEYWORD2>
+			<KEYWORD2>pdf_set_info_subject</KEYWORD2>
+			<KEYWORD2>pdf_set_info_title</KEYWORD2>
+			<KEYWORD2>pdf_set_leading</KEYWORD2>
+			<KEYWORD2>pdf_set_text_matrix</KEYWORD2>
+			<KEYWORD2>pdf_set_text_pos</KEYWORD2>
+			<KEYWORD2>pdf_set_text_rendering</KEYWORD2>
+			<KEYWORD2>pdf_set_text_rise</KEYWORD2>
+			<KEYWORD2>pdf_set_transition</KEYWORD2>
+			<KEYWORD2>pdf_set_word_spacing</KEYWORD2>
+			<KEYWORD2>pdf_setdash</KEYWORD2>
+			<KEYWORD2>pdf_setflat</KEYWORD2>
+			<KEYWORD2>pdf_setgray</KEYWORD2>
+			<KEYWORD2>pdf_setgray_fill</KEYWORD2>
+			<KEYWORD2>pdf_setgray_stroke</KEYWORD2>
+			<KEYWORD2>pdf_setlinecap</KEYWORD2>
+			<KEYWORD2>pdf_setlinejoin</KEYWORD2>
+			<KEYWORD2>pdf_setlinewidth</KEYWORD2>
+			<KEYWORD2>pdf_setmiterlimit</KEYWORD2>
+			<KEYWORD2>pdf_setrgbcolor</KEYWORD2>
+			<KEYWORD2>pdf_setrgbcolor_fill</KEYWORD2>
+			<KEYWORD2>pdf_setrgbcolor_stroke</KEYWORD2>
+			<KEYWORD2>pdf_show</KEYWORD2>
+			<KEYWORD2>pdf_show_xy</KEYWORD2>
+			<KEYWORD2>pdf_stringwidth</KEYWORD2>
+			<KEYWORD2>pdf_stroke</KEYWORD2>
+			<KEYWORD2>pdf_translate</KEYWORD2> -->
+
+			<!-- PostgreSQL functions -->
+			<KEYWORD2>pg_close</KEYWORD2>
+			<KEYWORD2>pg_cmdtuples</KEYWORD2>
+			<KEYWORD2>pg_connect</KEYWORD2>
+			<KEYWORD2>pg_dbname</KEYWORD2>
+			<KEYWORD2>pg_errormessage</KEYWORD2>
+			<KEYWORD2>pg_exec</KEYWORD2>
+			<KEYWORD2>pg_fetch_array</KEYWORD2>
+			<KEYWORD2>pg_fetch_object</KEYWORD2>
+			<KEYWORD2>pg_fetch_row</KEYWORD2>
+			<KEYWORD2>pg_fieldisnull</KEYWORD2>
+			<KEYWORD2>pg_fieldname</KEYWORD2>
+			<KEYWORD2>pg_fieldnum</KEYWORD2>
+			<KEYWORD2>pg_fieldprtlen</KEYWORD2>
+			<KEYWORD2>pg_fieldsize</KEYWORD2>
+			<KEYWORD2>pg_fieldtype</KEYWORD2>
+			<KEYWORD2>pg_freeresult</KEYWORD2>
+			<KEYWORD2>pg_getlastoid</KEYWORD2>
+			<KEYWORD2>pg_host</KEYWORD2>
+			<KEYWORD2>pg_loclose</KEYWORD2>
+			<KEYWORD2>pg_locreate</KEYWORD2>
+			<KEYWORD2>pg_loopen</KEYWORD2>
+			<KEYWORD2>pg_loread</KEYWORD2>
+			<KEYWORD2>pg_loreadall</KEYWORD2>
+			<KEYWORD2>pg_lounlink</KEYWORD2>
+			<KEYWORD2>pg_lowrite</KEYWORD2>
+			<KEYWORD2>pg_numfields</KEYWORD2>
+			<KEYWORD2>pg_numrows</KEYWORD2>
+			<KEYWORD2>pg_options</KEYWORD2>
+			<KEYWORD2>pg_pconnect</KEYWORD2>
+			<KEYWORD2>pg_port</KEYWORD2>
+			<KEYWORD2>pg_result</KEYWORD2>
+			<KEYWORD2>pg_tty</KEYWORD2>
+
+			<!-- Regular expression functions -->
+			<KEYWORD2>ereg</KEYWORD2>
+			<KEYWORD2>ereg_replace</KEYWORD2>
+			<KEYWORD2>eregi</KEYWORD2>
+			<KEYWORD2>eregi_replace</KEYWORD2>
+			<KEYWORD2>split</KEYWORD2>
+			<KEYWORD2>sql_regcase</KEYWORD2>
+
+			<!-- Semaphore and shared memory functions -->
+	<!-- 		<KEYWORD2>sem_acquire</KEYWORD2>
+			<KEYWORD2>sem_get</KEYWORD2>
+			<KEYWORD2>sem_release</KEYWORD2>
+			<KEYWORD2>shm_attach</KEYWORD2>
+			<KEYWORD2>shm_detach</KEYWORD2>
+			<KEYWORD2>shm_get_var</KEYWORD2>
+			<KEYWORD2>shm_put_var</KEYWORD2>
+			<KEYWORD2>shm_remove</KEYWORD2>
+			<KEYWORD2>shm_remove_var</KEYWORD2> -->
+
+			<!-- Solid functions -->
+	<!-- 		<KEYWORD2>solid_close</KEYWORD2>
+			<KEYWORD2>solid_connect</KEYWORD2>
+			<KEYWORD2>solid_exec</KEYWORD2>
+			<KEYWORD2>solid_fetchrow</KEYWORD2>
+			<KEYWORD2>solid_fieldname</KEYWORD2>
+			<KEYWORD2>solid_fieldnum</KEYWORD2>
+			<KEYWORD2>solid_freeresult</KEYWORD2>
+			<KEYWORD2>solid_numfields</KEYWORD2>
+			<KEYWORD2>solid_numrows</KEYWORD2>
+			<KEYWORD2>solid_result</KEYWORD2> -->
+
+			<!-- SNMP functions -->
+	<!-- 		<KEYWORD2>snmpget</KEYWORD2>
+			<KEYWORD2>snmprealwalk</KEYWORD2>
+			<KEYWORD2>snmpwalk</KEYWORD2> -->
+
+			<!-- String functions -->
+			<KEYWORD2>addslashes</KEYWORD2>
+			<KEYWORD2>chop</KEYWORD2>
+			<KEYWORD2>chr</KEYWORD2>
+			<KEYWORD2>chunk_split</KEYWORD2>
+			<KEYWORD2>convert_cyr_string</KEYWORD2>
+			<KEYWORD2>crypt</KEYWORD2>
+			<KEYWORD2>echo</KEYWORD2>
+			<KEYWORD2>explode</KEYWORD2>
+			<KEYWORD2>flush</KEYWORD2>
+			<KEYWORD2>get_meta_tags</KEYWORD2>
+			<KEYWORD2>htmlentities</KEYWORD2>
+			<KEYWORD2>htmlspecialchars</KEYWORD2>
+			<KEYWORD2>implode</KEYWORD2>
+			<KEYWORD2>join</KEYWORD2>
+			<KEYWORD2>ltrim</KEYWORD2>
+			<KEYWORD2>md5</KEYWORD2>
+			<KEYWORD2>nl2br</KEYWORD2>
+			<KEYWORD2>ord</KEYWORD2>
+			<KEYWORD2>parse_str</KEYWORD2>
+			<KEYWORD2>print</KEYWORD2>
+			<KEYWORD2>printf</KEYWORD2>
+			<KEYWORD2>quoted_printable_decode</KEYWORD2>
+			<KEYWORD2>quotemeta</KEYWORD2>
+			<KEYWORD2>rawurldecode</KEYWORD2>
+			<KEYWORD2>rawurlencode</KEYWORD2>
+			<KEYWORD2>setlocale</KEYWORD2>
+			<KEYWORD2>similar_text</KEYWORD2>
+			<KEYWORD2>soundex</KEYWORD2>
+			<KEYWORD2>sprintf</KEYWORD2>
+			<KEYWORD2>str_replace</KEYWORD2>
+			<KEYWORD2>strchr</KEYWORD2>
+			<KEYWORD2>strcmp</KEYWORD2>
+			<KEYWORD2>strcspn</KEYWORD2>
+			<KEYWORD2>strip_tags</KEYWORD2>
+			<KEYWORD2>stripslashes</KEYWORD2>
+			<KEYWORD2>strlen</KEYWORD2>
+			<KEYWORD2>strpos</KEYWORD2>
+			<KEYWORD2>strrchr</KEYWORD2>
+			<KEYWORD2>strrev</KEYWORD2>
+			<KEYWORD2>strrpos</KEYWORD2>
+			<KEYWORD2>strspn</KEYWORD2>
+			<KEYWORD2>strstr</KEYWORD2>
+			<KEYWORD2>strtok</KEYWORD2>
+			<KEYWORD2>strtolower</KEYWORD2>
+			<KEYWORD2>strtoupper</KEYWORD2>
+			<KEYWORD2>strtr</KEYWORD2>
+			<KEYWORD2>substr</KEYWORD2>
+			<KEYWORD2>trim</KEYWORD2>
+			<KEYWORD2>ucfirst</KEYWORD2>
+			<KEYWORD2>ucwords</KEYWORD2>
+
+			<!-- URL functions -->
+			<KEYWORD2>base64_decode</KEYWORD2>
+			<KEYWORD2>base64_encode</KEYWORD2>
+			<KEYWORD2>parse_url</KEYWORD2>
+			<KEYWORD2>urldecode</KEYWORD2>
+			<KEYWORD2>urlencode</KEYWORD2>
+
+			<!-- Variable functions -->
+			<KEYWORD2>doubleval</KEYWORD2>
+			<KEYWORD2>empty</KEYWORD2>
+			<KEYWORD2>gettype</KEYWORD2>
+			<KEYWORD2>intval</KEYWORD2>
+			<KEYWORD2>is_array</KEYWORD2>
+			<KEYWORD2>is_double</KEYWORD2>
+			<KEYWORD2>is_float</KEYWORD2>
+			<KEYWORD2>is_int</KEYWORD2>
+			<KEYWORD2>is_integer</KEYWORD2>
+			<KEYWORD2>is_long</KEYWORD2>
+			<KEYWORD2>is_object</KEYWORD2>
+			<KEYWORD2>is_real</KEYWORD2>
+			<KEYWORD2>is_string</KEYWORD2>
+			<KEYWORD2>isset</KEYWORD2>
+			<KEYWORD2>settype</KEYWORD2>
+			<KEYWORD2>strval</KEYWORD2>
+			<KEYWORD2>unset</KEYWORD2>
+
+			<!-- Vmailmgr functions -->
+	<!-- 		<KEYWORD2>vm_addalias</KEYWORD2>
+			<KEYWORD2>vm_adduser</KEYWORD2>
+			<KEYWORD2>vm_delalias</KEYWORD2>
+			<KEYWORD2>vm_deluser</KEYWORD2>
+			<KEYWORD2>vm_passwd</KEYWORD2> -->
+
+			<!-- WDDX functions -->
+	<!-- 		<KEYWORD2>wddx_add_vars</KEYWORD2>
+			<KEYWORD2>wddx_deserialize</KEYWORD2>
+			<KEYWORD2>wddx_packet_end</KEYWORD2>
+			<KEYWORD2>wddx_packet_start</KEYWORD2>
+			<KEYWORD2>wddx_serialize_value</KEYWORD2>
+			<KEYWORD2>wddx_serialize_vars</KEYWORD2> -->
+
+			<!-- Zlib functions -->
+	<!-- 		<KEYWORD2>gzclose</KEYWORD2>
+			<KEYWORD2>gzeof</KEYWORD2>
+			<KEYWORD2>gzfile</KEYWORD2>
+			<KEYWORD2>gzgetc</KEYWORD2>
+			<KEYWORD2>gzgets</KEYWORD2>
+			<KEYWORD2>gzgetss</KEYWORD2>
+			<KEYWORD2>gzopen</KEYWORD2>
+			<KEYWORD2>gzpassthru</KEYWORD2>
+			<KEYWORD2>gzputs</KEYWORD2>
+			<KEYWORD2>gzread</KEYWORD2>
+			<KEYWORD2>gzrewind</KEYWORD2>
+			<KEYWORD2>gzseek</KEYWORD2>
+			<KEYWORD2>gztell</KEYWORD2>
+			<KEYWORD2>gzwrite</KEYWORD2>
+			<KEYWORD2>readgzfile</KEYWORD2> -->
+
+			<!-- XML functions -->
+	<!-- 		<KEYWORD2>utf8_decode</KEYWORD2>
+			<KEYWORD2>utf8_encode</KEYWORD2>
+			<KEYWORD2>xml_error_string</KEYWORD2>
+			<KEYWORD2>xml_get_current_byte_index</KEYWORD2>
+			<KEYWORD2>xml_get_current_column_number</KEYWORD2>
+			<KEYWORD2>xml_get_current_line_number</KEYWORD2>
+			<KEYWORD2>xml_get_error_code</KEYWORD2>
+			<KEYWORD2>xml_parse</KEYWORD2>
+			<KEYWORD2>xml_parser_create</KEYWORD2>
+			<KEYWORD2>xml_parser_free</KEYWORD2>
+			<KEYWORD2>xml_parser_get_option</KEYWORD2>
+			<KEYWORD2>xml_parser_set_option</KEYWORD2>
+			<KEYWORD2>xml_set_character_data_handler</KEYWORD2>
+			<KEYWORD2>xml_set_default_handler</KEYWORD2>
+			<KEYWORD2>xml_set_element_handler</KEYWORD2>
+			<KEYWORD2>xml_set_external_entity_ref_handler</KEYWORD2>
+			<KEYWORD2>xml_set_notation_decl_handler</KEYWORD2>
+			<KEYWORD2>xml_set_processing_instruction_handler</KEYWORD2>
+			<KEYWORD2>xml_set_unparsed_entity_decl_handler</KEYWORD2> -->
+		</KEYWORDS>
+	</RULES>
+</MODE>
