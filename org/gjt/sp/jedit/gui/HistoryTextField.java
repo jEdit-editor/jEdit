@@ -32,6 +32,15 @@ public class HistoryTextField extends JTextField
 {
 	/**
 	 * Creates a new history text field.
+	 * @since jEdit 3.2pre5
+	 */
+	public HistoryTextField()
+	{
+		this(null);
+	}
+
+	/**
+	 * Creates a new history text field.
 	 * @param name The history model name
 	 */
 	public HistoryTextField(String name)

@@ -22,42 +22,55 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Vector;
+import org.gjt.sp.jedit.msg.MacrosChanged;
 import org.gjt.sp.jedit.*;
 
-public class MacrosMenu extends EnhancedMenu
+public class MacrosMenu extends EnhancedMenu implements EBComponent
 {
 	public MacrosMenu()
 	{
 		super("macros");
+		updateMacrosMenu();
 	}
 
-	public void setPopupMenuVisible(boolean b)
+	public void addNotify()
 	{
-		if(b)
+		super.addNotify();
+		EditBus.addToBus(this);
+	}
+
+	public void removeNotify()
+	{
+		super.removeNotify();
+		EditBus.removeFromBus(this);
+	}
+
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof MacrosChanged)
+			updateMacrosMenu();
+	}
+
+	private void updateMacrosMenu()
+	{
+		// Because the macros menu contains normal items as
+		// well as dynamically-generated stuff, we are careful
+		// to only remove the dynamic crap here...
+		for(int i = getMenuComponentCount() - 1; i >= 0; i--)
 		{
-			final View view = EditAction.getView(this);
-
-			// Because the macros menu contains normal items as
-			// well as dynamically-generated stuff, we are careful
-			// to only remove the dynamic crap here...
-			for(int i = getMenuComponentCount() - 1; i >= 0; i--)
-			{
-				if(getMenuComponent(i) instanceof JSeparator)
-					break;
-				else
-					remove(i);
-			}
-
-			int count = getMenuComponentCount();
-
-			Vector macroVector = Macros.getMacroHierarchy();
-			createMacrosMenu(this,macroVector,0);
-
-			if(count == getMenuComponentCount())
-				add(GUIUtilities.loadMenuItem("no-macros"));
+			if(getMenuComponent(i) instanceof JSeparator)
+				break;
+			else
+				remove(i);
 		}
 
-		super.setPopupMenuVisible(b);
+		int count = getMenuComponentCount();
+
+		Vector macroVector = Macros.getMacroHierarchy();
+		createMacrosMenu(this,macroVector,0);
+
+		if(count == getMenuComponentCount())
+			add(GUIUtilities.loadMenuItem("no-macros"));
 	}
 
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)

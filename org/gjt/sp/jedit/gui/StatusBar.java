@@ -23,6 +23,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.border.*;
 import javax.swing.text.Segment;
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.textarea.*;
@@ -114,8 +115,36 @@ public class StatusBar extends JPanel
 		add(BorderLayout.EAST,box);
 	}
 
+	/**
+	 * Show a message for a short period of time.
+	 * @param message The message
+	 * @since jEdit 3.2pre5
+	 */
+	public void setMessageAndClear(String message)
+	{
+		setMessage(message);
+
+		tempTimer = new Timer(0,new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				setMessage(null);
+			}
+		});
+
+		tempTimer.setInitialDelay(2000);
+		tempTimer.setRepeats(false);
+		tempTimer.start();
+	}
+
 	public void setMessage(String message)
 	{
+		if(tempTimer != null)
+		{
+			tempTimer.stop();
+			tempTimer = null;
+		}
+
 		if(message == null)
 		{
 			InputHandler inputHandler = view.getInputHandler();
@@ -191,6 +220,7 @@ public class StatusBar extends JPanel
 	private MiniIOProgress ioProgress;
 	private Color gray = new Color(142,142,142);
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();
+	private Timer tempTimer;
 
 	public class VICaretStatus extends JComponent
 	{

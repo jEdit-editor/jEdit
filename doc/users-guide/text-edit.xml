@@ -604,11 +604,13 @@
    about the gutter.
   </para>
   <para>
-   <guimenu>Markers</guimenu>&gt;<guimenuitem>Add Marker</guimenuitem>
+   <guimenu>Markers</guimenu>&gt;<guimenuitem>Add/Remove Marker</guimenuitem>
    (shortcut:
    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
    <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>) adds a
-   marker without a shortcut pointing to the current line. If some text is
+   marker without a shortcut pointing to the current line. If a marker is
+   already set on the current line, the marker is removed instead.
+   If some text is
    selected, markers are added to the first and last line of each selection.
   </para>
   <para>
@@ -658,10 +660,6 @@
    goes to the nearest marker after the caret position.
   </para>
   <para>
-   <guimenu>Markers</guimenu>&gt;<guimenuitem>Remove Marker From Current
-   Line</guimenuitem> removes the marker set at the current line, if there is one.
-  </para>
-  <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Remove All Markers</guimenuitem>
    removes all markers set in the current buffer.
   </para>
@@ -690,15 +688,19 @@
     searching forwards.
    </para>
    <para>
-    If the <guibutton>Reverse search</guibutton> check box is not selected,
-    clicking <guibutton>Find</guibutton> will locate the next occurrence of the
-    search string after the caret position. Otherwise, it will locate
-    the previous occurence before the caret position. If the
+    Clicking <guibutton>Find</guibutton> will locate the next (or previous, if
+    searching backwards) occurrence of the
+    search string after the caret position. If the
     <guibutton>Keep dialog</guibutton> check box is selected, the dialog box
     will remain open; otherwise, it will be closed after the search string is
-    located. If no occurrences could be found, a dialog
-    box will be displayed, offering to restart the search from the
-    beginning (or end, if reverse search is enabled) of the buffer.
+    located.
+   </para>
+   <para>
+    If no occurrences could be found and the
+    <guibutton>Auto wrap</guibutton> check box is selected, the search will
+    automatically be restarted and a message will be shown in the status bar
+    to indicate that. If the check box is not selected, a dialog
+    box will be displayed, offering to restart the search.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Find Next</guimenuitem> (shortcut:
@@ -729,7 +731,8 @@
    </para>
    <para>
     Pressing the
-    <keycap>Up</keycap> and <keycap>Down</keycap> keys in the two text fields
+    <keycap>Up</keycap> and <keycap>Down</keycap> keys in the replacement
+    text field
     recalls previously entered strings; see <xref linkend="history" /> for
     details.
    </para>

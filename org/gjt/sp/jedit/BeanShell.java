@@ -434,7 +434,7 @@ public class BeanShell
 		Log.log(Log.DEBUG,BeanShell.class,"Initializing BeanShell"
 			+ " interpreter");
 
-		BshClassManager.setDefaultClassLoader(new JARClassLoader());
+		BshClassManager.setClassLoader(new JARClassLoader());
 
 		global = new NameSpace("jEdit embedded BeanShell Interpreter");
 		interpForMethods = new Interpreter(global);

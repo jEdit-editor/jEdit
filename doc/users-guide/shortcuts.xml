@@ -440,7 +440,8 @@
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo></entry>
-      <entry>Add marker with no shortcut.
+      <entry>If current line doesn't contain a marker, one will be added.
+      Otherwise, the existing marker will be removed.
       Use the <guimenu>Markers</guimenu> menu to return to markers added
       in this manner.</entry>
      </row>

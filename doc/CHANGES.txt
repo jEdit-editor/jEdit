@@ -4,7 +4,7 @@ JEDIT 3.2 VERSION HISTORY
 
 + New Features
 
-- BeanShell 1.2 included, replaces BeanShell 1.01.
+- BeanShell 1.1a18 included, replaces BeanShell 1.01.
   - Better error reporting
   - Cleaned up internals
   - Performance improvements
@@ -14,6 +14,8 @@ JEDIT 3.2 VERSION HISTORY
     level. This means you can have import statements in actions.xml, for
     example.
   - Some jEdit code dealing with BeanShell has been cleaned up
+  - bsh.util package included. This package contains a bunch of
+    miscellaneous BeanShell scripts, like the BeanShell server
 
 + Enhancements
 
@@ -24,6 +26,13 @@ JEDIT 3.2 VERSION HISTORY
 - Minor improvement to Javadoc highlighting in Java source
 - Improved 'BeanShell Error' dialog box
 - Internal code cleanups
+- Text fields no longer get the text area font
+- 'Add Marker' and 'Remove Marker from Current Line' commands merged
+  into an 'Add/Remove Marker' command that toggles the marker on the
+  current line
+- 'Search and Replace' dialog box has a new look
+- If auto wrap around is enabled, a message will be shown in the status
+  bar when the search is restarted
 
 + Bug Fixes
 
@@ -38,6 +47,12 @@ JEDIT 3.2 VERSION HISTORY
   bug in the recent file handler
 - Replace all was a bit buggy
 - Ruby mode filename extension was wrong
+- Fixed typo one of the tips of the day
+- The local file VFS now displays an error message if a directory could
+  not be listed, instead of silently failing
+- Manipulating markers will no longer set the 'dirty' flag if the
+  persistent markers feature is disabled
+- Fixed another recent file list bug
 
 + API Changes
 

@@ -1558,7 +1558,7 @@ public class JEditTextArea extends JComponent
 	public String getSelectedText(String separator)
 	{
 		if(selection.size() == 0)
-			return "";
+			return null;
 
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < selection.size(); i++)
@@ -3099,6 +3099,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void addMarker()
 	{
+		// always add markers on selected lines
 		Selection[] selection = getSelection();
 		for(int i = 0; i < selection.length; i++)
 		{
@@ -3113,7 +3114,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				buffer.addMarker('\0',s.end);
 		}
 
-		buffer.addMarker('\0',caret);
+		// toggle marker on caret line
+		buffer.addOrRemoveMarker('\0',caret);
 	}
 
 	/**

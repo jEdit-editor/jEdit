@@ -82,7 +82,9 @@ public class RecentFilesMenu extends EnhancedMenu
 			int recentFileCount = Math.min(recentVector.size(),
 				Integer.parseInt(jEdit.getProperty("history")));
 
-			for(int i = 0; i < recentFileCount; i++)
+			for(int i = recentVector.size() - 1;
+				i >= recentVector.size() - recentFileCount;
+				i--)
 			{
 				String path = ((BufferHistory.Entry)recentVector
 					.elementAt(i)).path;

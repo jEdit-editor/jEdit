@@ -5,52 +5,37 @@ TO DO
 - update console macros and tell john
 - make xml plugin more respectable before 3.2final
 
-+ before 3.2pre5:
++ before 3.2final:
 
-- macros menu too slow?
-- get web start to work
-- fix '... is not a function name' when running openjade
 - installing source for already installed plugins
-- reload: preserve caret position
-- jEditLauncher
 - documentation
   - replace some links to writing-macros-part with using-macros
-  - using macros docs
   - bsh interface all implement docs -- also invoke() method!!!
   - mention registers in API guide
   - JOptionPane not a good idea for getting user input?
   - formatting problems in user's guide in table cells
-  - Include John's upcoming plugin guide when ready
-  - document new edit server
   - document differences between web start and stand-alone version
-  - jEditLauncher docs
   - maybe docs on BeanShell 1.2 features in macro guide?
     - incorporate portions of the beanshell manual into the macro guide.
-- help viewer: links to .txt files?
-- globalColors setting:
-  - tree controls, file system browser icons, tool bar icons look a bit
-    ugly with different backgrounds
-  - help viewer looks ugly
-  - selected borders in list, tree, table wrong colors
-  - updateUI doesn't update tree colors
-  - restart should not be necessary for 'globalColors' to take effect
-
-+ before 3.2final:
-
-- popup menus; make sure they are on-screen? GUIUtilities method?
-- does loading and saving user settings take a long time?
-- maybe rewrite file restore to use XML -- allow plugins to read/write
-  arbitriary restore files? -- eg BufferList
-- custom splitter control?
-- finish persistent splits: resize splits to put them in the middle
-- C+\
+  - document setMessageAndClear() in API guide
+  - BSH language reference appendix
+  - BSH command reference appendix
+  - finish writing-modes-part
+- get web start to work
+- fix '... is not a function name' when running openjade
+- reload: preserve caret position
 - next time i'm making an RPM, fix the shell script
-- 'globalFont' property?
-  - maybe don't give text fields a new font?...
-- swing font customization
+- John Gellene:
+  - using macros docs
+  - jEditLauncher docs
+  - Include John's upcoming plugin guide when ready
+  - jEditLauncher
 
 + bugs that need to be fixed at some stage:
 
+- popup menus; make sure they are on-screen? GUIUtilities method?
+- does loading and saving user settings take a long time?
+- help viewer: links to .txt files?
 - Java 1.4 key events: DefaultInputHandler?
 - XThis: don't throw exceptions for non-existent methods
 - only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>
@@ -77,10 +62,12 @@ TO DO
 
 + later:
 
+- custom splitter control?
+- swing font customization
 - much better rect select, along the lines of 'column mode'
 - scrolling while caret is on a bracket over long distances slows things
   down
-- status bar: show recording status, encoding, line separator?
+- status bar: show recording status, line separator?
 - macros in web start version
 - scroll lock key toggles 'scroll mode'
 - rewritten folding: Fold object, pointer to next of curr. level, each
@@ -108,3 +95,15 @@ TO DO
     floating, toggling auto-open, etc.
   - require that each dockable have a tool bar with a close button?
 - per-mode encodings and line endings
+- globalColors setting:
+  - tree controls, file system browser icons, tool bar icons look a bit
+    ugly with different backgrounds
+  - help viewer looks ugly
+  - selected borders in list, tree, table wrong colors
+  - updateUI doesn't update tree colors
+  - restart should not be necessary for 'globalColors' to take effect
+- maybe rewrite file restore to use XML -- allow plugins to read/write
+  arbitriary restore files? -- eg BufferList
+- finish persistent splits: resize splits to put them in the middle
+- C+\
+- edit server documentation

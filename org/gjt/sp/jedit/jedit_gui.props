@@ -369,19 +369,17 @@ markers=add-marker \
 	  select-marker \
 	  swap-marker \
 	  - \
-	  remove-marker \
 	  remove-all-markers \
 	  - \
 	  prev-marker \
 	  next-marker \
 	  -
 markers.label=$Markers
-add-marker.label=$Add Marker
+add-marker.label=$Add/Remove Marker
 add-marker-shortcut.label=Add Marker $With Shortcut
 goto-marker.label=$Go to Marker
 select-marker.label=$Select to Marker
 swap-marker.label=Swa$p Caret and Marker
-remove-marker.label=$Remove Marker from Current Line
 remove-all-markers.label=Re$move All Markers
 prev-marker.label=Go to $Previous Marker
 next-marker.label=Go to $Next Marker
@@ -610,6 +608,8 @@ view.status.register-prompt=Press key to specify register:
 view.status.marker-prompt=Press key to specify marker:
 view.status.expand-folds=Press 0-9 to specify fold level:
 view.status.insert-literal=Press key to insert literally:
+view.status.auto-wrap=Search text not found; restarting search
+view.status.welcome=Welcome to jEdit {0}
 view.status.mode-tooltip=Current edit mode
 view.status.encoding-tooltip=Current encoding
 
@@ -650,6 +650,12 @@ directory-error.title=Directory Error
 directory-error.message=The directory {0}\n\
 	could not be listed due to an I/O error.\n\
 	({1})
+
+# Directory error with no message
+directory-error-nomsg.title=Directory Error
+# {0} - the path name
+directory-error-nomsg.message=The directory {0}\n\
+	could not be listed due to an I/O error.
 
 # Character conversion error, {0}=path, {1}=current encoding, {2}=error message
 encoding-error.title=Incompatible Encoding
@@ -766,8 +772,8 @@ search.find=Search for: (press up arrow to recall previous)
 search.find.mnemonic=s
 search.replace=Replace with:
 search.replace.mnemonic=w
-search.string-replace-btn=Text:
-search.beanshell-replace-btn=Return value of a BeanShell snippet:
+search.string-replace-btn=Text
+search.beanshell-replace-btn=Return value of a BeanShell snippet
 
 search.keep=Keep dialog
 search.keep.mnemonic=k

@@ -2618,6 +2618,23 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
+	 * If a marker is set on the line of the position, it is removed. Otherwise
+	 * a new marker with the specified shortcut is added.
+	 * @param pos The position of the marker
+	 * @param shortcut The shortcut ('\0' if none)
+	 * @since jEdit 3.2pre5
+	 */
+	public void addOrRemoveMarker(char shortcut, int pos)
+	{
+		Element map = getDefaultRootElement();
+		int line = map.getElementIndex(pos);
+		if(getMarkerAtLine(line) != null)
+			removeMarker(line);
+		else
+			addMarker(shortcut,pos);
+	}
+
+	/**
 	 * Adds a marker to this buffer.
 	 * @param pos The position of the marker
 	 * @param shortcut The shortcut ('\0' if none)
@@ -2625,7 +2642,7 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	public void addMarker(char shortcut, int pos)
 	{
-		if(!getFlag(READ_ONLY))
+		if(!getFlag(READ_ONLY) && !jEdit.getBooleanProperty("persistentMarkers"))
 			setDirty(true);
 
 		Marker markerN = new Marker(this,shortcut,pos);
@@ -2707,7 +2724,9 @@ loop:				for(int i = 0; i < count; i++)
 			Marker marker = (Marker)markers.elementAt(i);
 			if(map.getElementIndex(marker.getPosition()) == line)
 			{
-				setDirty(true);
+				if(!jEdit.getBooleanProperty("persistentMarkers"))
+					setDirty(true);
+
 				markers.removeElementAt(i);
 				i--;
 			}
@@ -2723,7 +2742,8 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	public void removeAllMarkers()
 	{
-		setDirty(true);
+		if(!jEdit.getBooleanProperty("persistentMarkers"))
+			setDirty(true);
 
 		markers.removeAllElements();
 

@@ -178,9 +178,9 @@ public class BufferHistory
 
 	/* private */ static void addEntry(Entry entry)
 	{
-		history.insertElementAt(entry,0);
+		history.addElement(entry);
 		while(history.size() > max)
-			history.removeElementAt(history.size() - 1);
+			history.removeElementAt(0);
 	}
 
 	/* private */ static void removeEntry(String path)

@@ -90,7 +90,6 @@ public class SearchDialog extends EnhancedDialog
 			// ???
 
 		replace.setText(null);
-		replaceScript.setText(null);
 
 		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 		regexp.setSelected(SearchAndReplace.getRegexp());
@@ -207,7 +206,7 @@ public class SearchDialog extends EnhancedDialog
 	private View view;
 
 	// fields
-	private HistoryTextField find, replace, replaceScript;
+	private HistoryTextField find, replace;
 
 	private JRadioButton stringReplace, beanShellReplace;
 
@@ -259,33 +258,29 @@ public class SearchDialog extends EnhancedDialog
 		// tab from the search field to the replace field with
 		// one keystroke
 
+		Box replaceModeBox = new Box(BoxLayout.X_AXIS);
 		stringReplace = new MyJRadioButton(jEdit.getProperty(
 			"search.string-replace-btn"));
-		stringReplace.setBorder(new EmptyBorder(3,0,3,0));
 		stringReplace.addActionListener(replaceActionHandler);
 		grp.add(stringReplace);
-		fieldPanel.add(stringReplace);
+		replaceModeBox.add(stringReplace);
 
-		replace = new HistoryTextField("replace");
-		replace.addActionListener(actionHandler);
-		label.setLabelFor(replace);
-		fieldPanel.add(replace);
+		replaceModeBox.add(Box.createHorizontalStrut(12));
 
 		beanShellReplace = new MyJRadioButton(jEdit.getProperty(
 			"search.beanshell-replace-btn"));
-		beanShellReplace.setBorder(new EmptyBorder(6,0,3,0));
 		beanShellReplace.addActionListener(replaceActionHandler);
 		grp.add(beanShellReplace);
-		fieldPanel.add(beanShellReplace);
+		replaceModeBox.add(beanShellReplace);
 
-		if(jEdit.getBooleanProperty("search.beanshell.value"))
-			beanShellReplace.setSelected(true);
-		else
-			stringReplace.setSelected(true);
+		fieldPanel.add(replaceModeBox);
 
-		replaceScript = new HistoryTextField("replace.script");
-		replaceScript.addActionListener(actionHandler);
-		fieldPanel.add(replaceScript);
+		fieldPanel.add(Box.createVerticalStrut(3));
+
+		replace = new HistoryTextField();
+		replace.addActionListener(actionHandler);
+		label.setLabelFor(replace);
+		fieldPanel.add(replace);
 
 		return fieldPanel;
 	}
@@ -498,12 +493,9 @@ public class SearchDialog extends EnhancedDialog
 	{
 		boolean replaceEnabled = !hyperSearch.isSelected();
 
-		replace.setEnabled(replaceEnabled
-			&& stringReplace.isSelected());
-		replaceScript.setEnabled(replaceEnabled
-			&& beanShellReplace.isSelected());
 		stringReplace.setEnabled(replaceEnabled);
 		beanShellReplace.setEnabled(replaceEnabled);
+		replace.setEnabled(replaceEnabled);
 		replaceBtn.setEnabled(replaceEnabled);
 		replaceAndFindBtn.setEnabled(replaceEnabled);
 		replaceAllBtn.setEnabled(replaceEnabled);
@@ -586,12 +578,8 @@ public class SearchDialog extends EnhancedDialog
 			find.addCurrentToHistory();
 			SearchAndReplace.setSearchString(find.getText());
 			replace.addCurrentToHistory();
-			replaceScript.addCurrentToHistory();
 
-			SearchAndReplace.setReplaceString(
-				beanShellReplace.isSelected()
-				? replaceScript.getText()
-				: replace.getText());
+			SearchAndReplace.setReplaceString(replace.getText());
 		}
 		else
 			ok = false;
@@ -630,7 +618,9 @@ public class SearchDialog extends EnhancedDialog
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			updateEnabled();
+			replace.setModel(beanShellReplace.isSelected()
+				? "replace.script"
+				: "replace");
 			SearchAndReplace.setBeanShellReplace(
 				beanShellReplace.isSelected());
 		}

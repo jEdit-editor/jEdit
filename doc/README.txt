@@ -135,16 +135,14 @@ actually a Java bug, or a well-known problem.
 
 jEdit depends on, and comes bundled with the following libraries:
 
-- gnu.regexp by the Free Software Foundation. This is used to implement
-  regular expression search and replace, among other things. jEdit uses
-  gnu.regexp 1.1.3, with the following minor change:
+- gnu.regexp by the Free Software Foundation. jEdit bundles gnu.regexp
+  1.1.3, with the following minor change:
 
   - REMatch.getSubCount() method added
 
   The gnu.regexp homepage is <http://www.cacas.org/java/gnu/regexp/>.
 
-- AElfred XML parser by Microstar corporation. This is used by the
-  syntax highlighting code to parse mode files. This class library is
+- AElfred XML parser by Microstar corporation. This class library is
   released under its own, non-GPL license, which reads as follows:
 
   "AElfred is free for both commercial and non-commercial use and
@@ -155,22 +153,10 @@ jEdit depends on, and comes bundled with the following libraries:
 
   The AElfred home page is <http://www.microstar.com>.
 
-- BeanShell scripting language, by Pat Niemeyer. This is used to
-  implement macros, among other things. The version included with jEdit
-  is basically a stripped down BeanShell 1.1a17, with the following
-  changes (don't worry if these mean nothing to you):
-
-  - Removed bsh.util package
-  - Removed bsh.Console class
-  - Removed (unneeded) import of bsh.util.JConsole from
-    InterpreterTokenManager
-  - Removed unused bsh.lib package
-  - Removed bsh.classpath package
-  - Removed unused XTargetErrorPrinter.java file
-  - Added Interpreter(NameSpace) constructor
-  - Added BshClassManager.get/setDefaultClassLoader() methods
-  - Removed annoying 'No class manager available' message when running
-    on Java 1.1
+- BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
+  version 1.1a18. Unlike with previous jEdit versions, no changes were
+  made to the BeanShell source and the complete distribution (including
+  stuff like the BeanShell server, util package, etc) is included.
 
   The BeanShell homepage is located at <http://www.beanshell.org>.
 

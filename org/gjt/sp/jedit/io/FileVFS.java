@@ -192,7 +192,11 @@ public class FileVFS extends VFS
 		File directory = new File(path);
 		String[] list = directory.list();
 		if(list == null)
+		{
+			String[] pp = { path };
+			VFSManager.error(comp,"directory-error-nomsg",pp);
 			return null;
+		}
 
 		Vector list2 = new Vector();
 		for(int i = 0; i < list.length; i++)

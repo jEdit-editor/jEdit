@@ -406,6 +406,10 @@ public class jEdit
 				else if(jEdit.getBooleanProperty("tip.show"))
 					new TipOfTheDay(view);
 
+				String[] pp = { getVersion() };
+				view.getStatus().setMessageAndClear(
+					getProperty("view.status.welcome",pp));
+
 				setBooleanProperty("firstTime",false);
 
 				// Start I/O threads
@@ -668,7 +672,7 @@ public class jEdit
 		}
 		Font font = new Font(family,style,size);
 
-		defaults.put("TextField.font",font);
+		//defaults.put("TextField.font",font);
 		defaults.put("TextArea.font",font);
 		defaults.put("TextPane.font",font);
 
@@ -2186,8 +2190,17 @@ public class jEdit
 			}
 			else
 			{
-				// web start
-				jEditHome = null;
+				// check if web start
+				if(jEdit.class.getResource("/modes/catalog") != null)
+				{
+					// modes bundled in; hence web start
+					jEditHome = null;
+				}
+				else
+				{
+					// use user.dir as last resort
+					jEditHome = System.getProperty("user.dir");
+				}
 			}
 		}
 

@@ -412,7 +412,11 @@ loop:			for(;;)
 
 				boolean restart;
 				if(wrap)
+				{
+					view.getStatus().setMessageAndClear(
+						jEdit.getProperty("view.status.auto-wrap"));
 					restart = true;
+				}
 				else
 				{
 					Integer[] args = { new Integer(reverse ? 1 : 0) };
