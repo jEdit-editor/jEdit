@@ -34,9 +34,6 @@ import org.gjt.sp.util.Log;
  */
 public class JARClassLoader extends ClassLoader
 {
-	// plugins that are no longer compatible with jEdit
-	public static final String[] BLACKLIST = { "BufferTabsPlugin" };
-
 	public JARClassLoader(String path)
 		throws IOException
 	{
@@ -157,22 +154,6 @@ public class JARClassLoader extends ClassLoader
 		throws Exception
 	{
 		name = MiscUtilities.fileToClass(name);
-
-		// blacklisted plugins are those which are either
-		// totally obsolete, or have been rolled into
-		// jEdit. We don't even try to load them to avoid
-		// problems (BufferTabs, for example, breaks very
-		// badly with 2.3pre2+)
-		for(int j = 0; j < BLACKLIST.length; j++)
-		{
-			if(name.equals(BLACKLIST[j]))
-			{
-				Log.log(Log.ERROR,this,name + " is"
-					+ " incompatible with this"
-					+ " jEdit release");
-				return;
-			}
-		}
 
 		// Check if a plugin with the same name is already loaded
 		EditPlugin[] plugins = jEdit.getPlugins();
@@ -359,6 +340,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/01/28 00:54:26  sp
+ * Blacklisting removed
+ *
  * Revision 1.24  2000/01/28 00:20:58  sp
  * Lots of stuff
  *
