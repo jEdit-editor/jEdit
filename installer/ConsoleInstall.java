@@ -1,5 +1,5 @@
 /*
- * ConsoleInstall.java - Text-only installer
+ * ConsoleInstall.java
  * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,16 +17,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
 import java.io.*;
 import java.util.Vector;
 
+/*
+ * Performs text-only installation.
+ */
 public class ConsoleInstall
 {
 	public ConsoleInstall()
 	{
-		installer = new SIMInstaller();
+		installer = new Install();
 
 		String appName = installer.getProperty("app.name");
 		String appVersion = installer.getProperty("app.version");
@@ -90,7 +91,7 @@ public class ConsoleInstall
 	}
 
 	// private members
-	private SIMInstaller installer;
+	private Install installer;
 
 	private String readLine(BufferedReader in)
 	{

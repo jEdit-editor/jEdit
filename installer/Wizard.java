@@ -1,5 +1,5 @@
 /*
- * Wizard.java - A 'wizard'
+ * Wizard.java
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,12 +17,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
+/*
+ * An abstract class that steps the user through a set of pages. Used by
+ * SwingInstall.
+ */
 public abstract class Wizard extends JComponent
 {
 	public Wizard(Color highlight, Icon logo, String cancelButtonLabel,

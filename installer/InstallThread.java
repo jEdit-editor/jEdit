@@ -1,5 +1,5 @@
 /*
- * InstallThread.java - Performs actual installation
+ * InstallThread.java
  * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,17 +17,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
 import java.io.*;
 import java.util.Vector;
 
+/*
+ * The thread that performs installation.
+ */
 public class InstallThread extends Thread
 {
-	public InstallThread(SIMInstaller installer, Progress progress,
+	public InstallThread(Install installer, Progress progress,
 		String installDir, String binDir, int size, Vector components)
 	{
-		super("SIM install thread");
+		super("Install thread");
 
 		this.installer = installer;
 		this.progress = progress;
@@ -51,7 +52,7 @@ public class InstallThread extends Thread
 		try
 		{
 			Archive archive = new Archive(getClass()
-				.getResourceAsStream("/data.sim"));
+				.getResourceAsStream("/install.dat"));
 			String name;
 			boolean write = false;
 			while((name = archive.nextEntry()) != null)
@@ -96,7 +97,7 @@ public class InstallThread extends Thread
 	}
 
 	// private members
-	private SIMInstaller installer;
+	private Install installer;
 	private Progress progress;
 	private String installDir;
 	private String binDir;

@@ -50,12 +50,16 @@ NAME="SAVING"
    
    
    
-   Any changes made to a buffer aren't actually stored to disk immediately;
-   instead, they are stored in the computer's high
+  </P
+><P
+>   Any changes made to a buffer aren't actually stored to disk immediately;
+   instead, they are stored in your computer's high
    speed memory (RAM) until they are <I
 CLASS="FIRSTTERM"
 >saved</I
 >.
+   If there are unsaved changes in a buffer, an orange orb will be displayed
+   in buffer tab and status bar.
    <SPAN
 CLASS="GUIMENU"
 >File</SPAN
@@ -90,8 +94,7 @@ CLASS="GUIMENUITEM"
    (keyboard equivalent: <B
 CLASS="KEYCAP"
 >F4</B
->) will save all open buffers
-   immediately;
+>) will save all buffers;
    a confirmation dialog box will be issued first.
   </P
 ><DIV
@@ -99,7 +102,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN426"
+NAME="AEN459"
 >Autosave and Backups</A
 ></H2
 ><P
@@ -116,16 +119,15 @@ CLASS="FILENAME"
 CLASS="FILENAME"
 >#program.c#</TT
 >). When you save a buffer, its
-    autosave file is deleted. But if jEdit crashes before you can save a
-    file, the autosave will remain, with your unsaved changes in it.
-    Next time that file is opened, jEdit will ask if you want to
-    recover the autosaved data.
+    autosave file is deleted. But if jEdit crashes before you can save,
+    the autosave file will remain, and jEdit will offer to
+    recover the autosaved data next time the file is opened.
    </P
 ><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 3-5. Dialog box shown if a file has autosaved changes</B
+>Figure 3-7. Dialog box shown if a file has autosaved changes</B
 ></P
 ><P
 ><IMG
@@ -177,7 +179,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN452"
+NAME="AEN485"
 >Line Separator Characters</A
 ></H2
 ><P
@@ -192,8 +194,7 @@ NAME="AEN452"
     The MacOS uses Carriage-Return (\r, ^M) for that purpose. Unix
     uses Newline (\n, ^J). DOS and Windows use Carriage-Return-Newline
     (\r\n, ^M^J). jEdit can read and write all three formats.
-    The line separator used in the next time the current
-    buffer is saved can be changed
+    The line separator of the current buffer can be changed
     in the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -228,7 +229,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN473"
+NAME="AEN506"
 >When Another Application Modifies the File</A
 ></H2
 ><P
@@ -279,7 +280,7 @@ CLASS="EMPHASIS"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 3-6. Warning message displayed when another application
+>Figure 3-8. Warning message displayed when another application
    changed the file on disk</B
 ></P
 ><P

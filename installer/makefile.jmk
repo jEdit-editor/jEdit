@@ -1,0 +1,21 @@
+# A makefile file for the jEdit installer
+#
+# To recompile the installer, run jmk in this directory.
+
+cmd_javac = "jikes" "-O" "+E";
+
+srcs = (subst ".java", ".class", (glob "*.java"));
+
+"all": srcs;
+
+"%.class" : "%.java";
+{
+    exec cmd_javac <;
+}
+
+"clean":;
+{
+    -delete (glob (join pkgs, "/*.class"));
+}
+
+".PHONY": "clean" "all";

@@ -209,7 +209,7 @@ CLASS="GUIMENUITEM"
 > - if selected, hidden
    files will be shown in the file list. The definition of a hidden file
    is system-specific; on Windows, files with the "h" attribute
-   are hidden. On Unix, files whose name begins with "." are
+   are hidden. On Unix, files whose names begin with "." are
    hidden</P
 ></LI
 ><LI
@@ -218,8 +218,9 @@ CLASS="GUIMENUITEM"
 CLASS="GUIMENUITEM"
 >New Directory</SPAN
 > - prompts for a directory
-   name and creates a directory with that name in the current directory.
-   Note that not all virtual filesystems may support this operation
+   name and creates a directory with that name.
+   Note that not all virtual filesystems may support this operation (the
+   local and FTP filesystems do)
    </P
 ></LI
 ><LI
@@ -228,8 +229,8 @@ CLASS="GUIMENUITEM"
 CLASS="GUIMENUITEM"
 >Add to Favorites</SPAN
 > - adds the currently
-   selected directory (or the currently displayed, if there is nothing
-   selected) to the favorites list</P
+   selected (or the currently displayed, if there is nothing
+   selected) directory to the favorites list</P
 ></LI
 ><LI
 ><P
@@ -266,21 +267,27 @@ HREF="vfs-ftp.html"
    of the current directory to display in the form of a glob pattern.
    See <A
 HREF="globs.html"
->Appendix D</A
+>Appendix F</A
 > for more information about glob patterns.
    Both the path and filter fields support a history;
    see <A
 HREF="history.html"
->Appendix E</A
+>Appendix B</A
 > for
    details.
   </P
 ><P
->   Right-clicking on a file in the VFS browser displays a popup menu.
+>   Right-clicking on a file in the VFS browser displays a popup menu, containing
+   commands for manipulating that file, in addition to all the commands in the
+   <SPAN
+CLASS="GUIBUTTON"
+>More</SPAN
+> menu.
    If the buffer is already open, the popup will have commands to
    display it in the current view, display it in a new view, or close it.
    Unopened file popups have items for opening, deleting and renaming.
-   Note that not all virtual filesystems may support deletion and renaming.
+   Note that not all virtual filesystems may support deletion and renaming
+   (the local and FTP filesystems do).
    Attempting to delete a non-empty directory will give an error; only
    empty directories can be deleted.
   </P
@@ -312,7 +319,7 @@ CLASS="SIDEBAR"
 ></P
 ><P
 >    The VFS browser can be navigated from the keyboard.
-    The following keystrokes are defined:
+    The following keystrokes are supported:
     <P
 ></P
 ><UL
@@ -356,7 +363,7 @@ CLASS="KEYCAP"
 ></LI
 ></UL
 >
-    Note that the file list must have focus for this to work.
+    Note that the file list must have keyboard focus for these keys to work.
    </P
 ><P
 ></P

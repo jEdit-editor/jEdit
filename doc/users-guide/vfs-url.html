@@ -45,19 +45,41 @@ NAME="VFS-URL"
 ></H1
 ><P
 >   Java's networking library provides bare-bones
-   implementations of HTTP, Gopher and a few other protocols, so jEdit can
-   also access remote files on non-FTP servers, albeit in a much more limited
-   fashion.
-   To open a URL, enter it in the
-   <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Open Path</SPAN
-> dialog box. Currently,
-   saving to non-FTP URLs is not supported (this is a limitation of Java's
-   networking library).
+   implementations of HTTP, Gopher and a few other protocols, so jEdit also
+   supports (read-only, because that's all the Java networking library
+   supports) access remote files on non-FTP servers.
+   URLs can only be opened from the jEdit command line; type
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Enter</B
+>
+   <TT
+CLASS="USERINPUT"
+><B
+>open-file</B
+></TT
+> <B
+CLASS="KEYCAP"
+>Enter</B
+>, followed by the URL.
+  </P
+><P
+>   The command line can also be used to open files from FTP servers if
+   you know their exact path. Just enter an FTP URL using the technique above,
+   and you will be prompted for a user name and password.
+   (Entering an FTP at the jEdit command line uses jEdit's FTP
+   implementation, not the Java default).
+  </P
+><P
+>   See <A
+HREF="command-line.html"
+>the section called <I
+>The jEdit Command Line</I
+> in Chapter 4</A
+> for more information about the jEdit command line.
   </P
 ></DIV
 ><DIV

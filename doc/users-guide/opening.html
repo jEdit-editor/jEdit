@@ -59,7 +59,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >O</B
 >) pops
-   up a dialog box allowing you to browse and search the file system and
+   up a dialog box allowing you to browse the file system and
    select a
    file to open. For a detailed treatement of this dialog box, see
    <A
@@ -85,6 +85,16 @@ CLASS="GUIMENUITEM"
    Directory</SPAN
 > menu lists all files in the current buffer's directory.
   </P
+><P
+>   Files that you do not have write access to are automatically opened
+   read only. Files can also be forced to open read only from the command line
+   by specifying the <TT
+CLASS="USERINPUT"
+><B
+>-readonly</B
+></TT
+> option.
+  </P
 ><DIV
 CLASS="FIGURE"
 ><P
@@ -96,39 +106,34 @@ CLASS="FIGURE"
 SRC="../images/dialog-open.gif"></P
 ></DIV
 ><P
->   There are several ways to change the buffer displayed in the current
-   view. Firstly, you can use the <SPAN
-CLASS="GUIMENU"
->View</SPAN
->&gt;<SPAN
-CLASS="GUISUBMENU"
->Current
-   Buffer</SPAN
-> menu, which displays a list of all open buffers. The tabs
-   that run along the top of the text area serve a similar purpose.
+>   jEdit calls open files <I
+CLASS="FIRSTTERM"
+>buffers</I
+>. The buffer tabs that run along
+   the top of each text area can be used to switch between buffers.
+   Another way to switch buffers is to use the various items in the
    <SPAN
 CLASS="GUIMENU"
 >View</SPAN
->&gt;<SPAN
+> menu; the <SPAN
+CLASS="GUISUBMENU"
+>Current Buffer</SPAN
+> submenu, and the
+   <SPAN
 CLASS="GUIMENUITEM"
 >Go to Previous Buffer</SPAN
-> selects the
-   buffer before the current one. <SPAN
-CLASS="GUIMENU"
->View</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Go to
-   Next Buffer</SPAN
-> selects the buffer after the current one.
+>,
    <SPAN
-CLASS="GUIMENU"
->View</SPAN
->&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to Next Buffer</SPAN
+> and
+   <SPAN
 CLASS="GUIMENUITEM"
 >Go to Last Edited Buffer</SPAN
-> selects the
-   buffer that was being edited before you switched to the current one.
+> commands.
+   All of these are self-explanatory, except for the latter, which
+   selects the buffer that was being edited before you switched
+   to the current one.
   </P
 ><DIV
 CLASS="TIP"
@@ -156,28 +161,6 @@ HREF="global-opts.html"
    </P
 ></BLOCKQUOTE
 ></DIV
-><P
->   Files that you do not have write access to are automatically opened
-   read only. Files can also be forced to open read only from the command line
-   by specifying the <TT
-CLASS="USERINPUT"
-><B
->-readonly</B
-></TT
-> option.
-  </P
-><P
->   jEdit doesn't actually change a file on disk until you save it.
-   If there are unsaved changes in a buffer, "(modified)" will
-   be displayed in the status bar
-   and the <SPAN
-CLASS="GUIMENU"
->View</SPAN
->&gt;<SPAN
-CLASS="GUISUBMENU"
->Current Buffer</SPAN
-> menu.
-  </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

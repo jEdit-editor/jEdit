@@ -1,7 +1,7 @@
 ### plugin properties
 plugin.EditBuddyPlugin.name=Edit Buddy
 plugin.EditBuddyPlugin.author=Slava Pestov
-plugin.EditBuddyPlugin.version=0.1.4
+plugin.EditBuddyPlugin.version=0.1.5
 plugin.EditBuddyPlugin.docs=EditBuddy.html
 plugin.EditBuddyPlugin.depend.0=jedit 02.06.03.00
 plugin.EditBuddyPlugin.depend.1=plugin PluginManagerPlugin 0.5.6
@@ -24,9 +24,9 @@ edit-buddy.first-time.settings-dir.text=<h2>The settings directory</h2>\n\
 	For more detailed information about the settings directory, see\n\
 	Chapter 8 of the jEdit user guide.
 
-edit-buddy.first-time.settings-dir.files=jars/ macros/ modes/\n\
-	PluginManager.download/ sessions/ abbrevs history mode-cache\n\
-	properties server
+edit-buddy.first-time.settings-dir.files=jars/ macros/ modes/ \
+	PluginManager.download/ sessions/ abbrevs activity.log \
+	history mode-cache\n\ properties server
 
 edit-buddy.firewall-config.label=Configure firewall settings
 edit-buddy.firewall-config.action=edit-buddy-firewall-config

@@ -1,5 +1,5 @@
 /*
- * SwingInstall.java - Swing installer
+ * SwingInstall.java
  * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,8 +17,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -28,11 +26,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
+/*
+ * Graphical front-end to installer.
+ */
 public class SwingInstall extends JFrame
 {
 	public SwingInstall()
 	{
-		installer = new SIMInstaller();
+		installer = new Install();
 
 		appName = installer.getProperty("app.name");
 		appVersion = installer.getProperty("app.version");
@@ -62,7 +63,7 @@ public class SwingInstall extends JFrame
 	}
 
 	// package-private members
-	SIMInstaller installer;
+	Install installer;
 	String appName;
 	String appVersion;
 

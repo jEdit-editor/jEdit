@@ -1,5 +1,5 @@
 /*
- * SwingProgress.java - Swing progress window
+ * SwingProgress.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,13 +17,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
+/*
+ * Graphical progress monitor.
+ */
 public class SwingProgress extends JFrame
 implements ActionListener, Progress
 {

@@ -1,5 +1,5 @@
 /*
- * SIMInstaller.java - Main installer class
+ * Install.java - Main installer class
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,17 +17,30 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class SIMInstaller
+public class Install
 {
-	public static final String VERSION = "0.2.1";
+	public static final String VERSION = "0.3";
 
-	public SIMInstaller()
+	public static void main(String[] args)
+	{
+		if(args.length == 0)
+			new SwingInstall();
+		else if(args[0].equals("text"))
+			new ConsoleInstall();
+		else
+		{
+			System.err.println("Usage:");
+			System.err.println("jre -cp <installer JAR> install [text] (Java 1.1)");
+			System.err.println("java -jar <installer JAR> [text] (Java 2)");
+			System.err.println("text parameter starts installer in text-only mode");
+		}
+	}
+
+	public Install()
 	{
 		props = new Properties();
 		try

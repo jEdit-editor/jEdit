@@ -96,13 +96,18 @@ HREF="printing-sending.html"
 ></DT
 ><DT
 ><A
-HREF="closing-exiting.html"
->Closing Files and Exiting jEdit</A
+HREF="views.html"
+>Working With Views</A
 ></DT
 ><DT
 ><A
-HREF="activity-log.html"
->The Activity Log</A
+HREF="gutter.html"
+>The Gutter</A
+></DT
+><DT
+><A
+HREF="closing-exiting.html"
+>Closing Files and Exiting jEdit</A
 ></DT
 ></DL
 ></DIV
@@ -111,7 +116,7 @@ HREF="activity-log.html"
   opening, saving, printing and simple editing.
   jEdit works in a similar fashion to most MacOS or Windows text
   editors; if you have used one before, you will be able to start
-  using jEdit immediately.
+  working in jEdit immediately.
  </P
 ><DIV
 CLASS="SECT1"
@@ -129,7 +134,7 @@ NAME="STARTING"
    or dropped onto its icon. It is also possible to specify a line or marker
    to locate the caret on from the command line; see <A
 HREF="cli-usage.html"
->Appendix A</A
+>Appendix C</A
 >.
    If no initial file names are given, jEdit will load any files that
    were open in the previous session.
@@ -184,44 +189,47 @@ HREF="plugins.html"
 ></TABLE
 ><P
 >   After jEdit has finished loading, the editor window will
-   appear. Most user interface elements will look familiar
-   to Windows or MacOS users, except for the text area, which has
-   some unique features.
-   The text area displays the contents of the currently opened buffer.
-   The two scroll bars can be used to move around the buffer when there
-   is more text than can fit on the screen. The blinking red line
-   is called the <I
+   appear. The row of icons, or the <I
 CLASS="FIRSTTERM"
->caret</I
->. All text insertion and
-   deletion is performed at the caret position.
-  </P
-><P
->   Notice how the line with the caret is highlighted, and a
-   faint blue dot appears at the end of each line. The current line highlighting
-   aids in locating the caret, and the dot is an <I
-CLASS="FIRSTTERM"
->end of
-   line marker</I
+>tool bar</I
+>, offers quick access
+   to frequently used commands. In addition, clicking on the text area with
+   the right mouse button will display a popup menu, also offering fast
+   access to various commands. Both the tool bar and context menu can be
+   customized in the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+   dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 9</A
 >.
   </P
 ><P
->   The text area never allows the caret to be positioned closer than 3 lines
-   to the top or bottom of the viewscreen. If an attempt is made to move
-   it there, it will scroll in the appropriate direction to
-   make 3 lines above and below the caret
-   visible. Having some "context" always visible helps when
-   programming, for example. This feature
-   is called <I
+>   To aid in locating the caret, the current line is drawn with a slightly
+   different background color. For the pedantic programmers among us,
+   <I
+CLASS="FIRSTTERM"
+>end of line markers</I
+> at the end of each line are helpful for
+   locating lines with trailing whitespace.
+   Moving the caret closer than three lines from the top or bottom of the
+   viewscreen will scroll the text area to make at least three lines above
+   and below the caret visible. Having some "context" always visible
+   helps when programming. This
+   feature is called <I
 CLASS="FIRSTTERM"
 >electric scrolling</I
 >.
   </P
 ><P
->   Clicking the text area with the right mouse button will
-   display a menu of frequently-used
-   editing commands. This menu can be edited in
-   the <SPAN
+>   Many aspects of the text area's operation can be customized to your liking
+   in the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
@@ -239,7 +247,7 @@ HREF="global-opts.html"
 >   The status bar at the bottom of the editor window displays useful
    information such as the current caret location, status messages
    issued by commands,
-   and the state of the current buffer (modified since last save, read only, etc).
+   and the state of the current buffer.
    The caret location is displayed in the following format:
   </P
 ><TABLE
@@ -284,6 +292,38 @@ CLASS="FIGURE"
 ><IMG
 SRC="../images/window-editor.gif"></P
 ></DIV
+><P
+>   The far right of the status bar displays one of the following colored orbs
+   depending on the state of the current buffer:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+>White orb - displayed when there are no
+  unsaved changes in the buffer</P
+></LI
+><LI
+><P
+>Bright orange orb - displayed when
+  the buffer contains
+  unsaved changes</P
+></LI
+><LI
+><P
+>Green orb - displayed if this
+  is a newly
+  created, empty, buffer, that doesn't exist on disk</P
+></LI
+><LI
+><P
+>Yellow orb - displayed
+  if this is a newly
+  created buffer, with unsaved changes, that doesn't exist on disk
+  </P
+></LI
+></UL
 ></DIV
 ></DIV
 ><DIV

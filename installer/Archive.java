@@ -1,5 +1,5 @@
 /*
- * Archive.java - SIM archive
+ * Archive.java
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,17 +17,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
 import java.io.*;
 
+/*
+ * A class for reading installer archives. It can also be run as a
+ * stand-alone application to create, extract, and list archives.
+ */
 public class Archive
 {
 	public static final int BUFSIZE = 32 * 1024;
-	public static final String HEADER = "ArE!";
+	public static final String HEADER = "sp1n";
 	public static final int HEADERLEN = HEADER.length();
-	public static final String FIRST_ENTRY = "SIM_ARCHIVE_FMT_V2";
-	public static final String LAST_ENTRY = "SIM_END_OF_ARCHIVE";
+	public static final String FIRST_ENTRY = "spin_begin";
+	public static final String LAST_ENTRY = "spin_end";
 
 	public static void main(String[] args)
 	{
@@ -101,9 +103,12 @@ public class Archive
 
 	private static void usage()
 	{
-		System.err.println("Usage: java org.gjt.sp.sim.Archive c <archive name> <files>");
-		System.err.println("Usage: java org.gjt.sp.sim.Archive x <archive name>");
-		System.err.println("Usage: java org.gjt.sp.sim.Archive t <archive name>");
+		System.err.println("Usage: java spin.Archive c <archive name> <files>:"
+			+ " create new archive");
+		System.err.println("Usage: java spin.Archive x <archive name>:"
+			+ " extract archive");
+		System.err.println("Usage: java spin.Archive t <archive name>:"
+			+ " list archive contents");
 	}
 
 	private static void createArchive(String[] args)

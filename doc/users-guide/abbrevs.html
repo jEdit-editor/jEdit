@@ -71,19 +71,26 @@ CLASS="KEYCAP"
 >) will
    attempt to
    expand the word before the caret. If no expansion could be found, it will
-   offer to define one. See <A
-HREF="global-opts.html#GLOBAL-OPTS-ABBREVS"
+   offer to create a new one. Existing abbreviations can be edited in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+   see <A
+HREF="global-opts.html"
 >the section called <I
->The Abbreviations Pane</I
+>The Global Options Dialog Box</I
 > in Chapter 9</A
-> for information
-   about escape sequences that can be used within abbrev expansions.
+>.
   </P
 ><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 4-9. The Add Abbreviation dialog box</B
+>Figure 4-5. The Add Abbreviation dialog box</B
 ></P
 ><P
 ><IMG
@@ -93,7 +100,11 @@ SRC="../images/dialog-add-abbrev.gif"></P
 >   If automatic abbreviation expansion is enabled, pressing the space bar
    will first attempt to expand the word before the caret, and only insert
    a space if no expansion was found. This is a very powerful feature, but
-   it takes some getting used to, hence it is disabled by default.
+   it takes some getting used to, hence it is disabled by default. Enable
+   it in the <SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box.
   </P
 ><P
 >   If automatic expansion
@@ -117,23 +128,6 @@ CLASS="KEYCAP"
 >Space</B
 >.
   </P
-><P
->   Abbreviations can be edited in the
-   <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
-> dialog box;
-   see <A
-HREF="global-opts.html"
->the section called <I
->The Global Options Dialog Box</I
-> in Chapter 9</A
->. Abbreviations are preserved across
-   editing sessions.
-  </P
 ><DIV
 CLASS="WARNING"
 ><P
@@ -153,8 +147,8 @@ ALIGN="CENTER"
 ><TD
 ALIGN="LEFT"
 ><P
->    Automatic abbreviation expansion behaves in an unpredictable
-    manner when used from a macro - don't rely on automatic abbrev
+>    Automatic abbreviation expansion doesn't always work
+    when done from a macro - don't rely on automatic abbrev
     expansion when recording macros.
    </P
 ></TD

@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="Working With Paragraphs"
 HREF="paragraphs.html"><LINK
 REL="NEXT"
-TITLE="The jEdit Command Line"
-HREF="command-line.html"></HEAD
+TITLE="Registers"
+HREF="registers.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,7 +26,7 @@ CLASS="NAVHEADER"
 >jEdit 2.6 User's Guide</H1
 ><P
 ><A
-HREF="command-line.html"
+HREF="registers.html"
 >Next</A
 >, <A
 HREF="paragraphs.html"
@@ -47,9 +47,11 @@ NAME="MARKERS"
 >   
    
    
-   A marker is a named location in a buffer. There can be any number
-   of markers defined at any one time. Markers are persistent;
-   they are saved to
+   Any number of locations in a buffer can be remembered for quick access by
+   setting <I
+CLASS="FIRSTTERM"
+>markers</I
+>. Markers are persistent; they are saved to
    <TT
 CLASS="FILENAME"
 >.<TT
@@ -65,14 +67,7 @@ CLASS="REPLACEABLE"
 >filename</I
 ></TT
 > is the file name. (The dot prefix
-   makes the marks file hidden on Unix systems). In a way, markers
-   are similar to position registers (see <A
-HREF="registers.html#POS-REGISTERS"
->the section called <I
->Position Registers</I
-></A
->) except
-   that they are persistent and can have names of any length.
+   makes the marks file hidden on Unix systems).
   </P
 ><P
 >   
@@ -108,7 +103,7 @@ CLASS="KEYCAP"
    
    
    
-   To go to a marker position, select it from the
+   To return to a previously set marker, select it from the
    <SPAN
 CLASS="GUIMENU"
 >Search</SPAN
@@ -172,9 +167,9 @@ HREF="advanced-features.html"
 HREF="paragraphs.html"
 >Prev</A
 >: Working With Paragraphs<BR><A
-HREF="command-line.html"
+HREF="registers.html"
 >Next</A
->: The jEdit Command Line<BR></DIV
+>: Registers<BR></DIV
 ></BODY
 ></HTML
 >

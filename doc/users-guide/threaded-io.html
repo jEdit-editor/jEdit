@@ -50,8 +50,10 @@ NAME="THREADED-IO"
   </P
 ><P
 >   When jEdit starts up, it creates a pool of "I/O work threads".
-   The default number of threads is 4, which should be enough for the
-   majority of cases; but this can be changed in the
+   By default, four threads are started, which should be enough for most
+   purposes. If you find yourself loading, saving or otherwise manipulating
+   more than four files at the same time, you might want to increase the
+   number of threads in the
    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN

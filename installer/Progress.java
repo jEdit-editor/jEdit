@@ -1,5 +1,5 @@
 /*
- * Progress.java - Progress interface
+ * Progress.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,8 +17,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
+ /*
+  * An interface for reporting installation progress. ConsoleProgress and
+  * SwingProcess are the two existing implementations.
+  */
 public interface Progress
 {
 	public void showMessage(String msg);

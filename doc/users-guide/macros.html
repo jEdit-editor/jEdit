@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="Abbreviations"
 HREF="abbrevs.html"><LINK
 REL="NEXT"
-TITLE="Edit Modes"
-HREF="modes.html"></HEAD
+TITLE="The jEdit Command Line"
+HREF="command-line.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,7 +26,7 @@ CLASS="NAVHEADER"
 >jEdit 2.6 User's Guide</H1
 ><P
 ><A
-HREF="modes.html"
+HREF="command-line.html"
 >Next</A
 >, <A
 HREF="abbrevs.html"
@@ -48,8 +48,9 @@ NAME="MACROS"
 CLASS="FIRSTTERM"
 >macro</I
 > is a prerecorded sequence of events that can be
-   played back at any time. Macros can be used to automate complex operations
-   and repeat a set of commands many times.
+   played back with a single menu item selection, keystroke, or tool bar
+   click. Macros are useful for automating operations that would be very
+   boring or tedious to perform by hand.
   </P
 ><DIV
 CLASS="SECT2"
@@ -123,9 +124,9 @@ CLASS="GUIMENU"
 >Macros</SPAN
 > menu is automatically
     refreshed when you update or create a macro file from within jEdit.
-    Because macros are stored as ordinary files, they can be renamed,
-    deleted and so on with your operating system's file manager. If you
-    make changes to macros in a program other than jEdit, you can invoke
+    However, because macros are stored as ordinary files, they can be renamed,
+    deleted and so on with your operating system's file manager. When you
+    make changes to macros in a program other than jEdit, you must
     <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
@@ -136,7 +137,8 @@ CLASS="GUIMENUITEM"
     to update the macros menu with the changes.
    </P
 ><P
->    Like most other menu item commands, macros can be assigned shortcuts in
+>    Like most other menu item commands, macros can be assigned keyboard
+    shortcuts and added to the right-click context menu or tool bar in
     the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -314,7 +316,7 @@ CLASS="KEYCAP"
 CLASS="FILENAME"
 >__temporary__.macro</TT
 >
-    buffer to play it back. However, if you do save it, it will become
+    buffer before playing it back. If you do, it will become
     an ordinary macro, displayed in the <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
@@ -354,7 +356,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1382"
+NAME="AEN1304"
 >Prompting for Input</A
 ></H2
 ><P
@@ -374,11 +376,21 @@ CLASS="GUIMENUITEM"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 4-10. The Prompt for Input dialog box</B
+>Figure 4-6. The Prompt for Input dialog box</B
 ></P
 ><P
 ><IMG
 SRC="../images/dialog-macro-input.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 4-7. What will happen when the macro is played back</B
+></P
+><P
+><IMG
+SRC="../images/dialog-macro-input-play.gif"></P
 ></DIV
 ></DIV
 ><DIV
@@ -434,7 +446,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1401"
+NAME="AEN1326"
 >Some Sample Macros</A
 ></H2
 ><P
@@ -551,9 +563,9 @@ HREF="advanced-features.html"
 HREF="abbrevs.html"
 >Prev</A
 >: Abbreviations<BR><A
-HREF="modes.html"
+HREF="command-line.html"
 >Next</A
->: Edit Modes<BR></DIV
+>: The jEdit Command Line<BR></DIV
 ></BODY
 ></HTML
 >

@@ -1,5 +1,5 @@
 /*
- * OperatingSystem.java - OS specific stuff
+ * OperatingSystem.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,17 +17,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.sim;
-
 import java.io.*;
 
+/*
+ * Abstracts away operating-specific stuff, like finding out the installation
+ * directory, creating a shortcut to start to program, and such.
+ */
 public abstract class OperatingSystem
 {
 	public abstract String getInstallDirectory(String name, String version);
 
 	public abstract String getShortcutDirectory();
 
-	public void createScript(SIMInstaller installer, String installDir,
+	public void createScript(Install installer, String installDir,
 		String binDir, String name) throws IOException {}
 
 	public void mkdirs(String directory) throws IOException
@@ -68,7 +70,7 @@ public abstract class OperatingSystem
 			return "/usr/local/bin";
 		}
 
-		public void createScript(SIMInstaller installer,
+		public void createScript(Install installer,
 			String installDir, String binDir, String name)
 			throws IOException
 		{
@@ -137,7 +139,7 @@ public abstract class OperatingSystem
 			return "C:\\Windows";
 		}
 
-		public void createScript(SIMInstaller installer,
+		public void createScript(Install installer,
 			String installDir, String binDir, String name)
 			throws IOException
 		{

@@ -9,15 +9,12 @@ CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
 TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
-REL="UP"
-TITLE="Basic Features"
-HREF="basic-features.html"><LINK
 REL="PREVIOUS"
-TITLE="Closing Files and Exiting jEdit"
-HREF="closing-exiting.html"><LINK
+TITLE="Developing Virtual File Systems"
+HREF="plugin-vfs.html"><LINK
 REL="NEXT"
-TITLE="Advanced Features"
-HREF="advanced-features.html"></HEAD
+TITLE="History Text Fields"
+HREF="history.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,43 +23,47 @@ CLASS="NAVHEADER"
 >jEdit 2.6 User's Guide</H1
 ><P
 ><A
-HREF="advanced-features.html"
+HREF="history.html"
 >Next</A
 >, <A
-HREF="closing-exiting.html"
+HREF="plugin-vfs.html"
 >Prev</A
 ></P
-><H2
->Chapter 3. Basic Features</H2
 ><HR></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="APPENDIX"
 ><H1
-CLASS="SECT1"
 ><A
 NAME="ACTIVITY-LOG"
->The Activity Log</A
+>Appendix A. The Activity Log</A
 ></H1
 ><P
->   One last thing that every user of jEdit should know about is the
-   "activity log". The activity log is very useful for
-   plugin developers, and when troubleshooting.
-   jEdit writes the following information to the activity log:
-  </P
+>  The <I
+CLASS="FIRSTTERM"
+>activity log</I
+> is very useful for
+  troubleshooting problems, and helps when developing plugins.
+  jEdit writes the following information to the activity log:
+ </P
 ><P
 ></P
 ><UL
 ><LI
 ><P
->All error messages and runtime exceptions (most of
-   these display dialog boxes, as well; but the activity log usually
-   contains more detailed information)
-   </P
+>Information about your Java implementation (version,
+  operating system, architecture, etc)</P
 ></LI
 ><LI
 ><P
->Information about your Java implementation (version,
-   operating system, architecture, etc)</P
+>All error messages and runtime exceptions (most of
+  these display dialog boxes, as well; but the activity log usually
+  contains more detailed information)
+  </P
+></LI
+><LI
+><P
+>All sorts of debugging information that can be helpful
+  when tracking down bugs</P
 ></LI
 ><LI
 ><P
@@ -70,55 +71,45 @@ NAME="ACTIVITY-LOG"
 ></LI
 ><LI
 ><P
->Messages when files are opened and closed. This
-   can be useful in determining what caused an exception</P
-></LI
-><LI
-><P
->The directory list search logs all file names that
-   will be searched</P
-></LI
-><LI
-><P
 >Some plugins may log additional information as
-   well</P
+  well</P
 ></LI
 ></UL
 ><P
->   <SPAN
+>  <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Activity Log</SPAN
 > displays a
-   window showing the last 500 lines of the activity log. The complete
-   log can be found in the <TT
+  window showing the last 500 lines of the activity log. The complete
+  log can be found in the <TT
 CLASS="FILENAME"
 >activity.log</TT
 > file inside the
-   jEdit settings directory, the path of which is system-specific and
-   is shown inside the activity log window.
-  </P
+  jEdit settings directory, the path of which is shown inside the activity
+  log window.
+ </P
 ><P
->   While jEdit is running, the log file on disk may not always accurately reflect
-   what has been logged, due to buffering done for performance reasons.
-   To ensure the file on disk is up to
-   date, invoke the <SPAN
+>  While jEdit is running, the log file on disk may not always accurately reflect
+  what has been logged, due to buffering done for performance reasons.
+  To ensure the file on disk is up to
+  date, invoke the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Update Activity
-   Log on Disk</SPAN
+  Log on Disk</SPAN
 > command. The log file is also automatically updated on
-   disk when jEdit exits.
-  </P
+  disk when jEdit exits.
+ </P
 ><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 3-9. The activity log</B
+>Figure A-1. The activity log</B
 ></P
 ><P
 ><IMG
@@ -130,16 +121,13 @@ CLASS="NAVFOOTER"
 ><HR><A
 HREF="index.html"
 >Home</A
->, <A
-HREF="basic-features.html"
->Up</A
 ><BR><A
-HREF="closing-exiting.html"
+HREF="plugin-vfs.html"
 >Prev</A
->: Closing Files and Exiting jEdit<BR><A
-HREF="advanced-features.html"
+>: Developing Virtual File Systems<BR><A
+HREF="history.html"
 >Next</A
->: Advanced Features<BR></DIV
+>: History Text Fields<BR></DIV
 ></BODY
 ></HTML
 >

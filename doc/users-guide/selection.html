@@ -47,21 +47,14 @@ NAME="SELECTION"
 >   A <I
 CLASS="FIRSTTERM"
 >selection</I
-> is a a range of text marked for further
+> is a a chunk of text marked for further
    manipulation. A selection can either span a range of text between
    two locations in a buffer, or it can cover a rectangular area.
-   Rectangular selections are an advanced topic and are covered in
-   detail in <A
-HREF="rect-select.html"
->the section called <I
->Rectangular Selection</I
-> in Chapter 4</A
->.
   </P
 ><P
->   The simplest way to make a selection is to drag the mouse from the start
+>   The simplest way to make a range selection is to drag the mouse from the start
    of the selection to the end. All text between the two locations will
-   be marked. Also, <B
+   be marked. <B
 CLASS="KEYCAP"
 >Shift</B
 >-clicking a location in the buffer
@@ -113,6 +106,75 @@ CLASS="KEYCAP"
 >Escape</B
 >) deactivates the selection.
   </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 3-4. A range selection</B
+></P
+><P
+><IMG
+SRC="../images/window-editor-select.gif"></P
+></DIV
+><P
+>   A rectangular selection can be created by dragging the mouse while
+   holding down <B
+CLASS="KEYCAP"
+>Control</B
+>. Holding down
+   <B
+CLASS="KEYCAP"
+>Shift</B
+> and <B
+CLASS="KEYCAP"
+>Control</B
+> while clicking a location in
+   the buffer will extend a rectangular selection.
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Rectangular
+   Selection</SPAN
+> (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>\</B
+>)
+   will toggle the current selection between range and rectange mode.
+  </P
+><P
+>   It is possible to select a rectangle with zero width but non-zero height.
+   This can be used to insert a new column between two existing
+   columns. Such "zero-width" selections are shown as a thin
+   vertical line.
+  </P
+><P
+>   Deleting, replacing, copying, pasting, and so on works
+   as expected on rectangles. All jEdit builtin commands are rectangle-aware;
+   however, some plugins might not be. Note that because rectangular
+   selections are implemented using character offsets, rather than
+   absolute screen positions, they might not behave as one might expect
+   when proportional-width fonts or tabs are used. For best results
+   use monospaced fonts and soft tabs when editing columnar files.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 3-5. A rectangular selection</B
+></P
+><P
+><IMG
+SRC="../images/window-editor-rect-sel.gif"></P
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
