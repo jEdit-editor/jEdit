@@ -287,13 +287,27 @@ class PluginList
 			this.pluginName = pluginName;
 		}
 
-		boolean canSatisfy()
+		boolean isSatisfied()
 		{
 			if(what.equals("plugin"))
 			{
-				// assume Mike doesn't put an inconsistent set of
-				// plugins up
-				return true;
+				for(int i = 0; i < plugin.branches.size(); i++)
+				{
+					Branch branch = (Branch)plugin.branches
+						.elementAt(i);
+					if(plugin.installedVersion != null
+						&&
+					(from == null || MiscUtilities.compareVersions(
+						plugin.installedVersion,from) >= 0)
+						&&
+					   (to == null || MiscUtilities.compareVersions(
+					   	plugin.installedVersion,to) <= 0))
+					{
+						return true;
+					}
+				}
+
+				return false;
 			}
 			else if(what.equals("jdk"))
 			{
@@ -326,6 +340,13 @@ class PluginList
 				Log.log(Log.ERROR,this,"Invalid dependency: " + what);
 				return false;
 			}
+		}
+
+		boolean canSatisfy()
+		{
+			// new plugins can always be downloaded (assuming Mike
+			// maintains plugin central properly)
+			return (what.equals("plugin") || isSatisfied());
 		}
 
 		void satisfy(Roster roster, String installDirectory)

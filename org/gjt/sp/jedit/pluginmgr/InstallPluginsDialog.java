@@ -117,7 +117,7 @@ class InstallPluginsDialog extends EnhancedDialog
 
 		installSystem = new JRadioButton();
 		String jEditHome = jEdit.getJEditHome();
-		if(settings == null)
+		if(jEditHome == null)
 		{
 			jEditHome = jEdit.getProperty("install-plugins.none");
 			installSystem.setEnabled(false);
@@ -127,6 +127,7 @@ class InstallPluginsDialog extends EnhancedDialog
 			jEditHome = MiscUtilities.constructPath(jEditHome,"jars");
 			installSystem.setEnabled(true);
 		}
+		args[0] = jEditHome;
 		installSystem.setText(jEdit.getProperty("install-plugins.system",args));
 		grp.add(installSystem);
 		panel3.add(BorderLayout.SOUTH,installSystem);
@@ -244,7 +245,26 @@ class InstallPluginsDialog extends EnhancedDialog
 				author.setText(plugin.author);
 				version.setText(branch.version);
 				updated.setText(branch.date);
-				description.setText(plugin.description);
+
+				StringBuffer buf = new StringBuffer();
+				for(int i = 0; i < branch.deps.size(); i++)
+				{
+					PluginList.Dependency dep = (PluginList.Dependency)
+						branch.deps.elementAt(i);
+					if(dep.what.equals("plugin")
+						&& !dep.isSatisfied())
+					{
+						if(buf.length() != 0)
+							buf.append(", ");
+
+						buf.append(dep.plugin);
+					}
+				}
+
+				description.setText(plugin.description
+					+ (buf.length() == 0 ? ""
+					: jEdit.getProperty("install-plugins.info"
+					+ ".also-install") + buf.toString()));
 			}
 			else
 			{

@@ -1,5 +1,12 @@
 TO DO
 
+- after remove/install/update: display dialog saying to restart
+- test edit server
+- broken reverse search
+- italics font metrics bugs
+- vfs browser: >1 request error when clicking 'up'?
+- text style bugs
+- find again and multiple files?
 - Java 1.4 bugs
 - expand fold: scroll to last line of fold
 - get web start to work

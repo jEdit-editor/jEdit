@@ -94,7 +94,9 @@ class PluginListHandler extends HandlerBase
 		String text = new String(c, off, len);
 
 		if(tag == "DESCRIPTION")
+		{
 			description = text;
+		}
 		else if(tag == "PLUGIN_SET_ENTRY")
 			pluginSetEntry = text;
 		else if(tag == "AUTHOR")
@@ -156,6 +158,7 @@ class PluginListHandler extends HandlerBase
 			plugin.jar = jar;
 			plugin.name = name;
 			plugin.author = author;
+			plugin.description = description;
 			pluginList.addPlugin(plugin);
 			jar = null;
 			name = null;

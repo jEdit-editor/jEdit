@@ -1369,7 +1369,7 @@ plugin-manager.roster-confirm.message=Are you sure you want to perform the \
 	{0}
 
 plugin-manager.progress.title=Downloading Plugin List
-plugin-manager.progress.caption=Downloading plugin list from server
+plugin-manager.progress.caption=Downloading plugin list from server...
 plugin-manager.progress.stop=Stop
 
 ### error while loading plugin list
@@ -1396,6 +1396,8 @@ install-plugins.info.author=Author:
 install-plugins.info.version=Version:
 install-plugins.info.updated=Last updated:
 install-plugins.info.description=Description:
+install-plugins.info.also-install=\ Installing this plugin will also install \
+	the following plugins:\ 
 
 install-plugins.user=Install in user plugin directory ({0})
 install-plugins.system=Install in system plugin directory ({0})
