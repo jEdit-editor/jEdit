@@ -65,6 +65,8 @@ toggle-line-numbers.shortcut=C+e C+t
 paste-previous.shortcut=C+e C+v
 close-all.shortcut=C+e C+w
 redo.shortcut=C+e C+z
+collapse-fold.shortcut=C+e BACK_SPACE
+expand-fold.shortcut=C+e ENTER
 
 docking-top-expanded.shortcut=C+e 1
 docking-bottom-expanded.shortcut=C+e 2
@@ -138,3 +140,5 @@ select-prev-line.shortcut=S+UP
 next-line.shortcut=DOWN
 select-next-line.shortcut=S+DOWN
 repeat.shortcut=C+ENTER
+collapse-fold.shortcut=A+BACK_SPACE
+expand-fold.shortcut=A+ENTER

@@ -43,7 +43,7 @@ public interface TextAreaHighlight
 	 * This should paint the highlight and delgate to the
 	 * next highlight painter.
 	 * @param gfx The graphics context
-	 * @param line The line number
+	 * @param line The virtual line number
 	 * @param y The y co-ordinate of the line
 	 */
 	void paintHighlight(Graphics gfx, int line, int y);
@@ -57,11 +57,3 @@ public interface TextAreaHighlight
 	 */
 	String getToolTipText(MouseEvent evt);
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.2  2000/05/22 12:05:46  sp
- * Markers are highlighted in the gutter, bug fixes
- *
- */

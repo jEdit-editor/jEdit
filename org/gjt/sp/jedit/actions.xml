@@ -110,6 +110,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="collapse-fold">
+	<CODE>
+		textArea.collapseFold();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="complete-word">
 	<CODE>
 		textArea.completeWord();
@@ -257,6 +263,12 @@
 <ACTION NAME="exit">
 	<CODE>
 		jEdit.exit(view,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="expand-fold">
+	<CODE>
+		textArea.expandFold();
 	</CODE>
 </ACTION>
 

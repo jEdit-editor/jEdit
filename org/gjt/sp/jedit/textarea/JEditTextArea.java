@@ -520,7 +520,7 @@ public class JEditTextArea extends JComponent
 	{
 		FontMetrics fm = painter.getFontMetrics();
 		int height = fm.getHeight();
-		return Math.max(0,Math.min(getLineCount() - 1,
+		return Math.max(0,Math.min(getVirtualLineCount() - 1,
 			y / height + firstLine));
 	}
 
@@ -761,6 +761,26 @@ public class JEditTextArea extends JComponent
 	public final int getVirtualLineCount()
 	{
 		return buffer.getVirtualLineCount();
+	}
+
+	/**
+	 * Collapses the fold containing the caret.
+	 * @since jEdit 3.1pre1
+	 */
+	public void collapseFold()
+	{
+		if(!buffer.collapseFoldAt(getCaretLine()))
+			getToolkit().beep();
+	}
+
+	/**
+	 * Expands the fold containing the caret.
+	 * @since jEdit 3.1pre1
+	 */
+	public void expandFold()
+	{
+		if(!buffer.expandFoldAt(getCaretLine()))
+			getToolkit().beep();
 	}
 
 	/**

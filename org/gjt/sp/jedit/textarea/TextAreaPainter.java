@@ -356,7 +356,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Repaints the text.
 	 * @param g The graphics context
 	 */
-	public void paint(Graphics gfx)
+	public void paintComponent(Graphics gfx)
 	{
 		updateTabSize();
 
@@ -513,7 +513,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private int paintLine(Graphics gfx, Buffer buffer, boolean valid,
 		int virtualLine, int physicalLine, int x, int y)
 	{
-		paintHighlight(gfx,physicalLine,y,valid);
+		paintHighlight(gfx,virtualLine,physicalLine,y,valid);
 
 		int firstLine = textArea.getFirstLine();
 
@@ -551,8 +551,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(physicalLine != buffer.getLineCount() - 1)
 			{
-				Buffer.LineInfo next = buffer.getLineInfo(physicalLine + 1);
-				if(!next.isVisible())
+				if(!buffer.isLineVisible(physicalLine + 1))
 				{
 					gfx.setColor(defaultColor);
 					gfx.drawLine(0,y + fm.getHeight() - 1,
@@ -564,8 +563,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		return x;
 	}
 
-	private void paintHighlight(Graphics gfx, int physicalLine,
-		int y, boolean valid)
+	private void paintHighlight(Graphics gfx, int virtualLine,
+		int physicalLine, int y, boolean valid)
 	{
 		if(valid)
 		{
@@ -581,7 +580,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		if(highlights != null)
 		{
-			highlights.paintHighlight(gfx,physicalLine,
+			highlights.paintHighlight(gfx,virtualLine,
 				y - fm.getLeading() - fm.getDescent());
 		}
 	}

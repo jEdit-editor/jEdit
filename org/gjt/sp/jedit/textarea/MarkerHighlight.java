@@ -112,6 +112,8 @@ public class MarkerHighlight implements TextAreaHighlight
 		Buffer buffer = textArea.getBuffer();
 		Vector registers = Registers.getCaretRegisters();
 
+		line = buffer.virtualToPhysical(line);
+
 		for(int i = 0; i < registers.size(); i++)
 		{
 			Registers.CaretRegister reg = (Registers.CaretRegister)
@@ -139,6 +141,8 @@ public class MarkerHighlight implements TextAreaHighlight
 	{
 		Buffer buffer = textArea.getBuffer();
 		Registers.Register[] registers = Registers.getRegisters();
+
+		line = buffer.virtualToPhysical(line);
 
 		for(int i = 0; i < registers.length; i++)
 		{
@@ -184,6 +188,9 @@ public class MarkerHighlight implements TextAreaHighlight
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2001/01/26 03:46:56  sp
+ * Folding is now in a minimally useful state
+ *
  * Revision 1.6  2001/01/23 09:23:48  sp
  * code cleanups, misc tweaks
  *

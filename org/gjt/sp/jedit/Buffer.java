@@ -474,14 +474,6 @@ public class Buffer extends PlainDocument implements EBComponent
 					BufferUpdate.LOADED));
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.MARKERS_CHANGED));
-
-				// create a fold every 10 lines for testing
-				for(int i = 0; i < lineCount; i++)
-				{
-					LineInfo info = lineInfo[i];
-					if(i % 10 != 0)
-						info.foldLevel = 1;
-				}
 			}
 		};
 
@@ -1163,8 +1155,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void removeTrailingWhiteSpace(int first, int last)
 	{
-		Segment seg = new Segment();
-
 		int line, pos, lineStart, lineEnd, tail;
 
 		Element map = getDefaultRootElement();
@@ -1689,13 +1679,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		linesChanged(start,len);
 
-		Segment lineSegment = new Segment();
-		Element map = getDefaultRootElement();
-
-		len += start;
-
-		for(int i = start; i < len; i++)
-			markTokens(i);
+		for(int i = 0; i < len; i++)
+			markTokens(start + i);
 	}
 
 	/**
@@ -1726,7 +1711,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			try
 			{
 				getText(lineStart,lineElement.getEndOffset()
-					- lineStart - 1,line);
+					- lineStart - 1,seg);
 			}
 			catch(BadLocationException e)
 			{
@@ -1743,7 +1728,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		Font defaultFont = gfx.getFont();
 		Color defaultColor = gfx.getColor();
 
-		int originalOffset = line.offset, originalCount = line.count;
+		int originalOffset = seg.offset;
+		int originalCount = seg.count;
 
 		int offset = 0;
 		for(;;)
@@ -1753,7 +1739,7 @@ public class Buffer extends PlainDocument implements EBComponent
 				break;
 
 			int length = tokens.length;
-			line.count = length;
+			seg.count = length;
 			if(id == Token.NULL)
 			{
 				if(!defaultColor.equals(gfx.getColor()))
@@ -1767,7 +1753,7 @@ public class Buffer extends PlainDocument implements EBComponent
 				if (bg != null)
 				{
 					FontMetrics fm = styles[id].getFontMetrics(defaultFont);
-					int width   = Utilities.getTabbedTextWidth(line, fm, x, expander, 0); 
+					int width   = Utilities.getTabbedTextWidth(seg, fm, x, expander, 0); 
 					int height  = fm.getHeight();
 					int descent = fm.getDescent();
 					int leading = fm.getLeading();
@@ -1780,15 +1766,15 @@ public class Buffer extends PlainDocument implements EBComponent
 				styles[id].setGraphicsFlags(gfx,defaultFont);
 			}
 
-			x = Utilities.drawTabbedText(line,x,y,gfx,expander,0);
-			line.offset += length;
+			x = Utilities.drawTabbedText(seg,x,y,gfx,expander,0);
+			seg.offset += length;
 			offset += length;
 
 			tokens = tokens.next;
 		}
 
-		line.offset = originalOffset;
-		line.count = originalCount;
+		seg.offset = originalOffset;
+		seg.count = originalCount;
 
 		return x;
 	}
@@ -1847,7 +1833,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			try
 			{
 				getText(lineStart,lineElement.getEndOffset()
-					- lineStart - 1,line);
+					- lineStart - 1,seg);
 			}
 			catch(BadLocationException e)
 			{
@@ -1860,7 +1846,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			ParserRule oldRule = info.context.inRule;
 			TokenMarker.LineContext oldParent = info.context.parent;
 
-			tokenMarker.markTokens(prev,info,line);
+			tokenMarker.markTokens(prev,info,seg);
 
 			ParserRule newRule = info.context.inRule;
 			TokenMarker.LineContext newParent = info.context.parent;
@@ -1942,11 +1928,90 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Maps a virtual line number to a physical line number.
+	 * Returns if the specified line is visible.
+	 * @since jEdit 3.1pre1
+	 */
+	public boolean isLineVisible(int line)
+	{
+		return lineInfo[line].visible;
+	}
+
+	/**
+	 * Returns the fold level of the specified line.
+	 * @since jEdit 3.1pre1
+	 */
+	public int getFoldLevel(int line)
+	{
+		LineInfo info = lineInfo[line];
+
+		if(info.foldLevelValid)
+			return info.foldLevel;
+		else
+		{
+			// make this configurable!
+			int tabSize = getTabSize();
+
+			Element lineElement = getDefaultRootElement()
+				.getElement(line);
+			int start = lineElement.getStartOffset();
+			try
+			{
+				getText(start,lineElement.getEndOffset() - start - 1,seg);
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+
+			int offset = seg.offset;
+			int count = seg.count;
+
+			int whitespace = 0;
+
+			if(count == 0)
+			{
+				// empty line. inherit previous line's fold level
+				if(line != 0)
+					whitespace = getFoldLevel(line - 1);
+				else
+					whitespace = 0;
+			}
+			else
+			{
+loop:				for(int i = 0; i < count; i++)
+				{
+					switch(seg.array[offset + i])
+					{
+					case ' ':
+						whitespace++;
+						break;
+					case '\t':
+						whitespace += (tabSize - whitespace % tabSize);
+						break;
+					default:
+						break loop;
+					}
+				}
+			}
+
+			info.foldLevel = whitespace;
+			info.foldLevelValid = true;
+
+			return whitespace;
+		}
+	}
+
+	/**
+	 * Maps a virtual line number to a physical line number. To simplify
+	 * matters for text area highlighters, this method maps out-of-bounds
+	 * line numbers as well.
 	 * @since jEdit 3.1pre1
 	 */
 	public int virtualToPhysical(int lineNo)
 	{
+		if(lineNo >= virtualLineCount)
+			return lineCount + (lineNo - virtualLineCount);
+
 		return virtualLines[lineNo];
 	}
 
@@ -1962,7 +2027,8 @@ public class Buffer extends PlainDocument implements EBComponent
 				return i;
 		}
 
-		return virtualLineCount - 1;
+		// no, not virtualLineCount - 1!
+		return virtualLineCount;
 	}
 
 	/**
@@ -1973,16 +2039,25 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean collapseFoldAt(int line)
 	{
-		LineInfo info = lineInfo[line];
-		int initialFoldLevel = info.foldLevel;
+		int initialFoldLevel = getFoldLevel(line);
 
 		int start = 0;
+		int end = lineCount - 1;
 
-		if(line != lineCount - 1 && lineInfo[line + 1]
-			.foldLevel > initialFoldLevel)
+		if(line != lineCount - 1
+			&& getFoldLevel(line + 1) > initialFoldLevel)
 		{
 			// this line is the start of a fold
 			start = line + 1;
+
+			for(int i = line + 1; i < lineCount; i++)
+			{
+				if(getFoldLevel(i) <= initialFoldLevel)
+				{
+					end = i - 1;
+					break;
+				}
+			}
 		}
 		else
 		{
@@ -1991,11 +2066,11 @@ public class Buffer extends PlainDocument implements EBComponent
 			// scan backwards looking for the start
 			for(int i = line - 1; i >= 0; i--)
 			{
-				info = lineInfo[i];
-				if(info.foldLevel < initialFoldLevel)
+				if(getFoldLevel(i) < initialFoldLevel)
 				{
 					start = i + 1;
 					ok = true;
+					break;
 				}
 			}
 
@@ -2004,33 +2079,40 @@ public class Buffer extends PlainDocument implements EBComponent
 				// no folds in buffer
 				return false;
 			}
-		}
 
-		int end = lineCount - 1;
-		for(int i = line + 1; i < lineCount; i++)
-		{
-			info = lineInfo[i];
-			if(info.foldLevel < initialFoldLevel)
+			for(int i = line + 1; i < lineCount; i++)
 			{
-				end = i - 1;
-				break;
+				if(getFoldLevel(i) < initialFoldLevel)
+				{
+					end = i - 1;
+					break;
+				}
 			}
 		}
 
 		for(int i = start; i <= end; i++)
 			lineInfo[i].visible = false;
 
-		int delta = (start - end);
+		System.err.println("collapse from " + start + " to " + end);
+
+		int delta = (end - start + 1);
 
 		// I forgot to do this at first and it took me ages to
 		// figure out
 		start = physicalToVirtual(start);
 
+		System.err.println("virtualized start is " + start);
+
 		// update virtual -> physical map
 		virtualLineCount -= delta;
 
+		System.err.println("new virtual line count is " + virtualLineCount);
+
 		System.arraycopy(virtualLines,start + delta,virtualLines,start,
 			virtualLineCount);
+
+		System.err.println("copy from " + (start + delta)
+			+ " to " + start);
 
 		// this sucks how we use document changed events
 		// to notify that the fold structure changed...
@@ -2049,16 +2131,25 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean expandFoldAt(int line)
 	{
-		LineInfo info = lineInfo[line];
-		int initialFoldLevel = info.foldLevel;
+		int initialFoldLevel = getFoldLevel(line);
 
 		int start = 0;
+		int end = lineCount - 1;
 
-		if(line != lineCount - 1 && lineInfo[line + 1]
-			.foldLevel > initialFoldLevel)
+		if(line != lineCount - 1
+			&& getFoldLevel(line + 1) > initialFoldLevel)
 		{
 			// this line is the start of a fold
 			start = line + 1;
+
+			for(int i = line + 1; i < lineCount; i++)
+			{
+				if(getFoldLevel(i) <= initialFoldLevel)
+				{
+					end = i - 1;
+					break;
+				}
+			}
 		}
 		else
 		{
@@ -2067,11 +2158,11 @@ public class Buffer extends PlainDocument implements EBComponent
 			// scan backwards looking for the start
 			for(int i = line - 1; i >= 0; i--)
 			{
-				info = lineInfo[i];
-				if(info.foldLevel < initialFoldLevel)
+				if(getFoldLevel(i) < initialFoldLevel)
 				{
 					start = i + 1;
 					ok = true;
+					break;
 				}
 			}
 
@@ -2080,30 +2171,34 @@ public class Buffer extends PlainDocument implements EBComponent
 				// no folds in buffer
 				return false;
 			}
-		}
 
-		int end = lineCount - 1;
-		for(int i = line + 1; i < lineCount; i++)
-		{
-			info = lineInfo[i];
-			if(info.foldLevel < initialFoldLevel)
+			for(int i = line + 1; i < lineCount; i++)
 			{
-				end = i - 1;
-				break;
+				if(getFoldLevel(i) < initialFoldLevel)
+				{
+					end = i - 1;
+					break;
+				}
 			}
 		}
 
 		for(int i = start; i <= end; i++)
 			lineInfo[i].visible = true;
 
-		int delta = (start - end);
+		int delta = (end - start + 1);
 
+		System.err.println("expand from " + start + " to " + end);
 		// I forgot to do this at first and it took me ages to
 		// figure out
 		int virtualLine = physicalToVirtual(start);
 
+		System.err.println("virtual start is " + virtualLine
+			+ ", physical start is " + start);
+
 		// update virtual -> physical map
 		virtualLineCount += delta;
+
+		System.err.println("virtual line count is " + virtualLineCount);
 
 		if(virtualLines.length <= virtualLineCount)
 		{
@@ -2114,10 +2209,16 @@ public class Buffer extends PlainDocument implements EBComponent
 			virtualLines = virtualLinesN;
 		}
 
+		System.err.println("copy from " + (virtualLine)
+			+ " to " + (virtualLine + delta));
+
 		System.arraycopy(virtualLines,virtualLine,virtualLines,
 			virtualLine + delta,virtualLineCount);
 		for(int j = 0; j <= delta; j++)
+		{
+			System.err.println((virtualLine + j) + " maps to " + (start + j));
 			virtualLines[virtualLine + j] = start + j;
+		}
 
 		// this sucks how we use document changed events
 		// to notify that the fold structure changed...
@@ -2318,6 +2419,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		virtualLineCount = 1;
 		virtualLines = new int[1];
 
+		seg = new Segment();
+		lastTokenizedLine = -1;
+
 		setDocumentProperties(new BufferProps());
 		clearProperties();
 
@@ -2393,8 +2497,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	protected void fireInsertUpdate(DocumentEvent evt)
 	{
-		setDirty(true);
-
 		DocumentEvent.ElementChange ch = evt.getChange(
 			getDefaultRootElement());
 		if(ch != null)
@@ -2412,6 +2514,8 @@ public class Buffer extends PlainDocument implements EBComponent
 				.getElementIndex(evt.getOffset()),1);
 		}
 
+		setDirty(true);
+
 		super.fireInsertUpdate(evt);
 	}
 	
@@ -2422,8 +2526,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	protected void fireRemoveUpdate(DocumentEvent evt)
 	{
-		setDirty(true);
-
 		DocumentEvent.ElementChange ch = evt.getChange(
 			getDefaultRootElement());
 		if(ch != null)
@@ -2439,6 +2541,8 @@ public class Buffer extends PlainDocument implements EBComponent
 			linesChanged(getDefaultRootElement()
 				.getElementIndex(evt.getOffset()),1);
 		}
+
+		setDirty(true);
 
 		super.fireRemoveUpdate(evt);
 	}
@@ -2490,10 +2594,10 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	// Syntax highlighting
 	private TokenMarker tokenMarker;
-	private Segment line = new Segment(new char[0],0,0);
+	private Segment seg;
 	private LineInfo[] lineInfo;
 	private int lineCount;
-	private int lastTokenizedLine = -1;
+	private int lastTokenizedLine;
 	private boolean nextLineRequested;
 
 	// Folding
@@ -2689,11 +2793,11 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			LineInfo info = new LineInfo();
 			info.context = new TokenMarker.LineContext(null,mainSet);
-			info.foldLevel = prev.foldLevel;
 			info.visible = prev.visible;
 			lineInfo[index + i] = info;
 		}
 
+		
 		/* update the virtual -> physical mapping if the newly
 		 * inserted lines are actually visible */
 		int virtualLine = physicalToVirtual(index);
@@ -2711,11 +2815,12 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 
 			len = virtualLine + lines;
+
 			System.arraycopy(virtualLines,virtualLine,
 				virtualLines,len,virtualLines.length - len);
 
-			for(int i = virtualLine; i <= len; i++)
-				virtualLines[i] = i;
+			for(int i = 0; i <= lines; i++)
+				virtualLines[virtualLine + i] = index + i;
 		}
 		else
 			len = virtualLine;
@@ -2725,7 +2830,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 	
 	/**
-	 * Informs the token marker that line have been deleted from
+	 * Informs the token marker that lines have been deleted from
 	 * the document. This removes the lines in question from the
 	 * <code>lineInfo</code> array.
 	 * @param index The first line number
@@ -2752,14 +2857,18 @@ public class Buffer extends PlainDocument implements EBComponent
 			virtualLineCount -= lines;
 
 			len = virtualLine + lines;
+			System.err.println("copy from " + len + " to " + virtualLine);
 			System.arraycopy(virtualLines,len,virtualLines,
 				virtualLine,virtualLines.length - len);
 		}
 		else
 			len = virtualLine;
 
-		for(int i = index; i < virtualLineCount; i++)
+		for(int i = virtualLine; i < virtualLineCount; i++)
+		{
+			System.err.println(i + " maps to " + (virtualLines[i] - lines));
 			virtualLines[i] -= lines;
+		}
 	}
 
 	/**
@@ -2772,7 +2881,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		for(int i = 0; i < lines; i++)
 		{
-			lineInfo[index + i].tokensValid = false;
+			LineInfo info = lineInfo[index + i];
+			info.tokensValid = false;
+			info.foldLevelValid = false;
 		}
 	}
 
@@ -2804,24 +2915,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		 * is so that classes in the 'syntax' package can use it.
 		 */
 		public TokenMarker.LineContext context;
-
-		/**
-		 * Returns the fold level of this line.
-		 * @since jEdit 3.1pre1
-		 */
-		public int getFoldLevel()
-		{
-			return foldLevel;
-		}
-
-		/**
-		 * Returns if this line is visible.
-		 * @since jEdit 3.1pre1
-		 */
-		public boolean isVisible()
-		{
-			return visible;
-		}
 
 		/**
 		 * Returns the first syntax token.
@@ -2888,6 +2981,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		boolean tokensValid;
 		int width;
 		int foldLevel;
+		boolean foldLevelValid;
 		boolean visible;
 	}
 

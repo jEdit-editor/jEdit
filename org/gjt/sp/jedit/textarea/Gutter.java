@@ -81,33 +81,23 @@ public class Gutter extends JComponent implements SwingConstants
 		{
 			boolean valid = (line >= firstValidLine && line <= lastValidLine);
 
-			// highlights need the physical, not virtual line
-			int physicalLine;
-			if(valid)
-				physicalLine = buffer.virtualToPhysical(line);
-			else
-			{
-				int virtualLineCount = buffer.getVirtualLineCount();
-				physicalLine = buffer.virtualToPhysical(
-					virtualLineCount - 1)
-					+ (line - virtualLineCount);
-			}
-
 			if(highlights != null)
-				highlights.paintHighlight(gfx, physicalLine, y);
+				highlights.paintHighlight(gfx, line, y);
 
 			if(!valid)
 				return;
 
-			if(physicalLine != textArea.getLineCount() - 1)
+			// calculate the physical line
+			int physicalLine = buffer.virtualToPhysical(line);
+
+			if(physicalLine != buffer.getLineCount() - 1)
 			{
-				Buffer.LineInfo info = buffer.getLineInfo(physicalLine);
-				Buffer.LineInfo next = buffer.getLineInfo(physicalLine + 1);
-				if(info.getFoldLevel() < next.getFoldLevel())
+				if(buffer.getFoldLevel(physicalLine)
+					< buffer.getFoldLevel(physicalLine + 1))
 				{
 					gfx.setColor(foldColor);
-					if(next.isVisible())
-						gfx.drawRect(2,y + (lineHeight - 6) / 2,6,6);
+					if(buffer.isLineVisible(physicalLine + 1))
+						gfx.drawRect(2,y + (lineHeight - 6) / 2,5,5);
 					else
 						gfx.fillRect(2,y + (lineHeight - 6) / 2,6,6);
 				}
@@ -133,7 +123,7 @@ public class Gutter extends JComponent implements SwingConstants
 				offset = 0;
 			}
 
-			if (line == textArea.getCaretLine() && highlightCurrentLine)
+			if (physicalLine == textArea.getCaretLine() && highlightCurrentLine)
 				gfx.setColor(currentLineHighlight);
 			else if (interval > 1 && line % interval == 0)
 				gfx.setColor(intervalHighlight);
@@ -429,11 +419,9 @@ public class Gutter extends JComponent implements SwingConstants
 					return;
 
 				line = buffer.virtualToPhysical(line);
-				Buffer.LineInfo info = buffer.getLineInfo(line);
-				Buffer.LineInfo next = buffer.getLineInfo(line + 1);
-				if(info.getFoldLevel() < next.getFoldLevel())
+				if(buffer.getFoldLevel(line) < buffer.getFoldLevel(line + 1))
 				{
-					if(next.isVisible())
+					if(buffer.isLineVisible(line + 1))
 						buffer.collapseFoldAt(line);
 					else
 						buffer.expandFoldAt(line);

@@ -3,6 +3,17 @@
 ### By Slava Pestov <sp@gjt.org>
 ###
 
+# Default user catalog file
+defaultCatalog=<?xml version="1.0"?>\n\
+	<!DOCTYPE CATALOG SYSTEM "catalog.dtd">\n\
+	\n\
+	<MODES>\n\
+	\n\
+	<!-- Add lines like the following, one for each edit mode: -->\n\
+	<!-- <MODE NAME="foo" FILE="foo.xml" FILE_NAME_GLOB="*.foo" /> -->\n\
+	\n\
+	</MODES>
+
 ###
 ### COMMON STRINGS
 ###
@@ -374,6 +385,7 @@ view=new-view \
      recent-buffer \
      - \
      %scrolling \
+     %folding \
      %splitting \
      %docking
 view.label=$View
@@ -402,6 +414,17 @@ scroll-down-line.label=Line Scroll Down
 scroll-up-page.label=Page Scroll Up
 scroll-down-page.label=Page Scroll Down
 toggle-synchro-scroll.label=Synchronized Scrolling
+
+folding=collapse-fold \
+	collapse-all-folds \
+	- \
+	expand-fold \
+	expand-all-folds
+folding.label=Folding
+collapse-fold.label=Collapse Fold
+collapse-all-folds.label=Collapse All Folds
+expand-fold.label=Expand Fold
+expand-all-folds.label=Expand All Folds
 
 splitting=unsplit \
 	  split-horizontal \
