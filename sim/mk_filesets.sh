@@ -41,13 +41,18 @@ find gnu -type f -name \*.java -print >> sim/jedit-source
 find org -type f \( -name \*.java -o -name \*.gif -o -name \*.props -o -name \*.jpg \) >> sim/jedit-source
 find jars/PluginManager -type f -print >> sim/jedit-source
 find jars/LatestVersion -type f -print >> sim/jedit-source
-find jars/Firewall -type f -print >> sim/jedit-source
 echo makefile.jmk >> sim/jedit-source
 echo org/gjt/sp/jedit/jedit.manifest >> sim/jedit-source
 echo org/gjt/sp/jedit/default.abbrevs >> sim/jedit-source
 
 echo -n "jedit-source: "
 ls -l `cat sim/jedit-source` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'
+
+# jedit-firewall-source fileset
+find jars/Firewall -type f -print > sim/jedit-firewall-source
+
+echo -n "jedit-firewall-source: "
+ls -l `cat sim/jedit-firewall-source` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'
 
 for file in sim/jedit-*
 do

@@ -16,7 +16,7 @@ REL="PREVIOUS"
 TITLE="Buffer-Local Properties"
 HREF="buffer-local.html"><LINK
 REL="NEXT"
-TITLE="Using Plugins"
+TITLE="Installing and Using Plugins"
 HREF="plugins.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
@@ -63,7 +63,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2625"
+NAME="AEN2586"
 >The General Pane</A
 ></H2
 ><P
@@ -219,7 +219,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2683"
+NAME="AEN2644"
 >The Editor Pane</A
 ></H2
 ><P
@@ -348,7 +348,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2747"
+NAME="AEN2708"
 >The Gutter Pane</A
 ></H2
 ><P
@@ -368,7 +368,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2754"
+NAME="AEN2715"
 >The Colors &amp; Styles Pane</A
 ></H2
 ><P
@@ -386,7 +386,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2774"
+NAME="AEN2735"
 >The File Filters Pane</A
 ></H2
 ><P
@@ -413,8 +413,68 @@ HREF="modes.html"
     glob patterns, which are a simplified form of regular expressions,
     see <A
 HREF="globs.html"
->Appendix C</A
+>Appendix D</A
 >.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2743"
+>The Context Menu Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Context Menu</SPAN
+> pane allows you to edit the text area's
+    right-click context menu. The <SPAN
+CLASS="GUIBUTTON"
+>Add</SPAN
+> button displays a
+    dialog box for inserting a new item in the menu. <SPAN
+CLASS="GUIBUTTON"
+>Remove</SPAN
+>
+    removes the selected item. <SPAN
+CLASS="GUIBUTTON"
+>Move Up</SPAN
+> and
+    <SPAN
+CLASS="GUIBUTTON"
+>Move Down</SPAN
+> move the selected item up and down in the
+    menu, respectively.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2751"
+>The Abbreviations Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Abbreviations</SPAN
+> pane allows you to enable or disable
+    automatic abbreviation expansion, and edit the defined abbrevs.
+   </P
+><P
+>    The combo box labelled "Abbrev set" is used to choose the
+    abbrev set to edit. The first entry, "global", allows you to
+    edit abbrevs available in all edit modes. The subsequent
+    entries allow you to edit abbrevs on a per-mode basis.
+   </P
+><P
+>    Abbrevs are added and removed in a rather peculiar fashion in this pane.
+    Changing the last line in the list (which is always blank) will add
+    another blank line. Lines with empty abbrevs or expansions will
+    be ignored when the abbrevs are being saved.
    </P
 ></DIV
 ><DIV
@@ -480,43 +540,7 @@ CLASS="GUIMENUITEM"
 CLASS="KEYCAP"
 >C+e C+o</B
 >. Any number
-    of keystrokes can be present in a key binding. If you are having
-    trouble finding an unused key binding, try using one of the function
-    keys plus a modifier such as <B
-CLASS="KEYCAP"
->Control</B
-> or <B
-CLASS="KEYCAP"
->Alt</B
->.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN2802"
->The Abbreviations Pane</A
-></H2
-><P
->    The <SPAN
-CLASS="GUIBUTTON"
->Abbreviations</SPAN
-> pane allows you to enable or disable
-    automatic abbreviation expansion, and edit the defined abbrevs.
-   </P
-><P
->    The combo box labelled "Abbrev set" is used to choose the
-    abbrev set to edit. The first entry, "global", allows you to
-    edit abbrevs available in all edit modes. The subsequent
-    entries allow you to edit abbrevs on a per-mode basis.
-   </P
-><P
->    Abbrevs are added and removed in a rather peculiar fashion in this pane.
-    Changing the last line in the list (which is always blank) will add
-    another blank line. Lines with empty abbrevs or expansions will
-    be ignored when the abbrevs are being saved.
+    of keystrokes can be present in a key binding.
    </P
 ><DIV
 CLASS="FIGURE"
@@ -572,7 +596,27 @@ SRC="../images/dialog-options-filters.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-7. The Command Shortcuts pane of the Global Options dialog box</B
+>Figure 8-7. The Abbreviations pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-abbrevs.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-8. The Context Menu pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-context.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-9. The Command Shortcuts pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
@@ -582,21 +626,11 @@ SRC="../images/dialog-options-cmd-shortcuts.gif"></P
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-8. The Macro Shortcuts pane of the Global Options dialog box</B
+>Figure 8-10. The Macro Shortcuts pane of the Global Options dialog box</B
 ></P
 ><P
 ><IMG
 SRC="../images/dialog-options-mac-shortcuts.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-9. The Abbreviations pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-abbrevs.gif"></P
 ></DIV
 ></DIV
 ></DIV
@@ -614,7 +648,7 @@ HREF="buffer-local.html"
 >: Buffer-Local Properties<BR><A
 HREF="plugins.html"
 >Next</A
->: Using Plugins<BR></DIV
+>: Installing and Using Plugins<BR></DIV
 ></BODY
 ></HTML
 >

@@ -197,7 +197,7 @@ CLASS="EMPHASIS"
     keys.
    </P
 ><P
->    Search and replace operations can also be recorded in macros.
+>    Search and replace operations can be recorded in macros.
     When search and replace operations are played back,
     the dialog boxes are not displayed, but the actual search and
     replacement is done.
@@ -338,8 +338,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1332"
->A Sample Macro</A
+NAME="AEN1294"
+>Some Sample Macros</A
 ></H2
 ><P
 >    Here is a simple macro that swaps two
@@ -373,6 +373,35 @@ next-char
 paste
 
 # Done!</PRE
+></TD
+></TR
+></TABLE
+><P
+>    Here is another trivial macro that surrounds the selected
+    text with HTML <SPAN
+CLASS="MARKUP"
+>&lt;B&gt;</SPAN
+> tags:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+># Cut selected text to clipboard
+cut
+
+# Insert opening tag
+insert-char@&lt;B&gt;
+
+# Insert clipboard contents
+paste
+
+# Insert closing tag
+insert-char@&lt;/B&gt;</PRE
 ></TD
 ></TR
 ></TABLE

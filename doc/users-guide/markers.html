@@ -48,7 +48,7 @@ NAME="MARKERS"
    
    
    A marker is a named location in a buffer. There can be any number
-   of markers defined. Markers are persistent;
+   of markers defined at any one time. Markers are persistent;
    they are saved to
    <TT
 CLASS="FILENAME"
@@ -65,7 +65,14 @@ CLASS="REPLACEABLE"
 >filename</I
 ></TT
 > is the file name. (The dot prefix
-   makes the marks file hidden on Unix systems).
+   makes the marks file hidden on Unix systems). In a way, markers
+   are similar to caret registers (see <A
+HREF="registers.html#POS-REGISTERS"
+>the section called <I
+>Caret Registers</I
+></A
+>) except
+   that they are persistent and can have names of any length.
   </P
 ><P
 >   
