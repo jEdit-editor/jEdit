@@ -1831,9 +1831,7 @@ JEditTextArea</title>
 
   <para>
     The following methods are inherited by <classname>Buffer</classname>
-    from its parent class.  They are useful in extracting text from a
-    <classname>Buffer</classname> object for searching purposes or other
-    manipulation.
+    from its parent class.
   </para>
 
   <itemizedlist>
@@ -1869,6 +1867,34 @@ JEditTextArea</title>
        object's data and should be used on a read-only basis. Calling
        <function>toString()</function> on the <classname>Segment</classname>
        will create a new object suitable for manipulation.
+     </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public void <function>insertString</function></funcdef><!--
+          --><paramdef>int <parameter>offset</parameter></paramdef>
+          <paramdef>String <parameter>text</parameter></paramdef>
+          <paramdef>AttributeSet <parameter>attr</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+     <para>
+       This method inserts the string <varname>text</varname> at offset
+       <varname>offset</varname> in the buffer. The attribute
+       <varname>attr</varname> is not used by jEdit and should be left
+       as <constant>null</constant>.
+     </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public int <function>getLength</function></funcdef><paramdef />
+        </funcprototype>
+      </funcsynopsis>
+     <para>
+       This method returns the number of characters in the buffer.
      </para>
     </listitem>
 

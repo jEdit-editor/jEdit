@@ -26,6 +26,23 @@ import java.util.Random;
 import org.gjt.sp.util.Log;
 
 /**
+ * The edit server protocol is very simple. <code>$HOME/.jedit/server</code>
+ * is an ASCII file containing two lines, the first being the port number,
+ * the second being the authorization key.<p>
+ *
+ * You connect to that port on the local machine, sending the authorization
+ * key as ASCII, followed by a newline, followed by a BeanShell script.
+ * Then close the socket and the BeanShell script will be executed by the
+ * server instance of jEdit.<p>
+ *
+ * The snippet is executed in the AWT thread. None of the usual BeanShell
+ * variables (view, buffer, textArea, editPane) are set so the script has to
+ * figure things out by itself.<p>
+ *
+ * In most cases, the script will call the static
+ * <code>EditServer.handleClient()</code> method, but of course more
+ * complicated stuff can be done too.
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -86,7 +103,9 @@ public class EditServer extends Thread
 				Log.log(Log.MESSAGE,this,client + ": connected");
 
 				BufferedReader in = new BufferedReader(
-					new InputStreamReader(client.getInputStream()));
+					new InputStreamReader(
+					client.getInputStream(),
+					"UTF8"));
 
 				try
 				{
@@ -124,37 +143,60 @@ public class EditServer extends Thread
 		}
 	}
 
-	// called by client BeanShell scripts
+	/**
+	 * @param restore Ignored unless no views are open
+	 * @param newView Create a new view, or reuse first view?
+	 * @param args A list of files. Null entries are ignored, for convinience
+	 * @since jEdit 3.2pre4
+	 */
 	public static void handleClient(boolean restore, boolean newView, String[] args)
 	{
 		Buffer buffer = jEdit.openFiles(null,args);
 		String splitConfig = null;
 
-		if(restore)
+		// we have to deal with a huge range of possible border cases here.
+		if(jEdit.getFirstView() == null)
 		{
-			if(buffer == null)
-				splitConfig = jEdit.restoreOpenFiles();
-			else if(jEdit.getBooleanProperty("restore.cli"))
-				jEdit.restoreOpenFiles();
+			// coming out of background mode.
+			// no views open.
+			// no buffers open if args empty.
+
+			if(restore)
+			{
+				if(buffer == null)
+					splitConfig = jEdit.restoreOpenFiles();
+				else if(jEdit.getBooleanProperty("restore.cli"))
+				{
+					// no initial split config
+					jEdit.restoreOpenFiles();
+				}
+			}
+
+			// if session file is empty or -norestore specified,
+			// we need an initial buffer
+			if(jEdit.getFirstBuffer() == null)
+				buffer = jEdit.newFile(null);
 		}
-
-		if(buffer == null && splitConfig == null)
-			buffer = jEdit.newFile(null);
-
-		View view = null;
-
-		if(!newView)
-			view = jEdit.getFirstView();
-
-		if(view != null)
+		else if(!newView)
 		{
+			// no background mode, and reusing existing view
+			View view = jEdit.getFirstView();
+
+			// no need to worry about not having any buffers open
+			// if not in background mode
 			if(buffer != null)
 				view.setBuffer(buffer);
 
 			view.requestFocus();
 			view.toFront();
+
+			// do not create a new view
+			return;
 		}
-		else if(splitConfig != null)
+
+		// we reach here either if newView is specified, or there
+		// is no initial view (or both)
+		if(splitConfig != null)
 			jEdit.newView(null,splitConfig);
 		else
 			jEdit.newView(null,buffer);

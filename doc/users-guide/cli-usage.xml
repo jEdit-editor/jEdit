@@ -34,11 +34,6 @@
      </entry>
     </row>
     <row>
-     <entry>-nogui</entry>
-     <entry>Only valid when running in background mode. Forces jEdit
-     to start without an initial view.</entry>
-    </row>
-    <row>
      <entry>-norestore</entry>
      <entry>jEdit will not attempt to restore previously open files on
      startup. This feature can also be set permanently in the
@@ -60,9 +55,9 @@
      See <xref linkend="settings-directory" />.</entry>
     </row>
     <row>
-     <entry>-nostartupscrupts</entry>
+     <entry>-nostartupscripts</entry>
      <entry>Does not run any startup scripts.
-     See <xref linkend="startup-macro" />.
+     See <xref linkend="startup-scripts" />.
      Has no effect
      when connecting to another instance via the edit server.</entry>
     </row>

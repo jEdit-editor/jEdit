@@ -776,11 +776,11 @@ hypersearch-no-results.title=HyperSearch Complete
 hypersearch-no-results.message=No occurences of the search string were found.
 
 hypersearch-done.title=HyperSearch Complete
-hypersearch-done.message=Found {0} occurence(s) in {1} buffer(s).
+hypersearch-done.message=Found {0} occurence(s) in {1} file(s).
 
 # Replace all results
 replace-results.title=Replacement Complete
-replace-results.message=Replaced {0} occurence(s) in {1} buffer(s).
+replace-results.message=Replaced {0} occurence(s) in {1} file(s).
 
 # Search and replace error dialog
 searcherror.title=Search and Replace Error

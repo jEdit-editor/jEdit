@@ -204,7 +204,7 @@
    <guimenu>Macros</guimenu>&gt;<guimenuitem>Rescan Macros</guimenuitem>.
   </para>
 
-  <para>
+  <!-- <para>
    If a macro named <filename>Startup.bsh</filename> exists in either of
    the designated macro directories, it is executed near the end of the jEdit
    startup sequence. Unlike with other macros, any variables and methods
@@ -214,7 +214,7 @@
    matters!), and place it in the either of the two macro directories.
    See <xref linkend="startup-macro"/> for a more detailed discussion on
    the use of a startup macro.
-  </para>
+  </para> -->
 
   <para>
    You can run any macro, regardless of where it is located, by

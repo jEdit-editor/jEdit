@@ -38,14 +38,17 @@ JEDIT 3.2 VERSION HISTORY
   DocBook-XML 4.1.2 DTD to parse it
 - The runCommandInConsole() method has been moved from the 'Console
   Plugin' macros to the jedit.bsh file that is run on jEdit startup
-- Source code for three sample plugins now included with the jEdit source
-  download
+- Source code for three sample plugins now included with the jEdit
+  source download
 - Updated set of sample macros (John Gellene)
+- Improved XML and XSL modes (Ollie Rutherfurd)
+- The edit server now explicitly uses the UTF8 encoding when reading
+  and writing from/to the socket, instead of using the JVM default
 
 + Bug Fixes
 
-- Searching for certain regular expressions (like (), ^, or $ by itself, etc)
-  would hang jEdit
+- Searching for certain regular expressions (like (), ^, or $ by itself,
+  etc) would hang jEdit
 - Some of the links in the help viewer table of contents didn't work
 - Tab key didn't work in Java 1.4
 - jEdit would throw an exception upon loading a buffer if the first line
@@ -53,6 +56,12 @@ JEDIT 3.2 VERSION HISTORY
 - Possible fix for Tab key and C+i not working with some Java versions
   in 'grab key' dialog box used by shortcut option panes
 - Double-clicks to select bracketed blocks now work better
+- If jEdit was running in background mode and a client instance was
+  started with the -norestore switch, a NullPointerException could be
+  printed
+- A few bugs that could occur with obscure combinations of command-line
+  parameters have been fixed. A side-effect of this is that the -nogui
+  command line switch is no longer available.
 
 * Version 3.2pre3
 

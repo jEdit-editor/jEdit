@@ -505,284 +505,34 @@ view.getInputHandler().readNextChar("Enter a character",
 </sect1>
 
 
-<sect1 id="startup-macro"><title>Using a Startup Macro</title>
+<sect1 id="startup-scripts"><title>Startup Scripts</title>
 
   <para>
-    One useful feature in jEdit allows the user to run a macro script at startup
-    near the end of the program's initialization routine. The name of
-    the macro script must be <filename>Startup.bsh</filename> (capitalization
-    matters!) and it must be located in one of the two macro directories.
+    On startup,
+    jEdit runs any BeanShell scripts located in the
+    <filename>startup</filename> subdirectory
+    of the jEdit installation or user settings directories (see
+    <xref linkend="settings-directory" />. As with
+    macros, the scripts must have a <filename>.bsh</filename> file name
+    extension. Startup scripts are run near the end of the startup
+    sequence, after plugins, properties and such have been initialized,
+    but before the first view is opened.
   </para>
-
   <para>
-    The startup macro can perform additional initialization that cannot be
-    handled by command line options or ordinary configuration options. It
-    could, for example, open a designated file (whether or not it was open
-    at the close of the preceding jEdit session). It could write logging
-    information to jEdit's activity log or an external file, or activate
-    another application. It can also add variables, methods and scripted
-    object to the namespace used by the BeanShell interpreter when running
-    other macro scripts. This last feature allows you to create a personal
-    library of methods and objects that can be accessed at any time during the
-    editing session in another macro, the BeanShell shell of the Console
-    plugin, or menu items such as
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
-    BeanShell Expression</guimenuitem>.
+    If startup script bugs are causing jEdit to crash or
+    hang on startup, you can use the
+    <command>-nostartupscripts</command> command line option to
+    temporarily disable them.
   </para>
-
-
   <para>
-    Here are a few short scripts that illustrate the startup macro process.
+    Unlike with macros,
+    variables and methods defined in a startup script are available in
+    all instances of the BeanShell interpreter in jEdit; for example, in
+    other macros, search and replace operations, and the Console plugin.
+    Because of this, the most common use of a startup script is to build
+    up a library of useful BeanShell routines. Startup scripts can also
+    be used for other purposes, such as UI customizations.
   </para>
-
-  <formalpara><title><filename>Startup.bsh</filename></title>
-
-  <para>
-    This macro defines a method and several variables, and looks for a
-    second startup macro. If the second macro can be found, it is executed
-    and the variable <varname>orphanMessage</varname> is modified.
-  </para>
-</formalpara>
-
-    <informalexample><programlisting>// Startup.bsh
-
-foo()
-{
-    fooMessage = <quote>This is from Startup.bsh and </quote>
-        + <quote>is part of a foo() object.</quote>;
-    return this;
-}
-
-orphanMessage = <quote>This is from Startup.bsh </quote>
-    + <quote>but is not part of a scripted object.</quote>;
-
-startup2 = Macros.getMacro(<quote>Startup2</quote>);
-if(startup2 != null)
-{
-    BeanShell.runScript(null, startup2.path, false, false);
-    orphanMessage += <quote>\nStartup2 was found.</quote>;
-}
-else
-{
-    orphanMessage += <quote>\nStartup2 was not found.</quote>;
-}
-
-// end of Startup.bsh
-</programlisting></informalexample>
-
-<formalpara><title><filename>Startup2.bsh</filename></title>
-
-  <para>
-    This macro is called by the startup macro. It adds its own method and
-    variable, and modifies one of the variables defined in
-    <filename>Startup.bsh</filename> if it can find it.
-  </para>
-</formalpara>
-
-<informalexample><programlisting>// Startup2.bsh
-
-bar()
-{
-    barMessage = <quote>This is from Startup2.bsh and </quote>
-        + <quote>is part of a bar() object.</quote>;
-    return this;
-}
-
-orphanMessage2 = <quote>This is from Startup2.bsh </quote>
-    + <quote>but is not part of a scripted object.</quote>;
-
-if(orphanMessage != null)
-    orphanMessage = orphanMessage.toUpperCase();
-
-// end of Startup2.bsh
-</programlisting></informalexample>
-
-<formalpara><title>Namespace_Test.bsh</title>
-
-  <para>
-    We will run this macro manually after startup.  Among other things,
-    it obtains the BeanShell namespace through successive calls to
-    jEdit's <function>BeanShell.getInterpreter()</function> and BeanShell's own
-    <function>Interpreter.getNamespace()</function> methods.  The names and
-    values of variables in the namespace are obtained by calls to BeanShell's
-    <function>Namespace.getVariableNames()</function> and
-    <function>Namespace.getVariable()</function> methods.  The rest of the
-    script formats output and displays the result in a new buffer.
-  </para>
-</formalpara>
-
-<informalexample><programlisting>// Namespace_Test.bsh
-
-jEdit.newFile(view);
-
-namespace = BeanShell.getInterpreter().getNameSpace();
-v = namespace.getVariableNames();
-
-sb = new StringBuffer();
-
-sb.append(&quot;***** begin test of startup &quot;);
-sb.append(&quot;macro namespace capability *****\n\n&quot;);
-sb.append(&quot;List of BeanShell namespace variables:\n\n&quot;);
-
-for (i = 0; i &lt; v.length; ++i)
-{
-    sb.append(v[i] + &quot;\n&quot;);
-    o = namespace.getVariable(v[i]);
-    if(o != null)
-    {
-        sb.append(o)
-          .append(&quot;\n\n&quot;);
-    }
-    else
-    {
-        sb.append(&quot;Value of variable &quot;)
-          .append(String.valueOf(i))
-          .append(&quot; is null.\n&quot;);
-    }
-}
-sb.append(&quot;***** end variable list *****\n\n&quot;);
-textArea.setSelectedText(sb.toString());
-
-f = foo();
-b = bar();
-
-sb.setLength(0);
-
-sb.append(<quote>\n\n</quote>)
-  .append(<quote>foo().fooMessage = \n</quote>)
-  .append(f.fooMessage)
-  .append(<quote>\n\n</quote>);
-
-sb.append(<quote>bar().barMessage = \n</quote>)
-  .append(b.barMessage)
-  .append(<quote>\n\n</quote>);
-
-sb.append(<quote>orphanMessage = \n</quote>)
-  .append(this.orphanMessage)
-  .append(<quote>\n\n</quote>);
-
-sb.append(<quote>orphanMessage2 = \n</quote>)
-  .append(this.orphanMessage2)
-  .append(<quote>\n\n</quote>);
-
-sb.append(<quote>***** end test *****\n</quote>);
-
-textArea.setSelectedText(sb.toString());
-
-// end of Namespace_Test.bsh
-</programlisting></informalexample>
-
-<formalpara><title>The results</title>
-
-  <para>
-    Here are the result of running <filename>Namespace_Test.bsh</filename>
-    after startup occurs:
-  </para>
-</formalpara>
-
-  <informalexample>
-  <programlisting>***** begin test of startup macro namespace capability *****
-
-List of BeanShell namespace variables:
-
-startup2
-Startup2
-
-classLoader
-org.gjt.sp.jedit.JARClassLoader@3bc473
-
-orphanMessage
-THIS IS FROM STARTUP.BSH BUT IS NOT PART OF A SCRIPTED OBJECT.
-Startup2 was found.
-
-bsh
-'this' reference (XThis) to Bsh object: Bsh System Object
-
-orphanMessage2
-This is from Startup2.bsh but is not part of a scripted object.
-
-***** end variable list *****
-
-
-
-foo().fooMessage =
-This is from Startup.bsh and is part of a foo() object.
-
-bar().barMessage =
-This is from Startup2.bsh and is part of a bar() object.
-
-orphanMessage =
-THIS IS FROM STARTUP.BSH BUT IS NOT PART OF A SCRIPTED OBJECT.
-Startup2 was found.
-
-orphanMessage2 =
-This is from Startup2.bsh but is not part of a scripted object.
-
-***** end test *****
-</programlisting></informalexample>
-
-  <para>
-    You will see that objects and variables from both macros were available
-    to the test macro when it ran after startup. In addition, the script in
-    <filename>Startup2.bsh</filename> altered the variable
-    <varname>orphanMessage</varname> defined in
-    <filename>Startup.bsh</filename> by capitalizing the string contents.
-    After that, control returned to <filename>Startup.bsh</filename>, which
-    added additional lower casetext to <varname>orphanMessage</varname>.
-  </para>
-
-  <para>
-    This example shows that the startup macro feature can provide additional
-    opportunities for controlling jEdit's behavior. It also allows the
-    creation of customized variables and methods that a user can apply in
-    other macros or BeanShell code executed during the editing
-    session.
-  </para>
-
-  <para>
-    We close this discussion with an example of a versatile method that
-    can save typing time and provide a useful shorthand in other macros.
-    This method, <function>runCommandInConsole()</function>, takes two
-    parameters, a <classname>View</classname> representing the current
-    view and a <classname>String</classname> representing the text of a
-    command that will be executed in the Console's default shell.
-  </para>
-
-  <informalexample><programlisting>runCommandInConsole(View view, String cmd)
-{
-    // check if the plugin is installed.
-    if(jEdit.getPlugin("console.ConsolePlugin") == null)
-    {
-        Macros.error(view,"You must install the Console plugin"
-            + " to use this macro.");
-        return;
-    }
-    manager = view.getDockableWindowManager();
-    // Open the console if it isn't already open
-    manager.addDockableWindow("console");
-    // Obtain the console instance
-    console = manager.getDockableWindow("console");
-    // Ensure we are using the console shell
-    console.setShell("Console");
-    // Call its run() method
-    console.run(command);
-}</programlisting></informalexample>
-
-  <para>
-    If you have looked at the code for some of jEdit's installed macros, you
-    may recognize this method as similar to those contained in many macros
-    that use the Console plugin. The one significant difference is that this
-    startup method takes the current <classname>View</classname> as an
-    explicit parameter. This is because jEdit executes the startup macro
-    before creating an initial <classname>View</classname>, so it cannot use
-    the values of <varname>view</varname>, <varname>editPane</varname>,
-    <varname>textArea</varname> or <varname>buffer</varname> that are
-    normally defined in the macro's namespace. During an editing session,
-    however, you can call this method with <varname>view</varname> as the
-    first parameter just as you would call any other method, but without a
-    Java classname or a object variable as a prefix.
-  </para>
-
 </sect1>
 
 <sect1 id="macro-tips-debugging"><title>Debugging Macros</title>

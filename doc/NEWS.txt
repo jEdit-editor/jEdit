@@ -130,6 +130,14 @@ installation and user settings directories are run on startup. This
 replaces the clunky 'startup macro' feature found in earlier jEdit
 versions.
 
+* Edit server
+
+Other programs running on the same machine can send jEdit arbitriary
+BeanShell code to execute. On multi-user machines, this does not open a
+security hole, assuming file permissions are set up correctly, because
+clients must first send an authorization key stored in the user settings
+directory.
+
 * Sample plugins
 
 The three sample plugins that were formerly available from the jEdit web

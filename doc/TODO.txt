@@ -30,16 +30,23 @@ TO DO
 - get web start to work
 - fix 'is not a function name' when running openjade
 - installing source for already installed plugins
-- non-existent files and caret history
-- macro guide:
-  - mention registers
-  - runCommandInConsole()
-  - new startup script scheme
+- catch MalformedInputException and display a better error message
 
 + before 3.2final:
 
+- jedit -client reads BeanShell code from standard input and sends it
+  to server
+- custom splitter control?
+- finish persistent splits: resize splits to make them in the middle
+- documentation
+  - mention registers in API guide
+  - JOptionPane not a good idea for getting user input?
+  - formatting problems in user's guide in table cells
+  - Include John's upcoming plugin guide
+  - document new edit server
+  - jedit.bsh routines
+  - document differences between web start and stand-alone version
 - encoding option in VFS browser
-- catch MalformedInputException and display a better error message
 - help viewer: links to .txt files?
 - C+\
 - docking improvements:
@@ -51,30 +58,20 @@ TO DO
   - each dockable has a close box in its tool bar; or a button that
     shows a menu, with commands for moving the dockable, making it
     floating, toggling auto-open, etc.
+  - require that each dockable have a tool bar with a close button?
 - plugins should be able to run arbitriary .bsh scripts easily
-- use BeanShell 1.2 class loader instead of JARClassLoader
-- formatting problems in user's guide in table cells
-- expand-fold too aggressive
-- require that each dockable have a tool bar with a close button?
-- support middle mouse button clicks in JTextComponents
 - next time i'm making an RPM, fix the shell script
-- support jEdit keyboard shortcuts in JTextComponents
-- finish persistent splits: resize splits to make them in the middle
-- replace in sel doesn't work if rect
-- Include John's upcoming plugin guide
 - reload: preserve caret position
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
     ugly with different backgrounds
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
+  - updateUI doesn't update tree colors
+  - restart should not be necessary for 'globalColors' to take effect
 - 'globalFont' property?
   - maybe don't give text fields a new font?...
 - swing font customization
-- support Shift-clicks in JTextComponents (impossible?)
-- 'appearance' option pane(s)?
-- updateUI doesn't update tree colors
-- restart should not be necessary for 'globalColors' to take effect
 
 + bugs that need to be fixed at some stage:
 
@@ -99,6 +96,8 @@ TO DO
 - caret undo bugs
 - folding paint up bug
 - offsetToX() returning wrong location with some Java versions
+- expand-fold too aggressive
+- replace in sel doesn't work if rect
 
 + later:
 
@@ -123,3 +122,6 @@ TO DO
 - improved rectangular selections
 - a 'reinsertOnNextLine' regexp for word wrap?
 - soft wrap
+- support Shift-clicks in JTextComponents (impossible?)
+- support jEdit keyboard shortcuts in JTextComponents
+- support middle mouse button clicks in JTextComponents

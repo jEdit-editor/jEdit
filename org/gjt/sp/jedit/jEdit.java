@@ -92,7 +92,6 @@ public class jEdit
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
 		boolean restore = true;
-		boolean showGUI = true;
 		boolean noStartupScripts = false;
 
 		for(int i = 0; i < args.length; i++)
@@ -130,8 +129,6 @@ public class jEdit
 					portFile = arg.substring(8);
 				else if(arg.startsWith("-background"))
 					background = true;
-				else if(arg.startsWith("-nogui"))
-					showGUI = false;
 				else if(arg.equals("-norestore"))
 					restore = false;
 				else if(arg.equals("-nostartupscripts"))
@@ -166,7 +163,7 @@ public class jEdit
 				in.close();
 
 				Socket socket = new Socket(InetAddress.getLocalHost(),port);
-				Writer out = new OutputStreamWriter(socket.getOutputStream());
+				Writer out = new OutputStreamWriter(socket.getOutputStream(),"UTF8");
 				out.write(String.valueOf(key));
 				out.write('\n');
 
@@ -346,17 +343,14 @@ public class jEdit
 
 		String splitConfig = null;
 
-		if(restore && !background
-			&& settingsDirectory != null
+		if(restore && settingsDirectory != null
 			&& jEdit.getBooleanProperty("restore")
-			&& (bufferCount == 0
-			|| jEdit.getBooleanProperty("restore.cli")))
+			&& (bufferCount == 0 || jEdit.getBooleanProperty("restore.cli")))
 		{
 			splitConfig = restoreOpenFiles();
 		}
 
 		// Create the view and hide the splash screen.
-		final boolean _showGUI = showGUI;
 		final Buffer _buffer = buffer;
 		final String _splitConfig = splitConfig;
 
@@ -365,41 +359,24 @@ public class jEdit
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
+				if(bufferCount == 0)
+					newFile(null);
+
 				EditBus.send(new EditorStarted(null));
 
-				// If no files to open were specified in
-				// background mode, don't create a view.
-				if(background && !_showGUI)
-				{
-					if(bufferCount != 0)
-					{
-						if(_buffer != null)
-							newView(null,_buffer);
-						else
-							newView(null,_splitConfig);
-					}
-				}
+				View view;
+				if(_buffer != null)
+					view = newView(null,_buffer);
 				else
-				{
-					if(bufferCount == 0)
-						newFile(null);
+					view = newView(null,_splitConfig);
 
-					if(_buffer != null)
-						newView(null,_buffer);
-					else
-						newView(null,_splitConfig);
-				}
+				// show tip of the day
+				if(jEdit.getBooleanProperty("firstTime"))
+					new HelpViewer("welcome.html");
+				else if(jEdit.getBooleanProperty("tip.show"))
+					new TipOfTheDay(view);
 
-				// if there is a view around, show tip of the day
-				if(viewCount != 0)
-				{
-					if(jEdit.getBooleanProperty("firstTime"))
-						new HelpViewer("welcome.html");
-					else if(jEdit.getBooleanProperty("tip.show"))
-						new TipOfTheDay(viewsFirst);
-
-					setBooleanProperty("firstTime",false);
-				}
+				setBooleanProperty("firstTime",false);
 
 				// Start I/O threads
 				VFSManager.start();
@@ -2006,13 +1983,12 @@ public class jEdit
 	{
 		System.out.println("Usage: jedit [<options>] [<files>]");
 
-		System.out.println("	+marker:<marker>: Positions caret"
+		System.out.println("	<file> +marker:<marker>: Positions caret"
 			+ " at marker <marker>");
-		System.out.println("	+line:<line>: Positions caret"
+		System.out.println("	<file> +line:<line>: Positions caret"
 			+ " at line number <line>");
 		System.out.println("	--: End of options");
-		System.out.println("	-version: Print jEdit version and"
-			+ " exit");
+		System.out.println("	-version: Print jEdit version and exit");
 		System.out.println("	-usage: Print this message and exit");
 		System.out.println("	-norestore: Don't restore previously open files");
 		System.out.println("	-noserver: Don't start edit server");
@@ -2028,7 +2004,6 @@ public class jEdit
 			+ " settings from <path>");
 		System.out.println("	-nostartupscripts: Don't run startup scripts");
 		System.out.println("	-background: Run in background mode");
-		System.out.println("	-nogui: Don't create initial view in background mode");
 		System.out.println();
 		System.out.println("	-newview: Open new view if connecting to edit server");
 
@@ -2060,9 +2035,18 @@ public class jEdit
 		{
 			script.append("args[");
 			script.append(i);
-			script.append("] = \"");
-			script.append(MiscUtilities.charsToEscapes(args[i]));
-			script.append("\";\n");
+			script.append("] = ");
+
+			if(args[i] == null)
+				script.append("null");
+			else
+			{
+				script.append('"');
+				script.append(MiscUtilities.charsToEscapes(args[i]));
+				script.append('"');
+			}
+
+			script.append(";\n");
 		}
 
 		script.append("EditServer.handleClient(" + restore + "," + newView + ",args);\n");
