@@ -16,6 +16,7 @@
 <!ENTITY using-macros SYSTEM "using-macros.xml">
 <!ENTITY using-plugins SYSTEM "using-plugins.xml">
 <!ENTITY cli-usage SYSTEM "cli-usage.xml">
+<!ENTITY windows-launcher SYSTEM "windows-launcher.xml">
 <!ENTITY shortcuts SYSTEM "shortcuts.xml">
 <!ENTITY activity-log SYSTEM "activity-log.xml">
 <!ENTITY history SYSTEM "history.xml">
