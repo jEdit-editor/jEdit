@@ -39,7 +39,7 @@
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>`</BEGIN>
 			<END>`</END>
 		</SPAN>

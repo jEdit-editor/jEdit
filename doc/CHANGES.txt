@@ -10,6 +10,7 @@ JEDIT VERSION HISTORY
 - New 'search bar' with incremental search support replaces QuickSearch
   field on toolbar
 - PHP mode updates (Mike Dillon)
+- JMK (Java Make) mode added
 
 + Enhancements
 
