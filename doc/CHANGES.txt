@@ -5,10 +5,13 @@ JEDIT VERSION HISTORY
 + Enhancements
 
 - Options dialog box looks better (Mike Dillon)
+- Documentation updates
 
 + Bug Fixes
 
-- Options dialog box didn't display 'plugins' branch sometimes
+- Options dialog box didn't display 'plugins' branch sometimes (since 2.3pre4)
+- Problems would maifest if you selected the buffer list search set but
+  didn't actually specify any buffers (since ???)
 
 * Version 2.3pre4
 

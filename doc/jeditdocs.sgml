@@ -3038,31 +3038,77 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   of plugins; information on developing plugins is in the next
   chapter.
  </para>
+ <para>
+  A plugin is basically a JAR (Java Archive) file which contains
+  Java code and possibly other resources. Plugins must be placed in
+  a specific directory for jEdit to load them when it is starting.
+ </para>
+ <sect1 id=plugin-manager><title>The Plugin Manager</>
+  <indexterm><primary>Plugin Manager command</></indexterm>
+  <indexterm><primary>Plugins menu</></indexterm>
+  <para>
+   In jEdit versions prior to 2.3, plugin installation and removal
+   was somewhat complicated, because you had to track down the
+   directories involved, unzip into the right spot, etc. Now, using
+   plugins has become much easier with the <quote>Plugin Manager</>
+   in jEdit 2.3 and above.
+  </para>
+  <para>
+   <guimenu>Plugins</>&gt;<guimenuitem>Plugin Manager</> will display
+   the plugin manager window. It shows a list of all installed plugins.
+   Clicking on a plugin will display information about it.
+  </para>
+  <figure><title>The Plugin Manager window</>
+   <graphic scale=75 fileref=dialog-pluginmgr></>
+  </figure>
+  <para>
+   To remove some plugins, select them
+   and click <guibutton>Remove Selected
+   Plugins</>. This will issue a confimation dialog box first.
+  </para>
+ </sect1>
+ <sect1 id=updating-plugins><title>Updating Plugins</>
+  <para>
+   To check if updated versions of installed plugins are available,
+   click the <guibutton>Update Plugins</> button in the plugin manager.
+   The plugin manager will then
+   connect to jEdit plugin central and compare your installed plugins
+   against the latest available ones. Any outdated ones will be
+   displayed in a list.
+  </para>
+  <para>
+   To install the new plugin revisions, select any or all of them
+   and click <guibutton>Update</>.
+  </para>
+  <figure><title>The Update Plugins dialog box</>
+   <graphic scale=75 fileref=dialog-pluginmgr-update></>
+  </figure>
+  <para>
+   A progress window will be shown while the plugins are being
+   downloaded.
+  </para>
+  <figure><title>The plugin download dialog box</>
+   <graphic scale=75 fileref=dialog-pluginmgr-download></>
+  </figure>
+ </sect1>
  <sect1 id=installing-plugins><title>Installing Plugins</>
-  <indexterm><primary>.jedit/jars directory</></indexterm>
-  <indexterm><primary>JAR (Java Archive) files</></indexterm>
   <para>
-   jEdit scans two directories for plugins on startup;
-   the system-wide plugin directory, where plugins that are to be available
-   to all users can be placed, and the user-specific plugin
-   directory, where plugins for a specific user can be installed.
+   To install new plugins, click the <guibutton>Install New Plugins</>
+   button in the plugin manager. The plugin manager will then
+   connect to jEdit plugin central and download a list of plugins that
+   you do not yet have. Clicking on a plugin will display information
+   about it.
   </para>
   <para>
-   Plugins are distributed as ZIP or GZipped TAR files. Uncompressing
-   them will result in a JAR file which contains the plugin's code and
-   resources, and a directory which contains the source code. Only the JAR
-   file is required by jEdit; the source code is for developers and the
-   curious.
+   There are two locations where plugins can be installed; the user-specific
+   plugin directory, and the system-wide plugin directory. On Windows 95/98,
+   it doesn't make any difference where plugins are installed. On
+   multiuser systems such as Unix or Windows NT, however, each user
+   has their own plugin directory, while the system-wide plugin
+   directory is shared by all users on the system.
   </para>
-  <indexterm><primary>Help menu</></indexterm>
-  <indexterm><primary>About jEdit command</></indexterm>
-  <para>
-   A list of all installed plugins can be found in the
-   <guibutton>Loaded Plugins</> tab of the
-   <guimenu>Help</>&gt;<guimenuitem>About jEdit</> dialog box.
-  </para>
-  <figure><title>The <quote>Loaded Plugins</> tab of the about dialog box</>
-   <graphic scale=75 fileref=dialog-plugins></>
+  <figure><title>The Install New Plugins dialog box</>
+   <graphic scale=75 fileref=dialog-pluginmgr-install></>
   </figure>
  </sect1>
  <sect1 id=dependency-errors><title>Dependency Errors</>
@@ -3074,7 +3120,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    that is not currently available, the plugin will not be loaded,
    and instead a
    <quote>dependency error</> will be printed in the activity
-   log (<guimenu>Help</>&gt;<guimenuitem>Show Activity Log</>) and
+   log (<guimenu>Utilities</>&gt;<guimenuitem>Show Activity Log</>) and
    system console.
   </para>
   <screen>[error] JARClassLoader: ConsolePlugin requires jEdit 2.2final
@@ -3095,8 +3141,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   </para>
   <para>
    Most plugins add submenus or menu items to the <guimenu>Plugins</> menu.
-   Some plugins with customizable options add panes to the
-   <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box.
+   Some plugins add option panes to the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
   </para>
  </sect1>
 </chapter>

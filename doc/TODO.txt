@@ -6,7 +6,6 @@ JEDIT TO DO
 - Fix gutter repaint bug
 - Document option group API
 - Update window-editor-* and dialog-options-* screenshots
-- Document PluginManager
 
 ------- Later -------
 

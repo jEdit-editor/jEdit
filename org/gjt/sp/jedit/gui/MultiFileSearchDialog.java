@@ -139,7 +139,13 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		else if(all.getModel().isSelected())
 			return new AllBufferSet();
 		else if(selected.getModel().isSelected())
-			return new BufferListSet(bufferList.getSelectedValues());
+		{
+			Object[] values = bufferList.getSelectedValues();
+			if(values == null || values.length == 0)
+				return new CurrentBufferSet();
+			else
+				return new BufferListSet(values);
+		}
 		else if(directory.getModel().isSelected())
 		{
 			String _directory = directoryPath.getText();
@@ -350,6 +356,9 @@ public class MultiFileSearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/02/08 10:04:05  sp
+ * Bug fixes, documentation updates
+ *
  * Revision 1.8  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *
