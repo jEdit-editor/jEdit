@@ -180,7 +180,8 @@ public class PluginManagerPlugin extends EBPlugin
 		EditPlugin.JAR[] jars = jEdit.getPluginJARs();
 		for(int i = 0; i < jars.length; i++)
 		{
-			retVal.addElement(jars[i].getPath());
+			retVal.addElement(MiscUtilities.getFileName(
+				jars[i].getPath()));
 		}
 
 		String[] array = new String[retVal.size()];

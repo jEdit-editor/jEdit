@@ -185,13 +185,9 @@ VALIGN="TOP"
 ><TD
 ALIGN="LEFT"
 VALIGN="TOP"
->Starts jEdit without loading the user-specific settings
-     from <TT
-CLASS="FILENAME"
->$HOME/.jedit</TT
->. This can be used if the
-     user-specific settings are corrupt, or if a plugin installed
-     in your plugins directory is causing problems. Has no effect
+>Starts jEdit without loading user-specific settings.
+     This can be used if they are corrupt for some reason, or if a plugin
+     installed in your plugins directory is causing problems. Has no effect
      when connecting to another instance via the edit server.</TD
 ></TR
 ><TR
@@ -287,7 +283,12 @@ VALIGN="TOP"
 >Loads a previously-saved session from
      <TT
 CLASS="FILENAME"
->$HOME/.jedit/sessions/<TT
+><TT
+CLASS="REPLACEABLE"
+><I
+>user.home</I
+></TT
+>/.jedit/sessions/<TT
 CLASS="REPLACEABLE"
 ><I
 >name</I
@@ -332,7 +333,12 @@ CLASS="REPLACEABLE"
 >, instead of the
      default <TT
 CLASS="FILENAME"
->$HOME/.jedit</TT
+><TT
+CLASS="REPLACEABLE"
+><I
+>user.home</I
+></TT
+>/.jedit</TT
 >. <TT
 CLASS="REPLACEABLE"
 ><I

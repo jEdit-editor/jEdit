@@ -71,6 +71,6 @@ do
 done
 
 export CLASSPATH=$CLASSPATH:..
-java org.gjt.sp.sim.Archive c ../data.sim `cat file_list`
+java org.gjt.sp.sim.Archive c ../data.sim `cat file_list` > /dev/null
 
 rm file_list sim/jedit-*

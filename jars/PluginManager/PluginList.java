@@ -132,6 +132,7 @@ public class PluginList
 					currVersion = jEdit.getProperty(
 						"plugin." + clazz + ".version");
 					this.path = path;
+					this.clazz = clazz;
 					break;
 				}
 			}

@@ -31,24 +31,29 @@ public class PluginDownloadProgress extends JDialog
 		super(JOptionPane.getFrameForComponent(dialog),
 			jEdit.getProperty("download-progress.title"),true);
 
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
 		count = urls.length;
 
 		message = new JLabel("Hello World");
-		message.setBorder(new EmptyBorder(10,10,10,10));
-		getContentPane().add(BorderLayout.NORTH,message);
+		message.setBorder(new EmptyBorder(0,0,12,0));
+		content.add(BorderLayout.NORTH,message);
 
 		progress = new JProgressBar();
 		progress.setStringPainted(true);
-		getContentPane().add(BorderLayout.CENTER,progress);
+		content.add(BorderLayout.CENTER,progress);
 
 		stop = new JButton(jEdit.getProperty("download-progress.stop"));
 		stop.addActionListener(new ActionHandler());
 		JPanel panel = new JPanel();
-		panel.setBorder(new EmptyBorder(10,10,10,10));
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(12,0,0,0));
+		panel.add(Box.createGlue());
 		panel.add(stop);
-		getContentPane().add(BorderLayout.SOUTH,panel);
-
-		thread = new PluginDownloadThread(this,urls,dirs);
+		panel.add(Box.createGlue());
+		content.add(BorderLayout.SOUTH,panel);
 
 		addWindowListener(new WindowHandler());
 
@@ -59,6 +64,8 @@ public class PluginDownloadProgress extends JDialog
 		size.width = Math.max(size.width,500);
 		getRootPane().setPreferredSize(size);
 		setLocationRelativeTo(dialog);
+
+		thread = new PluginDownloadThread(this,urls,dirs);
 
 		show();
 	}

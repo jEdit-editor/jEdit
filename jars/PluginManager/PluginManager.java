@@ -35,6 +35,10 @@ public class PluginManager extends EnhancedDialog
 	{
 		super(view,jEdit.getProperty("plugin-manager.title"),true);
 
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
 		JPanel panel = new JPanel(new BorderLayout());
 		tree = new JTree();
 		tree.setCellRenderer(new Renderer());
@@ -46,7 +50,9 @@ public class PluginManager extends EnhancedDialog
 		panel.add(BorderLayout.CENTER,new JScrollPane(tree));
 
 		JPanel panel2 = new JPanel(new BorderLayout());
-		JPanel labelBox = new JPanel(new GridLayout(4,1));
+		panel2.setBorder(new EmptyBorder(6,0,12,0));
+		JPanel labelBox = new JPanel(new GridLayout(4,1,0,3));
+		labelBox.setBorder(new EmptyBorder(0,0,0,12));
 		labelBox.add(new JLabel(jEdit.getProperty("plugin-manager"
 			+ ".info.path"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("plugin-manager"
@@ -57,7 +63,7 @@ public class PluginManager extends EnhancedDialog
 			+ ".info.version"),SwingConstants.RIGHT));
 		panel2.add(BorderLayout.WEST,labelBox);
 
-		JPanel valueBox = new JPanel(new GridLayout(4,1));
+		JPanel valueBox = new JPanel(new GridLayout(4,1,0,3));
 		valueBox.add(path = new JLabel());
 		valueBox.add(name = new JLabel());
 		valueBox.add(author = new JLabel());
@@ -65,27 +71,32 @@ public class PluginManager extends EnhancedDialog
 		panel2.add(BorderLayout.CENTER,valueBox);
 
 		panel.add(BorderLayout.SOUTH,panel2);
-		getContentPane().add(BorderLayout.CENTER,panel);
+		content.add(BorderLayout.CENTER,panel);
 
-		panel = new JPanel();
+		Box box = new Box(BoxLayout.X_AXIS);
 
+		box.add(Box.createGlue());
 		close = new JButton(jEdit.getProperty("common.close"));
 		close.addActionListener(new ActionHandler());
-		panel.add(close);
+		box.add(close);
+		box.add(Box.createHorizontalStrut(6));
 		remove = new JButton(jEdit.getProperty("plugin-manager"
 			+ ".remove"));
 		remove.addActionListener(new ActionHandler());
-		panel.add(remove);
+		box.add(remove);
+		box.add(Box.createHorizontalStrut(6));
 		update = new JButton(jEdit.getProperty("plugin-manager"
 			+ ".update"));
 		update.addActionListener(new ActionHandler());
-		panel.add(update);
+		box.add(update);
+		box.add(Box.createHorizontalStrut(6));
 		install = new JButton(jEdit.getProperty("plugin-manager"
 			+ ".install"));
 		install.addActionListener(new ActionHandler());
-		panel.add(install);
+		box.add(install);
+		box.add(Box.createGlue());
 
-		getContentPane().add(BorderLayout.SOUTH,panel);
+		content.add(BorderLayout.SOUTH,box);
 
 		updateTree();
 

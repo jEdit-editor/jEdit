@@ -1,9 +1,9 @@
 ### plugin properties
 plugin.PluginManagerPlugin.name=Plugin Manager
 plugin.PluginManagerPlugin.author=Slava Pestov
-plugin.PluginManagerPlugin.version=0.5
+plugin.PluginManagerPlugin.version=0.5.2
 plugin.PluginManagerPlugin.docs=PluginManager.html
-plugin.PluginManagerPlugin.depend.0=jedit 02.05.03.00
+plugin.PluginManagerPlugin.depend.0=jedit 02.05.05.00
 
 ### URL to download plugin list from
 plugin-manager.url=http://jedit.standmed.com/export/plugin_manager
@@ -42,10 +42,10 @@ plugin-manager.title=Plugin Manager
 plugin-manager.loaded=Installed and loaded
 plugin-manager.not-loaded=Installed but not loaded
 
-plugin-manager.info.path=JAR file path:\ 
-plugin-manager.info.name=Plugin name:\ 
-plugin-manager.info.author=Author:\ 
-plugin-manager.info.version=Version:\ 
+plugin-manager.info.path=JAR file path:
+plugin-manager.info.name=Plugin name:
+plugin-manager.info.author=Author:
+plugin-manager.info.version=Version:
 plugin-manager.info.unknown=Unknown
 
 plugin-manager.remove=Remove Selected Plugins
@@ -70,12 +70,12 @@ remove-plugins.error.message=The plugin {0} cannot be removed because\n\
 install-plugins.title=Install New Plugins
 install-plugins.caption=Available plugins:
 install-plugins.loading=Loading plugin list from server; please wait...
-install-plugins.info.name=Name:\ 
-install-plugins.info.author=Author:\ 
-install-plugins.info.version=Version:\ 
-install-plugins.info.updated=Last updated:\ 
-install-plugins.info.requires=Requires:\ 
-install-plugins.info.description=Description:\ 
+install-plugins.info.name=Name:
+install-plugins.info.author=Author:
+install-plugins.info.version=Version:
+install-plugins.info.updated=Last updated:
+install-plugins.info.requires=Requires:
+install-plugins.info.description=Description:
 
 install-plugins.user=Install in user plugin directory ({0})
 install-plugins.none=none
@@ -93,13 +93,13 @@ install-plugins.error.message=The plugin {0} cannot be installed because\n\
 update-plugins.title=Update Plugins
 update-plugins.caption=New versions of the following plugins are available:
 update-plugins.loading=Loading plugin list from server; please wait...
-update-plugins.info.name=Name:\ 
-update-plugins.info.author=Author:\ 
-update-plugins.info.current-version=Installed version:\ 
-update-plugins.info.latest-version=Latest version:\ 
-update-plugins.info.updated=Last updated:\ 
-update-plugins.info.requires=Requires:\ 
-update-plugins.info.description=Description:\ 
+update-plugins.info.name=Name:
+update-plugins.info.author=Author:
+update-plugins.info.current-version=Installed version:
+update-plugins.info.latest-version=Latest version:
+update-plugins.info.updated=Last updated:
+update-plugins.info.requires=Requires:
+update-plugins.info.description=Description:
 
 update-plugins.update=Update
 

@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -32,10 +33,16 @@ public class UpdatePluginsDialog extends EnhancedDialog
 		super(JOptionPane.getFrameForComponent(dialog),
 			jEdit.getProperty("update-plugins.title"),true);
 
-		getContentPane().add(BorderLayout.NORTH,new JLabel(
-			jEdit.getProperty("update-plugins.caption")));
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
+		JLabel label = new JLabel(jEdit.getProperty("update-plugins.caption"));
+		label.setBorder(new EmptyBorder(0,0,6,0));
+		content.add(BorderLayout.NORTH,label);
 
 		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(new EmptyBorder(0,0,12,0));
 
 		String[] listItems = { jEdit.getProperty("update-plugins.loading") };
 		plugins = new JList(listItems);
@@ -44,7 +51,9 @@ public class UpdatePluginsDialog extends EnhancedDialog
 		panel.add(BorderLayout.CENTER,new JScrollPane(plugins));
 
 		JPanel panel2 = new JPanel(new BorderLayout());
-		JPanel labelBox = new JPanel(new GridLayout(7,1));
+		panel2.setBorder(new EmptyBorder(6,0,0,0));
+		JPanel labelBox = new JPanel(new GridLayout(7,1,0,3));
+		labelBox.setBorder(new EmptyBorder(0,0,3,12));
 		labelBox.add(new JLabel(jEdit.getProperty("update-plugins"
 			+ ".info.name"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("update-plugins"
@@ -61,7 +70,8 @@ public class UpdatePluginsDialog extends EnhancedDialog
 			+ ".info.description"),SwingConstants.RIGHT));
 		panel2.add(BorderLayout.WEST,labelBox);
 
-		JPanel valueBox = new JPanel(new GridLayout(7,1));
+		JPanel valueBox = new JPanel(new GridLayout(7,1,0,3));
+		valueBox.setBorder(new EmptyBorder(0,0,3,0));
 		valueBox.add(name = new JLabel());
 		valueBox.add(author = new JLabel());
 		valueBox.add(currVersion = new JLabel());
@@ -79,28 +89,28 @@ public class UpdatePluginsDialog extends EnhancedDialog
 
 		panel.add(BorderLayout.SOUTH,panel2);
 
-		getContentPane().add(BorderLayout.CENTER,panel);
+		content.add(BorderLayout.CENTER,panel);
 
-		JPanel buttons = new JPanel();
+		Box box = new Box(BoxLayout.X_AXIS);
 
+		box.add(Box.createGlue());
 		update = new JButton(jEdit.getProperty("update-plugins.update"));
 		update.setEnabled(false);
 		getRootPane().setDefaultButton(update);
 		update.addActionListener(new ActionHandler());
-		buttons.add(update);
+		box.add(update);
+		box.add(Box.createHorizontalStrut(6));
 
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(new ActionHandler());
-		buttons.add(cancel);
+		box.add(cancel);
+		box.add(Box.createGlue());
 
-		getContentPane().add(BorderLayout.SOUTH,buttons);
+		content.add(BorderLayout.SOUTH,box);
 
-		thread = new LoadThread();
-
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(dialog);
+		thread = new LoadThread();
 		show();
 	}
 
