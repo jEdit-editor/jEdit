@@ -410,6 +410,7 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
       <funcsynopsis>
         <funcprototype>
           <funcdef>public void <function>readNextChar</function></funcdef>
+          <paramdef>String <parameter>prompt</parameter></paramdef>
           <paramdef>String <parameter>code</parameter></paramdef>
         </funcprototype>
       </funcsynopsis>
@@ -417,11 +418,13 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
   </itemizedlist>
 
   <para>
-    The contents of the <varname>code</varname> parameter will be run as
+    Firstly, the contents of the <varname>prompt</varname> parameter
+    will be shown in the view's status
+    bar. Then, the method will wait for a key press, after which
+    the contents of the <varname>code</varname> parameter will be run as
     a BeanShell script, with one important modification. Each time the
     string <varname>__char__</varname> appears in the parameter script, it
-    will be substituted by the character value of the next key pressed after
-    <function>readNextChar()</function> is called. The key press
+    will be substituted by the character pressed. The key press
     is <quote>consumed</quote> by <function>readNextChar()</function>.
     It will not be displayed on the screen or otherwise processed by jEdit.
   </para>
@@ -449,7 +452,7 @@ script.append(   "if(__char__ != '\\n') ++match;"             );
 script.append(   "textArea.select(start, start + match - 1);" );
 script.append( "}"                                            );
 
-view.getInputHandler().readNextChar(script.toString());
+view.getInputHandler().readNextChar("Enter a character",script.toString());
 
 // end Next_Char.bsh</programlisting>
   </informalexample>

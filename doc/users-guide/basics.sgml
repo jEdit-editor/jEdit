@@ -190,17 +190,17 @@
    <listitem><para>Prompts displayed by commands such as those dealing with
    registers and markers (see <xref linkend=text-transfer> and <xref
    linkend=markers>)</para></listitem>
-   <listitem><para>If multiple selection is enabled, the text
-   <literal>(multi)</> is shown in black, otherwise it will be grayed out. Pressing
-   <keycap>Caps Lock</> turns multiple selection on and off. See <xref
-   linkend=multi-select>.</para></listitem>
-   <listitem><para>If overwrite mode is enabled, the text <literal>(over)</> is
-   shown in black, otherwise it will be grayed out. Pressing
-   <keycap>Insert</> turns overwrite mode on and off. See <xref
-   linkend=entering-text>.</para></listitem>
    <listitem><para>If input/output operations are in progress, a small disk icon
    and progress bars for each running operation are displayed. See <xref
    linkend=threaded-io>.</para></listitem>
+   <listitem><para>If multiple selection is enabled, the text
+   <literal>multi</> is shown in black, otherwise it will be grayed out. Pressing
+   <keycap>Caps Lock</> turns multiple selection on and off. See <xref
+   linkend=multi-select>.</para></listitem>
+   <listitem><para>If overwrite mode is enabled, the text <literal>over</> is
+   shown in black, otherwise it will be grayed out. Pressing
+   <keycap>Insert</> turns overwrite mode on and off. See <xref
+   linkend=entering-text>.</para></listitem>
   </itemizedlist>
   <para>
    The file system browser, HyperSearch results window, and many plugin

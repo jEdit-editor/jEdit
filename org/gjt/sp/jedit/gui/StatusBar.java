@@ -62,21 +62,21 @@ public class StatusBar extends JPanel
 		add(BorderLayout.CENTER,message);
 
 		Box box = new Box(BoxLayout.X_AXIS);
-		multiSelect = new JLabel("(multi)");
+		ioProgress = new MiniIOProgress();
+		box.add(Box.createHorizontalStrut(3));
+		box.add(ioProgress);
+		multiSelect = new JLabel("multi");
 		multiSelect.setFont(font);
 		box.add(multiSelect);
 		box.add(Box.createHorizontalStrut(3));
-		overwrite = new JLabel("(over)");
+		overwrite = new JLabel("over");
 		overwrite.setFont(font);
 		box.add(overwrite);
 		box.add(Box.createHorizontalStrut(3));
-		narrow = new JLabel("(narrow)");
+		narrow = new JLabel("narrow");
 		narrow.setFont(font);
 		box.add(narrow);
-		box.add(Box.createHorizontalStrut(3));
 		updateMiscStatus();
-		ioProgress = new MiniIOProgress();
-		box.add(ioProgress);
 
 		add(BorderLayout.EAST,box);
 	}
@@ -113,15 +113,15 @@ public class StatusBar extends JPanel
 					"Label.foreground"));
 			}
 			else
-				multiSelect.setForeground(Color.gray);
+				multiSelect.setForeground(gray);
 		}
 
 		if(textArea.isOverwriteEnabled())
 			overwrite.setForeground(Color.black);
 		else
-			overwrite.setForeground(Color.gray);
+			overwrite.setForeground(gray);
 
-		narrow.setForeground(Color.gray);
+		narrow.setForeground(gray);
 	}
 
 	// private members
@@ -132,6 +132,7 @@ public class StatusBar extends JPanel
 	private JLabel overwrite;
 	private JLabel narrow;
 	private MiniIOProgress ioProgress;
+	private Color gray = new Color(142,142,142);
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();
 
 	public class VICaretStatus extends JComponent
@@ -171,7 +172,7 @@ public class StatusBar extends JPanel
 
 			buf.setLength(0);
 			buf.append(Integer.toString(currLine + 1));
-			buf.append(", ");
+			buf.append(',');
 			buf.append(Integer.toString(dot + 1));
 
 			if (virtualPosition != dot)
@@ -211,7 +212,7 @@ public class StatusBar extends JPanel
 		}
 
 		// private members
-		private static final String testStr = "9999, 999-999 99%";
+		private static final String testStr = "9999,999-999 99%";
 
 		private Dimension size;
 		private Segment seg = new Segment();

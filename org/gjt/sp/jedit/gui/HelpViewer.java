@@ -243,7 +243,7 @@ public class HelpViewer extends JFrame
 
 			try
 			{
-				return new URL(doc);
+				return new URL(url);
 			}
 			catch(MalformedURLException mf)
 			{

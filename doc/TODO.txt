@@ -1,12 +1,8 @@
 TO DO
 
-- finish web start support
-- mention markers in gutter in dox
-- gap shown while I/O not being done in status bar is somewhat ugly
-- CVS: add tip38, 39, 40
-- status bar colors should be customizable
-- document new readNextChar()
-- catch MalformedInputException and display a better error message
+- expand fold: scroll to last line of fold
+- CVS: add PluginListDownloadProgress.java
+- web start: macros
 - scrollToCaret() doesn't always work
 - caret event not always fired
 - XThis: don't throw exceptions for non-existent methods
@@ -20,7 +16,6 @@ TO DO
 - prev line fold gutter bug
 - plugin manager:
   - a combined roster confirm/progress dialog box
-  - dialog box displayed while downloading plugin list from server
   - plugin update
   - plugin install dialog
 - enter:
@@ -41,6 +36,7 @@ TO DO
 - improve handling of DIGIT sequences
 - DELEGATE in EOL_SPAN
 - encoding option in VFS browser
+- catch MalformedInputException and display a better error message
 - failed saves should not clear the dirty flag
 - reverse regexp search
 - finish persistent splits
@@ -55,6 +51,5 @@ TO DO
 - improved rectangular selections
 - a 'reinsertOnNextLine' regexp for word wrap?
 - aborts not always fired
-- escape in 'add abbrev' dialog
 - fix dragStart handling in DockableWindowContainer.TabbedPane
 - C+i in shortcuts editor

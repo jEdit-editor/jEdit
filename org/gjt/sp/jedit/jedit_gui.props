@@ -1367,3 +1367,7 @@ plugin-manager.roster-confirm.message=Are you sure you want to perform the \
 	following operations?\n\
 	\n\
 	{0}
+
+plugin-manager.progress.title=Downloading Plugin List
+plugin-manager.progress.caption=Downloading plugin list from server
+plugin-manager.progress.stop=Stop

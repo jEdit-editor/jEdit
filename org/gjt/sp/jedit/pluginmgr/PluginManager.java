@@ -295,15 +295,35 @@ public class PluginManager extends JDialog
 			}
 			else if(source == update)
 			{
+				PluginList list = new PluginListDownloadProgress(PluginManager.this)
+					.getPluginList();
+				if(list == null)
+					return;
+
 				Roster roster = new Roster();
-				new PluginList().updatePlugins(roster,"/tmp");
-				System.err.println(roster);
+				String settingsDirectory = jEdit.getSettingsDirectory();
+				if(settingsDirectory == null)
+				{
+					GUIUtilities.error(PluginManager.this,
+						"no-settings",null);
+					return;
+				}
+
+				list.updatePlugins(roster,settingsDirectory);
+				if(!roster.confirm(PluginManager.this))
+					return;
+
+				updateTree();
 			}
-			/* else if(source == install)
+			else if(source == install)
 			{
-				if(PluginManagerPlugin.installPlugins(PluginManager.this))
-					updateTree();
-			} */
+				PluginList list = new PluginListDownloadProgress(PluginManager.this)
+					.getPluginList();
+				if(list == null)
+					return;
+
+				updateTree();
+			}
 		}
 	}
 

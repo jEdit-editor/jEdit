@@ -60,6 +60,12 @@ public class AddAbbrevDialog extends JDialog
 		box.add(Box.createGlue());
 		content.add(BorderLayout.SOUTH,box);
 
+		KeyListener listener = new KeyHandler();
+		addKeyListener(listener);
+		editor.getBeforeCaretTextArea().addKeyListener(listener);
+		editor.getAfterCaretTextArea().addKeyListener(listener);
+
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		GUIUtilities.requestFocus(this,editor.getBeforeCaretTextArea());
 		pack();
 		setLocationRelativeTo(view);
@@ -92,6 +98,15 @@ public class AddAbbrevDialog extends JDialog
 			}
 
 			dispose();
+		}
+	}
+
+	class KeyHandler extends KeyAdapter
+	{
+		public void keyPressed(KeyEvent evt)
+		{
+			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+				dispose();
 		}
 	}
 }

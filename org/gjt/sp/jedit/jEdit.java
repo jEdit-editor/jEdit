@@ -2199,6 +2199,38 @@ public class jEdit
 
 		if(jEditHome != null)
 			loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
+		else
+		{
+			// load firewall plugin 'manually' in web start version
+
+			// this is really bad, but we have to do it because
+			// we need firewall functionality in order for the
+			// user to be able to download and install plugins.
+			try
+			{
+				InputStream in = jEdit.class.getResourceAsStream("Firewall.props");
+				if(in != null)
+				{
+					loadProps(in,true);
+
+					Class clazz;
+					ClassLoader loader = jEdit.class.getClassLoader();
+					if(loader != null)
+						clazz = loader.loadClass("FirewallPlugin");
+					else
+						clazz = Class.forName("FirewallPlugin");
+
+					EditPlugin plugin = (EditPlugin)clazz.newInstance();
+
+					addPlugin(plugin);
+				}
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,jEdit.class,"Could not load firewall plugin:");
+				Log.log(Log.ERROR,jEdit.class,t);
+			}
+		}
 
 		if(settingsDirectory != null)
 		{

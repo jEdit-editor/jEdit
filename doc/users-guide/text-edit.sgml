@@ -586,6 +586,12 @@
    can be accessed more quickly from the keyboard.
   </para>
   <para>
+   Lines which contain markers are indicated in the gutter with a highlight.
+   Moving the mouse over the highlight displays a tool tip showing the marker's
+   shortcut, if it has one. See <xref linkend=textarea> for information about the
+   gutter.
+  </para>
+  <para>
    <guimenu>Markers</>&gt;<guimenuitem>Add Marker</> (shortcut:
    <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>M</></keycombo>) adds a marker without a
