@@ -13,7 +13,9 @@ JEDIT VERSION HISTORY
 - TokenMarker now uses a hashing algorithm to check against far fewer rules
   than previously. This should result in a 2-10x speed improvement! This is
   particularly noticable when loading files
-- XMode documentation started
+- 'Action tokens' overhead removed TokenMarker, should speed things up a
+  wee bit
+- XMode documentation
 
 + Bug Fixes
 

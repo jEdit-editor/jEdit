@@ -224,7 +224,7 @@ public class XModeHandler extends HandlerBase
 				lastEscape = null;
 				lastIgnoreCase = true;
 				lastHighlightDigits = false;
-				lastDefaultID = TokenMarker.AC_NULL;
+				lastDefaultID = Token.NULL;
 				rules = null;
 			}
 			else if (tag == "TERMINATE")
@@ -246,7 +246,7 @@ public class XModeHandler extends HandlerBase
 					lastExcludeMatch));
 				lastStart = null;
 				lastEnd = null;
-				lastTokenID = 0;
+				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 				lastExcludeMatch = false;
 			}
@@ -258,7 +258,7 @@ public class XModeHandler extends HandlerBase
 					lastExcludeMatch));
 				lastStart = null;
 				lastEnd = null;
-				lastTokenID = 0;
+				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 				lastExcludeMatch = false;
 			}
@@ -270,7 +270,7 @@ public class XModeHandler extends HandlerBase
 					lastExcludeMatch));
 				lastStart = null;
 				lastEnd = null;
-				lastTokenID = 0;
+				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 				lastExcludeMatch = false;
 			}
@@ -280,7 +280,7 @@ public class XModeHandler extends HandlerBase
 					lastStart,lastTokenID,lastAtLineStart));
 				lastStart = null;
 				lastEnd = null;
-				lastTokenID = 0;
+				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 			}
 			else if (tag == "END")
@@ -313,7 +313,7 @@ public class XModeHandler extends HandlerBase
 				}
 				lastStart = null;
 				lastEnd = null;
-				lastTokenID = 0;
+				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 				lastNoLineBreak = false;
 				lastExcludeMatch = false;
@@ -414,8 +414,8 @@ public class XModeHandler extends HandlerBase
 	private String lastEscape;
 	private String lastDelegateSet;
 	private ParserRuleSet rules;
-	private int lastDefaultID = TokenMarker.AC_NULL;
-	private int lastTokenID;
+	private byte lastDefaultID = Token.NULL;
+	private byte lastTokenID;
 	private int termChar = -1;
 	private boolean lastNoLineBreak;
 	private boolean lastNoWordBreak;
@@ -424,64 +424,64 @@ public class XModeHandler extends HandlerBase
 	private boolean lastIgnoreCase = true;
 	private boolean lastHighlightDigits;
 
-	private int stringToToken(String value)
+	private byte stringToToken(String value)
 	{
 		if (value == "NULL")
 		{
-			return TokenMarker.AC_NULL;
+			return Token.NULL;
 		}
 		else if (value == "COMMENT1")
 		{
-			return TokenMarker.AC_COMMENT1;
+			return Token.COMMENT1;
 		}
 		else if (value == "COMMENT2")
 		{
-			return TokenMarker.AC_COMMENT2;
+			return Token.COMMENT2;
 		}
 		else if (value == "LITERAL1")
 		{
-			return TokenMarker.AC_LITERAL1;
+			return Token.LITERAL1;
 		}
 		else if (value == "LITERAL2")
 		{
-			return TokenMarker.AC_LITERAL2;
+			return Token.LITERAL2;
 		}
 		else if (value == "LABEL")
 		{
-			return TokenMarker.AC_LABEL;
+			return Token.LABEL;
 		}
 		else if (value == "KEYWORD1")
 		{
-			return TokenMarker.AC_KEYWORD1;
+			return Token.KEYWORD1;
 		}
 		else if (value == "KEYWORD2")
 		{
-			return TokenMarker.AC_KEYWORD2;
+			return Token.KEYWORD2;
 		}
 		else if (value == "KEYWORD3")
 		{
-			return TokenMarker.AC_KEYWORD3;
+			return Token.KEYWORD3;
 		}
 		else if (value == "FUNCTION")
 		{
-			return TokenMarker.AC_FUNCTION;
+			return Token.FUNCTION;
 		}
 		else if (value == "MARKUP")
 		{
-			return TokenMarker.AC_MARKUP;
+			return Token.MARKUP;
 		}
 		else if (value == "OPERATOR")
 		{
-			return TokenMarker.AC_OPERATOR;
+			return Token.OPERATOR;
 		}
 		else if (value == "DIGIT")
 		{
-			return TokenMarker.AC_DIGIT;
+			return Token.DIGIT;
 		}
 		else
 		{
 			// XXX invalid token id
-			return TokenMarker.AC_NULL;
+			return Token.NULL;
 		}
 	}
 

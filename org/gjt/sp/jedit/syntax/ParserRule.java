@@ -27,23 +27,28 @@ package org.gjt.sp.jedit.syntax;
 public class ParserRule
 {
 	// public members
-	public final int[] sequenceLengths;
 	public final char[] searchChars;
+	public final int[] sequenceLengths;
 	public final int action;
+	public final byte token;
 	public ParserRule next;
 
 	// package-private members
-	ParserRule(char[] sc, int[] sl, int a)
+	ParserRule(char[] searchChars, int[] sequenceLengths, int action, byte token)
 	{
-		searchChars = sc;
-		sequenceLengths = sl;
-		action = a;
+		this.searchChars = searchChars;
+		this.sequenceLengths = sequenceLengths;
+		this.action = action;
+		this.token = token;
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/04/09 10:41:26  sp
+ * NO_WORD_BREAK SPANs fixed, action tokens removed
+ *
  * Revision 1.4  2000/04/08 06:57:14  sp
  * Parser rules are now hashed; this dramatically speeds up tokenization
  *

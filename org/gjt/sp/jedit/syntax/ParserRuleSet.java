@@ -139,20 +139,19 @@ public class ParserRuleSet
 		}
 		else
 		{
-			escapeRule = ParserRuleFactory.createEscapeRule(esc,
-				TokenMarker.AC_NULL);
+			escapeRule = ParserRuleFactory.createEscapeRule(esc);
 		}
 		escapePattern = null;
 	}
 
-	public int getDefault()
+	public byte getDefault()
 	{
-		return defaultID;
+		return defaultToken;
 	}
 
-	public void setDefault(int def)
+	public void setDefault(byte def)
 	{
-		defaultID = def;
+		defaultToken = def;
 	}
 
 	private static final int RULE_BUCKET_COUNT = 32;
@@ -166,12 +165,15 @@ public class ParserRuleSet
 	private int terminateChar = -1;
 	private boolean ignoreCase = true;
 	private boolean highlightDigits;
-	private int defaultID;
+	private byte defaultToken;
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/04/09 10:41:26  sp
+ * NO_WORD_BREAK SPANs fixed, action tokens removed
+ *
  * Revision 1.6  2000/04/08 09:34:58  sp
  * Documentation updates, minor syntax changes
  *

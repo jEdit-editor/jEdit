@@ -2,7 +2,6 @@ JEDIT TO DO
 
 2.4pre5:
 
-- NO_WORD_BREAK SPANs broken
 - do MARK_PREVIOUS before markKeyword()
 - get rid of WHITESPACE rule
 - Plugin devel manual needs more work:

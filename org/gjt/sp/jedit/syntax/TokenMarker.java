@@ -59,25 +59,6 @@ public class TokenMarker implements Cloneable
 //	public static final int ACTION_HINT_14 = 1 << 14;
 //	public static final int ACTION_HINT_15 = 1 << 15;
 
-	// action tokens (total: 16)
-	public static final int ACTION_TOKENS = 0xFFFF0000;
-	public static final int AC_NULL = 1 << 16;
-	public static final int AC_COMMENT1 = 1 << 17;
-	public static final int AC_COMMENT2 = 1 << 18;
-	public static final int AC_LITERAL1 = 1 << 19;
-	public static final int AC_LITERAL2 = 1 << 20;
-	public static final int AC_LABEL = 1 << 21;
-	public static final int AC_KEYWORD1 = 1 << 22;
-	public static final int AC_KEYWORD2 = 1 << 23;
-	public static final int AC_KEYWORD3 = 1 << 24;
-	public static final int AC_FUNCTION = 1 << 25;
-	public static final int AC_MARKUP = 1 << 26;
-	public static final int AC_OPERATOR = 1 << 27;
-	public static final int AC_DIGIT = 1 << 28;
-	public static final int AC_INVALID = 1 << 29;
-//	public static final int ACTION_TOKEN_30 = 1 << 30;
-//	public static final int ACTION_TOKEN_31 = 1 << 31;
-
 	public TokenMarker()
 	{
 		ruleSets = new Hashtable(64);
@@ -369,12 +350,12 @@ public class TokenMarker implements Cloneable
 								markKeyword(info,line, lastKeyword, pos);
 
 								addToken(info,pos - lastOffset,
-									getActionToken(context.rules.getDefault()));
+									context.rules.getDefault());
 							}
 							else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
 							{
 								addToken(info,pos - lastOffset,
-									getActionToken(context.inRule.action));
+									context.inRule.token);
 							}
 							else
 							{
@@ -387,11 +368,11 @@ public class TokenMarker implements Cloneable
 						if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
 							addToken(info,pattern.count,
-								getActionToken(context.rules.getDefault()));
+								context.rules.getDefault());
 						}
 						else
 						{
-							addToken(info,pattern.count, getActionToken(context.inRule.action));
+							addToken(info,pattern.count,context.inRule.token);
 						}
 
 						context.inRule = null;
@@ -440,7 +421,29 @@ public class TokenMarker implements Cloneable
 			}
 			else
 			{
-				// otherwise, if this isn't a hard span, check every rule
+				// if we are inside a span, check for its end sequence
+				rule = context.inRule;
+				if(rule != null && (rule.action & SPAN) == SPAN)
+				{
+					pattern.array = rule.searchChars;
+					pattern.count = rule.sequenceLengths[1];
+					pattern.offset = rule.sequenceLengths[0];
+
+					handleRule(info,line,rule);
+
+					// if this is a NO_WORD_BREAK span,
+					// we need to check every rule in
+					// case whitespace comes up, etc.
+					// otherwise, we just continue onto
+					// the next character.
+					if((rule.action & NO_WORD_BREAK) != NO_WORD_BREAK)
+					{
+						escaped = true;
+						continue;
+					}
+				}
+
+				// now check every rule
 				rule = context.rules.getRules(line.array[pos]);
 
 				while(rule != null)
@@ -459,7 +462,7 @@ public class TokenMarker implements Cloneable
 					}
 
 					// stop checking rules if there was a match and go to next pos
-					if (!handleRule(info,line, rule))
+					if (!handleRule(info,line,rule))
 						break;
 
 					rule = rule.next;
@@ -479,7 +482,7 @@ public class TokenMarker implements Cloneable
 			if (context.inRule == null)
 			{
 				addToken(info,lineLength - lastOffset,
-					getActionToken(context.rules.getDefault()));
+					context.rules.getDefault());
 			}
 			else if (
 				(context.inRule.action & SPAN) == SPAN &&
@@ -491,7 +494,7 @@ public class TokenMarker implements Cloneable
 			}
 			else
 			{
-				addToken(info,lineLength - lastOffset, getActionToken(context.inRule.action));
+				addToken(info,lineLength - lastOffset,context.inRule.token);
 
 				if((context.inRule.action & MARK_FOLLOWING) == MARK_FOLLOWING)
 				{
@@ -558,7 +561,7 @@ public class TokenMarker implements Cloneable
 			}
 			else
 			{
-				addToken(info,pos - lastOffset,getActionToken(context.inRule.action));
+				addToken(info,pos - lastOffset,context.inRule.token);
 			}
 			lastOffset = lastKeyword = pos;
 			context.inRule = null;
@@ -596,23 +599,23 @@ public class TokenMarker implements Cloneable
 				if (lastOffset < pos)
 				{
 					addToken(info,pos - lastOffset,
-						getActionToken(context.rules.getDefault()));
+						context.rules.getDefault());
 				}
 			}
 
-			if ((checkRule.action & MAJOR_ACTIONS) == 0)
+			switch(checkRule.action & MAJOR_ACTIONS)
 			{
+			case 0:
 				// this is a plain sequence rule
-				addToken(info,pattern.count, getActionToken(checkRule.action));
+				addToken(info,pattern.count,checkRule.token);
 				lastOffset = pos + pattern.count;
-			}
-			else if ((checkRule.action & SPAN) == SPAN)
-			{
+				break;
+			case SPAN:
 				context.inRule = checkRule;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
 					addToken(info,pattern.count,
-						getActionToken(context.rules.getDefault()));
+						context.rules.getDefault());
 					lastOffset = pos + pattern.count;
 				}
 				else
@@ -633,70 +636,69 @@ public class TokenMarker implements Cloneable
 						if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
 							addToken(info,pattern.count,
-								getActionToken(context.rules.getDefault()));
+								context.rules.getDefault());
 						}
 						else
 						{
-							addToken(info,pattern.count, getActionToken(checkRule.action));
+							addToken(info,pattern.count,checkRule.token);
 						}
 						lastKeyword = lastOffset = pos + pattern.count;
 
 						context = new LineContext(delegateSet, context);
 					}
 				}
-			}
-			else if ((checkRule.action & EOL_SPAN) == EOL_SPAN)
-			{
+
+				break;
+			case EOL_SPAN:
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
 					addToken(info,pattern.count,
-						getActionToken(context.rules.getDefault()));
+						context.rules.getDefault());
 					addToken(info,lineLength - (pos + pattern.count),
-						getActionToken(checkRule.action));
+						checkRule.token);
 				}
 				else
 				{
 					addToken(info,lineLength - pos,
-						getActionToken(checkRule.action));
+						checkRule.token);
 				}
 				lastOffset = lineLength;
 				lastKeyword = lineLength;
 				pos = lineLength;
 				return false;
-			}
-			else if ((checkRule.action & MARK_PREVIOUS) == MARK_PREVIOUS)
-			{
+			case MARK_PREVIOUS:
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					addToken(info,pos - lastOffset, getActionToken(checkRule.action));
+					addToken(info,pos - lastOffset,checkRule.token);
 					addToken(info,pattern.count,
-						getActionToken(context.rules.getDefault()));
+						context.rules.getDefault());
 				}
 				else
 				{
 					addToken(info,(pos + pattern.count) - lastOffset,
-						getActionToken(checkRule.action));
+						checkRule.token);
 				}
 				lastOffset = pos + pattern.count;
-			}
-			else if ((checkRule.action & MARK_FOLLOWING) == MARK_FOLLOWING)
-			{
+
+				break;
+			case MARK_FOLLOWING:
 				context.inRule = checkRule;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
 					addToken(info,pattern.count,
-						getActionToken(context.rules.getDefault()));
+						context.rules.getDefault());
 					lastOffset = pos + pattern.count;
 				}
 				else
 				{
 					lastOffset = pos;
 				}
+
+				break;
+			default:
+				throw new InternalError("Unhandled major action");
 			}
-			else
-			{
-				// UNHANDLED MAJOR ACTION!!! SHOULD NOT HAPPEN!!!
-			}
+
 			pos += (pattern.count - 1); // move pos to last character of match sequence
 			return false; // break out of inner for loop to check next char
 		}
@@ -707,14 +709,14 @@ public class TokenMarker implements Cloneable
 				context.inRule = null;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					addToken(info,pos - lastOffset, getActionToken(checkRule.action));
+					addToken(info,pos - lastOffset,checkRule.token);
 					addToken(info,pattern.count,
-						getActionToken(context.rules.getDefault()));
+						context.rules.getDefault());
 				}
 				else
 				{
 					addToken(info,(pos + pattern.count) - lastOffset,
-						getActionToken(checkRule.action));
+						checkRule.token);
 				}
 				lastKeyword = lastOffset = pos + pattern.count;
 
@@ -783,8 +785,8 @@ public class TokenMarker implements Cloneable
 			{
 				if(start != lastOffset)
 				{
-					addToken(info,start - lastOffset, getActionToken(
-						context.rules.getDefault()));
+					addToken(info,start - lastOffset,
+						context.rules.getDefault());
 				}
 				addToken(info,len,Token.DIGIT);
 				lastOffset = end;
@@ -801,34 +803,12 @@ public class TokenMarker implements Cloneable
 			{
 				if(start != lastOffset)
 				{
-					addToken(info,start - lastOffset, getActionToken(
-						context.rules.getDefault()));
+					addToken(info,start - lastOffset,
+						context.rules.getDefault());
 				}
 				addToken(info,len, id);
 				lastOffset = end;
 			}
-		}
-	}
-
-	private static final byte getActionToken(int action)
-	{
-		// switch on the masked action token
-		switch (action & ACTION_TOKENS)
-		{
-			case AC_COMMENT1: return Token.COMMENT1;
-			case AC_COMMENT2: return Token.COMMENT2;
-			case AC_LITERAL1: return Token.LITERAL1;
-			case AC_LITERAL2: return Token.LITERAL2;
-			case AC_LABEL: return Token.LABEL;
-			case AC_KEYWORD1: return Token.KEYWORD1;
-			case AC_KEYWORD2: return Token.KEYWORD2;
-			case AC_KEYWORD3: return Token.KEYWORD3;
-			case AC_FUNCTION: return Token.FUNCTION;
-			case AC_MARKUP: return Token.MARKUP;
-			case AC_OPERATOR: return Token.OPERATOR;
-			case AC_DIGIT: return Token.DIGIT;
-			case AC_INVALID: return Token.INVALID;
-			case AC_NULL: default: return Token.NULL;
 		}
 	}
 
@@ -950,6 +930,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.46  2000/04/09 10:41:26  sp
+ * NO_WORD_BREAK SPANs fixed, action tokens removed
+ *
  * Revision 1.45  2000/04/08 06:57:14  sp
  * Parser rules are now hashed; this dramatically speeds up tokenization
  *

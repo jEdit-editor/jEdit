@@ -28,10 +28,10 @@ public class ParserRuleFactory
 {
 	// public members
 	public static final ParserRule createSpanRule(String begin, String end,
-		int id, boolean noLineBreak, boolean atLineStart,
+		byte id, boolean noLineBreak, boolean atLineStart,
 		boolean excludeMatch, boolean noWordBreak)
 	{
-		int ruleAction = TokenMarker.SPAN | id |
+		int ruleAction = TokenMarker.SPAN |
 			((noLineBreak) ? TokenMarker.NO_LINE_BREAK : 0) |
 			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
 			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0) |
@@ -44,14 +44,14 @@ public class ParserRuleFactory
 		int[] ruleSeqLengths = getStringLengthArray(strings);
 		char[] ruleChars = getCharArray(strings, ruleSeqLengths);
 
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction);
+		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
 	}
 
 	public static final ParserRule createDelegateSpanRule(String begin, String end,
-		String delegateSet, int id, boolean noLineBreak, boolean atLineStart,
+		String delegateSet, byte id, boolean noLineBreak, boolean atLineStart,
 		boolean excludeMatch, boolean noWordBreak)
 	{
-		int ruleAction = TokenMarker.SPAN | id |
+		int ruleAction = TokenMarker.SPAN |
 			TokenMarker.DELEGATE |
 			((noLineBreak) ? TokenMarker.NO_LINE_BREAK : 0) |
 			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
@@ -66,13 +66,13 @@ public class ParserRuleFactory
 		int[] ruleSeqLengths = getStringLengthArray(strings);
 		char[] ruleChars = getCharArray(strings, ruleSeqLengths);
 
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction);
+		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
 	}
 
-	public static final ParserRule createEOLSpanRule(String seq, int id,
+	public static final ParserRule createEOLSpanRule(String seq, byte id,
 		boolean atLineStart, boolean excludeMatch)
 	{
-		int ruleAction = TokenMarker.EOL_SPAN | id |
+		int ruleAction = TokenMarker.EOL_SPAN |
 			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
 			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0);
 
@@ -91,13 +91,13 @@ public class ParserRuleFactory
 			ruleChars = new char[0];
 		}
 
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction);
+		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
 	}
 
-	public static final ParserRule createMarkPreviousRule(String seq, int id,
+	public static final ParserRule createMarkPreviousRule(String seq, byte id,
 		boolean atLineStart, boolean excludeMatch)
 	{
-		int ruleAction = TokenMarker.MARK_PREVIOUS | id |
+		int ruleAction = TokenMarker.MARK_PREVIOUS |
 			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
 			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0);
 
@@ -116,13 +116,13 @@ public class ParserRuleFactory
 			ruleChars = new char[0];
 		}
 
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction);
+		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
 	}
 
-	public static final ParserRule createMarkFollowingRule(String seq, int id,
+	public static final ParserRule createMarkFollowingRule(String seq, byte id,
 		boolean atLineStart, boolean excludeMatch)
 	{
-		int ruleAction = TokenMarker.MARK_FOLLOWING | id |
+		int ruleAction = TokenMarker.MARK_FOLLOWING |
 			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
 			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0);
 
@@ -141,13 +141,12 @@ public class ParserRuleFactory
 			ruleChars = new char[0];
 		}
 
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction);
+		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
 	}
 
-	public static final ParserRule createSequenceRule(String seq, int id, boolean atLineStart)
+	public static final ParserRule createSequenceRule(String seq, byte id, boolean atLineStart)
 	{
-		int ruleAction = id |
-			((atLineStart) ? TokenMarker.AT_LINE_START : 0);
+		int ruleAction = ((atLineStart) ? TokenMarker.AT_LINE_START : 0);
 
 		String[] strings = new String[1];
 		strings[0] = seq;
@@ -164,12 +163,12 @@ public class ParserRuleFactory
 			ruleChars = new char[0];
 		}
 
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction);
+		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
 	}
 
-	public static final ParserRule createEscapeRule(String seq, int id)
+	public static final ParserRule createEscapeRule(String seq)
 	{
-		int ruleAction = id | TokenMarker.IS_ESCAPE;
+		int ruleAction = TokenMarker.IS_ESCAPE;
 
 		String[] strings = new String[1];
 		strings[0] = seq;
@@ -186,7 +185,7 @@ public class ParserRuleFactory
 			ruleChars = new char[0];
 		}
 
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction);
+		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, Token.NULL);
 	}
 
 	public static final ParserRule createWhitespaceRule(String seq)
@@ -208,7 +207,7 @@ public class ParserRuleFactory
 			ruleChars = new char[0];
 		}
 
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction);
+		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, Token.NULL);
 	}
 
 	// private members
@@ -264,6 +263,9 @@ public class ParserRuleFactory
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/04/09 10:41:26  sp
+ * NO_WORD_BREAK SPANs fixed, action tokens removed
+ *
  * Revision 1.3  2000/04/07 06:57:26  sp
  * Buffer options dialog box updates, API docs updated a bit in syntax package
  *
