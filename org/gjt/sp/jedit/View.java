@@ -585,6 +585,7 @@ public class View extends JFrame
 		EditAction action = jEdit.getAction("play-macro");
 
 		String[] macroFiles = directory.list();
+		MiscUtilities.quicksort(macroFiles,new MiscUtilities.StringCompare());
 
 		for(int i = 0; i < macroFiles.length; i++)
 		{
@@ -786,6 +787,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.94  1999/10/17 04:16:28  sp
+ * Bug fixing
+ *
  * Revision 1.93  1999/10/16 09:43:00  sp
  * Final tweaking and polishing for jEdit 2.1final
  *

@@ -665,10 +665,24 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
+		GUIUtilities.showWaitCursor(view);
+
+		// Once we are sure they're all going to be blown away,
+		// fire BUFFER_CLOSED events
+		buffer = buffersFirst;
+		while(buffer != null)
+		{
+			fireEditorEvent(EditorEvent.BUFFER_CLOSED,view,buffer);
+			buffer = buffer.next;
+		}
+
 		// Create a new untitled file
 		buffersFirst = buffersLast = null;
 		bufferCount = 0;
 		newFile(view);
+
+		// newFile() calls openFile(), which hides the wait cursor
+		// XXX
 	}
 
 	/**
@@ -1573,6 +1587,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.138  1999/10/17 04:16:28  sp
+ * Bug fixing
+ *
  * Revision 1.137  1999/10/16 09:43:00  sp
  * Final tweaking and polishing for jEdit 2.1final
  *

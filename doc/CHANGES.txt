@@ -10,9 +10,8 @@ JEDIT VERSION HISTORY
 
 - Documentation updates
 - New plugin makefile template (Mike Dillon)
-- Buttons in the Paste Previous, Paste Predefined and View Registers are
-  enabled/disabled depending if something in selected in the list
 - Paste Predefined command removed. Use macros instead
+- Macros menu is sorted now
 
 + Bug Fixes
 
@@ -20,6 +19,9 @@ JEDIT VERSION HISTORY
 - Installer generated invalid batch files on Windows
 - Closing a macro buffer while a recording was in progress would cause
   problems
+- 'Close All Buffers' didn't fire BUFFER_CLOSED events
+- The register commands weren't recorded properly
+- Repeating commands in macros did't play back correctly
 
 * Version 2.1pre4
 

@@ -24,6 +24,7 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class set_filename_register extends EditAction
+implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
 	public set_filename_register()
 	{
@@ -50,6 +51,13 @@ public class set_filename_register extends EditAction
 				view.getToolkit().beep();
 				return;
 			}
+
+			InputHandler inputHandler = view.getTextArea().getInputHandler();
+			InputHandler.MacroRecorder recorder = inputHandler.getMacroRecorder();
+
+			if(recorder != null)
+				recorder.actionPerformed(this,actionCommand);
+
 			Registers.setRegister(ch,new Registers.StringRegister(
 				view.getBuffer().getPath()));
 		}

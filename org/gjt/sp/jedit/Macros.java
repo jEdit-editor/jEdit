@@ -95,6 +95,12 @@ public class Macros
 		{
 			Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
 				null,"<< temp macro >>"));
+			if(buffer == null)
+			{
+				view.getToolkit().beep();
+				return;
+			}
+
 			playMacroFromBuffer(view,"<< temp macro >>",buffer);
 			return;
 		}
@@ -213,8 +219,9 @@ public class Macros
 			return false;
 		}
 
-		_action.actionPerformed(new ActionEvent(view.getTextArea(),
-			ActionEvent.ACTION_PERFORMED,actionCommand));
+		JEditTextArea textArea = view.getTextArea();
+		textArea.getInputHandler().executeAction(_action,textArea,
+			actionCommand);
 
 		return true;
 	}
@@ -294,6 +301,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  1999/10/17 04:16:28  sp
+ * Bug fixing
+ *
  * Revision 1.4  1999/10/16 09:43:00  sp
  * Final tweaking and polishing for jEdit 2.1final
  *

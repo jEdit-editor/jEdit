@@ -25,7 +25,7 @@ import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.*;
 
 public class paste_string_register extends EditAction
-implements InputHandler.NonRepeatable
+implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
 	public paste_string_register()
 	{
@@ -59,6 +59,13 @@ implements InputHandler.NonRepeatable
 				view.getToolkit().beep();
 				return;
 			}
+
+			InputHandler inputHandler = textArea.getInputHandler();
+			InputHandler.MacroRecorder recorder = inputHandler.getMacroRecorder();
+
+			if(recorder != null)
+				recorder.actionPerformed(this,actionCommand);
+
 			Registers.Register register = Registers.getRegister(ch);
 			if(register == null)
 			{
@@ -74,7 +81,7 @@ implements InputHandler.NonRepeatable
 					return;
 				}
 
-				int repeatCount = textArea.getInputHandler().getRepeatCount();
+				int repeatCount = inputHandler.getRepeatCount();
 				StringBuffer buf = new StringBuffer();
 				for(int i = 0; i < repeatCount; i++)
 					buf.append(selection);

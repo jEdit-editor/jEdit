@@ -286,7 +286,6 @@ public class DefaultInputHandler implements InputHandler
 			int repeatCount = getRepeatCount();
 			if(repeatCount != 1)
 			{
-				// XXX hardcoded
 				recorder.actionPerformed(REPEAT,String.valueOf(repeatCount));
 			}
 
@@ -312,7 +311,11 @@ public class DefaultInputHandler implements InputHandler
 
 		// If repeat was true originally, clear it
 		// Otherwise it might have been set by the action, etc
-		if(_repeat)
+
+		// Check for grabAction being not null so that
+		// repeat@5 copy-string-register copy-string-register@a
+		// will work properly
+		if(_repeat && grabAction == null)
 		{
 			repeat = false;
 			repeatCount = 0;
@@ -533,9 +536,12 @@ public class DefaultInputHandler implements InputHandler
 
 	private void handleGrabAction(KeyEvent evt)
 	{
-		executeAction(grabAction,evt.getSource(),
-			String.valueOf(evt.getKeyChar()));
+		// Clear it *before* it is executed so that executeAction()
+		// resets the repeat count
+		ActionListener _grabAction = grabAction;
 		grabAction = null;
+		executeAction(_grabAction,evt.getSource(),
+			String.valueOf(evt.getKeyChar()));
 	}
 
 	public static class backspace implements ActionListener
@@ -1076,6 +1082,12 @@ public class DefaultInputHandler implements InputHandler
 		{
 			JEditTextArea textArea = getTextArea(evt);
 			textArea.getInputHandler().setRepeatEnabled(true);
+			String actionCommand = evt.getActionCommand();
+			if(actionCommand != null)
+			{
+				textArea.getInputHandler().setRepeatCount(
+					Integer.parseInt(actionCommand));
+			}
 		}
 	}
 
@@ -1116,6 +1128,9 @@ public class DefaultInputHandler implements InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  1999/10/17 04:16:28  sp
+ * Bug fixing
+ *
  * Revision 1.11  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

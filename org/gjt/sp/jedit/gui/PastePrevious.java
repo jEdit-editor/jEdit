@@ -143,6 +143,12 @@ implements ActionListener, KeyListener, ListSelectionListener, MouseListener
 	{
 		int selected = clips.getSelectedIndex();
 
+		if(selected == -1)
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
 		String clip = clipHistory.getItem(selected);
 
 		int repeatCount = view.getTextArea().getInputHandler()

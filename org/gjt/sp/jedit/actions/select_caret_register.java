@@ -24,6 +24,7 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class select_caret_register extends EditAction
+implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
 	public select_caret_register()
 	{
@@ -51,6 +52,13 @@ public class select_caret_register extends EditAction
 				view.getToolkit().beep();
 				return;
 			}
+
+			InputHandler inputHandler = textArea.getInputHandler();
+			InputHandler.MacroRecorder recorder = inputHandler.getMacroRecorder();
+
+			if(recorder != null)
+				recorder.actionPerformed(this,actionCommand);
+
 			Registers.Register register = Registers.getRegister(ch);
 
 			if(register instanceof Registers.CaretRegister)

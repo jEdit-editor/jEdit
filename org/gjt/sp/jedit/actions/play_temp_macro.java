@@ -31,14 +31,6 @@ public class play_temp_macro extends EditAction
 
 	public void actionPerformed(ActionEvent evt)
 	{
-		View view = getView(evt);
-
-		Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
-			null,"<< temp macro >>"));
-
-		if(buffer == null)
-			view.getToolkit().beep();
-		else
-			Macros.playMacroFromBuffer(view,"<< temp macro >> ",buffer);
+		Macros.playMacro(getView(evt),null);
 	}
 }

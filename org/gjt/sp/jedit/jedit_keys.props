@@ -80,7 +80,6 @@ delete-end-line.shortcut=C+d C+f
 delete-start-line.shortcut=C+d C+s
 
 # C+e
-replace-all.shortcut=C+e C+a
 box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
 select-none.shortcut=C+e C+d
