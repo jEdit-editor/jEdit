@@ -46,7 +46,7 @@ public class reload extends EditAction
 		int selStart = textArea.getSelectionStart();
 		int selEnd = textArea.getSelectionEnd();
 
-		buffer.reload(view);
+		buffer.load(view);
 
 		if(selStart < buffer.getLength()
 			&& selEnd < buffer.getLength())

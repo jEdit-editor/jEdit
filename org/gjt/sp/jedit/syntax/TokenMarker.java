@@ -190,6 +190,24 @@ public abstract class TokenMarker
 	}
 
 	/**
+	 * Completely resets the token marker by removing all stored
+	 * line state.
+	 */
+	public void reset()
+	{
+		lastLine = -1;
+		lineInfo = null;
+	}
+
+	/**
+	 * Returns the number of lines in this token marker.
+	 */
+	public int getLineCount()
+	{
+		return length;
+	}
+
+	/**
 	 * Returns true if the next line should be repainted. This
 	 * will return true after a line has been tokenized that starts
 	 * a multiline token that continues onto the next line.
@@ -221,7 +239,8 @@ public abstract class TokenMarker
 	protected LineInfo[] lineInfo;
 
 	/**
-	 * The length of the <code>lineInfo</code> array.
+	 * The number of lines in the model being tokenized. This can be
+	 * less than the length of the <code>lineInfo</code> array.
 	 */
 	protected int length;
 
@@ -242,7 +261,7 @@ public abstract class TokenMarker
 	 */
 	protected TokenMarker()
 	{
-		lastLine = -1;
+		reset();
 	}
 
 	/**
@@ -347,6 +366,9 @@ public abstract class TokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  1999/12/07 07:19:36  sp
+ * Buffer loading code cleaned up
+ *
  * Revision 1.28  1999/07/29 08:50:21  sp
  * Misc stuff for 1.7pre7
  *
@@ -377,9 +399,5 @@ public abstract class TokenMarker
  *
  * Revision 1.19  1999/04/30 23:20:38  sp
  * Improved colorization of multiline tokens
- *
- * Revision 1.18  1999/04/27 06:53:38  sp
- * JARClassLoader updates, shell script token marker update, token marker compiles
- * now
  *
  */

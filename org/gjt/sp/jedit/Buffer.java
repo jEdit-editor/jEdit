@@ -101,35 +101,42 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public void loadIfNecessary(View view)
 	{
 		if(!getFlag(LOADED))
+			load(view);
+	}
+
+	/**
+	 * Loads the buffer from disk, even if it is loaded already.
+	 * @param view The view
+	 */
+	public void load(View view)
+	{
+		setFlag(LOADED,false);
+
+		if(view != null)
+			view.showWaitCursor();
+
+		if(!getFlag(NEW_FILE))
 		{
-			if(view != null)
-				view.showWaitCursor();
-
-			setMode(jEdit.getMode(jEdit.getProperty("buffer.defaultMode")));
-
-			if(!getFlag(NEW_FILE))
+			if(autosaveFile.exists())
 			{
-				if(autosaveFile.exists())
-				{
-					Object[] args = { autosaveFile.getPath() };
-					GUIUtilities.message(view,"autosaveexists",args);
-				}
-				load(view);
-				loadMarkers();
+				Object[] args = { autosaveFile.getPath() };
+				GUIUtilities.message(view,"autosaveexists",args);
 			}
-
-			if(!getFlag(TEMPORARY))
-			{
-				setMode();
-				propertiesChanged();
-				EditBus.addToBus(this);
-			}
-
-			if(view != null)
-				view.hideWaitCursor();
-
-			setFlag(LOADED,true);
+			read(view);
+			readMarkers();
 		}
+
+		if(!getFlag(TEMPORARY))
+		{
+			setMode();
+			propertiesChanged();
+			EditBus.addToBus(this);
+		}
+
+		if(view != null)
+			view.hideWaitCursor();
+
+		setFlag(LOADED,true);
 	}
 
 	/**
@@ -289,24 +296,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			view.hideWaitCursor();
 
 		return returnValue;
-	}
-	
-	/**
-	 * Reloads the buffer from disk.
-	 * @param view The view that will be used to display error dialogs, etc
-	 */
-	public void reload(View view)
-	{
-		// Delete the autosave
-		autosaveFile.delete();
-
-		// remove all lines from token marker
-		if(tokenMarker != null)
-			tokenMarker.deleteLines(0,getDefaultRootElement()
-				.getElementCount());
-
-		setFlag(LOADED,false);
-		loadIfNecessary(view);
 	}
 
 	/**
@@ -791,6 +780,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		addDocumentListener(new DocumentHandler());
 		addUndoableEditListener(new UndoHandler());
 
+		setMode(jEdit.getMode(jEdit.getProperty("buffer.defaultMode")));
 		setDocumentProperties(new BufferProps());
 		putProperty("i18n",Boolean.FALSE);
 
@@ -892,7 +882,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	}
 
 	/*
-	 * The load() method reads in blocks from the input stream and
+	 * The read() method reads in blocks from the input stream and
 	 * marks out which offsets are line breaks. It uses an instance
 	 * of this class to record that information. Using a Vector
 	 * of Integer instances would also work, but 6000 objects
@@ -901,13 +891,13 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 * Why mark out line breaks in the first place? We could just
 	 * pass the text to PlainDocument.insertString(), but it
 	 * would slow things down; why parse the text for line breaks
-	 * first in load() (which must do it), and then in insertString()?
+	 * first in read() (which must do it), and then in insertString()?
 	 *
 	 * Instead, as of 2.2pre7, we remember the line break offsets
-	 * from the load() method and create an element map ourselves.
+	 * from the read() method and create an element map ourselves.
 	 * This speeds up the file loading by about 30%.
 	 */
-	private class LoadHelper
+	private class ReadHelper
 	{
 		int[] lines = new int[1000];
 		int last;
@@ -941,7 +931,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 * Notice that we also interleave the buffer-local
 	 * property code in.
 	 */
-	private void createElements(LoadHelper lines)
+	private void createElements(ReadHelper lines)
 		throws BadLocationException
 	{
 		int last = lines.last;
@@ -1002,19 +992,12 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 *
 	 * - We call getContent().insertString(), thus avoiding the slow
 	 *   PlainDocument.insertString(). But because Content.insertString()
-	 *   doesn't fire a document event, you have to update any
-	 *   line-dependent state, for example token marker line info,
-	 *   manually (see the reload() method; it calls
-	 *   TokenMarker.insertLines())
+	 *   doesn't fire a document event, we have to create it ourselves
 	 *
 	 * - To make reloading a bit easier, this method automatically
 	 *   removes all data from the model before inserting it. This
 	 *   shouldn't cause any problems, as most documents will be
-	 *   empty before being loaded into anyway. However, notice that
-	 *   we call PlainDocument.remove() -- *NOT* Content.remove().
-	 *   So, a document event will be fired for the removal, but not
-	 *   the following insertion! Again, take this into account if
-	 *   you use token markers and such.
+	 *   empty before being loaded into anyway.
 	 *
 	 * - If the last character read from the file is a line separator,
 	 *   it is not added to the model! There are two reasons:
@@ -1023,7 +1006,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 *   - Because save() appends a line separator after *every* line,
 	 *     it prevents the blank line count at the end from growing
 	 */
-	private void load(View view)
+	private void read(View view)
 	{
 		if(file.exists())
 			setFlag(READ_ONLY,!file.canWrite());
@@ -1032,7 +1015,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		URLConnection connection = null;
 		StringBuffer sbuf = new StringBuffer(Math.max(
 			(int)file.length(),IOBUFSIZE * 4));
-		LoadHelper lines = new LoadHelper();
+		ReadHelper lines = new ReadHelper();
 
 		try
 		{
@@ -1101,7 +1084,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 						sbuf.append('\n');
 
 						// Add the line end to the
-						// LoadHelper
+						// ReadHelper
 						lines.add(sbuf.length());
 
 						// This is i+1 to take the
@@ -1175,10 +1158,22 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			// For `reload' command
 			remove(0,getLength());
 
+			// The way remove() works, it fools token
+			// markers into thinking that there is
+			// actually one element left. So we remove
+			// that one element here.
+			if(tokenMarker != null)
+				tokenMarker.reset();
+
 			getContent().insertString(0,sbuf.toString());
 			createElements(lines);
 
+			fireInsertUpdate(new DefaultDocumentEvent(0,lines.last,
+				DocumentEvent.EventType.INSERT));
+
 			setFlag(NEW_FILE,false);
+			setFlag(READ_ONLY,false);
+			setDirty(false);
 
 			modTime = file.lastModified();
 
@@ -1269,7 +1264,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 	}
 
-	private void loadMarkers()
+	private void readMarkers()
 	{
 		// For `reload' command
 		markers.removeAllElements();
@@ -1554,6 +1549,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.112  1999/12/07 07:19:36  sp
+ * Buffer loading code cleaned up
+ *
  * Revision 1.111  1999/12/07 06:30:48  sp
  * Compile errors fixed, new 'new view' icon
  *

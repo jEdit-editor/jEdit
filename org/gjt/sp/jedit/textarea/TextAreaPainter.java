@@ -370,7 +370,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paint(Graphics gfx)
 	{
-		tabSize = fm.charWidth('w') * ((Integer)textArea
+		tabSize = fm.charWidth(' ') * ((Integer)textArea
 			.getDocument().getProperty(
 			PlainDocument.tabSizeAttribute)).intValue();
 
@@ -708,6 +708,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  1999/12/07 07:19:36  sp
+ * Buffer loading code cleaned up
+ *
  * Revision 1.21  1999/11/28 00:33:07  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *
