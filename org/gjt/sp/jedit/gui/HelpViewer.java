@@ -31,6 +31,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -40,7 +41,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HelpViewer extends JFrame
+public class HelpViewer extends JFrame implements EBComponent
 {
 	/**
 	 * @deprecated Create a new HelpViewer instance instead
@@ -122,7 +123,6 @@ public class HelpViewer extends JFrame
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
-		viewer.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		viewer.addHyperlinkListener(new LinkHandler());
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -138,6 +138,8 @@ public class HelpViewer extends JFrame
 
 		setSize(800,400);
 		GUIUtilities.loadGeometry(this,"helpviewer");
+
+		EditBus.addToBus(this);
 
 		show();
 	}
@@ -223,8 +225,15 @@ public class HelpViewer extends JFrame
 
 	public void dispose()
 	{
+		EditBus.removeFromBus(this);
 		GUIUtilities.saveGeometry(this,"helpviewer");
 		super.dispose();
+	}
+
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof PropertiesChanged)
+			SwingUtilities.updateComponentTreeUI(getRootPane());
 	}
 
 	// private members
@@ -494,7 +503,7 @@ public class HelpViewer extends JFrame
 
 	class TOCCellRenderer extends DefaultTreeCellRenderer
 	{
-		EmptyBorder border = new EmptyBorder(3,3,3,3);
+		EmptyBorder border = new EmptyBorder(1,0,1,1);
 
 		public Component getTreeCellRendererComponent(JTree tree,
 			Object value, boolean sel, boolean expanded,

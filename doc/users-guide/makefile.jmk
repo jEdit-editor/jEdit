@@ -1,9 +1,10 @@
 # A makefile for the jEdit documentation
 #
 # To build the HTML documentation, you will need:
-# - DocBook-SGML 4.1 DTD
+# - DocBook-XML 4.1.2 DTD
 # - OpenJade (I use version 1.3)
-# - DocBook modular DSSSL style sheets (I use version 1.59)
+# - OpenSP (I use version 1.4)
+# - DocBook modular DSSSL style sheets (I use version 1.64)
 #
 # To build toe PDF documentation, you will also need TeX.
 #
@@ -17,12 +18,12 @@
 
 "htmldocs":;
 {
-    exec "openjade" "-d" "jedithtml.dsl" "-D" "." "-t" "sgml" "users-guide.sgml";
+    exec "openjade" "-wxml" "-d" "jedithtml.dsl" "-D" "." "-t" "sgml" "users-guide.xml";
 }
 
 "pdfdocs":;
 {
-    exec "openjade" "-d" "jeditprint.dsl" "-t" "tex" "users-guide.sgml";
+    exec "openjade" "-wxml" "-d" "jeditprint.dsl" "-t" "tex" "users-guide.xml";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";
@@ -31,7 +32,7 @@
 
 "pdfdocs-a4":;
 {
-    exec "openjade" "-d" "jeditprint-a4.dsl" "-t" "tex" "users-guide.sgml";
+    exec "openjade" "-wxml" "-d" "jeditprint-a4.dsl" "-t" "tex" "users-guide.xml";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";

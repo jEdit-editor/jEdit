@@ -80,7 +80,6 @@ public class ViewRegisters extends EnhancedDialog
 		panel.add(BorderLayout.NORTH,label);
 
 		contentTextArea = new JTextArea(10,80);
-		contentTextArea.setFont(view.getTextArea().getPainter().getFont());
 		contentTextArea.setEditable(false);
 		panel.add(BorderLayout.CENTER,new JScrollPane(contentTextArea));
 		content.add(BorderLayout.CENTER,panel);

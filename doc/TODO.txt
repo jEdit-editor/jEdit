@@ -1,75 +1,99 @@
 TO DO
 
 - FTP plugin: soft links???
+- console: deleting backup files
 
-- document icon toggle in vfs browser
++ before pre4:
+
+- JavaInsight sets the mode but it gets set back to 'text'?
+- update macro guide:
+  - markers
+  - mention registers?
+  - s&r changes (removal of showSearchDialog(), beanshell replace)
+  - new select API
+  - convert to XML
+- installing source for already installed plugins
 - C+\
 - help viewer: links to .txt files
-- console: deleting backup files
 - finish converting docs to xml
-- support middle mouse button clicks, Shift-clicks in JTextComponents
-- support jEdit keyboard shortcuts in JTextComponents
 - fs browser: tooltips are shown in the wrong location
-- reload: save caret position?
-- document positional parameters in abbrevs
 - non-existent files and caret history
 - double click: selection prob
 - double click should move caret to other bracket, not clicked one
 - encoding option in VFS browser
 - catch MalformedInputException and display a better error message
 - get web start to work
+- test edit server
+- fold indicator in status
+- 'globalFont' property?
+  - maybe don't give text fields a new font?...
+
++ before 3.2final:
+
+- support middle mouse button clicks in JTextComponents
 - next time i'm making an RPM, fix the shell script
+- support jEdit keyboard shortcuts in JTextComponents
+- finish persistent splits: resize splits to make them in the middle
+- replace in sel doesn't work if rect
+- jEditLauncher
+- Include John's upcoming plugin guide
+- reload: preserve caret position
+- globalColors setting:
+  - add to global options
+  - tree controls, file system browser icons, tool bar icons look a bit
+    ugly with different backgrounds
+  - help viewer looks ugly
+  - selected borders in list, tree, table wrong colors
+- swing font customization
+- support Shift-clicks in JTextComponents (impossible?)
+- 'appearance' option pane(s)?
+- updateUI doesn't update tree colors
+- restart should not be necessary for 'globalColors' to take effect
+
++ bugs that need to be fixed at some stage:
+
+- Java 1.4 key events: DefaultInputHandler?
+- XThis: don't throw exceptions for non-existent methods
+- only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>
+  in PHP)
+- need to track down s.end < s.start cases
+- vfs browser: >1 request error when clicking 'up'?
+- italics font metrics bugs
+- broken reverse search?
+- text style bugs
+- caret event not always fired
+- prev line fold gutter bug
+- tabbing to text area fails
+- zlib decompression errors in plugin manager
+- failed saves should not clear the dirty flag
+- see if new beanshell fixes trailing \n bug
+- get rid of final blank page of user's guide
+- aborts not always fired
+- fix dragStart handling in DockableWindowContainer.TabbedPane
+- caret undo bugs
+- folding paint up bug
+- offsetToX() returning wrong location with some Java versions
+
++ later:
+
 - modes have a reference counter; unload modes which have no buffers open
 - scrolling while caret is on a bracket over long distances slows things
   down
-- test edit server
-- vfs browser: >1 request error when clicking 'up'?
-- italics font metrics bugs
-- finish persistent splits: resize splits to make them in the middle
 - status bar: show recording status, encoding, line separator?
 - server property
 - reuseview property
 - background property
-- narrow indicator in status
-- Java 1.4 key events: DefaultInputHandler
-- replace in sel doesn't work if rect
-- broken reverse search?
-- text style bugs
 - macros in web start version
-- caret event not always fired
-- XThis: don't throw exceptions for non-existent methods
-- need to track down s.end < s.start cases
-- jEditLauncher
 - scroll lock key toggles 'scroll mode'
-- folding paint up bug
-- prev line fold gutter bug
-- tabbing to text area fails
 - rewritten folding: Fold object, pointer to next of curr. level, each
   text area has visibility hashtable
 - explicit folding
 - fold browser
-- zlib decompression errors in plugin manager
 - when loading a plugin, check if all the jars are present?
-- only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>
-  in PHP)
 - regexps in XMode
 - improve handling of DIGIT sequences
 - DELEGATE in EOL_SPAN
-- failed saves should not clear the dirty flag
 - reverse regexp search
-- see if new beanshell fixes trailing \n bug
-- get rid of final blank page of user's guide
-- update macro guide for misc. API changes:
-  - markers
-  - mention registers?
-  - s&r changes (removal of showSearchDialog(), beanshell replace)
-  - new select API
-- Include John's upcoming plugin guide
 - improved rectangular selections
 - a 'reinsertOnNextLine' regexp for word wrap?
-- aborts not always fired
-- fix dragStart handling in DockableWindowContainer.TabbedPane
-- C+i in shortcuts editor
-- caret undo bugs
 - soft wrap
-- migrate documentation to XML

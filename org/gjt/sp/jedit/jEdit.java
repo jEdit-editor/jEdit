@@ -603,6 +603,72 @@ public class jEdit
 
 		saveCaret = getBooleanProperty("saveCaret");
 
+		UIDefaults defaults = UIManager.getDefaults();
+
+		// give all Swing components our colors
+		if(jEdit.getBooleanProperty("globalColors"))
+		{
+			Color background = new javax.swing.plaf.ColorUIResource(
+				GUIUtilities.parseColor(
+				jEdit.getProperty("view.bgColor")));
+			Color foreground = new javax.swing.plaf.ColorUIResource(
+				GUIUtilities.parseColor(
+				jEdit.getProperty("view.fgColor")));
+			Color caretColor = new javax.swing.plaf.ColorUIResource(
+				GUIUtilities.parseColor(
+				jEdit.getProperty("view.caretColor")));
+			Color selectionColor = new javax.swing.plaf.ColorUIResource(
+				GUIUtilities.parseColor(
+				jEdit.getProperty("view.selectionColor")));
+
+			String[] prefixes = { "TextField", "TextArea", "List", "Table" };
+			for(int i = 0; i < prefixes.length; i++)
+			{
+				String prefix = prefixes[i];
+				defaults.put(prefix + ".background",background);
+				defaults.put(prefix + ".foreground",foreground);
+				defaults.put(prefix + ".caretForeground",caretColor);
+				defaults.put(prefix + ".selectionForeground",foreground);
+				defaults.put(prefix + ".selectionBackground",selectionColor);
+				//defaults.put(prefix + ".inactiveForeground",foreground);
+			}
+
+			defaults.put("Tree.background",background);
+			defaults.put("Tree.foreground",foreground);
+			defaults.put("Tree.textBackground",background);
+			defaults.put("Tree.textForeground",foreground);
+			defaults.put("Tree.selectionForeground",foreground);
+			defaults.put("Tree.selectionBackground",selectionColor);
+		}
+
+		// give all text fields and text areas the same font
+		String family = jEdit.getProperty("view.font");
+		int size;
+		try
+		{
+			size = Integer.parseInt(jEdit.getProperty(
+				"view.fontsize"));
+		}
+		catch(NumberFormatException nf)
+		{
+			size = 14;
+		}
+		int style;
+		try
+		{
+			style = Integer.parseInt(jEdit.getProperty(
+				"view.fontstyle"));
+		}
+		catch(NumberFormatException nf)
+		{
+			style = Font.PLAIN;
+		}
+		Font font = new Font(family,style,size);
+
+		defaults.put("TextField.font",font);
+		defaults.put("TextArea.font",font);
+		defaults.put("TextPane.font",font);
+
 		EditBus.send(new PropertiesChanged(null));
 	}
 
@@ -2245,9 +2311,6 @@ public class jEdit
 		{
 			if(lf != null && lf.length() != 0)
 				UIManager.setLookAndFeel(lf);
-			// Mac users are rather fussy, and the default Mac L&F rocks
-			//else if(System.getProperty("os.name").indexOf("MacOS") != -1)
-			//	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
 		catch(Exception e)
 		{

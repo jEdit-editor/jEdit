@@ -112,8 +112,14 @@ public class Registers
 
 		Register reg = getRegister(register);
 
-		if(reg != null && reg.toString() != null)
-			selection = reg.toString() + separator + selection;
+		String registerContents = reg.toString();
+		if(reg != null && registerContents != null)
+		{
+			if(registerContents.endsWith(separator))
+				selection = registerContents + selection;
+			else
+				selection = registerContents + separator + selection;
+		}
 
 		setRegister(register,selection);
 		HistoryModel.getModel("clipboard").addItem(selection);

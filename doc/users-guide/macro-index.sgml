@@ -97,6 +97,16 @@
     </para></abstract>
 </listitem>
 
+<listitem>
+    <para><filename>Toggle_Line_Comment.bsh</filename></para>
+    <abstract><para>
+		Toggles line comments, alternately inserting and deleting them
+		at the beginning of each selected line.
+    </para></abstract>
+	<para>
+		If there is no selection, the macro operates on the current line.
+	</para>
+</listitem>
 
 <listitem>
     <para><filename>Make_Double_Box_Comments.bsh</></para>

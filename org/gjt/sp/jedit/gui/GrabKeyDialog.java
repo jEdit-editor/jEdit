@@ -34,7 +34,27 @@ public class GrabKeyDialog extends JDialog
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("grab-key.title"),true);
 
-		JPanel content = new JPanel(new BorderLayout());
+		JPanel content = new JPanel(new BorderLayout())
+		{
+			/**
+			 * Returns if this component can be traversed by pressing the
+			 * Tab key. This returns false.
+			 */
+			public boolean isManagingFocus()
+			{
+				return false;
+			}
+
+			/**
+			 * Makes the tab key work in Java 1.4.
+			 * @since jEdit 3.2pre4
+			 */
+			public boolean getFocusTraversalKeysEnabled()
+			{
+				return false;
+			}
+		};
+
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
@@ -148,7 +168,16 @@ public class GrabKeyDialog extends JDialog
 	 * Returns if this component can be traversed by pressing the
 	 * Tab key. This returns false.
 	 */
-	public final boolean isManagingFocus()
+	public boolean isManagingFocus()
+	{
+		return false;
+	}
+
+	/**
+	 * Makes the tab key work in Java 1.4.
+	 * @since jEdit 3.2pre4
+	 */
+	public boolean getFocusTraversalKeysEnabled()
 	{
 		return false;
 	}

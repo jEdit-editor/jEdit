@@ -3920,6 +3920,15 @@ forward_scan:		do
 	}
 
 	/**
+	 * Java 1.4 compatibility fix to make Tab key work.
+	 * @since jEdit 3.2pre4
+	 */
+	public boolean getFocusTraversalKeysEnabled()
+	{
+		return false;
+	}
+
+	/**
 	 * Returns if multiple selection is enabled.
 	 * @since jEdit 3.2pre1
 	 */

@@ -2483,12 +2483,16 @@ loop:				for(int i = 0; i < count; i++)
 
 		level = (level - 1) * getIndentSize() + 1;
 
+		/* this ensures that the first line is always visible */
+		boolean seenVisibleLine = false;
+
 		virtualLineCount = 0;
 
 		for(int i = 0; i < lineCount; i++)
 		{
-			if(getFoldLevel(i) < level)
+			if(!seenVisibleLine || getFoldLevel(i) < level)
 			{
+				seenVisibleLine = true;
 				lineInfo[i].visible = true;
 				virtualLines[virtualLineCount++] = i;
 			}

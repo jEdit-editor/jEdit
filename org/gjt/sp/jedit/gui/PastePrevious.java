@@ -54,7 +54,6 @@ implements ActionListener, ListSelectionListener, MouseListener
 		});
 
 		clips.setVisibleRowCount(16);
-		clips.setFont(view.getTextArea().getPainter().getFont());
 
 		clips.addMouseListener(this);
 		clips.addListSelectionListener(this);

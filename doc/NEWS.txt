@@ -1,15 +1,130 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.1 AND 3.2
 
-- Improved markers
-- Multiple selection
-- Middle mouse button
-- BeanShell search and replace
-- Cut Append, Copy Append, Cut Append to Register commands
-- Search in Open Buffers command, Search in Directory command
-- Search in Directory in file system browser right-click menu
-- Reload Edit Modes command
-- Verilog, Occam syntax highlighting
-- Status bar
-- Improved plugin manager
-- Positional parameters in abbrevs
-- Better OS X support
+* Markers
+
+Older jEdit versions had two slightly confusing ways of remembering
+positions in a buffer and returning to them later; markers and
+registers. Markers were buffer-specific, saved across editing sessions,
+and slightly cumbersome to use. Registers were global, not saved across
+editing sessions, and quicker to use but less intuitive, primarily due
+to the fact that they could be used to store chunks of text as well.
+
+In jEdit 3.2, registers can no longer be used to remember positions;
+they are for storing text only. Markers can now have single-character
+shortcuts, which allows them to be added and returned to from the
+keyboard.
+
+A new 'Markers' top-level menu contains commands for manipulating
+markers, as well as a list of markers in the current buffer.
+
+By default, markers are saved across editing sessions, but that can be
+disabled in the 'Global Options' dialog box.
+
+* Multiple selection
+
+Pressing the 'Caps Lock' key toggles multiple selection mode, where
+multiple independent ranges of text can be selected and operated upon at
+the same time.
+
+* Quick copy
+
+Alt-clicking in the text area (or, on systems with a three-button mouse,
+clicking the middle mouse button without holding down Alt) inserts the
+most recently selected text at the clicked location. This can be used to
+quickly transfer text from one place to another using the mouse.
+
+* Clipboard improvements
+
+Two new commands, 'Cut Append' and 'Copy Append', add the selected text
+to the existing clipboard contents, instead of replacing the clipboard
+contents as the 'Cut' and 'Copy' commands do.
+
+The existing 'Append to Register' command has been replaced with the
+'Cut Append to Register' and 'Copy Append to Register' commands.
+
+* Syntax highlighting improvements
+
+A new 'Reload Edit Modes' command in the Utilities menu reloads all
+syntax highlighting modes. This makes writing your own modes easier; you
+no longer need to restart jEdit to see changes to mode files take
+effect.
+
+Syntax highlighting for Verilog and Occam files has been added.
+
+* Search and replace improvements
+
+The 'Find' command now pre-selects the 'current buffer' radio button in
+the search and replace dialog box.
+
+Two new commands, 'Search in Open Buffers' and 'Search in Directory',
+pre-select the appropriate multi-file search settings.
+
+Occurences of the search string can now be replaced with the result of a
+BeanShell code snippet that is evaluated for each occurence. This can be
+used to perform complicated text transforms, like converting all HTML
+tags to lower case.
+
+* Positional parameters in abbreviations
+
+Positional parameters are an advanced feature that make abbreviations
+much more useful. The best way to describe them is with an example.
+
+Suppose you have an abbreviation "F" that is set to expand to the
+following:
+
+	for(int $1 = 0; $1 < $2; $1++)
+
+Now, simply entering "F" in the buffer and expanding it will insert the
+above text. However, if you expand "F#j#array.length#", the following
+will be inserted:
+
+	for(int j = 0; j < array.length; j++)
+
+Expansions can contain up to nine positional parameters.
+
+* Status bar
+
+A status bar has been added to views. The status bar shows miscellaneous
+information, such as the current caret location, any prompts displayed
+by marker and register commands, I/O status, and so on.
+
+If the current line contains hard tabs, both the 'file' column location
+(where each tab counts as one character) and 'screen' column location
+(where each tab counts as multiple characters) are shown.
+
+* File system browser improvements
+
+Icons can now be disabled in the 'Global Options' dialog box, which
+saves a lot of screen space.
+
+A 'Search in Directory' command, which displays a search and replace
+dialog box configured to search in the current directory, has been added
+to the file system browser's 'More' menu.
+
+* Plugin manager improvements
+
+The plugin manager now resolves dependencies automatically; for example,
+installing the JCompiler plugin will automatically install the EditBus,
+Console and ErrorList plugins, which the JCompiler plugin requires. In
+addition, plugins which require a newer jEdit or Java version than what
+you have are not shown in the 'Install Plugins' dialog box. These two
+features make it virtually impossible to install an incompatible set of
+plugins.
+
+For those with slow Internet connections, an option is available to only
+download plugin binaries, without source code.
+
+Finally, removing a plugin consisting of multiple JAR files will now
+remove all JAR files, instead of only removing the primary JAR file.
+
+* Better MacOS X support
+
+When running on MacOS X, jEdit automatically uses the Command key as the
+primary modifier, as opposed to Control. In addition, a property is set
+which puts jEdit's menus in the system menu bar, just like all other
+MacOS applications do.
+
+* Java 1.4 compatibility
+
+jEdit is now fully compatible with the newly released Java 1.4, which is
+still beta at the time of writing.

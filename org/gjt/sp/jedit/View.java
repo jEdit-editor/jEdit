@@ -915,6 +915,8 @@ public class View extends JFrame implements EBComponent
 		updateRecentMenu();
 
 		dockableWindowManager.propertiesChanged();
+
+		SwingUtilities.updateComponentTreeUI(getRootPane());
 	}
 
 	private void loadToolBars()

@@ -8,6 +8,9 @@ JEDIT 3.2 VERSION HISTORY
 - The icons in the file system browser can be toggled on and off
 - A dialog box is now displayed after a HyperSearch has been performed,
   showing the number of results found
+- 'Toggle Line Comment' macro (John Gellene)
+- Swing text fields and text areas now have the same font as the text
+  area
 
 + Enhancements
 
@@ -15,9 +18,14 @@ JEDIT 3.2 VERSION HISTORY
 
 + Bug Fixes
 
-- Searching for certain regular expressions (like (), ^, %, etc) would
-  cause an infinite loop
+- Searching for certain regular expressions (like (), ^, or $ by itself, etc)
+  would hang jEdit
 - Some of the links in the help viewer table of contents didn't work
+- Tab key didn't work in Java 1.4
+- jEdit would throw an exception upon loading a buffer if the first line
+  had a leading indent and an initial fold level was specified
+- Possible fix for Tab key and C+i not working with some Java versions
+  in 'grab key' dialog box used by shortcut option panes
 
 * Version 3.2pre3
 

@@ -394,7 +394,7 @@
 
 <ACTION NAME="io-progress-monitor">
 	<CODE>
-		new IOProgressMonitor();
+		new IOProgressMonitor(view);
 	</CODE>
 </ACTION>
 

@@ -61,26 +61,14 @@ public class StatusBar extends JPanel
 		add(BorderLayout.WEST,caretStatus);
 
 		message = new JLabel();
-		message.setForeground(UIManager.getColor("Button.foreground"));
+		message.setForeground(Color.black);
 		message.setBorder(border);
 		add(BorderLayout.CENTER,message);
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		mode = new JLabel();
-		mode.setForeground(UIManager.getColor("Button.foreground"));
+		mode.setForeground(Color.black);
 		mode.setBorder(border);
-
-		// make the mode label as wide as the widest edit mode name,
-		// so that the status bar does not resize while switching buffers
-		/* Mode[] modes = jEdit.getModes();
-		FontMetrics fm = getToolkit().getFontMetrics(mode.getFont());
-		int width = 0;
-		for(int i = 0; i < modes.length; i++)
-		{
-			width = Math.max(width,fm.stringWidth(modes[i].getName()));
-		}
-		mode.setPreferredSize(new Dimension(width,
-			mode.getPreferredSize().height)); */
 
 		box.add(mode);
 		box.add(Box.createHorizontalStrut(3));
@@ -92,12 +80,13 @@ public class StatusBar extends JPanel
 		overwrite.setBorder(border);
 		box.add(overwrite);
 		box.add(Box.createHorizontalStrut(3));
-		narrow = new JLabel("narrow");
-		narrow.setBorder(border);
-		box.add(narrow);
+		fold = new JLabel("fold");
+		fold.setBorder(border);
+		box.add(fold);
 
 		updateMode();
 		updateMiscStatus();
+		updateFoldStatus();
 
 		box.add(Box.createHorizontalStrut(3));
 		ioProgress = new MiniIOProgress();
@@ -167,8 +156,15 @@ public class StatusBar extends JPanel
 			overwrite.setForeground(Color.black);
 		else
 			overwrite.setForeground(gray);
+	}
 
-		narrow.setForeground(gray);
+	public void updateFoldStatus()
+	{
+		Buffer buffer = view.getBuffer();
+		if(buffer.getLineCount() != buffer.getVirtualLineCount())
+			fold.setForeground(Color.black);
+		else
+			fold.setForeground(gray);
 	}
 
 	// private members
@@ -178,7 +174,7 @@ public class StatusBar extends JPanel
 	private JLabel mode;
 	private JLabel multiSelect;
 	private JLabel overwrite;
-	private JLabel narrow;
+	private JLabel fold;
 	private MiniIOProgress ioProgress;
 	private Color gray = new Color(142,142,142);
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();

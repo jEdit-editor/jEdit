@@ -29,17 +29,10 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 
-public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
+public final class FileCellRenderer extends DefaultTreeCellRenderer
 {
 	public FileCellRenderer()
 	{
-		font = UIManager.getFont("Tree.font");
-
-		treeSelectionForeground = UIManager.getColor("Tree.selectionForeground");
-		treeNoSelectionForeground = UIManager.getColor("Tree.textForeground");
-		treeSelectionBackground = UIManager.getColor("Tree.selectionBackground");
-		treeNoSelectionBackground = UIManager.getColor("Tree.textBackground");
-
 		// use metal icons because not all looks and feels define these.
 		// note that metal is guaranteed to exist, so this shouldn't
 		// cause problems in the future.
@@ -49,10 +42,6 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 		dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
 		filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 		loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
-
-		treeCellRenderer = new JLabel();
-		treeCellRenderer.setOpaque(true);
-		treeCellRenderer.setFont(font);
 
 		propertiesChanged();
 
@@ -74,18 +63,8 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 		boolean sel, boolean expanded, boolean leaf, int row,
 		boolean focus)
 	{
-		if(sel)
-		{
-			treeCellRenderer.setBackground(treeSelectionBackground);
-			treeCellRenderer.setForeground(treeSelectionForeground);
-		}
-		else
-		{
-			treeCellRenderer.setBackground(treeNoSelectionBackground);
-			treeCellRenderer.setForeground(treeNoSelectionForeground);
-		}
-
-		treeCellRenderer.setEnabled(tree.isEnabled());
+		super.getTreeCellRendererComponent(tree,value,sel,expanded,
+			leaf,row,focus);
 
 		DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)value;
 		Object userObject = treeNode.getUserObject();
@@ -94,46 +73,52 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 			VFS.DirectoryEntry file = (VFS.DirectoryEntry)userObject;
 
 			boolean opened = (jEdit.getBuffer(file.path) != null);
-			treeCellRenderer.setBorder(opened ? openBorder : closedBorder);
+			setBorder(opened ? openBorder : closedBorder);
 
 			if(showIcons)
 			{
-				treeCellRenderer.setIcon(getIconForFile(file));
-				treeCellRenderer.setText(file.name);
+				setIcon(getIconForFile(file));
+				setText(file.name);
 			}
 			else
 			{
-				treeCellRenderer.setIcon(null);
-				treeCellRenderer.setText(file.type == VFS.DirectoryEntry.DIRECTORY
+				setIcon(null);
+				setText(file.type == VFS.DirectoryEntry.DIRECTORY
 					? file.name + "/" : file.name);
 			}
 		}
 		else if(userObject instanceof BrowserView.LoadingPlaceholder)
 		{
 			if(showIcons)
-				treeCellRenderer.setIcon(loadingIcon);
+				setIcon(loadingIcon);
 			else
-				treeCellRenderer.setIcon(null);
-			treeCellRenderer.setText(jEdit.getProperty("vfs.browser.tree.loading"));
-			treeCellRenderer.setBorder(closedBorder);
+				setIcon(null);
+			setText(jEdit.getProperty("vfs.browser.tree.loading"));
+			setBorder(closedBorder);
 		}
 		else if(userObject instanceof String)
 		{
 			if(showIcons)
 			{
-				treeCellRenderer.setIcon(dirIcon);
-				treeCellRenderer.setText((String)userObject);
+				setIcon(dirIcon);
+				setText((String)userObject);
 			}
 			else
 			{
-				treeCellRenderer.setIcon(null);
-				treeCellRenderer.setText(userObject + "/");
+				setIcon(null);
+				setText(userObject + "/");
 			}
 
-			treeCellRenderer.setBorder(closedBorder);
+			setBorder(closedBorder);
+		}
+		else
+		{
+			// userObject is null?
+			setIcon(null);
+			setText(null);
 		}
 
-		return treeCellRenderer;
+		return this;
 	}
 
 	// protected members
@@ -148,11 +133,7 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 	}
 
 	// private members
-	private JLabel treeCellRenderer;
-
 	private boolean showIcons;
-
-	private Font font;
 
 	private Icon fileIcon;
 	private Icon dirIcon;
@@ -162,24 +143,24 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 	private Border closedBorder;
 	private Border openBorder;
 
-	private Color treeSelectionForeground;
-	private Color treeNoSelectionForeground;
-	private Color treeSelectionBackground;
-	private Color treeNoSelectionBackground;
-
 	private void propertiesChanged()
 	{
+		// bug in DefaultTreeCellRenderer?
+		setBackground(UIManager.getColor("Tree.textBackground"));
+
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
 		if(showIcons)
 		{
 			closedBorder = new EmptyBorder(0,3,0,0);
-			openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,Color.black),
+			openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,
+				UIManager.getColor("Tree.textForeground")),
 				new EmptyBorder(0,1,0,0));
 		}
 		else
 		{
 			closedBorder = new EmptyBorder(1,4,1,1);
-			openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,Color.black),
+			openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,
+				UIManager.getColor("Tree.textForeground")),
 				new EmptyBorder(1,2,1,1));
 		}
 	}

@@ -106,8 +106,8 @@ buffer.collapseFolds=0
 ### VIEW SETTINGS
 ###
 
-# Initially, the view contains a text area with no splits
-view.splits=+
+# Apply jEdit colors to Swing text fields, text areas, lists, tables and trees?
+globalColors=false
 
 # Show toolbar?
 view.showToolbar=true

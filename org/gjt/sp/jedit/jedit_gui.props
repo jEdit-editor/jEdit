@@ -992,7 +992,7 @@ options.loadsave.restore.cli=... even if file names were specified on the \
 options.loadsave.persistentMarkers=Save marker positions
 
 options.textarea.label=Text Area
-options.textarea.font=Text area font:
+options.textarea.font=Text font:
 options.textarea.lineHighlight=Current line highlighting
 options.textarea.bracketHighlight=Bracket highlighting
 options.textarea.eolMarkers=End of line markers
@@ -1209,7 +1209,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=41
+tip.count=42
 
 # Activity log
 log-viewer.title=Activity Log

@@ -332,6 +332,17 @@ public class DockableWindowManager extends JPanel
 		top.propertiesChanged();
 		bottom.propertiesChanged();
 
+		Enumeration enum = windows.elements();
+		while(enum.hasMoreElements())
+		{
+			Entry entry = (Entry)enum.nextElement();
+			if(entry.container instanceof DockableWindowContainer.Floating)
+			{
+				SwingUtilities.updateComponentTreeUI(((JFrame)entry.container)
+					.getRootPane());
+			}
+		}
+
 		revalidate();
 	}
 
