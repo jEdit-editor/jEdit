@@ -52,7 +52,7 @@ public class MacroShortcutsOptionPane extends ShortcutsOptionPane
 
 		for(int i = 0; i < macroList.size(); i++)
 		{
-			String name = (String)macroList.elementAt(i);
+			String name = macroList.elementAt(i).toString();
 			bindings.addElement(new KeyBinding(name,name,
 				jEdit.getProperty(name + ".shortcut"),
 				jEdit.getProperty(name + ".shortcut2")));

@@ -3,7 +3,7 @@
 <!DOCTYPE ACTIONS SYSTEM "actions.dtd">
 
 <!-- jEdit action table                                                      -->
-<!-- Copyright (C) 2000 Slava Pestov                                         -->
+<!-- Copyright (C) 2000, 2001 Slava Pestov                                         -->
 
 <!-- Actions are the 'glue' that binds menu item selections and keystrokes   -->
 <!-- to jEdit's APIs. For simplicity and compactness, they are written in    -->
@@ -274,7 +274,13 @@
 
 <ACTION NAME="expand-fold">
 	<CODE>
-		buffer.expandFoldAt(textArea.getCaretLine());
+		buffer.expandFoldAt(textArea.getCaretLine(),true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="expand-one-level">
+	<CODE>
+		buffer.expandFoldAt(textArea.getCaretLine(),false);
 	</CODE>
 </ACTION>
 
@@ -370,7 +376,7 @@
 
 <ACTION NAME="indent-lines">
 	<CODE>
-		textArea.indentSelectedLines();
+		buffer.indentLines(textArea.getSelectionStartLine(),textArea.getSelectionEndLine();
 	</CODE>
 </ACTION>
 
@@ -413,6 +419,12 @@
 <ACTION NAME="match-bracket">
 	<CODE>
 		textArea.goToMatchingBracket();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="narrow">
+	<CODE>
+		buffer.narrow(textArea.getSelectionStartLine(),textArea.getSelectionEndLine());
 	</CODE>
 </ACTION>
 

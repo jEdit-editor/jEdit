@@ -169,9 +169,8 @@ public class Macros
 	}
 
 	/**
-	 * Returns a single vector with all known macros in it. Each
-	 * element of this vector is a macro name string.
-	 * @since jEdit 2.6pre1
+	 * Returns a single vector with all known macros in it.
+	 * @since jEdit 3.1pre3
 	 */
 	public static Vector getMacroList()
 	{
@@ -211,20 +210,11 @@ public class Macros
 					BeanShell.runScript(view,path,true,false);
 				}
 			};
-
-			String shortcut1 = jEdit.getProperty(name + ".shortcut");
-			if(shortcut1 != null)
-				jEdit.getInputHandler().addKeyBinding(shortcut1,action);
-
-			String shortcut2 = jEdit.getProperty(name + ".shortcut2");
-			if(shortcut2 != null)
-				jEdit.getInputHandler().addKeyBinding(shortcut2,action);
 		}
 
-		// for debugging
 		public String toString()
 		{
-			return name + ":" + path;
+			return name;
 		}
 	}
 
@@ -403,7 +393,7 @@ public class Macros
 				String name = path + label;
 				Macro newMacro = new Macro(name,file.getPath());
 				vector.addElement(newMacro);
-				macroList.addElement(name);
+				macroList.addElement(newMacro);
 				macroHash.put(name,newMacro);
 			}
 			else if(file.isDirectory())

@@ -323,8 +323,8 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 
 		SearchAndReplace.load();
-		Macros.loadMacros();
 		FavoritesVFS.loadFavorites();
+		Macros.loadMacros();
 		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress();
@@ -1557,6 +1557,20 @@ public class jEdit
 				+ ".shortcut2");
 			if(shortcut2 != null)
 				inputHandler.addKeyBinding(shortcut2,action);
+		}
+
+		Vector macros = Macros.getMacroList();
+
+		for(int i = 0; i < macros.size(); i++)
+		{
+			Macros.Macro macro = (Macros.Macro)macros.elementAt(i);
+			String shortcut1 = jEdit.getProperty(macro.name + ".shortcut");
+			if(shortcut1 != null)
+				jEdit.getInputHandler().addKeyBinding(shortcut1,macro.action);
+
+			String shortcut2 = jEdit.getProperty(macro.name + ".shortcut2");
+			if(shortcut2 != null)
+				jEdit.getInputHandler().addKeyBinding(shortcut2,macro.action);
 		}
 	}
 

@@ -421,7 +421,7 @@ public class Gutter extends JComponent implements SwingConstants
 					if(buffer.isLineVisible(line + 1))
 						buffer.collapseFoldAt(line);
 					else
-						buffer.expandFoldAt(line);
+						buffer.expandFoldAt(line,e.isShiftDown());
 				}
 			}
 			else

@@ -255,7 +255,20 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		else if(msg instanceof PropertiesChanged)
 			propertiesChanged();
 		else if(msg instanceof VFSUpdate)
+		{
+			// this is a dirty hack and it relies on the fact
+			// that updates for parents are sent before updates
+			// for the changed nodes themselves (if this was not
+			// the case, the browser wouldn't be updated properly
+			// on delete, etc).
+			//
+			// to avoid causing '> 1 request' errors, don't reload
+			// directory if request already active
+			if(requestRunning)
+				return;
+
 			browserView.reloadDirectory(((VFSUpdate)msg).getPath());
+		}
 	}
 
 	public String getDirectory()
@@ -751,6 +764,9 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 	{
 		if(requestRunning)
 		{
+			// dump stack trace for debugging purposes
+			Log.log(Log.DEBUG,this,new Throwable("For debugging purposes"));
+
 			GUIUtilities.error(this,"browser-multiple-io",null);
 			return false;
 		}

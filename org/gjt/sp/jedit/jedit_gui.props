@@ -159,7 +159,7 @@ view.search.find=Search for:
 ###
 view.context=undo redo - cut copy paste paste-previous - select-all \
 	select-none - view-registers - to-upper to-lower - \
-	eval-selection
+	narrow - eval-selection
 
 ###
 ### MENUBAR
@@ -416,16 +416,21 @@ scroll-down-page.label=Page Scroll Down
 toggle-synchro-scroll.label=Synchronized Scrolling
 
 folding=collapse-fold \
+	expand-one-level \
 	expand-fold \
 	- \
 	expand-folds \
-	expand-all-folds
+	expand-all-folds \
+	- \
+	narrow
 
 folding.label=Folding
 collapse-fold.label=Collapse Fold
-expand-fold.label=Expand Fold
+expand-one-level.label=Expand Fold One Level
+expand-fold.label=Expand Fold Fully
 expand-folds.label=Expand Folds [x]
 expand-all-folds.label=Expand All Folds
+narrow.label=Narrow Buffer to Selection
 
 splitting=unsplit \
 	  split-horizontal \

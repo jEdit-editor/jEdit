@@ -666,7 +666,12 @@ public class JEditTextArea extends JComponent
 		if(line < 0)
 			return 0;
 		else if(line >= getVirtualLineCount())
-			return getBufferLength();
+		{
+			// WRONG!!!
+			// return getBufferLength();
+			return getLineEndOffset(buffer.virtualToPhysical(
+				buffer.getVirtualLineCount() - 1)) - 1;
+		}
 		else
 		{
 			line = buffer.virtualToPhysical(line);
@@ -1251,10 +1256,10 @@ public class JEditTextArea extends JComponent
 			// this ensures that the caret does not get "lost"
 			// inside a fold
 			if(!buffer.isLineVisible(selectionStartLine))
-				buffer.expandFoldAt(selectionStartLine);
+				buffer.expandFoldAt(selectionStartLine,true);
 
 			if(!buffer.isLineVisible(selectionEndLine))
-				buffer.expandFoldAt(selectionEndLine);
+				buffer.expandFoldAt(selectionEndLine,true);
 
 			fireCaretEvent();
 		}
@@ -1472,20 +1477,6 @@ public class JEditTextArea extends JComponent
 	public final void setMagicCaretPosition(int magicCaret)
 	{
 		this.magicCaret = magicCaret;
-	}
-
-	/**
-	 * Indents all selected lines.
-	 * @since jEdit 2.7pre2
-	 */
-	public void indentSelectedLines()
-	{
-		buffer.beginCompoundEdit();
-		for(int i = selectionStartLine; i <= selectionEndLine; i++)
-		{
-			buffer.indentLine(i,true,true);
-		}
-		buffer.endCompoundEdit();
 	}
 
 	/**
@@ -2081,9 +2072,12 @@ loop:		for(int i = 0; i < text.length(); i++)
 		{
 			line = buffer.getNextVisibleLine(line);
 			if(line == -1)
+			{
 				getToolkit().beep();
-			else
-				caret = getLineStartOffset(line);
+				return;
+			}
+
+			caret = getLineStartOffset(line);
 		}
 		else
 			caret++;
@@ -2103,12 +2097,6 @@ loop:		for(int i = 0; i < text.length(); i++)
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
-		if(line == getLineCount() - 1)
-		{
-			getToolkit().beep();
-			return;
-		}
-
 		int magic = getMagicCaretPosition();
 		if(magic == -1)
 		{
@@ -2116,6 +2104,12 @@ loop:		for(int i = 0; i < text.length(); i++)
 		}
 
 		int nextLine = buffer.getNextVisibleLine(line);
+
+		if(nextLine == -1)
+		{
+			getToolkit().beep();
+			return;
+		}
 
 		caret = getLineStartOffset(nextLine)
 			+ xToOffset(nextLine,magic + 1);
@@ -2252,16 +2246,14 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(caret == lineText.length())
 		{
-			if(lineStart + caret == buffer.getLength())
+			int nextLine = buffer.getNextVisibleLine(line);
+			if(nextLine == -1)
 			{
 				getToolkit().beep();
 				return;
 			}
-			else
-			{
-				int nextLine = buffer.getNextVisibleLine(line);
-				caret = getLineStartOffset(nextLine);
-			}
+
+			caret = getLineStartOffset(nextLine);
 		}
 		else
 		{
@@ -2321,14 +2313,17 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		int caret = getCaretPosition();
 		int line = getCaretLine();
-		if(caret == 0)
-		{
-			getToolkit().beep();
-			return;
-		}
 
 		if(caret == getLineStartOffset(line))
-			caret = getLineEndOffset(buffer.getPrevVisibleLine(line)) - 1;
+		{
+			line = buffer.getPrevVisibleLine(line);
+			if(line == -1)
+			{
+				getToolkit().beep();
+				return;
+			}
+			caret = getLineEndOffset(line) - 1;
+		}
 		else
 			caret--;
 
@@ -2347,12 +2342,6 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
-		if(line == 0)
-		{
-			getToolkit().beep();
-			return;
-		}
-
 		int magic = getMagicCaretPosition();
 		if(magic == -1)
 		{
@@ -2360,6 +2349,12 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		}
 
 		int prevLine = buffer.getPrevVisibleLine(line);
+		if(prevLine == -1)
+		{
+			getToolkit().beep();
+			return;
+		}
+
 		caret = getLineStartOffset(prevLine) + xToOffset(prevLine,magic + 1);
 		if(select)
 			select(getMarkPosition(),caret);
@@ -2502,6 +2497,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			else
 			{
 				int prevLine = buffer.getPrevVisibleLine(line);
+				if(prevLine == -1)
+				{
+					getToolkit().beep();
+					return;
+				}
+
 				caret = getLineStartOffset(prevLine);
 			}
 		}
@@ -3007,6 +3008,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			buffer.removeTrailingWhiteSpace(selectionStartLine,
 				selectionEndLine);
 		}
+	}
+
+	/**
+	 * Indents all selected lines.
+	 * @since jEdit 3.1pre3
+	 */
+	public void indentSelectedLines()
+	{
+		if(!buffer.isEditable())
+			getToolkit().beep();
+		else
+			buffer.indentLines(selectionStartLine,selectionEndLine);
 	}
 
 	/**

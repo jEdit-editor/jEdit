@@ -350,7 +350,7 @@ class ContextAddDialog extends EnhancedDialog
 			return (ContextOptionPane.MenuItem)actionsList.getSelectedValue();
 		else if(macro.isSelected())
 		{
-			String selectedMacro = (String)macrosList.getSelectedValue();
+			String selectedMacro = macrosList.getSelectedValue().toString();
 			selectedMacro = "play-macro@" + selectedMacro;
 			return new ContextOptionPane.MenuItem(selectedMacro,
 				ContextOptionPane.getActionLabel(selectedMacro));
@@ -386,6 +386,9 @@ class ContextAddDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2001/03/01 11:03:27  sp
+ * Improved folding, vfs bug fix
+ *
  * Revision 1.11  2001/01/23 09:23:48  sp
  * code cleanups, misc tweaks
  *

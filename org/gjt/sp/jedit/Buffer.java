@@ -1671,6 +1671,20 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
+	 * Indents all specified lines.
+	 * @param start The first line to indent
+	 * @param end The last line to indent
+	 * @since jEdit 3.1pre3
+	 */
+	public void indentLines(int start, int end)
+	{
+		beginCompoundEdit();
+		for(int i = start; i <= end; i++)
+			indentLine(i,true,true);
+		endCompoundEdit();
+	}
+
+	/**
 	 * @deprecated Don't call this method.
 	 */
 	public void tokenizeLines() {}
@@ -1965,10 +1979,28 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(line == lineCount - 1)
 			return false;
 
-		// deep magic. do not change the order of the following
-		// two tests!
-		return getFoldLevel(line) < getFoldLevel(line + 1)
-			|| !lineInfo[line + 1].visible;
+		// how it works:
+
+		// - if a line has a greater fold level than the next,
+		//   it is a fold
+
+		// - if a line is invisible, it is also a fold, even
+		//   if the fold level is the same (rationale: changing
+		//   indent levels while folds are collapsed shouldn't
+		//   create pernamently inaccessable sections)
+
+		// - exception to the above: if the line is the last
+		//   virtual line, don't report it as a fold if the
+		//   fold levels are the same and the next is invisible,
+		//   otherwise the last narrowed line will always be
+		//   a fold start which is silly
+
+		// note that the last two cases are temporarily disabled
+		// in 3.1pre3 because expandFoldAt() doesn't handle them
+		// properly.
+		return getFoldLevel(line) < getFoldLevel(line + 1);
+			/*|| (line != virtualLines[virtualLineCount - 1]
+			&& !lineInfo[line + 1].visible);*/
 	}
 
 	/**
@@ -2260,10 +2292,12 @@ loop:				for(int i = 0; i < count; i++)
 	/**
 	 * Expand the fold that begins at the specified line number.
 	 * @param line The first line number of the fold
+	 * @param fully If true, fold will be expanded fully, otherwise
+	 * only one level will be expanded
 	 * @return False if there are no folds in the buffer
 	 * @since jEdit 3.1pre1
 	 */
-	public boolean expandFoldAt(int line)
+	public boolean expandFoldAt(int line, boolean fully)
 	{
 		int initialFoldLevel = getFoldLevel(line);
 
@@ -2324,18 +2358,35 @@ loop:				for(int i = 0; i < count; i++)
 			}
 		}
 
-		int delta = (end - start + 1);
+		int delta = 0;
+		int[] tmpVirtualMap = new int[end - start + 1];
+
+		// we need a different value of initialFoldLevel here!
+		initialFoldLevel = getFoldLevel(start);
+		//System.err.println("new initial fold level is " + initialFoldLevel);
 
 		for(int i = start; i <= end; i++)
 		{
 			LineInfo info = lineInfo[i];
 			if(info.visible)
-				delta--;
+			{
+				// user will be confused if 'expand fold'
+				// hides lines
+			}
+			else if(fully && getFoldLevel(i) > initialFoldLevel)
+			{
+				// don't expand lines with higher fold
+				// levels
+			}
 			else
+			{
+				tmpVirtualMap[delta++] = i;
 				info.visible = true;
+			}
 		}
 
- 		//System.err.println("expand from " + start + " to " + end);
+ 		System.err.println("expand from " + start + " to " + end
+			+ " with " + delta + " newly visible lines");
 
 		// I forgot to do this at first and it took me ages to
 		// figure out
@@ -2363,10 +2414,10 @@ loop:				for(int i = 0; i < count; i++)
 		System.arraycopy(virtualLines,virtualLine,virtualLines,
 			virtualLine + delta,virtualLines.length
 			- virtualLine - delta);
-		for(int j = 0; j <= delta; j++)
+		for(int j = 0; j < delta; j++)
 		{
-			//System.err.println((virtualLine + j) + " maps to " + (start + j));
-			virtualLines[virtualLine + j] = start + j;
+			//System.err.println((virtualLine + j) + " maps to " + tmpVirtualMap[j]);
+			virtualLines[virtualLine + j] = tmpVirtualMap[j];
 		}
 
 		fireFoldStructureChanged();
@@ -2444,6 +2495,34 @@ loop:				for(int i = 0; i < count; i++)
 			virtualLines[i] = i;
 			lineInfo[i].visible = true;
 		}
+
+		fireFoldStructureChanged();
+	}
+
+	/**
+	 * Narrows the visible portion of the buffer to the specified
+	 * line range.
+	 * @param start The first line
+	 * @param end The last line
+	 * @since jEdit 3.1pre3
+	 */
+	public void narrow(int start, int end)
+	{
+		virtualLineCount = end - start + 1;
+		virtualLines = new int[virtualLineCount];
+
+		for(int i = 0; i < start; i++)
+			lineInfo[i].visible = false;
+
+		for(int i = start; i <= end; i++)
+		{
+			LineInfo info = lineInfo[i];
+			info.visible = true;
+			virtualLines[i - start] = i;
+		}
+
+		for(int i = end + 1; i < lineCount; i++)
+			lineInfo[i].visible = false;
 
 		fireFoldStructureChanged();
 	}

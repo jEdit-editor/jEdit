@@ -549,14 +549,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				&& textArea.isCaretVisible())
 				paintCaret(gfx,physicalLine,y);
 
-			if(physicalLine != buffer.getLineCount() - 1)
+			if(buffer.isFoldStart(physicalLine)
+				&& !buffer.isLineVisible(physicalLine + 1))
 			{
-				if(!buffer.isLineVisible(physicalLine + 1))
-				{
-					gfx.setColor(defaultColor);
-					gfx.drawLine(0,y + fm.getHeight() - 1,
-						x,y + fm.getHeight() - 1);
-				}
+				gfx.setColor(defaultColor);
+				int start = textArea.getHorizontalOffset()
+					+ fm.charWidth(' ') * buffer.getFoldLevel(physicalLine);
+
+				gfx.drawLine(start,y + fm.getHeight() - 1,
+					x - 1,y + fm.getHeight() - 1);
 			}
 		}
 

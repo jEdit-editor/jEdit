@@ -2,6 +2,13 @@ JEDIT 3.1 VERSION HISTORY
 
 * Version 3.1pre3
 
++ New Features
+
+- 'Narrow Buffer to Selection' command, temporarily hides all lines
+  except those in the selection. Use 'Expand All Folds' command to
+  make all lines visible. Default shortcut is C+e n
+- 'Expand Fold One Level' command
+
 + Enhancements
 
 - Variables and functions defined in the 'Startup' macro are now
@@ -17,6 +24,13 @@ JEDIT 3.1 VERSION HISTORY
 - 'Current Directory' menu didn't ignore backup files properly
 - 'Expand All Folds' command was broken
 - AWK mode didn't work
+- Keyboard shortcuts assigned to macros didn't work
+- next/prev-char/word/line didn't properly handle cases where the first
+  or last physical line was not visible
+- Clicking in the text area past the last visible line wasn't handled
+  properly if the last virtual line was not the last physical one
+- The filesystem browser would display 'multiple request' errors when
+  deleting an expanded directory with no files inside it
 
 * Version 3.1pre2
 

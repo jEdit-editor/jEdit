@@ -284,23 +284,3 @@ public class BrowserIORequest extends WorkRequest
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.5  2000/11/11 02:59:30  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.4  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.3  2000/08/06 09:44:27  sp
- * VFS browser now has a tree view, rename command
- *
- * Revision 1.2  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.1  2000/07/29 12:24:08  sp
- * More VFS work, VFS browser started
- *
- */
