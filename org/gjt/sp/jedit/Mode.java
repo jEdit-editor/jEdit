@@ -1,6 +1,6 @@
 /*
  * Mode.java - jEdit editing mode
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  * Copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -186,12 +186,23 @@ public class Mode
 	// called by jEdit.reloadKeyBindings()
 	void initKeyBindings()
 	{
-		// Bind indentCloseBrackets to indent-line
+		// Bind indentOpenBrackets and indentCloseBrackets to indent-line
+		EditAction action = jEdit.getAction("indent-lines");
+
+		String indentOpenBrackets = (String)getProperty("indentOpenBrackets");
+		if(indentOpenBrackets != null)
+		{
+			for(int i = 0; i < indentOpenBrackets.length(); i++)
+			{
+				jEdit.getInputHandler().addKeyBinding(
+					indentOpenBrackets.substring(i,i+1),
+					action);
+			}
+		}
+
 		String indentCloseBrackets = (String)getProperty("indentCloseBrackets");
 		if(indentCloseBrackets != null)
 		{
-			EditAction action = jEdit.getAction("indent-lines");
-
 			for(int i = 0; i < indentCloseBrackets.length(); i++)
 			{
 				jEdit.getInputHandler().addKeyBinding(
@@ -212,6 +223,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/04/15 07:07:24  sp
+ * Smarter auto indent
+ *
  * Revision 1.25  2000/04/01 12:21:27  sp
  * mode cache implemented
  *
@@ -241,8 +255,5 @@ public class Mode
  *
  * Revision 1.16  1999/10/30 02:44:18  sp
  * Miscallaneous stuffs
- *
- * Revision 1.15  1999/10/24 06:04:00  sp
- * QuickSearch in tool bar, auto indent updates, macro recorder updates
  *
  */

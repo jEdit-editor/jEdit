@@ -46,11 +46,24 @@ public class indent_lines extends EditAction
 		{
 			textArea.overwriteSetSelectedText(actionCommand);
 
+			String indentOpenBrackets = (String)buffer
+				.getProperty("indentOpenBrackets");
 			String indentCloseBrackets = (String)buffer
 				.getProperty("indentCloseBrackets");
-			if(indentCloseBrackets == null)
-				return;
-			if(indentCloseBrackets.indexOf(actionCommand) == -1)
+
+			boolean ok = false;
+			if(indentOpenBrackets != null)
+			{
+				if(indentOpenBrackets.indexOf(actionCommand) != -1)
+					ok = true;
+			}
+			if(indentCloseBrackets != null)
+			{
+				if(indentCloseBrackets.indexOf(actionCommand) != -1)
+					ok = true;
+			}
+
+			if(!ok)
 				return;
 		}
 

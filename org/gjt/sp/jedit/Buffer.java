@@ -766,21 +766,39 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public boolean indentLine(View view, int lineIndex, boolean force)
 	{
+		if(lineIndex == 0)
+			return false;
+
 		// Use JEditTextArea's line access methods
 		JEditTextArea textArea = view.getTextArea();
 
 		// Get properties
 		String openBrackets = (String)getProperty("indentOpenBrackets");
 		String closeBrackets = (String)getProperty("indentCloseBrackets");
+		String _indentPrevLine = (String)getProperty("indentPrevLine");
+		boolean doubleBracketIndent = getBooleanProperty("doubleBracketIndent");
+		RE indentPrevLineRE = null;
 		if(openBrackets == null)
 			openBrackets = "";
 		if(closeBrackets == null)
 			closeBrackets = "";
+		if(_indentPrevLine != null)
+		{
+			try
+			{
+				indentPrevLineRE = new RE(_indentPrevLine,
+					RE.REG_ICASE,RESyntax.RE_SYNTAX_PERL5);
+			}
+			catch(REException re)
+			{
+				Log.log(Log.ERROR,this,"Invalid 'indentPrevLine'"
+					+ " regexp: " + _indentPrevLine);
+				Log.log(Log.ERROR,this,re);
+			}
+		}
+
 		int tabSize = getTabSize();
 		boolean noTabs = getBooleanProperty("noTabs");
-
-		if(lineIndex == 0)
-			return false;
 
 		// Get line text
 		String line = textArea.getLineText(lineIndex);
@@ -797,6 +815,12 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		if(prevLine == null)
 			return false;
+
+		/*
+		 * If 'prevLineIndent' matches a line --> +1
+		 */
+		boolean prevLineMatches = (indentPrevLineRE == null ? false
+			: indentPrevLineRE.isMatch(prevLine));
 
 		/*
 		 * On the previous line,
@@ -878,7 +902,25 @@ public class Buffer extends SyntaxDocument implements EBComponent
 						lineBrackets--;
 				}
 				else if(openBrackets.indexOf(c) != -1)
+				{
+					/*
+					 * If supressBracketAfterIndent is true
+					 * and we have something that looks like:
+					 * if(bob)
+					 * {
+					 * then the 'if' will not shift the indent,
+					 * because of the {.
+					 *
+					 * If supressBracketAfterIndent is false,
+					 * the above would be indented like:
+					 * if(bob)
+					 *         {
+					 */
+					if(!doubleBracketIndent)
+						prevLineMatches = false;
 					lineBrackets++;
+				}
+
 				break;
 			}
 		}
@@ -904,6 +946,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			{
 				prevLineIndent += (prevLineBrackets * tabSize);
 			}
+
+			if(prevLineMatches)
+				prevLineIndent += tabSize;
 
 			// Insert a tab if line already has correct indent
 			// and force is not set
@@ -1842,6 +1887,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.138  2000/04/15 07:07:24  sp
+ * Smarter auto indent
+ *
  * Revision 1.137  2000/04/15 04:14:46  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
  *
@@ -1872,14 +1920,5 @@ loop:		for(int i = 0; i < markers.size(); i++)
  * Revision 1.128  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes
- *
- * Revision 1.127  2000/03/14 06:22:24  sp
- * Lots of new stuff
- *
- * Revision 1.126  2000/03/04 03:39:54  sp
- * *** empty log message ***
- *
- * Revision 1.125  2000/02/20 03:14:13  sp
- * jEdit.getBrokenPlugins() method
  *
  */

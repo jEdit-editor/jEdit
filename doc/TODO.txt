@@ -1,6 +1,7 @@
 JEDIT TO DO
 
 - do MARK_PREVIOUS before markKeyword()
+- write 'indentPrevLine' regexp for Perl mode, maybe others
 - Double-click drag doesn't work backwards
 - XMode:
   - better error reporting
@@ -16,7 +17,12 @@ JEDIT TO DO
   - document GUIUtilities.load/saveGeometry
   - how to write text area and gutter hilites
 - Editable toolbar and context menu
-- Smarter auto indent
+- Possible auto indent improvements:
+  - don't do indentation inside comments
+  - skip brackets in string literals
+  - automatically shift indent left the line after one indented using
+    'indentPrevLine'
+  - 'unindentThisLine' regexp
 
 When we switch to JDK 1.2:
 - drag and drop

@@ -13,6 +13,12 @@ Also, syntax tokens can now be drawn with a background color other than
 the default. This can make certain tokens stand out more. The code to
 do this was contributed by Andre Kaplan <ak@village.uunet.be>.
 
+* Auto indent improvements
+
+In C-like edit modes (C, C++, Java, JavaScript, IDL), the indent will
+be shifted accordingly if the previous line contains an 'if', 'else',
+'for', 'while' or 'case' statement.
+
 * Search and replace improvements
 
 A new 'search bar' with incremental search support replaces the find

@@ -2,6 +2,12 @@ JEDIT VERSION HISTORY
 
 * Version 2.4pre6
 
++ New Features
+
+- In C-like modes, the indent will be shifted if the previous line contains
+  an 'if', 'else', 'while', 'for' or 'case' statement. This is implemented
+  using a regular expression in the 'indentPrevLine' buffer-local property
+
 + Enhancements
 
 - XML mode now opens all files whose first line contains <?xml in XML mode
