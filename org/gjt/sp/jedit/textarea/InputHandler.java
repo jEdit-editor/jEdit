@@ -213,6 +213,8 @@ public abstract class InputHandler extends KeyAdapter
 	public void setRepeatEnabled(boolean repeat)
 	{
 		this.repeat = repeat;
+		if(!repeat)
+			repeatCount = 0;
 	}
 
 	/**
@@ -269,13 +271,6 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	/**
-	 * Returns a copy of this input handler that shares the same
-	 * key bindings. Setting key bindings in the copy will also
-	 * set them in the original.
-	 */
-	public abstract InputHandler copy();
-
-	/**
 	 * Executes the specified action, repeating and recording it as
 	 * necessary.
 	 * @param listener The action listener
@@ -307,7 +302,7 @@ public abstract class InputHandler extends KeyAdapter
 			listener.actionPerformed(evt);
 		else
 		{
-			for(int i = 0; i < Math.max(1,repeatCount); i++)
+			for(int i = 0; i < _repeatCount; i++)
 				listener.actionPerformed(evt);
 		}
 
@@ -329,10 +324,7 @@ public abstract class InputHandler extends KeyAdapter
 			// If repeat was true originally, clear it
 			// Otherwise it might have been set by the action, etc
 			if(_repeat)
-			{
-				repeat = false;
-				repeatCount = 0;
-			}
+				setRepeatEnabled(false);
 		}
 	}
 
@@ -1105,6 +1097,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/03/18 05:45:25  sp
+ * Complete word overhaul, various other changes
+ *
  * Revision 1.21  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *

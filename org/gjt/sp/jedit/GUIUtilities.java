@@ -564,7 +564,7 @@ public class GUIUtilities
 	static void setProgressText(String message)
 	{
 		if(splash != null)
-			splash.setTitle(message);
+			splash.advance(message);
 	}
 
 	// private members
@@ -649,6 +649,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.52  2000/03/18 05:45:25  sp
+ * Complete word overhaul, various other changes
+ *
  * Revision 1.51  2000/03/14 06:22:24  sp
  * Lots of new stuff
  *

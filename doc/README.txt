@@ -64,7 +64,7 @@ Mike Dillon - TSQL syntax highlighting, gutter, new options dialog box,
 faster literal search, many other patches
 Ralf Engels - PostScript syntax highlighting
 Tal Davidson - Original syntax highlighting engine
-Valery Kondakoff - Complete Word command
+Valery Kondakoff - Old Complete Word command
 
 If you are not on the above list but think you should be, e-mail me.
 

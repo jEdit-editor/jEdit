@@ -1,6 +1,6 @@
 /*
  * SplashScreen.java - Splash screen
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,26 +19,65 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.Log;
 
-public class SplashScreen extends JFrame
+public class SplashScreen extends JWindow
 {
 	public SplashScreen()
 	{
-		super("jEdit is starting up");
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-		JLabel label = new JLabel(new ImageIcon(getClass()
-			.getResource("/org/gjt/sp/jedit/jedit_logo.jpg")));
-		setContentPane(label);
+		JPanel splash = new JPanel(new BorderLayout());
+		URL url = getClass().getResource("/org/gjt/sp/jedit/jedit_logo.jpg");
+		if(url != null)
+		{
+			splash.add(new JLabel(new ImageIcon(url)),
+				BorderLayout.CENTER);
+		}
+
+		splash.add(BorderLayout.NORTH,new JLabel("jEdit "
+			+ jEdit.getVersion(),JLabel.CENTER));
+
+		progress = new JProgressBar(0,6);
+		progress.setStringPainted(true);
+		progress.setString("jEdit is starting up...");
+		splash.add(BorderLayout.SOUTH,progress);
+
+		splash.setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
+
+		setContentPane(splash);
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
 			(screen.height - getSize().height) / 2);
 		show();
-
-		label.paintImmediately(0,0,label.getWidth(),label.getHeight());
 	}
+
+	public void advance(final String text)
+	{
+		try
+		{
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run()
+				{
+					progress.setValue(progress.getValue() + 1);
+					progress.setString(text);
+				}
+			});
+			Thread.yield();
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+		}
+	}
+
+	// private members
+	private JProgressBar progress;
 }

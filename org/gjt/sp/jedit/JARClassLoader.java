@@ -153,8 +153,6 @@ public class JARClassLoader extends ClassLoader
 
 			try
 			{
-				GUIUtilities.setProgressText("Starting plugin "
-					+ name);
 				loadPluginClass(name);
 			}
 			catch(Throwable t)
@@ -406,6 +404,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/03/18 05:45:25  sp
+ * Complete word overhaul, various other changes
+ *
  * Revision 1.31  2000/03/14 06:22:24  sp
  * Lots of new stuff
  *

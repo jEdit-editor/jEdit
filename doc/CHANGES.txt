@@ -10,7 +10,9 @@ JEDIT VERSION HISTORY
 - You can now have more than one split in a view
 - C+F11 and C+F12 go to the previous and next split pane, respectively
 - C+e TAB toggles between the current and last edited buffers
-- New splash screen
+- The current repeat count, if any, is now shown in the status bar
+- 'Complete Word' now displays a dialog box listing all completions if
+  there is more than one
 
 + Enhancements
 
@@ -20,6 +22,7 @@ JEDIT VERSION HISTORY
 - If the only opened file is an untitled file with no changes, opening
   another file will close the untitled file
 - 'Save As' warns you before overwriting an existing file
+- Plugin manager now prints exception tracebacks to the activity log
 
 + Bug Fixes
 

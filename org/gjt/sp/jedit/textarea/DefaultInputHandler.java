@@ -42,6 +42,18 @@ public class DefaultInputHandler extends InputHandler
 	}
 
 	/**
+	 * Creates a new input handler with the same set of key bindings
+	 * as the one specified. Note that both input handlers share
+	 * a pointer to exactly the same key binding table; so adding
+	 * a key binding in one will also add it to the other.
+	 * @param copy The input handler to copy key bindings from
+	 */
+	public DefaultInputHandler(DefaultInputHandler copy)
+	{
+		bindings = currentBindings = copy.bindings;
+	}
+
+	/**
 	 * Sets up the default key bindings.
 	 */
 	public void addDefaultKeyBindings()
@@ -139,16 +151,6 @@ public class DefaultInputHandler extends InputHandler
 	public void removeAllKeyBindings()
 	{
 		bindings.clear();
-	}
-
-	/**
-	 * Returns a copy of this input handler that shares the same
-	 * key bindings. Setting key bindings in the copy will also
-	 * set them in the original.
-	 */
-	public InputHandler copy()
-	{
-		return new DefaultInputHandler(this);
 	}
 
 	/**
@@ -261,8 +263,8 @@ public class DefaultInputHandler extends InputHandler
 				// 0-9 adds another 'digit' to the repeat number
 				if(repeat && Character.isDigit(c))
 				{
-					repeatCount *= 10;
-					repeatCount += (c - '0');
+					setRepeatCount(repeatCount * 10
+						+ (c - '0'));
 					return;
 				}
 
@@ -349,17 +351,14 @@ public class DefaultInputHandler extends InputHandler
 	// private members
 	private Hashtable bindings;
 	private Hashtable currentBindings;
-
-	private DefaultInputHandler(DefaultInputHandler copy)
-	{
-		bindings = currentBindings = copy.bindings;
-		inputAction = copy.inputAction;
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/03/18 05:45:25  sp
+ * Complete word overhaul, various other changes
+ *
  * Revision 1.20  2000/02/12 03:56:58  sp
  * 2.3pre5 stuff
  *

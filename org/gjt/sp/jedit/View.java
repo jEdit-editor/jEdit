@@ -604,10 +604,6 @@ public class View extends JFrame implements EBComponent
 		Font font = new Font(family,style,size);
 
 		painter.setFont(font);
-		painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
-			"view.lineHighlight")));
-		painter.setLineHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.lineHighlightColor")));
 		painter.setBracketHighlightEnabled("on".equals(jEdit.getProperty(
 			"view.bracketHighlight")));
 		painter.setBracketHighlightColor(GUIUtilities.parseColor(
@@ -628,7 +624,10 @@ public class View extends JFrame implements EBComponent
 			jEdit.getProperty("view.fgColor")));
 		painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
 			"view.blockCaret")));
-
+		painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
+			"view.lineHighlight")));
+		painter.setLineHighlightColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.lineHighlightColor")));
 
 		Gutter gutter = textArea.getGutter();
 		try
@@ -778,8 +777,6 @@ public class View extends JFrame implements EBComponent
 		TextAreaPainter painter = copy.getPainter();
 		TextAreaPainter myPainter = textArea.getPainter();
 		myPainter.setFont(painter.getFont());
-		myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
-		myPainter.setLineHighlightColor(painter.getLineHighlightColor());
 		myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
 		myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
 		myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
@@ -790,6 +787,8 @@ public class View extends JFrame implements EBComponent
 		myPainter.setBackground(painter.getBackground());
 		myPainter.setForeground(painter.getForeground());
 		myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
+		myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
+		myPainter.setLineHighlightColor(painter.getLineHighlightColor());
 		myPainter.setStyles(painter.getStyles());
 
 		Gutter myGutter = textArea.getGutter();
@@ -861,7 +860,8 @@ public class View extends JFrame implements EBComponent
 		textArea.getGutter().setContextMenu(GUIUtilities
 			.loadPopupMenu(this,"gutter.context"));
 
-		textArea.setInputHandler(jEdit.getInputHandler().copy());
+		textArea.setInputHandler(new StatusInputHandler(textArea,
+			(DefaultInputHandler)jEdit.getInputHandler()));
 		textArea.addCaretListener(new CaretHandler());
 		textArea.addFocusListener(new FocusHandler());
 
@@ -1354,15 +1354,26 @@ public class View extends JFrame implements EBComponent
 			int numLines = StatusBar.this.textArea.getLineCount();
 
 			String str;
-			if(status.isEmpty())
+			if(!status.isEmpty())
+				str = (String)status.peek();
+			else if(textArea.getInputHandler().isRepeatEnabled())
+			{
+				int repeatCount = textArea.getInputHandler()
+					.getRepeatCount();
+				if(repeatCount == 1)
+					str = "";
+				else
+					str = String.valueOf(repeatCount);
+				Object[] args = { str };
+				str = jEdit.getProperty("view.status.repeat",args);
+			}
+			else
 			{
 				str = ("col " + ((dot - start) + 1) + " line "
 					+ (currLine + 1) + "/"
 					+ numLines + " "
 					+ (((currLine + 1) * 100) / numLines) + "%");
 			}
-			else
-				str = (String)status.peek();
 
 			g.drawString(str,0,(StatusBar.this.getHeight()
 				+ fm.getAscent()) / 2);
@@ -1373,11 +1384,37 @@ public class View extends JFrame implements EBComponent
 			return new Dimension(200,0);
 		}
 	}
+
+	static class StatusInputHandler extends DefaultInputHandler
+	{
+		JEditTextArea textArea;
+
+		StatusInputHandler(JEditTextArea textArea, DefaultInputHandler inputHandler)
+		{
+			super(inputHandler);
+			this.textArea = textArea;
+		}
+
+		public void setRepeatEnabled(boolean repeat)
+		{
+			super.setRepeatEnabled(repeat);
+			textArea.getStatus().repaint();
+		}
+
+		public void setRepeatCount(int repeatCount)
+		{
+			super.setRepeatCount(repeatCount);
+			textArea.getStatus().repaint();
+		}
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.142  2000/03/18 05:45:25  sp
+ * Complete word overhaul, various other changes
+ *
  * Revision 1.141  2000/03/14 06:22:24  sp
  * Lots of new stuff
  *
@@ -1407,8 +1444,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.132  2000/01/31 05:04:48  sp
  * C+e C+x will ask to add abbrev if not found, other minor updates
- *
- * Revision 1.131  2000/01/29 10:12:43  sp
- * BeanShell edit mode, bug fixes
  *
  */

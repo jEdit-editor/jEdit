@@ -359,7 +359,7 @@ help-menu.label=$Help
 about.label=About jEdit...
 help.label=jEdit User Guide
 help@README.txt.label=jEdit Read Me
-help@NEWS.txt.label=Major Changes in jEdit 2.3
+help@NEWS.txt.label=Major Changes in jEdit 2.4
 help@FAQ.txt.label=Frequenty Asked Questions
 help@CHANGES.txt.label=Version History
 help@TODO.txt.label=To Do and Known Bugs
@@ -448,6 +448,8 @@ view.status.select-caret-register=Select to register:
 view.status.exchange-caret-register=Swap caret with register:
 view.status.clear-register=Clear register:
 view.status.insert-literal=Insert without expanding:
+view.status.repeat.none=Enter repeat count:
+view.status.repeat=Enter repeat count: {0}
 
 ###
 ### VARIOUS DIALOGS
@@ -625,6 +627,11 @@ searcherror.message=An error occurred while performing this operation. ({0})
 pasteprev.title=Paste Previous
 pasteprev.caption=Previous clippings:
 pasteprev.insert=Insert
+
+# Complete word dialog
+complete-word.title=Complete Word
+complete-word.caption=Possible completions for "{0}":\ 
+complete-word.insert=Insert
 
 # File changed on disk dialogs
 filechanged.title=File Changed on Disk
