@@ -274,7 +274,7 @@ public class InstallPluginsDialog extends EnhancedDialog
 				InstallPluginsDialog.this).getPlugins();
 
 			// skip plugins that are already installed
-			String[] installed = PluginManagerPlugin.getPlugins();
+			String[] installed = PluginManagerPlugin.getPlugins(false);
 			final DefaultListModel model = new DefaultListModel();
 loop:			for(int i = 0; i < pluginList.length; i++)
 			{

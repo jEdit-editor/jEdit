@@ -78,7 +78,7 @@ public class PluginManagerPlugin extends EBPlugin
 
 	// returns an array of all installed plugins' path names
 	// used by install and update functions
-	public static String[] getPlugins()
+	public static String[] getPlugins(boolean fullPath)
 	{
 		Vector installed = new Vector();
 
@@ -91,7 +91,9 @@ public class PluginManagerPlugin extends EBPlugin
 			{
 				String file = sysDirList[i];
 				if(!file.toLowerCase().endsWith(".jar"))
-						continue;
+					continue;
+				if(fullPath)
+					file = MiscUtilities.constructPath(sysDir,file);
 				installed.addElement(file);
 			}
 		}
@@ -109,6 +111,8 @@ public class PluginManagerPlugin extends EBPlugin
 					String file = userDirList[i];
 					if(!file.toLowerCase().endsWith(".jar"))
 						continue;
+					if(fullPath)
+						file = MiscUtilities.constructPath(userDir,file);
 					installed.addElement(file);
 				}
 			}
@@ -158,6 +162,32 @@ public class PluginManagerPlugin extends EBPlugin
 					loadedJARs.addElement(jar.getPath());
 				}
 			}
+		}
+
+		// Add any JARs that were installed after jEdit was started
+		// as 'not loaded'
+		String[] plugins = getPlugins(true);
+loop:		for(int i = 0; i < plugins.length; i++)
+		{
+			String jar = plugins[i];
+
+			for(int j = 0; j < loadedJARs.size(); j++)
+			{
+				if(loadedJARs.elementAt(j).equals(jar))
+					continue loop;
+			}
+
+			for(int j = 0; j < notLoadedJARs.size(); j++)
+			{
+				if(notLoadedJARs.elementAt(j).equals(jar))
+					continue loop;
+			}
+
+			// we've found a JAR that wasn't loaded
+			// on startup. Add it to the 'not loaded'
+			// list
+			notLoaded.addElement(MiscUtilities.getFileName(jar));
+			notLoadedJARs.addElement(jar);
 		}
 
 		retVal[0] = new String[loaded.size()];

@@ -62,7 +62,7 @@ public class PluginDownloadProgress extends JDialog
 		Dimension screen = getToolkit().getScreenSize();
 		Dimension size = getSize();
 		size.width = Math.max(size.width,500);
-		getRootPane().setPreferredSize(size);
+		setSize(size);
 		setLocationRelativeTo(dialog);
 
 		thread = new PluginDownloadThread(this,urls,dirs);
