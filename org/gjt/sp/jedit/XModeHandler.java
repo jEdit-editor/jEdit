@@ -303,6 +303,7 @@ public class XModeHandler extends HandlerBase
 			{
 				marker.addRuleSet(lastSetName, rules);
 				rules.setKeywords(keywords);
+				keywords = null;
 				lastSetName = null;
 				lastEscape = null;
 				lastIgnoreCase = true;

@@ -10,6 +10,8 @@
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.p[lm]" />
 		<PROPERTY NAME="firstlineGlob" VALUE="#!/*perl*" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 	</PROPS>
 	<RULES ESCAPE="\">
 		<!-- whitespace: (space and tab) -->
@@ -19,8 +21,9 @@
 		<!-- Comments -->
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
 
-		<SPAN TYPE="COMMENT2" AT_LINE_START="TRUE">
-			<BEGIN>=</BEGIN>
+		<!-- TYPE is LABEL so that =head1 and =cut are highlighted as so -->
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=head1</BEGIN>
 			<END>=cut</END>
 		</SPAN>
 
@@ -312,6 +315,14 @@
 			<KEYWORD3>warn</KEYWORD3>
 			<KEYWORD3>write</KEYWORD3>
 		</KEYWORDS>
+	</RULES>
+
+	<RULES SET="POD" DEFAULT="COMMENT2">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<MARK_FOLLOWING TYPE="LABEL" AT_LINE_START="TRUE">=</MARK_FOLLOWING>
 	</RULES>
 
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">

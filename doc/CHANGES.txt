@@ -16,6 +16,8 @@ error prevented 2.4pre2 from being installed properly.
 - jEdit didn't check if the buffer changed on disk when switching buffesr
   (since 2.4pre1)
 - The read only flag wasn't set on files (since 2.2 !!!)
+- Rule sets inherited the previous rule set's keyword map if no KEYWORDS
+  element was specified (since 2.4pre1)
 
 + API Changes
 
