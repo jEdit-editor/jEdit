@@ -321,7 +321,7 @@ public class SearchAndReplace
 		try
 		{
 			VFSManager.runInWorkThread(new HyperSearchRequest(view,
-				getSearchMatcher(false),results.getTreeModel()));
+				getSearchMatcher(false),results));
 			return true;
 		}
 		catch(Exception e)
@@ -332,16 +332,6 @@ public class SearchAndReplace
 				args[0] = e.toString();
 			GUIUtilities.error(view,"searcherror",args);
 			return false;
-		}
-		finally
-		{
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					results.searchDone();
-				}
-			});
 		}
 	}
 
@@ -621,14 +611,10 @@ loop:			for(;;)
 		/* Don't do this when playing a macro, cos it's annoying */
 		if(!BeanShell.isScriptRunning())
 		{
-			if(fileCount == 0)
-				view.getToolkit().beep();
-			else
-			{
-				Object[] args = { new Integer(occurCount),
-					new Integer(fileCount) };
-				GUIUtilities.message(view,"replace-results",args);
-			}
+			Object[] args = { new Integer(occurCount),
+				new Integer(fileCount) };
+			view.getStatus().setMessageAndClear(jEdit.getProperty(
+				"view.status.replace-all",args));
 		}
 
 		return (fileCount != 0);

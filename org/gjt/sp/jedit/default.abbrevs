@@ -13,18 +13,15 @@ P|public
 S|String
 V|Vector
 W|while($1)\n{\n\t\|\n}
-
 Mal|MalformedURLException
 hme|hasMoreElements()
 ne|nextElement()
 serr|System.err.println(\|);
 sout|System.out.println(\|);
-
 cg|Box.createGlue()
 chs|Box.createHorizontalStrut(\|)
 cvs|Box.createVerticalStrut(\|)
 Il|SwingUtilities.invokeLater(new Runnable()\n{\n\tpublic void run()\n\t{\n\t\t\|\n\t}\n});
-
 B|Buffer
 JE|JEditTextArea
 VDE|VFS.DirectoryEntry
@@ -42,17 +39,14 @@ logw|Log.log(Log.WARNING,this,\|);
 logn|Log.log(Log.NOTICE,this,\|);
 logm|Log.log(Log.MESSAGE,this,\|);
 logd|Log.log(Log.DEBUG,this,\|);
-
 [sgml]
 Ykeycap|<keycap>\|</>
 Ykeycombo|<keycombo><keycap>$1</><keycap>$2</></keycombo>
-
 [vhdl]
 sl|std_logic
 slv|std_logic_vector( x downto y )
 var|variable
 sig|signal
-
 [xsl]
 fes|<xsl:for-each select="\|">\n</xsl:for-each>
 nc|<xsl:number count="\|"/>
@@ -77,12 +71,17 @@ co|<xsl:copy>\|</xsl:copy>
 tnm|<xsl:template name="\|" match="">\n</xsl:template>
 om|<xsl:output method="\|"/>
 ats|<xsl:apply-templates select="\|"/>
+atsm|<xsl:apply-templates select="\|" mode=""/>
 tdoe|<xsl:text disable-output-escaping="\|"></xsl:text>
 t|<xsl:text>\|</xsl:text>
-ctnwp|<xsl:call-template name="\|">\n\t<xsl:with-param name="" select=""/>\n</xsl:call-template>
-s|<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">\n\|\n</xsl:stylesheet>
+ctnwp|<xsl:call-template name="\|">\n\t<xsl:with-param name="" 
+ctnwp|select=""/>\n</xsl:call-template>
+s|<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+s|version="1.0">\n\|\n</xsl:stylesheet>
 o|<xsl:otherwise>\n\|\n</xsl:otherwise>
-cwto|<xsl:choose>\n\t<xsl:when test="\|">\n\t</xsl:when>\n\t<xsl:otherwise>\n\t</xsl:otherwise>\n</xsl:choose>
+cwto|<xsl:choose>\n\t<xsl:when 
+cwto|test="\|">\n\t</xsl:when>\n\t<xsl:otherwise>\n\t</xsl:otherwise>\n</xsl:choose>
+tmm|<xsl:template match="\|" mode="">\n</xsl:template>
 m|<xsl:message>\|</xsl:message>
 inh|<xsl:include href="\|"/>
 k|<xsl:key name="\|" match="" use=""/>

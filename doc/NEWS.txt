@@ -1,6 +1,25 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.1 AND 3.2
 
-- to do: mention jEditLauncher, anti-alias & java2d code
+* Contents
+
+- Markers
+- Multiple selection
+- Quick copy
+- Clipboard improvements
+- Syntax highlighting improvements
+- New version of BeanShell
+- Search and replace improvements
+- Positional parameters in abbreviations
+- Better support for different character encodings
+- File system browser improvements
+- Plugin manager improvements
+- Status bar
+- Running BeanShell scripts on startup
+- Edit server
+- jEdit launcher for Windows
+- Improved Java 2 compatibility
+- Better MacOS X support
+- Improved documentation
 
 * Markers
 
@@ -106,16 +125,6 @@ following will be inserted:
 
 Expansions can contain up to nine positional parameters.
 
-* Status bar
-
-A status bar has been added to views. The status bar shows miscellaneous
-information, such as the current caret location, any prompts displayed
-by marker and register commands, I/O status, and so on.
-
-If the current line contains hard tabs, both the 'file' column location
-(where each tab counts as one character) and 'screen' column location
-(where each tab counts as multiple characters) are shown.
-
 * Better support for different character encodings
 
 Files can be loaded and saved with an encoding different from the
@@ -152,7 +161,17 @@ For those with slow Internet connections, an option is available to only
 download plugin binaries, without source code.
 
 Finally, removing a plugin consisting of multiple JAR files will now
-remove all JAR files, instead of only removing the primary JAR file.
+remove all JAR files, instead of just the primary JAR file as before.
+
+* Status bar
+
+A status bar has been added to views. The status bar shows miscellaneous
+information, such as the current caret location, any prompts displayed
+by marker and register commands, I/O status, and so on.
+
+If the current line contains hard tabs, both the 'file' column location
+(where each tab counts as one character) and 'screen' column location
+(where each tab counts as multiple characters) are shown.
 
 * Running BeanShell scripts on startup
 
@@ -174,22 +193,40 @@ with the '-bshclient' command line switch while another instance is
 already running. This will read a BeanShell script from standard input
 and send it to the already running instance.
 
+* jEdit launcher for Windows
+
+When running on Windows, the jEdit installer now offers an option to
+install a Windows-native launcher. The launcher allows file types to be
+associated with it; it also adds commands to the Windows Explorer
+right-click context menu for opening any file in jEdit. Finally, the
+launcher adds an 'Uninstall' option for removing jEdit.
+
+* Improved Java 2 compatibility
+
+Previously, jEdit always used Java 1.1 AWT code to draw and measure
+text. With some Java versions, this would result in problems such as the
+caret being drawn in the wrong place.
+
+Now, jEdit uses Java2D text code when running on Java 2. As a result
+jEdit should work better in many cases. Additionally, anti-aliasing of
+text can be enabled in the Text Area pane of the Global Options dialog
+box. The AntiAlias plugin that did this with older jEdit versions is now
+obsolete.
+
+Previous versions of jEdit exhibited problems running under the newly
+released JDK 1.4 beta; these are now fixed.
+
 * Better MacOS X support
 
-When running on MacOS X, jEdit automatically uses the Command key as the
-primary modifier, as opposed to Control. In addition, a property is set
-which puts jEdit's menus in the system menu bar, just like all other
-MacOS applications do.
-
-* Java 1.4 compatibility
-
-jEdit is now fully compatible with the newly released Java 1.4, which
-was still beta at the time of writing.
+When running on MacOS X, jEdit now uses the Command key as the primary
+modifier, as opposed to Control. In addition, jEdit's menus are now
+added to the system menu bar, just like with all other MacOS
+applications.
 
 * Improved documentation
 
 The user's guide has once again been restructured, expanded and revised.
-The section on writing macros has been greatly improved, and a new
+The section on writing macros has seen some improvement, and a new
 section on writing plugins has been added. This section describes the
 construction of a sample plugin, QuickNotepad, the full source of which
 can be found in the jEdit source code download.

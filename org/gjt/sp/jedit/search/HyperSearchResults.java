@@ -1,6 +1,6 @@
 /*
  * HyperSearchResults.java - HyperSearch results
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,10 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 		super(new BorderLayout());
 
 		this.view = view;
+
+		caption = new JLabel();
+		updateCaption(0,0);
+		add(BorderLayout.NORTH, caption);
 
 		resultTreeRoot = new DefaultMutableTreeNode();
 		resultTreeModel = new DefaultTreeModel(resultTreeRoot);
@@ -145,11 +149,12 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 
 	public void searchStarted()
 	{
+		caption.setText(jEdit.getProperty("hypersearch-results.searching"));
 		resultTreeRoot.removeAllChildren();
 		resultTreeModel.reload(resultTreeRoot);
 	}
 
-	public void searchDone()
+	public void searchDone(int resultCount, int bufferCount)
 	{
 		// need to invokeLater() because the thread calls
 		// VFSManager.runInAWTThread() to add search results
@@ -157,6 +162,8 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 		{
 			public void run()
 			{
+				updateCaption(resultCount,bufferCount);
+
 				if(resultTreeRoot.getChildCount() == 1)
 				{
 					resultTree.expandPath(new TreePath(
@@ -171,10 +178,16 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 	// private members
 	private View view;
 
+	private JLabel caption;
 	private JTree resultTree;
 	private DefaultMutableTreeNode resultTreeRoot;
 	private DefaultTreeModel resultTreeModel;
 
+	private void updateCaption(int resultCount, int bufferCount)
+	{
+		Object[] pp = { new Integer(resultCount), new Integer(bufferCount) };
+		caption.setText(jEdit.getProperty("hypersearch-results.caption",pp))
+	}
 
 	class MouseHandler extends MouseAdapter
 	{

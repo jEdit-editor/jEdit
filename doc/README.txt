@@ -216,6 +216,7 @@ Jerry McBride:
 John Gellene:
 	- Writing macros section of user's guide
 	- Writing plugins section of user's guide
+	- jEditLauncher for Windows
 	- A large number of sample macros
 	- ... and more
 

@@ -609,6 +609,7 @@ view.status.marker-prompt=Press key to specify marker:
 view.status.expand-folds=Press 0-9 to specify fold level:
 view.status.insert-literal=Press key to insert literally:
 view.status.auto-wrap=Search text not found; restarting search
+view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
 view.status.mode-tooltip=Current edit mode
 view.status.encoding-tooltip=Current encoding
 
@@ -823,17 +824,12 @@ keepsearching.message=No more matches were found. Continue search from\n\
 
 # HyperSearch results dialog
 hypersearch-results.title=HyperSearch Results
+hypersearch-results.caption=Found {0} occurrence(s) in {1} file(s).
+hypersearch-results.searching=Searching...
 hypersearch.status=HyperSearch
 
 hypersearch-no-results.title=HyperSearch Complete
 hypersearch-no-results.message=No occurrences of the search string were found.
-
-hypersearch-done.title=HyperSearch Complete
-hypersearch-done.message=Found {0} occurrence(s) in {1} file(s).
-
-# Replace all results
-replace-results.title=Replacement Complete
-replace-results.message=Replaced {0} occurrence(s) in {1} file(s).
 
 # Search and replace error dialog
 searcherror.title=Search and Replace Error

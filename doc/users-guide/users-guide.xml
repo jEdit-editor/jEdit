@@ -1,13 +1,15 @@
 <?xml version="1.0" ?>
 
-<!-- jEdit documentation, (C) 1999, 2000, 2001 Slava Pestov -->
-<!-- Portions copyright (C) 2001 John Gellene -->
+<!-- jEdit user's guide -->
+<!-- (C) 1999, 2000, 2001 Slava Pestov -->
+<!-- (C) 2001 John Gellene -->
 
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" [
 
+<!ENTITY starting SYSTEM "starting.xml">
 <!ENTITY basics SYSTEM "basics.xml">
 <!ENTITY files SYSTEM "files.xml">
 <!ENTITY text-edit SYSTEM "text-edit.xml">
@@ -15,8 +17,6 @@
 <!ENTITY customizing SYSTEM "customizing.xml">
 <!ENTITY using-macros SYSTEM "using-macros.xml">
 <!ENTITY using-plugins SYSTEM "using-plugins.xml">
-<!ENTITY cli-usage SYSTEM "cli-usage.xml">
-<!ENTITY windows-launcher SYSTEM "windows-launcher.xml">
 <!ENTITY shortcuts SYSTEM "shortcuts.xml">
 <!ENTITY activity-log SYSTEM "activity-log.xml">
 <!ENTITY history SYSTEM "history.xml">
@@ -75,6 +75,7 @@
   </para>
  </partintro>
 
+ &starting;
  &basics;
  &files;
  &text-edit;
@@ -82,7 +83,6 @@
  &customizing;
  &using-macros;
  &using-plugins;
- &cli-usage;
  &shortcuts;
  &activity-log;
  &history;

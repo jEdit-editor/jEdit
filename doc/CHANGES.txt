@@ -8,9 +8,9 @@ JEDIT 3.2 VERSION HISTORY
   EditServer client written in native code for improved performance,
   and adds a command for starting jEdit to the Windows Explorer
   right-click menu (John Gellene)
-- When running on Java 2, anti-aliasing can be enabled in Text Area
-  pane of Global Options dialog box. Replaces AntiAlias plugin, and
-  works better, because Java2D text measurement code is used to
+- When running on Java 2, anti-aliasing can be enabled in the Text
+  Area pane of Global Options dialog box. Replaces AntiAlias plugin,
+  and works better, because Java2D text measurement code is used to
   calculate offsets
 - Progress 4GL syntax highlighting (Patrick Tingen)
 
@@ -23,15 +23,16 @@ JEDIT 3.2 VERSION HISTORY
   too.
 - Documentation updates
 - Updated set of sample macros (John Gellene)
-
-+ Neutral
-
+- More XSL abbreviation updates (Ollie Rutherfurd)
 - The functionality of the following macros has been moved to the
   corresponding plugins:
-
   - Go_to_Clipper (to Clipper plugin)
   - Go_to_Console (to Console plugin)
   - Show_Dual_Diff (to JDiff plugin)
+- The Replace All command now shows the replacement results in the
+  status bar, not in a dialog box
+- The HyperSearch command now shows the number of matches found in the
+  HyperSearch Results window, not in a dialog box
 
 + Bug Fixes
 
@@ -45,6 +46,9 @@ JEDIT 3.2 VERSION HISTORY
 - When running on Java 2, jEdit uses Java2D text rendering and
   measurement code. This should finally fix the 'caret drawn in wrong
   place' bug, even when anti-aliasing is enabled
+- jEdit.openFiles() didn't setBuffer(), so when jEdit connected to
+  another instance, the new instance opened the necessary files, but
+  never displayed them
 
 * Version 3.2pre5
 

@@ -34,12 +34,13 @@ import org.gjt.sp.util.*;
 public class HyperSearchRequest extends WorkRequest
 {
 	public HyperSearchRequest(View view, SearchMatcher matcher,
-		DefaultTreeModel resultTreeModel)
+		HyperSearchResults results)
 	{
 		this.view = view;
 		this.matcher = matcher;
 
-		this.resultTreeModel = resultTreeModel;
+		this.results = results;
+		this.resultTreeModel = results.getTreeModel();
 		this.resultTreeRoot = (DefaultMutableTreeNode)resultTreeModel
 			.getRoot();
 	}
@@ -50,14 +51,14 @@ public class HyperSearchRequest extends WorkRequest
 		setProgressMaximum(fileset.getBufferCount());
 		setStatus(jEdit.getProperty("hypersearch.status"));
 
+		int resultCount = 0;
+		int bufferCount = 0;
+
 		try
 		{
 			int current = 0;
 
 			Buffer buffer = fileset.getFirstBuffer(view);
-
-			int resultCount = 0;
-			int bufferCount = 0;
 
 			if(buffer != null)
 			{
@@ -73,23 +74,6 @@ public class HyperSearchRequest extends WorkRequest
 				}
 				while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 			}
-
-			// retarded javac limitations force us to do this
-			// crap here
-			final Object[] pp = { new Integer(resultCount),
-				new Integer(bufferCount) };
-			final boolean resultsFound = (resultCount != 0);
-
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					if(resultsFound)
-						GUIUtilities.message(view,"hypersearch-done",pp);
-					else
-						GUIUtilities.message(view,"hypersearch-no-results",null);
-				}
-			});
 		}
 		catch(Exception e)
 		{
@@ -102,11 +86,24 @@ public class HyperSearchRequest extends WorkRequest
 		catch(WorkThread.Abort a)
 		{
 		}
+		finally
+		{
+			final int _bufferCount = bufferCount;
+			final int _resultCount = resultCount;
+			VFSManager.runInAWTThread(new Runnable()
+			{
+				public void run()
+				{
+					results.searchDone(_bufferCount,_resultCount);
+				}
+			});
+		}
 	}
 
 	// private members
 	private View view;
 	private SearchMatcher matcher;
+	private HyperSearchResults results;
 	private DefaultTreeModel resultTreeModel;
 	private DefaultMutableTreeNode resultTreeRoot;
 

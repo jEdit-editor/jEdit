@@ -1078,6 +1078,9 @@ public class jEdit
 				retVal = lastBuffer;
 		}
 
+		if(view != null && retVal != null)
+			view.setBuffer(retVal);
+
 		return retVal;
 	}
 
