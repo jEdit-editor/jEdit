@@ -101,15 +101,9 @@ public class View extends JFrame implements EBComponent
 		}
 		this.buffer = buffer;
 
-		// until we can find a better way to store caret info...
 		unsplit();
-		/* JEditTextArea[] textAreas = getTextAreas();
-		for(int i = 0; i < textAreas.length; i++)
-		{
-			JEditTextArea textArea = textAreas[i]; */
-			textArea.setDocument(buffer);
-			((StatusBar)textArea.getStatus()).repaint();
-		/* } */
+		textArea.setDocument(buffer);
+		((StatusBar)textArea.getStatus()).repaint();
 
 		loadCaretInfo();
 		updateMarkerMenus();
@@ -172,23 +166,34 @@ public class View extends JFrame implements EBComponent
 
 		JComponent oldParent = (JComponent)oldTextArea.getParent();
 
-		JSplitPane newSplitPane;
-
 		if(oldParent instanceof JSplitPane)
 		{
 			JSplitPane oldSplitPane = (JSplitPane)oldParent;
+			int dividerPos = oldSplitPane.getDividerLocation();
+
 			Component left = oldSplitPane.getLeftComponent();
-			newSplitPane = new JSplitPane(orientation,textArea,oldTextArea);
+			final JSplitPane newSplitPane = new JSplitPane(orientation,oldTextArea,textArea);
 			newSplitPane.setBorder(null);
+
 			if(left == oldTextArea)
 				oldSplitPane.setLeftComponent(newSplitPane);
 			else
 				oldSplitPane.setRightComponent(newSplitPane);
+
+			oldSplitPane.setDividerLocation(dividerPos);
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					newSplitPane.setDividerLocation(0.5);
+				}
+			});
 		}
 		else
 		{
-			newSplitPane = splitPane = new JSplitPane(orientation,
-				textArea,oldTextArea);
+			JSplitPane newSplitPane = splitPane = new JSplitPane(orientation,
+				oldTextArea,textArea);
 			newSplitPane.setBorder(null);
 			if(bufferTabs != null)
 				bufferTabs.update();
@@ -197,7 +202,11 @@ public class View extends JFrame implements EBComponent
 				oldParent.add(splitPane);
 				oldParent.revalidate();
 			}
+
+			newSplitPane.setDividerLocation(oldParent.getHeight() / 2);
 		}
+
+		textArea.requestFocus();
 	}
 
 	/**
@@ -1412,6 +1421,10 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.143  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.142  2000/03/18 05:45:25  sp
  * Complete word overhaul, various other changes
  *

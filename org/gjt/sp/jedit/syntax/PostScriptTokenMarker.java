@@ -38,7 +38,7 @@ public class PostScriptTokenMarker extends TokenMarker
 	    this.keywords = keywords;
 	}
 
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		int offset   = line.offset;
@@ -80,30 +80,30 @@ loop:		for(int i = offset; i < length; i++)
 				switch(c)
 				{
 				case '(':  // string
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.LITERAL1;
 						lastOffset = lastKeyword = i;
 						braceCount = 1;
 					}
 					break;
 				case '<':
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 
-					addToken(i - lastOffset,token);
+					addToken(info,i - lastOffset,token);
 					token = Token.LITERAL2;
 					lastOffset = lastKeyword = i;
 					break;
 				case '/':
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 
-					addToken(i - lastOffset, token );
+					addToken(info,i - lastOffset, token );
 					token = Token.LABEL;
 					lastOffset = lastKeyword = i;
 					break;
 				case '%': // read comment 
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 					if(length - i > 1)
 					{
 						switch(array[i1])
@@ -111,13 +111,13 @@ loop:		for(int i = offset; i < length; i++)
 						case '%':
 						case '?':
 						case '!':
-							addToken(i - lastOffset,token);
-							addToken(length - i,Token.COMMENT2);
+							addToken(info,i - lastOffset,token);
+							addToken(info,length - i,Token.COMMENT2);
 							lastOffset = lastKeyword = length;
 							break loop;
 						default:
-							addToken(i - lastOffset,token);
-							addToken(length - i,Token.COMMENT1);
+							addToken(info,i - lastOffset,token);
+							addToken(info,length - i,Token.COMMENT1);
 							lastOffset = lastKeyword = length;
 							break loop;
 						}
@@ -126,7 +126,7 @@ loop:		for(int i = offset; i < length; i++)
 				default:
 					if( Character.isWhitespace(c) || 
 						c1=='[' || c1==']' || c1=='{' || c1=='}' )
-						doKeyword(line,i,c);
+						doKeyword(info,line,i,c);
 					break;
 				}
 				break;
@@ -142,7 +142,7 @@ loop:		for(int i = offset; i < length; i++)
 					braceCount--;
 					if( braceCount <= 0 )
 					{
-						addToken(i1 - lastOffset,token);
+						addToken(info,i1 - lastOffset,token);
 						token = Token.NULL;
 						lastOffset = lastKeyword = i1;
 					}
@@ -160,7 +160,7 @@ loop:		for(int i = offset; i < length; i++)
 				}
 				if(c == '>')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(info,i1 - lastOffset,Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -169,8 +169,8 @@ loop:		for(int i = offset; i < length; i++)
 				if( Character.isWhitespace(c1) || 
 					c1=='[' || c1==']' || c1=='{' || c1=='}' )
 				{
-					addToken(i1 - lastOffset,token);
-					// doKeyword(line,i,c);
+					addToken(info,i1 - lastOffset,token);
+					// doKeyword(info,line,i,c);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -182,9 +182,9 @@ loop:		for(int i = offset; i < length; i++)
 		}
 
 		if(token == Token.NULL)
-			doKeyword(line,length,'\0');
+			doKeyword(info,line,length,'\0');
 
-		addToken(length - lastOffset,token);
+		addToken(info,length - lastOffset,token);
 
 		lineInfo[lineIndex].obj = new Integer(braceCount);
 
@@ -259,7 +259,7 @@ loop:		for(int i = offset; i < length; i++)
 	private int lastOffset;
 	private int lastKeyword;
 
-	private boolean doKeyword(Segment line, int i, char c)
+	private boolean doKeyword(LineInfo info, Segment line, int i, char c)
 	{
 		int i1 = i+1;
 
@@ -268,8 +268,8 @@ loop:		for(int i = offset; i < length; i++)
 		if(id != Token.NULL)
 		{
 			if(lastKeyword != lastOffset)
-			addToken(lastKeyword - lastOffset,Token.NULL);
-			addToken(len,id);
+			addToken(info,lastKeyword - lastOffset,Token.NULL);
+			addToken(info,len,id);
 			lastOffset = i;
 		}
 		lastKeyword = i1;
@@ -280,6 +280,10 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.2  2000/01/29 10:12:43  sp
  * BeanShell edit mode, bug fixes
  *

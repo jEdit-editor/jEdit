@@ -196,7 +196,7 @@ public class Registers
 		public Buffer getBuffer()
 		{
 			if(buffer == null)
-				return jEdit.openFile(null,null,path,false,false);
+				return jEdit.openFile(null,path);
 			else
 				return buffer;
 		}
@@ -341,6 +341,10 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.7  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *

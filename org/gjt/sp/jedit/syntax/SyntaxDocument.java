@@ -79,6 +79,8 @@ public class SyntaxDocument extends PlainDocument
 		if(tokenMarker == null || !tokenMarker.supportsMultilineTokens())
 			return;
 
+		tokenMarker.linesChanged(start,len);
+
 		Segment lineSegment = new Segment();
 		Element map = getDefaultRootElement();
 
@@ -142,9 +144,15 @@ public class SyntaxDocument extends PlainDocument
 				getDefaultRootElement());
 			if(ch != null)
 			{
+				tokenMarker.linesChanged(ch.getIndex(),2);
 				tokenMarker.insertLines(ch.getIndex() + 1,
 					ch.getChildrenAdded().length -
 					ch.getChildrenRemoved().length);
+			}
+			else
+			{
+				tokenMarker.linesChanged(getDefaultRootElement()
+					.getElementIndex(evt.getOffset()),1);
 			}
 		}
 
@@ -164,9 +172,15 @@ public class SyntaxDocument extends PlainDocument
 				getDefaultRootElement());
 			if(ch != null)
 			{
+				tokenMarker.linesChanged(ch.getIndex(),2);
 				tokenMarker.deleteLines(ch.getIndex() + 1,
 					ch.getChildrenRemoved().length -
 					ch.getChildrenAdded().length);
+			}
+			else
+			{
+				tokenMarker.linesChanged(getDefaultRootElement()
+					.getElementIndex(evt.getOffset()),1);
 			}
 		}
 
@@ -177,6 +191,10 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.14  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *
@@ -208,11 +226,5 @@ public class SyntaxDocument extends PlainDocument
  *
  * Revision 1.5  1999/06/05 00:22:58  sp
  * LGPL'd syntax package
- *
- * Revision 1.4  1999/05/02 00:07:21  sp
- * Syntax system tweaks, console bugfix for Swing 1.1.1
- *
- * Revision 1.3  1999/04/19 05:38:20  sp
- * Syntax API changes
  *
  */

@@ -34,6 +34,6 @@ public class open_file extends EditAction
 			.getFile().getParent(),JFileChooser.OPEN_DIALOG);
 
 		if(file != null)
-			jEdit.openFile(view,null,file,false,false);
+			jEdit.openFile(view,file);
 	}
 }

@@ -43,7 +43,7 @@ public class PerlTokenMarker extends TokenMarker
 		this.keywords = keywords;
 	}
 
-	public byte markTokensImpl(byte _token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte _token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		int offset = line.offset;
@@ -63,12 +63,12 @@ public class PerlTokenMarker extends TokenMarker
 				&& SyntaxUtilities.regionMatches(false,line,
 				offset,str))
 			{
-				addToken(line.count,token);
+				addToken(info,line.count,token);
 				return Token.NULL;
 			}
 			else
 			{
-				addToken(line.count,token);
+				addToken(info,line.count,token);
 				lineInfo[lineIndex].obj = str;
 				return token;
 			}
@@ -92,14 +92,14 @@ loop:		for(int i = offset; i < length; i++)
 				switch(c)
 				{
 				case '#':
-					if(doKeyword(line,i,c))
+					if(doKeyword(info,line,i,c))
 						break;
 					if(backslash)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
-						addToken(length - i,Token.COMMENT1);
+						addToken(info,i - lastOffset,token);
+						addToken(info,length - i,Token.COMMENT1);
 						lastOffset = lastKeyword = length;
 						break loop;
 					}
@@ -109,16 +109,16 @@ loop:		for(int i = offset; i < length; i++)
 					if(i == offset)
 					{
 						token = Token.COMMENT2;
-						addToken(length - i,token);
+						addToken(info,length - i,token);
 						lastOffset = lastKeyword = length;
 						break loop;
 					}
 					else
-						doKeyword(line,i,c);
+						doKeyword(info,line,i,c);
 					break;
 				case '$': case '&': case '%': case '@':
 					backslash = false;
-					if(doKeyword(line,i,c))
+					if(doKeyword(info,line,i,c))
 						break;
 					if(length - i > 1)
 					{
@@ -128,20 +128,20 @@ loop:		for(int i = offset; i < length; i++)
 							i++;
 						else
 						{
-							addToken(i - lastOffset,token);
+							addToken(info,i - lastOffset,token);
 							lastOffset = lastKeyword = i;
 							token = Token.KEYWORD2;
 						}
 					}
 					break;
 				case '"':
-					if(doKeyword(line,i,c))
+					if(doKeyword(info,line,i,c))
 						break;
 					if(backslash)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.LITERAL1;
 						lineInfo[lineIndex].obj = null;
 						lastOffset = lastKeyword = i;
@@ -153,29 +153,29 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						int oldLastKeyword = lastKeyword;
-						if(doKeyword(line,i,c))
+						if(doKeyword(info,line,i,c))
 							break;
 						if(i != oldLastKeyword)
 							break;
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.LITERAL2;
 						lastOffset = lastKeyword = i;
 					}
 					break;
 				case '`':
-					if(doKeyword(line,i,c))
+					if(doKeyword(info,line,i,c))
 						break;
 					if(backslash)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.OPERATOR;
 						lastOffset = lastKeyword = i;
 					}
 					break;
 				case '<':
-					if(doKeyword(line,i,c))
+					if(doKeyword(info,line,i,c))
 						break;
 					if(backslash)
 						backslash = false;
@@ -184,7 +184,7 @@ loop:		for(int i = offset; i < length; i++)
 						if(length - i > 2 && array[i1] == '<'
 							/* && !Character.isWhitespace(array[i+2]) */)
 						{
-							addToken(i - lastOffset,token);
+							addToken(info,i - lastOffset,token);
 							lastOffset = lastKeyword = i;
 							token = Token.LITERAL1;
 							int len = length - (i+2);
@@ -198,19 +198,19 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				case ':':
 					backslash = false;
-					if(doKeyword(line,i,c))
+					if(doKeyword(info,line,i,c))
 						break;
 					// Doesn't pick up all labels,
 					// but at least doesn't mess up
 					// XXX::YYY
 					if(lastKeyword != 0)
 						break;
-					addToken(i1 - lastOffset,Token.LABEL);
+					addToken(info,i1 - lastOffset,Token.LABEL);
 					lastOffset = lastKeyword = i1;
 					break;
 				case '-':
 					backslash = false;
-					if(doKeyword(line,i,c))
+					if(doKeyword(info,line,i,c))
 						break;
 					if(i != lastKeyword || length - i <= 1)
 						break;
@@ -225,14 +225,14 @@ loop:		for(int i = offset; i < length; i++)
 					case 't': case 'u': case 'g':
 					case 'k': case 'T': case 'B':
 					case 'M': case 'A': case 'C':
-						addToken(i - lastOffset,token);
-						addToken(2,Token.KEYWORD3);
+						addToken(info,i - lastOffset,token);
+						addToken(info,2,Token.KEYWORD3);
 						lastOffset = lastKeyword = i+2;
 						i++;
 					}
 					break;
 				case '/': case '?':
-					if(doKeyword(line,i,c))
+					if(doKeyword(info,line,i,c))
 						break;
 					if(length - i > 1)
 					{
@@ -242,7 +242,7 @@ loop:		for(int i = offset; i < length; i++)
 							break;
 						matchChar = c;
 						matchSpacesAllowed = false;
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = S_ONE;
 						lastOffset = lastKeyword = i;
 					}
@@ -251,7 +251,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(!Character.isLetterOrDigit(c)
 						&& c != '_')
-						doKeyword(line,i,c);
+						doKeyword(info,line,i,c);
 					break;
 				}
 				break;
@@ -268,13 +268,13 @@ loop:		for(int i = offset; i < length; i++)
 					// ignore it
 					if(i != offset && array[i-1] == '$')
 					{
-						addToken(i1 - lastOffset,token);
+						addToken(info,i1 - lastOffset,token);
 						lastOffset = lastKeyword = i1;
 					}
 					// Otherwise, end of variable...
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						lastOffset = lastKeyword = i;
 						// Wind back so that stuff
 						// like $hello$fred is picked
@@ -332,7 +332,7 @@ loop:		for(int i = offset; i < length; i++)
 						else
 						{
 							token = S_END;
-							addToken(i1 - lastOffset,
+							addToken(info,i1 - lastOffset,
 								Token.LITERAL2);
 							lastOffset = lastKeyword = i1;
 						}
@@ -343,13 +343,13 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(!Character.isLetterOrDigit(c)
 					&& c != '_')
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 				break;
 			case Token.COMMENT2:
 				backslash = false;
 				if(i == offset)
 				{
-					addToken(line.count,token);
+					addToken(info,line.count,token);
 					if(length - i > 3 && SyntaxUtilities
 						.regionMatches(false,line,offset,"=cut"))
 						token = Token.NULL;
@@ -364,7 +364,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = true; */
 				else if(c == '"')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -376,7 +376,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = true; */
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(info,i1 - lastOffset,Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -386,7 +386,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '`')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -398,27 +398,27 @@ loop:		for(int i = offset; i < length; i++)
 		}
 
 		if(token == Token.NULL)
-			doKeyword(line,length,'\0');
+			doKeyword(info,line,length,'\0');
 
 		switch(token)
 		{
 		case Token.KEYWORD2:
-			addToken(length - lastOffset,token);
+			addToken(info,length - lastOffset,token);
 			token = Token.NULL;
 			break;
 		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.LITERAL1);
+			addToken(info,length - lastOffset,Token.LITERAL1);
 			break;
 		case S_END:
-			addToken(length - lastOffset,Token.LITERAL2);
+			addToken(info,length - lastOffset,Token.LITERAL2);
 			token = Token.NULL;
 			break;
 		case S_ONE: case S_TWO:
-			addToken(length - lastOffset,Token.INVALID); // XXX
+			addToken(info,length - lastOffset,Token.INVALID); // XXX
 			token = Token.NULL;
 			break;
 		default:
-			addToken(length - lastOffset,token);
+			addToken(info,length - lastOffset,token);
 			break;
 		}
 		return token;
@@ -433,13 +433,13 @@ loop:		for(int i = offset; i < length; i++)
 	private boolean matchCharBracket;
 	private boolean matchSpacesAllowed;
 
-	private boolean doKeyword(Segment line, int i, char c)
+	private boolean doKeyword(LineInfo info, Segment line, int i, char c)
 	{
 		int i1 = i+1;
 
 		if(token == S_END)
 		{
-			addToken(i - lastOffset,Token.LITERAL2);
+			addToken(info,i - lastOffset,Token.LITERAL2);
 			token = Token.NULL;
 			lastOffset = i;
 			lastKeyword = i1;
@@ -451,8 +451,8 @@ loop:		for(int i = offset; i < length; i++)
 		if(id == S_ONE || id == S_TWO)
 		{
 			if(lastKeyword != lastOffset)
-				addToken(lastKeyword - lastOffset,Token.NULL);
-			addToken(len,Token.LITERAL2);
+				addToken(info,lastKeyword - lastOffset,Token.NULL);
+			addToken(info,len,Token.LITERAL2);
 			lastOffset = i;
 			lastKeyword = i1;
 			if(Character.isWhitespace(c))
@@ -466,8 +466,8 @@ loop:		for(int i = offset; i < length; i++)
 		else if(id != Token.NULL)
 		{
 			if(lastKeyword != lastOffset)
-				addToken(lastKeyword - lastOffset,Token.NULL);
-			addToken(len,id);
+				addToken(info,lastKeyword - lastOffset,Token.NULL);
+			addToken(info,len,id);
 			lastOffset = i;
 		}
 		lastKeyword = i1;
@@ -726,6 +726,10 @@ loop:		for(int i = offset; i < length; i++)
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.12  2000/02/03 04:53:48  sp
  * Bug fixes and small updates
  *

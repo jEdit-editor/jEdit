@@ -59,7 +59,7 @@ public class goto_register extends EditAction
 				textArea.setCaretPosition(caretReg.getOffset());
 			}
 			else
-				jEdit.openFile(view,null,register.toString(),false,false);
+				jEdit.openFile(view,register.toString());
 		}
 	}
 }

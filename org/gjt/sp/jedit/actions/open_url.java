@@ -34,7 +34,7 @@ public class open_url extends EditAction
 		if(path != null)
 		{
 			jEdit.openFile(view,buffer.getFile().getParent(),
-				path,false,false);
+				path,false,false,true);
 		}
 	}
 }

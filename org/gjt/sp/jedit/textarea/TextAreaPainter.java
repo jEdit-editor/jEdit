@@ -49,9 +49,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		ToolTipManager.sharedInstance().registerComponent(this);
 
-		currentLine = new Segment();
-		currentLineIndex = -1;
-
 		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
 		setFont(new Font("Monospaced",Font.PLAIN,14));
@@ -448,14 +445,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		return getPreferredSize();
 	}
 
-	// package-private members
-	int currentLineIndex;
-	Token currentLineTokens;
-	Segment currentLine;
-
 	// protected members
 	protected JEditTextArea textArea;
-	
+
 	protected SyntaxStyle[] styles;
 	protected Color caretColor;
 	protected Color selectionColor;
@@ -482,7 +474,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		Font defaultFont = getFont();
 		Color defaultColor = getForeground();
 
-		currentLineIndex = line;
 		int y = textArea.lineToY(line);
 
 		if(line < 0 || line >= textArea.getLineCount())
@@ -509,13 +500,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		Color defaultColor, int x, int y)
 	{
 		paintHighlight(gfx,line,y);
-		textArea.getLineText(line,currentLine);
 
 		gfx.setFont(defaultFont);
 		gfx.setColor(defaultColor);
 
 		y += fm.getHeight();
-		x = Utilities.drawTabbedText(currentLine,x,y,gfx,this,0);
+		textArea.getLineText(line,textArea.lineSegment);
+		x = Utilities.drawTabbedText(textArea.lineSegment,x,y,gfx,this,0);
 
 		if(eolMarkers)
 		{
@@ -527,17 +518,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	protected void paintSyntaxLine(Graphics gfx, TokenMarker tokenMarker,
 		int line, Font defaultFont, Color defaultColor, int x, int y)
 	{
-		textArea.getLineText(currentLineIndex,currentLine);
-		currentLineTokens = tokenMarker.markTokens(currentLine,
-			currentLineIndex);
-
 		paintHighlight(gfx,line,y);
 
 		gfx.setFont(defaultFont);
 		gfx.setColor(defaultColor);
 		y += fm.getHeight();
-		x = SyntaxUtilities.paintSyntaxLine(currentLine,
-			currentLineTokens,styles,this,gfx,x,y);
+
+		textArea.getLineText(line,textArea.lineSegment);
+		x = SyntaxUtilities.paintSyntaxLine(textArea.lineSegment,
+			tokenMarker.markTokens(textArea.lineSegment,line),
+			styles,this,gfx,x,y);
 
 		if(eolMarkers)
 		{
@@ -590,10 +580,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(textArea.isSelectionRectangular())
 			{
 				int lineLen = textArea.getLineLength(line);
-				x1 = textArea._offsetToX(line,Math.min(lineLen,
+				x1 = textArea.offsetToX(line,Math.min(lineLen,
 					selectionStart - textArea.getLineStartOffset(
 					selectionStartLine)));
-				x2 = textArea._offsetToX(line,Math.min(lineLen,
+				x2 = textArea.offsetToX(line,Math.min(lineLen,
 					selectionEnd - textArea.getLineStartOffset(
 					selectionEndLine)));
 				if(x1 == x2)
@@ -601,21 +591,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 			else if(selectionStartLine == selectionEndLine)
 			{
-				x1 = textArea._offsetToX(line,
+				x1 = textArea.offsetToX(line,
 					selectionStart - lineStart);
-				x2 = textArea._offsetToX(line,
+				x2 = textArea.offsetToX(line,
 					selectionEnd - lineStart);
 			}
 			else if(line == selectionStartLine)
 			{
-				x1 = textArea._offsetToX(line,
+				x1 = textArea.offsetToX(line,
 					selectionStart - lineStart);
 				x2 = getWidth();
 			}
 			else if(line == selectionEndLine)
 			{
 				x1 = 0;
-				x2 = textArea._offsetToX(line,
+				x2 = textArea.offsetToX(line,
 					selectionEnd - lineStart);
 			}
 			else
@@ -637,7 +627,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(position == -1)
 			return;
 		y += fm.getLeading() + fm.getMaxDescent();
-		int x = textArea._offsetToX(line,position);
+		int x = textArea.offsetToX(line,position);
 		gfx.setColor(bracketHighlightColor);
 		// Hack!!! Since there is no fast way to get the character
 		// from the bracket matching routine, we use ( since all
@@ -652,7 +642,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			int offset = textArea.getCaretPosition() 
 				- textArea.getLineStartOffset(line);
-			int caretX = textArea._offsetToX(line,offset);
+			int caretX = textArea.offsetToX(line,offset);
 			int caretWidth = ((blockCaret ||
 				textArea.isOverwriteEnabled()) ?
 				fm.charWidth('w') : 1);
@@ -677,6 +667,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.25  2000/01/29 10:12:43  sp
  * BeanShell edit mode, bug fixes
  *
@@ -706,43 +700,5 @@ public class TextAreaPainter extends JComponent implements TabExpander
  *
  * Revision 1.16  1999/10/06 08:39:46  sp
  * Fixes to repeating and macro features
- *
- * Revision 1.15  1999/09/30 12:21:05  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.14  1999/08/21 01:48:18  sp
- * jEdit 2.0pre8
- *
- * Revision 1.13  1999/07/29 08:50:21  sp
- * Misc stuff for 1.7pre7
- *
- * Revision 1.12  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.11  1999/07/08 06:06:04  sp
- * Bug fixes and miscallaneous updates
- *
- * Revision 1.10  1999/07/05 04:38:40  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.9  1999/06/30 07:08:02  sp
- * Text area bug fixes
- *
- * Revision 1.8  1999/06/30 05:01:55  sp
- * Lots of text area bug fixes and optimizations
- *
- * Revision 1.7  1999/06/29 09:01:24  sp
- * Text area now does bracket matching, eol markers, also xToOffset() and
- * offsetToX() now work better
- *
- * Revision 1.6  1999/06/28 09:17:20  sp
- * Perl mode javac compile fix, text area hacking
- *
- * Revision 1.5  1999/06/27 04:53:16  sp
- * Text selection implemented in text area, assorted bug fixes
- *
- * Revision 1.4  1999/06/25 06:54:08  sp
- * Text area updates
  *
  */

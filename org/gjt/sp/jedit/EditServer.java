@@ -164,7 +164,7 @@ class EditServer extends Thread
 				public void run()
 				{
 					retVal[0] = jEdit.openFile(null,
-						parent,path,readOnly,false);
+						parent,path,readOnly,false,true);
 				}
 			});
 		}
@@ -265,6 +265,10 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.8  2000/02/27 00:39:50  sp
  * Misc changes
  *

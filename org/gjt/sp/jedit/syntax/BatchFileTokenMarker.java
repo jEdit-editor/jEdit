@@ -28,7 +28,7 @@ import javax.swing.text.Segment;
  */
 public class BatchFileTokenMarker extends TokenMarker
 {
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		int offset = line.offset;
@@ -37,7 +37,7 @@ public class BatchFileTokenMarker extends TokenMarker
 
 		if(SyntaxUtilities.regionMatches(true,line,offset,"rem"))
 		{
-			addToken(line.count,Token.COMMENT1);
+			addToken(info,line.count,Token.COMMENT1);
 			return Token.NULL;
 		}
 
@@ -51,11 +51,11 @@ loop:		for(int i = offset; i < length; i++)
 				switch(array[i])
 				{
 				case '%':
-					addToken(i - lastOffset,token);
+					addToken(info,i - lastOffset,token);
 					lastOffset = i;
 					if(length - i <= 3 || array[i+2] == ' ')
 					{
-						addToken(2,Token.KEYWORD2);
+						addToken(info,2,Token.KEYWORD2);
 						i += 2;
 						lastOffset = i;
 					}
@@ -63,14 +63,14 @@ loop:		for(int i = offset; i < length; i++)
 						token = Token.KEYWORD2;
 					break;
 				case '"':
-					addToken(i - lastOffset,token);
+					addToken(info,i - lastOffset,token);
 					token = Token.LITERAL1;
 					lastOffset = i;
 					break;
 				case ':':
 					if(i == offset)
 					{
-						addToken(line.count,Token.LABEL);
+						addToken(info,line.count,Token.LABEL);
 						lastOffset = length;
 						break loop;
 					}
@@ -78,7 +78,7 @@ loop:		for(int i = offset; i < length; i++)
 				case ' ':
 					if(lastOffset == offset)
 					{
-						addToken(i - lastOffset,Token.KEYWORD1);
+						addToken(info,i - lastOffset,Token.KEYWORD1);
 						lastOffset = i;
 					}
 					break;
@@ -87,7 +87,7 @@ loop:		for(int i = offset; i < length; i++)
 			case Token.KEYWORD2:
 				if(array[i] == '%')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
@@ -95,7 +95,7 @@ loop:		for(int i = offset; i < length; i++)
 			case Token.LITERAL1:
 				if(array[i] == '"')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
@@ -111,7 +111,7 @@ loop:		for(int i = offset; i < length; i++)
 				token = Token.INVALID;
 			else if(lastOffset == offset)
 				token = Token.KEYWORD1;
-			addToken(length - lastOffset,token);
+			addToken(info,length - lastOffset,token);
 		}
 		return Token.NULL;
 	}
@@ -125,6 +125,10 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.20  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

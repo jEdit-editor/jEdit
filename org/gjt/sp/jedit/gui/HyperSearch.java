@@ -327,7 +327,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		public Buffer getBuffer()
 		{
 			if(buffer == null)
-				jEdit.openFile(null,null,path,false,false);
+				jEdit.openFile(null,path);
 			return buffer;
 		}
 
@@ -378,6 +378,10 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.50  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.49  2000/02/01 06:12:33  sp
  * Gutter added (still not fully functional)
  *

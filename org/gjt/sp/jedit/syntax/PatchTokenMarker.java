@@ -28,23 +28,23 @@ import javax.swing.text.Segment;
  */
 public class PatchTokenMarker extends TokenMarker
 {
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		if(line.count == 0)
 			return Token.NULL;
 		switch(line.array[line.offset])
 		{
 		case '+': case '>':
-			addToken(line.count,Token.KEYWORD1);
+			addToken(info,line.count,Token.KEYWORD1);
 			break;
 		case '-': case '<':
-			addToken(line.count,Token.KEYWORD2);
+			addToken(info,line.count,Token.KEYWORD2);
 			break;
 		case '@': case '*':
-			addToken(line.count,Token.KEYWORD3);
+			addToken(info,line.count,Token.KEYWORD3);
 			break;
 	        default:
-			addToken(line.count,Token.NULL);
+			addToken(info,line.count,Token.NULL);
 			break;
 		}
 		return Token.NULL;
@@ -59,6 +59,10 @@ public class PatchTokenMarker extends TokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.7  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

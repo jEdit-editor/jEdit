@@ -42,18 +42,6 @@ public class reload extends EditAction
 				return;
 		}
 
-		view.saveCaretInfo();
-
 		buffer.load(view);
-
-		View[] views = jEdit.getViews();
-		for(int i = 0; i < views.length; i++)
-		{
-			if(view.getBuffer() == buffer)
-			{
-				view.unsplit();
-				view.loadCaretInfo();
-			}
-		}
 	}
 }

@@ -167,7 +167,7 @@ public class Sessions
 		if(path == null)
 			return null;
 
-		Buffer buffer = jEdit.openFile(null,null,path,false,false);
+		Buffer buffer = jEdit.openFile(null,path);
 
 		if(selStart != null && selEnd != null
 			&& firstLine != null && horizontalOffset != null)
@@ -220,6 +220,10 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.12  2000/02/20 03:14:13  sp
  * jEdit.getBrokenPlugins() method
  *

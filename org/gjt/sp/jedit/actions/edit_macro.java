@@ -42,6 +42,6 @@ public class edit_macro extends EditAction
 			MiscUtilities.constructPath(settings,"macros"),
 			JFileChooser.OPEN_DIALOG);
 		if(path != null)
-			jEdit.openFile(view,null,path,false,false);
+			jEdit.openFile(view,path);
 	}
 }

@@ -30,7 +30,7 @@ public class PropsTokenMarker extends TokenMarker
 {
 	public static final byte VALUE = Token.INTERNAL_FIRST;
 
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		int offset = line.offset;
@@ -48,7 +48,7 @@ loop:		for(int i = offset; i < length; i++)
 				case '#': case ';':
 					if(i == offset)
 					{
-						addToken(line.count,Token.COMMENT1);
+						addToken(info,line.count,Token.COMMENT1);
 						lastOffset = length;
 						break loop;
 					}
@@ -56,13 +56,13 @@ loop:		for(int i = offset; i < length; i++)
 				case '[':
 					if(i == offset)
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.KEYWORD2;
 						lastOffset = i;
 					}
 					break;
 				case '=':
-					addToken(i - lastOffset,Token.KEYWORD1);
+					addToken(info,i - lastOffset,Token.KEYWORD1);
 					token = VALUE;
 					lastOffset = i;
 					break;
@@ -71,7 +71,7 @@ loop:		for(int i = offset; i < length; i++)
 			case Token.KEYWORD2:
 				if(array[i] == ']')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
@@ -84,7 +84,7 @@ loop:		for(int i = offset; i < length; i++)
 			}
 		}
 		if(lastOffset != length)
-			addToken(length - lastOffset,Token.NULL);
+			addToken(info,length - lastOffset,Token.NULL);
 		return Token.NULL;
 	}
 
@@ -97,6 +97,10 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.9  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

@@ -29,7 +29,7 @@ import javax.swing.text.Segment;
 public class MakefileTokenMarker extends TokenMarker
 {
 	// public members
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		int offset = line.offset;
@@ -56,7 +56,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(lastOffset == offset)
 					{
-						addToken(i1 - lastOffset,Token.KEYWORD1);
+						addToken(info,i1 - lastOffset,Token.KEYWORD1);
 						lastOffset = i1;
 					}
 					break;
@@ -65,8 +65,8 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
-						addToken(length - i,Token.COMMENT1);
+						addToken(info,i - lastOffset,token);
+						addToken(info,length - i,Token.COMMENT1);
 						lastOffset = length;
 						break loop;
 					}
@@ -76,7 +76,7 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else if(lastOffset != offset)
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						lastOffset = i;
 						if(length - i > 1)
 						{
@@ -85,7 +85,7 @@ loop:		for(int i = offset; i < length; i++)
 								token = Token.KEYWORD2;
 							else
 							{
-								addToken(2,Token.KEYWORD2);
+								addToken(info,2,Token.KEYWORD2);
 								lastOffset += 2;
 								i++;
 							}
@@ -97,7 +97,7 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.LITERAL1;
 						lastOffset = i;
 					}
@@ -107,7 +107,7 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.LITERAL2;
 						lastOffset = i;
 					}
@@ -120,7 +120,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(c == ')' || c == '}')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
@@ -130,7 +130,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '"')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
@@ -142,7 +142,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(info,i1 - lastOffset,Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
@@ -154,14 +154,14 @@ loop:		for(int i = offset; i < length; i++)
 		switch(token)
 		{
 		case Token.KEYWORD2:
-			addToken(length - lastOffset,Token.INVALID);
+			addToken(info,length - lastOffset,Token.INVALID);
 			token = Token.NULL;
 			break;
 		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.LITERAL1);
+			addToken(info,length - lastOffset,Token.LITERAL1);
 			break;
 		default:
-			addToken(length - lastOffset,token);
+			addToken(info,length - lastOffset,token);
 			break;
 		}
 		return token;
@@ -170,6 +170,10 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.18  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

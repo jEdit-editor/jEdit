@@ -92,9 +92,9 @@ public class JEditTextArea extends JComponent
 		documentHandler = new DocumentHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
-		lineSegment = new Segment();
 		bracketLine = bracketPosition = -1;
 		blink = true;
+		lineSegment = new Segment();
 
 		// Initialize the GUI
 		setLayout(new ScrollLayout());
@@ -432,7 +432,7 @@ public class JEditTextArea extends JComponent
 				newFirstLine = 0;
 		}
 
-		int x = _offsetToX(line,offset);
+		int x = offsetToX(line,offset);
 		int width = painter.getFontMetrics().charWidth('w');
 
 		if(x < 0)
@@ -473,26 +473,11 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Converts an offset in a line into an x co-ordinate. This is a
-	 * slow version that can be used any time.
+	 * Converts an offset in a line into an x co-ordinate.
 	 * @param line The line
 	 * @param offset The offset, from the start of the line
 	 */
-	public final int offsetToX(int line, int offset)
-	{
-		// don't use cached tokens
-		painter.currentLineTokens = null;
-		return _offsetToX(line,offset);
-	}
-
-	/**
-	 * Converts an offset in a line into an x co-ordinate. This is a
-	 * fast version that should only be used if no changes were made
-	 * to the text since the last repaint.
-	 * @param line The line
-	 * @param offset The offset, from the start of the line
-	 */
-	public int _offsetToX(int line, int offset)
+	public int offsetToX(int line, int offset)
 	{
 		TokenMarker tokenMarker = getTokenMarker();
 
@@ -515,16 +500,7 @@ public class JEditTextArea extends JComponent
 		 * tokens can vary in width */
 		else
 		{
-			Token tokens;
-			if(painter.currentLineIndex == line
-				&& painter.currentLineTokens != null)
-				tokens = painter.currentLineTokens;
-			else
-			{
-				painter.currentLineIndex = line;
-				tokens = painter.currentLineTokens
-					= tokenMarker.markTokens(lineSegment,line);
-			}
+			Token tokens = tokenMarker.markTokens(lineSegment,line);
 
 			Toolkit toolkit = painter.getToolkit();
 			Font defaultFont = painter.getFont();
@@ -613,16 +589,7 @@ public class JEditTextArea extends JComponent
 		}
 		else
 		{
-			Token tokens;
-			if(painter.currentLineIndex == line && painter
-				.currentLineTokens != null)
-				tokens = painter.currentLineTokens;
-			else
-			{
-				painter.currentLineIndex = line;
-				tokens = painter.currentLineTokens
-					= tokenMarker.markTokens(lineSegment,line);
-			}
+			Token tokens = tokenMarker.markTokens(lineSegment,line);
 
 			int offset = 0;
 			Toolkit toolkit = painter.getToolkit();
@@ -1595,6 +1562,9 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
+	// package-private members
+	Segment lineSegment;
+
 	// protected members
 	protected static String CENTER = "center";
 	protected static String RIGHT = "right";
@@ -1633,8 +1603,6 @@ public class JEditTextArea extends JComponent
 	protected SyntaxDocument document;
 	protected DocumentHandler documentHandler;
 	protected boolean documentHandlerInstalled;
-
-	protected Segment lineSegment;
 
 	protected int selectionStart;
 	protected int selectionStartLine;
@@ -2298,6 +2266,10 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.47  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.46  2000/03/14 06:22:25  sp
  * Lots of new stuff
  *

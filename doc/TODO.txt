@@ -1,33 +1,33 @@
 JEDIT TO DO
 
-- Split panes are a bit broken
-- Fix focus breakage, C+TAB/CS+TAB to navigate around all view components
-  except for tool bar buttons
+- Option pane for changing mode-specific tab size, indent, comment
+  characters, and so on
+- DOX: merge basic-file-opts and basic-editing, rename advanced-editing
+  to 'Advanced Features'
 - EditPlugin.getName()/Version()/Author(), getPath(), getClassName(), etc
   methods
 - BrokenPlugin extends EditPlugin, used as a placeholder for broken
   plugins -- implements getPath() and getClassName()
 - jEdit.getPlugins() returns broken and non-broken plugins
 - 'Uncomment' command that removes comment strings from selected text
-- Option pane for changing mode-specific tab size, indent, comment
-  characters, and so on
+
 - Double-click drag doesn't work backwards
+- Fix focus breakage, C+TAB/CS+TAB to navigate around all view components
+  except for tool bar buttons
 - Plugin devel manual needs more work:
   - document views, buffers
   - document GUIUtilities.load/saveGeometry
   - how to write edit modes and token markers
   - how to write text area and gutter hilites
   - each section should have some sample source code
-- DOX: merge basic-file-opts and basic-editing, rename advanced-editing
-  to 'Advanced Features'
+
 - Incremental search
 - Integrate XMode
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Write custom 'document' class; Swing implementation has a few
   problems. With a custom document, folding and such becomes much cleaner
 - i18n support - bidi, input methods, locale-sensitive GUI, etc
-
-------- JDK 1.2 -------
+- Word wrap
 
 When we switch to JDK 1.2, do this:
 - drag and drop of files and text
@@ -35,6 +35,4 @@ When we switch to JDK 1.2, do this:
 - Enhanced printing:
   - print selection only
   - print line numbers option
-- Wait cursor hack in event queue
-- Proper font list in global options
 - Integrate HTTP proxy support

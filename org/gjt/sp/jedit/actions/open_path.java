@@ -27,7 +27,6 @@ public class open_path extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		jEdit.openFile(getView(evt),null,evt.getActionCommand(),
-			false,false);
+		jEdit.openFile(getView(evt),evt.getActionCommand());
 	}
 }

@@ -42,7 +42,7 @@ public class SQLTokenMarker extends TokenMarker
 		isTSQL = tsql;
 	}
 
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		offset = lastOffset = lastKeyword = line.offset;
 		length = line.count + offset;
@@ -57,20 +57,20 @@ loop:
 				{
 					token = Token.NULL;
 					i++;
-					addToken((i + 1) - lastOffset,Token.COMMENT1);
+					addToken(info,(i + 1) - lastOffset,Token.COMMENT1);
 					lastOffset = i + 1;
 				}
 				else if (token == Token.NULL)
 				{
-					searchBack(line, i);
-					addToken(1,Token.OPERATOR);
+					searchBack(info, line, i);
+					addToken(info,1,Token.OPERATOR);
 					lastOffset = i + 1;
 				}
 				break;
 			case '[':
 				if(token == Token.NULL)
 				{
-					searchBack(line, i);
+					searchBack(info, line, i);
 					token = Token.LITERAL1;
 					literalChar = '[';
 					lastOffset = i;
@@ -81,34 +81,34 @@ loop:
 				{
 					token = Token.NULL;
 					literalChar = 0;
-					addToken((i + 1) - lastOffset,Token.LITERAL1);
+					addToken(info,(i + 1) - lastOffset,Token.LITERAL1);
 					lastOffset = i + 1;
 				}
 				break;
 			case '.': case ',': case '(': case ')':
 				if (token == Token.NULL) {
-					searchBack(line, i);
-					addToken(1, Token.NULL);
+					searchBack(info, line, i);
+					addToken(info,1, Token.NULL);
 					lastOffset = i + 1;
 				}
 				break;
 			case '+': case '%': case '&': case '|': case '^':
 			case '~': case '<': case '>': case '=':
 				if (token == Token.NULL) {
-					searchBack(line, i);
-					addToken(1,Token.OPERATOR);
+					searchBack(info, line, i);
+					addToken(info,1,Token.OPERATOR);
 					lastOffset = i + 1;
 				}
 				break;
 			case ' ': case '\t':
 				if (token == Token.NULL) {
-					searchBack(line, i, false);
+					searchBack(info, line, i, false);
 				}
 				break;
 			case ':':
 				if(token == Token.NULL)
 				{
-					addToken((i+1) - lastOffset,Token.LABEL);
+					addToken(info,(i+1) - lastOffset,Token.LABEL);
 					lastOffset = i + 1;
 				}
 				break;
@@ -117,15 +117,15 @@ loop:
 				{
 					if (length - i >= 2 && line.array[i + 1] == '*')
 					{
-						searchBack(line, i);
+						searchBack(info, line, i);
 						token = Token.COMMENT1;
 						lastOffset = i;
 						i++;
 					}
 					else
 					{
-						searchBack(line, i);
-						addToken(1,Token.OPERATOR);
+						searchBack(info, line, i);
+						addToken(info,1,Token.OPERATOR);
 						lastOffset = i + 1;
 					}
 				}
@@ -135,15 +135,15 @@ loop:
 				{
 					if (length - i >= 2 && line.array[i+1] == '-')
 					{
-						searchBack(line, i);
-						addToken(length - i,Token.COMMENT1);
+						searchBack(info, line, i);
+						addToken(info,length - i,Token.COMMENT1);
 						lastOffset = length;
 						break loop;
 					}
 					else
 					{
-						searchBack(line, i);
-						addToken(1,Token.OPERATOR);
+						searchBack(info, line, i);
+						addToken(info,1,Token.OPERATOR);
 						lastOffset = i + 1;
 					}
 				}
@@ -152,8 +152,8 @@ loop:
 				if(isTSQL && token == Token.NULL && length - i >= 2 &&
 				(line.array[i+1] == '=' || line.array[i+1] == '<' || line.array[i+1] == '>'))
 				{
-					searchBack(line, i);
-					addToken(1,Token.OPERATOR);
+					searchBack(info, line, i);
+					addToken(info,1,Token.OPERATOR);
 					lastOffset = i + 1;
 				}
 				break;
@@ -162,14 +162,14 @@ loop:
 				{
 					token = Token.LITERAL1;
 					literalChar = line.array[i];
-					addToken(i - lastOffset,Token.NULL);
+					addToken(info,i - lastOffset,Token.NULL);
 					lastOffset = i;
 				}
 				else if(token == Token.LITERAL1 && literalChar == line.array[i])
 				{
 					token = Token.NULL;
 					literalChar = 0;
-					addToken((i + 1) - lastOffset,Token.LITERAL1);
+					addToken(info,(i + 1) - lastOffset,Token.LITERAL1);
 					lastOffset = i + 1;
 				}
 				break;
@@ -178,9 +178,9 @@ loop:
 			}
 		}
 		if(token == Token.NULL)
-			searchBack(line, length, false);
+			searchBack(info, line, length, false);
 		if(lastOffset != length)
-			addToken(length - lastOffset,token);
+			addToken(info,length - lastOffset,token);
 		return token;
 	}
 
@@ -191,31 +191,35 @@ loop:
 	private KeywordMap keywords;
 	private char literalChar = 0;
 
-	private void searchBack(Segment line, int pos)
+	private void searchBack(LineInfo info, Segment line, int pos)
 	{
-		searchBack(line, pos, true);
+		searchBack(info, line, pos, true);
 	}
 
-	private void searchBack(Segment line, int pos, boolean padNull)
+	private void searchBack(LineInfo info, Segment line, int pos, boolean padNull)
 	{
 		int len = pos - lastKeyword;
 		byte id = keywords.lookup(line,lastKeyword,len);
 		if(id != Token.NULL)
 		{
 			if(lastKeyword != lastOffset)
-				addToken(lastKeyword - lastOffset,Token.NULL);
-			addToken(len,id);
+				addToken(info,lastKeyword - lastOffset,Token.NULL);
+			addToken(info,len,id);
 			lastOffset = pos;
 		}
 		lastKeyword = pos + 1;
 		if (padNull && lastOffset < pos)
-			addToken(pos - lastOffset, Token.NULL);
+			addToken(info,pos - lastOffset, Token.NULL);
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.6  1999/04/19 05:38:20  sp
  * Syntax API changes
  *

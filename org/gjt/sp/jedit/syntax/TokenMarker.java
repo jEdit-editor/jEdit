@@ -1,6 +1,6 @@
 /*
- * TokenMarker.java - Generic token marker
- * Copyright (C) 1998, 1999 Slava Pestov
+ * TokenMarker.java - Base token marker class
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,9 +52,15 @@ public abstract class TokenMarker
 				+ lineIndex);
 		}
 
-		lastToken = null;
-
 		LineInfo info = lineInfo[lineIndex];
+
+		/* If cached tokens are valid, return 'em */
+		if(info.tokensValid)
+			return info.firstToken;
+
+		/* Otherwise, prepare for tokenization */
+		info.lastToken = null;
+
 		LineInfo prev;
 		if(lineIndex == 0)
 			prev = null;
@@ -63,61 +69,25 @@ public abstract class TokenMarker
 
 		byte oldToken = info.token;
 		byte token = markTokensImpl(prev == null ?
-			Token.NULL : prev.token,line,lineIndex);
+			Token.NULL : prev.token,line,lineIndex,info);
 
 		info.token = token;
+		info.tokensValid = true;
 
-		/*
-		 * This is a foul hack. It stops nextLineRequested
-		 * from being cleared if the same line is marked twice.
-		 *
-		 * Why is this necessary? It's all JEditTextArea's fault.
-		 * When something is inserted into the text, firing a
-		 * document event, the insertUpdate() method shifts the
-		 * caret (if necessary) by the amount inserted.
-		 *
-		 * All caret movement is handled by the select() method,
-		 * which eventually pipes the new position to scrollTo()
-		 * and calls repaint().
-		 *
-		 * Note that at this point in time, the new line hasn't
-		 * yet been painted; the caret is moved first.
-		 *
-		 * scrollTo() calls offsetToX(), which tokenizes the line
-		 * unless it is being called on the last line painted
-		 * (in which case it uses the text area's painter cached
-		 * token list). What scrollTo() does next is irrelevant.
-		 *
-		 * After scrollTo() has done it's job, repaint() is
-		 * called, and eventually we end up in paintLine(), whose
-		 * job is to paint the changed line. It, too, calls
-		 * markTokens().
-		 *
-		 * The problem was that if the line started a multiline
-		 * token, the first markTokens() (done in offsetToX())
-		 * would set nextLineRequested (because the line end
-		 * token had changed) but the second would clear it
-		 * (because the line was the same that time) and therefore
-		 * paintLine() would never know that it needed to repaint
-		 * subsequent lines.
-		 *
-		 * This bug took me ages to track down, that's why I wrote
-		 * all the relevant info down so that others wouldn't
-		 * duplicate it.
-		 */
-		 if(!(lastLine == lineIndex && nextLineRequested))
-			nextLineRequested = (oldToken != token);
+		nextLineRequested = (oldToken != token);
+		if(nextLineRequested && length - lineIndex > 1)
+		{
+			lineInfo[lineIndex + 1].tokensValid = false;
+		}
 
-		lastLine = lineIndex;
+		addToken(info,0,Token.END);
 
-		addToken(0,Token.END);
-
-		return firstToken;
+		return info.firstToken;
 	}
 
 	/**
 	 * An abstract method that splits a line up into tokens. It
-	 * should parse the line, and call <code>addToken()</code> to
+	 * should parse the line, and call <code>addToken(info,)</code> to
 	 * add syntax tokens to the token list. Then, it should return
 	 * the initial token type for the next line.<p>
 	 *
@@ -130,10 +100,11 @@ public abstract class TokenMarker
 	 * @param line The line to be tokenized
 	 * @param lineIndex The index of the line in the document,
 	 * starting at 0
+	 * @param info The LineInfo object for this line
 	 * @return The initial token type for the next line
 	 */
 	protected abstract byte markTokensImpl(byte token, Segment line,
-		int lineIndex);
+		int lineIndex, LineInfo info);
 
 	/**
 	 * Returns if the token marker supports tokens that span multiple
@@ -190,6 +161,20 @@ public abstract class TokenMarker
 	}
 
 	/**
+	 * Informs the token marker that lines have changed. This will
+	 * invalidate any cached tokens.
+	 * @param index The first line number
+	 * @param lines The number of lines
+	 */
+	public void linesChanged(int index, int lines)
+	{
+		for(int i = 0; i < lines; i++)
+		{
+			lineInfo[index + i].tokensValid = false;
+		}
+	}
+
+	/**
 	 * Returns the number of lines in this token marker.
 	 */
 	public int getLineCount()
@@ -210,18 +195,6 @@ public abstract class TokenMarker
 	// protected members
 
 	/**
-	 * The first token in the list. This should be used as the return
-	 * value from <code>markTokens()</code>.
-	 */
-	protected Token firstToken;
-
-	/**
-	 * The last token in the list. New tokens are added here.
-	 * This should be set to null before a new line is to be tokenized.
-	 */
-	protected Token lastToken;
-
-	/**
 	 * An array for storing information about lines. It is enlarged and
 	 * shrunk automatically by the <code>insertLines()</code> and
 	 * <code>deleteLines()</code> methods.
@@ -235,24 +208,9 @@ public abstract class TokenMarker
 	protected int length;
 
 	/**
-	 * The last tokenized line.
-	 */
-	protected int lastLine;
-
-	/**
 	 * True if the next line should be painted.
 	 */
 	protected boolean nextLineRequested;
-
-	/**
-	 * Creates a new <code>TokenMarker</code>. This DOES NOT create
-	 * a lineInfo array; an initial call to <code>insertLines()</code>
-	 * does that.
-	 */
-	protected TokenMarker()
-	{
-		lastLine = -1;
-	}
 
 	/**
 	 * Ensures that the <code>lineInfo</code> array can contain the
@@ -280,10 +238,11 @@ public abstract class TokenMarker
 
 	/**
 	 * Adds a token to the token list.
+	 * @param info The line to add the token to
 	 * @param length The length of the token
 	 * @param id The id of the token
 	 */
-	protected void addToken(int length, byte id)
+	protected void addToken(LineInfo info, int length, byte id)
 	{
 		if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
 			throw new InternalError("Invalid id: " + id);
@@ -291,27 +250,31 @@ public abstract class TokenMarker
 		if(length == 0 && id != Token.END)
 			return;
 
-		if(firstToken == null)
+		if(info.firstToken == null)
 		{
-			firstToken = new Token(length,id);
-			lastToken = firstToken;
+			info.firstToken = new Token(length,id);
+			info.lastToken = info.firstToken;
 		}
-		else if(lastToken == null)
+		else if(info.lastToken == null)
 		{
-			lastToken = firstToken;
-			firstToken.length = length;
-			firstToken.id = id;
+			info.lastToken = info.firstToken;
+			info.firstToken.length = length;
+			info.firstToken.id = id;
 		}
-		else if(lastToken.next == null)
+		else if(info.lastToken.id == id)
 		{
-			lastToken.next = new Token(length,id);
-			lastToken = lastToken.next;
+			info.lastToken.length += length;
+		}
+		else if(info.lastToken.next == null)
+		{
+			info.lastToken.next = new Token(length,id);
+			info.lastToken = info.lastToken.next;
 		}
 		else
 		{
-			lastToken = lastToken.next;
-			lastToken.length = length;
-			lastToken.id = id;
+			info.lastToken = info.lastToken.next;
+			info.lastToken.length = length;
+			info.lastToken.id = id;
 		}
 	}
 
@@ -329,19 +292,25 @@ public abstract class TokenMarker
 		}
 
 		/**
-		 * Creates a new LineInfo object with the specified
-		 * parameters.
-		 */
-		public LineInfo(byte token, Object obj)
-		{
-			this.token = token;
-			this.obj = obj;
-		}
-
-		/**
 		 * The id of the last token of the line.
 		 */
 		public byte token;
+
+		/**
+		 * The first token of this line.
+		 */
+		public Token firstToken;
+
+		/**
+		 * The last token of this line.
+		 */
+		public Token lastToken;
+
+		/**
+		 * True if the tokens can be used, false if markTokensImpl()
+		 * needs to be called.
+		 */
+		public boolean tokensValid;
 
 		/**
 		 * This is for use by the token marker implementations
@@ -356,6 +325,10 @@ public abstract class TokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.32  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *
@@ -386,11 +359,5 @@ public abstract class TokenMarker
  *
  * Revision 1.23  1999/05/03 08:28:14  sp
  * Documentation updates, key binding editor, syntax text area bug fix
- *
- * Revision 1.22  1999/05/03 04:28:01  sp
- * Syntax colorizing bug fixing, console bug fix for Swing 1.1.1
- *
- * Revision 1.21  1999/05/02 00:07:21  sp
- * Syntax system tweaks, console bugfix for Swing 1.1.1
  *
  */

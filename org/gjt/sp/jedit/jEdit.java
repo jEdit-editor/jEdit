@@ -258,7 +258,7 @@ public class jEdit
 		{
 			if(args[i] == null)
 				continue;
-			openFile(null,userDir,args[i],readOnly,false);
+			openFile(null,userDir,args[i],readOnly,false,false);
 		}
 
 		Buffer buffer = null;
@@ -614,6 +614,18 @@ public class jEdit
 	/**
 	 * Opens a file.
 	 * @param view The view to open the file in
+	 * @param path The file path
+	 *
+	 * @since jEdit 2.4pre1
+	 */
+	public static Buffer openFile(View view, String path)
+	{
+		return openFile(view,null,path,false,false,true);
+	}
+
+	/**
+	 * Opens a file.
+	 * @param view The view to open the file in
 	 * @param parent The parent directory of the file
 	 * @param path The path name of the file
 	 * @param readOnly True if the file should be read only
@@ -621,6 +633,24 @@ public class jEdit
 	 */
 	public static Buffer openFile(View view, String parent, String path,
 		boolean readOnly, boolean newFile)
+	{
+		return openFile(view,parent,path,readOnly,newFile,true);
+	}
+
+	/**
+	 * Opens a file.
+	 * @param view The view to open the file in
+	 * @param parent The parent directory of the file
+	 * @param path The path name of the file
+	 * @param readOnly True if the file should be read only
+	 * @param newFile True if the file should not be loaded from disk
+	 * @param reloadIfOpen If true and buffer is already open, user will
+	 * be prompted if it should be reloaded
+	 *
+	 * @since jEdit 2.4pre1
+	 */
+	public static Buffer openFile(View view, String parent, String path,
+		boolean readOnly, boolean newFile, boolean reloadIfOpen)
 	{
 		if(view != null && parent == null)
 			parent = view.getBuffer().getFile().getParent();
@@ -654,9 +684,13 @@ public class jEdit
 			{
 				if(view != null)
 				{
+					view.setBuffer(buffer);
+
+					if(!buffer.isDirty() && reloadIfOpen)
+						confirmReload(view,buffer);
+
 					if(marker != null)
 						gotoMarker(buffer,view,marker);
-					view.setBuffer(buffer);
 				}
 				return buffer;
 			}
@@ -777,7 +811,8 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		return openFile(view,null,"Untitled-" + (untitledCount+1),false,true);
+		return openFile(view,null,"Untitled-" + (untitledCount+1),
+			false,true,false);
 	}
 
 	/**
@@ -1770,6 +1805,18 @@ public class jEdit
 		}
 	}
 
+	private static void confirmReload(View view, Buffer buffer)
+	{
+		String[] args = { buffer.getPath() };
+		int result = JOptionPane.showConfirmDialog(view,
+			getProperty("already-open.message",args),
+			getProperty("already-open.title"),
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE);
+		if(result == JOptionPane.YES_OPTION)
+			buffer.load(view);
+	}
+
 	private static void addViewToList(View view)
 	{
 		viewCount++;
@@ -1822,6 +1869,10 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.197  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.196  2000/03/14 06:22:24  sp
  * Lots of new stuff
  *

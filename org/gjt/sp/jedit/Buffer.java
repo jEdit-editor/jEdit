@@ -156,6 +156,23 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		setFlag(LOADED,true);
 
+		View _view = jEdit.getFirstView();
+		while(_view != null)
+		{
+			if(_view.getBuffer() == this)
+			{
+				_view.unsplit();
+				// we used to save, but now we
+				// just zero it because the
+				// caret position doesn't always
+				// make sense after a reload
+				// anyway
+				_view.getTextArea().setCaretPosition(0);
+			}
+
+			_view = _view.getNext();
+		}
+
 		// fire LOADING event
 		EditBus.send(new BufferUpdate(this,BufferUpdate.LOADING));
 	}
@@ -366,18 +383,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.YES_OPTION)
 			{
-				view.saveCaretInfo();
 				load(view);
-
-				View[] views = jEdit.getViews();
-				for(int i = 0; i < views.length; i++)
-				{
-					if(view.getBuffer() == this)
-					{
-						view.unsplit();
-						view.loadCaretInfo();
-					}
-				}
 			}
 		}
 	}
@@ -1616,6 +1622,10 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.128  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.127  2000/03/14 06:22:24  sp
  * Lots of new stuff
  *

@@ -56,7 +56,7 @@ implements InputHandler.NonRecordable
 		Buffer buffer = jEdit.openFile(null,null,
 			MiscUtilities.constructPath(settings,"macros",
 			name + ".macro"),
-			false,true);
+			false,true,false);
 
 		try
 		{

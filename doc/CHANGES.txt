@@ -4,15 +4,23 @@ JEDIT VERSION HISTORY
 
 + New Features
 
+- The syntax highlighting system no longer reparses lines every time
+  they are drawn; instead, tokens are cached and lines are only parsed
+  when the document changes. This should result in smoother scrolling
+  and improved performance in general
+- Subsequent tokens with the same id are now merged by the syntax
+  highlighting system, this should improve performance when using XMode
+- JEditTextArea internals have been cleaned up and simplified somewhat
 - Views now check if their buffers have changed on disk every time they
   gain focus (this can be disabled in Utilities->Global Options if
   desired)
 - You can now have more than one split in a view
 - C+F11 and C+F12 go to the previous and next split pane, respectively
-- C+e TAB toggles between the current and last edited buffers
+- C+e TAB toggles between the current and previous edited buffers
 - The current repeat count, if any, is now shown in the status bar
 - 'Complete Word' now displays a dialog box listing all completions if
   there is more than one
+- Opening a file which is already open will ask if it should be reloaded
 
 + Enhancements
 
@@ -31,3 +39,8 @@ JEDIT VERSION HISTORY
 - Removed debugging message when doing a 'save as' (since 2.3pre2)
 - When doing a 'save as', buffers weren't repositioned in the buffer
   list if sorting is enabled (since 2.3pre2)
+
++ API Changes
+
+- Signature of TokenMarker.markTokensImpl() and TokenMarker.addToken() methods
+  changed; this breaks XMode

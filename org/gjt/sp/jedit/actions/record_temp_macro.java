@@ -47,7 +47,7 @@ implements InputHandler.NonRecordable
 		}
 
 		Buffer buffer = jEdit.openFile(null,settings + File.separator
-			+ "macros","__temporary__.macro",false,true);
+			+ "macros","__temporary__.macro",false,true,false);
 
 		try
 		{

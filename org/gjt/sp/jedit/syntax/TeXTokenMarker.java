@@ -32,7 +32,7 @@ public class TeXTokenMarker extends TokenMarker
 	public static final byte BDFORMULA = Token.INTERNAL_FIRST;
 	public static final byte EDFORMULA = (byte)(Token.INTERNAL_FIRST + 1);
 	
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		int offset = line.offset;
@@ -63,7 +63,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(token == Token.KEYWORD2 || token == EDFORMULA)
 						token = Token.KEYWORD2;
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					lastOffset = i1;
 					if(token == Token.KEYWORD1)
 						token = Token.NULL;
@@ -77,7 +77,7 @@ loop:		for(int i = offset; i < length; i++)
 					// part of the command token
 					if(token == BDFORMULA || token == EDFORMULA)
 						token = Token.KEYWORD2;
-					addToken(i - lastOffset,token);
+					addToken(info,i - lastOffset,token);
 					if(token == Token.KEYWORD1)
 						token = Token.NULL;
 					lastOffset = i;
@@ -91,8 +91,8 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					break;
 				}
-				addToken(i - lastOffset,token);
-				addToken(length - i,Token.COMMENT1);
+				addToken(info,i - lastOffset,token);
+				addToken(info,length - i,Token.COMMENT1);
 				lastOffset = length;
 				break loop;
 			case '\\':
@@ -100,7 +100,7 @@ loop:		for(int i = offset; i < length; i++)
 				if(token == Token.NULL)
 				{
 					token = Token.KEYWORD1;
-					addToken(i - lastOffset,Token.NULL);
+					addToken(info,i - lastOffset,Token.NULL);
 					lastOffset = i;
 				}
 				break;
@@ -109,13 +109,13 @@ loop:		for(int i = offset; i < length; i++)
 				if(token == Token.NULL) // singe $
 				{
 					token = Token.KEYWORD2;
-					addToken(i - lastOffset,Token.NULL);
+					addToken(info,i - lastOffset,Token.NULL);
 					lastOffset = i;
 				}
 				else if(token == Token.KEYWORD1) // \...$
 				{
 					token = Token.KEYWORD2;
-					addToken(i - lastOffset,Token.KEYWORD1);
+					addToken(info,i - lastOffset,Token.KEYWORD1);
 					lastOffset = i;
 				}
 				else if(token == Token.KEYWORD2) // $$aaa
@@ -126,7 +126,7 @@ loop:		for(int i = offset; i < length; i++)
 						break;
 					}
 					token = Token.NULL;
-					addToken(i1 - lastOffset,Token.KEYWORD2);
+					addToken(info,i1 - lastOffset,Token.KEYWORD2);
 					lastOffset = i1;
 				}
 				else if(token == BDFORMULA) // $$aaa$
@@ -136,14 +136,14 @@ loop:		for(int i = offset; i < length; i++)
 				else if(token == EDFORMULA) // $$aaa$$
 				{
 					token = Token.NULL;
-					addToken(i1 - lastOffset,Token.KEYWORD2);
+					addToken(info,i1 - lastOffset,Token.KEYWORD2);
 					lastOffset = i1;
 				}
 				break;
 			}
 		}
 		if(lastOffset != length)
-			addToken(length - lastOffset,token == BDFORMULA
+			addToken(info,length - lastOffset,token == BDFORMULA
 				|| token == EDFORMULA ? Token.KEYWORD2 :
 				token);
 		return (token != Token.KEYWORD1 ? token : Token.NULL);
@@ -153,6 +153,10 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.16  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

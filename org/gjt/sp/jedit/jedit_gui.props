@@ -646,6 +646,11 @@ filechanged-dirty.message=The file {0}\n\
 	has been modified on disk by another program. Would you like to\n\
 	reload it? IF YOU RELOAD, UNSAVED CHANGES WILL BE LOST.
 
+# File already open dialog
+already-open.title=File Already Open
+already-open.message=The file {0}\n\
+	is already open. Would you like to reload it from disk?
+
 # File exists dialog
 fileexists.title=File Exists
 fileexists.message=The file {0} already exists. Are you sure you want\n\

@@ -41,7 +41,7 @@ public class HTMLTokenMarker extends TokenMarker
 		keywords = JavaScriptTokenMarker.getKeywords();
 	}
 
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		int offset = line.offset;
@@ -68,7 +68,7 @@ loop:		for(int i = offset; i < length; i++)
 				switch(c)
 				{
 				case '<':
-					addToken(i - lastOffset,token);
+					addToken(info,i - lastOffset,token);
 					lastOffset = lastKeyword = i;
 					if(SyntaxUtilities.regionMatches(false,
 						line,i1,"!--"))
@@ -79,7 +79,7 @@ loop:		for(int i = offset; i < length; i++)
 					else if(js && SyntaxUtilities.regionMatches(
 						true,line,i1,"script>"))
 					{
-						addToken(8,Token.KEYWORD1);
+						addToken(info,8,Token.KEYWORD1);
 						lastOffset = lastKeyword = (i += 8);
 						token = JAVASCRIPT;
 					}
@@ -89,7 +89,7 @@ loop:		for(int i = offset; i < length; i++)
 					}
 					break;
 				case '&':
-					addToken(i - lastOffset,token);
+					addToken(info,i - lastOffset,token);
 					lastOffset = lastKeyword = i;
 					token = Token.KEYWORD2;
 					break;
@@ -99,7 +99,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(c == '>')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					lastOffset = lastKeyword = i1;
 					token = Token.NULL;
 				}
@@ -108,7 +108,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(c == ';')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					lastOffset = lastKeyword = i1;
 					token = Token.NULL;
 					break;
@@ -118,7 +118,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(SyntaxUtilities.regionMatches(false,line,i,"-->"))
 				{
-					addToken((i + 3) - lastOffset,token);
+					addToken(info,(i + 3) - lastOffset,token);
 					lastOffset = lastKeyword = i + 3;
 					token = Token.NULL;
 				}
@@ -128,13 +128,13 @@ loop:		for(int i = offset; i < length; i++)
 				{
 				case '<':
 					backslash = false;
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 					if(SyntaxUtilities.regionMatches(true,
 						line,i1,"/script>"))
 					{
-						addToken(i - lastOffset,
+						addToken(info,i - lastOffset,
 							Token.NULL);
-						addToken(9,Token.KEYWORD1);
+						addToken(info,9,Token.KEYWORD1);
 						lastOffset = lastKeyword = (i += 9);
 						token = Token.NULL;
 					}
@@ -144,8 +144,8 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						doKeyword(line,i,c);
-						addToken(i - lastOffset,Token.NULL);
+						doKeyword(info,line,i,c);
+						addToken(info,i - lastOffset,Token.NULL);
 						lastOffset = lastKeyword = i;
 						token = Token.LITERAL1;
 					}
@@ -155,22 +155,22 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						doKeyword(line,i,c);
-						addToken(i - lastOffset,Token.NULL);
+						doKeyword(info,line,i,c);
+						addToken(info,i - lastOffset,Token.NULL);
 						lastOffset = lastKeyword = i;
 						token = Token.LITERAL2;
 					}
 					break;
 				case '/':
 					backslash = false;
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 					if(length - i > 1)
 					{
-						addToken(i - lastOffset,Token.NULL);
+						addToken(info,i - lastOffset,Token.NULL);
 						lastOffset = lastKeyword = i;
 						if(array[i1] == '/')
 						{
-							addToken(length - i,Token.COMMENT2);
+							addToken(info,length - i,Token.COMMENT2);
 							lastOffset = lastKeyword = length;
 							break loop;
 						}
@@ -183,7 +183,7 @@ loop:		for(int i = offset; i < length; i++)
 				default:					backslash = false;
 					if(!Character.isLetterOrDigit(c)
 						&& c != '_')
-						doKeyword(line,i,c);
+						doKeyword(info,line,i,c);
 					break;
 				}
 				break;
@@ -192,7 +192,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '"')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(info,i1 - lastOffset,Token.LITERAL1);
 					lastOffset = lastKeyword = i1;
 					token = JAVASCRIPT;
 				}
@@ -202,7 +202,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(info,i1 - lastOffset,Token.LITERAL1);
 					lastOffset = lastKeyword = i1;
 					token = JAVASCRIPT;
 				}
@@ -211,7 +211,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(c == '*' && length - i > 1 && array[i1] == '/')
 				{
-					addToken((i+=2) - lastOffset,Token.COMMENT1);
+					addToken(info,(i+=2) - lastOffset,Token.COMMENT1);
 					lastOffset = lastKeyword = i;
 					token = JAVASCRIPT;
 				}
@@ -226,22 +226,22 @@ loop:		for(int i = offset; i < length; i++)
 		{
 		case Token.LITERAL1:
 		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.INVALID);
+			addToken(info,length - lastOffset,Token.INVALID);
 			token = JAVASCRIPT;
 			break;
 		case Token.KEYWORD2:
-			addToken(length - lastOffset,Token.INVALID);
+			addToken(info,length - lastOffset,Token.INVALID);
 			token = Token.NULL;
 			break;
 		case JAVASCRIPT:
-			doKeyword(line,length,'\0');
-			addToken(length - lastOffset,Token.NULL);
+			doKeyword(info,line,length,'\0');
+			addToken(info,length - lastOffset,Token.NULL);
 			break;
 		case Token.COMMENT2:
-			addToken(length - lastOffset,Token.COMMENT1);
+			addToken(info,length - lastOffset,Token.COMMENT1);
 			break;
 		default:
-			addToken(length - lastOffset,token);
+			addToken(info,length - lastOffset,token);
 			break;
 		}
 
@@ -254,7 +254,7 @@ loop:		for(int i = offset; i < length; i++)
 	private int lastOffset;
 	private int lastKeyword;
 
-	private boolean doKeyword(Segment line, int i, char c)
+	private boolean doKeyword(LineInfo info, Segment line, int i, char c)
 	{
 		int i1 = i+1;
 
@@ -263,8 +263,8 @@ loop:		for(int i = offset; i < length; i++)
 		if(id != Token.NULL)
 		{
 			if(lastKeyword != lastOffset)
-				addToken(lastKeyword - lastOffset,Token.NULL);
-			addToken(len,id);
+				addToken(info,lastKeyword - lastOffset,Token.NULL);
+			addToken(info,len,id);
 			lastOffset = i;
 		}
 		lastKeyword = i1;
@@ -275,6 +275,10 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.35  2000/01/29 10:12:43  sp
  * BeanShell edit mode, bug fixes
  *

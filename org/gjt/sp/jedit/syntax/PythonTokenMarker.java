@@ -37,7 +37,7 @@ public class PythonTokenMarker extends TokenMarker
 		this.keywords = getKeywords();
 	}
 
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		int offset = line.offset;
@@ -67,20 +67,20 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						doKeyword(line,i,c);
-						addToken(i - lastOffset,token);
-						addToken(length - i,Token.COMMENT1);
+						doKeyword(info,line,i,c);
+						addToken(info,i - lastOffset,token);
+						addToken(info,length - i,Token.COMMENT1);
 						lastOffset = lastKeyword = length;
 						break loop;
 					}
 					break;
 				case '"':
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 					if(backslash)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						if(SyntaxUtilities.regionMatches(false,
 							line,i1,"\"\""))
 						{
@@ -94,12 +94,12 @@ loop:		for(int i = offset; i < length; i++)
 					}
 					break;
 				case '\'':
-					doKeyword(line,i,c);
+					doKeyword(info,line,i,c);
 					if(backslash)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						if(SyntaxUtilities.regionMatches(false,
 							line,i1,"''"))
 						{
@@ -116,7 +116,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(!Character.isLetterOrDigit(c)
 						&& c != '_')
-						doKeyword(line,i,c);
+						doKeyword(info,line,i,c);
 					break;
 				}
 				break;
@@ -125,7 +125,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '"')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -135,7 +135,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(info,i1 - lastOffset,Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -146,7 +146,7 @@ loop:		for(int i = offset; i < length; i++)
 				else if(SyntaxUtilities.regionMatches(false,
 					line,i,"\"\"\""))
 				{
-					addToken((i+=4) - lastOffset,
+					addToken(info,(i+=4) - lastOffset,
 						Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i;
@@ -158,7 +158,7 @@ loop:		for(int i = offset; i < length; i++)
 				else if(SyntaxUtilities.regionMatches(false,
 					line,i,"'''"))
 				{
-					addToken((i+=4) - lastOffset,
+					addToken(info,(i+=4) - lastOffset,
 						Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i;
@@ -174,12 +174,12 @@ loop:		for(int i = offset; i < length; i++)
 		{
 			case TRIPLEQUOTE1:
 			case TRIPLEQUOTE2:
-				addToken(length - lastOffset,Token.LITERAL1);
+				addToken(info,length - lastOffset,Token.LITERAL1);
 				break;
 			case Token.NULL:
-				doKeyword(line,length,'\0');
+				doKeyword(info,line,length,'\0');
 			default:
-				addToken(length - lastOffset,token);
+				addToken(info,length - lastOffset,token);
 				break;
 		}
 
@@ -230,7 +230,7 @@ loop:		for(int i = offset; i < length; i++)
 	private int lastOffset;
 	private int lastKeyword;
 
-	private boolean doKeyword(Segment line, int i, char c)
+	private boolean doKeyword(LineInfo info, Segment line, int i, char c)
 	{
 		int i1 = i+1;
 
@@ -239,8 +239,8 @@ loop:		for(int i = offset; i < length; i++)
 		if(id != Token.NULL)
 		{
 			if(lastKeyword != lastOffset)
-				addToken(lastKeyword - lastOffset,Token.NULL);
-			addToken(len,id);
+				addToken(info,lastKeyword - lastOffset,Token.NULL);
+			addToken(info,len,id);
 			lastOffset = i;
 		}
 		lastKeyword = i1;
@@ -251,6 +251,10 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.3  1999/12/14 04:20:35  sp
  * Various updates, PHP3 mode added
  *

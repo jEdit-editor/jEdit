@@ -31,7 +31,7 @@ public class ShellScriptTokenMarker extends TokenMarker
 	// public members
 	public static final byte LVARIABLE = Token.INTERNAL_FIRST;
 
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex, LineInfo info)
 	{
 		char[] array = line.array;
 		byte cmdState = 0; // 0 = space before command, 1 = inside
@@ -48,12 +48,12 @@ public class ShellScriptTokenMarker extends TokenMarker
 				&& SyntaxUtilities.regionMatches(false,line,
 				offset,str))
 			{
-				addToken(line.count,Token.LITERAL1);
+				addToken(info,line.count,Token.LITERAL1);
 				return Token.NULL;
 			}
 			else
 			{
-				addToken(line.count,Token.LITERAL1);
+				addToken(info,line.count,Token.LITERAL1);
 				lineInfo[lineIndex].obj = str;
 				return Token.LITERAL1;
 			}
@@ -81,7 +81,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(cmdState == 1/*insideCmd*/)
 					{
-						addToken(i - lastOffset,Token.KEYWORD1);
+						addToken(info,i - lastOffset,Token.KEYWORD1);
 						lastOffset = i;
 						cmdState = 2; /*afterCmd*/
 					}
@@ -90,7 +90,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(cmdState == 1/*insideCmd*/)
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						lastOffset = i;
 						cmdState = 2; /*afterCmd*/
 					}
@@ -106,8 +106,8 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
-						addToken(length - i,Token.COMMENT1);
+						addToken(info,i - lastOffset,token);
+						addToken(info,length - i,Token.COMMENT1);
 						lastOffset = length;
 						break loop;
 					}
@@ -117,7 +117,7 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						cmdState = 2; /*afterCmd*/
 						lastOffset = i;
 						if(length - i >= 2)
@@ -143,7 +143,7 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.LITERAL1;
 						lineInfo[lineIndex].obj = null;
 						cmdState = 2; /*afterCmd*/
@@ -155,7 +155,7 @@ loop:		for(int i = offset; i < length; i++)
 						backslash = false;
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						token = Token.LITERAL2;
 						cmdState = 2; /*afterCmd*/
 						lastOffset = i;
@@ -168,7 +168,7 @@ loop:		for(int i = offset; i < length; i++)
 					{
 						if(length - i > 1 && array[i1] == '<')
 						{
-							addToken(i - lastOffset,
+							addToken(info,i - lastOffset,
 								token);
 							token = Token.LITERAL1;
 							lastOffset = i;
@@ -184,7 +184,7 @@ loop:		for(int i = offset; i < length; i++)
 					{
 						if(cmdState == 0 /*beforeCmd*/)
 						{
-							addToken(i - lastOffset,token);
+							addToken(info,i - lastOffset,token);
 							lastOffset = i;
 							cmdState++; /*insideCmd*/
 						}
@@ -198,14 +198,14 @@ loop:		for(int i = offset; i < length; i++)
 				{
 					if(i != offset && array[i-1] == '$')
 					{
-						addToken(i1 - lastOffset,token);
+						addToken(info,i1 - lastOffset,token);
 						lastOffset = i1;
 						token = Token.NULL;
 						continue;
 					}
 					else
 					{
-						addToken(i - lastOffset,token);
+						addToken(info,i - lastOffset,token);
 						lastOffset = i;
 						token = Token.NULL;
 					}
@@ -216,7 +216,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '"')
 				{
-					addToken(i1 - lastOffset,token);
+					addToken(info,i1 - lastOffset,token);
 					cmdState = 2; /*afterCmd*/
 					lastOffset = i1;
 					token = Token.NULL;
@@ -229,7 +229,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(info,i1 - lastOffset,Token.LITERAL1);
 					cmdState = 2; /*afterCmd*/
 					lastOffset = i1;
 					token = Token.NULL;
@@ -241,7 +241,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(c == '}')
 				{
-					addToken(i1 - lastOffset,Token.KEYWORD2);
+					addToken(info,i1 - lastOffset,Token.KEYWORD2);
 					lastOffset = i1;
 					token = Token.NULL;
 				}
@@ -255,23 +255,23 @@ loop:		for(int i = offset; i < length; i++)
 		{
 		case Token.NULL:
 			if(cmdState == 1)
-				addToken(length - lastOffset,Token.KEYWORD1);
+				addToken(info,length - lastOffset,Token.KEYWORD1);
 			else
-				addToken(length - lastOffset,token);
+				addToken(info,length - lastOffset,token);
 			break;
 		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.LITERAL1);
+			addToken(info,length - lastOffset,Token.LITERAL1);
 			break;
 		case Token.KEYWORD2:
-			addToken(length - lastOffset,token);
+			addToken(info,length - lastOffset,token);
 			token = Token.NULL;
 			break;
 		case LVARIABLE:
-			addToken(length - lastOffset,Token.INVALID);
+			addToken(info,length - lastOffset,Token.INVALID);
 			token = Token.NULL;
 			break;
 		default:
-			addToken(length - lastOffset,token);
+			addToken(info,length - lastOffset,token);
 			break;
 		}
 		return token;
@@ -281,6 +281,10 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/03/20 03:42:55  sp
+ * Smoother syntax package, opening an already open file will ask if it should be
+ * reloaded, maybe some other changes
+ *
  * Revision 1.18  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *
