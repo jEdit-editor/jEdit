@@ -7,6 +7,12 @@ JEDIT VERSION HISTORY
 - Digits will be highlighted if the HIGHLIGHT_DIGITS attribute is set to
   "TRUE" on a ruleset
 
++ Enhancements
+
+- TokenMarker now uses a hashing algorithm to check against far fewer rules
+  than previously. This should result in a 2-10x speed improvement! This is
+  particularly noticable when loading files
+
 + Bug Fixes
 
 - Incremental search didn't beep if no match was found (since 2.4pre4)

@@ -30,41 +30,58 @@ import javax.swing.text.Segment;
  */
 public class ParserRuleSet
 {
-	public ParserRuleSet(int sz)
-	{
-		rules = new Vector(sz);
-	}
-
 	public ParserRuleSet()
 	{
-		this(DEFAULT_RULE_VECTOR_SIZE);
+		rules = new Vector(RULE_VECTOR_SIZE);
+		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
+		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
 	}
 
 	public void addRule(ParserRule r)
 	{
 		rules.addElement(r);
+
+		int key = Character.toUpperCase(r.searchChars[0])
+			% RULE_BUCKET_COUNT;
+		ParserRule last = ruleMapLast[key];
+		if(last == null)
+			ruleMapFirst[key] = ruleMapLast[key] = r;
+		else
+		{
+			last.next = r;
+			ruleMapLast[key] = r;
+		}
 	}
 
-	public void removeRule(ParserRule r)
+	public void dump()
 	{
-		rules.removeElement(r);
+		for(int i = 0; i < RULE_BUCKET_COUNT; i++)
+		{
+			ParserRule first = ruleMapFirst[i];
+			if(first == null)
+				System.err.println(0);
+			else
+			{
+				int j = 0;
+				while(first != null)
+				{
+					j++;
+					first = first.next;
+				}
+				System.err.println(j);
+			}
+		}
+	}
+
+	public ParserRule getRules(char ch)
+	{
+		int key = Character.toUpperCase(ch) % RULE_BUCKET_COUNT;
+		return ruleMapFirst[key];
 	}
 
 	public Vector getRules()
 	{
 		return rules;
-	}
-
-	public ParserRule[] getRuleArray()
-	{
-		ParserRule[] ruleArray = new ParserRule[rules.size()];
-		rules.copyInto(ruleArray);
-		return ruleArray;
-	}
-
-	public int getRuleCount()
-	{
-		return rules.size();
 	}
 
 	public int getTerminateChar()
@@ -146,8 +163,13 @@ public class ParserRuleSet
 		defaultID = def;
 	}
 
-	private static final int DEFAULT_RULE_VECTOR_SIZE = 48;
+	private static final int RULE_VECTOR_SIZE = 48;
+	private static final int RULE_BUCKET_COUNT = 32;
 	private KeywordMap keywords;
+
+	private ParserRule[] ruleMapFirst;
+	private ParserRule[] ruleMapLast;
+
 	private Vector rules;
 	private ParserRule escapeRule;
 	private Segment escapePattern;
@@ -160,6 +182,9 @@ public class ParserRuleSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/04/08 06:57:14  sp
+ * Parser rules are now hashed; this dramatically speeds up tokenization
+ *
  * Revision 1.4  2000/04/08 06:10:51  sp
  * Digit highlighting, search bar bug fix
  *

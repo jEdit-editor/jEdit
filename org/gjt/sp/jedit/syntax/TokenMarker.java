@@ -333,9 +333,8 @@ public class TokenMarker implements Cloneable
 
 		boolean b;
 		boolean tempEscaped;
-		ParserRule tempRule;
-		Vector rules;
 		Segment tempPattern;
+		ParserRule rule;
 		LineContext tempContext;
 
 		for(pos = line.offset; pos < searchLimit; pos++)
@@ -407,7 +406,7 @@ public class TokenMarker implements Cloneable
 			}
 
 			// check the escape rule for the current context, if there is one
-			if ((tempRule = context.rules.getEscapeRule()) != null)
+			if ((rule = context.rules.getEscapeRule()) != null)
 			{
 				// assign tempPattern to mutable "buffer" pattern
 				tempPattern = pattern;
@@ -417,7 +416,7 @@ public class TokenMarker implements Cloneable
 
 				tempEscaped = escaped;
 
-				b = handleRule(info, line, tempRule);
+				b = handleRule(info, line, rule);
 
 				// swap back the buffer pattern
 				pattern = tempPattern;
@@ -442,27 +441,28 @@ public class TokenMarker implements Cloneable
 			else
 			{
 				// otherwise, if this isn't a hard span, check every rule
-				rules = context.rules.getRules();
+				rule = context.rules.getRules(line.array[pos]);
 
-				for(int i = 0; i < rules.size(); i++)
+				while(rule != null)
 				{
-					tempRule = (ParserRule) rules.elementAt(i);
+					pattern.array = rule.searchChars;
 
-					pattern.array = tempRule.searchChars;
-
-					if (context.inRule == tempRule && (tempRule.action & SPAN) == SPAN)
+					if (context.inRule == rule && (rule.action & SPAN) == SPAN)
 					{
-						pattern.count = tempRule.sequenceLengths[1];
-						pattern.offset = tempRule.sequenceLengths[0];
+						pattern.count = rule.sequenceLengths[1];
+						pattern.offset = rule.sequenceLengths[0];
 					}
 					else
 					{
-						pattern.count = tempRule.sequenceLengths[0];
+						pattern.count = rule.sequenceLengths[0];
 						pattern.offset = 0;
 					}
 
 					// stop checking rules if there was a match and go to next pos
-					if (!handleRule(info,line, tempRule)) break;
+					if (!handleRule(info,line, rule))
+						break;
+
+					rule = rule.next;
 				}
 			}
 
@@ -950,6 +950,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.45  2000/04/08 06:57:14  sp
+ * Parser rules are now hashed; this dramatically speeds up tokenization
+ *
  * Revision 1.44  2000/04/08 06:10:51  sp
  * Digit highlighting, search bar bug fix
  *

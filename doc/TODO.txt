@@ -11,6 +11,7 @@ JEDIT TO DO
   - each section should have some sample source code
 - XMode docs
 - Redo window-editor-* screenshots
+- Split: insert-char not mapped
 
 Later:
 

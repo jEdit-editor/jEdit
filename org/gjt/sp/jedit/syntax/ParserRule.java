@@ -30,6 +30,7 @@ public class ParserRule
 	public final int[] sequenceLengths;
 	public final char[] searchChars;
 	public final int action;
+	public ParserRule next;
 
 	// package-private members
 	ParserRule(char[] sc, int[] sl, int a)
@@ -43,6 +44,9 @@ public class ParserRule
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/04/08 06:57:14  sp
+ * Parser rules are now hashed; this dramatically speeds up tokenization
+ *
  * Revision 1.3  2000/04/07 06:57:26  sp
  * Buffer options dialog box updates, API docs updated a bit in syntax package
  *
