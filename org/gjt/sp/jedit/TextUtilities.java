@@ -1,6 +1,6 @@
 /*
  * TextUtilities.java - Various text functions
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -331,11 +331,185 @@ public class TextUtilities
 		}
 		return true;
 	}
+
+	/**
+	 * Converts consecutive spaces to tabs in the specified string.
+	 * @param in The string
+	 * @param tabSize The tab size
+	 */
+	public static String spacesToTabs(String in, int tabSize)
+	{
+		StringBuffer buf = new StringBuffer();
+		int width = 0;
+		int whitespace = 0;
+		for(int i = 0; i < in.length(); i++)
+		{
+			switch(in.charAt(i))
+			{
+			case ' ':
+				whitespace++;
+				width++;
+				break;
+			case '\t':
+				int tab = tabSize - (width % tabSize);
+				width += tab;
+				whitespace += tab;
+				break;
+			case '\n':
+				if(whitespace != 0)
+				{
+					buf.append(MiscUtilities
+						.createWhiteSpace(whitespace,tabSize));
+				}
+				whitespace = 0;
+				width = 0;
+				buf.append('\n');
+				break;
+			default:
+				if(whitespace != 0)
+				{
+					buf.append(MiscUtilities
+						.createWhiteSpace(whitespace,tabSize));
+					whitespace = 0;
+				}
+				buf.append(in.charAt(i));
+				width++;
+				break;
+			}
+		}
+
+		if(whitespace != 0)
+		{
+			buf.append(MiscUtilities.createWhiteSpace(whitespace,tabSize));
+		}
+
+                return buf.toString();
+	}
+
+	/**
+	 * Converts tabs to consecutive spaces in the specified string.
+	 * @param in The string
+	 * @param tabSize The tab size
+	 */
+	public static String tabsToSpaces(String in, int tabSize)
+	{
+		StringBuffer buf = new StringBuffer();
+		int width = 0;
+		for(int i = 0; i < in.length(); i++)
+		{
+			switch(in.charAt(i))
+			{
+			case '\t':
+				int count = tabSize - (width % tabSize);
+				width += count;
+				while(--count >= 0)
+					buf.append(' ');
+				break;
+			case '\n':
+				width = 0;
+				buf.append(in.charAt(i));
+				break;
+			default:
+				width++;
+				buf.append(in.charAt(i));
+				break;
+                        }
+                }
+                return buf.toString();
+	}
+
+	/**
+	 * Formats the specified text by merging and breaking lines to the
+	 * specified width.
+	 * @param text The text
+	 * @param maxLineLen The maximum line length
+	 */
+	public static String format(String text, int maxLineLength)
+	{
+		StringBuffer buf = new StringBuffer();
+		StringBuffer word = new StringBuffer();
+		int lineLength = 0;
+		boolean newline = true;
+		boolean space = false;
+		char[] chars = text.toCharArray();
+		for(int i = 0; i < chars.length; i++)
+		{
+			char c = chars[i];
+			switch(c)
+			{
+			case '\n':
+				if(i == 0 || chars.length - i <= 2)
+				{
+					if(lineLength + word.length() >= maxLineLength)
+						buf.append('\n');
+					else if(space && word.length() != 0)
+						buf.append(' ');
+					buf.append(word);
+					word.setLength(0);
+					buf.append('\n');
+					newline = true;
+					space = false;
+					break;
+				}
+				else if(newline)
+				{
+					if(lineLength + word.length() >= maxLineLength)
+						buf.append('\n');
+					else if(space && word.length() != 0)
+						buf.append(' ');
+					buf.append(word);
+					word.setLength(0);
+					buf.append("\n\n");
+					newline = space = false;
+					lineLength = 0;
+					break;
+				}
+				else
+					newline = true;
+			case ' ':
+				if(lineLength + word.length() >= maxLineLength)
+				{
+					buf.append('\n');
+					lineLength = 0;
+					newline = true;
+				}
+				else if(space && lineLength != 0 && word.length() != 0)
+				{
+					buf.append(' ');
+					lineLength++;
+					space = false;
+				}
+				else
+					space = true;
+				buf.append(word);
+				lineLength += word.length();
+				word.setLength(0);
+				break;
+			default:
+				newline = false;
+				// without this test, we would have spaces
+				// at the start of lines
+				if(lineLength != 0)
+					space = true;
+				word.append(c);
+				break;
+			}
+		}
+		if(lineLength + word.length() >= maxLineLength)
+			buf.append('\n');
+		else if(space && word.length() != 0)
+			buf.append(' ');
+		buf.append(word);
+		return buf.toString();
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/11/13 11:19:26  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.4  2000/11/07 10:08:31  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

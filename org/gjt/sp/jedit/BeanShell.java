@@ -29,28 +29,33 @@ public class BeanShell
 	{
 		if(view != null)
 		{
+			EditPane editPane = view.getEditPane();
 			interp.setVariable("view",view);
-			interp.setVariable("buffer",view.getBuffer());
-			interp.setVariable("textArea",view.getTextArea());
+			interp.setVariable("editPane",editPane);
+			interp.setVariable("buffer",editPane.getBuffer());
+			interp.setVariable("textArea",editPane.getTextArea());
 		}
 
+		Object returnValue;
 		try
 		{
-			return interp.eval(command);
+			returnValue = interp.eval(command);
 		}
 		catch(Exception e)
 		{
+			returnValue = null;
 			e.printStackTrace(); // XXX
 		}
 
 		if(view != null)
 		{
 			interp.setVariable("view",null);
+			interp.setVariable("editPane",null);
 			interp.setVariable("buffer",null);
 			interp.setVariable("textArea",null);
 		}
 
-		return null;
+		return returnValue;
 	}
 
 	static void init()

@@ -130,6 +130,10 @@ public class HistoryTextField extends JTextField
 	// protected members
 	protected void processKeyEvent(KeyEvent evt)
 	{
+		evt = KeyEventWorkaround.processKeyEvent(evt);
+		if(evt == null)
+			return;
+
 		if(evt.getID() == KeyEvent.KEY_PRESSED)
 		{
 			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
@@ -139,7 +143,7 @@ public class HistoryTextField extends JTextField
 				fireActionPerformed();
 				evt.consume();
 			}
-			else if(evt.getKeyCode() == KeyEvent.VK_UP)
+			if(evt.getKeyCode() == KeyEvent.VK_UP)
 			{
 				if((evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
 					doBackwardSearch();
@@ -357,6 +361,9 @@ public class HistoryTextField extends JTextField
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.37  2000/11/13 11:19:27  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.36  2000/09/01 11:31:00  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

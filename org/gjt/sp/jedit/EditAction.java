@@ -24,7 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
 import java.util.EventObject;
-import org.gjt.sp.jedit.gui.CommandLine;
 import org.gjt.sp.util.Log;
 
 /**
@@ -124,23 +123,6 @@ public abstract class EditAction implements ActionListener
 	}
 
 	/**
-	 * Returns the command line this action was invoked from, or null
-	 * if it wasn't invoked from the command line.
-	 * @since jEdit 2.6pre5
-	 */
-	public static CommandLine getCommandLine(EventObject evt)
-	{
-		if(evt != null)
-		{
-			Object o = evt.getSource();
-			if(o instanceof Component)
-				return getCommandLine((Component)o);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Finds the view parent of the specified component.
 	 * @since jEdit 2.2pre4
 	 */
@@ -150,26 +132,6 @@ public abstract class EditAction implements ActionListener
 		{
 			if(comp instanceof View)
 				return (View)comp;
-			else if(comp instanceof JPopupMenu)
-				comp = ((JPopupMenu)comp).getInvoker();
-			else if(comp != null)
-				comp = comp.getParent();
-			else
-				break;
-		}
-		return null;
-	}
-
-	/**
-	 * Finds the command line parent of the specified component.
-	 * @since jEdit 2.6pre5
-	 */
-	public static CommandLine getCommandLine(Component comp)
-	{
-		for(;;)
-		{
-			if(comp instanceof CommandLine)
-				return (CommandLine)comp;
 			else if(comp instanceof JPopupMenu)
 				comp = ((JPopupMenu)comp).getInvoker();
 			else if(comp != null)
@@ -201,34 +163,19 @@ public abstract class EditAction implements ActionListener
 	}
 
 	/**
-	 * Returns if this edit action can be repeated. Returns true
+	 * Returns if this edit action should not be repeated. Returns false
 	 * by default.
 	 */
-	public boolean isRepeatable()
-	{
-		return true;
-	}
-
-	/**
-	 * Returns if this edit action can be recorded. Returns true
-	 * by default.
-	 */
-	public boolean isRecordable()
-	{
-		return true;
-	}
-
-	/**
-	 * Returns if this edit action requires an action command. If
-	 * it does, it will not appear in the command line's auto-complete
-	 * list. Returns false by default.
-	 */
-	public boolean needsActionCommand()
+	public boolean noRepeat()
 	{
 		return false;
 	}
 
-	public boolean isWrapper()
+	/**
+	 * Returns if this edit action should not be recorded. Returns false
+	 * by default.
+	 */
+	public boolean noRecord()
 	{
 		return false;
 	}
@@ -322,19 +269,6 @@ public abstract class EditAction implements ActionListener
 				return action.isSelected(comp);
 		}
 
-		public boolean needsActionCommand()
-		{
-			if(action == null)
-				return false;
-			else
-				return action.needsActionCommand();
-		}
-
-		public boolean isWrapper()
-		{
-			return true;
-		}
-
 		/**
 		 * Loads the action if necessary.
 		 */
@@ -372,6 +306,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/11/13 11:19:26  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.28  2000/09/03 03:16:52  sp
  * Search bar integrated with command line, enhancements throughout
  *

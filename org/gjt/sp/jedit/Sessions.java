@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import java.io.*;
 import java.util.StringTokenizer;
@@ -32,6 +33,33 @@ import org.gjt.sp.util.Log;
  */
 public class Sessions
 {
+	/**
+	 * Displays the 'load session' dialog box, and loads the selected
+	 * session.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showLoadSessionDialog(View view)
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+		{
+			GUIUtilities.error(view,"no-settings",null);
+			return;
+		}
+
+		String path = GUIUtilities.showFileDialog(
+			view,MiscUtilities.constructPath(settingsDirectory,
+			"sessions"),JFileChooser.OPEN_DIALOG);
+
+		if(path != null)
+		{
+			Buffer buffer = Sessions.loadSession(path,false);
+			if(buffer != null)
+				view.setBuffer(buffer);
+		}
+	}
+
 	/**
 	 * Loads a session.
 	 * @param session The file name, relative to $HOME/.jedit/sessions
@@ -76,6 +104,31 @@ public class Sessions
 		}
 
 		return buffer;
+	}
+
+	/**
+	 * Displays the 'save session' dialog box, and saves the selected
+	 * session.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showSaveSessionDialog(View view)
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+		{
+			GUIUtilities.error(view,"no-settings",null);
+			return;
+		}
+
+		String path = GUIUtilities.showFileDialog(
+			view,MiscUtilities.constructPath(settingsDirectory,
+			"sessions"),JFileChooser.SAVE_DIALOG);
+
+		if(path != null)
+		{
+			Sessions.saveSession(view,path);
+		}
 	}
 
 	/**
@@ -226,6 +279,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/11/13 11:19:26  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.18  2000/07/19 08:35:59  sp
  * plugin devel docs updated, minor other changes
  *

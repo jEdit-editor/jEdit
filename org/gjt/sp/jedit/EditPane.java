@@ -80,8 +80,9 @@ public class EditPane extends JPanel implements EBComponent
 			view.updateTitle();
 			view.updateMarkerMenus();
 
-			status.selectBuffer(buffer);
-			status.updateCaretStatus();
+			if(bufferSwitcher != null)
+				bufferSwitcher.setSelectedItem(buffer);
+			caretStatus.repaint();
 
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
 				.BUFFER_CHANGED));
@@ -193,7 +194,10 @@ public class EditPane extends JPanel implements EBComponent
 	public void handleMessage(EBMessage msg)
 	{
 		if(msg instanceof PropertiesChanged)
+		{
 			propertiesChanged();
+			loadBufferSwitcher();
+		}
 		else if(msg instanceof RegistersChanged)
 			textArea.getGutter().repaint();
 		else if(msg instanceof BufferUpdate)
@@ -253,10 +257,9 @@ public class EditPane extends JPanel implements EBComponent
 
 		EditBus.addToBus(this);
 
-		status = new StatusBar(this);
-		add(BorderLayout.NORTH,status);
-
 		textArea = new JEditTextArea(view);
+		textArea.add(JEditTextArea.LEFT_OF_SCROLLBAR,caretStatus
+			= new CaretStatus(this));
 		textArea.addCaretListener(new CaretHandler());
 		add(BorderLayout.CENTER,textArea);
 		markerHighlight = new MarkerHighlight();
@@ -279,7 +282,7 @@ public class EditPane extends JPanel implements EBComponent
 		else
 			setBuffer(buffer);
 
-		status.updateBufferList(); // create buffers popup
+		loadBufferSwitcher();
 
 		init = false;
 	}
@@ -296,7 +299,8 @@ public class EditPane extends JPanel implements EBComponent
 	private View view;
 	private Buffer buffer;
 	private Buffer recentBuffer;
-	private StatusBar status;
+	private BufferSwitcher bufferSwitcher;
+	private CaretStatus caretStatus;
 	private JEditTextArea textArea;
 	private MarkerHighlight markerHighlight;
 
@@ -557,12 +561,33 @@ public class EditPane extends JPanel implements EBComponent
 			.loadPopupMenu("view.context"));
 	}
 
+	private void loadBufferSwitcher()
+	{
+		if(jEdit.getBooleanProperty("view.showBufferSwitcher"))
+		{
+			if(bufferSwitcher == null)
+			{
+				bufferSwitcher = new BufferSwitcher(this);
+				add(BorderLayout.NORTH,bufferSwitcher);
+				bufferSwitcher.updateBufferList();
+				revalidate();
+			}
+		}
+		else if(bufferSwitcher != null)
+		{
+			remove(bufferSwitcher);
+			revalidate();
+			bufferSwitcher = null;
+		}
+	}
+
 	private void handleBufferUpdate(BufferUpdate msg)
 	{
 		Buffer _buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.CREATED)
 		{
-			status.updateBufferList();
+			if(bufferSwitcher != null)
+				bufferSwitcher.updateBufferList();
 
 			/* When closing the last buffer, the BufferUpdate.CLOSED
 			 * handler doesn't call setBuffer(), because null buffers
@@ -573,7 +598,8 @@ public class EditPane extends JPanel implements EBComponent
 		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
-			status.updateBufferList();
+			if(bufferSwitcher != null)
+				bufferSwitcher.updateBufferList();
 
 			if(_buffer == buffer)
 			{
@@ -593,7 +619,7 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				status.updateCaretStatus();
+				caretStatus.repaint();
 				textArea.setCaretPosition(0);
 				textArea.getPainter().repaint();
 			}
@@ -602,11 +628,14 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				status.updateCaretStatus();
-				if(buffer.isDirty())
-					status.updateBufferStatus();
-				else
-					status.updateBufferList();
+				caretStatus.repaint();
+				if(bufferSwitcher != null)
+				{
+					if(buffer.isDirty())
+						bufferSwitcher.repaint();
+					else
+						bufferSwitcher.updateBufferList();
+				}
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.LOADED)
@@ -614,8 +643,9 @@ public class EditPane extends JPanel implements EBComponent
 			if(_buffer == buffer)
 			{
 				textArea.repaint();
-				status.updateBufferList();
-				status.updateCaretStatus();
+				if(bufferSwitcher != null)
+					bufferSwitcher.updateBufferList();
+				caretStatus.repaint();
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
@@ -628,7 +658,8 @@ public class EditPane extends JPanel implements EBComponent
 			if(_buffer == buffer)
 			{
 				textArea.getPainter().repaint();
-				status.updateBufferStatus();
+				if(bufferSwitcher != null)
+					bufferSwitcher.repaint();
 			}
 		}
 	}
@@ -637,7 +668,7 @@ public class EditPane extends JPanel implements EBComponent
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
-			status.updateCaretStatus();
+			caretStatus.repaint();
 		}
 	}
 }
@@ -645,6 +676,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.27  2000/11/13 11:19:26  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.26  2000/11/12 05:36:48  sp
  * BeanShell integration started
  *
@@ -674,29 +708,5 @@ public class EditPane extends JPanel implements EBComponent
  *
  * Revision 1.17  2000/09/23 03:01:09  sp
  * pre7 yayayay
- *
- * Revision 1.16  2000/09/01 11:31:00  sp
- * Rudimentary 'command line', similar to emacs minibuf
- *
- * Revision 1.15  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.14  2000/08/24 08:17:46  sp
- * Bug fixing
- *
- * Revision 1.13  2000/08/10 08:30:40  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.12  2000/07/26 07:48:43  sp
- * stuff
- *
- * Revision 1.11  2000/07/22 12:37:38  sp
- * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
- *
- * Revision 1.10  2000/07/22 03:27:03  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.9  2000/07/14 06:00:44  sp
- * bracket matching now takes syntax info into account
  *
  */

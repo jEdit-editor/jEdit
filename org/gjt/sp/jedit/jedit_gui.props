@@ -71,6 +71,9 @@ icons=Blank24.gif \
 	Up24.gif \
 	Unsplit24.gif
 
+view.search.find=Search for:
+view.search.incremental=Incremental
+
 ###
 ### CONTEXT MENUS
 ###
@@ -183,8 +186,9 @@ select=select-word \
        - \
        to-lower \
        to-upper \
-       tab \
-       untab \
+       spaces-to-tabs \
+       tabs-to-spaces \
+       remove-trailing-ws \
        - \
        toggle-rect
 select.label=Selection
@@ -196,8 +200,9 @@ box-comment.label=Box Comment
 block-comment.label=Block Comment
 to-lower.label=To Lower Case
 to-upper.label=To Upper Case
-tab.label=Spaces to Tabs
-untab.label=Tabs to Spaces
+spaces-to-tabs.label=Spaces to Tabs
+tabs-to-spaces.label=Tabs to Spaces
+remove-trailing-ws.label=Remove Trailing Whitespace
 toggle-rect.label=Rectangular Selection
 
 ### Line menu
@@ -209,8 +214,7 @@ line=indent-lines \
      delete-start-line \
      delete-end-line \
      - \
-     join-lines \
-     remove-trailing-ws
+     join-lines
 line.label=Lines
 indent-lines.label=Indent Selected Lines
 shift-left.label=Shift Indent Left
@@ -219,7 +223,6 @@ delete-line.label=Delete Line
 delete-start-line.label=Delete to Start of Line
 delete-end-line.label=Delete to End of Line
 join-lines.label=Join Lines
-remove-trailing-ws.label=Remove Trailing Whitespace
 
 ### Paragraph menu
 paragraph=prev-paragraph \
@@ -441,18 +444,18 @@ no-plugins.label=No Plugins
 help-menu=about \
      help \
      - \
-     help@README.txt \
-     help@NEWS.txt \
-     help@CHANGES.txt \
-     help@COPYING.txt \
+     help-readme \
+     help-news \
+     help-changes \
+     help-copying \
      -
 help-menu.label=$Help
 about.label=About jEdit...
 help.label=jEdit User Guide
-help@README.txt.label=jEdit Read Me
-help@NEWS.txt.label=Major Changes in jEdit 2.7
-help@CHANGES.txt.label=Version History
-help@COPYING.txt.label=GNU General Public License
+help-readme.label=jEdit Read Me
+help-news.label=Major Changes in jEdit 2.7
+help-changes.label=Version History
+help-copying.label=GNU General Public License
 
 ###
 ### MACRO STRINGS
@@ -515,24 +518,7 @@ view.gutter.register=Register "{0}" points to this line
 view.gutter.marker=Marker "{0}" points to this line
 
 # Status messages
-view.status.cut-string-register=Cut to register:
-view.status.copy-string-register=Copy to register:
-view.status.append-string-register=Append to register:
-view.status.paste-string-register=Paste from register:
-view.status.set-filename-register=Save file name to register:
-view.status.set-caret-register=Save position to register:
-view.status.goto-register=Go to register:
-view.status.select-caret-register=Select to register:
-view.status.exchange-caret-register=Swap position with register:
-view.status.clear-register=Clear register:
-view.status.insert-literal=Insert without expanding:
 view.status.recording=(recording)
-view.status.vfs-browser=Enter directory or URL to browse:
-view.status.quick-search=Quick search for:
-view.status.incremental-search=Incremental search for:
-
-view.command-line.top-level=Enter a repeat count or action name:
-view.command-line.repeat=Enter repeat count, followed by command to repeat:
 
 # Printing
 print.page=Page {0}
@@ -577,8 +563,8 @@ badurl.title=Invalid URL
 badurl.message=The following URL is invalid: {0}
 
 # Go to line dialog
-gotoline.title=Go To Line
-gotoline.message=Go to line:
+goto-line.title=Go To Line
+goto-line.message=Go to line:
 
 # Word count dialog
 wordcount.title=Word Count
@@ -868,6 +854,8 @@ options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.checkModStatus=Check file modification time on focus
 options.general.showFullPath=Show full path of buffers in title bar
+options.general.showSearchbar=Show search bar
+options.general.showBufferSwitcher=Show buffer switcher
 
 options.loadsave.label=Loading & Saving
 options.loadsave.encoding=File encoding:

@@ -25,11 +25,13 @@ import java.awt.*;
 public class BeanShellAction extends EditAction
 {
 	public BeanShellAction(String name, String actionPerformed,
-		String isSelected)
+		String isSelected, boolean noRepeat, boolean noRecord)
 	{
 		super(name);
 
 		this.actionPerformed = actionPerformed;
+		this.noRepeat = noRepeat;
+		this.noRecord = noRecord;
 
 		if(isSelected != null)
 		{
@@ -64,9 +66,21 @@ public class BeanShellAction extends EditAction
 			cachedIsSelected)));
 	}
 
+	public boolean noRepeat()
+	{
+		return noRepeat;
+	}
+
+	public boolean noRecord()
+	{
+		return noRecord;
+	}
+
 	// private members
 	private static int counter;
 
+	private boolean noRepeat;
+	private boolean noRecord;
 	private String actionPerformed;
 	private String cachedActionPerformed;
 	private String cachedIsSelected;

@@ -17,6 +17,12 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.append(textArea,__char__)");
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="backspace">
 	<ACTION_PERFORMED>
 		textArea.backspace();
@@ -26,6 +32,18 @@
 <ACTION NAME="backspace-word">
 	<ACTION_PERFORMED>
 		textArea.backspaceWord();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="browse-system-macros">
+	<ACTION_PERFORMED>
+		Macros.browseSystemMacros(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="browse-user-macros">
+	<ACTION_PERFORMED>
+		Macros.browseUserMacros(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -53,6 +71,12 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="clear-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.clearRegister(__char__)");
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="close-all">
 	<ACTION_PERFORMED>
 		jEdit.closeAllBuffers(view);
@@ -71,15 +95,33 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="complete-word">
+	<ACTION_PERFORMED>
+		textArea.completeWord();
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="copy">
 	<ACTION_PERFORMED>
 		Registers.copy(textArea,'$');
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="copy-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.copy(textArea,__char__)");
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="cut">
 	<ACTION_PERFORMED>
 		Registers.cut(textArea,'$');
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="cut-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.cut(textArea,__char__)");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -167,15 +209,9 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="browse-system-macros">
+<ACTION NAME="exchange-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		Macros.browseSystemMacros(view);
-	</ACTION_PERFORMED>
-</ACTION>
-
-<ACTION NAME="browse-user-macros">
-	<ACTION_PERFORMED>
-		Macros.browseUserMacros(view);
+		view.getInputHandler().readNextChar("Registers.exchangeCaretRegister(editPane,__char__)");
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -191,21 +227,27 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="find" AUTO_RECORD="false">
+<ACTION NAME="find" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
 		SearchAndReplace.showSearchDialog(view,null);
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="find-next" AUTO_RECORD="false">
+<ACTION NAME="find-next" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
 		SearchAndReplace.find(view,view);
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="find-selection" AUTO_RECORD="false">
+<ACTION NAME="find-selection" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
 		SearchAndReplace.showSearchDialog(view,textArea.getSelectedText());
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="format-paragraph" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		textArea.formatParagraph();
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -221,15 +263,57 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="hypersearch" AUTO_RECORD="false">
+<ACTION NAME="goto-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.goToRegister(editPane,__char__)");
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="help">
+	<ACTION_PERFORMED>
+		HelpViewer.gotoFile("users-guide/index.html");
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="help-changes">
+	<ACTION_PERFORMED>
+		HelpViewer.gotoFile("CHANGES.txt");
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="help-copying">
+	<ACTION_PERFORMED>
+		HelpViewer.gotoFile("COPYING.txt");
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="help-news">
+	<ACTION_PERFORMED>
+		HelpViewer.gotoFile("NEWS.txt");
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="help-readme">
+	<ACTION_PERFORMED>
+		HelpViewer.gotoFile("README.txt");
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="hypersearch">
 	<ACTION_PERFORMED>
 		SearchAndReplace.showHyperSearchDialog(view,null);
 	</ACTION_PERFORMED>
 </ACTION>
 
-<ACTION NAME="hypersearch-selection" AUTO_RECORD="false">
+<ACTION NAME="hypersearch-selection">
 	<ACTION_PERFORMED>
 		SearchAndReplace.showHyperSearchDialog(view,textArea.getSelectedText());
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="incremental-search">
+	<ACTION_PERFORMED>
+		view.incrementalSearch();
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -245,9 +329,33 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="insert-literal">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("textArea.setSelectedText(new String(__char__))");
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="io-progress-monitor">
 	<ACTION_PERFORMED>
 		jEdit.showIOProgressMonitorDialog();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="join-lines">
+	<ACTION_PERFORMED>
+		textArea.joinLines();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="load-session">
+	<ACTION_PERFORMED>
+		Sessions.showLoadSessionDialog(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="locate-bracket">
+	<ACTION_PERFORMED>
+		textArea.locateBracket();
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -277,13 +385,19 @@
 
 <ACTION NAME="next-buffer">
 	<ACTION_PERFORMED>
-		view.getEditPane().nextBuffer();
+		editPane.nextBuffer();
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="next-char">
 	<ACTION_PERFORMED>
 		textArea.setCaretPosition(textArea.getNextCharacter());
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="next-marker">
+	<ACTION_PERFORMED>
+		textArea.setCaretPosition(textArea.getNextMarker());
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -329,6 +443,12 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.paste(textArea,__char__)");
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="prev-bracket">
 	<ACTION_PERFORMED>
 		textArea.setCaretPosition(textArea.getPrevBracket());
@@ -337,13 +457,19 @@
 
 <ACTION NAME="prev-buffer">
 	<ACTION_PERFORMED>
-		view.getEditPane().prevBuffer();
+		editPane.prevBuffer();
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="prev-char">
 	<ACTION_PERFORMED>
 		textArea.setCaretPosition(textArea.getPrevCharacter());
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="prev-marker">
+	<ACTION_PERFORMED>
+		textArea.setCaretPosition(textArea.getPrevMarker());
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -371,6 +497,12 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="quick-search">
+	<ACTION_PERFORMED>
+		view.quickSearch();
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="recent-buffer">
 	<ACTION_PERFORMED>
 		view.getEditPane().recentBuffer();
@@ -392,6 +524,18 @@
 <ACTION NAME="reload-all">
 	<ACTION_PERFORMED>
 		jEdit.reloadAllBuffers(view,true);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="reload-modes">
+	<ACTION_PERFORMED>
+		jEdit.reloadModes(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="remove-trailing-ws">
+	<ACTION_PERFORMED>
+		textArea.removeTrailingWhiteSpace();
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -450,6 +594,12 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="save-session">
+	<ACTION_PERFORMED>
+		Sessions.showSaveSessionDialog(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="scroll-down-line">
 	<ACTION_PERFORMED>
 		textArea.scrollDownLine();
@@ -486,6 +636,12 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="select-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.selectCaretRegister(editPane,__char__)");
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="select-line">
 	<ACTION_PERFORMED>
 		textArea.selectLine();
@@ -512,37 +668,43 @@
 
 <ACTION NAME="select-document-end">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(buffer.getLength());
+		textArea.moveCaretPosition(buffer.getLength());
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-document-home">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(0);
+		textArea.moveCaretPosition(0);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-next-bracket">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(textArea.getNextBracket());
+		textArea.moveCaretPosition(textArea.getNextBracket());
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-next-char">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(textArea.getNextCharacter());
+		textArea.moveCaretPosition(textArea.getNextCharacter());
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="select-next-marker">
+	<ACTION_PERFORMED>
+		textArea.moveCaretPosition(textArea.getNextMarker());
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-next-paragraph">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(textArea.getNextParagraph());
+		textArea.moveCaretPosition(textArea.getNextParagraph());
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-next-word">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(textArea.getNextWord());
+		textArea.moveCaretPosition(textArea.getNextWord());
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -554,19 +716,61 @@
 
 <ACTION NAME="select-prev-char">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(textArea.getPrevCharacter());
+		textArea.moveCaretPosition(textArea.getPrevCharacter());
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="select-prev-marker">
+	<ACTION_PERFORMED>
+		textArea.moveCaretPosition(textArea.getPrevMarker());
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-prev-paragraph">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(textArea.getPrevParagraph());
+		textArea.moveCaretPosition(textArea.getPrevParagraph());
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="select-prev-word">
 	<ACTION_PERFORMED>
-		textArea.setMarkPosition(textArea.getPrevWord());
+		textArea.moveCaretPosition(textArea.getPrevWord());
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="set-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.setCaretRegister(editPane,__char__)");
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="set-filename-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		view.getInputHandler().readNextChar("Registers.setRegister(__char__,buffer.getPath())");
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="set-marker">
+	<ACTION_PERFORMED>
+		textArea.showSetMarkerDialog();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="shift-left">
+	<ACTION_PERFORMED>
+		textArea.shiftIndentLeft();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="shift-right">
+	<ACTION_PERFORMED>
+		textArea.shiftIndentRight();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="spaces-to-tabs">
+	<ACTION_PERFORMED>
+		textArea.spacesToTabs();
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -579,6 +783,24 @@
 <ACTION NAME="split-vertical">
 	<ACTION_PERFORMED>
 		view.splitVertically();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="tabs-to-spaces">
+	<ACTION_PERFORMED>
+		textArea.tabsToSpaces();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="to-lower">
+	<ACTION_PERFORMED>
+		textArea.toLowerCase();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="to-upper">
+	<ACTION_PERFORMED>
+		textArea.toUpperCase();
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -636,9 +858,30 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="vfs-browser">
+	<ACTION_PERFORMED>
+		view.getDockableWindowManager().toggleDockableWindow("vfs.browser");
+	</ACTION_PERFORMED>
+	<IS_SELECTED>
+		return view.getDockableWindowManager().isDockableWindowVisible("vfs.browser");
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="view-registers">
+	<ACTION_PERFORMED>
+		Registers.showViewRegistersDialog(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="wing-comment">
 	<ACTION_PERFORMED>
 		textArea.wingComment();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="word-count">
+	<ACTION_PERFORMED>
+		textArea.showWordCountDialog();
 	</ACTION_PERFORMED>
 </ACTION>
 

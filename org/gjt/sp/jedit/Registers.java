@@ -75,8 +75,30 @@ public class Registers
 		if(selection == null)
 			return;
 
-		setRegister(register,new StringRegister(selection));
+		setRegister(register,selection);
 		HistoryModel.getModel("clipboard").addItem(selection);
+	}
+
+	/**
+	 * Convinience method that appends the text selected in the specified
+	 * text area to the specified register.
+	 * @param textArea The text area
+	 * @param register The register
+	 */
+	public static void append(JEditTextArea textArea, char register)
+	{
+		String selection = textArea.getSelectedText();
+		if(selection == null)
+			return;
+
+		Register reg = getRegister(register);
+
+		if(reg == null || reg.toString() == null)
+			setRegister(register,selection);
+		else
+		{
+			setRegister(register,reg.toString() + "\n" + selection);
+		}
 	}
 
 	/**
@@ -95,7 +117,7 @@ public class Registers
 			if(selection == null)
 				return;
 
-			setRegister(register,new StringRegister(selection));
+			setRegister(register,selection);
 			HistoryModel.getModel("clipboard").addItem(selection);
 
 			textArea.setSelectedText("");
@@ -134,6 +156,94 @@ public class Registers
 	}
 
 	/**
+	 * Convinience method that exchanges the caret position with that
+	 * stored in the specified register.
+	 * @param editPane The edit pane
+	 * @param register The register
+	 */
+	public static void exchangeCaretRegister(EditPane editPane,
+		char register)
+	{
+		Register reg = Registers.getRegister(register);
+		JEditTextArea textArea = editPane.getTextArea();
+
+		if(reg instanceof CaretRegister)
+		{
+			CaretRegister caretReg = (CaretRegister)reg;
+			Buffer buffer = caretReg.openFile();
+			if(buffer == null)
+				return;
+
+			int offset = caretReg.getOffset();
+
+			setRegister(register,new CaretRegister(editPane.getBuffer(),
+				textArea.getCaretPosition()));
+
+			editPane.setBuffer(buffer);
+			textArea.setCaretPosition(offset);
+		}
+		else
+			editPane.getToolkit().beep();
+	}
+
+	/**
+	 * Convinience method that stores the caret position in the
+	 * specified register.
+	 * @param editPane The edit pane
+	 * @param register The register
+	 */
+	public static void setCaretRegister(EditPane editPane, char register)
+	{
+		Registers.setRegister(register,new CaretRegister(
+			editPane.getBuffer(),editPane.getTextArea().getCaretPosition()));
+	}
+
+	/**
+	 * Convinience method that selects from the caret position to the
+	 * position stored in the specified register.
+	 * @param editPane The edit pane
+	 * @param register The register
+	 */
+	public static void selectCaretRegister(EditPane editPane, char register)
+	{
+		Register reg = getRegister(register);
+
+		if(reg instanceof CaretRegister)
+		{
+			CaretRegister caretReg = (CaretRegister)reg;
+			editPane.getTextArea().select(editPane.getTextArea()
+				.getCaretPosition(),caretReg.getOffset());
+		}
+		else
+			editPane.getToolkit().beep();
+	}
+
+	/**
+	 * Convinience method that opens the buffer and moves the caret to the
+	 * position pointed to by the specified register.
+	 * @param editPane The edit pane
+	 * @param register The register
+	 */
+	public static void goToRegister(EditPane editPane, char register)
+	{
+		Register reg = getRegister(register);
+
+		if(reg == null)
+			editPane.getToolkit().beep();
+		else if(reg instanceof CaretRegister)
+		{
+			CaretRegister caretReg = (CaretRegister)reg;
+			Buffer buffer = caretReg.openFile();
+			if(buffer == null)
+				return;
+			editPane.setBuffer(buffer);
+			editPane.getTextArea().setCaretPosition(caretReg.getOffset());
+		}
+		else
+			jEdit.openFile(editPane.getView(),reg.toString());
+	}
+
+	/**
 	 * Returns the specified register.
 	 * @param name The name
 	 */
@@ -143,6 +253,16 @@ public class Registers
 			return null;
 		else
 			return registers[name];
+	}
+
+	/**
+	 * Sets the specified register.
+	 * @param name The name
+	 * @param value The new value
+	 */
+	public static void setRegister(char name, String value)
+	{
+		setRegister(name,new StringRegister(value));
 	}
 
 	/**
@@ -497,6 +617,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/11/13 11:19:26  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.13  2000/11/12 05:36:48  sp
  * BeanShell integration started
  *

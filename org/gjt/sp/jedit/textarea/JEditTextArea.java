@@ -60,6 +60,12 @@ import org.gjt.sp.util.Log;
 public class JEditTextArea extends JComponent
 {
 	/**
+	 * Adding components with this name to the text area will place
+	 * them left of the horizontal scroll bar.
+	 */
+	public static String LEFT_OF_SCROLLBAR = "los";
+
+	/**
 	 * Creates a new JEditTextArea.
 	 */
 	public JEditTextArea(View view)
@@ -99,7 +105,7 @@ public class JEditTextArea extends JComponent
 				Boolean.FALSE);
 			horizontal.putClientProperty("JScrollBar.isFreeStanding",
 				Boolean.FALSE);
-			horizontal.setBorder(null);
+			//horizontal.setBorder(null);
 		}
 
 		// Add some event listeners
@@ -356,8 +362,8 @@ public class JEditTextArea extends JComponent
 	{
 		if(firstLine > 0)
 		{
-			firstLine -= visibleLines;
-			setFirstLine(firstLine > 0 ? firstLine : 0);
+			int newFirstLine = firstLine - visibleLines;
+			setFirstLine(newFirstLine > 0 ? newFirstLine : 0);
 		}
 		else
 		{
@@ -389,8 +395,9 @@ public class JEditTextArea extends JComponent
 
 		if(firstLine + visibleLines < numLines)
 		{
-			firstLine += visibleLines;
-			setFirstLine(firstLine + visibleLines < numLines ? firstLine : numLines - visibleLines);
+			int newFirstLine = firstLine + visibleLines;
+			setFirstLine(newFirstLine + visibleLines < numLines
+				? newFirstLine : numLines - visibleLines);
 		}
 		else
 		{
@@ -988,13 +995,13 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Sets the mark position.
+	 * Moves the caret without moving the mark.
 	 * @param mark The mark position
 	 * @since jEdit 2.7pre2
 	 */
-	public final void setMarkPosition(int mark)
+	public final void moveCaretPosition(int caret)
 	{
-		select(mark,getCaretPosition(),true);
+		select(getMarkPosition(),caret,true);
 	}
 
 	/**
@@ -1471,55 +1478,69 @@ public class JEditTextArea extends JComponent
 		}
 		else if(ch == '\n')
 		{
-			setSelectedText("\n");
-			if(buffer.getBooleanProperty("indentOnEnter"))
-				buffer.indentLine(this,selectionStartLine,true,true);
+			try
+			{
+				buffer.beginCompoundEdit();
+				setSelectedText("\n");
+				if(buffer.getBooleanProperty("indentOnEnter"))
+					buffer.indentLine(this,selectionStartLine,true,false);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
 			return;
 		}
-		else if(!overwrite || selectionStart != selectionEnd)
-			setSelectedText(str);
 		else
 		{
-			// Don't overstrike if we're on the end of
-			// the line
-			int caret = getCaretPosition();
-			int caretLineEnd = getLineEndOffset(caretLine);
-			if(caretLineEnd - caret <= str.length())
+			try
+			{
+				doWordWrap(caretLine,str);
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+
+			if(!overwrite || selectionStart != selectionEnd)
 				setSelectedText(str);
 			else
 			{
-				buffer.beginCompoundEdit();
-
-				try
+				// Don't overstrike if we're on the end of
+				// the line
+				int caret = getCaretPosition();
+				int caretLineEnd = getLineEndOffset(caretLine);
+				if(caretLineEnd - caret <= str.length())
+					setSelectedText(str);
+				else
 				{
-					buffer.remove(caret,str.length());
-					buffer.insertString(caret,str,null);
-				}
-				catch(BadLocationException bl)
-				{
-					bl.printStackTrace();
-				}
-				finally
-				{
-					buffer.endCompoundEdit();
+					buffer.beginCompoundEdit();
+	
+					try
+					{
+						buffer.remove(caret,str.length());
+						buffer.insertString(caret,str,null);
+					}
+					catch(BadLocationException bl)
+					{
+						bl.printStackTrace();
+					}
+					finally
+					{
+						buffer.endCompoundEdit();
+					}
 				}
 			}
 		}
 
+		String indentOpenBrackets = (String)buffer
+			.getProperty("indentOpenBrackets");
 		String indentCloseBrackets = (String)buffer
 			.getProperty("indentCloseBrackets");
-		if(indentCloseBrackets != null && indentCloseBrackets.indexOf(ch) != -1)
+		if((indentCloseBrackets != null && indentCloseBrackets.indexOf(ch) != -1)
+			|| (indentOpenBrackets != null && indentOpenBrackets.indexOf(ch) != -1))
 		{
-			buffer.indentLine(this,caretLine,true,true);
-		}
-
-		try
-		{
-			doWordWrap(caretLine,str);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
+			buffer.indentLine(this,caretLine,false,true);
 		}
 	}
 
@@ -1951,6 +1972,31 @@ loop:		for(int i = 0; i < text.length(); i++)
 	}
 
 	/**
+	 * Returns the offset of the next marker.
+	 * @since jEdit 2.7pre2
+	 */
+	public int getNextMarker()
+	{
+		int caret = getCaretPosition();
+		Vector markers = buffer.getMarkers();
+		Marker marker = null;
+		for(int i = 0; i < markers.size(); i++)
+		{
+			Marker _marker = (Marker)markers.elementAt(i);
+			if(_marker.getStart() > caret)
+			{
+				marker = _marker;
+				break;
+			}
+		}
+
+		if(marker != null)
+			return marker.getStart();
+		else
+			return buffer.getLength();
+	}
+
+	/**
 	 * Returns the offset of the next paragraph.
 	 * @since jEdit 2.7pre2
 	 */
@@ -2030,6 +2076,32 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			return caret;
 		else
 			return caret - 1;
+	}
+
+	/**
+	 * Returns the offset of the previous marker.
+	 * @since jEdit 2.7pre2
+	 */
+	public int getPrevMarker()
+	{
+		int caret = getCaretPosition();
+
+		Vector markers = buffer.getMarkers();
+		Marker marker = null;
+		for(int i = markers.size() - 1; i >= 0; i--)
+		{
+			Marker _marker = (Marker)markers.elementAt(i);
+			if(_marker.getStart() < caret)
+			{
+				marker = _marker;
+				break;
+			}
+		}
+
+		if(marker != null)
+			return marker.getStart();
+		else
+			return 0;
 	}
 
 	/**
@@ -2209,6 +2281,217 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	}
 
 	/**
+	 * Formats the paragraph containing the caret.
+	 * @since jEdit 2.7pre2
+	 */
+	public void formatParagraph()
+	{
+		if(!buffer.isEditable())
+		{
+			getToolkit().beep();
+			return;
+		}
+		int maxLineLength = ((Integer)buffer.getProperty("maxLineLen"))
+			.intValue();
+		String text = getSelectedText();
+		if(text != null)
+			setSelectedText(TextUtilities.format(text,maxLineLength));
+		else
+		{
+			int lineNo = getCaretLine();
+
+			int start = 0, end = buffer.getLength();
+
+			for(int i = lineNo - 1; i >= 0; i--)
+			{
+				if(getLineLength(i) == 0)
+				{
+					start = getLineStartOffset(i);
+					break;
+				}
+			}
+
+			for(int i = lineNo + 1; i < getLineCount(); i++)
+			{
+				if(getLineLength(i) == 0)
+				{
+					end = getLineStartOffset(i);
+					break;
+				}
+			}
+			try
+			{
+				text = buffer.getText(start,end - start);
+				buffer.remove(start,end - start);
+				buffer.insertString(start,TextUtilities.format(
+					text,maxLineLength),null);
+			}
+			catch(BadLocationException bl)
+			{
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Converts spaces to tabs in the selection.
+	 * @since jEdit 2.7pre2
+	 */
+	public void spacesToTabs()
+	{
+		if(!buffer.isEditable() || selectionStart == selectionEnd)
+                {
+                	getToolkit().beep();
+                	return;
+                }
+
+		setSelectedText(TextUtilities.spacesToTabs(getSelectedText(),
+			buffer.getTabSize()));
+	}
+
+	/**
+	 * Converts tabs to spaces in the selection.
+	 * @since jEdit 2.7pre2
+	 */
+	public void tabsToSpaces()
+	{
+		if(!buffer.isEditable() || selectionStart == selectionEnd)
+                {
+                	getToolkit().beep();
+                	return;
+                }
+
+		setSelectedText(TextUtilities.tabsToSpaces(getSelectedText(),
+			buffer.getTabSize()));
+	}
+
+	/**
+	 * Converts the selected text to upper case.
+	 * @since jEdit 2.7pre2
+	 */
+	public void toUpperCase()
+	{
+		if(!buffer.isEditable() || selectionStart == selectionEnd)
+			getToolkit().beep();
+		else
+			setSelectedText(getSelectedText().toUpperCase());
+	}
+
+	/**
+	 * Converts the selected text to lower case.
+	 * @since jEdit 2.7pre2
+	 */
+	public void toLowerCase()
+	{
+		if(!buffer.isEditable() || selectionStart == selectionEnd)
+			getToolkit().beep();
+		else
+			setSelectedText(getSelectedText().toLowerCase());
+	}
+
+	/**
+	 * Removes trailing whitespace from all lines in the selection.
+	 * @since jEdit 2.7pre2
+	 */
+	public void removeTrailingWhiteSpace()
+	{
+		if(!buffer.isEditable())
+			getToolkit().beep();
+		else
+		{
+			buffer.removeTrailingWhiteSpace(selectionStartLine,
+				selectionEndLine);
+		}
+	}
+
+	/**
+	 * Shifts the indent to the left.
+	 * @since jEdit 2.7pre2
+	 */
+	public void shiftIndentLeft()
+	{
+		if(!buffer.isEditable())
+			getToolkit().beep();
+		else
+		{
+			buffer.shiftIndentLeft(selectionStartLine,
+				selectionEndLine);
+		}
+	}
+
+	/**
+	 * Shifts the indent to the right.
+	 * @since jEdit 2.7pre2
+	 */
+	public void shiftIndentRight()
+	{
+		if(!buffer.isEditable())
+			getToolkit().beep();
+		else
+		{
+			buffer.shiftIndentRight(selectionStartLine,
+				selectionEndLine);
+		}
+	}
+
+	/**
+	 * Joins the current and the next line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void joinLines()
+	{
+		Element map = buffer.getDefaultRootElement();
+		int lineNo = getCaretLine();
+		Element lineElement = map.getElement(lineNo);
+		int start = lineElement.getStartOffset();
+		int end = lineElement.getEndOffset();
+		if(end > buffer.getLength())
+		{
+			getToolkit().beep();
+			return;
+		}
+		Element nextLineElement = map.getElement(lineNo+1);
+		int nextStart = nextLineElement.getStartOffset();
+		int nextEnd = nextLineElement.getEndOffset();
+		try
+		{
+			buffer.remove(end - 1,MiscUtilities.getLeadingWhiteSpace(
+				buffer.getText(nextStart,nextEnd - nextStart)) + 1);
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
+	}
+
+	/**
+	 * Moves the caret to the bracket matching the one before the caret.
+	 * @since jEdit 2.7pre2
+	 */
+	public void locateBracket()
+	{
+		int line = getCaretLine();
+		int dot = getCaretPosition() - getLineStartOffset(line);
+
+		try
+		{
+			int bracket = TextUtilities.findMatchingBracket(
+				buffer,line,Math.max(0,dot - 1));
+			if(bracket != -1)
+			{
+				setCaretPosition(bracket + 1);
+				return;
+			}
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
+
+		getToolkit().beep();
+	}
+
+	/**
 	 * Displays the 'go to line' dialog box, and moves the caret to the
 	 * specified line number.
 	 * @since jEdit 2.7pre2
@@ -2216,6 +2499,9 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	public void showGoToLineDialog()
 	{
 		String line = GUIUtilities.input(view,"goto-line",null);
+		if(line == null)
+			return;
+
 		try
 		{
 			int lineNumber = Integer.parseInt(line);
@@ -2235,6 +2521,153 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	public void showSelectLineRangeDialog()
 	{
 		new SelectLineRange(view);
+	}
+
+	/**
+	 * Displays the 'word count' dialog box.
+	 * @since jEdit 2.7pre2
+	 */
+	public void showWordCountDialog()
+	{
+		String selection = getSelectedText();
+		if(selection != null)
+		{
+			doWordCount(view,selection);
+			return;
+		}
+		try
+		{
+			doWordCount(view,buffer.getText(0,buffer.getLength()));
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
+	}
+
+	/**
+	 * Displays the 'set marker' dialog box.
+	 * @since jEdit 2.7pre2
+	 */
+	public void showSetMarkerDialog()
+	{
+		if(buffer.isEditable())
+			getToolkit().beep();
+		String marker = GUIUtilities.input(view,"setmarker",
+			getSelectedText());
+		if(marker != null)
+			buffer.addMarker(marker,getSelectionStart(),
+				getSelectionEnd());
+	}
+
+	/**
+	 * Attempts to complete the word at the caret position, by searching
+	 * the buffer for words that start with the currently entered text. If
+	 * only one completion is found, it is inserted immediately, otherwise
+	 * a popup is shown will all possible completions.
+	 * @since jEdit 2.7pre2
+	 */
+	public void completeWord()
+	{
+		String noWordSep = (String)buffer.getProperty("noWordSep");
+		if(noWordSep == null)
+			noWordSep = "";
+		if(!buffer.isEditable())
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		// first, we get the word before the caret
+
+		int lineIndex = getCaretLine();
+		String line = getLineText(lineIndex);
+		int dot = getCaretPosition() - getLineStartOffset(lineIndex);
+		if(dot == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int wordStart = TextUtilities.findWordStart(line,dot-1,noWordSep);
+		String word = line.substring(wordStart,dot);
+		if(word.length() == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		Vector completions = new Vector();
+		int wordLen = word.length();
+
+		// now loop through all lines of current buffer
+		for(int i = 0; i < getLineCount(); i++)
+		{
+			line = getLineText(i);
+
+			// check for match at start of line
+
+			if(line.startsWith(word))
+			{
+				if(i == lineIndex && wordStart == 0)
+					continue;
+
+				String _word = completeWord(line,0,noWordSep);
+				if(_word.length() != wordLen)
+				{
+					// remove duplicates
+					if(completions.indexOf(_word) == -1)
+						completions.addElement(_word);
+				}
+			}
+
+			// check for match inside line
+			int len = line.length() - word.length();
+			for(int j = 0; j < len; j++)
+			{
+				char c = line.charAt(j);
+				if(!Character.isLetterOrDigit(c) && noWordSep.indexOf(c) == -1)
+				{
+					if(i == lineIndex && wordStart == (j + 1))
+						continue;
+
+					if(line.regionMatches(j + 1,word,0,wordLen))
+					{
+						String _word = completeWord(line,j + 1,noWordSep);
+						if(_word.length() != wordLen)
+						{
+							// remove duplicates
+							if(completions.indexOf(_word) == -1)
+								completions.addElement(_word);
+						}
+					}
+				}
+			}
+		}
+
+		// sort completion list
+
+		MiscUtilities.quicksort(completions,new MiscUtilities.StringICaseCompare());
+
+		if(completions.size() == 0)
+			getToolkit().beep();
+		// if there is only one competion, insert in buffer
+		else if(completions.size() == 1)
+		{
+			// chop off 'wordLen' because that's what's already
+			// in the buffer
+			setSelectedText(((String)completions
+				.elementAt(0)).substring(wordLen));
+		}
+		// show dialog box if > 1
+		else
+		{
+			Point location = new Point(offsetToX(lineIndex,wordStart),
+				painter.getFontMetrics().getHeight()
+				* (lineIndex - firstLine + 1));
+			SwingUtilities.convertPointToScreen(location,this);
+			new CompleteWord(view,word,completions,location);
+		}
 	}
 
 	/**
@@ -2451,6 +2884,9 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	private boolean overwrite;
 	private boolean rectSelect;
 
+	// for event handlers only
+	private int clickCount;
+
 	private void fireCaretEvent()
 	{
 		Object[] listeners = listenerList.getListenerList();
@@ -2570,6 +3006,48 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		}
 	}
 
+	private void doWordCount(View view, String text)
+	{
+		char[] chars = text.toCharArray();
+		int characters = chars.length;
+		int words;
+		if(characters == 0)
+			words = 0;
+		else
+			words = 1;
+		int lines = 1;
+		boolean word = false;
+		for(int i = 0; i < chars.length; i++)
+		{
+			switch(chars[i])
+			{
+			case '\r': case '\n':
+				lines++;
+			case ' ': case '\t':
+				if(word)
+				{
+					words++;
+					word = false;
+				}
+				break;
+			default:
+				word = true;
+				break;
+			}
+		}
+		Object[] args = { new Integer(characters), new Integer(words),
+			new Integer(lines) };
+		GUIUtilities.message(view,"wordcount",args);
+	}
+
+	// return word that starts at 'offset'
+	private String completeWord(String line, int offset, String noWordSep)
+	{
+		// '+ 1' so that findWordEnd() doesn't pick up the space at the start
+		int wordEnd = TextUtilities.findWordEnd(line,offset + 1,noWordSep);
+		return line.substring(offset,wordEnd);
+	}
+
 	private void updateBracketHighlight(int line, int offset)
 	{
 		if(!painter.isBracketHighlightEnabled())
@@ -2637,11 +3115,6 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		}
 	}
 
-	// private members
-
-	// for event handlers only
-	private int clickCount;
-
 	static class TextAreaBorder extends AbstractBorder
 	{
 		private static final Insets insets = new Insets(1, 1, 2, 2);
@@ -2683,6 +3156,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				left = comp;
 			else if(name.equals(BOTTOM))
 				bottom = comp;
+			else if(name.equals(LEFT_OF_SCROLLBAR))
+				leftOfScrollBar = comp;
 		}
 
 		public void removeLayoutComponent(Component comp)
@@ -2695,6 +3170,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				left = null;
 			else if(bottom == comp)
 				bottom = null;
+			else if(leftOfScrollBar == comp)
+				leftOfScrollBar = null;
 		}
 
 		public Dimension preferredLayoutSize(Container parent)
@@ -2799,6 +3276,16 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				rightWidth,
 				centerHeight);
 
+			if(leftOfScrollBar != null)
+			{
+				Dimension dim = leftOfScrollBar.getPreferredSize();
+				leftOfScrollBar.setBounds(ileft,
+					itop + centerHeight,
+					dim.width,
+					bottomHeight);
+				ileft += dim.width;
+			}
+
 			bottom.setBounds(
 				ileft,
 				itop + centerHeight,
@@ -2810,6 +3297,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		Component left;
 		Component right;
 		Component bottom;
+		Component leftOfScrollBar;
 	}
 
 	static class CaretBlinker implements ActionListener
@@ -2982,16 +3470,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		public void mousePressed(MouseEvent evt)
 		{
 			grabFocus();
-			// trying to work around buggy focus handling in some
-			// Java versions
-//			if(!textArea.hasFocus())
-//			{
-//				textArea.processFocusEvent(new FocusEvent(textArea,
-//					FocusEvent.FOCUS_GAINED));
-//			}
 
-			// This is not done properly sometimes
-			focusedComponent = JEditTextArea.this;
 			blink = true;
 			painter.invalidateSelectedLines();
 
@@ -3183,7 +3662,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			int offset = xToOffset(mouse,evt.getX());
 			if(mark > mouse)
 			{
-				mark = getLineEndOffset(mark);
+				mark = getLineEndOffset(mark) - 1;
 				if(offset == getLineLength(mouse))
 					mouse = getLineEndOffset(mouse) - 1;
 				else
@@ -3195,7 +3674,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				if(offset == 0)
 					mouse = getLineStartOffset(mouse);
 				else
-					mouse = getLineEndOffset(mouse);
+					mouse = getLineEndOffset(mouse) - 1;
 			}
 			select(mark,mouse,false);
 		}
@@ -3269,6 +3748,9 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.98  2000/11/13 11:19:28  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.97  2000/11/12 05:36:50  sp
  * BeanShell integration started
  *

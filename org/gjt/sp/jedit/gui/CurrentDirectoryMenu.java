@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import java.awt.event.*;
 import java.io.File;
 import org.gjt.sp.jedit.*;
 
@@ -67,7 +68,14 @@ public class CurrentDirectoryMenu extends JMenu
 			addSeparator();
 
 			JMenu current = this;
-			EditAction action = jEdit.getAction("open-file");
+			ActionListener listener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					jEdit.openFile(view,evt.getActionCommand());
+				}
+			};
+
 			String[] list = dir.list();
 			if(list != null)
 			{
@@ -81,8 +89,9 @@ public class CurrentDirectoryMenu extends JMenu
 					if(file.isDirectory())
 						continue;
 
-					mi = new EnhancedMenuItem(name,action,
-						file.getPath());
+					mi = new JMenuItem(name);
+					mi.setActionCommand(file.getPath());
+					mi.addActionListener(listener);
 
 					if(current.getItemCount() >= 20)
 					{

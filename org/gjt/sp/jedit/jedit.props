@@ -84,6 +84,12 @@ buffer.maxLineLen=80
 # Show toolbar?
 view.showToolbar=true
 
+# Show searchbar?
+view.showSearchbar=true
+
+# Show buffer switcher?
+view.showBufferSwitcher=true
+
 # Show full path in title bar?
 view.showFullPath=false
 

@@ -42,6 +42,27 @@ import org.gjt.sp.util.Log;
 public class HelpViewer extends EnhancedFrame
 {
 	/**
+	 * Goes to the specified file, relative to the jEdit documentation
+	 * directory.
+	 * @param file The file
+	 * @since jEdit 2.7pre2
+	 */
+	public static void gotoFile(String file)
+	{
+		String docsHome = MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"doc");
+		docsHome = docsHome.replace(File.separatorChar,'/');
+		try
+		{
+			gotoURL(new URL("file:" + docsHome + "/" + file));
+		}
+		catch(MalformedURLException e)
+		{
+			Log.log(Log.ERROR,HelpViewer.class,e);
+		}
+	}
+
+	/**
 	 * Goes to the specified URL, creating a new help viewer or
 	 * reusing an existing one as necessary.
 	 * @param url The URL
@@ -258,6 +279,9 @@ public class HelpViewer extends EnhancedFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/11/13 11:19:27  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.28  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *

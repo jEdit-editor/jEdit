@@ -834,7 +834,41 @@ public class jEdit
 	}
 
 	/**
-	 * Reloads all modes and recreates the cache file.
+	 * Reloads all edit modes.
+	 * @param view The view
+	 */
+	public static void reloadModes(View view)
+	{
+		view.showWaitCursor();
+
+		String path;
+		String settingsDirectory = jEdit.getSettingsDirectory();
+
+		if(settingsDirectory == null)
+			path = null;
+		else
+			path = MiscUtilities.constructPath(settingsDirectory,
+				"mode-cache");
+
+		jEdit.createModeCache(path);
+
+		Buffer[] buffers = jEdit.getBuffers();
+		for(int i = 0; i < buffers.length; i++)
+			buffers[i].setMode();
+
+		View[] views = jEdit.getViews();
+		for(int i = 0; i < views.length; i++)
+		{
+			EditPane[] editPanes = views[i].getEditPanes();
+			for(int j = 0; j < editPanes.length; j++)
+				editPanes[j].getTextArea().repaint();
+		}
+
+		view.hideWaitCursor();
+	}
+
+	/**
+	 * Recreates the mode cache file.
 	 * @param path The mode cache file path
 	 */
 	public static void createModeCache(String path)
@@ -2086,76 +2120,37 @@ public class jEdit
 	{
 		actionHash = new Hashtable();
 
+		long start = System.currentTimeMillis();
+
 		Reader in = new BufferedReader(new InputStreamReader(
 			jEdit.class.getResourceAsStream("actions.xml")));
 		loadActions("actions.xml",in);
 
-		addAction("append-string-register");
-		addAction("clear-register");
-		addAction("command-line");
-		addAction("complete-word");
-		addAction("copy-string-register");
-		addAction("cut-string-register");
+		System.err.println(System.currentTimeMillis() - start);
+
 		addAction("end");
-		addAction("exchange-caret-register");
-		addAction("format-paragraph");
-		addAction("goto-register");
-		addAction("help");
 		addAction("home");
-		addAction("incremental-search");
-		addAction("insert-literal");
 		addAction("input");
-		addAction("join-lines");
-		addAction("load-session");
-		addAction("locate-bracket");
 		addAction("next-line");
-		addAction("next-marker");
 		addAction("next-page");
-		addAction("paste-string-register");
 		addAction("play-last-macro");
 		addAction("play-temp-macro");
 		addAction("prev-line");
-		addAction("prev-marker");
 		addAction("prev-page");
-		addAction("quick-search");
 		addAction("record-macro");
 		addAction("record-temp-macro");
-		addAction("reload-modes");
-		addAction("remove-trailing-ws");
-		addAction("save-session");
 		addAction("select-block");
-		addAction("select-caret-register");
 		addAction("select-end");
 		addAction("select-home");
 		addAction("select-next-line");
 		addAction("select-next-page");
 		addAction("select-prev-line");
 		addAction("select-prev-page");
-		addAction("set-caret-register");
-		addAction("set-filename-register");
-		addAction("set-marker");
-		addAction("shift-left");
-		addAction("shift-right");
 		addAction("stop-recording");
-		addAction("tab");
-		addAction("to-lower");
-		addAction("to-upper");
-		addAction("untab");
-		addAction("word-count");
 
 		// Preload these actions so that needsActionCommand()
 		// will return the correct value (for command line autocompletion)
-		addAction(new org.gjt.sp.jedit.actions.clear_marker());
-		addAction(new org.gjt.sp.jedit.actions.goto_marker());
 		addAction(new org.gjt.sp.jedit.actions.play_macro());
-		addAction(new org.gjt.sp.jedit.actions.repeat());
-		addAction(new org.gjt.sp.jedit.actions.set_replace_string());
-		addAction(new org.gjt.sp.jedit.actions.set_search_parameters());
-		addAction(new org.gjt.sp.jedit.actions.set_search_string());
-
-		// Preload these actions so that isToggle()
-		// will return the correct value
-		addAction(new org.gjt.sp.jedit.actions.vfs_browser());
 	}
 
 	/**
@@ -2483,6 +2478,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.292  2000/11/13 11:19:26  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.291  2000/11/12 05:36:48  sp
  * BeanShell integration started
  *

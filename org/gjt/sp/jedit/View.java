@@ -25,6 +25,8 @@ import javax.swing.text.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
@@ -64,12 +66,46 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Returns the command line prompt.
-	 * @since jEdit 2.6pre5
+	 * Quick search.
+	 * @since jEdit 2.7pre2
 	 */
-	public CommandLine getCommandLine()
+	public void quickSearch()
 	{
-		return commandLine;
+		if(searchBar == null)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		searchBar.setIncremental(false);
+		searchBar.getField().setText(getTextArea().getSelectedText());
+		searchBar.getField().requestFocus();
+	}
+
+	/**
+	 * Incremental search.
+	 * @since jEdit 2.7pre2
+	 */
+	public void incrementalSearch()
+	{
+		if(searchBar == null)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		searchBar.setIncremental(true);
+		searchBar.getField().setText(getTextArea().getSelectedText());
+		searchBar.getField().requestFocus();
+	}
+
+	/**
+	 * Returns the search bar.
+	 * @since jEdit 2.4pre4
+	 */
+	public final SearchBar getSearchBar()
+	{
+		return searchBar;
 	}
 
 	/**
@@ -511,7 +547,7 @@ public class View extends JFrame implements EBComponent
 		else if(msg instanceof MacrosChanged)
 			updateMacrosMenu();
 		else if(msg instanceof SearchSettingsChanged)
-			commandLine.updateSearchSettings();
+			searchBar.update();
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
 	}
@@ -551,13 +587,13 @@ public class View extends JFrame implements EBComponent
 		{
 			// fix for the bug where key events in JTextComponents
 			// inside views are also handled by the input handler
-			if(evt.getID() == KeyEvent.KEY_TYPED)
+			if(evt.getID() == KeyEvent.KEY_PRESSED)
 			{
-				switch(evt.getKeyChar())
+				switch(evt.getKeyCode())
 				{
-				case '\b':
-				case '\t':
-				case '\n':
+				case KeyEvent.VK_BACK_SPACE:
+				case KeyEvent.VK_TAB:
+				case KeyEvent.VK_ENTER:
 					return;
 				}
 			}
@@ -645,9 +681,6 @@ public class View extends JFrame implements EBComponent
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
 
-		commandLine = new CommandLine(this);
-		getContentPane().add(BorderLayout.SOUTH,commandLine);
-
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
 
@@ -675,7 +708,7 @@ public class View extends JFrame implements EBComponent
 			= gotoMarker = macros = plugins = help = null;
 		toolBars = null;
 		toolBar = null;
-		commandLine = null;
+		searchBar = null;
 		splitPane = null;
 		inputHandler = null;
 
@@ -718,8 +751,29 @@ public class View extends JFrame implements EBComponent
 			clearMarker.removeAll();
 		if(gotoMarker.getMenuComponentCount() != 0)
 			gotoMarker.removeAll();
-		EditAction clearMarkerAction = jEdit.getAction("clear-marker");
-		EditAction gotoMarkerAction = jEdit.getAction("goto-marker");
+
+		ActionListener clearMarkerAction = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				Buffer buffer = getBuffer();
+				if(buffer.isReadOnly())
+					getToolkit().beep();
+				buffer.removeMarker(evt.getActionCommand());
+			}
+		};
+
+		ActionListener gotoMarkerAction = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				JEditTextArea textArea = getTextArea();
+				Marker marker = getBuffer().getMarker(evt.getActionCommand());
+				if(marker != null)
+					textArea.select(marker.getStart(),marker.getEnd());
+			}
+		};
+
 		Vector markers = editPane.getBuffer().getMarkers();
 		if(markers.size() == 0)
 		{
@@ -727,13 +781,16 @@ public class View extends JFrame implements EBComponent
 			gotoMarker.add(GUIUtilities.loadMenuItem("no-markers"));
 			return;
 		}
+
 		for(int i = 0; i < markers.size(); i++)
 		{
 			String name = ((Marker)markers.elementAt(i)).getName();
-			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
-				clearMarkerAction,name);
+			JMenuItem menuItem = new JMenuItem(name);
+			menuItem.addActionListener(clearMarkerAction);
 			clearMarker.add(menuItem);
-			menuItem = new EnhancedMenuItem(name,gotoMarkerAction,name);
+
+			menuItem = new JMenuItem(name);
+			menuItem.addActionListener(gotoMarkerAction);
 			gotoMarker.add(menuItem);
 		}
 	}
@@ -755,13 +812,12 @@ public class View extends JFrame implements EBComponent
 
 	private Box toolBars;
 	private JToolBar toolBar;
+	private SearchBar searchBar;
 
 	private boolean synchroScroll;
 
 	private EditPane editPane;
 	private JSplitPane splitPane;
-
-	private CommandLine commandLine;
 
 	private KeyListener keyEventInterceptor;
 	private InputHandler inputHandler;
@@ -787,7 +843,7 @@ public class View extends JFrame implements EBComponent
 	 */
 	private void propertiesChanged()
 	{
-		loadToolBar();
+		loadToolBars();
 
 		showFullPath = jEdit.getBooleanProperty("view.showFullPath");
 		updateTitle();
@@ -797,7 +853,7 @@ public class View extends JFrame implements EBComponent
 		dockableWindowManager.propertiesChanged();
 	}
 
-	private void loadToolBar()
+	private void loadToolBars()
 	{
 		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
@@ -829,6 +885,20 @@ public class View extends JFrame implements EBComponent
 			removeToolBar(toolBar);
 			toolBar = null;
 		}
+
+		if(jEdit.getBooleanProperty("view.showSearchbar"))
+		{
+			if(searchBar == null)
+			{
+				searchBar = new SearchBar(this);
+				addToolBar(searchBar);
+			}
+		}
+		else
+		{
+			removeToolBar(searchBar);
+			searchBar = null;
+		}
 	}
 
 	private EditPane createEditPane(EditPane pane, Buffer buffer)
@@ -855,7 +925,14 @@ public class View extends JFrame implements EBComponent
 	{
 		if(recent.getMenuComponentCount() != 0)
 			recent.removeAll();
-		EditAction action = jEdit.getAction("open-file");
+		ActionListener listener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				jEdit.openFile(View.this,evt.getActionCommand());
+			}
+		};
+
 		String[] recentArray = jEdit.getRecent();
 		if(recentArray.length == 0)
 		{
@@ -866,10 +943,11 @@ public class View extends JFrame implements EBComponent
 		{
 			String path = recentArray[i];
 			VFS vfs = VFSManager.getVFSForPath(path);
-			EnhancedMenuItem menuItem = new EnhancedMenuItem(
+			JMenuItem menuItem = new JMenuItem(
 				MiscUtilities.getFileName(path) + " ("
-				+ vfs.getParentOfPath(path) + ")",
-				action,path);
+				+ vfs.getParentOfPath(path) + ")");
+			menuItem.setActionCommand(path);
+			menuItem.addActionListener(listener);
 			recent.add(menuItem);
 		}
 	}
@@ -997,7 +1075,20 @@ public class View extends JFrame implements EBComponent
 
 	private void updateHelpMenu()
 	{
-		EditAction action = jEdit.getAction("help");
+		ActionListener listener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				try
+				{
+					HelpViewer.gotoURL(new URL(evt.getActionCommand()));
+				}
+				catch(MalformedURLException e)
+				{
+					Log.log(Log.ERROR,View.this,e);
+				}
+			}
+		};
 
 		JMenu menu = help;
 
@@ -1029,8 +1120,10 @@ public class View extends JFrame implements EBComponent
 						menu = newMenu;
 					}
 
-					menu.add(new EnhancedMenuItem(label,
-						action,docsURL.toString()));
+					JMenuItem menuItem = new JMenuItem(label);
+					menuItem.setActionCommand(docsURL.toString());
+					menuItem.addActionListener(listener);
+					menu.add(menuItem);
 				}
 			}
 		}
@@ -1118,6 +1211,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.208  2000/11/13 11:19:26  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.207  2000/11/12 05:36:48  sp
  * BeanShell integration started
  *

@@ -134,8 +134,10 @@ public class DefaultInputHandler extends InputHandler
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 
-		if(modifiers == 0 && keyCode == KeyEvent.VK_TAB)
+		if(modifiers == 0 && bindings == currentBindings
+			&& (keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_TAB))
 		{
+			userInput((char)keyCode);
 			evt.consume();
 			return;
 		}
@@ -144,8 +146,12 @@ public class DefaultInputHandler extends InputHandler
 			|| evt.isActionKey()
 			|| keyCode == KeyEvent.VK_BACK_SPACE
 			|| keyCode == KeyEvent.VK_DELETE
-			|| keyCode == KeyEvent.VK_ESCAPE)
+			|| keyCode == KeyEvent.VK_ESCAPE
+			|| keyCode == KeyEvent.VK_ENTER
+			|| keyCode == KeyEvent.VK_TAB)
 		{
+			readNextChar = null;
+
 			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
 				modifiers);
 			Object o = currentBindings.get(keyStroke);
@@ -216,13 +222,7 @@ public class DefaultInputHandler extends InputHandler
 			currentBindings = bindings;
 		}
 
-		int _repeatCount = getRepeatCount();
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < _repeatCount; i++)
-		{
-			buf.append(evt.getKeyChar());
-		}
-		view.getTextArea().userInput(buf.toString());
+		userInput(c);
 	}
 
 	/**
@@ -301,11 +301,32 @@ public class DefaultInputHandler extends InputHandler
 	// private members
 	private Hashtable bindings;
 	private Hashtable currentBindings;
+
+	private void userInput(char ch)
+	{
+		if(readNextChar != null)
+			invokeReadNextChar(ch);
+		else
+		{
+			int _repeatCount = getRepeatCount();
+			StringBuffer buf = new StringBuffer();
+			for(int i = 0; i < _repeatCount; i++)
+			{
+				buf.append(ch);
+			}
+			view.getTextArea().userInput(buf.toString());
+		}
+
+		setRepeatEnabled(false);
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/11/13 11:19:27  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.6  2000/11/12 05:36:49  sp
  * BeanShell integration started
  *

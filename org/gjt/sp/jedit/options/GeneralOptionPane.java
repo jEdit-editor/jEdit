@@ -92,6 +92,20 @@ public class GeneralOptionPane extends AbstractOptionPane
 		showFullPath.setSelected(jEdit.getBooleanProperty(
 			"view.showFullPath"));
 		addComponent(showFullPath);
+
+		/* Show search bar */
+		showSearchbar = new JCheckBox(jEdit.getProperty(
+			"options.general.showSearchbar"));
+		showSearchbar.setSelected(jEdit.getBooleanProperty(
+			"view.showSearchbar"));
+		addComponent(showSearchbar);
+
+		/* Show buffer switcher */
+		showBufferSwitcher = new JCheckBox(jEdit.getProperty(
+			"options.general.showBufferSwitcher"));
+		showBufferSwitcher.setSelected(jEdit.getBooleanProperty(
+			"view.showBufferSwitcher"));
+		addComponent(showBufferSwitcher);
 	}
 
 	protected void _save()
@@ -107,6 +121,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.showFullPath",showFullPath
 			.isSelected());
+		jEdit.setBooleanProperty("view.showSearchbar",showSearchbar
+			.isSelected());
+		jEdit.setBooleanProperty("view.showBufferSwitcher",
+			showBufferSwitcher.isSelected());
 	}
 
 	// private members
@@ -119,11 +137,16 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
 	private JCheckBox showFullPath;
+	private JCheckBox showSearchbar;
+	private JCheckBox showBufferSwitcher;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.50  2000/11/13 11:19:28  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.49  2000/11/12 05:36:50  sp
  * BeanShell integration started
  *
@@ -153,11 +176,5 @@ public class GeneralOptionPane extends AbstractOptionPane
  *
  * Revision 1.40  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.39  2000/08/05 11:41:03  sp
- * More VFS browser work
- *
- * Revision 1.38  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
  *
  */

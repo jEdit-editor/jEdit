@@ -58,8 +58,12 @@ class ActionListHandler extends HandlerBase
 		aname = (aname == null) ? null : aname.intern();
 		value = (value == null) ? null : value.intern();
 
-		if (aname == "NAME")
+		if(aname == "NAME")
 			actionName = value;
+		else if(aname == "NO_REPEAT")
+			noRepeat = (value == "TRUE");
+		else if(aname == "NO_RECORD")
+			noRecord = (value == "TRUE");
 	}
 
 	public void doctypeDecl(String name, String publicId,
@@ -110,7 +114,8 @@ class ActionListHandler extends HandlerBase
 			if(tag == "ACTION")
 			{
 				jEdit.addAction(new BeanShellAction(actionName,
-					actionPerformed,isSelected));
+					actionPerformed,isSelected,noRepeat,
+					noRecord));
 			}
 
 			popElement();
@@ -141,6 +146,9 @@ class ActionListHandler extends HandlerBase
 	private String actionName;
 	private String actionPerformed;
 	private String isSelected;
+
+	private boolean noRepeat;
+	private boolean noRecord;
 
 	private Stack stateStack;
 

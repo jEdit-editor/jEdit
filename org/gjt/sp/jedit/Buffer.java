@@ -1,6 +1,7 @@
 /*
  * Buffer.java - jEdit buffer
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Portions copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1106,6 +1107,149 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
+	 * Removes trailing whitespace from all lines in the specified range.
+	 * @param first The start line
+	 * @param last The end line
+	 * @since jEdit 2.7pre2
+	 */
+	public void removeTrailingWhiteSpace(int first, int last)
+	{
+		Segment seg = new Segment();
+
+		int line, pos, lineStart, lineEnd, tail;
+
+		Element map = getDefaultRootElement();
+
+		try
+		{
+			beginCompoundEdit();
+
+			for (line = first; line <= last; line++)
+			{
+				Element lineElement = map.getElement(line);
+				getText(lineElement.getStartOffset(),
+					lineElement.getEndOffset()
+					- lineElement.getStartOffset() - 1);
+
+				// blank line
+				if (seg.count == 0) continue;
+
+				lineStart = seg.offset;
+				lineEnd = seg.offset + seg.count - 1;
+
+				for (pos = lineEnd; pos >= lineStart; pos--)
+				{
+					if (!Character.isWhitespace(seg.array[pos]))
+						break;
+				}
+
+				tail = lineEnd - pos;
+
+				// no whitespace
+				if (tail == 0) continue;
+
+				remove(lineElement.getEndOffset() - 1 - tail,
+					tail);
+			}
+		}
+		catch (BadLocationException ble)
+		{
+			Log.log(Log.ERROR, this, ble);
+		}
+		finally
+		{
+			endCompoundEdit();
+		}
+	}
+
+	/**
+	 * Shifts the indent of each line in the specified range to the left.
+	 * @param first The first line
+	 * @param last The last line
+	 */
+	public void shiftIndentLeft(int first, int last)
+	{
+		try
+		{
+			beginCompoundEdit();
+
+			int tabSize = getTabSize();
+			int indentSize = getIndentSize();
+			boolean noTabs = getBooleanProperty("noTabs");
+			Element map = getDefaultRootElement();
+
+			for(int i = first; i <= last; i++)
+			{
+				Element lineElement = map.getElement(i);
+				int lineStart = lineElement.getStartOffset();
+				String line = getText(lineStart,
+					lineElement.getEndOffset() - lineStart - 1);
+				int whiteSpace = MiscUtilities
+					.getLeadingWhiteSpace(line);
+				if(whiteSpace == 0)
+					continue;
+				int whiteSpaceWidth = Math.max(0,MiscUtilities
+					.getLeadingWhiteSpaceWidth(line,tabSize)
+					- indentSize);
+				remove(lineStart,whiteSpace);
+				insertString(lineStart,MiscUtilities
+					.createWhiteSpace(whiteSpaceWidth,
+					(noTabs ? 0 : tabSize)),null);
+			}
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
+		finally
+		{
+			endCompoundEdit();
+		}
+	}
+
+	/**
+	 * Shifts the indent of each line in the specified range to the right.
+	 * @param first The first line
+	 * @param last The last line
+	 */
+	public void shiftIndentRight(int first, int last)
+	{
+		try
+		{
+			beginCompoundEdit();
+
+			int tabSize = getTabSize();
+			int indentSize = getIndentSize();
+			boolean noTabs = getBooleanProperty("noTabs");
+			Element map = getDefaultRootElement();
+			for(int i = first; i <= last; i++)
+			{
+				Element lineElement = map.getElement(i);
+				int lineStart = lineElement.getStartOffset();
+				String line = getText(lineStart,
+					lineElement.getEndOffset() - lineStart - 1);
+				int whiteSpace = MiscUtilities
+					.getLeadingWhiteSpace(line);
+				int whiteSpaceWidth = MiscUtilities
+					.getLeadingWhiteSpaceWidth(
+					line,tabSize) + indentSize;
+				remove(lineStart,whiteSpace);
+				insertString(lineStart,MiscUtilities
+					.createWhiteSpace(whiteSpaceWidth,
+					(noTabs ? 0 : tabSize)),null);
+			}
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
+		finally
+		{
+			endCompoundEdit();
+		}
+	}
+
+	/**
 	 * Returns the tab size used in this buffer. This is equivalent
 	 * to calling getProperty("tabSize").
 	 */
@@ -2099,6 +2243,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.189  2000/11/13 11:19:25  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.188  2000/11/12 05:36:48  sp
  * BeanShell integration started
  *

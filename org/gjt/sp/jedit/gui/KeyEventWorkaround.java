@@ -54,7 +54,7 @@ public class KeyEventWorkaround
 			if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) != 0)
 				return null;
 
-			if(ch != '\n' && ch != '\t' && (ch < 0x20 || ch == 0x7f))
+			if(ch < 0x20 || ch == 0x7f)
 				return null;
 
 			// if the last key was a broken key, filter
@@ -124,6 +124,9 @@ public class KeyEventWorkaround
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/11/13 11:19:27  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.7  2000/11/12 05:36:50  sp
  * BeanShell integration started
  *

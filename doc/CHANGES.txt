@@ -6,6 +6,15 @@ JEDIT 2.7 VERSION HISTORY
 
 - Electric scrolling is now only performed when moving the caret using
   keyboard commands
+- The buffer switching popup can now be disabled. You might want to do this if
+  you prefer using another method to switch buffers, for example the
+  BufferList or BufferSelector plugins
+
++ Neutral
+
+- I have decided that the 'command line' really sucks. So the old jEdit 2.5
+  search bar is back. Now that BeanShell is integrated, the command line isn't
+  as useful anyway.
 
 + Bug Fixes
 

@@ -96,11 +96,7 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		this.repeat = repeat;
 		if(!repeat)
-		{
 			repeatCount = 0;
-			view.getCommandLine().setState(CommandLine.NULL_STATE);
-			view.getEditPane().focusOnTextArea();
-		}
 	}
 
 	/**
@@ -159,6 +155,17 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	/**
+	 * Invokes the specified BeanShell code, replacing __char__ in the
+	 * code with the next input character.
+	 * @param code The code
+	 * @since jEdit 2.7pre2
+	 */
+	public void readNextChar(String code)
+	{
+		readNextChar = code;
+	}
+
+	/**
 	 * Executes the specified action, repeating and recording it as
 	 * necessary.
 	 * @param action The action
@@ -174,7 +181,7 @@ public abstract class InputHandler extends KeyAdapter
 			actionCommand);
 
 		// don't do anything if the action is a wrapper
-		if(action.isWrapper())
+		if(action instanceof EditAction.Wrapper)
 		{
 			action.actionPerformed(evt);
 			return;
@@ -190,21 +197,20 @@ public abstract class InputHandler extends KeyAdapter
 		}
 
 		// remember old values, in case action changes them
-		CommandLine cli = view.getCommandLine();
 		boolean _repeat = repeat;
 		int _repeatCount = getRepeatCount();
-		int _state = cli.getState();
 
 		// execute the action
-		if(action.isRepeatable())
+		if(action.noRepeat() || _repeatCount == 1)
+			action.actionPerformed(evt);
+		else
 		{
-			View view = EditAction.getView((Component)source);
 			Buffer buffer = view.getBuffer();
 
 			try
 			{
 				buffer.beginCompoundEdit();
-
+	
 				for(int i = 0; i < _repeatCount; i++)
 					action.actionPerformed(evt);
 			}
@@ -213,12 +219,10 @@ public abstract class InputHandler extends KeyAdapter
 				buffer.endCompoundEdit();
 			}
 		}
-		else
-			action.actionPerformed(evt);
 
 		if(recorder != null)
 		{
-			if(action.isRecordable())
+			if(!action.noRecord())
 			{
 				if(_repeatCount != 1)
 				{
@@ -235,25 +239,11 @@ public abstract class InputHandler extends KeyAdapter
 		// Otherwise it might have been set by the action, etc
 		if(_repeat)
 		{
-			// first of all, if the state became TOPLEVEL,
-			// PROMPT_LINE or PROMPT_ONE_CHAR, do *not*
-			// reset the repeat count, or in fact do anything
-			// at all.
-			int state = cli.getState();
-			if(state == CommandLine.TOPLEVEL_STATE
-				|| state == CommandLine.PROMPT_ONE_CHAR_STATE
-				|| state == CommandLine.PROMPT_LINE_STATE)
+			// first of all, if this action set a readNextChar,
+			// do not clear the repeat
+			if(readNextChar != null)
 				return;
 
-			// now; if the state used to be NULL_STATE and
-			// became something, don't reset it. If the state
-			// used to be something else, then we *do* reset
-			// it to NULL_STATE
-			if(_state != CommandLine.NULL_STATE)
-			{
-				cli.setState(CommandLine.NULL_STATE);
-				view.getEditPane().focusOnTextArea();
-			}
 			repeat = false;
 			repeatCount = 0;
 		}
@@ -268,6 +258,48 @@ public abstract class InputHandler extends KeyAdapter
 	protected EditAction lastAction;
 	protected int lastActionCount;
 
+	protected String readNextChar;
+
+	protected void invokeReadNextChar(char ch)
+	{
+		String charStr;
+		switch(ch)
+		{
+		case '\t':
+			charStr = "\t";
+			break;
+		case '\n':
+			charStr = "\n";
+			break;
+		case '\\':
+			charStr = "\\\\";
+			break;
+		case '\'':
+			charStr = "\\\'";
+			break;
+		default:
+			charStr = String.valueOf(ch);
+			break;
+		}
+
+		int index = readNextChar.indexOf("__char__");
+		if(index != -1)
+		{
+			readNextChar = readNextChar.substring(0,index)
+				+ '\'' + charStr + '\''
+				+ readNextChar.substring(index + 8);
+		}
+
+		if(repeat && repeatCount != 1)
+		{
+			readNextChar = "for(int i = 1; i < " + repeatCount
+				+ "; i++)\n{\n" + readNextChar + "\n}";
+		}
+
+		BeanShell.eval(view,readNextChar);
+		readNextChar = null;
+	}
+
 	/**
 	 * Macro recorder.
 	 */
@@ -280,6 +312,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/11/13 11:19:27  sp
+ * Search bar reintroduced, more BeanShell stuff
+ *
  * Revision 1.15  2000/11/12 05:36:49  sp
  * BeanShell integration started
  *
@@ -309,17 +344,5 @@ public abstract class InputHandler extends KeyAdapter
  *
  * Revision 1.6  2000/05/23 04:04:52  sp
  * Marker highlight updates, next/prev-marker actions
- *
- * Revision 1.5  2000/05/14 10:55:21  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.4  2000/05/09 10:51:52  sp
- * New status bar, a few other things
- *
- * Revision 1.3  2000/05/07 05:48:30  sp
- * You can now edit several buffers side-by-side in a split view
- *
- * Revision 1.2  2000/04/30 07:27:13  sp
- * Ftp VFS hacking, bug fixes
  *
  */
