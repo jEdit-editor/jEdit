@@ -47,32 +47,36 @@ public class KeyEventWorkaround
 			if(keyCode == '\0')
 				return null;
 
-			handleBrokenKeys(modifiers,keyCode);
+			if(!java14)
+				handleBrokenKeys(modifiers,keyCode);
 
 			return evt;
 		case KeyEvent.KEY_TYPED:
-			if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) != 0)
-				return null;
-
 			// need to let \b through so that backspace will work
 			// in HistoryTextFields
 			if((ch < 0x20 || ch == 0x7f) && ch != '\b')
 				return null;
 
-			// if the last key was a broken key, filter
-			// out all except 'a'-'z' that occur 750 ms after.
-			if(last == LAST_BROKEN && System.currentTimeMillis()
-				- lastKeyTime < 750 && !Character.isLetter(ch))
-			{
-				last = LAST_NOTHING;
+			if(evt.isControlDown() || evt.isAltDown() || evt.isMetaDown())
 				return null;
-			}
-			// otherwise, if it was ALT, filter out everything.
-			else if(last == LAST_ALT && System.currentTimeMillis()
-				- lastKeyTime < 750)
+
+			if(!java14)
 			{
-				last = LAST_NOTHING;
-				return null;
+				// if the last key was a broken key, filter
+				// out all except 'a'-'z' that occur 750 ms after.
+				if(last == LAST_BROKEN && System.currentTimeMillis()
+					- lastKeyTime < 750 && !Character.isLetter(ch))
+				{
+					last = LAST_NOTHING;
+					return null;
+				}
+				// otherwise, if it was ALT, filter out everything.
+				else if(last == LAST_ALT && System.currentTimeMillis()
+					- lastKeyTime < 750)
+				{
+					last = LAST_NOTHING;
+					return null;
+				}
 			}
 
 			return evt;
@@ -82,6 +86,7 @@ public class KeyEventWorkaround
 	}
 
 	// private members
+	private static boolean java14;
 	private static long lastKeyTime;
 
 	private static int last;
@@ -89,6 +94,11 @@ public class KeyEventWorkaround
 	private static final int LAST_ALTGR = 1;
 	private static final int LAST_ALT = 2;
 	private static final int LAST_BROKEN = 3;
+
+	static
+	{
+		java14 = (System.getProperty("java.version").compareTo("1.4") >= 0);
+	}
 
 	private static void handleBrokenKeys(int modifiers, int keyCode)
 	{

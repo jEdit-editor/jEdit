@@ -1412,7 +1412,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 			for(int i = 0; i < modes.length; i++)
 			{
-				if(modes[i].accept(this,nogzName,line))
+				if(modes[i].accept(nogzName,line))
 				{
 					setMode(modes[i]);
 					return;
@@ -2370,7 +2370,6 @@ loop:				for(int i = 0; i < count; i++)
 
 		// we need a different value of initialFoldLevel here!
 		initialFoldLevel = getFoldLevel(start);
-		//System.err.println("new initial fold level is " + initialFoldLevel);
 
 		for(int i = start; i <= end; i++)
 		{
@@ -2388,7 +2387,7 @@ loop:				for(int i = 0; i < count; i++)
 			}
 			else
 			{
-				//System.err.println("fuck you: " + i);
+				// System.err.println("adding to map: " + i);
 				tmpVirtualMap[tmpMapLen++] = i;
 				delta++;
 				info.visible = true;
@@ -2405,6 +2404,7 @@ loop:				for(int i = 0; i < count; i++)
 
 		//System.err.println("virtual start is " + virtualLine
 		//	+ ", physical start is " + start);
+		//System.err.println("end=" + end + ",delta=" + delta);
 
 		// update virtual -> physical map
 		virtualLineCount += delta;
@@ -2421,10 +2421,12 @@ loop:				for(int i = 0; i < count; i++)
 
 		//System.err.println("copy from " + (virtualLine)
 		//	+ " to " + (virtualLine + delta));
+		//System.err.println("foo: " + virtualLines[virtualLine]);
 
 		System.arraycopy(virtualLines,virtualLine,virtualLines,
 			virtualLine + delta,virtualLines.length
 			- virtualLine - delta);
+
 		for(int j = 0; j < tmpMapLen; j++)
 		{
 			//System.err.println((virtualLine + j) + " maps to " + tmpVirtualMap[j]);
@@ -2438,9 +2440,9 @@ loop:				for(int i = 0; i < count; i++)
 			int firstLine = textArea.getFirstLine();
 			int visibleLines = textArea.getVisibleLines();
 			if(virtualLine + delta >= firstLine + visibleLines
-				&& delta < visibleLines)
+				&& delta < visibleLines - 1)
 			{
-				textArea.setFirstLine(virtualLine + delta - visibleLines - 1);
+				textArea.setFirstLine(virtualLine + delta - visibleLines + 1);
 			}
 		}
 
@@ -3150,6 +3152,7 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	private void addLinesToMap(int index, int lines)
 	{
+		//System.err.println("adding " + index + ":" + lines + " to map");
 		if(lines <= 0)
 			return;
 
@@ -3190,7 +3193,7 @@ loop:				for(int i = 0; i < count; i++)
 				virtualLines[virtualLine + i] = index + i;
 		}
 		else
-			virtualLength = virtualLine + 1;
+			virtualLength = virtualLine /* + 1 */;
 
 		for(int i = virtualLength; i < virtualLineCount; i++)
 			virtualLines[i] += lines;

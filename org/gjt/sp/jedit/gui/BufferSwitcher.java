@@ -75,27 +75,13 @@ public class BufferSwitcher extends JComboBox
 			JList list, Object value, int index,
 			boolean isSelected, boolean cellHasFocus)
 		{
-			super.getListCellRendererComponent(list,null,index,
+			super.getListCellRendererComponent(list,value,index,
 				isSelected,cellHasFocus);
 			Buffer buffer = (Buffer)value;
 			if(buffer == null)
-			{
 				setIcon(null);
-				setText(null);
-			}
 			else
-			{
 				setIcon(buffer.getIcon());
-				if(!buffer.isLoaded())
-					setText(buffer.toString());
-				else
-				{
-					setText(buffer.toString() + " ("
-						+ buffer.getMode().getName() + ")");
-				}
-
-				return this;
-			}
 			return this;
 		}
 	}

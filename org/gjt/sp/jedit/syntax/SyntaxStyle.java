@@ -1,6 +1,6 @@
 /*
  * SyntaxStyle.java - A simple text style class
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public class SyntaxStyle
 			throw new NullPointerException("font param must not"
 				+ " be null");
 
-		if(font.equals(lastFont))
+		if(font == lastFont)
 			return lastStyledFont;
 		lastFont = font;
 

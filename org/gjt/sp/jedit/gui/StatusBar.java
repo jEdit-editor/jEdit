@@ -66,6 +66,24 @@ public class StatusBar extends JPanel
 		add(BorderLayout.CENTER,message);
 
 		Box box = new Box(BoxLayout.X_AXIS);
+		mode = new JLabel();
+		mode.setForeground(UIManager.getColor("Button.foreground"));
+		mode.setBorder(border);
+
+		// make the mode label as wide as the widest edit mode name,
+		// so that the status bar does not resize while switching buffers
+		/* Mode[] modes = jEdit.getModes();
+		FontMetrics fm = getToolkit().getFontMetrics(mode.getFont());
+		int width = 0;
+		for(int i = 0; i < modes.length; i++)
+		{
+			width = Math.max(width,fm.stringWidth(modes[i].getName()));
+		}
+		mode.setPreferredSize(new Dimension(width,
+			mode.getPreferredSize().height)); */
+
+		box.add(mode);
+		box.add(Box.createHorizontalStrut(3));
 		multiSelect = new JLabel("multi");
 		multiSelect.setBorder(border);
 		box.add(multiSelect);
@@ -78,6 +96,7 @@ public class StatusBar extends JPanel
 		narrow.setBorder(border);
 		box.add(narrow);
 
+		updateMode();
 		updateMiscStatus();
 
 		box.add(Box.createHorizontalStrut(3));
@@ -122,6 +141,11 @@ public class StatusBar extends JPanel
 		caretStatus.repaint();
 	}
 
+	public void updateMode()
+	{
+		mode.setText(view.getBuffer().getMode().getName());
+	}
+
 	public void updateMiscStatus()
 	{
 		JEditTextArea textArea = view.getTextArea();
@@ -151,6 +175,7 @@ public class StatusBar extends JPanel
 	private View view;
 	private VICaretStatus caretStatus;
 	private JLabel message;
+	private JLabel mode;
 	private JLabel multiSelect;
 	private JLabel overwrite;
 	private JLabel narrow;

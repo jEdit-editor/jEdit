@@ -2,6 +2,10 @@ JEDIT 3.2 VERSION HISTORY
 
 * Version 3.2pre3
 
++ New Features
+
+- 'Include Guard' macro (John Gellene)
+
 + Enhancements
 
 - Improved progress bar window in plugin manager
@@ -17,6 +21,7 @@ JEDIT 3.2 VERSION HISTORY
   enabled and disabled in the Utilities->Global Options dialog box
 - Expanding a fold will now attempt to scroll the text area in order to
   make the fold visible, if possible
+- The current buffer's edit mode is now shown in the status bar
 
 + Bug Fixes
 
@@ -26,10 +31,14 @@ JEDIT 3.2 VERSION HISTORY
   on Windows. This caused problems when saving files, for example,
   because #<filename>#save# would never be renamed to <filename>
 - Fixed several bugs in the 'scroll to caret' code
-- Partial fix for Java 1.4 key event problems
+- Keyboard shortcuts might work in Java 1.4 now
 - The recent file list was being reversed each time jEdit was run!!!
 - Improved handling of 'Stop' button in plugin manager progress dialog
   boxes
+- Modes in the system mode directory no longer always shadow the modes
+  in the user specific mode directory
+- Fixed obscure bug in Buffer.addToMap() that could result in an invalid
+  line map when expading certain folds
 
 * Version 3.2pre2
 

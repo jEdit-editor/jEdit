@@ -197,6 +197,8 @@
    <listitem><para>Prompts displayed by commands such as those dealing with
    registers and markers (see <xref linkend=text-transfer> and <xref
    linkend=markers>)</para></listitem>
+   <listitem><para>The current buffer's edit mode. See <xref
+   linkend=modes>.</para></listitem>
    <listitem><para>If multiple selection is enabled, the text
    <literal>multi</> is shown in black, otherwise it will be grayed out. Pressing
    <keycap>Caps Lock</> turns multiple selection on and off. See <xref

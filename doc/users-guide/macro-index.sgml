@@ -721,6 +721,21 @@
 </listitem>
 
 <listitem>
+    <para><filename>Include_Guard.bsh</filename></para>
+    <abstract><para>
+		Intended for C/C++ header files, this macro inserts a preprocessor
+		directive in the current buffer to ensure that the header is
+		included only once per compilation unit.
+    </para></abstract>
+    <para>
+        To use the macro, first place the caret at the beginning of the
+		header file before any uncommented text.  The macro will return to
+		this position upon completion.  The defined term that triggers the
+		<quote>include guard</quote> is taken from the buffer's name.
+    </para>
+</listitem>
+
+<listitem>
     <para><filename>Notepad.bsh</filename></para>
     <abstract><para>
         Displays a tabbed set of text windows in a floating frame.

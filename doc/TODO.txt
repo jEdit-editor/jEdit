@@ -1,32 +1,28 @@
 TO DO
 
-before pre3:
-
-- get web start to work
-- enter:
-  {
-	foo
-  }
-  Collapse { line, put caret at start, delete line, undo.
-- encoding option in VFS browser
-- catch MalformedInputException and display a better error message
+- next time i'm making an RPM, fix the shell script
 - console: windows built-ins don't work?
 
-later:
++ to figure out before pre3:
 
-- mode, line sep, encoding in status
+- encoding option in VFS browser
+- catch MalformedInputException and display a better error message
+- large selections make the text area trip
+- test edit server
+- vfs browser: >1 request error when clicking 'up'?
+- italics font metrics bugs
+- finish persistent splits
+- new preferences engine?
+
+- get web start to work
+- line sep, encoding in status
 - server property
 - reuseview property
 - background property
 - narrow indicator in status
 - Java 1.4 key events: DefaultInputHandler
-- Java 1.4 key events: KeyEventWorkaround (not needed with Java 1.4!!!)
-- large selections make the text area trip
 - replace in sel doesn't work if rect
-- test edit server
 - broken reverse search
-- italics font metrics bugs
-- vfs browser: >1 request error when clicking 'up'?
 - text style bugs
 - macros in web start version
 - caret event not always fired
@@ -50,7 +46,6 @@ later:
 - DELEGATE in EOL_SPAN
 - failed saves should not clear the dirty flag
 - reverse regexp search
-- finish persistent splits
 - see if new beanshell fixes trailing \n bug
 - get rid of final blank page of user's guide
 - update macro guide for misc. API changes:
@@ -65,3 +60,5 @@ later:
 - fix dragStart handling in DockableWindowContainer.TabbedPane
 - C+i in shortcuts editor
 - caret undo bugs
+- soft wrap
+- migrate documentation to XML

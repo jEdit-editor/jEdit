@@ -185,16 +185,25 @@ public class Mode
 	}
 
 	/**
+	 * Unsets a mode property.
+	 * @param key The property name
+	 * @since jEdit 3.2pre3
+	 */
+	public void unsetProperty(String key)
+	{
+		props.remove(key);
+	}
+
+	/**
 	 * Returns if the edit mode is suitable for editing the specified
 	 * file. The buffer name and first line is checked against the
 	 * file name and first line globs, respectively.
-	 * @param buffer The buffer
 	 * @param fileName The buffer's name
 	 * @param firstLine The first line of the buffer
 	 *
-	 * @since jEdit 2.2pre1
+	 * @since jEdit 3.2pre3
 	 */
-	public boolean accept(Buffer buffer, String fileName, String firstLine)
+	public boolean accept(String fileName, String firstLine)
 	{
 		if(filenameRE != null && filenameRE.isMatch(fileName))
 			return true;

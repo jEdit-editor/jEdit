@@ -573,7 +573,16 @@ public class EditPane extends JPanel implements EBComponent
 				textArea.updateScrollBars();
 				if(bufferSwitcher != null)
 					bufferSwitcher.updateBufferList();
+
+				if(view.getEditPane() == this)
+				{
+					StatusBar status = view.getStatus();
+					status.repaintCaretStatus();
+					status.updateMode();
+					status.updateMiscStatus();
+				}
 			}
+
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
 		{
@@ -585,8 +594,9 @@ public class EditPane extends JPanel implements EBComponent
 			if(_buffer == buffer)
 			{
 				textArea.getPainter().repaint();
-				if(bufferSwitcher != null)
-					bufferSwitcher.repaint();
+
+				if(view.getEditPane() == this)
+					view.getStatus().updateMode();
 			}
 		}
 	}

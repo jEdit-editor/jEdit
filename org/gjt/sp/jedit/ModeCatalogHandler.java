@@ -88,7 +88,12 @@ class ModeCatalogHandler extends HandlerBase
 	{
 		if(name.equals("MODE"))
 		{
-			Mode mode = new Mode(modeName);
+			Mode mode = jEdit.getMode(modeName);
+			if(mode == null)
+			{
+				mode = new Mode(modeName);
+				jEdit.addMode(mode);
+			}
 
 			Object path;
 			if(resource)
@@ -102,11 +107,15 @@ class ModeCatalogHandler extends HandlerBase
 
 			if(filenameGlob != null)
 				mode.setProperty("filenameGlob",filenameGlob);
+			else
+				mode.unsetProperty("filenameGlob");
 
 			if(firstlineGlob != null)
 				mode.setProperty("firstlineGlob",firstlineGlob);
+			else
+				mode.unsetProperty("firstlineGlob");
 
-			jEdit.addMode(mode);
+			mode.init();
 
 			modeName = file = filenameGlob = firstlineGlob = null;
 		}

@@ -964,6 +964,7 @@ public class View extends JFrame implements EBComponent
 	{
 		this.editPane = editPane;
 		status.repaintCaretStatus();
+		status.updateMode();
 		status.updateMiscStatus();
 	}
 
@@ -1155,12 +1156,8 @@ public class View extends JFrame implements EBComponent
 		Buffer buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.CLOSED)
 			updateRecentMenu();
-		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
-			|| msg.getWhat() == BufferUpdate.LOADED)
+		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
-			status.repaintCaretStatus();
-			status.updateMiscStatus();
-
 			if(!buffer.isDirty())
 			{
 				// have to update title after each save
@@ -1184,6 +1181,7 @@ public class View extends JFrame implements EBComponent
 			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED)
 		{
 			status.repaintCaretStatus();
+			status.updateMode();
 			status.updateMiscStatus();
 		}
 	}

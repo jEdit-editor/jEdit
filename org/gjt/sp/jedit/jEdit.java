@@ -420,26 +420,6 @@ public class jEdit
 	}
 
 	/**
-	 * Loads the properties from the specified input stream. This
-	 * calls the <code>load()</code> method of the properties object
-	 * and closes the stream.
-	 * @param in The input stream
-	 * @param def If true, the properties will be loaded into the
-	 * default table
-	 * @exception IOException if an I/O error occured
-	 */
-	public static void loadProps(InputStream in, boolean def)
-		throws IOException
-	{
-		in = new BufferedInputStream(in);
-		if(def)
-			defaultProps.load(in);
-		else
-			props.load(in);
-		in.close();
-	}
-
-	/**
 	 * Returns the properties object which contains all known
 	 * jEdit properties.
 	 * @since jEdit 3.1pre4
@@ -663,78 +643,6 @@ public class jEdit
 	}
 
 	/**
-	 * Loads all plugins in a directory.
-	 * @param directory The directory
-	 */
-	public static void loadPlugins(String directory)
-	{
-		Log.log(Log.NOTICE,jEdit.class,"Loading plugins from "
-			+ directory);
-
-		File file = new File(directory);
-		if(!(file.exists() && file.isDirectory()))
-			return;
-		String[] plugins = file.list();
-		if(plugins == null)
-			return;
-
-		MiscUtilities.quicksort(plugins,new MiscUtilities.StringICaseCompare());
-		for(int i = 0; i < plugins.length; i++)
-		{
-			String plugin = plugins[i];
-			if(!plugin.toLowerCase().endsWith(".jar"))
-				continue;
-
-			String path = MiscUtilities.constructPath(directory,plugin);
-
-			if(plugin.equals("BeanShell.jar")
-				|| plugin.equals("bsh-1.0.jar")
-				|| plugin.equals("EditBuddy.jar")
-				|| plugin.equals("PluginManager.jar"))
-			{
-				String[] args = { plugin };
-				GUIUtilities.error(null,"plugin.obsolete",args);
-				continue;
-			}
-
-			try
-			{
-				Log.log(Log.DEBUG,jEdit.class,
-					"Scanning JAR file: " + path);
-				new JARClassLoader(path);
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,jEdit.class,"Cannot load"
-					+ " plugin " + plugin);
-				Log.log(Log.ERROR,jEdit.class,io);
-
-				String[] args = { plugin, io.toString() };
-				GUIUtilities.error(null,"plugin.load-error",args);
-			}
-		}
-	}
-
-	/**
-	 * Adds a plugin to the editor.
-	 * @param plugin The plugin
-	 */
-	public static void addPlugin(EditPlugin plugin)
-	{
-		plugins.addPlugin(plugin);
-	}
-
-	/**
-	 * Adds a plugin to the editor.
-	 * @param plugin The plugin
-	 */
-	public static void addPluginJAR(EditPlugin.JAR plugin)
-	{
-		plugin.index = jars.size();
-		jars.addElement(plugin);
-	}
-
-	/**
 	 * Returns the plugin with the specified class name.
 	 */
 	public static EditPlugin getPlugin(String name)
@@ -801,37 +709,6 @@ public class jEdit
 	public static EditPlugin.JAR getPluginJAR(int index)
 	{
 		return (EditPlugin.JAR)jars.elementAt(index);
-	}
-
-	/**
-	 * Loads the specified action list.
-	 * @since jEdit 3.1pre1
-	 */
-	public static boolean loadActions(String path, Reader in, boolean plugin)
-	{
-		Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
-
-		ActionListHandler ah = new ActionListHandler(path,plugin);
-		XmlParser parser = new XmlParser();
-		parser.setHandler(ah);
-		try
-		{
-			parser.parse(null, null, in);
-			return true;
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,jEdit.class,path + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,jEdit.class,e);
-		}
-
-		return false;
 	}
 
 	/**
@@ -925,106 +802,6 @@ public class jEdit
 	}
 
 	/**
-	 * Registers an edit mode with the editor.
-	 * @param mode The edit mode
-	 */
-	public static void addMode(Mode mode)
-	{
-		Log.log(Log.DEBUG,jEdit.class,"Adding edit mode "
-			+ mode.getName());
-
-		mode.init();
-		modes.addElement(mode);
-	}
-
-	/**
-	 * Loads a mode catalog file.
-	 * @since jEdit 3.2pre2
-	 */
-	public static void loadModeCatalog(String path, boolean resource)
-	{
-		Log.log(Log.MESSAGE,jEdit.class,"Loading mode catalog file " + path);
-
-		ModeCatalogHandler handler = new ModeCatalogHandler(
-			MiscUtilities.getParentOfPath(path),resource);
-		XmlParser parser = new XmlParser();
-		parser.setHandler(handler);
-		try
-		{
-			InputStream _in;
-			if(resource)
-				_in = jEdit.class.getResourceAsStream(path);
-			else
-				_in = new FileInputStream(path);
-			BufferedReader in = new BufferedReader(
-				new InputStreamReader(_in));
-			parser.parse(null, null, in);
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,jEdit.class,path + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,jEdit.class,e);
-		}
-	}
-
-	/**
-	 * Loads an XML-defined edit mode from the specified reader.
-	 * @param mode The edit mode
-	 */
-	public static void loadMode(Mode mode)
-	{
-		Object fileName = mode.getProperty("file");
-
-		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
-
-		XmlParser parser = new XmlParser();
-		XModeHandler xmh = new XModeHandler(parser,mode.getName(),fileName.toString());
-		parser.setHandler(xmh);
-		try
-		{
-			Reader grammar;
-			if(fileName instanceof URL)
-			{
-				grammar = new BufferedReader(
-					new InputStreamReader(
-					((URL)fileName).openStream()));
-			}
-			else
-			{
-				grammar = new BufferedReader(new FileReader(
-					(String)fileName));
-			}
-
-			parser.parse(null, null, grammar);
-		}
-		catch (Exception e)
-		{
-			Log.log(Log.ERROR, jEdit.class, e);
-
-			if (e instanceof XmlException)
-			{
-				XmlException xe = (XmlException) e;
-				int line = xe.getLine();
-				String message = xe.getMessage();
-
-				Object[] args = { fileName, new Integer(line), message };
-				GUIUtilities.error(null,"xmode-parse",args);
-			}
-
-			// give it an empty token marker to avoid problems
-			TokenMarker marker = new TokenMarker();
-			marker.addRuleSet("MAIN",new ParserRuleSet());
-			mode.setTokenMarker(marker);
-		}
-	}
-
-	/**
 	 * Returns the edit mode with the specified name.
 	 * @param name The edit mode
 	 */
@@ -1037,16 +814,6 @@ public class jEdit
 				return mode;
 		}
 		return null;
-	}
-
-	/**
-	 * Returns the localised name of an edit mode.
-	 * @param mode The edit mode
-	 */
-	public static String getModeName(Mode mode)
-	{
-		return jEdit.props.getProperty("mode." +
-			mode.getName() + ".name");
 	}
 
 	/**
@@ -1703,45 +1470,6 @@ public class jEdit
 	}
 
 	/**
-	 * Loads all key bindings from the properties.
-	 * @since 3.1pre1
-	 */
-	public static void initKeyBindings()
-	{
-		inputHandler.removeAllKeyBindings();
-
-		EditAction[] actions = getActions();
-		for(int i = 0; i < actions.length; i++)
-		{
-			EditAction action = actions[i];
-
-			String shortcut1 = jEdit.getProperty(action.getName()
-				+ ".shortcut");
-			if(shortcut1 != null)
-				inputHandler.addKeyBinding(shortcut1,action);
-
-			String shortcut2 = jEdit.getProperty(action.getName()
-				+ ".shortcut2");
-			if(shortcut2 != null)
-				inputHandler.addKeyBinding(shortcut2,action);
-		}
-
-		Vector macros = Macros.getMacroList();
-
-		for(int i = 0; i < macros.size(); i++)
-		{
-			Macros.Macro macro = (Macros.Macro)macros.elementAt(i);
-			String shortcut1 = jEdit.getProperty(macro.name + ".shortcut");
-			if(shortcut1 != null)
-				jEdit.getInputHandler().addKeyBinding(shortcut1,macro.action);
-
-			String shortcut2 = jEdit.getProperty(macro.name + ".shortcut2");
-			if(shortcut2 != null)
-				jEdit.getInputHandler().addKeyBinding(shortcut2,macro.action);
-		}
-	}
-
-	/**
 	 * Creates a new view of a buffer.
 	 * @param view An existing view
 	 * @param buffer The buffer
@@ -2045,6 +1773,140 @@ public class jEdit
 			removeBufferFromList(buffer);
 			addBufferToList(buffer);
 		}
+	}
+
+	/**
+	 * Registers an edit mode with the editor.
+	 * @param mode The edit mode
+	 */
+	/* package-private */ static void addMode(Mode mode)
+	{
+		Log.log(Log.DEBUG,jEdit.class,"Adding edit mode "
+			+ mode.getName());
+
+		modes.addElement(mode);
+	}
+
+	/**
+	 * Loads an XML-defined edit mode from the specified reader.
+	 * @param mode The edit mode
+	 */
+	/* package-private */ static void loadMode(Mode mode)
+	{
+		Object fileName = mode.getProperty("file");
+
+		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
+
+		XmlParser parser = new XmlParser();
+		XModeHandler xmh = new XModeHandler(parser,mode.getName(),fileName.toString());
+		parser.setHandler(xmh);
+		try
+		{
+			Reader grammar;
+			if(fileName instanceof URL)
+			{
+				grammar = new BufferedReader(
+					new InputStreamReader(
+					((URL)fileName).openStream()));
+			}
+			else
+			{
+				grammar = new BufferedReader(new FileReader(
+					(String)fileName));
+			}
+
+			parser.parse(null, null, grammar);
+		}
+		catch (Exception e)
+		{
+			Log.log(Log.ERROR, jEdit.class, e);
+
+			if (e instanceof XmlException)
+			{
+				XmlException xe = (XmlException) e;
+				int line = xe.getLine();
+				String message = xe.getMessage();
+
+				Object[] args = { fileName, new Integer(line), message };
+				GUIUtilities.error(null,"xmode-parse",args);
+			}
+
+			// give it an empty token marker to avoid problems
+			TokenMarker marker = new TokenMarker();
+			marker.addRuleSet("MAIN",new ParserRuleSet());
+			mode.setTokenMarker(marker);
+		}
+	}
+
+	/**
+	 * Loads the properties from the specified input stream. This
+	 * calls the <code>load()</code> method of the properties object
+	 * and closes the stream.
+	 * @param in The input stream
+	 * @param def If true, the properties will be loaded into the
+	 * default table
+	 * @exception IOException if an I/O error occured
+	 */
+	/* package-private */ static void loadProps(InputStream in, boolean def)
+		throws IOException
+	{
+		in = new BufferedInputStream(in);
+		if(def)
+			defaultProps.load(in);
+		else
+			props.load(in);
+		in.close();
+	}
+
+	/**
+	 * Adds a plugin to the editor.
+	 * @param plugin The plugin
+	 */
+	/* package-private */ static void addPlugin(EditPlugin plugin)
+	{
+		plugins.addPlugin(plugin);
+	}
+
+	/**
+	 * Adds a plugin to the editor.
+	 * @param plugin The plugin
+	 */
+	/* package-private */ static void addPluginJAR(EditPlugin.JAR plugin)
+	{
+		plugin.index = jars.size();
+		jars.addElement(plugin);
+	}
+
+	/**
+	 * Loads the specified action list.
+	 * @since jEdit 3.1pre1
+	 */
+	/* package-private */ static boolean loadActions(String path, Reader in,
+		boolean plugin)
+	{
+		Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
+
+		ActionListHandler ah = new ActionListHandler(path,plugin);
+		XmlParser parser = new XmlParser();
+		parser.setHandler(ah);
+		try
+		{
+			parser.parse(null, null, in);
+			return true;
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,jEdit.class,path + ":" + line
+				+ ": " + message);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,jEdit.class,e);
+		}
+
+		return false;
 	}
 
 	// private members
@@ -2624,6 +2486,134 @@ loop:		for(int i = 0; i < list.length; i++)
 
 			view.close();
 			removeViewFromList(view);
+		}
+	}
+
+	/**
+	 * Loads a mode catalog file.
+	 * @since jEdit 3.2pre2
+	 */
+	private static void loadModeCatalog(String path, boolean resource)
+	{
+		Log.log(Log.MESSAGE,jEdit.class,"Loading mode catalog file " + path);
+
+		ModeCatalogHandler handler = new ModeCatalogHandler(
+			MiscUtilities.getParentOfPath(path),resource);
+		XmlParser parser = new XmlParser();
+		parser.setHandler(handler);
+		try
+		{
+			InputStream _in;
+			if(resource)
+				_in = jEdit.class.getResourceAsStream(path);
+			else
+				_in = new FileInputStream(path);
+			BufferedReader in = new BufferedReader(
+				new InputStreamReader(_in));
+			parser.parse(null, null, in);
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,jEdit.class,path + ":" + line
+				+ ": " + message);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,jEdit.class,e);
+		}
+	}
+
+	/**
+	 * Loads all plugins in a directory.
+	 * @param directory The directory
+	 */
+	private static void loadPlugins(String directory)
+	{
+		Log.log(Log.NOTICE,jEdit.class,"Loading plugins from "
+			+ directory);
+
+		File file = new File(directory);
+		if(!(file.exists() && file.isDirectory()))
+			return;
+		String[] plugins = file.list();
+		if(plugins == null)
+			return;
+
+		MiscUtilities.quicksort(plugins,new MiscUtilities.StringICaseCompare());
+		for(int i = 0; i < plugins.length; i++)
+		{
+			String plugin = plugins[i];
+			if(!plugin.toLowerCase().endsWith(".jar"))
+				continue;
+
+			String path = MiscUtilities.constructPath(directory,plugin);
+
+			if(plugin.equals("BeanShell.jar")
+				|| plugin.equals("bsh-1.0.jar")
+				|| plugin.equals("EditBuddy.jar")
+				|| plugin.equals("PluginManager.jar"))
+			{
+				String[] args = { plugin };
+				GUIUtilities.error(null,"plugin.obsolete",args);
+				continue;
+			}
+
+			try
+			{
+				Log.log(Log.DEBUG,jEdit.class,
+					"Scanning JAR file: " + path);
+				new JARClassLoader(path);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,jEdit.class,"Cannot load"
+					+ " plugin " + plugin);
+				Log.log(Log.ERROR,jEdit.class,io);
+
+				String[] args = { plugin, io.toString() };
+				GUIUtilities.error(null,"plugin.load-error",args);
+			}
+		}
+	}
+
+	/**
+	 * Loads all key bindings from the properties.
+	 * @since 3.1pre1
+	 */
+	private static void initKeyBindings()
+	{
+		inputHandler.removeAllKeyBindings();
+
+		EditAction[] actions = getActions();
+		for(int i = 0; i < actions.length; i++)
+		{
+			EditAction action = actions[i];
+
+			String shortcut1 = jEdit.getProperty(action.getName()
+				+ ".shortcut");
+			if(shortcut1 != null)
+				inputHandler.addKeyBinding(shortcut1,action);
+
+			String shortcut2 = jEdit.getProperty(action.getName()
+				+ ".shortcut2");
+			if(shortcut2 != null)
+				inputHandler.addKeyBinding(shortcut2,action);
+		}
+
+		Vector macros = Macros.getMacroList();
+
+		for(int i = 0; i < macros.size(); i++)
+		{
+			Macros.Macro macro = (Macros.Macro)macros.elementAt(i);
+			String shortcut1 = jEdit.getProperty(macro.name + ".shortcut");
+			if(shortcut1 != null)
+				jEdit.getInputHandler().addKeyBinding(shortcut1,macro.action);
+
+			String shortcut2 = jEdit.getProperty(macro.name + ".shortcut2");
+			if(shortcut2 != null)
+				jEdit.getInputHandler().addKeyBinding(shortcut2,macro.action);
 		}
 	}
 }
