@@ -1,6 +1,6 @@
 /*
  * DockableWindowManager.java - manages dockable windows
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -349,6 +349,7 @@ public class DockableWindowManager extends JPanel
 		EditBus.addToBus(new DefaultFactory());
 		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"vfs.browser");
 		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"hypersearch-results");
+		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"log-viewer");
 	}
 
 	class DockableLayout implements LayoutManager2
@@ -543,6 +544,10 @@ public class DockableWindowManager extends JPanel
 				{
 					cmsg.setDockableWindow(new HyperSearchResults(
 						cmsg.getView()));
+				}
+				else if(name.equals("log-viewer"))
+				{
+					cmsg.setDockableWindow(new LogViewer());
 				}
 			}
 		}

@@ -21,8 +21,11 @@ package org.gjt.sp.jedit.pluginmgr;
 
 import javax.swing.JOptionPane;
 import java.awt.Component;
-import java.io.File;
+import java.io.*;
+import java.net.*;
+import java.util.zip.*;
 import java.util.*;
+import org.gjt.sp.jedit.io.VFSManager; // we use VFSManager.error() method
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -44,44 +47,34 @@ class Roster
 		operations.addElement(op);
 	}
 
+	int getOperationCount()
+	{
+		return operations.size();
+	}
+
 	boolean isEmpty()
 	{
 		return operations.size() == 0;
 	}
 
-	boolean confirm(Component comp)
-	{
-		if(isEmpty())
-			return false;
-
-		String[] args = { toString() };
-
-		int result = GUIUtilities.confirm(comp,"plugin-manager.roster-confirm",
-			args,JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-		return (result == JOptionPane.YES_OPTION);
-	}
-
-	boolean performOperations()
+	boolean performOperations(PluginManagerProgress progress)
 	{
 		for(int i = 0; i < operations.size(); i++)
 		{
 			Operation op = (Operation)operations.elementAt(i);
-			if(!op.perform())
+			if(op.perform(progress))
+				progress.done(true);
+			else
+			{
+				progress.done(false);
+				return false;
+			}
+
+			if(Thread.interrupted())
 				return false;
 		}
 
 		return true;
-	}
-
-	public String toString()
-	{
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < operations.size(); i++)
-		{
-			buf.append(operations.elementAt(i));
-			buf.append('\n');
-		}
-		return buf.toString();
 	}
 
 	// private members
@@ -89,9 +82,7 @@ class Roster
 
 	static interface Operation
 	{
-		boolean inAWTThread();
-		boolean perform();
-		String toString();
+		boolean perform(PluginManagerProgress progress);
 		boolean equals(Object o);
 	}
 
@@ -102,13 +93,10 @@ class Roster
 			this.plugin = plugin;
 		}
 
-		public boolean inAWTThread()
+		public boolean perform(PluginManagerProgress progress)
 		{
-			return true;
-		}
+			progress.removing(MiscUtilities.getFileName(plugin));
 
-		public boolean perform()
-		{
 			// close JAR file
 			EditPlugin.JAR jar = jEdit.getPluginJAR(plugin);
 			if(jar != null)
@@ -125,12 +113,6 @@ class Roster
 				ok &= deleteRecursively(srcFile);
 
 			return ok;
-		}
-
-		public String toString()
-		{
-			String[] args = { plugin };
-			return jEdit.getProperty("plugin-manager.roster.remove",args);
 		}
 
 		public boolean equals(Object o)
@@ -179,21 +161,39 @@ class Roster
 			this.installDirectory = installDirectory;
 		}
 
-		public boolean inAWTThread()
+		public boolean perform(PluginManagerProgress progress)
 		{
-			return false;
-		}
+			try
+			{
+				String fileName = MiscUtilities.getFileName(url);
+				progress.downloading(fileName);
+				String path = download(progress,fileName,url);
+				if(path == null)
+				{
+					// interrupted download
+					return false;
+				}
 
-		public boolean perform()
-		{
-			Log.log(Log.ERROR,this,"foo");
-			return false;
-		}
+				progress.installing(fileName);
+				install(progress,path,installDirectory);
 
-		public String toString()
-		{
-			String[] args = { url };
-			return jEdit.getProperty("plugin-manager.roster.install",args);
+				return true;
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+
+				String[] args = { io.getMessage() };
+				VFSManager.error(progress,"ioerror",args);
+
+				return false;
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+
+				return false;
+			}
 		}
 
 		public boolean equals(Object o)
@@ -211,5 +211,98 @@ class Roster
 		// private members
 		private String url;
 		private String installDirectory;
+
+		private String download(PluginManagerProgress progress,
+			String fileName, String url) throws Exception
+		{
+			URLConnection conn = new URL(url).openConnection();
+			progress.setMaximum(Math.max(0,conn.getContentLength()));
+
+			String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
+
+			if(!copy(progress,conn.getInputStream(),
+				new FileOutputStream(path),true,true))
+				return null;
+
+			return path;
+		}
+
+		private boolean install(PluginManagerProgress progress,
+			String path, String dir) throws Exception
+		{
+			progress.setMaximum(1);
+
+			ZipFile zipFile = new ZipFile(path);
+			Enumeration enum = zipFile.entries();
+			while(enum.hasMoreElements())
+			{
+				ZipEntry entry = (ZipEntry)enum.nextElement();
+				String name = entry.getName().replace('/',File.separatorChar);
+				File file = new File(dir,name);
+				if(entry.isDirectory())
+					file.mkdirs();
+				else
+				{
+					new File(file.getParent()).mkdirs();
+					copy(progress,zipFile.getInputStream(entry),
+						new FileOutputStream(file),false,false);
+				}
+			}
+
+			new File(path).delete();
+
+			progress.setValue(1);
+
+			return true;
+		}
+
+		private boolean copy(PluginManagerProgress progress,
+			InputStream in, OutputStream out, boolean canStop,
+			boolean doProgress) throws Exception
+		{
+			in = new BufferedInputStream(in);
+			out = new BufferedOutputStream(out);
+
+			byte[] buf = new byte[4096];
+			int copied = 0;
+			int count;
+loop:			while((count = in.read(buf,0,buf.length)) != -1)
+			{
+				if(doProgress)
+				{
+					copied += count;
+					progress.setValue(copied);
+				}
+
+				out.write(buf,0,count);
+				if(canStop && Thread.interrupted())
+				{
+					in.close();
+					out.close();
+					return false;
+				}
+			}
+
+			in.close();
+			out.close();
+			return true;
+		}
+
+		static File downloadDir;
+
+		static String getDownloadDir()
+		{
+			if(downloadDir == null)
+			{
+				String settings = jEdit.getSettingsDirectory();
+				if(settings == null)
+					settings = System.getProperty("user.home");
+				downloadDir = new File(MiscUtilities.constructPath(
+					settings,"PluginManager.download"));
+				downloadDir.mkdirs();
+			}
+
+			return downloadDir.getPath();
+		}
 	}
 }

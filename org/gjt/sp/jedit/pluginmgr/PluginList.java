@@ -84,23 +84,6 @@ class PluginList
 		}
 	}
 
-	void updatePlugins(Roster roster, String installDirectory)
-	{
-		for(int i = 0; i < plugins.size(); i++)
-		{
-			Plugin plugin = (Plugin)plugins.elementAt(i);
-			Branch branch = plugin.getCompatibleBranch();
-
-			if(branch != null
-				&& plugin.installedVersion != null
-				&& MiscUtilities.compareVersions(branch.version,
-				plugin.installedVersion) > 0)
-			{
-				plugin.install(roster,installDirectory);
-			}
-		}
-	}
-
 	void dump()
 	{
 		for(int i = 0; i < plugins.size(); i++)

@@ -2363,8 +2363,8 @@ public class jEdit
 			if(lf != null && lf.length() != 0)
 				UIManager.setLookAndFeel(lf);
 			// Mac users are rather fussy, and the default Mac L&F rocks
-			else if(System.getProperty("os.name").indexOf("MacOS") != -1)
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			//else if(System.getProperty("os.name").indexOf("MacOS") != -1)
+			//	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
 		catch(Exception e)
 		{

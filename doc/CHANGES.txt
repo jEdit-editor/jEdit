@@ -2,12 +2,18 @@ JEDIT 3.2 VERSION HISTORY
 
 * Version 3.2pre2
 
-- The plugin manager still doesn't work in this release. While most of
-  the code is in place, the user interface is not finished, and the
-  server-side backend code isn't complete either.
-
 + New Features
 
+- New plugin manager. The major changes are:
+  - Now part of the jEdit core, not a plugin
+  - Uses new server-side backend, courtesy of Mike Dillon
+  - Removing a plugin consisting of multiple JARs (Archive, JavaInsight)
+    removes all JARs, not just the main one
+  - Dependencies are now resolved automatically, eg installing the
+    JCompiler plugin will automatically install or update, if necessary,
+    the EditBus, ErrorList and Console plugins
+  - Many parts of the code have been rewritten from scratch and as a
+    result it is much cleaner
 - This was actually added in 3.2pre1, not 3.2pre2, but I forgot to
   mention it to the change log. 'BeanShell search and replace' lets you
   replace occurences of a search string (or regexp) with the result of a
@@ -44,7 +50,7 @@ JEDIT 3.2 VERSION HISTORY
   Utilities->Global Options->Loading and Saving
 - The 'Escape' key can now be used in the 'Add Abbreviation' dialog box
 - On MacOS and MacOS X, the primary modifier is Command, not Control now
-- On MacOS X, the default look and feel is now the 'MacOS Adaptive' look
+- The activity log is now dockable
 
 + Neutral
 

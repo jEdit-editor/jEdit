@@ -5,6 +5,19 @@
  <para>
   The <firstterm>activity log</> is very useful for
   troubleshooting problems, and helps when developing plugins.
+ </para>
+ <para>
+  <guimenu>Utilities</>&gt;<guimenuitem>Activity Log</> displays
+  the last 500 lines of the activity log. By default, the activity is shown in
+  a floating window;
+  it can be set to dock into the view in the <guibutton>Docking</> pane of the
+  <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  The complete
+  log can be found in the <filename>activity.log</> file inside the
+  jEdit settings directory, the path of which is shown inside the activity
+  log window.
+ </para>
+ <para>
   jEdit writes the following information to the activity log:
  </para>
  <itemizedlist>
@@ -18,13 +31,6 @@
   when tracking down bugs</para></listitem>
   <listitem><para>Information about loaded plugins</para></listitem>
  </itemizedlist>
- <para>
-  <guimenu>Utilities</>&gt;<guimenuitem>View Activity Log</> displays
-  the last 500 lines of the activity log. The complete
-  log can be found in the <filename>activity.log</> file inside the
-  jEdit settings directory, the path of which is shown inside the activity
-  log window.
- </para>
  <para>
   While jEdit is running, the log file on disk may not always accurately reflect
   what has been logged, due to buffering being done for performance reasons.

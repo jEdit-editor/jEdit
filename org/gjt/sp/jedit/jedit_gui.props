@@ -479,7 +479,7 @@ utils=vfs-browser \
 utils.label=$Utilities
 vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
-log-viewer.label=$View Activity Log...
+log-viewer.label=$Activity Log
 update-log.label=Update Activity $Log on Disk
 eval.label=$Evaluate BeanShell Expression...
 eval-selection.label=E$valuate Selection
@@ -1359,18 +1359,16 @@ plugin-manager.remove=Remove Plugins
 plugin-manager.update=Update Plugins
 plugin-manager.install=Install Plugins
 
-plugin-manager.roster.remove=Remove {0}
-plugin-manager.roster.install=Install {0}
-
-plugin-manager.roster-confirm.title=Confirm Operations
-plugin-manager.roster-confirm.message=Are you sure you want to perform the \
-	following operations?\n\
+plugin-manager.remove-confirm.title=Remove Plugins
+plugin-manager.remove-confirm.message=Are you sure you want to remove the \
+	following plugins?\n\
 	\n\
 	{0}
 
-plugin-manager.progress.title=Downloading Plugin List
-plugin-manager.progress.caption=Downloading plugin list from server...
-plugin-manager.progress.stop=Stop
+### plugin list download progress
+plugin-list.progress.title=Downloading Plugin List
+plugin-list.progress.caption=Downloading plugin list from server...
+plugin-list.progress.stop=Stop
 
 ### error while loading plugin list
 plugin-list.ioerror.title=I/O Error
@@ -1389,11 +1387,13 @@ plugin-manager.up-to-date.title=Plugins Up to Date
 plugin-manager.up-to-date.message=All installed plugins are their latest versions.
 
 ### plugin installation
-install-plugins.title=Install New Plugins
+install-plugins.title=Install Plugins
+update-plugins.title=Update Plugins
 install-plugins.caption=Click the check box next to plugins you wish to install:
 install-plugins.info.name=Name:
 install-plugins.info.author=Author:
-install-plugins.info.version=Version:
+install-plugins.info.latest-version=Latest version:
+install-plugins.info.installed-version=Installed version:
 install-plugins.info.updated=Last updated:
 install-plugins.info.description=Description:
 install-plugins.info.also-install=\ Installing this plugin will also install \
@@ -1403,3 +1403,17 @@ install-plugins.user=Install in user plugin directory ({0})
 install-plugins.system=Install in system plugin directory ({0})
 install-plugins.none=none
 install-plugins.install=Install
+
+### plugin progress
+plugin-manager.progress.title=Performing Operations
+plugin-manager.progress.removing=Removing {0}
+plugin-manager.progress.downloading=Downloading {0}
+plugin-manager.progress.installing=Installing {0}
+plugin-manager.progress.stop=Stop
+
+plugin-manager.done.title=Operations Complete
+plugin-manager.done.message=You must restart jEdit for plugin installation\n\
+	and removal to take effect.
+
+plugin-manager.failed.title=Operations Failed
+plugin-manager.failed.message=One or more operations could not be completed.

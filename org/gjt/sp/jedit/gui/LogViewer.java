@@ -1,6 +1,6 @@
 /*
  * LogViewer.java
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,20 +24,15 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public class LogViewer extends JFrame
+public class LogViewer extends JPanel implements DockableWindow
 {
 	public LogViewer()
 	{
-		super(jEdit.getProperty("log-viewer.title"));
-
-		setIconImage(GUIUtilities.getEditorIcon());
-
-		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,12,12,12));
-		setContentPane(content);
+		super(new BorderLayout());
 
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory != null)
@@ -46,26 +41,23 @@ public class LogViewer extends JFrame
 				settingsDirectory, "activity.log") };
 			JLabel label = new JLabel(jEdit.getProperty(
 				"log-viewer.caption",args));
-			label.setBorder(new EmptyBorder(0,0,12,0));
-			content.add(BorderLayout.NORTH,label);
+			add(BorderLayout.NORTH,label);
 		}
 
 		JTextArea textArea = new JTextArea(24,40);
 		textArea.setDocument(Log.getLogDocument());
 		//textArea.setEditable(false);
 
-		content.add(BorderLayout.CENTER,new JScrollPane(textArea));
-
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		pack();
-		GUIUtilities.loadGeometry(this,"log-viewer");
-		show();
+		add(BorderLayout.CENTER,new JScrollPane(textArea));
 	}
 
-	public void dispose()
+	public String getName()
 	{
-		GUIUtilities.saveGeometry(this,"log-viewer");
-		super.dispose();
+		return "log-viewer";
+	}
+
+	public Component getComponent()
+	{
+		return this;
 	}
 }

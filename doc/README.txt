@@ -229,6 +229,7 @@ Mike Dillon:
 	- Faster literal search
 	- ColdFusion, CSS, HTML, Java, JSP, LISP, Patch, PHP, SHTML,
 	  TSQL, XML, XSL syntax highlighting
+	- Plugin central (http://plugins.jedit.org) web master
 	- ... lots more
 
 Nitsan Vardi:

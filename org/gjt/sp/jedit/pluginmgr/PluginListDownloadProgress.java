@@ -32,19 +32,19 @@ class PluginListDownloadProgress extends JDialog
 	PluginListDownloadProgress(PluginManager window)
 	{
 		super(JOptionPane.getFrameForComponent(window),
-			jEdit.getProperty("plugin-manager.progress.title"),true);
+			jEdit.getProperty("plugin-list.progress.title"),true);
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		JLabel caption = new JLabel(jEdit.getProperty("plugin-manager.progress.caption"));
+		JLabel caption = new JLabel(jEdit.getProperty("plugin-list.progress.caption"));
 		caption.setBorder(new EmptyBorder(0,0,12,0));
 		content.add(BorderLayout.NORTH,caption);
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createGlue());
-		JButton stop = new JButton(jEdit.getProperty("plugin-manager.progress.stop"));
+		JButton stop = new JButton(jEdit.getProperty("plugin-list.progress.stop"));
 		stop.addActionListener(new ActionHandler());
 		stop.setMaximumSize(stop.getPreferredSize());
 		box.add(stop);

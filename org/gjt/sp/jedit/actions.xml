@@ -412,8 +412,11 @@
 
 <ACTION NAME="log-viewer">
 	<CODE>
-		new LogViewer();
+		view.getDockableWindowManager().toggleDockableWindow("log-viewer");
 	</CODE>
+	<IS_SELECTED>
+		return view.getDockableWindowManager().isDockableWindowVisible("log-viewer");
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="match-bracket">
@@ -835,12 +838,14 @@
 
 <ACTION NAME="select-document-end">
 	<CODE>
+		textArea.extendSelection(textArea.getCaretPosition(),buffer.getLength());
 		textArea.moveCaretPosition(buffer.getLength());
 	</CODE>
 </ACTION>
 
 <ACTION NAME="select-document-home">
 	<CODE>
+		textArea.extendSelection(textArea.getCaretPosition(),0);
 		textArea.moveCaretPosition(0);
 	</CODE>
 </ACTION>

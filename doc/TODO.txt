@@ -1,6 +1,8 @@
 TO DO
 
-- after remove/install/update: display dialog saying to restart
+- scrollToCaret() doesn't always work: eg, select-document-end
+
+- replace in sel doesn't work if rect
 - test edit server
 - broken reverse search
 - italics font metrics bugs
@@ -11,7 +13,6 @@ TO DO
 - expand fold: scroll to last line of fold
 - get web start to work
 - macros in web start version
-- scrollToCaret() doesn't always work
 - caret event not always fired
 - XThis: don't throw exceptions for non-existent methods
 - C+ENTER: display prompt
@@ -21,10 +22,6 @@ TO DO
 - on OS X, make macos l&f the default
 - folding paint up bug
 - prev line fold gutter bug
-- plugin manager:
-  - a combined roster confirm/progress dialog box
-  - plugin update
-  - write Roster.Install
 - enter:
   {
 	foo
@@ -60,3 +57,4 @@ TO DO
 - aborts not always fired
 - fix dragStart handling in DockableWindowContainer.TabbedPane
 - C+i in shortcuts editor
+- caret undo bugs

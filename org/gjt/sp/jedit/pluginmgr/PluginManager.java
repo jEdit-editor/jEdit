@@ -33,18 +33,6 @@ import org.gjt.sp.util.Log;
 
 public class PluginManager extends JDialog
 {
-	public static void pluginListDebug()
-	{
-		try
-		{
-			new PluginList().dump();
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,PluginManager.class,e);
-		}
-	}
-
 	public PluginManager(View view)
 	{
 		super(view,jEdit.getProperty("plugin-manager.title"),true);
@@ -228,7 +216,7 @@ public class PluginManager extends JDialog
 				Entry.this.author = jEdit.getProperty("plugin." + clazz
 					+ ".author");
 
-				String jarsProp = jEdit.getProperty("plugins." + clazz
+				String jarsProp = jEdit.getProperty("plugin." + clazz
 					+ ".jars");
 
 				if(jarsProp != null)
@@ -263,6 +251,7 @@ public class PluginManager extends JDialog
 				TreePath[] selected = tree.getSelectionModel()
 					.getSelectionPaths();
 
+				StringBuffer buf = new StringBuffer();
 				Roster roster = new Roster();
 				for(int i = 0; i < selected.length; i++)
 				{
@@ -274,30 +263,24 @@ public class PluginManager extends JDialog
 						Entry entry = (Entry)last;
 						for(int j = 0; j < entry.jars.size(); j++)
 						{
-							roster.addOperation(
-								new Roster.Remove(
-								(String)entry.jars
-								.elementAt(j)));
+							String jar = (String)entry.jars.elementAt(j);
+							if(buf.length() != 0)
+								buf.append('\n');
+							buf.append(jar);
+							roster.addOperation(new Roster.Remove(jar));
 						}
 					}
 				}
 
-				if(roster.isEmpty())
+				String[] args = { buf.toString() };
+				if(GUIUtilities.confirm(PluginManager.this,
+					"plugin-manager.remove-confirm",args,
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE)
+					== JOptionPane.YES_OPTION)
 				{
-					getToolkit().beep();
-					return;
-				}
-
-				if(roster.confirm(PluginManager.this))
-				{
-					setCursor(Cursor.getPredefinedCursor(
-						Cursor.WAIT_CURSOR));
-
-					if(roster.performOperations())
-						updateTree();
-
-					setCursor(Cursor.getPredefinedCursor(
-						Cursor.DEFAULT_CURSOR));
+					new PluginManagerProgress(PluginManager.this,roster);
+					updateTree();
 				}
 			}
 			else if(source == update)
@@ -307,26 +290,43 @@ public class PluginManager extends JDialog
 				if(list == null)
 					return;
 
-				Roster roster = new Roster();
-				String settingsDirectory = jEdit.getSettingsDirectory();
-				if(settingsDirectory == null)
+				if(jEdit.getSettingsDirectory() == null)
 				{
 					GUIUtilities.error(PluginManager.this,
 						"no-settings",null);
 					return;
 				}
 
-				list.updatePlugins(roster,settingsDirectory);
+				Vector plugins = new Vector();
+				for(int i = 0; i < list.plugins.size(); i++)
+				{
+					PluginList.Plugin plugin = (PluginList.Plugin)list
+						.plugins.elementAt(i);
+					PluginList.Branch branch = plugin.getCompatibleBranch();
 
-				if(roster.isEmpty())
+					if(branch != null
+						&& plugin.installedVersion != null
+						&& MiscUtilities.compareVersions(branch.version,
+						plugin.installedVersion) > 0)
+						plugins.addElement(plugin);
+				}
+
+				if(plugins.size() == 0)
 				{
 					GUIUtilities.message(PluginManager.this,
 						"plugin-manager.up-to-date",null);
 					return;
 				}
 
-				if(!roster.confirm(PluginManager.this))
+				Roster roster = new Roster();
+				new InstallPluginsDialog(PluginManager.this,plugins,
+					InstallPluginsDialog.UPDATE)
+					.installPlugins(roster);
+
+				if(roster.isEmpty())
 					return;
+
+				new PluginManagerProgress(PluginManager.this,roster);
 
 				updateTree();
 			}
@@ -344,12 +344,25 @@ public class PluginManager extends JDialog
 					return;
 				}
 
+				Vector plugins = new Vector();
+				for(int i = 0; i < list.plugins.size(); i++)
+				{
+					PluginList.Plugin plugin = (PluginList.Plugin)list
+						.plugins.elementAt(i);
+					if(plugin.installed == null
+						&& plugin.canBeInstalled())
+						plugins.addElement(plugin);
+				}
+
 				Roster roster = new Roster();
-				new InstallPluginsDialog(PluginManager.this,list)
+				new InstallPluginsDialog(PluginManager.this,plugins,
+					InstallPluginsDialog.INSTALL)
 					.installPlugins(roster);
 
-				if(!roster.confirm(PluginManager.this))
+				if(roster.isEmpty())
 					return;
+
+				new PluginManagerProgress(PluginManager.this,roster);
 
 				updateTree();
 			}

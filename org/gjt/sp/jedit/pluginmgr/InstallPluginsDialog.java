@@ -30,10 +30,15 @@ import org.gjt.sp.jedit.*;
 
 class InstallPluginsDialog extends EnhancedDialog
 {
-	InstallPluginsDialog(JDialog dialog, PluginList pluginList)
+	static final int INSTALL = 0;
+	static final int UPDATE = 1;
+
+	InstallPluginsDialog(JDialog dialog, Vector model, int mode)
 	{
 		super(JOptionPane.getFrameForComponent(dialog),
-			jEdit.getProperty("install-plugins.title"),true);
+			(mode == INSTALL
+			? jEdit.getProperty("install-plugins.title")
+			: jEdit.getProperty("update-plugins.title")),true);
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -46,15 +51,6 @@ class InstallPluginsDialog extends EnhancedDialog
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(new EmptyBorder(0,0,12,0));
 
-		Vector model = new Vector();
-		for(int i = 0; i < pluginList.plugins.size(); i++)
-		{
-			PluginList.Plugin plugin = (PluginList.Plugin)pluginList
-				.plugins.elementAt(i);
-			if(plugin.installed == null
-				&& plugin.canBeInstalled())
-				model.addElement(plugin);
-		}
 		plugins = new JCheckBoxList(model);
 		//plugins.setVisibleRowCount(8);
 		plugins.getSelectionModel().addListSelectionListener(new ListHandler());
@@ -66,25 +62,36 @@ class InstallPluginsDialog extends EnhancedDialog
 
 		JPanel panel2 = new JPanel(new BorderLayout());
 		panel2.setBorder(new EmptyBorder(6,0,0,0));
-		JPanel labelBox = new JPanel(new GridLayout(5,1,0,3));
+		JPanel labelBox = new JPanel(new GridLayout(
+			(mode == UPDATE ? 6 : 5),1,0,3));
 		labelBox.setBorder(new EmptyBorder(0,0,3,12));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.name"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.author"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
-			+ ".info.version"),SwingConstants.RIGHT));
+			+ ".info.latest-version"),SwingConstants.RIGHT));
+		if(mode == UPDATE)
+		{
+			labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
+				+ ".info.installed-version"),SwingConstants.RIGHT));
+		}
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.updated"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.description"),SwingConstants.RIGHT));
 		panel2.add(BorderLayout.WEST,labelBox);
 
-		JPanel valueBox = new JPanel(new GridLayout(5,1,0,3));
+		JPanel valueBox = new JPanel(new GridLayout(
+			(mode == UPDATE ? 6 : 5),1,0,3));
 		valueBox.setBorder(new EmptyBorder(0,0,3,0));
 		valueBox.add(name = new JLabel());
 		valueBox.add(author = new JLabel());
-		valueBox.add(version = new JLabel());
+		valueBox.add(latestVersion = new JLabel());
+		if(mode == UPDATE)
+		{
+			valueBox.add(installedVersion = new JLabel());
+		}
 		valueBox.add(updated = new JLabel());
 		valueBox.add(Box.createGlue());
 		panel2.add(BorderLayout.CENTER,valueBox);
@@ -97,45 +104,48 @@ class InstallPluginsDialog extends EnhancedDialog
 		JPanel panel4 = new JPanel(new BorderLayout());
 		panel3.add(BorderLayout.NORTH,new JScrollPane(description));
 
-		ButtonGroup grp = new ButtonGroup();
-		installUser = new JRadioButton();
-		String settings = jEdit.getSettingsDirectory();
-		if(settings == null)
+		if(mode == INSTALL)
 		{
-			settings = jEdit.getProperty("install-plugins.none");
-			installUser.setEnabled(false);
-		}
-		else
-		{
-			settings = MiscUtilities.constructPath(settings,"jars");
-			installUser.setEnabled(true);
-		}
-		String[] args = { settings };
-		installUser.setText(jEdit.getProperty("install-plugins.user",args));
-		grp.add(installUser);
-		panel3.add(BorderLayout.CENTER,installUser);
+			ButtonGroup grp = new ButtonGroup();
+			installUser = new JRadioButton();
+			String settings = jEdit.getSettingsDirectory();
+			if(settings == null)
+			{
+				settings = jEdit.getProperty("install-plugins.none");
+				installUser.setEnabled(false);
+			}
+			else
+			{
+				settings = MiscUtilities.constructPath(settings,"jars");
+				installUser.setEnabled(true);
+			}
+			String[] args = { settings };
+			installUser.setText(jEdit.getProperty("install-plugins.user",args));
+			grp.add(installUser);
+			panel3.add(BorderLayout.CENTER,installUser);
 
-		installSystem = new JRadioButton();
-		String jEditHome = jEdit.getJEditHome();
-		if(jEditHome == null)
-		{
-			jEditHome = jEdit.getProperty("install-plugins.none");
-			installSystem.setEnabled(false);
-		}
-		else
-		{
-			jEditHome = MiscUtilities.constructPath(jEditHome,"jars");
-			installSystem.setEnabled(true);
-		}
-		args[0] = jEditHome;
-		installSystem.setText(jEdit.getProperty("install-plugins.system",args));
-		grp.add(installSystem);
-		panel3.add(BorderLayout.SOUTH,installSystem);
+			installSystem = new JRadioButton();
+			String jEditHome = jEdit.getJEditHome();
+			if(jEditHome == null)
+			{
+				jEditHome = jEdit.getProperty("install-plugins.none");
+				installSystem.setEnabled(false);
+			}
+			else
+			{
+				jEditHome = MiscUtilities.constructPath(jEditHome,"jars");
+				installSystem.setEnabled(true);
+			}
+			args[0] = jEditHome;
+			installSystem.setText(jEdit.getProperty("install-plugins.system",args));
+			grp.add(installSystem);
+			panel3.add(BorderLayout.SOUTH,installSystem);
 
-		if(installUser.isEnabled())
-			installUser.setSelected(true);
-		else
-			installSystem.setSelected(true);
+			if(installUser.isEnabled())
+				installUser.setSelected(true);
+			else
+				installSystem.setSelected(true);
+		}
 
 		panel2.add(BorderLayout.SOUTH,panel3);
 
@@ -184,7 +194,7 @@ class InstallPluginsDialog extends EnhancedDialog
 			return;
 
 		String installDirectory;
-		if(installUser.isSelected())
+		if(installUser == null || installUser.isSelected())
 		{
 			installDirectory = MiscUtilities.constructPath(
 				jEdit.getSettingsDirectory(),"jars");
@@ -207,7 +217,8 @@ class InstallPluginsDialog extends EnhancedDialog
 	private JCheckBoxList plugins;
 	private JLabel name;
 	private JLabel author;
-	private JLabel version;
+	private JLabel latestVersion;
+	private JLabel installedVersion;
 	private JLabel updated;
 	private JTextArea description;
 	private JRadioButton installUser;
@@ -243,7 +254,9 @@ class InstallPluginsDialog extends EnhancedDialog
 				PluginList.Branch branch = plugin.getCompatibleBranch();
 				name.setText(plugin.name);
 				author.setText(plugin.author);
-				version.setText(branch.version);
+				latestVersion.setText(branch.version);
+				if(installedVersion != null)
+					installedVersion.setText(plugin.installedVersion);
 				updated.setText(branch.date);
 
 				StringBuffer buf = new StringBuffer();
@@ -272,7 +285,9 @@ class InstallPluginsDialog extends EnhancedDialog
 
 				name.setText(null);
 				author.setText(null);
-				version.setText(null);
+				latestVersion.setText(null);
+				if(installedVersion != null)
+					installedVersion.setText(null);
 				updated.setText(null);
 				description.setText(null);
 			}
