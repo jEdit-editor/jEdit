@@ -1,6 +1,6 @@
 /*
- * LatestVersionPlugin.java - Latest Version Check Plugin
- * Copyright (C) 1999, 2000 Slava Pestov
+ * edit_buddy_firewall_config.java - Displays firewall configuration dialog
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,18 +17,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import java.util.Vector;
+import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
-public class LatestVersionPlugin extends EditPlugin
+public class edit_buddy_firewall_config extends EditAction
 {
-	public void start()
+	public edit_buddy_firewall_config()
 	{
-		jEdit.addAction(new version_check());
+		super("edit-buddy-firewall-config");
 	}
 
-	public void createMenuItems(View view, Vector menus, Vector menuItems)
+	public void actionPerformed(ActionEvent evt)
 	{
-		menuItems.addElement(GUIUtilities.loadMenuItem("version-check"));
+		OptionPane optPane;
+		try
+		{
+			optPane = (OptionPane)getClass().getClassLoader()
+				.loadClass("FirewallOptionPane").newInstance();
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+			return;
+		}
+
+		new OptionPaneDialog(null,optPane,false);
 	}
 }

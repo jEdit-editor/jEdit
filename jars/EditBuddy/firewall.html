@@ -1,0 +1,32 @@
+<html>
+<body>
+
+<h2>Is your computer behind a firewall/proxy?</h2>
+
+Certain jEdit features that make HTTP connections (plugin manager's
+automated plugin installation and update, latest version check, loading
+files from remote servers) will not function from behind a firewall unless
+you configure the firewall settings. If you have a direct connection
+to the Internet, you may skip this step by clicking <b>Next</b>.<p>
+
+Firewall functionality is provided by the firewall plugin, which requires
+Java 2. To configure the plugin, click the button below. If you chose not
+to install the firewall plugin when installing jEdit, or you are not
+running Java 2, the button will be disabled and firewall functionality
+will not be available.
+
+<center>
+<object classid="org.gjt.sp.jedit.gui.HTMLActionButton">
+<param name="text" value="Configure firewall settings">
+<param name="action" value="edit-buddy-firewall-config">
+<param name="dependsOnPlugin" value="FirewallPlugin">
+</object>
+</center>
+
+You may change firewall settings at any other time by invoking the
+<b>Utilities</b>&gt;<b>Global Options</b> command from jEdit's menu bar
+and selecting <b>Plugin Settings</b>&gt;<b>Firewall</b> from the
+resulting dialog box.
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 /*
- * LatestVersionPlugin.java - Latest Version Check Plugin
- * Copyright (C) 1999, 2000 Slava Pestov
+ * WorkThreadProgressListener.java - Progress listener
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,18 +17,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import java.util.Vector;
-import org.gjt.sp.jedit.*;
+package org.gjt.sp.util;
 
-public class LatestVersionPlugin extends EditPlugin
+import java.util.EventListener;
+
+/**
+ * A work thread execution progress listener.
+ * @since jEdit 2.6pre1
+ */
+public interface WorkThreadProgressListener extends EventListener
 {
-	public void start()
-	{
-		jEdit.addAction(new version_check());
-	}
-
-	public void createMenuItems(View view, Vector menus, Vector menuItems)
-	{
-		menuItems.addElement(GUIUtilities.loadMenuItem("version-check"));
-	}
+	void progressUpdate(WorkThreadPool threadPool, int threadIndex);
 }

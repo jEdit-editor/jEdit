@@ -1,6 +1,11 @@
 ChangeLog for Firewall Plugin
 =============================
 
+Version 0.2.3
+-------------
+* updated for jEdit 2.4 option pane API
+* now uses jEdit.get/setBooleanProperty()
+
 Version 0.2.1
 -------------
 * makefile cleanup

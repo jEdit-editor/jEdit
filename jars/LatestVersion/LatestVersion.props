@@ -1,9 +1,9 @@
 plugin.LatestVersionPlugin.name=Latest Version Check
 plugin.LatestVersionPlugin.author=Slava Pestov
-plugin.LatestVersionPlugin.version=1.3.2
+plugin.LatestVersionPlugin.version=1.3.3
 plugin.LatestVersionPlugin.docs=LatestVersion.html
 
-plugin.LatestVersionPlugin.depend.0=jedit 02.05.05.00
+plugin.LatestVersionPlugin.depend.0=jedit 02.06.01.00
 
 version-check.label=Check jEdit Version
 

@@ -28,7 +28,7 @@ import org.gjt.sp.jedit.*;
 
 public class InstallPluginsDialog extends EnhancedDialog
 {
-	public InstallPluginsDialog(PluginManager dialog)
+	public InstallPluginsDialog(JDialog dialog)
 	{
 		super(JOptionPane.getFrameForComponent(dialog),
 			jEdit.getProperty("install-plugins.title"),true);

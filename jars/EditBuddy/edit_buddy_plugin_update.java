@@ -1,6 +1,6 @@
 /*
- * LatestVersionPlugin.java - Latest Version Check Plugin
- * Copyright (C) 1999, 2000 Slava Pestov
+ * edit_buddy_plugin_update.java - Displays plugin update dialog
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,18 +17,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import java.util.Vector;
+import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
-public class LatestVersionPlugin extends EditPlugin
+public class edit_buddy_plugin_update extends EditAction
 {
-	public void start()
+	public edit_buddy_plugin_update()
 	{
-		jEdit.addAction(new version_check());
+		super("edit-buddy-plugin-update");
 	}
 
-	public void createMenuItems(View view, Vector menus, Vector menuItems)
+	public void actionPerformed(ActionEvent evt)
 	{
-		menuItems.addElement(GUIUtilities.loadMenuItem("version-check"));
+		PluginManagerPlugin.updatePlugins(null);
 	}
 }

@@ -25,7 +25,7 @@ import org.gjt.sp.jedit.*;
 
 public class PluginDownloadProgress extends JDialog
 {
-	public PluginDownloadProgress(PluginManager dialog, String[] urls,
+	public PluginDownloadProgress(JDialog dialog, String[] urls,
 		String[] dirs)
 	{
 		super(JOptionPane.getFrameForComponent(dialog),

@@ -1,38 +1,12 @@
 ### plugin properties
 plugin.PluginManagerPlugin.name=Plugin Manager
 plugin.PluginManagerPlugin.author=Slava Pestov
-plugin.PluginManagerPlugin.version=0.5.5
+plugin.PluginManagerPlugin.version=0.5.6
 plugin.PluginManagerPlugin.docs=PluginManager.html
-plugin.PluginManagerPlugin.depend.0=jedit 02.05.08.00
+plugin.PluginManagerPlugin.depend.0=jedit 02.06.01.00
 
 ### URL to download plugin list from
 plugin-manager.url=http://jedit.sourceforge.net/export/plugin_manager.php
-
-### Message shown when jEdit is first run
-first-time.title=Welcome to jEdit
-first-time.message=Thank you for installing jEdit!\n\
-	\n\
-	While jEdit is very useful on its own, it can be made even more\n\
-	powerful by installing "plugins". Plugins are modules of code\n\
-	that add features to jEdit.\n\
-	\n\
-	Would you like to see a list of available plugins and download\n\
-	any that interest you? (This requires an Internet connection.)\n\
-	\n\
-	Note that you can install plugins at any other time by selecting\n\
-	Plugins->Plugin Manager->Install New Plugins.
-
-new-version.title=New Version Installed
-new-version.message=You have just upgraded from jEdit version {0} to {1}.\n\
-	Because this new version might have introduced plugin-related\n\
-	changes, it is recommended that you update all your plugins to\n\
-	their latest versions to avoid any problems.\n\
-	\n\
-	Would you like to update your plugins now? (This requires an\n\
-	Internet connection.)\n\
-	\n\
-	Note that you can update plugins at any other time by selecting\n\
-	Plugins->Plugin Manager->Update Plugins.
 
 ### Plugin manager menu item
 plugin-manager.label=Plugin Manager
@@ -114,13 +88,9 @@ download-progress.installing=Installing {0}
 download-progress.stop=Stop
 
 ### error while loading plugin list
-### tell user they should install Firewall plugin
 plugin-list.ioerror.title=I/O Error
 plugin-list.ioerror.message=An I/O error occurred ({0})\n\
 	\n\
 	If you are using Java 2 and are connected to the Internet\n\
 	through a firewall, you should configure the Firewall plugin\n\
-	in Utilities->Global Options.\n\
-	\n\
-	If you chose not to install the Firewall plugin when installing\n\
-	jEdit, you can download it from <http://jedit.standmed.com>.
+	in Utilities->Global Options before using the plugin manager.

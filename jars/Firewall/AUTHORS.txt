@@ -1,1 +1,3 @@
-Dirk Moebius <dmoebius@gmx.net>
+Dirk Moebius <dmoebius@gmx.net> - wrote the plugin
+Slava Pestov <sp@gjt.org> - made a few changes to the plugin and bundled
+it with the jEdit core

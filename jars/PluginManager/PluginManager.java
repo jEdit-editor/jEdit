@@ -76,10 +76,6 @@ public class PluginManager extends EnhancedDialog
 		Box box = new Box(BoxLayout.X_AXIS);
 
 		box.add(Box.createGlue());
-		close = new JButton(jEdit.getProperty("common.close"));
-		close.addActionListener(new ActionHandler());
-		box.add(close);
-		box.add(Box.createHorizontalStrut(6));
 		remove = new JButton(jEdit.getProperty("plugin-manager"
 			+ ".remove"));
 		remove.addActionListener(new ActionHandler());
@@ -94,6 +90,10 @@ public class PluginManager extends EnhancedDialog
 			+ ".install"));
 		install.addActionListener(new ActionHandler());
 		box.add(install);
+		box.add(Box.createHorizontalStrut(6));
+		close = new JButton(jEdit.getProperty("common.close"));
+		close.addActionListener(new ActionHandler());
+		box.add(close);
 		box.add(Box.createGlue());
 
 		content.add(BorderLayout.SOUTH,box);
@@ -123,10 +123,10 @@ public class PluginManager extends EnhancedDialog
 	private JLabel name;
 	private JLabel author;
 	private JLabel version;
-	private JButton close;
 	private JButton remove;
 	private JButton update;
 	private JButton install;
+	private JButton close;
 
 	private void updateTree()
 	{

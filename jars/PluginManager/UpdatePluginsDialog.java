@@ -28,7 +28,7 @@ import org.gjt.sp.jedit.*;
 
 public class UpdatePluginsDialog extends EnhancedDialog
 {
-	public UpdatePluginsDialog(PluginManager dialog)
+	public UpdatePluginsDialog(JDialog dialog)
 	{
 		super(JOptionPane.getFrameForComponent(dialog),
 			jEdit.getProperty("update-plugins.title"),true);

@@ -36,8 +36,10 @@ public class FirewallOptionPane extends AbstractOptionPane {
 
     public FirewallOptionPane() {
         super("firewall");
-        setBorder(new EmptyBorder(5,5,5,5));
+    }
 
+    public void _init()
+    {
         // checkbox "Enable firewall authentication"
         addComponent(cEnabled = new JCheckBox(jEdit.getProperty(
             "options.firewall.enabled")));
@@ -57,7 +59,7 @@ public class FirewallOptionPane extends AbstractOptionPane {
         addComponent(jEdit.getProperty("options.firewall.nonProxy"),
             tNonProxy = new JTextField(jEdit.getProperty("firewall.nonProxyHosts"), 15));
 
-        boolean enabled = "true".equals(jEdit.getProperty("firewall.enabled"));
+        boolean enabled = jEdit.getBooleanProperty("firewall.enabled");
         cEnabled.setSelected(enabled);
         tHost.setEnabled(enabled);
         tPort.setEnabled(enabled);
@@ -83,9 +85,8 @@ public class FirewallOptionPane extends AbstractOptionPane {
      * Called when the options dialog's `OK' button is pressed.
      * This should save any properties saved in this option pane.
      */
-    public void save() {
-        jEdit.setProperty("firewall.enabled", 
-                          cEnabled.isSelected() ? "true" : "false");            
+    public void _save() {
+        jEdit.setBooleanProperty("firewall.enabled", cEnabled.isSelected());
         jEdit.setProperty("firewall.host", tHost.getText());            
         jEdit.setProperty("firewall.port", tPort.getText());
         jEdit.setProperty("firewall.user", tUser.getText());

@@ -37,10 +37,6 @@ public class FirewallPlugin extends EBPlugin {
         propertiesChanged();
     }
     
-    public void stop() {}
-    
-    public void createMenuItems(View view, Vector menus, Vector menuItems) { }
-
     public void createOptionPanes(OptionsDialog optionsDialog) {
         optionsDialog.addOptionPane(new FirewallOptionPane());
     }
@@ -54,8 +50,8 @@ public class FirewallPlugin extends EBPlugin {
 
     
     private void propertiesChanged() {
-        String enabled = jEdit.getProperty("firewall.enabled");
-        if (enabled == null || "false".equals(enabled)) {
+        boolean enabled = jEdit.getBooleanProperty("firewall.enabled");
+        if (!enabled) {
             Log.log(Log.DEBUG, this, "Firewall disabled");
             System.getProperties().remove("proxySet");
             System.getProperties().remove("proxyHost");
@@ -64,7 +60,7 @@ public class FirewallPlugin extends EBPlugin {
             System.getProperties().remove("http.proxyPort");
             System.getProperties().remove("http.nonProxyHosts");
             Authenticator.setDefault(null);
-        } else {        
+        } else {
             // set proxy host
             String host = jEdit.getProperty("firewall.host");
             if (host == null) {

@@ -37,10 +37,8 @@ jarfile: srcs;
     exec cmd_jar "cf0" @
         (glob 
             (join pkgs, "/*.class")
-            (join pkgs, "/*.gif")
             (join pkgs, "/*.html")
-            (join pkgs, "/*.props")
-            (join pkgs, "/*.txt"));
+            (join pkgs, "/*.props"));
 }
 
 "jar": jarfile;

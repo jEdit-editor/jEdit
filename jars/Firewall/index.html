@@ -23,7 +23,7 @@
 <br><a href="#config">Configuration</a>
 <br><a href="#faq">Frequently Asked Questions</a>
 <br><a href="CHANGELOG.txt">Change Log</a>
-<br><a href="LICENSE.txt">Lincense information</a>
+<br><a href="LICENSE.txt">License Information</a>
 <br>
 <hr ALIGN=CENTER WIDTH="100%" SIZE="2">
 <h2>
@@ -43,13 +43,12 @@ Open an (HTTP-) URL</li>
 <li>
 InfoViewer / Online help</li>
 </ul>
-Since the HTTP proxy stuff is a JDK 1.2 feature, 1.2 or higher is required
-(along with jEdit 2.2final).
+Since the HTTP proxy stuff is a JDK 1.2 feature, 1.2 or higher is required.
 <h2>
 Configuration<a NAME="config"></a></h2>
-After installation in the jars directory, there is a new option pane "Proxy/Firewall"
+After installation, there is a new option pane "Proxy/Firewall"
 in the "Utilties->Global Options" dialog under "Plugin Options". It should
-be pretty self-explaining.
+be pretty self-explanatory.
 <h2>
 Frequently Asked Questions<a NAME="faq"></a></h2>
 
@@ -62,10 +61,10 @@ and email me.
 <h3>
 Are there any security issues?</h3>
 Yes. The proxy password is stored <b><i>in clear text</i></b> in the file
-"$HOME/.jedit/properties" (and "$HOME/.jedit/properties~", too!) under
-the entry "firewall.password". You must take care of proper file protection
+"$HOME/.jedit/properties" under
+the entry "firewall.password". You must take care of proper protection
 of this file.
-<br>Further more, at runtime the password is possibly stored in various
+<br>Furthermore, at runtime the password is possibly stored in various
 String instances, that probably can be spied out by a memory monitor in
 some occasions.
 <p>

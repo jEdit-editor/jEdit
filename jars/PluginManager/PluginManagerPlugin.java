@@ -17,7 +17,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import org.gjt.sp.jedit.msg.EditorStarted;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import javax.swing.*;
@@ -25,55 +24,27 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Vector;
 
-public class PluginManagerPlugin extends EBPlugin
+public class PluginManagerPlugin extends EditPlugin
 {
 	public void start()
 	{
 		jEdit.addAction(new OpenAction());
+
+		// old plugin manager versions didn't delete files for real,
+		// they just shoved them in a 'backup' dir
+
+		String settings = jEdit.getSettingsDirectory();
+		if(settings == null)
+			return;
+
+		File backupDir = new File(settings,"PluginManager.backup");
+		if(backupDir.exists())
+			deleteRecursively(backupDir);
 	}
 
 	public void createMenuItems(View view, Vector menus, Vector menuItems)
 	{
-		menuItems.addElement(GUIUtilities.loadMenuItem(view,"plugin-manager"));
-	}
-
-	public void handleMessage(EBMessage msg)
-	{
-		if(msg instanceof EditorStarted)
-		{
-			String build = jEdit.getProperty("update-plugins.last-version");
-			String myBuild = jEdit.getBuild();
-			if(build == null)
-			{
-				GUIUtilities.hideSplashScreen();
-				int result = JOptionPane.showConfirmDialog(null,
-					jEdit.getProperty("first-time.message"),
-					jEdit.getProperty("first-time.title"),
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-				if(result == JOptionPane.YES_OPTION)
-					new PluginManager(null);
-			}
-			else if(myBuild.compareTo(build) > 0)
-			{
-				GUIUtilities.hideSplashScreen();
-				String[] args = {
-					MiscUtilities.buildToVersion(build),
-					MiscUtilities.buildToVersion(myBuild)
-				};
-				int result = JOptionPane.showConfirmDialog(null,
-					jEdit.getProperty("new-version.message",args),
-					jEdit.getProperty("new-version.title"),
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-				if(result == JOptionPane.YES_OPTION)
-					new PluginManager(null);
-			}
-			else if(myBuild.compareTo(build) < 0)
-				return;
-
-			jEdit.setProperty("update-plugins.last-version",myBuild);
-		}
+		menuItems.addElement(GUIUtilities.loadMenuItem("plugin-manager"));
 	}
 
 	// returns an array of all installed plugins' path names
@@ -219,7 +190,7 @@ loop:		for(int i = 0; i < plugins.length; i++)
 		return array;
 	}
 
-	public static boolean removePlugins(PluginManager dialog, String[] plugins)
+	public static boolean removePlugins(JDialog dialog, String[] plugins)
 	{
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < plugins.length; i++)
@@ -255,7 +226,7 @@ loop:		for(int i = 0; i < plugins.length; i++)
 		return ok;
 	}
 
-	public static boolean installPlugins(PluginManager dialog)
+	public static boolean installPlugins(JDialog dialog)
 	{
 		InstallPluginsDialog installPlugins = new InstallPluginsDialog(dialog);
 		String[] urls = installPlugins.getPluginURLs();
@@ -278,7 +249,7 @@ loop:		for(int i = 0; i < plugins.length; i++)
 		return false;
 	}
 
-	public static boolean updatePlugins(PluginManager dialog)
+	public static boolean updatePlugins(JDialog dialog)
 	{
 		UpdatePluginsDialog updatePlugins = new UpdatePluginsDialog(dialog);
 		PluginList.Plugin[] plugins = updatePlugins.getPlugins();
@@ -298,9 +269,9 @@ loop:		for(int i = 0; i < plugins.length; i++)
 				File srcFile = new File(path.substring(0,
 					path.length() - 4));
 
-				backup(jarFile);
+				deleteRecursively(jarFile);
 				if(srcFile.exists())
-					backup(srcFile);
+					deleteRecursively(srcFile);
 
 				urls[i] = url;
 				dirs[i] = jarFile.getParent();
@@ -334,29 +305,19 @@ loop:		for(int i = 0; i < plugins.length; i++)
 	}
 
 	// private members
-	private static File usrBackupDir;
-	private static File sysBackupDir;
 	private static File downloadDir;
 
-	private static String getBackupDir(File plugin)
-	{
-		File pluginDir = new File(plugin.getParent());
-		File backupDir = new File(pluginDir.getParent(),"PluginManager.backup");
-		backupDir.mkdirs();
-
-		return backupDir.getPath();
-	}
-
-	private static boolean removePlugin(PluginManager dialog, String plugin)
+	private static boolean removePlugin(JDialog dialog, String plugin)
 	{
 		// move JAR first
 		File jarFile = new File(plugin);
 		File srcFile = new File(plugin.substring(0,plugin.length() - 4));
 
 		boolean ok = true;
-		ok &= backup(jarFile);
+		ok &= deleteRecursively(jarFile);
+
 		if(srcFile.exists())
-			ok &= backup(srcFile);
+			ok &= deleteRecursively(srcFile);
 
 		if(!ok)
 		{
@@ -367,32 +328,35 @@ loop:		for(int i = 0; i < plugins.length; i++)
 		return ok;
 	}
 
-	private static boolean installPlugins(PluginManager dialog,
+	private static boolean deleteRecursively(File file)
+	{
+		Log.log(Log.NOTICE,PluginManagerPlugin.class,"Deleting " + file
+			+ " recursively");
+
+		boolean ok = true;
+
+		if(file.isDirectory())
+		{
+			String path = file.getPath();
+			String[] children = file.list();
+			for(int i = 0; i < children.length; i++)
+			{
+				ok &= deleteRecursively(new File(path,children[i]));
+			}
+		}
+
+		ok &= file.delete();
+
+		return ok;
+	}
+
+	private static boolean installPlugins(JDialog dialog,
 		String[] urls, String[] dirs)
 	{
 		PluginDownloadProgress progress = new PluginDownloadProgress(
 			dialog,urls,dirs);
 
 		return progress.isOK();
-	}
-
-	private static boolean backup(File file)
-	{
-		String name = file.getName();
-		String directory = getBackupDir(file);
-
-		int i = 0;
-		File backupFile;
-		// find non-existent <name>.backup.<i> file
-		while((backupFile = new File(directory,name + ".backup." + i)).exists())
-		{
-			i++;
-		}
-
-		Log.log(Log.DEBUG,PluginManagerPlugin.class,"Moving "
-			+ file + " to " + backupFile);
-
-		return file.renameTo(backupFile);
 	}
 
 	static class OpenAction extends EditAction

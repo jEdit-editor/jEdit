@@ -1,11 +1,11 @@
 # Plugin properties
 plugin.FirewallPlugin.name=Firewall
 plugin.FirewallPlugin.author=Dirk Moebius
-plugin.FirewallPlugin.version=0.2.2
+plugin.FirewallPlugin.version=0.2.3
 plugin.FirewallPlugin.docs=index.html
 
 plugin.FirewallPlugin.depend.0=jdk 1.2
-plugin.FirewallPlugin.depend.1=jedit 02.02.99.00
+plugin.FirewallPlugin.depend.1=jedit 02.06.01.00
 
 # Default firewall properties
 firewall.enabled=false

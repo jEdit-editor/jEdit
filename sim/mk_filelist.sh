@@ -6,6 +6,7 @@
 echo jedit.jar > sim/jedit-program
 echo jars/PluginManager.jar >> sim/jedit-program
 echo jars/LatestVersion.jar >> sim/jedit-program
+echo jars/EditBuddy.jar >> sim/jedit-program
 find modes -name \*.xml >> sim/jedit-program
 find modes -name \*.dtd >> sim/jedit-program
 find doc -type f -name \*.txt >> sim/jedit-program
@@ -41,6 +42,7 @@ find gnu -type f -name \*.java -print >> sim/jedit-source
 find org -type f \( -name \*.java -o -name \*.gif -o -name \*.props -o -name \*.jpg \) >> sim/jedit-source
 find jars/PluginManager -type f -print >> sim/jedit-source
 find jars/LatestVersion -type f -print >> sim/jedit-source
+find jars/EditBuddy -type f -print >> sim/jedit-source
 echo makefile.jmk >> sim/jedit-source
 echo clean.sh >> sim/jedit-source
 echo sim/*.sh >> sim/jedit-source

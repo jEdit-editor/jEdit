@@ -1,0 +1,48 @@
+### plugin properties
+plugin.EditBuddyPlugin.name=Edit Buddy
+plugin.EditBuddyPlugin.author=Slava Pestov
+plugin.EditBuddyPlugin.version=0.1
+plugin.EditBuddyPlugin.docs=EditBuddy.html
+plugin.EditBuddyPlugin.depend.0=jedit 02.06.01.00
+plugin.EditBuddyPlugin.depend.1=plugin PluginManagerPlugin 0.5.6
+
+### common wizard strings
+edit-buddy.prev=Previous
+edit-buddy.next=Next
+edit-buddy.finish=Finish
+
+### first-time wizard
+edit-buddy.first-time.title=Running jEdit for the first time
+edit-buddy.first-time.caption=jEdit initial setup wizard
+
+### can't store as an HTML resource, since this text is dynamic
+edit-buddy.first-time.settings-dir.text=<h2>The settings directory</h2>\n\
+	jEdit has created the directory\n\
+	<b>"{0}"</b> for storing configuration files.\n\
+	Editing these files by hand is seldom necessary, but knowing\n\
+	about them still helps in many situations.<p>\n\
+	For more detailed information about the settings directory, see\n\
+	Chapter 8 of the jEdit user guide.
+
+edit-buddy.first-time.settings-dir.files=jars/ macros/ modes/\n\
+	PluginManager.download/ sessions/ abbrevs history mode-cache\n\
+	properties server
+
+### new-version wizard
+edit-buddy.new-version.title=New jEdit version installed
+edit-buddy.new-version.caption=jEdit update wizard
+edit-buddy.new-version.text=You have just upgraded from jEdit {0} to {1}.<p>\n\
+	\n\
+	Because the plugin API changes over time, older plugins might have\n\
+	problems running under newer jEdit releases. Therefore, it is a good\n\
+	idea to update your plugins to their latest versions after installing\n\
+	a new version of jEdit.<p>\n\
+	\n\
+	This wizard will offer to update your plugins, and give pointers to\n\
+	what is new in this jEdit release.\n\
+	<ul>\n\
+	<li>The <b>Next</b> button goes to the next page of the wizard\n\
+	<li>The <b>Previous</b> button goes back\n\
+	<li>The <b>Cancel</b> button will close the wizard before it has been\n\
+	completed\n\
+	</ul>
