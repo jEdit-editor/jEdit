@@ -1,5 +1,5 @@
 /*
- * EditAction.java - Swing action subclass
+ * EditAction.java - jEdit action listener
  * Copyright (C) 1998, 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -50,9 +50,7 @@ import org.gjt.sp.util.Log;
  * <li><code><i>internal name</i>.label</code> - the label of the
  * action appearing in the menu bar or tooltip of a tool bar button
  * <li><code><i>internal name</i>.shortcut</code> - the keyboard
- * shortcut of the action. The action must be in a menu for this
- * to work; you can't have keyboard-only actions. Format is described
- * in documentation for the <code>GUIUtilities</code> class.
+ * shortcut of the action
  * </ul>
  *
  * @author Slava Pestov
@@ -161,21 +159,49 @@ public abstract class EditAction implements ActionListener
 	// private members
 	private String name;
 
+	/**
+	 * jEdit wraps all EditActions in this wrapper so that they can
+	 * be recorded to macros and repeated. The wrapper also handles
+	 * autoloading of built-in actions.<p>
+	 *
+	 * This class should never be used directly. The
+	 * <code>jEdit.addAction()</code> method creates instances of
+	 * this class automatically.
+	 */
 	public static class Wrapper extends EditAction
 		implements InputHandler.NonRepeatable,
 		InputHandler.NonRecordable
 	{
+		/**
+		 * Creates a new wrapper that will autoload the built-in
+		 * action with the specified name.
+		 * @param name
+		 */
 		public Wrapper(String name)
 		{
 			super(name);
 		}
 
+		/**
+		 * Creates a new wrapper that will autoload the specified
+		 * plugin action.
+		 * @param action The plugin action
+		 */
 		public Wrapper(EditAction action)
 		{
 			super(action.name);
 			this.action = action;
 		}
 
+		/**
+		 * Called when the user selects this action from a menu.
+		 * It passes the action through the
+		 * <code>InputHandler.executeAction()</code> method,
+		 * which performs any recording or repeating. It also
+		 * loads the action if necessary.
+		 *
+		 * @param evt The action event
+		 */
 		public void actionPerformed(ActionEvent evt)
 		{
 			View view = EditAction.getView(evt);
@@ -188,6 +214,10 @@ public abstract class EditAction implements ActionListener
 				textArea,evt.getActionCommand());
 		}
 
+		/**
+		 * Delegates to the underlying action. Note that
+		 * built-in/autoloaded actions cannot be toggles.
+		 */
 		public boolean isToggle()
 		{
 			if(action == null)
@@ -196,6 +226,10 @@ public abstract class EditAction implements ActionListener
 				return action.isToggle();
 		}
 
+		/**
+		 * Delegates to the underlying action. Note that
+		 * built-in/autoloaded actions cannot be toggles.
+		 */
 		public boolean isSelected(Component comp)
 		{
 			if(action == null)
@@ -207,10 +241,14 @@ public abstract class EditAction implements ActionListener
 		// private members
 		private EditAction action;
 
+		/**
+		 * Called by <code>actionPerformed()</code> if the
+		 * action is null. Loads the action.
+		 */
 		private void loadAction()
 		{
 			String className = "org.gjt.sp.jedit.actions."
-				+ getName().replace('-','_');
+				+ name.replace('-','_');
 
 			Log.log(Log.DEBUG,this,"Loading action " + name +
 				" (class=" + className + ")");
@@ -238,6 +276,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  1999/12/07 06:30:48  sp
+ * Compile errors fixed, new 'new view' icon
+ *
  * Revision 1.17  1999/12/06 00:06:14  sp
  * Bug fixes
  *
@@ -267,12 +308,5 @@ public abstract class EditAction implements ActionListener
  *
  * Revision 1.8  1999/03/21 08:37:15  sp
  * Slimmer action system, history text field update
- *
- * Revision 1.7  1999/03/21 07:53:14  sp
- * Plugin doc updates, action API change, new method in MiscUtilities, new class
- * loader, new plugin interface
- *
- * Revision 1.6  1999/03/16 04:34:45  sp
- * HistoryTextField updates, moved generate-text to a plugin, fixed spelling mistake in EditAction Javadocs
  *
  */

@@ -7,6 +7,7 @@ JEDIT VERSION HISTORY
 - Buffers are only loaded when necessary. This improves jEdit's
   perceived speed when opening lots of files, etc
 - Possible workaround for buggy focus handling
+- An even better 'New View' icon (George Latkiewicz)
 
 + Bug Fixes
 
@@ -17,6 +18,7 @@ JEDIT VERSION HISTORY
 - Reload command didn't work (since 2.2pre7)
 - jEdit now ignores empty command line parameters - so the windows batch
   file should work properly now (since 2.2pre7)
+- Buffer.java and EditAction.java didn't compile with javac (since 2.2pre7)
 
 * Version 2.2pre7
 

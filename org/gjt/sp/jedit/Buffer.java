@@ -925,45 +925,49 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			System.arraycopy(lines,0,newlines,0,lines.length);
 			lines = newlines;
 		}
+	}
 
-		/*
-		 * This is not very obvious in the Swing docs, but
-		 * elements[i].end == elements[i+1].start. This
-		 * method takes advantage of that fact.
-		 *
-		 * Also, we assume that the default root element is
-		 * an instance of AbstractDocument.BranchElement.
-		 * This is not specified anywhere in the Swing docs,
-		 * so it could break! However, there is no other way
-		 * to do it as far as I can see.
-		 *
-		 * Notice that we also interleave the buffer-local
-		 * property code in.
-		 */
-		void createElements() throws BadLocationException
+	/*
+	 * This is not very obvious in the Swing docs, but
+	 * elements[i].end == elements[i+1].start. This
+	 * method takes advantage of that fact.
+	 *
+	 * Also, we assume that the default root element is
+	 * an instance of AbstractDocument.BranchElement.
+	 * This is not specified anywhere in the Swing docs,
+	 * so it could break! However, there is no other way
+	 * to do it as far as I can see.
+	 *
+	 * Notice that we also interleave the buffer-local
+	 * property code in.
+	 */
+	private void createElements(LoadHelper lines)
+		throws BadLocationException
+	{
+		int last = lines.last;
+
+		Element map = getDefaultRootElement();
+		Element[] elements = new Element[last];
+		for(int i = 0; i < last; i++)
 		{
-			Element map = getDefaultRootElement();
-			Element[] elements = new Element[last];
-			for(int i = 0; i < last; i++)
+			int start;
+			if(i == 0)
+				start = 0;
+			else
+				start = lines.lines[i-1];
+			int end = lines.lines[i];
+			elements[i] = createLeafElement(map,null,
+				start,end);
+			if(i < 10)
 			{
-				int start;
-				if(i == 0)
-					start = 0;
-				else
-					start = lines[i-1];
-				int end = lines[i];
-				elements[i] = createLeafElement(map,null,
-					start,end);
-				if(i < 10)
-				{
-					String line = getText(start,
-						end - start);
-					processProperty(line);
-				}
+				String line = getText(start,
+					end - start);
+				processProperty(line);
 			}
-			((BranchElement)map).replace(0,map.getElementCount(),
-				elements);
 		}
+
+		((BranchElement)map).replace(0,map.getElementCount(),
+			elements);
 	}
 
 	/*
@@ -983,8 +987,8 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 *   and we don't want to StringBuffer to enlarge 1000000 times for
 	 *   large URLs
 	 *
-	 * - We read the stream in IOBUFSIZE (default: 32k) blocks, and
-	 *   loop over the read characters looking for line breaks.
+	 * - We read the stream in IOBUFSIZE (= 32k) blocks, and loop over
+	 *   the read characters looking for line breaks.
 	 *   - a \r or \n causes a line to be added to the model, and appended
 	 *     to the string buffer
 	 *   - a \n immediately following an \r is ignored; so that Windows
@@ -1172,7 +1176,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			remove(0,getLength());
 
 			getContent().insertString(0,sbuf.toString());
-			lines.createElements();
+			createElements(lines);
 
 			setFlag(NEW_FILE,false);
 
@@ -1550,6 +1554,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.111  1999/12/07 06:30:48  sp
+ * Compile errors fixed, new 'new view' icon
+ *
  * Revision 1.110  1999/12/05 03:01:05  sp
  * Perl token marker bug fix, file loading is deferred, style option pane fix
  *
