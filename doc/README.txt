@@ -136,7 +136,10 @@ actually a Java bug, or a well-known problem.
 jEdit depends on, and comes bundled with the following libraries:
 
 - gnu.regexp by the Free Software Foundation. This is used to implement
-  regular expression search and replace, among other things.
+  regular expression search and replace, among other things. jEdit uses
+  gnu.regexp 1.1.3, with the following minor change:
+
+  - REMatch.getSubCount() method added
 
   The gnu.regexp homepage is <http://www.cacas.org/java/gnu/regexp/>.
 

@@ -118,6 +118,12 @@ public class BeanShell
 
 	/**
 	 * Runs a BeanShell script.
+	 * @param view The view
+	 * @param path The path name of the script. May be a jEdit VFS path
+	 * @param ownNamespace Macros are run in their own namespace, startup
+	 * scripts are run on the global namespace
+	 * @param rethrowBshErrors Rethrow BeanShell errors, in addition to
+	 * showing an error dialog box
 	 * @since jEdit 2.7pre3
 	 */
 	public static void runScript(View view, String path,
@@ -133,41 +139,73 @@ public class BeanShell
 			// user cancelled???
 			return;
 		}
-				
-		if(buffer != null && buffer.isLoaded())
-		{
-			StringBuffer buf = new StringBuffer();
-			try
-			{
-				buf.append(buffer.getText(0,buffer.getLength()));
-			}
-			catch(BadLocationException e)
-			{
-				// XXX
-				throw new InternalError();
-			}
 
-			// Ugly workaround for a BeanShell bug
-			buf.append("\n");
-
-			in = new StringReader(buf.toString());
-		}
-		else
+		try
 		{
-			try
+			if(buffer != null && buffer.isLoaded())
+			{
+				StringBuffer buf = new StringBuffer();
+				try
+				{
+					buf.append(buffer.getText(0,buffer.getLength()));
+				}
+				catch(BadLocationException e)
+				{
+					// XXX
+					throw new InternalError();
+				}
+
+				// Ugly workaround for a BeanShell bug
+				buf.append("\n");
+
+				in = new StringReader(buf.toString());
+			}
+			else
 			{
 				in = new BufferedReader(new InputStreamReader(
 					vfs._createInputStream(session,path,
 					true,view)));
-
 			}
-			catch(IOException e)
+
+			runScript(view,path,in,ownNamespace,rethrowBshErrors);
+		}
+		catch(IOException e)
+		{
+			Log.log(Log.ERROR,BeanShell.class,e);
+			GUIUtilities.error(view,"read-error",
+				new String[] { path, e.toString() });
+			return;
+		}
+		finally
+		{
+			try
 			{
-				GUIUtilities.error(view,"ioerror",
-					new String[] { e.getMessage() });
-				return;
+				vfs._endVFSSession(session,view);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,BeanShell.class,io);
+				GUIUtilities.error(view,"read-error",
+					new String[] { path, io.toString() });
 			}
 		}
+	}
+
+	/**
+	 * Runs a BeanShell script.
+	 * @param view The view
+	 * @param path For error reporting only
+	 * @param in The reader to read the script from
+	 * @param ownNamespace Macros are run in their own namespace, startup
+	 * scripts are run on the global namespace
+	 * @param rethrowBshErrors Rethrow BeanShell errors, in addition to
+	 * showing an error dialog box
+	 * @since jEdit 3.2pre4
+	 */
+	public static void runScript(View view, String path, Reader in,
+		boolean ownNamespace, boolean rethrowBshErrors)
+	{
+		Log.log(Log.MESSAGE,BeanShell.class,"Running script " + path);
 
 		NameSpace namespace = interp.getNameSpace();
 		if(ownNamespace)
@@ -185,15 +223,6 @@ public class BeanShell
 			}
 
 			running = true;
-
-			/* if(ownNamespace)
-			{
-				// terrible hack
-				interp.eval(new InputStreamReader(
-					BeanShell.class.getResourceAsStream(
-					"/org/gjt/sp/jedit/jedit.bsh")),
-					namespace,"jedit.bsh");
-			} */
 
 			interp.eval(in,namespace,path);
 		}
@@ -215,17 +244,6 @@ public class BeanShell
 		finally
 		{
 			running = false;
-
-			try
-			{
-				vfs._endVFSSession(session,view);
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,BeanShell.class,io);
-				GUIUtilities.error(view,"ioerror",
-					new String[] { io.getMessage() });
-			}
 		}
 	}
 
@@ -369,12 +387,14 @@ public class BeanShell
 		{
 			interp = new Interpreter();
 			interp.setVariable("classLoader",new JARClassLoader());
-			interp.eval(new BufferedReader(new InputStreamReader(
-				BeanShell.class.getResourceAsStream("jedit.bsh"))));
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+				BeanShell.class.getResourceAsStream("jedit.bsh")));
+
+			runScript(null,"jedit.bsh",in,false,false);
 		}
 		catch(Throwable t)
 		{
-			Log.log(Log.ERROR,BeanShell.class,"Error loading jedit.bsh from JAR file:");
 			Log.log(Log.ERROR,BeanShell.class,t);
 			System.exit(1);
 		}

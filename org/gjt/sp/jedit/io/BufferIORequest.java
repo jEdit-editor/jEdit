@@ -176,11 +176,19 @@ public class BufferIORequest extends WorkRequest
 				buffer.putProperty(Buffer.LINESEP,lineSeparator);
 				buffer.setNewFile(false);
 			}
+			catch(CharConversionException ch)
+			{
+				Log.log(Log.ERROR,this,ch);
+				Object[] pp = { path,
+					jEdit.getProperty("buffer.encoding"),
+					ch.toString() };
+				VFSManager.error(view,"encoding-error",pp);
+			}
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
-				Object[] args = { io.toString() };
-				VFSManager.error(view,"ioerror",args);
+				Object[] pp = { path, io.toString() };
+				VFSManager.error(view,"read-error",pp);
 			}
 
 			if(jEdit.getBooleanProperty("persistentMarkers"))
@@ -223,8 +231,8 @@ public class BufferIORequest extends WorkRequest
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
-				String[] args = { io.getMessage() };
-				VFSManager.error(view,"ioerror",args);
+				String[] pp = { path, io.toString() };
+				VFSManager.error(view,"read-error",pp);
 			}
 			catch(WorkThread.Abort a)
 			{
@@ -554,8 +562,8 @@ public class BufferIORequest extends WorkRequest
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
-				args[0] = io.toString();
-				VFSManager.error(view,"ioerror",args);
+				String[] pp = { path, io.toString() };
+				VFSManager.error(view,"write-error",pp);
 			}
 			finally
 			{
@@ -585,8 +593,8 @@ public class BufferIORequest extends WorkRequest
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
-				String[] args = { io.getMessage() };
-				VFSManager.error(view,"ioerror",args);
+				String[] pp = { path, io.toString() };
+				VFSManager.error(view,"write-error",pp);
 			}
 			catch(WorkThread.Abort a)
 			{
@@ -740,8 +748,8 @@ public class BufferIORequest extends WorkRequest
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
-				Object[] args = { io.toString() };
-				VFSManager.error(view,"ioerror",args);
+				String[] pp = { path, io.toString() };
+				VFSManager.error(view,"read-error",pp);
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -766,8 +774,8 @@ public class BufferIORequest extends WorkRequest
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
-				String[] args = { io.getMessage() };
-				VFSManager.error(view,"ioerror",args);
+				String[] pp = { path, io.toString() };
+				VFSManager.error(view,"read-error",pp);
 			}
 			catch(WorkThread.Abort a)
 			{

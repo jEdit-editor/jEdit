@@ -27,6 +27,9 @@ JEDIT 3.2 VERSION HISTORY
   Note that an authorization key is still required so this is not a
   security risk. jEditLauncher, jEditOpener and other code that
   interfaces with the edit server will need to be updated.
+- Running jEdit with the -bshclient switch will read a BeanShell script
+  from standard input and send it to an already running instance of
+  jEdit for evaluation.
 
 + Enhancements
 
@@ -36,14 +39,13 @@ JEDIT 3.2 VERSION HISTORY
 - Updated macro guide (John Gellene)
 - SGML documentation has been converted to XML. You now need the
   DocBook-XML 4.1.2 DTD to parse it
-- The runCommandInConsole() method has been moved from the 'Console
-  Plugin' macros to the jedit.bsh file that is run on jEdit startup
 - Source code for three sample plugins now included with the jEdit
   source download
 - Updated set of sample macros (John Gellene)
 - Improved XML and XSL modes (Ollie Rutherfurd)
 - The edit server now explicitly uses the UTF8 encoding when reading
   and writing from/to the socket, instead of using the JVM default
+- Improved reporting of I/O errors throughout the editor
 
 + Bug Fixes
 
@@ -62,6 +64,17 @@ JEDIT 3.2 VERSION HISTORY
 - A few bugs that could occur with obscure combinations of command-line
   parameters have been fixed. A side-effect of this is that the -nogui
   command line switch is no longer available.
+
++ API Changes
+
+- New method: BeanShell.runScript(View, String path, Reader in, boolean,
+  boolean); like the other form of runScript() but reads the script from
+  the Reader and only uses the path for error reporting purposes. This
+  means plugins can load arbitriary code on startup. Console 3.0 uses
+  this.
+- The runCommandInConsole() method has been moved from the 'Console
+  Plugin' macros to the Console plugin itself. Install Console 3.0 or
+  later for these macros to work.
 
 * Version 3.2pre3
 

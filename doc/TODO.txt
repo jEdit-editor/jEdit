@@ -1,6 +1,7 @@
 TO DO
 
 - FTP plugin: soft links???
+- FTP plugin: make a 3.2 version with better error messages?
 
 - console plugin, version 3.0:
   - sending processes to background:
@@ -21,21 +22,18 @@ TO DO
     - above always possible; option for not having to use % prefix
   - wild cards
   - what about \"foo\"?
-  - console.bsh script has runCommandInConsole() method
   - some % commands can be used without % prefix; clear, cd, pwd
 
 + before pre4:
 
+- don't invoke updateUI unnecessarily
 - jEditLauncher
 - get web start to work
 - fix 'is not a function name' when running openjade
 - installing source for already installed plugins
-- catch MalformedInputException and display a better error message
 
 + before 3.2final:
 
-- jedit -client reads BeanShell code from standard input and sends it
-  to server
 - custom splitter control?
 - finish persistent splits: resize splits to make them in the middle
 - documentation
@@ -44,7 +42,6 @@ TO DO
   - formatting problems in user's guide in table cells
   - Include John's upcoming plugin guide
   - document new edit server
-  - jedit.bsh routines
   - document differences between web start and stand-alone version
 - encoding option in VFS browser
 - help viewer: links to .txt files?

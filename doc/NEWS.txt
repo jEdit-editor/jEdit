@@ -1,6 +1,7 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.1 AND 3.2
 
-- new edit server
+- don't forget to document jEditLauncher, plugin guide, improved encoding
+  support, BeanShell 1.2 if it ends up being included
 
 * Markers
 
@@ -137,6 +138,11 @@ BeanShell code to execute. On multi-user machines, this does not open a
 security hole, assuming file permissions are set up correctly, because
 clients must first send an authorization key stored in the user settings
 directory.
+
+If you are technically-inclined want to try this feature out, run jEdit
+with the '-bshclient' command line switch while another instance is
+already running. This will read a BeanShell script from standard input
+and send it to the already running instance.
 
 * Sample plugins
 

@@ -27,6 +27,12 @@
      See <xref linkend="starting" />.</entry>
     </row>
     <row>
+     <entry>-bshclient</entry>
+     <entry>This is an advanced feature. It reads a BeanShell script from
+     standard input and sends it to an already running instance of jEdit for
+     evaluation.</entry>
+    </row>
+    <row>
      <entry>-newview</entry>
      <entry>Only valid when connecting to another instance.
      Instead of opening files in an existing view, they will be opened

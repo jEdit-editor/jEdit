@@ -39,31 +39,3 @@ print(arg)
 			Log.log(Log.WARNING,BeanShell.class,String.valueOf(arg));
 	}
 }
-
-/* This is a generic function that executes the specified command in the
- * console. This saves a bit of code duplication in macros that use the
- * console. Stuff like this doesn't really belong in the core at all...
- * In the future, plugins should be allowed to run BeanShell scripts on
- * startup. */
-runCommandInConsole(view,command)
-{
-	// firstly, check if the plugin is installed.
-	if(jEdit.getPlugin("console.ConsolePlugin") == null)
-	{
-		Macros.error(view,"You must install the Console plugin"
-			+ " to use the runCommandInConsole() function.");
-		return;
-	}
-
-	// Open the console if it isn't already open
-	view.getDockableWindowManager().addDockableWindow("console");
-
-	// Obtain the console instance
-	console = view.getDockableWindowManager().getDockableWindow("console");
-
-	// Ensure we are using the console shell
-	console.setShell("Console");
-
-	// Call its run() method
-	console.run(command);
-}

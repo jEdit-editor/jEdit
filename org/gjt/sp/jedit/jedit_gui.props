@@ -619,6 +619,39 @@ ioerror.title=I/O Error
 # {0} - the error message
 ioerror.message=An I/O error occurred ({0})
 
+# Read error
+read-error.title=Read Error
+# {0} - the path name {1} - the error message
+read-error.message=The file {0}\n\
+	could not be loaded due to an I/O error.\n\
+	({1})
+
+# Write error
+write-error.title=Write Error
+# {0} - the path name {1} - the error message
+write-error.message=The file {0}\n\
+	could not be saved due to an I/O error.\n\
+	({1})
+
+# Directory error
+directory-error.title=Directory Error
+# {0} - the path name {1} - the error message
+directory-error.message=The directory {0}\n\
+	could not be listed due to an I/O error.\n\
+	({1})
+
+# Character conversion error, {0}=path, {1}=current encoding, {2}=error message
+encoding-error.title=Incompatible Encoding
+encoding-error.message=The file {0}\n\
+	could not be loaded with the "{1}" encoding.\n\
+	({2})\n\
+	\n\
+	Try changing the file encoding in the Loading and Saving\n\
+	pane of the Utilities->Global Options dialog box.\n\
+	\n\
+	If you are really stuck and don't know which encoding to use,\n\
+	try either "8859_1" or "ASCII".
+
 # Cannot open directory dialog box
 open-directory.title=Cannot Open Directory
 open-directory.message={0} is a directory.\n\

@@ -87,7 +87,8 @@ public class jEdit
 
 		// Parse command line
 		boolean endOpts = false;
-		boolean newView = false;
+		boolean newView = false; // only used by EditServer client
+		boolean client = false; // only used by EditServer client
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
@@ -135,6 +136,8 @@ public class jEdit
 					noStartupScripts = true;
 				else if(arg.equals("-newview"))
 					newView = true;
+				else if(arg.equals("-bshclient"))
+					client = true;
 				else
 				{
 					System.err.println("Unknown option: "
@@ -167,8 +170,25 @@ public class jEdit
 				out.write(String.valueOf(key));
 				out.write('\n');
 
-				String script = makeServerScript(restore,newView,args);
-				out.write(script);
+				if(client)
+				{
+					// read script from standard input, in UTF8!!
+					in = new BufferedReader(new InputStreamReader(
+						System.in,"UTF8"));
+					char[] buf = new char[1024];
+					int count;
+					while((count = in.read(buf,0,buf.length)) != -1)
+					{
+						out.write(buf,0,count);
+					}
+
+					in.close();
+				}
+				else
+				{
+					String script = makeServerScript(restore,newView,args);
+					out.write(script);
+				}
 
 				out.close();
 
@@ -188,6 +208,12 @@ public class jEdit
 					+ " know what this means, don't worry.");
 				Log.log(Log.NOTICE,jEdit.class,e);
 			}
+		}
+		else if(client)
+		{
+			System.err.println("The -bshclient switch can only be"
+				+ "  used if an edit server is already running.");
+			System.exit(1);
 		}
 
 		// MacOS X GUI hacks
@@ -2006,6 +2032,9 @@ public class jEdit
 		System.out.println("	-background: Run in background mode");
 		System.out.println();
 		System.out.println("	-newview: Open new view if connecting to edit server");
+		System.out.println("	-bshclient: Send BeanShell script read from"
+			+ " standard input");
+		System.err.println("		to edit server (for developers)");
 
 		System.out.println();
 		System.out.println("To set minimum activity log level,"
@@ -2344,7 +2373,6 @@ public class jEdit
 				continue;
 
 			String path = new File(directory,snippet).getPath();
-			Log.log(Log.DEBUG,jEdit.class,"Running script: " + path);
 
 			BeanShell.runScript(null,path,false,false);
 		}

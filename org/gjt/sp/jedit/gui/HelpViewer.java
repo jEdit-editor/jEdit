@@ -202,8 +202,8 @@ public class HelpViewer extends JFrame implements EBComponent
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,this,io);
-			String[] args = { io.getMessage() };
-			GUIUtilities.error(this,"ioerror",args);
+			String[] args = { url, io.toString() };
+			GUIUtilities.error(this,"read-error",args);
 			return;
 		}
 
