@@ -23,8 +23,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.EditAction;
-import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.*;
 
 /**
  * Mega hackery in this class.
@@ -35,17 +34,17 @@ import org.gjt.sp.jedit.GUIUtilities;
  */
 public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
-	public EnhancedCheckBoxMenuItem(String label, String keyBinding,
-		EditAction action, String actionCommand)
+	public EnhancedCheckBoxMenuItem(String label, EditAction action,
+		String actionCommand)
 	{
 		super(label);
-		this.keyBinding = keyBinding;
 		this.action = action;
 
 		if(action != null)
 		{
 			setEnabled(true);
 			addActionListener(action);
+			keyBindingProp = action.getName() + ".shortcut";
 		}
 		else
 			setEnabled(false);
@@ -57,6 +56,9 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	public Dimension getPreferredSize()
 	{
 		Dimension d = super.getPreferredSize();
+
+		String keyBinding = getKeyBinding();
+
 		if(keyBinding != null)
 		{
 			d.width += (getToolkit().getFontMetrics(acceleratorFont)
@@ -68,6 +70,9 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	public void paint(Graphics g)
 	{
 		super.paint(g);
+
+		String keyBinding = getKeyBinding();
+
 		if(keyBinding != null)
 		{
 			g.setFont(acceleratorFont);
@@ -90,10 +95,21 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 
 	// private members
 	private String keyBinding;
+	private String keyBindingProp;
 	private EditAction action;
 	private static Font acceleratorFont;
 	private static Color acceleratorForeground;
 	private static Color acceleratorSelectionForeground;
+
+	private String getKeyBinding()
+	{
+		if(action == null)
+			return null;
+		else if(keyBinding == null && getActionCommand() == null)
+			return jEdit.getProperty(keyBindingProp);
+		else
+			return keyBinding;
+	}
 
 	static
 	{

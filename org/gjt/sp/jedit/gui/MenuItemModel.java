@@ -45,7 +45,6 @@ public class MenuItemModel
 		}
 
 		label = jEdit.getProperty(name.concat(".label"));
-		shortcut = jEdit.getProperty(name.concat(".shortcut"));
 		if(label == null)
 			label = name;
 
@@ -67,6 +66,8 @@ public class MenuItemModel
 			{
 				icon = new ImageIcon(url);
 				toolTip = GUIUtilities.prettifyMenuLabel(label);
+				String shortcut = jEdit.getProperty(name
+					+ ".shortcut");
 				if(shortcut != null)
 					toolTip = toolTip + " (" + shortcut + ")";
 			}
@@ -77,10 +78,9 @@ public class MenuItemModel
 	{
 		JMenuItem mi;
 		if(action != null && action.isToggle())
-			mi = new EnhancedCheckBoxMenuItem(label,shortcut,
-				action,arg);
+			mi = new EnhancedCheckBoxMenuItem(label,action,arg);
 		else
-			mi = new EnhancedMenuItem(label,shortcut,action,arg);
+			mi = new EnhancedMenuItem(label,null,action,arg);
 
 		if(mnemonic != '\0')
 			mi.setMnemonic(mnemonic);
@@ -98,7 +98,6 @@ public class MenuItemModel
 	protected String name;
 	protected String label;
 	protected String toolTip;
-	protected String shortcut;
 	protected char mnemonic;
 	protected EditAction action;
 	protected String arg;

@@ -288,7 +288,7 @@ public class Log
 		try
 		{
 			logDocument.insertString(logDocument.getLength(),
-				urgencyString + source + ": " + message + "\n",
+				urgencyString + source + ": " + message,
 				null);
 		}
 		catch(BadLocationException bl)
@@ -330,6 +330,9 @@ public class Log
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/02/24 04:13:06  sp
+ * Bug fixes, misc updates, etc
+ *
  * Revision 1.9  2000/02/20 03:14:13  sp
  * jEdit.getBrokenPlugins() method
  *

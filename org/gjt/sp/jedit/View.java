@@ -1139,16 +1139,14 @@ public class View extends JFrame implements EBComponent
 			String name = plugin.getClass().getName();
 
 			String label = jEdit.getProperty("plugin." + name + ".name");
-			String version = jEdit.getProperty("plugin." + name + ".version");
 			String docs = jEdit.getProperty("plugin." + name + ".docs");
 			if(docs != null)
 			{
 				java.net.URL docsURL = plugin.getClass().getResource(docs);
-				if(label != null && version != null && docsURL != null)
+				if(label != null && docsURL != null)
 				{
-					help.add(new EnhancedMenuItem(label + " ("
-						+ version + ")",null,action,
-						docsURL.toString()));
+					help.add(new EnhancedMenuItem(label,
+						null,action,docsURL.toString()));
 				}
 			}
 		}
@@ -1348,6 +1346,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.140  2000/02/24 04:13:05  sp
+ * Bug fixes, misc updates, etc
+ *
  * Revision 1.139  2000/02/12 03:56:58  sp
  * 2.3pre5 stuff
  *

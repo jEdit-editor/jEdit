@@ -117,9 +117,6 @@ edit=undo \
      select-all \
      select-none \
      - \
-     goto-line \
-     select-line-range \
-     - \
      word-count \
      - \
      complete-word \
@@ -139,8 +136,6 @@ paste.label=$Paste
 paste-previous.label=Paste Pre$vious...
 select-all.label=Select $All
 select-none.label=Select $None
-goto-line.label=$Go to Line...
-select-line-range.label=Select L$ine Range...
 word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
@@ -173,19 +168,23 @@ box-comment.label=Box Comment
 block-comment.label=Block Comment
 
 ### Line menu
-line=indent-lines \
+line=goto-line \
+     select-line-range \
+     - \
+     indent-lines \
      goto-end-indent \
-     scroll-line \
+     shift-left \
+     shift-right \
      - \
      delete-line \
      delete-start-line \
      delete-end-line \
      - \
      join-lines \
-     - \
-     shift-left \
-     shift-right
+     scroll-line
 line.label=Lines
+goto-line.label=Go to Line...
+select-line-range.label=Select Line Range...
 indent-lines.label=Indent Selected Lines
 goto-end-indent.label=Go to End of Indent
 scroll-line.label=Scroll to Current Line

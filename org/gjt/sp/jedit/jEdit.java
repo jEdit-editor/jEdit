@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.03.99.00";
+		return "02.03.07.00";
 	}
 
 	/**
@@ -1791,6 +1791,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.193  2000/02/24 04:13:06  sp
+ * Bug fixes, misc updates, etc
+ *
  * Revision 1.192  2000/02/20 03:14:13  sp
  * jEdit.getBrokenPlugins() method
  *

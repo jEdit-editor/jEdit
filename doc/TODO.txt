@@ -1,26 +1,30 @@
 JEDIT TO DO
 
-------- 2.3 to do -------
-
 - Focus breaks when saving or switching buffers
 
-------- 2.4 to do -------
-
-- Double-click drag doesn't work backwards
-- Option pane for changing mode-specific tab size, indent, comment
-  characters, and so on
-- EditAction.isEnabled() method
-- Check file modification status on focus and buffer switch
-  - Buffer.checkModStatus() method
+- C/S+TAB to navigate around view's components
+- Directory search: current buffer's dir is the default
+- Incremental search
+- View tiling
+- Keystroke to switch between two must recently edited buffers
 - Having more than 2 split panes should be possible
 - load/saveCaretInfo() save data in split.n.<property name> so that we
   don't have to unsplit when switching buffers, closing, reloading, etc
   - XXX: this will make the caret handling in split() a bit tricky
   - load/saveCaretInfo(int n) -- n=-1 for temporary saving, eg in
     split()
+- Check file modification status on focus and buffer switch
+  - Buffer.checkModStatus() method
+- Double-click drag doesn't work backwards
+- 'Uncomment' command that removes comment strings from selected text
+
+- Remove 'Clear Activity Log', 'Save Activity Log' actions, make them
+  buttons in the activity log window
+- Option pane for changing mode-specific tab size, indent, comment
+  characters, and so on
+- EditAction.isEnabled() method -- write new EditAction.Model class
 - If there is > 1 possible match, complete-word should list them in a
   dialog box
-- 'Uncomment' command that removes comment strings from selected text
 - Write an InputHandler subclass that displays the current repeat count,
   if any, in the view's status bar
 - Plugin devel manual needs more work:
@@ -31,17 +35,11 @@ JEDIT TO DO
   - each section should have some sample source code
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
   to 'Advanced Features'
-- Menu bar and tool bar loading needs to work outside of views
-- Changing key bindings should update menu item labels
-
-------- jEdit 3.0 to do -------
-
 - Integrate XMode
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
-- Maybe write custom 'document' class; Swing implementation has a few
+- Write custom 'document' class; Swing implementation has a few
   problems. With a custom document, folding and such becomes much cleaner
 - i18n support - bidi, input methods, locale-sensitive GUI, etc
-- Hex file editing
 
 ------- JDK 1.2 -------
 
