@@ -1924,6 +1924,7 @@ public class jEdit
 		addAction("insert-char");
 		addAction("insert-literal");
 		addAction("input");
+		addAction("io-progress-monitor");
 		addAction("join-lines");
 		addAction("load-session");
 		addAction("locate-bracket");
@@ -2312,6 +2313,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.256  2000/07/22 06:22:27  sp
+ * I/O progress monitor done
+ *
  * Revision 1.255  2000/07/22 03:27:03  sp
  * threaded I/O improved, autosave rewrite started
  *

@@ -56,6 +56,11 @@ public class IORequest extends WorkRequest
 	public static final int SAVE = 1;
 
 	/**
+	 * An autosave request. Only supported for local files.
+	 */
+	public static final int AUTOSAVE = 2;
+
+	/**
 	 * Creates a new I/O request.
 	 * @param type The request type
 	 * @param view The view
@@ -76,10 +81,6 @@ public class IORequest extends WorkRequest
 			+ ".marks";
 	}
 
-	/**
-	 * If type is LOAD, calls buffer._read(vfs._createInputStream()).
-	 * If type is SAVE, calls buffer._write(vfs._createOutputStream());
-	 */
 	public void run()
 	{
 		switch(type)
@@ -90,14 +91,32 @@ public class IORequest extends WorkRequest
 		case SAVE:
 			save();
 			break;
+		case AUTOSAVE:
+			autosave();
+			break;
 		}
 	}
 
 	public String toString()
 	{
-		return getClass().getName() + "[type=" + (type == LOAD
-			? "LOAD" : "SAVE") + ",view=" + view + ",buffer="
-			+ buffer + ",vfs=" + vfs + "]";
+		String typeString;
+		switch(type)
+		{
+		case LOAD:
+			typeString = "LOAD";
+			break;
+		case SAVE:
+			typeString = "SAVE";
+			break;
+		case AUTOSAVE:
+			typeString = "AUTOSAVE";
+			break;
+		default:
+			typeString = "UNKNOWN!!!";
+		}
+
+		return getClass().getName() + "[type=" + typeString + ",view="
+			+ view + ",buffer=" + buffer + ",vfs=" + vfs + "]";
 	}
 
 	// private members
@@ -616,6 +635,52 @@ public class IORequest extends WorkRequest
 		}
 	}
 
+	private void autosave()
+	{
+		OutputStream out = null;
+
+		try
+		{
+			String[] args = { MiscUtilities.getFileName(path) };
+			setStatus(jEdit.getProperty("view.status.autosave",args));
+
+			// the entire save operation can be aborted...
+			setAbortable(true);
+
+			try
+			{
+				out = vfs._createOutputStream(view,buffer,path);
+				if(out == null)
+					return;
+
+				write(buffer,out);
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				/* args[0] = io.toString();
+				VFSManager.error(view,"ioerror",args); */
+			}
+		}
+		catch(WorkThread.Abort a)
+		{
+			if(out != null)
+			{
+				try
+				{
+					out.close();
+				}
+				catch(IOException io)
+				{
+				}
+			}
+		}
+	}
+
 	private void write(Buffer buffer, OutputStream _out)
 		throws IOException, BadLocationException
 	{
@@ -647,10 +712,6 @@ public class IORequest extends WorkRequest
 				setProgressValue(i / SAVE_STEP);
 		}
 		out.close();
-
-		File autosaveFile = buffer.getAutosaveFile();
-		if(autosaveFile != null)
-			autosaveFile.delete();
 	}
 
 	private void writeMarkers(Buffer buffer, OutputStream out)
@@ -675,6 +736,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2000/07/22 06:22:27  sp
+ * I/O progress monitor done
+ *
  * Revision 1.12  2000/07/22 03:27:03  sp
  * threaded I/O improved, autosave rewrite started
  *
@@ -704,11 +768,5 @@ public class IORequest extends WorkRequest
  *
  * Revision 1.3  2000/04/25 03:32:40  sp
  * Even more VFS hacking
- *
- * Revision 1.2  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.1  2000/04/24 04:45:37  sp
- * New I/O system started, and a few minor updates
  *
  */

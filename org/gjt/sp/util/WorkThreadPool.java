@@ -192,8 +192,8 @@ public class WorkThreadPool
 	}
 
 	// package-private members
-	Object lock = new Object();
-	Object waitForAllLock = new Object();
+	Object lock = new String("Work thread pool request queue lock");
+	Object waitForAllLock = new String("Work thread pool waitForAll() notifier");
 
 	void fireProgressChanged(WorkThread thread)
 	{
@@ -396,6 +396,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/07/22 06:22:27  sp
+ * I/O progress monitor done
+ *
  * Revision 1.2  2000/07/22 03:27:04  sp
  * threaded I/O improved, autosave rewrite started
  *

@@ -37,11 +37,6 @@ public class BufferTabs extends JTabbedPane
 	{
 		this.editPane = editPane;
 
-		Font myFont = getFont();
-		Font textFont = editPane.getTextArea().getPainter().getFont();
-		Font newFont = new Font(myFont.getFamily(),Font.PLAIN,textFont.getSize());
-		setFont(newFont);
-
 		buffers = new Vector();
 
 		Buffer buffer = jEdit.getFirstBuffer();

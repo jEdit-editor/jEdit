@@ -1410,6 +1410,7 @@ public class JEditTextArea extends JComponent
 		super.removeNotify();
 
 		ToolTipManager.sharedInstance().unregisterComponent(painter);
+		ToolTipManager.sharedInstance().unregisterComponent(gutter);
 
 		if(focusedComponent == this)
 		{
@@ -2178,6 +2179,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.74  2000/07/22 06:22:27  sp
+ * I/O progress monitor done
+ *
  * Revision 1.73  2000/07/22 03:27:03  sp
  * threaded I/O improved, autosave rewrite started
  *

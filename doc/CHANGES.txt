@@ -18,6 +18,9 @@ JEDIT 3.0 VERSION HISTORY
 - I/O requests no longer block the GUI, and multiple requests can be
   executed at once. By default, 4 I/O threads are started; this can be
   changed in Utilities->Global Options
+- I/O requests can be monitored and aborted in Utilities->I/O Progress
+  Monitor. A miniature version of the progress display is in the status
+  bar of each view
 
 + Enhancements
 
@@ -40,6 +43,8 @@ JEDIT 3.0 VERSION HISTORY
 - The 'Help' menu now displays documentation for plugins that didn't load
 - Improved Python mode (Ivan Frohne)
 - Improved JSP mode (Vicente Salvador)
+- Improved autosave feature -- dedicated autosave thread gone, and up to
+  four files are autosaved at once
 
 + Bug Fixes
 
@@ -49,6 +54,8 @@ JEDIT 3.0 VERSION HISTORY
   where the first digit is '1'
 - When buffers were saved while the view was split, the focus would
   always shift to the last (bottom or rightmost) split pane
+- JEditTextArea didn't unregister the gutter from the tooltip manager, this
+  could result in memory leaks
 
 + API Changes
 

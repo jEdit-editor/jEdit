@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.gui;
 
 import javax.swing.border.*;
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
@@ -178,6 +179,7 @@ public class StatusBar extends JPanel
 			IOProgress.this.setDoubleBuffered(true);
 			IOProgress.this.setForeground(UIManager.getColor("Label.foreground"));
 			IOProgress.this.setBackground(UIManager.getColor("Label.background"));
+			IOProgress.this.addMouseListener(new MouseHandler());
 		}
 
 		public void addNotify()
@@ -224,9 +226,6 @@ public class StatusBar extends JPanel
 			int progressWidth = IOProgress.this.getWidth() - insets.left
 				- insets.right - fm.stringWidth(str);
 
-			// only show progress data for running threads
-			int count = 0;
-
 			for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
 			{
 				WorkThread thread = ioThreadPool.getThread(i);
@@ -237,10 +236,8 @@ public class StatusBar extends JPanel
 				int progress = ((progressWidth * thread
 					.getProgressValue()) / max);
 				g.fillRect(insets.left,insets.top
-					+ count * progressHeight,
+					+ i * progressHeight,
 					progressWidth,progressHeight);
-
-				count++;
 			}
 		}
 
@@ -259,12 +256,23 @@ public class StatusBar extends JPanel
 		{
 			return getPreferredSize();
 		}
+
+		class MouseHandler extends MouseAdapter
+		{
+			public void mouseClicked(MouseEvent evt)
+			{
+				new IOProgressMonitor();
+			}
+		}
 	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/07/22 06:22:27  sp
+ * I/O progress monitor done
+ *
  * Revision 1.5  2000/07/22 03:27:03  sp
  * threaded I/O improved, autosave rewrite started
  *

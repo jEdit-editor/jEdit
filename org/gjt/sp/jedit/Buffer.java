@@ -208,34 +208,14 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void autosave()
 	{
-		System.err.println("autosaving " + this);
-
-		/* if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY)
+		if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY)
 			|| getFlag(LOADING) || getFlag(SAVING))
 			return;
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		try
-		{
-			File tmpAutosaveFile = new File(MiscUtilities
-				.getFileParent(path),'#' + name + "#tmp#");
-			_write(new FileOutputStream(tmpAutosaveFile));
-			autosaveFile.delete();
-			tmpAutosaveFile.renameTo(autosaveFile);
-		}
-		catch(FileNotFoundException fnf)
-		{
-			// this could happen if eg, the directory
-			// containing this file was renamed.
-			// we ignore the error then so the user
-			/ isn't flooded with exceptions.
-			Log.log(Log.NOTICE,this,fnf);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		} */
+		VFSManager.addIORequest(IORequest.AUTOSAVE,null,this,
+			autosaveFile.getPath(),VFSManager.getFileVFS());
 	}
 
 	/**
@@ -299,6 +279,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			public void run()
 			{
+				if(autosaveFile != null)
+					autosaveFile.delete();
+
 				setFlag(AUTOSAVE_DIRTY,false);
 				setFlag(READ_ONLY,false);
 				setFlag(NEW_FILE,false);
@@ -1552,6 +1535,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.162  2000/07/22 06:22:26  sp
+ * I/O progress monitor done
+ *
  * Revision 1.161  2000/07/22 03:27:03  sp
  * threaded I/O improved, autosave rewrite started
  *
