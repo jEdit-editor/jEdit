@@ -227,11 +227,11 @@ public class EditPane extends JPanel implements EBComponent
 		if(selection != null)
 			textArea.setSelection(selection);
 
-		if(firstLine != null && horizontalOffset != null)
-		{
+		if(firstLine != null)
 			textArea.setFirstLine(firstLine.intValue());
+
+		if(horizontalOffset != null)
 			textArea.setHorizontalOffset(horizontalOffset.intValue());
-		}
 
 		if(overwrite != null)
 			textArea.setOverwriteEnabled(overwrite.booleanValue());
@@ -336,6 +336,8 @@ public class EditPane extends JPanel implements EBComponent
 			"view.antiAlias"));
 		painter.setFractionalFontMetricsEnabled(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
+		painter.setStyles(GUIUtilities.loadStyles(jEdit.getProperty("view.font"),
+			Integer.parseInt(jEdit.getProperty("view.fontsize"))));
 
 		Gutter gutter = textArea.getGutter();
 		gutter.setExpanded(jEdit.getBooleanProperty(
@@ -423,68 +425,9 @@ public class EditPane extends JPanel implements EBComponent
 			textArea.setElectricScroll(0);
 		}
 
-		loadStyles();
-
 		// Set up the right-click popup menu
 		textArea.setRightClickPopup(GUIUtilities
 			.loadPopupMenu("view.context"));
-	}
-
-	private void loadStyles()
-	{
-		try
-		{
-			String family = jEdit.getProperty("view.font");
-			int size = Integer.parseInt(jEdit.getProperty("view.fontsize"));
-
-			SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
-
-			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment1"),
-				family,size);
-			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment2"),
-				family, size);
-			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal1"),
-				family,size);
-			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal2"),
-				family,size);
-			styles[Token.LABEL] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.label"),
-				family,size);
-			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword1"),
-				family,size);
-			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword2"),
-				family,size);
-			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword3"),
-				family,size);
-			styles[Token.FUNCTION] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.function"),
-				family,size);
-			styles[Token.MARKUP] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.markup"),
-				family,size);
-			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.operator"),
-				family,size);
-			styles[Token.DIGIT] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.digit"),
-				family,size);
-			styles[Token.INVALID] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.invalid"),
-				family,size);
-
-			textArea.getPainter().setStyles(styles);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
 	}
 
 	private void loadBufferSwitcher()
@@ -578,6 +521,8 @@ public class EditPane extends JPanel implements EBComponent
 					status.updateBufferStatus();
 					status.updateMiscStatus();
 				}
+
+				loadCaretInfo();
 			}
 
 		}

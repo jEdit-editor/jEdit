@@ -156,14 +156,12 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 
 	public void searchDone(int resultCount, int bufferCount)
 	{
-		// need to invokeLater() because the thread calls
-		// VFSManager.runInAWTThread() to add search results
+		updateCaption(resultCount,bufferCount);
+
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
-				updateCaption(resultCount,bufferCount);
-
 				if(resultTreeRoot.getChildCount() == 1)
 				{
 					resultTree.expandPath(new TreePath(
@@ -186,7 +184,7 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 	private void updateCaption(int resultCount, int bufferCount)
 	{
 		Object[] pp = { new Integer(resultCount), new Integer(bufferCount) };
-		caption.setText(jEdit.getProperty("hypersearch-results.caption",pp))
+		caption.setText(jEdit.getProperty("hypersearch-results.caption",pp));
 	}
 
 	class MouseHandler extends MouseAdapter

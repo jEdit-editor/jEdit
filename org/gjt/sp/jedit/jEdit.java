@@ -1503,7 +1503,7 @@ public class jEdit
 	 * @param confirm If true, a confirmation dialog will be shown first
 	 * @since jEdit 2.7pre2
 	 */
-	public static void reloadAllBuffers(View view, boolean confirm)
+	public static void reloadAllBuffers(final View view, boolean confirm)
 	{
 		if(confirm)
 		{
@@ -1512,6 +1512,19 @@ public class jEdit
 				JOptionPane.QUESTION_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)
 				return;
+		}
+
+		// save caret info. Buffer.load() will load it.
+		View _view = viewsFirst;
+		while(_view != null)
+		{
+			EditPane[] panes = _view.getEditPanes();
+			for(int i = 0; i < panes.length; i++)
+			{
+				panes[i].saveCaretInfo();
+			}
+
+			_view = _view.next;
 		}
 
 		Buffer[] buffers = jEdit.getBuffers();

@@ -33,6 +33,8 @@ JEDIT 3.2 VERSION HISTORY
   status bar, not in a dialog box
 - The HyperSearch command now shows the number of matches found in the
   HyperSearch Results window, not in a dialog box
+- The 'Reload' and 'Reload All Buffers' commands now save the caret
+  position
 
 + Bug Fixes
 
@@ -49,6 +51,7 @@ JEDIT 3.2 VERSION HISTORY
 - jEdit.openFiles() didn't setBuffer(), so when jEdit connected to
   another instance, the new instance opened the necessary files, but
   never displayed them
+- 'Default edit mode' setting didn't work
 
 * Version 3.2pre5
 
@@ -117,6 +120,9 @@ JEDIT 3.2 VERSION HISTORY
 - JEditTextArea._addToSelection() method didn't merge selections
   properly, as a result triple-clicks to select lines didn't work too
   well
+- When adding or removing a marker, the 'dirty' flag would be set
+  if persistent markers were enabled, and would not be set otherwise.
+  This is the opposite of the correct behavior.
 
 + API Changes
 

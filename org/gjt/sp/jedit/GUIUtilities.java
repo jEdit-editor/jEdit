@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.util.Log;
 
 /**
@@ -659,6 +660,67 @@ public class GUIUtilities
 		}
 
 		return buf.toString();
+	}
+
+	/**
+	 * Loads the syntax styles from the properties, giving them the specified
+	 * base font family and size.
+	 * @param family The font family
+	 * @param size The font size
+	 * @since jEdit 3.2pre6
+	 */
+	public static SyntaxStyle[] loadStyles(String family, int size)
+	{
+		SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
+
+		try
+		{
+			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.comment1"),
+				family,size);
+			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.comment2"),
+				family, size);
+			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.literal1"),
+				family,size);
+			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.literal2"),
+				family,size);
+			styles[Token.LABEL] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.label"),
+				family,size);
+			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.keyword1"),
+				family,size);
+			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.keyword2"),
+				family,size);
+			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.keyword3"),
+				family,size);
+			styles[Token.FUNCTION] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.function"),
+				family,size);
+			styles[Token.MARKUP] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.markup"),
+				family,size);
+			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.operator"),
+				family,size);
+			styles[Token.DIGIT] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.digit"),
+				family,size);
+			styles[Token.INVALID] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.invalid"),
+				family,size);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,GUIUtilities.class,e);
+		}
+
+		return styles;
 	}
 
 	/**

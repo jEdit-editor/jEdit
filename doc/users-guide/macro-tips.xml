@@ -803,7 +803,7 @@ bottom</screen>
 
 </sect2>
 
-<sect2 id="macro-tips-debugging-message">
+<sect2 id="macro-tips-debugging-log">
 <title>Using the Activity Log as a Tracing Tool</title>
 
   <para>
@@ -849,7 +849,7 @@ bottom</screen>
   </itemizedlist>
 
   <para>
-   Note that the <parameter>urgency</parameter> parameter merely changes
+   Note that the <varname>urgency</varname> parameter merely changes
    the string prefixed to the log message; it does not change the logging
    behavior in any other way.
   </para>
@@ -876,6 +876,22 @@ bottom</screen>
     <informalexample>
     <programlisting>[debug] BeanShell: counter = 15</programlisting>
     </informalexample>
+
+  <sidebar><title>Using message dialog boxes as a tracing tool</title>
+    <para>
+      If you would prefer not having to deal with the activity log, you
+      can use the <function>Macros.message()</function> method as a
+      tracing tool. Just insert calls like the following in the macro
+      code:
+    </para>
+
+    <programlisting>Macros.message(view,"tracing");</programlisting>
+
+    <para>
+      Execution of the macro is halted until the message dialog box is
+      closed.
+    </para>
+  </sidebar>
 
 </sect2>
 

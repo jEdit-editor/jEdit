@@ -198,7 +198,6 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		int lineCount = getDefaultRootElement().getElementCount();
 
-		SyntaxStyle[] styles = view.getTextArea().getPainter().getStyles();
 		TabExpander expander = null;
 
 		Graphics gfx = null;
@@ -224,6 +223,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			fontStyle = Font.PLAIN;
 		}
+
+		SyntaxStyle[] styles = GUIUtilities.loadStyles(fontFamily,fontSize);
 
 		boolean style = jEdit.getBooleanProperty("print.style");
 		boolean color = jEdit.getBooleanProperty("print.color");
@@ -347,6 +348,7 @@ public class Buffer extends PlainDocument implements EBComponent
 				return;
 		}
 
+		view.getEditPane().saveCaretInfo();
 		load(view,true);
 	}
 
@@ -414,22 +416,6 @@ public class Buffer extends PlainDocument implements EBComponent
 				StringBuffer sbuf = (StringBuffer)getProperty(
 					BufferIORequest.LOAD_DATA);
 
-				if(reload)
-					clearProperties();
-				else
-				{
-					// reload maxLineLen and tabSize
-					// from the global/mode properties
-					getDocumentProperties().remove(
-						"tabSize");
-					getDocumentProperties().remove(
-						"indentSize");
-					getDocumentProperties().remove(
-						"maxLineLen");
-					getDocumentProperties().remove(
-						BufferIORequest.LOAD_DATA);
-				}
-
 				if(sbuf != null)
 				{
 					try
@@ -443,6 +429,14 @@ public class Buffer extends PlainDocument implements EBComponent
 						bl.printStackTrace();
 					}
 				}
+
+				// reload maxLineLen and tabSize
+				// from the global/mode properties
+				getDocumentProperties().remove("tabSize");
+				getDocumentProperties().remove("indentSize");
+				getDocumentProperties().remove("maxLineLen");
+				getDocumentProperties().remove(
+					BufferIORequest.LOAD_DATA);
 
 				undo = new MyUndoManager();
 				undo.addEdit(saveUndo = new SaveUndo());
@@ -477,15 +471,6 @@ public class Buffer extends PlainDocument implements EBComponent
 				if(loadAutosave)
 					setFlag(DIRTY,true);
 
-				// send some EditBus messages
-				if(!getFlag(TEMPORARY))
-				{
-					EditBus.send(new BufferUpdate(Buffer.this,
-						view,BufferUpdate.LOADED));
-					EditBus.send(new BufferUpdate(Buffer.this,
-						view,BufferUpdate.MARKERS_CHANGED));
-				}
-
 				if(jEdit.getBooleanProperty("parseFully"))
 				{
 					for(int i = 0; i < lineCount; i++)
@@ -502,6 +487,15 @@ public class Buffer extends PlainDocument implements EBComponent
 				}
 				catch(Exception e)
 				{
+				}
+
+				// send some EditBus messages
+				if(!getFlag(TEMPORARY))
+				{
+					EditBus.send(new BufferUpdate(Buffer.this,
+						view,BufferUpdate.LOADED));
+					EditBus.send(new BufferUpdate(Buffer.this,
+						view,BufferUpdate.MARKERS_CHANGED));
 				}
 			}
 		};
@@ -826,6 +820,7 @@ public class Buffer extends PlainDocument implements EBComponent
 				JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.YES_OPTION)
 			{
+				view.getEditPane().saveCaretInfo();
 				load(view,true);
 			}
 		}
@@ -1456,7 +1451,10 @@ public class Buffer extends PlainDocument implements EBComponent
 			Log.log(Log.ERROR,this,bl);
 		}
 
-		setMode(jEdit.getMode("text"));
+		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
+		if(defaultMode == null)
+			defaultMode = jEdit.getMode("text");
+		setMode(defaultMode);
 	}
 
 	/**
@@ -2151,6 +2149,11 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	public int virtualToPhysical(int lineNo)
 	{
+		// debugging code
+		if((lineNo < virtualLineCount && lineNo >= virtualLines.length)
+			|| lineNo < 0)
+			throw new RuntimeException("lineNo = " + lineNo);
+
 		if(lineNo >= virtualLineCount)
 			return lineCount + (lineNo - virtualLineCount);
 
@@ -2638,7 +2641,7 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	public void addMarker(char shortcut, int pos)
 	{
-		if(!getFlag(READ_ONLY) && !jEdit.getBooleanProperty("persistentMarkers"))
+		if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
 			setDirty(true);
 
 		Marker markerN = new Marker(this,shortcut,pos);
@@ -2720,7 +2723,7 @@ loop:				for(int i = 0; i < count; i++)
 			Marker marker = (Marker)markers.elementAt(i);
 			if(map.getElementIndex(marker.getPosition()) == line)
 			{
-				if(!jEdit.getBooleanProperty("persistentMarkers"))
+				if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
 					setDirty(true);
 
 				markers.removeElementAt(i);
@@ -2738,7 +2741,7 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	public void removeAllMarkers()
 	{
-		if(!jEdit.getBooleanProperty("persistentMarkers"))
+		if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
 			setDirty(true);
 
 		markers.removeAllElements();
@@ -2923,9 +2926,9 @@ loop:				for(int i = 0; i < count; i++)
 				.getElementIndex(evt.getOffset()),1);
 		}
 
-		setDirty(true);
-
 		super.fireInsertUpdate(evt);
+
+		setDirty(true);
 	}
 	
 	/**
@@ -2951,9 +2954,9 @@ loop:				for(int i = 0; i < count; i++)
 				.getElementIndex(evt.getOffset()),1);
 		}
 
-		setDirty(true);
-
 		super.fireRemoveUpdate(evt);
+
+		setDirty(true);
 	}
 
 	// private members

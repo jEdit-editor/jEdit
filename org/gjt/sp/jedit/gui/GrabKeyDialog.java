@@ -250,7 +250,15 @@ public class GrabKeyDialog extends JDialog
 					GUIUtilities.error(GrabKeyDialog.this,
 						"duplicate-alt-shortcut",null);
 				}
-				// a new shortcut is tested against existing shortcuts
+				else
+					isOK = true;
+
+				// this doesn't work properly if changes have already
+				// been made to the shortcuts, because the input
+				// handler is only updated after the options dialog
+				// is closed...
+
+				/* // a new shortcut is tested against existing shortcuts
 				else if(!shortcutString.equals(oldShortcut))
 				{
 					DefaultInputHandler handler =
@@ -267,7 +275,7 @@ public class GrabKeyDialog extends JDialog
 					}
 					else
 						isOK = true;
-				}
+				} */
 			}
 			dispose();
 		}

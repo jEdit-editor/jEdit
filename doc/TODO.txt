@@ -1,28 +1,20 @@
 TO DO
 
-- console: add go to console action
-- reload: preserve caret position
-- finish duplicate shortcut code
-- update README.txt for jEdit launcher
 - adapt John's jEdit launcher docs to starting jEdit chapter
-- mention using Macros.message() in macro-tips
-- finish console 3.0 before 3.2final because older console versions
-  don't work with 3.2
+- finish console 3.0
 - Java 1.3: pseudo-random window positioning?
 - installing source for already installed plugins
 - make XML plugin more respectable
 - FTP plugin: investigate soft links
 - FTP plugin: better error messages
 - FTP plugin: improve it in general before 3.2
-- document differences between web start and stand-alone version
 - next time i'm making an RPM, fix the shell script
-- directory search: continue even if a file can't be loaded
+- virtual line map: how can it get smaller than virtualLineCount?
 
 + bugs:
 
-- default edit mode setting doesn't work
-- printing: syntax output doesn't use print font
-- virtual line map: how can it get smaller than virtualLineCount?
+- finish duplicate shortcut code
+- directory search: continue even if a file can't be loaded
 - a line consisting entirely of spaces & word wrap
 - switching option panes real fast
 - fix '... is not a function name' when running openjade

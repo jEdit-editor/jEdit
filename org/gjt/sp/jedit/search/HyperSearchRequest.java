@@ -88,13 +88,13 @@ public class HyperSearchRequest extends WorkRequest
 		}
 		finally
 		{
-			final int _bufferCount = bufferCount;
 			final int _resultCount = resultCount;
+			final int _bufferCount = bufferCount;
 			VFSManager.runInAWTThread(new Runnable()
 			{
 				public void run()
 				{
-					results.searchDone(_bufferCount,_resultCount);
+					results.searchDone(_resultCount,_bufferCount);
 				}
 			});
 		}
@@ -158,14 +158,14 @@ loop:			for(;;)
 			buffer.readUnlock();
 		}
 
+		resultTreeRoot.insert(bufferNode,resultTreeRoot.getChildCount());
+
 		if(resultCount != 0)
 		{
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()
 				{
-					resultTreeRoot.insert(bufferNode,
-						resultTreeRoot.getChildCount());
 					resultTreeModel.reload(resultTreeRoot);
 				}
 			});

@@ -9,7 +9,7 @@ defaultCatalog=<?xml version="1.0"?>\n\
 	\n\
 	<MODES>\n\
 	\n\
-	<!-- Add lines like the following, one for each edit mode: -->\n\
+	<!-- Add lines like the following, one for each edit mode you add: -->\n\
 	<!-- <MODE NAME="foo" FILE="foo.xml" FILE_NAME_GLOB="*.foo" /> -->\n\
 	\n\
 	</MODES>
@@ -531,9 +531,9 @@ help-menu=about \
      help \
      tip-of-the-day
 help-menu.label=$Help
-about.label=About jEdit...
-help.label=jEdit Help
-tip-of-the-day.label=Tip of the Day
+about.label=$About jEdit...
+help.label=jEdit $Help
+tip-of-the-day.label=$Tip of the Day
 
 ###
 ### MACRO STRINGS
@@ -934,8 +934,6 @@ plugin.start-error.message=The plugin {0} cannot be started\n\
 	Possible reasons include:\n\
 	- the plugin is incompatible with this jEdit release; try updating\n\
 	the plugin\n\
-	- a plugin that this one depends on is not installed. Consult the\n\
-	plugin documentation to find out which plugins this one requires.\n\
 	- there is a bug in this plugin. If you suspect this is the case,\n\
 	e-mail the stack trace printed in the activity log to the plugin\n\
 	author.
@@ -1021,8 +1019,7 @@ options.general.history=History entries to remember:
 options.general.saveCaret=Save caret positions in recent file list
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
-options.general.checkModStatus=Warn if file is modified on disk by another \
-	program
+options.general.checkModStatus=Warn if file is modified on disk by another program
 options.general.showFullPath=Show full path of buffer in title bar
 options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher

@@ -7,7 +7,6 @@
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
-		<PROPERTY NAME="boxComment" VALUE="**" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
@@ -45,11 +44,11 @@
 		<SEQ TYPE="NULL">@</SEQ>
 		<SEQ TYPE="NULL">:</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
-		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">/</SEQ>
 		<SEQ TYPE="OPERATOR">*</SEQ>
@@ -1051,61 +1050,3 @@
 
 	</RULES>
 </MODE>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -73,12 +73,16 @@ actually a Java bug, or a well-known problem.
 
 - If you get an OutOfMemoryError while editing a large file, even if
   your computer has a large amount of RAM present, increase the Java
-  heap size.
+  virtual machine heap size.
 
-  - On Windows, edit the `jEdit.bat' file and change the line that looks
-    like so:
+  - On Windows, run "Set jEdit Parameters" from the "jEdit" group in the
+    Programs menu. Then, in the resulting dialog box, under "Command
+    line options for Java executable", change the option that looks like
+    so:
 
-    set JAVA_HEAP_SIZE=32
+    -mx32m
+
+    Replacing '32' with the desired heap size, in megabytes.
 
   - On Unix, edit the `jedit' shell script and change the line that
     looks like so:
@@ -113,6 +117,11 @@ actually a Java bug, or a well-known problem.
   (which some programs use instead of the clipboard). The XClipboard
   plugin available from <http://plugins.jedit.org> solves part of the
   problem by allowing read-only access to the primary selection.
+
+- Anti-aliased text might not display correctly with some Java versions.
+  If you enabled anti-aliasing and are seeing problems such as text
+  being drawn with the wrong font style, try using a different Java
+  version or disable anti-aliasing.
 
 - Because jEdit is written in Java, it will always be slower than a
   native application. The performance gap can be narrowed by installing
