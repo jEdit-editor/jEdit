@@ -12,7 +12,10 @@ The following plugins are included in the core distribution, and more
 can be downloaded from jEdit plugin central
 <http://www.icg-online.de/jedit>:
 
-- Console 1.7.2 by Slava Pestov
+- BufferTabs 0.3 by Jason Ginchereau
+- Console 1.8 by Slava Pestov
+- EditBus 0.3 by Slava Pestov
+- ErrorList 0.1 by Slava Pestov
 - HTML 2.0 by Romain Guy and Slava Pestov
 - JBrowse 0.9.9 by George Latkiewicz
 - QuickFile 0.6 by Jason Ginchereau

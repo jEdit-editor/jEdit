@@ -57,6 +57,18 @@ public class GeneralOptionPane extends AbstractOptionPane
 		history = new JTextField(jEdit.getProperty("history"));
 		addComponent(jEdit.getProperty("options.general.history"),history);
 
+		/* Default file encoding */
+		String[] encodings = {
+			"ASCII", "ISO8859_1", "UTF8", "Cp850", "Cp1252",
+			"MacRoman", "KOI8_R", "Unicode"
+		};
+
+		encoding = new JComboBox(encodings);
+		encoding.setEditable(true);
+		encoding.setSelectedItem(jEdit.getProperty("buffer.encoding",
+			System.getProperty("file.encoding")));
+		addComponent(jEdit.getProperty("options.general.encoding"),encoding);
+
 		/* Autosave interval */
 		autosave = new JTextField(jEdit.getProperty("autosave"));
 		addComponent(jEdit.getProperty("options.general.autosave"),autosave);
@@ -135,6 +147,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 			.isSelected() ? "on" : "off");
 		jEdit.setProperty("saveGeometry",saveGeometry.getModel()
 			.isSelected() ? "on" : "off");
+		jEdit.setProperty("buffer.encoding",(String)
+			encoding.getSelectedItem());
 		jEdit.setProperty("autosave",autosave.getText());
 		jEdit.setProperty("recent",recent.getText());
 		jEdit.setProperty("history",history.getText());
@@ -167,6 +181,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JComboBox lookAndFeel;
 	private JTextField recent;
 	private JTextField history;
+	private JComboBox encoding;
 	private JTextField autosave;
 	private JTextField backups;
 	private JTextField backupDirectory;

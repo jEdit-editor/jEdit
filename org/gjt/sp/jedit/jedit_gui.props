@@ -307,12 +307,14 @@ help-menu=about \
      help \
      - \
      log-viewer \
-     save-log
+     save-log \
+     clear-log
 help-menu.label=$Help
 about.label=About jEdit...
 help.label=Help Contents...
 log-viewer.label=Show Activity Log...
 save-log.label=Save Activity Log...
+clear-log.label=Clear Activity Log
 
 ###
 ### MACRO STRINGS
@@ -597,6 +599,7 @@ options.title=Global Options
 options.general.label=General
 options.general.lf.note=Restart jEdit for L&F changes to take effect
 options.general.lf=Swing look & feel:\ 
+options.general.encoding=File encoding:\ 
 options.general.autosave=Autosave frequency (seconds):\ 
 options.general.recent=Number of recent files:\ 
 options.general.history=Maximum elements in a history list:\ 

@@ -146,6 +146,38 @@ public class Log
 	}
 
 	/**
+	 * Clears the log.
+	 */
+	public static void clearLog()
+	{
+		try
+		{
+			logDocument.remove(0,logDocument.getLength());
+
+			log(NOTICE,Log.class,"To copy from the activity log, select"
+				+ " the appropriate text and press C+c");
+
+			// Log some stuff
+			log(MESSAGE,Log.class,"When reporting bugs, please"
+				+ " include the following information:");
+			String[] props = {
+				"java.version", "java.vendor",
+				"java.compiler", "os.name", "os.version",
+				"os.arch"
+				};
+			for(int i = 0; i < props.length; i++)
+			{
+				log(DEBUG,Log.class,
+					props[i] + "=" + System.getProperty(props[i]));
+			}
+		}
+		catch(BadLocationException bl)
+		{
+			log(ERROR,Log.class,bl);
+		}
+	}
+
+	/**
 	 * Logs a message. This method is threadsafe.
 	 * @param urgency The urgency
 	 * @param source The object that logged this message.
@@ -205,8 +237,7 @@ public class Log
 		realErr = System.err;
 
 		logDocument = new PlainDocument();
-		log(NOTICE,Log.class,"To copy from the activity log, select"
-			+ " the appropriate text and press C+c");
+		clearLog();
 	}
 
 	private static PrintStream createPrintStream(final int urgency)
@@ -293,6 +324,9 @@ public class Log
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/11/06 02:06:50  sp
+ * Logging updates, bug fixing, icons, various other stuff
+ *
  * Revision 1.1  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

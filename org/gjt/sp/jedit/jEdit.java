@@ -57,7 +57,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.02.02.00";
+		return "02.02.03.00";
 	}
 
 	/**
@@ -72,19 +72,7 @@ public class jEdit
 		Log.redirectStdio();
 
 		// Log some stuff
-		Log.log(Log.MESSAGE,jEdit.class,"When reporting bugs, please"
-			+ " include the following information:");
 		Log.log(Log.MESSAGE,jEdit.class,"jEdit version " + getVersion());
-		
-		String[] props = {
-			"java.version", "java.vendor",
-			"os.name", "os.version", "os.arch"
-			};
-		for(int i = 0; i < props.length; i++)
-		{
-			Log.log(Log.DEBUG,jEdit.class,
-				props[i] + "=" + System.getProperty(props[i]));
-		}
 
 		// Parse command line
 		boolean endOpts = false;
@@ -406,6 +394,7 @@ public class jEdit
 		}
 		catch(NumberFormatException nf)
 		{
+			Log.log(Log.ERROR,jEdit.class,nf);
 			maxRecent = 8;
 		}
 
@@ -1254,6 +1243,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.block_comment());
 		addAction(new org.gjt.sp.jedit.actions.box_comment());
 		addAction(new org.gjt.sp.jedit.actions.buffer_options());
+		addAction(new org.gjt.sp.jedit.actions.clear_log());
 		addAction(new org.gjt.sp.jedit.actions.clear_marker());
 		addAction(new org.gjt.sp.jedit.actions.clear_register());
 		addAction(new org.gjt.sp.jedit.actions.close_all());
@@ -1579,6 +1569,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.150  1999/11/06 02:06:50  sp
+ * Logging updates, bug fixing, icons, various other stuff
+ *
  * Revision 1.149  1999/10/31 08:31:36  sp
  * Minor fixes
  *

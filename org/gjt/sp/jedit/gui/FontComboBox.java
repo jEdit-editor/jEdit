@@ -73,9 +73,9 @@ public class FontComboBox extends JComboBox {
     * Toolkit.getFontList() in JDK 1.1.
     */
    public static String[] getAvailableFontFamilyNames() {
-      try {
-         /* return GraphicsEnvironment.getLocalGraphicsEnvironment()
-                                   .getAvailableFontFamilyNames(); */
+     // FUCK MICROSOFT... the font list stuff is too slow on Windows, it
+     // seems, so back to the 5 built in fonts...
+      /*try {
          Class GEClass = Class.forName("java.awt.GraphicsEnvironment");
          Object GEInstance =
                GEClass.getMethod("getLocalGraphicsEnvironment", null)
@@ -93,9 +93,9 @@ public class FontComboBox extends JComboBox {
 	 String[] _array = new String[nameVector.size()];
 	 nameVector.copyInto(_array);
 	 return _array;
-      } catch(Exception ex) {
+      } catch(Exception ex) {*/
          return Toolkit.getDefaultToolkit().getFontList();
-      }
+      /*}*/
    }
 
    /**

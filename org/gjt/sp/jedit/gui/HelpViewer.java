@@ -36,6 +36,8 @@ public class HelpViewer extends JFrame
 	{
 		super(jEdit.getProperty("helpviewer.title"));
 		
+		setIconImage(GUIUtilities.getEditorIcon());
+
 		history = new URL[25];
 
 		ActionHandler actionListener = new ActionHandler();
@@ -51,6 +53,7 @@ public class HelpViewer extends JFrame
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
+		viewer.setContentType("text/html");
 		viewer.addHyperlinkListener(new LinkHandler());
 		getContentPane().add(BorderLayout.CENTER,
 			new JScrollPane(viewer));

@@ -205,9 +205,9 @@ public class Buffer extends SyntaxDocument
 		}
 		catch(IOException io)
 		{
+			Log.log(Log.ERROR,this,io);
 			Object[] args = { io.toString() };
 			GUIUtilities.error(view,"ioerror",args);
-			Log.log(Log.ERROR,this,io);
 			returnValue = false;
 		}
 		catch(BadLocationException bl)
@@ -369,6 +369,7 @@ public class Buffer extends SyntaxDocument
 		}
 		catch(CannotUndoException cu)
 		{
+			Log.log(Log.DEBUG,this,cu);
 			return false;
 		}
 	}
@@ -390,6 +391,7 @@ public class Buffer extends SyntaxDocument
 		}
 		catch(CannotRedoException cr)
 		{
+			Log.log(Log.DEBUG,this,cr);
 			return false;
 		}
 	}
@@ -605,6 +607,7 @@ public class Buffer extends SyntaxDocument
 		}
 		catch(BadLocationException bl)
 		{
+			Log.log(Log.ERROR,this,bl);
 			return;
 		}
 		boolean added = false;
@@ -907,7 +910,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 				_in = new FileInputStream(file);
 			if(name.endsWith(".gz"))
 				_in = new GZIPInputStream(_in);
-			InputStreamReader in = new InputStreamReader(_in);
+			InputStreamReader in = new InputStreamReader(_in,
+				jEdit.getProperty("buffer.encoding",
+				System.getProperty("file.encoding")));
 			char[] buf = new char[IOBUFSIZE];
 			int len; // Number of characters in buffer
 			int lineCount = 0;
@@ -1010,9 +1015,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 		catch(IOException io)
 		{
+			Log.log(Log.ERROR,this,io);
 			Object[] args = { io.toString() };
 			GUIUtilities.error(view,"ioerror",args);
-			Log.log(Log.ERROR,this,io);
 		}
 	}
 
@@ -1125,6 +1130,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 						}
 						catch(NumberFormatException nf)
 						{
+							Log.log(Log.ERROR,this,nf);
 							start = 0;
 						}
 					}
@@ -1137,6 +1143,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 						}
 						catch(NumberFormatException nf)
 						{
+							Log.log(Log.ERROR,this,nf);
 							end = 0;
 						}
 						addMarker(name,start,end);
@@ -1154,6 +1161,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 		catch(Exception e)
 		{
+			//Log.log(Log.ERROR,this,e);
 		}
 	}
 
@@ -1161,7 +1169,10 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		throws IOException, BadLocationException
 	{
 		BufferedWriter out = new BufferedWriter(
-			new OutputStreamWriter(_out),IOBUFSIZE);
+			new OutputStreamWriter(_out,
+				jEdit.getProperty("buffer.encoding",
+				System.getProperty("file.encoding"))),
+				IOBUFSIZE);
 		Segment lineSegment = new Segment();
 		String newline = (String)getProperty(LINESEP);
 		if(newline == null)
@@ -1226,6 +1237,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 		catch(NumberFormatException nf)
 		{
+			Log.log(Log.ERROR,this,nf);
 			backups = 1;
 		}
 
@@ -1364,6 +1376,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.101  1999/11/06 02:06:50  sp
+ * Logging updates, bug fixing, icons, various other stuff
+ *
  * Revision 1.100  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

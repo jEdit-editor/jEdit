@@ -362,6 +362,55 @@
    </para>
   </sect2>
  </sect1>
+ <sect1 id=activity-log><title>The Activity Log</>
+  <indexterm><primary>Help menu</></indexterm>
+  <indexterm><primary>Show Activity Log command</></indexterm>
+  <indexterm><primary>Save Activity Log command</></indexterm>
+  <indexterm><primary>Clear Activity Log command</></indexterm>
+  <para>
+   Before continuing any further, it is important to know about the
+   so-called <quote>activity log</>. Basically, it is a dumping area
+   for information that is not important enough to be displayed to
+   the user automatically, but that is useful sometimes anyway.
+   Error messages and exceptions are appended to the log, but
+   are also printed to the command line window, if there is one.
+  </para>
+  <para>
+   <guimenu>Help</>&gt;<guimenuitem>Show Activity Log</> displays a
+   window showing the current activity log. Text can be copied from
+   the log by selecting it and pressing <keycombo><keycap>Control</>
+   <keycap>C</></keycombo>.
+  </para>
+  <para>
+   <guimenu>Help</>&gt;<guimenuitem>Save Activity Log</> displays a
+   file chooser dialog box, allowing you to select a file to save the
+   log to.
+  </para>
+  <para>
+   <guimenu>Help</>&gt;<guimenuitem>Clear Activity Log</> clears the
+   activity log of all information. This is useful when you are debugging
+   a problem and want to start over.
+  </para>
+  <para>
+   Currently, jEdit saves the following information to the activity log:
+  </para>
+  <itemizedlist>
+   <listitem><para>All error messages and exceptions
+   </para></listitem>
+   <listitem><para>Information about your Java implementation (version,
+   operating system, architecture, etc)</para></listitem>
+   <listitem><para>Information about loaded plugins</para></listitem>
+   <listitem><para>Messages when files are opened and closed. This
+   is useful in determining what caused an exception</para></listitem>
+   <listitem><para>The directory list search logs all file names that
+   will be searched</para></listitem>
+   <listitem><para>Some plugins may log additional information as
+   well</para></listitem>
+  </itemizedlist>
+  <figure><title>The activity log</>
+   <graphic fileref=window-log scale=75></>
+  </figure>
+ </sect1>
  <sect1 id=opening><title>Opening Files</>
   <indexterm><primary>buffer</></indexterm>
   <indexterm><primary>Buffers menu</></indexterm>
@@ -407,6 +456,13 @@
    If the save was successful, the read only flag will be cleared (the
    rationale behind this is that if the save was successful, you have
    write access to the file).
+  </para>
+  <para>
+   If you use with non-ASCII files, you can select the file
+   encoding used by jEdit in
+   the 
+     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+     see <xref linkend=global-opts>.
   </para>
   <sect2 id=opencli><title>Opening Files From the Command Line</>
    <para>
@@ -545,6 +601,13 @@
     The point of backups so that if you make extensive changes to a file that you
     are not happy with, you can go back to the previous version.
    </para>
+  <para>
+   If you use with non-ASCII files, you can select the file
+   encoding used by jEdit in
+   the 
+     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+     see <xref linkend=global-opts>.
+  </para>
    <tip>
     <para>
      The autosave interval and various backup-related
@@ -2147,7 +2210,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     <secondary>boxComment</></indexterm>
     <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Box Comment</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>K</></keycombo>) will enclose the
+    <keycombo><keycap>Control</><keycap>B</></keycombo>) will enclose the
     selection with comment start and end strings, and places the box
     comment string at the start of each line. An example of C++
     box commented code looks like so:
@@ -2170,7 +2233,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     <secondary>blockComment</></indexterm>
     <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Block Comment</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>B</></keycombo>) will place the
+    <keycombo><keycap>Control</><keycap>K</></keycombo>) will place the
     block comment character at the start of each line in the selection.
     An example of C++ block commented code looks like so:
    </para>
@@ -2644,7 +2707,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <indexterm><primary>autosave</></indexterm>
    <para>
     The <guibutton>General</> tab allows you to change general settings
-    such as the Swing look and feel, default line separator, backups and
+    such as the Swing look and feel, default line separator, file
+    encoding (if none of the ones in the list suit you, you can type in any
+    other encoding name supported by your Java version), backups and
     autosave, the maximum size of history lists, and global flags such as
     if window and dialog position saving should be enabled.
    </para>
@@ -2721,7 +2786,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <sect2><title>The File Filters Tab</>
    <para>
     The <guibutton>File Filters</> tab allows you to add custom file filters
-    to the open file and save dialog boxes.
+    to the open file and save dialog boxes. Note that the file filters
+    built into jEdit (the ones for the standard editing modes) cannot
+    be changed; only user-defined file filters can be added and changed.
    </para>
    <para>
     Filters are added and removed in a rather peculiar fashion in this tab.

@@ -44,6 +44,9 @@ backup.suffix=~
 # MacOS=\r
 #buffer.lineSeparator=\n
 
+# Encoding
+# The OS default will be used if this is not specified
+
 # Tab width
 buffer.tabSize=8
 

@@ -646,6 +646,32 @@ public class GUIUtilities
 		}
 	}
 
+	/**
+	 * Returns the default editor window image.
+	 */
+	public static Image getEditorIcon()
+	{
+		if(editorIcon == null)
+		{
+			editorIcon = new ImageIcon(GUIUtilities.class
+				.getResource("jedit_icon1.gif")).getImage();
+		}
+		return editorIcon;
+	}
+
+	/**
+	 * Returns the default plugin window image.
+	 */
+	public static Image getPluginIcon()
+	{
+		if(pluginIcon == null)
+		{
+			pluginIcon = new ImageIcon(GUIUtilities.class
+				.getResource("jedit_icon2.gif")).getImage();
+		}
+		return pluginIcon;
+	}
+
 	// package-private members
 
 	static void showSplashScreen()
@@ -668,6 +694,8 @@ public class GUIUtilities
 
 	private static SplashScreen splash;
 	private static JFileChooser chooser;
+	private static Image editorIcon;
+	private static Image pluginIcon;
 
 	private GUIUtilities() {}
 
@@ -752,6 +780,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.37  1999/11/06 02:06:50  sp
+ * Logging updates, bug fixing, icons, various other stuff
+ *
  * Revision 1.36  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *
@@ -781,29 +812,5 @@ public class GUIUtilities
  *
  * Revision 1.27  1999/07/08 06:35:41  sp
  * 1.7pre5, yay
- *
- * Revision 1.26  1999/07/08 06:06:04  sp
- * Bug fixes and miscallaneous updates
- *
- * Revision 1.25  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.24  1999/06/22 06:14:39  sp
- * RMI updates, text area updates, flag to disable geometry saving
- *
- * Revision 1.23  1999/06/16 03:29:59  sp
- * Added <title> tags to docs, configuration data is now stored in a
- * ~/.jedit directory, style option pane finished
- *
- * Revision 1.22  1999/06/13 05:47:02  sp
- * Minor changes required for LatestVersion plugin
- *
- * Revision 1.21  1999/06/12 02:30:27  sp
- * Find next can now perform multifile searches, multifile-search command added,
- * new style option pane
- *
- * Revision 1.20  1999/05/27 00:02:50  sp
- * Documentation updates, minor tweaks for WWW browser command unbundling
  *
  */

@@ -531,6 +531,8 @@ public class View extends JFrame
 	{
 		listenerList = new EventListenerList();
 
+		setIconImage(GUIUtilities.getEditorIcon());
+
 		// Dynamic menus
 		buffers = GUIUtilities.loadMenu(this,"buffers");
 		openRecent = GUIUtilities.loadMenu(this,"open-recent");
@@ -868,6 +870,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.101  1999/11/06 02:06:50  sp
+ * Logging updates, bug fixing, icons, various other stuff
+ *
  * Revision 1.100  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

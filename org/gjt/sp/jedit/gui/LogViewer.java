@@ -29,6 +29,9 @@ public class LogViewer extends JFrame
 	public LogViewer(View view)
 	{
 		super(jEdit.getProperty("log-viewer.title"));
+
+		setIconImage(GUIUtilities.getEditorIcon());
+
 		JTextArea textArea = new JTextArea(24,80);
 		textArea.setDocument(Log.getLogDocument());
 

@@ -33,6 +33,7 @@ public class Sessions
 	public static Buffer loadSession(String session, boolean ignoreNotFound)
 	{
 		String filename = createSessionFileName(session);
+		Log.log(Log.DEBUG,Sessions.class,"Loading session " + filename);
 
 		Buffer buffer = null;
 
@@ -60,6 +61,7 @@ public class Sessions
 		}
 		catch(IOException io)
 		{
+			Log.log(Log.ERROR,Sessions.class,io);
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(null,"ioerror",args);
 		}
@@ -72,6 +74,7 @@ public class Sessions
 		view.saveCaretInfo();
 
 		String filename = createSessionFileName(session);
+		Log.log(Log.DEBUG,Sessions.class,"Saving session " + filename);
 
 		Buffer buffer = jEdit.getFirstBuffer();
 
@@ -90,6 +93,7 @@ public class Sessions
 		}
 		catch(IOException io)
 		{
+			Log.log(Log.ERROR,Sessions.class,io);
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(null,"ioerror",args);
 		}
@@ -169,6 +173,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  1999/11/06 02:06:50  sp
+ * Logging updates, bug fixing, icons, various other stuff
+ *
  * Revision 1.3  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

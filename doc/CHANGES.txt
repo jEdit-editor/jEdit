@@ -1,5 +1,44 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2pre3
+
++ New Features
+
+- Clear Activity Log command
+- Plugins can now paint custom highlights in the text area (the jEdit core
+  only has the bare minimum necessary to do this; see the ErrorList plugin
+  for a more high-level approach)
+- The API is:
+  interface TextAreaPainter.Highlight
+  {
+  	void init(JEditTextArea textArea, TextAreaPainter.Highlight next);
+	void paintHighlight(Graphics gfx, int line, int y);
+	String getToolTipText(MouseEvent evt);
+  }
+  TextAreaPainter.addCustomHighlight(Highlight highlight) should be used
+  to add them. paintHighlight() MUST also call the paint method of the
+  next highlight, if it's non-null.
+- The file encoding used by jEdit can now be set in Global Options
+- Editor windows now have icons on systems which support them
+  (Valery Kondakoff). Plugins should also call setIconImage() on their
+  frames, passing them the image returned by GUIUtilities.getIconImage()
+
++ Enhancements
+
+- Documentation updates
+
++ Bug Fixes
+
+- Fixed obscure help viewer bug (since 1.3pre4)
+- Font-list code in global options commented out - it's too slow on MS-Windows
+  (since 2.1final)
+
++ Plugin Updates
+
+- Console 1.8
+- EditBus 0.3
+- ErrorList 0.1
+
 * Version 2.2pre2
 
 + New Features

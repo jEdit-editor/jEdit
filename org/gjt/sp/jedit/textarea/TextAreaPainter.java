@@ -19,8 +19,10 @@
 
 package org.gjt.sp.jedit.textarea;
 
+import javax.swing.ToolTipManager;
 import javax.swing.text.*;
 import javax.swing.JComponent;
+import java.awt.event.MouseEvent;
 import java.awt.*;
 
 import org.gjt.sp.jedit.syntax.*;
@@ -44,6 +46,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		setAutoscrolls(true);
 		setDoubleBuffered(true);
 		setOpaque(true);
+
+		ToolTipManager.sharedInstance().registerComponent(this);
 
 		currentLine = new Segment();
 		currentLineIndex = -1;
@@ -269,6 +273,59 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	}
 
 	/**
+	 * Adds a custom highlight painter.
+	 * @param highlight The highlight
+	 */
+	public void addCustomHighlight(Highlight highlight)
+	{
+		highlight.init(textArea,highlights);
+		highlights = highlight;
+	}
+
+	/**
+	 * Highlight interface.
+	 */
+	public interface Highlight
+	{
+		/**
+		 * Called after the highlight painter has been added.
+		 * @param textArea The text area
+		 * @param next The painter this one should delegate to
+		 */
+		public void init(JEditTextArea textArea, Highlight next);
+
+		/**
+		 * This should paint the highlight and delgate to the
+		 * next highlight painter.
+		 * @param gfx The graphics context
+		 * @param line The line number
+		 * @param y The y co-ordinate of the line
+		 */
+		public void paintHighlight(Graphics gfx, int line, int y);
+
+		/**
+		 * Returns the tool tip to display at the specified
+		 * location. If this highlighter doesn't know what to
+		 * display, it should delegate to the next highlight
+		 * painter.
+		 * @param evt The mouse event
+		 */
+		public String getToolTipText(MouseEvent evt);
+	}
+
+	/**
+	 * Returns the tool tip to display at the specified location.
+	 * @param evt The mouse event
+	 */
+	public String getToolTipText(MouseEvent evt)
+	{
+		if(highlights != null)
+			return highlights.getToolTipText(evt);
+		else
+			return null;
+	}
+
+	/**
 	 * Returns the font metrics used by this component.
 	 */
 	public FontMetrics getFontMetrics()
@@ -428,6 +485,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	protected int tabSize;
 	protected FontMetrics fm;
 
+	protected Highlight highlights;
+
 	protected void paintLine(Graphics gfx, TokenMarker tokenMarker,
 		int line, int x)
 	{
@@ -505,6 +564,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		if(line == textArea.getCaretLine())
 			paintCaret(gfx,line,y);
+
+		if(highlights != null)
+			highlights.paintHighlight(gfx,line,y);
 	}
 
 	protected void paintLineHighlight(Graphics gfx, int line, int y)
@@ -622,6 +684,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  1999/11/06 02:06:50  sp
+ * Logging updates, bug fixing, icons, various other stuff
+ *
  * Revision 1.16  1999/10/06 08:39:46  sp
  * Fixes to repeating and macro features
  *
