@@ -63,6 +63,7 @@ public class FtpClient {
         debug("sending command", debugString);
         out.print(command);
 	out.print("\r\n");
+	out.flush();
         setResponse();
     }
 

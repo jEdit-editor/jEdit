@@ -60,11 +60,13 @@ NAME="MACRO-FILES"
 >Macro Files</A
 ></H2
 ><P
->    Macro files have the
-    extension ".macro" and use a very simple syntax, with
-    one command per line. Lines starting with a hash ("#") are
-    ignored by the macro interpreter and can be used to add commentary
-    to macros, etc.
+>    Macro files have the extension ".macro". See <A
+HREF="macros.html#MACRO-SYNTAX"
+>the section called <I
+>Macro File Syntax</I
+></A
+>
+    for information about their syntax.
    </P
 ><P
 >    Macros can be stored in the <TT
@@ -352,7 +354,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1371"
+NAME="AEN1380"
 >Prompting for Input</A
 ></H2
 ><P
@@ -384,12 +386,24 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1379"
->Registers in Macros</A
+NAME="MACRO-SYNTAX"
+>Macro File Syntax</A
 ></H2
 ><P
->    In an action command (the text after the "@"), strings of
-    the form <TT
+>    Macro files have very simple syntax, with
+    one command per line. Lines starting with a hash ("#") are
+    ignored by the macro interpreter and can be used to add commentary
+    to macros, etc. Non-comment lines consist of an action name and
+    optional argument. An at character ("@") separates
+    the action name and argument.
+   </P
+><P
+>    Each jEdit command has a corresponding action name. Currently, the only way
+    to find out a command's action name is to record it in a macro and look at
+    the output.
+   </P
+><P
+>    In a command argument, strings of the form <TT
 CLASS="FILENAME"
 >$<TT
 CLASS="REPLACEABLE"
@@ -397,14 +411,14 @@ CLASS="REPLACEABLE"
 >x</I
 ></TT
 ></TT
-> will be replaced with
-    the contents of register <TT
+>
+    will be replaced with the contents of register <TT
 CLASS="REPLACEABLE"
 ><I
 >x</I
 ></TT
-> when the macro is
-    executed. This is a very powerful feature; you could, for example,
+> when the
+    macro is executed. This is a very powerful feature; you could, for example,
     write a macro that prompts the user for some input, does something
     to it, and then performs a search, based on that input.
    </P
@@ -414,7 +428,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1386"
+NAME="AEN1398"
 >Some Sample Macros</A
 ></H2
 ><P

@@ -60,7 +60,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3563"
+NAME="AEN3573"
 >Canned Dialog Boxes</A
 ></H2
 ><H4
@@ -387,7 +387,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3678"
+NAME="AEN3688"
 >Saving Window Geometry</A
 ></H2
 ><P
@@ -506,15 +506,19 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3716"
+NAME="AEN3726"
 >Improved Dialog Box Key Handling</A
 ></H2
 ><P
 >    The <TT
 CLASS="CLASSNAME"
 >org.gjt.sp.jedit.gui.EnhancedDialog</TT
-> class
-    automatically handles
+> and
+    <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.gui.EnhancedFrame</TT
+> classes
+    automatically handle
     presses of the <B
 CLASS="KEYCAP"
 >Enter</B
@@ -522,8 +526,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >Escape</B
 > keys, which
-    is something the standard AWT and Swing dialog box classes do not
-    do.
+    is something the standard AWT and Swing classes do not do.
    </P
 ><H4
 CLASS="BRIDGEHEAD"
@@ -576,6 +579,29 @@ CLASS="GUIBUTTON"
 > buttons; this class only handles the keystrokes
     for you.
    </P
+><H4
+CLASS="BRIDGEHEAD"
+>EnhancedFrame class</H4
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public class EnhancedFrame
+{
+        public EnhancedFrame(String title);
+        public abstract void ok();
+        public abstract void cancel();
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>   This class provides the same functionality for frames.
+  </P
 ></DIV
 ></DIV
 ><DIV

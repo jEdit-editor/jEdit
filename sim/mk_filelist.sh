@@ -42,6 +42,8 @@ find org -type f \( -name \*.java -o -name \*.gif -o -name \*.props -o -name \*.
 find jars/PluginManager -type f -print >> sim/jedit-source
 find jars/LatestVersion -type f -print >> sim/jedit-source
 echo makefile.jmk >> sim/jedit-source
+echo clean.sh >> sim/jedit-source
+echo sim/*.sh >> sim/jedit-source
 echo org/gjt/sp/jedit/jedit.manifest >> sim/jedit-source
 echo org/gjt/sp/jedit/default.abbrevs >> sim/jedit-source
 
@@ -67,9 +69,6 @@ do
 	echo FILESET_`basename $file` >> file_list
 	cat $file >> file_list
 done
-
-echo FILESET_do_not_install_these >> file_list
-echo sim/*.sh >> file_list
 
 export CLASSPATH=$CLASSPATH:..
 java org.gjt.sp.sim.Archive c ../data.sim `cat file_list`

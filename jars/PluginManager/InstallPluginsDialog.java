@@ -100,9 +100,9 @@ public class InstallPluginsDialog extends EnhancedDialog
 		panel3.add(BorderLayout.SOUTH,installSystem);
 
 		if(installUser.isEnabled())
-			installUser.getModel().setSelected(true);
+			installUser.setSelected(true);
 		else
-			installSystem.getModel().setSelected(true);
+			installSystem.setSelected(true);
 
 		panel2.add(BorderLayout.SOUTH,panel3);
 
@@ -157,7 +157,7 @@ public class InstallPluginsDialog extends EnhancedDialog
 
 	public String getInstallDirectory()
 	{
-		if(installUser.getModel().isSelected())
+		if(installUser.isSelected())
 			return MiscUtilities.constructPath(jEdit.getSettingsDirectory(),"jars");
 		else
 			return MiscUtilities.constructPath(jEdit.getJEditHome(),"jars");
