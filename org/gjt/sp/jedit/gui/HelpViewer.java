@@ -78,7 +78,6 @@ public class HelpViewer extends JFrame
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
-		viewer.setContentType("text/html");
 		viewer.addHyperlinkListener(new LinkHandler());
 		getContentPane().add(BorderLayout.CENTER,
 			new JScrollPane(viewer));

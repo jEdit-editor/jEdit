@@ -2,14 +2,14 @@ JEDIT TO DO
 
 ------- 2.3 to do -------
 
-- Help viewer -- open text file, open plugin help, boom
-- If no abbrev found, C+e C+x should ask if it should be added
 - Double-click drag doesn't work backwards
-- Integrate Mike Dillon's "Gutter" code
 - CaretUndo doesn't work on 'redo'
+- Integrate Mike Dillon's "Gutter" code
+- About box is ugly
 
 ------- Later -------
 
+- Having more than 2 split panes should be possible
 - Incremental search
 - If there is > 1 possible match, complete-word should list them in a
   dialog box

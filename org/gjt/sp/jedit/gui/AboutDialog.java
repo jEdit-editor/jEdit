@@ -135,12 +135,20 @@ public class AboutDialog extends EnhancedDialog
 				else
 					userPlugins.addElement(label);
 			}
-	
+
 			for(int i = 0; i < sysPlugins.size(); i++)
 			{
 				sysTree.insert(new DefaultMutableTreeNode(
 					sysPlugins.elementAt(i),false),i);
 			}
+
+			if(sysPlugins.size() == 0)
+			{
+				sysTree.insert(new DefaultMutableTreeNode(
+					jEdit.getProperty("about.plugins.none"),
+					false),0);
+			}
+
 			treeRoot.insert(sysTree,0);
 
 			String settingsDir = jEdit.getSettingsDirectory();
@@ -155,6 +163,14 @@ public class AboutDialog extends EnhancedDialog
 					userTree.insert(new DefaultMutableTreeNode(
 						userPlugins.elementAt(i),false),i);
 				}
+
+				if(userPlugins.size() == 0)
+				{
+					userTree.insert(new DefaultMutableTreeNode(
+						jEdit.getProperty("about.plugins.none"),
+						false),0);
+				}
+
 				treeRoot.insert(userTree,1);
 			}
 

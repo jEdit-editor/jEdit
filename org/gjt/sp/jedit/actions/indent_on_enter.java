@@ -33,7 +33,7 @@ public class indent_on_enter extends EditAction
 
 		// expand current word
 		if(Abbrevs.getExpandOnInput())
-			Abbrevs.expandAbbrev(buffer,textArea);
+			Abbrevs.expandAbbrev(view,false);
 
 		textArea.setSelectedText("\n");
 

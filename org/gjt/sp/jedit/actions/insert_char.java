@@ -31,10 +31,8 @@ implements InputHandler.NonRepeatable
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		JEditTextArea textArea = view.getTextArea();
 
-		String noWordSep = (String)buffer.getProperty("noWordSep");
+		String noWordSep = (String)view.getBuffer().getProperty("noWordSep");
 
 		String str = evt.getActionCommand();
 
@@ -44,9 +42,10 @@ implements InputHandler.NonRepeatable
 		{
 			// non-word char entered
 			// try to expand the abbrev first
-			Abbrevs.expandAbbrev(buffer,textArea);
+			Abbrevs.expandAbbrev(view,false);
 		}
 
+		JEditTextArea textArea = view.getTextArea();
 		int repeatCount = textArea.getInputHandler().getRepeatCount();
 
 		if(textArea.isEditable())

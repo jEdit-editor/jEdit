@@ -842,7 +842,7 @@ public class View extends JFrame implements EBComponent
 				new Integer(b.isNewFile() ? 1 : 0) };
 			JRadioButtonMenuItem menuItem =
 				new JRadioButtonMenuItem(jEdit.getProperty(
-					"view.title",args));
+					"view.buffer-label",args));
 			menuItem.addActionListener(jEdit.getAction("select-buffer"));
 			grp.add(menuItem);
 			menuItem.setActionCommand(name);
@@ -1233,6 +1233,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.132  2000/01/31 05:04:48  sp
+ * C+e C+x will ask to add abbrev if not found, other minor updates
+ *
  * Revision 1.131  2000/01/29 10:12:43  sp
  * BeanShell edit mode, bug fixes
  *

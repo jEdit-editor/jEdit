@@ -1,6 +1,6 @@
 /*
  * PluginResURLConnection.java - jEdit plugin resource URL connection
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public class PluginResURLConnection extends URLConnection
 		throws IOException
 	{
 		super(url);
-		
+
 		String file = url.getFile();
 		int index = file.indexOf('/',1);
 		if(index == -1)
@@ -51,6 +51,19 @@ public class PluginResURLConnection extends URLConnection
 		throws IOException
 	{
 		return in;
+	}
+
+	public String getHeaderField(String name)
+	{
+		if(name.equals("content-type"))
+		{
+			if(getURL().getFile().toLowerCase().endsWith(".html"))
+				return "text/html";
+			else
+				return null;
+		}
+		else
+			return null;
 	}
 
 	// private members

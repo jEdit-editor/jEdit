@@ -422,8 +422,10 @@ insert-literal.label=Insert Without Expanding
 # {1} - 1 if read only, 0 if read-write
 # {2} - 1 if modified, 0 if saved
 # {3} - 1 if new, 0 if existing
-view.title={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
+view.title=jEdit: {0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
 
+# Same as view.title but no leading 'jEdit:'
+view.buffer-label={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
 # Status messages
 view.status.recording=Macro recording
 view.status.cut-string-register=Cut to register
@@ -453,6 +455,7 @@ about.message=jEdit version {0}\n\
 	README file for more information.
 about.plugins=Loaded Plugins
 about.plugins.label={0} (loaded from {1})
+about.plugins.none=No Plugins
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
@@ -640,6 +643,15 @@ close.save=Save Selected
 close.save.mnemonic=s
 close.discard=Discard Selected
 close.discard.mnemonic=d
+
+# Add abbrev dialog
+add-abbrev.title=Add Abbreviation
+add-abbrev.message=The abbreviation "{0}" is undefined.\n\
+	To define it now, enter an expansion below, then\n\
+	click "mode-specific" to make it mode-specific,\n\
+	or "global" to make it apply in all edit modes.
+add-abbrev.mode=Mode-specific
+add-abbrev.global=Global
 
 # Buffer options dialog
 buffer_options.title=Buffer Options

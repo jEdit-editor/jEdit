@@ -19,20 +19,15 @@
 
 package org.gjt.sp.jedit.actions;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 
 public class expand_abbrev extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		JEditTextArea textArea = view.getTextArea();
-
-		if(!Abbrevs.expandAbbrev(buffer,textArea))
-			view.getToolkit().beep();
+		Abbrevs.expandAbbrev(getView(evt),true);
 	}
 }

@@ -88,7 +88,7 @@ plugin API are made from time to time, and some plugins break. You
 should either upgrade jEdit, the plugin, or both.
 
 Download updated jEdit versions from <http://www.gjt.org/~sp/jedit.html>.
-Download updated plugins from <http://www.icg-online.de/jedit>.
+Download updated plugins from <http://jedit.standmed.com>.
 
 * 7. Why is jEdit so slow?
 

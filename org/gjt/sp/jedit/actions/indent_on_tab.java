@@ -36,7 +36,7 @@ public class indent_on_tab extends EditAction
 
 		// expand current word
 		if(Abbrevs.getExpandOnInput())
-			Abbrevs.expandAbbrev(buffer,textArea);
+			Abbrevs.expandAbbrev(view,false);
 
                 Mode mode = buffer.getMode();
 		int selStart = textArea.getSelectionStart();

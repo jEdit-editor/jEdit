@@ -100,6 +100,9 @@ expand-abbrev.shortcut=C+e C+x
 unsplit.shortcut=C+e 1
 split-vertical.shortcut=C+e 2
 split-horizontal.shortcut=C+e 3
+select-line.shortcut=C+e l
+select-paragraph.shortcut=C+e p
+select-word.shortcut=C+e w
 
 # C+m
 play-last-macro.shortcut=C+m C+l

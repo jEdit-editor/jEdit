@@ -996,7 +996,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    A word can be selected by double-clicking with the mouse. Another
    way to select a word is with the
    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Select
-   Word</> command. The latter is primarily of use in macros, where mouse clicks
+   Word</> command
+   (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>E</></>
+   <keycap>W</>).
+   The latter is primarily of use in macros, where mouse clicks
    cannot be recorded (but menu item selections can).
   </para>
   <para>
@@ -1018,17 +1022,9 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <indexterm><primary>Edit menu</></>
   <indexterm><primary>Go to Line command</></>
   <para>
-   Finally, <guimenu>Edit</>&gt;<guimenuitem>Go to Line</> (keyboard
+   <guimenu>Edit</>&gt;<guimenuitem>Go to Line</> (keyboard
    equivalent: <keycombo><keycap>Control</><keycap>L</></keycombo>) moves the caret
    to the beginning of a line you specify.
-  </para>
-  <indexterm><primary>Select Line Range command</></>
-  <indexterm><primary>selecting text</><secondary>a range of lines</></>
-  <para>
-   <guimenu>Edit</>&gt;<guimenuitem>Select Line Range</> (keyboard
-   equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>L</></keycombo>) prompts for a start line and
-   end line, and selects all text between these lines, inclusive.
   </para>
   <indexterm><primary>selecting text</><secondary>a line at a time</></>
   <indexterm><primary>Lines menu</></>
@@ -1037,8 +1033,20 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    An entire line can be selected by triple-clicking with the mouse. Another
    way to select a line is with the
    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Select
-   Line</> command. The latter is primarily of use in macros, where mouse clicks
+   Line</> command
+   (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>E</></>
+   <keycap>W</>).
+   The latter is primarily of use in macros, where mouse clicks
    cannot be recorded (but menu item selections can).
+  </para>
+  <indexterm><primary>Select Line Range command</></>
+  <indexterm><primary>selecting text</><secondary>a range of lines</></>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Select Line Range</> (keyboard
+   equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>L</></keycombo>) prompts for a start line and
+   end line, and selects all text between these lines, inclusive.
   </para>
   <para>
    <indexterm><primary>scrolling</></indexterm>
@@ -1121,7 +1129,9 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <para>
    <indexterm><primary>Select Paragraph command</></indexterm>
    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Select
-   Paragraph</> will
+   Paragraph</> (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>E</></>
+   <keycap>P</>) will
    select the paragraph containing the caret
    The latter is primarily of use in macros, where mouse clicks
    cannot be recorded (but menu item selections can).
@@ -1604,6 +1614,19 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     recording macros.
    </para>
   </tip>
+  <tip>
+   <para>
+    A quick way to define an abbrev is to enter the desired abbrev, and
+    press <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>X</></keycombo>. If the abbrev
+    is not defined, a dialog box will appear, where you can enter the
+    expansion, and specify if it should be a mode-specific or global
+    abbrev.
+   </para>
+  </tip>
+  <figure><title>The Add Abbreviation dialog box</>
+   <graphic scale=75 fileref=dialog-add-abbrev></>
+  </figure>
  </sect1>
  <sect1 id=macros><title>Macros</>
   <para>
@@ -3800,7 +3823,7 @@ implements OptionPane
    set of messages that are meant to be sent by jEdit itself only;
    the EditBus plugin includes a wider range of messages that can be
    used for inter-plugin communication. Get the EditBus plugin from
-   <ulink url="http://www.icg-online.de/jedit">http://www.icg-online.de/jedit</>.
+   <ulink url="http://jedit.standmed.com">http://jedit.standmed.com</>.
   </para>
   <para>
    Each message type is a subclass of <classname>EBMessage</>.

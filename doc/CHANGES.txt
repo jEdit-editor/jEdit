@@ -22,6 +22,9 @@ JEDIT VERSION HISTORY
   they have no special meaning in other C-derived languages, such as
   C++, IDL, JavaScript or BeanShell
 - Enhanced about box, displays info about loaded plugins
+- Expanding an abbrev that is not defined with C+e C+x will ask if it
+  should be added
+- Select Line/Word/Paragraph now have keyboard shortcuts
 
 + Bug Fixes
 
@@ -31,6 +34,8 @@ JEDIT VERSION HISTORY
 - Docked plugins didn't work (Jason Ginchereau) (since 2.3pre2)
 - PostScript token marker didn't handle string literals very well
   (since 2.3pre2)
+- Search and replace called View.setBuffer() before jEdit.commitTemporary(),
+  this caused problems with buffer tabs
 
 + API Changes
 

@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit;
 
 import javax.swing.text.BadLocationException;
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.textarea.*;
@@ -55,23 +56,27 @@ public class Abbrevs
 	/**
 	 * Expands the abbrev at the caret position in the specified
 	 * view.
-	 * @param buffer The buffer
-	 * @param textArea The text area
-	 * @return True if the abbrev was expanded, false otherwise
+	 * @param view The view
+	 * @param add If true and abbrev not found, will ask user if
+	 * it should be added
+	 * @since jEdit 2.3pre3
 	 */
-	public static boolean expandAbbrev(Buffer buffer, JEditTextArea textArea)
+	public static void expandAbbrev(View view, boolean add)
 	{
+		JEditTextArea textArea = view.getTextArea();
+		Buffer buffer = view.getBuffer();
+
 		int line = textArea.getCaretLine();
 		int lineStart = textArea.getLineStartOffset(line);
 		int caret = textArea.getCaretPosition();
 
 		String lineText = textArea.getLineText(line);
 		if(lineText.length() == 0)
-			return false;
+			return;
 
 		int pos = caret - lineStart;
 		if(pos == 0)
-			return false;
+			return;
 
 		int wordStart = TextUtilities.findWordStart(lineText,pos - 1,
 			(String)buffer.getProperty("noWordSep"));
@@ -80,7 +85,11 @@ public class Abbrevs
 		String expand = Abbrevs.expandAbbrev(buffer.getMode().getName(),abbrev);
 
 		if(expand == null)
-			return false;
+		{
+			if(add)
+				addAbbrev(view,abbrev);
+			return;
+		}
 		else
 		{
 			buffer.beginCompoundEdit();
@@ -95,7 +104,6 @@ public class Abbrevs
 			}
 			buffer.endCompoundEdit();
 
-			return true;
 		}
 	}
 
@@ -314,5 +322,43 @@ public class Abbrevs
 			out.write(MiscUtilities.charsToEscapes((String)values.nextElement()));
 			out.write(lineSep);
 		}
+	}
+
+	private static void addAbbrev(View view, String abbrev)
+	{
+		String[] args = { abbrev };
+		JTextField textField = new JTextField();
+		Object[] message = {
+			jEdit.getProperty("add-abbrev.message",args),
+			textField };
+		Object[] options = { jEdit.getProperty("add-abbrev.global"),
+			jEdit.getProperty("add-abbrev.mode"),
+			jEdit.getProperty("common.cancel") };
+
+		int retVal = JOptionPane.showOptionDialog(view,message,
+			jEdit.getProperty("add-abbrev.title"),
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE,
+			null,options,options[0]);
+
+		String expand = textField.getText();
+		if(expand == null || retVal == 2)
+			return;
+
+		if(retVal == 1)
+		{
+			String mode = view.getBuffer().getMode().getName();
+			Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
+			if(modeAbbrevs == null)
+			{
+				modeAbbrevs = new Hashtable();
+				modes.put(mode,modeAbbrevs);
+			}
+			modeAbbrevs.put(abbrev,expand);
+		}
+		else
+			globalAbbrevs.put(abbrev,expand);
+
+		expandAbbrev(view,false);
 	}
 }

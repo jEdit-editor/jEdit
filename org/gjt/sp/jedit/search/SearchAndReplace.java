@@ -208,10 +208,7 @@ loop:			for(;;)
 					else
 						start = 0;
 					if(find(view,buffer,start))
-					{
-						fileset.matchFound(buffer);
 						return true;
-					}
 
 					buffer = fileset.getNextBuffer(view,buffer);
 				}
@@ -277,6 +274,7 @@ loop:			for(;;)
 		int[] match = matcher.nextMatch(text);
 		if(match != null)
 		{
+			fileset.matchFound(buffer);
 			view.setBuffer(buffer);
 			view.getTextArea().select(start + match[0],
 					start + match[1]);
@@ -513,6 +511,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/01/31 05:04:48  sp
+ * C+e C+x will ask to add abbrev if not found, other minor updates
+ *
  * Revision 1.24  2000/01/14 07:50:51  sp
  * Documentation updates, faster literal search, GUI updates, bug fixes
  *
