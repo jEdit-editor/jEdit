@@ -519,7 +519,7 @@ help-menu.label=$Help
 about.label=About jEdit...
 help.label=jEdit User Guide
 help-readme.label=jEdit Read Me
-help-news.label=Major Changes in jEdit 2.7
+help-news.label=Major Changes in jEdit 3.0
 help-changes.label=Version History
 help-copying.label=GNU General Public License
 

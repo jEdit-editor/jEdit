@@ -58,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.07.04.00";
+		return "03.00.04.00";
 	}
 
 	/**
@@ -600,10 +600,19 @@ public class jEdit
 			String plugin = plugins[i];
 			if(!plugin.toLowerCase().endsWith(".jar"))
 				continue;
+
+			String path = MiscUtilities.constructPath(directory,plugin);
+
+			if(plugin.equals("BeanShell.jar")
+				|| plugin.equals("bsh-1.0.jar"))
+			{
+				Log.log(Log.WARNING,jEdit.class,"Not loading"
+					+ " obsolete plugin: " + path);
+				continue;
+			}
+
 			try
 			{
-				String path = MiscUtilities.constructPath(
-					directory,plugin);
 				Log.log(Log.DEBUG,jEdit.class,
 					"Scanning JAR file: " + path);
 				new JARClassLoader(path);

@@ -1,4 +1,4 @@
-MAJOR CHANGES IN JEDIT 2.7 SINCE 2.6
+MAJOR CHANGES IN JEDIT 3.0 SINCE 2.6
 
 * Macro system improvements
 

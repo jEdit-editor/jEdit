@@ -109,7 +109,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
 		jEdit.setProperty("history",history.getText());
-		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
@@ -127,7 +126,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private UIManager.LookAndFeelInfo[] lfs;
 	private JComboBox lookAndFeel;
 	private JTextField history;
-	private JCheckBox saveDesktop;
 	private JCheckBox saveCaret;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;

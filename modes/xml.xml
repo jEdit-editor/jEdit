@@ -42,7 +42,7 @@
 		<!-- PI directives -->
 		<SPAN TYPE="KEYWORD3">
 			<BEGIN>&lt;?</BEGIN>
-			<END>?&gt;</END>
+			<END>&gt;</END>
 		</SPAN>
 
 		<!-- markup tags -->

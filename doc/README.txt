@@ -1,4 +1,4 @@
-JEDIT 2.7 README
+JEDIT 3.0 README
 
 * About jEdit
 
@@ -178,7 +178,7 @@ Kristian Ovaska:
 Matthias Schneider:
 	- AWK, COBOL syntax highlighting
 
-Michael P Jacobson:
+Michael Jacobson:
 	- TCL syntax highlighting
 
 Mike Dillon:

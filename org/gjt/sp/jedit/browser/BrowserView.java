@@ -310,20 +310,8 @@ public class BrowserView extends JPanel
 			}
 			else if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
-				char ch = evt.getKeyChar();
-				if(typeSelectBuffer.length() == 0)
-				{
-					typeSelectBuffer.append(ch);
-					doTypeSelect(typeSelectBuffer.toString(),true);
-				}
-				else if(typeSelectBuffer.length() != 1
-					|| typeSelectBuffer.charAt(0) != ch)
-				{
-					typeSelectBuffer.append(ch);
-					doTypeSelect(typeSelectBuffer.toString(),false);
-				}
-				else
-					doTypeSelect(typeSelectBuffer.toString(),true);
+				typeSelectBuffer.append(evt.getKeyChar());
+				doTypeSelect(typeSelectBuffer.toString());
 
 				timer.stop();
 				timer.setInitialDelay(500);
@@ -422,22 +410,20 @@ public class BrowserView extends JPanel
 				cellRect.y + cellRect.height);
 		}
 
-		private void doTypeSelect(String str, boolean skipSelection)
+		private void doTypeSelect(String str)
 		{
 			if(getSelectionCount() == 0)
 				doTypeSelect(str,0,getRowCount());
 			else
 			{
 				int start = getMaxSelectionRow();
-				if(skipSelection)
-					start++;
 				boolean retVal = doTypeSelect(str,start,getRowCount());
 
 				if(!retVal)
 				{
 					// scan from selection to end failed, so
 					// scan from start to selection
-					doTypeSelect(str,0,getMaxSelectionRow());
+					doTypeSelect(str,0,start);
 				}
 			}
 		}
