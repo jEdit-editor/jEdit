@@ -215,7 +215,10 @@ Gili Tzabari:
 	- OS/2 start script
 
 Kristian Ovaska:
-	- x86 Assembly, Haskell, Pascal syntax highlighting
+	- Intel x86 Assembly, Haskell, Pascal syntax highlighting
+
+Marc Rummel:
+	- MIPS R2000 Assembly syntax highlighting
 
 Matt Albrecht:
 	- Inform syntax highlighting

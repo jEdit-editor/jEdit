@@ -11,6 +11,9 @@ JEDIT 3.2 VERSION HISTORY
 - 'Toggle Line Comment' macro (John Gellene)
 - Swing text fields and text areas now have the same font as the text
   area
+- MIPS R2000 assembly syntax highlighting (Marc Rummel)
+- gnu.regexp 1.1.3 is now included. Positive lookaheads (?=...) and
+  negative lookaheads (?!=...) are now supported
 
 + Enhancements
 

@@ -5,6 +5,8 @@ TO DO
 
 + before pre4:
 
+- Docs for positive/negative lookahead
+- filename glob for r2000 mode
 - JavaInsight sets the mode but it gets set back to 'text'?
 - update macro guide:
   - markers
