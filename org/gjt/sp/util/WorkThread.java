@@ -227,6 +227,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.17  2000/11/21 02:58:04  sp
+ * 2.7pre2 finished
+ *
  * Revision 1.16  2000/07/26 07:48:46  sp
  * stuff
  *
@@ -256,14 +259,5 @@ public class WorkThread extends Thread
  *
  * Revision 1.7  2000/06/06 04:38:09  sp
  * WorkThread's AWT request stuff reworked
- *
- * Revision 1.6  2000/05/21 06:06:43  sp
- * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
- *
- * Revision 1.5  2000/05/01 11:53:24  sp
- * More icons added to toolbar, minor updates here and there
- *
- * Revision 1.4  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
  *
  */

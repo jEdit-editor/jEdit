@@ -51,15 +51,17 @@ public class JARClassLoader extends ClassLoader
 		{
 			ZipEntry entry = (ZipEntry)entires.nextElement();
 			String name = entry.getName();
-			if(name.toLowerCase().endsWith(".props"))
+			String lname = name.toLowerCase();
+			if(lname.equals("actions.xml"))
 			{
+				jEdit.loadActions(path + "!actions.xml",
+					new BufferedReader(new InputStreamReader(
+					zipFile.getInputStream(entry))));
+			}
+			else if(lname.endsWith(".props"))
 				jEdit.loadProps(zipFile.getInputStream(entry));
-			}
-			else if(name.toLowerCase().endsWith(".class"))
-			{
-				if(name.endsWith("Plugin.class"))
-					pluginClasses.addElement(name);
-			}
+			else if(name.endsWith("Plugin.class"))
+				pluginClasses.addElement(name);
 		}
 
 		jar = new EditPlugin.JAR(path,this);
@@ -418,6 +420,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  2000/11/21 02:58:03  sp
+ * 2.7pre2 finished
+ *
  * Revision 1.38  2000/11/19 07:51:25  sp
  * Documentation updates, bug fixes
  *

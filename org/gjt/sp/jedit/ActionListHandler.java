@@ -46,7 +46,6 @@ class ActionListHandler extends HandlerBase
 				Log.log(Log.ERROR,this,"Error while opening"
 					+ " actions.dtd:");
 				Log.log(Log.ERROR,this,e);
-				System.exit(1);
 			}
 		}
 
@@ -73,7 +72,6 @@ class ActionListHandler extends HandlerBase
 			return;
 
 		Log.log(Log.ERROR,this,path + ": DOCTYPE must be ACTIONS");
-		System.exit(1);
 	}
 
 	public void charData(char[] c, int off, int len)

@@ -286,7 +286,7 @@ public class WorkThreadPool
 				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
 			request.alreadyRun = true;
 
-			StringBuffer buf = new StringBuffer("request queue is now: ");
+			/* StringBuffer buf = new StringBuffer("request queue is now: ");
 			Request _request = request.next;
 			while(_request != null)
 			{
@@ -295,7 +295,7 @@ public class WorkThreadPool
 					buf.append(",");
 				_request = _request.next;
 			}
-			Log.log(Log.DEBUG,this,buf.toString());
+			Log.log(Log.DEBUG,this,buf.toString()); */
 
 			return request;
 		}
@@ -350,7 +350,7 @@ public class WorkThreadPool
 		{
 			awtRunnerQueued = true;
 			SwingUtilities.invokeLater(new RunRequestsInAWTThread());
-			Log.log(Log.DEBUG,this,"AWT runner queued");
+			//Log.log(Log.DEBUG,this,"AWT runner queued");
 		}
 	}
 
@@ -367,7 +367,7 @@ public class WorkThreadPool
 				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
 			request.alreadyRun = true;
 
-			StringBuffer buf = new StringBuffer("AWT request queue is now: ");
+			/* StringBuffer buf = new StringBuffer("AWT request queue is now: ");
 			Request _request = request.next;
 			while(_request != null)
 			{
@@ -376,7 +376,7 @@ public class WorkThreadPool
 					buf.append(",");
 				_request = _request.next;
 			}
-			Log.log(Log.DEBUG,this,buf.toString());
+			Log.log(Log.DEBUG,this,buf.toString()); */
 
 			return request;
 		}
@@ -419,6 +419,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/11/21 02:58:04  sp
+ * 2.7pre2 finished
+ *
  * Revision 1.8  2000/10/15 04:10:35  sp
  * bug fixes
  *

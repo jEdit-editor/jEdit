@@ -165,7 +165,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			setVisible(true);
 		}
 
-		System.err.println(fileset);
 		updateStatus();
 
 		toFront();
@@ -177,6 +176,12 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 				find.requestFocus();
 				if(search != null)
 					ok();
+				else
+				{
+					// just clear the result tree
+					resultTreeRoot.removeAllChildren();
+					resultTreeModel.reload(resultTreeRoot);
+				}
 			}
 		});
 	}
@@ -278,7 +283,7 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 	}
 
 	// private members
-	private View view;
+	//private View view;
 	private SearchFileSet fileset;
 	private HistoryTextField find;
 	private JCheckBox ignoreCase;
@@ -627,6 +632,9 @@ loop:				for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.73  2000/11/21 02:58:04  sp
+ * 2.7pre2 finished
+ *
  * Revision 1.72  2000/11/19 07:51:25  sp
  * Documentation updates, bug fixes
  *

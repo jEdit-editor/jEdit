@@ -718,6 +718,37 @@ public class jEdit
 	}
 
 	/**
+	 * Loads the specified action list.
+	 * @since jEdit 2.7pre2
+	 */
+	public static boolean loadActions(String path, Reader in)
+	{
+		Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
+
+		ActionListHandler ah = new ActionListHandler(path);
+		XmlParser parser = new XmlParser();
+		parser.setHandler(ah);
+		try
+		{
+			parser.parse(null, null, in);
+			return true;
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,jEdit.class,path + ":" + line
+				+ ": " + message);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,jEdit.class,e);
+		}
+
+		return false;
+	}
+
+	/**
 	 * Registers an action with the editor.
 	 * @param action The action
 	 */
@@ -762,7 +793,6 @@ public class jEdit
 	 */
 	public static void addMode(Mode mode)
 	{
-		Log.log(Log.DEBUG,jEdit.class,"Adding edit mode " + mode.getName());
 		modes.addElement(mode);
 	}
 
@@ -1990,6 +2020,8 @@ public class jEdit
 			else
 				jEditHome = System.getProperty("user.dir");
 		}
+
+		actionHash = new Hashtable();
 	}
 
 	/**
@@ -2102,41 +2134,10 @@ public class jEdit
 	 */
 	private static void initActions()
 	{
-		actionHash = new Hashtable();
-
 		Reader in = new BufferedReader(new InputStreamReader(
 			jEdit.class.getResourceAsStream("actions.xml")));
-		loadActions("actions.xml",in);
-	}
-
-	/**
-	 * Loads the specified action list.
-	 * @since jEdit 2.7pre2
-	 */
-	private static void loadActions(String path, Reader in)
-	{
-		Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
-
-		ActionListHandler ah = new ActionListHandler(path);
-		XmlParser parser = new XmlParser();
-		parser.setHandler(ah);
-		try
-		{
-			parser.parse(null, null, in);
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,jEdit.class,path + ":" + line
-				+ ": " + message);
+		if(!loadActions("actions.xml",in))
 			System.exit(1);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,jEdit.class,e);
-			System.exit(1);
-		}
 	}
 
 	/**
@@ -2434,6 +2435,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.296  2000/11/21 02:58:03  sp
+ * 2.7pre2 finished
+ *
  * Revision 1.295  2000/11/17 11:15:59  sp
  * Actions removed, documentation updates, more BeanShell work
  *

@@ -60,7 +60,7 @@ import org.gjt.sp.util.Log;
  * @see GUIUtilities#loadMenuItem(org.gjt.sp.jedit.View,String)
  */
 public abstract class EditAction
-implements ActionListener // this will not implement ActionListener for long!!!
+// no longer implements ActionListener
 {
 	/**
 	 * Creates a new <code>EditAction</code>.
@@ -95,7 +95,8 @@ implements ActionListener // this will not implement ActionListener for long!!!
 	}
 
 	/**
-	 * @deprecated Extend invoke() instead
+	 * @deprecated Extend invoke() instead, or better yet, write
+	 * your actions in BeanShell
 	 */
 	public void actionPerformed(ActionEvent evt) {}
 
@@ -220,8 +221,7 @@ implements ActionListener // this will not implement ActionListener for long!!!
 		 */
 		public void actionPerformed(ActionEvent evt)
 		{
-			// Let input handler do recording, repeating,
-			// etc.
+			// Let input handler do recording, repeating, etc
 			EditAction.getView(evt).getInputHandler()
 				.invokeAction(action);
 		}
@@ -234,6 +234,9 @@ implements ActionListener // this will not implement ActionListener for long!!!
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/11/21 02:58:03  sp
+ * 2.7pre2 finished
+ *
  * Revision 1.32  2000/11/17 11:15:59  sp
  * Actions removed, documentation updates, more BeanShell work
  *
