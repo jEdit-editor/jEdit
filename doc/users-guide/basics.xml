@@ -130,17 +130,21 @@
     <listitem><para>Prompts displayed by commands such as those dealing with
     registers and markers (see <xref linkend="text-transfer" /> and <xref
     linkend="markers" />)</para></listitem>
-    <listitem><para>The current buffer's edit mode. See <xref
-    linkend="modes" />.</para></listitem>
-    <listitem><para>The current buffer's character encoding. See <xref
-    linkend="encodings" />.</para></listitem>
+    <listitem><para>The current buffer's edit mode. Clicking this
+    displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+    Options</guimenuitem> dialog box. See <xref
+    linkend="modes" /> and <xref linkend="buffer-opts" />.</para></listitem>
+    <listitem><para>The current buffer's character encoding.  Clicking this
+    displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+    Options</guimenuitem> dialog box. See <xref
+    linkend="encodings" /> and <xref linkend="buffer-opts" />.</para></listitem>
     <listitem><para>If multiple selection is enabled, the text
     <guilabel>multi</guilabel> is shown in black, otherwise it will be grayed out.
-    Pressing <keycombo><keycap>Control</keycap>
+    Clicking her or pressing <keycombo><keycap>Control</keycap>
     <keycap>\</keycap></keycombo> turns multiple selection on and off. See <xref
     linkend="multi-select" />.</para></listitem>
     <listitem><para>If overwrite mode is enabled, the text <guilabel>over</guilabel> is
-    shown in black, otherwise it will be grayed out. Pressing
+    shown in black, otherwise it will be grayed out. Clicking here or pressing
     <keycap>Insert</keycap> turns overwrite mode on and off. See <xref
     linkend="entering-text" />.</para></listitem>
     <listitem><para>If portions of the buffer are invisible due to folding,
@@ -148,7 +152,9 @@
     shown in black, otherwise it will be grayed out. See <xref
     linkend="folding" />.</para></listitem>
     <listitem><para>If input/output operations are in progress, a small disk icon
-    and progress bars for each running operation are displayed. See <xref
+    and progress bars for each running operation are displayed. Clicking
+    here will display the <guimenu>Utilities</guimenu>&gt;<guimenuitem>I/O
+    Progress Monitor</guimenuitem> dialog box. See <xref
     linkend="threaded-io" />.</para></listitem>
    </itemizedlist>
   </sect2>

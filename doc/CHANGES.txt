@@ -4,6 +4,7 @@ JEDIT 3.2 VERSION HISTORY
 
 + New Features
 
+- BeanShell 1.2beta1 included
 - Visual Foxpro syntax highlighting (Matt Price)
 - SQR syntax highlighting (Richard Ashwell)
 - Cruddy -bshclient command-line switch replaced with -run=<script>
@@ -56,6 +57,9 @@ JEDIT 3.2 VERSION HISTORY
   C+Down to S+Up and S+Down
 - You can now press Enter in the 'Directory' and 'Filter' fields of the
   search and replace dialog box to begin a search
+- Clicking on the mode and encoding display in the status bar opens the
+  Buffer Options dialog box, clicking the overwrite and multiple
+  selection display toggles those settings
 
 + Bug Fixes
 
@@ -74,6 +78,7 @@ JEDIT 3.2 VERSION HISTORY
 - Global options dialog box looked a bit dodgy with the 'global colors'
   setting
 - Could paste into read-only buffers
+- Commands which used readNextChar() were not recorded properly
 
 * Version 3.2pre6
 

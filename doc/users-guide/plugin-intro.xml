@@ -41,61 +41,57 @@
 
 	<listitem><para>
     The plugin must provide for activating, displaying and
-    deactivating itself upon direction from the host application,
+    deactivating itself upon direction from jEdit,
     typically in response to user input.
   </para></listitem>
 
   <listitem><para>
-    The plugin may, but need not, provide its own user interface.
+    The plugin may, but need not, provide a user interface.
   </para>
   <para>
     If the plugin has a visible interface, it can be shown in any object
     derived from one of Java top-level container classes:
-    <classname>JWindow</classname>, <classname>JDialog</classname>,
-    <classname>JFrame</classname>. To integrate the plugin's display with
-    the host application, the Plugin API provides an dockable window
-    facility. It allows the plugin's visible components to appear in a
-    docking window adjacent to the main editing area. They can also appear
-    as a <quote>floating</quote>, top-level frame window. The docking window
-    scheme stacks plugins in sets of tabbed panes. A set of panes can appear
-    above, below or to the left or right of the editing pane. The user
-    controls whether and where a dockable window may appear.
+    <classname>JWindow</classname>, <classname>JDialog</classname>, or
+    <classname>JFrame</classname>. jEdit also provides a dockable window
+    API, which allows plugin windows to be docked into views or shown in
+    top-level frames, at the user's request.
   </para>
 
   <para>
     Plugins can also act directly upon jEdit's text area.  They
-    can add graphical elements to the buffer text display (like error
-    highlighting in the case of the ErrorList plugin) or decorations
-    surrounding the text area (like the JDiff plugin's summary views).
+    can add graphical elements to the text display (like error
+    highlighting in the case of the <application>ErrorList</application>
+    plugin) or decorations
+    surrounding the text area (like the <application>JDiff</application>
+    plugin's summary views).
   </para>
   </listitem>
 
   <listitem><para>
-    The plugin may (and typically does) define <firstterm>user
-    actions</firstterm> that jEdit will perform on behalf of the plugin upon
+    Plugins may (and typically do) define <firstterm>actions</firsterm>
+    that jEdit will perform on behalf of the plugin upon
     user request. User actions are short snippets of BeanShell code that
-    provide the <quote>glue</quote> between a user input and
+    provide the <quote>glue</quote> between user input and
     specifc plugin routines.
   </para>
 
   <para>
-    The Plugin API makes user actions available whether or not the plugin's
-    visible components have input focus. Generally, plugins display their
-    available actions in submenus of the application's
-    <guimenu>Plugins</guimenu> menu; each menu item corresponds to one
-    action. The user can also assign actions to keyboard shortcuts, buttons
-    on the application's tool bar and entries in the text area's context menu.
+    By convention, plugins display their
+    available actions in submenus of jEdit's
+    <guimenu>Plugins</guimenu> menu; each menu item corresponds to an
+    action. The user can also assign actions to keyboard shortcuts,
+    toolbar buttons or entries in the text area's right-click menu.
   </para>
 
   </listitem>
 
 	<listitem><para>
-    The plugin may provide a range of options that the user can modify to
+    Plugins may provide a range of options that the user can modify to
     alter its configuration.
   </para>
 
   <para>
-    If a plugin provides configuration options in accordance with the Plugin
+    If a plugin provides configuration options in accordance with the plugin
     API, jEdit will make them available in the <guilabel>Global
     Options</guilabel> dialog. Each plugin with options is listed in the
     tree view in that dialog under <guilabel>Plugin Options</guilabel>.
@@ -123,16 +119,16 @@
 
 <sidebar><title>Plugins and different jEdit versions</title>
   <para>
-    As jEdit continues to evolve and improve, elements of the Plugin API or
+    As jEdit continues to evolve and improve, elements of the plugin API or
     jEdit's general API may change with a new jEdit release. For example,
     version 3.2 of jEdit introduced a set of
     <classname>Selection</classname> classes that enable multiple text
-    selections in the editing area. On occasion an API change will break
+    selections in the text area. On occasion an API change will break
     code used by plugins, although efforts are made to maintain or deprecate
     plugin-related code where possible. While the majority of plugins are
     unaffected by most changes and will continue working, it is a good idea
-    to monitor the jEdit change log and mailing lists for API changes and update
-    your plugin as necessary.
+    to monitor the jEdit change log and mailing lists for API changes
+    and update your plugin as necessary.
   </para>
 </sidebar>
 

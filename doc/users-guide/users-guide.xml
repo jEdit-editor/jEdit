@@ -40,8 +40,7 @@
 <!ENTITY bsh-commands SYSTEM "bsh-commands.xml">
 <!ENTITY api-guide SYSTEM "api-guide.xml">
 <!ENTITY plugin-api-guide SYSTEM "plugin-api-guide.xml">
-<!ENTITY api-message SYSTEM "api-message.xml">
-<!ENTITY api-error-report SYSTEM "api-error-report.xml"> ]>
+<!ENTITY api-message SYSTEM "api-message.xml"> ]>
 
 <book>
 
@@ -191,7 +190,6 @@
  &api-guide;
  &plugin-api-guide;
  &api-message;
- &plugin-error-report;
 </part>
 
 </book>

@@ -65,11 +65,14 @@ public class StatusBar extends JPanel
 		message.setBorder(border);
 		add(BorderLayout.CENTER,message);
 
+		MouseHandler mouseHandler = new MouseHandler();
+
 		Box box = new Box(BoxLayout.X_AXIS);
 		mode = new JLabel();
 		mode.setForeground(Color.black);
 		mode.setBorder(border);
 		mode.setToolTipText(jEdit.getProperty("view.status.mode-tooltip"));
+		mode.addMouseListener(mouseHandler);
 		box.add(mode);
 		box.add(Box.createHorizontalStrut(3));
 
@@ -77,16 +80,19 @@ public class StatusBar extends JPanel
 		encoding.setForeground(Color.black);
 		encoding.setBorder(border);
 		encoding.setToolTipText(jEdit.getProperty("view.status.encoding-tooltip"));
+		encoding.addMouseListener(mouseHandler);
 		box.add(encoding);
 		box.add(Box.createHorizontalStrut(3));
 
 		multiSelect = new JLabel("multi");
 		multiSelect.setBorder(border);
+		multiSelect.addMouseListener(mouseHandler);
 		box.add(multiSelect);
 		box.add(Box.createHorizontalStrut(3));
 
 		overwrite = new JLabel("over");
 		overwrite.setBorder(border);
+		overwrite.addMouseListener(mouseHandler);
 		box.add(overwrite);
 		box.add(Box.createHorizontalStrut(3));
 
@@ -101,6 +107,7 @@ public class StatusBar extends JPanel
 		box.add(Box.createHorizontalStrut(3));
 		ioProgress = new MiniIOProgress();
 		ioProgress.setBorder(border);
+		ioProgress.addMouseListener(mouseHandler);
 		box.add(ioProgress);
 
 
@@ -221,7 +228,23 @@ public class StatusBar extends JPanel
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();
 	private Timer tempTimer;
 
-	public class VICaretStatus extends JComponent
+	class MouseHandler extends MouseAdapter
+	{
+		public void mouseClicked(MouseEvent evt)
+		{
+			Object source = evt.getSource();
+			if(source == mode || source == encoding)
+				new BufferOptions(view,view.getBuffer());
+			else if(source == multiSelect)
+				view.getTextArea().toggleMultipleSelectionEnabled();
+			else if(source == overwrite)
+				view.getTextArea().toggleOverwriteEnabled();
+			else if(source == ioProgress)
+				new IOProgressMonitor(view);
+		}
+	}
+
+	class VICaretStatus extends JComponent
 	{
 		public VICaretStatus()
 		{

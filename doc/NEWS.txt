@@ -83,9 +83,9 @@ Syntax highlighting for the following file types has been added:
 
 * New version of BeanShell
 
-jEdit now bundles BeanShell 1.1a18. Changes since BeanShell 1.01 include
-improved performance, cleaner internals, bug fixes, and a few new
-language features.
+jEdit now bundles BeanShell 1.2beta1. Changes since BeanShell 1.01
+include improved performance, cleaner internals, bug fixes, and a few
+new language features.
 
 * Search and replace improvements
 

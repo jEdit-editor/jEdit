@@ -38,6 +38,8 @@ public class GrabKeyDialog extends JDialog
 		this.oldShortcut = shortcutData[1];
 		this.altShortcut = shortcutData[2];
 
+		enableEvents(AWTEvent.KEY_EVENT_MASK);
+
 		JPanel content = new JPanel(new BorderLayout())
 		{
 			/**
@@ -122,10 +124,16 @@ public class GrabKeyDialog extends JDialog
 		return false;
 	}
 
+	// protected members
+	protected void processKeyEvent(KeyEvent evt)
+	{
+		shortcut.processKeyEvent(evt);
+	}
+
 	// private members
 
 	// this is a bad hack
-	private JTextField shortcut;
+	private InputPane shortcut;
 	private JButton ok;
 	private JButton cancel;
 	private boolean isOK;
