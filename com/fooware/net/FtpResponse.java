@@ -169,13 +169,6 @@ public class FtpResponse {
     private void setMessage(BufferedReader in) throws IOException {
         StringBuffer buffer = new StringBuffer();
         while (true) {
-            while (!in.ready()) {
-                try {
-                    Thread.sleep(10L);
-                }
-                catch (InterruptedException exc) {
-                }
-            }
             String line = in.readLine();
             if (returnCode == null)
                 returnCode = line.substring(0, 3);

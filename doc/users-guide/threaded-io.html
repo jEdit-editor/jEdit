@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Multithreaded I/O</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.6 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Virtual File Systems"
+HREF="vfs.html"><LINK
+REL="PREVIOUS"
+TITLE="The URL Filesystem"
+HREF="vfs-url.html"><LINK
+REL="NEXT"
+TITLE="Customizing jEdit"
+HREF="customizing.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.6 User's Guide</H1
+><P
+><A
+HREF="customizing.html"
+>Next</A
+>, <A
+HREF="vfs-url.html"
+>Prev</A
+></P
+><H2
+>Chapter 8. Virtual File Systems</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="THREADED-IO"
+>Multithreaded I/O</A
+></H1
+><P
+>   Because it is undesirable to block the GUI while loading or saving
+   buffers (especially with FTP filesystem)
+   jEdit executes all I/O operations asynchronously.
+  </P
+><P
+>   When jEdit starts up, it creates a pool of "I/O work threads".
+   The default number of threads is 4, which should be enough for the
+   majority of cases; but this can be changed in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>I/O Progress Monitor</SPAN
+> displays a
+   window showing what each I/O thread is doing. Clicking the <SPAN
+CLASS="GUIBUTTON"
+>Abort</SPAN
+>
+   button next to a progress bar will abort the operation executing
+   in that thread. You will be asked for confirmation first.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-2. The I/O Progress Monitor window</B
+></P
+><P
+><IMG
+SRC="../images/window-io-progress.gif"></P
+></DIV
+><P
+>   View status bars also have a miniature I/O monitor. Clicking on it
+   will open the <SPAN
+CLASS="GUIMENUITEM"
+>I/O Progress Monitor</SPAN
+> window.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="vfs.html"
+>Up</A
+><BR><A
+HREF="vfs-url.html"
+>Prev</A
+>: The URL Filesystem<BR><A
+HREF="customizing.html"
+>Next</A
+>: Customizing jEdit<BR></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The FTP Filesystem</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.6 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Virtual File Systems"
+HREF="vfs.html"><LINK
+REL="PREVIOUS"
+TITLE="Virtual File Systems"
+HREF="vfs.html"><LINK
+REL="NEXT"
+TITLE="The URL Filesystem"
+HREF="vfs-url.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.6 User's Guide</H1
+><P
+><A
+HREF="vfs-url.html"
+>Next</A
+>, <A
+HREF="vfs.html"
+>Prev</A
+></P
+><H2
+>Chapter 8. Virtual File Systems</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="VFS-FTP"
+>The FTP Filesystem</A
+></H1
+><P
+>   jEdit has its own FTP protocol implementation which is superior to
+   the one that ships with Java. Unlike the default implementation, it
+   supports non-anonymous logins and lets you browse remote filesystems.
+  </P
+><P
+>   To open a file stored on an FTP server, select the
+   <SPAN
+CLASS="GUIMENUITEM"
+>Connect to FTP Server</SPAN
+> command from the <SPAN
+CLASS="GUIMENU"
+>More</SPAN
+>
+   menu in the VFS browser. You will be prompted for a host name, user name
+   and password.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-1. The FTP login dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-ftp-login.gif"></P
+></DIV
+><P
+>   If a buffer was loaded from an FTP server,
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save</SPAN
+> (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>S</B
+>) will automatically
+   upload it. To upload a buffer not originally from an FTP server, invoke
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+> and perform the above steps
+   to connect to the FTP server.
+  </P
+><P
+>   Some jEdit features do not work when editing remote files;
+   no autosave or backup files are created, and the
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Current Directory</SPAN
+>
+   menu cannot currently list remote directories.
+  </P
+><P
+>   To improve performance, jEdit caches directory listings from remote
+   FTP servers. Adding and deleting files from within jEdit will automatically
+   update the cache when necessary, but if you use another FTP client, file
+   listings may become out of date. To flush the cache, invoke
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Flush Remote Directory Cache</SPAN
+>.
+   jEdit also remembers passwords on remote servers until it is closed.
+   To force jEdit to forget saved passwords without quitting and restarting
+   it, invoke <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Forget Remote Passwords</SPAN
+>.
+  </P
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>    If you know the exact path name of a buffer you want to open via FTP,
+    you can forgo the VFS browser by entering an FTP URL
+    (<TT
+CLASS="FILENAME"
+>ftp://<TT
+CLASS="REPLACEABLE"
+><I
+>user</I
+></TT
+>@<TT
+CLASS="REPLACEABLE"
+><I
+>server</I
+></TT
+>/<TT
+CLASS="REPLACEABLE"
+><I
+>path</I
+></TT
+></TT
+>)
+    directly in the
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Open Path</SPAN
+> dialog box. You will
+    then be prompted for a password, and the file will be loaded.
+   </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="vfs.html"
+>Up</A
+><BR><A
+HREF="vfs.html"
+>Prev</A
+>: Virtual File Systems<BR><A
+HREF="vfs-url.html"
+>Next</A
+>: The URL Filesystem<BR></DIV
+></BODY
+></HTML
+>

@@ -9,15 +9,12 @@ CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
 TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
-REL="UP"
-TITLE="Advanced Features"
-HREF="advanced-features.html"><LINK
 REL="PREVIOUS"
-TITLE="Advanced Features"
-HREF="advanced-features.html"><LINK
+TITLE="Searching in Multiple Files"
+HREF="multifile.html"><LINK
 REL="NEXT"
-TITLE="Working With Views"
-HREF="views.html"></HEAD
+TITLE="The FTP Filesystem"
+HREF="vfs-ftp.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,267 +23,69 @@ CLASS="NAVHEADER"
 >jEdit 2.6 User's Guide</H1
 ><P
 ><A
-HREF="views.html"
+HREF="vfs-ftp.html"
 >Next</A
 >, <A
-HREF="advanced-features.html"
+HREF="multifile.html"
 >Prev</A
 ></P
-><H2
->Chapter 4. Advanced Features</H2
 ><HR></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="VFS"
+>Chapter 8. Virtual File Systems</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="vfs.html#VFS-BROWSER"
+>The VFS Browser</A
+></DT
+><DT
+><A
+HREF="vfs-ftp.html"
+>The FTP Filesystem</A
+></DT
+><DT
+><A
+HREF="vfs-url.html"
+>The URL Filesystem</A
+></DT
+><DT
+><A
+HREF="threaded-io.html"
+>Multithreaded I/O</A
+></DT
+></DL
+></DIV
+><P
+>  jEdit doesn't deal with disk files directly. Instead, it passes all
+  buffer loading and saving through one of several available storage
+  implementations known as <I
+CLASS="FIRSTTERM"
+>virtual filesystems</I
+>.
+  The jEdit core includes local, FTP and URL filesystems. Plugins can
+  be written to add more.
+ </P
 ><DIV
 CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="VFS"
->Virtual File Systems</A
+NAME="VFS-BROWSER"
+>The VFS Browser</A
 ></H1
 ><P
->   jEdit doesn't deal with disk files directly. Instead, it passes all
-   buffer loading and saving through one of several available storage
-   implementations known as <I
-CLASS="FIRSTTERM"
->virtual filesystems</I
->.
-   The jEdit core includes local, FTP and URL filesystems. Plugins can
-   be written to add more.
-  </P
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN674"
->The Local Filesystem</A
-></H2
-><P
->    jEdit's features for manipulating local files have already been
-    discussed in earlier chapters, so they will not be repeated here.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN677"
->The FTP Filesystem</A
-></H2
-><P
->    jEdit has its own FTP protocol implementation which is superior to
-    the one that ships with Java. Unlike the default implementation, it
-    supports non-anonymous logins and lets you browse remote filesystems.
-   </P
-><P
->    To open a file stored on an FTP server, invoke
-    <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUISUBMENU"
->Open From</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->FTP Server</SPAN
->.
-    This will display the "FTP Browser" dialog box.
-   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-1. The FTP Browser dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-ftp-browser.gif"></P
-></DIV
-><P
->    After entering some required information such as the FTP server,
-    a user name and password, click <SPAN
-CLASS="GUIBUTTON"
->Connect</SPAN
-> to
-    log in to the server and display a directory listing. Double-click
-    on a directory in the list to browse its contents; double-click on
-    a file to open it. The <SPAN
-CLASS="GUIBUTTON"
->Up</SPAN
-> button will go up to the
-    directory containing the current one.
-   </P
-><P
->    If a buffer was loaded from an FTP server,
-    <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Save</SPAN
-> (keyboard equivalent:
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->S</B
->) will automatically
-    upload it. To upload a buffer not originally from an FTP server, invoke
-    <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUISUBMENU"
->Save To</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->FTP Server</SPAN
->,
-    which will display an FTP browser similar to the one used for opening
-    files.
-   </P
-><P
->    Some jEdit features do not work when editing remote files;
-    no autosave or backup files are created, and the
-    <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Current Directory</SPAN
->
-    menu cannot currently list remote directories.
-   </P
-><DIV
-CLASS="TIP"
-><BLOCKQUOTE
-CLASS="TIP"
-><P
-><B
->Tip: </B
->     If you know the exact path name of a buffer you want to open via FTP,
-     you can forgo the FTP browser by entering an FTP URL
-     (<TT
-CLASS="FILENAME"
->ftp://<TT
-CLASS="REPLACEABLE"
-><I
->server</I
-></TT
->/<TT
-CLASS="REPLACEABLE"
-><I
->path</I
-></TT
-></TT
->)
-     directly in the
-     <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Open Path</SPAN
-> dialog box. You will
-     then be prompted for a user name and password, and the file will be loaded.
-    </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-2. The FTP login dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-ftp-login.gif"></P
-></DIV
-></BLOCKQUOTE
-></DIV
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN713"
->The URL Filesystem</A
-></H2
-><P
->    Java's networking library provides bare-bones
-    implementations of HTTP, Gopher and a few other protocols, so jEdit can
-    also access remote files on non-FTP servers, albeit in a much more limited
-    fashion.
-    To open a URL, enter it in the
-    <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Open Path</SPAN
-> dialog box. Currently,
-    saving to non-FTP URLs is not supported (this is a limitation of Java's
-    networking library).
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="THREADED-IO"
->Multithreaded I/O</A
-></H2
-><P
->    Because it is undesirable to block the GUI while loading or saving
-    buffers (especially with FTP filesystem)
-    jEdit executes all I/O operations asynchronously.
-   </P
-><P
->    When jEdit starts up, it creates a pool of "I/O work threads".
-    The default number of threads is 4, which should be enough for the
-    majority of cases; but this can be changed in the
-    <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
-> dialog box.
-   </P
-><P
->    <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->I/O Progress Monitor</SPAN
-> displays a
-    window showing what each I/O thread is doing. Clicking the <SPAN
-CLASS="GUIBUTTON"
->Abort</SPAN
->
-    button next to a progress bar will abort the operation executing
-    in that thread. You will be asked for confirmation first.
-   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-3. The I/O Progress Monitor window</B
-></P
-><P
-><IMG
-SRC="../images/window-io-progress.gif"></P
-></DIV
-><P
->    View status bars also have a miniature I/O monitor. Clicking on it
-    will open the <SPAN
-CLASS="GUIMENUITEM"
->I/O Progress Monitor</SPAN
-> window.
-   </P
+>  </P
 ></DIV
 ></DIV
 ><DIV
@@ -294,16 +93,13 @@ CLASS="NAVFOOTER"
 ><HR><A
 HREF="index.html"
 >Home</A
->, <A
-HREF="advanced-features.html"
->Up</A
 ><BR><A
-HREF="advanced-features.html"
+HREF="multifile.html"
 >Prev</A
->: Advanced Features<BR><A
-HREF="views.html"
+>: Searching in Multiple Files<BR><A
+HREF="vfs-ftp.html"
 >Next</A
->: Working With Views<BR></DIV
+>: The FTP Filesystem<BR></DIV
 ></BODY
 ></HTML
 >

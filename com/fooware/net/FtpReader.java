@@ -44,13 +44,6 @@ public class FtpReader extends FilterReader {
     FtpReader(Reader in, FtpClient client) throws IOException {
         super(in);
         this.client = client;
-        while (!in.ready()) {
-            try {
-                Thread.sleep(50L);
-            }
-            catch (InterruptedException exc) {
-            }
-        }
     }
 
     /**
