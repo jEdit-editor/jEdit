@@ -489,9 +489,11 @@ public class Abbrevs
 				{
 					if(i != text.length() - 1)
 					{
-						ch = text.charAt(++i);
+						ch = text.charAt(i + 1);
 						if(Character.isDigit(ch) && ch != '0')
 						{
+							i++;
+
 							int pos = ch - '0';
 							if(pos < pp.size())
 								buf.append(pp.elementAt(pos));
@@ -509,7 +511,6 @@ public class Abbrevs
 							// $key will be $key, for
 							// example
 							buf.append('$');
-							buf.append(ch);
 						}
 					}
 				}

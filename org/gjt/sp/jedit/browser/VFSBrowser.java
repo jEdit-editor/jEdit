@@ -209,6 +209,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 				else
 					path = pathModel.getItem(0);
 			}
+			else if(defaultPath.equals("favorites"))
+				path = "favorites:";
 			else
 			{
 				// unknown value??!!!

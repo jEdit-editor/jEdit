@@ -17,6 +17,7 @@ TO DO
       - balancing brackets
     - ... what else?
   - installing-modes
+  - mention delegation to rulesets with TERMINATE_AT
 - documentation:
   - update using-plugins
   - formatting problems in user's guide in table cells
@@ -110,4 +111,11 @@ TO DO
 - finish persistent splits: resize splits to put them in the middle
 - C+\
 - edit server documentation
-
+- invert selection
+- hypersearch: select lines with matches
+- support for more token types, and in HTML mode, highlight different tag
+  types with different colors
+- {MARKUP,KEYWORD,COMMENT,LITERAL,OPERATOR,LABEL,FUNCTION}{1,2,3,4} token
+  types
+- new document model with sliding line map
+- keyboard selection in hypersearch

@@ -1,5 +1,16 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2pre6
+
++ Bug Fixes
+
+- README.txt, CHANGES.txt, etc. were missing from jedit.jar
+- Setting the file system browser's default path to 'favorites' didn't
+  work
+- In an abbrev expansion, $$1 will now be replaced by a dollar, followed
+  by the value of the first positional parameter. Previously, the first
+  dollar sign would cause problems
+
 * Version 3.2pre5
 
 + New Features
