@@ -664,21 +664,22 @@ loop:		for(;;)
 			int[] occur = matcher.nextMatch(text);
 			if(occur == null)
 				break loop;
-			int _start = occur[0] + offset;
-			int _end = occur[1] - occur[0];
+			int _start = occur[0];
+			int _length = occur[1] - occur[0];
 
-			String found = buffer.getText(_start,_end);
+			String found = new String(text.array,text.offset + _start,_length);
 			String subst = matcher.substitute(found);
 
 			if(subst != null)
 			{
-				buffer.remove(_start,_end);
-				buffer.insertString(_start,subst,null);
+				buffer.remove(offset + _start,_length);
+				buffer.insertString(offset + _start,subst,null);
 				occurCount++;
-				offset = _start + subst.length();
+				offset += _start + subst.length();
+				end += (subst.length() - found.length());
 			}
 			else
-				offset += _end;
+				offset += _start + _length;
 		}
 
 		return occurCount;

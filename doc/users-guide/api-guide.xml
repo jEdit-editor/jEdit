@@ -7,18 +7,7 @@
 <!-- This file contains the jEdit API Quick Reference            -->
 
 
-<appendix id="api-guide"><title>jEdit API Quick Reference</title>
-
-<para>
-    The source code for jEdit covers over 200 classes (not counting classes
-    from other open source packages like BeanShell and the GNU regular
-    expression package).  Embedding a BeanShell interpreter within jEdit
-    makes most of those classes available to the user to help customize and
-    extend the program.  For the vast majority of circumstances, however,
-    only a handful of classes will be needed for writing a macro script.
-    The following is a quick guide to some of the principal jEdit classes
-    that are useful in writing macros.
-</para>
+<chapter id="api-macro"><title>General jEdit Classes</title>
 
 <sect1 id="class-jEdit"><title>Class jEdit</title>
 
@@ -149,7 +138,7 @@
 <para>
     Returns a <type>boolean</type> value of <constant>true</constant> or
     <constant>false</constant> for the property named by <varname>name</varname> by
-    examining the String contents of the property; returns
+    examining the contents of the property; returns
     <constant>false</constant> if the property cannot be found.
 </para>
 </listitem>
@@ -461,7 +450,9 @@ a macro may need to use. They include the following:</para>
     message)</function> can be called on the return value of
     <function>getStatus()</function> to display reminders or updates during
     execution of a macro. The message remains until the method is called
-    again.
+    again. To display a temporary message in the status bar, call
+    <function>setMessageAndClear(String message)</function>, which will
+    erase the message after two seconds.
 </para>
 </listitem>
 
@@ -485,6 +476,195 @@ a macro may need to use. They include the following:</para>
 </itemizedlist>
 
 </sect1>
+
+<!-- open sect1 -->
+<sect1 id="class-Registers"><title>Class Registers</title>
+<para>
+  A <classname>Register</classname> is string of text indexed by a
+  single character.  Typically the text is taken from selected buffer text
+  and the index character is a keyboard character selected by the user.
+</para>
+
+<para>
+  The application maintains a single <classname>Registers</classname> object
+  consisting of an dynamically sized array of <classname>Register</classname>
+  objects.  The <classname>Registers</classname> class defines a number of methods
+  that give each register the properties of a virtual clipboard.
+</para>
+
+<para>
+  The following methods provide a clipboard operations for register
+  objects:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>copy</function></funcdef>
+        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
+        <paramdef>char <parameter>register</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Saves the selected text in the designated <parameter>textArea</parameter>
+      to the register indexed at <parameter>register</parameter>.  This
+      will replace the existing contents of the designated register.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>cut</function></funcdef>
+        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
+        <paramdef>char <parameter>register</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  <para>
+    Saves the selected text in the designated <parameter>textArea</parameter>
+    to the register indexed at <parameter>register</parameter>, and removes the
+    text from the text area.  This will replace the existing contents of the
+    designated register.
+  </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>append</function></funcdef>
+        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
+        <paramdef>char <parameter>register</parameter></paramdef>
+        <paramdef>String <parameter>separator</parameter></paramdef>
+        <paramdef>boolean <parameter>cut</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>append</function></funcdef>
+        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
+        <paramdef>char <parameter>register</parameter></paramdef>
+        <paramdef>String <parameter>separator</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>append</function></funcdef>
+        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
+        <paramdef>char <parameter>register</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  <para>
+    These three methods append the selected text in the
+    <parameter>textArea</parameter> to the designated register. If the
+    <parameter>cut</parameter> parameter is not specified, the selected text
+    remains in the text area. If the <parameter>separator</parameter>
+    parameter is not specified, a newline character is used to separate the
+    appended text from any existng register text.
+  </para>
+  </listitem>
+
+</itemizedlist>
+
+<para>
+  The following methods provide a lower-level interface for working with
+  registers:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>setRegister</function></funcdef>
+        <paramdef>char <parameter>name</parameter></paramdef>
+        <paramdef>Register <parameter>register</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>setRegister</function></funcdef>
+        <paramdef>char <parameter>name</parameter></paramdef>
+        <paramdef>Register <parameter>newRegister</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>clearRegister</function></funcdef>
+        <paramdef>char <parameter>name</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Sets the text of the designated register to <constant>null</constant>.
+      If the registger is one of the two registers reserved by the
+      application (as discussed in the next section), the text value is
+      set to an empty string.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static Register <function>getRegister</function></funcdef>
+        <paramdef>char <parameter>name</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static Register[] <function>getRegisters</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+
+<sect1 id="class-Register"><title>Interface Register</title>
+
+<para>
+  This interface requires implementation of two methods:
+  <function>setValue()</function>, which takes a
+  <classname>String</classname> parameter, and
+  <function>toString()</function>, which return a textual representation
+  of the register's contents. Two classes implement this interface. A
+  <classname>ClipboardRegister</classname> is tied to the contents of the
+  application's clipboard. The application assigns a
+  <classname>ClipboardRegister</classname> to the register indexed under
+  the character <screen>'$'</screen>. A
+  <classname>StringRegister</classname> is created for registers assigned
+  by the user. In addition, the application assigns to the
+  <classname>StringRegister</classname> indexed under <screen>'%'</screen>
+  the last text segment selected in the text area.
+</para>
+
+<para>
+  A <classname>Register</classname> object does not maintain a copy of
+  its index key.  Indexing is performed by the <classname>Registers</classname>
+  object.
+</para>
+
+
+</sect1>
+
 
 <!-- LaTeX spews with id's that are too long? -->
 <sect1 id="class-DockableWindowManager"><title>Class DockableWindowManager</title>
@@ -1696,7 +1876,7 @@ JEditTextArea</title>
   </listitem>
 </itemizedlist>
 <para>
-  The following methods are inherited by the <classname>Buffer</classname>
+  The following two methods are inherited by the <classname>Buffer</classname>
   class.
 </para>
 
@@ -1731,6 +1911,45 @@ JEditTextArea</title>
     </para>
   </listitem>
 </itemizedlist>
+
+<para>
+  These two methods provide shortcuts for getting snd setting <type>boolean</type>
+  properties.
+</para>
+
+<itemizedlist>
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public static boolean <function>getBooleanProperty</function></funcdef>
+  <paramdef>String <parameter>name</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Returns a <type>boolean</type> value of <constant>true</constant> or
+    <constant>false</constant> for the property named by <varname>name</varname> by
+    examining the contents of the property; returns
+    <constant>false</constant> if the property cannot be found.
+</para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public static void <function>setBooleanProperty</function></funcdef>
+  <paramdef>String <parameter>name</parameter></paramdef>
+  <paramdef>boolean <parameter>value</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    This method sets the property named by <varname>name</varname> to
+    <varname>value</varname>. The boolean value is stored internally as the
+    string <quote>true</quote> or <quote>false</quote>.
+</para>
+</listitem>
+
+</itemizedlist>
+
 
 </sect2>
 
@@ -2902,5 +3121,6 @@ This class is another collection of <type>static</type> utility methods.
 
 </sect1>
 
-</appendix>
+</chapter>
+
 

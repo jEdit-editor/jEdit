@@ -4173,8 +4173,7 @@ forward_scan:		do
 			// try and merge existing selections one by
 			// one with the new selection
 			Selection s = (Selection)selection.elementAt(i);
-			if((s.start < addMe.start && s.end >= addMe.start)
-				|| (s.end > addMe.end && s.start <= addMe.end))
+			if(_selectionsOverlap(s,addMe))
 			{
 				addMe.start = Math.min(s.start,addMe.start);
 				addMe.end = Math.max(s.end,addMe.end);
@@ -4190,6 +4189,15 @@ forward_scan:		do
 		selection.addElement(addMe);
 
 		invalidateLineRange(addMe.startLine,addMe.endLine);
+	}
+
+	private boolean _selectionsOverlap(Selection s1, Selection s2)
+	{
+		if((s1.start >= s2.start && s1.start <= s2.end)
+			|| (s1.end >= s2.start && s1.end <= s2.end))
+			return true;
+		else
+			return false;
 	}
 
 	private void getSelectedText(Selection s, StringBuffer buf)

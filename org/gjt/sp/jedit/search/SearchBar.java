@@ -101,7 +101,7 @@ public class SearchBar extends JPanel
 		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 		regexp.setSelected(SearchAndReplace.getRegexp());
 		hyperSearch.setSelected(jEdit.getBooleanProperty(
-			"search.hypersearch.toggle"));
+			"view.search.hypersearch.toggle"));
 		find.setModel(hyperSearch.isSelected() ? "find" : null);
 	}
 
@@ -197,7 +197,7 @@ public class SearchBar extends JPanel
 				find(false);
 			else if(evt.getSource() == hyperSearch)
 			{
-				jEdit.setBooleanProperty("search.hypersearch.toggle",
+				jEdit.setBooleanProperty("view.search.hypersearch.toggle",
 					hyperSearch.isSelected());
 				update();
 			}

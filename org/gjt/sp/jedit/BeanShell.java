@@ -211,7 +211,7 @@ public class BeanShell
 		else
 			namespace = global;
 
-		Interpreter interp = new Interpreter(namespace);
+		Interpreter interp = createInterpreter(namespace);
 
 		try
 		{
@@ -261,7 +261,7 @@ public class BeanShell
 		boolean rethrowBshErrors)
 	{
 		NameSpace namespace = new NameSpace(global,"inline eval");
-		Interpreter interp = new Interpreter(namespace);
+		Interpreter interp = createInterpreter(namespace);
 
 		try
 		{
@@ -437,11 +437,11 @@ public class BeanShell
 		BshClassManager.setClassLoader(new JARClassLoader());
 
 		global = new NameSpace("jEdit embedded BeanShell Interpreter");
-		interpForMethods = new Interpreter(global);
+		interpForMethods = createInterpreter(global);
 
 		try
 		{
-			Interpreter interp = new Interpreter(global);
+			Interpreter interp = createInterpreter(global);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 				BeanShell.class.getResourceAsStream("jedit.bsh")));
@@ -464,4 +464,11 @@ public class BeanShell
 	private static NameSpace internal;
 	private static boolean running;
 	private static int cachedBlockCounter;
+
+	// until Pat updates Interpreter.java
+	private static Interpreter createInterpreter(NameSpace nameSpace)
+	{
+		return new Interpreter(null,System.out,System.err,
+			false,nameSpace);
+	}
 }

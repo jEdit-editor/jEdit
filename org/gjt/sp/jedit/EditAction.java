@@ -204,6 +204,11 @@ public abstract class EditAction
 			+ "jEdit.getAction(\"" + name + "\"))";
 	}
 
+	public String toString()
+	{
+		return name;
+	}
+
 	// private members
 	private String name;
 	private boolean plugin;

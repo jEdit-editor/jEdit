@@ -24,15 +24,19 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.lang.reflect.*;
+import java.util.Hashtable;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 public class GrabKeyDialog extends JDialog
 {
-	public GrabKeyDialog(Component comp, String command)
+	public GrabKeyDialog(Component comp, String[] shortcutData)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("grab-key.title"),true);
+		this.command = shortcutData[0];
+		this.oldShortcut = shortcutData[1];
+		this.altShortcut = shortcutData[2];
 
 		JPanel content = new JPanel(new BorderLayout())
 		{
@@ -189,6 +193,9 @@ public class GrabKeyDialog extends JDialog
 	private JButton ok;
 	private JButton cancel;
 	private boolean isOK;
+	private String command;
+	private String oldShortcut;
+	private String altShortcut;
 
 	private String getSymbolicName(int keyCode)
 	{
@@ -229,8 +236,39 @@ public class GrabKeyDialog extends JDialog
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
-				isOK = true;
-
+			{
+				Log.log(Log.DEBUG, this, "Command = " + command);
+				String shortcutString = shortcut.getText();
+				// removing the shortcut is always OK
+				if(shortcutString.length() == 0)
+				{
+					isOK = true;
+				}
+				// we don't need two identical shortcuts
+				else if(shortcutString.equals(altShortcut))
+				{
+					GUIUtilities.error(GrabKeyDialog.this,
+						"duplicate-alt-shortcut",null);
+				}
+				// a new shortcut is tested against existing shortcuts
+				else if(!shortcutString.equals(oldShortcut))
+				{
+					DefaultInputHandler handler =
+						(DefaultInputHandler)jEdit.getFirstView().getInputHandler();
+					Object binding = handler.getKeyBinding(shortcutString);
+					if(binding != null)
+					{
+						String[] pp = { binding instanceof Hashtable
+							? jEdit.getProperty("duplicate-shortcut.prefix")
+							: binding.toString()
+						};
+						GUIUtilities.error(GrabKeyDialog.this,
+							"duplicate-shortcut",pp);
+					}
+					else
+						isOK = true;
+				}
+			}
 			dispose();
 		}
 	}

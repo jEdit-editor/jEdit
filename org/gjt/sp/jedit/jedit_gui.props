@@ -609,7 +609,6 @@ view.status.marker-prompt=Press key to specify marker:
 view.status.expand-folds=Press 0-9 to specify fold level:
 view.status.insert-literal=Press key to insert literally:
 view.status.auto-wrap=Search text not found; restarting search
-view.status.welcome=Welcome to jEdit {0}
 view.status.mode-tooltip=Current edit mode
 view.status.encoding-tooltip=Current encoding
 
@@ -1194,6 +1193,16 @@ options.keys.shortcut2=Alternative shortcut
 
 grab-key.title=Specify Shortcut
 grab-key.caption=Press the desired shortcut for "{0}", then click OK.
+
+duplicate-alt-shortcut.title=Duplicate Shortcut
+duplicate-alt-shortcut.message=The shortcut you selected duplicates the other\n\
+	shortcut for this item. Please choose another.
+
+duplicate-shortcut.title=Duplicate Shortcut
+duplicate-shortcut.message=The shortcut you selected conflicts with\n\
+	{0}. Please choose another.
+
+duplicate-shortcut.prefix=an existing prefix
 
 options.command-keys.label=Command Shortcuts
 

@@ -114,11 +114,15 @@ public abstract class ShortcutsOptionPane extends AbstractOptionPane
 			int column = keyTable.getSelectedColumn();
 			if(column != 0)
 			{
-				String command = (String)keyModel.getValueAt(row,0);
+				String shortcutData[] = {
+					(String)keyModel.getValueAt(row,0),
+					(String)keyModel.getValueAt(row,column),
+					(String)keyModel.getValueAt(row, column == 1 ? 2 : 1)
+				};
 
 				String shortcut = new GrabKeyDialog(
 					ShortcutsOptionPane.this,
-					command).getShortcut();
+					shortcutData).getShortcut();
 				if(shortcut != null)
 					keyModel.setValueAt(shortcut,row,column);
 			}

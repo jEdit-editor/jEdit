@@ -277,7 +277,7 @@ public class SearchDialog extends EnhancedDialog
 
 		fieldPanel.add(Box.createVerticalStrut(3));
 
-		replace = new HistoryTextField();
+		replace = new HistoryTextField("replace");
 		replace.addActionListener(actionHandler);
 		label.setLabelFor(replace);
 		fieldPanel.add(replace);

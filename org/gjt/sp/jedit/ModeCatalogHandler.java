@@ -97,10 +97,7 @@ class ModeCatalogHandler extends HandlerBase
 
 			Object path;
 			if(resource)
-			{
-				path = jEdit.class.getResource(directory
-					+ '/' + file);
-			}
+				path = jEdit.class.getResource(directory + file);
 			else
 				path = MiscUtilities.constructPath(directory,file);
 			mode.setProperty("file",path);

@@ -753,7 +753,7 @@ bottom</programlisting></informalexample>
   Most of these commands are themselves implemented as short beanShell scripts,
   so they function as macro shortcuts.  A selection of commands that may be useful
   in writing macros for jEdit is contained in <xref
-  linkend="api-BeanShell-commands"/>.
+  linkend="BeanShell-commands"/>.
 </para>
 
 </sect2>

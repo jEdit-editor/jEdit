@@ -153,10 +153,8 @@ jEdit depends on, and comes bundled with the following libraries:
 
   The AElfred home page is <http://www.microstar.com>.
 
-- BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
-  version 1.1a18. Unlike with previous jEdit versions, no changes were
-  made to the BeanShell source and the complete distribution (including
-  stuff like the BeanShell server, util package, etc) is included.
+- BeanShell scripting language, by Pat Niemeyer. jEdit bundles an
+  unmodified BeanShell, version 1.1a18, sans bsh.util package.
 
   The BeanShell homepage is located at <http://www.beanshell.org>.
 

@@ -3,9 +3,7 @@
 <!-- jEdit buffer-local properties:                           -->
 <!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
 
-<!-- covers links to additional information -->
-
-<chapter id="plugin-message-classes"><title>EditBus Message Classes</title>
+<chapter id="api-message"><title>EditBus Message Classes</title>
 
 <para>
     Here is a listing of the classes defined in jEdit that extends the
@@ -161,7 +159,7 @@
 
 </sect1>
 
-<sect1 id="plugins-class-editorexiting"><title>Class EditorExiting</title>
+<sect1 id="class-editorexiting"><title>Class EditorExiting</title>
 
 <para>
   This message signifies that the host application is about to exit.  It
@@ -197,7 +195,7 @@
 
 </sect1>
 
-<sect1 id="plugins-class-editorexitrequested"><title>Class EditorExitRequested</title>
+<sect1 id="class-editorexitrequested"><title>Class EditorExitRequested</title>
 
 <para>
   This message signifies that a request has been made for the host application
@@ -236,7 +234,7 @@
 
 </sect1>
 
-<sect1 id="plugins-class-editorstarted"><title>Class EditorStarted</title>
+<sect1 id="class-editorstarted"><title>Class EditorStarted</title>
 
 <para>
   This message signifies that the host application has styarted. The
@@ -327,7 +325,7 @@
 
 </sect1>
 
-<sect1 id="class-errorsourceupdate"><title>Class ErrorSourceUpdate</title>
+<sect1 id="class-errorsource-update"><title>Class ErrorSourceUpdate</title>
 
 <para>
   A <classname>DefaultErrorSource</classname> send this message after
@@ -406,7 +404,7 @@
 </itemizedlist>
 </sect1>
 
-<sect1 id="plugins-class-macroschanged"><title>Class MacrosChanged</title>
+<sect1 id="class-macroschanged"><title>Class MacrosChanged</title>
 
 <para>
   This message signifies that the list of available macros have changed.  It
@@ -442,7 +440,7 @@
 
 </sect1>
 
-<sect1 id="plugins-class-propertieschanged"><title>Class PropertiesChanged</title>
+<sect1 id="class-propertieschanged"><title>Class PropertiesChanged</title>
 
 <para>
   This message is sent when configuration settings have been changed through
@@ -479,7 +477,7 @@
 
 </sect1>
 
-<sect1 id="plugins-class-searchsettingschanged">
+<sect1 id="class-searchsettingschanged">
 <title>Class SearchSettingsChanged</title>
 
 <para>
@@ -604,52 +602,4 @@
 
 </sect1>
 
-</appendix>
-
-<appendix id="plugin-further-info"><title>Further Information</title>
-
-<sect1 id="links-plugin-api"><title>Documentation of the
-jEdit Plugin API</title>
-<para>
-Most of the jEdit plugin classes discussed in this guide are contained in
-the package <classname>org.gjt.sp.jedit</classname>.  The javadocs for
-the classes in this package can be found <ulink url=
-"http://www.gjt.org/javadoc/org/gjt/sp/jedit/package-summary.html">
-here</ulink>.
-</para>
-
-<para>
-The classes <classname>DockableWindow</classname> and
-<classname>DockableWindowContainer</classname> are in the package
-<classname>org.gjt.sp.jedit.gui</classname>.  Their javadocs are located
-<ulink url=
-"http://www.gjt.org/javadoc/org/gjt/sp/jedit/gui/package-summary.html">
-here</ulink>. The message classes
-derived from <classname>EBMessage</classname> are contained in
-package <classname>org.gjt.sp.jedit.msg</classname>. Their javadocs
-may be found <ulink url=
-"http://www.gjt.org/javadoc/org/gjt/sp/jedit/msg/package-summary.html">
-here</ulink>.
-</para>
-
-</sect1>
-
-
-<sect1 id="links-jedit-other"><title>Other jEdit Resources</title>
-
-<para>
-<ulink url="http://www.jedit.org">The jEdit home page</ulink>
-</para>
-
-<para>
-<ulink url="http://plugins.jedit.org">jEdit Plugin Central</ulink>
-</para>
-
-<para>
-<ulink url="http://www.jedit.org/index.php?page=lists">
-jEdit mailing list information</ulink>
-</para>
-
-</sect1>
 </chapter>
-

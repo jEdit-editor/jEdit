@@ -4,7 +4,7 @@ JEDIT 3.2 VERSION HISTORY
 
 + New Features
 
-- BeanShell 1.1a18 included, replaces BeanShell 1.01.
+- BeanShell 1.1a18:
   - Better error reporting
   - Cleaned up internals
   - Performance improvements
@@ -14,14 +14,9 @@ JEDIT 3.2 VERSION HISTORY
     level. This means you can have import statements in actions.xml, for
     example.
   - Some jEdit code dealing with BeanShell has been cleaned up
-  - bsh.util package included. This package contains a bunch of
-    miscellaneous BeanShell scripts, like the BeanShell server
-- John Gellene's 'plugin guide' added to user's guide. Note that a lot of
-  changes have been made to the user's guide in the 3.2 series, and it is
-  still a bit rough.
-- The three sample 'Hello' plugins included with the source download have
-  been replaced with a single, more comprehensive demonstration plugin
-  written by John Gellene named 'QuickNotepad'
+- The three sample 'Hello' plugins included with the source download
+  have been replaced with a single, more comprehensive demonstration
+  plugin written by John Gellene named 'QuickNotepad'
 - Omnimark syntax highlighting (Lionel Fiol)
 - Velocity syntax highlighting (Saimon Moore)
 
@@ -33,7 +28,6 @@ JEDIT 3.2 VERSION HISTORY
 - The 'Update Plugins' dialog box now deletes obsolete plugins
 - Minor improvement to Javadoc highlighting in Java source
 - Improved 'BeanShell Error' dialog box
-- Internal code cleanups
 - Text fields no longer get the text area font
 - 'Add Marker' and 'Remove Marker from Current Line' commands merged
   into an 'Add/Remove Marker' command that toggles the marker on the
@@ -43,6 +37,9 @@ JEDIT 3.2 VERSION HISTORY
   bar when the search is restarted
 - The shortcut to toggle multiple selection has been changed from
   Caps Lock to C+\
+- The HyperSearch settings in the search bar is now independent of the
+  HyperSearch setting in the search and replace dialog box
+- Documentation updates
 
 + Bug Fixes
 
@@ -57,7 +54,7 @@ JEDIT 3.2 VERSION HISTORY
   bug in the recent file handler
 - Replace all was a bit buggy
 - Ruby mode filename extension was wrong
-- Fixed typo one of the tips of the day
+- Fixed typo in one of the tips of the day
 - The local file VFS now displays an error message if a directory could
   not be listed, instead of silently failing
 - Manipulating markers will no longer set the 'dirty' flag if the
@@ -67,11 +64,16 @@ JEDIT 3.2 VERSION HISTORY
   only. Now it just beeps
 - jEdit ran startup scripts in the settings directory twice, and startup
   scripts in the jEdit home directory weren't being run at all
+- JEditTextArea._addToSelection() method didn't merge selections
+  properly, as a result triple-clicks to select lines didn't work too
+  well
 
 + API Changes
 
 - GUIUtilities.loadMenu(view,name) deprecated; use loadMenu(name)
   instead
+- The Console plugin's "BeanShell" shell was broken by an API change.
+  The upcoming version 3.0 of the Console plugin will fix the problem.
 
 * Version 3.2pre4
 
