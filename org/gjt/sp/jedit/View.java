@@ -365,10 +365,26 @@ public class View extends JFrame implements EBComponent
 
 		textArea.setDocument(buffer);
 
-		int start = Math.min(buffer.getLength(),buffer.getSavedSelStart());
-		int end = Math.min(buffer.getLength(),buffer.getSavedSelEnd());
-		textArea.select(start,end);
-		textArea.setSelectionRectangular(buffer.isSelectionRectangular());
+		Integer start = (Integer)buffer.getProperty(Buffer.SELECTION_START);
+		Integer end = (Integer)buffer.getProperty(Buffer.SELECTION_END);
+		Boolean rectSel = (Boolean)buffer.getProperty(Buffer.SELECTION_RECT);
+		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
+		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
+		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
+
+		if(start != null && end != null && rectSel != null
+			&& firstLine != null && horizontalOffset != null
+			&& overwrite != null)
+		{
+			textArea.select(Math.min(start.intValue(),
+				buffer.getLength()),
+				Math.min(end.intValue(),
+				buffer.getLength()));
+			textArea.setSelectionRectangular(rectSel.booleanValue());
+			textArea.setFirstLine(firstLine.intValue());
+			textArea.setHorizontalOffset(horizontalOffset.intValue());
+			textArea.setOverwriteEnabled(overwrite.booleanValue());
+		}
 
 		updateMarkerMenus();
 		updateTitle();
@@ -439,10 +455,18 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void saveCaretInfo()
 	{
-		buffer.setCaretInfo(
-			textArea.getSelectionStart(),
-			textArea.getSelectionEnd(),
-			textArea.isSelectionRectangular());
+		buffer.putProperty(Buffer.SELECTION_START,new Integer(
+			textArea.getSelectionStart()));
+		buffer.putProperty(Buffer.SELECTION_END,new Integer(
+			textArea.getSelectionEnd()));
+		buffer.putProperty(Buffer.SELECTION_RECT,new Boolean(
+			textArea.isSelectionRectangular()));
+		buffer.putProperty(Buffer.SCROLL_VERT,new Integer(
+			textArea.getFirstLine()));
+		buffer.putProperty(Buffer.SCROLL_HORIZ,new Integer(
+			textArea.getHorizontalOffset()));
+		buffer.putProperty(Buffer.OVERWRITE,new Boolean(
+			textArea.isOverwriteEnabled()));
 	}
 
 	/**
@@ -575,9 +599,8 @@ public class View extends JFrame implements EBComponent
 		else
 			loadPropertiesFromView(view);
 
-		Buffer[] bufferArray = jEdit.getBuffers();
 		if(buffer == null)
-			setBuffer(bufferArray[bufferArray.length - 1]);
+			setBuffer(jEdit.getLastBuffer());
 		else
 			setBuffer(buffer);
 
@@ -751,9 +774,8 @@ public class View extends JFrame implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				Buffer[] bufferArray = jEdit.getBuffers();
-				if(bufferArray.length != 0)
-					setBuffer(bufferArray[bufferArray.length - 1]);
+				if(jEdit.getBufferCount() != 0)
+					setBuffer(jEdit.getLastBuffer());
 			}
 
 			updateOpenRecentMenu();
@@ -856,6 +878,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.112  1999/11/29 02:45:50  sp
+ * Scroll bar position saved when switching buffers
+ *
  * Revision 1.111  1999/11/28 00:33:06  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *

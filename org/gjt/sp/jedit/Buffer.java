@@ -50,6 +50,13 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public static final String LINESEP = "lineSeparator";
 
+	// caret info properties
+	public static final String SELECTION_START = "Buffer__selStart";
+	public static final String SELECTION_END = "Buffer__selEnd";
+	public static final String SELECTION_RECT = "Buffer__rect";
+	public static final String SCROLL_VERT = "Buffer__scrollVert";
+	public static final String SCROLL_HORIZ = "Buffer__scrollHoriz";
+	public static final String OVERWRITE = "Buffer__overwrite";
 	/**
 	 * Reloads settings from the properties. This should be called
 	 * after the <code>syntax</code> buffer-local property is
@@ -231,6 +238,11 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		// This is so that `dirty' isn't set
 		setFlag(INIT,true);
 
+		// remove all lines from token marker
+		if(tokenMarker != null)
+			tokenMarker.deleteLines(0,getDefaultRootElement()
+				.getElementCount());
+
 		load(view);
 		loadMarkers();
 
@@ -238,6 +250,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		propertiesChanged();
 		setMode();
 
+		// add lines to token marker
 		if(tokenMarker != null)
 		{
 			tokenMarker.insertLines(0,getDefaultRootElement()
@@ -686,30 +699,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	}
 
 	/**
-	 * Returns the saved selection start.
-	 */
-	public final int getSavedSelStart()
-	{
-		return savedSelStart;
-	}
-
-	/**
-	 * Returns the saved selection end.
-	 */
-	public final int getSavedSelEnd()
-	{
-		return savedSelEnd;
-	}
-
-	/**
-	 * Returns the saved rectangular selection flag.
-	 */
-	public final boolean isSelectionRectangular()
-	{
-		return getFlag(RECT_SELECT);
-	}
-
-	/**
 	 * Returns the next buffer in the list.
 	 */
 	public final Buffer getNext()
@@ -803,14 +792,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		EditBus.removeFromBus(this);
 	}
 
-	void setCaretInfo(int savedSelStart, int savedSelEnd,
-		boolean rectSelect)
-	{
-		this.savedSelStart = savedSelStart;
-		this.savedSelEnd = savedSelEnd;
-		setFlag(RECT_SELECT,rectSelect);
-	}
-
 	// private members
 	private void setFlag(int flag, boolean value)
 	{
@@ -835,8 +816,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	private static final int BACKED_UP = 6;
 	private static final int SYNTAX = 7;
 	private static final int UNDO_IN_PROGRESS = 8;
-	private static final int RECT_SELECT = 9;
-	private static final int TEMPORARY = 10;
+	private static final int TEMPORARY = 9;
 
 	private int flags;
 
@@ -1545,6 +1525,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.108  1999/11/29 02:45:50  sp
+ * Scroll bar position saved when switching buffers
+ *
  * Revision 1.107  1999/11/28 00:33:06  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *

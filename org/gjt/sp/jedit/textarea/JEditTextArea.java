@@ -1653,7 +1653,7 @@ public class JEditTextArea extends JComponent
 			painter.invalidateLine(line);
 		}
 		// do magic stuff
-		else if(line + count < firstLine)
+		else if(line < firstLine)
 		{
 			setFirstLine(firstLine + count);
 		}
@@ -2138,6 +2138,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  1999/11/29 02:45:50  sp
+ * Scroll bar position saved when switching buffers
+ *
  * Revision 1.32  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *

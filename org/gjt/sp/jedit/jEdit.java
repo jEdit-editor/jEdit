@@ -1551,7 +1551,10 @@ public class jEdit
 		}
 
 		if(view == null || view.getBuffer() != buffer)
-			buffer.setCaretInfo(start,end,false);
+		{
+			buffer.putProperty(Buffer.SELECTION_START,new Integer(start));
+			buffer.putProperty(Buffer.SELECTION_END,new Integer(end));
+		}
 		else if(view != null)
 			view.getTextArea().select(start,end);
 	}
@@ -1654,6 +1657,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.164  1999/11/29 02:45:50  sp
+ * Scroll bar position saved when switching buffers
+ *
  * Revision 1.163  1999/11/28 00:33:06  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *

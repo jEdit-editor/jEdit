@@ -2,6 +2,10 @@ JEDIT VERSION HISTORY
 
 * Version 2.2pre7
 
++ New Features
+
+- Scroll bar position is now saved while switching buffers
+
 + Enhancements
 
 - Built-in actions are now dynamically loaded as they are executed, this
@@ -15,6 +19,8 @@ JEDIT VERSION HISTORY
 - New concept of 'temporary buffers' speeds up recursive directory search
   dramatically (the time to search in the org.gjt.sp.jedit.syntax package,
   for example, has been cut from 20 seconds to 5!!!)
+- Minor update to text area scrolling code
+- Search and replace only shows the 'keep searching' dialog once
 - Key binding changes:
   C+d C+d: C+d
   C+d C+e: C+e C+d

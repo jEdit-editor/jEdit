@@ -202,6 +202,13 @@ loop:			for(;;)
 					buffer = fileset.getNextBuffer(view,buffer);
 				}
 
+				if(repeat)
+				{
+					// no point showing this dialog box twice
+					view.getToolkit().beep();
+					return false;
+				}
+
 				int result = JOptionPane.showConfirmDialog(view,
 					jEdit.getProperty("keepsearching.message"),
 					jEdit.getProperty("keepsearching.title"),
@@ -481,6 +488,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  1999/11/29 02:45:50  sp
+ * Scroll bar position saved when switching buffers
+ *
  * Revision 1.19  1999/11/28 00:33:07  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *
