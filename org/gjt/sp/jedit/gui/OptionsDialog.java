@@ -258,14 +258,12 @@ public class OptionsDialog extends EnhancedDialog
 		jEditGroup = new OptionGroup("jedit");
 
 		addOptionPane(new GeneralOptionPane(), jEditGroup);
+		addOptionPane(new EditorOptionPane(), jEditGroup);
 		addOptionPane(new TextAreaOptionPane(), jEditGroup);
 		addOptionPane(new StyleOptionPane(), jEditGroup);
-		addOptionPane(new EditorOptionPane(), jEditGroup);
-		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new DockingOptionPane(), jEditGroup);
-		addOptionPane(new ToolBarOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
-		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
+		addOptionPane(new ToolBarOptionPane(), jEditGroup);
 
 		// create the Shortcuts sub-branch
 		OptionGroup shortcutsGroup = new OptionGroup("shortcuts");
@@ -273,6 +271,8 @@ public class OptionsDialog extends EnhancedDialog
 		shortcutsGroup.addOptionPane(new MacroShortcutsOptionPane());
 		addOptionGroup(shortcutsGroup, jEditGroup);
 
+		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
+		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new BrowserOptionPane(), jEditGroup);
 
 		addOptionGroup(jEditGroup, rootGroup);
@@ -596,6 +596,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.31  2000/08/20 07:29:31  sp
  * I/O and VFS browser improvements
  *

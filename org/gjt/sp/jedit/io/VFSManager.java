@@ -76,9 +76,9 @@ public class VFSManager
 	/**
 	 * Returns the VFS for the specified name.
 	 * @param name The VFS name
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.6pre4
 	 */
-	public static VFS getVFSForName(String name)
+	public static VFS getVFSByName(String name)
 	{
 		return (VFS)vfsHash.get(name);
 	}
@@ -100,6 +100,19 @@ public class VFSManager
 			else
 				return urlVFS;
 		}
+	}
+
+	/**
+	 * Returns the VFS for the specified path.
+	 * @param path The path
+	 * @since jEdit 2.6pre4
+	 */
+	public static VFS getVFSForPath(String path)
+	{
+		if(MiscUtilities.isURL(path))
+			return getVFSForProtocol(path);
+		else
+			return fileVFS;
 	}
 
 	/**
@@ -394,6 +407,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.19  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.18  2000/08/20 07:29:31  sp
  * I/O and VFS browser improvements
  *

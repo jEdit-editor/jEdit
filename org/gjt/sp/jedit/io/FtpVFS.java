@@ -129,7 +129,7 @@ public class FtpVFS extends VFS
 		Vector directoryVector = new Vector();
 		try
 		{
-			client.dataPort();
+			_setupSocket(client);
 			Reader _in = client.list(address.path);
 			if(_in == null)
 			{
@@ -255,7 +255,7 @@ public class FtpVFS extends VFS
 		if(client == null)
 			return null;
 
-		client.dataPort();
+		_setupSocket(client);
 		Reader _reader = client.list(address.path);
 		if(_reader == null)
 		{
@@ -268,8 +268,6 @@ public class FtpVFS extends VFS
 		reader.close();
 		if(line != null)
 		{
-			System.err.println(line);
-
 			if(line.startsWith("total"))
 			{
 				// ok, this really sucks.
@@ -304,7 +302,7 @@ public class FtpVFS extends VFS
 		if(client == null)
 			return null;
 
-		client.dataPort();
+		_setupSocket(client);
 		InputStream in = client.retrieveStream(address.path);
 
 		if(in == null)
@@ -328,7 +326,7 @@ public class FtpVFS extends VFS
 		if(client == null)
 			return null;
 
-		client.dataPort();
+		_setupSocket(client);
 		OutputStream out = client.storeStream(address.path);
 
 		if(out == null)
@@ -382,6 +380,15 @@ public class FtpVFS extends VFS
 		}
 
 		return client;
+	}
+
+	private static void _setupSocket(FtpClient client)
+		throws IOException
+	{
+		if(jEdit.getBooleanProperty("vfs.ftp.passive"))
+			client.passive();
+		else
+			client.dataPort();
 	}
 
 	private static FtpClient _createFtpClient(String host, String port,
@@ -561,6 +568,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.22  2000/08/22 07:25:01  sp
  * Improved abbrevs, bug fixes
  *

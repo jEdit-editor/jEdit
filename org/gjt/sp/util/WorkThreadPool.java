@@ -69,11 +69,15 @@ public class WorkThreadPool
 	{
 		// if inAWT is set and there are no requests
 		// pending, execute it immediately
-		if(inAWT && requestCount == 0 && awtRequestCount == 0
-			&& SwingUtilities.isEventDispatchThread())
+		if(inAWT && requestCount == 0 && awtRequestCount == 0)
 		{
 			Log.log(Log.DEBUG,this,"AWT immediate: " + run);
-			run.run();
+
+			if(SwingUtilities.isEventDispatchThread())
+				run.run();
+			else
+				SwingUtilities.invokeLater(run);
+
 			return;
 		}
 
@@ -394,6 +398,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.6  2000/08/22 07:25:01  sp
  * Improved abbrevs, bug fixes
  *

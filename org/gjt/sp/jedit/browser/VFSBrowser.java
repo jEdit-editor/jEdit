@@ -19,7 +19,7 @@
 
 package org.gjt.sp.jedit.browser;
 
-import gnu.regexp.REException;
+import gnu.regexp.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.EventListenerList;
 import javax.swing.*;
@@ -113,39 +113,39 @@ public class VFSBrowser extends JPanel implements EBComponent
 		layout.setConstraints(label,cons);
 		pathAndFilterPanel.add(label);
 
-		filterCombo = new JComboBox();
+		filterField = new HistoryTextField("vfs.browser.filter",true);
+		filterField.addActionListener(new ActionHandler());
 
-		// because its preferred size can be quite wide, we
-		// don't want it to make the browser way too big,
-		// so set the preferred width to 0.
-		prefSize = filterCombo.getPreferredSize();
-		prefSize.width = 0;
-		filterCombo.setPreferredSize(prefSize);
-
-		filterCombo.addActionListener(new ActionHandler());
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
-		layout.setConstraints(filterCombo,cons);
-		pathAndFilterPanel.add(filterCombo);
+		layout.setConstraints(filterField,cons);
+		pathAndFilterPanel.add(filterField);
 
 		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
 
 		propertiesChanged();
 
-		int lastFilter;
+		HistoryModel filterModel = HistoryModel.getModel("vfs.browser.filter");
+		String filter;
+		if(filterModel.getSize() == 0)
+			filter = jEdit.getProperty("vfs.browser.default-filter");
+		else
+			filter = filterModel.getItem(0);
+
 		try
 		{
-			lastFilter = Integer.parseInt(jEdit.getProperty("vfs"
-				+ ".browser.lastFilter"));
-		}
-		catch(NumberFormatException nf)
-		{
-			lastFilter = 0;
-		}
+			filenameFilter = new RE(MiscUtilities.globToRE(filter),
+				RE.REG_ICASE);
 
-		if(lastFilter < filterCombo.getItemCount())
-			filterCombo.setSelectedIndex(lastFilter);
+			filterField.setText(filter);
+			// so that the default will be added to the history
+			filterField.addCurrentToHistory();
+		}
+		catch(Exception e)
+		{
+			// leave the filter field blank
+		}
 
 		if(path == null)
 		{
@@ -166,11 +166,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 			}
 			else if(defaultPath.equals("last"))
 			{
-				HistoryModel model = HistoryModel.getModel("vfs.browser.path");
-				if(model.getSize() == 0)
+				HistoryModel pathModel = HistoryModel.getModel("vfs.browser.path");
+				if(pathModel.getSize() == 0)
 					path = userHome;
 				else
-					path = model.getItem(0);
+					path = pathModel.getItem(0);
 			}
 			else
 			{
@@ -192,8 +192,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 	{
 		super.removeNotify();
 		EditBus.removeFromBus(this);
-		jEdit.setProperty("vfs.browser.lastFilter",String.valueOf(
-			filterCombo.getSelectedIndex()));
 	}
 
 	public void handleMessage(EBMessage msg)
@@ -238,19 +236,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void loadDirectory(String path)
 	{
-		if(!startRequest())
-			return;
-
-		if(MiscUtilities.isURL(path))
-		{
-			vfs = VFSManager.getVFSForProtocol(MiscUtilities
-				.getFileProtocol(path));
-		}
-		else
-			vfs = VFSManager.getFileVFS();
+		VFS vfs = VFSManager.getVFSForPath(path);
 
 		VFSSession session = vfs.createVFSSession(path,this);
 		if(session == null)
+			return;
+
+		if(!startRequest())
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
@@ -262,20 +254,36 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void delete(String path)
 	{
-		if(!startRequest())
-			return;
+		if(FavoritesVFS.PROTOCOL.equals(MiscUtilities.getFileProtocol(path)))
+		{
+			Object[] args = { path.substring(FavoritesVFS.PROTOCOL.length() + 1) };
+			int result = JOptionPane.showConfirmDialog(this,
+				jEdit.getProperty("vfs.browser.delete-favorites.message",args),
+				jEdit.getProperty("vfs.browser.delete-favorites.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+			if(result != JOptionPane.YES_OPTION)
+				return;
+		}
+		else
+		{
+			Object[] args = { path };
+			int result = JOptionPane.showConfirmDialog(this,
+				jEdit.getProperty("vfs.browser.delete-confirm.message",args),
+				jEdit.getProperty("vfs.browser.delete-confirm.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+			if(result != JOptionPane.YES_OPTION)
+				return;
+		}
 
-		Object[] args = { path };
-		int result = JOptionPane.showConfirmDialog(this,
-			jEdit.getProperty("vfs.browser.delete-confirm.message",args),
-			jEdit.getProperty("vfs.browser.delete-confirm.title"),
-			JOptionPane.YES_NO_OPTION,
-			JOptionPane.WARNING_MESSAGE);
-		if(result != JOptionPane.YES_OPTION)
-			return;
+		VFS vfs = VFSManager.getVFSForPath(path);
 
 		VFSSession session = vfs.createVFSSession(path,this);
 		if(session == null)
+			return;
+
+		if(!startRequest())
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
@@ -287,19 +295,21 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void rename(String from)
 	{
-		if(!startRequest())
-			return;
-
 		String[] args = { MiscUtilities.getFileName(from) };
 		String to = GUIUtilities.input(this,"vfs.browser.rename",
 			args,null);
 		if(to == null)
 			return;
 
+		VFS vfs = VFSManager.getVFSForPath(from);
+
 		to = vfs.constructPath(vfs.getFileParent(from),to);
 
 		VFSSession session = vfs.createVFSSession(from,this);
 		if(session == null)
+			return;
+
+		if(!startRequest())
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
@@ -311,18 +321,20 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void mkdir()
 	{
-		if(!startRequest())
-			return;
-
 		String newDirectory = GUIUtilities.input(this,"vfs.browser.mkdir",null);
 		if(newDirectory == null)
 			return;
+
+		VFS vfs = VFSManager.getVFSForPath(newDirectory);
 
 		// path is the currently viewed directory in the browser
 		newDirectory = vfs.constructPath(path,newDirectory);
 
 		VFSSession session = vfs.createVFSSession(newDirectory,this);
 		if(session == null)
+			return;
+
+		if(!startRequest())
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
@@ -335,11 +347,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 	public View getView()
 	{
 		return view;
-	}
-
-	public VFS getVFS()
-	{
-		return vfs;
 	}
 
 	public int getMode()
@@ -362,12 +369,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 		this.showHiddenFiles = showHiddenFiles;
 	}
 
-	public VFSFilter getFilenameFilter()
+	public RE getFilenameFilter()
 	{
 		return filenameFilter;
 	}
 
-	public void setFilenameFilter(VFSFilter filenameFilter)
+	public void setFilenameFilter(RE filenameFilter)
 	{
 		this.filenameFilter = filenameFilter;
 	}
@@ -419,7 +426,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 					if(file.hidden && !showHiddenFiles)
 						continue;
 					if(file.type == VFS.DirectoryEntry.FILE
-						&& !filenameFilter.accept(file.name))
+						&& filenameFilter != null
+						&& !filenameFilter.isMatch(file.name))
 						continue;
 					directoryVector.addElement(file);
 				}
@@ -533,18 +541,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 	}
 
 	// private members
-	private static VFSFilter allFilter;
-	private static Vector filters = new Vector();
-
 	private EventListenerList listenerList;
 	private View view;
 	private String path;
-	private VFS vfs;
 	private HistoryTextField pathField;
-	private JComboBox filterCombo;
+	private HistoryTextField filterField;
 	private JButton up, reload, roots, home, synchronize;
 	private BrowserView browserView;
-	private VFSFilter filenameFilter;
+	private RE filenameFilter;
 	private int mode;
 	private boolean multipleSelection;
 
@@ -554,82 +558,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private boolean sortIgnoreCase;
 
 	private boolean requestRunning;
-
-	static
-	{
-		try
-		{
-			allFilter = new VFSFilter(jEdit.getProperty(
-				"vfs.browser.filter.all"),"*");
-		}
-		catch(REException re)
-		{
-			throw new InternalError("* isn't a valid glob!!??");
-		}
-
-		EditBus.addToBus(new EBComponent()
-		{
-			public void handleMessage(EBMessage msg)
-			{
-				if(msg instanceof PropertiesChanged)
-					updateFilters();
-			}
-		});
-
-		updateFilters();
-	}
-
-	private static void updateFilters()
-	{
-		// recreate file filters
-		filters.removeAllElements();
-
-		filters.addElement(allFilter);
-
-		// Create mode filename filters
-		Mode[] modes = jEdit.getModes();
-		for(int i = 0; i < modes.length; i++)
-		{
-			Mode mode = modes[i];
-			String label = (String)mode.getProperty("label");
-			String glob = (String)mode.getProperty("filenameGlob");
-			if(label == null || glob == null)
-				continue;
-
-			try
-			{
-				filters.addElement(new VFSFilter(label,glob));
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,VFSBrowser.class,
-					"Invalid file filter: " + glob);
-				Log.log(Log.ERROR,VFSBrowser.class,e);
-			}
-		}
-
-		// Load custom file filters
-		int i = 0;
-		String name;
-
-		while((name = jEdit.getProperty("filefilter." + i + ".name")) != null
-			&& name.length() != 0)
-		{
-			String glob = jEdit.getProperty("filefilter." + i + ".re");
-			try
-			{
-				filters.addElement(new VFSFilter(name,glob));
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,VFSBrowser.class,
-					"Invalid file filter: " + glob);
-				Log.log(Log.ERROR,VFSBrowser.class,e);
-			}
-
-			i++;
-		}
-	}
 
 	private JToolBar createToolBar()
 	{
@@ -693,8 +621,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 			setBrowserView(new BrowserTreeView(this));
 		else // default
 			setBrowserView(new BrowserListView(this));
-
-		filterCombo.setModel(new DefaultComboBoxModel(filters));
 	}
 
 	/* We do this stuff because the browser is not able to handle
@@ -735,20 +661,31 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(path != null)
 					setDirectory(path);
 			}
-			else if(source == filterCombo)
+			else if(source == filterField)
 			{
-				VFSFilter filter = (VFSFilter)filterCombo.getSelectedItem();
-				if(filter != null)
+				try
 				{
-					VFSBrowser.this.filenameFilter = filter;
-
-					// don't do anything during initialization...
-					if(path != null)
-						reloadDirectory(false);
+					String filter = filterField.getText();
+					if(filter.length() == 0)
+						filter = "*";
+					filenameFilter = new RE(MiscUtilities
+						.globToRE(filter),RE.REG_ICASE);
+					reloadDirectory(false);
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,VFSBrowser.this,e);
+					String[] args = { filterField.getText(),
+						e.getMessage() };
+					GUIUtilities.error(VFSBrowser.this,
+						"vfs.browser.bad-filter",args);
 				}
 			}
 			else if(source == up)
+			{
+				VFS vfs = VFSManager.getVFSForPath(path);
 				setDirectory(vfs.getFileParent(path));
+			}
 			else if(source == reload)
 				reloadDirectory(true);
 			else if(source == roots)
@@ -910,7 +847,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				else if(actionCommand.startsWith("vfs."))
 				{
 					String vfsName = actionCommand.substring(4);
-					VFS vfs = VFSManager.getVFSForName(vfsName);
+					VFS vfs = VFSManager.getVFSByName(vfsName);
 					String directory = vfs.showBrowseDialog(
 						null,VFSBrowser.this);
 					if(directory != null)
@@ -942,6 +879,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.17  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.16  2000/08/23 09:51:48  sp
  * Documentation updates, abbrev updates, bug fixes
  *
@@ -968,20 +908,5 @@ public class VFSBrowser extends JPanel implements EBComponent
  *
  * Revision 1.8  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
- *
- * Revision 1.7  2000/08/05 11:41:03  sp
- * More VFS browser work
- *
- * Revision 1.6  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.5  2000/08/03 07:43:42  sp
- * Favorites added to browser, lots of other stuff too
- *
- * Revision 1.4  2000/08/01 11:44:15  sp
- * More VFS browser work
- *
- * Revision 1.3  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
  *
  */

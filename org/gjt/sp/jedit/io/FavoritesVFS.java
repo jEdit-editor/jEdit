@@ -81,7 +81,7 @@ public class FavoritesVFS extends VFS
 	{
 		synchronized(lock)
 		{
-			path = path.substring("favorites:".length());
+			path = path.substring(PROTOCOL.length() + 1);
 			favorites.removeElement(path);
 
 			VFSManager.sendVFSUpdate(this,PROTOCOL + ":",false);
@@ -136,6 +136,9 @@ public class FavoritesVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.4  2000/08/20 07:29:31  sp
  * I/O and VFS browser improvements
  *

@@ -242,8 +242,11 @@ print.margin.bottom=0.5
 print.margin.right=0.5
 
 ###
-### VFS BROWSER
+### VFS SETTINGS
 ###
+
+# PASV or PORT
+vfs.ftp.passive=false
 
 vfs.browser.showHiddenFiles=false
 vfs.browser.sortFiles=true

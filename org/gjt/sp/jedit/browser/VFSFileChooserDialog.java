@@ -103,13 +103,16 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		pack();
-		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
+		GUIUtilities.loadGeometry(this,"vfs.browser.dialog."
+			+ (mode == VFSBrowser.OPEN_DIALOG ? "open" : "save"));
 		show();
 	}
 
 	public void dispose()
 	{
-		GUIUtilities.saveGeometry(this,"vfs.browser.dialog");
+		GUIUtilities.saveGeometry(this,"vfs.browser.dialog."
+			+ (browser.getMode() == VFSBrowser.OPEN_DIALOG
+			? "open" : "save"));
 		super.dispose();
 	}
 
@@ -168,8 +171,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(filenameField != null)
 		{
 			String directory = browser.getDirectory();
-			String[] retVal = { browser.getVFS().constructPath(
-				directory,filenameField.getText()) };
+			VFS vfs = VFSManager.getVFSForPath(directory);
+			String[] retVal = { vfs.constructPath(directory,
+				filenameField.getText()) };
 			return retVal;
 		}
 		else
@@ -197,8 +201,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 	private boolean doFileExistsWarning(String filename)
 	{
-		filename = browser.getVFS().constructPath(
-			browser.getDirectory(),filename);
+		String directory = browser.getDirectory();
+		VFS vfs = VFSManager.getVFSForPath(directory);
+		filename = vfs.constructPath(directory,filename);
 
 		// this is a stupid hack. File.exists()
 		// will always return 'false' for non-local
@@ -211,7 +216,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				browser,
 				jEdit.getProperty("fileexists.message",args),
 				jEdit.getProperty("fileexists.title"),
-				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)
 				return true;
@@ -241,9 +246,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			if(filenameField != null)
 			{
 				VFS.DirectoryEntry file = files[0];
-				if(file.type != VFS.DirectoryEntry.FILE)
-					filenameField.setText(null);
-				else
+				if(file.type == VFS.DirectoryEntry.FILE)
 				{
 					String path = file.path;
 					if(path.startsWith(browser.getDirectory()))
@@ -276,6 +279,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.8  2000/08/24 08:17:46  sp
  * Bug fixing
  *

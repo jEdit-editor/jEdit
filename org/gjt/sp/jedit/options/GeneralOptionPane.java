@@ -74,6 +74,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"view.checkModStatus"));
 		addComponent(checkModStatus);
 
+		/* Passive-mode FTP */
+		passiveFTP = new JCheckBox(jEdit.getProperty(
+			"options.general.passiveFTP"));
+		passiveFTP.setSelected(jEdit.getBooleanProperty(
+			"vfs.ftp.passive"));
+		addComponent(passiveFTP);
+
 		addSeparator("options.general.loadsave");
 
 		/* Default file encoding */
@@ -201,6 +208,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
 			.isSelected());
+		jEdit.setBooleanProperty("vfs.ftp.passive",passiveFTP
+			.isSelected());
 
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
@@ -244,6 +253,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
+	private JCheckBox passiveFTP;
 
 	private JComboBox encoding;
 	private JTextField autosave;
@@ -264,6 +274,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.42  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.41  2000/08/10 11:55:58  sp
  * VFS browser toolbar improved a little bit, font selector tweaks
  *

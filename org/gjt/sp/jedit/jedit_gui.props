@@ -531,6 +531,11 @@ open-directory.title=Cannot Open Directory
 open-directory.message={0} is a directory.\n\
 	Directories cannot be opened for editing.
 
+# Cannot save directory dialog box
+save-directory.title=Cannot Save Directory
+save-directory.message={0} is a directory.\n\
+	Buffers cannot be saved over directories.
+
 # Cannot read dialog box
 no-read.title=Cannot Open File
 no-read.message=Cannot read from {0}.\n\
@@ -839,6 +844,7 @@ options.general.saveDesktop=Save session on exit
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort by file name only (instead of full path)
 options.general.checkModStatus=Check file modification time on focus
+options.general.passiveFTP=Use passive-mode FTP
 
 options.general.loadsave=Loading and saving
 options.general.encoding=File encoding:
@@ -997,7 +1003,7 @@ options.context.add.macro=Macro:
 
 options.abbrevs.label=Abbreviations
 options.abbrevs.set=Abbrev set:
-options.abbrevs.expandOnInput=Automatically expand abbrevs when they are typed
+options.abbrevs.expandOnInput=Space bar expands abbrevs
 options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
 options.abbrevs.sort.abbrev=Sort by abbrev
@@ -1107,7 +1113,7 @@ login.password=Password:
 vfs.browser.title=File System Browser
 vfs.browser.path=Path:
 vfs.browser.filter=Filter:
-vfs.browser.filter.all=All Files
+vfs.browser.default-filter=[^#]*[^~#]
 
 vfs.browser.up.label=Parent Directory
 vfs.browser.up.icon=FolderUp.gif
@@ -1137,6 +1143,9 @@ vfs.browser.menu.select.label=Select
 vfs.browser.menu.delete.label=Delete...
 vfs.browser.menu.rename.label=Rename...
 
+vfs.browser.bad-filter.title=Invalid Filter
+vfs.browser.bad-filter.message=The filter {0} is invalid ({1})
+
 vfs.browser.files-favorites.title=Cannot Add Files to Favorites
 vfs.browser.files-favorites.message=Only directories can be added to the favorites list.
 
@@ -1145,6 +1154,11 @@ vfs.browser.tree.loading=Loading...
 vfs.browser.delete-confirm.title=Delete File Confirmation
 vfs.browser.delete-confirm.message=Are you sure you want to delete\n\
 	{0}?
+
+vfs.browser.delete-favorites.title=Delete From Favorites
+vfs.browser.delete-favorites.message=Are you sure you want to remove\n\
+	{0}\n\
+	from the favorites?
 
 vfs.browser.delete-error.title=Cannot Delete File
 vfs.browser.delete-error.message=An error occurred while attempting\n\

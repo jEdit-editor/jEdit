@@ -70,11 +70,8 @@ public class FileVFS extends VFS
 
 		if(!file.exists())
 		{
-			if(buffer != null)
-			{
-				buffer.setNewFile(true);
-				buffer.setDirty(false);
-			}
+			buffer.setNewFile(true);
+			buffer.setDirty(false);
 			return false;
 		}
 		else
@@ -84,11 +81,8 @@ public class FileVFS extends VFS
 		{
 			String[] args = { file.getPath() };
 			GUIUtilities.error(view,"open-directory",args);
-			if(buffer != null)
-			{
-				buffer.setNewFile(false);
-				buffer.setDirty(false);
-			}
+			buffer.setNewFile(false);
+			buffer.setDirty(false);
 			return false;
 		}
 
@@ -96,11 +90,8 @@ public class FileVFS extends VFS
 		{
 			String[] args = { file.getPath() };
 			GUIUtilities.error(view,"no-read",args);
-			if(buffer != null)
-			{
-				buffer.setNewFile(false);
-				buffer.setDirty(false);
-			}
+			buffer.setNewFile(false);
+			buffer.setDirty(false);
 			return false;
 		}
 
@@ -112,6 +103,15 @@ public class FileVFS extends VFS
 		// can't call buffer.getFile() here because this
 		// method is called *before* setPath()
 		File file = new File(path);
+
+		// Apparently, certain broken OSes (like Micro$oft Windows)
+		// can mess up directories if they are write()'n to
+		if(file.isDirectory())
+		{
+			String[] args = { file.getPath() };
+			GUIUtilities.error(view,"save-directory",args);
+			return false;
+		}
 
 		// Check that we can actually write to the file
 		if((file.exists() && !file.canWrite())
@@ -312,6 +312,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.19  2000/08/23 09:51:48  sp
  * Documentation updates, abbrev updates, bug fixes
  *

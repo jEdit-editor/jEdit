@@ -140,7 +140,8 @@ Dirk Moebius - HTTP firewall plugin
 Jason Ginchereau - Buffer tabs code, portions of QuickFile plugin code
 	are used by the VFS browser
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
-	dialog box, faster literal search, many other patches
+	dialog box, faster literal search, passive mode FTP, many
+	other patches
 Tal Davidson - Original syntax highlighting engine
 Valery Kondakoff - Old Complete Word command
 
@@ -156,6 +157,7 @@ Jonathan Revusky - Python
 Juha Lindfors - IDL
 Kristian Ovaska - Pascal
 Matthias Schneider - AWK and COBOL
+Michael P Jacobson - TCL
 Ralf Engels - PostScript
 Romain Guy - POVRay
 

@@ -94,18 +94,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 		sortMixFilesAndDirs.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".sortMixFilesAndDirs"));
 		addComponent(sortMixFilesAndDirs);
-
-		addSeparator("options.browser.filters");
-
-		GridBagConstraints cons = new GridBagConstraints();
-		cons.gridy = 8;
-		cons.gridwidth = cons.gridheight = GridBagConstraints.REMAINDER;
-		cons.fill = GridBagConstraints.BOTH;
-		cons.weightx = cons.weighty = 1.0f;
-
-		JScrollPane filterScroller = createFileFilterScroller();
-		gridBag.setConstraints(filterScroller,cons);
-		add(filterScroller);
 	}
 
 	public void _save()
@@ -124,8 +112,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 			sortIgnoreCase.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.sortMixFilesAndDirs",
 			sortMixFilesAndDirs.isSelected());
-
-		filterModel.save();
 	}
 
 	// private members
@@ -135,159 +121,14 @@ public class BrowserOptionPane extends AbstractOptionPane
 	private JCheckBox sortFiles;
 	private JCheckBox sortIgnoreCase;
 	private JCheckBox sortMixFilesAndDirs;
-
-	private JTable filterTable;
-	private FileFilterTableModel filterModel;
-
-	private JScrollPane createFileFilterScroller()
-	{
-		filterModel = new FileFilterTableModel();
-		filterTable = new JTable(filterModel);
-		filterTable.getTableHeader().setReorderingAllowed(false);
-		Dimension d = filterTable.getPreferredSize();
-		d.height = Math.min(d.height,200);
-		JScrollPane scroller = new JScrollPane(filterTable);
-		scroller.setPreferredSize(d);
-		return scroller;
-	}
-}
-
-class FileFilterTableModel extends AbstractTableModel
-{
-	private Vector filters;
-
-	FileFilterTableModel()
-	{
-		filters = new Vector();
-
-		String name;
-		int i = 0;
-
-		// better names for these properties would be:
-		// vfs.browser.filter.X.name
-		// vfs.browser.filter.X.glob
-		// but I still use the old names for historical reasons/
-		// backwards compatibility
-		while((name = jEdit.getProperty("filefilter." + i + ".name"))
-			!= null && name.length() != 0)
-		{
-			filters.addElement(new FilterEntry(name,
-				jEdit.getProperty("filefilter." + i + ".re")));
-			i++;
-		}
-	}
-
-	public int getColumnCount()
-	{
-		return 2;
-	}
-
-	public int getRowCount()
-	{
-		return filters.size() + 1;
-	}
-
-	public Object getValueAt(int row, int col)
-	{
-		if(row == filters.size())
-			return "";
-
-		FilterEntry filter = (FilterEntry)filters.elementAt(row);
-		switch(col)
-		{
-		case 0:
-			return filter.name;
-		case 1:
-			return filter.glob;
-		default:
-			return null;
-		}
-	}
-
-	public boolean isCellEditable(int row, int col)
-	{
-		return true;
-	}
-
-	public void setValueAt(Object value, int row, int col)
-	{
-		// When we change the last row, another one is added...
-		if(row == filters.size())
-		{
-			String name = (col == 0 ? (String)value : null);
-			String glob = (col == 1 ? (String)value : null);
-			filters.addElement(new FilterEntry(name,glob));
-
-			fireTableRowsUpdated(row,row + 1);
-		}
-		else
-		{
-			FilterEntry filter = (FilterEntry)filters.elementAt(row);
-			switch(col)
-			{
-			case 0:
-				filter.name = (String)value;
-				break;
-			case 1:
-				filter.glob = (String)value;
-				break;
-			}
-
-			fireTableRowsUpdated(row,row);
-		}
-	}
-
-	public String getColumnName(int index)
-	{
-		switch(index)
-		{
-		case 0:
-			return jEdit.getProperty("options.browser.filters.name");
-		case 1:
-			return jEdit.getProperty("options.browser.filters.glob");
-		default:
-			return null;
-		}
-	}
-
-	public void save()
-	{
-		// keep a seprate count for the filter entry property names,
-		// because some filters might be blank
-		int j = 0;
-
-		for(int i = 0; i < filters.size(); i++)
-		{
-			FilterEntry filter = (FilterEntry)filters.elementAt(i);
-			if(filter.name == null || filter.name.length() == 0
-				|| filter.glob == null || filter.glob.length() == 0)
-				continue;
-
-			jEdit.setProperty("filefilter." + j + ".name",filter.name);
-			jEdit.setProperty("filefilter." + j + ".re",filter.glob);
-			j++;
-		}
-
-		jEdit.unsetProperty("filefilter." + j + ".name");
-		jEdit.unsetProperty("filefilter." + j + ".re");
-	}
-
-	class FilterEntry
-	{
-		FilterEntry(String name, String glob)
-		{
-			this.name = name;
-			this.glob = glob;
-		}
-
-		String name;
-		String glob;
-	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.3  2000/08/20 07:29:31  sp
  * I/O and VFS browser improvements
  *

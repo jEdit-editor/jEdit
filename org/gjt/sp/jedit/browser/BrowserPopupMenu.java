@@ -26,7 +26,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -39,7 +39,7 @@ public class BrowserPopupMenu extends JPopupMenu
 	{
 		this.browser = browser;
 		this.file = file;
-		this.vfs = browser.getVFS();
+		this.vfs = VFSManager.getVFSForPath(browser.getDirectory());
 
 		boolean delete = (vfs.getCapabilities() & VFS.DELETE_CAP) != 0;
 		boolean rename = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
@@ -134,6 +134,9 @@ public class BrowserPopupMenu extends JPopupMenu
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.4  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

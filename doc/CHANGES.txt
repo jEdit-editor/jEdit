@@ -2,17 +2,24 @@ JEDIT 2.6 VERSION HISTORY
 
 * Version 2.6pre4
 
++ New Features
+
+- TCL syntax highlighting (Michael P Jacobson)
+- Passive-mode FTP can now be enabled in the Global Options dialog box
+  (Mike Dillon)
+
 + Enhancements
 
 - Improved abbreviations feature:
   - Abbrevs are now only expanded when a space is entered
   - Abbrevs are now only saved on exit if they were changed while
     the editor was running. This improves performance a little bit
-  - Abbrev expansions can now contain newlines
+  - Abbrev expansions can now contain more than one line; "\n" inside an
+    expansion will create a new line
   - The caret position can be specified by placing "\|" inside an abbrev
     expansion
 - I/O and VFS browser improvements:
-  - 'VFS Browser' and 'File Filters' option panes merged
+  - Filename filter combo box in VFS browser is now a text field
   - New VFSUpdate message is sent when a file or a directory changes. As a
     result, VFS browsers are automatically updated when files are created
     or deleted (within jEdit)
@@ -54,6 +61,10 @@ JEDIT 2.6 VERSION HISTORY
   buffer tabs was disabled
 - Closing and opening buffers would always shift the focus to the last
   text area if the view was split
+- Using the tree view with the 'favorites:' protocol would cause the
+  VFS browser to use the wrong VFS when deleting and renaming files
+- Sometimes, buffers would be loaded empty due to a bug in the
+  WorkThreadPool class
 
 * Version 2.6pre3
 

@@ -89,7 +89,7 @@ public class EditPane extends JPanel implements EBComponent
 		updateTextArea();
 
 		// only do this if we are the current edit pane
-		if(view.getEditPane().equals(this))
+		if(view.getEditPane() == this)
 			focusOnTextArea();
 
 		if(!init)
@@ -624,6 +624,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.15  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.14  2000/08/24 08:17:46  sp
  * Bug fixing
  *

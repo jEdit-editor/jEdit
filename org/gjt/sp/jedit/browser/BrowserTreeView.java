@@ -50,6 +50,7 @@ public class BrowserTreeView extends BrowserView
 		tree.addTreeExpansionListener(new TreeHandler());
 		tree.putClientProperty("JTree.lineStyle", "Angled");
 		tree.setRowHeight(22);
+		tree.setVisibleRowCount(10);
 
 		if(browser.isMultipleSelectionEnabled())
 			tree.getSelectionModel().setSelectionMode(
@@ -322,6 +323,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/08/27 02:06:52  sp
+ * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
+ *
  * Revision 1.7  2000/08/20 07:29:30  sp
  * I/O and VFS browser improvements
  *
