@@ -1,6 +1,6 @@
 /*
  * CloseDialog.java - Close all buffers dialog
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -33,8 +34,13 @@ public class CloseDialog extends EnhancedDialog
 
 		this.view = view;
 
-		getContentPane().add(BorderLayout.NORTH,new JLabel(
-			jEdit.getProperty("close.caption")));
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
+		JLabel label = new JLabel(jEdit.getProperty("close.caption"));
+		label.setBorder(new EmptyBorder(0,0,6,0));
+		content.add(BorderLayout.NORTH,label);
 
 		bufferList = new JList(bufferModel = new DefaultListModel());
 		bufferList.setVisibleRowCount(10);
@@ -50,23 +56,29 @@ public class CloseDialog extends EnhancedDialog
 			}
 		}
 
-		getContentPane().add(BorderLayout.CENTER,new JScrollPane(bufferList));
+		content.add(BorderLayout.CENTER,new JScrollPane(bufferList));
 
 		ActionHandler actionListener = new ActionHandler();
 
 		JPanel buttons = new JPanel();
+		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
+		buttons.setBorder(new EmptyBorder(12,0,0,0));
+		buttons.add(Box.createGlue());
 		buttons.add(save = new JButton(jEdit.getProperty("close.save")));
 		save.setMnemonic(jEdit.getProperty("close.save.mnemonic").charAt(0));
 		save.addActionListener(actionListener);
+		buttons.add(Box.createHorizontalStrut(6));
 		buttons.add(discard = new JButton(jEdit.getProperty("close.discard")));
 		discard.setMnemonic(jEdit.getProperty("close.discard.mnemonic").charAt(0));
 		discard.addActionListener(actionListener);
+		buttons.add(Box.createHorizontalStrut(6));
 		buttons.add(cancel = new JButton(jEdit.getProperty("common.cancel")));
 		cancel.addActionListener(actionListener);
+		buttons.add(Box.createGlue());
 
 		bufferList.setSelectedIndex(0);
 
-		getContentPane().add(BorderLayout.SOUTH,buttons);
+		content.add(BorderLayout.SOUTH,buttons);
 
 		GUIUtilities.requestFocus(this,bufferList);
 

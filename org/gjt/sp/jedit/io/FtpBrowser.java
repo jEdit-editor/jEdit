@@ -40,6 +40,10 @@ public class FtpBrowser extends JDialog
 		super(view,jEdit.getProperty("vfs.ftp.browser."
 			+ (type == OPEN ? "open" : "save") + "-title"),true);
 
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,0));
+		setContentPane(content);
+
 		this.view = view;
 		this.type = type;
 
@@ -69,44 +73,82 @@ public class FtpBrowser extends JDialog
 			path = null;
 		}
 
-		JPanel topPanel = new JPanel(new BorderLayout());
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.gridwidth = cons.gridheight = 1;
+		cons.gridx = cons.gridy = 0;
+		cons.fill = GridBagConstraints.BOTH;
+		cons.insets = new Insets(0,0,6,12);
 
-		JPanel topLabels = new JPanel(new GridLayout(3,1));
-		topLabels.add(new JLabel(jEdit.getProperty("vfs.ftp.browser.host"),
-			SwingConstants.RIGHT));
-		topLabels.add(new JLabel(jEdit.getProperty("vfs.ftp.browser.username"),
-			SwingConstants.RIGHT));
-		topLabels.add(new JLabel(jEdit.getProperty("vfs.ftp.browser.password"),
-			SwingConstants.RIGHT));
-		topPanel.add(BorderLayout.WEST,topLabels);
+		JPanel centerPanel = new JPanel(layout);
 
-		JPanel topFields = new JPanel(new GridLayout(3,1));
-		topFields.add(hostField = new JTextField(host));
-		topFields.add(userField = new JTextField(user));
-		topFields.add(passwordField = new JPasswordField(password));
-		topFields.setBorder(new EmptyBorder(0,0,5,0));
-		topPanel.add(BorderLayout.CENTER,topFields);
+		JLabel label = new JLabel(jEdit.getProperty("vfs.ftp.browser.host"),
+			SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		centerPanel.add(label);
 
-		getContentPane().add(BorderLayout.NORTH,topPanel);
+		cons.gridy++;
+		label = new JLabel(jEdit.getProperty("vfs.ftp.browser.username"),
+			SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		centerPanel.add(label);
 
-		JPanel centerPanel = new JPanel(new BorderLayout());
+		cons.gridy++;
+		label = new JLabel(jEdit.getProperty("vfs.ftp.browser.password"),
+			SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		centerPanel.add(label);
+
+		cons.gridy = 0;
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+
+		hostField = new JTextField(host);
+		layout.setConstraints(hostField,cons);
+		centerPanel.add(hostField);
+		cons.gridy++;
+		userField = new JTextField(user);
+		layout.setConstraints(userField,cons);
+		centerPanel.add(userField);
+		cons.gridy++;
+		passwordField = new JPasswordField(password);
+		layout.setConstraints(passwordField,cons);
+		centerPanel.add(passwordField);
+
+		cons.gridy++;
+		cons.gridx = 0;
+		cons.gridwidth = 2;
+		cons.weighty = 1.0f;
 		list = new JList();
 		list.setVisibleRowCount(10);
 		list.addListSelectionListener(new ListHandler());
 		list.addMouseListener(new MouseHandler());
 		list.setCellRenderer(new FileCellRenderer());
-		centerPanel.add(BorderLayout.CENTER,new JScrollPane(list));
+		JScrollPane listScroller = new JScrollPane(list);
+		layout.setConstraints(listScroller,cons);
+		centerPanel.add(listScroller);
 
-		JPanel pathPanel = new JPanel(new BorderLayout());
-		pathPanel.add(BorderLayout.WEST,new JLabel(jEdit.getProperty(
-			"vfs.ftp.browser.path"),SwingConstants.RIGHT));
-		pathPanel.add(BorderLayout.CENTER,pathField = new JTextField(path));
-		pathPanel.setBorder(new EmptyBorder(5,0,0,0));
-		centerPanel.add(BorderLayout.SOUTH,pathPanel);
+		cons.gridy++;
+		cons.gridwidth = 1;
+		cons.weightx = cons.weighty = 0.0f;
+		label = new JLabel(jEdit.getProperty("vfs.ftp.browser.path"),
+			SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		centerPanel.add(label);
 
-		getContentPane().add(BorderLayout.CENTER,centerPanel);
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		pathField = new JTextField(path);
+		layout.setConstraints(pathField,cons);
+		centerPanel.add(pathField);
+
+		content.add(BorderLayout.CENTER,centerPanel);
 
 		JPanel buttons = new JPanel();
+		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
+		buttons.setBorder(new EmptyBorder(6,0,0,12));
+		buttons.add(Box.createGlue());
+
 		ActionHandler actionHandler = new ActionHandler();
 
 		// the below locks the preferred size so that the buttons
@@ -115,18 +157,22 @@ public class FtpBrowser extends JDialog
 		select.setPreferredSize(select.getPreferredSize());
 		select.addActionListener(actionHandler);
 		buttons.add(select);
+		buttons.add(Box.createHorizontalStrut(6));
 
 		up = new JButton(jEdit.getProperty("vfs.ftp.browser.up"));
 		up.addActionListener(actionHandler);
 		buttons.add(up);
+		buttons.add(Box.createHorizontalStrut(6));
 		refresh = new JButton(jEdit.getProperty("vfs.ftp.browser.refresh"));
 		refresh.addActionListener(actionHandler);
 		buttons.add(refresh);
+		buttons.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(actionHandler);
 		buttons.add(cancel);
+		buttons.add(Box.createGlue());
 
-		getContentPane().add(BorderLayout.SOUTH,buttons);
+		content.add(BorderLayout.SOUTH,buttons);
 
 		addWindowListener(new WindowHandler());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -563,6 +609,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/06/04 08:57:35  sp
+ * GUI updates, bug fixes
+ *
  * Revision 1.8  2000/06/02 08:43:03  sp
  * Printing fixes and enhancements, other bug fixes
  *

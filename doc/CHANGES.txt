@@ -22,6 +22,7 @@ JEDIT 2.5 VERSION HISTORY
 - The help viewer now displays plain text files in a monospaced font
 - Many dialog boxes tweaked to comply with Java look & feel guidelines;
   as a result they look better
+- Improved 'Send' command error handling
 
 + Bug Fixes
 
@@ -37,6 +38,8 @@ JEDIT 2.5 VERSION HISTORY
 - Backup directory code was broken (since 2.5pre1)
 - Entering an invalid FTP URL in the 'Open Path' dialog box will no longer
   throw an IllegalArgumentException and hang jEdit (since 2.5pre1)
+- Buffer._read() called setDirty() in a non-threadsafe way, this could
+  cause problems with buffer tabs for example (since 2.5pre1)
 
 * Version 2.5pre4
 

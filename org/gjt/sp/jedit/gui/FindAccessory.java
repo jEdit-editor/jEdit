@@ -937,6 +937,7 @@ class FindByDate extends JPanel implements FindFilterFactory
 
 		// between
 		JLabel betweenLabel = new JLabel(FROM_DATE_LABEL, SwingConstants.RIGHT);
+		betweenLabel.setBorder(new EmptyBorder(0,0,0,12));
 		labels.add(betweenLabel);
 
 		// from date
@@ -947,6 +948,7 @@ class FindByDate extends JPanel implements FindFilterFactory
 
 		// and
 		JLabel andLabel = new JLabel(TO_DATE_LABEL, SwingConstants.RIGHT);
+		andLabel.setBorder(new EmptyBorder(0,0,0,12));
 		labels.add(andLabel);
 
 		//toDateField = new JTextField(8);
@@ -1286,6 +1288,9 @@ class FindByName extends JPanel implements FindFilterFactory
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/06/04 08:57:35  sp
+ * GUI updates, bug fixes
+ *
  * Revision 1.4  2000/05/20 07:02:04  sp
  * Documentation updates, tool bar editor finished, a few other enhancements
  *

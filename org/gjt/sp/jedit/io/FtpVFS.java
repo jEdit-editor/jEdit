@@ -316,32 +316,33 @@ public class FtpVFS extends VFS
 		try
 		{
 			FtpAddress address = new FtpAddress(path);
+
+			if(address.user == null)
+				address.user = savedUser;
+			if(address.password == null)
+				address.password = savedPassword;
+
+			if(address.user == null || address.password == null)
+			{
+				LoginDialog dialog = new LoginDialog(view,address.host,
+					address.user,address.password);
+				if(!dialog.isOK())
+					return false;
+
+				address.user = dialog.getUser();
+				address.password = dialog.getPassword();
+			}
+
+			buffer.putProperty(USERNAME_PROPERTY,address.user);
+			buffer.putProperty(PASSWORD_PROPERTY,address.password);
+
+			return true;
 		}
 		catch(IllegalArgumentException ia)
 		{
+			// FtpAddress.<init> can throw this
 			return false;
 		}
-
-		if(address.user == null)
-			address.user = savedUser;
-		if(address.password == null)
-			address.password = savedPassword;
-
-		if(address.user == null || address.password == null)
-		{
-			LoginDialog dialog = new LoginDialog(view,address.host,
-				address.user,address.password);
-			if(!dialog.isOK())
-				return false;
-
-			address.user = dialog.getUser();
-			address.password = dialog.getPassword();
-		}
-
-		buffer.putProperty(USERNAME_PROPERTY,address.user);
-		buffer.putProperty(PASSWORD_PROPERTY,address.password);
-
-		return true;
 	}
 
 	// private members

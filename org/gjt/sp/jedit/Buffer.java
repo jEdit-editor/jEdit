@@ -116,6 +116,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		setFlag(LOADING,true);
 
 		undo = null;
+		final boolean loadAutosave;
 
 		if(!getFlag(NEW_FILE))
 		{
@@ -125,18 +126,17 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			if(file != null)
 				modTime = file.lastModified();
 
-			boolean doLoad;
 			// Only on initial load
 			if(!reload && autosaveFile != null && autosaveFile.exists())
-				doLoad = recoverAutosave(view);
+				loadAutosave = recoverAutosave(view);
 			else
 			{
 				if(autosaveFile != null)
 					autosaveFile.delete();
-				doLoad = true;
+				loadAutosave = false;
 			}
 
-			if(doLoad)
+			if(!loadAutosave)
 			{
 				// this returns false if initial sanity
 				// checks (if the file is a directory, etc)
@@ -150,6 +150,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				}
 			}
 		}
+		else
+			loadAutosave = false;
 
 		// Do some stuff once loading is finished
 		VFSManager.runInAWTThread(new Runnable()
@@ -158,6 +160,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			{
 				undo = new UndoManager();
 				setFlag(LOADING,false);
+
+				// if loadAutosave is false, we loaded an
+				// autosave file, so we set 'dirty' to true
+				setDirty(loadAutosave);
 
 				if(getFlag(TEMPORARY))
 					return;
@@ -1330,7 +1336,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		}
 
 		setFlag(NEW_FILE,false);
-		setDirty(false);
 	}
 
 	/**
@@ -1719,9 +1724,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(result == JOptionPane.YES_OPTION)
 		{
 			vfs.load(view,this,autosaveFile.getPath());
-			// can't call setDirty(true) because it is ignored
-			// if LOADED is set
-			setFlag(DIRTY,true);
 
 			// show this message when all I/O requests are
 			// complete
@@ -1733,10 +1735,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				}
 			});
 
-			return false;
+			return true;
 		}
 		else
-			return true;
+			return false;
 	}
 
 	// A dictionary that looks in the mode and editor properties
@@ -1810,6 +1812,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.153  2000/06/04 08:57:35  sp
+ * GUI updates, bug fixes
+ *
  * Revision 1.152  2000/05/24 07:56:04  sp
  * bug fixes
  *

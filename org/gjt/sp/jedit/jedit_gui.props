@@ -549,8 +549,8 @@ findAccessory.today=Today
 findAccessory.now=Now
 findAccessory.modified=Modified
 findAccessory.format=mm/dd/yyyy
-findAccessory.from=Between:\ 
-findAccessory.to=And:\ 
+findAccessory.from=Between:
+findAccessory.to=And:
 findAccessory.pattern=Pattern
 findAccessory.contains=Contains
 findAccessory.is=Is
@@ -573,15 +573,15 @@ saveurl.message=Enter a local path name or URL:
 
 # Send dialog
 send.title=Send
-send.smtp=SMTP Server:\ 
-send.from=From:\ 
-send.to=To:\ 
-send.subject=Subject:\ 
+send.smtp=SMTP Server:
+send.from=From:
+send.to=To:
+send.subject=Subject:
 send.selectionOnly=Send selected text only
 send.send=Send
 sendempty.title=Send Error
-sendempty.message=The SMTP Server, From and To fields must all be\n\
-	filled out before the file can be sent.
+sendempty.message=The "SMTP Server", "From" and "To" fields must be\n\
+	specified before the buffer can be sent.
 badport.title=Invalid Port
 badport.message=The specified port number is invalid.
 serverdown.title=Server Is Down
@@ -681,15 +681,15 @@ search.replaceAll.mnemonic=r
 
 # Multifile search dialog
 multifile.title=Multi File Search Settings
-multifile.caption=Search in the following buffer sets:
+multifile.caption=File set to search:
 multifile.current=Search in current buffer only
 multifile.all=Search in all buffers
-multifile.selected=Search in selected buffers
-multifile.directory=Search in a directory
+multifile.selected=Search in selected buffers:
+multifile.directory=Search in a directory:
 
-multifile.directory.path=Path:\ 
+multifile.directory.path=Path:
 multifile.directory.choose=Choose...
-multifile.directory.glob=Filter:\ 
+multifile.directory.glob=Filter:
 multifile.directory.glob.value=*
 multifile.directory.recurse=Search subdirectories
 multifile.directory.recurse.value=on
@@ -731,7 +731,7 @@ pasteprev.insert=Insert
 
 # Complete word dialog
 complete-word.title=Complete Word
-complete-word.caption=Possible completions for "{0}":\ 
+complete-word.caption=Possible completions for "{0}":
 complete-word.insert=Insert
 
 # File changed on disk dialogs
@@ -848,8 +848,8 @@ plugin.dep-class.message=The plugin {0} requires the class {1}.\n\
 # Macro input dialog
 macro-input.title=Macro Input
 macro-input.caption=This action lets you prompt the user for input in macro.
-macro-input.prompt=Prompt to display:\ 
-macro-input.register=Store in register:\ 
+macro-input.prompt=Prompt to display:
+macro-input.register=Store in register:
 
 macro-input.no-record.title=Not Recording
 macro-input.no-record.message=This command is only useful while recording\n\
@@ -1059,10 +1059,10 @@ login.password=Password:
 vfs.ftp.browser.open-title=Open from FTP Server
 vfs.ftp.browser.save-title=Save to FTP Server
 
-vfs.ftp.browser.host=FTP server:\ 
-vfs.ftp.browser.username=User name:\ 
-vfs.ftp.browser.password=Password:\ 
-vfs.ftp.browser.path=Path:\ 
+vfs.ftp.browser.host=FTP server:
+vfs.ftp.browser.username=User name:
+vfs.ftp.browser.password=Password:
+vfs.ftp.browser.path=Path:
 
 vfs.ftp.browser.connect=Connect
 vfs.ftp.browser.open=Open

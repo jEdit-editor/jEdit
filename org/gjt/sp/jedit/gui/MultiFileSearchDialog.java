@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -43,16 +44,20 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		this.fileset = fileset;
 
 		GridBagLayout layout = new GridBagLayout();
-		getContentPane().setLayout(layout);
+		JPanel content = new JPanel(layout);
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.anchor = GridBagConstraints.WEST;
 		cons.fill = GridBagConstraints.BOTH;
 		cons.weightx = 1.0f;
+		cons.insets = new Insets(0,0,3,0);
 
 		JLabel caption = new JLabel(jEdit.getProperty("multifile.caption"));
 		cons.gridy++;
 		layout.setConstraints(caption,cons);
-		getContentPane().add(caption);
+		content.add(caption);
 
 		ActionHandler actionHandler = new ActionHandler();
 		ButtonGroup grp = new ButtonGroup();
@@ -64,7 +69,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		grp.add(current);
 		cons.gridy++;
 		layout.setConstraints(current,cons);
-		getContentPane().add(current);
+		content.add(current);
 
 		all = new JRadioButton(jEdit.getProperty("multifile.all"));
 		if(fileset instanceof AllBufferSet)
@@ -73,7 +78,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		grp.add(all);
 		cons.gridy++;
 		layout.setConstraints(all,cons);
-		getContentPane().add(all);
+		content.add(all);
 
 		selected = new JRadioButton(jEdit.getProperty("multifile.selected"));
 		if(fileset instanceof BufferListSet
@@ -83,14 +88,14 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		grp.add(selected);
 		cons.gridy++;
 		layout.setConstraints(selected,cons);
-		getContentPane().add(selected);
+		content.add(selected);
 
 		JScrollPane list = createBufferList();
 		cons.gridy++;
 		cons.weighty = 1.0f;
 		layout.setConstraints(list,cons);
+		content.add(list);
 		cons.weighty = 0.0f;
-		getContentPane().add(list);
 
 		directory = new JRadioButton(jEdit.getProperty("multifile.directory"));
 		if(fileset instanceof DirectoryListSet)
@@ -99,27 +104,32 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		grp.add(directory);
 		cons.gridy++;
 		layout.setConstraints(directory,cons);
-		getContentPane().add(directory);
+		content.add(directory);
 
 		JPanel options = createDirectoryOptions();
 		cons.gridy++;
 		layout.setConstraints(options,cons);
-		getContentPane().add(options);
+		content.add(options);
 
 		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(9,0,0,0));
 
+		panel.add(Box.createGlue());
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(actionHandler);
 		getRootPane().setDefaultButton(ok);
 		panel.add(ok);
+		panel.add(Box.createHorizontalStrut(6));
 
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(actionHandler);
 		panel.add(cancel);
+		panel.add(Box.createGlue());
 
 		cons.gridy++;
 		layout.setConstraints(panel,cons);
-		getContentPane().add(panel);
+		content.add(panel);
 
 		updateEnabled();
 
@@ -252,19 +262,23 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		JPanel box = new JPanel(new BorderLayout());
 
 		// First component houses the labels.
-		JPanel labels = new JPanel(new GridLayout(2,1));
-		labels.add(new JLabel(jEdit.getProperty("multifile.directory.path"),
-			SwingConstants.RIGHT));
-		labels.add(new JLabel(jEdit.getProperty("multifile.directory.glob"),
-			SwingConstants.RIGHT));
+		JPanel labels = new JPanel(new GridLayout(2,1,0,3));
+		JLabel label = new JLabel(jEdit.getProperty("multifile.directory.path"),
+			SwingConstants.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		labels.add(label);
+		label = new JLabel(jEdit.getProperty("multifile.directory.glob"),
+			SwingConstants.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		labels.add(label);
 
 		box.add(BorderLayout.WEST,labels);
 
 		// Second components houses the text fields and buttons.
-		JPanel fields = new JPanel(new GridLayout(2,1));
+		JPanel fields = new JPanel(new GridLayout(2,1,0,3));
 
 		// Box holding path field and choose button
-		JPanel box1 = new JPanel(new BorderLayout());
+		Box box1 = new Box(BoxLayout.X_AXIS);
 
 		Box box2 = new Box(BoxLayout.Y_AXIS);
 		box2.add(Box.createGlue());
@@ -284,17 +298,18 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		directoryPath.setMaximumSize(dim);
 		box2.add(directoryPath);
 		box2.add(Box.createGlue());
-		box1.add(BorderLayout.CENTER,box2);
+		box1.add(box2);
+		box1.add(Box.createHorizontalStrut(6));
 
 		directoryChoose = new JButton(jEdit.getProperty("multifile"
 			+ ".directory.choose"));
 		directoryChoose.addActionListener(new ActionHandler());
-		box1.add(BorderLayout.EAST,directoryChoose);
+		box1.add(directoryChoose);
 
 		fields.add(box1);
 
 		// Box holding glob field and recurse check box
-		JPanel box3 = new JPanel(new BorderLayout());
+		Box box3 = new Box(BoxLayout.X_AXIS);
 
 		Box box4 = new Box(BoxLayout.Y_AXIS);
 		box4.add(Box.createGlue());
@@ -326,14 +341,16 @@ public class MultiFileSearchDialog extends EnhancedDialog
 		directoryGlob.setMaximumSize(dim);
 		box4.add(directoryGlob);
 		box4.add(Box.createGlue());
-		box3.add(BorderLayout.CENTER,box4);
+		box3.add(box4);
+		box3.add(Box.createHorizontalStrut(6));
 
 		directoryRecurse = new JCheckBox(jEdit.getProperty("multifile"
 			+ ".directory.recurse"));
 		directoryRecurse.setSelected(jEdit.getBooleanProperty(
 			"multifile.directory.recurse.value"));
 		directoryRecurse.addActionListener(new ActionHandler());
-		box3.add(BorderLayout.EAST,directoryRecurse);
+		directoryRecurse.setMargin(new Insets(0,0,0,0));
+		box3.add(directoryRecurse);
 
 		fields.add(box3);
 
@@ -372,6 +389,9 @@ public class MultiFileSearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/06/04 08:57:35  sp
+ * GUI updates, bug fixes
+ *
  * Revision 1.14  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *

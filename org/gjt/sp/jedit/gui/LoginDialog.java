@@ -34,31 +34,32 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 		this.view = view;
 
 		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,6,12,9));
+		content.setBorder(new EmptyBorder(12,12,12,0));
 		setContentPane(content);
 
 		JLabel label = new JLabel(jEdit.getProperty(
 			"login.caption",new String[] { host }));
-		label.setBorder(new EmptyBorder(0,6,3,0));
+		label.setBorder(new EmptyBorder(0,0,6,12));
 		content.add(BorderLayout.NORTH,label);
 
 		JPanel panel = createFieldPanel(user,password);
-
 		content.add(BorderLayout.CENTER,panel);
 
-		Box box = new Box(BoxLayout.X_AXIS);
-		box.add(Box.createGlue());
+		panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(6,0,0,12));
+		panel.add(Box.createGlue());
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(this);
 		getRootPane().setDefaultButton(ok);
-		box.add(ok);
-		box.add(Box.createHorizontalStrut(6));
+		panel.add(ok);
+		panel.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
-		box.add(cancel);
-		box.add(Box.createGlue());
+		panel.add(cancel);
+		panel.add(Box.createGlue());
 
-		content.add(box,BorderLayout.SOUTH);
+		content.add(panel,BorderLayout.SOUTH);
 
 		GUIUtilities.requestFocus(this,(user == null ? userField
 			: passwordField));
@@ -133,10 +134,9 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 	{
 		GridBagLayout layout = new GridBagLayout();
 		JPanel panel = new JPanel(layout);
-		panel.setBorder(new EmptyBorder(3,0,9,0));
 
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.insets = new Insets(3,6,3,3);
+		cons.insets = new Insets(0,0,6,12);
 		cons.gridwidth = cons.gridheight = 1;
 		cons.gridx = cons.gridy = 0;
 		cons.fill = GridBagConstraints.BOTH;
@@ -172,6 +172,9 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/06/04 08:57:35  sp
+ * GUI updates, bug fixes
+ *
  * Revision 1.4  2000/06/03 07:28:26  sp
  * User interface updates, bug fixes
  *

@@ -1,6 +1,6 @@
 /*
  * SendDialog.java - Send Dialog
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -32,8 +33,7 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.Log;
 
-public class SendDialog extends EnhancedDialog
-implements ActionListener, Runnable
+public class SendDialog extends EnhancedDialog implements ActionListener
 {
 	public static final String CRLF = "\r\n";
 
@@ -42,6 +42,10 @@ implements ActionListener, Runnable
 		super(view,jEdit.getProperty("send.title"),true);
 		this.view = view;
 
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,0));
+		setContentPane(content);
+
 		JPanel panel = new JPanel();
 		GridBagLayout layout = new GridBagLayout();
 		panel.setLayout(layout);
@@ -49,65 +53,63 @@ implements ActionListener, Runnable
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridwidth = constraints.gridheight = 1;
 		constraints.fill = constraints.BOTH;
-		constraints.weightx = 1.0f;
-		JLabel label = new JLabel(jEdit
-			.getProperty("send.smtp"),SwingConstants.RIGHT);
+		constraints.insets = new Insets(0,0,6,12);
+		JLabel label = new JLabel(jEdit.getProperty("send.smtp"),
+			SwingConstants.RIGHT);
 		layout.setConstraints(label,constraints);
 		panel.add(label);
 
 		constraints.gridx = 1;
-		constraints.gridwidth = 2;
-		smtp = new JTextField(jEdit
-			.getProperty("send.smtp.value"),30);
+		constraints.weightx = 1.0f;
+		smtp = new JTextField(jEdit.getProperty("send.smtp.value"),30);
 		layout.setConstraints(smtp,constraints);
 		panel.add(smtp);
 
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		constraints.gridwidth = 1;
+		constraints.weightx = 0.0f;
 		label = new JLabel(jEdit.getProperty("send.from"),
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,constraints);
 		panel.add(label);
 
 		constraints.gridx = 1;
-		constraints.gridwidth = 2;
-		from = new JTextField(jEdit
-			.getProperty("send.from.value"),30);
+		constraints.weightx = 1.0f;
+		from = new JTextField(jEdit.getProperty("send.from.value"),30);
 		layout.setConstraints(from,constraints);
 		panel.add(from);
 
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		constraints.gridwidth = 1;
+		constraints.weightx = 0.0f;
 		label = new JLabel(jEdit.getProperty("send.to"),
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,constraints);
 		panel.add(label);
 
 		constraints.gridx = 1;
-		constraints.gridwidth = 2;
+		constraints.weightx = 1.0f;
 		to = new JTextField(jEdit.getProperty("send.to.value"),30);
 		layout.setConstraints(to,constraints);
 		panel.add(to);
 
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		constraints.gridwidth = 1;
+		constraints.weightx = 0.0f;
 		label = new JLabel(jEdit.getProperty("send.subject"),
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,constraints);
 		panel.add(label);
 
 		constraints.gridx = 1;
-		constraints.gridwidth = 2;
+		constraints.weightx = 1.0f;
 		subject = new JTextField(view.getBuffer().getPath(),30);
 		layout.setConstraints(subject,constraints);
 		panel.add(subject);
 
 		constraints.gridx = 0;
 		constraints.gridy = 4;
-		constraints.gridwidth = constraints.REMAINDER;
+		constraints.gridwidth = 2;
 		constraints.fill = constraints.VERTICAL;
 		constraints.anchor = constraints.WEST;
 		selectionOnly = new JCheckBox(jEdit.getProperty(
@@ -117,15 +119,21 @@ implements ActionListener, Runnable
 		layout.setConstraints(selectionOnly,constraints);
 		panel.add(selectionOnly);
 
-		getContentPane().add(BorderLayout.NORTH,panel);
+		content.add(BorderLayout.NORTH,panel);
 
 		buttons = new JPanel();
+		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
+		buttons.setBorder(new EmptyBorder(6,0,0,12));
+		buttons.add(Box.createGlue());
 		send = new JButton(jEdit.getProperty("send.send"));
 		buttons.add(send);
+		buttons.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		buttons.add(cancel);
+		buttons.add(Box.createGlue());
 
-		getContentPane().add(BorderLayout.SOUTH,buttons);
+		content.add(BorderLayout.SOUTH,buttons);
+
 		getRootPane().setDefaultButton(send);
 		send.addActionListener(this);
 		cancel.addActionListener(this);
@@ -135,7 +143,17 @@ implements ActionListener, Runnable
 		show();
 	}
 
-	public void run()
+	public void actionPerformed(ActionEvent evt)
+	{
+		Object source = evt.getSource();
+		if(source == send)
+			ok();
+		else if(source == cancel)
+			cancel();
+	}
+
+	// EnhancedDialog implementation
+	public void ok()
 	{
 		JEditTextArea textArea = view.getTextArea();
 
@@ -148,20 +166,14 @@ implements ActionListener, Runnable
 		if(smtp.length() == 0 || from.length() == 0
 			|| to.length() == 0)
 		{
-			GUIUtilities.error(view,"sendempty",new Object[0]);
+			error("sendempty");
 			return;
 		}
 
-		this.smtp.setEnabled(false);
-		this.from.setEnabled(false);
-		this.to.setEnabled(false);
-		this.subject.setEnabled(false);
-		send.setEnabled(false);
-		cancel.setEnabled(false);
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 		Object[] args = { smtp };
-		Log.log(Log.DEBUG,this,jEdit.getProperty("send.connect",
-			args));
+		Log.log(Log.DEBUG,this,jEdit.getProperty("send.connect",args));
 
 		try
 		{
@@ -169,8 +181,7 @@ implements ActionListener, Runnable
 			int port = 25;
 			if(index != -1)
 			{
-				port = Integer.parseInt(smtp.substring(index
-					+ 1));
+				port = Integer.parseInt(smtp.substring(index + 1));
 				smtp = smtp.substring(0,index);
 			}
 
@@ -183,7 +194,10 @@ implements ActionListener, Runnable
 			String response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("220"))
+			{
 				error("serverdown");
+				return;
+			}
 
 			String command = "HELO " + socket.getLocalAddress()
 				.getHostName() + CRLF;
@@ -194,7 +208,10 @@ implements ActionListener, Runnable
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
+			{
 				error("badhost");
+				return;
+			}
 			command = "MAIL FROM: <" + from + ">" + CRLF;
 			Log.log(Log.DEBUG,this,command);
 			out.write(command);
@@ -203,7 +220,10 @@ implements ActionListener, Runnable
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
+			{
 				error("badsender");
+				return;
+			}
 			command = "RCPT TO: <" + to + ">" + CRLF;
 			Log.log(Log.DEBUG,this,command);
 			out.write(command);
@@ -212,7 +232,10 @@ implements ActionListener, Runnable
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
+			{
 				error("badrecepient");
+				return;
+			}
 			command = "DATA" + CRLF;
 			Log.log(Log.DEBUG,this,command);
 			out.write(command);
@@ -221,7 +244,10 @@ implements ActionListener, Runnable
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("354"))
+			{
 				error("badmsg");
+				return;
+			}
 
 			out.write("Subject: " + subject);
 			out.write(CRLF);
@@ -271,7 +297,10 @@ implements ActionListener, Runnable
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
+			{
 				error("badmsg");
+				return;
+			}
 			command = "QUIT" + CRLF;
 			Log.log(Log.DEBUG,this,command);
 			out.write(command);
@@ -282,6 +311,9 @@ implements ActionListener, Runnable
 			in.close();
 			out.close();
 			socket.close();
+
+			save();
+			dispose();
 		}
 		catch(IOException io)
 		{
@@ -292,26 +324,10 @@ implements ActionListener, Runnable
 		catch(NumberFormatException nf)
 		{
 			Log.log(Log.ERROR,this,nf);
-			GUIUtilities.error(view,"badport",new Object[0]);
+			GUIUtilities.error(view,"badport",null);
 		}
 
-		save();
-		dispose();
-	}
-
-	public void actionPerformed(ActionEvent evt)
-	{
-		Object source = evt.getSource();
-		if(source == send)
-			ok();
-		else if(source == cancel)
-			cancel();
-	}
-
-	// EnhancedDialog implementation
-	public void ok()
-	{
-		(thread = new Thread(this)).start();
+		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void cancel()
@@ -334,8 +350,8 @@ implements ActionListener, Runnable
 
 	private void error(String msg)
 	{
-		GUIUtilities.error(view,msg,new Object[0]);
-		dispose();
+		GUIUtilities.error(view,msg,null);
+		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	private void save()
@@ -346,8 +362,5 @@ implements ActionListener, Runnable
 		jEdit.setProperty("send.subject.value",subject.getText());
 		jEdit.setBooleanProperty("send.selectionOnly.value",
 			selectionOnly.isSelected());
-
-		if(thread != null)
-			thread.stop();
 	}
 }
