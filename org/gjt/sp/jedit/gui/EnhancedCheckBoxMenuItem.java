@@ -20,7 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditAction;
@@ -36,14 +36,16 @@ import org.gjt.sp.jedit.GUIUtilities;
 public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
 	public EnhancedCheckBoxMenuItem(String label, String keyBinding,
-		EditAction action, String actionCommand)
+		EditAction action, ActionListener actionWrapper,
+		String actionCommand)
 	{
 		super(label);
 		this.keyBinding = keyBinding;
 		this.action = action;
 
-		if(action != null)
-			addActionListener(GUIUtilities.createActionWrapper(action));
+		if(actionWrapper != null)
+			addActionListener(actionWrapper);
+
 		setActionCommand(actionCommand);
 		setModel(new Model());
 		setEnabled(action != null);

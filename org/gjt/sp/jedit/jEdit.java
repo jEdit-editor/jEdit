@@ -197,42 +197,54 @@ public class jEdit
 		}
 
 		// Show the kool splash screen
-		// The advanceProgress() calls are indented in this
-		// weird fashion so that they can easily be counted
 		if(showSplash)
 			GUIUtilities.showSplashScreen();
 
 		// Get things rolling
-		initMisc();			GUIUtilities.advanceProgress();
-		initSystemProperties();		GUIUtilities.advanceProgress();
-		initPlugins();			GUIUtilities.advanceProgress();
-		initUserProperties();		GUIUtilities.advanceProgress();
+		initMisc();
+		GUIUtilities.advanceProgress("Loading default properties...");
+		initSystemProperties();
+		GUIUtilities.advanceProgress("Loading plugins...");
+		initPlugins();
+		GUIUtilities.advanceProgress("Loading user properties...");
+		initUserProperties();
+		GUIUtilities.advanceProgress("Loading tables and settings...");
 		initActions();
 		initModes();
 		initPLAF();
-		initKeyBindings();		GUIUtilities.advanceProgress();
+		initKeyBindings();
 		propertiesChanged();
-		initRecent();			GUIUtilities.advanceProgress();
+		initRecent();
 		if(settingsDirectory != null)
 		{
+			GUIUtilities.advanceProgress("Loading history...");
 			String history = MiscUtilities.constructPath(
 				settingsDirectory,"history");
-			Log.log(Log.DEBUG,jEdit.class,"Loading history from "
-				+ history);
 			HistoryModel.loadHistory(history);
-						GUIUtilities.advanceProgress();
 		}
+		GUIUtilities.advanceProgress("Loading macros...");
 		SearchAndReplace.load();
 		Macros.init();
 
 		// Start plugins
-		JARClassLoader.initPlugins();	GUIUtilities.advanceProgress();
+		GUIUtilities.advanceProgress("Starting plugins...");
+		JARClassLoader.initPlugins();
+
+		// Preload menu and tool bar models
+		GUIUtilities.advanceProgress("Loading GUI...");
+
+		GUIUtilities.loadMenuBarModel("view.mbar");
+		GUIUtilities.loadMenuModel("view.context");
+		if("on".equals(getProperty("view.showToolbar")))
+			GUIUtilities.loadToolBarModel("view.toolbar");
 
 		// Start server
 		if(portFile != null)
 			server = new EditServer(portFile);
 
 		// Load files specified on the command line
+		GUIUtilities.advanceProgress("Opening files...");
+
 		Buffer buffer = null;
 		for(int i = 0; i < args.length; i++)
 		{
@@ -253,7 +265,7 @@ public class jEdit
 		if(buffer == null)
 			buffer = newFile(null);
 
-						GUIUtilities.advanceProgress();
+		GUIUtilities.advanceProgress("Creating initial view...");
 
 		// Create the view and hide the splash screen.
 		// Paranoid thread safety courtesy of Sun.
@@ -827,7 +839,9 @@ public class jEdit
 			view.saveCaretInfo();
 		}
 
+		long start = System.currentTimeMillis();
 		View newView = new View(view,buffer);
+		System.err.println(System.currentTimeMillis() - start);
 		addViewToList(newView);
 
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
@@ -1526,6 +1540,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.160  1999/11/26 01:18:49  sp
+ * Optimizations, splash screen updates, misc stuff
+ *
  * Revision 1.159  1999/11/23 05:43:55  sp
  * Reload All command
  *

@@ -19,8 +19,8 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import org.gjt.sp.jedit.jEdit;
@@ -40,12 +40,15 @@ public class SplashScreen extends JWindow
 				BorderLayout.CENTER);
 		}
 
+		splash.add(BorderLayout.NORTH,new JLabel("jEdit "
+			+ jEdit.getVersion(),JLabel.CENTER));
+
 		progress = new JProgressBar(0,9);
 		progress.setStringPainted(true);
-		progress.setString("jEdit " + jEdit.getVersion());
+		progress.setString("jEdit is starting up...");
 		splash.add(BorderLayout.SOUTH,progress);
 
-		splash.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+		splash.setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
 
 		setContentPane(splash);
 
@@ -56,7 +59,7 @@ public class SplashScreen extends JWindow
 		show();
 	}
 
-	public void advance()
+	public void advance(final String text)
 	{
 		try
 		{
@@ -64,6 +67,7 @@ public class SplashScreen extends JWindow
 				public void run()
 				{
 					progress.setValue(progress.getValue() + 1);
+					progress.setString(text);
 				}
 			});
 		}

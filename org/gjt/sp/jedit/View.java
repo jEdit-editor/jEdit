@@ -50,28 +50,7 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void propertiesChanged()
 	{
-		if("on".equals(jEdit.getProperty("view.showToolbar")))
-		{
-			if(toolBar == null)
-			{
-				toolBar = GUIUtilities.loadToolBar("view.toolbar");
-				toolBar.add(Box.createHorizontalStrut(10));
-				toolBar.add(new JLabel(jEdit.getProperty("view.quicksearch")));
-				Box box = new Box(BoxLayout.Y_AXIS);
-				box.add(Box.createVerticalGlue());
-				box.add(quicksearch);
-				box.add(Box.createVerticalGlue());
-				toolBar.add(box);
-			}
-			if(toolBar.getParent() == null)
-				addToolBar(toolBar);
-		}
-		else if(toolBar != null)
-		{
-			removeToolBar(toolBar);
-			toolBar = null;
-			validate();
-		}
+		loadToolBar();
 
 		showFullPath = "on".equals(jEdit.getProperty("view.showFullPath"));
 
@@ -109,7 +88,7 @@ public class View extends JFrame implements EBComponent
 			"view.bracketHighlight")));
 		painter.setBracketHighlightColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.bracketHighlightColor")));
-		painter.setEOLMarkersEnabled("on".equals(jEdit.getProperty(
+		painter.setEOLMarkersPainted("on".equals(jEdit.getProperty(
 			"view.eolMarkers")));
 		painter.setInvalidLinesPainted("on".equals(jEdit.getProperty(
 			"view.paintInvalid")));
@@ -510,6 +489,24 @@ public class View extends JFrame implements EBComponent
 			handleBufferUpdate((BufferUpdate)msg);
 	}
 
+	public JMenu getMenu(String name)
+	{
+		if(name.equals("buffers"))
+			return buffers;
+		else if(name.equals("open-recent"))
+			return openRecent;
+		else if(name.equals("clear-marker"))
+			return clearMarker;
+		else if(name.equals("goto-marker"))
+			return gotoMarker;
+		else if(name.equals("macros"))
+			return macros;
+		else if(name.equals("plugins"))
+			return plugins;
+		else
+			return null;
+	}
+
 	// package-private members
 	View prev;
 	View next;
@@ -530,7 +527,7 @@ public class View extends JFrame implements EBComponent
 
 		EditBus.addToBus(this);
 
-		setJMenuBar(GUIUtilities.loadMenubar(this,"view.mbar"));
+		setJMenuBar(GUIUtilities.loadMenuBar(this,"view.mbar"));
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
 
@@ -552,7 +549,10 @@ public class View extends JFrame implements EBComponent
 		textArea.setInputHandler(jEdit.getInputHandler().copy());
 		textArea.addCaretListener(new CaretHandler());
 
-		propertiesChanged();
+		if(view == null)
+			propertiesChanged();
+		else
+			loadPropertiesFromView(view);
 
 		Buffer[] bufferArray = jEdit.getBuffers();
 		if(buffer == null)
@@ -566,24 +566,6 @@ public class View extends JFrame implements EBComponent
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 
-	JMenu getMenu(String name)
-	{
-		if(name.equals("buffers"))
-			return buffers;
-		else if(name.equals("open-recent"))
-			return openRecent;
-		else if(name.equals("clear-marker"))
-			return clearMarker;
-		else if(name.equals("goto-marker"))
-			return gotoMarker;
-		else if(name.equals("macros"))
-			return macros;
-		else if(name.equals("plugins"))
-			return plugins;
-		else
-			return null;
-	}
-	
 	void close()
 	{
 		closed = true;
@@ -613,6 +595,63 @@ public class View extends JFrame implements EBComponent
 	private int waitCount;
 
 	private boolean showFullPath;
+
+	private void loadPropertiesFromView(View view)
+	{
+		loadToolBar();
+
+		showFullPath = view.showFullPath;
+		TextAreaPainter painter = view.textArea.getPainter();
+		TextAreaPainter myPainter = textArea.getPainter();
+		myPainter.setFont(painter.getFont());
+		myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
+		myPainter.setLineHighlightColor(painter.getLineHighlightColor());
+		myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
+		myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
+		myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
+		myPainter.setInvalidLinesPainted(painter.getInvalidLinesPainted());
+		myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
+		myPainter.setCaretColor(painter.getCaretColor());
+		myPainter.setSelectionColor(painter.getSelectionColor());
+		myPainter.setBackground(painter.getBackground());
+		myPainter.setForeground(painter.getForeground());
+		myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
+
+		textArea.setCaretBlinkEnabled(view.textArea.isCaretBlinkEnabled());
+		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
+			view.textArea.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
+		textArea.setElectricScroll(view.textArea.getElectricScroll());
+
+		myPainter.setStyles(painter.getStyles());
+
+		updateOpenRecentMenu();
+	}
+
+	private void loadToolBar()
+	{
+		if("on".equals(jEdit.getProperty("view.showToolbar")))
+		{
+			if(toolBar == null)
+			{
+				toolBar = GUIUtilities.loadToolBar("view.toolbar");
+				toolBar.add(Box.createHorizontalStrut(10));
+				toolBar.add(new JLabel(jEdit.getProperty("view.quicksearch")));
+				Box box = new Box(BoxLayout.Y_AXIS);
+				box.add(Box.createVerticalGlue());
+				box.add(quicksearch);
+				box.add(Box.createVerticalGlue());
+				toolBar.add(box);
+			}
+			if(toolBar.getParent() == null)
+				addToolBar(toolBar);
+		}
+		else if(toolBar != null)
+		{
+			removeToolBar(toolBar);
+			toolBar = null;
+			validate();
+		}
+	}
 
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
@@ -796,6 +835,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.109  1999/11/26 01:18:49  sp
+ * Optimizations, splash screen updates, misc stuff
+ *
  * Revision 1.108  1999/11/21 03:40:18  sp
  * Parts of EditBus not used by core moved to EditBus.jar
  *

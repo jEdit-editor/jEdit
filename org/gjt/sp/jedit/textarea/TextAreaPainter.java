@@ -258,7 +258,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	/**
 	 * Returns true if EOL markers are drawn, false otherwise.
 	 */
-	public final boolean getEOLMarkersEnabled()
+	public final boolean getEOLMarkersPainted()
 	{
 		return eolMarkers;
 	}
@@ -267,7 +267,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Sets if EOL markers are to be drawn.
 	 * @param eolMarkers True if EOL markers should be drawn, false otherwise
 	 */
-	public final void setEOLMarkersEnabled(boolean eolMarkers)
+	public final void setEOLMarkersPainted(boolean eolMarkers)
 	{
 		this.eolMarkers = eolMarkers;
 		repaint();
@@ -585,11 +585,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(bracketHighlight && line == textArea.getBracketLine())
 			paintBracketHighlight(gfx,line,y);
 
-		if(line == textArea.getCaretLine())
-			paintCaret(gfx,line,y);
-
 		if(highlights != null)
 			highlights.paintHighlight(gfx,line,y);
+
+		if(line == textArea.getCaretLine())
+			paintCaret(gfx,line,y);
 	}
 
 	protected void paintLineHighlight(Graphics gfx, int line, int y)
@@ -707,6 +707,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  1999/11/26 01:18:50  sp
+ * Optimizations, splash screen updates, misc stuff
+ *
  * Revision 1.19  1999/11/21 03:40:18  sp
  * Parts of EditBus not used by core moved to EditBus.jar
  *

@@ -20,7 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditAction;
@@ -42,11 +42,28 @@ public class EnhancedMenuItem extends JMenuItem
 	public EnhancedMenuItem(String label, String keyBinding,
 		EditAction action, String actionCommand)
 	{
+		this(label,keyBinding,action,GUIUtilities.createActionWrapper(
+			action),actionCommand);
+	}
+
+	/**
+	 * Creates a new menu item. Most plugins should call
+	 * GUIUtilities.loadMenuItem() instead.
+	 * @param label The menu item label
+	 * @param keyBinding The key binding
+	 * @param action The edit action
+	 * @param actionWrapper The action wrapper
+	 * @param actionCommand The action command
+	 */
+	public EnhancedMenuItem(String label, String keyBinding,
+		EditAction action, ActionListener actionWrapper,
+		String actionCommand)
+	{
 		super(label);
 		this.keyBinding = keyBinding;
 
 		if(action != null)
-			addActionListener(GUIUtilities.createActionWrapper(action));
+			addActionListener(actionWrapper);
 		setActionCommand(actionCommand);
 
 		acceleratorFont = UIManager
@@ -55,6 +72,8 @@ public class EnhancedMenuItem extends JMenuItem
 			.getColor("MenuItem.acceleratorForeground");
 		acceleratorSelectionForeground = UIManager
 			.getColor("MenuItem.acceleratorSelectionForeground");
+
+		setEnabled(action != null);
 	}
 
 	public Dimension getPreferredSize()

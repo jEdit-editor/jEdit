@@ -1647,15 +1647,20 @@ public class JEditTextArea extends JComponent
 			count = ch.getChildrenAdded().length -
 				ch.getChildrenRemoved().length;
 
+		int line = getLineOfOffset(evt.getOffset());
 		if(count == 0)
 		{
-			int line = getLineOfOffset(evt.getOffset());
 			painter.invalidateLine(line);
 		}
+		// do magic stuff
+		else if(line + count < firstLine)
+		{
+			setFirstLine(firstLine + count);
+		}
+		// end of magic stuff
 		else
 		{
-			int index = ch.getIndex();
-			painter.invalidateLineRange(index,firstLine + visibleLines);
+			painter.invalidateLineRange(line,firstLine + visibleLines);
 			updateScrollBars();
 		}
 	}
@@ -2133,6 +2138,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  1999/11/26 01:18:50  sp
+ * Optimizations, splash screen updates, misc stuff
+ *
  * Revision 1.30  1999/11/21 07:59:30  sp
  * JavaDoc updates
  *

@@ -65,5 +65,3 @@ JEDIT TO DO
 - Debugger front-end
 - VI key binding emulation
 - Spelling checker
-- Column guides - use text area highlighters to draw a vertical line at
-  a user-specified position (eg, column 80)

@@ -30,6 +30,19 @@ JEDIT VERSION HISTORY
   the selected string when invoked
 - If you do a 'Save As' on a temporary macro, it will default to the
   user's macro directory
+- Fixed weird scrolling when working with multiple views
+- The caret is painted after any plugin highlights, so that line guides, etc
+  won't obscure it
+- Views after the initial view are created faster, due to several
+  optimizations:
+  - settings are obtained from previous views, rather than being loaded
+    from scratch
+  - the menu bar and tool bar is loaded only once, and subsequent views
+    create a new one from the 'model'
+  - tool bar icons are only loaded once per session
+  - on my machine, views now open about 200 ms faster. On slower machines,
+    this will be much more noticable
+- Improved splash screen
 
 + Bug Fixes
 
@@ -46,6 +59,9 @@ JEDIT VERSION HISTORY
 
 + API Changes
 
+- This doesn't break anything, but is important: plugins that load
+  images should use the GUIUtilities.loadImageIcon() method so that
+  icons are cached and only loaded once per session
 - Plugins that rely on the old event system will no longer work
 
 * Version 2.2pre5
