@@ -1,12 +1,8 @@
 JEDIT TO DO
 
-2.4:
-
-- do MARK_PREVIOUS after markKeyword()
-- CVS: add dialog-options-context, ContextOptionPane
-
 2.5:
 
+- do MARK_PREVIOUS after markKeyword()
 - XMode:
   - better error reporting
   - regexps

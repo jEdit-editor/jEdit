@@ -72,8 +72,8 @@ actually a Java bug, or a well-known problem.
   these problems, but I'm not sure.
 
 - The buffer tabs component has problems with focus handling sometimes;
-  you might notice that the caret stops flashing after you save a
-  buffer, for example. This is mostly caused by Java and Swing problems.
+  jEdit 2.4pre7 fixes most of these, but some remain, especially when
+  working with splits.
 
 - The Swing HTML component used by jEdit's help viewer is very buggy.
   Although it has been getting better with recent Swing releases, it
