@@ -42,7 +42,6 @@ echo doc/jeditdocs.sgml > sim/jedit-sgml
 find doc/scripts -type f \! -path \*CVS\* -print >> sim/jedit-sgml
 find doc/dsssl -type f -name \*.dsl -print >> sim/jedit-sgml
 echo doc/makefile.jmk >> sim/jedit-sgml
-find doc/images -type f \! -path \*CVS\* -print >> sim/jedit-sgml
 
 echo -n "jedit-sgml: "
 ls -l `cat sim/jedit-sgml` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'
