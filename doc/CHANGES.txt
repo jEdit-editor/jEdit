@@ -55,6 +55,11 @@ JEDIT 2.6 VERSION HISTORY
 - The window docking code is now slightly more resistent to broken dockables
 - Undoing all changes up to a save now clears the dirty flag
 - 'Load Session' and 'Save Session' commands moved to 'File' menu
+- Improved Unix window positioning workaround. Many Unix Java versions
+  position windows in an extremely broken manner. As a result, windows
+  could 'drift' because their position would be restored incorrectly.
+  jEdit 2.6pre5 should do much better; if windows don't appear where you
+  last put them on Unix, please tell me!
 
 + Bug Fixes
 

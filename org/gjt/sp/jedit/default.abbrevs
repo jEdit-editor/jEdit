@@ -43,11 +43,11 @@ sbp|jEdit.setBooleanProperty(\|)
 ogs|import org.gjt.sp.
 ogsj|import org.gjt.sp.jedit.
 ogsu|import org.gjt.sp.util.
-loge|Log.log(Log.ERROR,this,\|)
-logw|Log.log(Log.WARNING,this,\|)
-logn|Log.log(Log.NOTICE,this,\|)
-logm|Log.log(Log.MESSAGE,this,\|)
-logd|Log.log(Log.DEBUG,this,\|)
+loge|Log.log(Log.ERROR,this,\|);
+logw|Log.log(Log.WARNING,this,\|);
+logn|Log.log(Log.NOTICE,this,\|);
+logm|Log.log(Log.MESSAGE,this,\|);
+logd|Log.log(Log.DEBUG,this,\|);
 
 [html]
 EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>

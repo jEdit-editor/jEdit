@@ -150,19 +150,18 @@ public class TextUtilities
 					}
 
 					//System.err.println(lineTokens);
-
 					int len = lineTokens.length;
 					if(id == idOfBracket)
 					{
-						for(int j = scanStartOffset; j >= tokenListOffset  - len; j--)
+						for(int j = scanStartOffset; j > tokenListOffset - len; j--)
 						{
-							/* if(j >= lineText.count)
+							if(j >= lineText.count)
 								System.err.println("WARNING: " + j + " >= " + lineText.count);
 							else if(j < 0)
 							{
 								System.err.println("sso=" + scanStartOffset + ", tlo=" + tokenListOffset + ",len=" + len);
 								System.err.println("WARNING: " + j + " < 0");
-							} */
+							}
 
 							char ch = lineText.array[lineText.offset + j];
 							//System.err.print(ch);
@@ -307,6 +306,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/09/04 06:34:54  sp
+ * bug fixes
+ *
  * Revision 1.11  2000/09/03 03:16:53  sp
  * Search bar integrated with command line, enhancements throughout
  *

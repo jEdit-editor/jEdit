@@ -1236,7 +1236,7 @@ public class jEdit
 				JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.YES_OPTION)
 			{
-				if(!buffer.save(view,null))
+				if(!buffer.save(view,null,true))
 					return false;
 			}
 			else if(result != JOptionPane.NO_OPTION)
@@ -2195,7 +2195,8 @@ public class jEdit
 	{
 		// if only one, clean, 'untitled' buffer is open, we
 		// replace it
-		if(buffersFirst != null && buffersFirst == buffersLast
+		if(viewCount <= 1 && buffersFirst != null
+			&& buffersFirst == buffersLast
 			&& buffersFirst.isUntitled()
 			&& !buffersFirst.isDirty())
 		{
@@ -2353,6 +2354,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.276  2000/09/04 06:34:53  sp
+ * bug fixes
+ *
  * Revision 1.275  2000/09/03 03:16:53  sp
  * Search bar integrated with command line, enhancements throughout
  *

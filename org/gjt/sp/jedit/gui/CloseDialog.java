@@ -134,7 +134,7 @@ public class CloseDialog extends EnhancedDialog
 				{
 					String path = (String)paths[i];
 					Buffer buffer = jEdit.getBuffer(path);
-					if(!buffer.save(view,null))
+					if(!buffer.save(view,null,true))
 						return;
 					jEdit._closeBuffer(view,buffer);
 					bufferModel.removeElement(path);

@@ -612,7 +612,11 @@ public class GUIUtilities
 	 */
 	public static void loadGeometry(Window win, String name)
 	{
-		int x, y, width, height;
+		// all this adjust_* crap is there to work around buggy
+		// Unix Java versions which don't put windows where you
+		// tell them to
+		int x, y, width, height, adjust_x, adjust_y, adjust_width,
+			adjust_height;
 
 		try
 		{
@@ -648,34 +652,124 @@ public class GUIUtilities
 			}
 		}
 
-		win.setLocation(x,y);
-		win.setSize(width,height);
-
-		// workaround for broken Linux JDK
-		if(System.getProperty("os.name").indexOf("Linux") != -1)
-			win.addWindowListener(new LinuxWorkaround(win,x,y,width,height));
-	}
-
-	static class LinuxWorkaround extends WindowAdapter
-	{
-		Window win;
-		int x, y, width, height;
-
-		LinuxWorkaround(Window win, int x, int y, int width, int height)
+		try
 		{
-			this.win = win;
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
+			adjust_x = Integer.parseInt(jEdit.getProperty(name + ".dx"));
+			adjust_y = Integer.parseInt(jEdit.getProperty(name + ".dy"));
+			adjust_width = Integer.parseInt(jEdit.getProperty(name + ".d-width"));
+			adjust_height = Integer.parseInt(jEdit.getProperty(name + ".d-height"));
+		}
+		catch(NumberFormatException nf)
+		{
+			adjust_x = adjust_y = 0;
+			adjust_width = adjust_height = 0;
 		}
 
-		public void windowOpened(WindowEvent evt)
-		{
-			win.setLocation(x,y);
-			win.setSize(width,height);
+		Rectangle desired = new Rectangle(x,y,width,height);
+		Rectangle required = new Rectangle(x - adjust_x,
+			y - adjust_y,width - adjust_width,
+			height - adjust_height);
+		Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
+			+ ": desired geometry is " + desired);
+		Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
+			+ ": setting geometry to " + required);
+		win.setBounds(required);
 
-			win.removeWindowListener(this);
+		if(File.separatorChar == '/') // ie, Unix
+			new UnixWorkaround(win,name,desired,required);
+	}
+
+	static class UnixWorkaround
+	{
+		Window win;
+		String name;
+		Rectangle desired;
+		Rectangle required;
+		long start;
+		boolean windowOpened;
+
+		UnixWorkaround(Window win, String name, Rectangle desired,
+			Rectangle required)
+		{
+			this.win = win;
+			this.name = name;
+			this.desired = desired;
+			this.required = required;
+
+			start = System.currentTimeMillis();
+
+			win.addComponentListener(new ComponentHandler());
+			win.addWindowListener(new WindowHandler());
+		}
+
+		class ComponentHandler extends ComponentAdapter
+		{
+			public void componentMoved(ComponentEvent evt)
+			{
+				if(System.currentTimeMillis() - start < 1000)
+				{
+					Rectangle r = win.getBounds();
+					if(!windowOpened && r.equals(required))
+						return;
+
+					if(!r.equals(desired))
+					{
+						Log.log(Log.DEBUG,GUIUtilities.class,
+							"Window resize blocked: " + win.getBounds());
+						win.setBounds(desired);
+					}
+				}
+				else
+					win.removeComponentListener(this);
+			}
+
+			public void componentResized(ComponentEvent evt)
+			{
+				if(System.currentTimeMillis() - start < 1000)
+				{
+					Rectangle r = win.getBounds();
+					if(!windowOpened && r.equals(required))
+						return;
+
+					if(!r.equals(desired))
+					{
+						Log.log(Log.DEBUG,GUIUtilities.class,
+							"Window resize blocked: " + win.getBounds());
+						win.setBounds(desired);
+					}
+				}
+				else
+					win.removeComponentListener(this);
+			}
+		}
+
+		class WindowHandler extends WindowAdapter
+		{
+			public void windowOpened(WindowEvent evt)
+			{
+				windowOpened = true;
+
+				
+				Rectangle r = win.getBounds();
+				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
+					+ name + ": bounds after opening: " + r);
+
+				if(r.x != desired.x || r.y != desired.y
+					|| r.width != desired.width
+					|| r.height != desired.height)
+				{
+					jEdit.setProperty(name + ".dx",String.valueOf(
+						r.x - required.x));
+					jEdit.setProperty(name + ".dy",String.valueOf(
+						r.y - required.y));
+					jEdit.setProperty(name + ".d-width",String.valueOf(
+						r.width - required.width));
+					jEdit.setProperty(name + ".d-height",String.valueOf(
+						r.height - required.height));
+				}
+
+				win.removeWindowListener(this);
+			}
 		}
 	}
 
@@ -689,13 +783,11 @@ public class GUIUtilities
 	 */
 	public static void saveGeometry(Window win, String name)
 	{
-		Point location = win.getLocation();
-		Dimension size = win.getSize();
-		jEdit.setProperty(name + ".x",String.valueOf(location.x));
-		jEdit.setProperty(name + ".y",String.valueOf(location.y));
-		jEdit.setProperty(name + ".width",String.valueOf(size.width));
-		jEdit.setProperty(name + ".height",String.valueOf(size.height));
-
+		Rectangle bounds = win.getBounds();
+		jEdit.setProperty(name + ".x",String.valueOf(bounds.x));
+		jEdit.setProperty(name + ".y",String.valueOf(bounds.y));
+		jEdit.setProperty(name + ".width",String.valueOf(bounds.width));
+		jEdit.setProperty(name + ".height",String.valueOf(bounds.height));
 	}
 
 	/**
@@ -774,6 +866,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.76  2000/09/04 06:34:53  sp
+ * bug fixes
+ *
  * Revision 1.75  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

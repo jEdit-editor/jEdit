@@ -27,6 +27,6 @@ public class save extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		view.getBuffer().save(view,null);
+		view.getBuffer().save(view,null,true);
 	}
 }

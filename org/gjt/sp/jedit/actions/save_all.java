@@ -44,7 +44,7 @@ public class save_all extends EditAction
 		{
 			Buffer buffer = buffers[i];
 			if(buffer.isDirty())
-				buffer.save(view,null);
+				buffer.save(view,null,true);
 		}
 	}
 }
