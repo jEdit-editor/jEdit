@@ -6,8 +6,20 @@
 
 <project name="jEdit" default="dist" basedir=".">
 
+	<property file="build.properties"/>
+
 	<target name="init">
 		<available property="jdk14" classname="java.awt.KeyboardFocusManager" />
+		<echo file="doc/docbook-wrapper.xsl"
+			message="&lt;xsl:stylesheet"/>
+		<echo file="doc/docbook-wrapper.xsl" append="true"
+			message=" xmlns:xsl='http://www.w3.org/1999/XSL/Transform'"/>
+		<echo file="doc/docbook-wrapper.xsl" append="true"
+			message=" xsl:version='1.0'&gt;"/>
+		<echo file="doc/docbook-wrapper.xsl" append="true"
+			message="&lt;xsl:import href='${docbook.xsl}/html/chunk.xsl'/&gt;"/>
+		<echo file="doc/docbook-wrapper.xsl" append="true"
+			message="&lt;/xsl:stylesheet&gt;"/>
 	</target>
 
 	<target name="compile" depends="init">
@@ -98,7 +110,7 @@
 	<target name="docs-pdf-openjade-letter">
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
-			<arg value="jeditprint-letter.dsl"/>
+			<arg value="../jeditprint-letter.dsl"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
 			<arg value="/usr/share/sgml/xml.dcl"/>
@@ -120,7 +132,7 @@
 	<target name="docs-pdf-openjade-a4">
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
-			<arg value="jeditprint-a4.dsl"/>
+			<arg value="../jeditprint-a4.dsl"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
 			<arg value="/usr/share/sgml/xml.dcl"/>
