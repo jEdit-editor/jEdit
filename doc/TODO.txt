@@ -1,13 +1,9 @@
 JEDIT TO DO
 
-2.5pre1:
-
-- Block user input while loading/saving
-- Closed views leak memory a rusty bucket
-- CVS: remove SaveAll.gif
-
 2.5:
 
+- Closed views leak memory a rusty bucket
+- Block user input while loading/saving
 - Plugin manager: use swing centering code, JARClassLoader.getLoaded() method
 - Annoying BufferTabs flicker
 - Make HyperSearch a JFrame
