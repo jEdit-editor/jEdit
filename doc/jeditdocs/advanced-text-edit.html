@@ -109,11 +109,6 @@ HREF="abbrevs.html"
 HREF="macros.html"
 >Macros</A
 ></DT
-><DT
-><A
-HREF="misc-commands.html"
->Miscellaneous Commands</A
-></DT
 ></DL
 ></DIV
 ><P
@@ -158,8 +153,6 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >W</B
 >).
-   The latter is primarily of use in macros, where mouse clicks
-   cannot be recorded (but menu item selections can).
   </P
 ><P
 >   <B
@@ -201,6 +194,86 @@ CLASS="FIRSTTERM"
 >in front of</I
 >
    the caret, respectively.
+  </P
+><P
+>   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Word Count</SPAN
+>
+   displays a dialog box with the number of characters,
+   words and lines in the current buffer.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 5-1. The word count dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-wordcount.gif"></P
+></DIV
+><P
+>   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Complete Word</SPAN
+> (keyboard
+   equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>B</B
+>) attempts to
+   compete the current word by searching the buffer for
+   other words beginning with the current word. Invoking it multiple times
+   will cycle through all possible completions. This can be used to
+   enter previously typed long identifiers in program source, for example.
+  </P
+><P
+>   
+   When editing Lisp source, for example,
+   you might want strings such as "compile-inline" and
+   "after-load-alist" to be treated as one word. To do this,
+   you can set the "noWordSep" buffer-local property,
+   which specifies
+   non-alphanumeric characters which are to be treated as part of words
+   anyway. To set the
+   "noWordSep" buffer-local property,
+   place the following in the first 10 lines of
+   the buffer:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:noWordSep=-:</PRE
+></TD
+></TR
+></TABLE
+><P
+>   Some edit modes have default values for this property; in C mode,
+   for example, the underscore ("_") is treated as
+   a word character. See <A
+HREF="source-edit.html#MODES"
+>the section called <I
+>Edit Modes</I
+> in Chapter 6</A
+> for information about edit modes.
   </P
 ></DIV
 ></DIV

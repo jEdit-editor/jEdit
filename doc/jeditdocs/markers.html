@@ -48,22 +48,32 @@ NAME="MARKERS"
    
    
    A marker is a named location in a buffer. There can be any number
-   of markers defined. Markers are preserved across editing sessions;
+   of markers defined. Markers are preserved across sessions;
    markers for file <TT
 CLASS="FILENAME"
->filename</TT
+><TT
+CLASS="REPLACEABLE"
+><I
+>filename</I
+></TT
+></TT
 > are saved to
    <TT
 CLASS="FILENAME"
->.filename.marks</TT
->. The dot prefix is necessary to make
-   the file hidden on Unix systems.
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>filename</I
+></TT
+>.marks</TT
+>. (The dot prefix
+   makes
+   the marks file hidden on Unix systems).
   </P
 ><P
 >   Markers are kept sorted according to their position in the
-   buffer. Combined with the fact that they are saved across editing
-   sessions, this makes them very useful for marking chapters in an online book,
-   etc.
+   buffer. Combined with the fact that they are saved with the file,
+   makes them very useful for marking sections in a file, etc.
   </P
 ><P
 >   

@@ -45,12 +45,12 @@ NAME="RECT-SELECT"
 ></H1
 ><P
 >   
-   Not only is it possible to select continuous runs of text, but
-   columns of text can also be selected.
+   Using jEdit's rectangular selection features, you can select and operate
+   on columns of text.
   </P
 ><P
 >   There are three ways to create a rectangular selection. The simplest
-   way is to drag the mouse from one corner of the rectangle to another
+   way is to drag the mouse from one corner of the rectangle to the other
    while holding down the <B
 CLASS="KEYCAP"
 >Control</B
@@ -88,9 +88,10 @@ CLASS="KEYCAP"
    will toggle the current selection between continuous and rectangular mode.
   </P
 ><P
->   It is possible to select a rectangle with zero width, but non-zero height.
-   For example, this can be used to insert a column between two existing
-   columns. Such selections are shown as a thin vertical line.
+>   It is possible to select a rectangle with zero width.
+   For example, this can be used to insert a new column between two existing
+   columns. Such "zero-width" selections are shown as a thin
+   vertical line.
   </P
 ><P
 >   Deleting, replacing, copying, pasting, and so on works as expected on
@@ -98,24 +99,38 @@ CLASS="KEYCAP"
    cause problems. All commands built in to jEdit should work, however.
   </P
 ><DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="WARNING"
 ><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
 ><B
->Note: </B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
 >    Because rectangles rely on character offsets, rather than absolute
     screen positions, they may behave strangely when proportional-width
-    fonts, or tabs, are used. Try to use monospaced fonts and soft tabs
+    fonts or tabs are used. Try to use monospaced fonts and soft tabs
     when editing columnar files.
    </P
-></BLOCKQUOTE
+></TD
+></TR
+></TABLE
 ></DIV
 ><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 5-3. A rectangular selection</B
+>Figure 5-4. A rectangular selection</B
 ></P
 ><P
 ><IMG

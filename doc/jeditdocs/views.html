@@ -110,7 +110,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >N</B
 >) will close the
-   current view. jEdit will then exit if no more views remain.
+   current view. jEdit will exit if all views are closed.
   </P
 ><P
 >   
@@ -131,7 +131,8 @@ CLASS="KEYCAP"
    <B
 CLASS="KEYCAP"
 >2</B
->) will horizontally split the current view.
+>) will horizontally split the text area into two regions.
+   Each region can view a different location in the current buffer.
   </P
 ><P
 >   
@@ -152,7 +153,8 @@ CLASS="KEYCAP"
    <B
 CLASS="KEYCAP"
 >3</B
->) will vertically split the current view.
+>) will vertically split the text are into two regions.
+   Each region can view a different location in the current buffer.
   </P
 ><P
 >   
@@ -173,26 +175,21 @@ CLASS="KEYCAP"
    <B
 CLASS="KEYCAP"
 >1</B
->) will remove all splits from the current view.
+>) will remove all text areas areas except for the one which has
+   keyboard focus from the view.
   </P
-><DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
 ><P
-><B
->Note: </B
->    A split view can still only display one buffer at a time. If you need
-    to simultaneously view two buffers at once, you must create a new
-    view.
-   </P
-></BLOCKQUOTE
-></DIV
+>   A single view can still only display one buffer at a time, even if it is
+   split.
+   Another limitation is that views are unsplit when some operations
+   are performed; for example, switching
+   buffers, reloading, and a few others.
+  </P
 ><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 5-1. A view split into two panes</B
+>Figure 5-2. A view split into two panes</B
 ></P
 ><P
 ><IMG

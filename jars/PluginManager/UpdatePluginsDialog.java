@@ -239,7 +239,8 @@ public class UpdatePluginsDialog extends EnhancedDialog
 				{
 					if(jar.equals(installed[j])
 						&& plugin.currVersion != null
-						&& plugin.currVersion.compareTo(
+						&& MiscUtilities.compareVersions(
+						plugin.currVersion,
 						plugin.latestVersion) < 0)
 					{
 						model.addElement(pluginList[i]);

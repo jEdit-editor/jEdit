@@ -69,6 +69,8 @@ public class PluginManagerPlugin extends EBPlugin
 				if(result == JOptionPane.YES_OPTION)
 					updatePlugins(null);
 			}
+			else if(myBuild.compareTo(build) < 0)
+				return;
 
 			jEdit.setProperty("update-plugins.last-version",myBuild);
 		}
@@ -214,11 +216,7 @@ public class PluginManagerPlugin extends EBPlugin
 		for(int i = 0; i < plugins.length; i++)
 		{
 			String plugin = plugins[i];
-
-			if(plugin.startsWith(jEditHome))
-				ok |= removePlugin(view,plugin,getSystemBackupDir());
-			else
-				ok |= removePlugin(view,plugin,getUserBackupDir());
+			ok |= removePlugin(view,plugin);
 		}
 
 		if(ok)
@@ -256,8 +254,6 @@ public class PluginManagerPlugin extends EBPlugin
 		PluginList.Plugin[] plugins = dialog.getPlugins();
 		if(plugins != null)
 		{
-			String usrBackupDir = getUserBackupDir();
-			String sysBackupDir = getSystemBackupDir();
 			String sysPluginDir = MiscUtilities.constructPath(
 				jEdit.getJEditHome(),"jars");
 
@@ -275,19 +271,12 @@ public class PluginManagerPlugin extends EBPlugin
 				File srcFile = new File(path.substring(0,
 					path.length() - 4));
 
-				String dir = jarFile.getParent();
-				String backupDir;
-				if(dir.startsWith(sysPluginDir))
-					backupDir = sysBackupDir;
-				else
-					backupDir = usrBackupDir;
-
-				backup(jarFile,backupDir);
+				backup(jarFile);
 				if(srcFile.exists())
-					backup(srcFile,backupDir);
+					backup(srcFile);
 
 				urls[i] = url;
-				dirs[i] = dir;
+				dirs[i] = jarFile.getParent();
 			}
 
 			if(installPlugins(view,urls,dirs))
@@ -322,44 +311,25 @@ public class PluginManagerPlugin extends EBPlugin
 	private static File sysBackupDir;
 	private static File downloadDir;
 
-	private static String getUserBackupDir()
+	private static String getBackupDir(File plugin)
 	{
-		if(usrBackupDir == null)
-		{
-			String settings = jEdit.getSettingsDirectory();
-			if(settings == null)
-				settings = System.getProperty("user.home");
-			usrBackupDir = new File(MiscUtilities.constructPath(
-				settings,"PluginManager.backup"));
-			usrBackupDir.mkdirs();
-		}
+		File pluginDir = new File(plugin.getParent());
+		File backupDir = new File(pluginDir.getParent(),"PluginManager.backup");
+		backupDir.mkdirs();
 
-		return usrBackupDir.getPath();
+		return backupDir.getPath();
 	}
 
-	private static String getSystemBackupDir()
-	{
-		if(sysBackupDir == null)
-		{
-			String settings = jEdit.getJEditHome();
-			sysBackupDir = new File(MiscUtilities.constructPath(
-				settings,"PluginManager.backup"));
-			sysBackupDir.mkdirs();
-		}
-
-		return sysBackupDir.getPath();
-	}
-
-	private static boolean removePlugin(View view, String plugin, String directory)
+	private static boolean removePlugin(View view, String plugin)
 	{
 		// move JAR first
 		File jarFile = new File(plugin);
 		File srcFile = new File(plugin.substring(0,plugin.length() - 4));
 
 		boolean ok = true;
-		ok &= backup(jarFile,directory);
+		ok &= backup(jarFile);
 		if(srcFile.exists())
-			ok &= backup(srcFile,directory);
+			ok &= backup(srcFile);
 
 		if(!ok)
 		{
@@ -378,9 +348,10 @@ public class PluginManagerPlugin extends EBPlugin
 		return progress.isOK();
 	}
 
-	private static boolean backup(File file, String directory)
+	private static boolean backup(File file)
 	{
 		String name = file.getName();
+		String directory = getBackupDir(file);
 
 		int i = 0;
 		File backupFile;

@@ -96,10 +96,12 @@ CLASS="FIRSTTERM"
 CLASS="FILENAME"
 >org/gjt/sp/jedit/jEdit.java</TT
 > file.
+   To depend on a specific plugin release, specify "plugin" followed
+   by the plugin name and version number.
   </P
 ><P
->   Here is a typical example for a plugin that requires JDK 1.2 and
-   jEdit 2.1pre3:
+>   Here is a typical example for a plugin that requires JDK 1.2,
+   jEdit 2.3pre5, and EditBus 0.9.1:
   </P
 ><TABLE
 BORDER="0"
@@ -110,7 +112,8 @@ WIDTH="100%"
 ><PRE
 CLASS="PROGRAMLISTING"
 >plugin.BazPlugin.depend.0=jdk 1.2
-plugin.BazPlugin.depend.1=jedit 02.02.03.00</PRE
+plugin.BazPlugin.depend.1=jedit 02.03.05.00
+plugin.BazPlugin.depend.2=plugin EditBusPlugin 0.9.1</PRE
 ></TD
 ></TR
 ></TABLE

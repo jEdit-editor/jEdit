@@ -110,6 +110,8 @@ public class PluginDownloadThread extends Thread
 			}
 		}
 
+		new File(path).delete();
+
 		progress.setValue(1);
 	}
 

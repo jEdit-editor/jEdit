@@ -47,20 +47,21 @@ NAME="SESSIONS"
 >   
    
    
-   When working on a project, it can sometimes be convenient to save
-   the list of open files, and re-open those files at a later time.
-   jEdit's saved sessions can do this.
+   When working on a project, it can be convenient to save
+   a list of open files, and re-open those files at a later time.
+   jEdit's saved sessions do exactly that.
   </P
 ><P
->   jEdit sessions are plain text files with the extension
+>   Sessions are plain text files with the extension
    <TT
 CLASS="FILENAME"
 >.session</TT
 >, stored in the
    <TT
 CLASS="FILENAME"
->$HOME/.jedit/sessions</TT
-> directory. The session named
+>.jedit/sessions</TT
+> subdirectory of the user's home directory.
+   The session named
    <TT
 CLASS="FILENAME"
 >default.session</TT
@@ -91,11 +92,12 @@ CLASS="COMMAND"
    all files in the <TT
 CLASS="FILENAME"
 >website</TT
-> session (the <TT
+> session (it is not
+   necessary to specify the <TT
 CLASS="FILENAME"
 >.session</TT
 >
-   suffix, if left off, is appended to session names automatically):
+   suffix):
    <TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -135,7 +137,7 @@ CLASS="GUIMENU"
 CLASS="GUIMENUITEM"
 >Load Session</SPAN
 > loads
-   a session while jEdit is running from a file specified in a file
+   the session specified in a file
    selection dialog box.
   </P
 ><P
@@ -146,7 +148,7 @@ CLASS="GUIMENU"
 CLASS="GUIMENUITEM"
 >Save Session</SPAN
 > saves the list of
-   all open files to a session specified in a file selection dialog box.
+   open files to a session specified in a file selection dialog box.
   </P
 ></DIV
 ><DIV

@@ -49,21 +49,22 @@ CLASS="FIRSTTERM"
 >register</I
 > is place where you can save a string or caret
    position for later use.
-   Each register has a single-character name (hence the number of registers
-   is limited by how many distinct keys can be typed on your keyboard),
-   and can contain a string or a caret position.
+   Each register has a single-character name and can contain a string or a
+   caret position. The number of registers
+   is limited by how many keys can be typed on your keyboard.
   </P
 ><P
->   All register-related commands except for <SPAN
+>   All register commands except for <SPAN
 CLASS="GUIMENUITEM"
 >View Registers</SPAN
->,
-   once invoked, grab the next character entered at the keyboard and use
+>
+   grab the next character entered at the keyboard and use
    that as the register to operate on. So to copy the selection to register
    <TT
 CLASS="FILENAME"
 >X</TT
->, you can type <B
+>, you would type
+   <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
@@ -82,8 +83,9 @@ CLASS="KEYCAP"
 >.
   </P
 ><P
->   Registers are global; all buffers share the same set. The contents of
-   registers are not saved across editing sessions.
+>   Registers are global to the editor; all buffers and views share the same
+   set.
+   Registers are not saved across editing sessions.
   </P
 ><DIV
 CLASS="SECT2"
@@ -175,8 +177,9 @@ CLASS="KEYCAP"
 >C</B
 >) reads the next
     character entered at the keyboard, and appends the selected text to that
-    register, leaving it in the buffer. This can be used to merge several
-    text strings and insert them into a different buffer in one operation.
+    register, leaving the original text in the buffer. This can be
+    to collate
+    distinct text strings from several places.
    </P
 ><P
 >    <SPAN
@@ -205,7 +208,7 @@ CLASS="KEYCAP"
 >) reads the next
     character entered at the keyboard, and replaces the selection with the
     contents of that register. Every time you paste from a register,
-    the pasted text is added to the clipboard history displayed in the
+    the pasted text is added to the list in the
     <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -342,6 +345,21 @@ CLASS="KEYCAP"
     repeatedly, it can be used to flip between two buffers and/or caret
     positions.
    </P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>     Caret positions cannot be saved to the <TT
+CLASS="FILENAME"
+>$</TT
+> (clipboard)
+     register.
+    </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -354,7 +372,8 @@ NAME="FILENAME-REGISTERS"
 ><P
 >    Registers can also be used to store file names to visit. Internally,
     jEdit makes no distinction between a file name and string register;
-    they can be used interchangeably.
+    so for example, you can paste a
+    filename register into a buffer to get the file's name.
    </P
 ><P
 >    <SPAN
@@ -400,7 +419,7 @@ CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
->T</B
+>Y</B
 >)
     reads the next character entered at the keyboard, and opens the buffer
     named by the contents of that register. This is the same command
@@ -412,7 +431,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1401"
+NAME="AEN1430"
 >Viewing Register Contents</A
 ></H2
 ><P
@@ -445,7 +464,7 @@ CLASS="KEYCAP"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 5-4. The View Registers dialog box</B
+>Figure 5-5. The View Registers dialog box</B
 ></P
 ><P
 ><IMG

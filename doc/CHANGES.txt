@@ -5,9 +5,9 @@ JEDIT VERSION HISTORY
 + New Features
 
 - MiscUtilities.compareVersions() method compares strings of the form
-  XX.YY.ZZ
-- 'plugin <name> <version>' dependency added
-- Buffer.isLoaded() method added (required for EditBus plugin)
+  XX.YY.ZZ (Dirk Moebius)
+- 'plugin <name> <version>' dependency added (Dirk Moebius)
+- Buffer.isLoaded() method added
 
 + Enhancements
 

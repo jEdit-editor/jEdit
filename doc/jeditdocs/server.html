@@ -45,29 +45,22 @@ NAME="SERVER"
 ></H1
 ><P
 >   When jEdit is
-   started, it attempts to connect to another running jEdit instance.
-   If the connection
-   was
-   successful, it transfers control to that running instance, passing it any
-   necessary file names. Only if no other running instance can be found does
-   jEdit start up for real. This saves startup time if another instance is
-   already running.
+   launched, it first attempts to locate another running instance before
+   starting up for real. If another copy happends to be running, it
+   transfers control to it, passing any necessary file names.
+   This technique saves time and memory when jEdit is started multiple times.
   </P
 ><P
->   The edit server is implemented using TCP/IP
-   sockets. When a server is started, it
-   picks a random port number and authorization key and writes it to a
+>   Communication between instances of jEdit is implemented using
+   TCP/IP sockets. When a server is started, it
+   picks a random port number and authorization key (to prevent malicious
+   remote users from opening files) and writes it to a
    <I
 CLASS="FIRSTTERM"
 >port file</I
 > (usually in a well-known location). Client instances
    of jEdit then read the port file and connect to the specified port, passing
-   it the authorization key.
-  </P
-><P
->   The authorization key is required to prevent malicious remote attackers from
-   opening files
-   on your compiler.
+   it the authorization key and the file names to open, if any.
   </P
 ><P
 >   
@@ -82,9 +75,11 @@ CLASS="COMMAND"
    <B
 CLASS="COMMAND"
 >-server</B
-> command line switch can be used to change the file
-   where port information is stored. This can be used when
-   you want to run more than one copy of jEdit at once. For example:
+> command line switch specifies
+   where port information is stored. This can be used to start more than
+   one copy of jEdit.
+   For example, you
+   can start a new jEdit like so:
   </P
 ><TABLE
 BORDER="0"
@@ -107,14 +102,11 @@ CLASS="USERINPUT"
 ></TR
 ></TABLE
 ><P
->   The same <B
+>   Now any subsequent jEdit instances opened with the
+   <B
 CLASS="COMMAND"
->-server</B
-> parameter must be passed to <I
-CLASS="EMPHASIS"
->both</I
->
-   the server and client.
+>-server=my-server-2</B
+> parameter will connect to this instance.
   </P
 ><P
 >   

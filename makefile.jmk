@@ -89,15 +89,4 @@ jar: srcs;
 	"org/gjt/sp/jedit/default.abbrevs");
 }
 
-"apidocs":;
-{
-    exec "javadoc" "-J-mx24m" "-noindex" "-notree" "-d" "doc/api"
-        "org.gjt.sp.jedit"
-	"org.gjt.sp.jedit.gui"
-        "org.gjt.sp.jedit.msg"
-        "org.gjt.sp.jedit.syntax"
-        "org.gjt.sp.jedit.textarea"
-	"org.gjt.sp.util";
-}
-
-".PHONY": "all" "apidocs";
+".PHONY": "all";

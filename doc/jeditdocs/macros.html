@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="Abbreviations"
 HREF="abbrevs.html"><LINK
 REL="NEXT"
-TITLE="Miscellaneous Commands"
-HREF="misc-commands.html"></HEAD
+TITLE="Source Code Editing"
+HREF="source-edit.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,7 +26,7 @@ CLASS="NAVHEADER"
 >jEdit 2.3 User's Guide</H1
 ><P
 ><A
-HREF="misc-commands.html"
+HREF="source-edit.html"
 >Next</A
 >, <A
 HREF="abbrevs.html"
@@ -193,7 +193,13 @@ CLASS="KEYCAP"
 >    While a recording is in progress, "Macro recording" is
     displayed in the status bar, instead of the caret position information.
     Currently, jEdit records key strokes, commands invoked from
-    the menu bar, and tool bar clicks.
+    the menu bar, and tool bar clicks. Caret movement and selection performed
+    using the mouse is <I
+CLASS="EMPHASIS"
+>not</I
+> recorded; to move the caret or
+    select text from a macro, use the text selection commands and arrow
+    keys.
    </P
 ><P
 >    Search and replace operations can also be recorded in macros.
@@ -291,11 +297,12 @@ CLASS="GUIMENUITEM"
 > stops recording the
     temporary macro. This is the same command used to stop recording an
     ordinary macro.
-    Once recording is complete, the <TT
+    Once recording is complete, you don't need to save the
+    <TT
 CLASS="FILENAME"
 >__temporary__.macro</TT
 >
-    buffer need not be saved. However, if you do save it, it will become
+    buffer to play it back. However, if you do save it, it will become
     an ordinary macro, displayed in the <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
@@ -330,6 +337,51 @@ CLASS="FILENAME"
 > buffer.
    </P
 ></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1597"
+>A Sample Macro</A
+></H2
+><P
+>    Here is an example macro, that swaps two
+    characters on either side of the caret:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+># Get rid of selection, if any
+select-none
+# Get character before caret and put it into register !
+# If the current line looks like: hello wol|rd, with caret at |
+# It will now look like:          hello wo|rd
+select-prev-char
+cut
+# Now, move the caret after the second character
+# If the current line looks like: hello wo|rd
+# It will now look like:          hello wor|d
+next-char
+# Finally, paste the character that was cut at the start
+# If the current line looks like: hello wor|d
+# It will now look like:          hello worl|d
+paste
+# Done!</PRE
+></TD
+></TR
+></TABLE
+><P
+>    When writing or recording macros, remember that you can use
+    registers and the clipboard for data transfer. Also, make
+    creative use of jEdit's builtin commands.
+   </P
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -343,9 +395,9 @@ HREF="advanced-text-edit.html"
 HREF="abbrevs.html"
 >Prev</A
 >: Abbreviations<BR><A
-HREF="misc-commands.html"
+HREF="source-edit.html"
 >Next</A
->: Miscellaneous Commands<BR></DIV
+>: Source Code Editing<BR></DIV
 ></BODY
 ></HTML
 >
