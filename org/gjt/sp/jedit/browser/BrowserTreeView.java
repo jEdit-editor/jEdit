@@ -301,18 +301,20 @@ public class BrowserTreeView extends BrowserView
 			{
 				TreePath path = tree.getPathForLocation(evt.getX(),evt.getY());
 				if(path == null)
-					return;
-
-				if(!tree.isPathSelected(path))
-					tree.setSelectionPath(path);
-
-				Object userObject = ((DefaultMutableTreeNode)path
-					.getLastPathComponent()).getUserObject();
-				if(userObject instanceof VFS.DirectoryEntry)
+					showFilePopup(null,tree,evt.getPoint());
+				else
 				{
-					VFS.DirectoryEntry file = (VFS.DirectoryEntry)
-						userObject;
-					showFilePopup(file,tree,evt.getPoint());
+					if(!tree.isPathSelected(path))
+						tree.setSelectionPath(path);
+
+					Object userObject = ((DefaultMutableTreeNode)path
+						.getLastPathComponent()).getUserObject();
+					if(userObject instanceof VFS.DirectoryEntry)
+					{
+						VFS.DirectoryEntry file = (VFS.DirectoryEntry)
+							userObject;
+						showFilePopup(file,tree,evt.getPoint());
+					}
 				}
 			}
 		}
@@ -356,6 +358,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/10/05 04:30:10  sp
+ * *** empty log message ***
+ *
  * Revision 1.11  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

@@ -793,152 +793,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		}
 
 		// private members
-		private JPopupMenu popup;
-
-		private void createPopup()
-		{
-			popup = new JPopupMenu();
-			ButtonGroup grp = new ButtonGroup();
-			ActionHandler actionHandler = new ActionHandler();
-
-			JRadioButtonMenuItem list = new JRadioButtonMenuItem(
-				jEdit.getProperty("vfs.browser.more.list.label"));
-			grp.add(list);
-			list.setActionCommand("list");
-			list.setSelected(browserView instanceof BrowserListView);
-			list.addActionListener(actionHandler);
-			popup.add(list);
-
-			JRadioButtonMenuItem tree = new JRadioButtonMenuItem(
-				jEdit.getProperty("vfs.browser.more.tree.label"));
-			grp.add(tree);
-			tree.setActionCommand("tree");
-			tree.setSelected(browserView instanceof BrowserTreeView);
-			tree.addActionListener(actionHandler);
-			popup.add(tree);
-
-			JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
-				jEdit.getProperty("vfs.browser.more.showHiddenFiles.label"));
-			showHiddenFiles.setActionCommand("showHiddenFiles");
-			showHiddenFiles.setSelected(VFSBrowser.this.showHiddenFiles);
-			showHiddenFiles.addActionListener(actionHandler);
-			popup.add(showHiddenFiles);
-
-			popup.addSeparator();
-
-			JMenuItem newDirectory = new JMenuItem(jEdit.getProperty(
-				"vfs.browser.more.newDirectory.label"));
-			newDirectory.setActionCommand("newDirectory");
-			newDirectory.addActionListener(actionHandler);
-			popup.add(newDirectory);
-
-			popup.addSeparator();
-
-			JMenuItem addToFavorites = new JMenuItem(jEdit.getProperty(
-				"vfs.browser.more.addToFavorites.label"));
-			addToFavorites.setActionCommand("addToFavorites");
-			addToFavorites.addActionListener(actionHandler);
-			popup.add(addToFavorites);
-
-			JMenuItem goToFavorites = new JMenuItem(jEdit.getProperty(
-				"vfs.browser.more.goToFavorites.label"));
-			goToFavorites.setActionCommand("goToFavorites");
-			goToFavorites.addActionListener(actionHandler);
-			popup.add(goToFavorites);
-
-			popup.addSeparator();
-
-			Enumeration enum = VFSManager.getFilesystems();
-			while(enum.hasMoreElements())
-			{
-				VFS vfs = (VFS)enum.nextElement();
-				if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
-					continue;
-
-				JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
-					"vfs." + vfs.getName() + ".label"));
-				menuItem.setActionCommand("vfs." + vfs.getName());
-				menuItem.addActionListener(new ActionHandler());
-				popup.add(menuItem);
-			}
-
-			popup.addSeparator();
-
-			JMenuItem clearDirectoryCache = new JMenuItem(jEdit.getProperty(
-				"clear-directory-cache.label"));
-			clearDirectoryCache.setActionCommand("clearDirectoryCache");
-			clearDirectoryCache.addActionListener(actionHandler);
-			popup.add(clearDirectoryCache);
-
-			JMenuItem forgetPasswords = new JMenuItem(jEdit.getProperty(
-				"forget-passwords.label"));
-			forgetPasswords.setActionCommand("forgetPasswords");
-			forgetPasswords.addActionListener(actionHandler);
-			popup.add(forgetPasswords);
-		}
-
-		class ActionHandler implements ActionListener
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				String actionCommand = evt.getActionCommand();
-				if(actionCommand.equals("list"))
-					setBrowserView(new BrowserListView(VFSBrowser.this));
-				else if(actionCommand.equals("tree"))
-					setBrowserView(new BrowserTreeView(VFSBrowser.this));
-				else if(actionCommand.equals("showHiddenFiles"))
-				{
-					showHiddenFiles = !showHiddenFiles;
-					reloadDirectory(false);
-				}
-				else if(actionCommand.equals("newDirectory"))
-					mkdir();
-				else if(actionCommand.equals("addToFavorites"))
-				{
-					// if any directories are selected, add
-					// them, otherwise add current directory
-					Vector toAdd = new Vector();
-					VFS.DirectoryEntry[] selected = getSelectedFiles();
-					for(int i = 0; i < selected.length; i++)
-					{
-						VFS.DirectoryEntry file = selected[i];
-						if(file.type == VFS.DirectoryEntry.FILE)
-						{
-							GUIUtilities.error(VFSBrowser.this,
-								"vfs.browser.files-favorites",null);
-							return;
-						}
-						else
-							toAdd.addElement(file.path);
-					}
-	
-					if(toAdd.size() != 0)
-					{
-						for(int i = 0; i < toAdd.size(); i++)
-						{
-							FavoritesVFS.addToFavorites((String)toAdd.elementAt(i));
-						}
-					}
-					else
-						FavoritesVFS.addToFavorites(path);
-				}
-				else if(actionCommand.equals("goToFavorites"))
-					setDirectory(FavoritesVFS.PROTOCOL + ":");
-				else if(actionCommand.startsWith("vfs."))
-				{
-					String vfsName = actionCommand.substring(4);
-					VFS vfs = VFSManager.getVFSByName(vfsName);
-					String directory = vfs.showBrowseDialog(
-						null,VFSBrowser.this);
-					if(directory != null)
-						setDirectory(directory);
-				}
-				else if(actionCommand.equals("clearDirectoryCache"))
-					DirectoryCache.clearAllCachedDirectories();
-				else if(actionCommand.equals("forgetPasswords"))
-					VFSManager.forgetPasswords();
-			}
-		}
+		JPopupMenu popup;
 
 		class MouseHandler extends MouseAdapter
 		{
@@ -946,9 +801,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 			{
 				if(popup == null || !popup.isVisible())
 				{
-					createPopup();
-					popup.show(MoreMenuButton.this,0,
-						MoreMenuButton.this.getHeight());
+					popup = new BrowserPopupMenu(VFSBrowser.this,null);
+					popup.show(MoreMenuButton.this,0,MoreMenuButton.this.getHeight());
 				}
 				else
 				{
@@ -963,6 +817,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.24  2000/10/05 04:30:10  sp
+ * *** empty log message ***
+ *
  * Revision 1.23  2000/09/26 10:19:46  sp
  * Bug fixes, spit and polish
  *

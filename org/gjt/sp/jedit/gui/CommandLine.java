@@ -411,7 +411,7 @@ public class CommandLine extends JPanel
 			getDocument().addDocumentListener(new DocumentHandler());
 		}
 
-		protected void processKeyEvent(KeyEvent evt)
+		public void processKeyEvent(KeyEvent evt)
 		{
 			if(state == NULL_STATE)
 				return;
@@ -725,6 +725,11 @@ public class CommandLine extends JPanel
 
 		class KeyHandler extends KeyAdapter
 		{
+			public void keyTyped(KeyEvent evt)
+			{
+				textField.processKeyEvent(evt);
+			}
+
 			public void keyPressed(KeyEvent evt)
 			{
 				if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
@@ -753,6 +758,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/10/05 04:30:10  sp
+ * *** empty log message ***
+ *
  * Revision 1.7  2000/09/30 01:17:00  sp
  * *** empty log message ***
  *

@@ -179,15 +179,16 @@ public class BrowserListView extends BrowserView
 			{
 				int index = list.locationToIndex(evt.getPoint());
 				if(index == -1)
-					return;
+					showFilePopup(null,list,evt.getPoint());
+				else
+				{
+					if(list.getSelectedIndex() != index)
+						list.setSelectedIndex(index);
 
-				if(list.getSelectedIndex() != index)
-					list.setSelectedIndex(index);
-
-				VFS.DirectoryEntry file = (VFS.DirectoryEntry)
-					list.getSelectedValue();
-				if(file != null)
+					VFS.DirectoryEntry file = (VFS.DirectoryEntry)
+						list.getSelectedValue();
 					showFilePopup(file,list,evt.getPoint());
+				}
 			}
 		}
 	}
@@ -196,6 +197,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/10/05 04:30:09  sp
+ * *** empty log message ***
+ *
  * Revision 1.11  2000/09/26 10:19:46  sp
  * Bug fixes, spit and polish
  *

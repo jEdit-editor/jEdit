@@ -38,41 +38,108 @@ public class BrowserPopupMenu extends JPopupMenu
 	public BrowserPopupMenu(VFSBrowser browser, VFS.DirectoryEntry file)
 	{
 		this.browser = browser;
-		this.file = file;
-		this.vfs = VFSManager.getVFSForPath(browser.getDirectory());
 
-		boolean delete = (vfs.getCapabilities() & VFS.DELETE_CAP) != 0;
-		boolean rename = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
+		if(file != null)
+		{
+			this.file = file;
+			this.vfs = VFSManager.getVFSForPath(browser.getDirectory());
 
-		if(jEdit.getBuffer(file.path) != null)
-		{
-			add(createMenuItem("open",true));
-			add(createMenuItem("open-view",false));
-			add(createMenuItem("close",false));
-		}
-		else
-		{
-			if(file.type == VFS.DirectoryEntry.DIRECTORY
-				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
+			boolean delete = (vfs.getCapabilities() & VFS.DELETE_CAP) != 0;
+			boolean rename = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
+
+			if(jEdit.getBuffer(file.path) != null)
 			{
-				add(createMenuItem("goto",true));
+				add(createMenuItem("open"));
+				add(createMenuItem("open-view"));
+				add(createMenuItem("close"));
 			}
-			else if(browser.getMode() != VFSBrowser.BROWSER)
-			{
-				add(createMenuItem("select",true));
-			}
-			// else if in browser mode
 			else
 			{
-				add(createMenuItem("open",true));
-				add(createMenuItem("open-view",false));
+				if(file.type == VFS.DirectoryEntry.DIRECTORY
+					|| file.type == VFS.DirectoryEntry.FILESYSTEM)
+				{
+					add(createMenuItem("goto"));
+				}
+				else if(browser.getMode() != VFSBrowser.BROWSER)
+				{
+					add(createMenuItem("choose"));
+				}
+				// else if in browser mode
+				else
+				{
+					add(createMenuItem("open"));
+					add(createMenuItem("open-view"));
+				}
+	
+				if(rename)
+					add(createMenuItem("rename"));
+				if(delete)
+					add(createMenuItem("delete"));
 			}
 
-			if(rename)
-				add(createMenuItem("rename",false));
-			if(delete)
-				add(createMenuItem("delete",false));
+			addSeparator();
 		}
+
+		ButtonGroup grp = new ButtonGroup();
+		JRadioButtonMenuItem list = new JRadioButtonMenuItem(
+			jEdit.getProperty("vfs.browser.menu.list.label"));
+		grp.add(list);
+		list.setActionCommand("list");
+		list.setSelected(browser.getBrowserView() instanceof BrowserListView);
+		list.addActionListener(new ActionHandler());
+		add(list);
+
+		JRadioButtonMenuItem tree = new JRadioButtonMenuItem(
+			jEdit.getProperty("vfs.browser.menu.tree.label"));
+		grp.add(tree);
+		tree.setActionCommand("tree");
+		tree.setSelected(browser.getBrowserView() instanceof BrowserTreeView);
+		tree.addActionListener(new ActionHandler());
+		add(tree);
+
+		JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
+			jEdit.getProperty("vfs.browser.menu.show-hidden-files.label"));
+		showHiddenFiles.setActionCommand("show-hidden-files");
+		showHiddenFiles.setSelected(browser.getShowHiddenFiles());
+		showHiddenFiles.addActionListener(new ActionHandler());
+		add(showHiddenFiles);
+
+		addSeparator();
+		add(createMenuItem("new-directory"));
+
+		addSeparator();
+
+		add(createMenuItem("add-to-favorites"));
+		add(createMenuItem("go-to-favorites"));
+		addSeparator();
+
+		Enumeration enum = VFSManager.getFilesystems();
+		while(enum.hasMoreElements())
+		{
+			VFS vfs = (VFS)enum.nextElement();
+			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
+				continue;
+
+			JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
+				"vfs." + vfs.getName() + ".label"));
+			menuItem.setActionCommand("vfs." + vfs.getName());
+			menuItem.addActionListener(new ActionHandler());
+			add(menuItem);
+		}
+
+		addSeparator();
+
+		JMenuItem clearDirectoryCache = new JMenuItem(jEdit.getProperty(
+			"clear-directory-cache.label"));
+		clearDirectoryCache.setActionCommand("clear-directory-cache");
+		clearDirectoryCache.addActionListener(new ActionHandler());
+		add(clearDirectoryCache);
+
+		JMenuItem forgetPasswords = new JMenuItem(jEdit.getProperty(
+			"forget-passwords.label"));
+		forgetPasswords.setActionCommand("forget-passwords");
+		forgetPasswords.addActionListener(new ActionHandler());
+		add(forgetPasswords);
 	}
 
 	// private members
@@ -80,13 +147,10 @@ public class BrowserPopupMenu extends JPopupMenu
 	private VFS.DirectoryEntry file;
 	private VFS vfs;
 
-	private JMenuItem createMenuItem(String name, boolean bold)
+	private JMenuItem createMenuItem(String name)
 	{
 		String label = jEdit.getProperty("vfs.browser.menu." + name + ".label");
 		JMenuItem mi = new JMenuItem(label);
-		Font f = mi.getFont();
-		f = new Font(f.getName(), (bold ? Font.BOLD : Font.PLAIN), f.getSize());
-		mi.setFont(f);
 		mi.setActionCommand(name);
 		mi.addActionListener(new ActionHandler());
 		return mi;
@@ -107,7 +171,7 @@ public class BrowserPopupMenu extends JPopupMenu
 				if(buffer != null)
 					jEdit.newView(view,buffer);
 			}
-			else if(actionCommand.equals("select"))
+			else if(actionCommand.equals("choose"))
 				browser.filesActivated();
 			else if(actionCommand.equals("close"))
 			{
@@ -116,17 +180,66 @@ public class BrowserPopupMenu extends JPopupMenu
 					jEdit.closeBuffer(view,buffer);
 			}
 			else if(actionCommand.equals("goto"))
-			{
 				browser.setDirectory(file.path);
-			}
 			else if(evt.getActionCommand().equals("rename"))
-			{
 				browser.rename(file.path);
-			}
 			else if(evt.getActionCommand().equals("delete"))
-			{
 				browser.delete(file.deletePath);
+			else if(actionCommand.equals("list"))
+				browser.setBrowserView(new BrowserListView(browser));
+			else if(actionCommand.equals("tree"))
+				browser.setBrowserView(new BrowserTreeView(browser));
+			else if(actionCommand.equals("show-hidden-files"))
+			{
+				browser.setShowHiddenFiles(!browser.getShowHiddenFiles());
+				browser.reloadDirectory(false);
 			}
+			else if(actionCommand.equals("new-directory"))
+				browser.mkdir();
+			else if(actionCommand.equals("add-to-favorites"))
+			{
+				// if any directories are selected, add
+				// them, otherwise add current directory
+				Vector toAdd = new Vector();
+				VFS.DirectoryEntry[] selected = browser.getSelectedFiles();
+				for(int i = 0; i < selected.length; i++)
+				{
+					VFS.DirectoryEntry file = selected[i];
+					if(file.type == VFS.DirectoryEntry.FILE)
+					{
+						GUIUtilities.error(browser,
+							"vfs.browser.files-favorites",
+							null);
+						return;
+					}
+					else
+						toAdd.addElement(file.path);
+				}
+	
+				if(toAdd.size() != 0)
+				{
+					for(int i = 0; i < toAdd.size(); i++)
+					{
+						FavoritesVFS.addToFavorites((String)toAdd.elementAt(i));
+					}
+				}
+				else
+					FavoritesVFS.addToFavorites(browser.getDirectory());
+			}
+			else if(actionCommand.equals("go-to-favorites"))
+				browser.setDirectory(FavoritesVFS.PROTOCOL + ":");
+			else if(actionCommand.startsWith("vfs."))
+			{
+				String vfsName = actionCommand.substring(4);
+				VFS vfs = VFSManager.getVFSByName(vfsName);
+				String directory = vfs.showBrowseDialog(null,browser);
+				if(directory != null)
+					browser.setDirectory(directory);
+			}
+			else if(actionCommand.equals("clear-directory-cache"))
+				DirectoryCache.clearAllCachedDirectories();
+			else if(actionCommand.equals("forget-passwords"))
+				VFSManager.forgetPasswords();
 		}
 	}
 }
@@ -134,6 +247,9 @@ public class BrowserPopupMenu extends JPopupMenu
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/10/05 04:30:10  sp
+ * *** empty log message ***
+ *
  * Revision 1.5  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

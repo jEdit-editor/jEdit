@@ -465,14 +465,19 @@ public class Macros
 			if(File.separatorChar == '\\' || File.separatorChar == ':')
 			{
 				path = path.toLowerCase();
-				if(path.startsWith(systemMacroPath.toLowerCase())
-					|| path.startsWith(userMacroPath.toLowerCase()))
+				if(path.startsWith(systemMacroPath.toLowerCase()))
+					loadMacros();
+
+				if(userMacroPath != null && path.startsWith(
+					userMacroPath.toLowerCase()))
 					loadMacros();
 			}
 			else
 			{
-				if(path.startsWith(systemMacroPath)
-					|| path.startsWith(userMacroPath))
+				if(path.startsWith(systemMacroPath))
+					loadMacros();
+
+				if(userMacroPath != null && path.startsWith(userMacroPath))
 					loadMacros();
 			}
 		}
@@ -568,6 +573,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.37  2000/10/05 04:30:09  sp
+ * *** empty log message ***
+ *
  * Revision 1.36  2000/09/26 10:19:46  sp
  * Bug fixes, spit and polish
  *

@@ -21,6 +21,8 @@ JEDIT 2.6 VERSION HISTORY
 - When the complete word or complete action popups are visible, the 'Tab'
   key will select the current item
 - Literal search code updates (Mike Dillon)
+- Contents of VFS browser's 'More' menu is now displayed in the right-click
+  popup as well
 
 + Neutral
 
@@ -48,6 +50,9 @@ JEDIT 2.6 VERSION HISTORY
 - Having an unmatched ')' in a regular expression should no longer throw
   an ArrayIndexOutOfBoundsException (Alan Moore)
 - Removed useless debugging message from Print command
+- The key event workaround code would drop key events under some circumstances
+- After the command line's completion popup appears, some key events are no
+  longer handled
 
 + API Changes
 

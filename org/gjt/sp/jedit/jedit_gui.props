@@ -37,7 +37,7 @@ paste.icon=Paste24.gif
 find.icon=Find24.gif
 find-next.icon=FindAgain24.gif
 new-view.icon=Applet24.gif
-unsplit.icon=Stop24.gif
+unsplit.icon=Unsplit24.gif
 split-horizontal.icon=SplitHorizontal24.gif
 split-vertical.icon=SplitVertical24.gif
 buffer-options.icon=Properties24.gif
@@ -67,9 +67,9 @@ icons=Applet24.gif \
 	Server24.gif \
 	SplitHorizontal24.gif \
 	SplitVertical24.gif \
-	Stop24.gif \
 	Undo24.gif \
-	Up24.gif
+	Up24.gif \
+	Unsplit24.gif
 
 ###
 ### CONTEXT MENUS
@@ -1116,20 +1116,20 @@ vfs.browser.synchronize.icon=Import24.gif
 vfs.browser.more.label=More
 vfs.browser.more.icon=ToolbarMenu.gif
 
-vfs.browser.more.list.label=View as List
-vfs.browser.more.tree.label=View as Tree
-vfs.browser.more.showHiddenFiles.label=Show Hidden Files
-vfs.browser.more.newDirectory.label=New Directory...
-vfs.browser.more.addToFavorites.label=Add to Favorites
-vfs.browser.more.goToFavorites.label=Go to Favorites
-
 vfs.browser.menu.close.label=Close
-vfs.browser.menu.open.label=Open in Current View
-vfs.browser.menu.open-view.label=Open in New View
-vfs.browser.menu.goto.label=Go to
-vfs.browser.menu.select.label=Select
-vfs.browser.menu.delete.label=Delete...
-vfs.browser.menu.rename.label=Rename...
+vfs.browser.menu.open.label=Open Selected File
+vfs.browser.menu.open-view.label=Open Selected File in New View
+vfs.browser.menu.goto.label=Go to Selected Directory
+vfs.browser.menu.choose.label=Choose
+vfs.browser.menu.delete.label=Delete Selected File...
+vfs.browser.menu.rename.label=Rename Selected File...
+
+vfs.browser.menu.list.label=View as List
+vfs.browser.menu.tree.label=View as Tree
+vfs.browser.menu.show-hidden-files.label=Show Hidden Files
+vfs.browser.menu.new-directory.label=New Directory...
+vfs.browser.menu.add-to-favorites.label=Add to Favorites
+vfs.browser.menu.go-to-favorites.label=Go to Favorites
 
 vfs.browser.bad-filter.title=Invalid Filter
 vfs.browser.bad-filter.message=The filter {0} is invalid ({1})

@@ -47,15 +47,7 @@ public class KeyEventWorkaround
 			if(keyCode == '\0')
 				return null;
 
-			lastWasAltGR = (modifiers == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK)
-				|| modifiers == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK
-				| KeyEvent.SHIFT_MASK));
-
-			if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) != 0
-				&& isBrokenKey(modifiers,keyCode))
-				lastKeyTime = System.currentTimeMillis();
-			else
-				lastKeyTime = 0L;
+			handleBrokenKeys(modifiers,keyCode);
 
 			return evt;
 		case KeyEvent.KEY_TYPED:
@@ -68,23 +60,19 @@ public class KeyEventWorkaround
 			if(ch != '\b' && (ch < 0x20 || ch == 0x7f))
 				return null;
 
-			// some Java versions send a Control+Alt KEY_PRESSED
-			// before an AltGR KEY_TYPED...
-			if(lastWasAltGR && (modifiers & ALT_GRAPH_MASK) != 0)
+			// if the last key was a broken key, filter
+			// out all except 'a'-'z' that occur 750 ms after.
+			if(last == LAST_BROKEN && System.currentTimeMillis()
+				- lastKeyTime < 750 && !Character.isLetter(ch))
 			{
-				lastWasAltGR = false;
-				lastKeyTime = 0L;
-				return evt;
+				last = LAST_NOTHING;
+				return null;
 			}
-
-			// with some Java versions, the modifiers are
-			// lost in the KEY_TYPED event. As a very crude
-			// workaround, we get rid of KEY_TYPED events
-			// that occur 500ms or less after KEY_RELEASED
-			if(System.currentTimeMillis() - lastKeyTime < 500)
+			// otherwise, if it was ALT, filter out everything.
+			else if(last == LAST_ALT && System.currentTimeMillis()
+				- lastKeyTime < 750)
 			{
-				lastWasAltGR = false;
-				lastKeyTime = 0L;
+				last = LAST_NOTHING;
 				return null;
 			}
 
@@ -96,25 +84,48 @@ public class KeyEventWorkaround
 
 	// private members
 	private static long lastKeyTime;
-	private static boolean lastWasAltGR;
 
-	private static boolean isBrokenKey(int modifiers, int keyCode)
+	private static int last;
+	private static final int LAST_NOTHING = 0;
+	private static final int LAST_ALTGR = 1;
+	private static final int LAST_ALT = 2;
+	private static final int LAST_BROKEN = 3;
+
+	private static void handleBrokenKeys(int modifiers, int keyCode)
 	{
 		// If you have any keys you would like to add to this list,
 		// e-mail me
-		if((modifiers & KeyEvent.ALT_MASK) != 0)
-			return true;
 
-		if(keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
-			return true;
+		if(modifiers == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK)
+			|| modifiers == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK
+			| KeyEvent.SHIFT_MASK))
+		{
+			last = LAST_ALTGR;
+			return;
+		}
+		else if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) == 0)
+		{
+			last = LAST_NOTHING;
+			return;
+		}
+
+		if((modifiers & KeyEvent.ALT_MASK) != 0)
+			last = LAST_ALT;
+		else if(keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
+			last = LAST_BROKEN;
 		else
-			return false;
+			last = LAST_NOTHING;
+
+		lastKeyTime = System.currentTimeMillis();
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/10/05 04:30:10  sp
+ * *** empty log message ***
+ *
  * Revision 1.4  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *
