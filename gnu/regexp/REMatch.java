@@ -110,7 +110,16 @@ public final class REMatch implements Serializable, Cloneable {
     public String toString() {
 	return matchedText;
     }
-    
+   
+
+// ADDED BY SLAVA
+
+    public int getSubCount() {
+        return start.length;
+    }
+
+// END OF SLAVA'S STUFF
+ 
     /**
      * Returns the index within the input text where the match in its entirety
      * began.

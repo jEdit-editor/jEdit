@@ -7,3 +7,4 @@ Differences between BeanShell 1.01 and jEdit's BeanShell:
   of calling Class.forName()
 - Fixed a bug where imports in namespaces would shadow all imports from
   their parent
+- Allowed methods to be invoked with a different namespace

@@ -4,21 +4,16 @@ This list is a real mess... Note that not all these changes will be
 implemented in jEdit 3.2. Some might appear in a future version, some
 might never be implemented at all.
 
-+ before 3.2pre1
-
-- finish new plugin manager
-- scrollToCaret() doesn't always work
-
-+ later
-
 - what to do with boxComment property?
 - update buffer history for multiple selection
 - reload edit modes command
 - start preparing for web start (handle jEditHome == null, jedit_jnlp.jar)
 - when loading a plugin, check if all the jars are present?
 - 'find' -vs- 'find in files'?
-- newline at the end of BeanShell scripts causes problems
-
+- having no newline at the end of BeanShell scripts causes problems
+- finish new plugin manager
+- scrollToCaret() doesn't always work
+- better docs about multiple selection
 - reverse regexp search
 - hypersearch: select button, clear button
 - XThis: don't throw exceptions for non-existent methods

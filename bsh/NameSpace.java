@@ -332,12 +332,7 @@ public class NameSpace implements java.io.Serializable
 		return c;
     }
 
-    static Class getAbsoluteClass(String name)
-    {
-		return getClass(null, name);
-    }
-
-    private static Class getClass(NameSpace namespace, String name)
+    public static Class getClass(NameSpace namespace, String name)
     {
 		// hack for scripts to be able to use jEdit plugin classes
 		Object _loader = namespace.getVariable("classLoader");

@@ -1,4 +1,4 @@
-# A makefile file for jEdit
+# A makefile for jEdit
 #
 # To recompile jEdit, start jmk in the root of the jEdit directory structure.
 #
@@ -38,6 +38,7 @@ jedit_pkgs = "com/microstar/xml"
     "org/gjt/sp/jedit/io"
     "org/gjt/sp/jedit/msg"
     "org/gjt/sp/jedit/options"
+    "org/gjt/sp/jedit/pluginmgr"
     "org/gjt/sp/jedit/proto/jeditresource"
     "org/gjt/sp/jedit/search"
     "org/gjt/sp/jedit/syntax"
@@ -52,30 +53,57 @@ doc_pgks = (subst "/", ".", jedit_pkgs);
 pkgs = re_pkg bsh_pkgs jedit_pkgs "org/gjt/sp/jedit/icons"
     "org/gjt/sp/jedit/tips";
 
+# Additional stuff that is bundled into the web start version
+jnlp_pkgs = pkgs "doc" "doc/users-guide"
+    "macros"
+    "macros/Console_Plugin"
+    "macros/Files"
+    "macros/Java"
+    "macros/Misc"
+    "macros/Misc/Properties"
+    "macros/Other_Plugins"
+    "macros/Search"
+    "macros/Text"
+    "modes";
+
 # Installer sources
 installer_srcs = (subst ".java", ".class", (glob "installer/*.java"));
 
 # All sources
 srcs = re_srcs bsh_srcs jedit_srcs installer_srcs;
 
-jar = "jedit.jar";
-
-"all": srcs;
+get_file_list = function(list)
 {
-    exec cmd_jar "cmf0" jedit_mf jar (glob
-        (join pkgs, "/*.class")
-        (join pkgs, "/*.gif")
-        (join pkgs, "/*.jpg")
-        (join pkgs, "/*.props")
-        (join pkgs, "/*.bsh")
-        (join pkgs, "/*.html")
+    (glob
+        (join list, "/*.class")
+        (join list, "/*.gif")
+        (join list, "/*.jpg")
+        (join list, "/*.props")
+        (join list, "/*.bsh")
+        (join list, "/*.html")
+        (join list, "/*.xml")
         "org/gjt/sp/jedit/default.abbrevs"
-        "org/gjt/sp/jedit/actions.xml"
         "org/gjt/sp/jedit/actions.dtd"
         "org/gjt/sp/jedit/catalog.dtd"
         "org/gjt/sp/jedit/xmode.dtd"
         "bsh/lib/defaultImports"
-        "bsh/lib/javaPackages");
+        "bsh/lib/javaPackages")
+}
+end;
+
+"all": srcs;
+{
+    exec cmd_jar "cmf0" jedit_mf "jedit.jar" (get_file_list pkgs);
+}
+
+"jnlp": srcs;
+{
+    exec cmd_jar "cmf" jedit_mf "jedit_jnlp.jar" (get_file_list jnlp_pkgs)
+        "modes/catalog";
+}
+
+"srcs": srcs;
+{
 }
 
 "%.class" : "%.java";

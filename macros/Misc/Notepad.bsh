@@ -16,7 +16,7 @@ createWindowListener()
 	windowClosing(e)
 	{
 		GUIUtilities.saveGeometry(e.getSource(),"macro.notepad");
-		dispose();
+		e.getSource().dispose();
 	}
 
 	return this;

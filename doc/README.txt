@@ -14,10 +14,7 @@ JEDIT 3.2 README
 
 * About jEdit
 
-jEdit is a cross platform text editor written in Java. It has many
-advanced features that make text editing easier, such as syntax
-highlighting, auto indent, abbreviation expansion, registers, macros,
-folding, regular expressions, and multiple file search and replace.
+jEdit is a cross platform programmer's text editor written in Java.
 
 jEdit is free software, and you are welcome to redistribute it under the
 terms of the GNU General Public License. See the file COPYING.txt for

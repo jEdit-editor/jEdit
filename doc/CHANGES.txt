@@ -48,7 +48,8 @@ JEDIT 3.2 VERSION HISTORY
 - -nostartupmacro command line switch
 - Improved 'View Registers' dialog box
 - The gutter now shows marker tooltips immediately
-- Minor improvements made to installer
+- Installer has a new look
+- Installer now installs jedit.cmd file for starting jEdit on OS/2
 
 + Neutral
 
@@ -56,7 +57,7 @@ JEDIT 3.2 VERSION HISTORY
 - 'Replace All' no longer bound to C+e C+a
 - 'site-props' directory renamed to 'properties'
 - 'Rectangular Selection' command removed. Now, the only way to create
-  a rectangular selection is to either Control-drag and
+  a rectangular selection is to either Control-drag or
   Control-Shift-click
 - 'Box Comment' command removed (it might reappear later. I just can't
   be bothered updating it for the new selection code right now.)

@@ -476,16 +476,6 @@
     inserts the clipboard contents in place of the selection (or at the
     caret position, if there is no selection).
    </para>
-   <sidebar><title>The X Window System</>
-    <para>
-     The X Window System on Unix actually has two system-wide
-     storage areas for text;
-     the <quote>primary selection</>, and the <quote>clipboard</>.
-     jEdit only uses the clipboard. However, the XClipboard plugin
-     (see <xref linkend=plugins> for information about installing
-     plugins) allows read-only access to the primary selection.
-    </para>
-   </sidebar>
   </sect2>
   <sect2><title>General Register Commands</>
    <para>

@@ -1,6 +1,6 @@
 /*
  * ConsoleProgress.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,10 +24,6 @@ package installer;
  */
 public class ConsoleProgress implements Progress
 {
-	public void showMessage(String msg)
-	{
-		System.out.println(msg);
-	}
 
 	public void setMaximum(int max)
 	{

@@ -38,7 +38,17 @@ public class BshMethod implements java.io.Serializable
 		
 	}
 
-	public Object invokeDeclaredMethod( 
+	public Object invokeDeclaredMethod(
+		Object[] argValues, Interpreter interpreter ) throws EvalError 
+	{
+		NameSpace localNameSpace = new NameSpace( 
+			declaringNameSpace, method.name );
+
+		return invokeDeclaredMethod(localNameSpace,argValues,
+			interpreter);
+	}
+
+	public Object invokeDeclaredMethod(NameSpace localNameSpace,
 		Object[] argValues, Interpreter interpreter ) throws EvalError 
 	{
 
@@ -60,9 +70,6 @@ public class BshMethod implements java.io.Serializable
 					+ method.name, method);
 			}
 		}
-
-		NameSpace localNameSpace = new NameSpace( 
-			declaringNameSpace, method.name );
 
 		for(int i=0; i<method.params.numArgs; i++)
 		{

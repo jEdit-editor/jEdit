@@ -1163,7 +1163,6 @@ public final class RE extends REToken {
     // return the index following the '}'
     return index;
   }
-
    /**
     * Return a human readable form of the compiled regular expression,
     * useful for debugging.

@@ -1,6 +1,6 @@
 /*
- * Install.java - Main installer class
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Install.java - Main class of the installer
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,6 @@ import java.util.Properties;
 
 public class Install
 {
-	public static final String VERSION = "0.6.1";
-
 	public static void main(String[] args)
 	{
 		if(args.length == 0)

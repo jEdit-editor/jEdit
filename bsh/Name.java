@@ -497,7 +497,8 @@ class Name implements java.io.Serializable
         // check for compiled bsh command class
         commandName = "bsh.commands." + value;
         // create class outside of any namespace
-        Class c = NameSpace.getAbsoluteClass(commandName);
+	// WHY???
+        Class c = NameSpace.getClass(namespace,commandName);
         if(c == null)
             throw new EvalError("Command not found: " + value);
 

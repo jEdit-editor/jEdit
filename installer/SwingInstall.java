@@ -1,6 +1,6 @@
 /*
  * SwingInstall.java
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +42,41 @@ public class SwingInstall extends JFrame
 
 		setTitle(appName + " " + appVersion + " installer");
 
-		getContentPane().add(BorderLayout.CENTER,new InstallWizard(
+		JPanel content = new JPanel(new WizardLayout());
+		setContentPane(content);
+
+		caption = new JLabel();
+		caption.setFont(new Font("SansSerif",Font.BOLD,18));
+
+		ActionHandler actionHandler = new ActionHandler();
+
+		cancelButton = new JButton("Cancel");
+		cancelButton.setRequestFocusEnabled(false);
+		cancelButton.addActionListener(actionHandler);
+		prevButton = new JButton("Previous");
+		prevButton.setRequestFocusEnabled(false);
+		prevButton.addActionListener(actionHandler);
+		nextButton = new JButton();
+		nextButton.setRequestFocusEnabled(false);
+		nextButton.addActionListener(actionHandler);
+
+		content.add(caption);
+		content.add(cancelButton);
+		content.add(prevButton);
+		content.add(nextButton);
+
+		pages = new Component[] {
+			new About(),
 			chooseDirectory = new ChooseDirectory(),
-			selectComponents = new SelectComponents()));
+			selectComponents = new SelectComponents(),
+			progress = new SwingProgress(),
+			new Complete()
+		};
+
+		for(int i = 0; i < pages.length; i++)
+			content.add(pages[i]);
+
+		pageChanged();
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
@@ -56,21 +88,24 @@ public class SwingInstall extends JFrame
 		show();
 	}
 
-	class WindowHandler extends WindowAdapter
-	{
-		public void windowClosing(WindowEvent evt)
-		{
-			System.exit(0);
-		}
-	}
-
 	// package-private members
 	Install installer;
 	String appName;
 	String appVersion;
 
+	JLabel caption;
+
 	ChooseDirectory chooseDirectory;
 	SelectComponents selectComponents;
+	SwingProgress progress;
+
+	JButton cancelButton;
+	JButton prevButton;
+	JButton nextButton;
+	Component[] pages;
+	int currentPage;
+
+	private static final int PADDING = 12;
 
 	void install()
 	{
@@ -91,12 +126,9 @@ public class SwingInstall extends JFrame
 			}
 		}
 
-		dispose();
-
 		JTextField binDir = chooseDirectory.binDir;
 		String installDir = chooseDirectory.installDir.getText();
 
-		SwingProgress progress = new SwingProgress(appName);
 		InstallThread thread = new InstallThread(
 			installer,progress,
 			(installDir == null ? null : installDir),
@@ -106,24 +138,169 @@ public class SwingInstall extends JFrame
 		thread.start();
 	}
 
-	class InstallWizard extends Wizard
+	private void pageChanged()
 	{
-		InstallWizard(ChooseDirectory chooseDirectory,
-			SelectComponents selectComponents)
+		switch(currentPage)
 		{
-			super("Cancel","Previous","Next","Install");
-			setPages(new Component[] { new About(), chooseDirectory,
-				selectComponents });
+		case 0:
+			caption.setText("Installing " + appName);
+
+			nextButton.setText("Next");
+			prevButton.setEnabled(false);
+			break;
+		case 1:
+			caption.setText("Specify where " + appName
+				+ " is to be installed");
+
+			nextButton.setText("Next");
+			prevButton.setEnabled(true);
+			break;
+		case 2:
+			caption.setText("Choose components to install");
+
+			nextButton.setText("Install");
+			prevButton.setEnabled(true);
+			break;
+		case 3:
+			caption.setText("Installing " + appName);
+
+			nextButton.setText("Finish");
+			prevButton.setEnabled(false);
+			nextButton.setEnabled(false);
+			install();
+			break;
+		case 4:;
+			caption.setText("Installation complete");
+
+			nextButton.setText("Finish");
+			prevButton.setEnabled(false);
+			nextButton.setEnabled(true);
+			break;
 		}
 
-		protected void cancelCallback()
+		getRootPane().invalidate();
+		getRootPane().validate();
+	}
+
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			Object source = evt.getSource();
+			if(evt.getSource() == cancelButton)
+				System.exit(0);
+			else if(evt.getSource() == prevButton)
+			{
+				currentPage--;
+				pageChanged();
+			}
+			else if(evt.getSource() == nextButton)
+			{
+				if(currentPage == pages.length - 1)
+					System.exit(0);
+				else
+				{
+					currentPage++;
+					pageChanged();
+				}
+			}
+		}
+	}
+
+	class WindowHandler extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent evt)
 		{
 			System.exit(0);
 		}
+	}
 
-		protected void finishCallback()
+	class WizardLayout implements LayoutManager
+	{
+		public void addLayoutComponent(String name, Component comp)
 		{
-			install();
+		}
+
+		public void removeLayoutComponent(Component comp)
+		{
+		}
+
+		public Dimension preferredLayoutSize(Container parent)
+		{
+			Dimension dim = new Dimension();
+
+			Dimension captionSize = caption.getPreferredSize();
+			dim.width = captionSize.width;
+
+			for(int i = 0; i < pages.length; i++)
+			{
+				Dimension _dim = pages[i].getPreferredSize();
+				dim.width = Math.max(_dim.width,dim.width);
+				dim.height = Math.max(_dim.height,dim.height);
+			}
+
+			dim.width += PADDING * 2;
+			dim.height += PADDING * 2;
+			dim.height += nextButton.getPreferredSize().height;
+			dim.height += captionSize.height;
+			return dim;
+		}
+
+		public Dimension minimumLayoutSize(Container parent)
+		{
+			return preferredLayoutSize(parent);
+		}
+
+		public void layoutContainer(Container parent)
+		{
+			Dimension size = parent.getSize();
+
+			Dimension captionSize = caption.getPreferredSize();
+			caption.setBounds(PADDING,PADDING,captionSize.width,
+				captionSize.height);
+
+			// make all buttons the same size
+			Dimension buttonSize = cancelButton.getPreferredSize();
+			buttonSize.width = Math.max(buttonSize.width,prevButton.getPreferredSize().width);
+			buttonSize.width = Math.max(buttonSize.width,nextButton.getPreferredSize().width);
+
+			int bottomBorder = buttonSize.height + PADDING;
+
+			// cancel button goes on far left
+			cancelButton.setBounds(
+				PADDING,
+				size.height - buttonSize.height - PADDING,
+				buttonSize.width,
+				buttonSize.height);
+
+			// prev and next buttons are on the right
+			prevButton.setBounds(
+				size.width - buttonSize.width * 2 - 6 - PADDING,
+				size.height - buttonSize.height - PADDING,
+				buttonSize.width,
+				buttonSize.height);
+
+			nextButton.setBounds(
+				size.width - buttonSize.width - PADDING,
+				size.height - buttonSize.height - PADDING,
+				buttonSize.width,
+				buttonSize.height);
+
+			// calculate size for current page
+			Rectangle currentPageBounds = new Rectangle();
+			currentPageBounds.x = PADDING;
+			currentPageBounds.y = PADDING * 2 + captionSize.height;
+			currentPageBounds.width = size.width - currentPageBounds.x
+				- PADDING;
+			currentPageBounds.height = size.height - buttonSize.height
+				- currentPageBounds.y - PADDING * 2;
+
+			for(int i = 0; i < pages.length; i++)
+			{
+				Component page = pages[i];
+				page.setBounds(currentPageBounds);
+				page.setVisible(i == currentPage);
+			}
 		}
 	}
 
@@ -133,35 +310,27 @@ public class SwingInstall extends JFrame
 		{
 			super(new BorderLayout());
 
-			JLabel caption = new JLabel(appName + " " + appVersion);
-			caption.setBorder(new EmptyBorder(0,0,12,0));
-			Font font = caption.getFont();
-			caption.setFont(new Font(font.getFamily(),font.getStyle(),18));
-
-			add(BorderLayout.NORTH,caption);
-
 			JEditorPane text = new JEditorPane();
 
 			String readme = installer.getProperty("app.readme");
 
 			try
 			{
-				text.setText("Loading '" + readme + "'...");
-				text.setPage(getClass().getResource(readme));
+				text.setPage(About.this.getClass().getResource(readme));
 			}
-			catch(IOException io)
+			catch(Exception e)
 			{
 				text.setText("Error loading '" + readme + "'");
-				io.printStackTrace();
+				e.printStackTrace();
 			}
 
 			text.setEditable(false);
 
 			JScrollPane scrollPane = new JScrollPane(text);
 			Dimension dim = new Dimension();
-			dim.height = 250;
+			dim.height = 200;
 			scrollPane.setPreferredSize(dim);
-			add(BorderLayout.CENTER,scrollPane);
+			About.this.add(BorderLayout.CENTER,scrollPane);
 		}
 	}
 
@@ -176,15 +345,6 @@ public class SwingInstall extends JFrame
 		ChooseDirectory()
 		{
 			super(new BorderLayout());
-
-			JLabel caption = new JLabel("First, specify where "
-				+ appName + " is to be installed:");
-			Font font = caption.getFont();
-			caption.setFont(new Font(font.getFamily(),font.getStyle(),18));
-
-			add(BorderLayout.NORTH,caption);
-
-			Box box = new Box(BoxLayout.Y_AXIS);
 
 			String _binDir = OperatingSystem.getOperatingSystem()
 				.getShortcutDirectory(appName,appVersion);
@@ -226,9 +386,10 @@ public class SwingInstall extends JFrame
 				directoryPanel.add(binDir);
 			}
 
-			box.add(directoryPanel);
+			ChooseDirectory.this.add(BorderLayout.NORTH,directoryPanel);
 
 			Box buttons = new Box(BoxLayout.X_AXIS);
+			buttons.add(Box.createGlue());
 			chooseInstall = new JButton("Choose Install Directory...");
 			chooseInstall.setRequestFocusEnabled(false);
 			chooseInstall.addActionListener(this);
@@ -241,11 +402,9 @@ public class SwingInstall extends JFrame
 				chooseBin.addActionListener(this);
 				buttons.add(chooseBin);
 			}
-			box.add(buttons);
+			buttons.add(Box.createGlue());
 
-			box.add(Box.createGlue());
-
-			add(BorderLayout.CENTER,box);
+			ChooseDirectory.this.add(BorderLayout.SOUTH,buttons);
 		}
 
 		public void actionPerformed(ActionEvent evt)
@@ -269,27 +428,17 @@ public class SwingInstall extends JFrame
 	{
 		JPanel comp;
 		JLabel sizeLabel;
+		Vector filesets;
 
 		SelectComponents()
 		{
 			super(new BorderLayout());
 
-			JLabel caption = new JLabel("Now, specify program"
-				+ " components to install:");
-			Font font = caption.getFont();
-			caption.setFont(new Font(font.getFamily(),font.getStyle(),18));
-
-			add(BorderLayout.NORTH,caption);
-
-			Box box = new Box(BoxLayout.Y_AXIS);
-			box.add(Box.createGlue());
-			box.add(comp = createCompPanel());
-			box.add(Box.createGlue());
-
-			add(BorderLayout.CENTER,box);
+			comp = createCompPanel();
+			SelectComponents.this.add(BorderLayout.NORTH,comp);
 
 			sizeLabel = new JLabel("",SwingConstants.LEFT);
-			add(BorderLayout.SOUTH,sizeLabel);
+			SelectComponents.this.add(BorderLayout.SOUTH,sizeLabel);
 
 			updateSize();
 		}
@@ -301,11 +450,22 @@ public class SwingInstall extends JFrame
 
 		private JPanel createCompPanel()
 		{
+			filesets = new Vector();
+
 			int count = installer.getIntProperty("comp.count");
 			JPanel panel = new JPanel(new GridLayout(count,1));
 
+			String osClass = OperatingSystem.getOperatingSystem()
+				.getClass().getName();
+			osClass = osClass.substring(osClass.indexOf('$') + 1);
+
 			for(int i = 0; i < count; i++)
 			{
+				String os = installer.getProperty("comp." + i + ".os");
+
+				if(os != null && !osClass.equals(os))
+					continue;
+
 				JCheckBox checkBox = new JCheckBox(
 					installer.getProperty("comp." + i + ".name")
 					+ " (" + installer.getProperty("comp." + i + ".size")
@@ -313,6 +473,9 @@ public class SwingInstall extends JFrame
 				checkBox.getModel().setSelected(true);
 				checkBox.addActionListener(this);
 				checkBox.setRequestFocusEnabled(false);
+
+				filesets.addElement(new Integer(i));
+
 				panel.add(checkBox);
 			}
 
@@ -327,18 +490,130 @@ public class SwingInstall extends JFrame
 		{
 			int size = 0;
 
-			for(int i = 0; i < comp.getComponentCount(); i++)
+			for(int i = 0; i < filesets.size(); i++)
 			{
 				if(((JCheckBox)comp.getComponent(i))
 					.getModel().isSelected())
 				{
-					size += installer.getIntProperty(
-						"comp." + i + ".size");
+					size += installer.getIntProperty("comp."
+						+ filesets.elementAt(i)
+						+ ".size");
 				}
 			}
 
 			sizeLabel.setText("Estimated disk usage of selected"
 				+ " components: " + size + "Kb");
+		}
+	}
+
+	class SwingProgress extends JPanel implements Progress
+	{
+		JProgressBar progress;
+		InstallThread thread;
+
+		SwingProgress()
+		{
+			super(new BorderLayout());
+
+			progress = new JProgressBar();
+			progress.setStringPainted(true);
+
+			SwingProgress.this.add(BorderLayout.NORTH,progress);
+		}
+
+		public void setMaximum(final int max)
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					progress.setMaximum(max);
+				}
+			});
+		}
+
+		public void advance(final int value)
+		{
+			try
+			{
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
+					{
+						progress.setValue(progress
+							.getValue() + value);
+					}
+				});
+				Thread.yield();
+			}
+			catch(Exception e)
+			{
+			}
+		}
+
+		public void done()
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					currentPage++;
+					pageChanged();
+				}
+			});
+		}
+
+		public void error(final String message)
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					dispose();
+					JOptionPane.showMessageDialog(null,
+						message,
+						"Installation aborted",
+						JOptionPane.ERROR_MESSAGE);
+					System.exit(1);
+				}
+			});
+		}
+
+		public void setThread(InstallThread thread)
+		{
+			this.thread = thread;
+		}
+	}
+
+	class Complete extends JPanel
+	{
+		Complete()
+		{
+			super(new BorderLayout());
+
+			JEditorPane text = new JEditorPane();
+
+			String clazz = OperatingSystem.getOperatingSystem()
+				.getClass().getName();
+			String readme = "done-" + clazz.substring(clazz.indexOf('$') + 1) + ".html";
+
+			try
+			{
+				text.setPage(Complete.this.getClass().getResource(readme));
+			}
+			catch(Exception e)
+			{
+				text.setText("Error loading '" + readme + "'");
+				e.printStackTrace();
+			}
+
+			text.setEditable(false);
+
+			JScrollPane scrollPane = new JScrollPane(text);
+			Dimension dim = new Dimension();
+			dim.height = 200;
+			scrollPane.setPreferredSize(dim);
+			Complete.this.add(BorderLayout.CENTER,scrollPane);
 		}
 	}
 }
