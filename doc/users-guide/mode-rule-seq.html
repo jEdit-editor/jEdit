@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>SEQ Rule</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.7 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Writing Edit Modes"
+HREF="writing-modes.html"><LINK
+REL="PREVIOUS"
+TITLE="MARK_FOLLOWING Rule"
+HREF="mode-rule-mark-following.html"><LINK
+REL="NEXT"
+TITLE="KEYWORDS Rule"
+HREF="mode-rule-keywords.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.7 User's Guide</H1
+><P
+><A
+HREF="mode-rule-keywords.html"
+>Next</A
+>, <A
+HREF="mode-rule-mark-following.html"
+>Prev</A
+></P
+><H2
+>Chapter 9. Writing Edit Modes</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MODE-RULE-SEQ"
+>SEQ Rule</A
+></H1
+><P
+>   The <SPAN
+CLASS="MARKUP"
+>SEQ</SPAN
+> rule highlights fixed sequences of text. The text
+   to highlight is specified between opening and closing <SPAN
+CLASS="MARKUP"
+>SEQ</SPAN
+>
+   tags. The following attributes are supported:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>TYPE</SPAN
+> - the token type to highlight the
+   sequence with. See <A
+HREF="mode-syntax-tokens.html"
+>the section called <I
+>Token Types</I
+></A
+> for a list of token types</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>AT_LINE_START</SPAN
+> - If set to <SPAN
+CLASS="MARKUP"
+>TRUE</SPAN
+>,
+   the sequence will only be highlighted if if it occurs at the
+   beginning of a line</P
+></LI
+></UL
+><P
+>   The following <SPAN
+CLASS="MARKUP"
+>SEQ</SPAN
+>s highlight a few Java operators:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;SEQ TYPE="OPERATOR"&gt;+&lt;/SEQ&gt;
+&lt;SEQ TYPE="OPERATOR"&gt;-&lt;/SEQ&gt;
+&lt;SEQ TYPE="OPERATOR"&gt;*&lt;/SEQ&gt;
+&lt;SEQ TYPE="OPERATOR"&gt;/&lt;/SEQ&gt;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="writing-modes.html"
+>Up</A
+><BR><A
+HREF="mode-rule-mark-following.html"
+>Prev</A
+>: MARK_FOLLOWING Rule<BR><A
+HREF="mode-rule-keywords.html"
+>Next</A
+>: KEYWORDS Rule<BR></DIV
+></BODY
+></HTML
+>

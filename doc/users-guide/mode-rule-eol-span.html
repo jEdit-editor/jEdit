@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>EOL_SPAN Rule</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.7 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Writing Edit Modes"
+HREF="writing-modes.html"><LINK
+REL="PREVIOUS"
+TITLE="SPAN Rule"
+HREF="mode-rule-span.html"><LINK
+REL="NEXT"
+TITLE="MARK_PREVIOUS Rule"
+HREF="mode-rule-mark-prev.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.7 User's Guide</H1
+><P
+><A
+HREF="mode-rule-mark-prev.html"
+>Next</A
+>, <A
+HREF="mode-rule-span.html"
+>Prev</A
+></P
+><H2
+>Chapter 9. Writing Edit Modes</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MODE-RULE-EOL-SPAN"
+>EOL_SPAN Rule</A
+></H1
+><P
+>   An <SPAN
+CLASS="MARKUP"
+>EOL_SPAN</SPAN
+> is similar to a <SPAN
+CLASS="MARKUP"
+>SPAN</SPAN
+> except that
+   highlighting stops at the end of the line, not after the end sequence
+   is found. The text to match is specified between the opening and closing
+   <SPAN
+CLASS="MARKUP"
+>EOL_SPAN</SPAN
+> tags.
+   The following attributes are supported:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>TYPE</SPAN
+> - The token type to highlight the span
+   with. See <A
+HREF="mode-syntax-tokens.html"
+>the section called <I
+>Token Types</I
+></A
+> for a list of token types</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>AT_LINE_START</SPAN
+> - If set to <SPAN
+CLASS="MARKUP"
+>TRUE</SPAN
+>,
+   the span will only be highlighted if the start sequence occurs at the
+   beginning of a line</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>EXCLUDE_MATCH</SPAN
+> - If set to
+   <SPAN
+CLASS="MARKUP"
+>TRUE</SPAN
+>, the start sequence will not be highlighted,
+   only the text after it will</P
+></LI
+></UL
+><P
+>   Here is an <SPAN
+CLASS="MARKUP"
+>EOL_SPAN</SPAN
+> that highlights C++-style comments:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;EOL_SPAN TYPE="COMMENT1"&gt;//&lt;/EOL_SPAN&gt;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="writing-modes.html"
+>Up</A
+><BR><A
+HREF="mode-rule-span.html"
+>Prev</A
+>: SPAN Rule<BR><A
+HREF="mode-rule-mark-prev.html"
+>Next</A
+>: MARK_PREVIOUS Rule<BR></DIV
+></BODY
+></HTML
+>

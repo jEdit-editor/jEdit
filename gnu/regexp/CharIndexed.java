@@ -18,7 +18,7 @@
  */
 package gnu.regexp;
 
-interface CharIndexed {
+public interface CharIndexed {
   public static final char OUT_OF_BOUNDS = '\uFFFF';
 
   public char charAt(int index);

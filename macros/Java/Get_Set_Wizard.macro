@@ -1,8 +1,8 @@
 # GetSetWizard: asks you a few questions and inserts a
 # JavaBeans getFOO()/setFOO() pair.
 
-input@a@Class name:
-input@b@Instance variable name:
+input@b@Property name:
+input@a@Property class:
 
 # Create a version of 'b' with the first character capitalized
 paste-string-register@b

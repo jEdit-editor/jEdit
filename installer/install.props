@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=2.6final
+app.version=2.7pre1
 
 # Logo to display in installer window
 app.logo=/logo.gif

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>KEYWORDS Rule</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.7 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Writing Edit Modes"
+HREF="writing-modes.html"><LINK
+REL="PREVIOUS"
+TITLE="SEQ Rule"
+HREF="mode-rule-seq.html"><LINK
+REL="NEXT"
+TITLE="Token Types"
+HREF="mode-syntax-tokens.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.7 User's Guide</H1
+><P
+><A
+HREF="mode-syntax-tokens.html"
+>Next</A
+>, <A
+HREF="mode-rule-seq.html"
+>Prev</A
+></P
+><H2
+>Chapter 9. Writing Edit Modes</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MODE-RULE-KEYWORDS"
+>KEYWORDS Rule</A
+></H1
+><P
+>   There can only be one <SPAN
+CLASS="MARKUP"
+>KEYWORDS</SPAN
+> tag per ruleset.
+   The <SPAN
+CLASS="MARKUP"
+>KEYWORDS</SPAN
+> rule allows you to define keywords to highlight.
+   Keywords are similar to <SPAN
+CLASS="MARKUP"
+>SEQ</SPAN
+>s, except that <SPAN
+CLASS="MARKUP"
+>SEQ</SPAN
+>s
+   match anywhere in the text, whereas keywords only match whole words.
+  </P
+><P
+>   The <SPAN
+CLASS="MARKUP"
+>KEYWORDS</SPAN
+> tag supports only one attribute,
+   <SPAN
+CLASS="MARKUP"
+>IGNORE_CASE</SPAN
+>. If set to <SPAN
+CLASS="MARKUP"
+>FALSE</SPAN
+>, keywords will be
+   case sensitive. Otherwise, case will not matter. Default is
+   <SPAN
+CLASS="MARKUP"
+>TRUE</SPAN
+>.
+  </P
+><P
+>   Each child element of the <SPAN
+CLASS="MARKUP"
+>KEYWORDS</SPAN
+> tag should be named after the
+   desired token type, with the keyword text between the start and end tags.
+   For example, to highlight the most common Java keywords, you would write:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;KEYWORDS IGNORE_CASE="FALSE"&gt;
+   &lt;KEYWORD1&gt;if&lt;/KEYWORD1&gt;
+   &lt;KEYWORD1&gt;else&lt;/KEYWORD1&gt;
+   &lt;KEYWORD3&gt;int&lt;/KEYWORD3&gt;
+   &lt;KEYWORD3&gt;char&lt;/KEYWORD3&gt;
+&lt;/KEYWORDS&gt;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="writing-modes.html"
+>Up</A
+><BR><A
+HREF="mode-rule-seq.html"
+>Prev</A
+>: SEQ Rule<BR><A
+HREF="mode-syntax-tokens.html"
+>Next</A
+>: Token Types<BR></DIV
+></BODY
+></HTML
+>

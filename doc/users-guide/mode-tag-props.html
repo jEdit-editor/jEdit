@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The PROPS Tag</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.7 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Writing Edit Modes"
+HREF="writing-modes.html"><LINK
+REL="PREVIOUS"
+TITLE="The MODE Tag"
+HREF="mode-tag.html"><LINK
+REL="NEXT"
+TITLE="The RULES Tag"
+HREF="mode-tag-rules.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.7 User's Guide</H1
+><P
+><A
+HREF="mode-tag-rules.html"
+>Next</A
+>, <A
+HREF="mode-tag.html"
+>Prev</A
+></P
+><H2
+>Chapter 9. Writing Edit Modes</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MODE-TAG-PROPS"
+>The PROPS Tag</A
+></H1
+><P
+>   The <SPAN
+CLASS="MARKUP"
+>PROPS</SPAN
+> tag and the <SPAN
+CLASS="MARKUP"
+>PROPERTY</SPAN
+> tags inside it
+   are used to define mode-specific
+   properties. Each <SPAN
+CLASS="MARKUP"
+>PROPERTY</SPAN
+> tag must have a
+   <SPAN
+CLASS="MARKUP"
+>NAME</SPAN
+> attribute set to the property's name, and a
+   <SPAN
+CLASS="MARKUP"
+>VALUE</SPAN
+> attribute with the property's value.
+  </P
+><P
+>   In addition to the properties listed in <A
+HREF="buffer-local.html"
+>the section called <I
+>Buffer-Local Properties</I
+> in Chapter 7</A
+>,
+   you can use the following properties in modes:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="PROPERTY"
+>label</SPAN
+> - this property must be specified. It is
+   the full name of the edit mode, for example "MS-DOS Batch File".
+   </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="PROPERTY"
+>filenameGlob</SPAN
+> - if a file's name matches this
+   glob pattern, it will be opened with this edit mode. See
+   <A
+HREF="globs.html"
+>Appendix F</A
+> for information about glob patterns.
+   In Java mode, for example, the value of this property is
+   "*.java".
+   </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="PROPERTY"
+>firstlineGlob</SPAN
+> - similar to
+   <SPAN
+CLASS="PROPERTY"
+>filenameGlob</SPAN
+>, except that it is applied to a buffer's
+   first line, instead of file name. In Perl mode, for example,
+   the value of this property is "#!/*perl*".
+   </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="writing-modes.html"
+>Up</A
+><BR><A
+HREF="mode-tag.html"
+>Prev</A
+>: The MODE Tag<BR><A
+HREF="mode-tag-rules.html"
+>Next</A
+>: The RULES Tag<BR></DIV
+></BODY
+></HTML
+>

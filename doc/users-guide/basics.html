@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Basic Concepts</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.7 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using jEdit"
+HREF="using-jedit.html"><LINK
+REL="PREVIOUS"
+TITLE="Keyboard Shortcuts"
+HREF="shortcuts.html"><LINK
+REL="NEXT"
+TITLE="Working With Views"
+HREF="views.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.7 User's Guide</H1
+><P
+><A
+HREF="views.html"
+>Next</A
+>, <A
+HREF="shortcuts.html"
+>Prev</A
+></P
+><HR></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="BASICS"
+>Chapter 2. Basic Concepts</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="basics.html#STARTING"
+>Starting jEdit</A
+></DT
+><DT
+><A
+HREF="views.html"
+>Working With Views</A
+></DT
+><DT
+><A
+HREF="gutter.html"
+>The Gutter</A
+></DT
+><DT
+><A
+HREF="closing-exiting.html"
+>Closing Files and Exiting jEdit</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="STARTING"
+>Starting jEdit</A
+></H1
+><P
+>   Exactly how jEdit is started depends on your operating system;
+   on Unix systems, you might type "jedit" at the command line,
+   or select jEdit from a menu; on Windows, you might
+   double click on the jEdit icon. By default,
+   jEdit, when started will load any files that
+   were open in the previous session. A specific file to edit can be specified
+   on the command line, or by dropping a file onto the jEdit icon.
+   jEdit displays a "splash screen" while starting up.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 2-1. The jEdit splash screen</B
+></P
+><P
+><IMG
+SRC="../images/window-splash.gif"></P
+></DIV
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><P
+></P
+><P
+>    The first time jEdit is run, it will display an "initial setup
+    wizard" which will help you configure firewall settings (so
+    that jEdit features that make HTTP connections will work), install
+    plugins using the plugin manager (see <A
+HREF="plugins.html"
+>Chapter 8</A
+> for
+    more information about plugins) and give you some pointers to
+    further information. Similarly, after upgrading to a new jEdit version,
+    an "update wizard" will help you update your plugins and
+    give pointers to the change log so you can see what's new.
+   </P
+><P
+>    Both of these wizards are self-explanatory and very easy to use,
+    and therefore will not be covered in any more detail in this manual.
+   </P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>   After jEdit has finished loading, the editor window will
+   appear. Most user interface elements will be instantly familiar to users
+   of graphical environments such as Windows, MacOS or GNOME. Some features
+   are unique to jEdit, however. They will be described in the following
+   paragraphs.
+  </P
+><P
+>   The combo box above the text area is used to select the <I
+CLASS="FIRSTTERM"
+>buffer</I
+>
+   to edit. Each open file is loaded into its own buffer.
+   One of the following icons is displayed next to each buffer name in the
+   list, depending on the state of the buffer:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+>   <IMG
+SRC="../images/normal.gif">
+   Displayed if the buffer doesn't contain unsaved changes
+  </P
+></LI
+><LI
+><P
+>   <IMG
+SRC="../images/dirty.gif">
+   Displayed if the buffer contains unsaved changes
+  </P
+></LI
+><LI
+><P
+>   <IMG
+SRC="../images/readonly.gif">
+   Displayed if the buffer is read-only
+  </P
+></LI
+><LI
+><P
+>   <IMG
+SRC="../images/new.gif">
+   Displayed if the buffer is a new buffer that
+     hasn't yet been saved to disk
+  </P
+></LI
+></UL
+><P
+>   The column and line number
+   containing the caret is displayed immediately to
+   the right of the buffer selector.
+  </P
+><P
+>   For the pedantic programmers among us,
+   <I
+CLASS="FIRSTTERM"
+>end of line markers</I
+> at the end of each line are helpful for
+   locating lines with trailing whitespace.
+   The vertical blue line is a <I
+CLASS="FIRSTTERM"
+>wrap guide</I
+>; entering characters
+   beyond this position will automatically insert a newline. See
+   <A
+HREF="entering-text.html"
+>the section called <I
+>Inserting and Deleting Text</I
+> in Chapter 4</A
+> for details.
+  </P
+><P
+>   Clicking on the text area with
+   the right mouse button will display a popup menu, offering quick
+   access to various commands. Both the tool bar and context menu can be
+   customized in the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+   dialog box.
+  </P
+><P
+>   Many aspects of the text area's operation can be customized to your liking
+   in the <SPAN
+CLASS="GUIBUTTON"
+>Text Area</SPAN
+> pane of the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 2-2. The editor window</B
+></P
+><P
+><IMG
+SRC="../images/window-editor.gif"></P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="using-jedit.html"
+>Up</A
+><BR><A
+HREF="shortcuts.html"
+>Prev</A
+>: Keyboard Shortcuts<BR><A
+HREF="views.html"
+>Next</A
+>: Working With Views<BR></DIV
+></BODY
+></HTML
+>

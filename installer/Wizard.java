@@ -71,7 +71,8 @@ public abstract class Wizard extends JComponent
 		g.setColor(highlight);
 		g.fillRect(0,0,getWidth(),getHeight());
 
-		logo.paintIcon(this,g,sideBorder,PADDING);
+		logo.paintIcon(this,g,sideBorder + (getWidth() - PADDING * 4
+			- logo.getIconWidth()) / 2,PADDING);
 
 		int width = getWidth() - sideBorder * 2;
 		int height = getHeight() - topBorder - bottomBorder;

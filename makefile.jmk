@@ -49,12 +49,10 @@ jedit_pkg = "org/gjt/sp/jedit";
 
 # jEdit's packages
 jedit_pkgs = "com/microstar/xml"
-    "com/fooware/net"
     jedit_pkg
     "org/gjt/sp/jedit/actions"
     "org/gjt/sp/jedit/browser"
     "org/gjt/sp/jedit/gui"
-    "org/gjt/sp/jedit/icons"
     "org/gjt/sp/jedit/io"
     "org/gjt/sp/jedit/msg"
     "org/gjt/sp/jedit/options"
@@ -68,7 +66,7 @@ jedit_srcs = (subst ".java", ".class", (glob (join jedit_pkgs, "/*.java")));
 jedit_mf = (cat jedit_pkg "/jedit.manifest");
 
 # All source directories
-pkgs = re_pkg jedit_pkgs;
+pkgs = re_pkg jedit_pkgs "org/gjt/sp/jedit/icons";
 
 # All sources
 srcs = re_srcs jedit_srcs;
@@ -101,5 +99,10 @@ jar = "jedit.jar";
     exec cmd_javac <;
 }
 
+"javadoc":;
+{
+    -mkdir "doc/api";
+    exec "javadoc" "-d" "doc/api" jedit_pkgs;
+}
 
-".PHONY": "all" "everything";
+".PHONY": "all" "javadoc" "everything";

@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The File System Browser</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.7 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Working With Buffers"
+HREF="buffers.html"><LINK
+REL="PREVIOUS"
+TITLE="Saving Files"
+HREF="saving.html"><LINK
+REL="NEXT"
+TITLE="Multithreaded I/O"
+HREF="threaded-io.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.7 User's Guide</H1
+><P
+><A
+HREF="threaded-io.html"
+>Next</A
+>, <A
+HREF="saving.html"
+>Prev</A
+></P
+><H2
+>Chapter 3. Working With Buffers</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="VFS-BROWSER"
+>The File System Browser</A
+></H1
+><P
+>   The <SPAN
+CLASS="GUIMENUITEM"
+>Open File</SPAN
+> and <SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+> dialog boxes
+   both show a file system browser embedded in a dialog box.
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>File System Browser</SPAN
+> displays a
+   standalone version. By default, the standalone browser is shown in
+   a separate frame, but if you prefer, you can set it to be docked into
+   the current view in the
+   <SPAN
+CLASS="GUIBUTTON"
+>Docking</SPAN
+> pane of the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global
+   Options</SPAN
+>.
+  </P
+><P
+>   The browser consists of a tool bar, a path field,
+   a filename filter field, and the file tree itself. The file tree allows
+   an entire directory hierarchy to be viewed at once; try clicking
+   on the expander control next to directories in the tree.
+  </P
+><P
+>   The toolbar buttons perform the following actions, from left to right:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Up</SPAN
+> - takes you to the current
+   directory's parent. The popup arrow next to this button displays a
+   menu listing all the parent directories of the current directory,
+   up to the filesystem root</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Reload</SPAN
+> - updates the file list by
+   reloading the directory</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Local Drives</SPAN
+> - displays all
+   local drives in the file list. On Windows, this will be a list of
+   drive letters; on Unix, the list will only contain one entry, the
+   root directory (<TT
+CLASS="FILENAME"
+>/</TT
+>)</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Home Directory</SPAN
+> - takes you to your
+   home directory, the location of which is system-specific</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Parent Directory of Current Buffer</SPAN
+> -
+   take you to the directory containing the current buffer (if the current
+   view is split into multiple panes, the "current buffer" is
+   defined as the one that most recently had keyboard focus)</P
+></LI
+></UL
+><P
+>   The <SPAN
+CLASS="GUIMENU"
+>More</SPAN
+> menu contains several less frequently-used commands:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>Show Hidden Files</SPAN
+> - if selected, hidden
+   files will be shown in the file list. The definition of a hidden file
+   is system-specific; on Windows, files with the "h" attribute
+   are hidden. On Unix, files whose names begin with "." are
+   hidden</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>New Directory</SPAN
+> - prompts for a directory
+   name and creates a directory with that name.
+   Note that not all virtual filesystems may support this operation (the
+   local and FTP filesystems do)
+   </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>Add to Favorites</SPAN
+> - adds the currently
+   selected (or the currently displayed, if there is nothing
+   selected) directory to the favorites list</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>Go to Favorites</SPAN
+> - displays the favorites
+   list. To remove a directory from the list, right-click on it and select
+   <SPAN
+CLASS="GUIMENUITEM"
+>Delete</SPAN
+> from the resulting popup menu</P
+></LI
+></UL
+><P
+>   The filter text field allows you to specify a subset
+   of the current directory to display in the form of a glob pattern.
+   See <A
+HREF="globs.html"
+>Appendix F</A
+> for more information about glob patterns.
+   Both the path and filter fields support a history;
+   see <A
+HREF="history.html"
+>Appendix B</A
+> for
+   details.
+  </P
+><P
+>   Right-clicking on a file in the VFS browser displays a popup menu, containing
+   commands for manipulating that file, in addition to all the commands in the
+   <SPAN
+CLASS="GUIBUTTON"
+>More</SPAN
+> menu.
+   If the buffer is already open, the popup will have commands to
+   display it in the current view, display it in a new view, or close it.
+   Unopened file popups have items for opening, deleting and renaming.
+   Attempting to delete a non-empty directory will give an error; only
+   empty directories can be deleted.
+  </P
+><P
+>   Several aspects of the VFS browser can be customized in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box.
+  </P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><P
+></P
+><P
+>    The VFS browser can be navigated from the keyboard.
+    The following keystrokes are supported:
+    <P
+></P
+><UL
+><LI
+><P
+><B
+CLASS="KEYCAP"
+>Enter</B
+> - opens the currently selected file or
+     directory</P
+></LI
+><LI
+><P
+><B
+CLASS="KEYCAP"
+>Left</B
+> - goes to the current directory's parent
+     </P
+></LI
+><LI
+><P
+><B
+CLASS="KEYCAP"
+>Up</B
+> - selects previous file in list
+     </P
+></LI
+><LI
+><P
+><B
+CLASS="KEYCAP"
+>Down</B
+> - selects next file in list
+     </P
+></LI
+><LI
+><P
+>Typing the first few characters of
+     a file's name will select that file
+     </P
+></LI
+></UL
+>
+    Note that the file list must have keyboard focus for these keys to work.
+   </P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 3-4. The stand-alone VFS Browser</B
+></P
+><P
+><IMG
+SRC="../images/window-vfs-browser.gif"></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="buffers.html"
+>Up</A
+><BR><A
+HREF="saving.html"
+>Prev</A
+>: Saving Files<BR><A
+HREF="threaded-io.html"
+>Next</A
+>: Multithreaded I/O<BR></DIV
+></BODY
+></HTML
+>

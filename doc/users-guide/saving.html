@@ -7,33 +7,33 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.6 User's Guide"
+TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Basic Features"
-HREF="basic-features.html"><LINK
+TITLE="Working With Buffers"
+HREF="buffers.html"><LINK
 REL="PREVIOUS"
-TITLE="The Clipboard"
-HREF="clipboard.html"><LINK
+TITLE="Opening Files"
+HREF="opening.html"><LINK
 REL="NEXT"
-TITLE="Printing Files"
-HREF="printing-sending.html"></HEAD
+TITLE="The File System Browser"
+HREF="vfs-browser.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.6 User's Guide</H1
+>jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="printing-sending.html"
+HREF="vfs-browser.html"
 >Next</A
 >, <A
-HREF="clipboard.html"
+HREF="opening.html"
 >Prev</A
 ></P
 ><H2
->Chapter 3. Basic Features</H2
+>Chapter 3. Working With Buffers</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -74,16 +74,28 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >S</B
 >)
-   will immediately save the current buffer to disk, unless the buffer
-   is untitled, in which case it will prompt for a file name first.
+   will save the current buffer to disk.
    <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Save As</SPAN
-> also saves the buffer to disk,
-   but prompts for a file name every time.
+> and
+   <SPAN
+CLASS="GUIMENUITEM"
+>Save a Copy As</SPAN
+> save the buffer to disk,
+   prompting for a file name first. The difference between the two is that
+   <SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+> renames the buffer to the selected path, whereas
+   <SPAN
+CLASS="GUIMENUITEM"
+>Save a Copy As</SPAN
+> doesn't (so subsequent saves will still use
+   the old path name).
    <SPAN
 CLASS="GUIMENU"
 >File</SPAN
@@ -94,15 +106,14 @@ CLASS="GUIMENUITEM"
    (keyboard equivalent: <B
 CLASS="KEYCAP"
 >F4</B
->) will save all buffers;
-   a confirmation dialog box will be issued first.
+>) will save all buffers.
   </P
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN464"
+NAME="AEN368"
 >Autosave and Backups</A
 ></H2
 ><P
@@ -127,7 +138,7 @@ CLASS="FILENAME"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 3-7. Dialog box shown if a file has autosaved changes</B
+>Figure 3-2. Dialog box shown if a file has autosaved changes</B
 ></P
 ><P
 ><IMG
@@ -158,7 +169,7 @@ CLASS="TIP"
 >     The autosave frequency and various backup-related
      settings can be changed in the <SPAN
 CLASS="GUIBUTTON"
->General</SPAN
+>Loading and Saving</SPAN
 > pane of the
      <SPAN
 CLASS="GUIMENU"
@@ -176,7 +187,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN490"
+NAME="AEN394"
 >Line Separator Characters</A
 ></H2
 ><P
@@ -201,7 +212,7 @@ CLASS="GUIMENUITEM"
 > dialog box.
     The default for new files can be changed in the <SPAN
 CLASS="GUIBUTTON"
->Editor</SPAN
+>Editing</SPAN
 > pane of the
     <SPAN
 CLASS="GUIMENU"
@@ -217,7 +228,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN510"
+NAME="AEN414"
 >When Another Application Modifies the File</A
 ></H2
 ><P
@@ -225,7 +236,18 @@ NAME="AEN510"
     has changed an open buffer on disk.
     You will be given the choice to
     continue editing (and lose changes made by the other application)
-    or to reload the buffer.
+    or to reload the buffer. If you prefer, this feature can be disabled in the
+    <SPAN
+CLASS="GUIBUTTON"
+>General</SPAN
+> pane of the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box.
    </P
 ><P
 >    <SPAN
@@ -268,7 +290,7 @@ CLASS="EMPHASIS"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 3-8. Warning message displayed when another application
+>Figure 3-3. Warning message displayed when another application
    changed the file on disk</B
 ></P
 ><P
@@ -283,15 +305,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="basic-features.html"
+HREF="buffers.html"
 >Up</A
 ><BR><A
-HREF="clipboard.html"
+HREF="opening.html"
 >Prev</A
->: The Clipboard<BR><A
-HREF="printing-sending.html"
+>: Opening Files<BR><A
+HREF="vfs-browser.html"
 >Next</A
->: Printing Files<BR></DIV
+>: The File System Browser<BR></DIV
 ></BODY
 ></HTML
 >

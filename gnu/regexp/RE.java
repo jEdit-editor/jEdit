@@ -18,6 +18,7 @@
  */
 
 package gnu.regexp;
+import javax.swing.text.Segment;
 import java.io.InputStream;
 import java.util.Vector;
 
@@ -1306,6 +1307,10 @@ public class RE extends REToken
       return new CharIndexedStringBuffer((StringBuffer) input,index);
     else if (input instanceof InputStream)
       return new CharIndexedInputStream((InputStream) input,index);
+    else if (input instanceof Segment)
+      return new CharIndexedSegment((Segment) input,index);
+    else if (input instanceof CharIndexed)
+      return (CharIndexed)input;
     else throw new IllegalArgumentException("Invalid class for input text");
   }
 }

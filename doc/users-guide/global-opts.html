@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.6 User's Guide"
+TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="Customizing jEdit"
@@ -23,7 +23,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.6 User's Guide</H1
+>jEdit 2.7 User's Guide</H1
 ><P
 ><A
 HREF="settings-directory.html"
@@ -33,7 +33,7 @@ HREF="buffer-local.html"
 >Prev</A
 ></P
 ><H2
->Chapter 9. Customizing jEdit</H2
+>Chapter 7. Customizing jEdit</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -63,7 +63,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2822"
+NAME="AEN2191"
 >The General Pane</A
 ></H2
 ><P
@@ -72,7 +72,7 @@ CLASS="GUIBUTTON"
 >General</SPAN
 > option pane allows you to change various
     miscellaneous settings, such as the number of recent files to remember,
-    file encoding, default file separator, and Swing look &amp; feel.
+    Swing look &amp; feel, and such.
    </P
 ></DIV
 ><DIV
@@ -80,35 +80,67 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2826"
->The Editor Pane</A
+NAME="AEN2195"
+>The Loading and Saving Pane</A
 ></H2
 ><P
 >    The <SPAN
 CLASS="GUIBUTTON"
->Editor</SPAN
-> option pane allows you to change settings such
-    as the tab size, syntax highlighting and soft tabs, on both a global and
-    edit mode-specific basis.
+>Loading and Saving</SPAN
+> option pane allows you to change
+    settings such as the autosave frequency, backup settings, file encoding,
+    and so on.
    </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2199"
+>The Editing Pane</A
+></H2
 ><P
->    When editing mode-specific settings,
-    the "file name glob" and "first line glob" fields allow
-    you to specify a glob pattern that names and first lines of buffers
-    will be matched against.
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Editing</SPAN
+> option pane allows you to change settings such
+    as the tab size, syntax highlighting and soft tabs on a global basis.
    </P
 ><P
 >    Due to a quirk in jEdit's properties implementation,
     changes to some settings in this option pane only take effect
     in newly opened files.
    </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2204"
+>The Mode-Specific Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Mode-Specific</SPAN
+> option pane allows you to change settings such
+    as the tab size, syntax highlighting and soft tabs on a
+    mode-specific basis.
+   </P
+><P
+>    The "file name glob" and "first line glob" fields allow
+    you to specify a glob pattern that names and first lines of buffers
+    will be matched against.
+   </P
 ><P
 >    This option pane does not change XML mode definition files on disk; it
     merely writes values to the user properties file which override those
     in mode files. To find out how to edit mode files directly, see
     <A
-HREF="modes.html"
->Chapter 5</A
+HREF="writing-modes.html"
+>Chapter 9</A
 >.
    </P
 ></DIV
@@ -117,7 +149,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2836"
+NAME="AEN2213"
 >The Text Area Pane</A
 ></H2
 ><P
@@ -125,7 +157,7 @@ NAME="AEN2836"
 CLASS="GUIBUTTON"
 >Text Area</SPAN
 > option pane allows you to customize the
-    appearance of the text area and gutter.
+    appearance of the text area.
    </P
 ></DIV
 ><DIV
@@ -133,17 +165,31 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2840"
+NAME="AEN2217"
+>The Gutter Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Gutter</SPAN
+> option pane allows you to customize the
+    appearance of the gutter.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2221"
 >The Colors &amp; Styles Pane</A
 ></H2
 ><P
 >    The <SPAN
 CLASS="GUIBUTTON"
->Colors &amp; Styles</SPAN
-> pane allows you to change various
-    colors used by the text area, and the text styles used by syntax
-    highlighting. Clicking on a color or style will display the appropriate
-    editor for changing it.
+>Colors</SPAN
+> pane allows you to change
+    the text area's color scheme.
    </P
 ></DIV
 ><DIV
@@ -151,7 +197,24 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2844"
+NAME="AEN2225"
+>The Styles Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Styles</SPAN
+> pane allows you to change
+    the text styles and color used by syntax
+    highlighting.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2229"
 >The Docking Pane</A
 ></H2
 ><P
@@ -162,10 +225,10 @@ CLASS="GUIBUTTON"
     windows should be displayed in their own frame, or docked in the
     current view. The only dockable window currently in the jEdit core
     is the VFS browser (see <A
-HREF="vfs.html#VFS-BROWSER"
+HREF="vfs-browser.html"
 >the section called <I
->The VFS Browser</I
-> in Chapter 8</A
+>The File System Browser</I
+> in Chapter 3</A
 >). Plugins can add
     their own.
    </P
@@ -175,7 +238,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2849"
+NAME="AEN2234"
 >The Context Menu Pane</A
 ></H2
 ><P
@@ -191,7 +254,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2853"
+NAME="AEN2238"
 >The Tool Bar Pane</A
 ></H2
 ><P
@@ -311,7 +374,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2892"
+NAME="AEN2277"
 >The Printing Pane</A
 ></H2
 ><P
@@ -327,7 +390,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2900"
+NAME="AEN2285"
 >The VFS Browser Pane</A
 ></H2
 ><P

@@ -7,33 +7,33 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.6 User's Guide"
+TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Basic Features"
-HREF="basic-features.html"><LINK
+TITLE="Working With Buffers"
+HREF="buffers.html"><LINK
 REL="PREVIOUS"
-TITLE="Basic Features"
-HREF="basic-features.html"><LINK
+TITLE="Working With Buffers"
+HREF="buffers.html"><LINK
 REL="NEXT"
-TITLE="Creating New Files"
-HREF="creating.html"></HEAD
+TITLE="Saving Files"
+HREF="saving.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.6 User's Guide</H1
+>jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="creating.html"
+HREF="saving.html"
 >Next</A
 >, <A
-HREF="basic-features.html"
+HREF="buffers.html"
 >Prev</A
 ></P
 ><H2
->Chapter 3. Basic Features</H2
+>Chapter 3. Working With Buffers</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -63,10 +63,10 @@ CLASS="KEYCAP"
    select a
    file to open. For a detailed treatment of this dialog box, see
    <A
-HREF="vfs.html#VFS-BROWSER"
+HREF="vfs-browser.html"
 >the section called <I
->The VFS Browser</I
-> in Chapter 8</A
+>The File System Browser</I
+></A
 >.
    jEdit remembers the last few edited files; they listed in the
    <SPAN
@@ -86,6 +86,20 @@ CLASS="GUIMENUITEM"
 > menu lists all files in the current buffer's directory.
   </P
 ><P
+>   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Insert File</SPAN
+> is similar to
+   <SPAN
+CLASS="GUIMENUITEM"
+>Open File</SPAN
+>, except that it inserts the contents of the
+   specified file into the current buffer, instead of creating a new buffer.
+  </P
+><P
 >   Files that you do not have write access to are automatically opened
    read only. Files can also be forced to open read only from the command line
    by specifying the <TT
@@ -99,65 +113,11 @@ CLASS="USERINPUT"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 3-3. The Open File dialog box</B
+>Figure 3-1. The Open File dialog box</B
 ></P
 ><P
 ><IMG
 SRC="../images/dialog-open.gif"></P
-></DIV
-><P
->   jEdit calls open files <I
-CLASS="FIRSTTERM"
->buffers</I
->. The buffer tabs that run along
-   the top of each text area can be used to switch between buffers.
-   Another way to switch buffers is to use the various items in the
-   <SPAN
-CLASS="GUIMENU"
->View</SPAN
-> menu; the <SPAN
-CLASS="GUISUBMENU"
->Current Buffer</SPAN
-> submenu, and the
-   <SPAN
-CLASS="GUIMENUITEM"
->Go to Previous Buffer</SPAN
->,
-   <SPAN
-CLASS="GUIMENUITEM"
->Go to Next Buffer</SPAN
-> and
-   <SPAN
-CLASS="GUIMENUITEM"
->Go to Last Edited Buffer</SPAN
-> commands.
-   All of these are self-explanatory, except for the latter, which
-   selects the buffer that was being edited before you switched
-   to the current one.
-  </P
-><DIV
-CLASS="TIP"
-><BLOCKQUOTE
-CLASS="TIP"
-><P
-><B
->Tip: </B
->    The buffer switching tabs can take up a lot of room and get cumbersome
-    if you have many buffers
-    open. If this bothers you, they can be disabled in
-    the <SPAN
-CLASS="GUIBUTTON"
->General</SPAN
-> pane of the
-    <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
-> dialog box.
-   </P
-></BLOCKQUOTE
 ></DIV
 ></DIV
 ><DIV
@@ -166,15 +126,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="basic-features.html"
+HREF="buffers.html"
 >Up</A
 ><BR><A
-HREF="basic-features.html"
+HREF="buffers.html"
 >Prev</A
->: Basic Features<BR><A
-HREF="creating.html"
+>: Working With Buffers<BR><A
+HREF="saving.html"
 >Next</A
->: Creating New Files<BR></DIV
+>: Saving Files<BR></DIV
 ></BODY
 ></HTML
 >

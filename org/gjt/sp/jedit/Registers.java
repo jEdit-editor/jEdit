@@ -404,9 +404,6 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
- * Revision 1.12  2000/11/11 05:37:52  sp
- * paste bug fixed
- *
  * Revision 1.11  2000/11/11 02:59:29  sp
  * FTP support moved out of the core into a plugin
  *

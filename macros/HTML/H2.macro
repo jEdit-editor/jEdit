@@ -1,5 +1,0 @@
-# This macro surrounds the selection with HTML <h2>...</h2> tags.
-
-clear-register@$
-copy
-insert-char@<h2>$$</h2>

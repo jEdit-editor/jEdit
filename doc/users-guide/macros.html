@@ -7,542 +7,182 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.6 User's Guide"
+TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Advanced Features"
-HREF="advanced-features.html"><LINK
+TITLE="Extending jEdit"
+HREF="extending-jedit.html"><LINK
 REL="PREVIOUS"
-TITLE="Abbreviations"
-HREF="abbrevs.html"><LINK
+TITLE="Token Types"
+HREF="mode-syntax-tokens.html"><LINK
 REL="NEXT"
-TITLE="The jEdit Command Line"
-HREF="command-line.html"></HEAD
+TITLE="Recording Macros"
+HREF="macro-record.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.6 User's Guide</H1
+>jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="command-line.html"
+HREF="macro-record.html"
 >Next</A
 >, <A
-HREF="abbrevs.html"
+HREF="mode-syntax-tokens.html"
 >Prev</A
 ></P
-><H2
->Chapter 4. Advanced Features</H2
 ><HR></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="MACROS"
+>Chapter 10. Macros</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="macros.html#MACRO-FILES"
+>Macro Files</A
+></DT
+><DT
+><A
+HREF="macro-record.html"
+>Recording Macros</A
+></DT
+><DT
+><A
+HREF="macro-temp.html"
+>Temporary Macros</A
+></DT
+><DT
+><A
+HREF="macro-prompt.html"
+>Prompting for Input</A
+></DT
+><DT
+><A
+HREF="macro-syntax.html"
+>Macro File Syntax</A
+></DT
+><DT
+><A
+HREF="macro-samples.html"
+>Some Sample Macros</A
+></DT
+></DL
+></DIV
+><P
+>  A <I
+CLASS="FIRSTTERM"
+>macro</I
+> is a prerecorded sequence of events that can be
+  played back with a single menu item selection, keystroke, or tool bar
+  click. Macros are useful for automating operations that would be very
+  boring or tedious to perform by hand.
+ </P
 ><DIV
 CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="MACROS"
->Macros</A
-></H1
-><P
->   A <I
-CLASS="FIRSTTERM"
->macro</I
-> is a prerecorded sequence of events that can be
-   played back with a single menu item selection, keystroke, or tool bar
-   click. Macros are useful for automating operations that would be very
-   boring or tedious to perform by hand.
-  </P
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
 NAME="MACRO-FILES"
 >Macro Files</A
-></H2
+></H1
 ><P
->    Macro files have the extension ".macro". See <A
-HREF="macros.html#MACRO-SYNTAX"
+>   Macro files have the extension ".macro". See <A
+HREF="macro-syntax.html"
 >the section called <I
 >Macro File Syntax</I
 ></A
 >
-    for information about their syntax.
-   </P
+   for information about their syntax.
+  </P
 ><P
->    Macros can be stored in the <TT
+>   Macros can be stored in the <TT
 CLASS="FILENAME"
 >macros</TT
 > subdirectory
-    of the jEdit install directory or the <TT
+   of the jEdit install directory or the <TT
 CLASS="FILENAME"
 >.jedit/macros</TT
 >
-    subdirectory of the user's home directory. The former contains several
-    sample macros included with jEdit, and the latter should be used to
-    store user-defined macros.
-   </P
+   subdirectory of the user's home directory. The former contains several
+   sample macros included with jEdit, and the latter should be used to
+   store user-defined macros.
+  </P
 ><P
->    The <SPAN
+>   The <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
 > menu lists all known macros, in addition
-    to commands for working with them. To play a macro, select it from
-    the menu. The most recently recorded or played macro can be played back with
-    the <SPAN
+   to commands for working with them. To play a macro, select it from
+   the menu. The most recently recorded or played macro can be played back with
+   the <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Play Last Macro</SPAN
 > command (keyboard
-    equivalent:
-    <B
+   equivalent:
+   <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
 >M</B
 >
-    <B
+   <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
 >L</B
 >).
-   </P
+  </P
 ><P
->    Creating subdirectories in the macros directory works as expected; they
-    are displayed as submenus of the <SPAN
+>   Creating subdirectories in the macros directory works as expected; they
+   are displayed as submenus of the <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
 > menu. This can be
-    used to organize a large collection of macros.
-    The <SPAN
+   used to organize a large collection of macros.
+   The <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
 > menu is automatically
-    refreshed when you update or create a macro file from within jEdit.
-    However, because macros are stored as ordinary files, they can be renamed,
-    deleted and so on with your operating system's file manager. When you
-    make changes to macros in a program other than jEdit, you must
-    <SPAN
+   refreshed when you update or create a macro file from within jEdit.
+   However, because macros are stored as ordinary files, they can be renamed,
+   deleted and so on with your operating system's file manager. When you
+   make changes to macros in a program other than jEdit, you must
+   <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Rescan Macros</SPAN
 >
-    to update the macros menu with the changes.
-   </P
+   to update the macros menu with the changes.
+  </P
 ><P
->    Like most other menu item commands, macros can be assigned keyboard
-    shortcuts and added to the right-click context menu or tool bar in
-    the <SPAN
+>   Like most other menu item commands, macros can be assigned keyboard
+   shortcuts and added to the right-click context menu or tool bar in
+   the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Global Options</SPAN
 > dialog box.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="MACRO-RECORD"
->Recording Macros</A
-></H2
-><P
->    <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Record Macro</SPAN
-> (keyboard
-    equivalent:
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->M</B
->
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->R</B
->) prompts for
-    a macro name, and begins recording to a file with that name
-    suffixed with ".macro".
-   </P
-><P
->    While a recording is in progress, "(recording)" is
-    displayed in the status bar, instead of the caret position information.
-    Currently, jEdit records key strokes, commands invoked from
-    the menu bar, and tool bar clicks. Caret movement and selection performed
-    using the mouse is <I
-CLASS="EMPHASIS"
->not</I
-> recorded; to move the caret or
-    select text from a macro, use the text selection commands and arrow
-    keys.
-   </P
-><P
->    Search and replace operations can be recorded in macros.
-    When search and replace operations are played back,
-    the dialog boxes are not displayed, but the actual search and
-    replacement is done.
-   </P
-><P
->    <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Stop Recording</SPAN
-> (keyboard
-    equivalent:
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->M</B
->
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->S</B
->) stops any
-    recording currently in progress. It also switches to the buffer where
-    the macro was being recorded, giving you a chance to check over the
-    commands
-    and make any necessary changes.
-    When you are happy with the macro, simply
-    save it and it will automatically appear in the <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
->
-    menu. If you wish to discard the macro, close it without
-    saving.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="MACRO-TEMP"
->Temporary Macros</A
-></H2
-><P
->    Sometimes, a complicated action only needs to be repeated a few of
-    times, and it is not worth creating a new macro file. The
-    temporary macro feature is useful in those situations.
-   </P
-><P
->    <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Record Temporary Macro</SPAN
-> (keyboard
-    equivalent:
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->M</B
->
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->M</B
->) works in a
-    similar fashion to the <SPAN
-CLASS="GUIMENUITEM"
->Record Macro</SPAN
-> command, except that
-    it records to a buffer named <TT
-CLASS="FILENAME"
->__temporary__.macro</TT
->.
-   </P
-><P
->    <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Stop Recording</SPAN
->
-    (keyboard equivalent: <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->M</B
->
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->S</B
->) stops recording the
-    temporary macro. This is the same command used to stop recording an
-    ordinary macro.
-    Once recording is complete, you don't need to save the
-    <TT
-CLASS="FILENAME"
->__temporary__.macro</TT
->
-    buffer before playing it back. If you do, it will become
-    an ordinary macro, displayed in the <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
-> menu.
-   </P
-><P
->    <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Play Temporary Macro</SPAN
-> (keyboard
-    equivalent:
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->M</B
->
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->P</B
->) plays the
-    macro recorded to the <TT
-CLASS="FILENAME"
->__temporary__.macro</TT
-> buffer.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN1307"
->Prompting for Input</A
-></H2
-><P
->    While recording a macro, invoking
-    <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Prompt for Input</SPAN
-> will display
-    a dialog box allowing you to record a special command which when
-    played back, will prompt the user for input and store it in a
-    specified register.
-   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-6. The Prompt for Input dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-macro-input.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-7. What will happen when the macro is played back</B
-></P
-><P
-><IMG
-SRC="../images/dialog-macro-input-play.gif"></P
-></DIV
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="MACRO-SYNTAX"
->Macro File Syntax</A
-></H2
-><P
->    Macro files have very simple syntax, with
-    one command per line. Lines starting with a hash ("#") are
-    ignored by the macro interpreter and can be used to add commentary
-    to macros, etc. Non-comment lines consist of an action name and
-    optional argument. An at character ("@") separates
-    the action name and argument.
-   </P
-><P
->    Each jEdit command has a corresponding action name. Although no
-    documentation for the built-in editor actions exists, you can use
-    the command line's action completion feature (see <A
-HREF="command-line.html"
->the section called <I
->The jEdit Command Line</I
-></A
->)
-    to fool around with different actions.
-   </P
-><P
->    In a command argument, strings of the form <TT
-CLASS="FILENAME"
->$<TT
-CLASS="REPLACEABLE"
-><I
->x</I
-></TT
-></TT
->
-    will be replaced with the contents of register <TT
-CLASS="REPLACEABLE"
-><I
->x</I
-></TT
-> when the
-    macro is executed. This is a very powerful feature; you could, for example,
-    write a macro that prompts the user for some input, does something
-    to it, and then performs a search, based on that input.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN1329"
->Some Sample Macros</A
-></H2
-><P
->    Here is a simple macro that swaps two
-    characters on either side of the caret:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
-># Get rid of selection, if any
-select-none
-
-# Get character before caret and cut it to the clipboard
-# If the current line looks like: hello wol|rd, with caret at |
-# It will now look like:          hello wo|rd
-select-prev-char
-cut
-
-# Now, position the caret after the second character
-# If the current line looks like: hello wo|rd
-# It will now look like:          hello wor|d
-next-char
-
-# Finally, paste the character that was cut at the start
-# If the current line looks like: hello wor|d
-# It will now look like:          hello worl|d
-paste
-
-# Done!</PRE
-></TD
-></TR
-></TABLE
-><P
->    Here is another trivial macro that surrounds the selected
-    text with HTML <SPAN
-CLASS="MARKUP"
->&lt;B&gt;</SPAN
-> tags (if the <TT
-CLASS="FILENAME"
->$$</TT
-> bit looks
-    a bit strange, keep in mind that <TT
-CLASS="FILENAME"
->$<TT
-CLASS="REPLACEABLE"
-><I
->x</I
-></TT
-></TT
->
-    is expanded to the contents of the register named <TT
-CLASS="REPLACEABLE"
-><I
->x</I
-></TT
->,
-    and that the <TT
-CLASS="FILENAME"
->$</TT
-> register is an alias for the clipboard):
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->cut
-insert-char@&lt;B&gt;$$&lt;/B&gt;</PRE
-></TD
-></TR
-></TABLE
-><P
->    This final example demonstrates prompting the user for input in
-    a macro:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
-># Prompt the user for a URL and store it in register 'a'
-input@a@Enter a URL:
-
-# Prompt for link text and store it in register 'b'
-input@b@Enter link text:
-
-# Insert &lt;A&gt; tag
-insert-char@&lt;A HREF="$a"&gt;$b&lt;/A&gt;</PRE
-></TD
-></TR
-></TABLE
+  </P
 ></DIV
 ></DIV
 ><DIV
@@ -551,15 +191,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="advanced-features.html"
+HREF="extending-jedit.html"
 >Up</A
 ><BR><A
-HREF="abbrevs.html"
+HREF="mode-syntax-tokens.html"
 >Prev</A
->: Abbreviations<BR><A
-HREF="command-line.html"
+>: Token Types<BR><A
+HREF="macro-record.html"
 >Next</A
->: The jEdit Command Line<BR></DIV
+>: Recording Macros<BR></DIV
 ></BODY
 ></HTML
 >

@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Token Types</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.7 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Writing Edit Modes"
+HREF="writing-modes.html"><LINK
+REL="PREVIOUS"
+TITLE="KEYWORDS Rule"
+HREF="mode-rule-keywords.html"><LINK
+REL="NEXT"
+TITLE="Macros"
+HREF="macros.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.7 User's Guide</H1
+><P
+><A
+HREF="macros.html"
+>Next</A
+>, <A
+HREF="mode-rule-keywords.html"
+>Prev</A
+></P
+><H2
+>Chapter 9. Writing Edit Modes</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MODE-SYNTAX-TOKENS"
+>Token Types</A
+></H1
+><P
+>   Each syntax token is of one of the following types:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>NULL</SPAN
+> (this is the default type. No special
+  highlighting is performed on tokens of type <SPAN
+CLASS="MARKUP"
+>NULL</SPAN
+>)
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>COMMENT1</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>COMMENT2</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>DIGIT</SPAN
+> (tokens of this type are automatically
+  added if the <SPAN
+CLASS="MARKUP"
+>HIGHLIGHT_DIGITS</SPAN
+> attribute of a ruleset is set;
+  you should not explicitly define rules with this token type)
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>FUNCTION</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>INVALID</SPAN
+> (tokens of this type are automatically
+  added when an invalid sequence of characters is found; you should not
+  explicitly define rules with this token type)
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>KEYWORD1</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>KEYWORD2</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>KEYWORD3</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>LABEL</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>LITERAL1</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>LITERAL2</SPAN
+>
+  </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="MARKUP"
+>OPERATOR</SPAN
+>
+  </P
+></LI
+></UL
+><P
+>   There are no formal conventions specifying which token types should be
+   used for what; instead, just take a look at how syntax is highlighted
+   in some existing modes and
+   decide for yourself what token type you should use.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="writing-modes.html"
+>Up</A
+><BR><A
+HREF="mode-rule-keywords.html"
+>Prev</A
+>: KEYWORDS Rule<BR><A
+HREF="macros.html"
+>Next</A
+>: Macros<BR></DIV
+></BODY
+></HTML
+>

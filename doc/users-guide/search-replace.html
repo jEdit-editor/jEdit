@@ -7,8 +7,11 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.6 User's Guide"
+TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
+REL="UP"
+TITLE="Using jEdit"
+HREF="using-jedit.html"><LINK
 REL="PREVIOUS"
 TITLE="Commenting Out Code"
 HREF="commenting.html"><LINK
@@ -20,7 +23,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.6 User's Guide</H1
+>jEdit 2.7 User's Guide</H1
 ><P
 ><A
 HREF="hypersearch.html"
@@ -35,7 +38,7 @@ CLASS="CHAPTER"
 ><H1
 ><A
 NAME="SEARCH-REPLACE"
->Chapter 7. Search and Replace</A
+>Chapter 6. Search and Replace</A
 ></H1
 ><DIV
 CLASS="TOC"
@@ -66,15 +69,6 @@ HREF="quick-search.html"
 ></DT
 ></DL
 ></DIV
-><P
->  jEdit has a very powerful search and replace system. It supports
-  multi-file searching, regular expressions, and a
-  <B
-CLASS="COMMAND"
->grep</B
->-like "HyperSearch" feature. This chapter
-  covers it in detail.
- </P
 ><DIV
 CLASS="SECT1"
 ><H1
@@ -233,12 +227,23 @@ CLASS="KEYCAP"
 ><P
 >Clicking <SPAN
 CLASS="GUIBUTTON"
->Replace in Selection</SPAN
+>Replace</SPAN
 >
    will replace all occurrences of the search string with
    the replacement string in the selected text. This will beep
    if there is no selection or if it doesn't contain the search
    string.
+   </P
+></LI
+><LI
+><P
+>Clicking <SPAN
+CLASS="GUIBUTTON"
+>Replace &amp; Find</SPAN
+>
+   will replace all occurrences of the search string with
+   the replacement string in the selected text, and locate the next
+   occurrence of the search string.
    </P
 ></LI
 ><LI
@@ -263,10 +268,25 @@ CLASS="GUIBUTTON"
 ></LI
 ></UL
 ><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>    jEdit supports multiple-line search and replace; when regular expressions
+    are enabled, you can use
+    the "\n" (newline)
+    metacharacter in both the "search for" and
+    "replace with" fields.
+   </P
+></BLOCKQUOTE
+></DIV
+><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 7-1. The search and replace dialog box</B
+>Figure 6-1. The search and replace dialog box</B
 ></P
 ><P
 ><IMG
@@ -279,6 +299,9 @@ CLASS="NAVFOOTER"
 ><HR><A
 HREF="index.html"
 >Home</A
+>, <A
+HREF="using-jedit.html"
+>Up</A
 ><BR><A
 HREF="commenting.html"
 >Prev</A

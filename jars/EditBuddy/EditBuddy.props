@@ -1,9 +1,9 @@
 ### plugin properties
 plugin.EditBuddyPlugin.name=Edit Buddy
 plugin.EditBuddyPlugin.author=Slava Pestov
-plugin.EditBuddyPlugin.version=0.1.5
+plugin.EditBuddyPlugin.version=0.1.6
 plugin.EditBuddyPlugin.docs=EditBuddy.html
-plugin.EditBuddyPlugin.depend.0=jedit 02.06.03.00
+plugin.EditBuddyPlugin.depend.0=jedit 02.07.01.00
 plugin.EditBuddyPlugin.depend.1=plugin PluginManagerPlugin 0.5.6
 
 ### common wizard strings

@@ -7,14 +7,14 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.6 User's Guide"
+TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Source Code Editing"
+TITLE="Editing Source Code"
 HREF="source-edit.html"><LINK
 REL="PREVIOUS"
-TITLE="Source Code Editing"
-HREF="source-edit.html"><LINK
+TITLE="Bracket Matching"
+HREF="bracket-matching.html"><LINK
 REL="NEXT"
 TITLE="Commenting Out Code"
 HREF="commenting.html"></HEAD
@@ -23,17 +23,17 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.6 User's Guide</H1
+>jEdit 2.7 User's Guide</H1
 ><P
 ><A
 HREF="commenting.html"
 >Next</A
 >, <A
-HREF="source-edit.html"
+HREF="bracket-matching.html"
 >Prev</A
 ></P
 ><H2
->Chapter 6. Source Code Editing</H2
+>Chapter 5. Editing Source Code</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -59,26 +59,35 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="INDENT-TABS"
->Changing the Tab Width</A
+>Changing the Tab and Indent Width</A
 ></H2
 ><P
->    Many believe that the One True Tab Size is 8, others think that
-    all code should be indented with a tab width of 4, and the GNU
-    Project refuses to accept code with a tab width of anything but 2.
-   </P
-><P
->    There are three ways to change the tab size:
+>    jEdit makes a distinction between the <I
+CLASS="FIRSTTERM"
+>tab width</I
+>, which is
+    is used when displaying tab characters, and the <I
+CLASS="FIRSTTERM"
+>indent width</I
+>,
+    which is used when a level of indent is to be added or removed, for example
+    by edit mode-specific smart indent routines. Both can be changed in one of
+    several ways:
    </P
 ><P
 ></P
 ><UL
 ><LI
 ><P
->The tab size can be changed on a global basis in
+>They can be changed on a global or edit mode-specific
+    basis in
     <SPAN
 CLASS="GUIBUTTON"
->Editor</SPAN
-> pane of the
+>Editing</SPAN
+> and <SPAN
+CLASS="GUIBUTTON"
+>Mode-Specific</SPAN
+> panes of the
     the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -90,7 +99,7 @@ CLASS="GUIMENUITEM"
 ></LI
 ><LI
 ><P
->The tab size can be changed in the current buffer
+>Thy can be changed in the current buffer
     for the duration of the editing session in the
     <SPAN
 CLASS="GUIMENU"
@@ -103,16 +112,23 @@ CLASS="GUIMENUITEM"
 ></LI
 ><LI
 ><P
->The tab size can be changed in the current buffer
+>They can be changed in the current buffer
     for future editing sessions by setting the "tabSize"
-    buffer-local property to the desired tab size, by placing the
+    and "indentSize"
+    buffer-local properties to the desired sizes, by placing the
     following in one of the first 10 lines of the buffer, where
     <TT
 CLASS="REPLACEABLE"
 ><I
 >n</I
 ></TT
-> is the desired tab size:
+> is the desired tab width, and
+    <TT
+CLASS="REPLACEABLE"
+><I
+>m</I
+></TT
+> is the desired indent width:
    </P
 ><TABLE
 BORDER="0"
@@ -126,6 +142,11 @@ CLASS="SCREEN"
 CLASS="REPLACEABLE"
 ><I
 >n</I
+></TT
+>:indentSize=<TT
+CLASS="REPLACEABLE"
+><I
+>m</I
 ></TT
 >:</PRE
 ></TD
@@ -148,15 +169,11 @@ NAME="INDENT-SOFTTABS"
    
    
     Sometimes, it is preferable to use multiple spaces instead of
-    "real" tabs to indent code. The main advantage of doing so is that
+    tab stop characters to indent code. One might want to do this, so that,
+    for example,
     the file will look the same if viewed with a different default
-    tab size. jEdit supports this with its "Soft Tabs"
-    feature. If the <B
-CLASS="KEYCAP"
->Tab</B
-> key is pressed with soft tabs enabled,
-    the number of spaces necessary to move the caret to the next tab
-    stop will be inserted, instead of a "real" tab.
+    tab size. jEdit allows this with its "Soft Tabs"
+    feature.
    </P
 ><P
 >    There are three ways to use soft tabs:
@@ -167,11 +184,14 @@ CLASS="KEYCAP"
 ><LI
 ><P
 >You can specify if soft tabs should be used
-    on a global basis in the
+    on a global or edit mode-specific basis in the
     <SPAN
 CLASS="GUIBUTTON"
->Editor</SPAN
-> pane of the
+>Editing</SPAN
+> and <SPAN
+CLASS="GUIBUTTON"
+>Mode-Specific</SPAN
+> panes of the
     <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -239,7 +259,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2088"
+NAME="AEN1627"
 >Indentation-Related Commands</A
 ></H2
 ><P
@@ -260,7 +280,7 @@ CLASS="KEYCAP"
 >Alt</B
 >-<B
 CLASS="KEYCAP"
->Left Arrow</B
+>Left</B
 >)
     and
     <SPAN
@@ -278,10 +298,10 @@ CLASS="KEYCAP"
 >Alt</B
 >-<B
 CLASS="KEYCAP"
->Right Arrow</B
+>Right</B
 >)
-    will add or remove, respectively, one level of indent (a tab, or the number
-    of spaces equivalent to a tab) to every line in the selection, or the
+    will add or remove, respectively, one level of indent
+    to every line in the selection, or the
     current line if nothing is selected.
    </P
 ><P
@@ -378,11 +398,15 @@ CLASS="KEYCAP"
 ><LI
 ><P
 >Indent on enter and indent on tab can be set on a global
+    or edit mode-specific
     basis in the <SPAN
 CLASS="GUIBUTTON"
->Editor</SPAN
-> pane of the
-    <SPAN
+>Editing</SPAN
+> and <SPAN
+CLASS="GUIBUTTON"
+>Mode-Specific</SPAN
+> panes
+    of the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
@@ -499,9 +523,9 @@ HREF="index.html"
 HREF="source-edit.html"
 >Up</A
 ><BR><A
-HREF="source-edit.html"
+HREF="bracket-matching.html"
 >Prev</A
->: Source Code Editing<BR><A
+>: Bracket Matching<BR><A
 HREF="commenting.html"
 >Next</A
 >: Commenting Out Code<BR></DIV
