@@ -312,11 +312,16 @@ class StyleTableModel extends AbstractTableModel
 		addStyleChoice("options.styles.comment2Style","view.style.comment2");
 		addStyleChoice("options.styles.literal1Style","view.style.literal1");
 		addStyleChoice("options.styles.literal2Style","view.style.literal2");
+		addStyleChoice("options.styles.constantStyle","view.style.constant");
 		addStyleChoice("options.styles.labelStyle","view.style.label");
 		addStyleChoice("options.styles.keyword1Style","view.style.keyword1");
 		addStyleChoice("options.styles.keyword2Style","view.style.keyword2");
 		addStyleChoice("options.styles.keyword3Style","view.style.keyword3");
+		addStyleChoice("options.styles.functionStyle","view.style.function");
+		addStyleChoice("options.styles.variableStyle","view.style.variable");
+		addStyleChoice("options.styles.datatypeStyle","view.style.datatype");
 		addStyleChoice("options.styles.operatorStyle","view.style.operator");
+		addStyleChoice("options.styles.digitStyle","view.style.digit");
 		addStyleChoice("options.styles.invalidStyle","view.style.invalid");
 	}
 
@@ -549,6 +554,9 @@ implements ActionListener, KeyListener
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/04/06 13:09:46  sp
+ * More token types added
+ *
  * Revision 1.10  2000/03/21 07:18:53  sp
  * bug fixes
  *

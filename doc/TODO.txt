@@ -10,6 +10,8 @@ JEDIT TO DO
   - regexps
   - graphical mode/grammar editor
   - more modes
+  - digit highlighting
+- Update existing modes to take advantage of new token types
 - 'Uncomment' command that removes comment strings from selected text
 - Plugin devel manual needs more work:
   - document views, buffers
@@ -24,7 +26,7 @@ JEDIT TO DO
 
 + Enhancements
 
-- Update window-editor-* shots
+- Update window-editor-*, dialog-options-styles shots
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
   to 'Advanced Features'
 - EditPlugin.getName()/Version()/Author(), getPath(), getClassName(), etc

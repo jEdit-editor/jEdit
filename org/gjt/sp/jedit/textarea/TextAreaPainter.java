@@ -56,7 +56,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		setBackground(Color.white);
 
 		blockCaret = defaults.blockCaret;
-		styles = defaults.styles;
 		cols = defaults.cols;
 		rows = defaults.rows;
 		caretColor = defaults.caretColor;
@@ -667,6 +666,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/04/06 13:09:46  sp
+ * More token types added
+ *
  * Revision 1.28  2000/03/27 07:31:23  sp
  * We now use Log.log() in some places instead of System.err.println, HTML mode
  * now supports <script> tags, external delegation bug fix

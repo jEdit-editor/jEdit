@@ -62,21 +62,21 @@ public class TokenMarker implements Cloneable
 	// action tokens (total: 16)
 	public static final int ACTION_TOKENS = 0xFFFF0000;
 	public static final int AC_NULL = 1 << 16;
-	public static final int AC_KEYWORD1 = 1 << 17;
-	public static final int AC_KEYWORD2 = 1 << 18;
-	public static final int AC_KEYWORD3 = 1 << 19;
-	public static final int AC_COMMENT1 = 1 << 20;
-	public static final int AC_COMMENT2 = 1 << 21;
-	public static final int AC_LITERAL1 = 1 << 22;
-	public static final int AC_LITERAL2 = 1 << 23;
-	public static final int AC_LABEL = 1 << 24;
-	public static final int AC_OPERATOR = 1 << 25;
-	public static final int AC_INVALID = 1 << 26;
-//	public static final int ACTION_TOKEN_27 = 1 << 27;
-//	public static final int ACTION_TOKEN_28 = 1 << 28;
-//	public static final int ACTION_TOKEN_29 = 1 << 29;
-//	public static final int ACTION_TOKEN_30 = 1 << 30;
-//	public static final int ACTION_TOKEN_31 = 1 << 31;
+	public static final int AC_COMMENT1 = 1 << 17;
+	public static final int AC_COMMENT2 = 1 << 18;
+	public static final int AC_LITERAL1 = 1 << 19;
+	public static final int AC_LITERAL2 = 1 << 20;
+	public static final int AC_CONSTANT = 1 << 21;
+	public static final int AC_LABEL = 1 << 22;
+	public static final int AC_KEYWORD1 = 1 << 23;
+	public static final int AC_KEYWORD2 = 1 << 24;
+	public static final int AC_KEYWORD3 = 1 << 25;
+	public static final int AC_FUNCTION = 1 << 26;
+	public static final int AC_VARIABLE = 1 << 27;
+	public static final int AC_DATATYPE = 1 << 28;
+	public static final int AC_OPERATOR = 1 << 29;
+	public static final int AC_DIGIT = 1 << 30;
+	public static final int AC_INVALID = 1 << 31;
 
 	public TokenMarker()
 	{
@@ -757,28 +757,22 @@ public class TokenMarker implements Cloneable
 		// switch on the masked action token
 		switch (action & ACTION_TOKENS)
 		{
-			case AC_KEYWORD1:
-				return Token.KEYWORD1;
-			case AC_KEYWORD2:
-				return Token.KEYWORD2;
-			case AC_KEYWORD3:
-				return Token.KEYWORD3;
-			case AC_LITERAL1:
-				return Token.LITERAL1;
-			case AC_LITERAL2:
-				return Token.LITERAL2;
-			case AC_COMMENT1:
-				return Token.COMMENT1;
-			case AC_COMMENT2:
-				return Token.COMMENT2;
-			case AC_LABEL:
-				return Token.LABEL;
-			case AC_OPERATOR:
-				return Token.OPERATOR;
-			case AC_INVALID:
-				return Token.INVALID;
-			case AC_NULL: default:
-				return Token.NULL;
+			case AC_COMMENT1: return Token.COMMENT1;
+			case AC_COMMENT2: return Token.COMMENT2;
+			case AC_LITERAL1: return Token.LITERAL1;
+			case AC_LITERAL2: return Token.LITERAL2;
+			case AC_CONSTANT: return Token.CONSTANT;
+			case AC_LABEL: return Token.LABEL;
+			case AC_KEYWORD1: return Token.KEYWORD1;
+			case AC_KEYWORD2: return Token.KEYWORD2;
+			case AC_KEYWORD3: return Token.KEYWORD3;
+			case AC_FUNCTION: return Token.FUNCTION;
+			case AC_VARIABLE: return Token.VARIABLE;
+			case AC_DATATYPE: return Token.DATATYPE;
+			case AC_OPERATOR: return Token.OPERATOR;
+			case AC_DIGIT: return Token.DIGIT;
+			case AC_INVALID: return Token.INVALID;
+			case AC_NULL: default: return Token.NULL;
 		}
 	}
 
@@ -917,6 +911,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.41  2000/04/06 13:09:46  sp
+ * More token types added
+ *
  * Revision 1.40  2000/04/06 00:28:14  sp
  * Resource handling bugs fixed, minor token marker tweaks
  *
@@ -947,21 +944,5 @@ public class TokenMarker implements Cloneable
  *
  * Revision 1.31  1999/12/10 03:22:47  sp
  * Bug fixes, old loading code is now used again
- *
- * Revision 1.30  1999/12/07 07:27:59  sp
- * TokenMarker.reset() fixed
- *
- * Revision 1.29  1999/12/07 07:19:36  sp
- * Buffer loading code cleaned up
- *
- * Revision 1.28  1999/07/29 08:50:21  sp
- * Misc stuff for 1.7pre7
- *
- * Revision 1.27  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.26  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
  *
  */

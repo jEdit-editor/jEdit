@@ -706,20 +706,30 @@ public class View extends JFrame implements EBComponent
 				jEdit.getProperty("view.style.comment1"));
 			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.comment2"));
+			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.literal1"));
+			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.literal2"));
+			styles[Token.CONSTANT] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.constant"));
+			styles[Token.LABEL] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.label"));
 			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.keyword1"));
 			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.keyword2"));
 			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.keyword3"));
-			styles[Token.LABEL] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.label"));
-			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal1"));
-			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal2"));
+			styles[Token.FUNCTION] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.function"));
+			styles[Token.VARIABLE] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.variable"));
+			styles[Token.DATATYPE] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.datatype"));
 			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.operator"));
+			styles[Token.DIGIT] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.digit"));
 			styles[Token.INVALID] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.invalid"));
 
@@ -1361,6 +1371,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.151  2000/04/06 13:09:46  sp
+ * More token types added
+ *
  * Revision 1.150  2000/04/03 10:22:24  sp
  * Search bar
  *

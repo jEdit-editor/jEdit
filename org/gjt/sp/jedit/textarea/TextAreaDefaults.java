@@ -56,7 +56,6 @@ public class TextAreaDefaults
 
 	public int cols;
 	public int rows;
-	public SyntaxStyle[] styles;
 	public Color caretColor;
 	public Color selectionColor;
 	public Color lineHighlightColor;
@@ -101,7 +100,6 @@ public class TextAreaDefaults
 
 			DEFAULTS.cols = 80;
 			DEFAULTS.rows = 25;
-			DEFAULTS.styles = SyntaxUtilities.getDefaultSyntaxStyles();
 			DEFAULTS.caretColor = Color.red;
 			DEFAULTS.selectionColor = new Color(0xccccff);
 			DEFAULTS.lineHighlightColor = new Color(0xe0e0e0);

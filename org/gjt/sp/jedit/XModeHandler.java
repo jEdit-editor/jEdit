@@ -57,52 +57,9 @@ public class XModeHandler extends HandlerBase
 		{
 			propValue = value;
 		}
-		if (aname == "TYPE")
+		else if (aname == "TYPE")
 		{
-			if (value == "KEYWORD1")
-			{
-				lastTokenID = TokenMarker.AC_KEYWORD1;
-			}
-			else if (value == "KEYWORD2")
-			{
-				lastTokenID = TokenMarker.AC_KEYWORD2;
-			}
-			else if (value == "KEYWORD3")
-			{
-				lastTokenID = TokenMarker.AC_KEYWORD3;
-			}
-			else if (value == "COMMENT1")
-			{
-				lastTokenID = TokenMarker.AC_COMMENT1;
-			}
-			else if (value == "COMMENT2")
-			{
-				lastTokenID = TokenMarker.AC_COMMENT2;
-			}
-			else if (value == "LITERAL1")
-			{
-				lastTokenID = TokenMarker.AC_LITERAL1;
-			}
-			else if (value == "LITERAL2")
-			{
-				lastTokenID = TokenMarker.AC_LITERAL2;
-			}
-			else if (value == "LABEL")
-			{
-				lastTokenID = TokenMarker.AC_LABEL;
-			}
-			else if (value == "OPERATOR")
-			{
-				lastTokenID = TokenMarker.AC_OPERATOR;
-			}
-			else if (value == "NULL")
-			{
-				lastTokenID = TokenMarker.AC_NULL;
-			}
-			else
-			{
-				lastTokenID = TokenMarker.AC_NULL;
-			}
+			lastTokenID = stringToToken(value);
 		}
 		else if (aname == "AT_LINE_START")
 		{
@@ -157,50 +114,7 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (aname == "DEFAULT")
 		{
-			if (value == "KEYWORD1")
-			{
-				lastDefaultID = TokenMarker.AC_KEYWORD1;
-			}
-			else if (value == "KEYWORD2")
-			{
-				lastDefaultID = TokenMarker.AC_KEYWORD2;
-			}
-			else if (value == "KEYWORD3")
-			{
-				lastDefaultID = TokenMarker.AC_KEYWORD3;
-			}
-			else if (value == "COMMENT1")
-			{
-				lastDefaultID = TokenMarker.AC_COMMENT1;
-			}
-			else if (value == "COMMENT2")
-			{
-				lastDefaultID = TokenMarker.AC_COMMENT2;
-			}
-			else if (value == "LITERAL1")
-			{
-				lastDefaultID = TokenMarker.AC_LITERAL1;
-			}
-			else if (value == "LITERAL2")
-			{
-				lastDefaultID = TokenMarker.AC_LITERAL2;
-			}
-			else if (value == "LABEL")
-			{
-				lastDefaultID = TokenMarker.AC_LABEL;
-			}
-			else if (value == "OPERATOR")
-			{
-				lastDefaultID = TokenMarker.AC_OPERATOR;
-			}
-			else if (value == "NULL")
-			{
-				lastDefaultID = TokenMarker.AC_NULL;
-			}
-			else
-			{
-				lastDefaultID = TokenMarker.AC_NULL;
-			}
+			lastDefaultID = stringToToken(value);
 		}
 	}
 
@@ -232,18 +146,7 @@ public class XModeHandler extends HandlerBase
 		{
 			lastEnd = text;
 		}
-		else if (
-			tag == "KEYWORD1" ||
-			tag == "KEYWORD2" ||
-			tag == "KEYWORD3" ||
-			tag == "COMMENT1" ||
-			tag == "COMMENT2" ||
-			tag == "LITERAL1" ||
-			tag == "LITERAL2" ||
-			tag == "LABEL" ||
-			tag == "OPERATOR" ||
-			tag == "NULL"
-		)
+		else
 		{
 			lastKeyword = text;
 		}
@@ -410,45 +313,65 @@ public class XModeHandler extends HandlerBase
 				lastNoWordBreak = false;
 				lastDelegateSet = null;
 			}
-			else if (tag == "KEYWORD1")
+			else if (tag == "NULL")
 			{
-				addKeyword(lastKeyword, Token.KEYWORD1);
-			}
-			else if (tag == "KEYWORD2")
-			{
-				addKeyword(lastKeyword, Token.KEYWORD2);
-			}
-			else if (tag == "KEYWORD3")
-			{
-				addKeyword(lastKeyword, Token.KEYWORD3);
+				addKeyword(lastKeyword,Token.NULL);
 			}
 			else if (tag == "COMMENT1")
 			{
-				addKeyword(lastKeyword, Token.COMMENT1);
+				addKeyword(lastKeyword,Token.COMMENT1);
 			}
 			else if (tag == "COMMENT2")
 			{
-				addKeyword(lastKeyword, Token.COMMENT2);
+				addKeyword(lastKeyword,Token.COMMENT2);
 			}
 			else if (tag == "LITERAL1")
 			{
-				addKeyword(lastKeyword, Token.LITERAL1);
+				addKeyword(lastKeyword,Token.LITERAL1);
 			}
 			else if (tag == "LITERAL2")
 			{
-				addKeyword(lastKeyword, Token.LITERAL2);
+				addKeyword(lastKeyword,Token.LITERAL2);
+			}
+			else if (tag == "CONSTANT")
+			{
+				addKeyword(lastKeyword,Token.CONSTANT);
 			}
 			else if (tag == "LABEL")
 			{
-				addKeyword(lastKeyword, Token.LABEL);
+				addKeyword(lastKeyword,Token.LABEL);
+			}
+			else if (tag == "KEYWORD1")
+			{
+				addKeyword(lastKeyword,Token.KEYWORD1);
+			}
+			else if (tag == "KEYWORD2")
+			{
+				addKeyword(lastKeyword,Token.KEYWORD2);
+			}
+			else if (tag == "KEYWORD3")
+			{
+				addKeyword(lastKeyword,Token.KEYWORD3);
+			}
+			else if (tag == "FUNCTION")
+			{
+				addKeyword(lastKeyword,Token.FUNCTION);
+			}
+			else if (tag == "VARIABLE")
+			{
+				addKeyword(lastKeyword,Token.VARIABLE);
+			}
+			else if (tag == "DATATYPE")
+			{
+				addKeyword(lastKeyword,Token.DATATYPE);
 			}
 			else if (tag == "OPERATOR")
 			{
-				addKeyword(lastKeyword, Token.OPERATOR);
+				addKeyword(lastKeyword,Token.OPERATOR);
 			}
-			else if (tag == "NULL")
+			else if (tag == "DIGIT")
 			{
-				addKeyword(lastKeyword, Token.NULL);
+				addKeyword(lastKeyword,Token.DIGIT);
 			}
 
 			popElement();
@@ -500,6 +423,75 @@ public class XModeHandler extends HandlerBase
 	private boolean lastAtLineStart;
 	private boolean lastExcludeMatch;
 	private boolean lastIgnoreCase;
+
+	private int stringToToken(String value)
+	{
+		if (value == "NULL")
+		{
+			return TokenMarker.AC_NULL;
+		}
+		else if (value == "COMMENT1")
+		{
+			return TokenMarker.AC_COMMENT1;
+		}
+		else if (value == "COMMENT2")
+		{
+			return TokenMarker.AC_COMMENT2;
+		}
+		else if (value == "LITERAL1")
+		{
+			return TokenMarker.AC_LITERAL1;
+		}
+		else if (value == "LITERAL2")
+		{
+			return TokenMarker.AC_LITERAL2;
+		}
+		else if (value == "CONSTANT")
+		{
+			return TokenMarker.AC_CONSTANT;
+		}
+		else if (value == "LABEL")
+		{
+			return TokenMarker.AC_LABEL;
+		}
+		else if (value == "KEYWORD1")
+		{
+			return TokenMarker.AC_KEYWORD1;
+		}
+		else if (value == "KEYWORD2")
+		{
+			return TokenMarker.AC_KEYWORD2;
+		}
+		else if (value == "KEYWORD3")
+		{
+			return TokenMarker.AC_KEYWORD3;
+		}
+		else if (value == "FUNCTION")
+		{
+			return TokenMarker.AC_FUNCTION;
+		}
+		else if (value == "VARIABLE")
+		{
+			return TokenMarker.AC_VARIABLE;
+		}
+		else if (value == "DATATYPE")
+		{
+			return TokenMarker.AC_DATATYPE;
+		}
+		else if (value == "OPERATOR")
+		{
+			return TokenMarker.AC_OPERATOR;
+		}
+		else if (value == "DIGIT")
+		{
+			return TokenMarker.AC_DIGIT;
+		}
+		else
+		{
+			// XXX invalid token id
+			return TokenMarker.AC_NULL;
+		}
+	}
 
 	private void addKeyword(String k, byte id)
 	{

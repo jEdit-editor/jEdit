@@ -11,6 +11,7 @@ JEDIT VERSION HISTORY
   field on toolbar
 - PHP mode updates (Mike Dillon)
 - JMK (Java Make) mode added
+- New token types added: Token.{CONSTANT,VARIABLE,FUNCTION,DATATYPE,DIGIT}
 
 + Enhancements
 

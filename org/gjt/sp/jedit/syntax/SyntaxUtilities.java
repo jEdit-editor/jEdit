@@ -92,29 +92,6 @@ public class SyntaxUtilities
 	}
 
 	/**
-	 * Returns the default style table. This can be passed to the
-	 * <code>setStyles()</code> method of <code>SyntaxDocument</code>
-	 * to use the default syntax styles.
-	 */
-	public static SyntaxStyle[] getDefaultSyntaxStyles()
-	{
-		SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
-
-		styles[Token.COMMENT1] = new SyntaxStyle(Color.black,true,false);
-		styles[Token.COMMENT2] = new SyntaxStyle(new Color(0x990033),true,false);
-		styles[Token.KEYWORD1] = new SyntaxStyle(Color.black,false,true);
-		styles[Token.KEYWORD2] = new SyntaxStyle(Color.magenta,false,false);
-		styles[Token.KEYWORD3] = new SyntaxStyle(new Color(0x009600),false,false);
-		styles[Token.LITERAL1] = new SyntaxStyle(new Color(0x650099),false,false);
-		styles[Token.LITERAL2] = new SyntaxStyle(new Color(0x650099),false,true);
-		styles[Token.LABEL] = new SyntaxStyle(new Color(0x990033),false,true);
-		styles[Token.OPERATOR] = new SyntaxStyle(Color.black,false,true);
-		styles[Token.INVALID] = new SyntaxStyle(Color.red,false,true);
-
-		return styles;
-	}
-
-	/**
 	 * Paints the specified line onto the graphics context. Note that this
 	 * method munges the offset and count values of the segment.
 	 * @param line The line segment
@@ -170,6 +147,9 @@ public class SyntaxUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/04/06 13:09:46  sp
+ * More token types added
+ *
  * Revision 1.9  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *
