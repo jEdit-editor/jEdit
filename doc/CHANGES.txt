@@ -1,5 +1,39 @@
 JEDIT 3.0 VERSION HISTORY
 
+* Version 3.0.1
+
++ Enhancements
+
+- 'Favorites' is now an option for the 'default path' option in the
+  'File System Browser' option pane
+
++ Neutral
+
+- Default install directory is now /usr/share/jedit/<version> on Unix.
+  It used to be /usr/share/jedit-<version>
+
++ Bug Fixes
+
+- DocBook abbrevs are now defined in XML and SGML mode, not just XML
+  mode
+- Fixed typo in actions.dtd
+- 'Browse Directory' macro would fail if the file system browser was not
+  open
+- .xsl files were being opened in XML, rather than XSL, mode. The only
+  workaround I could think of was to disable XML mode's firstlineGlob;
+  no longer will all files that start with "<?xml ... ?>" be opened in
+  XML mode. Instead, the list of extensions must be specified manually.
+- FileVFS.getParentOfPath() no longer calls
+  FileSystemView.getFileRoots(), which is a performance bottleneck on
+  Java 1.1 and Windows
+- The 'Find' command was recorded incorrectly in macros
+- It is no longer possible to resize docking areas so that they cover
+  the text area or overlap
+- Improved 'Run java' macro
+- The batch file created on Windows, and the shell script created on
+  Unix by the installer now make it easier to change the Java heap size
+- The 'Style' option pane displayed syntax styles incorrectly on Java 2
+
 * Version 3.0final
 
 + Enhancements
@@ -28,6 +62,8 @@ JEDIT 3.0 VERSION HISTORY
 - Complete word popup would be offset horizontally a little if the
   gutter was visible
 - Recorded search and replace actions didn't work
+- Specifying an icon loaded from an external file in the tool bar editor
+  didn't work
 
 * Version 3.0pre5
 

@@ -18,8 +18,10 @@
  */
 package org.gjt.sp.jedit.syntax;
 
+import java.lang.reflect.Method;
 import java.awt.*;
 import java.util.StringTokenizer;
+import org.gjt.sp.util.Log;
 
 /**
  * A simple text style class. It can specify the color, italic flag,
@@ -93,13 +95,33 @@ public class SyntaxStyle
 		if(font == null)
 			throw new NullPointerException("font param must not"
 				+ " be null");
+
 		if(font.equals(lastFont))
 			return lastStyledFont;
 		lastFont = font;
-		lastStyledFont = new Font(font.getFamily(),
-			(bold ? Font.BOLD : 0)
-			| (italic ? Font.ITALIC : 0),
-			font.getSize());
+
+		int style = (bold ? Font.BOLD : 0)
+			| (italic ? Font.ITALIC : 0);
+
+		if(method == null)
+		{
+			lastStyledFont = new Font(font.getFamily(),style,
+				font.getSize());
+		}
+		else
+		{
+			Object[] args = { new Integer(style) };
+			try
+			{
+				lastStyledFont = (Font)method.invoke(font,args);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+		}
+
 		return lastStyledFont;
 	}
 
@@ -155,4 +177,20 @@ public class SyntaxStyle
 	private Font lastFont;
 	private Font lastStyledFont;
 	private FontMetrics fontMetrics;
+	private static Method method;
+
+	static
+	{
+		try
+		{
+			// try Java 1.2 code
+			method = Font.class.getMethod("deriveFont",
+				new Class[] { int.class });
+			Log.log(Log.DEBUG,SyntaxStyle.class,"deriveFont() available");
+		}
+		catch(Exception e)
+		{
+			// use Java 1.1 code
+		}
+	}
 }

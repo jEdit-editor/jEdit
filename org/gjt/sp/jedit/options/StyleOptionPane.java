@@ -205,11 +205,14 @@ class StyleTableModel extends AbstractTableModel
 	static class StyleRenderer extends JLabel
 		implements TableCellRenderer
 	{
+		Font originalFont;
+
 		public StyleRenderer()
 		{
 			setOpaque(true);
 			setBorder(StyleOptionPane.noFocusBorder);
 			setText("Hello World");
+			originalFont = getFont();
 		}
 	
 		// TableCellRenderer implementation
@@ -221,28 +224,22 @@ class StyleTableModel extends AbstractTableModel
 			int row,
 			int col)
 		{
-			if (isSelected)
-			{
-				setBackground(table.getSelectionBackground());
-				setForeground(table.getSelectionForeground());
-			}
-			else
-			{
-				setBackground(table.getBackground());
-				setForeground(table.getForeground());
-			}
-	
 			if (value != null)
 			{
 				SyntaxStyle style = (SyntaxStyle)value;
 				setForeground(style.getForegroundColor());
 				if (style.getBackgroundColor() != null) 
-				{ 
 					setBackground(style.getBackgroundColor());
+				else
+				{
+					// this part sucks
+					setBackground(GUIUtilities.parseColor(
+						jEdit.getProperty("view.bgColor")));
 				}
-				setFont(style.getStyledFont(getFont()));
+				setFont(style.getStyledFont(originalFont));
+				System.err.println(style + ":" + getFont());
 			}
-	
+
 			setBorder((cellHasFocus) ? UIManager.getBorder(
 				"Table.focusCellHighlightBorder")
 				: StyleOptionPane.noFocusBorder);
@@ -376,6 +373,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.26  2001/01/22 05:35:08  sp
+ * bug fixes galore
+ *
  * Revision 1.25  2000/11/07 10:08:32  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

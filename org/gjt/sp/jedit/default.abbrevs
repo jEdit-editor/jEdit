@@ -53,11 +53,17 @@ logd|Log.log(Log.DEBUG,this,\|);
 EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>
 JEDITLINK|<a href="http://jedit.sourceforge.net">jEdit</a>
 
-[xml]
+[sgml]
 Ykeycap|<keycap>\|</>
 Ykeycombo|<keycombo><keycap>\|</><keycap></></keycombo>
 Yindex|<indexterm><primary>\|</></indexterm>
 YYindex|<indexterm><primary>\|</><secondary></></indexterm>
+
+[xml]
+Ykeycap|<keycap>\|</keycap>
+Ykeycombo|<keycombo><keycap>\|</keycap><keycap></keycap></keycombo>
+Yindex|<indexterm><primary>\|</primary></indexterm>
+YYindex|<indexterm><primary>\|</primary><secondary></secondary></indexterm>
 
 [vhdl]
 sl|std_logic

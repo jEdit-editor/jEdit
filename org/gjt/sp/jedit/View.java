@@ -678,6 +678,7 @@ public class View extends JFrame implements EBComponent
 		plugins = GUIUtilities.loadMenu(this,"plugins");
 
 		editPane = createEditPane(null,buffer);
+		dockableWindowManager.add(editPane,BorderLayout.CENTER);
 
 		updateMarkerMenus();
 		updateMacrosMenu();

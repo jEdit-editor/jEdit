@@ -38,6 +38,7 @@ public class BrowserOptionPane extends AbstractOptionPane
 		String[] dirs = {
 			jEdit.getProperty("options.browser.defaultPath.buffer"),
 			jEdit.getProperty("options.browser.defaultPath.home"),
+			jEdit.getProperty("options.browser.defaultPath.favorites"),
 			jEdit.getProperty("options.browser.defaultPath.last")
 		};
 
@@ -47,8 +48,10 @@ public class BrowserOptionPane extends AbstractOptionPane
 			defaultDirectory.setSelectedIndex(0);
 		else if("home".equals(defaultDir))
 			defaultDirectory.setSelectedIndex(1);
-		else if("last".equals(defaultDir))
+		else if("favorites".equals(defaultDir))
 			defaultDirectory.setSelectedIndex(2);
+		else if("last".equals(defaultDir))
+			defaultDirectory.setSelectedIndex(3);
 		addComponent(jEdit.getProperty("options.browser.defaultPath"),
 			defaultDirectory);
 
@@ -97,7 +100,7 @@ public class BrowserOptionPane extends AbstractOptionPane
 
 	public void _save()
 	{
-		String[] dirs = { "buffer", "home", "last" };
+		String[] dirs = { "buffer", "home", "favorites", "last" };
 		jEdit.setProperty("vfs.browser.defaultPath",dirs[defaultDirectory
 			.getSelectedIndex()]);
 		jEdit.setBooleanProperty("vfs.browser.showHiddenFiles",
@@ -123,26 +126,3 @@ public class BrowserOptionPane extends AbstractOptionPane
 	private JCheckBox doubleClickClose;
 	private JCheckBox currentBufferFilter;
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.6  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.5  2000/09/26 10:19:47  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.4  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.3  2000/08/20 07:29:31  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.2  2000/08/19 08:26:27  sp
- * More docking API tweaks
- *
- * Revision 1.1  2000/08/11 09:06:52  sp
- * Browser option pane
- *
- */

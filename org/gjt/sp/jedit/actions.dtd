@@ -1,6 +1,6 @@
 <!ENTITY % att-bool '( TRUE | FALSE )' >
 
-<!-- MODE element -->
+<!-- ACTIONS element -->
 <!ELEMENT ACTIONS ( ACTION+ ) >
 
 <!-- ACTION element -->

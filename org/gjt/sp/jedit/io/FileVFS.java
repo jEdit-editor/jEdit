@@ -58,12 +58,15 @@ public class FileVFS extends VFS
 				return FileRootsVFS.PROTOCOL + ":";
 		}
 
-		File[] roots = fsView.getRoots();
+		if(path.equals("/"))
+			return FileRootsVFS.PROTOCOL + ":";
+
+		/* File[] roots = fsView.getRoots();
 		for(int i = 0; i < roots.length; i++)
 		{
 			if(roots[i].getPath().equals(path))
 				return FileRootsVFS.PROTOCOL + ":";
-		}
+		} */
 
 		return MiscUtilities.getParentOfPath(path);
 	}
@@ -371,6 +374,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2001/01/22 05:35:08  sp
+ * bug fixes galore
+ *
  * Revision 1.28  2000/12/02 02:44:41  sp
  * Documentation updates, complete icon set now included
  *

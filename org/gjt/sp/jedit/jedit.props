@@ -262,5 +262,5 @@ vfs.browser.sortIgnoreCase=true
 vfs.browser.doubleClickClose=false
 vfs.browser.currentBufferFilter=true
 
-# Can be one of: buffer, home, last
+# Can be one of: buffer, home, favorites, last
 vfs.browser.defaultPath=buffer

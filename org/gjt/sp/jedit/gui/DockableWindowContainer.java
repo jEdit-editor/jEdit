@@ -46,6 +46,8 @@ public interface DockableWindowContainer
 	 */
 	public class TabbedPane extends JTabbedPane implements DockableWindowContainer
 	{
+		public static final int SPLITTER_WIDTH = 5;
+
 		String position;
 		int dimension;
 		boolean collapsed;
@@ -81,6 +83,9 @@ public interface DockableWindowContainer
 			if(getComponentCount() == 0)
 				return;
 
+			if(dimension <= SPLITTER_WIDTH)
+				collapsed = true;
+
 			this.collapsed = collapsed;
 			revalidate();
 		}
@@ -92,7 +97,7 @@ public interface DockableWindowContainer
 
 		public void saveDimension()
 		{
-			if(dimension <= 5)
+			if(dimension <= SPLITTER_WIDTH)
 				dimension = -1;
 
 			jEdit.setProperty("view.dock." + position + ".dimension",
@@ -103,10 +108,14 @@ public interface DockableWindowContainer
 
 		public void propertiesChanged()
 		{
-			int top = position.equals(DockableWindowManager.BOTTOM) ? 5 : 0;
-			int left = position.equals(DockableWindowManager.RIGHT) ? 5 : 0;
-			int bottom = position.equals(DockableWindowManager.TOP) ? 5 : 0;
-			int right = position.equals(DockableWindowManager.LEFT) ? 5 : 0;
+			int top = position.equals(DockableWindowManager.BOTTOM)
+				? SPLITTER_WIDTH : 0;
+			int left = position.equals(DockableWindowManager.RIGHT)
+				? SPLITTER_WIDTH : 0;
+			int bottom = position.equals(DockableWindowManager.TOP)
+				? SPLITTER_WIDTH : 0;
+			int right = position.equals(DockableWindowManager.LEFT)
+				? SPLITTER_WIDTH : 0;
 
 			setBorder(new MatteBorder(top,left,bottom,right,
 				GUIUtilities.parseColor(jEdit.getProperty(
@@ -135,10 +144,10 @@ public interface DockableWindowContainer
 			{
 				if(position.equals(DockableWindowManager.LEFT)
 					|| position.equals(DockableWindowManager.RIGHT))
-					prefSize.width = 5;
+					prefSize.width = SPLITTER_WIDTH;
 				else if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
-					prefSize.height = 5;
+					prefSize.height = SPLITTER_WIDTH;
 			}
 			else if(dimension == -1)
 			{
@@ -276,8 +285,8 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.RIGHT))
 					dimension = getWidth() - evt.getX();
 
-				dimension = Math.max(5,dimension);
-				if(dimension == 5)
+				dimension = Math.max(SPLITTER_WIDTH,dimension);
+				if(dimension == SPLITTER_WIDTH)
 				{
 					dimension = -1;
 					collapsed = true;

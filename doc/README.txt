@@ -40,11 +40,8 @@ your jEdit version, Java version, operating system, any relevant output
 from the activity log, and an e-mail address, in case we need further
 information to fix the bug.
 
-The preferred way to suggest features is to first post a message to the
-jEdit-users or jEdit-devel mailing list. One of the jEdit developers
-will then add the feature request to our task manager if it is deemed
-appropriate. A list of pending tasks may be viewed at
-<http://www.sourceforge.net/pm/?group_id=588>.
+The preferred way to suggest features is to post a message to the
+jEdit-users or jEdit-devel mailing list.
 
 If you would like to discuss the BeanShell scripting language,
 subscribe to one of the BeanShell mailing lists by visiting
@@ -65,6 +62,24 @@ can be viewed in a PDF viewer such as Adobe Acrobat.
 
 Before reporting a problem with jEdit, please make sure it is not
 actually a Java bug, or a well-known problem.
+
+- If you get an OutOfMemoryError while editing a large file, even if
+  your computer has a large amount of RAM present, increase the Java
+  heap size.
+
+  - On Windows, edit the `jEdit.bat' file and change the line that looks
+    like so:
+
+    set JAVA_HEAP_SIZE=16
+
+  - On Unix, edit the `jedit' shell script and change the line that
+    looks like so:
+
+    export JAVA_HEAP_SIZE=16
+
+  In both cases, replace `16' with the desired heap size, in megabytes.
+  For best results, use a heap size of about 2.5 times the largest file
+  size you plan to edit.
 
 - You must rebuild the mode cache with the `Utilities->Reload Edit Modes'
   command after adding or removing edit modes, otherwise jEdit will not

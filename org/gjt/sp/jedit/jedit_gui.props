@@ -1103,6 +1103,7 @@ options.browser.label=File System Browser
 options.browser.defaultPath=Default path:
 options.browser.defaultPath.buffer=Parent directory of current buffer
 options.browser.defaultPath.home=Home directory
+options.browser.defaultPath.favorites=Favorites
 options.browser.defaultPath.last=Most recently visited directory
 options.browser.showHiddenFiles=Show hidden files
 options.browser.sortFiles=Sort file list
