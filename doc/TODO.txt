@@ -2,11 +2,12 @@ TO DO
 
 + before 3.2final:
 
-- appendix in plugin guide on contributing plugins
 - formatting problems in user's guide in table cells
+- reverse search doesn't work?
 
 + next major release (4.0):
 
+- appendix in plugin guide on contributing plugins
 - Macros.confirm()
 - saving a read-only file: show a confirmation dialog box
 - jEdit.get/setInteger/Color/FontProperty()

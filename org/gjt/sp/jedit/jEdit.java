@@ -767,6 +767,17 @@ public class jEdit
 	}
 
 	/**
+	 * Adds a plugin JAR to the editor.
+	 * @param plugin The plugin
+	 * @since jEdit 3.2pre10
+	 */
+	public static void addPluginJAR(EditPlugin.JAR plugin)
+	{
+		plugin.index = jars.size();
+		jars.addElement(plugin);
+	}
+
+	/**
 	 * Plugins should not be calling this method.
 	 */
 	public static void addAction(EditAction action)
@@ -1997,16 +2008,6 @@ public class jEdit
 	/* package-private */ static void addPlugin(EditPlugin plugin)
 	{
 		plugins.addPlugin(plugin);
-	}
-
-	/**
-	 * Adds a plugin to the editor.
-	 * @param plugin The plugin
-	 */
-	/* package-private */ static void addPluginJAR(EditPlugin.JAR plugin)
-	{
-		plugin.index = jars.size();
-		jars.addElement(plugin);
 	}
 
 	/**

@@ -246,6 +246,7 @@ Peter Graves:       - Code for preserving file permissions on Unix was
                       (http://www.armedbear.org)
 Ralf Engels:        - PostScript edit mode
 Richard Ashwell:    - SQR edit mode
+Rick Owen:          - PL-SQL edit mode
 Romain Guy:         - POVRay edit mode
 Richard Beton:      - Occam edit mode
 Saimon Moore:       - Velocity edit mode

@@ -81,6 +81,7 @@ Syntax highlighting for the following file types has been added:
 - MIPS R2000 assembly
 - Occam
 - Omnimark
+- PL-SQL
 - Progress 4GL
 - PV-WAVE
 - SQR

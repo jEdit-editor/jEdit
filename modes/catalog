@@ -118,6 +118,9 @@
 				FILE_NAME_GLOB="*.{php3,php,phtml}"
 				FIRST_LINE_GLOB="&lt;?php" />
 
+<MODE NAME="pl-sql"		FILE="pl-sql.xml"
+				FILE_NAME_GLOB="*.pls" />
+
 <MODE NAME="postscript"		FILE="postscript.xml"
 				FILE_NAME_GLOB="*.{ps,eps}" />
 

@@ -159,17 +159,17 @@ public abstract class EditPlugin
 			return index;
 		}
 
-		// package-private members
-		int index;
-
-		JAR(String path, JARClassLoader classLoader)
+		public JAR(String path, JARClassLoader classLoader)
 		{
 			this.path = path;
 			this.classLoader = classLoader;
 			plugins = new Vector();
 		}
 
-		public void getPlugins(Vector vector)
+		// package-private members
+		int index;
+
+		void getPlugins(Vector vector)
 		{
 			for(int i = 0; i < plugins.size(); i++)
 			{

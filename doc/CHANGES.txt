@@ -2,6 +2,10 @@ JEDIT 3.2 VERSION HISTORY
 
 * Version 3.2pre10
 
++ New Features
+
+- PL-SQL syntax highlighting (Rick Owen)
+
 + Enhancements
 
 - Documentation updates
@@ -25,6 +29,9 @@ JEDIT 3.2 VERSION HISTORY
   jEdit.openFile(View,String,String,boolean,Hashtable) instead.
 - Most plugins probably use openFile(View,String), which is still the
   same as ever.
+- jEdit.addPluginJAR() is now public, for plugins that want to load the
+  JDK's tools.jar of whatever
+- EditPlugin.JAR constructor is now public, for the same reason as above
 
 * Version 3.2pre9
 
