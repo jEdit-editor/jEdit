@@ -1099,27 +1099,24 @@ public class jEdit
 			((EditPlugin)plugins.elementAt(i)).stop();
 		}
 
-		// Save the recent file list
-		for(int i = 0; i < recent.size(); i++)
-		{
-			String file = (String)recent.elementAt(i);
-			setProperty("recent." + i,file);
-		}
-		unsetProperty("recent." + maxRecent);
-
-		// Save the history lists
+		
+		// Save various settings
 		if(settingsDirectory != null)
 		{
+			// Save the recent file list
+			for(int i = 0; i < recent.size(); i++)
+			{
+				String file = (String)recent.elementAt(i);
+				setProperty("recent." + i,file);
+			}
+			unsetProperty("recent." + maxRecent);
+
 			HistoryModel.saveHistory(MiscUtilities.constructPath(
 				settingsDirectory, "history"));
-		}
 
-		// Save search and replace state
-		SearchAndReplace.save();
+			SearchAndReplace.save();
+			Abbrevs.save();
 
-		// Write the user properties file
-		if(settingsDirectory != null)
-		{
 			String path = MiscUtilities.constructPath(
 				settingsDirectory,"properties");
 			Log.log(Log.DEBUG,jEdit.class,"Saving user propeties"
@@ -1692,6 +1689,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.174  1999/12/20 08:38:43  sp
+ * Abbrevs option pane
+ *
  * Revision 1.173  1999/12/20 06:05:26  sp
  * Search settings buttons on tool bar, static abbrevs
  *

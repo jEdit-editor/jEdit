@@ -35,7 +35,7 @@ public class indent_on_tab extends EditAction
                 JEditTextArea textArea = view.getTextArea();
 
 		// expand current word
-		if(Abbrevs.expandOnUserInput())
+		if(Abbrevs.getExpandOnInput())
 			Abbrevs.expandAbbrev(buffer,textArea);
 
                 Mode mode = buffer.getMode();

@@ -2309,6 +2309,17 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    field will move the focus back to the text area.
   </para>
   <para>
+   The three buttons to the right of the find field can be used to
+   toggle case insensitive searching, regular expressions, and multiple
+   file searching, respectively. Pressing the first two will toggle the
+   respective value, and pressing the multiple file search button will
+   display the multifile search options dialog box; see <xref
+   linkend=multifile> for details.
+  </para>
+  <figure><title>The QuickSearch text field and controls</>
+   <graphic scale=75 fileref=window-editor-quicksearch></>
+  </figure>
+  <para>
    <indexterm><primary>selection</></indexterm>
    <indexterm><primary>Find Next command</></indexterm>
    <guimenu>Search</>&gt;<guimenuitem>Find Next</> (keyboard equivalent:

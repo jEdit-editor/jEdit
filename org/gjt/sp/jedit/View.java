@@ -660,9 +660,9 @@ public class View extends JFrame implements EBComponent
 
 	// we need to keep these instances so that we can call repaint()
 	// when search & replace settings change
-	private JButton ignoreCase;
-	private JButton regexp;
-	private JButton multifile;
+	private EnhancedButton ignoreCase;
+	private EnhancedButton regexp;
+	private EnhancedButton multifile;
 
 	private JEditTextArea textArea;
 	private StatusBar status;
@@ -943,6 +943,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.118  1999/12/20 08:38:43  sp
+ * Abbrevs option pane
+ *
  * Revision 1.117  1999/12/20 06:05:26  sp
  * Search settings buttons on tool bar, static abbrevs
  *

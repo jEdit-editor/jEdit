@@ -172,7 +172,7 @@ public class GUIUtilities
 	 * with the value of the <code><i>name</i>.icon</code> property.
 	 * @param name The name of the button
 	 */
-	public static JButton loadToolButton(String name)
+	public static EnhancedButton loadToolButton(String name)
 	{
 		return loadMenuItemModel(name).createButton();
 	}
@@ -647,6 +647,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.48  1999/12/20 08:38:43  sp
+ * Abbrevs option pane
+ *
  * Revision 1.47  1999/12/19 08:12:34  sp
  * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
  *

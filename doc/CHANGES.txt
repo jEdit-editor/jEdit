@@ -2,6 +2,15 @@ JEDIT VERSION HISTORY
 
 * Version 2.3pre1
 
++ New Features
+
+- Predefined abbreviation expansion.
+  - Expand current word by pressing C+e C+b, or entering a non-alphanumeric
+    character
+  - Abbreviations can be edited in File->Global Options->Abbreviations
+- Buttons added to tool bar for changing ignore case, regexp, multifile search
+  options
+
 + Enhancements
 
 - 'Expand Abbreviation' renamed to 'Complete Word' -- old name was a bit

@@ -38,10 +38,11 @@ public class GlobalOptions extends OptionsDialog
 
 		addOptionPane(new org.gjt.sp.jedit.options.GeneralOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.EditorOptionPane());
-		addOptionPane(new org.gjt.sp.jedit.options.CommandShortcutsOptionPane());
-		addOptionPane(new org.gjt.sp.jedit.options.MacroShortcutsOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.StyleOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.FileFilterOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.CommandShortcutsOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.MacroShortcutsOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.AbbrevsOptionPane());
 
 		view.hideWaitCursor();
 
@@ -57,6 +58,9 @@ public class GlobalOptions extends OptionsDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  1999/12/20 08:38:43  sp
+ * Abbrevs option pane
+ *
  * Revision 1.13  1999/12/19 08:12:34  sp
  * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
  *

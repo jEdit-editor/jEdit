@@ -36,9 +36,20 @@ public class Abbrevs
 	 * Returns if abbreviations should be expanded after the
 	 * user finishes typing a word.
 	 */
-	public static boolean expandOnUserInput()
+	public static boolean getExpandOnInput()
 	{
 		return expandOnInput;
+	}
+
+	/**
+	 * Sets if abbreviations should be expanded after the
+	 * user finishes typing a word.
+	 * @param true If true, typing a non-alphanumeric characater will
+	 * automatically attempt to expand the current abbrev
+	 */
+	public static void setExpandOnInput(boolean expandOnInput)
+	{
+		Abbrevs.expandOnInput = expandOnInput;
 	}
 
 	/**
@@ -108,6 +119,44 @@ public class Abbrevs
 		return (String)globalAbbrevs.get(abbrev);
 	}
 
+	/**
+	 * Returns the global abbreviation set.
+	 * @since jEdit 2.3pre1
+	 */
+	public static Hashtable getGlobalAbbrevs()
+	{
+		return globalAbbrevs;
+	}
+
+	/**
+	 * Sets the global abbreviation set.
+	 * @param globalAbbrevs The new global abbrev set
+	 * @since jEdit 2.3pre1
+	 */
+	public static void getGlobalAbbrevs(Hashtable globalAbbrevs)
+	{
+		Abbrevs.globalAbbrevs = globalAbbrevs;
+	}
+
+	/**
+	 * Returns the mode-specific abbreviation set.
+	 * @since jEdit 2.3pre1
+	 */
+	public static Hashtable getModeAbbrevs()
+	{
+		return modes;
+	}
+
+	/**
+	 * Sets the mode-specific abbreviation set.
+	 * @param globalAbbrevs The new global abbrev set
+	 * @since jEdit 2.3pre1
+	 */
+	public static void getModeAbbrevs(Hashtable modes)
+	{
+		Abbrevs.modes = modes;
+	}
+
 	// package-private members
 	static void load()
 	{
@@ -147,6 +196,12 @@ public class Abbrevs
 				Log.log(Log.ERROR,Abbrevs.class,e);
 			}
 		}
+	}
+
+	static void save()
+	{
+		jEdit.setProperty("view.expandOnInput",expandOnInput
+			? "yes" : "no");
 	}
 
 	// private members

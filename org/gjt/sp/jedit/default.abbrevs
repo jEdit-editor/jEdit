@@ -6,25 +6,31 @@ JEDIT|http://www.gjt.org/~sp/jedit.html
 [java]
 Ex|Exception
 IOEx|IOException
+MalEx|MalformedURLException
 Ob|Object
 St|String
-V|View
+Vi|View
+Ve|Vector
+Ha|Hashtable
 B|Buffer
 JE|JEditTextArea
 jE|jEdit
 gta|getTextArea()
 gb|getBuffer()
 gv|getView(evt)
-ira|import java.awt
-irj|import java
-irs|import javax.swing
-iru|import java.util
-irj|import org.gjt.sp.jedit
-irjt|import org.gjt.sp.jedit.textarea
-irpju|import org.gjt.sp.util.
+gp|getPropertyarea
+ogs|org.gjt.sp
+ogsj|org.gjt.sp.jedit
+ogsjt|org.gjt.sp.jedit.textarea
 serr|System.err.println(
 sout|System.out.println(
+loge|Log.log(Log.ERROR
+logw|Log.log(Log.WARNING
+logn|Log.log(Log.NOTICE
+logm|Log.log(Log.MESSAGE
+logd|Log.log(Log.DEBUG
 
 [html]
 EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>
 HOMELINK|<a href="http://www.geocities.com/slava_pestov">http://www.geocities.com/slava_pestov</a>
+JEDITLINK|<a href="http://www.gjt.org/~sp/jedit.html">jEdit</a>

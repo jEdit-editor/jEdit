@@ -673,15 +673,22 @@ options.styles.keyword2Style=Keyword 2
 options.styles.keyword3Style=Keyword 3
 options.styles.operatorStyle=Operator
 options.styles.invalidStyle=Invalid token
+options.filters.label=File Filters
+options.filters.name=Name
+options.filters.re=Glob Pattern
 options.keys.name=Command
 options.keys.binding=Keyboard shortcut
 options.keys.sort.label=Sort by label
 options.keys.sort.shortcut=Sort by shortcut
 options.command-keys.label=Command Shortcuts
 options.macro-keys.label=Macro Shortcuts
-options.filters.label=File Filters
-options.filters.name=Name
-options.filters.re=Glob Pattern
+options.abbrevs.label=Abbreviations
+options.abbrevs.set=Abbrev set:
+options.abbrevs.expandOnInput=Auto-expand abbrevs
+options.abbrevs.abbrev=Abbrev
+options.abbrevs.expand=Expansion
+options.abbrevs.sort.abbrev=Sort by abbrev
+options.abbrevs.sort.expand=Sort by expansion
 
 # Color chooser, used by options.styles
 colorChooser.title=Pick a Color

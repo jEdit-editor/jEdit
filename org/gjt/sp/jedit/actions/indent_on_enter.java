@@ -32,7 +32,7 @@ public class indent_on_enter extends EditAction
                 JEditTextArea textArea = view.getTextArea();
 
 		// expand current word
-		if(Abbrevs.expandOnUserInput())
+		if(Abbrevs.getExpandOnInput())
 			Abbrevs.expandAbbrev(buffer,textArea);
 
 		textArea.setSelectedText("\n");

@@ -87,7 +87,7 @@ public class MenuItemModel
 		return mi;
 	}
 
-	public JButton createButton()
+	public EnhancedButton createButton()
 	{
 		return new EnhancedButton(icon,toolTip,action,arg);
 	}
