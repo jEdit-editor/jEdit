@@ -1,9 +1,8 @@
 JEDIT TO DO
 
-CVS: remove window-editor-tooltip
-
 2.4pre5:
 
+- Proofread chapter 6 onwards
 - do MARK_PREVIOUS before markKeyword()
 - Untitled files not replaced sometimes?
 - Double-click drag doesn't work backwards
