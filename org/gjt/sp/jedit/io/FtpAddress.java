@@ -68,20 +68,20 @@ public class FtpAddress
 		// get host name and path
 		index = url.indexOf('/');
 		if(index == -1)
-			throw new IllegalArgumentException();
+			index = url.length();
+
+		host = url.substring(0,index);
+		path = url.substring(index);
+		if(path.length() == 0)
+			path = "/";
+
+		index = host.indexOf(':');
+		if(index == -1)
+			port = "21";
 		else
 		{
-			host = url.substring(0,index);
-			path = url.substring(index);
-
-			index = host.indexOf(':');
-			if(index == -1)
-				port = "21";
-			else
-			{
-				port = host.substring(index + 1);
-				host = host.substring(0,index);
-			}
+			port = host.substring(index + 1);
+			host = host.substring(0,index);
 		}
 	}
 
@@ -124,6 +124,9 @@ public class FtpAddress
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/01 11:44:15  sp
+ * More VFS browser work
+ *
  * Revision 1.2  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

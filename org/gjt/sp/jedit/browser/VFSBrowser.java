@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.browser;
 
+import gnu.regexp.REException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.EventListenerList;
 import javax.swing.*;
@@ -30,6 +31,7 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * The main class of the VFS browser.
@@ -60,26 +62,58 @@ public class VFSBrowser extends JPanel implements EBComponent
 	 * @param view The view to open buffers in by default
 	 * @param path The path to display
 	 * @param mode The browser mode
+	 * @param multipleSelection True if multiple selection should be allowed
 	 */
-	public VFSBrowser(View view, String path, int mode)
+	public VFSBrowser(View view, String path, int mode, boolean multipleSelection)
 	{
 		super(new BorderLayout());
 
 		listenerList = new EventListenerList();
 
 		this.mode = mode;
+		this.multipleSelection = multipleSelection;
 		this.view = view;
 
 		Box topBox = new Box(BoxLayout.Y_AXIS);
 		topBox.add(createToolBar());
-		JPanel pathPanel = new JPanel(new BorderLayout());
-		JLabel pathLabel = new JLabel(jEdit.getProperty("vfs.browser.directory"));
-		pathLabel.setBorder(new EmptyBorder(0,0,0,12));
-		pathPanel.add(BorderLayout.WEST,pathLabel);
+
+		GridBagLayout layout = new GridBagLayout();
+		JPanel pathAndFilterPanel = new JPanel(layout);
+
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.gridwidth = cons.gridheight = 1;
+		cons.gridx = cons.gridy = 0;
+		cons.fill = GridBagConstraints.BOTH;
+		JLabel label = new JLabel(jEdit.getProperty("vfs.browser.directory"),
+			SwingConstants.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		layout.setConstraints(label,cons);
+		pathAndFilterPanel.add(label);
+
 		pathField = new HistoryTextField("vfs.browser.path",true);
 		pathField.addActionListener(new ActionHandler());
-		pathPanel.add(BorderLayout.CENTER,pathField);
-		topBox.add(pathPanel);
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		layout.setConstraints(pathField,cons);
+		pathAndFilterPanel.add(pathField);
+
+		label = new JLabel(jEdit.getProperty("vfs.browser.filter"),
+			SwingConstants.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		cons.gridx = 0;
+		cons.weightx = 0.0f;
+		cons.gridy = 1;
+		layout.setConstraints(label,cons);
+		pathAndFilterPanel.add(label);
+
+		filterCombo = new JComboBox();
+		filterCombo.addActionListener(new ActionHandler());
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		layout.setConstraints(filterCombo,cons);
+		pathAndFilterPanel.add(filterCombo);
+
+		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
 
 		browserView = new BrowserListView(this);
@@ -201,6 +235,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 		return mode;
 	}
 
+	public boolean isMultipleSelectionEnabled()
+	{
+		return multipleSelection;
+	}
+
 	public boolean getShowHiddenFiles()
 	{
 		return showHiddenFiles;
@@ -209,6 +248,16 @@ public class VFSBrowser extends JPanel implements EBComponent
 	public void setShowHiddenFiles(boolean showHiddenFiles)
 	{
 		this.showHiddenFiles = showHiddenFiles;
+	}
+
+	public VFSFilter getFilenameFilter()
+	{
+		return filenameFilter;
+	}
+
+	public void setFilenameFilter(VFSFilter filenameFilter)
+	{
+		this.filenameFilter = filenameFilter;
 	}
 
 	public VFS.DirectoryEntry[] getSelectedFiles()
@@ -233,12 +282,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			public void run()
 			{
-				// XXX: filtering
 				Vector directoryVector = new Vector();
 				for(int i = 0; i < list.length; i++)
 				{
 					VFS.DirectoryEntry file = list[i];
 					if(file.hidden && !showHiddenFiles)
+						continue;
+					if(file.type == VFS.DirectoryEntry.FILE
+						&& !filenameFilter.accept(file.name))
 						continue;
 					directoryVector.addElement(file);
 				}
@@ -365,32 +416,114 @@ public class VFSBrowser extends JPanel implements EBComponent
 	}
 
 	// private members
+	private static VFSFilter allFilter;
+	private static Vector filters = new Vector();
+
 	private EventListenerList listenerList;
 	private View view;
 	private String path;
 	private VFS vfs;
 	private VFSSession vfsSession;
 	private HistoryTextField pathField;
+	private JComboBox filterCombo;
 	private JButton filesystems, home, synchronize, up, reload;
 	private BrowserView browserView;
+	private VFSFilter filenameFilter;
 	private int mode;
+	private boolean multipleSelection;
 
 	private boolean showHiddenFiles;
 	private boolean sortFiles;
 	private boolean sortMixFilesAndDirs;
 	private boolean sortIgnoreCase;
 
+	static
+	{
+		try
+		{
+			allFilter = new VFSFilter(jEdit.getProperty(
+				"vfs.browser.filter.all"),"*");
+		}
+		catch(REException re)
+		{
+			throw new InternalError("* isn't a valid glob!!??");
+		}
+
+		EditBus.addToBus(new EBComponent()
+		{
+			public void handleMessage(EBMessage msg)
+			{
+				if(msg instanceof PropertiesChanged)
+					updateFilters();
+			}
+		});
+
+		updateFilters();
+	}
+
+	private static void updateFilters()
+	{
+		// recreate file filters
+		filters.removeAllElements();
+
+		filters.addElement(allFilter);
+
+		// Create mode filename filters
+		Mode[] modes = jEdit.getModes();
+		for(int i = 0; i < modes.length; i++)
+		{
+			Mode mode = modes[i];
+			String label = (String)mode.getProperty("label");
+			String glob = (String)mode.getProperty("filenameGlob");
+			if(label == null || glob == null)
+				continue;
+
+			try
+			{
+				filters.addElement(new VFSFilter(label,glob));
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,VFSBrowser.class,
+					"Invalid file filter: " + glob);
+				Log.log(Log.ERROR,VFSBrowser.class,e);
+			}
+		}
+
+		// Load custom file filters
+		int i = 0;
+		String name;
+
+		while((name = jEdit.getProperty("filefilter." + i + ".name")) != null
+			&& name.length() != 0)
+		{
+			String glob = jEdit.getProperty("filefilter." + i + ".re");
+			try
+			{
+				filters.addElement(new VFSFilter(name,glob));
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,VFSBrowser.class,
+					"Invalid file filter: " + glob);
+				Log.log(Log.ERROR,VFSBrowser.class,e);
+			}
+
+			i++;
+		}
+	}
+
 	private JToolBar createToolBar()
 	{
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 
+		toolBar.add(up = createToolButton("up"));
+		toolBar.add(reload = createToolButton("reload"));
+		toolBar.addSeparator();
 		toolBar.add(filesystems = createToolButton("filesystems"));
 		toolBar.add(home = createToolButton("home"));
 		toolBar.add(synchronize = createToolButton("synchronize"));
-		toolBar.addSeparator();
-		toolBar.add(up = createToolButton("up"));
-		toolBar.add(reload = createToolButton("reload"));
 
 		toolBar.add(Box.createGlue());
 		return toolBar;
@@ -431,6 +564,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 		sortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
 		sortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
 
+		filterCombo.setModel(new DefaultComboBoxModel(filters));
+
 		// unless we're being called from the constructor, reload
 		// directory so that new sorting settings take effect.
 		if(path != null)
@@ -447,6 +582,18 @@ public class VFSBrowser extends JPanel implements EBComponent
 				String path = pathField.getText();
 				if(path != null)
 					setDirectory(path);
+			}
+			else if(source == filterCombo)
+			{
+				VFSFilter filter = (VFSFilter)filterCombo.getSelectedItem();
+				if(filter != null)
+				{
+					VFSBrowser.this.filenameFilter = filter;
+
+					// don't do anything during initialization...
+					if(path != null)
+						reloadDirectory(false);
+				}
 			}
 			else if(source == filesystems)
 				setDirectory(FileVFS.FILESYSTEM_ROOTS_URL);
@@ -474,6 +621,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/01 11:44:15  sp
+ * More VFS browser work
+ *
  * Revision 1.3  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

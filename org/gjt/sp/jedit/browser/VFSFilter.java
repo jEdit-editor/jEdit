@@ -1,5 +1,5 @@
 /*
- * VFSBrowserFrame.java - VFS browser frame
+ * VFSFilter.java - VFS filename filter
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,49 +19,41 @@
 
 package org.gjt.sp.jedit.browser;
 
-import javax.swing.*;
-import java.awt.BorderLayout;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.jEdit;
+import gnu.regexp.*;
+import org.gjt.sp.jedit.MiscUtilities;
 
 /**
- * Wraps the VFS browser in a frame.
+ * A file name filter used by the VFS browser.
  * @author Slava Pestov
  * @version $Id$
  */
-public class VFSBrowserFrame extends JFrame
+public class VFSFilter
 {
-	public VFSBrowserFrame(View view, String path)
+	public VFSFilter(String label, String glob) throws REException
 	{
-		super(jEdit.getProperty("vfs.browser.title"));
-
-		getContentPane().add(new VFSBrowser(view,path,VFSBrowser.BROWSER,true));
-
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		pack();
-		GUIUtilities.loadGeometry(this,"vfs.browser");
-		show();
+		this.label = label + " (" + glob + ")";
+		re = new RE(MiscUtilities.globToRE(glob),RE.REG_ICASE);
 	}
 
-	public void dispose()
+	public String toString()
 	{
-		GUIUtilities.saveGeometry(this,"vfs.browser");
-		super.dispose();
+		return label;
 	}
+
+	public boolean accept(String name)
+	{
+		return re.isMatch(name);
+	}
+
+	// private members
+	private String label;
+	private RE re;
 }
 
 /*
  * Change Log:
  * $Log$
- * Revision 1.3  2000/08/01 11:44:15  sp
+ * Revision 1.1  2000/08/01 11:44:15  sp
  * More VFS browser work
- *
- * Revision 1.2  2000/07/30 09:04:19  sp
- * More VFS browser hacking
- *
- * Revision 1.1  2000/07/29 12:24:08  sp
- * More VFS work, VFS browser started
  *
  */

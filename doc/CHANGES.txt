@@ -25,6 +25,13 @@ JEDIT 2.6 VERSION HISTORY
 - Plugins couldn't be removed on systems that disallow removing open files,
   such as Windows (since 2.6pre1)
 - FtpVFS.getFileLength() always returned 0 (since 2.6pre1)
+- FtpVFS would throw a NullPointerException if an error occurred while
+  connecting to the FTP server
+
++ API Changes
+
+- org.gjt.sp.jedit.REFileFilter class removed
+- Many changes made to org.gjt.sp.jedit.VFS class
 
 * Version 2.6pre1
 

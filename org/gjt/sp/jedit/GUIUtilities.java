@@ -368,6 +368,7 @@ public class GUIUtilities
 	 * @param view The view
 	 * @param path The initial directory to display. May be null
 	 * @param type The dialog type
+	 * @param multipleSelection True if multiple selection should be allowed
 	 * @param vfsSession A VFS session stores username/password info
 	 * when dealing with remote servers, so that the user isn't prompted
 	 * twice for that info, once by the file chooser and second by the
@@ -378,10 +379,10 @@ public class GUIUtilities
 	 * @since jEdit 2.6pre2
 	 */
 	public static String[] showVFSFileDialog(View view, String path,
-		int type, VFSSession[] vfsSession)
+		int type, boolean multipleSelection, VFSSession[] vfsSession)
 	{
 		VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
-			view,path,type);
+			view,path,type,multipleSelection);
 		String[] selectedFiles = fileChooser.getSelectedFiles();
 		if(selectedFiles == null)
 			return null;
@@ -405,10 +406,10 @@ public class GUIUtilities
 		if(file == null)
 			file = System.getProperty("user.dir");
 		File _file = new File(file);
-		JFileChooser chooser = getFileChooser(view);
+
+		JFileChooser chooser = new JFileChooser();
 
 		chooser.setCurrentDirectory(_file);
-		chooser.rescanCurrentDirectory();
 		if(_file.isDirectory())
 			chooser.setSelectedFile(null);
 		else
@@ -708,8 +709,6 @@ public class GUIUtilities
 	}
 
 	// package-private members
-	static JFileChooser chooser;
-
 	static void showSplashScreen()
 	{
 		splash = new SplashScreen();
@@ -732,86 +731,14 @@ public class GUIUtilities
 	private static Hashtable icons = new Hashtable();
 
 	private GUIUtilities() {}
-
-	// Since only one file chooser is every visible at any one
-	// time, we can reuse 'em
-	private static JFileChooser getFileChooser(View view)
-	{
-		if(chooser == null)
-		{
-			if(view != null)
-				view.showWaitCursor();
-
-			chooser = new JFileChooser();
-			chooser.setAccessory(new FindAccessory(chooser));
-
-			// Create mode filename filters
-			Mode[] modes = jEdit.getModes();
-			for(int i = 0; i < modes.length; i++)
-			{
-				Mode mode = modes[i];
-				String label = (String)mode.getProperty("label");
-				String glob = (String)mode.getProperty("filenameGlob");
-				if(label == null || glob == null)
-					continue;
-
-				try
-				{
-					chooser.addChoosableFileFilter(
-						new REFileFilter(label,
-						MiscUtilities.globToRE(glob)));
-				}
-				catch(REException re)
-				{
-					Log.log(Log.ERROR,GUIUtilities.class,
-						"Invalid file filter: " + glob);
-					Log.log(Log.ERROR,GUIUtilities.class,
-						re);
-				}
-			}
-
-			// Load file filters
-			int i = 0;
-			String name;
-
-			while((name = jEdit.getProperty("filefilter." + i + ".name")) != null
-				&& name.length() != 0)
-			{
-				try
-				{
-					chooser.addChoosableFileFilter(new REFileFilter(name,
-						MiscUtilities.globToRE(jEdit.getProperty(
-						"filefilter." + i + ".re"))));
-				}
-				catch(REException re)
-				{
-					Log.log(Log.ERROR,GUIUtilities.class,
-						"Invalid file filter: " + i);
-					Log.log(Log.ERROR,GUIUtilities.class,
-						re);
-				}
-
-				i++;
-			}
-
-			chooser.setFileFilter(chooser.getAcceptAllFileFilter());
-
-			// increase preferred size a little bit
-			Dimension size = chooser.getPreferredSize();
-			size.width *= 1.1;
-			chooser.setPreferredSize(size);
-
-			if(view != null)
-				view.hideWaitCursor();
-		}
-
-		return chooser;
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.72  2000/08/01 11:44:14  sp
+ * More VFS browser work
+ *
  * Revision 1.71  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *
@@ -841,8 +768,5 @@ public class GUIUtilities
  *
  * Revision 1.62  2000/05/21 06:06:43  sp
  * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
- *
- * Revision 1.61  2000/05/20 07:02:04  sp
- * Documentation updates, tool bar editor finished, a few other enhancements
  *
  */

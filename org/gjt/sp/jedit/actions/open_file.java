@@ -32,7 +32,7 @@ public class open_file extends EditAction
 		View view = getView(evt);
 		VFSSession[] vfsSession = new VFSSession[1];
 		String[] files = GUIUtilities.showVFSFileDialog(view,null,
-			VFSBrowser.OPEN_DIALOG,vfsSession);
+			VFSBrowser.OPEN_DIALOG,true,vfsSession);
 
 		Buffer buffer = null;
 		if(files != null)

@@ -277,7 +277,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		VFSSession[] session = new VFSSession[1];
 		String[] files = GUIUtilities.showVFSFileDialog(view,path,
-			VFSBrowser.SAVE_DIALOG,session);
+			VFSBrowser.SAVE_DIALOG,false,session);
 
 		// files[] should have length 1, since the dialog type is
 		// SAVE_DIALOG
@@ -1688,6 +1688,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.168  2000/08/01 11:44:14  sp
+ * More VFS browser work
+ *
  * Revision 1.167  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

@@ -358,11 +358,11 @@ utils=repeat \
       save-session \
       - \
       vfs-browser \
-      - \
       io-progress-monitor \
+      flush-directory-cache \
+      - \
       log-viewer \
       - \
-      flush-directory-cache \
       reload-modes \
       - \
       buffer-options \
@@ -1110,17 +1110,19 @@ login.password=Password:
 # VFS browser
 vfs.browser.title=File System Browser
 vfs.browser.directory=Directory:
+vfs.browser.filter=Filename Filter:
+vfs.browser.filter.all=All Files
 
+vfs.browser.up.label=Parent Directory
+vfs.browser.up.icon=FolderUp.gif
+vfs.browser.reload.label=Reload Directory
+vfs.browser.reload.icon=Reload.gif
 vfs.browser.filesystems.label=Filesystems
 vfs.browser.filesystems.icon=CD.gif
 vfs.browser.home.label=Home Directory
 vfs.browser.home.icon=Home.gif
-vfs.browser.up.label=Parent Directory
-vfs.browser.up.icon=FolderUp.gif
 vfs.browser.synchronize.label=Go to Current Buffer Directory
 vfs.browser.synchronize.icon=Synchronize.gif
-vfs.browser.reload.label=Reload Directory
-vfs.browser.reload.icon=Reload.gif
 
 vfs.browser.dialog.open=Open
 vfs.browser.dialog.save=Save

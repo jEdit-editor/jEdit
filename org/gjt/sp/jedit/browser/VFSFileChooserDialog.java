@@ -24,6 +24,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
+import java.util.Vector;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
@@ -35,7 +36,8 @@ import org.gjt.sp.jedit.*;
  */
 public class VFSFileChooserDialog extends EnhancedDialog
 {
-	public VFSFileChooserDialog(View view, String path, int mode)
+	public VFSFileChooserDialog(View view, String path,
+		int mode, boolean multipleSelection)
 	{
 		super(view,jEdit.getProperty("vfs.browser.title"),true);
 
@@ -52,7 +54,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			path = MiscUtilities.getFileParent(path);
 		}
 
-		browser = new VFSBrowser(view,path,mode);
+		browser = new VFSBrowser(view,path,mode,multipleSelection);
 		browser.addBrowserListener(new BrowserHandler());
 		content.add(BorderLayout.CENTER,browser);
 
@@ -75,6 +77,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			box.add(filenameField);
 			box.add(Box.createGlue());
 			panel.add(box);
+
+			GUIUtilities.requestFocus(this,filenameField);
 
 			panel.add(Box.createHorizontalStrut(12));
 		}
@@ -111,14 +115,31 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 	public void ok()
 	{
-		VFS.DirectoryEntry[] files = browser.getSelectedFiles();
-		if(files.length == 0 || files[0].type != VFS.DirectoryEntry.FILE)
-			return;
-
-		if(filenameField != null && filenameField.getText() == null)
+		if(filenameField != null)
 		{
-			getToolkit().beep();
-			return;
+			if(filenameField.getText() == null)
+			{
+				getToolkit().beep();
+				return;
+			}
+		}
+		else
+		{
+			VFS.DirectoryEntry[] files = browser.getSelectedFiles();
+			if(files.length == 0)
+				return;
+
+			for(int i = 0; i < files.length; i++)
+			{
+				VFS.DirectoryEntry file = files[i];
+				if(file.type == VFS.DirectoryEntry.FILESYSTEM
+					|| file.type == VFS.DirectoryEntry.DIRECTORY)
+				{
+					// the browser will list the directory
+					// in question, so just return
+					return;
+				}
+			}
 		}
 
 		isOK = true;
@@ -144,12 +165,16 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 		else
 		{
+			Vector vector = new Vector();
 			VFS.DirectoryEntry[] selectedFiles = browser.getSelectedFiles();
-			String[] retVal = new String[selectedFiles.length];
 			for(int i = 0; i < selectedFiles.length; i++)
 			{
-				retVal[i] = selectedFiles[i].path;
+				VFS.DirectoryEntry file =  selectedFiles[i];
+				if(file.type == VFS.DirectoryEntry.FILE)
+					vector.addElement(file.path);
 			}
+			String[] retVal = new String[vector.size()];
+			vector.copyInto(retVal);
 			return retVal;
 		}
 	}
@@ -198,6 +223,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/01 11:44:15  sp
+ * More VFS browser work
+ *
  * Revision 1.2  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

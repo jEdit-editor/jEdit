@@ -137,7 +137,8 @@ The following people contributed large amounts of code to the jEdit core:
 
 Andre Kaplan - Syntax token background highlighting
 Dirk Moebius - HTTP firewall plugin
-Jason Ginchereau - Buffer tabs code
+Jason Ginchereau - Buffer tabs code, portions of QuickFile plugin code
+	are used by the VFS browser
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
 	dialog box, faster literal search, many other patches
 Tal Davidson - Original syntax highlighting engine

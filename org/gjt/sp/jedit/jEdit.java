@@ -549,9 +549,6 @@ public class jEdit
 			maxRecent = 8;
 		}
 
-		// File filters might have changed
-		GUIUtilities.chooser = null;
-
 		EditBus.send(new PropertiesChanged(null));
 	}
 
@@ -2326,6 +2323,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.262  2000/08/01 11:44:14  sp
+ * More VFS browser work
+ *
  * Revision 1.261  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

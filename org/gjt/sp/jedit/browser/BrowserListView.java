@@ -43,9 +43,9 @@ public class BrowserListView extends BrowserView
 		list = new HelpfulJList();
 		list.setCellRenderer(renderer);
 
-		if(browser.getMode() == VFSBrowser.OPEN_DIALOG)
+		if(browser.isMultipleSelectionEnabled())
 			list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		else // if SAVE_DIALOG or BROWSER mode
+		else
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		list.addMouseListener(new MouseHandler());
@@ -126,6 +126,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/01 11:44:15  sp
+ * More VFS browser work
+ *
  * Revision 1.2  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

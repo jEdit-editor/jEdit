@@ -19,7 +19,7 @@
 
 package org.gjt.sp.jedit.search;
 
-import gnu.regexp.REException;
+import gnu.regexp.RE;
 import java.io.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
@@ -48,15 +48,15 @@ public class DirectoryListSet extends BufferListSet
 			+ directory);
 		Vector files = new Vector(50);
 
-		REFileFilter filter;
+		RE filter;
 		try
 		{
-			filter = new REFileFilter(MiscUtilities.globToRE(glob));
+			filter = new RE(MiscUtilities.globToRE(glob));
 		}
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,DirectoryListSet.class,e);
-			filter = null;
+			return files;
 		}
 
 		listFiles(new Vector(),files,new File(directory),filter,recurse);
@@ -65,7 +65,7 @@ public class DirectoryListSet extends BufferListSet
 	}
 
 	private static void listFiles(Vector stack, Vector files,
-		File directory, REFileFilter filter, boolean recurse)
+		File directory, RE filter, boolean recurse)
 	{
 		if(stack.contains(directory))
 		{
@@ -77,7 +77,7 @@ public class DirectoryListSet extends BufferListSet
 		else
 			stack.addElement(directory);
 		
-		String[] _files = directory.list(filter);
+		String[] _files = directory.list();
 		if(_files == null)
 			return;
 
@@ -85,7 +85,11 @@ public class DirectoryListSet extends BufferListSet
 
 		for(int i = 0; i < _files.length; i++)
 		{
-			File file = new File(directory,_files[i]);
+			String name = _files[i];
+			if(!filter.isMatch(name))
+				continue;
+
+			File file = new File(directory,name);
 			if(file.isDirectory())
 			{
 				if(recurse)
@@ -94,8 +98,16 @@ public class DirectoryListSet extends BufferListSet
 			else
 			{
 				Log.log(Log.DEBUG,DirectoryListSet.class,file.getPath());
-				files.addElement(MiscUtilities.constructPath(
-					null,file.getPath()));
+				String canonPath;
+				try
+				{
+					canonPath = file.getCanonicalPath();
+				}
+				catch(IOException io)
+				{
+					canonPath = file.getPath();
+				}
+				files.addElement(canonPath);
 			}
 		}
 	}
@@ -104,6 +116,9 @@ public class DirectoryListSet extends BufferListSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/08/01 11:44:15  sp
+ * More VFS browser work
+ *
  * Revision 1.3  2000/07/19 08:35:59  sp
  * plugin devel docs updated, minor other changes
  *

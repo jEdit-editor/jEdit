@@ -50,6 +50,13 @@ public class FtpVFS extends VFS
 			| RENAME_CAP | MKDIR_CAP;
 	}
 
+	public String getFileParent(String path)
+	{
+		FtpAddress address = new FtpAddress(path);
+		address.path = MiscUtilities.getFileParent(address.path);
+		return address.toString();
+	}
+
 	public String constructPath(String parent, String path)
 	{
 		if(parent.endsWith("/"))
@@ -105,12 +112,17 @@ public class FtpVFS extends VFS
 	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
 		Component comp) throws IOException
 	{
+		// add trailing '/' if necessary, so that foo and foo/ aren't
+		// represented differently in cache
+		if(!url.endsWith("/"))
+			url = url + "/";
+
 		VFS.DirectoryEntry[] directory = DirectoryCache.getCachedDirectory(url);
 		if(directory != null)
 			return directory;
 
 		FtpAddress address = new FtpAddress(url);
-		FtpClient client = getFtpClient(session,address,true,comp);
+		FtpClient client = getFtpClient(session,address,false,comp);
 		if(client == null)
 			return null;
 
@@ -330,7 +342,12 @@ public class FtpVFS extends VFS
 			if(ignoreErrors)
 				return null;
 
-			String[] args = { host, port, client.getResponse().toString() };
+			String response;
+			if(client != null)
+				response = client.getResponse().toString();
+			else
+				response = "";
+			String[] args = { host, port, response };
 			VFSManager.error(comp,"vfs.ftp.connect-error",args);
 			return null;
 		}
@@ -359,7 +376,8 @@ public class FtpVFS extends VFS
 
 			client = createFtpClient(comp,address.host,address.port,
 				address.user,address.password,ignoreErrors);
-			session.put(CLIENT_KEY,client);
+			if(client != null)
+				session.put(CLIENT_KEY,client);
 		}
 
 		return client;
@@ -433,6 +451,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/08/01 11:44:15  sp
+ * More VFS browser work
+ *
  * Revision 1.13  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *
