@@ -182,7 +182,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						if(length - i > 2 && array[i1] == '<'
-							&& !Character.isWhitespace(array[i+2]))
+							/* && !Character.isWhitespace(array[i+2]) */)
 						{
 							addToken(i - lastOffset,token);
 							lastOffset = lastKeyword = i;
@@ -192,6 +192,7 @@ loop:		for(int i = offset; i < length; i++)
 								len--;
 							lineInfo[lineIndex].obj =
 								createReadinString(array,i + 2,len);
+							break loop;
 						}
 					}
 					break;
@@ -725,6 +726,9 @@ loop:		for(int i = offset; i < length; i++)
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/02/03 04:53:48  sp
+ * Bug fixes and small updates
+ *
  * Revision 1.11  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

@@ -228,5 +228,10 @@ public class BufferTabs extends JTabbedPane
 
 			view.focusOnTextArea();
 		}
+
+		public boolean isValidateRoot()
+		{
+			return true;
+		}
 	}
 }

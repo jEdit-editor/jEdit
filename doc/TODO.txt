@@ -5,11 +5,9 @@ JEDIT TO DO
 - Double-click drag doesn't work backwards
 - CaretUndo doesn't work on 'redo'
 - Check file modification status on focus
-- Customizable gutter font and colors
 - Document gutter
 - Update window-editor-* screenshots
 - Update dialog-options-* screenshots
-- Ensure that the gutter is only repainted when really necessary
 
 ------- Later -------
 

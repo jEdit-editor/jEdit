@@ -137,7 +137,7 @@ view.homeEnd=yes
 view.gutter.width=40
 
 # Gutter collapsed/expanded by default
-view.gutter.collapsed=no
+view.gutter.collapsed=yes
 
 # Gutter displays line numbers
 view.gutter.lineNumbers=yes

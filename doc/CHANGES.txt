@@ -8,8 +8,7 @@ JEDIT VERSION HISTORY
 
 + Enhancements
 
-- Gutter option pane, new toggle-gutter and toggle-line-numbers
-  actions
+- Gutter updates (Mike Dillon)
 - Improved options dialog box now uses a tree instead of a list, plugins
   can add their own tree nodes (Mike Dillon)
 
@@ -22,6 +21,9 @@ JEDIT VERSION HISTORY
   actions (since 2.3pre3)
 - Reload was broken with split panes (unfortunately, the only way to
   fix this right now is to unsplit views when reloading)
+- Fixed gutter repaint problem when splitting views (since 2.3pre3)
+- Perl mode now correctly highlights read-ins of the form
+  <<"EOF", << "EOF", etc (since 1.7pre2)
 
 * Version 2.3pre3
 

@@ -127,7 +127,10 @@ class EditServer extends Thread
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
-				jEdit.newView(jEdit.getFirstView(),buffer);
+				View view = jEdit.newView(jEdit.getFirstView(),
+					buffer);
+				view.requestFocus();
+				view.toFront();
 			}
 		});
 	}
@@ -264,6 +267,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/02/03 04:53:48  sp
+ * Bug fixes and small updates
+ *
  * Revision 1.5  2000/01/21 00:35:29  sp
  * Various updates
  *
