@@ -2,7 +2,7 @@
 
 <!DOCTYPE MODE>
 
-<MODE NAME="vbs">
+<MODE NAME="vbscript">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="VBScript" />
 		<PROPERTY NAME="blockComment" VALUE="'" />
