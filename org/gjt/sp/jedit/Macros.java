@@ -267,7 +267,8 @@ public class Macros
 			if(name.toLowerCase().endsWith(".macro"))
 			{
 				String label = name.substring(0,name.length() - 6);
-				vector.addElement(new Macro(label,path + label,file.getPath()));
+				vector.addElement(new Macro(label.replace('_',' '),
+					path + label,file.getPath()));
 			}
 			else if(file.isDirectory())
 			{
@@ -437,6 +438,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/05/07 05:48:30  sp
+ * You can now edit several buffers side-by-side in a split view
+ *
  * Revision 1.24  2000/05/05 11:08:26  sp
  * Johnny Ryall
  *

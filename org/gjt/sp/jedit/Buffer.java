@@ -162,16 +162,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				View _view = jEdit.getFirstView();
 				while(_view != null)
 				{
-					if(_view.getBuffer() == Buffer.this)
+					EditPane[] editPanes = _view
+						.getEditPanes();
+					for(int i = 0; i < editPanes.length; i++)
 					{
-						_view.unsplit();
-						// we used to save, but now we
-						// just zero it because the
-						// caret position doesn't always
-						// make sense after a reload
-						// anyway
-						_view.getTextArea().setCaretPosition(0);
-						_view.getTextArea().repaint();
+						EditPane editPane = editPanes[i];
+						if(editPane.getBuffer() == Buffer.this)
+						{
+							editPane.getTextArea().setCaretPosition(0);
+							editPane.getTextArea().repaint();
+						}
 					}
 	
 					_view = _view.getNext();
@@ -276,6 +276,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(path == null)
 			path = this.path;
 
+		final String oldPath = this.path;
 		setPath(path);
 
 		if(!vfs.save(view,this,path))
@@ -304,7 +305,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				if(file != null)
 					modTime = file.lastModified();
 
-				jEdit.updatePosition(Buffer.this);
+				if(!getPath().equals(oldPath))
+					jEdit.updatePosition(Buffer.this);
 
 				// getPath() used since 'path' in containing
 				// method isn't final
@@ -776,20 +778,17 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 * If auto indent is enabled, this method is called when the `Tab'
 	 * or `Enter' key is pressed to perform mode-specific indentation
 	 * and return true, or return false if a normal tab is to be inserted.
-	 * @param view The view where the tab key was pressed
+	 * @param textArea The text area
 	 * @param line The line number to indent
 	 * @param force If true, the line will be indented even if it already
 	 * has the right amount of indent
 	 * @return true if the tab key event should be swallowed (ignored)
 	 * false if a real tab should be inserted
 	 */
-	public boolean indentLine(View view, int lineIndex, boolean force)
+	public boolean indentLine(JEditTextArea textArea, int lineIndex, boolean force)
 	{
 		if(lineIndex == 0)
 			return false;
-
-		// Use JEditTextArea's line access methods
-		JEditTextArea textArea = view.getTextArea();
 
 		// Get properties
 		String openBrackets = (String)getProperty("indentOpenBrackets");
@@ -1001,6 +1000,17 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			return super.getTokenMarker();
 		else
 			return null;
+	}
+
+	/**
+	 * Doesn't do anything if tokenization is disabled.
+	 */
+	public void tokenizeLines()
+	{
+		if(!jEdit.getBooleanProperty("buffer.tokenize"))
+			return;
+
+		super.tokenizeLines();
 	}
 
 	/**
@@ -1798,6 +1808,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.148  2000/05/07 05:48:29  sp
+ * You can now edit several buffers side-by-side in a split view
+ *
  * Revision 1.147  2000/05/01 11:53:23  sp
  * More icons added to toolbar, minor updates here and there
  *

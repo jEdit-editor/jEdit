@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
 public class reload_modes extends EditAction
@@ -48,9 +47,9 @@ public class reload_modes extends EditAction
 		View[] views = jEdit.getViews();
 		for(int i = 0; i < views.length; i++)
 		{
-			JEditTextArea[] textAreas = views[i].getTextAreas();
-			for(int j = 0; j < textAreas.length; j++)
-				textAreas[j].repaint();
+			EditPane[] editPanes = views[i].getEditPanes();
+			for(int j = 0; j < editPanes.length; j++)
+				editPanes[j].getTextArea().repaint();
 		}
 
 		view.hideWaitCursor();

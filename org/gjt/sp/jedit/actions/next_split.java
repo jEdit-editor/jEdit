@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class next_split extends EditAction
@@ -28,17 +27,17 @@ public class next_split extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		JEditTextArea[] textAreas = view.getTextAreas();
-		JEditTextArea textArea = view.getTextArea();
-		for(int i = 0; i < textAreas.length; i++)
+		EditPane[] editPanes = view.getEditPanes();
+		EditPane editPane = view.getEditPane();
+		for(int i = 0; i < editPanes.length; i++)
 		{
-			if(textArea == textAreas[i])
+			if(editPane == editPanes[i])
 			{
-				if(i == textAreas.length - 1)
-					textArea = textAreas[0];
+				if(i == editPanes.length - 1)
+					editPane = editPanes[0];
 				else
-					textArea = textAreas[i+1];
-				textArea.requestFocus();
+					editPane = editPanes[i+1];
+				editPane.focusOnTextArea();
 				break;
 			}
 		}

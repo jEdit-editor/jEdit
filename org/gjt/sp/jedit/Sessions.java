@@ -87,7 +87,7 @@ public class Sessions
 	 */
 	public static void saveSession(View view, String session)
 	{
-		view.saveCaretInfo();
+		view.getEditPane().saveCaretInfo();
 
 		String lineSep = System.getProperty("line.separator");
 		String filename = createSessionFileName(session);
@@ -225,6 +225,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/05/07 05:48:30  sp
+ * You can now edit several buffers side-by-side in a split view
+ *
  * Revision 1.16  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

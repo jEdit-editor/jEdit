@@ -42,45 +42,17 @@ public class ViewUpdate extends EBMessage.NonVetoable
 	public static final Object CLOSED = "CLOSED";
 
 	/**
-	 * View buffer changed.
-	 */
-	public static final Object BUFFER_CHANGED = "BUFFER_CHANGED";
-
-	/**
-	 * Text area created.
-	 */
-	public static final Object TEXTAREA_CREATED = "TEXTAREA_CREATED";
-
-	/**
-	 * Text area created.
-	 */
-	public static final Object TEXTAREA_DESTROYED = "TEXTAREA_DESTROYED";
-
-	/**
 	 * Creates a new view update message.
 	 * @param view The view
-	 * @param textArea The text area
 	 * @param what What happened
 	 */
 	public ViewUpdate(View view, Object what)
-	{
-		this(view,null,what);
-	}
-
-	/**
-	 * Creates a new view update message.
-	 * @param view The view
-	 * @param textArea The text area
-	 * @param what What happened
-	 */
-	public ViewUpdate(View view, JEditTextArea textArea, Object what)
 	{
 		super(view);
 
 		if(what == null)
 			throw new NullPointerException("What must be non-null");
 
-		this.textArea = textArea;
 		this.what = what;
 	}
 
@@ -100,20 +72,11 @@ public class ViewUpdate extends EBMessage.NonVetoable
 		return (View)getSource();
 	}
 
-	/**
-	 * Returns the text area involved.
-	 */
-	public JEditTextArea getTextArea()
-	{
-		return textArea;
-	}
-
 	public String paramString()
 	{
 		return super.paramString() + ",what=" + what;
 	}
 
 	// private members
-	private JEditTextArea textArea;
 	private Object what;
 }

@@ -167,7 +167,7 @@ public class SearchBar extends JPanel
 					find.setText(null);
 					SearchAndReplace.setSearchString(text);
 					SearchAndReplace.find(view,view);
-					view.focusOnTextArea();
+					view.getEditPane().focusOnTextArea();
 				}
 			}
 			else if(evt.getSource() == incremental)
@@ -205,7 +205,7 @@ public class SearchBar extends JPanel
 		{
 			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
 			{
-				view.focusOnTextArea();
+				view.getEditPane().focusOnTextArea();
 			}
 		}
 	}
@@ -244,6 +244,9 @@ public class SearchBar extends JPanel
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.8  2000/05/07 05:48:30  sp
+ * You can now edit several buffers side-by-side in a split view
+ *
  * Revision 1.7  2000/05/05 11:08:26  sp
  * Johnny Ryall
  *

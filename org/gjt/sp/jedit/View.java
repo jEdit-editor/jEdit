@@ -29,8 +29,6 @@ import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.syntax.SyntaxStyle;
-import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
@@ -51,9 +49,9 @@ public class View extends JFrame implements EBComponent
 	public void pushStatus(String str)
 	{
 		statusMsg.push(str);
-		JEditTextArea[] textAreas = getTextAreas();
+		/*JEditTextArea[] textAreas = getTextAreas();
 		for(int i = 0 ; i < textAreas.length; i++)
-			textAreas[i].getStatus().repaint();
+			textAreas[i].getStatus().repaint();*/
 	}
 
 	/**
@@ -64,83 +62,9 @@ public class View extends JFrame implements EBComponent
 		if(!statusMsg.isEmpty())
 			statusMsg.pop();
 
-		JEditTextArea[] textAreas = getTextAreas();
+		/*JEditTextArea[] textAreas = getTextAreas();
 		for(int i = 0 ; i < textAreas.length; i++)
-			textAreas[i].getStatus().repaint();
-	}
-
-	/**
-	 * Returns the buffer being edited by this view.
-	 */
-	public final Buffer getBuffer()
-	{
-		return buffer;
-	}
-
-	/**
-	 * Returns the most recently edited buffer.
-	 */
-	public final Buffer getRecentBuffer()
-	{
-		return recentBuffer;
-	}
-
-	/**
-	 * Sets the buffer being edited by this view.
-	 * @param buffer The buffer to edit.
-	 */
-	public void setBuffer(final Buffer buffer)
-	{
-		if(this.buffer == buffer)
-			return;
-
-		recentBuffer = this.buffer;
-		if(recentBuffer != null)
-			saveCaretInfo();
-		this.buffer = buffer;
-
-		unsplit();
-		textArea.setDocument(buffer);
-		((StatusBar)textArea.getStatus()).repaint();
-
-		updateMarkerMenus();
-		updateTitle();
-
-		// Don't fire event for the initial buffer set
-		if(recentBuffer != null)
-			EditBus.send(new ViewUpdate(this,ViewUpdate.BUFFER_CHANGED));
-
-		if(bufferTabs != null)
-			bufferTabs.selectBufferTab(buffer);
-		updateBuffersMenu();
-
-		focusOnTextArea();
-
-		// Only do this after all I/O requests are complete
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				loadCaretInfo();
-				buffer.checkModTime(View.this);
-			}
-		});
-	}
-
-	/**
-	 * Sets the focus onto the text area.
-	 */
-	public final void focusOnTextArea()
-	{
-		textArea.requestFocus();
-	}
-
-	/**
-	 * Returns the view's text area.
-	 */
-	public final JEditTextArea getTextArea()
-	{
-		return textArea;
+			textAreas[i].getStatus().repaint();*/
 	}
 
 	/**
@@ -166,13 +90,12 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void split(int orientation)
 	{
-		saveCaretInfo();
-		JEditTextArea oldTextArea = textArea;
-		textArea = createTextArea();
-		initTextArea(textArea,oldTextArea);
-		loadCaretInfo();
+		editPane.saveCaretInfo();
+		EditPane oldEditPane = editPane;
+		setEditPane(createEditPane(oldEditPane,null));
+		editPane.loadCaretInfo();
 
-		JComponent oldParent = (JComponent)oldTextArea.getParent();
+		JComponent oldParent = (JComponent)oldEditPane.getParent();
 
 		if(oldParent instanceof JSplitPane)
 		{
@@ -180,10 +103,11 @@ public class View extends JFrame implements EBComponent
 			int dividerPos = oldSplitPane.getDividerLocation();
 
 			Component left = oldSplitPane.getLeftComponent();
-			final JSplitPane newSplitPane = new JSplitPane(orientation,oldTextArea,textArea);
+			final JSplitPane newSplitPane = new JSplitPane(orientation,
+				oldEditPane,editPane);
 			newSplitPane.setBorder(null);
 
-			if(left == oldTextArea)
+			if(left == oldEditPane)
 				oldSplitPane.setLeftComponent(newSplitPane);
 			else
 				oldSplitPane.setRightComponent(newSplitPane);
@@ -195,29 +119,24 @@ public class View extends JFrame implements EBComponent
 				public void run()
 				{
 					newSplitPane.setDividerLocation(0.5);
-					textArea.requestFocus();
+					editPane.focusOnTextArea();
 				}
 			});
 		}
 		else
 		{
 			JSplitPane newSplitPane = splitPane = new JSplitPane(orientation,
-				oldTextArea,textArea);
+				oldEditPane,editPane);
 			newSplitPane.setBorder(null);
-			if(bufferTabs != null)
-				bufferTabs.update();
-			else
-			{
-				oldParent.add(splitPane);
-				oldParent.revalidate();
-			}
+			oldParent.add(splitPane);
+			oldParent.revalidate();
 
 			newSplitPane.setDividerLocation(oldParent.getHeight() / 2);
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()
 				{
-					textArea.requestFocus();
+					editPane.focusOnTextArea();
 				}
 			});
 		}
@@ -231,34 +150,26 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane != null)
 		{
-			JEditTextArea[] textAreas = getTextAreas();
-			for(int i = 0; i < textAreas.length; i++)
+			EditPane[] editPanes = getEditPanes();
+			for(int i = 0; i < editPanes.length; i++)
 			{
-				JEditTextArea _textArea = textAreas[i];
-				if(textArea != _textArea)
-				{
-					EditBus.send(new ViewUpdate(this,_textArea,
-						ViewUpdate.TEXTAREA_DESTROYED));
-				}
+				EditPane _editPane = editPanes[i];
+				if(editPane != _editPane)
+					editPane.close();
 			}
 
 			JComponent parent = (JComponent)splitPane.getParent();
 			parent.remove(splitPane);
 			splitPane = null;
-			if(bufferTabs != null)
-				bufferTabs.update();
-			else
-			{
-				parent.add(textArea);
-				parent.revalidate();
-			}
+			parent.add(editPane);
+			parent.revalidate();
 		}
 
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
-				focusOnTextArea();
+				editPane.focusOnTextArea();
 			}
 		});
 	}
@@ -273,23 +184,56 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Returns all text areas.
-	 * @since jEdit 2.3pre2
+	 * Returns the current edit pane's buffer.
 	 */
-	public JEditTextArea[] getTextAreas()
+	public Buffer getBuffer()
+	{
+		return editPane.getBuffer();
+	}
+
+	/**
+	 * Sets the current edit pane's buffer.
+	 */
+	public void setBuffer(Buffer buffer)
+	{
+		editPane.setBuffer(buffer);
+	}
+
+	/**
+	 * Returns the current edit pane's text area.
+	 */
+	public JEditTextArea getTextArea()
+	{
+		return editPane.getTextArea();
+	}
+
+	/**
+	 * Returns the current edit pane.
+	 * @since jEdit 2.5pre2
+	 */
+	public EditPane getEditPane()
+	{
+		return editPane;
+	}
+
+	/**
+	 * Returns all edit panes.
+	 * @since jEdit 2.5pre2
+	 */
+	public EditPane[] getEditPanes()
 	{
 		if(splitPane == null)
 		{
-			JEditTextArea[] ta = { textArea };
-			return ta;
+			EditPane[] ep = { editPane };
+			return ep;
 		}
 		else
 		{
 			Vector vec = new Vector();
-			getTextAreas(vec,splitPane);
-			JEditTextArea[] ta = new JEditTextArea[vec.size()];
-			vec.copyInto(ta);
-			return ta;
+			getEditPanes(vec,splitPane);
+			EditPane[] ep = new EditPane[vec.size()];
+			vec.copyInto(ep);
+			return ep;
 		}
 	}
 
@@ -314,58 +258,6 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Saves the caret information to the current buffer.
-	 */
-	public void saveCaretInfo()
-	{
-		buffer.putProperty(Buffer.SELECTION_START,new Integer(
-			textArea.getSelectionStart()));
-		buffer.putProperty(Buffer.SELECTION_END,new Integer(
-			textArea.getSelectionEnd()));
-		buffer.putProperty(Buffer.SELECTION_RECT,new Boolean(
-			textArea.isSelectionRectangular()));
-		buffer.putProperty(Buffer.SCROLL_VERT,new Integer(
-			textArea.getFirstLine()));
-		buffer.putProperty(Buffer.SCROLL_HORIZ,new Integer(
-			textArea.getHorizontalOffset()));
-		buffer.putProperty(Buffer.OVERWRITE,new Boolean(
-			textArea.isOverwriteEnabled()));
-	}
-
-	/**
-	 * Loads the caret information from the curret buffer.
-	 */
-	public void loadCaretInfo()
-	{
-		Integer start = (Integer)buffer.getProperty(Buffer.SELECTION_START);
-		Integer end = (Integer)buffer.getProperty(Buffer.SELECTION_END);
-		Boolean rectSel = (Boolean)buffer.getProperty(Buffer.SELECTION_RECT);
-		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
-		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
-		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
-
-		if(start != null && end != null)
-		{
-			textArea.select(Math.min(start.intValue(),
-				buffer.getLength()),
-				Math.min(end.intValue(),
-				buffer.getLength()));
-		}
-
-		if(firstLine != null && horizontalOffset != null)
-		{
-			textArea.setFirstLine(firstLine.intValue());
-			textArea.setHorizontalOffset(horizontalOffset.intValue());
-		}
-
-		if(rectSel != null && overwrite != null)
-		{
-			textArea.setSelectionRectangular(rectSel.booleanValue());
-			textArea.setOverwriteEnabled(overwrite.booleanValue());
-		}
-	}
-
-	/**
 	 * Returns true if this view has been closed with
 	 * <code>jEdit.closeView()</code>.
 	 */
@@ -387,11 +279,12 @@ public class View extends JFrame implements EBComponent
 			// has a wait cursor
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 			setCursor(cursor);
-			JEditTextArea[] textAreas = getTextAreas();
-			for(int i = 0; i < textAreas.length; i++)
+			EditPane[] editPanes = getEditPanes();
+			for(int i = 0; i < editPanes.length; i++)
 			{
-				JEditTextArea textArea = textAreas[i];
-				textArea.getPainter().setCursor(cursor);
+				EditPane editPane = editPanes[i];
+				editPane.getTextArea().getPainter()
+					.setCursor(cursor);
 			}
 		}
 	}
@@ -413,11 +306,12 @@ public class View extends JFrame implements EBComponent
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 			setCursor(cursor);
 			cursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
-			JEditTextArea[] textAreas = getTextAreas();
-			for(int i = 0; i < textAreas.length; i++)
+			EditPane[] editPanes = getEditPanes();
+			for(int i = 0; i < editPanes.length; i++)
 			{
-				JEditTextArea textArea = textAreas[i];
-				textArea.getPainter().setCursor(cursor);
+				EditPane editPane = editPanes[i];
+				editPane.getTextArea().getPainter()
+					.setCursor(cursor);
 			}
 		}
 	}
@@ -483,9 +377,11 @@ public class View extends JFrame implements EBComponent
 	View prev;
 	View next;
 
-	View(View view, Buffer buffer)
+	View(Buffer buffer)
 	{
 		setIconImage(GUIUtilities.getEditorIcon());
+
+		editPane = createEditPane(null,buffer);
 
 		// Dynamic menus
 		buffers = GUIUtilities.loadMenu(this,"buffers");
@@ -514,19 +410,10 @@ public class View extends JFrame implements EBComponent
 		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
 			jEdit.getInputHandler());
 
-		textArea = createTextArea();
-
-		if(view == null)
-			propertiesChanged();
-		else
-			loadPropertiesFromView(view);
-
-		if(buffer == null)
-			setBuffer(jEdit.getFirstBuffer());
-		else
-			setBuffer(buffer);
+		propertiesChanged();
 
 		getContentPane().add(BorderLayout.NORTH,toolBars);
+		getContentPane().add(BorderLayout.CENTER,editPane);
 
 		glassPane = new GlassPane();
 		getRootPane().setGlassPane(glassPane);
@@ -539,20 +426,15 @@ public class View extends JFrame implements EBComponent
 	{
 		closed = true;
 		GUIUtilities.saveGeometry(this,"view");
-		saveCaretInfo();
 		EditBus.removeFromBus(this);
 		dispose();
 
-		JEditTextArea[] textAreas = getTextAreas();
-		for(int i = 0; i < textAreas.length; i++)
-		{
-			EditBus.send(new ViewUpdate(this,textAreas[i],
-				ViewUpdate.TEXTAREA_DESTROYED));
-		}
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+			editPanes[i].close();
 
 		// null some variables so that retaining references
 		// to closed views won't hurt as much.
-		buffer = recentBuffer = null;
 		buffers = openFrom = saveTo = recent = currentDirectory
 			= clearMarker = gotoMarker = macros = plugins
 			= help = null;
@@ -560,505 +442,45 @@ public class View extends JFrame implements EBComponent
 		toolBar = null;
 		searchBar = null;
 		statusMsg = null;
-		bufferTabs = null;
 		splitPane = null;
-		textArea = null;
 		inputHandler = null;
 		glassPane = null;
 
 		setContentPane(new JPanel());
 	}
 
-	// protected members
-
-	/**
-	 * Forwards key events directly to the input handler.
-	 * This is slightly faster than using a KeyListener
-	 * because some Swing overhead is avoided.
-	 */
-	protected void processKeyEvent(KeyEvent evt)
-	{
-		if(glassPane.isVisible())
-		{
-			super.processKeyEvent(evt);
-			return;
-		}
-
-		switch(evt.getID())
-		{
-		case KeyEvent.KEY_TYPED:
-			if(inputHandler.isPrefixActive())
-				inputHandler.keyTyped(evt);
-			break;
-		case KeyEvent.KEY_PRESSED:
-			inputHandler.keyPressed(evt);
-			break;
-		case KeyEvent.KEY_RELEASED:
-			inputHandler.keyReleased(evt);
-			break;
-		}
-
-		if(!evt.isConsumed())
-			super.processKeyEvent(evt);
-	}
-
-	// private members
-	private Buffer buffer;
-	private Buffer recentBuffer;
-	private boolean closed;
-
-	private JMenu buffers;
-	private JMenu openFrom;
-	private JMenu saveTo;
-	private JMenu recent;
-	private JMenu currentDirectory;
-	private JMenu clearMarker;
-	private JMenu gotoMarker;
-	private JMenu macros;
-	private JMenu plugins;
-	private JMenu help;
-
-	private Box toolBars;
-	private JToolBar toolBar;
-	private SearchBar searchBar;
-
-	private Stack statusMsg;
-
-	private BufferTabs bufferTabs;
-	private JSplitPane splitPane;
-	private JEditTextArea textArea;
-
-	private InputHandler inputHandler;
-	private GlassPane glassPane;
-
-	private int waitCount;
-
-	private boolean showFullPath;
-	private boolean checkModStatus;
-
-	/**
-	 * Reloads various settings from the properties.
-	 */
-	private void getTextAreas(Vector vec, Component comp)
-	{
-		if(comp instanceof JEditTextArea)
-			vec.addElement(comp);
-		else if(comp instanceof JSplitPane)
-		{
-			JSplitPane split = (JSplitPane)comp;
-			getTextAreas(vec,split.getLeftComponent());
-			getTextAreas(vec,split.getRightComponent());
-		}
-	}
-
-	private void propertiesChanged()
-	{
-		loadToolBars();
-		initBufferTabs();
-
-		showFullPath = jEdit.getBooleanProperty("view.showFullPath");
-		checkModStatus = jEdit.getBooleanProperty("view.checkModStatus");
-		if(buffer != null)
-			updateTitle();
-
-		JEditTextArea[] textAreas = getTextAreas();
-		for(int i = 0; i < textAreas.length; i++)
-		{
-			initTextArea(textAreas[i]);
-		}
-
-		loadStyles();
-
-		updateRecentMenu();
-	}
-
-	private void initTextArea(JEditTextArea textArea)
-	{
-		TextAreaPainter painter = textArea.getPainter();
-
-		String family = jEdit.getProperty("view.font");
-		int size;
-		try
-		{
-			size = Integer.parseInt(jEdit.getProperty(
-				"view.fontsize"));
-		}
-		catch(NumberFormatException nf)
-		{
-			size = 14;
-		}
-		int style;
-		try
-		{
-			style = Integer.parseInt(jEdit.getProperty(
-				"view.fontstyle"));
-		}
-		catch(NumberFormatException nf)
-		{
-			style = Font.PLAIN;
-		}
-		Font font = new Font(family,style,size);
-
-		painter.setFont(font);
-		painter.setBracketHighlightEnabled(jEdit.getBooleanProperty(
-			"view.bracketHighlight"));
-		painter.setBracketHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.bracketHighlightColor")));
-		painter.setEOLMarkersPainted(jEdit.getBooleanProperty(
-			"view.eolMarkers"));
-		painter.setInvalidLinesPainted(jEdit.getBooleanProperty(
-			"view.paintInvalid"));
-		painter.setEOLMarkerColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.eolMarkerColor")));
-		painter.setCaretColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.caretColor")));
-		painter.setSelectionColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.selectionColor")));
-		painter.setBackground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.bgColor")));
-		painter.setForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.fgColor")));
-		painter.setBlockCaretEnabled(jEdit.getBooleanProperty(
-			"view.blockCaret"));
-		painter.setLineHighlightEnabled(jEdit.getBooleanProperty(
-			"view.lineHighlight"));
-		painter.setLineHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.lineHighlightColor")));
-
-		Gutter gutter = textArea.getGutter();
-		try
-		{
-			int width = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.width"));
-			gutter.setGutterWidth(width);
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default gutter width
-		}
-		gutter.setCollapsed(jEdit.getBooleanProperty(
-			"view.gutter.collapsed"));
-		gutter.setLineNumberingEnabled(jEdit.getBooleanProperty(
-			"view.gutter.lineNumbers"));
-		try
-		{
-			int interval = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.highlightInterval"));
-			gutter.setHighlightInterval(interval);
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default highlight interval
-		}
-		gutter.setCurrentLineHighlightEnabled(jEdit.getBooleanProperty(
-			"view.gutter.highlightCurrentLine"));
-		gutter.setBackground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.bgColor")));
-		gutter.setForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.fgColor")));
-		gutter.setHighlightedForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.highlightColor")));
-		gutter.setCurrentLineForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.currentLineColor")));
-		String alignment = jEdit.getProperty(
-			"view.gutter.numberAlignment");
-		if ("right".equals(alignment))
-		{
-			gutter.setLineNumberAlignment(Gutter.RIGHT);
-		}
-		else if ("center".equals(alignment))
-		{
-			gutter.setLineNumberAlignment(Gutter.CENTER);
-		}
-		else // left == default case
-		{
-			gutter.setLineNumberAlignment(Gutter.LEFT);
-		}
-		try
-		{
-			int width = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.borderWidth"));
-			gutter.setBorder(width, GUIUtilities.parseColor(
-				jEdit.getProperty("view.gutter.borderColor")));
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default border
-		}
-		try
-		{
-			String fontname = jEdit.getProperty("view.gutter.font");
-			int fontsize = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.fontsize"));
-			int fontstyle = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.fontstyle"));
-			gutter.setFont(new Font(fontname,fontstyle,fontsize));
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default font
-		}
-
-		textArea.setCaretBlinkEnabled(jEdit.getBooleanProperty(
-			"view.caretBlink"));
-
-		try
-		{
-			textArea.setElectricScroll(Integer.parseInt(jEdit
-				.getProperty("view.electricBorders")));
-		}
-		catch(NumberFormatException nf)
-		{
-			textArea.setElectricScroll(0);
-		}
-
-		// Set up the right-click popup menu
-		textArea.setRightClickPopup(GUIUtilities
-			.loadPopupMenu(this,"view.context"));
-	}
-
-	private void loadStyles()
-	{
-		try
-		{
-			SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
-
-			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment1"));
-			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment2"));
-			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal1"));
-			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal2"));
-			styles[Token.LABEL] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.label"));
-			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword1"));
-			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword2"));
-			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword3"));
-			styles[Token.FUNCTION] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.function"));
-			styles[Token.MARKUP] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.markup"));
-			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.operator"));
-			styles[Token.DIGIT] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.digit"));
-			styles[Token.INVALID] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.invalid"));
-
-			JEditTextArea[] textAreas = getTextAreas();
-			for(int i = 0; i < textAreas.length; i++)
-			{
-				JEditTextArea textArea = textAreas[i];
-				textArea.getPainter().setStyles(styles);
-			}
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
-	}
-
-	private void loadPropertiesFromView(View view)
-	{
-		loadToolBars();
-		initBufferTabs();
-
-		showFullPath = view.showFullPath;
-		checkModStatus = view.checkModStatus;
-
-		JEditTextArea[] textAreas = getTextAreas();
-		for(int i = 0; i < textAreas.length; i++)
-		{
-			initTextArea(textAreas[i],view.textArea);
-		}
-
-		updateRecentMenu();
-	}
-
-	private void initTextArea(JEditTextArea textArea, JEditTextArea copy)
-	{
-		TextAreaPainter painter = copy.getPainter();
-		TextAreaPainter myPainter = textArea.getPainter();
-		myPainter.setFont(painter.getFont());
-		myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
-		myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
-		myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
-		myPainter.setInvalidLinesPainted(painter.getInvalidLinesPainted());
-		myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
-		myPainter.setCaretColor(painter.getCaretColor());
-		myPainter.setSelectionColor(painter.getSelectionColor());
-		myPainter.setBackground(painter.getBackground());
-		myPainter.setForeground(painter.getForeground());
-		myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
-		myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
-		myPainter.setLineHighlightColor(painter.getLineHighlightColor());
-		myPainter.setStyles(painter.getStyles());
-
-		Gutter myGutter = textArea.getGutter();
-		Gutter gutter = copy.getGutter();
-		myGutter.setGutterWidth(gutter.getGutterWidth());
-		myGutter.setCollapsed(gutter.isCollapsed());
-		myGutter.setLineNumberingEnabled(gutter.isLineNumberingEnabled());
-		myGutter.setHighlightInterval(gutter.getHighlightInterval());
-		myGutter.setCurrentLineHighlightEnabled(gutter.isCurrentLineHighlightEnabled());
-		myGutter.setLineNumberAlignment(gutter.getLineNumberAlignment());
-		myGutter.setFont(gutter.getFont());
-		myGutter.setBorder(gutter.getBorder());
-		myGutter.setBackground(gutter.getBackground());
-		myGutter.setForeground(gutter.getForeground());
-		myGutter.setHighlightedForeground(gutter.getHighlightedForeground());
-		myGutter.setCurrentLineForeground(gutter.getCurrentLineForeground());
-
-		textArea.setCaretBlinkEnabled(copy.isCaretBlinkEnabled());
-		textArea.setElectricScroll(copy.getElectricScroll());
-
-		myPainter.setStyles(painter.getStyles());
-
-		// Set up the right-click popup menu
-		textArea.setRightClickPopup(GUIUtilities
-			.loadPopupMenu(this,"view.context"));
-	}
-
-	private void loadToolBars()
-	{
-		if(jEdit.getBooleanProperty("view.showToolbar"))
-		{
-			if(toolBar == null)
-			{
-				toolBar = GUIUtilities.loadToolBar("view.toolbar");
-				toolBar.add(Box.createGlue());
-			}
-			if(toolBar.getParent() == null)
-				addToolBar(toolBar);
-		}
-		else if(toolBar != null)
-		{
-			removeToolBar(toolBar);
-			toolBar = null;
-		}
-
-		if(jEdit.getBooleanProperty("view.showSearchbar"))
-		{
-			if(searchBar == null)
-				searchBar = new SearchBar(this);
-			if(searchBar.getParent() == null)
-				addToolBar(searchBar);
-		}
-		else if(searchBar != null)
-		{
-			removeToolBar(searchBar);
-			searchBar = null;
-		}
-	}
-
-	private JEditTextArea createTextArea()
-	{
-		JEditTextArea textArea = new JEditTextArea();
-
-		// Add the line number display
-		textArea.add(JEditTextArea.LEFT_OF_SCROLLBAR,new StatusBar(textArea));
-
-		textArea.getGutter().setContextMenu(GUIUtilities
-			.loadPopupMenu(this,"gutter.context"));
-
-		textArea.addCaretListener(new CaretHandler());
-		textArea.addFocusListener(new FocusHandler());
-
-		if(buffer != null)
-		{
-			textArea.setDocument(buffer);
-			textArea.setEditable(!buffer.isReadOnly());
-		}
-
-		EditBus.send(new ViewUpdate(this,textArea,
-			ViewUpdate.TEXTAREA_CREATED));
-
-		return textArea;
-	}
-
-	private void initBufferTabs()
-	{
-		Container parent;
-
-		if(bufferTabs != null)
-			parent = bufferTabs.getParent();
-		else if(splitPane != null)
-			parent = splitPane.getParent();
-		else
-			parent = textArea.getParent();
-
-		if(parent == null)
-			parent = getContentPane();
-
-		Container comp;
-		if(splitPane == null)
-			comp = textArea;
-		else
-			comp = splitPane;
-
-		if(jEdit.getBooleanProperty("view.showBufferTabs"))
-		{
-			if(bufferTabs == null)
-			{
-				bufferTabs = new BufferTabs(this);
-				parent.remove(comp);
-
-				// BorderLayout adds to center by default,
-				// but this will also work with other layouts.
-				parent.add(bufferTabs);
-			}
-
-			bufferTabs.setTabPlacement(Integer.parseInt(
-				jEdit.getProperty("view.bufferTabsPos")));
-		}
-		else
-		{
-			if(bufferTabs != null)
-			{
-				parent.remove(bufferTabs);
-				bufferTabs = null;
-				parent.add(comp);
-			}
-			else if(comp.getParent() == null)
-			{
-				parent.add(comp);
-			}
-		}
-
-		getRootPane().revalidate();
-		getRootPane().repaint();
-	}
-
 	/**
 	 * Updates the title bar and read only status of the text
 	 * area.
 	 */
-	private void updateTitle()
+	void updateTitle()
 	{
-		Object[] args = { ((showFullPath && !buffer.isNewFile())
-			? buffer.getPath() : buffer.getName()),
-			new Integer(buffer.isReadOnly() ? 1 : 0),
-			new Integer(buffer.isDirty() ? 1: 0),
-			new Integer(buffer.isNewFile() ? 1: 0)};
-		setTitle(jEdit.getProperty("view.title",args));
-
-		JEditTextArea[] textAreas = getTextAreas();
-		for(int i = 0; i < textAreas.length; i++)
+		Vector buffers = new Vector();
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
 		{
-			JEditTextArea textArea = textAreas[i];
-			textArea.setEditable(!buffer.isReadOnly());
+			Buffer buffer = editPanes[i].getBuffer();
+			if(buffers.indexOf(buffer) == -1)
+				buffers.addElement(buffer);
 		}
+
+		StringBuffer title = new StringBuffer(jEdit.getProperty("view.title"));
+		for(int i = 0; i < buffers.size(); i++)
+		{
+			if(i != 0)
+				title.append(", ");
+
+			Buffer buffer = (Buffer)buffers.elementAt(i);
+			title.append((showFullPath && !buffer.isNewFile())
+				? buffer.getPath() : buffer.getName());
+		}
+		setTitle(title.toString());
 	}
 
 	/**
 	 * Recreates the buffers menu.
 	 */
-	private void updateBuffersMenu()
+	void updateBuffersMenu()
 	{
 		if(jEdit.getBufferCount() == 0)
 		{
@@ -1096,10 +518,195 @@ public class View extends JFrame implements EBComponent
 			menuItem.addActionListener(jEdit.getAction("select-buffer"));
 			grp.add(menuItem);
 			menuItem.setActionCommand(name);
-			if(buffer == b)
+			if(editPane.getBuffer() == b)
 				menuItem.getModel().setSelected(true);
 			buffers.add(menuItem);
 		}
+	}
+
+	/**
+	 * Recreates the goto marker and clear marker menus.
+	 */
+	void updateMarkerMenus()
+	{
+		if(clearMarker.getMenuComponentCount() != 0)
+			clearMarker.removeAll();
+		if(gotoMarker.getMenuComponentCount() != 0)
+			gotoMarker.removeAll();
+		EditAction clearMarkerAction = jEdit.getAction("clear-marker");
+		EditAction gotoMarkerAction = jEdit.getAction("goto-marker");
+		Enumeration enum = editPane.getBuffer().getMarkers();
+		if(!enum.hasMoreElements())
+		{
+			clearMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
+			gotoMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
+			return;
+		}
+		while(enum.hasMoreElements())
+		{
+			String name = ((Marker)enum.nextElement())
+				.getName();
+			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
+				null,clearMarkerAction,name);
+			clearMarker.add(menuItem);
+			menuItem = new EnhancedMenuItem(name,null,
+				gotoMarkerAction,name);
+			gotoMarker.add(menuItem);
+		}
+	}
+
+	// protected members
+
+	/**
+	 * Forwards key events directly to the input handler.
+	 * This is slightly faster than using a KeyListener
+	 * because some Swing overhead is avoided.
+	 */
+	protected void processKeyEvent(KeyEvent evt)
+	{
+		if(glassPane.isVisible())
+		{
+			super.processKeyEvent(evt);
+			return;
+		}
+
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_TYPED:
+			if(inputHandler.isPrefixActive())
+				inputHandler.keyTyped(evt);
+			break;
+		case KeyEvent.KEY_PRESSED:
+			inputHandler.keyPressed(evt);
+			break;
+		case KeyEvent.KEY_RELEASED:
+			inputHandler.keyReleased(evt);
+			break;
+		}
+
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
+	}
+
+	// private members
+	private boolean closed;
+
+	private JMenu buffers;
+	private JMenu openFrom;
+	private JMenu saveTo;
+	private JMenu recent;
+	private JMenu currentDirectory;
+	private JMenu clearMarker;
+	private JMenu gotoMarker;
+	private JMenu macros;
+	private JMenu plugins;
+	private JMenu help;
+
+	private Box toolBars;
+	private JToolBar toolBar;
+	private SearchBar searchBar;
+
+	private Stack statusMsg;
+
+	private EditPane editPane;
+	private JSplitPane splitPane;
+
+	private InputHandler inputHandler;
+	private GlassPane glassPane;
+
+	private int waitCount;
+
+	private boolean showFullPath;
+	private boolean checkModStatus;
+
+	private void getEditPanes(Vector vec, Component comp)
+	{
+		if(comp instanceof EditPane)
+			vec.addElement(comp);
+		else if(comp instanceof JSplitPane)
+		{
+			JSplitPane split = (JSplitPane)comp;
+			getEditPanes(vec,split.getLeftComponent());
+			getEditPanes(vec,split.getRightComponent());
+		}
+	}
+
+	/**
+	 * Reloads various settings from the properties.
+	 */
+	private void propertiesChanged()
+	{
+		loadToolBars();
+
+		showFullPath = jEdit.getBooleanProperty("view.showFullPath");
+		checkModStatus = jEdit.getBooleanProperty("view.checkModStatus");
+		updateTitle();
+
+		updateRecentMenu();
+	}
+
+	private void loadToolBars()
+	{
+		if(jEdit.getBooleanProperty("view.showToolbar"))
+		{
+			if(toolBar == null)
+			{
+				toolBar = GUIUtilities.loadToolBar("view.toolbar");
+				toolBar.add(Box.createGlue());
+			}
+			if(toolBar.getParent() == null)
+				addToolBar(toolBar);
+		}
+		else if(toolBar != null)
+		{
+			removeToolBar(toolBar);
+			toolBar = null;
+		}
+
+		if(jEdit.getBooleanProperty("view.showSearchbar"))
+		{
+			if(searchBar == null)
+				searchBar = new SearchBar(this);
+			if(searchBar.getParent() == null)
+				addToolBar(searchBar);
+		}
+		else if(searchBar != null)
+		{
+			removeToolBar(searchBar);
+			searchBar = null;
+		}
+	}
+
+	private EditPane createEditPane(EditPane pane, Buffer buffer)
+	{
+		EditPane editPane = new EditPane(this,pane,buffer);
+		editPane.getTextArea().addFocusListener(new FocusHandler());
+		return editPane;
+	}
+
+	private void setEditPane(EditPane editPane)
+	{
+		EditPane oldPane = this.editPane;
+		this.editPane = editPane;
+		if(oldPane.getBuffer() != editPane.getBuffer())
+		{
+			updateBuffersMenu();
+			updateMarkerMenus();
+		}
+	}
+
+	/**
+	 * Returns true if at least one edit pane is editing this buffer.
+	 */
+	private boolean isOpen(Buffer buffer)
+	{
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+		{
+			if(editPanes[i].getBuffer() == buffer)
+				return true;
+		}
+		return false;
 	}
 
 	/**
@@ -1157,37 +764,6 @@ public class View extends JFrame implements EBComponent
 			EnhancedMenuItem menuItem = new EnhancedMenuItem(path,
 				null,action,path);
 			recent.add(menuItem);
-		}
-	}
-
-	/**
-	 * Recreates the goto marker and clear marker menus.
-	 */
-	private void updateMarkerMenus()
-	{
-		if(clearMarker.getMenuComponentCount() != 0)
-			clearMarker.removeAll();
-		if(gotoMarker.getMenuComponentCount() != 0)
-			gotoMarker.removeAll();
-		EditAction clearMarkerAction = jEdit.getAction("clear-marker");
-		EditAction gotoMarkerAction = jEdit.getAction("goto-marker");
-		Enumeration enum = buffer.getMarkers();
-		if(!enum.hasMoreElements())
-		{
-			clearMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
-			gotoMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
-			return;
-		}
-		while(enum.hasMoreElements())
-		{
-			String name = ((Marker)enum.nextElement())
-				.getName();
-			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
-				null,clearMarkerAction,name);
-			clearMarker.add(menuItem);
-			menuItem = new EnhancedMenuItem(name,null,
-				gotoMarkerAction,name);
-			gotoMarker.add(menuItem);
 		}
 	}
 
@@ -1333,79 +909,51 @@ public class View extends JFrame implements EBComponent
 
 	private void handleBufferUpdate(BufferUpdate msg)
 	{
-		Buffer _buffer = msg.getBuffer();
+		Buffer buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.CREATED)
 		{
 			updateBuffersMenu();
-
-			if(bufferTabs != null)
-				bufferTabs.addBufferTab(_buffer);
 		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
-			if(bufferTabs != null)
-				bufferTabs.removeBufferTab(_buffer);
-
-			if(_buffer == buffer)
-			{
-				Buffer newBuffer = (recentBuffer != null ?
-					recentBuffer : _buffer.getPrev());
-				if(newBuffer != null && !newBuffer.isClosed())
-					setBuffer(newBuffer);
-				else if(jEdit.getBufferCount() != 0)
-					setBuffer(jEdit.getFirstBuffer());
-
-				recentBuffer = null;
-			}
-			else if(_buffer == recentBuffer)
-				recentBuffer = null;
-
 			updateRecentMenu();
 			updateBuffersMenu();
 		}
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
-			if(_buffer == buffer)
+			if(isOpen(buffer))
 				updateTitle();
 			updateBuffersMenu();
-
-			if(bufferTabs != null)
-				bufferTabs.updateBufferTab(_buffer);
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
 		{
-			if(_buffer == buffer)
+			if(isOpen(buffer))
 				updateMarkerMenus();
-		}
-		else if(msg.getWhat() == BufferUpdate.MODE_CHANGED)
-		{
-			if(_buffer == buffer)
-			{
-				JEditTextArea[] textAreas = getTextAreas();
-				for(int i = 0; i < textAreas.length; i++)
-				{
-					JEditTextArea textArea = textAreas[i];
-					textArea.getPainter().repaint();
-				}
-			}
 		}
 	}
 
-	class CaretHandler implements CaretListener
+	/*class CaretHandler implements CaretListener
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
 			JEditTextArea textArea = (JEditTextArea)evt.getSource();
 			((StatusBar)textArea.getStatus()).repaint();
 		}
-	}
+	}*/
 
 	class FocusHandler extends FocusAdapter
 	{
 		public void focusGained(FocusEvent evt)
 		{
-			textArea = (JEditTextArea)evt.getSource();
+			// walk up hierarchy, looking for an EditPane
+			Component comp = (Component)evt.getSource();
+			while(!(comp instanceof EditPane))
+			{
+				comp = comp.getParent();
+			}
+
+			setEditPane((EditPane)comp);
 		}
 	}
 
@@ -1417,12 +965,12 @@ public class View extends JFrame implements EBComponent
 		{
 			if(!gotFocus)
 			{
-				textArea.requestFocus();
+				editPane.focusOnTextArea();
 				gotFocus = true;
 			}
 
 			if(checkModStatus)
-				buffer.checkModTime(View.this);
+				editPane.getBuffer().checkModTime(View.this);
 		}
 
 		public void windowClosing(WindowEvent evt)
@@ -1443,7 +991,7 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	class StatusBar extends JComponent
+	/*class StatusBar extends JComponent
 	{
 		JEditTextArea textArea;
 
@@ -1495,12 +1043,15 @@ public class View extends JFrame implements EBComponent
 		{
 			return new Dimension(200,0);
 		}
-	}
+	}*/
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.168  2000/05/07 05:48:30  sp
+ * You can now edit several buffers side-by-side in a split view
+ *
  * Revision 1.167  2000/05/05 11:08:26  sp
  * Johnny Ryall
  *

@@ -440,14 +440,10 @@ select-next-line.label=Select Next Line
 ###
 
 # Title
-# {0} - file name
-# {1} - 1 if read only, 0 if read-write
-# {2} - 1 if modified, 0 if saved
-# {3} - 1 if new, 0 if existing
-view.title=jEdit: {0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
+view.title=jEdit - 
 
-# Same as view.title but no leading 'jEdit:'
 view.buffer-label={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
+
 # Status messages
 view.status.loading=Loading {0}
 view.status.saving=Saving {0}
@@ -821,6 +817,7 @@ options.general.showFullPath=Show full path of buffers in title bar
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort by file name only (instead of full path)
 options.general.checkModStatus=Check file modification time on focus
+options.general.tokenize=Fully parse files for syntax info when loading
 options.editor.label=Editor
 options.editor.defaultMode=Default edit mode:\ 
 options.editor.font=Text font:\ 

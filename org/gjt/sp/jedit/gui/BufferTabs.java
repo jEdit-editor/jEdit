@@ -33,9 +33,9 @@ import org.gjt.sp.jedit.*;
  */
 public class BufferTabs extends JTabbedPane
 {
-	public BufferTabs(View view)
+	public BufferTabs(EditPane editPane)
 	{
-		this.view = view;
+		this.editPane = editPane;
 
 		buffers = new Vector();
 
@@ -130,7 +130,7 @@ public class BufferTabs extends JTabbedPane
 
 			updating = false;
 
-			if(view.getBuffer() == buffer)
+			if(editPane.getBuffer() == buffer)
 				selectBufferTab(buffer);
 		}
 	}
@@ -152,7 +152,7 @@ public class BufferTabs extends JTabbedPane
 	}
 
 	// private members
-	private View view;
+	private EditPane editPane;
 	private Vector buffers;
 	private boolean removing;
 	private boolean updating;
@@ -225,21 +225,16 @@ public class BufferTabs extends JTabbedPane
 
 		void select()
 		{
-			view.setBuffer(buffer);
+			editPane.setBuffer(buffer);
 			update();
 		}
 
 		void update()
 		{
-			JComponent comp;
-			if(view.getSplitPane() == null)
-				comp = view.getTextArea();
-			else
-				comp = view.getSplitPane();
-			this.add(BorderLayout.CENTER,comp);
+			this.add(BorderLayout.CENTER,editPane.getTextArea());
 			this.revalidate();
 
-			view.focusOnTextArea();
+			editPane.focusOnTextArea();
 		}
 
 		public boolean isValidateRoot()

@@ -65,6 +65,9 @@ buffer.defaultMode=text
 # Undo queue size
 buffer.undoCount=100
 
+# Should files be tokenized on load?
+buffer.tokenize=true
+
 # Print margins (these cannot be set on a per-buffer basis currently.
 # Not much point fixing this though)
 buffer.margin.top=0.5
@@ -120,7 +123,7 @@ view.eolMarkers=true
 view.eolMarkerColor=#009999
 
 # Invalid lines
-view.paintInvalid=true
+view.paintInvalid=false
 
 # Caret color
 view.caretColor=#ff0000

@@ -178,6 +178,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 		checkModStatus.getModel().setSelected(jEdit.getBooleanProperty(
 			"view.checkModStatus"));
 		addComponent(checkModStatus);
+
+		/* Tokenize files on load */
+		tokenize = new JCheckBox(jEdit.getProperty(
+			"options.general.tokenize"));
+		tokenize.getModel().setSelected(jEdit.getBooleanProperty(
+			"buffer.tokenize"));
+		addComponent(tokenize);
 	}
 
 	protected void _save()
@@ -225,6 +232,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus.getModel()
 			.isSelected());
+		jEdit.setBooleanProperty("buffer.tokenize",tokenize.getModel()
+			.isSelected());
 	}
 
 	// private members
@@ -248,4 +257,5 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
+	private JCheckBox tokenize;
 }

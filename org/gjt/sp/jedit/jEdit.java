@@ -1352,10 +1352,10 @@ public class jEdit
 		if(view != null)
 		{
 			view.showWaitCursor();
-			view.saveCaretInfo();
+			view.getEditPane().saveCaretInfo();
 		}
 
-		View newView = new View(view,buffer);
+		View newView = new View(buffer);
 		addViewToList(newView);
 
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
@@ -2259,6 +2259,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.233  2000/05/07 05:48:30  sp
+ * You can now edit several buffers side-by-side in a split view
+ *
  * Revision 1.232  2000/05/04 10:37:04  sp
  * Wasting time
  *

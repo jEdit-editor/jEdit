@@ -110,9 +110,9 @@ public abstract class InputHandler extends KeyAdapter
 
 		if(view != null)
 		{
-			JEditTextArea[] textAreas = view.getTextAreas();
-			for(int i = 0; i < textAreas.length; i++)
-				textAreas[i].getStatus().repaint();
+			//JEditTextArea[] textAreas = view.getTextAreas();
+			//for(int i = 0; i < textAreas.length; i++)
+			//	textAreas[i].getStatus().repaint();
 		}
 	}
 
@@ -134,9 +134,9 @@ public abstract class InputHandler extends KeyAdapter
 
 		if(view != null)
 		{
-			JEditTextArea[] textAreas = view.getTextAreas();
+			/*JEditTextArea[] textAreas = view.getTextAreas();
 			for(int i = 0; i < textAreas.length; i++)
-				textAreas[i].getStatus().repaint();
+				textAreas[i].getStatus().repaint();*/
 		}
 	}
 
@@ -286,6 +286,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/05/07 05:48:30  sp
+ * You can now edit several buffers side-by-side in a split view
+ *
  * Revision 1.2  2000/04/30 07:27:13  sp
  * Ftp VFS hacking, bug fixes
  *

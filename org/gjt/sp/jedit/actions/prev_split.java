@@ -28,17 +28,17 @@ public class prev_split extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		JEditTextArea[] textAreas = view.getTextAreas();
-		JEditTextArea textArea = view.getTextArea();
-		for(int i = 0; i < textAreas.length; i++)
+		EditPane[] editPanes = view.getEditPanes();
+		EditPane editPane = view.getEditPane();
+		for(int i = 0; i < editPanes.length; i++)
 		{
-			if(textArea == textAreas[i])
+			if(editPane == editPanes[i])
 			{
 				if(i == 0)
-					textArea = textAreas[textAreas.length-1];
+					editPane = editPanes[editPanes.length - 1];
 				else
-					textArea = textAreas[i-1];
-				textArea.requestFocus();
+					editPane = editPanes[i-1];
+				editPane.focusOnTextArea();
 				break;
 			}
 		}

@@ -210,6 +210,26 @@ public class JEditTextArea extends JComponent
 	{
 		if(vertical != null && visibleLines != 0)
 		{
+			// don't display stuff past the end of the document if
+			// we can help it
+			int lineCount = getLineCount();
+			if(firstLine < 0)
+			{
+				setFirstLine(0);
+				return;
+			}
+			else if(lineCount < firstLine + visibleLines)
+			{
+				// this will call updateScrollBars(), so
+				// just return...
+				int newFirstLine = Math.max(0,lineCount - visibleLines);
+				if(newFirstLine != firstLine)
+				{
+					setFirstLine(newFirstLine);
+					return;
+				}
+			}
+
 			vertical.setValues(firstLine,visibleLines,0,getLineCount());
 			vertical.setUnitIncrement(2);
 			vertical.setBlockIncrement(visibleLines);
@@ -234,15 +254,15 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Sets the line displayed at the text area's origin without
-	 * updating the scroll bars.
+	 * Sets the line displayed at the text area's origin.
 	 */
 	public void setFirstLine(int firstLine)
 	{
 		if(firstLine == this.firstLine)
 			return;
-		int oldFirstLine = this.firstLine;
+
 		this.firstLine = firstLine;
+
 		if(firstLine != vertical.getValue())
 			updateScrollBars();
 		painter.repaint();
@@ -2194,6 +2214,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.60  2000/05/07 05:48:30  sp
+ * You can now edit several buffers side-by-side in a split view
+ *
  * Revision 1.59  2000/05/06 05:53:46  sp
  * HyperSearch bug fix
  *

@@ -79,7 +79,7 @@ public class indent_lines extends EditAction
 		buffer.beginCompoundEdit();
 		for(int i = start; i <= end; i++)
 		{
-			buffer.indentLine(view,i,true);
+			buffer.indentLine(textArea,i,true);
 		}
 		buffer.endCompoundEdit();
 	}

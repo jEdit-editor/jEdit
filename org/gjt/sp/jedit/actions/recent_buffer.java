@@ -27,10 +27,11 @@ public class recent_buffer extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer recentBuffer = view.getRecentBuffer();
+		EditPane editPane = view.getEditPane();
+		Buffer recentBuffer = editPane.getRecentBuffer();
 		if(recentBuffer != null)
-			view.setBuffer(view.getRecentBuffer());
+			editPane.setBuffer(recentBuffer);
 		else
-			view.getToolkit().beep();
+			editPane.getToolkit().beep();
 	}
 }
