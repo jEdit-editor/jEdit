@@ -189,6 +189,7 @@
 			<fileset dir="." includes="doc/users-guide/*.pdf"/>
 			<fileset dir="." includes="doc/users-guide/*.aux"/>
 			<fileset dir="." includes="doc/users-guide/*.tex"/>
+			<fileset dir="." includes="doc/users-guide/*.out"/>
 			<fileset dir="." includes="doc/users-guide/*.log"/>
 
 			<fileset dir="." includes="installer/jedit-*"/>
