@@ -4,8 +4,10 @@ JEDIT 3.2 VERSION HISTORY
 
 + Enhancements
 
-- Improvements to plugin resource handling, required for XML plugin 0.4
+- Improvements to plugin resource handling, needed by XML plugin 0.4
 - Changes to BeanShellAction to improve performance
+- jedit.spec file for creating RPM improved (Mike Dillon)
+- Documentation changes (John Gellene)
 
 + Bug Fixes
 

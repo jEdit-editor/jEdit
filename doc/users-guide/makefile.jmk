@@ -15,7 +15,7 @@
 # :indentSize=4:noTabs=true:
 
 # this sucks
-xml_dcl = "/usr/local/share/OpenSP/xml.dcl";
+xml_dcl = "/usr/share/sgml/xml.dcl";
 
 "all": "htmldocs" "pdfdocs" "pdfdocs-a4";
 

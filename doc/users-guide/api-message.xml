@@ -154,8 +154,8 @@
     <para>
         This sets the <parameter>vetoed</parameter> state to
         <constant>true</constant>, which terminates circulation of the
-        message to subscribers on the EditBus.  To preven a message from being
-        vetoed, the message object must be dereived from the abstract class
+        message to subscribers on the EditBus.  To prevent a message from being
+        vetoed, the message object must be derived from the abstract class
         <classname>EBMessage.NonVetoable</classname>.  An object of this class
         will throw an <classname>InternalError</classname> if the
         <function>veto()</function> method is called on it.

@@ -1566,6 +1566,10 @@ JEditTextArea</title>
     line index is zero-based, so <function>getFirstLine()</function> will
     always return zero for the first line of text.
   </para>
+  <para>
+    To convert a virtual line count to a physical count or vice versa,
+    see <xref linkend="class-buffer-virtual-lines" />.
+  </para>
 </listitem>
 
 <listitem>
@@ -1908,6 +1912,25 @@ JEditTextArea</title>
 <para>
     Returns the number of lines in the buffer being edited.
 </para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public int <function>getVirtualLineCount</function></funcdef>
+  <void/>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Returns the number of <quote>virtual</quote> or visible lines in the
+    buffer being edited, which may be less than the total number of
+    lines because of folding or narrowing.
+</para>
+<para>
+  To convert a virtual line count to a physical count or vice versa,
+  see <xref linkend="class-buffer-virtual-lines" />.
+</para>
+
 </listitem>
 
 <listitem>
@@ -2515,6 +2538,43 @@ JEditTextArea</title>
 </itemizedlist>
 
 </sect3>
+
+<sect3 id="class-buffer-virtual-lines">
+<title>Virtual and physical line indices</title>
+
+<para>
+  When jEdit's folding or narrowing features are used to hide
+  portions of a buffer, the <quote>virtual</quote> line count visible
+  in the text area is generally not equal to the <quote>physical</quote>
+  line count of the buffer represented by the gutter's display.  The
+  following pair of methods translate one enumeration to the other.
+</para>
+
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>virtualToPhysical</function></funcdef>
+        <paramdef>int <parameter>lineNo</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>physicalToVirtual</function></funcdef>
+        <paramdef>int <parameter>lineNo</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+</itemizedlist>
+
+</sect3>
+
 </sect2>
 
 </sect1>
