@@ -21,10 +21,11 @@
    </para>
    <para>
     If automatic mode selection is not appropriate, the edit mode can
-    be specified manually. To set the current buffer's edit mode
-    on a one-time basis, specify it in the
+    be specified manually. The current buffer's edit mode can be set
+    on a one-time basis in the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-    dialog box. To have a buffer open with a specific edit mode every time,
+    dialog box; see <xref linkend="buffer-opts" />. To set a buffer's edit mode
+    for future editing sessions,
     place the following in one of the first 10 lines of the buffer,
     where <replaceable>edit mode</replaceable> is the name of the desired edit
     mode:
@@ -34,7 +35,7 @@
   <sect2 id="syntax-hilite"><title>Syntax Highlighting</title>
    <para>
     Syntax highlighting is the display of programming language
-    tokens using different fonts and colors. This makes the code
+    tokens using different fonts and colors. This makes code
     easier to follow and errors such as misplaced quotes easier to spot.
     All edit modes except for
     the plain text mode perform syntax highlighting.
@@ -43,7 +44,7 @@
     The colors and styles used to highlight syntax tokens can be changed
     in the <guibutton>Styles</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="global-opts" />.
    </para>
    <para>
     Syntax highlighting can be enabled or disabled in one of
@@ -58,7 +59,7 @@
     <listitem><para>In the current buffer
     for the duration of the editing session in the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-    dialog box.</para></listitem>
+    dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
     <listitem><para>In the current buffer for future editing sessions, by placing
     the following in one of the first 10 lines of the buffer, where
     <replaceable>flag</replaceable> is either <quote>true</quote> or
@@ -81,7 +82,8 @@
    edit modes, or mode-specific. Abbreviations can be edited
    in the <guibutton>Abbreviations</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box. The Java, SGML and VHDL edit modes include some pre-defined
+   dialog box; see <xref linkend="global-opts" />. The Java, SGML and VHDL edit
+   modes include some pre-defined
    abbreviations you might find useful.
   </para>
   <para>
@@ -94,8 +96,9 @@
    Automatic abbreviation expansion can be enabled in the
    <guibutton>Abbreviations</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box. If enabled, pressing the space bar will automatically expand
-   the word before the caret, assuming it is a valid abbreviation.
+   dialog box; see <xref linkend="global-opts" />. If enabled, pressing the
+   space bar after entering an
+   abbreviation will automatically expand it.
   </para>
   <para>
    If automatic expansion
@@ -116,7 +119,8 @@
    <programlisting>for(int $1 = 0; $1 &lt; $2; $1++)</programlisting>
    <para>
     Now, simply entering <quote>F</quote> in the buffer and expanding it will
-    insert the above text. However, if you expand <literal>F#j#array.length#</literal>,
+    insert the above text as-is. However, if you expand
+    <literal>F#j#array.length#</literal>,
     the following will be inserted:
    </para>
    <programlisting>for(int j = 0; j &lt; array.length; j++)</programlisting>
@@ -139,7 +143,7 @@
    screen). Bracket highlighting can be disabled in the
    <guibutton>Text Area</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="global-opts" />.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
@@ -197,7 +201,7 @@
    <listitem><para>In the current buffer
    for the duration of the editing session in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-   dialog box.</para></listitem>
+   dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
    <listitem><para>In the current buffer
    for future editing sessions by placing the
    following in one of the first 10 lines of the buffer, where
@@ -239,7 +243,7 @@
     <listitem><para>In the current buffer for
     the duration of the editing session in the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-    dialog box.</para></listitem>
+    dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
     <listitem><para>In the current buffer for
     future editing sessions by placing the following in one of the first
     10 lines of the buffer, where <replaceable>flag</replaceable> is either
@@ -289,7 +293,7 @@
     <listitem><para>In the current buffer for the duration of the editing
     session in the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-    dialog box. </para></listitem>
+    dialog box; see <xref linkend="buffer-opts" />. </para></listitem>
     <listitem><para>In the current buffer for future editing sessions
     by placing the following in the first 10 lines of a buffer,
     where <replaceable>flag</replaceable> is either <quote>true</quote> or
@@ -345,7 +349,7 @@
    dialog box, or on a buffer-specific basis using buffer-local
    properties. For example, placing the following in one of the first 10 lines
    of a buffer will change the range comment strings to <literal>(*</literal> and
-   <quote>*)</quote>:
+   <literal>*)</literal>:
   </para>
   <screen>:commentStart=(*:commentEnd=*):</screen>
   <para>
@@ -388,7 +392,7 @@
    The initial fold visibility level, in multiples of the indent width,
    can be specified on a mode-specific or global basis in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box. Folds
+   dialog box; see <xref linkend="global-opts" />. Folds
    with a level higher than this will be automatically collapsed after a buffer
    is loaded. Setting this value to zero makes all folds expanded initially
    (this is the default).

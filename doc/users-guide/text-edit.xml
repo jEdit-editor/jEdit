@@ -99,13 +99,9 @@
    <para>
     Pressing <keycombo><keycap>Control</keycap> <keycap>\</keycap></keycombo>
     turns multiple selection mode on and
-    off. In multiple selection mode, the text <literal>multi</literal> is shown
-    in black in the status bar, and multiple fragments of text can be selected
-    and operated on simultaneously. Note that deactivating multiple selection
-    mode while a fragmented selection exists will leave the selection in place,
-    but it will prevent you from making further fragmented selections. If a
-    fragmented selection exists but multiple selection mode is not active, the
-    text <literal>multi</literal> will be shown in dark blue.
+    off. In multiple selection mode, multiple fragments of text can be selected
+    and operated on simultaneously, and the text <literal>multi</literal> is shown
+    in black in the status bar.
    </para>
    <para>
     While multiple selection mode is active, you can click and drag the mouse
@@ -140,6 +136,15 @@
     <listitem><para>Some older plugins may not support multiple selection at
     all.</para></listitem>
    </itemizedlist>
+   <tip>
+    <para>
+     Deactivating multiple selection
+     mode while a fragmented selection exists will leave the selection in place,
+     but it will prevent you from making further fragmented selections. If a
+     fragmented selection exists but multiple selection mode is not active, the
+     text <literal>multi</literal> will be shown in dark blue in the status bar.
+    </para>
+   </tip>
   </sect2>
  </sect1>
  <sect1 id="entering-text"><title>Inserting and Deleting Text</title>
@@ -168,11 +173,11 @@
    basis in the
    <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.</para></listitem>
+   dialog box; see <xref linkend="global-opts" />.</para></listitem>
    <listitem><para>In the current buffer
    for the duration of the editing session in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="buffer-opts" />.
    </para></listitem>
    <listitem><para>In the current buffer
    for future editing sessions by placing
@@ -325,7 +330,7 @@
    to Start Of Line</guimenuitem>
    (shortcut:
    <keycombo><keycap>Shift</keycap><keycap>Backspace</keycap></keycombo>)
-   deletes all text from the caret to the start of the current line.
+   deletes all text from the start of the current line to the caret.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
@@ -437,8 +442,8 @@
  </sect1>
  <sect1 id="text-transfer"><title>Transferring Text</title>
   <para>
-   jEdit provides a rich set of commands for moving and copying text. Text is
-   transferred using <firstterm>registers</firstterm>. A register is a holding
+   jEdit provides a rich set of commands for moving and copying text
+   using <firstterm>registers</firstterm>. A register is a holding
    area with a single-character name that can hold once piece of text at a time.
    Registers are global to the editor; all buffers share the same set. With the
    exception of the clipboard, register contents are only accessable inside
@@ -490,15 +495,19 @@
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Cut Append</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>)
-    adds the selected text to the clipboard, with replacing the existing
-    clipboard contents, then removes the text from the buffer.
+    appends the selected text to the clipboard, then removes it from the
+    buffer. After this command has been invoked, the clipboard will consist of
+    the former clipboard contents, followed by a newline, followed by the
+    selected text.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Copy Append</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>)
-    adds the selected text to the clipboard, with replacing the existing
-    clipboard contents, without removing the text from the buffer.
+    appends the selected text to the clipboard, and leaves it in the
+    buffer. After this command has been invoked, the clipboard will consist of
+    the former clipboard contents, followed by a newline, followed by the
+    selected text.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste</guimenuitem>
@@ -517,12 +526,15 @@
     These commands all expect a single-character
     register name to be typed at the keyboard after the command is
     invoked, and subsequently operate on that register.
+    Pressing <keycap>Escape</keycap> instead of specifying a register name
+    invoking a command will cancel the operation.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Cut
     to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>)
+    <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>
+    <keycap><replaceable>register</replaceable></keycap>)
     stores the selected text in the specified
     register, removing it from the buffer.
    </para>
@@ -530,7 +542,8 @@
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Copy
     to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>)
+    <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>
+    <keycap><replaceable>register</replaceable></keycap>)
     stores the selected text in the specified
     register, leaving it in the buffer.
    </para>
@@ -538,7 +551,8 @@
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Cut
     Append to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>)
+    <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>
+    <keycap><replaceable>register</replaceable></keycap>)
     adds the selected text to the existing contents of the specified
     register, and removes it from the buffer.
    </para>
@@ -546,7 +560,8 @@
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Copy
     Append to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>)
+    <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>
+    <keycap><replaceable>register</replaceable></keycap>)
     adds the selected text to the existing contents of the specified
     register, without removing it from the buffer.
    </para>
@@ -554,7 +569,8 @@
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Paste
     from Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>) 
+    <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>
+    <keycap><replaceable>register</replaceable></keycap>) 
     replaces the selection with the
     contents of the specified register.
    </para>
@@ -567,7 +583,7 @@
     pasted text. By default, the last 20 strings are remembered; this can be
     changed in the <guibutton>General</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="global-opts" />.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>View
@@ -584,16 +600,17 @@
    at most one marker set pointing to it. Markers are persistent; they are
    saved to
    <filename>.<replaceable>filename</replaceable>.marks</filename>, where
-   <replaceable>filename</replaceable> is the file name. (The dot prefix
-   makes the marker file hidden on Unix systems). Marker persistance can be
+   <filename><replaceable>filename</replaceable></filename> is the file
+   name<footnote><para>The dot prefix
+   makes the markers file hidden on Unix systems.</para></footnote>. Marker
+   saving can be
    disabled in the <guibutton>Loading and Saving</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" /> for information about the 
-   global options dialog box.
+   dialog box; see <xref linkend="global-opts" />.
   </para>
   <para>
    Markers are listed in the <guimenu>Markers</guimenu> menu; selecting a marker
-   from this menu is the simplest way to return to its locaiton.
+   from this menu is the simplest way to return to its location.
    Each marker can optionally have a single-character shortcut; markers without
    a shortcut can only be returned to using the menu, markers with a shortcut
    can be accessed more quickly from the keyboard.
@@ -611,8 +628,8 @@
    <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>) adds a
    marker without a shortcut pointing to the current line. If a marker is
    already set on the current line, the marker is removed instead.
-   If some text is
-   selected, markers are added to the first and last line of each selection.
+   If text is selected,
+   markers are added to the first and last line of each selection.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Add Marker With
@@ -728,7 +745,8 @@
    <para>
     Occurrences of the search string can be replaced with either a replacement
     string or the result of a BeanShell script snippet. Two radio buttons in
-    the search and replace dialog box select between these two behaviors.
+    the search and replace dialog box can be used to choose between these two
+    behaviors.
    </para>
    <para>
     Pressing the
@@ -748,14 +766,14 @@
    <para>
     In text replacement mode, the search string is replaced with the replacement
     string. If regular expressions are enabled, positional parameters
-    (<literal>$0</literal>, <literal>$1</literal>, <literal>$3</literal>, and so
+    (<literal>$0</literal>, <literal>$1</literal>, <literal>$2</literal>, and so
     on) can be used to insert the contents of matched subexpressions in the
-    replacement text; see <xref linkend="regexps" /> for information.
+    replacement text; see <xref linkend="regexps" /> for more information.
    </para>
    <para>
     In BeanShell replacement mode, the search string is replaced with the return
-    value of a BeanShell snippet. The following variables can be used in the
-    snippet:
+    value of a BeanShell snippet. The following predefined variables can be
+    referenced in the snippet:
    </para>
    <itemizedlist><listitem><para><varname>_0</varname> -- the text to be
    replaced</para>
@@ -780,7 +798,7 @@
    </informalexample>
    <informalexample>
     <para>
-     To replace arithmetic expression between curly braces with their result,
+     To replace arithmetic expressions between curly braces with their result,
      search for the following regular expression:
     </para>
     <programlisting><![CDATA[\{(.+)\}]]></programlisting>
@@ -789,6 +807,9 @@
     </para>
     <programlisting><![CDATA[eval(_1)]]></programlisting>
    </informalexample>
+   <para>
+    These two examples only scratch the surface; the possibilities are endless.
+   </para>
   </sect2>
   <sect2><title>HyperSearch</title>
    <para>
@@ -802,7 +823,7 @@
     the window can be set to dock into the view
     in the <guibutton>Docking</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="docking" />.
    </para>
    <para>
     Running searches can be stopped in the
@@ -817,14 +838,14 @@
    </para>
    <para>
     If the <guibutton>All buffers</guibutton> radio button in the search and
-    replace dialog box is selected, all open buffers whose names match the filter
+    replace dialog box is selected, all open buffers whose names match the glob
+    pattern
     entered in the <guibutton>Filter</guibutton> text field will be searched.
-    The filter is specified in the form of a glob pattern; see
-    <xref linkend="globs" /> for more information about glob patterns.
+    See <xref linkend="globs" /> for more information about glob patterns.
    </para>
    <para>
     If the <guibutton>Directory</guibutton> radio button is selected, all files
-    in the directory whose names match the filter will be searched. The
+    in the directory whose names match the glob will be searched. The
     directory to search in can either be entered in the
     <guibutton>Directory</guibutton> text field, or chosen in a file selector
     dialog box by clicking <guibutton>Choose</guibutton>.
@@ -864,15 +885,16 @@
     The search bar at the top of the view provides a convenient way to
     perform simple searches without
     opening the search and replace dialog box first. Neither multiple file
-    search or replacement can be done from the search bar.
+    search nor replacement can be done from the search bar.
    </para>
    <para>
-    Initially, the search bar is in <firstterm>incremental search</firstterm>
-    mode. In incremental search mode, the first occurrence of the search
+    Unless the <guibutton>HyperSearch</guibutton> check box is selected, the
+    search bar will perform an <firstterm>incremental search</firstterm>.
+    In incremental search mode, the first occurrence of the search
     string is located in the current buffer as is it is being typed.
-    Subsequent occurrences can be located by pressing <keycap>Enter</keycap>
-    and <keycombo><keycap>Shift</keycap><keycap>Enter</keycap></keycombo> to
-    search forwards and backwards, respectively.
+    Pressing <keycap>Enter</keycap>
+    and <keycombo><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
+    searches for the next and previous occurrence, respectively.
     Once the desired occurrence has been found, press <keycap>Escape</keycap>
     to return keyboard focus to the text area.
    </para>

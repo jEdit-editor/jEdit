@@ -1,15 +1,16 @@
 <!-- jEdit buffer-local properties:                              -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
-
+<!-- :collapseFolds=0:                                           -->
 
 <chapter id="using-macros"><title>Using Macros</title>
   <para>
     Macros in jEdit are short scripts written in a scripting language called
-    <firstterm>BeanShell</firstterm>. They provide shortcuts to keyboard and
-    menu procedures as well as access to the objects and methods created by
+    <firstterm>BeanShell</firstterm>. They provide an wasy way to
+    automate repetitive keyboard and menu procedures,
+    as well as access to the objects and methods created by
     jEdit. Macros
     also provide a powerful facility for customizing jEdit and automating
-    complex text processing and programmming tasks. In this section we
+    complex text processing and programming tasks. In this section we
     describe how to record and run macros. A detailed guide on
     writing macros appears later in a separate part of the user's
     guide; see <xref linkend="writing-macros-part"/>.
@@ -71,7 +72,7 @@
 
   <para>
    If a complicated operation only needs to be repeated a few of
-   times, using the temporary macro feature is easier than saving a new
+   times, using the temporary macro feature is quicker than saving a new
    macro file.
   </para>
   <para>
@@ -97,7 +98,7 @@
    macro available for your next jEdit session, save the buffer
    <filename>Temporary_Macro.bsh</filename> as an ordinary macro with a
    descriptive name of your choice. The new name will then be displayed in
-   the<guimenu>Macros</guimenu> menu.
+   the <guimenu>Macros</guimenu> menu.
   </para>
 </sect1>
 
@@ -122,35 +123,31 @@
     <guimenuitem>Macro Shortcuts</guimenuitem>,
     <guimenuitem>Tool Bar</guimenuitem> or
     <guimenuitem>Context Menu</guimenuitem> panes of the
-    <guimenuitem>Global Options</guimenuitem> dialog, see
-    <xref linkend="global-opts"/>
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+    Options</guimenuitem> dialog; see
+    <xref linkend="global-opts"/>.
   </para>
 
   <para>
-    Besides the <guimenuitem>Run Temporary Macro</guimenuitem> command
-    discussed in the preceding section, the <guimenu>Macros</guimenu> menu
-    contains two other items allowing you to run macros. The
-    <guimenuitem>Run Last Macro</guimenuitem> command (shortcut:
+    <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Last Macro</guimenuitem>
+    (shortcut:
     <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>) causes
-    the last macro run by jEdit to be run again.  The
-    <guimenuitem>Run Other Macro</guimenuitem> command causes the
-    display of a file chooser dialog to select the macro file to be run.
+    <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>)
+    runs the last macro run by jEdit again.
   </para>
 
-  <para>
-    The <guimenu>Macros</guimenu>&gt;<guimenuitem>Browse System
-    Macros</guimenuitem> and
-    <guimenu>Macros</guimenu>&gt;<guimenuitem>Browse User
-    Macros</guimenuitem> also cause the display of a file chooser dialog
-    set to the location of the macros installed with jEdit (the
-    <filename>macros</filename> subdirectory of the directory in which
-    jEdit is installed) or the location of macros recorded or written
-    by the user (the <filename>macros</filename> subdirectory of the
-    directory in which the user's jEdit settings are stored.  Choosing a
-    file from here will not execute the macro, but instead load and
-    display the file containing the macro script in the text editing area.
-  </para>
+  <sidebar><title>XInsert plugin</title>
+   <para>
+    The <application>XInsert</application> plugin has a feature that
+    lists the title of macros, organized by subdirectories, as part of
+    its tree list display.  Clicking on the leaf of the tree
+    corresponding to a macro name causes jEdit to execute the macro
+    immediately.  The plugin allows you to keep a list of macros and
+    cut-and-paste text fragments available while editing
+    without opening menus. For information about installing plugins, see
+    <xref linkend="using-plugins"/>.
+   </para>
+  </sidebar>
 
 </sect1>
 
@@ -177,10 +174,17 @@
   </para>
 
   <para>
+    Macros stored elsewhere can be run using the
+    <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Other Macro</guimenuitem>
+    command, which
+    displays a file chooser dialog box, and runs the specified file.
+  </para>
+
+  <para>
    The listing of individual macros in the <guimenu>Macros</guimenu> menu
-   item can be organized in a hierarchy using subdirectories in the general
-   or user-specific macro folders. Each subdirectory containing BeanShell
-   macros appears as a submenu. You will find such a hierarchy in the
+   can be organized in a hierarchy using subdirectories in the general
+   or user-specific macro directories; each subdirectory
+   appears as a submenu. You will find such a hierarchy in the
    default macro set included with jEdit.
   </para>
 
@@ -191,50 +195,29 @@
    and the <filename>.bsh</filename> extension for menu labels, so that
    <filename>List_Useful_Information.bsh</filename>, for example, will be
    displayed in the <guimenu>Macros</guimenu> menu as <guimenuitem>List
-   Useful Information</guimenuitem>. To update the menu listing by
-   rescanning the general and user-specific macro directories, invoke
-   <guimenu>Macros</guimenu>&gt;<guimenuitem>Rescan Macros</guimenuitem>.
-  </para>
-
-  <!-- <para>
-   If a macro named <filename>Startup.bsh</filename> exists in either of
-   the designated macro directories, it is executed near the end of the jEdit
-   startup sequence. Unlike with other macros, any variables and methods
-   defined in the startup macro are available to all other macros and
-   BeanShell commands.  If you take advantage of this feature, be sure to
-   have only one macro named <filename>Startup.bsh</filename> (capitalization
-   matters!), and place it in the either of the two macro directories.
-   See <xref linkend="startup-macro"/> for a more detailed discussion on
-   the use of a startup macro.
-  </para> -->
-
-  <para>
-   You can run any macro, regardless of where it is located, by
-   invoking <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Other
-   Macro</guimenuitem>. You will be presented with the usual file
-   selection dialog box.
+   Useful Information</guimenuitem>.
   </para>
 
   <para>
-   You can also assign a macro to a toolbar button, a keyboard shortcut or
-   the context pop-up menu in the <guilabel>Macro Shortcuts</guilabel>,
-   <guilabel>Tool Bar</guilabel> and <guilabel>Context Menu</guilabel>
-   panes of the<guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box.
+    <guimenu>Macros</guimenu>&gt;<guimenuitem>Browse System Macros</guimenuitem>
+    displays the <filename>macros</filename> subdirectory of the
+    directory in which jEdit is installed in the file system browser.
   </para>
 
-  <sidebar><title>XInsert plugin</title>
-   <para>
-    The <application>XInsert</application> plugin has a feature that
-    lists the title of macros, organized by subdirectories, as part of
-    its tree list display.  Clicking on the leaf of the tree
-    corresponding to a macro name causes jEdit to execute the macro
-    immediately.  The plugin allows you to keep a list of macros and
-    cut-and-paste text fragments available while editing
-    without opening menus. For information about installing plugins, see
-    <xref linkend="using-plugins"/>.
-   </para>
-  </sidebar>
+  <para>
+    <guimenu>Macros</guimenu>&gt;<guimenuitem>Browse User Macros</guimenuitem>
+    displays the <filename>macros</filename> subdirectory of the
+    user settings directory in the file system browser.
+  </para>
+
+  <para>
+    Macros can be opened and edited much like ordinary files from the
+    file system browser. Editing macros from within jEdit will
+    automatically update the macros menu; however, if you modify macros
+    from another program, the
+    <guimenu>Macros</guimenu>&gt;<guimenuitem>Rescan Macros</guimenuitem>
+    will need to be invoked to update the macro list.
+  </para>
  </sect1>
 
 </chapter>

@@ -188,7 +188,7 @@ public abstract class InputHandler extends KeyAdapter
 			action.invoke(view);
 		else
 		{
-			// stop people doing dumb stuff like C+e 100 C+n
+			// stop people doing dumb stuff like C+ENTER 100 C+n
 			if(_repeatCount > REPEAT_COUNT_THRESHOLD)
 			{
 				String label = jEdit.getProperty(action.getName() + ".label");
@@ -274,6 +274,25 @@ public abstract class InputHandler extends KeyAdapter
 				textArea.userInput(ch);
 			else
 			{
+				// stop people doing dumb stuff like C+ENTER 100 C+n
+				if(_repeatCount > REPEAT_COUNT_THRESHOLD)
+				{
+					Object[] pp = { String.valueOf(ch),
+						new Integer(_repeatCount) };
+
+					if(GUIUtilities.confirm(view,
+						"large-repeat-count.user-input",pp,
+						JOptionPane.WARNING_MESSAGE,
+						JOptionPane.YES_NO_OPTION)
+						!= JOptionPane.YES_OPTION)
+					{
+						repeat = false;
+						repeatCount = 0;
+						view.getStatus().setMessage(null);
+						return;
+					}
+				}
+
 				for(int i = 0; i < _repeatCount; i++)
 					textArea.userInput(ch);
 			}

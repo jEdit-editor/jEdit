@@ -51,22 +51,22 @@
  </itemizedlist>
  <para>
   Within a character class expression, the following sequences have special meaning:
-  <itemizedlist>
-   <listitem><para><literal>[:alnum:]</literal> Any alphanumeric
-   character</para></listitem>
-   <listitem><para><literal>[:alpha:]</literal> Any alphabetical character</para></listitem>
-   <listitem><para><literal>[:blank:]</literal> A space or horizontal tab</para></listitem>
-   <listitem><para><literal>[:cntrl:]</literal> A control character</para></listitem>
-   <listitem><para><literal>[:digit:]</literal> A decimal digit</para></listitem>
-   <listitem><para><literal>[:graph:]</literal> A non-space, non-control character</para></listitem>
-   <listitem><para><literal>[:lower:]</literal> A lowercase letter</para></listitem>
-   <listitem><para><literal>[:print:]</literal> Same as <literal>[:graph:]</literal>, but also space and tab</para></listitem>
-   <listitem><para><literal>[:punct:]</literal> A punctuation character</para></listitem>
-   <listitem><para><literal>[:space:]</literal> Any whitespace character, including newlines</para></listitem>
-   <listitem><para><literal>[:upper:]</literal> An uppercase letter</para></listitem>
-   <listitem><para><literal>[:xdigit:]</literal> A valid hexadecimal digit</para></listitem>
-  </itemizedlist>
  </para>
+ <itemizedlist>
+  <listitem><para><literal>[:alnum:]</literal> Any alphanumeric
+  character</para></listitem>
+  <listitem><para><literal>[:alpha:]</literal> Any alphabetical character</para></listitem>
+  <listitem><para><literal>[:blank:]</literal> A space or horizontal tab</para></listitem>
+  <listitem><para><literal>[:cntrl:]</literal> A control character</para></listitem>
+  <listitem><para><literal>[:digit:]</literal> A decimal digit</para></listitem>
+  <listitem><para><literal>[:graph:]</literal> A non-space, non-control character</para></listitem>
+  <listitem><para><literal>[:lower:]</literal> A lowercase letter</para></listitem>
+  <listitem><para><literal>[:print:]</literal> Same as <literal>[:graph:]</literal>, but also space and tab</para></listitem>
+  <listitem><para><literal>[:punct:]</literal> A punctuation character</para></listitem>
+  <listitem><para><literal>[:space:]</literal> Any whitespace character, including newlines</para></listitem>
+  <listitem><para><literal>[:upper:]</literal> An uppercase letter</para></listitem>
+  <listitem><para><literal>[:xdigit:]</literal> A valid hexadecimal digit</para></listitem>
+ </itemizedlist>
  <bridgehead renderas="sect3">Subexpressions and Backreferences</bridgehead>
  <itemizedlist>
   <listitem><para><literal>(<replaceable>abc</replaceable>)</literal> matches

@@ -7,13 +7,13 @@
   <filename>modes</filename> subdirectory of
   the jEdit settings directory, and the
   <filename>modes</filename> subdirectory of the jEdit install directory.
-  The location of the settings directory is operating system-specific;
+  The location of the settings directory is system-specific;
   see <xref linkend="settings-directory" />.
  </para>
  <para>
-  Edit modes must be listed in a <firstterm>mode catalog</firstterm>
-  file, otherwise they will not be available to jEdit. There is a catalog
-  file in each mode directory, named <filename>catalog</filename>.
+  Each mode directory contains a <filename>catalog</filename> file. All edit
+  modes contained in that directory must be listed in the catalog, otherwise
+  they will not be available to jEdit.
  </para>
  <para>
   Catalogs, like modes themselves, are written in XML. They consist of a
@@ -43,9 +43,9 @@
  </para>
  <itemizedlist>
   <listitem><para><literal>NAME</literal> - the name of the edit mode, as it
-  will appear in the <guimenuitem>Buffer Options</guimenuitem> dialog box, and
-  so on</para></listitem>
-  <listitem><para><literal>FILE</literal> - the name of the XML file,
+  will appear in the <guimenuitem>Buffer Options</guimenuitem> dialog box, the
+  status bar, and so on</para></listitem>
+  <listitem><para><literal>FILE</literal> - the name of the XML file
   containing the mode definition</para></listitem>
   <listitem><para><literal>FILE_NAME_GLOB</literal> - files whose names match
   this glob pattern will be opened in this edit mode. See

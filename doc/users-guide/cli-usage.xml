@@ -49,8 +49,8 @@
      startup. This feature can also be set permanently in the
      <guibutton>Loading and Saving</guibutton> pane of the
      <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-     dialog box. Has no effect when connecting to
-     another instance via the edit server.
+     dialog box; see <xref linkend="global-opts" />. Has no effect when
+     connecting to another instance via the edit server.
      </entry>
     </row>
     <row>

@@ -1002,6 +1002,10 @@ macro-not-recording.message=A macro is not currently being recorded.
 large-repeat-count.title=Large Repeat Count
 large-repeat-count.message=Are you sure you want to invoke "{0}" {1} times?
 
+large-repeat-count.user-input.title=Large Repeat Count
+large-repeat-count.user-input.message=Are you sure you want to insert "{0}" \
+	{1} times?
+
 # Buffer options dialog
 buffer-options.title=Buffer Options
 buffer-options.mode=Edit mode:

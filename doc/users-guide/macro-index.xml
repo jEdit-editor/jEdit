@@ -573,10 +573,10 @@
         The form of each name is that used by
         <function>jEdit.getPlugin()</function>.
     </para>
-    <note><para>
+    <tip><para>
         The name can be used in a macro to test for the presence of a
         particular plugin.
-    </para></note>
+    </para></tip>
 </listitem>
 
 <listitem>
@@ -705,7 +705,8 @@
 <listitem>
     <para><filename>Evaluate_Buffer_in_BeanShell.bsh</filename></para>
     <abstract><para>
-        Evaluates contents of current buffer as BeanShell script.  Opens new
+        Evaluates contents of current buffer as a BeanShell script,
+        and opens a new
         buffer to receive any text output.
     </para></abstract>
     <para>

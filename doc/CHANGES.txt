@@ -2,6 +2,15 @@ JEDIT 3.2 VERSION HISTORY
 
 * Version 3.2pre6
 
++ Enhancements
+
+- PHP mode now highlights variables in string literals
+- Repeating an action more than 20 times displayed a confirmation
+  dialog, but character input could be repeated any number of times.
+  Now, a confirmation dialog is displayed for large character inputs
+  too.
+- Documentation updates
+
 + Bug Fixes
 
 - README.txt, CHANGES.txt, etc. were missing from jedit.jar

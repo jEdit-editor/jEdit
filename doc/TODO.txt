@@ -1,55 +1,29 @@
 TO DO
 
-- FTP plugin: soft links???
-- FTP plugin: make a 3.2 version with better error messages?
-- make xml plugin more respectable before 3.2final
-
-+ before 3.2pre6:
-
-- installing source for already installed plugins
-- update macros for new BeanShell implied imports
-- writing modes part of user's guide:
-  - xml-primer
-  - writing-modes
-  - mode-tips
-    - delegate techniques
-      - start/end different from contents
-      - balancing brackets
-    - ... what else?
-  - installing-modes
-  - mention delegation to rulesets with TERMINATE_AT
-- documentation:
-  - update using-plugins
-  - formatting problems in user's guide in table cells
-  - document differences between web start and stand-alone version
-  - JOptionPane not a good idea for getting user input?
-  - proofread documentation
-- finish duplicate shortcut code
-- save markers on close and don't set dirty flag
-
 + before 3.2final:
 
-- get web start to work
+- cvs remove mode-tips.xml
+- FTP plugin: investigate soft links
+- FTP plugin: better error messages
+- make XML plugin more respectable
+- installing source for already installed plugins
+- finish duplicate shortcut code
+- get web start to work, and document differences between web start and
+  stand-alone version
 - fix '... is not a function name' when running openjade
 - reload: preserve caret position
 - next time i'm making an RPM, fix the shell script
 - jEditLauncher
+- a line consisting entirely of spaces & word wrap
 
 + bugs that need to be fixed at some stage:
 
 - popup menus; make sure they are on-screen? GUIUtilities method?
 - does loading and saving user settings take a long time?
-- help viewer: links to .txt files?
-- Java 1.4 key events: DefaultInputHandler?
-- XThis: don't throw exceptions for non-existent methods
 - only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>
   in PHP)
-- need to track down s.end < s.start cases
 - vfs browser: >1 request error when clicking 'up'?
-- italics font metrics bugs
 - broken reverse search?
-- text style bugs
-- caret event not always fired
 - prev line fold gutter bug
 - tabbing to text area fails
 - zlib decompression errors in plugin manager
@@ -58,14 +32,16 @@ TO DO
 - get rid of final blank page of user's guide
 - aborts not always fired
 - fix dragStart handling in DockableWindowContainer.TabbedPane
-- caret undo bugs
 - folding paint up bug
 - offsetToX() returning wrong location with some Java versions
 - expand-fold too aggressive
 - replace in sel doesn't work if rect
+- formatting problems in user's guide in table cells
+- macro guide: JOptionPane not a good idea for getting user input?
 
 + later:
 
+- save markers on close and don't set dirty flag
 - custom splitter control?
 - swing font customization
 - much better rect select, along the lines of 'column mode'
@@ -80,8 +56,8 @@ TO DO
 - fold browser
 - when loading a plugin, check if all the jars are present?
 - regexps in XMode
-- improve handling of DIGIT sequences
 - DELEGATE in EOL_SPAN
+- PHP mode: <?php echo "<?xml version='1.0'?>" ?>
 - reverse regexp search
 - a 'reinsertOnNextLine' regexp for hard word wrap?
 - soft wrap
@@ -109,7 +85,6 @@ TO DO
 - maybe rewrite file restore to use XML -- allow plugins to read/write
   arbitriary restore files? -- eg BufferList
 - finish persistent splits: resize splits to put them in the middle
-- C+\
 - edit server documentation
 - invert selection
 - hypersearch: select lines with matches
@@ -119,3 +94,7 @@ TO DO
   types
 - new document model with sliding line map
 - keyboard selection in hypersearch
+- HTML mode: handle <SCRIPT LANGUAGE="..."> in a more flexible manner
+- fs browser: details view
+- fs browser: two pane view
+- JTreeTable control?

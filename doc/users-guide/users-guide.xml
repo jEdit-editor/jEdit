@@ -24,7 +24,6 @@
 <!ENTITY macro-index SYSTEM "macro-index.xml">
 
 <!ENTITY writing-modes SYSTEM "writing-modes.xml">
-<!ENTITY mode-tips SYSTEM "mode-tips.xml">
 <!ENTITY installing-modes SYSTEM "installing-modes.xml">
 
 <!ENTITY macro-basics SYSTEM "macro-basics.xml">
@@ -66,13 +65,13 @@
  <partintro>
   <para>
    This part of the user's guide covers jEdit's text editing commands, along
-   with basic usage of macros and plugins. Information and developing macros and
-   plugins can be found in subsequent parts of the user's guide.
+   with basic usage of macros and plugins. Information about developing macros
+   and plugins can be found in subsequent parts of the user's guide.
   </para>
 
   <para>
    This part of the user's guide was written by Slava Pestov
-   (<email>slava@jedit.org</email>).
+   <email>slava@jedit.org</email>.
   </para>
  </partintro>
 
@@ -102,12 +101,11 @@
 
   <para>
    This part of the user's guide was written by Slava Pestov
-   (<email>slava@jedit.org</email>).
+   <email>slava@jedit.org</email>.
   </para>
  </partintro>
 
  &writing-modes;
- &mode-tips;
  &installing-modes;
 </part>
 
@@ -124,7 +122,7 @@
  </para>
 
  <para>This part of the user's guide was written by John Gellene
- (<email>jgellene@nyc.rr.com</email>).</para>
+ <email>jgellene@nyc.rr.com</email>.</para>
 
  </partintro>
 
@@ -152,7 +150,7 @@
 
   <para>
    This part of the user's guide was written by John Gellene
-   (<email>jgellene@nyc.rr.com</email>).
+   <email>jgellene@nyc.rr.com</email>.
   </para>
  </partintro>
 
@@ -179,7 +177,7 @@
   </para>
   <para>
    This part of the user's guide was written by John Gellene
-   (<email>jgellene@nyc.rr.com</email>).
+   <email>jgellene@nyc.rr.com</email>.
   </para>
  </partintro>
 

@@ -35,7 +35,7 @@
    The number of recent files to remember can be changed and caret
    position saving can be disabled in the <guibutton>General</guibutton> pane of
    the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="global-opts" />.
   </para>
   <para>
    Files that you do not have write access to are opened in read-only
@@ -75,7 +75,7 @@
    the buffer to a different specified file on disk, but doesn't rename the
    buffer, and doesn't clear the <quote>modified</quote> flag.
   </para>
-  <sect2><title>Autosave and Backups</title>
+  <sect2><title>Autosave and Crash Recovery</title>
    <para>
     The autosave feature protects your work from computer crashes and
     such. Every 30 seconds, all buffers with unsaved changes are
@@ -95,63 +95,101 @@
     autosaved data.
    </para>
    <para>
+    The autosave feature can be configured
+    in the <guibutton>Loading and Saving</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box; see <xref linkend="global-opts" />.
+   </para>
+  </sect2>
+  <sect2><title>Backups</title>
+   <para>
     The backup feature can be used to roll back to the previous version
     of a file after changes were made. When a buffer is saved
     for the first time after being opened, its original contents are
-    preserved in the buffer's file name suffixed with a tilde (<quote>~</quote>).
+    <quote>backed up</quote> under a different file name.
+   </para>
+   <para>
+    The default behavior is to back up the original contents
+    to the buffer's file name suffixed with a tilde (<quote>~</quote>).
     For example, <filename>paper.tex</filename> will be backed up to
     <filename>paper.tex~</filename>.
    </para>
    <para>
-    The autosave and backup features can be configured
+    The backup feature can also be configured to do any of the following:
+   </para>
+   <itemizedlist>
+    <listitem><para>
+     Save numbered backups, named
+     <filename><replaceable>filename</replaceable>~<replaceable>number</replaceable>~</filename>
+    </para></listitem>
+    <listitem><para>
+     Add a prefix to the backed-up file name
+    </para></listitem>
+    <listitem><para>
+     Adds a suffix, other than <quote>~</quote>, to the backed-up file name
+    </para></listitem>
+    <listitem><para>
+     Backups can optionally be saved in a specified backup directory, instead of
+     the directory of the original file. This can reduce clutter
+    </para></listitem>
+   </itemizedlist>
+   <para>
+    The above features can be configured
     in the <guibutton>Loading and Saving</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
-   </para>
-  </sect2>
-  <sect2 id="line-separators"><title>Line Separators</title>
-   <para>
-    The three major operating systems use different conventions to mark
-    line endings in text files.
-    The MacOS uses Carriage-Return characters (\r, ^M) for that purpose. Unix
-    uses Newline characters (\n, ^J). Windows uses both
-    (\r\n, ^M^J). jEdit can read and write files in all three formats.
-    When a file is opened, the line separator is automatically
-    detected. The line separator can be set on a buffer-specific basis
-    in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
-    Options</guimenuitem> dialog box. The default for new files can be set in the
-    <guibutton>Loading and Saving</guibutton> pane of the
-    <guimenu>Utilities</guimenu>>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="global-opts" />.
    </para>
   </sect2>
  </sect1>
+ <sect1 id="line-separators"><title>Line Separators</title>
+  <para>
+   The three major operating systems use different conventions to mark
+   line endings in text files.
+   The MacOS uses Carriage-Return characters (<literal>\r</literal> in
+   Java-speak) for that purpose. Unix
+   uses Newline characters (<literal>\n</literal>). Windows uses both
+   (<literal>\r\n</literal>). jEdit can read and write files in all three formats.
+  </para>
+  <para>
+   When loading a file, the line separator used within is automatically
+   detected, and will be used when saving a file back to disk. The line
+   separator used when saving the current buffer can be changed in the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+   Options</guimenuitem> dialog box; see <xref linkend="buffer-opts" />.
+  </para>
+   By default, new files are saved with your operating system's native line
+   separator. This can be changed in the
+   <guibutton>Loading and Saving</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />.
+  </para>
+ </sect1>
  <sect1 id="encodings"><title>Character Encodings</title>
   <para>
-   Internally, Java programs like jEdit represent letters of text as
-   16-bit numerical values in the Unicode character set. Unicode is a
-   standardized character set that can be used to represent almost all human
-   languages. Unicode is very easy to work with from a programmer's point of
-   view, because characters in practically any human language can be written
-   without having to add specific support for each language.
+   Internally, Java programs like jEdit store text as a stream of
+   16-bit numerical values, with each value a character in the Unicode character
+   set. Unicode is a
+   standardized character set that can represent characters in almost all human
+   languages.
   </para>
   <para>
-   Unfortunately, most other programs use far less flexible methods of storing
+   Unfortunately, most other computer programs use far less flexible methods of
+   storing
    text; therefore, if jEdit loaded and saved all files as raw Unicode, it would
-   be useless, because most programs would not be able to make sense of the
-   16-bit values.
+   be useless.
   </para>
   <para>
-   To get around this, jEdit converts Unicode characters to other character
+   To get around this, jEdit converts Unicode text to other character
    encodings and vice versa when loading and saving files. jEdit can use any
    encoding supported by the Java platform.
   </para>
   <para>
-   Firstly, the default encoding, used to load and save files for which no
+   The default encoding, used to load and save files for which no
    other encoding is specified, can be set in the <guibutton>Loading and
    Saving</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box. The setting is presented as an editable combo box; the combo box
+   dialog box; see <xref linkend="global-opts" />. The setting is presented as
+   an editable combo box; the combo box
    contains a few of the more frequently used encodings, but the Java platform
    defines practically hundreds more you can use.
   </para>
@@ -182,7 +220,7 @@
    your Java implementation.
   </para>
   <para>
-   Once a file has been loaded into memory, the encoding to use when saving it
+   Once a file has been opened, the encoding to use when saving it
    can be set in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
    Options</guimenuitem> dialog box.
   </para>
@@ -196,7 +234,8 @@
    <para>
     The most frequently-used character encoding is ASCII, or <quote>American 
     Standard Code for Information Interchange</quote>. ASCII encodes Latin
-    letters used in English, in addition to numbers and a range of punctuation.
+    letters used in English, in addition to numbers and a range of punctuation
+    characters.
     The ASCII character set consists of 127 characters only, and it is unsuitable
     for anything but English text (and other file types which only use English
     characters, like most program source). jEdit will load and save files as
@@ -249,7 +288,7 @@
    By default, the file system browser is shown in a floating window;
    it can be set to dock into the view in the <guibutton>Docking</guibutton>
    pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box.
+   Options</guimenuitem> dialog box; see <xref linkend="docking" />.
   </para>
   <para>
    The directory to browse is specified in the <guibutton>Path</guibutton> text
@@ -376,7 +415,7 @@
    or reload the buffer from disk (and lose any usaved changes). This
    feature can be disabled in the <guibutton>General</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="global-opts" />.
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Reload</guimenuitem> can be used to
@@ -407,8 +446,8 @@
    threads can be changed in the
    <guibutton>Loading and Saving</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box. Setting the number to zero disables multi-threaded I/O
-   completely; doing this is not recommended.
+   dialog box; see <xref linkend="global-opts" />. Setting the number to zero
+   disables multi-threaded I/O completely; doing this is not recommended.
   </para>
  </sect1>
  <sect1 id="printing"><title>Printing Files</title>

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :indentSize=1:noTabs=true:collapseFolds=0: -->
 
 <chapter id="writing-modes"><title>Writing Edit Modes</title>
  <para>
@@ -198,17 +198,59 @@
    </para></listitem>
   </itemizedlist>
   <para>
-   Each child element of the <literal>RULES</literal> tag defines a parser rule.
-   More specific rules must be defined before general ones; for
-   example, a rule matching the string <quote>hello</quote> rule must
-   be placed before one matching <quote>he</quote>.
-  </para>
-  <para>
    Here is an example <literal>RULES</literal> tag:
   </para>
   <programlisting>&lt;RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"&gt;
-    <replaceable>...</replaceable>
+    <replaceable>... parser rules go here ...</replaceable>
 &lt;/RULES&gt;</programlisting>
+  <sidebar><title>Rule Ordering Requirements</title>
+   <para>
+    You might encounter this very common pitfall when writing your own modes.
+   </para>
+   <para>
+    Since jEdit checks buffer text against parser rules in the order they appear
+    in the ruleset, more specific rules must be placed before generalized ones,
+    otherwise the generalized rules will catch everything.
+   </para>
+   <para>
+    This is best demonstrated with an example. The following is incorrect rule
+    ordering:
+   </para>
+   <programlisting><![CDATA[<SPAN TYPE="MARKUP">
+    <BEGIN>[</BEGIN>
+    <END>]</END>
+</SPAN>
+
+<SPAN TYPE="KEYWORD1">
+    <BEGIN>[!</BEGIN>
+    <END>]</END>
+</SPAN>]]></programlisting>
+   <para>
+    If you write the above in a rule set, any occurrence of <quote>[</quote>
+    (even things like <quote>[!DEFINE</quote>, etc) 
+    will be highlighted using the first rule, because it will be the
+    first to match. This is most likely not the intended behavior.
+   </para>
+   <para>
+    The problem can be solved by placing the more specific rule before the
+    general one:
+   </para>
+   <programlisting><![CDATA[<SPAN TYPE="KEYWORD1">
+    <BEGIN>[!</BEGIN>
+    <END>]</END>
+</SPAN>
+
+<SPAN TYPE="MARKUP">
+    <BEGIN>[</BEGIN>
+    <END>]</END>
+</SPAN>]]></programlisting>
+   <para>
+    Now, if the buffer contains the text <quote>[!SPECIAL]</quote>, the
+    rules will be checked in order, and the first rule will be the first
+    to match. However, if you write <quote>[FOO]</quote>, it will be highlighted
+    using the second rule, which is exactly what you would expect.
+   </para>
+  </sidebar>
   <sect2 id="mode-rule-terminate"><title>The TERMINATE Rule</title>
    <para>
     The <literal>TERMINATE</literal> rule specifies that parsing should stop
@@ -265,6 +307,13 @@
     Note that the first (unnamed) ruleset in a mode is called
     <quote>MAIN</quote>.</para></listitem>
    </itemizedlist>
+   <note>
+    <para>
+     Do not delegate to rulesets that define a <literal>TERMINATE</literal> rule
+     (examples of such rulesets include <literal>text::MAIN</literal> and
+     <literal>patch::MAIN</literal>). It won't work.
+    </para>
+   </note>
    <para>
     Here is a <literal>SPAN</literal> that highlights Java string literals,
     which cannot include line breaks:
@@ -291,6 +340,16 @@
    &lt;BEGIN&gt;&amp;lt;style&amp;gt;&lt;/BEGIN&gt;
    &lt;END&gt;&amp;lt;/style&amp;gt;&lt;/END&gt;
 &lt;/SPAN&gt;</programlisting>
+   <tip>
+    <para>
+     The <literal>&lt;END&gt;</literal> tag is optional. If it is not specified,
+     any occurrence of the start string will cause the remainder of the buffer
+     to be highlighted with this rule.
+    </para>
+    <para>
+     This can be very useful when combined with delegation.
+    </para>
+   </tip>
   </sect2>
   <sect2 id="mode-rule-eol-span"><title>The EOL_SPAN Rule</title>
    <para>

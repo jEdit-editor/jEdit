@@ -4,7 +4,7 @@
 <chapter id="basics"><title>Basic Concepts</title>
  <sect1 id="menu-items"><title>Conventions</title>
   <para>
-   Whenever a specific menu item selection is referenced, the
+   When a menu item selection is being described, the
    top level menu is listed first, followed by successive levels of submenus,
    finally followed by the menu item itself. All menu components are separated
    by greater-than symbols (<quote>&gt;</quote>). For example,
@@ -52,7 +52,7 @@
    This saves time and memory if jEdit is started multiple times.
    Communication between instances of jEdit is implemented using
    TCP/IP sockets; the initial instance is known as the
-   <firstterm>server</firstterm>, and subsequent invocations are known as
+   <firstterm>server</firstterm>, and subsequent invocations are
    <firstterm>clients</firstterm>.
   </para>
   <para>
@@ -60,7 +60,7 @@
    jEdit will continue running and waiting for client requests even
    after all editor windows are closed. The advantage of background mode
    is that you can open and close jEdit any number of times, only having
-   to wait for it to start up the first time. The downside of background
+   to wait for it to start the first time. The downside of background
    mode is that jEdit will continue to consume memory when no windows
    are open.
   </para>
@@ -74,7 +74,7 @@
    having to find the files you are working on first. This feature can be
    disabled in the <guibutton>Loading and Saving</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="global-opts" />.
   </para>
   <sidebar><title>The edit server and security</title>
    <para>
@@ -125,7 +125,7 @@
  </sect1>
  <sect1 id="views"><title>Views</title>
   <para>
-   Each editor window is referred to as a <firstterm>view</firstterm>.
+   Each editor window is known as a <firstterm>view</firstterm>.
    It is possible to have multiple views open at once, and each view can
    be split into multiple panes.
   </para>
@@ -180,13 +180,15 @@
    changed in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
    Options</guimenuitem> dialog box.
   </para>
-  <sect2><title>Window Docking</title>
+  <sect2 id="docking"><title>Window Docking</title>
    <para>
     The file system browser, HyperSearch results window, and many plugin
     windows can optionally be docked into the view. This can be
     configured in the <guibutton>Docking</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="global-opts" />. Note that changes made in
+    this option pane will not take effect
+    immediately; you must restart jEdit or open a new view first.
    </para>
    <para>
     When windows are docked into the view,
@@ -224,8 +226,8 @@
     linkend="encodings" />.</para></listitem>
     <listitem><para>If multiple selection is enabled, the text
     <guilabel>multi</guilabel> is shown in black, otherwise it will be grayed out.
-    Pressing
-    <keycap>Caps Lock</keycap> turns multiple selection on and off. See <xref
+    Pressing <keycombo><keycap>Control</keycap>
+    <keycap>\</keycap></keycombo> turns multiple selection on and off. See <xref
     linkend="multi-select" />.</para></listitem>
     <listitem><para>If overwrite mode is enabled, the text <guilabel>over</guilabel> is
     shown in black, otherwise it will be grayed out. Pressing
@@ -253,7 +255,7 @@
    feature is called <firstterm>electric scrolling</firstterm> and can be disabled
    in the <guibutton>Text Area</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="global-opts" />.
   </para>
   <para>
    To aid in locating the caret, the current line is drawn with a
