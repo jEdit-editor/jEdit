@@ -51,6 +51,6 @@ changeUIFonts(String fontName, int fontStyle, int fontSize)
 }
 
 // On Windows, you might want to try something like:
-// ChangeUIFonts("Microsoft Sans Serif", Font.PLAIN, 10);
+// changeUIFonts("Microsoft Sans Serif", Font.PLAIN, 10);
 // On other platforms, try something like this:
 // changeUIFonts("SansSerif", Font.PLAIN, 12);
