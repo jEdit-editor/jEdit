@@ -95,10 +95,10 @@
 	</target>
 
 	<!-- Generate PDF docs with OpenJade tool from openjade.sf.net -->
-	<target name="docs-pdf-openjade">
+	<target name="docs-pdf-openjade-letter">
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
-			<arg value="jeditprint.dsl"/>
+			<arg value="jeditprint-letter.dsl"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
 			<arg value="/usr/share/sgml/xml.dcl"/>
