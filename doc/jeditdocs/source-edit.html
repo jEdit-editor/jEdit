@@ -86,6 +86,11 @@ CLASS="SECT1"
 NAME="MODES"
 >Edit Modes</A
 ></H1
+><H4
+CLASS="BRIDGEHEAD"
+>Because the XMode plugin has been integrated into
+  jEdit, this section is out of date. It will be updated in the next jEdit
+  release.</H4
 ><P
 >   Because it is impossible to provide optimal editing for all types of
    files at once, jEdit provides various <I
@@ -101,7 +106,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1613"
+NAME="AEN1614"
 >Automatic Mode Selection</A
 ></H2
 ><P
@@ -122,7 +127,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1621"
+NAME="AEN1622"
 >Manually Setting the Edit Mode</A
 ></H2
 ><P
@@ -164,303 +169,6 @@ CLASS="REPLACEABLE"
 ></TD
 ></TR
 ></TABLE
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN1633"
->Available Edit Modes</A
-></H2
-><DIV
-CLASS="TABLE"
-><P
-><B
->Table 6-1. Table of edit modes</B
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><TR
-><TH
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->Mode name</TH
-><TH
-ALIGN="LEFT"
-VALIGN="TOP"
->Comments</TH
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->bat</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->MS-DOS Batch File edit mode. Automatically selected for
-       files with extension ".bat".</TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->c</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->C source code edit mode. Automatically selected for
-       files with extension ".c" or ".h".</TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->cc</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->C++ source code edit mode. Automatically selected for
-       files with a variety of C++ extensions.</TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->eiffel</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Eiffel source code edit mode. Automatically
-       selected for files with extension ".e".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->html</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->HTML source code edit mode. Automatically selected for
-       files with extension ".html", ".shtml" or ".htm".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->idl</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->CORBA IDL (Interface Definition Language) edit mode.
-       Automatically selected for
-       files with extension ".idl".</TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->java</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Java source code edit mode. Automatically selected for
-       files with extension ".java".</TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->javascript</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->JavaScript source code edit mode. Automatically selected for
-       files with extension ".js".</TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->make</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Makefile edit mode. Automatically selected for files named
-       "Makefile" or "GNUmakefile".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->patch</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Edit mode for Unix diffs and patches. Automatically selected
-       for files with extension ".diff" or ".patch".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->perl</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Perl edit mode. Automatically selected for files with
-       extension ".pl" or ".pm", or whose first line
-       contains "#!" and "perl".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->php3</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->PHP3 edit mode. Automatically selected for files with
-       extension ".php3", ".php",
-       ".phtml" or ".inc".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->postscript</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->PostScript edit mode. Automatically
-       selected for files with extension ".ps".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->props</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Java property file and MS-DOS INI edit mode. Automatically
-       selected for files with extension ".props" or ".ini",
-       and files named "config.sys" or "properties".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->python</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Python script edit mode. Automatically
-       selected for files with extension ".py" or whose first line
-       contains "#!" and "python".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->shell</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Unix shell script edit mode. Automatically selected for files
-       with extension ".sh" or ".csh",
-       and files whose first line is
-       "#!" followed by one of the various Unix shell names.
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->tex</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->TeX edit mode. Automatically selected for files with
-       extension ".tex".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->text</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Default edit mode. Does nothing special.</TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->tsql</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Transact-SQL edit mode. Automatically selected for files with
-       extension ".sql".
-       </TD
-></TR
-><TR
-><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="TOP"
->xml</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->XML and SGML source code edit mode. Automatically selected for
-       files with extension "dtd",
-       "rdf",
-       "rss",
-       "sgm",
-       "sgml",
-       "xml",
-       "xsd"
-       or "xsl".
-       </TD
-></TR
-></TABLE
-></DIV
 ></DIV
 ></DIV
 ></DIV

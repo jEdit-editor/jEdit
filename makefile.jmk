@@ -1,4 +1,4 @@
-# A makefile file for jEdit 2.2
+# A makefile file for jEdit 2.4
 # Based on jmk makefile
 #
 # To recompile jEdit, start jmk in the root of the jEdit directory structure.
@@ -48,7 +48,8 @@ re_srcs = "gnu/regexp/RESyntax.class"
 jedit_pkg = "org/gjt/sp/jedit";
 
 # jEdit's packages
-jedit_pkgs = jedit_pkg
+jedit_pkgs = "com/microstar/xml"
+    jedit_pkg
     "org/gjt/sp/jedit/actions"
     "org/gjt/sp/jedit/gui"
     "org/gjt/sp/jedit/msg"

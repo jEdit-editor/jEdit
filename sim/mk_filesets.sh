@@ -6,6 +6,7 @@
 echo jedit.jar > sim/jedit-program
 echo jars/PluginManager.jar >> sim/jedit-program
 echo jars/LatestVersion.jar >> sim/jedit-program
+echo modes/*.xml >> sim/jedit-program
 find doc -type f -name \*.txt >> sim/jedit-program
 
 echo -n "jedit-program: "

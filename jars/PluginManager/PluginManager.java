@@ -270,7 +270,8 @@ public class PluginManager extends EnhancedDialog
 			String authorStr;
 			String versionStr;
 
-			if(node != null && node.isLeaf())
+			if(node != null && node.isLeaf()
+				&& node.getUserObject() instanceof Entry)
 			{
 				Entry entry = (Entry)node.getUserObject();
 				pathStr = entry.path;
