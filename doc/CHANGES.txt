@@ -13,10 +13,10 @@ JEDIT 2.7 VERSION HISTORY
     is inserted in the appropriate location.
   - A 'wrap guide' is drawn in the text area at the wrap column. This
     is similar to the LineGuides plugin.
-- Ollie Rutherfurd's scrolling actions:
+- Ollie Rutherfurd's scrolling actions in View->Scrolling menu:
   - Scroll Up/Down Line: C+' and C+/
   - Scroll Up/Down Page: A+' and A+/
-  - Center Cursor: C+e C+i
+  - Center Caret: C+e C+i
 - Checkbox to the right of the 'Filter:' field in the VFS browser can be
   used to temporarily display all files in the current directory
 - 'File name' text field is now displayed in the 'Open File' dialog box
@@ -48,6 +48,7 @@ JEDIT 2.7 VERSION HISTORY
   - Remove Trailing Whitespace: bound to C+e r, removes whitespace at
     the end of lines
 - Multiple line search and replace now supported
+- C# syntax highlighting (Ollie Rutherfurd)
 
 + Enhancements
 
@@ -96,6 +97,8 @@ JEDIT 2.7 VERSION HISTORY
 - Mode cache wasn't created properly if empty property names were present
 - The text area would repaint too much when the caret was being moved,
   which caused a slight slowdown
+- 'Open Selection' macro didn't work
+- Disabling the 'check file modification status' setting would have no effect
 
 + API Changes
 

@@ -558,6 +558,7 @@ public class EditPane extends JPanel implements EBComponent
 			if(_buffer == buffer)
 			{
 				status.updateCaretStatus();
+				textArea.setCaretPosition(0);
 				textArea.getPainter().repaint();
 			}
 		}
@@ -576,8 +577,6 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				status.updateCaretStatus();
-				textArea.setCaretPosition(0);
 				textArea.repaint();
 				status.updateBufferList();
 			}
@@ -609,6 +608,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.24  2000/11/08 09:31:36  sp
+ * Junk
+ *
  * Revision 1.23  2000/11/07 10:08:31  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

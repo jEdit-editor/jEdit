@@ -168,7 +168,15 @@ public class Buffer extends PlainDocument implements EBComponent
 			{
 				StringBuffer sbuf = (StringBuffer)getProperty(
 					BufferIORequest.LOAD_DATA);
-				clearProperties();
+
+				if(reload)
+					clearProperties();
+				else
+				{
+					getDocumentProperties().remove(
+						BufferIORequest.LOAD_DATA);
+				}
+
 				if(sbuf != null)
 				{
 					try
@@ -184,6 +192,9 @@ public class Buffer extends PlainDocument implements EBComponent
 				}
 
 				undo = new MyUndoManager();
+
+				setMode();
+
 				setFlag(LOADING,false);
 
 				// if reloading a file, clear dirty flag
@@ -201,8 +212,6 @@ public class Buffer extends PlainDocument implements EBComponent
 				// redundant autosave file
 				if(loadAutosave)
 					setFlag(DIRTY,true);
-
-				setMode();
 
 				// send some EditBus messages
 				EditBus.send(new BufferUpdate(Buffer.this,
@@ -468,6 +477,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void checkModTime(View view)
 	{
+		if(!jEdit.getBooleanProperty("view.checkModStatus"))
+			return;
+
 		// don't do these checks while a save is in progress,
 		// because for a moment newModTime will be greater than
 		// oldModTime, due to the multithreading
@@ -914,7 +926,10 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		this.mode = mode;
 
-		clearProperties();
+		// don't do this while loading, otherwise we will
+		// blow away caret location properties
+		if(!getFlag(LOADING))
+			clearProperties();
 		parseBufferLocalProperties();
 
 		propertiesChanged(); // sets up token marker
@@ -1817,6 +1832,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.186  2000/11/08 09:31:35  sp
+ * Junk
+ *
  * Revision 1.185  2000/11/07 10:08:30  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

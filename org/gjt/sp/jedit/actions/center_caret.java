@@ -1,5 +1,5 @@
 /*
- * center_cursor.java
+ * center_caret.java
  * Copyright (C) 2000 Ollie Rutherfurd
  *
  * This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import java.awt.Rectangle;
 import org.gjt.sp.jedit.*;
 
-public class center_cursor extends EditAction
+public class center_caret extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{

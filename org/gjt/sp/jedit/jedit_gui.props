@@ -343,7 +343,7 @@ next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to Last $Edited Buffer
 
 scrolling=scroll-to-current-line \
-	  center-cursor \
+	  center-caret \
 	  - \
 	  scroll-up-line \
 	  scroll-down-line \
@@ -354,7 +354,7 @@ scrolling=scroll-to-current-line \
 	  toggle-synchro-scroll
 scrolling.label=Scrolling
 scroll-to-current-line.label=Scroll to Current Line
-center-cursor.label=Center Cursor on Screen
+center-caret.label=Center Caret on Screen
 scroll-up-line.label=Line Scroll Up
 scroll-down-line.label=Line Scroll Down
 scroll-up-page.label=Page Scroll Up

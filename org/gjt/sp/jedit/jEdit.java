@@ -1976,7 +1976,7 @@ public class jEdit
 		addAction("block-comment");
 		addAction("box-comment");
 		addAction("buffer-options");
-		addAction("center-cursor");
+		addAction("center-caret");
 		addAction("clear-directory-cache");
 		addAction("clear-register");
 		addAction("close-all");
@@ -2441,6 +2441,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.289  2000/11/08 09:31:36  sp
+ * Junk
+ *
  * Revision 1.288  2000/11/07 10:08:31  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

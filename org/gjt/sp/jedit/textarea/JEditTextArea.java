@@ -344,7 +344,7 @@ public class JEditTextArea extends JComponent
 		{
 			// vertical scroll position is correct already
 		}
-		else if(_firstLine - caretLine > 5 || caretLine - _lastLine > 5)
+		else if(_firstLine - caretLine > 10 || caretLine - _lastLine > 10)
 		{
 			int markLine = getMarkLine();
 
@@ -1454,7 +1454,6 @@ public class JEditTextArea extends JComponent
 			firstLine,visibleLines);
 		if(_maxHorizontalScrollWidth != maxHorizontalScrollWidth)
 		{
-			System.err.println("phat");
 			maxHorizontalScrollWidth = _maxHorizontalScrollWidth;
 			horizontal.setValues(-horizontalOffset,painter.getWidth(),
 				0,maxHorizontalScrollWidth);
@@ -2346,6 +2345,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.95  2000/11/08 09:31:37  sp
+ * Junk
+ *
  * Revision 1.94  2000/11/07 10:08:33  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

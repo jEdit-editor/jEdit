@@ -705,7 +705,6 @@ public class View extends JFrame implements EBComponent
 	private int waitCount;
 
 	private boolean showFullPath;
-	private boolean checkModStatus;
 
 	private void getEditPanes(Vector vec, Component comp)
 	{
@@ -727,7 +726,6 @@ public class View extends JFrame implements EBComponent
 		loadToolBar();
 
 		showFullPath = jEdit.getBooleanProperty("view.showFullPath");
-		checkModStatus = jEdit.getBooleanProperty("view.checkModStatus");
 		updateTitle();
 
 		updateRecentMenu();
@@ -1043,8 +1041,7 @@ public class View extends JFrame implements EBComponent
 				gotFocus = true;
 			}
 
-			if(checkModStatus)
-				editPane.getBuffer().checkModTime(View.this);
+			editPane.getBuffer().checkModTime(View.this);
 		}
 
 		public void windowClosing(WindowEvent evt)
@@ -1057,6 +1054,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.206  2000/11/08 09:31:36  sp
+ * Junk
+ *
  * Revision 1.205  2000/11/05 00:44:14  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

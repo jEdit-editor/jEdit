@@ -81,8 +81,8 @@ public class MiniIOProgress extends JComponent implements WorkThreadProgressList
 			if(!thread.isRequestRunning() || max == 0)
 				continue;
 
-			double progressRatio = ((double)thread
-				.getProgressValue() / max);
+			int value = thread.getProgressValue();
+			double progressRatio = ((double)value / max);
 
 			// when loading gzip files, for example,
 			// progressValue (data read) can be larger
@@ -111,6 +111,9 @@ public class MiniIOProgress extends JComponent implements WorkThreadProgressList
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/11/08 09:31:37  sp
+ * Junk
+ *
  * Revision 1.1  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *
