@@ -150,6 +150,7 @@ Artur Biesiadowski - Eiffel
 Clancy Malcolm - Original version of PHP3 mode
 Dante Fabrizio - VHDL
 Ian Maclean - Ruby
+Jerry McBride - NetRexx
 Jonathan Revusky - Python
 Juha Lindfors - IDL
 Kristian Ovaska - Pascal

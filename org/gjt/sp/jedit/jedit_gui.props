@@ -1038,6 +1038,7 @@ log-viewer.save=Save Log
 ### MISC
 ###
 mode.text.label=Plain Text
+mode.text.filenameGlob=*.txt
 
 ###
 ### VFS STRINGS

@@ -5,6 +5,11 @@ JEDIT 2.5 VERSION HISTORY
 + New Features
 
 - SHTML mode (Mike Dillon)
+- NetRexx mode (Jerry McBride)
+
++ Enhancements
+
+- Scheme mode updated (Mike Dillon)
 
 + Bug Fixes
 
@@ -17,6 +22,9 @@ JEDIT 2.5 VERSION HISTORY
 - jEdit would erronously write an autosaved buffer back to disk after it had
   been recovered
 - 'Stop' button in installer didn't work (since 2.5pre2)
+- Plugin manager didn't work due to an incorrect dependency (since 2.5pre8)
+- If a default edit mode other than 'text' was specified, *.txt files would
+  be opened with that mode
 
 * Version 2.5pre8
 
