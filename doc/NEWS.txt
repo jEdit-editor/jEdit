@@ -1,6 +1,66 @@
 MAJOR CHANGES IN JEDIT 2.5 SINCE 2.4
 
-To do.
+* New I/O subsystem
+
+The file loading and saving code has been completely overhauled in
+jEdit 2.5. The code is cleaner and more modular, which should make it
+easier to extend in the future. Also, all I/O is now performed in a
+separate thread, which improves responsiveness.
+
+* FTP load and save
+
+Taking advantage of the increased modularity of the new I/O code, the
+FTP 'virtual filesystem' allows transparent access to files stored on
+FTP servers. It supports username/password authentication and browsing
+of remote directories.
+
+* Improved split pane feature
+
+It is now possible to edit multiple buffers side-by-side in a split
+view. Previously, all splits had to edit the same buffer.
+
+* Changing settings on a mode-by-mode basis
+
+Settings such as the tab size, comment strings, and various flags can
+now be set on a mode-by-mode basis in the Utilities->Global Options
+dialog box. The patterns used to match file names to edit modes can
+be customized as well.
+
+* Customizable tool bar
+
+The tool bar can now be customized in the Utilities->Global Options
+dialog box.
+
+* Searching in file dialog boxes
+
+The 'Open File' and 'Save As' dialog boxes now have a built in 'find
+file' widget that supports searching by file name and modification date.
+This widget was written by Ken Klinner <kklinner@opiom.com>.
+
+* Register and marker improvements
+
+Markers and position registers are now highlighted in the gutter.
+Commands have been added to move the caret to the closest marker before
+and after the caret.
+
+* Macro improvements
+
+Macros can now be written that prompt for input. Also, register contents
+can now be substituted into action commands by writing '$x', where 'x'
+is the desired register.
+
+* HyperSearch improvements
+
+The 'HyperSearch' window now performs searches in a background thread.
+This improves percieved performance, gives feedback as while the
+search is in progress, and allows the search to be interrupted.
+
+* Background mode
+
+If the '-background' switch is specified on the command line, jEdit will
+stay resident and continue running even if no views are open. On systems
+with lots of free memory, this improves performance because jEdit only
+needs to be loaded once.
 
 -- Slava Pestov
 <sp@gjt.org>

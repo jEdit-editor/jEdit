@@ -53,6 +53,8 @@ public class end extends EditAction
 			lastVisibleLine = Math.min(textArea.getLineCount() - 1,
 				lastVisibleLine);
 		}
+		else if(lastVisibleLine <= textArea.getElectricScroll())
+			lastVisibleLine = 0;
 		else
 			lastVisibleLine -= (textArea.getElectricScroll() + 1);
 

@@ -35,13 +35,14 @@ public class prev_marker extends EditAction
 
 		Vector markers = view.getBuffer().getMarkers();
 		Marker marker = null;
-		for(int i = markers.size() -1; i >= 0; i--)
+		for(int i = markers.size() - 1; i >= 0; i--)
 		{
 			Marker _marker = (Marker)markers.elementAt(i);
 			if(_marker.getStart() < caret)
-				break;
-			else
+			{
 				marker = _marker;
+				break;
+			}
 		}
 
 		if(marker != null)

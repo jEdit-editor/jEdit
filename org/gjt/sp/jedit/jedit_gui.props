@@ -409,7 +409,7 @@ help-menu.label=$Help
 about.label=About jEdit...
 help.label=jEdit User Guide
 help@README.txt.label=jEdit Read Me
-help@NEWS.txt.label=Major Changes in jEdit 2.4
+help@NEWS.txt.label=Major Changes in jEdit 2.5
 help@CHANGES.txt.label=Version History
 help@TODO.txt.label=To Do and Known Bugs
 
@@ -505,8 +505,8 @@ view.status.recording=(recording)
 
 # About dialog
 about.title=About jEdit
-about.message=jEdit version {0}\n\
-	jEdit was written by Slava Pestov with code\n\
+about.caption=jEdit version {0}
+about.message=jEdit was written by Slava Pestov with code\n\
 	contributions from several others. It is released\n\
 	under the GNU General Public License.\n\
 	See the README file for more information.

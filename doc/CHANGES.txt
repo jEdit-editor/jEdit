@@ -21,6 +21,8 @@ JEDIT 2.5 VERSION HISTORY
 - PHP mode now highlights statements with '@' better
 - The gutter now only repaints lines which really need repainting
 - File chooser is now a little bit wider
+- Shell scripts used to create the jEdit installer are now included in
+  the 'jEdit source' fileset
 
 + Bug Fixes
 
@@ -33,6 +35,8 @@ JEDIT 2.5 VERSION HISTORY
 - Fixed possible NPE in focus handling code
 - Mode option pane didn't save settings sometimes
 - Tab size setting in mode XML files was ignored
+- Povray mode had an incorrect 'label' property
+- Fixed ArrayIndexOutOfBoundsException in 'end' action
 
 * Version 2.5pre3
 

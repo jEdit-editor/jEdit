@@ -32,20 +32,27 @@ public class AboutDialog extends EnhancedDialog
 	{
 		super(view,jEdit.getProperty("about.title"),true);
 
-		JLabel label = new JLabel(
-			new ImageIcon(getClass().getResource(
-			"/org/gjt/sp/jedit/jedit_logo.gif")));
-		label.setBorder(new EmptyBorder(10,10,10,10));
-		getContentPane().add(BorderLayout.NORTH,label);
-		JPanel panel = new JPanel(new GridLayout(0,1));
+		JPanel panel = new JPanel(new BorderLayout());
+
 		String[] args = { jEdit.getVersion() };
+		JLabel label = new JLabel(jEdit.getProperty("about.caption",args),
+			SwingConstants.CENTER);
+		panel.add(BorderLayout.NORTH,label);
+
+		label = new JLabel(new ImageIcon(getClass().getResource(
+			"/org/gjt/sp/jedit/jedit_logo.gif")));
+		label.setBorder(new CompoundBorder(new EmptyBorder(5,5,5,5),
+			new BevelBorder(BevelBorder.LOWERED)));
+		panel.add(BorderLayout.CENTER,label);
+		JPanel panel2 = new JPanel(new GridLayout(0,1));
 		StringTokenizer st = new StringTokenizer(
-			jEdit.getProperty("about.message",args),"\n");
+			jEdit.getProperty("about.message"),"\n");
 		while(st.hasMoreTokens())
 		{
-			panel.add(new JLabel(st.nextToken(),
+			panel2.add(new JLabel(st.nextToken(),
 				SwingConstants.CENTER));
 		}
+		panel.add(BorderLayout.SOUTH,panel2);
 		getContentPane().add(BorderLayout.CENTER,panel);
 
 		panel = new JPanel();

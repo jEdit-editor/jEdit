@@ -39,9 +39,10 @@ public class next_marker extends EditAction
 		{
 			Marker _marker = (Marker)markers.elementAt(i);
 			if(_marker.getStart() > caret)
-				break;
-			else
+			{
 				marker = _marker;
+				break;
+			}
 		}
 
 		if(marker != null)
