@@ -1,6 +1,6 @@
 /*
  * end.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
@@ -41,16 +42,24 @@ public class end extends EditAction
 	{
 		View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
+		InputHandler inputHandler = view.getInputHandler();
 
 		int caret = textArea.getCaretPosition();
+		int line = textArea.getCaretLine();
+
+		int lastIndent = textArea.getLineEndOffset(line)
+			- MiscUtilities.getTrailingWhiteSpace(textArea
+			.getLineText(line)) - 1;
 
 		int lastOfLine = textArea.getLineEndOffset(
 			textArea.getCaretLine()) - 1;
+
 		int lastVisibleLine = textArea.getFirstLine()
 			+ textArea.getVisibleLines();
+
 		if(lastVisibleLine >= textArea.getLineCount())
 		{
-			lastVisibleLine = Math.min(textArea.getLineCount() - 1,
+			lastVisibleLine = Math.min(textArea.getLineCount(),
 				lastVisibleLine);
 		}
 		else if(lastVisibleLine <= textArea.getElectricScroll())
@@ -59,21 +68,20 @@ public class end extends EditAction
 			lastVisibleLine -= (textArea.getElectricScroll() + 1);
 
 		int lastVisible = textArea.getLineEndOffset(lastVisibleLine) - 1;
-		int lastDocument = textArea.getDocumentLength();
 
-		if(caret == lastDocument)
+		int[] positions = { lastIndent, lastOfLine, lastVisible };
+		int count;
+		if(!jEdit.getBooleanProperty("view.homeEnd"))
+			count = 2;
+		else if(inputHandler.getLastAction() == this)
 		{
-			view.getToolkit().beep();
-			return;
+			count = (inputHandler.getLastActionCount() - 1)
+				% positions.length;
 		}
-		else if(!jEdit.getBooleanProperty("view.homeEnd"))
-			caret = lastOfLine;
-		else if(caret == lastVisible)
-			caret = lastDocument;
-		else if(caret == lastOfLine)
-			caret = lastVisible;
 		else
-			caret = lastOfLine;
+			count = 0;
+
+		caret = positions[count];
 
 		if(select)
 			textArea.select(textArea.getMarkPosition(),caret);

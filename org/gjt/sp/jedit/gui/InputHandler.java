@@ -169,6 +169,24 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	/**
+	 * Returns the last executed action.
+	 * @since jEdit 2.5pre5
+	 */
+	public EditAction getLastAction()
+	{
+		return lastAction;
+	}
+
+	/**
+	 * Returns the number of times the last action was executed.
+	 * @since jEdit 2.5pre5
+	 */
+	public int getLastActionCount()
+	{
+		return lastActionCount;
+	}
+
+	/**
 	 * Executes the specified action, repeating and recording it as
 	 * necessary.
 	 * @param action The action
@@ -188,6 +206,15 @@ public abstract class InputHandler extends KeyAdapter
 		{
 			action.actionPerformed(evt);
 			return;
+		}
+
+		// remember the last executed action
+		if(lastAction == action)
+			lastActionCount++;
+		else
+		{
+			lastAction = action;
+			lastActionCount = 1;
 		}
 
 		// remember old values, in case action changes them
@@ -237,6 +264,9 @@ public abstract class InputHandler extends KeyAdapter
 	protected int repeatCount;
 	protected InputHandler.MacroRecorder recorder;
 
+	protected EditAction lastAction;
+	protected int lastActionCount;
+
 	/**
 	 * If a key is being grabbed, this method should be called with
 	 * the appropriate key event. It executes the grab action with
@@ -278,6 +308,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/05/27 05:52:06  sp
+ * Improved home/end actions
+ *
  * Revision 1.7  2000/05/24 07:56:05  sp
  * bug fixes
  *

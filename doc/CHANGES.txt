@@ -1,5 +1,21 @@
 JEDIT 2.5 VERSION HISTORY
 
+* Version 2.5pre5
+
++ New Features
+
+- Improved home/end commands; they now go to the first/last non-whitespace
+  character on the current line, then the start/end of the line, and then
+  to the first/last visible line. Also, even if, for example, the caret is
+  already at the start of the line, HOME still needs to be pressed three
+  times to go to the start of the viewscreen. This should make these
+  commands more reliable in macros
+
++ Enhancements
+
+- 'Go to End Of Indent' command removed (just use HOME instead); shortcut
+  of 'Indent Selected Lines' changed to C+i
+
 * Version 2.5pre4
 
 + New Features

@@ -55,6 +55,13 @@ The 'HyperSearch' window now performs searches in a background thread.
 This improves percieved performance, gives feedback as while the
 search is in progress, and allows the search to be interrupted.
 
+* Improved home/end commands
+
+The behaviour of the HOME and END keys has changed. Pressing them
+multiple times will now cycle between the first/last non-whitespace
+character on the current line, the start/end of the current line, and
+the first/last visible line.
+
 * Background mode
 
 If the '-background' switch is specified on the command line, jEdit will

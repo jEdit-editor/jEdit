@@ -184,6 +184,29 @@ loop:		for(;whitespace < str.length();)
 	}
 
 	/**
+	 * Returns the number of trailing whitespace characters in the
+	 * specified string.
+	 * @param str The string
+	 * @since jEdit 2.5pre5
+	 */
+	public static int getTrailingWhiteSpace(String str)
+	{
+		int whitespace = 0;
+loop:		for(int i = str.length() - 1; i >= 0; i--)
+		{
+			switch(str.charAt(i))
+			{
+			case ' ': case '\t':
+				whitespace++;
+				break;
+			default:
+				break loop;
+			}
+		}
+		return whitespace;
+	}
+
+	/**
 	 * Returns the width of the leading white space in the specified
 	 * string.
 	 * @param str The string
@@ -658,6 +681,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/05/27 05:52:06  sp
+ * Improved home/end actions
+ *
  * Revision 1.32  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

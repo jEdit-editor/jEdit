@@ -1,6 +1,6 @@
 /*
  * home.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
@@ -41,31 +42,41 @@ public class home extends EditAction
 	{
 		View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
+		InputHandler inputHandler = view.getInputHandler();
 
 		int caret = textArea.getCaretPosition();
+		int line = textArea.getCaretLine();
 
-		int firstLine = textArea.getFirstLine();
+		int firstIndent = textArea.getLineStartOffset(line)
+			+ MiscUtilities.getLeadingWhiteSpace(textArea
+			.getLineText(line));
 
 		int firstOfLine = textArea.getLineStartOffset(
 			textArea.getCaretLine());
-		int firstVisibleLine = (firstLine == 0 ? 0 :
-			firstLine + textArea.getElectricScroll());
-		int firstVisible = textArea.getLineStartOffset(
-			firstVisibleLine);
 
-		if(caret == 0)
+		int firstLine = textArea.getFirstLine();
+		int electricScroll = textArea.getElectricScroll();
+
+		int firstVisibleLine = (firstLine <= electricScroll) ? 0 :
+			firstLine + electricScroll;
+		if(firstVisibleLine >= textArea.getLineCount())
+			firstVisibleLine = textArea.getLineCount() - 1;
+
+		int firstVisible = textArea.getLineStartOffset(firstVisibleLine);
+
+		int[] positions = { firstIndent, firstOfLine, firstVisible };
+		int count;
+		if(!jEdit.getBooleanProperty("view.homeEnd"))
+			count = 2;
+		else if(inputHandler.getLastAction() == this)
 		{
-			view.getToolkit().beep();
-			return;
+			count = (inputHandler.getLastActionCount() - 1)
+				% positions.length;
 		}
-		else if(!jEdit.getBooleanProperty("view.homeEnd"))
-			caret = firstOfLine;
-		else if(caret == firstVisible)
-			caret = 0;
-		else if(caret == firstOfLine)
-			caret = firstVisible;
 		else
-			caret = firstOfLine;
+			count = 0;
+
+		caret = positions[count];
 
 		if(select)
 			textArea.select(textArea.getMarkPosition(),caret);

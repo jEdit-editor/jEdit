@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.05.04.00";
+		return "02.05.05.00";
 	}
 
 	/**
@@ -1838,7 +1838,6 @@ public class jEdit
 		addAction("find-next");
 		addAction("find-selection");
 		addAction("global-options");
-		addAction("goto-end-indent");
 		addAction("goto-line");
 		addAction("goto-marker");
 		addAction("goto-register");
@@ -2306,6 +2305,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.243  2000/05/27 05:52:06  sp
+ * Improved home/end actions
+ *
  * Revision 1.242  2000/05/23 04:04:52  sp
  * Marker highlight updates, next/prev-marker actions
  *

@@ -214,7 +214,6 @@ toggle-rect.label=Rectangular Selection
 
 ### Line menu
 line=indent-lines \
-     goto-end-indent \
      shift-left \
      shift-right \
      - \
@@ -226,7 +225,6 @@ line=indent-lines \
      scroll-line
 line.label=Lines
 indent-lines.label=Indent Selected Lines
-goto-end-indent.label=Go to End of Indent
 scroll-line.label=Scroll to Current Line
 delete-line.label=Delete Line
 delete-start-line.label=Delete to Start of Line
