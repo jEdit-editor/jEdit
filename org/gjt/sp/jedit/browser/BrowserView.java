@@ -44,11 +44,10 @@ public class BrowserView extends JPanel
 		model = new DefaultTreeModel(rootNode,true);
 
 		tree = new BrowserJTree(model);
-		tree.setCellRenderer(new FileCellRenderer());
+		tree.setCellRenderer(renderer);
 		tree.setEditable(false);
 		tree.addTreeExpansionListener(new TreeHandler());
 		tree.putClientProperty("JTree.lineStyle", "Angled");
-		tree.setRowHeight(22);
 		tree.setVisibleRowCount(10);
 
 		if(browser.isMultipleSelectionEnabled())
@@ -159,6 +158,11 @@ public class BrowserView extends JPanel
 	public Component getDefaultFocusComponent()
 	{
 		return tree;
+	}
+
+	public void propertiesChanged()
+	{
+		tree.revalidate();
 	}
 
 	// private members
@@ -281,7 +285,7 @@ public class BrowserView extends JPanel
 				Rectangle cellRect = getPathBounds(path);
 				if(cellRect != null && !cellRectIsVisible(cellRect))
 				{
-					return new Point(cellRect.x + 20, cellRect.y + 2);
+					return new Point(cellRect.x + 20,cellRect.y + cellRect.height);
 				}
 			}
 			return null;

@@ -1,6 +1,7 @@
 /*
  * FileCellRenderer.java - renders list and tree cells for the VFS browser
  * Copyright (C) 1999 Jason Ginchereau
+ * Portions copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,14 +26,14 @@ import javax.swing.tree.*;
 import javax.swing.border.*;
 
 import org.gjt.sp.jedit.io.VFS;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.*;
 
 public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 {
-	public FileCellRenderer() {
+	public FileCellRenderer()
+	{
 		font = UIManager.getFont("Tree.font");
-		font = new Font(font.getName(), Font.PLAIN, font.getSize());
 
 		treeSelectionForeground = UIManager.getColor("Tree.selectionForeground");
 		treeNoSelectionForeground = UIManager.getColor("Tree.textForeground");
@@ -48,19 +49,31 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 		dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
 		filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 		loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
+
+		treeCellRenderer = new JLabel();
+		treeCellRenderer.setOpaque(true);
+		treeCellRenderer.setFont(font);
+
+		propertiesChanged();
+
+		/* pure genius. since only one instance of this class is ever
+		 * created, we can add a 'hard-coded' component to the editbus
+		 * to handle property changes.
+		 */
+		EditBus.addToBus(new EBComponent()
+		{
+			public void handleMessage(EBMessage msg)
+			{
+				if(msg instanceof PropertiesChanged)
+					propertiesChanged();
+			}
+		});
 	}
 
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 		boolean sel, boolean expanded, boolean leaf, int row,
 		boolean focus)
 	{
-		if(treeCellRenderer == null)
-		{
-			treeCellRenderer = new JLabel();
-			treeCellRenderer.setOpaque(true);
-			treeCellRenderer.setFont(font);
-		}
-
 		if(sel)
 		{
 			treeCellRenderer.setBackground(treeSelectionBackground);
@@ -83,19 +96,40 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 			boolean opened = (jEdit.getBuffer(file.path) != null);
 			treeCellRenderer.setBorder(opened ? openBorder : closedBorder);
 
-			treeCellRenderer.setIcon(getIconForFile(file));
-			treeCellRenderer.setText(file.name);
+			if(showIcons)
+			{
+				treeCellRenderer.setIcon(getIconForFile(file));
+				treeCellRenderer.setText(file.name);
+			}
+			else
+			{
+				treeCellRenderer.setIcon(null);
+				treeCellRenderer.setText(file.type == VFS.DirectoryEntry.DIRECTORY
+					? file.name + "/" : file.name);
+			}
 		}
 		else if(userObject instanceof BrowserView.LoadingPlaceholder)
 		{
-			treeCellRenderer.setIcon(loadingIcon);
+			if(showIcons)
+				treeCellRenderer.setIcon(loadingIcon);
+			else
+				treeCellRenderer.setIcon(null);
 			treeCellRenderer.setText(jEdit.getProperty("vfs.browser.tree.loading"));
 			treeCellRenderer.setBorder(closedBorder);
 		}
 		else if(userObject instanceof String)
 		{
-			treeCellRenderer.setIcon(dirIcon);
-			treeCellRenderer.setText((String)userObject);
+			if(showIcons)
+			{
+				treeCellRenderer.setIcon(dirIcon);
+				treeCellRenderer.setText((String)userObject);
+			}
+			else
+			{
+				treeCellRenderer.setIcon(null);
+				treeCellRenderer.setText(userObject + "/");
+			}
+
 			treeCellRenderer.setBorder(closedBorder);
 		}
 
@@ -114,7 +148,9 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 	}
 
 	// private members
-	private JLabel treeCellRenderer = null;
+	private JLabel treeCellRenderer;
+
+	private boolean showIcons;
 
 	private Font font;
 
@@ -123,35 +159,28 @@ public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 	private Icon filesystemIcon;
 	private Icon loadingIcon;
 
-	private Border closedBorder = new EmptyBorder(0,3,0,0);
-	private Border openBorder = new CompoundBorder(new EmptyBorder(0,1,0,0),
-		new MatteBorder(0,2,0,0,Color.black));
+	private Border closedBorder;
+	private Border openBorder;
 
 	private Color treeSelectionForeground;
 	private Color treeNoSelectionForeground;
 	private Color treeSelectionBackground;
 	private Color treeNoSelectionBackground;
-}
 
-/*
- * Change Log:
- * $Log$
- * Revision 1.6  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.5  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.4  2000/08/16 08:47:19  sp
- * Stuff
- *
- * Revision 1.3  2000/08/06 09:44:27  sp
- * VFS browser now has a tree view, rename command
- *
- * Revision 1.2  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.1  2000/07/30 09:04:19  sp
- * More VFS browser hacking
- *
- */
+	private void propertiesChanged()
+	{
+		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
+		if(showIcons)
+		{
+			closedBorder = new EmptyBorder(0,3,0,0);
+			openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,Color.black),
+				new EmptyBorder(0,1,0,0));
+		}
+		else
+		{
+			closedBorder = new EmptyBorder(1,4,1,1);
+			openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,Color.black),
+				new EmptyBorder(1,2,1,1));
+		}
+	}
+}

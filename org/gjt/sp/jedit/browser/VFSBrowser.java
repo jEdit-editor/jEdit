@@ -771,6 +771,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 			reload = true;
 		}
 
+		browserView.propertiesChanged();
+
 		if(path != null && reload)
 			reloadDirectory();
 	}

@@ -253,6 +253,9 @@ Ralf Engels:
 Romain Guy:
 	- POVRay syntax highlighting
 
+Richard Beton:
+	- Occam syntax highlighting
+
 Tal Davidson:
 	- Original syntax highlighting engine
 

@@ -272,6 +272,7 @@ print.margin.right=0.5
 ### VFS SETTINGS
 ###
 
+vfs.browser.showIcons=true
 vfs.browser.showHiddenFiles=false
 vfs.browser.sortFiles=true
 vfs.browser.sortMixFilesAndDirs=false

@@ -1,5 +1,10 @@
 TO DO
 
+- finish converting docs to xml
+- support middle mouse button clicks, Shift-clicks in JTextComponents
+- support jEdit keyboard shortcuts in JTextComponents
+- fs browser: tooltips are shown in the wrong location
+- reload: save caret position?
 - document positional parameters in abbrevs
 - non-existent files and caret history
 - double click: selection prob

@@ -108,6 +108,8 @@ class PluginListHandler extends HandlerBase
 		}
 		else if(tag == "DOWNLOAD")
 			download = text;
+		else if(tag == "DOWNLOAD_SOURCE")
+			downloadSource = text;
 	}
 
 	public void startElement(String tag)
@@ -169,6 +171,7 @@ class PluginListHandler extends HandlerBase
 			branch.version = version;
 			branch.date = date;
 			branch.download = download;
+			branch.downloadSource = downloadSource;
 			branch.obsolete = obsolete;
 			plugin.branches.addElement(branch);
 			version = null;
@@ -222,6 +225,7 @@ class PluginListHandler extends HandlerBase
 	private String version;
 	private String date;
 	private String download;
+	private String downloadSource;
 	private String depWhat;
 	private String depFrom;
 	private String depTo;

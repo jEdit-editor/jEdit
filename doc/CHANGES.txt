@@ -1,5 +1,16 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2pre4
+
++ New Features
+
+- Occam syntax highlighting (Richard Beton)
+- The icons in the file system browser can be toggled on and off
+
++ Enhancements
+
+- You can now choose if you want to download plugin source, or only binaries
+
 * Version 3.2pre3
 
 + New Features

@@ -101,11 +101,11 @@ class InstallPluginsDialog extends EnhancedDialog
 		description.setEditable(false);
 		description.setLineWrap(true);
 		description.setWrapStyleWord(true);
-		JPanel panel4 = new JPanel(new BorderLayout());
 		panel3.add(BorderLayout.NORTH,new JScrollPane(description));
-
 		if(mode == INSTALL)
 		{
+			JPanel panel4 = new JPanel(new BorderLayout());
+
 			ButtonGroup grp = new ButtonGroup();
 			installUser = new JRadioButton();
 			String settings = jEdit.getSettingsDirectory();
@@ -122,7 +122,7 @@ class InstallPluginsDialog extends EnhancedDialog
 			String[] args = { settings };
 			installUser.setText(jEdit.getProperty("install-plugins.user",args));
 			grp.add(installUser);
-			panel3.add(BorderLayout.CENTER,installUser);
+			panel4.add(BorderLayout.CENTER,installUser);
 
 			installSystem = new JRadioButton();
 			String jEditHome = jEdit.getJEditHome();
@@ -139,13 +139,20 @@ class InstallPluginsDialog extends EnhancedDialog
 			args[0] = jEditHome;
 			installSystem.setText(jEdit.getProperty("install-plugins.system",args));
 			grp.add(installSystem);
-			panel3.add(BorderLayout.SOUTH,installSystem);
+			panel4.add(BorderLayout.SOUTH,installSystem);
 
 			if(installUser.isEnabled())
 				installUser.setSelected(true);
 			else
 				installSystem.setSelected(true);
+
+			panel3.add(BorderLayout.CENTER,panel4);
 		}
+
+		panel3.add(BorderLayout.SOUTH,downloadSource = new JCheckBox(
+			jEdit.getProperty("install-plugins.downloadSource")));
+		downloadSource.setSelected(jEdit.getBooleanProperty("install-plugins"
+			+ ".downloadSource.value"));
 
 		panel2.add(BorderLayout.SOUTH,panel3);
 
@@ -178,6 +185,8 @@ class InstallPluginsDialog extends EnhancedDialog
 
 	public void ok()
 	{
+		jEdit.setBooleanProperty("install-plugins.downloadSource.value",
+			downloadSource.isSelected());
 		dispose();
 	}
 
@@ -209,7 +218,7 @@ class InstallPluginsDialog extends EnhancedDialog
 		for(int i = 0; i < selected.length; i++)
 		{
 			PluginList.Plugin plugin = (PluginList.Plugin)selected[i];
-			plugin.install(roster,installDirectory);
+			plugin.install(roster,installDirectory,downloadSource.isSelected());
 		}
 	}
 
@@ -223,6 +232,7 @@ class InstallPluginsDialog extends EnhancedDialog
 	private JTextArea description;
 	private JRadioButton installUser;
 	private JRadioButton installSystem;
+	private JCheckBox downloadSource;
 
 	private JButton install;
 	private JButton cancel;

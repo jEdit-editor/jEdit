@@ -8,7 +8,7 @@ OVERVIEW OF CHANGES BETWEEN JEDIT 3.1 AND 3.2
 - Search in Open Buffers command, Search in Directory command
 - Search in Directory in file system browser right-click menu
 - Reload Edit Modes command
-- Verilog syntax highlighting
+- Verilog, Occam syntax highlighting
 - Status bar
 - Improved plugin manager
 - Positional parameters in abbrevs

@@ -99,13 +99,17 @@ class PluginList
 		String description;
 		Vector plugins = new Vector();
 
-		void install(Roster roster, String installDirectory)
+		void install(Roster roster, String installDirectory,
+			boolean downloadSource)
 		{
 			for(int i = 0; i < plugins.size(); i++)
 			{
 				Plugin plugin = (Plugin)plugins.elementAt(i);
 				if(plugin.canBeInstalled())
-					plugin.install(roster,installDirectory);
+				{
+					plugin.install(roster,installDirectory,
+						downloadSource);
+				}
 			}
 		}
 
@@ -185,7 +189,7 @@ class PluginList
 			return branch != null && !branch.obsolete;
 		}
 
-		void install(Roster roster, String installDirectory)
+		void install(Roster roster, String installDirectory, boolean downloadSource)
 		{
 			if(installed != null)
 				roster.addOperation(new Roster.Remove(installed));
@@ -194,7 +198,8 @@ class PluginList
 			if(branch.obsolete)
 				return;
 
-			branch.satisfyDependencies(roster,installDirectory);
+			branch.satisfyDependencies(roster,installDirectory,
+				downloadSource);
 
 			if(installed != null)
 			{
@@ -204,16 +209,17 @@ class PluginList
 
 			roster.addOperation(new Roster.Install(branch.download,
 				installDirectory));
+
+			if(downloadSource)
+			{
+				roster.addOperation(new Roster.Install(branch.downloadSource,
+					installDirectory));
+			}
 		}
 
 		public String toString()
 		{
 			return name;
-
-			/* return "[jar=" + jar + ",name=" + name + ",description="
-				+ description + ",author=" + author + ",branches="
-				+ branches + ",installed=" + installed
-				+ ",installedVersion=" + installedVersion + "]"; */
 		}
 	}
 
@@ -222,6 +228,7 @@ class PluginList
 		String version;
 		String date;
 		String download;
+		String downloadSource;
 		boolean obsolete;
 		Vector deps = new Vector();
 
@@ -237,12 +244,13 @@ class PluginList
 			return true;
 		}
 
-		void satisfyDependencies(Roster roster, String installDirectory)
+		void satisfyDependencies(Roster roster, String installDirectory,
+			boolean downloadSource)
 		{
 			for(int i = 0; i < deps.size(); i++)
 			{
 				Dependency dep = (Dependency)deps.elementAt(i);
-				dep.satisfy(roster,installDirectory);
+				dep.satisfy(roster,installDirectory,downloadSource);
 			}
 		}
 
@@ -332,7 +340,8 @@ class PluginList
 			return (what.equals("plugin") || isSatisfied());
 		}
 
-		void satisfy(Roster roster, String installDirectory)
+		void satisfy(Roster roster, String installDirectory,
+			boolean downloadSource)
 		{
 			if(what.equals("plugin"))
 			{
@@ -351,7 +360,8 @@ class PluginList
 					   (to == null || MiscUtilities.compareVersions(
 					   	branch.version,to) <= 0))
 					{
-						plugin.install(roster,installDirectory);
+						plugin.install(roster,installDirectory,
+							downloadSource);
 						return;
 					}
 				}

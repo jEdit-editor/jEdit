@@ -862,6 +862,10 @@
     The search bar can be disabled in the <guibutton>General</> pane of
     the <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
    </para>
+   <para>
+    Note that incremental searches cannot be not recorded in macros. Use the
+    search and replace dialog box instead.
+   </para>
   </sect2>
  </sect1>
 </chapter>

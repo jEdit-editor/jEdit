@@ -55,6 +55,13 @@ public class BrowserOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.browser.defaultPath"),
 			defaultDirectory);
 
+		/* Show icons */
+		showIcons = new JCheckBox(jEdit.getProperty("options.browser"
+			+ ".showIcons"));
+		showIcons.setSelected(jEdit.getBooleanProperty("vfs.browser"
+			+ ".showIcons"));
+		addComponent(showIcons);
+
 		/* Show hidden files */
 		showHiddenFiles = new JCheckBox(jEdit.getProperty("options.browser"
 			+ ".showHiddenFiles"));
@@ -103,6 +110,8 @@ public class BrowserOptionPane extends AbstractOptionPane
 		String[] dirs = { "buffer", "home", "favorites", "last" };
 		jEdit.setProperty("vfs.browser.defaultPath",dirs[defaultDirectory
 			.getSelectedIndex()]);
+		jEdit.setBooleanProperty("vfs.browser.showIcons",
+			showIcons.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.showHiddenFiles",
 			showHiddenFiles.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.sortFiles",
@@ -119,6 +128,7 @@ public class BrowserOptionPane extends AbstractOptionPane
 
 	// private members
 	private JComboBox defaultDirectory;
+	private JCheckBox showIcons;
 	private JCheckBox showHiddenFiles;
 	private JCheckBox sortFiles;
 	private JCheckBox sortIgnoreCase;

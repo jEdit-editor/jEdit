@@ -95,9 +95,18 @@
   </para>
   <para>
    While recording is in progress, the string
-   <quote>(recording)</> is displayed in the menu bar. jEdit records
-   key strokes, menu item commands, tool bar clicks, and search and
-   replace operations. Mouse clicks in the text area are
+   <quote>Macro recording</> is displayed in the status bar. jEdit records
+   the following:
+  </para>
+  <itemizedlist>
+   <listitem><para>Key strokes</para></listitem>
+   <listitem><para>Menu item commands</para></listitem>
+   <listitem><para>Tool bar clicks</para></listitem>
+   <listitem><para>All search and replace operations except incremental
+   search</para></listitem>
+  </itemizedlist>
+  <para>
+   Mouse clicks in the text area are
    <emphasis>not</> recorded; to record the equivalent of mouse operations,
    use the text selection commands or arrow keys.
   </para>
