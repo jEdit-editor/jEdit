@@ -163,6 +163,7 @@
 
 			<fileset dir="." includes="installer/jedit-*"/>
 		</delete>
+		<delete dir="doc/api"/>
 	</target>
 
 	<!-- Generate tags using 'ctags' program from ctags.sourceforge.net -->
