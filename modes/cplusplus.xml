@@ -7,7 +7,7 @@
 
 <MODE NAME="cplusplus">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="C++ [XMode]" />
+		<PROPERTY NAME="label" VALUE="C++" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

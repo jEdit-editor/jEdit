@@ -6,7 +6,7 @@
 
 <MODE NAME="makefile">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Makefile [XMode]" />
+		<PROPERTY NAME="label" VALUE="Makefile" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*makefile*" />
 	</PROPS>

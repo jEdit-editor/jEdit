@@ -4,7 +4,7 @@
 
 <MODE NAME="scheme">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Scheme [XMode]" />
+		<PROPERTY NAME="label" VALUE="Scheme" />
 		<PROPERTY NAME="commentStart" VALUE="#| " />
 		<PROPERTY NAME="commentEnd" VALUE=" |#" />
 		<PROPERTY NAME="boxComment" VALUE=" | " />

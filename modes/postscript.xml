@@ -7,7 +7,7 @@
 
 <MODE NAME="postscript">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="PostScript [XMode]" />
+		<PROPERTY NAME="label" VALUE="PostScript" />
 		<PROPERTY NAME="blockComment" VALUE="%" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{ps,eps}" />
 	</PROPS>

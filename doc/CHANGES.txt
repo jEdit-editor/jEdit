@@ -10,7 +10,6 @@ JEDIT VERSION HISTORY
 
 - Closing a buffer will now go to the most recently edited buffer, rather
   than the previous one
-- Makefile updates (arh14@cornell.edu)
 
 + Bug Fixes
 

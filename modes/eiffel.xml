@@ -7,7 +7,7 @@
 
 <MODE NAME="eiffel">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Eiffel [XMode]" />
+		<PROPERTY NAME="label" VALUE="Eiffel" />
 		<PROPERTY NAME="blockComment" VALUE="--" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.e" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />

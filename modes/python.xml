@@ -7,7 +7,7 @@
 
 <MODE NAME="python">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Python [XMode]" />
+		<PROPERTY NAME="label" VALUE="Python" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.py" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />

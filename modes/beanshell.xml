@@ -7,7 +7,7 @@
 
 <MODE NAME="beanshell">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="BeanShell [XMode]" />
+		<PROPERTY NAME="label" VALUE="BeanShell" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

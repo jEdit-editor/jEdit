@@ -4,7 +4,7 @@
 
 <MODE NAME="ini">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="MS-DOS INI [XMode]" />
+		<PROPERTY NAME="label" VALUE="MS-DOS INI" />
 		<PROPERTY NAME="blockComment" VALUE=";" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{ini,reg}" />
 	</PROPS>

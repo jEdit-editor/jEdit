@@ -442,7 +442,7 @@ public class jEdit
 	 */
 	public static void loadPlugins(String directory)
 	{
-		Log.log(Log.MESSAGE,jEdit.class,"Scanning directory: "
+		Log.log(Log.MESSAGE,jEdit.class,"Loading plugins from "
 			+ directory);
 
 		File file = new File(directory);
@@ -566,6 +566,7 @@ public class jEdit
 	 */
 	public static void addMode(Mode mode)
 	{
+		Log.log(Log.DEBUG,jEdit.class,"Adding edit mode " + mode.getName());
 		modes.addElement(mode);
 	}
 
@@ -575,6 +576,8 @@ public class jEdit
 	 */
 	public static void loadModes(String directory)
 	{
+		Log.log(Log.MESSAGE,jEdit.class,"Loading edit modes from " + directory);
+
 		File file = new File(directory);
 		if(!(file.exists() && file.isDirectory()))
 			return;
@@ -628,7 +631,9 @@ public class jEdit
 	 */
 	public static Mode loadMode(Reader grammar, String fileName)
 	{
-		XModeHandler xmh = new XModeHandler();
+		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
+
+		XModeHandler xmh = new XModeHandler(fileName);
 		XmlParser parser = new XmlParser();
 		parser.setHandler(xmh);
 		try
@@ -641,17 +646,13 @@ public class jEdit
 			{
 				XmlException xe = (XmlException) e;
 				int line = xe.getLine();
-				int col = xe.getColumn();
 				String message = xe.getMessage();
 
-				Log.log(Log.ERROR,jEdit.class,
-					"XMode parse error: " + fileName
-					+ ":" + line + ":" + message);
+				Object[] args = { fileName, new Integer(line), message };
+				GUIUtilities.error(null,"xmode-parse",args);
 			}
-			else
-			{
-				Log.log(Log.ERROR, jEdit.class, e);
-			}
+
+			Log.log(Log.ERROR, jEdit.class, e);
 		}
 
 		return xmh.getMode();
@@ -1488,7 +1489,7 @@ public class jEdit
 	{
 		/* Try to guess the eventual size to avoid unnecessary
 		 * copying */
-		modes = new Vector(30);
+		modes = new Vector(40);
 
 		addMode(new Mode("text"));
 		addMode(new Mode("perl"));
@@ -1940,6 +1941,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.201  2000/03/26 05:12:59  sp
+ * minor XMode updates
+ *
  * Revision 1.200  2000/03/26 03:35:32  sp
  * Minor updates
  *

@@ -4,7 +4,7 @@
 
 <MODE NAME="xsl">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="XSL [XMode]" />
+		<PROPERTY NAME="label" VALUE="XSL" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.xsl" />

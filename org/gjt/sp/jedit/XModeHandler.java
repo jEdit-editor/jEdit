@@ -28,7 +28,10 @@ import org.gjt.sp.util.Log;
 public class XModeHandler extends HandlerBase
 {
 	// public members
-	public XModeHandler () {}
+	public XModeHandler (String path)
+	{
+		this.path = path;
+	}
 
 	// begin HandlerBase implementation
 	public void attribute(String aname, String value, boolean isSpecified)
@@ -135,6 +138,8 @@ public class XModeHandler extends HandlerBase
 			}
 			catch (NumberFormatException e)
 			{
+				String[] args = { path, value };
+				GUIUtilities.error(null,"xmode-termchar-invalid",args);
 				termChar = -1;
 			}
 		}
@@ -188,10 +193,10 @@ public class XModeHandler extends HandlerBase
 			{
 				lastDefaultID = GenericTokenMarker.OPERATOR;
 			}
-			else if (value == "NULL")
+			/*else if (value == "NULL")
 			{
 				lastDefaultID = GenericTokenMarker.NULL;
-			}
+			}*/
 			else
 			{
 				lastDefaultID = GenericTokenMarker.NULL;
@@ -204,7 +209,8 @@ public class XModeHandler extends HandlerBase
 	{
 		if ("MODE".equalsIgnoreCase(name)) return;
 
-		throw new Exception("Invalid document type (" + name + ")");
+		String[] args = { path, name };
+		GUIUtilities.error(null,"xmode-invalid-doctype",args);
 	}
 
 	public void charData(char[] c, int off, int len)
@@ -270,18 +276,14 @@ public class XModeHandler extends HandlerBase
 		{
 			if (tag == "MODE")
 			{
-				if (jEdit.getMode(modeName) == null)
+				Mode mode = jEdit.getMode(modeName);
+				if (mode == null)
 				{
 					mode = new Mode(modeName);
-					mode.setTokenMarker(marker);
+					jEdit.addMode(mode);
 				}
-				else
-				{
-					mode = null;
-					Log.log(Log.ERROR, this,"A mode named "
-						+ modeName + " is already"
-						+ " loaded");
-				}
+
+				mode.setTokenMarker(marker);
 			}
 			else if (tag == "PROPERTY")
 			{
@@ -435,9 +437,8 @@ public class XModeHandler extends HandlerBase
 		}
 		else
 		{
-			// oops...unclosed tag
-			Log.log(Log.ERROR, this, "In mode " + modeName);
-			Log.log(Log.ERROR, this, "Unclosed tag: " + tag);
+			// can't happen
+			throw new InternalError();
 		}
 	}
 
@@ -463,6 +464,8 @@ public class XModeHandler extends HandlerBase
 	}
 
 	// private members
+	private String path;
+
 	private GenericTokenMarker marker;
 	private KeywordMap keywords;
 	private Mode mode;

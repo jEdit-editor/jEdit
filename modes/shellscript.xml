@@ -6,7 +6,7 @@
 
 <MODE NAME="shellscript">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Unix Shell Script [XMode]" />
+		<PROPERTY NAME="label" VALUE="Unix Shell Script" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{csh,sh}" />
 		<PROPERTY NAME="firstlineGlob" VALUE="#!/*sh*" />

@@ -4,7 +4,7 @@
 
 <MODE NAME="java">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Java [XMode]" />
+		<PROPERTY NAME="label" VALUE="Java" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

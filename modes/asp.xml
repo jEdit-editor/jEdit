@@ -4,7 +4,7 @@
 
 <MODE NAME="asp">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="ASP (JScript) [XMode]" />
+		<PROPERTY NAME="label" VALUE="ASP (JScript)" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

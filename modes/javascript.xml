@@ -7,7 +7,7 @@
 
 <MODE NAME="javascript">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="JavaScript [XMode]" />
+		<PROPERTY NAME="label" VALUE="JavaScript" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

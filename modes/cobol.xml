@@ -4,7 +4,7 @@
 
 <MODE NAME="cobol">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="COBOL [XMode]" />
+		<PROPERTY NAME="label" VALUE="COBOL" />
 		<PROPERTY NAME="blockComment" VALUE="*" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.cbl" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />

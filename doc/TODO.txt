@@ -1,11 +1,14 @@
 JEDIT TO DO
 
+CVS: add macro.xml
+
 - XMode:
-  - better error reporting (show dialog boxes!)
+  - better error reporting
   - faster loading of modes
   - faster tokenizing of files
   - write docs
 - Get rid of loadIfNecessary() crap?
+- JARClassLoader: use GUIUtilities.error() to display errors
 - Option pane for changing mode-specific tab size, indent, comment
   characters, and so on
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing

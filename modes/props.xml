@@ -4,7 +4,7 @@
 
 <MODE NAME="props">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Properties/INI [XMode]" />
+		<PROPERTY NAME="label" VALUE="Properties/INI" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*{properties,props}" />
 	</PROPS>

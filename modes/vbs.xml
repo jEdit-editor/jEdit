@@ -4,7 +4,7 @@
 
 <MODE NAME="vbs">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="VBScript [XMode]" />
+		<PROPERTY NAME="label" VALUE="VBScript" />
 		<PROPERTY NAME="blockComment" VALUE="'" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.vbs" />
 	</PROPS>

@@ -567,7 +567,7 @@ record.message=Macro name:
 
 # Macro error dialog
 macro-error.title=Macro Error
-macro-error.message=Unknown action {2} while executing macro {0}\n\
+macro-error.message=Unknown action "{2}" while executing macro {0}\n\
 	(line {1}).
 
 # Some features don't work with -nosettings dialog
@@ -682,6 +682,21 @@ add-abbrev.message=The abbreviation "{0}" is undefined.\n\
 	or "global" to make it apply in all edit modes.
 add-abbrev.mode=Mode-specific
 add-abbrev.global=Global
+
+# XMode errors
+xmode-invalid-termchar.title=Invalid Attribute
+xmode-invalid-termchar.message=The AT_CHAR attribute ({1}) of the\
+	TERMINATE tag in\n\
+	{0} is not a number.
+
+xmode-invalid-doctype.title=Invalid Document Type
+xmode-invalid-doctype.message=The DOCTYPE of {0}\n\
+	is "{1}", not "MODE" as expected. The mode will be loaded anyway,\n\
+	but please ensure that this is a valid mode definition.
+
+xmode-parse.title=XML Parse Error
+xmode-parse.message=An error occured while parsing {0}, line {1}:\n\
+	{2}
 
 # Buffer options dialog
 buffer_options.title=Buffer Options

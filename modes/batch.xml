@@ -6,7 +6,7 @@
 
 <MODE NAME="batch">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="MS-DOS Batch [XMode]" />
+		<PROPERTY NAME="label" VALUE="MS-DOS Batch" />
 		<PROPERTY NAME="blockComment" VALUE="rem " />
 		<PROPERTY NAME="filenameGlob" VALUE="*.bat" />
 	</PROPS>
