@@ -9,7 +9,7 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<!-- the ; hack is there so that stuff like if(bob) fred();
 		  -- does not indent the next line -->
-		<PROPERTY NAME="indentPrevLine" VALUE="\s*(((if|while)\s*\(|else|case|default:)[^;]*|for\s*\(.*)" />
+		<PROPERTY NAME="indentPrevLine" VALUE="\s*(((if|while)\s*\(|else|case)[^;]*|for\s*\(.*)" />
 		<!-- set this to 'true' if you want to use GNU coding style -->
 		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />
@@ -149,6 +149,32 @@
 
 		<KEYWORDS>
 			<LABEL>@author</LABEL>
+			<LABEL>@history</LABEL>
+			<LABEL>@bug</LABEL>
+			<LABEL>@review</LABEL>
+			<LABEL>@todo</LABEL>
+			<LABEL>@idea</LABEL>
+			<LABEL>@pre</LABEL>
+			<LABEL>@requires</LABEL>
+			<LABEL>@post</LABEL>
+			<LABEL>@ensures</LABEL>
+			<LABEL>@generates</LABEL>
+			<LABEL>@modifies</LABEL>
+			<LABEL>@invariant</LABEL>
+			<LABEL>@exception</LABEL>
+			<LABEL>@hides</LABEL>
+			<LABEL>@overrides</LABEL>
+			<LABEL>@equivalent</LABEL>
+			<LABEL>@bon</LABEL>
+			<LABEL>@access</LABEL>
+			<LABEL>@example</LABEL>
+			<LABEL>@design</LABEL>
+			<LABEL>@serial</LABEL>
+			<LABEL>@references</LABEL>
+			<LABEL>@uses</LABEL>
+			<LABEL>@guard</LABEL>
+			<LABEL>@values</LABEL>
+			<LABEL>@complexity</LABEL>
 			<LABEL>@deprecated</LABEL>
 			<LABEL>@docRoot</LABEL>
 			<LABEL>@exception</LABEL>

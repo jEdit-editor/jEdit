@@ -8,7 +8,7 @@ JEDIT 2.6 VERSION HISTORY
 - The border color of docked windows can now be set in the Global Options
   dialog box
 - When a line with no syntax info is being painted, the token marker will
-  now backtrack up to 50 lines in the buffer in order to get accurate
+  now backtrack up to 100 lines in the buffer in order to get accurate
   syntax info. This should result in better highlighting when pasting
   long blocks of text, scrolling backwards in the buffer, and such
 - When changes are made in the 'Global Options' dialog box, the VFS browser
@@ -27,6 +27,13 @@ JEDIT 2.6 VERSION HISTORY
 
 - Clicks and drags in the space between the gutter and text area are now
   handled
+- Java mode now supports Infoshere's non-standard extended JavaDoc tags
+  (Todd Papaioannou)
+
++ Neutral
+
+- The installer no longer creates batch files on windows. Just double-click
+  on 'jedit.jar' instead
 
 + Bug Fixes
 
@@ -37,6 +44,11 @@ JEDIT 2.6 VERSION HISTORY
 - Bracket highlight no longer painted while buffer is being loaded (this
   could cause minor visual quirks when reloading, for example)
 - Minor fix to makefile syntax highlighting
+- Closing the global options dialog box no longer reshuffles the main
+  tool bar to the bottom if plugin tool bars are also active
+- Better error reporting when the user attempts to save to a 'pseudo'
+  filesystem such as 'favorites:' or 'roots:'
+- Fixed possible NullPointerException when saving files to FTP servers
 
 * Version 2.6pre8
 

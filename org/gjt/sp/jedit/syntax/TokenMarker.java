@@ -149,23 +149,25 @@ public class TokenMarker implements Cloneable
 			return info;
 
 		/*
-		 * Else, go up to 50 lines back, looking for a line with
+		 * Else, go up to 100 lines back, looking for a line with
 		 * cached tokens. Tokenize from that line to this line.
 		 */
-		int start = 0;
+		int start = Math.max(0,lineIndex - 100) - 1;
+		int end = Math.max(0,lineIndex - 100);
 
-		for(int i = lineIndex - 1; i > Math.max(0,lineIndex - 50); i--)
+		for(int i = lineIndex - 1; i > end; i--)
 		{
 			if(lineInfo[i].tokensValid)
-				break;
-			else
+			{
 				start = i;
+				break;
+			}
 		}
 
-//		System.err.println("start=" + start);
+		//System.err.println("i=" + lineIndex + ",start=" + start);
 		Element map = buffer.getDefaultRootElement();
 
-		for(int i = start; i <= lineIndex; i++)
+		for(int i = start + 1; i <= lineIndex; i++)
 		{
 			Element lineElement = map.getElement(i);
 			int lineStart = lineElement.getStartOffset();
@@ -1008,6 +1010,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.55  2000/10/15 04:10:35  sp
+ * bug fixes
+ *
  * Revision 1.54  2000/10/12 09:28:27  sp
  * debugging and polish
  *

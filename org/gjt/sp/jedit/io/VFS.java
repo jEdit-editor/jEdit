@@ -128,14 +128,14 @@ public abstract class VFS
 	 */
 	public String constructPath(String parent, String path)
 	{
-		return null;
+		return parent + path;
 	}
 
 	/**
 	 * Returns the file separator used by this VFS.
-	 * @since jEdit 2.6pre5
+	 * @since jEdit 2.6pre9
 	 */
-	public char getFileSeprator()
+	public char getFileSeparator()
 	{
 		return '/';
 	}
@@ -164,6 +164,12 @@ public abstract class VFS
 	 */
 	public boolean load(View view, Buffer buffer, String path)
 	{
+		if((getCapabilities() & READ_CAP) == 0)
+		{
+			VFSManager.error(view,"vfs.not-supported.load",new String[] { name });
+			return false;
+		}
+
 		VFSSession session = createVFSSession(path,view);
 		if(session == null)
 			return false;
@@ -182,6 +188,12 @@ public abstract class VFS
 	 */
 	public boolean save(View view, Buffer buffer, String path)
 	{
+		if((getCapabilities() & WRITE_CAP) == 0)
+		{
+			VFSManager.error(view,"vfs.not-supported.save",new String[] { name });
+			return false;
+		}
+
 		VFSSession session = createVFSSession(path,view);
 		if(session == null)
 			return false;
@@ -207,6 +219,7 @@ public abstract class VFS
 		Component comp)
 		throws IOException
 	{
+		VFSManager.error(comp,"vfs.not-supported.list",new String[] { name });
 		return null;
 	}
 
@@ -223,6 +236,7 @@ public abstract class VFS
 		Component comp)
 		throws IOException
 	{
+		VFSManager.error(comp,"vfs.not-supported.list",new String[] { name });
 		return null;
 	}
 
@@ -336,6 +350,7 @@ public abstract class VFS
 		String path, boolean ignoreErrors, Component comp)
 		throws IOException
 	{
+		VFSManager.error(comp,"vfs.not-supported.load",new String[] { name });
 		return null;
 	}
 
@@ -352,6 +367,7 @@ public abstract class VFS
 		String path, Component comp)
 		throws IOException
 	{
+		VFSManager.error(comp,"vfs.not-supported.save",new String[] { name });
 		return null;
 	}
 
@@ -376,6 +392,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.19  2000/10/15 04:10:35  sp
+ * bug fixes
+ *
  * Revision 1.18  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

@@ -30,7 +30,9 @@ public abstract class WorkRequest implements Runnable
 	 */
 	public void setAbortable(boolean abortable)
 	{
-		((WorkThread)Thread.currentThread()).setAbortable(abortable);
+		Thread thread = Thread.currentThread();
+		if(thread instanceof WorkThread)
+			((WorkThread)thread).setAbortable(abortable);
 	}
 
 	/**
@@ -39,7 +41,9 @@ public abstract class WorkRequest implements Runnable
 	 */
 	public void setStatus(String status)
 	{
-		((WorkThread)Thread.currentThread()).setStatus(status);
+		Thread thread = Thread.currentThread();
+		if(thread instanceof WorkThread)
+			((WorkThread)thread).setStatus(status);
 	}
 
 	/**
@@ -48,7 +52,9 @@ public abstract class WorkRequest implements Runnable
 	 */
 	public void setProgressValue(int value)
 	{
-		((WorkThread)Thread.currentThread()).setProgressValue(value);
+		Thread thread = Thread.currentThread();
+		if(thread instanceof WorkThread)
+			((WorkThread)thread).setProgressValue(value);
 	}
 
 	/**
@@ -57,13 +63,18 @@ public abstract class WorkRequest implements Runnable
 	 */
 	public void setProgressMaximum(int value)
 	{
-		((WorkThread)Thread.currentThread()).setProgressMaximum(value);
+		Thread thread = Thread.currentThread();
+		if(thread instanceof WorkThread)
+			((WorkThread)thread).setProgressMaximum(value);
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/10/15 04:10:35  sp
+ * bug fixes
+ *
  * Revision 1.3  2000/07/26 07:48:46  sp
  * stuff
  *

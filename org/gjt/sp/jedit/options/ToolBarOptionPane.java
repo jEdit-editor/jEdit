@@ -27,6 +27,7 @@ import java.awt.*;
 import java.io.File;
 import java.net.*;
 import java.util.*;
+import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -543,23 +544,23 @@ class ToolBarAddDialog extends EnhancedDialog
 					directory = null;
 				else
 					directory = MiscUtilities.getParentOfPath(fileIcon);
-				String path = GUIUtilities.showFileDialog(null,directory,
-					JFileChooser.OPEN_DIALOG);
-				if(path != null)
-				{
-					fileIcon = "file:" + path;
+				String paths[] = GUIUtilities.showVFSFileDialog(null,directory,
+					VFSBrowser.OPEN_DIALOG,false);
+				if(paths == null)
+					return;
 
-					try
-					{
-						fileButton.setIcon(new ImageIcon(new URL(
-							fileIcon)));
-					}
-					catch(MalformedURLException mf)
-					{
-						Log.log(Log.ERROR,this,mf);
-					}
-					fileButton.setText(MiscUtilities.getFileName(fileIcon));
+				fileIcon = "file:" + paths[0];
+
+				try
+				{
+					fileButton.setIcon(new ImageIcon(new URL(
+						fileIcon)));
 				}
+				catch(MalformedURLException mf)
+				{
+					Log.log(Log.ERROR,this,mf);
+				}
+				fileButton.setText(MiscUtilities.getFileName(fileIcon));
 			}
 		}
 	}
@@ -568,6 +569,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/10/15 04:10:35  sp
+ * bug fixes
+ *
  * Revision 1.11  2000/09/23 03:01:11  sp
  * pre7 yayayay
  *

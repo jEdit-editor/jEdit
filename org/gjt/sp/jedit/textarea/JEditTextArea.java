@@ -798,8 +798,10 @@ public class JEditTextArea extends JComponent
 	 */
 	public final void getLineText(int lineIndex, Segment segment)
 	{
-		int start = getLineStartOffset(lineIndex);
-		getText(start,getLineEndOffset(lineIndex) - start - 1,segment);
+		Element lineElement = buffer.getDefaultRootElement()
+			.getElement(lineIndex);
+		int start = lineElement.getStartOffset();
+		getText(start,lineElement.getEndOffset() - start - 1,segment);
 	}
 
 	/**
@@ -2242,6 +2244,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.88  2000/10/15 04:10:35  sp
+ * bug fixes
+ *
  * Revision 1.87  2000/10/13 06:57:20  sp
  * Edit User/System Macros command, gutter mouse handling improved
  *

@@ -40,12 +40,18 @@ public class WorkThreadPool
 	public WorkThreadPool(String name, int count)
 	{
 		listenerList = new EventListenerList();
-		threadGroup = new ThreadGroup(name);
-		threads = new WorkThread[count];
-		for(int i = 0; i < threads.length; i++)
+
+		if(count != 0)
 		{
-			threads[i] = new WorkThread(this,threadGroup,name + " #" + (i+1));
+			threadGroup = new ThreadGroup(name);
+			threads = new WorkThread[count];
+			for(int i = 0; i < threads.length; i++)
+			{
+				threads[i] = new WorkThread(this,threadGroup,name + " #" + (i+1));
+			}
 		}
+		else
+			Log.log(Log.WARNING,this,"Async I/O disabled");
 	}
 
 	/**
@@ -53,9 +59,12 @@ public class WorkThreadPool
 	 */
 	public void start()
 	{
-		for(int i = 0; i < threads.length; i++)
+		if(threads != null)
 		{
-			threads[i].start();
+			for(int i = 0; i < threads.length; i++)
+			{
+				threads[i].start();
+			}
 		}
 	}
 
@@ -67,6 +76,12 @@ public class WorkThreadPool
 	 */
 	public void addWorkRequest(Runnable run, boolean inAWT)
 	{
+		if(threads == null)
+		{
+			run.run();
+			return;
+		}
+
 		// if inAWT is set and there are no requests
 		// pending, execute it immediately
 		if(inAWT && requestCount == 0 && awtRequestCount == 0)
@@ -125,6 +140,9 @@ public class WorkThreadPool
 	 */
 	public void waitForRequests()
 	{
+		if(threads == null)
+			return;
+
 		synchronized(waitForAllLock)
 		{
 			while(requestCount != 0)
@@ -171,7 +189,10 @@ public class WorkThreadPool
 	 */
 	public int getThreadCount()
 	{
-		return threads.length;
+		if(threads == null)
+			return 0;
+		else
+			return threads.length;
 	}
 
 	/**
@@ -305,7 +326,7 @@ public class WorkThreadPool
 		}
 	}
 
-	public void doAWTRequest(Request request)
+	private void doAWTRequest(Request request)
 	{
 		Log.log(Log.DEBUG,this,"Running in AWT thread: " + request);
 
@@ -398,6 +419,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/10/15 04:10:35  sp
+ * bug fixes
+ *
  * Revision 1.7  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

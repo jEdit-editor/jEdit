@@ -697,6 +697,7 @@ public class CommandLine extends JPanel
 			list = new JList();
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			list.addKeyListener(new KeyHandler());
+			view.setKeyEventInterceptor(new KeyHandler());
 			list.addMouseListener(new MouseHandler());
 
 			// stupid scrollbar policy is an attempt to work around
@@ -709,6 +710,12 @@ public class CommandLine extends JPanel
 			setListData(items);
 
 			CompletionWindow.this.show();
+		}
+
+		public void dispose()
+		{
+			view.setKeyEventInterceptor(null);
+			super.dispose();
 		}
 
 		void setListData(Vector items)
@@ -742,6 +749,8 @@ public class CommandLine extends JPanel
 				{
 					executeAction((String)list.getSelectedValue());
 				}
+				else
+					textField.processKeyEvent(evt);
 			}
 		}
 
@@ -758,6 +767,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/10/15 04:10:34  sp
+ * bug fixes
+ *
  * Revision 1.8  2000/10/05 04:30:10  sp
  * *** empty log message ***
  *

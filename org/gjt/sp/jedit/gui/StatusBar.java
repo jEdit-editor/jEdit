@@ -182,6 +182,10 @@ public class StatusBar extends JPanel
 
 		public void paintComponent(Graphics g)
 		{
+			WorkThreadPool ioThreadPool = VFSManager.getIOThreadPool();
+			if(ioThreadPool.getThreadCount() == 0)
+				return;
+
 			FontMetrics fm = g.getFontMetrics();
 
 			JEditTextArea textArea = view.getTextArea();
@@ -191,7 +195,6 @@ public class StatusBar extends JPanel
 			int start = textArea.getLineStartOffset(currLine);
 			int numLines = textArea.getLineCount();
 
-			WorkThreadPool ioThreadPool = VFSManager.getIOThreadPool();
 			String str = String.valueOf(ioThreadPool.getRequestCount());
 
 			Insets insets = IOProgress.this.getBorder()
@@ -250,6 +253,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/10/15 04:10:34  sp
+ * bug fixes
+ *
  * Revision 1.8  2000/09/01 11:31:01  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

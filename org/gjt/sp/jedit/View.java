@@ -738,11 +738,27 @@ public class View extends JFrame implements EBComponent
 		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
 			if(toolBar != null)
-				removeToolBar(toolBar);
-
-			toolBar = GUIUtilities.loadToolBar("view.toolbar");
-			toolBar.add(Box.createGlue());
-			addToolBar(toolBar);
+			{
+				Component[] components = toolBars.getComponents();
+				for(int i = 0; i < components.length; i++)
+				{
+					if(components[i] == toolBar)
+					{
+						toolBars.remove(toolBar);
+						toolBar = GUIUtilities.loadToolBar("view.toolbar");
+						toolBar.add(Box.createGlue());
+						toolBars.add(toolBar,i);
+						getRootPane().revalidate();
+						return;
+					}
+				}
+			}
+			else
+			{
+				toolBar = GUIUtilities.loadToolBar("view.toolbar");
+				toolBar.add(Box.createGlue());
+				addToolBar(toolBar);
+			}
 		}
 		else if(toolBar != null)
 		{
@@ -1061,6 +1077,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.201  2000/10/15 04:10:34  sp
+ * bug fixes
+ *
  * Revision 1.200  2000/10/12 09:28:26  sp
  * debugging and polish
  *

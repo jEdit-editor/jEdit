@@ -207,11 +207,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		VFS vfs = VFSManager.getVFSForPath(directory);
 		filename = vfs.constructPath(directory,filename);
 
-		// this is a stupid hack. File.exists()
-		// will always return 'false' for non-local
-		// files, so we don't need to check for
-		// that first.
-		if(new File(filename).exists())
+		if(vfs instanceof FileVFS && new File(filename).exists())
 		{
 			String[] args = { MiscUtilities.getFileName(filename) };
 			int result = JOptionPane.showConfirmDialog(
@@ -281,6 +277,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/10/15 04:10:34  sp
+ * bug fixes
+ *
  * Revision 1.10  2000/08/29 07:47:12  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

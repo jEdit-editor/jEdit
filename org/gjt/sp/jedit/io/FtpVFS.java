@@ -200,6 +200,9 @@ public class FtpVFS extends VFS
 
 		VFS.DirectoryEntry directoryEntry = _getDirectoryEntry(
 			session,url,comp);
+		if(directoryEntry == null)
+			return false;
+
 		if(directoryEntry.type == VFS.DirectoryEntry.FILE)
 			client.delete(address.path);
 		else if(directoryEntry.type == VFS.DirectoryEntry.DIRECTORY)
@@ -220,6 +223,8 @@ public class FtpVFS extends VFS
 
 		VFS.DirectoryEntry directoryEntry = _getDirectoryEntry(
 			session,from,comp);
+		if(directoryEntry == null)
+			return false;
 
 		client.renameFrom(address.path);
 		client.renameTo(new FtpAddress(to).path);
@@ -574,6 +579,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/10/15 04:10:34  sp
+ * bug fixes
+ *
  * Revision 1.26  2000/09/23 03:01:11  sp
  * pre7 yayayay
  *

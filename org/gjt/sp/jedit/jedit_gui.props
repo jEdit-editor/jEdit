@@ -1190,6 +1190,19 @@ vfs.status.listing-directory=Listing {0}
 vfs.status.deleting=Deleting {0}
 vfs.status.renaming=Renaming {0} to {1}
 
+# Unsupported operation errors
+vfs.not-supported.list.title=Operation Not Supported
+vfs.not-supported.list.message=The {0} filesystem does not support\n\
+	directory browsing.
+
+vfs.not-supported.load.title=Operation Not Supported
+vfs.not-supported.load.message=The {0} filesystem does not support\n\
+	file loading.
+
+vfs.not-supported.save.title=Operation Not Supported
+vfs.not-supported.save.message=The {0} filesystem does not support\n\
+	file saving.
+
 # Connect error
 vfs.ftp.connect-error.title=Cannot Connect
 vfs.ftp.connect-error.message=Cannot connect to {0}:{1}.\n\
