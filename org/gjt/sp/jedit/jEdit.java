@@ -61,7 +61,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.02.99.00";
+		return "03.02.10.00";
 	}
 
 	/**
@@ -939,7 +939,7 @@ public class jEdit
 			for(int i = 0; i < files.length; i++)
 			{
 				Buffer newBuffer = openFile(null,null,files[i],
-					false,false,props);
+					false,props);
 				if(newBuffer != null)
 					buffer = newBuffer;
 			}
@@ -1058,7 +1058,7 @@ public class jEdit
 				continue;
 			}
 
-			lastBuffer = openFile(null,parent,arg,false,false);
+			lastBuffer = openFile(null,parent,arg,false,null);
 
 			if(retVal == null && lastBuffer != null)
 				retVal = lastBuffer;
@@ -1080,25 +1080,28 @@ public class jEdit
 	 */
 	public static Buffer openFile(View view, String path)
 	{
-		return openFile(view,null,path,false,false,
-			new Hashtable());
+		return openFile(view,null,path,false,new Hashtable());
 	}
 
 	/**
-	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
-	 * null if the buffer could not be opened.
-	 * @param view The view to open the file in
-	 * @param parent The parent directory of the file
-	 * @param path The path name of the file
-	 * @param readOnly True if the file should be read only
-	 * @param newFile True if the file should not be loaded from disk
-	 * be prompted if it should be reloaded
+	 * @deprecated The openFile() forms with the readOnly parameter
+	 * should not be used. The readOnly prameter is no longer supported.
 	 */
 	public static Buffer openFile(View view, String parent,
 		String path, boolean readOnly, boolean newFile)
 	{
-		return openFile(view,parent,path,readOnly,newFile,
-			new Hashtable());
+		return openFile(view,parent,path,newFile,new Hashtable());
+	}
+
+	/**
+	 * @deprecated The openFile() forms with the readOnly parameter
+	 * should not be used. The readOnly prameter is no longer supported.
+	 */
+	public static Buffer openFile(View view, String parent,
+		String path, boolean readOnly, boolean newFile,
+		Hashtable props)
+	{
+		return openFile(view,parent,path,newFile,props);
 	}
 
 	/**
@@ -1107,16 +1110,14 @@ public class jEdit
 	 * @param view The view to open the file in
 	 * @param parent The parent directory of the file
 	 * @param path The path name of the file
-	 * @param readOnly True if the file should be read only
 	 * @param newFile True if the file should not be loaded from disk
 	 * be prompted if it should be reloaded
 	 * @param props Buffer-local properties to set in the buffer
 	 *
-	 * @since JEdit 2.5pre1
+	 * @since jEdit 3.2pre10
 	 */
 	public static Buffer openFile(final View view, String parent,
-		String path, boolean readOnly, boolean newFile,
-		Hashtable props)
+		String path, boolean newFile, Hashtable props)
 	{
 		if(view != null && parent == null)
 		{
@@ -1170,8 +1171,7 @@ public class jEdit
 				props.put(Buffer.ENCODING,entry.encoding);
 		}
 
-		final Buffer newBuffer = new Buffer(view,path,readOnly,
-			newFile,false,props);
+		final Buffer newBuffer = new Buffer(view,path,newFile,false,props);
 
 		if(!newBuffer.load(view,false))
 			return null;
@@ -1196,9 +1196,11 @@ public class jEdit
 	 * @param path The path name of the file
 	 * @param readOnly True if the file should be read only
 	 * @param newFile True if the file should not be loaded from disk
+	 *
+	 * @since jEdit 3.2pre10
 	 */
 	public static Buffer openTemporary(View view, String parent,
-		String path, boolean readOnly, boolean newFile)
+		String path, boolean newFile)
 	{
 		if(view != null && parent == null)
 		{
@@ -1224,8 +1226,7 @@ public class jEdit
 		if(buffer != null)
 			return buffer;
 
-		buffer = new Buffer(null,path,readOnly,newFile,true,
-			new Hashtable());
+		buffer = new Buffer(null,path,newFile,true,new Hashtable());
 		if(!buffer.load(view,false))
 			return null;
 		else
@@ -1302,8 +1303,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		return openFile(view,dir,"Untitled-" + (untitledCount+1),
-			false,true);
+		return openFile(view,dir,"Untitled-" + (untitledCount+1),true,null);
 	}
 
 	/**

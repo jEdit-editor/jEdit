@@ -124,6 +124,7 @@ public class HelpViewer extends JFrame implements EBComponent
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
 		viewer.addHyperlinkListener(new LinkHandler());
+		viewer.setFont(new Font("Monospaced",Font.PLAIN,12));
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 			new JScrollPane(toc),new JScrollPane(viewer));
@@ -438,7 +439,7 @@ public class HelpViewer extends JFrame implements EBComponent
 				Rectangle cellRect = getPathBounds(path);
 				if(cellRect != null && !cellRectIsVisible(cellRect))
 				{
-					return new Point(cellRect.x, cellRect.y + 1);
+					return new Point(cellRect.x, cellRect.y - 1);
 				}
 			}
 			return null;

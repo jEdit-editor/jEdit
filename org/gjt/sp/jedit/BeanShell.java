@@ -260,8 +260,7 @@ public class BeanShell
 	public static Object eval(View view, String command,
 		boolean rethrowBshErrors)
 	{
-		NameSpace namespace = new NameSpace(global,"inline eval");
-		return eval(view,namespace,command,rethrowBshErrors);
+		return eval(view,global,command,rethrowBshErrors);
 	}
 
 	/**

@@ -256,6 +256,12 @@
         <void/>
       </funcprototype>
     </funcsynopsis>
+    <para>
+      Returns the internal name of the requested dockable window. Your plugin
+      should check if this is the name of one of the dockables it provides,
+      and if so, call <function>setDockableWindow()</function> with the new
+      dockable window instance.
+    </para>
   </listitem>
 
   <listitem>
@@ -282,7 +288,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public void <function>setDockableWindow</function></funcdef>
-        <paramdef>DockableWindow <varname>window</varname></paramdef>
+        <paramdef>DockableWindow <parameter>window</parameter></paramdef>
       </funcprototype>
     </funcsynopsis>
     <para>

@@ -2810,8 +2810,8 @@ loop:				for(int i = 0; i < count; i++)
 	Buffer prev;
 	Buffer next;
 
-	Buffer(View view, String path, boolean readOnly,
-		boolean newFile, boolean temp, Hashtable props)
+	Buffer(View view, String path, boolean newFile, boolean temp,
+		Hashtable props)
 	{
 		lineCount = 1;
 		lineInfo = new LineInfo[1];
@@ -2829,7 +2829,6 @@ loop:				for(int i = 0; i < count; i++)
 		clearProperties();
 
 		setFlag(TEMPORARY,temp);
-		setFlag(READ_ONLY,readOnly);
 
 		markers = new Vector();
 
@@ -3012,6 +3011,9 @@ loop:				for(int i = 0; i < count; i++)
 		this.path = path;
 
 		vfs = VFSManager.getVFSForPath(path);
+		if((vfs.getCapabilities() & VFS.WRITE_CAP) != 0)
+			setReadOnly(true);
+
 		name = vfs.getFileName(path);
 
 		if(vfs instanceof FileVFS)

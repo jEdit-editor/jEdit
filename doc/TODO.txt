@@ -2,17 +2,8 @@ TO DO
 
 + before 3.2final:
 
-- markers menu: wtf?
-- section in plugin guide on contributing plugins
+- appendix in plugin guide on contributing plugins
 - formatting problems in user's guide in table cells
-- make sure pre9 alt key change didn't break altgr on java 1.4
-- 3.2 RPMs:
-  jedit rpm: don't forget to include a non-broken shell script
-  jedit src rpm: with relatively easy build support
-  jedit-plugins rpm: binaries of all plugins compatible with 3.2
-  jedit-plugins src rpm: sources of all plugins compatible with 3.2
-  make plugin rpms relocatable
-  are plugin rpms worth it?
 
 + next major release (4.0):
 
@@ -134,10 +125,10 @@ TO DO
 .
 + bugs:
 
+- finish persistent splits code
 - complete word: keys to navigate don't work with some Java versions
 - don't do #save# stuff if destination directory is not writeable
 - installing source for already installed plugins is not possible
-- finish duplicate shortcut code
 - directory search: continue even if a file can't be loaded
 - a line consisting entirely of spaces & word wrap
 - switching option panes real fast
@@ -158,7 +149,6 @@ TO DO
 - expand-fold too aggressive
 - replace in sel doesn't work if rect
 - macro guide: JOptionPane not a good idea for getting user input?
-- scrolling while caret is on a bracket is slow
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
     ugly with different backgrounds

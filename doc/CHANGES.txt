@@ -1,14 +1,30 @@
 JEDIT 3.2 VERSION HISTORY
 
-* Version 3.2final
+* Version 3.2pre10
 
 + Enhancements
 
 - Documentation updates
+- The jedit.spec file for creating the Linux RPM package can now be used
+  to compile and build jEdit from scratch
+- Improved RPM spec syntax highlighting
+- Read-only flag is automatically said when loading files from read-only
+  filesystems, like the Archive plugin VFS
 
 + Bug Fixes
 
 - C+. and C+, bug fix, again
+- Help viewer tree would should tooltips in wrong place
+
++ API Changes
+
+- BeanShell.eval() no longer creates a new namespace
+- jEdit.openFile(View,String,String,boolean,boolean) deprecated
+  jEdit.openFile(View,String,String,boolean,boolean,Hashtable) depreacted
+  The 'readOnly' parameter should no longer be specified. Use
+  jEdit.openFile(View,String,String,boolean,Hashtable) instead.
+- Most plugins probably use openFile(View,String), which is still the
+  same as ever.
 
 * Version 3.2pre9
 

@@ -280,7 +280,7 @@ public class Macros
 		}
 
 		Buffer buffer = jEdit.openFile(null,settings + File.separator
-			+ "macros","Temporary_Macro.bsh",false,true);
+			+ "macros","Temporary_Macro.bsh",true,null);
 
 		if(buffer == null)
 			return;
@@ -327,8 +327,7 @@ public class Macros
 
 		Buffer buffer = jEdit.openFile(null,null,
 			MiscUtilities.constructPath(settings,"macros",
-			name + ".bsh"),
-			false,true);
+			name + ".bsh"),true,null);
 
 		if(buffer == null)
 			return;

@@ -252,7 +252,7 @@
 
 <para>
   The <classname>View</classname> class contains a number of methods
-  that can be called from plugins; see <xref linkend="class-View" /> for
+  that can be called from plugins; see <xref linkend="class-view" /> for
   details.
 </para>
 
@@ -357,7 +357,7 @@
 <para>
   The <classname>DockableWindowManager</classname> and
   <classname>EditBus</classname> classes contain a number of methods
-  that can be called from plugins; see <xref linkend="class-View" /> for
+  that can be called from plugins; see <xref linkend="class-view" /> for
   details.
 </para>
 

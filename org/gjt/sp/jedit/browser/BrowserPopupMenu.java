@@ -208,7 +208,7 @@ public class BrowserPopupMenu extends JPopupMenu
 				// a bit of a hack to support 'Open With Encoding' menu
 				Hashtable props = new Hashtable();
 				props.put(Buffer.ENCODING,actionCommand.substring(5));
-				jEdit.openFile(view,null,file.path,false,false,props);
+				jEdit.openFile(view,null,file.path,false,props);
 			}
 			else if(actionCommand.equals("other-encoding"))
 			{
@@ -220,7 +220,7 @@ public class BrowserPopupMenu extends JPopupMenu
 					return;
 				Hashtable props = new Hashtable();
 				props.put(Buffer.ENCODING,encoding);
-				jEdit.openFile(view,null,file.path,false,false,props);
+				jEdit.openFile(view,null,file.path,false,props);
 			}
 			else if(actionCommand.equals("open"))
 				jEdit.openFile(view,file.path);
