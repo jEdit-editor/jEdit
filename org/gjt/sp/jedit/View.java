@@ -111,6 +111,24 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Splits the view horizontally.
+	 * @since jEdit 2.7pre2
+	 */
+	public void splitHorizontally()
+	{
+		split(JSplitPane.VERTICAL_SPLIT);
+	}
+
+	/**
+	 * Splits the view vertically.
+	 * @since jEdit 2.7pre2
+	 */
+	public void splitVertically()
+	{
+		split(JSplitPane.HORIZONTAL_SPLIT);
+	}
+
+	/**
 	 * Splits the view.
 	 * @since jEdit 2.3pre2
 	 */
@@ -208,6 +226,46 @@ public class View extends JFrame implements EBComponent
 				editPane.focusOnTextArea();
 			}
 		});
+	}
+
+	/**
+	 * Moves keyboard focus to the next text area.
+	 * @since jEdit 2.7pre2
+	 */
+	public void nextSplit()
+	{
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+		{
+			if(editPane == editPanes[i])
+			{
+				if(i == editPanes.length - 1)
+					editPanes[0].focusOnTextArea();
+				else
+					editPanes[i+1].focusOnTextArea();
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Moves keyboard focus to the previous text area.
+	 * @since jEdit 2.7pre2
+	 */
+	public void prevSplit()
+	{
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+		{
+			if(editPane == editPanes[i])
+			{
+				if(i == 0)
+					editPanes[editPanes.length - 1].focusOnTextArea();
+				else
+					editPanes[i-1].focusOnTextArea();
+				break;
+			}
+		}
 	}
 
 	/**
@@ -371,6 +429,15 @@ public class View extends JFrame implements EBComponent
 
 	/**
 	 * Toggles synchronized scrolling.
+	 * @since jEdit 2.7pre2
+	 */
+	public void toggleSynchroScrollEnabled()
+	{
+		setSynchroScrollEnabled(!synchroScroll);
+	}
+
+	/**
+	 * Sets synchronized scrolling.
 	 * @since jEdit 2.7pre1
 	 */
 	public void setSynchroScrollEnabled(boolean synchroScroll)
@@ -484,16 +551,13 @@ public class View extends JFrame implements EBComponent
 		{
 			// fix for the bug where key events in JTextComponents
 			// inside views are also handled by the input handler
-			if(evt.getID() == KeyEvent.KEY_PRESSED)
+			if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
-				switch(evt.getKeyCode())
+				switch(evt.getKeyChar())
 				{
-				// have to do this because jEdit handles these
-				// keys on KEY_PRESSED, but text components only
-				// register them in their keymaps as KEY_TYPED
-				case KeyEvent.VK_BACK_SPACE:
-				case KeyEvent.VK_ENTER:
-				case KeyEvent.VK_TAB:
+				case '\b':
+				case '\t':
+				case '\n':
 					return;
 				}
 			}
@@ -1054,6 +1118,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.207  2000/11/12 05:36:48  sp
+ * BeanShell integration started
+ *
  * Revision 1.206  2000/11/08 09:31:36  sp
  * Junk
  *

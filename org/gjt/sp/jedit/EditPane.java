@@ -56,15 +56,6 @@ public class EditPane extends JPanel implements EBComponent
 	}
 
 	/**
-	 * Returns the most recently edited buffer.
-	 * @since jEdit 2.5pre2
-	 */
-	public Buffer getRecentBuffer()
-	{
-		return recentBuffer;
-	}
-
-	/**
 	 * Sets the current buffer.
 	 * @param buffer The buffer to edit.
 	 * @since jEdit 2.5pre2
@@ -114,6 +105,44 @@ public class EditPane extends JPanel implements EBComponent
 			VFSManager.runInAWTThread(runnable);
 		else
 			runnable.run();
+	}
+
+	/**
+	 * Selects the previous buffer.
+	 * @since jEdit 2.7pre2
+	 */
+	public void prevBuffer()
+	{
+		Buffer buffer = this.buffer.getPrev();
+		if(buffer == null)
+			setBuffer(jEdit.getLastBuffer());
+		else
+			setBuffer(buffer);
+	}
+
+	/**
+	 * Selects the next buffer.
+	 * @since jEdit 2.7pre2
+	 */
+	public void nextBuffer()
+	{
+		Buffer buffer = this.buffer.getNext();
+		if(buffer == null)
+			setBuffer(jEdit.getFirstBuffer());
+		else
+			setBuffer(buffer);
+	}
+
+	/**
+	 * Selects the most recently edited buffer.
+	 * @since jEdit 2.7pre2
+	 */
+	public void recentBuffer()
+	{
+		if(recentBuffer != null)
+			setBuffer(recentBuffer);
+		else
+			getToolkit().beep();
 	}
 
 	/**
@@ -616,6 +645,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.26  2000/11/12 05:36:48  sp
+ * BeanShell integration started
+ *
  * Revision 1.25  2000/11/11 02:59:29  sp
  * FTP support moved out of the core into a plugin
  *

@@ -83,8 +83,8 @@ select-paragraph.shortcut=C+e p
 remove-trailing-ws.shortcut=C+e r
 select-word.shortcut=C+e w
 recent-buffer.shortcut=C+e TAB
-prev-bracket-exp.shortcut=C+e [
-next-bracket-exp.shortcut=C+e ]
+prev-bracket.shortcut=C+e [
+next-bracket.shortcut=C+e ]
 
 # C+m
 play-last-macro.shortcut=C+m C+l
@@ -101,8 +101,6 @@ paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x
 
 # Other keys
-indent-on-tab.shortcut=TAB
-indent-on-enter.shortcut=ENTER
 select-block.shortcut=C+[
 locate-bracket.shortcut=C+]
 prev-paragraph.shortcut=C+UP

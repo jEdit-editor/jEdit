@@ -243,13 +243,13 @@ format-paragraph.label=Format Paragraph
 brackets=select-block \
          locate-bracket \
          - \
-         prev-bracket-exp \
-         next-bracket-exp
+         prev-bracket \
+         next-bracket
 brackets.label=Brackets
 select-block.label=Select Code Block
 locate-bracket.label=Locate Bracket
-prev-bracket-exp.label=Go to Previous Bracket
-next-bracket-exp.label=Go to Next Bracket
+prev-bracket.label=Go to Previous Bracket
+next-bracket.label=Go to Next Bracket
 
 ### Registers menu
 registers=cut-string-register \
@@ -416,8 +416,8 @@ macros=record-macro \
        play-temp-macro \
        play-last-macro \
        - \
-       edit-system-macros \
-       edit-user-macros \
+       browse-system-macros \
+       browse-user-macros \
        - \
        rescan-macros \
        -
@@ -428,8 +428,8 @@ stop-recording.label=$Stop Recording
 input.label=Prompt for $Input...
 play-temp-macro.label=$Play Temporary Macro
 play-last-macro.label=P$lay Last Macro
-edit-system-macros.label=Edit S$ystem Macros
-edit-user-macros.label=Edit $User Macros
+browse-system-macros.label=Browse S$ystem Macros
+browse-user-macros.label=Browse $User Macros
 rescan-macros.label=Resca$n Macros
 no-macros.label=No Macros
 
@@ -527,10 +527,7 @@ view.status.exchange-caret-register=Swap position with register:
 view.status.clear-register=Clear register:
 view.status.insert-literal=Insert without expanding:
 view.status.recording=(recording)
-view.status.goto-line=Go to line:
 view.status.vfs-browser=Enter directory or URL to browse:
-view.status.open-file=Enter path or URL to open:
-view.status.insert-file=Enter path or URL to insert in current buffer:
 view.status.quick-search=Quick search for:
 view.status.incremental-search=Incremental search for:
 
@@ -772,10 +769,6 @@ close.save.mnemonic=s
 close.discard=Discard Selected
 close.discard.mnemonic=d
 
-# Confirm exit dialog
-confirm-exit.title=Confirm Exit
-confirm-exit.message=Are you sure you want to exit jEdit?
-
 # Add abbrev dialog
 add-abbrev.title=Add Abbreviation
 add-abbrev.message=The abbreviation "{0}" is undefined.\n\
@@ -870,7 +863,6 @@ options.general.lf.note=Restart jEdit for look & feel changes to take effect
 options.general.lf=Swing look & feel:
 options.general.recent=Max recent files:
 options.general.history=Max history list length:
-options.general.confirmExit=Ask for confirmation before exiting
 options.general.saveDesktop=Save session on exit
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name

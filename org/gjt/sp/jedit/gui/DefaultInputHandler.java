@@ -60,7 +60,6 @@ public class DefaultInputHandler extends InputHandler
 		super(view);
 
 		bindings = currentBindings = copy.bindings;
-		inputAction = copy.inputAction;
 	}
 
 	/**
@@ -135,12 +134,16 @@ public class DefaultInputHandler extends InputHandler
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 
+		if(modifiers == 0 && keyCode == KeyEvent.VK_TAB)
+		{
+			evt.consume();
+			return;
+		}
+
 		if((modifiers & ~KeyEvent.SHIFT_MASK) != 0
 			|| evt.isActionKey()
 			|| keyCode == KeyEvent.VK_BACK_SPACE
 			|| keyCode == KeyEvent.VK_DELETE
-			|| keyCode == KeyEvent.VK_ENTER
-			|| keyCode == KeyEvent.VK_TAB
 			|| keyCode == KeyEvent.VK_ESCAPE)
 		{
 			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
@@ -191,32 +194,35 @@ public class DefaultInputHandler extends InputHandler
 		int modifiers = evt.getModifiers();
 		char c = evt.getKeyChar();
 
-		// KeyEventWorkaround doesn't filter these out (CommandLine
-		// needs to handle them)
-		if(c == '\b')
-			return;
-
-		KeyStroke keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c));
-		Object o = currentBindings.get(keyStroke);
-
-		if(o instanceof Hashtable)
+		if(currentBindings != bindings)
 		{
-			currentBindings = (Hashtable)o;
-			return;
-		}
-		else if(o instanceof EditAction)
-		{
+			KeyStroke keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c));
+			Object o = currentBindings.get(keyStroke);
+
+			if(o instanceof Hashtable)
+			{
+				currentBindings = (Hashtable)o;
+				return;
+			}
+			else if(o instanceof EditAction)
+			{
+				currentBindings = bindings;
+				executeAction((EditAction)o,
+					evt.getSource(),
+					String.valueOf(c));
+				return;
+			}
+
 			currentBindings = bindings;
-			executeAction((EditAction)o,
-				evt.getSource(),
-				String.valueOf(c));
-			return;
 		}
 
-		currentBindings = bindings;
-
-		executeAction(inputAction,evt.getSource(),String.valueOf(
-			evt.getKeyChar()));
+		int _repeatCount = getRepeatCount();
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < _repeatCount; i++)
+		{
+			buf.append(evt.getKeyChar());
+		}
+		view.getTextArea().userInput(buf.toString());
 	}
 
 	/**
@@ -300,6 +306,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/11/12 05:36:49  sp
+ * BeanShell integration started
+ *
  * Revision 1.5  2000/09/26 10:19:46  sp
  * Bug fixes, spit and polish
  *

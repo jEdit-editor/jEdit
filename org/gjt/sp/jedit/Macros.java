@@ -29,7 +29,8 @@ import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.jedit.browser.*;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
@@ -44,6 +45,51 @@ import org.gjt.sp.util.Log;
  */
 public class Macros
 {
+	/**
+	 * Opens the system macro directory in a VFS browser.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void browseSystemMacros(View view)
+	{
+		DockableWindowManager dockableWindowManager
+			= view.getDockableWindowManager();
+
+		dockableWindowManager.showDockableWindow(VFSBrowserDockable.NAME);
+		VFSBrowser browser = (VFSBrowser)dockableWindowManager
+			.getDockableWindow(VFSBrowserDockable.NAME)
+			.getComponent();
+
+		browser.setDirectory(MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"macros"));
+	}
+
+	/**
+	 * Opens the user macro directory in a VFS browser.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void browseUserMacros(View view)
+	{
+		String settings = jEdit.getSettingsDirectory();
+
+		if(settings == null)
+		{
+			GUIUtilities.error(view,"no-settings",null);
+			return;
+		}
+
+		DockableWindowManager dockableWindowManager
+			= view.getDockableWindowManager();
+
+		dockableWindowManager.showDockableWindow(VFSBrowserDockable.NAME);
+		VFSBrowser browser = (VFSBrowser)dockableWindowManager
+			.getDockableWindow(VFSBrowserDockable.NAME)
+			.getComponent();
+
+		browser.setDirectory(MiscUtilities.constructPath(settings,"macros"));
+	}
+
 	/**
 	 * Rebuilds the macros list, and sends a MacrosChanged message
 	 * (views update their Macros menu upon receiving it)
@@ -622,6 +668,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.42  2000/11/12 05:36:48  sp
+ * BeanShell integration started
+ *
  * Revision 1.41  2000/11/02 09:19:31  sp
  * more features
  *

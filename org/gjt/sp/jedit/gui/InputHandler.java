@@ -122,23 +122,6 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	/**
-	 * Returns the action used to handle text input.
-	 */
-	public EditAction getInputAction()
-	{
-		return inputAction;
-	}
-
-	/**
-	 * Sets the action used to handle text input.
-	 * @param inputAction The new input action
-	 */
-	public void setInputAction(EditAction inputAction)
-	{
-		this.inputAction = inputAction;
-	}
-	
-	/**
 	 * Returns the macro recorder. If this is non-null, all executed
 	 * actions should be forwarded to the recorder.
 	 */
@@ -278,7 +261,6 @@ public abstract class InputHandler extends KeyAdapter
 
 	// protected members
 	protected View view;
-	protected EditAction inputAction;
 	protected boolean repeat;
 	protected int repeatCount;
 	protected InputHandler.MacroRecorder recorder;
@@ -298,6 +280,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/11/12 05:36:49  sp
+ * BeanShell integration started
+ *
  * Revision 1.14  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

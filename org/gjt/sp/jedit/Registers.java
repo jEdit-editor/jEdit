@@ -24,8 +24,10 @@ import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
 import java.util.Vector;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.RegistersChanged;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
 /**
@@ -40,6 +42,97 @@ import org.gjt.sp.util.Log;
  */
 public class Registers
 {
+	/**
+	 * Displays the 'view registers' dialog box.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showViewRegistersDialog(View view)
+	{
+		new ViewRegisters(view);
+	}
+
+	/**
+	 * Displays the 'paste previous' dialog box.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showPastePreviousDialog(View view)
+	{
+		new PastePrevious(view);
+	}
+
+	/**
+	 * Convinience method that copies the text selected in the specified
+	 * text area into the specified register.
+	 * @param textArea The text area
+	 * @param register The register
+	 * @since jEdit 2.7pre2
+	 */
+	public static void copy(JEditTextArea textArea, char register)
+	{
+		String selection = textArea.getSelectedText();
+		if(selection == null)
+			return;
+
+		setRegister(register,new StringRegister(selection));
+		HistoryModel.getModel("clipboard").addItem(selection);
+	}
+
+	/**
+	 * Convinience method that copies the text selected in the specified
+	 * text area into the specified register, and then removes it from the
+	 * text area.
+	 * @param textArea The text area
+	 * @param register The register
+	 * @since jEdit 2.7pre2
+	 */
+	public static void cut(JEditTextArea textArea, char register)
+	{
+		if(textArea.isEditable())
+		{
+			String selection = textArea.getSelectedText();
+			if(selection == null)
+				return;
+
+			setRegister(register,new StringRegister(selection));
+			HistoryModel.getModel("clipboard").addItem(selection);
+
+			textArea.setSelectedText("");
+		}
+		else
+			textArea.getToolkit().beep();
+	}
+
+	/**
+	 * Convinience method that pastes the contents of the specified
+	 * register into the text area.
+	 * @param textArea The text area
+	 * @param register The register
+	 * @since jEdit 2.7pre2
+	 */
+	public static void paste(JEditTextArea textArea, char register)
+	{
+		Register reg = getRegister(register);
+		if(reg == null)
+		{
+			textArea.getToolkit().beep();
+			return;
+		}
+		else
+		{
+			String selection = reg.toString();
+			if(selection == null)
+			{
+				textArea.getToolkit().beep();
+				return;
+			}
+
+			textArea.setSelectedText(selection);
+			HistoryModel.getModel("clipboard").addItem(selection);
+		}
+	}
+
 	/**
 	 * Returns the specified register.
 	 * @param name The name
@@ -404,6 +497,12 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/11/12 05:36:48  sp
+ * BeanShell integration started
+ *
+ * Revision 1.12  2000/11/11 05:37:52  sp
+ * paste bug fixed
+ *
  * Revision 1.11  2000/11/11 02:59:29  sp
  * FTP support moved out of the core into a plugin
  *

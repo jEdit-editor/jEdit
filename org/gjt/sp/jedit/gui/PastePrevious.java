@@ -105,13 +105,7 @@ implements ActionListener, ListSelectionListener, MouseListener
 		}
 
 		String clip = clipHistory.getItem(selected);
-
-		int repeatCount = view.getInputHandler().getRepeatCount();
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < repeatCount; i++)
-			buf.append(clip);
-
-		view.getTextArea().setSelectedText(buf.toString());
+		view.getTextArea().setSelectedText(clip);
 
 		dispose();
 	}

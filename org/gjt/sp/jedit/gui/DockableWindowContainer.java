@@ -88,6 +88,11 @@ public interface DockableWindowContainer
 			revalidate();
 		}
 
+		public void toggleCollapsed()
+		{
+			setCollapsed(!collapsed);
+		}
+
 		public void saveDimension()
 		{
 			if(dimension <= 5)
@@ -353,6 +358,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.16  2000/11/12 05:36:49  sp
+ * BeanShell integration started
+ *
  * Revision 1.15  2000/11/07 10:08:32  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

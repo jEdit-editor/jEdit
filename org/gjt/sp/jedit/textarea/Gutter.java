@@ -23,7 +23,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
 
 public class Gutter extends JComponent implements SwingConstants
 {
@@ -364,6 +364,15 @@ public class Gutter extends JComponent implements SwingConstants
 	}
 
 	/**
+	 * Toggles line numbering.
+	 * @param enabled true if line numbers are drawn, false otherwise
+	 */
+	public void toggleLineNumberingEnabled()
+	{
+		setLineNumberingEnabled(!lineNumberingEnabled);
+	}
+
+	/**
 	 * Identifies whether the horizontal alignment of the line numbers.
 	 * @return Gutter.RIGHT, Gutter.CENTER, Gutter.LEFT
 	 */
@@ -415,6 +424,16 @@ public class Gutter extends JComponent implements SwingConstants
 	public void toggleCollapsed()
 	{
 		setCollapsed(!collapsed);
+	}
+
+	/**
+	 * Makes the gutter's current size the default for future sessions.
+	 * @since jEdit 2.7pre2
+	 */
+	public void saveGutterSize()
+	{
+		jEdit.setProperty("view.gutter.width", Integer.toString(
+			gutterSize.width));
 	}
 
 	/**

@@ -19,9 +19,6 @@ history=25
 # Desktop saving toggle
 saveDesktop=true
 
-# Ask for confirmation before exiting
-confirmExit=true
-
 # I/O thread count
 ioThreadCount=4
 

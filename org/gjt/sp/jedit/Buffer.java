@@ -28,6 +28,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.syntax.*;
@@ -103,6 +104,242 @@ public class Buffer extends PlainDocument implements EBComponent
 		// cache these for improved performance
 		putProperty("tabSize",getProperty("tabSize"));
 		putProperty("maxLineLen",getProperty("maxLineLen"));
+	}
+
+	/**
+	 * Displays the buffer options dialog box.
+	 * @since jEdit 2.7pre2
+	 */
+	public void showBufferOptionsDialog(View view)
+	{
+		new BufferOptions(view,this);
+	}
+
+	/**
+	 * Displays the 'insert file' dialog box and inserts the selected file
+	 * into the buffer.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public void showInsertFileDialog(View view)
+	{
+		String[] files = GUIUtilities.showVFSFileDialog(view,null,
+			VFSBrowser.OPEN_DIALOG,false);
+
+		if(files != null)
+			insert(view,files[0]);
+	}
+
+	/**
+	 * Prints the buffer.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public void print(View view)
+	{
+		PrintJob job = view.getToolkit().getPrintJob(view,name,null);
+		if(job == null)
+			return;
+
+		view.showWaitCursor();
+
+		int topMargin;
+		int leftMargin;
+		int bottomMargin;
+		int rightMargin;
+		int ppi = job.getPageResolution();
+
+		try
+		{
+			topMargin = (int)(Float.valueOf(jEdit.getProperty(
+				"print.margin.top")).floatValue() * ppi);
+		}
+		catch(NumberFormatException nf)
+		{
+			topMargin = ppi / 2;
+		}
+		try
+		{
+			leftMargin = (int)(Float.valueOf(jEdit.getProperty(
+				"print.margin.left")).floatValue() * ppi);
+		}
+		catch(NumberFormatException nf)
+		{
+			leftMargin = ppi / 2;
+		}
+		try
+		{
+			bottomMargin = (int)(Float.valueOf(jEdit.getProperty(
+				"print.margin.bottom")).floatValue() * ppi);
+		}
+		catch(NumberFormatException nf)
+		{
+			bottomMargin = topMargin;
+		}
+		try
+		{
+			rightMargin = (int)(Float.valueOf(jEdit.getProperty(
+				"print.margin.right")).floatValue() * ppi);
+		}
+		catch(NumberFormatException nf)
+		{
+			rightMargin = leftMargin;
+		}
+
+		boolean printHeader = jEdit.getBooleanProperty("print.header");
+		boolean printFooter = jEdit.getBooleanProperty("print.footer");
+		boolean printLineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
+		boolean syntax = jEdit.getBooleanProperty("print.syntax");
+
+		String header = path;
+		String footer = new Date().toString();
+
+		TokenMarker tokenMarker = (syntax ? this.tokenMarker
+			: new NullTokenMarker());
+		SyntaxStyle[] styles = view.getTextArea().getPainter().getStyles();
+		TabExpander expander = null;
+
+		Graphics gfx = null;
+
+		String fontFamily = jEdit.getProperty("print.font");
+		int fontSize;
+		try
+		{
+			fontSize = Integer.parseInt(jEdit.getProperty(
+				"print.fontsize"));
+		}
+		catch(NumberFormatException nf)
+		{
+			fontSize = 10;
+		}
+		int fontStyle;
+		try
+		{
+			fontStyle = Integer.parseInt(jEdit.getProperty(
+				"print.fontstyle"));
+		}
+		catch(NumberFormatException nf)
+		{
+			fontStyle = Font.PLAIN;
+		}
+
+		Font font = new Font(fontFamily,fontStyle,fontSize);
+
+		FontMetrics fm = null;
+		Dimension pageDimension = job.getPageDimension();
+		int pageWidth = pageDimension.width;
+		int pageHeight = pageDimension.height;
+		int y = 0;
+		int tabSize = 0;
+		int lineHeight = 0;
+		int page = 0;
+
+		int lineCount = getDefaultRootElement().getElementCount();
+
+		int lineNumberDigits = (int)Math.ceil(Math.log(
+			lineCount) / Math.log(10));
+
+		for(int i = 0; i < lineCount; i++)
+		{
+			if(gfx == null)
+			{
+				page++;
+
+				gfx = job.getGraphics();
+				gfx.setFont(font);
+				fm = gfx.getFontMetrics();
+				lineHeight = fm.getHeight();
+				tabSize = getTabSize() * fm.charWidth(' ');
+				expander = new PrintTabExpander(leftMargin,tabSize);
+
+				y = topMargin + lineHeight - fm.getDescent()
+					- fm.getLeading();
+
+				if(printHeader)
+				{
+					gfx.setColor(Color.lightGray);
+					gfx.fillRect(leftMargin,topMargin,pageWidth
+						- leftMargin - rightMargin,lineHeight);
+					gfx.setColor(Color.black);
+					gfx.drawString(header,leftMargin,y);
+					y += lineHeight;
+				}
+			}
+
+			y += lineHeight;
+
+			gfx.setColor(Color.black);
+			gfx.setFont(font);
+
+			int x = leftMargin;
+			if(printLineNumbers)
+			{
+				int lineNumberWidth = fm.charWidth('0') * lineNumberDigits;
+				String lineNumber = String.valueOf(i + 1);
+				gfx.drawString(lineNumber,(leftMargin + lineNumberWidth)
+					- fm.stringWidth(lineNumber),y);
+				x += lineNumberWidth + fm.charWidth('0');
+			}
+
+			tokenMarker.paintSyntaxLine(this,i,
+				styles,expander,gfx,Color.white,x,y);
+
+			int bottomOfPage = pageHeight - bottomMargin - lineHeight;
+			if(printFooter)
+				bottomOfPage -= lineHeight * 2;
+
+			if(y >= bottomOfPage || i == lineCount - 1)
+			{
+				if(printFooter)
+				{
+					y = pageHeight - bottomMargin;
+
+					gfx.setColor(Color.lightGray);
+					gfx.setFont(font);
+					gfx.fillRect(leftMargin,y - lineHeight,pageWidth
+						- leftMargin - rightMargin,lineHeight);
+					gfx.setColor(Color.black);
+					y -= (lineHeight - fm.getAscent());
+					gfx.drawString(footer,leftMargin,y);
+
+					Integer[] args = { new Integer(page) };
+					String pageStr = jEdit.getProperty("print.page",args);
+					int width = fm.stringWidth(pageStr);
+					gfx.drawString(pageStr,pageWidth - rightMargin
+						- width,y);
+				}
+
+				gfx.dispose();
+				gfx = null;
+			}
+		}
+
+		job.end();
+
+		view.hideWaitCursor();
+	}
+
+	/**
+	 * Reloads the buffer from disk, asking for confirmation if the buffer
+	 * is dirty.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public void reload(View view)
+	{
+		if(getFlag(DIRTY))
+		{
+			String[] args = { name };
+			int result = JOptionPane.showConfirmDialog(view,
+				jEdit.getProperty("changedreload.message",args),
+				jEdit.getProperty("changedreload.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+			if(result != JOptionPane.YES_OPTION)
+				return;
+		}
+
+		load(view,true);
 	}
 
 	/**
@@ -495,6 +732,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 			if(!file.exists())
 			{
+				setFlag(NEW_FILE,true);
+				EditBus.send(new BufferUpdate(this,
+					BufferUpdate.DIRTY_CHANGED));
 				Object[] args = { path };
 				GUIUtilities.message(view,"filedeleted",args);
 				return;
@@ -710,15 +950,20 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Undoes the most recent edit. Returns true if the undo was
-	 * successful.
+	 * Undoes the most recent edit.
 	 *
-	 * @since jEdit 2.2pre1
+	 * @since jEdit 2.7pre2
 	 */
-	public boolean undo()
+	public void undo()
 	{
 		if(undo == null)
-			return false;
+			return;
+
+		if(!isEditable())
+		{
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
 
 		try
 		{
@@ -728,7 +973,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		catch(CannotUndoException cu)
 		{
 			Log.log(Log.DEBUG,this,cu);
-			return false;
+			Toolkit.getDefaultToolkit().beep();
+			return;
 		}
 		finally
 		{
@@ -738,20 +984,24 @@ public class Buffer extends PlainDocument implements EBComponent
 		UndoableEdit toUndo = undo.editToBeUndone();
 		if(toUndo == saveUndo)
 			setDirty(false);
-
-		return true;
 	}
 
 	/**
 	 * Redoes the most recently undone edit. Returns true if the redo was
 	 * successful.
 	 *
-	 * @since jEdit 2.2pre1
+	 * @since jEdit 2.7pre2
 	 */
-	public boolean redo()
+	public void redo()
 	{
 		if(undo == null)
-			return false;
+			return;
+
+		if(!isEditable())
+		{
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
 
 		try
 		{
@@ -761,7 +1011,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		catch(CannotRedoException cr)
 		{
 			Log.log(Log.DEBUG,this,cr);
-			return false;
+			Toolkit.getDefaultToolkit().beep();
+			return;
 		}
 		finally
 		{
@@ -771,8 +1022,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		UndoableEdit toUndo = undo.editToBeUndone();
 		if(toUndo == saveUndo)
 			setDirty(false);
-
-		return true;
 	}
 
 	/**
@@ -1746,6 +1995,24 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 	}
 
+	static class PrintTabExpander implements TabExpander
+	{
+		private int leftMargin;
+		private int tabSize;
+
+		public PrintTabExpander(int leftMargin, int tabSize)
+		{
+			this.leftMargin = leftMargin;
+			this.tabSize = tabSize;
+		}
+
+		public float nextTabStop(float x, int tabOffset)
+		{
+			int ntabs = ((int)x - leftMargin) / tabSize;
+			return (ntabs + 1) * tabSize + leftMargin;
+		}
+	}
+
 	// A dictionary that looks in the mode and editor properties
 	// for default values
 	class BufferProps extends Hashtable
@@ -1832,6 +2099,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.188  2000/11/12 05:36:48  sp
+ * BeanShell integration started
+ *
  * Revision 1.187  2000/11/11 02:59:28  sp
  * FTP support moved out of the core into a plugin
  *

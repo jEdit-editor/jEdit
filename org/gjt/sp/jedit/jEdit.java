@@ -28,6 +28,7 @@ import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
+import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
@@ -57,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.07.01.00";
+		return "02.07.02.00";
 	}
 
 	/**
@@ -279,6 +280,7 @@ public class jEdit
 		// Get things rolling
 		initMisc();
 		initSystemProperties();
+		BeanShell.init();
 		GUIUtilities.advanceSplashProgress();
 		initPlugins();
 		GUIUtilities.advanceSplashProgress();
@@ -1010,6 +1012,67 @@ public class jEdit
 	}
 
 	/**
+	 * Displays the 'about jEdit' dialog box.
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showAboutDialog(View view)
+	{
+		new AboutDialog(view);
+	}
+
+	/**
+	 * Displays the global options dialog box.
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showGlobalOptionsDialog(View view)
+	{
+		new OptionsDialog(view);
+	}
+
+	/**
+	 * Displays the I/O progress monitor dialog box.
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showIOProgressMonitorDialog()
+	{
+		new IOProgressMonitor();
+	}
+
+	/**
+	 * Displays the activity log window.
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showActivityLog()
+	{
+		new LogViewer();
+	}
+
+	/**
+	 * Displays the open file dialog box, and opens any selected files.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showOpenFileDialog(View view)
+	{
+		String[] files = GUIUtilities.showVFSFileDialog(view,null,
+			VFSBrowser.OPEN_DIALOG,true);
+
+		Buffer buffer = null;
+		if(files != null)
+		{
+			for(int i = 0; i < files.length; i++)
+			{
+				Buffer newBuffer = openFile(null,files[i]);
+				if(newBuffer != null)
+					buffer = newBuffer;
+			}
+		}
+
+		if(buffer != null)
+			view.setBuffer(buffer);
+	}
+
+	/**
 	 * Opens the file names specified in the argument array. This
 	 * handles +line and +marker arguments just like the command
 	 * line parser.
@@ -1303,7 +1366,16 @@ public class jEdit
 	/**
 	 * Closes all open buffers.
 	 * @param view The view
-	 * @param isExiting This must be true unless this method is
+	 */
+	public static boolean closeAllBuffers(View view)
+	{
+		return closeAllBuffers(view,false);
+	}
+
+	/**
+	 * Closes all open buffers.
+	 * @param view The view
+	 * @param isExiting This must be false unless this method is
 	 * being called by the exit() method
 	 */
 	public static boolean closeAllBuffers(View view, boolean isExiting)
@@ -1356,6 +1428,61 @@ public class jEdit
 			newFile(view);
 
 		return true;
+	}
+
+	/**
+	 * Saves all open buffers.
+	 * @param view The view
+	 * @param confirm If true, a confirmation dialog will be shown first
+	 * @since jEdit 2.7pre2
+	 */
+	public static void saveAllBuffers(View view, boolean confirm)
+	{
+		if(confirm)
+		{
+			int result = JOptionPane.showConfirmDialog(view,
+				jEdit.getProperty("saveall.message"),
+				jEdit.getProperty("saveall.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+			if(result != JOptionPane.YES_OPTION)
+				return;
+		}
+
+		Buffer buffer = buffersFirst;
+		while(buffer != null)
+		{
+			if(buffer.isDirty())
+				buffer.save(view,null,true);
+			buffer = buffer.next;
+		}
+	}
+
+	/**
+	 * Reloads all open buffers.
+	 * @param view The view
+	 * @param confirm If true, a confirmation dialog will be shown first
+	 * @since jEdit 2.7pre2
+	 */
+	public static void reloadAllBuffers(View view, boolean confirm)
+	{
+		if(confirm)
+		{
+			int result = JOptionPane.showConfirmDialog(view,
+				jEdit.getProperty("reload-all.message"),
+				jEdit.getProperty("reload-all.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+			if(result != JOptionPane.YES_OPTION)
+				return;
+		}
+
+		Buffer[] buffers = jEdit.getBuffers();
+		for(int i = 0; i < buffers.length; i++)
+		{
+			Buffer buffer = buffers[i];
+			buffer.load(view,true);
+		}
 	}
 
 	/**
@@ -1453,13 +1580,6 @@ public class jEdit
 				+ ".shortcut");
 			if(shortcut != null)
 				inputHandler.addKeyBinding(shortcut,action);
-		}
-
-		// load mode-specific keys
-		Mode[] modes = getModes();
-		for(int i = 0; i < modes.length; i++)
-		{
-			modes[i].initKeyBindings();
 		}
 	}
 
@@ -1966,159 +2086,67 @@ public class jEdit
 	{
 		actionHash = new Hashtable();
 
-		addAction("about");
+		Reader in = new BufferedReader(new InputStreamReader(
+			jEdit.class.getResourceAsStream("actions.xml")));
+		loadActions("actions.xml",in);
+
 		addAction("append-string-register");
-		addAction("backspace");
-		addAction("backspace-word");
-		addAction("block-comment");
-		addAction("box-comment");
-		addAction("buffer-options");
-		addAction("center-caret");
 		addAction("clear-register");
-		addAction("close-all");
-		addAction("close-buffer");
-		addAction("close-view");
 		addAction("command-line");
 		addAction("complete-word");
-		addAction("copy");
 		addAction("copy-string-register");
-		addAction("cut");
 		addAction("cut-string-register");
-		addAction("delete");
-		addAction("delete-end-line");
-		addAction("delete-line");
-		addAction("delete-paragraph");
-		addAction("delete-start-line");
-		addAction("delete-word");
-		addAction("document-end");
-		addAction("document-home");
-		addAction("edit-system-macros");
-		addAction("edit-user-macros");
 		addAction("end");
 		addAction("exchange-caret-register");
-		addAction("exit");
-		addAction("expand-abbrev");
-		addAction("find");
-		addAction("find-next");
-		addAction("find-selection");
 		addAction("format-paragraph");
-		addAction("global-options");
-		addAction("goto-line");
 		addAction("goto-register");
 		addAction("help");
 		addAction("home");
-		addAction("hypersearch");
-		addAction("hypersearch-selection");
 		addAction("incremental-search");
-		addAction("indent-lines");
-		addAction("indent-on-enter");
-		addAction("indent-on-tab");
-		addAction("insert-file");
 		addAction("insert-literal");
 		addAction("input");
-		addAction("io-progress-monitor");
 		addAction("join-lines");
 		addAction("load-session");
 		addAction("locate-bracket");
-		addAction("log-viewer");
-		addAction("new-file");
-		addAction("new-view");
-		addAction("next-bracket-exp");
-		addAction("next-buffer");
-		addAction("next-char");
 		addAction("next-line");
 		addAction("next-marker");
 		addAction("next-page");
-		addAction("next-paragraph");
-		addAction("next-split");
-		addAction("next-word");
-		addAction("open-file");
-		addAction("overwrite");
-		addAction("paste");
-		addAction("paste-previous");
 		addAction("paste-string-register");
 		addAction("play-last-macro");
 		addAction("play-temp-macro");
-		addAction("prev-bracket-exp");
-		addAction("prev-buffer");
-		addAction("prev-char");
 		addAction("prev-line");
 		addAction("prev-marker");
 		addAction("prev-page");
-		addAction("prev-paragraph");
-		addAction("prev-split");
-		addAction("prev-word");
-		addAction("print");
 		addAction("quick-search");
-		addAction("recent-buffer");
 		addAction("record-macro");
 		addAction("record-temp-macro");
-		addAction("redo");
-		addAction("reload");
-		addAction("reload-all");
 		addAction("reload-modes");
 		addAction("remove-trailing-ws");
-		addAction("replace-all");
-		addAction("replace-and-find-next");
-		addAction("replace-in-selection");
-		addAction("rescan-macros");
-		addAction("save");
-		addAction("save-a-copy-as");
-		addAction("save-all");
-		addAction("save-as");
-		addAction("save-gutter-size");
 		addAction("save-session");
-		addAction("scroll-down-line");
-		addAction("scroll-down-page");
-		addAction("scroll-to-current-line");
-		addAction("scroll-up-line");
-		addAction("scroll-up-page");
-		addAction("select-all");
 		addAction("select-block");
 		addAction("select-caret-register");
-		addAction("select-document-end");
-		addAction("select-document-home");
 		addAction("select-end");
 		addAction("select-home");
-		addAction("select-line");
-		addAction("select-line-range");
-		addAction("select-next-char");
 		addAction("select-next-line");
 		addAction("select-next-page");
-		addAction("select-next-paragraph");
-		addAction("select-next-word");
-		addAction("select-none");
-		addAction("select-paragraph");
-		addAction("select-prev-char");
 		addAction("select-prev-line");
 		addAction("select-prev-page");
-		addAction("select-prev-paragraph");
-		addAction("select-prev-word");
-		addAction("select-word");
 		addAction("set-caret-register");
 		addAction("set-filename-register");
 		addAction("set-marker");
 		addAction("shift-left");
 		addAction("shift-right");
-		addAction("split-horizontal");
-		addAction("split-vertical");
 		addAction("stop-recording");
 		addAction("tab");
 		addAction("to-lower");
 		addAction("to-upper");
-		addAction("undo");
-		addAction("update-log");
-		addAction("unsplit");
 		addAction("untab");
-		addAction("view-registers");
-		addAction("wing-comment");
 		addAction("word-count");
 
 		// Preload these actions so that needsActionCommand()
 		// will return the correct value (for command line autocompletion)
 		addAction(new org.gjt.sp.jedit.actions.clear_marker());
 		addAction(new org.gjt.sp.jedit.actions.goto_marker());
-		addAction(new org.gjt.sp.jedit.actions.insert_char());
 		addAction(new org.gjt.sp.jedit.actions.play_macro());
 		addAction(new org.gjt.sp.jedit.actions.repeat());
 		addAction(new org.gjt.sp.jedit.actions.set_replace_string());
@@ -2127,18 +2155,37 @@ public class jEdit
 
 		// Preload these actions so that isToggle()
 		// will return the correct value
-		addAction(new org.gjt.sp.jedit.actions.toggle_gutter());
-		addAction(new org.gjt.sp.jedit.actions.toggle_line_numbers());
-		addAction(new org.gjt.sp.jedit.actions.toggle_rect());
-		addAction(new org.gjt.sp.jedit.actions.toggle_synchro_scroll());
 		addAction(new org.gjt.sp.jedit.actions.vfs_browser());
-		addAction(new org.gjt.sp.jedit.actions.docking_bottom_expanded());
-		addAction(new org.gjt.sp.jedit.actions.docking_left_expanded());
-		addAction(new org.gjt.sp.jedit.actions.docking_right_expanded());
-		addAction(new org.gjt.sp.jedit.actions.docking_top_expanded());
+	}
 
-		// this is the default action, used to handle key typed events
-		inputHandler.setInputAction(getAction("insert-char"));
+	/**
+	 * Loads the specified action list.
+	 * @since jEdit 2.7pre2
+	 */
+	private static void loadActions(String path, Reader in)
+	{
+		Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
+
+		ActionListHandler ah = new ActionListHandler(path);
+		XmlParser parser = new XmlParser();
+		parser.setHandler(ah);
+		try
+		{
+			parser.parse(null, null, in);
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,jEdit.class,path + ":" + line
+				+ ": " + message);
+			System.exit(1);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,jEdit.class,e);
+			System.exit(1);
+		}
 	}
 
 	/**
@@ -2436,6 +2483,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.291  2000/11/12 05:36:48  sp
+ * BeanShell integration started
+ *
  * Revision 1.290  2000/11/11 02:59:29  sp
  * FTP support moved out of the core into a plugin
  *

@@ -67,12 +67,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
 		addComponent(saveDesktop);
 
-		/* Exit confirmation */
-		confirmExit = new JCheckBox(jEdit.getProperty(
-			"options.general.confirmExit"));
-		confirmExit.setSelected(jEdit.getBooleanProperty("confirmExit"));
-		addComponent(confirmExit);
-
 		/* Sort buffers */
 		sortBuffers = new JCheckBox(jEdit.getProperty(
 			"options.general.sortBuffers"));
@@ -107,7 +101,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("recent",recent.getText());
 		jEdit.setProperty("history",history.getText());
 		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
-		jEdit.setBooleanProperty("confirmExit",confirmExit.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
@@ -122,7 +115,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JTextField recent;
 	private JTextField history;
 	private JCheckBox saveDesktop;
-	private JCheckBox confirmExit;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
@@ -132,6 +124,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.49  2000/11/12 05:36:50  sp
+ * BeanShell integration started
+ *
  * Revision 1.48  2000/11/11 02:59:31  sp
  * FTP support moved out of the core into a plugin
  *

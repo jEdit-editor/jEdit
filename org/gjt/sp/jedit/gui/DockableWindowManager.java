@@ -286,22 +286,24 @@ public class DockableWindowManager extends JPanel
 		right.saveDimension();
 	}
 
-	/**
-	 * Returns the specified docking area.
-	 * @since jEdit 2.7pre1
-	 */
-	public DockableWindowContainer.TabbedPane getDockingArea(String name)
+	public DockableWindowContainer.TabbedPane getTopDockingArea()
 	{
-		if(name.equals(TOP))
-			return top;
-		else if(name.equals(LEFT))
-			return left;
-		else if(name.equals(BOTTOM))
-			return bottom;
-		else if(name.equals(RIGHT))
-			return right;
-		else
-			return null;
+		return top;
+	}
+
+	public DockableWindowContainer.TabbedPane getLeftDockingArea()
+	{
+		return left;
+	}
+
+	public DockableWindowContainer.TabbedPane getBottomDockingArea()
+	{
+		return bottom;
+	}
+
+	public DockableWindowContainer.TabbedPane getRightDockingArea()
+	{
+		return right;
 	}
 
 	/**
@@ -423,6 +425,9 @@ public class DockableWindowManager extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/11/12 05:36:49  sp
+ * BeanShell integration started
+ *
  * Revision 1.7  2000/11/05 05:25:46  sp
  * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
  *

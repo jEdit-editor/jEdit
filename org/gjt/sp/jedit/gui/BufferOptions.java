@@ -32,11 +32,11 @@ import org.gjt.sp.jedit.*;
  */
 public class BufferOptions extends EnhancedDialog
 {
-	public BufferOptions(View view)
+	public BufferOptions(View view, Buffer buffer)
 	{
 		super(view,jEdit.getProperty("buffer-options.title"),true);
 		this.view = view;
-		this.buffer = view.getBuffer();
+		this.buffer = buffer;
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -386,6 +386,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/11/12 05:36:49  sp
+ * BeanShell integration started
+ *
  * Revision 1.21  2000/11/07 10:08:31  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

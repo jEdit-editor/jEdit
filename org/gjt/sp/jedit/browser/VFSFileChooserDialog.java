@@ -134,7 +134,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				getToolkit().beep();
 				return;
 			}
-			else
+			else if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
 			{
 				VFS vfs = VFSManager.getVFSForPath(directory);
 				filename = vfs.constructPath(directory,filename);
@@ -282,6 +282,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.15  2000/11/12 05:36:49  sp
+ * BeanShell integration started
+ *
  * Revision 1.14  2000/11/02 09:19:33  sp
  * more features
  *

@@ -29,7 +29,7 @@ import org.gjt.sp.util.Log;
 
 public class LogViewer extends JFrame
 {
-	public LogViewer(View view)
+	public LogViewer()
 	{
 		super(jEdit.getProperty("log-viewer.title"));
 
@@ -54,9 +54,9 @@ public class LogViewer extends JFrame
 		textArea.setDocument(Log.getLogDocument());
 		//textArea.setEditable(false);
 
-		Font font = view.getTextArea().getPainter().getFont();
-		textArea.setFont(font);
 		content.add(BorderLayout.CENTER,new JScrollPane(textArea));
+
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		pack();
 		GUIUtilities.loadGeometry(this,"log-viewer");

@@ -79,8 +79,6 @@ public class Mode
 				+ " globs in mode " + name);
 			Log.log(Log.ERROR,this,re);
 		}
-
-		initKeyBindings();
 	}
 
 	/**
@@ -243,37 +241,6 @@ public class Mode
 		return getClass().getName() + "[" + getName() + "]";
 	}
 
-	// package-private members
-
-	// called by jEdit.reloadKeyBindings()
-	void initKeyBindings()
-	{
-		// Bind indentOpenBrackets and indentCloseBrackets to indent-line
-		EditAction action = jEdit.getAction("indent-lines");
-
-		String indentOpenBrackets = (String)getProperty("indentOpenBrackets");
-		if(indentOpenBrackets != null)
-		{
-			for(int i = 0; i < indentOpenBrackets.length(); i++)
-			{
-				jEdit.getInputHandler().addKeyBinding(
-					indentOpenBrackets.substring(i,i+1),
-					action);
-			}
-		}
-
-		String indentCloseBrackets = (String)getProperty("indentCloseBrackets");
-		if(indentCloseBrackets != null)
-		{
-			for(int i = 0; i < indentCloseBrackets.length(); i++)
-			{
-				jEdit.getInputHandler().addKeyBinding(
-					indentCloseBrackets.substring(i,i+1),
-					action);
-			}
-		}
-	}
-
 	// private members
 	private String name;
 	private Hashtable props;
@@ -285,6 +252,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  2000/11/12 05:36:48  sp
+ * BeanShell integration started
+ *
  * Revision 1.30  2000/11/02 09:19:31  sp
  * more features
  *

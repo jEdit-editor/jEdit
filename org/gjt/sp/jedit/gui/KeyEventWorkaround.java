@@ -54,10 +54,7 @@ public class KeyEventWorkaround
 			if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) != 0)
 				return null;
 
-			if(ch == KeyEvent.CHAR_UNDEFINED)
-				return null;
-
-			if(ch != '\b' && (ch < 0x20 || ch == 0x7f))
+			if(ch != '\n' && ch != '\t' && (ch < 0x20 || ch == 0x7f))
 				return null;
 
 			// if the last key was a broken key, filter
@@ -114,7 +111,8 @@ public class KeyEventWorkaround
 		else if((keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
 			&& keyCode != KeyEvent.VK_LEFT && keyCode != KeyEvent.VK_RIGHT
 			&& keyCode != KeyEvent.VK_UP && keyCode != KeyEvent.VK_DOWN
-			&& keyCode != KeyEvent.VK_DELETE && keyCode != KeyEvent.VK_BACK_SPACE)
+			&& keyCode != KeyEvent.VK_DELETE && keyCode != KeyEvent.VK_BACK_SPACE
+			 && keyCode != KeyEvent.VK_TAB && keyCode != KeyEvent.VK_ENTER)
 			last = LAST_BROKEN;
 		else
 			last = LAST_NOTHING;
@@ -126,6 +124,9 @@ public class KeyEventWorkaround
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/11/12 05:36:50  sp
+ * BeanShell integration started
+ *
  * Revision 1.6  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

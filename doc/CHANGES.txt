@@ -1,5 +1,17 @@
 JEDIT 2.7 VERSION HISTORY
 
+* Version 2.7pre2
+
++ Enhancements
+
+- Electric scrolling is now only performed when moving the caret using
+  keyboard commands
+
++ Bug Fixes
+
+- The 'Open File' dialog box erronously displayed an 'are you sure you want to
+  overwrite...' warning
+
 * Version 2.7pre1
 
 + New Features
