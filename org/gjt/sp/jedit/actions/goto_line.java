@@ -41,9 +41,12 @@ implements InputHandler.NonRepeatable
 			line = textArea.getInputHandler().getRepeatCount();
 		else
 		{
+			String str = (String)GUIUtilities.input(view,"gotoline",null);
+			if(str == null)
+				return;
 			try
 			{
-				line = Integer.parseInt(GUIUtilities.input(view,"gotoline",null));
+				line = Integer.parseInt(str);
 			}
 			catch(NumberFormatException nf)
 			{}

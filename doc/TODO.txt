@@ -1,6 +1,8 @@
 JEDIT TO DO
 
 Get rid of URL saving from Buffer.java
+Dox: finish words, lines, paragraphs sections
+Finish help menu
 
 ------- Stuff for 2.3pre2 -------
 
@@ -17,11 +19,6 @@ Get rid of URL saving from Buffer.java
   thing, EditBus will also use it for errors
 - Write an InputHandler subclass that displays the current repeat count,
   if any, in the view's status bar
-- Tool bar ideas:
-  - show file status on tool bar, instead of (modified) in title bar, etc
-  - a button that displays a menu of buffer options to replace the buffer
-    options dialog box?
-  - a button that displays a menu of markers
 
 ------- Stuff for 2.3pre3 -------
 

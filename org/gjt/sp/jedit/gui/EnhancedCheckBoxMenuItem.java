@@ -55,6 +55,9 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 
 		acceleratorFont = UIManager
 			.getFont("MenuItem.acceleratorFont");
+		acceleratorFont = new Font("Monospaced",
+			acceleratorFont.getStyle(),
+			acceleratorFont.getSize());
 		acceleratorForeground = UIManager
 			.getColor("MenuItem.acceleratorForeground");
 		acceleratorSelectionForeground = UIManager

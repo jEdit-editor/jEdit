@@ -49,7 +49,7 @@ view.context=undo redo - cut copy paste paste-previous - scroll-line - \
 ###
 ### MENUBAR
 ###
-view.mbar=buffers file edit registers search macros plugins help-menu
+view.mbar=buffers file edit search tools macros plugins help-menu
 
 ### Buffers menu
 buffers=prev-buffer \
@@ -80,13 +80,6 @@ file=new-file \
      send \
      print \
      - \
-     load-session \
-     save-session \
-     - \
-     buffer-options \
-     global-options \
-     plugin-options \
-     - \
      exit
 file.label=$File
 new-file.label=$New File
@@ -105,11 +98,6 @@ save-as.label=Sa$ve As...
 save-all.label=Save A$ll Buffers...
 send.label=Sen$d...
 print.label=$Print...
-load-session.label=Load S$ession...
-save-session.label=Save Sess$ion...
-buffer-options.label=Buffer Options...
-global-options.label=Global Options...
-plugin-options.label=Plugin Options...
 exit.label=E$xit
 
 ### Edit menu
@@ -135,7 +123,8 @@ edit=undo \
      %select \
      %line \
      %paragraph \
-     %block
+     %brackets \
+     %registers
 edit.label=$Edit
 undo.label=$Undo
 redo.label=$Redo
@@ -220,12 +209,12 @@ select-next-paragraph.label=Select Next Paragraph
 delete-paragraph.label=Delete Paragraph
 
 ### Block menu
-block=select-block \
-      locate-bracket \
-      - \
-      prev-bracket-exp \
-      next-bracket-exp
-block.label=Source Code
+brackets=select-block \
+         locate-bracket \
+         - \
+         prev-bracket-exp \
+         next-bracket-exp
+brackets.label=Brackets
 select-block.label=Select Code Block
 locate-bracket.label=Locate Bracket
 prev-bracket-exp.label=Go to Previous Bracket
@@ -246,18 +235,18 @@ registers=cut-string-register \
 	  clear-register \
 	  - \
 	  view-registers
-registers.label=$Registers
-cut-string-register.label=$Cut to Register
-copy-string-register.label=C$opy to Register
-append-string-register.label=$Append to Register
-paste-string-register.label=$Paste Register
-set-filename-register.label=Save $Filename to Register
-set-caret-register.label=Save $Caret to Register
-goto-register.label=$Go to Register
-select-caret-register.label=$Select to Register
-exchange-caret-register.label=S$wap Caret with Register
-clear-register.label=Clear Reg$ister
-view-registers.label=$View Registers...
+registers.label=Registers
+cut-string-register.label=Cut to Register
+copy-string-register.label=Copy to Register
+append-string-register.label=Append to Register
+paste-string-register.label=Paste Register
+set-filename-register.label=Save Filename to Register
+set-caret-register.label=Save Caret to Register
+goto-register.label=Go to Register
+select-caret-register.label=Select to Register
+exchange-caret-register.label=Swap Caret with Register
+clear-register.label=Clear Register
+view-registers.label=View Registers...
 
 ### Search menu
 search=find \
@@ -291,6 +280,30 @@ clear-marker.label=Clear Marker
 goto-marker.label=Go to Marker
 no-markers.label=No Markers Defined
 
+### Tools menu
+tools=load-session \
+      save-session \
+      - \
+      log-viewer \
+      save-log \
+      clear-log \
+      - \
+      view-editbus \
+      - \
+      buffer-options \
+      global-options \
+      plugin-options
+tools.label=$Tools
+load-session.label=$Load Session...
+save-session.label=$Save Session...
+log-viewer.label=Show $Activity Log...
+save-log.label=Sa$ve Activity Log...
+clear-log.label=$Clear Activity Log
+view-editbus.label=Show $EditBus...
+buffer-options.label=$Buffer Options...
+global-options.label=$Global Options...
+plugin-options.label=$Plugin Options...
+
 ### Macros menu
 macros=record-macro \
        record-temp-macro \
@@ -319,19 +332,23 @@ no-plugins.label=No Plugins
 ### Help menu
 help-menu=about \
      help \
+     help@api/packages.html \
      - \
-     log-viewer \
-     save-log \
-     clear-log \
-     - \
-     view-editbus
+     help@README.txt \
+     help@NEWS.txt \
+     help@FAQ.txt \
+     help@CHANGES.txt \
+     help@TODO.txt \
+     -
 help-menu.label=$Help
 about.label=About jEdit...
-help.label=Help Contents...
-log-viewer.label=Show Activity Log...
-save-log.label=Save Activity Log...
-clear-log.label=Clear Activity Log
-view-editbus.label=Show EditBus...
+help.label=jEdit User Guide
+help@api/packages.html.label=jEdit API Documentation
+help@README.txt.label=jEdit Read Me
+help@NEWS.txt.label=Major Changes in jEdit 2.3
+help@FAQ.txt.label=Frequenty Asked Questions
+help@CHANGES.txt.label=Version History
+help@TODO.txt.label=To Do and Known Bugs
 
 ###
 ### MACRO STRINGS

@@ -150,7 +150,7 @@ public class SearchAndReplace
 		if(regexp)
 			matcher = new RESearchMatcher(search,replace,ignoreCase);
 		else
-			matcher = new LiteralSearchMatcher(search,replace,ignoreCase);
+			matcher = new BoyerMooreSearchMatcher(search,replace,ignoreCase);
 
 		return matcher;
 	}
@@ -513,6 +513,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/01/14 07:50:51  sp
+ * Documentation updates, faster literal search, GUI updates, bug fixes
+ *
  * Revision 1.23  1999/12/20 06:05:27  sp
  * Search settings buttons on tool bar, static abbrevs
  *

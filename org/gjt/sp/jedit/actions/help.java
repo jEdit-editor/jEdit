@@ -30,9 +30,18 @@ public class help extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
+		String jEditHome = MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"doc");
+		jEditHome = jEditHome.replace(File.separatorChar,'/');
+
+		String actionCommand = evt.getActionCommand();
+		if(actionCommand == null)
+			actionCommand = "jeditdocs/index.html";
+
 		try
 		{
-			HelpViewer.gotoURL(new URL("jeditdocs:"));
+			HelpViewer.gotoURL(new URL("file:" + jEditHome + '/'
+				+ actionCommand));
 		}
 		catch(MalformedURLException mf)
 		{

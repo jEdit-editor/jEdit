@@ -202,7 +202,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <indexterm><primary>menu bar</></indexterm>
    <indexterm><primary>File menu</></indexterm>
    <indexterm><primary>Edit menu</></indexterm>
-   <indexterm><primary>Registers menu</></indexterm>
+   <indexterm><primary>Tools menu</></indexterm>
    <indexterm><primary>Macros menu</></indexterm>
    <indexterm><primary>Search menu</></indexterm>
    <indexterm><primary>Plugins menu</></indexterm>
@@ -211,8 +211,9 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     the top of the editor window are called <firstterm>menus</>. Generally,
     <guimenu>File</> contains global file-related commands,
     <guimenu>Edit</> contains editing commands, and
-    <guimenu>Registers</>, <guimenu>Search</> and <guimenu>Macros</>
-    contain commands for those jEdit features.
+    <guimenu>Tools</> contains miscellaneous commands.
+    <guimenu>Search</> and <guimenu>Macros</>
+    contain commands for the respective jEdit features.
     <guimenu>Plugins</> contains menus and menu items created
     by plugins.
     </para>
@@ -247,7 +248,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <tip>
     <para>
      If you don't use the tool bar, disable it in the
-     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box to save
+     <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box to save
      memory and startup time (the images won't be loaded if it is disabled).
     </para>
    </tip>
@@ -300,7 +301,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <tip>
     <para>
      Many characteristics of the text area can be changed in the
-     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+     <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
      see <xref linkend=global-opts>.
     </para>
    </tip>
@@ -324,7 +325,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   </sect2>
  </sect1>
  <sect1 id=activity-log><title>The Activity Log</>
-  <indexterm><primary>Help menu</></indexterm>
+  <indexterm><primary>Tools menu</></indexterm>
   <indexterm><primary>Show Activity Log command</></indexterm>
   <indexterm><primary>Save Activity Log command</></indexterm>
   <indexterm><primary>Clear Activity Log command</></indexterm>
@@ -338,18 +339,18 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    are also printed to the system console window, if there is one.
   </para>
   <para>
-   <guimenu>Help</>&gt;<guimenuitem>Show Activity Log</> displays a
+   <guimenu>Tools</>&gt;<guimenuitem>Show Activity Log</> displays a
    window showing the current activity log. Text can be copied from
    the log by selecting it and pressing <keycombo><keycap>Control</>
    <keycap>C</></keycombo>.
   </para>
   <para>
-   <guimenu>Help</>&gt;<guimenuitem>Save Activity Log</> displays a
+   <guimenu>Tools</>&gt;<guimenuitem>Save Activity Log</> displays a
    file chooser dialog box, allowing you to select a file to save the
    log to.
   </para>
   <para>
-   <guimenu>Help</>&gt;<guimenuitem>Clear Activity Log</> clears the
+   <guimenu>Tools</>&gt;<guimenuitem>Clear Activity Log</> clears the
    activity log of all information. This is useful when you are debugging
    a problem and want to start over.
   </para>
@@ -424,7 +425,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    If you edit non-ASCII files, you can select the file
    encoding used by jEdit in
    the 
-     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+     <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
      see <xref linkend=global-opts>.
   </para>
   <sect2 id=opencli><title>Opening Files From the Command Line</>
@@ -471,7 +472,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     types; selecting one will make only files of that type visible in
     the file list. This is handy when navigating directories with lots
     of files of different types. The filters can be changed in the
-    <guibutton>File Filters</> tab of the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+    <guibutton>File Filters</> tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
     dialog box; see <xref linkend=global-opts>.
    </para>
   </sect2>
@@ -501,7 +502,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <note>
     <para>
      The number of recent files can be changed in the
-     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+     <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
      see <xref linkend=global-opts>.
     </para>
    </note>
@@ -567,7 +568,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     <para>
      The autosave interval and various backup-related
      settings can be changed in the
-     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+     <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
      see <xref linkend=global-opts>.
     </para>
    </tip>
@@ -589,10 +590,10 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     in that file. When a file is being saved, it uses the line separator it
     found while loading the file. The line separator can be changed manually
     on a per-buffer
-    basis in the <guimenu>File</>&gt;<guimenuitem>Buffer Options</> dialog box;
+    basis in the <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> dialog box;
     see <xref linkend=buffer-opts>.
     The default for new files can be changed in the Editor tab of the
-    <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+    <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
     see <xref linkend=global-opts>.
    </para>
   </sect2>
@@ -653,7 +654,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     types; selecting one will make only files of that type visible in
     the file list. This is handy when navigating directories with lots
     of files of different types. The filters can be changed in the
-    <guibutton>File Filters</> tab of the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+    <guibutton>File Filters</> tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
     dialog box; see <xref linkend=global-opts>.
    </para>
   </sect2>
@@ -714,7 +715,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <para>
    <indexterm><primary>Close All Buffers command</></indexterm>
    <guimenu>File</>&gt;<guimenuitem>Close All Buffers</>
-   (keyboard equivalent: <keycombo><keycap>Shift</><keycap>F3</></>)
+   (keyboard equivalent: <keycap>F4</>)
    will close all currently open buffers. If any buffers have unsaved
    changes, a dialog box will be displayed, listing them all. To discard
    changes to a buffer, select it from the list and click <guibutton>Discard
@@ -749,13 +750,94 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   this section more carefully; Several things in jEdit are done differently
   from those text editors.
  </para>
- <sect1 id=caret><title>The Caret and Text Selection</>
+ <sect1 id=caret><title>The Caret</>
   <para>
-   Mouse clicks to move, Left, Right, Up, Down, PageUp, PageDown,
-   Home, End, C+Home, C+End, C+a, Escape, Go to line, Select line range
+   The <firstterm>caret</> is the location where text editing takes place.
+   To make changes to a buffer, the caret must first
+   be moved to the location
+   where the changes are to take place.
+  </para>
+  <para>
+   The most direct way to move the caret is to click the
+   mouse where you want it to be moved.
+  </para>
+  <para>
+   <keycap>Left</>, <keycap>Right</>, <keycap>Up</> and <keycap>Down</>
+   move the caret in the respective direction.
+  </para>
+  <para>
+   The <keycap>Home</> and <keycap>End</> behave differently depending on
+   how many times they are pressed, however if you wish them to behave like
+   in other text editors (go to the start and end of the current line only),
+   you can specify so in the
+   <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog
+   box; see <xref linkend=global-opts> for details.
+  </para>
+  <para>
+   The <keycap>Home</> key first moves the caret to the start of the
+   current line, then to the top of the viewscreen, and then to the
+   beginning of the buffer.
+  </para>
+  <para>
+   The <keycap>End</> key first moves the caret to the end of the
+   current line, then to the bottom of the viewscreen, and then to the
+   end of the buffer.
+  </para>
+  <para>
+   The caret can also be moved directly to the beginning or end of the
+   buffer by pressing <keycap>Control</> in addition to
+   <keycap>Home</> or <keycap>End</>.
+  </para>
+  <para>
+   The <keycap>PageUp</> and <keycap>PageDown</> keys move the caret up
+   and down one viewscreen, respectively.
+  </para>
+  <para>
+   Finally, <guimenu>Edit</>&gt;<guimenuitem>Go to Line</> (keyboard
+   equivalent: <keycombo><keycap>Control</><keycap>L</></keycombo>) moves the caret
+   to the beginning of a line you specify.
   </para>
  </sect1>
- <sect1 id=entering-text><title>Entering Text</>
+ <sect1 id=selection><title>Selecting Text</>
+  <para>
+   jEdit has various commands for manipulating arbitriary ranges of text.
+   To specify a range of text for further manipulation, it must be
+   <firstterm>selected</>. When a range of text is selected, it is drawn
+   with a purple highlight (the color can be changed if you don't like it).
+   Only one selection can exist at any one time.
+  </para>
+  <para>
+   The simplest way to make a selection is to drag the mouse from the start
+   of the selection to the end. All text between the two locations will
+   be marked. Also, <keycap>Shift</>-clicking in a location in the buffer
+   will create a selection from the caret position to where you clicked.
+  </para>
+  <para>
+   Holding down <keycap>Shift</> in addition to a caret movement key
+   (<keycap>Left</>, <keycap>Up</>, <keycap>Home</>, etc) will extend the
+   selection in the specified direction, instead of moving the caret.
+   If no selection is active, one will be created.
+  </para>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Select All</> (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>A</></keycombo>)
+   selects the entire buffer.
+  </para>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Select None</> (keyboard equivalent:
+   <keycap>Escape</>) deactivates the selection, if there is one.
+  </para>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Select Line Range</> (keyboard
+   equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>L</></keycombo>) prompts for a start line and
+   end line, and selects all text between these lines, inclusive.
+  </para>
+  <figure><title>A selection</>
+   <graphic scale=75 fileref=window-editor-select></>
+  </figure>
+ </sect1>
+ <sect1 id=entering-text><title>Entering and Deleting Text</>
   <indexterm><primary>overstrike mode</></indexterm>
   <indexterm><primary>Insert key</></indexterm>
   <para>
@@ -778,8 +860,6 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    Regardless if overstrike mode is on, entering text while a selection
    is active will replace the selection with the newly entered text.
   </para>
- </sect1>
- <sect1 id=deleting-text><title>Deleting Text</>
   <para>
    <indexterm><primary>deleting</><secondary>characters</></indexterm>
    <indexterm><primary>Backspace key</></indexterm>
@@ -789,36 +869,10 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    the caret.
   </para>
   <para>
-   <indexterm><primary>deleting</><secondary>words</></indexterm>
-   Pressing <keycap>Control</> in addition to
-   <keycap>Backspace</> or <keycap>Delete</> deletes the word
-   <firstterm>before</> and <firstterm>in front of</>
-   the caret, respectively.
-  </para>
-  <para>
-   <indexterm><primary>deleting</><secondary>lines</></indexterm>
-   <indexterm><primary>Delete Line command</></indexterm>
-   <indexterm><primary>Lines menu</></indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
-   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete Line</>
-   (keyboard equivalent: <keycombo><keycap>Control</><keycap>D</></keycombo>)
-   will
-   delete the line that the caret is positioned on.
-  </para>
-  <para>
-   <indexterm><primary>deleting</><secondary>paragraphs</></indexterm>
-   <indexterm><primary>Delete Paragraph command</></indexterm>
-   <indexterm><primary>Paragraphs menu</></indexterm>
-   <guimenu>Edit</>&gt;<guisubmenu>Paragraphs</>&gt;<guimenuitem>Delete
-   Paragraph</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</>
-   </keycombo> <keycombo><keycap>Control</><keycap>D</></keycombo>) will
-   delete the paragraph containing the caret.
-  </para>
-  <para>
    <indexterm><primary>deleting</><secondary>selected text</></indexterm>
    <indexterm><primary>selection</></indexterm>
-   If a selection is active,<keycap>Backspace</> or <keycap>Delete</> can be
-   pressed to delete the selected text.
+   If a selection is active,
+   <keycap>Backspace</> and <keycap>Delete</> delete the selected text.
   </para>
  </sect1>
  <sect1 id=undo-redo><title>Undo and Redo</>
@@ -897,7 +951,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <tip>
    <para>
     The number of pasted strings to remember can be changed in the
-    <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+    <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
     see <xref linkend=global-opts>.
    </para>
   </tip>
@@ -916,15 +970,41 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <para>
    C+Left, C+Right, C+Backsp, C+Delete, Select-word, double-click
   </para>
+  <para>
+   <indexterm><primary>deleting</><secondary>words</></indexterm>
+   Pressing <keycap>Control</> in addition to
+   <keycap>Backspace</> or <keycap>Delete</> deletes the word
+   <firstterm>before</> and <firstterm>in front of</>
+   the caret, respectively.
+  </para>
  </sect1>
  <sect1 id=lines><title>Working With Lines</>
   <para>
    C+d, CS+Backsp, CS+Delete, C+e C+j, C+j
   </para>
+  <para>
+   <indexterm><primary>deleting</><secondary>lines</></indexterm>
+   <indexterm><primary>Delete Line command</></indexterm>
+   <indexterm><primary>Lines menu</></indexterm>
+   <indexterm><primary>Edit menu</></indexterm>
+   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete Line</>
+   (keyboard equivalent: <keycombo><keycap>Control</><keycap>D</></keycombo>)
+   will
+   delete the line that the caret is positioned on.
+  </para>
  </sect1>
  <sect1 id=paragraphs><title>Working With Paragraphs</>
   <para>
    C+Up, C+Down, C+e C+d, Select-paragraph
+  </para>
+  <para>
+   <indexterm><primary>deleting</><secondary>paragraphs</></indexterm>
+   <indexterm><primary>Delete Paragraph command</></indexterm>
+   <indexterm><primary>Paragraphs menu</></indexterm>
+   <guimenu>Edit</>&gt;<guisubmenu>Paragraphs</>&gt;<guimenuitem>Delete
+   Paragraph</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</>
+   </keycombo> <keycombo><keycap>Control</><keycap>D</></keycombo>) will
+   delete the paragraph containing the caret.
   </para>
  </sect1>
  <sect1 id=views><title>Editing With Multiple Views</>
@@ -1025,7 +1105,8 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <filename>default.session</> is loaded on startup, and the list of
    open files is recorded into it when jEdit exits. The end result is
    that open files are retained across editing sessions. This
-   <quote>default</> session can be disabled in the Global Options
+   <quote>default</> session can be disabled in the
+   <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
    dialog box; see <xref linkend=global-opts>.
   </para>
   <para>
@@ -1039,14 +1120,12 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    file.
   </para>
   <para>
-   <guimenu>File</>&gt;<guimenuitem>Load Session</> (keyboard equivalent:
-   <keycap>F4</>) loads
+   <guimenu>Tools</>&gt;<guimenuitem>Load Session</> loads
    a session while jEdit is running from a file specified in a file
    selection dialog box.
   </para>
   <para>
-   <guimenu>File</>&gt;<guimenuitem>Save Session</> (keyboard equivalent:
-   <keycombo><keycap>Shift</><keycap>F4</></keycombo>) saves the list of
+   <guimenu>Tools</>&gt;<guimenuitem>Save Session</> saves the list of
    all open files to a session specified in a file selection dialog box.
   </para>
  </sect1>
@@ -1197,21 +1276,21 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <indexterm><primary>clipboard</></indexterm>
    <indexterm><primary>selection</></indexterm>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Cut to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Cut to Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>R</></keycombo>
     <keycombo><keycap>Control</><keycap>X</></keycombo>) reads the next
     character entered at the keyboard, and copies the selected text to that
     register, removing it from the buffer.
    </para>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Copy to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Copy to Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>R</></keycombo>
     <keycombo><keycap>Control</><keycap>C</></keycombo>) reads the next
     character entered at the keyboard, and copies the selected text to that
     register, leaving it in the buffer.
    </para>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Append to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Append to Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>R</></keycombo>
     <keycombo><keycap>Control</><keycap>C</></keycombo>) reads the next
     character entered at the keyboard, and appends the selected text to that
@@ -1219,7 +1298,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     text strings and insert them into a different buffer in one operation.
    </para>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Paste from Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Paste from Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>R</></keycombo>
     <keycombo><keycap>Control</><keycap>V</></keycombo>) reads the next
     character entered at the keyboard, and replaces the selection with the
@@ -1242,7 +1321,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <indexterm><primary>Swap Caret with Register command</></indexterm>
    <indexterm><primary>selection</></indexterm>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Save Caret to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Save Caret to Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>T</></keycombo>)
     reads the next character entered at the keyboard, and saves the current
     buffer name and caret position to that register. Because the buffer name
@@ -1250,14 +1329,14 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     multiple buffers.
    </para>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Go to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Go to Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>Y</></keycombo>)
     reads the next character entered at the keyboard, switches to the buffer
     name saved in that register (opening it if necessary), and moves the caret
     to the saved position.
    </para>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Select to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Select to Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>U</></keycombo>)
     reads the next character entered at the keyboard, and creates a selection
     from the caret position to the offset specified in that register.
@@ -1265,7 +1344,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     the selection may be meaningless.
    </para>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Swap Caret with Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Swap Caret with Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>K</></keycombo>)
     reads the next character entered at the keyboard, and swaps the caret
     position and current buffer with that entered in the register. If invoked
@@ -1283,14 +1362,14 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     they can be used interchangeably.
    </para>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Save Filename to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Save Filename to Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>R</></keycombo>
     <keycombo><keycap>Control</><keycap>F</></keycombo>) reads the next
     character entered at the keyboard, and saves the current buffer's path
     name to that register.
    </para>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>Go to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Go to Register</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>T</></keycombo>)
     reads the next character entered at the keyboard, and opens the buffer
     named by the contents of that register. This is the same command
@@ -1301,7 +1380,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <indexterm><primary>Registers menu</></indexterm>
    <indexterm><primary>View Registers command</></indexterm>
    <para>
-    <guimenu>Registers</>&gt;<guimenuitem>View Registers</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>View Registers</>
     (keyboard equivalent: <keycap>F6</>) shows a
     dialog box with a scrollable list of all defined registers.
    </para>
@@ -1357,7 +1436,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   </para>
   <para>
    Abbreviations can be edited in the <guibutton>Abbreviations</> tab
-   of the <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+   of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
    see <xref linkend=global-opts>. Abbreviations are preserved across
    editing sessions.
   </para>
@@ -1409,7 +1488,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    </para>
    <para>
     Like all other menu item commands, macros can be assigned shortcuts in
-    the <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+    the <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
     see <xref linkend=global-opts>.
    </para>
    <indexterm><primary>Play Last Macro command</></indexterm>
@@ -1621,7 +1700,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     If automatic mode selection is not appropriate, the edit mode can
     be specified manually. To set the current buffer's edit mode
     on a one-time basis, select the edit mode in the
-    <guimenu>File</>&gt;<guimenuitem>Buffer Options</> dialog box;
+    <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> dialog box;
     see <xref linkend=buffer-opts>.
     To have a buffer open with a specific edit mode every time,
     set the <quote>mode</> buffer-local property to the
@@ -1779,7 +1858,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    Colors &amp; Styles tab of the <guimenu>File</>&gt;<guimenuitem>Global
    Options</> dialog box; see <xref linkend=global-opts>.
    Bracket highlighting can be disabled
-   in the Editor tab of the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+   in the Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
    dialog box; see <xref linkend=global-opts>.
   </para>
   <para>
@@ -1834,11 +1913,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    </para>
    <itemizedlist>
     <listitem><para>The tab size can be changed on a global basis in
-    the Editor tab of the <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+    the Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
     see <xref linkend=global-opts>.</para></listitem>
     <listitem><para>The tab size can be changed in the current buffer
     for the duration of the editing session in the
-    <guimenu>File</>&gt;<guimenuitem>Buffer Options</> dialog box;
+    <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> dialog box;
    see <xref linkend=buffer-opts>.
     </para></listitem>
     <listitem><para>The tab size can be changed in the current buffer
@@ -1871,12 +1950,12 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <itemizedlist>
     <listitem><para>You can specify if soft tabs should be used
     on a global basis in the
-    Editor tab of the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+    Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
     dialog box; see <xref linkend=global-opts>.</para></listitem>
     <listitem><para>You can specify if soft tabs should be used
     in the current buffer for
     the duration of the editing session in the
-    <guimenu>File</>&gt;<guimenuitem>Buffer Options</> dialog box;
+    <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> dialog box;
    see <xref linkend=buffer-opts>.
     </para></listitem>
     <listitem><para>You can specify if soft tabs should be used
@@ -1975,11 +2054,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    </para>
    <itemizedlist>
     <listitem><para>Indent on enter and tab can be set on a global
-    basis in the Editor tab of the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+    basis in the Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
     dialog box; see <xref linkend=global-opts>.</para></listitem>
     <listitem><para>Indent on enter and tab can be set in the
     current buffer for the duration of the editing session in the
-    <guimenu>File</>&gt;<guimenuitem>Buffer Options</> dialog box;
+    <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> dialog box;
    see <xref linkend=buffer-opts>.
     </para></listitem>
     <listitem><para>Indent on enter and tab can be set in the
@@ -2107,7 +2186,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   </para>
   <para>
    The colors and styles used to highlight syntax tokens can be changed
-   in the Colors &amp; Styles tab of the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+   in the Colors &amp; Styles tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
    dialog box; see <xref linkend=global-opts>.
   </para>
   <para>
@@ -2117,13 +2196,13 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <itemizedlist>
    <listitem><para>You can specify if
    syntax highlighting is to be performed on a global basis in the
-   Editor tab of the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+   Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
    dialog box;
    see <xref linkend=global-opts>.</para></listitem>
    <listitem><para>You can specify if
    syntax highlighting is to be performed in the current buffer
    for the duration of the editing session in the
-   <guimenu>File</>&gt;<guimenuitem>Buffer Options</> dialog box;
+   <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> dialog box;
    see <xref linkend=buffer-opts>.
    </para></listitem>
    <listitem><para>You can specify if
@@ -2412,13 +2491,13 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  </para>
  <sect1 id=buffer-opts><title>The Buffer Options Dialog Box</>
   <indexterm><primary>Buffer Options command</></indexterm>
-  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>Tools menu</></indexterm>
   <indexterm><primary>edit modes</></indexterm>
   <indexterm><primary>line separator</></indexterm>
   <indexterm><primary>auto indent</></indexterm>
   <indexterm><primary>tab width</></indexterm>
   <para>
-   <guimenu>File</>&gt;<guimenuitem>Buffer Options</> displays the
+   <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> displays the
    buffer options dialog box where per-buffer settings can be changed.
    Any changes made in this dialog box are lost when the buffer is
    closed and reopened; it can be used to temporarily test various
@@ -2556,9 +2635,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  </sect1>
  <sect1 id=global-opts><title>The Global Options Dialog Box</>
   <indexterm><primary>Global Options command</></indexterm>
-  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>Tools menu</></indexterm>
   <para>
-   <guimenu>File</>&gt;<guimenuitem>Global Options</> displays the
+   <guimenu>Tools</>&gt;<guimenuitem>Global Options</> displays the
    global options dialog box. A whole slew of settings can be
    customized here. The dialog box is divided into several tabs,
    each tab containing a set of related options.
@@ -2831,7 +2910,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  <sect1 id=using-plugins><title>Using Plugins</>
   <indexterm><primary>Plugins menu</></indexterm>
   <indexterm><primary>Plugin Options command</></indexterm>
-  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>Tools menu</></indexterm>
   <indexterm><primary>Help Contents command</></indexterm>
   <indexterm><primary>Help menu</></indexterm>
   <para>
@@ -3649,7 +3728,7 @@ implements OptionPane
      <entry>-nosession</>
      <entry>jEdit will not attempt to load
      a saved session. Session saving can be
-     disabled permanently in the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+     disabled permanently in the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
      dialog box; see <xref linkend=global-opts>. Has no effect when connecting to
      another instance via the edit server.</entry>
     </row>

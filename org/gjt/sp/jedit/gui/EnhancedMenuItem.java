@@ -57,6 +57,9 @@ public class EnhancedMenuItem extends JMenuItem
 
 		acceleratorFont = UIManager
 			.getFont("MenuItem.acceleratorFont");
+		acceleratorFont = new Font("Monospaced",
+			acceleratorFont.getStyle(),
+			acceleratorFont.getSize());
 		acceleratorForeground = UIManager
 			.getColor("MenuItem.acceleratorForeground");
 		acceleratorSelectionForeground = UIManager
