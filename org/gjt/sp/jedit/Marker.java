@@ -33,6 +33,7 @@ public class Marker
 {
 	/**
 	 * Returns the marker's shortcut.
+	 * @since jEdit 3.2pre1
 	 */
 	public char getShortcut()
 	{
@@ -40,7 +41,18 @@ public class Marker
 	}
 
 	/**
+	 * Sets the marker's shortcut.
+	 * @param shortcut The new shortcut
+	 * @since jEdit 3.2pre1
+	 */
+	public void setShortcut(char shortcut)
+	{
+		this.shortcut = shortcut;
+	}
+
+	/**
 	 * Returns the position of this marker.
+	 * @since jEdit 3.2pre1
 	 */
 	public int getPosition()
 	{

@@ -28,6 +28,7 @@ import javax.swing.text.Segment;
 import javax.swing.JFileChooser;
 import java.lang.reflect.InvocationTargetException;
 import java.io.*;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
@@ -96,15 +97,17 @@ public class BeanShell
 	 */
 	public static void showRunScriptDialog(View view)
 	{
-		String path = GUIUtilities.showFileDialog(view,
-			null,JFileChooser.OPEN_DIALOG);
-		if(path != null)
+		String[] paths = GUIUtilities.showVFSFileDialog(view,
+			null,JFileChooser.OPEN_DIALOG,true);
+		if(paths != null)
 		{
 			Buffer buffer = view.getBuffer();
 			try
 			{
 				buffer.beginCompoundEdit();
-				runScript(view,path,true,false);
+
+				for(int i = 0; i < paths.length; i++)
+					runScript(view,paths[i],true,false);
 			}
 			finally
 			{
@@ -122,6 +125,15 @@ public class BeanShell
 	{
 		Reader in;
 		Buffer buffer = jEdit.getBuffer(path);
+
+		VFS vfs = VFSManager.getVFSForPath(path);
+		Object session = vfs.createVFSSession(path,view);
+		if(session == null)
+		{
+			// user cancelled???
+			return;
+		}
+				
 		if(buffer != null && buffer.isLoaded())
 		{
 			Segment seg = new Segment();
@@ -141,12 +153,15 @@ public class BeanShell
 		{
 			try
 			{
-				in = new BufferedReader(new FileReader(path));
+				in = new BufferedReader(new InputStreamReader(
+					vfs._createInputStream(session,path,
+					true,view)));
+
 			}
-			catch(FileNotFoundException e)
+			catch(IOException e)
 			{
-				GUIUtilities.error(view,"beanshell-notfound",
-					new String[] { path });
+				GUIUtilities.error(view,"ioerror",
+					new String[] { e.getMessage() });
 				return;
 			}
 		}
@@ -197,6 +212,17 @@ public class BeanShell
 		finally
 		{
 			running = false;
+
+			try
+			{
+				vfs._endVFSSession(session,view);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,BeanShell.class,io);
+				GUIUtilities.error(view,"ioerror",
+					new String[] { io.getMessage() });
+			}
 		}
 	}
 

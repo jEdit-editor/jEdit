@@ -1045,9 +1045,6 @@ public class View extends JFrame implements EBComponent
 	 */
 	private void updatePluginsMenu()
 	{
-		if(plugins.getMenuComponentCount() != 0)
-			plugins.removeAll();
-
 		// Query plugins for menu items
 		Vector pluginMenuItems = new Vector();
 
@@ -1058,24 +1055,19 @@ public class View extends JFrame implements EBComponent
 			{
 				EditPlugin plugin = pluginArray[i];
 
-				// major hack to put 'Plugin Manager' at the
-				// top of the 'Plugins' menu
-				if(plugin.getClassName().equals("PluginManagerPlugin"))
+				// call old API
+				int count = pluginMenuItems.size();
+				plugin.createMenuItems(this,pluginMenuItems,
+					pluginMenuItems);
+				if(count != pluginMenuItems.size())
 				{
-					Vector vector = new Vector();
-					plugin.createMenuItems(vector);
-					plugins.add((JMenuItem)vector.elementAt(0));
-					plugins.addSeparator();
+					Log.log(Log.WARNING,this,plugin.getClassName()
+						+ " is using the obsolete"
+						+ " createMenuItems() API.");
 				}
-				else
-				{
-					// call old API
-					plugin.createMenuItems(this,pluginMenuItems,
-						pluginMenuItems);
 
-					// call new API
-					plugin.createMenuItems(pluginMenuItems);
-				}
+				// call new API
+				plugin.createMenuItems(pluginMenuItems);
 			}
 			catch(Throwable t)
 			{
@@ -1220,7 +1212,7 @@ public class View extends JFrame implements EBComponent
 
 			Vector buffers = new Vector();
 			EditPane[] editPanes = getEditPanes();
-			for(int i = 0; i < editPanes.size(); i++)
+			for(int i = 0; i < editPanes.length; i++)
 			{
 				Buffer buffer = ((EditPane)editPanes[i])
 					.getBuffer();

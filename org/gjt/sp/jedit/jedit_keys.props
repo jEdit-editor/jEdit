@@ -30,7 +30,6 @@ close-buffer.shortcut=C+w
 cut.shortcut=C+x
 goto-marker.shortcut=C+y
 undo.shortcut=C+z
-toggle-rect.shortcut=C+BACK_SLASH
 recent-buffer.shortcut=C+BACK_QUOTE
 unsplit.shortcut=C+1
 split-horizontal.shortcut=C+2

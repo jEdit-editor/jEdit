@@ -40,7 +40,10 @@ class EditServer extends Thread
 
 		try
 		{
-			socket = new ServerSocket(0); // Bind to any port
+			// Bind to any port on localhost; accept 2 simultaneous
+			// connection attempts before rejecting connections
+			socket = new ServerSocket(0, 2,
+				InetAddress.getLocalHost());
 			authKey = Math.abs(new Random().nextInt());
 			int port = socket.getLocalPort();
 

@@ -24,6 +24,17 @@ JEDIT 3.2 VERSION HISTORY
 - New 'Cut Append to Register' (C+r C+u) command append selected text to
   specified register and removes it from the buffer.
 
++ Enhancements
+
+- 'Auto wrap around' option in search and replace dialog box
+- Edit server now binds to local host only (so that remote attackers
+  can't compromise jEdit) and accepts no more than 2 simultaneous
+  connection attempts (Mike Dillon)
+- The 'Run Other Macro' command no longer uses the obsolete Swing file
+  chooser dialog box
+- Marker saving can now be toggled in Utilities->Global Options->Loading
+  and Saving
+
 + Neutral
 
 - 'Append to Register' command renamed 'Copy Append to Register'
@@ -39,3 +50,17 @@ JEDIT 3.2 VERSION HISTORY
 - If a view was split and several buffers were visible, only one of them
   would be checked when the view gains focus for modification by another
   program
+- The setting of the reverse search flag wasn't fully saved and restored
+- The setting of the HyperSearch flag wasn't handled properly by the
+  search bar
+- Notepad macro threw an exception when its window was closed
+- The 'Search in Current Buffer' and 'Search in Directory' macros didn't
+  work
+
++ API Changes
+
+- As jEdit now handles middle mouse button clicks itself, the XClipboard
+  plugin will have to be modified to set a custom implementation of the
+  '%' register, instead of trapping middle mouse clicks directly.
+- Plugins are now loaded after the buffer history and macros are
+  initialised

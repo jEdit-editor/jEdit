@@ -228,8 +228,6 @@ edit=undo \
      goto-line \
      select-line-range \
      - \
-     toggle-rect \
-     - \
      %text \
      %source \
      %registers
@@ -242,14 +240,13 @@ cut-append.label=Cu$t Append
 copy-append.label=Copy $Append
 paste.label=$Paste
 paste-previous.label=Paste Pre$vious...
-select-all.label=Select A$ll
+select-all.label=$Select All
 select-none.label=Select $None
 word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
 goto-line.label=$Go to Line...
-select-line-range.label=Select Li$ne Range...
-toggle-rect.label=Rectangular $Selection
+select-line-range.label=Se$lect Line Range...
 
 ### Text menu
 text=select-word \
@@ -511,8 +508,10 @@ rescan-macros.label=Resca$n Macros
 no-macros.label=No Macros
 
 ### Plugins menu
+plugins=plugin-manager -
 plugins.label=$Plugins
-no-plugins.label=No Plugins
+plugin-manager.label=Plugin $Manager...
+no-plugins.label=No Plugins Installed
 
 ### Help menu
 help-menu=about \
@@ -709,6 +708,8 @@ search.find=Search for: (press up arrow to recall previous)
 search.find.mnemonic=s
 search.replace=Replace with:
 search.replace.mnemonic=w
+search.string-replace-btn=Text:
+search.beanshell-replace-btn=Return value of a BeanShell snippet:
 
 search.keep=Keep dialog
 search.keep.mnemonic=k
@@ -716,10 +717,16 @@ search.case=Ignore case
 search.case.mnemonic=g
 search.regexp=Regular expressions
 search.regexp.mnemonic=x
-search.reverse=Reverse search
-search.reverse.mnemonic=v
 search.hypersearch=HyperSearch
 search.hypersearch.mnemonic=h
+search.wrap=Auto wrap
+search.wrap.mnemonic=w
+
+search.direction=Direction:
+search.back=Backward
+search.back.mnemonic=b
+search.forward=Forward
+search.forward.mnemonic=o
 
 search.fileset=Search in:
 search.current=Current buffer
@@ -736,7 +743,7 @@ search.filterField.mnemonic=f
 search.subdirs=Search subdirectories
 search.subdirs.mnemonic=u
 search.choose=Choose...
-search.choose.mnemonic=o
+search.choose.mnemonic=e
 
 search.findBtn=Find
 search.replaceBtn=Replace
@@ -762,7 +769,8 @@ replace-results.message=Replaced {0} occurence(s) in {1} buffer(s).
 # Search and replace error dialog
 searcherror.title=Search and Replace Error
 # {0} - error message
-searcherror.message=An error occurred while performing this operation. ({0})
+searcherror.message=An error occurred while performing this operation.\n\
+	({0})
 
 # Empty fileset error dialog
 empty-fileset.title=Empty File Set
@@ -912,9 +920,6 @@ beanshell-error.message=While executing "{0}",\n\
 	\n\
 	More information can be found in the activity log.
 
-beanshell-notfound.title=BeanShell Script Not Found
-beanshell-notfound.message=The BeanShell script {0} does not exist.
-
 beanshell-eval-input.title=Evaluate BeanShell Expression
 beanshell-eval-input.message=BeanShell expression:
 
@@ -950,7 +955,6 @@ options.general.showBufferSwitcher=Show buffer switcher
 options.general.showTips=Show tips on startup
 
 options.loadsave.label=Loading & Saving
-options.loadsave.restore=Restore previously open files on startup
 options.loadsave.encoding=File encoding:
 options.loadsave.autosave=Autosave frequency (secs):
 options.loadsave.backups=Max number of backups:
@@ -959,6 +963,8 @@ options.loadsave.backupPrefix=Backup filename prefix:
 options.loadsave.backupSuffix=Backup filename suffix:
 options.loadsave.lineSeparator=Default line separator:
 options.loadsave.ioThreadCount=Number of I/O threads:
+options.loadsave.restore=Restore previously open files on startup
+options.loadsave.persistentMarkers=Save marker positions
 
 options.textarea.label=Text Area
 options.textarea.font=Text area font:
@@ -1178,7 +1184,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=34
+tip.count=38
 
 # Activity log
 log-viewer.title=Activity Log
@@ -1317,3 +1323,25 @@ vfs.not-supported.load.message=The {0} filesystem does not support\n\
 vfs.not-supported.save.title=Operation Not Supported
 vfs.not-supported.save.message=The {0} filesystem does not support\n\
 	file saving.
+
+###
+### PLUGIN MANAGER
+###
+
+plugin-manager.title=Plugin Manager
+
+plugin-manager.caption=Installed plugins:
+
+plugin-manager.not-loaded=Not loaded due to errors
+plugin-manager.loaded=Loaded plugins
+plugin-manager.new=Newly installed plugins
+
+plugin-manager.info.path=JAR file path:
+plugin-manager.info.name=Plugin name:
+plugin-manager.info.author=Author:
+plugin-manager.info.version=Version:
+plugin-manager.info.unknown=Unknown
+
+plugin-manager.remove=Remove Plugins
+plugin-manager.update=Update Plugins
+plugin-manager.install=Install Plugins

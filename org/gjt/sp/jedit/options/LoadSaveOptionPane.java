@@ -96,6 +96,13 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			"options.loadsave.restore"));
 		restore.setSelected(jEdit.getBooleanProperty("restore"));
 		addComponent(restore);
+
+		/* Session management */
+		persistentMarkers = new JCheckBox(jEdit.getProperty(
+			"options.loadsave.persistentMarkers"));
+		persistentMarkers.setSelected(jEdit.getBooleanProperty(
+			"persistentMarkers"));
+		addComponent(persistentMarkers);
 	}
 
 	public void _save()
@@ -123,6 +130,8 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
 		jEdit.setBooleanProperty("restore",restore.isSelected());
+		jEdit.setBooleanProperty("persistentMarkers",
+			persistentMarkers.isSelected());
 	}
 
 	// private members
@@ -135,4 +144,5 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	private JComboBox lineSeparator;
 	private JTextField ioThreadCount;
 	private JCheckBox restore;
+	private JCheckBox persistentMarkers;
 }

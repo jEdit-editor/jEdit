@@ -344,9 +344,9 @@
    </tgroup>
   </informaltable>
 
- <bridgehead renderas=sect1>Clipboard and Text Registers</>
+ <bridgehead renderas=sect1>Clipboard and Registers</>
   <para>
-   For details, see <xref linkend=clipboard> and <xref linkend=text-registers>.
+   For details, see <xref linkend=clipboard>.
   </para>
   <informaltable frame=none>
    <tgroup cols=2>
@@ -359,6 +359,18 @@
      <row>
       <entry><keycombo><keycap>Control</><keycap>C</></keycombo></entry>
       <entry>Copy selected text to clipboard.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
+      <keycombo><keycap>Control</><keycap>U</></keycombo></entry>
+      <entry>Append selected text to clipboard, removing it from the
+      buffer.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
+      <keycombo><keycap>Control</><keycap>A</></keycombo></entry>
+      <entry>Append selected text to clipboard, leaving it in the
+      buffer.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>V</></keycombo></entry>
@@ -380,10 +392,19 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>R</></keycombo>
+      <keycombo><keycap>Control</><keycap>U</>
+      </keycombo>
+      <keycap><replaceable>key</></keycap></entry>
+      <entry>Append selected text to register <replaceable>key</>,
+      removing it from the buffer.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>R</></keycombo>
       <keycombo><keycap>Control</><keycap>A</>
       </keycombo>
       <keycap><replaceable>key</></keycap></entry>
-      <entry>Append selected text to register <replaceable>key</>.</entry>
+      <entry>Append selected text to register <replaceable>key</>,
+      leaving it in the buffer.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>R</></keycombo>
@@ -402,9 +423,9 @@
    </tgroup>
   </informaltable>
 
- <bridgehead renderas=sect1>Markers and Position Registers</>
+ <bridgehead renderas=sect1>Markers</>
   <para>
-   For details, see <xref linkend=markers> and <xref linkend=pos-registers>.
+   For details, see <xref linkend=markers>.
   </para>
   <informaltable frame=none>
    <tgroup cols=2>
@@ -413,37 +434,39 @@
      <row>
       <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
       <keycombo><keycap>Control</><keycap>M</></keycombo></entry>
-      <entry>Set marker.</entry>
-     </row>
-     <row>
-      <entry><keycombo><keycap>Alt</><keycap>Up</></keycombo>;
-      <keycombo><keycap>Alt</><keycap>Down</></keycombo></entry>
-      <entry>Move caret to previous; next marker.</entry>
+      <entry>Add marker with no shortcut.
+      Use the <guimenu>Markers</> menu to return to markers added
+      in this manner.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>T</>
       </keycombo>
       <keycap><replaceable>key</></keycap></entry>
-      <entry>Save position to register <replaceable>key</>.</entry>
+      <entry>Add marker with shortcut <replaceable>key</>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>Y</>
       </keycombo>
       <keycap><replaceable>key</></keycap></entry>
-      <entry>Go to position saved in register <replaceable>key</>.</entry>
+      <entry>Go to marker with shortcut <replaceable>key</>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>U</>
       </keycombo>
       <keycap><replaceable>key</></keycap></entry>
-      <entry>Select to position saved in register <replaceable>key</>.</entry>
+      <entry>Select to marker with shortcut <replaceable>key</>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>K</>
       </keycombo>
       <keycap><replaceable>key</></keycap></entry>
-      <entry>Go to position saved in register <replaceable>key</>, and
-      save previous position to that register.</entry>
+      <entry>Go to marker with shortcut <replaceable>key</>, and
+      move the marker to the previous caret position.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</><keycap>Up</></keycombo>;
+      <keycombo><keycap>Alt</><keycap>Down</></keycombo></entry>
+      <entry>Move caret to previous; next marker.</entry>
      </row>
     </tbody>
    </tgroup>
@@ -483,11 +506,6 @@
       <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
       <keycombo><keycap>Control</><keycap>G</></keycombo></>
       <entry>Replace in selection and find next.</entry>
-     </row>
-     <row>
-      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
-      <keycombo><keycap>Control</><keycap>A</></keycombo></>
-      <entry>Replace all.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>,</></keycombo></>

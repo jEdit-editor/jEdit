@@ -66,7 +66,7 @@ public class Gutter extends JComponent implements SwingConstants
 			- pfm.getDescent()) / 2.0);
 
 		boolean highlightCurrentLine = currentLineHighlightEnabled
-			&& (textArea.getSelectionStart() == textArea.getSelectionEnd());
+			&& textArea.selection == null;
 
 		int y = (clip.y - clip.y % lineHeight);
 

@@ -297,19 +297,19 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 
+		SearchAndReplace.load();
+		FavoritesVFS.loadFavorites();
+		Macros.loadMacros();
+		propertiesChanged();
+
+		GUIUtilities.advanceSplashProgress();
+
 		// Start plugins
 		for(int i = 0; i < jars.size(); i++)
 		{
 			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
 				.loadAllPlugins();
 		}
-
-		GUIUtilities.advanceSplashProgress();
-
-		SearchAndReplace.load();
-		FavoritesVFS.loadFavorites();
-		Macros.loadMacros();
-		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -587,6 +587,39 @@ public class jEdit
 	}
 
 	/**
+	 * Returns a list of plugin JARs that are not currently loaded
+	 * by examining the user and system plugin directories.
+	 * @since jEdit 3.2pre1
+	 */
+	public static String[] getNotLoadedPluginJARs()
+	{
+		Vector returnValue = new Vector();
+
+		String systemPluginDir = MiscUtilities
+			.constructPath(jEditHome,"jars");
+
+		String[] list = new File(systemPluginDir).list();
+		if(list != null)
+			getNotLoadedPluginJARs(returnValue,systemPluginDir,list);
+
+		if(settingsDirectory != null)
+		{
+			String userPluginDir = MiscUtilities
+				.constructPath(settingsDirectory,"jars");
+			list = new File(userPluginDir).list();
+			if(list != null)
+			{
+				getNotLoadedPluginJARs(returnValue,
+					userPluginDir,list);
+			}
+		}
+
+		String[] _returnValue = new String[returnValue.size()];
+		returnValue.copyInto(_returnValue);
+		return _returnValue;
+	}
+
+	/**
 	 * Loads all plugins in a directory.
 	 * @param directory The directory
 	 */
@@ -613,7 +646,8 @@ public class jEdit
 
 			if(plugin.equals("BeanShell.jar")
 				|| plugin.equals("bsh-1.0.jar")
-				|| plugin.equals("EditBuddy.jar"))
+				|| plugin.equals("EditBuddy.jar")
+				|| plugin.equals("PluginManager.jar"))
 			{
 				String[] args = { plugin };
 				GUIUtilities.error(null,"plugin.obsolete",args);
@@ -758,8 +792,7 @@ public class jEdit
 	}
 
 	/**
-	 * Registers an action with the editor.
-	 * @param action The action
+	 * Plugins should not be calling this method.
 	 */
 	public static void addAction(EditAction action)
 	{
@@ -1166,11 +1199,10 @@ public class jEdit
 			return buffer;
 		}
 
-		if(saveCaret && props.get(Buffer.SELECTION_START) == null)
+		if(saveCaret && props.get(Buffer.CARET) == null)
 		{
 			int caret = BufferHistory.getCaretPosition(path);
-			props.put(Buffer.SELECTION_START,new Integer(caret));
-			props.put(Buffer.SELECTION_END,new Integer(caret));
+			props.put(Buffer.CARET,new Integer(caret));
 		}
 
 		final Buffer newBuffer = new Buffer(view,path,readOnly,
@@ -1365,7 +1397,7 @@ public class jEdit
 		if(!buffer.isNewFile())
 		{
 			view.getEditPane().saveCaretInfo();
-			Integer _caret = (Integer)buffer.getProperty(Buffer.SELECTION_START);
+			Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
 			int caret = (_caret == null ? 0 : _caret.intValue());
 			BufferHistory.setCaretPosition(buffer.getPath(),caret);
 		}
@@ -1435,7 +1467,7 @@ public class jEdit
 		{
 			if(!buffer.isNewFile())
 			{
-				Integer _caret = (Integer)buffer.getProperty(Buffer.SELECTION_START);
+				Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
 				int caret = (_caret == null ? 0 : _caret.intValue());
 				BufferHistory.setCaretPosition(buffer.getPath(),caret);
 			}
@@ -2202,6 +2234,35 @@ public class jEdit
 		}
 	}
 
+	private static void getNotLoadedPluginJARs(Vector returnValue,
+		String dir, String[] list)
+	{
+loop:		for(int i = 0; i < list.length; i++)
+		{
+			String name = list[i];
+			if(!name.toLowerCase().endsWith(".jar"))
+				continue loop;
+
+			String path = MiscUtilities.constructPath(dir,name);
+
+			for(int j = 0; j < jars.size(); j++)
+			{
+				EditPlugin.JAR jar = (EditPlugin.JAR)
+					jars.elementAt(j);
+				String jarPath = jar.getPath();
+				String jarName = MiscUtilities.getFileName(jarPath);
+
+				if(path.equals(jarPath))
+					continue loop;
+				else if(!new File(jarPath).exists()
+					&& name.equals(jarName))
+					continue loop;
+			}
+
+			returnValue.addElement(path);
+		}
+	}
+
 	private static void gotoMarker(Buffer buffer, String marker)
 	{
 		VFSManager.runInAWTThread(new GotoMarkerSafely(buffer,marker));
@@ -2252,8 +2313,7 @@ public class jEdit
 			else
 				throw new InternalError();
 
-			buffer.putProperty(Buffer.SELECTION_START,new Integer(pos));
-			buffer.putProperty(Buffer.SELECTION_END,new Integer(pos));
+			buffer.putProperty(Buffer.CARET,new Integer(pos));
 			buffer.getDocumentProperties().remove(Buffer.SCROLL_HORIZ);
 			buffer.getDocumentProperties().remove(Buffer.SCROLL_VERT);
 		}

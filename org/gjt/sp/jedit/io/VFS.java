@@ -158,8 +158,7 @@ public abstract class VFS
 	 * a login name and password, for example.
 	 * @param path The path in question
 	 * @param comp The component that will parent error dialog boxes
-	 * @return True if everything is okay, false if the user cancelled
-	 * the operation
+	 * @return The session
 	 * @since jEdit 2.6pre3
 	 */
 	public Object createVFSSession(String path, Component comp)
@@ -429,6 +428,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.25  2001/04/27 11:28:46  sp
+ * new selection code started
+ *
  * Revision 1.24  2001/04/18 03:09:45  sp
  * GJT was down for a long time
  *

@@ -343,47 +343,6 @@
    changing the wrap column.
   </para>
  </sect1>
- <sect1 id=clipboard><title>The Clipboard</>
-  <para>
-   <guimenu>Edit</>&gt;<guimenuitem>Cut</>
-   (shortcut: <keycombo><keycap>Control</><keycap>X</></keycombo>)
-   places the selected text in the clipboard and removes it from the
-   buffer.
-  </para>
-  <para>
-   <guimenu>Edit</>&gt;<guimenuitem>Copy</>
-   (shortcut: <keycombo><keycap>Control</><keycap>C</></keycombo>)
-   places the selected text in the clipboard and leaves it in the
-   buffer.
-  </para>
-  <para>
-   <guimenu>File</>&gt;<guimenuitem>Paste</>
-   (shortcut: <keycombo><keycap>Control</><keycap>V</></keycombo>)
-   inserts the clipboard contents in place of the selection (or at the
-   caret position, if there is no selection).
-  </para>
-  <para>
-   <guimenu>Edit</>&gt;<guimenuitem>Paste Previous</> (shortcut:
-   <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>V</></keycombo>)
-   displays a dialog box listing recently copied and
-   pasted text. By default, the last 20 strings are remembered; this can be
-   changed in the <guibutton>General</> pane of the
-   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
-  </para>
-  <sidebar><title>The X Window System</>
-   <para>
-    The X Window System on Unix actually has two storage areas for text;
-    the <quote>primary selection</>, and the <quote>clipboard</>.
-    jEdit only uses the clipboard. However, the XClipboard plugin
-    (see <xref linkend=plugins> for information about installing
-    plugins) allows read-only access to the primary selection.
-   </para>
-  </sidebar>
-  <!-- <figure><title>The Paste Previous dialog box</>
-   <graphic scale=50 fileref=dialog-pasteprev></>
-  </figure> -->
- </sect1>
  <sect1 id=scrolling><title>Scrolling</>
   <para>
    <guimenu>View</>&gt;<guisubmenu>Scrolling</>&gt;<guimenuitem>Scroll to
@@ -436,77 +395,102 @@
    time disables the feature.
   </para>
  </sect1>
- <sect1 id=markers><title>Markers</>
+ <sect1 id=text-transfer><title>Transferring Text</>
   <para>
-   Once a <firstterm>marker</> has been set at a particular location in a buffer,
-   it can be quickly returned to at any time. Any number of markers can be
-   set in each buffer, and markers are persistent; they are saved to
-   <filename>.<replaceable>filename</>.marks</>, where
-   <replaceable>filename</> is the file name. (The dot prefix
-   makes the marker file hidden on Unix systems).
+   jEdit provides a rich set of commands for moving and copying text.
+   Most applications support the concept of a single <firstterm>clipboard</>
+   that can hold one piece of information at a time. jEdit takes this to the
+   next step by supporting any number of clipboards, called
+   <firstterm>registers</>, with each register referred to by a single-character
+   name. The <quote>quick copy</> and system clipboard features allow easy
+   access to two specific registers. A third set of commands allows access to
+   all registers.
   </para>
-  <para>
-   <guimenu>Search</>&gt;<guimenuitem>Set Marker</> (shortcut:
-   <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>M</></keycombo>) prompts for
-   a marker name (the default being the selected text) and set a
-   marker with that name at the caret position.
-  </para>
-  <para>
-   Selecting a marker from the
-   <guimenu>Search</>&gt;<guisubmenu>Go to Marker</> menu moves the
-   caret to the marker's location. Selecting a marker from the
-   <guimenu>Search</>&gt;<guisubmenu>Clear Marker</> menu removes it
-   from the buffer.
-  </para>
-  <para>
-   <guimenu>Search</>&gt;<guimenuitem>Go to Previous Marker</>
-   (shortcut: <keycombo><keycap>Alt</><keycap>Up</></>) goes
-   to the nearest marker before the caret position.
-  </para>
-  <para>
-   <guimenu>Search</>&gt;<guimenuitem>Go to Next Marker</>
-   (shortcut: <keycombo><keycap>Alt</><keycap>Down</></>)
-   goes to the nearest marker after the caret position.
-  </para>
- </sect1>
- <sect1 id=registers><title>Registers</>
-  <para>
-   Each <firstterm>register</> can hold either a text string or caret
-   position for later use.
-   Registers have single-character names, hence their number
-   is limited by how many keys can be typed on your keyboard.
-   Register contents are global to the editor; all buffers and views share
-   the same set. Registers are not persistent; their contents are lost when
-   jEdit exits. The register
-   <filename>$</> is an alias for the clipboard, and therefore registers can
-   be considered as an extension of the clipboard concept.
-  </para>
-  <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>View Registers</>
-   displays a dialog box for
-   viewing register contents. The popup menu in the dialog box
-   lists all defined registers;
-   selecting one will display its contents and type (text or position).
-   It is not possible to change or add registers in this
-   dialog box; it is for viewing only.
-  </para>
-  <!-- <figure><title>The View Registers dialog box</>
-   <graphic scale=50 fileref=dialog-view-registers></>
-  </figure> -->
-  <para>
-   All register commands except for <guimenuitem>View Registers</>
-   listen for the next key press and operate on the register with
-   that name. For example, to copy the
-   selection to register <filename>X</>, press
-   <keycombo><keycap>Control</><keycap>R</></keycombo>
-   <keycombo><keycap>Control</><keycap>C</></keycombo> <keycap>X</>
-   (The character <quote>x</> will not be inserted into the buffer).
-  </para>
-  <!-- <figure><title>A register command prompting for a register to operate on</>
-   <graphic fileref=window-editor-prompt scale=50></>
-  </figure> -->
-  <sect2 id=text-registers><title>Text Registers</>
+  <sect2><title>Quick Copy</>
+   <para>
+    jEdit stores the most recently selected text in the <filename>%</> register.
+    A middle mouse button click (or <keycap>Alt</>-click, if you do not have a
+    three-button mouse) inserts the contents of that register at the clicked
+    location.
+   </para>
+   <para>
+    Therefore, the simplest way to copy text from one location to another is to
+    select it, then click in the location either with the middle mouse button
+    or while holding down <keycap>Alt</>.
+   </para>
+  </sect2>
+  <sect2><title>The System Clipboard</>
+   <para>
+    Quick copy is very useful in many situations, but has the following
+    disadvantages:
+   </para>
+   <itemizedlist>
+    <listitem><para>It requires the use of the mouse</para></listitem>
+    <listitem><para>It cannot be used to replace an existing selection,
+    because selecting text immediately places it in the <filename>%</>
+    register</para></listitem>
+    <listitem><para>It cannot be used to transfer text between applications,
+    only within jEdit</para></listitem>
+   </itemizedlist>
+   <para>
+    The register <filename>$</> is the system clipboard. The system clipboard
+    can be used to share data with other applications, and jEdit offers a set of
+    commands for working with it.
+   </para>
+   <para>
+    <guimenu>Edit</>&gt;<guimenuitem>Cut</>
+    (shortcut: <keycombo><keycap>Control</><keycap>X</></keycombo>)
+    places the selected text in the clipboard and removes it from the
+    buffer.
+   </para>
+   <para>
+    <guimenu>Edit</>&gt;<guimenuitem>Copy</>
+    (shortcut: <keycombo><keycap>Control</><keycap>C</></keycombo>)
+    places the selected text in the clipboard and leaves it in the
+    buffer.
+   </para>
+   <para>
+    <guimenu>Edit</>&gt;<guimenuitem>Cut Append</>
+    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>U</></keycombo>)
+    adds the selected text to the clipboard, with replacing the existing
+    clipboard contents, then removes the text from the buffer..
+   </para>
+   <para>
+    <guimenu>Edit</>&gt;<guimenuitem>Copy Append</>
+    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>A</></keycombo>)
+    adds the selected text to the clipboard, with replacing the existing
+    clipboard contents, without removing the text from the buffer..
+   </para>
+   <para>
+    <guimenu>Edit</>&gt;<guimenuitem>Paste</>
+    (shortcut: <keycombo><keycap>Control</><keycap>V</></keycombo>)
+    inserts the clipboard contents in place of the selection (or at the
+    caret position, if there is no selection).
+   </para>
+   <sidebar><title>The X Window System</>
+    <para>
+     The X Window System on Unix actually has two system-wide
+     storage areas for text;
+     the <quote>primary selection</>, and the <quote>clipboard</>.
+     jEdit only uses the clipboard. However, the XClipboard plugin
+     (see <xref linkend=plugins> for information about installing
+     plugins) allows read-only access to the primary selection.
+    </para>
+   </sidebar>
+  </sect2>
+  <sect2><title>General Register Commands</>
+   <para>
+    These commands are slightly less convinient to use than the two methods of
+    transferring text descirbed above, but have the advantage that they allow
+    any number of strings to be copied simultaneously.
+   </para>
+   <para>
+    These commands all expect a single-character
+    register name to be typed at the keyboard after the command is
+    invoked, and subsequently operate on that register.
+   </para>
    <para>
     <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Cut to Register</>
     (shortcut: <keycombo><keycap>Control</><keycap>R</></keycombo>
@@ -522,11 +506,18 @@
     register, leaving it in the buffer.
    </para>
    <para>
-    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Append to Register</>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Cut Append to Register</>
+    (shortcut: <keycombo><keycap>Control</><keycap>R</></keycombo>
+    <keycombo><keycap>Control</><keycap>U</></keycombo>)
+    adds the selected text to the existing contents of the specified
+    register, and removes it from the buffer.
+   </para>
+   <para>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Copy Append to Register</>
     (shortcut: <keycombo><keycap>Control</><keycap>R</></keycombo>
     <keycombo><keycap>Control</><keycap>A</></keycombo>)
     adds the selected text to the existing contents of the specified
-    register.
+    register, without removing it from the buffer.
    </para>
    <para>
     <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Paste from Register</>
@@ -535,42 +526,94 @@
     replaces the selection with the
     contents of the specified register.
    </para>
+   <para>
+    <guimenu>Edit</>&gt;<guimenuitem>Paste Previous</> (shortcut:
+    <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>V</></keycombo>)
+    displays a dialog box listing recently copied and
+    pasted text. By default, the last 20 strings are remembered; this can be
+    changed in the <guibutton>General</> pane of the
+    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+   </para>
+   <para>
+    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>View Registers</>
+    displays a dialog box for
+    viewing the contents of registers (including the clipboard).
+   </para>
   </sect2>
-  <sect2 id=pos-registers><title>Position Registers</>
-   <para>
-    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Save Position to Register</>
-    (shortcut: <keycombo><keycap>Control</><keycap>T</></keycombo>)
-    stores the current
-    buffer name and caret position in the specified register.
-   </para>
-   <para>
-    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Go to Position
-    in Register</>
-    (shortcut: <keycombo><keycap>Control</><keycap>Y</></keycombo>)
-    opens the buffer
-    named in the specified register (if necessary), and moves the caret
-    to the saved position.
-   </para>
-   <para>
-    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Select to
-    Position in Register</>
-    (shortcut: <keycombo><keycap>Control</><keycap>U</></keycombo>)
-    creates a selection
-    from the current caret position to the position saved in the specified register.
-   </para>
-   <para>
-    <guimenu>Edit</>&gt;<guisubmenu>Registers</>&gt;<guimenuitem>Swap Position with Register</>
-    (shortcut: <keycombo><keycap>Control</><keycap>K</></keycombo>)
-    goes to the position stored in the specified register, and saves the
-    previous position in that register.
-   </para>
-   <note>
-    <para>
-     Caret positions cannot be saved to the register <filename>$</>
-     (clipboard).
-    </para>
-   </note>
-  </sect2>
+ </sect1>
+ <sect1 id=markers><title>Markers</>
+  <para>
+   Each buffer can have any number of <firstterm>markers</> defined, pointing to
+   specific locations within that buffer. Each line in a buffer can have
+   at most one marker set pointing to it. Markers are persistent; they are
+   saved to
+   <filename>.<replaceable>filename</>.marks</>, where
+   <replaceable>filename</> is the file name. (The dot prefix
+   makes the marker file hidden on Unix systems). Marker persistance can be
+   disabled in the <guibutton>Loading and Saving</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+   dialog box; see <xref linkend=global-opts> for information about the 
+   global options dialog box.
+  </para>
+  <para>
+   Markers are listed in the <guimenu>Markers</> menu; selecting a marker from
+   this menu is the simplest way to return to its locaiton.
+   Each marker can optionally have a single-character shortcut; markers without
+   a shortcut can only be returned to using the menu, markers with a shortcut
+   can be accessed more quickly from the keyboard.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Add Marker</> (shortcut:
+   <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>M</></keycombo>) adds a marker without a
+   shortcut pointing to the current line.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Add Marker With Shortcut</>
+   (shortcut: <keycombo><keycap>Control</><keycap>T</></keycombo>)
+   reads the next character entered at the keyboard, and adds a marker with that
+   shortcut pointing to the current line. If a previously-defined marker already
+   has that shortcut, it will no longer have that shortcut, but will remain
+   in the buffer.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Go to Marker</>
+   (shortcut: <keycombo><keycap>Control</><keycap>Y</></keycombo>)
+   reads the next character entered at the keyboard, and moves the caret to the
+   location of the marker with that shortcut.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Select to Marker</>
+   (shortcut: <keycombo><keycap>Control</><keycap>U</></keycombo>)
+   reads the next character entered at the keyboard, and extends
+   the selection to the location of the marker with that shortcut.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Swap Caret and Marker</>
+   (shortcut: <keycombo><keycap>Control</><keycap>U</></keycombo>)
+   reads the next character entered at the keyboard, and swaps the
+   position of the caret with
+   the location of the marker with that shortcut.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Go to Previous Marker</>
+   (shortcut: <keycombo><keycap>Alt</><keycap>Up</></>) goes
+   to the nearest marker before the caret position.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Go to Next Marker</>
+   (shortcut: <keycombo><keycap>Alt</><keycap>Down</></>)
+   goes to the nearest marker after the caret position.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Remove Marker From Current Line</>
+   removes the marker set at the current line, if there is one.
+  </para>
+  <para>
+   <guimenu>Markers</>&gt;<guimenuitem>Remove All Markers</>
+   removes all markers set in the current buffer.
+  </para>
  </sect1>
  <sect1 id=search-replace><title>Search and Replace</>
   <sect2><title>Searching For Text</>

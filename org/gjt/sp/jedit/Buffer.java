@@ -66,11 +66,10 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	/**
 	 * Caret info properties.
-	 * @since 2.2pre7
+	 * @since 3.2pre1
 	 */
-	public static final String SELECTION_START = "Buffer__selStart";
-	public static final String SELECTION_END = "Buffer__selEnd";
-	public static final String SELECTION_RECT = "Buffer__rect";
+	public static final String CARET = "Buffer__caret";
+	public static final String SELECTION = "Buffer__selection";
 	public static final String SCROLL_VERT = "Buffer__scrollVert";
 	public static final String SCROLL_HORIZ = "Buffer__scrollHoriz";
 	public static final String OVERWRITE = "Buffer__overwrite";
@@ -2589,11 +2588,13 @@ loop:				for(int i = 0; i < count; i++)
 			for(int i = 0; i < markers.size(); i++)
 			{
 				Marker marker = (Marker)markers.elementAt(i);
-				if((shortcut != '\0' && marker.getShortcut() == shortcut)
-					|| map.getElementIndex(marker.getPosition())
-					== line)
+				if(shortcut != '\0' && marker.getShortcut() == shortcut)
+					marker.setShortcut('\0');
+
+				if(map.getElementIndex(marker.getPosition()) == line)
 				{
 					markers.removeElementAt(i);
+					i--;
 				}
 			}
 

@@ -3,6 +3,7 @@
  *         Boyer-Moore algorithm
  * Copyright (C) 1999, 2000 mike dillon
  * Portions copyright (C) 2001 Tom Locke
+ * Portions copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,20 +22,19 @@
 
 package org.gjt.sp.jedit.search;
 
+import bsh.*;
 import javax.swing.text.Segment;
+import org.gjt.sp.jedit.BeanShell;
 import org.gjt.sp.util.Log;
 
 public class BoyerMooreSearchMatcher implements SearchMatcher
 {
 	/**
 	 * Creates a new string literal matcher.
-	 * @param pattern The search string
-	 * @param replace The replacement string
-	 * @param ignoreCase True if the matcher should be case insensitive,
-	 * false otherwise
 	 */
 	public BoyerMooreSearchMatcher(String pattern, String replace,
-		boolean ignoreCase, boolean reverseSearch)
+		boolean ignoreCase, boolean reverseSearch,
+		boolean beanshell, BshMethod replaceMethod)
 	{
 		if (ignoreCase)
 		{
@@ -58,6 +58,9 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		this.replace = replace;
 		this.ignoreCase = ignoreCase;
 		this.reverseSearch = reverseSearch;
+		this.beanshell = beanshell;
+		this.replaceMethod = replaceMethod;
+		replaceArgs = new Object[10];
 
 		generateSkipArray();
 		generateSuffixArray();
@@ -91,48 +94,22 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 * within this matcher performed.
 	 * @param text The text
 	 */
-	public String substitute(String text)
+	public String substitute(String text) throws Exception
 	{
-		if (reverseSearch)
-			throw new RuntimeException("Reverse substitution not implemented");
-
-		StringBuffer buf = null;
-
-		int pos, lastMatch = 0;
-		int length = text.length();
-
-		char[] chars = text.toCharArray();
-
-		while ((pos = match(chars, lastMatch, length)) != -1)
+		if(beanshell)
 		{
-			if (buf == null)
-			{
-				buf = new StringBuffer(length);
-			}
-
-			if (pos != lastMatch)
-			{
-				buf.append(chars, lastMatch, pos - lastMatch);
-			}
-
-			buf.append(replace);
-
-			lastMatch = pos + pattern.length;
-		}
-
-		if(buf == null)
-		{
-			return null;
+			Interpreter interp = BeanShell.getInterpreter();
+			Object[] args = new Object[10];
+			args[0] = text;
+			Object obj = replaceMethod.invokeDeclaredMethod(
+				args,interp);
+			if(obj == null)
+				return null;
+			else
+				return obj.toString();
 		}
 		else
-		{
-			if(lastMatch < chars.length)
-			{
-				buf.append(chars, lastMatch,length - lastMatch);
-			}
-
-			return buf.toString();
-		}
+			return replace;
 	}
 
 	/*
@@ -220,6 +197,9 @@ SEARCH:
 	private String replace;
 	private boolean ignoreCase;
 	private boolean reverseSearch;
+	private boolean beanshell;
+	private BshMethod replaceMethod;
+	private Object[] replaceArgs;
 
 	// Boyer-Moore member fields
 	private int[] skip;

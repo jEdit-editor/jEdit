@@ -191,18 +191,51 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void saveCaretInfo()
 	{
-		buffer.putProperty(Buffer.SELECTION_START,new Integer(
-			textArea.getSelectionStart()));
-		buffer.putProperty(Buffer.SELECTION_END,new Integer(
-			textArea.getSelectionEnd()));
-		buffer.putProperty(Buffer.SELECTION_RECT,new Boolean(
-			textArea.isSelectionRectangular()));
+		buffer.putProperty(Buffer.CARET,new Integer(
+			textArea.getCaretPosition()));
+
+		Selection[] selection = textArea.getSelection();
+		if(selection != null)
+			buffer.putProperty(Buffer.SELECTION,selection);
+
 		buffer.putProperty(Buffer.SCROLL_VERT,new Integer(
 			textArea.getFirstLine()));
 		buffer.putProperty(Buffer.SCROLL_HORIZ,new Integer(
 			textArea.getHorizontalOffset()));
 		buffer.putProperty(Buffer.OVERWRITE,new Boolean(
 			textArea.isOverwriteEnabled()));
+	}
+
+	/**
+	 * Loads the caret information from the curret buffer.
+	 * @since jEdit 2.5pre2
+	 */
+	public void loadCaretInfo()
+	{
+		Integer caret = (Integer)buffer.getProperty(Buffer.CARET);
+		Selection[] selection = (Selection[])buffer.getProperty(Buffer.SELECTION);
+
+		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
+		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
+		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
+
+		if(caret != null)
+		{
+			textArea.setCaretPosition(Math.min(caret.intValue(),
+				buffer.getLength()));
+		}
+
+		if(selection != null)
+			textArea.setSelection(selection);
+
+		if(firstLine != null && horizontalOffset != null)
+		{
+			textArea.setFirstLine(firstLine.intValue());
+			textArea.setHorizontalOffset(horizontalOffset.intValue());
+		}
+
+		if(overwrite != null)
+			textArea.setOverwriteEnabled(overwrite.booleanValue());
 	}
 
 	public void handleMessage(EBMessage msg)
@@ -216,40 +249,6 @@ public class EditPane extends JPanel implements EBComponent
 			textArea.getGutter().repaint();
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
-	}
-
-	/**
-	 * Loads the caret information from the curret buffer.
-	 * @since jEdit 2.5pre2
-	 */
-	public void loadCaretInfo()
-	{
-		Integer start = (Integer)buffer.getProperty(Buffer.SELECTION_START);
-		Integer end = (Integer)buffer.getProperty(Buffer.SELECTION_END);
-		Boolean rectSel = (Boolean)buffer.getProperty(Buffer.SELECTION_RECT);
-		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
-		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
-		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
-
-		if(start != null && end != null)
-		{
-			textArea.select(Math.min(start.intValue(),
-				buffer.getLength()),
-				Math.min(end.intValue(),
-				buffer.getLength()));
-		}
-
-		if(firstLine != null && horizontalOffset != null)
-		{
-			textArea.setFirstLine(firstLine.intValue());
-			textArea.setHorizontalOffset(horizontalOffset.intValue());
-		}
-
-		if(rectSel != null && overwrite != null)
-		{
-			textArea.setSelectionRectangular(rectSel.booleanValue());
-			textArea.setOverwriteEnabled(overwrite.booleanValue());
-		}
 	}
 
 	/**
@@ -308,9 +307,6 @@ public class EditPane extends JPanel implements EBComponent
 	private CaretStatus caretStatus;
 	private JEditTextArea textArea;
 	private MarkerHighlight markerHighlight;
-
-	// buttons that control folding
-	private JButton level1, level2, level3, expandAll;
 
 	private void propertiesChanged()
 	{

@@ -3,6 +3,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.pluginmgr.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;

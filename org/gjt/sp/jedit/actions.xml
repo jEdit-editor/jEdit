@@ -516,6 +516,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="plugin-manager">
+	<CODE>
+		new PluginManager();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="prev-bracket">
 	<CODE>
 		textArea.goToPrevBracket(false);
@@ -856,7 +862,7 @@
 
 <ACTION NAME="select-none">
 	<CODE>
-		textArea.selectNone();
+		textArea.setSelection(null);
 	</CODE>
 </ACTION>
 
@@ -975,15 +981,6 @@
 	</CODE>
 	<IS_SELECTED>
 		return textArea.getGutter().isExpanded();
-	</IS_SELECTED>
-</ACTION>
-
-<ACTION NAME="toggle-rect">
-	<CODE>
-		textArea.toggleSelectionRectangular();
-	</CODE>
-	<IS_SELECTED>
-		return textArea.isSelectionRectangular();
 	</IS_SELECTED>
 </ACTION>
 

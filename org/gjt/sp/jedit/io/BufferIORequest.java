@@ -183,19 +183,22 @@ public class BufferIORequest extends WorkRequest
 				VFSManager.error(view,"ioerror",args);
 			}
 
-			try
+			if(jEdit.getBooleanProperty("persistentMarkers"))
 			{
-				String[] args = { vfs.getFileName(path) };
-				setStatus(jEdit.getProperty("vfs.status.load-markers",args));
-				setAbortable(true);
+				try
+				{
+					String[] args = { vfs.getFileName(path) };
+					setStatus(jEdit.getProperty("vfs.status.load-markers",args));
+					setAbortable(true);
 
-				in = vfs._createInputStream(session,markersPath,true,view);
-				if(in != null)
-					readMarkers(buffer,in);
-			}
-			catch(IOException io)
-			{
-				// ignore
+					in = vfs._createInputStream(session,markersPath,true,view);
+					if(in != null)
+						readMarkers(buffer,in);
+				}
+				catch(IOException io)
+				{
+					// ignore
+				}
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -504,7 +507,8 @@ public class BufferIORequest extends WorkRequest
 
 				// We only save markers to VFS's that support deletion.
 				// Otherwise, we will accumilate stale marks files.
-				if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0
+				if(jEdit.getBooleanProperty("persistentMarkers")
+					&& (vfs.getCapabilities() & VFS.DELETE_CAP) != 0
 					&& buffer.getMarkers().size() != 0)
 				{
 					setStatus(jEdit.getProperty("vfs.status.save-markers",args));

@@ -1,6 +1,6 @@
 /*
  * SearchBar.java - Search & replace toolbar
- * Portions copyright (C) 2000 Slava Pestov
+ * Portions copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,18 +89,19 @@ public class SearchBar extends JPanel
 		return find;
 	}
 
+	public void setHyperSearch(boolean hyperSearch)
+	{
+		jEdit.setBooleanProperty("search.hypersearch.toggle",hyperSearch);
+		update();
+	}
+
 	public void update()
 	{
 		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 		regexp.setSelected(SearchAndReplace.getRegexp());
-		setHyperSearch(hyperSearch.isSelected());
-	}
-
-	public void setHyperSearch(boolean hyperSearch)
-	{
-		jEdit.setBooleanProperty("search.hypersearch.toggle",hyperSearch);
-		this.hyperSearch.setSelected(hyperSearch);
-		find.setModel(hyperSearch ? "find" : null);
+		hyperSearch.setSelected(jEdit.getBooleanProperty(
+			"search.hypersearch.toggle"));
+		find.setModel(hyperSearch.isSelected() ? "find" : null);
 	}
 
 	// private members
@@ -187,7 +188,11 @@ public class SearchBar extends JPanel
 			if(evt.getSource() == find)
 				find(false);
 			else if(evt.getSource() == hyperSearch)
+			{
+				jEdit.setBooleanProperty("search.hypersearch.toggle",
+					hyperSearch.isSelected());
 				update();
+			}
 			else if(evt.getSource() == ignoreCase)
 			{
 				SearchAndReplace.setIgnoreCase(ignoreCase

@@ -1,0 +1,14 @@
+<html><body>
+You can replace all occurrences of a specific string (or regular
+expression) with the return value of a BeanShell script. You can use
+this, for example, to convert all tags in an HTML file to lower case, by
+searching for the following regular expression:<p>
+
+<code>&lt;(.+?)&gt;</code>
+
+And entering the following in the <b>Return value of a BeanShell
+snippet</b> text field:<p>
+
+<code>"&lt;" + _1.toLowerCase() + "&gt;"</code>
+
+</body></html>

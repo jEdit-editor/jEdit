@@ -30,11 +30,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
 /**
- * jEdit's registers are an extension of the clipboard metaphor. There
- * can be an unlimited number of registers, each one holding a string,
- * caret position, or file name. By default, register "$" contains the
- * clipboard, and all other registers are empty. Actions invoked by
- * the user and the methods in this class can change register contents.
+ * jEdit's registers are an extension of the clipboard metaphor.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -200,26 +196,32 @@ public class Registers
 	/**
 	 * Sets the specified register.
 	 * @param name The name
-	 * @param value The new value
+	 * @param newRegister The new value
 	 */
-	public static void setRegister(char name, String value)
+	public static void setRegister(char name, Register newRegister)
 	{
-		setRegister(name,new StringRegister(value));
+		if(name >= registers.length)
+		{
+			Register[] newRegisters = new Register[
+				Math.min(1<<16,name * 2)];
+			System.arraycopy(registers,0,newRegisters,0,
+				registers.length);
+			registers = newRegisters;
+		}
+
+		registers[name] = newRegister;
+
+		EditBus.send(new RegistersChanged(null));
 	}
 
 	/**
 	 * Sets the specified register.
 	 * @param name The name
-	 * @param newRegister The new value
+	 * @param value The new value
 	 */
 	public static void setRegister(char name, String value)
 	{
-		if(registers == null)
-		{
-			registers = new Register[name + 1];
-			registers[name] = new StringRegister(value);
-		}
-		else if(name >= registers.length)
+		if(name >= registers.length)
 		{
 			Register[] newRegisters = new Register[
 				Math.min(1<<16,name * 2)];
@@ -281,7 +283,7 @@ public class Registers
 		/**
 		 * Sets the register contents.
 		 */
-		setValue(String value);
+		void setValue(String value);
 	}
 
 	/**
@@ -389,7 +391,8 @@ public class Registers
 
 	static
 	{
-		setRegister('$',new ClipboardRegister());
-		setRegister('%',new StringRegister(""));
+		registers = new Register[256];
+		registers['$'] = new ClipboardRegister();
+		registers['%'] = new StringRegister("");
 	}
 }

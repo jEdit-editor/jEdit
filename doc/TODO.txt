@@ -4,16 +4,13 @@ This list is a real mess... Note that not all these changes will be
 implemented in jEdit 3.2. Some might appear in a future version, some
 might never be implemented at all.
 
-+ search and replace
- - reverse regexp search
- - option for auto wrap around in search
- - search and replace: option to use BeanShell in replace string,
-   eg $0.toLowerCase(). That would be rather cool.
- - don't clear hypersearch results between subsequent searches, instead
-   have a 'Clear' button in the results window
- - hypersearch: select all found results using dicont. select
-
-- config option for controlling marker persistance
+- reverse regexp search
+- hypersearch: select all found results using dicont. select
+- hypersearch: multiple results
+- XThis: don't throw exceptions for non-existent methods
+- CVS: add tip34-37.html
+- CVS: add Selection.java
+- caret event not always fired
 
 + editing
  - wing comment with rect sel active puts comment start/end at the
@@ -68,8 +65,8 @@ might never be implemented at all.
  - use Dirk's VariableGridLayout more
  - escape in 'add abbrev' dialog
  - docked windows: discourage use of check box menu items, instead menu
-   item calls addDockableWindow() and right click on tab shows menu with
-   'Close'
+   item calls addDockableWindow() and right click on tab shows closes
+ - View->Close Docked Window menu
  - fix dragStart handling in DockableWindowContainer.TabbedPane
  - C+i in shortcuts editor
  - 'new view' creates incorrectly sized views due to Java bugs
@@ -77,17 +74,15 @@ might never be implemented at all.
 
 + beanshell
  - improve handling of __char__
- - BeanShell class uses deprecated showFileDialog() method
  - runmacro= switch, nomacro switch
 
 + documentation
  - get rid of final blank page of user's guide
  - Migrate documentation to DocBook/XML
- - documentation: merge 'Text Registers' and 'The Clipboard' sections,
-   also mention MMB in those sections. Merge 'Markers' and 'Position
-   Registers'.
  - update macro guide for misc. API changes:
    - markers, registers, should probably be mentioned?
+   - s&r changes
+ - document new search and replace features
  - Include John's upcoming plugin guide
 
 + misc
