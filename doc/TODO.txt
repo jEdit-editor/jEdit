@@ -2,6 +2,7 @@ TO DO
 
 + 4.0.1:
 
+- make fs color regexp error more intuitive
 - need to investigate:
   - scroll to caret _still_ jumps around?
   - mouse clicks not working?
@@ -16,6 +17,7 @@ TO DO
 
 + in 4.1:
 
+- rect select hypersearch
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
 - drag and up and down should not need setFirstLine() stupidity
