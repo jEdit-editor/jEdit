@@ -196,7 +196,7 @@ public abstract class TokenMarker
 	public void reset()
 	{
 		lastLine = -1;
-		lineInfo = null;
+		length = 0;
 	}
 
 	/**
@@ -366,6 +366,9 @@ public abstract class TokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  1999/12/07 07:27:59  sp
+ * TokenMarker.reset() fixed
+ *
  * Revision 1.29  1999/12/07 07:19:36  sp
  * Buffer loading code cleaned up
  *
