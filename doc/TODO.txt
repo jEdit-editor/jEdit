@@ -89,10 +89,6 @@ speed things up a lot.
 When saving a file, it will first be saved to .<filename>.save, and
 only then renamed to <filename> if the save was successful.
 
-* More than one shortcut per command
-
-It should be possible to assign more than one shortcut to each command.
-
 * Minor changes
 
 - The File->Current Directory menu will not list backups and autosaves.
