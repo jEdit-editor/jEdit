@@ -684,6 +684,7 @@ public class View extends JFrame implements EBComponent
 		EditPane editPane = new EditPane(this,pane,buffer);
 		editPane.getTextArea().addCaretListener(new CaretHandler());
 		editPane.getTextArea().addFocusListener(new FocusHandler());
+		EditBus.send(new EditPaneUpdate(editPane,EditPaneUpdate.CREATED));
 		return editPane;
 	}
 
@@ -1003,6 +1004,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.172  2000/05/12 11:07:38  sp
+ * Bug fixes, documentation updates
+ *
  * Revision 1.171  2000/05/09 10:51:51  sp
  * New status bar, a few other things
  *

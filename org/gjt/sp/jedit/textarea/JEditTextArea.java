@@ -94,14 +94,6 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Returns 0,0 for split pane compatibility.
-	 */
-	public final Dimension getMinimumSize()
-	{
-		return new Dimension(0,0);
-	}
-
-	/**
 	 * Returns the object responsible for painting this text area.
 	 */
 	public final TextAreaPainter getPainter()
@@ -2183,6 +2175,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.62  2000/05/12 11:07:39  sp
+ * Bug fixes, documentation updates
+ *
  * Revision 1.61  2000/05/09 10:51:52  sp
  * New status bar, a few other things
  *

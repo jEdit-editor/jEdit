@@ -919,7 +919,7 @@ class FindByDate extends JPanel implements FindFilterFactory
 	protected JComboBox toDateField = null;
 
 	protected String[] fromDateItems = {THE_BIG_BANG, YESTERDAY, TODAY};
-	protected String[] toDateItems = {THE_BIG_CRUNCH, TODAY, NOW, YESTERDAY};
+	protected String[] toDateItems = {THE_BIG_CRUNCH, NOW, TODAY, YESTERDAY};
 
 
 	FindByDate()
@@ -1187,7 +1187,8 @@ class FindByName extends JPanel implements FindFilterFactory
 			{
 				try
 				{
-					matchRE = new RE(MiscUtilities.globToRE(name));
+					matchRE = new RE(MiscUtilities.globToRE(name),
+						(ignoreCase ? RE.REG_ICASE : 0));
 				}
 				catch(REException re)
 				{
@@ -1292,6 +1293,9 @@ class FindByName extends JPanel implements FindFilterFactory
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/05/12 11:07:39  sp
+ * Bug fixes, documentation updates
+ *
  * Revision 1.2  2000/05/09 10:51:52  sp
  * New status bar, a few other things
  *

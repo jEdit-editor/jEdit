@@ -1,5 +1,22 @@
 JEDIT 2.5 VERSION HISTORY
 
+* Version 2.5pre3
+
++ Enhancements
+
+- Documentation updates
+
++ Bug Fixes
+
+- EditPaneUpdate.CREATED message was never sent (since 2.5pre2)
+- Sometimes, resizing of the split panes wasn't possible (since 2.5pre2)
+- FtpClient didn't work on MacOS (since 2.5pre1)
+- When splitting a view, the newly created edit pane would edit the wrong
+  buffer (since 2.5pre2)
+- The file finder in the open dialog box didn't support case-insensitive
+  pattern matching (since 2.5pre2)
+- Wait cursor handling was broken in the FTP browser (since 2.5pre1)
+
 * Version 2.5pre2
 
 + New Features

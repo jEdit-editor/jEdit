@@ -464,12 +464,9 @@ public class FtpBrowser extends JDialog
 			if(source == select)
 			{
 				if(!connected)
-				{
 					connect();
-					return;
-				}
-
-				selectPath();
+				else
+					selectPath();
 			}
 			else if(source == refresh)
 			{
@@ -559,6 +556,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/05/12 11:07:39  sp
+ * Bug fixes, documentation updates
+ *
  * Revision 1.6  2000/05/09 10:51:52  sp
  * New status bar, a few other things
  *

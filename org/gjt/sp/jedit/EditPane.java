@@ -191,6 +191,14 @@ public class EditPane extends JPanel implements EBComponent
 		}
 	}
 
+	/**
+	 * Returns 0,0 for split pane compatibility.
+	 */
+	public final Dimension getMinimumSize()
+	{
+		return new Dimension(0,0);
+	}
+
 	// package-private members
 	EditPane(View view, EditPane editPane, Buffer buffer)
 	{
@@ -215,7 +223,12 @@ public class EditPane extends JPanel implements EBComponent
 		initBufferTabs();
 
 		if(buffer == null)
-			setBuffer(jEdit.getFirstBuffer());
+		{
+			if(editPane != null)
+				setBuffer(editPane.getBuffer());
+			else
+				setBuffer(jEdit.getFirstBuffer());
+		}
 		else
 			setBuffer(buffer);
 
@@ -559,6 +572,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/05/12 11:07:38  sp
+ * Bug fixes, documentation updates
+ *
  * Revision 1.2  2000/05/09 10:51:51  sp
  * New status bar, a few other things
  *

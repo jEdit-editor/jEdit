@@ -98,6 +98,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				undo.setLimit(100);
 			}
 		}
+
+		// cache it for improved performance
+		putProperty("tabSize",getProperty("tabSize"));
 	}
 
 	/**
@@ -1808,6 +1811,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.149  2000/05/12 11:07:38  sp
+ * Bug fixes, documentation updates
+ *
  * Revision 1.148  2000/05/07 05:48:29  sp
  * You can now edit several buffers side-by-side in a split view
  *

@@ -131,6 +131,21 @@ public class Mode
 	 */
 	public Object getProperty(String key)
 	{
+		String property = jEdit.getProperty("mode." + name + "." + key);
+		if(property != null)
+		{
+			Object value;
+			try
+			{
+				value = new Integer(property);
+			}
+			catch(NumberFormatException nf)
+			{
+				value = property;
+			}
+			return value;
+		}
+
 		return props.get(key);
 	}
 
@@ -223,6 +238,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/05/12 11:07:38  sp
+ * Bug fixes, documentation updates
+ *
  * Revision 1.26  2000/04/15 07:07:24  sp
  * Smarter auto indent
  *
