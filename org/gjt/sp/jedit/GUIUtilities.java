@@ -365,9 +365,9 @@ public class GUIUtilities
 	}
 
 	/**
-	 * `Prettifies' a menu item label by removing the `$' sign and the
-	 * training ellipisis, if any. This can be used to process the
-	 * contents of an <i>action</i>.label property.
+	 * `Prettifies' a menu item label by removing the `$' sign. This
+	 * can be used to process the contents of an <i>action</i>.label
+	 * property.
 	 */
 	public static String prettifyMenuLabel(String label)
 	{
@@ -377,8 +377,6 @@ public class GUIUtilities
 			label = label.substring(0,index)
 				.concat(label.substring(index + 1));
 		}
-		if(label.endsWith("..."))
-			label = label.substring(0,label.length() - 3);
 		return label;
 	}
 

@@ -273,8 +273,9 @@ public class EditPane extends JPanel implements EBComponent
 		EditBus.addToBus(this);
 
 		textArea = new JEditTextArea(view);
-		textArea.add(JEditTextArea.LEFT_OF_SCROLLBAR,caretStatus
-			= new CaretStatus(this));
+
+		textArea.add(JEditTextArea.LEFT_OF_SCROLLBAR,
+			caretStatus = new CaretStatus(this));
 		textArea.addCaretListener(new CaretHandler());
 		add(BorderLayout.CENTER,textArea);
 		markerHighlight = new MarkerHighlight();
@@ -308,6 +309,9 @@ public class EditPane extends JPanel implements EBComponent
 	private CaretStatus caretStatus;
 	private JEditTextArea textArea;
 	private MarkerHighlight markerHighlight;
+
+	// buttons that control folding
+	private JButton level1, level2, level3, expandAll;
 
 	private void propertiesChanged()
 	{

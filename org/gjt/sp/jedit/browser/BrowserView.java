@@ -407,6 +407,8 @@ public class BrowserView extends JPanel
 								userObject;
 							showFilePopup(file,evt.getPoint());
 						}
+						else
+							showFilePopup(null,evt.getPoint());
 					}
 
 					break;

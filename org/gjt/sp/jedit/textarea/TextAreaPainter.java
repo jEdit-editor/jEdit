@@ -536,7 +536,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				- fm.getLeading() - fm.getDescent();
 
 			x = buffer.paintSyntaxLine(physicalLine,styles,
-				this,gfx,getBackground(),x,baseLine);
+				this,true,true,gfx,getBackground(),x,baseLine);
 
 			if(eolMarkers)
 			{

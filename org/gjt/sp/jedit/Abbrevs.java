@@ -96,13 +96,16 @@ public class Abbrevs
 			(String)buffer.getProperty("noWordSep"));
 
 		String abbrev = lineText.substring(wordStart,pos);
-		Expansion expand = Abbrevs.expandAbbrev(buffer.getMode().getName(),abbrev);
+		Expansion expand = Abbrevs.expandAbbrev(buffer.getMode().getName(),
+			abbrev,(buffer.getBooleanProperty("noTabs") ?
+			buffer.getTabSize() : 0));
 
 		if(expand == null)
 		{
 			if(add)
-				addAbbrev(view,abbrev);
-			return false;
+				return addAbbrev(view,abbrev);
+			else
+				return false;
 		}
 		else
 		{
@@ -138,9 +141,12 @@ public class Abbrevs
 	 * Locates a completion for the specified abbrev.
 	 * @param mode The edit mode
 	 * @param abbrev The abbrev
-	 * @since jEdit 2.6pre4
+	 * @param softTabSize The soft tab size, or zero if hard tabs should
+	 * be used in the expansion
+	 * @since jEdit 3.1pre1
 	 */
-	public static Expansion expandAbbrev(String mode, String abbrev)
+	public static Expansion expandAbbrev(String mode, String abbrev,
+		int softTabSize)
 	{
 		// try mode-specific abbrevs first
 		String expand = null;
@@ -154,7 +160,7 @@ public class Abbrevs
 		if(expand == null)
 			return null;
 		else
-			return new Expansion(expand);
+			return new Expansion(expand,softTabSize);
 	}
 
 	/**
@@ -167,7 +173,7 @@ public class Abbrevs
 		public int caretPosition = -1;
 		public int lineCount;
 
-		public Expansion(String text)
+		public Expansion(String text, int softTabSize)
 		{
 			StringBuffer buf = new StringBuffer();
 			boolean backslash = false;
@@ -186,6 +192,16 @@ public class Abbrevs
 						buf.append('\n');
 						lineCount++;
 					}
+					else if(ch == 't')
+					{
+						if(softTabSize == 0)
+							buf.append('\t');
+						else
+						{
+							for(int j = 0; j < softTabSize; j++)
+								buf.append(' ');
+						}
+					}
 					else
 						buf.append(ch);
 				}
@@ -196,25 +212,6 @@ public class Abbrevs
 			}
 
 			this.text = buf.toString();
-		}
-
-		public String toString()
-		{
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < text.length(); i++)
-			{
-				if(i == caretPosition)
-					buf.append("\\|");
-
-				char ch = text.charAt(i);
-				if(ch == '\n')
-					buf.append("\\n");
-				else if(ch == '\\')
-					buf.append("\\\\");
-				else
-					buf.append(ch);
-			}
-			return buf.toString();
 		}
 	}
 
@@ -424,7 +421,7 @@ public class Abbrevs
 		}
 	}
 
-	private static void addAbbrev(View view, String abbrev)
+	private static boolean addAbbrev(View view, String abbrev)
 	{
 		String[] args = { abbrev };
 		JTextField textField = new JTextField();
@@ -443,7 +440,7 @@ public class Abbrevs
 
 		String expand = textField.getText();
 		if(expand == null || (retVal != 0 && retVal != 1))
-			return;
+			return false;
 
 		if(retVal == 1)
 		{
@@ -461,54 +458,6 @@ public class Abbrevs
 
 		abbrevsChanged = true;
 
-		expandAbbrev(view,false);
+		return expandAbbrev(view,false);
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.19  2000/11/19 07:51:24  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.18  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.17  2000/10/12 09:28:26  sp
- * debugging and polish
- *
- * Revision 1.16  2000/09/01 11:31:00  sp
- * Rudimentary 'command line', similar to emacs minibuf
- *
- * Revision 1.15  2000/08/29 07:47:10  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.14  2000/08/23 09:51:48  sp
- * Documentation updates, abbrev updates, bug fixes
- *
- * Revision 1.13  2000/08/22 07:25:00  sp
- * Improved abbrevs, bug fixes
- *
- * Revision 1.12  2000/07/19 08:35:58  sp
- * plugin devel docs updated, minor other changes
- *
- * Revision 1.11  2000/04/27 08:32:56  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.10  2000/04/15 04:14:46  sp
- * XML files updated, jEdit.get/setBooleanProperty() method added
- *
- * Revision 1.9  2000/03/21 07:18:53  sp
- * bug fixes
- *
- * Revision 1.8  2000/03/11 03:02:15  sp
- * 2.3final
- *
- * Revision 1.7  2000/03/04 03:39:54  sp
- * *** empty log message ***
- *
- * Revision 1.6  2000/02/15 07:44:30  sp
- * bug fixes, doc updates, etc
- *
- */

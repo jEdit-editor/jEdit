@@ -5,6 +5,13 @@ JEDIT 3.1 VERSION HISTORY
 + New Features
 
 - File permissions are now preserved when saving files on Unix systems
+- Folding
+  - Currently, only indent-based folding is supported. Support for more
+    folding algorithms will be added later
+  - Folds can be collapsed an expanded in the gutter, or using the
+    commands in the View->Folding menu
+  - The default fold visibility level can be set in the `Global Options'
+    dialog box
 
 + Enhancements
 
@@ -13,7 +20,7 @@ JEDIT 3.1 VERSION HISTORY
   cache on subsequent starts, jEdit now loads a 'mode catalog' file,
   which must be manually updated when modes are added or removed. There
   is one catalog in the system mode directory, and one in the user mode
-  directory. This eliminates the lengthy wait when starti2ng jEdit for
+  directory. This eliminates the lengthy wait when starting jEdit for
   the first time.
 - Plugin shortcuts are now shown in a separate option pane
 - Gutter changes:
@@ -26,17 +33,36 @@ JEDIT 3.1 VERSION HISTORY
 - Docking area separators now look like split pane dividers when running
   with the Metal look and feel
 - jEdit now notices if a file's read only status changes on disk
+- \t can now be used in abbreviation expansions to insert a tab
 
 + API Changes
 
-- EditAction.EditAction(String) deprecated. Plugins should no longer be
-  subclassing EditAction; write an actions.xml file instead.
-- MenuBarModel, MenuModel, MenuItemModel, ToolBarModel classes removed.
-  Since plugins do not use these classes directly, it should not cause
-  any breakage.
 - invalidateLine(), invalidateLineRange() methods in Gutter and
   TextAreaPainter classes replaced by methods with same names in
   JEditTextArea class
+- Text area highlighters will need to be updated to work properly with
+  folding.
+  - jEdit now makes the distinction between 'virtual' and 'physical'
+    line numbers. A physical line number is the line number in the
+    document. A virtual line number is a line number on screen.
+  - Buffer.virtualToPhysical() converts a virtual line number to a
+    physical one. This method is very fast as it only involves an
+    array lookup.
+  - Buffer.physicalToVirtual() converts a physical line number to a
+    virtual one. This method performs a binary search, so the number of
+    operations depends on log_2(line count). For example, if the buffer
+    has 4000 lines, this methd will require approximately 14 comparisons.
+  - JEditTextArea.get/setFirstLine(), lineToY(), yToLine() operate on
+    virtual line numbers.
+  - All other methods in the text area class (including
+    invalidateLine(), invalidateLineRange()) operate on physical line
+    numbers.
+  - TextAreaHighlight.paintHighlight() is passed a virtual line number.
+- Code that deals with token markers will need to be updated.
+  - markTokens() method in TokenMarker class should not be called. Call
+    Buffer.markTokens() instead
+  - LineInfo inner class moved from TokenMarker to Buffer class
+- I promise there won't be any more API changes in the 3.1 version.
 
 + Bug Fixes
 

@@ -27,6 +27,16 @@
    attempts to expand the word before the caret. If no expansion could
    be found, it will offer to define one. 
   </para>
+  <para>
+   The string <quote>\n</> in an abbreviation expansion inserts a newline,
+   <quote>\t</> inserts a tab. The caret is located at
+   the position of the string <quote>\|</>. The <quote>\|</> will
+   not appear in the buffer. For example, if
+   <quote>il</> is defined to expand to
+   <quote>SwingUtilities.invokeLater(\|);</>,
+   the text <quote>SwingUtilities.invokeLater();</> will be inserted
+   in the buffer, with the caret positioned between the brackets.
+  </para>
   <!-- <figure><title>The Add Abbreviation dialog box</>
    <graphic scale=50 fileref=dialog-add-abbrev></>
   </figure> -->

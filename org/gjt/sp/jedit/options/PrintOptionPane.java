@@ -76,10 +76,15 @@ public class PrintOptionPane extends AbstractOptionPane
 		addComponent(printLineNumbers);
 
 		/* Syntax highlighting */
-		syntax = new JCheckBox(jEdit.getProperty("options.print"
-			+ ".syntax"));
-		syntax.setSelected(jEdit.getBooleanProperty("print.syntax"));
-		addComponent(syntax);
+		style = new JCheckBox(jEdit.getProperty("options.print"
+			+ ".style"));
+		style.setSelected(jEdit.getBooleanProperty("print.style"));
+		addComponent(style);
+
+		color = new JCheckBox(jEdit.getProperty("options.print"
+			+ ".color"));
+		color.setSelected(jEdit.getBooleanProperty("print.color"));
+		addComponent(color);
 
 		addSeparator("options.print.margins");
 
@@ -104,7 +109,8 @@ public class PrintOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("print.header",printHeader.isSelected());
 		jEdit.setBooleanProperty("print.footer",printFooter.isSelected());
 		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());
-		jEdit.setBooleanProperty("print.syntax",syntax.isSelected());
+		jEdit.setBooleanProperty("print.style",style.isSelected());
+		jEdit.setBooleanProperty("print.color",color.isSelected());
 		jEdit.setProperty("print.margin.top",topMargin.getText());
 		jEdit.setProperty("print.margin.left",leftMargin.getText());
 		jEdit.setProperty("print.margin.bottom",bottomMargin.getText());
@@ -116,23 +122,10 @@ public class PrintOptionPane extends AbstractOptionPane
 	private JCheckBox printHeader;
 	private JCheckBox printFooter;
 	private JCheckBox printLineNumbers;
-	private JCheckBox syntax;
+	private JCheckBox style;
+	private JCheckBox color;
 	private JTextField topMargin;
 	private JTextField leftMargin;
 	private JTextField bottomMargin;
 	private JTextField rightMargin;
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.4  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.3  2000/08/10 08:30:41  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.2  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- */

@@ -1,6 +1,6 @@
 /*
  * JEditTextArea.java - jEdit's text component
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 2000 Ollie Rutherfurd
  *
  * This program is free software; you can redistribute it and/or
@@ -769,26 +769,6 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Collapses the fold containing the caret.
-	 * @since jEdit 3.1pre1
-	 */
-	public void collapseFold()
-	{
-		if(!buffer.collapseFoldAt(getCaretLine()))
-			getToolkit().beep();
-	}
-
-	/**
-	 * Expands the fold containing the caret.
-	 * @since jEdit 3.1pre1
-	 */
-	public void expandFold()
-	{
-		if(!buffer.expandFoldAt(getCaretLine()))
-			getToolkit().beep();
-	}
-
-	/**
 	 * Returns the line containing the specified offset.
 	 * @param offset The offset
 	 */
@@ -1261,6 +1241,14 @@ public class JEditTextArea extends JComponent
 			selectionStartLine = newStartLine;
 			selectionEndLine = newEndLine;
 			biasLeft = newBias;
+
+			// this ensures that the caret does not get "lost"
+			// inside a fold
+			if(!buffer.isLineVisible(selectionStartLine))
+				buffer.expandFoldAt(selectionStartLine);
+
+			if(!buffer.isLineVisible(selectionEndLine))
+				buffer.expandFoldAt(selectionEndLine);
 
 			fireCaretEvent();
 		}
@@ -2049,17 +2037,25 @@ loop:		for(int i = 0; i < text.length(); i++)
 		}
 
 		int caret = getCaretPosition();
+		int line = getCaretLine();
 		if(caret == buffer.getLength())
 			getToolkit().beep();
-		else
+
+		if(caret == getLineEndOffset(line) - 1)
 		{
+			line = buffer.getNextVisibleLine(line);
+			if(line == -1)
+				getToolkit().beep();
+			else
+				caret = getLineStartOffset(line);
+		}
+		else
 			caret++;
 
-			if(select)
-				select(getMarkPosition(),caret);
-			else
-				setCaretPosition(caret);
-		}
+		if(select)
+			select(getMarkPosition(),caret);
+		else
+			setCaretPosition(caret);
 	}
 
 	/**
@@ -2083,8 +2079,10 @@ loop:		for(int i = 0; i < text.length(); i++)
 			magic = offsetToX(line,caret - getLineStartOffset(line));
 		}
 
-		caret = getLineStartOffset(line + 1)
-			+ xToOffset(line + 1,magic + 1);
+		int nextLine = buffer.getNextVisibleLine(line);
+
+		caret = getLineStartOffset(nextLine)
+			+ xToOffset(nextLine,magic + 1);
 		if(select)
 			select(getMarkPosition(),caret);
 		else
@@ -2131,7 +2129,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextPage(boolean select)
 	{
-		int lineCount = getLineCount();
+		int lineCount = buffer.getVirtualLineCount();
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
@@ -2146,7 +2144,8 @@ loop:		for(int i = 0; i < text.length(); i++)
 		else
 			setFirstLine(firstLine + visibleLines);
 
-		line = Math.min(lineCount - 1,line + visibleLines);
+		line = buffer.virtualToPhysical(Math.min(lineCount - 1,
+			buffer.physicalToVirtual(line) + visibleLines));
 		caret = getLineStartOffset(line) + xToOffset(line,magic + 1);
 		if(select)
 			select(getMarkPosition(),caret);
@@ -2168,7 +2167,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
-			if(getLineLength(i) == 0)
+			if(buffer.isLineVisible(i) && getLineLength(i) == 0)
 			{
 				caret = getLineStartOffset(i);
 				break;
@@ -2201,16 +2200,19 @@ loop:		for(int i = 0; i < text.length(); i++)
 				getToolkit().beep();
 				return;
 			}
-
-			caret++;
+			else
+			{
+				int nextLine = buffer.getNextVisibleLine(line);
+				caret = getLineStartOffset(nextLine);
+			}
 		}
 		else
 		{
 			String noWordSep = (String)buffer.getProperty("noWordSep");
-			caret = TextUtilities.findWordEnd(lineText,caret + 1,noWordSep);
+			caret = TextUtilities.findWordEnd(lineText,caret + 1,noWordSep)
+				+ lineStart;
 		}
 
-		caret += lineStart;
 		if(select)
 			select(getMarkPosition(),caret);
 		else
@@ -2261,17 +2263,22 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		}
 
 		int caret = getCaretPosition();
+		int line = getCaretLine();
 		if(caret == 0)
-			getToolkit().beep();
-		else
 		{
+			getToolkit().beep();
+			return;
+		}
+
+		if(caret == getLineStartOffset(line))
+			caret = getLineEndOffset(buffer.getPrevVisibleLine(line)) - 1;
+		else
 			caret--;
 
-			if(select)
-				select(getMarkPosition(),caret);
-			else
-				setCaretPosition(caret);
-		}
+		if(select)
+			select(getMarkPosition(),caret);
+		else
+			setCaretPosition(caret);
 	}
 
 	/**
@@ -2295,7 +2302,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			magic = offsetToX(line,caret - getLineStartOffset(line));
 		}
 
-		caret = getLineStartOffset(line - 1) + xToOffset(line - 1,magic + 1);
+		int prevLine = buffer.getPrevVisibleLine(line);
+		caret = getLineStartOffset(prevLine) + xToOffset(prevLine,magic + 1);
 		if(select)
 			select(getMarkPosition(),caret);
 		else
@@ -2356,7 +2364,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			magic = offsetToX(line,caret - getLineStartOffset(line));
 		}
 
-		line = Math.max(0,line - visibleLines);
+		line = buffer.virtualToPhysical(Math.max(0,
+			buffer.physicalToVirtual(line) - visibleLines));
 		caret = getLineStartOffset(line) + xToOffset(line,magic + 1);
 
 		if(select)
@@ -2379,7 +2388,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		for(int i = lineNo - 1; i >= 0; i--)
 		{
-			if(getLineLength(i) == 0)
+			if(buffer.isLineVisible(i) && getLineLength(i) == 0)
 			{
 				caret = getLineStartOffset(i);
 				break;
@@ -2412,15 +2421,18 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				view.getToolkit().beep();
 				return;
 			}
-			caret--;
+			else
+			{
+				int prevLine = buffer.getPrevVisibleLine(line);
+				caret = getLineStartOffset(prevLine);
+			}
 		}
 		else
 		{
 			String noWordSep = (String)buffer.getProperty("noWordSep");
-			caret = TextUtilities.findWordStart(lineText,caret - 1,noWordSep);
+			caret = TextUtilities.findWordStart(lineText,caret - 1,noWordSep)
+				+ lineStart;
 		}
-
-		caret += lineStart;
 
 		if(select)
 			select(getMarkPosition(),caret);
@@ -3352,7 +3364,7 @@ forward_scan:		do
 	void updateMaxHorizontalScrollWidth()
 	{
 		int _maxHorizontalScrollWidth = buffer.getMaxLineWidth(
-			firstLine,visibleLines);
+			physFirstLine,visibleLines);
 		if(_maxHorizontalScrollWidth != maxHorizontalScrollWidth)
 		{
 			maxHorizontalScrollWidth = _maxHorizontalScrollWidth;
@@ -3727,7 +3739,8 @@ forward_scan:		do
 		else
 		{
 			updateScrollBars();
-			invalidateLineRange(line,firstLine + visibleLines);
+			invalidateLineRange(line,buffer.virtualToPhysical(
+				firstLine + visibleLines));
 		}
 	}
 

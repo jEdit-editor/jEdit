@@ -75,6 +75,10 @@ public class EditingOptionPane extends AbstractOptionPane
 		defaultWordBreakChars = new JTextField(jEdit.getProperty("buffer.wordBreakChars"));
 		addComponent(jEdit.getProperty("options.editing.wordBreakChars"),defaultWordBreakChars);
 
+		/* Word break chars */
+		defaultCollapseFolds = new JTextField(jEdit.getProperty("buffer.collapseFolds"));
+		addComponent(jEdit.getProperty("options.editing.collapseFolds"),defaultCollapseFolds);
+
 		/* Undo queue size */
 		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
 		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
@@ -114,6 +118,7 @@ public class EditingOptionPane extends AbstractOptionPane
 			.getSelectedItem());
 		jEdit.setProperty("buffer.maxLineLen",(String)defaultMaxLineLen.getSelectedItem());
 		jEdit.setProperty("buffer.wordBreakChars",defaultWordBreakChars.getText());
+		jEdit.setProperty("buffer.collapseFolds",defaultCollapseFolds.getText());
 		jEdit.setProperty("buffer.undoCount",undoCount.getText());
 		jEdit.setBooleanProperty("buffer.syntax",defaultSyntax.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
@@ -129,17 +134,10 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JComboBox defaultIndentSize;
 	private JComboBox defaultMaxLineLen;
 	private JTextField defaultWordBreakChars;
+	private JTextField defaultCollapseFolds;
 	private JTextField undoCount;
 	private JCheckBox defaultSyntax;
 	private JCheckBox defaultIndentOnTab;
 	private JCheckBox defaultIndentOnEnter;
 	private JCheckBox defaultNoTabs;
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.1  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- */

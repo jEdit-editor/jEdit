@@ -39,7 +39,7 @@ import org.gjt.sp.util.Log;
  * An in-memory copy of an open file.<p>
  *
  * This is basically a Swing document with support for loading and
- * saving, and various other miscallaenous things such as markers.<p>
+ * saving, and various other miscellanous things such as markers.<p>
  *
  * Buffers extend Swing document properties to obtain the default values
  * from jEdit's global properties.<p>
@@ -195,12 +195,6 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		int lineCount = getDefaultRootElement().getElementCount();
 
-		/* TokenMarker tokenMarker;
-		if(syntax)
-			tokenMarker = this.tokenMarker;
-		else
-			tokenMarker = jEdit.getMode("text").getTokenMarker(); */
-
 		SyntaxStyle[] styles = view.getTextArea().getPainter().getStyles();
 		TabExpander expander = null;
 
@@ -227,6 +221,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			fontStyle = Font.PLAIN;
 		}
+
+		boolean style = jEdit.getBooleanProperty("print.style");
+		boolean color = jEdit.getBooleanProperty("print.color");
 
 		Font font = new Font(fontFamily,fontStyle,fontSize);
 
@@ -284,7 +281,8 @@ public class Buffer extends PlainDocument implements EBComponent
 				x += lineNumberWidth + fm.charWidth('0');
 			}
 
-			paintSyntaxLine(i,styles,expander,gfx,Color.white,x,y);
+			paintSyntaxLine(i,styles,expander,style,color,
+				gfx,Color.white,x,y);
 
 			int bottomOfPage = pageHeight - bottomMargin - lineHeight;
 			if(printFooter)
@@ -417,6 +415,8 @@ public class Buffer extends PlainDocument implements EBComponent
 					getDocumentProperties().remove(
 						"tabSize");
 					getDocumentProperties().remove(
+						"indentSize");
+					getDocumentProperties().remove(
 						"maxLineLen");
 					getDocumentProperties().remove(
 						BufferIORequest.LOAD_DATA);
@@ -470,10 +470,25 @@ public class Buffer extends PlainDocument implements EBComponent
 					setFlag(DIRTY,true);
 
 				// send some EditBus messages
-				EditBus.send(new BufferUpdate(Buffer.this,
-					BufferUpdate.LOADED));
-				EditBus.send(new BufferUpdate(Buffer.this,
-					BufferUpdate.MARKERS_CHANGED));
+				if(!getFlag(TEMPORARY))
+				{
+					EditBus.send(new BufferUpdate(Buffer.this,
+						BufferUpdate.LOADED));
+					EditBus.send(new BufferUpdate(Buffer.this,
+						BufferUpdate.MARKERS_CHANGED));
+				}
+
+				try
+				{
+					int collapseFolds = ((Integer)
+						getProperty("collapseFolds"))
+						.intValue();
+					if(collapseFolds != 0)
+						expandFolds(collapseFolds);
+				}
+				catch(Exception e)
+				{
+				}
 			}
 		};
 
@@ -1656,14 +1671,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Returns the token marker for this buffer.
-	 */
-	public final TokenMarker getTokenMarker()
-	{
-		return tokenMarker;
-	}
-
-	/**
 	 * @deprecated Don't call this method.
 	 */
 	public void tokenizeLines() {}
@@ -1690,6 +1697,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * @param styles The syntax style list
 	 * @param expander The tab expander used to determine tab stops. May
 	 * be null
+	 * @param style True if the output should be syntax styled
+	 * @param color True if the output should be syntax colored
 	 * @param gfx The graphics context
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
@@ -1697,8 +1706,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * @since jEdit 3.1pre1
 	 */
 	public int paintSyntaxLine(int lineIndex, SyntaxStyle[] styles,
-		TabExpander expander, Graphics gfx, Color background,
-		int x, int y)
+		TabExpander expander, boolean style, boolean color,
+		Graphics gfx, Color background, int x, int y)
 	{
 		LineInfo info = lineInfo[lineIndex];
 
@@ -1742,17 +1751,16 @@ public class Buffer extends PlainDocument implements EBComponent
 			seg.count = length;
 			if(id == Token.NULL)
 			{
-				if(!defaultColor.equals(gfx.getColor()))
-					gfx.setColor(defaultColor);
-				if(!defaultFont.equals(gfx.getFont()))
-					gfx.setFont(defaultFont);
+				gfx.setColor(defaultColor);
+				gfx.setFont(defaultFont);
 			}
 			else
 			{
 				Color bg = styles[id].getBackgroundColor();
-				if (bg != null)
+				if(color && bg != null)
 				{
-					FontMetrics fm = styles[id].getFontMetrics(defaultFont);
+					FontMetrics fm = (style ? styles[id].getFontMetrics(defaultFont)
+						: gfx.getFontMetrics(defaultFont));
 					int width   = Utilities.getTabbedTextWidth(seg, fm, x, expander, 0); 
 					int height  = fm.getHeight();
 					int descent = fm.getDescent();
@@ -1763,7 +1771,10 @@ public class Buffer extends PlainDocument implements EBComponent
 					gfx.setPaintMode();
 				}
 
-				styles[id].setGraphicsFlags(gfx,defaultFont);
+				if(style)
+					gfx.setFont(styles[id].getStyledFont(defaultFont));
+				if(color)
+					gfx.setColor(styles[id].getForegroundColor());
 			}
 
 			x = Utilities.drawTabbedText(seg,x,y,gfx,expander,0);
@@ -1892,18 +1903,27 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	/**
 	 * Returns the maximum line width in the specified line range.
-	 * @param start The first line
-	 * @param len The number of lines
+	 * The strange mix of physical/virtual line numbers is due to
+	 * the way the text area paints lines.
+	 * @param start The first physical line
+	 * @param len The number of virtual lines from the first line
 	 * @since jEdit 3.1pre1
 	 */
 	public int getMaxLineWidth(int start, int len)
 	{
 		int retVal = 0;
-		for(int i = start; i <= start + len; i++)
+		int lines = 0;
+		for(int i = start; ; i++)
 		{
-			if(i >= lineCount)
+			if(i >= lineCount || lines >= len)
 				break;
-			retVal = Math.max(lineInfo[i].width,retVal);
+
+			LineInfo info = lineInfo[i];
+			if(info.visible)
+			{
+				retVal = Math.max(lineInfo[i].width,retVal);
+				lines++;
+			}
 		}
 		return retVal;
 	}
@@ -1934,6 +1954,21 @@ public class Buffer extends PlainDocument implements EBComponent
 	public boolean isLineVisible(int line)
 	{
 		return lineInfo[line].visible;
+	}
+
+	/**
+	 * Returns if the specified line begins a fold.
+	 * @since jEdit 3.1pre1
+	 */
+	public boolean isFoldStart(int line)
+	{
+		if(line == lineCount - 1)
+			return false;
+
+		// deep magic. do not change the order of the following
+		// two tests!
+		return getFoldLevel(line) < getFoldLevel(line + 1)
+			|| !lineInfo[line + 1].visible;
 	}
 
 	/**
@@ -2020,6 +2055,40 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
+	 * Returns the previous visible line before the specified index, or
+	 * -1 if no previous lines are visible.
+	 * @param lineNo The line
+	 * @since jEdit 3.1pre1
+	 */
+	public int getPrevVisibleLine(int lineNo)
+	{
+		for(int i = lineNo - 1; i >= 0; i--)
+		{
+			if(lineInfo[i].visible)
+				return i;
+		}
+
+		return -1;
+	}
+
+	/**
+	 * Returns the next visible line after the specified index, or
+	 * -1 if no subsequent lines are visible.
+	 * @param lineNo The line
+	 * @since jEdit 3.1pre1
+	 */
+	public int getNextVisibleLine(int lineNo)
+	{
+		for(int i = lineNo + 1; i < lineCount; i++)
+		{
+			if(lineInfo[i].visible)
+				return i;
+		}
+
+		return -1;
+	}
+
+	/**
 	 * Maps a virtual line number to a physical line number. To simplify
 	 * matters for text area highlighters, this method maps out-of-bounds
 	 * line numbers as well.
@@ -2039,15 +2108,15 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	public int physicalToVirtual(int lineNo)
 	{
-		for(int i = 0; i < virtualLineCount; i++)
+		/* for(int i = 0; i < virtualLineCount; i++)
 		{
 			if(virtualLines[i] >= lineNo)
 				return i;
 		}
 
-		return virtualLineCount;
+		return virtualLineCount; */
 
-		/* int start = 0;
+		int start = 0;
 		int end = virtualLineCount - 1;
 
 		// funky hack
@@ -2060,10 +2129,18 @@ loop:				for(int i = 0; i < count; i++)
 			switch(end - start)
 			{
 			case 0:
-				return start;
+				if(virtualLines[start] < lineNo)
+					return start + 1;
+				else
+					return start;
 			case 1:
 				if(virtualLines[start] < lineNo)
-					return end;
+				{
+					if(virtualLines[end] < lineNo)
+						return end + 1;
+					else
+						return end;
+				}
 				else
 					return start;
 			default:
@@ -2077,7 +2154,7 @@ loop:				for(int i = 0; i < count; i++)
 					end = pivot - 1;
 				break;
 			}
-		} */
+		}
 	}
 
 	/**
@@ -2150,6 +2227,12 @@ loop:				for(int i = 0; i < count; i++)
 				delta--;
 		}
 
+		if(delta == 0)
+		{
+			// user probably pressed A+BACK_SPACE twice
+			return false;
+		}
+
 		//System.err.println("collapse from " + start + " to " + end);
 
 		// I forgot to do this at first and it took me ages to
@@ -2164,7 +2247,7 @@ loop:				for(int i = 0; i < count; i++)
 		//System.err.println("new virtual line count is " + virtualLineCount);
 
 		System.arraycopy(virtualLines,start + delta,virtualLines,start,
-			virtualLineCount);
+			virtualLines.length - start - delta);
 
 		//System.err.println("copy from " + (start + delta)
 		//	+ " to " + start);
@@ -2188,6 +2271,8 @@ loop:				for(int i = 0; i < count; i++)
 		int end = lineCount - 1;
 
 		if(line != lineCount - 1
+			&& lineInfo[line].visible
+			&& !lineInfo[line + 1].visible
 			&& getFoldLevel(line + 1) > initialFoldLevel)
 		{
 			// this line is the start of a fold
@@ -2195,7 +2280,7 @@ loop:				for(int i = 0; i < count; i++)
 
 			for(int i = line + 1; i < lineCount; i++)
 			{
-				if(getFoldLevel(i) <= initialFoldLevel)
+				if(lineInfo[i].visible && getFoldLevel(i) <= initialFoldLevel)
 				{
 					end = i - 1;
 					break;
@@ -2204,12 +2289,18 @@ loop:				for(int i = 0; i < count; i++)
 		}
 		else
 		{
+			if(lineInfo[line].visible)
+			{
+				// the user probably pressed A+ENTER twice
+				return false;
+			}
+
 			boolean ok = false;
 
 			// scan backwards looking for the start
 			for(int i = line - 1; i >= 0; i--)
 			{
-				if(getFoldLevel(i) < initialFoldLevel)
+				if(lineInfo[i].visible && getFoldLevel(i) < initialFoldLevel)
 				{
 					start = i + 1;
 					ok = true;
@@ -2225,7 +2316,7 @@ loop:				for(int i = 0; i < count; i++)
 
 			for(int i = line + 1; i < lineCount; i++)
 			{
-				if(getFoldLevel(i) < initialFoldLevel)
+				if(lineInfo[i].visible && getFoldLevel(i) < initialFoldLevel)
 				{
 					end = i - 1;
 					break;
@@ -2233,48 +2324,104 @@ loop:				for(int i = 0; i < count; i++)
 			}
 		}
 
-		for(int i = start; i <= end; i++)
-			lineInfo[i].visible = true;
-
 		int delta = (end - start + 1);
 
-		System.err.println("expand from " + start + " to " + end);
+		for(int i = start; i <= end; i++)
+		{
+			LineInfo info = lineInfo[i];
+			if(info.visible)
+				delta--;
+			else
+				info.visible = true;
+		}
+
+ 		//System.err.println("expand from " + start + " to " + end);
 
 		// I forgot to do this at first and it took me ages to
 		// figure out
 		int virtualLine = physicalToVirtual(start);
 
-		System.err.println("virtual start is " + virtualLine
-			+ ", physical start is " + start);
+		//System.err.println("virtual start is " + virtualLine
+		//	+ ", physical start is " + start);
 
 		// update virtual -> physical map
 		virtualLineCount += delta;
 
-		System.err.println("virtual line count is " + virtualLineCount);
+		//System.err.println("virtual line count is " + virtualLineCount);
 
 		if(virtualLines.length <= virtualLineCount)
 		{
-			int[] virtualLinesN = new int[
-				(virtualLineCount + 1) * 2];
+			int[] virtualLinesN = new int[(virtualLineCount + 1) * 2];
 			System.arraycopy(virtualLines,0,
 				virtualLinesN,0,virtualLines.length);
 			virtualLines = virtualLinesN;
 		}
 
-		System.err.println("copy from " + (virtualLine)
-			+ " to " + (virtualLine + delta));
+		//System.err.println("copy from " + (virtualLine)
+		//	+ " to " + (virtualLine + delta));
 
 		System.arraycopy(virtualLines,virtualLine,virtualLines,
-			virtualLine + delta,virtualLineCount);
+			virtualLine + delta,virtualLines.length
+			- virtualLine - delta);
 		for(int j = 0; j <= delta; j++)
 		{
-			System.err.println((virtualLine + j) + " maps to " + (start + j));
+			//System.err.println((virtualLine + j) + " maps to " + (start + j));
 			virtualLines[virtualLine + j] = start + j;
 		}
 
 		fireFoldStructureChanged();
 
 		return true;
+	}
+
+	/**
+	 * This is intended to be called from actions.xml.
+	 * @since jEdit 3.1pre1
+	 */
+	public void expandFolds(char digit)
+	{
+		if(digit < '1' || digit > '9')
+		{
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+		else
+			expandFolds((int)(digit - '1') + 1);
+	}
+
+	/**
+	 * Expand all folds in the buffer up to a specified level.
+	 * @param level All folds less than this level will be expanded,
+	 * others will be collapsed. This is not the actual fold level;
+	 * it is multiplied by the indent size first
+	 * @since jEdit 3.1pre1
+	 */
+	public void expandFolds(int level)
+	{
+		if(virtualLines.length <= lineCount)
+		{
+			int[] virtualLinesN = new int[(lineCount + 1) * 2];
+			System.arraycopy(virtualLines,0,
+				virtualLinesN,0,virtualLines.length);
+			virtualLines = virtualLinesN;
+		}
+
+		level = (level - 1) * getIndentSize() + 1;
+
+		virtualLineCount = 0;
+
+		for(int i = 0; i < lineCount; i++)
+		{
+			if(getFoldLevel(i) < level)
+			{
+				lineInfo[i].visible = true;
+				virtualLines[virtualLineCount++] = i;
+			}
+			else
+				lineInfo[i].visible = false;
+		}
+
+		fireFoldStructureChanged();
 	}
 
 	/**
@@ -2858,6 +3005,7 @@ loop:				for(int i = 0; i < count; i++)
 			lineInfo.length - len);
 
 		LineInfo prev = lineInfo[index - 1];
+
 		ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
 		for(int i = 0; i < lines; i++)
 		{
@@ -2867,7 +3015,6 @@ loop:				for(int i = 0; i < count; i++)
 			lineInfo[index + i] = info;
 		}
 
-		
 		/* update the virtual -> physical mapping if the newly
 		 * inserted lines are actually visible */
 		int virtualLine = physicalToVirtual(index);
@@ -2893,7 +3040,7 @@ loop:				for(int i = 0; i < count; i++)
 				virtualLines[virtualLine + i] = index + i;
 		}
 		else
-			len = virtualLine;
+			len = virtualLine - 1;
 
 		for(int i = len + 1; i < virtualLineCount; i++)
 			virtualLines[i] += lines;

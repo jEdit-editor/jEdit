@@ -338,14 +338,8 @@
    is added.
   </para>
   <para>
-   The string <quote>\n</> in an abbreviation expansion inserts a newline in
-   the buffer when the abbreviation is expanded, and the caret is located at
-   the position of the string <quote>\|</>. The <quote>\|</> will
-   not appear in the buffer. For example, if
-   <quote>il</> is defined to expand to
-   <quote>SwingUtilities.invokeLater(\|);</>,
-   the text <quote>SwingUtilities.invokeLater();</> will be inserted
-   in the buffer, with the caret positioned between the brackets.
+   See <xref linkend=abbrevs> for information about escape sequences that can be
+   used in abbreviation expansion.
   </para>
   <bridgehead renderas=sect3>The Printing Pane</>
   <indexterm><primary>File menu</></indexterm>

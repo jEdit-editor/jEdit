@@ -1,24 +1,25 @@
 Here is my to do list for jEdit 3.1. Tell me what you think.
 
+* Before 3.1pre1
+
+- inserting text causes random problems with folding
+- undo causes problems sometimes (is this related to folding at all?)
+- sometimes fold markers are not repainted in gutter
+- finish persistent splits
+- The abbrev option pane will edit the currently selected abbrev in a
+  text area.
+
+- document folding
+
 * Folding
 
-'foldMode' buffer local property is either 'embedded' or 'indent'.
-
-In 'embedded' mode, buffers are scanned for customizable start/end
-strings; for example, { and }.
-
-In 'indent' mode, folds are added on lines where the indent increases
-from the previous.
-
-Folding commands will be in the View->Folding menu.
-
-Fold arrows will be shown in the gutter.
+- expand-one-level command
 
 * XMode rule inclusion
 
 A new tag will be added:
 
-<INCLUDE NAME="<ruleset name>" />
+<INCLUDE SET="<ruleset name>" />
 
 This tag will copy all rules from the specified ruleset to the current
 ruleset. This will reduce rule duplication by allowing, for example,
@@ -38,9 +39,6 @@ only then renamed to <filename> if the save was successful.
 
 - The base Metal L&F font will be configurable.
 
-- The abbrev option pane will edit the currently selected abbrev in a
-  text area.
-
 - The shortcuts option panes will support grabbing keys from the
   keyboard, and assignment of more than one shortcut per command.
 
@@ -54,12 +52,8 @@ only then renamed to <filename> if the save was successful.
 
 - Bracket double click behavior is really annoying - make if configurable
 
+* Two-pane view in filesystem browser
+
 * Documentation
 
-Migrate to DocBook/XML.
-
-* Feature removals
-
-- Markers will be removed
-
--- Slava Pestov <sp@gjt.org>
+- Migrate to DocBook/XML

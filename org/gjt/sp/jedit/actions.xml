@@ -112,7 +112,7 @@
 
 <ACTION NAME="collapse-fold">
 	<CODE>
-		textArea.collapseFold();
+		buffer.collapseFoldAt(textArea.getCaretLine());
 	</CODE>
 </ACTION>
 
@@ -268,7 +268,13 @@
 
 <ACTION NAME="expand-fold">
 	<CODE>
-		textArea.expandFold();
+		buffer.expandFoldAt(textArea.getCaretLine());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="expand-folds" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar("buffer.expandFolds(__char__);");
 	</CODE>
 </ACTION>
 

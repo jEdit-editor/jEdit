@@ -89,6 +89,9 @@ public class ModeOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.mode.noWordSep"),
 			noWordSep = new JTextField());
 
+		addComponent(jEdit.getProperty("options.editing.collapseFolds"),
+			collapseFolds = new JTextField());
+
 		addComponent(syntax = new JCheckBox(jEdit.getProperty(
 			"options.editing.syntax")));
 
@@ -130,6 +133,7 @@ public class ModeOptionPane extends AbstractOptionPane
 	private JTextField boxComment;
 	private JTextField blockComment;
 	private JTextField noWordSep;
+	private JTextField collapseFolds;
 	private JCheckBox noTabs;
 	private JCheckBox indentOnTab;
 	private JCheckBox indentOnEnter;
@@ -149,6 +153,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		current.boxComment = boxComment.getText();
 		current.blockComment = blockComment.getText();
 		current.noWordSep = noWordSep.getText();
+		current.collapseFolds = collapseFolds.getText();
 		current.noTabs = noTabs.isSelected();
 		current.indentOnEnter = indentOnEnter.isSelected();
 		current.indentOnTab = indentOnTab.isSelected();
@@ -173,6 +178,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		boxComment.setText(current.boxComment);
 		blockComment.setText(current.blockComment);
 		noWordSep.setText(current.noWordSep);
+		collapseFolds.setText(current.collapseFolds);
 		noTabs.setSelected(current.noTabs);
 		indentOnTab.setSelected(current.indentOnTab);
 		indentOnEnter.setSelected(current.indentOnEnter);
@@ -195,6 +201,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		boxComment.setEnabled(enabled);
 		blockComment.setEnabled(enabled);
 		noWordSep.setEnabled(enabled);
+		collapseFolds.setEnabled(enabled);
 		noTabs.setEnabled(enabled);
 		indentOnTab.setEnabled(enabled);
 		indentOnEnter.setEnabled(enabled);
@@ -237,6 +244,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		String boxComment;
 		String blockComment;
 		String noWordSep;
+		String collapseFolds;
 		boolean noTabs;
 		boolean indentOnTab;
 		boolean indentOnEnter;
@@ -269,6 +277,7 @@ public class ModeOptionPane extends AbstractOptionPane
 			boxComment = (String)mode.getProperty("boxComment");
 			blockComment = (String)mode.getProperty("blockComment");
 			noWordSep = (String)mode.getProperty("noWordSep");
+			collapseFolds = mode.getProperty("collapseFolds").toString();
 			noTabs = mode.getBooleanProperty("noTabs");
 			indentOnTab = mode.getBooleanProperty("indentOnTab");
 			indentOnEnter = mode.getBooleanProperty("indentOnEnter");
@@ -298,6 +307,7 @@ public class ModeOptionPane extends AbstractOptionPane
 				jEdit.resetProperty(prefix + "boxComment");
 				jEdit.resetProperty(prefix + "blockComment");
 				jEdit.resetProperty(prefix + "noWordSep");
+				jEdit.resetProperty(prefix + "collapseFolds");
 				jEdit.resetProperty(prefix + "noTabs");
 				jEdit.resetProperty(prefix + "indentOnTab");
 				jEdit.resetProperty(prefix + "indentOnEnter");
@@ -316,6 +326,7 @@ public class ModeOptionPane extends AbstractOptionPane
 				jEdit.setProperty(prefix + "boxComment",boxComment);
 				jEdit.setProperty(prefix + "blockComment",blockComment);
 				jEdit.setProperty(prefix + "noWordSep",noWordSep);
+				jEdit.setProperty(prefix + "collapseFolds",collapseFolds);
 				jEdit.setBooleanProperty(prefix + "noTabs",noTabs);
 				jEdit.setBooleanProperty(prefix + "indentOnTab",indentOnTab);
 				jEdit.setBooleanProperty(prefix + "indentOnEnter",indentOnEnter);
@@ -324,11 +335,3 @@ public class ModeOptionPane extends AbstractOptionPane
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.5  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- */

@@ -92,8 +92,7 @@ public class Gutter extends JComponent implements SwingConstants
 
 			if(physicalLine != buffer.getLineCount() - 1)
 			{
-				if(buffer.getFoldLevel(physicalLine)
-					< buffer.getFoldLevel(physicalLine + 1))
+				if(buffer.isFoldStart(physicalLine))
 				{
 					gfx.setColor(foldColor);
 					if(buffer.isLineVisible(physicalLine + 1))
@@ -419,7 +418,7 @@ public class Gutter extends JComponent implements SwingConstants
 					return;
 
 				line = buffer.virtualToPhysical(line);
-				if(buffer.getFoldLevel(line) < buffer.getFoldLevel(line + 1))
+				if(buffer.isFoldStart(line))
 				{
 					if(buffer.isLineVisible(line + 1))
 						buffer.collapseFoldAt(line);

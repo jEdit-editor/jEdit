@@ -416,15 +416,13 @@ scroll-down-page.label=Page Scroll Down
 toggle-synchro-scroll.label=Synchronized Scrolling
 
 folding=collapse-fold \
-	collapse-all-folds \
-	- \
 	expand-fold \
-	expand-all-folds
+	- \
+	expand-folds
 folding.label=Folding
 collapse-fold.label=Collapse Fold
-collapse-all-folds.label=Collapse All Folds
 expand-fold.label=Expand Fold
-expand-all-folds.label=Expand All Folds
+expand-folds.label=Expand Folds [x]
 
 splitting=unsplit \
 	  split-horizontal \
@@ -1009,6 +1007,7 @@ options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.maxLineLen=Wrap lines at column:
 options.editing.wordBreakChars=Break lines at these characters:
+options.editing.collapseFolds=Initially collapse folds with level:
 options.editing.undoCount=Number of undos:
 options.editing.syntax=Syntax highlighting
 options.editing.indentOnTab=Indent line when Tab key is pressed
@@ -1033,7 +1032,8 @@ options.print.fontsize=Print font size:
 options.print.header=Print a header with the file name
 options.print.footer=Print a footer with the date, time and page number
 options.print.lineNumbers=Print line numbers
-options.print.syntax=Syntax highlighting
+options.print.style=Use syntax styles in output
+options.print.color=Use syntax colors in output
 
 options.print.margins=Margins (in inches)
 options.print.margin.top=Top:

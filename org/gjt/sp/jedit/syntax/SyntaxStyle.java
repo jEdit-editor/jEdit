@@ -146,19 +146,6 @@ public class SyntaxStyle
 	}
 
 	/**
-	 * Sets the foreground color and font of the specified graphics
-	 * context to that specified in this style.
-	 * @param gfx The graphics context
-	 * @param font The font to add the styles to
-	 */
-	public void setGraphicsFlags(Graphics gfx, Font font)
-	{
-		Font _font = getStyledFont(font);
-		gfx.setFont(_font);
-		gfx.setColor(fgColor);
-	}
-
-	/**
 	 * Returns a string representation of this object.
 	 */
 	public String toString()
