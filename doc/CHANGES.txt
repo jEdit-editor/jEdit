@@ -18,6 +18,8 @@ JEDIT 3.1 VERSION HISTORY
 - New directories are created in the currently selected directory,
   instead of the root directory of the tree
 - Slightly faster local filesystem code
+- Clicking on a closed fold in the gutter now only expands one level by
+  default. To expand the fold fully, Shift-click it.
 
 + Bug Fixes
 

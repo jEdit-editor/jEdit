@@ -2295,7 +2295,7 @@ loop:				for(int i = 0; i < count; i++)
 	 * @param fully If true, fold will be expanded fully, otherwise
 	 * only one level will be expanded
 	 * @return False if there are no folds in the buffer
-	 * @since jEdit 3.1pre1
+	 * @since jEdit 3.1pre2
 	 */
 	public boolean expandFoldAt(int line, boolean fully)
 	{
@@ -2323,11 +2323,11 @@ loop:				for(int i = 0; i < count; i++)
 		}
 		else
 		{
-			if(lineInfo[line].visible)
+			/* if(lineInfo[line].visible)
 			{
 				// the user probably pressed A+ENTER twice
 				return false;
-			}
+			} */
 
 			boolean ok = false;
 
@@ -2359,6 +2359,7 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		int delta = 0;
+		int tmpMapLen = 0;
 		int[] tmpVirtualMap = new int[end - start + 1];
 
 		// we need a different value of initialFoldLevel here!
@@ -2372,15 +2373,18 @@ loop:				for(int i = 0; i < count; i++)
 			{
 				// user will be confused if 'expand fold'
 				// hides lines
+				tmpVirtualMap[tmpMapLen++] = i;
 			}
-			else if(fully && getFoldLevel(i) > initialFoldLevel)
+			else if(!fully && getFoldLevel(i) > initialFoldLevel)
 			{
 				// don't expand lines with higher fold
 				// levels
 			}
 			else
 			{
-				tmpVirtualMap[delta++] = i;
+				//System.err.println("fuck you: " + i);
+				tmpVirtualMap[tmpMapLen++] = i;
+				delta++;
 				info.visible = true;
 			}
 		}
@@ -2414,7 +2418,7 @@ loop:				for(int i = 0; i < count; i++)
 		System.arraycopy(virtualLines,virtualLine,virtualLines,
 			virtualLine + delta,virtualLines.length
 			- virtualLine - delta);
-		for(int j = 0; j < delta; j++)
+		for(int j = 0; j < tmpMapLen; j++)
 		{
 			//System.err.println((virtualLine + j) + " maps to " + tmpVirtualMap[j]);
 			virtualLines[virtualLine + j] = tmpVirtualMap[j];
@@ -3140,11 +3144,14 @@ loop:				for(int i = 0; i < count; i++)
 			}
 
 			len = virtualLine + lines;
+			System.err.println("len=" + len + ", copy from "
+				+ virtualLine + " to " + len);
+			System.err.println("map to " + index + ":" + lines);
 
 			System.arraycopy(virtualLines,virtualLine,
 				virtualLines,len,virtualLines.length - len);
 
-			for(int i = 0; i <= lines; i++)
+			for(int i = 0; i < lines; i++)
 				virtualLines[virtualLine + i] = index + i;
 		}
 		else

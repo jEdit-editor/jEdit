@@ -12,7 +12,7 @@
  - update to new gnu.regexp version
  - finish persistent splits
  - finish \t in abbrevs
- - Folding docs - in source-edit.sgml
+ - Folding/narrowing docs - in source-edit.sgml
  - confirm() method in GUIUtilities
  - .description plugin property
  - Migrate documentation to DocBook/XML
