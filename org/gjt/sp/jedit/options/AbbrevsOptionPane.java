@@ -76,16 +76,15 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 		add(BorderLayout.NORTH,panel);
 
-		add(BorderLayout.CENTER,createAbbrevsScroller());
-
-		panel = new JPanel();
-		abbrev = new JButton(jEdit.getProperty("options.abbrevs.sort.abbrev"));
-		abbrev.addActionListener(new ActionHandler());
-		panel.add(abbrev);
-		expand = new JButton(jEdit.getProperty("options.abbrevs.sort.expand"));
-		expand.addActionListener(new ActionHandler());
-		panel.add(expand);
-		add(BorderLayout.SOUTH,panel);
+		globalAbbrevs = new AbbrevsModel(Abbrevs.getGlobalAbbrevs());
+		abbrevsTable = new JTable(globalAbbrevs);
+		abbrevsTable.getTableHeader().setReorderingAllowed(false);
+		abbrevsTable.getTableHeader().addMouseListener(new MouseHandler());
+		Dimension d = abbrevsTable.getPreferredSize();
+		d.height = Math.min(d.height,200);
+		JScrollPane scroller = new JScrollPane(abbrevsTable);
+		scroller.setPreferredSize(d);
+		add(BorderLayout.CENTER,scroller);
 	}
 
 	protected void _save()
@@ -117,16 +116,20 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	private AbbrevsModel globalAbbrevs;
 	private Hashtable modeAbbrevs;
 
-	private JScrollPane createAbbrevsScroller()
+	class MouseHandler extends MouseAdapter
 	{
-		globalAbbrevs = new AbbrevsModel(Abbrevs.getGlobalAbbrevs());
-		abbrevsTable = new JTable(globalAbbrevs);
-		abbrevsTable.getTableHeader().setReorderingAllowed(false);
-		Dimension d = abbrevsTable.getPreferredSize();
-		d.height = Math.min(d.height,200);
-		JScrollPane scroller = new JScrollPane(abbrevsTable);
-		scroller.setPreferredSize(d);
-		return scroller;
+		public void mouseClicked(MouseEvent evt)
+		{
+			switch(abbrevsTable.getTableHeader().columnAtPoint(evt.getPoint()))
+			{
+			case 0:
+				((AbbrevsModel)abbrevsTable.getModel()).sort(0);
+				break;
+			case 1:
+				((AbbrevsModel)abbrevsTable.getModel()).sort(1);
+				break;
+			}
+		}
 	}
 
 	class ActionHandler implements ActionListener
@@ -146,11 +149,6 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 					abbrevsTable.setModel((AbbrevsModel)
 						modeAbbrevs.get(selected));
 				}
-			}
-			else
-			{
-				((AbbrevsModel)abbrevsTable.getModel())
-					.sort(source == abbrev ? 0 : 1);
 			}
 		}
 	}
@@ -330,6 +328,9 @@ class Abbrev
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2001/01/30 09:08:59  sp
+ * More folding work, some option pane tweaking
+ *
  * Revision 1.8  2000/12/14 01:01:57  sp
  * Bug fixes, 2 new edit modes
  *

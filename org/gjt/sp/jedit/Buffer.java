@@ -3045,7 +3045,7 @@ loop:				for(int i = 0; i < count; i++)
 		for(int i = len + 1; i < virtualLineCount; i++)
 			virtualLines[i] += lines;
 	}
-	
+
 	/**
 	 * Informs the token marker that lines have been deleted from
 	 * the document. This removes the lines in question from the
@@ -3055,6 +3055,7 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	private void deleteLines(int index, int lines)
 	{
+		
 		if (lines <= 0)
 			return;
 

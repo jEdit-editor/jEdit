@@ -1227,9 +1227,6 @@ public class JEditTextArea extends JComponent
 			int newStartLine = getLineOfOffset(newStart);
 			int newEndLine = getLineOfOffset(newEnd);
 
-			updateBracketHighlight(newEndLine,newEnd
-				- getLineStartOffset(newEndLine));
-
 			invalidateLineRange(selectionStartLine,selectionEndLine);
 			invalidateLineRange(newStartLine,newEndLine);
 
@@ -1249,6 +1246,9 @@ public class JEditTextArea extends JComponent
 
 			if(!buffer.isLineVisible(selectionEndLine))
 				buffer.expandFoldAt(selectionEndLine);
+
+			updateBracketHighlight(newEndLine,newEnd
+				- getLineStartOffset(newEndLine));
 
 			fireCaretEvent();
 		}
@@ -1885,22 +1885,50 @@ public class JEditTextArea extends JComponent
 
 		int start = 0, end = buffer.getLength();
 
-		for(int i = lineNo - 1; i >= 0; i--)
+loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
-			if(getLineLength(i) == 0)
+			if(!buffer.isLineVisible(i))
+				continue loop;
+
+			getLineText(i,lineSegment);
+
+			for(int j = 0; j < lineSegment.count; j++)
 			{
-				start = getLineStartOffset(i);
-				break;
+				switch(lineSegment.array[lineSegment.offset + j])
+				{
+				case ' ':
+				case '\t':
+					break;
+				default:
+					continue loop;
+				}
 			}
+
+			start = getLineStartOffset(i);
+			break loop;
 		}
 
-		for(int i = lineNo + 1; i < getLineCount(); i++)
+loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
-			if(getLineLength(i) == 0)
+			if(!buffer.isLineVisible(i))
+				continue loop;
+
+			getLineText(i,lineSegment);
+
+			for(int j = 0; j < lineSegment.count; j++)
 			{
-				end = getLineStartOffset(i);
-				break;
+				switch(lineSegment.array[lineSegment.offset + j])
+				{
+				case ' ':
+				case '\t':
+					break;
+				default:
+					continue loop;
+				}
 			}
+
+			end = getLineEndOffset(i) - 1;
+			break loop;
 		}
 
 		try
@@ -2165,13 +2193,34 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		int caret = getBufferLength();
 
-		for(int i = lineNo + 1; i < getLineCount(); i++)
+		boolean foundBlank = false;
+
+loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
-			if(buffer.isLineVisible(i) && getLineLength(i) == 0)
+			if(!buffer.isLineVisible(i))
+				continue;
+
+			getLineText(i,lineSegment);
+
+			for(int j = 0; j < lineSegment.count; j++)
 			{
-				caret = getLineStartOffset(i);
-				break;
+				switch(lineSegment.array[lineSegment.offset + j])
+				{
+				case ' ':
+				case '\t':
+					break;
+				default:
+					if(foundBlank)
+					{
+						caret = getLineStartOffset(i);
+						break loop;
+					}
+					else
+						continue loop;
+				}
 			}
+
+			foundBlank = true;
 		}
 
 		if(select)
@@ -2386,13 +2435,34 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		int caret = 0;
 
-		for(int i = lineNo - 1; i >= 0; i--)
+		boolean foundBlank = false;
+
+loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
-			if(buffer.isLineVisible(i) && getLineLength(i) == 0)
+			if(!buffer.isLineVisible(i))
+				continue;
+
+			getLineText(i,lineSegment);
+
+			for(int j = 0; j < lineSegment.count; j++)
 			{
-				caret = getLineStartOffset(i);
-				break;
+				switch(lineSegment.array[lineSegment.offset + j])
+				{
+				case ' ':
+				case '\t':
+					break;
+				default:
+					if(foundBlank)
+					{
+						caret = getLineEndOffset(i) - 1;
+						break loop;
+					}
+					else
+						continue loop;
+				}
 			}
+
+			foundBlank = true;
 		}
 
 		if(select)
@@ -2599,8 +2669,10 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		int firstVisibleLine = (firstLine <= electricScroll) ? 0 :
 			firstLine + electricScroll;
-		if(firstVisibleLine >= getLineCount())
-			firstVisibleLine = getLineCount() - 1;
+		if(firstVisibleLine >= getVirtualLineCount())
+			firstVisibleLine = getVirtualLineCount() - 1;
+
+		firstVisibleLine = buffer.virtualToPhysical(firstVisibleLine);
 
 		int firstVisible = getLineEndOffset(firstVisibleLine) - 1;
 
@@ -2623,12 +2695,14 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		int lastVisibleLine = firstLine + visibleLines;
 
-		if(lastVisibleLine >= getLineCount())
-			lastVisibleLine = getLineCount() - 1;
+		if(lastVisibleLine >= getVirtualLineCount())
+			lastVisibleLine = getVirtualLineCount() - 1;
 		else if(lastVisibleLine <= electricScroll)
 			lastVisibleLine = 0;
 		else
 			lastVisibleLine -= electricScroll;
+
+		lastVisibleLine = buffer.virtualToPhysical(lastVisibleLine);
 
 		int lastVisible = getLineEndOffset(lastVisibleLine) - 1;
 
@@ -2796,23 +2870,46 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 			int start = 0, end = buffer.getLength();
 
-			for(int i = lineNo - 1; i >= 0; i--)
+loop:			for(int i = lineNo - 1; i >= 0; i--)
 			{
-				if(getLineLength(i) == 0)
+				getLineText(i,lineSegment);
+
+				for(int j = 0; j < lineSegment.count; j++)
 				{
-					start = getLineStartOffset(i);
-					break;
+					switch(lineSegment.array[lineSegment.offset + j])
+					{
+					case ' ':
+					case '\t':
+						break;
+					default:
+						continue loop;
+					}
 				}
+
+				start = getLineStartOffset(i);
+				break loop;
 			}
 
-			for(int i = lineNo + 1; i < getLineCount(); i++)
+loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
-				if(getLineLength(i) == 0)
+				getLineText(i,lineSegment);
+
+				for(int j = 0; j < lineSegment.count; j++)
 				{
-					end = getLineStartOffset(i);
-					break;
+					switch(lineSegment.array[lineSegment.offset + j])
+					{
+					case ' ':
+					case '\t':
+						break;
+					default:
+						continue loop;
+					}
 				}
+
+				end = getLineEndOffset(i) - 1;
+				break loop;
 			}
+
 			try
 			{
 				buffer.beginCompoundEdit();
@@ -3244,7 +3341,8 @@ forward_scan:		do
 		{
 			Point location = new Point(offsetToX(lineIndex,wordStart),
 				painter.getFontMetrics().getHeight()
-				* (lineIndex - firstLine + 1));
+				* (buffer.physicalToVirtual(lineIndex)
+				- firstLine + 1));
 			SwingUtilities.convertPointToScreen(location,painter);
 			new CompleteWord(view,word,completions,location);
 		}
@@ -3690,13 +3788,20 @@ forward_scan:		do
 			return;
 		}
 
+		int lastLine;
+		if(visibleLines == 0)
+			lastLine = buffer.getLineCount();
+		else
+		{
+			lastLine = buffer.virtualToPhysical(
+				Math.min(getVirtualLineCount(),
+				firstLine + visibleLines));
+		}
+
 		try
 		{
 			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,line,offset - 1,
-				physFirstLine,buffer.virtualToPhysical(
-					Math.min(getVirtualLineCount(),
-					firstLine + visibleLines)));
+				buffer,line,offset - 1,physFirstLine,lastLine);
 			if(bracketOffset != -1)
 			{
 				bracketLine = getLineOfOffset(bracketOffset);

@@ -449,9 +449,9 @@ public class FileVFS extends VFS
 						if(s.charAt(2) == 'x')
 							permissions += 0100;
 						else if(s.charAt(2) == 's')
-							permissions += 4100;
+							permissions += 04100;
 						else if(s.charAt(2) == 'S')
-							permissions += 4000;
+							permissions += 04000;
 						if(s.charAt(3) == 'r')
 							permissions += 040;
 						if(s.charAt(4) == 'w')
@@ -459,19 +459,19 @@ public class FileVFS extends VFS
 						if(s.charAt(5) == 'x')
 							permissions += 010;
 						else if(s.charAt(5) == 's')
-							permissions += 2010;
+							permissions += 02010;
 						else if(s.charAt(5) == 'S')
-							permissions += 2000;
+							permissions += 02000;
 						if(s.charAt(6) == 'r')
-							permissions += 4;
+							permissions += 04;
 						if(s.charAt(7) == 'w')
-							permissions += 2;
+							permissions += 02;
 						if(s.charAt(8) == 'x')
-							permissions += 1;
+							permissions += 01;
 						else if(s.charAt(8) == 't')
-							permissions += 1001;
+							permissions += 01001;
 						else if(s.charAt(8) == 'T')
-							permissions += 1000;
+							permissions += 01000;
 					}
 				}
 			}

@@ -1,5 +1,5 @@
 /*
- * AbooutDialog.java - About jEdit dialog box
+ * AboutDialog.java - About jEdit dialog box
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
 
 public class AboutDialog extends EnhancedDialog

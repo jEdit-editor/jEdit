@@ -1,6 +1,6 @@
 /*
  * Abbrevs.java - Abbreviation manager
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
+import org.gjt.sp.jedit.gui.AddAbbrevDialog;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
@@ -103,9 +104,9 @@ public class Abbrevs
 		if(expand == null)
 		{
 			if(add)
-				return addAbbrev(view,abbrev);
-			else
-				return false;
+				new AddAbbrevDialog(view,abbrev);
+
+			return false;
 		}
 		else
 		{
@@ -253,6 +254,35 @@ public class Abbrevs
 	{
 		abbrevsChanged = true;
 		Abbrevs.modes = modes;
+	}
+
+	/**
+	 * Adds an abbreviation to the global abbreviation list.
+	 * @param abbrev The abbreviation
+	 * @param expansion The expansion
+	 * @since jEdit 3.1pre1
+	 */
+	public static void addGlobalAbbrev(String abbrev, String expansion)
+	{
+		globalAbbrevs.put(abbrev,expansion);
+	}
+
+	/**
+	 * Adds a mode-specific abbrev.
+	 * @param mode The edit mode
+	 * @param abbrev The abbrev
+	 * @param expansion The expansion
+	 * @since jEdit 3.1pre1
+	 */
+	public static void addModeAbbrev(String mode, String abbrev, String expansion)
+	{
+		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
+		if(modeAbbrevs == null)
+		{
+			modeAbbrevs = new Hashtable();
+			modes.put(mode,modeAbbrevs);
+		}
+		modeAbbrevs.put(abbrev,expansion);
 	}
 
 	// package-private members
@@ -419,45 +449,5 @@ public class Abbrevs
 			out.write(values.nextElement().toString());
 			out.write(lineSep);
 		}
-	}
-
-	private static boolean addAbbrev(View view, String abbrev)
-	{
-		String[] args = { abbrev };
-		JTextField textField = new JTextField();
-		Object[] message = {
-			jEdit.getProperty("add-abbrev.message",args),
-			textField };
-		Object[] options = { jEdit.getProperty("add-abbrev.global"),
-			jEdit.getProperty("add-abbrev.mode"),
-			jEdit.getProperty("common.cancel") };
-
-		int retVal = JOptionPane.showOptionDialog(view,message,
-			jEdit.getProperty("add-abbrev.title"),
-			JOptionPane.YES_NO_OPTION,
-			JOptionPane.QUESTION_MESSAGE,
-			null,options,options[0]);
-
-		String expand = textField.getText();
-		if(expand == null || (retVal != 0 && retVal != 1))
-			return false;
-
-		if(retVal == 1)
-		{
-			String mode = view.getBuffer().getMode().getName();
-			Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
-			if(modeAbbrevs == null)
-			{
-				modeAbbrevs = new Hashtable();
-				modes.put(mode,modeAbbrevs);
-			}
-			modeAbbrevs.put(abbrev,expand);
-		}
-		else
-			globalAbbrevs.put(abbrev,expand);
-
-		abbrevsChanged = true;
-
-		return expandAbbrev(view,false);
 	}
 }

@@ -3,13 +3,17 @@ Here is my to do list for jEdit 3.1. Tell me what you think.
 * Before 3.1pre1
 
 - inserting text causes random problems with folding
+- deleting text also causes problems
 - undo causes problems sometimes (is this related to folding at all?)
 - sometimes fold markers are not repainted in gutter
 - finish persistent splits
 - The abbrev option pane will edit the currently selected abbrev in a
   text area.
-
 - document folding
+- visibleLine handling a bit broken
+- shortcuts option pane: grabbing keys
+- > 1 shortcut per command
+- finish \t in abbrevs
 
 * Folding
 
@@ -38,12 +42,6 @@ only then renamed to <filename> if the save was successful.
 - All available fonts will be shown in the font selector.
 
 - The base Metal L&F font will be configurable.
-
-- The shortcuts option panes will support grabbing keys from the
-  keyboard, and assignment of more than one shortcut per command.
-
-- Improve next/prev-paragraph commands -- if a line contains ONLY
-  whitespace, treat it as a paragraph separator
 
 - File system browser: change 'Open in new view' to 'Open in new split'
 

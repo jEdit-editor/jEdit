@@ -809,12 +809,13 @@ close.discard.mnemonic=d
 
 # Add abbrev dialog
 add-abbrev.title=Add Abbreviation
-add-abbrev.message=The abbreviation "{0}" is undefined.\n\
-	To define it now, enter an expansion below, then\n\
-	click "mode-specific" to make it mode-specific,\n\
-	or "global" to make it apply in all edit modes.
-add-abbrev.mode=Mode-specific
-add-abbrev.global=Global
+add-abbrev.caption=Enter an expansion for abbreviation "{0}":
+add-abbrev.mode=Add mode-specific
+add-abbrev.global=Add global
+
+# Abbrev editor control
+abbrev-editor.before=Text to insert before caret:
+abbrev-editor.after=Text to insert after caret:
 
 # XMode errors
 xmode-error.title=XML Parse Error
@@ -1085,13 +1086,9 @@ options.abbrevs.set=Abbrev set:
 options.abbrevs.expandOnInput=Space bar expands abbrevs
 options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
-options.abbrevs.sort.abbrev=Sort by abbrev
-options.abbrevs.sort.expand=Sort by expansion
 
 options.keys.name=Command
-options.keys.binding=Keyboard shortcut
-options.keys.sort.label=Sort by label
-options.keys.sort.shortcut=Sort by shortcut
+options.keys.binding=Shortcut
 
 options.command-keys.label=Command Shortcuts
 

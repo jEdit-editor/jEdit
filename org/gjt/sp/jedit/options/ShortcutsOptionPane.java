@@ -44,16 +44,17 @@ public abstract class ShortcutsOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
-		add(BorderLayout.CENTER,createKeyTableScroller());
 
-		JPanel panel = new JPanel();
-		label = new JButton(jEdit.getProperty("options.keys.sort.label"));
-		label.addActionListener(new ActionHandler());
-		panel.add(label);
-		shortcut = new JButton(jEdit.getProperty("options.keys.sort.shortcut"));
-		shortcut.addActionListener(new ActionHandler());
-		panel.add(shortcut);
-		add(BorderLayout.SOUTH,panel);
+		keyModel = new ShortcutsModel(createBindings());;
+		keyTable = new JTable(keyModel);
+		keyTable.getTableHeader().setReorderingAllowed(false);
+		keyTable.getTableHeader().addMouseListener(new MouseHandler());
+		Dimension d = keyTable.getPreferredSize();
+		d.height = Math.min(d.height,200);
+		JScrollPane scroller = new JScrollPane(keyTable);
+		scroller.setPreferredSize(d);
+
+		add(BorderLayout.CENTER,scroller);
 	}
 
 	protected void _save()
@@ -66,26 +67,7 @@ public abstract class ShortcutsOptionPane extends AbstractOptionPane
 
 	// private members
 	private JTable keyTable;
-	private JButton label;
-	private JButton shortcut;
 	private ShortcutsModel keyModel;
-
-	private JScrollPane createKeyTableScroller()
-	{
-		keyModel = createShortcutsModel();
-		keyTable = new JTable(keyModel);
-		keyTable.getTableHeader().setReorderingAllowed(false);
-		Dimension d = keyTable.getPreferredSize();
-		d.height = Math.min(d.height,200);
-		JScrollPane scroller = new JScrollPane(keyTable);
-		scroller.setPreferredSize(d);
-		return scroller;
-	}
-
-	private ShortcutsModel createShortcutsModel()
-	{
-		return new ShortcutsModel(createBindings());
-	}
 
 	public static class KeyBinding
 	{
@@ -101,11 +83,18 @@ public abstract class ShortcutsOptionPane extends AbstractOptionPane
 		String shortcut;
 	}
 
-	class ActionHandler implements ActionListener
+	class MouseHandler extends MouseAdapter
 	{
-		public void actionPerformed(ActionEvent evt)
+		public void mouseClicked(MouseEvent evt)
 		{
-			keyModel.sort(evt.getSource() == label ? 0 : 1);
+			switch(keyTable.getTableHeader().columnAtPoint(evt.getPoint()))
+			{
+			case 0:
+				keyModel.sort(0);
+				break;
+			case 1:
+				keyModel.sort(1);
+			}
 		}
 	}
 }
@@ -230,6 +219,9 @@ class ShortcutsModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2001/01/30 09:08:59  sp
+ * More folding work, some option pane tweaking
+ *
  * Revision 1.6  2000/11/11 02:59:31  sp
  * FTP support moved out of the core into a plugin
  *
