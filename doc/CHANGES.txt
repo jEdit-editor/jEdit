@@ -22,6 +22,7 @@ JEDIT VERSION HISTORY
 - Files with extension '.php' are now recognized as PHP3 files
 - Documentation updates
 - .xsd, .xsl, .dtd, .rdf and .rss files are now opened in XML mode
+- When closing a buffer, we now switch to the previous, not the last buffer
 
 + Bug Fixes
 

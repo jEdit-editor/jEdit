@@ -107,7 +107,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void loadIfNecessary(View view)
 	{
-		if(!getFlag(LOADED))
+		if(!getFlag(LOADED) && !getFlag(CLOSED))
 			load(view);
 	}
 
@@ -1520,6 +1520,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.121  2000/01/22 23:36:42  sp
+ * Improved file close behaviour
+ *
  * Revision 1.120  2000/01/14 22:11:24  sp
  * Enhanced options dialog box
  *

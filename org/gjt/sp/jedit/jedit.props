@@ -251,10 +251,10 @@ mode.php3.commentEnd=-->
 mode.php3.tokenMarker=org.gjt.sp.jedit.syntax.PHPTokenMarker
 
 # PostScript mode (written by Ralf Engels)
-mode.ps.label=PostScript Files
-mode.ps.blockComment=%
-mode.ps.tokenMarker=org.gjt.sp.jedit.syntax.PostScriptTokenMarker
-mode.ps.filenameGlob=*.ps
+mode.postscript.label=PostScript Files
+mode.postscript.blockComment=%
+mode.postscript.tokenMarker=org.gjt.sp.jedit.syntax.PostScriptTokenMarker
+mode.postscript.filenameGlob=*.ps
 
 # Props mode
 mode.props.label=Property Files

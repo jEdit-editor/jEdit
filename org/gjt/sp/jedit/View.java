@@ -855,8 +855,11 @@ public class View extends JFrame implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				if(jEdit.getBufferCount() != 0)
-					setBuffer(jEdit.getLastBuffer());
+				Buffer newBuffer = _buffer.getPrev();
+				if(newBuffer != null && !newBuffer.isClosed())
+					setBuffer(newBuffer);
+				else if(jEdit.getBufferCount() != 0)
+					setBuffer(jEdit.getFirstBuffer());
 			}
 
 			updateRecentMenu();
@@ -987,6 +990,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.125  2000/01/22 23:36:42  sp
+ * Improved file close behaviour
+ *
  * Revision 1.124  2000/01/21 00:35:29  sp
  * Various updates
  *

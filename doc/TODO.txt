@@ -8,7 +8,6 @@ JEDIT TO DO
 - Buffer options: show buffer-local properties
 - Need to redo window-editor-* snapshots in icewm
 - Need to redo dialog-options-* snapshots as well
-- When a buffer is being closed, set buffer to previous rather than last
 
 ------- Stuff for 2.3pre3+ -------
 
@@ -46,6 +45,8 @@ JEDIT TO DO
 
 ------- Maybe later, in 2.4 -------
 
+- Display wait cursor in EditAction.Wrapper if action executes longer than
+  500 ms or so
 - Option to keep buffer list sorted
 - Don't just blindly call updateBracketHighlight() all the time, only
   call it if bracket highlighted region becomes dirty
@@ -79,6 +80,13 @@ JEDIT TO DO
 
 - Folding
 - Menu bar editing
+
+------- JDK 1.2 -------
+
+When we switch to JDK 1.2, do this:
+- drag and drop of files and text
+- input method support in text area
+- Use collections instead of MiscUtilities.quicksort()
 
 ------- Installer -------
 

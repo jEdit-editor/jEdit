@@ -821,6 +821,11 @@ public class jEdit
 		// dirty ones)
 
 		buffer = buffersFirst;
+
+		// zero it here so that BufferTabs doesn't have any problems
+		buffersFirst = buffersLast = null;
+		bufferCount = 0;
+
 		while(buffer != null)
 		{
 			if(!buffer.isNewFile())
@@ -830,9 +835,6 @@ public class jEdit
 				EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
 			buffer = buffer.next;
 		}
-
-		buffersFirst = buffersLast = null;
-		bufferCount = 0;
 
 		newFile(view);
 
@@ -1704,6 +1706,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.181  2000/01/22 23:36:43  sp
+ * Improved file close behaviour
+ *
  * Revision 1.180  2000/01/22 22:25:07  sp
  * PostScript edit mode, other misc updates
  *

@@ -45,6 +45,9 @@ public class CurrentDirectoryMenu extends JMenu
 	{
 		if(b)
 		{
+			if(getMenuComponentCount() != 0)
+				removeAll();
+
 			File dir = new File(view.getBuffer().getFile().getParent());
 
 			JMenuItem mi = new JMenuItem(dir.getPath());
@@ -84,15 +87,9 @@ public class CurrentDirectoryMenu extends JMenu
 				}
 			}
 
-			super.setPopupMenuVisible(b);
 		}
-		else
-		{
-			super.setPopupMenuVisible(b);
 
-			if(getMenuComponentCount() != 0)
-				removeAll();
-		}
+		super.setPopupMenuVisible(b);
 	}
 
 	// private members
