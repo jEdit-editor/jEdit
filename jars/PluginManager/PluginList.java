@@ -75,9 +75,9 @@ public class PluginList
 		}
 		catch(IOException io)
 		{
+			Log.log(Log.ERROR,this,io);
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(view,"plugin-list.ioerror",args);
-			Log.log(Log.ERROR,this,io);
 		}
 		catch(Exception e)
 		{

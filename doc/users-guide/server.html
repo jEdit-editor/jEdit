@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.4 User's Guide"
+TITLE="jEdit 2.5 User's Guide"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Command Line Usage"
@@ -20,7 +20,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.4 User's Guide</H1
+>jEdit 2.5 User's Guide</H1
 ><P
 ><A
 HREF="regexps.html"
@@ -126,6 +126,40 @@ CLASS="COMMAND"
 > switch is specified, the client instance will
   open files in an existing view, rather than creating a new one.
  </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN3924"
+>Background Mode</A
+></H1
+><P
+>   If you find yourself launching and exiting jEdit often, you can save time
+   by running it in <I
+CLASS="FIRSTTERM"
+>background mode</I
+>. In background mode, jEdit
+   will stay resident and wait for client requests, even when no views are
+   open. To start jEdit in background mode, specify the <B
+CLASS="COMMAND"
+>-background</B
+>
+   command line switch. jEdit will then start up normally, except that an
+   initial view will only be created when a client connects.
+  </P
+><P
+>   To completely exit jEdit when running in background mode, you must invoke
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Exit</SPAN
+>; if you close all open views,
+   jEdit will continue running and waiting for more requests.
+  </P
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

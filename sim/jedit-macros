@@ -19,7 +19,7 @@ macros/HTML/H3.macro
 macros/HTML/H4.macro
 macros/HTML/Hyperlink.macro
 macros/HTML/Italics.macro
-macros/Java/CreateGetSet.macro
+macros/Java/GetSetWizard.macro
 macros/Misc/CloseAllAndLoadSession.macro
 macros/Search/ReplaceAndFindNext.macro
 macros/Text/TransposeChars.macro

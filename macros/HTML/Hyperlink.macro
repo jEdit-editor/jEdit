@@ -1,27 +1,11 @@
 # This macro inserts an HTML hyperlink.
-# It uses the ! register for temporary storage.
+# We assume that the link text is selected.
 
-# Assume selection is a URL.
+input@a@URL:
+cut-string-register@b
 
-# Get rid of leading < and trailing >
-set-search-parameters@literal
-
-set-search-string@<
-set-replace-string@
-replace-in-selection
-
-set-search-string@>
-set-replace-string@
-replace-in-selection
-
-# Now we have a plain URL: http://www.slashdot.org, for example
-clear-register@!
-cut-string-register@!
-
-insert-char@<a href="
-paste-string-register@!
-insert-char@">&lt;
-
-paste-string-register@!
-
-insert-char@&gt;</a>
+insert-char@<A HREF="
+paste-string-register@a
+insert-char@">
+paste-string-register@b
+insert-char@</A>

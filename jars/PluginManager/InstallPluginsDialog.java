@@ -127,7 +127,6 @@ public class InstallPluginsDialog extends EnhancedDialog
 
 		thread = new LoadThread();
 
-		pack();
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,

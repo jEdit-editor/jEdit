@@ -91,7 +91,6 @@ public class PluginManager extends EnhancedDialog
 
 		updateTree();
 
-		pack();
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
