@@ -91,7 +91,7 @@ public class MarkerHighlight implements TextAreaHighlight
 
 	private Color getHighlightColor(int line)
 	{
-		Buffer buffer = (Buffer)textArea.getDocument();
+		Buffer buffer = textArea.getBuffer();
 		Vector registers = Registers.getCaretRegisters();
 
 		for(int i = 0; i < registers.size(); i++)
@@ -119,7 +119,7 @@ public class MarkerHighlight implements TextAreaHighlight
 
 	private String getLineToolTip(int line)
 	{
-		Buffer buffer = (Buffer)textArea.getDocument();
+		Buffer buffer = textArea.getBuffer();
 		Registers.Register[] registers = Registers.getRegisters();
 
 		for(int i = 0; i < registers.length; i++)
@@ -166,6 +166,9 @@ public class MarkerHighlight implements TextAreaHighlight
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/07/22 03:27:03  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.4  2000/07/14 06:00:45  sp
  * bracket matching now takes syntax info into account
  *

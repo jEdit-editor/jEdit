@@ -336,7 +336,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
 
 		// We don't use yToLine() here because that method doesn't
-		// return lines past the end of the document
+		// return lines past the end of the buffer
 		int height = fm.getHeight();
 		int firstLine = textArea.getFirstLine();
 		int firstInvalid = firstLine + clipRect.y / height;
@@ -347,8 +347,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		try
 		{
-			TokenMarker tokenMarker = textArea.getDocument()
-				.getTokenMarker();
+			TokenMarker tokenMarker = textArea.getTokenMarker();
 			int x = textArea.getHorizontalOffset();
 
 			for(int line = firstInvalid; line <= lastInvalid; line++)
@@ -438,11 +437,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	// package-private members
 	void updateTabSize()
 	{
-		if(textArea.getDocument() == null)
+		if(textArea.getBuffer() == null)
 			return;
 
 		tabSize = fm.charWidth(' ') * ((Integer)textArea
-			.getDocument().getProperty(
+			.getBuffer().getProperty(
 			PlainDocument.tabSizeAttribute)).intValue();
 	}
 
@@ -477,7 +476,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		int y = textArea.lineToY(line);
 
-		boolean invalid = (!textArea.getDocument().isLoaded() || line < 0
+		boolean invalid = (!textArea.getBuffer().isLoaded() || line < 0
 			|| line >= textArea.getLineCount());
 		paintHighlight(gfx,line,y,invalid);
 
@@ -641,6 +640,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.40  2000/07/22 03:27:04  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.39  2000/07/14 06:00:45  sp
  * bracket matching now takes syntax info into account
  *

@@ -43,7 +43,7 @@ public class document_end extends EditAction
 		JEditTextArea textArea = view.getTextArea();
 		if(select)
 			textArea.select(textArea.getMarkPosition(),
-				textArea.getDocumentLength());
+				textArea.getBufferLength());
 		else
 			textArea.setCaretPosition(view.getBuffer().getLength());
 	}

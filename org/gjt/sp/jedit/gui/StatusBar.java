@@ -22,8 +22,10 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.*;
 
 public class StatusBar extends JPanel
 {
@@ -46,15 +48,21 @@ public class StatusBar extends JPanel
 		statusMessage = new JLabel();
 		statusMessage.setBorder(border);
 		statusMessage.setFont(font);
-		Dimension dim = statusMessage.getPreferredSize();
-		dim.width = 0;
-		statusMessage.setPreferredSize(dim);
 		add(BorderLayout.CENTER,statusMessage);
+
+		Box box = new Box(BoxLayout.X_AXIS);
 
 		bufferStatus = new JLabel();
 		bufferStatus.setBorder(border);
 		bufferStatus.setFont(font);
-		add(BorderLayout.EAST,bufferStatus);
+		box.add(bufferStatus);
+
+		ioProgress = new IOProgress();
+		ioProgress.setBorder(border);
+		ioProgress.setFont(font);
+		box.add(ioProgress);
+
+		add(BorderLayout.EAST,box);
 
 		updateBufferStatus();
 	}
@@ -96,6 +104,7 @@ public class StatusBar extends JPanel
 	private CaretStatus caret;
 	private JLabel statusMessage;
 	private JLabel bufferStatus;
+	private IOProgress ioProgress;
 
 	class CaretStatus extends JComponent
 	{
@@ -146,7 +155,109 @@ public class StatusBar extends JPanel
 
 		public Dimension getPreferredSize()
 		{
-			return new Dimension(180,0);
+			FontMetrics fm = CaretStatus.this.getToolkit()
+				.getFontMetrics(CaretStatus.this.getFont());
+			Insets insets = CaretStatus.this.getBorder()
+				.getBorderInsets(this);
+
+			return new Dimension(fm.stringWidth("col 123 line 1234"
+				+ " / 1234 100%"),fm.getHeight() + insets.top
+				+ insets.bottom);
+		}
+
+		public Dimension getMaximumSize()
+		{
+			return getPreferredSize();
+		}
+	}
+
+	class IOProgress extends JComponent implements WorkThreadProgressListener
+	{
+		IOProgress()
+		{
+			IOProgress.this.setDoubleBuffered(true);
+			IOProgress.this.setForeground(UIManager.getColor("Label.foreground"));
+			IOProgress.this.setBackground(UIManager.getColor("Label.background"));
+		}
+
+		public void addNotify()
+		{
+			super.addNotify();
+			VFSManager.getIOThreadPool().addProgressListener(this);
+		}
+
+		public void removeNotify()
+		{
+			super.removeNotify();
+			VFSManager.getIOThreadPool().removeProgressListener(this);
+		}
+
+		public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
+		{
+			IOProgress.this.repaint();
+		}
+
+		public void paintComponent(Graphics g)
+		{
+			FontMetrics fm = g.getFontMetrics();
+
+			JEditTextArea textArea = view.getTextArea();
+			int dot = textArea.getCaretPosition();
+
+			int currLine = textArea.getCaretLine();
+			int start = textArea.getLineStartOffset(currLine);
+			int numLines = textArea.getLineCount();
+
+			WorkThreadPool ioThreadPool = VFSManager.getIOThreadPool();
+			String str = String.valueOf(ioThreadPool.getRequestCount());
+
+			Insets insets = IOProgress.this.getBorder()
+				.getBorderInsets(this);
+			int offx = IOProgress.this.getWidth() - insets.right
+				- fm.stringWidth(str);
+			g.drawString(str,offx,(IOProgress.this.getHeight()
+				+ fm.getAscent()) / 2 - 1);
+
+			int progressHeight = (IOProgress.this.getHeight()
+				- insets.top - insets.bottom)
+				/ ioThreadPool.getThreadCount();
+			int progressWidth = IOProgress.this.getWidth() - insets.left
+				- insets.right - fm.stringWidth(str);
+
+			// only show progress data for running threads
+			int count = 0;
+
+			for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
+			{
+				WorkThread thread = ioThreadPool.getThread(i);
+				int max = thread.getProgressMaximum();
+				if(!thread.isRequestsRunning() || max == 0)
+					continue;
+
+				int progress = ((progressWidth * thread
+					.getProgressValue()) / max);
+				g.fillRect(insets.left,insets.top
+					+ count * progressHeight,
+					progressWidth,progressHeight);
+
+				count++;
+			}
+		}
+
+		public Dimension getPreferredSize()
+		{
+			FontMetrics fm = IOProgress.this.getToolkit()
+				.getFontMetrics(IOProgress.this.getFont());
+			Insets insets = IOProgress.this.getBorder()
+				.getBorderInsets(this);
+
+			return new Dimension(40,fm.getHeight() + insets.top
+				+ insets.bottom);
+		}
+
+		public Dimension getMaximumSize()
+		{
+			return getPreferredSize();
 		}
 	}
 }
@@ -154,6 +265,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/07/22 03:27:03  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.4  2000/07/15 10:10:18  sp
  * improved printing
  *

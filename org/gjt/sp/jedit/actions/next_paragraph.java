@@ -43,6 +43,6 @@ public class next_paragraph extends EditAction
 			}
 		}
 
-		textArea.setCaretPosition(textArea.getDocumentLength());
+		textArea.setCaretPosition(textArea.getBufferLength());
 	}
 }

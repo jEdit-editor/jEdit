@@ -50,6 +50,68 @@ public class WorkThread extends Thread
 	}
 
 	/**
+	 * Returns if the work thread is currently running a request.
+	 */
+	public boolean isRequestsRunning()
+	{
+		return requestsRunning;
+	}
+
+	/**
+	 * Returns the status text.
+	 */
+	public String getStatus()
+	{
+		return status;
+	}
+
+	/**
+	 * Sets the status text.
+	 * @since jEdit 3.0pre1
+	 */
+	public void setStatus(String status)
+	{
+		this.status = status;
+		pool.fireProgressChanged(this);
+	}
+
+	/**
+	 * Returns the progress value.
+	 */
+	public int getProgressValue()
+	{
+		return progressValue;
+	}
+
+	/**
+	 * Sets the progress value.
+	 * @since jEdit 3.0pre1
+	 */
+	public void setProgressValue(int progressValue)
+	{
+		this.progressValue = progressValue;
+		pool.fireProgressChanged(this);
+	}
+
+	/**
+	 * Returns the progress maximum.
+	 */
+	public int getProgressMaximum()
+	{
+		return progressMaximum;
+	}
+
+	/**
+	 * Sets the maximum progress value.
+	 * @since jEdit 3.0pre1
+	 */
+	public void setProgressMaximum(int progressMaximum)
+	{
+		this.progressMaximum = progressMaximum;
+		pool.fireProgressChanged(this);
+	}
+
+	/**
 	 * Aborts the currently running request, if allowed.
 	 * @since jEdit 3.0pre1
 	 */
@@ -76,11 +138,18 @@ public class WorkThread extends Thread
 	// private members
 	private WorkThreadPool pool;
 	private Object abortLock = new Object();
+	private boolean requestsRunning;
 	private boolean abortable;
 	private boolean aborted;
+	private String status;
+	private int progressValue;
+	private int progressMaximum;
 
 	private void doRequests()
 	{
+		requestsRunning = true;
+		pool.fireProgressChanged(this);
+
 		WorkThreadPool.Request request;
 		for(;;)
 		{
@@ -90,6 +159,9 @@ public class WorkThread extends Thread
 			else
 				doRequest(request);
 		}
+
+		requestsRunning = false;
+		pool.fireProgressChanged(this);
 
 		synchronized(pool.waitForAllLock)
 		{
@@ -135,7 +207,10 @@ public class WorkThread extends Thread
 			{
 				aborted = abortable = false;
 			}
+			status = null;
+			progressValue = progressMaximum = 0;
 			pool.requestDone();
+			pool.fireProgressChanged(this);
 		}
 	}
 
@@ -151,6 +226,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.15  2000/07/22 03:27:04  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.14  2000/07/21 10:23:49  sp
  * Multiple work threads
  *

@@ -81,7 +81,7 @@ public class EditPane extends JPanel implements EBComponent
 			saveCaretInfo();
 		this.buffer = buffer;
 
-		textArea.setDocument(buffer);
+		textArea.setBuffer(buffer);
 
 		if(bufferTabs != null)
 			bufferTabs.selectBufferTab(buffer);
@@ -603,6 +603,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/07/22 03:27:03  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.9  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
  *

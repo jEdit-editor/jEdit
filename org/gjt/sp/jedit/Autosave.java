@@ -1,6 +1,6 @@
 /*
- * Autosave.java - Autosave thread
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Autosave.java - Autosave manager
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,56 +19,64 @@
 
 package org.gjt.sp.jedit;
 
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  * @author Slava Pestov
  * @version $Id$
  */
-class Autosave extends Thread
+class Autosave implements ActionListener
 {
-	Autosave()
+	public static void setInterval(int interval)
 	{
-		super("jEdit autosave daemon");
-		setDaemon(true);
-		start();
+		if(interval == 0)
+		{
+			if(timer != null)
+			{
+				timer.stop();
+				timer = null;
+			}
+
+			return;
+		}
+
+		interval *= 1000;
+
+		if(timer == null)
+		{
+			timer = new Timer(interval,new Autosave());
+			timer.start();
+		}
+		else
+			timer.setDelay(interval);
 	}
 
-	public void run()
+	public static void stop()
 	{
-		int interval;
-		try
-		{
-			interval = Integer.parseInt(jEdit.getProperty(
-				"autosave"));
-		}
-		catch(NumberFormatException nf)
-		{
-			interval = 15;
-		}
-		if(interval == 0)
-			return;
-		interval *= 1000;
-		for(;;)
-		{
-			try
-			{
-				Thread.sleep(interval);
-			}
-			catch(InterruptedException i)
-			{
-				return;
-			}
-			if(interrupted())
-				return;
-			Buffer[] bufferArray = jEdit.getBuffers();
-			for(int i = 0; i < bufferArray.length; i++)
-				bufferArray[i].autosave();
-		}
+		timer.stop();
 	}
+
+	public void actionPerformed(ActionEvent evt)
+	{
+		Buffer[] bufferArray = jEdit.getBuffers();
+		for(int i = 0; i < bufferArray.length; i++)
+			bufferArray[i].autosave();
+	}
+
+	// private members
+	private static Timer timer;
+
+	private Autosave() {}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/07/22 03:27:03  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.6  2000/06/12 02:43:29  sp
  * pre6 almost ready
  *

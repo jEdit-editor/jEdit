@@ -541,11 +541,17 @@ public class jEdit
 	 */
 	public static void propertiesChanged()
 	{
-		// Auto save
-		if(autosave != null)
-			autosave.interrupt();
-
-		autosave = new Autosave();
+		int interval;
+		try
+		{
+			interval = Integer.parseInt(getProperty("autosave"));
+		}
+		catch(NumberFormatException nf)
+		{
+			Log.log(Log.ERROR,jEdit.class,nf);
+			interval = 30;
+		}
+		Autosave.setInterval(interval);
 
 		// Recent files
 		try
@@ -1061,7 +1067,8 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		final Buffer newBuffer = new Buffer(view,path,readOnly,
+		// XXX
+		final Buffer newBuffer = new org.gjt.sp.jedit.syntax.SyntaxDocument(view,path,readOnly,
 			newFile,false,props);
 
 		if(!newBuffer.load(view,false))
@@ -1624,8 +1631,8 @@ public class jEdit
 		// closed a view but cancelled an unsaved buffer close
 		view.close();
 
-		// Stop autosave thread
-		autosave.stop();
+		// Stop autosave timer
+		Autosave.stop();
 
 		// Stop server here
 		if(server != null)
@@ -1669,7 +1676,6 @@ public class jEdit
 	private static String session;
 	private static Properties defaultProps;
 	private static Properties props;
-	private static Autosave autosave;
 	private static EditServer server;
 	private static boolean background;
 	private static Hashtable actionHash;
@@ -2306,6 +2312,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.255  2000/07/22 03:27:03  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.254  2000/07/19 08:35:59  sp
  * plugin devel docs updated, minor other changes
  *
@@ -2335,14 +2344,5 @@ public class jEdit
  *
  * Revision 1.245  2000/06/03 07:28:25  sp
  * User interface updates, bug fixes
- *
- * Revision 1.244  2000/06/02 02:21:05  sp
- * minor bug fixes
- *
- * Revision 1.243  2000/05/27 05:52:06  sp
- * Improved home/end actions
- *
- * Revision 1.242  2000/05/23 04:04:52  sp
- * Marker highlight updates, next/prev-marker actions
  *
  */

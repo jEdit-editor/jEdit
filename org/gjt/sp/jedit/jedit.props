@@ -22,6 +22,9 @@ saveDesktop=true
 # Ask for confirmation before exiting
 confirmExit=true
 
+# I/O thread count
+ioThreadCount=4
+
 # Number of backups to make, 0=no backups
 backups=1
 

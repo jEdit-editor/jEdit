@@ -41,7 +41,7 @@ public class delete_paragraph extends EditAction
 		Buffer buffer = view.getBuffer();
 		int lineNo = textArea.getCaretLine();
 
-		int start = 0, end = textArea.getDocumentLength();
+		int start = 0, end = textArea.getBufferLength();
 
 		for(int i = lineNo - 1; i >= 0; i--)
 		{

@@ -19,6 +19,7 @@
 
 package org.gjt.sp.util;
 
+import javax.swing.event.EventListenerList;
 import javax.swing.SwingUtilities;
 
 /**
@@ -38,6 +39,7 @@ public class WorkThreadPool
 	 */
 	public WorkThreadPool(String name, int count)
 	{
+		listenerList = new EventListenerList();
 		threadGroup = new ThreadGroup(name);
 		threads = new WorkThread[count];
 		for(int i = 0; i < threads.length; i++)
@@ -154,9 +156,77 @@ public class WorkThreadPool
 		return requestCount;
 	}
 
+	/**
+	 * Returns the number of threads in this pool.
+	 */
+	public int getThreadCount()
+	{
+		return threads.length;
+	}
+
+	/**
+	 * Returns the specified thread.
+	 * @param index The index of the thread
+	 */
+	public WorkThread getThread(int index)
+	{
+		return threads[index];
+	}
+
+	/**
+	 * Adds a progress listener to this thread pool.
+	 * @param listener The listener
+	 */
+	public final void addProgressListener(WorkThreadProgressListener listener)
+	{
+		listenerList.add(WorkThreadProgressListener.class,listener);
+	}
+
+	/**
+	 * Removes a progress listener from this thread pool.
+	 * @param listener The listener
+	 */
+	public final void removeProgressListener(WorkThreadProgressListener listener)
+	{
+		listenerList.remove(WorkThreadProgressListener.class,listener);
+	}
+
 	// package-private members
 	Object lock = new Object();
 	Object waitForAllLock = new Object();
+
+	void fireProgressChanged(WorkThread thread)
+	{
+		final Object[] listeners = listenerList.getListenerList();
+		if(listeners.length != 0)
+		{
+			int index = 0;
+			for(int i = 0; i < threads.length; i++)
+			{
+				if(threads[i] == thread)
+				{
+					index = i;
+					break;
+				}
+			}
+
+			final int _index = index;
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					for(int i = listeners.length - 2; i >= 0; i--)
+					{
+						if(listeners[i] == WorkThreadProgressListener.class)
+						{
+							((WorkThreadProgressListener)listeners[i+1])
+								.progressUpdate(WorkThreadPool.this,_index);
+						}
+					}
+				}
+			});
+		}
+	}
 
 	void requestDone()
 	{
@@ -204,7 +274,7 @@ public class WorkThreadPool
 
 	// private members
 	private ThreadGroup threadGroup;
-	private Thread[] threads;
+	private WorkThread[] threads;
 
 	// Request queue
 	private Request firstRequest;
@@ -216,6 +286,8 @@ public class WorkThreadPool
 	private Request firstAWTRequest;
 	private Request lastAWTRequest;
 	private int awtRequestCount;
+
+	private EventListenerList listenerList;
 
 	private void doAWTRequests()
 	{
@@ -324,6 +396,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/07/22 03:27:04  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.1  2000/07/21 10:23:49  sp
  * Multiple work threads
  *

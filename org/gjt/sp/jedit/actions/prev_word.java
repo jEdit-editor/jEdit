@@ -60,7 +60,7 @@ public class prev_word extends EditAction
 		}
 		else
 		{
-			String noWordSep = (String)textArea.getDocument().getProperty("noWordSep");
+			String noWordSep = (String)textArea.getBuffer().getProperty("noWordSep");
 			caret = TextUtilities.findWordStart(lineText,caret - 1,noWordSep);
 		}
 

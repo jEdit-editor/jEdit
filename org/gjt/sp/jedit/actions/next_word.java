@@ -51,7 +51,7 @@ public class next_word extends EditAction
 
 		if(caret == lineText.length())
 		{
-			if(lineStart + caret == textArea.getDocumentLength())
+			if(lineStart + caret == textArea.getBufferLength())
 			{
 				view.getToolkit().beep();
 				return;
@@ -60,7 +60,7 @@ public class next_word extends EditAction
 		}
 		else
 		{
-			String noWordSep = (String)textArea.getDocument().getProperty("noWordSep");
+			String noWordSep = (String)textArea.getBuffer().getProperty("noWordSep");
 			caret = TextUtilities.findWordEnd(lineText,caret + 1,noWordSep);
 		}
 

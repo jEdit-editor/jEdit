@@ -44,6 +44,6 @@ public class select_next_paragraph extends EditAction
 		}
 
 		textArea.select(textArea.getMarkPosition(),
-			textArea.getDocumentLength());
+			textArea.getBufferLength());
 	}
 }

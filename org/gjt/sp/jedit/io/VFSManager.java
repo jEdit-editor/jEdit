@@ -39,9 +39,20 @@ import org.gjt.sp.util.WorkThreadPool;
  */
 public class VFSManager
 {
+	/**
+	 * Do not call.
+	 */
 	public static void start()
 	{
 		ioThreadPool.start();
+	}
+
+	/**
+	 * Returns the I/O thread pool.
+	 */
+	public static WorkThreadPool getIOThreadPool()
+	{
+		return ioThreadPool;
 	}
 
 	/**
@@ -232,6 +243,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2000/07/22 03:27:03  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.12  2000/07/21 10:23:49  sp
  * Multiple work threads
  *

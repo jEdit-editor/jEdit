@@ -15,9 +15,9 @@ JEDIT 3.0 VERSION HISTORY
   change log, and other such stuff.
 - 'Print' command now supports printing of line numbers, and many printing
   settings can now be customized in Utilities->Global Options->Printing
-- The currently executing I/O request can be aborted by pressing 'Escape'.
-  A confirmation dialog box will be displayed first. This is very useful,
-  if, for example, a remote FTP server stops responding.
+- I/O requests no longer block the GUI, and multiple requests can be
+  executed at once. By default, 4 I/O threads are started; this can be
+  changed in Utilities->Global Options
 
 + Enhancements
 
@@ -56,8 +56,6 @@ JEDIT 3.0 VERSION HISTORY
   jEdit 3.0 or later should use GUIUTilities.loadMenuItem(String) instead.
   Don't worry, since all existing plugins use the old method, it won't be
   removed any time soon, if at all.
-- Signature of TextUtilities.findMatchingBracket() is now
-  findMatchingBracket(SyntaxDocument doc, int line, int offset)
 - Return type of TokenMarker.markTokens() changed from Token to
   TokenMarker.LineInfo
 - EditActions can now be invoked without a view (of course the action

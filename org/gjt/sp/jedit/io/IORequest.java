@@ -41,6 +41,11 @@ public class IORequest extends WorkRequest
 	public static final int IOBUFSIZE = 32768;
 
 	/**
+	 * Number of lines per progress increment.
+	 */
+	public static final int SAVE_STEP = 100;
+
+	/**
 	 * A file load request.
 	 */
 	public static final int LOAD = 0;
@@ -111,6 +116,8 @@ public class IORequest extends WorkRequest
 		{
 			try
 			{
+				String[] args = { MiscUtilities.getFileName(path) };
+				setStatus(jEdit.getProperty("view.status.load",args));
 				setAbortable(true);
 
 				in = vfs._createInputStream(view,buffer,path,false);
@@ -135,6 +142,9 @@ public class IORequest extends WorkRequest
 
 			try
 			{
+				String[] args = { MiscUtilities.getFileName(path) };
+				setStatus(jEdit.getProperty("view.status.load-markers",args));
+
 				// just before inserting the text into the
 				// buffer, read() calls setAbortable(false)
 				setAbortable(true);
@@ -227,12 +237,23 @@ public class IORequest extends WorkRequest
 	public void read(Buffer buffer, InputStream _in)
 		throws IOException, BadLocationException
 	{
+		boolean trackProgress; // only true if the file size is known
 		int bufLength;
 		File file = buffer.getFile();
 		if(file != null)
+		{
 			bufLength = (int)file.length();
+			setProgressMaximum(bufLength);
+			trackProgress = true;
+		}
 		else
+		{
 			bufLength = IOBUFSIZE * 4;
+			trackProgress = false;
+		}
+
+		setProgressValue(0);
+
 		StringBuffer sbuf = new StringBuffer(bufLength);
 
 		InputStreamReader in = new InputStreamReader(_in,
@@ -346,6 +367,8 @@ public class IORequest extends WorkRequest
 			}
 			// Add remaining stuff from buffer
 			sbuf.append(buf,lastLine,len - lastLine);
+
+			setProgressValue(sbuf.length());
 		}
 
 		// Can't abort the rest, otherwise the buffer may be
@@ -527,6 +550,9 @@ public class IORequest extends WorkRequest
 
 		try
 		{
+			String[] args = { MiscUtilities.getFileName(path) };
+			setStatus(jEdit.getProperty("view.status.save",args));
+
 			// the entire save operation can be aborted...
 			setAbortable(true);
 
@@ -545,6 +571,7 @@ public class IORequest extends WorkRequest
 				// Otherwise, we will accumilate stale marks files.
 				if(vfs.canDelete() && buffer.getMarkerCount() != 0)
 				{
+					setStatus(jEdit.getProperty("view.status.save-markers",args));
 					out = vfs._createOutputStream(view,buffer,markersPath);
 					if(out != null)
 						writeMarkers(buffer,out);
@@ -559,7 +586,7 @@ public class IORequest extends WorkRequest
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
-				Object[] args = { io.toString() };
+				args[0] = io.toString();
 				VFSManager.error(view,"ioerror",args);
 			}
 		}
@@ -602,6 +629,10 @@ public class IORequest extends WorkRequest
 		if(newline == null)
 			newline = System.getProperty("line.separator");
 		Element map = buffer.getDefaultRootElement();
+
+		setProgressMaximum(map.getElementCount() / SAVE_STEP);
+		setProgressValue(0);
+
 		for(int i = 0; i < map.getElementCount(); i++)
 		{
 			Element line = map.getElement(i);
@@ -611,6 +642,9 @@ public class IORequest extends WorkRequest
 			out.write(lineSegment.array,lineSegment.offset,
 				lineSegment.count);
 			out.write(newline);
+
+			if(i % SAVE_STEP == 0)
+				setProgressValue(i / SAVE_STEP);
 		}
 		out.close();
 
@@ -641,6 +675,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/07/22 03:27:03  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.11  2000/07/21 10:23:49  sp
  * Multiple work threads
  *

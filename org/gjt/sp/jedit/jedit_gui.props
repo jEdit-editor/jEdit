@@ -356,6 +356,7 @@ utils=repeat \
       load-session \
       save-session \
       - \
+      io-progress-monitor \
       log-viewer \
       - \
       buffer-options \
@@ -366,6 +367,7 @@ utils.label=$Utilities
 repeat.label=$Repeat Next Command
 load-session.label=$Load Session...
 save-session.label=$Save Session...
+io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$Activity Log...
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
@@ -479,6 +481,10 @@ view.gutter.register=Register "{0}" points to this line
 view.gutter.marker=Marker "{0}" points to this line
 
 # Status messages
+view.status.load=Loading {0}
+view.status.load-markers=Loading markers for {0}
+view.status.save=Saving {0}
+view.status.save-markers=Saving markers for {0}
 view.status.cut-string-register=Cut to register:
 view.status.copy-string-register=Copy to register:
 view.status.append-string-register=Append to register:
@@ -884,6 +890,7 @@ options.general.backupDirectory=Backup directory:
 options.general.backupPrefix=Backup filename prefix:
 options.general.backupSuffix=Backup filename suffix:
 options.general.lineSeparator=Default line separator:
+options.general.ioThreadCount=Number of I/O threads:
 options.general.saveDesktop=Save session on exit
 options.general.confirmExit=Ask for confirmation before exiting
 options.general.showToolbar=Show toolbar

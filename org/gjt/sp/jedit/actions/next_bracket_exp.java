@@ -31,7 +31,7 @@ public class next_bracket_exp extends EditAction
 		JEditTextArea textArea = view.getTextArea();
 
 		int caret = textArea.getCaretPosition();
-		int docLength = textArea.getDocumentLength();
+		int docLength = textArea.getBufferLength();
 
 		String text = textArea.getText(caret,docLength - caret - 1);
 

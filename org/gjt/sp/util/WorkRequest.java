@@ -32,4 +32,39 @@ public abstract class WorkRequest implements Runnable
 	{
 		((WorkThread)Thread.currentThread()).setAbortable(abortable);
 	}
+
+	/**
+	 * Sets the status text.
+	 * @param status The status text
+	 */
+	public void setStatus(String status)
+	{
+		((WorkThread)Thread.currentThread()).setStatus(status);
+	}
+
+	/**
+	 * Sets the progress value.
+	 * @param status The progress value.
+	 */
+	public void setProgressValue(int value)
+	{
+		((WorkThread)Thread.currentThread()).setProgressValue(value);
+	}
+
+	/**
+	 * Sets the maximum progress value.
+	 * @param status The progress value.
+	 */
+	public void setProgressMaximum(int value)
+	{
+		((WorkThread)Thread.currentThread()).setProgressMaximum(value);
+	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.2  2000/07/22 03:27:04  sp
+ * threaded I/O improved, autosave rewrite started
+ *
+ */

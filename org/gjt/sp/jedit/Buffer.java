@@ -55,7 +55,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class Buffer extends SyntaxDocument implements EBComponent
+public class Buffer extends PlainDocument implements EBComponent
 {
 	/**
 	 * Line separator property.
@@ -208,13 +208,15 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void autosave()
 	{
-		if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY)
+		System.err.println("autosaving " + this);
+
+		/* if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY)
 			|| getFlag(LOADING) || getFlag(SAVING))
 			return;
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		/* try
+		try
 		{
 			File tmpAutosaveFile = new File(MiscUtilities
 				.getFileParent(path),'#' + name + "#tmp#");
@@ -1025,20 +1027,73 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public final TokenMarker getTokenMarker()
 	{
 		if(getFlag(SYNTAX))
-			return super.getTokenMarker();
+			return tokenMarker;
 		else
 			return NullTokenMarker.getSharedInstance();
 	}
 
 	/**
-	 * Doesn't do anything if tokenization is disabled.
+	 * Sets the token marker that is to be used to split lines of
+	 * this document up into tokens.
+	 * @param tm The new token marker
+	 */
+	public void setTokenMarker(TokenMarker tm)
+	{
+		if(tm == null)
+			throw new NullPointerException("token marker cannot be null");
+
+		tokenMarker = tm;
+		tokenMarker.insertLines(0,getDefaultRootElement().getElementCount());
+		tokenizeLines();
+	}
+
+	/**
+	 * Reparses the document, by passing all lines to the token
+	 * marker. This should be called after the document is first
+	 * loaded.
 	 */
 	public void tokenizeLines()
 	{
 		if(!jEdit.getBooleanProperty("buffer.tokenize"))
 			return;
 
-		super.tokenizeLines();
+		tokenizeLines(0,getDefaultRootElement().getElementCount());
+	}
+
+	/**
+	 * Reparses the document, by passing the specified lines to the
+	 * token marker. This should be called after a large quantity of
+	 * text is first inserted.
+	 * @param start The first line to parse
+	 * @param len The number of lines, after the first one to parse
+	 */
+	public void tokenizeLines(int start, int len)
+	{
+		if(tokenMarker instanceof NullTokenMarker)
+			return;
+
+		tokenMarker.linesChanged(start,len);
+
+		Segment lineSegment = new Segment();
+		Element map = getDefaultRootElement();
+
+		len += start;
+
+		try
+		{
+			for(int i = start; i < len; i++)
+			{
+				Element lineElement = map.getElement(i);
+				int lineStart = lineElement.getStartOffset();
+				getText(lineStart,lineElement.getEndOffset()
+					- lineStart - 1,lineSegment);
+				tokenMarker.markTokens(lineSegment,i);
+			}
+		}
+		catch(BadLocationException bl)
+		{
+			bl.printStackTrace();
+		}
 	}
 
 	/**
@@ -1210,12 +1265,13 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	Buffer prev;
 	Buffer next;
 
-	Buffer(View view, String path, boolean readOnly,
+	/* compat */ public Buffer(View view, String path, boolean readOnly,
 		boolean newFile, boolean temp, Hashtable props)
 	{
 		setFlag(TEMPORARY,temp);
 		setFlag(READ_ONLY,readOnly);
 
+		tokenMarker = NullTokenMarker.getSharedInstance();
 		markers = new Vector();
 
 		addDocumentListener(new DocumentHandler());
@@ -1305,6 +1361,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	private String protocol;
 	private String name;
 	private Mode mode;
+	private TokenMarker tokenMarker;
 	private UndoManager undo;
 	private CompoundEdit compoundEdit;
 	private int compoundEditCount;
@@ -1367,6 +1424,61 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		}
 		else
 			return false;
+	}
+
+	/**
+	 * We overwrite this method to update the token marker
+	 * state immediately so that any event listeners get a
+	 * consistent token marker.
+	 */
+	protected void fireInsertUpdate(DocumentEvent evt)
+	{
+		DocumentEvent.ElementChange ch = evt.getChange(
+			getDefaultRootElement());
+		if(ch != null)
+		{
+			int index = ch.getIndex();
+			int len = ch.getChildrenAdded().length -
+				ch.getChildrenRemoved().length;
+			tokenMarker.linesChanged(index,
+				tokenMarker.getLineCount() - index);
+			tokenMarker.insertLines(ch.getIndex() + 1,len);
+			index += (len + 1);
+		}
+		else
+		{
+			tokenMarker.linesChanged(getDefaultRootElement()
+				.getElementIndex(evt.getOffset()),1);
+		}
+
+		super.fireInsertUpdate(evt);
+	}
+	
+	/**
+	 * We overwrite this method to update the token marker
+	 * state immediately so that any event listeners get a
+	 * consistent token marker.
+	 */
+	protected void fireRemoveUpdate(DocumentEvent evt)
+	{
+		DocumentEvent.ElementChange ch = evt.getChange(
+			getDefaultRootElement());
+		if(ch != null)
+		{
+			int index = ch.getIndex();
+			int len = ch.getChildrenRemoved().length -
+				ch.getChildrenAdded().length;
+			tokenMarker.linesChanged(index,
+				tokenMarker.getLineCount() - index);
+			tokenMarker.deleteLines(index + 1,len);
+		}
+		else
+		{
+			tokenMarker.linesChanged(getDefaultRootElement()
+				.getElementIndex(evt.getOffset()),1);
+		}
+
+		super.fireRemoveUpdate(evt);
 	}
 
 	// A dictionary that looks in the mode and editor properties
@@ -1440,6 +1552,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.161  2000/07/22 03:27:03  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.160  2000/07/21 10:23:49  sp
  * Multiple work threads
  *
@@ -1469,8 +1584,5 @@ public class Buffer extends SyntaxDocument implements EBComponent
  *
  * Revision 1.151  2000/05/22 12:05:45  sp
  * Markers are highlighted in the gutter, bug fixes
- *
- * Revision 1.150  2000/05/13 05:13:31  sp
- * Mode option pane
  *
  */

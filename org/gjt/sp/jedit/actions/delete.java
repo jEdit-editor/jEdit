@@ -45,7 +45,7 @@ public class delete extends EditAction
 		else
 		{
 			int caret = textArea.getCaretPosition();
-			if(caret == textArea.getDocumentLength())
+			if(caret == textArea.getBufferLength())
 			{
 				view.getToolkit().beep();
 				return;

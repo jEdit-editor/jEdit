@@ -43,7 +43,7 @@ public class next_char extends EditAction
 		JEditTextArea textArea = view.getTextArea();
 
 		int caret = textArea.getCaretPosition();
-		if(caret == textArea.getDocumentLength())
+		if(caret == textArea.getBufferLength())
 		{
 			view.getToolkit().beep();
 			return;

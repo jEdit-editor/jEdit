@@ -112,6 +112,11 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.general.lineSeparator"),
 			lineSeparator);
 
+		/* Number of I/O threads to start */
+		ioThreadCount = new JTextField(jEdit.getProperty("ioThreadCount"));
+		addComponent(jEdit.getProperty("options.general.ioThreadCount"),
+			ioThreadCount);
+
 		/* Session management */
 		saveDesktop = new JCheckBox(jEdit.getProperty(
 			"options.general.saveDesktop"));
@@ -202,6 +207,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
+		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
 		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
 		jEdit.setBooleanProperty("confirmExit",confirmExit.isSelected());
 		jEdit.setBooleanProperty("view.showBufferTabs",showBufferTabs
@@ -229,6 +235,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JTextField backupPrefix;
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
+	private JTextField ioThreadCount;
 	private JCheckBox saveDesktop;
 	private JCheckBox confirmExit;
 	private JCheckBox showBufferTabs;

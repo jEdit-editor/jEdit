@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.textarea;
 
 import javax.swing.text.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.Buffer;
 
 /**
  * Class with several utility functions used by the text area component.
@@ -31,26 +32,26 @@ public class TextUtilities
 {
 	/**
 	 * Returns the offset of the bracket matching the one at the
-	 * specified offset of the document, or -1 if the bracket is
+	 * specified offset of the buffer, or -1 if the bracket is
 	 * unmatched (or if the character is not a bracket).
-	 * @param doc The document
+	 * @param buffer The buffer
 	 * @param line The line
 	 * @param offset The offset within that line
 	 * @exception BadLocationException If an out-of-bounds access
-	 * was attempted on the document text
+	 * was attempted on the buffer's text
 	 * @since jEdit 3.0pre1
 	 */
-	public static int findMatchingBracket(SyntaxDocument doc, int line, int offset)
+	public static int findMatchingBracket(Buffer buffer, int line, int offset)
 		throws BadLocationException
 	{
-		if(doc.getLength() == 0)
+		if(buffer.getLength() == 0)
 			return -1;
 
-		Element map = doc.getDefaultRootElement();
+		Element map = buffer.getDefaultRootElement();
 		Element lineElement = map.getElement(line);
 		Segment lineText = new Segment();
 		int lineStart = lineElement.getStartOffset();
-		doc.getText(lineStart,lineElement.getEndOffset() - lineStart - 1,
+		buffer.getText(lineStart,lineElement.getEndOffset() - lineStart - 1,
 			lineText);
 
 		char c = lineText.array[lineText.offset + offset];
@@ -70,7 +71,7 @@ public class TextUtilities
 
 		int count;
 
-		TokenMarker tokenMarker = doc.getTokenMarker();
+		TokenMarker tokenMarker = buffer.getTokenMarker();
 
 		// Get the syntax token at 'offset'
 		// only tokens with the same type will be checked for
@@ -112,7 +113,7 @@ public class TextUtilities
 				int lineLength = lineElement.getEndOffset()
 					- lineStart - 1;
 
-				doc.getText(lineStart,lineLength,lineText);
+				buffer.getText(lineStart,lineLength,lineText);
 
 				int scanStartOffset;
 				if(i != line)
@@ -189,7 +190,7 @@ public class TextUtilities
 				// get text
 				lineElement = map.getElement(i);
 				lineStart = lineElement.getStartOffset();
-				doc.getText(lineStart,lineElement.getEndOffset()
+				buffer.getText(lineStart,lineElement.getEndOffset()
 					- lineStart - 1,lineText);
 
 				int scanStartOffset;
@@ -303,6 +304,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/07/22 03:27:04  sp
+ * threaded I/O improved, autosave rewrite started
+ *
  * Revision 1.8  2000/07/15 06:56:29  sp
  * bracket matching debugged
  *

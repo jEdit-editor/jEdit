@@ -46,8 +46,8 @@ public class Gutter extends JComponent implements SwingConstants
 			gfx.setColor(getBackground());
 			gfx.fillRect(r.x, r.y, r.width, r.height);
 
-			// if document is loading, don't paint anything
-			if (!textArea.getDocument().isLoaded()) return;
+			// if buffer is loading, don't paint anything
+			if (!textArea.getBuffer().isLoaded()) return;
 
 			// paint custom highlights, if there are any
 			if (highlights != null) paintCustomHighlights(gfx);
