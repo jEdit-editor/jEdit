@@ -49,8 +49,8 @@
 			srcdir="."
 			destdir="${build.directory}"
 			deprecation="on"
-			debug="yes"
 			includeJavaRuntime="yes"
+			debug="yes"
 		>
 			<include name="org/gjt/sp/jedit/Java14.java"/>
 			<include name="org/gjt/sp/jedit/print/BufferPrinter1_4.java"/>
