@@ -6192,17 +6192,22 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				dragStartOffset = dragStart
 					- getLineStartOffset(dragStartLine);
 			}
-			else if(control)
-			{
-				if(!multi)
-					selectNone();
-
-				moveCaretPosition(xyToOffset(evt.getX(),
-					evt.getY(),false),false);
-				selectToMatchingBracket();
-			}
 			else
 			{
+				int offset = xyToOffset(evt.getX(),evt.getY(),false);
+				if(offset != buffer.getLength())
+				{
+					buffer.getText(offset,1,lineSegment);
+					switch(lineSegment.array[lineSegment.offset])
+					{
+					case '(': case '[': case '{':
+					case ')': case ']': case '}':
+						moveCaretPosition(offset,false);
+						selectToMatchingBracket();
+						return;
+					}
+				}
+
 				if(!multi)
 					selectNone();
 

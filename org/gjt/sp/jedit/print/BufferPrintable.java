@@ -30,7 +30,7 @@ import java.awt.print.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.textarea.ChunkCache;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -57,131 +57,30 @@ class BufferPrintable implements Printable
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
 	{
-		lineList.clear();
-		currentLine = 0;
-
-		if(pageIndex != currentPage)
+		if(pageIndex > currentPage + 1)
 		{
-			currentPageStart = currentPhysicalLine;
-			currentPage = pageIndex;
+			for(int i = currentPage; i < pageIndex; i++)
+			{
+				printPage(_gfx,pageFormat,i,true);
+			}
 
+			currentPage = pageIndex - 1;
+		}
+
+		if(pageIndex == currentPage + 1)
+		{
 			if(end)
 				return NO_SUCH_PAGE;
-			else
-				return PAGE_EXISTS;
+
+			currentPageStart = currentPhysicalLine;
+			currentPage = pageIndex;
 		}
-		else
+		else if(pageIndex == currentPage)
+		{
 			currentPhysicalLine = currentPageStart;
-
-		double pageX = pageFormat.getImageableX();
-		double pageY = pageFormat.getImageableY();
-		double pageWidth = pageFormat.getImageableWidth();
-		double pageHeight = pageFormat.getImageableHeight();
-
-		Graphics2D gfx = (Graphics2D)_gfx;
-
-		gfx.setFont(font);
-
-		if(header)
-		{
-			double headerHeight = paintHeader(gfx,pageX,pageY,pageWidth);
-			pageY += headerHeight * 2;
-			pageHeight -= headerHeight * 2;
 		}
 
-		if(footer)
-		{
-			double footerHeight = paintFooter(gfx,pageX,pageY,pageWidth,
-				pageHeight,pageIndex);
-			pageHeight -= footerHeight * 2;
-		}
-
-		FontRenderContext frc = gfx.getFontRenderContext();
-
-		// the +1's ensure that 99 gets 3 digits, 103 gets 4 digits,
-		// and so on.
-		int lineNumberDigits = (int)Math.ceil(Math.log(buffer.getLineCount() + 1)
-			/ Math.log(10)) + 1;
-
-		//{{{ now that we know how many chars there are, get the width.
-		char[] chars = new char[lineNumberDigits];
-		for(int i = 0; i < chars.length; i++)
-			chars[i] = ' ';
-		double lineNumberWidth = font.getStringBounds(chars,
-			0,lineNumberDigits,frc).getWidth();
-		//}}}
-
-		//{{{ calculate tab size
-		int tabSize = jEdit.getIntegerProperty("print.tabSize",8);
-		chars = new char[tabSize];
-		for(int i = 0; i < chars.length; i++)
-			chars[i] = ' ';
-		double tabWidth = font.getStringBounds(chars,
-			0,tabSize,frc).getWidth();
-		PrintTabExpander e = new PrintTabExpander(tabWidth);
-		//}}}
-
-		Segment seg = new Segment();
-		double y = 0.0;
-
-print_loop:	for(;;)
-		{
-			//{{{ get line text
-			if(currentLine == lineList.size())
-			{
-				buffer.getLineText(currentPhysicalLine,seg);
-				lm = font.getLineMetrics(seg.array,
-					seg.offset,seg.count,frc);
-
-				Token tokens = buffer.markTokens(currentPhysicalLine)
-					.getFirstToken();
-
-				lineList.add(new Integer(++currentPhysicalLine));
-
-				ChunkCache.lineToChunkList(seg,tokens,styles,frc,
-					e,(float)(pageWidth - lineNumberWidth),
-					lineList);
-				if(lineList.size() == currentLine + 1)
-					lineList.add(null);
-			} //}}}
-
-			y += lm.getHeight();
-			if(y >= pageHeight)
-				break print_loop;
-
-			Object obj = lineList.get(currentLine++);
-			if(obj instanceof Integer)
-			{
-				//{{{ paint line number
-				if(lineNumbers)
-				{
-					gfx.setFont(font);
-					gfx.setColor(lineNumberColor);
-					String lineNumberString = String.valueOf(obj);
-					gfx.drawString(lineNumberString,
-						(float)pageX,(float)(pageY + y));
-				} //}}}
-
-				obj = lineList.get(currentLine++);
-			}
-
-			if(obj != null)
-			{
-				ChunkCache.Chunk line = (ChunkCache.Chunk)obj;
-
-				ChunkCache.paintChunkList(line,gfx,
-					(float)(pageX + lineNumberWidth),
-					(float)(pageY + y),
-					Color.white,false);
-			}
-
-			if(currentPhysicalLine == buffer.getLineCount()
-				&& currentLine == lineList.size())
-			{
-				end = true;
-				break print_loop;
-			}
-		}
+		printPage(_gfx,pageFormat,pageIndex,true);
 
 		return PAGE_EXISTS;
 	} //}}}
@@ -207,7 +106,6 @@ print_loop:	for(;;)
 
 	private int currentPage;
 	private int currentPageStart;
-	private int currentLine;
 	private int currentPhysicalLine;
 	private boolean end;
 
@@ -215,28 +113,140 @@ print_loop:	for(;;)
 	private ArrayList lineList;
 	//}}}
 
+	//{{{ printPage() method
+	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex,
+		boolean actuallyPaint)
+	{
+		Graphics2D gfx = (Graphics2D)_gfx;
+		gfx.setFont(font);
+
+		double pageX = pageFormat.getImageableX();
+		double pageY = pageFormat.getImageableY();
+		double pageWidth = pageFormat.getImageableWidth();
+		double pageHeight = pageFormat.getImageableHeight();
+
+		if(header)
+		{
+			double headerHeight = paintHeader(gfx,pageX,pageY,pageWidth,
+				actuallyPaint);
+			pageY += headerHeight * 2;
+			pageHeight -= headerHeight * 2;
+		}
+
+		if(footer)
+		{
+			double footerHeight = paintFooter(gfx,pageX,pageY,pageWidth,
+				pageHeight,pageIndex,actuallyPaint);
+			pageHeight -= footerHeight * 2;
+		}
+
+		FontRenderContext frc = gfx.getFontRenderContext();
+
+		double lineNumberWidth;
+
+		//{{{ determine line number width
+		if(lineNumbers)
+		{
+			// the +1's ensure that 99 gets 3 digits, 103 gets 4 digits,
+			// and so on.
+			int lineNumberDigits = (int)Math.ceil(Math.log(buffer.getLineCount() + 1)
+				/ Math.log(10)) + 1;
+
+			// now that we know how many chars there are, get the width.
+			char[] chars = new char[lineNumberDigits];
+			for(int i = 0; i < chars.length; i++)
+				chars[i] = ' ';
+			lineNumberWidth = font.getStringBounds(chars,
+				0,lineNumberDigits,frc).getWidth();
+		}
+		else
+			lineNumberWidth = 0.0;
+		//}}}
+
+		//{{{ calculate tab size
+		int tabSize = jEdit.getIntegerProperty("print.tabSize",8);
+		char[] chars = new char[tabSize];
+		for(int i = 0; i < chars.length; i++)
+			chars[i] = ' ';
+		double tabWidth = font.getStringBounds(chars,
+			0,tabSize,frc).getWidth();
+		PrintTabExpander e = new PrintTabExpander(tabWidth);
+		//}}}
+
+		Segment seg = new Segment();
+		double y = 0.0;
+
+		lm = font.getLineMetrics("gGyYX",frc);
+
+print_loop:	for(;;)
+		{
+			if(currentPhysicalLine == buffer.getLineCount())
+			{
+				end = true;
+				break print_loop;
+			}
+
+			lineList.clear();
+
+			buffer.getLineText(currentPhysicalLine,seg);
+			Token tokens = buffer.markTokens(currentPhysicalLine)
+				.getFirstToken();
+			ChunkCache.lineToChunkList(seg,tokens,styles,frc,
+				e,(float)(pageWidth - lineNumberWidth),
+				lineList);
+			if(lineList.size() == 0)
+				lineList.add(null);
+
+			if(y + (lm.getHeight() * lineList.size()) >= pageHeight)
+				break print_loop;
+
+			if(lineNumbers && actuallyPaint)
+			{
+				gfx.setFont(font);
+				gfx.setColor(lineNumberColor);
+				gfx.drawString(String.valueOf(currentPhysicalLine + 1),
+					(float)pageX,(float)(pageY + y));
+			}
+
+			for(int i = 0; i < lineList.size(); i++)
+			{
+				ChunkCache.Chunk chunks = (ChunkCache.Chunk)lineList.get(i);
+				if(chunks != null && actuallyPaint)
+				{
+					ChunkCache.paintChunkList(chunks,gfx,
+						(float)(pageX + lineNumberWidth),
+						(float)(pageY + y),
+						Color.white,false);
+				}
+				y += lm.getHeight();
+			}
+
+			currentPhysicalLine++;
+		}
+	} //}}}
+
 	//{{{ paintHeader() method
 	private double paintHeader(Graphics2D gfx, double pageX, double pageY,
-		double pageWidth)
+		double pageWidth, boolean actuallyPaint)
 	{
 		String headerText = jEdit.getProperty("print.headerText",
 			new String[] { buffer.getPath() });
 		FontRenderContext frc = gfx.getFontRenderContext();
-
-		gfx.setColor(headerColor);
+		lm = font.getLineMetrics(headerText,frc);
 
 		Rectangle2D bounds = font.getStringBounds(headerText,frc);
-
 		Rectangle2D headerBounds = new Rectangle2D.Double(
 			pageX,pageY,pageWidth,bounds.getHeight());
-		gfx.fill(headerBounds);
 
-		gfx.setColor(headerTextColor);
-
-		lm = font.getLineMetrics(headerText,frc);
-		gfx.drawString(headerText,
-			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
-			(float)(pageY + lm.getAscent()));
+		if(actuallyPaint)
+		{
+			gfx.setColor(headerColor);
+			gfx.fill(headerBounds);
+			gfx.setColor(headerTextColor);
+			gfx.drawString(headerText,
+				(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
+				(float)(pageY + lm.getAscent()));
+		}
 
 		return headerBounds.getHeight();
 	}
@@ -244,27 +254,29 @@ print_loop:	for(;;)
 
 	//{{{ paintFooter() method
 	private double paintFooter(Graphics2D gfx, double pageX, double pageY,
-		double pageWidth, double pageHeight, int pageIndex)
+		double pageWidth, double pageHeight, int pageIndex,
+		boolean actuallyPaint)
 	{
 		String footerText = jEdit.getProperty("print.footerText",
 			new Object[] { new Date(), new Integer(pageIndex + 1) });
 		FontRenderContext frc = gfx.getFontRenderContext();
-
-		gfx.setColor(footerColor);
+		lm = font.getLineMetrics(footerText,frc);
 
 		Rectangle2D bounds = font.getStringBounds(footerText,frc);
 		Rectangle2D footerBounds = new Rectangle2D.Double(
 			pageX,pageY + pageHeight - bounds.getHeight(),
 			pageWidth,bounds.getHeight());
-		gfx.fill(footerBounds);
 
-		gfx.setColor(footerTextColor);
-
-		lm = font.getLineMetrics(footerText,frc);
-		gfx.drawString(footerText,
-			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
-			(float)(pageY + pageHeight - bounds.getHeight()
-			+ lm.getAscent()));
+		if(actuallyPaint)
+		{
+			gfx.setColor(footerColor);
+			gfx.fill(footerBounds);
+			gfx.setColor(footerTextColor);
+			gfx.drawString(footerText,
+				(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
+				(float)(pageY + pageHeight - bounds.getHeight()
+				+ lm.getAscent()));
+		}
 
 		return footerBounds.getHeight();
 	} //}}}
