@@ -30,47 +30,33 @@
    editor written in Java. I hope it is as useful for you as for me.
   </para>
   <para>
-   The latest version of jEdit, general information, and plugins
-   can all be obtained from its homepage: <indexterm>
-   <primary>home page</><secondary>jEdit</></indexterm>
-   <ulink url="http://www.gjt.org/~sp/jedit.html">
-   http://www.gjt.org/~sp/jedit.html</>. If you are not sure what
-   version of jEdit you have, or you obtained your copy some time
-   ago, it is recommended you upgrade to the latest available version.
-  </para>
-  <para>
-   There is a jEdit mailing list. <indexterm>
-   <primary>mailing list</><secondary>jEdit</></indexterm>
-   New plugins and jEdit versions are
-   announced there, and general discussion takes place. Please
-   try to keep the messages posted to the list on-topic and generally
-   interesting to other subscribers.
-  </para>
-  <itemizedlist>
-   <listitem><para>
-    To subscribe: Send mail to <email>jedit-subscribe@listbot.com</>
-   </para></listitem>
-   <listitem><para>
-    To unsubscribe: Send mail to <email>jedit-unsubscribe@listbot.com</>
-   </para></listitem>
-   <listitem><para>
-    To send a message to the list: Send mail to <email>jedit@listbot.com</>
-   </para></listitem>
-   <listitem><para>
-    To view the list archive: Go to <ulink url="http://jedit.listbot.com">
-    http://jedit.listbot.com</>.
-   </para></listitem>
-  </itemizedlist>
-  <para>
-   You may also contact the author of jEdit directly. My e-mail address
-   is <email>sp@gjt.org</>.
+   The jEdit homepage, located at <ulink
+   url="http://www.gjt.org/~sp/jedit.html">
+   http://www.gjt.org/~sp/jedit.html</>
+   contains the latest version of jEdit, along with plugin downloads.
+  </para><para>
+   There are two mailing lists dedicated to jEdit, one is for
+   announcements, the other is for general discussion.
+  </para><para>
+  To subscribe to the discussion list, e-mail
+  <email>jedit-subscribe@listbot.com</>. To unsubscribe, e-mail
+  <email>jedit-unsubscribe@listbot.com</>. To view the archive, go to
+  <ulink url="http://jedit.listbot.com">http://jedit.listbot.com</>.
+  </para><para>
+  To subscribe to the announcement list, e-mail
+  <email>jedit.announce-subscribe@listbot.com</>. To unsubscribe, e-mail
+  <email>jedit.announce-unsubscribe@listbot.com</>. To view the archive, go to
+  <ulink url="http://jedit.announce.listbot.com">http://jedit.announce.listbot.com</>.
+  </para><para>
+  You may also contact me directly by e-mailing <email>sp@gjt.org</>.
   </para>
  </sect1>
  <sect1 id=licensing><title>Licensing Information</>
   <para>
    Most of jEdit is released under the GNU General Public License, except
    for the following packages which are released under the GNU Lesser
-   General Public License, which allows them to be used in commercial programs:
+   General Public License, which allows them to be used in non-Open Source
+   programs:
   </para>
   <itemizedlist>
    <listitem><para>
@@ -325,16 +311,16 @@
     but don't actually exist in the document.
    </para>
    <para>
-    Clicking the text area with the right mouse button will
-    display the <firstterm>context menu</>, which contains frequently-used
-    editing commands.
-   </para>
-   <para>
     The text area never allows the caret to be positioned in the first or
     last visible line. If It is moved closer than 3 lines to the top or
     bottom, the viewscreen will shift in the appropriate direction to
     make 3 lines above and below the caret
     visible. This is called <firstterm>electric scrolling</>.
+   </para>
+   <para>
+    Clicking the text area with the right mouse button will
+    display the <firstterm>context menu</>, which contains frequently-used
+    editing commands.
    </para>
    <tip>
     <para>
@@ -458,7 +444,7 @@
    write access to the file).
   </para>
   <para>
-   If you use with non-ASCII files, you can select the file
+   If you edit non-ASCII files, you can select the file
    encoding used by jEdit in
    the 
      <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
@@ -601,13 +587,6 @@
     The point of backups so that if you make extensive changes to a file that you
     are not happy with, you can go back to the previous version.
    </para>
-  <para>
-   If you use with non-ASCII files, you can select the file
-   encoding used by jEdit in
-   the 
-     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
-     see <xref linkend=global-opts>.
-  </para>
    <tip>
     <para>
      The autosave interval and various backup-related
@@ -1225,11 +1204,10 @@
    <indexterm><primary>command line switches</><secondary>-nosettings</></indexterm>
    <indexterm><primary>command line switches</><secondary>-settings</></indexterm>
    <indexterm><primary>command line switches</><secondary>-nosplash</></indexterm>
-   <indexterm><primary>command line switches</><secondary>-nodesktop</></indexterm>
    <indexterm><primary>command line</></indexterm>
    All jEdit command line parameters except those that affect initial
-   startup (<command>-nosettings</>, <command>-settings</>, <command>-nosplash</>,
-   and <command>-nodesktop</>) are handled appropriately by the server.
+   startup (<command>-nosettings</>, <command>-settings</>
+   and <command>-nosplash</>) are handled appropriately by the server.
   </para>
   <para>
    <indexterm><primary>command line switches</><secondary>-reuseview</></indexterm>
@@ -1263,7 +1241,7 @@
    suffix, if left off, is appended to session names automatically):
    <screen><prompt>$</> <userinput>jedit -session=website</></screen>
    The <command>-nosession</> command line switch will instruct jEdit
-   not to load any session, and instead open an <filename>Untitled</>
+   not to load a session, and instead open an <filename>Untitled</>
    file.
   </para>
   <para>
@@ -1323,11 +1301,7 @@
   <para>
    Quite often while editing text, you need to insert a character or perform
    a command several times in a row. jEdit's repeat feature facilitates this.
-   Currently, only keyboard commands can be repeated, not
-   menu item selections.
-   The one exception to this rule is that commands for invoking macros
-   in the <guimenu>Macros</> menu <emphasis>can</> be repeated
-   by selecting their menu items.
+   Keyboard commands, menu item selections and tool bar clicks can be repeated.
   </para>
   <para>
    Pressing <keycombo><keycap>Control</><keycap>Enter</></keycombo> allows
@@ -1561,8 +1535,14 @@
   </para>
   <sect2 id=macro-files><title>Macro Files</>
    <para>
-    Each macro is stored as a file in the <filename>.jedit/macros</>
-    subdirectory of the user's home directory. Macro files have the
+    Each macro is stored as a file in the <filename>macros</> subdirectory
+    of the jEdit install directory, or the <filename>.jedit/macros</>
+    subdirectory of the user's home directory. The former contains several
+    sample macros included with jEdit, and the latter should be used to
+    store user-defined macros.
+   </para>
+   <para>
+    Macro files have the
     extension <quote>.macro</> and use a very simple syntax, with
     one command per line. Lines starting with a hash (<quote>#</>) are
     ignored by the macro interpreter and can be used to add commentary
@@ -1597,8 +1577,8 @@
     <guimenu>Macros</>&gt;<guimenuitem>Play Last Macro</> command (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycap>M</>
-    <keycap>L</>
+    <keycombo><keycap>Control</><keycap>M</></keycombo>
+    <keycombo><keycap>Control</><keycap>L</></keycombo>
    </para>
   </sect2>
   <sect2 id=macro-record><title>Recording Macros</>
@@ -1608,10 +1588,10 @@
     <guimenu>Macros</>&gt;<guimenuitem>Record Macro</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycap>M</>
-    <keycap>R</>) prompts for
+    <keycombo><keycap>Control</><keycap>M</></keycombo>
+    <keycombo><keycap>Control</><keycap>R</></keycombo>) prompts for
     a macro name, and begins recording to a file with that name
-    suffixed with <quote>.macro</> in the user's home directory.
+    suffixed with <quote>.macro</>.
    </para>
    <para>
     While a recording is in progress, <quote>Macro recording</> is
@@ -1629,8 +1609,8 @@
     <guimenu>Macros</>&gt;<guimenuitem>Stop Recording</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycap>M</>
-    <keycap>S</>) stops any
+    <keycombo><keycap>Control</><keycap>M</></keycombo>
+    <keycombo><keycap>Control</><keycap>S</></keycombo>) stops any
     recording currently in progress. It also switches to the buffer where
     the macro was being recorded, giving you a chance to check over the
     commands
@@ -1653,25 +1633,27 @@
     <guimenu>Macros</>&gt;<guimenuitem>Record Temporary Macro</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycap>M</>
-    <keycap>M</>) works in a
+    <keycombo><keycap>Control</><keycap>M</></keycombo>
+    <keycombo><keycap>Control</><keycap>M</></keycombo>) works in a
     similar fashion to the <guimenuitem>Record Macro</> command, except that
     it records to a buffer named <filename>__temporary__.macro</>.
-    Once recording is complete, the buffer should not be saved.
    </para>
    <indexterm><primary>Stop Recording command</></indexterm>
    <para>
     <guimenu>Macros</>&gt;<guimenuitem>Stop Recording</> stops recording the
     temporary macro. This is the same command used to stop recording an
     ordinary macro.
+    Once recording is complete, the <filename>__temporary__.macro</>
+    buffer need not be saved. However, if you do save it, it will become
+    an ordinary macro, displayed in the <guimenu>Macros</> menu.
    </para>
    <indexterm><primary>Play Temporary Macro command</></indexterm>
    <para>
     <guimenu>Macros</>&gt;<guimenuitem>Play Temporary Macro</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycap>M</>
-    <keycap>P</>) plays the
+    <keycombo><keycap>Control</><keycap>M</></keycombo>
+    <keycombo><keycap>Control</><keycap>P</></keycombo>) plays the
     macro recorded to the <filename>__temporary__.macro</> buffer.
    </para>
   </sect2>
@@ -1858,7 +1840,7 @@
       <row>
        <entry>eiffel</>
        <entry>Eiffel source code edit mode. Automatically
-       selected for files with extension <quote>.e</> or <quote>.se</>.
+       selected for files with extension <quote>.e</>.
        </entry>
       </row>
       <row>
@@ -1898,7 +1880,8 @@
       <row>
        <entry>perl</>
        <entry>Perl edit mode. Automatically selected for files with
-       extension <quote>.pl</> or <quote>.pm</>.
+       extension <quote>.pl</> or <quote>.pm</>, and whose first line
+       contains <quote>#!</> and <quote>perl</>.
        </entry>
       </row>
       <row>
@@ -1911,14 +1894,15 @@
       <row>
        <entry>python</>
        <entry>Python script edit mode. Automatically
-       selected for files with extension <quote>.py</> or whose first
-       line is <quote>#!/usr/bin/python</> or <quote>#!/usr/local/bin/python</>.
+       selected for files with extension <quote>.py</> or whose first line
+       contains <quote>#!</> and <quote>python</>.
        </entry>
       </row>
       <row>
        <entry>shell</>
        <entry>Unix shell script edit mode. Automatically selected for files
-       with extension <quote>.sh</>, and files whose first line is
+       with extension <quote>.sh</> or <quote>.csh</>,
+       and files whose first line is
        <quote>#!</> followed by one of the various Unix shell names.
        </entry>
       </row>
@@ -1935,7 +1919,7 @@
       <row>
        <entry>tsql</>
        <entry>Transact-SQL edit mode. Automatically selected for files with
-       extension <quote>.tsql</> or <quote>.sql</>.
+       extension <quote>.sql</>.
        </entry>
       </row>
       <row>
@@ -2222,7 +2206,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <para>
     The strings used for wing commenting can be changed using buffer-local
     properties. For example, placing the following in the first 10 lines
-    of a buffer will change the wing comment characters to <quote>(*</> and
+    of a buffer will change the wing comment strings to <quote>(*</> and
     <quote>*)</>:
    </para>
    <screen>:commentStart=(*:commentEnd=*):</screen>
@@ -2249,7 +2233,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <para>
     The strings used for box commenting can be changed using buffer-local
     properties. For example, placing the following in the first 10 lines
-    of a buffer will change the box comment characters to <quote>(*</> and
+    of a buffer will change the box comment strings to <quote>(*</> and
     <quote>*</>), with <quote>(-</> placed at the start of each line:
    </para>
    <screen>:commentStart=(*:commentEnd=*):boxComment=(-:</screen>
@@ -2271,7 +2255,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <para>
     The string used for block commenting can be changed using buffer-local
     properties. For example, placing the following in the first 10 lines
-    of a buffer will change the box comment characters to <quote>--</>:
+    of a buffer will change the box comment string to <quote>--</>:
    </para>
    <screen>:blockComment=--:</screen>
   </sect2>
@@ -2494,7 +2478,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <para>
    <indexterm><primary>history text fields</></indexterm>
    The text fields in the Search and Replace and HyperSearch dialog
-   boxes remember the last 25 strings entered into them.
+   boxes remember the last 25 entered strings.
   </para>
   <para>
    Previous strings can be recalled by pressing
@@ -2507,11 +2491,10 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    will search backwards or forwards, respectively, for strings
    beginning with the text already entered in the text field. For
    example, if <quote>Th</> is already entered, and the
-   strings <quote>Three</>, <quote>They</> and
-   <quote>Them</> were previously entered, pressing
+   strings <quote>Three</>, <quote>Bob</>, <quote>They</>, <quote>Fred</> and
+   <quote>Them</> are in the history, pressing
    <keycombo><keycap>Control</><keycap>Up Arrow</></keycombo>
-   would first recall <quote>Three</>, then <quote>They</>,
-   and so on.
+   would recall <quote>Three</>, <quote>They</>, and <quote>Them</>.
   </para>
   <para>
    Clicking the text field with the right mouse button will display
@@ -2640,25 +2623,25 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     <tbody>
      <row>
       <entry>blockComment</>
-      <entry>The block comment character(s). A block comment is one that
+      <entry>The block comment string. A block comment is one that
       extends to the end of the line. For example, in Java mode the
       default value is <quote>//</>. See <xref linkend=commenting>.</entry>
      </row>
      <row>
       <entry>boxComment</>
-      <entry>The box comment character(s). A box comment is one delimited
-      by the wing comment characters, but with the box comment character
+      <entry>The box comment string. A box comment is one delimited
+      by the wing comment strings, but with the box comment string
       also at the start of each line. For example, in Java mode the
       default value is <quote>*</>. See <xref linkend=commenting>.</entry>
      </row>
      <row>
       <entry>commentEnd</>
-      <entry>The wing comment end character(s). For example, in Java mode
+      <entry>The wing comment end string. For example, in Java mode
       the default value is <quote>*/</>. See <xref linkend=commenting>.</entry>
      </row>
      <row>
       <entry>commentStart</>
-      <entry>The wing comment start character(s). For example, in Java mode
+      <entry>The wing comment start string. For example, in Java mode
       the default value is <quote>/*</>. See <xref linkend=commenting>.</entry>
      </row>
      <row>
@@ -2942,13 +2925,12 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   text in this chapter presents brief <quote>cookbook</>-style instructions
   for the most common tasks, while the API documentation gives more
   detail and in-depth coverage - if you know what you're looking for.
-  Of course, learning any sort of programming is difficult unless you
+  And of course, learning any sort of programming is difficult unless you
   look at examples and experiment; having the source to a couple of
-  plugins might help.
+  plugins will definately help.
  </para>
  <para>
-  This section is still under construction; information about edit modes,
-  views, buffers and the text area is still to come.
+  This section is still under construction; more is still to come.
  </para>
  <sect1 id=plugin-jar><title>General Structure of a Plugin</>
   <para>
@@ -3063,10 +3045,10 @@ qux=$</programlisting>
    time a string of the form <property>{<replaceable>n</>}</> occurs in the
    property value. For example,
    the below code will produce the output <computeroutput>Hello, World-6</> if the
-   value of the <property>Foo</> is <property>{1}, {0}-{2}</>:
+   value of the <property>Foo</> property is <property>{1}, {0}-{2}</>:
   </para>
   <programlisting>Object[] args = { "World", "Hello", new Integer(6) };
-System.out.println("Foo",args);</>
+System.out.println(jEdit.getProperty("Foo",args));</>
   <para>
    Under the hood, this form of <function>getProperty()</> uses
    <classname>java.text.MessageFormat</> to do the formatting, and so
@@ -3130,7 +3112,7 @@ System.out.println("Foo",args);</>
    <listitem><para>
     <property>plugin.<replaceable>plugin</>.docs</property> - the filename,
     relative to the plugin's JAR root, where the documentation is stored in
-    HTML format
+    HTML format (a text file could also be used, but HTML is much better).
    </para></listitem>
   </itemizedlist>
  </sect1>
@@ -3164,18 +3146,20 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
   <para>
    How do you know exactly which jEdit version your plugin requires?
    The EditPlugin API was added in jEdit 2.1pre1 (build 02.01.01.00), so most
-   plugins will require that version. Furthermore, the option pane API changed
+   plugins will require that version. The option pane API changed
    in jEdit 2.1pre3 (build 02.01.03.00), so plugins
-   using option panes will require that.
+   using option panes will require that. Finally, another major change
+   occurred in jEdit 2.2pre6 (build 02.02.06.00); the EditBus message
+   system was integrated. There have been many other smaller API changes,
+   but most don't affect plugins.
   </para>
  </sect1>
  <sect1 id=plugin-actions><title>Plugin Actions</>
   <para>
    An <firstterm>action</> is basically an AWT action listener with a name
    attached that is used to obtain several properties, such as the
-   action's label when it is listed in a menu. Actions can be used anywhere
-   an AWT action listener can, for example to handle menu item selections,
-   button clicks, etc.
+   action's label when it is listed in a menu. Actions are called in response
+   to user feedback such as menu item selections, keystrokes, etc.
   </para>
   <indexterm><primary>class</><secondary>EditAction</></indexterm>
   <bridgehead renderas=sect3>EditAction class</>
@@ -3198,7 +3182,7 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
    <classname>java.awt.event.ActionListener</> interface, and hence can be
    used anywhere an ordinary action listener would, for example to
    handle menu item and button clicks. Currently, jEdit uses actions for
-   menus, keyboard shortcuts, and the tool bar, however plugins can only
+   menus, keyboard shortcuts, and the tool bar. Plugins can only
    customize the first two.
   </para>
   <bridgehead renderas=sect3>EditAction.EditAction() constructor</>
@@ -3371,11 +3355,14 @@ import org.gjt.sp.jedit.View;</>
   </para>
   <note>
    <para>
-    While it is possible to assign keyboard shortcuts to plugin commands,
-    this is highly discouraged. First of all, if two plugins bind to the
+    While you might be tempted to assign convinient keyboard shortcuts
+    to your plugin's actions, doing so
+    is highly discouraged, for several reasons.
+    First of all, if two plugins bind to the
     same key, nothing good will happen. Secondly, future jEdit versions
-    might use your shortcuts. If the user invokes a plugin often enough,
-    they can always assign it a key in the shortcut editor.
+    might use your shortcuts. It is much better to let the user decide
+    which plugins they actually use, and assign whatever shortcuts
+    they want to them.
    </para>
   </note>
  </sect1>
@@ -3460,7 +3447,7 @@ implements OptionPane
    the message</para></listitem>
    <listitem><para>Too complicated; the various methods of the
    <classname>JOptionPane</> class have too many paremeters which
-   are too hard to remember</para></listitem>
+   are hard to get right</para></listitem>
   </itemizedlist>
   <para>
    To solve this, jEdit has a number of wrappers around the
@@ -3593,7 +3580,7 @@ implements OptionPane
    </para></listitem>
   </itemizedlist>
   <para>
-   To overcome all these problems, jEdit has its own logging API.
+   To overcome these problems, jEdit has its own logging API.
   </para>
   <indexterm><primary>class</><secondary>Log</></indexterm>
   <indexterm><primary>method</><secondary>log() of Log class</></indexterm>
@@ -3608,8 +3595,8 @@ implements OptionPane
    </funcprototype>
   </funcsynopsis>
   <para>
-   This methods appends a message to the activity log
-   (<guimenu>Help</>&gt;<guimenuitem>Show Activity Log</>).
+   This method appends a message to the activity log
+   (see <xref linkend=activity-log>).
    <parameter>urgency</> is one of
    <command>Log.DEBUG</>,
    <command>Log.MESSAGE</>,
@@ -3624,8 +3611,9 @@ implements OptionPane
    a class. If <parameter>source</>
    is <command>null</>, the current thread's name is used.
    The <parameter>message</> parameter is the actual logged message;
-   it is either a string or
-   a <classname>java.lang.Throwable</>.
+   it should either be a string or
+   a <classname>java.lang.Throwable</> (the common superclass of all
+   exceptions and errors).
   </para>
  </sect1>
 </chapter>
@@ -3698,7 +3686,8 @@ implements OptionPane
      <entry>If this switch is specified, jEdit will not attempt to load
      a saved session. Session saving can be
      disabled permanently in the <guimenu>File</>&gt;<guimenuitem>Global Options</>
-     dialog box; see <xref linkend=global-opts>. Has no effect when connecting to another instance.</entry>
+     dialog box; see <xref linkend=global-opts>. Has no effect when connecting to
+     another instance via the edit server.</entry>
     </row>
     <row>
      <entry>-nosettings</>
@@ -3706,7 +3695,7 @@ implements OptionPane
      from <filename>$HOME/.jedit</>. This can be used if the
      user-specific settings are corrupt, or if a plugin installed
      in your plugins directory is causing problems. Has no effect
-     when connecting to another instance.</entry>
+     when connecting to another instance via the edit server.</entry>
     </row>
     <row>
      <entry>-nosplash</>
@@ -3715,8 +3704,8 @@ implements OptionPane
      <filename>.xinitrc</> or whatever on Unix, it might be undesirable
      for the splash screen to appear every time you log in. Another
      reason this might be used is if you want jEdit to start slightly
-     faster (not much faster; about 500 ms). Has no effect
-     when connecting to another instance.</entry>
+     faster (not much faster; about half a second). Has no effect
+     when connecting to another instance via the edit server.</entry>
     </row>
     <row>
      <entry>-readonly</>
@@ -3744,7 +3733,7 @@ implements OptionPane
      the directory named <replaceable>dir</>, instead of the
      default <filename>$HOME/.jedit</>. <replaceable>dir</> will
      be created if it does not exist. Has no effect
-     when connecting to another instance.</entry>
+     when connecting to another instance via the edit server.</entry>
     </row>
     <row>
      <entry>-reuseview</>

@@ -258,7 +258,7 @@ mode.shell.label=Shell Scripts
 mode.shell.blockComment=#
 mode.shell.tokenMarker=org.gjt.sp.jedit.syntax.ShellScriptTokenMarker
 mode.shell.filenameGlob=*.{csh,sh}
-mode.shell.firstlineGlob=#!*{sh,ash,bash,zsh,ksh,csh,tcsh}
+mode.shell.firstlineGlob=#!*{sh,ash,bash,zsh,ksh,csh,tcsh}*
 
 # TeX mode
 mode.tex.label=TeX Files

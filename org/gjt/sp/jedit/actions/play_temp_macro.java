@@ -31,6 +31,15 @@ public class play_temp_macro extends EditAction
 
 	public void actionPerformed(ActionEvent evt)
 	{
-		Macros.playMacro(getView(evt),null);
+		View view = getView(evt);
+		String settings = jEdit.getSettingsDirectory();
+
+		if(settings == null)
+		{
+			GUIUtilities.error(view,"no-settings",new String[0]);
+			return;
+		}
+
+		Macros.playMacro(view,null);
 	}
 }

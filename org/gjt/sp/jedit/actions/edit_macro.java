@@ -39,7 +39,7 @@ public class edit_macro extends EditAction
 
 		if(settings == null)
 		{
-			GUIUtilities.error(view,"macro-no-settings",new String[0]);
+			GUIUtilities.error(view,"no-settings",new String[0]);
 			return;
 		}
 

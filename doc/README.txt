@@ -19,7 +19,7 @@ found at <http://www.cacas.org/java/gnu/regexp/>.
 Most of jEdit is released under the GNU General Public License, except
 for the following packages which are released under the GNU Lesser
 General Public License, which allows those packages to be linked into
-commercial programs:
+non-Open Source programs:
 
 - org.gjt.sp.jedit.syntax (Syntax highlighting core and parsers)
 - org.gjt.sp.jedit.textarea (Syntax highlighting text area component)
@@ -33,24 +33,23 @@ COPYING.txt and COPYING-LIB.txt files, respectively.
 
 * jEdit on the Internet
 
-The jEdit homepage contains the latest version of jEdit, along with
-general information.
+The jEdit homepage, located at <http://www.gjt.org/~sp/jedit.html>
+contains the latest version of jEdit, along with plugin downloads.
 
-- jEdit homepage: <http://www.gjt.org/~sp/jedit.html>
+There are two mailing lists dedicated to jEdit, one is for
+announcements, the other is for general discussion.
 
-There is a jEdit mailing list for announcements and general discussion.
-If you have a feature suggestion, or you have written a plugin for
-jEdit, or you just want to be informed when new versions are released,
-you can subscribe to the mailing list.
+To subscribe to the discussion list, e-mail
+<jedit-subscribe@listbot.com>. To unsubscribe, e-mail
+<jedit-unsubscribe@listbot.com>. To view the archive, go to
+<http://jedit.listbot.com>.
 
-- To subscribe: Send mail to <jedit-subscribe@listbot.com>
-- To unsubscribe: Send mail to <jedit-unsubscribe@listbot.com>
-- To send a message to the list: Send mail to <jedit@listbot.com>
-- To view the archive: Go to <http://jedit.listbot.com>
+To subscribe to the announcement list, e-mail
+<jedit.announce-subscribe@listbot.com>. To unsubscribe, e-mail
+<jedit.announce-unsubscribe@listbot.com>. To view the archive, go to
+<http://jedit.announce.listbot.com>.
 
-You may also contact the author of jEdit directly.
-
-- Slava Pestov's e-mail: <sp@gjt.org>
+You may also contact me directly by e-mailing <sp@gjt.org>.
 
 * Documentation
 
@@ -63,4 +62,6 @@ doc/jeditdocs/index.html in a WWW browser. To view the PDF, open
 doc/jeditdocs.pdf in a PDF viewer such as Adobe Acrobat.
 
 Have fun!
+
+Slava Pestov
 <sp@gjt.org>

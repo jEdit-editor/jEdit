@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.actions;
 
 import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -35,13 +36,21 @@ public class record_temp_macro extends EditAction
 	{
 		View view = getView(evt);
 
+		String settings = jEdit.getSettingsDirectory();
+
+		if(settings == null)
+		{
+			GUIUtilities.error(view,"no-settings",new String[0]);
+			return;
+		}
 		if(view.getTextArea().getInputHandler().getMacroRecorder() != null)
 		{
 			GUIUtilities.error(view,"already-recording",new String[0]);
 			return;
 		}
 
-		Buffer buffer = jEdit.openFile(null,null,"__temporary__.macro",false,true);
+		Buffer buffer = jEdit.openFile(null,settings + File.separator
+			+ "macros","__temporary__.macro",false,true);
 
 		try
 		{

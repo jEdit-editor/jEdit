@@ -1,12 +1,6 @@
 JEDIT TO DO
 
-------- 2.2 to do -------
-
-- Proofread docs
-
-------- 2.3+ -------
-
-+ Possible cleanups
++ Cleanups
 
 - currently, Macros.java has a huge kudge to implement key bindings for
   macros. This is very stupid, and the menu code needs to be made more
@@ -71,3 +65,5 @@ JEDIT TO DO
 - Debugger front-end
 - VI key binding emulation
 - Spelling checker
+- Column guides - use text area highlighters to draw a vertical line at
+  a user-specified position (eg, column 80)
