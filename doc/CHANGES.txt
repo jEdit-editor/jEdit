@@ -6,7 +6,7 @@ JEDIT VERSION HISTORY
 
 - CSS mode added; HTML and friends now highlight CSS stylesheets inside
   <style> tags (Mike Dillon)
-- ASP mode (Andre Kaplan)
+- Major ASP mode updates (Andre Kaplan)
 - New 'search bar' with incremental search support replaces QuickSearch
   field on toolbar
 - PHP mode updates (Mike Dillon)
@@ -17,6 +17,9 @@ JEDIT VERSION HISTORY
 - Updated VBScript and JavaScript modes (Andre Kaplan)
 - Improved Search & Replace and HyperSearch dialog boxes
 - Utilities->Reload Edit Modes now works with the -nosettings switch
+- If the plugin list cannot be loaded, the plugin manager now displays a more
+  helpful error message telling the user to install the Firewall plugin if they
+  are behind a firewall
 
 + Bug Fixes
 
@@ -28,6 +31,8 @@ JEDIT VERSION HISTORY
 - Sources for AElfred XML parser were in the JAR but weren't installed
   (since 2.4pre2)
 - Fixed a few problems with resource handling
+- When run with the -nosettings switch, jEdit would create a 'mode-cache' file
+  in the current directory (since 2.4pre3)
 
 * Version 2.4pre3
 

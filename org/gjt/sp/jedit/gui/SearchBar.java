@@ -20,9 +20,12 @@
 package org.gjt.sp.jedit.gui;
 import java.awt.event.*;
 import java.awt.*;
+import javax.swing.event.*;
+import javax.swing.text.BadLocationException;
 import javax.swing.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class SearchBar extends JPanel
 {
@@ -42,6 +45,7 @@ public class SearchBar extends JPanel
 		ActionHandler handler = new ActionHandler();
 		find.addKeyListener(new KeyHandler());
 		find.addActionListener(new ActionHandler());
+		find.getDocument().addDocumentListener(new DocumentHandler());
 		box.add(Box.createGlue());
 		add(box,BorderLayout.CENTER);
 
@@ -82,9 +86,6 @@ public class SearchBar extends JPanel
 	{
 		if(incremental.getModel().isSelected())
 		{
-			ignoreCase.setSelected(false);
-			regexp.setSelected(false);
-			regexp.setEnabled(false);
 			multifile.setSelected(false);
 			multifile.setEnabled(false);
 			multifileBtn.setEnabled(false);
@@ -93,7 +94,6 @@ public class SearchBar extends JPanel
 		{
 			ignoreCase.getModel().setSelected(SearchAndReplace.getIgnoreCase());
 			regexp.getModel().setSelected(SearchAndReplace.getRegexp());
-			regexp.setEnabled(true);
 			multifile.getModel().setSelected(!(SearchAndReplace.getSearchFileSet()
 				instanceof CurrentBufferSet));
 			multifile.setEnabled(true);
@@ -119,6 +119,27 @@ public class SearchBar extends JPanel
 			instanceof CurrentBufferSet));
 	}
 
+	private void incrementalSearch(int start)
+	{
+		SearchAndReplace.setSearchString(find.getText());
+
+		try
+		{
+			SearchAndReplace.find(view,view.getBuffer(),start);
+			return;
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
+		catch(IllegalArgumentException ia)
+		{
+			// invalid regexp, ignore
+		}
+
+		view.getToolkit().beep();
+	}
+
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -126,25 +147,26 @@ public class SearchBar extends JPanel
 			Object source = evt.getSource();
 			if(evt.getSource() == find)
 			{
-				if(incremental.getModel().isSelected())
+				String text = find.getText();
+				if(text == null && text.length() == 0)
 				{
-					System.err.println("Incremental search not implemented yet");
+					new SearchDialog(view,null);
+				}
+				else if(incremental.getModel().isSelected())
+				{
+					// on enter, start search from end
+					// of current match to find next one
+					find.addCurrentToHistory();
+					incrementalSearch(view.getTextArea()
+						.getSelectionEnd());
 				}
 				else
 				{
-					String text = find.getText();
-					if(text == null || text.length() == 0)
-					{
-						new SearchDialog(view,null);
-					}
-					else
-					{
-						find.addCurrentToHistory();
-						find.setText(null);
-						SearchAndReplace.setSearchString(text);
-						SearchAndReplace.find(view);
-						view.focusOnTextArea();
-					}
+					find.addCurrentToHistory();
+					find.setText(null);
+					SearchAndReplace.setSearchString(text);
+					SearchAndReplace.find(view);
+					view.focusOnTextArea();
 				}
 			}
 			else if(evt.getSource() == incremental)
@@ -186,11 +208,44 @@ public class SearchBar extends JPanel
 			}
 		}
 	}
+
+	class DocumentHandler implements DocumentListener
+	{
+		public void insertUpdate(DocumentEvent evt)
+		{
+			// on insert, start search from beginning of
+			// current match. This will continue to highlight
+			// the current match until another match is found
+			if(incremental.getModel().isSelected())
+				incrementalSearch(view.getTextArea()
+					.getSelectionStart());
+		}
+
+		public void removeUpdate(DocumentEvent evt)
+		{
+			// on backspace, restart from beginning
+			// when we write reverse search, implement real
+			// backtracking
+			if(incremental.getModel().isSelected())
+			{
+				String text = find.getText();
+				if(text != null && text.length() != 0)
+					incrementalSearch(0);
+			}
+		}
+
+		public void changedUpdate(DocumentEvent evt)
+		{
+		}
+	}
 }
 
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.2  2000/04/06 02:22:12  sp
+ * Incremental search, documentation updates
+ *
  * Revision 1.1  2000/04/04 04:53:26  sp
  * added SearchBar.java
  *

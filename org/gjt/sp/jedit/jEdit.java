@@ -1612,13 +1612,16 @@ public class jEdit
 		modes = new Vector(40);
 
 		// try loading cache file
-		String path = MiscUtilities.constructPath(
-			settingsDirectory,"mode-cache");
+		String path;
 		if(settingsDirectory != null)
 		{
+			path = MiscUtilities.constructPath(
+				settingsDirectory,"mode-cache");
 			if(loadModeCache(path))
 				return;
 		}
+		else
+			path = null;
 
 		GUIUtilities.setProgressText("Creating edit mode cache");
 		createModeCache(path);
@@ -2058,6 +2061,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.210  2000/04/06 02:22:12  sp
+ * Incremental search, documentation updates
+ *
  * Revision 1.209  2000/04/05 08:33:42  sp
  * BufferTabs bug fix
  *

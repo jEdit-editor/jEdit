@@ -41,6 +41,9 @@ public class SearchAndReplace
 	 */
 	public static void setSearchString(String search)
 	{
+		if(search.equals(SearchAndReplace.search))
+			return;
+
 		SearchAndReplace.search = search;
 		matcher = null;
 
@@ -61,6 +64,9 @@ public class SearchAndReplace
 	 */
 	public static void setReplaceString(String replace)
 	{
+		if(replace.equals(SearchAndReplace.replace))
+			return;
+
 		SearchAndReplace.replace = replace;
 		matcher = null;
 
@@ -82,6 +88,9 @@ public class SearchAndReplace
 	 */
 	public static void setIgnoreCase(boolean ignoreCase)
 	{
+		if(ignoreCase == SearchAndReplace.ignoreCase)
+			return;
+
 		SearchAndReplace.ignoreCase = ignoreCase;
 		matcher = null;
 
@@ -105,6 +114,9 @@ public class SearchAndReplace
 	 */
 	public static void setRegexp(boolean regexp)
 	{
+		if(regexp == SearchAndReplace.regexp)
+			return;
+
 		SearchAndReplace.regexp = regexp;
 		matcher = null;
 
@@ -505,6 +517,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/04/06 02:22:12  sp
+ * Incremental search, documentation updates
+ *
  * Revision 1.26  2000/04/01 12:21:27  sp
  * mode cache implemented
  *

@@ -2,8 +2,6 @@ JEDIT TO DO
 
 + Features
 
-- Incremental search
-- 'Background' mode
 - XMode:
   - better error reporting
   - faster tokenizing of files
@@ -26,6 +24,7 @@ JEDIT TO DO
 
 + Enhancements
 
+- Update window-editor-* shots
 - JARClassLoader: use GUIUtilities.error() to display errors
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
   to 'Advanced Features'

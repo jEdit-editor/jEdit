@@ -83,6 +83,7 @@ goto-register.shortcut=C+y
 undo.shortcut=C+z
 
 # C+e
+replace-all.shortcut=C+e C+a
 box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
 delete-paragraph.shortcut=C+e C+d
@@ -96,6 +97,7 @@ set-marker.shortcut=C+e C+m
 new-view.shortcut=C+e C+n
 open-url.shortcut=C+e C+o
 exit.shortcut=C+e C+q
+replace-in-selection.shortcut=C+e C+r
 insert-literal.shortcut=C+e C+v
 close-view.shortcut=C+e C+w
 redo.shortcut=C+e C+z
