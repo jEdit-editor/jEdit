@@ -7,8 +7,6 @@ JEDIT TO DO
   flexible, so that BeanShell and friends can also have shortcuts (that
   can be edited in the shortcuts option pane!)
 - jEdit.getBooleanProperty() for yes/no stuff
-- SHIFT+Click broken in ta?
-- test if search and replace beeps
 
 + Features
 
