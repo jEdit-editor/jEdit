@@ -94,13 +94,50 @@ public class Abbrevs
 			return false;
 		}
 
-		int wordStart = TextUtilities.findWordStart(lineText,pos - 1,
-			(String)buffer.getProperty("noWordSep"));
+		// we reuse the 'pp' vector to save time
+		pp.removeAllElements();
 
-		String abbrev = lineText.substring(wordStart,pos);
-		Expansion expand = Abbrevs.expandAbbrev(buffer.getMode().getName(),
+		int wordStart;
+		String abbrev;
+
+		// handle abbrevs of the form abbrev#pos1#pos2#pos3#...
+		if(lineText.charAt(pos-1) == '#')
+		{
+			wordStart = lineText.indexOf('#');
+			wordStart = TextUtilities.findWordStart(lineText,wordStart,
+				(String)buffer.getProperty("noWordSep") + '#');
+
+			abbrev = lineText.substring(wordStart,pos - 1);
+
+			// positional parameters will be inserted where $1, $2, $3, ...
+			// occurs in the expansion
+
+			int lastIndex = 0;
+			for(int i = 0; i < abbrev.length(); i++)
+			{
+				if(abbrev.charAt(i) == '#')
+				{
+					pp.addElement(abbrev.substring(lastIndex,i));
+					lastIndex = i + 1;
+				}
+			}
+
+			pp.addElement(abbrev.substring(lastIndex));
+
+			// the first element of pp is the abbrev itself
+			abbrev = (String)pp.elementAt(0);
+		}
+		else
+		{
+			wordStart = TextUtilities.findWordStart(lineText,pos - 1,
+				(String)buffer.getProperty("noWordSep"));
+
+			abbrev = lineText.substring(wordStart,pos);
+		}
+
+		Expansion expand = expandAbbrev(buffer.getMode().getName(),
 			abbrev,(buffer.getBooleanProperty("noTabs") ?
-			buffer.getTabSize() : 0));
+			buffer.getTabSize() : 0),pp);
 
 		if(expand == null)
 		{
@@ -149,84 +186,6 @@ public class Abbrevs
 			buffer.endCompoundEdit();
 
 			return true;
-		}
-	}
-
-	/**
-	 * Locates a completion for the specified abbrev.
-	 * @param mode The edit mode
-	 * @param abbrev The abbrev
-	 * @param softTabSize The soft tab size, or zero if hard tabs should
-	 * be used in the expansion
-	 * @since jEdit 3.1pre1
-	 */
-	public static Expansion expandAbbrev(String mode, String abbrev,
-		int softTabSize)
-	{
-		// try mode-specific abbrevs first
-		String expand = null;
-		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
-		if(modeAbbrevs != null)
-			expand = (String)modeAbbrevs.get(abbrev);
-
-		if(expand == null)
-			expand = (String)globalAbbrevs.get(abbrev);
-
-		if(expand == null)
-			return null;
-		else
-			return new Expansion(expand,softTabSize);
-	}
-
-	/**
-	 * An abbreviation expansion.
-	 * @since jEdit 2.6pre4
-	 */
-	public static class Expansion
-	{
-		public String text;
-		public int caretPosition = -1;
-		public int lineCount;
-
-		public Expansion(String text, int softTabSize)
-		{
-			StringBuffer buf = new StringBuffer();
-			boolean backslash = false;
-
-			for(int i = 0; i < text.length(); i++)
-			{
-				char ch = text.charAt(i);
-				if(backslash)
-				{
-					backslash = false;
-
-					if(ch == '|')
-						caretPosition = buf.length();
-					else if(ch == 'n')
-					{
-						buf.append('\n');
-						lineCount++;
-					}
-					else if(ch == 't')
-					{
-						if(softTabSize == 0)
-							buf.append('\t');
-						else
-						{
-							for(int j = 0; j < softTabSize; j++)
-								buf.append(' ');
-						}
-					}
-					else
-						buf.append(ch);
-				}
-				else if(ch == '\\')
-					backslash = true;
-				else
-					buf.append(ch);
-			}
-
-			this.text = buf.toString();
 		}
 	}
 
@@ -383,8 +342,27 @@ public class Abbrevs
 	private static boolean expandOnInput;
 	private static Hashtable globalAbbrevs;
 	private static Hashtable modes;
+	private static Vector pp = new Vector();
 
 	private Abbrevs() {}
+
+	private static Expansion expandAbbrev(String mode, String abbrev,
+		int softTabSize, Vector pp)
+	{
+		// try mode-specific abbrevs first
+		String expand = null;
+		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
+		if(modeAbbrevs != null)
+			expand = (String)modeAbbrevs.get(abbrev);
+
+		if(expand == null)
+			expand = (String)globalAbbrevs.get(abbrev);
+
+		if(expand == null)
+			return null;
+		else
+			return new Expansion(expand,softTabSize,pp);
+	}
 
 	private static void loadAbbrevs(Reader _in) throws Exception
 	{
@@ -464,6 +442,77 @@ public class Abbrevs
 			out.write('|');
 			out.write(values.nextElement().toString());
 			out.write(lineSep);
+		}
+	}
+
+	static class Expansion
+	{
+		String text;
+		int caretPosition = -1;
+		int lineCount;
+
+		Expansion(String text, int softTabSize, Vector pp)
+		{
+			StringBuffer buf = new StringBuffer();
+			boolean backslash = false;
+
+			for(int i = 0; i < text.length(); i++)
+			{
+				char ch = text.charAt(i);
+				if(backslash)
+				{
+					backslash = false;
+
+					if(ch == '|')
+						caretPosition = buf.length();
+					else if(ch == 'n')
+					{
+						buf.append('\n');
+						lineCount++;
+					}
+					else if(ch == 't')
+					{
+						if(softTabSize == 0)
+							buf.append('\t');
+						else
+						{
+							for(int j = 0; j < softTabSize; j++)
+								buf.append(' ');
+						}
+					}
+					else
+						buf.append(ch);
+				}
+				else if(ch == '\\')
+					backslash = true;
+				else if(ch == '$')
+				{
+					if(i != text.length() - 1)
+					{
+						ch = text.charAt(++i);
+						if(Character.isDigit(ch) && ch != '0')
+						{
+							int pos = ch - '0';
+							if(pos < pp.size())
+								buf.append(pp.elementAt(pos));
+							else
+							{
+								// so the user knows
+								// a positional is
+								// expected
+								buf.append('$');
+								buf.append(ch);
+							}
+						}
+						else
+							buf.append(ch);
+					}
+				}
+				else
+					buf.append(ch);
+			}
+
+			this.text = buf.toString();
 		}
 	}
 }

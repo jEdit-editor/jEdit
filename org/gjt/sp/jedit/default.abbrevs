@@ -1,15 +1,20 @@
-[global]
-EMAIL|slava@jedit.org
-JEDIT|http://www.jedit.org
-
 [java]
-Ex|Exception
-IOEx|IOException
-MalEx|MalformedURLException
-Ob|Object
-St|String
-Ve|Vector
-Ha|Hashtable
+D|do\n{\n\t\|\n}\nwhile($1);
+E|Exception
+Ei|else if($1)\n{\n\t\|\n}
+El|else\n{\n\t\|\n}
+F|for(int $1 = 0; $1 < $2; $1++)\n{\n\t\|\n}
+Fd|for(int $1 = $2 - 1; $1 >= 0; $1--)\n{\n\t\|\n}
+H|Hashtable
+I|if($1)\n{\n\t\|\n}
+IO|IOException
+O|Object
+P|public
+S|String
+V|Vector
+W|while($1)\n{\n\t\|\n}
+
+Mal|MalformedURLException
 hme|hasMoreElements()
 ne|nextElement()
 serr|System.err.println(\|);
@@ -18,24 +23,13 @@ sout|System.out.println(\|);
 cg|Box.createGlue()
 chs|Box.createHorizontalStrut(\|)
 cvs|Box.createVerticalStrut(\|)
-Yil|SwingUtilities.invokeLater(new Runnable()\n{\n\tpublic void run()\n\t{\n\t\t\|\n\t}\n});
+Il|SwingUtilities.invokeLater(new Runnable()\n{\n\tpublic void run()\n\t{\n\t\t\|\n\t}\n});
 
-Yif|if(\|)\n\t;
-YYif|if(\|)\n{\n\t\n}
-Yelse|else(\|)\n\t;
-YYelse|else(\|)\n{\n\t\n}
-Yfor|for(\|)\n\t;
-YYfor|for(\|)\n{\n\t\n}
-Ywhile|while(\|)\n\t;
-YYwhile|while(\|)\n{\n\t\n}
-
-Vi|View
 B|Buffer
 JE|JEditTextArea
 VDE|VFS.DirectoryEntry
 gta|getTextArea()
 gb|getBuffer()
-gv|getView(evt)
 gp|jEdit.getProperty(\|)
 gbp|jEdit.getBooleanProperty(\|)
 sp|jEdit.setProperty(\|)
@@ -49,21 +43,9 @@ logn|Log.log(Log.NOTICE,this,\|);
 logm|Log.log(Log.MESSAGE,this,\|);
 logd|Log.log(Log.DEBUG,this,\|);
 
-[html]
-EMAILLINK|<a href="mailto:slava@jedit.org">slava@jedit.org</a>
-JEDITLINK|<a href="http://www.jedit.org">jEdit</a>
-
 [sgml]
 Ykeycap|<keycap>\|</>
-Ykeycombo|<keycombo><keycap>\|</><keycap></></keycombo>
-Yindex|<indexterm><primary>\|</></indexterm>
-YYindex|<indexterm><primary>\|</><secondary></></indexterm>
-
-[xml]
-Ykeycap|<keycap>\|</keycap>
-Ykeycombo|<keycombo><keycap>\|</keycap><keycap></keycap></keycombo>
-Yindex|<indexterm><primary>\|</primary></indexterm>
-YYindex|<indexterm><primary>\|</primary><secondary></secondary></indexterm>
+Ykeycombo|<keycombo><keycap>$1</><keycap>$2</></keycombo>
 
 [vhdl]
 sl|std_logic

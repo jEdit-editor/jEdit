@@ -17,8 +17,13 @@ JEDIT 3.2 README
 jEdit is a cross platform programmer's text editor written in Java.
 
 jEdit is free software, and you are welcome to redistribute it under the
-terms of the GNU General Public License. See the file COPYING.txt for
-details.
+terms of the GNU General Public License (either version 2 or any later
+version, at the user's election). See the file COPYING.txt for details.
+
+A number of plugins are available for jEdit. Unless otherwise stated in
+the plugin's documentation, each of the plugins is licensed for use and
+redistribution under the terms of the GNU General Public License (either
+version 2 or any later version, at the user's election).
 
 jEdit requires Java 2 (or Java 1.1 with Swing 1.1) in order to work.
 
@@ -27,10 +32,10 @@ jEdit requires Java 2 (or Java 1.1 with Swing 1.1) in order to work.
 The jEdit homepage, located at <http://www.jedit.org> contains the
 latest version of jEdit, along with plugin downloads.
 
-There are three mailing lists dedicated to jEdit; an announcement
-list that is very low traffic, a general discussion list, and a
-development discussion list. To subscribe, unsubscribe or view list
-archives, visit <http://www.sourceforge.net/mail/?group_id=588>.
+There are three mailing lists dedicated to jEdit; an announcement list
+that is very low traffic, a general discussion list, and a development
+discussion list. To subscribe, unsubscribe or view list archives, visit
+<http://www.sourceforge.net/mail/?group_id=588>.
 
 If you would like to discuss the BeanShell scripting language,
 subscribe to one of the BeanShell mailing lists by visiting
@@ -55,11 +60,10 @@ jEdit-users or jEdit-devel mailing list.
 
 * Documentation
 
-An HTML version of the jEdit user's guide is included with jEdit; to
-view it, invoke `Help->jEdit User Guide' from jEdit's menu bar, or open
-`doc/users-guide/index.html' in a WWW browser such as Netscape.
+An HTML version of the user's guide is included with jEdit; to view it,
+invoke `Help->jEdit Help' from jEdit's menu bar.
 
-A PDF version can be obtained from <http://www.jedit.org>. It can be
+A PDF version can be downloaded from <http://www.jedit.org>. It can be
 viewed in a PDF viewer such as Adobe Acrobat.
 
 * Common problems

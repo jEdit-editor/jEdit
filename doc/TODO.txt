@@ -1,31 +1,28 @@
 TO DO
 
-- next time i'm making an RPM, fix the shell script
-- console: windows built-ins don't work?
-- move user's guide to jedit.jar
-- have copy of .txt files in jedit.jar
-- macros fileset in installer
-
-+ to figure out before pre3:
-
+- document positional parameters in abbrevs
+- non-existent files and caret history
+- double click: selection prob
+- double click should move caret to other bracket, not clicked one
 - encoding option in VFS browser
 - catch MalformedInputException and display a better error message
-- large selections make the text area trip
+- get web start to work
+- next time i'm making an RPM, fix the shell script
+- modes have a reference counter; unload modes which have no buffers open
+- scrolling while caret is on a bracket over long distances slows things
+  down
 - test edit server
 - vfs browser: >1 request error when clicking 'up'?
 - italics font metrics bugs
 - finish persistent splits: resize splits to make them in the middle
-- new preferences engine?
-
-- get web start to work
-- line sep, encoding in status
+- status bar: show recording status, encoding, line separator?
 - server property
 - reuseview property
 - background property
 - narrow indicator in status
 - Java 1.4 key events: DefaultInputHandler
 - replace in sel doesn't work if rect
-- broken reverse search
+- broken reverse search?
 - text style bugs
 - macros in web start version
 - caret event not always fired

@@ -1,19 +1,19 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
-<appendix id=activity-log><title>The Activity Log</>
+<appendix id="activity-log"><title>The Activity Log</title>
  <para>
-  The <firstterm>activity log</> is very useful for
+  The <firstterm>activity log</firstterm> is very useful for
   troubleshooting problems, and helps when developing plugins.
  </para>
  <para>
-  <guimenu>Utilities</>&gt;<guimenuitem>Activity Log</> displays
+  <guimenu>Utilities</guimenu>&gt;<guimenuitem>Activity Log</guimenuitem> displays
   the last 500 lines of the activity log. By default, the activity is shown in
   a floating window;
-  it can be set to dock into the view in the <guibutton>Docking</> pane of the
-  <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  it can be set to dock into the view in the <guibutton>Docking</guibutton> pane of the
+  <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
   The complete
-  log can be found in the <filename>activity.log</> file inside the
+  log can be found in the <filename>activity.log</filename> file inside the
   jEdit settings directory, the path of which is shown inside the activity
   log window.
  </para>
@@ -35,8 +35,8 @@
   While jEdit is running, the log file on disk may not always accurately reflect
   what has been logged, due to buffering being done for performance reasons.
   To ensure the file on disk is up to
-  date, invoke the <guimenu>Utilities</>&gt;<guimenuitem>Update Activity
-  Log on Disk</> command. The log file is also automatically updated on
+  date, invoke the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Update Activity
+  Log on Disk</guimenuitem> command. The log file is also automatically updated on
   disk when jEdit exits.
  </para>
  <!-- <figure><title>The activity log</>

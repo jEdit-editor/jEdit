@@ -1,7 +1,7 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
-<appendix id=globs><title>Glob Patterns</>
+<appendix id="globs"><title>Glob Patterns</title>
  <para>
   jEdit uses glob patterns similar to those in the various
   Unix shells to implement file name filters in the file system browser.
@@ -11,15 +11,15 @@
   pattern:
  </para>
  <itemizedlist>
-  <listitem><para><command>?</> matches any one character</para></listitem>
-  <listitem><para><command>*</> matches any number of characters</para></listitem>
-  <listitem><para><command>{<replaceable>a</>,<replaceable>b</>,<replaceable>c</>}</>
-  matches any one of <replaceable>a</>, <replaceable>b</> or
-  <replaceable>c</></para></listitem>
+  <listitem><para><command>?</command> matches any one character</para></listitem>
+  <listitem><para><command>*</command> matches any number of characters</para></listitem>
+  <listitem><para><command>{<replaceable>a</replaceable>,<replaceable>b</replaceable>,<replaceable>c</replaceable>}</command>
+  matches any one of <replaceable>a</replaceable>, <replaceable>b</replaceable> or
+  <replaceable>c</replaceable></para></listitem>
  </itemizedlist>
  <para>
-  Character class expressions (<command>[abc]</>, etc) are supported in globs
+  Character class expressions (<command>[abc]</command>, etc) are supported in globs
   and behave exactly like regular expression character classes; see
-  <xref linkend=regexps> for details.
+  <xref linkend=regexps /> for details.
  </para>
 </appendix>

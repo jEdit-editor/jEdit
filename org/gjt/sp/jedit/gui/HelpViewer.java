@@ -158,9 +158,7 @@ public class HelpViewer extends JFrame
 		try
 		{
 			if(!MiscUtilities.isURL(url))
-				_url = getDocumentation(url);
-			else if(url.startsWith("file://"))
-				_url = new URL("file:" + url.substring(7));
+				_url = getClass().getResource("/doc/" + url);
 			else
 				_url = new URL(url);
 
@@ -195,13 +193,9 @@ public class HelpViewer extends JFrame
 		}
 
 		// select the appropriate tree node.
-		// messier than it needs to be due to stupid Web Start issues.
-		url = _url.toString();
 		int index = url.lastIndexOf("/doc/");
-		if(index == -1)
-			return;
-
-		url = url.substring(index + 5);
+		if(index != -1)
+			url = url.substring(index + 5);
 
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)nodes.get(url);
 
@@ -232,26 +226,6 @@ public class HelpViewer extends JFrame
 	private String[] history;
 	private int historyPos;
 
-	private URL getDocumentation(String doc)
-	{
-		if(jEdit.getJEditHome() == null)
-			return HelpViewer.class.getResource("/doc/" + doc);
-		else
-		{
-			String url = MiscUtilities.constructPath(jEdit.getJEditHome(),"doc");
-			url = "file:" + url.replace(File.separatorChar,'/') + '/' + doc;
-
-			try
-			{
-				return new URL(url);
-			}
-			catch(MalformedURLException mf)
-			{
-				return null;
-			}
-		}
-	}
-
 	private void createTOC()
 	{
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
@@ -259,25 +233,20 @@ public class HelpViewer extends JFrame
 		root.add(createNode("welcome.html",
 			jEdit.getProperty("helpviewer.toc.welcome")));
 
-		loadUserGuideTOC(root);
-
-		DefaultMutableTreeNode misc = new DefaultMutableTreeNode(
-			jEdit.getProperty("helpviewer.toc.misc"),true);
-
-		misc.add(createNode("README.txt",
+		root.add(createNode("README.txt",
 			jEdit.getProperty("helpviewer.toc.readme")));
-		misc.add(createNode("NEWS.txt",
+		root.add(createNode("NEWS.txt",
 			jEdit.getProperty("helpviewer.toc.news")));
-		misc.add(createNode("TODO.txt",
+		root.add(createNode("TODO.txt",
 			jEdit.getProperty("helpviewer.toc.todo")));
-		misc.add(createNode("CHANGES.txt",
+		root.add(createNode("CHANGES.txt",
 			jEdit.getProperty("helpviewer.toc.changes")));
-		misc.add(createNode("COPYING.txt",
+		root.add(createNode("COPYING.txt",
 			jEdit.getProperty("helpviewer.toc.copying")));
-		misc.add(createNode("COPYING.DOC.txt",
+		root.add(createNode("COPYING.DOC.txt",
 			jEdit.getProperty("helpviewer.toc.copying-doc")));
 
-		root.add(misc);
+		loadUserGuideTOC(root);
 
 		DefaultMutableTreeNode pluginDocs = new DefaultMutableTreeNode(
 			jEdit.getProperty("helpviewer.toc.plugins"),true);
@@ -325,7 +294,7 @@ public class HelpViewer extends JFrame
 			// use a URL here because with Web Start version,
 			// toc.xml is not a local file
 			parser.parse(null, null, new InputStreamReader(
-				getDocumentation("users-guide/toc.xml")
+				getClass().getResource("/doc/users-guide/toc.xml")
 				.openStream()));
 		}
 		catch(XmlException xe)

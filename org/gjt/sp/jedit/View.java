@@ -982,6 +982,7 @@ public class View extends JFrame implements EBComponent
 			public void actionPerformed(ActionEvent evt)
 			{
 				jEdit.openFile(View.this,evt.getActionCommand());
+				status.setMessage(null);
 			}
 		};
 
@@ -994,11 +995,6 @@ public class View extends JFrame implements EBComponent
 			}
 
 			public void mouseExited(MouseEvent evt)
-			{
-				status.setMessage(null);
-			}
-
-			public void mouseClicked(MouseEvent evt)
 			{
 				status.setMessage(null);
 			}

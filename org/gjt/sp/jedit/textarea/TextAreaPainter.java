@@ -522,8 +522,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		paintHighlight(gfx,virtualLine,physicalLine,y,valid);
 
-		int firstLine = textArea.getFirstLine();
-
 		if(maxLineLen != 0 && wrapGuide)
 		{
 			gfx.setColor(wrapGuideColor);
@@ -626,7 +624,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private void paintCaret(Graphics gfx, int physicalLine, int y)
 	{
-		int offset = textArea.getCaretPosition() 
+		int offset = textArea.getCaretPosition()
 			- textArea.getLineStartOffset(physicalLine);
 		int caretX = textArea.offsetToX(physicalLine,offset);
 		int height = fm.getHeight();

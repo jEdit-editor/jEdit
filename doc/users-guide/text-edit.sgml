@@ -604,19 +604,24 @@
    reads the next character entered at the keyboard, and adds a marker with that
    shortcut pointing to the current line. If a previously-defined marker already
    has that shortcut, it will no longer have that shortcut, but will remain
-   in the buffer.
+   in the buffer. Pressing <keycap>Escape</> instead of specifying a marker
+   shortcut after invoking the command will cancel the operation.
   </para>
   <para>
    <guimenu>Markers</>&gt;<guimenuitem>Go to Marker</>
    (shortcut: <keycombo><keycap>Control</><keycap>Y</></keycombo>)
    reads the next character entered at the keyboard, and moves the caret to the
-   location of the marker with that shortcut.
+   location of the marker with that shortcut. Pressing <keycap>Escape</> instead
+   of specifying a marker
+   shortcut after invoking the command will cancel the operation.
   </para>
   <para>
    <guimenu>Markers</>&gt;<guimenuitem>Select to Marker</>
    (shortcut: <keycombo><keycap>Control</><keycap>U</></keycombo>)
    reads the next character entered at the keyboard, and extends
    the selection to the location of the marker with that shortcut.
+    Pressing <keycap>Escape</> instead of specifying a marker
+   shortcut after invoking the command will cancel the operation.
   </para>
   <para>
    <guimenu>Markers</>&gt;<guimenuitem>Swap Caret and Marker</>
@@ -624,6 +629,8 @@
    reads the next character entered at the keyboard, and swaps the
    position of the caret with
    the location of the marker with that shortcut.
+    Pressing <keycap>Escape</> instead of specifying a marker
+   shortcut after invoking the command will cancel the operation.
   </para>
   <para>
    <guimenu>Markers</>&gt;<guimenuitem>Go to Previous Marker</>

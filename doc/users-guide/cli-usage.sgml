@@ -1,7 +1,7 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
-<appendix id=cli-usage><title>Command Line Usage</>
+<appendix id="cli-usage"><title>Command Line Usage</title>
  <para>
   On operating systems that support a command line, jEdit can be passed
   a multitude of options that control its behavior.
@@ -10,93 +10,94 @@
   When opening files from the command line, a line number or marker to
   position the caret on can be specified like so:
  </para>
- <screen><prompt>$ </><userinput>jedit MyApplet.java +line:10</>
-<prompt>$ </><userinput>jedit thesis.tex +marker:chapter5</></screen>
+ <screen><prompt>$ </prompt><userinput>jedit MyApplet.java +line:10</userinput>
+<prompt>$ </prompt><userinput>jedit thesis.tex +marker:chapter5</userinput></screen>
 <informaltable><!-- <title>Table of command line switches</> -->
-  <tgroup cols=2>
-   <colspec colnum=1 colwidth=1.5in>
+  <tgroup cols="2">
+   <colspec colnum="1" colwidth="1.5in">
    <thead>
-    <row><entry>Switch</><entry>Effect</></row>
+    <row><entry>Switch</entry><entry>Effect</entry></row>
    </thead>
    <tbody>
     <row>
-     <entry>-background</>
+     <entry>-background</entry>
      <entry>Runs jEdit in background mode. In background mode,
      the edit server will continue listening for
      client connections even after all views are closed.
-     See <xref linkend=starting>.</entry>
+     See <xref linkend=starting />.</entry>
     </row>
     <row>
-     <entry>-newview</>
+     <entry>-newview</entry>
      <entry>Only valid when connecting to another instance.
      Instead of opening files in an existing view, they will be opened
      in a new view.
      </entry>
     </row>
     <row>
-     <entry>-nogui</>
+     <entry>-nogui</entry>
      <entry>Only valid when running in background mode. Forces jEdit
-     to start without an initial view.</>
+     to start without an initial view.</entry>
     </row>
     <row>
-     <entry>-norestore</>
+     <entry>-norestore</entry>
      <entry>jEdit will not attempt to restore previously open files on
      startup. This feature can also be set permanently in the
-     <guibutton>Loading and Saving</> pane of the
-     <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+     <guibutton>Loading and Saving</guibutton> pane of the
+     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
      dialog box. Has no effect when connecting to
      another instance via the edit server.
      </entry>
     </row>
     <row>
-     <entry>-noserver</>
+     <entry>-noserver</entry>
      <entry>Disables the edit server. Does not attempt to
      connect to the server, and does not start one either. For
-     information about the edit server, see <xref linkend=starting>.</entry>
+     information about the edit server, see <xref linkend=starting />.</entry>
     </row>
     <row>
-     <entry>-nosettings</>
+     <entry>-nosettings</entry>
      <entry>Starts jEdit without loading user-specific settings.
-     See <xref linkend=settings-directory>.</entry>
+     See <xref linkend=settings-directory />.</entry>
     </row>
     <row>
-     <entry>-nostartupmacro</>
+     <entry>-nostartupmacro</entry>
      <entry>Does not run the startup macro if one is present.
-     See <xref linkend=startup-macro>.
+     See <xref linkend=startup-macro />.
      Has no effect
      when connecting to another instance via the edit server.</entry>
     </row>
     <row>
      <entry>-server</entry>
-     <entry>Stores the server port info in the file named <filename>server</>
+     <entry>Stores the server port info in the file named <filename>server</filename>
      inside the settings directory.</entry>
     </row>
     <row>
-     <entry>-server=<replaceable>name</></entry>
+     <entry>-server=<replaceable>name</replaceable></entry>
      <entry>Stores the server port info in the file named
-     <replaceable>name</>. File names for this
+     <replaceable>name</replaceable>. File names for this
      parameter are relative to the settings directory.</entry>
     </row>
     <row>
-     <entry>-settings=<replaceable>dir</></entry>
+     <entry>-settings=<replaceable>dir</replaceable></entry>
      <entry>Loads and saves the user-specific settings from
-     the directory named <replaceable>dir</>, instead of the
-     default <filename><replaceable>user.home</>/.jedit</>. <replaceable>dir</> will
+     the directory named <replaceable>dir</replaceable>, instead of the
+     default <filename><replaceable>user.home</replaceable>/.jedit</filename>.
+     <replaceable>dir</replaceable> will
      be created if it does not exist. Has no effect
      when connecting to another instance via the edit server.</entry>
     </row>
     <row>
-     <entry>-usage</>
+     <entry>-usage</entry>
      <entry>Shows a brief command line usage message without starting
      jEdit.
-     This message is also shown if an invalid switch was specified.</>
+     This message is also shown if an invalid switch was specified.</entry>
     </row>
     <row>
-     <entry>-version</>
-     <entry>Shows the version number without starting jEdit.</>
+     <entry>-version</entry>
+     <entry>Shows the version number without starting jEdit.</entry>
     </row>
     <row>
-     <entry>- -</>
+     <entry>- -</entry>
      <entry>Specifies the end of the command line switches. Further
      parameters are treated as file names, even if they begin with
      a dash. Can be used to open files whose names start with a

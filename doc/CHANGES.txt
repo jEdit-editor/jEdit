@@ -5,6 +5,16 @@ JEDIT 3.2 VERSION HISTORY
 + New Features
 
 - 'Include Guard' macro (John Gellene)
+- Positional parameters in abbrevs: if you enter something like, for
+  example, F#j#array.length# in Java mode where 'F' is defined to
+  expand to 'for(int $1 = 0; $1 < $2; $1++)\n{\n\t\|\n}', the following
+  will be inserted in the buffer, with the caret positioned between the
+  two curly braces:
+
+  for(int j = 0; j < array.length; j++)
+  {
+
+  }
 
 + Enhancements
 
@@ -22,6 +32,11 @@ JEDIT 3.2 VERSION HISTORY
 - Expanding a fold will now attempt to scroll the text area in order to
   make the fold visible, if possible
 - The current buffer's edit mode is now shown in the status bar
+- Java mode has a new set of default abbrevs
+
++ Neutral
+
+- User's guide has been moved into the jedit.jar JAR file
 
 + Bug Fixes
 
@@ -39,6 +54,7 @@ JEDIT 3.2 VERSION HISTORY
   in the user specific mode directory
 - Fixed obscure bug in Buffer.addToMap() that could result in an invalid
   line map when expading certain folds
+- Slightly faster regular expression search
 
 * Version 3.2pre2
 

@@ -414,11 +414,7 @@ loop:			for(;;)
 							start = s.getEnd();
 					}
 					else
-					{
-						start = reverse
-							? buffer.getLength()
-							: 0;
-					}
+						start = 0;
 
 					if(find(view,buffer,start))
 						return true;

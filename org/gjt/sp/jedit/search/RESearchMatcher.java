@@ -70,7 +70,7 @@ public class RESearchMatcher implements SearchMatcher
 	 */
 	public int[] nextMatch(Segment text)
 	{
-		REMatch match = re.getMatch(text);
+		REMatch match = re.getMatch(new CharIndexedSegment(text,0));
 		if(match == null)
 			return null;
 		int[] result = { match.getStartIndex(),
