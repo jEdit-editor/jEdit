@@ -219,7 +219,19 @@ public class OptionsDialog extends EnhancedDialog
 		}
 
 		currentLabel.setText(buf.toString());
-		optionPane.init();
+		// Fuck JBrowse, fuck QuickFile
+		//optionPane.init();
+		try
+		{
+			optionPane.getClass().getMethod("init",new Class[0])
+				.invoke(optionPane,new Object[0]);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.WARNING,this,optionPane.getClass()
+				.getName() + " uses old API");
+		}
+
 		pack();
 		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
 	}
@@ -578,6 +590,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/04/23 03:58:00  sp
+ * ContextOptionPane didn't compile, hack to let JBrowse and QuickFile work
+ *
  * Revision 1.20  2000/04/18 08:27:52  sp
  * Context menu editor started
  *

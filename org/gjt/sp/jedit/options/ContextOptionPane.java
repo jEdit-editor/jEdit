@@ -144,7 +144,7 @@ public class ContextOptionPane extends AbstractOptionPane
 	private void updateButtons()
 	{
 		int index = list.getSelectedIndex();
-		remove.setEnabled(index != -1 && errorListModel.getSize() != 0);
+		remove.setEnabled(index != -1 && listModel.getSize() != 0);
 		moveUp.setEnabled(index > 0);
 		moveDown.setEnabled(index != -1 && index != listModel.getSize() - 1);
 	}
@@ -334,6 +334,9 @@ class AddDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/04/23 03:58:00  sp
+ * ContextOptionPane didn't compile, hack to let JBrowse and QuickFile work
+ *
  * Revision 1.3  2000/04/23 03:36:39  sp
  * Minor fixes
  *

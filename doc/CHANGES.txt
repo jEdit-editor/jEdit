@@ -7,6 +7,8 @@ JEDIT 2.4 VERSION HISTORY
 - The text area should now retain focus when switching windows
 - Documentation updates
 - 'Untitled' buffers no longer saved in sessions
+- Quick hack to let JBrowse and QuickFile work for now (but they should
+  still be updated for the new API so that the options dialog can load faster)
 
 + Bug Fixes
 
