@@ -29,7 +29,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.zip.*;
-import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 
@@ -38,7 +38,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class Buffer extends SyntaxDocument
+public class Buffer extends SyntaxDocument implements EBComponent
 {
 	/**
 	 * Size of I/O buffers.
@@ -166,7 +166,7 @@ public class Buffer extends SyntaxDocument
 		if(view != null)
 			view.showWaitCursor();
 
-		fireBufferEvent(BufferEvent.BUFFER_SAVING);
+		EditBus.send(new BufferUpdate(this,BufferUpdate.SAVING));
 
 		backup(view,saveFile);
 
@@ -199,7 +199,7 @@ public class Buffer extends SyntaxDocument
 			autosaveFile.delete();
 			modTime = file.lastModified();
 
-			fireBufferEvent(BufferEvent.DIRTY_CHANGED);
+		EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
 
 			returnValue = true;
 		}
@@ -254,7 +254,7 @@ public class Buffer extends SyntaxDocument
 		if(view != null)
 			view.hideWaitCursor();
 
-		fireBufferEvent(BufferEvent.DIRTY_CHANGED);
+		EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
 
 		setFlag(INIT,false);
 	}
@@ -338,6 +338,8 @@ public class Buffer extends SyntaxDocument
 	 */
 	public void setDirty(boolean d)
 	{
+		boolean old_d = getFlag(DIRTY);
+
 		if(d)
 		{
 			if(getFlag(INIT) || getFlag(READ_ONLY))
@@ -349,7 +351,9 @@ public class Buffer extends SyntaxDocument
 		}
 		else
 			setFlag(DIRTY,false);
-		fireBufferEvent(BufferEvent.DIRTY_CHANGED);
+
+		if(d != old_d)
+			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
 	}
 
 	/**
@@ -520,7 +524,7 @@ public class Buffer extends SyntaxDocument
 				this.mode.enterView(view);
 		}
 
-		fireBufferEvent(BufferEvent.MODE_CHANGED);
+		EditBus.send(new BufferUpdate(this,BufferUpdate.MODE_CHANGED));
 	}
 
 	/**
@@ -632,8 +636,7 @@ public class Buffer extends SyntaxDocument
 		if(!added)
 			markers.addElement(markerN);
 
-		fireBufferEvent(BufferEvent.MARKERS_CHANGED);
-		fireBufferEvent(BufferEvent.DIRTY_CHANGED);
+		EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
 	}
 
 	/**
@@ -650,8 +653,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			if(marker.getName().equals(name))
 				markers.removeElementAt(i);
 		}
-		fireBufferEvent(BufferEvent.MARKERS_CHANGED);
-		fireBufferEvent(BufferEvent.DIRTY_CHANGED);
+		EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
 	}
 	
 	/**
@@ -693,23 +695,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	{
 		return getFlag(RECT_SELECT);
 	}
-	/**
-	 * Adds a buffer event listener to this buffer.
-	 * @param listener The event listener
-	 */
-	public final void addBufferListener(BufferListener listener)
-	{
-		listenerList.add(BufferListener.class,listener);
-	}
-
-	/**	
-	 * Removes a buffer event listener from this buffer.
-	 * @param listener The event listener
-	 */
-	public final void removeBufferListener(BufferListener listener)
-	{
-		listenerList.remove(BufferListener.class,listener);
-	}
 
 	/**
 	 * Returns the next buffer in the list.
@@ -736,6 +721,12 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		return path;
 	}
 
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof PropertiesChanged)
+			propertiesChanged();
+	}
+
 	// package-private members
 	Buffer prev;
 	Buffer next;
@@ -752,7 +743,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		setDocumentProperties(new BufferProps());
 		putProperty("i18n",Boolean.FALSE);
 		
-		listenerList = new EventListenerList();
 		undo = new UndoManager();
 		markers = new Vector();
 		addDocumentListener(new DocumentHandler());
@@ -779,7 +769,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		setMode();
 
 		addUndoableEditListener(new UndoHandler());
-		jEdit.addEditorListener(editorHandler = new EditorHandler());
+		EditBus.addToBus(this);
 		
 		setFlag(INIT,false);
 	}
@@ -788,7 +778,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	{
 		setFlag(CLOSED,true);
 		autosaveFile.delete();
-		jEdit.removeEditorListener(editorHandler);
+		EditBus.removeFromBus(this);
 	}
 
 	void setCaretInfo(int savedSelStart, int savedSelEnd,
@@ -842,23 +832,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	private Vector markers;
 	private int savedSelStart;
 	private int savedSelEnd;
-	private EditorHandler editorHandler;
-	private EventListenerList listenerList;
-
-	private void fireBufferEvent(int id)
-	{
-		BufferEvent evt = null;
-		Object[] listeners = listenerList.getListenerList();
-		for(int i = listeners.length - 2; i >= 0; i-= 2)
-		{
-			if(listeners[i] == BufferListener.class)
-			{
-				if(evt == null)
-					evt = new BufferEvent(id,this);
-				evt.fire((BufferListener)listeners[i+1]);
-			}
-		}
-	}
 
 	private void setPath()
 	{
@@ -1337,15 +1310,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	}
 
 	// event handlers
-	class EditorHandler
-	extends EditorAdapter
-	{
-		public void propertiesChanged(EditorEvent evt)
-		{
-			Buffer.this.propertiesChanged();
-		}
-	}
-
 	class UndoHandler
 	implements UndoableEditListener
 	{
@@ -1377,6 +1341,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.105  1999/11/19 08:54:51  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.104  1999/11/16 08:21:19  sp
  * Various fixes, attempt at beefing up expand-abbrev
  *
@@ -1403,29 +1370,4 @@ loop:		for(int i = 0; i < markers.size(); i++)
  *
  * Revision 1.96  1999/10/16 09:43:00  sp
  * Final tweaking and polishing for jEdit 2.1final
- *
- * Revision 1.95  1999/10/03 03:47:15  sp
- * Minor stupidity, IDL mode
- *
- * Revision 1.94  1999/10/01 07:31:39  sp
- * RMI server replaced with socket-based server, minor changes
- *
- * Revision 1.93  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.92  1999/08/21 01:48:18  sp
- * jEdit 2.0pre8
- *
- * Revision 1.91  1999/07/16 23:45:48  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.90  1999/07/08 06:06:04  sp
- * Bug fixes and miscallaneous updates
- *
- * Revision 1.89  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.88  1999/06/22 06:14:39  sp
- * RMI updates, text area updates, flag to disable geometry saving
  */

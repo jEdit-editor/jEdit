@@ -617,7 +617,7 @@ public abstract class InputHandler extends KeyAdapter
 				textArea.getToolkit().beep();
 				return;
 			}
-			else if(Boolean.TRUE.equals(textArea.getClientProperty(
+			else if(!Boolean.TRUE.equals(textArea.getClientProperty(
 				SMART_HOME_END_PROPERTY)))
 				caret = lastOfLine;
 			else if(caret == lastVisible)
@@ -663,7 +663,7 @@ public abstract class InputHandler extends KeyAdapter
 				textArea.getToolkit().beep();
 				return;
 			}
-			else if(Boolean.TRUE.equals(textArea.getClientProperty(
+			else if(!Boolean.TRUE.equals(textArea.getClientProperty(
 				SMART_HOME_END_PROPERTY)))
 				caret = firstOfLine;
 			else if(caret == firstVisible)
@@ -1098,6 +1098,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  1999/11/19 08:54:52  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.8  1999/11/16 08:21:20  sp
  * Various fixes, attempt at beefing up expand-abbrev
  *

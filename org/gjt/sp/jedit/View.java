@@ -27,7 +27,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.*;
-import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
@@ -43,7 +43,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class View extends JFrame
+public class View extends JFrame implements EBComponent
 {
 	/**
 	 * Reloads various settings from the properties.
@@ -379,7 +379,7 @@ public class View extends JFrame
 		focusOnTextArea();
 
 		// Fire event
-		fireViewEvent(ViewEvent.BUFFER_CHANGED,oldBuffer);
+		EditBus.send(new ViewUpdate(this,ViewUpdate.BUFFER_CHANGED));
 
 		updateBuffersMenu();
 	}
@@ -483,24 +483,6 @@ public class View extends JFrame
 	}
 
 	/**
-	 * Adds a view event listener to this view.
-	 * @param listener The event listener
-	 */
-	public final void addViewListener(ViewListener listener)
-	{
-		listenerList.add(ViewListener.class,listener);
-	}
-
-	/**	
-	 * Removes a view event listener from this view.
-	 * @param listener The event listener
-	 */
-	public final void removeViewListener(ViewListener listener)
-	{
-		listenerList.remove(ViewListener.class,listener);
-	}
-
-	/**
 	 * Returns the next view in the list.
 	 */
 	public final View getNext()
@@ -516,14 +498,22 @@ public class View extends JFrame
 		return prev;
 	}
 
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof PropertiesChanged)
+			propertiesChanged();
+		else if(msg instanceof MacrosChanged)
+			updateMacrosMenu();
+		else if(msg instanceof BufferUpdate)
+			handleBufferUpdate((BufferUpdate)msg);
+	}
+
 	// package-private members
 	View prev;
 	View next;
 
 	View(View view, Buffer buffer)
 	{
-		listenerList = new EventListenerList();
-
 		setIconImage(GUIUtilities.getEditorIcon());
 
 		// Dynamic menus
@@ -536,14 +526,7 @@ public class View extends JFrame
 		plugins = GUIUtilities.loadMenu(this,"plugins");
 		updatePluginsMenu();
 
-		jEdit.addEditorListener(editorListener = new EditorHandler());
-		bufferListener = new BufferHandler();
-
-		Buffer[] bufferArray = jEdit.getBuffers();
-		for(int i = 0; i < bufferArray.length; i++)
-		{
-			bufferArray[i].addBufferListener(bufferListener);
-		}
+		EditBus.addToBus(this);
 
 		setJMenuBar(GUIUtilities.loadMenubar(this,"view.mbar"));
 
@@ -569,6 +552,7 @@ public class View extends JFrame
 
 		propertiesChanged();
 
+		Buffer[] bufferArray = jEdit.getBuffers();
 		if(buffer == null)
 			setBuffer(bufferArray[bufferArray.length - 1]);
 		else
@@ -603,10 +587,7 @@ public class View extends JFrame
 		closed = true;
 		GUIUtilities.saveGeometry(this,"view");
 		saveCaretInfo();
-		jEdit.removeEditorListener(editorListener);
-		Buffer[] bufferArray = jEdit.getBuffers();
-		for(int i = 0; i < bufferArray.length; i++)
-			bufferArray[i].removeBufferListener(bufferListener);
+		EditBus.removeFromBus(this);
 		dispose();
 	}
 
@@ -630,10 +611,6 @@ public class View extends JFrame
 	private int waitCount;
 
 	private boolean showFullPath;
-
-	private EventListenerList listenerList;
-	private BufferListener bufferListener;
-	private EditorListener editorListener;
 
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
@@ -664,21 +641,6 @@ public class View extends JFrame
 						this,"no-macros"));
 				}
 				menu.add(submenu);
-			}
-		}
-	}
-
-	private void fireViewEvent(int id, Buffer buffer)
-	{
-		ViewEvent evt = null;
-		Object[] listeners = listenerList.getListenerList();
-		for(int i = listeners.length - 2; i >= 0; i-= 2)
-		{
-			if(listeners[i] == ViewListener.class)
-			{
-				if(evt == null)
-					evt = new ViewEvent(id,this,buffer);
-				evt.fire((ViewListener)listeners[i+1]);
 			}
 		}
 	}
@@ -718,6 +680,41 @@ public class View extends JFrame
 		}
 	}
 
+	private void handleBufferUpdate(BufferUpdate msg)
+	{
+		Buffer _buffer = msg.getBuffer();
+		if(msg.getWhat() == BufferUpdate.CREATED)
+			updateBuffersMenu();
+		else if(msg.getWhat() == BufferUpdate.CLOSED)
+		{
+			if(_buffer == buffer)
+			{
+				Buffer[] bufferArray = jEdit.getBuffers();
+				if(bufferArray.length != 0)
+					setBuffer(bufferArray[bufferArray.length - 1]);
+			}
+
+			updateOpenRecentMenu();
+			updateBuffersMenu();
+		}
+		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
+		{
+			if(_buffer == buffer)
+				updateTitle();
+			updateBuffersMenu();
+		}
+		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
+		{
+			if(_buffer == buffer)
+				updateMarkerMenus();
+		}
+		else if(msg.getWhat() == BufferUpdate.MODE_CHANGED)
+		{
+			if(_buffer == buffer)
+				textArea.getPainter().repaint();
+		}
+	}
+
 	// event listeners
 	class ActionHandler implements ActionListener
 	{
@@ -740,73 +737,11 @@ public class View extends JFrame
 		}
 	}
 
-	class BufferHandler extends BufferAdapter
-	{
-		public void bufferDirtyChanged(BufferEvent evt)
-		{
-			Buffer _buffer = evt.getBuffer();
-			if(_buffer == buffer)
-				updateTitle();
-
-			updateBuffersMenu();
-		}
-
-		public void bufferMarkersChanged(BufferEvent evt)
-		{
-			if(evt.getBuffer() == buffer)
-				updateMarkerMenus();
-		}
-
-		public void bufferModeChanged(BufferEvent evt)
-		{
-			if(evt.getBuffer() == buffer)
-			{
-				textArea.getPainter().repaint();
-			}
-		}
-	}
-
 	class CaretHandler implements CaretListener
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
 			status.repaint();
-		}
-	}
-
-	class EditorHandler extends EditorAdapter
-	{
-		public void bufferCreated(EditorEvent evt)
-		{
-			updateBuffersMenu();
-			evt.getBuffer().addBufferListener(bufferListener);
-		}
-
-		public void bufferClosed(EditorEvent evt)
-		{
-			Buffer buf = evt.getBuffer();
-
-			buf.removeBufferListener(bufferListener);
-
-			if(buf == buffer)
-			{
-				Buffer[] bufferArray = jEdit.getBuffers();
-				if(bufferArray.length != 0)
-					setBuffer(bufferArray[bufferArray.length - 1]);
-			}
-
-			updateOpenRecentMenu();
-			updateBuffersMenu();
-		}
-
-		public void propertiesChanged(EditorEvent evt)
-		{
-			View.this.propertiesChanged();
-		}
-
-		public void macrosChanged(EditorEvent evt)
-		{
-			updateMacrosMenu();
 		}
 	}
 
@@ -857,6 +792,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.106  1999/11/19 08:54:51  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.105  1999/11/12 09:06:01  sp
  * HTML bug fix
  *
@@ -887,62 +825,5 @@ public class View extends JFrame
  *
  * Revision 1.96  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
- *
- * Revision 1.95  1999/10/19 09:10:13  sp
- * pre5 bug fixing
- *
- * Revision 1.94  1999/10/17 04:16:28  sp
- * Bug fixing
- *
- * Revision 1.93  1999/10/16 09:43:00  sp
- * Final tweaking and polishing for jEdit 2.1final
- *
- * Revision 1.92  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
- *
- * Revision 1.91  1999/10/05 10:55:29  sp
- * File dialogs open faster, and experimental keyboard macros
- *
- * Revision 1.90  1999/10/03 03:47:15  sp
- * Minor stupidity, IDL mode
- *
- * Revision 1.89  1999/10/01 07:31:39  sp
- * RMI server replaced with socket-based server, minor changes
- *
- * Revision 1.88  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.86  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.85  1999/07/08 06:06:04  sp
- * Bug fixes and miscallaneous updates
- *
- * Revision 1.84  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.83  1999/06/27 04:53:16  sp
- * Text selection implemented in text area, assorted bug fixes
- *
- * Revision 1.82  1999/06/25 06:54:08  sp
- * Text area updates
- *
- * Revision 1.81  1999/06/22 06:14:39  sp
- * RMI updates, text area updates, flag to disable geometry saving
- *
- * Revision 1.80  1999/06/20 07:00:59  sp
- * Text component rewrite started
- *
- * Revision 1.79  1999/06/20 02:15:45  sp
- * Syntax coloring optimizations
- *
- * Revision 1.78  1999/06/16 03:29:59  sp
- * Added <title> tags to docs, configuration data is now stored in a
- * ~/.jedit directory, style option pane finished
- *
- * Revision 1.77  1999/06/15 05:03:54  sp
- * RMI interface complete, save all hack, views & buffers are stored as a link
- * list now
  *
  */

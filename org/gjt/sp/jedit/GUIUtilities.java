@@ -26,7 +26,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.net.URL;
 import java.util.StringTokenizer;
-import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.InputHandler;
@@ -662,7 +662,6 @@ public class GUIUtilities
 		{
 			public void windowOpened(WindowEvent evt)
 			{
-				System.out.println("hi");
 				win.setLocation(x,y);
 				win.setSize(width,height);
 
@@ -750,7 +749,14 @@ public class GUIUtilities
 	// private members
 	static
 	{
-		jEdit.addEditorListener(new EditorHandler());
+		EditBus.addToBus(new EBComponent()
+		{
+			public void handleMessage(EBMessage msg)
+			{
+				if(msg instanceof org.gjt.sp.jedit.msg.PropertiesChanged)
+					chooser = null;
+			}
+		});
 	}
 
 	private static SplashScreen splash;
@@ -826,21 +832,14 @@ public class GUIUtilities
 
 		return chooser;
 	}
-
-	// Because a propertiesChanged() may mean that the filters
-	// have changed, we have to get rid of the cached file chooser
-	static class EditorHandler extends EditorAdapter
-	{
-		public void propertiesChanged(EditorEvent evt)
-		{
-			GUIUtilities.chooser = null;
-		}
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.41  1999/11/19 08:54:51  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.40  1999/11/16 08:21:20  sp
  * Various fixes, attempt at beefing up expand-abbrev
  *
@@ -871,17 +870,5 @@ public class GUIUtilities
  *
  * Revision 1.31  1999/10/05 10:55:29  sp
  * File dialogs open faster, and experimental keyboard macros
- *
- * Revision 1.30  1999/10/05 04:43:58  sp
- * Minor bug fixes and updates
- *
- * Revision 1.29  1999/10/04 03:20:50  sp
- * Option pane change, minor tweaks and bug fixes
- *
- * Revision 1.28  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.27  1999/07/08 06:35:41  sp
- * 1.7pre5, yay
  *
  */

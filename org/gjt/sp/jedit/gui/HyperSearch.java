@@ -26,10 +26,13 @@ import gnu.regexp.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
-import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
@@ -40,7 +43,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HyperSearch extends JDialog
+public class HyperSearch extends JDialog implements EBComponent
 {
 	public HyperSearch(View view, String defaultFind)
 	{
@@ -103,7 +106,8 @@ public class HyperSearch extends JDialog
 		findBtn.addActionListener(actionListener);
 		close.addActionListener(actionListener);
 
-		jEdit.addEditorListener(editorListener = new EditorHandler());
+		EditBus.addToBus(this);
+
 		pack();
 		GUIUtilities.loadGeometry(this,"hypersearch");
 
@@ -122,9 +126,25 @@ public class HyperSearch extends JDialog
 	
 	public void dispose()
 	{
-		jEdit.removeEditorListener(editorListener);
+		EditBus.removeFromBus(this);
 		GUIUtilities.saveGeometry(this,"hypersearch");
 		super.dispose();
+	}
+
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof BufferUpdate)
+		{
+			BufferUpdate bmsg = (BufferUpdate)msg;
+			Buffer buffer = bmsg.getBuffer();
+			for(int i = 0; i < resultModel.getSize(); i++)
+			{
+				SearchResult result = (SearchResult)resultModel
+					.elementAt(i);
+				if(result.buffer == buffer)
+					resultModel.removeElementAt(i);
+			}
+		}
 	}
 
 	// private members
@@ -139,7 +159,6 @@ public class HyperSearch extends JDialog
 	private JButton close;
 	private JList results;
 	private DefaultListModel resultModel;
-	private EditorHandler editorListener;
 
 	private void doHyperSearch()
 	{
@@ -284,26 +303,11 @@ public class HyperSearch extends JDialog
 		}
 	}
 
-	class EditorHandler extends EditorAdapter
-	{
-		public void bufferClosed(EditorEvent evt)
-		{
-			Buffer buffer = evt.getBuffer();
-			for(int i = 0; i < resultModel.getSize(); i++)
-			{
-				SearchResult result = (SearchResult)resultModel
-					.elementAt(i);
-				if(result.buffer == buffer)
-					resultModel.removeElementAt(i);
-			}
-		}
-	}
-
 	class KeyHandler extends KeyAdapter
 	{
 		public void keyPressed(KeyEvent evt)
 		{
-			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)	
+			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
 				dispose();
 		}
 	}
@@ -329,6 +333,9 @@ public class HyperSearch extends JDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.41  1999/11/19 08:54:52  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.40  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

@@ -3,9 +3,6 @@ JEDIT TO DO
 - Expand abbreviation sucks:
   - > 1 match on one line doesn't work
   - need to finish match cycling
-- Integrate EditBus if enough plugins take advantage of it. This will also
-  mean that jEdit will be able to take advantage of EditBus stuff; for
-  example, the buffers menu could display which buffers have errors
 - Do searching in a background thread. For it to work properly, the following
   methods will need to be made thread-safe:
     - jEdit.openFile()

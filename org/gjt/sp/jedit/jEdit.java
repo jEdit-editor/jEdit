@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit;
 
-import javax.swing.event.EventListenerList;
 import javax.swing.text.Element;
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +27,7 @@ import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
-import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.textarea.DefaultInputHandler;
@@ -57,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.02.05.00";
+		return "02.02.06.00";
 	}
 
 	/**
@@ -196,10 +195,6 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
 		}
-
-		// GUIUtilities.static() adds a listener to our list,
-		// so it must be available before GUIUtilities is first used
-		listenerList = new EventListenerList();
 
 		// Show the kool splash screen
 		// The advanceProgress() calls are indented in this
@@ -399,7 +394,7 @@ public class jEdit
 			maxRecent = 8;
 		}
 
-		fireEditorEvent(EditorEvent.PROPERTIES_CHANGED,null,null);
+		EditBus.send(new PropertiesChanged(null));
 	}
 
 	/**
@@ -618,8 +613,6 @@ public class jEdit
 		if(view != null)
 			view.showWaitCursor();
 
-		Log.log(Log.DEBUG,jEdit.class,"Opening file " + path);
-
 		buffer = new Buffer(view,url,path,readOnly,newFile);
 		addBufferToList(buffer);
 
@@ -634,7 +627,7 @@ public class jEdit
 			view.hideWaitCursor();
 		}
 
-		fireEditorEvent(EditorEvent.BUFFER_CREATED,view,buffer);
+		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CREATED));
 
 		return buffer;
 	}
@@ -707,8 +700,6 @@ public class jEdit
 	 */
 	public static void _closeBuffer(View view, Buffer buffer)
 	{
-		Log.log(Log.DEBUG,jEdit.class,"Closing buffer " + buffer.getPath());
-
 		removeBufferFromList(buffer);
 		buffer.close();
 
@@ -722,7 +713,7 @@ public class jEdit
 				recent.removeElementAt(maxRecent);
 		}
 
-		fireEditorEvent(EditorEvent.BUFFER_CLOSED,view,buffer);
+		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
 
 		// Create a new file when the last is closed
 		if(buffersFirst == null && buffersLast == null)
@@ -839,7 +830,7 @@ public class jEdit
 		View newView = new View(view,buffer);
 		addViewToList(newView);
 
-		fireEditorEvent(EditorEvent.VIEW_CREATED,newView,newView.getBuffer());
+		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 		// Do this crap here so that the view is created
 		// and added to the list before it is shown
@@ -877,7 +868,7 @@ public class jEdit
 			exit(view); /* exit does editor event & save */
 		else
 		{
-			fireEditorEvent(EditorEvent.VIEW_CLOSED,view,view.getBuffer());
+			EditBus.send(new ViewUpdate(view,ViewUpdate.CLOSED));
 
 			view.close();
 			removeViewFromList(view);
@@ -939,26 +930,6 @@ public class jEdit
 	public static String getSettingsDirectory()
 	{
 		return settingsDirectory;
-	}
-
-	/**
-	 * Adds an editor event listener to the global editor listener
-	 * list.
-	 * @param listener The editor event listener
-	 */
-	public static void addEditorListener(EditorListener listener)
-	{
-		listenerList.add(EditorListener.class,listener);
-	}
-
-	/**
-	 * Removes an editor event listener from the global editor listener
-	 * list.
-	 * @param listener The editor event listener
-	 */
-	public static final void removeEditorListener(EditorListener listener)
-	{
-		listenerList.remove(EditorListener.class,listener);
 	}
 
 	/**
@@ -1036,24 +1007,6 @@ public class jEdit
 		System.exit(0);
 	}
 
-	// package-private members
-
-	// View class needs to fire VIEW_CREATED editor events
-	static void fireEditorEvent(int id, View view, Buffer buffer)
-	{
-		EditorEvent evt = null;
-		Object[] listeners = listenerList.getListenerList();
-		for(int i = listeners.length - 2; i >= 0; i-= 2)
-		{
-			if(listeners[i] == EditorListener.class)
-			{
-				if(evt == null)
-					evt = new EditorEvent(id,view,buffer);
-				evt.fire((EditorListener)listeners[i+1]);
-			}
-		}
-	}
-
 	// private members
 	private static String jEditHome;
 	private static String settingsDirectory;
@@ -1068,7 +1021,6 @@ public class jEdit
 	private static Vector recent;
 	private static int maxRecent;
 	private static InputHandler inputHandler;
-	private static EventListenerList listenerList;
 	private static WindowHandler windowHandler;
 
 	// buffer link list
@@ -1338,6 +1290,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.tab());
 		addAction(new org.gjt.sp.jedit.actions.undo());
 		addAction(new org.gjt.sp.jedit.actions.untab());
+		addAction(new org.gjt.sp.jedit.actions.view_editbus());
 		addAction(new org.gjt.sp.jedit.actions.view_registers());
 		addAction(new org.gjt.sp.jedit.actions.wing_comment());
 		addAction(new org.gjt.sp.jedit.actions.word_count());
@@ -1572,6 +1525,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.155  1999/11/19 08:54:51  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.154  1999/11/19 05:11:35  sp
  * Recent file list bug fix, HTML comment bug fix
  *
@@ -1599,20 +1555,5 @@ public class jEdit
  *
  * Revision 1.146  1999/10/28 09:07:21  sp
  * Directory list search
- *
- * Revision 1.145  1999/10/26 07:43:59  sp
- * Session loading and saving, directory list search started
- *
- * Revision 1.144  1999/10/24 06:04:00  sp
- * QuickSearch in tool bar, auto indent updates, macro recorder updates
- *
- * Revision 1.143  1999/10/24 02:06:41  sp
- * Miscallaneous pre1 stuff
- *
- * Revision 1.142  1999/10/23 03:48:22  sp
- * Mode system overhaul, close all dialog box, misc other stuff
- *
- * Revision 1.141  1999/10/22 07:05:37  sp
- * Version number changed to 2.1final
  *
  */

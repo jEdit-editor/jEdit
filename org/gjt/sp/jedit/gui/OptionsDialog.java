@@ -23,7 +23,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import org.gjt.sp.jedit.event.*;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -70,7 +69,7 @@ implements ActionListener, KeyListener, WindowListener
 		while(enum.hasMoreElements())
 			((OptionPane)enum.nextElement()).save();
 
-		/* This will fire the PROPERTITES_CHANGED event */
+		/* This will fire the PROPERTIES_CHANGED event */
 		jEdit.propertiesChanged();
 		dispose();
 	}
@@ -126,6 +125,9 @@ implements ActionListener, KeyListener, WindowListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/11/19 08:54:52  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.6  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

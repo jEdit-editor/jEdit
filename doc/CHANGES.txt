@@ -1,5 +1,23 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2pre6
+
++ New Features
+
+- EditBus plugin integrated into the core, old event system removed
+
++ Bug Fixes
+
+- The smart home/end toggle was broken (since 2.2pre4)
+- Fixed obscure bug with session saving and new files (since 2.2pre1)
+- DIRTY_CHANGED events are no longer fired at nearly every autosave (since
+  1.7pre2???)
+- Removed debugging message ('hi') from GUIUtilities class (since 2.2pre5)
+
++ API Changes
+
+- Plugins that rely on the old event system will no longer work
+
 * Version 2.2pre5
 
 + Enhancements

@@ -22,7 +22,7 @@ package org.gjt.sp.jedit;
 import javax.swing.text.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
-import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.util.Log;
 
 /**
@@ -120,8 +120,7 @@ public class Registers
 		public void dispose();
 	}
 
-	public static class CaretRegister extends EditorAdapter
-		implements Register
+	public static class CaretRegister implements Register, EBComponent
 	{
 		private String path;
 		private int offset;
@@ -142,7 +141,7 @@ public class Registers
 				Log.log(Log.ERROR,this,bl);
 			}
 
-			jEdit.addEditorListener(this);
+			EditBus.addToBus(this);
 		}
 
 		public String toString()
@@ -155,7 +154,7 @@ public class Registers
 
 		public void dispose()
 		{
-			jEdit.removeEditorListener(this);
+			EditBus.removeFromBus(this);
 		}
 
 		public Buffer getBuffer()
@@ -174,30 +173,38 @@ public class Registers
 				return pos.getOffset();
 		}
 
-		public void bufferOpened(EditorEvent evt)
+		public void handleMessage(EBMessage msg)
 		{
-			if(buffer == null && evt.getBuffer().getPath().equals(path))
-			{
-				buffer = evt.getBuffer();
-
-				try
-				{
-					pos = buffer.createPosition(offset);
-				}
-				catch(BadLocationException bl)
-				{
-					Log.log(Log.ERROR,this,bl);
-				}
-			}
+			if(msg instanceof BufferUpdate)
+				handleBufferUpdate((BufferUpdate)msg);
 		}
 
-		public void bufferClosed(EditorEvent evt)
+		private void handleBufferUpdate(BufferUpdate msg)
 		{
-			if(evt.getBuffer() == buffer)
+			Buffer _buffer = msg.getBuffer();
+			if(msg.getWhat() == BufferUpdate.CREATED)
 			{
-				buffer = null;
-				offset = pos.getOffset();
-				pos = null;
+				if(buffer == null && _buffer.getPath().equals(path))
+				{
+					buffer = _buffer;
+					try
+					{
+						pos = buffer.createPosition(offset);
+					}
+					catch(BadLocationException bl)
+					{
+						Log.log(Log.ERROR,this,bl);
+					}
+				}
+			}
+			else if(msg.getWhat() == BufferUpdate.CLOSED)
+			{
+				if(_buffer == buffer)
+				{
+					buffer = null;
+					offset = pos.getOffset();
+					pos = null;
+				}
 			}
 		}
 	}
@@ -267,6 +274,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  1999/11/19 08:54:51  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.4  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

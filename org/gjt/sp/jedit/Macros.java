@@ -28,7 +28,8 @@ import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.MacrosChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
@@ -60,7 +61,7 @@ public class Macros
 				settings,"macros")));
 		}
 
-		jEdit.fireEditorEvent(EditorEvent.MACROS_CHANGED,null,null);
+		EditBus.send(new MacrosChanged(null));
 	}
 
 	/**
@@ -115,7 +116,7 @@ public class Macros
 		lastMacro = name;
 
 		view.getTextArea().getInputHandler().setMacroRecorder(
-			new BufferRecorder(buffer));
+			new BufferRecorder(view,buffer));
 	}
 
 	public static void endRecording(View view)
@@ -206,12 +207,9 @@ public class Macros
 	}
 
 	// package-private members
-	static BufferHandler bufferHandler;
-
 	static void init()
 	{
-		bufferHandler = new BufferHandler();
-		jEdit.addEditorListener(new EditorHandler());
+		EditBus.addToBus(new EBComponent());
 		loadMacros();
 	}
 
@@ -306,17 +304,27 @@ public class Macros
 
 	static class BufferRecorder implements InputHandler.MacroRecorder
 	{
+		View view;
 		Buffer buffer;
 		boolean lastWasInsert;
 
-		BufferRecorder(Buffer buffer)
+		BufferRecorder(View view, Buffer buffer)
 		{
+			this.view = view;
 			this.buffer = buffer;
 		}
 
 		public void actionPerformed(ActionListener listener,
 			String actionCommand)
 		{
+			if(buffer.isClosed())
+			{
+				view.getTextArea().getInputHandler()
+					.setMacroRecorder(null);
+				view.showStatus(null);
+				return;
+			}
+
 			String name = getActionName(listener);
 			if(name == null)
 			{
@@ -357,39 +365,21 @@ public class Macros
 		}
 	}
 
-	static class BufferHandler extends BufferAdapter
+	static class EBComponent implements org.gjt.sp.jedit.EBComponent
 	{
-		public void bufferDirtyChanged(BufferEvent evt)
+		public void handleMessage(EBMessage msg)
 		{
-			if(evt.getBuffer().getPath().toLowerCase()
-				.endsWith(".macro"))
-				loadMacros();
-		}
-	}
-
-	static class EditorHandler extends EditorAdapter
-	{
-		public void bufferOpened(EditorEvent evt)
-		{
-			evt.getBuffer().addBufferListener(bufferHandler);
+			if(msg instanceof BufferUpdate)
+				handleBufferUpdate((BufferUpdate)msg);
 		}
 
-		public void bufferClosed(EditorEvent evt)
+		private void handleBufferUpdate(BufferUpdate msg)
 		{
-			evt.getBuffer().removeBufferListener(bufferHandler);
-
-			View view = evt.getView();
-
-			InputHandler inputHandler = view.getTextArea()
-				.getInputHandler();
-			BufferRecorder recorder = (BufferRecorder)inputHandler
-				.getMacroRecorder();
-
-			if(recorder != null)
+			Buffer buffer = msg.getBuffer();
+			if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 			{
-				if(evt.getBuffer() == recorder.buffer)
-					inputHandler.setMacroRecorder(null);
-				view.showStatus(null);
+				if(buffer.getPath().toLowerCase().endsWith(".macro"))
+					loadMacros();
 			}
 		}
 	}
@@ -398,6 +388,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  1999/11/19 08:54:51  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.12  1999/11/16 08:21:20  sp
  * Various fixes, attempt at beefing up expand-abbrev
  *

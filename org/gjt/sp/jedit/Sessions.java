@@ -123,7 +123,6 @@ public class Sessions
 	private static Buffer readSessionCommand(String line)
 	{
 		String path = null;
-		boolean newFile = false;
 		int selStart = 0;
 		int selEnd = 0;
 		boolean rectSel = false;
@@ -136,8 +135,6 @@ public class Sessions
 
 			if(token.startsWith("path:"))
 				path = token.substring(5);
-			else if(token.equals("new"))
-				newFile = true;
 			else if(token.startsWith("selStart:"))
 				selStart = Integer.parseInt(token.substring(9));
 			else if(token.startsWith("selEnd:"))
@@ -151,7 +148,7 @@ public class Sessions
 		if(path == null)
 			return null;
 
-		Buffer buffer = jEdit.openFile(null,null,path,false,newFile);
+		Buffer buffer = jEdit.openFile(null,null,path,false,false);
 		buffer.setCaretInfo(selStart,selEnd,rectSel);
 		return (current ? buffer : null);
 	}
@@ -161,9 +158,6 @@ public class Sessions
 	{
 		out.write("path:");
 		out.write(buffer.getPath());
-
-		if(buffer.isNewFile())
-			out.write("\tnew");
 
 		out.write("\tselStart:");
 		out.write(String.valueOf(buffer.getSavedSelStart()));
@@ -182,6 +176,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/11/19 08:54:51  sp
+ * EditBus integrated into the core, event system gone, bug fixes
+ *
  * Revision 1.6  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

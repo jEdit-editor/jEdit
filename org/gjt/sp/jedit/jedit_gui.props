@@ -308,13 +308,16 @@ help-menu=about \
      - \
      log-viewer \
      save-log \
-     clear-log
+     clear-log \
+     - \
+     view-editbus
 help-menu.label=$Help
 about.label=About jEdit...
 help.label=Help Contents...
 log-viewer.label=Show Activity Log...
 save-log.label=Save Activity Log...
 clear-log.label=Clear Activity Log
+view-editbus.label=Show EditBus...
 
 ###
 ### MACRO STRINGS
@@ -688,6 +691,14 @@ helpviewer.home=Contents
 
 # Activity log
 log-viewer.title=Activity Log
+
+# View editbus dialog
+view-editbus.title=EditBus Viewer
+view-editbus.update=Update
+
+view-editbus.editbus=EditBus
+view-editbus.components=Components
+view-editbus.lists=Lists
 
 # Documentation protocol (jeditdocs:)
 docindex.header=<html><head><title>Documentation Index</title></head>\n\
