@@ -1,5 +1,5 @@
 /*
- * close_file.java
+ * close_buffer.java
  * Copyright (C) 1998 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ package org.gjt.sp.jedit.actions;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
 
-public class close_file extends EditAction
+public class close_buffer extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
