@@ -1,5 +1,18 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2.1
+
++ Bug Fixes
+
+- Undos are now cleared when a buffer is reloaded (this was a bug because
+  the reload garbled existing undos anyway)
+- PHP3 mode didn't perform syntax highlighting (since 2.2final)
+- Geometry loading moved windows up by the height of the title bar each time
+  (since 2.2final)
+- The NEW_FILE flag wasn't set for new files until an attempt was made
+  to load them from disk, this caused problems with BufferTabs, etc
+  (since 2.2pre8)
+
 * Version 2.2final
 
 Syntax package is now GPL'd again. When we LGPL'd it, jEdit had no IDE

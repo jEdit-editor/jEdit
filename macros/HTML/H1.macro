@@ -1,0 +1,13 @@
+# This macro surrounds the selection with HTML <h1>...</h1> tags.
+# It uses the ! register for temporary storage.
+
+# Copy selection, if any to register !.
+clear-register@!
+copy-string-register@!
+
+insert-char@<h1>
+
+# Now insert the formely selected text
+paste-string-register@!
+
+insert-char@</h1>

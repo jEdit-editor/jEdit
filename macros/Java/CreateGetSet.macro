@@ -1,0 +1,93 @@
+# This macro creates a JavaBeans getFOO()/setFOO() method pair.
+# The property name is the word under the cursor.
+
+# It can even automatically define an instance variable named foo;
+# however, because everybody puts variables in different locations
+# in the source, it doesn't insert it for you; you must move the
+# caret to some spot and type C+r C+v #.
+
+# The !, @ and # registers are used for temporary storage.
+#
+# Requires the TextTools plugin for the to-lower action.
+
+# Pick up word under the cursor and store it in @ register
+set-caret-register@!
+prev-word
+exchange-caret-register@!
+next-word
+select-caret-register@!
+clear-register@@
+copy-string-register@@
+
+# Now convert selection to lowercase and store in !.
+# Tricky 'cos to-lower clears the selection
+
+# This is a total hack
+select-none
+select-next-char
+to-lower
+prev-word
+select-next-word
+clear-register@!
+cut-string-register@!
+
+# public Foo getFoo()
+insert-char@public
+insert-char@ 
+paste-string-register@@
+insert-char@ 
+insert-char@get
+paste-string-register@@
+insert-char@()
+
+# {
+indent-on-enter
+insert-char@{
+indent-on-enter
+
+# return foo;
+insert-char@return
+insert-char@ 
+paste-string-register@!
+insert-char@;
+
+# }
+indent-on-enter
+indent-line@}
+indent-on-enter
+
+# public void setFoo(Foo foo)
+insert-char@public void set
+paste-string-register@@
+insert-char@(
+paste-string-register@@
+insert-char@ 
+paste-string-register@!
+insert-char@)
+
+# {
+indent-on-enter
+insert-char@{
+indent-on-enter
+
+# this.foo = foo;
+insert-char@this.
+paste-string-register@!
+insert-char@ =
+insert-char@ 
+paste-string-register@!
+insert-char@;
+
+# }
+indent-on-enter
+indent-line@}
+indent-on-enter
+
+# private Foo foo;
+insert-char@private
+insert-char@ 
+paste-string-register@@
+insert-char@ 
+paste-string-register@!
+insert-char@;
+indent-on-enter

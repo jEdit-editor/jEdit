@@ -19,16 +19,15 @@
 
 import javax.swing.JOptionPane;
 import java.util.Vector;
-import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.*;
 
-public class LatestVersionPlugin extends EditPlugin
+public class LatestVersionPlugin extends EBPlugin
 {
 	public void start()
 	{
 		jEdit.addAction(new version_check_settings());
 		jEdit.addAction(new version_check_now());
-		jEdit.addEditorListener(new EditorHandler());
 	}
 
 	public void createMenuItems(View view, Vector menus, Vector menuItems)
@@ -57,34 +56,38 @@ public class LatestVersionPlugin extends EditPlugin
 		new VersionCheckThread(view).start();
 	}
 
-	class EditorHandler extends EditorAdapter
+	public void handleMessage(EBMessage msg)
 	{
-		public void viewCreated(EditorEvent evt)
+		if(msg instanceof ViewUpdate)
 		{
-			jEdit.removeEditorListener(this);
-
-			if(jEdit.getProperty("version-check.enabled") == null)
+			ViewUpdate vmsg = (ViewUpdate)msg;
+			if(vmsg.getWhat() == ViewUpdate.CREATED)
 			{
-				doVersionCheckConfirm(evt.getView());
-			}
-			else if("yes".equals(jEdit.getProperty("version-check.enabled")))
-			{
-				String lastTimeStr = jEdit.getProperty(
-					"version-check.last-time");
-				long lastTime;
-				if(lastTimeStr == null)
-					lastTime = 0L;
-				else
-					lastTime = Long.parseLong(lastTimeStr);
+				EditBus.removeFromBus(this);
 
-				long interval = Long.parseLong(jEdit.getProperty(
-					"version-check.interval"))
-					* 1000 * 60 * 60 * 24;
+				if(jEdit.getProperty("version-check.enabled") == null)
+				{
+					doVersionCheckConfirm(vmsg.getView());
+				}
+				else if("yes".equals(jEdit.getProperty("version-check.enabled")))
+				{
+					String lastTimeStr = jEdit.getProperty(
+						"version-check.last-time");
+					long lastTime;
+					if(lastTimeStr == null)
+						lastTime = 0L;
+					else
+						lastTime = Long.parseLong(lastTimeStr);
 
-				long currentTime = System.currentTimeMillis();
+					long interval = Long.parseLong(jEdit.getProperty(
+						"version-check.interval"))
+						* 1000 * 60 * 60 * 24;
 
-				if(lastTime + interval < currentTime)
-					doVersionCheck(evt.getView());
+					long currentTime = System.currentTimeMillis();
+
+					if(lastTime + interval < currentTime)
+						doVersionCheck(vmsg.getView());
+				}
 			}
 		}
 	}

@@ -1,0 +1,4 @@
+# This macro saves the current file and executes amstex in the console.
+
+save
+console@amstex $f

@@ -36,13 +36,18 @@ Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
 * Documentation
 
-jEdit's documentation is written in SGML-DocBook. HTML and PDF versions
-are installed by default, and other formats such as text only, RTF and
-DVI can be generated from the SGML source.
+jEdit's documentation is written in SGML-DocBook, which is a generic
+documentation format that can be coverted to HTML, PDF, PostScript, and
+so on.
+
+An HTML version of the documentation is included in the base jEdit
+distribution; a pretty PDF version can be obtained from
+<http://www.gjt.org/~sp/jedit-download.html>. Other formats such as text
+only, RTF and DVI can be generated from the SGML source.
 
 To view the HTML version, select `Help->Help Contents' in jEdit, or open
-doc/jeditdocs/index.html in a WWW browser. To view the PDF, open
-doc/jeditdocs.pdf in a PDF viewer such as Adobe Acrobat.
+doc/jeditdocs/index.html in a WWW browser such as Netscape. To view the
+PDF, open jedit-<version>.pdf in a PDF viewer such as Adobe Acrobat.
 
 Have fun!
 

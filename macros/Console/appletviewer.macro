@@ -1,0 +1,5 @@
+# This macro executes appletviewer in the console.
+# Note that it executes 'appletviewer $n.html', so executing it in
+# Bob.java will run appletviewer on Bob.html.
+
+console@appletviewer $n.html

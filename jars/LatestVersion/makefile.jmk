@@ -6,11 +6,40 @@
 # :mode=makefile:tabSize=4:noTabs=yes:
 # :indentOpenBrackets={:indentCloseBrackets=}:
 
-cmd_javac = "javac";
-cmd_jar = "jar";
+jar_name = "LatestVersion";
 
-srcs = (subst ".java", ".class", (glob "*.java"));
-jar = "../LatestVersion.jar";
+##
+# javac executable and args
+##
+javac_bin = "javac";
+
+# Uncomment the following line to pass options to javac; JMK uses ';'
+# as a generic file separator in classpaths ('/' for directories) then
+# converts to the native separators using the 'file.separator' and
+# 'path.separator' system properties
+#javac_opts = "-classpath" "../../jedit.jar;../EditBus.jar;.";
+
+cmd_javac = javac_bin javac_opts;
+
+##
+# jar executable and args
+##
+jar_bin = "jar";
+jar_opts = "cfM0";
+cmd_jar = jar_bin jar_opts;
+
+srcs = (subst ".java", ".class", (glob "*Plugin.java" "*.java"));
+jar = (cat "../" jar_name ".jar");
+
+get_files = function (dummy)
+{
+	extensions = "class" "gif" "html" "props";
+	file_globs = (join "/*.", extensions);
+#	other_files = "./CHANGES" "./README" "./TODO" "./LICENSE";
+
+	(glob (join (dirs "."), file_globs)) other_files
+}
+end;
 
 "all": jar;
 
@@ -21,7 +50,12 @@ jar = "../LatestVersion.jar";
 
 jar: srcs;
 {
-    exec cmd_jar "cfM0" @ (glob "*.class" "*.gif" "*.html" "*.props");
+    exec cmd_jar @ (get_files "1");
+}
+
+"clean":;
+{
+	delete (glob (join (dirs "."), "/*.class"));
 }
 
 ".PHONY": "all";

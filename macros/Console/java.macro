@@ -1,0 +1,5 @@
+# This macro saves the current file and java in the console, passing it
+# the current file's name without an extension, so that executing it in
+# Bob.java will run 'java Bob'.
+
+console@java $n

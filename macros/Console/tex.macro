@@ -1,0 +1,4 @@
+# This macro saves the current file and executes tex in the console.
+
+save
+console@tex $f

@@ -1,0 +1,4 @@
+# This macro saves the current file and executes javac in the console.
+
+save
+console@javac $f

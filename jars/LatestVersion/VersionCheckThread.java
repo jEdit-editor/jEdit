@@ -21,6 +21,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class VersionCheckThread extends Thread
 {
@@ -47,15 +48,14 @@ public class VersionCheckThread extends Thread
 					version = line.substring(8).trim();
 				else if(line.startsWith(".build"))
 					build = line.substring(6).trim();
-				else if(line.startsWith(".end"))
-					break;
 			}
 
 			bin.close();
 
 			if(version != null && build != null)
 			{
-				System.out.println("Latest version is " + version);
+				Log.log(Log.NOTICE,this,"Latest version is "
+					+ version);
 				String lastVersion = jEdit.getProperty(
 					"version-check.last-version");
 				if(jEdit.getBuild().compareTo(build) < 0 &&
@@ -74,8 +74,7 @@ public class VersionCheckThread extends Thread
 		}
 		catch(Exception e)
 		{
-			System.out.println("Error with version check: "
-				+ e.toString());
+			Log.log(Log.ERROR,this,e);
 		}
 	}
 

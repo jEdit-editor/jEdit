@@ -134,6 +134,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		setFlag(LOADED,false);
 
+		undo = null;
+
 		if(!getFlag(NEW_FILE))
 		{
 			read(view);
@@ -146,6 +148,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			propertiesChanged();
 			EditBus.addToBus(this);
 		}
+
+		undo = new UndoManager();
 
 		if(view != null)
 			view.hideWaitCursor();
@@ -433,6 +437,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public boolean undo()
 	{
+		if(undo == null)
+			return false;
+
 		try
 		{
 			setFlag(UNDO_IN_PROGRESS,true);
@@ -455,6 +462,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public boolean redo()
 	{
+		if(undo == null)
+			return false;
+
 		try
 		{
 			setFlag(UNDO_IN_PROGRESS,true);
@@ -484,7 +494,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void addUndoableEdit(UndoableEdit edit)
 	{
-		if(getFlag(UNDO_IN_PROGRESS))
+		if(undo == null || getFlag(UNDO_IN_PROGRESS))
 			return;
 
 		// Ignore insificant edits if the redo queue is non-empty.
@@ -800,12 +810,10 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		this.url = url;
 		this.path = path;
 		setFlag(TEMPORARY,temp);
-		setFlag(NEW_FILE,newFile);
 		setFlag(READ_ONLY,readOnly);
 
 		markers = new Vector();
 
-		undo = new UndoManager();
 		addDocumentListener(new DocumentHandler());
 		addUndoableEditListener(new UndoHandler());
 
@@ -813,6 +821,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		putProperty("i18n",Boolean.FALSE);
 
 		setPath();
+
+		newFile = (newFile || !file.exists());
+		setFlag(NEW_FILE,newFile);
 
 		// New files are initialized immediately since it
 		// only takes 1 ms or so

@@ -245,6 +245,7 @@ mode.php3.label=PHP3 Files
 mode.php3.filenameGlob=*.{php3,phtml,inc}
 mode.php3.commentStart=<!--
 mode.php3.commentEnd=-->
+mode.php3.tokenMarker=org.gjt.sp.jedit.syntax.PHPTokenMarker
 
 # Props mode
 mode.props.label=Property Files

@@ -473,8 +473,8 @@ public class GUIUtilities
 		win.setLocation(x,y);
 		win.setSize(width,height);
 
-		// workaround for broken Linux JDK
-		win.addWindowListener(new LinuxWorkaround(win,x,y,width,height));
+		if(System.getProperty("os.name").indexOf("Linux") != -1)
+			win.addWindowListener(new LinuxWorkaround(win,x,y,width,height));
 	}
 
 	static class LinuxWorkaround extends WindowAdapter
@@ -493,8 +493,7 @@ public class GUIUtilities
 
 		public void windowOpened(WindowEvent evt)
 		{
-			Insets insets = win.getInsets();
-			win.setLocation(x - insets.left,y - insets.top);
+			win.setLocation(x,y);
 			win.setSize(width,height);
 
 			win.removeWindowListener(this);

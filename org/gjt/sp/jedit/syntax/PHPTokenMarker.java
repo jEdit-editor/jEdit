@@ -31,12 +31,6 @@ public class PHPTokenMarker extends TokenMarker
 {
 	public static final byte SCRIPT = Token.INTERNAL_FIRST;
 
-	public PHPTokenMarker(boolean js)
-	{
-		this.js = js;
-		getKeywords();
-	}
-
 	public byte markTokensImpl(byte token, Segment line, int lineIndex)
 	{
 		char[] array = line.array;
@@ -72,21 +66,21 @@ loop:		for(int i = offset; i < length; i++)
 						i += 3;
 						token = Token.COMMENT1;
 					}
-					else if(js && SyntaxUtilities.regionMatches(
+					else if(SyntaxUtilities.regionMatches(
 						true,line,i1,"?php"))
 					{
 						addToken(5,Token.LABEL);
 						lastOffset = lastKeyword = (i += 4) + 1;
 						token = SCRIPT;
 					}
-					else if(js && SyntaxUtilities.regionMatches(
+					else if(SyntaxUtilities.regionMatches(
 						true,line,i1,"?"))
 					{
 						addToken(2,Token.LABEL);
 						lastOffset = lastKeyword = (i += 1) + 1;
 						token = SCRIPT;
 					}
-					else if(js && SyntaxUtilities.regionMatches(
+					else if(SyntaxUtilities.regionMatches(
 						true,line,i1,"script>"))
 					{
 						addToken(8,Token.LABEL);
@@ -317,48 +311,43 @@ loop:		for(int i = offset; i < length; i++)
 		return token;
 	}
 
-	public static KeywordMap getKeywords()
-	{
-		if(keywords == null)
-		{
-			keywords = new KeywordMap(false);
-			keywords.add("function",Token.KEYWORD2);
-			keywords.add("class",Token.KEYWORD2);
-			keywords.add("var",Token.KEYWORD2);
-			keywords.add("require",Token.KEYWORD2);
-			keywords.add("include",Token.KEYWORD2);
-			keywords.add("else",Token.KEYWORD1);
-			keywords.add("elseif",Token.KEYWORD1);
-			keywords.add("do",Token.KEYWORD1);
-			keywords.add("for",Token.KEYWORD1);
-			keywords.add("if",Token.KEYWORD1);
-			keywords.add("endif",Token.KEYWORD1);
-			keywords.add("in",Token.KEYWORD1);
-			keywords.add("new",Token.KEYWORD1);
-			keywords.add("return",Token.KEYWORD1);
-			keywords.add("while",Token.KEYWORD1);
-			keywords.add("endwhile",Token.KEYWORD1);
-			keywords.add("with",Token.KEYWORD1);
-			keywords.add("break",Token.KEYWORD1);
-			keywords.add("switch",Token.KEYWORD1);
-			keywords.add("case",Token.KEYWORD1);
-			keywords.add("continue",Token.KEYWORD1);
-			keywords.add("default",Token.KEYWORD1);
-			keywords.add("echo",Token.KEYWORD1);
-			keywords.add("false",Token.KEYWORD1);
-			keywords.add("this",Token.KEYWORD1);
-			keywords.add("true",Token.KEYWORD1);
-			keywords.add("array",Token.KEYWORD1);
-			keywords.add("extends",Token.KEYWORD1);
-		}
-		return keywords;
-	}
-  
 	// private members
 	private static KeywordMap keywords;
-	private boolean js;
 	private int lastOffset;
 	private int lastKeyword;
+
+	static
+	{
+		keywords = new KeywordMap(false);
+		keywords.add("function",Token.KEYWORD2);
+		keywords.add("class",Token.KEYWORD2);
+		keywords.add("var",Token.KEYWORD2);
+		keywords.add("require",Token.KEYWORD2);
+		keywords.add("include",Token.KEYWORD2);
+		keywords.add("else",Token.KEYWORD1);
+		keywords.add("elseif",Token.KEYWORD1);
+		keywords.add("do",Token.KEYWORD1);
+		keywords.add("for",Token.KEYWORD1);
+		keywords.add("if",Token.KEYWORD1);
+		keywords.add("endif",Token.KEYWORD1);
+		keywords.add("in",Token.KEYWORD1);
+		keywords.add("new",Token.KEYWORD1);
+		keywords.add("return",Token.KEYWORD1);
+		keywords.add("while",Token.KEYWORD1);
+		keywords.add("endwhile",Token.KEYWORD1);
+		keywords.add("with",Token.KEYWORD1);
+		keywords.add("break",Token.KEYWORD1);
+		keywords.add("switch",Token.KEYWORD1);
+		keywords.add("case",Token.KEYWORD1);
+		keywords.add("continue",Token.KEYWORD1);
+		keywords.add("default",Token.KEYWORD1);
+		keywords.add("echo",Token.KEYWORD1);
+		keywords.add("false",Token.KEYWORD1);
+		keywords.add("this",Token.KEYWORD1);
+		keywords.add("true",Token.KEYWORD1);
+		keywords.add("array",Token.KEYWORD1);
+		keywords.add("extends",Token.KEYWORD1);
+	}
 
 	private boolean doKeyword(Segment line, int i, char c)
 	{

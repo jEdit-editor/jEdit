@@ -1,0 +1,4 @@
+# This macro saves the current file and executes jikes in the console.
+
+save
+console@jikes +E $f
