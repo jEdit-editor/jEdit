@@ -673,6 +673,7 @@ options.general.lineSeparator=Default line separator:\
 options.general.saveDesktop=Save session on exit
 options.general.showToolbar=Show toolbar
 options.general.showBufferTabs=Show buffer tabs
+options.general.bufferTabsPos=Buffer tabs position:\ 
 options.general.showFullPath=Show full path of buffers in title bar
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort by file name only (instead of full path)
@@ -765,21 +766,3 @@ view-editbus.update=Update
 view-editbus.editbus=EditBus
 view-editbus.components=Components
 view-editbus.lists=Lists
-
-# Documentation protocol (jeditdocs:)
-docindex.header=<html><head><title>Documentation Index</title></head>\n\
-	<body><h1>Documentation Index</h1>
-
-docindex.general=<h2>Miscellaneous</h2><ul>
-docindex.general.entry=<li><a href={0}>{1}</a>
-
-docindex.books=</ul><h2>jEdit Documentation</h2><ul>
-docindex.books.jeditdocs=<li><a href={0}>jEdit User Guide</a>
-docindex.books.api=<li><a href={0}>jEdit API Documentation</a>
-
-docindex.plugins=</ul><h2>Plugin Documentation</h2><ul>
-docindex.plugins.entry=<li><a href={3}>{0} {2}</a> (by {1})
-
-docindex.footer=</ul><center><font size=-2>jEdit is (C) 1998, 1999\n\
-	by Slava Pestov. See README.txt for licensing information.\n\
-	</font></center></body></html>

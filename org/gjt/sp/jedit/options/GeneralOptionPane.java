@@ -129,6 +129,17 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"view.showBufferTabs")));
 		addComponent(showBufferTabs);
 
+		/* Buffer tabs position */
+		String[] positions = {
+			"top", "left", "bottom", "right"
+		};
+
+		bufferTabsPos = new JComboBox(positions);
+		bufferTabsPos.setSelectedIndex(Integer.parseInt(jEdit.getProperty(
+			"view.bufferTabsPos")) - 1);
+		addComponent(jEdit.getProperty("options.general.bufferTabsPos"),
+			bufferTabsPos);
+
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.general.showFullPath"));
@@ -184,6 +195,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 			.isSelected() ? "on" : "off");
 		jEdit.setProperty("view.showBufferTabs",showBufferTabs.getModel()
 			.isSelected() ? "on" : "off");
+		jEdit.setProperty("view.bufferTabsPos",String.valueOf(
+			bufferTabsPos.getSelectedIndex() + 1));
 		jEdit.setProperty("view.showFullPath",showFullPath.getModel()
 			.isSelected() ? "on" : "off");
 		jEdit.setProperty("sortBuffers",sortBuffers.getModel()
@@ -207,6 +220,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox saveDesktop;
 	private JCheckBox showToolbar;
 	private JCheckBox showBufferTabs;
+	private JComboBox bufferTabsPos;
 	private JCheckBox showFullPath;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;

@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.03.02.00";
+		return "02.03.03.00";
 	}
 
 	/**
@@ -1001,7 +1001,6 @@ public class jEdit
 
 		newView.show();
 		newView.focusOnTextArea();
-		newView.addWindowListener(windowHandler);
 
 		return newView;
 	}
@@ -1189,7 +1188,6 @@ public class jEdit
 	private static Vector recent;
 	private static int maxRecent;
 	private static InputHandler inputHandler;
-	private static WindowHandler windowHandler;
 
 	// buffer link list
 	private static boolean sortBuffers;
@@ -1259,7 +1257,6 @@ public class jEdit
 	private static void initMisc()
 	{
 		inputHandler = new DefaultInputHandler();
-		windowHandler = new WindowHandler();
 
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
@@ -1764,21 +1761,14 @@ public class jEdit
 		if(recent.size() > maxRecent)
 			recent.removeElementAt(maxRecent);
 	}
-
-	// Since window closing is handled by the editor itself,
-	// and is the same for all views, it is ok to do it here
-	static class WindowHandler extends WindowAdapter
-	{
-		public void windowClosing(WindowEvent evt)
-		{
-			closeView((View)evt.getSource());
-		}
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.184  2000/01/28 09:24:16  sp
+ * Buffer tabs updated (uses better impl == less bugs)
+ *
  * Revision 1.183  2000/01/28 00:25:47  sp
  * Minor tweak
  *
@@ -1811,8 +1801,5 @@ public class jEdit
  *
  * Revision 1.173  1999/12/20 06:05:26  sp
  * Search settings buttons on tool bar, static abbrevs
- *
- * Revision 1.172  1999/12/19 11:14:28  sp
- * Static abbrev expansion started
  *
  */

@@ -47,20 +47,8 @@ public class BufferTabs extends JTabbedPane
 			buffer = buffer.getNext();
 		}
 
+		((Magic)getSelectedComponent()).update();
 		addChangeListener(new ChangeHandler());
-	}
-
-	public Component getComponentAt(int index)
-	{
-		if(!removing && index >= 0 && index < getTabCount())
-			return textArea;
-		else
-			return super.getComponentAt(index);
-	}
-
-	public int indexOfComponent(Component component)
-	{
-		return super.indexOfComponent(textArea);
 	}
 
 	public boolean isFocusTraversable()
@@ -79,19 +67,13 @@ public class BufferTabs extends JTabbedPane
 		int selectedIndex = getSelectedIndex();
 
 		buffers.insertElementAt(buffer,index);
-		if(getTabCount() == 0)
-			addTab(getTabLabel(buffer),null,textArea);
-		else
-			insertTab(getTabLabel(buffer),null,null,null,index);
+		insertTab(getTabLabel(buffer),null,new Magic(buffer),null,index);
 
 		if(index <= selectedIndex)
 		{
 			selectedIndex++;
 			setSelectedIndex(selectedIndex);
 		}
-
-		if(index == 0)
-			textArea.setVisible(true);
 
 		view.focusOnTextArea();
 	}
@@ -101,30 +83,22 @@ public class BufferTabs extends JTabbedPane
 		int index = buffers.indexOf(buffer);
 		int selectedIndex = getSelectedIndex();
 
-		try
+		buffers.removeElementAt(index);
+
+		removeTabAt(index);
+
+		if(index < selectedIndex)
 		{
-			removing = true;
-			buffers.removeElementAt(index);
+			if(selectedIndex != 0)
+				selectedIndex--;
 
-			removeTabAt(index);
-
-			if(index < selectedIndex)
-			{
-				if(selectedIndex != 0)
-					selectedIndex--;
-
-				setSelectedIndex(selectedIndex);
-			}
-
-			if(getTabCount() != 0)
-			{
-				setComponentAt(0,textArea);
-				textArea.setVisible(true);
-			}
+			setSelectedIndex(selectedIndex);
 		}
-		finally
+		else if(index == selectedIndex)
 		{
-			removing = false;
+			Magic comp = (Magic)getSelectedComponent();
+			if(comp != null)
+				comp.update();
 		}
 	}
 
@@ -140,17 +114,14 @@ public class BufferTabs extends JTabbedPane
 		}
 		else
 		{
-			try
-			{
-				updating = true;
-				removeBufferTab(buffer);
-				addBufferTab(buffer);
-				selectBufferTab(buffer);
-			}
-			finally
-			{
-				updating = false;
-			}
+			updating = true;
+
+			removeBufferTab(buffer);
+			addBufferTab(buffer);
+			selectBufferTab(buffer);
+
+			updating = false;
+
 			if(view.getBuffer() == buffer)
 				selectBufferTab(buffer);
 		}
@@ -158,7 +129,12 @@ public class BufferTabs extends JTabbedPane
 
 	public void selectBufferTab(Buffer buffer)
 	{
-		setSelectedIndex(buffer.getIndex());
+		int index = buffer.getIndex();
+		int selectedIndex = getSelectedIndex();
+		if(index == selectedIndex)
+			((Magic)getSelectedComponent()).update();
+		else
+			setSelectedIndex(buffer.getIndex());
 	}
 
 	// private members
@@ -195,8 +171,34 @@ public class BufferTabs extends JTabbedPane
 				index--;
 			}
 
-			if(buffer != null)
-				view.setBuffer(buffer);
+			Magic comp = (Magic)getSelectedComponent();
+			if(comp != null)
+				comp.select();
+		}
+	}
+
+	// each tab has an instance of this component, which swaps the
+	// one text area instance in and out
+	class Magic extends JPanel
+	{
+		Buffer buffer;
+
+		Magic(Buffer buffer)
+		{
+			super(new BorderLayout());
+			this.buffer = buffer;
+		}
+
+		void select()
+		{
+			view.setBuffer(buffer);
+			update();
+		}
+
+		void update()
+		{
+			this.add(BorderLayout.CENTER,textArea);
+			this.revalidate();
 		}
 	}
 }

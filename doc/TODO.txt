@@ -40,7 +40,6 @@ JEDIT TO DO
   -- more than one level of embedding will require a major reworking of the
      syntax system, so don't do it for now
 - 'Uncomment' command, removes comment strings from selected text
-- Remove 'smart' home/end?
 - Menu bar and tool bar loading needs to work outside of views
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
@@ -48,14 +47,9 @@ JEDIT TO DO
   and/or center themselves on the screen
 - Beef up 'Marker' class to support file/line number/message stuff, EditBus
   will also use it for errors
-- Macros -- \n, \t in action command
 - Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
   to TextAreaHighlight and use that same interface to paint stuff in the
   gutter
-- (??? WHY?) Higlight.paintHighlight(): instead of passing y co-ordinate,
-  pass a rectangle with line bounds. Maybe rework TextAreaPainter internals
-  to use a rectangle also, it could simplify some things. If one rectangle
-  instance is stored and reused, it would not slow things down
 - Plugin devel manual needs more work:
   - document views, buffers
   - document GUIUtilities.load/saveGeometry

@@ -84,6 +84,9 @@ view.showToolbar=on
 # Show buffer tabs? (on/off)
 view.showBufferTabs=on
 
+# Buffer tabs position (1=top, 2=left, 3=bottom, 4=right)
+view.bufferTabsPos=1
+
 # Show full path in title bar? (on/off)
 view.showFullPath=off
 

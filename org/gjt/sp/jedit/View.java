@@ -363,6 +363,7 @@ public class View extends JFrame implements EBComponent
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowHandler());
 	}
 
 	void close()
@@ -372,6 +373,8 @@ public class View extends JFrame implements EBComponent
 		saveCaretInfo();
 		EditBus.removeFromBus(this);
 		dispose();
+
+		buffer.removeDocumentListener(textArea);
 	}
 
 	// private members
@@ -598,6 +601,9 @@ public class View extends JFrame implements EBComponent
 				getContentPane().remove(textArea);
 				getContentPane().add(BorderLayout.CENTER,bufferTabs);
 			}
+
+			bufferTabs.setTabPlacement(Integer.parseInt(
+				jEdit.getProperty("view.bufferTabsPos")));
 		}
 		else
 		{
@@ -961,6 +967,14 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
+	class WindowHandler extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent evt)
+		{
+			jEdit.closeView(View.this);
+		}
+	}
+
 	class StatusBar extends JComponent
 	{
 		Stack status;
@@ -1026,6 +1040,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.127  2000/01/28 09:24:16  sp
+ * Buffer tabs updated (uses better impl == less bugs)
+ *
  * Revision 1.126  2000/01/28 00:20:58  sp
  * Lots of stuff
  *
@@ -1055,8 +1072,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.117  1999/12/20 06:05:26  sp
  * Search settings buttons on tool bar, static abbrevs
- *
- * Revision 1.116  1999/12/19 11:14:28  sp
- * Static abbrev expansion started
  *
  */
