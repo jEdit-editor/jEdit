@@ -86,6 +86,14 @@
 </listitem>
 
 <listitem>
+    <para><filename>Color_Picker.bsh</filename></para>
+    <abstract><para>
+        Displays a color picker and inserts the selected color in
+        hexadecimal format, prefixed with a <quote>#</quote>.
+    </para></abstract>
+</listitem>
+
+<listitem>
     <para><filename>Duplicate_Line.bsh</filename></para>
     <abstract><para>
         Duplicates the line on which the caret lies immediately

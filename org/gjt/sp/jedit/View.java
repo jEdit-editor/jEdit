@@ -52,6 +52,15 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Returns the view's tool bar.
+	 * @since jEdit 3.2.1
+	 */
+	public JToolBar getToolBar()
+	{
+		return toolBar;
+	}
+
+	/**
 	 * Quick search.
 	 * @since jEdit 2.7pre2
 	 */

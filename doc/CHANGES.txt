@@ -2,11 +2,20 @@ JEDIT 3.2 VERSION HISTORY
 
 * Version 3.2.1
 
++ New Features
+
+- 'Color Picker' macro added
+- Objective-C syntax highlighting (Kris Kopicki)
+
 + Bug Fixes
 
 - Clicks in table of contents in help viewer didn't work
 - A few actions didn't record a trailing ; when recording a macro
 - Fixed another BeanShell performance problem
+
++ API Changes
+
+- View.getToolBar() method added
 
 * Version 3.2final
 

@@ -35,8 +35,9 @@
      please let me know -->
 <MODE NAME="bcel"		FILE="bcel.xml" />
 
+<!--  We let Objective C mode highlight .h files -->
 <MODE NAME="c"			FILE="c.xml"
-				FILE_NAME_GLOB="*.[ch]" />
+				FILE_NAME_GLOB="*.c" />
 
 <MODE NAME="cobol"		FILE="cobol.xml"
 				FILE_NAME_GLOB="*.cbl" />
@@ -97,6 +98,9 @@
 
 <MODE NAME="netrexx"		FILE="netrexx.xml"
 				FILE_NAME_GLOB="*.nrx" />
+
+<MODE NAME="objective-c"	FILE="objective-c.xml"
+				FILE_NAME_GLOB="*.[mh]" />
 
 <MODE NAME="occam"		FILE="occam.xml"
 				FILE_NAME_GLOB="*.icc" />

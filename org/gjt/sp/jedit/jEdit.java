@@ -61,7 +61,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.02.99.00";
+		return "03.02.99.01";
 	}
 
 	/**
@@ -2748,7 +2748,8 @@ loop:		for(int i = 0; i < list.length; i++)
 			if(plugin.equals("EditBuddy.jar")
 				|| plugin.equals("PluginManager.jar")
 				|| plugin.equals("jaxp.jar")
-				|| plugin.equals("crimson.jar"))
+				|| plugin.equals("crimson.jar")
+				|| plugin.equals("Tidy.jar"))
 			{
 				String[] args = { plugin };
 				GUIUtilities.error(null,"plugin.obsolete",args);

@@ -1,7 +1,12 @@
 TO DO
 
+installer: real size -vs- disk size (rounded up to 4k)
+
 + features:
 
+- instead of mini i/o progress, show messages in status bar: number
+  of i/o requests pending, and setMessageAndClear("foo") when i/o
+  complete
 - Jext-style undo to replace CaretUndo crap
 - select-* actions: add to selection in multi-select mode
 - appendix in plugin guide on contributing plugins
