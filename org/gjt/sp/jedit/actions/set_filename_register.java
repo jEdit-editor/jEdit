@@ -20,11 +20,9 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class set_filename_register extends EditAction
-implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -46,12 +44,6 @@ implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 				view.getToolkit().beep();
 				return;
 			}
-
-			InputHandler inputHandler = view.getTextArea().getInputHandler();
-			InputHandler.MacroRecorder recorder = inputHandler.getMacroRecorder();
-
-			if(recorder != null)
-				recorder.actionPerformed(this,actionCommand);
 
 			Registers.setRegister(ch,new Registers.StringRegister(
 				view.getBuffer().getPath()));

@@ -24,7 +24,6 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class set_caret_register extends EditAction
-implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -47,12 +46,6 @@ implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 				view.getToolkit().beep();
 				return;
 			}
-
-			InputHandler inputHandler = textArea.getInputHandler();
-			InputHandler.MacroRecorder recorder = inputHandler.getMacroRecorder();
-
-			if(recorder != null)
-				recorder.actionPerformed(this,actionCommand);
 
 			Registers.setRegister(ch,new Registers.CaretRegister(
 				view.getBuffer(),textArea.getCaretPosition()));

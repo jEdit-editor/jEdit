@@ -2,19 +2,19 @@
  * InputHandler.java - Manages key bindings and executes actions
  * Copyright (C) 1999 Slava Pestov
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 package org.gjt.sp.jedit.textarea;
@@ -261,7 +261,8 @@ public abstract class InputHandler extends KeyAdapter
 	public abstract InputHandler copy();
 
 	/**
-	 * Executes the specified action.
+	 * Executes the specified action, repeating and recording it as
+	 * necessary.
 	 * @param listener The action listener
 	 * @param source The event source
 	 * @param actionCommand The action command
@@ -269,49 +270,54 @@ public abstract class InputHandler extends KeyAdapter
 	public void executeAction(ActionListener listener, Object source,
 		String actionCommand)
 	{
-		/**
-		 * We have to hardcode the recording of 'repeat' because
-		 * when it is first invoked, its action command is null,
-		 * and then input is received from the keyboard.
-		 */
-		if(recorder != null)
-		{
-			int repeatCount = getRepeatCount();
-			if(repeatCount != 1)
-			{
-				recorder.actionPerformed(REPEAT,String.valueOf(repeatCount));
-			}
-
-			if(!(listener instanceof InputHandler.NonRecordable))
-				recorder.actionPerformed(listener,actionCommand);
-		}
-
+		// create event
 		ActionEvent evt = new ActionEvent(source,
 			ActionEvent.ACTION_PERFORMED,
 			actionCommand);
 
-		boolean _repeat = repeat;
+		// don't do anything if the action is a wrapper
+		// (like EditAction.Wrapper)
+		if(listener instanceof Wrapper)
+		{
+			listener.actionPerformed(evt);
+			return;
+		}
 
+		// remember old values, in case action changes them
+		boolean _repeat = repeat;
+		int _repeatCount = getRepeatCount();
+
+		// execute the action
 		if(listener instanceof InputHandler.NonRepeatable)
 			listener.actionPerformed(evt);
 		else
 		{
-			int _repeatCount = repeatCount;
-			repeatCount = 0;
-			for(int i = 0; i < Math.max(1,_repeatCount); i++)
+			for(int i = 0; i < Math.max(1,repeatCount); i++)
 				listener.actionPerformed(evt);
 		}
 
-		// If repeat was true originally, clear it
-		// Otherwise it might have been set by the action, etc
-
-		// Check for grabAction being not null so that
-		// repeat@5 copy-string-register copy-string-register@a
-		// will work properly
-		if(_repeat && grabAction == null)
+		// do recording. Notice that we do no recording whatsoever
+		// for actions that grab keys
+		if(grabAction == null)
 		{
-			repeat = false;
-			repeatCount = 0;
+			if(recorder != null)
+			{
+				if(!(listener instanceof InputHandler.NonRecordable))
+				{
+					if(_repeatCount != 1)
+						recorder.actionPerformed(REPEAT,String.valueOf(_repeatCount));
+
+					recorder.actionPerformed(listener,actionCommand);
+				}
+			}
+
+			// If repeat was true originally, clear it
+			// Otherwise it might have been set by the action, etc
+			if(_repeat)
+			{
+				repeat = false;
+				repeatCount = 0;
+			}
 		}
 	}
 
@@ -383,6 +389,12 @@ public abstract class InputHandler extends KeyAdapter
 	 * by the macro recorder. Instead, it will do its own recording.
 	 */
 	public interface NonRecordable {}
+
+	/**
+	 * For use by EditAction.Wrapper only.
+	 * @since jEdit 2.2final
+	 */
+	public interface Wrapper {}
 
 	/**
 	 * Macro recorder.
@@ -1071,6 +1083,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  1999/12/13 03:40:30  sp
+ * Bug fixes, syntax is now mostly GPL'd
+ *
  * Revision 1.13  1999/12/03 23:48:10  sp
  * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
  *

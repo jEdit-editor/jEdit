@@ -813,6 +813,11 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		putProperty("i18n",Boolean.FALSE);
 
 		setPath();
+
+		// New files are initialized immediately since it
+		// only takes 1 ms or so
+		if(newFile)
+			loadIfNecessary(null);
 	}
 
 	void commitTemporary()
@@ -1464,7 +1469,8 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	{
 		public void undoableEditHappened(UndoableEditEvent evt)
 		{
-			addUndoableEdit(evt.getEdit());
+			if(getFlag(LOADED))
+				addUndoableEdit(evt.getEdit());
 		}
 	}
 
@@ -1490,6 +1496,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.116  1999/12/13 03:40:29  sp
+ * Bug fixes, syntax is now mostly GPL'd
+ *
  * Revision 1.115  1999/12/11 06:34:39  sp
  * Bug fixes
  *

@@ -318,7 +318,7 @@ view-editbus.label=Show EditBus...
 macro.temp.header=# This is a temporary macro. First, check over the\n\
                   # commands to make sure this is what you intended.\n\
                   # Then, to execute this macro, switch to the buffer\n\
-                  # where you would like to execute it and press C+e C+m C+p.
+                  # where you would like to execute it and press C+m C+p.
 
 macro.header=# This is a freshly recorded macro. First, check over the\n\
              # commands to make sure this is what you intended. Then,\n\

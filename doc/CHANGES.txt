@@ -1,5 +1,29 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2final
+
+Syntax package is now GPL'd again. When we LGPL'd it, jEdit had no IDE
+features, so it was natural to let commercial IDEs use it; after all, we
+weren't competing. Now that a range of plugins are being written for
+jEdit which give it some degree of IDE functionality, we were basically
+giving the competition a free ride.
+
+jEdit 2.1 and 2.0 are still available on the net, and they have LGPL'd
+syntax packages. So closed-source programs can still use the older code.
+
++ Bug Fixes
+
+- It was possible to undo the initial file load, which could leave you
+  with an empty buffer (since 2.2pre8)
+- Only text area actions were recorded to macros (since 2.2pre7)
+- Macro recording had problems with the new delayed-loading buffer code
+  (since 2.2pre8)
+
++ API Changes
+
+- Minor changes to EditBus. This breaks all plugins using the extra
+  messages in EditBus.jar
+
 * Version 2.2pre9
 
 + Enhancements

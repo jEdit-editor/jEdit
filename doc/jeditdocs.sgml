@@ -53,28 +53,13 @@
  </sect1>
  <sect1 id=licensing><title>Licensing Information</>
   <para>
-   Most of jEdit is released under the GNU General Public License, except
-   for the following packages which are released under the GNU Lesser
-   General Public License, which allows them to be used in non-Open Source
-   programs:
+   jEdit is released under the GNU General Public License. except
   </para>
-  <itemizedlist>
-   <listitem><para>
-    org.gjt.sp.jedit.syntax (Syntax highlighting core and parsers)
-   </para></listitem>
-   <listitem><para>
-    org.gjt.sp.jedit.textarea (Syntax highlighting text area component)
-   </para></listitem>
-   <listitem><para>
-    org.gjt.sp.util (Various utility classes)
-   </para></listitem>
-  </itemizedlist>
   <para>
    jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
    section 11 and 12 of the GNU General Public License for details.
-   The GNU General and Lesser Public Licenses can be found in the
-   <filename>COPYING.txt</> and
-   <filename>COPYING-LIB.txt</> files of the jEdit distribution, respectively.
+   The GNU General Public License can be found in the
+   <filename>COPYING.txt</> file in the jEdit distribution.
    </para>
  </sect1>
  <sect1 id=release-notes><title>Release Notes</>

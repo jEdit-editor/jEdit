@@ -39,22 +39,6 @@ import org.gjt.sp.util.Log;
 public class EditBus
 {
 	/**
-	 * Named list of error sources. The elements of this list are
-	 * ErrorSource implementations.
-	 */
-	public static final Object ERROR_SOURCES = "ERROR_SOURCES";
-
-	/**
-	 * Named list of outputs. The elements of this list are strings.
-	 */
-	public static final Object OUTPUTS = "OUTPUTS";
-
-	/**
-	 * Named list of shells. The elements of this list are strings.
-	 */
-	public static final Object SHELLS = "SHELLS";
-
-	/**
 	 * Adds a component to the bus. It will receive all messages sent
 	 * on the bus.
 	 * @param comp The component to add

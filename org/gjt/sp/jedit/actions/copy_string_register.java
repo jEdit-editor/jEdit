@@ -24,7 +24,7 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class copy_string_register extends EditAction
-implements InputHandler.NonRecordable, InputHandler.NonRepeatable
+implements InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -52,13 +52,7 @@ implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 				return;
 			}
 
-			InputHandler inputHandler = textArea.getInputHandler();
-			InputHandler.MacroRecorder recorder = inputHandler.getMacroRecorder();
-
-			if(recorder != null)
-				recorder.actionPerformed(this,actionCommand);
-
-			int repeatCount = inputHandler.getRepeatCount();
+			int repeatCount = textArea.getInputHandler().getRepeatCount();
 			StringBuffer buf = new StringBuffer();
 			for(int i = 0; i < repeatCount; i++)
 				buf.append(selection);

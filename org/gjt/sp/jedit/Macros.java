@@ -355,6 +355,7 @@ public class Macros
 			}
 
 			String name = getActionName(listener);
+
 			if(name == null)
 			{
 				// eg, Macros$1 action
@@ -398,6 +399,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  1999/12/13 03:40:29  sp
+ * Bug fixes, syntax is now mostly GPL'd
+ *
  * Revision 1.17  1999/12/05 03:01:05  sp
  * Perl token marker bug fix, file loading is deferred, style option pane fix
  *

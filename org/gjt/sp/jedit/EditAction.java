@@ -87,6 +87,14 @@ public abstract class EditAction implements ActionListener
 	 */
 	public final String getName()
 	{
+		if(name == null)
+		{
+			String clazz = getClass().getName();
+			clazz = clazz.substring("org.gjt.sp.jedit.actions.".length());
+			clazz = clazz.replace('_','-');
+			name = clazz;
+		}
+
 		return name;
 	}
 
@@ -126,12 +134,12 @@ public abstract class EditAction implements ActionListener
 		{
 			if(comp instanceof View)
 				return (View)comp;
-			else if(comp == null)
-				break;
 			else if(comp instanceof JPopupMenu)
 				comp = ((JPopupMenu)comp).getInvoker();
-			else
+			else if(comp != null)
 				comp = comp.getParent();
+			else
+				break;
 		}
 		return null;
 	}
@@ -169,8 +177,7 @@ public abstract class EditAction implements ActionListener
 	 * this class automatically.
 	 */
 	public static class Wrapper extends EditAction
-		implements InputHandler.NonRepeatable,
-		InputHandler.NonRecordable
+		implements InputHandler.Wrapper
 	{
 		/**
 		 * Creates a new wrapper that will autoload the built-in
@@ -277,6 +284,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  1999/12/13 03:40:29  sp
+ * Bug fixes, syntax is now mostly GPL'd
+ *
  * Revision 1.19  1999/12/10 03:22:46  sp
  * Bug fixes, old loading code is now used again
  *

@@ -16,20 +16,12 @@ found at <http://www.cacas.org/java/gnu/regexp/>.
 
 * jEdit's License
 
-Most of jEdit is released under the GNU General Public License, except
-for the following packages which are released under the GNU Lesser
-General Public License, which allows those packages to be linked into
-non-Open Source programs:
-
-- org.gjt.sp.jedit.syntax (Syntax highlighting core and parsers)
-- org.gjt.sp.jedit.textarea (Syntax highlighting text area component)
-- org.gjt.sp.util (Various utility classes)
+jEdit is released under the GNU General Public License.
 
 Note that jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
 section 11 and 12 of the GNU General Public License for details.
 
-The GNU General and Lesser Publice Licenses are stored in the
-COPYING.txt and COPYING-LIB.txt files, respectively.
+The GNU General Public License are stored in the COPYING.txt file.
 
 * jEdit on the Internet
 

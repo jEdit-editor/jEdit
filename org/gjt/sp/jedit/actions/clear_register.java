@@ -20,22 +20,20 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
 public class clear_register extends EditAction
-implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		InputHandler inputHandler = view.getTextArea().getInputHandler();
 
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
 			view.showStatus(jEdit.getProperty("view.status.clear-register"));
-			inputHandler.grabNextKeyStroke(this);
+			view.getTextArea().getInputHandler()
+				.grabNextKeyStroke(this);
 		}
 		else
 		{
@@ -47,11 +45,6 @@ implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 				view.getToolkit().beep();
 				return;
 			}
-
-			InputHandler.MacroRecorder recorder = inputHandler.getMacroRecorder();
-
-			if(recorder != null)
-				recorder.actionPerformed(this,actionCommand);
 
 			Registers.clearRegister(ch);
 		}
