@@ -1341,6 +1341,16 @@ public class Buffer extends PlainDocument implements EBComponent
 		setDocumentProperties(new BufferProps());
 		putProperty("i18n",Boolean.FALSE);
 
+		if(props != null)
+		{
+			Enumeration keys = props.keys();
+			Enumeration values = props.elements();
+			while(keys.hasMoreElements())
+			{
+				putProperty(keys.nextElement(),values.nextElement());
+			}
+		}
+
 		setPath(path);
 
 		/* Magic: UNTITLED is only set of newFile param to
@@ -1357,16 +1367,6 @@ public class Buffer extends PlainDocument implements EBComponent
 			newFile |= !file.exists();
 
 		setFlag(NEW_FILE,newFile);
-
-		if(props != null)
-		{
-			Enumeration keys = props.keys();
-			Enumeration values = props.elements();
-			while(keys.hasMoreElements())
-			{
-				putProperty(keys.nextElement(),values.nextElement());
-			}
-		}
 	}
 
 	void commitTemporary()
@@ -1515,7 +1515,11 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		vfsSession = (VFSSession)getProperty(VFS_SESSION_HACK);
 		if(vfsSession != null)
+		{
+			System.err.println(vfsSession);
 			vfsSession = (VFSSession)vfsSession.clone();
+			System.err.println(vfsSession);
+		}
 		else
 			vfsSession = new VFSSession();
 
@@ -1695,6 +1699,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.170  2000/08/15 08:07:10  sp
+ * A bunch of bug fixes
+ *
  * Revision 1.169  2000/08/11 12:13:13  sp
  * Preparing for 2.6pre2 release
  *

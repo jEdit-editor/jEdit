@@ -519,13 +519,13 @@ public class IORequest extends WorkRequest
 				buffer.readLock();
 
 				out = vfs._createOutputStream(session,path,view);
-				if(out == null)
-					return;
+				if(out != null)
+				{
+					if(path.endsWith(".gz"))
+						out = new GZIPOutputStream(out);
 
-				if(path.endsWith(".gz"))
-					out = new GZIPOutputStream(out);
-
-				write(buffer,out);
+					write(buffer,out);
+				}
 
 				// We only save markers to VFS's that support deletion.
 				// Otherwise, we will accumilate stale marks files.
@@ -700,6 +700,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.21  2000/08/15 08:07:11  sp
+ * A bunch of bug fixes
+ *
  * Revision 1.20  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

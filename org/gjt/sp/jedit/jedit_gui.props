@@ -52,7 +52,6 @@ icons=\
       Cut.gif \
       Delete.gif \
       Document.gif \
-      Favorite.gif \
       FingerRight.gif \
       Folder.gif \
       FolderUp.gif \
@@ -63,7 +62,6 @@ icons=\
       NewView.gif \
       Open.gif \
       Paste.gif \
-      Plus.gif \
       Print.gif \
       Redo.gif \
       Reload.gif \
@@ -835,7 +833,7 @@ options.shortcuts.label=Shortcuts
 
 options.general.label=General
 
-options.general.misc=Miscallaneous settings
+options.general.misc=Miscellaneous settings
 options.general.recent=Max recent files:
 options.general.history=Max history list length:
 options.general.confirmExit=Ask for confirmation before exiting
@@ -945,7 +943,7 @@ options.editor.boxComment=Box comment:
 options.editor.blockComment=Block comment:
 options.editor.noWordSep=Extra word characters:
 
-options.print.misc=Miscallaneous settings
+options.print.misc=Miscellaneous settings
 options.print.label=Printing
 options.print.font=Print font:
 options.print.fontstyle=Print font style:
@@ -1111,10 +1109,6 @@ vfs.browser.home.label=Home Directory
 vfs.browser.home.icon=Home.gif
 vfs.browser.synchronize.label=Go to Parent Directory of Current Buffer
 vfs.browser.synchronize.icon=Synchronize.gif
-vfs.browser.addToFavorites.label=Add to Favorites
-vfs.browser.addToFavorites.icon=Plus.gif
-vfs.browser.gotoFavorites.label=Go to Favorites
-vfs.browser.gotoFavorites.icon=Favorite.gif
 vfs.browser.more.label=More
 vfs.browser.more.icon=ToolbarMenu.gif
 
@@ -1122,6 +1116,8 @@ vfs.browser.more.list.label=View as List
 vfs.browser.more.tree.label=View as Tree
 vfs.browser.more.showHiddenFiles.label=Show Hidden Files
 vfs.browser.more.newDirectory.label=New Directory...
+vfs.browser.more.addToFavorites.label=Add to Favorites
+vfs.browser.more.goToFavorites.label=Go to Favorites
 
 vfs.browser.menu.close.label=Close
 vfs.browser.menu.open.label=Open in Current View

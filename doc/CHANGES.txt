@@ -2,10 +2,23 @@ JEDIT 2.6 VERSION HISTORY
 
 * Version 2.6pre3
 
++ Enhancements
+
+- When closing a buffer, jEdit now only blocks until I/O is complete if
+  the buffer _being closed_ is currently being loaded or saved
+
 + Bug Fixes
 
 - Double-clicking on a directory in the 'save as' dialog box did not have
-  the desired effect (since jEdit 2.6pre2)
+  the desired effect (since 2.6pre2)
+- On some systems, File.list(), for whatever reason, returns files in the
+  list, which return false when exists() is called on them. This caused NPE's
+  (since 2.6pre2)
+- The VFS browser would throw 'VFS session in use' errors after the
+  Global Options dialog box was closed (since 2.6pre2)
+- The 'Add to Favorites' button in the VFS browser would throw an NPE if the
+  tree view was active (since 2.6pre2)
+- The VFS browser would prompt for FTP passwords twice (since 2.6pre2)
 
 * Version 2.6pre2
 

@@ -535,8 +535,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private VFSSession vfsSession;
 	private HistoryTextField pathField;
 	private JComboBox filterCombo;
-	private JButton up, reload, roots, home, synchronize,
-		addToFavorites, gotoFavorites;
+	private JButton up, reload, roots, home, synchronize;
 	private BrowserView browserView;
 	private VFSFilter filenameFilter;
 	private int mode;
@@ -636,9 +635,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		toolBar.add(home = createToolButton("home"));
 		toolBar.add(synchronize = createToolButton("synchronize"));
 		toolBar.addSeparator();
-		toolBar.add(addToFavorites = createToolButton("addToFavorites"));
-		toolBar.add(gotoFavorites = createToolButton("gotoFavorites"));
-		toolBar.addSeparator();
 
 		toolBar.add(new MoreMenuButton());
 
@@ -697,17 +693,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 		filterCombo.setModel(new DefaultComboBoxModel(filters));
 
 		String defaultView = jEdit.getProperty("vfs.browser.defaultView");
-		/* if(defaultView.equals("list"))
-			setBrowserView(new BrowserListView(this));
-		else */ if(defaultView.equals("tree"))
+		if(defaultView.equals("tree"))
 			setBrowserView(new BrowserTreeView(this));
 		else // default
 			setBrowserView(new BrowserListView(this));
-
-		// unless we're being called from the constructor, reload
-		// directory so that new sorting settings take effect.
-		if(path != null)
-			reloadDirectory(false);
 	}
 
 	class ActionHandler implements ActionListener
@@ -752,37 +741,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 				else
 					getToolkit().beep();
 			}
-			else if(source == addToFavorites)
-			{
-				// if any directories are selected, add them,
-				// otherwise add current directory
-				Vector toAdd = new Vector();
-				VFS.DirectoryEntry[] selected = getSelectedFiles();
-				for(int i = 0; i < selected.length; i++)
-				{
-					VFS.DirectoryEntry file = selected[i];
-					if(file.type == VFS.DirectoryEntry.FILE)
-					{
-						GUIUtilities.error(VFSBrowser.this,
-							"vfs.browser.files-favorites",null);
-						return;
-					}
-					else
-						toAdd.addElement(file.path);
-				}
-
-				if(toAdd.size() != 0)
-				{
-					for(int i = 0; i < toAdd.size(); i++)
-					{
-						FavoritesVFS.addToFavorites((String)toAdd.elementAt(i));
-					}
-				}
-				else
-					FavoritesVFS.addToFavorites(path);
-			}
-			else if(source == gotoFavorites)
-				setDirectory(FavoritesVFS.PROTOCOL + ":");
 		}
 	}
 
@@ -807,13 +765,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			popup = new JPopupMenu();
 			ButtonGroup grp = new ButtonGroup();
+			ActionHandler actionHandler = new ActionHandler();
 
 			JRadioButtonMenuItem list = new JRadioButtonMenuItem(
 				jEdit.getProperty("vfs.browser.more.list.label"));
 			grp.add(list);
 			list.setActionCommand("list");
 			list.setSelected(browserView instanceof BrowserListView);
-			list.addActionListener(new ActionHandler());
+			list.addActionListener(actionHandler);
 			popup.add(list);
 
 			JRadioButtonMenuItem tree = new JRadioButtonMenuItem(
@@ -821,23 +780,34 @@ public class VFSBrowser extends JPanel implements EBComponent
 			grp.add(tree);
 			tree.setActionCommand("tree");
 			tree.setSelected(browserView instanceof BrowserTreeView);
-			tree.addActionListener(new ActionHandler());
+			tree.addActionListener(actionHandler);
 			popup.add(tree);
 
 			JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
 				jEdit.getProperty("vfs.browser.more.showHiddenFiles.label"));
 			showHiddenFiles.setActionCommand("showHiddenFiles");
 			showHiddenFiles.setSelected(VFSBrowser.this.showHiddenFiles);
-			showHiddenFiles.addActionListener(new ActionHandler());
+			showHiddenFiles.addActionListener(actionHandler);
 			popup.add(showHiddenFiles);
 
 			popup.addSeparator();
 
 			JMenuItem newDirectory = new JMenuItem(jEdit.getProperty(
-				"vfs.browser.more.newDirectory.label"));
+				"vfs.browser.mode.newDirectory.label"));
 			newDirectory.setActionCommand("newDirectory");
-			newDirectory.addActionListener(new ActionHandler());
-			popup.add(newDirectory);
+			newDirectory.addActionListener(actionHandler);
+
+			JMenuItem addToFavorites = new JMenuItem(jEdit.getProperty(
+				"vfs.browser.more.addToFavorites.label"));
+			addToFavorites.setActionCommand("addToFavorites");
+			addToFavorites.addActionListener(actionHandler);
+			popup.add(addToFavorites);
+
+			JMenuItem goToFavorites = new JMenuItem(jEdit.getProperty(
+				"vfs.browser.more.goToFavorites.label"));
+			goToFavorites.setActionCommand("goToFavorites");
+			goToFavorites.addActionListener(actionHandler);
+			popup.add(goToFavorites);
 
 			popup.addSeparator();
 
@@ -872,6 +842,37 @@ public class VFSBrowser extends JPanel implements EBComponent
 				}
 				else if(actionCommand.equals("newDirectory"))
 					mkdir();
+				else if(actionCommand.equals("addToFavorites"))
+				{
+					// if any directories are selected, add
+					// them, otherwise add current directory
+					Vector toAdd = new Vector();
+					VFS.DirectoryEntry[] selected = getSelectedFiles();
+					for(int i = 0; i < selected.length; i++)
+					{
+						VFS.DirectoryEntry file = selected[i];
+						if(file.type == VFS.DirectoryEntry.FILE)
+						{
+							GUIUtilities.error(VFSBrowser.this,
+								"vfs.browser.files-favorites",null);
+							return;
+						}
+						else
+							toAdd.addElement(file.path);
+					}
+	
+					if(toAdd.size() != 0)
+					{
+						for(int i = 0; i < toAdd.size(); i++)
+						{
+							FavoritesVFS.addToFavorites((String)toAdd.elementAt(i));
+						}
+					}
+					else
+						FavoritesVFS.addToFavorites(path);
+				}
+				else if(actionCommand.equals("goToFavorites"))
+					setDirectory(FavoritesVFS.PROTOCOL + ":");
 				else if(actionCommand.startsWith("vfs."))
 				{
 					String vfsName = actionCommand.substring(4);
@@ -907,6 +908,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2000/08/15 08:07:10  sp
+ * A bunch of bug fixes
+ *
  * Revision 1.12  2000/08/13 07:35:23  sp
  * Dockable window API
  *

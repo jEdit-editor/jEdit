@@ -65,7 +65,7 @@ public class BrowserTreeView extends BrowserView
 		Vector selected = new Vector(tree.getSelectionCount());
 		TreePath[] paths = tree.getSelectionPaths();
 		if(paths == null)
-			return null;
+			return new VFS.DirectoryEntry[0];
 
 		for(int i = 0; i < paths.length; i++)
 		{
@@ -236,6 +236,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/08/15 08:07:10  sp
+ * A bunch of bug fixes
+ *
  * Revision 1.5  2000/08/13 07:35:23  sp
  * Dockable window API
  *

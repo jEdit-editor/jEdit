@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.io;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
 import java.io.*;
+import java.util.Vector;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -131,15 +132,19 @@ public class FileVFS extends VFS
 		if(list == null)
 			return null;
 
-		VFS.DirectoryEntry[] list2 = new VFS.DirectoryEntry[list.length];
+		Vector list2 = new Vector();
 		for(int i = 0; i < list.length; i++)
 		{
 			String name = list[i];
-			list2[i] = _getDirectoryEntry(session,
+			VFS.DirectoryEntry file = _getDirectoryEntry(session,
 				MiscUtilities.constructPath(path,name),comp);
+			if(file != null)
+				list2.addElement(file);
 		}
 
-		return list2;
+		VFS.DirectoryEntry[] retVal = new VFS.DirectoryEntry[list2.size()];
+		list2.copyInto(retVal);
+		return retVal;
 	}
 
 	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
@@ -286,6 +291,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/08/15 08:07:11  sp
+ * A bunch of bug fixes
+ *
  * Revision 1.15  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *

@@ -103,6 +103,11 @@ public class VFSSession implements Cloneable
 		return clone;
 	}
 
+	public String toString()
+	{
+		return getClass().getName() + ":" + hashtable;
+	}
+
 	// private members
 	private VFS owner;
 	private Hashtable hashtable = new Hashtable();
@@ -111,6 +116,9 @@ public class VFSSession implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/08/15 08:07:11  sp
+ * A bunch of bug fixes
+ *
  * Revision 1.2  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

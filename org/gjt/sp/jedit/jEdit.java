@@ -1218,9 +1218,12 @@ public class jEdit
 	public static boolean closeBuffer(View view, Buffer buffer)
 	{
 		// Wait for pending I/O requests
-		VFSManager.waitForRequests();
-		if(VFSManager.errorOccurred())
-			return false;
+		if(!buffer.isLoaded() || buffer.isSaving())
+		{
+			VFSManager.waitForRequests();
+			if(VFSManager.errorOccurred())
+				return false;
+		}
 
 		if(buffer.isDirty())
 		{
@@ -2324,6 +2327,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.267  2000/08/15 08:07:10  sp
+ * A bunch of bug fixes
+ *
  * Revision 1.266  2000/08/13 07:35:22  sp
  * Dockable window API
  *
