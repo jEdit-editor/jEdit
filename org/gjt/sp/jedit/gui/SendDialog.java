@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.util.Log;
 
 public class SendDialog extends JDialog
 implements ActionListener, KeyListener, Runnable
@@ -164,20 +165,12 @@ implements ActionListener, KeyListener, Runnable
 		this.from.setEnabled(false);
 		this.to.setEnabled(false);
 		this.subject.setEnabled(false);
-
-		JTextArea transcript = new JTextArea();
-		transcript.setRows(10);
-		transcript.setEditable(false);
-
-		getContentPane().remove(buttons);
-		getContentPane().add(BorderLayout.SOUTH,
-			new JScrollPane(transcript));
-		pack();
+		send.setEnabled(false);
+		cancel.setEnabled(false);
 
 		Object[] args = { smtp };
-		transcript.append(jEdit.getProperty("send.connect",
+		Log.log(Log.DEBUG,this,jEdit.getProperty("send.connect",
 			args));
-		transcript.append(CRLF);
 
 		try
 		{
@@ -197,50 +190,45 @@ implements ActionListener, KeyListener, Runnable
 				.getOutputStream());
 
 			String response = in.readLine();
-			transcript.append(response);
-			transcript.append(CRLF);
+			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("220"))
 				error("serverdown");
 
 			String command = "HELO " + socket.getLocalAddress()
 				.getHostName() + CRLF;
-			transcript.append(command);
+			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
 			
 			response = in.readLine();
-			transcript.append(response);
-			transcript.append(CRLF);
+			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
 				error("badhost");
 			command = "MAIL FROM: <" + from + ">" + CRLF;
-			transcript.append(command);
+			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
 			
 			response = in.readLine();
-			transcript.append(response);
-			transcript.append(CRLF);
+			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
 				error("badsender");
 			command = "RCPT TO: <" + to + ">" + CRLF;
-			transcript.append(command);
+			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
 			
 			response = in.readLine();
-			transcript.append(response);
-			transcript.append(CRLF);
+			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
 				error("badrecepient");
 			command = "DATA" + CRLF;
-			transcript.append(command);
+			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
 			
 			response = in.readLine();
-			transcript.append(response);
-			transcript.append(CRLF);
+			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("354"))
 				error("badmsg");
 			
@@ -290,18 +278,16 @@ implements ActionListener, KeyListener, Runnable
 			out.flush();
 
 			response = in.readLine();
-			transcript.append(response);
-			transcript.append(CRLF);
+			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
 				error("badmsg");
 			command = "QUIT" + CRLF;
-			transcript.append(command);
+			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
 
 			response = in.readLine();
-			transcript.append(response);
-			transcript.append(CRLF);
+			Log.log(Log.DEBUG,this,response);
 			in.close();
 			out.close();
 			socket.close();

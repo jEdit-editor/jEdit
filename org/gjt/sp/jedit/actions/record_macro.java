@@ -23,6 +23,7 @@ import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class record_macro extends EditAction
 {
@@ -65,7 +66,7 @@ public class record_macro extends EditAction
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 		}
 
 		view.showStatus(jEdit.getProperty("view.status.recording"));

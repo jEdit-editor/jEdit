@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.util.Log;
 
 /**
  * A window that edits buffers. There is no public constructor in the
@@ -721,8 +722,7 @@ public class View extends JFrame
 		}
 		catch(Exception e)
 		{
-			System.out.println("Error loading syntax styles:");
-			e.printStackTrace();
+			Log.log(Log.ERROR,this,e);
 		}
 	}
 
@@ -868,6 +868,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.100  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.99  1999/10/28 09:07:21  sp
  * Directory list search
  *

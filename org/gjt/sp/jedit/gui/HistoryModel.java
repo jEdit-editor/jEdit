@@ -23,6 +23,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.Log;
 
 public class HistoryModel
 {
@@ -132,11 +133,11 @@ public class HistoryModel
 		}
 		catch(FileNotFoundException fnf)
 		{
+			Log.log(Log.DEBUG,HistoryModel.class,fnf);
 		}
 		catch(IOException io)
 		{
-			System.err.println("Error loading history file:");
-			io.printStackTrace();
+			Log.log(Log.ERROR,HistoryModel.class,io);
 		}
 	}
 
@@ -174,8 +175,7 @@ public class HistoryModel
 		}
 		catch(IOException io)
 		{
-			System.err.println("Error saving history file:");
-			io.printStackTrace();
+			Log.log(Log.ERROR,HistoryModel.class,io);
 		}
 	}
 
@@ -266,6 +266,9 @@ public class HistoryModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.7  1999/10/26 07:43:59  sp
  * Session loading and saving, directory list search started
  *

@@ -24,6 +24,7 @@ import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class indent_on_tab extends EditAction
 {
@@ -64,7 +65,7 @@ public class indent_on_tab extends EditAction
 			}
 			catch(BadLocationException bl)
 			{
-				bl.printStackTrace();
+				Log.log(Log.ERROR,this,bl);
 			}
                 }
                 else

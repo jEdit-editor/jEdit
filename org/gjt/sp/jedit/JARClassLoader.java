@@ -25,6 +25,7 @@ import java.lang.reflect.Modifier;
 import java.net.*;
 import java.util.*;
 import java.util.zip.*;
+import org.gjt.sp.util.Log;
 
 /**
  * A class loader implementation that loads classes from JAR files.
@@ -76,8 +77,7 @@ public class JARClassLoader extends ClassLoader
 		}
 		catch(IOException io)
 		{
-			System.err.println("I/O error:");
-			io.printStackTrace();
+			Log.log(Log.ERROR,this,io);
 
 			return null;
 		}
@@ -91,6 +91,7 @@ public class JARClassLoader extends ClassLoader
 		}
 		catch(MalformedURLException mu)
 		{
+			Log.log(Log.ERROR,this,mu);
 			return null;
 		}
 	}
@@ -102,20 +103,12 @@ public class JARClassLoader extends ClassLoader
 
 	public static void initPlugins()
 	{
-		String msg = jEdit.getProperty("jar.loading");
-		System.out.print(msg);
-		System.out.flush();
-		width = msg.length();
-
 		for(int i = 0; i < classLoaders.size(); i++)
 		{
 			JARClassLoader classLoader = (JARClassLoader)
 				classLoaders.elementAt(i);
 			classLoader.loadAllPlugins();
 		}
-
-		if(width != 0)
-			System.out.println();
 	}
 
 	public static JARClassLoader getClassLoader(int index)
@@ -124,9 +117,6 @@ public class JARClassLoader extends ClassLoader
 	}
 
 	// private members
-
-	// Pretty loading messages:
-	private static int width;
 
 	/* Loading of plugin classes is deferred until all JARs
 	 * are loaded - this is necessary because a plugin might
@@ -147,14 +137,7 @@ public class JARClassLoader extends ClassLoader
 			}
 			catch(Throwable t)
 			{
-				if(width != 0)
-				{
-					System.err.println();
-					width = 0;
-				}
-				String[] args = { name };
-				System.err.println(jEdit.getProperty("jar.error.init",args));
-				t.printStackTrace();
+				Log.log(Log.ERROR,this,t);
 			}
 		}
 	}
@@ -171,14 +154,8 @@ public class JARClassLoader extends ClassLoader
 		{
 			if(plugins[i].getClass().getName().equals(name))
 			{
-				if(width != 0)
-				{
-					System.err.println();
-					width = 0;
-				}
-				String[] args = { name };
-				System.err.println(jEdit.getProperty(
-					"jar.error.duplicateName",args));
+				Log.log(Log.WARNING,this,"A plugin named "
+					+ name + " is already loaded");
 				return;
 			}
 		}
@@ -195,20 +172,7 @@ public class JARClassLoader extends ClassLoader
 			&& !Modifier.isAbstract(modifiers)
 			&& EditPlugin.class.isAssignableFrom(clazz))
 		{
-			int nameWidth = name.length() + 1;
-			if((width + nameWidth) >= 79)
-			{
-				System.out.println();
-				width = nameWidth;
-			}
-			else
-			{
-				System.out.print(' ');
-				width += nameWidth;
-			}
-
-			System.out.print(name);
-			System.out.flush();
+			Log.log(Log.NOTICE,this,"Starting plugin " + name);
 
 			jEdit.addPlugin((EditPlugin)clazz.newInstance());
 		}
@@ -220,9 +184,6 @@ public class JARClassLoader extends ClassLoader
 
 		// For `failed dependencies' error message
 		StringBuffer deps = new StringBuffer();
-
-		if(width != 0)
-			deps.append('\n');
 
 		String[] args = { name };
 		deps.append(jEdit.getProperty("jar.error.deps",args));
@@ -281,10 +242,8 @@ public class JARClassLoader extends ClassLoader
 		}
 
 		if(!ok)
-		{
-			width = 0;
-			System.out.print(deps);
-		}
+			Log.log(Log.WARNING,this,deps);
+
 		return ok;
 	}
 
@@ -342,15 +301,15 @@ public class JARClassLoader extends ClassLoader
 			byte[] data = new byte[len];
 			int success = 0;
 			int offset = 0;
-			while (success < len) {
+			while(success < len)
+			{
 				len -= success;
 				offset += success;
 				success = in.read(data,offset,len);
-				if (success == -1)
+				if(success == -1)
 				{
-					String[] args = { clazz, zipFile.getName() };
-					System.err.println(jEdit.getProperty(
-						"jar.error.zip",args));
+					Log.log(Log.ERROR,this,"Failed to load class "
+						+ clazz + " from " + zipFile.getName());
 					throw new ClassNotFoundException(clazz);
 				}
 			}
@@ -364,8 +323,7 @@ public class JARClassLoader extends ClassLoader
 		}
 		catch(IOException io)
 		{
-			System.err.println("I/O error:");
-			io.printStackTrace();
+			Log.log(Log.ERROR,this,io);
 
 			throw new ClassNotFoundException(clazz);
 		}
@@ -375,6 +333,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.18  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *
@@ -398,10 +359,4 @@ public class JARClassLoader extends ClassLoader
  *
  * Revision 1.10  1999/05/15 00:29:19  sp
  * Prev error bug fix, doc updates, tips updates
- *
- * Revision 1.9  1999/05/13 05:38:11  sp
- * JARClassLoader bug fix
- *
- * Revision 1.8  1999/05/08 06:37:21  sp
- * jEdit.VERSION/BUILD becomes jEdit.getVersion()/getBuild(), plugin dependencies
  */

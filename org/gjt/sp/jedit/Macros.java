@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import org.gjt.sp.jedit.event.*;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.util.Log;
 
 /**
  * This class records and plays macros. Thanks to Romain Guy for writing
@@ -198,7 +199,7 @@ public class Macros
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,Macros.class,bl);
 		}
 	}
 
@@ -292,7 +293,7 @@ public class Macros
 			}
 			catch(BadLocationException bl)
 			{
-				bl.printStackTrace();
+				Log.log(Log.ERROR,this,bl);
 			}
 		}
 	}
@@ -301,6 +302,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.7  1999/10/28 09:07:21  sp
  * Directory list search
  *

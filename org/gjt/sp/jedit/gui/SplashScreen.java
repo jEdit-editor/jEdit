@@ -24,11 +24,14 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.net.URL;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.Log;
 
 public class SplashScreen extends JWindow
 {
 	public SplashScreen()
 	{
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
 		JPanel splash = new JPanel(new BorderLayout());
 		URL url = getClass().getResource("/org/gjt/sp/jedit/jedit_logo.gif");
 		if(url != null)
@@ -36,15 +39,15 @@ public class SplashScreen extends JWindow
 			splash.add(new JLabel(new ImageIcon(url)),
 				BorderLayout.CENTER);
 		}
-		
-		splash.add(new JLabel("jEdit " + jEdit.getVersion(),
-			SwingConstants.CENTER),BorderLayout.SOUTH);
+
+		progress = new JProgressBar(0,9);
+		progress.setStringPainted(true);
+		progress.setString("jEdit " + jEdit.getVersion());
+		splash.add(BorderLayout.SOUTH,progress);
 
 		splash.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
 
 		setContentPane(splash);
-
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
@@ -52,4 +55,24 @@ public class SplashScreen extends JWindow
 			(screen.height - getSize().height) / 2);
 		show();
 	}
+
+	public void advance()
+	{
+		try
+		{
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run()
+				{
+					progress.setValue(progress.getValue() + 1);
+				}
+			});
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+		}
+	}
+
+	// private members
+	private JProgressBar progress;
 }

@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class HelpViewer extends JFrame
 {
@@ -165,7 +166,7 @@ public class HelpViewer extends JFrame
 				}
 				catch(MalformedURLException mu)
 				{
-					mu.printStackTrace();
+					Log.log(Log.ERROR,this,mu);
 				}
 			}
 		}

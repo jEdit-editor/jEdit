@@ -23,6 +23,7 @@ import javax.swing.text.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.util.Log;
 
 /**
  * jEdit's registers are an extension of the clipboard metaphor. There
@@ -91,6 +92,9 @@ public class Registers
 	 */
 	public static void clearRegister(char name)
 	{
+		if(name >= registers.length)
+			return;
+
 		Register register = registers[name];
 		if(register instanceof ClipboardRegister)
 			((ClipboardRegister)register).setValue("");
@@ -135,7 +139,7 @@ public class Registers
 			}
 			catch(BadLocationException bl)
 			{
-				bl.printStackTrace();
+				Log.log(Log.ERROR,this,bl);
 			}
 
 			jEdit.addEditorListener(this);
@@ -182,7 +186,7 @@ public class Registers
 				}
 				catch(BadLocationException bl)
 				{
-					bl.printStackTrace();
+					Log.log(Log.ERROR,this,bl);
 				}
 			}
 		}
@@ -262,6 +266,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.2  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.zip.*;
 import org.gjt.sp.jedit.event.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.util.Log;
 
 /**
  * An in-memory copy of an open file.
@@ -89,11 +90,11 @@ public class Buffer extends SyntaxDocument
 				 * containing this file was renamed.
 				 * we ignore the error then so the user
 				 * isn't flooded with exceptions. */
+				Log.log(Log.DEBUG,this,fnf);
 			}
 			catch(Exception e)
 			{
-				System.err.println("Error during autosave:");
-				e.printStackTrace();
+				Log.log(Log.ERROR,this,e);
 			}
 		}
 	}
@@ -206,11 +207,12 @@ public class Buffer extends SyntaxDocument
 		{
 			Object[] args = { io.toString() };
 			GUIUtilities.error(view,"ioerror",args);
+			Log.log(Log.ERROR,this,io);
 			returnValue = false;
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 			returnValue = false;
 		}
 
@@ -561,7 +563,7 @@ public class Buffer extends SyntaxDocument
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 		}
 	}
 
@@ -999,16 +1001,18 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 		}
 		catch(FileNotFoundException fnf)
 		{
 			setFlag(NEW_FILE,true);
+			Log.log(Log.DEBUG,this,fnf);
 		}
 		catch(IOException io)
 		{
 			Object[] args = { io.toString() };
 			GUIUtilities.error(view,"ioerror",args);
+			Log.log(Log.ERROR,this,io);
 		}
 	}
 
@@ -1276,11 +1280,11 @@ loop:		for(int i = 0; i < markers.size(); i++)
 				+ "1" + backupSuffix));
 		}
 
-		if(!ok)
+		/*if(!ok)
 		{
 			String[] args = { file.getPath() };
 			GUIUtilities.error(view,"backup-failed",args);
-		}
+		}*/
 	}
 
 	class BufferProps extends Hashtable
@@ -1360,6 +1364,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.100  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.99  1999/10/30 02:44:18  sp
  * Miscallaneous stuffs
  *

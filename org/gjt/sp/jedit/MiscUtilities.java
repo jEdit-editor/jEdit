@@ -68,18 +68,18 @@ public class MiscUtilities
 	{
 		// absolute pathnames
 		if(path.startsWith(File.separator))
-			return path;
+			return canonPath(path);
 		// windows pathnames, eg C:\document
 		else if(path.length() >= 3 && path.charAt(1) == ':')
-			return path;
+			return canonPath(path);
 		// relative pathnames
 		else if(parent == null)
 			parent = System.getProperty("user.dir");
 		// do it!
 		if(parent.endsWith(File.separator))
-			return parent + path;
+			return canonPath(parent + path);
 		else
-			return parent + File.separator + path;
+			return canonPath(parent + File.separator + path);
 	}
 
 	/**
@@ -326,7 +326,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	// private members
 	private MiscUtilities() {}
-/*
+
 	private static String canonPath(String path)
 	{
 		try
@@ -338,7 +338,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return path;
 		}
 	}
-*/
+
 	private static void quicksort(Object[] obj, int _start, int _end,
 		Compare compare)
 	{
@@ -417,6 +417,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.21  1999/10/30 02:44:18  sp
  * Miscallaneous stuffs
  *

@@ -107,8 +107,6 @@ public abstract class EditAction implements ActionListener
 			}
 		}
 		// this shouldn't happen
-		System.err.println("BUG: getView() returning null");
-		System.err.println("Report this to Slava Pestov <sp@gjt.org>");
 		return null;
 	}
 
@@ -131,6 +129,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.12  1999/10/02 01:12:36  sp
  * Search and replace updates (doesn't work yet), some actions moved to TextTools
  *

@@ -1,5 +1,5 @@
 /*
- * record_temp_macro.java
+ * save_log.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,41 +19,39 @@
 
 package org.gjt.sp.jedit.actions;
 
-import javax.swing.text.BadLocationException;
+import javax.swing.JFileChooser;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public class record_temp_macro extends EditAction
+public class save_log extends EditAction
 {
-	public record_temp_macro()
+	public save_log()
 	{
-		super("record-temp-macro");
+		super("save-log");
 	}
 
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
 
-		if(view.getTextArea().getInputHandler().getMacroRecorder() != null)
-		{
-			GUIUtilities.error(view,"already-recording",new String[0]);
-			return;
-		}
+		String path = GUIUtilities.showFileDialog(
+			view,MiscUtilities.constructPath(null,"jedit.log"),
+			JFileChooser.SAVE_DIALOG);
 
-		Buffer buffer = jEdit.openFile(null,null,"<< temp macro >>",false,true);
-
-		try
+		if(path != null)
 		{
-			buffer.remove(0,buffer.getLength());
-			buffer.insertString(0,jEdit.getProperty("macro.temp.header"),null);
+			try
+			{
+				Log.saveLog(path);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				String[] args = { io.getMessage() };
+				GUIUtilities.error(view,"ioerror",args);
+			}
 		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
-
-		view.showStatus(jEdit.getProperty("view.status.recording"));
-		Macros.beginRecording(view,null,buffer);
 	}
 }

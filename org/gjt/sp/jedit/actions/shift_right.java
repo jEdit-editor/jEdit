@@ -24,6 +24,7 @@ import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class shift_right extends EditAction
 {
@@ -70,7 +71,7 @@ public class shift_right extends EditAction
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 		}
 		finally
 		{

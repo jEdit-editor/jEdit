@@ -23,6 +23,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class delete_line extends EditAction
 {
@@ -56,7 +57,7 @@ public class delete_line extends EditAction
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 		}
 	}
 }

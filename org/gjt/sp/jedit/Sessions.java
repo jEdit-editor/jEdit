@@ -21,6 +21,7 @@ package org.gjt.sp.jedit;
 
 import java.io.*;
 import java.util.StringTokenizer;
+import org.gjt.sp.util.Log;
 
 /**
  * Loads and saves sessions.
@@ -51,6 +52,7 @@ public class Sessions
 		}
 		catch(FileNotFoundException fnf)
 		{
+			Log.log(Log.DEBUG,Sessions.class,fnf);
 			if(ignoreNotFound)
 				return null;
 			String[] args = { filename };
@@ -167,6 +169,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.2  1999/10/28 09:07:21  sp
  * Directory list search
  *

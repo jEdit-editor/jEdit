@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.textarea.DefaultInputHandler;
 import org.gjt.sp.jedit.textarea.InputHandler;
+import org.gjt.sp.util.Log;
 
 /**
  * The main class of the jEdit text editor.
@@ -67,6 +68,21 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
+		// Log some stuff
+		Log.log(Log.MESSAGE,jEdit.class,"When reporting bugs, please"
+			+ " include the following information:");
+		Log.log(Log.MESSAGE,jEdit.class,"jEdit version " + getVersion());
+		
+		String[] props = {
+			"java.version", "java.vendor",
+			"os.name", "os.version", "os.arch"
+			};
+		for(int i = 0; i < props.length; i++)
+		{
+			Log.log(Log.DEBUG,jEdit.class,
+				props[i] + "=" + System.getProperty(props[i]));
+		}
+
 		// Parse command line
 		boolean endOpts = false;
 		boolean readOnly = false;
@@ -129,13 +145,20 @@ public class jEdit
 			}
 		}
 
+		Log.log(Log.DEBUG,jEdit.class,"Settings directory is "
+			+ settingsDirectory);
+
 		if(settingsDirectory != null && portFile != null)
 			portFile = MiscUtilities.constructPath(settingsDirectory,portFile);
 		else
 			portFile = null;
 
+		Log.log(Log.DEBUG,jEdit.class,"Port file is " + portFile);
+
 		if(session != null)
 			session = Sessions.createSessionFileName(session);
+
+		Log.log(Log.DEBUG,jEdit.class,"Session is " + session);
 
 		// Connect to server
 		String userDir = System.getProperty("user.dir");
@@ -179,8 +202,7 @@ public class jEdit
 			}
 			catch(Exception e)
 			{
-				System.err.println("Error connecting to server:");
-				e.printStackTrace();
+				Log.log(Log.ERROR,jEdit.class,e);
 			}
 		}
 
@@ -189,29 +211,35 @@ public class jEdit
 		listenerList = new EventListenerList();
 
 		// Show the kool splash screen
+		// The advanceProgress() calls are indented in this
+		// weird fashion so that they can easily be counted
 		if(showSplash)
 			GUIUtilities.showSplashScreen();
 
 		// Get things rolling
-		initMisc();
-		initSystemProperties();
-		initPlugins();
-		initUserProperties();
+		initMisc();			GUIUtilities.advanceProgress();
+		initSystemProperties();		GUIUtilities.advanceProgress();
+		initPlugins();			GUIUtilities.advanceProgress();
+		initUserProperties();		GUIUtilities.advanceProgress();
 		initActions();
 		initModes();
 		initPLAF();
-		initKeyBindings();
+		initKeyBindings();		GUIUtilities.advanceProgress();
 		propertiesChanged();
-		initRecent();
+		initRecent();			GUIUtilities.advanceProgress();
 		if(settingsDirectory != null)
 		{
-			HistoryModel.loadHistory(MiscUtilities.constructPath(
-				settingsDirectory,"history"));
+			String history = MiscUtilities.constructPath(
+				settingsDirectory,"history");
+			Log.log(Log.DEBUG,jEdit.class,"Loading history from "
+				+ history);
+			HistoryModel.loadHistory(history);
+						GUIUtilities.advanceProgress();
 		}
 		SearchAndReplace.load();
 
 		// Start plugins
-		JARClassLoader.initPlugins();
+		JARClassLoader.initPlugins();	GUIUtilities.advanceProgress();
 
 		// Start server
 		if(portFile != null)
@@ -229,7 +257,7 @@ public class jEdit
 		{
 			if(defaultSession)
 			{
-				if("on".equals(getProperty("saveDesktop")))
+				if(session != null && "on".equals(getProperty("saveDesktop")))
 					buffer = Sessions.loadSession(session,true);
 			}
 			else
@@ -237,6 +265,8 @@ public class jEdit
 		}
 		if(buffer == null)
 			buffer = newFile(null);
+
+						GUIUtilities.advanceProgress();
 
 		// Create the view and hide the splash screen.
 		// Paranoid thread safety courtesy of Sun.
@@ -385,9 +415,8 @@ public class jEdit
 	 */
 	public static void loadPlugins(String directory)
 	{
-		String[] args = { directory };
-		System.out.println(jEdit.getProperty(
-			"jar.scanningdir",args));
+		Log.log(Log.MESSAGE,jEdit.class,"Scanning directory: "
+			+ directory);
 
 		File file = new File(directory);
 		if(!(file.exists() || file.isDirectory()))
@@ -404,15 +433,17 @@ public class jEdit
 				continue;
 			try
 			{
-				new JARClassLoader(MiscUtilities.constructPath(
-					directory,plugin));
+				String path = MiscUtilities.constructPath(
+					directory,plugin);
+				Log.log(Log.DEBUG,jEdit.class,
+					"Scanning JAR file: " + path);
+				new JARClassLoader(path);
 			}
 			catch(IOException io)
 			{
-				String[] args2 = { plugin };
-				System.err.println(jEdit.getProperty(
-					"jar.error.load",args2));
-				io.printStackTrace();
+				Log.log(Log.ERROR,jEdit.class,"Cannot load"
+					+ " plugin");
+				Log.log(Log.ERROR,jEdit.class,io);
 			}
 		}
 	}
@@ -594,6 +625,8 @@ public class jEdit
 		if(view != null)
 			view.showWaitCursor();
 
+		Log.log(Log.DEBUG,jEdit.class,"Opening file " + path);
+
 		buffer = new Buffer(view,url,path,readOnly,newFile);
 		addBufferToList(buffer);
 
@@ -681,6 +714,8 @@ public class jEdit
 	 */
 	public static void _closeBuffer(View view, Buffer buffer)
 	{
+		Log.log(Log.DEBUG,jEdit.class,"Closing buffer " + buffer.getPath());
+
 		removeBufferFromList(buffer);
 		buffer.close();
 		fireEditorEvent(EditorEvent.BUFFER_CLOSED,view,buffer);
@@ -985,25 +1020,25 @@ public class jEdit
 		// Write the user properties file
 		if(settingsDirectory != null)
 		{
+			String path = MiscUtilities.constructPath(
+				settingsDirectory,"properties");
+			Log.log(Log.DEBUG,jEdit.class,"Saving user propeties"
+				+ " to " + path);
+
 			try
 			{
-				OutputStream out = new FileOutputStream(
-					MiscUtilities.constructPath(
-						settingsDirectory,
-						"properties"));
+				OutputStream out = new FileOutputStream(path);
 				props.save(out,"Use the -nosettings switch"
 					+ " if you want to edit this file in jEdit");
 				out.close();
 			}
 			catch(IOException io)
 			{
-				io.printStackTrace();
+				Log.log(Log.ERROR,jEdit.class,io);
 			}
 		}
 
 		// Byebye...
-		System.out.println("Thank you for using jEdit. Send an e-mail"
-			+ " to Slava Pestov <sp@gjt.org>.");
 		System.exit(0);
 	}
 
@@ -1056,43 +1091,43 @@ public class jEdit
 
 	private static void usage()
 	{
-		System.err.println("Usage: jedit [<options>] [<files>]");
+		System.out.println("Usage: jedit [<options>] [<files>]");
 
-		System.err.println("Common options:");
-		System.err.println("	<filename>#<marker>: Positions caret"
+		System.out.println("Common options:");
+		System.out.println("	<filename>#<marker>: Positions caret"
 			+ " at marker <marker>");
-		System.err.println("	<filename>#+<line>: Positions caret"
+		System.out.println("	<filename>#+<line>: Positions caret"
 			+ " at line number <line>");
-		System.err.println("	--: End of options");
-		System.err.println("	-version: Print jEdit version and"
+		System.out.println("	--: End of options");
+		System.out.println("	-version: Print jEdit version and"
 			+ " exit");
-		System.err.println("	-usage: Print this message and exit");
-		System.err.println("	-readonly: Open files read-only");
-		System.err.println("	-nosession: Don't load default session");
-		System.err.println("	-session=<name>: Load session from"
+		System.out.println("	-usage: Print this message and exit");
+		System.out.println("	-readonly: Open files read-only");
+		System.out.println("	-nosession: Don't load default session");
+		System.out.println("	-session=<name>: Load session from"
 			+ " $HOME/.jedit/sessions/<name>");
-		System.err.println("	-noserver: Don't start editor server");
-		System.err.println("	-server=<name>: Reads/writes server"
+		System.out.println("	-noserver: Don't start editor server");
+		System.out.println("	-server=<name>: Reads/writes server"
 			+ " info to $HOME/.jedit/<name>");
 
-		System.err.println();
-		System.err.println("Server-only options:");
-		System.err.println("	-nosettings: Don't load user-specific"
+		System.out.println();
+		System.out.println("Server-only options:");
+		System.out.println("	-nosettings: Don't load user-specific"
 			+ " settings");
-		System.err.println("	-settings=<path>: Load user-specific"
+		System.out.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
-		System.err.println("	-nosplash: Don't show splash screen");
-		System.err.println();
-		System.err.println("Client-only options:");
-		System.err.println("	-reuseview: Don't open new view in");
+		System.out.println("	-nosplash: Don't show splash screen");
+		System.out.println();
+		System.out.println("Client-only options:");
+		System.out.println("	-reuseview: Don't open new view in");
 
-		System.err.println();
-		System.err.println("Report bugs to Slava Pestov <sp@gjt.org>.");
+		System.out.println();
+		System.out.println("Report bugs to Slava Pestov <sp@gjt.org>.");
 	}
 
 	private static void version()
 	{
-		System.err.println("jEdit " + getVersion());
+		System.out.println("jEdit " + getVersion());
 	}
 
 	/**
@@ -1161,12 +1196,15 @@ public class jEdit
 		}
 		catch(Exception e)
 		{
-			System.err.println(">> ERROR LOADING SYSTEM PROPERTIES <<\n"
-				+ "One of the following property files could not be loaded:\n"
+			Log.log(Log.ERROR,jEdit.class,
+				"Error while loading system properties!");
+			Log.log(Log.ERROR,jEdit.class,
+				"One of the following property files could not be loaded:\n"
 				+ "- jedit.props\n"
 				+ "- jedit_gui.props\n"
 				+ "- jedit_keys.props\n"
 				+ "Try reinstalling jEdit.");
+			Log.log(Log.ERROR,jEdit.class,e);
 			System.exit(1);
 		}
 	}
@@ -1247,6 +1285,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.join_lines());
 		addAction(new org.gjt.sp.jedit.actions.load_session());
 		addAction(new org.gjt.sp.jedit.actions.locate_bracket());
+		addAction(new org.gjt.sp.jedit.actions.log_viewer());
 		addAction(new org.gjt.sp.jedit.actions.multifile_search());
 		addAction(new org.gjt.sp.jedit.actions.new_file());
 		addAction(new org.gjt.sp.jedit.actions.new_view());
@@ -1278,6 +1317,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.save());
 		addAction(new org.gjt.sp.jedit.actions.save_all());
 		addAction(new org.gjt.sp.jedit.actions.save_as());
+		addAction(new org.gjt.sp.jedit.actions.save_log());
 		addAction(new org.gjt.sp.jedit.actions.save_session());
 		addAction(new org.gjt.sp.jedit.actions.save_url());
 		addAction(new org.gjt.sp.jedit.actions.scroll_line());
@@ -1341,12 +1381,11 @@ public class jEdit
 			}
 			catch(FileNotFoundException fnf)
 			{
+				Log.log(Log.DEBUG,jEdit.class,fnf);
 			}
 			catch(IOException e)
 			{
-				System.err.println("Error while loading user"
-					+ " properties:");
-				e.printStackTrace();
+				Log.log(Log.ERROR,jEdit.class,e);
 			}
 		}
 	}
@@ -1364,8 +1403,7 @@ public class jEdit
 		}
 		catch(Exception e)
 		{
-			System.err.println("Error loading L&F!");
-			e.printStackTrace();
+			Log.log(Log.ERROR,jEdit.class,e);
 		}
 	}
 
@@ -1538,6 +1576,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.148  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.147  1999/10/30 02:44:18  sp
  * Miscallaneous stuffs
  *
@@ -1564,13 +1605,4 @@ public class jEdit
  *
  * Revision 1.139  1999/10/19 09:10:13  sp
  * pre5 bug fixing
- *
- * Revision 1.138  1999/10/17 04:16:28  sp
- * Bug fixing
- *
- * Revision 1.137  1999/10/16 09:43:00  sp
- * Final tweaking and polishing for jEdit 2.1final
- *
- * Revision 1.136  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
  */

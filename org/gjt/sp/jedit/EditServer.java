@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
+import org.gjt.sp.util.Log;
 
 /**
  * @author Slava Pestov
@@ -47,14 +48,14 @@ class EditServer extends Thread
 			out.write("\n");
 			out.close();
 
-			System.out.println("jEdit server started on port "
-				+ socket.getLocalPort()
-				+ " (port file: " + portFile + ")");
+			Log.log(Log.DEBUG,this,"jEdit server started on port "
+				+ socket.getLocalPort());
+			Log.log(Log.DEBUG,this,"Authorization key is "
+				+ authKey);
 		}
 		catch(IOException io)
 		{
-			System.err.println("Error starting server:");
-			io.printStackTrace();
+			Log.log(Log.ERROR,this,io);
 			return;
 		}
 
@@ -68,7 +69,7 @@ class EditServer extends Thread
 			for(;;)
 			{
 				Socket client = socket.accept();
-				System.out.println(client + ": connected");
+				Log.log(Log.MESSAGE,this,client + ": connected");
 
 				BufferedReader in = new BufferedReader(
 					new InputStreamReader(client.getInputStream()));
@@ -78,7 +79,8 @@ class EditServer extends Thread
 					int key = Integer.parseInt(in.readLine());
 					if(key != authKey)
 					{
-						System.err.println(client + ": wrong"
+						Log.log(Log.ERROR,this,
+							client + ": wrong"
 							+ " authorization key");
 						in.close();
 						client.close();
@@ -87,14 +89,16 @@ class EditServer extends Thread
 				}
 				catch(Exception e)
 				{
-					System.err.println(client + ": invalid"
+					Log.log(Log.ERROR,this,
+							client + ": invalid"
 							+ " authorization key");
 					in.close();
 					client.close();
 					continue;
 				}
 
-				System.out.println(client + ": authenticated successfully");
+				Log.log(Log.DEBUG,this,client + ": authenticated"
+					+ " successfully");
 				handleClient(client,in);
 
 				client.close();
@@ -102,8 +106,7 @@ class EditServer extends Thread
 		}
 		catch(IOException io)
 		{
-			System.err.println("Error with server:");
-			io.printStackTrace();
+			Log.log(Log.ERROR,this,io);
 		}
 	}
 
@@ -144,7 +147,7 @@ class EditServer extends Thread
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR,this,e);
 		}
 		return retVal[0];
 	}
@@ -166,7 +169,7 @@ class EditServer extends Thread
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR,this,e);
 		}
 		return retVal[0];
 	}
@@ -186,7 +189,7 @@ class EditServer extends Thread
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR,this,e);
 		}
 		return retVal[0];
 	}
@@ -232,7 +235,8 @@ class EditServer extends Thread
 				else if(command.startsWith("session="))
 					session = command.substring(8);
 				else
-					System.err.println(client + ": unknown server"
+					Log.log(Log.ERROR,this,client
+						+ ": unknown server"
 						+ " command: " + command);
 			}
 		}
@@ -249,6 +253,8 @@ class EditServer extends Thread
 		{
 			view = jEdit.getViews()[0];
 			TSsetBuffer(view,buffer);
+			view.requestFocus();
+			view.toFront();
 		}
 		else
 			TSnewView(buffer);
@@ -258,6 +264,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.3  1999/10/30 02:44:18  sp
  * Miscallaneous stuffs
  *

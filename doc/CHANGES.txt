@@ -2,23 +2,41 @@ JEDIT VERSION HISTORY
 
 * Version 2.2pre2
 
++ New Features
+
+- Splash screen now displays a progress bar
+- Instead of dumping lots of crap to System.out and System.err,
+  jEdit now has an 'activity log' that lists all messages and
+  exceptions. To view it, open Help->View Activity Log. Exceptions
+  and fatal errors are printed on the console as well, but
+  everything else only goes to the activity log now.
+- The activity log can be used in other applications; see the
+  LGPL'd org.gjt.sp.util package.
+
 + Enhancements
 
 - The -session switch is now passed to server instances of jEdit
-- An error message is displayed if saving a backup failed
 - Buffers no longer use boolean to store flags, instead there is
   one integer storing a bit mask
+- PDF documentation is now distributed separately from jEdit, this
+  reduces the size of the installer by about 500K
 
 + Bug Fixes
 
 - Fixed minor bug in load-session action (Mike Dillon) (since 2.2pre1)
 - Fixed ClassCastException when loading files on JDK 1.3 (since 2.2pre1)
-- MiscUtilities.constructPath() no longer calls File.getCanonicalPath()
-  which seems to cause problems for some people (since 0.x)
 - BufferListSet and DirectoryListSet had problems with find-next
   (since 2.1pre4)
 - Fixed a memory leak where closed buffers were never reclamed
   (not sure when this was introduced)
+- Python syntax highlighting had problems with triple-quote (""") statements
+  (since 2.1pre1)
+- C preprocessor statements (#if, #ifdef, etc) were highlighted in Java
+  mode, which is incorrect (since 1.7pre5)
+- Passing the -nosession switch to jEdit would throw a null pointer exception
+  (since 2.2pre1)
+- Clear register command didn't display anything in the status bar
+  (since 2.2pre1)
 
 + Plugin Updates
 

@@ -24,6 +24,7 @@ import javax.swing.text.Element;
 import javax.swing.JOptionPane;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * Class that implements regular expression and literal search within
@@ -218,7 +219,7 @@ loop:			for(;;)
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR,SearchAndReplace.class,e);
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
@@ -297,7 +298,7 @@ loop:			for(;;)
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR,SearchAndReplace.class,e);
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
@@ -348,7 +349,7 @@ loop:			for(;;)
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR,SearchAndReplace.class,e);
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
@@ -481,6 +482,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.17  1999/10/24 06:04:00  sp
  * QuickSearch in tool bar, auto indent updates, macro recorder updates
  *

@@ -67,7 +67,7 @@ loop:		for(int i = offset; i < length; i++)
 				case '#':
 					if(backslash)
 						backslash = false;
-					else
+					else if(cpp)
 					{
 						if(doKeyword(line,i,c))
 							break;
@@ -284,6 +284,9 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.32  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

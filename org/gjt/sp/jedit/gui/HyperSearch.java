@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.util.Log;
 
 /**
  * HyperSearch dialog.
@@ -245,7 +246,7 @@ public class HyperSearch extends JDialog
 			}
 			catch(BadLocationException bl)
 			{
-				bl.printStackTrace();
+				Log.log(Log.ERROR,this,bl);
 				return "";
 			}
 		}
@@ -327,6 +328,9 @@ public class HyperSearch extends JDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.38  1999/10/11 07:14:22  sp
  * doneWithBuffer()
  *

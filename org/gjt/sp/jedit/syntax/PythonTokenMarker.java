@@ -149,7 +149,7 @@ loop:		for(int i = offset; i < length; i++)
 					addToken((i+=4) - lastOffset,
 						Token.LITERAL1);
 					token = Token.NULL;
-					lastOffset = lastKeyword = i1;
+					lastOffset = lastKeyword = i;
 				}
 				break;
 			case TRIPLEQUOTE2:
@@ -161,7 +161,7 @@ loop:		for(int i = offset; i < length; i++)
 					addToken((i+=4) - lastOffset,
 						Token.LITERAL1);
 					token = Token.NULL;
-					lastOffset = lastKeyword = i1;
+					lastOffset = lastKeyword = i;
 				}
 				break;
 			default:
@@ -251,6 +251,9 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.1  1999/09/30 12:21:05  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

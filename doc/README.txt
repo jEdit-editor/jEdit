@@ -12,10 +12,10 @@ The following plugins are included in the core distribution, and more
 can be downloaded from jEdit plugin central
 <http://www.icg-online.de/jedit>:
 
-- Console 1.7 by Slava Pestov
+- Console 1.7.2 by Slava Pestov
 - HTML 2.0 by Romain Guy and Slava Pestov
-- JBrowse 0.9.8 by George Latkiewicz
-- QuickFile 0.5 by Jason Ginchereau
+- JBrowse 0.9.9 by George Latkiewicz
+- QuickFile 0.6 by Jason Ginchereau
 
 jEdit requires either Java 1.1 with Swing 1.1, or Java 2 (including the
 new JDK 1.3beta) to work.
@@ -33,6 +33,7 @@ commercial programs:
 
 - org.gjt.sp.jedit.syntax (Syntax highlighting core and parsers)
 - org.gjt.sp.jedit.textarea (Syntax highlighting text area component)
+- org.gjt.sp.util (Various utility classes)
 
 Note that jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
 section 11 and 12 of the GNU General Public License for details.

@@ -1,29 +1,20 @@
 JEDIT 2.2 TO DO
 
-------- pre2 -------
-
+- Document activity log in user and devel guide
 - Low-priority background thread that plugins can use to do background
   parsing, etc: jEdit.addWorkRequest(Runnable r), WorkerThread
 - Directory list set is slow; investigate exactly what happends in openFile()
   and closeBuffer()
 - On some Java implementations, scrolling doesn't stop after mouse is released
-
-------- pre3+ -------
-
 - Reverse search
 - Integrate XMode
 - Integrate EditBus if enough plugins take advantage of it
 - Word wrap
-- XML GUI. For example:
-  <textfield id=find text=search.find.value />
-  <button id=ok text=common.ok>
-   <action>set-search-string $find</>
-   <action>set-replace-string $replace</>
-   <action>find-next</>
-  </button>
+- Finish XGL and use it in jEdit
 
 ------- Installer -------
 
+- Submit to CVS
 - Package and release
 - Check version of existing 'simlaunch' program before overwriting
 - Store human-readable strings in a property file for easier localization

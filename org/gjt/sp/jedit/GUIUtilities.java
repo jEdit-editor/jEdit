@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 import org.gjt.sp.jedit.event.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.util.Log;
 
 /**
  * Class with several useful GUI functions.<p>
@@ -92,7 +93,8 @@ public class GUIUtilities
 			String label = jEdit.getProperty(name + ".label");
 			if(label == null)
 			{
-				System.err.println("menu label is null: "
+				Log.log(Log.ERROR,GUIUtilities.class,
+					"Menu label is null: "
 					+ name);
 				return null;
 			}
@@ -189,8 +191,8 @@ public class GUIUtilities
 		String keyStroke = jEdit.getProperty(name.concat(".shortcut"));
 		if(label == null)
 		{
-			System.err.println("Menu item label is null: "
-				+ name);
+			Log.log(Log.ERROR,GUIUtilities.class,
+				"Menu item label is null: " + name);
 			return null;
 		}
 
@@ -259,13 +261,15 @@ public class GUIUtilities
 		String iconName = jEdit.getProperty(name + ".icon");
 		if(iconName == null)
 		{
-			System.out.println("Tool button icon is null: " + name);
+			Log.log(Log.ERROR,GUIUtilities.class,
+				"Tool button icon is null: " + name);
 			return null;
 		}
 		URL url = GUIUtilities.class.getResource("toolbar/" + iconName);
 		if(url == null)
 		{
-			System.out.println("Tool button icon is null: " + name);
+			Log.log(Log.ERROR,GUIUtilities.class,
+				"Tool button icon is null: " + name);
 			return null;
 		}
 		JButton button = new JButton(new ImageIcon(url));
@@ -276,7 +280,8 @@ public class GUIUtilities
 		String toolTip = jEdit.getProperty(name + ".label");
 		if(toolTip == null)
 		{
-			System.out.println("Tool button label is null: " + name);
+			Log.log(Log.ERROR,GUIUtilities.class,
+				"Tool button label is null: " + name);
 			return null;
 		}
 		toolTip = prettifyMenuLabel(toolTip);
@@ -648,6 +653,13 @@ public class GUIUtilities
 		splash = new SplashScreen();
 	}
 
+	// advances progress bar
+	static void advanceProgress()
+	{
+		if(splash != null)
+			splash.advance();
+	}
+
 	// private members
 	static
 	{
@@ -687,8 +699,10 @@ public class GUIUtilities
 				}
 				catch(REException re)
 				{
-					System.err.println("Invalid file filter: " + glob);
-					re.printStackTrace();
+					Log.log(Log.ERROR,GUIUtilities.class,
+						"Invalid file filter: " + glob);
+					Log.log(Log.ERROR,GUIUtilities.class,
+						re);
 				}
 			}
 
@@ -707,8 +721,10 @@ public class GUIUtilities
 				}
 				catch(REException re)
 				{
-					System.err.println("Invalid file filter: " + i);
-					re.printStackTrace();
+					Log.log(Log.ERROR,GUIUtilities.class,
+						"Invalid file filter: " + i);
+					Log.log(Log.ERROR,GUIUtilities.class,
+						re);
 				}
 
 				i++;
@@ -736,6 +752,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.35  1999/10/24 06:04:00  sp
  * QuickSearch in tool bar, auto indent updates, macro recorder updates
  *

@@ -19,13 +19,6 @@ lineSep.mac=MacOS (\\r)
 ### JAR LOADER MESSAGES
 ###
 
-jar.scanningdir=Scanning directory: {0}
-jar.loading=Loading plugins:
-jar.error.load=Error loading {0}
-jar.error.zip=Error loading class {0} from {1}
-jar.error.duplicateName=A plugin named {0} is already loaded
-jar.disabled=Disabled at user request: {0}
-jar.error.init=Initialization failed: {0}
 jar.error.deps=Dependency check failed: {0}\n\
 	The following is required to use this plugin:
 jar.what.jdk=\tJava version >= {0}
@@ -311,10 +304,15 @@ no-plugins.label=No Plugins
 
 ### Help menu
 help-menu=about \
-     help
+     help \
+     - \
+     log-viewer \
+     save-log
 help-menu.label=$Help
 about.label=About jEdit...
 help.label=Help Contents...
+log-viewer.label=Show Activity Log...
+save-log.label=Save Activity Log...
 
 ###
 ### MACRO STRINGS
@@ -382,6 +380,7 @@ view.status.set-caret-register=Save caret to register?
 view.status.goto-register=Go to register?
 view.status.select-caret-register=Select to register?
 view.status.exchange-caret-register=Swap caret with register?
+view.status.clear-register=Clear register?
 
 ###
 ### VARIOUS DIALOGS
@@ -409,11 +408,11 @@ about.message=jEdit version {0} (Java {1}, {2} {3})\n\
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
 # {0} - the error message
-ioerror.message=An I/O error ocurred ({0})
+ioerror.message=An I/O error occurred ({0})
 
 # Backup failed dialog, {0}=file name
 backup-failed.title=Backup Failed
-backup-failed.message=An error ocurred while backing up {0}.
+backup-failed.message=An error occurred while backing up {0}.
 
 # Open URL dialog
 openurl.title=Open URL
@@ -557,7 +556,7 @@ replace-results.message=Changed {0} line(s) in {1} buffer(s).
 # Search and replace error dialog
 searcherror.title=Search and Replace Error
 # {0} - error message
-searcherror.message=An error occured while performing this operation. ({0})
+searcherror.message=An error occurred while performing this operation. ({0})
 
 # Paste previous dialog
 pasteprev.title=Paste Previous
@@ -681,6 +680,9 @@ helpviewer.url=URL:\
 helpviewer.back=Back
 helpviewer.forward=Forward
 helpviewer.home=Contents
+
+# Activity log
+log-viewer.title=Activity Log
 
 # Documentation protocol (jeditdocs:)
 docindex.header=<html><head><title>Documentation Index</title></head>\n\

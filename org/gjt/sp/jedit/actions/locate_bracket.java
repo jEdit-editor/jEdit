@@ -24,6 +24,7 @@ import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class locate_bracket extends EditAction
 {
@@ -51,7 +52,7 @@ public class locate_bracket extends EditAction
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 		}
 
 		view.getToolkit().beep();

@@ -25,6 +25,7 @@ import javax.swing.text.Element;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * An edit mode defines specific settings for editing some type of file.
@@ -81,9 +82,9 @@ public class Mode
 		}
 		catch(REException re)
 		{
-			System.err.println("Invalid filename/firstline globs"
-				+ " in mode " + name + ":");
-			re.printStackTrace();
+			Log.log(Log.ERROR,this,"Invalid filename/firstline"
+				+ " globs in mode " + name);
+			Log.log(Log.ERROR,this,re);
 		}
 	}
 
@@ -278,7 +279,7 @@ public class Mode
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
+			Log.log(Log.ERROR,this,bl);
 		}
 
 		return false;
@@ -311,8 +312,7 @@ public class Mode
 		}
 		catch(Exception e)
 		{
-			System.err.println("Cannot create token marker " + clazz + ":");
-			e.printStackTrace();
+			Log.log(Log.ERROR,this,e);
 		}
 
 		return null;
@@ -390,6 +390,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  1999/10/31 07:15:34  sp
+ * New logging API, splash screen updates, bug fixes
+ *
  * Revision 1.16  1999/10/30 02:44:18  sp
  * Miscallaneous stuffs
  *

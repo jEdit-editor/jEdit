@@ -1,6 +1,6 @@
 /*
- * help.java - Action
- * Copyright (C) 1998, 1999 Slava Pestov
+ * LogViewer.java
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,31 +17,34 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.actions;
+package org.gjt.sp.jedit.gui;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.net.*;
+import javax.swing.*;
+import java.awt.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.gui.HelpViewer;
 import org.gjt.sp.util.Log;
 
-public class help extends EditAction
+public class LogViewer extends JFrame
 {
-	public help()
+	public LogViewer(View view)
 	{
-		super("help");
+		super(jEdit.getProperty("log-viewer.title"));
+		JTextArea textArea = new JTextArea(24,80);
+		textArea.setDocument(Log.getLogDocument());
+		textArea.setEditable(false);
+
+		Font font = view.getTextArea().getPainter().getFont();
+		textArea.setFont(font);
+		getContentPane().add(BorderLayout.CENTER,new JScrollPane(textArea));
+
+		pack();
+		GUIUtilities.loadGeometry(this,"log-viewer");
+		show();
 	}
-	
-	public void actionPerformed(ActionEvent evt)
+
+	public void dispose()
 	{
-		try
-		{
-			new HelpViewer(new URL("jeditdocs:"));
-		}
-		catch(MalformedURLException mf)
-		{
-			Log.log(Log.ERROR,this,mf);
-		}
+		GUIUtilities.saveGeometry(this,"log-viewer");
+		super.dispose();
 	}
 }
