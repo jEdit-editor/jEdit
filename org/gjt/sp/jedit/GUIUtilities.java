@@ -30,7 +30,6 @@ import java.util.StringTokenizer;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFS;
-import org.gjt.sp.jedit.io.VFSSession;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.util.Log;
@@ -417,26 +416,17 @@ public class GUIUtilities
 	 * @param path The initial directory to display. May be null
 	 * @param type The dialog type
 	 * @param multipleSelection True if multiple selection should be allowed
-	 * @param vfsSession A VFS session stores username/password info
-	 * when dealing with remote servers, so that the user isn't prompted
-	 * twice for that info, once by the file chooser and second by the
-	 * Buffer.load() method. You should pass an array of length 1 so
-	 * that the VFS session can be stored here. If you don't need the
-	 * VFS session, just set this parameter to null.
 	 * @return The selected file(s)
 	 * @since jEdit 2.6pre2
 	 */
 	public static String[] showVFSFileDialog(View view, String path,
-		int type, boolean multipleSelection, VFSSession[] vfsSession)
+		int type, boolean multipleSelection)
 	{
 		VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
 			view,path,type,multipleSelection);
 		String[] selectedFiles = fileChooser.getSelectedFiles();
 		if(selectedFiles == null)
 			return null;
-
-		if(vfsSession != null)
-			vfsSession[0] = fileChooser.getVFSSession();
 
 		return selectedFiles;
 	}
@@ -784,6 +774,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.75  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.74  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

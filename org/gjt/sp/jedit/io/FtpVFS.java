@@ -24,7 +24,6 @@ import java.awt.Component;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import org.gjt.sp.jedit.gui.LoginDialog;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -37,10 +36,7 @@ public class FtpVFS extends VFS
 {
 	public static final String PROTOCOL = "ftp";
 
-	public static final String CLIENT_KEY = "FtpVFS__client";
-	public static final String HOSTNAME_KEY = "FtpVFS__hostname";
-	public static final String USERNAME_KEY = "FtpVFS__username";
-	public static final String PASSWORD_KEY = "FtpVFS__password";
+	public static final String CLIENT_KEY = "FtpVFS.client";
 
 	public FtpVFS()
 	{
@@ -53,18 +49,17 @@ public class FtpVFS extends VFS
 			| RENAME_CAP | MKDIR_CAP;
 	}
 
-	public String showBrowseDialog(VFSSession session, Component comp)
+	public String showBrowseDialog(VFSSession[] session, Component comp)
 	{
-		LoginDialog dialog = new LoginDialog(comp,null,null,null);
-		if(!dialog.isOK())
+		VFSSession newSession = createVFSSession(null,comp);
+		if(newSession == null)
 			return null;
 
-		session.put(HOSTNAME_KEY,dialog.getHost());
-		//session.put(USERNAME_KEY,dialog.getUser());
-		session.put(PASSWORD_KEY,dialog.getPassword());
+		if(session != null)
+			session[0] = newSession;
 
-		return PROTOCOL + "://" + dialog.getUser() + "@"
-			+ dialog.getHost() + "/";
+		return PROTOCOL + "://" + newSession.get(VFSSession.USERNAME_KEY)
+			+ "@" + newSession.get(VFSSession.HOSTNAME_KEY) + "/";
 	}
 
 	public String getFileParent(String path)
@@ -88,56 +83,33 @@ public class FtpVFS extends VFS
 			return parent + '/' + path;
 	}
 
-	public boolean setupVFSSession(VFSSession session, Component comp)
+	public VFSSession createVFSSession(String path, Component comp)
 	{
-		super.setupVFSSession(session,comp);
+		VFSSession session = super.createVFSSession(path,comp);
 
-		String path = (String)session.get(VFSSession.PATH_KEY);
-		String savedHost = (String)session.get(HOSTNAME_KEY);
-		String savedUser = (String)session.get(USERNAME_KEY);
-		String savedPassword = (String)session.get(PASSWORD_KEY);
+		String savedHost = (String)session.get(VFSSession.HOSTNAME_KEY);
+		String savedUser = (String)session.get(VFSSession.USERNAME_KEY);
+		String savedPassword = (String)session.get(VFSSession.PASSWORD_KEY);
 
 		try
 		{
-			FtpAddress address = new FtpAddress(path);
-
-			if(!address.host.equals(savedHost))
+			if(path != null)
 			{
-				// erase saved username and password if
-				// the user switches to a different host
-				savedUser = savedPassword = null;
+				FtpAddress address = new FtpAddress(path);
+				session.put(VFSSession.HOSTNAME_KEY,address.host);
+				if(address.user != null)
+					session.put(VFSSession.USERNAME_KEY,address.user);
 			}
 
-			if(address.user == null)
-				address.user = savedUser;
-			if(address.password == null)
-				address.password = savedPassword;
-
-			if(address.user == null || address.password == null)
-			{
-				/* since this can be called at startup time,
-				 * we need to hide the splash screen. */
-				GUIUtilities.hideSplashScreen();
-
-				LoginDialog dialog = new LoginDialog(comp,address.host,
-					address.user,address.password);
-				if(!dialog.isOK())
-					return false;
-
-				address.user = dialog.getUser();
-				address.password = dialog.getPassword();
-			}
-
-			session.put(HOSTNAME_KEY,address.host);
-			session.put(USERNAME_KEY,address.user);
-			session.put(PASSWORD_KEY,address.password);
-
-			return true;
+			if(VFSManager.showLoginDialog(session,comp))
+				return session;
+			else
+				return null;
 		}
 		catch(IllegalArgumentException ia)
 		{
 			// FtpAddress.<init> can throw this
-			return false;
+			return null;
 		}
 	}
 
@@ -405,12 +377,12 @@ public class FtpVFS extends VFS
 		if(client == null)
 		{
 			if(address.user == null)
-				address.user = (String)session.get(USERNAME_KEY);
-			if(address.password == null)
-				address.password = (String)session.get(PASSWORD_KEY);
+				address.user = (String)session.get(VFSSession.USERNAME_KEY);
 
 			client = _createFtpClient(address.host,address.port,
-				address.user,address.password,ignoreErrors,comp);
+				address.user,(String)session.get(VFSSession.PASSWORD_KEY),
+				ignoreErrors,comp);
+
 			if(client != null)
 				session.put(CLIENT_KEY,client);
 		}
@@ -586,6 +558,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.19  2000/08/16 08:47:19  sp
  * Stuff
  *

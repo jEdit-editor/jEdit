@@ -4,11 +4,14 @@ Not yet written. Will need to mention:
 
 - non-blocking I/O
 - file system browser
+- directory cache
+- password saving
 - improved bracket matching
 - improved printing
 - macros can be added to context menu and tool bar
 - first-time and upgrade wizards
 - improved UI - slightly restructured menu bar, tool bars have rollover effect
+- dockable windows
 
 -- Slava Pestov
 <sp@gjt.org>

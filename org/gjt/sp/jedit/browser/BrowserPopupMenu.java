@@ -100,23 +100,15 @@ public class BrowserPopupMenu extends JPopupMenu
 			String actionCommand = evt.getActionCommand();
 
 			if(actionCommand.equals("open"))
-			{
-				Hashtable props = new Hashtable();
-				props.put(Buffer.VFS_SESSION_HACK,browser.getVFSSession());
-				jEdit.openFile(view,null,file.path,false,false,props);
-			}
+				jEdit.openFile(view,file.path);
 			else if(actionCommand.equals("open-view"))
 			{
-				Hashtable props = new Hashtable();
-				props.put(Buffer.VFS_SESSION_HACK,browser.getVFSSession());
-				Buffer buffer = jEdit.openFile(null,null,file.path,false,false,props);
+				Buffer buffer = jEdit.openFile(null,file.path);
 				if(buffer != null)
 					jEdit.newView(view,buffer);
 			}
 			else if(actionCommand.equals("select"))
-			{
 				browser.filesActivated();
-			}
 			else if(actionCommand.equals("close"))
 			{
 				Buffer buffer = jEdit.getBuffer(file.path);
@@ -142,6 +134,9 @@ public class BrowserPopupMenu extends JPopupMenu
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.3  2000/08/13 07:35:23  sp
  * Dockable window API
  *

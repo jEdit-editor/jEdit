@@ -147,8 +147,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		if(lastFilter < filterCombo.getItemCount())
 			filterCombo.setSelectedIndex(lastFilter);
 
-		vfsSession = new VFSSession();
-
 		if(path == null)
 		{
 			String defaultPath = jEdit.getProperty("vfs.browser.defaultPath");
@@ -241,14 +239,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 		else
 			vfs = VFSManager.getFileVFS();
 
-		vfsSession.put(VFSSession.PATH_KEY,path);
-
-		if(!vfs.setupVFSSession(vfsSession,this))
+		VFSSession session = vfs.createVFSSession(path,this);
+		if(session == null)
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,this,
-			vfsSession,vfs,path,null));
+			session,vfs,path,null));
 	}
 
 	public void delete(String path)
@@ -262,12 +259,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 		if(result != JOptionPane.YES_OPTION)
 			return;
 
-		if(!vfs.setupVFSSession(vfsSession,this))
+		VFSSession session = vfs.createVFSSession(path,this);
+		if(session == null)
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.DELETE,this,
-			vfsSession,vfs,path,null));
+			session,vfs,path,null));
 
 		reloadDirectorySafely(vfs.getFileParent(path));
 	}
@@ -282,12 +280,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		to = vfs.constructPath(vfs.getFileParent(from),to);
 
-		if(!vfs.setupVFSSession(vfsSession,this))
+		VFSSession session = vfs.createVFSSession(from,this);
+		if(session == null)
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.RENAME,this,
-			vfsSession,vfs,from,to));
+			session,vfs,from,to));
 
 		reloadDirectorySafely(vfs.getFileParent(from));
 	}
@@ -301,12 +300,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 		// path is the currently viewed directory in the browser
 		newDirectory = vfs.constructPath(path,newDirectory);
 
-		if(!vfs.setupVFSSession(vfsSession,this))
+		VFSSession session = vfs.createVFSSession(newDirectory,this);
+		if(session == null)
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
-			vfsSession,vfs,newDirectory,null));
+			session,vfs,newDirectory,null));
 
 		reloadDirectorySafely(vfs.getFileParent(newDirectory));
 	}
@@ -319,11 +319,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 	public VFS getVFS()
 	{
 		return vfs;
-	}
-
-	public VFSSession getVFSSession()
-	{
-		return vfsSession;
 	}
 
 	public int getMode()
@@ -489,12 +484,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			{
 				Buffer buffer = jEdit.getBuffer(file.path);
 				if(buffer == null)
-				{
-					Hashtable props = new Hashtable();
-					props.put(Buffer.VFS_SESSION_HACK,vfsSession);
-					buffer = jEdit.openFile(null,null,file.path,
-						false,false,props);
-				}
+					buffer = jEdit.openFile(null,file.path);
 
 				if(buffer != null)
 				{
@@ -532,7 +522,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private View view;
 	private String path;
 	private VFS vfs;
-	private VFSSession vfsSession;
 	private HistoryTextField pathField;
 	private JComboBox filterCombo;
 	private JButton up, reload, roots, home, synchronize;
@@ -877,8 +866,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 				{
 					String vfsName = actionCommand.substring(4);
 					VFS vfs = VFSManager.getVFSForName(vfsName);
-					String directory = vfs.showBrowseDialog(vfsSession,
-						VFSBrowser.this);
+					String directory = vfs.showBrowseDialog(
+						null,VFSBrowser.this);
 					if(directory != null)
 						setDirectory(directory);
 				}
@@ -908,6 +897,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.14  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.13  2000/08/15 08:07:10  sp
  * A bunch of bug fixes
  *

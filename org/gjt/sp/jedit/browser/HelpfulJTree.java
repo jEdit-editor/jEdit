@@ -81,7 +81,7 @@ public class HelpfulJTree extends JTree implements MouseListener
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		toolTipInitialDelay = ttm.getInitialDelay();
 		toolTipReshowDelay = ttm.getReshowDelay();
-		ttm.setInitialDelay(100);
+		ttm.setInitialDelay(200);
 		ttm.setReshowDelay(0);
 	}
 
@@ -100,6 +100,9 @@ public class HelpfulJTree extends JTree implements MouseListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.2  2000/08/16 08:47:19  sp
  * Stuff
  *

@@ -23,6 +23,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
+import org.gjt.sp.jedit.gui.LoginDialog;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
@@ -206,12 +207,72 @@ public class VFSManager
 		});
 	}
 
+	/**
+	 * If a password has been saved for the host and user name in the
+	 * session, it sets the value of the session's PASSWORD_KEY value
+	 * accordingly. Otherwise, a login dialog box is displayed.
+	 * @param session The VFS session
+	 * @param comp The component that will parent the login dialog box
+	 * @return True if everything is ok, false if the user cancelled the
+	 * operation
+	 * @since jEdit 2.6pre3
+	 */
+	public static boolean showLoginDialog(VFSSession session, Component comp)
+	{
+		String host = (String)session.get(VFSSession.HOSTNAME_KEY);
+		String user = (String)session.get(VFSSession.USERNAME_KEY);
+		String password = (String)session.get(VFSSession.PASSWORD_KEY);
+
+		if(host != null && user != null)
+		{
+			if(password != null)
+				return true;
+
+			password = (String)passwordHash.get(user + "@" + host);
+			if(password != null)
+			{
+				session.put(VFSSession.PASSWORD_KEY,password);
+				return true;
+			}
+		}
+
+		/* since this can be called at startup time,
+		 * we need to hide the splash screen. */
+		GUIUtilities.hideSplashScreen();
+
+		LoginDialog dialog = new LoginDialog(comp,host,user,password);
+		if(!dialog.isOK())
+			return false;
+
+		host = dialog.getHost();
+		user = dialog.getUser();
+		password = dialog.getPassword();
+
+		session.put(VFSSession.HOSTNAME_KEY,host);
+		session.put(VFSSession.USERNAME_KEY,user);
+		session.put(VFSSession.PASSWORD_KEY,password);
+
+		passwordHash.put(user + "@" + host,password);
+
+		return true;
+	}
+
+	/**
+	 * Forgets all saved passwords.
+	 * @since jEdit 2.6pre3
+	 */
+	public static void forgetPasswords()
+	{
+		passwordHash.clear();
+	}
+
 	// private members
 	private static WorkThreadPool ioThreadPool;
 	private static VFS fileVFS = new FileVFS();
 	private static VFS urlVFS = new UrlVFS();
 	private static Hashtable vfsHash;
 	private static Hashtable protocolHash;
+	private static Hashtable passwordHash;
 	private static boolean error;
 
 	static
@@ -228,6 +289,7 @@ public class VFSManager
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
 		vfsHash = new Hashtable();
 		protocolHash = new Hashtable();
+		passwordHash = new Hashtable();
 		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
 		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
 		registerVFS(FtpVFS.PROTOCOL,new FtpVFS());
@@ -239,6 +301,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.17  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.16  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *

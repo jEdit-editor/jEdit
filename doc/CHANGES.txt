@@ -4,10 +4,17 @@ JEDIT 2.6 VERSION HISTORY
 
 + Enhancements
 
-- When closing a buffer, jEdit now only blocks until I/O is complete if
+- Previously, buffer closing and search & replace would block the GUI
+  until all pending I/O was complete. Now, these commands only do it if
+  it is really necessary
   the buffer _being closed_ is currently being loaded or saved
 - If the default edit mode is not 'text', *.txt files are now opened in
   text mode anyway
+- jEdit now remembers all FTP passwords until it is quit. To force it
+  to forget passwords while it is still running, invoke Utilities->Forget
+  Remote Passwords
+- More VFS code cleanups
+- Documentation updates
 
 + Bug Fixes
 
@@ -20,11 +27,12 @@ JEDIT 2.6 VERSION HISTORY
   Global Options dialog box was closed (since 2.6pre2)
 - The 'Add to Favorites' button in the VFS browser would throw an NPE if the
   tree view was active (since 2.6pre2)
-- The VFS browser would prompt for FTP passwords twice (since 2.6pre2)
 - The FTP VFS now resolves symlinks, so links to directories should no
   longer show up as plain files in the browser
 - The DirectoryListSet would reject directories whose names didn't match
   the file name filter, and not check any files within them (since 2.6pre2)
+- On some JVMs, IORequest.java would cause VerifyErrors, and as a result,
+  buffers could not be loaded or saved (since 2.6pre2)
 
 * Version 2.6pre2
 

@@ -1,6 +1,6 @@
 /*
- * open_file.java
- * Copyright (C) 1999, 2000 Slava Pestov
+ * forget_passwords.java
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,29 +20,13 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
-public class open_file extends EditAction
+public class forget_passwords extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		View view = getView(evt);
-		String[] files = GUIUtilities.showVFSFileDialog(view,null,
-			VFSBrowser.OPEN_DIALOG,true);
-
-		Buffer buffer = null;
-		if(files != null)
-		{
-			for(int i = 0; i < files.length; i++)
-			{
-				Buffer newBuffer = jEdit.openFile(null,files[i]);
-				if(newBuffer != null)
-					buffer = newBuffer;
-			}
-		}
-
-		if(buffer != null)
-			view.setBuffer(buffer);
+		VFSManager.forgetPasswords();
 	}
 }

@@ -26,7 +26,6 @@ public class FtpAddress
 	public String host;
 	public String port;
 	public String user;
-	public String password;
 	public String path;
 
 	public FtpAddress(String url)
@@ -46,23 +45,12 @@ public class FtpAddress
 		}
 		url = url.substring(trimAt);
 
-		// get username/password
+		// get username
 		int index = url.indexOf('@');
-		if(index == -1)
-			user = password = null;
-		else
+		if(index != -1)
 		{
 			user = url.substring(0,index);
 			url = url.substring(index + 1);
-
-			index = user.indexOf(':');
-			if(index != -1)
-			{
-				password = user.substring(index + 1);
-				user = user.substring(0,index);
-			}
-			else
-				password = null;
 		}
 
 		// get host name and path
@@ -85,13 +73,11 @@ public class FtpAddress
 		}
 	}
 
-	public FtpAddress(String host, String port, String user,
-		String password, String path)
+	public FtpAddress(String host, String port, String user, String path)
 	{
 		this.host = host;
 		this.port = port;
 		this.user = user;
-		this.password = password;
 		this.path = path;
 	}
 
@@ -103,11 +89,6 @@ public class FtpAddress
 		if(user != null)
 		{
 			buf.append(user);
-			if(password != null && password.length() != 0)
-			{
-				buf.append(':');
-				buf.append(password);
-			}
 			buf.append('@');
 		}
 		buf.append(host);
@@ -125,6 +106,9 @@ public class FtpAddress
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.4  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *

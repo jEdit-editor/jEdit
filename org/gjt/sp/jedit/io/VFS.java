@@ -95,12 +95,12 @@ public abstract class VFS
 	/**
 	 * Displays a dialog box that should set up a session and return
 	 * the initial URL to browse.
-	 * @param session The VFS session
+	 * @param session Where the VFS session will be stored
 	 * @param comp The component that will parent error dialog boxes
 	 * @return The URL
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.6pre3
 	 */
-	public String showBrowseDialog(VFSSession session, Component comp)
+	public String showBrowseDialog(VFSSession[] session, Component comp)
 	{
 		return null;
 	}
@@ -132,19 +132,18 @@ public abstract class VFS
 	}
 
 	/**
-	 * Starts a VFS session. This method is called from the AWT thread,
+	 * Creates a VFS session. This method is called from the AWT thread,
 	 * so it should not do any I/O. It could, however, prompt for
 	 * a login name and password, for example.
-	 * @param session The VFS session
+	 * @param path The path in question
 	 * @param comp The component that will parent error dialog boxes
 	 * @return True if everything is okay, false if the user cancelled
 	 * the operation
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.6pre3
 	 */
-	public boolean setupVFSSession(VFSSession session, Component comp)
+	public VFSSession createVFSSession(String path, Component comp)
 	{
-		session.setOwnerVFS(this);
-		return true;
+		return new VFSSession();
 	}
 
 	/**
@@ -156,11 +155,12 @@ public abstract class VFS
 	 */
 	public boolean load(View view, Buffer buffer, String path)
 	{
-		if(!setupVFSSession(buffer.getVFSSession(),view))
+		VFSSession session = createVFSSession(path,view);
+		if(session == null)
 			return false;
 
 		VFSManager.runInWorkThread(new IORequest(IORequest.LOAD,
-			view,buffer,path,this));
+			view,buffer,session,this,path));
 		return true;
 	}
 
@@ -173,11 +173,12 @@ public abstract class VFS
 	 */
 	public boolean save(View view, Buffer buffer, String path)
 	{
-		if(!setupVFSSession(buffer.getVFSSession(),view))
+		VFSSession session = createVFSSession(path,view);
+		if(session == null)
 			return false;
 
 		VFSManager.runInWorkThread(new IORequest(IORequest.SAVE,
-			view,buffer,path,this));
+			view,buffer,session,this,path));
 		return true;
 	}
 
@@ -357,18 +358,6 @@ public abstract class VFS
 	public void _endVFSSession(VFSSession session, Component comp)
 		throws IOException
 	{
-		if(session.getOwnerVFS() == this)
-			session.setOwnerVFS(null);
-		else if(session.getOwnerVFS() == null)
-		{
-			throw new IllegalArgumentException("_endSession()"
-				+ " called on an unowned session");
-		}
-		else
-		{
-			throw new IllegalArgumentException("_endSession()"
-				+ " called on a session that is not mine");
-		}
 	}
 
 	// private members
@@ -378,6 +367,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.16  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.15  2000/08/10 11:55:58  sp
  * VFS browser toolbar improved a little bit, font selector tweaks
  *

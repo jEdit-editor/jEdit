@@ -179,11 +179,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 	}
 
-	public VFSSession getVFSSession()
-	{
-		return browser.getVFSSession();
-	}
-
 	// private members
 	private VFSBrowser browser;
 	private JTextField filenameField;
@@ -235,6 +230,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.5  2000/08/13 07:35:23  sp
  * Dockable window API
  *

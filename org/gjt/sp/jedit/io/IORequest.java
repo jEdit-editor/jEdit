@@ -70,16 +70,19 @@ public class IORequest extends WorkRequest
 	 * @param type The request type
 	 * @param view The view
 	 * @param buffer The buffer
-	 * @param path The path
+	 * @param session The VFS session
 	 * @param vfs The VFS
+	 * @param path The path
 	 */
-	public IORequest(int type, View view, Buffer buffer, String path, VFS vfs)
+	public IORequest(int type, View view, Buffer buffer, VFSSession session, 
+		VFS vfs, String path)
 	{
 		this.type = type;
 		this.view = view;
 		this.buffer = buffer;
-		this.path = path;
+		this.session = session;
 		this.vfs = vfs;
+		this.path = path;
 
 		markersPath = MiscUtilities.getFileParent(path)
 			+ '.' + MiscUtilities.getFileName(path)
@@ -121,21 +124,21 @@ public class IORequest extends WorkRequest
 		}
 
 		return getClass().getName() + "[type=" + typeString
-			+ ",buffer=" + buffer + ",vfs=" + vfs + "]";
+			+ ",buffer=" + buffer + "]";
 	}
 
 	// private members
 	private int type;
 	private View view;
 	private Buffer buffer;
+	private VFSSession session;
+	private VFS vfs;
 	private String path;
 	private String markersPath;
-	private VFS vfs;
 
 	private void load()
 	{
 		InputStream in = null;
-		VFSSession session = buffer.getVFSSession();
 
 		try
 		{
@@ -504,7 +507,6 @@ public class IORequest extends WorkRequest
 	private void save()
 	{
 		OutputStream out = null;
-		VFSSession session = buffer.getVFSSession();
 
 		try
 		{
@@ -590,11 +592,6 @@ public class IORequest extends WorkRequest
 	private void autosave()
 	{
 		OutputStream out = null;
-
-		// since autosave is only supported for local files,
-		// we don't do any of the setupSession()/endSession()
-		// stuff (it isn't necessary)
-		VFSSession session = buffer.getVFSSession();
 
 		try
 		{
@@ -700,6 +697,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.22  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.21  2000/08/15 08:07:11  sp
  * A bunch of bug fixes
  *

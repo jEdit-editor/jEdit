@@ -1927,6 +1927,7 @@ public class jEdit
 		addAction("find-next");
 		addAction("find-selection");
 		addAction("flush-directory-cache");
+		addAction("forget-passwords");
 		addAction("global-options");
 		addAction("goto-line");
 		addAction("goto-marker");
@@ -2328,6 +2329,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.269  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.268  2000/08/16 08:47:18  sp
  * Stuff
  *

@@ -24,7 +24,7 @@ import java.util.Hashtable;
 /**
  * Some virtual filesystems, such as the FTP filesystem, need to store
  * certain state, such as login information, the socket connection to
- * the server, and so on, between VFS calls. This calls facilitates
+ * the server, and so on, between VFS calls. This class facilitates
  * storage of such information.
  *
  * @author Slava Pestov
@@ -32,18 +32,25 @@ import java.util.Hashtable;
  *
  * @since jEdit 2.6pre2
  */
-public class VFSSession implements Cloneable
+public class VFSSession
 {
 	/**
-	 * This key contains the path name of the buffer which created
-	 * this session, if any. It should only be accessed by methods
-	 * in the VFS class that directly deal with buffers (for
-	 * example, load() and save()).<p>
-	 *
-	 * The VFS browser also stores the path of the current directory
-	 * in this key.
+	 * This key contains the host name for the path in question, if any.
+	 * @since jEdit 2.6pre3
 	 */
-	public static final String PATH_KEY = "VFSSession__path";
+	public static final String HOSTNAME_KEY = "VFSSession.hostname";
+
+	/**
+	 * This key contains the user name for the path in question, if any.
+	 * @since jEdit 2.6pre3
+	 */
+	public static final String USERNAME_KEY = "VFSSession.username";
+
+	/**
+	 * This key contains the password for the path in question, if any.
+	 * @since jEdit 2.6pre3
+	 */
+	public static final String PASSWORD_KEY = "VFSSession.password";
 
 	/**
 	 * Returns a stored value.
@@ -73,49 +80,21 @@ public class VFSSession implements Cloneable
 		hashtable.remove(key);
 	}
 
-	/**
-	 * Returns the VFS that owns this session.
-	 */
-	public VFS getOwnerVFS()
-	{
-		return owner;
-	}
-
-	/**
-	 * Sets the VFS that owns this session.
-	 * @param vfs The VFS
-	 */
-	public void setOwnerVFS(VFS owner)
-	{
-		if(this.owner != null && owner != null)
-		{
-			throw new IllegalArgumentException("setOwnerVFS() called"
-				+ " on an in-use session");
-		}
-		else
-			this.owner = owner;
-	}
-
-	public Object clone()
-	{
-		VFSSession clone = new VFSSession();
-		clone.hashtable = (Hashtable)hashtable.clone();
-		return clone;
-	}
-
 	public String toString()
 	{
 		return getClass().getName() + ":" + hashtable;
 	}
 
 	// private members
-	private VFS owner;
 	private Hashtable hashtable = new Hashtable();
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.3  2000/08/15 08:07:11  sp
  * A bunch of bug fixes
  *

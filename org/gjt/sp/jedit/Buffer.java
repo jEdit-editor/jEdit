@@ -64,17 +64,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	public static final String LINESEP = "lineSeparator";
 
 	/**
-	 * This is a hack so that the user won't have to enter the FTP
-	 * password twice when opening an FTP URL from the browser.
-	 * The browser puts a VFSSession instance (which contains the
-	 * saved password) in the buffer-local property with this name.
-	 * The Buffer.setPath() method then queries this property, and
-	 * attempts to use the VFSSession contained in it.
-	 * @since jEdit 2.6pre2
-	 */
-	public static final String VFS_SESSION_HACK = "VFSSession__hack";
-
-	/**
 	 * Caret info properties.
 	 * @since 2.2pre7
 	 */
@@ -266,7 +255,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		setFlag(AUTOSAVE_DIRTY,false);
 
 		VFSManager.runInWorkThread(new IORequest(IORequest.AUTOSAVE,
-			null,this,autosaveFile.getPath(),VFSManager.getFileVFS()));
+			null,this,new VFSSession(),VFSManager.getFileVFS(),
+			autosaveFile.getPath()));
 	}
 
 	/**
@@ -275,9 +265,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean saveAs(View view)
 	{
-		VFSSession[] session = new VFSSession[1];
 		String[] files = GUIUtilities.showVFSFileDialog(view,path,
-			VFSBrowser.SAVE_DIALOG,false,session);
+			VFSBrowser.SAVE_DIALOG,false);
 
 		// files[] should have length 1, since the dialog type is
 		// SAVE_DIALOG
@@ -431,16 +420,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	public VFS getVFS()
 	{
 		return vfs;
-	}
-
-	/**
-	 * Returns the virtual filesystem session. Should only be
-	 * called by the classes in the <code>org.gjt.sp.jedit.io</code>
-	 * package.
-	 */
-	public VFSSession getVFSSession()
-	{
-		return vfsSession;
 	}
 
 	/**
@@ -1474,7 +1453,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	private long modTime;
 	private File file;
 	private VFS vfs;
-	private VFSSession vfsSession;
 	private File autosaveFile;
 	private String path;
 	private String protocol;
@@ -1512,16 +1490,6 @@ public class Buffer extends PlainDocument implements EBComponent
 				autosaveFile.delete();
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
 		}
-
-		vfsSession = (VFSSession)getProperty(VFS_SESSION_HACK);
-		if(vfsSession != null)
-			vfsSession = (VFSSession)vfsSession.clone();
-		else
-			vfsSession = new VFSSession();
-
-		getDocumentProperties().remove(VFS_SESSION_HACK);
-
-		vfsSession.put(VFSSession.PATH_KEY,path);
 	}
 
 	private boolean recoverAutosave(final View view)
@@ -1695,6 +1663,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.172  2000/08/16 12:14:29  sp
+ * Passwords are now saved, bug fixes, documentation updates
+ *
  * Revision 1.171  2000/08/16 08:47:18  sp
  * Stuff
  *
