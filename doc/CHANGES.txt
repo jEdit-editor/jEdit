@@ -6,11 +6,22 @@ JEDIT VERSION HISTORY
 
 - EditBus plugin integrated into the core, old event system removed
 - New classes for EditBus plugins: LogOutput, LazyOutput
+  LogOutput is not accessable by plugins directly; you have to use the
+  GetOutput message with a parameter of "Log". It prints all output to
+  the activity log, and plugins that display output can use it as a
+  last resort.
+  LazyOutput is passed the name of an underlying output, which is only
+  created if something is actually printed; so you can safely create
+  LazyOutput instances, without cluttering the user's screen with
+  consoles unless you print something
 
 + Enhancements
 
 - The wait cursor is now displayed in the HyperSearch dialog box while
   searching
+- 'New View' button added to tool bar
+- Fixed several files to compile with the jikes 'pedantic' option (+P)
+- Minor changes to the API documentation
 
 + Bug Fixes
 
@@ -20,12 +31,19 @@ JEDIT VERSION HISTORY
   1.7pre2???)
 - Removed debugging message ('hi') from GUIUtilities class (since 2.2pre5)
 - GUIUtilities.java didn't compile with the JDK 1.3 javac (since 2.2pre5)
+- The source parameter to the log() method was ignored when logging exceptions
+  (since 2.2pre2)
+- Error line numbers were displayed off-by-one (since EditBus 0.4)
+- HyperSearch didn't deal with closed buffers correctly (since 1.7pre2???)
 
 + API Changes
 
 - Plugins that rely on the old event system will no longer work
-- GetOutput message changed. This breaks Console 1.9 and earlier. Use Console
-  1.9.1
+- EditBus command messages have changed:
+  - Shell interface and GetShells message replaces ExecuteCommand and StopCommand
+    messages
+  - GetOutput.addReturn() renamed to GetOutput.setOutput()
+  - This breaks Console 1.9 and earlier; use 1.9.1 or later
 
 * Version 2.2pre5
 
@@ -160,7 +178,7 @@ As of this version, plugins are no longer part of the core distribution.
 - Python syntax highlighting had problems with triple-quote (""") statements
   (since 2.1pre1)
 - C preprocessor statements (#if, #ifdef, etc) were highlighted in Java
-  mode, which is incorrect (since 1.7pre5)
+  mode, which is incorrect (since 2.1pre1)
 - Passing the -nosession switch to jEdit would throw a null pointer exception
   (since 2.2pre1)
 - Clear register command didn't display anything in the status bar

@@ -20,7 +20,9 @@
 package org.gjt.sp.jedit;
 
 /**
- * Error source interface.
+ * An error source. Error sources generate errors which other plugins can
+ * present in some fashion, for example the ErrorList plugin displays
+ * an error list.
  * @author Slava Pestov
  * @version $Id$
  *
@@ -31,84 +33,79 @@ public interface ErrorSource
 	/**
 	 * Returns a string description of this error source.
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * Returns the number of errors in this source.
 	 */
-	public int getErrorCount();
+	int getErrorCount();
 
 	/**
-	 * Returns all errors.
+	 * Returns an array of all errors in this error source.
 	 */
-	public Error[] getAllErrors();
+	Error[] getAllErrors();
 
 	/**
-	 * Returns the number of errors in a specified file.
+	 * Returns the number of errors in the specified file.
 	 * @param path Full path name
 	 */
-	public int getFileErrorCount(String path);
+	int getFileErrorCount(String path);
 
 	/**
 	 * Returns all errors in the specified file.
 	 * @param path Full path name
 	 */
-	public Error[] getFileErrors(String path);
+	Error[] getFileErrors(String path);
 
 	/**
 	 * Returns all errors on the specified line.
 	 * @param lineIndex The line number
 	 */
-	public Error[] getLineErrors(Buffer buffer, int lineIndex);
-
-	/**
-	 * Removes all errors from this error source (if supported).
-	 */
-	public void clear();
+	Error[] getLineErrors(Buffer buffer, int lineIndex);
 
 	/**
 	 * An error.
 	 */
-	public static interface Error
+	public interface Error
 	{
 		/**
 		 * Returns the source of this error.
 		 */
-		public ErrorSource getErrorSource();
+		ErrorSource getErrorSource();
 
 		/**
 		 * Returns the buffer involved, or null if it is not open.
 		 */
-		public Buffer getBuffer();
+		Buffer getBuffer();
 
 		/**
 		 * Returns the file path name involved.
 		 */
-		public String getFilePath();
+		String getFilePath();
 
 		/**
 		 * Returns just the name portion of the file involved.
 		 */
-		public String getFileName();
+		String getFileName();
 
 		/**
 		 * Returns the line number.
 		 */
-		public int getLineNumber();
+		int getLineNumber();
 
 		/**
 		 * Returns the start offset.
 		 */
-		public int getStartOffset();
+		int getStartOffset();
 
 		/**
 		 * Returns the end offset.
 		 */
-		public int getEndOffset();
+		int getEndOffset();
 
 		/**
 		 * Returns the error message.
 		 */
-		public String getErrorMessage();
+		String getErrorMessage();
 	}
 }

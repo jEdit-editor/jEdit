@@ -1,5 +1,5 @@
 /*
- * StopCommand.java - Stop command message
+ * GetShell.java - Get shell message
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -22,47 +22,70 @@ package org.gjt.sp.jedit.msg;
 import org.gjt.sp.jedit.*;
 
 /**
- * Message to stop an executing command. Upon receiving this message, plugins
- * should check if the specified tag is for a command they're executing, and
- * stop it if necessary,
+ * Message to obtain a named shell.
  * @author Slava Pestov
  * @version $Id$
  *
  * @since jEdit 2.2pre6
  */
-public class StopCommand extends EBMessage
+public class GetShell extends EBMessage
 {
 	/**
-	 * Creates a new stop command message.
+	 * Creates a new get shell message.
 	 * @param source The message source
-	 * @param tag Value of getTag() method of ExecuteCommand message
+	 * @param name The shell name
+	 * @param view The view
 	 */
-	public StopCommand(EBComponent source, Object tag)
+	public GetShell(EBComponent source, String name, View view)
 	{
 		super(source);
-		if(tag == null)
-			throw new NullPointerException("Tag must be non-null");
+		if(name == null)
+			throw new NullPointerException("Name must be non-null");
 
-		this.tag = tag;
+		this.name = name;
+		this.view = view;
 	}
 
 	/**
-	 * Returns the process tag. This should be obtained from
-	 * the ExecuteCommand message.
+	 * Returns the requested shell name.
 	 */
-	public Object getTag()
+	public String getShellName()
 	{
-		return tag;
+		return name;
 	}
 
 	/**
-	 * Returns a string representation of this message's parameters.
+	 * Returns the view.
 	 */
+	public View getView()
+	{
+		return view;
+	}
+
+	/**
+	 * Sets the shell.
+	 */
+	public void setShell(Shell shell)
+	{
+		this.shell = shell;
+		veto();
+	}
+
+	/**
+	 * Returns the shell, or null if nobody responded to the message.
+	 */
+	public Shell getShell()
+	{
+		return shell;
+	}
+
 	public String paramString()
 	{
-		return super.paramString() + ",tag=" + tag;
+		return super.paramString() + ",name=" + name;
 	}
 
 	// private members
-	private Object tag;
+	private String name;
+	private View view;
+	private Shell shell;
 }

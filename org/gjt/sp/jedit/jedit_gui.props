@@ -28,10 +28,11 @@ jar.what.class=    Existance of class {0}
 ###
 ### TOOLBAR
 ###
-view.toolbar=new-file open-file close-file - save save-all - \
+view.toolbar=new-file new-view open-file close-file - save save-all - \
 	print - undo redo - cut copy paste - help
 
 new-file.icon=New.gif
+new-view.icon=Computer.gif
 open-file.icon=Open.gif
 close-file.icon=Delete.gif
 save.icon=Save.gif

@@ -32,9 +32,10 @@ public abstract class EBPlugin extends EditPlugin implements EBComponent
 	/**
 	 * Returns the plugin's name. This return's the plugin's
 	 * class name, without the "Plugin" suffix. This should
-	 * be used to identify the plugin in messages such as
-	 * <code>GetShells</code>, <code>ExecuteCommand</code>,
-	 * etc.
+	 * be used to identify the plugin in named lists and such.
+	 *
+	 * @see EditBus#addToNamedList(Object,Object)
+	 * @see EditBus#getNamedList(Object,Object)
 	 */
 	public String getName()
 	{

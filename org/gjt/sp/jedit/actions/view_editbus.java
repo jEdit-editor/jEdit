@@ -1,5 +1,5 @@
 /*
- * EBComponent.java - An EditBus component
+ * view_editbus.java - EditBus Plugin
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,21 +17,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit;
+package org.gjt.sp.jedit.actions;
 
-/**
- * A component on the EditBus. Messages sent on the EditBus are forwarded
- * to all components in turn.
- * @author Slava Pestov
- * @version $Id$
- *
- * @since jEdit 2.2pre6
- */
-public interface EBComponent
+import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.EditBusViewer;
+import org.gjt.sp.jedit.EditAction;
+
+public class view_editbus extends EditAction
 {
-	/**
-	 * Handles a message sent on the EditBus.
-	 * @param message The message
-	 */
-	void handleMessage(EBMessage message);
+	public view_editbus()
+	{
+		super("view-editbus");
+	}
+
+	public void actionPerformed(ActionEvent evt)
+	{
+		new EditBusViewer();
+	}
 }

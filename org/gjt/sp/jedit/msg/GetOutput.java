@@ -22,8 +22,7 @@ package org.gjt.sp.jedit.msg;
 import org.gjt.sp.jedit.*;
 
 /**
- * Message to obtain a named output. The <code>GetOutputs</code> message
- * can be used to obtain a list.
+ * Message to obtain a named output.
  * @author Slava Pestov
  * @version $Id$
  *

@@ -22,7 +22,9 @@ package org.gjt.sp.jedit;
 import java.awt.Color;
 
 /**
- * An interface for displaying text output.
+ * An interface for displaying text output, much like a terminal. Plugins
+ * that implement some sort of shell or interpreter can use outputs to
+ * display output to the user.
  * @author Slava Pestov
  * @version $Id$
  *
@@ -31,26 +33,27 @@ import java.awt.Color;
 public interface Output
 {
 	/**
-	 * Appends some output.
+	 * Appends some output to the display.
 	 * @param color The color to display it in (null will use
 	 * the default)
 	 * @param text The text
 	 */
-	public void addOutput(Color color, String text);
+	void addOutput(Color color, String text);
 
 	/**
 	 * This method must be called when the command
-	 * finishes executing.
+	 * finishes executing. The output may take some action, for
+	 * example printing a "command done" message.
 	 */
-	public void commandDone();
+	void commandDone();
 
 	/**
 	 * Returns the default color for informational messages.
 	 */
-	public Color getInfoColor();
+	Color getInfoColor();
 
 	/**
 	 * Returns the default color for error messages.
 	 */
-	public Color getErrorColor();
+	Color getErrorColor();
 }

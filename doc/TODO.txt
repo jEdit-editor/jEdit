@@ -1,25 +1,76 @@
 JEDIT TO DO
 
+CVS: Remove ExecuteCommand, StopCommand
+Add Shell
+
+------- 2.2 to do -------
+
+- Shell.waitFor()?
+- s/overwriteSetSelectedText/userInput/g. userInput() performs soft wrap
+- execute-command action for invoking EB shell commands from macros
 - Expand abbreviation sucks:
   - > 1 match on one line doesn't work
   - need to finish match cycling
-- Action: shell
-- Invoke EditBus commands from macros, macros written using other shells
-- Shell interface so that ExecuteCommands are not necessary
+
+------- 2.3+ -------
+
++ Possible cleanups
+
+- currently, Macros.java has a huge kudge to implement key bindings for
+  macros. This is very stupid, and the menu code needs to be made more
+  flexible, so that BeanShell and friends can also have shortcuts (that
+  can be edited in the shortcuts option pane!)
+
++ Features
+
+- Write user and developer documentation for EditBus
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
-- Word wrap. True word-wrap would require significant changes to the text area,
-  and would probably slow things down (think yToLine()). Maybe some sort of
-  'soft wrap' that inserts newlines into the text could be implemented instead?
 - Enhanced printing:
   - print selection only
   - print line numbers option
+- If the BeanShell plugin becomes mature enough, maybe replace built-in macro
+  system with it?
+
++ Somewhat pointless changes that probably won't be made that make sense anyway:
+
+- jEdit defines its own 'Action' shell for executing actions
+- Macros can be written using any shell; special #!<shell> lines switch
+- File=NewFile NewView
+  NewFile.label=New File
+  # multiple actions can be specified:
+  PreviousTag.action=SetSearchString '<' FindPrevious SelectNone
+  Bob.action=BeanShell 'some stuff'
+  # to disable the menu item, do:
+  NoRecent.disabled=yes
+- Only load actions when necessary. JARClassLoader builds a list of classes
+  whose names end with Action:
+  package.bob.GonkAction -> Gonk
+  if an action cannot be found in plugin JAR files, try loading
+  org.gjt.sp.jedit.actions.<name>Action
+- EditPlugin instances no longer call addAction()
+- Scrap EditAction, use a Command interface instead?
+  class Command
+  {
+  	abstract void execute(View view, String parameter);
+  }
+- With all this breakage, why not break a little more? Move EBPlugin
+  functionality to EditPlugin, mark EBPlugin as @deprecated
+- With the number of plugins already out there, must preserve backwards
+  compatibility
+- What about InputHandlers? Should Command be moved to org.gjt.sp.util, with
+  a jEdit-specific subclass, say EditCommand?
+- XML can be used to load the menu bar if XMode is ever integrated
+- Replace shortcut editor with full menu bar/tool bar/right click menu editor
+- It would be nice if this plugin/action stuff was moved to org.gjt.sp.util, so
+  that other applications could use it
 
 ------- Installer -------
 
 - Package and release
 - Check version of existing 'simlaunch' program before overwriting
 - Store human-readable strings in a property file for easier localization
+- Bad file number I/O error - file descriptor leak somewhere?
 
 ------- Ideas for plugins -------
 
@@ -28,17 +79,4 @@ JEDIT TO DO
 - Generic EditBus-aware plugin for invoking other programs inside the JVM
 - Debugger front-end
 - VI key binding emulation
-- Menu bar/right-click context menu/toolbar editor
 - Spelling checker
-- BeanShell is REALLY nifty! Wrap it in a plugin
-  - Use EditBus: supports execution from console, error list, etc
-  - One interpreter per view
-  - It should be possible to write entire plugins in BeanShell. Eg:
-    class SomePlugin extends BeanShellPlugin
-    {
-      public SomePlugin()
-      {
-        super("SomePlugin.bsh");
-      }
-    }
-    Where SomePlugin.bsh has all the code.

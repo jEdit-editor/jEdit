@@ -1,5 +1,5 @@
 /*
- * EBComponent.java - An EditBus component
+ * Shell.java - EditBus shell interface
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,18 +20,25 @@
 package org.gjt.sp.jedit;
 
 /**
- * A component on the EditBus. Messages sent on the EditBus are forwarded
- * to all components in turn.
+ * An abstract interface to a shell that executes commands.
  * @author Slava Pestov
  * @version $Id$
  *
  * @since jEdit 2.2pre6
  */
-public interface EBComponent
+public interface Shell
 {
 	/**
-	 * Handles a message sent on the EditBus.
-	 * @param message The message
+	 * Executes a command.
+	 * @param view The view
+	 * @param command The command. The format of this is left entirely
+	 * up to the implementation
+	 * @param output The output
 	 */
-	void handleMessage(EBMessage message);
+	void execute(View view, String command, Output output);
+
+	/**
+	 * Stops the currently executing command, if any.
+	 */
+	void stop();
 }

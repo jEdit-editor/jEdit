@@ -11,3 +11,4 @@ MAJOR CHANGES IN JEDIT 2.2 SINCE 2.1
   - highlights on the text area (= ErrorList plugin)
   - menu item selections and tool bar clicks can be recorded to macros
   - recordable search and replace
+  - integrated EditBus

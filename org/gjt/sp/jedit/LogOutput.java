@@ -24,13 +24,14 @@ import org.gjt.sp.jedit.msg.GetOutput;
 import org.gjt.sp.util.Log;
 
 /**
- * Outputs to the jEdit activity log
+ * Outputs to the jEdit activity log. This class is not public and should
+ * not be created directly; use GetOutput(Log) instead
  * @author Slava Pestov
  * @version $Id$
  *
  * @since jEdit 2.2pre6
  */
-public class LogOutput implements Output
+/*public*/ class LogOutput implements Output
 {
 	/**
 	 * Appends some output.
@@ -64,7 +65,4 @@ public class LogOutput implements Output
 	{
 		return null;
 	}
-
-	// package-private members
-	LogOutput() {}
 }

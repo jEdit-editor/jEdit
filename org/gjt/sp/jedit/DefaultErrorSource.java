@@ -406,7 +406,7 @@ public class DefaultErrorSource implements ErrorSource, EBComponent
 		{
 			return "[" + getErrorSource().getName()
 				+ "] " + getFileName() + ":" +
-				getLineNumber() + ":" +
+				(getLineNumber() + 1) + ":" +
 				getErrorMessage();
 		}
 			
