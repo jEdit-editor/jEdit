@@ -25,7 +25,7 @@
     plugin API with these two classes.
 </para>
 
-<sect2 id="plugin-class-EditPlugin"><title>Class EditPlugin</title>
+<sect2 id="class-EditPlugin"><title>Class EditPlugin</title>
 
 <para>
   This abstract class is the base for every plugin core class.  Its methods
@@ -136,9 +136,44 @@
   </listitem>
 
 </itemizedlist>
+
+<para>
+ This class defines two other methods which may be useful to some
+ plugins, but are mainly of use to the jEdit core:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getClassName</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This shortcut method returns <function>getClass().getName()</function>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EditPlugin.JAR <function>getJAR</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method returns the <classname>EditPlugin.JAR</classname> data
+      object associated with the plugin.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
 </sect2>
 
-<sect2 id="plugin-class-EBPlugin"><title>Class EBPlugin</title>
+<sect2 id="class-EBPlugin"><title>Class EBPlugin</title>
 
 <para>
   Every plugin core class class that uses the EditBus for receiving
@@ -232,11 +267,11 @@ else if(msg instanceof ViewUpdate)
 
 </sect1>
 
-<sect1 id="api-window-classes"><title>Interface DockableWindow</title>
+<sect1 id="plugin-window-classes"><title>Dockable Window Classes</title>
 
 <para>
   The dockable plugin API consists of a single interface,
-  <classname>DockableWindow</classname>.  It links the visible
+  <classname>DockableWindow</classname>. It links the visible
   components of a plugin with the dockable window management facility. The
   interface gives developers flexibility and minimizes code refactoring,
   for it can be implemented as part of the plugin's top-level display
@@ -244,6 +279,14 @@ else if(msg instanceof ViewUpdate)
   handles the display of windows as either docked or floating
   without specific direction from the plugin.
 </para>
+
+<para>
+  The <classname>DockableWindowContainer</classname> is also used by the
+  API behind the scenes. Most plugins will not need to know about this
+  class.
+</para>
+
+<sect2 id="class-DockableWindow"><title>Interface DockableWindow</title>
 
 <para>
   This interface provides the connection between the plugin's visible
@@ -298,6 +341,45 @@ else if(msg instanceof ViewUpdate)
 
 </itemizedlist>
 
+</sect2>
+
+<sect2 id="class-DockableDindowContainer">
+<title>Interface DockableWindowContainer</title>
+
+<para>
+  Depending upon the settings chosen by the user, the jEdit Plugin API
+  will place the <classname>Component</classname> returned by the
+  <function>DockableWindow.getComponent()</function> method in a floating frame
+  window or in a tabbed window at the designated docking location. Both
+  types of containing windows implement the interface
+  <classname>DockableWindowContainer</classname> and are managed entirely
+  by the host application.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>
+      The <classname>DockableWindowContainer.Floating</classname> class is
+      derived from <classname>JFrame</classname> and uses a
+      <classname>BorderLayout</classname>.  The plugin window's component is
+      placed in the center position of the frame's content pane.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The <classname>DockableWindowContainer.TabbedPane</classname> class is
+      derived from <classname>JTabbedPane</classname>. Here the plugin
+      window's component is added to the container's collection of tabbed
+      components.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2>
+
 </sect1>
 
 <sect1 id="api-option-classes"><title>Plugin Option Pane Classes</title>
@@ -312,7 +394,7 @@ else if(msg instanceof ViewUpdate)
   the application.
 </para>
 
-<sect2 id="plugin-class-AbstractOptionPane"><title>Class AbstractOptionPane</title>
+<sect2 id="class-AbstractOptionPane"><title>Class AbstractOptionPane</title>
 
 <para>
   Most plugin option panes extend this implementation of
@@ -330,7 +412,10 @@ else if(msg instanceof ViewUpdate)
   <classname>AbstractOptionPane</classname> should
   call the parent constructor and pass the option pane's <quote>internal
   name</quote> as a
-  parameter. It should also implement two methods:
+  parameter. The internal name is used to key a property where the
+  option pane's label is stored; see
+  <xref linkend="api-resource-properties" />.
+  It should also implement two methods:
 </para>
 
 <itemizedlist>
@@ -418,7 +503,7 @@ else if(msg instanceof ViewUpdate)
 
 </sect2>
 
-<sect2 id="plugin-class-OptionGroup"><title>Class OptionGroup</title>
+<sect2 id="class-OptionGroup"><title>Class OptionGroup</title>
 
 <para>
   In those cases where a single option pane is inadequate to present all
@@ -440,7 +525,9 @@ else if(msg instanceof ViewUpdate)
     </funcsynopsis>
     <para>
       The constructor's single parameter represents the internal
-      name of the option group.
+      name of the option group. The internal name is used to key a
+      property where the option group's label is stored; see
+      <xref linkend="api-resource-properties" />.
     </para>
   </listitem>
 
@@ -529,10 +616,10 @@ else if(msg instanceof ViewUpdate)
 <para>
   Actions are defined by creating an XML file entitled
   <filename>actions.xml</filename> at the top level of the plugin JAR
-  file. A simple action catalog looks like so:
+  file. A sample action catalog looks like so:
 </para>
 
-<informalexample><programlisting><![CDATA[&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
+<informalexample><programlisting>&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
 
 &lt;ACTIONS&gt;
     &lt;ACTION NAME="quicknotepad.toggle"&gt;
@@ -552,8 +639,7 @@ else if(msg instanceof ViewUpdate)
                 .addDockableWindow(QuickNotepadPlugin.NAME);
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
-&lt;/ACTIONS&gt;]]>
-</programlisting></informalexample>
+&lt;/ACTIONS&gt;</programlisting></informalexample>
 
 <para>
   The defined elements have the following functions:
@@ -595,6 +681,11 @@ else if(msg instanceof ViewUpdate)
     </para>
   </listitem>
 </itemizedlist>
+
+<para>
+ More discussion of the action catalog can be found in <xref
+ linkend="plugin-implement-actions" />.
+</para>
 
 </sect2>
 
@@ -642,7 +733,8 @@ plugin.MyPlugin.version=1.0.3</programlisting></informalexample>
     <para>
       Note that each property is prefixed with
       <literal>plugin.</literal>, followed by the fully qualified name
-      of the plugin core class.
+      of the plugin core class (including a package name, if there is
+      one).
     </para>
   </listitem>
   <listitem>
@@ -686,7 +778,7 @@ plugin.MyPlugin.depend.3=plugin Console 3.0</programlisting>
       The property is a space-separated list of filenames. Here is an
       example:
     </para>
-    <informalexample><programlisting>plugin.MyPlugin.jars=crimson.jar jaxp.jar</programlisting></informalexample>
+    <informalexample><programlisting>plugin.AntFarmPlugin.jars=crimson.jar jaxp.jar</programlisting></informalexample>
   </listitem>
 
   <listitem>
@@ -708,13 +800,22 @@ plugin.MyPlugin.depend.3=plugin Console 3.0</programlisting>
       relating to toolbars and keyboard shortcuts.
     </para>
     <para>
-      Similarly, action labels are defined in properties named by the
+      Action labels are defined in properties named by the
       action's internal name as specified in the action catalog,
       followed by <literal>.label</literal>:
     </para>
 <informalexample><programlisting>myplugin.label=My Plugin
 myplugin-grok.label=Grok Current Buffer</programlisting>
 </informalexample>
+  </listitem>
+  <listitem>
+    <para>
+      The list of menu items contained in plugin menus, if any.
+    </para>
+    <para>
+      This is discussed in detail in <xref
+      linkend="plugin-implement-menu" />.
+    </para>
   </listitem>
   <listitem>
     <para>
@@ -776,6 +877,12 @@ myplugin-grok.label=Grok Current Buffer</programlisting>
     </para>
   </listitem>
 </itemizedlist>
+
+<para>
+ The location of the plugin's help file should be stored in the
+ <property>plugin.<replaceable>class name</replaceable>.docs</property>
+ property.
+</para>
 
 </sect2>
 

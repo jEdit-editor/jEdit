@@ -2,11 +2,13 @@ TO DO
 
 + before 3.2final:
 
+- cvs remove plugin-api-guide.xml
 - proofread plugin guide
 - formatting problems in user's guide in table cells
 - next time i'm making an RPM, fix the shell script
 - make sure pre9 alt key change didn't break altgr on java 1.4
-- scrollToCaret() broken
+- F11 if F1 assigned, etc.
+- saving a read-only file: show a confirmation dialog box?
 
 + next major release (4.0):
 

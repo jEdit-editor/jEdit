@@ -40,7 +40,6 @@
 
 <!ENTITY bsh-commands SYSTEM "bsh-commands.xml">
 <!ENTITY api-guide SYSTEM "api-guide.xml">
-<!ENTITY plugin-api-guide SYSTEM "plugin-api-guide.xml">
 <!ENTITY api-message SYSTEM "api-message.xml"> ]>
 
 <book>
@@ -176,11 +175,11 @@
    use jEdit.
   </para>
   <para>
-   The first two chapters deal with APIs which are primarily of use in macros,
-   but can be used in plugins as well.
-   The final two chapters deal with classes only used when developing plugins:
-   classes defining plugin objects and classes defining messages sent by jEdit's
-   EditBus subsystem.
+   The first two chapter covers BeanShell commands, which are can only
+   be used in macros. The second chapter covers APIs useful to both macros and
+   plugins.
+   The final chapter covers the EditBus message system, which is typically
+   only used by plugins.
   </para>
   <para>
    This part of the user's guide was written by John Gellene
@@ -190,7 +189,6 @@
 
  &bsh-commands;
  &api-guide;
- &plugin-api-guide;
  &api-message;
 </part>
 

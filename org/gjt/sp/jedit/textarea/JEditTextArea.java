@@ -275,8 +275,14 @@ public class JEditTextArea extends JComponent
 
 		// hack so that if we scroll and the matching bracket
 		// comes into view, it is highlighted
-		if(bracketPosition == -1)
-			updateBracketHighlight();
+
+		// 3.2pre9 update: I am commenting this out once again because
+		// I have changed the location of the documentChanged() call
+		// in the DocumentHandler, so this is called before the caret
+		// position is updated, which can be potentially tricky.
+
+		//if(bracketPosition == -1)
+		//	updateBracketHighlight();
 
 		if(this.firstLine != vertical.getValue())
 			updateScrollBars();
@@ -4790,6 +4796,8 @@ forward_scan:		do
 			if(!buffer.isLoaded())
 				return;
 
+			documentChanged(evt);
+
 			int offset = evt.getOffset();
 			int length = evt.getLength();
 
@@ -4823,14 +4831,14 @@ forward_scan:		do
 				if(changed)
 					invalidateLineRange(s.startLine,s.endLine);
 			}
-
-			documentChanged(evt);
 		}
 
 		public void removeUpdate(DocumentEvent evt)
 		{
 			if(!buffer.isLoaded())
 				return;
+
+			documentChanged(evt);
 
 			int offset = evt.getOffset();
 			int length = evt.getLength();
@@ -4893,8 +4901,6 @@ forward_scan:		do
 				if(caretEvent)
 					fireCaretEvent();
 			}
-
-			documentChanged(evt);
 		}
 
 		public void changedUpdate(DocumentEvent evt) {}

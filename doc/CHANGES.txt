@@ -12,6 +12,7 @@ JEDIT 3.2 VERSION HISTORY
 + Enhancements
 
 - Documentation updates
+- Improved Python syntax highlighting (Ollie Rutherfurd)
 
 + Bug Fixes
 
@@ -23,6 +24,8 @@ JEDIT 3.2 VERSION HISTORY
   caused problems
 - Invoking menus using Alt-key mnemonics would insert the mnemonic
   character into the buffer on JDK 1.4
+- Fixed long-standing bug in scroll-to-caret bug
+- C+. and C+, didn't set the history model of the search bar
 
 + API Changes
 

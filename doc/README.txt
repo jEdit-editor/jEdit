@@ -193,7 +193,6 @@ Alwyn Barry:        - Ada95 edit mode
 Andre Kaplan:       - ASP, JavaScript, VBScript, BCEL edit modes
                     - Syntax token background highlighting
 Artur Biesiadowski: - Eiffel edit mode
-Ben Sarsgard:       - Improved PHP edit mode
 Bruno Tatibouet:    - B formal method edit mode
 Dante Fabrizio:     - VHDL edit mode
 Denis Lambot:       - Selecting files from the keyboard in the file
@@ -235,7 +234,6 @@ Mike Dillon:        - XMode syntax highlighting engine
                     - ... and more
 Nitsan Vardi:       - VHDL edit mode
 Ollie Rutherfurd:   - C# edit mode
-                    - Improvements to XSL edit mode
                     - Default set of XSL abbreviations
                     - Some commands in View->Scrolling menu
                     - ... and more

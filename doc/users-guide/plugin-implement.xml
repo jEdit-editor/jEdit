@@ -34,7 +34,7 @@
   </listitem>
   <listitem>
     <para>
-      The plugin implements the necessary elements of the jEdit Plugin API
+      The plugin implements the necessary elements of the jEdit plugin API
       that were outlined in the last chapter: a plugin core class, a plugin
       window class, a plugin option pane class, a set of required plugin
       resources, and an error reporting facility.
@@ -76,9 +76,6 @@
   option to hide the file name. Finally, there should be an action
   by which a single click or keypress would cause the contents of the
   notepad to be written to the new text buffer for further processing.
-  There seems to be no need to use the ErrorList plugin in connection
-  with a virtual scratch pad, so we will not attempt to have QuickNotepad
-  send data to the ErrorList.
 </para>
 
 <para>
@@ -131,7 +128,7 @@
 </para>
 
 <para>
-  Knowing what types of messages are made available by the Plugin API is
+  Knowing what types of messages are made available by the plugin API is
   obviously helpful is determining both the base plugin class and the
   contents of a <filename>handleMessage()</filename> method. The message
   classes derived from <classname>EBMessage</classname> cover the opening
@@ -206,28 +203,30 @@
   If <classname>EditPlugin</classname> is selected as the base plugin core
   class, the implementations of <function>start()</function> and
   <function>stop()</function> in the plugin's derived class are likely to
-  be trivial, and can probably both be <quote>no-ops</quote>. If
+  be trivial, or not present at all (in which case they will be
+  <quote>no-ops</quote>). If
   <classname>EBPlugin</classname> is selected to provide
   messaging capability, however, there are a few fixed requirements.
 </para>
 
 <para>
-  At a minimum, the <function>start()</function> method of the plugin core
-  class should provide the EditBus with an internal name for the plugin
-  window. The EditBus stores such information in one of a number of
-  <quote>named lists</quote>. To provide the plugin's dockable window
-  name, for example, the <function>start()</function>method
-  could make the following call:
+  If the plugin is to use the dockable window API, the
+  <quote>names</quote> of any dockable windows must be registered with
+  the EditBus component.
+  The EditBus stores such information in one of a number of
+  <quote>named lists</quote>. Here is how the QuickNotepad plugin
+  registers its dockable window:
 </para>
 
-<informalexample><programlisting>EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST, NAME);
-</programlisting></informalexample>
+<informalexample>
+<programlisting>EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST, NAME);</programlisting>
+</informalexample>
 
 <para>
   The first parameter is a <classname>String</classname> constant
   identifying the dockable window list. The second is a static
   <classname>String</classname> constant which is initialized in the
-  plugin core class as the the plugin's internal name.
+  plugin core class as the dockable window's internal name.
 </para>
 
 <para>
@@ -244,7 +243,7 @@
 <itemizedlist>
   <listitem>
     <para>
-      the internal working name of the plugin that will be used in the
+      the internal working name of dockable windows that will be used in the
       <classname>CreateDockableWindow</classname> message and elsewhere;
     </para>
   </listitem>
@@ -255,7 +254,7 @@
   </listitem>
   <listitem>
     <para>
-      a prefix for labelling properties required by the Plugin API; and
+      a prefix for labelling properties required by the plugin API; and
     </para>
   </listitem>
   <listitem>
@@ -279,9 +278,8 @@
   implementation of <function>handleMessage()</function> will only deal
   with one class of message. We will define a few static
   <classname>String</classname> data members to enforce consistent syntax
-  for the name of properties we will use throughout the plugin. We will
-  not require error reporting, so the plugin core class will not have to
-  create and register an error source. Finally, we will use a standalone plugin
+  for the name of properties we will use throughout the plugin. 
+  Finally, we will use a standalone plugin
   window class to separate the functions of that class from the visible
   component class we will create.
 </para>
@@ -293,14 +291,15 @@
 <informalexample><programlisting>public class QuickNotepadPlugin extends EBPlugin {
     public static final String NAME = "quicknotepad";
     public static final String MENU = "quicknotepad.menu";
-    public static final String PROPERTY_PREFIX = "plugin.QuickNotepadPlugin.";
-    public static final String OPTION_PREFIX = "options.quicknotepad.";
+    public static final String PROPERTY_PREFIX
+        = "plugin.QuickNotepadPlugin.";
+    public static final String OPTION_PREFIX
+        = "options.quicknotepad.";
 
-    public void start(){
-        EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST, NAME);
+    public void start() {
+        EditBus.addToNamedList(DockableWindow
+            .DOCKABLE_WINDOW_LIST, NAME);
     }
-
-    public void stop() {}
 
     public void createMenuItems(Vector menuItems) {
         menuItems.addElement(GUIUtilities.loadMenu(MENU));
@@ -312,7 +311,8 @@
 
     public void handleMessage(EBMessage message) {
         if(message instanceof CreateDockableWindow) {
-            CreateDockableWindow cmsg = (CreateDockableWindow)message;
+            CreateDockableWindow cmsg = (CreateDockableWindow)
+                message;
             if (cmsg.getDockableWindowName().equals(NAME)) {
                 DockableWindow win = new QuickNotepadDockable(
                     cmsg.getView(), cmsg.getPosition());
@@ -324,16 +324,16 @@
 
 <para>
   The implementations of <function>createMenuItems()</function> and
-  <function>createOptionPane()</function> (assuming options are enabled)
+  <function>createOptionPane()</function>
   are typically trivial, because the real work will be done using other
-  program elements. Menu creation is performed by a utility function in
+  plugin elements. Menu creation is performed by a utility function in
   jEdit's API, using properties defined in the plugin's properties file.
   The option pane is constructed in its own class.
 </para>
 
 <para>
   If the plugin only had a single menu item (for example, a checkbox item
-  that toggled activation of the plugin), we would call
+  that toggled activation of a dockable window), we would call
   <function>GUIUtilities.loadMenuItem()</function> instead of
   <function>loadMenu()</function>. We will explain the use of both methods
   in the next section.
@@ -450,7 +450,7 @@
   used in menu items and in the sections of jEdit's options dialog that
   deal with toolbar buttons, keyboard shortcuts and context menu items. We
   supply this information to jEdit through entries in the plugin's
-  properties file. At program startup, a call to
+  properties file. A call to
   <function>GUIUtilities.loadMenu()</function> or
   <function>GUIUtilities.loadMenuItem()</function> will read and extract
   the necessary labels from the contents of a properties file.
@@ -477,21 +477,20 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 <para>
   <function>GUIUtilities.loadMenuItem()</function> and
   <function>GUIUtilites.loadMenu()</function> use syntatical conventions
-  for the value of a menu property that simplifies menu layout. The
-  character <userinput>'_'</userinput> is translated as a space character
-  in the menu label. The character <userinput>'$'</userinput> before any
-  character turns it into an underscored mnemomic for the menu item. In
+  for the value of a menu property that simplifies menu layout. In
   <function>loadMenu()</function>, the use of the dash, as in the second
   item in the example menu list, signifies the placement of a separator.
   Finally, the character <userinput>'%'</userinput> used as a prefix on a
   label causes <function>loadMenu()</function> to call itself recursively
-  with the prefixed label as the source of submenu data.
+  with the prefixed label as the source of submenu data. Most plugins
+  will not need to define menus that contain other submenus.
 </para>
 
 <para>
   Note also that <function>quicknotepad-to-front</function> is not
   included in the menu listing. It will appear, however, on the
-  <guilabel>Plugin Shortcuts</guilabel> portion of the options dialog,
+  <guilabel>Shortcuts</guilabel> pane of the <guimenuitem>Global
+  Options</guimenuitem> dialog,
   so that the action can be associated with a keyboard shortcut.
 </para>
 
@@ -502,7 +501,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 </sect1>
 
 
-<sect1 id="window-implement"><title>Implementing a Plugin Window Class</title>
+<sect1 id="window-implement"><title>Implementing a Dockable Window Class</title>
 
 <para>
   The <application>QuickNotepad</application> plugin uses the dockable
@@ -528,7 +527,8 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   definition showing the implementation of both interfaces:
 </para>
 
-<informalexample><programlisting>public class QuickNotepad extends JPanel implements EBComponent, DockableWindow
+<informalexample><programlisting>public class QuickNotepad extends JPanel
+implements EBComponent, DockableWindow
 {
     private View view;
     private String position;
@@ -547,7 +547,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
         return this;
     }
     ...
-    public void handleMessage(EBMessage message)   {
+    public void handleMessage(EBMessage message) {
         if (message instanceof PropertiesChanged) {
             propertiesChanged();
         }
@@ -560,8 +560,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   components, nor does it show how our user actions will be implemented.
   To provide more structure to the code, we will implement the
   <classname>DockableWindow</classname> interface in a separate,
-  lightwieght class. We will also define an interface that will
-  encapsulate the plugin's user actions.
+  lightweight class.
 </para>
 
 </sect2>
@@ -596,21 +595,20 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
     void chooseFile();
     void saveFile();
     void copyToBuffer();
-}
-</programlisting></informalexample>
+}</programlisting></informalexample>
 
 </sect2>
 
 <sect2 id="window-implement-lightweight">
-<title>A Lightweight Plugin Window Class</title>
+<title>A Lightweight Dockable Window Class</title>
 
 <para>
   Here is the complete definition of the
   <classname>QuickNotepadDockable</classname> class:
 </para>
 
-<informalexample><programlisting>public class QuickNotepadDockable implements DockableWindow,
-    QuickNotepadActions
+<informalexample><programlisting>public class QuickNotepadDockable
+implements DockableWindow, QuickNotepadActions
 {
     private QuickNotepad notepad;
 
@@ -678,7 +676,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   the EditBus.
 </para>
 
-<para>
+<!-- <para>
   We could have the plugin core class receive and delegate
   <classname>PropertiesChanged</classname> messages to the window class.
   However, this would require the plugin core class to hold a reference
@@ -688,7 +686,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   EditBus directly; many plugins take this approach.  This means that
   <classname>QuickNotepad</classname> must implement the
   <classname>EBComponent</classname> interface.
-</para>
+</para> -->
 
 <para>
   Unlike the <classname>EBPlugin</classname> class, the
@@ -699,7 +697,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   the visible window becomes is assigned and unassigned to its
   <classname>DockableWindowContainer</classname>.  These two methods,
   <function>addNotify()</function> and
-  <function>removeNotify()</function>, are subclassed to add and remove
+  <function>removeNotify()</function>, are overridden to add and remove
   the visible window from the list of EditBus subscribers.
 </para>
 
@@ -708,7 +706,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   displayed in the floating window.  First, when a floating plugin window
   is created, we will give the notepad text area input focus.  Second,
   when the notepad if floating and has input focus, we will have the
-  <keysym>Esc</keysym> key dismiss the notepad window.  An
+  <keycap>Escape</keycap> key dismiss the notepad window.  An
   <classname>AncestorListener</classname> and a
   <classname>KeyListener</classname> will implement these details.
 </para>
@@ -718,8 +716,8 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   implementation of the <classname>EBComponent</classname> interface:
 </para>
 
-<informalexample><programlisting>public class QuickNotepad extends JPanel implements EBComponent,
-    QuickNotepadActions
+<informalexample><programlisting>public class QuickNotepad extends JPanel
+implements EBComponent, QuickNotepadActions
 {
     private String filename;
     private String defaultFilename;
@@ -741,7 +739,8 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
         this.floating = position.equals(
             DockableWindowManager.FLOATING);
 
-        this.filename = jEdit.getProperty(QuickNotepadPlugin.OPTION_PREFIX
+        this.filename = jEdit.getProperty(
+            QuickNotepadPlugin.OPTION_PREFIX
             + "filepath");
         if(this.filename == null || this.filename.length() == 0)
         {
@@ -926,7 +925,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   The QuickNotepad plugin has only three options to set: the path name of
   the file that will store the notepad text, the visibility of the
   path name on the tool bar, and the notepad's display font.
-  Using the shortcut methods of the Plugin API, the implementation of
+  Using the shortcut methods of the plugin API, the implementation of
   <function>_init()</function> looks like this:
 </para>
 
@@ -942,15 +941,19 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
     public void _init()
     {
         showPath = new JCheckBox(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "show-filepath.title"),
-        jEdit.getProperty(QuickNotepadPlugin.OPTION_PREFIX +
-            "show-filepath").equals("true"));
+            QuickNotepadPlugin.OPTION_PREFIX
+            + "show-filepath.title"),
+        jEdit.getProperty(
+            QuickNotepadPlugin.OPTION_PREFIX +  "show-filepath")
+            .equals("true"));
         addComponent(showPath);
 
         pathName = new JTextField(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "filepath"));
+            QuickNotepadPlugin.OPTION_PREFIX
+            + "filepath"));
         JButton pickPath = new JButton(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "choose-file"));
+            QuickNotepadPlugin.OPTION_PREFIX
+            + "choose-file"));
         pickPath.addActionListener(this);
 
         JPanel pathPanel = new JPanel(new BorderLayout(0, 0));
@@ -993,7 +996,8 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 </para>
 
 <para>
-  The _save() method extracts data from the user input components and
+  The <function>_save()</function> method extracts data from the user
+  input components and
   assigns them to the plugin's properties.  The implementation is
   straighforward:
 </para>
@@ -1029,8 +1033,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   We have already covered in some detail one of the three types of resources
   that plugins include with their class files - the user action catalog - and
   the need for help documentation does not require extended discussion.  The
-  remaining resource is the properties file.  We have already mentioned a few
-  of its items, but it is time to provide a complete discussion.
+  remaining resource is the properties file.
 </para>
 
 <para>
@@ -1048,24 +1051,16 @@ plugin.QuickNotepadPlugin.depend.0=jdk 1.2
 plugin.QuickNotepadPlugin.depend.1=jedit 03.01.99.00</programlisting></informalexample>
 
 <para>
-  These properties all use a common prefix of
-  <function>plugin.QuickNotepadPlugin</function> to fit requirements of the
-  search routine of the host application. The last two properties
-  are used by jEdit at startup to determine the
-  existence of any dependencies that the plugin may have.  The version
-  number for jEdit describes the <quote>final</quote> release
-  of version 3.1; a development version such as 3.2pre3 would be
-  signified by using <screen>03.02.03.00</screen>. If a dependency
-  on another plugin was present, it would be described using the form
-  <screen>plugin <replaceable>plugin name</replaceable>
-  <replaceable>plugin version</replaceable></screen>
+  These properties are described in detail in <xref
+  linkend="api-resource-properties" /> and do not require further
+  discussion here.
 </para>
 
 <para>
   Next in the file comes a property that sets the title of the
-  plugin in docking or frame windows.  The use of the suffix
+  plugin in docked or frame windows.  The use of the suffix
   <filename>title</filename> in the property's key name is
-  required by the Plugin API.
+  required by the plugin API.
 </para>
 
 <informalexample><programlisting># dockable window name
@@ -1073,7 +1068,8 @@ quicknotepad.title=QuickNotepad</programlisting></informalexample>
 
 <para>
   The next sections, consisting of the action label and menu item
-  properties, have been discussed earlier.
+  properties, have been discussed earlier in
+  <xref linkend="plugin-implement-menu" />.
 </para>
 
 <informalexample><programlisting># action labels
@@ -1122,8 +1118,7 @@ options.quicknotepad.fontstyle=0
 options.quicknotepad.fontsize=14
 
 # Setting not defined but supplied for completeness
-options.quicknotepad.filepath=
-</programlisting></informalexample>
+options.quicknotepad.filepath=</programlisting></informalexample>
 
 <para>
   We do not define a default setting for the filepath property because of
@@ -1168,7 +1163,7 @@ javac_bin = "jikes";
 javac_opts = "-g" "-deprecation" "+E";
 
 # set up the class path
-new_class_path = "../../jedit.jar;../EditBus.jar;.";
+new_class_path = "../../jedit.jar;.";
 old_class_path = (getprop "java.class.path");
 
 # concatenate the old and new class paths
@@ -1237,7 +1232,7 @@ jar: srcs;
   </para> </listitem>
   <listitem><para>
     the classpath variables for <filename>jedit.jar</filename> for
-    the jEdit API and, if necessary, the EditBus plugin.
+    the jEdit API and any plugins this one depends on.
   </para></listitem>
 </itemizedlist>
 
