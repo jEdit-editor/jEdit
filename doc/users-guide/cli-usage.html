@@ -48,11 +48,9 @@ NAME="CLI-USAGE"
   and interpret them as file names.
  </P
 ><P
->  If a file name contains the hash ("#") character, the
-  remainder of the file name after the hash will be the name of
-  the marker to move the caret to. If the first character of the
-  marker name is a plus sign ("+") the remainder is treated as a
-  line number to move the caret to. For example:
+>  When opening files from the command line,
+  you can specify a line number or marker to position the caret on,
+  like in the following example:
  </P
 ><TABLE
 BORDER="0"
@@ -68,16 +66,16 @@ CLASS="PROMPT"
 ><TT
 CLASS="USERINPUT"
 ><B
->jedit thesis.tex#chapter5</B
+>jedit MyApplet.java +line:10</B
 ></TT
 >
-<TT
+ <TT
 CLASS="PROMPT"
 >$ </TT
 ><TT
 CLASS="USERINPUT"
 ><B
->jedit MyApplet.java#+10</B
+>jedit thesis.tex +marker:chapter5</B
 ></TT
 ></PRE
 ></TD
@@ -209,17 +207,6 @@ CLASS="FILENAME"
      reason this might be used is if you want jEdit to start slightly
      faster (not much faster; about half a second). Has no effect
      when connecting to another instance via the edit server.</TD
-></TR
-><TR
-><TD
-WIDTH="144"
-ALIGN="LEFT"
-VALIGN="TOP"
->-readonly</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->Opens all files specified on the command line read only.</TD
 ></TR
 ><TR
 ><TD

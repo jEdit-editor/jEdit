@@ -62,8 +62,8 @@ public class FtpClient {
 
         debug("sending command", debugString);
         out.print(command);
-	out.print("\r\n");
-	out.flush();
+        out.print("\r\n");
+        out.flush();
         setResponse();
     }
 
@@ -97,8 +97,8 @@ public class FtpClient {
     **/
     public void connect(String hostName, int port) throws IOException {
         cmdSocket = new Socket(hostName, port);
-        in = new BufferedReader(
-			new InputStreamReader(cmdSocket.getInputStream()));
+        in = new BufferedReader(new InputStreamReader(
+            cmdSocket.getInputStream()));
         out = new PrintWriter(cmdSocket.getOutputStream(), true);
         setResponse();
     }
@@ -290,7 +290,26 @@ public class FtpClient {
     * <BR><I>Per RFC959</I><BR>
     **/
     public void passive() throws IOException {
-        System.err.println("FtpClient.passive() not implemented.  Please, help yourself :)");
+        sendCommand("PASV");
+        FtpResponse resp = getResponse();
+        if (!resp.isPositiveCompletion()) {
+            Log.log(Log.ERROR, this, "couldn't set passive");
+            return;
+        }
+
+        String message = resp.getMessage();
+        int bound_r = message.lastIndexOf(')');
+        int bound_l = message.lastIndexOf('(', bound_r  - 1) + 1;
+
+        String remoteAddr = message.substring(bound_l, bound_r);
+        int comma1 = remoteAddr.lastIndexOf(',');
+        int port = Integer.parseInt(remoteAddr.substring(comma1 + 1));
+        int comma2 = remoteAddr.lastIndexOf(',', comma1 - 1);
+        port |= Integer.parseInt(remoteAddr.substring(comma2 + 1,
+            comma1)) << 8;
+        remoteAddr = remoteAddr.substring(0, comma2).replace(',', '.');
+
+        passiveSocket = new Socket(remoteAddr, port);
     }
 
     /**
@@ -434,24 +453,26 @@ public class FtpClient {
     * @return a reader from which can be read the retrieved file data
     **/
     public FtpReader retrieve(String path) throws IOException {
-        sendCommand("RETR " + path);
-        if (!getResponse().isPositivePreliminary()) {
-            return null;
-        }
-        dataXfrSocket = dataSocket.accept();
-        InputStream istr = dataXfrSocket.getInputStream();
+        InputStream istr = getRetrieveStream(path);
+        if (istr == null) return null;
+
         InputStreamReader in = new InputStreamReader(istr);
         return new FtpReader(in, this);
     }
 
     public FtpInputStream retrieveStream(String path) throws IOException {
+        InputStream istr = getRetrieveStream(path);
+        if (istr == null) return null;
+
+        return new FtpInputStream(istr, this);
+    }
+
+    protected InputStream getRetrieveStream(String path) throws IOException {
         sendCommand("RETR " + path);
         if (!getResponse().isPositivePreliminary()) {
             return null;
         }
-        dataXfrSocket = dataSocket.accept();
-        InputStream istr = dataXfrSocket.getInputStream();
-        return new FtpInputStream(istr, this);
+        return getTransferSocket().getInputStream();
     }
 
     /**
@@ -471,24 +492,26 @@ public class FtpClient {
     * @return a writer into which can be written the data for the host file
     **/
     public FtpWriter store(String path) throws IOException {
-        sendCommand("STOR " + path);
-        if (!getResponse().isPositivePreliminary()) {
-            return null;
-        }
-        dataXfrSocket = dataSocket.accept();
-        OutputStream ostr = dataXfrSocket.getOutputStream();
+        OutputStream ostr = getStoreStream(path);
+        if (ostr == null) return null;
+
         OutputStreamWriter out = new OutputStreamWriter(ostr);
         return new FtpWriter(out, this);
     }
 
     public FtpOutputStream storeStream(String path) throws IOException {
+        OutputStream ostr = getStoreStream(path);
+        if (ostr == null) return null;
+
+        return new FtpOutputStream(ostr, this);
+    }
+
+    protected OutputStream getStoreStream(String path) throws IOException {
         sendCommand("STOR " + path);
         if (!getResponse().isPositivePreliminary()) {
             return null;
         }
-        dataXfrSocket = dataSocket.accept();
-        OutputStream ostr = dataXfrSocket.getOutputStream();
-        return new FtpOutputStream(ostr, this);
+        return getTransferSocket().getOutputStream();
     }
 
     /**
@@ -505,24 +528,26 @@ public class FtpClient {
     * @return a writer into which can be written the data for the host file
     **/
     public FtpWriter storeUnique() throws IOException {
-        sendCommand("STOU");
-        if (!getResponse().isPositivePreliminary()) {
-            return null;
-        }
-        dataXfrSocket = dataSocket.accept();
-        OutputStream ostr = dataXfrSocket.getOutputStream();
+        OutputStream ostr = getStoreUniqueStream();
+        if (ostr == null) return null;
+
         OutputStreamWriter out = new OutputStreamWriter(ostr);
         return new FtpWriter(out, this);
     }
 
     public FtpOutputStream storeUniqueStream() throws IOException {
+        OutputStream ostr = getStoreUniqueStream();
+        if (ostr == null) return null;
+
+        return new FtpOutputStream(ostr, this);
+    }
+
+    protected OutputStream getStoreUniqueStream() throws IOException {
         sendCommand("STOU");
         if (!getResponse().isPositivePreliminary()) {
             return null;
         }
-        dataXfrSocket = dataSocket.accept();
-        OutputStream ostr = dataXfrSocket.getOutputStream();
-        return new FtpOutputStream(ostr, this);
+        return getTransferSocket().getOutputStream();
     }
 
     /**
@@ -541,24 +566,26 @@ public class FtpClient {
     * @return a writer into which can be written the data for the host file
     **/
     public FtpWriter append(String path) throws IOException {
-        sendCommand("APPE " + path);
-        if (!getResponse().isPositivePreliminary()) {
-            return null;
-        }
-        dataXfrSocket = dataSocket.accept();
-        OutputStream ostr = dataXfrSocket.getOutputStream();
+        OutputStream ostr = getAppendStream(path);
+        if (ostr == null) return null;
+
         OutputStreamWriter out = new OutputStreamWriter(ostr);
         return new FtpWriter(out, this);
     }
 
     public FtpOutputStream appendStream(String path) throws IOException {
+        OutputStream ostr = getAppendStream(path);
+        if (ostr == null) return null;
+
+        return new FtpOutputStream(ostr, this);
+    }
+
+    protected OutputStream getAppendStream(String path) throws IOException {
         sendCommand("APPE " + path);
         if (!getResponse().isPositivePreliminary()) {
             return null;
         }
-        dataXfrSocket = dataSocket.accept();
-        OutputStream ostr = dataXfrSocket.getOutputStream();
-        return new FtpOutputStream(ostr, this);
+        return getTransferSocket().getOutputStream();
     }
 
     /**
@@ -728,17 +755,9 @@ public class FtpClient {
     * @return a reader from which can be read the retrieved file data
     **/ 
     public FtpReader list(String path) throws IOException {
-        if (path == null) {
-            sendCommand("LIST");
-        }
-        else {
-            sendCommand("LIST " + path);
-        }
-        if (!getResponse().isPositivePreliminary()) {
-            return null;
-        }
-        dataXfrSocket = dataSocket.accept();
-        InputStream istr = dataXfrSocket.getInputStream();
+        InputStream istr = getListStream(path);
+        if (istr == null) return null;
+
         InputStreamReader in = new InputStreamReader(istr);
         return new FtpReader(in, this);
     }
@@ -751,6 +770,17 @@ public class FtpClient {
     }
 
     public FtpInputStream listStream(String path) throws IOException {
+        InputStream istr = getListStream(path);
+        if (istr == null) return null;
+
+        return new FtpInputStream(istr, this);
+    }
+
+    public FtpInputStream listStream() throws IOException {
+        return listStream(null);
+    }
+
+    protected InputStream getListStream(String path) throws IOException {
         if (path == null) {
             sendCommand("LIST");
         }
@@ -760,13 +790,7 @@ public class FtpClient {
         if (!getResponse().isPositivePreliminary()) {
             return null;
         }
-        dataXfrSocket = dataSocket.accept();
-        InputStream istr = dataXfrSocket.getInputStream();
-        return new FtpInputStream(istr, this);
-    }
-
-    public FtpInputStream listStream() throws IOException {
-        return listStream(null);
+        return getTransferSocket().getInputStream();
     }
 
 
@@ -792,17 +816,9 @@ public class FtpClient {
     * @return a reader from which can be read the retrieved file data
     **/
     public FtpReader nameList(String path) throws IOException {
-        if (path == null) {
-            sendCommand("NLIST");
-        }
-        else {
-            sendCommand("NLST " + path);
-        }
-        if (!getResponse().isPositivePreliminary()) {
-            return null;
-        }
-        dataXfrSocket = dataSocket.accept();
-        InputStream istr = dataXfrSocket.getInputStream();
+        InputStream istr = getNameListStream(path);
+        if (istr == null) return null;
+
         InputStreamReader in = new InputStreamReader(istr);
         return new FtpReader(in, this);
     }
@@ -815,6 +831,17 @@ public class FtpClient {
     }
 
     public FtpInputStream nameListStream(String path) throws IOException {
+        InputStream istr = getNameListStream(path);
+        if (istr == null) return null;
+
+        return new FtpInputStream(istr, this);
+    }
+
+    public FtpInputStream nameListStream() throws IOException {
+        return nameListStream(null);
+    }
+
+    protected InputStream getNameListStream(String path) throws IOException {
         if (path == null) {
             sendCommand("NLIST");
         }
@@ -824,13 +851,7 @@ public class FtpClient {
         if (!getResponse().isPositivePreliminary()) {
             return null;
         }
-        dataXfrSocket = dataSocket.accept();
-        InputStream istr = dataXfrSocket.getInputStream();
-        return new FtpInputStream(istr, this);
-    }
-
-    public FtpInputStream nameListStream() throws IOException {
-        return nameListStream(null);
+        return getTransferSocket().getInputStream();
     }
 
     /**
@@ -972,7 +993,12 @@ public class FtpClient {
     * explicitly closed.
     **/
     protected void closeTransferSocket() throws IOException {
-        dataXfrSocket.close();
+        if (dataXfrSocket != null)
+        {
+            dataXfrSocket.close();
+            dataXfrSocket = null;
+        }
+
         setResponse();
     }
 
@@ -984,17 +1010,36 @@ public class FtpClient {
         Log.log(Log.DEBUG,this,heading + ": " + message);
     }
 
+    private Socket getTransferSocket() throws IOException
+    {
+        if (dataXfrSocket != null)
+        {
+            dataXfrSocket.close();
+            dataXfrSocket = null;
+        }
+
+        if (passiveSocket != null)
+        {
+            dataXfrSocket = passiveSocket;
+        }
+        else if (dataSocket != null)
+        {
+            dataXfrSocket = dataSocket.accept();
+        }
+
+        return dataXfrSocket;
+    }
+
     private boolean useReaderWriter;
-    
+
     private BufferedReader in;
     private PrintWriter out;
 
     private Socket cmdSocket;
     private ServerSocket dataSocket;
     private Socket dataXfrSocket;
+    private Socket passiveSocket;
 
     private FtpResponse response;
     private Vector responseArchive = new Vector();
-
 }
-

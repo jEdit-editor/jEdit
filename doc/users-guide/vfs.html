@@ -85,7 +85,203 @@ NAME="VFS-BROWSER"
 >The VFS Browser</A
 ></H1
 ><P
->  </P
+>   There are three ways to access the VFS browser. The <SPAN
+CLASS="GUIMENUITEM"
+>Open
+   File</SPAN
+> and <SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+> dialog boxes embed one.
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>File System Browser</SPAN
+> displays a
+   standalone version. By default, the standalone VFS browser is shown in
+   a separate frame, but if you prefer, you can set it to be docked into
+   the current view in <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global
+   Options</SPAN
+>; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 9</A
+>. The browser consists of a
+   tool bar, a path field,
+   a filename filter combo box, and the file list itself.
+  </P
+><P
+>   The toolbar buttons perform the following actions, from left to right:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Up</SPAN
+> - takes you to the current
+   directory's parent</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Reload</SPAN
+> - updates the file list by
+   reloading the directory</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Local Drives</SPAN
+> - displays all
+   local drives in the file list. On Windows, this will be a list of
+   drive letters; on Unix, the list will only contain one entry, the
+   root directory (<TT
+CLASS="FILENAME"
+>/</TT
+>)</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Home Directory</SPAN
+> - takes you to your
+   home directory, the location of which is system-specific</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIBUTTON"
+>Parent Directory of Current Buffer</SPAN
+> -
+   take you to the directory containing the current buffer (if the current
+   view is split into multiple panes, the "current buffer" is
+   defined as the one that most recently had keyboard focus)</P
+></LI
+></UL
+><P
+>   The <SPAN
+CLASS="GUIMENU"
+>More</SPAN
+> menu contains several less frequently-used commands:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>View as List</SPAN
+> - if selected, files will
+   be displayed in a simple list</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>View as Tree</SPAN
+> - if selected, files will
+   be displayed as a tree structure, with directories being
+   branches that can be expanded, for viewing an entire directory
+   hierarchy at once</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>Show Hidden Files</SPAN
+> - if selected, hidden
+   files will be shown in the file list. The definition of a hidden file
+   is system-specific; on Windows, files with the "h" attribute
+   are hidden. On Unix, files whose name begins with "." are
+   hidden</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>New Directory</SPAN
+> - prompts for a directory
+   name and creates a directory with that name in the current directory.
+   Note that not all virtual filesystems may support this operation
+   </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>Add to Favorites</SPAN
+> - adds the currently
+   selected directory (or the currently displayed, if there is nothing
+   selected) to the favorites list</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>Go to Favorites</SPAN
+> - displays the favorites
+   list. To remove a directory from the list, right-click on it and select
+   <SPAN
+CLASS="GUIMENUITEM"
+>Delete</SPAN
+> from the resulting popup menu</P
+></LI
+></UL
+><P
+>   The filter text field allows you to specify a subset
+   of the current directory to display in the form of a glob pattern.
+   See <A
+HREF="globs.html"
+>Appendix D</A
+> for more information about glob patterns.
+   Both the path and filter fields support a history;
+   see <A
+HREF="history.html"
+>the section called <I
+>History Text Fields</I
+> in Chapter 7</A
+> for
+   details.
+  </P
+><P
+>   Right-clicking on a file in the VFS browser displays a popup menu.
+   If the buffer is already open, the popup will have commands to
+   display it in the current view, display it in a new view, or close it.
+   Unopened file popups have items for opening, deleting and renaming.
+   Note that not all virtual filesystems may support deletion and renaming.
+   Also, only empty directories can be deleted.
+  </P
+><P
+>   Several aspects of the VFS browser can be customized in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+   see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 9</A
+> for details.
+  </P
 ></DIV
 ></DIV
 ><DIV

@@ -63,7 +63,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2816"
+NAME="AEN2884"
 >The General Pane</A
 ></H2
 ><P
@@ -80,41 +80,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2824"
->The Text Area Pane</A
-></H2
-><P
->    The <SPAN
-CLASS="GUIBUTTON"
->Text Area</SPAN
-> option pane allows you to customize the
-    appearance of the text area and gutter.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN2838"
->The Colors &amp; Styles Pane</A
-></H2
-><P
->    The <SPAN
-CLASS="GUIBUTTON"
->Colors &amp; Styles</SPAN
-> pane allows you to change various
-    colors used by the text area, and the text styles used by syntax
-    highlighting. Clicking on a color or style will display the appropriate
-    editor for changing it.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN2858"
+NAME="AEN2892"
 >The Editor Pane</A
 ></H2
 ><P
@@ -151,15 +117,15 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2868"
->The Printing Pane</A
+NAME="AEN2902"
+>The Text Area Pane</A
 ></H2
 ><P
 >    The <SPAN
 CLASS="GUIBUTTON"
->Printing</SPAN
-> pane allows you to customize what printed
-    output looks like by changing the font, margins, and several flags.
+>Text Area</SPAN
+> option pane allows you to customize the
+    appearance of the text area and gutter.
    </P
 ></DIV
 ><DIV
@@ -167,16 +133,17 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2876"
->The Tool Bar Pane</A
+NAME="AEN2916"
+>The Colors &amp; Styles Pane</A
 ></H2
 ><P
 >    The <SPAN
 CLASS="GUIBUTTON"
->Tool Bar</SPAN
-> pane allows you to specify if the tool bar
-    and search bar should be displayed. Also, the buttons displayed
-    on the tool bar may be changed.
+>Colors &amp; Styles</SPAN
+> pane allows you to change various
+    colors used by the text area, and the text styles used by syntax
+    highlighting. Clicking on a color or style will display the appropriate
+    editor for changing it.
    </P
 ></DIV
 ><DIV
@@ -184,7 +151,31 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2880"
+NAME="AEN2936"
+>The Docking Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Docking</SPAN
+> pane allows you to specify if dockable
+    windows should be displayed in their own frame, or docked in the
+    current view. The only dockable window currently in the jEdit core
+    is the VFS browser (see <A
+HREF="vfs.html#VFS-BROWSER"
+>the section called <I
+>The VFS Browser</I
+> in Chapter 8</A
+>). Plugins can add
+    their own.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2941"
 >The Context Menu Pane</A
 ></H2
 ><P
@@ -200,27 +191,16 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2884"
->The Abbreviations Pane</A
+NAME="AEN2945"
+>The Tool Bar Pane</A
 ></H2
 ><P
 >    The <SPAN
 CLASS="GUIBUTTON"
->Abbreviations</SPAN
-> pane allows you to enable or disable
-    automatic abbreviation expansion, and edit the currently defined abbrevs.
-   </P
-><P
->    The combo box labelled "Abbrev set" is used to choose the
-    abbrev set to edit. The first entry, "global", allows you to
-    edit abbrevs available in all edit modes. The subsequent
-    entries allow you to edit abbrevs on a per-mode basis.
-   </P
-><P
->    Abbrevs are added and removed in a rather peculiar fashion in this pane.
-    Changing the last line in the list (which is always blank) will add
-    another blank line. Lines with empty abbrevs or expansions will
-    be ignored when the abbrevs are being saved.
+>Tool Bar</SPAN
+> pane allows you to specify if the tool bar
+    and search bar should be displayed. Also, the buttons displayed
+    on the tool bar may be changed.
    </P
 ></DIV
 ><DIV
@@ -294,7 +274,60 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2910"
+NAME="GLOBAL-OPTS-ABBREVS"
+>The Abbreviations Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Abbreviations</SPAN
+> pane allows you to enable or disable
+    automatic abbreviation expansion, and edit the currently defined abbrevs.
+   </P
+><P
+>    The combo box labelled "Abbrev set" is used to choose the
+    abbrev set to edit. The first entry, "global", allows you to
+    edit abbrevs available in all edit modes. The subsequent
+    entries allow you to edit abbrevs on a per-mode basis.
+   </P
+><P
+>    Abbrevs are added and removed in a rather peculiar fashion in this pane.
+    Changing the last line in the list (which is always blank) will add
+    another blank line. Lines with empty abbrevs or expansions will
+    be ignored when the abbrevs are being saved.
+   </P
+><P
+>    Within an abbrev expansion, you can type "\n" to mean a newline.
+    If "\|" appears in the expansion, the caret will be moved to
+    that location after the abbrev is expanded, and the "\|" will
+    not appear in the buffer. For example, if you define
+    "il" to expand to "SwingUtilities.invokeLater(\|);",
+    expanding "il" will insert "SwingUtilities.invokeLater();"
+    in the buffer, with the caret positioned between the brackets.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2983"
+>The Printing Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Printing</SPAN
+> pane allows you to customize what printed
+    output looks like by changing the font, margins, and several flags.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2991"
 >The VFS Browser Pane</A
 ></H2
 ><P
@@ -324,32 +357,10 @@ CLASS="GUIMENUITEM"
 >File System Browser</SPAN
 > commands.
    </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN2930"
->The File Filters Pane</A
-></H2
 ><P
->    The <SPAN
-CLASS="GUIBUTTON"
->File Filters</SPAN
-> pane allows you to add custom file filters
-    to the open file and save dialog boxes. Note that only user-defined
-    file filters can be added and changed here; filters used
-    to pick a file's edit mode can be changed in the <SPAN
-CLASS="GUIBUTTON"
->Edit Modes</SPAN
->
-    pane.
-   </P
-><P
->    Filters are added and removed in a rather peculiar fashion in this pane.
-    Changing the last line in the list (which is always blank) will add
-    another blank line. Lines with empty names or globs will
+>    Custom filename filters can be added in this option pane.
+    Note that changing the last line in the filter list (which is always blank)
+    will add another blank line. Lines with empty names or globs will
     be ignored when the filters are being saved.
    </P
 ><P

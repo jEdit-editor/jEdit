@@ -47,7 +47,7 @@ NAME="ABBREVS"
 >   An abbreviation is a string, that when inserted in the buffer, expands
    into a longer and harder to type string. For example,
    you can define an abbreviation "sout" that expands to
-   "System.out.println" in Java mode.
+   "System.out.println()" in Java mode.
   </P
 ><P
 >   There are two types of abbreviations; global abbrevs and mode-specific
@@ -77,7 +77,13 @@ CLASS="KEYCAP"
 >X</B
 >) will attempt to
    expand the word before the caret. If no expansion could be found, it will
-   offer to define one.
+   offer to define one. See <A
+HREF="global-opts.html#GLOBAL-OPTS-ABBREVS"
+>the section called <I
+>The Abbreviations Pane</I
+> in Chapter 9</A
+> for information
+   about escape sequences that can be used within abbrev expansions.
   </P
 ><DIV
 CLASS="FIGURE"
@@ -90,30 +96,15 @@ CLASS="FIGURE"
 SRC="../images/dialog-add-abbrev.gif"></P
 ></DIV
 ><P
->   If automatic abbreviation expansion is enabled, entering
-   a non-alphanumeric character will automatically try to expand the word
-   before the caret. This is a very powerful feature, but it takes some
-   getting used to, hence it is disabled by default.
+>   If automatic abbreviation expansion is enabled, pressing the space bar
+   will first attempt to expand the word before the caret, and only insert
+   a space if no expansion was found. This is a very powerful feature, but
+   it takes some getting used to, hence it is disabled by default.
   </P
 ><P
 >   If automatic expansion
-   is enabled and you want to enter a non-alphanumeric character without
-   expanding the current word, prefix the character with
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->E</B
->
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->V</B
->. For example,
-   to enter a space without expanding the current word, you would type
+   is enabled and you want to enter a space without
+   expanding the current word, press
    <B
 CLASS="KEYCAP"
 >Control</B
