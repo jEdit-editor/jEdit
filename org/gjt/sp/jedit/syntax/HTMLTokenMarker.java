@@ -118,7 +118,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(SyntaxUtilities.regionMatches(false,line,i,"-->"))
 				{
-					addToken((i += 3) - lastOffset,token);
+					addToken(((i += 2) + 1) - lastOffset,token);
 					lastOffset = lastKeyword = i;
 					token = Token.NULL;
 				}
@@ -272,6 +272,9 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  1999/11/12 09:06:01  sp
+ * HTML bug fix
+ *
  * Revision 1.31  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

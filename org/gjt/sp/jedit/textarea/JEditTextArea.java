@@ -1986,7 +1986,7 @@ public class JEditTextArea extends JComponent
 
 			// Ok, it's not a bracket... select the word
 			String lineText = getLineText(line);
-			char ch = lineText.charAt(offset - 1);
+			char ch = lineText.charAt(Math.max(0,offset - 1));
 
 			String noWordSep = (String)document.getProperty("noWordSep");
 			if(noWordSep == null)
@@ -2098,6 +2098,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  1999/11/12 09:06:01  sp
+ * HTML bug fix
+ *
  * Revision 1.27  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

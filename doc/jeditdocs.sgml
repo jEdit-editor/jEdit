@@ -1581,7 +1581,7 @@
    <para>
     Like all other menu item commands, macros can be assigned shortcuts in
     the <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
-    see <xref id=global-opts>.
+    see <xref linkend=global-opts>.
    </para>
    <indexterm><primary>Play Last Macro command</></indexterm>
    <para>

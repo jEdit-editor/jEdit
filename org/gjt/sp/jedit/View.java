@@ -726,7 +726,7 @@ public class View extends JFrame
 			if(evt.getSource() == quicksearch)
 			{
 				String text = quicksearch.getText();
-				if(text != null)
+				if(text != null && text.length() != 0)
 				{
 					quicksearch.addCurrentToHistory();
 					quicksearch.setText(null);
@@ -857,6 +857,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.105  1999/11/12 09:06:01  sp
+ * HTML bug fix
+ *
  * Revision 1.104  1999/11/10 10:43:01  sp
  * Macros can now have shortcuts, various miscallaneous updates
  *
