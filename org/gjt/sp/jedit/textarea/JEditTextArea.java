@@ -2436,7 +2436,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		// do this here, for weird reasons
 		Macros.Recorder recorder = view.getMacroRecorder();
 		if(recorder != null)
-			recorder.record("textArea.goToStartOfLine(" + select + ")");
+			recorder.record("textArea.goToStartOfLine(" + select + ");");
 
 		if(select)
 		{
@@ -2456,7 +2456,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		// do this here, for weird reasons
 		Macros.Recorder recorder = view.getMacroRecorder();
 		if(recorder != null)
-			recorder.record("textArea.goToEndOfLine(" + select + ")");
+			recorder.record("textArea.goToEndOfLine(" + select + ");");
 
 		if(select)
 		{
@@ -2477,7 +2477,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		// do this here, for weird reasons
 		Macros.Recorder recorder = view.getMacroRecorder();
 		if(recorder != null)
-			recorder.record("textArea.goToStartOfWhiteSpace(" + select + ")");
+			recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");
 
 		int line = getCaretLine();
 		int firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
@@ -2503,7 +2503,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		// do this here, for weird reasons
 		Macros.Recorder recorder = view.getMacroRecorder();
 		if(recorder != null)
-			recorder.record("textArea.goToEndOfWhiteSpace(" + select + ")");
+			recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
 
 		int line = getCaretLine();
 		int lastIndent = MiscUtilities.getTrailingWhiteSpace(getLineText(line));
@@ -2528,7 +2528,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		// do this here, for weird reasons
 		Macros.Recorder recorder = view.getMacroRecorder();
 		if(recorder != null)
-			recorder.record("textArea.goToFirstVisibleLine(" + select + ")");
+			recorder.record("textArea.goToFirstVisibleLine(" + select + ");");
 
 		int firstVisibleLine = (firstLine <= electricScroll) ? 0 :
 			firstLine + electricScroll;
@@ -2552,7 +2552,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		// do this here, for weird reasons
 		Macros.Recorder recorder = view.getMacroRecorder();
 		if(recorder != null)
-			recorder.record("textArea.goToLastVisibleLine(" + select + ")");
+			recorder.record("textArea.goToLastVisibleLine(" + select + ");");
 
 		int lastVisibleLine = firstLine + visibleLines;
 

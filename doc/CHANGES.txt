@@ -22,6 +22,8 @@ JEDIT 2.7 VERSION HISTORY
 - The 'Append to Register' command now adds the new text to the
   clipboard history
 - EditBuddy's first-time and new-version wizards now look better
+- The complete Java look and feel icon collection is now included with
+  jEdit, for easier toolbar customization
 
 + Neutral
 
@@ -51,6 +53,9 @@ JEDIT 2.7 VERSION HISTORY
   would not be inserted, and hence the macro would not run
 - Entering filenames in the filename field of the 'Open' dialog box
   didn't work properly
+- A NullPointerException would be thrown when opening an unreadable file
+- The Home and End keys would not record themselves properly, and the
+  resulting macro would not run
 
 * Version 2.7pre3
 

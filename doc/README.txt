@@ -13,9 +13,9 @@ jEdit is released under the _GNU General Public License_, which can be
 found in the COPYING.txt file. jEdit comes with ABSOLUTELY NO WARRANTY
 OF ANY KIND; see section 11 and 12 of the GPL for details.
 
-* Class Libraries
+* Libraries
 
-jEdit depends on, and comes bundled with the following class libraries:
+jEdit depends on, and comes bundled with the following libraries:
 
 - gnu.regexp by the Free Software Foundation. This is used to implement
   regular expression search and replace, among other things. gnu.regexp
@@ -39,6 +39,9 @@ jEdit depends on, and comes bundled with the following class libraries:
   implement macros, among other things. The version included with jEdit
   is basically a stripped down BeanShell 1.01, with a few minor changes.
   The original package is located at <http://www.beanshell.org>.
+
+- The Sun Java look and Feel icon collection. The license may be found
+  in the ICONS.LICENSE.txt file.
 
 * jEdit on the Internet
 
@@ -71,14 +74,12 @@ Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
 * Documentation
 
-An HTML version of the jEdit user's guide is included in the base jEdit
-distribution; a pretty PDF version can be obtained from
-<http://jedit.sourceforge.net/download.php>.
+An HTML version of the jEdit user's guide is included with jEdit
+distribution; to view it, invoke `Help->jEdit User Guide' in jEdit, or
+open `doc/users-guide/index.html' in a WWW browser such as Netscape.
 
-To view the HTML version, select `Help->jEdit User Guide' in jEdit, or
-open `doc/users-guide/index.html' in a WWW browser such as Netscape. To
-view the PDF, open jedit-<version>.pdf in a PDF viewer such as Adobe
-Acrobat.
+A PDF version can be obtained from <http://jedit.sourceforge.net>. It
+can be viewed in a PDF viewer such as Adobe Acrobat.
 
 * Common Problems
 
@@ -135,38 +136,75 @@ actually a Java bug, or a well-known problem.
 
 * Credits
 
-The following people contributed code to the jEdit core:
+The following people contributed code and edit modes to the jEdit core:
 
-Andre Kaplan - Syntax token background highlighting
-Denis Lambot - Selecting files from the keyboard in the file system browser
-Dirk Moebius - HTTP firewall plugin
-Jason Ginchereau - Portions of QuickFile plugin code are used in the
-	VFS browser
-Mike Dillon - XMode syntax highlighting engine, gutter, new options
-	dialog box, faster literal search, many other patches
-Ollie Rutherfurd - Some commands in View->Scrolling menu
-Tal Davidson - Original syntax highlighting engine (since rewritten
-several times)
+Andre Kaplan:
+	- ASP, JavaScript, VBScript syntax highlighting
+	- Syntax token background highlighting
 
-The following people contributed edit modes:
+Artur Biesiadowski:
+	- Eiffel syntax highlighting
 
-Andre Kaplan - ASP, JavaScript, VBScript
-Artur Biesiadowski - Eiffel
-Dante Fabrizio - VHDL
-Dominic Stolerman - ML
-Ian Maclean - Ruby
-Jerry McBride - NetRexx
-Jonathan Revusky - Python
-Juha Lindfors - IDL
-Kristian Ovaska - x86 Assembly, Haskell, Pascal
-Matthias Schneider - AWK, COBOL
-Michael P Jacobson - TCL
-Mike Dillon - ColdFusion, CSS, HTML, Java, JSP, LISP, Patch, PHP, SHTML,
-	TSQL, XML, XSL
-Nitsan Vardi - VHDL
-Ollie Rutherfurd - C#
-Ralf Engels - PostScript
-Romain Guy - POVRay
+Dante Fabrizio:
+	- VHDL syntax highlighting
+
+Denis Lambot:
+	- Selecting files from the keyboard in the file system browser
+
+Dirk Moebius:
+	- HTTP firewall plugin
+
+Dominic Stolerman:
+	- ML syntax highlighting
+
+Ian Maclean:
+	- Ruby syntax highlighting
+
+Jason Ginchereau:
+	- Portions of QuickFile plugin are used in file system browser
+
+Jerry McBride:
+	- NetRexx syntax highlighting
+
+Jonathan Revusky:
+	- Python syntax highlighting
+
+Juha Lindfors:
+	- IDL syntax highlighting
+
+Kristian Ovaska:
+	- x86 Assembly, Haskell, Pascal syntax highlighting
+
+Matthias Schneider:
+	- AWK, COBOL syntax highlighting
+
+Michael P Jacobson:
+	- TCL syntax highlighting
+
+Mike Dillon:
+	- XMode syntax highlighting engine
+	- Gutter
+	- New options dialog box
+	- Faster literal search
+	- ColdFusion, CSS, HTML, Java, JSP, LISP, Patch, PHP, SHTML,
+	  TSQL, XML, XSL syntax highlighting
+	- ... lots more
+
+Nitsan Vardi:
+	- VHDL syntax highlighting
+
+Ollie Rutherfurd:
+	- Some commands in View->Scrolling menu
+	- C# syntax highlighting
+
+Ralf Engels:
+	- PostScript syntax highlighting
+
+Romain Guy:
+	- POVRay syntax highlighting
+
+Tal Davidson:
+	- Original syntax highlighting engine
 
 If you are not on the above list but think you should be, e-mail me.
 

@@ -85,7 +85,6 @@ public class FileVFS extends VFS
 		if(!file.exists())
 		{
 			buffer.setNewFile(true);
-			buffer.setDirty(false);
 			return false;
 		}
 		else
@@ -96,7 +95,6 @@ public class FileVFS extends VFS
 			String[] args = { file.getPath() };
 			GUIUtilities.error(view,"open-directory",args);
 			buffer.setNewFile(false);
-			buffer.setDirty(false);
 			return false;
 		}
 
@@ -105,7 +103,6 @@ public class FileVFS extends VFS
 			String[] args = { file.getPath() };
 			GUIUtilities.error(view,"no-read",args);
 			buffer.setNewFile(false);
-			buffer.setDirty(false);
 			return false;
 		}
 
@@ -374,6 +371,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  2000/12/02 02:44:41  sp
+ * Documentation updates, complete icon set now included
+ *
  * Revision 1.27  2000/11/11 02:59:30  sp
  * FTP support moved out of the core into a plugin
  *
