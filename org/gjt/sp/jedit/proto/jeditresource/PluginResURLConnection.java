@@ -49,6 +49,9 @@ public class PluginResURLConnection extends URLConnection
 			plugin = file.substring(start,index);
 			resource = file.substring(index + 1);
 		}
+
+		if(plugin != null && resource.startsWith("/"))
+			resource = resource.substring(1);
 	}
 
 	public void connect() throws IOException

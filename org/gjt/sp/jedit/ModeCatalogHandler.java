@@ -78,7 +78,14 @@ class ModeCatalogHandler extends HandlerBase
 	public void doctypeDecl(String name, String publicId,
 		String systemId) throws Exception
 	{
-		if("CATALOG".equals(name))
+		// older jEdit versions used a DOCTYPE of CATALOG, which
+		// is incorrect since the DOCTYPE must be the name of the
+		// root element, which is MODES.
+
+		// so you the avid code reader should use MODES as the
+		// DOCTYPE instead, but we still let old catalogs through
+		// to avoid annoying users.
+		if("CATALOG".equals(name) || "MODES".equals(name))
 			return;
 
 		Log.log(Log.ERROR,this,directory + "catalog: DOCTYPE must be CATALOG");

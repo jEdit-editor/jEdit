@@ -5,7 +5,7 @@ JEDIT 3.2 VERSION HISTORY
 + Enhancements
 
 - Improvements to plugin resource handling, required for XML plugin 0.4
-- Changes to BeanShellAction and JARClassLoader to improve performance
+- Changes to BeanShellAction to improve performance
 
 + Bug Fixes
 

@@ -10,7 +10,7 @@
 <!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; "FALSE"' >
 
 <!-- MODE element -->
-<!ELEMENT MODE ( PROPS, RULES* ) >
+<!ELEMENT MODE ( PROPS?, RULES* ) >
 
 <!-- MODE children -->
 <!-- PROPS element -->
@@ -24,7 +24,7 @@
 
 <!-- RULES element -->
 <!ELEMENT RULES ( ( TERMINATE | WHITESPACE | SPAN | EOL_SPAN | MARK_PREVIOUS
-	| MARK_FOLLOWING | SEQ )+, KEYWORDS? ) >
+	| MARK_FOLLOWING | SEQ )*, KEYWORDS? ) >
 
 <!-- RULES attributes -->
 <!ATTLIST RULES

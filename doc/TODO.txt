@@ -2,11 +2,11 @@ TO DO
 
 + before 3.2final:
 
-- release console 3.0, errorlist 1.1.1, editbus 1.1
 - formatting problems in user's guide in table cells
 
 + next major release (4.0):
 
+- Jext-style undo to replace CaretUndo crap
 - select-* actions: add to selection in multi-select mode
 - appendix in plugin guide on contributing plugins
 - Macros.confirm()

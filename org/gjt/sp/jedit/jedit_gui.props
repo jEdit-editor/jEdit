@@ -5,7 +5,7 @@
 
 # Default user catalog file
 defaultCatalog=<?xml version="1.0"?>\n\
-	<!DOCTYPE CATALOG SYSTEM "catalog.dtd">\n\
+	<!DOCTYPE MODES SYSTEM "catalog.dtd">\n\
 	\n\
 	<MODES>\n\
 	\n\
