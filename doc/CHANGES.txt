@@ -50,6 +50,10 @@ JEDIT 2.6 VERSION HISTORY
   VFS browser
 - Closing the global options dialog box while a VFS browser was open
   would reload the current directory twice
+- Closing all buffers didn't work properly if the view was split and
+  buffer tabs was disabled
+- Closing and opening buffers would always shift the focus to the last
+  text area if the view was split
 
 * Version 2.6pre3
 

@@ -550,10 +550,6 @@ badurl.title=Invalid URL
 # {0} - the URL
 badurl.message=The following URL is invalid: {0}
 
-# Save To URL dialog
-saveurl.title=Save To URL
-saveurl.message=Enter a local path name or URL:
-
 # Go to line dialog
 gotoline.title=Go To Line
 gotoline.message=Go to line:

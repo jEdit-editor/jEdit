@@ -87,7 +87,10 @@ public class EditPane extends JPanel implements EBComponent
 			bufferTabs.selectBufferTab(buffer);
 
 		updateTextArea();
-		focusOnTextArea();
+
+		// only do this if we are the current edit pane
+		if(view.getEditPane().equals(this))
+			focusOnTextArea();
 
 		if(!init)
 		{
@@ -565,6 +568,13 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(bufferTabs != null)
 				bufferTabs.addBufferTab(_buffer);
+
+			/* When closing the last buffer, the BufferUpdate.CLOSED
+			 * handler doesn't call setBuffer(), because null buffers
+			 * are not supported. Instead, it waits for the subsequent
+			 * 'Untitled' file creation. */
+			if(buffer.isClosed())
+				setBuffer(jEdit.getFirstBuffer());
 		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
@@ -614,6 +624,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.14  2000/08/24 08:17:46  sp
+ * Bug fixing
+ *
  * Revision 1.13  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

@@ -117,10 +117,20 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	{
 		if(filenameField != null)
 		{
-			if(filenameField.getText().length() == 0)
+			String filename = filenameField.getText();
+			if(filename.length() == 0)
 			{
 				getToolkit().beep();
 				return;
+			}
+			else
+			{
+				// only do this for the file VFS
+				if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
+				{
+					if(doFileExistsWarning(filename))
+						return;
+				}
 			}
 		}
 		else
@@ -185,6 +195,31 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	private JButton cancel;
 	private boolean isOK;
 
+	private boolean doFileExistsWarning(String filename)
+	{
+		filename = browser.getVFS().constructPath(
+			browser.getDirectory(),filename);
+
+		// this is a stupid hack. File.exists()
+		// will always return 'false' for non-local
+		// files, so we don't need to check for
+		// that first.
+		if(new File(filename).exists())
+		{
+			String[] args = { MiscUtilities.getFileName(filename) };
+			int result = JOptionPane.showConfirmDialog(
+				browser,
+				jEdit.getProperty("fileexists.message",args),
+				jEdit.getProperty("fileexists.title"),
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+			if(result != JOptionPane.YES_OPTION)
+				return true;
+		}
+
+		return false;
+	}
+
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -241,6 +276,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/08/24 08:17:46  sp
+ * Bug fixing
+ *
  * Revision 1.7  2000/08/22 07:25:00  sp
  * Improved abbrevs, bug fixes
  *

@@ -31,7 +31,7 @@ VDE|VFS.DirectoryEntry
 gta|getTextArea()
 gb|getBuffer()
 gv|getView(evt)
-gp|getProperty(\|)
+gp|jEdit.getProperty(\|)
 gbp|jEdit.getBooleanProperty(\|)
 sp|jEdit.setProperty(\|)
 sbp|jEdit.setBooleanProperty(\|)
