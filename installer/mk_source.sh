@@ -10,7 +10,7 @@ fi
 sh clean.sh
 
 cd ..
-tar cvfz jedit${1}source.tar.gz `find jEdit -type f \! \( -name Entries \
+tar cvfz jedit${1}source.tar.gz `find jEdit-3.0.2 -type f \! \( -name Entries \
 	-o -name Root -o -name Entries.Static -o -name Repository \
 	-o -name \*.class -o -name \*.jar -o -name install.dat \
 	-o -name jedit-\* \)`

@@ -114,8 +114,8 @@ public class SwingInstall extends JFrame
 			super(new Color(0xccccff),
 				new ImageIcon(InstallWizard.class.getResource(
 				installer.getProperty("app.logo"))),
-				"Cancel","Previous","Next","Install",
-				new Component[] { new About(), chooseDirectory,
+				"Cancel","Previous","Next","Install");
+			setPages(new Component[] { new About(), chooseDirectory,
 				selectComponents });
 		}
 

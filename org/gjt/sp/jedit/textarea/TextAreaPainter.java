@@ -313,11 +313,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public String getToolTipText(MouseEvent evt)
 	{
-		int wrapGuidePos = maxLineLen + textArea.getHorizontalOffset();
-		if(Math.abs(evt.getX() - wrapGuidePos) < 5)
+		if(maxLineLen != 0)
 		{
-			return String.valueOf(textArea.getBuffer()
-				.getProperty("maxLineLen"));
+			int wrapGuidePos = maxLineLen + textArea.getHorizontalOffset();
+			if(Math.abs(evt.getX() - wrapGuidePos) < 5)
+			{
+				return String.valueOf(textArea.getBuffer()
+					.getProperty("maxLineLen"));
+			}
 		}
 
 		if(highlights != null)

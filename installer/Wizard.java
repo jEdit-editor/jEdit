@@ -31,7 +31,7 @@ public abstract class Wizard extends JComponent
 {
 	public Wizard(Color highlight, Icon logo, String cancelButtonLabel,
 		String prevButtonLabel, String nextButtonLabel,
-		String finishButtonLabel, Component[] pages)
+		String finishButtonLabel)
 	{
 		this.highlight = highlight;
 		this.logo = logo;
@@ -50,16 +50,19 @@ public abstract class Wizard extends JComponent
 		this.nextButtonLabel = nextButtonLabel;
 		this.finishButtonLabel = finishButtonLabel;
 
+		setLayout(new WizardLayout());
+		add(cancelButton);
+		add(prevButton);
+		add(nextButton);
+	}
+
+	public void setPages(Component[] pages)
+	{
 		this.pages = pages;
 		for(int i = 0; i < pages.length; i++)
 		{
 			add(pages[i]);
 		}
-
-		setLayout(new WizardLayout());
-		add(cancelButton);
-		add(prevButton);
-		add(nextButton);
 
 		pageChanged();
 	}

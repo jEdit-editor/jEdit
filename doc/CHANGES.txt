@@ -1,5 +1,15 @@
 JEDIT 3.0 VERSION HISTORY
 
+* Version 3.0.2
+
++ Bug Fixes
+
+- The installer didn't compile with some versions of javac
+- The installer created an invalid batch file for starting jEdit on Windows
+- 'Remove Trailing Whitespace' command didn't work
+- If word wrap was disabled, a tooltip with the text "0" would be displayed
+  on the left of the text area
+
 * Version 3.0.1
 
 + Enhancements

@@ -1158,7 +1158,7 @@ public class Buffer extends PlainDocument implements EBComponent
 				Element lineElement = map.getElement(line);
 				getText(lineElement.getStartOffset(),
 					lineElement.getEndOffset()
-					- lineElement.getStartOffset() - 1);
+					- lineElement.getStartOffset() - 1,seg);
 
 				// blank line
 				if (seg.count == 0) continue;

@@ -168,8 +168,8 @@ public abstract class OperatingSystem
 			out.write("rem Java heap size, in megabytes (see doc/README.txt)\r\n");
 			out.write("@set JAVA_HEAP_SIZE=16\r\n");
 			out.write("\"" + System.getProperty("java.home")
-				+ "\\bin\\java\" -classpath \"%CLASSPATH%;"
-				+ " -mx%JAVA_HEAP_SIZE%m"
+				+ "\\bin\\java\" -mx%JAVA_HEAP_SIZE%m"
+				+ " -classpath \"%CLASSPATH%;"
 				+ installDir + File.separator
 				+ name.toLowerCase() + ".jar\" "
 				+ installer.getProperty("app.main.class")
