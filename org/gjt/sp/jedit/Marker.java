@@ -79,6 +79,12 @@ public class Marker
 		}
 	}
 
+	void removePosition()
+	{
+		// forget the cached Position instance
+		position = null;
+	}
+
 	// private members
 	private Buffer buffer;
 	private char shortcut;

@@ -1358,7 +1358,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		return mode;
 	}
-	
+
 	/**
 	 * Sets this buffer's edit mode. Note that calling this before a buffer
 	 * is loaded will have no effect; in that case, set the "mode" property
@@ -1513,7 +1513,7 @@ public class Buffer extends PlainDocument implements EBComponent
 					break;
 				}
 			}
-	
+
 			if(prevLine == null)
 				return false;
 		}
@@ -2713,6 +2713,7 @@ loop:				for(int i = 0; i < count; i++)
 				if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
 					setDirty(true);
 
+				marker.removePosition();
 				markers.removeElementAt(i);
 				i--;
 			}
@@ -2730,6 +2731,9 @@ loop:				for(int i = 0; i < count; i++)
 	{
 		if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
 			setDirty(true);
+
+		for(int i = 0; i < markers.size(); i++)
+			((Marker)markers.elementAt(i)).removePosition();
 
 		markers.removeAllElements();
 
@@ -2888,7 +2892,7 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	// protected members
-	
+
 	/**
 	 * We overwrite this method to update the line info array
 	 * state immediately so that any event listeners get a
@@ -2917,7 +2921,7 @@ loop:				for(int i = 0; i < count; i++)
 
 		setDirty(true);
 	}
-	
+
 	/**
 	 * We overwrite this method to update the line info array
 	 * state immediately so that any event listeners get a
@@ -3080,7 +3084,7 @@ loop:				for(int i = 0; i < count; i++)
 					line.getEndOffset() - line.getStartOffset() - 1);
 				parseBufferLocalProperty(text);
 			}
-	
+
 			// Create marker positions
 			for(int i = 0; i < markers.size(); i++)
 			{
@@ -3177,7 +3181,7 @@ loop:				for(int i = 0; i < count; i++)
 	 * Inserts the specified line range into the virtual to physical
 	 * mapping and line info array.
 	 * @param index The first line number
-	 * @param lines The number of lines 
+	 * @param lines The number of lines
 	 */
 	private void addLinesToMap(int index, int lines)
 	{

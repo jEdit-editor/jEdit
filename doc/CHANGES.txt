@@ -6,7 +6,7 @@ JEDIT 3.2 VERSION HISTORY
 
 - Keys can now be bound to letter keys without modifiers; eg you can
   bind a macro to '>' that in HTML mode inserts the appropriate closing
-  tab automatically. Note that the actual cahracter is not inserted, so
+  tag automatically. Note that the actual character is not inserted, so
   the macro would need to insert '>' first itself.
 
 + Bug Fixes
@@ -17,6 +17,8 @@ JEDIT 3.2 VERSION HISTORY
   visible lines, which caused problems
 - Disabled non-working persistent splits feature, which could have
   caused problems
+- Invoking menus using Alt-key mnemonics would insert the mnemonic
+  character into the buffer on JDK 1.4
 
 + API Changes
 
@@ -24,6 +26,8 @@ JEDIT 3.2 VERSION HISTORY
   permissions on Unix. These methods were formely private, now they are
   public and static. They do nothing if jEdit is not being run on a Unix
   platform.
+- Minor change to marker behavior to facilitate AStyle and JavaStyle
+  plugins (Dirk Moebius)
 
 * Version 3.2pre8
 

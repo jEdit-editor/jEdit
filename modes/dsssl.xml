@@ -71,6 +71,16 @@
 		<SEQ TYPE="NULL">&lt;=</SEQ>
 
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
+			<BEGIN>&lt;/style-specification</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
+			<BEGIN>&lt;/style-sheet</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
 			<BEGIN>&lt;style-specification</BEGIN>
 			<END>&gt;</END>
 		</SPAN>

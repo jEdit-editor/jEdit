@@ -53,12 +53,12 @@ public class KeyEventWorkaround
 			if((ch < 0x20 || ch == 0x7f || ch == 0xff) && ch != '\b')
 				return null;
 
+			if(evt.isControlDown() || evt.isAltDown()
+				|| evt.isMetaDown())
+				return null;
+
 			if(!java14)
 			{
-				if(evt.isControlDown() || evt.isAltDown()
-					|| evt.isMetaDown())
-					return null;
-
 				// if the last key was a broken key, filter
 				// out all except 'a'-'z' that occur 750 ms after.
 				if(last == LAST_BROKEN && System.currentTimeMillis()
