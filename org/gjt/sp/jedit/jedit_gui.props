@@ -388,8 +388,6 @@ utils=command-line \
       - \
       vfs-browser \
       io-progress-monitor \
-      clear-directory-cache \
-      forget-passwords \
       - \
       log-viewer \
       update-log \
@@ -404,8 +402,6 @@ vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$View Activity Log...
 update-log.label=Update Activity $Log on Disk
-clear-directory-cache.label=Clear Remote Directory Cache
-forget-passwords.label=Forget Remote Passwords
 reload-modes.label=$Reload Edit Modes
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
@@ -513,8 +509,6 @@ select-next-line.label=Select Next Line
 
 # Title
 view.title=jEdit - 
-
-view.buffer-label={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
 
 # Gutter highlight
 view.gutter.register=Register "{0}" points to this line
@@ -882,7 +876,6 @@ options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.checkModStatus=Check file modification time on focus
 options.general.showFullPath=Show full path of buffers in title bar
-options.general.passiveFTP=Use passive-mode FTP
 
 options.loadsave.label=Loading & Saving
 options.loadsave.encoding=File encoding:
@@ -1129,12 +1122,6 @@ browser-multiple-io.message=Each VFS browser can only execute one input/output\n
 	operation finishes (or abort it in the I/O progress monitor)\n\
 	before starting another one.
 
-# Login dialog box
-login.title=Log in
-login.host=Remote host:
-login.user=User name:
-login.password=Password:
-
 # VFS browser
 vfs.browser.title=File System Browser
 vfs.browser.path=Path:
@@ -1169,6 +1156,11 @@ vfs.browser.menu.show-hidden-files.label=Show Hidden Files
 vfs.browser.menu.new-directory.label=New Directory...
 vfs.browser.menu.add-to-favorites.label=Add to Favorites
 vfs.browser.menu.go-to-favorites.label=Go to Favorites
+
+vfs.browser.dialog.open=Open
+vfs.browser.dialog.save=Save
+vfs.browser.dialog.filename=File name:
+vfs.browser.dialog.multi-select=Multiple files selected
 
 vfs.browser.bad-filter.title=Invalid Filter
 vfs.browser.bad-filter.message=The filter {0} is invalid ({1})
@@ -1208,14 +1200,6 @@ vfs.browser.mkdir-error.title=Cannot Create Directory
 vfs.browser.mkdir-error.message=An error occurred while attempting\n\
 	to create {0}.
 
-# FTP VFS
-vfs.ftp.label=Connect to FTP Server...
-
-vfs.browser.dialog.open=Open
-vfs.browser.dialog.save=Save
-vfs.browser.dialog.filename=File name:
-vfs.browser.dialog.multi-select=Multiple files selected
-
 # Status bar messages
 vfs.status.load=Loading {0}
 vfs.status.load-markers=Loading markers for {0}
@@ -1238,33 +1222,3 @@ vfs.not-supported.load.message=The {0} filesystem does not support\n\
 vfs.not-supported.save.title=Operation Not Supported
 vfs.not-supported.save.message=The {0} filesystem does not support\n\
 	file saving.
-
-# Connect error
-vfs.ftp.connect-error.title=Cannot Connect
-vfs.ftp.connect-error.message=Cannot connect to {0}:{1}.\n\
-	{2}\n\
-	See Utilities->Activity Log for a full connection trace.
-
-# Login error
-vfs.ftp.login-error.title=Cannot Log in
-vfs.ftp.login-error.message=Cannot log in to {0}:{1} with username {2}.\n\
-	{3}\n\
-	See Utilities->Activity Log for a full connection trace.
-
-# Download error
-vfs.ftp.download-error.title=Cannot Download File
-vfs.ftp.download-error.message=An error occurred while downloading {0}:{1}{2}.\n\
-	{3}\n\
-	See Utilities->Activity Log for a full connection trace.
-
-# Upload error
-vfs.ftp.upload-error.title=Cannot Upload File
-vfs.ftp.upload-error.message=An error occurred while uploading {0}:{1}{2}.\n\
-	{3}\n\
-	See Utilities->Activity Log for a full connection trace.
-
-# File list error
-vfs.ftp.list-error.title=Cannot List Directory
-vfs.ftp.list-error.message=An error occurred while listing {0}.\n\
-	{1}\n\
-	See Utilities->Activity Log for a full connection trace.

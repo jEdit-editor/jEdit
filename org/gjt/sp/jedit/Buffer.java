@@ -308,7 +308,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		setFlag(AUTOSAVE_DIRTY,false);
 
 		VFSManager.runInWorkThread(new BufferIORequest(
-			BufferIORequest.AUTOSAVE,null,this,new VFSSession(),
+			BufferIORequest.AUTOSAVE,null,this,null,
 			VFSManager.getFileVFS(),autosaveFile.getPath()));
 	}
 
@@ -1832,6 +1832,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.187  2000/11/11 02:59:28  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.186  2000/11/08 09:31:35  sp
  * Junk
  *

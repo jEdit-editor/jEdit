@@ -243,9 +243,6 @@ print.margin.right=0.5
 ### VFS SETTINGS
 ###
 
-# PASV or PORT
-vfs.ftp.passive=false
-
 vfs.browser.showHiddenFiles=false
 vfs.browser.sortFiles=true
 vfs.browser.sortMixFilesAndDirs=false
@@ -254,6 +251,3 @@ vfs.browser.doubleClickClose=false
 
 # Can be one of: buffer, home, last
 vfs.browser.defaultPath=buffer
-
-# Can be either list or tree
-vfs.browser.defaultView=list

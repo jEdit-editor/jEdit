@@ -55,7 +55,7 @@ public class UrlVFS extends VFS
 		return MiscUtilities.getParentOfPath(path);
 	}
 
-	public InputStream _createInputStream(VFSSession session,
+	public InputStream _createInputStream(Object session,
 		String path, boolean ignoreErrors, Component comp)
 		throws IOException
 	{
@@ -72,7 +72,7 @@ public class UrlVFS extends VFS
 		}
 	}
 
-	public OutputStream _createOutputStream(VFSSession session, String path,
+	public OutputStream _createOutputStream(Object session, String path,
 		Component comp) throws IOException
 	{
 		try
@@ -93,6 +93,9 @@ public class UrlVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/11/11 02:59:31  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.8  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *

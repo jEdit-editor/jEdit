@@ -50,7 +50,7 @@ public class FileRootsVFS extends VFS
 		return PROTOCOL + ":";
 	}
 
-	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
+	public VFS.DirectoryEntry[] _listDirectory(Object session, String url,
 		Component comp)
 	{
 		File[] roots = fsView.getRoots();
@@ -68,7 +68,7 @@ public class FileRootsVFS extends VFS
 		return rootDE;
 	}
 
-	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
 		return new VFS.DirectoryEntry(path,path,path,VFS.DirectoryEntry
@@ -82,6 +82,9 @@ public class FileRootsVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/11/11 02:59:30  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.3  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

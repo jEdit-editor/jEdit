@@ -59,7 +59,7 @@ public class FavoritesVFS extends VFS
 		return PROTOCOL + ":";
 	}
 
-	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
+	public VFS.DirectoryEntry[] _listDirectory(Object session, String url,
 		Component comp)
 	{
 		synchronized(lock)
@@ -74,7 +74,7 @@ public class FavoritesVFS extends VFS
 		}
 	}
 
-	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
 		return new VFS.DirectoryEntry(path,path,"favorites:" + path,
@@ -82,7 +82,7 @@ public class FavoritesVFS extends VFS
 					0L,false);
 	}
 
-	public boolean _delete(VFSSession session, String path, Component comp)
+	public boolean _delete(Object session, String path, Component comp)
 	{
 		synchronized(lock)
 		{
@@ -141,6 +141,9 @@ public class FavoritesVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/11/11 02:59:30  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.6  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

@@ -1707,9 +1707,6 @@ public class jEdit
 		// Save settings
 		saveSettings();
 
-		// Clear cached directory listings
-		DirectoryCache.clearAllCachedDirectories();
-
 		// Close activity log stream
 		Log.closeStream();
 
@@ -1977,7 +1974,6 @@ public class jEdit
 		addAction("box-comment");
 		addAction("buffer-options");
 		addAction("center-caret");
-		addAction("clear-directory-cache");
 		addAction("clear-register");
 		addAction("close-all");
 		addAction("close-buffer");
@@ -2005,7 +2001,6 @@ public class jEdit
 		addAction("find");
 		addAction("find-next");
 		addAction("find-selection");
-		addAction("forget-passwords");
 		addAction("format-paragraph");
 		addAction("global-options");
 		addAction("goto-line");
@@ -2441,6 +2436,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.290  2000/11/11 02:59:29  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.289  2000/11/08 09:31:36  sp
  * Junk
  *

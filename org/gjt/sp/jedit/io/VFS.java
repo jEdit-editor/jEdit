@@ -98,9 +98,9 @@ public abstract class VFS
 	 * @param session Where the VFS session will be stored
 	 * @param comp The component that will parent error dialog boxes
 	 * @return The URL
-	 * @since jEdit 2.6pre3
+	 * @since jEdit 2.7pre1
 	 */
-	public String showBrowseDialog(VFSSession[] session, Component comp)
+	public String showBrowseDialog(Object[] session, Component comp)
 	{
 		return null;
 	}
@@ -150,9 +150,9 @@ public abstract class VFS
 	 * the operation
 	 * @since jEdit 2.6pre3
 	 */
-	public VFSSession createVFSSession(String path, Component comp)
+	public Object createVFSSession(String path, Component comp)
 	{
-		return new VFSSession();
+		return new Object();
 	}
 
 	/**
@@ -170,7 +170,7 @@ public abstract class VFS
 			return false;
 		}
 
-		VFSSession session = createVFSSession(path,view);
+		Object session = createVFSSession(path,view);
 		if(session == null)
 			return false;
 
@@ -200,7 +200,7 @@ public abstract class VFS
 			return false;
 		}
 
-		VFSSession session = createVFSSession(path,view);
+		Object session = createVFSSession(path,view);
 		if(session == null)
 			return false;
 
@@ -224,7 +224,7 @@ public abstract class VFS
 			return false;
 		}
 
-		VFSSession session = createVFSSession(path,view);
+		Object session = createVFSSession(path,view);
 		if(session == null)
 			return false;
 
@@ -243,9 +243,9 @@ public abstract class VFS
 	 * @param directory The directory
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.7pre1
 	 */
-	public DirectoryEntry[] _listDirectory(VFSSession session, String directory,
+	public DirectoryEntry[] _listDirectory(Object session, String directory,
 		Component comp)
 		throws IOException
 	{
@@ -260,9 +260,9 @@ public abstract class VFS
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
 	 * @return The specified directory entry, or null if it doesn't exist.
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.7pre1
 	 */
-	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 		throws IOException
 	{
@@ -310,9 +310,9 @@ public abstract class VFS
 	 * @param path The path
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurs
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.7pre1
 	 */
-	public boolean _delete(VFSSession session, String path, Component comp)
+	public boolean _delete(Object session, String path, Component comp)
 		throws IOException
 	{
 		return false;
@@ -327,9 +327,9 @@ public abstract class VFS
 	 * @param to The new path
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurs
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.7pre1
 	 */
-	public boolean _rename(VFSSession session, String from, String to,
+	public boolean _rename(Object session, String from, String to,
 		Component comp) throws IOException
 	{
 		return false;
@@ -341,9 +341,9 @@ public abstract class VFS
 	 * @param directory The directory
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurs
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.7pre1
 	 */
-	public boolean _mkdir(VFSSession session, String directory, Component comp)
+	public boolean _mkdir(Object session, String directory, Component comp)
 		throws IOException
 	{
 		return false;
@@ -358,9 +358,9 @@ public abstract class VFS
 	 * ignored
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException If an I/O error occurs
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.7pre1
 	 */
-	public InputStream _createInputStream(VFSSession session,
+	public InputStream _createInputStream(Object session,
 		String path, boolean ignoreErrors, Component comp)
 		throws IOException
 	{
@@ -375,9 +375,9 @@ public abstract class VFS
 	 * @param path The path
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException If an I/O error occurs
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.7pre1
 	 */
-	public OutputStream _createOutputStream(VFSSession session,
+	public OutputStream _createOutputStream(Object session,
 		String path, Component comp)
 		throws IOException
 	{
@@ -392,9 +392,9 @@ public abstract class VFS
 	 * @param session The VFS session
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.7pre1
 	 */
-	public void _endVFSSession(VFSSession session, Component comp)
+	public void _endVFSSession(Object session, Component comp)
 		throws IOException
 	{
 	}
@@ -406,6 +406,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.22  2000/11/11 02:59:31  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.21  2000/11/05 00:44:14  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *
@@ -435,17 +438,5 @@ public abstract class VFS
  *
  * Revision 1.12  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
- *
- * Revision 1.11  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.10  2000/07/30 09:04:19  sp
- * More VFS browser hacking
- *
- * Revision 1.9  2000/07/29 12:24:08  sp
- * More VFS work, VFS browser started
- *
- * Revision 1.8  2000/07/26 07:48:45  sp
- * stuff
  *
  */

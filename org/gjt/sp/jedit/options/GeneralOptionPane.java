@@ -98,13 +98,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		showFullPath.setSelected(jEdit.getBooleanProperty(
 			"view.showFullPath"));
 		addComponent(showFullPath);
-
-		/* Passive-mode FTP */
-		passiveFTP = new JCheckBox(jEdit.getProperty(
-			"options.general.passiveFTP"));
-		passiveFTP.setSelected(jEdit.getBooleanProperty(
-			"vfs.ftp.passive"));
-		addComponent(passiveFTP);
 	}
 
 	protected void _save()
@@ -121,8 +114,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.showFullPath",showFullPath
 			.isSelected());
-		jEdit.setBooleanProperty("vfs.ftp.passive",passiveFTP
-			.isSelected());
 	}
 
 	// private members
@@ -136,12 +127,14 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
 	private JCheckBox showFullPath;
-	private JCheckBox passiveFTP;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.48  2000/11/11 02:59:31  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.47  2000/11/07 10:08:32  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

@@ -80,7 +80,7 @@ public class BufferIORequest extends WorkRequest
 	 * @param path The path
 	 */
 	public BufferIORequest(int type, View view, Buffer buffer,
-		VFSSession session, VFS vfs, String path)
+		Object session, VFS vfs, String path)
 	{
 		this.type = type;
 		this.view = view;
@@ -139,7 +139,7 @@ public class BufferIORequest extends WorkRequest
 	private int type;
 	private View view;
 	private Buffer buffer;
-	private VFSSession session;
+	private Object session;
 	private VFS vfs;
 	private String path;
 	private String markersPath;
@@ -771,6 +771,9 @@ public class BufferIORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/11/11 02:59:30  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.3  2000/11/02 09:19:33  sp
  * more features
  *

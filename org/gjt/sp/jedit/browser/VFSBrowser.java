@@ -232,14 +232,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 		pathField.setText(path);
 		pathField.addCurrentToHistory();
 
-		reloadDirectory(false);
+		reloadDirectory();
 	}
 
-	public void reloadDirectory(boolean clearCache)
+	public void reloadDirectory()
 	{
-		if(clearCache)
-			DirectoryCache.clearCachedDirectory(path);
-
 		try
 		{
 			String filter = filterField.getText();
@@ -262,7 +259,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	{
 		VFS vfs = VFSManager.getVFSForPath(path);
 
-		VFSSession session = vfs.createVFSSession(path,this);
+		Object session = vfs.createVFSSession(path,this);
 		if(session == null)
 			return;
 
@@ -302,7 +299,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFS vfs = VFSManager.getVFSForPath(path);
 
-		VFSSession session = vfs.createVFSSession(path,this);
+		Object session = vfs.createVFSSession(path,this);
 		if(session == null)
 			return;
 
@@ -326,7 +323,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		to = vfs.constructPath(vfs.getParentOfPath(from),to);
 
-		VFSSession session = vfs.createVFSSession(from,this);
+		Object session = vfs.createVFSSession(from,this);
 		if(session == null)
 			return;
 
@@ -349,7 +346,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		// path is the currently viewed directory in the browser
 		newDirectory = vfs.constructPath(path,newDirectory);
 
-		VFSSession session = vfs.createVFSSession(newDirectory,this);
+		Object session = vfs.createVFSSession(newDirectory,this);
 		if(session == null)
 			return;
 
@@ -683,7 +680,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		}
 
 		if(path != null && reload)
-			reloadDirectory(false);
+			reloadDirectory();
 	}
 
 	/* We do this stuff because the browser is not able to handle
@@ -727,7 +724,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				setDirectory(vfs.getParentOfPath(path));
 			}
 			else if(source == reload)
-				reloadDirectory(true);
+				reloadDirectory();
 			else if(source == roots)
 				setDirectory(FileRootsVFS.PROTOCOL + ":");
 			else if(source == home)
@@ -854,6 +851,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.27  2000/11/11 02:59:30  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.26  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

@@ -172,7 +172,7 @@ public class FileVFS extends VFS
 		return super.load(view,buffer,path);
 	}
 
-	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String path,
+	public VFS.DirectoryEntry[] _listDirectory(Object session, String path,
 		Component comp)
 	{
 		/* Fix for the bug where listing a drive letter on Windows
@@ -210,7 +210,7 @@ public class FileVFS extends VFS
 		return retVal;
 	}
 
-	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
 		// workaround for Java bug where paths with trailing / return
@@ -232,7 +232,7 @@ public class FileVFS extends VFS
 			path,path,type,file.length(),fsView.isHiddenFile(file));
 	}
 
-	public boolean _delete(VFSSession session, String path, Component comp)
+	public boolean _delete(Object session, String path, Component comp)
 	{
 		boolean retVal = new File(path).delete();
 		if(retVal)
@@ -240,7 +240,7 @@ public class FileVFS extends VFS
 		return retVal;
 	}
 
-	public boolean _rename(VFSSession session, String from, String to,
+	public boolean _rename(Object session, String from, String to,
 		Component comp)
 	{
 		boolean retVal = new File(from).renameTo(new File(to));
@@ -249,14 +249,14 @@ public class FileVFS extends VFS
 	}
 
 
-	public boolean _mkdir(VFSSession session, String directory, Component comp)
+	public boolean _mkdir(Object session, String directory, Component comp)
 	{
 		boolean retVal = new File(directory).mkdir();
 		VFSManager.sendVFSUpdate(this,directory,true);
 		return retVal;
 	}
 
-	public InputStream _createInputStream(VFSSession session, String path,
+	public InputStream _createInputStream(Object session, String path,
 		boolean ignoreErrors, Component comp) throws IOException
 	{
 		try
@@ -272,7 +272,7 @@ public class FileVFS extends VFS
 		}
 	}
 
-	public OutputStream _createOutputStream(VFSSession session, String path,
+	public OutputStream _createOutputStream(Object session, String path,
 		Component comp) throws IOException
 	{
 		OutputStream retVal = new FileOutputStream(path);
@@ -374,6 +374,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/11/11 02:59:30  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.26  2000/11/07 10:08:32  sp
  * Options dialog improvements, documentation changes, bug fixes
  *
@@ -403,29 +406,5 @@ public class FileVFS extends VFS
  *
  * Revision 1.17  2000/08/20 07:29:31  sp
  * I/O and VFS browser improvements
- *
- * Revision 1.16  2000/08/15 08:07:11  sp
- * A bunch of bug fixes
- *
- * Revision 1.15  2000/08/10 08:30:41  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.14  2000/08/06 09:44:27  sp
- * VFS browser now has a tree view, rename command
- *
- * Revision 1.13  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.12  2000/08/03 07:43:42  sp
- * Favorites added to browser, lots of other stuff too
- *
- * Revision 1.11  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.10  2000/07/30 09:04:19  sp
- * More VFS browser hacking
- *
- * Revision 1.9  2000/07/29 12:24:08  sp
- * More VFS work, VFS browser started
  *
  */

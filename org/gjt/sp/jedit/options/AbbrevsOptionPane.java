@@ -90,6 +90,9 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 	protected void _save()
 	{
+		if(abbrevsTable.getCellEditor() != null)
+			abbrevsTable.getCellEditor().stopCellEditing();
+
 		Abbrevs.setExpandOnInput(expandOnInput.isSelected());
 
 		Abbrevs.setGlobalAbbrevs(globalAbbrevs.toHashtable());
@@ -327,6 +330,9 @@ class Abbrev
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/11/11 02:59:31  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.6  2000/07/15 10:10:18  sp
  * improved printing
  *

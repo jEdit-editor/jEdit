@@ -382,7 +382,7 @@ public class JEditTextArea extends JComponent
 				- x + width + 5);
 			changed = true;
 		}
-		else if(x + width >= painter.getWidth())
+		else if(x >= painter.getWidth())
 		{
 			horizontalOffset = horizontalOffset +
 				(painter.getWidth() - x) - width - 5;
@@ -1413,6 +1413,36 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
+	/**
+	 * Bug workarounds.
+	 * @since jEdit 2.7pre1
+	 */
+	public boolean hasFocus()
+	{
+		Component c = this;
+		while(!(c instanceof Window))
+		{
+			if(c == null)
+				return false;
+			c = c.getParent();
+		}
+		boolean hasFocus = (((Window)c).getFocusOwner() == this);
+		if(hasFocus && focusedComponent != this)
+			focusedComponent = this;
+		return hasFocus;
+	}
+
+	/**
+	 * Bug workarounds.
+	 * @since jEdit 2.7pre1
+	 */
+	public void grabFocus()
+	{
+		super.grabFocus();
+		// ensure that focusedComponent is set correctly
+		hasFocus();
+	}
+
 	// package-private members
 	Segment lineSegment;
 	MouseHandler mouseHandler;
@@ -1423,7 +1453,7 @@ public class JEditTextArea extends JComponent
 	 */
 	final boolean isCaretVisible()
 	{
-		return blink && focusedComponent == this && hasFocus();
+		return blink && hasFocus();
 	}
 
 	/**
@@ -1431,7 +1461,7 @@ public class JEditTextArea extends JComponent
 	 */
 	final boolean isHighlightVisible()
 	{
-		return focusedComponent == this && hasFocus();
+		return hasFocus();
 	}
 
 	/**
@@ -2064,7 +2094,14 @@ public class JEditTextArea extends JComponent
 	{
 		public void mousePressed(MouseEvent evt)
 		{
-			requestFocus();
+			grabFocus();
+			// trying to work around buggy focus handling in some
+			// Java versions
+//			if(!textArea.hasFocus())
+//			{
+//				textArea.processFocusEvent(new FocusEvent(textArea,
+//					FocusEvent.FOCUS_GAINED));
+//			}
 
 			// This is not done properly sometimes
 			focusedComponent = JEditTextArea.this;
@@ -2171,7 +2208,7 @@ public class JEditTextArea extends JComponent
 		private void doTripleClick(MouseEvent evt)
 		{
 			select(getLineStartOffset(dragStartLine),
-				getLineEndOffset(dragStartLine)-1);
+				getLineEndOffset(dragStartLine));
 		}
 
 		public void mouseDragged(MouseEvent evt)
@@ -2259,7 +2296,7 @@ public class JEditTextArea extends JComponent
 			int offset = xToOffset(mouse,evt.getX());
 			if(mark > mouse)
 			{
-				mark = getLineEndOffset(mark) - 1;
+				mark = getLineEndOffset(mark);
 				if(offset == getLineLength(mouse))
 					mouse = getLineEndOffset(mouse) - 1;
 				else
@@ -2271,7 +2308,7 @@ public class JEditTextArea extends JComponent
 				if(offset == 0)
 					mouse = getLineStartOffset(mouse);
 				else
-					mouse = getLineEndOffset(mouse) - 1;
+					mouse = getLineEndOffset(mouse);
 			}
 			select(mark,mouse);
 		}
@@ -2345,6 +2382,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.96  2000/11/11 02:59:31  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.95  2000/11/08 09:31:37  sp
  * Junk
  *
@@ -2374,20 +2414,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.86  2000/10/12 09:28:27  sp
  * debugging and polish
- *
- * Revision 1.85  2000/09/26 10:19:47  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.84  2000/09/23 03:01:11  sp
- * pre7 yayayay
- *
- * Revision 1.83  2000/09/07 04:46:08  sp
- * bug fixes
- *
- * Revision 1.82  2000/09/06 04:39:47  sp
- * bug fixes
- *
- * Revision 1.81  2000/09/03 03:16:53  sp
- * Search bar integrated with command line, enhancements throughout
  *
  */

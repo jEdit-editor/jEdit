@@ -35,13 +35,6 @@ jEdit depends on, and comes bundled with the following class libraries:
 
   The complete AElfred package can be found at <http://www.microstar.com>.
 
-- Fooware FTP client by Fooware. This is used to implement loading and
-  saving buffers on FTP servers. This class library is released under
-  the _GNU General Public License_. Get the complete package from
-  <http://www.fooware.com>. Note that the version shipped with jEdit is
-  slightly different from the official one; several bugs have been
-  fixed, and support for passive-mode FTP was added.
-
 * jEdit on the Internet
 
 The jEdit homepage, located at <http://jedit.sourceforge.net> contains
@@ -140,8 +133,7 @@ Dirk Moebius - HTTP firewall plugin
 Jason Ginchereau - Portions of QuickFile plugin code are used in the
 	VFS browser
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
-	dialog box, faster literal search, passive mode FTP, many
-	other patches
+	dialog box, faster literal search, many other patches
 Ollie Rutherfurd - Some commands in View->Scrolling menu
 Tal Davidson - Original syntax highlighting engine
 

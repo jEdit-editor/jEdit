@@ -122,7 +122,14 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void focusOnTextArea()
 	{
-		textArea.requestFocus();
+		textArea.grabFocus();
+		// trying to work around buggy focus handling in some
+		// Java versions
+//		if(!textArea.hasFocus())
+//		{
+//			textArea.processFocusEvent(new FocusEvent(textArea,
+//				FocusEvent.FOCUS_GAINED));
+//		}
 	}
 
 	/**
@@ -579,6 +586,7 @@ public class EditPane extends JPanel implements EBComponent
 			{
 				textArea.repaint();
 				status.updateBufferList();
+				status.updateCaretStatus();
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
@@ -608,6 +616,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.25  2000/11/11 02:59:29  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.24  2000/11/08 09:31:36  sp
  * Junk
  *

@@ -22,6 +22,7 @@ package org.gjt.sp.jedit;
 import javax.swing.text.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
+import java.io.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.RegistersChanged;
@@ -291,9 +292,21 @@ public class Registers
 					.getContents(this).getTransferData(
 					DataFlavor.stringFlavor));
 
-				// The MacOS MRJ doesn't convert \r to \n,
-				// so do it here
-				return selection.replace('\r','\n');
+				// Some Java versions return the clipboard
+				// contents using the native line separator,
+				// so have to convert it here
+				BufferedReader in = new BufferedReader(
+					new StringReader(selection));
+				StringBuffer buf = new StringBuffer();
+				String line;
+				while((line = in.readLine()) != null)
+				{
+					buf.append(line);
+					buf.append('\n');
+				}
+				// remove trailing \n
+				buf.setLength(buf.length() - 1);
+				return buf.toString();
 			}
 			catch(Exception e)
 			{
@@ -386,6 +399,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/11/11 02:59:29  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.10  2000/06/12 02:43:29  sp
  * pre6 almost ready
  *

@@ -58,6 +58,9 @@ public abstract class ShortcutsOptionPane extends AbstractOptionPane
 
 	protected void _save()
 	{
+		if(keyTable.getCellEditor() != null)
+			keyTable.getCellEditor().stopCellEditing();
+
 		keyModel.save();
 	}
 
@@ -227,6 +230,9 @@ class ShortcutsModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/11/11 02:59:31  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.5  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

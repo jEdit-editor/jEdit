@@ -61,7 +61,7 @@ public class BrowserIORequest extends WorkRequest
 	 * @param path2 The second path name to operate on
 	 */
 	public BrowserIORequest(int type, VFSBrowser browser,
-		VFSSession session, VFS vfs, String path1, String path2)
+		Object session, VFS vfs, String path1, String path2)
 	{
 		this.type = type;
 		this.browser = browser;
@@ -122,7 +122,7 @@ public class BrowserIORequest extends WorkRequest
 	// private members
 	private int type;
 	private VFSBrowser browser;
-	private VFSSession session;
+	private Object session;
 	private VFS vfs;
 	private String path1;
 	private String path2;
@@ -288,6 +288,9 @@ public class BrowserIORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/11/11 02:59:30  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.4  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

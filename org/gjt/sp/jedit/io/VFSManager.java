@@ -24,7 +24,6 @@ import java.util.Hashtable;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.util.Vector;
-import org.gjt.sp.jedit.gui.LoginDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -220,86 +219,6 @@ public class VFSManager
 	}
 
 	/**
-	 * If a password has been saved for the host and user name in the
-	 * session, it sets the value of the session's PASSWORD_KEY value
-	 * accordingly. Otherwise, a login dialog box is displayed.
-	 * @param session The VFS session
-	 * @param comp The component that will parent the login dialog box
-	 * @return True if everything is ok, false if the user cancelled the
-	 * operation
-	 * @since jEdit 2.6pre3
-	 */
-	public static boolean showLoginDialog(VFSSession session, Component comp)
-	{
-		String host = (String)session.get(VFSSession.HOSTNAME_KEY);
-		String user = (String)session.get(VFSSession.USERNAME_KEY);
-		String password = (String)session.get(VFSSession.PASSWORD_KEY);
-
-		if(host != null)
-		{
-			LoginInfo login = (LoginInfo)loginHash.get(host);
-
-			if(login != null && (user == null || login.user.equals(user)))
-			{
-				if(user == null)
-				{
-					user = login.user;
-					session.put(VFSSession.USERNAME_KEY,user);
-				}
-
-				if(password == null)
-				{
-					password = login.password;
-					session.put(VFSSession.PASSWORD_KEY,password);
-				}
-			}
-
-			if(user != null && password != null)
-				return true;
-		}
-
-		/* since this can be called at startup time,
-		 * we need to hide the splash screen. */
-		GUIUtilities.hideSplashScreen();
-
-		LoginDialog dialog = new LoginDialog(comp,host,user,password);
-		if(!dialog.isOK())
-			return false;
-
-		host = dialog.getHost();
-		user = dialog.getUser();
-		password = dialog.getPassword();
-
-		session.put(VFSSession.HOSTNAME_KEY,host);
-		session.put(VFSSession.USERNAME_KEY,user);
-		session.put(VFSSession.PASSWORD_KEY,password);
-
-		loginHash.put(host,new LoginInfo(user,password));
-
-		return true;
-	}
-
-	/**
-	 * Forgets all saved passwords.
-	 * @since jEdit 2.6pre3
-	 */
-	public static void forgetPasswords()
-	{
-		loginHash.clear();
-	}
-
-	static class LoginInfo
-	{
-		String user, password;
-
-		LoginInfo(String user, String password)
-		{
-			this.user = user;
-			this.password = password;
-		}
-	}
-
-	/**
 	 * Sends a VFS update message.
 	 * @param vfs The VFS
 	 * @param path The path that changed
@@ -320,10 +239,6 @@ public class VFSManager
 			if(path.length() != 1 && (path.endsWith("/")
 				|| path.endsWith(java.io.File.separator)))
 				path = path.substring(0,path.length() - 1);
-
-			/* we do this here, and not in an EBComponent
-			 * inside DirectoryCache, to simplify matters */
-			DirectoryCache.clearCachedDirectory(path);
 
 			synchronized(vfsUpdateLock)
 			{
@@ -374,7 +289,6 @@ public class VFSManager
 	private static VFS urlVFS;
 	private static Hashtable vfsHash;
 	private static Hashtable protocolHash;
-	private static Hashtable loginHash;
 	private static boolean error;
 	private static Object vfsUpdateLock;
 	private static Vector vfsUpdates;
@@ -395,11 +309,9 @@ public class VFSManager
 		urlVFS = new UrlVFS();
 		vfsHash = new Hashtable();
 		protocolHash = new Hashtable();
-		loginHash = new Hashtable();
 		vfsUpdateLock = new Object();
 		vfsUpdates = new Vector();
 		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
-		registerVFS(FtpVFS.PROTOCOL,new FtpVFS());
 		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
 	}
 
@@ -409,6 +321,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.22  2000/11/11 02:59:31  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.21  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

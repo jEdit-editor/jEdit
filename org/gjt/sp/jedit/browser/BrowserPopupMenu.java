@@ -94,14 +94,21 @@ public class BrowserPopupMenu extends JPopupMenu
 
 		add(createMenuItem("add-to-favorites"));
 		add(createMenuItem("go-to-favorites"));
-		addSeparator();
 
 		Enumeration enum = VFSManager.getFilesystems();
+		boolean addedSeparator = false;
+
 		while(enum.hasMoreElements())
 		{
 			VFS vfs = (VFS)enum.nextElement();
 			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
 				continue;
+
+			if(!addedSeparator)
+			{
+				addSeparator();
+				addedSeparator = true;
+			}
 
 			JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
 				"vfs." + vfs.getName() + ".label"));
@@ -109,20 +116,6 @@ public class BrowserPopupMenu extends JPopupMenu
 			menuItem.addActionListener(new ActionHandler());
 			add(menuItem);
 		}
-
-		addSeparator();
-
-		JMenuItem clearDirectoryCache = new JMenuItem(jEdit.getProperty(
-			"clear-directory-cache.label"));
-		clearDirectoryCache.setActionCommand("clear-directory-cache");
-		clearDirectoryCache.addActionListener(new ActionHandler());
-		add(clearDirectoryCache);
-
-		JMenuItem forgetPasswords = new JMenuItem(jEdit.getProperty(
-			"forget-passwords.label"));
-		forgetPasswords.setActionCommand("forget-passwords");
-		forgetPasswords.addActionListener(new ActionHandler());
-		add(forgetPasswords);
 	}
 
 	// private members
@@ -171,7 +164,7 @@ public class BrowserPopupMenu extends JPopupMenu
 			else if(actionCommand.equals("show-hidden-files"))
 			{
 				browser.setShowHiddenFiles(!browser.getShowHiddenFiles());
-				browser.reloadDirectory(false);
+				browser.reloadDirectory();
 			}
 			else if(actionCommand.equals("new-directory"))
 				browser.mkdir();
@@ -215,10 +208,6 @@ public class BrowserPopupMenu extends JPopupMenu
 				if(directory != null)
 					browser.setDirectory(directory);
 			}
-			else if(actionCommand.equals("clear-directory-cache"))
-				DirectoryCache.clearAllCachedDirectories();
-			else if(actionCommand.equals("forget-passwords"))
-				VFSManager.forgetPasswords();
 		}
 	}
 }
@@ -226,6 +215,9 @@ public class BrowserPopupMenu extends JPopupMenu
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/11/11 02:59:30  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.7  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

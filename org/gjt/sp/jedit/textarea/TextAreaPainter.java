@@ -385,7 +385,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				boolean valid = textArea.getBuffer().isLoaded()
 					&& line >= 0 && line < lineCount;
 
-				int width = paintLine(gfx,tokenMarker,valid,line,x) - x;
+				int width = paintLine(gfx,tokenMarker,valid,line,x)
+					- x + 5 /* Yay */;
 				if(valid)
 				{
 					tokenMarker.setLineWidth(line,width);
@@ -698,6 +699,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.49  2000/11/11 02:59:31  sp
+ * FTP support moved out of the core into a plugin
+ *
  * Revision 1.48  2000/11/07 10:08:33  sp
  * Options dialog improvements, documentation changes, bug fixes
  *
