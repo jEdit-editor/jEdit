@@ -19,7 +19,7 @@
     <quote>plugin core class</quote>, otherwise it will not do anything
     useful (but recall that a class library intended for use by other
     plugins need not provide a plugin core class).
-    That class must implement
+    That class must extend
     either <classname>EditPlugin</classname> or its convinience subclass,
     <classname>EBPlugin</classname>. We begin our review of the jEdit
     plugin API with these two classes.
@@ -251,7 +251,7 @@ else if(msg instanceof ViewUpdate)
 <informalexample><programlisting>if(msg instanceof CreateDockableWindow)
 {
     CreateDockableWindow cmsg = (CreateDockableWindow)msg;
-    if(cmsg.getName().equals("myplugin"))
+    if(cmsg.getDockableWindowName().equals("myplugin"))
         cmsg.setDockableWindow(new MyPluginWindow());
 }</programlisting></informalexample>
 <para>
@@ -267,7 +267,7 @@ else if(msg instanceof ViewUpdate)
 
 </sect1>
 
-<sect1 id="plugin-window-classes"><title>Dockable Window Classes</title>
+<sect1 id="class-dockablewindow"><title>Interface DockableWindow</title>
 
 <para>
   The dockable plugin API consists of a single interface,
@@ -280,13 +280,13 @@ else if(msg instanceof ViewUpdate)
   without specific direction from the plugin.
 </para>
 
-<para>
-  The <classname>DockableWindowContainer</classname> is also used by the
-  API behind the scenes. Most plugins will not need to know about this
+<!-- <para>
+  The <classname>DockableWindowContainer</classname> class is also used
+  by the API behind the scenes. Most plugins will not need to know about this
   class.
 </para>
 
-<sect2 id="class-DockableWindow"><title>Interface DockableWindow</title>
+<sect2 id="class-DockableWindow"><title>Interface DockableWindow</title> -->
 
 <para>
   This interface provides the connection between the plugin's visible
@@ -341,9 +341,7 @@ else if(msg instanceof ViewUpdate)
 
 </itemizedlist>
 
-</sect2>
-
-<sect2 id="class-DockableDindowContainer">
+<!-- <sect2 id="class-DockableDindowContainer">
 <title>Interface DockableWindowContainer</title>
 
 <para>
@@ -378,7 +376,7 @@ else if(msg instanceof ViewUpdate)
 
 </itemizedlist>
 
-</sect2>
+</sect2> -->
 
 </sect1>
 
@@ -606,7 +604,7 @@ else if(msg instanceof ViewUpdate)
   using descriptive strings as keys.  The values in the table are
   sets of statements written in BeanShell, jEdit's macro scripting
   language.  These scripts either direct the action themselves,
-  delegate performance to a method of one of jEdit's classes that
+  delegate to a method in one of the plugin's classes that
   encapsulates the action, or do a little of both.  The scripts are
   usually short; elaborate action protocols are usually contained in
   compiled code, rather than an interpreted macro script, to speed
@@ -655,28 +653,29 @@ else if(msg instanceof ViewUpdate)
   <listitem>
     <para>
       An <varname>ACTION</varname> contains the data for a particular action.
-      It has three attributes: a required <varname>NAME</varname>; a flag
+      It has three attributes: a required <varname>NAME</varname>; 
+      an optional <varname>NO_REPEAT</varname>, which is a flag
       indicating whether the action should not be repeated with the
       <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-      command (see <xref linkend="repeat" />);
-      and a flag indicating whether the
+      command (see <xref linkend="repeat" />); and an optional
+      <varname>NO_RECORD</varname> which is a a flag indicating whether the
       action should be recorded if it is invoked while a user is recording a
-      macro (<varname>NO_RECORD</varname>). The two flag attributes
+      macro. The two flag attributes
       can have two possible values, <quote>TRUE</quote> or
       <quote>FALSE</quote>. In both cases, <quote>FALSE</quote> is the
-      default if not specified.
+      default if the attribute is not specified.
     </para>
   </listitem>
   <listitem>
     <para>
-      An <varname>ACTION</varname> contains two child elements
+      An <varname>ACTION</varname> can have two child elements
       within it: a required <varname>CODE</varname> element which
       specifies the
       BeanShell code that will be executed when the action is invoked,
       and an optional <varname>IS_SELECTED</varname> element, used for
       checkbox
       menu items.  The <varname>IS_SELECTED</varname> element contains
-      BeanShell code that is designed to return a boolean flag that will
+      BeanShell code that returns a boolean flag that will
       determine the state of the checkbox.
     </para>
   </listitem>
@@ -763,7 +762,7 @@ plugin.MyPlugin.version=1.0.3</programlisting></informalexample>
     <informalexample><programlisting>plugin.MyPlugin.depend.0=jdk 1.2
 plugin.MyPlugin.depend.1=jedit 03.02.97.00
 plugin.MyPlugin.depend.2=class com.ice.tar.tar
-plugin.MyPlugin.depend.3=plugin Console 3.0</programlisting>
+plugin.MyPlugin.depend.3=plugin console.ConsolePlugin 3.0</programlisting>
 </informalexample>
 
   </listitem>
@@ -880,7 +879,7 @@ myplugin-grok.label=Grok Current Buffer</programlisting>
 
 <para>
  The location of the plugin's help file should be stored in the
- <property>plugin.<replaceable>class name</replaceable>.docs</property>
+ <literal>plugin.<replaceable>class name</replaceable>.docs</literal>
  property.
 </para>
 

@@ -32,14 +32,16 @@
         </funcprototype>
       </funcsynopsis>
       <para>
-        Writes the string value of the argument to the output stream
-        of the current process.  If <parameter>arg</parameter> is an array,
-        <function>print</function> runs itslef recursively
+        Writes the string value of the argument to the activity log,
+        or if run from the <application>Console</application> plugin,
+        to the current output window.  If <parameter>arg</parameter> is
+        an array, <function>print</function> runs itself recursively
         on the array's elements.
       </para>
     </listitem>
 
-    <listitem>
+    <!-- one day jEdit will provide its own error() implementation -->
+    <!-- <listitem>
       <funcsynopsis>
         <funcprototype>
           <funcdef>void <function>error</function></funcdef>
@@ -50,7 +52,7 @@
         Writes the string represented by <parameter>errorMsg</parameter>
         to the error stream of the current process.
       </para>
-    </listitem>
+    </listitem> -->
 
     <listitem>
       <funcsynopsis>
@@ -61,7 +63,7 @@
       </funcsynopsis>
       <para>
         Writes the contents of <parameter>filename</parameter>
-        to the output stream of the current process.
+        to the activity log.
       </para>
     </listitem>
 
@@ -74,8 +76,8 @@
       </funcsynopsis>
       <para>
         Writes the public fields and methods of the specified class to
-        the output stream of the current process.  Requires JDK1.3
-        or greater.
+        the output stream of the current process.  Requires Java 2
+        version 1.3 or greater.
       </para>
     </listitem>
 
@@ -96,8 +98,8 @@
       </funcsynopsis>
       <para>
         Displays the contents of directory <parameter>dirname</parameter>.
-        The format of the display is similar to the <function>ls -l</function>
-        command.
+        The format of the display is similar to the Unix
+        <function>ls -l</function> command.
       </para>
     </listitem>
 
@@ -110,7 +112,7 @@
       </funcsynopsis>
       <para>
         Create a <classname>File</classname> object corresponding to
-        <function>filename</function>.  Relative paths are resolced with
+        <function>filename</function>.  Relative paths are resolved with
         reference to the BeanShell interpreter's working
         directory.
       </para>
@@ -249,11 +251,13 @@
       </funcsynopsis>
       <para>
         Returns the resource specified by <parameter>path</parameter>.
-        A absolute path must be used to returns any resource available in
+        A absolute path must be used to return any resource available in
         the current classpath.
       </para>
     </listitem>
 
+    <!-- bsh.classpath not supported in jEdit -->
+    <!--
     <listitem>
       <funcsynopsis>
         <funcprototype>
@@ -341,7 +345,7 @@
       </para>
     </listitem>
 
-  </itemizedlist>
+  </itemizedlist> -->
 
 </sect1>
 
@@ -433,6 +437,12 @@
         interpreter.  The server interpreter listens on the designated
         port.
       </para>
+      <para>
+        This requires the <classname>bsh.util</classname> package, which
+        is not included with jEdit. It can be found in the stand-alone
+        BeanShell distribution, available from <ulink
+        url="http://www.beanshell.org">http://www.beanshell.org</ulink>.
+      </para>
       <caution><para>
         Security of this port is not guaranteed.  Use this command
         with extreme caution.
@@ -457,8 +467,13 @@
       </funcsynopsis>
       <para>
         Creates a new BeanShell <classname>This</classname> scripted object which
-        can hold data members.
+        can hold data members. You can use this to create an object for
+        storing miscellaneous crufties, like so:
       </para>
+      <informalexample><programlisting>crufties = object();
+crufties.foo = "hello world";
+crufties.counter = 5;
+...</programlisting></informalexample>
     </listitem>
 
     <listitem>

@@ -16,10 +16,9 @@
 <sect1 id="class-EditBus"><title>Class EditBus</title>
 
   <para>
-    This class defines a singleton object providing a <quote>publish and
-    subscribe</quote> messaging system for all components that implement
+    This class provides a messaging system for all components that implement
     the	<classname>EBComponent</classname> interface, including
-    <classname>View</classname> and<classname>DockableWindow</classname>
+    <classname>View</classname> and <classname>EBPlugin</classname>
     objects.
   </para>
 
@@ -65,19 +64,10 @@
       </funcprototype>
     </funcsynopsis>
 	<para>
-		Manages lists of plugin labels, error sources and other objects.
-	</para>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>removeFromBus</function></funcdef>
-        <paramdef>EBComponent <parameter>component</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-	<para>
-		Adds or removes a subscribing component.
+		Manages arbitriary lists of objects. Used by jEdit to manage
+    dockable windows. The
+    <application>ErrorList</application> plugin also uses these methods to
+    manage error sources.
 	</para>
   </listitem>
 
@@ -89,8 +79,7 @@
       </funcprototype>
     </funcsynopsis>
 	<para>
-		Returns an array of references to all components connected to the
-		EditBus.
+		Returns an array of all components connected to the EditBus.
 	</para>
   </listitem>
 
@@ -195,31 +184,6 @@
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public <function>BufferUpdate</function></funcdef>
-        <paramdef>Buffer <parameter>buffer</parameter></paramdef>
-        <paramdef>View <parameter>view</parameter></paramdef>
-        <paramdef>Object <parameter>what</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      The parameter <parameter>what</parameter> is an <classname>Object</classname>
-      consisting of one of the following string literals:
-    </para>
-    <itemizedlist mark="bullet">
-      <listitem><para><constant>"CREATED"</constant></para></listitem>
-      <listitem><para><constant>"LOAD_STARTED"</constant></para></listitem>
-      <listitem><para><constant>"DIRTY_CHANGED"</constant> - a change in the buffer's
-        <quote>dirty</quote> status</para></listitem>
-      <listitem><para><constant>"MARKERS_CHANGED"</constant></para></listitem>
-      <listitem><para><constant>"MODE_CHANGED"</constant></para></listitem>
-      <listitem><para><constant>"ENCODING_CHANGED"</constant></para></listitem>
-      <listitem><para><constant>"SAVING"</constant></para></listitem>
-    </itemizedlist>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
         <funcdef>public Buffer <function>getBuffer</function></funcdef>
         <void/>
       </funcprototype>
@@ -233,6 +197,9 @@
         <void/>
       </funcprototype>
     </funcsynopsis>
+    <para>
+      This may be <literal>null</literal> with some message types.
+    </para>
   </listitem>
 
   <listitem>
@@ -243,8 +210,19 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-      returns the string literal indicating the change in buffer status.
+      Returns one of the following constants defined in the
+      <classname>BufferUpdate</classname> class:
     </para>
+    <itemizedlist>
+      <listitem><para><varname>CREATED</varname></para></listitem>
+      <listitem><para><varname>LOAD_STARTED</varname></para></listitem>
+      <listitem><para><varname>DIRTY_CHANGED</varname> - a change in the buffer's
+        <quote>dirty</quote> status</para></listitem>
+      <listitem><para><varname>MARKERS_CHANGED</varname></para></listitem>
+      <listitem><para><varname>MODE_CHANGED</varname></para></listitem>
+      <listitem><para><varname>ENCODING_CHANGED</varname></para></listitem>
+      <listitem><para><varname>SAVING</varname></para></listitem>
+    </itemizedlist>
   </listitem>
 
 </itemizedlist>
@@ -255,28 +233,12 @@
 <title>Class CreateDockableWindow</title>
 
 <para>
-  This message is sent to cause a plugin core object to create a plugin
-  window object.
+  This message is sent by the <function>addDockableWindow()</function>
+  method of the <classname>DockableWindowManager</classname> class; see
+  <xref linkend="host-display-message" />.
 </para>
 
 <itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>CreateDockableWindow</function></funcdef>
-        <paramdef>View <parameter>view</parameter></paramdef>
-        <paramdef>String <parameter>name</parameter></paramdef>
-        <paramdef>String <parameter>position</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      The parameter <parameter>name</parameter> represnets the name of
-      the plugin and is ultimately drawn form the plugin's propoerties file.
-      The <parameter>position</parameter> is supplied by the plugin
-      management facility based upon user settings.
-    </para>
-  </listitem>
 
   <listitem>
     <funcsynopsis>
@@ -304,22 +266,28 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-      returns the string literal indicating the change in buffer status.
+      Returns one of the following constants defined in the
+      <classname>DockableWindowManager</classname> class:
     </para>
+    <itemizedlist>
+     <listitem><para><varname>FLOATING</varname></para></listitem>
+     <listitem><para><varname>TOP</varname></para></listitem>
+     <listitem><para><varname>BOTTOM</varname></para></listitem>
+     <listitem><para><varname>LEFT</varname></para></listitem>
+     <listitem><para><varname>RIGHT</varname></para></listitem>
+    </itemizedlist>
   </listitem>
 
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public DockableWindow <function>getDockableWindow</function></funcdef>
-        <void/>
+        <funcdef>public void <function>setDockableWindow</function></funcdef>
+        <paramdef>DockableWindow <varname>window</varname></paramdef>
       </funcprototype>
     </funcsynopsis>
     <para>
-      returns the name of the <classname>DockableWindow</classname>
-      created in response to the message; it must be attached to the message
-      through a call to <function>setDockableWindow()</function> by the
-      plugin core object.
+      Attaches a dockable window to the message. This prevents the
+      message from being passed on to further subscribers.
     </para>
   </listitem>
 
@@ -330,36 +298,9 @@
 <sect1 id="class-EditorExiting"><title>Class EditorExiting</title>
 
 <para>
-  This message signifies that the host application is about to exit.  It
-  cannot be vetoed.  The message has no parameters other than the source
-  and no methods other than the <function>getSource()</function> method
-  of <classname>EBMessage</classname>.
+  This message signifies that the host application is about to exit.
+  The message has no parameters and may not be vetoed.
 </para>
-
-<itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>EditorExiting</function></funcdef>
-        <paramdef>Component <parameter>source</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Component <function>getSource</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      inherited from <classname>EBMessage</classname>.
-    </para>
-  </listitem>
-
-</itemizedlist>
 
 </sect1>
 
@@ -376,26 +317,10 @@
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public <function>EditorExitRequested</function></funcdef>
-        <paramdef>View <parameter>view</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      the parameter <parameter>view</parameter> represent the view from
-      which the exit request originated.
-    </para>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
         <funcdef>public View <function>getView</function></funcdef>
         <void/>
       </funcprototype>
     </funcsynopsis>
-    <para>
-      inherited from <classname>EBMessage</classname>.
-    </para>
   </listitem>
 
 </itemizedlist>
@@ -405,37 +330,10 @@
 <sect1 id="class-EditorStarted"><title>Class EditorStarted</title>
 
 <para>
-  This message signifies that the host application has styarted. The
+  This message signifies that the host application has started. The
   message is sent before any views are created. The message has no
-  parameters other than the source and no methods other than the
-  <function>getSource()</function> method of <classname>EBMessage</classname>.
-  It may not be vetoed.
+  parameters and it may not be vetoed.
 </para>
-
-<itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>EditorStarted</function></funcdef>
-        <paramdef>Component <parameter>source</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Component <function>getSource</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      inherited from <classname>EBMessage</classname>.
-    </para>
-  </listitem>
-
-</itemizedlist>
 
 </sect1>
 
@@ -446,26 +344,6 @@
 </para>
 
 <itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>EditPaneUpdate</function></funcdef>
-        <paramdef>EditPane <parameter>editPane</parameter></paramdef>
-        <paramdef>Object <parameter>what</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      The parameter <parameter>what</parameter> is an <classname>Object</classname>
-      consisting of one of the following string literals:
-    </para>
-    <itemizedlist mark="bullet">
-      <listitem><para><constant>"CREATED"</constant></para></listitem>
-      <listitem><para><constant>"DESTROYED"</constant></para></listitem>
-      <listitem><para><constant>"BUFFER_CHANGED"</constant> - a change in the buffer
-        displayed in the edit pane</para></listitem>
-    </itemizedlist>
-  </listitem>
 
   <listitem>
     <funcsynopsis>
@@ -484,8 +362,15 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-      returns the string literal indicating the change in edit pane status.
+      Returns one of the following constants defined in the
+      <classname>EditPaneUpdate</classname> class:
     </para>
+    <itemizedlist>
+      <listitem><para><varname>CREATED</varname></para></listitem>
+      <listitem><para><varname>DESTROYED</varname></para></listitem>
+      <listitem><para><varname>BUFFER_CHANGED</varname> - a change in the buffer
+        displayed in the edit pane</para></listitem>
+    </itemizedlist>
   </listitem>
 
 </itemizedlist>
@@ -496,36 +381,9 @@
 <sect1 id="class-MacrosChanged"><title>Class MacrosChanged</title>
 
 <para>
-  This message signifies that the list of available macros have changed.  It
-  cannot be vetoed.  The message has no parameters other than the source
-  and no methods other than the <function>getSource()</function> method
-  of <classname>EBMessage</classname>.
+  This message signifies that the list of available macros have changed.
+  The message has no parameters and may not be vetoed.
 </para>
-
-<itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>MacrosChanged</function></funcdef>
-        <paramdef>Component <parameter>source</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Component <function>getSource</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      inherited from <classname>EBMessage</classname>.
-    </para>
-  </listitem>
-
-</itemizedlist>
 
 </sect1>
 
@@ -533,36 +391,9 @@
 
 <para>
   This message is sent when configuration settings have been changed through
-  any of the option panes in the options dialog. The message
-  cannot be vetoed.  It has no parameters other than the source
-  and no methods other than the <function>getSource()</function> method
-  of <classname>EBMessage</classname>.
+  any of the option panes in the options dialog. The message has no
+  parameters and may be vetoed.
 </para>
-
-<itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>PropertiesChanged</function></funcdef>
-        <paramdef>Component <parameter>source</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Component <function>getSource</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      inherited from <classname>EBMessage</classname>.
-    </para>
-  </listitem>
-
-</itemizedlist>
 
 </sect1>
 
@@ -571,35 +402,9 @@
 
 <para>
   This message is sent when settings in the <quote>Search and
-  Replace</quote> dialog have changed. It cannot be vetoed. The message
-  has no parameters other than the source and no methods other than the
-  <function>getSource()</function> methodof <classname>EBMessage</classname>.
+  Replace</quote> dialog have changed. The message has no
+  parameters and may be vetoed.
 </para>
-
-<itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>SearchSettingsChanged</function></funcdef>
-        <paramdef>Component <parameter>source</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Component <function>getSource</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      inherited from <classname>EBMessage</classname>.
-    </para>
-  </listitem>
-
-</itemizedlist>
 
 </sect1>
 
@@ -607,24 +412,10 @@
 <para>
     This message is sent when the status of a file or directory changes.
     This allows subscribers that display or operate upon files an
-    opportunity to adjust their state.  This message may be vetoed by a
-    subscriber.
+    opportunity to adjust their state.  This message may not be vetoed.
 </para>
 
 <itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>VFSUpdate</function></funcdef>
-        <paramdef>String <parameter>path</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      The parameter <parameter>path</parameter> represents the path of
-      the file or directory that is the subject of the message,
-    </para>
-  </listitem>
 
   <listitem>
     <funcsynopsis>
@@ -642,29 +433,11 @@
 
 <sect1 id="class-ViewUpdate"><title>Class ViewUpdate</title>
 <para>
-    This message is sent when the status of a view changes.  It may
+    This message is sent when the status of a view changes. It may
     not be vetoed.
 </para>
 
 <itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>ViewUpdate</function></funcdef>
-        <paramdef>View <parameter>view</parameter></paramdef>
-        <paramdef>Object <parameter>what</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      The parameter <parameter>what</parameter> is an <classname>Object</classname>
-      consisting of one of the following string literals:
-    </para>
-    <itemizedlist mark="bullet">
-      <listitem><para><constant>"CREATED"</constant></para></listitem>
-      <listitem><para><constant>"CLOSED"</constant></para></listitem>
-    </itemizedlist>
-  </listitem>
 
   <listitem>
     <funcsynopsis>
@@ -683,8 +456,13 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-      returns the string literal indicating the change in view status.
+      Returns one of the following constants defined in the
+      <classname>ViewUpdate</classname> class:
     </para>
+    <itemizedlist>
+      <listitem><para><varname>CREATED</varname></para></listitem>
+      <listitem><para><varname>CLOSED</varname></para></listitem>
+    </itemizedlist>
   </listitem>
 
 </itemizedlist>

@@ -9,14 +9,15 @@
 
 <chapter id="api-macro"><title>General jEdit Classes</title>
 
-<sect1 id="class-jEdit"><title>Class jEdit</title>
+<sect1 id="class-jedit"><title>Class jEdit</title>
 
 <para>
-    This is the main class of the application. The methods likely
-    to be invoked in macros are all <type>static</type> methods, so
-    they are called with the following syntax:
+    This is the main class of the application. All the methods in this
+    class are static methods, so
+    they are called with the following syntax, from both macros and
+    plugins:
 </para>
-<programlisting>    jEdit.<emphasis>name_of_method</emphasis>(<emphasis>parameters</emphasis>)
+<programlisting>jEdit.<replaceable>method</replaceable>(<replaceable>parameters</replaceable>)
 </programlisting>
 
 <para>
@@ -208,7 +209,10 @@
 </funcsynopsis>
 <para>
     Returns the path of the directory in which user-specific settings
-    are stored.
+    are stored. This will be null if jEdit was started with the
+    <command>-nosettings</command> command-line switch; so do not
+    blindly use this method without checking for a null return value
+    first.
 </para>
 </listitem>
 
@@ -216,7 +220,7 @@
 
 
 <para>The jEdit object also maintains a number of collections which
-a macro may need to use. They include the following:</para>
+are useful in some situations. They include the following:</para>
 
 <itemizedlist>
 
@@ -357,7 +361,7 @@ a macro may need to use. They include the following:</para>
 </itemizedlist>
 </sect1>
 
-<sect1 id="class-View"><title>Class View</title>
+<sect1 id="class-view"><title>Class View</title>
 
 <para>
     This class represents the <quote>parent</quote> or top-level frame window
@@ -430,7 +434,8 @@ a macro may need to use. They include the following:</para>
 <para>
     Removes the <quote>waiting</quote> cursor. This method and
     <function>showWaitCursor()</function> are implemented using a reference
-    count of requests for wait cursors, so the macro writer should
+    count of requests for wait cursors, so that nested calls work
+    correctly; however, you should
     be careful to use these methods in tandem.
 </para>
 </listitem>
@@ -448,11 +453,11 @@ a macro may need to use. They include the following:</para>
     current cursor position, the editing mode of the current buffer and
     other information. The method <function>setMessage(String
     message)</function> can be called on the return value of
-    <function>getStatus()</function> to display reminders or updates during
-    execution of a macro. The message remains until the method is called
+    <function>getStatus()</function> to display reminders or updates.
+    The message remains until the method is called
     again. To display a temporary message in the status bar, call
     <function>setMessageAndClear(String message)</function>, which will
-    erase the message after two seconds.
+    erase the message automatically after ten seconds.
 </para>
 </listitem>
 
@@ -464,12 +469,8 @@ a macro may need to use. They include the following:</para>
  </funcprototype>
 </funcsynopsis>
 <para>
-    The object returned by this method keeps track of all plugins
-    that can be contained in dockable windows above, below and to the left and
-    right of the editing pane. Calling
-    <function>getDockableWindow(String pluginName)</function> on the
-    return value of this method
-    is an efficient way to access and (if necessary) activate a plugin.
+    The object returned by this method keeps track of all dockable
+    windows. See <xref linkend="class-dockablewindowmanager" />.
 </para>
 </listitem>
 
@@ -478,7 +479,7 @@ a macro may need to use. They include the following:</para>
 </sect1>
 
 <!-- open sect1 -->
-<sect1 id="class-Registers"><title>Class Registers</title>
+<sect1 id="class-registers"><title>Class Registers</title>
 <para>
   A <classname>Register</classname> is string of text indexed by a
   single character.  Typically the text is taken from selected buffer text
@@ -609,7 +610,7 @@ a macro may need to use. They include the following:</para>
     </funcsynopsis>
     <para>
       Sets the text of the designated register to <constant>null</constant>.
-      If the registger is one of the two registers reserved by the
+      If the register is one of the two registers reserved by the
       application (as discussed in the next section), the text value is
       set to an empty string.
     </para>
@@ -638,7 +639,7 @@ a macro may need to use. They include the following:</para>
 </sect1>
 
 
-<sect1 id="class-Register"><title>Interface Register</title>
+<sect1 id="class-register"><title>Interface Registers.Register</title>
 
 <para>
   This interface requires implementation of two methods:
@@ -649,10 +650,10 @@ a macro may need to use. They include the following:</para>
   <classname>ClipboardRegister</classname> is tied to the contents of the
   application's clipboard. The application assigns a
   <classname>ClipboardRegister</classname> to the register indexed under
-  the character <screen>'$'</screen>. A
+  the character <filename>$</filename>. A
   <classname>StringRegister</classname> is created for registers assigned
   by the user. In addition, the application assigns to the
-  <classname>StringRegister</classname> indexed under <screen>'%'</screen>
+  <classname>StringRegister</classname> indexed under <filename>%</filename>
   the last text segment selected in the text area.
 </para>
 
@@ -667,10 +668,10 @@ a macro may need to use. They include the following:</para>
 
 
 <!-- LaTeX spews with id's that are too long? -->
-<sect1 id="class-DockableWindowManager"><title>Class DockableWindowManager</title>
+<sect1 id="class-dockablewindowmanager"><title>Class DockableWindowManager</title>
 
     <para>
-        Windows conforming to jEdit's docking API can appear in window
+        Windows conforming to jEdit's dockable window API can appear in
         <quote>panes</quote> located above, below or to the left or right of the
         main editing pane. They can also be displayed in <quote>floating</quote>
         frame windows. A <classname>DockableWindowManager</classname> keeps
@@ -692,7 +693,7 @@ a macro may need to use. They include the following:</para>
           object named by the <varname>name</varname> parameter.  The name of a
           <classname>DockableWindow</classname> is a required property of the
           plugin.  If there is no <classname>DockableWindow</classname> bearing the
-          requested name, the method return <constant>null</constant>.
+          requested name, the method returns <constant>null</constant>.
         </para>
        </listitem>
 
@@ -751,14 +752,14 @@ a macro may need to use. They include the following:</para>
 
 </sect1>
 
-<sect1 id="class-JEditTextArea"><title>Class JEditTextArea</title>
+<sect1 id="class-jedittextarea"><title>Class JEditTextArea</title>
 
 <para>
     This class is the visible component that displays the file
     being edited. It is derived from Java's <classname>JComponent</classname> class.
 </para>
 
-<para>
+<!-- <para>
     There are many methods in <classname>JEditTextArea</classname> that can
     be helpful in writing macros. The methods that deal with selecting text,
     many of which are new to version 3.2 of jEdit, rely upon a new
@@ -768,9 +769,9 @@ a macro may need to use. They include the following:</para>
     selection classes, we will outline the selection methods
     of <classname>JEditTextArea</classname>, followed by a listing of
     other methods in this class that are useful in writing macros.
-</para>
+</para> -->
 
-<sect2 id="class-Selection"><title>class Selection</title>
+<sect2 id="class-selection"><title>Class Selection</title>
   <para>
     This is an <glossterm>abstract class</glossterm> which holds data
     on a region of selected text. As an abstract class, it cannot be used
@@ -897,7 +898,7 @@ a macro may need to use. They include the following:</para>
 
 </sect2>
 
-<sect2 id="class-JEditTextArea-selection"><title>Selection methods in
+<sect2 id="class-jedittextarea-selection"><title>Selection methods in
 JEditTextArea</title>
 <para>
   A <classname>JEditTextArea</classname> object maintains an
@@ -914,23 +915,22 @@ JEditTextArea</title>
   dealing with <classname>Selection</classname> objects:
 </para>
 
-<sect3 id="class-JEditTextArea-selection-add-remove">
+<sect3 id="class-jedittextarea-selection-add-remove">
 <title>Adding and removing selections</title>
 <itemizedlist>
 
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public void <function>setMultipleSelectionEnabled
-        </function></funcdef>
+        <funcdef>public void <function>setMultipleSelectionEnabled</function></funcdef>
         <paramdef>boolean <parameter>multi</parameter></paramdef>
       </funcprototype>
     </funcsynopsis>
     <para>
       Set multiple selection on or off according to the value of
       <parameter>multi</parameter>. This only affects the ability to
-      make multiple selections in the user interface; macros can
-      manipulate them regardless of the setting of this flag. In fact,
+      make multiple selections in the user interface; macros and plugins
+      can manipulate them regardless of the setting of this flag. In fact,
       in most cases, calling this method should not be necessary.
     </para>
   </listitem>
@@ -991,9 +991,9 @@ JEditTextArea</title>
     </funcsynopsis>
     <para>
       Adds a single <classname>Selection</classname> or an array of
-      <classname>Selection</classname> object to the existing collection
+      <classname>Selection</classname> objects to the existing collection
       maintined by the <classname>JEditTextArea</classname>.  Nested or
-      overlappiong selections will be merged where possible.
+      overlapping selections will be merged where possible.
     </para>
   </listitem>
 
@@ -1042,7 +1042,7 @@ JEditTextArea</title>
 </itemizedlist>
 </sect3>
 
-<sect3 id="class-JEditTextArea-selection-text">
+<sect3 id="class-jedittextarea-selection-text">
 <title>Getting and setting selected text</title>
 <itemizedlist>
 
@@ -1105,10 +1105,9 @@ JEditTextArea</title>
     <para>
       The first version changes the text of the selection represented
       by <parameter>s</parameter> to
-      <parameter>selectedText</parameter>. The second version operates
-      on the selection containing the current caret position; if there
-      is no selection, the contents of <parameter>selectedText</parameter>
-      are inserted at the current caret position.
+      <parameter>selectedText</parameter>. The second version sets the
+      text of all active selections; if there are no selections, the
+      text will be inserted at the current caret position.
     </para>
     <para>
       The second version of <function>setSelectedText()</function> is
@@ -1131,7 +1130,7 @@ JEditTextArea</title>
     <para>
       This method is the most convenient way to iterate through selected lines
       in a buffer. The line numbers in the array returned by this method can
-      be passed as a parameeter to such methods as
+      be passed as a parameter to such methods as
       <function>getLineText()</function>, as discussed below.
     </para>
   </listitem>
@@ -1139,13 +1138,13 @@ JEditTextArea</title>
 </itemizedlist>
 </sect3>
 
-<sect3 id="class-JEditTextArea-selection-other">
+<sect3 id="class-jedittextarea-selection-other">
 <title>Other selection methods</title>
 
 <para>
   The following methods perform selection operations without using
   <classname>Selection</classname> objects as parameters or return
-  values.
+  values. These methods should only be used in macros.
 </para>
 
 
@@ -1249,10 +1248,10 @@ JEditTextArea</title>
 
 </sect2>
 
-<sect2 id="class-JEditTextArea-non-selection">
+<sect2 id="class-jedittextarea-non-selection">
   <title>Other methods in JEditTextArea</title>
 
-<sect3 id="class-JEditTextArea-caret">
+<sect3 id="class-jedittextarea-caret">
 <title>Editing caret methods</title>
 <para>
     These methods are used to get, set and move the position of the
@@ -1488,7 +1487,7 @@ JEditTextArea</title>
 
 </sect3>
 
-<sect3 id="class-JEditTextArea-position">
+<sect3 id="class-jedittextarea-position">
 <title>Methods for calculating editing positions</title>
 
 
@@ -1530,7 +1529,7 @@ JEditTextArea</title>
 </itemizedlist>
 </sect3>
 
-<sect3 id="class-JEditTextArea-gettext">
+<sect3 id="class-jedittextarea-gettext">
 <title>Other methods for retrieving text</title>
 
 <para>
@@ -1592,7 +1591,7 @@ JEditTextArea</title>
 </sect3>
 
 
-<sect3 id="class-JEditTextArea-delete">
+<sect3 id="class-jedittextarea-delete">
 <title>Methods for deleting text</title>
 
 <itemizedlist>
@@ -1658,7 +1657,7 @@ JEditTextArea</title>
 </sect3>
 
 
-<sect3 id="class-JEditTextArea-commment">
+<sect3 id="class-jedittextarea-commment">
 <title>Methods for creating comments</title>
 
 <itemizedlist>
@@ -1691,7 +1690,7 @@ JEditTextArea</title>
 </itemizedlist>
 </sect3>
 
-<sect3 id="class-JEditTextArea-statistics">
+<sect3 id="class-jedittextarea-statistics">
 <title>Methods for getting buffer statistics</title>
 
 <itemizedlist>
@@ -1704,7 +1703,7 @@ JEditTextArea</title>
  </funcprototype>
 </funcsynopsis>
 <para>
-    Returns the length of the buffer being edited.
+    Returns the number of characters in the buffer.
 </para>
 </listitem>
 
@@ -1739,16 +1738,16 @@ JEditTextArea</title>
 
 </sect1>
 
-<sect1 id="class-Buffer"><title>Class Buffer</title>
+<sect1 id="class-buffer"><title>Class Buffer</title>
 
 <para>
     A <classname>Buffer</classname> represents the contents of an open text
     file as it is maintained in the computer's memory (as opposed to
-    how it may stored on a disk). It is derived from Java's
+    how it may be stored on a disk). It is derived from Java's
     <classname>PlainDocument</classname> class.
 </para>
 
-<sect2 id="class-Buffer-file"><title>File attribute methods</title>
+<sect2 id="class-buffer-file"><title>File attribute methods</title>
 
 <itemizedlist>
 
@@ -1777,6 +1776,12 @@ JEditTextArea</title>
   <void/>
  </funcprototype>
 </funcsynopsis>
+<para>
+ This method may return <literal>null</literal> if the file is stored on
+ a remote file system (for example, if the <application>FTP</application>
+ or <application>Archive</application> plugins are in use). This method
+ should be avoided if possible.
+</para>
 </listitem>
 
 <listitem>
@@ -1825,7 +1830,7 @@ JEditTextArea</title>
 
 </sect2>
 
-<sect2 id="class-Buffer-editing-attr"><title>Editing attribute methods</title>
+<sect2 id="class-buffer-editing-attr"><title>Editing attribute methods</title>
 
 <itemizedlist>
 
@@ -1953,8 +1958,8 @@ JEditTextArea</title>
 
 </sect2>
 
-<sect2 id="class-Buffer-editing-action"><title>Editing action methods</title>
-<sect3 id="class-Buffer-editing-general"><title>General editing methods</title>
+<sect2 id="class-buffer-editing-action"><title>Editing action methods</title>
+<sect3 id="class-buffer-editing-general"><title>General editing methods</title>
 
 <itemizedlist>
 
@@ -2120,7 +2125,7 @@ JEditTextArea</title>
     </itemizedlist>
 </sect3>
 
-<sect3 id="class-Buffer-editing-marker"><title>Editing marker methods</title>
+<sect3 id="class-buffer-editing-marker"><title>Marker methods</title>
 <para>
   Buffers may have one or more <glossterm>markers</glossterm> which serve
   as textual bookmarks.  A <classname>Marker</classname> has three key attributes: the
@@ -2224,7 +2229,7 @@ JEditTextArea</title>
 </itemizedlist>
 </sect3>
 
-<sect3 id="class-Buffer-editing-folding"><title>Folding methods</title>
+<sect3 id="class-buffer-editing-folding"><title>Folding methods</title>
 
 <para>
   The <quote>folding</quote> features of jEdit allow sections of source
@@ -2323,11 +2328,11 @@ JEditTextArea</title>
 
 </sect1>
 
-<sect1 id="class-Macros"><title>Class Macros</title>
+<sect1 id="class-macros"><title>Class Macros</title>
 
 <para>
     The following shortcut methods are useful in displaying output messages
-    or obtaining input.
+    or obtaining input from a macro.
 </para>
 
   <itemizedlist>
@@ -2394,7 +2399,7 @@ JEditTextArea</title>
 
 </sect1>
 
-<sect1 id="class-SearchAndReplace"><title>Class SearchAndReplace</title>
+<sect1 id="class-searchandreplace"><title>Class SearchAndReplace</title>
 
 <para>
     Search and replace routines are undertaken by jEdit's
@@ -2569,9 +2574,7 @@ JEditTextArea</title>
     from <classname>SearchFileSet</classname>:
 </para>
 
-<para>
-    <emphasis>class DirectoryListSet</emphasis>
-</para>
+<bridgehead renderas="sect2">DirectoryListSet</bridgehead>
 
 <para>
     This represents a set of files taken from a directory.  It can be extended recursively
@@ -2579,7 +2582,7 @@ JEditTextArea</title>
     following syntax:
 </para>
 
-<itemizedlist mark="disc">
+<itemizedlist>
 <listitem>
 <funcsynopsis>
  <funcprototype>
@@ -2600,16 +2603,14 @@ JEditTextArea</title>
 </listitem>
 </itemizedlist>
 
-<para>
-<emphasis>class AllBufferSet</emphasis>
-</para>
+<bridgehead renderas="sect2">class AllBufferSet</bridgehead>
 
 <para>
     This class represents the set of all buffers currently open.  The constructor
     for this class takes a file mask as a single parameter:
 </para>
 
-<itemizedlist mark="disc">
+<itemizedlist>
 <listitem>
 <funcsynopsis>
  <funcprototype>
@@ -2620,9 +2621,7 @@ JEditTextArea</title>
 </listitem>
 </itemizedlist>
 
-<para>
-<emphasis>class CurrentBufferSet</emphasis>
-</para>
+<bridgehead renderas="sect2">class CurrentBufferSet</bridgehead>
 
 <para>
     This class represents a buffer set consisting of the current buffer only.
@@ -2765,7 +2764,7 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 </para>
 
 <para>
-  To create and display the <guilabel>Search And Replace</guilabel>
+  To create and display the search and replace
   dialog, first assign desired values to the search settings using the methods
   described above.  Then create a new <classname>SearchDialog</classname> object
   using the following constructor:
@@ -2789,18 +2788,20 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
   constant values <constant>CURRENT_BUFFER</constant>,
   <constant>ALL_BUFFERS</constant> or <constant>DIRECTORY</constant>,
   defined in the <classname>SearchDialog</classname> class.
-  The value should correspond to the type of
-  <classname>SearchFileSet</classname> created for the search.
+  This parameter determines which file set radio button to preselect
+  in the dialog box.
 </para>
 
 </sect1>
 
 
-<sect1 id="class-GUIUtilities"><title>Class GUIUtilities</title>
+<sect1 id="class-guiutilities"><title>Class GUIUtilities</title>
 
 <para>
-    One <type>static</type> method in this class encapsulates the creation and
-    display of file selection dialogs.
+    The methods dealing with creating menus and menu items are described
+    in <xref linkend="plugin-implement-menu" />.
+    One other <type>static</type> method in this class encapsulates the
+    creation and display of jEdit's custom file chooser dialog box.
 </para>
 
 <itemizedlist>
@@ -2833,7 +2834,7 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 
 </sect1>
 
-<sect1 id="class-TextUtilities"><title>Class TextUtilities</title>
+<sect1 id="class-textutilities"><title>Class TextUtilities</title>
 
 <para>
     This class contains a number of <type>static</type> methods
@@ -2933,7 +2934,7 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 
 </sect1>
 
-<sect1 id="class-MiscUtilities"><title>Class MiscUtilities</title>
+<sect1 id="class-miscutilities"><title>Class MiscUtilities</title>
 
 <para>
 This class is another collection of <type>static</type> utility methods.
@@ -2996,15 +2997,10 @@ This class is another collection of <type>static</type> utility methods.
 <para>
     If <parameter>tabSize</parameter> is set to zero, the string will consist entirely
     of space characters.  To get a whitespace string tuned to the current buffer's
-    editing mode, call this method as follows:</para>
+    settings, call this method as follows:</para>
 <informalexample>
-<programlisting>    myWhitespace = MiscUtilities.createWhiteSpace(myLength,
-        buffer.getMode().getProperty(tabSize).intValue());</programlisting></informalexample>
-<para>
-    Here, <function>getProperty()</function> returns an encapsulating
-    <classname>Integer</classname> object.  It yields its <quote>primitive</quote>
-    <type>int</type> value with a call to <function>intValue()</function>.
-</para>
+<programlisting>myWhitespace = MiscUtilities.createWhiteSpace(myLength,
+    buffer.getTabSize());</programlisting></informalexample>
 
 </listitem>
 </itemizedlist>
@@ -3067,13 +3063,16 @@ This class is another collection of <type>static</type> utility methods.
 </para>
 
 <para>
-    Except under JDK 1.3, BeanShell cannot implement arbitrary interfaces
-    such as <classname>Compare</classname> (although, as we have noted <link
-    linkend="explain-add-listeners">earlier</link>, a BeanShell method can
-    implement a number of specific listener interfaces).  Fortunately for macro
-    writers, jEdit provides a number of classes implementing <classname>Compare</classname>
+    When writing macros, keep in mind that
+    except under Java 2 version 1.3, BeanShell cannot implement arbitrary interfaces
+    such as <classname>Compare</classname> (although, as we have noted
+    in <xref linkend="macro-tips-BeanShell-interface" />,
+    a BeanShell method can
+    implement a number of specific listener interfaces).  Fortunately,
+    jEdit provides a number of classes implementing <classname>Compare</classname>
     for sorting purposes. Among them are <classname>StringCompare</classname> and
-    <classname>StringICaseCompare</classname>. Both classes compare <classname>String</classname>
+    <classname>StringICaseCompare</classname>. Both classes compare
+    <classname>String</classname>
     object; the latter class compares two strings on a case-insentive basis.
 </para>
 
@@ -3091,7 +3090,7 @@ This class is another collection of <type>static</type> utility methods.
 </sect1>
 
 
-<sect1 id="class-BeanShell"><title>Class BeanShell</title>
+<sect1 id="class-beanshell"><title>Class BeanShell</title>
 
 <para>
     This class integrates the BeanShell interpreter into jEdit.  One method is
@@ -3119,8 +3118,8 @@ This class is another collection of <type>static</type> utility methods.
     and <parameter>editPane</parameter> are
     determined with reference to the <parameter>view</parameter> parameter.  If
     <parameter>rethrowBshErrors</parameter> is set to true, any runtime exception thrown
-    by the child script will be rethrown to the parent script and become
-    visible to the user.
+    by the child script will be rethrown to the parent script for
+    additional handling.
 </para>
 
 <para>
@@ -3130,7 +3129,7 @@ This class is another collection of <type>static</type> utility methods.
     variables defined in the script will be available to all future
     uses of BeanShell; if set to <constant>true</constant>, they will be lost as
     soon as the script finishes executing. jEdit uses a value of
-    <constant>false</constant> when running the startup macro, and a value of
+    <constant>false</constant> when running startup scripts, and a value of
     <constant>true</constant> when running all other macros.
 </para>
 

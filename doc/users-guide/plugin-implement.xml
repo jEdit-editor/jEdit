@@ -35,13 +35,14 @@
   <listitem>
     <para>
       The plugin implements the necessary elements of the jEdit plugin API
-      that were outlined in the last chapter: a plugin core class, a plugin
-      window class, a plugin option pane class, a set of required plugin
-      resources, and an error reporting facility.
+      that were outlined in the last chapter: a plugin core class, 
+      perhaps a number of plugin
+      window classes, maybe a plugin option pane class, and a set of
+      required plugin resources.
     </para>
     <para>
-      Not every plugin will use error reporting. Some will do without
-      configuration options or even a visible window. All will need a plugin
+      Not every plugin has configurable options; some do not have a
+      visible window. However, all will need a plugin
       core class and a minimum set of other resources.
     </para>
   </listitem>
@@ -99,17 +100,23 @@
 
 <itemizedlist>
   <listitem><para>
+    Will the plugin provide for actions that the user can trigger using
+    jEdit's menu items, toolbar buttons and keyboard shortcuts?
+  </para></listitem>
+  <listitem><para>
     Will the plugin have its own visible interface?
   </para></listitem>
   <listitem><para>
-    Will the plugin provide for actions that the user can trigger when the
-    plugin does not have input focus? These will be the actions found in
-    menu items, toolbar buttons and keyboard shortcuts.
-  </para></listitem>
+    Will the plugin use jEdit's dockable window API?
+  </para>
+  <para>
+    If a plugin will use the dockable window API, it must handle a
+    targeted <classname>CreateDockableWindow</classname> message.
+  </para>
+  </listitem>
   <listitem><para>
-    If a plugin will have a visible interface, it must handle a targeted
-    <classname>CreateDockableWindow</classname> message. Will the plugin
-    respond to other messages reflecting changes in the host
+    Will the plugin
+    respond to any other messages reflecting changes in the host
     application's state?
   </para></listitem>
   <listitem><para>
@@ -121,9 +128,9 @@
 <sect2 id="implement-plugin-choose-base"><title>Choosing a Base Class</title>
 
 <para>
-  If the plugin will have a visible interface, or if will repsond to
+  If the plugin will respond to EditBus
   messages, it must be derived from <classname>EBPlugin</classname>.
-  Otherwise, <classname>EditPlugin</classname> should suffice as a
+  Otherwise, <classname>EditPlugin</classname> will suffice as a
   base class.
 </para>
 
@@ -189,6 +196,11 @@
   </listitem>
 </itemizedlist>
 
+<para>
+  Detailed documentation for each message class can be found in <xref
+  linkend="api-message" />.
+</para>
+
 <!-- TODO: include data members of derived message classes in appendix -->
 
 </sect2>
@@ -211,8 +223,8 @@
 
 <para>
   If the plugin is to use the dockable window API, the
-  <quote>names</quote> of any dockable windows must be registered with
-  the EditBus component.
+  <quote> internal names</quote> of any dockable windows must be
+  registered with the EditBus component.
   The EditBus stores such information in one of a number of
   <quote>named lists</quote>. Here is how the QuickNotepad plugin
   registers its dockable window:
@@ -231,10 +243,10 @@
 
 <para>
   The use of <varname>NAME</varname> as the second parameter employs an
-  idiom found in many plugins. The plugin class can include <type>static
-  final String</type> data members containing information to be registered
+  idiom found in many plugins. The plugin class can include <literal>static
+  final String</literal> data members containing information to be registered
   with the EditBus or key names for certain types of plugin properties.
-  values will be set or retrieved. This makes it easier to refer to the
+  This makes it easier to refer to the
   information when a method such as <function>handleMessage()</function>
   examines the contents of a message. The kind of data that can be handled
   in this fashion include the following:
@@ -362,8 +374,7 @@
 <para>
   The plugin's user action catalog, <filename>actions.xml</filename>, is
   the resource used by the plugin API to get the names and definitions of
-  user actions. If you are unfamiliar with XML or with implementing a
-  document type definition, the following <filename>actions.xml</filename>
+  user actions. The following <filename>actions.xml</filename>
   file from the <application>QuickNotepad</application> plugin can
   provide a model:
 </para>
@@ -431,16 +442,26 @@
   If you are unfamiliar with BeanShell code, you may nevertheless notice
   that the code statements bear a strong resemblance to Java code, with
   two exceptions: the variable <varname>wm</varname> is not typed, and the
-  variable <varname>view</varname> is never assigned any value. For
-  complete answers to these and other BeanShell
+  variable <varname>view</varname> is never assigned any value.
+</para>
+
+<para>
+  For complete answers to these and other BeanShell
   mysteries, see <xref linkend="writing-macros-part" />; two
   observations will suffice here. First, the
   BeanShell scripting language is based upon Java syntax, but allows
   variables to be typed at run time, so explicit types for variables such
   as <varname>wm</varname> need not be declared. Second, the variable
   <varname>view</varname> is predefined by jEdit's implementation of
-  BeanShell to refer to the current<classname>View</classname> object.
+  BeanShell to refer to the current <classname>View</classname> object.
 </para>
+
+<para>
+  A formal description of each element of the
+  <filename>actions.xml</filename> file can be found in
+  <xref linkend="api-resources-action" />.
+</para>
+
 </sect3>
 
 <sect3 id="plugin-implement-menu"><title>Action Labels and Menu Items</title>
@@ -523,12 +544,13 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   execution of user actions. The window for QuickNotepad will also
   implement the <classname>EBComponent</classname> so it can receive
   messages from the EditBus whenever the user has changed the plugin's
-  settings in the Global Options dialog. Here is an excerpt from a class
+  settings in the <guimenuitem>Global Options</guimenuitem> dialog. Here
+  is an excerpt from a class
   definition showing the implementation of both interfaces:
 </para>
 
 <informalexample><programlisting>public class QuickNotepad extends JPanel
-implements EBComponent, DockableWindow
+    implements EBComponent, DockableWindow
 {
     private View view;
     private String position;
@@ -608,7 +630,7 @@ implements EBComponent, DockableWindow
 </para>
 
 <informalexample><programlisting>public class QuickNotepadDockable
-implements DockableWindow, QuickNotepadActions
+    implements DockableWindow, QuickNotepadActions
 {
     private QuickNotepad notepad;
 
@@ -878,10 +900,12 @@ implements EBComponent, QuickNotepadActions
                     QuickNotepadToolPanel.this.pad.copyToBuffer();
                 }
             }));
-        label = new JLabel(pad.getFilename(), SwingConstants.RIGHT);
+        label = new JLabel(pad.getFilename(),
+            SwingConstants.RIGHT);
         label.setForeground(Color.black);
         label.setVisible(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "show-filepath").equals("true"));
+            QuickNotepadPlugin.OPTION_PREFIX
+            + "show-filepath").equals("true"));
         this.setLayout(new BorderLayout(10, 0));
         this.add(BorderLayout.WEST, toolBar);
         this.add(BorderLayout.CENTER, label);
@@ -1059,7 +1083,7 @@ plugin.QuickNotepadPlugin.depend.1=jedit 03.01.99.00</programlisting></informale
 <para>
   Next in the file comes a property that sets the title of the
   plugin in docked or frame windows.  The use of the suffix
-  <filename>title</filename> in the property's key name is
+  <literal>.title</literal> in the property's key name is
   required by the plugin API.
 </para>
 
@@ -1121,7 +1145,8 @@ options.quicknotepad.fontsize=14
 options.quicknotepad.filepath=</programlisting></informalexample>
 
 <para>
-  We do not define a default setting for the filepath property because of
+  We do not define a default setting for the <literal>filepath</literal>
+  property because of
   differences among operating systems.  We will define a default file
   programatically that will reside in the directory jEdit designates for
   user settings.
@@ -1148,7 +1173,8 @@ options.quicknotepad.filepath=</programlisting></informalexample>
 
 <informalexample><programlisting><![CDATA[# A plugin makefile
 #
-# To recompile this plugin, start jmk in the plugin's source directory.
+# To recompile this plugin, start jmk
+# in the plugin's source directory.
 #
 
 jar_name = "QuickNotepad";
@@ -1231,8 +1257,8 @@ jar: srcs;
     <userinput>'#'</userinput>); and
   </para> </listitem>
   <listitem><para>
-    the classpath variables for <filename>jedit.jar</filename> for
-    the jEdit API and any plugins this one depends on.
+    the classpath variables for <filename>jedit.jar</filename>
+    any plugins this one depends on.
   </para></listitem>
 </itemizedlist>
 

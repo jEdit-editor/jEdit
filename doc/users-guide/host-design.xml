@@ -211,7 +211,7 @@
   To display a user interface, plugins can either directly extend Java's
   <classname>JFrame</classname>, <classname>JDialog</classname>, or
   <classname>JWindow</classname> classes, or use jEdit's dockable window
-  API. They are typically defined in classes that are
+  API. Plugin windows are typically defined in classes that are
   part of the plugin package but separate from the plugin core
   class.
 </para>

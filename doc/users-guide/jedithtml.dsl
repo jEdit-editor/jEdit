@@ -28,6 +28,8 @@ CDATA DSSSL> ]>
 (element (funcdef function) ($bold-seq$))
 (element funcsynopsis (process-children))
 
+(element void (process-children))
+
 (define %funcsynopsis-style% 'ansi)
 
 ;; abstract is used to tag data, not to render output

@@ -2,7 +2,8 @@ TO DO
 
 + before 3.2final:
 
-- proofread plugin and API guide
+- markers menu: wtf?
+- section in plugin guide on contributing plugins
 - formatting problems in user's guide in table cells
 - make sure pre9 alt key change didn't break altgr on java 1.4
 - 3.2 RPMs:
@@ -24,7 +25,7 @@ TO DO
 - docking:
   - each tab has a close box
   - registerDockableWindow(name,multi) instead of named lists
-  - go-to-<name> action for multi dockables
+  - <name>-to-front action for multi dockables
   - toggle-<name> action for toggling
   - <name> action calls addDockableWindow(), no longer a toggle
 - hypersearch:
