@@ -1011,7 +1011,7 @@ options.macro-keys.label=Macros
 
 options.browser.label=VFS Browser
 options.browser.defaultPath=Default path:
-options.browser.defaultPath.buffer=Current buffer directory
+options.browser.defaultPath.buffer=Parent directory of current buffer
 options.browser.defaultPath.home=Home directory
 options.browser.defaultPath.last=Most recently visited directory
 options.browser.defaultView=Default browser view:
@@ -1110,7 +1110,7 @@ vfs.browser.roots.label=Local Drives
 vfs.browser.roots.icon=CD.gif
 vfs.browser.home.label=Home Directory
 vfs.browser.home.icon=Home.gif
-vfs.browser.synchronize.label=Go to Current Buffer Directory
+vfs.browser.synchronize.label=Go to Parent Directory of Current Buffer
 vfs.browser.synchronize.icon=Synchronize.gif
 vfs.browser.addToFavorites.label=Add to Favorites
 vfs.browser.addToFavorites.icon=Plus.gif
@@ -1122,7 +1122,7 @@ vfs.browser.more.icon=ToolbarMenu.gif
 vfs.browser.more.list.label=View as List
 vfs.browser.more.tree.label=View as Tree
 vfs.browser.more.showHiddenFiles.label=Show Hidden Files
-vfs.browser.more.newDirectory.label=New Directory
+vfs.browser.more.newDirectory.label=New Directory...
 
 vfs.browser.menu.close.label=Close
 vfs.browser.menu.open.label=Open in Current View
@@ -1130,8 +1130,8 @@ vfs.browser.menu.open-view.label=Open in New View
 vfs.browser.menu.goto.label=Go to
 vfs.browser.menu.new-browser.label=Open in New Browser Window
 vfs.browser.menu.select.label=Select
-vfs.browser.menu.delete.label=Delete
-vfs.browser.menu.rename.label=Rename
+vfs.browser.menu.delete.label=Delete...
+vfs.browser.menu.rename.label=Rename...
 
 vfs.browser.files-favorites.title=Cannot Add Files to Favorites
 vfs.browser.files-favorites.message=Only directories can be added to the favorites list.

@@ -185,7 +185,6 @@ public class BrowserTreeView extends BrowserView
 
 				Object userObject = ((DefaultMutableTreeNode)path
 					.getLastPathComponent()).getUserObject();
-				System.err.println(userObject);
 				if(userObject instanceof VFS.DirectoryEntry)
 				{
 					VFS.DirectoryEntry file = (VFS.DirectoryEntry)
@@ -232,6 +231,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/11 12:13:14  sp
+ * Preparing for 2.6pre2 release
+ *
  * Revision 1.3  2000/08/10 11:55:58  sp
  * VFS browser toolbar improved a little bit, font selector tweaks
  *

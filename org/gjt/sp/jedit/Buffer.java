@@ -686,7 +686,10 @@ public class Buffer extends PlainDocument implements EBComponent
 			return;
 
 		if(compoundEdit != null)
+		{
+			compoundEditNonEmpty = true;
 			compoundEdit.addEdit(edit);
+		}
 		else
 			undo.addEdit(edit);
 	}
@@ -709,7 +712,10 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		compoundEditCount++;
 		if(compoundEdit == null)
+		{
+			compoundEditNonEmpty = false;
 			compoundEdit = new CompoundEdit();
+		}
 	}
 
 	/**
@@ -730,7 +736,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(compoundEdit != null)
 		{
 			compoundEdit.end();
-			if(compoundEdit.canUndo())
+			if(compoundEditNonEmpty && compoundEdit.canUndo())
 				undo.addEdit(compoundEdit);
 			compoundEdit = null;
 		}
@@ -1477,6 +1483,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	private TokenMarker tokenMarker;
 	private UndoManager undo;
 	private CompoundEdit compoundEdit;
+	private boolean compoundEditNonEmpty;
 	private int compoundEditCount;
 	private Vector markers;
 	private int savedSelStart;
@@ -1688,6 +1695,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.169  2000/08/11 12:13:13  sp
+ * Preparing for 2.6pre2 release
+ *
  * Revision 1.168  2000/08/01 11:44:14  sp
  * More VFS browser work
  *

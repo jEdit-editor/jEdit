@@ -17,6 +17,8 @@ JEDIT 2.6 VERSION HISTORY
     hierarchy
   - Hidden files can optionally be displayed
   - Geometry of file chooser is saved
+  - The 'Find file' widget has not yet been ported to the VFS. It will appear
+    in a future pre-release.
 - Utilities->File System Browser displays a stand-alone version of the file
   chooser
 
@@ -29,6 +31,8 @@ JEDIT 2.6 VERSION HISTORY
 - 'Send' command moved to a plugin, out of the core
 - Repeated actions can now be undone in one operation
 - Macro invocations can now be undone in one operation
+- HyperSearch command no longer displays the wait cursor in all open views
+  while searching -- because the search is threaded, this didn't make sense
 
 + Bug Fixes
 
@@ -56,6 +60,7 @@ JEDIT 2.6 VERSION HISTORY
 - New method: GUIUtilities.loadMenu(String). Plugins that target jEdit
   2.6pre2 (or 2.5.2) can use this method instead of the older loadMenu()
   form.
+- org.gjt.sp.jedit.syntax.SyntaxDocument class removed
 
 * Version 2.6pre1
 

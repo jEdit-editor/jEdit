@@ -394,12 +394,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			{
 				current = 0;
 
-				View[] views = jEdit.getViews();
-				for(int i = 0; i < views.length; i++)
-				{
-					views[i].showWaitCursor();
-				}
-
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 				resultModel.removeAllElements();
@@ -444,12 +438,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 				updateStatus();
 
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-
-				View[] views = jEdit.getViews();
-				for(int i = 0; i < views.length; i++)
-				{
-					views[i].hideWaitCursor();
-				}
 			}
 		}
 
@@ -482,6 +470,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.65  2000/08/11 12:13:14  sp
+ * Preparing for 2.6pre2 release
+ *
  * Revision 1.64  2000/06/16 10:11:06  sp
  * Bug fixes ahoy
  *
