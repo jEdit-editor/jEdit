@@ -147,6 +147,7 @@
 			<fileset dir=".">
 				<include name="**/*.class"/>
 				<exclude name="org/gjt/sp/jedit/textarea/TextRenderer2D.class"/>
+				<exclude name="org/gjt/sp/jedit/gui/PanelWindowContainer*.class"/>
 				<exclude name="bsh/XThis*.class"/>
 				<exclude name="bsh/reflect/ReflectManagerImpl.class"/>
 			</fileset>
