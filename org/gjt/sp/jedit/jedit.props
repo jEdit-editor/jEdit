@@ -42,30 +42,32 @@ filefilter.1.name=C Source Files
 filefilter.1.re=*.[ch]
 filefilter.2.name=C++ Source Files
 filefilter.2.re=*.{cc,hh,cpp,cxx}
-filefilter.3.name=HTML Files
-filefilter.3.re=*.{html,shtml,htm}
-filefilter.4.name=Java Source Files
-filefilter.4.re=*.java
-filefilter.5.name=JavaScript Source Files
-filefilter.5.re=*.js
-filefilter.6.name=jEdit Macro Files
-filefilter.6.re=*.macro
-filefilter.7.name=Makefiles
-filefilter.7.re={gnumakefile,makefile}
-filefilter.8.name=Patch/DIFF Files
-filefilter.8.re=*.{diff,patch}
-filefilter.9.name=Perl Source Files
-filefilter.9.re=*.p[lm]
-filefilter.10.name=Properties/INI Files
-filefilter.10.re={properties,config.sys,*.{props,ini,reg}}
-filefilter.11.name=Python Source Files
-filefilter.11.re=*.py
-filefilter.12.name=Shell Scripts
-filefilter.12.re=*.{sh,csh}
-filefilter.13.name=TeX Files
-filefilter.13.re=*.{tex,sty,aux}
-filefilter.14.name=Transact-SQL Files
-filefilter.14.re=*.sql
+filefilter.3.name=Eiffel Source Files
+filefilter.3.re=*.{e,se}
+filefilter.4.name=HTML Files
+filefilter.4.re=*.{html,shtml,htm}
+filefilter.5.name=Java Source Files
+filefilter.5.re=*.java
+filefilter.6.name=JavaScript Source Files
+filefilter.6.re=*.js
+filefilter.7.name=jEdit Macro Files
+filefilter.7.re=*.macro
+filefilter.8.name=Makefiles
+filefilter.8.re={gnumakefile,makefile}
+filefilter.9.name=Patch/DIFF Files
+filefilter.9.re=*.{diff,patch}
+filefilter.10.name=Perl Source Files
+filefilter.10.re=*.p[lm]
+filefilter.11.name=Properties/INI Files
+filefilter.11.re={properties,config.sys,*.{props,ini,reg}}
+filefilter.12.name=Python Source Files
+filefilter.12.re=*.py
+filefilter.13.name=Shell Scripts
+filefilter.13.re=*.{sh,csh}
+filefilter.14.name=TeX Files
+filefilter.14.re=*.{tex,sty,aux}
+filefilter.15.name=Transact-SQL Files
+filefilter.15.re=*.sql
 
 ###
 ### BUFFER SETTINGS
@@ -205,6 +207,8 @@ mode.extension.cxx=cc
 
 # Eiffel mode
 mode.eiffel.name=Eiffel
+mode.eiffel.blockComment=--
+mode.eiffel.noWordSep=_
 mode.extension.e=eiffel
 mode.extension.se=eiffel
 

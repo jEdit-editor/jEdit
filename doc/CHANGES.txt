@@ -11,6 +11,10 @@ JEDIT VERSION HISTORY
 - Font selector lists all available fonts if JDK 1.2 is available (defaults
   to Java predefined fonts with JDK 1.1) (Jason Ginchereau)
 
++ Plugin Updates
+
+- BufferTabs 0.3
+
 * Version 2.1pre5
 
 + New Features

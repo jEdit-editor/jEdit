@@ -1,7 +1,5 @@
 JEDIT 2.2 TO DO
 
-CVS: add Eiffel stuff, also FontComboBox
-
 * New features:
 
 - 'startup.action' property, executed when jEdit started with no files
@@ -41,9 +39,6 @@ CVS: add Eiffel stuff, also FontComboBox
 
 - Integrate EditBus if enough plugins take advantage of it
 
-- To impress Windows point-and-drool types, create a plugin that adds
-  pretty icons for all menu item commands
-
 * Code cleanups:
 
 - View.show/hideWaitCursor(): increments waitCount for nested operation
@@ -63,7 +58,16 @@ CVS: add Eiffel stuff, also FontComboBox
 
 - Mode system changes: mode.XXX.filename-glob: all filenames globbed against
   this property. mode.XXX.firstline-glob: corresponding glob for first line
-  of file
+  of file. mode.XXX.tokenMarker property: class name of token marker to
+  use (handled by DefaultMode so that XMode can implement Mode)
+
+  interface Mode
+  {
+  	TokenMarker createTokenMarker();
+	Object getProperty(String name);
+	boolean accept(Buffer buffer);
+	String getName();
+  }
 
 * Ideas for plugins:
 

@@ -1,6 +1,6 @@
 /*
  * eiffel.java - Eiffel editing mode
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999 Artur Biesiadowski
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

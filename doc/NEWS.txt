@@ -15,7 +15,7 @@ list can be found in the file named CHANGES.txt.
 - Command repeating. Keystrokes and macros can be repeated multiple
   times automatically.
 
-- Python, XML and IDL syntax highlighting.
+- Eiffel, IDL, Python and XML syntax highlighting.
 
 - Filename filters in 'Open' and 'Save As' dialog boxes.
 
