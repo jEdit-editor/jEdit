@@ -2,13 +2,11 @@
 
 <!--
      This is a build.xml file for building jEdit.
-     If you're only using Java 2 version 1.3, comment out the "jdk14" property
-     below.
 -->
 
 <project name="jEdit" default="dist" basedir=".">
 
-	<property name="jdk14" value="true"/>
+	<available property="jdk14" classname="java.awt.KeyboardFocusManager" />
 
 	<target name="compile">
 		<javac
