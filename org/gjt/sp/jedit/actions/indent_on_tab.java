@@ -39,10 +39,6 @@ public class indent_on_tab extends EditAction
 			return;
 		}
 
-		// expand current word
-		if(Abbrevs.getExpandOnInput())
-			Abbrevs.expandAbbrev(view,false);
-
 		int selStart = textArea.getSelectionStart();
 		int selEnd = textArea.getSelectionEnd();
 

@@ -8,28 +8,41 @@ IOEx|IOException
 MalEx|MalformedURLException
 Ob|Object
 St|String
-Vi|View
 Ve|Vector
 Ha|Hashtable
+hme|hasMoreElements()
+ne|nextElement()
+serr|System.err.println(\|)
+sout|System.out.println(\|)
+
+Yif|if(\|)\n;
+YYif|if(\|)\n{\n\n}
+Yelse|else(\|)\n;
+YYelse|else(\|)\n{\n\n}
+Yfor|for(\|)\n;
+YYfor|for(\|)\n{\n\n}
+Ywhile|while(\|)\n;
+YYwhile|while(\|)\n{\n\n}
+
+Vi|View
 B|Buffer
 JE|JEditTextArea
-jE|jEdit
+VDE|VFS.DirectoryEntry
 gta|getTextArea()
 gb|getBuffer()
 gv|getView(evt)
-gp|getProperty
-ogs|org.gjt.sp
-ogsj|org.gjt.sp.jedit
-ogsjt|org.gjt.sp.jedit.textarea
-serr|System.err.println
-sout|System.out.println
-loge|Log.log(Log.ERROR
-logw|Log.log(Log.WARNING
-logn|Log.log(Log.NOTICE
-logm|Log.log(Log.MESSAGE
-logd|Log.log(Log.DEBUG
-hme|hasMoreElements
-ne|nextElement
+gp|getProperty(\|)
+gbp|jEdit.getBooleanProperty(\|)
+sp|jEdit.setProperty(\|)
+sbp|jEdit.setBooleanProperty(\|)
+ogs|import org.gjt.sp.
+ogsj|import org.gjt.sp.jedit.
+ogsu|import org.gjt.sp.util.
+loge|Log.log(Log.ERROR,this,\|)
+logw|Log.log(Log.WARNING,this,\|)
+logn|Log.log(Log.NOTICE,this,\|)
+logm|Log.log(Log.MESSAGE,this,\|)
+logd|Log.log(Log.DEBUG,this,\|)
 
 [html]
 EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>

@@ -788,8 +788,10 @@ public class jEdit
 		// remove existing modes
 		modes = new Vector();
 
+		// 'manually' create text mode
 		Mode text = new Mode("text");
 		text.setProperty("label",getProperty("mode.text.label"));
+		text.setProperty("filenameGlob",getProperty("mode.text.filenameGlob"));
 		text.init();
 		addMode(text);
 
@@ -2316,6 +2318,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.271  2000/08/22 07:25:00  sp
+ * Improved abbrevs, bug fixes
+ *
  * Revision 1.270  2000/08/20 07:29:30  sp
  * I/O and VFS browser improvements
  *

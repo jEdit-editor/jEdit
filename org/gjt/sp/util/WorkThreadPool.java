@@ -83,8 +83,6 @@ public class WorkThreadPool
 		{
 			if(inAWT)
 			{
-				Log.log(Log.DEBUG,this,"Adding request to AWT queue: " + request);
-
 				if(firstAWTRequest == null && lastAWTRequest == null)
 					firstAWTRequest = lastAWTRequest = request;
 				else
@@ -123,8 +121,6 @@ public class WorkThreadPool
 	 */
 	public void waitForRequests()
 	{
-		Log.log(Log.DEBUG,this,"waitForRequests(): entering");
-
 		synchronized(waitForAllLock)
 		{
 			while(requestCount != 0)
@@ -140,18 +136,22 @@ public class WorkThreadPool
 			}
 		}
 
-		// FIXME: when called from a non-AWT thread,
-		// waitForRequests() will return before all
-		// AWT runnables have completed
 		if(SwingUtilities.isEventDispatchThread())
 		{
-			Log.log(Log.DEBUG,this,"waitForRequests() running"
-				+ " remaining AWT requests");
 			// do any queued AWT runnables
 			doAWTRequests();
 		}
-
-		Log.log(Log.DEBUG,this,"waitForRequests(): leaving");
+		else
+		{
+			try
+			{
+				SwingUtilities.invokeAndWait(new RunRequestsInAWTThread());
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+			}
+		}
 	}
 
 	/**
@@ -261,8 +261,6 @@ public class WorkThreadPool
 				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
 			request.alreadyRun = true;
 
-			Log.log(Log.DEBUG,this,"getNextRequest() returning " + request);
-
 			StringBuffer buf = new StringBuffer("request queue is now: ");
 			Request _request = request.next;
 			while(_request != null)
@@ -297,14 +295,10 @@ public class WorkThreadPool
 
 	private void doAWTRequests()
 	{
-		Log.log(Log.DEBUG,this,"Running requests in AWT thread");
-
 		while(firstAWTRequest != null)
 		{
 			doAWTRequest(getNextAWTRequest());
 		}
-
-		Log.log(Log.DEBUG,this,"Finished running requests in AWT thread");
 	}
 
 	public void doAWTRequest(Request request)
@@ -347,8 +341,6 @@ public class WorkThreadPool
 			if(request.alreadyRun)
 				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
 			request.alreadyRun = true;
-
-			Log.log(Log.DEBUG,this,"getNextAWTRequest() returning " + request);
 
 			StringBuffer buf = new StringBuffer("AWT request queue is now: ");
 			Request _request = request.next;
@@ -402,6 +394,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/08/22 07:25:01  sp
+ * Improved abbrevs, bug fixes
+ *
  * Revision 1.5  2000/07/26 07:48:46  sp
  * stuff
  *

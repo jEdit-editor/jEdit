@@ -36,17 +36,13 @@ public class insert_char extends EditAction
 			return;
 		}
 
-		String noWordSep = (String)view.getBuffer().getProperty("noWordSep");
-
 		String str = evt.getActionCommand();
 
 		char ch = str.charAt(0);
-		if(Abbrevs.getExpandOnInput() && !Character.isLetterOrDigit(ch)
-			&& (noWordSep == null || noWordSep.indexOf(ch) == -1))
+		if(Abbrevs.getExpandOnInput() && ch == ' ')
 		{
-			// non-word char entered
-			// try to expand the abbrev first
-			Abbrevs.expandAbbrev(view,false);
+			if(Abbrevs.expandAbbrev(view,false))
+				return;
 		}
 
 		int repeatCount = view.getInputHandler().getRepeatCount();

@@ -36,10 +36,6 @@ public class indent_on_enter extends EditAction
 			return;
 		}
 
-		// expand current word
-		if(Abbrevs.getExpandOnInput())
-			Abbrevs.expandAbbrev(view,false);
-
 		textArea.setSelectedText("\n");
 
 		int selStart = textArea.getSelectionStart();

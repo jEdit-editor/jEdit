@@ -225,6 +225,12 @@ public interface DockableWindowContainer
 
 				revalidate();
 			}
+
+			public void mouseExited(MouseEvent evt)
+			{
+				setCursor(Cursor.getPredefinedCursor(
+					Cursor.DEFAULT_CURSOR));
+			}
 		}
 	}
 
@@ -284,6 +290,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/08/22 07:25:00  sp
+ * Improved abbrevs, bug fixes
+ *
  * Revision 1.5  2000/08/20 07:29:30  sp
  * I/O and VFS browser improvements
  *

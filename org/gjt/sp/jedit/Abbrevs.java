@@ -1,6 +1,6 @@
 /*
  * Abbrevs.java - Abbreviation manager
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,15 +59,15 @@ public class Abbrevs
 	 * @param view The view
 	 * @param add If true and abbrev not found, will ask user if
 	 * it should be added
-	 * @since jEdit 2.3pre3
+	 * @since jEdit 2.6pre4
 	 */
-	public static void expandAbbrev(View view, boolean add)
+	public static boolean expandAbbrev(View view, boolean add)
 	{
 		JEditTextArea textArea = view.getTextArea();
 		if(!textArea.isEditable())
 		{
 			view.getToolkit().beep();
-			return;
+			return false;
 		}
 
 		Buffer buffer = view.getBuffer();
@@ -81,7 +81,7 @@ public class Abbrevs
 		{
 			if(add)
 				view.getToolkit().beep();
-			return;
+			return false;
 		}
 
 		int pos = caret - lineStart;
@@ -89,20 +89,20 @@ public class Abbrevs
 		{
 			if(add)
 				view.getToolkit().beep();
-			return;
+			return false;
 		}
 
 		int wordStart = TextUtilities.findWordStart(lineText,pos - 1,
 			(String)buffer.getProperty("noWordSep"));
 
 		String abbrev = lineText.substring(wordStart,pos);
-		String expand = Abbrevs.expandAbbrev(buffer.getMode().getName(),abbrev);
+		Expansion expand = Abbrevs.expandAbbrev(buffer.getMode().getName(),abbrev);
 
 		if(expand == null)
 		{
 			if(add)
 				addAbbrev(view,abbrev);
-			return;
+			return false;
 		}
 		else
 		{
@@ -110,7 +110,12 @@ public class Abbrevs
 			try
 			{
 				buffer.remove(lineStart + wordStart,pos - wordStart);
-				buffer.insertString(lineStart + wordStart,expand,null);
+				buffer.insertString(lineStart + wordStart,expand.text,null);
+				if(expand.caretPosition != -1)
+				{
+					textArea.setCaretPosition(lineStart + wordStart
+						+ expand.caretPosition);
+				}
 			}
 			catch(BadLocationException bl)
 			{
@@ -118,6 +123,7 @@ public class Abbrevs
 			}
 			buffer.endCompoundEdit();
 
+			return true;
 		}
 	}
 
@@ -125,20 +131,79 @@ public class Abbrevs
 	 * Locates a completion for the specified abbrev.
 	 * @param mode The edit mode
 	 * @param abbrev The abbrev
-	 * @since jEdit 2.3pre1
+	 * @since jEdit 2.6pre4
 	 */
-	public static String expandAbbrev(String mode, String abbrev)
+	public static Expansion expandAbbrev(String mode, String abbrev)
 	{
 		// try mode-specific abbrevs first
+		Expansion expand = null;
 		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
 		if(modeAbbrevs != null)
+			expand = (Expansion)modeAbbrevs.get(abbrev);
+
+		if(expand == null)
+			expand = (Expansion)globalAbbrevs.get(abbrev);
+
+		return expand;
+	}
+
+	/**
+	 * An abbreviation expansion.
+	 * @since jEdit 2.6pre4
+	 */
+	public static class Expansion
+	{
+		public String text;
+		public int caretPosition = -1;
+		public int lineCount;
+
+		public Expansion(String text)
 		{
-			String expand = (String)modeAbbrevs.get(abbrev);
-			if(expand != null)
-				return expand;
+			StringBuffer buf = new StringBuffer();
+			boolean backslash = false;
+
+			for(int i = 0; i < text.length(); i++)
+			{
+				char ch = text.charAt(i);
+				if(ch == '\\')
+					backslash = true;
+				else if(backslash)
+				{
+					if(ch == '|')
+						caretPosition = buf.length();
+					else if(ch == 'n')
+					{
+						buf.append('\n');
+						lineCount++;
+					}
+					else
+						buf.append(ch);
+				}
+				else
+					buf.append(ch);
+			}
+
+			this.text = buf.toString();
 		}
 
-		return (String)globalAbbrevs.get(abbrev);
+		public String toString()
+		{
+			StringBuffer buf = new StringBuffer();
+			for(int i = 0; i < text.length(); i++)
+			{
+				if(i == caretPosition)
+					buf.append("\\|");
+
+				char ch = text.charAt(i);
+				if(ch == '\n')
+					buf.append("\\n");
+				else if(ch == '\\')
+					buf.append("\\\\");
+				else
+					buf.append(ch);
+			}
+			return buf.toString();
+		}
 	}
 
 	/**
@@ -157,6 +222,7 @@ public class Abbrevs
 	 */
 	public static void setGlobalAbbrevs(Hashtable globalAbbrevs)
 	{
+		abbrevsChanged = true;
 		Abbrevs.globalAbbrevs = globalAbbrevs;
 	}
 
@@ -176,6 +242,7 @@ public class Abbrevs
 	 */
 	public static void setModeAbbrevs(Hashtable modes)
 	{
+		abbrevsChanged = true;
 		Abbrevs.modes = modes;
 	}
 
@@ -231,7 +298,7 @@ public class Abbrevs
 		jEdit.setBooleanProperty("view.expandOnInput",expandOnInput);
 
 		String settings = jEdit.getSettingsDirectory();
-		if(settings != null)
+		if(abbrevsChanged && settings != null)
 		{
 			File file = new File(MiscUtilities.constructPath(settings,"abbrevs"));
 			if(file.exists() && file.lastModified() != abbrevsModTime)
@@ -256,6 +323,7 @@ public class Abbrevs
 	}
 
 	// private members
+	private static boolean abbrevsChanged;
 	private static long abbrevsModTime;
 	private static boolean expandOnInput;
 	private static Hashtable globalAbbrevs;
@@ -294,8 +362,7 @@ public class Abbrevs
 			{
 				int index = line.indexOf('|');
 				currentAbbrevs.put(line.substring(0,index),
-					MiscUtilities.escapesToChars(
-					line.substring(index + 1)));
+					new Expansion(line.substring(index + 1)));
 			}
 		}
 
@@ -340,7 +407,7 @@ public class Abbrevs
 			String abbrev = (String)keys.nextElement();
 			out.write(abbrev);
 			out.write('|');
-			out.write(MiscUtilities.charsToEscapes((String)values.nextElement()));
+			out.write(values.nextElement().toString());
 			out.write(lineSep);
 		}
 	}
@@ -375,10 +442,12 @@ public class Abbrevs
 				modeAbbrevs = new Hashtable();
 				modes.put(mode,modeAbbrevs);
 			}
-			modeAbbrevs.put(abbrev,expand);
+			modeAbbrevs.put(abbrev,new Expansion(expand));
 		}
 		else
-			globalAbbrevs.put(abbrev,expand);
+			globalAbbrevs.put(abbrev,new Expansion(expand));
+
+		abbrevsChanged = true;
 
 		expandAbbrev(view,false);
 	}
@@ -387,6 +456,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/08/22 07:25:00  sp
+ * Improved abbrevs, bug fixes
+ *
  * Revision 1.12  2000/07/19 08:35:58  sp
  * plugin devel docs updated, minor other changes
  *

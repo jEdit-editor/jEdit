@@ -146,7 +146,8 @@ public class FtpVFS extends VFS
 					continue;
 
 				VFS.DirectoryEntry entry = lineToDirectoryEntry(line);
-				if(entry.name.equals(".") || entry.name.equals(".."))
+				if(entry == null || entry.name.equals(".")
+					|| entry.name.equals(".."))
 					continue;
 
 				directoryVector.addElement(entry);
@@ -267,6 +268,8 @@ public class FtpVFS extends VFS
 		reader.close();
 		if(line != null)
 		{
+			System.err.println(line);
+
 			if(line.startsWith("total"))
 			{
 				// ok, this really sucks.
@@ -281,7 +284,9 @@ public class FtpVFS extends VFS
 			else
 			{
 				VFS.DirectoryEntry dirEntry = lineToDirectoryEntry(line);
-				if(dirEntry.type == __LINK)
+				if(dirEntry == null)
+					return null;
+				else if(dirEntry.type == __LINK)
 					resolveSymlink(session,getFileParent(path),
 						dirEntry,comp);
 				return dirEntry;
@@ -457,62 +462,71 @@ public class FtpVFS extends VFS
 	// Convert a line of LIST output to a VFS.DirectoryEntry
 	private VFS.DirectoryEntry lineToDirectoryEntry(String line)
 	{
-		int type;
-		switch(line.charAt(0))
+		try
 		{
-		case 'd':
-			type = VFS.DirectoryEntry.DIRECTORY;
-			break;
-		case 'l':
-			type = __LINK;
-			break;
-		default:
-			type = VFS.DirectoryEntry.FILE;
-			break;
-		}
-
-		// first, extract the fifth field, which is the file size
-		int i;
-		int j = 0;
-		boolean lastWasSpace = false;
-		int fieldCount = 0;
-
-		long length = 0L;
-		String name = null;
-
-		for(i = 0; i < line.length(); i++)
-		{
-			if(line.charAt(i) == ' ')
+			int type;
+			switch(line.charAt(0))
 			{
-				lastWasSpace = true;
+			case 'd':
+				type = VFS.DirectoryEntry.DIRECTORY;
+				break;
+			case 'l':
+				type = __LINK;
+				break;
+			default:
+				type = VFS.DirectoryEntry.FILE;
+				break;
 			}
-			else
+
+			// first, extract the fifth field, which is the file size
+			int i;
+			int j = 0;
+			boolean lastWasSpace = false;
+			int fieldCount = 0;
+
+			long length = 0L;
+			String name = null;
+
+			for(i = 0; i < line.length(); i++)
 			{
-				if(lastWasSpace)
+				if(line.charAt(i) == ' ')
 				{
-					fieldCount++;
-
-					if(fieldCount == 4)
-						j = i;
-					else if(fieldCount == 5)
-					{
-						length = Long.parseLong(
-							line.substring(j,i).trim());
-					}
-					else if(fieldCount == 8)
-					{
-						name = line.substring(i);
-						break;
-					}
+					lastWasSpace = true;
 				}
+				else
+				{
+					if(lastWasSpace)
+					{
+						fieldCount++;
 
-				lastWasSpace = false;
+						if(fieldCount == 4)
+							j = i;
+						else if(fieldCount == 5)
+						{
+							length = Long.parseLong(
+								line.substring(
+								j,i).trim());
+						}
+						else if(fieldCount == 8)
+						{
+							name = line.substring(i);
+							break;
+						}
+					}
+
+					lastWasSpace = false;
+				}
 			}
-		}
 
-		// path is null; it will be created later, by _listDirectory()
-		return new VFS.DirectoryEntry(name,null,null,type,length,
-			name.charAt(0) == '.' /* isHidden */);
+			// path is null; it will be created later, by _listDirectory()
+			return new VFS.DirectoryEntry(name,null,null,type,
+				length,name.charAt(0) == '.' /* isHidden */);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.NOTICE,this,e);
+			return null;
+		}
 	}
 
 	private void resolveSymlink(VFSSession session, String dir,
@@ -547,6 +561,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/08/22 07:25:01  sp
+ * Improved abbrevs, bug fixes
+ *
  * Revision 1.21  2000/08/20 07:29:31  sp
  * I/O and VFS browser improvements
  *

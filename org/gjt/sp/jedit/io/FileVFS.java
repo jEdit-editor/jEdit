@@ -53,7 +53,7 @@ public class FileVFS extends VFS
 		for(int i = 0; i < roots.length; i++)
 		{
 			if(roots[i].getPath().equals(path))
-				return FileRootsVFS.PROTOCOL;
+				return FileRootsVFS.PROTOCOL + ":";
 		}
 
 		return MiscUtilities.getFileParent(path);
@@ -302,6 +302,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/08/22 07:25:01  sp
+ * Improved abbrevs, bug fixes
+ *
  * Revision 1.17  2000/08/20 07:29:31  sp
  * I/O and VFS browser improvements
  *

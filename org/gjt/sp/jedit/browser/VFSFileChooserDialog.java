@@ -117,7 +117,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	{
 		if(filenameField != null)
 		{
-			if(filenameField.getText() == null)
+			if(filenameField.getText().length() == 0)
 			{
 				getToolkit().beep();
 				return;
@@ -135,8 +135,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				if(file.type == VFS.DirectoryEntry.FILESYSTEM
 					|| file.type == VFS.DirectoryEntry.DIRECTORY)
 				{
-					// the browser will list the directory
-					// in question, so just return
+					browser.setDirectory(file.path);
 					return;
 				}
 			}
@@ -222,6 +221,18 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		public void filesActivated(VFSBrowser browser, VFS.DirectoryEntry[] files)
 		{
+			for(int i = 0; i < files.length; i++)
+			{
+				VFS.DirectoryEntry file = files[i];
+				if(file.type == VFS.DirectoryEntry.FILESYSTEM
+					|| file.type == VFS.DirectoryEntry.DIRECTORY)
+				{
+					// the browser will list the directory
+					// in question, so just return
+					return;
+				}
+			}
+
 			ok();
 		}
 	}
@@ -230,6 +241,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/08/22 07:25:00  sp
+ * Improved abbrevs, bug fixes
+ *
  * Revision 1.6  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

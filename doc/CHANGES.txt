@@ -23,6 +23,9 @@ JEDIT 2.6 VERSION HISTORY
   more than one request simultaneously. Because the browser was not
   designed with this in mind, it would cause strange problems
 - doc/NEWS.txt written
+- Abbreviations are now only expanded when a space is entered
+- Abbreviations are now only saved on exit if they were changed while
+  the editor was running. This improves performance a little bit
 
 + Bug Fixes
 
@@ -31,6 +34,12 @@ JEDIT 2.6 VERSION HISTORY
   every VFS operation
 - FtpVFS no longer throws NullPointerExceptions when an error occurs
   while connecting to a server
+- A bug in the WorkThreadPool.waitForRequests() method would cause
+  HyperSearch to begin searching inside buffers before they were fully
+  loaded
+- The 'Up' button in the VFS browser would behave incorrectly if it was
+  pressed while the current directory was a file system root
+- Double-click on directory bug in 'save as' dialog box fixed yet again
 
 * Version 2.6pre3
 
