@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.03.05.00";
+		return "02.03.06.00";
 	}
 
 	/**
@@ -159,12 +159,8 @@ public class jEdit
 		else
 			portFile = null;
 
-		Log.log(Log.DEBUG,jEdit.class,"Port file is " + portFile);
-
 		if(session != null)
 			session = Sessions.createSessionFileName(session);
-
-		Log.log(Log.DEBUG,jEdit.class,"Session is " + session);
 
 		// Connect to server
 		String userDir = System.getProperty("user.dir");
@@ -254,6 +250,7 @@ public class jEdit
 
 		GUIUtilities.loadMenuBarModel("view.mbar");
 		GUIUtilities.loadMenuModel("view.context");
+		GUIUtilities.loadMenuModel("gutter.context");
 		if("on".equals(getProperty("view.showToolbar")))
 			GUIUtilities.loadToolBarModel("view.toolbar");
 
@@ -1138,21 +1135,28 @@ public class jEdit
 			SearchAndReplace.save();
 			Abbrevs.save();
 
-			String path = MiscUtilities.constructPath(
-				settingsDirectory,"properties");
-			Log.log(Log.DEBUG,jEdit.class,"Saving user propeties"
-				+ " to " + path);
-
-			try
+			File file = new File(MiscUtilities.constructPath(
+				settingsDirectory,"properties"));
+			if(file.lastModified() > propsModTime)
 			{
-				OutputStream out = new FileOutputStream(path);
-				props.save(out,"Use the -nosettings switch"
-					+ " if you want to edit this file in jEdit");
-				out.close();
+				Log.log(Log.WARNING,jEdit.class,file + " changed"
+					+ " on disk; will not save user properties");
 			}
-			catch(IOException io)
+			else
 			{
-				Log.log(Log.ERROR,jEdit.class,io);
+				Log.log(Log.DEBUG,jEdit.class,"Saving user propeties"
+					+ " to " + file);
+
+				try
+				{
+					OutputStream out = new FileOutputStream(file);
+					props.save(out,"jEdit properties");
+					out.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,jEdit.class,io);
+				}
 			}
 		}
 
@@ -1177,6 +1181,7 @@ public class jEdit
 	// private members
 	private static String jEditHome;
 	private static String settingsDirectory;
+	private static long propsModTime;
 	private static String session;
 	private static Properties defaultProps;
 	private static Properties props;
@@ -1418,7 +1423,6 @@ public class jEdit
 		addAction("help");
 		addAction("hypersearch");
 		addAction("hypersearch-selection");
-		addAction("ignore-case");
 		addAction("indent-lines");
 		addAction("indent-on-enter");
 		addAction("indent-on-tab");
@@ -1428,7 +1432,6 @@ public class jEdit
 		addAction("load-session");
 		addAction("locate-bracket");
 		addAction("log-viewer");
-		addAction("multifile-search");
 		addAction("new-file");
 		addAction("new-view");
 		addAction("next-bracket-exp");
@@ -1452,7 +1455,6 @@ public class jEdit
 		addAction("redo");
 		addAction("reload");
 		addAction("reload-all");
-		addAction("regexp");
 		addAction("replace-all");
 		addAction("replace-in-selection");
 		addAction("rescan-macros");
@@ -1490,9 +1492,6 @@ public class jEdit
 		addAction("tab");
 		addAction("to-lower");
 		addAction("to-upper");
-		addAction("toggle-gutter");
-		addAction("toggle-line-numbers");
-		addAction("toggle-rect");
 		addAction("undo");
 		addAction("unsplit");
 		addAction("untab");
@@ -1506,12 +1505,12 @@ public class jEdit
 
 		// Preload these actions so that isToggle()
 		// will always return the correct value
-		((EditAction.Wrapper)getAction("ignore-case")).loadIfNecessary();
-		((EditAction.Wrapper)getAction("multifile-search")).loadIfNecessary();
-		((EditAction.Wrapper)getAction("regexp")).loadIfNecessary();
-		((EditAction.Wrapper)getAction("toggle-gutter")).loadIfNecessary();
-		((EditAction.Wrapper)getAction("toggle-line-numbers")).loadIfNecessary();
-		((EditAction.Wrapper)getAction("toggle-rect")).loadIfNecessary();
+		addAction(new org.gjt.sp.jedit.actions.ignore_case());
+		addAction(new org.gjt.sp.jedit.actions.multifile_search());
+		addAction(new org.gjt.sp.jedit.actions.regexp());
+		addAction(new org.gjt.sp.jedit.actions.toggle_gutter());
+		addAction(new org.gjt.sp.jedit.actions.toggle_line_numbers());
+		addAction(new org.gjt.sp.jedit.actions.toggle_rect());
 	}
 
 	/**
@@ -1539,11 +1538,13 @@ public class jEdit
 
 		if(settingsDirectory != null)
 		{
+			File file = new File(MiscUtilities.constructPath(
+				settingsDirectory,"properties"));
+			propsModTime = file.lastModified();
+
 			try
 			{
-				loadProps(new FileInputStream(
-					MiscUtilities.constructPath(
-					settingsDirectory,"properties")));
+				loadProps(new FileInputStream(file));
 			}
 			catch(FileNotFoundException fnf)
 			{
@@ -1774,6 +1775,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.191  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
  * Revision 1.190  2000/02/07 06:35:53  sp
  * Options dialog box updates
  *
@@ -1803,14 +1807,5 @@ public class jEdit
  *
  * Revision 1.181  2000/01/22 23:36:43  sp
  * Improved file close behaviour
- *
- * Revision 1.180  2000/01/22 22:25:07  sp
- * PostScript edit mode, other misc updates
- *
- * Revision 1.179  2000/01/17 07:03:42  sp
- * File->Current Dir menu, other stuff
- *
- * Revision 1.178  2000/01/16 01:45:51  sp
- * Remove Trailing Whitespace going back to TextTools
  *
  */

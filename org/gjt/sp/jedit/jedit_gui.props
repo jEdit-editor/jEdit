@@ -45,7 +45,7 @@ view.quicksearch=Find:\
 ### CONTEXT MENUS
 ###
 view.context=undo redo - cut copy paste paste-previous - select-all \
-	select-none - scroll-line - view-registers - unsplit \
+	select-none - view-registers - unsplit \
 	split-horizontal split-vertical - record-temp-macro \
 	stop-recording play-temp-macro
 
@@ -435,7 +435,7 @@ view.title=jEdit: {0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,c
 # Same as view.title but no leading 'jEdit:'
 view.buffer-label={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
 # Status messages
-view.status.recording=Macro recording:
+view.status.recording=Macro recording
 view.status.cut-string-register=Cut to register:
 view.status.copy-string-register=Copy to register:
 view.status.append-string-register=Append to register:

@@ -81,6 +81,20 @@ public abstract class ShortcutsOptionPane extends AbstractOptionPane
 		return new ShortcutsModel(createBindings());
 	}
 
+	public static class KeyBinding
+	{
+		KeyBinding(String name, String label, String shortcut)
+		{
+			this.name = name;
+			this.label = label;
+			this.shortcut = shortcut;
+		}
+
+		String name;
+		String label;
+		String shortcut;
+	}
+
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -118,7 +132,9 @@ class ShortcutsModel extends AbstractTableModel
 
 	public Object getValueAt(int row, int col)
 	{
-		KeyBinding binding = (KeyBinding)bindings.elementAt(row);
+		ShortcutsOptionPane.KeyBinding binding
+			= (ShortcutsOptionPane.KeyBinding)
+			bindings.elementAt(row);
 		switch(col)
 		{
 		case 0:
@@ -139,7 +155,8 @@ class ShortcutsModel extends AbstractTableModel
 	{
 		if(col != 1)
 			return;
-		((KeyBinding)bindings.elementAt(row)).shortcut = (String)value;
+		((ShortcutsOptionPane.KeyBinding)bindings.elementAt(row))
+			.shortcut = (String)value;
 		fireTableRowsUpdated(row,row);
 	}
 
@@ -160,7 +177,9 @@ class ShortcutsModel extends AbstractTableModel
 	{
 		for(int i = 0; i < bindings.size(); i++)
 		{
-			KeyBinding binding = (KeyBinding)bindings.elementAt(i);
+			ShortcutsOptionPane.KeyBinding binding
+				= (ShortcutsOptionPane.KeyBinding)
+				bindings.elementAt(i);
 			jEdit.setProperty(binding.name + ".shortcut",binding.shortcut);
 		}
 	}
@@ -176,8 +195,8 @@ class ShortcutsModel extends AbstractTableModel
 
 		public int compare(Object obj1, Object obj2)
 		{
-			KeyBinding k1 = (KeyBinding)obj1;
-			KeyBinding k2 = (KeyBinding)obj2;
+			ShortcutsOptionPane.KeyBinding k1 = (ShortcutsOptionPane.KeyBinding)obj1;
+			ShortcutsOptionPane.KeyBinding k2 = (ShortcutsOptionPane.KeyBinding)obj2;
 
 			String label1 = k1.label;
 			String label2 = k2.label;
@@ -202,23 +221,12 @@ class ShortcutsModel extends AbstractTableModel
 	}
 }
 
-class KeyBinding
-{
-	KeyBinding(String name, String label, String shortcut)
-	{
-		this.name = name;
-		this.label = label;
-		this.shortcut = shortcut;
-	}
-
-	String name;
-	String label;
-	String shortcut;
-}
-
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
  * Revision 1.1  1999/12/19 08:12:34  sp
  * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
  *

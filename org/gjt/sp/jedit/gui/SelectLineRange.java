@@ -109,9 +109,7 @@ implements ActionListener
 		}
 
 		int startOffset = startElement.getStartOffset();
-		int endOffset = endElement.getEndOffset();
-		if(endOffset > buffer.getLength())
-			endOffset = buffer.getLength();
+		int endOffset = endElement.getEndOffset() - 1;
 
 		((View)getParent()).getTextArea().select(startOffset,endOffset);
 
@@ -135,6 +133,9 @@ implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
  * Revision 1.9  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *

@@ -1,6 +1,6 @@
 /*
  * block_comment.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This	free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class block_comment extends EditAction
 			view.getToolkit().beep();
 			return;
 		}
-		comment = comment + ' ';
+
 		int startLine = textArea.getSelectionStartLine();
 		int endLine = textArea.getSelectionEndLine();
 

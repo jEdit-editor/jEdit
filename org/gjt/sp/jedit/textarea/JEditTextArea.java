@@ -1113,7 +1113,8 @@ public class JEditTextArea extends JComponent
 			painter.invalidateLineRange(newStartLine,newEndLine);
 
 			document.addUndoableEdit(new CaretUndo(
-				selectionStart,selectionEnd));
+				selectionStart,selectionEnd,
+				newStart,newEnd));
 
 			selectionStart = newStart;
 			selectionEnd = newEnd;
@@ -1663,7 +1664,7 @@ public class JEditTextArea extends JComponent
 	protected void updateBracketHighlight(int newCaretPosition)
 	{
 		if(!painter.isBracketHighlightEnabled())
-				return;
+			return;
 
 		if(bracketLine != -1)
 			painter.invalidateLine(bracketLine);
@@ -2230,11 +2231,16 @@ public class JEditTextArea extends JComponent
 	{
 		private int start;
 		private int end;
+		private int newStart;
+		private int newEnd;
 
-		CaretUndo(int start, int end)
+		CaretUndo(int start, int end, int newStart, int newEnd)
 		{
 			this.start = start;
 			this.end = end;
+
+			this.newStart = newStart;
+			this.newEnd = newEnd;
 		}
 
 		public boolean isSignificant()
@@ -2258,7 +2264,7 @@ public class JEditTextArea extends JComponent
 		{
 			super.redo();
 
-			select(start,end);
+			select(newStart,newEnd);
 		}
 
 		public boolean addEdit(UndoableEdit edit)
@@ -2266,14 +2272,22 @@ public class JEditTextArea extends JComponent
 			if(edit instanceof CaretUndo)
 			{
 				CaretUndo cedit = (CaretUndo)edit;
-				start = cedit.start;
-				end = cedit.end;
+//				start = cedit.start;
+//				end = cedit.end;
+//				newStart = cedit.start;
+//				newEnd = cedit.end;
 				cedit.die();
 
 				return true;
 			}
 			else
 				return false;
+		}
+
+		public String toString()
+		{
+			return getPresentationName() + "[start="
+				+ start + ",end=" + end + "]";
 		}
 	}
 
@@ -2288,6 +2302,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.44  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
  * Revision 1.43  2000/02/04 05:50:27  sp
  * More gutter updates from mike
  *
@@ -2317,62 +2334,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.34  1999/12/03 23:48:11  sp
  * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
- *
- * Revision 1.33  1999/11/29 02:45:50  sp
- * Scroll bar position saved when switching buffers
- *
- * Revision 1.32  1999/11/26 07:37:11  sp
- * Escape/enter handling code moved to common superclass, bug fixes
- *
- * Revision 1.31  1999/11/26 01:18:50  sp
- * Optimizations, splash screen updates, misc stuff
- *
- * Revision 1.30  1999/11/21 07:59:30  sp
- * JavaDoc updates
- *
- * Revision 1.29  1999/11/21 03:40:18  sp
- * Parts of EditBus not used by core moved to EditBus.jar
- *
- * Revision 1.28  1999/11/12 09:06:01  sp
- * HTML bug fix
- *
- * Revision 1.27  1999/11/07 06:51:43  sp
- * Check box menu items supported
- *
- * Revision 1.26  1999/10/28 09:07:21  sp
- * Directory list search
- *
- * Revision 1.25  1999/10/24 06:04:00  sp
- * QuickSearch in tool bar, auto indent updates, macro recorder updates
- *
- * Revision 1.24  1999/10/24 02:06:41  sp
- * Miscallaneous pre1 stuff
- *
- * Revision 1.23  1999/10/16 09:43:00  sp
- * Final tweaking and polishing for jEdit 2.1final
- *
- * Revision 1.22  1999/10/10 06:38:46  sp
- * Bug fixes and quicksort routine
- *
- * Revision 1.21  1999/10/06 08:39:46  sp
- * Fixes to repeating and macro features
- *
- * Revision 1.20  1999/10/04 06:13:52  sp
- * Repeat counts now supported
- *
- * Revision 1.19  1999/09/30 12:21:05  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.17  1999/08/21 01:48:18  sp
- * jEdit 2.0pre8
- *
- * Revision 1.16  1999/07/29 08:50:21  sp
- * Misc stuff for 1.7pre7
- *
- * Revision 1.15  1999/07/21 05:45:14  sp
- * AltGr fix, documentation restructuring
- *
- * Revision 1.14  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
  *
  */

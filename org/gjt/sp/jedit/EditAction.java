@@ -255,10 +255,6 @@ public abstract class EditAction implements ActionListener
 			String className = "org.gjt.sp.jedit.actions."
 				+ Wrapper.this.getName().replace('-','_');
 
-			Log.log(Log.DEBUG,this,"Loading action " +
-				Wrapper.this.getName() +
-				" (class=" + className + ")");
-
 			try
 			{
 				Class clazz;
@@ -285,6 +281,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
  * Revision 1.21  2000/01/14 04:23:50  sp
  * 2.3pre2 stuff
  *
@@ -314,14 +313,4 @@ public abstract class EditAction implements ActionListener
  *
  * Revision 1.12  1999/10/02 01:12:36  sp
  * Search and replace updates (doesn't work yet), some actions moved to TextTools
- *
- * Revision 1.11  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.10  1999/05/22 08:33:53  sp
- * FAQ updates, mode selection tweak, patch mode update, javadoc updates, JDK 1.1.8 fix
- *
- * Revision 1.9  1999/03/24 05:45:27  sp
- * Juha Lidfors' backup directory patch, removed debugging messages from various locations, documentation updates
- *
  */

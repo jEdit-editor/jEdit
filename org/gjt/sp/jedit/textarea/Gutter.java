@@ -92,8 +92,7 @@ public class Gutter extends JComponent implements SwingConstants
 			pfm.getMaxDescent()) / 2.0);
 
 		int firstLine = textArea.getFirstLine() + 1;
-		int lastLine = firstLine + (gfx.getClipRect().height
-			/ lineHeight);
+		int lastLine = firstLine + (getHeight() / lineHeight);
 
 		int firstValidLine = (int) Math.max(1, firstLine);
 		int lastValidLine = (int) Math.min(textArea.getLineCount(),
@@ -149,7 +148,7 @@ public class Gutter extends JComponent implements SwingConstants
 			.getHeight();
 
 		int firstLine = textArea.getFirstLine();
-		int lastLine = firstLine + textArea.getVisibleLines();
+		int lastLine = firstLine + (getHeight() / lineHeight);
 
 		int y = 0;
 

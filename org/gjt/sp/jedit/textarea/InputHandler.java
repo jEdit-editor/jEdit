@@ -828,7 +828,7 @@ public abstract class InputHandler extends KeyAdapter
 			}
 
 			caret = textArea.getLineStartOffset(line + 1)
-				+ textArea.xToOffset(line + 1,magic);
+				+ textArea.xToOffset(line + 1,magic + 1);
 			if(select)
 				textArea.select(textArea.getMarkPosition(),caret);
 			else
@@ -980,7 +980,7 @@ public abstract class InputHandler extends KeyAdapter
 			}
 
 			caret = textArea.getLineStartOffset(line - 1)
-				+ textArea.xToOffset(line - 1,magic);
+				+ textArea.xToOffset(line - 1,magic + 1);
 			if(select)
 				textArea.select(textArea.getMarkPosition(),caret);
 			else
@@ -1105,6 +1105,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
  * Revision 1.20  2000/02/10 08:32:51  sp
  * Bug fixes, doc updates
  *

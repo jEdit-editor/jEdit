@@ -1,5 +1,32 @@
 JEDIT VERSION HISTORY
 
+* Version 2.3pre6
+
++ Enhancements
+
+- Plugin Manager now deletes the ZIP files it downloads once they're
+  installed
+- Plugin Manager now removes plugins better
+- If the user properties file changes while jEdit is running, it will
+  not be saved on exit (so you can edit your properties from within
+  jEdit, etc)
+- LatestVersion plugin updates
+- Improved commenting commands
+- Minor undo improvements
+- You can no longer save the caret position to the $ (clipboard)
+  register (in previous versions, you could do this but it was
+  useless)
+- GUIUtilities.showFileDialog() can now accept a null view
+  (Dirk Moebius)
+- Documentation updates
+
++ Bug Fixes
+
+- Fixed yet another gutter repaint problem (since 2.3pre5)
+- Up/Down arrow keys should be more robust now (since 1.7pre5)
+- 'Spaces to Tabs' didn't work (since 2.1pre1!!! From now on, I promise
+  I will test jEdit features better :-) )
+
 * Version 2.3pre5
 
 + New Features
@@ -2453,5 +2480,22 @@ file dialog as soon as Swing 1.1 final is out
 - Obscure erros are handled better
 
 * Version 0.2
+
+- Command API changes
+- Command cleanups
+- Added support for on-the-fly property changes (propertyChanged() method)
+- Added auto indent
+- File loading and saving
+- Server added
+- Printing started
+- Documentation updates
+
+* Version 0.1
+
+- Supports multiple buffers, views
+- Menu bar loaded from properties
+- Command interface used to implement menu item behaviour
+
+* Version 0.0.1
 
 - Change log started

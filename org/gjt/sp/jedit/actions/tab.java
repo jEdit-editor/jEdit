@@ -76,6 +76,7 @@ public class tab extends EditAction
 				{
 					buf.append(MiscUtilities
 						.createWhiteSpace(whitespace,tabSize));
+					whitespace = 0;
 				}
 				buf.append(in.charAt(i));
 				width++;

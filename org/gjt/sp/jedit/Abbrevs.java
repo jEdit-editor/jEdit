@@ -72,11 +72,19 @@ public class Abbrevs
 
 		String lineText = textArea.getLineText(line);
 		if(lineText.length() == 0)
+		{
+			if(add)
+				view.getToolkit().beep();
 			return;
+		}
 
 		int pos = caret - lineStart;
 		if(pos == 0)
+		{
+			if(add)
+				view.getToolkit().beep();
 			return;
+		}
 
 		int wordStart = TextUtilities.findWordStart(lineText,pos - 1,
 			(String)buffer.getProperty("noWordSep"));
@@ -182,7 +190,6 @@ public class Abbrevs
 
 			try
 			{
-				Log.log(Log.MESSAGE,Abbrevs.class,"Loading " + path);
 				loadAbbrevs(new FileReader(path));
 				loaded = true;
 			}
@@ -201,7 +208,6 @@ public class Abbrevs
 		{
 			try
 			{
-				Log.log(Log.MESSAGE,Abbrevs.class,"Loading default.abbrevs");
 				loadAbbrevs(new InputStreamReader(Abbrevs.class
 					.getResourceAsStream("default.abbrevs")));
 			}
@@ -225,7 +231,6 @@ public class Abbrevs
 
 			try
 			{
-				Log.log(Log.MESSAGE,Abbrevs.class,"Saving " + path);
 				saveAbbrevs(new FileWriter(path));
 			}
 			catch(Exception e)
@@ -362,3 +367,11 @@ public class Abbrevs
 		expandAbbrev(view,false);
 	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.6  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
+ */

@@ -356,15 +356,15 @@ public class OptionsDialog extends EnhancedDialog
 		{
 			if (selected)
 			{
-				setBackground(UIManager.getColor(
+				this.setBackground(UIManager.getColor(
 					"Tree.selectionBackground"));
-				setForeground(UIManager.getColor(
+				this.setForeground(UIManager.getColor(
 					"Tree.selectionForeground"));
 			}
 			else
 			{
-				setBackground(tree.getBackground());
-				setForeground(tree.getForeground());
+				this.setBackground(tree.getBackground());
+				this.setForeground(tree.getForeground());
 			}
 
 			String name = null;
@@ -372,12 +372,12 @@ public class OptionsDialog extends EnhancedDialog
 			if (value instanceof OptionGroup)
 			{
 				name = ((OptionGroup)value).getName();
-				setFont(groupFont);
+				this.setFont(groupFont);
 			}
 			else if (value instanceof OptionPane)
 			{
 				name = ((OptionPane)value).getName();
-				setFont(paneFont);
+				this.setFont(paneFont);
 			}
 
 			if (name == null)
@@ -573,6 +573,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
  * Revision 1.17  2000/02/07 06:35:53  sp
  * Options dialog box updates
  *

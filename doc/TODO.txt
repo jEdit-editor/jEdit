@@ -4,44 +4,51 @@ JEDIT TO DO
 
 - Double-click drag doesn't work backwards
 - Focus is broken with buffertabs
-- Redo window-editor-* snapshots
 
-------- Later -------
+------- 2.4 to do -------
 
+- Integrate Dirk's plugin versioning changes
+- Option pane for changing mode-specific tab size, indent, comment
+  characters, and so on
 - EditAction.isEnabled() method
-- Need to set caret on 'redo'
-- Check file modification status on focus
+- Check file modification status on focus - Buffer.checkModStatus() method
 - Having more than 2 split panes should be possible
 - load/saveCaretInfo() save data in split.n.<property name> so that we
   don't have to unsplit when switching buffers, closing, reloading, etc
-- Incremental search
+  - XXX: this will make the caret handling in split() a bit tricky
+  - load/saveCaretInfo(int n) -- n=-1 for temporary saving, eg in
+    split()
 - If there is > 1 possible match, complete-word should list them in a
   dialog box
 - 'Uncomment' command that removes comment strings from selected text
-- Beef up 'Marker' class to support file/line number/message stuff, EditBus
-  will also use it for errors
 - Write an InputHandler subclass that displays the current repeat count,
   if any, in the view's status bar
-- Don't just blindly call updateBracketHighlight() all the time, only
-  call it if bracket highlighted region becomes dirty
 - Plugin devel manual needs more work:
   - document views, buffers
   - document GUIUtilities.load/saveGeometry
   - how to write edit modes and token markers
   - how to write text area and gutter hilites
+  - each section should have some sample source code
+- DOX: merge basic-file-opts and basic-editing, rename advanced-editing
+  to 'Advanced Features'
 - Menu bar and tool bar loading needs to work outside of views
+
+------- jEdit 3.0 to do -------
+
 - Integrate XMode
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
-- Folding
+- Maybe write custom 'document' class; Swing implementation has a few
+  problems. With a custom document, folding and such becomes much cleaner
+- i18n support - bidi, input methods, locale-sensitive GUI, etc
 
 ------- JDK 1.2 -------
 
 When we switch to JDK 1.2, do this:
 - drag and drop of files and text
-- input method support in text area
 - Use collections instead of MiscUtilities.quicksort()
 - Enhanced printing:
   - print selection only
   - print line numbers option
 - Wait cursor hack in event queue
 - Proper font list in global options
+- Integrate HTTP proxy support

@@ -582,7 +582,8 @@ public class GUIUtilities
 	{
 		if(chooser == null)
 		{
-			view.showWaitCursor();
+			if(view != null)
+				view.showWaitCursor();
 
 			chooser = new JFileChooser();
 
@@ -637,7 +638,8 @@ public class GUIUtilities
 
 			chooser.setFileFilter(chooser.getAcceptAllFileFilter());
 
-			view.hideWaitCursor();
+			if(view != null)
+				view.hideWaitCursor();
 		}
 
 		return chooser;
@@ -647,6 +649,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.50  2000/02/15 07:44:30  sp
+ * bug fixes, doc updates, etc
+ *
  * Revision 1.49  1999/12/21 06:50:50  sp
  * Documentation updates, abbrevs option pane finished, bug fixes
  *

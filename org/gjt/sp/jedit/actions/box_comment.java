@@ -1,6 +1,6 @@
 /*
  * box_comment.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This	free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +42,7 @@ public class box_comment extends EditAction
 			view.getToolkit().beep();
 			return;
 		}
-		commentStart = commentStart + ' ';
-		commentEnd = ' ' + commentEnd;
-		boxComment = boxComment + ' ';
+
 		int selectionStart = textArea.getSelectionStart();
 		int selectionEnd = textArea.getSelectionEnd();
 		int startLine = textArea.getSelectionStartLine();
@@ -57,27 +55,17 @@ public class box_comment extends EditAction
 		{
 			Element lineElement = map.getElement(startLine);
 			int start = lineElement.getStartOffset();
-			int indent = MiscUtilities.getLeadingWhiteSpace(
-				buffer.getText(start,lineElement.getEndOffset()
-				- start));
-			buffer.insertString(Math.max(start + indent,selectionStart),
-				commentStart,null);
+
+			buffer.insertString(start,commentStart,null);
 			for(int i = startLine + 1; i <= endLine; i++)
 			{
 				lineElement = map.getElement(i);
 				start = lineElement.getStartOffset();
-				indent = MiscUtilities.getLeadingWhiteSpace(
-					buffer.getText(start,lineElement
-					.getEndOffset() - start));
-				buffer.insertString(start + indent,boxComment,null);
+				buffer.insertString(start,boxComment,null);
 			}
 			lineElement = map.getElement(endLine);
-			start = lineElement.getStartOffset();
-			indent = MiscUtilities.getLeadingWhiteSpace(buffer
-				.getText(start,lineElement.getEndOffset()
-				- start));
-			buffer.insertString(Math.max(start + indent,textArea
-				.getSelectionEnd()),commentEnd,null);
+			int end = lineElement.getEndOffset() - 1;
+			buffer.insertString(end,commentEnd,null);
 		}
 		catch(BadLocationException bl)
 		{
