@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -34,17 +35,26 @@ public class LogViewer extends JFrame
 
 		setIconImage(GUIUtilities.getEditorIcon());
 
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
 		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(0,0,12,0));
+		panel.add(Box.createGlue());
 
 		clear = new JButton(jEdit.getProperty("log-viewer.clear"));
 		clear.addActionListener(new ActionHandler());
 		panel.add(clear);
+		panel.add(Box.createHorizontalStrut(6));
 
 		save = new JButton(jEdit.getProperty("log-viewer.save"));
 		save.addActionListener(new ActionHandler());
 		panel.add(save);
+		panel.add(Box.createGlue());
 
-		getContentPane().add(BorderLayout.NORTH,panel);
+		content.add(BorderLayout.NORTH,panel);
 
 		JTextArea textArea = new JTextArea(24,80);
 		textArea.setDocument(Log.getLogDocument());
@@ -52,7 +62,7 @@ public class LogViewer extends JFrame
 
 		Font font = view.getTextArea().getPainter().getFont();
 		textArea.setFont(font);
-		getContentPane().add(BorderLayout.CENTER,new JScrollPane(textArea));
+		content.add(BorderLayout.CENTER,new JScrollPane(textArea));
 
 		pack();
 		GUIUtilities.loadGeometry(this,"log-viewer");

@@ -28,9 +28,9 @@ import javax.swing.SwingUtilities;
  */
 public class WorkThread extends Thread
 {
-	public WorkThread()
+	public WorkThread(String name)
 	{
-		super("Work request thread");
+		super(name);
 		setDaemon(true);
 		setPriority(4);
 	}
@@ -96,7 +96,7 @@ public class WorkThread extends Thread
 			if(SwingUtilities.isEventDispatchThread())
 			{
 				Log.log(Log.ERROR,this,"waitForRequests() running"
-					+ " remaining AWT runnables");
+					+ " remaining AWT requests");
 				// do any queued AWT runnables
 				doAWTRequests();
 			}
@@ -166,14 +166,14 @@ public class WorkThread extends Thread
 			doAWTRequest(getNextAWTRequest());
 		}
 
-		Log.log(Log.ERROR,this,"AWT requests done");
+		Log.log(Log.ERROR,this,"Finished running requests in AWT thread");
 	}
 
 	private void doRequest(final Request request)
 	{
 		if(request.inAWT)
 		{
-			Log.log(Log.ERROR,this,"Adding to queue and starting AWT runner: "
+			Log.log(Log.ERROR,this,"Adding request to AWT queue: "
 				+ request.run);
 
 			synchronized(lock)
@@ -234,9 +234,7 @@ public class WorkThread extends Thread
 	{
 		synchronized(lock)
 		{
-			if(awtRunnerQueued)
-				Log.log(Log.ERROR,this,"AWT runner already queued");
-			else
+			if(!awtRunnerQueued)
 			{
 				awtRunnerQueued = true;
 				SwingUtilities.invokeLater(new RunRequestsInAWTThread());
@@ -286,13 +284,9 @@ public class WorkThread extends Thread
 	{
 		public void run()
 		{
-			Log.log(Log.ERROR,this,"Running");
-
 			awtRunnerQueued = false;
 
-			if(awtRequestCount == 0)
-				Log.log(Log.ERROR,this,"Oops");
-			else
+			if(awtRequestCount != 0)
 				doAWTRequests();
 		}
 	}
@@ -301,6 +295,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/06/12 02:43:30  sp
+ * pre6 almost ready
+ *
  * Revision 1.7  2000/06/06 04:38:09  sp
  * WorkThread's AWT request stuff reworked
  *

@@ -81,15 +81,13 @@ public class MarkerHighlight implements TextAreaHighlight
 	private boolean isLineHighlighted(int line)
 	{
 		Buffer buffer = (Buffer)textArea.getDocument();
-		Registers.Register[] registers = Registers.getRegisters();
+		Vector registers = Registers.getCaretRegisters();
 
-		for(int i = 0; i < registers.length; i++)
+		for(int i = 0; i < registers.size(); i++)
 		{
-			Object obj = registers[i];
-			if(!(obj instanceof Registers.CaretRegister))
-				continue;
+			Registers.CaretRegister reg = (Registers.CaretRegister)
+				registers.elementAt(i);
 
-			Registers.CaretRegister reg = (Registers.CaretRegister)obj;
 			if(reg.getBuffer() == buffer)
 			{
 				if(line == textArea.getLineOfOffset(reg.getOffset()))
@@ -120,6 +118,7 @@ public class MarkerHighlight implements TextAreaHighlight
 				continue;
 
 			Registers.CaretRegister reg = (Registers.CaretRegister)obj;
+
 			if(reg.getBuffer() == buffer)
 			{
 				if(line == textArea.getLineOfOffset(reg.getOffset()))
@@ -156,6 +155,9 @@ public class MarkerHighlight implements TextAreaHighlight
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/06/12 02:43:30  sp
+ * pre6 almost ready
+ *
  * Revision 1.2  2000/05/23 04:04:53  sp
  * Marker highlight updates, next/prev-marker actions
  *

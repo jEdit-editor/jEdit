@@ -291,16 +291,8 @@ loop:			for(;;)
 		if(match != null)
 		{
 			fileset.matchFound(buffer);
-			// Only do this once all I/O requests are complete
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					view.setBuffer(buffer);
-					view.getTextArea().select(start + match[0],
-							start + match[1]);
-				}
-			});
+			view.setBuffer(buffer);
+			view.getTextArea().select(start + match[0],start + match[1]);
 			return true;
 		}
 		else
@@ -386,8 +378,6 @@ loop:			for(;;)
 			{
 				// Wait for buffer to finish loading
 				VFSManager.waitForRequests();
-
-				System.err.println(buffer + ": replace-all");
 
 				// Leave buffer in a consistent state if
 				// an error occurs
@@ -543,6 +533,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2000/06/12 02:43:30  sp
+ * pre6 almost ready
+ *
  * Revision 1.33  2000/06/06 04:38:09  sp
  * WorkThread's AWT request stuff reworked
  *

@@ -585,6 +585,12 @@ public class View extends JFrame implements EBComponent
 			return;
 		}
 
+		// possible workaround for bug some people have experienced,
+		// where both the find text field and the text area handle
+		// a key stroke
+		if(getFocusOwner() instanceof JTextField)
+			return;
+
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_TYPED:
@@ -1025,6 +1031,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.179  2000/06/12 02:43:29  sp
+ * pre6 almost ready
+ *
  * Revision 1.178  2000/06/05 08:22:25  sp
  * bug fixes
  *

@@ -27,7 +27,8 @@ class Autosave extends Thread
 {
 	Autosave()
 	{
-		super("jEdit autosave");
+		super("jEdit autosave daemon");
+		setDaemon(true);
 		start();
 	}
 
@@ -68,6 +69,9 @@ class Autosave extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/06/12 02:43:29  sp
+ * pre6 almost ready
+ *
  * Revision 1.5  1999/10/01 07:31:39  sp
  * RMI server replaced with socket-based server, minor changes
  *

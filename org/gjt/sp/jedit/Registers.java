@@ -22,6 +22,7 @@ package org.gjt.sp.jedit;
 import javax.swing.text.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
+import java.util.Vector;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.RegistersChanged;
 import org.gjt.sp.util.Log;
@@ -126,6 +127,14 @@ public class Registers
 	}
 
 	/**
+	 * Returns a vector of caret registers. For internal use only.
+	 */
+	public static Vector getCaretRegisters()
+	{
+		return caretRegisters;
+	}
+
+	/**
 	 * A register.
 	 */
 	public interface Register
@@ -145,7 +154,7 @@ public class Registers
 	/**
 	 * Register that points to a location in a file.
 	 */
-	public static class CaretRegister implements Register, EBComponent
+	public static class CaretRegister implements Register
 	{
 		private String path;
 		private int offset;
@@ -171,7 +180,7 @@ public class Registers
 				Log.log(Log.ERROR,this,bl);
 			}
 
-			EditBus.addToBus(this);
+			caretRegisters.addElement(this);
 		}
 
 		/**
@@ -192,7 +201,7 @@ public class Registers
 		 */
 		public void dispose()
 		{
-			EditBus.removeFromBus(this);
+			caretRegisters.removeElement(this);
 		}
 
 		/**
@@ -225,38 +234,29 @@ public class Registers
 				return pos.getOffset();
 		}
 
-		public void handleMessage(EBMessage msg)
+		void openNotify(Buffer _buffer)
 		{
-			if(msg instanceof BufferUpdate)
-				handleBufferUpdate((BufferUpdate)msg);
-		}
-
-		private void handleBufferUpdate(BufferUpdate msg)
-		{
-			Buffer _buffer = msg.getBuffer();
-			if(msg.getWhat() == BufferUpdate.CREATED)
+			if(buffer == null && _buffer.getPath().equals(path))
 			{
-				if(buffer == null && _buffer.getPath().equals(path))
+				buffer = _buffer;
+				try
 				{
-					buffer = _buffer;
-					try
-					{
-						pos = buffer.createPosition(offset);
-					}
-					catch(BadLocationException bl)
-					{
-						Log.log(Log.ERROR,this,bl);
-					}
+					pos = buffer.createPosition(offset);
+				}
+				catch(BadLocationException bl)
+				{
+					Log.log(Log.ERROR,this,bl);
 				}
 			}
-			else if(msg.getWhat() == BufferUpdate.CLOSED)
+		}
+
+		void closeNotify(Buffer _buffer)
+		{
+			if(_buffer == buffer)
 			{
-				if(_buffer == buffer)
-				{
-					buffer = null;
-					offset = pos.getOffset();
-					pos = null;
-				}
+				buffer = null;
+				offset = pos.getOffset();
+				pos = null;
 			}
 		}
 	}
@@ -342,18 +342,53 @@ public class Registers
 
 	// private members
 	private static Register[] registers;
+	private static Vector caretRegisters = new Vector();
 
 	private Registers() {}
 
 	static
 	{
+		EditBus.addToBus(new CaretRegisterHelper());
 		setRegister('$',new ClipboardRegister());
+	}
+
+	static class CaretRegisterHelper implements EBComponent
+	{
+		public void handleMessage(EBMessage msg)
+		{
+			if(msg instanceof BufferUpdate)
+				handleBufferUpdate((BufferUpdate)msg);
+		}
+
+		private void handleBufferUpdate(BufferUpdate msg)
+		{
+			Buffer _buffer = msg.getBuffer();
+			if(msg.getWhat() == BufferUpdate.CREATED)
+			{
+				for(int i = 0; i < caretRegisters.size(); i++)
+				{
+					((CaretRegister)caretRegisters.elementAt(i))
+						.openNotify(_buffer);
+				}
+			}
+			else if(msg.getWhat() == BufferUpdate.CLOSED)
+			{
+				for(int i = 0; i < caretRegisters.size(); i++)
+				{
+					((CaretRegister)caretRegisters.elementAt(i))
+						.closeNotify(_buffer);
+				}
+			}
+		}
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/06/12 02:43:29  sp
+ * pre6 almost ready
+ *
  * Revision 1.9  2000/05/22 12:05:45  sp
  * Markers are highlighted in the gutter, bug fixes
  *

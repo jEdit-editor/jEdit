@@ -1,6 +1,10 @@
 JEDIT TO DO
 
-- Update plugin manager screenshots in docs
+- Update plugin manager download screenshot
+- On some JDKs, the find and console toolbar text fields do not consume
+  key events it seems, so pressing backspace, for example, will delete
+  a character both in the text field and main text area. I'm not sure
+  if there is a way to fix this.
 
 Later:
 

@@ -654,7 +654,7 @@ public class GUIUtilities
 	{
 		LoadThread()
 		{
-			super("Loading file chooser in background");
+			super("jEdit file chooser load thread");
 			setPriority(Thread.MIN_PRIORITY);
 			start();
 		}
@@ -771,6 +771,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.66  2000/06/12 02:43:29  sp
+ * pre6 almost ready
+ *
  * Revision 1.65  2000/06/05 08:22:25  sp
  * bug fixes
  *

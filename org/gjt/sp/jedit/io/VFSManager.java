@@ -194,7 +194,7 @@ public class VFSManager
 	}
 
 	// private members
-	private static WorkThread ioThread = new WorkThread();
+	private static WorkThread ioThread = new WorkThread("jEdit I/O daemon");
 	private static VFS fileVFS = new FileVFS();
 	private static VFS urlVFS = new UrlVFS();
 	private static Hashtable vfsHash;
@@ -212,6 +212,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/06/12 02:43:29  sp
+ * pre6 almost ready
+ *
  * Revision 1.8  2000/05/21 06:06:43  sp
  * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
  *

@@ -33,7 +33,8 @@ class EditServer extends Thread
 {
 	EditServer(String portFile)
 	{
-		super("jEdit server [" + portFile + "]");
+		super("jEdit server daemon [" + portFile + "]");
+		setDaemon(true);
 		this.portFile = portFile;
 
 		try
@@ -295,6 +296,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/06/12 02:43:29  sp
+ * pre6 almost ready
+ *
  * Revision 1.13  2000/04/29 03:07:37  sp
  * Indentation rules updated, VFS displays wait cursor properly, background mode
  *
