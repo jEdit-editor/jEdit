@@ -123,21 +123,25 @@
 	</target>
 
 	<!-- Generate PDF docs with OpenJade tool from openjade.sf.net -->
-	<target name="docs-pdf-openjade-letter" description="Generate PDF (letter size) documents with OpenJade tool.">
+	<!-- Do not call directly. Expects paper.size property to be set. -->
+	<target name="docs-pdf-openjade" description="Generate PDF documents with OpenJade tool.">
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
-			<arg value="../jeditprint-letter.dsl"/>
+			<arg value="../jeditprint-${paper.size}.dsl"/>
 			<arg value="-c"/>
-			<arg value="/usr/share/xml/docbook/xml-dtd-4.1.2/catalog"/>
+			<arg value="${docbook.dtd.catalog}"/>
 			<arg value="-c"/>
-			<arg value="/usr/local/share/dsssl/docbook-dsssl-1.77/catalog"/>
+			<arg value="${docbook.dsssl.catalog}"/>
 			<arg value="-c"/>
-			<arg value="/usr/local/share/dsssl/docbook-dsssl-1.77/catalog"/>
-			<arg value="-c"/>
-			<arg value="/usr/local/share/dsssl/catalog"/>
+			<arg value="${dsssl.dtd.catalog}"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
-			<arg value="/usr/local/share/OpenSP/xml.dcl"/>
+			<arg value="-V"/>
+			<arg value="paper-type=${paper.type}"/>
+			<arg value="-a"/>
+			<arg value="xml"/>
+			<arg value="-E"/>
+			<arg value="10000"/>
 			<arg value="users-guide.xml"/>
 		</exec>
 		<exec executable="pdfjadetex" dir="doc/users-guide">
@@ -150,37 +154,18 @@
 			<arg value="users-guide.tex"/>
 		</exec>
 		<move file="doc/users-guide/users-guide.pdf"
-			tofile="doc/users-guide/users-guide-letter.pdf" />
+			tofile="doc/users-guide/users-guide-${paper.size}.pdf" />
+	</target>
+
+	<!-- Generate PDF docs with OpenJade tool from openjade.sf.net -->
+	<target name="docs-pdf-openjade-letter" description="Generate PDF (letter size) documents with OpenJade tool.">
+		<property name="paper.size" value="letter" />
+		<antcall target="docs-pdf-openjade"/>
 	</target>
 
 	<target name="docs-pdf-openjade-a4" description="Generate PDF (A4 size) documents with OpenJade tool.">
-		<exec executable="openjade" dir="doc/users-guide">
-			<arg value="-d"/>
-			<arg value="../jeditprint-a4.dsl"/>
-			<arg value="-c"/>
-			<arg value="/usr/share/xml/docbook/xml-dtd-4.1.2/catalog"/>
-			<arg value="-c"/>
-			<arg value="/usr/local/share/dsssl/docbook-dsssl-1.77/catalog"/>
-			<arg value="-c"/>
-			<arg value="/usr/local/share/dsssl/docbook-dsssl-1.77/catalog"/>
-			<arg value="-c"/>
-			<arg value="/usr/local/share/dsssl/catalog"/>
-			<arg value="-t"/>
-			<arg value="tex"/>
-			<arg value="/usr/local/share/OpenSP/xml.dcl"/>
-			<arg value="users-guide.xml"/>
-		</exec>
-		<exec executable="pdfjadetex" dir="doc/users-guide">
-			<arg value="users-guide.tex"/>
-		</exec>
-		<exec executable="pdfjadetex" dir="doc/users-guide">
-			<arg value="users-guide.tex"/>
-		</exec>
-		<exec executable="pdfjadetex" dir="doc/users-guide">
-			<arg value="users-guide.tex"/>
-		</exec>
-		<move file="doc/users-guide/users-guide.pdf"
-			tofile="doc/users-guide/users-guide-a4.pdf" />
+		<property name="paper.size" value="a4" />
+		<antcall target="docs-pdf-openjade"/>
 	</target>
 
 	<path id="doclet.class.path">
