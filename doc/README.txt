@@ -203,6 +203,7 @@ Dirk Moebius:       - HTTP firewall plugin
                     - VariableGridLayout code
                     - Show Free Memory macro
 Dominic Stolerman:  - ML edit mode
+Ed Stewart:         - PV-WAVE edit mode
 Francesc Roses:     - Duplicate Line macro
 Gili Tzabari:       - OS/2 start script
 Ian Maclean:        - Ruby edit mode

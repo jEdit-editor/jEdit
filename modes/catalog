@@ -130,6 +130,9 @@
 <MODE NAME="properties"		FILE="props.xml"
 				FILE_NAME_GLOB="*{properties,props}" />
 
+<MODE NAME="pvwave"		FILE="pvwave.xml"
+				FILE_NAME_GLOB="*.{pro,jou}" />
+
 <MODE NAME="python"		FILE="python.xml"
 				FILE_NAME_GLOB="*.py" />
 

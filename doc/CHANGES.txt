@@ -1,5 +1,21 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2pre8
+
++ New Features
+
+- PV-WAVE syntax highlighting (Ed Stewart)
+
++ Enhancements
+
+- Improved XSL abbrevs (Ollie Rutherfurd)
+
++ Bug Fixes
+
+- Right mouse button clicks didn't work on all platforms
+- Printing didn't work due to a change in 3.2pre7
+- Fixed exception printed when trying to use the file chooser dialog box
+
 * Version 3.2pre7
 
 + New Features

@@ -82,6 +82,7 @@ Syntax highlighting for the following file types has been added:
 - Occam
 - Omnimark
 - Progress 4GL
+- PV-WAVE
 - SQR
 - Velocity
 - Verilog

@@ -966,6 +966,21 @@ public class GUIUtilities
 		});
 	}
 
+	/**
+	 * Returns if the specified event is the popup trigger event.
+	 * This implements precisely defined behavior, as opposed to
+	 * MouseEvent.isPopupTrigger().
+	 * @param evt The event
+	 * @since jEdit 3.2pre8
+	 */
+	public static boolean isPopupTrigger(MouseEvent evt)
+	{
+		if(macOS)
+			return evt.isControlDown();
+		else
+			return ((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0);
+	}
+
 	// deprecated APIs
 
 	/**
@@ -1039,13 +1054,15 @@ public class GUIUtilities
 
 	// private members
 	private static SplashScreen splash;
-
+	private static boolean macOS;
 	private static Hashtable icons;
 
 	private GUIUtilities() {}
 
 	static
 	{
+		macOS = (System.getProperty("os.name").indexOf("MacOS") != -1);
+
 		icons = new Hashtable();
 		NEW_BUFFER_ICON = loadIcon("new.gif");
 		DIRTY_BUFFER_ICON = loadIcon("dirty.gif");

@@ -149,11 +149,11 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			}
 		}
 
-		VFS vfs = VFSManager.getVFSForPath(directory);
-		filename = vfs.constructPath(directory,filename);
-
 		if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
 		{
+			VFS vfs = VFSManager.getVFSForPath(directory);
+			filename = vfs.constructPath(directory,filename);
+
 			if(vfs instanceof FileVFS && doFileExistsWarning(filename))
 				return;
 		}

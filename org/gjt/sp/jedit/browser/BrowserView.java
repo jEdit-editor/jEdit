@@ -27,8 +27,7 @@ import java.awt.*;
 import java.util.Enumeration;
 import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.*;
 
 /**
  * VFS browser tree view.
@@ -382,7 +381,7 @@ public class BrowserView extends JPanel
 						break;
 					}
 				}
-				else if(evt.isPopupTrigger())
+				else if(GUIUtilities.isPopupTrigger(evt))
 					; // do nothing
 
 				super.processMouseEvent(evt);
@@ -396,7 +395,7 @@ public class BrowserView extends JPanel
 					if(evt.getClickCount() == 2)
 						break;
 				}
-				else if(evt.isPopupTrigger())
+				else if(GUIUtilities.isPopupTrigger(evt))
 				{
 					if(popup != null && popup.isVisible())
 					{

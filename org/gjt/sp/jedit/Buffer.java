@@ -230,11 +230,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		int lineNumberDigits = (int)Math.ceil(Math.log(
 			lineCount) / Math.log(10));
 
-		int lineNumberWidth;
-		if(printLineNumbers)
-			lineNumberWidth = fm.charWidth('0') * lineNumberDigits;
-		else
-			lineNumberWidth = 0;
+		int lineNumberWidth = 0;
 
 		TextRenderer renderer = TextRenderer.createPrintTextRenderer();
 
@@ -251,6 +247,15 @@ public class Buffer extends PlainDocument implements EBComponent
 
 				gfx.setFont(font);
 				fm = gfx.getFontMetrics();
+
+				if(printLineNumbers)
+				{
+					lineNumberWidth = fm.charWidth('0')
+						* lineNumberDigits;
+				}
+				else
+					lineNumberWidth = 0;
+
 				lineHeight = fm.getHeight();
 				tabSize = getTabSize() * fm.charWidth(' ');
 				expander = new PrintTabExpander(leftMargin

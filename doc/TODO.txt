@@ -1,7 +1,7 @@
 TO DO
 
 - proofread user's guide
-- find out about jEdit cli args & jEditLauncher
+- add note to cli-usage about having to specify args in options dialog
 - finish console 3.0
 - -1 being passed to virtualToPhysical() by documentChanged()
 - formatting problems in user's guide in table cells

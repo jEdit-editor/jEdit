@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import org.gjt.sp.jedit.GUIUtilities;
 
 /**
  * Text field with an arrow-key accessable history.
@@ -365,7 +366,7 @@ public class HistoryTextField extends JTextField
 				showPopupMenu(getText().substring(0,getSelectionStart()),
 					0,getHeight());
 			}
-			else if(evt.isPopupTrigger())
+			else if(GUIUtilities.isPopupTrigger(evt))
 				showPopupMenu("",0,getHeight());
 		}
 	}
