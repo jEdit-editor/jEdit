@@ -39,6 +39,8 @@ JEDIT 3.2 VERSION HISTORY
 - 'Search and Replace' dialog box has a new look
 - If auto wrap around is enabled, a message will be shown in the status
   bar when the search is restarted
+- The shortcut to toggle multiple selection has been changed from
+  Caps Lock to C+\
 
 + Bug Fixes
 
@@ -61,6 +63,8 @@ JEDIT 3.2 VERSION HISTORY
 - Fixed another recent file list bug
 - 'Paste' command displayed a cryptic exception if the buffer was read
   only. Now it just beeps
+- jEdit ran startup scripts in the settings directory twice, and startup
+  scripts in the jEdit home directory weren't being run at all
 
 + API Changes
 

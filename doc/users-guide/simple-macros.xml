@@ -12,11 +12,6 @@
 <!-- discussed.                                                 -->
 
 <chapter id="simple-macros"><title>A Few Simple Macros</title>
- <para>
-  We now move from macro housekeeping to the actual writing of
-  BeanShell scripts. We will look at some simple macros and show you
-  how they work.
- </para>
 
  <sect1 id="first-example"><title>The Mandatory First Example</title>
   <informalexample><!-- <title>A first one-line macro</title> -->
@@ -182,7 +177,7 @@
    </listitem>
    <listitem>
     <para>When you are constructing a new object in a macro (for
-    example, a dialog window or other GUI elements) you will need
+    example, a dialog window or other GUI elements) you will need to
     use import statements or fully qualified class names for those
     components - see <xref linkend="dialog-macro"/> for details.</para>
    </listitem>
@@ -199,8 +194,8 @@
     <function>package</function> statement. In Java, such a statement is
     used to bundle together a number of files so that their classes become
     visible to one another. Packages are not part of BeanShell. With the
-    exception of a designated startup macro (see <xref
-    linkend="organizing-macros"/>), and a macro that calls another,
+    exception of designated startup scripts (see <xref
+    linkend="startup-scripts"/>), and a macro that calls another,
     nested macro, variables defined in a BeanShell script
     (other than the script's return value) are visible only within the
     script. You don't need to know anything about Java packages to write
@@ -215,7 +210,7 @@
    Including <function>message()</function>, there are four static methods
    in the <classname>Macros</classname> class that allow you to converse
    easily with your macros. They all encapsulate calls to methods of the
-   <classname>JOptionPane</classname> class.
+   Java platform's <classname>JOptionPane</classname> class.
   </para>
 
   <itemizedlist>
@@ -300,12 +295,12 @@
    Java's way of saying that there is no object associated with this
    variable. Whenever you seek to use a return value from
    <function>input()</function> in your macro, you should test it to see if
-   it is <constant>null</constant>. BeanShell will complain if you call any
-   methods on a <constant>null</constant> object. In most cases, you will
+   it is <constant>null</constant>. In most cases, you will
    want to exit gracefully from the script with a
    <function>return</function> statement, because the presence of a null
-   value for an input varaible usually means that the user intended to
-   cancel macro execution.
+   value for an input variable usually means that the user intended to
+   cancel macro execution. BeanShell will complain if you call any
+   methods on a <constant>null</constant> object.
   </para>
 
   <para>
@@ -329,10 +324,11 @@ String result = Macros.input(view, "What is your name?",
     before the variable name <varname>result</varname> tells BeanShell that
     the variable refers to a <classname>String</classname> object, even
     before a particular <classname>String</classname> object is assigned to
-    it. In BeanShell, this declaration of the <glossterm>type</glossterm> of
-    <varname>result</varname> is not necessary; BeanShell can figure it out
-    when the macro runs. This can be helpful if you are not comfortable with
-    types and classes; justuse your variables and let BeanShell worry about it.
+    it. In BeanShell, this <glossterm>declaration</glossterm> of the
+    <glossterm>type</glossterm> of <varname>result</varname> is not
+    necessary; BeanShell can figure it out when the macro runs. This can be
+    helpful if you are not comfortable with types and classes; just use your
+    variables and let BeanShell worry about it.
   </para>
 
   <para>
@@ -433,9 +429,10 @@ textArea.setSelectedText(newText);</programlisting>
 
   <para>
     In precise terms, the <function>setSelectedText()</function> method
-    substitutes the text currently selected with the contents of the
-    <classname>String</classname> parameter. If no text is selected, the
-    effect of this operation is to insert text at the caret position.
+    substitutes the contents of the <classname>String</classname>
+    parameter for a range of selected text that includes the current caret
+    position. If no text is selected at the caret position, the effect
+    of this operation is simply to insert the new text at that position.
   </para>
 
   <para>
@@ -493,10 +490,10 @@ String result = df.format(d);
 	     <para>
          A Java <classname>Date</classname> object is created using the
          <function>new</function> keyword. The empty parenthesis after
-         <classname>Date</classname> signify a call on the constructor method
-         of <classname>Date</classname> having no parameters; here, a
-         <classname>Date</classname> is created representing the current
-         date and time.
+         <classname>Date</classname> signify a call on the <glossterm>
+         constructor method</glossterm> of <classname>Date</classname> having no
+         parameters; here, a <classname>Date</classname> is created representing
+         the current date and time.
        </para>
 	   </listitem>
 

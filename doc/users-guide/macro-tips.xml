@@ -225,7 +225,7 @@ if( JOptionPane.OK_OPTION !=
         The two visible components created by
         <function>showConfirmDialog()</function> appear at positions 3 and 6 of
         the <varname>message</varname> array. Only the text is required; they
-        are rendered as text labels. Note that it was necessary to set the
+        are rendered as text labels. Note that the constructor sets the
         foreground color <varname>nameLabel</varname> to black. The default text
         color of <classname>JLabel</classname> objects is gray for Java's
         default look-and-feel, so the color was reset for consistency with
@@ -256,10 +256,14 @@ if( JOptionPane.OK_OPTION !=
     <listitem>
       <para>
         Finally, the call to <function>showConfirmDialog()</function> uses
-        the defined constants the option type (using <guilabel>OK</guilabel>
-        and <guilabel>Cancel</guilabel> buttons) and the message type (a
-        <constant>QUERY_MESSAGE</constant> that causes the message box
-        to display a question mark icon.  The return value of the method
+        defined constants for the option type and the message type.  The
+        option type signifies the use of <guilabel>OK</guilabel>
+        and <guilabel>Cancel</guilabel> buttons. The
+        <constant>QUERY_MESSAGE</constant> message type causes the message box
+        to display a question mark icon.
+      </para>
+      <para>
+        The return value of the method
         is tested against the value <constant>OK_OPTION</constant>.  If
         the return value is something else (because the
         <guilabel>Cancel</guilabel> button was pressed or because the
@@ -351,7 +355,6 @@ result = JOptionPane.showInputDialog(view,
     equalled <constant>null</constant>.
   </para>
 
-
   <para>
     A set of options can be similarly placed in a
     <classname>JComboBox</classname> component created as part of a larger
@@ -363,11 +366,12 @@ result = JOptionPane.showInputDialog(view,
   <programlisting>// fragments from Display_Abbreviations.bsh
 // import statements and other code omitted
 
-// from main routine, a method returning an array of Strings
-// representing the names of abbreviation sets
+// from main routine, this method call returns an array
+// of Strings representing the names of abbreviation sets
 
 abbrevSets = getActiveSets();
 
+...
 
 // from showAbbrevs() method
 
@@ -392,7 +396,7 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
     <application>vi</application>. They will require only a single keypress
     as input that would be handled by the macro but not displayed on the
     screen. If the keypress corresponds to a character value, jEdit can pass
-    the character value as a parameter to a BeanShell script.
+    that value as a parameter to a BeanShell script.
   </para>
 
   <para>
@@ -418,9 +422,9 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
   </itemizedlist>
 
   <para>
-    Firstly, the contents of the <varname>prompt</varname> parameter
-    will be shown in the view's status
-    bar. Then, the method will wait for a key press, after which
+    When this method is called, the contents of the <varname>prompt</varname>
+    parameter is shown in the view's status
+    bar. The method then waits for a key press, after which
     the contents of the <varname>code</varname> parameter will be run as
     a BeanShell script, with one important modification. Each time the
     string <varname>__char__</varname> appears in the parameter script, it
@@ -508,31 +512,135 @@ view.getInputHandler().readNextChar("Enter a character",
 <sect1 id="startup-scripts"><title>Startup Scripts</title>
 
   <para>
-    On startup,
-    jEdit runs any BeanShell scripts located in the
-    <filename>startup</filename> subdirectory
-    of the jEdit installation or user settings directories (see
-    <xref linkend="settings-directory" />. As with
-    macros, the scripts must have a <filename>.bsh</filename> file name
-    extension. Startup scripts are run near the end of the startup
-    sequence, after plugins, properties and such have been initialized,
-    but before the first view is opened.
+    On startup, jEdit runs any BeanShell scripts located in the
+    <filename>startup</filename> subdirectory of the jEdit installation or
+    user settings directories (see <xref linkend="settings-directory" />. As
+    with macros, the scripts must have a <filename>.bsh</filename> file name
+    extension. Startup scripts are run near the end of the startup sequence,
+    after plugins, properties and such have been initialized, but before the
+    first view is opened.
   </para>
+
   <para>
-    If startup script bugs are causing jEdit to crash or
+    The startup routine will run scripts in the installation directory first,
+    followed by scripts in the user settings directory. In each case, scripts
+    will be executed in alphabetical order, applied without regard to
+    whether the file name contains upper or lower case characters.
+  </para>
+
+  <para>
+    If a startup script throws an exception (becuase, for example,
+    it attempts to call a method on a <constant>null</constant>object).
+    jEdit will show a message box and attempt to move on to the next
+    startup script.  If script bugs are causing jEdit to crash or
     hang on startup, you can use the
     <command>-nostartupscripts</command> command line option to
-    temporarily disable them.
+    disable them for that editing session.
   </para>
+
+  <para>
+    A startup script can perform initialization tasks that cannot be
+    handled by command line options or ordinary configuration options. It
+    could, for example, open a designated file (whether or not it was open
+    at the close of the preceding jEdit session). It could write logging
+    information to jEdit's Activity Log or an external file, or activate
+    another application. It can also add variables, methods and scripted
+    objects to the namespace used by the BeanShell interpreter when running
+    other macro scripts. This last feature allows you to create a personal
+    library of methods and objects that can be accessed at any time during the
+    editing session in another macro, the BeanShell shell of the Console
+    plugin, or menu items such as
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
+    BeanShell Expression</guimenuitem>.
+  </para>
+
   <para>
     Unlike with macros,
     variables and methods defined in a startup script are available in
-    all instances of the BeanShell interpreter in jEdit; for example, in
+    all instances of the BeanShell interpreter in jEdit, including
     other macros, search and replace operations, and the Console plugin.
     Because of this, the most common use of a startup script is to build
     up a library of useful BeanShell routines. Startup scripts can also
-    be used for other purposes, such as UI customizations.
+    be used for other purposes, such as UI customization.
   </para>
+
+  <para>
+    Another important difference between startup scripts and ordinary
+    macros is that startup scripts cannot use the pre-defined variables
+    <varname>view</varname>, <varname>textArea</varname>,
+    <varname>editPane</varname> and <varname>buffer</varname>.  This is
+    because they are executed before a view and the other objects are
+    created.  The pre-defined variables will be set to
+    <constant>null</constant> inside the method because they are
+    <constant>null</constant> at the time the source was interpreted by
+    BeanShell. If you are writing a method in a
+    startup script that will be part of your personal macro library, and
+    you wish to use pre-defined variables, use parameters of the
+    appropriate type in the method, so that a macro calling them after
+    startup can supply pre-defined values. For example, a startup script
+    could include a method
+    <informalexample><programlisting>void doSomethingWithView(View v, String s)  {
+    ...
+}</programlisting></informalexample>
+    so that during the editing session another macro can call the method
+    using
+    <informalexample><programlisting>doSomethingWithView(view, "something");
+</programlisting></informalexample>
+
+  </para>
+</sect1>
+
+<sect1 id="macro-tips-BeanShell"><title>Advanced BeanShell Techniques</title>
+
+<para>
+  Up to this point we have not discussed all of the options and features
+  of BeanShell, which is packaged as a standalone interpreter environment
+  as well as a scripting language. While many of those features are more
+  helpful when using BeanShell on its own, we will now mention a few
+  of them that can make writing macros easier. The latest documentation
+  on the entire BeanShell package is available from the
+  <ulink url="http://www.beanshell.org">BeanShell web site</ulink>.
+</para>
+
+<sect2 id="macro-tips-BeanShell-convenience">
+<title>BeanShell's <quote>Convenience</quote> Syntax</title>
+
+<para>
+  [To be supplied]
+</para>
+
+
+</sect2>
+
+
+<sect2 id="macro-tips-BeanShell-keywords">
+<title>Special BeanShell Keywords</title>
+
+<para>
+  [To be supplied]
+</para>
+
+</sect2>
+
+<sect2 id="macro-tips-BeanShell-interface">
+<title>Implementing Interfaces</title>
+
+<para>
+  [To be supplied]
+</para>
+
+
+</sect2>
+
+<sect2 id="macro-tips-BeanShell"><title>BeanShell Commands</title>
+
+<para>
+  [To be supplied]
+</para>
+
+
+</sect2>
+
 </sect1>
 
 <sect1 id="macro-tips-debugging"><title>Debugging Macros</title>

@@ -97,7 +97,8 @@
   </sect2>
   <sect2 id="multi-select"><title>Multiple Selection</title>
    <para>
-    Pressing <keycap>Caps Lock</keycap> turns multiple selection mode on and
+    Pressing <keycombo><keycap>Control</keycap> <keycap>\</keycap></keycombo>
+    turns multiple selection mode on and
     off. In multiple selection mode, the text <literal>multi</literal> is shown
     in black in the status bar, and multiple fragments of text can be selected
     and operated on simultaneously. Note that deactivating multiple selection

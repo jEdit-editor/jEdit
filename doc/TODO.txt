@@ -14,15 +14,11 @@ TO DO
   - formatting problems in user's guide in table cells
   - document differences between web start and stand-alone version
   - JOptionPane not a good idea for getting user input?
-  - maybe docs on BeanShell 1.2 features in macro guide?
-    - incorporate portions of the beanshell manual into the macro guide.
-  - BSH language reference appendix
-  - BSH command reference appendix
+  - BSH command reference in API guide <part>
   - proofread it
 
 - don't use hacked BeanShell 1.1a18
 - 'rem' in vbscript
-- delete line aiob?
 - installing source for already installed plugins
 - get web start to work
 - fix '... is not a function name' when running openjade
@@ -32,7 +28,7 @@ TO DO
 - John Gellene:
   - jEditLauncher docs
   - jEditLauncher
-  - rest of macro guide changes
+  - API guide
 
 + bugs that need to be fixed at some stage:
 

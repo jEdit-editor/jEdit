@@ -348,7 +348,7 @@ public class jEdit
 		// are loaded
 		if(!noStartupScripts && jEditHome != null)
 		{
-			String path = MiscUtilities.constructPath(settingsDirectory,"startup");
+			String path = MiscUtilities.constructPath(jEditHome,"startup");
 			File file = new File(path);
 			if(file.exists())
 				runStartupScripts(file);

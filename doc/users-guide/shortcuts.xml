@@ -250,7 +250,7 @@
       <entry>Select line range.</entry>
      </row>
      <row>
-      <entry><keycap>Caps Lock</keycap></entry>
+      <entry><keycombo><keycap>Control</keycap><keycap>\</keycap></keycombo>
       <entry>Switch between single and multiple selection mode.</entry>
      </row>
     </tbody>

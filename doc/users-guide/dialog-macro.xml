@@ -7,7 +7,7 @@
 <!-- This file contains an extended discussion of a                     -->
 <!-- dialog-based macro example "Add_Prefix_and_Suffix.bsh"             -->
 
-<!-- Note: macro has been revised to accomodate Section API in jEdit3.2 -->
+<!-- Note: macro has been revised to accomodate Selection API in jEdit3.2 -->
 
 <chapter id="dialog-macro"><title>A Dialog-Based Macro</title>
  <para>
@@ -195,7 +195,7 @@ import javax.swing.border.*;</programlisting></informalexample>
     BeanShell interpreter without having to use the <glossterm>fully qualified class
     name</glossterm> each time one of the classes is referenced. As we mentioned
     previously (see <xref linkend="first-example"/>), jEdit's implementation of
-    BeanShell causes a number of classes to be automatically imported. Those classes
+    BeanShell causes a number of classes to be automatically imported. Classes
     that are not automatically imported must be named by a full qualified name or be
     the subject of an <function>import</function> statement.
   </para>
@@ -225,8 +225,8 @@ content.setBorder(new EmptyBorder(12, 12, 12, 12));
 dialog.setContentPane(content);</programlisting></informalexample>
 
   <para>
-    To get input for the macro, we need a dialog that permits input of the prefix
-    and suffix string, an <guibutton>OK</guibutton> button to perform text
+    To get input for the macro, we need a dialog that provides for input of the prefix
+    and suffix strings, an <guibutton>OK</guibutton> button to perform text
     insertion, and a <guibutton>Cancel</guibutton> button in case we change our
     mind. We have decided to make the dialog window non-modal. This will allow us to
     move around in the text buffer to find things we may need (including text to cut
@@ -234,16 +234,16 @@ dialog.setContentPane(content);</programlisting></informalexample>
   </para>
 
   <para>
-    The Java object we need is a <classname>JDialog</classname> object. To
-    construct one, we use the <function>new</function> keyword and call a
-    <glossterm>constructor</glossterm> function. The constructor we use
-    takes three parameters: the owner of the new dialog, the title to
-    be displayed in the dialog frame, and a <type>boolean</type>
-    parameter (<constant>true</constant> or <constant>false</constant>) that
-    specifies whether the dialog will be modal or non-modal. We
-    define the variable <varname>title</varname> using a string literal,
-    then use it immediately in the <classname>JDialog</classname>
-    constructor.
+    The Java object we need is a <classname>JDialog</classname> object from
+    the Swing package. To construct one, we use the <function>new</function>
+    keyword and call a <glossterm>constructor</glossterm> function. The
+    constructor we use takes three parameters: the owner of the new dialog,
+    the title to be displayed in the dialog frame, and a
+    <type>boolean</type> parameter (<constant>true</constant> or
+    <constant>false</constant>) that specifies whether the dialog will be
+    modal or non-modal. We define the variable <varname>title</varname>
+    using a string literal, then use it immediately in the
+    <classname>JDialog</classname> constructor.
   </para>
 
   <para>
@@ -269,8 +269,9 @@ dialog.setContentPane(content);</programlisting></informalexample>
     A <classname>BorderLayout</classname> is one of the simpler layout
     schemes available for Java Swing objects.
     A <classname>BorderLayout</classname>
-    divides the container into five sections: North, South, East,
-    West and Center. Components are added to the layout using the
+    divides the container into five sections: <quote>North</quote>,
+    <quote>South</quote>, <quote></quote>East, <quote>West</quote> and
+    <quote>Center</quote>. Components are added to the layout using the
     container's <function>add</function> method, specifying the component to
     be added and the section to which it is assigned. Building a
     component like our dialog window involves building a set of
@@ -314,10 +315,9 @@ content.add(fieldPanel, <quote>Center</quote>);</programlisting></informalexampl
 
   <para>
     To create the <classname>HistoryTextField</classname> objects we use a
-    constructor method that takes a single parameter: the name of the
-    tag under which history values will be stored in the
-    <filename>history</filename> file. Here we choose names that are not
-    likely to conflict with existing jEdit history items.
+    constructor method that takes a single parameter: the name of the tag
+    under which history values will be stored. Here we choose names that are
+    not likely to conflict with existing jEdit history items.
   </para>
 
   <para>
@@ -378,7 +378,7 @@ content.add(buttonPanel, <quote>South</quote>);</programlisting></informalexampl
     <guilabel>OK</guilabel> button to be outlined as the default button. Finally, we
     place the button side by side with a 6 pixel gap between them (for aesthetic
     reasons), and place the completed <varname>buttonPanel</varname> in the
-    <quote>South</quote> section of thedialog's content pane.
+    <quote>South</quote> section of the dialog's content pane.
   </para>
 </sect2>
 
@@ -399,7 +399,7 @@ suffixField.addActionListener(this);</programlisting></informalexample>
     components of the dialog - the two <classname>HistoryTextField</classname>
     components and the two buttons. In Java, an
     <classname>ActionListener</classname> is an <glossterm>interface</glossterm> - an
-    abstract class specification that a derived class implements. The
+    abstract specification for a derived class to implement. The
     <classname>ActionListener</classname> interface contains a single method to
     be implemented:
   </para>
@@ -444,7 +444,7 @@ dialog.setVisible(true);</programlisting></informalexample>
     on the dialog. We also call the <function>setDefaultCloseOperation()</function>
     function to specify that the dialog box should be immediately disposed if the
     user clicks the close box. Finally, we activate the dialog by calling
-    <function>setVisible()</function>with the state param   eter set to
+    <function>setVisible()</function>with the state parameter set to
     <constant>true</constant>.
   </para>
 
@@ -481,6 +481,18 @@ void actionPerformed(e)
     call the <function>processText()</function> method to insert the prefix
     and suffix text. Then the dialog is closed by calling its
     <function>dispose()</function> method.
+  </para>
+
+  <para>
+    The ability to implement interfaces like
+    <classname>ActionListener</classname> inside a BeanShell script is
+    one of the more powerful features of the BeanShell package. With an
+    <classname>ActionListener</classname> interface, which has only a
+    single method, implementation is simple.  When using other
+    interfaces with multiple methods, however, there are some details to
+    deal with that will vary depending on the version of the Java
+    platform that you are running.  These techniques are discussed in
+    the next chapter.  <!-- Insert xref here -->
   </para>
 
 </sect2>
@@ -588,7 +600,8 @@ void processText()
     <para>
       If the line is empty, <function>getSelectedText()</function> will
       return <constant>null</constant>. In that case, we assign an empty
-      string to <varname>text</varname>.
+      string to <varname>text</varname> to avoid calling methods on a
+      null object.
     </para>
   </listitem>
 
@@ -635,7 +648,7 @@ prefixSuffixDialog();</programlisting>
   <para>
     Our analysis of <filename>Add_Prefix_and_Suffix.bsh</filename> is now
     complete. In the next section, we look at other ways in which a macro
-    can obtain user input.
+    can obtain user input, as well as other macro writing techniques.
   </para>
 
 </sect2>
