@@ -172,6 +172,14 @@ class ColorTableModel extends AbstractTableModel
 			"view.bracketHighlightColor");
 		addColorChoice("options.styles.eolMarkerColor",
 			"view.eolMarkerColor");
+		addColorChoice("options.styles.gutterBgColor",
+			"view.gutter.bgColor");
+		addColorChoice("options.styles.gutterFgColor",
+			"view.gutter.fgColor");
+		addColorChoice("options.styles.gutterHighlightColor",
+			"view.gutter.highlightColor");
+		addColorChoice("options.styles.gutterBorderColor",
+			"view.gutter.borderColor");
 	}
 
 	public int getColumnCount()
@@ -539,6 +547,9 @@ implements ActionListener, KeyListener
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/02/04 05:50:27  sp
+ * More gutter updates from mike
+ *
  * Revision 1.8  1999/12/05 03:01:05  sp
  * Perl token marker bug fix, file loading is deferred, style option pane fix
  *

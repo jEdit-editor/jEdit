@@ -21,7 +21,9 @@ package org.gjt.sp.jedit.textarea;
 
 import org.gjt.sp.jedit.syntax.*;
 import javax.swing.JPopupMenu;
+import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.Font;
 
 /**
  * Encapsulates default settings for a text area. This can be passed
@@ -43,6 +45,13 @@ public class TextAreaDefaults
 
 	public boolean gutterCollapsed;
 	public int gutterWidth;
+	public Color gutterBgColor;
+	public Color gutterFgColor;
+	public Color gutterHighlightColor;
+	public Color gutterBorderColor;
+	public int gutterBorderWidth;
+	public int gutterNumberAlignment;
+	public Font gutterFont;
 
 	public int cols;
 	public int rows;
@@ -79,6 +88,16 @@ public class TextAreaDefaults
 
 			DEFAULTS.gutterCollapsed = true;
 			DEFAULTS.gutterWidth = 40;
+			DEFAULTS.gutterBgColor = Color.white;
+			DEFAULTS.gutterFgColor =
+				UIManager.getColor("Label.foreground");
+			DEFAULTS.gutterHighlightColor =
+				DEFAULTS.gutterFgColor.brighter();
+			DEFAULTS.gutterBorderColor = Color.gray;
+			DEFAULTS.gutterBorderWidth = 4;
+			DEFAULTS.gutterNumberAlignment = Gutter.RIGHT;
+			DEFAULTS.gutterFont =
+				new Font("monospaced", Font.PLAIN, 10);
 
 			DEFAULTS.cols = 80;
 			DEFAULTS.rows = 25;

@@ -41,12 +41,15 @@ multifile-search.icon=Multifile.gif
 view.quicksearch=Find:\ 
 
 ###
-### CONTEXT MENU
+### CONTEXT MENUS
 ###
 view.context=undo redo - cut copy paste paste-previous - select-all \
 	select-none - scroll-line - view-registers - unsplit \
 	split-horizontal split-vertical - record-temp-macro \
 	stop-recording play-temp-macro
+
+gutter.context=toggle-gutter toggle-line-numbers - save-gutter-size
+save-gutter-size.label=Save Gutter Size
 
 ###
 ### MENUBAR
@@ -513,7 +516,7 @@ send.connect=Connecting to {0}...
 
 # Go to line dialog
 gotoline.title=Go To Line
-gotoline.message=Line number to go to:
+gotoline.message=Go to line:
 
 # Word count dialog
 wordcount.title=Word Count
@@ -723,6 +726,10 @@ options.styles.selectionColor=Selection
 options.styles.lineHighlightColor=Line highlight
 options.styles.bracketHighlightColor=Bracket highlight
 options.styles.eolMarkerColor=EOL markers
+options.styles.gutterBgColor=Gutter background
+options.styles.gutterFgColor=Gutter foreground
+options.styles.gutterHighlightColor=Gutter highlight
+options.styles.gutterBorderColor=Gutter border
 options.styles.comment1Style=Comment 1
 options.styles.comment2Style=Comment 2
 options.styles.literal1Style=String literal
@@ -751,9 +758,13 @@ options.abbrevs.sort.abbrev=Sort by abbrev
 options.abbrevs.sort.expand=Sort by expansion
 options.gutter.label=Gutter
 options.gutter.expanded=Gutter expanded by default
-options.gutter.interval=Line number highlight interval (0 disables):\ 
+options.gutter.interval=Line highlight interval (0 disables):\ 
 options.gutter.lineNumbers=Line numbering enabled
 options.gutter.width=Gutter width:\ 
+options.gutter.borderWidth=Gutter border width:\ 
+options.gutter.font=Gutter font:\ 
+options.gutter.fontsize=Gutter font size:\ 
+options.gutter.fontstyle=Gutter font style:\ 
 
 # Color chooser, used by options.styles
 colorChooser.title=Pick a Color

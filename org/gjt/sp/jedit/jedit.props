@@ -133,14 +133,42 @@ view.electricBorders=3
 # Smart home/end
 view.homeEnd=yes
 
+# Gutter background color
+view.gutter.bgColor=white
+
+# Gutter foreground color
+view.gutter.fgColor=#6060a0
+
+# Gutter highlight color
+view.gutter.highlightColor=#8080c0
+
+# Gutter border color
+view.gutter.borderColor=gray
+
+# Gutter font name
+view.gutter.font=Monospaced
+
+# Gutter font style
+# 0=plain, 1=bold, 2=italic, 3=boldItalic
+view.gutter.fontstyle=0
+
+# Gutter font size
+view.gutter.fontsize=10
+
 # Gutter width
 view.gutter.width=40
 
+# Gutter border width
+view.gutter.borderWidth=4
+
 # Gutter collapsed/expanded by default
-view.gutter.collapsed=yes
+view.gutter.collapsed=no
 
 # Gutter displays line numbers
 view.gutter.lineNumbers=yes
+
+# Line numbers are drawn with this alignment (left, center, right)
+view.gutter.numberAlignment=right
 
 # Gutter line numbers are highlighted at this interval
 view.gutter.highlightInterval=5

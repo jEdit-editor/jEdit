@@ -1459,6 +1459,7 @@ public class jEdit
 		addAction("save");
 		addAction("save-all");
 		addAction("save-as");
+		addAction("save-gutter-size");
 		addAction("save-log");
 		addAction("save-session");
 		addAction("scroll-line");
@@ -1773,6 +1774,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.189  2000/02/04 05:50:27  sp
+ * More gutter updates from mike
+ *
  * Revision 1.188  2000/02/02 06:23:44  sp
  * Gutter changes from mike
  *

@@ -599,6 +599,7 @@ public class View extends JFrame implements EBComponent
 		}
 		catch(NumberFormatException nf)
 		{
+			// retain the default gutter width
 		}
 		gutter.setCollapsed("yes".equals(jEdit.getProperty(
 			"view.gutter.collapsed")));
@@ -612,6 +613,51 @@ public class View extends JFrame implements EBComponent
 		}
 		catch(NumberFormatException nf)
 		{
+			// retain the default highlight interval
+		}
+		gutter.setBackground(GUIUtilities.parseColor(
+			jEdit.getProperty("view.gutter.bgColor")));
+		gutter.setForeground(GUIUtilities.parseColor(
+			jEdit.getProperty("view.gutter.fgColor")));
+		gutter.setHighlightedForeground(GUIUtilities.parseColor(
+			jEdit.getProperty("view.gutter.highlightColor")));
+		String alignment = jEdit.getProperty(
+			"view.gutter.numberAlignment");
+		if ("right".equals(alignment))
+		{
+			gutter.setLineNumberAlignment(Gutter.RIGHT);
+		}
+		else if ("center".equals(alignment))
+		{
+			gutter.setLineNumberAlignment(Gutter.CENTER);
+		}
+		else // left == default case
+		{
+			gutter.setLineNumberAlignment(Gutter.LEFT);
+		}
+		try
+		{
+			int width = Integer.parseInt(jEdit.getProperty(
+				"view.gutter.borderWidth"));
+			gutter.setBorder(width, GUIUtilities.parseColor(
+				jEdit.getProperty("view.gutter.borderColor")));
+		}
+		catch(NumberFormatException nf)
+		{
+			// retain the default border
+		}
+		try
+		{
+			String fontname = jEdit.getProperty("view.gutter.font");
+			int fontsize = Integer.parseInt(jEdit.getProperty(
+				"view.gutter.fontsize"));
+			int fontstyle = Integer.parseInt(jEdit.getProperty(
+				"view.gutter.fontstyle"));
+			gutter.setFont(new Font(fontname,fontstyle,fontsize));
+		}
+		catch(NumberFormatException nf)
+		{
+			// retain the default font
 		}
 
 		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
@@ -711,11 +757,20 @@ public class View extends JFrame implements EBComponent
 		myGutter.setCollapsed(gutter.isCollapsed());
 		myGutter.setLineNumberingEnabled(gutter.isLineNumberingEnabled());
 		myGutter.setHighlightInterval(gutter.getHighlightInterval());
+		myGutter.setLineNumberAlignment(gutter.getLineNumberAlignment());
+		myGutter.setFont(gutter.getFont());
+		myGutter.setBorder(gutter.getBorder());
+		myGutter.setBackground(gutter.getBackground());
+		myGutter.setForeground(gutter.getForeground());
+		myGutter.setHighlightedForeground(
+			gutter.getHighlightedForeground());
 
 		textArea.setCaretBlinkEnabled(copy.isCaretBlinkEnabled());
 		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
 			copy.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
 		textArea.setElectricScroll(copy.getElectricScroll());
+
+		myPainter.setStyles(painter.getStyles());
 	}
 
 	private void loadToolBar()
@@ -761,6 +816,9 @@ public class View extends JFrame implements EBComponent
 		// Set up the right-click popup menu
 		textArea.setRightClickPopup(GUIUtilities
 			.loadPopupMenu(this,"view.context"));
+
+		textArea.getGutter().setContextMenu(GUIUtilities
+			.loadPopupMenu(this,"gutter.context"));
 
 		textArea.setInputHandler(jEdit.getInputHandler().copy());
 		textArea.addCaretListener(new CaretHandler());
@@ -1277,6 +1335,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.137  2000/02/04 05:50:27  sp
+ * More gutter updates from mike
+ *
  * Revision 1.136  2000/02/02 07:52:32  sp
  * bug fixes
  *

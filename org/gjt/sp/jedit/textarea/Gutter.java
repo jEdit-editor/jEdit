@@ -1,6 +1,6 @@
 /*
  * Gutter.java
- * Copyright (C) 1999 mike dillon
+ * Copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,42 +20,61 @@
 package org.gjt.sp.jedit.textarea;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
 
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import javax.swing.border.Border;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
-public class Gutter extends JComponent
+public class Gutter extends JComponent implements SwingConstants
 {
-	public Gutter(JEditTextArea textArea, int width)
+	public Gutter(JEditTextArea textArea, TextAreaDefaults defaults)
 	{
 		this.textArea = textArea;
-		setGutterWidth(width);
-		setBorder(defaultBorder);
-		setForeground(UIManager.getColor("Label.foreground"));
-		Font labelFont = UIManager.getFont("Label.font");
-		setFont(new Font(labelFont.getName(), labelFont.getStyle(), 8));
-		addMouseListener(new GutterMouseListener());
+
+		setBackground(defaults.gutterBgColor);
+		setForeground(defaults.gutterFgColor);
+		setHighlightedForeground(defaults.gutterHighlightColor);
+
+		setFont(defaults.gutterFont);
+
+		setBorder(defaults.gutterBorderWidth, defaults.gutterBorderColor);
+
+		setLineNumberAlignment(defaults.gutterNumberAlignment);
+
+		setGutterWidth(defaults.gutterWidth);
+		setCollapsed(defaults.gutterCollapsed);
+
+		GutterMouseListener ml = new GutterMouseListener();
+		addMouseListener(ml);
+		addMouseMotionListener(ml);
 	}
 
 	public void paintComponent(Graphics gfx)
 	{
 		if (!collapsed)
 		{
-			Font defaultFont = getFont();
-			gfx.setFont(defaultFont);
+			// fill the background
+			Rectangle r = gfx.getClipBounds();
+			gfx.setColor(getBackground());
+			gfx.fillRect(r.x, r.y, r.width, r.height);
 
 			// paint custom highlights, if there are any
 			if (highlights != null) paintCustomHighlights(gfx);
@@ -67,10 +86,10 @@ public class Gutter extends JComponent
 
 	protected void paintLineNumbers(Graphics gfx)
 	{
-		int lineHeight = textArea.getPainter().getFontMetrics()
-			.getHeight();
-		int baseline = (fontHeight + lineHeight) / 2 -
-			(fontHeight + lineHeight) % 2;
+		FontMetrics pfm = textArea.getPainter().getFontMetrics();
+		int lineHeight = pfm.getHeight();
+		int baseline = (int) Math.round((this.baseline + lineHeight -
+			pfm.getMaxDescent()) / 2.0);
 
 		int firstLine = textArea.getFirstLine() + 1;
 		int lastLine = firstLine + textArea.getVisibleLines();
@@ -79,11 +98,13 @@ public class Gutter extends JComponent
 		int lastValidLine = (int) Math.min(textArea.getLineCount(),
 			lastLine);
 
-		gfx.setColor(normal);
+		gfx.setFont(getFont());
+
+		gfx.setColor(getForeground());
 
 		String number;
 
-		for (int line = firstLine; line < lastLine;
+		for (int line = firstLine; line <= lastLine;
 			line++, baseline += lineHeight)
 		{
 			// only print numbers for valid lines
@@ -92,15 +113,31 @@ public class Gutter extends JComponent
 
 			number = Integer.toString(line);
 
+			int offset;
+
+			switch (alignment)
+			{
+			case RIGHT:
+				offset = gutterSize.width - collapsedSize.width
+					- (fm.stringWidth(number) + 1);
+				break;
+			case CENTER:
+				offset = ((gutterSize.width - collapsedSize.width)
+					- fm.stringWidth(number)) / 2;
+				break;
+			case LEFT: default:
+				offset = 1;
+			}
+
 			if (interval > 1 && line % interval == 0)
 			{
-				gfx.setColor(bright);
-				gfx.drawString(number, ileft, baseline);
-				gfx.setColor(normal);
+				gfx.setColor(getHighlightedForeground());
+				gfx.drawString(number, ileft + offset, baseline);
+				gfx.setColor(getForeground());
 			}
 			else
 			{
-				gfx.drawString(number, ileft, baseline);
+				gfx.drawString(number, ileft + offset, baseline);
 			}
 		}
 	}
@@ -132,6 +169,17 @@ public class Gutter extends JComponent
 		highlights = highlight;
 	}
 
+	/**
+	 * Convenience method for setting a default matte border on the right
+	 * with the specified border width and color
+	 * @param width The border width (in pixels)
+	 * @param color The border color
+	 */
+	public void setBorder(int width, Color color)
+	{
+		setBorder(BorderFactory.createMatteBorder(0,0,0,width,color));
+	}
+
 	/*
 	 * JComponent.setBorder(Border) is overridden here to cache the left
 	 * inset of the border (if any) to avoid having to fetch it during every
@@ -157,7 +205,7 @@ public class Gutter extends JComponent
 	}
 
 	/*
-	 * JComponent.setFont(Font) is overridden here to cache the height of
+	 * JComponent.setFont(Font) is overridden here to cache the baseline for
 	 * the font. This avoids having to get the font metrics during every
 	 * repaint.
 	 */
@@ -165,26 +213,35 @@ public class Gutter extends JComponent
 	{
 		super.setFont(font);
 
-		FontMetrics fm = getFontMetrics(font);
-		fontHeight = fm.getHeight();
+		fm = getFontMetrics(font);
+		baseline = fm.getHeight() - fm.getMaxDescent();
 	}
 
-	/*
-	 * Component.setForeground(Color) is overridden here to cache both the
-	 * foreground color and the Color obtained by calling brighter() on the
-	 * supplied color.
+	/**
+	 * Set the foreground color for highlighted line numbers
+	 * @param highlight The highlight color
 	 */
-	public void setForeground(Color fore)
+	public void setHighlightedForeground(Color highlight)
 	{
-		super.setForeground(fore);
-
-		normal = fore;
-		bright = normal.brighter();
+		intervalHighlight = highlight;
 	}
 
+	/**
+	 * Get the foreground color for highlighted line numbers
+	 * @return The highlight color
+	 */
+	public Color getHighlightedForeground()
+	{
+		return intervalHighlight;
+	}
+
+	/**
+	 * Set the width of the expanded gutter
+	 * @param width The gutter width
+	 */
 	public void setGutterWidth(int width)
 	{
-		if (width < 0) width = 0;
+		if (width < collapsedSize.width) width = collapsedSize.width;
 
 		gutterSize.width = width;
 
@@ -193,6 +250,10 @@ public class Gutter extends JComponent
 		if (!collapsed) textArea.revalidate();
 	}
 
+	/**
+	 * Get the width of the expanded gutter
+	 * @return The gutter width
+	 */
 	public int getGutterWidth()
 	{
 		return gutterSize.width;
@@ -244,6 +305,28 @@ public class Gutter extends JComponent
 		if (lineNumberingEnabled == enabled) return;
 
 		lineNumberingEnabled = enabled;
+
+		repaint();
+	}
+
+	/**
+	 * Identifies whether the horizontal alignment of the line numbers.
+	 * @return Gutter.RIGHT, Gutter.CENTER, Gutter.LEFT
+	 */
+	public int getLineNumberAlignment()
+	{
+		return alignment;
+	}
+
+	/**
+	 * Sets the horizontal alignment of the line numbers.
+	 * @param alignment Gutter.RIGHT, Gutter.CENTER, Gutter.LEFT
+	 */
+	public void setLineNumberAlignment(int alignment)
+	{
+		if (this.alignment == alignment) return;
+
+		this.alignment = alignment;
 
 		repaint();
 	}
@@ -302,45 +385,125 @@ public class Gutter extends JComponent
 		repaint();
 	}
 
-	// private members
-	private static final Border defaultBorder =
-		new CompoundBorder(new EmptyBorder(0,1,0,3),
-		new BevelBorder(BevelBorder.LOWERED));
+	public JPopupMenu getContextMenu()
+	{
+		return context;
+	}
 
+	public void setContextMenu(JPopupMenu context)
+	{
+		this.context = context;
+	}
+
+	// private members
 	// the JEditTextArea this gutter is attached to
 	private JEditTextArea textArea;
 
+	private JPopupMenu context;
+
 	private TextAreaHighlight highlights;
 
-	private int fontHeight = 0;
+	private int baseline = 0;
 	private int ileft = 0;
 
 	private Dimension gutterSize = new Dimension(0,0);
 	private Dimension collapsedSize = new Dimension(0,0);
 
-	private Color normal;
-	private Color bright;
+	private Color intervalHighlight;
+
+	private FontMetrics fm;
+
+	private int alignment;
 
 	private int interval = 0;
 	private boolean lineNumberingEnabled = true;
 	private boolean collapsed = false;
 
 	class GutterMouseListener extends MouseAdapter
+		implements MouseMotionListener
 	{
 		public void mouseClicked(MouseEvent e)
 		{
-			if (e.getClickCount() >= 2)
+			int count = e.getClickCount();
+			if (count == 1)
+			{
+				if (context == null || context.isVisible())
+					return;
+
+				if ((e.getModifiers() & InputEvent.BUTTON3_MASK)
+					!= 0)
+				{
+					//XXX this is a hack to make sure the
+					//XXX actions get the right text area
+					textArea.requestFocus();
+
+					context.show(Gutter.this,
+						e.getX(), e.getY());
+				}
+			}
+			else if (count >= 2)
 			{
 				toggleCollapsed();
 			}
 		}
+
+		public void mousePressed(MouseEvent e)
+		{
+			dragStart = e.getPoint();
+
+			startWidth = gutterSize.width;
+	}
+
+		public void mouseDragged(MouseEvent e)
+		{
+			if (dragStart == null) return;
+
+			if (isCollapsed()) setCollapsed(false);
+
+			Point p = e.getPoint();
+
+			gutterSize.width = startWidth + p.x - dragStart.x;
+
+			if (gutterSize.width < collapsedSize.width)
+			{
+				gutterSize.width = startWidth;
+				setCollapsed(true);
+			}
+
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run()
+				{
+					textArea.revalidate();
+				}
+			});
+		}
+
+		public void mouseExited(MouseEvent e)
+		{
+			if (dragStart != null && dragStart.x > e.getPoint().x)
+			{
+				setCollapsed(true);
+				gutterSize.width = startWidth;
+
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run()
+					{
+						textArea.revalidate();
+					}
+				});
+			}
+
+			dragStart = null;
+		}
+
+		public void mouseMoved(MouseEvent e) {}
+
+		public void mouseReleased(MouseEvent e)
+		{
+			dragStart = null;
+		}
+
+		private Point dragStart = null;
+		private int startWidth = 0;
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.2  2000/02/02 06:23:44  sp
- * Gutter changes from mike
- *
- */

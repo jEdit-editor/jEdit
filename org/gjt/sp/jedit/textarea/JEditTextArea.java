@@ -88,8 +88,7 @@ public class JEditTextArea extends JComponent
 
 		// Initialize some misc. stuff
 		painter = new TextAreaPainter(this,defaults);
-		gutter = new Gutter(this, defaults.gutterWidth);
-		gutter.setCollapsed(defaults.gutterCollapsed);
+		gutter = new Gutter(this, defaults);
 		documentHandler = new DocumentHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
@@ -2289,6 +2288,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.43  2000/02/04 05:50:27  sp
+ * More gutter updates from mike
+ *
  * Revision 1.42  2000/02/01 06:12:33  sp
  * Gutter added (still not fully functional)
  *

@@ -11,6 +11,7 @@ JEDIT VERSION HISTORY
 - Gutter updates (Mike Dillon)
 - Improved options dialog box now uses a tree instead of a list, plugins
   can add their own tree nodes (Mike Dillon)
+- New ignore case and regexp icons for tool bar (Andre Kaplan)
 
 + Bug Fixes
 

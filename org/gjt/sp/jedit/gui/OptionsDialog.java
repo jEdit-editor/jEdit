@@ -116,7 +116,7 @@ public class OptionsDialog extends EnhancedDialog
 
 		paneTree.getSelectionModel().addTreeSelectionListener(this);
 
-		paneTree.setSelectedRow(1);
+		paneTree.setSelectionRow(1);
 
 		view.hideWaitCursor();
 
@@ -288,6 +288,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/02/04 05:50:27  sp
+ * More gutter updates from mike
+ *
  * Revision 1.14  2000/02/03 06:02:29  sp
  * options dialog updated
  *
