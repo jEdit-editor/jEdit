@@ -243,7 +243,7 @@ public class EditPane extends JPanel implements EBComponent
 		else
 			setBuffer(buffer);
 
-		status.updateBuffers(); // create buffers popup
+		status.updateBufferList(); // create buffers popup
 
 		init = false;
 	}
@@ -526,7 +526,7 @@ public class EditPane extends JPanel implements EBComponent
 		Buffer _buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.CREATED)
 		{
-			status.updateBuffers();
+			status.updateBufferList();
 
 			/* When closing the last buffer, the BufferUpdate.CLOSED
 			 * handler doesn't call setBuffer(), because null buffers
@@ -537,7 +537,7 @@ public class EditPane extends JPanel implements EBComponent
 		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
-			status.updateBuffers();
+			status.updateBufferList();
 
 			if(_buffer == buffer)
 			{
@@ -569,7 +569,7 @@ public class EditPane extends JPanel implements EBComponent
 				if(buffer.isDirty())
 					status.updateBufferStatus();
 				else
-					status.updateBuffers();
+					status.updateBufferList();
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.LOADED)
@@ -579,7 +579,7 @@ public class EditPane extends JPanel implements EBComponent
 				status.updateCaretStatus();
 				textArea.setCaretPosition(0);
 				textArea.repaint();
-				status.updateBuffers();
+				status.updateBufferList();
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
@@ -590,7 +590,10 @@ public class EditPane extends JPanel implements EBComponent
 		else if(msg.getWhat() == BufferUpdate.MODE_CHANGED)
 		{
 			if(_buffer == buffer)
+			{
 				textArea.getPainter().repaint();
+				status.updateBufferStatus();
+			}
 		}
 	}
 
@@ -606,6 +609,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.23  2000/11/07 10:08:31  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.22  2000/11/05 05:25:45  sp
  * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
  *

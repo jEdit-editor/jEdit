@@ -55,7 +55,7 @@ public class StatusBar extends JPanel
 		buffers.setSelectedItem(buffer);
 	}
 
-	public void updateBuffers()
+	public void updateBufferList()
 	{
 		// if the buffer count becomes 0, then it is guaranteed to
 		// become 1 very soon, so don't do anything in that case.
@@ -114,7 +114,8 @@ public class StatusBar extends JPanel
 			else
 			{
 				setIcon(buffer.getIcon());
-				setText(buffer.toString());
+				setText(buffer.toString() + " ("
+					+ buffer.getMode().getName() + ")");
 				return this;
 			}
 			return this;
@@ -171,6 +172,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.11  2000/11/02 09:19:33  sp
  * more features
  *

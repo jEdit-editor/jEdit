@@ -1,7 +1,6 @@
 /*
  * TextAreaOptionPane.java - Text area options panel
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
- * Copyright (C) 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +33,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 	public void _init()
 	{
-		addSeparator("options.textarea.textarea");
-
 		/* Font */
 		String _fontFamily = jEdit.getProperty("view.font");
 		int _fontStyle;
@@ -110,76 +107,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		homeEnd.setSelected(jEdit.getBooleanProperty("view.homeEnd"));
 		addComponent(homeEnd);
 
-		addSeparator("options.textarea.gutter");
-
-		/* Font */
-		_fontFamily = jEdit.getProperty("view.gutter.font");
-		try
-		{
-			_fontStyle = Integer.parseInt(jEdit.getProperty("view.gutter.fontstyle"));
-		}
-		catch(NumberFormatException nf)
-		{
-			_fontStyle = Font.PLAIN;
-		}
-		try
-		{
-			_fontSize = Integer.parseInt(jEdit.getProperty("view.gutter.fontsize"));
-		}
-		catch(NumberFormatException nf)
-		{
-			_fontSize = 14;
-		}
-		gutterFont = new FontSelector(new Font(_fontFamily,_fontStyle,_fontSize));
-
-		addComponent(jEdit.getProperty("options.textarea.gutter.font"),gutterFont);
-
-		gutterWidth = new JTextField(jEdit.getProperty(
-			"view.gutter.width"));
-		addComponent(jEdit.getProperty("options.textarea.gutter.width"),
-			gutterWidth);
-
-		gutterBorderWidth = new JTextField(jEdit.getProperty(
-			"view.gutter.borderWidth"));
-		addComponent(jEdit.getProperty("options.textarea.gutter.borderWidth"),
-			gutterBorderWidth);
-
-		gutterHighlightInterval = new JTextField(jEdit.getProperty(
-			"view.gutter.highlightInterval"));
-		addComponent(jEdit.getProperty("options.textarea.gutter.interval"),
-			gutterHighlightInterval);
-
-		String[] alignments = new String[] {
-			"Left", "Center", "Right"
-		};
-		gutterNumberAlignment = new JComboBox(alignments);
-		String alignment = jEdit.getProperty("view.gutter.numberAlignment");
-		if("right".equals(alignment))
-			gutterNumberAlignment.setSelectedIndex(2);
-		else if("center".equals(alignment))
-			gutterNumberAlignment.setSelectedIndex(1);
-		else
-			gutterNumberAlignment.setSelectedIndex(0);
-		addComponent(jEdit.getProperty("options.textarea.gutter.numberAlignment"),
-			gutterNumberAlignment);
-
-		gutterExpanded = new JCheckBox(jEdit.getProperty(
-			"options.textarea.gutter.expanded"));
-		gutterExpanded.setSelected(!jEdit.getBooleanProperty(
-			"view.gutter.collapsed"));
-		addComponent(gutterExpanded);
-
-		lineNumbersEnabled = new JCheckBox(jEdit.getProperty(
-			"options.textarea.gutter.lineNumbers"));
-		lineNumbersEnabled.setSelected(jEdit.getBooleanProperty(
-			"view.gutter.lineNumbers"));
-		addComponent(lineNumbersEnabled);
-
-		gutterCurrentLineHighlightEnabled = new JCheckBox(jEdit.getProperty(
-			"options.textarea.gutter.currentLineHighlight"));
-		gutterCurrentLineHighlightEnabled.setSelected(jEdit.getBooleanProperty(
-			"view.gutter.highlightCurrentLine"));
-		addComponent(gutterCurrentLineHighlightEnabled);
+		
 	}
 
 	public void _save()
@@ -202,36 +130,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		jEdit.setProperty("view.electricBorders",electricBorders
 			.isSelected() ? "3" : "0");
 		jEdit.setBooleanProperty("view.homeEnd",homeEnd.isSelected());
-
-		_font = gutterFont.getFont();
-		jEdit.setProperty("view.gutter.font",_font.getFamily());
-		jEdit.setProperty("view.gutter.fontsize",String.valueOf(_font.getSize()));
-		jEdit.setProperty("view.gutter.fontstyle",String.valueOf(_font.getStyle()));
-
-		jEdit.setProperty("view.gutter.width", gutterWidth.getText());
-		jEdit.setProperty("view.gutter.borderWidth",
-			gutterBorderWidth.getText());
-		jEdit.setProperty("view.gutter.highlightInterval",
-			gutterHighlightInterval.getText());
-		String alignment = null;
-		switch(gutterNumberAlignment.getSelectedIndex())
-		{
-		case 2:
-			alignment = "right";
-			break;
-		case 1:
-			alignment = "center";
-			break;
-		case 0: default:
-			alignment = "left";
-		}
-		jEdit.setProperty("view.gutter.numberAlignment", alignment);
-		jEdit.setBooleanProperty("view.gutter.collapsed",
-			!gutterExpanded.isSelected());
-		jEdit.setBooleanProperty("view.gutter.lineNumbers", lineNumbersEnabled
-			.isSelected());
-		jEdit.setBooleanProperty("view.gutter.highlightCurrentLine",
-			gutterCurrentLineHighlightEnabled.isSelected());
 	}
 
 	// private members
@@ -244,20 +142,14 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox blockCaret;
 	private JCheckBox electricBorders;
 	private JCheckBox homeEnd;
-
-	private FontSelector gutterFont;
-	private JTextField gutterWidth;
-	private JTextField gutterBorderWidth;
-	private JTextField gutterHighlightInterval;
-	private JComboBox gutterNumberAlignment;
-	private JCheckBox gutterExpanded;
-	private JCheckBox lineNumbersEnabled;
-	private JCheckBox gutterCurrentLineHighlightEnabled;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.4  2000/11/05 05:25:46  sp
  * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
  *

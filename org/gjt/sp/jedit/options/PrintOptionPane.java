@@ -34,8 +34,6 @@ public class PrintOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
-		addSeparator("options.print.misc");
-
 		/* Font */
 		String _fontFamily = jEdit.getProperty("print.font");
 		int _fontStyle;
@@ -128,6 +126,9 @@ public class PrintOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.3  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *

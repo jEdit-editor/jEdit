@@ -60,7 +60,6 @@ scroll-down-page.shortcut=A+SLASH
 replace-all.shortcut=C+e C+a
 box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
-delete-paragraph.shortcut=C+e C+d
 find-selection.shortcut=C+e C+f
 replace-and-find-next.shortcut=C+e C+g
 hypersearch-selection.shortcut=C+e C+h
@@ -76,10 +75,16 @@ toggle-gutter.shortcut=C+e C+t
 insert-literal.shortcut=C+e C+v
 close-view.shortcut=C+e C+w
 redo.shortcut=C+e C+z
+
+delete-paragraph.shortcut=C+e d
+format-paragraph.shortcut=C+e f
 select-line.shortcut=C+e l
 select-paragraph.shortcut=C+e p
+remove-trailing-ws.shortcut=C+e r
 select-word.shortcut=C+e w
 recent-buffer.shortcut=C+e TAB
+prev-bracket-exp.shortcut=C+e [
+next-bracket-exp.shortcut=C+e ]
 
 # C+m
 play-last-macro.shortcut=C+m C+l
@@ -100,8 +105,6 @@ indent-on-tab.shortcut=TAB
 indent-on-enter.shortcut=ENTER
 select-block.shortcut=C+[
 locate-bracket.shortcut=C+]
-prev-bracket-exp.shortcut=C+e [
-next-bracket-exp.shortcut=C+e ]
 prev-paragraph.shortcut=C+UP
 next-paragraph.shortcut=C+DOWN
 select-prev-paragraph.shortcut=CS+UP

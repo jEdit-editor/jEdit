@@ -52,10 +52,6 @@ public interface DockableWindowContainer
 
 		public TabbedPane(String position)
 		{
-			/* super(new BorderLayout());
-			tabbedPane = new JTabbedPane();
-			add(BorderLayout.CENTER,tabbedPane); */
-
 			this.position = position;
 
 			try
@@ -94,7 +90,7 @@ public interface DockableWindowContainer
 
 		public void saveDimension()
 		{
-			if(dimension == 0)
+			if(dimension <= 5)
 				dimension = -1;
 
 			jEdit.setProperty("view.dock." + position + ".dimension",
@@ -117,9 +113,9 @@ public interface DockableWindowContainer
 			int tabsPos = Integer.parseInt(jEdit.getProperty(
 				"view.docking.tabsPos"));
 			if(tabsPos == 0)
-				/* tabbedPane. */setTabPlacement(JTabbedPane.TOP);
+				setTabPlacement(JTabbedPane.TOP);
 			else if(tabsPos == 1)
-				/* tabbedPane. */setTabPlacement(JTabbedPane.BOTTOM);
+				setTabPlacement(JTabbedPane.BOTTOM);
 		}
 
 		public Dimension getMinimumSize()
@@ -129,20 +125,11 @@ public interface DockableWindowContainer
 
 		public Dimension getPreferredSize()
 		{
-			if(/*tabbedPane.*/getComponentCount() == 0)
+			if(getComponentCount() == 0)
 				return new Dimension(0,0);
 
 			Dimension prefSize = super.getPreferredSize();
-			if(dimension == -1)
-			{
-				if(position.equals(DockableWindowManager.LEFT)
-					|| position.equals(DockableWindowManager.RIGHT))
-					dimension = prefSize.width;
-				else if(position.equals(DockableWindowManager.TOP)
-					|| position.equals(DockableWindowManager.BOTTOM))
-					 dimension = prefSize.height;
-			}
-			else if(collapsed)
+			if(collapsed)
 			{
 				if(position.equals(DockableWindowManager.LEFT)
 					|| position.equals(DockableWindowManager.RIGHT))
@@ -150,6 +137,15 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
 					prefSize.height = 5;
+			}
+			else if(dimension == -1)
+			{
+				if(position.equals(DockableWindowManager.LEFT)
+					|| position.equals(DockableWindowManager.RIGHT))
+					dimension = prefSize.width;
+				else if(position.equals(DockableWindowManager.TOP)
+					|| position.equals(DockableWindowManager.BOTTOM))
+					 dimension = prefSize.height;
 			}
 			else
 			{
@@ -166,26 +162,26 @@ public interface DockableWindowContainer
 
 		public void addDockableWindow(DockableWindow win)
 		{
-			/* tabbedPane. */addTab(jEdit.getProperty(win.getName()
+			addTab(jEdit.getProperty(win.getName()
 				+ ".title"),win.getComponent());
-			/* tabbedPane. */setSelectedComponent(win.getComponent());
+			setSelectedComponent(win.getComponent());
 			if(dimension == 0)
 				dimension = -1;
 
-			/*tabbedPane.*/revalidate();
+			revalidate();
 		}
 
 		public void saveDockableWindow(DockableWindow win) {}
 
 		public void removeDockableWindow(DockableWindow win)
 		{
-			/* tabbedPane. */remove(win.getComponent());
-			/* tabbedPane. */revalidate();
+			remove(win.getComponent());
+			revalidate();
 		}
 
 		public void showDockableWindow(DockableWindow win)
 		{
-			/* tabbedPane. */setSelectedComponent(win.getComponent());
+			setSelectedComponent(win.getComponent());
 			if(collapsed)
 			{
 				collapsed = false;
@@ -264,8 +260,6 @@ public interface DockableWindowContainer
 				if(!canDrag)
 					return;
 
-				collapsed = false;
-
 				if(dragStart == null) // can't happen?
 					return;
 
@@ -279,6 +273,13 @@ public interface DockableWindowContainer
 					dimension = getWidth() - evt.getX();
 
 				dimension = Math.max(5,dimension);
+				if(dimension == 5)
+				{
+					dimension = -1;
+					collapsed = true;
+				}
+				else
+					collapsed = false;
 
 				revalidate();
 			}
@@ -352,6 +353,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.15  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.14  2000/11/05 05:25:46  sp
  * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
  *

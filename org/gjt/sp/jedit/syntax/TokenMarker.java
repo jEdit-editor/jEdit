@@ -21,6 +21,7 @@
 package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.*;
+import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -136,6 +137,100 @@ public class TokenMarker implements Cloneable
 	}
 
 	/**
+	 * Paints the specified line onto the graphics context.
+	 * @param buffer The buffer
+	 * @param lineIndex The line
+	 * @param styles The syntax style list
+	 * @param expander The tab expander used to determine tab stops. May
+	 * be null
+	 * @param gfx The graphics context
+	 * @param x The x co-ordinate
+	 * @param y The y co-ordinate
+	 * @return The x co-ordinate, plus the width of the painted string
+	 * @since jEdit 2.7pre1
+	 */
+	public int paintSyntaxLine(Buffer buffer, int lineIndex,
+		SyntaxStyle[] styles, TabExpander expander, Graphics gfx,
+		Color background, int x, int y)
+	{
+		LineInfo info = lineInfo[lineIndex];
+		if(info.tokensValid)
+		{
+			// have to do this 'manually'
+			Element lineElement = buffer.getDefaultRootElement()
+				.getElement(lineIndex);
+			int lineStart = lineElement.getStartOffset();
+			try
+			{
+				buffer.getText(lineStart,lineElement.getEndOffset()
+					- lineStart - 1,line);
+			}
+			catch(BadLocationException e)
+			{
+				Log.log(Log.ERROR,this,e);
+			}
+		}
+		else
+			markTokens(buffer,lineIndex);
+
+		Token tokens = info.firstToken;
+
+		// the above should leave the text in the 'line' segment
+
+		Font defaultFont = gfx.getFont();
+		Color defaultColor = gfx.getColor();
+
+		int originalOffset = line.offset, originalCount = line.count;
+
+		int offset = 0;
+		for(;;)
+		{
+			byte id = tokens.id;
+			if(id == Token.END)
+				break;
+
+			int length = tokens.length;
+			line.count = length;
+			if(id == Token.NULL)
+			{
+				if(!defaultColor.equals(gfx.getColor()))
+					gfx.setColor(defaultColor);
+				if(!defaultFont.equals(gfx.getFont()))
+					gfx.setFont(defaultFont);
+			}
+			else
+			{
+				Color bg = styles[id].getBackgroundColor();
+				if (bg != null)
+				{
+					FontMetrics fm = styles[id].getFontMetrics(defaultFont);
+					int width   = Utilities.getTabbedTextWidth(line, fm, x, expander, 0); 
+					int height  = fm.getHeight();
+					int descent = fm.getDescent();
+					int leading = fm.getLeading();
+					gfx.setColor(background);
+					gfx.setXORMode(bg);
+					gfx.fillRect(x, y - height + descent + leading, width, height);
+					gfx.setPaintMode();
+				}
+
+				styles[id].setGraphicsFlags(gfx,defaultFont);
+			}
+
+			x = Utilities.drawTabbedText(line,x,y,gfx,expander,0);
+			line.offset += length;
+			offset += length;
+
+			tokens = tokens.next;
+		}
+
+		line.offset = originalOffset;
+		line.count = originalCount;
+
+		return x;
+	}
+
+	/**
 	 * Returns the syntax tokens for the specified line.
 	 * @param buffer The buffer
 	 * @param lineIndex The line number
@@ -148,6 +243,8 @@ public class TokenMarker implements Cloneable
 		/* If cached tokens are valid, return 'em */
 		if(info.tokensValid)
 			return info;
+
+		//long _start = System.currentTimeMillis();
 
 		/*
 		 * Else, go up to 100 lines back, looking for a line with
@@ -165,79 +262,66 @@ public class TokenMarker implements Cloneable
 			}
 		}
 
+		LineInfo prev;
+		if(start == -1)
+			prev = null;
+		else
+			prev = lineInfo[start];
+
 		//System.err.println("i=" + lineIndex + ",start=" + start);
 		Element map = buffer.getDefaultRootElement();
 
 		for(int i = start + 1; i <= lineIndex; i++)
 		{
+			info = lineInfo[i];
+			if(info.tokensValid)
+			{
+				prev = info;
+				continue;
+			}
+
 			Element lineElement = map.getElement(i);
 			int lineStart = lineElement.getStartOffset();
 			try
 			{
 				buffer.getText(lineStart,lineElement.getEndOffset()
-					- lineStart - 1,lineFromBuffer);
+					- lineStart - 1,line);
 			}
 			catch(BadLocationException e)
 			{
-				e.printStackTrace();
+				Log.log(Log.ERROR,this,e);
 			}
 
-			info = markTokens(lineFromBuffer,i);
+			/* Prepare for tokenization */
+			info.lastToken = null;
+
+			ParserRule oldRule = info.context.inRule;
+			LineContext oldParent = info.context.parent;
+			markTokensImpl(prev,info);
+			ParserRule newRule = info.context.inRule;
+			LineContext newParent = info.context.parent;
+
+			info.tokensValid = true;
+
+			if(i != lastTokenizedLine)
+			{
+				nextLineRequested = false;
+				lastTokenizedLine = i;
+			}
+
+			nextLineRequested |= (oldRule != newRule || oldParent != newParent);
+
+			addToken(info,0,Token.END);
+
+			prev = info;
 		}
-
-		return info;
-	}
-
-	/**
-	 * Returns the syntax tokens for the specified line.
-	 * @param line The line
-	 * @param lineIndex The line number
-	 */
-	public LineInfo markTokens(Segment line, int lineIndex)
-	{
-		if(lineIndex >= length)
-		{
-			throw new IllegalArgumentException("Tokenizing invalid line: "
-				+ lineIndex);
-		}
-
-		LineInfo info = lineInfo[lineIndex];
-
-		/* If cached tokens are valid, return 'em */
-		if(info.tokensValid)
-			return info;
-
-		/* Otherwise, prepare for tokenization */
-		info.lastToken = null;
-
-		LineInfo prev;
-		if(lineIndex == 0)
-			prev = null;
-		else
-			prev = lineInfo[lineIndex - 1];
-
-		ParserRule oldRule = info.context.inRule;
-		LineContext oldParent = info.context.parent;
-		markTokensImpl(line,prev,info);
-		ParserRule newRule = info.context.inRule;
-		LineContext newParent = info.context.parent;
-
-		info.tokensValid = true;
-
-		if(lineIndex != lastTokenizedLine)
-		{
-			nextLineRequested = false;
-			lastTokenizedLine = lineIndex;
-		}
-
-		nextLineRequested |= (oldRule != newRule || oldParent != newParent);
 
 		if(nextLineRequested && length - lineIndex > 1)
 		{
 			linesChanged(lineIndex + 1,length - lineIndex - 1);
 		}
 
-		addToken(info,0,Token.END);
+		//System.err.println(System.currentTimeMillis() - _start);
 
 		return info;
 	}
@@ -359,7 +443,7 @@ public class TokenMarker implements Cloneable
 	private String rulePfx;
 	private Hashtable ruleSets;
 
-	private Segment lineFromBuffer = new Segment(new char[0],0,0);
+	private Segment line = new Segment(new char[0],0,0);
 
 	private LineInfo[] lineInfo;
 	private int length;
@@ -382,8 +466,7 @@ public class TokenMarker implements Cloneable
 		lineInfo = new LineInfo[0];	
 	}
 
-	private void markTokensImpl(Segment line, LineInfo prevInfo,
-		LineInfo info)
+	private void markTokensImpl(LineInfo prevInfo, LineInfo info)
 	{
 		LineContext lastContext = (prevInfo == null ? null
 			: prevInfo.context);
@@ -1044,6 +1127,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.58  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.57  2000/11/05 00:44:15  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

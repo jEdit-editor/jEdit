@@ -291,8 +291,6 @@ search=find \
        hypersearch \
        hypersearch-selection \
        - \
-       multifile-search \
-       - \
        quick-search \
        incremental-search \
        - \
@@ -310,7 +308,6 @@ replace-and-find-next.label=Re$place and Find Next
 replace-all.label=Replace $All
 hypersearch.label=$HyperSearch...
 hypersearch-selection.label=HyperSearch for Se$lection...
-multifile-search.label=M$ultifile Search Settings...
 quick-search.label=$Quick Search
 incremental-search.label=$Incremental Search
 set-marker.label=Set $Marker...
@@ -724,7 +721,7 @@ hypersearch.stop=Stop
 
 # Replace all results
 replace-results.title=Replacement Complete
-replace-results.message=Changed {0} line(s) in {1} buffer(s).
+replace-results.message=Replaced {0} occurence(s) in {1} buffer(s).
 
 # Search and replace error dialog
 searcherror.title=Search and Replace Error
@@ -747,6 +744,10 @@ filechanged-focus.message=The file {0}\n\
 filechanged-dirty.message=The file {0}\n\
 	has been modified on disk by another program. Would you like to\n\
 	reload it from disk? IF YOU RELOAD, UNSAVED CHANGES WILL BE LOST.
+
+filedeleted.title=File Deleted on Disk
+filedeleted.message=The file {0}\n\
+	has been deleted. If you want to re-create it, save the buffer.
 
 # File exists dialog
 fileexists.title=File Exists
@@ -869,11 +870,10 @@ buffer-options.props=Corresponding buffer-local properties: (C+c copies)
 options.title=Global Options
 options.jedit.label=jEdit Options
 options.plugins.label=Plugin Options
-options.shortcuts.label=Shortcuts
 
 options.general.label=General
-
-options.general.misc=Miscellaneous settings
+options.general.lf.note=Restart jEdit for look & feel changes to take effect
+options.general.lf=Swing look & feel:
 options.general.recent=Max recent files:
 options.general.history=Max history list length:
 options.general.confirmExit=Ask for confirmation before exiting
@@ -881,25 +881,20 @@ options.general.saveDesktop=Save session on exit
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.checkModStatus=Check file modification time on focus
+options.general.showFullPath=Show full path of buffers in title bar
 options.general.passiveFTP=Use passive-mode FTP
 
-options.general.loadsave=Loading and saving
-options.general.encoding=File encoding:
-options.general.autosave=Autosave frequency (secs):
-options.general.backups=Max number of backups:
-options.general.backupDirectory=Backup directory:
-options.general.backupPrefix=Backup filename prefix:
-options.general.backupSuffix=Backup filename suffix:
-options.general.lineSeparator=Default line separator:
-options.general.ioThreadCount=Number of I/O threads:
-
-options.general.ui=User interface
-options.general.lf.note=Restart jEdit for look & feel changes to take effect
-options.general.lf=Swing look & feel:
-options.general.showFullPath=Show full path of buffers in title bar
+options.loadsave.label=Loading & Saving
+options.loadsave.encoding=File encoding:
+options.loadsave.autosave=Autosave frequency (secs):
+options.loadsave.backups=Max number of backups:
+options.loadsave.backupDirectory=Backup directory:
+options.loadsave.backupPrefix=Backup filename prefix:
+options.loadsave.backupSuffix=Backup filename suffix:
+options.loadsave.lineSeparator=Default line separator:
+options.loadsave.ioThreadCount=Number of I/O threads:
 
 options.textarea.label=Text Area
-options.textarea.textarea=Text area
 options.textarea.font=Text area font:
 options.textarea.lineHighlight=Current line highlighting
 options.textarea.bracketHighlight=Bracket highlighting
@@ -910,78 +905,77 @@ options.textarea.blockCaret=Block-shaped caret
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.homeEnd="Smart" home/end behaviour
 
-options.textarea.gutter=Gutter
-options.textarea.gutter.font=Gutter font:
-options.textarea.gutter.width=Gutter width:
-options.textarea.gutter.borderWidth=Gutter border width:
-options.textarea.gutter.numberAlignment=Line number alignment:
-options.textarea.gutter.expanded=Gutter expanded by default
-options.textarea.gutter.interval=Line highlight interval (0=none):
-options.textarea.gutter.lineNumbers=Line numbering enabled
-options.textarea.gutter.currentLineHighlight=Current line highlight enabled
+options.gutter.label=Gutter
+options.gutter.font=Gutter font:
+options.gutter.width=Gutter width:
+options.gutter.borderWidth=Gutter border width:
+options.gutter.numberAlignment=Line number alignment:
+options.gutter.expanded=Gutter expanded by default
+options.gutter.interval=Line highlight interval:
+options.gutter.lineNumbers=Line numbering enabled
+options.gutter.currentLineHighlight=Current line highlight enabled
 
-options.styles.label=Colors & Styles
-options.styles.colors=Colors:
-options.styles.styles=Styles:
-options.styles.object=Object
-options.styles.color=Color
-options.styles.style=Style
-options.styles.bgColor=View background
-options.styles.fgColor=View foreground
-options.styles.caretColor=Caret
-options.styles.selectionColor=Selection
-options.styles.lineHighlightColor=Line highlight
-options.styles.bracketHighlightColor=Bracket highlight
-options.styles.eolMarkerColor=EOL markers
-options.styles.wrapGuideColor=Wrap guide
-options.styles.gutterBgColor=Gutter background
-options.styles.gutterFgColor=Gutter foreground
-options.styles.gutterHighlightColor=Gutter highlight
-options.styles.gutterCurrentLineColor=Current line in gutter
-options.styles.gutterMarkerColor=Markers in gutter
-options.styles.gutterRegisterColor=Registers in gutter
-options.styles.gutterFocusBorderColor=Focused gutter border
-options.styles.gutterNoFocusBorderColor=Unfocused gutter border
-options.styles.dockingBorderColor=Docked window border
-options.styles.comment1Style=Comment 1
-options.styles.comment2Style=Comment 2
-options.styles.literal1Style=Literal 1
-options.styles.literal2Style=Literal 2
-options.styles.labelStyle=Label
-options.styles.keyword1Style=Keyword 1
-options.styles.keyword2Style=Keyword 2
-options.styles.keyword3Style=Keyword 3
-options.styles.functionStyle=Function
-options.styles.markupStyle=Markup
-options.styles.operatorStyle=Operator
-options.styles.digitStyle=Digit
-options.styles.invalidStyle=Invalid token
+options.color.label=Colors
+options.color.object=Object
+options.color.color=Color
+options.color.bgColor=View background
+options.color.fgColor=View foreground
+options.color.caretColor=Caret
+options.color.selectionColor=Selection
+options.color.lineHighlightColor=Line highlight
+options.color.bracketHighlightColor=Bracket highlight
+options.color.eolMarkerColor=EOL markers
+options.color.wrapGuideColor=Wrap guide
+options.color.gutterBgColor=Gutter background
+options.color.gutterFgColor=Gutter foreground
+options.color.gutterHighlightColor=Gutter highlight
+options.color.gutterCurrentLineColor=Current line in gutter
+options.color.gutterMarkerColor=Markers in gutter
+options.color.gutterRegisterColor=Registers in gutter
+options.color.gutterFocusBorderColor=Focused gutter border
+options.color.gutterNoFocusBorderColor=Unfocused gutter border
+options.color.dockingBorderColor=Docked window border
 
-options.editor.label=Editor
-options.editor.global=Default editor settings
-options.editor.defaultMode=Default edit mode:
-options.editor.tabSize=Tab width:
-options.editor.indentSize=Indent width:
-options.editor.maxLineLen=Wrap lines at column:
-options.editor.wordBreakChars=Break lines at these characters:
-options.editor.undoCount=Number of undos:
-options.editor.syntax=Highlight syntax tokens
-options.editor.indentOnTab=Indent line when Tab key is pressed
-options.editor.indentOnEnter=Indent line when Enter key is pressed
-options.editor.noTabs=Soft (emulated with spaces) tabs
+options.style.label=Styles
+options.style.object=Object
+options.style.style=Style
+options.style.comment1Style=Comment 1
+options.style.comment2Style=Comment 2
+options.style.literal1Style=Literal 1
+options.style.literal2Style=Literal 2
+options.style.labelStyle=Label
+options.style.keyword1Style=Keyword 1
+options.style.keyword2Style=Keyword 2
+options.style.keyword3Style=Keyword 3
+options.style.functionStyle=Function
+options.style.markupStyle=Markup
+options.style.operatorStyle=Operator
+options.style.digitStyle=Digit
+options.style.invalidStyle=Invalid token
 
-options.editor.mode-specific=Mode-specific editor settings
-options.editor.mode=Edit mode:
-options.editor.useDefaults=Use default settings
-options.editor.filenameGlob=File name glob:
-options.editor.firstlineGlob=First line glob:
-options.editor.commentStart=Comment start:
-options.editor.commentEnd=Comment end:
-options.editor.boxComment=Box comment:
-options.editor.blockComment=Block comment:
-options.editor.noWordSep=Extra word characters:
+options.editing.label=Editing
+options.editing.defaultMode=Default edit mode:
+options.editing.tabSize=Tab width:
+options.editing.indentSize=Indent width:
+options.editing.maxLineLen=Wrap lines at column:
+options.editing.wordBreakChars=Break lines at these characters:
+options.editing.undoCount=Number of undos:
+options.editing.syntax=Highlight syntax tokens
+options.editing.indentOnTab=Indent line when Tab key is pressed
+options.editing.indentOnEnter=Indent line when Enter key is pressed
+options.editing.noTabs=Soft (emulated with spaces) tabs
 
-options.print.misc=Miscellaneous settings
+options.mode.label=Mode-Specific
+options.mode.mode=Edit mode:
+options.mode.useDefaults=Use default settings
+options.mode.filenameGlob=File name glob:
+options.mode.firstlineGlob=First line glob:
+options.mode.commentStart=Comment start:
+options.mode.commentEnd=Comment end:
+options.mode.boxComment=Box comment:
+options.mode.blockComment=Block comment:
+options.mode.noWordSep=Extra word characters:
+
 options.print.label=Printing
 options.print.font=Print font:
 options.print.fontstyle=Print font style:
@@ -1049,9 +1043,9 @@ options.keys.binding=Keyboard shortcut
 options.keys.sort.label=Sort by label
 options.keys.sort.shortcut=Sort by shortcut
 
-options.command-keys.label=Commands
+options.command-keys.label=Command Shortcuts
 
-options.macro-keys.label=Macros
+options.macro-keys.label=Macro Shortcuts
 
 options.browser.label=VFS Browser
 options.browser.defaultPath=Default path:

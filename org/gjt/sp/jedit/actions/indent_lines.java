@@ -53,7 +53,7 @@ public class indent_lines extends EditAction
 		*/
 		if(actionCommand != null)
 		{
-			textArea.overwriteSetSelectedText(actionCommand);
+			textArea.userInput(actionCommand);
 
 			String indentOpenBrackets = (String)buffer
 				.getProperty("indentOpenBrackets");

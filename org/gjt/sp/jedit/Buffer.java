@@ -100,8 +100,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 		}
 
-		// cache it for improved performance
+		// cache these for improved performance
 		putProperty("tabSize",getProperty("tabSize"));
+		putProperty("maxLineLen",getProperty("maxLineLen"));
 	}
 
 	/**
@@ -167,33 +168,14 @@ public class Buffer extends PlainDocument implements EBComponent
 			{
 				StringBuffer sbuf = (StringBuffer)getProperty(
 					BufferIORequest.LOAD_DATA);
+				clearProperties();
 				if(sbuf != null)
 				{
-					getDocumentProperties().remove(
-						BufferIORequest.LOAD_DATA);
-
 					try
 					{
 						// For `reload' command
 						remove(0,getLength());
 						insertString(0,sbuf.toString(),null);
-
-						// Process buffer-local properties
-						Element map = getDefaultRootElement();
-						for(int i = 0; i < Math.min(10,map.getElementCount()); i++)
-						{
-							Element line = map.getElement(i);
-							String text = getText(line.getStartOffset(),
-								line.getEndOffset() - line.getStartOffset() - 1);
-							processProperty(text);
-						}
-
-						// Create marker positions
-						for(int i = 0; i < markers.size(); i++)
-						{
-							((Marker)markers.elementAt(i))
-								.createPositions();
-						}
 					}
 					catch(BadLocationException bl)
 					{
@@ -423,40 +405,41 @@ public class Buffer extends PlainDocument implements EBComponent
 						autosaveFile.delete();
 
 					saveUndo = undo.editToBeUndone();
-					if(oldPath.equals(getPath()))
-					{
-						setFlag(AUTOSAVE_DIRTY,false);
-						setFlag(READ_ONLY,false);
-						setFlag(NEW_FILE,false);
-						setFlag(UNTITLED,false);
-						setFlag(DIRTY,false);
-						setFlag(IO,false);
 
-						saveUndo = undo.editToBeUndone();
+					setFlag(AUTOSAVE_DIRTY,false);
+					setFlag(READ_ONLY,false);
+					setFlag(NEW_FILE,false);
+					setFlag(UNTITLED,false);
+					setFlag(DIRTY,false);
 
-						if(!getPath().equals(oldPath))
-							setMode();
-
-						if(file != null)
-							modTime = file.lastModified();
-					}
+					saveUndo = undo.editToBeUndone();
 
 					if(!getPath().equals(oldPath))
-					setMode();
+						setMode();
+
+					if(file != null)
+						modTime = file.lastModified();
+
+					if(!getPath().equals(oldPath))
+					{
+						jEdit.updatePosition(Buffer.this);
+						setMode();
+					}
 
 					if(file != null)
 						modTime = file.lastModified();
 				}
 
-				if(!getPath().equals(oldPath))
-				{
-					if(rename)
-						jEdit.updatePosition(Buffer.this);
-					VFSManager.sendVFSUpdate(getVFS(),getPath(),true);
-				}
+				setFlag(IO,false);
 
-				EditBus.send(new BufferUpdate(Buffer.this,
-					BufferUpdate.DIRTY_CHANGED));
+				if(!getPath().equals(oldPath))
+					VFSManager.sendVFSUpdate(getVFS(),getPath(),true);
+
+				if(rename)
+				{
+					EditBus.send(new BufferUpdate(Buffer.this,
+						BufferUpdate.DIRTY_CHANGED));
+				}
 			}
 		});
 
@@ -497,6 +480,13 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(newModTime != oldModTime)
 		{
 			modTime = newModTime;
+
+			if(!file.exists())
+			{
+				Object[] args = { path };
+				GUIUtilities.message(view,"filedeleted",args);
+				return;
+			}
 
 			String prop = (isDirty() ? "filechanged-dirty.message"
 				: "filechanged-focus.message");
@@ -924,6 +914,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		this.mode = mode;
 
+		clearProperties();
+		parseBufferLocalProperties();
+
 		propertiesChanged(); // sets up token marker
 
 		// don't fire it for initial mode set
@@ -1253,21 +1246,8 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		len += start;
 
-		try
-		{
-			for(int i = start; i < len; i++)
-			{
-				Element lineElement = map.getElement(i);
-				int lineStart = lineElement.getStartOffset();
-				getText(lineStart,lineElement.getEndOffset()
-					- lineStart - 1,lineSegment);
-				tokenMarker.markTokens(lineSegment,i);
-			}
-		}
-		catch(BadLocationException bl)
-		{
-			bl.printStackTrace();
-		}
+		for(int i = start; i < len; i++)
+			tokenMarker.markTokens(this,i);
 	}
 
 	/**
@@ -1434,17 +1414,16 @@ public class Buffer extends PlainDocument implements EBComponent
 	Buffer(View view, String path, boolean readOnly,
 		boolean newFile, boolean temp, Hashtable props)
 	{
+		setDocumentProperties(new BufferProps());
+		clearProperties();
+
 		setFlag(TEMPORARY,temp);
 		setFlag(READ_ONLY,readOnly);
 
-		setMode(jEdit.getMode("text"));
 		markers = new Vector();
 
 		addDocumentListener(new DocumentHandler());
 		addUndoableEditListener(new UndoHandler());
-
-		setDocumentProperties(new BufferProps());
-		putProperty("i18n",Boolean.FALSE);
 
 		if(props != null)
 		{
@@ -1456,15 +1435,23 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 		}
 
+		setMode(jEdit.getMode("text"));
 		setPath(path);
 
-		/* Magic: UNTITLED is only set of newFile param to
+		/* Magic: UNTITLED is only set if newFile param to
 		 * constructor is set, NEW_FILE is also set if file
 		 * doesn't exist on disk.
 		 *
 		 * This is so that we can tell apart files created
 		 * with jEdit.newFile(), and those that just don't
 		 * exist on disk.
+		 *
+		 * Why do we need to tell the difference between the
+		 * two? jEdit.addBufferToList() checks if the only
+		 * opened buffer is an untitled buffer, and if so,
+		 * replaces it with the buffer to add. We don't want
+		 * this behavior to occur with files that don't
+		 * exist on disk; only untitled ones.
 		 */
 		setFlag(UNTITLED,newFile);
 
@@ -1646,7 +1633,39 @@ public class Buffer extends PlainDocument implements EBComponent
 			return false;
 	}
 
-	private void processProperty(String prop)
+	private void clearProperties()
+	{
+		((BufferProps)getDocumentProperties()).clear();
+		putProperty("i18n",Boolean.FALSE);
+	}
+
+	private void parseBufferLocalProperties()
+	{
+		try
+		{
+			Element map = getDefaultRootElement();
+			for(int i = 0; i < Math.min(10,map.getElementCount()); i++)
+			{
+				Element line = map.getElement(i);
+				String text = getText(line.getStartOffset(),
+					line.getEndOffset() - line.getStartOffset() - 1);
+				parseBufferLocalProperty(text);
+			}
+	
+			// Create marker positions
+			for(int i = 0; i < markers.size(); i++)
+			{
+				((Marker)markers.elementAt(i))
+					.createPositions();
+			}
+		}
+		catch(BadLocationException bl)
+		{
+			bl.printStackTrace();
+		}
+	}
+
+	private void parseBufferLocalProperty(String prop)
 	{
 		StringBuffer buf = new StringBuffer();
 		String name = null;
@@ -1798,6 +1817,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.185  2000/11/07 10:08:30  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.184  2000/11/05 00:44:13  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *
@@ -1827,31 +1849,4 @@ public class Buffer extends PlainDocument implements EBComponent
  *
  * Revision 1.175  2000/08/29 07:47:10  sp
  * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.174  2000/08/23 09:51:48  sp
- * Documentation updates, abbrev updates, bug fixes
- *
- * Revision 1.173  2000/08/17 08:04:09  sp
- * Marker loading bug fixed, docking option pane
- *
- * Revision 1.172  2000/08/16 12:14:29  sp
- * Passwords are now saved, bug fixes, documentation updates
- *
- * Revision 1.171  2000/08/16 08:47:18  sp
- * Stuff
- *
- * Revision 1.170  2000/08/15 08:07:10  sp
- * A bunch of bug fixes
- *
- * Revision 1.169  2000/08/11 12:13:13  sp
- * Preparing for 2.6pre2 release
- *
- * Revision 1.168  2000/08/01 11:44:14  sp
- * More VFS browser work
- *
- * Revision 1.167  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.166  2000/07/30 09:04:18  sp
- * More VFS browser hacking
  */

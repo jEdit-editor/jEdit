@@ -1,5 +1,5 @@
 /*
- * TextUtilities.java - Utility functions used by the text area classes
+ * TextUtilities.java - Various text functions
  * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,14 +17,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.textarea;
+package org.gjt.sp.jedit;
 
 import javax.swing.text.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.Buffer;
 
 /**
- * Class with several utility functions used by the text area component.
+ * Class with several text utility functions.
  * @author Slava Pestov
  * @version $Id$
  */
@@ -78,7 +77,7 @@ public class TextUtilities
 		// the corresponding bracket
 		byte idOfBracket = Token.NULL;
 
-		TokenMarker.LineInfo lineInfo = tokenMarker.markTokens(lineText,line);
+		TokenMarker.LineInfo lineInfo = tokenMarker.markTokens(buffer,line);
 		Token lineTokens = lineInfo.firstToken;
 
 		int tokenListOffset = 0;
@@ -118,7 +117,7 @@ public class TextUtilities
 				int scanStartOffset;
 				if(i != line)
 				{
-					lineTokens = tokenMarker.markTokens(lineText,i).lastToken;
+					lineTokens = tokenMarker.markTokens(buffer,i).lastToken;
 					tokenListOffset = scanStartOffset = lineLength - 1;
 				}
 				else
@@ -198,7 +197,7 @@ public class TextUtilities
 				int scanStartOffset;
 				if(i != line)
 				{
-					lineTokens = tokenMarker.markTokens(lineText,i).firstToken;
+					lineTokens = tokenMarker.markTokens(buffer,i).firstToken;
 					tokenListOffset = 0;
 					scanStartOffset = 0;
 				}
@@ -301,11 +300,45 @@ public class TextUtilities
 		}
 		return wordEnd;
 	}
+
+	/**
+	 * Checks if a subregion of a <code>Segment</code> is equal to a
+	 * character array.
+	 * @param ignoreCase True if case should be ignored, false otherwise
+	 * @param text The segment
+	 * @param offset The offset into the segment
+	 * @param match The character array to match
+	 * @since jEdit 2.7pre1
+	 */
+	public static boolean regionMatches(boolean ignoreCase, Segment text,
+					    int offset, char[] match)
+	{
+		int length = offset + match.length;
+		char[] textArray = text.array;
+		if(length > text.offset + text.count)
+			return false;
+		for(int i = offset, j = 0; i < length; i++, j++)
+		{
+			char c1 = textArray[i];
+			char c2 = match[j];
+			if(ignoreCase)
+			{
+				c1 = Character.toUpperCase(c1);
+				c2 = Character.toUpperCase(c2);
+			}
+			if(c1 != c2)
+				return false;
+		}
+		return true;
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/11/07 10:08:31  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.13  2000/09/06 04:39:47  sp
  * bug fixes
  *

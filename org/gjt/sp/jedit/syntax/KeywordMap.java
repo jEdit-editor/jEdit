@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.Segment;
+import org.gjt.sp.jedit.TextUtilities;
 
 /**
  * A <code>KeywordMap</code> is similar to a hashtable in that it maps keys
@@ -72,7 +73,7 @@ public class KeywordMap
 				k = k.next;
 				continue;
 			}
-			if(SyntaxUtilities.regionMatches(ignoreCase,text,offset,
+			if(TextUtilities.regionMatches(ignoreCase,text,offset,
 				k.keyword))
 				return k.id;
 			k = k.next;
@@ -149,6 +150,9 @@ public class KeywordMap
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.17  2000/04/07 06:57:26  sp
  * Buffer options dialog box updates, API docs updated a bit in syntax package
  *

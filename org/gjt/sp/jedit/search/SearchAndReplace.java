@@ -20,7 +20,7 @@
 package org.gjt.sp.jedit.search;
 
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
+import javax.swing.text.Segment;
 import javax.swing.JOptionPane;
 import java.awt.Component;
 import org.gjt.sp.jedit.gui.*;
@@ -328,9 +328,10 @@ loop:			for(;;)
 	{
 		SearchMatcher matcher = getSearchMatcher();
 
-		String text = buffer.getText(start,
-			buffer.getLength() - start);
-		final int[] match = matcher.nextMatch(text);
+		Segment text = new Segment();
+		buffer.getText(start,buffer.getLength() - start,text);
+
+		int[] match = matcher.nextMatch(text);
 		if(match != null)
 		{
 			fileset.matchFound(buffer);
@@ -379,8 +380,9 @@ loop:			for(;;)
 				return false;
 			}
 
-			String replacement = matcher.substitute(textArea.getSelectedText());
-			if(replacement == null)
+			String text = textArea.getSelectedText();
+			String replacement = matcher.substitute(text);
+			if(replacement == null || replacement.equals(text))
 				return false;
 
 			textArea.setSelectedText(replacement);
@@ -407,8 +409,8 @@ loop:			for(;;)
 	 */
 	public static boolean replaceAll(View view, Component comp)
 	{
-		int lineCount = 0;
 		int fileCount = 0;
+		int occurCount = 0;
 
 		record(view,"replace-all");
 
@@ -432,7 +434,7 @@ loop:			for(;;)
 					if(retVal != 0)
 					{
 						fileCount++;
-						lineCount += retVal;
+						occurCount += retVal;
 						fileset.matchFound(buffer);
 					}
 				}
@@ -463,7 +465,7 @@ loop:			for(;;)
 				view.getToolkit().beep();
 			else
 			{
-				Object[] args = { new Integer(lineCount),
+				Object[] args = { new Integer(occurCount),
 					new Integer(fileCount) };
 				GUIUtilities.message(view,"replace-results",args);
 			}
@@ -490,27 +492,32 @@ loop:			for(;;)
 		if(matcher == null)
 			return 0;
 
-		int lineCount = 0;
-		Element map = buffer.getDefaultRootElement();
+		int occurCount = 0;
 
-		for(int i = 0; i < map.getElementCount(); i++)
+		Segment text = new Segment();
+		int offset = 0;
+loop:		for(;;)
 		{
-			Element lineElement = map.getElement(i);
-			int lineStart = lineElement.getStartOffset();
-			int lineEnd = lineElement.getEndOffset()
-				- lineStart - 1;
-
-			String line = buffer.getText(lineStart,lineEnd);
-			String newLine = matcher.substitute(line);
-			if(newLine == null)
-				continue;
-			buffer.remove(lineStart,lineEnd);
-			buffer.insertString(lineStart,newLine,null);
-
-			lineCount++;
+			buffer.getText(offset,buffer.getLength() - offset,text);
+			int[] occur = matcher.nextMatch(text);
+			if(occur == null)
+				break loop;
+			int start = occur[0] + offset;
+			int end = occur[1] - occur[0];
+			String found = buffer.getText(start,end);
+			found = matcher.substitute(found);
+			if(found != null)
+			{
+				buffer.remove(start,end);
+				buffer.insertString(start,found,null);
+				occurCount++;
+				offset = start + found.length();
+			}
+			else
+				offset += end;
 		}
 
-		return lineCount;
+		return occurCount;
 	}
 
 	/**
@@ -584,6 +591,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.38  2000/11/05 00:44:15  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

@@ -576,21 +576,34 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			try
 			{
 				buffer.readLock();
+
 				Element map = buffer.getDefaultRootElement();
-				int lines = map.getElementCount();
-				for(int i = 0; i < lines; i++)
+				Segment text = new Segment();
+				int offset = 0;
+				int line = -1;
+loop:				for(;;)
 				{
-					Element lineElement = map.getElement(i);
-					int start = lineElement.getStartOffset();
-					String lineString = buffer.getText(start,
-						lineElement.getEndOffset() - start - 1);
-					int[] match = matcher.nextMatch(lineString);
-					if(match != null)
+					buffer.getText(offset,buffer.getLength()
+						- offset,text);
+					int[] match = matcher.nextMatch(text);
+					if(match == null)
+						break loop;
+
+					offset += match[1];
+
+					int newLine = map.getElementIndex(offset);
+					if(line == newLine)
 					{
-						bufferNode.insert(new DefaultMutableTreeNode(
-							new SearchResult(buffer,i),false),
-							bufferNode.getChildCount());
+						// already had a result on this
+						// line, skip
+						continue loop;
 					}
+
+					line = newLine;
+
+					bufferNode.insert(new DefaultMutableTreeNode(
+						new SearchResult(buffer,line),false),
+						bufferNode.getChildCount());
 				}
 			}
 			finally
@@ -619,6 +632,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.71  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.70  2000/11/05 00:44:14  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

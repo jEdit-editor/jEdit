@@ -31,8 +31,10 @@ import java.util.Enumeration;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.Abbrevs;
 import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.Log;
 
@@ -82,6 +84,8 @@ public class JEditTextArea extends JComponent
 		add(CENTER,painter);
 		add(RIGHT,vertical = new JScrollBar(JScrollBar.VERTICAL));
 		add(BOTTOM,horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
+
+		horizontal.setValues(0,0,0,0);
 
 		// this ensures that the text area's look is slightly
 		// more consistent with the rest of the metal l&f.
@@ -303,38 +307,13 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * A fast way of changing both the first line and horizontal
-	 * offset.
-	 * @param firstLine The new first line
-	 * @param horizontalOffset The new horizontal offset
-	 * @return True if any of the values were changed, false otherwise
+	 * @deprecated Use setFirstLine() and setHorizontalOffset() instead
 	 */
 	public boolean setOrigin(int firstLine, int horizontalOffset)
 	{
-		boolean vertChanged = false, horizChanged = false;
-		int oldFirstLine = this.firstLine;
-
-		if(firstLine != this.firstLine)
-		{
-			this.firstLine = firstLine;
-			vertChanged = true;
-		}
-
-		if(horizontalOffset != this.horizontalOffset)
-		{
-			this.horizontalOffset = horizontalOffset;
-			horizChanged = true;
-		}
-
-		if(vertChanged || horizChanged /* || horizontal.getMaximum()
-			!= maxHorizontalScrollWidth */)
-		{
-			updateScrollBars();
-			painter.repaint();
-			gutter.repaint();
-		}
-
-		return vertChanged || horizChanged;
+		setFirstLine(firstLine);
+		setHorizontalOffset(horizontalOffset);
+		return true;
 	}
 
 	/**
@@ -343,66 +322,81 @@ public class JEditTextArea extends JComponent
 	 * @return True if scrolling was actually performed, false if the
 	 * caret was already visible
 	 */
-	public boolean scrollToCaret()
+	public void scrollToCaret()
 	{
-		int line = getCaretLine();
-		int lineStart = getLineStartOffset(line);
-		int offset = Math.max(0,Math.min(getLineLength(line) - 1,
-			getCaretPosition() - lineStart));
+		int caretLine = getCaretLine();
+		int offset = getCaretPosition() - getLineStartOffset(caretLine);
 
-		return scrollTo(line,offset);
-	}
-
-	/**
-	 * Ensures that the specified line and offset is visible by scrolling
-	 * the text area if necessary.
-	 * @param line The line to scroll to
-	 * @param offset The offset in the line to scroll to
-	 * @return True if scrolling was actually performed, false if the
-	 * line and offset was already visible
-	 */
-	public boolean scrollTo(int line, int offset)
-	{
 		// visibleLines == 0 before the component is realized
 		// we can't do any proper scrolling then, so we have
 		// this hack...
 		if(visibleLines == 0)
 		{
-			setFirstLine(Math.max(0,line - electricScroll));
-			return true;
+			setFirstLine(Math.max(0,caretLine - electricScroll));
+			return;
 		}
 
-		int newFirstLine = firstLine;
-		int newHorizontalOffset = horizontalOffset;
+		boolean changed = false;
 
-		if(line < firstLine + electricScroll)
+		int _firstLine = firstLine + electricScroll;
+		int _lastLine = firstLine + visibleLines - electricScroll;
+		if(caretLine > _firstLine && caretLine < _lastLine)
 		{
-			newFirstLine = Math.max(0,line - electricScroll);
+			// vertical scroll position is correct already
 		}
-		else if(line + electricScroll >= firstLine + visibleLines)
+		else if(_firstLine - caretLine > 5 || caretLine - _lastLine > 5)
 		{
-			newFirstLine = (line - visibleLines) + electricScroll + 1;
-			if(newFirstLine + visibleLines >= getLineCount())
-				newFirstLine = getLineCount() - visibleLines;
-			if(newFirstLine < 0)
-				newFirstLine = 0;
+			int markLine = getMarkLine();
+
+			// center {markLine,caretLine} on screen
+			firstLine = markLine - (visibleLines
+				- caretLine + markLine) / 2;
+			firstLine = Math.max(caretLine - visibleLines + electricScroll,firstLine);
+			firstLine = Math.min(caretLine /* + visibleLines */ - electricScroll,firstLine);
+
+			changed = true;
+		}
+		else if(caretLine < _firstLine)
+		{
+			firstLine = Math.max(0,caretLine - electricScroll);
+
+			changed = true;
+		}
+		else if(caretLine >= _lastLine)
+		{
+			firstLine = (caretLine - visibleLines) + electricScroll + 1;
+			if(_firstLine >= getLineCount())
+				firstLine = getLineCount() - visibleLines;
+			if(firstLine < 0)
+				firstLine = 0;
+
+			changed = true;
 		}
 
-		int x = offsetToX(line,offset);
+		int x = offsetToX(caretLine,offset);
 		int width = painter.getFontMetrics().charWidth('w');
 
 		if(x < 0)
 		{
-			newHorizontalOffset = Math.min(0,horizontalOffset
+			horizontalOffset = Math.min(0,horizontalOffset
 				- x + width + 5);
+			changed = true;
 		}
 		else if(x + width >= painter.getWidth())
 		{
-			newHorizontalOffset = horizontalOffset +
+			horizontalOffset = horizontalOffset +
 				(painter.getWidth() - x) - width - 5;
+			changed = true;
 		}
 
-		return setOrigin(newFirstLine,newHorizontalOffset);
+		if(changed)
+		{
+			updateScrollBars();
+			painter.repaint();
+
+			if(!gutter.isCollapsed())
+				gutter.repaint();
+		}
 	}
 
 	/**
@@ -1004,8 +998,9 @@ public class JEditTextArea extends JComponent
 
 			// repaint the gutter if the current line changes and current
 			// line highlighting is enabled
-			if ((newStartLine != selectionStartLine || newEndLine
-				!= selectionEndLine || newBias != biasLeft)
+			if ((newStartLine != selectionStartLine
+				|| newEndLine != selectionEndLine
+				|| newBias != biasLeft)
 				&& gutter.isCurrentLineHighlightEnabled())
 			{
 				gutter.invalidateLine(biasLeft ? selectionStartLine
@@ -1240,44 +1235,65 @@ public class JEditTextArea extends JComponent
 
 	/**
 	 * Similar to <code>setSelectedText()</code>, but overstrikes the
-	 * appropriate number of characters if overwrite mode is enabled.
+	 * appropriate number of characters if overwrite mode is enabled,
+	 * performs word wrap, and expands abbreviations.
 	 * @param str The string
 	 * @see #setSelectedText(String)
 	 * @see #isOverwriteEnabled()
+	 * @since jEdit 2.7pre1
 	 */
-	public void overwriteSetSelectedText(String str)
+	public void userInput(String str)
 	{
+		if(!isEditable())
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		if(str.charAt(0) == ' ' && Abbrevs.getExpandOnInput()
+			&& Abbrevs.expandAbbrev(view,false))
+			return;
+
+		int caretLine = getCaretLine();
+
 		// Don't overstrike if there is a selection
 		if(!overwrite || selectionStart != selectionEnd)
-		{
 			setSelectedText(str);
-			return;
-		}
-
-		// Don't overstrike if we're on the end of
-		// the line
-		int caret = getCaretPosition();
-		int caretLineEnd = getLineEndOffset(getCaretLine());
-		if(caretLineEnd - caret <= str.length())
+		else
 		{
-			setSelectedText(str);
-			return;
-		}
+			// Don't overstrike if we're on the end of
+			// the line
+			int caret = getCaretPosition();
+			int caretLineEnd = getLineEndOffset(caretLine);
+			if(caretLineEnd - caret <= str.length())
+				setSelectedText(str);
+			else
+			{
+				buffer.beginCompoundEdit();
 
-		buffer.beginCompoundEdit();
+				try
+				{
+					buffer.remove(caret,str.length());
+					buffer.insertString(caret,str,null);
+				}
+				catch(BadLocationException bl)
+				{
+					bl.printStackTrace();
+				}
+				finally
+				{
+					buffer.endCompoundEdit();
+				}
+			}
+		}
 
 		try
 		{
-			buffer.remove(caret,str.length());
-			buffer.insertString(caret,str,null);
+			doWordWrap(caretLine,str);
 		}
 		catch(BadLocationException bl)
 		{
-			bl.printStackTrace();
-		}
-		finally
-		{
-			buffer.endCompoundEdit();
+			Log.log(Log.ERROR,this,bl);
 		}
 	}
 
@@ -1438,6 +1454,7 @@ public class JEditTextArea extends JComponent
 			firstLine,visibleLines);
 		if(_maxHorizontalScrollWidth != maxHorizontalScrollWidth)
 		{
+			System.err.println("phat");
 			maxHorizontalScrollWidth = _maxHorizontalScrollWidth;
 			horizontal.setValues(-horizontalOffset,painter.getWidth(),
 				0,maxHorizontalScrollWidth);
@@ -1551,6 +1568,92 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
+	private void doWordWrap(int line, String str)
+		throws BadLocationException
+	{
+		int maxLineLen = ((Integer)buffer.getProperty("maxLineLen"))
+			.intValue();
+
+		if(maxLineLen <= 0)
+			return;
+
+		int strLen = str.length();
+
+		Element lineElement = buffer.getDefaultRootElement()
+			.getElement(line);
+		int start = lineElement.getStartOffset();
+		int end = lineElement.getEndOffset();
+		int len = end - start - 1;
+
+		// don't wrap unless we're at the end of the line
+		if(getCaretPosition() != end - 1)
+			return;
+
+		int tabSize = buffer.getTabSize();
+
+		String wordBreakChars = (String)buffer.getProperty("wordBreakChars");
+
+		buffer.getText(start,len,lineSegment);
+
+		int lineStart = lineSegment.offset;
+		int logicalLength = 0; // length with tabs expanded
+		int lastWordOffset = -1;
+		boolean lastWasSpace = true;
+		for(int i = 0; i < len; i++)
+		{
+			char ch = lineSegment.array[lineStart + i];
+			if(ch == '\t')
+			{
+				logicalLength += tabSize - (logicalLength % tabSize);
+				if(!lastWasSpace)
+				{
+					lastWordOffset = i;
+					lastWasSpace = true;
+				}
+			}
+			else if(ch == ' ')
+			{
+				logicalLength++;
+				if(!lastWasSpace)
+				{
+					lastWordOffset = i;
+					lastWasSpace = true;
+				}
+			}
+			else if(wordBreakChars != null && wordBreakChars.indexOf(ch) != -1)
+			{
+				logicalLength++;
+				if(!lastWasSpace)
+				{
+					lastWordOffset = i;
+					lastWasSpace = true;
+				}
+			}
+			else
+			{
+				logicalLength++;
+				lastWasSpace = false;
+			}
+
+			if(logicalLength + strLen > maxLineLen && lastWordOffset != -1)
+			{
+				// break line at lastWordOffset
+				try
+				{
+					buffer.beginCompoundEdit();
+					buffer.insertString(lastWordOffset + start,"\n",null);
+					buffer.indentLine(this,line + 1,true,true);
+				}
+				finally
+				{
+					buffer.endCompoundEdit();
+				}
+
+				break;
+			}
+		}
+	}
+
 	private void updateBracketHighlight(int line, int offset)
 	{
 		if(!painter.isBracketHighlightEnabled())
@@ -1569,14 +1672,12 @@ public class JEditTextArea extends JComponent
 		{
 			int bracketOffset = TextUtilities.findMatchingBracket(
 				buffer,line,offset - 1);
-			if(offset != -1)
+			if(bracketOffset != -1)
 			{
 				bracketLine = getLineOfOffset(bracketOffset);
 				bracketPosition = bracketOffset
 					- getLineStartOffset(bracketLine);
-
-				if(bracketLine != -1)
-					painter.invalidateLine(bracketLine);
+				painter.invalidateLine(bracketLine);
 				return;
 			}
 		}
@@ -2245,6 +2346,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.94  2000/11/07 10:08:33  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.93  2000/11/05 05:25:46  sp
  * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
  *

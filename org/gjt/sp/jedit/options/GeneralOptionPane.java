@@ -33,7 +33,25 @@ public class GeneralOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
-		addSeparator("options.general.misc");
+		/* Look and feel */
+		addComponent(new JLabel(jEdit.getProperty("options.general.lf.note")));
+
+		lfs = UIManager.getInstalledLookAndFeels();
+		String[] names = new String[lfs.length];
+		String lf = UIManager.getLookAndFeel().getClass().getName();
+		int index = 0;
+		for(int i = 0; i < names.length; i++)
+		{
+			names[i] = lfs[i].getName();
+			if(lf.equals(lfs[i].getClassName()))
+				index = i;
+		}
+
+		lookAndFeel = new JComboBox(names);
+		lookAndFeel.setSelectedIndex(index);
+
+		addComponent(jEdit.getProperty("options.general.lf"),
+			lookAndFeel);
 
 		/* Recent file count */
 		recent = new JTextField(jEdit.getProperty("recent"));
@@ -74,105 +92,25 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"view.checkModStatus"));
 		addComponent(checkModStatus);
 
-		/* Passive-mode FTP */
-		passiveFTP = new JCheckBox(jEdit.getProperty(
-			"options.general.passiveFTP"));
-		passiveFTP.setSelected(jEdit.getBooleanProperty(
-			"vfs.ftp.passive"));
-		addComponent(passiveFTP);
-
-		addSeparator("options.general.loadsave");
-
-		/* Default file encoding */
-		String[] encodings = {
-			"ASCII", "8859_1", "UTF8", "Cp850", "Cp1252",
-			"MacRoman", "KOI8_R", "Unicode"
-		};
-
-		encoding = new JComboBox(encodings);
-		encoding.setEditable(true);
-		encoding.setSelectedItem(jEdit.getProperty("buffer.encoding",
-			System.getProperty("file.encoding")));
-		addComponent(jEdit.getProperty("options.general.encoding"),encoding);
-
-		/* Autosave interval */
-		autosave = new JTextField(jEdit.getProperty("autosave"));
-		addComponent(jEdit.getProperty("options.general.autosave"),autosave);
-
-		/* Backup count */
-		backups = new JTextField(jEdit.getProperty("backups"));
-		addComponent(jEdit.getProperty("options.general.backups"),backups);
-
-		/* Backup directory */
-		backupDirectory = new JTextField(jEdit.getProperty(
-			"backup.directory"));
-		addComponent(jEdit.getProperty("options.general.backupDirectory"),
-			backupDirectory);
-
-		/* Backup filename prefix */
-		backupPrefix = new JTextField(jEdit.getProperty("backup.prefix"));
-		addComponent(jEdit.getProperty("options.general.backupPrefix"),
-			backupPrefix);
-
-		/* Backup suffix */
-		backupSuffix = new JTextField(jEdit.getProperty(
-			"backup.suffix"));
-		addComponent(jEdit.getProperty("options.general.backupSuffix"),
-			backupSuffix);
-
-		/* Line separator */
-		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
-			jEdit.getProperty("lineSep.windows"),
-			jEdit.getProperty("lineSep.mac") };
-		lineSeparator = new JComboBox(lineSeps);
-		String lineSep = jEdit.getProperty("buffer.lineSeparator",
-			System.getProperty("line.separator"));
-		if("\n".equals(lineSep))
-			lineSeparator.setSelectedIndex(0);
-		else if("\r\n".equals(lineSep))
-			lineSeparator.setSelectedIndex(1);
-		else if("\r".equals(lineSep))
-			lineSeparator.setSelectedIndex(2);
-		addComponent(jEdit.getProperty("options.general.lineSeparator"),
-			lineSeparator);
-
-		/* Number of I/O threads to start */
-		ioThreadCount = new JTextField(jEdit.getProperty("ioThreadCount"));
-		addComponent(jEdit.getProperty("options.general.ioThreadCount"),
-			ioThreadCount);
-
-		addSeparator("options.general.ui");
-
-		/* Look and feel */
-		addComponent(new JLabel(jEdit.getProperty("options.general.lf.note")));
-
-		lfs = UIManager.getInstalledLookAndFeels();
-		String[] names = new String[lfs.length];
-		String lf = UIManager.getLookAndFeel().getClass().getName();
-		int index = 0;
-		for(int i = 0; i < names.length; i++)
-		{
-			names[i] = lfs[i].getName();
-			if(lf.equals(lfs[i].getClassName()))
-				index = i;
-		}
-
-		lookAndFeel = new JComboBox(names);
-		lookAndFeel.setSelectedIndex(index);
-
-		addComponent(jEdit.getProperty("options.general.lf"),
-			lookAndFeel);
-
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.general.showFullPath"));
 		showFullPath.setSelected(jEdit.getBooleanProperty(
 			"view.showFullPath"));
 		addComponent(showFullPath);
+
+		/* Passive-mode FTP */
+		passiveFTP = new JCheckBox(jEdit.getProperty(
+			"options.general.passiveFTP"));
+		passiveFTP.setSelected(jEdit.getBooleanProperty(
+			"vfs.ftp.passive"));
+		addComponent(passiveFTP);
 	}
 
 	protected void _save()
 	{
+		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
+		jEdit.setProperty("lookAndFeel",lf);
 		jEdit.setProperty("recent",recent.getText());
 		jEdit.setProperty("history",history.getText());
 		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
@@ -181,39 +119,15 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
 			.isSelected());
-		jEdit.setBooleanProperty("vfs.ftp.passive",passiveFTP
-			.isSelected());
-
-		jEdit.setProperty("buffer.encoding",(String)
-			encoding.getSelectedItem());
-		jEdit.setProperty("autosave",autosave.getText());
-		jEdit.setProperty("backups",backups.getText());
-		jEdit.setProperty("backup.directory",backupDirectory.getText());
-		jEdit.setProperty("backup.prefix",backupPrefix.getText());
-		jEdit.setProperty("backup.suffix",backupSuffix.getText());
-		String lineSep = null;
-		switch(lineSeparator.getSelectedIndex())
-		{
-		case 0:
-			lineSep = "\n";
-			break;
-		case 1:
-			lineSep = "\r\n";
-			break;
-		case 2:
-			lineSep = "\r";
-			break;
-		}
-		jEdit.setProperty("buffer.lineSeparator",lineSep);
-		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
-
-		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
-		jEdit.setProperty("lookAndFeel",lf);
 		jEdit.setBooleanProperty("view.showFullPath",showFullPath
+			.isSelected());
+		jEdit.setBooleanProperty("vfs.ftp.passive",passiveFTP
 			.isSelected());
 	}
 
 	// private members
+	private UIManager.LookAndFeelInfo[] lfs;
+	private JComboBox lookAndFeel;
 	private JTextField recent;
 	private JTextField history;
 	private JCheckBox saveDesktop;
@@ -221,25 +135,16 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
-	private JCheckBox passiveFTP;
-
-	private JComboBox encoding;
-	private JTextField autosave;
-	private JTextField backups;
-	private JTextField backupDirectory;
-	private JTextField backupPrefix;
-	private JTextField backupSuffix;
-	private JComboBox lineSeparator;
-	private JTextField ioThreadCount;
-
-	private UIManager.LookAndFeelInfo[] lfs;
-	private JComboBox lookAndFeel;
 	private JCheckBox showFullPath;
+	private JCheckBox passiveFTP;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.47  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.46  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

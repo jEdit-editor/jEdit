@@ -19,9 +19,9 @@ jEdit depends on, and comes bundled with the following class libraries:
 
 - gnu.regexp by the Free Software Foundation. This is used to implement
   regular expression search and replace, among other things. gnu.regexp
-  is released under the _GNU Lesser General Public License_. Only the
-  parts of gnu.regexp used by jEdit are included - the complete package
-  can be found at <http://www.cacas.org/java/gnu/regexp/>.
+  is released under the _GNU Lesser General Public License_. The version
+  included with jEdit differs slightly from the latest official version.
+  The original can be found at <http://www.cacas.org/java/gnu/regexp/>.
 
 - AElfred XML parser by Microstar corporation. This is used by the
   syntax highlighting code to parse mode files. This class library is
@@ -142,7 +142,7 @@ Jason Ginchereau - Portions of QuickFile plugin code are used in the
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
 	dialog box, faster literal search, passive mode FTP, many
 	other patches
-Ollie Rutherford - Some commands in View->Scrolling menu
+Ollie Rutherfurd - Some commands in View->Scrolling menu
 Tal Davidson - Original syntax highlighting engine
 
 The following people contributed edit modes:

@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 import java.awt.event.MouseEvent;
 import java.awt.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.Log;
 
 /**
@@ -542,10 +543,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			gfx.setFont(defaultFont);
 			gfx.setColor(defaultColor);
 
-			textArea.getLineText(line,textArea.lineSegment);
-			x = SyntaxUtilities.paintSyntaxLine(textArea.lineSegment,
-				tokenMarker.markTokens(textArea.getBuffer(),line)
-				.firstToken,styles,this,gfx,getBackground(),x,y + fm.getHeight());
+			x = tokenMarker.paintSyntaxLine(textArea.getBuffer(),line,
+				styles,this,gfx,getBackground(),x,y + fm.getHeight());
 
 			if(eolMarkers)
 			{
@@ -699,6 +698,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.48  2000/11/07 10:08:33  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.47  2000/11/05 05:25:46  sp
  * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
  *

@@ -153,6 +153,9 @@ public class Gutter extends JComponent implements SwingConstants
 	*/
 	public final void invalidateLine(int line)
 	{
+		if(collapsed)
+			return;
+
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
 		repaint(0,textArea.lineToY(line) + pfm.getDescent() + pfm.getLeading(),
 			getWidth(),pfm.getHeight());
@@ -165,6 +168,9 @@ public class Gutter extends JComponent implements SwingConstants
 	*/
 	public final void invalidateLineRange(int firstLine, int lastLine)
 	{
+		if(collapsed)
+			return;
+
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
 		repaint(0,textArea.lineToY(firstLine) + pfm.getDescent() + pfm.getLeading(),
 			getWidth(),(lastLine - firstLine + 1) * pfm.getHeight());

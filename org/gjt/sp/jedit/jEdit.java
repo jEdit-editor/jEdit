@@ -881,7 +881,7 @@ public class jEdit
 				{
 					out.write('\t');
 					Object prop = mode.getProperty(props[j]);
-					if(prop != null)
+					if(prop != null && prop.toString().length() > 0)
 						out.write(prop.toString());
 					else
 						out.write('\0');
@@ -2026,7 +2026,6 @@ public class jEdit
 		addAction("load-session");
 		addAction("locate-bracket");
 		addAction("log-viewer");
-		addAction("multifile-search");
 		addAction("new-file");
 		addAction("new-view");
 		addAction("next-bracket-exp");
@@ -2442,6 +2441,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.288  2000/11/07 10:08:31  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.287  2000/11/05 05:25:45  sp
  * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
  *

@@ -22,9 +22,9 @@ package org.gjt.sp.jedit.actions;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.textarea.TextUtilities;
 
 public class select_word extends EditAction
 {

@@ -52,7 +52,7 @@ public class insert_literal extends EditAction
 			StringBuffer buf = new StringBuffer();
 			for(int i = 0; i < repeatCount; i++)
 				buf.append(str);
-			textArea.overwriteSetSelectedText(buf.toString());
+			textArea.setSelectedText(buf.toString());
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*
- * EditorOptionPane.java - Editor options panel
+ * ModeOptionPane.java - Mode-specific options panel
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -24,171 +24,88 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 
-public class EditorOptionPane extends AbstractOptionPane
+public class ModeOptionPane extends AbstractOptionPane
 {
-	public EditorOptionPane()
+	public ModeOptionPane()
 	{
-		super("editor");
+		super("mode");
 	}
 
 	// protected members
 	protected void _init()
 	{
-		addSeparator("options.editor.global");
-
-		/* Modes */
 		Mode[] modes = jEdit.getModes();
-		String defaultModeString = jEdit.getProperty("buffer.defaultMode");
 		String[] modeNames = new String[modes.length];
-		int index = 0;
-		for(int i = 0; i < modes.length; i++)
-		{
-			Mode _mode = modes[i];
-			modeNames[i] = _mode.getName();
-			if(defaultModeString.equals(_mode.getName()))
-				index = i;
-		}
-		defaultMode = new JComboBox(modeNames);
-		defaultMode.setSelectedIndex(index);
-		addComponent(jEdit.getProperty("options.editor.defaultMode"),
-			defaultMode);
-
-		/* Tab size */
-		String[] tabSizes = { "2", "4", "8" };
-		defaultTabSize = new JComboBox(tabSizes);
-		defaultTabSize.setEditable(true);
-		defaultTabSize.setSelectedItem(jEdit.getProperty("buffer.tabSize"));
-		addComponent(jEdit.getProperty("options.editor.tabSize"),defaultTabSize);
-
-		/* Indent size */
-		defaultIndentSize = new JComboBox(tabSizes);
-		defaultIndentSize.setEditable(true);
-		defaultIndentSize.setSelectedItem(jEdit.getProperty("buffer.indentSize"));
-		addComponent(jEdit.getProperty("options.editor.indentSize"),defaultIndentSize);
-
-		/* Max line length */
-		String[] lineLens = { "72", "76", "80" };
-		defaultMaxLineLen = new JComboBox(lineLens);
-		defaultMaxLineLen.setEditable(true);
-		defaultMaxLineLen.setSelectedItem(jEdit.getProperty("buffer.maxLineLen"));
-		addComponent(jEdit.getProperty("options.editor.maxLineLen"),defaultMaxLineLen);
-
-		/* Word break chars */
-		defaultWordBreakChars = new JTextField(jEdit.getProperty("buffer.wordBreakChars"));
-		addComponent(jEdit.getProperty("options.editor.wordBreakChars"),defaultWordBreakChars);
-
-		/* Undo queue size */
-		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
-		addComponent(jEdit.getProperty("options.editor.undoCount"),undoCount);
-
-		/* Syntax highlighting */
-		defaultSyntax = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".syntax"));
-		defaultSyntax.setSelected(jEdit.getBooleanProperty("buffer.syntax"));
-		addComponent(defaultSyntax);
-
-		/* Indent on tab */
-		defaultIndentOnTab = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".indentOnTab"));
-		defaultIndentOnTab.setSelected(jEdit.getBooleanProperty("buffer.indentOnTab"));
-		addComponent(defaultIndentOnTab);
-
-		/* Indent on enter */
-		defaultIndentOnEnter = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".indentOnEnter"));
-		defaultIndentOnEnter.setSelected(jEdit.getBooleanProperty("buffer.indentOnEnter"));
-		addComponent(defaultIndentOnEnter);
-
-		/* Soft tabs */
-		defaultNoTabs = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".noTabs"));
-		defaultNoTabs.setSelected(jEdit.getBooleanProperty("buffer.noTabs"));
-		addComponent(defaultNoTabs);
-
-		addSeparator("options.editor.mode-specific");
-
 		modeProps = new ModeProperties[modes.length];
 		for(int i = 0; i < modes.length; i++)
 		{
 			modeProps[i] = new ModeProperties(modes[i]);
+			modeNames[i] = modes[i].getName();
 		}
 		mode = new JComboBox(modeNames);
 		mode.addActionListener(new ActionHandler());
 
-		addComponent(jEdit.getProperty("options.editor.mode"),mode);
+		addComponent(jEdit.getProperty("options.mode.mode"),mode);
 
-		useDefaults = new JCheckBox(jEdit.getProperty("options.editor.useDefaults"));
+		useDefaults = new JCheckBox(jEdit.getProperty("options.mode.useDefaults"));
 		useDefaults.addActionListener(new ActionHandler());
 		addComponent(useDefaults);
 
-		addComponent(jEdit.getProperty("options.editor.filenameGlob"),
+		addComponent(jEdit.getProperty("options.mode.filenameGlob"),
 			filenameGlob = new JTextField());
 
-		addComponent(jEdit.getProperty("options.editor.firstlineGlob"),
+		addComponent(jEdit.getProperty("options.mode.firstlineGlob"),
 			firstlineGlob = new JTextField());
 
-		addComponent(jEdit.getProperty("options.editor.tabSize"),
+		String[] tabSizes = { "2", "4", "8" };
+		addComponent(jEdit.getProperty("options.editing.tabSize"),
 			tabSize = new JComboBox(tabSizes));
 		tabSize.setEditable(true);
 
-		addComponent(jEdit.getProperty("options.editor.indentSize"),
+		addComponent(jEdit.getProperty("options.editing.indentSize"),
 			indentSize = new JComboBox(tabSizes));
 		indentSize.setEditable(true);
 
-		addComponent(jEdit.getProperty("options.editor.maxLineLen"),
+		String[] lineLens = { "0", "72", "76", "80" };
+		addComponent(jEdit.getProperty("options.editing.maxLineLen"),
 			maxLineLen = new JComboBox(lineLens));
+		maxLineLen.setEditable(true);
 
-		addComponent(jEdit.getProperty("options.editor.wordBreakChars"),
+		addComponent(jEdit.getProperty("options.editing.wordBreakChars"),
 			wordBreakChars = new JTextField());
 
-		addComponent(jEdit.getProperty("options.editor.commentStart"),
+		addComponent(jEdit.getProperty("options.mode.commentStart"),
 			commentStart = new JTextField());
 
-		addComponent(jEdit.getProperty("options.editor.commentEnd"),
+		addComponent(jEdit.getProperty("options.mode.commentEnd"),
 			commentEnd = new JTextField());
 
-		addComponent(jEdit.getProperty("options.editor.boxComment"),
+		addComponent(jEdit.getProperty("options.mode.boxComment"),
 			boxComment = new JTextField());
 
-		addComponent(jEdit.getProperty("options.editor.blockComment"),
+		addComponent(jEdit.getProperty("options.mode.blockComment"),
 			blockComment = new JTextField());
 
-		addComponent(jEdit.getProperty("options.editor.noWordSep"),
+		addComponent(jEdit.getProperty("options.mode.noWordSep"),
 			noWordSep = new JTextField());
 
 		addComponent(syntax = new JCheckBox(jEdit.getProperty(
-			"options.editor.syntax")));
+			"options.editing.syntax")));
 
 		addComponent(indentOnTab = new JCheckBox(jEdit.getProperty(
-			"options.editor.indentOnTab")));
+			"options.editing.indentOnTab")));
 
 		addComponent(indentOnEnter = new JCheckBox(jEdit.getProperty(
-			"options.editor.indentOnEnter")));
+			"options.editing.indentOnEnter")));
 
 		addComponent(noTabs = new JCheckBox(jEdit.getProperty(
-			"options.editor.noTabs")));
+			"options.editing.noTabs")));
 
 		selectMode();
 	}
 
 	protected void _save()
 	{
-		jEdit.setProperty("buffer.defaultMode",
-			modeProps[defaultMode.getSelectedIndex()].mode.getName());
-		jEdit.setProperty("buffer.tabSize",(String)defaultTabSize
-			.getSelectedItem());
-		jEdit.setProperty("buffer.indentSize",(String)defaultIndentSize
-			.getSelectedItem());
-		jEdit.setProperty("buffer.maxLineLen",(String)defaultMaxLineLen.getSelectedItem());
-		jEdit.setProperty("buffer.wordBreakChars",defaultWordBreakChars.getText());
-		jEdit.setProperty("buffer.undoCount",undoCount.getText());
-		jEdit.setBooleanProperty("buffer.syntax",defaultSyntax.isSelected());
-		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
-			.isSelected());
-		jEdit.setBooleanProperty("buffer.indentOnEnter",defaultIndentOnEnter
-			.isSelected());
-		jEdit.setBooleanProperty("buffer.noTabs",defaultNoTabs.isSelected());
-
 		saveMode();
 
 		for(int i = 0; i < modeProps.length; i++)
@@ -198,17 +115,6 @@ public class EditorOptionPane extends AbstractOptionPane
 	}
 
 	// private members
-	private JComboBox defaultMode;
-	private JComboBox defaultTabSize;
-	private JComboBox defaultIndentSize;
-	private JComboBox defaultMaxLineLen;
-	private JTextField defaultWordBreakChars;
-	private JTextField undoCount;
-	private JCheckBox defaultSyntax;
-	private JCheckBox defaultIndentOnTab;
-	private JCheckBox defaultIndentOnEnter;
-	private JCheckBox defaultNoTabs;
-
 	private ModeProperties[] modeProps;
 	private ModeProperties current;
 	private JComboBox mode;
@@ -422,19 +328,7 @@ public class EditorOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
- * Revision 1.30  2000/11/05 05:25:46  sp
- * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
- *
- * Revision 1.29  2000/11/05 00:44:15  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.28  2000/11/02 09:19:34  sp
- * more features
- *
- * Revision 1.27  2000/09/26 10:19:47  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.26  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
+ * Revision 1.5  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
  *
  */

@@ -92,7 +92,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty(
-			"options.editor.tabSize"),SwingConstants.RIGHT);
+			"options.editing.tabSize"),SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
@@ -113,7 +113,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty(
-			"options.editor.indentSize"),SwingConstants.RIGHT);
+			"options.editing.indentSize"),SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
@@ -133,11 +133,11 @@ public class BufferOptions extends EnhancedDialog
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty(
-			"options.editor.maxLineLen"),SwingConstants.RIGHT);
+			"options.editing.maxLineLen"),SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		String[] lineLengths = { "72", "76", "80" };
+		String[] lineLengths = { "0", "72", "76", "80" };
 
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
@@ -187,7 +187,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.fill = GridBagConstraints.NONE;
 		cons.anchor = GridBagConstraints.WEST;
 		syntax = new JCheckBox(jEdit.getProperty(
-			"options.editor.syntax"));
+			"options.editing.syntax"));
 		syntax.setSelected(buffer.getBooleanProperty("syntax"));
 		syntax.addActionListener(actionListener);
 		layout.setConstraints(syntax,cons);
@@ -196,7 +196,7 @@ public class BufferOptions extends EnhancedDialog
 		// Indent on tab
 		cons.gridy = 6;
 		indentOnTab = new JCheckBox(jEdit.getProperty(
-			"options.editor.indentOnTab"));
+			"options.editing.indentOnTab"));
 		indentOnTab.setSelected(buffer.getBooleanProperty("indentOnTab"));
 		indentOnTab.addActionListener(actionListener);
 		layout.setConstraints(indentOnTab,cons);
@@ -205,7 +205,7 @@ public class BufferOptions extends EnhancedDialog
 		// Indent on enter
 		cons.gridy = 7;
 		indentOnEnter = new JCheckBox(jEdit.getProperty(
-			"options.editor.indentOnEnter"));
+			"options.editing.indentOnEnter"));
 		indentOnEnter.setSelected(buffer.getBooleanProperty("indentOnEnter"));
 		indentOnEnter.addActionListener(actionListener);
 		layout.setConstraints(indentOnEnter,cons);
@@ -214,7 +214,7 @@ public class BufferOptions extends EnhancedDialog
 		// Soft tabs
 		cons.gridy = 8;
 		noTabs = new JCheckBox(jEdit.getProperty(
-			"options.editor.noTabs"));
+			"options.editing.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
 		noTabs.addActionListener(actionListener);
 		layout.setConstraints(noTabs,cons);
@@ -357,8 +357,27 @@ public class BufferOptions extends EnhancedDialog
 				ok();
 			else if(source == cancel)
 				cancel();
-			else if(source instanceof JComboBox
-				|| source instanceof JCheckBox)
+			else if(source == mode)
+			{
+				Mode _mode = jEdit.getMode((String)
+					mode.getSelectedItem());
+				tabSize.setSelectedItem(_mode.getProperty(
+					"tabSize"));
+				indentSize.setSelectedItem(_mode.getProperty(
+					"indentSize"));
+				maxLineLen.setSelectedItem(_mode.getProperty(
+					"maxLineLen"));
+				indentOnTab.setSelected(_mode.getBooleanProperty(
+					"indentOnTab"));
+				indentOnEnter.setSelected(_mode.getBooleanProperty(
+					"indentOnEnter"));
+				syntax.setSelected(_mode.getBooleanProperty(
+					"syntax"));
+				noTabs.setSelected(_mode.getBooleanProperty(
+					"noTabs"));
+				updatePropsField();
+			}
+			else
 				updatePropsField();
 		}
 	}
@@ -367,6 +386,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/11/07 10:08:31  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.20  2000/11/05 05:25:46  sp
  * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
  *

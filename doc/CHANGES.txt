@@ -12,8 +12,8 @@ JEDIT 2.7 VERSION HISTORY
   - If, when typing, the line length exceeds the maximum, a line break
     is inserted in the appropriate location.
   - A 'wrap guide' is drawn in the text area at the wrap column. This
-    is similar to the LineGuides plugin
-- Ollie Rutherford's scrolling actions:
+    is similar to the LineGuides plugin.
+- Ollie Rutherfurd's scrolling actions:
   - Scroll Up/Down Line: C+' and C+/
   - Scroll Up/Down Page: A+' and A+/
   - Center Cursor: C+e C+i
@@ -44,6 +44,10 @@ JEDIT 2.7 VERSION HISTORY
   on multi-user systems (Mike Dillon)
 - Format and Remove Trailing Whitespace actions from TextTools plugin
   integrated into the core
+  - Format: bound to C+e f, reflows current paragraph or selection
+  - Remove Trailing Whitespace: bound to C+e r, removes whitespace at
+    the end of lines
+- Multiple line search and replace now supported
 
 + Enhancements
 
@@ -67,6 +71,13 @@ JEDIT 2.7 VERSION HISTORY
 - Minor change to dockable window behavior. If a dockable is open but
   it's container is collapsed, invoking the dockable's action will
   expand the container
+- Deleting a file that is currently open in jEdit is now handled better
+- When scrolling long distanes, the caret is now centered on the screen
+- Buffer properties are reset when the edit mode is changed. For example,
+  if your default tab size is set to 8 but Java tab size set to 4 and
+  you save a new file with the ".java" extension, the tab size will
+  automatically change to 4
+- New options dialog layout
 
 + Neutral
 
@@ -74,7 +85,22 @@ JEDIT 2.7 VERSION HISTORY
   - 'Gutter Expanded' now bound to C+e C+t instead of C+'
   - 'Expand Abbreviation' now bound to C+; instead of C+/
   - 'View Registers' now bound to S+F5 instead of F6
+  - 'Delete Paragraph' now bound to C+e d instead of C+e d
 - List view removed from browser, only tree view supported
+
++ Bug Fixes
+
+- Dragging a dockable area to its minimum size is now handled the same
+  as collapsing it
+- 'Clear Register' action didn't work
+- Mode cache wasn't created properly if empty property names were present
+- The text area would repaint too much when the caret was being moved,
+  which caused a slight slowdown
+
++ API Changes
+
+- JEditTextArea.setOrigin() deprecated. This method should not be called
+  anyway.
 
 -- Slava Pestov
 <sp@gjt.org>

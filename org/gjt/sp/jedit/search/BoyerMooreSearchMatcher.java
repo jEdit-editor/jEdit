@@ -20,6 +20,7 @@
 
 package org.gjt.sp.jedit.search;
 
+import javax.swing.text.Segment;
 import org.gjt.sp.util.Log;
 
 public class BoyerMooreSearchMatcher implements SearchMatcher
@@ -57,9 +58,9 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 * of the match, and the second element is the end offset of
 	 * the match
 	 */
-	public int[] nextMatch(String text)
+	public int[] nextMatch(Segment text)
 	{
-		int pos = match(text.toCharArray(), 0);
+		int pos = match(text.array, text.offset, text.offset + text.count);
 
 		if (pos == -1)
 		{
@@ -67,7 +68,8 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		}
 		else
 		{
-			return new int[] { pos, pos + pattern.length };
+			return new int[] { pos - text.offset, pos + pattern.length
+				- text.offset };
 		}
 	}
 
@@ -80,15 +82,16 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	{
 		StringBuffer buf = null;
 
+		int pos, lastMatch = 0;
+		int length = text.length();
+
 		char[] chars = text.toCharArray();
 
-		int pos, lastMatch = 0;
-
-		while ((pos = match(chars, lastMatch)) != -1)
+		while ((pos = match(chars, lastMatch, length)) != -1)
 		{
 			if (buf == null)
 			{
-				buf = new StringBuffer(chars.length);
+				buf = new StringBuffer(length);
 			}
 
 			if (pos != lastMatch)
@@ -109,8 +112,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		{
 			if(lastMatch < chars.length)
 			{
-				buf.append(chars, lastMatch,
-					chars.length - lastMatch);
+				buf.append(chars, lastMatch,length - lastMatch);
 			}
 
 			return buf.toString();
@@ -124,7 +126,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 *   http://www.cs.utexas.edu/users/moore/best-ideas/string-searching/
 	 *
 	 */
-	public int match(char[] text, int offset)
+	public int match(char[] text, int offset, int length)
 	{
 		// position variable for pattern start
 		int anchor = offset;
@@ -135,7 +137,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		// last possible start position of a match with this pattern;
 		// this is negative if the pattern is longer than the text
 		// causing the search loop below to immediately fail
-		int last_anchor = text.length - pattern.length;
+		int last_anchor = length - pattern.length;
 
 		// each time the pattern is checked, we start this many
 		// characters ahead of 'anchor'

@@ -32,7 +32,7 @@ public class clear_register extends EditAction
 		if(actionCommand == null)
 		{
 			view.getCommandLine().promptOneChar(jEdit.getProperty(
-				"view.status.clear-string-register"),this);
+				"view.status.clear-register"),this);
 		}
 		else
 		{

@@ -259,19 +259,18 @@ public class OptionsDialog extends EnhancedDialog
 		jEditGroup = new OptionGroup("jedit");
 
 		addOptionPane(new GeneralOptionPane(), jEditGroup);
-		addOptionPane(new EditorOptionPane(), jEditGroup);
+		addOptionPane(new LoadSaveOptionPane(), jEditGroup);
+		addOptionPane(new EditingOptionPane(), jEditGroup);
+		addOptionPane(new ModeOptionPane(), jEditGroup);
 		addOptionPane(new TextAreaOptionPane(), jEditGroup);
+		addOptionPane(new GutterOptionPane(), jEditGroup);
+		addOptionPane(new ColorOptionPane(), jEditGroup);
 		addOptionPane(new StyleOptionPane(), jEditGroup);
+		addOptionPane(new CommandShortcutsOptionPane(), jEditGroup);
+		addOptionPane(new MacroShortcutsOptionPane(), jEditGroup);
 		addOptionPane(new DockingOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
 		addOptionPane(new ToolBarOptionPane(), jEditGroup);
-
-		// create the Shortcuts sub-branch
-		OptionGroup shortcutsGroup = new OptionGroup("shortcuts");
-		shortcutsGroup.addOptionPane(new CommandShortcutsOptionPane());
-		shortcutsGroup.addOptionPane(new MacroShortcutsOptionPane());
-		addOptionGroup(shortcutsGroup, jEditGroup);
-
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new BrowserOptionPane(), jEditGroup);
@@ -597,6 +596,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.33  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *
@@ -626,38 +628,5 @@ public class OptionsDialog extends EnhancedDialog
  *
  * Revision 1.24  2000/05/13 05:13:31  sp
  * Mode option pane
- *
- * Revision 1.23  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.22  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.21  2000/04/23 03:58:00  sp
- * ContextOptionPane didn't compile, hack to let JBrowse and QuickFile work
- *
- * Revision 1.20  2000/04/18 08:27:52  sp
- * Context menu editor started
- *
- * Revision 1.19  2000/04/16 08:56:24  sp
- * Option pane updates
- *
- * Revision 1.18  2000/02/15 07:44:30  sp
- * bug fixes, doc updates, etc
- *
- * Revision 1.17  2000/02/07 06:35:53  sp
- * Options dialog box updates
- *
- * Revision 1.16  2000/02/04 07:56:10  sp
- * Documentation updates, some other stuff
- *
- * Revision 1.15  2000/02/04 05:50:27  sp
- * More gutter updates from mike
- *
- * Revision 1.14  2000/02/03 06:02:29  sp
- * options dialog updated
- *
- * Revision 1.13  2000/02/02 10:03:31  sp
- * Option groups added
  *
  */

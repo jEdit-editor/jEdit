@@ -184,9 +184,8 @@ public class print extends EditAction
 				x += lineNumberWidth + fm.charWidth('0');
 			}
 
-			Token tokens = tokenMarker.markTokens(lineSegment,i).firstToken;
-			SyntaxUtilities.paintSyntaxLine(lineSegment,
-				tokens,styles,expander,gfx,Color.white,x,y);
+			tokenMarker.paintSyntaxLine(buffer,i,
+				styles,expander,gfx,Color.white,x,y);
 
 			int bottomOfPage = pageHeight - bottomMargin - lineHeight;
 			if(printFooter)

@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.actions;
 
 import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
 public class format_paragraph extends EditAction
@@ -28,6 +29,7 @@ public class format_paragraph extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
+		JEditTextArea textArea = view.getTextArea();
 		Buffer buffer = view.getBuffer();
 		if(!buffer.isEditable())
 		{
@@ -36,17 +38,37 @@ public class format_paragraph extends EditAction
 		}
 		int maxLineLength = ((Integer)buffer.getProperty("maxLineLen"))
 			.intValue();
-		String text = view.getTextArea().getSelectedText();
+		String text = textArea.getSelectedText();
 		if(text != null)
-			view.getTextArea().setSelectedText(doFormat(text,
-				maxLineLength));
+			textArea.setSelectedText(doFormat(text,maxLineLength));
 		else
 		{
+			int lineNo = textArea.getCaretLine();
+
+			int start = 0, end = textArea.getBufferLength();
+
+			for(int i = lineNo - 1; i >= 0; i--)
+			{
+				if(textArea.getLineLength(i) == 0)
+				{
+					start = textArea.getLineStartOffset(i);
+					break;
+				}
+			}
+
+			for(int i = lineNo + 1; i < textArea.getLineCount(); i++)
+			{
+				if(textArea.getLineLength(i) == 0)
+				{
+					end = textArea.getLineStartOffset(i);
+					break;
+				}
+			}
 			try
 			{
-				text = buffer.getText(0,buffer.getLength());
-				buffer.remove(0,buffer.getLength());
-				buffer.insertString(0,doFormat(text,
+				text = buffer.getText(start,end - start);
+				buffer.remove(start,end - start);
+				buffer.insertString(start,doFormat(text,
 					maxLineLength),null);
 			}
 			catch(BadLocationException bl)

@@ -213,6 +213,11 @@ public class FileVFS extends VFS
 	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
 		Component comp)
 	{
+		// workaround for Java bug where paths with trailing / return
+		// null getName()
+		if(path.endsWith("/") || path.endsWith(File.separator))
+			path = path.substring(0,path.length() - 1);
+
 		File file = new File(path);
 		if(!file.exists())
 			return null;
@@ -369,6 +374,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.25  2000/11/02 09:19:33  sp
  * more features
  *

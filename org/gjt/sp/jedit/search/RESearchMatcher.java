@@ -20,6 +20,8 @@
 package org.gjt.sp.jedit.search;
 
 import gnu.regexp.*;
+import javax.swing.text.Segment;
+import org.gjt.sp.jedit.MiscUtilities;
 
 /**
  * A regular expression string matcher.
@@ -38,6 +40,10 @@ public class RESearchMatcher implements SearchMatcher
 	public RESearchMatcher(String search, String replace,
 		boolean ignoreCase)
 	{
+		// gnu.regexp doesn't seem to support \n and \t in the replace
+		// string, so implement it here
+		this.replace = MiscUtilities.escapesToChars(replace);
+
 		try
 		{
 			re = new RE(search,(ignoreCase ? RE.REG_ICASE : 0)
@@ -47,8 +53,6 @@ public class RESearchMatcher implements SearchMatcher
 		{
 			throw new IllegalArgumentException(e.getMessage());
 		}
-
-		this.replace = replace;
 	}
 
 	/**
@@ -59,7 +63,7 @@ public class RESearchMatcher implements SearchMatcher
 	 * of the match, and the second element is the end offset of
 	 * the match
 	 */
-	public int[] nextMatch(String text)
+	public int[] nextMatch(Segment text)
 	{
 		REMatch match = re.getMatch(text);
 		if(match == null)
@@ -76,11 +80,7 @@ public class RESearchMatcher implements SearchMatcher
 	 */
 	public String substitute(String text)
 	{
-		String str = re.substituteAll(text,replace);
-		if(str.equals(text)) // XXX slow
-			return null;
-		else
-			return str;
+		return re.substituteAll(text,replace);
 	}
 
 	// private members
@@ -91,6 +91,9 @@ public class RESearchMatcher implements SearchMatcher
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/11/07 10:08:32  sp
+ * Options dialog improvements, documentation changes, bug fixes
+ *
  * Revision 1.3  1999/06/06 05:05:25  sp
  * Search and replace tweaks, Perl/Shell Script mode updates
  *
