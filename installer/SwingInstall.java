@@ -120,7 +120,7 @@ public class SwingInstall extends JFrame
 				.getModel().isSelected())
 			{
 				size += installer.getIntProperty(
-					"comp." + i + ".size");
+					"comp." + i + ".real-size");
 				components.addElement(installer.getProperty(
 					"comp." + i + ".fileset"));
 			}
@@ -468,8 +468,8 @@ public class SwingInstall extends JFrame
 
 				JCheckBox checkBox = new JCheckBox(
 					installer.getProperty("comp." + i + ".name")
-					+ " (" + installer.getProperty("comp." + i + ".size")
-					+ "Kb)");
+					+ " (" + installer.getProperty("comp." + i
+					+ ".disk-size") + "Kb)");
 				checkBox.getModel().setSelected(true);
 				checkBox.addActionListener(this);
 				checkBox.setRequestFocusEnabled(false);
@@ -497,7 +497,7 @@ public class SwingInstall extends JFrame
 				{
 					size += installer.getIntProperty("comp."
 						+ filesets.elementAt(i)
-						+ ".size");
+						+ ".disk-size");
 				}
 			}
 

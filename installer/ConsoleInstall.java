@@ -85,7 +85,7 @@ public class ConsoleInstall
 			System.out.print("Install "
 				+ installer.getProperty("comp." + i + ".name")
 				+ " ("
-				+ installer.getProperty("comp." + i + ".size")
+				+ installer.getProperty("comp." + i + ".disk-size")
 				+ "Kb) [Y/n]? ");
 
 			String line = readLine(in);

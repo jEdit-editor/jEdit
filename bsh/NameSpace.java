@@ -525,6 +525,9 @@ public class NameSpace
 		return packages;
     }
 
+    // temporary hack by Slava Pestov
+    private static final Object NO_CLASS = new Object();
+
 	/**
 		Load class through this namespace, taking into account imports.
 
@@ -537,17 +540,24 @@ public class NameSpace
 		Class c	= null;
 
 		if(classCache != null)
-			c =	(Class)classCache.get(name);
+		{
+			Object obj = classCache.get(name);
+			if(obj == NO_CLASS)
+				return null;
+
+			c =	(Class)obj;
+		}
 
 		if(c ==	null) {
 			c =	getClassImpl( name );
 
-			if(c != null) {
-				if(classCache == null)
-					classCache = new Hashtable();
+			if(classCache == null)
+				classCache = new Hashtable();
 
+			if(c != null)
 				classCache.put(name, c);
-			}
+			else
+				classCache.put(name, NO_CLASS);
 		}
 
 		return c;

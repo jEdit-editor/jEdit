@@ -40,4 +40,18 @@ void duplicateLine()
 
 duplicateLine();
 
+/*
+
+Macro index data (in DocBook format)
+
+  <listitem>
+    <para><filename>Duplicate_Line.bsh</filename></para>
+	<abstract><para>
+	  Duplicates the line on which the caret lies immediately
+	  beneath it and moves the caret to the new line.
+	</para></abstract>
+  </listitem>
+
+*/
+
 // end Duplicate_Line.bsh

@@ -1061,7 +1061,7 @@ public class GUIUtilities
 
 	static
 	{
-		macOS = (System.getProperty("os.name").indexOf("MacOS") != -1);
+		macOS = (System.getProperty("os.name").indexOf("Mac") != -1);
 
 		icons = new Hashtable();
 		NEW_BUFFER_ICON = loadIcon("new.gif");

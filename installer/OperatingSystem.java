@@ -179,6 +179,9 @@ public abstract class OperatingSystem
 			{
 				Runtime.getRuntime().exec(args).waitFor();
 			}
+			catch(IOException io)
+			{
+			}
 			catch(InterruptedException ie)
 			{
 			}

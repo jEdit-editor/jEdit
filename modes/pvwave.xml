@@ -116,6 +116,7 @@
 			<KEYWORD1>create_weekdends</KEYWORD1>
 			<KEYWORD1>crossp</KEYWORD1>
 			<KEYWORD1>cursor</KEYWORD1>
+			<KEYWORD1>curvatures</KEYWORD1>
 			<KEYWORD1>curvefit</KEYWORD1>
 			<KEYWORD1>cylinder</KEYWORD1>
 			<KEYWORD1>day_name</KEYWORD1>
@@ -186,6 +187,7 @@
 			<KEYWORD1>erode</KEYWORD1>
 			<KEYWORD1>errorf</KEYWORD1>
 			<KEYWORD1>errplot</KEYWORD1>
+			<KEYWORD1>euclidean</KEYWORD1>
 			<KEYWORD1>exec_on_select</KEYWORD1>
 			<KEYWORD1>execute</KEYWORD1>
 			<KEYWORD1>exp</KEYWORD1>
@@ -262,6 +264,7 @@
 			<KEYWORD1>invert</KEYWORD1>
 			<KEYWORD1>isaskey</KEYWORD1>
 			<KEYWORD1>ishft</KEYWORD1>
+			<KEYWORD1>jacobian</KEYWORD1>
 			<KEYWORD1>jul_to_dt</KEYWORD1>
 			<KEYWORD1>keyword_set</KEYWORD1>
 			<KEYWORD1>lcm</KEYWORD1>
@@ -310,6 +313,8 @@
 			<KEYWORD1>n_params</KEYWORD1>
 			<KEYWORD1>n_tags</KEYWORD1>
 			<KEYWORD1>nint</KEYWORD1>
+			<KEYWORD1>normals</KEYWORD1>
+			<KEYWORD1>null_processor</KEYWORD1>
 			<KEYWORD1>openr</KEYWORD1>
 			<KEYWORD1>openu</KEYWORD1>
 			<KEYWORD1>openw</KEYWORD1>
@@ -321,7 +326,7 @@
 			<KEYWORD1>packimage</KEYWORD1>
 			<KEYWORD1>packtable</KEYWORD1>
 			<KEYWORD1>palette</KEYWORD1>
-			<KEYWORD1>param_persent</KEYWORD1>
+			<KEYWORD1>param_present</KEYWORD1>
 			<KEYWORD1>parsefilename</KEYWORD1>
 			<KEYWORD1>pie</KEYWORD1>
 			<KEYWORD1>pie_chart</KEYWORD1>
@@ -526,6 +531,8 @@
 			<KEYWORD1>vtkcommand</KEYWORD1>
 			<KEYWORD1>vtkerase</KEYWORD1>
 			<KEYWORD1>vtkformat</KEYWORD1>
+			<KEYWORD1>vtkgrid</KEYWORD1>
+			<KEYWORD1>vtkhedgehog</KEYWORD1>
 			<KEYWORD1>vtkinit</KEYWORD1>
 			<KEYWORD1>vtklight</KEYWORD1>
 			<KEYWORD1>vtkplots</KEYWORD1>
@@ -537,6 +544,7 @@
 			<KEYWORD1>vtkrectilineargrid</KEYWORD1>
 			<KEYWORD1>vtkrenderwindow</KEYWORD1>
 			<KEYWORD1>vtkscatter</KEYWORD1>
+			<KEYWORD1>vtkslicevol</KEYWORD1>
 			<KEYWORD1>vtkstructuredpoints</KEYWORD1>
 			<KEYWORD1>vtkstructuredgrid</KEYWORD1>
 			<KEYWORD1>vtksurface</KEYWORD1>
@@ -545,6 +553,7 @@
 			<KEYWORD1>vtkunstructuredgrid</KEYWORD1>
 			<KEYWORD1>vtkwdelete</KEYWORD1>
 			<KEYWORD1>vtkwindow</KEYWORD1>
+			<KEYWORD1>vtkwritevrml</KEYWORD1>
 			<KEYWORD1>vtkwset</KEYWORD1>
 			<KEYWORD1>wait</KEYWORD1>
 			<KEYWORD1>wavedatamanager</KEYWORD1>
@@ -578,6 +587,7 @@
 			<KEYWORD2>else</KEYWORD2>
 			<KEYWORD2>end</KEYWORD2>
 			<KEYWORD2>endcase</KEYWORD2>
+			<KEYWORD2>endelse</KEYWORD2>
 			<KEYWORD2>endfor</KEYWORD2>
 			<KEYWORD2>endif</KEYWORD2>
 			<KEYWORD2>endrepeat</KEYWORD2>

@@ -50,20 +50,26 @@ public class StatusBar extends JPanel
 	public StatusBar(View view)
 	{
 		super(new BorderLayout(3,3));
-		setBorder(new EmptyBorder(3,0,0,0));
+		setBorder(BorderFactory.createEmptyBorder(3,0,0,0));
 
 		this.view = view;
 
-		Border border = new BevelBorder(BevelBorder.LOWERED);
+		Border border = BorderFactory.createLoweredBevelBorder();
 
 		caretStatus = new VICaretStatus();
 		caretStatus.setBorder(border);
 		add(BorderLayout.WEST,caretStatus);
 
+		messagePanel = new JPanel();
+		messagePanel.setLayout(new BorderLayout(0,0));
+		messagePanel.setBorder(border);
+		messagePanel.setPreferredSize(caretStatus.getPreferredSize());
+		add(BorderLayout.CENTER,messagePanel);
+
 		message = new JLabel();
 		message.setForeground(Color.black);
-		message.setBorder(border);
-		add(BorderLayout.CENTER,message);
+		message.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+		setMessageComponent(message);
 
 		MouseHandler mouseHandler = new MouseHandler();
 
@@ -151,6 +157,8 @@ public class StatusBar extends JPanel
 			tempTimer = null;
 		}
 
+		setMessageComponent(this.message);
+
 		if(message == null)
 		{
 			InputHandler inputHandler = view.getInputHandler();
@@ -168,6 +176,17 @@ public class StatusBar extends JPanel
 		}
 		else
 			this.message.setText(message);
+	}
+
+	public void setMessageComponent(Component comp)
+	{
+		if (comp == null || messageComp == comp)
+		{
+			return;
+		}
+
+		messageComp = comp;
+		messagePanel.add(BorderLayout.CENTER, messageComp);
 	}
 
 	public void repaintCaretStatus()
@@ -217,6 +236,8 @@ public class StatusBar extends JPanel
 	// private members
 	private View view;
 	private VICaretStatus caretStatus;
+	private JPanel messagePanel;
+	private Component messageComp;
 	private JLabel message;
 	private JLabel mode;
 	private JLabel encoding;

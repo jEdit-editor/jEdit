@@ -7,15 +7,27 @@ JEDIT 3.2 VERSION HISTORY
 - 'Color Picker' macro added
 - Objective-C syntax highlighting (Kris Kopicki)
 
++ Enhancements
+
+- Updated PV-WAVE edit mode (Ed Stewart)
+- Updated 'Write HyperSearch Results' macro (John Gellene)
+- Updated jEditLauncher (John Gellene)
+
 + Bug Fixes
 
 - Clicks in table of contents in help viewer didn't work
 - A few actions didn't record a trailing ; when recording a macro
 - Fixed another BeanShell performance problem
+- Fixed a few minor problems if a plugin threw an exception in its
+  start() method (Dirk Moebius)
+- MRJ on MacOS 8/9 returns an os.name of "Mac OS", but jEdit was
+  checking for "MacOS".
+- Fixed minor grab key dialog box bug
 
 + API Changes
 
 - View.getToolBar() method added
+- Status bar change necessary for upcoming Vimulator plugin (Mike Dillon)
 
 * Version 3.2final
 

@@ -197,7 +197,7 @@ public class jEdit
 		}
 
 		// MacOS X GUI hacks
-		if(System.getProperty("os.name").indexOf("MacOS X") != -1)
+		if(System.getProperty("os.name").indexOf("Mac") != -1)
 		{
 			// put the menu bar at the top of the screen, as opposed to
 			// inside the jEdit window

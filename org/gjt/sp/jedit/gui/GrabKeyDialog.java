@@ -312,9 +312,6 @@ public class GrabKeyDialog extends JDialog
 
 		protected void processKeyEvent(KeyEvent _evt)
 		{
-			if(_evt.getID() != KeyEvent.KEY_PRESSED)
-				return;
-
 			KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
 			if(evt == null)
 			{
@@ -331,54 +328,75 @@ public class GrabKeyDialog extends JDialog
 			if(getDocument().getLength() != 0)
 				keyString.append(' ');
 
-			boolean appendPlus = false;
-
-			// On MacOS, C+ is command, M+ is control
-			// so that jEdit's default shortcuts are
-			// mapped to the Command
-			if(evt.isControlDown())
+			if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
-				keyString.append(macOS ? 'M' : 'C');
-				appendPlus = true;
-			}
+				if(evt.getKeyChar() == '\0'
+					|| evt.getKeyChar() == '\b')
+					return;
 
-			if(evt.isAltDown())
+				keyString.append(evt.getKeyChar());
+			}
+			else if(evt.getID() == KeyEvent.KEY_PRESSED)
 			{
-				keyString.append('A');
-				appendPlus = true;
+				boolean appendPlus = false;
+
+				// On MacOS, C+ is command, M+ is control
+				// so that jEdit's default shortcuts are
+				// mapped to the Command
+				if(evt.isControlDown())
+				{
+					keyString.append(macOS ? 'M' : 'C');
+					appendPlus = true;
+				}
+
+				if(evt.isAltDown())
+				{
+					keyString.append('A');
+					appendPlus = true;
+				}
+
+				if(evt.isMetaDown())
+				{
+					keyString.append(macOS ? 'C' : 'M');
+					appendPlus = true;
+				}
+
+				// don't want Shift+'d' recorded as S+D
+				if(evt.isShiftDown())
+				{
+					keyString.append('S');
+					appendPlus = true;
+				}
+
+				if(appendPlus)
+					keyString.append('+');
+
+				int keyCode = evt.getKeyCode();
+
+				if(keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z
+					&& !(evt.isAltDown() ^ evt.isControlDown())
+					&& !evt.isMetaDown())
+				{
+					// already handled by KEY_TYPED
+					return;
+				}
+
+				String symbolicName = getSymbolicName(keyCode);
+
+				if(symbolicName == null)
+					return;
+
+				keyString.append(symbolicName);
 			}
-
-			if(evt.isMetaDown())
-			{
-				keyString.append(macOS ? 'C' : 'M');
-				appendPlus = true;
-			}
-
-			// don't want Shift+'d' recorded as S+D
-			if(evt.getID() != KeyEvent.KEY_TYPED && evt.isShiftDown())
-			{
-				keyString.append('S');
-				appendPlus = true;
-			}
-
-			if(appendPlus)
-				keyString.append('+');
-
-			int keyCode = evt.getKeyCode();
-
-			String symbolicName = getSymbolicName(keyCode);
-
-			if(symbolicName == null)
+			else if(evt.getID() == KeyEvent.KEY_RELEASED)
 				return;
-
-			keyString.append(symbolicName);
 
 			setText(keyString.toString());
 			updateAssignedTo(keyString.toString());
 		}
 
 		private boolean macOS = (System.getProperty("os.name")
-			.indexOf("MacOS") != -1);
+			.indexOf("Mac") != -1);
 	}
 
 	class ActionHandler implements ActionListener

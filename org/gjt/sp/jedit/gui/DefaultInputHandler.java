@@ -379,6 +379,6 @@ public class DefaultInputHandler extends InputHandler
 
 	static
 	{
-		macOS = (System.getProperty("os.name").indexOf("MacOS") != -1);
+		macOS = (System.getProperty("os.name").indexOf("Mac") != -1);
 	}
 }

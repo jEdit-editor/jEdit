@@ -87,8 +87,8 @@ void writeResultsForFile( node)
     if(node == null) return;
     childCount = node.getChildCount();
     if( childCount == 0) return;
-    ++fileCount;
-    hitCount += childCount;
+    ++super.fileCount;
+    super.hitCount += childCount;
     obj = node.getUserObject();
     sb.setLength(0);
     sb.append("Results for file:\n");
