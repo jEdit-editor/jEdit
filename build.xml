@@ -40,6 +40,7 @@
 				<include name="org/gjt/sp/util/**/*.class"/>
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
 				<include name="org/gjt/sp/jedit/icons/*.gif"/>
+				<include name="org/gjt/sp/jedit/icons/*.jpg"/>
 				<include name="org/gjt/sp/jedit/tips/*.html"/>
 				<include name="org/gjt/sp/jedit/*.props"/>
 
@@ -79,7 +80,7 @@
 	<target name="docs-pdf-openjade">
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
-			<arg value="jeditprint.xsl"/>
+			<arg value="jeditprint.dsl"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
 			<arg value="/usr/share/sgml/xml.dcl"/>
@@ -101,7 +102,7 @@
 	<target name="docs-pdf-openjade-a4">
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
-			<arg value="jeditprint-a4.xsl"/>
+			<arg value="jeditprint-a4.dsl"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
 			<arg value="/usr/share/sgml/xml.dcl"/>
