@@ -154,7 +154,6 @@ public class BufferTabs extends JTabbedPane
 	// private members
 	private EditPane editPane;
 	private Vector buffers;
-	private boolean removing;
 	private boolean updating;
 
 	private static ImageIcon newDirtyIcon, newIcon, dirtyIcon, normalIcon;
@@ -189,20 +188,7 @@ public class BufferTabs extends JTabbedPane
 	{
 		public void stateChanged(ChangeEvent evt)
 		{
-			if(updating)
-				return;
-
-			int index = getSelectedIndex();
-			Buffer buffer = jEdit.getFirstBuffer();
-			while(buffer != null)
-			{
-				if(index == 0)
-					break;
-				buffer = buffer.getNext();
-				index--;
-			}
-
-			if(getComponentCount() == 0)
+			if(updating || getComponentCount() == 0)
 				return;
 
 			Magic comp = (Magic)getSelectedComponent();

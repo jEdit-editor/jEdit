@@ -229,20 +229,20 @@ public abstract class InputHandler extends KeyAdapter
 		}
 	}
 
-	// private members
-	private View view;
-	private EditAction inputAction;
-	private EditAction grabAction;
-	private boolean repeat;
-	private int repeatCount;
-	private InputHandler.MacroRecorder recorder;
+	// protected members
+	protected View view;
+	protected EditAction inputAction;
+	protected EditAction grabAction;
+	protected boolean repeat;
+	protected int repeatCount;
+	protected InputHandler.MacroRecorder recorder;
 
 	/**
 	 * If a key is being grabbed, this method should be called with
 	 * the appropriate key event. It executes the grab action with
 	 * the typed character as the parameter.
 	 */
-	private void handleGrabAction(KeyEvent evt)
+	protected void handleGrabAction(KeyEvent evt)
 	{
 		// Clear it *before* it is executed so that executeAction()
 		// resets the repeat count
@@ -278,6 +278,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/05/24 07:56:05  sp
+ * bug fixes
+ *
  * Revision 1.6  2000/05/23 04:04:52  sp
  * Marker highlight updates, next/prev-marker actions
  *

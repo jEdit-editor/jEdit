@@ -31,6 +31,8 @@ JEDIT 2.5 VERSION HISTORY
 - Gutter highlight tool tips didn't work (this bug was never encountered
   in practice since no plugins actually used gutter highlights)
 - Fixed possible NPE in focus handling code
+- Mode option pane didn't save settings sometimes
+- Tab size setting in mode XML files was ignored
 
 * Version 2.5pre3
 

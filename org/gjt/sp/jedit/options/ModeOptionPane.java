@@ -95,6 +95,8 @@ public class ModeOptionPane extends AbstractOptionPane
 
 	protected void _save()
 	{
+		saveMode();
+
 		for(int i = 0; i < modeProps.length; i++)
 		{
 			modeProps[i].save();
@@ -280,6 +282,9 @@ public class ModeOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/05/24 07:56:05  sp
+ * bug fixes
+ *
  * Revision 1.2  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *

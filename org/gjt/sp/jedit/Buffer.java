@@ -180,8 +180,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 					_view = _view.getNext();
 				}
 
-				propertiesChanged();
 				setMode();
+				propertiesChanged();
 				EditBus.addToBus(Buffer.this);
 
 				// send some EditBus messages
@@ -1810,6 +1810,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.152  2000/05/24 07:56:04  sp
+ * bug fixes
+ *
  * Revision 1.151  2000/05/22 12:05:45  sp
  * Markers are highlighted in the gutter, bug fixes
  *

@@ -249,8 +249,6 @@ public class JEditTextArea extends JComponent
 			updateScrollBars();
 		painter.repaint();
 		gutter.repaint();
-
-		fireScrollEvent(ScrollEvent.VERTICAL);
 	}
 
 	/**
@@ -296,8 +294,6 @@ public class JEditTextArea extends JComponent
 		if(horizontalOffset != horizontal.getValue())
 			updateScrollBars();
 		painter.repaint();
-
-		fireScrollEvent(ScrollEvent.HORIZONTAL);
 	}
 
 	/**
@@ -330,11 +326,6 @@ public class JEditTextArea extends JComponent
 			painter.repaint();
 			gutter.repaint();
 		}
-
-		if(vertChanged)
-			fireScrollEvent(ScrollEvent.VERTICAL);
-		if(horizChanged)
-			fireScrollEvent(ScrollEvent.HORIZONTAL);
 
 		return vertChanged || horizChanged;
 	}
@@ -1401,24 +1392,6 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Adds a scroll listener to this text area.
-	 * @param listener The listener
-	 */
-	public final void addScrollListener(ScrollListener listener)
-	{
-		listenerList.add(ScrollListener.class,listener);
-	}
-
-	/**
-	 * Removes a scroll listener from this text area.
-	 * @param listener The listener
-	 */
-	public final void removeScrollListener(ScrollListener listener)
-	{
-		listenerList.remove(ScrollListener.class,listener);
-	}
-
-	/**
 	 * Called by the AWT when this component is added to a parent.
 	 * Adds document listener.
 	 */
@@ -1469,7 +1442,42 @@ public class JEditTextArea extends JComponent
 	}
 
 	// package-private members
+
 	Segment lineSegment;
+
+	// protected members
+
+	protected void processKeyEvent(KeyEvent evt)
+	{
+		View view = EditAction.getView(evt);
+
+		// Ignore
+		if(view.isClosed())
+			return;
+
+		if(view.getRootPane().getGlassPane().isVisible())
+		{
+			super.processKeyEvent(evt);
+			return;
+		}
+
+		InputHandler inputHandler = view.getInputHandler();
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_TYPED:
+			inputHandler.keyTyped(evt);
+			break;
+		case KeyEvent.KEY_PRESSED:
+			inputHandler.keyPressed(evt);
+			break;
+		case KeyEvent.KEY_RELEASED:
+			inputHandler.keyReleased(evt);
+			break;
+		}
+
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
+	}
 
 	// private members
 	private static String CENTER = "center";
@@ -1540,32 +1548,6 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	private void fireScrollEvent(int id)
-	{
-		ScrollEvent evt = null;
-		Object[] listeners = listenerList.getListenerList();
-		for(int i = listeners.length - 2; i >= 0; i--)
-		{
-			if(listeners[i] == ScrollListener.class)
-			{
-				if(evt == null)
-					evt = new ScrollEvent(this,id);
-				ScrollListener listener = (ScrollListener)listeners[i+1];
-				switch(id)
-				{
-				case ScrollEvent.VERTICAL:
-					listener.verticalScrollUpdate(evt);
-					break;
-				case ScrollEvent.HORIZONTAL:
-					listener.horizontalScrollUpdate(evt);
-					break;
-				default:
-					throw new InternalError("Invalid event id");
-				}
-			}
-		}
-	}
-
 	private void updateBracketHighlight(int newCaretPosition)
 	{
 		if(!painter.isBracketHighlightEnabled())
@@ -1631,38 +1613,6 @@ public class JEditTextArea extends JComponent
 			gutter.invalidateLineRange(line,firstLine + visibleLines);
 			updateScrollBars();
 		}
-	}
-
-	private void processKeyEvent(KeyEvent evt)
-	{
-		View view = EditAction.getView(evt);
-
-		// Ignore
-		if(view.isClosed())
-			return;
-
-		if(view.getRootPane().getGlassPane().isVisible())
-		{
-			super.processKeyEvent(evt);
-			return;
-		}
-
-		InputHandler inputHandler = view.getInputHandler();
-		switch(evt.getID())
-		{
-		case KeyEvent.KEY_TYPED:
-			inputHandler.keyTyped(evt);
-			break;
-		case KeyEvent.KEY_PRESSED:
-			inputHandler.keyPressed(evt);
-			break;
-		case KeyEvent.KEY_RELEASED:
-			inputHandler.keyReleased(evt);
-			break;
-		}
-
-		if(!evt.isConsumed())
-			super.processKeyEvent(evt);
 	}
 
 	// private members
@@ -2229,6 +2179,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.67  2000/05/24 07:56:05  sp
+ * bug fixes
+ *
  * Revision 1.66  2000/05/23 04:04:52  sp
  * Marker highlight updates, next/prev-marker actions
  *
