@@ -142,6 +142,8 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 	public void dispose()
 	{
+		GUIUtilities.saveGeometry(this,"hypersearch");
+
 		if(thread != null)
 		{
 			thread.stop();
@@ -167,7 +169,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			thread.stop();
 
 		EditBus.removeFromBus(this);
-		GUIUtilities.saveGeometry(this,"hypersearch");
 		dispose();
 	}
 	// end EnhancedDialog implementation
@@ -481,6 +482,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.64  2000/06/16 10:11:06  sp
+ * Bug fixes ahoy
+ *
  * Revision 1.63  2000/06/03 07:28:26  sp
  * User interface updates, bug fixes
  *

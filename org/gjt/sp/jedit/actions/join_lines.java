@@ -41,7 +41,7 @@ public class join_lines extends EditAction
 		Element lineElement = map.getElement(lineNo);
 		int start = lineElement.getStartOffset();
 		int end = lineElement.getEndOffset();
-		if(end >= buffer.getLength())
+		if(end > buffer.getLength())
 		{
 			view.getToolkit().beep();
 			return;

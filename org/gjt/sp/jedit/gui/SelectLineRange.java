@@ -88,20 +88,16 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		}
 
 		Buffer buffer = view.getBuffer();
+		Element map = buffer.getDefaultRootElement();
 
-		Element startElement = buffer.getDefaultRootElement()
-			.getElement(startLine);
-		Element endElement = buffer.getDefaultRootElement()
-			.getElement(endLine);
-		
-		if(startElement == null || endElement == null)
+		if(startLine < 0 || endLine >= map.getElementCount())
 		{
 			getToolkit().beep();
 			return;
 		}
 
-		int startOffset = startElement.getStartOffset();
-		int endOffset = endElement.getEndOffset() - 1;
+		int startOffset = map.getElement(startLine).getStartOffset();
+		int endOffset = map.getElement(endLine).getEndOffset() - 1;
 
 		view.getTextArea().select(startOffset,endOffset);
 
@@ -172,6 +168,9 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/06/16 10:11:06  sp
+ * Bug fixes ahoy
+ *
  * Revision 1.14  2000/06/04 08:57:35  sp
  * GUI updates, bug fixes
  *

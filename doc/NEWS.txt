@@ -67,7 +67,7 @@ the first/last visible line.
 If the '-background' switch is specified on the command line, jEdit will
 stay resident and continue running even if no views are open. On systems
 with lots of free memory, this improves performance because jEdit only
-needs to be loaded once.
+needs to load once.
 
 -- Slava Pestov
 <sp@gjt.org>

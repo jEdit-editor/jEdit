@@ -124,6 +124,13 @@ public class SearchDialog extends EnhancedDialog
 
 		pack();
 
+		// don't remember the width and height of the dialog box,
+		// so that people upgrading from jEdit 2.3 don't get a
+		// dialog box that is way too small (since its size and
+		// layout has changed over the versions, a size that used
+		// to make sense might no longer)
+		jEdit.unsetProperty("search.width");
+		jEdit.unsetProperty("search.height");
 		GUIUtilities.loadGeometry(this,"search");
 		show();
 	}
@@ -179,6 +186,7 @@ public class SearchDialog extends EnhancedDialog
 	{
 		if(keepDialog.isSelected())
 			return;
+		GUIUtilities.saveGeometry(this,"search");
 		dispose();
 	}
 
@@ -200,7 +208,7 @@ public class SearchDialog extends EnhancedDialog
 			Object source = evt.getSource();
 			Buffer buffer = view.getBuffer();
 			if(source == cancel)
-				dispose();
+				cancel();
 			else if(source == findBtn)
 			{
 				ok();
@@ -243,6 +251,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/06/16 10:11:06  sp
+ * Bug fixes ahoy
+ *
  * Revision 1.13  2000/06/03 07:28:26  sp
  * User interface updates, bug fixes
  *
@@ -272,8 +283,5 @@ public class SearchDialog extends EnhancedDialog
  *
  * Revision 1.4  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.3  1999/06/09 07:28:10  sp
- * Multifile search and replace tweaks, removed console.html
  *
  */

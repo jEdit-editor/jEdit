@@ -22,13 +22,21 @@ package org.gjt.sp.jedit.actions;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.View;
 
 public class select_paragraph extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		JEditTextArea textArea = getView(evt).getTextArea();
+		View view = getView(evt);
+		JEditTextArea textArea = view.getTextArea();
 		int caretLine = textArea.getCaretLine();
+
+		if(textArea.getLineLength(caretLine) == 0)
+		{
+			view.getToolkit().beep();
+			return;
+		}
 
 		int start = caretLine;
 		int end = caretLine;

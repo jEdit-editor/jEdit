@@ -1,38 +1,59 @@
 JEDIT TO DO
 
-- Update plugin manager download screenshot
-- On some JDKs, the find and console toolbar text fields do not consume
-  key events it seems, so pressing backspace, for example, will delete
-  a character both in the text field and main text area. I'm not sure
-  if there is a way to fix this.
+* jEdit 2.6
 
-Later:
+Major stuff:
 
+- Bracket matching code doesn't pay attention to comments, string literals,
+  etc. It would be nice if its parser was a bit more intelligent
+- FTP VFS improvements:
+  - threaded browser with bookmarks
+  - improve symlink handling in browser
+  - display FTP responses in status bar
+  - filename filters in FTP browser
+- Printing improvements:
+  - option pane for setting margins, print font, toggling header/footer
+  - 'Print Selection' command
+  - option for printing line numbers
+- Adding macros to context menu and toolbar:
+  - Macros become full-blown actions; macro-<xxx>. List is maintained in
+    Macros class; they are *not* added to jEdit's action list
+  - Some stuff will be simplified if an EditAction.getLabel() method is
+    added
+- Improve rectangular selections:
+  - end of selection can be last the end of the line
+  - hack offsetToX()/xToOffset() to accept 'pastEOL' parameter, which
+    toggles 'virtual' spaces after the end of the line
+  - JEditTextArea.getSelectedTextOnLine(int line) method returns selection
+    on line 'line' (no virtual spaces at the end)
 - Documentation:
   - document view, edit pane, buffer API
   - how to write text area and gutter hilites
   - write VFS developer docs
   - document EditBus plugin
+- Pluggable input handlers
+- 'autosave' session created by autosave thread, deleted on exit. When jEdit
+  is started, it checks for this session, if it exists, it prompts if the
+  files should be recovered
+
+Minor tweaks:
+
+- Plugin manager should remove files for real, instead of moving them to
+  a 'backup' directory
 - Switch to DocBook 4.0 for the documentation
 - Prettify options dialog boxes with JLF guidelines
-- Improve symlink handling in FTP browser
 - Buffer-local property to disable marker persistance
+- ModeComboBox class
+- Maybe simplify threaded I/O code a bit
+
+* jEdit 3.0 and later
+
 - Word wrap
 - Abortable I/O
-- FtpVFS should display detailed messages in the status bar
-- get rid of EnhancedDialog, EnhancedFrame; write EnterEscapeHandler
-  and EnterEscapeContainer classes
-- ModeComboBox class
-- -session= parameter should work even if files were specified on the
-  command line. More than one -session parameter should be supported
-- Pluggable input handlers
 - Folding
-- Add macros to context menu and toolbar
-- Improve FtpBrowser; add bookmarks, filtering, make it threaded, etc
 - XMode:
   - better error reporting
   - regexps
-  - MARK_PREVIOUS should mark to lastOffset not lastKeyword
 - New document model
 - Reverse search
 - i18n support - bidi, input methods, localizable GUI, etc
@@ -41,16 +62,12 @@ Later:
 - Mode grammar editor
 - Set dirty to false when all undos undone (will be easy with new document
   model)
-- Bracket matching code doesn't pay attention to comments, string literals,
-  etc. It would be nice if its parser was a bit more intelligent
 - New preferences system for easier storage of non-string values
-- Improve rectangular selections
-- Print option pane for changing printing settings
-- 'Print Selection' command
-- 'autosave' session created by autosave thread, list all autosaved files
-  in one dialog box
+- -session= parameter should work even if files were specified on the
+  command line. More than one -session parameter should be supported
 
-When we switch to Java 2:
+* When we switch to Java 2
+
 - drag and drop
 - Use collections
 - Enhanced printing

@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.05.06.00";
+		return "02.05.07.00";
 	}
 
 	/**
@@ -2303,6 +2303,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.248  2000/06/16 10:11:06  sp
+ * Bug fixes ahoy
+ *
  * Revision 1.247  2000/06/05 08:22:26  sp
  * bug fixes
  *

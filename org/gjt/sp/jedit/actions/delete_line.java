@@ -42,7 +42,7 @@ public class delete_line extends EditAction
 		{
 			int start = lineElement.getStartOffset();
 			int end = lineElement.getEndOffset();
-			if(end >= buffer.getLength())
+			if(end > buffer.getLength())
 			{
 				if(start != 0)
 					start--;

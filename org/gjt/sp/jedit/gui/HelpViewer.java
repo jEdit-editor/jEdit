@@ -51,7 +51,10 @@ public class HelpViewer extends EnhancedFrame
 		if(helpViewer == null)
 			helpViewer = new HelpViewer(url);
 		else
+		{
+			helpViewer.setVisible(true);
 			helpViewer.gotoURL(url,true);
+		}
 	}
 
 	/**
@@ -172,10 +175,8 @@ public class HelpViewer extends EnhancedFrame
 	public void cancel()
 	{
 		GUIUtilities.saveGeometry(this,"helpviewer");
-		if(helpViewer == this)
-			helpViewer = null;
 		viewer.setText("");
-		dispose();
+		setVisible(false);
 	}
 
 	// private members
@@ -250,3 +251,11 @@ public class HelpViewer extends EnhancedFrame
 		}
 	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.23  2000/06/16 10:11:06  sp
+ * Bug fixes ahoy
+ *
+ */
