@@ -42,32 +42,35 @@ public class PluginDownloadThread extends Thread
 
 	public void run()
 	{
-		try
+		for(int i = 0; i < urls.length; i++)
 		{
-			for(int i = 0; i < urls.length; i++)
+			try
 			{
-				progress.downloading(urls[i]);
-				String path = download(urls[i]);
+				String url = urls[i];
+				String fileName = PluginManagerPlugin
+					.getLastPathComponent(url);
+				progress.downloading(fileName);
+				String path = download(fileName,url);
 
-				progress.installing(urls[i]);
+				progress.installing(fileName);
 				install(path,dirs[i]);
 
 				progress.done(true);
 			}
+			catch(IOException io)
+			{
+				String[] args = { io.getMessage() };
+				GUIUtilities.error(view,"ioerror",args);
 
-			return;
-		}
-		catch(IOException io)
-		{
-			String[] args = { io.getMessage() };
-			GUIUtilities.error(view,"ioerror",args);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
+				progress.done(false);
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
 
-		progress.done(false);
+				progress.done(false);
+			}
+		}
 	}
 
 	// private members
@@ -76,13 +79,13 @@ public class PluginDownloadThread extends Thread
 	private String[] urls;
 	private String[] dirs;
 
-	private String download(String url) throws Exception
+	private String download(String fileName, String url) throws Exception
 	{
 		URLConnection conn = new URL(url).openConnection();
 		progress.setMaximum(Math.max(0,conn.getContentLength()));
 
 		String path = MiscUtilities.constructPath(PluginManagerPlugin
-			.getDownloadDir(),new File(url).getName());
+			.getDownloadDir(),fileName);
 
 		copy(conn.getInputStream(),new FileOutputStream(path),true,true);
 

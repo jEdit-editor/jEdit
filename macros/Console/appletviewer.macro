@@ -2,4 +2,4 @@
 # Note that it executes 'appletviewer $n.html', so executing it in
 # Bob.java will run appletviewer on Bob.html.
 
-console@appletviewer $n.html
+console@appletviewer file://$d/$n.html

@@ -53,7 +53,6 @@ jedit_pkgs = jedit_pkg
     "org/gjt/sp/jedit/gui"
     "org/gjt/sp/jedit/msg"
     "org/gjt/sp/jedit/options"
-    "org/gjt/sp/jedit/proto/jeditdocs"
     "org/gjt/sp/jedit/proto/jeditresource"
     "org/gjt/sp/jedit/search"
     "org/gjt/sp/jedit/syntax"
@@ -74,6 +73,17 @@ jar = "jedit.jar";
 
 "all": jar;
 
+"everything":;
+{
+    exec cmd_javac (glob (join jedit_pkgs, "/*.java"));
+    exec cmd_jar "cmf0" jedit_mf "jedit.jar" (glob
+        (join pkgs, "/*.class")
+        (join pkgs, "/*.gif")
+        (join pkgs, "/*.jpg")
+        (join pkgs, "/*.props")
+        "org/gjt/sp/jedit/default.abbrevs");
+}
+		      
 "%.class" : "%.java";
 {
     exec cmd_javac <;

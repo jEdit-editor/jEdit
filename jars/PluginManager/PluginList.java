@@ -121,12 +121,28 @@ public class PluginList
 				EditPlugin plugin = plugins[i];
 				JARClassLoader loader = (JARClassLoader)plugin
 					.getClass().getClassLoader();
-				if(new File(loader.getPath()).getName().equals(jar))
+				if(PluginManagerPlugin.getLastPathComponent(
+					loader.getPath()).equals(jar))
 				{
 					clazz = plugin.getClass().getName();
 					currVersion = jEdit.getProperty(
 						"plugin." + clazz + ".version");
 					break;
+				}
+			}
+
+			if(clazz != null)
+			{
+				EditPlugin.Broken[] broken = jEdit.getBrokenPlugins();
+				for(int i = 0; i < broken.length; i++)
+				{
+					EditPlugin.Broken b = broken[i];
+					if(b.jar.equals(jar))
+					{
+						clazz = b.clazz;
+						currVersion = jEdit.getProperty(
+							"plugin." + clazz + ".version");
+					}
 				}
 			}
 		}

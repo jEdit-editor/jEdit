@@ -194,7 +194,11 @@ public class UpdatePluginsDialog extends EnhancedDialog
 				PluginList.Plugin plugin = (PluginList.Plugin)selected;
 				name.setText(plugin.name);
 				author.setText(plugin.author);
-				currVersion.setText(plugin.currVersion);
+				if(plugin.currVersion == null)
+					currVersion.setText(jEdit.getProperty(
+						"plugin-manager.info.unknown"));
+				else
+					currVersion.setText(plugin.currVersion);
 				latestVersion.setText(plugin.latestVersion);
 				updated.setText(plugin.updated);
 				requires.setText(plugin.requires);
@@ -237,9 +241,11 @@ public class UpdatePluginsDialog extends EnhancedDialog
 				String jar = plugin.jar;
 				for(int j = 0; j < installed.length; j++)
 				{
-					if(jar.equals(installed[j])
-						&& plugin.currVersion != null
-						&& MiscUtilities.compareVersions(
+					if(!jar.equals(installed[j]))
+						continue;
+
+					if(plugin.currVersion == null ||
+						MiscUtilities.compareVersions(
 						plugin.currVersion,
 						plugin.latestVersion) < 0)
 					{

@@ -183,7 +183,7 @@ public class PluginManager extends EnhancedDialog
 		public String toString()
 		{
 			if(clazz == null)
-				return new File(path).getName();
+				return PluginManagerPlugin.getLastPathComponent(path);
 			else
 			{
 				String name = jEdit.getProperty("plugin."
@@ -215,6 +215,12 @@ public class PluginManager extends EnhancedDialog
 						.getUserObject();
 					if(last instanceof Entry)
 						plugins.addElement(((Entry)last).path);
+				}
+
+				if(plugins.size() == 0)
+				{
+					getToolkit().beep();
+					return;
 				}
 
 				String[] array = new String[plugins.size()];

@@ -76,6 +76,15 @@ public class PluginManagerPlugin extends EBPlugin
 		}
 	}
 
+	public static String getLastPathComponent(String path)
+	{
+		int index = path.lastIndexOf(File.separatorChar);
+		if(index == -1)
+			index = path.lastIndexOf('/');
+
+		return path.substring(index + 1);
+	}
+
 	public static String[] getPlugins()
 	{
 		Vector installed = new Vector();

@@ -102,7 +102,7 @@ public class PluginDownloadProgress extends JDialog
 	{
 		this.ok |= ok;
 
-		if(done == count || !ok)
+		if(done == count)
 		{
 			SwingUtilities.invokeLater(new Runnable()
 			{
