@@ -185,7 +185,8 @@ class StyleTableModel extends AbstractTableModel
 	{
 		styleChoices.addElement(new StyleChoice(jEdit.getProperty(label),
 			property,
-			GUIUtilities.parseStyle(jEdit.getProperty(property))));
+			GUIUtilities.parseStyle(jEdit.getProperty(property),
+			"Dialog",12)));
 	}
 
 	static class StyleChoice
@@ -205,14 +206,11 @@ class StyleTableModel extends AbstractTableModel
 	static class StyleRenderer extends JLabel
 		implements TableCellRenderer
 	{
-		Font originalFont;
-
 		public StyleRenderer()
 		{
 			setOpaque(true);
 			setBorder(StyleOptionPane.noFocusBorder);
 			setText("Hello World");
-			originalFont = getFont();
 		}
 	
 		// TableCellRenderer implementation
@@ -236,7 +234,7 @@ class StyleTableModel extends AbstractTableModel
 					setBackground(GUIUtilities.parseColor(
 						jEdit.getProperty("view.bgColor")));
 				}
-				setFont(style.getStyledFont(originalFont));
+				setFont(style.getFont());
 			}
 
 			setBorder((cellHasFocus) ? UIManager.getBorder(
@@ -264,11 +262,11 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		panel.setBorder(new EmptyBorder(0,0,12,0));
 		panel.add(italics = new JCheckBox(
 			jEdit.getProperty("style-editor.italics")));
-		italics.setSelected(style.isItalic());
+		italics.setSelected(style.getFont().isItalic());
 		panel.add(Box.createHorizontalStrut(2));
 		panel.add(bold = new JCheckBox(
 			jEdit.getProperty("style-editor.bold")));
-		bold.setSelected(style.isBold());
+		bold.setSelected(style.getFont().isBold());
 		panel.add(Box.createHorizontalStrut(12));
 		panel.add(new JLabel(jEdit.getProperty("style-editor.fgColor")));
 		panel.add(Box.createHorizontalStrut(12));
@@ -344,19 +342,16 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		if(!okClicked)
 			return null;
 
-		if (bgColor.getBackground().equals(GUIUtilities.parseColor(jEdit.getProperty("view.bgColor"))))
-		{
-			return new SyntaxStyle(fgColor.getBackground(),null,
-					italics.isSelected(),
-					bold.isSelected());
-		}
-		else
-		{
-			return new SyntaxStyle(fgColor.getBackground(),
-					bgColor.getBackground(),
-					italics.isSelected(),
-					bold.isSelected());
-		}
+		Color background = bgColor.getBackground();
+
+		if (background.equals(GUIUtilities.parseColor(jEdit.getProperty("view.bgColor"))))
+			background = null;
+
+		return new SyntaxStyle(fgColor.getBackground(),background,
+				new Font("Dialog",
+				(italics.isSelected() ? Font.ITALIC : 0)
+				| (bold.isSelected() ? Font.BOLD : 0),
+				12));
 	}
 
 	// private members
@@ -372,6 +367,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.28  2001/07/15 09:55:14  sp
+ * AWT/2D text render code split almost finished
+ *
  * Revision 1.27  2001/02/05 09:15:30  sp
  * Improved shortcut option pane, various other 31337 stuff
  *

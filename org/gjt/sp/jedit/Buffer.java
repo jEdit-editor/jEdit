@@ -242,6 +242,11 @@ public class Buffer extends PlainDocument implements EBComponent
 		int lineNumberDigits = (int)Math.ceil(Math.log(
 			lineCount) / Math.log(10));
 
+		TextRenderingManager renderer = TextRenderingManager
+			.createTextRenderingManager();
+
+		renderer.configure(false,false);
+
 		for(int i = 0; i < lineCount; i++)
 		{
 			if(gfx == null)
@@ -249,6 +254,8 @@ public class Buffer extends PlainDocument implements EBComponent
 				page++;
 
 				gfx = job.getGraphics();
+				renderer.setupGraphics(gfx);
+
 				gfx.setFont(font);
 				fm = gfx.getFontMetrics();
 				lineHeight = fm.getHeight();
@@ -285,7 +292,8 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 
 			paintSyntaxLine(i,gfx,x,y,expander,style,color,
-				Color.white,styles,new AWTTextRenderingManager());
+				font,Color.black,Color.white,styles,
+				renderer);
 
 			int bottomOfPage = pageHeight - bottomMargin - lineHeight;
 			if(printFooter)
@@ -703,7 +711,7 @@ public class Buffer extends PlainDocument implements EBComponent
 					// and clearing of the dirty flag
 					try
 					{
-						Buffer.this.writeLock();
+						Buffer.this._writeLock();
 
 						if(autosaveFile != null)
 							autosaveFile.delete();
@@ -722,7 +730,7 @@ public class Buffer extends PlainDocument implements EBComponent
 					}
 					finally
 					{
-						Buffer.this.writeUnlock();
+						Buffer.this._writeUnlock();
 					}
 
 					if(!getPath().equals(oldPath))
@@ -741,6 +749,17 @@ public class Buffer extends PlainDocument implements EBComponent
 		});
 
 		return true;
+	}
+
+	// these are only public so that an inner class can access them!
+	public void _writeLock()
+	{
+		writeLock();
+	}
+
+	public void _writeUnlock()
+	{
+		writeUnlock();
 	}
 
 	/**
@@ -1736,8 +1755,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public int paintSyntaxLine(int lineIndex, Graphics gfx, int _x, int _y,
 		TabExpander expander, boolean style, boolean color,
-		Color background, SyntaxStyle[] styles,
-		TextRenderingManager renderer)
+		Font defaultFont, Color foreground, Color background,
+		SyntaxStyle[] styles, TextRenderingManager renderer)
 	{
 		float x = (float)_x;
 		float y = (float)_y;
@@ -1768,9 +1787,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		// the above should leave the text in the 'seg' segment
 		char[] text = seg.array;
 
-		Font defaultFont = gfx.getFont();
-		Color defaultColor = gfx.getColor();
-
 		int off = seg.offset;
 
 		for(;;)
@@ -1782,23 +1798,23 @@ public class Buffer extends PlainDocument implements EBComponent
 			Color bg = null;
 			if(id == Token.NULL)
 			{
-				gfx.setColor(defaultColor);
+				gfx.setColor(foreground);
 				gfx.setFont(defaultFont);
 			}
 			else
 			{
-				if(color)
-					bg = styles[id].getBackgroundColor();
-
 				if(style)
-					gfx.setFont(styles[id].getStyledFont(defaultFont));
+					gfx.setFont(styles[id].getFont());
 				else
 					gfx.setFont(defaultFont);
 
 				if(color)
+				{
+					bg = styles[id].getBackgroundColor();
 					gfx.setColor(styles[id].getForegroundColor());
+				}
 				else
-					gfx.setColor(defaultColor);
+					gfx.setColor(foreground);
 			}
 
 			int len = tokens.length;

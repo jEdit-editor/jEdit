@@ -27,7 +27,7 @@ public abstract class TextRenderingManager
 {
 	static final String JAVA2D_RENDER_CLASS = "org.gjt.sp.jedit.textarea.TextRenderingManager2D";
 
-	static TextRenderingManager createTextRenderingManager()
+	public static TextRenderingManager createTextRenderingManager()
 	{
 		if(java2d)
 		{
@@ -53,9 +53,9 @@ public abstract class TextRenderingManager
 			return new AWTTextRenderingManager();
 	}
 
-	void setupGraphics(Graphics g) {}
+	public void setupGraphics(Graphics g) {}
 
-	void fontChanged(JEditTextArea textArea) {}
+	public void configure(boolean antiAlias, boolean fracFontMetrics) {}
 
 	public float drawChars(char[] text, int off, int len, Graphics g,
 		float x, float y, TabExpander e, Color background)
@@ -142,10 +142,76 @@ public abstract class TextRenderingManager
 		return newX - x;
 	}
 
-	protected abstract float _drawCharsAndGetWidth(char[] text, int start,
-		int len, Graphics g, float x, float y);
+	public int xToOffset(char[] text, int off, int len, Font font, float x0,
+		TabExpander e, boolean round, float[] widthArray)
+	{
+		int flushLen = 0;
+		int flushIndex = off;
 
-	protected abstract float _getWidth(char[] text, int start, int len, Font font);
+		int end = off + len;
+
+		float width = widthArray[0];
+
+		for(int i = off; i < end; i++)
+		{
+			if(text[i] == '\t')
+			{
+				if(flushLen > 0)
+				{
+					float newWidth = _getWidth(text,flushIndex,
+						flushLen,font);
+					if(x <= width + newWidth)
+					{
+						return _xToOffset(text,flushIndex,
+							flushLen,font,x - width,
+							round) - off;
+					}
+					else
+						width += newWidth;
+
+					flushLen = 0;
+				}
+
+				flushIndex = i + 1;
+
+				float newWidth = e.nextTabStop(width,i - off) - width;
+				if(x <= width + newWidth)
+				{
+					if(round || (x - width) < (width + newWidth - x))
+						return i;
+					else
+						return i + 1;
+				}
+				else
+					width += newWidth;
+			}
+			else
+				flushLen++;
+		}
+
+		if(flushLen > 0)
+		{
+			float newWidth = _getWidth(text,flushIndex,flushLen,font);
+			if(x <= width + newWidth)
+			{
+				return _xToOffset(text,flushIndex,flushLen,font,
+					x - width,round) - off;
+			}
+			else
+				width += newWidth;
+		}
+
+		widthArray[0] = width;
+		return -1;
+	}
+
+	abstract float _drawChars(char[] text, int start, int len, Graphics g,
+		float x, float y);
+
+	abstract float _getWidth(char[] text, int start, int len, Font font);
+
+	abstract int _offsetToX(char[] text, int start, int len, Font font, float x,
+		boolean round);
 
 	static boolean java2d;
 

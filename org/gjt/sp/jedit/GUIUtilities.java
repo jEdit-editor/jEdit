@@ -592,9 +592,12 @@ public class GUIUtilities
 	/**
 	 * Converts a style string to a style object.
 	 * @param str The style string
+	 * @param family Style strings only specify font style, not font family
+	 * @param size Style strings only specify font style, not font family
 	 * @exception IllegalArgumentException if the style is invalid
+	 * @since jEdit 3.2pre6
 	 */
-	public static SyntaxStyle parseStyle(String str)
+	public static SyntaxStyle parseStyle(String str, String family, int size)
 		throws IllegalArgumentException
 	{
 		Color fgColor = Color.black;
@@ -630,7 +633,10 @@ public class GUIUtilities
 				throw new IllegalArgumentException(
 					"Invalid directive: " + s);
 		}
-		return new SyntaxStyle(fgColor,bgColor,italic,bold);
+		return new SyntaxStyle(fgColor,bgColor,
+			new Font(family,
+			(italic ? Font.ITALIC : 0) | (bold ? Font.BOLD : 0),
+			size));
 	}
 
 	/**
@@ -646,10 +652,10 @@ public class GUIUtilities
 		{
 			buf.append(" bgColor:" + getColorHexString(style.getBackgroundColor()));
 		}
-		if(!style.isPlain())
+		if(!style.getFont().isPlain())
 		{
-			buf.append(" style:" + (style.isItalic() ? "i" : "")
-				+ (style.isBold() ? "b" : ""));
+			buf.append(" style:" + (style.getFont().isItalic() ? "i" : "")
+				+ (style.getFont().isBold() ? "b" : ""));
 		}
 
 		return buf.toString();
@@ -729,8 +735,14 @@ public class GUIUtilities
 // 			+ ": setting geometry to " + required);
 		win.setBounds(required);
 
-		if(File.separatorChar == '/') // ie, Unix
+		if(File.separatorChar == '/'
+			&& System.getProperty("java.version").compareTo("1.2") < 0)
+		{
+			win.setBounds(required);
 			new UnixWorkaround(win,name,desired,required);
+		}
+		else
+			win.setBounds(desired);
 	}
 
 	static class UnixWorkaround

@@ -32,12 +32,8 @@ class TextRenderingManager2D extends TextRenderingManager
 		((Graphics2D)g).setRenderingHints(renderingHints);
 	}
 
-	void fontChanged(JEditTextArea textArea)
+	void configure(boolean antiAlias, boolean fracFontMetrics)
 	{
-		boolean antiAlias = textArea.getPainter().isAntiAliasEnabled();
-		boolean fracFontMetrics = textArea.getPainter()
-			.isFractionalFontMetricsEnabled();
-
 		Hashtable hints = new Hashtable();
 
 		if(antiAlias)
@@ -56,14 +52,17 @@ class TextRenderingManager2D extends TextRenderingManager
 		renderingHints = new RenderingHints(hints);
 		fontRenderContext = new FontRenderContext(null,antiAlias,
 			fracFontMetrics);
-		//fontRenderContext = ((Graphics2D)textArea.getPainter()
-		//	.getGraphics()).getFontRenderContext();
 	}
 
-	public float _drawCharsAndGetWidth(char[] text, int start, int len,
-		Graphics g, float x, float y)
+	float _drawChars(char[] text, int start, int len, Graphics _g,
+		float x, float y)
 	{
+		Graphics2D g = (Graphics2D)_g;
+
 		Font font = g.getFont();
+
+		// update it just in case
+		fontRenderContext = g.getFontRenderContext();
 
 		GlyphVector glyphs = font.createGlyphVector(fontRenderContext,
 			new String(text,start,len));
@@ -73,12 +72,23 @@ class TextRenderingManager2D extends TextRenderingManager
 		return (float)glyphs.getLogicalBounds().getWidth();
 	}
 
-	public float _getWidth(char[] text, int start, int len, Font font)
+	float _getWidth(char[] text, int start, int len, Font font)
 	{
 		GlyphVector glyphs = font.createGlyphVector(fontRenderContext,
 			new String(text,start,len));
 
 		return (float)glyphs.getLogicalBounds().getWidth();
+	}
+
+	int _offsetToX(char[] text, int start, int len, Font font, float x,
+		boolean round)
+	{
+		// this is slow!
+		TextLayout layout = new TextLayout(new String(text,start,len),font,
+			fontRenderContext);
+
+		TextHitInfo info = layout.hitTestChar(x,0);
+		return (round ? info.getInsertIndex() : info.getCharIndex());
 	}
 
 	// private members

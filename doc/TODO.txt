@@ -1,23 +1,25 @@
 TO DO
 
-+ would be nice to have before pre6:
++ before pre6:
 
+- edit server doesn't work
+- printing: syntax output doesn't use print font!!!
 - console: add go to console action
 - console 3.0: MUST FINISH!!!
-- new xToOffset()
 - mention using Macros.message() in macro-tips
 - reload: preserve caret position
 - finish duplicate shortcut code
+- caret status: center text, don't put it at the bottom
 
 + lower priority/later:
 
+- Java 1.3: pseudo-random window positioning?
 - installing source for already installed plugins
 - make XML plugin more respectable
 - FTP plugin: investigate soft links
 - FTP plugin: better error messages
 - FTP plugin: improve it in general before 3.2
-- get web start to work, and document differences between web start and
-  stand-alone version
+- document differences between web start and stand-alone version
 - next time i'm making an RPM, fix the shell script
 - jEditLauncher
 

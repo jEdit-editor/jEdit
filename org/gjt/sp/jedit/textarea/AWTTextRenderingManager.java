@@ -21,22 +21,43 @@ package org.gjt.sp.jedit.textarea;
 
 import java.awt.*;
 
-/**
- * This class may be used outside the textarea package.
- * @since jEdit 3.2pre6
- */
-public class AWTTextRenderingManager extends TextRenderingManager
+class AWTTextRenderingManager extends TextRenderingManager
 {
-	public float _drawCharsAndGetWidth(char[] text, int start, int len,
-		Graphics g, float x, float y)
+	float _drawChars(char[] text, int start, int len, Graphics g,
+		float x, float y)
 	{
 		g.drawChars(text,start,len,(int)x,(int)y);
 		return (float)g.getFontMetrics().charsWidth(text,start,len);
 	}
 
-	public float _getWidth(char[] text, int start, int len, Font font)
+	float _getWidth(char[] text, int start, int len, Font font)
 	{
 		return (float)Toolkit.getDefaultToolkit()
 			.getFontMetrics(font).charsWidth(text,start,len);
+	}
+
+	int _offsetToX(char[] text, int start, int len, Font font, float x,
+		boolean round)
+	{
+		int end = start + len;
+
+		FontMetrics fm = Toolkit.getDefaultToolkit()
+			.getFontMetrics(font);
+
+		int width = 0;
+
+		for(int i = start; i < end; i++)
+		{
+			int newWidth = fm.charWidth(text[i]);
+			if(x <= width + newWidth)
+			{
+				if(round || (x - width) < (width + newWidth - x))
+					return i;
+				else
+					return i + 1;
+			}
+		}
+
+		return -1;
 	}
 }

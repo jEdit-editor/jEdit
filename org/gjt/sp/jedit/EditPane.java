@@ -434,34 +434,50 @@ public class EditPane extends JPanel implements EBComponent
 	{
 		try
 		{
+			String family = jEdit.getProperty("view.font");
+			int size = Integer.parseInt(jEdit.getProperty("view.fontsize"));
+
 			SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
 
 			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment1"));
+				jEdit.getProperty("view.style.comment1"),
+				family,size);
 			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment2"));
+				jEdit.getProperty("view.style.comment2"),
+				family, size);
 			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal1"));
+				jEdit.getProperty("view.style.literal1"),
+				family,size);
 			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal2"));
+				jEdit.getProperty("view.style.literal2"),
+				family,size);
 			styles[Token.LABEL] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.label"));
+				jEdit.getProperty("view.style.label"),
+				family,size);
 			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword1"));
+				jEdit.getProperty("view.style.keyword1"),
+				family,size);
 			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword2"));
+				jEdit.getProperty("view.style.keyword2"),
+				family,size);
 			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword3"));
+				jEdit.getProperty("view.style.keyword3"),
+				family,size);
 			styles[Token.FUNCTION] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.function"));
+				jEdit.getProperty("view.style.function"),
+				family,size);
 			styles[Token.MARKUP] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.markup"));
+				jEdit.getProperty("view.style.markup"),
+				family,size);
 			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.operator"));
+				jEdit.getProperty("view.style.operator"),
+				family,size);
 			styles[Token.DIGIT] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.digit"));
+				jEdit.getProperty("view.style.digit"),
+				family,size);
 			styles[Token.INVALID] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.invalid"));
+				jEdit.getProperty("view.style.invalid"),
+				family,size);
 
 			textArea.getPainter().setStyles(styles);
 		}

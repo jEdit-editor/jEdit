@@ -18,10 +18,8 @@
  */
 package org.gjt.sp.jedit.syntax;
 
-import java.lang.reflect.Method;
-import java.awt.*;
-import java.util.StringTokenizer;
-import org.gjt.sp.util.Log;
+import java.awt.Font;
+import java.awt.Color;
 
 /**
  * A simple text style class. It can specify the color, italic flag,
@@ -35,15 +33,13 @@ public class SyntaxStyle
 	 * Creates a new SyntaxStyle.
 	 * @param fgColor The text color
 	 * @param bgColor The background color
-	 * @param italic True if the text should be italics
-	 * @param bold True if the text should be bold
+	 * @param font The text font
 	 */
-	public SyntaxStyle(Color fgColor, Color bgColor, boolean italic, boolean bold)
+	public SyntaxStyle(Color fgColor, Color bgColor, Font font)
 	{
 		this.fgColor = fgColor;
 		this.bgColor = bgColor;
-		this.italic = italic;
-		this.bold = bold;
+		this.font = font;
 	}
 
 	/**
@@ -63,100 +59,15 @@ public class SyntaxStyle
 	}
 
 	/**
-	 * Returns true if no font styles are enabled.
+	 * Returns the style font.
 	 */
-	public boolean isPlain()
+	public Font getFont()
 	{
-		return !(bold || italic);
-	}
-
-	/**
-	 * Returns true if italics is enabled for this style.
-	 */
-	public boolean isItalic()
-	{
-		return italic;
-	}
-
-	/**
-	 * Returns true if boldface is enabled for this style.
-	 */
-	public boolean isBold()
-	{
-		return bold;
-	}
-
-	/**
-	 * Returns the specified font, but with the style's bold and
-	 * italic flags applied.
-	 */
-	public Font getStyledFont(Font font)
-	{
-		if(font == null)
-			throw new NullPointerException("font param must not"
-				+ " be null");
-
-		if(font == lastFont)
-			return lastStyledFont;
-		lastFont = font;
-
-		int style = (bold ? Font.BOLD : 0)
-			| (italic ? Font.ITALIC : 0);
-
-		if(method == null)
-		{
-			lastStyledFont = new Font(font.getFamily(),style,
-				font.getSize());
-		}
-		else
-		{
-			Object[] args = { new Integer(style) };
-			try
-			{
-				lastStyledFont = (Font)method.invoke(font,args);
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-				return null;
-			}
-		}
-
-		return lastStyledFont;
-	}
-
-	/**
-	 * Returns a string representation of this object.
-	 */
-	public String toString()
-	{
-		return getClass().getName() + "[fgColor=" + fgColor +
-			((bgColor == null) ? "" : ",bgColor=" + bgColor) +
-			(italic ? ",italic" : "") +
-			(bold ? ",bold" : "") + "]";
+		return font;
 	}
 
 	// private members
 	private Color fgColor;
 	private Color bgColor;
-	private boolean italic;
-	private boolean bold;
-	private Font lastFont;
-	private Font lastStyledFont;
-	private static Method method;
-
-	static
-	{
-		try
-		{
-			// try Java 1.2 code
-			method = Font.class.getMethod("deriveFont",
-				new Class[] { int.class });
-			Log.log(Log.DEBUG,SyntaxStyle.class,"deriveFont() available");
-		}
-		catch(Exception e)
-		{
-			// use Java 1.1 code
-		}
-	}
+	private Font font;
 }

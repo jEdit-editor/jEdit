@@ -580,7 +580,7 @@ public class JEditTextArea extends JComponent
 			if(id == Token.NULL)
 				font = defaultFont;
 			else
-				font = styles[id].getStyledFont(defaultFont);
+				font = styles[id].getFont();
 
 			int len = tokens.length;
 
@@ -608,22 +608,32 @@ public class JEditTextArea extends JComponent
 	 */
 	public int xToOffset(int line, int x)
 	{
-		Token tokens = buffer.markTokens(line).getFirstToken();
+		return xToOffset(line,x,true);
+	}
 
-		FontMetrics fm;
+	/**
+	 * Converts an x co-ordinate to an offset within a line.
+	 * @param line The line
+	 * @param x The x co-ordinate
+	 * @param round Round up to next letter if past the middle of a letter?
+	 * @since jEdit 3.2pre6
+	 */
+	public int xToOffset(int line, int x, boolean round)
+	{
+		Token tokens = buffer.markTokens(line).getFirstToken();
 
 		getLineText(line,lineSegment);
 
-		char[] segmentArray = lineSegment.array;
-		int segmentOffset = lineSegment.offset;
-		int segmentCount = lineSegment.count;
+		char[] text = lineSegment.array;
+		int off = lineSegment.offset;
 
 		int width = horizontalOffset;
 
-		int offset = 0;
 		Toolkit toolkit = painter.getToolkit();
 		Font defaultFont = painter.getFont();
 		SyntaxStyle[] styles = painter.getStyles();
+
+		float[] widthArray = new float[] { horizontalOffset };
 
 		for(;;)
 		{
@@ -631,40 +641,25 @@ public class JEditTextArea extends JComponent
 			if(id == Token.END)
 				return offset;
 
+			Font font;
 			if(id == Token.NULL)
-				fm = painter.getFontMetrics();
+				font = defaultFont;
 			else
-				fm = painter.getFontMetrics(styles[id].getStyledFont(defaultFont));
+				font = styles[id].getFont();
 
-			int length = tokens.length;
+			int len = tokens.length;
 
-			for(int i = 0; i < length; i++)
-			{
-				char c = segmentArray[segmentOffset + offset + i];
-				int charWidth;
-				if(c == '\t')
-					charWidth = (int)painter.nextTabStop(width,offset + i)
-						- width;
-				else
-					charWidth = fm.charWidth(c);
+			int offset = renderingManager.xToOffset(text,off,len,font,
+				painter,round,widthArray);
 
-				if(painter.isBlockCaretEnabled())
-				{
-					if(x - charWidth <= width)
-						return offset + i;
-				}
-				else
-				{
-					if(x - charWidth / 2 <= width)
-						return offset + i;
-				}
+			if(offset != -1)
+				return offset;
 
-				width += charWidth;
-			}
-
-			offset += length;
+			off += len;
 			tokens = tokens.next;
 		}
+
+		return lineSegment.count;
 	}
 
 	/**
@@ -673,6 +668,18 @@ public class JEditTextArea extends JComponent
 	 * @param y The y co-ordinate of the point
 	 */
 	public int xyToOffset(int x, int y)
+	{
+		return xyToOffset(x,y,true);
+	}
+
+	/**
+	 * Converts a point to an offset, from the start of the text.
+	 * @param x The x co-ordinate of the point
+	 * @param y The y co-ordinate of the point
+	 * @param round Round up to next letter if past the middle of a letter?
+	 * @since jEdit 3.2pre6
+	 */
+	public int xyToOffset(int x, int y, boolean round)
 	{
 		FontMetrics fm = painter.getFontMetrics();
 		int height = fm.getHeight();
@@ -4947,7 +4954,7 @@ forward_scan:		do
 
 			dragStartLine = buffer.virtualToPhysical(yToLine(y));
 			dragStartOffset = xToOffset(dragStartLine,x);
-			dragStart = xyToOffset(x,y);
+			dragStart = xyToOffset(x,y,painter.isBlockCaretEnabled());
 
 			clickCount = evt.getClickCount();
 			switch(clickCount)
@@ -5094,7 +5101,8 @@ forward_scan:		do
 
 		private void doSingleDrag(MouseEvent evt, boolean rect)
 		{
-			int dot = xyToOffset(evt.getX(),evt.getY());
+			int dot = xyToOffset(evt.getX(),evt.getY(),
+				painter.isBlockCaretEnabled());
 			if(dot == caret)
 				return;
 
