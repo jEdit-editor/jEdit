@@ -86,6 +86,23 @@ public class Registers
 	}
 
 	/**
+	 * Clears (sets it's value to null) the specified register.
+	 * @param name The register name
+	 */
+	public static void clearRegister(char name)
+	{
+		Register register = registers[name];
+		if(register instanceof ClipboardRegister)
+			((ClipboardRegister)register).setValue("");
+		else
+		{
+			if(register != null)
+				register.dispose();
+			registers[name] = null;
+		}
+	}
+
+	/**
 	 * Returns an array of all available registers.
 	 */
 	public static Register[] getRegisters()
@@ -245,6 +262,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.1  1999/10/03 04:13:26  sp
  * Forgot to add some files
  *

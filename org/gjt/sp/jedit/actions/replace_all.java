@@ -22,9 +22,11 @@ package org.gjt.sp.jedit.actions;
 import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.search.SearchAndReplace;
+import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
 public class replace_all extends EditAction
+implements InputHandler.NonRecordable
 {
 	public replace_all()
 	{

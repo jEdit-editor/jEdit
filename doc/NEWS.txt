@@ -1,39 +1,4 @@
-MAJOR CHANGES IN JEDIT 2.1 SINCE 2.0
+MAJOR CHANGES IN JEDIT 2.2 SINCE 2.1
 
-This file outlines the major changes in jEdit 2.1 since 2.0. A complete
-list can be found in the file named CHANGES.txt.
-
-- Keyboard macros. Complex actions can be recorded and played back as
-  many times as necessary. Macros are saved across editing sessions.
-
-- Rectangular selection. Columns of text can now be selected and
-  operated upon.
-
-- Registers for storing strings and positions inside a buffer. It's like
-  having multiple clipboards and anchors.
-
-- Command repeating. Keystrokes and macros can be repeated multiple
-  times automatically.
-
-- Eiffel, IDL, Python and XML syntax highlighting.
-
-- Filename filters in 'Open' and 'Save As' dialog boxes.
-
-- RMI server removed, replaced by simpler socket-based edit server. RMI
-  had too many quirks and required the user to run the 'rmiregistry'
-  daemon.
-
-- New plugin API brings improvements to option panes and Plugins menu
-  creation.
-
-- Bundled plugins. The following plugins are now included with jEdit:
-  - BufferTabs by Jason Ginchereau
-  - Console by Slava Pestov
-  - HTML by Romain Guy and Slava Pestov
-  - JBrowse by George Latkiewicz
-  - QuickFile by Jason Ginchereau
-
-- Documentation updates. The plugin development section covers much more
-  detail. The documentation is now available in PDF format.
-
-There are many more less important changes, as well as bug fixes.
+All advanced editing commands have been removed and jEdit now has the
+functionality of Windows Notepad.

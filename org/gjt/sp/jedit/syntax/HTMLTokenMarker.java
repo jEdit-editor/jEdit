@@ -30,6 +30,11 @@ public class HTMLTokenMarker extends TokenMarker
 {
 	public static final byte JAVASCRIPT = Token.INTERNAL_FIRST;
 
+	public HTMLTokenMarker()
+	{
+		this(true);
+	}
+
 	public HTMLTokenMarker(boolean js)
 	{
 		this.js = js;
@@ -267,6 +272,9 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.30  1999/09/30 12:21:05  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

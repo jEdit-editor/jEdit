@@ -422,7 +422,7 @@ public class GUIUtilities
 	public static String showFileDialog(View view, String file, int type)
 	{
 		File _file = new File(file);
-		JFileChooser chooser = getFileChooser();
+		JFileChooser chooser = getFileChooser(view);
 
 		chooser.setCurrentDirectory(_file);
 		chooser.rescanCurrentDirectory();
@@ -628,29 +628,6 @@ public class GUIUtilities
 	}
 
 	/**
-	 * Shows the wait cursor.
-	 * @param view The view
-	 */
-	public static void showWaitCursor(View view)
-	{
-		Cursor cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-		view.setCursor(cursor);
-		view.getTextArea().getPainter().setCursor(cursor);
-	}
-
-	/**
-	 * Hides the wait cursor.
-	 * @param view The view
-	 */
-	public static void hideWaitCursor(View view)
-	{
-		Cursor cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-		view.setCursor(cursor);
-		Cursor text = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
-		view.getTextArea().getPainter().setCursor(text);
-	}
-
-	/**
 	 * Ensures that the splash screen is not visible. This should be
 	 * called before displaying any dialog boxes or windows at
 	 * startup.
@@ -684,11 +661,36 @@ public class GUIUtilities
 
 	// Since only one file chooser is every visible at any one
 	// time, we can reuse 'em
-	private static JFileChooser getFileChooser()
+	private static JFileChooser getFileChooser(View view)
 	{
 		if(chooser == null)
 		{
+			view.showWaitCursor();
+
 			chooser = new JFileChooser();
+
+			// Create mode filename filters
+			Mode[] modes = jEdit.getModes();
+			for(int i = 0; i < modes.length; i++)
+			{
+				Mode mode = modes[i];
+				String label = (String)mode.getProperty("label");
+				String glob = (String)mode.getProperty("filenameGlob");
+				if(label == null || glob == null)
+					continue;
+
+				try
+				{
+					chooser.addChoosableFileFilter(
+						new REFileFilter(label,
+						MiscUtilities.globToRE(glob)));
+				}
+				catch(REException re)
+				{
+					System.err.println("Invalid file filter: " + glob);
+					re.printStackTrace();
+				}
+			}
 
 			// Load file filters
 			int i = 0;
@@ -713,6 +715,8 @@ public class GUIUtilities
 			}
 
 			chooser.setFileFilter(chooser.getAcceptAllFileFilter());
+
+			view.hideWaitCursor();
 		}
 
 		return chooser;
@@ -732,6 +736,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.33  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

@@ -157,7 +157,7 @@ public class Buffer extends SyntaxDocument
 		// A save is definately going to occur; show the wait cursor
 		// and fire BUFFER_SAVING event
 		if(view != null)
-			GUIUtilities.showWaitCursor(view);
+			view.showWaitCursor();
 
 		fireBufferEvent(BufferEvent.BUFFER_SAVING);
 
@@ -207,7 +207,7 @@ public class Buffer extends SyntaxDocument
 
 		// Hide wait cursor
 		if(view != null)
-			GUIUtilities.hideWaitCursor(view);
+			view.hideWaitCursor();
 
 		return returnValue;
 	}
@@ -220,7 +220,7 @@ public class Buffer extends SyntaxDocument
 	{
 		// Show the wait cursor
 		if(view != null)
-			GUIUtilities.showWaitCursor(view);
+			view.showWaitCursor();
 
 		// Delete the autosave
 		autosaveFile.delete();
@@ -241,7 +241,7 @@ public class Buffer extends SyntaxDocument
 
 		// Hide the wait cursor
 		if(view != null)
-			GUIUtilities.hideWaitCursor(view);
+			view.hideWaitCursor();
 
 		fireBufferEvent(BufferEvent.DIRTY_CHANGED);
 
@@ -384,14 +384,6 @@ public class Buffer extends SyntaxDocument
 	}
 	
 	/**
-	 * Returns the localised name of this buffer's edit mode.
-	 */
-	public final String getModeName()
-	{
-		return jEdit.getModeName(mode);
-	}
-	
-	/**
 	 * Sets this buffer's edit mode.
 	 * @param mode The mode
 	 */
@@ -434,8 +426,8 @@ public class Buffer extends SyntaxDocument
 	}
 
 	/**
-	 * Sets this buffer's edit mode by looking at the extension,
-	 * file name and first line.
+	 * Sets this buffer's edit mode by calling the accept() method
+	 * of each registered edit mode.
 	 */
 	public void setMode()
 	{
@@ -451,37 +443,28 @@ public class Buffer extends SyntaxDocument
 		}
 
 		String nogzName = name.substring(0,name.length() -
-			(name.endsWith(".gz") ? 3 : 0)).toLowerCase();
-		Mode mode = jEdit.getMode(jEdit.getProperty(
-			"mode.filename.".concat(nogzName)));
-		if(mode != null)
-			setMode(mode);
-		else
+			(name.endsWith(".gz") ? 3 : 0));
+		Element lineElement = getDefaultRootElement().getElement(0);
+		int start = lineElement.getStartOffset();
+		try
 		{
-			int index = nogzName.lastIndexOf('.') + 1;
-			mode = jEdit.getMode(jEdit.getProperty(
-				"mode.extension.".concat(nogzName
-				.substring(index))));
-			if(mode != null)
-				setMode(mode);
-			else
+			String line = getText(start,lineElement.getEndOffset()
+				- start - 1);
+
+			Mode[] modes = jEdit.getModes();
+			// check last mode first
+			for(int i = modes.length - 1; i >= 0; i--)
 			{
-				Element lineElement = getDefaultRootElement()
-					.getElement(0);
-				int start = lineElement.getStartOffset();
-				try
+				if(modes[i].accept(this,nogzName,line))
 				{
-					String line = getText(start,lineElement
-						.getEndOffset() - start - 1);
-					mode = jEdit.getMode(jEdit.getProperty(
-						"mode.firstline." + line));
-					if(mode != null)
-						setMode(mode);
-				}
-				catch(BadLocationException bl)
-				{
+					setMode(modes[i]);
+					break;
 				}
 			}
+		}
+		catch(BadLocationException bl)
+		{
+			bl.printStackTrace();
 		}
 	}
 
@@ -718,6 +701,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	void close()
 	{
 		closed = true;
+		autosaveFile.delete();
 	}
 
 	void setCaretInfo(int savedSelStart, int savedSelEnd,
@@ -1198,16 +1182,14 @@ loop:		for(int i = 0; i < markers.size(); i++)
 				return o;
 
 			// Now try mode.<mode>.<property>
-			String value = jEdit.getProperty("mode."
-				+ mode.getName() + "." + key);
+			o = mode.getProperty((String)key);
+			if(o != null)
+				return o;
 
 			// Now try buffer.<property>
+			String value = jEdit.getProperty("buffer." + key);
 			if(value == null)
-			{
-				value = jEdit.getProperty("buffer." + key);
-				if(value == null)
-					return null;
-			}
+				return null;
 
 			// Try returning it as an integer first
 			try
@@ -1265,6 +1247,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.97  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.96  1999/10/16 09:43:00  sp
  * Final tweaking and polishing for jEdit 2.1final
  *

@@ -38,7 +38,7 @@ implements ActionListener, KeyListener, WindowListener
 	{
 		super(view,title,true);
 
-		GUIUtilities.showWaitCursor(view);
+		view.showWaitCursor();
 
 		getContentPane().setLayout(new BorderLayout());
 		panes = new Vector();
@@ -126,6 +126,9 @@ implements ActionListener, KeyListener, WindowListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.5  1999/10/04 03:20:51  sp
  * Option pane change, minor tweaks and bug fixes
  *

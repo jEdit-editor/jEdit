@@ -18,67 +18,20 @@
  */
 
 package org.gjt.sp.jedit;
+
+import gnu.regexp.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.*;
 
 /**
- * The abstract class all jEdit edit modes most extend. An edit mode defines
- * a set of behaviours for editing a specific file type.<p>
- * 
- * The <i>internal</i> name of an edit mode is the string passed to the
- * mode's constructor - it can be obtained with the <code>getName()</code>
- * method. The user visible name is that stored in the
- * <code>mode.<i>internal name</i>.name</code> property.<p>
- *
- * A mode instance can be fetched if it's internal name is known with the
- * <code>jEdit.getMode()</code> method. The
- * <code>jEdit.getModeName()</code> method returns the user visible
- * name of a mode instance.<p>
- *
- * Modes can be added at run-time with the <code>jEdit.addMode()</code>
- * method. An array of currently installed edit modes can be obtained
- * with the <code>jEdit.getModes()</code> method.<p>
- *
- * Currently, edit modes can influence the following:
- * <ul>
- * <li>The indentation performed, if any, when the user presses `Tab'
- * or `Enter'. This can be achieved by implementing the <code>indentLine()</code>
- * method. The default implementation performs simple auto indent.
- * <li>The token marker used for syntax colorizing, if any. This can
- * be achieved by implementing the <code>createTokenMarker()</code>
- * method.
- * </ul>
- * The following properties relate to edit modes:
- * <ul>
- * <li><code>mode.<i>internal name</i>.name</code> - the name of the edit
- * mode, displayed in the `Mode' menu
- * <li><code>mode.<i>internal name</i>.<i>buffer-local property</i></code> -
- * the default value of <i>buffer-local property</i> in this edit mode
- * <li><code>mode.extension.<i>extension</i></code> - the internal name of the
- * mode to be used for editing files with extension <i>extension</i>
- * <li><code>mode.filename.<i>filename</i></code> - the internal name of the
- * mode to be used for editing files named <i>filename</i>
- * <li><code>mode.firstline.<i>first line</i></code> - the internal name
- * of the mode to be used for editing files whose first line is
- * <i>first line</i>
- * </ul>
+ * Yes.
  *
  * @author Slava Pestov
  * @version $Id$
- *
- * @see org.gjt.sp.jedit.jEdit#getProperty(String)
- * @see org.gjt.sp.jedit.jEdit#getProperty(String,String)
- * @see org.gjt.sp.jedit.jEdit#getMode(String)
- * @see org.gjt.sp.jedit.jEdit#getModeName(Mode)
- * @see org.gjt.sp.jedit.jEdit#getModes()
- * @see org.gjt.sp.jedit.jEdit#addMode(Mode)
- * @see org.gjt.sp.jedit.Buffer#setMode()
- * @see org.gjt.sp.jedit.Buffer#setMode(Mode)
- * @see org.gjt.sp.jedit.syntax.TokenMarker
  */
-public abstract class Mode
+public class Mode
 {
 	/**
 	 * Creates a new edit mode
@@ -86,6 +39,29 @@ public abstract class Mode
 	public Mode(String name)
 	{
 		this.name = name;
+
+		try
+		{
+			String filenameGlob = (String)getProperty("filenameGlob");
+			if(filenameGlob != null)
+			{
+				filenameRE = new RE(MiscUtilities.globToRE(
+					filenameGlob),RE.REG_ICASE);
+			}
+
+			String firstlineGlob = (String)getProperty("firstlineGlob");
+			if(firstlineGlob != null)
+			{
+				firstlineRE = new RE(MiscUtilities.globToRE(
+					firstlineGlob),RE.REG_ICASE);
+			}
+		}
+		catch(REException re)
+		{
+			System.err.println("Invalid filename/firstline globs"
+				+ " in mode " + name + ":");
+			re.printStackTrace();
+		}
 	}
 
 	/**
@@ -93,12 +69,24 @@ public abstract class Mode
 	 * @param buffer The buffer that entered this mode
 	 */
 	public void enter(Buffer buffer) {}
-	
+
 	/**
 	 * Called when a view enters this mode.
 	 * @param view The view that entered this mode
 	 */
 	public void enterView(View view) {}
+
+	/**
+	 * Called when a buffer leaves this mode.
+	 * @param buffer The buffer that left this mode
+	 */
+	public void leave(Buffer buffer) {}
+	
+	/**
+	 * Called when a view leaves this mode.
+	 * @param view The view that left this mode
+	 */
+	public void leaveView(View view) {}
 
 	/**
 	 * If auto indent is enabled, this method is called when the `Tab'
@@ -258,20 +246,64 @@ public abstract class Mode
 	 */
 	public TokenMarker createTokenMarker()
 	{
+		String clazz = (String)getProperty("tokenMarker");
+		if(clazz == null)
+			return null;
+
+		try
+		{
+			Class cls;
+			ClassLoader loader = getClass().getClassLoader();
+			if(loader == null)
+				cls = Class.forName(clazz);
+			else
+				cls = loader.loadClass(clazz);
+
+			return (TokenMarker)cls.newInstance();
+		}
+		catch(Exception e)
+		{
+			System.err.println("Cannot create token marker " + clazz + ":");
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 
 	/**
-	 * Called when a buffer leaves this mode.
-	 * @param buffer The buffer that left this mode
+	 * Returns a mode property.
+	 * @param key The property name
 	 */
-	public void leave(Buffer buffer) {}
-	
+	public Object getProperty(String key)
+	{
+		String value = jEdit.getProperty("mode." + name + "." + key);
+		try
+		{
+			return new Integer(value);
+		}
+		catch(NumberFormatException nf)
+		{
+			return value;
+		}
+	}
+
 	/**
-	 * Called when a view leaves this mode.
-	 * @param view The view that left this mode
+	 * Returns if the edit mode is suitable for editing the specified
+	 * file.
+	 * @param buffer The buffer
+	 * @param fileName The buffer's name
+	 * @param firstLine The first line of the buffer
 	 */
-	public void leaveView(View view) {}
+	public boolean accept(Buffer buffer, String fileName, String firstLine)
+	{
+		if(filenameRE != null && filenameRE.isMatch(fileName))
+			return true;
+
+		if(firstlineRE != null && firstlineRE.isMatch(firstLine))
+			return true;
+
+		return false;
+	}
 
 	/**
 	 * Returns the internal name of this edit mode.
@@ -280,7 +312,11 @@ public abstract class Mode
 	{
 		return name;
 	}
-	
+
+	// protected members
+	protected RE filenameRE;
+	protected RE firstlineRE;
+
 	// private members
 	private String name;
 }
@@ -288,6 +324,9 @@ public abstract class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.12  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

@@ -19,8 +19,6 @@
 package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.Segment;
-import org.gjt.sp.jedit.mode.javascript;
-import org.gjt.sp.jedit.jEdit;
 
 /**
  * Java properties/DOS INI token marker.
@@ -99,6 +97,9 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.7  1999/07/05 04:38:39  sp
  * Massive batch of changes... bug fixes, also new text component is in place.
  * Have fun

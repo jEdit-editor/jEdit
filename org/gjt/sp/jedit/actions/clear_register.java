@@ -1,5 +1,5 @@
 /*
- * replace_in_selection.java - Action
+ * clear_register.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,22 +20,45 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
-public class replace_in_selection extends EditAction
-implements InputHandler.NonRecordable
+public class clear_register extends EditAction
+implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
-	public replace_in_selection()
+	public clear_register()
 	{
-		super("replace-in-selection");
+		super("clear-register");
 	}
-
+	
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		SearchAndReplace.replace(view);
+		InputHandler inputHandler = view.getTextArea().getInputHandler();
+
+		String actionCommand = evt.getActionCommand();
+		if(actionCommand == null || actionCommand.length() != 1)
+		{
+			view.showStatus(jEdit.getProperty("view.status.clear-register"));
+			inputHandler.grabNextKeyStroke(this);
+		}
+		else
+		{
+			view.showStatus(null);
+
+			char ch = actionCommand.charAt(0);
+			if(ch == '\0')
+			{
+				view.getToolkit().beep();
+				return;
+			}
+
+			InputHandler.MacroRecorder recorder = inputHandler.getMacroRecorder();
+
+			if(recorder != null)
+				recorder.actionPerformed(this,actionCommand);
+
+			Registers.clearRegister(ch);
+		}
 	}
 }

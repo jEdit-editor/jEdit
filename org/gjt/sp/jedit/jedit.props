@@ -36,38 +36,8 @@ backup.suffix=~
 ### FILENAME FILTERS
 ###
 
-filefilter.0.name=Batch Files
-filefilter.0.re=*.bat
-filefilter.1.name=C Source Files
-filefilter.1.re=*.[ch]
-filefilter.2.name=C++ Source Files
-filefilter.2.re=*.{cc,hh,cpp,cxx}
-filefilter.3.name=Eiffel Source Files
-filefilter.3.re=*.{e,se}
-filefilter.4.name=HTML Files
-filefilter.4.re=*.{html,shtml,htm}
-filefilter.5.name=Java Source Files
-filefilter.5.re=*.java
-filefilter.6.name=JavaScript Source Files
-filefilter.6.re=*.js
-filefilter.7.name=jEdit Macro Files
-filefilter.7.re=*.macro
-filefilter.8.name=Makefiles
-filefilter.8.re={gnumakefile,makefile}
-filefilter.9.name=Patch/DIFF Files
-filefilter.9.re=*.{diff,patch}
-filefilter.10.name=Perl Source Files
-filefilter.10.re=*.p[lm]
-filefilter.11.name=Properties/INI Files
-filefilter.11.re={properties,config.sys,*.{props,ini,reg}}
-filefilter.12.name=Python Source Files
-filefilter.12.re=*.py
-filefilter.13.name=Shell Scripts
-filefilter.13.re=*.{sh,csh}
-filefilter.14.name=TeX Files
-filefilter.14.re=*.{tex,sty,aux}
-filefilter.15.name=Transact-SQL Files
-filefilter.15.re=*.sql
+filefilter.0.name=jEdit Macro Files
+filefilter.0.re=*.macro
 
 ###
 ### BUFFER SETTINGS
@@ -170,165 +140,145 @@ view.style.invalid=color:red style:b
 ### EDIT MODES
 ###
 
-# Text mode
-mode.text.name=Text
-
 # Batch File mode
-mode.bat.name=Batch File
+mode.bat.label=MS-DOS Batch Files
 mode.bat.blockComment=rem
-mode.extension.bat=bat
+mode.bat.tokenMarker=org.gjt.sp.jedit.syntax.BatchFileTokenMarker
+mode.bat.filenameGlob=*.bat
 
 # C mode
-mode.c.name=C
-mode.c.noWordSep=_
-mode.c.indentOpenBrackets={
-mode.c.indentCloseBrackets=}
-mode.c.commentStart=/*
-mode.c.commentEnd=*/
+mode.c.label=C Source Files
 mode.c.blockComment=//
 mode.c.boxComment=\ *
-mode.extension.c=c
-mode.extension.h=c
+mode.c.commentStart=/*
+mode.c.commentEnd=*/
+mode.c.indentOpenBrackets={
+mode.c.indentCloseBrackets=}
+mode.c.noWordSep=_
+mode.c.tokenMarker=org.gjt.sp.jedit.syntax.CTokenMarker
+mode.c.filenameGlob=*.[ch]
 
 # C++ mode
-mode.cc.name=C++
-mode.cc.noWordSep=_
-mode.cc.indentOpenBrackets={
-mode.cc.indentCloseBrackets=}
-mode.cc.commentStart=/*
-mode.cc.commentEnd=*/
+mode.cc.label=C++ Source Files
 mode.cc.blockComment=//
 mode.cc.boxComment=\ *
+mode.cc.commentStart=/*
+mode.cc.commentEnd=*/
+mode.cc.indentOpenBrackets={
+mode.cc.indentCloseBrackets=}
+mode.cc.tokenMarker=org.gjt.sp.jedit.syntax.CCTokenMarker
+mode.cc.noWordSep=_
 # I wish the C++ file extensions were more standard... jeez...
-mode.extension.cc=cc
-mode.extension.hh=cc
-mode.extension.cpp=cc
-mode.extension.cxx=cc
+mode.cc.filenameGlob=*.{cc,hh,cpp,cxx}
 
-# Eiffel mode
-mode.eiffel.name=Eiffel
+# Eiffel mode (written by Artur Biesiadowski)
+mode.eiffel.label=Eiffel Source Files
 mode.eiffel.blockComment=--
 mode.eiffel.noWordSep=_
-mode.extension.e=eiffel
-mode.extension.se=eiffel
+mode.eiffel.tokenMarker=org.gjt.sp.jedit.syntax.EiffelTokenMarker
+mode.eiffel.filenameGlob=.*{e,se}
 
 # HTML mode
-mode.html.name=HTML
+mode.html.label=HTML Files
 mode.html.commentStart=<!--
 mode.html.commentEnd=-->
-mode.extension.html=html
-mode.extension.shtml=html
-mode.extension.htm=html
+mode.html.tokenMarker=org.gjt.sp.jedit.syntax.HTMLTokenMarker
+mode.html.filenameGlob=*.{shtml,html,htm}
 
 # IDL mode
-mode.idl.name=IDL
-mode.idl.noWordSep=_
-mode.idl.indentOpenBrackets={
-mode.idl.indentCloseBrackets=}
-mode.idl.commentStart=/*
-mode.idl.commentEnd=*/
+mode.idl.label=IDL Files
 mode.idl.blockComment=//
 mode.idl.boxComment=\ *
-mode.extension.idl=idl
+mode.idl.commentStart=/*
+mode.idl.commentEnd=*/
+mode.idl.indentOpenBrackets={
+mode.idl.indentCloseBrackets=}
+mode.idl.noWordSep=_
+mode.idl.tokenMarker=org.gjt.sp.jedit.syntax.IDLTokenMarker
+mode.idl.filenameGlob=*.idl
 
 # Java mode
-mode.java.name=Java
-mode.java.noWordSep=_
-mode.java.indentOpenBrackets={
-mode.java.indentCloseBrackets=}
-mode.java.commentStart=/*
-mode.java.commentEnd=*/
+mode.java.label=Java Source Files
 mode.java.blockComment=//
 mode.java.boxComment=\ *
-mode.extension.java=java
-mode.extension.sqlj=java
+mode.java.commentStart=/*
+mode.java.commentEnd=*/
+mode.java.indentOpenBrackets={
+mode.java.indentCloseBrackets=}
+mode.java.noWordSep=_
+mode.java.tokenMarker=org.gjt.sp.jedit.syntax.JavaTokenMarker
+mode.java.filenameGlob=*.{java,sqlj}
 
 # JavaScript mode
-mode.javascript.name=JavaScript
-mode.javascript.noWordSep=_
-mode.javascript.indentOpenBrackets={
-mode.javascript.indentCloseBrackets=}
-mode.javascript.commentStart=/*
-mode.javascript.commentEnd=*/
+mode.javascript.label=JavaScript Source Files
 mode.javascript.blockComment=//
 mode.javascript.boxComment=\ *
-mode.extension.js=javascript
+mode.javascript.commentStart=/*
+mode.javascript.commentEnd=*/
+mode.javascript.indentOpenBrackets={
+mode.javascript.indentCloseBrackets=}
+mode.javascript.noWordSep=_
+mode.javascript.tokenMarker=org.gjt.sp.jedit.syntax.JavaScriptTokenMarker
+mode.javascript.filenameGlob=*.js
 
 # Makefile mode
-mode.makefile.name=Makefile
+mode.makefile.label=Makefiles
 mode.makefile.blockComment=#
-mode.filename.gnumakefile=makefile
-mode.filename.makefile=makefile
+mode.makefile.tokenMarker=org.gjt.sp.jedit.syntax.MakefileTokenMarker
+mode.makefile.filenameGlob=*makefile*
 
 # Patch mode
-mode.patch.name=Patch/DIFF
-mode.extension.diff=patch
-mode.extension.patch=patch
+mode.patch.label=Patch Files
+mode.patch.tokenMarker=org.gjt.sp.jedit.syntax.PatchTokenMarker
+mode.patch.filenameGlob=*.{diff,patch}
 
 # Perl mode
-mode.perl.name=Perl
+mode.perl.label=Perl Scripts
 mode.perl.blockComment=#
 mode.perl.indentOpenBrackets={
 mode.perl.indentCloseBrackets=}
-mode.extension.pl=perl
-mode.extension.pm=perl
-mode.firstline.#!/usr/bin/perl=perl
+mode.perl.tokenMarker=org.gjt.sp.jedit.syntax.PerlTokenMarker
+mode.perl.filenameGlob=*.p[lm]
+mode.perl.firstlineGlob=#!*perl*
 
 # Props mode
-mode.props.name=Properties/INI
+mode.props.label=Property Files
 mode.props.blockComment=#
-mode.extension.props=props
-mode.extension.ini=props
-mode.extension.reg=props
-mode.filename.properties=props
-mode.filename.config.sys=props
+mode.props.tokenMarker=org.gjt.sp.jedit.syntax.PropsTokenMarker
+mode.props.filenameGlob={properties,config.sys,*.{ini,reg,props}}
 
 # Python mode (written by Jonathan Revusky)
-mode.python.name=Python
+mode.python.label=Python Scripts
 mode.python.blockComment=#
-mode.extension.py=python
-mode.firstline.#!/usr/bin/python=python
-mode.firstline.#!/usr/local/bin/python=python
+mode.python.tokenMarker=org.gjt.sp.jedit.syntax.PythonTokenMarker
+mode.python.filenameGlob=*.py
+mode.python.firstlineGlob=#!*python*
 
 # Shell script mode
-mode.sh.name=Shell Script
-mode.sh.blockComment=#
-mode.extension.sh=sh
-mode.extension.csh=sh
-mode.firstline.#!/bin/sh=sh
-mode.firstline.#!/bin/ash=sh
-mode.firstline.#!/usr/local/bin/ash=sh
-mode.firstline.#!/bin/bash=sh
-mode.firstline.#!/usr/local/bin/bash=sh
-mode.firstline.#!/bin/zsh=sh
-mode.firstline.#!/usr/local/bin/zsh=sh
-mode.firstline.#!/bin/ksh=sh
-mode.firstline.#!/usr/local/bin/ksh=sh
-mode.firstline.#!/bin/csh=sh
-mode.firstline.#!/usr/local/bin/csh=sh
-mode.firstline.#!/bin/tcsh=sh
-mode.firstline.#!/usr/local/bin/tcsh=sh
+mode.shell.label=Shell Scripts
+mode.shell.blockComment=#
+mode.shell.tokenMarker=org.gjt.sp.jedit.syntax.ShellScriptTokenMarker
+mode.shell.filenameGlob=*.{sh,csh}
+mode.shell.firstlineGlob=#!*{sh,ash,bash,zsh,ksh,csh,tcsh}
 
 # TeX mode
-mode.tex.name=TeX
+mode.tex.label=TeX Files
 mode.tex.blockComment=%
-mode.extension.tex=tex
-mode.extension.sty=tex
-mode.extension.aux=tex
+mode.tex.tokenMarker=org.gjt.sp.jedit.syntax.TeXTokenMarker
+mode.tex.filenameGlob=*.{tex,cls,sty,aux}
 
-# Transact-SQL mode (written by Mike Dillon <mdillon@uclink4.berkeley.edu>)
-mode.tsql.name=Transact-SQL
-mode.tsql.commentStart=/*
-mode.tsql.commentEnd=*/
+# Transact-SQL mode (written by Mike Dillon)
+mode.tsql.label=Transact-SQL Files
 mode.tsql.blockComment=--
 mode.tsql.boxComment=**
-mode.extension.sql=tsql
+mode.tsql.commentStart=/*
+mode.tsql.commentEnd=*/
+mode.tsql.tokenMarker=org.gjt.sp.jedit.syntax.TSQLTokenMarker
+mode.tsql.filenameGlob=*.sql
 
 # XML mode
-mode.xml.name=XML/SGML
+mode.xml.label=XML Files
 mode.xml.commentStart=<!--
 mode.xml.commentEnd=-->
-mode.extension.xml=xml
-mode.extension.sgm=xml
-mode.extension.sgml=xml
-mode.extension.dtd=xml
+mode.xml.tokenMarker=org.gjt.sp.jedit.syntax.XMLTokenMarker
+mode.xml.filenameGlob=*.{xml,sgml,sgm,dtd}

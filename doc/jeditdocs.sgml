@@ -11,7 +11,7 @@
 
 <!-- General information -->
 <bookinfo>
- <title>jEdit 2.1 User's Guide</>
+ <title>jEdit 2.2 User's Guide</>
  <author><firstname>Slava</><surname>Pestov</></author>
  <legalnotice><title>Legal Notice</>
   <para>
@@ -90,67 +90,13 @@
  </sect1>
  <sect1 id=release-notes><title>Release Notes</>
   <para>
-   The following is an overview of the major changes in jEdit 2.1 since
-   2.0. A complete list can be found in the file named
+   The following is an overview of the major changes in jEdit 2.2 since
+   2.1. A complete list can be found in the file named
    <filename>CHANGES.txt</>, which is part of the jEdit distribution.
   </para>
-  <itemizedlist>
-  <listitem><para>
-   Keyboard macros. Complex actions can be recorded and played back as
-   many times as necessary. Macros are saved across editing sessions.
-  </para></listitem>
-  <listitem><para>
-   Rectangular selection. Columns of text can now be selected and
-   operated upon.
-  </para></listitem>
-  <listitem><para>
-   Registers for storing strings and positions inside a buffer. It's like
-   having multiple clipboards and anchors.
-  </para></listitem>
-  <listitem><para>
-   Command repeating. Keystrokes and macros can be repeated multiple
-   times automatically.
-  </para></listitem>
-  <listitem><para>
-   Eiffel, IDL, Python and XML syntax highlighting.
-  </para></listitem>
-  <listitem><para>
-   Filename filters in 'Open' and 'Save As' dialog boxes.
-  </para></listitem>
-  <listitem><para>
-   RMI server removed, replaced by simpler socket-based edit server. RMI
-   had too many quirks and required the user to run the 'rmiregistry'
-   daemon.
-  </para></listitem>
-  <listitem><para>
-   New plugin API brings improvements to option panes and Plugins menu
-   creation.
+  <para>
+   XXX - not done yet.
   </para>
-  </listitem>
-   <listitem><para>
-    Bundled plugins. The following plugins are now included with jEdit:
-   </para><itemizedlist>
-   <listitem><para>
-   BufferTabs by Jason Ginchereau
-   </para></listitem>
-   <listitem><para>
-   Console by Slava Pestov
-   </para></listitem>
-   <listitem><para>
-   HTML by Romain Guy and Slava Pestov
-   </para></listitem>
-   <listitem><para>
-   JBrowse by George Latkiewicz
-   </para></listitem>
-   <listitem><para>
-   QuickFile by Jason Ginchereau
-   </para></listitem>
-  </itemizedlist></listitem>
-  <listitem><para>
-   Documentation updates. The plugin development section covers much more
-   detail. The documentation is now available in PDF format.
-  </para></listitem>
-  </itemizedlist>
  </sect1>
  <sect1 id=features><title>jEdit Features</>
   <para>
@@ -210,7 +156,7 @@
  <sect1 id=old-jedit><title>Old jEdit Versions</>
   <indexterm><primary>old jEdit versions</></indexterm>
   <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.0 Users</>
+   <bridgehead renderas=sect3>jEdit 2.1 Users</>
    <para>
     In areas where jEdit has changed significantly since the last version,
     a sidebar like this one will appear, describing what went away, the
@@ -495,20 +441,6 @@
     example:
    </para>
    <screen><prompt>$</> <userinput>jedit -- -file-name-starting-with-a-dash</></screen>
-   <indexterm><primary>old jEdit versions</></indexterm>
-   <sidebar>
-    <bridgehead renderas=sect3>jEdit 2.0 Users</>
-    <para>
-     In jEdit 2.0, to go to a specific line number, you would invoke:
-    </para>
-    <screen><prompt>$</> <userinput>jedit paper.tex -+247</></screen>
-    <para>
-     Only one such line number specification was allowed
-     per command line; you couldn't open two files with the caret on
-     different lines. The new way allows any number of line numbers
-     to be specified, and it is more consistent.
-    </para>
-   </sidebar>
   </sect2>
   <sect2><title>Opening Files With the Open File Command</>
    <para>
@@ -762,14 +694,23 @@
    <guibutton>Cancel</> cancels the close operation and
    returns to the editor.
   </para>
+  <figure><title>The message displayed if a file has unsaved changes</>
+   <graphic scale=75 fileref=dialog-unsaved></>
+  </figure>
   <para>
    <indexterm><primary>Close All Buffers command</></indexterm>
    <guimenu>File</>&gt;<guimenuitem>Close All Buffers</>
    (keyboard equivalent: <keycap>F2</>)
-   will close all currently open buffers.
+   will close all currently open buffers. If any buffers have unsaved
+   changes, a dialog box will be displayed, listing them all. To discard
+   changes to a buffer, select it from the list and click <guibutton>Discard
+   Selected</>. To save changes, click <guibutton>Save Selected</>.
+   Multiple buffers to operate on can be selected by clicking on them
+   while holding down <keycap>Control</>.
   </para>
-  <figure><title>The message displayed if a file has unsaved changes</>
-   <graphic scale=75 fileref=dialog-unsaved></>
+  <figure><title>The dialog box displayed by Close All Buffers if
+  there are unsaved changes</title>
+   <graphic scale=75 fileref=dialog-unsaved-list></>
   </figure>
   <para>
    <guimenu>File</>&gt;<guimenuitem>Exit</>
@@ -885,14 +826,6 @@
    will display a dialog box where a line number can be entered. The caret
    will then be moved to that line.
   </para>
-  <indexterm><primary>old jEdit versions</></indexterm>
-  <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.0 Users</>
-   <para>
-    In jEdit 2.0, the <guimenuitem>Go to Line</> command was in the
-    <guimenu>Search</> menu.
-   </para>
-  </sidebar>
  </sect1>
  <sect1 id=selecting-text><title>Selecting Text</>
   <para>
@@ -963,14 +896,6 @@
    a dialog box where the starting line and end line can be entered.
    The specified range of lines will be selected.
   </para>
-  <indexterm><primary>old jEdit versions</></indexterm>
-  <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.0 Users</>
-   <para>
-    In jEdit 2.0, the <guimenuitem>Select Line Range</> command was in the
-    <guimenu>Search</> menu.
-   </para>
-  </sidebar>
   <para>
    <indexterm><primary>selecting</><secondary>the entire buffer
    </></indexterm>
@@ -1232,16 +1157,6 @@
    to open the files in an existing view, rather than creating a new one.
    The <command>-reuseview</> switch can be used for that purpose.
   </para>
-  <indexterm><primary>old jEdit versions</></indexterm>
-  <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.0 Users</>
-   <para>
-    The jEdit 2.1 server replaces the jEdit 2.0 RMI interface. While the RMI
-    interface was more flexible, it had various problems and required the user
-    to run the <command>rmiregistry</> daemon. The 2.1 server is much simpler
-    and problem-free.
-   </para>
-  </sidebar>
  </sect1>
  <sect1 id=markers><title>Markers</>
   <para>
@@ -1474,15 +1389,6 @@
     repeatedly, it can be used to flip between two buffers and/or caret
     positions.
    </para>
-   <indexterm><primary>old jEdit versions</></indexterm>
-   <sidebar>
-    <bridgehead renderas=sect3>jEdit 2.0 Users</>
-    <para>
-     The new registers feature replaces the anchor found in jEdit 2.0.
-     The anchor was like having only one register, that could only store a
-     caret position.
-    </para>
-   </sidebar>
   </sect2>
   <sect2 id=filename-registers><title>File Name Registers</>
    <indexterm><primary>Registers menu</></indexterm>
@@ -1589,6 +1495,11 @@
     displayed in the status bar, instead of the caret position information.
     Currently, jEdit records all key strokes and commands invoked from
     the keyboard; recording of menu item selections is not yet possible.
+   </para>
+   <para>
+    Search and replace operations are recorded as you would expect;
+    the actual search and replacement is recorded, rather than the
+    dialog boxes being displayed.
    </para>
    <indexterm><primary>Stop Recording command</></indexterm>
    <para>
@@ -1789,107 +1700,84 @@
     see <xref linkend=buffer-opts>.
     To have a buffer open with a specific edit mode every time,
     set the <quote>mode</> buffer-local property to the
-    <firstterm>internal</> name of the desired edit mode by placing
+    name of the desired edit mode by placing
     the following text in one of the first 10 lines of the buffer:
    </para>
    <screen>:mode=<replaceable>edit mode</>:</screen>
-   <para>
-    The internal names of edit modes are listed in the following
-    table.
-   </para>
-  </sect2>
+   </sect2>
   <sect2><title>Available Edit Modes</>
    <table><title>Table of edit modes</>
     <tgroup cols=3>
      <colspec colnum=1 colwidth=1.5in>
-     <colspec colnum=2 colwidth=1.5in>
      <thead>
       <row>
        <entry>Mode name</>
-       <entry>Internal name</>
        <entry>Comments</>
       </row>
      </thead>
      <tbody>
       <row>
-       <entry>Text</>
-       <entry>text</>
-       <entry>Default edit mode. Does nothing special.</>
-      </row>
-      <row>
-       <entry>Batch File</>
        <entry>bat</>
        <entry>MS-DOS Batch File edit mode. Automatically selected for
        files with extension <quote>.bat</>.</entry>
       </row>
       <row>
-       <entry>C</>
        <entry>c</>
        <entry>C source code edit mode. Automatically selected for
        files with extension <quote>.c</> or <quote>.h</>.</entry>
       </row>
       <row>
-       <entry>C++</>
        <entry>cc</>
        <entry>C++ source code edit mode. Automatically selected for
        files with a variety of C++ extensions.</entry>
       </row>
       <row>
-       <entry>Eiffel</>
        <entry>eiffel</>
        <entry>Eiffel source code edit mode. Automatically
        selected for files with extension <quote>.e</> or <quote>.se</>.
        </entry>
       </row>
       <row>
-       <entry>HTML</>
        <entry>html</>
        <entry>HTML source code edit mode. Automatically selected for
        files with extension <quote>.html</>, <quote>.shtml</> or <quote>.htm</>.
        </entry>
       </row>
       <row>
-       <entry>IDL</>
        <entry>idl</>
        <entry>CORBA IDL (Interface Definition Language) edit mode.
        Automatically selected for
        files with extension <quote>.idl</>.</entry>
       </row>
       <row>
-       <entry>Java</>
        <entry>java</>
        <entry>Java source code edit mode. Automatically selected for
        files with extension <quote>.java</>.</entry>
       </row>
       <row>
-       <entry>JavaScript</>
        <entry>javascript</>
        <entry>JavaScript source code edit mode. Automatically selected for
        files with extension <quote>.js</>.</entry>
       </row>
       <row>
-       <entry>Makefile</>
        <entry>make</>
        <entry>Makefile edit mode. Automatically selected for files named
        <quote>Makefile</> or <quote>GNUmakefile</>.
        </entry>
       </row>
       <row>
-       <entry>Patch/DIFF</>
        <entry>patch</>
        <entry>Edit mode for Unix diffs and patches. Automatically selected
        for files with extension <quote>.diff</> or <quote>.patch</>.
        </entry>
       </row>
       <row>
-       <entry>Perl</>
        <entry>perl</>
        <entry>Perl edit mode. Automatically selected for files with
        extension <quote>.pl</> or <quote>.pm</>.
        </entry>
       </row>
       <row>
-       <entry>Properties/INI</>
        <entry>props</>
        <entry>Java property file and MS-DOS INI edit mode. Automatically
        selected for files with extension <quote>.props</> or <quote>.ini</>,
@@ -1897,7 +1785,6 @@
        </entry>
       </row>
       <row>
-       <entry>Python</>
        <entry>python</>
        <entry>Python script edit mode. Automatically
        selected for files with extension <quote>.py</> or whose first
@@ -1905,29 +1792,29 @@
        </entry>
       </row>
       <row>
-       <entry>Shell Script</>
-       <entry>sh</>
+       <entry>shell</>
        <entry>Unix shell script edit mode. Automatically selected for files
        with extension <quote>.sh</>, and files whose first line is
        <quote>#!</> followed by one of the various Unix shell names.
        </entry>
       </row>
       <row>
-       <entry>TeX</>
        <entry>tex</>
        <entry>TeX edit mode. Automatically selected for files with
        extension <quote>.tex</>.
        </entry>
       </row>
       <row>
-       <entry>Transact-SQL</>
+       <entry>text</>
+       <entry>Default edit mode. Does nothing special.</>
+      </row>
+      <row>
        <entry>tsql</>
        <entry>Transact-SQL edit mode. Automatically selected for files with
        extension <quote>.tsql</> or <quote>.sql</>.
        </entry>
       </row>
       <row>
-       <entry>XML/SGML</>
        <entry>xml</>
        <entry>XML and SGML source code edit mode. Automatically selected for
        files with extension <quote>.xml</>, <quote>.sgml</> or <quote>.sgm</>.
@@ -1990,14 +1877,6 @@
    Double clicking on a bracket will also select the code block it
    delimits.
   </para>
-  <indexterm><primary>old jEdit versions</></indexterm>
-  <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.0 Users</>
-   <para>
-    In jEdit 2.0, the <guimenuitem>Locate Bracket</> command was in the
-    <guimenu>Edit</> menu.
-   </para>
-  </sidebar>
   <figure><title>Bracket highlighting in action</>
    <graphic scale=75 fileref=window-editor-bracket></>
   </figure>
@@ -2505,14 +2384,6 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     buffers to fully reverse any changes.
    </para>
   </warning>
-  <indexterm><primary>old jEdit versions</></indexterm>
-  <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.0 Users</>
-   <para>
-    In jEdit 2.0, <keycap>F9</> was bound to the <guimenuitem>Multifile
-    Search Settings</> command. It no longer has a shortcut.
-   </para>
-  </sidebar>
   <figure><title>The Multi File Search Settings dialog box</>
    <graphic scale=75 fileref=dialog-multifile></>
   </figure>
@@ -2760,8 +2631,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   </sect2>
   <sect2><title>The File Filters Tab</>
    <para>
-    The <guibutton>File Filters</> tab allows you to change the file filters
-    displayed in the open file and save dialog boxes.
+    The <guibutton>File Filters</> tab allows you to add custom file filters
+    to the open file and save dialog boxes.
    </para>
    <para>
     Filters are added and removed in a rather peculiar fashion in this tab.
@@ -2869,15 +2740,6 @@ The following is required to use this plugin:
   This section is still under construction; information about edit modes,
   views, buffers and the text area is still to come.
  </para>
- <indexterm><primary>old jEdit versions</></indexterm>
- <sidebar>
-  <bridgehead renderas=sect3>jEdit 2.0 Users</>
-  <para>
-   jEdit 2.1 introduced a new plugin API, based around the
-   <classname>EditPlugin</> class. Old jEdit 2.0 plugins will need to
-   be updated for the new API before they can work with jEdit 2.1.
-  </para>
- </sidebar>
  <sect1 id=plugin-jar><title>General Structure of a Plugin</>
   <para>
    A plugin is a JAR (Java Archive) file that adds to or modifies jEdit's

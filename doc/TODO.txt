@@ -1,25 +1,14 @@
 JEDIT 2.2 TO DO
 
-* New features:
+- Document mode API changes
 
-- 'startup.action' property, executed when jEdit started with no files
-  on command line. Can be 'new-file', 'open-file', 'load-desktop', etc.
+* New features:
 
 - SyntaxDocument.addEdit() method. Buffer implements it to do the
   compound-edit logic. JEditTextArea adds insignificant edits every time
   the caret is moved.
 
-- Macro recorder
-  - Write the following actions:
-    - set-search-string
-    - set-replace-string
-    - set-search-parameters (regexp, icase, {current,all})
-  - Macros bound to events?
-
-- Close dialog box that lists all dirty buffers
-  - Save, Discard, Cancel buttons
-  - Clicking on a buffer in the list will switch to that buffer in the
-    view
+- set-search-parameters (regexp, icase, {current,all}) action
 
 - Recording and repeating menu items
   - Could be implemented by giving menu items a 'proxy' action listener
@@ -41,9 +30,6 @@ JEDIT 2.2 TO DO
 
 * Code cleanups:
 
-- View.show/hideWaitCursor(): increments waitCount for nested operation
-  (use in save-all)
-
 - Move some DefaultInputHandler logic to InputHandler (make it a class)
 
 - Move repeating and recording to JEditInputHandler, which calls
@@ -55,19 +41,6 @@ JEDIT 2.2 TO DO
   enter char and then calls execAction(indent-line). When recording a
   macro, the indent-line will only be recorded if indent-on-enter is
   enabled, thus making macros more portable
-
-- Mode system changes: mode.XXX.filename-glob: all filenames globbed against
-  this property. mode.XXX.firstline-glob: corresponding glob for first line
-  of file. mode.XXX.tokenMarker property: class name of token marker to
-  use (handled by DefaultMode so that XMode can implement Mode)
-
-  interface Mode
-  {
-  	TokenMarker createTokenMarker();
-	Object getProperty(String name);
-	boolean accept(Buffer buffer);
-	String getName();
-  }
 
 * Ideas for plugins:
 

@@ -35,12 +35,10 @@ public class EditorOptionPane extends AbstractOptionPane
 		String[] modeNames = new String[modes.length];
 		for(int i = 0; i < modes.length; i++)
 		{
-			modeNames[i] = jEdit.getModeName(modes[i]);
+			modeNames[i] = modes[i].getName();
 		}
 		defaultMode = new JComboBox(modeNames);
-		defaultMode.setSelectedItem(jEdit.getProperty(
-			"mode." + jEdit.getProperty("buffer.defaultMode")
-			+ ".name"));
+		defaultMode.setSelectedItem(jEdit.getProperty("buffer.defaultMode"));
 		addComponent(jEdit.getProperty("options.editor.defaultMode"),
 			defaultMode);
 

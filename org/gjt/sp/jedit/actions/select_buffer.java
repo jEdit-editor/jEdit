@@ -31,6 +31,6 @@ public class select_buffer extends EditAction
 
 	public void actionPerformed(ActionEvent evt)
 	{
-		getView(evt)._setBuffer(jEdit.getBuffer(evt.getActionCommand()));
+		getView(evt).setBuffer(jEdit.getBuffer(evt.getActionCommand()));
 	}
 }

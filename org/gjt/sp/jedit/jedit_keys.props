@@ -101,6 +101,7 @@ next-bracket-exp.shortcut=C+e C+]
 append-string-register.shortcut=C+r C+a
 copy-string-register.shortcut=C+r C+c
 set-filename-register.shortcut=C+r C+f
+clear-register.shortcut=C+r C+l
 paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x
 

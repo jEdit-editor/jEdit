@@ -29,7 +29,7 @@ import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
 import org.gjt.sp.jedit.event.*;
-import org.gjt.sp.jedit.gui.HistoryModel;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.textarea.DefaultInputHandler;
 import org.gjt.sp.jedit.textarea.InputHandler;
@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.01.99.00";
+		return "02.02.01.00";
 	}
 
 	/**
@@ -377,10 +377,10 @@ public class jEdit
 		if(!(file.exists() || file.isDirectory()))
 			return;
 		String[] plugins = file.list();
-		MiscUtilities.quicksort(plugins,new MiscUtilities.StringICaseCompare());
-
 		if(plugins == null)
 			return;
+
+		MiscUtilities.quicksort(plugins,new MiscUtilities.StringICaseCompare());
 		for(int i = 0; i < plugins.length; i++)
 		{
 			String plugin = plugins[i];
@@ -576,7 +576,7 @@ public class jEdit
 		// Show the wait cursor because there certainly is going
 		// to be a file load
 		if(view != null)
-			GUIUtilities.showWaitCursor(view);
+			view.showWaitCursor();
 
 		buffer = new Buffer(view,url,path,readOnly,newFile);
 		addBufferToList(buffer);
@@ -589,7 +589,7 @@ public class jEdit
 			view.setBuffer(buffer);
 
 			// Hide wait cursor
-			GUIUtilities.hideWaitCursor(view);
+			view.hideWaitCursor();
 		}
 
 		fireEditorEvent(EditorEvent.BUFFER_CREATED,view,buffer);
@@ -635,56 +635,88 @@ public class jEdit
 	 */
 	public static boolean closeBuffer(View view, Buffer buffer)
 	{
-		if(_closeBuffer(view,buffer))
+		if(buffer.isDirty())
 		{
-			removeBufferFromList(buffer);
-			buffer.getAutosaveFile().delete();
-			buffer.close();
-			fireEditorEvent(EditorEvent.BUFFER_CLOSED,view,buffer);
-
-			// Create a new file when the last is closed
-			if(buffersFirst == null && buffersLast == null)
-				newFile(view);
-
-			return true;
+			Object[] args = { buffer.getName() };
+			int result = JOptionPane.showConfirmDialog(view,
+				getProperty("notsaved.message",args),
+				getProperty("notsaved.title"),
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+			if(result == JOptionPane.YES_OPTION)
+			{
+				if(!buffer.save(view,null))
+					return false;
+			}
+			else if(result != JOptionPane.NO_OPTION)
+				return false;
 		}
-		else
-			return false;
+
+		_closeBuffer(view,buffer);
+		return true;
+	}
+
+	/**
+	 * Closes the buffer, even if it has unsaved changes.
+	 * @param view The view
+	 * @param buffer The buffer
+	 */
+	public static void _closeBuffer(View view, Buffer buffer)
+	{
+		removeBufferFromList(buffer);
+		buffer.close();
+		fireEditorEvent(EditorEvent.BUFFER_CLOSED,view,buffer);
+
+		if(!buffer.isNewFile())
+		{
+			String path = buffer.getPath();
+			if(recent.contains(path))
+				recent.removeElement(path);
+			recent.insertElementAt(path,0);
+			if(recent.size() > maxRecent)
+				recent.removeElementAt(maxRecent);
+		}
+
+		// Create a new file when the last is closed
+		if(buffersFirst == null && buffersLast == null)
+			newFile(view);
 	}
 
 	/**
 	 * Closes all open buffers.
 	 */
-	public static void closeAllBuffers(View view)
+	public static boolean closeAllBuffers(View view)
 	{
-		// Close all buffers
+		boolean dirty = false;
+
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
 		{
-			if(!_closeBuffer(view,buffer))
-				return;
-			buffer.getAutosaveFile().delete();
+			if(buffer.isDirty())
+			{
+				dirty = true;
+				break;
+			}
 			buffer = buffer.next;
 		}
 
-		GUIUtilities.showWaitCursor(view);
-
-		// Once we are sure they're all going to be blown away,
-		// fire BUFFER_CLOSED events
-		buffer = buffersFirst;
-		while(buffer != null)
+		if(dirty)
 		{
-			fireEditorEvent(EditorEvent.BUFFER_CLOSED,view,buffer);
-			buffer = buffer.next;
+			boolean ok = new CloseDialog(view).isOK();
+			if(!ok)
+				return false;
 		}
-
-		// Create a new untitled file
-		buffersFirst = buffersLast = null;
-		bufferCount = 0;
-		newFile(view);
-
-		// newFile() calls openFile(), which hides the wait cursor
-		// XXX
+		else
+		{
+			// close all buffers
+			buffer = buffersFirst;
+			while(buffer != null)
+			{
+				_closeBuffer(view,buffer);
+				buffer = buffer.next;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -753,7 +785,7 @@ public class jEdit
 	{
 		if(view != null)
 		{
-			GUIUtilities.showWaitCursor(view);
+			view.showWaitCursor();
 			view.saveCaretInfo();
 		}
 
@@ -775,7 +807,7 @@ public class jEdit
 			location.y += 20;
 			newView.setLocation(location);
 
-			GUIUtilities.hideWaitCursor(view);
+			view.hideWaitCursor();
 		}
 		else
 		{
@@ -923,24 +955,11 @@ public class jEdit
 		}
 
 		// Close all buffers
-		Buffer buffer = buffersFirst;
-		while(buffer != null)
-		{
-			if(!_closeBuffer(view,buffer))
-				return;
-			buffer = buffer.next;
-		}
+		if(!closeAllBuffers(view))
+			return;
 
 		// Stop autosave thread
 		autosave.stop();
-
-		// Delete autosave files
-		buffer = buffersFirst;
-		while(buffer != null)
-		{
-			buffer.getAutosaveFile().delete();
-			buffer = buffer.next;
-		}
 
 		// Stop server here
 		if(server != null)
@@ -1163,27 +1182,27 @@ public class jEdit
 	{
 		/* Try to guess the eventual size to avoid unnecessary
 		 * copying */
-		modes = new Vector(17 /* modes built into jEdit */
+		modes = new Vector(18 /* modes built into jEdit */
 			+ 10 /* give plugins some space */);
 
-		addMode(new org.gjt.sp.jedit.mode.text());
-		addMode(new org.gjt.sp.jedit.mode.bat());
-		addMode(new org.gjt.sp.jedit.mode.c());
-		addMode(new org.gjt.sp.jedit.mode.cc());
-		addMode(new org.gjt.sp.jedit.mode.eiffel());
-		addMode(new org.gjt.sp.jedit.mode.html());
-		addMode(new org.gjt.sp.jedit.mode.idl());
-		addMode(new org.gjt.sp.jedit.mode.java_mode());
-		addMode(new org.gjt.sp.jedit.mode.javascript());
-		addMode(new org.gjt.sp.jedit.mode.makefile());
-		addMode(new org.gjt.sp.jedit.mode.patch());
-		addMode(new org.gjt.sp.jedit.mode.perl());
-		addMode(new org.gjt.sp.jedit.mode.props());
-		addMode(new org.gjt.sp.jedit.mode.python());
-		addMode(new org.gjt.sp.jedit.mode.sh());
-		addMode(new org.gjt.sp.jedit.mode.tex());
-		addMode(new org.gjt.sp.jedit.mode.tsql());
-		addMode(new org.gjt.sp.jedit.mode.xml());
+		addMode(new Mode("bat"));
+		addMode(new Mode("c"));
+		addMode(new Mode("cc"));
+		addMode(new Mode("eiffel"));
+		addMode(new Mode("html"));
+		addMode(new Mode("idl"));
+		addMode(new Mode("java"));
+		addMode(new Mode("javascript"));
+		addMode(new Mode("makefile"));
+		addMode(new Mode("patch"));
+		addMode(new Mode("perl"));
+		addMode(new Mode("props"));
+		addMode(new Mode("python"));
+		addMode(new Mode("shell"));
+		addMode(new Mode("tex"));
+		addMode(new Mode("text"));
+		addMode(new Mode("tsql"));
+		addMode(new Mode("xml"));
 	}
 
 	/**
@@ -1199,6 +1218,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.box_comment());
 		addAction(new org.gjt.sp.jedit.actions.buffer_options());
 		addAction(new org.gjt.sp.jedit.actions.clear_marker());
+		addAction(new org.gjt.sp.jedit.actions.clear_register());
 		addAction(new org.gjt.sp.jedit.actions.close_all());
 		addAction(new org.gjt.sp.jedit.actions.close_file());
 		addAction(new org.gjt.sp.jedit.actions.close_view());
@@ -1272,6 +1292,8 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.select_prev_paragraph());
 		addAction(new org.gjt.sp.jedit.actions.set_caret_register());
 		addAction(new org.gjt.sp.jedit.actions.set_filename_register());
+		addAction(new org.gjt.sp.jedit.actions.set_replace_string());
+		addAction(new org.gjt.sp.jedit.actions.set_search_string());
 		addAction(new org.gjt.sp.jedit.actions.send());
 		addAction(new org.gjt.sp.jedit.actions.set_marker());
 		addAction(new org.gjt.sp.jedit.actions.shift_left());
@@ -1542,40 +1564,6 @@ public class jEdit
 		}
 	}
 
-	private static boolean _closeBuffer(View view, Buffer buffer)
-	{
-		if(buffer.isDirty())
-		{
-			Object[] args = { buffer.getName() };
-			int result = JOptionPane.showConfirmDialog(view,
-				getProperty("notsaved.message",args),
-				getProperty("notsaved.title"),
-				JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.WARNING_MESSAGE);
-			if(result == JOptionPane.YES_OPTION)
-			{
-				if(!buffer.save(view,null))
-					return false;
-			}
-			else if(result == JOptionPane.NO_OPTION)
-			{
-				buffer.setDirty(false);
-			}
-			else
-				return false;
-		}
-		if(!buffer.isNewFile())
-		{
-			String path = buffer.getPath();
-			if(recent.contains(path))
-				recent.removeElement(path);
-			recent.insertElementAt(path,0);
-			if(recent.size() > maxRecent)
-				recent.removeElementAt(maxRecent);
-		}
-		return true;
-	}
-
 	// Since window closing is handled by the editor itself,
 	// and is the same for all views, it is ok to do it here
 	static class WindowHandler extends WindowAdapter
@@ -1590,6 +1578,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.142  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.141  1999/10/22 07:05:37  sp
  * Version number changed to 2.1final
  *

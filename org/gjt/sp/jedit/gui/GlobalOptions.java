@@ -43,7 +43,7 @@ public class GlobalOptions extends OptionsDialog
 		addOptionPane(new org.gjt.sp.jedit.options.StyleOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.FileFilterOptionPane());
 
-		GUIUtilities.hideWaitCursor(view);
+		view.hideWaitCursor();
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
@@ -57,6 +57,9 @@ public class GlobalOptions extends OptionsDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.10  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

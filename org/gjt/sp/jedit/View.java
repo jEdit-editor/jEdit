@@ -237,6 +237,11 @@ public class View extends JFrame
 				macros.remove(i);
 		}
 
+		createMacrosMenu(macros,new File(jEdit.getJEditHome()
+			+ File.separator + "macros"));
+
+		macros.addSeparator();
+
 		String settings = jEdit.getSettingsDirectory();
 
 		if(settings != null)
@@ -325,13 +330,10 @@ public class View extends JFrame
 	}
 
 	/**
-	 * Sets the buffer being edited by this view, without updating
-	 * the `Buffers' menu. This is for internal use by the
-	 * select-buffer action only, don't call this method in other
-	 * situations.
+	 * Sets the buffer being edited by this view.
 	 * @param buffer The buffer to edit.
 	 */
-	public void _setBuffer(Buffer buffer)
+	public void setBuffer(Buffer buffer)
 	{
 		if(this.buffer == buffer)
 			return;
@@ -368,15 +370,7 @@ public class View extends JFrame
 
 		// Fire event
 		fireViewEvent(ViewEvent.BUFFER_CHANGED,oldBuffer);
-	}
 
-	/**
-	 * Sets the buffer being edited by this view.
-	 * @param buffer The buffer to edit.
-	 */
-	public final void setBuffer(Buffer buffer)
-	{
-		_setBuffer(buffer);
 		updateBuffersMenu();
 	}
 
@@ -434,6 +428,36 @@ public class View extends JFrame
 	public final boolean isClosed()
 	{
 		return closed;
+	}
+
+	/**
+	 * Shows the wait cursor.
+	 */
+	public void showWaitCursor()
+	{
+		if(waitCount++ == 0)
+		{
+			Cursor cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+			setCursor(cursor);
+			getTextArea().getPainter().setCursor(cursor);
+		}
+	}
+
+	/**
+	 * Hides the wait cursor.
+	 */
+	public void hideWaitCursor()
+	{
+		if(waitCount > 0)
+			waitCount--;
+
+		if(waitCount == 0)
+		{
+			Cursor cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+			setCursor(cursor);
+			cursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
+			getTextArea().getPainter().setCursor(cursor);
+		}
 	}
 
 	/**
@@ -572,6 +596,8 @@ public class View extends JFrame
 	private JEditTextArea textArea;
 	private StatusBar status;
 
+	private int waitCount;
+
 	private boolean showFullPath;
 
 	private EventListenerList listenerList;
@@ -585,6 +611,12 @@ public class View extends JFrame
 		EditAction action = jEdit.getAction("play-macro");
 
 		String[] macroFiles = directory.list();
+		if(macroFiles == null)
+		{
+			menu.add(GUIUtilities.loadMenuItem(this,"no-macros"));
+			return;
+		}
+
 		MiscUtilities.quicksort(macroFiles,new MiscUtilities.StringCompare());
 
 		for(int i = 0; i < macroFiles.length; i++)
@@ -727,7 +759,7 @@ public class View extends JFrame
 			{
 				Buffer[] bufferArray = jEdit.getBuffers();
 				if(bufferArray.length != 0)
-					_setBuffer(bufferArray[bufferArray.length - 1]);
+					setBuffer(bufferArray[bufferArray.length - 1]);
 			}
 
 			updateOpenRecentMenu();
@@ -787,6 +819,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.96  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.95  1999/10/19 09:10:13  sp
  * pre5 bug fixing
  *

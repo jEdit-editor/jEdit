@@ -78,10 +78,10 @@ public class BufferOptions extends JDialog
 		String[] modeNames = new String[modes.length];
 		for(int i = 0; i < modes.length; i++)
 		{
-			modeNames[i] = jEdit.getModeName(modes[i]);
+			modeNames[i] = modes[i].getName();
 		}
 		mode = new JComboBox(modeNames);
-		mode.setSelectedItem(buffer.getModeName());
+		mode.setSelectedItem(buffer.getMode().getName());
 		layout.setConstraints(mode,cons);
 		panel.add(mode);
 
@@ -258,6 +258,9 @@ public class BufferOptions extends JDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.10  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

@@ -41,7 +41,7 @@ public class PluginOptions extends OptionsDialog
 		for(int i = 0; i < plugins.length; i++)
 			plugins[i].createOptionPanes(this);
 
-		GUIUtilities.hideWaitCursor(view);
+		view.hideWaitCursor();
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
@@ -55,6 +55,9 @@ public class PluginOptions extends OptionsDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.3  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

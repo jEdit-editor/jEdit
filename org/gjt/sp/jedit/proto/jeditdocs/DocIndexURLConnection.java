@@ -42,14 +42,22 @@ public class DocIndexURLConnection extends URLConnection
 		String[] textFiles = docDir.list();
 		String[] args = new String[2];
 
-		for(int i = 0; i < textFiles.length; i++)
+		if(textFiles != null)
 		{
-			if(textFiles[i].toUpperCase().endsWith(".TXT"))
+			MiscUtilities.quicksort(textFiles,new MiscUtilities
+				.StringCompare());
+
+			for(int i = 0; i < textFiles.length; i++)
 			{
-				args[0] = "\"file:" + docDir.getPath()
-					+ File.separator + textFiles[i] + "\"";
-				args[1] = textFiles[i];
-				buf.append(MessageFormat.format(textFileEntry,args));
+				if(textFiles[i].toUpperCase().endsWith(".TXT"))
+				{
+					args[0] = "\"file:" + docDir.getPath()
+						+ File.separator
+						+ textFiles[i] + "\"";
+					args[1] = textFiles[i];
+					buf.append(MessageFormat.format(
+						textFileEntry,args));
+				}
 			}
 		}
 

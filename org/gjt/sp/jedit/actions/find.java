@@ -21,9 +21,11 @@ package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.gui.SearchDialog;
+import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
 public class find extends EditAction
+implements InputHandler.NonRecordable
 {
 	public find()
 	{

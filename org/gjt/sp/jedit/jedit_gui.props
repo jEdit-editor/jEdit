@@ -232,6 +232,8 @@ registers=cut-string-register \
 	  select-caret-register \
 	  exchange-caret-register \
 	  - \
+	  clear-register \
+	  - \
 	  view-registers
 registers.label=$Registers
 cut-string-register.label=$Cut to Register
@@ -243,6 +245,7 @@ set-caret-register.label=Save $Caret to Register
 goto-register.label=$Go to Register
 select-caret-register.label=Se$lect to Register
 exchange-caret-register.label=S$wap Caret with Register
+clear-register.label=Clear Reg$ister
 view-registers.label=$View Registers...
 
 ### Search menu
@@ -391,11 +394,11 @@ about.message=jEdit version {0} (Java {1}, {2} {3})\n\
 	See the README.txt file for redistribution information and warranty\n\
 	disclamer.\n\
 	\n\
-	The following people have written plugins or contributed code to the\n\
-	jEdit project: Artur Biesiadowski, Aziz Sharif, Chris Laird,\n\
-	George Latkiewicz, Henrik Falk, Jason Ginchereau, Jonathan Revusky,\n\
-	Juha Lindfors, Mike Dillon, Nathan Tenney, Romain Guy and\n\
-	Tal Davison. Thanks for your help!
+	The following people have written plugins or contributed code to jEdit:\n\
+	Artur Biesiadowski, Aziz Sharif, Chris Laird, George Latkiewicz,\n\
+	Henrik Falk, Jason Ginchereau, Jonathan Revusky, Juha Lindfors,\n\
+	Mike Dillon, Nathan Tenney, Romain Guy and Tal Davison.\n\
+	Thanks for your help!
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
@@ -558,6 +561,14 @@ selectlinerange.end=End line:\
 # View registers
 view-registers.title=Registers
 view-registers.caption=Defined registers:
+
+# Close all buffers dialog
+close.title=Unsaved Changes
+close.caption=The following buffers have unsaved changes:
+close.save=Save Selected
+close.save.mnemonic=s
+close.discard=Discard Selected
+close.discard.mnemonic=d
 
 # Buffer options dialog
 buffer_options.title=Buffer Options

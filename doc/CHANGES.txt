@@ -1,5 +1,25 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2pre1
+
++ New Features
+
+- 'Clear Register' command (primarily for macros)
+- Macros are now also loaded from $JEDIT_HOME/macros
+- Some sample macros are now included with jEdit
+- Search and replace operations can now be recorded in macros
+- 'Close All Buffers' and 'Exit' commands now display a dialog box listing
+  all unsaved buffers
+
++ API Changes
+
+- GUIUtilities.show/hideWaitCursor() becomes View.show/hideWaitCursor()
+- Mode system cleanup - this breaks XMode
+
++ Bug Fixes
+
+- PatchTokenMarker had a bogus dependency on the jEdit core
+
 * Version 2.1final
 
 + New Features

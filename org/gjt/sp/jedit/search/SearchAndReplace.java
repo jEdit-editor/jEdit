@@ -22,7 +22,7 @@ package org.gjt.sp.jedit.search;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.JOptionPane;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -175,7 +175,9 @@ public class SearchAndReplace
 			return false;
 		}
 
-		GUIUtilities.showWaitCursor(view);
+		record(view,"find-next");
+
+		view.showWaitCursor();
 
 		try
 		{
@@ -192,7 +194,7 @@ loop:			for(;;)
 						start = 0;
 					if(find(view,buffer,start))
 					{
-						GUIUtilities.hideWaitCursor(view);
+						view.hideWaitCursor();
 						return true;
 					}
 					fileset.doneWithBuffer(buffer);
@@ -223,7 +225,7 @@ loop:			for(;;)
 			GUIUtilities.error(view,"searcherror",args);
 		}
 
-		GUIUtilities.hideWaitCursor(view);
+		view.hideWaitCursor();
 		return false;
 	}
 
@@ -273,6 +275,8 @@ loop:			for(;;)
 			return false;
 		}
 
+		record(view,"replace-in-selection");
+
 		try
 		{
 			SearchMatcher matcher = getSearchMatcher();
@@ -312,8 +316,9 @@ loop:			for(;;)
 		int lineCount = 0;
 		int fileCount = 0;
 
-		// Show the wait cursor
-		GUIUtilities.showWaitCursor(view);
+		record(view,"replace-all");
+
+		view.showWaitCursor();
 
 		try
 		{
@@ -351,7 +356,7 @@ loop:			for(;;)
 		}
 
 		// Hide the wait cursor
-		GUIUtilities.hideWaitCursor(view);
+		view.hideWaitCursor();
 
 		if(fileCount == 0)
 			view.getToolkit().beep();
@@ -430,7 +435,7 @@ loop:			for(;;)
 		jEdit.setProperty("search.regexp.toggle",
 			regexp ? "on" : "off");
 	}
-		
+
 	// private members
 	private static String search;
 	private static String replace;
@@ -438,11 +443,29 @@ loop:			for(;;)
 	private static boolean ignoreCase;
 	private static SearchMatcher matcher;
 	private static SearchFileSet fileset;
+
+	private static void record(View view, String action)
+	{
+		InputHandler.MacroRecorder recorder = view.getTextArea()
+			.getInputHandler().getMacroRecorder();
+
+		if(recorder != null)
+		{
+			recorder.actionPerformed(jEdit.getAction("set-search-string"),
+				search);
+			recorder.actionPerformed(jEdit.getAction("set-replace-string"),
+				replace);
+			recorder.actionPerformed(jEdit.getAction(action),null);
+		}
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  1999/10/23 03:48:22  sp
+ * Mode system overhaul, close all dialog box, misc other stuff
+ *
  * Revision 1.15  1999/10/11 07:14:22  sp
  * doneWithBuffer()
  *
