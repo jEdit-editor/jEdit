@@ -29,6 +29,7 @@
 			destdir="."
 			deprecation="on"
 			includeJavaRuntime="yes"
+			debug="yes"
 		>
 			<include name="bsh/**/*.java"/>
 			<include name="com/microstar/xml/*.java"/>
