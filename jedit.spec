@@ -3,7 +3,7 @@
 ###
 
 ### This is a hack. For it to work, you must first install jEdit using
-### the regular installer, then create a 'dummy' jedit30pre5source.tar.gz
+### the regular installer, then create a 'dummy' jedit30source.tar.gz
 ### file in the /usr/src/redhat/SOURCES directory.
 
 ### To create the RPM, invoke:
@@ -11,11 +11,13 @@
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 3.0pre5
-Release: 2
+Version: 3.0
+Release: 1
+# REMIND: bump this with each RPM
+Serial: 1
 Copyright: GPL
 Group: Application/Editors
-Source0: http://download.sourceforge.net/jedit/jedit30pre5source.tar.gz
+Source0: http://download.sourceforge.net/jedit/jedit30source.tar.gz
 NoSource: 0
 URL: http://jedit.sourceforge.net
 Packager: Slava Pestov <sp@gjt.org>
@@ -30,8 +32,8 @@ regular expressions, and multiple file search and replace.
 jEdit requires either Java 1.1 with Swing 1.1, or Java 2 to work.
 
 %prep
-rm -f /usr/doc/jedit-3.0pre5
-ln -sf ../share/jedit-3.0pre5/doc /usr/doc/jedit-3.0pre5
+rm -f /usr/doc/jedit-3.0
+ln -sf ../share/jedit-3.0/doc /usr/doc/jedit-3.0
 
 %build
 
@@ -42,7 +44,7 @@ ln -sf ../share/jedit-3.0pre5/doc /usr/doc/jedit-3.0pre5
 mkdir -p ${RPM_INSTALL_PREFIX}/bin
 echo "#!/bin/sh" > ${RPM_INSTALL_PREFIX}/bin/jedit
 echo 'exec java ${JEDIT} -classpath \
-	"${CLASSPATH}:'${RPM_INSTALL_PREFIX}'/share/jedit-3.0pre5/jedit.jar" \
+	"${CLASSPATH}:'${RPM_INSTALL_PREFIX}'/share/jedit-3.0/jedit.jar" \
 	org.gjt.sp.jedit.jEdit $@' >> ${RPM_INSTALL_PREFIX}/bin/jedit
 chmod 755 ${RPM_INSTALL_PREFIX}/bin/jedit
 
@@ -50,6 +52,6 @@ chmod 755 ${RPM_INSTALL_PREFIX}/bin/jedit
 rm ${RPM_INSTALL_PREFIX}/bin/jedit
 
 %files
-/usr/doc/jedit-3.0pre5
-%docdir /usr/doc/jedit-3.0pre5/
-/usr/share/jedit-3.0pre5/
+/usr/doc/jedit-3.0
+%docdir /usr/doc/jedit-3.0/
+/usr/share/jedit-3.0/

@@ -162,8 +162,8 @@ public abstract class OperatingSystem
 				+ name + ".bat";
 
 			FileWriter out = new FileWriter(script);
-			out.write("@" + System.getProperty("java.home")
-				+ "\\bin\\java -classpath \"%CLASSPATH%:"
+			out.write("\"" + System.getProperty("java.home")
+				+ "\\bin\\java\" -classpath \"%CLASSPATH%;"
 				+ installDir + File.separator
 				+ name.toLowerCase() + ".jar\" "
 				+ installer.getProperty("app.main.class")

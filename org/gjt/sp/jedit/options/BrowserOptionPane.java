@@ -127,9 +127,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
- * Revision 1.7  2000/12/24 02:54:48  sp
- * fixing bugs
- *
  * Revision 1.6  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

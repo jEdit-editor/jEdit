@@ -21,6 +21,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Enumeration;
 import java.util.zip.*;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -56,10 +57,10 @@ public class PluginDownloadThread extends Thread
 			}
 			catch(IOException io)
 			{
-				String[] args = { io.getMessage() };
-				GUIUtilities.error(progress,"ioerror",args);
-
 				Log.log(Log.ERROR,this,io);
+
+				String[] args = { io.getMessage() };
+				VFSManager.error(progress,"ioerror",args);
 
 				progress.done(false);
 			}

@@ -45,10 +45,14 @@ public class InstallPluginsDialog extends EnhancedDialog
 		panel.setBorder(new EmptyBorder(0,0,12,0));
 
 		String[] listItems = { jEdit.getProperty("install-plugins.loading") };
-		plugins = new JList(listItems);
-		plugins.setVisibleRowCount(8);
-		plugins.addListSelectionListener(new ListHandler());
-		panel.add(BorderLayout.CENTER,new JScrollPane(plugins));
+		plugins = new JCheckBoxList(listItems);
+		//plugins.setVisibleRowCount(8);
+		plugins.getSelectionModel().addListSelectionListener(new ListHandler());
+		JScrollPane scroller = new JScrollPane(plugins);
+		Dimension dim = scroller.getPreferredSize();
+		dim.height = 120;
+		scroller.setPreferredSize(dim);
+		panel.add(BorderLayout.CENTER,scroller);
 
 		JPanel panel2 = new JPanel(new BorderLayout());
 		panel2.setBorder(new EmptyBorder(6,0,0,0));
@@ -183,7 +187,7 @@ public class InstallPluginsDialog extends EnhancedDialog
 			return null;
 
 		Vector vector = new Vector();
-		Object[] selected = plugins.getSelectedValues();
+		Object[] selected = plugins.getCheckedValues();
 		for(int i = 0; i < selected.length; i++)
 		{
 			Object object = selected[i];
@@ -202,7 +206,7 @@ public class InstallPluginsDialog extends EnhancedDialog
 	}
 
 	// private members
-	private JList plugins;
+	private JCheckBoxList plugins;
 	private JLabel name;
 	private JLabel author;
 	private JLabel version;
@@ -277,7 +281,7 @@ public class InstallPluginsDialog extends EnhancedDialog
 
 			// skip plugins that are already installed
 			String[] installed = PluginManagerPlugin.getPlugins(false);
-			final DefaultListModel model = new DefaultListModel();
+			final Vector model = new Vector();
 loop:			for(int i = 0; i < pluginList.length; i++)
 			{
 				String jar = pluginList[i].jar;

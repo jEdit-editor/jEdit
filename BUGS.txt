@@ -1,1 +1,0 @@
-Console macros: set shell to Console

@@ -45,10 +45,14 @@ public class UpdatePluginsDialog extends EnhancedDialog
 		panel.setBorder(new EmptyBorder(0,0,12,0));
 
 		String[] listItems = { jEdit.getProperty("update-plugins.loading") };
-		plugins = new JList(listItems);
-		plugins.setVisibleRowCount(8);
-		plugins.addListSelectionListener(new ListHandler());
-		panel.add(BorderLayout.CENTER,new JScrollPane(plugins));
+		plugins = new JCheckBoxList(listItems);
+		//plugins.setVisibleRowCount(8);
+		plugins.getSelectionModel().addListSelectionListener(new ListHandler());
+		JScrollPane scroller = new JScrollPane(plugins);
+		Dimension dim = scroller.getPreferredSize();
+		dim.height = 120;
+		scroller.setPreferredSize(dim);
+		panel.add(BorderLayout.CENTER,scroller);
 
 		JPanel panel2 = new JPanel(new BorderLayout());
 		panel2.setBorder(new EmptyBorder(6,0,0,0));
@@ -144,7 +148,7 @@ public class UpdatePluginsDialog extends EnhancedDialog
 			return null;
 
 		Vector vector = new Vector();
-		Object[] selected = plugins.getSelectedValues();
+		Object[] selected = plugins.getCheckedValues();
 		for(int i = 0; i < selected.length; i++)
 		{
 			Object object = selected[i];
@@ -161,7 +165,7 @@ public class UpdatePluginsDialog extends EnhancedDialog
 	}
 
 	// private members
-	private JList plugins;
+	private JCheckBoxList plugins;
 	private JLabel name;
 	private JLabel author;
 	private JLabel currVersion;
@@ -191,7 +195,6 @@ public class UpdatePluginsDialog extends EnhancedDialog
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
-			int index = plugins.getSelectedIndex();
 			Object selected = plugins.getSelectedValue();
 			if(selected instanceof PluginList.Plugin)
 			{
@@ -243,7 +246,7 @@ public class UpdatePluginsDialog extends EnhancedDialog
 			// only add plugins that are already installed,
 			// and don't add freshly installed ones
 			String[] installed = PluginManagerPlugin.getLoadedPlugins();
-			final DefaultListModel model = new DefaultListModel();
+			final Vector model = new Vector();
 			for(int i = 0; i < pluginList.length; i++)
 			{
 				PluginList.Plugin plugin = pluginList[i];
@@ -269,7 +272,7 @@ public class UpdatePluginsDialog extends EnhancedDialog
 				public void run()
 				{
 					plugins.setModel(model);
-					if(model.getSize() == 0)
+					if(model.size() == 0)
 						GUIUtilities.message(UpdatePluginsDialog.this,"up-to-date",null);
 				}
 			});

@@ -1,8 +1,7 @@
 ### plugin properties
 plugin.PluginManagerPlugin.name=Plugin Manager
 plugin.PluginManagerPlugin.author=Slava Pestov
-plugin.PluginManagerPlugin.version=0.5.13
-#plugin.PluginManagerPlugin.docs=PluginManager.html
+plugin.PluginManagerPlugin.version=0.6
 plugin.PluginManagerPlugin.depend.0=jedit 02.07.02.00
 
 ### URL to download plugin list from
@@ -40,7 +39,7 @@ remove-plugins.error.message=The plugin {0} cannot be removed because\n\
 
 ### plugin installation
 install-plugins.title=Install New Plugins
-install-plugins.caption=Available plugins:
+install-plugins.caption=Click the check box next to plugins you wish to install:
 install-plugins.loading=Loading plugin list from server; please wait...
 install-plugins.info.name=Name:
 install-plugins.info.author=Author:
@@ -52,7 +51,7 @@ install-plugins.info.description=Description:
 install-plugins.user=Install in user plugin directory ({0})
 install-plugins.none=none
 install-plugins.system=Install in system plugin directory ({0})
-install-plugins.install=Install
+install-plugins.install=Install Checked Plugins
 
 install-plugins.done.title=Plugins Installed
 install-plugins.done.message=You must now restart jEdit to be use the\n\
@@ -63,7 +62,7 @@ install-plugins.error.message=The plugin {0} cannot be installed because\n\
 
 ### plugin updating
 update-plugins.title=Update Plugins
-update-plugins.caption=New versions of the following plugins are available:
+update-plugins.caption=Click the check box next to plugins you wish to update:
 update-plugins.loading=Loading plugin list from server; please wait...
 update-plugins.info.name=Name:
 update-plugins.info.author=Author:
@@ -73,7 +72,7 @@ update-plugins.info.updated=Last updated:
 update-plugins.info.requires=Requires:
 update-plugins.info.description=Description:
 
-update-plugins.update=Update
+update-plugins.update=Update Checked Plugins
 
 update-plugins.done.title=Plugins Updated
 update-plugins.done.message=You must now restart jEdit to be use the\n\
