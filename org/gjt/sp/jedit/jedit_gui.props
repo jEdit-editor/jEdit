@@ -19,25 +19,30 @@ lineSep.mac=MacOS (\\r)
 ###
 ### TOOLBAR
 ###
-view.toolbar=new-file open-file close-file - save save-all - \
-	print - undo redo - cut copy paste - new-view - help
+view.toolbar=new-file open-file save close-file print - \
+	undo redo cut copy paste - goto-line find - new-view unsplit \
+	split-horizontal split-vertical - buffer-options global-options - \
+	help
 
 new-file.icon=New.gif
 open-file.icon=Open.gif
 close-file.icon=Delete.gif
 save.icon=Save.gif
-save-all.icon=SaveAll.gif
 print.icon=Print.gif
 undo.icon=Undo.gif
 redo.icon=Redo.gif
 cut.icon=Cut.gif
 copy.icon=Copy.gif
 paste.icon=Paste.gif
+goto-line.icon=FingerRight.gif
+find.icon=Binocular.gif
 new-view.icon=NewView.gif
+unsplit.icon=Unsplit.gif
+split-horizontal.icon=SplitHorizontal.gif
+split-vertical.icon=SplitVertical.gif
+buffer-options.icon=Document.gif
+global-options.icon=Hammer.gif
 help.icon=Help.gif
-ignore-case.icon=IgnoreCase.gif
-regexp.icon=Regexp.gif
-multifile-search.icon=Multifile.gif
 
 view.search.find=Find:\ 
 view.search.incremental=Incremental

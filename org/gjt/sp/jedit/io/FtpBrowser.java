@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.io;
 
 import com.fooware.net.*;
+import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -83,9 +84,27 @@ public class FtpBrowser extends JDialog
 		topFields.add(hostField = new JTextField(host));
 		topFields.add(userField = new JTextField(user));
 		topFields.add(passwordField = new JPasswordField(password));
+		topFields.setBorder(new EmptyBorder(0,0,0,5));
 		topPanel.add(BorderLayout.CENTER,topFields);
 
 		getContentPane().add(BorderLayout.NORTH,topPanel);
+
+		JPanel centerPanel = new JPanel(new BorderLayout());
+		list = new JList();
+		list.setVisibleRowCount(10);
+		list.addListSelectionListener(new ListHandler());
+		list.addMouseListener(new MouseHandler());
+		list.setCellRenderer(new FileCellRenderer());
+		centerPanel.add(BorderLayout.CENTER,new JScrollPane(list));
+
+		JPanel pathPanel = new JPanel(new BorderLayout());
+		pathPanel.add(BorderLayout.WEST,new JLabel(jEdit.getProperty(
+			"vfs.ftp.browser.path"),SwingConstants.RIGHT));
+		pathPanel.add(BorderLayout.CENTER,pathField = new JTextField(path));
+		pathPanel.setBorder(new EmptyBorder(0,5,0,0));
+		centerPanel.add(BorderLayout.SOUTH,pathPanel);
+
+		getContentPane().add(BorderLayout.CENTER,centerPanel);
 
 		JPanel buttons = new JPanel();
 		ActionHandler actionHandler = new ActionHandler();
@@ -107,21 +126,6 @@ public class FtpBrowser extends JDialog
 		cancel.addActionListener(actionHandler);
 		buttons.add(cancel);
 
-		JPanel centerPanel = new JPanel(new BorderLayout());
-		list = new JList();
-		list.setVisibleRowCount(10);
-		list.addListSelectionListener(new ListHandler());
-		list.addMouseListener(new MouseHandler());
-		list.setCellRenderer(new FileCellRenderer());
-		centerPanel.add(BorderLayout.CENTER,new JScrollPane(list));
-
-		JPanel pathPanel = new JPanel(new BorderLayout());
-		pathPanel.add(BorderLayout.WEST,new JLabel(jEdit.getProperty(
-			"vfs.ftp.browser.path"),SwingConstants.RIGHT));
-		pathPanel.add(BorderLayout.CENTER,pathField = new JTextField(path));
-		centerPanel.add(BorderLayout.SOUTH,pathPanel);
-
-		getContentPane().add(BorderLayout.CENTER,centerPanel);
 		getContentPane().add(BorderLayout.SOUTH,buttons);
 
 		addWindowListener(new WindowHandler());
@@ -551,6 +555,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/05/01 11:53:24  sp
+ * More icons added to toolbar, minor updates here and there
+ *
  * Revision 1.4  2000/04/30 07:27:13  sp
  * Ftp VFS hacking, bug fixes
  *

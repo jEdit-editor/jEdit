@@ -186,9 +186,10 @@ public class VFSManager
 			{
 				VFSManager.error = false;
 
-				if(view != null && !view.isShowing())
-					view = null;
-				GUIUtilities.error(view,error,args);
+				if(view == null || !view.isShowing())
+					GUIUtilities.error(null,error,args);
+				else
+					GUIUtilities.error(view,error,args);
 			}
 		});
 	}
@@ -212,6 +213,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/05/01 11:53:24  sp
+ * More icons added to toolbar, minor updates here and there
+ *
  * Revision 1.6  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

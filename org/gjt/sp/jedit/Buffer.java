@@ -142,6 +142,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				{
 					if(!getFlag(TEMPORARY) && view != null)
 						view.hideWaitCursor();
+					setFlag(LOADING,false);
 					return false;
 				}
 			}
@@ -1797,6 +1798,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.147  2000/05/01 11:53:23  sp
+ * More icons added to toolbar, minor updates here and there
+ *
  * Revision 1.146  2000/04/30 07:27:13  sp
  * Ftp VFS hacking, bug fixes
  *

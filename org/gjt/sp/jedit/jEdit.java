@@ -2138,7 +2138,7 @@ public class jEdit
 	{
 		viewCount--;
 
-		if(view == viewsFirst && view == viewsLast)
+		if(viewsFirst == viewsLast)
 		{
 			viewsFirst = viewsLast = null;
 			return;
@@ -2195,7 +2195,7 @@ public class jEdit
 	{
 		// Even if reallyExit is false, we still exit properly
 		// if background mode is off
-		reallyExit = reallyExit || !background;
+		reallyExit |= !background;
 
 		if(settingsDirectory != null && session != null)
 			Sessions.saveSession(view,session);
@@ -2222,6 +2222,8 @@ public class jEdit
 			// jEdit process
 			saveSettings();
 
+			System.err.println(viewsFirst + ":" + viewsLast
+				+ ":" + buffersFirst + ":" + buffersLast);
 			return;
 		}
 
@@ -2257,6 +2259,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.231  2000/05/01 11:53:23  sp
+ * More icons added to toolbar, minor updates here and there
+ *
  * Revision 1.230  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

@@ -1307,6 +1307,8 @@ public class View extends JFrame implements EBComponent
 
 				recentBuffer = null;
 			}
+			else if(_buffer == recentBuffer)
+				recentBuffer = null;
 
 			updateRecentMenu();
 			updateBuffersMenu();
@@ -1438,6 +1440,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.165  2000/05/01 11:53:23  sp
+ * More icons added to toolbar, minor updates here and there
+ *
  * Revision 1.164  2000/04/30 07:27:13  sp
  * Ftp VFS hacking, bug fixes
  *

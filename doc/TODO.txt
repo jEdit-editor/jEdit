@@ -3,7 +3,8 @@ JEDIT TO DO
 2.5pre1:
 
 - Block user input while loading/saving
-- Background mode memory leak
+- Closed views leak memory a rusty bucket
+- CVS: remove SaveAll.gif
 
 2.5:
 
@@ -30,6 +31,7 @@ JEDIT TO DO
   - customizable font size?
 - Threaded HyperSearch
 - set dirty to false when all undos undone
+- GUIUtilities.<message,error,input>(Component,String,Object[])
 
 Later:
 

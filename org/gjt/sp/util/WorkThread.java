@@ -158,7 +158,20 @@ public class WorkThread extends Thread
 						"Running in AWT thread: "
 						+ request.run);
 
-					request.run.run();
+					try
+					{
+						request.run.run();
+					}
+					catch(Abort a)
+					{
+					}
+					catch(Throwable t)
+					{
+						Log.log(Log.ERROR,WorkThread.class,"Exception "
+							+ "in AWT thread:");
+						Log.log(Log.ERROR,WorkThread.class,t);
+					}
+
 					requestCount--;
 				}
 			};
@@ -168,7 +181,19 @@ public class WorkThread extends Thread
 		{
 			Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: "
 				+ request.run);
-			request.run.run();
+			try
+			{
+				request.run.run();
+			}
+			catch(Abort a)
+			{
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,WorkThread.class,"Exception "
+					+ "in work thread:");
+				Log.log(Log.ERROR,WorkThread.class,t);
+			}
 			requestCount--;
 		}
 	}
@@ -211,6 +236,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/05/01 11:53:24  sp
+ * More icons added to toolbar, minor updates here and there
+ *
  * Revision 1.4  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *
