@@ -5,15 +5,17 @@ JEDIT VERSION HISTORY
 + New Features
 
 - To Upper Case, To Lower Case and Select Word actions from TextTools plugin
-  moved into the core
+  moved into the core (TextTools was written by Mike Dillon)
 - New Select Line, Select Paragraph actions (mainly useful in plugins)
 
 + Enhancements
 
 - Useless 'Save to URL' command removed (URL saving is not supported in
-  Java, all the current protocols return 'operation not supported')
+  Java, all the current protocols return 'operation not supported').
+  Because the URL loading code is still in Buffer.java, re-adding this
+  command once URL saving is supported will be trivial
 - Macro updates
-- Menu items look better
+- Menu items and tool bar looks better
 - Faster literal search, using the Boyer-Moore algorithm (Mike Dillon)
 - Menu bar rearranged a little bit
 - Improved 'global options' dialog box (Mike Dillon)
@@ -31,6 +33,8 @@ JEDIT VERSION HISTORY
   dawn of time)
 - If you invoked undo when there were no undos in the queue, a flag would
   be set which prevented undos from working at all (since 2.2pre1)
+- If an error occurs while opening a plugin's ZIP file, any subsequent
+  plugins don't seem to load (since ???)
 
 * Version 2.3pre1
 

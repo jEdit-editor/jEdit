@@ -37,9 +37,6 @@ public class JARClassLoader extends ClassLoader
 	public JARClassLoader(String path)
 		throws IOException
 	{
-		index = classLoaders.size();
-		classLoaders.addElement(this);
-
 		zipFile = new ZipFile(path);
 
 		Enumeration entires = zipFile.entries();
@@ -57,6 +54,12 @@ public class JARClassLoader extends ClassLoader
 					pluginClasses.addElement(name);
 			}
 		}
+
+		// If this is done before the above while() statement
+		// and an exception is thrown while the ZIP file is
+		// being loaded, weird things happen...
+		index = classLoaders.size();
+		classLoaders.addElement(this);
 	}
 
 	/**
@@ -336,6 +339,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/01/16 06:09:27  sp
+ * Bug fixes
+ *
  * Revision 1.22  1999/11/27 06:01:20  sp
  * Faster file loading, geometry fix
  *

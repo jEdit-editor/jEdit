@@ -1,5 +1,5 @@
 /*
- * OptionsDialog.java - Abstract tabbed options dialog
+ * OptionsDialog.java - Global options dialog
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
@@ -49,6 +49,7 @@ public class OptionsDialog extends EnhancedDialog
 		cardPanel = new JPanel(new CardLayout());
 		cardPanel.setBorder(new CompoundBorder(new BevelBorder(
 			BevelBorder.RAISED), new EmptyBorder(2, 2, 2, 2)));
+
 		getContentPane().add(cardPanel, BorderLayout.CENTER);
 
 		paneNames = new DefaultListModel();
@@ -153,7 +154,7 @@ public class OptionsDialog extends EnhancedDialog
 	{
 		Object source = evt.getSource();
 
-		if (source != paneList) return; // eh? (SP)
+		if (source != paneList) return;
 
 		int idx = ((JList)source).getSelectedIndex();
 
@@ -166,14 +167,12 @@ public class OptionsDialog extends EnhancedDialog
 		}
 	}
 
-	// protected members
-	protected Vector panes;
-	protected JTabbedPane tabs;
-	protected JList paneList;
-	protected JPanel cardPanel;
-	protected DefaultListModel paneNames;
-
 	// private members
+	private Vector panes;
+	private JTabbedPane tabs;
+	private JList paneList;
+	private JPanel cardPanel;
+	private DefaultListModel paneNames;
 	private JButton ok;
 	private JButton cancel;
 }
@@ -181,6 +180,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/01/16 06:09:27  sp
+ * Bug fixes
+ *
  * Revision 1.9  2000/01/14 22:11:24  sp
  * Enhanced options dialog box
  *

@@ -564,6 +564,7 @@ public class View extends JFrame implements EBComponent
 				box.add(quicksearch);
 				box.add(Box.createVerticalGlue());
 				toolBar.add(box);
+				toolBar.add(Box.createHorizontalStrut(10));
 
 				toolBar.add(ignoreCase = GUIUtilities.loadToolButton(
 					"ignore-case"));
@@ -982,6 +983,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.122  2000/01/16 06:09:27  sp
+ * Bug fixes
+ *
  * Revision 1.121  2000/01/15 04:15:51  sp
  * Help menu updates, misc. GUI updates
  *

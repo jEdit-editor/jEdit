@@ -1,6 +1,8 @@
 JEDIT TO DO
 
-CVS: remove jeditdocs directory
+Bracket highlighting is broken by forward-delete and other
+commands which change the document without changing the
+caret position
 
 ------- Stuff for 2.3pre2 -------
 
