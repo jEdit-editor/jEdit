@@ -78,7 +78,7 @@ view.context=undo redo - cut copy paste paste-previous - select-all \
 	split-horizontal split-vertical - record-temp-macro \
 	stop-recording play-temp-macro
 
-gutter.context=toggle-gutter toggle-line-numbers - save-gutter-size
+view.gutter.context=toggle-gutter toggle-line-numbers - save-gutter-size
 save-gutter-size.label=Save Gutter Size
 
 ###
@@ -466,6 +466,10 @@ select-next-line.label=Select Next Line
 view.title=jEdit - 
 
 view.buffer-label={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
+
+# Gutter highlight
+view.gutter.register=Register "{0}" points to this line
+view.gutter.marker=Marker "{0}" points to this line
 
 # Status messages
 view.status.loading=Loading {0}
@@ -942,6 +946,7 @@ options.styles.gutterBgColor=Gutter background
 options.styles.gutterFgColor=Gutter foreground
 options.styles.gutterHighlightColor=Gutter highlight
 options.styles.gutterCurrentLineColor=Gutter current line
+options.styles.gutterMarkerColor=Gutter markers
 options.styles.gutterBorderColor=Gutter border
 options.styles.comment1Style=Comment 1
 options.styles.comment2Style=Comment 2

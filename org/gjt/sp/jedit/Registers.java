@@ -1,6 +1,6 @@
 /*
  * Registers.java - Register manager
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ import javax.swing.text.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.RegistersChanged;
 import org.gjt.sp.util.Log;
 
 /**
@@ -89,6 +90,8 @@ public class Registers
 				registers[name] = newRegister;
 			}
 		}
+
+		EditBus.send(new RegistersChanged(null));
 	}
 
 	/**
@@ -109,6 +112,8 @@ public class Registers
 				register.dispose();
 			registers[name] = null;
 		}
+
+		EditBus.send(new RegistersChanged(null));
 	}
 
 	/**
@@ -191,9 +196,17 @@ public class Registers
 		}
 
 		/**
-		 * Returns the buffer involved, opening it if necessary.
+		 * Returns the buffer involved, or null if it is not open.
 		 */
 		public Buffer getBuffer()
+		{
+			return buffer;
+		}
+
+		/**
+		 * Returns the buffer involved, opening it if necessary.
+		 */
+		public Buffer openFile()
 		{
 			if(buffer == null)
 				return jEdit.openFile(null,path);
@@ -341,6 +354,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/05/22 12:05:45  sp
+ * Markers are highlighted in the gutter, bug fixes
+ *
  * Revision 1.8  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes

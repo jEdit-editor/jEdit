@@ -53,7 +53,7 @@ public class goto_register extends EditAction
 			{
 				Registers.CaretRegister caretReg
 					= (Registers.CaretRegister)register;
-				Buffer buffer = caretReg.getBuffer();
+				Buffer buffer = caretReg.openFile();
 				if(buffer == null)
 					return;
 				view.setBuffer(buffer);

@@ -5,8 +5,10 @@ JEDIT 2.5 VERSION HISTORY
 + New Features
 
 - The tool bar can be edited in Utilities->Global Options->Tool Bar
-- For plugin developers: new EnhancedFrame provides automatic Enter/Escape key
-  handling for JFrames
+- For plugin developers: new EnhancedFrame class provides automatic
+  Enter/Escape key handling for JFrames
+- New RegistersChanged message is sent when the value of a register changes
+- Position registers and markers are highlighted in the gutter
 
 + Enhancements
 
@@ -15,6 +17,7 @@ JEDIT 2.5 VERSION HISTORY
 - Broken plugins will no longer prevent the 'Plugins' menu from appearing
 - HyperSearch is now a frame, not a dialog box
 - Documentation updates
+- PHP mode now highlights statements with '@' better
 
 + Bug Fixes
 
@@ -22,6 +25,9 @@ JEDIT 2.5 VERSION HISTORY
 - Fixed NPE that could occur when performing an undo (since 2.5pre1)
 - Added jEdit.getPlugin(String name) method, which was missing in 2.5pre3
 - Shell script mode didn't highlight some variables correctly (since 2.4pre2)
+- Gutter highlight tool tips didn't work (this bug was never encountered
+  in practice since no plugins actually used gutter highlights)
+- Fixed possible NPE in focus handling code
 
 * Version 2.5pre3
 

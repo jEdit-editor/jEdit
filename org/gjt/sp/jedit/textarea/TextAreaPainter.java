@@ -21,7 +21,6 @@ package org.gjt.sp.jedit.textarea;
 
 import javax.swing.text.*;
 import javax.swing.JComponent;
-import javax.swing.ToolTipManager;
 import java.awt.event.MouseEvent;
 import java.awt.*;
 import org.gjt.sp.jedit.syntax.*;
@@ -659,6 +658,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  2000/05/22 12:05:46  sp
+ * Markers are highlighted in the gutter, bug fixes
+ *
  * Revision 1.35  2000/05/10 08:22:21  sp
  * EOL marker bug fix, documentation updates
  *
@@ -691,20 +693,5 @@ public class TextAreaPainter extends JComponent implements TabExpander
  * Revision 1.26  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes
- *
- * Revision 1.25  2000/01/29 10:12:43  sp
- * BeanShell edit mode, bug fixes
- *
- * Revision 1.24  1999/12/13 03:40:30  sp
- * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.23  1999/12/11 06:34:39  sp
- * Bug fixes
- *
- * Revision 1.22  1999/12/07 07:19:36  sp
- * Buffer loading code cleaned up
- *
- * Revision 1.21  1999/11/28 00:33:07  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
  *
  */

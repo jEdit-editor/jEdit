@@ -547,17 +547,16 @@ public class View extends JFrame implements EBComponent
 			gotoMarker.removeAll();
 		EditAction clearMarkerAction = jEdit.getAction("clear-marker");
 		EditAction gotoMarkerAction = jEdit.getAction("goto-marker");
-		Enumeration enum = editPane.getBuffer().getMarkers();
-		if(!enum.hasMoreElements())
+		Vector markers = editPane.getBuffer().getMarkers();
+		if(markers.size() == 0)
 		{
 			clearMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
 			gotoMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
 			return;
 		}
-		while(enum.hasMoreElements())
+		for(int i = 0; i < markers.size(); i++)
 		{
-			String name = ((Marker)enum.nextElement())
-				.getName();
+			String name = ((Marker)markers.elementAt(i)).getName();
 			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
 				null,clearMarkerAction,name);
 			clearMarker.add(menuItem);
@@ -692,8 +691,9 @@ public class View extends JFrame implements EBComponent
 	private EditPane createEditPane(EditPane pane, Buffer buffer)
 	{
 		EditPane editPane = new EditPane(this,pane,buffer);
-		editPane.getTextArea().addCaretListener(new CaretHandler());
-		editPane.getTextArea().addFocusListener(new FocusHandler());
+		JEditTextArea textArea = editPane.getTextArea();
+		textArea.addCaretListener(new CaretHandler());
+		textArea.addFocusListener(new FocusHandler());
 		EditBus.send(new EditPaneUpdate(editPane,EditPaneUpdate.CREATED));
 		return editPane;
 	}
@@ -973,6 +973,9 @@ public class View extends JFrame implements EBComponent
 			Component comp = (Component)evt.getSource();
 			while(!(comp instanceof EditPane))
 			{
+				if(comp == null)
+					return;
+
 				comp = comp.getParent();
 			}
 
@@ -1018,6 +1021,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.176  2000/05/22 12:05:45  sp
+ * Markers are highlighted in the gutter, bug fixes
+ *
  * Revision 1.175  2000/05/16 10:47:40  sp
  * More work on toolbar editor, -gui command line switch
  *

@@ -57,3 +57,11 @@ public interface TextAreaHighlight
 	 */
 	String getToolTipText(MouseEvent evt);
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.2  2000/05/22 12:05:46  sp
+ * Markers are highlighted in the gutter, bug fixes
+ *
+ */

@@ -100,6 +100,8 @@ public class EditPane extends JPanel implements EBComponent
 				.BUFFER_CHANGED));
 		}
 
+		markerHighlight.updateHighlight();
+
 		// Only do this after all I/O requests are complete
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -153,6 +155,8 @@ public class EditPane extends JPanel implements EBComponent
 	{
 		if(msg instanceof PropertiesChanged)
 			propertiesChanged();
+		else if(msg instanceof RegistersChanged)
+			markerHighlight.updateHighlight();
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
 	}
@@ -211,9 +215,10 @@ public class EditPane extends JPanel implements EBComponent
 		EditBus.addToBus(this);
 
 		textArea = new JEditTextArea();
-
+		markerHighlight = new MarkerHighlight();
+		textArea.getGutter().addCustomHighlight(markerHighlight);
 		textArea.getGutter().setContextMenu(GUIUtilities
-			.loadPopupMenu(view,"gutter.context"));
+			.loadPopupMenu(view,"view.gutter.context"));
 
 		if(editPane != null)
 			initTextArea(editPane.textArea);
@@ -249,6 +254,7 @@ public class EditPane extends JPanel implements EBComponent
 	private Buffer recentBuffer;
 	private BufferTabs bufferTabs;
 	private JEditTextArea textArea;
+	private MarkerHighlight markerHighlight;
 
 	private void propertiesChanged()
 	{
@@ -342,6 +348,8 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getProperty("view.gutter.fgColor")));
 		gutter.setHighlightedForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.highlightColor")));
+		markerHighlight.setHighlightColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.gutter.markerColor")));
 		gutter.setCurrentLineForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.currentLineColor")));
 		String alignment = jEdit.getProperty(
@@ -561,6 +569,11 @@ public class EditPane extends JPanel implements EBComponent
 			if(bufferTabs != null)
 				bufferTabs.updateBufferTab(_buffer);
 		}
+		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
+		{
+			if(_buffer == buffer)
+				markerHighlight.updateHighlight();
+		}
 		else if(msg.getWhat() == BufferUpdate.MODE_CHANGED)
 		{
 			if(_buffer == buffer)
@@ -572,6 +585,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/05/22 12:05:45  sp
+ * Markers are highlighted in the gutter, bug fixes
+ *
  * Revision 1.4  2000/05/14 10:55:21  sp
  * Tool bar editor started, improved view registers dialog box
  *

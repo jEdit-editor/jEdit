@@ -88,9 +88,6 @@ public class JEditTextArea extends JComponent
 
 		caretVisible = true;
 		editable = true;
-
-		// We don't seem to get the initial focus event?
-		//focusedComponent = this;
 	}
 
 	/**
@@ -252,6 +249,8 @@ public class JEditTextArea extends JComponent
 			updateScrollBars();
 		painter.repaint();
 		gutter.repaint();
+
+		fireScrollEvent(ScrollEvent.VERTICAL);
 	}
 
 	/**
@@ -297,6 +296,8 @@ public class JEditTextArea extends JComponent
 		if(horizontalOffset != horizontal.getValue())
 			updateScrollBars();
 		painter.repaint();
+
+		fireScrollEvent(ScrollEvent.HORIZONTAL);
 	}
 
 	/**
@@ -308,29 +309,34 @@ public class JEditTextArea extends JComponent
 	 */
 	public boolean setOrigin(int firstLine, int horizontalOffset)
 	{
-		boolean changed = false;
+		boolean vertChanged = false, horizChanged = false;
 		int oldFirstLine = this.firstLine;
-
-		if(horizontalOffset != this.horizontalOffset)
-		{
-			this.horizontalOffset = horizontalOffset;
-			changed = true;
-		}
 
 		if(firstLine != this.firstLine)
 		{
 			this.firstLine = firstLine;
-			changed = true;
+			vertChanged = true;
 		}
 
-		if(changed)
+		if(horizontalOffset != this.horizontalOffset)
+		{
+			this.horizontalOffset = horizontalOffset;
+			horizChanged = true;
+		}
+
+		if(vertChanged || horizChanged)
 		{
 			updateScrollBars();
 			painter.repaint();
 			gutter.repaint();
 		}
 
-		return changed;
+		if(vertChanged)
+			fireScrollEvent(ScrollEvent.VERTICAL);
+		if(horizChanged)
+			fireScrollEvent(ScrollEvent.HORIZONTAL);
+
+		return vertChanged || horizChanged;
 	}
 
 	/**
@@ -1395,6 +1401,24 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Adds a scroll listener to this text area.
+	 * @param listener The listener
+	 */
+	public final void addScrollListener(ScrollListener listener)
+	{
+		listenerList.add(ScrollListener.class,listener);
+	}
+
+	/**
+	 * Removes a scroll listener from this text area.
+	 * @param listener The listener
+	 */
+	public final void removeScrollListener(ScrollListener listener)
+	{
+		listenerList.remove(ScrollListener.class,listener);
+	}
+
+	/**
 	 * Called by the AWT when this component is added to a parent.
 	 * Adds document listener.
 	 */
@@ -1409,6 +1433,7 @@ public class JEditTextArea extends JComponent
 		}
 
 		ToolTipManager.sharedInstance().registerComponent(painter);
+		ToolTipManager.sharedInstance().registerComponent(gutter);
 
 		if(!documentHandlerInstalled)
 		{
@@ -1511,6 +1536,32 @@ public class JEditTextArea extends JComponent
 			if(listeners[i] == CaretListener.class)
 			{
 				((CaretListener)listeners[i+1]).caretUpdate(caretEvent);
+			}
+		}
+	}
+
+	protected void fireScrollEvent(int id)
+	{
+		ScrollEvent evt = null;
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = listeners.length - 2; i >= 0; i--)
+		{
+			if(listeners[i] == ScrollListener.class)
+			{
+				if(evt == null)
+					evt = new ScrollEvent(this,id);
+				ScrollListener listener = (ScrollListener)listeners[i+1];
+				switch(id)
+				{
+				case ScrollEvent.VERTICAL:
+					listener.verticalScrollUpdate(evt);
+					break;
+				case ScrollEvent.HORIZONTAL:
+					listener.horizontalScrollUpdate(evt);
+					break;
+				default:
+					throw new InternalError("Invalid event id");
+				}
 			}
 		}
 	}
@@ -2181,6 +2232,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.65  2000/05/22 12:05:45  sp
+ * Markers are highlighted in the gutter, bug fixes
+ *
  * Revision 1.64  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *

@@ -53,7 +53,10 @@ public class exchange_caret_register extends EditAction
 			{
 				Registers.CaretRegister caretReg
 					= (Registers.CaretRegister)register;
-				Buffer buffer = caretReg.getBuffer();
+				Buffer buffer = caretReg.openFile();
+				if(buffer == null)
+					return;
+
 				int offset = caretReg.getOffset();
 
 				Registers.setRegister(ch,new Registers.CaretRegister(

@@ -1,6 +1,6 @@
 /*
  * StyleOptionPane.java - Color/style option pane
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -184,6 +184,8 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.highlightColor");
 		addColorChoice("options.styles.gutterCurrentLineColor",
 			"view.gutter.currentLineColor");
+		addColorChoice("options.styles.gutterMarkerColor",
+			"view.gutter.markerColor");
 		addColorChoice("options.styles.gutterBorderColor",
 			"view.gutter.borderColor");
 	}
@@ -585,6 +587,9 @@ implements ActionListener, KeyListener
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/05/22 12:05:45  sp
+ * Markers are highlighted in the gutter, bug fixes
+ *
  * Revision 1.15  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *
@@ -614,23 +619,5 @@ implements ActionListener, KeyListener
  *
  * Revision 1.6  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.5  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.4  1999/07/08 06:06:04  sp
- * Bug fixes and miscallaneous updates
- *
- * Revision 1.3  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.2  1999/06/16 03:29:59  sp
- * Added <title> tags to docs, configuration data is now stored in a
- * ~/.jedit directory, style option pane finished
- *
- * Revision 1.1  1999/06/12 02:30:27  sp
- * Find next can now perform multifile searches, multifile-search command added,
- * new style option pane
  *
  */

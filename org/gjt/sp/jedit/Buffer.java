@@ -1017,11 +1017,12 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
-	 * Returns an enumeration of set markers.
+	 * Returns a vector of markers.
+	 * @since jEdit 2.5pre4
 	 */
-	public final Enumeration getMarkers()
+	public final Vector getMarkers()
 	{
-		return markers.elements();
+		return markers;
 	}
 
 	/**
@@ -1108,7 +1109,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public Marker getMarker(String name)
 	{
-		Enumeration enum = getMarkers();
+		Enumeration enum = markers.elements();
 		while(enum.hasMoreElements())
 		{
 			Marker marker = (Marker)enum.nextElement();
@@ -1443,7 +1444,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public void _writeMarkers(OutputStream out) throws IOException
 	{
 		Writer o = new BufferedWriter(new OutputStreamWriter(out));
-		Enumeration enum = getMarkers();
+		Enumeration enum = markers.elements();
 		while(enum.hasMoreElements())
 		{
 			Marker marker = (Marker)enum.nextElement();
@@ -1809,6 +1810,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.151  2000/05/22 12:05:45  sp
+ * Markers are highlighted in the gutter, bug fixes
+ *
  * Revision 1.150  2000/05/13 05:13:31  sp
  * Mode option pane
  *

@@ -155,6 +155,9 @@ view.gutter.highlightColor=#000000
 # Gutter current line highlight color
 view.gutter.currentLineColor=#d04040
 
+# Gutter marker highlight color
+view.gutter.markerColor=#ccffcc
+
 # Gutter border color
 view.gutter.borderColor=#808080
 
