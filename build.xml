@@ -48,7 +48,6 @@
 				<include name="com/microstar/xml/*.class"/>
 				<include name="gnu/regexp/*.class"/>
 				<include name="gnu/regexp/MessagesBundle.properties"/>
-				<include name="javax/help/**/*.class"/>
 
 				<include name="org/gjt/sp/jedit/**/*.class"/>
 				<include name="org/gjt/sp/util/**/*.class"/>
@@ -56,20 +55,12 @@
 				<include name="org/gjt/sp/jedit/icons/*.gif"/>
 				<include name="org/gjt/sp/jedit/icons/*.jpg"/>
 				<include name="org/gjt/sp/jedit/options/overview.html"/>
-				<include name="org/gjt/sp/jedit/tips/*.html"/>
 				<include name="org/gjt/sp/jedit/*.props"/>
 
 				<include name="org/gjt/sp/jedit/actions.xml"/>
 				<include name="org/gjt/sp/jedit/dockables.xml"/>
 				<include name="org/gjt/sp/jedit/default.abbrevs"/>
 				<include name="org/gjt/sp/jedit/jedit.bsh"/>
-
-				<include name="doc/*.txt"/>
-				<include name="doc/welcome.html"/>
-				<include name="doc/jedit.gif"/>
-				<include name="doc/users-guide/*.html"/>
-				<include name="doc/users-guide/toc.xml"/>
-				<include name="doc/users-guide/word-index.xml"/>
 			</fileset>
 		</jar>
 	</target>
@@ -117,8 +108,13 @@
 	<target name="docs-html-xsltproc">
 		<exec executable="xsltproc" dir="doc/users-guide">
 			<arg value="--catalogs"/>
-			<arg value="jedithtml.xsl"/>
+			<arg value="../jedithtml.xsl"/>
 			<arg value="users-guide.xml"/>
+		</exec>
+		<exec executable="xsltproc" dir="doc/FAQ">
+			<arg value="--catalogs"/>
+			<arg value="../jedithtml.xsl"/>
+			<arg value="faq.xml"/>
 		</exec>
 	</target>
 
@@ -127,7 +123,11 @@
 		<style
 			in="doc/users-guide/users-guide.xml"
 			destdir="doc/users-guide"
-			style="doc/users-guide/jedithtml.xsl"/>
+			style="doc/jedithtml.xsl"/>
+		<style
+			in="doc/FAQ/faq.xml"
+			destdir="doc/FAQ"
+			style="doc/jedithtml.xsl"/>
 	</target>
 
 	<!-- Generate PDF docs with OpenJade tool from openjade.sf.net -->
@@ -205,6 +205,10 @@
 			<fileset dir="." includes="doc/users-guide/*.html"/>
 			<fileset dir="." includes="doc/users-guide/toc.xml"/>
 			<fileset dir="." includes="doc/users-guide/word-index.xml"/>
+
+			<fileset dir="." includes="doc/FAQ/*.html"/>
+			<fileset dir="." includes="doc/FAQ/toc.xml"/>
+			<fileset dir="." includes="doc/FAQ/word-index.xml"/>
 
 			<fileset dir="." includes="doc/users-guide/*.pdf"/>
 			<fileset dir="." includes="doc/users-guide/*.aux"/>
