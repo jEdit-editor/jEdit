@@ -120,6 +120,11 @@ public class JEditTextArea extends JComponent
 		addFocusListener(new FocusHandler());
 
 		editable = true;
+
+		// This doesn't seem very correct, but it fixes a problem
+		// when setting the initial caret position for a buffer
+		// (eg, from the recent file list)
+		focusedComponent = this;
 	}
 
 	/**
@@ -430,7 +435,7 @@ public class JEditTextArea extends JComponent
 
 		int _firstLine = firstLine + electricScroll;
 		int _lastLine = firstLine + visibleLines - electricScroll;
-		if(caretLine > _firstLine && caretLine <= _lastLine)
+		if(caretLine > _firstLine && caretLine < _lastLine)
 		{
 			// vertical scroll position is correct already
 		}
@@ -454,8 +459,8 @@ public class JEditTextArea extends JComponent
 		}
 		else if(caretLine >= _lastLine)
 		{
-			firstLine = (caretLine - visibleLines) + electricScroll;
-			if(_firstLine >= getLineCount())
+			firstLine = (caretLine - visibleLines) + electricScroll + 1;
+			if(_firstLine >= getLineCount() - visibleLines)
 				firstLine = getLineCount() - visibleLines;
 			if(firstLine < 0)
 				firstLine = 0;
@@ -472,7 +477,7 @@ public class JEditTextArea extends JComponent
 				- x + width + 5);
 			changed = true;
 		}
-		else if(x >= painter.getWidth())
+		else if(x >= painter.getWidth() - width - 5)
 		{
 			horizontalOffset = horizontalOffset +
 				(painter.getWidth() - x) - width - 5;
@@ -3226,7 +3231,9 @@ forward_scan:		do
 				return false;
 			c = c.getParent();
 		}
-		boolean hasFocus = (((Window)c).getFocusOwner() == this);
+
+		Component focusOwner = ((Window)c).getFocusOwner();
+		boolean hasFocus = (focusOwner == this);
 		if(hasFocus && focusedComponent != this)
 			focusedComponent = this;
 		return hasFocus;
@@ -4247,59 +4254,3 @@ forward_scan:		do
 		caretTimer.start();
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.102  2000/11/23 08:34:11  sp
- * Search and replace UI improvements
- *
- * Revision 1.101  2000/11/19 07:51:26  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.100  2000/11/17 11:16:05  sp
- * Actions removed, documentation updates, more BeanShell work
- *
- * Revision 1.99  2000/11/16 10:25:19  sp
- * More macro work
- *
- * Revision 1.98  2000/11/13 11:19:28  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.97  2000/11/12 05:36:50  sp
- * BeanShell integration started
- *
- * Revision 1.96  2000/11/11 02:59:31  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.95  2000/11/08 09:31:37  sp
- * Junk
- *
- * Revision 1.94  2000/11/07 10:08:33  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.93  2000/11/05 05:25:46  sp
- * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
- *
- * Revision 1.92  2000/11/05 00:44:15  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.91  2000/11/02 09:19:34  sp
- * more features
- *
- * Revision 1.90  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.89  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.88  2000/10/15 04:10:35  sp
- * bug fixes
- *
- * Revision 1.87  2000/10/13 06:57:20  sp
- * Edit User/System Macros command, gutter mouse handling improved
- *
- * Revision 1.86  2000/10/12 09:28:27  sp
- * debugging and polish
- *
- */

@@ -52,8 +52,8 @@ public class SearchDialog extends EnhancedDialog
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(BorderLayout.NORTH,createFieldPanel());
 		centerPanel.add(BorderLayout.CENTER,createSearchSettingsPanel());
-		centerPanel.add(BorderLayout.SOUTH,createMultiFilePanel());
 		content.add(BorderLayout.CENTER,centerPanel);
+		content.add(BorderLayout.SOUTH,createMultiFilePanel());
 
 		content.add(BorderLayout.EAST,createButtonsPanel());
 
@@ -77,19 +77,7 @@ public class SearchDialog extends EnhancedDialog
 			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 			regexp.setSelected(SearchAndReplace.getRegexp());
 
-			String searchMode = jEdit.getProperty("search.mode.value");
-			if("incremental".equals(searchMode))
-				incrementalSearch.setSelected(true);
-			else if("batch".equals(searchMode))
-				batchSearch.setSelected(true);
-			else
-				normalSearch.setSelected(true);
-
-			String batchMode = jEdit.getProperty("search.batch-results.value");
-			if("buffer".equals(batchMode))
-				batchBuffer.setSelected(true);
-			else
-				batchWindow.setSelected(true);
+			batchSearch.setSelected(jEdit.getBooleanProperty("search.batch.toggle"));
 
 			fileset = SearchAndReplace.getSearchFileSet();
 			if(fileset instanceof CurrentBufferSet)
@@ -145,15 +133,7 @@ public class SearchDialog extends EnhancedDialog
 
 	public void ok()
 	{
-		if(incrementalSearch.isSelected())
-		{
-			// on enter, start search from end
-			// of current match to find next one
-			find.addCurrentToHistory();
-			incrementalSearch(view.getTextArea()
-				.getSelectionEnd());
-		}
-		else if(batchSearch.isSelected())
+		if(batchSearch.isSelected())
 		{
 			save();
 			if(SearchAndReplace.batchSearch(view));
@@ -186,9 +166,7 @@ public class SearchDialog extends EnhancedDialog
 	private HistoryTextField find, replace;
 
 	// search settings
-	private JRadioButton normalSearch, incrementalSearch, batchSearch;
-	private JRadioButton batchWindow, batchBuffer;
-	private JCheckBox keepDialog, ignoreCase, regexp;
+	private JCheckBox keepDialog, ignoreCase, regexp, batchSearch;
 	private JRadioButton searchCurrentBuffer, searchAllBuffers,
 		searchDirectory;
 
@@ -213,7 +191,6 @@ public class SearchDialog extends EnhancedDialog
 		label.setDisplayedMnemonic(jEdit.getProperty("search.find.mnemonic")
 			.charAt(0));
 		find = new HistoryTextField("find");
-		find.getDocument().addDocumentListener(new DocumentHandler());
 		find.addActionListener(actionHandler);
 		label.setLabelFor(find);
 		label.setBorder(new EmptyBorder(12,0,2,0));
@@ -238,56 +215,18 @@ public class SearchDialog extends EnhancedDialog
 
 	private JPanel createSearchSettingsPanel()
 	{
-		JPanel searchSettings = new JPanel(new GridLayout(7,2));
+		JPanel searchSettings = new JPanel(new GridLayout(4,2));
 		searchSettings.setBorder(new EmptyBorder(0,0,12,12));
 
 		SettingsActionHandler actionHandler = new SettingsActionHandler();
-
-		ButtonGroup searchMode = new ButtonGroup();
 		ButtonGroup fileset = new ButtonGroup();
-		ButtonGroup showBatchResultsIn = new ButtonGroup();
+
+		searchSettings.add(new JLabel(jEdit.getProperty("search.fileset")));
 
 		keepDialog = new JCheckBox(jEdit.getProperty("search.keep"));
 		keepDialog.setMnemonic(jEdit.getProperty("search.keep.mnemonic")
 			.charAt(0));
 		searchSettings.add(keepDialog);
-
-		searchSettings.add(new JLabel(jEdit.getProperty("search.mode")));
-
-		ignoreCase = new JCheckBox(jEdit.getProperty("search.case"));
-		ignoreCase.setMnemonic(jEdit.getProperty("search.case.mnemonic")
-			.charAt(0));
-		searchSettings.add(ignoreCase);
-		ignoreCase.addActionListener(actionHandler);
-
-		normalSearch = new JRadioButton(jEdit.getProperty("search.normal"));
-		normalSearch.setMnemonic(jEdit.getProperty("search.normal.mnemonic")
-			.charAt(0));
-		searchMode.add(normalSearch);
-		searchSettings.add(normalSearch);
-		normalSearch.addActionListener(actionHandler);
-
-		regexp = new JCheckBox(jEdit.getProperty("search.regexp"));
-		regexp.setMnemonic(jEdit.getProperty("search.regexp.mnemonic")
-			.charAt(0));
-		searchSettings.add(regexp);
-		regexp.addActionListener(actionHandler);
-
-		incrementalSearch = new JRadioButton(jEdit.getProperty("search.incremental"));
-		incrementalSearch.setMnemonic(jEdit.getProperty("search.incremental.mnemonic")
-			.charAt(0));
-		searchMode.add(incrementalSearch);
-		searchSettings.add(incrementalSearch);
-		incrementalSearch.addActionListener(actionHandler);
-
-		searchSettings.add(new JLabel(jEdit.getProperty("search.fileset")));
-
-		batchSearch = new JRadioButton(jEdit.getProperty("search.batch"));
-		batchSearch.setMnemonic(jEdit.getProperty("search.batch.mnemonic")
-			.charAt(0));
-		searchMode.add(batchSearch);
-		searchSettings.add(batchSearch);
-		batchSearch.addActionListener(actionHandler);
 
 		searchCurrentBuffer = new JRadioButton(jEdit.getProperty("search.current"));
 		searchCurrentBuffer.setMnemonic(jEdit.getProperty("search.current.mnemonic")
@@ -296,7 +235,11 @@ public class SearchDialog extends EnhancedDialog
 		searchSettings.add(searchCurrentBuffer);
 		searchCurrentBuffer.addActionListener(actionHandler);
 
-		searchSettings.add(new JLabel(jEdit.getProperty("search.batch-results")));
+		ignoreCase = new JCheckBox(jEdit.getProperty("search.case"));
+		ignoreCase.setMnemonic(jEdit.getProperty("search.case.mnemonic")
+			.charAt(0));
+		searchSettings.add(ignoreCase);
+		ignoreCase.addActionListener(actionHandler);
 
 		searchAllBuffers = new JRadioButton(jEdit.getProperty("search.all"));
 		searchAllBuffers.setMnemonic(jEdit.getProperty("search.all.mnemonic")
@@ -305,12 +248,11 @@ public class SearchDialog extends EnhancedDialog
 		searchSettings.add(searchAllBuffers);
 		searchAllBuffers.addActionListener(actionHandler);
 
-		batchWindow = new JRadioButton(jEdit.getProperty("search.window"));
-		batchWindow.setMnemonic(jEdit.getProperty("search.window.mnemonic")
+		regexp = new JCheckBox(jEdit.getProperty("search.regexp"));
+		regexp.setMnemonic(jEdit.getProperty("search.regexp.mnemonic")
 			.charAt(0));
-		fileset.add(batchWindow);
-		showBatchResultsIn.add(batchWindow);
-		searchSettings.add(batchWindow);
+		searchSettings.add(regexp);
+		regexp.addActionListener(actionHandler);
 
 		searchDirectory = new JRadioButton(jEdit.getProperty("search.directory"));
 		searchDirectory.setMnemonic(jEdit.getProperty("search.directory.mnemonic")
@@ -319,12 +261,11 @@ public class SearchDialog extends EnhancedDialog
 		searchSettings.add(searchDirectory);
 		searchDirectory.addActionListener(actionHandler);
 
-		batchBuffer = new JRadioButton(jEdit.getProperty("search.buffer"));
-		batchBuffer.setMnemonic(jEdit.getProperty("search.buffer.mnemonic")
+		batchSearch = new JCheckBox(jEdit.getProperty("search.batch"));
+		batchSearch.setMnemonic(jEdit.getProperty("search.batch.mnemonic")
 			.charAt(0));
-		fileset.add(batchBuffer);
-		showBatchResultsIn.add(batchBuffer);
-		searchSettings.add(batchBuffer);
+		searchSettings.add(batchSearch);
+		batchSearch.addActionListener(actionHandler);
 
 		return searchSettings;
 	}
@@ -332,14 +273,14 @@ public class SearchDialog extends EnhancedDialog
 	private JPanel createMultiFilePanel()
 	{
 		JPanel multifile = new JPanel();
-		multifile.setBorder(new EmptyBorder(0,0,0,12));
 
 		GridBagLayout layout = new GridBagLayout();
 		multifile.setLayout(layout);
 
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridy = 1;
-		cons.gridwidth = cons.gridheight = 1;
+		cons.gridwidth = 1;
+		cons.gridheight = 1;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.fill = GridBagConstraints.HORIZONTAL;
 
@@ -378,20 +319,23 @@ public class SearchDialog extends EnhancedDialog
 
 		cons.insets = new Insets(0,0,3,6);
 		cons.weightx = 1.0f;
+		cons.gridwidth = 2;
 		layout.setConstraints(directory,cons);
 		multifile.add(directory);
 
 		choose = new JButton(jEdit.getProperty("search.choose"));
 		choose.setMnemonic(jEdit.getProperty("search.choose.mnemonic")
 			.charAt(0));
+		cons.insets = new Insets(0,0,3,0);
 		cons.weightx = 0.0f;
+		cons.gridwidth = 1;
 		layout.setConstraints(choose,cons);
 		multifile.add(choose);
 		choose.addActionListener(new MultiFileActionHandler());
 
 		cons.insets = new Insets(0,0,0,0);
 		cons.gridy++;
-		cons.gridwidth = 3;
+		cons.gridwidth = 4;
 
 		searchSubDirectories = new JCheckBox(jEdit.getProperty(
 			"search.subdirs"));
@@ -450,55 +394,21 @@ public class SearchDialog extends EnhancedDialog
 
 	private void updateEnabled()
 	{
-		boolean replaceEnabled = !(incrementalSearch.isSelected()
-			|| batchSearch.isSelected());
+		boolean replaceEnabled = !batchSearch.isSelected();
 
 		replace.setEnabled(replaceEnabled);
 		replaceBtn.setEnabled(replaceEnabled);
 		replaceAndFindBtn.setEnabled(replaceEnabled);
 		replaceAllBtn.setEnabled(replaceEnabled);
 
-		boolean batchAndMultiFileEnabled = (!incrementalSearch.isSelected());
+		filter.setEnabled(searchAllBuffers.isSelected()
+			|| searchDirectory.isSelected());
 
-		searchCurrentBuffer.setEnabled(batchAndMultiFileEnabled);
-		searchAllBuffers.setEnabled(batchAndMultiFileEnabled);
-		searchDirectory.setEnabled(batchAndMultiFileEnabled);
-
-		boolean batchEnabled = batchSearch.isSelected();
-		batchWindow.setEnabled(batchEnabled);
-		batchBuffer.setEnabled(batchEnabled);
-
-		filter.setEnabled(batchAndMultiFileEnabled
-			&& (searchAllBuffers.isSelected()
-			|| searchDirectory.isSelected()));
-
-		boolean directoryEnabled = batchAndMultiFileEnabled
-			&& searchDirectory.isSelected();
+		boolean directoryEnabled = searchDirectory.isSelected();
 
 		directory.setEnabled(directoryEnabled);
 		choose.setEnabled(directoryEnabled);
 		searchSubDirectories.setEnabled(directoryEnabled);
-	}
-
-	private void incrementalSearch(int start)
-	{
-		SearchAndReplace.setSearchString(find.getText());
-
-		try
-		{
-			if(SearchAndReplace.find(view,view.getBuffer(),start))
-				return;
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
-		catch(Exception ia)
-		{
-			// invalid regexp, ignore
-		}
-
-		view.getToolkit().beep();
 	}
 
 	private void save()
@@ -537,18 +447,8 @@ public class SearchDialog extends EnhancedDialog
 
 		jEdit.setBooleanProperty("search.keepDialog.toggle",
 			keepDialog.isSelected());
-		String searchMode;
-		if(incrementalSearch.isSelected())
-			searchMode = "incremental";
-		else if(batchSearch.isSelected())
-			searchMode = "batch";
-		else
-			searchMode = "normal";
 
-		jEdit.setProperty("search.mode.value",searchMode);
-
-		jEdit.setProperty("search.batch-results.value",
-			batchBuffer.isSelected() ? "buffer" : "window");
+		jEdit.setBooleanProperty("search.batch.toggle",batchSearch.isSelected());
 	}
 
 	private void closeOrKeepDialog()
@@ -572,9 +472,7 @@ public class SearchDialog extends EnhancedDialog
 				SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
 			else if(source == regexp)
 				SearchAndReplace.setRegexp(regexp.isSelected());
-			else if(source == normalSearch
-				|| source == incrementalSearch
-				|| source == batchSearch
+			else if(source == batchSearch
 				|| source == searchCurrentBuffer
 				|| source == searchAllBuffers
 				|| source == searchDirectory)
@@ -638,38 +536,6 @@ public class SearchDialog extends EnhancedDialog
 
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
-		}
-	}
-
-	class DocumentHandler implements DocumentListener
-	{
-		public void insertUpdate(DocumentEvent evt)
-		{
-			// on insert, start search from beginning of
-			// current match. This will continue to highlight
-			// the current match until another match is found
-			if(incrementalSearch.isSelected())
-			{
-				incrementalSearch(view.getTextArea()
-					.getSelectionStart());
-			}
-		}
-
-		public void removeUpdate(DocumentEvent evt)
-		{
-			// on backspace, restart from beginning
-			// when we write reverse search, implement real
-			// backtracking
-			if(incrementalSearch.isSelected())
-			{
-				String text = find.getText();
-				if(text != null && text.length() != 0)
-					incrementalSearch(0);
-			}
-		}
-
-		public void changedUpdate(DocumentEvent evt)
-		{
 		}
 	}
 }

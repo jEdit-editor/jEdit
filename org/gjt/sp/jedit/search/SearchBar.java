@@ -143,6 +143,7 @@ public class SearchBar extends JPanel
 					find.addCurrentToHistory();
 					find.setText(null);
 					SearchAndReplace.setSearchString(text);
+					SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
 					SearchAndReplace.batchSearch(view);
 				}
 				else
@@ -213,6 +214,7 @@ public class SearchBar extends JPanel
 		{
 			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
 			{
+				evt.consume();
 				view.getEditPane().focusOnTextArea();
 			}
 		}

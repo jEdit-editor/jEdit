@@ -7,13 +7,13 @@
 help.shortcut=F1
 
 # Single key
-# Unused: h
 select-all.shortcut=C+a
 complete-word.shortcut=C+b
 copy.shortcut=C+c
 delete-line.shortcut=C+d
 find.shortcut=C+f
 find-next.shortcut=C+g
+find-selection.shortcut=C+h
 indent-lines.shortcut=C+i
 join-lines.shortcut=C+j
 exchange-caret-register.shortcut=C+k

@@ -63,10 +63,22 @@ public class CurrentBufferSet implements SearchFileSet
 	{
 		return 1;
 	}
+
+	/**
+	 * Returns the BeanShell code that will recreate this file set.
+	 * @since jEdit 2.7pre3
+	 */
+	public String getCode()
+	{
+		return "new CurrentBufferSet()";
+	}
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/11/24 06:48:35  sp
+ * Caret position history
+ *
  * Revision 1.7  2000/05/14 10:55:22  sp
  * Tool bar editor started, improved view registers dialog box
  *

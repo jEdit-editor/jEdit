@@ -52,6 +52,16 @@ public class AllBufferSet extends BufferListSet
 		return glob;
 	}
 
+	/**
+	 * Returns the BeanShell code that will recreate this file set.
+	 * @since jEdit 2.7pre3
+	 */
+	public String getCode()
+	{
+		return "new AllBufferSet(\"" + MiscUtilities.charsToEscapes(glob)
+			+ "\")";
+	}
+
 	// private members
 	private String glob;
 

@@ -56,6 +56,17 @@ public class DirectoryListSet extends BufferListSet
 		return recurse;
 	}
 
+	/**
+	 * Returns the BeanShell code that will recreate this file set.
+	 * @since jEdit 2.7pre3
+	 */
+	public String getCode()
+	{
+		return "new DirectoryListSet(\"" + MiscUtilities.charsToEscapes(directory)
+			+ "\",\"" + MiscUtilities.charsToEscapes(glob) + "\","
+			+ recurse + ")";
+	}
+
 	// private members
 	private String directory;
 	private String glob;

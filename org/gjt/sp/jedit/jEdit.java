@@ -285,7 +285,6 @@ public class jEdit
 		initPlugins();
 		GUIUtilities.advanceSplashProgress();
 		initSiteProperties();
-		GUIUtilities.advanceSplashProgress();
 		initUserProperties();
 		if(settingsDirectory != null)
 		{
@@ -294,6 +293,12 @@ public class jEdit
 			if(history.exists())
 				historyModTime = history.lastModified();
 			HistoryModel.loadHistory(history);
+
+			File recent = new File(MiscUtilities.constructPath(
+				settingsDirectory,"recent"));
+			if(recent.exists())
+				recentModTime = recent.lastModified();
+			BufferHistory.load(recent);
 		}
 
 		Abbrevs.load();
@@ -306,7 +311,6 @@ public class jEdit
 
 		propertiesChanged();
 		initPLAF();
-		initRecent();
 		SearchAndReplace.load();
 
 		initActions();
@@ -323,15 +327,6 @@ public class jEdit
 			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
 				.loadAllPlugins();
 		}
-
-		GUIUtilities.advanceSplashProgress();
-
-		// Preload menu and tool bar models
-		GUIUtilities.loadMenuBarModel("view.mbar");
-		GUIUtilities.loadMenuModel("view.context");
-		GUIUtilities.loadMenuModel("gutter.context");
-		if(getBooleanProperty("view.showToolbar"))
-			GUIUtilities.loadToolBarModel("view.toolbar");
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -573,16 +568,7 @@ public class jEdit
 		}
 		Autosave.setInterval(interval);
 
-		// Recent files
-		try
-		{
-			maxRecent = Integer.parseInt(getProperty("recent"));
-		}
-		catch(NumberFormatException nf)
-		{
-			Log.log(Log.ERROR,jEdit.class,nf);
-			maxRecent = 8;
-		}
+		saveCaret = getBooleanProperty("saveCaret");
 
 		EditBus.send(new PropertiesChanged(null));
 	}
@@ -1180,7 +1166,8 @@ public class jEdit
 	 */
 	public static Buffer openFile(View view, String path)
 	{
-		return openFile(view,null,path,false,false,null);
+		return openFile(view,null,path,false,false,
+			new Hashtable());
 	}
 
 	/**
@@ -1196,7 +1183,8 @@ public class jEdit
 	public static Buffer openFile(View view, String parent,
 		String path, boolean readOnly, boolean newFile)
 	{
-		return openFile(view,parent,path,readOnly,newFile,null);
+		return openFile(view,parent,path,readOnly,newFile,
+			new Hashtable());
 	}
 
 	/**
@@ -1232,7 +1220,7 @@ public class jEdit
 		}
 		else
 			protocol = "file";
-			
+
 		if(protocol.equals("file"))
 			path = MiscUtilities.constructPath(parent,path);
 
@@ -1242,6 +1230,13 @@ public class jEdit
 			if(view != null)
 				view.setBuffer(buffer);
 			return buffer;
+		}
+
+		if(saveCaret && props.get(Buffer.SELECTION_START) == null)
+		{
+			int caret = BufferHistory.getCaretPosition(path);
+			props.put(Buffer.SELECTION_START,new Integer(caret));
+			props.put(Buffer.SELECTION_END,new Integer(caret));
 		}
 
 		final Buffer newBuffer = new Buffer(view,path,readOnly,
@@ -1298,7 +1293,8 @@ public class jEdit
 		if(buffer != null)
 			return buffer;
 
-		buffer = new Buffer(null,path,readOnly,newFile,true,null);
+		buffer = new Buffer(null,path,readOnly,newFile,true,
+			new Hashtable());
 		if(!buffer.load(view,false))
 			return null;
 		else
@@ -1418,7 +1414,11 @@ public class jEdit
 		buffer.close();
 
 		if(!buffer.isNewFile())
-			addRecent(buffer.getPath());
+		{
+			Integer _caret = (Integer)buffer.getProperty(Buffer.SELECTION_START);
+			int caret = (_caret == null ? 0 : _caret.intValue());
+			BufferHistory.setCaretPosition(buffer.getPath(),caret);
+		}
 
 		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
 
@@ -1481,7 +1481,12 @@ public class jEdit
 		while(buffer != null)
 		{
 			if(!buffer.isNewFile())
-				addRecent(buffer.getPath());
+			{
+				Integer _caret = (Integer)buffer.getProperty(Buffer.SELECTION_START);
+				int caret = (_caret == null ? 0 : _caret.intValue());
+				BufferHistory.setCaretPosition(buffer.getPath(),caret);
+			}
+
 			buffer.close();
 			if(!isExiting)
 				EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
@@ -1739,16 +1744,6 @@ public class jEdit
 	}
 
 	/**
-	 * Returns an array of recently opened files.
-	 */
-	public static String[] getRecent()
-	{
-		String[] array = new String[recent.size()];
-		recent.copyInto(array);
-		return array;
-	}
-
-	/**
 	 * Returns the jEdit install directory.
 	 */
 	public static String getJEditHome()
@@ -1772,14 +1767,20 @@ public class jEdit
 		if(settingsDirectory != null)
 		{
 			// Save the recent file list
-			for(int i = 0; i < recent.size(); i++)
-			{
-				String file = (String)recent.elementAt(i);
-				setProperty("recent." + i,file);
-			}
-			unsetProperty("recent." + maxRecent);
-
 			File file = new File(MiscUtilities.constructPath(
+				settingsDirectory, "recent"));
+			if(file.lastModified() != recentModTime)
+			{
+				Log.log(Log.WARNING,jEdit.class,file + " changed"
+					+ " on disk; will not save recent files");
+			}
+			else
+			{
+				BufferHistory.save(file);
+			}
+			recentModTime = file.lastModified();
+
+			file = new File(MiscUtilities.constructPath(
 				settingsDirectory, "history"));
 			if(file.lastModified() != historyModTime)
 			{
@@ -1915,7 +1916,7 @@ public class jEdit
 	// private members
 	private static String jEditHome;
 	private static String settingsDirectory;
-	private static long propsModTime, historyModTime;
+	private static long propsModTime, historyModTime, recentModTime;
 	private static String session;
 	private static Properties defaultProps;
 	private static Properties props;
@@ -1926,7 +1927,7 @@ public class jEdit
 	private static EditPlugin.JAR plugins; /* plugins without a JAR */
 	private static Vector modes;
 	private static Vector recent;
-	private static int maxRecent;
+	private static boolean saveCaret;
 	private static InputHandler inputHandler;
 
 	// buffer link list
@@ -2202,21 +2203,6 @@ public class jEdit
 		}
 	}
 
-	/**
-	 * Loads the recent file list.
-	 */
-	private static void initRecent()
-	{
-		recent = new Vector(maxRecent);
-
-		for(int i = 0; i < maxRecent; i++)
-		{
-			String recentFile = getProperty("recent." + i);
-			if(recentFile != null)
-				recent.addElement(recentFile);
-		}
-	}
-
 	private static void gotoMarker(Buffer buffer, String marker)
 	{
 		VFSManager.runInAWTThread(new GotoMarkerSafely(buffer,marker));
@@ -2406,15 +2392,6 @@ public class jEdit
 		}
 	}
 
-	private static void addRecent(String path)
-	{
-		if(recent.contains(path))
-			recent.removeElement(path);
-		recent.insertElementAt(path,0);
-		if(recent.size() > maxRecent)
-			recent.removeElementAt(maxRecent);
-	}
-
 	/**
 	 * closeView() used by exit().
 	 */
@@ -2431,83 +2408,3 @@ public class jEdit
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.297  2000/11/23 08:34:10  sp
- * Search and replace UI improvements
- *
- * Revision 1.296  2000/11/21 02:58:03  sp
- * 2.7pre2 finished
- *
- * Revision 1.295  2000/11/17 11:15:59  sp
- * Actions removed, documentation updates, more BeanShell work
- *
- * Revision 1.294  2000/11/16 10:25:16  sp
- * More macro work
- *
- * Revision 1.293  2000/11/16 04:01:11  sp
- * BeanShell macros started
- *
- * Revision 1.292  2000/11/13 11:19:26  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.291  2000/11/12 05:36:48  sp
- * BeanShell integration started
- *
- * Revision 1.290  2000/11/11 02:59:29  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.289  2000/11/08 09:31:36  sp
- * Junk
- *
- * Revision 1.288  2000/11/07 10:08:31  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.287  2000/11/05 05:25:45  sp
- * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
- *
- * Revision 1.286  2000/11/05 00:44:14  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.285  2000/11/02 09:19:31  sp
- * more features
- *
- * Revision 1.284  2000/10/30 07:14:03  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.283  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.282  2000/10/13 06:57:20  sp
- * Edit User/System Macros command, gutter mouse handling improved
- *
- * Revision 1.281  2000/10/12 09:28:27  sp
- * debugging and polish
- *
- * Revision 1.280  2000/09/26 10:19:46  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.279  2000/09/23 03:01:09  sp
- * pre7 yayayay
- *
- * Revision 1.278  2000/09/09 04:00:34  sp
- * 2.6pre6
- *
- * Revision 1.277  2000/09/06 04:39:47  sp
- * bug fixes
- *
- * Revision 1.276  2000/09/04 06:34:53  sp
- * bug fixes
- *
- * Revision 1.275  2000/09/03 03:16:53  sp
- * Search bar integrated with command line, enhancements throughout
- *
- * Revision 1.274  2000/09/01 11:31:00  sp
- * Rudimentary 'command line', similar to emacs minibuf
- *
- * Revision 1.273  2000/08/31 02:54:00  sp
- * Improved activity log, bug fixes
- *
- */

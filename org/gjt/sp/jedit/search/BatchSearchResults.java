@@ -143,6 +143,31 @@ public class BatchSearchResults extends JPanel implements DockableWindow,
 		return resultTreeModel;
 	}
 
+	public void searchStarted()
+	{
+		resultTreeRoot.removeAllChildren();
+		resultTreeModel.reload(resultTreeRoot);
+	}
+
+	public void searchDone()
+	{
+		// need to invokeLater() because the thread calls
+		// VFSManager.runInAWTThread() to add search results
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				if(resultTreeRoot.getChildCount() == 1)
+				{
+					resultTree.expandPath(new TreePath(
+						((DefaultMutableTreeNode)
+						resultTreeRoot.getChildAt(0))
+						.getPath()));
+				}
+			}
+		});
+	}
+
 	// private members
 	private View view;
 

@@ -214,11 +214,14 @@ public class SearchAndReplace
 	 */
 	public static boolean batchSearch(View view)
 	{
+		record(view,"batchSearch(view);",false,true);
+
 		view.getDockableWindowManager().addDockableWindow(
 			BatchSearchResults.NAME);
-		BatchSearchResults results = (BatchSearchResults)
+		final BatchSearchResults results = (BatchSearchResults)
 			view.getDockableWindowManager()
 			.getDockableWindow(BatchSearchResults.NAME);
+		results.searchStarted();
 
 		try
 		{
@@ -234,6 +237,16 @@ public class SearchAndReplace
 				args[0] = e.toString();
 			GUIUtilities.error(view,"searcherror",args);
 			return false;
+		}
+		finally
+		{
+			VFSManager.runInAWTThread(new Runnable()
+			{
+				public void run()
+				{
+					results.searchDone();
+				}
+			});
 		}
 	}
 
@@ -533,11 +546,19 @@ loop:		for(;;)
 	 */
 	public static void load()
 	{
-		fileset = new CurrentBufferSet();
 		search = jEdit.getProperty("search.find.value");
 		replace = jEdit.getProperty("search.replace.value");
 		regexp = jEdit.getBooleanProperty("search.regexp.toggle");
 		ignoreCase = jEdit.getBooleanProperty("search.ignoreCase.toggle");
+
+		String filesetCode = jEdit.getProperty("search.fileset.value");
+		if(filesetCode != null)
+		{
+			fileset = (SearchFileSet)BeanShell.eval(null,filesetCode,true);
+		}
+
+		if(fileset == null)
+			fileset = new CurrentBufferSet();
 	}
 
 	/**
@@ -549,6 +570,8 @@ loop:		for(;;)
 		jEdit.setProperty("search.replace.value",replace);
 		jEdit.setBooleanProperty("search.ignoreCase.toggle",ignoreCase);
 		jEdit.setBooleanProperty("search.regexp.toggle",regexp);
+
+		jEdit.setProperty("search.fileset.value",fileset.getCode());
 	}
 
 	// private members
@@ -584,16 +607,8 @@ loop:		for(;;)
 
 			if(recordFileSet)
 			{
-				if(fileset instanceof CurrentBufferSet)
-				{
-					recorder.record("SearchAndReplace.setSearchFileSet("
-					+ "new CurrentBufferSet());");
-				}
-				else if(fileset instanceof AllBufferSet)
-				{
-					recorder.record("SearchAndReplace.setSearchFileSet("
-						+ "new AllBufferSet());");
-				}
+				recorder.record("SearchAndReplace.setSearchFileSet("
+					+ fileset.getCode() + ");");
 			}
 
 			recorder.record(action);

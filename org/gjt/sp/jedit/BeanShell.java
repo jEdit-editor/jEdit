@@ -41,7 +41,7 @@ public class BeanShell
 			view.getToolkit().beep();
 			return;
 		}
-		Object returnValue = eval(view,command);
+		Object returnValue = eval(view,command,false);
 		if(returnValue != null)
 			textArea.setSelectedText(returnValue.toString());
 	}
@@ -62,9 +62,16 @@ public class BeanShell
 			}
 
 			Object returnValue = null;
-			for(int i = 0; i < repeat; i++)
+			try
 			{
-				returnValue = eval(view,command);
+				for(int i = 0; i < repeat; i++)
+				{
+					returnValue = eval(view,command,true);
+				}
+			}
+			catch(Error t)
+			{
+				// BeanShell error occured, abort execution
 			}
 
 			if(returnValue != null)
@@ -80,10 +87,11 @@ public class BeanShell
 		String path = GUIUtilities.showFileDialog(view,
 			null,JFileChooser.OPEN_DIALOG);
 		if(path != null)
-			runScript(view,path);
+			runScript(view,path,false);
 	}
 
-	public static void runScript(View view, String path)
+	public static void runScript(View view, String path,
+		boolean rethrowBshErrors)
 	{
 		Reader in;
 		Buffer buffer = jEdit.getBuffer(path);
@@ -146,6 +154,9 @@ public class BeanShell
 			Log.log(Log.ERROR,BeanShell.class,e);
 			GUIUtilities.error(view,"beanshell-error",
 				new String[] { path, e.toString() });
+
+			if(e instanceof Error && rethrowBshErrors)
+				throw (Error)e;
 		}
 		finally
 		{
@@ -153,7 +164,8 @@ public class BeanShell
 		}
 	}
 
-	public static Object eval(View view, String command)
+	public static Object eval(View view, String command,
+		boolean rethrowBshErrors)
 	{
 		if(view != null)
 		{
@@ -182,6 +194,9 @@ public class BeanShell
 			Log.log(Log.ERROR,BeanShell.class,e);
 			GUIUtilities.error(view,"beanshell-error",
 				new String[] { command, e.toString() });
+
+			if(e instanceof Error && rethrowBshErrors)
+				throw (Error)e;
 		}
 
 		if(view != null)

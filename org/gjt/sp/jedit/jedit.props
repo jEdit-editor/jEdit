@@ -10,14 +10,14 @@
 # Autosave interval in seconds, 0=off
 autosave=30
 
-# Number of recent files
-recent=8
-
 # Maximum number of elements in a history list
 history=25
 
 # Desktop saving toggle
 saveDesktop=true
+
+# Caret saving toggle
+saveCaret=true
 
 # I/O thread count
 ioThreadCount=4

@@ -41,9 +41,6 @@ public class BatchSearchRequest extends WorkRequest
 		this.resultTreeModel = resultTreeModel;
 		this.resultTreeRoot = (DefaultMutableTreeNode)resultTreeModel
 			.getRoot();
-
-		resultTreeRoot.removeAllChildren();
-		resultTreeModel.reload(resultTreeRoot);
 	}
 
 	public void run()
@@ -60,12 +57,15 @@ public class BatchSearchRequest extends WorkRequest
 
 			boolean retVal = false;
 
-			do
+			if(buffer != null)
 			{
-				retVal |= doBatchSearch(buffer,matcher);
-				setProgressValue(++current);
+				do
+				{
+					setProgressValue(++current);
+					retVal |= doBatchSearch(buffer,matcher);
+				}
+				while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 			}
-			while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 
 			if(!retVal)
 			{
@@ -123,7 +123,6 @@ loop:			for(;;)
 				}
 
 				line = newLine;
-				System.err.println(newLine);
 
 				bufferNode.insert(new DefaultMutableTreeNode(
 					new BatchSearchResult(buffer,line),false),

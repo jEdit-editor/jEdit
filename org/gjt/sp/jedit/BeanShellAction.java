@@ -39,7 +39,7 @@ public class BeanShellAction extends EditAction
 		{
 			String cachedIsSelectedName = "_action" + counter++;
 			BeanShell.eval(null,cachedIsSelectedName + "(){"
-				+ isSelected + "}");
+				+ isSelected + "}",false);
 			cachedIsSelected = BeanShell.getMethod(cachedIsSelectedName);
 		}
 	}
@@ -50,7 +50,7 @@ public class BeanShellAction extends EditAction
 		{
 			String cachedCodeName = "_action" + counter++;
 			BeanShell.eval(null,cachedCodeName + "(){"
-				+ code + "}");
+				+ code + "}",false);
 			cachedCode = BeanShell.getMethod(cachedCodeName);
 		}
 		BeanShell.invokeMethod(view,cachedCode,EMPTY_ARGS);

@@ -640,12 +640,6 @@ search.case=Ignore case
 search.case.mnemonic=g
 search.regexp=Regular expressions
 search.regexp.mnemonic=x
-
-search.mode=Search mode:
-search.normal=Normal
-search.normal.mnemonic=n
-search.incremental=Incremental
-search.incremental.mnemonic=i
 search.batch=Batch
 search.batch.mnemonic=b
 
@@ -656,12 +650,6 @@ search.all=All buffers
 search.all.mnemonic=l
 search.directory=Directory:
 search.directory.mnemonic=d
-
-search.batch-results=Show batch search results in:
-search.window=Window
-search.window.mnemonic=w
-search.buffer=New buffer
-search.buffer.mnemonic=u
 
 search.directoryField=Directory:
 search.directoryField.mnemonic=t
@@ -687,7 +675,6 @@ keepsearching.message=No more matches were found. Continue search from\n\
 
 # Batch search results dialog
 batch-search-results.title=Batch Search Results
-
 batch-search.status=Batch search
 
 # Replace all results
@@ -859,9 +846,9 @@ options.plugins.label=Plugin Options
 options.general.label=General
 options.general.lf.note=Restart jEdit for look & feel changes to take effect
 options.general.lf=Swing look & feel:
-options.general.recent=Max recent files:
-options.general.history=Max history list length:
+options.general.history=Maximum history list length:
 options.general.saveDesktop=Save session on exit
+options.general.saveCaret=Save caret position in buffers
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.checkModStatus=Check file modification time on focus

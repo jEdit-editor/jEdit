@@ -23,13 +23,14 @@ import javax.swing.SwingUtilities;
 import java.util.Vector;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * A file set for searching a user-specified list of buffers.
  * @author Slava Pestov
  * @version $Id$
  */
-public class BufferListSet implements SearchFileSet
+public abstract class BufferListSet implements SearchFileSet
 {
 	/**
 	 * Creates a new buffer list search set. This constructor is
@@ -163,6 +164,7 @@ public class BufferListSet implements SearchFileSet
 			}
 			catch(Exception e)
 			{
+				Log.log(Log.ERROR,this,e);
 				return null;
 			}
 		}
@@ -170,48 +172,3 @@ public class BufferListSet implements SearchFileSet
 			return jEdit.openTemporary(null,null,path,false,false);
 	}
 }
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.15  2000/05/14 10:55:22  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.14  2000/04/27 08:32:57  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.13  2000/04/25 03:32:40  sp
- * Even more VFS hacking
- *
- * Revision 1.12  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.11  1999/11/28 00:33:07  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
- *
- * Revision 1.10  1999/10/30 02:44:18  sp
- * Miscallaneous stuffs
- *
- * Revision 1.9  1999/10/28 09:07:21  sp
- * Directory list search
- *
- * Revision 1.8  1999/10/26 07:43:59  sp
- * Session loading and saving, directory list search started
- *
- * Revision 1.7  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
- *
- * Revision 1.6  1999/10/02 01:12:36  sp
- * Search and replace updates (doesn't work yet), some actions moved to TextTools
- *
- * Revision 1.5  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.4  1999/06/15 05:03:54  sp
- * RMI interface complete, save all hack, views & buffers are stored as a link
- * list now
- *
- * Revision 1.3  1999/06/09 07:28:10  sp
- * Multifile search and replace tweaks, removed console.html
- *
- */

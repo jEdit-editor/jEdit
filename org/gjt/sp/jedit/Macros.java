@@ -194,11 +194,11 @@ public class Macros
 			this.name = name;
 			this.path = path;
 
-			action = new EditAction("no use for a name")
+			action = new EditAction("irrelevant")
 			{
 				public void invoke(View view)
 				{
-					BeanShell.runScript(view,path);
+					BeanShell.runScript(view,path,false);
 				}
 			};
 
@@ -341,7 +341,7 @@ public class Macros
 			jEdit.getSettingsDirectory(),"macros",
 			"Temporary_Macro.bsh");
 
-		BeanShell.runScript(view,lastMacro);
+		BeanShell.runScript(view,lastMacro,false);
 	}
 
 	/**
@@ -354,7 +354,7 @@ public class Macros
 		if(lastMacro == null)
 			view.getToolkit().beep();
 		else
-			BeanShell.runScript(view,lastMacro);
+			BeanShell.runScript(view,lastMacro,false);
 	}
 
 	// private members
@@ -560,53 +560,3 @@ public class Macros
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.47  2000/11/19 07:51:25  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.46  2000/11/19 00:14:29  sp
- * Documentation updates, some bug fixes
- *
- * Revision 1.45  2000/11/17 11:15:59  sp
- * Actions removed, documentation updates, more BeanShell work
- *
- * Revision 1.44  2000/11/16 10:25:16  sp
- * More macro work
- *
- * Revision 1.43  2000/11/16 04:01:10  sp
- * BeanShell macros started
- *
- * Revision 1.42  2000/11/12 05:36:48  sp
- * BeanShell integration started
- *
- * Revision 1.41  2000/11/02 09:19:31  sp
- * more features
- *
- * Revision 1.40  2000/10/30 07:14:03  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.39  2000/10/13 06:57:19  sp
- * Edit User/System Macros command, gutter mouse handling improved
- *
- * Revision 1.38  2000/10/12 09:28:26  sp
- * debugging and polish
- *
- * Revision 1.37  2000/10/05 04:30:09  sp
- * *** empty log message ***
- *
- * Revision 1.36  2000/09/26 10:19:46  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.35  2000/09/03 03:16:52  sp
- * Search bar integrated with command line, enhancements throughout
- *
- * Revision 1.34  2000/08/11 09:06:51  sp
- * Browser option pane
- *
- * Revision 1.33  2000/08/10 08:30:40  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- */

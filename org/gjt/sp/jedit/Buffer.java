@@ -1851,14 +1851,11 @@ public class Buffer extends PlainDocument implements EBComponent
 		addDocumentListener(new DocumentHandler());
 		addUndoableEditListener(new UndoHandler());
 
-		if(props != null)
+		Enumeration keys = props.keys();
+		Enumeration values = props.elements();
+		while(keys.hasMoreElements())
 		{
-			Enumeration keys = props.keys();
-			Enumeration values = props.elements();
-			while(keys.hasMoreElements())
-			{
-				putProperty(keys.nextElement(),values.nextElement());
-			}
+			putProperty(keys.nextElement(),values.nextElement());
 		}
 
 		setMode(jEdit.getMode("text"));
@@ -2261,6 +2258,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.192  2000/11/24 06:48:34  sp
+ * Caret position history
+ *
  * Revision 1.191  2000/11/19 07:51:24  sp
  * Documentation updates, bug fixes
  *

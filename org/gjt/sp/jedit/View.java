@@ -956,15 +956,17 @@ public class View extends JFrame implements EBComponent
 			}
 		};
 
-		String[] recentArray = jEdit.getRecent();
-		if(recentArray.length == 0)
+		Vector recentVector = BufferHistory.getBufferHistory();
+		if(recentVector.size() == 0)
 		{
 			recent.add(GUIUtilities.loadMenuItem("no-recent"));
 			return;
 		}
-		for(int i = 0; i < recentArray.length; i++)
+
+		for(int i = 0; i < recentVector.size(); i++)
 		{
-			String path = recentArray[i];
+			String path = ((BufferHistory.Entry)recentVector
+				.elementAt(i)).path;
 			VFS vfs = VFSManager.getVFSForPath(path);
 			JMenuItem menuItem = new JMenuItem(
 				MiscUtilities.getFileName(path) + " ("
@@ -1236,59 +1238,3 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.210  2000/11/23 08:34:10  sp
- * Search and replace UI improvements
- *
- * Revision 1.209  2000/11/16 04:01:11  sp
- * BeanShell macros started
- *
- * Revision 1.208  2000/11/13 11:19:26  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.207  2000/11/12 05:36:48  sp
- * BeanShell integration started
- *
- * Revision 1.206  2000/11/08 09:31:36  sp
- * Junk
- *
- * Revision 1.205  2000/11/05 00:44:14  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.204  2000/11/02 09:19:31  sp
- * more features
- *
- * Revision 1.203  2000/10/30 07:14:03  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.202  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.201  2000/10/15 04:10:34  sp
- * bug fixes
- *
- * Revision 1.200  2000/10/12 09:28:26  sp
- * debugging and polish
- *
- * Revision 1.199  2000/09/26 10:19:46  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.198  2000/09/23 03:01:09  sp
- * pre7 yayayay
- *
- * Revision 1.197  2000/09/07 04:46:08  sp
- * bug fixes
- *
- * Revision 1.196  2000/09/03 03:16:53  sp
- * Search bar integrated with command line, enhancements throughout
- *
- * Revision 1.195  2000/09/01 11:31:00  sp
- * Rudimentary 'command line', similar to emacs minibuf
- *
- * Revision 1.194  2000/08/31 02:54:00  sp
- * Improved activity log, bug fixes
- *
- */

@@ -2,17 +2,41 @@ JEDIT 2.7 VERSION HISTORY
 
 * Version 2.7pre3
 
++ New Features
+
+- The list of recent files, along with their caret positions, is now stored in
+  <user.home>/.jedit/recent.
+  - When a file is opened, the caret is moved to the saved position; the
+    caret position is saved when the buffer is closed
+  - Sessions no longer record caret positions; just filenames
+  - The session file format has changed. Old sessions will continue to work in
+    jEdit 2.7pre3, however older jEdit versions will have problems loading
+    sessions created by this version.
+  - The number of files to remember is determined by the 'Maximum history list
+    length' setting in Utilities->Global Options->General
+  - If you would prefer opened files to open with the caret at the beginning,
+    the caret saving feature can be disabled in Utilities->Global
+    Options->General.
+
 + Enhancements
 
 - Search and replace changes:
   - Search and replace and HyperSearch dialog boxes merged into one;
-    HyperSearch feature can be enabled by selecting the 'Batch' radio button.
+    HyperSearch feature can be enabled by selecting the 'Batch' check box
   - Multiple file search settings are accessable directly from search and
     replace dialog box
-  - HyperSearch results are displayed in a dockable window
-  - HyperSearch can be performed from the search bar, too
+  - Batch search results are displayed in a dockable window
+  - Batch search can be performed from the search bar, too
+  - Batch searches can be aborted in Utilities->I/O Progress Monitor
   - Multiple file search can no longer be done from the search bar
+  - Normal searches can no longer be done from the search bar; only incremental
+    (and batch) search is supported now
+  - The search fileset is now stored between sessions
 - Much faster bracket highlighting
+
++ Neutral
+
+- find-selection is now bound to C+h instead of C+e C+f
 
 + Bug Fixes
 
@@ -22,6 +46,9 @@ JEDIT 2.7 VERSION HISTORY
 - Disabling the search bar caused problems
 - Word wrap would wrap the line of the text was on the wrap column; it
   should've only wrapped it if was beyond the wrap column
+- Minor scrolling bugs fixed
+- Searching in a directory with no files would throw a
+  NullPointerException
 
 * Version 2.7pre2
 

@@ -264,7 +264,8 @@ public abstract class InputHandler extends KeyAdapter
 				buffer.beginCompoundEdit();
 	
 				BeanShell.eval(view,"for(int i = 1; i < " + repeatCount
-					+ "; i++)\n{\n" + readNextChar + "\n}");
+					+ "; i++)\n{\n" + readNextChar + "\n}",
+					false);
 			}
 			finally
 			{
@@ -272,7 +273,7 @@ public abstract class InputHandler extends KeyAdapter
 			}
 		}
 		else
-			BeanShell.eval(view,readNextChar);
+			BeanShell.eval(view,readNextChar,false);
 
 		readNextChar = null;
 	}
@@ -281,6 +282,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/11/24 06:48:35  sp
+ * Caret position history
+ *
  * Revision 1.20  2000/11/19 07:51:25  sp
  * Documentation updates, bug fixes
  *
