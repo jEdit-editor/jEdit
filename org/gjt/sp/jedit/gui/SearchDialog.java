@@ -97,11 +97,7 @@ public class SearchDialog extends EnhancedDialog
 
 		pack();
 
-		// hack so that people upgrading from older jEdit don't
-		// get a wrong size dialog box
-		jEdit.unsetProperty("search.width");
-		jEdit.unsetProperty("search.height");
-		GUIUtilities.loadGeometry(this,"search");
+		GUIUtilities.loadGeometry(this,"find");
 		show();
 	}
 
@@ -119,7 +115,7 @@ public class SearchDialog extends EnhancedDialog
 
 	public void cancel()
 	{
-		GUIUtilities.saveGeometry(this,"search");
+		GUIUtilities.saveGeometry(this,"find");
 		dispose();
 	}
 	// end EnhancedDialog implementation
@@ -220,6 +216,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/05/21 06:06:43  sp
+ * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
+ *
  * Revision 1.11  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *

@@ -1,5 +1,5 @@
 /*
- * HyperSearch.java - HyperSearch dialog
+ * HyperSearch.java - HyperSearch window
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -21,12 +21,10 @@ package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
 import javax.swing.text.*;
-import gnu.regexp.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
@@ -34,7 +32,6 @@ import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.Log;
 
@@ -43,11 +40,11 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HyperSearch extends EnhancedDialog implements EBComponent
+public class HyperSearch extends EnhancedFrame implements EBComponent
 {
 	public HyperSearch(View view, String defaultFind)
 	{
-		super(view,jEdit.getProperty("hypersearch.title"),false);
+		super(jEdit.getProperty("hypersearch.title"));
 		this.view = view;
 
 		fileset = SearchAndReplace.getSearchFileSet();
@@ -81,21 +78,16 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		box.add(multifile);
 		box.add(multifileBtn);
 		box.add(Box.createHorizontalStrut(5));
-		findBtn = new JButton();
-		box.add(findBtn);
+		start = new JButton(jEdit.getProperty("hypersearch.start"));
+		box.add(start);
 		box.add(Box.createHorizontalStrut(5));
-		close = new JButton(jEdit.getProperty("common.close"));
-		box.add(close);
+		stop = new JButton(jEdit.getProperty("hypersearch.stop"));
+		box.add(stop);
 		box.add(Box.createHorizontalStrut(5));
 		status = new JLabel();
 		box.add(status);
-		getRootPane().setDefaultButton(findBtn);
+		getRootPane().setDefaultButton(start);
 		updateEnabled();
-
-		// search label is wider than 'stop'. This stops relayout
-		// when the user clicks the button
-		findBtn.setPreferredSize(findBtn.getPreferredSize());
-		findBtn.setMinimumSize(findBtn.getMinimumSize());
 
 		updateStatus();
 		Dimension size = status.getPreferredSize();
@@ -116,26 +108,24 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		multifile.addActionListener(actionListener);
 		multifileBtn.addActionListener(actionListener);
 		find.addActionListener(actionListener);
-		findBtn.addActionListener(actionListener);
-		close.addActionListener(actionListener);
+		start.addActionListener(actionListener);
+		stop.addActionListener(actionListener);
 
 		if(defaultFind != null)
-		{
 			find.setText(defaultFind);
-			save();
-		}
 
 		EditBus.addToBus(this);
+
+		setIconImage(GUIUtilities.getEditorIcon());
 
 		GUIUtilities.requestFocus(this,find);
 
 		pack();
 		GUIUtilities.loadGeometry(this,"hypersearch");
-
 		show();
 
 		if(defaultFind != null)
-			doHyperSearch();
+			ok();
 	}
 
 	public void save()
@@ -164,7 +154,8 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 			return;
 
 		save();
-		doHyperSearch();
+		thread = new HyperSearchThread();
+		updateEnabled();
 	}
 
 	public void cancel()
@@ -205,6 +196,16 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 				}
 			}
 		}
+		else if(msg instanceof ViewUpdate)
+		{
+			ViewUpdate vmsg = (ViewUpdate)msg;
+			View view = vmsg.getView();
+			if(vmsg.getWhat() == ViewUpdate.CLOSED)
+			{
+				if(this.view == view)
+					this.view = jEdit.getFirstView();
+			}
+		}
 	}
 
 	// private members
@@ -215,8 +216,8 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 	private JCheckBox regexp;
 	private JCheckBox multifile;
 	private JButton multifileBtn;
-	private JButton findBtn;
-	private JButton close;
+	private JButton start;
+	private JButton stop;
 	private JLabel status;
 	private JList results;
 	private DefaultListModel resultModel;
@@ -230,21 +231,14 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		regexp.setEnabled(thread == null);
 		multifile.setEnabled(thread == null);
 		multifileBtn.setEnabled(thread == null);
-		findBtn.setText(thread == null
-			? jEdit.getProperty("hypersearch.findBtn")
-			: jEdit.getProperty("hypersearch.stopBtn"));
+		start.setEnabled(thread == null);
+		stop.setEnabled(thread != null);
 	}
 
 	private void updateStatus()
 	{
 		Object[] args = { new Integer(current), new Integer(fileset.getBufferCount()) };
 		status.setText(jEdit.getProperty("hypersearch.status",args));
-	}
-
-	private void doHyperSearch()
-	{
-		thread = new HyperSearchThread();
-		updateEnabled();
 	}
 
 	private void showMultiFileDialog()
@@ -336,17 +330,10 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == close)
-				cancel();
-			else if(source == findBtn)
-			{
-				if(thread != null)
-					thread.stop();
-				else
-					ok();
-			}
-			else if(source == find)
+			if(source == start || source == find)
 				ok();
+			else if(source == stop)
+				thread.stop();
 			else if(source == multifileBtn)
 				showMultiFileDialog();
 			else if(source == multifile)
@@ -381,6 +368,8 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 					int pos = result.linePos.getOffset();
 					view.setBuffer(buffer);
 					view.getTextArea().setCaretPosition(pos);
+					view.toFront();
+					view.requestFocus();
 				}
 			});
 		}
@@ -489,6 +478,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.62  2000/05/21 06:06:43  sp
+ * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
+ *
  * Revision 1.61  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *

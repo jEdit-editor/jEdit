@@ -699,8 +699,8 @@ keepsearching.message=No more matches were found. Continue search from\n\
 # Hypersearch dialog
 hypersearch.title=HyperSearch
 hypersearch.find=Search for: (up arrow recalls previous)
-hypersearch.findBtn=Search
-hypersearch.stopBtn=Stop
+hypersearch.start=Start
+hypersearch.stop=Stop
 hypersearch.status={0}/{1}
 
 # Replace all results

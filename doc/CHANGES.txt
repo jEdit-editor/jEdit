@@ -5,17 +5,23 @@ JEDIT 2.5 VERSION HISTORY
 + New Features
 
 - The tool bar can be edited in Utilities->Global Options->Tool Bar
+- For plugin developers: new EnhancedFrame provides automatic Enter/Escape key
+  handling for JFrames
 
 + Enhancements
 
 - Single-clicks in the results list of the 'find file' widget will now
   select that file in the file chooser
 - Broken plugins will no longer prevent the 'Plugins' menu from appearing
+- HyperSearch is now a frame, not a dialog box
+- Documentation updates
 
 + Bug Fixes
 
 - FTP didn't work at all (since 2.5pre3)
 - Fixed NPE that could occur when performing an undo (since 2.5pre1)
+- Added jEdit.getPlugin(String name) method, which was missing in 2.5pre3
+- Shell script mode didn't highlight some variables correctly (since 2.4pre2)
 
 * Version 2.5pre3
 

@@ -527,9 +527,19 @@ public class GUIUtilities
 		}
 		catch(NumberFormatException nf)
 		{
-			Dimension screen = win.getToolkit().getScreenSize();
-			x = (screen.width - width) / 2;
-			y = (screen.height - height) / 2;
+			Component parent = win.getParent();
+			if(parent == null)
+			{
+				Dimension screen = win.getToolkit().getScreenSize();
+				x = (screen.width - width) / 2;
+				y = (screen.height - height) / 2;
+			}
+			else
+			{
+				Rectangle bounds = parent.getBounds();
+				x = bounds.x + (bounds.width - width) / 2;
+				y = bounds.y + (bounds.height - height) / 2;
+			}
 		}
 
 		win.setLocation(x,y);
@@ -756,6 +766,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.62  2000/05/21 06:06:43  sp
+ * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
+ *
  * Revision 1.61  2000/05/20 07:02:04  sp
  * Documentation updates, tool bar editor finished, a few other enhancements
  *

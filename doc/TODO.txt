@@ -2,30 +2,25 @@ JEDIT TO DO
 
 2.5:
 
-- jEdit.getPlugin(name) method
-- Update window-editor-* screenshots
 - Can't follow symlinks in FTP browser
-- -session= parameter should work even if files were specified on the
-  command line
 - Increase file chooser's preferred size
-- Abortable I/O
 - Annoying BufferTabs flicker
-- Make HyperSearch a JFrame
 - text area doesn't lose focus sometimes
 - Documentation:
-  - document macro syntax in more detail
   - document view, edit pane, buffer API
   - how to write text area and gutter hilites
   - write VFS developer docs
 - Buffer tabs focus is still screwed with JDK 1.3
-- The GUI is inconsistent in places:
-  - the search options panels look slightly different in HyperSearch, search
-    & replace, and the search bar
-  - HyperSearch has a 'search' button that changes to 'stop', the find
-    accessory has 'start' and 'stop' buttons
+- Switch to DocBook 4.0 for the documentation
 
 Later:
 
+- Abortable I/O
+- get rid of EnhancedDialog, EnhancedFrame; write EnterEscapeHandler
+  and EnterEscapeContainer classes
+- ModeComboBox class
+- -session= parameter should work even if files were specified on the
+  command line. More than one -session parameter should be supported
 - Pluggable input handlers
 - New document model
 - Folding
@@ -48,6 +43,7 @@ Later:
   model)
 - Bracket matching code doesn't pay attention to comments, string literals,
   etc. It would be nice if its parser was a bit more intelligent
+- New preferences system for easier storage of non-string values
 
 When we switch to Java 2:
 - drag and drop

@@ -1,5 +1,5 @@
 /*
- * EnhancedDialog.java - Handles OK/Cancel for you
+ * EnhancedFrame.java - Handles OK/Cancel for you
  * Copyright (C) 1998, 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,23 +19,23 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import java.awt.event.*;
 import java.awt.*;
 
 /**
- * A dialog box that handles window closing, the ENTER key and the ESCAPE
+ * A frame that handles window closing, the ENTER key and the ESCAPE
  * key for you. All you have to do is implement ok() (called when
  * Enter is pressed) and cancel() (called when Escape is pressed, or window
  * is closed).
  * @author Slava Pestov
  * @version $Id$
  */
-public abstract class EnhancedDialog extends JDialog
+public abstract class EnhancedFrame extends JFrame
 {
-	public EnhancedDialog(Frame parent, String title, boolean modal)
+	public EnhancedFrame(String title)
 	{
-		super(parent,title,modal);
+		super(title);
 
 		((Container)getContentPane()).addContainerListener(
 			new ContainerHandler());

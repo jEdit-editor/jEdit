@@ -130,12 +130,11 @@ public class VFSManager
 	}
 
 	/**
-	 * Aborts the currently running I/O operation.
-	 * @since jEdit 2.5pre1
+	 * Returns the number of pending I/O requests.
 	 */
-	public static void abortIO()
+	public static int getRequestCount()
 	{
-		ioThread.abort();
+		return ioThread.getRequestCount();
 	}
 
 	/**
@@ -213,6 +212,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/05/21 06:06:43  sp
+ * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
+ *
  * Revision 1.7  2000/05/01 11:53:24  sp
  * More icons added to toolbar, minor updates here and there
  *

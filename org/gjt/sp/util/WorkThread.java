@@ -91,11 +91,11 @@ public class WorkThread extends Thread
 	}
 
 	/**
-	 * Aborts the currently running operation.
+	 * Returns the number of pending requests.
 	 */
-	public void abort()
+	public int getRequestCount()
 	{
-		stop(new Abort());
+		return requestCount;
 	}
 
 	public void run()
@@ -104,13 +104,7 @@ public class WorkThread extends Thread
 
 		for(;;)
 		{
-			try
-			{
-				doRequests();
-			}
-			catch(Abort a)
-			{
-			}
+			doRequests();
 		}
 	}
 
@@ -162,9 +156,6 @@ public class WorkThread extends Thread
 					{
 						request.run.run();
 					}
-					catch(Abort a)
-					{
-					}
 					catch(Throwable t)
 					{
 						Log.log(Log.ERROR,WorkThread.class,"Exception "
@@ -184,9 +175,6 @@ public class WorkThread extends Thread
 			try
 			{
 				request.run.run();
-			}
-			catch(Abort a)
-			{
 			}
 			catch(Throwable t)
 			{
@@ -223,19 +211,14 @@ public class WorkThread extends Thread
 			this.inAWT = inAWT;
 		}
 	}
-
-	public class Abort extends Error
-	{
-		public Abort()
-		{
-			super("I/O abort");
-		}
-	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/05/21 06:06:43  sp
+ * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
+ *
  * Revision 1.5  2000/05/01 11:53:24  sp
  * More icons added to toolbar, minor updates here and there
  *

@@ -616,6 +616,21 @@ public class jEdit
 	}
 
 	/**
+	 * Returns the plugin with the specified class name.
+	 */
+	public static EditPlugin getPlugin(String name)
+	{
+		EditPlugin[] plugins = getPlugins();
+		for(int i = 0; i < plugins.length; i++)
+		{
+			if(plugins[i].getClassName().equals(name))
+				return plugins[i];
+		}
+
+		return null;
+	}
+
+	/**
 	 * Returns an array of installed plugins.
 	 */
 	public static EditPlugin[] getPlugins()
@@ -2289,6 +2304,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.241  2000/05/21 06:06:43  sp
+ * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
+ *
  * Revision 1.240  2000/05/20 07:02:04  sp
  * Documentation updates, tool bar editor finished, a few other enhancements
  *
