@@ -30,7 +30,6 @@ import java.text.MessageFormat;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.syntax.GenericTokenMarker;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.textarea.DefaultInputHandler;
 import org.gjt.sp.jedit.textarea.InputHandler;
@@ -609,15 +608,7 @@ public class jEdit
 			}
 
 			if (reader != null)
-			{
-				Mode newMode = loadMode(reader, fileName);
-				if (newMode != null)
-				{
-					GenericTokenMarker.addTokenMarker(
-						newMode.getName(),
-						newMode.createTokenMarker());
-				}
-			}
+				loadMode(reader, fileName);
 		}
 	}
 
@@ -626,7 +617,7 @@ public class jEdit
 	 * @param grammar The reader
 	 * @param fileName The file name
 	 */
-	public static Mode loadMode(Reader grammar, String fileName)
+	public static void loadMode(Reader grammar, String fileName)
 	{
 		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
 
@@ -651,8 +642,6 @@ public class jEdit
 
 			Log.log(Log.ERROR, jEdit.class, e);
 		}
-
-		return xmh.getMode();
 	}
 
 	/**
@@ -1489,7 +1478,6 @@ public class jEdit
 		modes = new Vector(40);
 
 		addMode(new Mode("text"));
-		addMode(new Mode("perl"));
 
 		loadModes(MiscUtilities.constructPath(getJEditHome(),"modes"));
 
@@ -1950,6 +1938,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.205  2000/04/01 08:40:54  sp
+ * Streamlined syntax highlighting, Perl mode rewritten in XML
+ *
  * Revision 1.204  2000/04/01 03:17:41  sp
  * Tiny fixes here and there
  *

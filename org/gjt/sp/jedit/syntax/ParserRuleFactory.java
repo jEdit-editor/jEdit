@@ -26,11 +26,11 @@ public class ParserRuleFactory
 		int id, boolean noLineBreak, boolean atLineStart,
 		boolean excludeMatch, boolean noWordBreak)
 	{
-		int ruleAction = GenericTokenMarker.SPAN | id |
-			((noLineBreak) ? GenericTokenMarker.NO_LINE_BREAK : 0) |
-			((atLineStart) ? GenericTokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? GenericTokenMarker.EXCLUDE_MATCH : 0) |
-			((noWordBreak) ? GenericTokenMarker.NO_WORD_BREAK : 0);
+		int ruleAction = TokenMarker.SPAN | id |
+			((noLineBreak) ? TokenMarker.NO_LINE_BREAK : 0) |
+			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
+			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0) |
+			((noWordBreak) ? TokenMarker.NO_WORD_BREAK : 0);
 
 		String[] strings = new String[2];
 		strings[0] = begin;
@@ -46,12 +46,12 @@ public class ParserRuleFactory
 		String delegateSet, int id, boolean noLineBreak, boolean atLineStart,
 		boolean excludeMatch, boolean noWordBreak)
 	{
-		int ruleAction = GenericTokenMarker.SPAN | id |
-			GenericTokenMarker.DELEGATE |
-			((noLineBreak) ? GenericTokenMarker.NO_LINE_BREAK : 0) |
-			((atLineStart) ? GenericTokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? GenericTokenMarker.EXCLUDE_MATCH : 0) |
-			((noWordBreak) ? GenericTokenMarker.NO_WORD_BREAK : 0);
+		int ruleAction = TokenMarker.SPAN | id |
+			TokenMarker.DELEGATE |
+			((noLineBreak) ? TokenMarker.NO_LINE_BREAK : 0) |
+			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
+			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0) |
+			((noWordBreak) ? TokenMarker.NO_WORD_BREAK : 0);
 
 		String[] strings = new String[3];
 		strings[0] = begin;
@@ -67,9 +67,9 @@ public class ParserRuleFactory
 	public static final ParserRule createEOLSpanRule(String seq, int id,
 		boolean atLineStart, boolean excludeMatch)
 	{
-		int ruleAction = GenericTokenMarker.EOL_SPAN | id |
-			((atLineStart) ? GenericTokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? GenericTokenMarker.EXCLUDE_MATCH : 0);
+		int ruleAction = TokenMarker.EOL_SPAN | id |
+			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
+			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0);
 
 		String[] strings = new String[1];
 		strings[0] = seq;
@@ -92,9 +92,9 @@ public class ParserRuleFactory
 	public static final ParserRule createMarkPreviousRule(String seq, int id,
 		boolean atLineStart, boolean excludeMatch)
 	{
-		int ruleAction = GenericTokenMarker.MARK_PREVIOUS | id |
-			((atLineStart) ? GenericTokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? GenericTokenMarker.EXCLUDE_MATCH : 0);
+		int ruleAction = TokenMarker.MARK_PREVIOUS | id |
+			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
+			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0);
 
 		String[] strings = new String[1];
 		strings[0] = seq;
@@ -117,9 +117,9 @@ public class ParserRuleFactory
 	public static final ParserRule createMarkFollowingRule(String seq, int id,
 		boolean atLineStart, boolean excludeMatch)
 	{
-		int ruleAction = GenericTokenMarker.MARK_FOLLOWING | id |
-			((atLineStart) ? GenericTokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? GenericTokenMarker.EXCLUDE_MATCH : 0);
+		int ruleAction = TokenMarker.MARK_FOLLOWING | id |
+			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
+			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0);
 
 		String[] strings = new String[1];
 		strings[0] = seq;
@@ -142,7 +142,7 @@ public class ParserRuleFactory
 	public static final ParserRule createSequenceRule(String seq, int id, boolean atLineStart)
 	{
 		int ruleAction = id |
-			((atLineStart) ? GenericTokenMarker.AT_LINE_START : 0);
+			((atLineStart) ? TokenMarker.AT_LINE_START : 0);
 
 		String[] strings = new String[1];
 		strings[0] = seq;
@@ -164,7 +164,7 @@ public class ParserRuleFactory
 
 	public static final ParserRule createEscapeRule(String seq, int id)
 	{
-		int ruleAction = id | GenericTokenMarker.IS_ESCAPE;
+		int ruleAction = id | TokenMarker.IS_ESCAPE;
 
 		String[] strings = new String[1];
 		strings[0] = seq;
@@ -186,7 +186,7 @@ public class ParserRuleFactory
 
 	public static final ParserRule createWhitespaceRule(String seq)
 	{
-		int ruleAction = GenericTokenMarker.WHITESPACE;
+		int ruleAction = TokenMarker.WHITESPACE;
 
 		String[] strings = new String[1];
 		strings[0] = seq;
@@ -255,3 +255,11 @@ public class ParserRuleFactory
 		return stringLengthArray;
 	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.2  2000/04/01 08:40:55  sp
+ * Streamlined syntax highlighting, Perl mode rewritten in XML
+ *
+ */

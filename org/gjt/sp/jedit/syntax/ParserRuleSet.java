@@ -23,6 +23,11 @@ import java.util.Enumeration;
 import java.util.Vector;
 import javax.swing.text.Segment;
 
+/**
+ * A set of parser rules.
+ * @author mike dillon
+ * @version $Id$
+ */
 public class ParserRuleSet
 {
 	public ParserRuleSet(int sz)
@@ -45,9 +50,9 @@ public class ParserRuleSet
 		rules.removeElement(r);
 	}
 
-	public Enumeration getRules()
+	public Vector getRules()
 	{
-		return rules.elements();
+		return rules;
 	}
 
 	public ParserRule[] getRuleArray()
@@ -116,7 +121,7 @@ public class ParserRuleSet
 		else
 		{
 			escapeRule = ParserRuleFactory.createEscapeRule(esc,
-				GenericTokenMarker.NULL);
+				TokenMarker.AC_NULL);
 		}
 		escapePattern = null;
 	}
@@ -140,3 +145,11 @@ public class ParserRuleSet
 	private boolean ignoreCase = true;
 	private int defaultID;
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.2  2000/04/01 08:40:55  sp
+ * Streamlined syntax highlighting, Perl mode rewritten in XML
+ *
+ */

@@ -34,3 +34,11 @@ public class ParserRule
 		action = a;
 	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.2  2000/04/01 08:40:55  sp
+ * Streamlined syntax highlighting, Perl mode rewritten in XML
+ *
+ */

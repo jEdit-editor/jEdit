@@ -61,47 +61,47 @@ public class XModeHandler extends HandlerBase
 		{
 			if (value == "KEYWORD1")
 			{
-				lastTokenID = GenericTokenMarker.KEYWORD1;
+				lastTokenID = TokenMarker.AC_KEYWORD1;
 			}
 			else if (value == "KEYWORD2")
 			{
-				lastTokenID = GenericTokenMarker.KEYWORD2;
+				lastTokenID = TokenMarker.AC_KEYWORD2;
 			}
 			else if (value == "KEYWORD3")
 			{
-				lastTokenID = GenericTokenMarker.KEYWORD3;
+				lastTokenID = TokenMarker.AC_KEYWORD3;
 			}
 			else if (value == "COMMENT1")
 			{
-				lastTokenID = GenericTokenMarker.COMMENT1;
+				lastTokenID = TokenMarker.AC_COMMENT1;
 			}
 			else if (value == "COMMENT2")
 			{
-				lastTokenID = GenericTokenMarker.COMMENT2;
+				lastTokenID = TokenMarker.AC_COMMENT2;
 			}
 			else if (value == "LITERAL1")
 			{
-				lastTokenID = GenericTokenMarker.LITERAL1;
+				lastTokenID = TokenMarker.AC_LITERAL1;
 			}
 			else if (value == "LITERAL2")
 			{
-				lastTokenID = GenericTokenMarker.LITERAL2;
+				lastTokenID = TokenMarker.AC_LITERAL2;
 			}
 			else if (value == "LABEL")
 			{
-				lastTokenID = GenericTokenMarker.LABEL;
+				lastTokenID = TokenMarker.AC_LABEL;
 			}
 			else if (value == "OPERATOR")
 			{
-				lastTokenID = GenericTokenMarker.OPERATOR;
+				lastTokenID = TokenMarker.AC_OPERATOR;
 			}
 			else if (value == "NULL")
 			{
-				lastTokenID = GenericTokenMarker.NULL;
+				lastTokenID = TokenMarker.AC_NULL;
 			}
 			else
 			{
-				lastTokenID = GenericTokenMarker.NULL;
+				lastTokenID = TokenMarker.AC_NULL;
 			}
 		}
 		else if (aname == "AT_LINE_START")
@@ -159,47 +159,47 @@ public class XModeHandler extends HandlerBase
 		{
 			if (value == "KEYWORD1")
 			{
-				lastDefaultID = GenericTokenMarker.KEYWORD1;
+				lastDefaultID = TokenMarker.AC_KEYWORD1;
 			}
 			else if (value == "KEYWORD2")
 			{
-				lastDefaultID = GenericTokenMarker.KEYWORD2;
+				lastDefaultID = TokenMarker.AC_KEYWORD2;
 			}
 			else if (value == "KEYWORD3")
 			{
-				lastDefaultID = GenericTokenMarker.KEYWORD3;
+				lastDefaultID = TokenMarker.AC_KEYWORD3;
 			}
 			else if (value == "COMMENT1")
 			{
-				lastDefaultID = GenericTokenMarker.COMMENT1;
+				lastDefaultID = TokenMarker.AC_COMMENT1;
 			}
 			else if (value == "COMMENT2")
 			{
-				lastDefaultID = GenericTokenMarker.COMMENT2;
+				lastDefaultID = TokenMarker.AC_COMMENT2;
 			}
 			else if (value == "LITERAL1")
 			{
-				lastDefaultID = GenericTokenMarker.LITERAL1;
+				lastDefaultID = TokenMarker.AC_LITERAL1;
 			}
 			else if (value == "LITERAL2")
 			{
-				lastDefaultID = GenericTokenMarker.LITERAL2;
+				lastDefaultID = TokenMarker.AC_LITERAL2;
 			}
 			else if (value == "LABEL")
 			{
-				lastDefaultID = GenericTokenMarker.LABEL;
+				lastDefaultID = TokenMarker.AC_LABEL;
 			}
 			else if (value == "OPERATOR")
 			{
-				lastDefaultID = GenericTokenMarker.OPERATOR;
+				lastDefaultID = TokenMarker.AC_OPERATOR;
 			}
-			/*else if (value == "NULL")
+			else if (value == "NULL")
 			{
-				lastDefaultID = GenericTokenMarker.NULL;
-			}*/
+				lastDefaultID = TokenMarker.AC_NULL;
+			}
 			else
 			{
-				lastDefaultID = GenericTokenMarker.NULL;
+				lastDefaultID = TokenMarker.AC_NULL;
 			}
 		}
 	}
@@ -253,7 +253,16 @@ public class XModeHandler extends HandlerBase
 	{
 		tag = pushElement(tag);
 
-		if (tag == "KEYWORDS")
+		if (tag == "MODE")
+		{
+			mode = jEdit.getMode(modeName);
+			if (mode == null)
+			{
+				mode = new Mode(modeName);
+				jEdit.addMode(mode);
+			}
+		}
+		else if (tag == "KEYWORDS")
 		{
 			keywords = new KeywordMap(true);
 		}
@@ -276,18 +285,14 @@ public class XModeHandler extends HandlerBase
 		{
 			if (tag == "MODE")
 			{
-				mode = jEdit.getMode(modeName);
-				if (mode == null)
-				{
-					mode = new Mode(modeName);
-					jEdit.addMode(mode);
-				}
-
+				mode.init();
 				mode.setTokenMarker(marker);
+				TokenMarker.addTokenMarker(modeName,
+					marker);
 			}
 			else if (tag == "PROPERTY")
 			{
-				setProperty(propName,propValue);
+				mode.setProperty(propName,propValue);
 			}
 			else if (tag == "KEYWORDS")
 			{
@@ -301,7 +306,7 @@ public class XModeHandler extends HandlerBase
 				lastSetName = null;
 				lastEscape = null;
 				lastIgnoreCase = true;
-				lastDefaultID = GenericTokenMarker.NULL;
+				lastDefaultID = TokenMarker.AC_NULL;
 				rules = null;
 			}
 			else if (tag == "TERMINATE")
@@ -444,7 +449,7 @@ public class XModeHandler extends HandlerBase
 
 	public void startDocument()
 	{
-		marker = new GenericTokenMarker();
+		marker = new TokenMarker();
 
 		try
 		{
@@ -457,16 +462,10 @@ public class XModeHandler extends HandlerBase
 	}
 	// end HandlerBase implementation
 
-	// package-private members
-	Mode getMode()
-	{
-		return mode;
-	}
-
 	// private members
 	private String path;
 
-	private GenericTokenMarker marker;
+	private TokenMarker marker;
 	private KeywordMap keywords;
 	private Mode mode;
 	private Stack stateStack;
@@ -480,7 +479,7 @@ public class XModeHandler extends HandlerBase
 	private String lastEscape;
 	private String lastDelegateSet;
 	private ParserRuleSet rules;
-	private int lastDefaultID = GenericTokenMarker.NULL;
+	private int lastDefaultID = TokenMarker.AC_NULL;
 	private int lastTokenID;
 	private int termChar = -1;
 	private boolean lastNoLineBreak;
@@ -529,11 +528,5 @@ public class XModeHandler extends HandlerBase
 		if (stateStack == null) stateStack = new Stack();
 
 		return (String) stateStack.pop();
-	}
-
-	private void setProperty(String key, String value)
-	{
-		jEdit.setTemporaryProperty("mode." + modeName + "." + key,
-			value);
 	}
 }

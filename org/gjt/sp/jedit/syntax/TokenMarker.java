@@ -1,6 +1,7 @@
 /*
- * TokenMarker.java - Base token marker class
+ * TokenMarker.java - Tokenizes lines of text
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000 Mike Dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,27 +21,130 @@ package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.Segment;
 import java.util.*;
+import org.gjt.sp.util.Log;
 
 /**
- * A token marker that splits lines of text into tokens. Each token carries
+ * A token marker splits lines of text into tokens. Each token carries
  * a length field and an indentification tag that can be mapped to a color
- * for painting that token.<p>
+ * or font style for painting that token.
  *
- * For performance reasons, the linked list of tokens is reused after each
- * line is tokenized. Therefore, the return value of <code>markTokens</code>
- * should only be used for immediate painting. Notably, it cannot be
- * cached.
- *
- * @author Slava Pestov
+ * @author Slava Pestov, Mike Dillon
  * @version $Id$
  *
  * @see org.gjt.sp.jedit.syntax.Token
  */
-public abstract class TokenMarker implements Cloneable
+public class TokenMarker implements Cloneable
 {
+	// major actions (total: 8)
+	public static final int MAJOR_ACTIONS = 0x000000FF;
+	public static final int WHITESPACE = 1 << 0;
+	public static final int SPAN = 1 << 1;
+	public static final int MARK_PREVIOUS = 1 << 2;
+	public static final int MARK_FOLLOWING = 1 << 3;
+	public static final int EOL_SPAN = 1 << 4;
+//	public static final int MAJOR_ACTION_5 = 1 << 5;
+//	public static final int MAJOR_ACTION_6 = 1 << 6;
+//	public static final int MAJOR_ACTION_7 = 1 << 7;
+
+	// action hints (total: 8)
+	public static final int ACTION_HINTS = 0x0000FF00;
+	public static final int EXCLUDE_MATCH = 1 << 8;
+	public static final int AT_LINE_START = 1 << 9;
+	public static final int NO_LINE_BREAK = 1 << 10;
+	public static final int NO_WORD_BREAK = 1 << 11;
+	public static final int IS_ESCAPE = 1 << 12;
+	public static final int DELEGATE = 1 << 13;
+//	public static final int ACTION_HINT_14 = 1 << 14;
+//	public static final int ACTION_HINT_15 = 1 << 15;
+
+	// action tokens (total: 16)
+	public static final int ACTION_TOKENS = 0xFFFF0000;
+	public static final int AC_NULL = 1 << 16;
+	public static final int AC_KEYWORD1 = 1 << 17;
+	public static final int AC_KEYWORD2 = 1 << 18;
+	public static final int AC_KEYWORD3 = 1 << 19;
+	public static final int AC_COMMENT1 = 1 << 20;
+	public static final int AC_COMMENT2 = 1 << 21;
+	public static final int AC_LITERAL1 = 1 << 22;
+	public static final int AC_LITERAL2 = 1 << 23;
+	public static final int AC_LABEL = 1 << 24;
+	public static final int AC_OPERATOR = 1 << 25;
+	public static final int AC_INVALID = 1 << 26;
+//	public static final int ACTION_TOKEN_27 = 1 << 27;
+//	public static final int ACTION_TOKEN_28 = 1 << 28;
+//	public static final int ACTION_TOKEN_29 = 1 << 29;
+//	public static final int ACTION_TOKEN_30 = 1 << 30;
+//	public static final int ACTION_TOKEN_31 = 1 << 31;
+
+	public static void addTokenMarker(String name, TokenMarker tokenMarker)
+	{
+		tokenMarkers.put(name,tokenMarker);
+	}
+
+	public TokenMarker()
+	{
+		ruleSets = new Hashtable(16);
+	}
+
+	public void addRuleSet(String setName, ParserRuleSet rules)
+	{
+		if (rules == null) return;
+
+		if (setName == null) setName = "MAIN";
+
+		ruleSets.put(rulePfx.concat(setName), rules);
+	}
+
+	public ParserRuleSet getRuleSet(String setName)
+	{
+		ParserRuleSet rules;
+
+		int delim = setName.indexOf("::");
+
+		if (delim == -1)
+		{
+			rules = (ParserRuleSet) ruleSets.get(rulePfx.concat(setName));
+		}
+		else
+		{
+			rules = (ParserRuleSet) ruleSets.get(setName);
+
+			if (rules == null && !setName.startsWith(rulePfx))
+			{
+				String modeName = setName.substring(0, delim);
+
+				rules = getExternalRuleSet(modeName,
+					setName.substring(delim + 2));
+
+				// store external ParserRuleSet in the local hashtable for
+				// faster lookups later
+				if (rules != null) ruleSets.put(setName, rules);
+			}
+		}
+
+		if (rules == null)
+		{
+			Log.log(Log.ERROR,this,"Unresolved delegate target: " + setName);
+		}
+
+		return rules;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		if (name == null) throw new NullPointerException();
+
+		this.name = name;
+		rulePfx = name.concat("::");
+	}
+
 	/**
-	 * A wrapper for the lower-level <code>markTokensImpl</code> method
-	 * that is called to split a line up into tokens.
+	 * Returns the syntax tokens for the specified line.
 	 * @param line The line
 	 * @param lineIndex The line number
 	 */
@@ -67,14 +171,13 @@ public abstract class TokenMarker implements Cloneable
 		else
 			prev = lineInfo[lineIndex - 1];
 
-		byte oldToken = info.token;
-		byte token = markTokensImpl(prev == null ?
-			Token.NULL : prev.token,line,lineIndex,info);
+		ParserRule oldRule = info.context.inRule;
+		markTokensImpl(line,prev,info);
+		ParserRule newRule = info.context.inRule;
 
-		info.token = token;
 		info.tokensValid = true;
 
-		nextLineRequested = (oldToken != token);
+		nextLineRequested = (oldRule != newRule);
 		if(nextLineRequested && length - lineIndex > 1)
 		{
 			lineInfo[lineIndex + 1].tokensValid = false;
@@ -83,41 +186,6 @@ public abstract class TokenMarker implements Cloneable
 		addToken(info,0,Token.END);
 
 		return info.firstToken;
-	}
-
-	/**
-	 * An abstract method that splits a line up into tokens. It
-	 * should parse the line, and call <code>addToken(info,)</code> to
-	 * add syntax tokens to the token list. Then, it should return
-	 * the initial token type for the next line.<p>
-	 *
-	 * For example if the current line contains the start of a 
-	 * multiline comment that doesn't end on that line, this method
-	 * should return the comment token type so that it continues on
-	 * the next line.
-	 *
-	 * @param token The initial token type for this line
-	 * @param line The line to be tokenized
-	 * @param lineIndex The index of the line in the document,
-	 * starting at 0
-	 * @param info The LineInfo object for this line
-	 * @return The initial token type for the next line
-	 */
-	protected abstract byte markTokensImpl(byte token, Segment line,
-		int lineIndex, LineInfo info);
-
-	/**
-	 * Returns if the token marker supports tokens that span multiple
-	 * lines. If this is true, the object using this token marker is
-	 * required to pass all lines in the document to the
-	 * <code>markTokens()</code> method (in turn).<p>
-	 *
-	 * The default implementation returns true; it should be overridden
-	 * to return false on simpler token markers for increased speed.
-	 */
-	public boolean supportsMultilineTokens()
-	{
-		return true;
 	}
 
 	/**
@@ -140,6 +208,8 @@ public abstract class TokenMarker implements Cloneable
 		for(int i = index + lines - 1; i >= index; i--)
 		{
 			lineInfo[i] = new LineInfo();
+			lineInfo[i].context = new LineContext(null,
+				getRuleSet("MAIN"));
 		}
 	}
 	
@@ -192,30 +262,512 @@ public abstract class TokenMarker implements Cloneable
 		return nextLineRequested;
 	}
 
-	public Object clone() throws CloneNotSupportedException
+	public Object clone()
 	{
-		return super.clone();
+		return new TokenMarker(this);
 	}
 
-	// protected members
+	// private members
+	private static Hashtable tokenMarkers = new Hashtable();
+
+	private static final int SOFT_SPAN = MARK_FOLLOWING | NO_WORD_BREAK;
+
+	private String name;
+	private String rulePfx;
+	private Hashtable ruleSets;
+
+	private LineInfo[] lineInfo;
+	private int length;
+	private boolean nextLineRequested;
+
+	private LineContext context;
+	private Segment pattern = new Segment(new char[0],0,0);
+	private int lastOffset;
+	private int lastKeyword;
+	private int lineLength;
+	private int pos;
+	private boolean escaped;
+
+	private static ParserRuleSet getExternalRuleSet(String modeName, String setName)
+	{
+		TokenMarker marker = (TokenMarker)tokenMarkers.get(modeName);
+
+		if (marker == null)
+		{
+			Log.log(Log.ERROR,TokenMarker.class,
+				"Unresolved token marker: " + modeName);
+			return null;
+		}
+
+		return marker.getRuleSet(setName);
+	}
+
+	private TokenMarker(TokenMarker copy)
+	{
+		name = copy.name;
+		rulePfx = copy.rulePfx;
+		ruleSets = copy.ruleSets;
+	}
+
+	private void markTokensImpl(Segment line, LineInfo prevInfo,
+		LineInfo info)
+	{
+		LineContext lastContext = (prevInfo == null ? null
+			: prevInfo.context);
+		if(lastContext == null)
+			lastContext = new LineContext(null,getRuleSet("MAIN"));
+
+		context = info.context;
+
+		context.parent = lastContext.parent;
+		context.inRule = lastContext.inRule;
+		context.rules = lastContext.rules;
+
+		lastOffset = lastKeyword = line.offset;
+		lineLength = line.count + line.offset;
+
+		int terminateChar = context.rules.getTerminateChar();
+		int searchLimit = (terminateChar >= 0 && terminateChar < line.count)
+			? line.offset + terminateChar : lineLength;
+
+		escaped = false;
+
+		boolean b;
+		boolean tempEscaped;
+		ParserRule tempRule;
+		Vector rules;
+		Segment tempPattern;
+		LineContext tempContext;
+
+		for(pos = line.offset; pos < searchLimit; pos++)
+		{
+			// if we are not in the top level context, we are delegated
+			if (context.parent != null)
+			{
+				tempContext = context;
+
+				context = context.parent;
+
+				pattern.array = context.inRule.searchChars;
+				pattern.count = context.inRule.sequenceLengths[1];
+				pattern.offset = context.inRule.sequenceLengths[0];
+
+				tempEscaped = escaped;
+
+				b = handleRule(info, line, context.inRule);
+
+				context = tempContext;
+
+				if (!b)
+				{
+					if (!tempEscaped)
+					{
+						if (pos != lastOffset)
+						{
+							if (context.inRule == null)
+							{
+								if(context.rules.getKeywords() != null)
+								{
+									markKeyword(info,line, lastKeyword, pos);
+								}
+
+								addToken(info,pos - lastOffset,
+									getActionToken(context.rules.getDefault()));
+							}
+							else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
+							{
+								addToken(info,pos - lastOffset,
+									getActionToken(context.inRule.action));
+							}
+							else
+							{
+								addToken(info,pos - lastOffset, Token.INVALID);
+							}
+						}
+
+						context = (LineContext) context.parent;
+
+						if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+						{
+							addToken(info,pattern.count,
+								getActionToken(context.rules.getDefault()));
+						}
+						else
+						{
+							addToken(info,pattern.count, getActionToken(context.inRule.action));
+						}
+
+						context.inRule = null;
+
+						lastKeyword = lastOffset = pos + pattern.count;
+					}
+
+					pos += (pattern.count - 1); // move pos to last character of match sequence
+
+					continue;
+				}
+			}
+
+			// check the escape rule for the current context, if there is one
+			if ((tempRule = context.rules.getEscapeRule()) != null)
+			{
+				// assign tempPattern to mutable "buffer" pattern
+				tempPattern = pattern;
+
+				// swap in the escape pattern
+				pattern = context.rules.getEscapePattern();
+
+				b = handleRule(info, line, tempRule);
+
+				// swap back the buffer pattern
+				pattern = tempPattern;
+
+				if (!b) continue;
+			}
+
+			if (context.inRule != null && (context.inRule.action & SOFT_SPAN) == 0)
+			{
+				// we are in a hard span rule, so see if context.inRule matches
+				pattern.array = context.inRule.searchChars;
+				pattern.count = context.inRule.sequenceLengths[1];
+				pattern.offset = context.inRule.sequenceLengths[0];
+
+				if (handleRule(info,line, context.inRule) && escaped)
+					escaped = false;
+			}
+			else
+			{
+				// otherwise, if this isn't a hard span, check every rule
+				rules = context.rules.getRules();
+
+				for(int i = 0; i < rules.size(); i++)
+				{
+					tempRule = (ParserRule) rules.elementAt(i);
+
+					pattern.array = tempRule.searchChars;
+
+					if (context.inRule == tempRule && (tempRule.action & SPAN) == SPAN)
+					{
+						pattern.count = tempRule.sequenceLengths[1];
+						pattern.offset = tempRule.sequenceLengths[0];
+					}
+					else
+					{
+						pattern.count = tempRule.sequenceLengths[0];
+						pattern.offset = 0;
+					}
+
+					// stop checking rules if there was a match and go to next pos
+					if (!handleRule(info,line, tempRule)) break;
+				}
+			}
+		}
+
+		// check for keywords at the line's end
+		if(context.rules.getKeywords() != null && context.inRule == null)
+		{
+			markKeyword(info,line, lastKeyword, lineLength);
+		}
+
+		// mark all remaining characters
+		if(lastOffset != lineLength)
+		{
+			if (context.inRule == null)
+			{
+				addToken(info,lineLength - lastOffset,
+					getActionToken(context.rules.getDefault()));
+			}
+			else if (
+				(context.inRule.action & SPAN) == SPAN &&
+				(context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) != 0
+			)
+			{
+				addToken(info,lineLength - lastOffset,Token.INVALID);
+				context.inRule = null;
+			}
+			else
+			{
+				addToken(info,lineLength - lastOffset, getActionToken(context.inRule.action));
+
+				if((context.inRule.action & MARK_FOLLOWING) == MARK_FOLLOWING)
+				{
+					context.inRule = null;
+				}
+			}
+		}
+
+		info.context = context;
+	}
 
 	/**
-	 * An array for storing information about lines. It is enlarged and
-	 * shrunk automatically by the <code>insertLines()</code> and
-	 * <code>deleteLines()</code> methods.
+	 * Checks if the rule matches the line at the current position
+	 * and handles the rule if it does match
+	 * @param line Segment to check rule against
+	 * @param checkRule ParserRule to check against line
+	 * @return true,  keep checking other rules
+	 *     <br>false, stop checking other rules
 	 */
-	protected LineInfo[] lineInfo;
+	private boolean handleRule(LineInfo info, Segment line, ParserRule checkRule)
+	{
+		if (pattern.count == 0) return true;
 
-	/**
-	 * The number of lines in the model being tokenized. This can be
-	 * less than the length of the <code>lineInfo</code> array.
-	 */
-	protected int length;
+		if (lineLength - pos < pattern.count) return true;
 
-	/**
-	 * True if the next line should be painted.
-	 */
-	protected boolean nextLineRequested;
+		char a, b;
+		for (int k = 0; k < pattern.count; k++)
+		{
+			a = pattern.array[pattern.offset + k];
+			b = line.array[pos + k];
+
+			// break out and check the next rule if there is a mismatch
+			if (
+				!(
+					a == b ||
+					context.rules.getIgnoreCase() &&
+					(
+						Character.toLowerCase(a) == b ||
+						a == Character.toLowerCase(b)
+					)
+				)
+			) return true;
+		}
+
+		// check for escape sequences
+		if (escaped || (checkRule.action & IS_ESCAPE) == IS_ESCAPE)
+		{
+			escaped = !escaped;
+			pos += pattern.count - 1;
+			return false;
+		}
+
+		// handle soft spans
+		if (context.inRule != checkRule && context.inRule != null
+			&& (context.inRule.action & SOFT_SPAN) != 0)
+		{
+			if ((context.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
+			{
+				addToken(info,pos - lastOffset, Token.INVALID);
+			}
+			else
+			{
+				addToken(info,pos - lastOffset,getActionToken(context.inRule.action));
+			}
+			lastOffset = lastKeyword = pos;
+			context.inRule = null;
+		}
+
+		if (context.inRule == null)
+		{
+			if ((checkRule.action & AT_LINE_START) == AT_LINE_START)
+			{
+				if (
+					(((checkRule.action & MARK_PREVIOUS) != 0) ?
+					lastKeyword :
+					pos) != line.offset
+				)
+				{
+					return true;
+				}
+			}
+
+			/* check to see if previous sequence is a keyword.
+			 * skip this if the matching rule colorizes the previous
+			 * sequence. */
+			if ((checkRule.action & MARK_PREVIOUS) != MARK_PREVIOUS)
+			{
+				if (context.rules.getKeywords() != null)
+				{
+					markKeyword(info,line, lastKeyword, pos);
+				}
+
+				lastKeyword = pos + pattern.count;
+
+				if ((checkRule.action & WHITESPACE) == WHITESPACE)
+				{
+					return false; // break out of inner for loop to check next char
+				}
+
+				// mark previous sequence as NULL (plain text)
+				if (lastOffset < pos)
+				{
+					addToken(info,pos - lastOffset,
+						getActionToken(context.rules.getDefault()));
+				}
+			}
+
+			if ((checkRule.action & MAJOR_ACTIONS) == 0)
+			{
+				// this is a plain sequence rule
+				addToken(info,pattern.count, getActionToken(checkRule.action));
+				lastOffset = pos + pattern.count;
+			}
+			else if ((checkRule.action & SPAN) == SPAN)
+			{
+				context.inRule = checkRule;
+				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+				{
+					addToken(info,pattern.count,
+						getActionToken(context.rules.getDefault()));
+					lastOffset = pos + pattern.count;
+				}
+				else
+				{
+					lastOffset = pos;
+				}
+
+				if ((checkRule.action & DELEGATE) == DELEGATE)
+				{
+					String setName = new String(checkRule.searchChars,
+						checkRule.sequenceLengths[0] + checkRule.sequenceLengths[1],
+						checkRule.sequenceLengths[2]);
+
+					ParserRuleSet delegateSet = getRuleSet(setName);
+
+					if (delegateSet != null)
+					{
+						if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+						{
+							addToken(info,pattern.count,
+								getActionToken(context.rules.getDefault()));
+						}
+						else
+						{
+							addToken(info,pattern.count, getActionToken(checkRule.action));
+						}
+						lastKeyword = lastOffset = pos + pattern.count;
+
+						context = new LineContext(delegateSet, context);
+					}
+				}
+			}
+			else if ((checkRule.action & EOL_SPAN) == EOL_SPAN)
+			{
+				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+				{
+					addToken(info,pattern.count,
+						getActionToken(context.rules.getDefault()));
+					addToken(info,lineLength - (pos + pattern.count),
+						getActionToken(checkRule.action));
+				}
+				else
+				{
+					addToken(info,lineLength - pos,
+						getActionToken(checkRule.action));
+				}
+				lastOffset = lineLength;
+				lastKeyword = lineLength;
+				pos = lineLength;
+				return false;
+			}
+			else if ((checkRule.action & MARK_PREVIOUS) == MARK_PREVIOUS)
+			{
+				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+				{
+					addToken(info,pos - lastOffset, getActionToken(checkRule.action));
+					addToken(info,pattern.count,
+						getActionToken(context.rules.getDefault()));
+				}
+				else
+				{
+					addToken(info,(pos + pattern.count) - lastOffset,
+						getActionToken(checkRule.action));
+				}
+				lastOffset = pos + pattern.count;
+			}
+			else if ((checkRule.action & MARK_FOLLOWING) == MARK_FOLLOWING)
+			{
+				context.inRule = checkRule;
+				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+				{
+					addToken(info,pattern.count,
+						getActionToken(context.rules.getDefault()));
+					lastOffset = pos + pattern.count;
+				}
+				else
+				{
+					lastOffset = pos;
+				}
+			}
+			else
+			{
+				// UNHANDLED MAJOR ACTION!!! SHOULD NOT HAPPEN!!!
+			}
+			pos += (pattern.count - 1); // move pos to last character of match sequence
+			return false; // break out of inner for loop to check next char
+		}
+		else if ((checkRule.action & SPAN) == SPAN)
+		{
+			if ((checkRule.action & DELEGATE) != DELEGATE)
+			{
+				context.inRule = null;
+				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+				{
+					addToken(info,pos - lastOffset, getActionToken(checkRule.action));
+					addToken(info,pattern.count,
+						getActionToken(context.rules.getDefault()));
+				}
+				else
+				{
+					addToken(info,(pos + pattern.count) - lastOffset,
+						getActionToken(checkRule.action));
+				}
+				lastKeyword = lastOffset = pos + pattern.count;
+
+				pos += (pattern.count - 1); // move pos to last character of match sequence
+			}
+
+			return false; // break out of inner for loop to check next char
+		}
+		return true;
+	}
+
+	private void markKeyword(LineInfo info, Segment line, int start, int end)
+	{
+		int len = end - start;
+
+		byte id = context.rules.getKeywords().lookup(line, start, len);
+
+		if(id != Token.NULL)
+		{
+			if(start != lastOffset)
+			{
+				addToken(info,start - lastOffset, getActionToken(
+					context.rules.getDefault()));
+			}
+			addToken(info,len, id);
+			lastOffset = end;
+		}
+	}
+
+	private static final byte getActionToken(int action)
+	{
+		// switch on the masked action token
+		switch (action & ACTION_TOKENS)
+		{
+			case AC_KEYWORD1:
+				return Token.KEYWORD1;
+			case AC_KEYWORD2:
+				return Token.KEYWORD2;
+			case AC_KEYWORD3:
+				return Token.KEYWORD3;
+			case AC_LITERAL1:
+				return Token.LITERAL1;
+			case AC_LITERAL2:
+				return Token.LITERAL2;
+			case AC_COMMENT1:
+				return Token.COMMENT1;
+			case AC_COMMENT2:
+				return Token.COMMENT2;
+			case AC_LABEL:
+				return Token.LABEL;
+			case AC_OPERATOR:
+				return Token.OPERATOR;
+			case AC_INVALID:
+				return Token.INVALID;
+			case AC_NULL: default:
+				return Token.NULL;
+		}
+	}
 
 	/**
 	 * Ensures that the <code>lineInfo</code> array can contain the
@@ -228,7 +780,7 @@ public abstract class TokenMarker implements Cloneable
 	 *
 	 * @param index The array index
 	 */
-	protected void ensureCapacity(int index)
+	private void ensureCapacity(int index)
 	{
 		if(lineInfo == null)
 			lineInfo = new LineInfo[index + 1];
@@ -247,7 +799,7 @@ public abstract class TokenMarker implements Cloneable
 	 * @param length The length of the token
 	 * @param id The id of the token
 	 */
-	protected void addToken(LineInfo info, int length, byte id)
+	private void addToken(LineInfo info, int length, byte id)
 	{
 		if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
 			throw new InternalError("Invalid id: " + id);
@@ -286,21 +838,8 @@ public abstract class TokenMarker implements Cloneable
 	/**
 	 * Inner class for storing information about tokenized lines.
 	 */
-	public class LineInfo
+	public static class LineInfo
 	{
-		/**
-		 * Creates a new LineInfo object with token = Token.NULL
-		 * and obj = null.
-		 */
-		public LineInfo()
-		{
-		}
-
-		/**
-		 * The id of the last token of the line.
-		 */
-		public byte token;
-
 		/**
 		 * The first token of this line.
 		 */
@@ -318,18 +857,69 @@ public abstract class TokenMarker implements Cloneable
 		public boolean tokensValid;
 
 		/**
-		 * This is for use by the token marker implementations
-		 * themselves. It can be used to store anything that
-		 * is an object and that needs to exist on a per-line
-		 * basis.
+		 * The line context.
 		 */
-		public Object obj;
+		public LineContext context;
+	}
+
+	public static class LineContext
+	{
+		public LineContext parent;
+		public ParserRule inRule;
+		public ParserRuleSet rules;
+
+		public LineContext(ParserRule r, ParserRuleSet rs)
+		{
+			inRule = r;
+			rules = rs;
+		}
+
+		public LineContext(ParserRuleSet rs, LineContext lc)
+		{
+			rules = rs;
+			try
+			{
+				parent = (lc == null) ? null : (LineContext) lc.clone();
+			}
+			catch (CloneNotSupportedException e)
+			{
+			}
+		}
+
+		public LineContext(ParserRule r)
+		{
+			inRule = r;
+		}
+
+		public LineContext()
+		{
+		}
+
+		protected Object clone() throws CloneNotSupportedException
+		{
+			LineContext lc = new LineContext();
+			lc.inRule = inRule;
+			lc.rules = rules;
+
+			try
+			{
+				lc.parent = (parent == null) ? null : (LineContext) parent.clone();
+			}
+			catch (CloneNotSupportedException e)
+			{
+			}
+
+			return lc;
+		}
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  2000/04/01 08:40:55  sp
+ * Streamlined syntax highlighting, Perl mode rewritten in XML
+ *
  * Revision 1.34  2000/03/26 03:30:48  sp
  * XMode integrated
  *
@@ -361,11 +951,5 @@ public abstract class TokenMarker implements Cloneable
  *
  * Revision 1.25  1999/06/06 05:05:25  sp
  * Search and replace tweaks, Perl/Shell Script mode updates
- *
- * Revision 1.24  1999/06/05 00:22:58  sp
- * LGPL'd syntax package
- *
- * Revision 1.23  1999/05/03 08:28:14  sp
- * Documentation updates, key binding editor, syntax text area bug fix
  *
  */

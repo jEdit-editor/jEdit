@@ -76,7 +76,7 @@ public class SyntaxDocument extends PlainDocument
 	 */
 	public void tokenizeLines(int start, int len)
 	{
-		if(tokenMarker == null || !tokenMarker.supportsMultilineTokens())
+		if(tokenMarker == null)
 			return;
 
 		tokenMarker.linesChanged(start,len);
@@ -191,6 +191,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/04/01 08:40:55  sp
+ * Streamlined syntax highlighting, Perl mode rewritten in XML
+ *
  * Revision 1.17  2000/03/24 04:52:17  sp
  * bug fixing
  *
@@ -218,19 +221,5 @@ public class SyntaxDocument extends PlainDocument
  *
  * Revision 1.9  1999/09/30 12:21:05  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.8  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.7  1999/06/22 06:14:39  sp
- * RMI updates, text area updates, flag to disable geometry saving
- *
- * Revision 1.6  1999/06/07 06:36:32  sp
- * Syntax `styling' (bold/italic tokens) added,
- * plugin options dialog for plugin option panes
- *
- * Revision 1.5  1999/06/05 00:22:58  sp
- * LGPL'd syntax package
  *
  */

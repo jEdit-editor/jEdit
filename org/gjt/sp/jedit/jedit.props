@@ -194,17 +194,3 @@ view.style.literal1=color:#650099
 view.style.literal2=color:#650099 style:b
 view.style.operator=style:b
 view.style.invalid=color:red style:b
-
-###
-### EDIT MODES
-###
-
-# Perl mode
-mode.perl.label=Perl Scripts
-mode.perl.blockComment=#
-mode.perl.indentOpenBrackets={
-mode.perl.indentCloseBrackets=}
-mode.perl.tokenMarker=org.gjt.sp.jedit.syntax.PerlTokenMarker
-mode.perl.filenameGlob=*.p[lm]
-mode.perl.firstlineGlob=#!*perl*
-mode.perl.noWordSep=_

@@ -21,8 +21,8 @@
 package org.gjt.sp.jedit;
 
 import gnu.regexp.*;
+import java.util.Hashtable;
 import org.gjt.sp.jedit.syntax.TokenMarker;
-import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -47,7 +47,15 @@ public class Mode
 	public Mode(String name)
 	{
 		this.name = name;
+		props = new Hashtable();
+	}
 
+	/**
+	 * Initializes the edit mode. Should be called after all properties
+	 * are loaded and set.
+	 */
+	public void init()
+	{
 		try
 		{
 			String filenameGlob = (String)getProperty("filenameGlob");
@@ -77,50 +85,25 @@ public class Mode
 	/**
 	 * Returns a <code>TokenMarker</code> for this mode. Can return null
 	 * if this mode doesn's support syntax highlighting. The default
-	 * implementation creates a new instance of the class specified
-	 * by the "tokenMarker" mode property, unless another token marker
-	 * has been specified with the <code>setTokenMarker()</code> method,
-	 * in which case a copy of that is returned.
-	 *
-	 * @see #getProperty(String)
+	 * implementation returns a copy of the token marker specified with
+	 * <code>setTokenMarker()</code>.
 	 */
 	public TokenMarker createTokenMarker()
 	{
-		String clazz = (String)getProperty("tokenMarker");
-		if(clazz == null)
-		{
-			if (marker == null)
-				return null;
-			TokenMarker copy;
+		if(marker == null)
+			return null;
 
-			try
-			{
-				copy = (TokenMarker) marker.clone();
-			}
-			catch (CloneNotSupportedException e)
-			{
-				copy = null;
-			}
-			return copy;
-		}
+		TokenMarker copy;
 
 		try
 		{
-			Class cls;
-			ClassLoader loader = getClass().getClassLoader();
-			if(loader == null)
-				cls = Class.forName(clazz);
-			else
-				cls = loader.loadClass(clazz);
-
-			return (TokenMarker)cls.newInstance();
+			copy = (TokenMarker) marker.clone();
 		}
-		catch(Exception e)
+		catch (CloneNotSupportedException e)
 		{
-			Log.log(Log.ERROR,this,e);
+			copy = null;
 		}
-
-		return null;
+		return copy;
 	}
 
 	/**
@@ -134,27 +117,24 @@ public class Mode
 	}
 
 	/**
-	 * Returns a mode property. The default implementation obtains the
-	 * property from the jEdit property named
-	 * "mode.<i>mode name</i>.<i>key</i>".
+	 * Returns a mode property.
 	 * @param key The property name
 	 *
 	 * @since jEdit 2.2pre1
 	 */
 	public Object getProperty(String key)
 	{
-		String value = jEdit.getProperty("mode." + name + "." + key);
-		if(value == null)
-			return null;
+		return props.get(key);
+	}
 
-		try
-		{
-			return new Integer(value);
-		}
-		catch(NumberFormatException nf)
-		{
-			return value;
-		}
+	/**
+	 * Sets a mode property.
+	 * @param key The property name
+	 * @param value The property value
+	 */
+	public void setProperty(String key, Object value)
+	{
+		props.put(key,value);
 	}
 
 	/**
@@ -216,6 +196,7 @@ public class Mode
 
 	// private members
 	private String name;
+	private Hashtable props;
 	private RE firstlineRE;
 	private RE filenameRE;
 	private TokenMarker marker;
@@ -224,6 +205,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/04/01 08:40:54  sp
+ * Streamlined syntax highlighting, Perl mode rewritten in XML
+ *
  * Revision 1.22  2000/03/26 03:30:48  sp
  * XMode integrated
  *
@@ -253,8 +237,5 @@ public class Mode
  *
  * Revision 1.13  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
- *
- * Revision 1.12  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
  *
  */

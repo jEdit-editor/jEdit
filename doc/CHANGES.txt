@@ -2,15 +2,25 @@ JEDIT VERSION HISTORY
 
 * Version 2.4pre3
 
+jEdit 2.4pre3 is being released so soon after 2.4pre2 because an installer
+error prevented 2.4pre2 from being installed properly.
+
 + Enhancements
 
 - Ruby mode updates (Mike Dillon)
+- Syntax highlighting streamlined
 
 + Bug Fixes
 
 - jEdit didn't install due to an installer error (since 2.4pre2)
 - jEdit didn't check if the buffer changed on disk when switching buffesr
   (since 2.4pre1)
+
++ API Changes
+
+- The ASPMode plugin will no longer work, because hard-coded token markers
+  are no longer supported. ASPMode should be rewritten in the XMode XML
+  syntax.
 
 * Version 2.4pre2
 
