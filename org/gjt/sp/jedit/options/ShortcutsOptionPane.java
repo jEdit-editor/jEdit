@@ -42,6 +42,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
+		allBindings = new Vector();
+
 		setLayout(new BorderLayout(12,12));
 
 		initModels();
@@ -112,11 +114,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				= new GrabKeyDialog.KeyBinding(name,
 					label,shortcut1,shortcut2);
 			bindings.addElement(binding);
-
-			if(shortcut1 != null && shortcut1.length() > 0)
-				allBindings.put(shortcut1,binding);
-			if(shortcut2 != null && shortcut2.length() > 0)
-				allBindings.put(shortcut2,binding);
+			allBindings.addElement(binding);
 		}
 
 		return new ShortcutsModel(id,bindings);
@@ -136,11 +134,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				= new GrabKeyDialog.KeyBinding(name,
 					name,shortcut1,shortcut2);
 			bindings.addElement(binding);
-
-			if(shortcut1 != null && shortcut1.length() > 0)
-				allBindings.put(shortcut1,binding);
-			if(shortcut2 != null && shortcut2.length() > 0)
-				allBindings.put(shortcut2,binding);
+			allBindings.addElement(binding);
 		}
 
 		return new ShortcutsModel("macros",bindings);
@@ -151,7 +145,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	private Vector models;
 	private ShortcutsModel currentModel;
 	private JComboBox selectModel;
-	private Hashtable allBindings = new Hashtable();
+	private Vector allBindings;
 
 	class HeaderMouseHandler extends MouseAdapter
 	{
@@ -178,7 +172,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		{
 			int row = keyTable.getSelectedRow();
 			int column = keyTable.getSelectedColumn();
-			if(column != 0)
+			if(column != 0 && row != -1)
 			{
 				String shortcut = new GrabKeyDialog(
 					ShortcutsOptionPane.this,
@@ -263,9 +257,6 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				binding.shortcut1 = (String)value;
 			else if(col == 2)
 				binding.shortcut2 = (String)value;
-
-			if(((String)value).length() > 0)
-				allBindings.put(value,binding);
 
 			// redraw the whole table because a second shortcut
 			// might have changed, too

@@ -184,6 +184,25 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Returns if clicking the middle mouse button pastes the most
+	 * recent selection (% register).
+	 */
+	public final boolean isMiddleMousePasteEnabled()
+	{
+		return middleMousePaste;
+	}
+
+	/**
+	 * Sets if clicking the middle mouse button pastes the most
+	 * recent selection (% register).
+	 * @param middleMousePaste A boolean flag
+	 */
+	public final void setMiddleMousePasteEnabled(boolean middleMousePaste)
+	{
+		this.middleMousePaste = middleMousePaste;
+	}
+
+	/**
 	 * Updates the state of the scroll bars. This should be called
 	 * if the number of lines in the buffer changes, or when the
 	 * size of the text are changes.
@@ -4108,6 +4127,8 @@ forward_scan:		do
 
 	private int horizontalOffset;
 
+	private boolean middleMousePaste;
+
 	private JScrollBar vertical;
 	private JScrollBar horizontal;
 	private boolean scrollBarsInitialized;
@@ -5004,7 +5025,8 @@ forward_scan:		do
 
 				moveCaretPosition(dragStart,false);
 
-				if((evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
+				if(middleMousePaste
+					&& (evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
 				{
 					if(!isEditable())
 						getToolkit().beep();

@@ -1053,6 +1053,8 @@ options.textarea.blinkCaret=Blinking caret
 options.textarea.blockCaret=Block caret
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.homeEnd="Smart" home/end key behaviour
+options.textarea.middleMousePaste=Middle mouse button click pastes \
+	most recent selection
 options.textarea.antiAlias=Smooth text
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
@@ -1201,6 +1203,7 @@ grab-key.title=Specify Shortcut
 grab-key.caption=Press the desired shortcut for "{0}", then click OK.
 grab-key.assigned-to=Currently assigned to: {0}
 grab-key.assigned-to.none=<none>
+grab-key.assigned-to.prefix={0} prefix
 grab-key.clear=Clear
 grab-key.remove=Remove Current
 
@@ -1217,9 +1220,7 @@ grab-key.duplicate-alt-shortcut.message=\
 grab-key.duplicate-shortcut.title=Duplicate Shortcut
 grab-key.duplicate-shortcut.message=\
 	This shortcut is already assigned to\n\
-	"{0}".\n\
-	\n\
-	Do you want to overwrite this assignment?
+	"{0}".
 
 options.browser.label=File System Browser
 options.browser.defaultPath=Default path:

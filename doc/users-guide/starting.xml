@@ -159,8 +159,10 @@
    They are listed in the following table.
   </para>
   <para>
-   The optional <application>jEditLauncher</application> package for Windows
-   supports a few additional command line parameters; see <xref
+   If you are using <application>jEditLauncher</application>
+   to start jEdit on Windows, only file names and marker and line number
+   specifications can be specified on the command line; other parameters
+   must be set as described in <xref
    linkend="launcher-starting" />.
   </para>
   <informaltable>

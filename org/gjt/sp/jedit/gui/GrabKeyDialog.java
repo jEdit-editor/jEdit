@@ -23,8 +23,8 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.lang.reflect.*;
-import java.util.Hashtable;
+import java.lang.reflect.Field;
+import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -44,7 +44,7 @@ public class GrabKeyDialog extends JDialog
 	 * @since jEdit 3.2pre8
 	 */
 	public GrabKeyDialog(Component comp, KeyBinding binding,
-		Hashtable allBindings, int shortcutNo)
+		Vector allBindings, int shortcutNo)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("grab-key.title"),true);
@@ -93,7 +93,7 @@ public class GrabKeyDialog extends JDialog
 		input.add(clear);
 
 		assignedTo = new JLabel();
-		updateAssignedTo("");
+		updateAssignedTo(null);
 
 		Box buttons = Box.createHorizontalBox();
 		buttons.add(Box.createGlue());
@@ -171,7 +171,7 @@ public class GrabKeyDialog extends JDialog
 	private JButton clear;
 	private boolean isOK;
 	private KeyBinding binding;
-	private Hashtable allBindings;
+	private Vector allBindings;
 	private int shortcutNo;
 
 	private boolean isAssigned()
@@ -232,13 +232,45 @@ public class GrabKeyDialog extends JDialog
 
 	private void updateAssignedTo(String shortcutString)
 	{
-		if(shortcutString == null)
-			return;
-		KeyBinding other = (KeyBinding)allBindings.get(shortcutString);
-		String label = other != null ? other.label
-			: jEdit.getProperty("grab-key.assigned-to.none");
 		assignedTo.setText(jEdit.getProperty(
-			"grab-key.assigned-to",new String[] { label }));
+			"grab-key.assigned-to",new String[] {
+			getAssignedTo(shortcutString) }));
+	}
+
+	private String getAssignedTo(String shortcutString)
+	{
+		String label = jEdit.getProperty("grab-key.assigned-to.none");
+
+		if(shortcutString != null && shortcutString.length() != 0)
+		{
+			Enumeration enum = allBindings.elements();
+			while(enum.hasMoreElements())
+			{
+				KeyBinding binding = (KeyBinding)enum.nextElement();
+
+				// eg, trying to bind C+n C+p if C+n already bound
+				if((binding.shortcut1 != null
+					&& shortcutString.startsWith(binding.shortcut1))
+					|| (binding.shortcut2 != null
+					&& shortcutString.startsWith(binding.shortcut2)))
+				{
+					label = binding.label;
+					break;
+				}
+				// eg, trying to bind C+e if C+e is a prefix
+				if((binding.shortcut1 != null
+					&& binding.shortcut1.startsWith(shortcutString))
+					|| (binding.shortcut2 != null
+					&& binding.shortcut2.startsWith(shortcutString)))
+				{
+					label = jEdit.getProperty("grab-key.assigned-to.prefix",
+						new String[] { shortcutString });
+					break;
+				}
+			}
+		}
+
+		return label;
 	}
 
 	/**
@@ -354,8 +386,7 @@ public class GrabKeyDialog extends JDialog
 			}
 			else if(evt.getSource() == remove)
 			{
-				shortcut.setText("");
-				allBindings.remove(getOldShortcut());
+				shortcut.setText(null);
 				isOK = true;
 				dispose();
 			}
@@ -363,8 +394,8 @@ public class GrabKeyDialog extends JDialog
 				dispose();
 			else if(evt.getSource() == clear)
 			{
-				shortcut.setText("");
-				updateAssignedTo("");
+				shortcut.setText(null);
+				updateAssignedTo(null);
 			}
 		}
 
@@ -383,8 +414,8 @@ public class GrabKeyDialog extends JDialog
 					JOptionPane.QUESTION_MESSAGE);
 				if(answer == JOptionPane.YES_OPTION)
 				{
+					shortcut.setText(null);
 					isOK = true;
-					allBindings.remove(getOldShortcut());
 				}
 				else if(answer == JOptionPane.CANCEL_OPTION)
 					return false;
@@ -395,30 +426,18 @@ public class GrabKeyDialog extends JDialog
 				GUIUtilities.error(GrabKeyDialog.this,
 					"grab-key.duplicate-alt-shortcut",
 					null);
+				return false;
 			}
 			else
 			{
 				// check whether this shortcut already exists
-				KeyBinding other = (KeyBinding)allBindings
-					.get(shortcutString);
-				if(other != null && other != binding)
+				String other = getAssignedTo(shortcutString);
+				if(other != null && !other.equals(binding.label))
 				{
-					int answer = GUIUtilities.confirm(
-						GrabKeyDialog.this,
+					GUIUtilities.error(GrabKeyDialog.this,
 						"grab-key.duplicate-shortcut",
-						new Object[] { other.label },
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE);
-					if(answer == JOptionPane.YES_OPTION)
-					{
-						// remove other shortcut
-						if(shortcutString.equals(other.shortcut1))
-							other.shortcut1 = null;
-						else
-							other.shortcut2 = null;
-						isOK = true;
-						allBindings.remove(shortcutString);
-					}
+						new Object[] { other });
+					return false;
 				}
 				else
 					isOK = true;

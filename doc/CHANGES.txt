@@ -12,6 +12,9 @@ JEDIT 3.2 VERSION HISTORY
 - jEditLauncher updates (John Gellene)
 - Updated Duplicate_Line and Next_Char macros (John Gellene)
 - Improved shortcuts option pane (Dirk Moebius)
+- Improved PHP mode
+- Middle mouse button paste can now be disabled in the Global Options
+  dialog box
 
 + Neutral
 
@@ -23,6 +26,8 @@ JEDIT 3.2 VERSION HISTORY
 - Printing didn't work due to a change in 3.2pre7
 - Fixed exception printed when trying to use the file chooser dialog box
 - jEditLauncher didn't work due to an EditServer change in pre7
+- jEdit might hang if an error was shown while downloading the plugin
+  list in the plugin manager
 
 * Version 3.2pre7
 

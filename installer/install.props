@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=3.2pre7
+app.version=3.2pre8
 
 # Info to display on first page of installer
 app.readme=readme.html
@@ -20,7 +20,7 @@ app.main.class=org.gjt.sp.jedit.jEdit
 comp.count=5
 
 comp.0.name=jEdit text editor
-comp.0.size=1944
+comp.0.size=1968
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
@@ -32,7 +32,7 @@ comp.2.size=16
 comp.2.fileset=jedit-firewall
 
 comp.3.name=Windows launcher and context menu addition (Windows only)
-comp.3.size=240
+comp.3.size=260
 comp.3.fileset=jedit-windows
 comp.3.os=Windows
 

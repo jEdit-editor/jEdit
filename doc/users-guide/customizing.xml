@@ -235,16 +235,20 @@
    The <guibutton>Tool Bar</guibutton> option pane lets you edit the tool bar,
    or disable it completely.
   </para>
-  <bridgehead renderas="sect3">The Shortcut Editing Panes</bridgehead>
+  <bridgehead renderas="sect3">The Shortcuts Pane</bridgehead>
   <para>
-   The <guibutton>Command Shortcuts</guibutton>, <guibutton>Plugin
-   Shortcuts</guibutton> and <guibutton>Macro Shortcuts</guibutton> option panes
+   The <guibutton>Shortcuts</guibutton> option pane
    let you change keyboard shortcuts. Each command can have up to two shortcuts
    associated with it.
   </para>
   <para>
+   The combo box at the top of the option pane selects the shortcut set
+   to edit (command, plugin or macro shortcuts).
+  </para>
+  <para>
    To change a shortcut, click the appropriate table entry and press the
    keys you want associated with that command in the resulting dialog box.
+   The dialog box will warn you if the shortcut is already assigned.
   </para>
   <bridgehead renderas="sect3">The Abbreviations Pane</bridgehead>
   <para>

@@ -18,7 +18,6 @@
  * along with the jEdit program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Version: 0.1 [Sun Jul 08 08:24:03 CEST 2001 @308 /Internet Time/]
  *
  * $Id$
  */
@@ -26,25 +25,19 @@
 void duplicateLine()
 {
 	line = textArea.getCaretLine();
-	text = textArea.getLineText(line) + "\n";
-	buffer.insertString(textArea.getLineEndOffset(line), text, null);
+	offset = textArea.getLineEndOffset(line);
+	// handle last line differently
+	if(line == textArea.getLineCount() - 1)
+	{
+		text = "\n" + textArea.getLineText(line);
+		--offset;
+	}
+	else
+		text = textArea.getLineText(line) + "\n";
+	buffer.insertString(offset, text, null);
 	textArea.goToNextLine(false);
 }
 
 duplicateLine();
-
-/*
-
-Macro index data (in DocBook format)
-
-  <listitem>
-    <para><filename>Duplicate_Line.bsh</filename></para>
-	<abstract><para>
-	  Duplicates the line on which the caret lies immediately
-	  beneath it and moves the caret to the new line.
-	</para></abstract>
-  </listitem>
-
-*/
 
 // end Duplicate_Line.bsh

@@ -23,7 +23,7 @@
  * $Id$
  */
 
-void nextChar();
+void nextChar()
 {
 	script = new StringBuffer(512);
 	script.append( "start = textArea.getCaretPosition();"        );

@@ -107,6 +107,13 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		homeEnd.setSelected(jEdit.getBooleanProperty("view.homeEnd"));
 		addComponent(homeEnd);
 
+		/* Middle mouse button click pastes % register */
+		middleMousePaste = new JCheckBox(jEdit.getProperty("options.textarea"
+			+ ".middleMousePaste"));
+		middleMousePaste.setSelected(jEdit.getBooleanProperty(
+			"view.middleMousePaste"));
+		addComponent(middleMousePaste);
+
 		/* Anti-aliasing */
 		antiAlias = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".antiAlias"));
@@ -145,6 +152,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		jEdit.setProperty("view.electricBorders",electricBorders
 			.isSelected() ? "3" : "0");
 		jEdit.setBooleanProperty("view.homeEnd",homeEnd.isSelected());
+		jEdit.setBooleanProperty("view.middleMousePaste",
+			middleMousePaste.isSelected());
 		jEdit.setBooleanProperty("view.antiAlias",antiAlias.isSelected());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
 	}
@@ -159,6 +168,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox blockCaret;
 	private JCheckBox electricBorders;
 	private JCheckBox homeEnd;
+	private JCheckBox middleMousePaste;
 	private JCheckBox antiAlias;
 	private JCheckBox fracFontMetrics;
 }

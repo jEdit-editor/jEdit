@@ -428,6 +428,9 @@ public class EditPane extends JPanel implements EBComponent
 		// Set up the right-click popup menu
 		textArea.setRightClickPopup(GUIUtilities
 			.loadPopupMenu("view.context"));
+
+		textArea.setMiddleMousePasteEnabled(jEdit.getBooleanProperty(
+			"view.middleMousePaste"));
 	}
 
 	private void loadBufferSwitcher()

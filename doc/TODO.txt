@@ -6,7 +6,6 @@ TO DO
 - scrollToCaret() still broken
 - formatting problems in user's guide in table cells
 - next time i'm making an RPM, fix the shell script
-- plugin manager: modal error dialogs showing while downloading plugin list
 
 + bugs:
 

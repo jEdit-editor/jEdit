@@ -35,6 +35,8 @@ class PluginListDownloadProgress extends JDialog
 		super(JOptionPane.getFrameForComponent(window),
 			jEdit.getProperty("plugin-list.progress.title"),true);
 
+		this.window = window;
+
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
@@ -66,6 +68,7 @@ class PluginListDownloadProgress extends JDialog
 	}
 
 	// private members
+	private PluginManager window;
 	private PluginList list;
 	private DownloadThread thread;
 
@@ -93,8 +96,7 @@ class PluginListDownloadProgress extends JDialog
 				Log.log(Log.ERROR,this,path + ":" + line
 					+ ": " + message);
 				String[] pp = { path, String.valueOf(line), message };
-				GUIUtilities.error(PluginListDownloadProgress.this,
-					"plugin-list.xmlerror",pp);
+				GUIUtilities.error(window,"plugin-list.xmlerror",pp);
 			}
 			catch(Exception e)
 			{
@@ -102,8 +104,7 @@ class PluginListDownloadProgress extends JDialog
 
 				Log.log(Log.ERROR,this,e);
 				String[] pp = { e.toString() };
-				GUIUtilities.error(PluginListDownloadProgress.this,
-					"plugin-list.ioerror",pp);
+				GUIUtilities.error(window,"plugin-list.ioerror",pp);
 			}
 		}
 	}
