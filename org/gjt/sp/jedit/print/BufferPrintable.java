@@ -57,16 +57,21 @@ class BufferPrintable implements Printable
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
 	{
-		if(pageIndex == currentPage)
-			currentLine = currentPageStart;
-		else
+		lineList.clear();
+		currentLine = 0;
+
+		if(pageIndex != currentPage)
 		{
+			currentPageStart = currentPhysicalLine;
+			currentPage = pageIndex;
+
 			if(end)
 				return NO_SUCH_PAGE;
-
-			currentPageStart = currentLine;
-			currentPage = pageIndex;
+			else
+				return PAGE_EXISTS;
 		}
+		else
+			currentPhysicalLine = currentPageStart;
 
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
@@ -113,7 +118,7 @@ class BufferPrintable implements Printable
 			chars[i] = ' ';
 		double tabWidth = font.getStringBounds(chars,
 			0,tabSize,frc).getWidth();
-		PrintTabExpander e = new PrintTabExpander(pageX,tabWidth);
+		PrintTabExpander e = new PrintTabExpander(tabWidth);
 		//}}}
 
 		Segment seg = new Segment();
@@ -269,21 +274,19 @@ print_loop:	for(;;)
 	//{{{ PrintTabExpander class
 	static class PrintTabExpander implements TabExpander
 	{
-		private double pageX;
 		private double tabWidth;
 
 		//{{{ PrintTabExpander constructor
-		public PrintTabExpander(double pageX, double tabWidth)
+		public PrintTabExpander(double tabWidth)
 		{
-			this.pageX = pageX;
 			this.tabWidth = tabWidth;
 		} //}}}
 
 		//{{{ nextTabStop() method
 		public float nextTabStop(float x, int tabOffset)
 		{
-			int ntabs = (int)((x - pageX) / tabWidth);
-			return (float)((ntabs + 1) * tabWidth + pageX);
+			int ntabs = (int)((x + 1) / tabWidth);
+			return (float)((ntabs + 1) * tabWidth);
 		} //}}}
 	} //}}}
 }

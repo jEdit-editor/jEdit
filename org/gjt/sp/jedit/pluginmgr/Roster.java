@@ -260,20 +260,27 @@ class Roster
 			progress.setMaximum(1);
 
 			ZipFile zipFile = new ZipFile(path);
-			Enumeration enum = zipFile.entries();
-			while(enum.hasMoreElements())
+			try
 			{
-				ZipEntry entry = (ZipEntry)enum.nextElement();
-				String name = entry.getName().replace('/',File.separatorChar);
-				File file = new File(dir,name);
-				if(entry.isDirectory())
-					file.mkdirs();
-				else
+				Enumeration enum = zipFile.entries();
+				while(enum.hasMoreElements())
 				{
-					new File(file.getParent()).mkdirs();
-					copy(progress,zipFile.getInputStream(entry),
-						new FileOutputStream(file),false,false);
+					ZipEntry entry = (ZipEntry)enum.nextElement();
+					String name = entry.getName().replace('/',File.separatorChar);
+					File file = new File(dir,name);
+					if(entry.isDirectory())
+						file.mkdirs();
+					else
+					{
+						new File(file.getParent()).mkdirs();
+						copy(progress,zipFile.getInputStream(entry),
+							new FileOutputStream(file),false,false);
+					}
 				}
+			}
+			finally
+			{
+				zipFile.close();
 			}
 
 			new File(path).delete();

@@ -311,8 +311,6 @@ public class HelpViewer extends JFrame implements EBComponent
 			jEdit.getProperty("helpviewer.toc.readme")));
 		root.add(createNode("NEWS.txt",
 			jEdit.getProperty("helpviewer.toc.news")));
-		root.add(createNode("TODO.txt",
-			jEdit.getProperty("helpviewer.toc.todo")));
 		root.add(createNode("CHANGES.txt",
 			jEdit.getProperty("helpviewer.toc.changes")));
 		root.add(createNode("COPYING.txt",

@@ -1,5 +1,63 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0.1
+
++ Bug Fixes
+
+- A single invalid file system browser coloring regular expression no
+  longer stops the remaining expressions from being loaded.
+
+- Fixed a bug in the undo request merging code that would occur
+  sometimes when multiple consecutive pieces of text were removed one
+  after the other.
+
+- Fixed a bug in the undo request merging code that would occur when
+  a selection was replaced with some text.
+
+- If the splash screen was disabled, running jEdit with the -nogui and
+  -nobackground command line arguments didn't work, because the AWT
+  event thread was never started, because no GUI calls were made, and as
+  a result jEdit exited immediately after starting up instead of
+  entering the event loop.
+
+- Fixed erronous assignment in VFS browser code that would cause
+  NullPointerExceptions after opening a file in a new view.
+
+- Triple-clicking on the last line of a file printed an
+  ArrayIndexOutOfBoundsException.
+
+- One of the tips of the day referred to an invalid URL.
+
+- Previously, the filesystem browser opens the clicked directory if
+  clickCount == 2. This doesn't work if you double click once and then
+  immediate double click again on a directory (or a file) at the same
+  physical location, because the 2nd double click is reported with a
+  click count of 3 and 4. (Alexander Maryanovsky)
+
+- A few printing bugs fixed, including the notorious print output
+  spacing problem.
+
+- The help viewer should no longer open behind the view when jEdit is
+  run for the first time on some Java implementations.
+
+- StatusBar.MemoryIndicator.removeNotify() was missing a
+  super.removeNotify() call. This could cause 'InputContext' errors when
+  exiting jEdit. (Alexander Maryanovsky)
+
+- The plugin manager did not delete downloaded files from the
+  'PluginManager.download' directory on some operating systems, due to a
+  missing close() call.
+
+- JEditTextArea.goToEndOfLine() (bound to END if 'smart home/end' is
+  off, or END END if its on) followed by goToNextLine() would move the
+  cursor to the first column.
+
+- Preview_Javadoc_of_Buffer.bsh macro used the deprecated
+  DockableWindowManager.getDockableWindow() method.
+
+- Text area would not automatically scroll to the caret location when
+  working with multiple views under certain circumstances.
+
 * Version 4.0final
 
 + Enhancements
@@ -8,6 +66,7 @@ JEDIT 4.0 VERSION HISTORY
 - Hidden files are no longer listed in the 'Macros' menu
 - Minor improvements to RPM Spec syntax highlighting
 - Updated Python mode (Ollie Rutherfurd)
+- Documentation updates
 
 + Bug Fixes
 

@@ -632,7 +632,10 @@ public class View extends JFrame implements EBComponent
 	 */
 	public JEditTextArea getTextArea()
 	{
-		return editPane.getTextArea();
+		if(editPane == null)
+			return null;
+		else
+			return editPane.getTextArea();
 	} //}}}
 
 	//{{{ getEditPane() method

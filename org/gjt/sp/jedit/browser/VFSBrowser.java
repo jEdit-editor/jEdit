@@ -865,7 +865,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(buffer != null)
 				{
 					if(newView)
-						view = jEdit.newView(null,buffer);
+						jEdit.newView(null,buffer);
 					else
 						view.setBuffer(buffer);
 				}
