@@ -4,7 +4,7 @@ JEDIT VERSION HISTORY
 
 + Enhancements
 
-- Workaround for broken geometry handling on Linux JDK
+- Workaround for broken window geometry code on Linux
 - Documentation updates
 - New flag can be passed to HistoryTextField constructor; if true, selecting
   something from the popup list will immediately fire an ActionEvent
@@ -20,6 +20,8 @@ JEDIT VERSION HISTORY
   2.1pre3)
 - Edit modes installed by plugins did not get a chance at automatically being
   selected for a given file type (since 2.2pre1???)
+- Fixed HTML comment highlighting bug again (since 2.2pre4)
+- Fixed recent file list bug (Mike Dillon) (since 2.2pre1???)
 
 * Version 2.2pre4
 

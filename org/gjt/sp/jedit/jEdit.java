@@ -711,7 +711,6 @@ public class jEdit
 
 		removeBufferFromList(buffer);
 		buffer.close();
-		fireEditorEvent(EditorEvent.BUFFER_CLOSED,view,buffer);
 
 		if(!buffer.isNewFile())
 		{
@@ -722,6 +721,8 @@ public class jEdit
 			if(recent.size() > maxRecent)
 				recent.removeElementAt(maxRecent);
 		}
+
+		fireEditorEvent(EditorEvent.BUFFER_CLOSED,view,buffer);
 
 		// Create a new file when the last is closed
 		if(buffersFirst == null && buffersLast == null)
@@ -1571,6 +1572,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.154  1999/11/19 05:11:35  sp
+ * Recent file list bug fix, HTML comment bug fix
+ *
  * Revision 1.153  1999/11/16 08:21:20  sp
  * Various fixes, attempt at beefing up expand-abbrev
  *
