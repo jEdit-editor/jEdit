@@ -6,7 +6,6 @@ TO DO
 - formatting problems in user's guide in table cells
 - next time i'm making an RPM, fix the shell script
 - make sure pre9 alt key change didn't break altgr on java 1.4
-- missing class names from API docs
 - scrollToCaret() broken
 
 + next major release (4.0):

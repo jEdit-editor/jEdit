@@ -30,19 +30,13 @@ public class BeanShellAction extends EditAction
 		super(name,plugin);
 
 		this.code = code;
+		this.isSelected = isSelected;
 		this.noRepeat = noRepeat;
 		this.noRecord = noRecord;
 
 		/* Some characters that we like to use in action names
 		 * ('.', '-') are not allowed in BeanShell identifiers. */
 		sanitizedName = name.replace('.','_').replace('-','_');
-
-		if(isSelected != null)
-		{
-			String cachedIsSelectedName = "selected_" + sanitizedName;
-			cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
-				isSelected,true);
-		}
 	}
 
 	public void invoke(View view)
@@ -57,13 +51,20 @@ public class BeanShellAction extends EditAction
 
 	public boolean isToggle()
 	{
-		return cachedIsSelected != null;
+		return isSelected != null;
 	}
 
 	public boolean isSelected(View view)
 	{
-		if(cachedIsSelected == null)
+		if(isSelected == null)
 			return false;
+
+		if(cachedIsSelected == null)
+		{
+			String cachedIsSelectedName = "selected_" + sanitizedName;
+			cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
+				isSelected,true);
+		}
 
 		return Boolean.TRUE.equals(BeanShell.runCachedBlock(cachedIsSelected,
 			view,null));
@@ -88,6 +89,7 @@ public class BeanShellAction extends EditAction
 	private boolean noRepeat;
 	private boolean noRecord;
 	private String code;
+	private String isSelected;
 	private String cachedCode;
 	private String cachedIsSelected;
 	private String sanitizedName;

@@ -52,7 +52,6 @@ class InstallPluginsDialog extends EnhancedDialog
 		panel.setBorder(new EmptyBorder(0,0,12,0));
 
 		plugins = new JCheckBoxList(model);
-		//plugins.setVisibleRowCount(8);
 		plugins.getSelectionModel().addListSelectionListener(new ListHandler());
 		JScrollPane scroller = new JScrollPane(plugins);
 		Dimension dim = scroller.getPreferredSize();

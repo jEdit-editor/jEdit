@@ -25,7 +25,7 @@ CDATA DSSSL> ]>
 
 (element funcsynopsis (process-children))
 
-(define %funcsynopsis-style% #f)
+(define %funcsynopsis-style% 'ansi)
 
 (element funcprototype
   (let ((paramdefs (select-elements (children (current-node))

@@ -28,6 +28,7 @@ JEDIT 3.2 VERSION HISTORY
   platform.
 - Minor change to marker behavior to facilitate AStyle and JavaStyle
   plugins (Dirk Moebius)
+- JCheckBoxList class moved to org.gjt.sp.jedit.gui package
 
 * Version 3.2pre8
 

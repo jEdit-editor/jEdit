@@ -17,22 +17,53 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.pluginmgr;
+package org.gjt.sp.jedit.gui;
 
 import javax.swing.table.*;
 import javax.swing.*;
 import java.util.Vector;
 
+/**
+ * @since jEdit 3.2pre9
+ */
 public class JCheckBoxList extends JTable
 {
+	/**
+	 * Creates a checkbox list with the given list of objects. The elements
+	 * of this array can either be Entry instances, or other objects (if the
+	 * latter, they will default to being unchecked).
+	 */
+	public JCheckBoxList(Object[] items)
+	{
+		setModel(items);
+	}
+
+	/**
+	 * Creates a checkbox list with the given list of objects. The elements
+	 * of this vector can either be Entry instances, or other objects (if the
+	 * latter, they will default to being unchecked).
+	 */
 	public JCheckBoxList(Vector items)
 	{
 		setModel(items);
-		getSelectionModel().setSelectionMode(ListSelectionModel
-			.SINGLE_SELECTION);
-		setShowGrid(false);
 	}
 
+	/**
+	 * Sets the model to the given list of objects. The elements of this
+	 * array can either be Entry instances, or other objects (if the
+	 * latter, they will default to being unchecked).
+	 */
+	public void setModel(Object[] items)
+	{
+		setModel(new CheckBoxListModel(items));
+		init();
+	}
+
+	/**
+	 * Sets the model to the given list of objects. The elements of this
+	 * vector can either be Entry instances, or other objects (if the
+	 * latter, they will default to being unchecked).
+	 */
 	public void setModel(Vector items)
 	{
 		setModel(new CheckBoxListModel(items));
@@ -45,14 +76,21 @@ public class JCheckBoxList extends JTable
 		CheckBoxListModel model = (CheckBoxListModel)getModel();
 		for(int i = 0; i < model.items.size(); i++)
 		{
-			CheckBoxListModel.Entry entry = (CheckBoxListModel.Entry)
-				model.items.elementAt(i);
+			Entry entry = (Entry)model.items.elementAt(i);
 			if(entry.checked)
 				values.addElement(entry.value);
 		}
 
 		Object[] retVal = new Object[values.size()];
 		values.copyInto(retVal);
+		return retVal;
+	}
+
+	public Entry[] getValues()
+	{
+		CheckBoxListModel model = (CheckBoxListModel)getModel();
+		Entry[] retVal = new Entry[model.items.size()];
+		model.items.copyInto(retVal);
 		return retVal;
 	}
 
@@ -68,6 +106,9 @@ public class JCheckBoxList extends JTable
 	// private members
 	private void init()
 	{
+		getSelectionModel().setSelectionMode(ListSelectionModel
+			.SINGLE_SELECTION);
+		setShowGrid(false);
 		setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		TableColumn column = getColumnModel().getColumn(0);
 		int checkBoxWidth = new JCheckBox().getPreferredSize().width;
@@ -77,28 +118,58 @@ public class JCheckBoxList extends JTable
 		column.setMaxWidth(checkBoxWidth);
 		column.setResizable(false);
 	}
+
+	public static class Entry
+	{
+		boolean checked;
+		Object value;
+
+		public Entry(boolean checked, Object value)
+		{
+			this.checked = checked;
+			this.value = value;
+		}
+
+		public boolean isChecked()
+		{
+			return checked;
+		}
+
+		public Object getValue()
+		{
+			return value;
+		}
+	}
 }
 
 class CheckBoxListModel extends AbstractTableModel
 {
 	Vector items;
 
-	CheckBoxListModel(Object[] _items)
-	{
-		items = new Vector(_items.length);
-		for(int i = 0; i < _items.length; i++)
-		{
-			items.addElement(new Entry(_items[i]));
-		}
-	}
-
 	CheckBoxListModel(Vector _items)
 	{
 		items = new Vector(_items.size());
 		for(int i = 0; i < _items.size(); i++)
 		{
-			items.addElement(new Entry(_items.elementAt(i)));
+			items.addElement(createEntry(_items.elementAt(i)));
 		}
+	}
+
+	CheckBoxListModel(Object[] _items)
+	{
+		items = new Vector(_items.length);
+		for(int i = 0; i < _items.length; i++)
+		{
+			items.addElement(createEntry(_items[i]));
+		}
+	}
+
+	private JCheckBoxList.Entry createEntry(Object obj)
+	{
+		if(obj instanceof JCheckBoxList.Entry)
+			return (JCheckBoxList.Entry)obj;
+		else
+			return new JCheckBoxList.Entry(false,obj);
 	}
 
 	public int getRowCount()
@@ -118,7 +189,7 @@ class CheckBoxListModel extends AbstractTableModel
 
 	public Object getValueAt(int row, int col)
 	{
-		Entry entry = (Entry)items.elementAt(row);
+		JCheckBoxList.Entry entry = (JCheckBoxList.Entry)items.elementAt(row);
 		switch(col)
 		{
 		case 0:
@@ -145,7 +216,7 @@ class CheckBoxListModel extends AbstractTableModel
 
 	public boolean isCellEditable(int row, int col)
 	{
-		return (col == 0 && !(((Entry)items.elementAt(row)).value
+		return (col == 0 && !(((JCheckBoxList.Entry)items.elementAt(row)).value
 			instanceof String));
 	}
 
@@ -153,19 +224,8 @@ class CheckBoxListModel extends AbstractTableModel
 	{
 		if(col == 0)
 		{
-			((Entry)items.elementAt(row)).checked =
+			((JCheckBoxList.Entry)items.elementAt(row)).checked =
 				(value.equals(Boolean.TRUE));
-		}
-	}
-
-	class Entry
-	{
-		boolean checked;
-		Object value;
-
-		Entry(Object value)
-		{
-			this.value = value;
 		}
 	}
 }

@@ -483,7 +483,7 @@ public class FileVFS extends VFS
 					process.getErrorStream().close();
 					int exitCode = process.waitFor();
 					if(exitCode != 0)
-						Log.log(Log.NOTICE,this,"chmod exited with code " + exitCode);
+						Log.log(Log.NOTICE,FileVFS.class,"chmod exited with code " + exitCode);
 				}
 
 				// Feb 4 2000 5:30 PM
