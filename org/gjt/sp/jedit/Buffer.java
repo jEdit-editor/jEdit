@@ -34,7 +34,24 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 
 /**
- * An in-memory copy of an open file.
+ * An in-memory copy of an open file.<p>
+ *
+ * This is basically a Swing document with support for loading and
+ * saving, and various other miscallaenous things such as markers.<p>
+ *
+ * Buffers extend Swing document properties to obtain the default values
+ * from jEdit's global properties.<p>
+ *
+ * The following properties are always defined:
+ * <ul>
+ * <li>tabSize: the tab size
+ * <li>lineSeparator: default line separator. This is rarely useful,
+ * because all buffers use "\n" as a separator in memory anyway. Only
+ * use this property when reading/writing to the disk
+ * </ul>
+ *
+ * Various other properties are also used by jEdit and plugin actions.
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -1155,6 +1172,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			setFlag(NEW_FILE,false);
 
 			modTime = file.lastModified();
+
+			// fire LOADING event
+			EditBus.send(new BufferUpdate(this,BufferUpdate.LOADING));
 		}
 		catch(BadLocationException bl)
 		{
@@ -1525,6 +1545,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.109  1999/12/03 23:48:10  sp
+ * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
+ *
  * Revision 1.108  1999/11/29 02:45:50  sp
  * Scroll bar position saved when switching buffers
  *

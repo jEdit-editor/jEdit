@@ -53,11 +53,15 @@ public abstract class InputHandler extends KeyAdapter
 	public static final ActionListener DELETE = new delete();
 	public static final ActionListener DELETE_WORD = new delete_word();
 	public static final ActionListener END = new end(false);
+	public static final ActionListener DOCUMENT_END = new document_end(false);
 	public static final ActionListener SELECT_END = new end(true);
+	public static final ActionListener SELECT_DOC_END = new document_end(true);
 	public static final ActionListener INSERT_BREAK = new insert_break();
 	public static final ActionListener INSERT_TAB = new insert_tab();
 	public static final ActionListener HOME = new home(false);
+	public static final ActionListener DOCUMENT_HOME = new document_home(false);
 	public static final ActionListener SELECT_HOME = new home(true);
+	public static final ActionListener SELECT_DOC_HOME = new document_home(true);
 	public static final ActionListener NEXT_CHAR = new next_char(false);
 	public static final ActionListener NEXT_LINE = new next_line(false);
 	public static final ActionListener NEXT_PAGE = new next_page(false);
@@ -92,10 +96,14 @@ public abstract class InputHandler extends KeyAdapter
 		actions.put("delete-word",DELETE_WORD);
 		actions.put("end",END);
 		actions.put("select-end",SELECT_END);
+		actions.put("document-end",DOCUMENT_END);
+		actions.put("select-doc-end",SELECT_DOC_END);
 		actions.put("insert-break",INSERT_BREAK);
 		actions.put("insert-tab",INSERT_TAB);
 		actions.put("home",HOME);
 		actions.put("select-home",SELECT_HOME);
+		actions.put("document-home",DOCUMENT_HOME);
+		actions.put("select-doc-home",SELECT_DOC_HOME);
 		actions.put("next-char",NEXT_CHAR);
 		actions.put("next-line",NEXT_LINE);
 		actions.put("next-page",NEXT_PAGE);
@@ -602,6 +610,27 @@ public abstract class InputHandler extends KeyAdapter
 		}
 	}
 
+	public static class document_end implements ActionListener
+	{
+		private boolean select;
+
+		public document_end(boolean select)
+		{
+			this.select = select;
+		}
+
+		public void actionPerformed(ActionEvent evt)
+		{
+			JEditTextArea textArea = getTextArea(evt);
+			if(select)
+				textArea.select(textArea.getMarkPosition(),
+					textArea.getDocumentLength());
+			else
+				textArea.setCaretPosition(textArea
+					.getDocumentLength());
+		}
+	}
+
 	public static class home implements ActionListener
 	{
 		private boolean select;
@@ -645,6 +674,25 @@ public abstract class InputHandler extends KeyAdapter
 				textArea.select(textArea.getMarkPosition(),caret);
 			else
 				textArea.setCaretPosition(caret);
+		}
+	}
+
+	public static class document_home implements ActionListener
+	{
+		private boolean select;
+
+		public document_home(boolean select)
+		{
+			this.select = select;
+		}
+
+		public void actionPerformed(ActionEvent evt)
+		{
+			JEditTextArea textArea = getTextArea(evt);
+			if(select)
+				textArea.select(textArea.getMarkPosition(),0);
+			else
+				textArea.setCaretPosition(0);
 		}
 	}
 
@@ -1023,6 +1071,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  1999/12/03 23:48:10  sp
+ * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
+ *
  * Revision 1.12  1999/11/21 07:59:30  sp
  * JavaDoc updates
  *

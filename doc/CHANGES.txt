@@ -6,9 +6,14 @@ JEDIT VERSION HISTORY
 
 - Scroll bar position is now saved while switching buffers
 - You can now sort by label or shortcut in the key binding editor
+- Updated expand-abbrev (Valery Kondakoff)
+- C+HOME/C+END go to beginning and end of document
+- New BufferUpdate.LOADING message fired on buffer load and reload
+  (signals that buffer-local properties have changed)
 
 + Enhancements
 
+- Enhanced horizontal scrolling
 - Built-in actions are now dynamically loaded as they are executed, this
   improves startup time and memory consumption somewhat
 - The file loading code now bypasses the Swing document interface, so it
@@ -20,8 +25,8 @@ JEDIT VERSION HISTORY
 - New concept of 'temporary buffers' speeds up recursive directory search
   dramatically (the time to search in the org.gjt.sp.jedit.syntax package,
   for example, has been cut from 20 seconds to 5!!!)
-- Minor update to text area scrolling code
 - Search and replace only shows the 'keep searching' dialog once
+- New 'New View' icon
 - Key binding changes:
   C+d C+d: C+d
   C+d C+e: C+e C+d
@@ -45,7 +50,7 @@ JEDIT VERSION HISTORY
 - Highlights are now drawn for invalid lines as well - so LineGuides will be
   drawn on empty lines (since 1.7pre5???)
 - BufferListSet didn't properly search the last file (since 2.2pre4)
-- Hopefully fixed last remaining problems of multifile find-next
+- Hopefully fixed last remaining multifile find-next bugs
   (problems with this have been around since 1.7pre3)
 
 * Version 2.2pre6

@@ -12,9 +12,8 @@ JEDIT TO DO
 
 ------- Features -------
 
-- C+END/C+HOME
 - Word wrap
-- Write user and developer documentation for EditBus
+- Document EditBus in plugin development docs
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
 - Enhanced printing:

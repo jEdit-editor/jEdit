@@ -846,14 +846,11 @@
    or last visible position, it will be moved to the start or end of
    the buffer.
   </para>
-  <indexterm><primary>Control+HOME command, lack of</></indexterm>
-  <indexterm><primary>Control+END command, lack of</></indexterm>
   <para>
-   Most text editors also have <keycombo><keycap>Control</><keycap>Home</>
-   </keycombo> and <keycombo><keycap>Control</><keycap>End</>
-   </keycombo> commands for moving the caret to the start and end of the
-   buffer. jEdit has no equivalent; instead, press <keycap>Home</> or
-   <keycap>End</> three times.
+   Another way of going to the beginning or end of a buffer is to press
+   <keycombo><keycap>Control</><keycap>Home</>
+   </keycombo> or <keycombo><keycap>Control</><keycap>End</>
+   </keycombo>, respectively..
   </para>
   <tip>
    <para>

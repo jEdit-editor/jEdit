@@ -854,8 +854,10 @@ public class jEdit
 	}
 
 	/**
-	 * Returns the buffer with the specified path name.
+	 * Returns the buffer with the specified path name. The path name
+	 * must be an absolute, canonical, path.
 	 * @param path The path name
+	 * @see MiscUtilities#constructPath(String,String)
 	 */
 	public static Buffer getBuffer(String path)
 	{
@@ -1657,6 +1659,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.165  1999/12/03 23:48:10  sp
+ * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
+ *
  * Revision 1.164  1999/11/29 02:45:50  sp
  * Scroll bar position saved when switching buffers
  *

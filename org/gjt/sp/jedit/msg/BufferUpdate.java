@@ -61,6 +61,11 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	public static final Object SAVING = "SAVING";
 
 	/**
+	 * Buffer reloading.
+	 */
+	public static final Object LOADING = "LOADING";
+
+	/**
 	 * Creates a new buffer update message.
 	 * @param buffer The buffer
 	 * @param what What happened

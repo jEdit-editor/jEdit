@@ -61,6 +61,10 @@ public class DefaultInputHandler extends InputHandler
 		addKeyBinding("END",END);
 		addKeyBinding("S+HOME",SELECT_HOME);
 		addKeyBinding("S+END",SELECT_END);
+		addKeyBinding("C+HOME",DOCUMENT_HOME);
+		addKeyBinding("C+END",DOCUMENT_END);
+		addKeyBinding("CS+HOME",SELECT_DOC_HOME);
+		addKeyBinding("CS+END",SELECT_DOC_END);
 
 		addKeyBinding("PAGE_UP",PREV_PAGE);
 		addKeyBinding("PAGE_DOWN",NEXT_PAGE);
@@ -356,6 +360,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  1999/12/03 23:48:10  sp
+ * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
+ *
  * Revision 1.16  1999/11/16 08:21:20  sp
  * Various fixes, attempt at beefing up expand-abbrev
  *

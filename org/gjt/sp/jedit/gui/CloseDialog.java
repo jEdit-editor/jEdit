@@ -64,7 +64,7 @@ public class CloseDialog extends EnhancedDialog
 		buttons.add(cancel = new JButton(jEdit.getProperty("common.cancel")));
 		cancel.addActionListener(actionListener);
 
-		updateButtons();
+		bufferList.setSelectedIndex(0);
 
 		getContentPane().add(BorderLayout.SOUTH,buttons);
 

@@ -416,12 +416,12 @@ public class JEditTextArea extends JComponent
 		if(x < 0)
 		{
 			newHorizontalOffset = Math.min(0,horizontalOffset
-				- x + width);
+				- x + width + 5);
 		}
 		else if(x + width >= painter.getWidth())
 		{
 			newHorizontalOffset = horizontalOffset +
-				(painter.getWidth() - x) - width;
+				(painter.getWidth() - x) - width - 5;
 		}
 
 		return setOrigin(newFirstLine,newHorizontalOffset);
@@ -2138,6 +2138,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  1999/12/03 23:48:11  sp
+ * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
+ *
  * Revision 1.33  1999/11/29 02:45:50  sp
  * Scroll bar position saved when switching buffers
  *

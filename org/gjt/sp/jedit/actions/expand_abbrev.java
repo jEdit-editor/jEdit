@@ -36,10 +36,15 @@ public class expand_abbrev extends EditAction
 	private Buffer buffer;
 	private JEditTextArea textArea;
 	private String separators, line, word;
-	private int dot, dotdot, lineNo, start, len, wordStart;
+	private int dot, dotdot, lineNo, start, len, wordStart, lineCount;
 	private int count = 1;
 	private int myLength;
 	private int[] array;
+
+	public expand_abbrev()
+	{
+		super("expand-abbrev");
+	}
 
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -54,6 +59,7 @@ public class expand_abbrev extends EditAction
 		lineNo = textArea.getSelectionStartLine();
 		start = textArea.getLineStartOffset(lineNo);
 		len = textArea.getLineEndOffset(lineNo) - start - 1;
+		lineCount = textArea.getLineCount();
 
 		if (createSet)
 		{
@@ -146,19 +152,10 @@ public class expand_abbrev extends EditAction
 	{
 		try
 		{
-			for(int i = lineNo; i >= 0; i--)
+			for(int i = lineCount - 1; i >= 0; i--)
 			{
 				int lineStart = textArea.getLineStartOffset(i);
-				int lineLen;
-				if(i == lineNo)
-				{
-					lineLen = wordStart - lineStart;
-				}
-				else
-				{
-					lineLen = textArea.getLineEndOffset(i)
-						- lineStart - 1;
-				}
+				int lineLen = textArea.getLineEndOffset(i) - lineStart - 1;
 				line = buffer.getText(lineStart, lineLen);
 				int[] array = getIndexOfWord(line,string,separators);
 
