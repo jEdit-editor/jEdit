@@ -95,7 +95,7 @@
 		<exec executable="pdfjadetex" dir="doc/users-guide">
 			<arg value="users-guide.tex"/>
 		</exec>
-		<rename src="doc/users-guide/users-guide.pdf"
+		<move src="doc/users-guide/users-guide.pdf"
 			dest="doc/users-guide/users-guide-letter.pdf"/>
 	</target>
 
@@ -117,7 +117,7 @@
 		<exec executable="pdfjadetex" dir="doc/users-guide">
 			<arg value="users-guide.tex"/>
 		</exec>
-		<rename src="doc/users-guide/users-guide.pdf"
+		<move src="doc/users-guide/users-guide.pdf"
 			dest="doc/users-guide/users-guide-a4.pdf"/>
 	</target>
 
