@@ -1208,7 +1208,8 @@ public class View extends JFrame implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				Buffer newBuffer = _buffer.getPrev();
+				Buffer newBuffer = (recentBuffer != null ?
+					recentBuffer : _buffer.getPrev());
 				if(newBuffer != null && !newBuffer.isClosed())
 					setBuffer(newBuffer);
 				else if(jEdit.getBufferCount() != 0)
@@ -1417,6 +1418,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.146  2000/03/22 07:02:42  sp
+ * pink noise
+ *
  * Revision 1.145  2000/03/21 07:18:53  sp
  * bug fixes
  *
@@ -1447,17 +1451,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.136  2000/02/02 07:52:32  sp
  * bug fixes
- *
- * Revision 1.135  2000/02/02 06:23:44  sp
- * Gutter changes from mike
- *
- * Revision 1.134  2000/02/01 06:49:39  sp
- * View.initTextArea() updated for gutter
- *
- * Revision 1.133  2000/02/01 06:12:33  sp
- * Gutter added (still not fully functional)
- *
- * Revision 1.132  2000/01/31 05:04:48  sp
- * C+e C+x will ask to add abbrev if not found, other minor updates
  *
  */
