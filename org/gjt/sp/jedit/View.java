@@ -112,6 +112,8 @@ public class View extends JFrame implements EBComponent
 			bufferTabs.selectBufferTab(buffer);
 		updateBuffersMenu();
 
+		buffer.checkModTime(this);
+
 		focusOnTextArea();
 	}
 
@@ -1418,6 +1420,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.147  2000/04/01 03:17:41  sp
+ * Tiny fixes here and there
+ *
  * Revision 1.146  2000/03/22 07:02:42  sp
  * pink noise
  *

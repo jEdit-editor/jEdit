@@ -1,5 +1,17 @@
 JEDIT VERSION HISTORY
 
+* Version 2.4pre3
+
++ Enhancements
+
+- Ruby mode updates (Mike Dillon)
+
++ Bug Fixes
+
+- jEdit didn't install due to an installer error (since 2.4pre2)
+- jEdit didn't check if the buffer changed on disk when switching buffesr
+  (since 2.4pre1)
+
 * Version 2.4pre2
 
 + New Features
