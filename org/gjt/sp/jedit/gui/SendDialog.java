@@ -249,6 +249,9 @@ public class SendDialog extends EnhancedDialog implements ActionListener
 				return;
 			}
 
+			out.write("From: " + from);
+			out.write("To: " + to);
+			out.write(CRLF);
 			out.write("Subject: " + subject);
 			out.write(CRLF);
 			out.write("X-Mailer: jEdit " + jEdit.getVersion());

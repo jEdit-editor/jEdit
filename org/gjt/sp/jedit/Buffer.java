@@ -111,7 +111,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 *
 	 * @since 2.5pre1
 	 */
-	public boolean load(final View view, boolean reload)
+	public boolean load(final View view, final boolean reload)
 	{
 		setFlag(LOADING,true);
 
@@ -161,9 +161,14 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				undo = new UndoManager();
 				setFlag(LOADING,false);
 
+				// if reloading a file, clear dirty flag
+				if(reload)
+					setDirty(false);
+
 				// if loadAutosave is false, we loaded an
 				// autosave file, so we set 'dirty' to true
-				setDirty(loadAutosave);
+				if(loadAutosave)
+					setDirty(true);
 
 				if(getFlag(TEMPORARY))
 					return;
@@ -634,6 +639,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void beginCompoundEdit()
 	{
+		if(getFlag(TEMPORARY))
+			return;
+
 		compoundEditCount++;
 		if(compoundEdit == null)
 			compoundEdit = new CompoundEdit();
@@ -648,6 +656,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void endCompoundEdit()
 	{
+		if(getFlag(TEMPORARY))
+			return;
+
 		if(compoundEditCount == 0)
 			return;
 		compoundEditCount--;
@@ -1812,6 +1823,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.154  2000/06/05 08:22:25  sp
+ * bug fixes
+ *
  * Revision 1.153  2000/06/04 08:57:35  sp
  * GUI updates, bug fixes
  *

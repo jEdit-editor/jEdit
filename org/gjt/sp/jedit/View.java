@@ -169,10 +169,11 @@ public class View extends JFrame implements EBComponent
 			}
 
 			JComponent parent = (JComponent)splitPane.getParent();
+
 			parent.remove(splitPane);
-			splitPane = null;
 			parent.add(editPane);
 			parent.revalidate();
+			splitPane = null;
 			updateTitle();
 		}
 
@@ -1024,6 +1025,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.178  2000/06/05 08:22:25  sp
+ * bug fixes
+ *
  * Revision 1.177  2000/06/02 02:21:05  sp
  * minor bug fixes
  *

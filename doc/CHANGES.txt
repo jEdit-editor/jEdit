@@ -1,5 +1,15 @@
 JEDIT 2.5 VERSION HISTORY
 
+* Version 2.5pre6
+
++ Bug Fixes
+
+- Initial size of plugin download progress dialog box was wrong
+- 'Replace All' with the directory file set didn't work
+- By not specifying a 'To:' field, the 'Send' command could trigger anti-spam
+  filters
+- 'Latest Version' plugin could throw a NoSuchMethodError
+
 * Version 2.5pre5
 
 + New Features

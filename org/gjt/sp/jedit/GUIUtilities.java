@@ -757,7 +757,7 @@ public class GUIUtilities
 
 			// increase preferred size a little bit
 			Dimension size = chooser.getPreferredSize();
-			size.width *= 1.15;
+			size.width *= 1.2;
 			chooser.setPreferredSize(size);
 
 			if(view != null)
@@ -771,6 +771,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.65  2000/06/05 08:22:25  sp
+ * bug fixes
+ *
  * Revision 1.64  2000/05/24 07:56:04  sp
  * bug fixes
  *
