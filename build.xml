@@ -2,9 +2,13 @@
 
 <!--
      This is a build.xml file for building jEdit.
+     If you're only using Java 2 version 1.3, comment out the "jdk14" property
+     below.
 -->
 
 <project name="jEdit" default="dist" basedir=".">
+
+	<property name="jdk14" value="true"/>
 
 	<target name="compile">
 		<javac
@@ -17,12 +21,22 @@
 			<include name="gnu/regexp/*.java"/>
 			<include name="installer/*.java"/>
 			<include name="org/gjt/sp/jedit/**/*.java"/>
+			<exclude name="org/gjt/sp/jedit/Java14.java"/>
 			<include name="org/gjt/sp/util/*.java"/>
 		</javac>
 	</target>
 
+	<target name="compile14" if="jdk14">
+		<javac
+			srcdir="."
+			deprecation="on"
+			includeJavaRuntime="yes"
+		>
+			<include name="org/gjt/sp/jedit/Java14.java"/>
+		</javac>
+	</target>
 
-	<target name="dist" depends="compile">
+	<target name="dist" depends="compile,compile14">
 		<jar
 			jarfile="jedit.jar"
 			manifest="org/gjt/sp/jedit/jedit.manifest"
