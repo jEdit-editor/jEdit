@@ -100,6 +100,9 @@ public class Sessions
 
 			while(buffer != null)
 			{
+				if(buffer.isUntitled())
+					continue;
+
 				writeSessionCommand(view,buffer,out);
 				out.write(lineSep);
 				buffer = buffer.getNext();
@@ -220,6 +223,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/04/23 03:36:39  sp
+ * Minor fixes
+ *
  * Revision 1.13  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes

@@ -2,6 +2,8 @@ JEDIT TO DO
 
 2.5:
 
+- Display context menu when a tab is right-clicked
+- TokenMarker.markKeyword(): highlight training l, f or d as DIGIT
 - do MARK_PREVIOUS after markKeyword()
 - XMode:
   - better error reporting
