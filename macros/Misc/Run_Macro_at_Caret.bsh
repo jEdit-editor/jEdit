@@ -3,10 +3,8 @@
  * for the jEdit text editor - runs the macro named
  * by the word under or immediately to the left of the
  * editing caret
- *
- * Version 1.1 - Fri Mar 23 2001 10:46:31 EST
  * Copyright (C) 2001 John Gellene
- * e-mail address:  jgellene@nyc.rr.com
+ * jgellene@nyc.rr.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with the jEdit program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * $Id$
  *
  * Notes on usage:
  *

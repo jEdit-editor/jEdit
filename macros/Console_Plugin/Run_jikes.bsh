@@ -28,7 +28,7 @@ void runJikes()
 	command = "jikes -classpath $d $f";
 
 	// Call our runCommandInConsole() function
-	runCommandInConsole(view,command);
+	runCommandInConsole(view,"Console",command);
 }
 
 runJikes();

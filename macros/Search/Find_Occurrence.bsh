@@ -2,10 +2,8 @@
  * Find_occurrence.bsh - a BeanShell macro script
  * for the jEdit text editor - searches for the full word
  * at or immediately to the left of the caret
- *
- * Version 1.3 - Fri Mar 30 18:18:53 EST 2001 @13 /Internet Time/
  * Copyright (C) 2001 John Gellene
- * e-mail address:  jgellene@nyc.rr.com
+ * jgellene@nyc.rr.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +33,8 @@
  * This macro is designed to work with Return_from_find.bsh,
  * which opens (if necessary) the buffer in which the search commenced
  * and restores the starting caret position.
+ *
+ * $Id$
  */
 
  import javax.swing.SwingUtilities;
@@ -256,5 +256,5 @@ doIt();
 grab = grabIt();
 SwingUtilities.invokeLater(grab);
 
-
+// end Find_Occurrence.bsh
 

@@ -3,14 +3,42 @@
  *  This file is part of the BeanShell Java Scripting distribution.          *
  *  Documentation and updates may be found at http://www.beanshell.org/      *
  *                                                                           *
- *  BeanShell is distributed under the terms of the LGPL:                    *
- *  GNU Library Public License http://www.gnu.org/copyleft/lgpl.html         *
+ *  Sun Public License Notice:                                               *
+ *                                                                           *
+ *  The contents of this file are subject to the Sun Public License Version  *
+ *  1.0 (the "License"); you may not use this file except in compliance with *
+ *  the License. A copy of the License is available at http://www.sun.com    * 
+ *                                                                           *
+ *  The Original Code is BeanShell. The Initial Developer of the Original    *
+ *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
+ *  (C) 2000.  All Rights Reserved.                                          *
+ *                                                                           *
+ *  GNU Public License Notice:                                               *
+ *                                                                           *
+ *  Alternatively, the contents of this file may be used under the terms of  *
+ *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
+ *  provisions of LGPL are applicable instead of those above. If you wish to *
+ *  allow use of your version of this file only under the  terms of the LGPL *
+ *  and not to allow others to use your version of this file under the SPL,  *
+ *  indicate your decision by deleting the provisions above and replace      *
+ *  them with the notice and other provisions required by the LGPL.  If you  *
+ *  do not delete the provisions above, a recipient may use your version of  *
+ *  this file under either the SPL or the LGPL.                              *
  *                                                                           *
  *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Exploring Java, O'Reilly & Associates                          *
+ *  Author of Learning Java, O'Reilly & Associates                           *
  *  http://www.pat.net/~pat/                                                 *
  *                                                                           *
  *****************************************************************************/
+
+/*
+	Notes:
+	There is probably a lot of room for improvement in here.
+	All of the syntactic lookaheads have been commented with:
+		SYNTACTIC_LOOKAHEAD
+	These are probably expensive and we may want to start weeding them out
+	where possible.
+*/
 
 options {
     JAVA_UNICODE_ESCAPE=true;
@@ -19,591 +47,18 @@ options {
     NODE_DEFAULT_VOID=true;
 	NODE_SCOPE_HOOK=true;
 	NODE_PREFIX="BSH";
+	/* Print grammar debugging info as we parse 
+	DEBUG_PARSER=true; */
+	/* Print detailed lookahead debugging info
+	DEBUG_LOOKAHEAD=true; */
 }
 
-PARSER_BEGIN(Interpreter)
+PARSER_BEGIN(Parser)
 package bsh;
 
-import java.util.Vector;
-import java.io.*;
+import java.io.Reader;
 
-/*  Daniel Leuck: Added stuff to support JConsole Color and images */
-import java.awt.Color;
-import bsh.util.JConsole;
-
-/**
-	The BeanShell script interpreter.
-
-	An instance of Interpreter or Server can be used to source scripts
-	and evaluate expressions.  Some examples:
-
-<p><blockquote><pre>
-		// Evaluate expressions
-		Interpeter i = new Interpreter();
-		i.eval("foo=5");
-		i.eval("bar=foo*5);
-
-		// Source from files
-		i.source("myscript.bsh");  // or i.eval("source(\"myscript.bsh\")");
-
-		// Pass in an object as a variable
-		i.setVariable( "date", new Date() );
-		i.eval("year = date.getYear()");
-
-		// Fetch script as an arbitrary interface 
-		i.eval(	"foo() { print( date ); }");
-		MyInterface myObj = (MyInterface)i.eval("return (MyInterface)this");
-		myObj.foo();
-</pre></blockquote>
-
-	See the BeanShell User's Manual for more information.
-*/
-public class Interpreter implements Runnable /*,Serializable*/ 
-{
-	// These are static so that they are reachable by code that doesn't
-	// necessarily have an interpreter reference (e.g. tracing in utils).
-    static PrintStream debug = System.err;
-    public static boolean DEBUG = Boolean.getBoolean("debug");
-
-    NameSpace globalNameSpace;
-	This bshObject;
-    Reader in;
-    PrintStream out;
-    PrintStream err;
-    ConsoleInterface console; 
-
-	// Can these be combined?
-    private boolean 
-		evalOnly, 		// Interpreter has no input stream, use eval() only
-		interactive;	// Interpreter has a user, print prompts, etc.
-
-	/**
-		The main constructor.
-		All constructors should now pass through here.
-
-		If namespace is non-null then this interpreter's root 
-		will be made a child of the specified namespace. 
-	*/
-    public Interpreter(
-		Reader in, PrintStream out, PrintStream err, 
-		boolean interactive, NameSpace namespace)
-    {
-        this( in );
-        this.in = in;
-        this.out = out;
-        this.err = err;
-        this.interactive = interactive;
-		debug = err;  // correct?
-
-		if ( namespace == null )
-        	this.globalNameSpace = new NameSpace("global");
-		else
-			this.globalNameSpace = namespace;
-
-        try {
-            // To speed ambiguos name parsing
-            NameSpace.loadJavaPackagesOptimization();
-
-            // The classes which are imported by default
-            NameSpace.loadDefaultImports(globalNameSpace);
-        } catch(Exception e) {
-            error("Couldn't load interpreter resources...");
-        }
-
-		/* 
-			Create the root "bsh" system object if it doesn't exist.
-		*/
-		Object bo = globalNameSpace.getVariable("bsh");
-		if ( ! (bo instanceof bsh.This) ) {
-			initRootSystemObject();
-
-			// set the bsh variable in our root namespace
-			try {
-				globalNameSpace.setVariable( "bsh", bshObject );
-			} catch ( EvalError e ) {
-				throw new InterpreterError("can't create system namespace");
-			}
-		} else
-			bshObject = (bsh.This)bo;
-
-		if ( interactive )
-			loadRCFiles();
-    }
-
-	private void initRootSystemObject() 
-	{
-		bshObject = new NameSpace( "Bsh System Object" ).getThis( this );
-
-		// bsh.help
-		This helpText = new NameSpace( 
-			bshObject.namespace, "Bsh Command Help Text" ).getThis( this );
-		setBshVariable( "help", helpText );
-
-		// bsh.cwd
-		try {
-			setBshVariable( "cwd", System.getProperty("user.dir") );
-		} catch ( SecurityException e ) { 
-			// applets can't see sys props
-			setBshVariable( "cwd", "." );
-		}
-
-		// bsh.interactive
-		setBshVariable( "interactive", new Primitive(interactive) );
-		// bsh.evalOnly
-		setBshVariable( "evalOnly", new Primitive(evalOnly) );
-	}
-
-    public Interpreter(
-		Reader in, PrintStream out, PrintStream err, boolean interactive)
-    {
-        this(in, out, err, interactive, null);
-    }
-
-	/**
-		Construct a new interactive interpreter attached to the specified 
-		console using the specified parent namespace.
-	*/
-    public Interpreter(ConsoleInterface console, NameSpace globalNameSpace) {
-
-        this( new InputStreamReader(console.getIn()), 
-			console.getOut(), console.getErr(), 
-			true, globalNameSpace );
-
-		setConsole( console );
-
-		/*
-        // redirect system out/err to console if possible
-		We no longer do this.  Instead we have an option in Console menu
-		to capture stdin/stdout
-
-        try {
-            System.setOut(console.getOutStream());
-            System.setErr(console.getErrStream());
-        } catch (Exception e) { }
-		*/
-    }
-
-	/**
-		Construct a new interactive interpreter attached to the specified 
-		console.
-	*/
-    public Interpreter(ConsoleInterface console) {
-        this(console, null);
-    }
-
-	/**
-		Create an interpreter for evaluation only.
-	*/
-    public Interpreter()
-    {
-		this( new StringReader(""), 
-			System.out, System.err, false, null );
-        evalOnly = true;
-		setBshVariable( "evalOnly", new Primitive(true) );
-    }
-
-	/**
-		Create an interpreter and source the specified resource file.
-		Note:
-		Resource files of course are located relative to the classpath 
-		and may be stored in separate files or inside of JAR files.
-		'resource' is relative to the bsh package unless you specify an
-		absolute "/xxx" path.
-		
-		@throws EvalError since it does a source.
-    public Interpreter( String resource )
-		throws EvalError
-    {
-		this();
-		InputStream in = getClass().getResourceAsStream( resource );
-		if ( in == null )
-			throw new EvalError("Script not found: "+resource);
-		in = new BufferedInputStream( in );
-		eval( new InputStreamReader(in), globalNameSpace, resource );
-    }
-	*/
-
-	// dumb helper method
-	void setBshVariable( String name, Object obj ) {
-		try {
-			bshObject.namespace.setVariable( name, obj );
-		} catch (EvalError e ) {
-			throw new InterpreterError("Internal error: bsh namespace");
-		}
-	}
-
-	// dumb helper method
-	Object getBshVar( String name ) {
-		return unwrap( bshObject.namespace.getVariable( name ) );
-	}
-
-	public void setConsole( ConsoleInterface console ) {
-		this.console = console;
-		setBshVariable( "console", console );
-	}
-
-	// End constructors
-
-    public static void main( String [] args ) {
-
-        if ( args.length > 0 ) {
-			String filename = args[0];
-
-			String [] bshArgs;
-			if ( args.length > 1 ) {
-				bshArgs = new String [ args.length -1 ];
-				System.arraycopy( args, 1, bshArgs, 0, args.length-1 );
-			} else
-				bshArgs = new String [0];
-
-            Interpreter interpreter = new Interpreter();
-			interpreter.setBshVariable( "args", bshArgs );
-			try {
-				interpreter.source( filename, interpreter.globalNameSpace );
-			} catch ( FileNotFoundException e ) {
-				System.out.println("File not found: "+e);
-			} catch ( EvalError e ) {
-				System.out.println("Error in file: "+e);
-			}
-        } else {
-			// Workaround for JDK bug 4071281, where system.in.available() 
-			// returns too large a value. This bug has been fixed in JDK 1.2.
-			InputStream src;
-			if ( System.getProperty("os.name").startsWith("Windows") 
-				&& System.getProperty("java.version").startsWith("1.1."))
-			{
-				src = new FilterInputStream(System.in) {
-					public int available() throws IOException {
-						return 0;
-					}
-				};
-			}
-			else
-				src = System.in;
-
-            Reader in = new CommandLineReader( new InputStreamReader(src));
-            Interpreter interpreter = 
-				new Interpreter( in, System.out, System.err, true );
-        	interpreter.run();
-        }
-    }
-
-	/*
-		Run interactively.  (printing prompts, etc.)
-	*/
-    public void run() {
-
-        if(evalOnly)
-            throw new RuntimeException("bsh Interpreter: No stream");
-
-        /*
-          We'll print our banner using eval(String) in order to
-          exercise the parser and get the basic expression classes loaded...
-          This ameliorates the delay after typing the first statement.
-        */
-        if ( interactive )
-			try { 
-				eval("printBanner();"); 
-			} catch ( EvalError e ) {
-				println("BeanShell 1.01 beta - by Pat Niemeyer (pat@pat.net)");
-			}
-
-        boolean eof = false;
-        while(!eof)
-        {
-            try
-            {
-                // try to sync up the console
-                System.out.flush();
-                System.err.flush();
-                Thread.yield();  // this helps a little
-                if(interactive)
-                    print("bsh % ");
-                eof = Line();
-
-                if(jjtree.nodeArity() > 0)  // number of child nodes 
-                {
-                    SimpleNode node = (SimpleNode)(jjtree.rootNode());
-
-                    if(DEBUG)
-                        node.dump(">");
-
-                    Object ret = node.eval( globalNameSpace, this );
-                    if(ret instanceof ReturnControl)
-                        ret = ((ReturnControl)ret).value;
-                    if(ret != Primitive.VOID)
-                    {
-                        setVariable("$_", ret);
-                        Object show = getBshVar("show");
-                        if(show instanceof Boolean &&
-                            ((Boolean)show).booleanValue() == true)
-                            println("<" + ret + ">");
-                    }
-                }
-            }
-            catch(ParseException e)
-            {
-                error("Parser Error: " + e.getMessage(DEBUG));
-                if(DEBUG)
-                    e.printStackTrace();
-                if(!interactive)
-                    eof = true;
-
-                ReInit(in);
-            }
-            catch(InterpreterError e)
-            {
-                error("Internal Error: " + e.getMessage());
-                e.printStackTrace();
-                if(!interactive)
-                    eof = true;
-            }
-            catch(TargetError e)
-            {
-                error("// Uncaught Exception: " + e.getTarget());
-                if(!interactive)
-                    eof = true;
-            }
-            catch (EvalError e)
-            {
-				String err = 
-					( !interactive ? e.getLocation() : "" )+ e.toString();
-                error( err );
-                if(DEBUG)
-                    e.printStackTrace();
-                if(!interactive)
-                    eof = true;
-            }
-            catch(Exception e)
-            {
-                error("Unknown error: " + e);
-                e.printStackTrace();
-                if(!interactive)
-                    eof = true;
-            }
-            catch(TokenMgrError e)
-            {
-				/*
-				if ( tokenMgrErrors++ > 25 ) {
-					error("Too many token mgr errors, stopping.");
-					eof=true;
-					return;
-				}
-				*/
-                error("Error parsing input: " + e);
-                //e.printStackTrace();
-                if(!interactive)
-                    eof = true;
-            }
-            finally
-            {
-                jjtree.reset();
-            }
-        }
-    }
-
-	/**
-		Read text from fileName and eval it.
-	*/
-    public Object source( String filename, NameSpace nameSpace ) 
-		throws FileNotFoundException, EvalError 
-	{
-		File file = pathToFile( filename );
-		debug("Sourcing file: "+file);
-		Reader in = new BufferedReader( new FileReader(file) );
-		return eval( in, nameSpace, filename );
-	}
-
-	/**
-		Read text from fileName and eval it.
-		Convenience method.  Use the global namespace.
-	*/
-    public Object source( String filename ) 
-		throws FileNotFoundException, EvalError 
-	{
-		return source( filename, globalNameSpace );
-	}
-
-    /**
-        Spawn a local interpreter to evaluate text in the specified 
-		namespace.  
-
-		Return value is the evaluated object (or corresponding primitive 
-		wrapper).
-
-		@throws EvalError on script problems
-		@throws TargetError on unhandled exceptions from the script
-    */
-    public Object eval( 
-		Reader in, NameSpace nameSpace, String sourceFile ) 
-		throws EvalError {
-
-		Object retVal = null;
-		debug("eval: nameSpace = "+nameSpace);
-
-		/* 
-			Create non-interactive local interpreter for this namespace
-			with source from the input stream and out/err same as 
-			this interpreter.
-		*/
-        Interpreter localInterpreter = 
-			new Interpreter( in, out, err, false, nameSpace );
-
-        boolean eof = false;
-        while(!eof)
-        {
-            try
-            {
-                eof = localInterpreter.Line();
-                if(localInterpreter.jjtree.nodeArity() > 0)
-                {
-                    SimpleNode node = 
-						(SimpleNode)localInterpreter.jjtree.rootNode();
-                    retVal = node.eval( nameSpace, this );
-                    if(retVal instanceof ReturnControl)
-                        retVal = ((ReturnControl)retVal).value;
-                }
-            } catch(ParseException e) {
-                throw new EvalError(
-					"Sourced file: "+sourceFile+" parser Error: " 
-					+ e.getMessage( DEBUG ) );
-            } catch(InterpreterError e) {
-                e.printStackTrace();
-                throw new EvalError(
-					"Sourced file: "+sourceFile+" internal Error: " 
-					+ e.getMessage());
-            } catch( TargetError e ) {
-                if(DEBUG)
-                    e.printStackTrace();
-				e.reThrow("Sourced file: "+sourceFile);
-            } catch(EvalError e) {
-                if(DEBUG)
-                    e.printStackTrace();
-                throw new EvalError( e.getLocation() + 
-					"sourced file: "+sourceFile+"\n"+ e.toString() );
-            } catch(Exception e) {
-                e.printStackTrace();
-                throw new EvalError(
-					"Sourced file: "+sourceFile+" unknown error: " 
-					+ e.getMessage());
-            } catch(TokenMgrError e) {
-                throw new EvalError(
-					"Sourced file: "+sourceFile+" Token Parsing Error: " 
-					+ e.getMessage() );
-            } finally {
-                localInterpreter.jjtree.reset();
-            }
-        }
-		return unwrap( retVal );
-    }
-
-	/**
-		Evaluate the inputstream in this interpreter's global namespace.
-	*/
-    public Object eval( Reader in ) throws EvalError 
-	{
-		return eval( in, globalNameSpace, "eval stream" );
-	}
-
-	/**
-		Evaluate the string in this interpreter's global namespace.
-	*/
-    public Object eval( String statement ) throws EvalError {
-		return eval(statement, globalNameSpace);
-	}
-
-	/**
-		Note: StringBufferInputStream is deprecated, fix this
-	*/
-    public Object eval( String statement, NameSpace nameSpace ) 
-		throws EvalError {
-
-		String s = ( statement.endsWith(";") ? statement : statement+";" );
-        return eval( 
-			new StringReader(s), nameSpace, "<inline eval>" );
-    }
-
-	/* Daniel Leuck: added color */
-    public final void error(String s) {
-
-		if ( console != null )
-				console.print("// Error: " + s +"\n", Color.red);
-		else {
-			err.println("// Error: " + s);
-			err.flush();
-		}
-    }
-
-    public final void println(String s)
-    {
-        print(s + "\n");
-    }
-
-    public final void print(String s)
-    {
-		if(console != null) {
-            console.print(s);
-        } else {
-            out.print(s);
-            out.flush();
-        }
-    }
-
-    public final static void debug(String s)
-    {
-        if(DEBUG)
-            debug.println("// Debug: " + s);
-    }
-
-    public Object getVariable(String name)
-    {
-        Object obj = globalNameSpace.getVariable(name);
-		return unwrap( obj );
-    }
-
-	/*
-		unwrap primitive and map voids to nulls
-	*/
-	Object unwrap( Object obj ) {
-		if ( obj == null )
-			return null;
-
-        // map voids to nulls for the outside world
-        if(obj == Primitive.VOID)
-            return null;
-
-        // unwrap primitives
-        if(obj instanceof Primitive)
-            return((Primitive)obj).getValue();
-        else
-            return obj;
-	}
-
-	// These are squeltching error... should they?
-
-    public void setVariable(String name, Object value)
-    {
-        try { globalNameSpace.setVariable(name, value); }
-        catch(EvalError e) { error(e.toString()); }
-    }
-
-    public void setVariable(String name, int value)
-    {
-        try { globalNameSpace.setVariable(name, new Primitive(value)); }
-        catch(EvalError e) { error(e.toString()); }
-    }
-
-    public void setVariable(String name, float value)
-    {
-        try { globalNameSpace.setVariable(name, new Primitive(value)); }
-        catch(EvalError e) { error(e.toString()); }
-    }
-
-    public void setVariable(String name, boolean value)
-    {
-        try { globalNameSpace.setVariable(name, new Primitive(value)); }
-        catch(EvalError e) { error(e.toString()); }
-    }
+class Parser { 
 
 	void jjtreeOpenNodeScope(Node n) {
 		((SimpleNode)n).firstToken = getToken(1);
@@ -613,48 +68,43 @@ public class Interpreter implements Runnable /*,Serializable*/
 		((SimpleNode)n).lastToken = getToken(0);
 	}
 
-	void loadRCFiles() {
-		try {
-			String rcfile = 
-				// Default is c:\windows under win98, $HOME under Unix
-				System.getProperty("user.home") + File.separator + ".bshrc";
-			source( rcfile, globalNameSpace );
-		} catch ( Exception e ) { 
-			// squeltch security exception, filenotfoundexception
-			debug("Could not find rc file: "+e);
-		}
+	/**
+		Re-initialize the input stream and token source.
+	*/
+	void reInitInput( Reader in ) {
+		ReInit(in);
 	}
 
-    public File pathToFile( String fileName ) {
-
-		bsh.File file = new bsh.File( fileName );
-
-		String sourceDir, sourceFile;
-		String cwd = (String)getBshVar("cwd");
-
-		if ( file.isAbsolute() ) {
-			sourceDir = file.dirName();
-			sourceFile = file.baseName();
-		} else {
-			sourceDir = cwd + File.separator + file.dirName();
-			sourceFile = file.baseName();
-			file = new bsh.File( sourceDir + File.separator + sourceFile );
-		} 
-
-		return file;
+	/**
+		Explicitly re-initialize just the token reader.
+		This seems to be necessary to avoid certain looping errors when
+		reading bogus input.  See Interpreter.
+	*/
+	void reInitTokenInput( Reader in ) {
+		jj_input_stream.ReInit( in, 
+			jj_input_stream.getEndLine(), 
+			jj_input_stream.getEndColumn() );
 	}
+
 }
 
-PARSER_END(Interpreter)
+
+PARSER_END(Parser)
 
 SKIP : /* WHITE SPACE */
 { 
-	" " | "\t" | "\n" | "\r" | "\f" | 
-	< NONPRINTABLE: (["\u0000"-"\u0020", "\u0080"-"\u00ff"])+ >
+	" " | "\t" | "\r" | "\f"
+	| "\n" 
+	| < NONPRINTABLE: (["\u0000"-"\u0020", "\u0080"-"\u00ff"])+ >
 }
 
 SPECIAL_TOKEN : /* COMMENTS */
 {
+/*
+	Single line comments fail on the last line of a file with no terminating
+	linefeed.  I thought the <EOF> would fix that, but no...
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* "<EOF>"|("\n"|"\r"|"\r\n")>
+*/
   <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
 | <HASH_BANG_COMMENT: "#!" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
 | <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
@@ -871,20 +321,31 @@ TOKEN : /* OPERATORS */
 boolean Line() :
 {}
 {
-  (
-   LOOKAHEAD( 3 )
-   /* 
-      The order here is important: Expression must be first.
-      else it will match on a minimal expression in...
-   */
-   Expression() ";"
-|  BlockStatement()
-|  ImportDeclaration()
-  )  { 
-		return false; 
+  <EOF> { 
+	Interpreter.debug("End of File!"); 
+	return true; 
 	}
-  | <EOF> { 
-	debug("End of File!"); return true; 
+|
+  (
+	/*
+		SYNTACTIC_LOOKAHEAD
+		I'm guessing this is expensive, but I don't know how to work around
+		it...  Is there another syntactic indication that we are working 
+		through an expression as opposed to a statement?
+		What is the difference?  Well, some statements don't require a
+		semicolon and they don't return vlues...  We could probably broaden
+		bsh to allow everything to return a value, but the semi-colon thing
+		is tougher.  You don't want to have to say if ( foo ) { } ;
+		Maybe we can invert ths and enumerate all of those types of 
+		statements in a special lookahead that's cheaper??
+	*/
+   LOOKAHEAD( Expression() ";" )
+   Expression() ";" 
+  |
+   BlockStatement()
+  )
+	{ 
+		return false; 
 	}
 }
 
@@ -895,6 +356,8 @@ boolean Line() :
 void MethodDeclaration() #MethodDeclaration :
 { Token t = null; }
 {
+	// SYNTACTIC_LOOKAHEAD
+	// this one seems cheap enough
     LOOKAHEAD( MethodDeclarationTypeLookahead() )
     ReturnType() t = <IDENTIFIER> { jjtThis.name = t.image; }
     FormalParameters() Block()
@@ -905,6 +368,8 @@ void MethodDeclaration() #MethodDeclaration :
 
 void MethodDeclarationLookahead() : { }
 {
+	// SYNTACTIC_LOOKAHEAD
+	// this one seems cheap enough
     LOOKAHEAD( MethodDeclarationTypeLookahead() )
     ReturnType() <IDENTIFIER> FormalParameters() "{"
 |
@@ -921,10 +386,17 @@ void ImportDeclaration() #ImportDeclaration :
     Token t = null;
 }
 {
+  LOOKAHEAD( 2 )
+
   "import" AmbiguousName() [ t = "." "*" ] ";" {
     if ( t != null )
         jjtThis.importPackage = true;
     }
+  |
+	// bsh super import statement
+  "import" "*" ";" {
+		jjtThis.superImport = true;
+	}
 }
 
 void VariableDeclarator() #VariableDeclarator :
@@ -956,7 +428,8 @@ void VariableInitializer() :
 void ArrayInitializer() #ArrayInitializer :
 {}
 {
-  "{" [ VariableInitializer() ( LOOKAHEAD(2) "," VariableInitializer() )* ] [ "," ] "}"
+  "{" [ VariableInitializer() 
+		( LOOKAHEAD(2) "," VariableInitializer() )* ] [ "," ] "}"
 }
 
 void FormalParameters() #FormalParameters :
@@ -982,16 +455,25 @@ void FormalParameter() #FormalParameter :
   t=<IDENTIFIER> { jjtThis.name = t.image; }
 }
 
-/*
- * Type, name and expression syntax follows.
- */
 
+/*
+	Type, name and expression syntax follows.
+*/
 void Type() #Type :
 { }
 {
-  ( PrimitiveType() | AmbiguousName() ) ( "[" "]" { jjtThis.addArrayDimension(); } )*
+	/* 
+		The embedded lookahead is (was?) necessary to disambiguate for
+		PrimaryPrefix.  ( )* is a choice point.  It took me a while to
+		figure out where to put that.  This stuff is annoying.
+	*/
+  ( PrimitiveType() | AmbiguousName() ) 
+	( LOOKAHEAD(2) "[" "]" { jjtThis.addArrayDimension(); } )* 
 }
 
+/*
+	Originally called ResultType in the grammar
+*/
 void ReturnType() #ReturnType :
 { }
 {
@@ -1029,7 +511,6 @@ void AmbiguousName() #AmbiguousName :
         s.append("."+t.image);
     }
   )* {
-        //jjtThis.name = new Name( nameSpace, s.toString() );
         jjtThis.text = s.toString();
     }
 }
@@ -1037,11 +518,14 @@ void AmbiguousName() #AmbiguousName :
 /*
  * Expression syntax follows.
  */
-
 void Expression() :
 { }
 {
-  LOOKAHEAD( PrimaryExpression() AssignmentOperator() )
+	/**
+		SYNTACTIC_LOOKAHEAD
+		This is probably expensive.  Can we simplify it somehow?
+	*/
+  LOOKAHEAD( LHSPrimaryExpression() AssignmentOperator() )
   Assignment()
 |
   ConditionalExpression()
@@ -1203,6 +687,7 @@ void UnaryExpressionNotPlusMinus() :
   ( t="~" | t="!" ) UnaryExpression()
     { jjtThis.kind = t.kind; } #UnaryExpression(1)
 |
+	// SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( CastLookahead() ) CastExpression()
 |
   PostfixExpression()
@@ -1213,6 +698,7 @@ void CastLookahead() : { }
 {
   LOOKAHEAD(2) "(" PrimitiveType()
 |
+// SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( "(" AmbiguousName() "[" ) "(" AmbiguousName() "[" "]"
 |
   "(" AmbiguousName() ")" ( "~" | "!" | "(" | <IDENTIFIER> | /* "this" | "super" | */ "new" | Literal() )
@@ -1222,18 +708,20 @@ void PostfixExpression() :
 { Token t = null; }
 {
  (
+// SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( LHSPrimaryExpression() ("++"|"--") )
   LHSPrimaryExpression()
+	  [ ( t="++" | t="--" ) { 
+		jjtThis.kind = t.kind; jjtThis.postfix = true; } #UnaryExpression(1) ]
 |
   PrimaryExpression()
  )
-  [ ( t="++" | t="--" ) { 
-	jjtThis.kind = t.kind; jjtThis.postfix = true; } #UnaryExpression(1) ]
 }
 
 void CastExpression() #CastExpression :
 { }
 {
+// SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( "(" PrimitiveType() ) "(" Type() ")" UnaryExpression()
 |
   "(" Type() ")" UnaryExpressionNotPlusMinus()
@@ -1254,7 +742,20 @@ void PrimaryPrefix() : { }
 |
   AllocationExpression()
 |
+// SYNTACTIC_LOOKAHEAD
+  LOOKAHEAD( Type() "." "class" )
+  Type()
+|
+	/* 
+		Handle method invocation OR straight ambigous name...
+		(probably should just write this as two rules more clearly)
+	*/ 
   ( AmbiguousName() [ Arguments() ]  ) #MethodInvocation(>1)
+
+/*
+|
+  LOOKAHEAD( "void" "." "class" )
+*/
 }
 
 void PrimarySuffix() #PrimarySuffix :
@@ -1288,14 +789,31 @@ void PrimarySuffix() #PrimarySuffix :
 */
 }
 
+
 /*
-    Note: I have gotten rid of LHSPrimaryPrefix because I believe the
-    only meaningful rule is the AmbiguousName.  I believe the only other
-    plausable rule was AllocationExpression...  don't see the point right now.
+	Begin LHS part of the grammar --
+
+	The reason this stuff is duplicated (e.g. LHSPrimaryPrefix and 
+	PrimaryPrefix) is that the whole grammar splits based on whether we 
+	are preparig to do an assignment or not.  This is an important issue 
+	to revisit in the future.
 */
+/**
+	The method invocation is here to force this to an object type in order 
+	to simplify the suffix processing.  
+*/
+void LHSPrimaryPrefix() : { }
+{
+	/* 
+		Method invocation or simple ambiguous name.
+		(probably should just write this as two rules more clearly)
+	*/ 
+  ( AmbiguousName() [ Arguments() ]  ) #MethodInvocation(>1)
+}
+
 void LHSPrimaryExpression() #LHSPrimaryExpression : { }
 {
-  AmbiguousName()  ( LHSPrimarySuffix( ) )*
+  LHSPrimaryPrefix() ( LHSPrimarySuffix( ) )*
 }
 
 void LHSPrimarySuffix() #LHSPrimarySuffix :
@@ -1323,6 +841,10 @@ void LHSPrimarySuffix() #LHSPrimarySuffix :
         jjtThis.operation = BSHLHSPrimarySuffix.PROPERTY;
     }
 }
+
+/*
+	-- End LHS part of the grammar
+*/
 
 void Literal() #Literal :
 {
@@ -1367,18 +889,27 @@ void Literal() #Literal :
   }
 |
   x = <CHARACTER_LITERAL> {
-    jjtThis.charSetup( x.image.substring(1, x.image.length() - 1) );
+		try {
+    		jjtThis.charSetup( x.image.substring(1, x.image.length() - 1) );
+		} catch ( Exception e ) {
+			throw new ParseException("Error parsing character: "+x.image);
+		}
     }
 |
   x = <STRING_LITERAL> {
-    jjtThis.stringSetup( x.image.substring(1, x.image.length() - 1) );
+		try {
+			jjtThis.stringSetup( x.image.substring(1, x.image.length() - 1) );
+		} catch ( Exception e ) {
+			throw new ParseException("Error parsing string: "+x.image);
+		}
     }
 |
   b = BooleanLiteral()  {
     jjtThis.value = new Primitive( new Boolean(b) ); }
 |
   NullLiteral() {
-    jjtThis.value = Primitive.NULL; }
+    jjtThis.value = Primitive.NULL; 
+}
 |
  VoidLiteral() {
     jjtThis.value = Primitive.VOID; }
@@ -1424,7 +955,13 @@ void AllocationExpression() #AllocationExpression :
   LOOKAHEAD(2)
   "new" PrimitiveType() ArrayDimensions()
 |
-  "new" AmbiguousName() ( ArrayDimensions() | Arguments() )
+  "new" AmbiguousName() 
+	( 
+		ArrayDimensions() 
+	| 
+		// SYNTACTIC_LOOKAHEAD
+		Arguments() [ LOOKAHEAD(2) Block() ]
+	)
 }
 
 void ArrayDimensions() #ArrayDimensions :
@@ -1489,12 +1026,20 @@ void Block() #Block :
 void BlockStatement() :
 {}
 {
+// SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( MethodDeclarationLookahead() ) MethodDeclaration()
 |
+// SYNTACTIC_LOOKAHEAD
   LOOKAHEAD([ "final" ] Type() <IDENTIFIER>)
   TypedVariableDeclaration() ";"
 |
   Statement()
+
+/* end */
+
+|  
+  // Allow BeanShell imports in any block
+  ImportDeclaration()
 }
 
 void EmptyStatement() :
@@ -1514,13 +1059,14 @@ void StatementExpression() :
 |
   PreDecrementExpression()
 |
+// SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( PrimaryExpression() AssignmentOperator() )
   Assignment() { }
 |
   PostfixExpression()
 }
 
-void SwitchStatement() :
+void SwitchStatement() #SwitchStatement :
 {}
 {
   "switch" "(" Expression() ")" "{"
@@ -1528,12 +1074,12 @@ void SwitchStatement() :
   "}"
 }
 
-void SwitchLabel() :
+void SwitchLabel() #SwitchLabel :
 {}
 {
   "case" Expression() ":"
 |
-  "default" ":"
+  "default" ":" { jjtThis.isDefault = true; }
 }
 
 void IfStatement() #IfStatement :
@@ -1576,16 +1122,26 @@ void ForStatement() #ForStatement :
 void ForInit() :
 { Token t = null; }
 {
+// SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( [ t="final" ] Type() <IDENTIFIER> )
   TypedVariableDeclaration()
 |
   StatementExpressionList()
 }
 
+/**
+	Declared a typed variable.
+	Untyped variables are not declared per-se but are handled by the part
+	of the grammar that deals with assignments.
+*/
 void TypedVariableDeclaration() #TypedVariableDeclaration :
-{ Token t = null; }
+{ 
+	Token t = null; 
+}
 {
-  [ t="final" ] Type() VariableDeclarator() ( "," VariableDeclarator() )*  {
+  [ t="final" ] Type() 
+		VariableDeclarator() ( "," VariableDeclarator() )*  
+	{
         jjtThis.isFinal = (t!=null);
     }
 }

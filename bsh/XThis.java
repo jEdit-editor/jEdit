@@ -3,11 +3,30 @@
  *  This file is part of the BeanShell Java Scripting distribution.          *
  *  Documentation and updates may be found at http://www.beanshell.org/      *
  *                                                                           *
- *  BeanShell is distributed under the terms of the LGPL:                    *
- *  GNU Library Public License http://www.gnu.org/copyleft/lgpl.html         *
+ *  Sun Public License Notice:                                               *
+ *                                                                           *
+ *  The contents of this file are subject to the Sun Public License Version  *
+ *  1.0 (the "License"); you may not use this file except in compliance with *
+ *  the License. A copy of the License is available at http://www.sun.com    * 
+ *                                                                           *
+ *  The Original Code is BeanShell. The Initial Developer of the Original    *
+ *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
+ *  (C) 2000.  All Rights Reserved.                                          *
+ *                                                                           *
+ *  GNU Public License Notice:                                               *
+ *                                                                           *
+ *  Alternatively, the contents of this file may be used under the terms of  *
+ *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
+ *  provisions of LGPL are applicable instead of those above. If you wish to *
+ *  allow use of your version of this file only under the  terms of the LGPL *
+ *  and not to allow others to use your version of this file under the SPL,  *
+ *  indicate your decision by deleting the provisions above and replace      *
+ *  them with the notice and other provisions required by the LGPL.  If you  *
+ *  do not delete the provisions above, a recipient may use your version of  *
+ *  this file under either the SPL or the LGPL.                              *
  *                                                                           *
  *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Exploring Java, O'Reilly & Associates                          *
+ *  Author of Learning Java, O'Reilly & Associates                           *
  *  http://www.pat.net/~pat/                                                 *
  *                                                                           *
  *****************************************************************************/
@@ -49,13 +68,12 @@ class XThis extends This {
 		return "'this' reference (XThis) to Bsh object: " + namespace.name;
 	}
 
-	/**
-		Get dynamic proxy for interface by String name.
-	public Object getInterface( String name ) throws ClassNotFoundException {
-		Class clas = Class.forName( name );
-		return getInterface( clas );
+	String toStringShowInts( Class [] ints ) {
+		StringBuffer sb = new StringBuffer( toString() + "\nimplements:" );
+		for(int i=0; i<ints.length; i++)
+			sb.append( " "+ ints[i].getName() + ((ints.length > 1)?",":"") );
+		return sb.toString();
 	}
-	*/
 
 	/**
 		Get dynamic proxy for interface.
@@ -65,23 +83,15 @@ class XThis extends This {
 			clas.getClassLoader(), new Class[] { clas }, invocationHandler );
 	}
 
-
-	String toStringShowInts( Class [] ints ) {
-		StringBuffer sb = new StringBuffer( toString() + "\nimplements:" );
-		for(int i=0; i<ints.length; i++)
-			sb.append( " "+ ints[i].getName() + ((ints.length > 1)?",":"") );
-		return sb.toString();
-	}
-
 	/**
 		Get a proxy interface for the specified XThis reference.
 		This is a static utility method because the interpreter doesn't 
 		currently allow access to direct methods of This objects.
 		
-	*/
 	public static Object getInterface( XThis ths, Class interf ) { 
 		return ths.getInterface( interf ); 
 	}
+	*/
 
 	/**
 		Inner class for the invocation handler seems to shield this unavailable
@@ -90,38 +100,53 @@ class XThis extends This {
 		I don't understand this.  JThis works just fine even if those
 		classes aren't there (doesn't it?)  This class shouldn't be loaded
 		if an XThis isn't instantiated in NameSpace.java, should it?
-
-		Note: there is another invoke method in This... combine?
 	*/
 	class Handler implements InvocationHandler, java.io.Serializable {
 
 		public Object invoke( Object proxy, Method method, Object[] args ) 
 			throws EvalError 
 		{
-			/*
-				Note: Reflect invokeObjectMethod does the same as the below 
-				to invoke the method.  Maybe we should create a 
-				NameSpace invokeMethod() method.
-			*/
-
+			Class [] sig = Reflect.getTypes( args );
 			BshMethod bmethod = 
-				namespace.getMethod( method.getName() );
+				namespace.getMethod( method.getName(), sig );
 
 			if ( bmethod != null )
-				return bmethod.invokeDeclaredMethod( 
-					args, declaringInterpreter );
+				return Primitive.unwrap( 
+					bmethod.invokeDeclaredMethod( 
+					args, declaringInterpreter, callstack, null ) );
 
 			// Look for the default handler
-			bmethod = namespace.getMethod( "invoke" );
+			bmethod = namespace.getMethod( "invoke", 
+				new Class [] { null, null } );
 
 			// Call script "invoke( String methodName, Object [] args );
 			if ( bmethod != null )
-				return bmethod.invokeDeclaredMethod( 
+				return Primitive.unwrap( 
+					bmethod.invokeDeclaredMethod( 
 					new Object [] { method.getName(), args }, 
-					declaringInterpreter );
+					declaringInterpreter, callstack, null ) );
 
+			/*
+				implement the required part of the Object protocol:
+					public int hashCode();
+					public boolean equals(java.lang.Object);
+					public java.lang.String toString();
+				if these were not handled by scripted methods we must provide
+				a default impl.
+			*/
+			// a default toString() that shows the interfaces we implement
 			if ( method.getName().equals("toString" ) )
 				return toStringShowInts( proxy.getClass().getInterfaces());
+
+			// a default hashCode()
+			if ( method.getName().equals("hashCode" ) )
+				return new Integer(this.hashCode());
+
+			// a default equals()
+			if ( method.getName().equals("equals" ) ) {
+				Object obj = args[0];
+				return new Boolean( proxy == obj );
+			}
 
 			throw new EvalError("Bsh script method: "+ method.getName()
 				+ " not found in namespace: "+ namespace.name );
@@ -151,4 +176,6 @@ class XThis extends This {
 		declaringInterpreter = interpreter;
 	}
 }
+
+
 

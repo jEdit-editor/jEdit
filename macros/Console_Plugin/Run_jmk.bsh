@@ -35,7 +35,7 @@ void runJmk()
 	command = "jmk " + target;
 
 	// Call our runCommandInConsole() function
-	runCommandInConsole(view,command);
+	runCommandInConsole(view,"Console",command);
 }
 
 runJmk();

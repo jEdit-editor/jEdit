@@ -3,11 +3,30 @@
  *  This file is part of the BeanShell Java Scripting distribution.          *
  *  Documentation and updates may be found at http://www.beanshell.org/      *
  *                                                                           *
- *  BeanShell is distributed under the terms of the LGPL:                    *
- *  GNU Library Public License http://www.gnu.org/copyleft/lgpl.html         *
+ *  Sun Public License Notice:                                               *
+ *                                                                           *
+ *  The contents of this file are subject to the Sun Public License Version  *
+ *  1.0 (the "License"); you may not use this file except in compliance with *
+ *  the License. A copy of the License is available at http://www.sun.com    * 
+ *                                                                           *
+ *  The Original Code is BeanShell. The Initial Developer of the Original    *
+ *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
+ *  (C) 2000.  All Rights Reserved.                                          *
+ *                                                                           *
+ *  GNU Public License Notice:                                               *
+ *                                                                           *
+ *  Alternatively, the contents of this file may be used under the terms of  *
+ *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
+ *  provisions of LGPL are applicable instead of those above. If you wish to *
+ *  allow use of your version of this file only under the  terms of the LGPL *
+ *  and not to allow others to use your version of this file under the SPL,  *
+ *  indicate your decision by deleting the provisions above and replace      *
+ *  them with the notice and other provisions required by the LGPL.  If you  *
+ *  do not delete the provisions above, a recipient may use your version of  *
+ *  this file under either the SPL or the LGPL.                              *
  *                                                                           *
  *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Exploring Java, O'Reilly & Associates                          *
+ *  Author of Learning Java, O'Reilly & Associates                           *
  *  http://www.pat.net/~pat/                                                 *
  *                                                                           *
  *****************************************************************************/
@@ -40,20 +59,22 @@ class BSHLHSPrimarySuffix extends SimpleNode
 
 	BSHLHSPrimarySuffix(int id) { super(id); }
 
-	public LHS doLHSSuffix(Object obj, NameSpace namespace, Interpreter interpreter) throws EvalError
+	public LHS doLHSSuffix(
+		Object obj, CallStack callstack, Interpreter interpreter) 
+		throws EvalError
 	{
 		try
 		{
 			switch(operation)
 			{
 				case INDEX:
-					return doIndex(obj, namespace, interpreter);
+					return doIndex(obj, callstack, interpreter);
 
 				case NAME:
-					return doName(obj, namespace, interpreter);
+					return doName(obj, callstack, interpreter);
 
 				case PROPERTY:
-					return doProperty(obj, namespace, interpreter);
+					return doProperty(obj, callstack, interpreter);
 
 				default:
 					throw new InterpreterError("LHS suffix");
@@ -70,7 +91,7 @@ class BSHLHSPrimarySuffix extends SimpleNode
 	}
 
 	private LHS doName(
-		Object obj, NameSpace namespace, Interpreter interpreter) 
+		Object obj, CallStack callstack, Interpreter interpreter) 
 		throws EvalError, ReflectError, InvocationTargetException 
 	{
 		if (jjtGetNumChildren() == 0)
@@ -78,9 +99,10 @@ class BSHLHSPrimarySuffix extends SimpleNode
 			return Reflect.getLHSObjectField(obj, field);
 		else {
 			// intermediate method invocation, and field access
-			Object[] oa = ((BSHArguments)jjtGetChild(0)).getArguments(namespace, interpreter);
+			Object[] oa = ((BSHArguments)jjtGetChild(0)).getArguments(
+				callstack, interpreter);
 			try {
-				obj = Reflect.invokeObjectMethod(interpreter, obj, method, oa);
+				obj = Reflect.invokeObjectMethod(interpreter, obj, method, oa, this);
 			} catch ( EvalError ee ) {
 				// catch and re-throw to get line number right
 				throw new EvalError( ee.getMessage(), this );
@@ -89,7 +111,9 @@ class BSHLHSPrimarySuffix extends SimpleNode
 		}
 	}
 
-	private LHS doIndex(Object obj, NameSpace namespace, Interpreter interpreter) throws EvalError, ReflectError
+	private LHS doIndex(
+		Object obj, CallStack callstack, Interpreter interpreter) 
+		throws EvalError, ReflectError
 	{
 		if(!obj.getClass().isArray())
 			throw new EvalError("Not an array", this);
@@ -97,7 +121,8 @@ class BSHLHSPrimarySuffix extends SimpleNode
 		int index;
 		try
 		{
-			Primitive val = (Primitive)(((SimpleNode)jjtGetChild(0)).eval(namespace, interpreter));
+			Primitive val = (Primitive)(((SimpleNode)jjtGetChild(0)).eval(
+				callstack, interpreter));
 			index = val.intValue();
 		}
 		catch(Exception e)
@@ -107,8 +132,9 @@ class BSHLHSPrimarySuffix extends SimpleNode
 
 		return new LHS(obj, index);
 	}
-
-	private LHS doProperty(Object obj, NameSpace namespace, Interpreter interpreter) throws EvalError, ReflectError
+	private LHS doProperty(
+		Object obj, CallStack callstack, Interpreter interpreter) 
+		throws EvalError, ReflectError
 	{
 		if(obj == Primitive.VOID)
 			throw new EvalError("Attempt to access property on a void type", this);
@@ -116,7 +142,9 @@ class BSHLHSPrimarySuffix extends SimpleNode
 		else if(obj instanceof Primitive)
 			throw new EvalError("Attempt to access property on a primitive", this);
 
-		Object value = ((SimpleNode)jjtGetChild(0)).eval(namespace, interpreter);
+		Object value = ((SimpleNode)jjtGetChild(0)).eval(
+			callstack, interpreter);
+
 		if(!(value instanceof String))
 			throw new EvalError("Property expression must be a String or identifier.", this);
 

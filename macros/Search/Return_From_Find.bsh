@@ -2,10 +2,8 @@
  * Return_From_Find.bsh  - a BeanShell macro script
  * for the jEdit text editor - returns the editing caret to
  * a earlier buffer and position
- *
- * Version 1.2 - Thu Mar 29 15:34:54 EST 2001 @899 /Internet Time/
  * Copyright (C) 2001 John Gellene
- * e-mail address:  jgellene@nyc.rr.com
+ * jgellene@nyc.rr.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +27,8 @@
  *
  * To prevent confusion, only a single return is permitted;
  * to change this, see comment at the end of this listing.
+ *
+ * $Id$
  */
 
 boolean doIt()
@@ -78,4 +78,5 @@ doIt();
 jEdit.setTemporaryProperty("temp.findXXX.bufferName", "");
 jEdit.setTemporaryProperty("temp.findXXX.caretPosition", "");
 
+// end Return_From_Find.bsh
 

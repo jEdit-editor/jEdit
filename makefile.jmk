@@ -20,7 +20,7 @@ re_srcs = (subst ".java", ".class", (glob (cat re_pkg "/*.java")));
 ### BeanShell
 ###
 
-bsh_pkgs = "bsh" "bsh/lib" "bsh/commands";
+bsh_pkgs = "bsh" "bsh/commands";
 bsh_srcs = (subst ".java", ".class", (glob (join bsh_pkgs, "/*.java")));
 
 ###
@@ -74,8 +74,6 @@ get_file_list = function(dummy)
         (join pkgs, "/*.dtd")
         "org/gjt/sp/jedit/actions.xml"
         "org/gjt/sp/jedit/default.abbrevs"
-        "bsh/lib/defaultImports"
-        "bsh/lib/javaPackages"
         "doc/users-guide/toc.xml"
         "gnu/regexp/MessagesBundle.properties")
 }

@@ -3,11 +3,30 @@
  *  This file is part of the BeanShell Java Scripting distribution.          *
  *  Documentation and updates may be found at http://www.beanshell.org/      *
  *                                                                           *
- *  BeanShell is distributed under the terms of the LGPL:                    *
- *  GNU Library Public License http://www.gnu.org/copyleft/lgpl.html         *
+ *  Sun Public License Notice:                                               *
+ *                                                                           *
+ *  The contents of this file are subject to the Sun Public License Version  *
+ *  1.0 (the "License"); you may not use this file except in compliance with *
+ *  the License. A copy of the License is available at http://www.sun.com    * 
+ *                                                                           *
+ *  The Original Code is BeanShell. The Initial Developer of the Original    *
+ *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
+ *  (C) 2000.  All Rights Reserved.                                          *
+ *                                                                           *
+ *  GNU Public License Notice:                                               *
+ *                                                                           *
+ *  Alternatively, the contents of this file may be used under the terms of  *
+ *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
+ *  provisions of LGPL are applicable instead of those above. If you wish to *
+ *  allow use of your version of this file only under the  terms of the LGPL *
+ *  and not to allow others to use your version of this file under the SPL,  *
+ *  indicate your decision by deleting the provisions above and replace      *
+ *  them with the notice and other provisions required by the LGPL.  If you  *
+ *  do not delete the provisions above, a recipient may use your version of  *
+ *  this file under either the SPL or the LGPL.                              *
  *                                                                           *
  *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Exploring Java, O'Reilly & Associates                          *
+ *  Author of Learning Java, O'Reilly & Associates                           *
  *  http://www.pat.net/~pat/                                                 *
  *                                                                           *
  *****************************************************************************/
@@ -26,16 +45,18 @@ class BSHPrimaryExpression extends SimpleNode
 		opportunity to work through them.  This let's the suffixes decide
 		how to interpret an ambiguous name (e.g. for the .class operation).
 	*/
-	public Object eval(NameSpace namespace, Interpreter interpreter)  throws EvalError
+	public Object eval(CallStack callstack, Interpreter interpreter)  
+		throws EvalError
 	{
 		Object obj = jjtGetChild(0);
 		int n = jjtGetNumChildren(); 
 
 		for(int i=1; i<n; i++)
-			obj = ((BSHPrimarySuffix)jjtGetChild(i)).doSuffix(obj, namespace, interpreter);
+			obj = ((BSHPrimarySuffix)jjtGetChild(i)).doSuffix(
+				obj, callstack, interpreter);
 
 		/*
-			eval(namespace, interpreter) the node to an object
+			eval the node to an object
 
 			Note: This construct is now necessary where the node may be
 			an ambiguous name.  If this becomes common we might want to 
@@ -43,9 +64,9 @@ class BSHPrimaryExpression extends SimpleNode
 		*/
 		if ( obj instanceof SimpleNode )
 			if ( obj instanceof BSHAmbiguousName )
-				obj = ((BSHAmbiguousName)obj).toObject(namespace, interpreter);
+				obj = ((BSHAmbiguousName)obj).toObject(callstack, interpreter);
 			else
-				obj = ((SimpleNode)obj).eval(namespace, interpreter);	
+				obj = ((SimpleNode)obj).eval(callstack, interpreter);	
 
 		return obj;
 	}

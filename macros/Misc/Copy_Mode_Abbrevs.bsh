@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Version 2.0 - Sun Apr 01 13:01:19 EDT 2001 @750 /Internet Time/
+ * $Id$
  */
 
 import org.gjt.sp.jedit.*;

@@ -17,25 +17,28 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
+ * along with the jEdit program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Version 1.0 - Tue Apr 17 00:12:33 EDT 2001 @217 /Internet Time/
- *
+ * $Id$
  */
 
+void nextChar();
+{
+	script = new StringBuffer(512);
+	script.append( "start = textArea.getCaretPosition();"        );
+	script.append( "line = textArea.getCaretLine();"             );
+	script.append( "end = textArea.getLineEndOffset(line) + 1;"  );
+	script.append( "text = buffer.getText(start, end - start)"   );
+	script.append( "match = text.indexOf(__char__, 1);"          );
+	script.append( "if(match != -1) {"                           );
+	script.append( "if(__char__ != '\\n') ++match;"              );
+	script.append( "textArea.select(start, start + match - 1);}" );
 
-script = new StringBuffer(512);
-script.append( "start = textArea.getCaretPosition();"        );
-script.append( "line = textArea.getCaretLine();"             );
-script.append( "end = textArea.getLineEndOffset(line) + 1;"  );
-script.append( "text = buffer.getText(start, end - start)"   );
-script.append( "match = text.indexOf(__char__, 1);"          );
-script.append( "if(match != -1) {"                           );
-script.append( "if(__char__ != '\\n') ++match;"              );
-script.append( "textArea.select(start, start + match - 1);}" );
+	view.getInputHandler().readNextChar("Enter a character",script.toString());
+}
 
-view.getInputHandler().readNextChar("Enter a character",script.toString());
+nextChar();
 
 // end Next_char.bsh
 

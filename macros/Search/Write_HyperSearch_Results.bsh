@@ -2,9 +2,8 @@
  * Write_HyperSearch_Results.bsh -  a BeanShell macro script
  * for the jEdit text editor - writes the contents of the
  * "HyperSearch Results" window to a new text buffer
- *
  * Copyright (C) 2001 John Gellene
- * e-mail address:  jgellene@nyc.rr.com
+ * jgellene@nyc.rr.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +31,7 @@
  * routines.  To be completely reliable, the macro should be run immediately
  * after a HyperSearch.
  *
+ * $Id$
  */
 
 import java.text.SimpleDateFormat;
@@ -183,4 +183,6 @@ sb = new StringBuffer();
 fileCount = 0;
 hitCount = 0;
 writeHyperSearchResults();
+
+// end Write_HyperSearch_Results.bsh
 

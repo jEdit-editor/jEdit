@@ -3,11 +3,30 @@
  *  This file is part of the BeanShell Java Scripting distribution.          *
  *  Documentation and updates may be found at http://www.beanshell.org/      *
  *                                                                           *
- *  BeanShell is distributed under the terms of the LGPL:                    *
- *  GNU Library Public License http://www.gnu.org/copyleft/lgpl.html         *
+ *  Sun Public License Notice:                                               *
+ *                                                                           *
+ *  The contents of this file are subject to the Sun Public License Version  *
+ *  1.0 (the "License"); you may not use this file except in compliance with *
+ *  the License. A copy of the License is available at http://www.sun.com    * 
+ *                                                                           *
+ *  The Original Code is BeanShell. The Initial Developer of the Original    *
+ *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
+ *  (C) 2000.  All Rights Reserved.                                          *
+ *                                                                           *
+ *  GNU Public License Notice:                                               *
+ *                                                                           *
+ *  Alternatively, the contents of this file may be used under the terms of  *
+ *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
+ *  provisions of LGPL are applicable instead of those above. If you wish to *
+ *  allow use of your version of this file only under the  terms of the LGPL *
+ *  and not to allow others to use your version of this file under the SPL,  *
+ *  indicate your decision by deleting the provisions above and replace      *
+ *  them with the notice and other provisions required by the LGPL.  If you  *
+ *  do not delete the provisions above, a recipient may use your version of  *
+ *  this file under either the SPL or the LGPL.                              *
  *                                                                           *
  *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Exploring Java, O'Reilly & Associates                          *
+ *  Author of Learning Java, O'Reilly & Associates                           *
  *  http://www.pat.net/~pat/                                                 *
  *                                                                           *
  *****************************************************************************/
@@ -32,7 +51,7 @@ import java.util.Hashtable;
 	Note: moving some stuff from Reflect to a BshObject, but not going
 	as far as the above yet...
 */
-class LHS implements InterpreterConstants, java.io.Serializable
+class LHS implements ParserConstants, java.io.Serializable
 {
 	NameSpace nameSpace;
 
@@ -102,22 +121,18 @@ class LHS implements InterpreterConstants, java.io.Serializable
 	{
 		if(type == VARIABLE)
 			return nameSpace.getVariable(varName);
-		else if(type == FIELD)
-			try
-			{
+		else if (type == FIELD)
+			try {
 				return field.get(object);
 			}
-			catch(IllegalAccessException e2)
-			{
+			catch(IllegalAccessException e2) {
 				throw new EvalError("Can't read field: " + field);
 			}
 		else if(type == PROPERTY)
-			try
-			{
+			try {
 				return Reflect.getObjectProperty(object, propName);
 			}
-			catch(ReflectError e)
-			{
+			catch(ReflectError e) {
 				Interpreter.debug(e.getMessage());
 				throw new EvalError("No such property: " + propName);
 			}
@@ -136,50 +151,49 @@ class LHS implements InterpreterConstants, java.io.Serializable
 
 	public Object assign( Object val ) throws EvalError
 	{
-		if(type == VARIABLE)
+		if ( type == VARIABLE )
 			nameSpace.setVariable(varName, val);
-		else if(type == FIELD)
-			try
-			{
+		else 
+		if ( type == FIELD )
+			try {
 				if(val instanceof Primitive)
 					val = ((Primitive)val).getValue();
 
 				field.set(object, val);
-
 				return val;
 			}
-			catch(NullPointerException e)
-			{
-				throw new EvalError("LHS not a static field.");
+			catch( NullPointerException e) {   
+    			throw new EvalError(
+					"LHS ("+field.getName()+") not a static field.");
+			}     
+   			catch( IllegalAccessException e2) {   
+				throw new EvalError(
+					"LHS ("+field.getName()+") can't access field.");
+			}     
+			catch( IllegalArgumentException e3) {
+				throw new EvalError(
+					"Argument type mismatch. "
+					+ (val == null ? "null" : val.getClass().getName())
+					+ " not assignable to field "+field.getName());
 			}
-			catch(IllegalAccessException e2)
-			{
-				throw new EvalError("LHS can't access field.");
-			}
-			catch(IllegalArgumentException e3)
-			{
-				throw new EvalError("Argument type mismatch");
-			}
+
 		else if(type == PROPERTY)
-			if(object instanceof Hashtable)
+			if ( object instanceof Hashtable )
 				((Hashtable)object).put(propName, val);
 			else
-				try
-				{
+				try {
 					Reflect.setObjectProperty(object, propName, val);
 				}
-				catch(ReflectError e)
-				{
+				catch(ReflectError e) {
 					Interpreter.debug("Assignment: " + e.getMessage());
 					throw new EvalError("No such property: " + propName);
 				}
 		else if(type == INDEX)
-			try
-			{
+			try {
 				Reflect.setIndex(object, index, val);
-			}
-			catch(Exception e)
-			{
+			} catch(TargetError e1) { // pass along target error
+				throw e1;
+			} catch(Exception e) {
 				throw new EvalError("Assignment: " + e.getMessage());
 			}
 

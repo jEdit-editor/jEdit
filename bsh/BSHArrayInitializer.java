@@ -3,11 +3,30 @@
  *  This file is part of the BeanShell Java Scripting distribution.          *
  *  Documentation and updates may be found at http://www.beanshell.org/      *
  *                                                                           *
- *  BeanShell is distributed under the terms of the LGPL:                    *
- *  GNU Library Public License http://www.gnu.org/copyleft/lgpl.html         *
+ *  Sun Public License Notice:                                               *
+ *                                                                           *
+ *  The contents of this file are subject to the Sun Public License Version  *
+ *  1.0 (the "License"); you may not use this file except in compliance with *
+ *  the License. A copy of the License is available at http://www.sun.com    * 
+ *                                                                           *
+ *  The Original Code is BeanShell. The Initial Developer of the Original    *
+ *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
+ *  (C) 2000.  All Rights Reserved.                                          *
+ *                                                                           *
+ *  GNU Public License Notice:                                               *
+ *                                                                           *
+ *  Alternatively, the contents of this file may be used under the terms of  *
+ *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
+ *  provisions of LGPL are applicable instead of those above. If you wish to *
+ *  allow use of your version of this file only under the  terms of the LGPL *
+ *  and not to allow others to use your version of this file under the SPL,  *
+ *  indicate your decision by deleting the provisions above and replace      *
+ *  them with the notice and other provisions required by the LGPL.  If you  *
+ *  do not delete the provisions above, a recipient may use your version of  *
+ *  this file under either the SPL or the LGPL.                              *
  *                                                                           *
  *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Exploring Java, O'Reilly & Associates                          *
+ *  Author of Learning Java, O'Reilly & Associates                           *
  *  http://www.pat.net/~pat/                                                 *
  *                                                                           *
  *****************************************************************************/
@@ -21,77 +40,91 @@ class BSHArrayInitializer extends SimpleNode
 {
     BSHArrayInitializer(int id) { super(id); }
 
-    public Object eval(NameSpace namespace, Interpreter interpreter)  throws EvalError {
-		throw new EvalError("array initializer Internal error, no base type");
+    public Object eval( CallStack callstack, Interpreter interpreter )
+		throws EvalError 
+	{
+		throw new EvalError( "Array initializer has no base type.");
 	}
 
-    public Object eval( Class baseType, NameSpace namespace, Interpreter interpreter ) throws EvalError
+	/**
+		Construct the array from the initializer syntax.
+
+		@param baseType the base class type of the array (no dimensionality)
+		@param dimensions the top number of dimensions of the array 
+			e.g. 2 for a String [][];
+	*/
+    public Object eval( Class baseType, int dimensions, 
+						CallStack callstack, Interpreter interpreter ) 
+		throws EvalError
     {
-        int n = jjtGetNumChildren();
-        Class initializerType = null;
-        Object initializers = null;
+        int numInitializers = jjtGetNumChildren();
 
-        for(int i = 0; i < n; i++)
+		// allocate the array to store the initializers
+		int [] dima = new int [dimensions]; // description of the array
+		// The other dimensions default to zero and are assigned when 
+		// the values are set.
+		dima[0] = numInitializers;
+        Object initializers = 
+			Array.newInstance( baseType, dima );
+
+		// Evaluate the initializers
+        for (int i = 0; i < numInitializers; i++)
         {
-            Object currentInitializer = ((SimpleNode)jjtGetChild(i)).eval(namespace, interpreter);
+			SimpleNode node = (SimpleNode)jjtGetChild(i);
+            Object currentInitializer;
+			if ( node instanceof BSHArrayInitializer ) {
+				if ( dimensions < 2 )
+					throw new EvalError(
+						"Invalid Location for Intializer, position: "+i, this);
+            	currentInitializer = 
+					((BSHArrayInitializer)node).eval( 
+						baseType, dimensions-1, callstack, interpreter);
+			} else
+            	currentInitializer = node.eval( callstack, interpreter);
 
-            // allocate the array to store the initializers
-            if(initializers == null)
-            {
-                // determine the type of the initializer
-                if(currentInitializer instanceof Primitive)
-                    initializerType = ((Primitive)currentInitializer).getType();
-                else
-                    initializerType = currentInitializer.getClass();
+			if ( currentInitializer == Primitive.VOID )
+				throw new EvalError(
+					"Void in array initializer, position"+i, this);
 
-                initializers = Array.newInstance(initializerType, jjtGetNumChildren());
-            }
+			// unwrap primitive to the wrapper type
+			Object value;
+			if ( currentInitializer instanceof Primitive )
+				value = ((Primitive)currentInitializer).getValue();
+			else
+				value = currentInitializer;
 
-            try
-            {
-                // store the initializer in the array
-                if((initializerType.isArray()) || (!initializerType.isPrimitive()))
-                    ((Object[])initializers)[i] = currentInitializer;
-                else
-                {
-                    Object primitive = ((Primitive)currentInitializer).getValue();
+			// store the value in the array
+            try {
+				Array.set(initializers, i, value);
 
-                    if(initializerType == Boolean.TYPE)
-                        ((boolean[])initializers)[i] = ((Boolean)primitive).booleanValue();
-                    else if(initializerType == Character.TYPE)
-                        ((char[])initializers)[i] = ((Character)primitive).charValue();
-                    else if(initializerType == Byte.TYPE)
-                        ((byte[])initializers)[i] = ((Byte)primitive).byteValue();
-                    else if(initializerType == Short.TYPE)
-                        ((short[])initializers)[i] = ((Short)primitive).shortValue();
-                    else if(initializerType == Integer.TYPE)
-                        ((int[])initializers)[i] = ((Integer)primitive).intValue();
-                    else if(initializerType == Long.TYPE)
-                        ((long[])initializers)[i] = ((Long)primitive).longValue();
-                    else if(initializerType == Float.TYPE)
-                        ((float[])initializers)[i] = ((Float)primitive).floatValue();
-                    else if(initializerType == Double.TYPE)
-                        ((double[])initializers)[i] = ((Double)primitive).doubleValue();
-                }
-            }
-            catch(Exception e)
-            {
-                String lhsType = Reflect.normalizeClassName(initializerType);
-
-                String rhsType;
-                if(currentInitializer instanceof Primitive)
-                    rhsType = ((Primitive)currentInitializer).getType().getName();
-                else
-                    rhsType = Reflect.normalizeClassName(currentInitializer.getClass());
-
-                throw new EvalError ("Incompatible types in initializer. Initializer contains both " + lhsType + " and " + rhsType, this);
+            } catch( IllegalArgumentException e ) {
+				Interpreter.debug("illegal arg"+e);
+				throwTypeError( baseType, currentInitializer, i );
+            } catch( ArrayStoreException e ) { // I think this can happen
+				Interpreter.debug("arraystore"+e);
+				throwTypeError( baseType, currentInitializer, i );
             }
         }
 
-		// zero length array init
-		if ( initializers == null )
-			initializers = Array.newInstance( baseType, 0 );
-
         return initializers;
     }
+
+	private void throwTypeError( 
+		Class baseType, Object initializer, int argNum ) 
+		throws EvalError
+	{
+		String lhsType = Reflect.normalizeClassName(baseType);
+
+		String rhsType;
+		if (initializer instanceof Primitive)
+			rhsType = 
+				((Primitive)initializer).getType().getName();
+		else
+			rhsType = Reflect.normalizeClassName(
+				initializer.getClass());
+
+		throw new EvalError ( "Incompatible type: " + rhsType 
+			+" in initializer of array type: "+ baseType
+			+" at position: "+argNum, this );
+	}
 }

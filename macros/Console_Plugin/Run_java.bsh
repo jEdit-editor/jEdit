@@ -39,7 +39,7 @@ void runJava()
 	}
 
 	// Call our runCommandInConsole() function
-	runCommandInConsole(view,command);
+	runCommandInConsole(view,"Console",command);
 }
 
 runJava();

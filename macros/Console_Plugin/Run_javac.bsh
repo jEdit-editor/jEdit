@@ -27,7 +27,7 @@ void runJavac()
 	command = "javac -classpath $d $f";
 
 	// Call our runCommandInConsole() function
-	runCommandInConsole(view,command);
+	runCommandInConsole(view,"Console",command);
 }
 
 runJavac();

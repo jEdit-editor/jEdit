@@ -18,7 +18,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Version 1.0 -- Thu Mar 08 15:02:55 EST 2001
+ * $Id$
+ *
  * requires JDK 1.2, jEdit3.0
  *
  * Notes on use:
@@ -234,6 +235,8 @@ void showAbbrevs()
 	 * Having these members of KeyListener implemented as no-ops
 	 * will speedup execution.  Otherwise BeanShell throws an
 	 * exception that jEdit handles internally.
+	 * Under BeanShell 1.2, implementation of these methods is
+	 * required.
 	 */
 	void keyReleased(e) {}
 	void keyTyped(e) {}
