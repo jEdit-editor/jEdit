@@ -309,6 +309,7 @@ public class BrowserView extends JPanel
 			}
 			else if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
+                              int i;
 				char ch = evt.getKeyChar();
 				typeSelectBuffer.append(ch);
 				doTypeSelect(typeSelectBuffer.toString());
@@ -471,6 +472,9 @@ public class BrowserView extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/11/26 01:43:35  sp
+ * x86 assembly mode, various other stuff
+ *
  * Revision 1.7  2000/11/05 00:44:14  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

@@ -119,6 +119,8 @@ public class SearchDialog extends EnhancedDialog
 						.getFileExtension(view.getBuffer()
 						.getName()));
 				}
+
+				searchSubDirectories.setSelected(true);
 			}
 
 			updateEnabled();
@@ -278,9 +280,7 @@ public class SearchDialog extends EnhancedDialog
 		multifile.setLayout(layout);
 
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.gridy = 1;
-		cons.gridwidth = 1;
-		cons.gridheight = 1;
+		cons.gridy = cons.gridwidth = cons.gridheight = 1;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.fill = GridBagConstraints.HORIZONTAL;
 
@@ -298,6 +298,7 @@ public class SearchDialog extends EnhancedDialog
 		layout.setConstraints(label,cons);
 		multifile.add(label);
 
+		cons.insets = new Insets(0,0,3,6);
 		cons.weightx = 1.0f;
 		layout.setConstraints(filter,cons);
 		multifile.add(filter);
@@ -313,6 +314,7 @@ public class SearchDialog extends EnhancedDialog
 		label.setDisplayedMnemonic(jEdit.getProperty("search.directoryField.mnemonic")
 			.charAt(0));
 		label.setLabelFor(directory);
+		cons.insets = new Insets(0,0,3,0);
 		cons.weightx = 0.0f;
 		layout.setConstraints(label,cons);
 		multifile.add(label);

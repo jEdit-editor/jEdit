@@ -54,7 +54,9 @@ public class KeyEventWorkaround
 			if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) != 0)
 				return null;
 
-			if(ch < 0x20 || ch == 0x7f)
+			// need to let \b through so that backspace will work
+			// in HistoryTextFields
+			if((ch < 0x20 || ch == 0x7f) && ch != '\b')
 				return null;
 
 			// if the last key was a broken key, filter
@@ -124,6 +126,9 @@ public class KeyEventWorkaround
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/11/26 01:43:35  sp
+ * x86 assembly mode, various other stuff
+ *
  * Revision 1.8  2000/11/13 11:19:27  sp
  * Search bar reintroduced, more BeanShell stuff
  *

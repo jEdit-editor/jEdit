@@ -2,13 +2,16 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="scheme">
+<MODE NAME="lisp">
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="#| " />
 		<PROPERTY NAME="commentEnd" VALUE=" |#" />
 		<PROPERTY NAME="boxComment" VALUE=" | " />
 		<PROPERTY NAME="blockComment" VALUE=";" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.scm" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.{lisp,lsp,scm}" />
+		<PROPERTY NAME="noWordSep" VALUE="_-+?:" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="(" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE=")" />
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<WHITESPACE> </WHITESPACE>

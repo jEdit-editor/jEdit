@@ -17,6 +17,7 @@ JEDIT 2.7 VERSION HISTORY
   - If you would prefer opened files to open with the caret at the beginning,
     the caret saving feature can be disabled in Utilities->Global
     Options->General.
+- x86 assembly syntax highlighting (Kristian Ovaska)
 
 + Enhancements
 
@@ -33,6 +34,7 @@ JEDIT 2.7 VERSION HISTORY
     (and batch) search is supported now
   - The search fileset is now stored between sessions
 - Much faster bracket highlighting
+- Minor scheme mode updates (Mike Dillon)
 
 + Neutral
 
@@ -49,6 +51,7 @@ JEDIT 2.7 VERSION HISTORY
 - Minor scrolling bugs fixed
 - Searching in a directory with no files would throw a
   NullPointerException
+- Backspace key didn't work in history text fields on some virtual machines
 
 * Version 2.7pre2
 

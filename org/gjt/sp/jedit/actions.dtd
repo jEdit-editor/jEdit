@@ -11,5 +11,5 @@
 	NO_RECORD %att-bool; "FALSE" >
 
 <!-- ACTION children -->
-<!ELEMENT ACTION_PERFORMED ( #PCDATA ) >
+<!ELEMENT CODE ( #PCDATA ) >
 <!ELEMENT IS_SELECTED ( #PCDATA ) >

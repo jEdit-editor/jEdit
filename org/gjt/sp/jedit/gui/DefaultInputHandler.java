@@ -198,6 +198,10 @@ public class DefaultInputHandler extends InputHandler
 		int modifiers = evt.getModifiers();
 		char c = evt.getKeyChar();
 
+		// ignore
+		if(ch == '\b')
+			return;
+
 		if(currentBindings != bindings)
 		{
 			KeyStroke keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c));
@@ -308,6 +312,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/11/26 01:43:35  sp
+ * x86 assembly mode, various other stuff
+ *
  * Revision 1.10  2000/11/17 11:16:04  sp
  * Actions removed, documentation updates, more BeanShell work
  *
