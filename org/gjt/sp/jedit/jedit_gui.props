@@ -883,7 +883,7 @@ view-registers.caption=Register:
 view-registers.clipboard=$ (clipboard)
 view-registers.selection=% (selection)
 view-registers.none=No registers defined
-view-registers.registers=Registers:
+view-registers.register=Register:
 view-registers.contents=Contents:
 
 # Close all buffers dialog
@@ -1273,7 +1273,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=44
+tip.count=53
 
 # Activity log
 log-viewer.title=Activity Log

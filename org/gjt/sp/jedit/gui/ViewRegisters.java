@@ -40,7 +40,7 @@ public class ViewRegisters extends EnhancedDialog
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(new EmptyBorder(0,12,0,0));
 
-		JLabel label = new JLabel(jEdit.getProperty("view-registers.registers"));
+		JLabel label = new JLabel(jEdit.getProperty("view-registers.register"));
 		label.setBorder(new EmptyBorder(0,0,3,0));
 		panel.add(BorderLayout.NORTH,label);
 
@@ -178,6 +178,7 @@ public class ViewRegisters extends EnhancedDialog
 				return;
 
 			contentTextArea.setText(reg.toString());
+			contentTextArea.setCaretPosition(0);
 		}
 	}
 }

@@ -1,19 +1,22 @@
 TO DO
 
+- wait for John to finish plugin guide
+- wait for John to send uninstall.exe
+- check out latest jEditLauncher sources
 - adapt John's jEdit launcher docs to starting jEdit chapter
 - finish console 3.0
-- Java 1.3: pseudo-random window positioning?
-- installing source for already installed plugins
-- make XML plugin more respectable
-- FTP plugin: investigate soft links
-- FTP plugin: better error messages
-- FTP plugin: improve it in general before 3.2
+- Java 1.3: pseudo-random window positioning
 - next time i'm making an RPM, fix the shell script
 - virtual line map: how can it get smaller than virtualLineCount?
-- cvs remove Console_Plugin macros
+- formatting problems in user's guide in table cells
+- printing: header not printed
+- FTP plugin: investigate soft links
+- FTP plugin: not saving files, allegedly?
+- FTP plugin: better error messages
 
 + bugs:
 
+- installing source for already installed plugins is not possible
 - finish duplicate shortcut code
 - directory search: continue even if a file can't be loaded
 - a line consisting entirely of spaces & word wrap
@@ -34,7 +37,6 @@ TO DO
 - folding paint up bug
 - expand-fold too aggressive
 - replace in sel doesn't work if rect
-- formatting problems in user's guide in table cells
 - macro guide: JOptionPane not a good idea for getting user input?
 - scrolling while caret is on a bracket is slow
 - globalColors setting:

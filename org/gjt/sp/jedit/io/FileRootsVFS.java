@@ -1,6 +1,6 @@
 /*
  * FileRootsVFS.java - Local root filesystems VFS
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,9 @@ package org.gjt.sp.jedit.io;
 
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
+import java.lang.reflect.*;
 import java.io.File;
+import org.gjt.sp.util.Log;
 
 /**
  * A VFS that lists local root filesystems.
@@ -35,7 +37,18 @@ public class FileRootsVFS extends VFS
 	public FileRootsVFS()
 	{
 		super("roots");
-		fsView = FileSystemView.getFileSystemView();
+
+		// try using Java 2 method first
+		try
+		{
+			method = File.class.getMethod("listRoots",new Class[0]);
+			Log.log(Log.DEBUG,this,"File.listRoots() detected");
+		}
+		catch(Exception e)
+		{
+			fsView = FileSystemView.getFileSystemView();
+			Log.log(Log.DEBUG,this,"File.listRoots() not detected");
+		}
 	}
 
 	public int getCapabilities()
@@ -53,7 +66,22 @@ public class FileRootsVFS extends VFS
 	public VFS.DirectoryEntry[] _listDirectory(Object session, String url,
 		Component comp)
 	{
-		File[] roots = fsView.getRoots();
+		File[] roots;
+
+		if(method == null)
+			roots = fsView.getRoots();
+		else
+		{
+			try
+			{
+				roots = (File[])method.invoke(null,new Object[0]);
+			}
+			catch(Exception e)
+			{
+				roots = null;
+				Log.log(Log.ERROR,this,e);
+			}
+		}
 
 		if(roots == null)
 			return null;
@@ -77,21 +105,5 @@ public class FileRootsVFS extends VFS
 
 	// private members
 	private FileSystemView fsView;
+	private Method method;
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.4  2000/11/11 02:59:30  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.3  2000/08/29 07:47:13  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.2  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.1  2000/08/03 07:43:42  sp
- * Favorites added to browser, lots of other stuff too
- *
- */

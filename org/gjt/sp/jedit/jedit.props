@@ -8,7 +8,7 @@
 ###
 
 # Swing look and feel
-#lookAndFeel=javax.swing.plaf.metal.MetalLookAndFeel;
+#lookAndFeel=javax.swing.plaf.metal.MetalLookAndFeel
 
 # If true, welcome screen will be displayed.
 # Set to false after initial startup.
@@ -69,7 +69,7 @@ sortByName=true
 
 # Encoding
 # The OS default will be used if this is not specified
-#buffer.encoding=latin1
+#buffer.encoding=ISO8859_1
 
 # Tab width
 buffer.tabSize=8
@@ -212,16 +212,16 @@ view.gutter.numberAlignment=right
 # Gutter line numbers are highlighted at this interval
 view.gutter.highlightInterval=5
 
-# Gutter displays line numbers
+# Gutter current line highlighting
 view.gutter.highlightCurrentLine=true
 
 # Marker highlight
 view.gutter.markerHighlight=true
 
-# Docking border color
+# Docking border color (non-Metal L&F only)
 view.docking.borderColor=#ccccff
 
-# Expand abbrevs when user finishes typing a word
+# Expand abbrevs when space bar pressed
 view.expandOnInput=false
 
 # Syntax styles
@@ -265,7 +265,7 @@ print.footer=true
 # Print line numbers?
 print.lineNumbers=true
 
-# Syntax highlighting?
+# Use style and color info from defined SyntaxStyles?
 print.style=true
 print.color=false
 
@@ -276,7 +276,7 @@ print.margin.bottom=0.5
 print.margin.right=0.5
 
 ###
-### VFS SETTINGS
+### FILE SYSTEM BROWSER SETTINGS
 ###
 
 vfs.browser.showIcons=true

@@ -9,12 +9,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
  */
 
 package org.gjt.sp.jedit.gui;
@@ -58,7 +58,6 @@ public class GrabKeyDialog extends JDialog
 				return false;
 			}
 		};
-
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
@@ -68,8 +67,7 @@ public class GrabKeyDialog extends JDialog
 
 		content.add(BorderLayout.NORTH,label);
 
-		shortcut = new JTextField();
-		shortcut.setEnabled(false);
+		shortcut = new InputPane();
 		content.add(BorderLayout.CENTER,shortcut);
 
 		JPanel buttons = new JPanel();
@@ -104,68 +102,6 @@ public class GrabKeyDialog extends JDialog
 			return shortcut.getText();
 		else
 			return null;
-	}
-
-	protected void processKeyEvent(KeyEvent _evt)
-	{
-		if(_evt.getID() != KeyEvent.KEY_PRESSED)
-			return;
-
-		KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
-		if(evt == null)
-		{
-			Log.log(Log.DEBUG,this,"Event " + _evt + " filtered");
-			return;
-		}
-		else
-			Log.log(Log.DEBUG,this,"Event " + _evt + " passed");
-
-		StringBuffer keyString = new StringBuffer(
-			shortcut.getText());
-
-		if(shortcut.getDocument().getLength() != 0)
-			keyString.append(' ');
-
-		boolean appendPlus = false;
-
-		if(evt.isControlDown())
-		{
-			keyString.append('C');
-			appendPlus = true;
-		}
-
-		if(evt.isAltDown())
-		{
-			keyString.append('A');
-			appendPlus = true;
-		}
-
-		if(evt.isMetaDown())
-		{
-			keyString.append('M');
-			appendPlus = true;
-		}
-
-		// don't want Shift+'d' recorded as S+D
-		if(evt.getID() != KeyEvent.KEY_TYPED && evt.isShiftDown())
-		{
-			keyString.append('S');
-			appendPlus = true;
-		}
-
-		if(appendPlus)
-			keyString.append('+');
-
-		int keyCode = evt.getKeyCode();
-
-		String symbolicName = getSymbolicName(keyCode);
-
-		if(symbolicName == null)
-			return;
-
-		keyString.append(symbolicName);
-
-		shortcut.setText(keyString.toString());
 	}
 
 	/**
@@ -229,6 +165,79 @@ public class GrabKeyDialog extends JDialog
 		}
 
 		return null;
+	}
+
+	class InputPane extends JTextField
+	{
+		/**
+		 * Makes the tab key work in Java 1.4.
+		 * @since jEdit 3.2pre4
+		 */
+		public boolean getFocusTraversalKeysEnabled()
+		{
+			return false;
+		}
+
+		protected void processKeyEvent(KeyEvent _evt)
+		{
+			if(_evt.getID() != KeyEvent.KEY_PRESSED)
+				return;
+
+			KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
+			if(evt == null)
+			{
+				Log.log(Log.DEBUG,this,"Event " + _evt + " filtered");
+				return;
+			}
+			else
+				Log.log(Log.DEBUG,this,"Event " + _evt + " passed");
+
+			StringBuffer keyString = new StringBuffer(getText());
+
+			if(getDocument().getLength() != 0)
+				keyString.append(' ');
+
+			boolean appendPlus = false;
+
+			if(evt.isControlDown())
+			{
+				keyString.append('C');
+				appendPlus = true;
+			}
+
+			if(evt.isAltDown())
+			{
+				keyString.append('A');
+				appendPlus = true;
+			}
+
+			if(evt.isMetaDown())
+			{
+				keyString.append('M');
+				appendPlus = true;
+			}
+
+			// don't want Shift+'d' recorded as S+D
+			if(evt.getID() != KeyEvent.KEY_TYPED && evt.isShiftDown())
+			{
+				keyString.append('S');
+				appendPlus = true;
+			}
+
+			if(appendPlus)
+				keyString.append('+');
+
+			int keyCode = evt.getKeyCode();
+
+			String symbolicName = getSymbolicName(keyCode);
+
+			if(symbolicName == null)
+				return;
+
+			keyString.append(symbolicName);
+
+			setText(keyString.toString());
+		}
 	}
 
 	class ActionHandler implements ActionListener

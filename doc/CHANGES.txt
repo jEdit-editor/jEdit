@@ -17,6 +17,8 @@ JEDIT 3.2 VERSION HISTORY
   could not be found
 - Token backgrounds were not being drawn
 - Printing didn't work on Java 2
+- GrabKeyDialog bug fix for JDK 1.4 (Alan Moore)
+- roots: virtual filesystem didn't list all filesystem roots on JDK 1.4
 
 * Version 3.2pre6
 
