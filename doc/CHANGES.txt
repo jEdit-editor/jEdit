@@ -2,9 +2,16 @@ JEDIT 2.5 VERSION HISTORY
 
 * Version 2.5pre2
 
++ New Features
+
+- New macro language feature: writing $x where x is a register in an
+  action command will substitute contents of register x. \$ can be used
+  to insert a literal '$'
+
 + Enhancements
 
 - User input is blocked while I/O is in progress
+- Improved focus handling when splitting views
 
 + Bug Fixes
 

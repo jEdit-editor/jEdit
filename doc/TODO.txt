@@ -9,7 +9,6 @@ JEDIT TO DO
 - Editable toolbar
 - Add macros to context menu and toolbar - hack loadMenuItem() to handle
   play-macro@... specially
-- $x in macro action command will expand to contents of register 'x'
 
 2.5:
 

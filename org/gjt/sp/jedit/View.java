@@ -213,7 +213,13 @@ public class View extends JFrame implements EBComponent
 			}
 
 			newSplitPane.setDividerLocation(oldParent.getHeight() / 2);
-			textArea.requestFocus();
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					textArea.requestFocus();
+				}
+			});
 		}
 	}
 
@@ -248,7 +254,13 @@ public class View extends JFrame implements EBComponent
 			}
 		}
 
-		focusOnTextArea();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				focusOnTextArea();
+			}
+		});
 	}
 
 	/**
@@ -537,6 +549,24 @@ public class View extends JFrame implements EBComponent
 			EditBus.send(new ViewUpdate(this,textAreas[i],
 				ViewUpdate.TEXTAREA_DESTROYED));
 		}
+
+		// null some variables so that retaining references
+		// to closed views won't hurt as much.
+		buffer = recentBuffer = null;
+		buffers = openFrom = saveTo = recent = currentDirectory
+			= clearMarker = gotoMarker = macros = plugins
+			= help = null;
+		toolBars = null;
+		toolBar = null;
+		searchBar = null;
+		statusMsg = null;
+		bufferTabs = null;
+		splitPane = null;
+		textArea = null;
+		inputHandler = null;
+		glassPane = null;
+
+		setContentPane(new JPanel());
 	}
 
 	// protected members
@@ -1471,6 +1501,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.167  2000/05/05 11:08:26  sp
+ * Johnny Ryall
+ *
  * Revision 1.166  2000/05/04 10:37:04  sp
  * Wasting time
  *
