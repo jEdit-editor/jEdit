@@ -14,7 +14,6 @@
 		>
 			<include name="bsh/**/*.java"/>
 			<include name="com/microstar/*.java"/>
-			<include name="com/incors/plaf/kunststoff/*.java"/>
 			<include name="gnu/regexp/*.java"/>
 			<include name="installer/*.java"/>
 			<include name="org/gjt/sp/jedit/**/*.java"/>
@@ -33,8 +32,6 @@
 				<include name="bsh/commands/*.bsh"/>
 
 				<include name="com/microstar/*.class"/>
-				<include name="com/incors/plaf/kunststoff/*.class"/>
-				<include name="com/incors/plaf/kunststoff/icons/*.gif"/>
 				<include name="gnu/regexp/*.class"/>
 				<include name="gnu/regexp/MessagesBundle.properties"/>
 				<include name="javax/help/**/*.class"/>
@@ -88,7 +85,6 @@
 			<fileset dir="." includes="**/.directory"/>
 			<fileset dir=".">
 				<include name="**/*.class"/>
-				<exclude name="com/incors/plaf/kunststoff/*.class"/>
 				<exclude name="org/gjt/sp/jedit/textarea/TextRenderer2D.class"/>
 				<exclude name="bsh/XThis*.class"/>
 				<exclude name="bsh/reflect/ReflectManagerImpl.class"/>
