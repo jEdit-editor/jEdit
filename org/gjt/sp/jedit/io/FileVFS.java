@@ -259,7 +259,7 @@ public class FileVFS extends VFS
 
 	public boolean _mkdir(Object session, String directory, Component comp)
 	{
-		boolean retVal = new File(directory).mkdir();
+		boolean retVal = new File(directory).mkdirs();
 		VFSManager.sendVFSUpdate(this,directory,true);
 		return retVal;
 	}

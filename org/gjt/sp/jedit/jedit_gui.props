@@ -1258,7 +1258,7 @@ vfs.browser.rename-error.message=An error occurred while attempting\n\
 	to rename {0}.
 
 vfs.browser.mkdir.title=New Directory
-vfs.browser.mkdir.message=Create new directory named:
+vfs.browser.mkdir.message=Name (or path) of new directory:
 
 vfs.browser.mkdir-error.title=Cannot Create Directory
 vfs.browser.mkdir-error.message=An error occurred while attempting\n\
