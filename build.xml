@@ -61,6 +61,7 @@
 				<include name="com/**/*.class"/>
 				<include name="gnu/**/*.class"/>
 				<include name="org/**/*.class"/>
+				<exclude name="com/loomcom/**/*.class"/>
 			</fileset>
 
 			<fileset dir=".">
@@ -82,6 +83,82 @@
 				<include name="org/gjt/sp/jedit/default.abbrevs"/>
 			</fileset>
 		</jar>
+
+	</target>
+
+	<target name="dist-mac" depends="docs-html,javadoc">
+
+		<!-- Make sure all of the default plugins are compiled -->
+		<ant dir="jars/LatestVersion"/>
+		<ant dir="jars/MacOS"/>
+		<ant dir="jars/QuickNotepad"/>
+
+		<javac
+			srcdir="."
+			destdir="${build.directory}"
+			deprecation="on"
+			includeJavaRuntime="yes"
+			debug="yes"
+			encoding="UTF8" 
+		>
+			<include name="com/loomcom/ant/tasks/jarbundler/*.java"/>
+		</javac>
+
+		<!-- Package jEdit into a Mac-friendly application bundle -->
+		<taskdef name="jarbundler" classpath="${build.directory}" classname="com.loomcom.ant.tasks.jarbundler.JarBundler"/>
+		<delete dir="jEdit.app"/>
+		<jarbundler
+			dir="${build.directory}"
+			name="jEdit"
+			aboutmenuname="jEdit"
+			mainclass="org.gjt.sp.jedit.jEdit"
+			antialiasedgraphics="true"
+			antialiasedtext="true"
+			infostring="jEdit 4.3, Copyright &amp;#169; 1998-2004 Slava Pestov"
+			version="4.3"
+			shortVersion="4.3"
+			jvmversion="1.4+"
+			arguments="-background"
+			extraClasspath="/System/Library/Java"
+			screenmenu="true"
+			icon="icons/icon.icns"
+			bundleid="org.gjt.sp.jedit"
+			signature="JESP">
+			<jarfileset dir="${build.directory}">
+				<include name="jedit.jar"/>
+				<include name="doc/**/*.html"/>
+				<include name="doc/**/*.css"/>
+				<include name="doc/**/*.png"/>
+				<include name="doc/**/*.gif"/>
+				<include name="doc/**/*.txt"/>
+				<include name="doc/**/toc.xml"/>
+				<include name="jars/*.jar"/>
+				<include name="macros/**"/>
+				<include name="modes/**"/>
+				<include name="properties/**"/>
+				<include name="startup/**"/>
+			</jarfileset>
+			<documenttype
+				extensions="*" iconFile="icons/file.icns" name="jEdit TEXT Document" role="Editor"/>
+			<documenttype
+				ostypes="TEXT" iconFile="icons/file.icns" name="jEdit TEXT Document" role="Editor"/>
+			<documenttype
+				ostypes="****" iconFile="icons/file.icns" name="jEdit TEXT Document" role="Editor"/>
+			<service
+				menuItem="jEdit/Open Files" message="openFile" sendTypes="NSStringPboardType,NSFilenamesPboardType"/>
+			<service
+				menuItem="jEdit/Insert Text" message="insertSelection" sendTypes="NSStringPboardType"/>
+			<service
+				menuItem="jEdit/New Buffer with Text" message="openSelection" sendTypes="NSStringPboardType"/>
+		</jarbundler>
+		
+		<!-- Create disk image -->
+		<delete file="jEdit.dmg"/>
+		<echo message="Creating disk image..."/>
+		<exec executable="hdiutil">
+			<arg line="create -quiet -volname &quot;jEdit 4.2&quot; -srcfolder jEdit.app jEdit.dmg"/>
+		</exec>
+
 	</target>
 
 	<target name="generate-docbook-wrapper">
