@@ -1,6 +1,6 @@
 /*
  * EditPlugin.java - Interface all plugins must implement
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,16 @@ import org.gjt.sp.jedit.gui.OptionsDialog;
  */
 public abstract class EditPlugin
 {
+	/**
+	 * Returns the plugin's class name.
+	 *
+	 * @since jEdit 2.5pre3
+	 */
+	public String getClassName()
+	{
+		return getClass().getName();
+	}
+
 	/**
 	 * Method called by jEdit to initialize the plugin.
 	 * Actions and edit modes should be registered here, along
@@ -86,22 +96,87 @@ public abstract class EditPlugin
 	/**
 	 * A placeholder for a plugin that didn't load.
 	 */
-	public static class Broken
+	public static class Broken extends EditPlugin
 	{
-		public String jar;
-		public String clazz;
-
-		public Broken(String jar, String clazz)
+		public String getClassName()
 		{
-			this.jar = jar;
+			return clazz;
+		}
+
+		// package-private members
+		Broken(String clazz)
+		{
 			this.clazz = clazz;
 		}
+
+		// private members
+		private String clazz;
+	}
+
+	/**
+	 * A JAR file.
+	 */
+	public static class JAR
+	{
+		public String getPath()
+		{
+			return path;
+		}
+
+		public JARClassLoader getClassLoader()
+		{
+			return classLoader;
+		}
+
+		public void addPlugin(EditPlugin plugin)
+		{
+			plugin.start();
+			plugins.addElement(plugin);
+		}
+
+		public EditPlugin[] getPlugins()
+		{
+			EditPlugin[] array = new EditPlugin[plugins.size()];
+			plugins.copyInto(array);
+			return array;
+		}
+
+		public int getIndex()
+		{
+			return index;
+		}
+
+		// package-private members
+		int index;
+
+		JAR(String path, JARClassLoader classLoader)
+		{
+			this.path = path;
+			this.classLoader = classLoader;
+			plugins = new Vector();
+		}
+
+		public void getPlugins(Vector vector)
+		{
+			for(int i = 0; i < plugins.size(); i++)
+			{
+				vector.addElement(plugins.elementAt(i));
+			}
+		}
+
+		// private members
+		private String path;
+		private JARClassLoader classLoader;
+		private Vector plugins;
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/05/14 10:55:21  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.4  2000/02/20 03:14:13  sp
  * jEdit.getBrokenPlugins() method
  *

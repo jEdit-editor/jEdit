@@ -46,10 +46,18 @@ public interface SearchFileSet
 	 * @param buffer The buffer
 	 */
 	void matchFound(Buffer buffer);
+
+	/**
+	 * Returns the number of buffers in this file set.
+	 */
+	int getBufferCount();
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/05/14 10:55:22  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.7  1999/11/28 00:33:07  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *

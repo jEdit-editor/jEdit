@@ -1,4 +1,4 @@
-JEDIT 2.4 README
+JEDIT 2.5 README
 
 * About jEdit
 
@@ -15,14 +15,16 @@ OF ANY KIND; see section 11 and 12 of the GPL for details.
 
 * Class Libraries
 
-jEdit is bundled with the following class libraries:
+jEdit depends on, and is bundled with the following class libraries:
 
-- gnu.regexp by the Free Software Foundation. gnu.regexp is released
-  under the _GNU Lesser General Public License_. Only the parts of
-  gnu.regexp used by jEdit are included - the complete package can be
-  found at <http://www.cacas.org/java/gnu/regexp/>.
+- gnu.regexp by the Free Software Foundation. This is used to implement
+  regular expression search and replace, among other things. gnu.regexp
+  is released under the _GNU Lesser General Public License_. Only the
+  parts of gnu.regexp used by jEdit are included - the complete package
+  can be found at <http://www.cacas.org/java/gnu/regexp/>.
 
-- AElfred XML parser by Microstar corporation. This class library is
+- AElfred XML parser by Microstar corporation. This is used by the
+  syntax highlighting code to parse mode files. This class library is
   released under its own, non-GPL license, which reads as follows:
 
   "AElfred is free for both commercial and non-commercial use and
@@ -33,9 +35,11 @@ jEdit is bundled with the following class libraries:
 
   The complete AElfred package can be found at <http://www.microstar.com>.
 
-- Fooware FTP client by Fooware. This class library is released under
+- Fooware FTP client by Fooware. This is used to implement loading and
+  saving buffers on FTP servers. This class library is released under
   the _GNU General Public License_. Get the complete package from
-  <http://www.fooware.com>.
+  <http://www.fooware.com>. Note that the version shipped with jEdit is
+  slightly different from the official one.
 
 - The toolbar icons are (C) 1998 Dean S. Jones <dean@gallant.com>.
 
@@ -81,7 +85,11 @@ actually a Java bug, or a well-known problem.
   jEdit bug, a Java bug or both. Allegedly Java 1.1.8 and 1.2.2 fix
   these problems, but I'm not sure.
 
-- The buffer tabs component has problems with focus handling sometimes;
+- On a related note, composed keys don't work either, so international
+  characters can be hard to type. I can't do anything about this until
+  someone submits code to add composed key support to jEdit.
+
+- The buffer tabs component has minor problems with focus handling;
   jEdit 2.4 fixes most of these, but some remain, especially when
   working with splits.
 
@@ -98,7 +106,7 @@ actually a Java bug, or a well-known problem.
   can only access the system clipboard, and not the primary selection
   buffer (which some programs use instead of the clipboard). The
   XClipboard plugin available from <http://jedit.standmed.com> solves
-  some of the problems by allowing read-only access to the primary
+  part of the problem by allowing read-only access to the primary
   selection buffer.
 
 - If you are using Java 1.1 and get a `ClassNotFoundException:

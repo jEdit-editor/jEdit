@@ -48,7 +48,7 @@ public class PluginResURLConnection extends URLConnection
 	{
 		if(!connected)
 		{
-			in = JARClassLoader.getClassLoader(pluginIndex)
+			in = jEdit.getPluginJAR(pluginIndex).getClassLoader()
 				.getResourceAsStream(resource);
 			if(in == null)
 			{

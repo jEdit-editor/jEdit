@@ -85,6 +85,11 @@ public class StatusBar extends JPanel
 		statusMessage.setText(buffer.getPath());
 	}
 
+	public void updateCaretStatus()
+	{
+		caret.repaint();
+	}
+
 	// private members
 	private View view;
 	private CaretStatus caret;
@@ -148,6 +153,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/05/14 10:55:22  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.1  2000/05/09 10:51:52  sp
  * New status bar, a few other things
  *

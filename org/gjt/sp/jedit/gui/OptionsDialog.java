@@ -85,7 +85,7 @@ public class OptionsDialog extends EnhancedDialog
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
 		buttons.add(cancel);
-/* 		apply = new JButton(jEdit.getProperty("common.apply"));
+		/* apply = new JButton(jEdit.getProperty("common.apply"));
 		apply.addActionListener(this);
 		buttons.add(apply); */
 
@@ -147,7 +147,8 @@ public class OptionsDialog extends EnhancedDialog
 		jEdit.saveSettings();
 
 		// get rid of this dialog if necessary
-		if (dispose) dispose();
+		if(dispose)
+			dispose();
 	}
 
 	public void actionPerformed(ActionEvent evt)
@@ -253,6 +254,7 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionPane(new StyleOptionPane(), jEditGroup);
 		addOptionPane(new FileFilterOptionPane(), jEditGroup);
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
+		addOptionPane(new ToolBarOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
 
 		// create the Shortcuts sub-branch
@@ -582,6 +584,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/05/14 10:55:22  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.24  2000/05/13 05:13:31  sp
  * Mode option pane
  *

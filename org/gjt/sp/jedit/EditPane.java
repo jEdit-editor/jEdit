@@ -92,7 +92,7 @@ public class EditPane extends JPanel implements EBComponent
 		if(!init)
 		{
 			view.updateTitle();
-			view.updateStatus();
+			view.updateBufferStatus();
 			view.updateBuffersMenu();
 			view.updateMarkerMenus();
 
@@ -572,6 +572,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/05/14 10:55:21  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.3  2000/05/12 11:07:38  sp
  * Bug fixes, documentation updates
  *

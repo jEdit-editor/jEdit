@@ -6,10 +6,16 @@ JEDIT 2.5 VERSION HISTORY
 
 - Various properties can now be set on a mode-specific basis in
   Utilities->Global Options->Edit Modes
+- The buttons displayed on the tool bar can be changed in
+  Utilities->Global Options->Tool Bar
+- The HyperSearch feature now performs searches in a background thread
 
 + Enhancements
 
 - Documentation updates
+- The plugin manager no longer lists JARs with no plugins in them (for
+  example, class libraries) as "not loaded"
+- Improved 'View Registers' command
 
 + Bug Fixes
 
@@ -25,6 +31,10 @@ JEDIT 2.5 VERSION HISTORY
 - '$' characters in action commands were not escaped when recording macros
   (since 2.5pre2)
 - *.idl files were not opened in IDL mode (since 2.4pre2)
+- The status bar wasn't updated properly while a repeat count was being
+  entered (since 2.5pre2)
+- Fixed possible NPE when C+e C+w was pressed (since 2.5pre2)
+- Console macros were broken (since 2.5pre2)
 
 * Version 2.5pre2
 

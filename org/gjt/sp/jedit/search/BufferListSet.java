@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.search;
 
+import javax.swing.SwingUtilities;
 import java.util.Vector;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
@@ -98,9 +99,35 @@ public class BufferListSet implements SearchFileSet
 	 * Called if the specified buffer was found to have a match.
 	 * @param buffer The buffer
 	 */
-	public void matchFound(Buffer buffer)
+	public void matchFound(final Buffer buffer)
 	{
-		jEdit.commitTemporary(buffer);
+		// HyperSearch runs stuff in another thread
+		if(!SwingUtilities.isEventDispatchThread())
+		{
+			try
+			{
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
+					{
+						jEdit.commitTemporary(buffer);
+					}
+				});
+			}
+			catch(Exception e)
+			{
+			}
+		}
+		else
+			jEdit.commitTemporary(buffer);
+	}
+
+	/**
+	 * Returns the number of buffers in this file set.
+	 */
+	public int getBufferCount()
+	{
+		return files.size();
 	}
 
 	/**
@@ -115,14 +142,40 @@ public class BufferListSet implements SearchFileSet
 	// private members
 	private Vector files;
 
-	private Buffer getBuffer(String path)
+	private Buffer getBuffer(final String path)
 	{
-		return jEdit.openTemporary(null,null,path,false,false);
+		// HyperSearch runs stuff in another thread
+		if(!SwingUtilities.isEventDispatchThread())
+		{
+			final Buffer[] retVal = new Buffer[1];
+
+			try
+			{
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
+					{
+						retVal[0] = jEdit.openTemporary(null,null,
+							path,false,false);
+					}
+				});
+				return retVal[0];
+			}
+			catch(Exception e)
+			{
+				return null;
+			}
+		}
+		else
+			return jEdit.openTemporary(null,null,path,false,false);
 	}
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/05/14 10:55:22  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.14  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

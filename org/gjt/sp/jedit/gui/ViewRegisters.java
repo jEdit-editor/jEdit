@@ -1,6 +1,6 @@
 /*
  * ViewRegisters.java - View registers dialog
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,13 +34,19 @@ public class ViewRegisters extends EnhancedDialog
 
 		Container content = getContentPane();
 
+		contents = new Vector();
+		registerCombo = new JComboBox();
 		Registers.Register[] registers = Registers.getRegisters();
-		Vector strings = new Vector();
 
+		int index = 0;
 		for(int i = 0; i < registers.length; i++)
 		{
 			Registers.Register reg = registers[i];
 			if(reg == null)
+				continue;
+
+			String value = reg.toString();
+			if(value == null)
 				continue;
 
 			String name;
@@ -48,43 +54,50 @@ public class ViewRegisters extends EnhancedDialog
 				name = "\n";
 			else if(i == '\t')
 				name = "\t";
+			else if(i == '$')
+			{
+				index = registerCombo.getItemCount();
+				name = jEdit.getProperty("view-registers.clipboard");
+			}
 			else
 				name = String.valueOf((char)i);
 
-			String value = reg.toString();
-			if(value == null)
-				continue;
-
-			strings.addElement(name + ": " + value);
+			registerCombo.addItem(name);
+			contents.addElement(reg);
 		}
 
-		JList registerList = new JList(strings);
-		registerList.setVisibleRowCount(16);
-		registerList.setFont(view.getTextArea().getPainter().getFont());
+		if(registerCombo.getItemCount() == 0)
+		{
+			registerCombo.addItem(jEdit.getProperty("view-registers.none"));
+			contents.addElement(null);
+		}
 
-		close = new JButton(jEdit.getProperty("common.close"));
+		registerCombo.setMaximumSize(registerCombo.getPreferredSize());
 
-		content.setLayout(new BorderLayout());
+		Box box = new Box(BoxLayout.X_AXIS);
+		box.add(new JLabel(jEdit.getProperty("view-registers.caption")));
+		box.add(registerCombo);
+		box.add(Box.createGlue());
+		box.add(new JLabel(jEdit.getProperty("view-registers.type")));
+		type = new JLabel();
+		box.add(type);
+		box.add(Box.createHorizontalStrut(5));
+		content.add(BorderLayout.NORTH,box);
 
-		content.add(new JLabel(jEdit.getProperty("view-registers.caption")),
-			BorderLayout.NORTH);
-
-		JScrollPane scroller = new JScrollPane(registerList);
-		Dimension dim = scroller.getPreferredSize();
-		scroller.setPreferredSize(new Dimension(640,dim.height));
-
-		content.add(scroller, BorderLayout.CENTER);
+		contentTextArea = new JTextArea(10,80);
+		contentTextArea.setFont(view.getTextArea().getPainter().getFont());
+		contentTextArea.setEditable(false);
+		content.add(BorderLayout.CENTER,new JScrollPane(contentTextArea));
 
 		JPanel panel = new JPanel();
+		close = new JButton(jEdit.getProperty("common.close"));
+		close.addActionListener(new ActionHandler());
 		panel.add(close);
-		content.add(panel, BorderLayout.SOUTH);
-
 		getRootPane().setDefaultButton(close);
+		content.add(BorderLayout.SOUTH,panel);
 
-		ActionHandler actionListener = new ActionHandler();
-		close.addActionListener(actionListener);
-
-		GUIUtilities.requestFocus(this,registerList);
+		registerCombo.addActionListener(new ActionHandler());
+		registerCombo.setSelectedIndex(index);
 
 		pack();
 		setLocationRelativeTo(view);
@@ -104,13 +117,38 @@ public class ViewRegisters extends EnhancedDialog
 	// end EnhancedDialog implementation
 
 	// private members
+	private JComboBox registerCombo;
+	private JLabel type;
+	private Vector contents;
+	private JTextArea contentTextArea;
 	private JButton close;
 
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(evt.getSource() == close)
+			if(evt.getSource() == registerCombo)
+			{
+				Registers.Register reg = (Registers.Register)
+					contents.elementAt(registerCombo
+					.getSelectedIndex());
+
+				if(reg == null)
+					return;
+
+				String typeString;
+				if(reg instanceof Registers.StringRegister
+					|| reg instanceof Registers.ClipboardRegister)
+					typeString = jEdit.getProperty("view-registers.text");
+				else if(reg instanceof Registers.CaretRegister)
+					typeString = jEdit.getProperty("view-registers.position");
+				else
+					typeString = jEdit.getProperty("view-registers.unknown");
+
+				type.setText(typeString);
+				contentTextArea.setText(reg.toString());
+			}
+			else if(evt.getSource() == close)
 				cancel();
 		}
 	}

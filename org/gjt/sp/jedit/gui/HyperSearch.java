@@ -66,7 +66,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 		JPanel stretchPanel = new JPanel(new BorderLayout());
 
-		panel = new JPanel();
+		Box box = new Box(BoxLayout.X_AXIS);
 		ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.ignoreCase"),SearchAndReplace.getIgnoreCase());
 		regexp = new JCheckBox(jEdit.getProperty(
@@ -76,19 +76,38 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 			instanceof CurrentBufferSet));
 		multifileBtn = new JButton(jEdit.getProperty(
 			"search.multifile"));
-		panel.add(ignoreCase);
-		panel.add(regexp);
-		panel.add(multifile);
-		panel.add(multifileBtn);
-		findBtn = new JButton(jEdit.getProperty("hypersearch.findBtn"));
-		panel.add(findBtn);
-		getRootPane().setDefaultButton(findBtn);
+		box.add(ignoreCase);
+		box.add(Box.createHorizontalStrut(5));
+		box.add(regexp);
+		box.add(Box.createHorizontalStrut(5));
+		box.add(multifile);
+		box.add(multifileBtn);
+		box.add(Box.createHorizontalStrut(5));
+		findBtn = new JButton();
+		box.add(findBtn);
+		box.add(Box.createHorizontalStrut(5));
 		close = new JButton(jEdit.getProperty("common.close"));
-		panel.add(close);
-		stretchPanel.add(panel,BorderLayout.NORTH);
+		box.add(close);
+		box.add(Box.createHorizontalStrut(5));
+		status = new JLabel();
+		box.add(status);
+		getRootPane().setDefaultButton(findBtn);
+		updateEnabled();
 
-		results = new JList();
-		results.setVisibleRowCount(10);
+		// search label is wider than 'stop'. This stops relayout
+		// when the user clicks the button
+		findBtn.setPreferredSize(findBtn.getPreferredSize());
+		findBtn.setMinimumSize(findBtn.getMinimumSize());
+
+		updateStatus();
+		Dimension size = status.getPreferredSize();
+		size.width = Math.max(size.width,100);
+		status.setPreferredSize(size);
+		status.setMinimumSize(size);
+		stretchPanel.add(box,BorderLayout.NORTH);
+
+		results = new JList(resultModel);
+		results.setVisibleRowCount(16);
 		results.addListSelectionListener(new ListHandler());
 		stretchPanel.add(new JScrollPane(results), BorderLayout.CENTER);
 
@@ -120,7 +139,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		if(defaultFind != null)
 			doHyperSearch();
 	}
-	
+
 	public void save()
 	{
 		find.addCurrentToHistory();
@@ -130,15 +149,31 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		SearchAndReplace.setSearchFileSet(fileset);
 	}
 
+	public void dispose()
+	{
+		if(thread != null)
+		{
+			thread.stop();
+			thread = null;
+		}
+		super.dispose();
+	}
+
 	// EnhancedDialog implementation
 	public void ok()
 	{
+		if(thread != null)
+			return;
+
 		save();
 		doHyperSearch();
 	}
 
 	public void cancel()
 	{
+		if(thread != null)
+			thread.stop();
+
 		EditBus.removeFromBus(this);
 		GUIUtilities.saveGeometry(this,"hypersearch");
 		dispose();
@@ -184,72 +219,37 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 	private JButton multifileBtn;
 	private JButton findBtn;
 	private JButton close;
+	private JLabel status;
 	private JList results;
 	private DefaultListModel resultModel;
+	private HyperSearchThread thread;
+	private int current;
+
+	private void updateEnabled()
+	{
+		find.setEnabled(thread == null);
+		ignoreCase.setEnabled(thread == null);
+		regexp.setEnabled(thread == null);
+		multifile.setEnabled(thread == null);
+		multifileBtn.setEnabled(thread == null);
+		findBtn.setText(thread == null
+			? jEdit.getProperty("hypersearch.findBtn")
+			: jEdit.getProperty("hypersearch.stopBtn"));
+	}
+
+	private void updateStatus()
+	{
+		if(thread == null)
+			current = 0;
+
+		Object[] args = { new Integer(current), new Integer(fileset.getBufferCount()) };
+		status.setText(jEdit.getProperty("hypersearch.status",args));
+	}
 
 	private void doHyperSearch()
 	{
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		try
-		{
-			resultModel.removeAllElements();
-			SearchMatcher matcher = SearchAndReplace
-				.getSearchMatcher();
-			if(matcher == null)
-			{
-				view.getToolkit().beep();
-				return;
-			}
-
-			SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
-			Buffer buffer = fileset.getFirstBuffer(view);
-
-			do
-			{
-				// Wait for buffer to finish loading
-				VFSManager.waitForRequests();
-
-				doHyperSearch(buffer,matcher);
-			}
-			while((buffer = fileset.getNextBuffer(view,buffer)) != null);
-
-			if(resultModel.isEmpty())
-				view.getToolkit().beep();
-			results.setModel(resultModel);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-			Object[] args = { e.getMessage() };
-			if(args[0] == null)
-				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
-		}
-		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-	}
-
-	private boolean doHyperSearch(Buffer buffer, SearchMatcher matcher)
-		throws Exception
-	{
-		boolean retVal = false;
-
-		Element map = buffer.getDefaultRootElement();
-		int lines = map.getElementCount();
-		for(int i = 0; i < lines; i++)
-		{
-			Element lineElement = map.getElement(i);
-			int start = lineElement.getStartOffset();
-			String lineString = buffer.getText(start,
-				lineElement.getEndOffset() - start - 1);
-			int[] match = matcher.nextMatch(lineString);
-			if(match != null)
-			{
-				resultModel.addElement(new SearchResult(buffer,i));
-				retVal = true;
-			}
-		}
-
-		return retVal;
+		thread = new HyperSearchThread();
+		updateEnabled();
 	}
 
 	private void showMultiFileDialog()
@@ -262,6 +262,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		}
 		multifile.getModel().setSelected(!(
 			fileset instanceof CurrentBufferSet));
+		updateStatus();
 	}
 
 	class SearchResult
@@ -345,7 +346,14 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 			Object source = evt.getSource();
 			if(source == close)
 				cancel();
-			else if(source == findBtn || source == find)
+			else if(source == findBtn)
+			{
+				if(thread != null)
+					thread.stop();
+				else
+					ok();
+			}
+			else if(source == find)
 				ok();
 			else if(source == multifileBtn)
 				showMultiFileDialog();
@@ -383,11 +391,113 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 			});
 		}
 	}
+
+	class HyperSearchThread extends Thread
+	{
+		HyperSearchThread()
+		{
+			super("jEdit HyperSearch thread");
+			setPriority(4);
+			start();
+		}
+
+		public void run()
+		{
+			try
+			{
+				current = 0;
+
+				View[] views = jEdit.getViews();
+				for(int i = 0; i < views.length; i++)
+				{
+					views[i].showWaitCursor();
+				}
+
+				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+				resultModel.removeAllElements();
+				SearchMatcher matcher = SearchAndReplace
+					.getSearchMatcher();
+				if(matcher == null)
+				{
+					view.getToolkit().beep();
+					return;
+				}
+
+				SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+				Buffer buffer = fileset.getFirstBuffer(view);
+
+				do
+				{
+					// Wait for buffer to finish loading
+					VFSManager.waitForRequests();
+
+					doHyperSearch(buffer,matcher);
+
+					current++;
+					updateStatus();
+				}
+				while((buffer = fileset.getNextBuffer(view,buffer)) != null);
+
+				if(resultModel.isEmpty())
+					view.getToolkit().beep();
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+				Object[] args = { e.getMessage() };
+				if(args[0] == null)
+					args[0] = e.toString();
+				VFSManager.error(view,"searcherror",args);
+			}
+			finally
+			{
+				thread = null;
+				updateEnabled();
+				updateStatus();
+
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+				View[] views = jEdit.getViews();
+				for(int i = 0; i < views.length; i++)
+				{
+					views[i].hideWaitCursor();
+				}
+			}
+		}
+
+		private boolean doHyperSearch(Buffer buffer, SearchMatcher matcher)
+			throws Exception
+		{
+			boolean retVal = false;
+
+			Element map = buffer.getDefaultRootElement();
+			int lines = map.getElementCount();
+			for(int i = 0; i < lines; i++)
+			{
+				Element lineElement = map.getElement(i);
+				int start = lineElement.getStartOffset();
+				String lineString = buffer.getText(start,
+					lineElement.getEndOffset() - start - 1);
+				int[] match = matcher.nextMatch(lineString);
+				if(match != null)
+				{
+					resultModel.addElement(new SearchResult(buffer,i));
+					retVal = true;
+				}
+			}
+
+			return retVal;
+		}
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.59  2000/05/14 10:55:21  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.58  2000/05/06 05:53:46  sp
  * HyperSearch bug fix
  *
@@ -419,23 +529,5 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
  *
  * Revision 1.49  2000/02/01 06:12:33  sp
  * Gutter added (still not fully functional)
- *
- * Revision 1.48  2000/01/29 10:12:43  sp
- * BeanShell edit mode, bug fixes
- *
- * Revision 1.47  1999/12/05 03:01:05  sp
- * Perl token marker bug fix, file loading is deferred, style option pane fix
- *
- * Revision 1.46  1999/11/28 00:33:07  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
- *
- * Revision 1.45  1999/11/26 07:37:11  sp
- * Escape/enter handling code moved to common superclass, bug fixes
- *
- * Revision 1.44  1999/11/23 08:03:21  sp
- * Miscallaeneous stuff
- *
- * Revision 1.43  1999/11/21 01:20:31  sp
- * Bug fixes, EditBus updates, fixed some warnings generated by jikes +P
  *
  */

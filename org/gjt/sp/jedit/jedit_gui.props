@@ -44,6 +44,28 @@ buffer-options.icon=Document.gif
 global-options.icon=Hammer.gif
 help.icon=Help.gif
 
+# Used by toolbar editor
+icons=\
+      Binocular.gif \
+      Copy.gif \
+      Cut.gif \
+      Delete.gif \
+      Document.gif \
+      FingerRight.gif \
+      Hammer.gif \
+      Help.gif \
+      New.gif \
+      NewView.gif \
+      Open.gif \
+      Paste.gif \
+      Print.gif \
+      Redo.gif \
+      Save.gif \
+      SplitHorizontal.gif \
+      SplitVertical.gif \
+      Undo.gif \
+      Unsplit.gif
+
 view.search.find=Find:\ 
 view.search.incremental=Incremental
 
@@ -259,11 +281,11 @@ cut-string-register.label=Cut to Register
 copy-string-register.label=Copy to Register
 append-string-register.label=Append to Register
 paste-string-register.label=Paste Register
-set-filename-register.label=Save Filename to Register
-set-caret-register.label=Save Caret to Register
+set-filename-register.label=Save File Name to Register
+set-caret-register.label=Save Position to Register
 goto-register.label=Go to Register
 select-caret-register.label=Select to Register
-exchange-caret-register.label=Swap Caret with Register
+exchange-caret-register.label=Swap Position with Register
 clear-register.label=Clear Register
 view-registers.label=View Registers...
 
@@ -452,10 +474,10 @@ view.status.copy-string-register=Copy to register:
 view.status.append-string-register=Append to register:
 view.status.paste-string-register=Paste from register:
 view.status.set-filename-register=Save file name to register:
-view.status.set-caret-register=Save caret to register:
+view.status.set-caret-register=Save position to register:
 view.status.goto-register=Go to register:
 view.status.select-caret-register=Select to register:
-view.status.exchange-caret-register=Swap caret with register:
+view.status.exchange-caret-register=Swap position with register:
 view.status.clear-register=Clear register:
 view.status.insert-literal=Insert without expanding:
 view.status.repeat.none=Enter repeat count:
@@ -678,7 +700,9 @@ keepsearching.message=No more matches were found. Continue search from\n\
 # Hypersearch dialog
 hypersearch.title=HyperSearch
 hypersearch.find=Search for: (up arrow recalls previous)
-hypersearch.findBtn=Find All
+hypersearch.findBtn=Search
+hypersearch.stopBtn=Stop
+hypersearch.status={0}/{1}
 
 # Replace all results
 replace-results.title=Replacement Complete
@@ -725,7 +749,13 @@ selectlinerange.end=End line:\
 
 # View registers
 view-registers.title=Registers
-view-registers.caption=Defined registers:
+view-registers.caption=Register:\ 
+view-registers.clipboard=$ (clipboard)
+view-registers.type=Type:\ 
+view-registers.text=text
+view-registers.position=position
+view-registers.other=other
+view-registers.none=No registers defined
 
 # Close all buffers dialog
 close.title=Unsaved Changes
@@ -929,6 +959,7 @@ options.styles.digitStyle=Digit
 options.styles.invalidStyle=Invalid token
 
 options.filters.label=File Filters
+options.filters.caption=Additional filters to display in file dialogs:
 options.filters.name=Name
 options.filters.re=Glob pattern
 
@@ -939,6 +970,21 @@ options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
 options.abbrevs.sort.abbrev=Sort by abbrev
 options.abbrevs.sort.expand=Sort by expansion
+
+options.toolbar.label=Tool Bar
+options.toolbar.caption=Buttons to display on tool bar:
+options.toolbar.add=Add...
+options.toolbar.remove=Remove
+options.toolbar.moveUp=Move Up
+options.toolbar.moveDown=Move Down
+options.toolbar.add.title=Add Item
+options.toolbar.add.caption=Add to tool bar:
+options.toolbar.add.separator=Separator
+options.toolbar.add.action=Command:\ 
+options.toolbar.add.icon=Icon:
+options.toolbar.add.builtin=Built in:\ 
+options.toolbar.add.file=From file:\ 
+options.toolbar.add.choose=Choose
 
 options.context.label=Context Menu
 options.context.caption=Items in text area right click menu:

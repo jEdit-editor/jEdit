@@ -1,6 +1,6 @@
 /*
  * MenuItemModel.java - A menu item template
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.Insets;
-import java.net.URL;
+import java.net.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -61,7 +61,20 @@ public class MenuItemModel
 		String iconName = jEdit.getProperty(name + ".icon");
 		if(iconName != null)
 		{
-			URL url = getClass().getResource("/org/gjt/sp/jedit/toolbar/" + iconName);
+			URL url;
+			if(iconName.startsWith("file:"))
+			{
+				try
+				{
+					url = new URL(iconName);
+				}
+				catch(MalformedURLException mf)
+				{
+					url = null;
+				}
+			}
+			else
+				url = getClass().getResource("/org/gjt/sp/jedit/toolbar/" + iconName);
 			if(url != null)
 			{
 				icon = new ImageIcon(url);
@@ -116,6 +129,9 @@ public class MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/05/14 10:55:22  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.9  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

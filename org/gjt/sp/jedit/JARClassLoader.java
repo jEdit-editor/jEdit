@@ -37,7 +37,6 @@ public class JARClassLoader extends ClassLoader
 	public JARClassLoader(String path)
 		throws IOException
 	{
-		fileName = new File(path).getName();
 		zipFile = new ZipFile(path);
 
 		Enumeration entires = zipFile.entries();
@@ -56,11 +55,8 @@ public class JARClassLoader extends ClassLoader
 			}
 		}
 
-		// If this is done before the above while() statement
-		// and an exception is thrown while the ZIP file is
-		// being loaded, weird things happen...
-		index = classLoaders.size();
-		classLoaders.addElement(this);
+		jar = new EditPlugin.JAR(path,this);
+		jEdit.addPluginJAR(jar);
 	}
 
 	/**
@@ -109,46 +105,11 @@ public class JARClassLoader extends ClassLoader
 
 	public String getResourceAsPath(String name)
 	{
-		return "jeditresource:" + index + "/" + name;
+		return "jeditresource:" + jar.getIndex() + "/" + name;
 	}
 
-	public String getPath()
-	{
-		return zipFile.getName();
-	}
-
-	public static void initPlugins()
-	{
-		for(int i = 0; i < classLoaders.size(); i++)
-		{
-			JARClassLoader classLoader = (JARClassLoader)
-				classLoaders.elementAt(i);
-			classLoader.loadAllPlugins();
-		}
-	}
-
-	public static JARClassLoader getClassLoader(int index)
-	{
-		return (JARClassLoader)classLoaders.elementAt(index);
-	}
-
-	public static int getClassLoaderCount()
-	{
-		return classLoaders.size();
-	}
-
-	// private members
-
-	/* Loading of plugin classes is deferred until all JARs
-	 * are loaded - this is necessary because a plugin might
-	 * depend on classes stored in other JARs. */
-	private static Vector classLoaders = new Vector();
-	private int index;
-	private Vector pluginClasses = new Vector();
-	private String fileName;
-	private ZipFile zipFile;
-
-	private void loadAllPlugins()
+	// package-private members
+	void loadAllPlugins()
 	{
 		for(int i = 0; i < pluginClasses.size(); i++)
 		{
@@ -164,12 +125,17 @@ public class JARClassLoader extends ClassLoader
 				Log.log(Log.ERROR,this,"Error while starting plugin " + name);
 				Log.log(Log.ERROR,this,t);
 
-				jEdit.addBrokenPlugin(fileName,name);
+				jar.addPlugin(new EditPlugin.Broken(name));
 				String[] args = { name, t.toString() };
 				GUIUtilities.error(null,"plugin.start-error",args);
 			}
 		}
 	}
+
+	// private members
+	private EditPlugin.JAR jar;
+	private Vector pluginClasses = new Vector();
+	private ZipFile zipFile;
 
 	private void loadPluginClass(String name)
 		throws Exception
@@ -190,7 +156,7 @@ public class JARClassLoader extends ClassLoader
 		// Check dependencies
 		if(!checkDependencies(name))
 		{
-			jEdit.addBrokenPlugin(fileName,name);
+			jar.addPlugin(new EditPlugin.Broken(name));
 			return;
 		}
 
@@ -218,7 +184,7 @@ public class JARClassLoader extends ClassLoader
 			Log.log(Log.NOTICE,this,"Starting plugin " + name
 					+ version);
 
-			jEdit.addPlugin((EditPlugin)clazz.newInstance());
+			jar.addPlugin((EditPlugin)clazz.newInstance());
 		}
 	}
 
@@ -320,10 +286,10 @@ public class JARClassLoader extends ClassLoader
 	private Class findOtherClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
-		for(int i = 0; i < classLoaders.size(); i++)
+		EditPlugin.JAR[] jars = jEdit.getPluginJARs();
+		for(int i = 0; i < jars.length; i++)
 		{
-			JARClassLoader loader = (JARClassLoader)
-				classLoaders.elementAt(i);
+			JARClassLoader loader = jars[i].getClassLoader();
 			Class cls = loader.loadClassFromZip(clazz,resolveIt,
 				false);
 			if(cls != null)
@@ -403,6 +369,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  2000/05/14 10:55:21  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.35  2000/04/06 09:28:08  sp
  * Better plugin error reporting, search bar updates
  *
@@ -432,8 +401,5 @@ public class JARClassLoader extends ClassLoader
  *
  * Revision 1.26  2000/01/30 04:23:23  sp
  * New about box, minor bug fixes and updates here and there
- *
- * Revision 1.25  2000/01/28 00:54:26  sp
- * Blacklisting removed
  *
  */

@@ -41,6 +41,8 @@ public class FileFilterOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
+		add(BorderLayout.NORTH,new JLabel(jEdit.getProperty("options"
+			+ ".filters.caption")));
 		add(BorderLayout.CENTER,createFileFilterScroller());
 	}
 
@@ -201,6 +203,9 @@ class FileFilterTableModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/05/14 10:55:22  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.4  2000/04/16 08:56:24  sp
  * Option pane updates
  *

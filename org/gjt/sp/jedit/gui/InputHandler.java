@@ -109,7 +109,7 @@ public abstract class InputHandler extends KeyAdapter
 			repeatCount = 0;
 
 		if(view != null)
-			view.updateStatus();
+			view.updateCaretStatus();
 	}
 
 	/**
@@ -129,11 +129,7 @@ public abstract class InputHandler extends KeyAdapter
 		this.repeatCount = repeatCount;
 
 		if(view != null)
-		{
-			/*JEditTextArea[] textAreas = view.getTextAreas();
-			for(int i = 0; i < textAreas.length; i++)
-				textAreas[i].getStatus().repaint();*/
-		}
+			view.updateCaretStatus();
 	}
 
 	/**
@@ -282,6 +278,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/05/14 10:55:21  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.4  2000/05/09 10:51:52  sp
  * New status bar, a few other things
  *

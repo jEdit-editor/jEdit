@@ -243,7 +243,11 @@ public class jEdit
 
 		// Start plugins
 		GUIUtilities.setProgressText("Starting plugins");
-		JARClassLoader.initPlugins();
+		for(int i = 0; i < jars.size(); i++)
+		{
+			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
+				.loadAllPlugins();
+		}
 
 		// Preload menu and tool bar models
 		GUIUtilities.setProgressText("Loading user interface");
@@ -586,24 +590,17 @@ public class jEdit
 	 */
 	public static void addPlugin(EditPlugin plugin)
 	{
-		plugin.start();
-		plugins.addElement(plugin);
+		plugins.addPlugin(plugin);
 	}
 
 	/**
-	 * Returns a plugin by it's class name.
-	 * @param name The plugin to return
+	 * Adds a plugin to the editor.
+	 * @param plugin The plugin
 	 */
-	public static EditPlugin getPlugin(String name)
+	public static void addPluginJAR(EditPlugin.JAR plugin)
 	{
-		for(int i = 0; i < plugins.size(); i++)
-		{
-			EditPlugin p = (EditPlugin)plugins.elementAt(i);
-			if(p.getClass().getName().equals(name))
-				return p;
-		}
-
-		return null;
+		plugin.index = jars.size();
+		jars.addElement(plugin);
 	}
 
 	/**
@@ -611,19 +608,36 @@ public class jEdit
 	 */
 	public static EditPlugin[] getPlugins()
 	{
-		EditPlugin[] pluginArray = new EditPlugin[plugins.size()];
-		plugins.copyInto(pluginArray);
-		return pluginArray;
+		Vector vector = new Vector();
+		for(int i = 0; i < jars.size(); i++)
+		{
+			((EditPlugin.JAR)jars.elementAt(i)).getPlugins(vector);
+		}
+		plugins.getPlugins(vector);
+
+		EditPlugin[] array = new EditPlugin[vector.size()];
+		vector.copyInto(array);
+		return array;
 	}
 
 	/**
-	 * Returns an array of plugin class names which didn't load.
+	 * Returns an array of installed plugins.
+	 * @since jEdit 2.5pre3
 	 */
-	public static EditPlugin.Broken[] getBrokenPlugins()
+	public static EditPlugin.JAR[] getPluginJARs()
 	{
-		EditPlugin.Broken[] pluginArray = new EditPlugin.Broken[brokenPlugins.size()];
-		brokenPlugins.copyInto(pluginArray);
-		return pluginArray;
+		EditPlugin.JAR[] array = new EditPlugin.JAR[jars.size()];
+		jars.copyInto(array);
+		return array;
+	}
+
+	/**
+	 * Returns the JAR at the specified index.
+	 * @since jEdit 2.5pre3
+	 */
+	public static EditPlugin.JAR getPluginJAR(int index)
+	{
+		return (EditPlugin.JAR)jars.elementAt(index);
 	}
 
 	/**
@@ -1553,14 +1567,6 @@ public class jEdit
 		}
 	}
 
-	/**
-	 * This plugin didn't load.
-	 */
-	static void addBrokenPlugin(String jar, String name)
-	{
-		brokenPlugins.addElement(new EditPlugin.Broken(jar,name));
-	}
-
 	// private members
 	private static String jEditHome;
 	private static String settingsDirectory;
@@ -1572,8 +1578,8 @@ public class jEdit
 	private static EditServer server;
 	private static boolean background;
 	private static Hashtable actionHash;
-	private static Vector plugins;
-	private static Vector brokenPlugins;
+	private static Vector jars;
+	private static EditPlugin.JAR plugins; /* plugins without a JAR */
 	private static Vector modes;
 	private static Vector recent;
 	private static int maxRecent;
@@ -1934,8 +1940,8 @@ public class jEdit
 	 */
 	private static void initPlugins()
 	{
-		plugins = new Vector();
-		brokenPlugins = new Vector();
+		plugins = new EditPlugin.JAR(null,null);
+		jars = new Vector();
 		loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
 		if(settingsDirectory != null)
 		{
@@ -2251,9 +2257,10 @@ public class jEdit
 			server.stopServer();
 
 		// Stop all plugins
-		for(int i = 0; i < plugins.size(); i++)
+		EditPlugin[] plugins = getPlugins();
+		for(int i = 0; i < plugins.length; i++)
 		{
-			((EditPlugin)plugins.elementAt(i)).stop();
+			plugins[i].stop();
 		}
 
 		// Send EditorExiting
@@ -2270,6 +2277,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.238  2000/05/14 10:55:21  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.237  2000/05/13 05:13:31  sp
  * Mode option pane
  *

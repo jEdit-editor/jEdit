@@ -4,20 +4,14 @@ JEDIT TO DO
 
 - Divide by zero with JDK 1.3 in recalculateVisibleLines()
 - Increase file chooser's preferred size
-- Redo window-editor screenshots
-- Abortable I/O
-- Plugin manager: use swing centering code
-- jEdit.getJARs() method
-- EditPlugin.JAR class, with these methods:
-  getClassLoader()
-  getPath()
-  getPlugins()
-- Update plugin manager to use the above
-- Editable toolbar
-- Update dialog-options-* screenshots
+- Finish tool bar editor
+- Update dialog-options-* and window-editor-* screenshots
+- Document tool bar editor
 
 2.5:
 
+- Abortable I/O
+- Document macro syntax in more detail
 - Add macros to context menu and toolbar
 - Annoying BufferTabs flicker
 - Make HyperSearch a JFrame
@@ -29,8 +23,6 @@ JEDIT TO DO
   - how to write text area and gutter hilites
   - document VFS stuff
 - Buffer tabs focus is still screwed with JDK 1.3
-- Threaded HyperSearch
-- set dirty to false when all undos undone
 
 Later:
 
@@ -49,6 +41,8 @@ Later:
   - better error reporting
   - regexps
 - Mode grammar editor
+- Set dirty to false when all undos undone (will be easy with new document
+  model)
 
 When we switch to Java 2:
 - drag and drop

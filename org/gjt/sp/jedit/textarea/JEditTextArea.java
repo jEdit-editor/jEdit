@@ -1588,6 +1588,11 @@ public class JEditTextArea extends JComponent
 	protected void processKeyEvent(KeyEvent evt)
 	{
 		View view = EditAction.getView(evt);
+
+		// Ignore
+		if(view.isClosed())
+			return;
+
 		if(view.getRootPane().getGlassPane().isVisible())
 		{
 			super.processKeyEvent(evt);
@@ -2175,6 +2180,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.63  2000/05/14 10:55:22  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.62  2000/05/12 11:07:39  sp
  * Bug fixes, documentation updates
  *

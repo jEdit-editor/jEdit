@@ -54,11 +54,20 @@ public class View extends JFrame implements EBComponent
 
 	/**
 	 * Updates the status bar.
-	 * @since jEdit 2.5pre2
+	 * @since jEdit 2.5pre3
 	 */
-	public void updateStatus()
+	public void updateBufferStatus()
 	{
 		status.updateBufferStatus();
+	}
+
+	/**
+	 * Updates the caret status.
+	 * @since jEdit 2.5pre2
+	 */
+	public void updateCaretStatus()
+	{
+		status.updateCaretStatus();
 	}
 
 	/**
@@ -652,13 +661,12 @@ public class View extends JFrame implements EBComponent
 	{
 		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
-			if(toolBar == null)
-			{
-				toolBar = GUIUtilities.loadToolBar("view.toolbar");
-				toolBar.add(Box.createGlue());
-			}
-			if(toolBar.getParent() == null)
-				addToolBar(toolBar);
+			if(toolBar != null)
+				removeToolBar(toolBar);
+
+			toolBar = GUIUtilities.loadToolBar("view.toolbar");
+			toolBar.add(Box.createGlue());
+			addToolBar(toolBar);
 		}
 		else if(toolBar != null)
 		{
@@ -668,10 +676,11 @@ public class View extends JFrame implements EBComponent
 
 		if(jEdit.getBooleanProperty("view.showSearchbar"))
 		{
-			if(searchBar == null)
-				searchBar = new SearchBar(this);
-			if(searchBar.getParent() == null)
-				addToolBar(searchBar);
+			if(searchBar != null)
+				removeToolBar(toolBar);
+
+			searchBar = new SearchBar(this);
+			addToolBar(searchBar);
 		}
 		else if(searchBar != null)
 		{
@@ -700,7 +709,7 @@ public class View extends JFrame implements EBComponent
 			status.updateBufferStatus();
 		}
 		else
-			status.repaint();
+			status.updateCaretStatus();
 	}
 
 	/**
@@ -890,7 +899,11 @@ public class View extends JFrame implements EBComponent
 		for(int i = 0; i < plugins.length; i++)
 		{
 			EditPlugin plugin = plugins[i];
-			String name = plugin.getClass().getName();
+			// don't include broken plugins in list
+			if(plugin instanceof EditPlugin.Broken)
+				continue;
+
+			String name = plugin.getClassName();
 
 			String label = jEdit.getProperty("plugin." + name + ".name");
 			String docs = jEdit.getProperty("plugin." + name + ".docs");
@@ -1005,6 +1018,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.174  2000/05/14 10:55:21  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.173  2000/05/13 05:13:31  sp
  * Mode option pane
  *

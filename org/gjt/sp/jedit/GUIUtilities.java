@@ -164,6 +164,18 @@ public class GUIUtilities
 	}
 
 	/**
+	 * Instructs jEdit to reload this tool bar model the next time it is
+	 * requested.
+	 * @param name The menu name
+	 */
+	public static void invalidateToolBarModel(String name)
+	{
+		// that's right; we store tool bars and menus in the
+		// same hash
+		menus.remove(name);
+	}
+
+	/**
 	 * Creates a toolbar.
 	 * @param name The toolbar name
 	 */
@@ -719,6 +731,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.59  2000/05/14 10:55:21  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.58  2000/05/08 11:20:07  sp
  * New file finder in open dialog box
  *

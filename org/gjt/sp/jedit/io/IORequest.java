@@ -76,7 +76,7 @@ public class IORequest implements Runnable
 		{
 			views = jEdit.getViews();
 			String status = (type == LOAD ? "loading" : "saving");
-			String[] args = { path };
+			String[] args = { MiscUtilities.getFileName(path) };
 			String message = jEdit.getProperty("view.status." + status,args);
 			for(int i = 0; i < views.length; i++)
 			{
@@ -250,6 +250,9 @@ public class IORequest implements Runnable
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/05/14 10:55:22  sp
+ * Tool bar editor started, improved view registers dialog box
+ *
  * Revision 1.7  2000/05/09 10:51:52  sp
  * New status bar, a few other things
  *
