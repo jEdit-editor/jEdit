@@ -511,8 +511,8 @@ class ToolBarAddDialog extends EnhancedDialog
 					JFileChooser.OPEN_DIALOG);
 				if(path != null)
 				{
-					fileIcon = "file://" + path.replace(
-						File.separatorChar,'/');
+					fileIcon = "file:" + path;
+
 					try
 					{
 						fileButton.setIcon(new ImageIcon(new URL(
@@ -532,6 +532,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/06/29 06:20:45  sp
+ * Tool bar icon code bug fix
+ *
  * Revision 1.4  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *

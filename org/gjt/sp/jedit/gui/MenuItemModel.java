@@ -61,29 +61,11 @@ public class MenuItemModel
 		String iconName = jEdit.getProperty(name + ".icon");
 		if(iconName != null)
 		{
-			URL url;
-			if(iconName.startsWith("file:"))
-			{
-				try
-				{
-					url = new URL(iconName);
-				}
-				catch(MalformedURLException mf)
-				{
-					url = null;
-				}
-			}
-			else
-				url = getClass().getResource("/org/gjt/sp/jedit/toolbar/" + iconName);
-			if(url != null)
-			{
-				icon = new ImageIcon(url);
-				toolTip = label;
-				String shortcut = jEdit.getProperty(name
-					+ ".shortcut");
-				if(shortcut != null)
-					toolTip = toolTip + " (" + shortcut + ")";
-			}
+			icon = GUIUtilities.loadToolBarIcon(iconName);
+			toolTip = label;
+			String shortcut = jEdit.getProperty(name + ".shortcut");
+			if(shortcut != null)
+				toolTip = toolTip + " (" + shortcut + ")";
 		}
 	}
 
@@ -117,7 +99,7 @@ public class MenuItemModel
 	}
 
 	// protected members
-	protected ImageIcon icon;
+	protected Icon icon;
 	protected String name;
 	protected String label;
 	protected String toolTip;
@@ -129,6 +111,9 @@ public class MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/06/29 06:20:45  sp
+ * Tool bar icon code bug fix
+ *
  * Revision 1.10  2000/05/14 10:55:22  sp
  * Tool bar editor started, improved view registers dialog box
  *

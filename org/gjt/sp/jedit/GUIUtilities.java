@@ -196,25 +196,16 @@ public class GUIUtilities
 			return icon;
 
 		// get the icon
-		URL url;
-
 		if(iconName.startsWith("file:"))
 		{
-			try
-			{
-				url = new URL(iconName);
-			}
-			catch(MalformedURLException mf)
-			{
-				url = null;
-			}
+			icon = new ImageIcon(iconName.substring(5));
 		}
 		else
 		{
-			url = GUIUtilities.class.getResource("/org/gjt/sp/jedit/toolbar/"
-				+ iconName);
+			icon = new ImageIcon(GUIUtilities.class.getResource(
+				"/org/gjt/sp/jedit/toolbar/" + iconName));
 		}
-		icon = new ImageIcon(url);
+
 		icons.put(iconName,icon);
 		return icon;
 	}
@@ -757,7 +748,7 @@ public class GUIUtilities
 
 			// increase preferred size a little bit
 			Dimension size = chooser.getPreferredSize();
-			size.width *= 1.2;
+			size.width *= 1.1;
 			chooser.setPreferredSize(size);
 
 			if(view != null)
@@ -771,6 +762,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.67  2000/06/29 06:20:45  sp
+ * Tool bar icon code bug fix
+ *
  * Revision 1.66  2000/06/12 02:43:29  sp
  * pre6 almost ready
  *
@@ -800,44 +794,5 @@ public class GUIUtilities
  *
  * Revision 1.57  2000/05/04 10:37:04  sp
  * Wasting time
- *
- * Revision 1.56  2000/04/28 09:29:11  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.55  2000/04/18 08:27:51  sp
- * Context menu editor started
- *
- * Revision 1.54  2000/04/17 07:40:51  sp
- * File dialog loaded in a background thread
- *
- * Revision 1.53  2000/04/09 03:14:14  sp
- * Syntax token backgrounds can now be specified
- *
- * Revision 1.52  2000/03/18 05:45:25  sp
- * Complete word overhaul, various other changes
- *
- * Revision 1.51  2000/03/14 06:22:24  sp
- * Lots of new stuff
- *
- * Revision 1.50  2000/02/15 07:44:30  sp
- * bug fixes, doc updates, etc
- *
- * Revision 1.49  1999/12/21 06:50:50  sp
- * Documentation updates, abbrevs option pane finished, bug fixes
- *
- * Revision 1.48  1999/12/20 08:38:43  sp
- * Abbrevs option pane
- *
- * Revision 1.47  1999/12/19 08:12:34  sp
- * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
- *
- * Revision 1.46  1999/12/15 10:40:40  sp
- * HelpViewer updates, bug fixing, getting ready for 2.2final
- *
- * Revision 1.45  1999/12/14 04:20:35  sp
- * Various updates, PHP3 mode added
- *
- * Revision 1.44  1999/11/27 06:01:20  sp
- * Faster file loading, geometry fix
  *
  */

@@ -1,5 +1,12 @@
 JEDIT 2.5 VERSION HISTORY
 
+* Version 2.5final
+
++ Bug Fixes
+
+- Adding buttons with icons loaded from external files didn't work on non-Unix
+  systems
+
 * Version 2.5pre8
 
 + New Features
