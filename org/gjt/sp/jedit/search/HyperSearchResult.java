@@ -53,7 +53,8 @@ public class HyperSearchResult
 		{
 			return buffer.getText(elem.getStartOffset(),
 				elem.getEndOffset() -
-				elem.getStartOffset() - 1);
+				elem.getStartOffset() - 1)
+				.replace('\t',' ');
 		}
 		catch(BadLocationException bl)
 		{

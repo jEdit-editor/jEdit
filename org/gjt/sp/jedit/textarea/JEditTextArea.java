@@ -428,7 +428,12 @@ public class JEditTextArea extends JComponent
 			return;
 		}
 
-		int electricScroll = (doElectricScroll ? this.electricScroll : 0);
+		int electricScroll;
+
+		if(doElectricScroll && visibleLines > this.electricScroll * 2)
+			electricScroll = this.electricScroll;
+		else
+			electricScroll = 0;
 
 		boolean changed = false;
 

@@ -2873,8 +2873,11 @@ loop:				for(int i = 0; i < count; i++)
 
 	private void clearProperties()
 	{
+		String lineSeparator = (String)getProperty(LINESEP);
 		((BufferProps)getDocumentProperties()).clear();
 		putProperty("i18n",Boolean.FALSE);
+		if(lineSeparator != null)
+			putProperty(LINESEP,lineSeparator);
 	}
 
 	private void parseBufferLocalProperties()
@@ -3055,7 +3058,6 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	private void deleteLines(int index, int lines)
 	{
-		
 		if (lines <= 0)
 			return;
 
@@ -3072,9 +3074,9 @@ loop:				for(int i = 0; i < count; i++)
 		int virtualLine = physicalToVirtual(index);
 		if(info.visible)
 		{
-			virtualLineCount -= lines;
+			len = physicalToVirtual(len);
+			virtualLineCount -= (len - virtualLine);
 
-			len = virtualLine + lines;
 			//System.err.println("copy from " + len + " to " + virtualLine);
 			System.arraycopy(virtualLines,len,virtualLines,
 				virtualLine,virtualLines.length - len);

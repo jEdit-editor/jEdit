@@ -34,6 +34,7 @@ JEDIT 3.1 VERSION HISTORY
   with the Metal look and feel
 - jEdit now notices if a file's read only status changes on disk
 - \t can now be used in abbreviation expansions to insert a tab
+- Improved 'Insert Date' macro (Valery Kondakoff)
 
 + API Changes
 
@@ -71,3 +72,6 @@ JEDIT 3.1 VERSION HISTORY
 - Fixed an obscure roundoff error in the gutter code that could cause
   line numbers to not be repainted fully
 - Mixed paths (eg, C:\files\project1/file) didn't work correctly on Windows
+- Tab characters in HyperSearch results caused display problems
+- Fixed scrolling problem if the text area was exceptionally small
+- Reloading a file would reset the line separator to the system default
