@@ -7,6 +7,7 @@ JEDIT VERSION HISTORY
 - Digits will be highlighted if the HIGHLIGHT_DIGITS attribute is set to
   "TRUE" on a ruleset
 - The background color of syntax tokens can now be specified (Andre Kaplan)
+- If an autosave file is found, jEdit will now offer to load it
 
 + Enhancements
 
@@ -16,6 +17,8 @@ JEDIT VERSION HISTORY
 - 'Action tokens' overhead removed TokenMarker, should speed things up a
   wee bit
 - XMode documentation
+- xmode.dtd is actually a valid DTD now (Mike Dillon)
+- Documentation updates
 
 + Bug Fixes
 
@@ -23,6 +26,8 @@ JEDIT VERSION HISTORY
 - xmode.dtd didn't define attributes of KEYWORDS tag (since 2.4pre2)
 - Inserting characters after using the splitting commands didn't work
   (since 2.4pre4)
+- Sometimes an 'autosave file found' dialog box would be shown when
+  reloading a buffer (since 2.4pre4)
 
 * Version 2.4pre4
 

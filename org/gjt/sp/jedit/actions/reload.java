@@ -42,6 +42,6 @@ public class reload extends EditAction
 				return;
 		}
 
-		buffer.load(view);
+		buffer.load(view,true);
 	}
 }

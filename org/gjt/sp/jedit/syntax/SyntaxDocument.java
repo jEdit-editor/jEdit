@@ -64,7 +64,6 @@ public class SyntaxDocument extends PlainDocument
 	{
 		long start = System.currentTimeMillis();
 		tokenizeLines(0,getDefaultRootElement().getElementCount());
-		System.err.println(System.currentTimeMillis() - start);
 	}
 
 	/**
@@ -203,6 +202,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/04/10 08:46:16  sp
+ * Autosave recovery support, documentation updates
+ *
  * Revision 1.21  2000/04/08 06:57:14  sp
  * Parser rules are now hashed; this dramatically speeds up tokenization
  *

@@ -36,7 +36,7 @@ public class help extends EditAction
 
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null)
-			actionCommand = "jeditdocs/index.html";
+			actionCommand = "users-guide/index.html";
 
 		if(!actionCommand.startsWith("jeditresource:"))
 			actionCommand = "file:" + jEditHome + '/' + actionCommand;

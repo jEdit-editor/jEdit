@@ -68,9 +68,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public static final String LINESEP = "lineSeparator";
 
-	// caret info properties
-
 	/**
+	 * Caret info properties.
 	 * @since 2.2pre7
 	 */
 	public static final String SELECTION_START = "Buffer__selStart";
@@ -100,23 +99,15 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	/**
 	 * Loads the buffer from disk, even if it is loaded already.
 	 * @param view The view
+	 * @param reload If true, we automatically delete the autosave file,
+	 * otherwise we warn user
 	 *
-	 * @since 2.2pre7
+	 * @since 2.4pre5
 	 */
-	public void load(View view)
+	public void load(View view, boolean reload)
 	{
 		if(view != null)
 			view.showWaitCursor();
-
-		if(!getFlag(NEW_FILE))
-		{
-			// Only on initial load
-			if(autosaveFile.exists())
-			{
-				Object[] args = { autosaveFile.getPath() };
-				GUIUtilities.message(view,"autosaveexists",args);
-			}
-		}
 
 		setFlag(LOADING,true);
 
@@ -124,7 +115,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		if(!getFlag(NEW_FILE))
 		{
-			read(view);
+			boolean doLoad;
+			// Only on initial load
+			if(!reload && autosaveFile.exists())
+				doLoad = recoverAutosave(view);
+			else
+				doLoad = true;
+
+			if(doLoad)
+				read(view,file);
+
 			readMarkers();
 		}
 
@@ -370,7 +370,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.YES_OPTION)
 			{
-				load(view);
+				load(view,true);
 			}
 		}
 	}
@@ -1078,7 +1078,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 		setFlag(NEW_FILE,newFile);
 
-		load(null);
+		load(null,false);
 	}
 
 	void commitTemporary()
@@ -1215,7 +1215,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 *   - Because save() appends a line separator after *every* line,
 	 *     it prevents the blank line count at the end from growing
 	 */
-	private void read(View view)
+	private void read(View view, File file)
 	{
 		if(file.exists())
 			setFlag(READ_ONLY,!file.canWrite());
@@ -1546,6 +1546,32 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 	}
 
+	private boolean recoverAutosave(View view)
+	{
+		// this method might get called at startup
+		GUIUtilities.hideSplashScreen();
+
+		Object[] args = { autosaveFile.getPath() };
+		int result = JOptionPane.showConfirmDialog(view,
+			jEdit.getProperty("autosave-found.message",args),
+			jEdit.getProperty("autosave-found.title"),
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE);
+
+		if(result == JOptionPane.YES_OPTION)
+		{
+			read(view,autosaveFile);
+			// can't call setDirty(true) because it is ignored
+			// if LOADING is set
+			setFlag(DIRTY,true);
+
+			GUIUtilities.message(view,"autosave-loaded",args);
+			return false;
+		}
+		else
+			return true;
+	}
+
 	// Saving is much simpler than loading :-)
 	private void save(OutputStream _out)
 		throws IOException, BadLocationException
@@ -1749,6 +1775,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.135  2000/04/10 08:46:16  sp
+ * Autosave recovery support, documentation updates
+ *
  * Revision 1.134  2000/04/09 09:27:51  sp
  * XMode docs finished
  *
@@ -1779,38 +1808,5 @@ loop:		for(int i = 0; i < markers.size(); i++)
  *
  * Revision 1.125  2000/02/20 03:14:13  sp
  * jEdit.getBrokenPlugins() method
- *
- * Revision 1.124  2000/02/17 05:37:59  sp
- * Bug fixes
- *
- * Revision 1.123  2000/02/10 08:32:51  sp
- * Bug fixes, doc updates
- *
- * Revision 1.122  2000/01/28 00:20:58  sp
- * Lots of stuff
- *
- * Revision 1.121  2000/01/22 23:36:42  sp
- * Improved file close behaviour
- *
- * Revision 1.120  2000/01/14 22:11:24  sp
- * Enhanced options dialog box
- *
- * Revision 1.119  1999/12/22 06:36:40  sp
- * 2.3pre1 stuff
- *
- * Revision 1.118  1999/12/21 06:50:50  sp
- * Documentation updates, abbrevs option pane finished, bug fixes
- *
- * Revision 1.117  1999/12/14 04:20:35  sp
- * Various updates, PHP3 mode added
- *
- * Revision 1.116  1999/12/13 03:40:29  sp
- * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.115  1999/12/11 06:34:39  sp
- * Bug fixes
- *
- * Revision 1.114  1999/12/10 03:22:46  sp
- * Bug fixes, old loading code is now used again
  *
  */

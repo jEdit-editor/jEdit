@@ -53,7 +53,7 @@ distribution; a pretty PDF version can be obtained from
 <http://jedit.sourceforge.net/download.php>.
 
 To view the HTML version, select `Help->jEdit User Guide' in jEdit, or
-open `doc/jeditdocs/index.html' in a WWW browser such as Netscape. To
+open `doc/users-guide/index.html' in a WWW browser such as Netscape. To
 view the PDF, open jedit-<version>.pdf in a PDF viewer such as Adobe
 Acrobat.
 

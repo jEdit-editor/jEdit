@@ -2009,7 +2009,7 @@ public class jEdit
 			JOptionPane.YES_NO_OPTION,
 			JOptionPane.QUESTION_MESSAGE);
 		if(result == JOptionPane.YES_OPTION)
-			buffer.load(view);
+			buffer.load(view,true);
 	}
 
 	private static void addViewToList(View view)
@@ -2064,6 +2064,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.214  2000/04/10 08:46:16  sp
+ * Autosave recovery support, documentation updates
+ *
  * Revision 1.213  2000/04/08 06:10:51  sp
  * Digit highlighting, search bar bug fix
  *

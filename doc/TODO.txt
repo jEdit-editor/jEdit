@@ -1,5 +1,7 @@
 JEDIT TO DO
 
+TEST: editing a file loaded by recoverAutosave() (setPath() issues?)
+
 2.4pre5:
 
 - do MARK_PREVIOUS before markKeyword()

@@ -43,7 +43,6 @@ public class XModeHandler extends HandlerBase
 		{
 			String path = MiscUtilities.constructPath(
 				jEdit.getJEditHome(),"modes","xmode.dtd");
-			System.err.println(path);
 			try
 			{
 				return new BufferedReader(new FileReader(path));
