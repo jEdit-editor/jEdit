@@ -118,25 +118,6 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	/**
-	 * Returns the macro recorder. If this is non-null, all executed
-	 * actions should be forwarded to the recorder.
-	 */
-	public InputHandler.MacroRecorder getMacroRecorder()
-	{
-		return recorder;
-	}
-
-	/**
-	 * Sets the macro recorder. If this is non-null, all executed
-	 * actions should be forwarded to the recorder.
-	 * @param recorder The macro recorder
-	 */
-	public void setMacroRecorder(InputHandler.MacroRecorder recorder)
-	{
-		this.recorder = recorder;
-	}
-
-	/**
 	 * Returns the last executed action.
 	 * @since jEdit 2.5pre5
 	 */
@@ -220,20 +201,10 @@ public abstract class InputHandler extends KeyAdapter
 			}
 		}
 
-		if(recorder != null)
-		{
-			if(!action.noRecord())
-			{
-				if(_repeatCount != 1)
-				{
-					recorder.actionPerformed(
-						jEdit.getAction("repeat"),
-						String.valueOf(_repeatCount));
-				}
+		Macros.Recorder recorder = view.getMacroRecorder();
 
-				recorder.actionPerformed(action,actionCommand);
-			}
-		}
+		if(recorder != null && !action.noRecord())
+			recorder.record(_repeatCount,action.getCode());
 
 		// If repeat was true originally, clear it
 		// Otherwise it might have been set by the action, etc
@@ -253,7 +224,6 @@ public abstract class InputHandler extends KeyAdapter
 	protected View view;
 	protected boolean repeat;
 	protected int repeatCount;
-	protected InputHandler.MacroRecorder recorder;
 
 	protected EditAction lastAction;
 	protected int lastActionCount;
@@ -266,10 +236,10 @@ public abstract class InputHandler extends KeyAdapter
 		switch(ch)
 		{
 		case '\t':
-			charStr = "\t";
+			charStr = "\\t";
 			break;
 		case '\n':
-			charStr = "\n";
+			charStr = "\\n";
 			break;
 		case '\\':
 			charStr = "\\\\";
@@ -300,18 +270,35 @@ public abstract class InputHandler extends KeyAdapter
 		readNextChar = null;
 	}
 
-	/**
-	 * Macro recorder.
-	 */
-	public interface MacroRecorder
+	protected void userInput(char ch)
 	{
-		void actionPerformed(EditAction action, String actionCommand);
+		if(readNextChar != null)
+			invokeReadNextChar(ch);
+		else
+		{
+			StringBuffer buf = new StringBuffer();
+			int _repeatCount = getRepeatCount();
+			for(int i = 0; i < _repeatCount; i++)
+				buf.append(ch);
+
+			view.getTextArea().userInput(buf.toString());
+
+			Macros.Recorder recorder = view.getMacroRecorder();
+
+			if(recorder != null)
+				recorder.record(_repeatCount,ch);
+		}
+
+		setRepeatEnabled(false);
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/11/16 04:01:11  sp
+ * BeanShell macros started
+ *
  * Revision 1.16  2000/11/13 11:19:27  sp
  * Search bar reintroduced, more BeanShell stuff
  *

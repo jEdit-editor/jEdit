@@ -55,7 +55,7 @@ public class Macros
 		DockableWindowManager dockableWindowManager
 			= view.getDockableWindowManager();
 
-		dockableWindowManager.showDockableWindow(VFSBrowserDockable.NAME);
+		dockableWindowManager.addDockableWindow(VFSBrowserDockable.NAME);
 		VFSBrowser browser = (VFSBrowser)dockableWindowManager
 			.getDockableWindow(VFSBrowserDockable.NAME)
 			.getComponent();
@@ -82,7 +82,7 @@ public class Macros
 		DockableWindowManager dockableWindowManager
 			= view.getDockableWindowManager();
 
-		dockableWindowManager.showDockableWindow(VFSBrowserDockable.NAME);
+		dockableWindowManager.addDockableWindow(VFSBrowserDockable.NAME);
 		VFSBrowser browser = (VFSBrowser)dockableWindowManager
 			.getDockableWindow(VFSBrowserDockable.NAME)
 			.getComponent();
@@ -99,7 +99,6 @@ public class Macros
 	{
 		macroList = new Vector();
 		macroHierarchy = new Vector();
-		macrosHash = new Hashtable();
 
 		systemMacroPath = MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"macros");
@@ -144,16 +143,6 @@ public class Macros
 	}
 
 	/**
-	 * Returns the macro with the specified name.
-	 * @param macro The macro's name
-	 * @since jEdit 2.6pre1
-	 */
-	public static Macro getMacro(String macro)
-	{
-		return (Macro)macrosHash.get(macro);
-	}
-
-	/**
 	 * Encapsulates the macro's label, name and path.
 	 * @since jEdit 2.2pre4
 	 */
@@ -161,32 +150,29 @@ public class Macros
 	{
 		public String name;
 		public String path;
+		public EditAction action;
 
-		public Macro(final String name, String path)
+		public Macro(String name, final String path)
 		{
 			this.name = name;
 			this.path = path;
 
+			action = new EditAction()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					Macros.runMacro(getView(evt),path);
+				}
+
+				public boolean isWrapper()
+				{
+					return true;
+				}
+			};
+
 			String binding = jEdit.getProperty(name + ".shortcut");
 			if(binding != null)
-			{
-				final EditAction action = jEdit.getAction("play-macro");
-				jEdit.getInputHandler().addKeyBinding(binding,new EditAction()
-				{
-					public void actionPerformed(ActionEvent evt)
-					{
-						action.actionPerformed(
-							new ActionEvent(
-							evt.getSource(),
-							evt.getID(),name));
-					}
-
-					public boolean isWrapper()
-					{
-						return true;
-					}
-				});
-			}
+				jEdit.getInputHandler().addKeyBinding(binding,action);
 		}
 
 		// for debugging
@@ -197,32 +183,105 @@ public class Macros
 	}
 
 	/**
+	 * Starts recording a temporary macro.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void recordTemporaryMacro(View view)
+	{
+		String settings = jEdit.getSettingsDirectory();
+
+		if(settings == null)
+		{
+			GUIUtilities.error(view,"no-settings",new String[0]);
+			return;
+		}
+		if(view.getMacroRecorder() != null)
+		{
+			GUIUtilities.error(view,"already-recording",new String[0]);
+			return;
+		}
+
+		Buffer buffer = jEdit.openFile(null,settings + File.separator
+			+ "macros","Temporary_Macro.bsh",false,true);
+
+		if(buffer == null)
+			return;
+
+		try
+		{
+			buffer.remove(0,buffer.getLength());
+			buffer.insertString(0,jEdit.getProperty("macro.temp.header"),null);
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,Macros.class,bl);
+		}
+
+		recordMacro(view,null,buffer);
+	}
+
+	/**
 	 * Starts recording a macro.
 	 * @param view The view
-	 * @param name The macro name
-	 * @param buffer The buffer to record to
+	 * @since jEdit 2.7pre2
 	 */
-	public static void beginRecording(View view, String name, Buffer buffer)
+	public static void recordMacro(View view)
 	{
-		lastMacro = name;
+		String settings = jEdit.getSettingsDirectory();
 
-		view.setRecordingStatus(true);
-		view.getInputHandler().setMacroRecorder(
-			new BufferRecorder(view,buffer));
+		if(settings == null)
+		{
+			GUIUtilities.error(view,"no-settings",new String[0]);
+			return;
+		}
+
+		if(view.getMacroRecorder() != null)
+		{
+			GUIUtilities.error(view,"already-recording",new String[0]);
+			return;
+		}
+
+		String name = GUIUtilities.input(view,"record",null);
+		if(name == null)
+			return;
+
+		name = name.replace(' ','_');
+
+		Buffer buffer = jEdit.openFile(null,null,
+			MiscUtilities.constructPath(settings,"macros",
+			name + ".macro"),
+			false,true);
+
+		if(buffer == null)
+			return;
+
+		try
+		{
+			buffer.remove(0,buffer.getLength());
+			buffer.insertString(0,jEdit.getProperty("macro.header"),null);
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,Macros.class,bl);
+		}
+
+		recordMacro(view,name,buffer);
 	}
 
 	/**
 	 * Stops a recording currently in progress.
 	 * @param view The view
+	 * @since jEdit 2.7pre2
 	 */
-	public static void endRecording(View view)
+	public static void stopRecording(View view)
 	{
 		InputHandler inputHandler = view.getInputHandler();
-		BufferRecorder recorder = (BufferRecorder)inputHandler
-			.getMacroRecorder();
+		Recorder recorder = view.getMacroRecorder();
 
 		if(recorder != null)
 		{
+			view.setMacroRecorder(null);
 			if(lastMacro != null)
 				view.setBuffer(recorder.buffer);
 			recorder.dispose();
@@ -230,20 +289,80 @@ public class Macros
 	}
 
 	/**
-	 * Returns if a macro is currently being played.
-	 * @since jEdit 2.6pre9
+	 * Returns if a macro is currently being run.
+	 * @since jEdit 2.7pre2
 	 */
-	public static boolean isMacroPlaying()
+	public static boolean isMacroRunning()
 	{
-		return macroPlaying;
+		return macroRunning;
 	}
 
 	/**
-	 * Plays a macro.
+	 * Runs the temporary macro.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void runTemporaryMacro(View view)
+	{
+		String settings = jEdit.getSettingsDirectory();
+
+		if(settings == null)
+		{
+			GUIUtilities.error(view,"no-settings",new String[0]);
+			return;
+		}
+
+		lastMacro = null;
+
+		// This hackery is necessary to prevent actions inside the
+		// macro from picking up the repeat count
+		InputHandler inputHandler = view.getInputHandler();
+		int repeatCount = inputHandler.getRepeatCount();
+		inputHandler.setRepeatEnabled(false);
+
+		try
+		{
+			macroRunning = true;
+
+			for(int i = repeatCount; i > 0; i--)
+			{
+				Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
+					jEdit.getSettingsDirectory(),"macros","Temporary_Macro.bsh"));
+				if(buffer == null)
+				{
+					view.getToolkit().beep();
+					return;
+				}
+
+				runMacroFromBuffer(view,"Temporary_Macro.bsh",buffer);
+			}
+		}
+		finally
+		{
+			macroRunning = false;
+		}
+	}
+
+	/**
+	 * Runs the most recently run or recorded macro.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void runLastMacro(View view)
+	{
+		if(lastMacro == null)
+			runTemporaryMacro(view);
+		else
+			runMacro(view,lastMacro);
+	}
+
+	/**
+	 * Runs a macro.
 	 * @param view The view
 	 * @param name The macro name
+	 * @since jEdit 2.7pre2
 	 */
-	public static void playMacro(View view, String name)
+	public static void runMacro(View view, String name)
 	{
 		lastMacro = name;
 
@@ -255,125 +374,26 @@ public class Macros
 
 		try
 		{
-			macroPlaying = true;
+			macroRunning = true;
 
 			for(int i = repeatCount; i > 0; i--)
 			{
-				if(name == null)
-				{
-					Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
-						jEdit.getSettingsDirectory(),"macros","__temporary__.macro"));
-					if(buffer == null)
-					{
-						view.getToolkit().beep();
-						return;
-					}
-		
-					playMacroFromBuffer(view,"__temporary__.macro",buffer);
-				}
+				String fileName = MiscUtilities.constructPath(
+					jEdit.getSettingsDirectory(),"macros",name);
+
+				// Check if it's open
+				Buffer buffer = jEdit.getBuffer(fileName);
+
+				if(buffer == null)
+					runMacroFromFile(view,name,fileName);
 				else
-				{
-					String fileName = MiscUtilities.constructPath(
-						jEdit.getSettingsDirectory(),"macros",name);
-	
-					// Check if it's open
-					Buffer buffer = jEdit.getBuffer(fileName);
-	
-					if(buffer == null)
-						playMacroFromFile(view,name,fileName);
-					else
-						playMacroFromBuffer(view,name,buffer);
-				}
+					runMacroFromBuffer(view,name,buffer);
 			}
 		}
 		finally
 		{
-			macroPlaying = false;
+			macroRunning = false;
 		}
-	}
-
-	/**
-	 * Executes a macro command. This is intended for the XInsert
-	 * plugins and friends.
-	 * @param view The view
-	 * @param macro The macro name for error reporting
-	 * @param lineNo The line number for error reporting
-	 * @param line The macro text
-	 */
-	public static boolean playMacroCommand(View view, String macro,
-		int lineNo, String line)
-	{
-		if(line.length() == 0 || line.charAt(0) == '#')
-			return true;
-
-		String action;
-		String actionCommand;
-		int index = line.indexOf('@');
-		if(index == -1)
-		{
-			action = line;
-			actionCommand = null;
-		}
-		else
-		{
-			action = line.substring(0,index);
-			actionCommand = substituteRegisters(line.substring(
-				index + 1));
-		}
-
-		if(action.equals("input"))
-		{
-			char register;
-			index = actionCommand.indexOf('@');
-			if(index != 1)
-				register = '$';
-			else
-			{
-				register = actionCommand.charAt(0);
-				actionCommand = actionCommand.substring(2);
-			}
-
-			String retVal = (String)JOptionPane.showInputDialog(view,
-				actionCommand,jEdit.getProperty("macro-input.title"),
-				JOptionPane.QUESTION_MESSAGE);
-			if(retVal == null)
-				return false;
-			else
-			{
-				Registers.setRegister(register,new
-					Registers.StringRegister(retVal));
-				return true;
-			}
-		}
-		else
-		{
-			EditAction _action = jEdit.getAction(action);
-
-			if(_action == null)
-			{
-				Object[] args = { macro, new Integer(lineNo), action };
-				GUIUtilities.error(view,"macro-error",args);
-				return false;
-			}
-
-			view.getInputHandler().executeAction(_action,view.getTextArea(),
-				actionCommand);
-
-			// wait for all I/O to complete before going on to the
-			// next action
-			VFSManager.waitForRequests();
-
-			return true;
-		}
-	}
-
-	/**
-	 * Returns the last executed macro. This can be passed to
-	 * <code>playMacro()</code>, etc.
-	 */
-	public static String getLastMacro()
-	{
-		return lastMacro;
 	}
 
 	// private members
@@ -382,10 +402,9 @@ public class Macros
 
 	private static Vector macroList;
 	private static Vector macroHierarchy;
-	private static Hashtable macrosHash;
 	private static String lastMacro;
 
-	private static boolean macroPlaying;
+	private static boolean macroRunning;
 
 	static
 	{
@@ -404,13 +423,12 @@ public class Macros
 		{
 			String fileName = macroFiles[i];
 			File file = new File(directory,fileName);
-			if(fileName.toLowerCase().endsWith(".macro"))
+			if(fileName.toLowerCase().endsWith(".bsh"))
 			{
 				String label = fileName.substring(0,fileName.length() - 6);
 				String name = path + label;
 				Macro newMacro = new Macro(name,file.getPath());
-				macrosHash.put(name,newMacro);
-				vector.addElement(name);
+				vector.addElement(newMacro);
 				macroList.addElement(name);
 			}
 			else if(file.isDirectory())
@@ -423,7 +441,21 @@ public class Macros
 		}
 	}
 
-	private static void playMacroFromBuffer(View view, String macro,
+	/**
+	 * Starts recording a macro.
+	 * @param view The view
+	 * @param name The macro name
+	 * @param buffer The buffer to record to
+	 */
+	private static void recordMacro(View view, String name, Buffer buffer)
+	{
+		lastMacro = name;
+
+		view.setRecordingStatus(true);
+		view.setMacroRecorder(new Recorder(view,buffer));
+	}
+
+	private static void runMacroFromBuffer(View view, String macro,
 		Buffer buffer)
 	{
 		Buffer _viewBuffer = view.getBuffer();
@@ -432,21 +464,7 @@ public class Macros
 		{
 			_viewBuffer.beginCompoundEdit();
 
-			Element map = buffer.getDefaultRootElement();
-			for(int i = 0; i < map.getElementCount(); i++)
-			{
-				Element lineElement = map.getElement(i);
-				if(!playMacroCommand(view,macro,i,
-					buffer.getText(
-					lineElement.getStartOffset(),
-					lineElement.getEndOffset()
-					- lineElement.getStartOffset() - 1)))
-					break;
-			}
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,Macros.class,bl);
+			//
 		}
 		finally
 		{
@@ -454,7 +472,7 @@ public class Macros
 		}
 	}
 
-	private static void playMacroFromFile(View view, String macro, String path)
+	private static void runMacroFromFile(View view, String macro, String path)
 	{
 		Buffer _viewBuffer = view.getBuffer();
 
@@ -462,79 +480,17 @@ public class Macros
 		{
 			_viewBuffer.beginCompoundEdit();
 
-			BufferedReader in = new BufferedReader(new FileReader(path));
-
-			String line;
-			int lineNo = 1;
-			while((line = in.readLine()) != null)
-			{
-				if(!playMacroCommand(view,macro,lineNo,line))
-					break;
-				lineNo++;
-			}
-
-			in.close();
 		}
-		catch(IOException io)
+		/*catch(IOException io)
 		{
 			Log.log(Log.ERROR,Macros.class,io);
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(view,"ioerror",args);
-		}
+		}*/
 		finally
 		{
 			_viewBuffer.endCompoundEdit();
 		}
-	}
-
-	private static String substituteRegisters(String actionCommand)
-	{
-		StringBuffer buf = new StringBuffer();
-		boolean backslash = false;
-		for(int i = 0; i < actionCommand.length(); i++)
-		{
-			char ch = actionCommand.charAt(i);
-			if(ch == '\\')
-			{
-				if(backslash)
-				{
-					backslash = false;
-					buf.append('\\');
-				}
-				else
-					backslash = true;
-			}
-			else if(ch == '$')
-			{
-				if(backslash || i == actionCommand.length() - 1)
-				{
-					buf.append(ch);
-					backslash = false;
-				}
-				else
-				{
-					ch = actionCommand.charAt(++i);
-					Registers.Register reg = Registers.getRegister(ch);
-					if(reg != null)
-					{
-						String str = reg.toString();
-						if(str != null)
-							buf.append(str);
-					}
-				}
-			}
-			else
-			{
-				if(backslash)
-				{
-					buf.append('\\');
-					backslash = false;
-				}
-				buf.append(ch);
-			}
-		}
-
-		return buf.toString();
 	}
 
 	static class MacrosEBComponent implements EBComponent
@@ -578,57 +534,60 @@ public class Macros
 		}
 	}
 
-	static class BufferRecorder implements InputHandler.MacroRecorder,
-		EBComponent
+	public static class Recorder implements EBComponent
 	{
 		View view;
 		Buffer buffer;
-		boolean lastWasInsert;
 
-		BufferRecorder(View view, Buffer buffer)
+		public Recorder(View view, Buffer buffer)
 		{
 			this.view = view;
 			this.buffer = buffer;
 			EditBus.addToBus(this);
 		}
 
-		public void actionPerformed(EditAction action, String actionCommand)
+		public void record(String code)
 		{
-			// Escape $ characters in action command
-			if(actionCommand != null)
+			append("\n");
+			append(code);
+		}
+
+		public void record(int repeat, String code)
+		{
+			if(repeat == 1)
+				record(code);
+			else
 			{
-				StringBuffer buf = new StringBuffer();
-				for(int i = 0; i < actionCommand.length(); i++)
-				{
-					char ch = actionCommand.charAt(i);
-					if(ch == '$')
-						buf.append("\\$");
-					else
-						buf.append(ch);
-				}
-				actionCommand = buf.toString();
+				record("for(int i = 1; i <= " + repeat + "; i++)\n"
+					+ "{\n"
+					+ code + ";\n"
+					+ "}");
+			}
+		}
+
+		public void record(int repeat, char ch)
+		{
+			String charStr;
+			switch(ch)
+			{
+			case '\t':
+				charStr = "\\t";
+				break;
+			case '\n':
+				charStr = "\\n";
+				break;
+			case '\\':
+				charStr = "\\\\";
+				break;
+			case '"':
+				charStr = "\\\"";
+				break;
+			default:
+				charStr = String.valueOf(ch);
+				break;
 			}
 
-			String name = action.getName();
-
-			// Collapse multiple insert-char's
-			if(name.equals("insert-char"))
-			{
-				if(lastWasInsert)
-				{
-					append(actionCommand);
-					return;
-				}
-				else
-					lastWasInsert = true;
-			}
-			else
-				lastWasInsert = false;
-
-			if(actionCommand == null)
-				append("\n" + name);
-			else
-				append("\n" + name + "@" + actionCommand);
+			record(repeat,"textArea.userInput(\"" + charStr + "\");");
 		}
 
 		public void handleMessage(EBMessage msg)
@@ -639,7 +598,7 @@ public class Macros
 				if(bmsg.getWhat() == BufferUpdate.CLOSED)
 				{
 					if(bmsg.getBuffer() == buffer)
-						dispose();
+						stopRecording(view);
 				}
 			}
 		}
@@ -658,7 +617,6 @@ public class Macros
 
 		private void dispose()
 		{
-			view.getInputHandler().setMacroRecorder(null);
 			view.setRecordingStatus(false);
 			EditBus.removeFromBus(this);
 		}
@@ -668,6 +626,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.43  2000/11/16 04:01:10  sp
+ * BeanShell macros started
+ *
  * Revision 1.42  2000/11/12 05:36:48  sp
  * BeanShell integration started
  *
@@ -697,14 +658,5 @@ public class Macros
  *
  * Revision 1.33  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.32  2000/07/26 07:48:44  sp
- * stuff
- *
- * Revision 1.31  2000/07/19 08:35:59  sp
- * plugin devel docs updated, minor other changes
- *
- * Revision 1.30  2000/07/14 06:00:44  sp
- * bracket matching now takes syntax info into account
  *
  */

@@ -9,6 +9,9 @@ JEDIT 2.7 VERSION HISTORY
 - The buffer switching popup can now be disabled. You might want to do this if
   you prefer using another method to switch buffers, for example the
   BufferList or BufferSelector plugins
+- The caret status has been moved to the bottom-left corner of the text area.
+  So the jEdit 2.7pre2 GUI looks very similar to the old jEdit 2.4 GUI now.
+  What goes around, comes around ;-)
 
 + Neutral
 
@@ -20,6 +23,8 @@ JEDIT 2.7 VERSION HISTORY
 
 - The 'Open File' dialog box erronously displayed an 'are you sure you want to
   overwrite...' warning
+- The 'Edit System Macros' and 'Edit User Macros' commands threw exceptions
+  if the filesystem browser wasn't open
 
 * Version 2.7pre1
 

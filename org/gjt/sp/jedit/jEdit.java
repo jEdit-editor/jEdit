@@ -2133,12 +2133,8 @@ public class jEdit
 		addAction("input");
 		addAction("next-line");
 		addAction("next-page");
-		addAction("play-last-macro");
-		addAction("play-temp-macro");
 		addAction("prev-line");
 		addAction("prev-page");
-		addAction("record-macro");
-		addAction("record-temp-macro");
 		addAction("select-block");
 		addAction("select-end");
 		addAction("select-home");
@@ -2146,7 +2142,6 @@ public class jEdit
 		addAction("select-next-page");
 		addAction("select-prev-line");
 		addAction("select-prev-page");
-		addAction("stop-recording");
 
 		// Preload these actions so that needsActionCommand()
 		// will return the correct value (for command line autocompletion)
@@ -2478,6 +2473,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.293  2000/11/16 04:01:11  sp
+ * BeanShell macros started
+ *
  * Revision 1.292  2000/11/13 11:19:26  sp
  * Search bar reintroduced, more BeanShell stuff
  *

@@ -50,7 +50,7 @@ public class LogViewer extends JFrame
 			content.add(BorderLayout.NORTH,label);
 		}
 
-		JTextArea textArea = new JTextArea(24,80);
+		JTextArea textArea = new JTextArea(24,40);
 		textArea.setDocument(Log.getLogDocument());
 		//textArea.setEditable(false);
 

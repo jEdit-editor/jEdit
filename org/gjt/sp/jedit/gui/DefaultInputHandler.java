@@ -24,8 +24,7 @@ import java.awt.event.*;
 import java.awt.Toolkit;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import org.gjt.sp.jedit.EditAction;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -301,29 +300,14 @@ public class DefaultInputHandler extends InputHandler
 	// private members
 	private Hashtable bindings;
 	private Hashtable currentBindings;
-
-	private void userInput(char ch)
-	{
-		if(readNextChar != null)
-			invokeReadNextChar(ch);
-		else
-		{
-			int _repeatCount = getRepeatCount();
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < _repeatCount; i++)
-			{
-				buf.append(ch);
-			}
-			view.getTextArea().userInput(buf.toString());
-		}
-
-		setRepeatEnabled(false);
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/11/16 04:01:11  sp
+ * BeanShell macros started
+ *
  * Revision 1.7  2000/11/13 11:19:27  sp
  * Search bar reintroduced, more BeanShell stuff
  *

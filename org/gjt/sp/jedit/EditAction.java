@@ -180,6 +180,15 @@ public abstract class EditAction implements ActionListener
 		return false;
 	}
 
+	/**
+	 * Returns the BeanShell code that will replay this action.
+	 * @since jEdit 2.7pre2
+	 */
+	public String getCode()
+	{
+		return "// fixme";
+	}
+
 	// private members
 	private String name;
 
@@ -306,6 +315,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  2000/11/16 04:01:10  sp
+ * BeanShell macros started
+ *
  * Revision 1.29  2000/11/13 11:19:26  sp
  * Search bar reintroduced, more BeanShell stuff
  *

@@ -147,6 +147,23 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Returns the macro recorder.
+	 */
+	public Macros.Recorder getMacroRecorder()
+	{
+		return recorder;
+	}
+
+	/**
+	 * Sets the macro recorder.
+	 * @param recorder The macro recorder
+	 */
+	public void setMacroRecorder(Macros.Recorder recorder)
+	{
+		this.recorder = recorder;
+	}
+
+	/**
 	 * Splits the view horizontally.
 	 * @since jEdit 2.7pre2
 	 */
@@ -711,6 +728,7 @@ public class View extends JFrame implements EBComponent
 		searchBar = null;
 		splitPane = null;
 		inputHandler = null;
+		recorder = null;
 
 		setContentPane(new JPanel());
 	}
@@ -821,6 +839,7 @@ public class View extends JFrame implements EBComponent
 
 	private KeyListener keyEventInterceptor;
 	private InputHandler inputHandler;
+	private Macros.Recorder recorder;
 
 	private int waitCount;
 
@@ -982,10 +1001,16 @@ public class View extends JFrame implements EBComponent
 		for(int i = start; i < vector.size(); i++)
 		{
 			Object obj = vector.elementAt(i);
-			if(obj instanceof String)
+			if(obj instanceof Macros.Macro)
 			{
-				menu.add(GUIUtilities.loadMenuItem(
-					"play-macro@" + obj));
+				Macros.Macro macro = (Macros.Macro)obj;
+				String label = macro.name;
+				int index = label.lastIndexOf('/');
+				label = label.substring(index + 1)
+					.replace('_',' ');
+
+				menu.add(new EnhancedMenuItem(label,
+					macro.action,null));
 			}
 			else if(obj instanceof Vector)
 			{
@@ -1211,6 +1236,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.209  2000/11/16 04:01:11  sp
+ * BeanShell macros started
+ *
  * Revision 1.208  2000/11/13 11:19:26  sp
  * Search bar reintroduced, more BeanShell stuff
  *

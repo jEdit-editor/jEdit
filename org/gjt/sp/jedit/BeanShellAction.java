@@ -76,6 +76,11 @@ public class BeanShellAction extends EditAction
 		return noRecord;
 	}
 
+	public String getCode()
+	{
+		return actionPerformed.trim();
+	}
+
 	// private members
 	private static int counter;
 

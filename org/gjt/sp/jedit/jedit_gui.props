@@ -416,8 +416,8 @@ macros=record-macro \
        - \
        input \
        - \
-       play-temp-macro \
-       play-last-macro \
+       run-temp-macro \
+       run-last-macro \
        - \
        browse-system-macros \
        browse-user-macros \
@@ -429,8 +429,8 @@ record-macro.label=$Record Macro...
 record-temp-macro.label=Record $to Temporary Buffer
 stop-recording.label=$Stop Recording
 input.label=Prompt for $Input...
-play-temp-macro.label=$Play Temporary Macro
-play-last-macro.label=P$lay Last Macro
+run-temp-macro.label=Run Tem$porary Macro
+run-last-macro.label=Run $Last Macro
 browse-system-macros.label=Browse S$ystem Macros
 browse-user-macros.label=Browse $User Macros
 rescan-macros.label=Resca$n Macros
@@ -461,15 +461,15 @@ help-copying.label=GNU General Public License
 ### MACRO STRINGS
 ###
 
-macro.temp.header=# This is a temporary macro. First, check over the\n\
-                  # commands to make sure this is what you intended.\n\
-                  # Then, to execute this macro, switch to the buffer\n\
-                  # where you would like to execute it and press C+m C+p.
+macro.temp.header=// This is a temporary macro. First, check over the\n\
+                  // commands to make sure this is what you intended.\n\
+                  // Then, to execute this macro, switch to the buffer\n\
+                  // where you would like to execute it and press C+m C+p.
 
-macro.header=# This is a recorded macro. First, check over the\n\
-             # commands to make sure this is what you intended. Then,\n\
-             # save this buffer, and the macro should appear in the\n\
-             # Macros menu.
+macro.header=// This is a recorded macro. First, check over the\n\
+             // commands to make sure this is what you intended. Then,\n\
+             // save this buffer, and the macro should appear in the\n\
+             // Macros menu.
 
 ###
 ### COMMANDS THAT DON'T APPEAR IN MENUS

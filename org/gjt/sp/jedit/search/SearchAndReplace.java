@@ -230,10 +230,9 @@ public class SearchAndReplace
 	/**
 	 * Finds the next occurance of the search string.
 	 * @param view The view
-	 * @param comp The component to display dialog boxes for
 	 * @return True if the operation was successful, false otherwise
 	 */
-	public static boolean find(View view, Component comp)
+	public static boolean find(View view)
 	{
 		boolean repeat = false;
 		Buffer buffer = fileset.getNextBuffer(view,null);
@@ -245,7 +244,7 @@ public class SearchAndReplace
 			return false;
 		}
 
-		record(view,"find-next");
+		record(view,"SearchAndReplace.find(view)");
 
 		view.showWaitCursor();
 
@@ -279,10 +278,10 @@ loop:			for(;;)
 				}
 
 				/* Don't do this when playing a macro */
-				if(Macros.isMacroPlaying())
+				if(Macros.isMacroRunning())
 					break loop;
 
-				int result = JOptionPane.showConfirmDialog(comp,
+				int result = JOptionPane.showConfirmDialog(view,
 					jEdit.getProperty("keepsearching.message"),
 					jEdit.getProperty("keepsearching.title"),
 					JOptionPane.YES_NO_OPTION,
@@ -303,7 +302,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(comp,"searcherror",args);
+			GUIUtilities.error(view,"searcherror",args);
 		}
 		finally
 		{
@@ -346,10 +345,9 @@ loop:			for(;;)
 	/**
 	 * Replaces the current selection with the replacement string.
 	 * @param view The view
-	 * @param comp The component
 	 * @return True if the operation was successful, false otherwise
 	 */
-	public static boolean replace(View view, Component comp)
+	public static boolean replace(View view)
 	{
 		JEditTextArea textArea = view.getTextArea();
 
@@ -369,7 +367,7 @@ loop:			for(;;)
 			return false;
 		}
 
-		record(view,"replace-in-selection");
+		record(view,"SearchAndReplace.replace(view)");
 
 		try
 		{
@@ -396,7 +394,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(comp,"searcherror",args);
+			GUIUtilities.error(view,"searcherror",args);
 		}
 
 		return false;
@@ -405,14 +403,14 @@ loop:			for(;;)
 	/**
 	 * Replaces all occurances of the search string with the replacement
 	 * string.
-	 * @param comp The component
+	 * @param view The view
 	 */
-	public static boolean replaceAll(View view, Component comp)
+	public static boolean replaceAll(View view)
 	{
 		int fileCount = 0;
 		int occurCount = 0;
 
-		record(view,"replace-all");
+		record(view,"SearchAndReplace.replaceAll(view)");
 
 		view.showWaitCursor();
 
@@ -451,7 +449,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(comp,"searcherror",args);
+			GUIUtilities.error(view,"searcherror",args);
 		}
 		finally
 		{
@@ -459,7 +457,7 @@ loop:			for(;;)
 		}
 
 		/* Don't do this when playing a macro, cos it's annoying */
-		if(!Macros.isMacroPlaying())
+		if(!Macros.isMacroRunning())
 		{
 			if(fileCount == 0)
 				view.getToolkit().beep();
@@ -556,13 +554,11 @@ loop:		for(;;)
 
 	private static void record(View view, String action)
 	{
-		InputHandler.MacroRecorder recorder = view.getInputHandler()
-			.getMacroRecorder();
+		Macros.Recorder recorder = view.getMacroRecorder();
 
 		if(recorder != null)
 		{
-			recorder.actionPerformed(jEdit.getAction("set-search-string"),
-				search);
+			/* recorder.record("SearchAndReplace.setSearchString(");
 			recorder.actionPerformed(jEdit.getAction("set-replace-string"),
 				replace);
 
@@ -583,7 +579,7 @@ loop:		for(;;)
 			recorder.actionPerformed(jEdit.getAction("set-search-parameters"),
 				buf.toString());
 
-			recorder.actionPerformed(jEdit.getAction(action),null);
+			recorder.actionPerformed(jEdit.getAction(action),null); */
 		}
 	}
 }
@@ -591,6 +587,9 @@ loop:		for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.40  2000/11/16 04:01:12  sp
+ * BeanShell macros started
+ *
  * Revision 1.39  2000/11/07 10:08:32  sp
  * Options dialog improvements, documentation changes, bug fixes
  *
@@ -621,14 +620,5 @@ loop:		for(;;)
  * Revision 1.30  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature
- *
- * Revision 1.29  2000/04/25 03:32:40  sp
- * Even more VFS hacking
- *
- * Revision 1.28  2000/04/15 04:14:47  sp
- * XML files updated, jEdit.get/setBooleanProperty() method added
- *
- * Revision 1.27  2000/04/06 02:22:12  sp
- * Incremental search, documentation updates
  *
  */

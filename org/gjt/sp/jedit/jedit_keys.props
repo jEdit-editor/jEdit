@@ -87,9 +87,9 @@ prev-bracket.shortcut=C+e [
 next-bracket.shortcut=C+e ]
 
 # C+m
-play-last-macro.shortcut=C+m C+l
+run-last-macro.shortcut=C+m C+l
 record-temp-macro.shortcut=C+m C+m
-play-temp-macro.shortcut=C+m C+p
+run-temp-macro.shortcut=C+m C+p
 record-macro.shortcut=C+m C+r
 stop-recording.shortcut=C+m C+s
 

@@ -235,7 +235,7 @@
 
 <ACTION NAME="find-next" NO_RECORD="TRUE">
 	<ACTION_PERFORMED>
-		SearchAndReplace.find(view,view);
+		SearchAndReplace.find(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -503,6 +503,18 @@
 	</ACTION_PERFORMED>
 </ACTION>
 
+<ACTION NAME="record-macro" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		Macros.recordMacro(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="record-temp-macro" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		Macros.recordTemporaryMacro(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
 <ACTION NAME="recent-buffer">
 	<ACTION_PERFORMED>
 		view.getEditPane().recentBuffer();
@@ -541,26 +553,38 @@
 
 <ACTION NAME="replace-all" AUTO_RECORD="false">
 	<ACTION_PERFORMED>
-		SearchAndReplace.replaceAll(view,view);
+		SearchAndReplace.replaceAll(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="replace-and-find-next" AUTO_RECORD="false">
 	<ACTION_PERFORMED>
-		if(SearchAndReplace.replace(view,view))
-			SearchAndReplace.find(view,view);
+		if(SearchAndReplace.replace(view))
+			SearchAndReplace.find(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="replace-in-selection" AUTO_RECORD="false">
 	<ACTION_PERFORMED>
-		SearchAndReplace.replace(view,view);
+		SearchAndReplace.replace(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
 <ACTION NAME="rescan-macros">
 	<ACTION_PERFORMED>
 		Macros.loadMacros();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="run-last-macro" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		Macros.runLastMacro(view);
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="run-temp-macro" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		Macros.runTemporaryMacro(view);
 	</ACTION_PERFORMED>
 </ACTION>
 
@@ -783,6 +807,12 @@
 <ACTION NAME="split-vertical">
 	<ACTION_PERFORMED>
 		view.splitVertically();
+	</ACTION_PERFORMED>
+</ACTION>
+
+<ACTION NAME="stop-recording" NO_RECORD="TRUE">
+	<ACTION_PERFORMED>
+		Macros.stopRecording(view);
 	</ACTION_PERFORMED>
 </ACTION>
 

@@ -47,17 +47,9 @@ public class MenuItemModel
 		}
 		action = jEdit.getAction(actionName);
 
-		if(actionName.equals("play-macro"))
-		{
-			index = arg.lastIndexOf('/');
-			label = arg.substring(index + 1).replace('_',' ');
-		}
-		else
-		{
-			label = jEdit.getProperty(name.concat(".label"));
-			if(label == null)
-				label = name;
-		}
+		label = jEdit.getProperty(name.concat(".label"));
+		if(label == null)
+			label = name;
 
 		index = label.indexOf('$');
 		if(index != -1 && label.length() - index > 1)
@@ -144,6 +136,9 @@ public class MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/11/16 04:01:12  sp
+ * BeanShell macros started
+ *
  * Revision 1.15  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *
