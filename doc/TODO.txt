@@ -2,10 +2,6 @@ JEDIT TO DO
 
 - Scrolling is too slow on certain JDKs
 
-- Console: doesn't appear sometimes?
-
-- Finish plugin development section of user's guide
-
 - Macro recorder
   - Write the following actions:
     - set-search-string

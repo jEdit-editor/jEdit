@@ -27,6 +27,7 @@ list can be found in the file named CHANGES.txt.
   creation.
 
 - Bundled plugins. The following plugins are now included with jEdit:
+  - BufferTabs by Jason Ginchereau
   - Console by Slava Pestov
   - HTML by Romain Guy and Slava Pestov
   - JBrowse by George Latkiewicz

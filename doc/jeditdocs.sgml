@@ -131,6 +131,9 @@
     Bundled plugins. The following plugins are now included with jEdit:
    </para><itemizedlist>
    <listitem><para>
+   BufferTabs by Jason Ginchereau
+   </para></listitem>
+   <listitem><para>
    Console by Slava Pestov
    </para></listitem>
    <listitem><para>
@@ -164,12 +167,8 @@
  </sect1>
  <sect1 id=features><title>jEdit Features</>
   <para>
-   jEdit itself aims to provide most of the features needed to edit
-   text files. That's it. No IDE features (project manager, etc), no file
-   management, no built in e-mail reader (*cough* *cough* emacs). Those
-   and other non-essential features can be coded as plugins, which the
-   user installs when necessary. Having said that, jEdit still boasts an
-   impressive set of features, the most important being:
+   The current version of jEdit has many features, the most important being
+   the following:
   </para>
   <itemizedlist>
    <listitem><para>
@@ -271,10 +270,10 @@
    <keycombo><keycap>Modifier</><keycap>Key</></keycombo>, where
    <keycap>Modifier</> is the modifier key that must be pressed in
    addition to <keycap>Key</> to invoke that command. When multiple
-   keystrokes are present in a binding,they will be listed in order,
-   for example the shortcut for <guimenuitem>Open URL</> is
-   <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>O</></keycombo>.
+   keystrokes are present in a binding, they will be listed in order,
+   for example the shortcut for <guimenuitem>Delete Line</> is
+   <keycombo><keycap>Control</><keycap>D</></keycombo>
+   <keycombo><keycap>Control</><keycap>D</></keycombo>.
   </para>
  </sect1>
 </chapter>
@@ -357,8 +356,10 @@
    </figure>
    <tip>
     <para>
-     The tool bar can be disabled in the
-     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box; see
+     If you don't use the tool bar, disable it in the
+     <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box to save
+     memory and startup time (the images won't be loaded if it is disabled).
+     See
      <xref linkend=global-opts>.
     </para>
    </tip>
@@ -391,10 +392,9 @@
    </para>
    <para>
     The lines painted with red tildes (<quote>~</quote>)
-    are <firstterm>invalid lines</firstterm> - they are visible,
-    but don't actually exist in the document. In the case of the
-    example document shown in the screen shot, all visible lines after the
-    first two are invalid because the document only has two lines.
+    are <firstterm>invalid lines</firstterm> - they are visible for one
+    reason or another,
+    but don't actually exist in the documentscreen.
    </para>
    <para>
     Clicking the text area with the right mouse button will
@@ -420,7 +420,7 @@
    <indexterm><primary>status bar</></indexterm>
    <indexterm><primary>line number display</></indexterm>
    <para>
-    The status area is at bottom left of the editor window. It
+    The status area is at the bottom left of the editor window. It
     displays information in the following format:
    </para>
    <screen>col 42 line 7/10 70%</screen>
@@ -471,7 +471,7 @@
   </para>
   <para>
    Files that you do not have write access to are automatically opened
-   read only. Files can also be opened read only from the command line
+   read only. Files can also be forced to open read only from the command line
    by specifying the <userinput>-readonly</> option.
   </para>
   <para>
@@ -496,7 +496,6 @@
    </para>
    <screen><prompt>$</> <userinput>jedit paper.tex#+247</></screen>
    <para>
-    Only one line number specification is allowed per command line.
     It is also possible to move the caret to a specific marker.
     For example, to open <filename>Kernel.java</> and go to
     the marker named <filename>getCommandStack</>, you would invoke:
@@ -515,7 +514,7 @@
     <para>
      In jEdit 2.0, to go to a specific line number, you would invoke:
     </para>
-    <screen><prompt>%</> <userinput>jedit paper.tex -+247</></screen>
+    <screen><prompt>$</> <userinput>jedit paper.tex -+247</></screen>
     <para>
      Only one such line number specification was allowed
      per command line; you couldn't open two files with the caret on
@@ -634,7 +633,8 @@
    </para>
    <tip>
     <para>
-     The autosave interval and various backup settings can be changed in the
+     The autosave interval and various backup-related
+     settings can be changed in the
      <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
      see <xref linkend=global-opts>.
     </para>
@@ -702,7 +702,7 @@
     The changes made since the last save will <emphasis>only</>
     be saved to the new file specified in the save dialog box;
     hence if you make some changes and <quote>Save As</>, the old
-    file will not contain the changes, and the new file will.
+    file will not contain the changes, but the new one will.
     This can be used to create an alternative version of the file and so on.
    </para>
    <para>
@@ -968,8 +968,9 @@
   <para>
    <indexterm><primary>selecting</><secondary>ranges of lines</>
    </indexterm>
+   <indexterm><primary>Edit menu</></indexterm>
    <indexterm><primary>Select Line Range command</></indexterm>
-   <guimenu>Search</>&gt;<guimenuitem>Select Line Range</> (keyboard
+   <guimenu>Edit</>&gt;<guimenuitem>Select Line Range</> (keyboard
    equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>L</></keycombo>) will display
    a dialog box where the starting line and end line can be entered.
@@ -998,8 +999,7 @@
    <indexterm><primary>Select None command</></indexterm>
    <indexterm><primary>Edit menu</></indexterm>
    <guimenu>Edit</>&gt;<guimenuitem>Select None</>
-   (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</>
-   <keycap>Control</><keycap>D</> </keycombo>)
+   (keyboard equivalent: <keycap>Escape</>)
    will deselect the currently selected region, if any.
   </para>
   <figure><title>A sample selection</>
@@ -1297,221 +1297,6 @@
    it from the buffer.
   </para>
  </sect1>
- <sect1 id=modes><title>Edit Modes</>
-  <indexterm><primary>syntax highlighting</></indexterm>
-  <indexterm><primary>auto indent</></indexterm>
-  <indexterm><primary>edit modes</></indexterm>
-  <para>
-   Because it is impossible to provide optimal editing for all types of
-   files at once, jEdit provides various <firstterm>edit modes</>. An edit mode
-   is an editor configuration suitable for editing a specific
-   type of file. Edit modes can specify syntax highlighting, auto indent,
-   and various other settings for editing a file type.
-  </para>
-  <sect2><title>Automatic Mode Selection</>
-   <para>
-    <indexterm><primary>file name extensions</></indexterm>
-    When a file is opened, jEdit uses various techniques to guess the
-    most appropriate edit mode. First of all, it checks the file's
-    <quote>extension</> (the part after the last period, if there is
-    one). For example, files whose names end with
-    <quote>.c</> are edited in C mode. Then, it checks the entire
-    <emphasis>file name</> against a list of known file names. For
-    example, a file named <quote>CONFIG.SYS</> will be
-    edited in DOS INI mode. Finally, the first line of the file is
-    checked. For example, if the first line of
-    a file is <quote>#!/bin/sh</>, (signifying a Unix shell script)
-    the file will be edited in Shell Script mode.
-   </para>
-  </sect2>
-  <sect2><title>Manually Setting the Edit Mode</>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>mode</></indexterm>
-   <para>
-    If none of those techniques are appropriate, the edit mode can
-    be specified manually. To set the current buffer's edit mode
-    on a one-time basis, select the edit mode in the
-    <guimenu>File</>&gt;<guimenuitem>Buffer Options</> dialog box;
-    see <xref linkend=buffer-opts>.
-    To have a buffer open with a specific edit mode every time,
-    set the <quote>mode</> buffer-local property to the
-    <firstterm>internal</> name of the desired edit mode by placing
-    the following text in one of the first 10 lines of the buffer:
-   </para>
-   <screen>:mode=<replaceable>edit mode</>:</screen>
-   <para>
-    The internal names of edit modes are listed in the following
-    table.
-   </para>
-  </sect2>
-  <sect2><title>Available Edit Modes</>
-   <table><title>Table of edit modes</>
-    <tgroup cols=3>
-     <colspec colnum=1 colwidth=1.5in>
-     <colspec colnum=2 colwidth=1.5in>
-     <thead>
-      <row>
-       <entry>Mode name</>
-       <entry>Internal name</>
-       <entry>Comments</>
-      </row>
-     </thead>
-     <tbody>
-      <row>
-       <entry>Text</>
-       <entry>text</>
-       <entry>Default edit mode. Does nothing special.</>
-      </row>
-      <row>
-       <entry>Batch File</>
-       <entry>bat</>
-       <entry>MS-DOS Batch File edit mode. Automatically selected for
-       files with extension <quote>.bat</>. Performs batch file
-       syntax highlighting.</entry>
-      </row>
-      <row>
-       <entry>C</>
-       <entry>c</>
-       <entry>C source code edit mode. Automatically selected for
-       files with extension <quote>.c</> or <quote>.h</>. Performs
-       C syntax highlighting and enables automatic curly bracket
-       indent. Also the underscore (<quote>_</>) is not treated as
-       a word separator by the <guimenuitem>Expand Abbreviation</>
-       command and when double-clicking to select words.</entry>
-      </row>
-      <row>
-       <entry>C++</>
-       <entry>cc</>
-       <entry>C++ source code edit mode. Automatically selected for
-       files with a variety of C++ extensions. Performs
-       C++ syntax highlighting and enables automatic curly bracket
-       indent. Also the underscore (<quote>_</>) is not treated as
-       a word separator by the <guimenuitem>Expand Abbreviation</>
-       command and when double-clicking to select words.</entry>
-      </row>
-      <row>
-       <entry>HTML</>
-       <entry>html</>
-       <entry>HTML source code edit mode. Automatically selected for
-       files with extension <quote>.html</>, <quote>.shtml</> or <quote>.htm</>.
-       Performs HTML syntax highlighting (and JavaScript highlighting inside
-       <sgmltag>script</> tags).</entry>
-      </row>
-      <row>
-       <entry>IDL</>
-       <entry>idl</>
-       <entry>CORBA IDL (Interface Definition Language) edit mode.
-       Automatically selected for
-       files with extension <quote>.idl</>. Performs
-       IDL syntax highlighting and enables automatic curly bracket
-       indent. Also the underscore (<quote>_</>) is not treated as
-       a word separator by the <guimenuitem>Expand Abbreviation</>
-       command and when double-clicking to select words.</entry>
-      </row>
-      <row>
-       <entry>Java</>
-       <entry>java</>
-       <entry>Java source code edit mode. Automatically selected for
-       files with extension <quote>.java</>. Performs
-       Java syntax highlighting and enables automatic curly bracket
-       indent. Also the underscore (<quote>_</>) is not treated as
-       a word separator by the <guimenuitem>Expand Abbreviation</>
-       command and when double-clicking to select words.</entry>
-      </row>
-      <row>
-       <entry>JavaScript</>
-       <entry>javascript</>
-       <entry>JavaScript source code edit mode. Automatically selected for
-       files with extension <quote>.js</>. Performs
-       JavaScript syntax highlighting and enables automatic curly bracket
-       indent. Also the underscore (<quote>_</>) is not treated as
-       a word separator by the <guimenuitem>Expand Abbreviation</>
-       command and when double-clicking to select words.</entry>
-      </row>
-      <row>
-       <entry>Makefile</>
-       <entry>make</>
-       <entry>Makefile edit mode. Automatically selected for files named
-       <quote>Makefile</> or <quote>GNUmakefile</>. Performs Makefile
-       syntax highlighting.
-       </entry>
-      </row>
-      <row>
-       <entry>Patch/DIFF</>
-       <entry>patch</>
-       <entry>Edit mode for Unix diffs and patches. Automatically selected
-       for files with extension <quote>.diff</> or <quote>.patch</>.
-       Performs patch syntax highlighting (lines are highlighted differently
-       if they start with <quote>+</>, <quote>-</>, or one of the other
-       patch commands).
-       </entry>
-      </row>
-      <row>
-       <entry>Perl</>
-       <entry>perl</>
-       <entry>Perl edit mode. Automatically selected for files with
-       extension <quote>.pl</> or <quote>.pm</>. Performs Perl syntax
-       highlighting (but it's not perfect yet; namely, multi line matches
-       are not yet properly highlighted).
-       </entry>
-      </row>
-      <row>
-       <entry>Properties/INI</>
-       <entry>props</>
-       <entry>Java property file and MS-DOS INI edit mode. Automatically
-       selected for files with extension <quote>.props</> or <quote>.ini</>,
-       and files named <quote>config.sys</> or <quote>properties</>.
-       Performs property syntax highlighting (name/value pairs are
-       highlighted).
-       </entry>
-      </row>
-      <row>
-       <entry>Python</>
-       <entry>python</>
-       <entry>Python script edit mode. Automatically
-       selected for files with extension <quote>.py</> or whose first
-       line is <quote>#!/usr/bin/python</> or <quote>#!/usr/local/bin/python</>.
-       Performs Python syntax highlighting.
-       </entry>
-      </row>
-      <row>
-       <entry>Shell Script</>
-       <entry>sh</>
-       <entry>Unix shell script edit mode. Automatically selected for files
-       with extension <quote>.sh</>, and files whose first line is
-       <quote>#!</> followed by one of the various Unix shell names.
-       Performs shell syntax highlighting.
-       </entry>
-      </row>
-      <row>
-       <entry>TeX</>
-       <entry>tex</>
-       <entry>TeX edit mode. Automatically selected for files with
-       extension <quote>.tex</>. Performs TeX syntax highlighting.
-       </entry>
-      </row>
-      <row>
-       <entry>Transact-SQL</>
-       <entry>tsql</>
-       <entry>Transact-SQL edit mode. Automatically selected for files with
-       extension <quote>.tsql</> or <quote>.sql</>. Performs
-       Transact-SQL syntax highlighting.
-       </entry>
-      </row>
-      <row>
-       <entry>XML/SGML</>
-       <entry>xml</>
-       <entry>XML and SGML source code edit mode. Automatically selected for
-       files with extension <quote>.xml</>, <quote>.sgml</> or <quote>.sgm</>.
-       Performs XML/SGML syntax highlighting (identical to HTML
-       highlighting except that <sgmltag>script</> tags are not handled
-       specially).</entry>
-      </row>
-     </tbody>
-    </tgroup>
-   </table>
-  </sect2>
- </sect1>
  <sect1 id=repeats><title>Repeating Commands</>
   <indexterm><primary>Edit menu</></indexterm>
   <indexterm><primary>Go to Line command</></indexterm>
@@ -1767,7 +1552,7 @@
   </para>
   <sect2 id=macro-files><title>Macro Files</>
    <para>
-    Each macro is stored as a separate file in the <filename>.jedit/macros</>
+    Each macro is stored as a file in the <filename>.jedit/macros</>
     subdirectory of the user's home directory. Macro files have the
     extension <quote>.macro</> and use a very simple syntax, with
     one command per line. Lines starting with a hash (<quote>#</>) are
@@ -1782,8 +1567,8 @@
     <guimenu>Macros</> menu is automatically
     refreshed when you update or create a macro file from within jEdit.
     Because macros are stored as ordinary files, they can be renamed,
-    deleted and so on with your operating system's file manager. If you do
-    change a macro from outside jEdit, the
+    deleted and so on with your operating system's file manager. If you
+    make changes to the macros from outside of jEdit, the
     <guimenu>Macros</>&gt;<guimenuitem>Rescan Macros</> command should be used
     to update the macros menu with the changes.
    </para>
@@ -1999,6 +1784,221 @@
   bracket matching, various indentation commands, auto indent,
   commands for commenting source, and syntax highlighting.
  </para>
+ <sect1 id=modes><title>Edit Modes</>
+  <indexterm><primary>syntax highlighting</></indexterm>
+  <indexterm><primary>auto indent</></indexterm>
+  <indexterm><primary>edit modes</></indexterm>
+  <para>
+   Because it is impossible to provide optimal editing for all types of
+   files at once, jEdit provides various <firstterm>edit modes</>. An edit mode
+   is an editor configuration suitable for editing a specific
+   type of file. Edit modes can specify syntax highlighting, auto indent,
+   and various other settings for editing a file type.
+  </para>
+  <sect2><title>Automatic Mode Selection</>
+   <para>
+    <indexterm><primary>file name extensions</></indexterm>
+    When a file is opened, jEdit uses various techniques to guess the
+    most appropriate edit mode. First of all, it checks the file's
+    <quote>extension</> (the part after the last period, if there is
+    one). For example, files whose names end with
+    <quote>.c</> are edited in C mode. Then, it checks the entire
+    <emphasis>file name</> against a list of known file names. For
+    example, a file named <quote>CONFIG.SYS</> will be
+    edited in DOS INI mode. Finally, the first line of the file is
+    checked. For example, if the first line of
+    a file is <quote>#!/bin/sh</>, (signifying a Unix shell script)
+    the file will be edited in Shell Script mode.
+   </para>
+  </sect2>
+  <sect2><title>Manually Setting the Edit Mode</>
+   <indexterm><primary>buffer-local properties</>
+   <secondary>mode</></indexterm>
+   <para>
+    If none of those techniques are appropriate, the edit mode can
+    be specified manually. To set the current buffer's edit mode
+    on a one-time basis, select the edit mode in the
+    <guimenu>File</>&gt;<guimenuitem>Buffer Options</> dialog box;
+    see <xref linkend=buffer-opts>.
+    To have a buffer open with a specific edit mode every time,
+    set the <quote>mode</> buffer-local property to the
+    <firstterm>internal</> name of the desired edit mode by placing
+    the following text in one of the first 10 lines of the buffer:
+   </para>
+   <screen>:mode=<replaceable>edit mode</>:</screen>
+   <para>
+    The internal names of edit modes are listed in the following
+    table.
+   </para>
+  </sect2>
+  <sect2><title>Available Edit Modes</>
+   <table><title>Table of edit modes</>
+    <tgroup cols=3>
+     <colspec colnum=1 colwidth=1.5in>
+     <colspec colnum=2 colwidth=1.5in>
+     <thead>
+      <row>
+       <entry>Mode name</>
+       <entry>Internal name</>
+       <entry>Comments</>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>Text</>
+       <entry>text</>
+       <entry>Default edit mode. Does nothing special.</>
+      </row>
+      <row>
+       <entry>Batch File</>
+       <entry>bat</>
+       <entry>MS-DOS Batch File edit mode. Automatically selected for
+       files with extension <quote>.bat</>. Performs batch file
+       syntax highlighting.</entry>
+      </row>
+      <row>
+       <entry>C</>
+       <entry>c</>
+       <entry>C source code edit mode. Automatically selected for
+       files with extension <quote>.c</> or <quote>.h</>. Performs
+       C syntax highlighting and enables automatic curly bracket
+       indent. Also the underscore (<quote>_</>) is not treated as
+       a word separator by the <guimenuitem>Expand Abbreviation</>
+       command and when double-clicking to select words.</entry>
+      </row>
+      <row>
+       <entry>C++</>
+       <entry>cc</>
+       <entry>C++ source code edit mode. Automatically selected for
+       files with a variety of C++ extensions. Performs
+       C++ syntax highlighting and enables automatic curly bracket
+       indent. Also the underscore (<quote>_</>) is not treated as
+       a word separator by the <guimenuitem>Expand Abbreviation</>
+       command and when double-clicking to select words.</entry>
+      </row>
+      <row>
+       <entry>HTML</>
+       <entry>html</>
+       <entry>HTML source code edit mode. Automatically selected for
+       files with extension <quote>.html</>, <quote>.shtml</> or <quote>.htm</>.
+       Performs HTML syntax highlighting (and JavaScript highlighting inside
+       <sgmltag>script</> tags).</entry>
+      </row>
+      <row>
+       <entry>IDL</>
+       <entry>idl</>
+       <entry>CORBA IDL (Interface Definition Language) edit mode.
+       Automatically selected for
+       files with extension <quote>.idl</>. Performs
+       IDL syntax highlighting and enables automatic curly bracket
+       indent. Also the underscore (<quote>_</>) is not treated as
+       a word separator by the <guimenuitem>Expand Abbreviation</>
+       command and when double-clicking to select words.</entry>
+      </row>
+      <row>
+       <entry>Java</>
+       <entry>java</>
+       <entry>Java source code edit mode. Automatically selected for
+       files with extension <quote>.java</>. Performs
+       Java syntax highlighting and enables automatic curly bracket
+       indent. Also the underscore (<quote>_</>) is not treated as
+       a word separator by the <guimenuitem>Expand Abbreviation</>
+       command and when double-clicking to select words.</entry>
+      </row>
+      <row>
+       <entry>JavaScript</>
+       <entry>javascript</>
+       <entry>JavaScript source code edit mode. Automatically selected for
+       files with extension <quote>.js</>. Performs
+       JavaScript syntax highlighting and enables automatic curly bracket
+       indent. Also the underscore (<quote>_</>) is not treated as
+       a word separator by the <guimenuitem>Expand Abbreviation</>
+       command and when double-clicking to select words.</entry>
+      </row>
+      <row>
+       <entry>Makefile</>
+       <entry>make</>
+       <entry>Makefile edit mode. Automatically selected for files named
+       <quote>Makefile</> or <quote>GNUmakefile</>. Performs Makefile
+       syntax highlighting.
+       </entry>
+      </row>
+      <row>
+       <entry>Patch/DIFF</>
+       <entry>patch</>
+       <entry>Edit mode for Unix diffs and patches. Automatically selected
+       for files with extension <quote>.diff</> or <quote>.patch</>.
+       Performs patch syntax highlighting (lines are highlighted differently
+       if they start with <quote>+</>, <quote>-</>, or one of the other
+       patch commands).
+       </entry>
+      </row>
+      <row>
+       <entry>Perl</>
+       <entry>perl</>
+       <entry>Perl edit mode. Automatically selected for files with
+       extension <quote>.pl</> or <quote>.pm</>. Performs Perl syntax
+       highlighting (but it's not perfect yet; namely, multi line matches
+       are not yet properly highlighted).
+       </entry>
+      </row>
+      <row>
+       <entry>Properties/INI</>
+       <entry>props</>
+       <entry>Java property file and MS-DOS INI edit mode. Automatically
+       selected for files with extension <quote>.props</> or <quote>.ini</>,
+       and files named <quote>config.sys</> or <quote>properties</>.
+       Performs property syntax highlighting (name/value pairs are
+       highlighted).
+       </entry>
+      </row>
+      <row>
+       <entry>Python</>
+       <entry>python</>
+       <entry>Python script edit mode. Automatically
+       selected for files with extension <quote>.py</> or whose first
+       line is <quote>#!/usr/bin/python</> or <quote>#!/usr/local/bin/python</>.
+       Performs Python syntax highlighting.
+       </entry>
+      </row>
+      <row>
+       <entry>Shell Script</>
+       <entry>sh</>
+       <entry>Unix shell script edit mode. Automatically selected for files
+       with extension <quote>.sh</>, and files whose first line is
+       <quote>#!</> followed by one of the various Unix shell names.
+       Performs shell syntax highlighting.
+       </entry>
+      </row>
+      <row>
+       <entry>TeX</>
+       <entry>tex</>
+       <entry>TeX edit mode. Automatically selected for files with
+       extension <quote>.tex</>. Performs TeX syntax highlighting.
+       </entry>
+      </row>
+      <row>
+       <entry>Transact-SQL</>
+       <entry>tsql</>
+       <entry>Transact-SQL edit mode. Automatically selected for files with
+       extension <quote>.tsql</> or <quote>.sql</>. Performs
+       Transact-SQL syntax highlighting.
+       </entry>
+      </row>
+      <row>
+       <entry>XML/SGML</>
+       <entry>xml</>
+       <entry>XML and SGML source code edit mode. Automatically selected for
+       files with extension <quote>.xml</>, <quote>.sgml</> or <quote>.sgm</>.
+       Performs XML/SGML syntax highlighting (identical to HTML
+       highlighting except that <command>&lt;SCRIPT&gt;</> tags are not handled
+       specially).</entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </sect2>
+ </sect1>
  <sect1 id=bracket-matching><title>Bracket Matching</>
   <indexterm><primary>bracket matching</></indexterm>
   <indexterm><primary>Locate Bracket command</></indexterm>
@@ -2193,6 +2193,8 @@
    <secondary>indentOpenBrackets</></indexterm>
    <indexterm><primary>buffer-local properties</>
    <secondary>indentCloseBrackets</></indexterm>
+   <indexterm><primary>Emacs text editor</></indexterm>
+   <indexterm><primary>VIM text editor</></indexterm>
    <para>
     Pressing <keycap>Tab</> or <keycap>Space</> at the start of every
     line to create the appropriate indent is very tedious, so jEdit has
@@ -2208,7 +2210,7 @@
     If indent on tab is enabled, pressing the <keycap>Tab</> key on
     an unindented line will insert the appropriate amount of
     indentation. Pressing it again will insert a tab (or a soft tab).
-    This is similar to the way <application>emacs</> performs
+    This is similar to the way <application>Emacs</> performs
     indentation.
    </para>
    <para>
@@ -2366,7 +2368,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    </para>
    <screen>:syntax=off:</screen>
    <para>
-   If syntax highlighting is disabled, it can be enabled just for that
+   If syntax highlighting is disabled globally, it can be enabled just for one
    buffer by substituting <quote>off</> with <quote>on</>.
    </para></listitem>
   </itemizedlist>
@@ -2381,7 +2383,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   jEdit has a very powerful search and replace system. It supports
   multi-file searching and regular expressions, and also a
   <command>grep</>-like <quote>HyperSearch</> feature. This chapter
-  will cover it in detail.
+  covers it in detail.
  </para>
  <sect1 id=search-replace-dlog><title>The Search and Replace Dialog Box</>
   <para>
@@ -2418,7 +2420,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <quote>HELLO</>, and <quote>HeLlO</>
    </para></listitem>
    <listitem><para>If the
-   <guibutton>Multi File</> check box, multi file searching will be enabled.
+   <guibutton>Multi File</> check box is selected,
+   multi file searching will be enabled.
    For more information
    about multi-file searching, see <xref linkend=multifile>.
    </para></listitem>
@@ -2456,7 +2459,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <indexterm><primary>regular expressions</></indexterm>
    <para>
    The HyperSearch feature works in a similar fashion to the
-   Unix <command>grep</> command - it lists all lines that
+   Unix <command>grep</> command - it lists all lines in a set of buffers
+   that
    contain a specific string.
   </para>
   <para>
@@ -2586,7 +2590,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
 
 <chapter id=customizing><title>Customizing jEdit</>
  <para>
-  There are many settings and flags that can be changed, on a global
+  jEdit has many settings and flags that can be changed, on a global
   or per-buffer basis. This chapter deals with the Buffer Options
   dialog box, the Global Options dialog box, and buffer-local properties.
  </para>
@@ -2741,7 +2745,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <guimenu>File</>&gt;<guimenuitem>Global Options</> displays the
    global options dialog box. A whole slew of settings can be
    customized here. The dialog box is divided into several tabs,
-   each tab containing some of related settings.
+   each tab containing a set of related options.
   </para>
   <sect2><title>The General Tab</>
    <indexterm><primary>line separator</></indexterm>
@@ -2850,8 +2854,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  <para>
   jEdit supports plugins, loadable modules of code that extend the
   editor's functionality. This chapter covers installation and usage
-  of plugins; information on developing plugins will be provided in
-  a later release of this documentation.
+  of plugins; information on developing plugins is in the next
+  chapter.
  </para>
  <sect1 id=installing-plugins><title>Installing Plugins</>
   <indexterm><primary>.jedit/jars directory</></indexterm>
@@ -2892,7 +2896,7 @@ The following is required to use this plugin:
   <para>
    This is a simple example; some plugins might not only depend on
    a jEdit and JDK version, but also other plugins and class libraries.
-   When an unsatisfied dependency is found, all
+   Note that when a dependency cannot be satisfied, all
    dependencies are displayed, not just the failed ones.
   </para>
  </sect1>
@@ -2940,7 +2944,7 @@ The following is required to use this plugin:
   <para>
    jEdit 2.1 introduced a new plugin API, based around the
    <classname>EditPlugin</> class. Old jEdit 2.0 plugins will need to
-   be updated for the new API.
+   be updated for the new API before they can work with jEdit 2.1.
   </para>
  </sidebar>
  <sect1 id=plugin-jar><title>General Structure of a Plugin</>
@@ -3699,7 +3703,7 @@ implements OptionPane
  <itemizedlist>
   <listitem><para><command>?</> matches any one character</para></listitem>
   <listitem><para><command>*</> matches any number of characters</para></listitem>
-  <listitem><para><command>{<replaceable>a</>,<replaceable>b</>,<replaceable>c</></>
+  <listitem><para><command>{<replaceable>a</>,<replaceable>b</>,<replaceable>c</>}</>
   matches any one of <replaceable>a</>, <replaceable>b</> or
   <replaceable>c</></para></listitem>
  </itemizedlist>

@@ -17,9 +17,12 @@ JEDIT VERSION HISTORY
   MiscUtilities.StringICaseCompare are the two provided implementations
   of this interface
 
+- Documentation updates
 - Plugin updates:
-  QuickFile 0.6
+  New plugin: BufferTabs 0.1 by Jason Ginchereau
   JBrowse 0.9.9
+  QuickFile 0.6
+- Updated jars/template.jmk (Mike Dillon)
 
 + Bug Fixes
 
