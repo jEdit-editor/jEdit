@@ -88,6 +88,8 @@ public class JEditTextArea extends JComponent
 
 		// Initialize some misc. stuff
 		painter = new TextAreaPainter(this,defaults);
+		gutter = new Gutter(this, defaults.gutterWidth);
+		gutter.setCollapsed(defaults.gutterCollapsed);
 		documentHandler = new DocumentHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
@@ -97,6 +99,7 @@ public class JEditTextArea extends JComponent
 
 		// Initialize the GUI
 		setLayout(new ScrollLayout());
+		add(LEFT,gutter);
 		add(CENTER,painter);
 		add(RIGHT,vertical = new JScrollBar(JScrollBar.VERTICAL));
 		add(BOTTOM,horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
@@ -147,6 +150,15 @@ public class JEditTextArea extends JComponent
 	public final TextAreaPainter getPainter()
 	{
 		return painter;
+	}
+
+ 	/**
+	 * Returns the gutter to the left of the text area or null if the gutter
+	 * is disabled
+	 */
+	public final Gutter getGutter()
+	{
+		return gutter;
 	}
 
 	/**
@@ -287,6 +299,7 @@ public class JEditTextArea extends JComponent
 		if(firstLine != vertical.getValue())
 			updateScrollBars();
 		painter.repaint();
+		gutter.repaint();
 	}
 
 	/**
@@ -363,6 +376,7 @@ public class JEditTextArea extends JComponent
 		{
 			updateScrollBars();
 			painter.repaint();
+			gutter.repaint();
 		}
 
 		return changed;
@@ -697,6 +711,7 @@ public class JEditTextArea extends JComponent
 		select(0,0);
 		updateScrollBars();
 		painter.repaint();
+		gutter.repaint();
 	}
 
 	/**
@@ -1583,12 +1598,15 @@ public class JEditTextArea extends JComponent
 	// protected members
 	protected static String CENTER = "center";
 	protected static String RIGHT = "right";
+	protected static String LEFT = "left";
 	protected static String BOTTOM = "bottom";
 
 	protected static JEditTextArea focusedComponent;
 	protected static Timer caretTimer;
 	
 	protected TextAreaPainter painter;
+
+	protected Gutter gutter;
 
 	protected JPopupMenu popup;
 
@@ -1705,6 +1723,7 @@ public class JEditTextArea extends JComponent
 		else
 		{
 			painter.invalidateLineRange(line,firstLine + visibleLines);
+			gutter.repaint();
 			updateScrollBars();
 		}
 	}
@@ -1722,6 +1741,8 @@ public class JEditTextArea extends JComponent
 				center = comp;
 			else if(name.equals(RIGHT))
 				right = comp;
+			else if(name.equals(LEFT))
+				left = comp;
 			else if(name.equals(BOTTOM))
 				bottom = comp;
 			else if(name.equals(LEFT_OF_SCROLLBAR))
@@ -1732,9 +1753,11 @@ public class JEditTextArea extends JComponent
 		{
 			if(center == comp)
 				center = null;
-			if(right == comp)
+			else if(right == comp)
 				right = null;
-			if(bottom == comp)
+			else if(left == comp)
+				left = null;
+			else if(bottom == comp)
 				bottom = null;
 			else
 				leftOfScrollBar = null;
@@ -1747,6 +1770,8 @@ public class JEditTextArea extends JComponent
 			dim.width = insets.left + insets.right;
 			dim.height = insets.top + insets.bottom;
 
+			Dimension leftPref = left.getPreferredSize();
+			dim.width += leftPref.width;
 			Dimension centerPref = center.getPreferredSize();
 			dim.width += centerPref.width;
 			dim.height += centerPref.height;
@@ -1765,6 +1790,8 @@ public class JEditTextArea extends JComponent
 			dim.width = insets.left + insets.right;
 			dim.height = insets.top + insets.bottom;
 
+			Dimension leftPref = left.getMinimumSize();
+			dim.width += leftPref.width;
 			Dimension centerPref = center.getMinimumSize();
 			dim.width += centerPref.width; 
 			dim.height += centerPref.height;
@@ -1786,18 +1813,27 @@ public class JEditTextArea extends JComponent
 			int iright = insets.right;
 
 			int rightWidth = right.getPreferredSize().width;
+			int leftWidth = left.getPreferredSize().width;
 			int bottomHeight = bottom.getPreferredSize().height;
-			int centerWidth = size.width - rightWidth - ileft - iright;
-			int centerHeight = size.height - bottomHeight - itop - ibottom;
+			int centerWidth = size.width - leftWidth - rightWidth -
+				ileft - iright;
+			int centerHeight = size.height - bottomHeight - itop -
+				ibottom;
+
+			left.setBounds(
+				ileft,
+				itop,
+				leftWidth,
+				centerHeight);
 
 			center.setBounds(
-				ileft,
+				ileft + leftWidth,
 				itop,
 				centerWidth,
 				centerHeight);
 
 			right.setBounds(
-				ileft + centerWidth,
+				ileft + leftWidth + centerWidth,
 				itop,
 				rightWidth,
 				centerHeight);
@@ -1817,6 +1853,7 @@ public class JEditTextArea extends JComponent
 		}
 
 		Component center;
+		Component left;
 		Component right;
 		Component bottom;
 		Component leftOfScrollBar;
@@ -2252,6 +2289,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.42  2000/02/01 06:12:33  sp
+ * Gutter added (still not fully functional)
+ *
  * Revision 1.41  2000/01/29 03:27:20  sp
  * Split window functionality added
  *

@@ -272,10 +272,11 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 		SearchResult(Buffer buffer, int line)
 		{
-			if(!buffer.isTemporary())
-				bufferOpened(buffer);
 			path = buffer.getPath();
 			this.line = line;
+
+			if(!buffer.isTemporary())
+				bufferOpened(buffer);
 
 			str = buffer.getName() + ":" + (line + 1) + ":"
 				+ getLine(buffer,buffer.getDefaultRootElement()
@@ -377,6 +378,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.49  2000/02/01 06:12:33  sp
+ * Gutter added (still not fully functional)
+ *
  * Revision 1.48  2000/01/29 10:12:43  sp
  * BeanShell edit mode, bug fixes
  *
@@ -406,8 +410,5 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
  *
  * Revision 1.39  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.38  1999/10/11 07:14:22  sp
- * matchFound()
  *
  */

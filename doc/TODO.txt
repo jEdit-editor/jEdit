@@ -4,11 +4,13 @@ JEDIT TO DO
 
 - Double-click drag doesn't work backwards
 - CaretUndo doesn't work on 'redo'
-- Integrate Mike Dillon's "Gutter" code
-- About box is ugly
+- Check file mod status on focus
+- Update initTextArea(Z,Z) method for gutter
+- Option pane for gutter
 
 ------- Later -------
 
+- Integrate Mike Dillon's "Gutter" code
 - Having more than 2 split panes should be possible
 - Incremental search
 - If there is > 1 possible match, complete-word should list them in a

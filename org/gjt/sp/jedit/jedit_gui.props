@@ -447,12 +447,13 @@ view.status.insert-literal=Insert without expanding
 # About dialog
 about.title=About jEdit
 about.about=Information
-about.message=jEdit version {0}\n\
+about.message=jEdit {0}\n\
 	<http://www.gjt.org/~sp/jedit.html>\n\
 	jEdit was written by Slava Pestov with code\n\
-	contributions of several others. It is released\n\
-	under the GNU General Public License; see the\n\
-	README file for more information.
+	contributions from several others. It is released\n\
+	under the GNU General Public License.\n\
+	See the README file for a detailed list\n\
+	of code contributions, and other information.
 about.plugins=Loaded Plugins
 about.plugins.label={0} (loaded from {1})
 about.plugins.none=No Plugins

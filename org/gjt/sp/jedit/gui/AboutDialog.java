@@ -179,6 +179,7 @@ public class AboutDialog extends EnhancedDialog
 				tree.expandRow(i);
 
 			PluginsPane.this.add(BorderLayout.CENTER,new JScrollPane(tree));
+			PluginsPane.this.setPreferredSize(new Dimension(0,0));
 		}
 	}
 }

@@ -25,6 +25,7 @@ JEDIT VERSION HISTORY
 - Expanding an abbrev that is not defined with C+e C+x will ask if it
   should be added
 - Select Line/Word/Paragraph now have keyboard shortcuts
+- Documentation updates
 
 + Bug Fixes
 
@@ -34,8 +35,8 @@ JEDIT VERSION HISTORY
 - Docked plugins didn't work (Jason Ginchereau) (since 2.3pre2)
 - PostScript token marker didn't handle string literals very well
   (since 2.3pre2)
-- Search and replace called View.setBuffer() before jEdit.commitTemporary(),
-  this caused problems with buffer tabs
+- Obscure: HyperSearch called setBuffer() before commitTemporary() (since
+  2.2pre7)
 
 + API Changes
 

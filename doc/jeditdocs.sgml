@@ -3006,32 +3006,6 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  <sect1 id=installing-plugins><title>Installing Plugins</>
   <indexterm><primary>.jedit/jars directory</></indexterm>
   <indexterm><primary>JAR (Java Archive) files</></indexterm>
-  <indexterm><primary>Help menu</></indexterm>
-  <indexterm><primary>Show Activity Log command</></indexterm>
-  <para>
-   When jEdit starts up, it prints a number of messages detailing the
-   plugin load process to the activity log. To view the log,
-   select <guimenu>Help</>&gt;<guimenuitem>Show Activity Log</>.
-   Here is an example:
-  </para>
-  <screen>[message] jEdit: Scanning directory: /usr/local/jedit-2.2pre2/jars
-[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/buffertabs.jar
-[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/Console.jar
-[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/EditBus.jar
-[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/HTML.jar
-[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/JBrowse.jar
-[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/LatestVersion.jar
-[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/quickfile.jar
-[message] jEdit: Scanning directory: /home/slava/.jedit/jars
-[debug] jEdit: Scanning JAR file: /home/slava/.jedit/jars/TextTools.jar
-[notice] JARClassLoader: Starting plugin BufferTabsPlugin
-[notice] JARClassLoader: Starting plugin ConsolePlugin
-[notice] JARClassLoader: Starting plugin EditBusPlugin
-[notice] JARClassLoader: Starting plugin HTMLPlugin
-[notice] JARClassLoader: Starting plugin JBrowsePlugin
-[notice] JARClassLoader: Starting plugin LatestVersionPlugin
-[notice] JARClassLoader: Starting plugin QuickFilePlugin
-[notice] JARClassLoader: Starting plugin TextToolsPlugin</screen>
   <para>
    jEdit scans two directories for plugins on startup;
    the system-wide plugin directory, where plugins that are to be available
@@ -3045,10 +3019,20 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    file is required by jEdit; the source code is for developers and the
    curious.
   </para>
+  <indexterm><primary>Help menu</></indexterm>
+  <indexterm><primary>About jEdit command</></indexterm>
+  <para>
+   A list of all installed plugins can be found in the
+   <guibutton>Loaded Plugins</> tab of the
+   <guimenu>Help</>&gt;<guimenuitem>About jEdit</> dialog box.
+  </para>
+  <figure><title>The <quote>Loaded Plugins</> tab of the about dialog box</>
+   <graphic scale=75 fileref=dialog-plugins></>
+  </figure>
  </sect1>
  <sect1 id=dependency-errors><title>Dependency Errors</>
   <indexterm><primary>dependency errors</></indexterm>
-  <indexterm><primary>Help menu</></indexterm>
+  <indexterm><primary>Utilities menu</></indexterm>
   <indexterm><primary>Show Activity Log command</></indexterm>
   <para>
    If jEdit detects that some plugin requires some capability
@@ -4011,7 +3995,7 @@ import org.gjt.sp.jedit.EditBus;</>
    </para>
    <itemizedlist><listitem><para><command>ViewUpdate.CREATED</> - a
    new view has been created</para></listitem>
-   <itemizedlist><listitem><para><command>ViewUpdate.TEXTAREA_CREATED</> - a
+   <listitem><para><command>ViewUpdate.TEXTAREA_CREATED</> - a
    new text area has been created - this message is sent when the view
    is split. The <function>getTextArea()</> method returns the new text
    area</para></listitem>

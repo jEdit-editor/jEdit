@@ -579,6 +579,31 @@ public class View extends JFrame implements EBComponent
 		painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
 			"view.blockCaret")));
 
+
+		Gutter gutter = textArea.getGutter();
+		try
+		{
+			int width = Integer.parseInt(jEdit.getProperty(
+				"view.gutter.width"));
+			gutter.setGutterWidth(width);
+		}
+		catch(NumberFormatException nf)
+		{
+		}
+		gutter.setCollapsed("yes".equals(jEdit.getProperty(
+			"view.gutter.collapsed")));
+		gutter.setLineNumberingEnabled(!"no".equals(jEdit.getProperty(
+			"view.gutter.lineNumbers")));
+		try
+		{
+			int interval = Integer.parseInt(jEdit.getProperty(
+				"view.gutter.highlightInterval"));
+			gutter.setHighlightInterval(interval);
+		}
+		catch(NumberFormatException nf)
+		{
+		}
+
 		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
 			"view.caretBlink")));
 
@@ -1233,6 +1258,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.133  2000/02/01 06:12:33  sp
+ * Gutter added (still not fully functional)
+ *
  * Revision 1.132  2000/01/31 05:04:48  sp
  * C+e C+x will ask to add abbrev if not found, other minor updates
  *

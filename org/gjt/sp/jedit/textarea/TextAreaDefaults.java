@@ -41,6 +41,9 @@ public class TextAreaDefaults
 	public boolean blockCaret;
 	public int electricScroll;
 
+	public boolean gutterCollapsed;
+	public int gutterWidth;
+
 	public int cols;
 	public int rows;
 	public SyntaxStyle[] styles;
@@ -73,6 +76,9 @@ public class TextAreaDefaults
 			DEFAULTS.caretVisible = true;
 			DEFAULTS.caretBlinks = true;
 			DEFAULTS.electricScroll = 3;
+
+			DEFAULTS.gutterCollapsed = true;
+			DEFAULTS.gutterWidth = 40;
 
 			DEFAULTS.cols = 80;
 			DEFAULTS.rows = 25;
