@@ -104,7 +104,7 @@ public class TextUtilities
 
 			count = 0;
 
-			for(int i = line; i > 0; i--)
+			for(int i = line; i >= 0; i--)
 			{
 				// get text
 				lineElement = map.getElement(i);
@@ -123,10 +123,20 @@ public class TextUtilities
 				}
 				else
 				{
-					if(tokenListOffset != lineLength)
-						tokenListOffset += lineTokens.length;
-					lineTokens = lineInfo.lastToken;
+ 					if(tokenListOffset != lineLength)
+ 						tokenListOffset += lineTokens.length;
+					//lineTokens = lineInfo.lastToken;
 					scanStartOffset = offset;
+					/* System.err.println("sso=" + scanStartOffset + ",tlo=" + tokenListOffset);
+
+					Token __ = lineTokens;
+					for(;;)
+					{
+						if(__ == null)
+							break;
+						System.err.println(__);
+						__ = __.prev;
+					} */
 				}
 
 				// only check tokens with id 'idOfBracket'
@@ -142,10 +152,15 @@ public class TextUtilities
 					int len = lineTokens.length;
 					if(id == idOfBracket)
 					{
-						for(int j = scanStartOffset; j >= tokenListOffset - len; j--)
+						for(int j = scanStartOffset; j >= tokenListOffset  - len; j--)
 						{
-							if(j >= lineText.count)
+							/* if(j >= lineText.count)
 								System.err.println("WARNING: " + j + " >= " + lineText.count);
+							else if(j < 0)
+							{
+								System.err.println("sso=" + scanStartOffset + ", tlo=" + tokenListOffset + ",len=" + len);
+								System.err.println("WARNING: " + j + " < 0");
+							} */
 
 							char ch = lineText.array[lineText.offset + j];
 							if(ch == c)
@@ -288,6 +303,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/07/15 06:56:29  sp
+ * bracket matching debugged
+ *
  * Revision 1.7  2000/07/14 06:00:45  sp
  * bracket matching now takes syntax info into account
  *
