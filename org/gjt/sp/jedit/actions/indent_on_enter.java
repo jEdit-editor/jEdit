@@ -1,6 +1,6 @@
 /*
  * indent_on_enter.java - Action
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,16 +20,30 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class indent_on_enter extends EditAction
+implements InputHandler.NonRecordable
 {
         public void actionPerformed(ActionEvent evt)
         {
                 View view = getView(evt);
                 Buffer buffer = view.getBuffer();
                 JEditTextArea textArea = view.getTextArea();
+
+		boolean enabled = "on".equals(buffer.getProperty("indentOnEnter"));
+
+		InputHandler.MacroRecorder recorder = textArea.getInputHandler()
+			.getMacroRecorder();
+		if(recorder != null)
+		{
+			if(enabled)
+				recorder.actionPerformed(this,null);
+			else
+				recorder.actionPerformed(InputHandler.getAction(
+					"insert-tab"),null);
+		}
 
 		// expand current word
 		if(Abbrevs.getExpandOnInput())
@@ -41,8 +55,7 @@ public class indent_on_enter extends EditAction
 		int selStart = textArea.getSelectionStart();
 		int selEnd = textArea.getSelectionEnd();
 
-                if(selStart == selEnd
-			&& "on".equals(buffer.getProperty("indentOnEnter")))
+                if(selStart == selEnd && enabled)
 		{
 			mode.indentLine(buffer,view,textArea.getCaretLine(),false);
                 }

@@ -30,12 +30,8 @@ import org.gjt.sp.jedit.gui.OptionsDialog;
 public abstract class EBPlugin extends EditPlugin implements EBComponent
 {
 	/**
-	 * Returns the plugin's name. This return's the plugin's
-	 * class name, without the "Plugin" suffix. This should
-	 * be used to identify the plugin in named lists and such.
-	 *
-	 * @see EditBus#addToNamedList(Object,Object)
-	 * @see EditBus#getNamedList(Object,Object)
+	 * @deprecated Store your plugin's name in a 'static final'
+	 * variable and use that instead of this method
 	 */
 	public String getName()
 	{

@@ -91,8 +91,8 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    </para></listitem>
    <listitem><para>
     Powerful search and replace that supports multi-file searching
-    (including a recursive directory search)
-    and regular expressions (inexact sequences of text)
+    (including recursive directory search)
+    and regular expressions (matching inexact sequences of text)
    </para></listitem>
    <listitem><para>
     HyperSearch feature that shows all lines in the document that
@@ -331,13 +331,22 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <indexterm><primary>Clear Activity Log command</></indexterm>
   <para>
    Before continuing any further, it is important to know about the
-   so-called <quote>activity log</>. Basically, the activity log
-   is a dumping area
-   for information that is not important enough to be displayed to
-   the user automatically, but that is useful sometimes anyway.
-   Error messages and exceptions are appended to the log as well, but
-   are also printed to the system console window, if there is one.
+   so-called <quote>activity log</>.
+   jEdit writes the following information to the activity log:
   </para>
+  <itemizedlist>
+   <listitem><para>All error messages and runtime exceptions
+   </para></listitem>
+   <listitem><para>Information about your Java implementation (version,
+   operating system, architecture, etc)</para></listitem>
+   <listitem><para>Information about loaded plugins</para></listitem>
+   <listitem><para>Messages when files are opened and closed. This
+   can be useful in determining what caused an exception</para></listitem>
+   <listitem><para>The directory list search logs all file names that
+   will be searched</para></listitem>
+   <listitem><para>Some plugins may log additional information as
+   well</para></listitem>
+  </itemizedlist>
   <para>
    <guimenu>Utilities</>&gt;<guimenuitem>Show Activity Log</> displays a
    window showing the current activity log. Text can be copied from
@@ -354,22 +363,6 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    activity log of all information. This is useful when you are debugging
    a problem and want to start over.
   </para>
-  <para>
-   Currently, jEdit saves the following information to the activity log:
-  </para>
-  <itemizedlist>
-   <listitem><para>All error messages and exceptions
-   </para></listitem>
-   <listitem><para>Information about your Java implementation (version,
-   operating system, architecture, etc)</para></listitem>
-   <listitem><para>Information about loaded plugins</para></listitem>
-   <listitem><para>Messages when files are opened and closed. This
-   can be useful in determining what caused an exception</para></listitem>
-   <listitem><para>The directory list search logs all file names that
-   will be searched</para></listitem>
-   <listitem><para>Some plugins may log additional information as
-   well</para></listitem>
-  </itemizedlist>
   <figure><title>The activity log</>
    <graphic fileref=window-log scale=75></>
   </figure>
@@ -491,11 +484,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     the Internet directly. However, saving to URLs is not supported.
    </para>
   </sect2>
-  <sect2 id=recent><title>Opening Files With the Open Recent Menu</>
+  <sect2 id=recent><title>Recently Opened Files</>
    <para>
-    <indexterm><primary>Open Recent menu</></indexterm>
+    <indexterm><primary>Recent Files menu</></indexterm>
     <indexterm><primary>File menu</></indexterm>
-    The <guisubmenu>Open Recent</> submenu of the <guimenu>File</> menu
+    The <guisubmenu>Recent Files</> submenu of the <guimenu>File</> menu
     lists the 8 most recently opened files. When a buffer is closed,
     it is added to this list.
    </para>
@@ -506,6 +499,16 @@ http://www.sourceforge.net/mail/?group_id=588</>.
      see <xref linkend=global-opts>.
     </para>
    </note>
+  </sect2>
+  <sect2><title>Current Directory Menu</>
+   <para>
+    <indexterm><primary>Current Directory menu</></indexterm>
+    <indexterm><primary>File menu</></indexterm>
+    The <guisubmenu>Current Directory</> submenu of the
+    <guimenu>File</> menu lists all files in the frontmost buffer's
+    directory. Opening files with this menu can be quicker than using
+    the <guimenuitem>Open File</> dialog box.
+   </para>
   </sect2>
   <sect2><title>Creating New Files</>
    <indexterm><primary>New File command</></indexterm>
@@ -762,11 +765,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    mouse where you want it to be moved.
   </para>
   <para>
-   <keycap>Left</>, <keycap>Right</>, <keycap>Up</> and <keycap>Down</>
+   The <keycap>Left</>, <keycap>Right</>, <keycap>Up</> and <keycap>Down</> keys
    move the caret in the respective direction.
   </para>
   <para>
-   The <keycap>Home</> and <keycap>End</> behave differently depending on
+   <keycap>Home</> and <keycap>End</> behave differently depending on
    how many times they are pressed, however if you wish them to behave like
    in other text editors (go to the start and end of the current line only),
    you can specify so in the
@@ -792,13 +795,9 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    The <keycap>PageUp</> and <keycap>PageDown</> keys move the caret up
    and down one viewscreen, respectively.
   </para>
-  <para>
-   Finally, <guimenu>Edit</>&gt;<guimenuitem>Go to Line</> (keyboard
-   equivalent: <keycombo><keycap>Control</><keycap>L</></keycombo>) moves the caret
-   to the beginning of a line you specify.
-  </para>
  </sect1>
  <sect1 id=selection><title>Selecting Text</>
+  <indexterm><primary>selection</></>
   <para>
    jEdit has various commands for manipulating arbitriary ranges of text.
    To specify a range of text for further manipulation, it must be
@@ -806,32 +805,31 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    with a purple highlight (the color can be changed if you don't like it).
    Only one selection can exist at any one time.
   </para>
+  <indexterm><primary>selecting text</><secondary>by dragging the mouse</></>
   <para>
    The simplest way to make a selection is to drag the mouse from the start
    of the selection to the end. All text between the two locations will
    be marked. Also, <keycap>Shift</>-clicking in a location in the buffer
    will create a selection from the caret position to where you clicked.
   </para>
+  <indexterm><primary>selecting text</><secondary>by using the Shift modifier</></>
+  <indexterm><primary>selecting text</><secondary>a line at a time</></>
   <para>
    Holding down <keycap>Shift</> in addition to a caret movement key
    (<keycap>Left</>, <keycap>Up</>, <keycap>Home</>, etc) will extend the
    selection in the specified direction, instead of moving the caret.
    If no selection is active, one will be created.
   </para>
+  <indexterm><primary>selecting text</><secondary>the entire buffer</></>
   <para>
    <guimenu>Edit</>&gt;<guimenuitem>Select All</> (keyboard equivalent:
    <keycombo><keycap>Control</><keycap>A</></keycombo>)
    selects the entire buffer.
   </para>
+  <indexterm><primary>selecting text</><secondary>deactivating the selection</></>
   <para>
    <guimenu>Edit</>&gt;<guimenuitem>Select None</> (keyboard equivalent:
    <keycap>Escape</>) deactivates the selection, if there is one.
-  </para>
-  <para>
-   <guimenu>Edit</>&gt;<guimenuitem>Select Line Range</> (keyboard
-   equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>L</></keycombo>) prompts for a start line and
-   end line, and selects all text between these lines, inclusive.
   </para>
   <figure><title>A selection</>
    <graphic scale=75 fileref=window-editor-select></>
@@ -892,8 +890,10 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <indexterm><primary>Redo command</></indexterm>
    <guimenu>File</>&gt;<guimenuitem>Redo</> (keyboard equivalent:
    <keycombo><keycap>Control</><keycap>R</></keycombo>) will redo the
-   most recently undone action. For example, if a text insertion was undone,
-   the text will once again appear.
+   most recently undone action. For example, if some text was deleted,
+   invoking <guimenuitem>Undo</> will make the text come back again.
+   Invoking <guimenuitem>Redo</> after it was undone will once again
+   delete that text.
   </para>
   <para>
    jEdit stores the last 100 editing actions. An editing action can be
@@ -905,7 +905,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <para>
    <indexterm><primary>clipboard</></indexterm>
    The clipboard is a storage area where text and other data can be
-   temporarily stored. It is system-wide, and can be used to transfer
+   temporarily stored. It is system-wide, and hence can be used to transfer
    data between applications.
   </para>
   <para>
@@ -968,7 +968,29 @@ http://www.sourceforge.net/mail/?group_id=588</>.
  </para>
  <sect1 id=words><title>Working With Words</>
   <para>
-   C+Left, C+Right, C+Backsp, C+Delete, Select-word, double-click
+   jEdit has a variety of commands for working with words. In jEdit,
+   words are runs of text separated by non-alphanumeric characters.
+   For [a totally idiotic] example, <quote>hello, world</> is considered
+   two
+   words, <quote>hello</> and <quote>world</> obviously.
+  </para>
+  <indexterm><primary>selecting text</><secondary>a word at a time</></>
+  <indexterm><primary>Edit menu</></>
+  <indexterm><primary>Lines menu</></>
+  <indexterm><primary>Select Word command</></>
+  <para>
+   A word can be selected by double-clicking with the mouse. Another
+   way to select a word is with the
+   <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Select
+   Word</> command. The latter is primarily of use in macros, where mouse clicks
+   cannot be recorded (but menu item selections can).
+  </para>
+  <para>
+   <keycombo><keycap>Control</><keycap>Left</></keycombo> moves the
+   caret to the previous word.
+   <keycombo><keycap>Control</><keycap>Right</></keycombo> moves the
+   caret to the next word. Holding down shift in addition to one of
+   these keys will extend the selection, instead of moving the caret.
   </para>
   <para>
    <indexterm><primary>deleting</><secondary>words</></indexterm>
@@ -979,9 +1001,55 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   </para>
  </sect1>
  <sect1 id=lines><title>Working With Lines</>
+  <indexterm><primary>Edit menu</></>
+  <indexterm><primary>Go to Line command</></>
   <para>
-   C+d, CS+Backsp, CS+Delete, C+e C+j, C+j
+   Finally, <guimenu>Edit</>&gt;<guimenuitem>Go to Line</> (keyboard
+   equivalent: <keycombo><keycap>Control</><keycap>L</></keycombo>) moves the caret
+   to the beginning of a line you specify.
   </para>
+  <indexterm><primary>Select Line Range command</></>
+  <indexterm><primary>selecting text</><secondary>a range of lines</></>
+  <para>
+   <guimenu>Edit</>&gt;<guimenuitem>Select Line Range</> (keyboard
+   equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>L</></keycombo>) prompts for a start line and
+   end line, and selects all text between these lines, inclusive.
+  </para>
+  <indexterm><primary>selecting text</><secondary>a line at a time</></>
+  <indexterm><primary>Lines menu</></>
+  <indexterm><primary>Select Line command</></>
+  <para>
+   An entire line can be selected by triple-clicking with the mouse. Another
+   way to select a line is with the
+   <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Select
+   Line</> command. The latter is primarily of use in macros, where mouse clicks
+   cannot be recorded (but menu item selections can).
+  </para>
+  <para>
+   <indexterm><primary>scrolling</></indexterm>
+   <indexterm><primary>Scroll to Line command</></indexterm>
+   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Scroll
+   to Current Line</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>J</></keycombo>) centers
+   the current line on the screen.
+  </para>
+  <para>
+   <indexterm><primary>Join Lines command</></indexterm>
+   <indexterm><primary>joining lines</></indexterm>
+   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Join
+   Lines</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>J</></keycombo>)
+   removes any whitespace from the start of the next line and joins the
+   current and next lines. This will beep if the caret is on the last
+   line of the buffer. For example, if the caret is on the first line
+   of the following example Java code:
+  </para>
+  <screen>new Widget(Foo
+       .createDefaultFoo());</screen>
+  <para>
+   <guimenuitem>Join Lines</> will change it to:
+  </para>
+  <screen>new Widget(Foo.createDefaultFoo());</screen>
   <para>
    <indexterm><primary>deleting</><secondary>lines</></indexterm>
    <indexterm><primary>Delete Line command</></indexterm>
@@ -991,6 +1059,29 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    (keyboard equivalent: <keycombo><keycap>Control</><keycap>D</></keycombo>)
    will
    delete the line that the caret is positioned on.
+  </para>
+  <para>
+   <indexterm><primary>deleting</><secondary>parts of lines</></indexterm>
+   <indexterm><primary>Delete To Start Of Line command</></indexterm>
+   <indexterm><primary>Lines menu</></indexterm>
+   <indexterm><primary>Edit menu</></indexterm>
+   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete to
+   Start Of Line</>
+   (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>Shift</><keycap>Backspace</></keycombo>)
+   will
+   delete all text from the caret position to the start of the line.
+  </para>
+  <para>
+   <indexterm><primary>Delete To End Of Line command</></indexterm>
+   <indexterm><primary>Lines menu</></indexterm>
+   <indexterm><primary>Edit menu</></indexterm>
+   <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete to
+   End Of Line</>
+   (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>Shift</><keycap>Delete</></keycombo>)
+   will
+   delete all text from the caret position to the end of the line.
   </para>
  </sect1>
  <sect1 id=paragraphs><title>Working With Paragraphs</>
@@ -1593,51 +1684,6 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     <graphic scale=75 fileref=dialog-wordcount></>
    </figure>
   </sect2>
-  <sect2><title>Line Related Commands</>
-   <para>
-    <indexterm><primary>scrolling</></indexterm>
-    <indexterm><primary>Scroll to Line command</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Scroll
-    to Current Line</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>J</></keycombo>) centers
-    the current line on the screen.
-   </para>
-   <para>
-    <indexterm><primary>Delete to Start of Line command</></indexterm>
-    <indexterm><primary>Lines menu</></indexterm>
-    <indexterm><primary>deleting</><secondary>to the start
-    of the line</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete to
-    Start of Line</> (keyboard equivalent: <keycombo><keycap>Control</>
-    <keycap>Control</><keycap>Backspace</></keycombo>) deletes from the
-    start of the current line to the caret position.
-   </para>
-   <para>
-    <indexterm><primary>Delete to End of Line command</></indexterm>
-    <indexterm><primary>deleting</><secondary>to the end
-    of the line</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Delete to
-    End of Line</> (keyboard equivalent:
-    <keycombo><keycap>Control</><keycap>Control</><keycap>Delete</></keycombo>) deletes from the
-    caret position to the end of the current line.
-   </para>
-   <para>
-    <indexterm><primary>Join Lines command</></indexterm>
-    <indexterm><primary>joining lines</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Join
-    Lines</> (keyboard equivalent: <keycombo><keycap>Control</><keycap>J</></keycombo>)
-    removes any whitespace from the start of the next line and joins the
-    current and next lines. This will beep if the caret is on the last
-    line of the buffer. For example, if the caret is on the first line
-    of the following example Java code:
-   </para>
-   <screen>new Widget(Foo
-        .createDefaultFoo());</screen>
-   <para>
-    <guimenuitem>Join Lines</> will change it to:
-   </para>
-   <screen>new Widget(Foo.createDefaultFoo());</screen>
-  </sect2>
   <sect2><title>Word Competion</title>
    <para>
     <indexterm><primary>Complete Word command</></indexterm>
@@ -1785,7 +1831,8 @@ http://www.sourceforge.net/mail/?group_id=588</>.
       <row>
        <entry>php3</>
        <entry>PHP3 edit mode. Automatically selected for files with
-       extension <quote>.php3</>, <quote>.phtml</> or <quote>.inc</>.
+       extension <quote>.php3</>, <quote>.php</>,
+       <quote>.phtml</> or <quote>.inc</>.
        </entry>
       </row>
       <row>
@@ -2895,8 +2942,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <indexterm><primary>Help menu</></indexterm>
   <indexterm><primary>Show Activity Log command</></indexterm>
   <para>
-   If jEdit detects that the plugin requires some capability
-   that is not currently available, a
+   If jEdit detects that some plugin requires some capability
+   that is not currently available, the plugin will not be loaded,
+   and instead a
    <quote>dependency error</> will be printed in the activity
    log (<guimenu>Help</>&gt;<guimenuitem>Show Activity Log</>) and
    system console.
@@ -2904,9 +2952,6 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <screen>[error] JARClassLoader: ConsolePlugin requires jEdit 2.2final
 [error] JARClassLoader: ErrorListPlugin requires class EditBusPlugin
 [error] JARClassLoader: XInsertPlugin requires JDK 1.2</screen>
-  <para>
-   The affected plugins will not be loaded, to prevent any problems.
-  </para>
  </sect1>
  <sect1 id=using-plugins><title>Using Plugins</>
   <indexterm><primary>Plugins menu</></indexterm>

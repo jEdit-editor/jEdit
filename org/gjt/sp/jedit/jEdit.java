@@ -1703,6 +1703,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.179  2000/01/17 07:03:42  sp
+ * File->Current Dir menu, other stuff
+ *
  * Revision 1.178  2000/01/16 01:45:51  sp
  * Remove Trailing Whitespace going back to TextTools
  *
@@ -1732,23 +1735,5 @@ public class jEdit
  *
  * Revision 1.169  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.168  1999/12/10 03:22:46  sp
- * Bug fixes, old loading code is now used again
- *
- * Revision 1.167  1999/12/06 00:06:14  sp
- * Bug fixes
- *
- * Revision 1.166  1999/12/05 03:01:05  sp
- * Perl token marker bug fix, file loading is deferred, style option pane fix
- *
- * Revision 1.165  1999/12/03 23:48:10  sp
- * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
- *
- * Revision 1.164  1999/11/29 02:45:50  sp
- * Scroll bar position saved when switching buffers
- *
- * Revision 1.163  1999/11/28 00:33:06  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
  *
  */

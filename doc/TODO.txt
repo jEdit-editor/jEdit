@@ -1,16 +1,14 @@
 JEDIT TO DO
 
-Bracket highlighting is broken by forward-delete and other
-commands which change the document without changing the
-caret position
-
 ------- Stuff for 2.3pre2 -------
 
+- SIM: smaller logo
 - Finish documentation updates
-- 'File->Current Directory' menu lists files in $d
+- Bracket highlight is broken by other views editing the buffer, etc
 - CaretUndo acts weird on 'redo' sometimes
 - Need to redo window-editor-* snapshots in icewm
 - Need to redo dialog-options-* snapshots as well
+- Buffer options: show buffer-local properties
 
 ------- Stuff for 2.3pre3+ -------
 
@@ -22,13 +20,8 @@ caret position
     instead wait for the buffer created event (if there will be one)
   - if the buffer is not temporary, create positions cos it's going stay
     open
-- Beef up 'Marker' class to support this sort of file/line number/message
-  thing, EditBus will also use it for errors
 - Double-click/drag
 - better ignore case, regexp icons
-- Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
-  to TextAreaHighlight and use that same interface to paint stuff in the
-  gutter
 - Clean way of embedding token markers in one another, so that HTMLTokenMarker
   can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
   -- TokenMarker.markTokensImpl changed to:
@@ -48,29 +41,40 @@ caret position
      calls markTokensImpl() of child
   -- more than one level of embedding will require a major reworking of the
      syntax system, so don't do it for now
+- Document EditBus in plugin development docs
+
+------- Maybe later, in 2.4 -------
+
 - Write an InputHandler subclass that displays the current repeat count,
   if any, in the view's status bar
-- Document EditBus in plugin development docs
-- complete-word shouldn't scan entire document every time a match needs
-  to be completed, also storing view/textArea instances in actions is
-  not a good idea
-- insert-char performs indent on \n and \t. InputHandlers pass \n and \t
-  to the input action. InputHandler.insert-{tab,break} removed.
-- Macros -- \n, \t in action command
-- Integrate BufferTabs into the core
-- (??? WHY?) Higlight.paintHighlight(): instead of passing y co-ordinate,
-  pass a rectangle with line bounds. Maybe rework TextAreaPainter internals
-  to use a rectangle also, it could simplify some things. If one rectangle
-  instance is stored and reused, it would not slow things down
-
-------- Probably not in 2.3 -------
-
 - Menu bar and tool bar loading needs to work outside of views
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
 - Enhanced printing:
   - print selection only
   - print line numbers option
+- EnhancedDialog and EnhancedFrame that automatically load/save geometry
+  and/or center themselves on the screen
+- EditorStarted and EditorExiting messages
+- complete-word shouldn't scan entire document every time a match needs
+  to be completed, also storing view/textArea instances in actions is
+  not a good idea
+- Beef up 'Marker' class to support file/line number/message stuff, EditBus
+  will also use it for errors
+- Macros -- \n, \t in action command
+- Integrate BufferTabs into the core
+- Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
+  to TextAreaHighlight and use that same interface to paint stuff in the
+  gutter
+- (??? WHY?) Higlight.paintHighlight(): instead of passing y co-ordinate,
+  pass a rectangle with line bounds. Maybe rework TextAreaPainter internals
+  to use a rectangle also, it could simplify some things. If one rectangle
+  instance is stored and reused, it would not slow things down
+
+------- Very hard -------
+
+- Folding
+- Menu bar editing
 
 ------- Installer -------
 

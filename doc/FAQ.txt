@@ -9,7 +9,8 @@ Please read this file before reporting bugs.
 - 3. Why can't I copy and paste between jEdit and other applications?
 - 4. Why do I get OutOfMemoryErrors?
 - 5. Why do I get a ClassDefNotFoundError on startup?
-- 6. Why is jEdit so slow?
+- 6. Why doesn't plugin XXX work?
+- 7. Why is jEdit so slow?
 
 * 1. JDK bugs that cause problems in jEdit
 
@@ -79,7 +80,17 @@ it's swingall.jar file must be in the CLASSPATH.
 
 Swing can be downloaded from <java.sun.com/products/jfc/index.html>.
 
-* 6. Why is jEdit so slow?
+* 6. Why doesn't plugin XXX work?
+
+If installing a plugin just gives you lots of exceptions, make sure that
+the plugin is compatible with your version of jEdit; changes to jEdit's
+plugin API are made from time to time, and some plugins break. You
+should either upgrade jEdit, the plugin, or both.
+
+Download updated jEdit versions from <http://www.gjt.org/~sp/jedit.html>.
+Download updated plugins from <http://www.icg-online.de/jedit>.
+
+* 7. Why is jEdit so slow?
 
 Because jEdit is written in Java, it's performance will always be slower
 than native applications. A fast system with a good Java implementation
@@ -94,3 +105,5 @@ up jEdit significantly.
 Finally, if your jEdit version is more than a couple of months old,
 chances are a newer version is already available. Improvements to
 jEdit's speed are always being made.
+
+Download updated jEdit versions from <http://www.gjt.org/~sp/jedit.html>.

@@ -289,8 +289,10 @@ public class View extends JFrame implements EBComponent
 	{
 		if(name.equals("buffers"))
 			return buffers;
-		else if(name.equals("open-recent"))
-			return openRecent;
+		else if(name.equals("recent-files"))
+			return recent;
+		else if(name.equals("current-directory"))
+			return currentDirectory;
 		else if(name.equals("clear-marker"))
 			return clearMarker;
 		else if(name.equals("goto-marker"))
@@ -315,7 +317,8 @@ public class View extends JFrame implements EBComponent
 
 		// Dynamic menus
 		buffers = GUIUtilities.loadMenu(this,"buffers");
-		openRecent = GUIUtilities.loadMenu(this,"open-recent");
+		recent = GUIUtilities.loadMenu(this,"recent-files");
+		currentDirectory = new CurrentDirectoryMenu(this);
 		clearMarker = GUIUtilities.loadMenu(this,"clear-marker");
 		gotoMarker = GUIUtilities.loadMenu(this,"goto-marker");
 		macros = GUIUtilities.loadMenu(this,"macros");
@@ -380,7 +383,8 @@ public class View extends JFrame implements EBComponent
 	private boolean closed;
 
 	private JMenu buffers;
-	private JMenu openRecent;
+	private JMenu recent;
+	private JMenu currentDirectory;
 	private JMenu clearMarker;
 	private JMenu gotoMarker;
 	private JMenu macros;
@@ -481,7 +485,7 @@ public class View extends JFrame implements EBComponent
 
 		loadStyles();
 
-		updateOpenRecentMenu();
+		updateRecentMenu();
 	}
 
 	private void loadStyles()
@@ -547,7 +551,7 @@ public class View extends JFrame implements EBComponent
 
 		myPainter.setStyles(painter.getStyles());
 
-		updateOpenRecentMenu();
+		updateRecentMenu();
 	}
 
 	private void loadToolBar()
@@ -557,14 +561,14 @@ public class View extends JFrame implements EBComponent
 			if(toolBar == null)
 			{
 				toolBar = GUIUtilities.loadToolBar("view.toolbar");
-				toolBar.add(Box.createHorizontalStrut(10));
+				toolBar.addSeparator();
 				toolBar.add(new JLabel(jEdit.getProperty("view.quicksearch")));
 				Box box = new Box(BoxLayout.Y_AXIS);
 				box.add(Box.createVerticalGlue());
 				box.add(quicksearch);
 				box.add(Box.createVerticalGlue());
 				toolBar.add(box);
-				toolBar.add(Box.createHorizontalStrut(10));
+				toolBar.addSeparator();
 
 				toolBar.add(ignoreCase = GUIUtilities.loadToolButton(
 					"ignore-case"));
@@ -647,17 +651,17 @@ public class View extends JFrame implements EBComponent
 	}
 	
 	/**
-	 * Recreates the open recent menu.
+	 * Recreates the recent menu.
 	 */
-	private void updateOpenRecentMenu()
+	private void updateRecentMenu()
 	{
-		if(openRecent.getMenuComponentCount() != 0)
-			openRecent.removeAll();
+		if(recent.getMenuComponentCount() != 0)
+			recent.removeAll();
 		EditAction action = jEdit.getAction("open-path");
 		String[] recentArray = jEdit.getRecent();
 		if(recentArray.length == 0)
 		{
-			openRecent.add(GUIUtilities.loadMenuItem(this,"no-recent"));
+			recent.add(GUIUtilities.loadMenuItem(this,"no-recent"));
 			return;
 		}
 		for(int i = 0; i < recentArray.length; i++)
@@ -665,10 +669,10 @@ public class View extends JFrame implements EBComponent
 			String path = recentArray[i];
 			EnhancedMenuItem menuItem = new EnhancedMenuItem(path,
 				null,action,path);
-			openRecent.add(menuItem);
+			recent.add(menuItem);
 		}
 	}
-	
+
 	/**
 	 * Recreates the goto marker and clear marker menus.
 	 */
@@ -855,7 +859,7 @@ public class View extends JFrame implements EBComponent
 					setBuffer(jEdit.getLastBuffer());
 			}
 
-			updateOpenRecentMenu();
+			updateRecentMenu();
 			updateBuffersMenu();
 		}
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
@@ -983,6 +987,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.123  2000/01/17 07:03:41  sp
+ * File->Current Dir menu, other stuff
+ *
  * Revision 1.122  2000/01/16 06:09:27  sp
  * Bug fixes
  *

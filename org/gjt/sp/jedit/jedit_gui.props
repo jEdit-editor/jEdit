@@ -64,7 +64,8 @@ file=new-file \
      new-view \
      open-file \
      open-url \
-     %open-recent \
+     %recent-files \
+     %current-directory \
      - \
      reload \
      reload-all \
@@ -86,9 +87,11 @@ new-file.label=$New File
 new-view.label=New $View
 open-file.label=$Open File...
 open-url.label=Open $URL...
-open-recent.label=O$pen Recent
+recent-files.label=$Recent Files
+current-directory.label=Curren$t Directory
+current-directory.more.label=More
 no-recent.label=No Recent Files
-reload.label=$Reload
+reload.label=Re$load
 reload-all.label=Reload $All Buffers...
 close-file.label=$Close File
 close-all.label=Close All $Buffers

@@ -4,6 +4,8 @@ JEDIT VERSION HISTORY
 
 + New Features
 
+- File->Current Directory menu lists all files in current directory, selecting
+  a file will open it
 - To Upper Case, To Lower Case and Select Word actions from TextTools plugin
   moved into the core (TextTools was written by Mike Dillon)
 - New Select Line, Select Paragraph actions (mainly useful in plugins)
@@ -20,6 +22,8 @@ JEDIT VERSION HISTORY
 - Menu bar rearranged a little bit
 - Improved 'global options' dialog box (Mike Dillon)
 - Enhanced help menu
+- Files with extension '.php' are now recognized as PHP3 files
+- Documentation updates
 
 + Bug Fixes
 
@@ -36,12 +40,17 @@ JEDIT VERSION HISTORY
 - If an error occurs while opening a plugin's ZIP file, any subsequent
   plugins don't seem to load (since ???)
 
++ API Changes
+
+- EBPlugin.getName() method deprecated, just use your plugin's name
+  directly instead (or store it in a 'static final' constant, etc)
+
 * Version 2.3pre1
 
 + New Features
 
 - Predefined abbreviation expansion.
-  - Expand current word by pressing C+e C+b, or entering a non-alphanumeric
+  - Expand current word by pressing C+e C+x, or entering a non-alphanumeric
     character
   - Abbreviations can be edited in File->Global Options->Abbreviations
   - To insert a character without expanding the current word, type

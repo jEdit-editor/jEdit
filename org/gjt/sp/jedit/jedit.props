@@ -245,7 +245,7 @@ mode.perl.firstlineGlob=#!*perl*
 
 # PHP3 mode (contributed by Clancy Malcolm <clancy@cyber.com.au>)
 mode.php3.label=PHP3 Files
-mode.php3.filenameGlob=*.{php3,phtml,inc}
+mode.php3.filenameGlob=*.{php3,php,phtml,inc}
 mode.php3.commentStart=<!--
 mode.php3.commentEnd=-->
 mode.php3.tokenMarker=org.gjt.sp.jedit.syntax.PHPTokenMarker
