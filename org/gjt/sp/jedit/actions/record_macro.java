@@ -56,6 +56,9 @@ public class record_macro extends EditAction
 			name + ".macro"),
 			false,true);
 
+		if(buffer == null)
+			return;
+
 		try
 		{
 			buffer.remove(0,buffer.getLength());

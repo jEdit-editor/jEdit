@@ -34,7 +34,7 @@ public class block_comment extends EditAction
 		JEditTextArea textArea = view.getTextArea();
 		Buffer buffer = view.getBuffer();
 		String comment = (String)buffer.getProperty("blockComment");
-		if(comment == null)
+		if(!textArea.isEditable() || comment == null)
 		{
 			view.getToolkit().beep();
 			return;

@@ -31,6 +31,11 @@ public class insert_literal extends EditAction
 		View view = getView(evt);
 		Buffer buffer = view.getBuffer();
 		JEditTextArea textArea = view.getTextArea();
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
 
 		String str = evt.getActionCommand();
 
@@ -48,14 +53,10 @@ public class insert_literal extends EditAction
 			{
 				int repeatCount = textArea.getInputHandler().getRepeatCount();
 
-				if(textArea.isEditable())
-				{
-					StringBuffer buf = new StringBuffer();
-					for(int i = 0; i < repeatCount; i++)
-						buf.append(str);
-					textArea.overwriteSetSelectedText(buf.toString());
-					return;
-				}
+				StringBuffer buf = new StringBuffer();
+				for(int i = 0; i < repeatCount; i++)
+					buf.append(str);
+				textArea.overwriteSetSelectedText(buf.toString());
 			}
 		}
 

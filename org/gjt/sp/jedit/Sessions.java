@@ -171,6 +171,8 @@ public class Sessions
 			return null;
 
 		Buffer buffer = jEdit.openFile(null,path);
+		if(buffer == null)
+			return null;
 
 		if(selStart != null && selEnd != null
 			&& firstLine != null && horizontalOffset != null)
@@ -223,6 +225,10 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.15  2000/04/24 04:45:36  sp
  * New I/O system started, and a few minor updates
  *

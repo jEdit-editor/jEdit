@@ -27,7 +27,14 @@ public class redo extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		if(!getBuffer(evt).redo())
-			getView(evt).getToolkit().beep();
+		View view = getView(evt);
+		if(!view.getTextArea().isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
+		if(!view.getBuffer().redo())
+			view.getToolkit().beep();
 	}
 }

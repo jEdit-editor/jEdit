@@ -70,9 +70,10 @@ public abstract class VFS
 	 * @param buffer The buffer
 	 * @param path The path
 	 */
-	public void load(View view, Buffer buffer, String path)
+	public boolean load(View view, Buffer buffer, String path)
 	{
 		VFSManager.addIORequest(IORequest.LOAD,view,buffer,path,this);
+		return true;
 	}
 
 	/**
@@ -153,6 +154,10 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.3  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

@@ -216,6 +216,7 @@ class EditServer extends Thread
 		String parent = null;
 		String session = null;
 		boolean endOpts = false;
+		boolean error = false;
 
 		View view = null;
 		Buffer buffer = null;
@@ -224,7 +225,13 @@ class EditServer extends Thread
 		while((command = in.readLine()) != null)
 		{
 			if(endOpts)
-				buffer = TSopenFile(parent,command,readOnly);
+			{
+				Buffer _buffer = TSopenFile(parent,command,readOnly);
+				if(_buffer != null)
+					buffer = _buffer;
+				else
+					error = true;
+			}
 			else
 			{
 				if(command.equals("--"))
@@ -244,9 +251,18 @@ class EditServer extends Thread
 			}
 		}
 
-		// If nothing was opened, try loading session, then new file
-		if(buffer == null && session != null)
+		// Try loading session, then new file
+		if(session != null)
+		{
+			error = false;
 			buffer = TSloadSession(session);
+		}
+		else if(error)
+		{
+			// If all buffers we tried to open caused errors,
+			// just return.
+			return;
+		}
 
 		if(buffer == null)
 			buffer = TSnewFile();
@@ -267,6 +283,10 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.11  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

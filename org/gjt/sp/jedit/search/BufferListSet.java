@@ -103,6 +103,15 @@ public class BufferListSet implements SearchFileSet
 		jEdit.commitTemporary(buffer);
 	}
 
+	/**
+	 * Returns if this fileset is valid (ie, has one or more buffers
+	 * in it.
+	 */
+	public boolean isValid()
+	{
+		return files.size() != 0;
+	}
+
 	// private members
 	private Vector files;
 
@@ -114,6 +123,10 @@ public class BufferListSet implements SearchFileSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.13  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

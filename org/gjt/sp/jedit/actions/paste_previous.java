@@ -22,12 +22,17 @@ package org.gjt.sp.jedit.actions;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.gui.PastePrevious;
 import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.View;
 
 public class paste_previous extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		new PastePrevious(getView(evt));
+		View view = getView(evt);
+		if(!view.getTextArea().isEditable())
+			view.getToolkit().beep();
+		else
+			new PastePrevious(view);
 	}
 
 	public boolean isRepeatable()

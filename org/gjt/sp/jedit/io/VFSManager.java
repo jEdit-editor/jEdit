@@ -117,7 +117,7 @@ public class VFSManager
 	 */
 	public static void waitForRequests()
 	{
-		ioThread.waitForAll();
+		ioThread.waitForRequests();
 	}
 
 	/**
@@ -147,6 +147,14 @@ public class VFSManager
 	public static void runInAWTThread(Runnable run)
 	{
 		ioThread.addWorkRequest(run,true);
+	}
+
+	/**
+	 * Returns if the I/O thread is currently running.
+	 */
+	public static boolean isIOThreadRunning()
+	{
+		return ioThread.isRunning();
 	}
 
 	/**
@@ -185,6 +193,10 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.4  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

@@ -29,6 +29,12 @@ public class insert_char extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
+		JEditTextArea textArea = view.getTextArea();
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
 
 		String noWordSep = (String)view.getBuffer().getProperty("noWordSep");
 
@@ -43,20 +49,12 @@ public class insert_char extends EditAction
 			Abbrevs.expandAbbrev(view,false);
 		}
 
-		JEditTextArea textArea = view.getTextArea();
 		int repeatCount = textArea.getInputHandler().getRepeatCount();
 
-		if(textArea.isEditable())
-		{
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < repeatCount; i++)
-				buf.append(str);
-			textArea.overwriteSetSelectedText(buf.toString());
-		}
-		else
-		{
-			view.getToolkit().beep();
-		}
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < repeatCount; i++)
+			buf.append(str);
+		textArea.overwriteSetSelectedText(buf.toString());
 	}
 
 	public boolean isRepeatable()

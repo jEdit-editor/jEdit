@@ -33,6 +33,11 @@ public class indent_on_tab extends EditAction
                 View view = getView(evt);
                 Buffer buffer = view.getBuffer();
                 JEditTextArea textArea = view.getTextArea();
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
 
 		// expand current word
 		if(Abbrevs.getExpandOnInput())

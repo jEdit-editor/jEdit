@@ -108,15 +108,15 @@ public class FileVFS extends VFS
 	 * @param buffer The buffer
 	 * @param path The path
 	 */
-	public void load(View view, Buffer buffer, String path)
+	public boolean load(View view, Buffer buffer, String path)
 	{
 		File file = new File(path);
 		buffer.setLastModified(file.lastModified());
 
 		if(!checkFile(view,buffer,file))
-			return;
+			return false;
 
-		super.load(view,buffer,path);
+		return super.load(view,buffer,path);
 	}
 
 	/**
@@ -136,8 +136,8 @@ public class FileVFS extends VFS
 		{
 			Object[] args = { path };
 			int result = JOptionPane.showConfirmDialog(view,
-				jEdit.getProperty("filechanged-save.message",
-				args),jEdit.getProperty("filechanged.title"),
+				jEdit.getProperty("filechanged-save.message",args),
+				jEdit.getProperty("filechanged.title"),
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)
@@ -145,7 +145,8 @@ public class FileVFS extends VFS
 		}
 
 		// Check that we can actually write to the file
-		if(!new File(file.getParent()).canWrite())
+		if((file.exists() && !file.canWrite())
+			|| (!file.exists() && !new File(file.getParent()).canWrite()))
 		{
 			String[] args = { path };
 			GUIUtilities.error(view,"no-write",args);
@@ -263,9 +264,18 @@ public class FileVFS extends VFS
 		{
 			backupDirectory = MiscUtilities.constructPath(
 				System.getProperty("user.home"),backupDirectory);
-			new File(backupDirectory).mkdirs();
+
+			// Perhaps here we would want to guard with
+			// a property for parallel backups or not.
+			backupDirectory = MiscUtilities.concatPath(
+				backupDirectory,file.getPath());
+
+			File dir = new File(backupDirectory);
+
+			if (!dir.exists())
+				dir.mkdirs();
 		}
-		
+
 		String name = file.getName();
 
 		// If backups is 1, create ~ file
@@ -315,7 +325,7 @@ public class FileVFS extends VFS
 		if(file.isDirectory())
 		{
 			String[] args = { file.getPath() };
-			VFSManager.error(view,"open-directory",args);
+			GUIUtilities.error(view,"open-directory",args);
 			if(buffer != null)
 			{
 				buffer.setNewFile(false);
@@ -327,7 +337,7 @@ public class FileVFS extends VFS
 		if(!file.canRead())
 		{
 			String[] args = { file.getPath() };
-			VFSManager.error(view,"no-read",args);
+			GUIUtilities.error(view,"no-read",args);
 			if(buffer != null)
 			{
 				buffer.setNewFile(false);

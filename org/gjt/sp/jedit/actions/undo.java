@@ -27,7 +27,14 @@ public class undo extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		if(!getBuffer(evt).undo())
-			getView(evt).getToolkit().beep();
+		View view = getView(evt);
+		if(!view.getTextArea().isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
+		if(!view.getBuffer().undo())
+			view.getToolkit().beep();
 	}
 }

@@ -55,7 +55,10 @@ public class goto_register extends EditAction
 			{
 				Registers.CaretRegister caretReg
 					= (Registers.CaretRegister)register;
-				view.setBuffer(caretReg.getBuffer());
+				Buffer buffer = caretReg.getBuffer();
+				if(buffer == null)
+					return;
+				view.setBuffer(buffer);
 				textArea.setCaretPosition(caretReg.getOffset());
 			}
 			else

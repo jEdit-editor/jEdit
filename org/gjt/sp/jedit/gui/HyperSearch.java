@@ -368,6 +368,10 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 			SearchResult result = (SearchResult)results.getSelectedValue();
 			final Buffer buffer = result.getBuffer();
+
+			if(buffer == null)
+				return;
+
 			final int pos = result.linePos.getOffset();
 
 			VFSManager.runInAWTThread(new Runnable()
@@ -385,6 +389,10 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.55  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.54  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

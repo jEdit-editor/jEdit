@@ -1,6 +1,6 @@
 /*
  * SearchAndReplace.java - Search and replace
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -312,6 +312,13 @@ loop:			for(;;)
 	public static boolean replace(View view)
 	{
 		JEditTextArea textArea = view.getTextArea();
+
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return false;
+		}
+
 		// setSelectedText() clears these values, so save them
 		int selStart = textArea.getSelectionStart();
 		boolean rect = textArea.isSelectionRectangular();
@@ -529,6 +536,10 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.29  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

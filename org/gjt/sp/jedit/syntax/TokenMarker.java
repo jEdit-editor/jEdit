@@ -170,11 +170,17 @@ public class TokenMarker implements Cloneable
 
 		info.tokensValid = true;
 
-		nextLineRequested = (oldRule != newRule ||
-			oldParent != newParent);
+		if(lineIndex != lastTokenizedLine)
+		{
+			nextLineRequested = false;
+			lastTokenizedLine = lineIndex;
+		}
+
+		nextLineRequested |= (oldRule != newRule || oldParent != newParent);
+
 		if(nextLineRequested && length - lineIndex > 1)
 		{
-			lineInfo[lineIndex + 1].tokensValid = false;
+			linesChanged(lineIndex + 1,length - lineIndex - 1);
 		}
 
 		addToken(info,0,Token.END);
@@ -247,7 +253,7 @@ public class TokenMarker implements Cloneable
 		return length;
 	}
 
-	/**
+	/*
 	 * Returns true if the next line should be repainted. This
 	 * will return true after a line has been tokenized that starts
 	 * a multiline token that continues onto the next line.
@@ -271,6 +277,7 @@ public class TokenMarker implements Cloneable
 
 	private LineInfo[] lineInfo;
 	private int length;
+	private int lastTokenizedLine = -1;
 	private boolean nextLineRequested;
 
 	private LineContext context;
@@ -930,6 +937,10 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.50  2000/04/27 08:32:58  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.49  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

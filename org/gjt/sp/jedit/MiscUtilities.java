@@ -1,6 +1,7 @@
 /*
  * MiscUtilities.java - Various miscallaneous utility functions
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
+ * Portions copyright (C) 2000 Richard S. Hall
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,6 +96,29 @@ public class MiscUtilities
 		return constructPath(constructPath(parent,path1),path2);
 	}
 
+	/**
+	 * Like constructPath(), except <code>path</code> will be
+	 * appended to <code>parent</code> even if it is absolute.
+	 * @param path
+	 * @param parent
+	 */
+	public static String concatPath(String parent, String path)
+	{
+		// Make all child paths relative.
+		if (path.startsWith(File.separator))
+			path = path.substring(1);
+		else if ((path.length() >= 3) && (path.charAt(1) == ':'))
+			path = path.replace(':', File.separatorChar);
+
+		if (parent == null)
+			parent = System.getProperty("user.dir");
+
+		if (parent.endsWith(File.separator))
+			return canonPath(parent + path);
+		else
+			return canonPath(parent + File.separator + path);
+	}
+	
 	/**
 	 * Returns the extension of the specified filename, or an empty
 	 * string if there is none.
@@ -634,6 +658,10 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.31  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

@@ -36,8 +36,8 @@ public class box_comment extends EditAction
 		String commentStart = (String)buffer.getProperty("commentStart");
 		String commentEnd = (String)buffer.getProperty("commentEnd");
 		String boxComment = (String)buffer.getProperty("boxComment");
-		if(commentStart == null || commentEnd == null
-			|| boxComment == null)
+		if(!textArea.isEditable() || commentStart == null
+			|| commentEnd == null || boxComment == null)
 		{
 			view.getToolkit().beep();
 			return;

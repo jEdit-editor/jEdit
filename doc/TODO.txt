@@ -1,21 +1,31 @@
 JEDIT TO DO
 
-2.5:
+2.5pre1:
 
+- Annoying BufferTabs flicker
+- Text area scroll bar size bug
+- Create macro-input snap
+- Update dialog-options-general snap
+- Save As: don't do disk mod check
+- make HyperSearch a JFrame
+
+Later:
+
+- Fix dialog box focus problems
 - VFS:
   - Show wait cursor only once for a set of requests
-  - Filter events in view to implement ESCAPE, etc
-  - FTP VFS GUI
   - Abortable FTP
+  - FTP VFS GUI
   - If an error occurs while saving, we shouldn't clear the dirty flag
     (VFSManager.waitForRequests() returns a boolean value. If it is false,
     _closeFile() doesn't close the buffer)
   - Write VFS docs - user and developer
-  - Annoying BufferTabs flicker
+  - Filter events in view to implement ESCAPE, etc
+  - move InputHandler to gui package and implement key handling in View
+    (but let child components handle events first!!!)
 
 - JEditTextArea.CaretUndo: set textArea reference to null when it is removed?
 - text area doesn't lose focus sometimes
-- there are still problems with multiline tokens
 - TokenMarker: MARK_PREVIOUS should mark to lastOffset not lastKeyword
 - XMode:
   - better error reporting
@@ -30,16 +40,9 @@ JEDIT TO DO
 - Buffer tabs:
   - trunicate long file names (should be configurable)
   - customizable font size?
-- 'input' action: eg: 'input@a@Enter your name:' would store the user's
-  input in register 'a', or clear it if they clicked 'Cancel'
 - Threaded HyperSearch
-- Backup directory: preserve full paths
 - set dirty to false when all undos undone
-- move InputHandler to gui package and implement key handling in View
-  (but let child components handle events first!!!)
-- Rename comment actions to make them more obvious:
-  wing comment -> comment
-  block comment -> line comment
+- Background mode
 
 Later:
 

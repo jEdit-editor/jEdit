@@ -71,7 +71,7 @@ public class FtpVFS extends VFS
 	 * @param buffer The buffer
 	 * @param path The path
 	 */
-	public void load(View view, Buffer buffer, String path)
+	public boolean load(View view, Buffer buffer, String path)
 	{
 		// since files may be loaded at startup, try to hide
 		// the splash screen first
@@ -79,7 +79,9 @@ public class FtpVFS extends VFS
 
 		path = doLogin(view,buffer,path);
 		if(path != null)
-			VFSManager.addIORequest(IORequest.LOAD,view,buffer,path,this);
+			return super.load(view,buffer,path);
+		else
+			return false;
 	}
 
 	/**

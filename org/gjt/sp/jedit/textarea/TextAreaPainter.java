@@ -466,12 +466,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		Color defaultColor = getForeground();
 
 		int y = textArea.lineToY(line);
+		paintHighlight(gfx,line,y);
 
 		if(line < 0 || line >= textArea.getLineCount())
 		{
 			if(paintInvalid)
 			{
-				paintHighlight(gfx,line,y);
 				styles[Token.INVALID].setGraphicsFlags(gfx,defaultFont);
 				gfx.drawString("~",0,y + fm.getHeight());
 			}
@@ -490,8 +490,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	protected void paintPlainLine(Graphics gfx, int line, Font defaultFont,
 		Color defaultColor, int x, int y)
 	{
-		paintHighlight(gfx,line,y);
-
 		gfx.setFont(defaultFont);
 		gfx.setColor(defaultColor);
 
@@ -509,8 +507,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	protected void paintSyntaxLine(Graphics gfx, TokenMarker tokenMarker,
 		int line, Font defaultFont, Color defaultColor, int x, int y)
 	{
-		paintHighlight(gfx,line,y);
-
 		gfx.setFont(defaultFont);
 		gfx.setColor(defaultColor);
 		y += fm.getHeight();
@@ -658,6 +654,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/04/27 08:32:58  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.32  2000/04/17 06:34:24  sp
  * More focus debugging, linesChanged() tweaked
  *

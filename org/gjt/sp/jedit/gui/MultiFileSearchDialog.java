@@ -24,6 +24,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
 import java.util.Vector;
+import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 
@@ -129,20 +130,29 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 	public SearchFileSet getSearchFileSet()
 	{
-		if(!isOK)
+		if(isOK)
+			return fileset;
+		else
 			return null;
+	}
 
+	// EnhancedDialog implementation
+	public void ok()
+	{
 		if(current.getModel().isSelected())
-			return new CurrentBufferSet();
+			fileset = new CurrentBufferSet();
 		else if(all.getModel().isSelected())
-			return new AllBufferSet();
+			fileset = new AllBufferSet();
 		else if(selected.getModel().isSelected())
 		{
 			Object[] values = bufferList.getSelectedValues();
 			if(values == null || values.length == 0)
-				return new CurrentBufferSet();
+			{
+				GUIUtilities.error(view,"invalid-fileset",null);
+				return;
+			}
 			else
-				return new BufferListSet(values);
+				fileset = new BufferListSet(values);
 		}
 		else if(directory.getModel().isSelected())
 		{
@@ -151,19 +161,19 @@ public class MultiFileSearchDialog extends EnhancedDialog
 			boolean _recurse = directoryRecurse.getModel()
 				.isSelected();
 
-			jEdit.setProperty("multifile.directory.path.value",_directory);
-			jEdit.setProperty("multifile.directory.glob.value",_glob);
 			jEdit.setBooleanProperty("multifile.directory.recurse.value",_recurse);
 
-			return new DirectoryListSet(_directory,_glob,_recurse);
+			fileset = new DirectoryListSet(_directory,
+				_glob,_recurse);
+			if(!((BufferListSet)fileset).isValid())
+			{
+				GUIUtilities.error(view,"invalid-fileset",null);
+				return;
+			}
 		}
 		else
-			return null;
-	}
+			return;
 
-	// EnhancedDialog implementation
-	public void ok()
-	{
 		isOK = true;
 		dispose();
 	}
@@ -259,8 +269,17 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		Box box2 = new Box(BoxLayout.Y_AXIS);
 		box2.add(Box.createGlue());
-		directoryPath = new JTextField(MiscUtilities.getFileParent(
-			view.getBuffer().getPath()));
+
+		String path;
+		if(view.getBuffer().getVFS() instanceof FileVFS)
+		{
+			path = MiscUtilities.getFileParent(
+				view.getBuffer().getPath());
+		}
+		else
+			path = System.getProperty("user.dir");
+
+		directoryPath = new JTextField(path);
 		Dimension dim = directoryPath.getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		directoryPath.setMaximumSize(dim);
@@ -354,6 +373,10 @@ public class MultiFileSearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.12  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

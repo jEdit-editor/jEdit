@@ -45,17 +45,17 @@ public class WorkThread extends Thread
 		Log.log(Log.DEBUG,this,"Adding request: " + run +
 			(inAWT ? " in AWT thread" : ""));
 
+		// if inAWT is set and there are no requests
+		// pending, execute it immediately
+		if(requestCount == 0 && inAWT)
+		{
+			Log.log(Log.DEBUG,this,"AWT immediate: " + run);
+			run.run();
+			return;
+		}
+
 		synchronized(lock)
 		{
-			// if inAWT is set and there are no requests
-			// pending, execute it immediately
-			if(requestCount == 0 && inAWT)
-			{
-				Log.log(Log.DEBUG,this,"AWT immediate: " + run);
-				run.run();
-				return;
-			}
-
 			Request request = new Request(run,inAWT);
 			if(firstRequest == null && lastRequest == null)
 				firstRequest = lastRequest = request;
@@ -74,7 +74,7 @@ public class WorkThread extends Thread
 	/**
 	 * Waits until all requests are complete.
 	 */
-	public void waitForAll()
+	public void waitForRequests()
 	{
 		synchronized(lock)
 		{
@@ -98,6 +98,14 @@ public class WorkThread extends Thread
 	public void abort()
 	{
 		stop(new Abort());
+	}
+
+	/**
+	 * Returns if the I/O thread is currently running.
+	 */
+	public boolean isRunning()
+	{
+		return (requestCount != 0);
 	}
 
 	public void run()
@@ -153,8 +161,8 @@ public class WorkThread extends Thread
 				endRunning();
 			}
 
-			// notify a running waitForAll() method
-			lock.notify();
+			// notify a running waitForRequests() method
+			lock.notifyAll();
 
 			// wait for more requests
 			try
@@ -235,6 +243,10 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/04/27 08:32:58  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.2  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

@@ -64,6 +64,12 @@ public class Abbrevs
 	public static void expandAbbrev(View view, boolean add)
 	{
 		JEditTextArea textArea = view.getTextArea();
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
 		Buffer buffer = view.getBuffer();
 
 		int line = textArea.getCaretLine();
@@ -371,6 +377,10 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/04/27 08:32:56  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.10  2000/04/15 04:14:46  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
  *

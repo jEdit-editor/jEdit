@@ -35,7 +35,7 @@ public class wing_comment extends EditAction
 		Buffer buffer = view.getBuffer();
 		String commentStart = (String)buffer.getProperty("commentStart");
 		String commentEnd = (String)buffer.getProperty("commentEnd");
-		if(commentStart == null || commentEnd == null)
+		if(!textArea.isEditable() || commentStart == null || commentEnd == null)
 		{
 			view.getToolkit().beep();
 			return;

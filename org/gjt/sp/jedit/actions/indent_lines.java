@@ -29,6 +29,12 @@ public class indent_lines extends EditAction
         {
                 View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
                 Buffer buffer = view.getBuffer();
 
 		String actionCommand = evt.getActionCommand();

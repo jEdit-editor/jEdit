@@ -252,15 +252,23 @@ public class jEdit
 			server = new EditServer(portFile);
 
 		// Load files specified on the command line
+		boolean error = false;
+
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i] == null)
 				continue;
-			openFile(null,userDir,args[i],readOnly,false);
+			if(openFile(null,userDir,args[i],readOnly,false) == null)
+				error = true;
 		}
 
 		Buffer buffer = null;
-		if(bufferCount == 0)
+
+		// If the user tries to open a file they don't have access
+		// to, it would be a bit weird if jEdit loaded the last
+		// session. So we just create an untitled file if no
+		// specified buffers could not be opened
+		if(bufferCount == 0 && !error)
 		{
 			if(defaultSession)
 			{
@@ -860,7 +868,8 @@ public class jEdit
 	}
 
 	/**
-	 * Opens a file.
+	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
+	 * null if the buffer could not be opened.
 	 * @param view The view to open the file in
 	 * @param path The file path
 	 *
@@ -872,7 +881,8 @@ public class jEdit
 	}
 
 	/**
-	 * Opens a file.
+	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
+	 * null if the buffer could not be opened.
 	 * @param view The view to open the file in
 	 * @param parent The parent directory of the file
 	 * @param path The path name of the file
@@ -887,7 +897,8 @@ public class jEdit
 	}
 
 	/**
-	 * Opens a file.
+	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
+	 * null if the buffer could not be opened.
 	 * @param view The view to open the file in
 	 * @param parent The parent directory of the file
 	 * @param path The path name of the file
@@ -951,6 +962,10 @@ public class jEdit
 
 		final Buffer newBuffer = new Buffer(view,path,readOnly,
 			newFile,false,props);
+
+		if(!newBuffer.load(view,false))
+			return null;
+
 		addBufferToList(newBuffer);
 
 		EditBus.send(new BufferUpdate(newBuffer,BufferUpdate.CREATED));
@@ -1009,7 +1024,11 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		return new Buffer(null,path,readOnly,newFile,true,null);
+		buffer = new Buffer(null,path,readOnly,newFile,true,null);
+		if(!buffer.load(view,false))
+			return null;
+		else
+			return buffer;
 	}
 
 	/**
@@ -1700,6 +1719,7 @@ public class jEdit
 		addAction("indent-on-tab");
 		addAction("insert-char");
 		addAction("insert-literal");
+		addAction("input");
 		addAction("join-lines");
 		addAction("load-session");
 		addAction("locate-bracket");
@@ -2139,6 +2159,10 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.227  2000/04/27 08:32:57  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.226  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

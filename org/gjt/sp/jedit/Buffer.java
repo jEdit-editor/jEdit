@@ -106,9 +106,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 * @param reload If true, we automatically delete the autosave file,
 	 * otherwise we warn user
 	 *
-	 * @since 2.4pre5
+	 * @since 2.5pre1
 	 */
-	public void load(View view, boolean reload)
+	public boolean load(View view, boolean reload)
 	{
 		setFlag(LOADING,true);
 
@@ -121,10 +121,20 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			if(!reload && autosaveFile != null && autosaveFile.exists())
 				doLoad = recoverAutosave(view);
 			else
+			{
+				if(autosaveFile != null)
+					autosaveFile.delete();
 				doLoad = true;
+			}
 
 			if(doLoad)
-				vfs.load(view,this,path);
+			{
+				// this returns false if initial sanity
+				// checks (if the file is a directory, etc)
+				// fail
+				if(!vfs.load(view,this,path))
+					return false;
+			}
 		}
 
 		// Do some stuff once loading is finished
@@ -167,6 +177,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 					BufferUpdate.MARKERS_CHANGED));
 			}
 		});
+
+		return true;
 	}
 
 	/**
@@ -1484,8 +1496,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				putProperty(keys.nextElement(),values.nextElement());
 			}
 		}
-
-		load(view,false);
 	}
 
 	void commitTemporary()
@@ -1748,6 +1758,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.143  2000/04/27 08:32:56  sp
+ * VFS fixes, read only fixes, macros can prompt user for input, improved
+ * backup directory feature
+ *
  * Revision 1.142  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

@@ -31,6 +31,12 @@ public class backspace_word extends EditAction
 	{
 		View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
 		int start = textArea.getSelectionStart();
 		if(start != textArea.getSelectionEnd())
 		{

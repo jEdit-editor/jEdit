@@ -30,11 +30,17 @@ public class complete_word extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
+
 		Buffer buffer = view.getBuffer();
 		String noWordSep = (String)buffer.getProperty("noWordSep");
 		if(noWordSep == null)
 			noWordSep = "";
 		JEditTextArea textArea = view.getTextArea();
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
 
 		// first, we get the word before the caret
 
