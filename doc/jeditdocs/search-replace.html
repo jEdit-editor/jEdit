@@ -13,8 +13,8 @@ REL="PREVIOUS"
 TITLE="Commenting Out Code"
 HREF="commenting.html"><LINK
 REL="NEXT"
-TITLE="The Search and Replace Dialog Box"
-HREF="search-replace-dlog.html"></HEAD
+TITLE="The HyperSearch Dialog Box"
+HREF="hypersearch-dlog.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -23,7 +23,7 @@ CLASS="NAVHEADER"
 >jEdit 2.4 User's Guide</H1
 ><P
 ><A
-HREF="search-replace-dlog.html"
+HREF="hypersearch-dlog.html"
 >Next</A
 >, <A
 HREF="commenting.html"
@@ -35,7 +35,7 @@ CLASS="CHAPTER"
 ><H1
 ><A
 NAME="SEARCH-REPLACE"
->Chapter 8. Search and Replace</A
+>Chapter 7. Search and Replace</A
 ></H1
 ><DIV
 CLASS="TOC"
@@ -46,18 +46,18 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="search-replace.html#QUICKSEARCH"
->Searching for Text</A
-></DT
-><DT
-><A
-HREF="search-replace-dlog.html"
+HREF="search-replace.html#SEARCH-REPLACE-DLOG"
 >The Search and Replace Dialog Box</A
 ></DT
 ><DT
 ><A
 HREF="hypersearch-dlog.html"
 >The HyperSearch Dialog Box</A
+></DT
+><DT
+><A
+HREF="searchbar.html"
+>The Search Bar</A
 ></DT
 ><DT
 ><A
@@ -85,8 +85,8 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="QUICKSEARCH"
->Searching for Text</A
+NAME="SEARCH-REPLACE-DLOG"
+>The Search and Replace Dialog Box</A
 ></H1
 ><P
 >   
@@ -94,128 +94,193 @@ NAME="QUICKSEARCH"
    
    
    
-   The "Find" field in the tool bar can be used to search for text.
-   A search string can be entered by clicking the the field, or by invoking
+   
    <SPAN
 CLASS="GUIMENU"
 >Search</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Find</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>F</B
+>) displays the Search and Replace
+   dialog box. The Search and Replace dialog box allows you to perform
+   replacement in addition to searching.
+  </P
+><P
+>   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Find Selection</SPAN
 > (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
    <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
 >F</B
->). Pressing
-   <B
-CLASS="KEYCAP"
->Enter</B
-> in the "Find" field will
-   locate the next instance of the currently entered
-   string. If <B
-CLASS="KEYCAP"
->Enter</B
-> is pressed
-   while no string is entered, the Search and Replace dialog box will be
-   displayed. Pressing <B
-CLASS="KEYCAP"
->Escape</B
-> in the "Find"
-   field will move the focus back to the main text area.
-   The find field stores previously entered strings; see
+>)
+   displays the search and replace dialog box
+   and inserts any text currently selected in the text area.
+  </P
+><P
+></P
+><UL
+><LI
+><P
+>The desired search string can be entered in the
+   <SPAN
+CLASS="GUIBUTTON"
+>Search for:</SPAN
+> field. This field stores previously entered strings; see
+   <A
+HREF="history.html"
+>the section called <I
+>History Text Fields</I
+></A
+>.</P
+></LI
+><LI
+><P
+>The desired replacement string can be entered in the
+   <SPAN
+CLASS="GUIBUTTON"
+>Replace with:</SPAN
+> field. This field stores previously entered strings; see
    <A
 HREF="history.html"
 >the section called <I
 >History Text Fields</I
 ></A
 >.
-  </P
+   </P
+></LI
+><LI
 ><P
->   The three buttons to the right of the find field can be used to
-   toggle case insensitive searching, regular expressions, and multiple
-   file searching, respectively. Pressing the first two will toggle the
-   respective value, and pressing the multiple file search button will
-   display the multifile search options dialog box; see <A
+>If the <SPAN
+CLASS="GUIBUTTON"
+>Keep Dialog</SPAN
+> check box
+   is selected, the find dialog box will remain open until it is explicitly
+   closed. Otherwise,
+   it will be closed after a successful search or replace operation.
+   </P
+></LI
+><LI
+><P
+>If the <SPAN
+CLASS="GUIBUTTON"
+>Regexp</SPAN
+> check box
+   is selected, regular expressions can be used to match
+   inexact sequences of text; see <A
+HREF="regexps.html"
+>Appendix B</A
+>.
+   </P
+></LI
+><LI
+><P
+>If the <SPAN
+CLASS="GUIBUTTON"
+>Ignore Case</SPAN
+> check box is selected,
+   the search will be case insensitive; entering
+   "Hello" in the search field will locate "hello",
+   "HELLO", and "HeLlO"
+   </P
+></LI
+><LI
+><P
+>If the
+   <SPAN
+CLASS="GUIBUTTON"
+>Multi File</SPAN
+> check box is selected,
+   multi file searching will be enabled.
+   For more information
+   about multi-file searching, see <A
 HREF="multifile.html"
 >the section called <I
 >Searching in Multiple Files</I
 ></A
-> for details.
-  </P
+>.
+   </P
+></LI
+><LI
+><P
+>Clicking <SPAN
+CLASS="GUIBUTTON"
+>Find</SPAN
+> or pressing
+   <B
+CLASS="KEYCAP"
+>Enter</B
+> will begin the search. If the search string
+   is found, the next occurrence will be selected. If the search
+   was unsuccessful, a dialog box will prompt if the search should
+   start from the beginning of the buffer (or file set if multi-file
+   searching is enabled).
+   </P
+></LI
+><LI
+><P
+>Clicking <SPAN
+CLASS="GUIBUTTON"
+>Replace in Selection</SPAN
+>
+   will replace all occurrences of the search string with
+   the replacement string in the selected text. This will beep
+   if there is no selection or if it doesn't contain the search
+   string.
+   </P
+></LI
+><LI
+><P
+>Clicking <SPAN
+CLASS="GUIBUTTON"
+>Replace All</SPAN
+>
+   will replace all occurrences of the search string with
+   the replacement string, spanning multiple buffers if
+   multi file search is enabled. This will beep
+   if the search string could not be found.
+   </P
+></LI
+><LI
+><P
+>Clicking <SPAN
+CLASS="GUIBUTTON"
+>Cancel</SPAN
+> will close the search
+   and replace dialog box.</P
+></LI
+></UL
 ><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-1. The QuickSearch text field and controls</B
+>Figure 7-1. The search and replace dialog box</B
 ></P
 ><P
 ><IMG
-SRC="../images/window-editor-quicksearch.gif"></P
-></DIV
-><P
->   
-   
-   <SPAN
-CLASS="GUIMENU"
->Search</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Find Next</SPAN
-> (keyboard equivalent:
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->G</B
->)
-   locates the next instance of the search string.
-  </P
-><P
->   
-   
-   <SPAN
-CLASS="GUIMENU"
->Search</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Find Selection</SPAN
-> (keyboard equivalent:
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->H</B
->)
-   moves the keyboard focus to the "Find" field in the tool bar
-   and inserts any text currently selected in the main text area.
-   <B
-CLASS="KEYCAP"
->Enter</B
-> can then be pressed to search for that text.
-  </P
-><DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->    If the tool bar is hidden, the <SPAN
-CLASS="GUIMENUITEM"
->Find</SPAN
-> and
-    <SPAN
-CLASS="GUIMENUITEM"
->Find Selection</SPAN
-> commands will display the Search and
-    Replace dialog box instead.
-   </P
-></BLOCKQUOTE
+SRC="../images/dialog-search.gif"></P
 ></DIV
 ></DIV
 ></DIV
@@ -228,9 +293,9 @@ HREF="index.html"
 HREF="commenting.html"
 >Prev</A
 >: Commenting Out Code<BR><A
-HREF="search-replace-dlog.html"
+HREF="hypersearch-dlog.html"
 >Next</A
->: The Search and Replace Dialog Box<BR></DIV
+>: The HyperSearch Dialog Box<BR></DIV
 ></BODY
 ></HTML
 >

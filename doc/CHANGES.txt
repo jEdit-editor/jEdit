@@ -22,10 +22,9 @@ JEDIT VERSION HISTORY
 - JARClassLoader now displays error messages in more friendly dialog boxes,
   instead of printing stuff to the activity log
 - Buffer Options dialog box improvements
-- Updated edit modes:
-  - PHP (Mike Dillon)
-  - PHP, JSP and ColdFusion now support inline JavaScript
-  - ASP, JavaScript, VBScript (Andre Kaplan)
+- PHP mode updates (Mike Dillon)
+- PHP, JSP and ColdFusion now support inline JavaScript
+- ASP, JavaScript, VBScript updates (Andre Kaplan)
 
 + Bug Fixes
 

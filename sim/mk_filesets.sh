@@ -29,7 +29,8 @@ ls -l `cat sim/jedit-html` | awk 'BEGIN { size=0 } { size+=$5 } END { print size
 
 # jedit-source fileset
 
-find gnu -type f -name \*.java -print > sim/jedit-source
+find com -type f -name \*.java -print > sim/jedit-source
+find gnu -type f -name \*.java -print >> sim/jedit-source
 find org -type f \( -name \*.java -o -name \*.gif -o -name \*.props -o -name \*.jpg \) >> sim/jedit-source
 find jars/PluginManager -type f -print >> sim/jedit-source
 find jars/LatestVersion -type f -print >> sim/jedit-source

@@ -2,7 +2,7 @@
 <HTML
 ><HEAD
 ><TITLE
->Basic File Operations</TITLE
+>Basic Features</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
@@ -34,8 +34,8 @@ HREF="shortcuts.html"
 CLASS="CHAPTER"
 ><H1
 ><A
-NAME="BASIC-FILE-OPS"
->Chapter 3. Basic File Operations</A
+NAME="BASIC-FEATURES"
+>Chapter 3. Basic Features</A
 ></H1
 ><DIV
 CLASS="TOC"
@@ -46,7 +46,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="basic-file-ops.html#STARTING"
+HREF="basic-features.html#STARTING"
 >Starting jEdit</A
 ></DT
 ><DT
@@ -58,6 +58,31 @@ HREF="activity-log.html"
 ><A
 HREF="opening.html"
 >Opening Files</A
+></DT
+><DT
+><A
+HREF="caret.html"
+>The Caret</A
+></DT
+><DT
+><A
+HREF="selection.html"
+>Selecting Text</A
+></DT
+><DT
+><A
+HREF="entering-text.html"
+>Entering and Deleting Text</A
+></DT
+><DT
+><A
+HREF="undo-redo.html"
+>Undo and Redo</A
+></DT
+><DT
+><A
+HREF="clipboard.html"
+>The Clipboard</A
 ></DT
 ><DT
 ><A
@@ -77,8 +102,11 @@ HREF="closing-exiting.html"
 ></DL
 ></DIV
 ><P
->  This chapter describes jEdit's basic file-related operations, such as
-  opening, saving, printing, and so on.
+>  This chapter describes jEdit's basic features, such as
+  opening, saving, printing, simple editing, and so on.
+  jEdit works in a similar fashion to most MacOS or Windows text
+  editors; if you have used one before, you will feel right at home
+  in jEdit.
  </P
 ><DIV
 CLASS="SECT1"
@@ -102,7 +130,7 @@ NAME="STARTING"
 HREF="sessions.html"
 >the section called <I
 >Saving and Loading Sessions</I
-> in Chapter 5</A
+> in Chapter 4</A
 >
    for details.
   </P
@@ -200,11 +228,25 @@ NAME="TOOLBAR"
 >The Tool Bar</A
 ></H2
 ><P
->    The strip of buttons underneath the menu bar is called the
-    <I
-CLASS="FIRSTTERM"
->tool bar</I
->. Moving the mouse pointer over a
+>    The tool bar is a strip of buttons allowing quick access to
+    frequently used commands. The tool bar is not enabled by
+    default; if you want to use, first enable it in the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+    see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+> for details.
+   </P
+><P
+>    Moving the mouse pointer over a
     button and holding it still will display a
     <I
 CLASS="FIRSTTERM"
@@ -221,35 +263,25 @@ CLASS="FIGURE"
 ><IMG
 SRC="../images/window-editor-tooltip.gif"></P
 ></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN130"
+>The Search Bar</A
+></H2
 ><P
->    The text field labelled "Find" on the tool bar can be used
+>    The search bar can be used to
     to quickly search for a string without displaying the
     Search and Replace dialog box; see <A
-HREF="search-replace.html#QUICKSEARCH"
+HREF="searchbar.html"
 >the section called <I
->Searching for Text</I
-> in Chapter 8</A
->.
+>The Search Bar</I
+> in Chapter 7</A
+> for details.
    </P
-><DIV
-CLASS="TIP"
-><BLOCKQUOTE
-CLASS="TIP"
-><P
-><B
->Tip: </B
->     If you don't use the tool bar, disable it in the
-     <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
-> dialog box to save
-     memory and startup time (the images won't be loaded if it is disabled).
-    </P
-></BLOCKQUOTE
-></DIV
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -324,7 +356,7 @@ CLASS="GUIMENUITEM"
 HREF="global-opts.html"
 >the section called <I
 >The Global Options Dialog Box</I
-> in Chapter 9</A
+> in Chapter 8</A
 >.
     </P
 ></BLOCKQUOTE

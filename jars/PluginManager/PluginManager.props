@@ -1,9 +1,9 @@
 ### plugin properties
 plugin.PluginManagerPlugin.name=Plugin Manager
 plugin.PluginManagerPlugin.author=Slava Pestov
-plugin.PluginManagerPlugin.version=0.4.1
+plugin.PluginManagerPlugin.version=0.4.2
 plugin.PluginManagerPlugin.docs=PluginManager.html
-plugin.PluginManagerPlugin.depend.0=jedit 02.03.07.00
+plugin.PluginManagerPlugin.depend.0=jedit 02.04.04.00
 
 ### URL to download plugin list from
 plugin-manager.url=http://jedit.standmed.com/export/plugin_manager
@@ -113,3 +113,13 @@ download-progress.title=Installing Plugins
 download-progress.downloading=Downloading {0}
 download-progress.installing=Installing {0}
 download-progress.stop=Stop
+
+### error while loading plugin list
+### tell user they should install Firewall plugin
+plugin-list.ioerror.title=I/O Error
+plugin-list.ioerror.message=An I/O error occurred ({0})\n\
+	\n\
+	If you are connected to the Internet through a firewall,\n\
+	you should download and install the Firewall plugin from\n\
+	jEdit plugin central (<http://jedit.standmed.com>) before\n\
+	using the plugin manager.

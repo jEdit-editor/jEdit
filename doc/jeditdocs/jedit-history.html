@@ -171,12 +171,43 @@ CLASS="FUNCTION"
  </P
 ><H3
 CLASS="BRIDGEHEAD"
->After 1.2</H3
+>jEdit 2.0</H3
 ><P
->  Subsequent jEdit versions added many more features and enhancements.
-  jEdit 1.2 seems primitive in comparison to the latest releases.
-  But nothing really notable has happened since 1.2 was released; jEdit
-  has more or less stayed on the same path.
+>  jEdit 1.3 to 1.6 all added many useful features, but nothing too notable.
+  However, jEdit 2.0 bought another major update to the core; it had a
+  rewritten text area component.
+ </P
+><P
+>  The old text area component, which was based on the Swing JEditorPane, was
+  slow, buggy and inflexible.
+  The new one, in contrast, was a from-scratch
+  implementation that was not based on the Swing text package, and it was much
+  more suited for a text editor.
+  jEdit versions 2.1, 2.2
+  and 2.3 took advantage of the new text area by adding rectangular selections,
+  macros, a gutter and many other features.
+ </P
+><H3
+CLASS="BRIDGEHEAD"
+>jEdit 2.4</H3
+><P
+>  In previous jEdit releases, to write a new syntax highlighting
+  mode, you had to know Java and write a class known as a
+  <I
+CLASS="FIRSTTERM"
+>token marker</I
+>. Token markers were sometimes tricky to write,
+  were error-prone, and duplicated a lot of code among themselves.
+ </P
+><P
+>  The solution had actually been in development since jEdit 1.5. For nearly a
+  year, Mike Dillon had been maintaining the "XMode" plugin, which
+  allowed new syntax highlighting modes to be specified using an XML syntax.
+  In jEdit 2.4, the old syntax highlighting system was scrapped and XMode was
+  integrated.
+  Now, the syntax highlighting modes are easier to write and maintain,
+  can highlight more
+  syntax, and of course, there are more of them.
  </P
 ></DIV
 ><DIV

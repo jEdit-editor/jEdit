@@ -4,7 +4,7 @@
 # To recompile jEdit, start jmk in the root of the jEdit directory structure.
 #
 # jEdit buffer-local properties:
-# :mode=makefile:tabSize=4:noTabs=yes:
+# :tabSize=4:noTabs=yes:
 
 cmd_javac = "jikes" "-deprecation" "+D" "+P";
 #cmd_javac = "javac";
@@ -84,7 +84,7 @@ jar = "jedit.jar";
         (join pkgs, "/*.props")
         "org/gjt/sp/jedit/default.abbrevs");
 }
-		      
+
 "%.class" : "%.java";
 {
     exec cmd_javac <;

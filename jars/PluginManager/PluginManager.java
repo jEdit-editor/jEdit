@@ -255,12 +255,10 @@ public class PluginManager extends EnhancedDialog
 			DefaultMutableTreeNode node;
 			if(selection == null)
 			{
-				remove.setEnabled(false);
 				node = null;
 			}
 			else
 			{
-				remove.setEnabled(true);
 				node = (DefaultMutableTreeNode)
 					selection.getLastPathComponent();
 			}
@@ -273,6 +271,8 @@ public class PluginManager extends EnhancedDialog
 			if(node != null && node.isLeaf()
 				&& node.getUserObject() instanceof Entry)
 			{
+				remove.setEnabled(true);
+
 				Entry entry = (Entry)node.getUserObject();
 				pathStr = entry.path;
 				String clazz = entry.clazz;
@@ -304,6 +304,8 @@ public class PluginManager extends EnhancedDialog
 			}
 			else
 			{
+				remove.setEnabled(false);
+
 				pathStr = nameStr = authorStr = versionStr = "";
 			}
 

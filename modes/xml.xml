@@ -46,7 +46,7 @@
 		</SPAN>
 
 		<!-- markup tags -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -57,7 +57,7 @@
 			<END>;</END>
 		</SPAN>
 	</RULES>
-	<RULES SET="TAGS" DEFAULT="KEYWORD1">
+	<RULES SET="TAGS" DEFAULT="MARKUP">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
