@@ -493,7 +493,8 @@ public class GUIUtilities
 
 		public void windowOpened(WindowEvent evt)
 		{
-			win.setLocation(x,y);
+			Insets insets = win.getInsets();
+			win.setLocation(x - insets.left,y - insets.top);
 			win.setSize(width,height);
 
 			win.removeWindowListener(this);
@@ -538,7 +539,7 @@ public class GUIUtilities
 	 */
 	public static Image getEditorIcon()
 	{
-		return loadImageIcon(GUIUtilities.class.getResource(
+		return new ImageIcon(GUIUtilities.class.getResource(
 			"jedit_icon1.gif")).getImage();
 	}
 
@@ -547,7 +548,7 @@ public class GUIUtilities
 	 */
 	public static Image getPluginIcon()
 	{
-		return loadImageIcon(GUIUtilities.class.getResource(
+		return new ImageIcon(GUIUtilities.class.getResource(
 			"jedit_icon2.gif")).getImage();
 	}
 
@@ -646,6 +647,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.46  1999/12/15 10:40:40  sp
+ * HelpViewer updates, bug fixing, getting ready for 2.2final
+ *
  * Revision 1.45  1999/12/14 04:20:35  sp
  * Various updates, PHP3 mode added
  *

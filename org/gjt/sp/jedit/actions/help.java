@@ -32,7 +32,7 @@ public class help extends EditAction
 	{
 		try
 		{
-			new HelpViewer(new URL("jeditdocs:"));
+			HelpViewer.gotoURL(new URL("jeditdocs:"));
 		}
 		catch(MalformedURLException mf)
 		{

@@ -20,6 +20,12 @@ syntax packages. So closed-source programs can still use the older code.
 - jEdit now ignores ^Z (0x1a) characters at the end of files. DOS-derived
   operating systems (Windows, OS/2) sometimes append these characters to
   text files
+- New template.jmk (Mike Dillon)
+- Existing help viewer windows are reused, instead of new windows being
+  opened all the time
+- Documentation updates
+- Minor change to the geometry loading code, windows should be positioned
+  better
 
 + Bug Fixes
 
@@ -35,6 +41,8 @@ syntax packages. So closed-source programs can still use the older code.
   messages in EditBus.jar
 - Removed the GUIUtilities.loadImageIcon() method, since the AWT caches
   loaded images anyway
+- HelpViewer(URL) constructor deprecated, use the static HelpViewer.gotoURL()
+  method instead, which reuses existing help viewer windows
 
 * Version 2.2pre9
 

@@ -3,6 +3,21 @@ MAJOR CHANGES IN JEDIT 2.2 SINCE 2.1
 The following is an overview of changes in jEdit 2.2 since 2.1. A
 complete list can be found in the file doc/CHANGES.txt.
 
+* IMPORTANT: Syntax highlighting package no longer LGPL'd
+
+The license of the syntax highlighting and text area classes has been
+changed back to the GNU General Public License. This means that these
+packages can no longer be used in non-Open Source programs.
+
+When we LGPL'd the syntax package, jEdit had no IDE features, so it was
+natural to let commercial IDEs use it; after all, we weren't competing.
+Now that a range of plugins are being written for jEdit which give it
+IDE-like functionality, we were basically giving the competition a free
+ride.
+
+jEdit 2.1 and 2.0 are still available on the net, and they have LGPL'd
+syntax packages. So closed-source programs can still use the older code.
+
 * Directory search
 
 jEdit can now search inside all files in a directory. It can even

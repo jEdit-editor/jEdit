@@ -39,8 +39,23 @@ import org.gjt.sp.util.Log;
 public class HelpViewer extends JFrame
 {
 	/**
+	 * Goes to the specified URL, creating a new help viewer or
+	 * reusing an existing one as necessary.
+	 * @param url The URL
+	 * @since jEdit 2.2final
+	 */
+	public static void gotoURL(URL url)
+	{
+		if(helpViewer == null)
+			helpViewer = new HelpViewer(url);
+		else
+			helpViewer.gotoURL(url,true);
+	}
+
+	/**
 	 * Creates a new help viewer for the specified URL.
 	 * @param url The URL
+	 * @deprecated Use the static gotoURL() method instead
 	 */
 	public HelpViewer(URL url)
 	{
@@ -135,10 +150,14 @@ public class HelpViewer extends JFrame
 	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,"helpviewer");
+		if(helpViewer == this)
+			helpViewer = null;
 		super.dispose();
 	}
 
 	// private members
+	private static HelpViewer helpViewer;
+
 	private JButton back;
 	private JButton forward;
 	private JButton home;

@@ -16,12 +16,11 @@ found at <http://www.cacas.org/java/gnu/regexp/>.
 
 * jEdit's License
 
-jEdit is released under the GNU General Public License.
+jEdit is released under the GNU General Public License, which can
+be found in the COPYING.txt file.
 
 Note that jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
-section 11 and 12 of the GNU General Public License for details.
-
-The GNU General Public License are stored in the COPYING.txt file.
+section 11 and 12 of the GPL for details.
 
 * jEdit on the Internet
 

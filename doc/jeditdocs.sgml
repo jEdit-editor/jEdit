@@ -53,13 +53,12 @@
  </sect1>
  <sect1 id=licensing><title>Licensing Information</>
   <para>
-   jEdit is released under the GNU General Public License. except
+   jEdit is released under the GNU General Public License, which can be
+   found in the <filename>COPYING.txt</> file of the jEdit distribution.
   </para>
   <para>
    jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
-   section 11 and 12 of the GNU General Public License for details.
-   The GNU General Public License can be found in the
-   <filename>COPYING.txt</> file in the jEdit distribution.
+   section 11 and 12 of the GPL for details.
    </para>
  </sect1>
  <sect1 id=release-notes><title>Release Notes</>
@@ -68,7 +67,21 @@
    2.1. A complete list can be found in the file named
    <filename>CHANGES.txt</>, which is part of the jEdit distribution.
   </para>
+<bridgehead renderas=sect3>IMPORTANT: Syntax highlighting package no longer
+LGPL'd</>
 
+<para>
+The license of the syntax highlighting and text area classes has been
+changed back to the GNU General Public License. This means that these
+packages can no longer be used in non-Open Source programs.
+</para>
+<para>
+When we LGPL'd the syntax package, jEdit had no IDE features, so it was
+natural to let commercial IDEs use it; after all, we weren't competing.
+Now that a range of plugins are being written for jEdit which give it
+IDE-like functionality, we were basically giving the competition a free
+ride.
+</para>
 <bridgehead renderas=sect3>Directory search</>
 <para>
 jEdit can now search inside all files in a directory. It can even
@@ -706,9 +719,10 @@ so you can edit files written in non-Latin1 (human) languages.
     <guimenu>File</>&gt;<guimenuitem>Reload All Buffers</> (keyboard equivalent:
     <keycombo><keycap>Shift</><keycap>F2</></keycombo>) will discard your
     changes in <emphasis>all open buffers</>
-    and reload them from disk. This command will ask for comfirmation first.
+    and reload them from disk. This command will ask for confirmation first.
     It is useful after performing a CVS checkin or similar; CVS inserts
-    version info in the file.
+    version info in all files it commits, hence they must be re-read from
+    disk.
    </para>
    <figure><title>Warning message displayed when another application
    changed the file on disk</>
@@ -924,7 +938,7 @@ so you can edit files written in non-Latin1 (human) languages.
   </para>
   <tip>
    <para>
-    If the overloaded behaviour of <keycap>Home</> and <keycap>End</>
+    If the overloaded behavior of <keycap>Home</> and <keycap>End</>
     bothers you, disable it in the <guimenu>File</>&gt;<guimenuitem>Global
     Options</> dialog box;
     see <xref linkend=global-opts>.
@@ -1290,7 +1304,7 @@ so you can edit files written in non-Latin1 (human) languages.
   <para>
    <indexterm><primary>command line switches</><secondary>-nosession</></indexterm>
    <indexterm><primary>command line switches</><secondary>-session</></indexterm>
-   When working on a project, it can sometimes be convinient to save
+   When working on a project, it can sometimes be convenient to save
    the list of open files, and re-open those files at a later time.
    jEdit's saved sessions can do this.
   </para>
@@ -1811,7 +1825,7 @@ so you can edit files written in non-Latin1 (human) languages.
     <keycombo><keycap>Control</><keycap>B</></keycombo>) attempts to
     compete the current word by searching the buffer for
     other words beginning with the current word. Invoking it multiple times
-    will cycle through all possible competions. This can be used to
+    will cycle through all possible completions. This can be used to
     enter previously typed, long identifiers in program source, for example.
    </para>
    <para>
@@ -2592,7 +2606,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    the <guimenu>Search</> menu.
   </para>
   <para>
-   The first two file sets should be self-expanatory. With <quote>Search in
+   The first two file sets should be self-explanatory. With <quote>Search in
    selected buffers</>, you must <keycap>Control</>-click to select
    multiple buffers from the list.
   </para>
@@ -3000,7 +3014,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   detail and in-depth coverage - if you know what you're looking for.
   And of course, learning any sort of programming is difficult unless you
   look at examples and experiment; having the source to a couple of
-  plugins will definately help.
+  plugins will definitely help.
  </para>
  <para>
   This section is still under construction; more is still to come.
@@ -3230,8 +3244,9 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
  <sect1 id=plugin-actions><title>Plugin Actions</>
   <para>
    An <firstterm>action</> is basically an AWT action listener with a name
-   attached that is used to obtain several properties, such as the
-   action's label when it is listed in a menu. Actions are called in response
+   attached. The name is used to obtain several properties, such as the
+   action's menu item label and such. Actions are called by jEdit
+   in response
    to user feedback such as menu item selections, keystrokes, etc.
   </para>
   <indexterm><primary>class</><secondary>EditAction</></indexterm>
@@ -3428,7 +3443,7 @@ import org.gjt.sp.jedit.View;</>
   </para>
   <note>
    <para>
-    While you might be tempted to assign convinient keyboard shortcuts
+    While you might be tempted to assign convenient keyboard shortcuts
     to your plugin's actions, doing so
     is highly discouraged, for several reasons.
     First of all, if two plugins bind to the
@@ -3512,14 +3527,14 @@ implements OptionPane
   <para>
    The Swing <classname>JOptionPane</> class is a great way to present
    simple
-   messages and errors to the user, but it has two limitations:
+   messages and errors to the user, but it has two drawbacks:
   </para>
   <itemizedlist>
    <listitem><para>No support for localization; you must call
    <function>jEdit.getProperty()</> manually for each element of
    the message</para></listitem>
    <listitem><para>Too complicated; the various methods of the
-   <classname>JOptionPane</> class have too many paremeters which
+   <classname>JOptionPane</> class have too many parameters which
    are hard to get right</para></listitem>
   </itemizedlist>
   <para>
