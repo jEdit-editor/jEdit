@@ -555,7 +555,7 @@ public class EditPane extends JPanel implements EBComponent
 				{
 					StatusBar status = view.getStatus();
 					status.repaintCaretStatus();
-					status.updateMode();
+					status.updateBufferStatus();
 					status.updateMiscStatus();
 				}
 			}
@@ -573,7 +573,15 @@ public class EditPane extends JPanel implements EBComponent
 				textArea.getPainter().repaint();
 
 				if(view.getEditPane() == this)
-					view.getStatus().updateMode();
+					view.getStatus().updateBufferStatus();
+			}
+		}
+		else if(msg.getWhat() == BufferUpdate.ENCODING_CHANGED)
+		{
+			if(_buffer == buffer)
+			{
+				if(view.getEditPane() == this)
+					view.getStatus().updateBufferStatus();
 			}
 		}
 	}

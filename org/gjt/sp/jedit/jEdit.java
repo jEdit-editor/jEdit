@@ -352,7 +352,7 @@ public class jEdit
 
 		if(!noStartupScripts && settingsDirectory != null)
 		{
-			String path = MiscUtilities.constructPath(settingsDirectory,"startup`");
+			String path = MiscUtilities.constructPath(settingsDirectory,"startup");
 			File file = new File(path);
 			if(!file.exists())
 				file.mkdirs();
@@ -893,10 +893,52 @@ public class jEdit
 
 	/**
 	 * Displays the open file dialog box, and opens any selected files.
+	 *
 	 * @param view The view
 	 * @since jEdit 2.7pre2
 	 */
 	public static void showOpenFileDialog(View view)
+	{
+		showOpenFileDialog(view,null);
+	}
+
+	/**
+	 * Displays the open file dialog box, and opens any selected files,
+	 * but first prompts for a character encoding to use.
+	 *
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public static void showOpenFileWithOtherEncodingDialog(View view)
+	{
+		String encoding = GUIUtilities.input(view,"encoding-prompt",null,
+			jEdit.getProperty("buffer.encoding",
+			System.getProperty("file.encoding")));
+		if(encoding == null)
+			return;
+
+		Macros.Recorder recorder = view.getMacroRecorder();
+		if(recorder != null)
+		{
+			recorder.record("props = new Hashtable();");
+			recorder.record("props.put(\"encoding\",\"" + encoding + "\");");
+			recorder.record("jEdit.showOpenFileDialog(view,props);");
+		}
+
+		Hashtable props = new Hashtable();
+		props.put(Buffer.ENCODING,encoding);
+		showOpenFileDialog(view,props);
+	}
+
+	/**
+	 * Displays the open file dialog box, and opens any selected files,
+	 * setting the properties specified in the hash table in the buffers.
+	 *
+	 * @param view The view
+	 * @param props The properties to set in the buffer
+	 * @since jEdit 3.2pre2
+	 */
+	public static void showOpenFileDialog(View view, Hashtable props)
 	{
 		String[] files = GUIUtilities.showVFSFileDialog(view,null,
 			VFSBrowser.OPEN_DIALOG,true);
@@ -906,7 +948,8 @@ public class jEdit
 		{
 			for(int i = 0; i < files.length; i++)
 			{
-				Buffer newBuffer = openFile(null,files[i]);
+				Buffer newBuffer = openFile(null,null,files[i],
+					false,false,props);
 				if(newBuffer != null)
 					buffer = newBuffer;
 			}
@@ -1110,13 +1153,27 @@ public class jEdit
 			return buffer;
 		}
 
-		if(saveCaret && props.get(Buffer.CARET) == null)
+		if(props == null)
+			props = new Hashtable();
+
+		BufferHistory.Entry entry = BufferHistory.getEntry(path);
+
+		if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
 		{
-			int caret = BufferHistory.getCaretPosition(path);
-			props.put(Buffer.CARET,new Integer(caret));
-			Selection[] selection = BufferHistory.getSelection(path);
-			if(selection != null)
-				props.put(Buffer.SELECTION,selection);
+			int caret = entry.caret;
+			props.put(Buffer.CARET,new Integer(entry.caret));
+			if(entry.selection != null)
+			{
+				// getSelection() converts from string to
+				// Selection[]
+				props.put(Buffer.SELECTION,entry.getSelection());
+			}
+		}
+
+		if(entry != null && props.get(Buffer.ENCODING) == null)
+		{
+			if(entry.encoding != null)
+				props.put(Buffer.ENCODING,entry.encoding);
 		}
 
 		final Buffer newBuffer = new Buffer(view,path,readOnly,
@@ -1315,7 +1372,8 @@ public class jEdit
 			int caret = (_caret == null ? 0 : _caret.intValue());
 
 			BufferHistory.setEntry(buffer.getPath(),caret,
-				(Selection[])buffer.getProperty(Buffer.SELECTION));
+				(Selection[])buffer.getProperty(Buffer.SELECTION),
+				(String)buffer.getProperty(Buffer.ENCODING));
 		}
 
 		removeBufferFromList(buffer);
@@ -1386,7 +1444,8 @@ public class jEdit
 				Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
 				int caret = (_caret == null ? 0 : _caret.intValue());
 				BufferHistory.setEntry(buffer.getPath(),caret,
-					(Selection[])buffer.getProperty(Buffer.SELECTION));
+					(Selection[])buffer.getProperty(Buffer.SELECTION),
+					(String)buffer.getProperty(Buffer.ENCODING));
 			}
 
 			buffer.close();

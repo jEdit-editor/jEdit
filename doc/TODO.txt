@@ -29,11 +29,17 @@ TO DO
 - don't invoke updateUI unnecessarily
 - jEditLauncher
 - get web start to work
-- fix 'is not a function name' when running openjade
+- fix '... is not a function name' when running openjade
 - installing source for already installed plugins
+- save encoding in buffer history
+- document multiple encoding support
+- .. don't forget to mention in VFS browser docs
 
 + before 3.2final:
 
+- save buffer history as XML
+- maybe rewrite file restore to use XML -- allow plugins to read/write
+  arbitriary restore files? -- eg BufferList
 - custom splitter control?
 - finish persistent splits: resize splits to make them in the middle
 - documentation
@@ -43,7 +49,6 @@ TO DO
   - Include John's upcoming plugin guide
   - document new edit server
   - document differences between web start and stand-alone version
-- encoding option in VFS browser
 - help viewer: links to .txt files?
 - C+\
 - docking improvements:
@@ -56,7 +61,6 @@ TO DO
     shows a menu, with commands for moving the dockable, making it
     floating, toggling auto-open, etc.
   - require that each dockable have a tool bar with a close button?
-- plugins should be able to run arbitriary .bsh scripts easily
 - next time i'm making an RPM, fix the shell script
 - reload: preserve caret position
 - globalColors setting:

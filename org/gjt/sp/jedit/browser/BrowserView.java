@@ -49,7 +49,6 @@ public class BrowserView extends JPanel
 		tree.setEditable(false);
 		tree.addTreeExpansionListener(new TreeHandler());
 		tree.putClientProperty("JTree.lineStyle", "Angled");
-		tree.setVisibleRowCount(10);
 
 		if(browser.isMultipleSelectionEnabled())
 			tree.getSelectionModel().setSelectionMode(
@@ -59,7 +58,10 @@ public class BrowserView extends JPanel
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		setLayout(new BorderLayout());
-		add(BorderLayout.CENTER, scroller = new JScrollPane(tree));
+
+		scroller = new JScrollPane(tree);
+		scroller.setPreferredSize(new Dimension(0,200));
+		add(BorderLayout.CENTER,scroller);
 
 		propertiesChanged();
 	}

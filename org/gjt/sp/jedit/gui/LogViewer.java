@@ -44,7 +44,7 @@ public class LogViewer extends JPanel implements DockableWindow
 			add(BorderLayout.NORTH,label);
 		}
 
-		JTextArea textArea = new JTextArea(24,40);
+		JTextArea textArea = new JTextArea(24,80);
 		textArea.setDocument(Log.getLogDocument());
 		//textArea.setEditable(false);
 

@@ -599,7 +599,9 @@ public class View extends JFrame implements EBComponent
 
 	public JMenu getMenu(String name)
 	{
-		if(name.equals("recent-files"))
+		if(name.equals("open-encoding"))
+			return openEncoding;
+		else if(name.equals("recent-files"))
 			return recent;
 		else if(name.equals("current-directory"))
 			return currentDirectory;
@@ -691,6 +693,7 @@ public class View extends JFrame implements EBComponent
 		dockableWindowManager = new DockableWindowManager(this);
 
 		// Dynamic menus
+		openEncoding = GUIUtilities.loadMenu(this,"open-encoding");
 		recent = GUIUtilities.loadMenu(this,"recent-files");
 		currentDirectory = new CurrentDirectoryMenu(this);
 		markers = new MarkersMenu(this);
@@ -701,6 +704,7 @@ public class View extends JFrame implements EBComponent
 		Component comp = restoreSplitConfig(buffer,splitConfig);
 		dockableWindowManager.add(comp);
 
+		updateOpenEncodingMenu();
 		updateMacrosMenu();
 		updatePluginsMenu();
 
@@ -786,6 +790,7 @@ public class View extends JFrame implements EBComponent
 
 	private DockableWindowManager dockableWindowManager;
 
+	private JMenu openEncoding;
 	private JMenu recent;
 	private JMenu currentDirectory;
 	private JMenu markers;
@@ -968,8 +973,51 @@ public class View extends JFrame implements EBComponent
 	{
 		this.editPane = editPane;
 		status.repaintCaretStatus();
-		status.updateMode();
+		status.updateBufferStatus();
 		status.updateMiscStatus();
+	}
+
+	/**
+	 * Creates the 'Open Encoding' menu.
+	 */
+	private void updateOpenEncodingMenu()
+	{
+		ActionListener listener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				Hashtable props = new Hashtable();
+				props.put("encoding",evt.getActionCommand());
+				jEdit.showOpenFileDialog(View.this,props);
+			}
+		};
+
+		// used twice...
+		String systemEncoding = System.getProperty("file.encoding");
+
+		JMenuItem mi = new JMenuItem(jEdit.getProperty("os-encoding"));
+		mi.setActionCommand(systemEncoding);
+		mi.addActionListener(listener);
+		openEncoding.add(mi);
+
+		mi = new JMenuItem(jEdit.getProperty("jedit-encoding"));
+		mi.setActionCommand(jEdit.getProperty("buffer.encoding",systemEncoding));
+		mi.addActionListener(listener);
+		openEncoding.add(mi);
+
+		openEncoding.addSeparator();
+
+		StringTokenizer st = new StringTokenizer(jEdit.getProperty("encodings"));
+		while(st.hasMoreTokens())
+		{
+			mi = new JMenuItem(st.nextToken());
+			mi.addActionListener(listener);
+			openEncoding.add(mi);
+		}
+
+		openEncoding.addSeparator();
+
+		openEncoding.add(GUIUtilities.loadMenuItem("other-encoding"));
 	}
 
 	/**
@@ -1181,7 +1229,7 @@ public class View extends JFrame implements EBComponent
 			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED)
 		{
 			status.repaintCaretStatus();
-			status.updateMode();
+			status.updateBufferStatus();
 			status.updateMiscStatus();
 			status.updateFoldStatus();
 		}

@@ -4,6 +4,15 @@ JEDIT 3.2 VERSION HISTORY
 
 + New Features
 
+- Improved support for editing files with different character encodings:
+  - The encoding used to load a file is remembered in the buffer history
+  - File->Open With Encoding menu
+  - Encoding can be changed for open buffers in Utilities->Buffer
+    Options
+  - Editor default can be changed in Utilities->Global Options->Loading
+    and saving
+  - In stand-alone file system browser, an 'Open With Encoding' submenu
+    appears in the right-click context menu
 - Occam syntax highlighting (Richard Beton)
 - MIPS R2000 assembly syntax highlighting (Marc Rummel)
 - The icons in the file system browser can be toggled on and off
@@ -64,6 +73,7 @@ JEDIT 3.2 VERSION HISTORY
 - A few bugs that could occur with obscure combinations of command-line
   parameters have been fixed. A side-effect of this is that the -nogui
   command line switch is no longer available.
+- The default size of the file system browser was wrong
 
 + API Changes
 

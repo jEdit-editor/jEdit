@@ -180,7 +180,7 @@ public class BufferIORequest extends WorkRequest
 			{
 				Log.log(Log.ERROR,this,ch);
 				Object[] pp = { path,
-					jEdit.getProperty("buffer.encoding"),
+					buffer.getProperty(Buffer.ENCODING),
 					ch.toString() };
 				VFSManager.error(view,"encoding-error",pp);
 			}
@@ -307,8 +307,7 @@ public class BufferIORequest extends WorkRequest
 		StringBuffer sbuf = new StringBuffer((int)length);
 
 		InputStreamReader in = new InputStreamReader(_in,
-			jEdit.getProperty("buffer.encoding",
-			System.getProperty("file.encoding")));
+			(String)buffer.getProperty(Buffer.ENCODING));
 		char[] buf = new char[IOBUFSIZE];
 		// Number of characters in 'buf' array.
 		// InputStream.read() doesn't always fill the
@@ -666,8 +665,7 @@ public class BufferIORequest extends WorkRequest
 	{
 		BufferedWriter out = new BufferedWriter(
 			new OutputStreamWriter(_out,
-				jEdit.getProperty("buffer.encoding",
-				System.getProperty("file.encoding"))),
+				(String)buffer.getProperty(Buffer.ENCODING)),
 				IOBUFSIZE);
 		Segment lineSegment = new Segment();
 		String newline = (String)buffer.getProperty(Buffer.LINESEP);

@@ -1,7 +1,7 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.1 AND 3.2
 
-- don't forget to document jEditLauncher, plugin guide, improved encoding
-  support, BeanShell 1.2 if it ends up being included
+- don't forget to document jEditLauncher, plugin guide, BeanShell 1.2 if
+  it ends up being included
 
 * Markers
 
@@ -63,10 +63,16 @@ the search and replace dialog box.
 Two new commands, 'Search in Open Buffers' and 'Search in Directory',
 pre-select the appropriate multi-file search settings.
 
-Occurrences of the search string can now be replaced with the result of a
-BeanShell code snippet that is evaluated for each occurrence. This can be
-used to perform complicated text transforms, like converting all HTML
-tags to lower case.
+Occurrences of the search string can now be replaced with the result of
+a BeanShell code snippet that is evaluated for each occurrence. For
+example, to convert HTML tags to lower case, perform a 'Replace All',
+searching for the following regular expression:
+
+	<(.*?)>
+
+Replacing it with:
+
+	"<" + _1.toLowerCase() + ">"
 
 Version 1.1.3 of the gnu.regexp package is now included. This version
 adds support for positive and negative lookaheads.
@@ -98,6 +104,19 @@ by marker and register commands, I/O status, and so on.
 If the current line contains hard tabs, both the 'file' column location
 (where each tab counts as one character) and 'screen' column location
 (where each tab counts as multiple characters) are shown.
+
+* Better support for different character encodings
+
+Files can be loaded and saved with an encoding different from the
+default using the commands in the 'Open With Encoding' submenu of the
+File menu, or the 'Open With Encoding' submenu of the file system
+browser right-click menu.
+
+The current buffer's encoding is shown in the status bar, and the recent
+file list remembers the encoding of recently-opened files.
+
+The default encoding can still be set in the 'Global Options' dialog
+box, as in previous versions.
 
 * File system browser improvements
 

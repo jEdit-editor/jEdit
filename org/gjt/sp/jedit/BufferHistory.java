@@ -26,22 +26,32 @@ import org.gjt.sp.util.Log;
 
 public class BufferHistory
 {
-	public static int getCaretPosition(String path)
+	public static Entry getEntry(String path)
 	{
-		Entry entry = getEntry(path);
-		return (entry == null ? 0 : entry.caret);
+		Enumeration enum = history.elements();
+		while(enum.hasMoreElements())
+		{
+			Entry entry = (Entry)enum.nextElement();
+			if(pathsCaseInsensitive)
+			{
+				if(entry.path.equalsIgnoreCase(path))
+					return entry;
+			}
+			else
+			{
+				if(entry.path.equals(path))
+					return entry;
+			}
+		}
+
+		return null;
 	}
 
-	public static Selection[] getSelection(String path)
-	{
-		Entry entry = getEntry(path);
-		return (entry == null ? null : stringToSelection(entry.selection));
-	}
-
-	public static void setEntry(String path, int caret, Selection[] selection)
+	public static void setEntry(String path, int caret, Selection[] selection,
+		String encoding)
 	{
 		removeEntry(path);
-		addEntry(new Entry(path,caret,selectionToString(selection)));
+		addEntry(new Entry(path,caret,selectionToString(selection),encoding));
 	}
 
 	public static Vector getBufferHistory()
@@ -88,7 +98,7 @@ public class BufferHistory
 					selection = line.substring(index2 + 1);
 				}
 
-				history.addElement(new Entry(path,caret,selection));
+				history.addElement(new Entry(path,caret,selection,null));
 			}
 
 			in.close();
@@ -143,27 +153,6 @@ public class BufferHistory
 		history = new Vector();
 		pathsCaseInsensitive = (File.separatorChar == '\\'
 			|| File.separatorChar == ':');
-	}
-
-	private static Entry getEntry(String path)
-	{
-		Enumeration enum = history.elements();
-		while(enum.hasMoreElements())
-		{
-			Entry entry = (Entry)enum.nextElement();
-			if(pathsCaseInsensitive)
-			{
-				if(entry.path.equalsIgnoreCase(path))
-					return entry;
-			}
-			else
-			{
-				if(entry.path.equals(path))
-					return entry;
-			}
-		}
-
-		return null;
 	}
 
 	private static void addEntry(Entry entry)
@@ -244,12 +233,19 @@ public class BufferHistory
 		public String path;
 		public int caret;
 		public String selection;
+		public String encoding;
 
-		public Entry(String path, int caret, String selection)
+		public Selection[] getSelection()
+		{
+			return stringToSelection(selection);
+		}
+
+		public Entry(String path, int caret, String selection, String encoding)
 		{
 			this.path = path;
 			this.caret = caret;
 			this.selection = selection;
+			this.encoding = encoding;
 		}
 	}
 }

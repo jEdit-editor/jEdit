@@ -509,6 +509,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="other-encoding">
+	<CODE>
+		jEdit.showOpenFileWithOtherEncodingDialog(view);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="paste">
 	<CODE>
 		Registers.paste(textArea,'$');

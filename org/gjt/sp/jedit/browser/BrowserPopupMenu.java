@@ -50,10 +50,15 @@ public class BrowserPopupMenu extends JPopupMenu
 
 			if(jEdit.getBuffer(file.path) != null)
 			{
-				add(createMenuItem("open"));
-				add(createMenuItem("open-view"));
-				add(createMenuItem("insert"));
-				add(createMenuItem("close"));
+				if(browser.getMode() == VFSBrowser.BROWSER)
+				{
+					add(createMenuItem("open"));
+					add(createOpenEncodingMenu());
+					add(createMenuItem("insert"));
+					add(createMenuItem("close"));
+				}
+				else
+					add(createMenuItem("choose"));
 			}
 			else
 			{
@@ -70,7 +75,7 @@ public class BrowserPopupMenu extends JPopupMenu
 				else
 				{
 					add(createMenuItem("open"));
-					add(createMenuItem("open-view"));
+					add(createOpenEncodingMenu());
 					add(createMenuItem("insert"));
 				}
 	
@@ -151,6 +156,47 @@ public class BrowserPopupMenu extends JPopupMenu
 		return mi;
 	}
 
+	private JMenu createOpenEncodingMenu()
+	{
+		ActionListener listener = new ActionHandler();
+
+		JMenu openEncoding = new JMenu(jEdit.getProperty("open-encoding.label"));
+
+		// used twice...
+		String systemEncoding = System.getProperty("file.encoding");
+
+		JMenuItem mi = new JMenuItem(jEdit.getProperty("os-encoding"));
+		mi.setActionCommand("open@" + systemEncoding);
+		mi.addActionListener(listener);
+		openEncoding.add(mi);
+
+		mi = new JMenuItem(jEdit.getProperty("jedit-encoding"));
+		mi.setActionCommand("open@" + jEdit.getProperty("buffer.encoding",systemEncoding));
+		mi.addActionListener(listener);
+		openEncoding.add(mi);
+
+		openEncoding.addSeparator();
+
+		StringTokenizer st = new StringTokenizer(jEdit.getProperty("encodings"));
+		while(st.hasMoreTokens())
+		{
+			String encoding = st.nextToken();
+			mi = new JMenuItem(encoding);
+			mi.setActionCommand("open@" + encoding);
+			mi.addActionListener(listener);
+			openEncoding.add(mi);
+		}
+
+		openEncoding.addSeparator();
+
+		mi = new JMenuItem(jEdit.getProperty("other-encoding.label"));
+		mi.setActionCommand("other-encoding");
+		mi.addActionListener(listener);
+		openEncoding.add(mi);
+
+		return openEncoding;
+	}
+
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -158,14 +204,27 @@ public class BrowserPopupMenu extends JPopupMenu
 			View view = browser.getView();
 			String actionCommand = evt.getActionCommand();
 
-			if(actionCommand.equals("open"))
-				jEdit.openFile(view,file.path);
-			else if(actionCommand.equals("open-view"))
+			if(actionCommand.startsWith("open@"))
 			{
-				Buffer buffer = jEdit.openFile(null,file.path);
-				if(buffer != null)
-					jEdit.newView(view,buffer);
+				// a bit of a hack to support 'Open With Encoding' menu
+				Hashtable props = new Hashtable();
+				props.put(Buffer.ENCODING,actionCommand.substring(5));
+				jEdit.openFile(view,null,file.path,false,false,props);
 			}
+			else if(actionCommand.equals("other-encoding"))
+			{
+				String encoding = GUIUtilities.input(browser,
+					"encoding-prompt",null,
+					jEdit.getProperty("buffer.encoding",
+					System.getProperty("file.encoding")));
+				if(encoding == null)
+					return;
+				Hashtable props = new Hashtable();
+				props.put(Buffer.ENCODING,encoding);
+				jEdit.openFile(view,null,file.path,false,false,props);
+			}
+			else if(actionCommand.equals("open"))
+				jEdit.openFile(view,file.path);
 			else if(actionCommand.equals("insert"))
 				view.getBuffer().insert(view,file.path);
 			else if(actionCommand.equals("choose"))

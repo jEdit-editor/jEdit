@@ -67,6 +67,12 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	public static final Object MODE_CHANGED = "MODE_CHANGED";
 
 	/**
+	 * Character ncoding changed.
+	 * @since jEdit 3.2pre4
+	 */
+	public static final Object ENCODING_CHANGED = "ENCODING_CHANGED";
+
+	/**
 	 * Buffer saving.
 	 */
 	public static final Object SAVING = "SAVING";

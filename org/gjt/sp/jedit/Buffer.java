@@ -82,6 +82,12 @@ public class Buffer extends PlainDocument implements EBComponent
 	public static final String OVERWRITE = "Buffer__overwrite";
 
 	/**
+	 * Character encoding used when loading and saving.
+	 * @since jEdit 3.2pre4
+	 */
+	public static final String ENCODING = "encoding";
+
+	/**
 	 * Reloads settings from the properties. This should be called
 	 * after the <code>syntax</code> buffer-local property is
 	 * changed.
@@ -3039,10 +3045,15 @@ loop:				for(int i = 0; i < count; i++)
 	private void clearProperties()
 	{
 		String lineSeparator = (String)getProperty(LINESEP);
+		String encoding = (String)getProperty(ENCODING);
 		((BufferProps)getDocumentProperties()).clear();
 		putProperty("i18n",Boolean.FALSE);
 		if(lineSeparator != null)
 			putProperty(LINESEP,lineSeparator);
+		if(encoding != null)
+			putProperty(ENCODING,encoding);
+		else
+			putProperty(ENCODING,System.getProperty("file.encoding"));
 	}
 
 	private void parseBufferLocalProperties()

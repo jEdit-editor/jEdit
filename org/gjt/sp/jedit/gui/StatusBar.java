@@ -69,22 +69,32 @@ public class StatusBar extends JPanel
 		mode = new JLabel();
 		mode.setForeground(Color.black);
 		mode.setBorder(border);
-
+		mode.setToolTipText(jEdit.getProperty("view.status.mode-tooltip"));
 		box.add(mode);
 		box.add(Box.createHorizontalStrut(3));
+
+		encoding = new JLabel();
+		encoding.setForeground(Color.black);
+		encoding.setBorder(border);
+		encoding.setToolTipText(jEdit.getProperty("view.status.encoding-tooltip"));
+		box.add(encoding);
+		box.add(Box.createHorizontalStrut(3));
+
 		multiSelect = new JLabel("multi");
 		multiSelect.setBorder(border);
 		box.add(multiSelect);
 		box.add(Box.createHorizontalStrut(3));
+
 		overwrite = new JLabel("over");
 		overwrite.setBorder(border);
 		box.add(overwrite);
 		box.add(Box.createHorizontalStrut(3));
+
 		fold = new JLabel("fold");
 		fold.setBorder(border);
 		box.add(fold);
 
-		updateMode();
+		updateBufferStatus();
 		updateMiscStatus();
 		updateFoldStatus();
 
@@ -130,9 +140,11 @@ public class StatusBar extends JPanel
 		caretStatus.repaint();
 	}
 
-	public void updateMode()
+	public void updateBufferStatus()
 	{
-		mode.setText(view.getBuffer().getMode().getName());
+		Buffer buffer = view.getBuffer();
+		mode.setText(buffer.getMode().getName());
+		encoding.setText(buffer.getProperty("encoding").toString());
 	}
 
 	public void updateMiscStatus()
@@ -172,6 +184,7 @@ public class StatusBar extends JPanel
 	private VICaretStatus caretStatus;
 	private JLabel message;
 	private JLabel mode;
+	private JLabel encoding;
 	private JLabel multiSelect;
 	private JLabel overwrite;
 	private JLabel fold;

@@ -1,6 +1,6 @@
 /*
  * BufferOptions.java - Buffer-specific options dialog
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.StringTokenizer;
+import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -179,9 +181,36 @@ public class BufferOptions extends EnhancedDialog
 		layout.setConstraints(lineSeparator,cons);
 		panel.add(lineSeparator);
 
-		// Syntax highlighting
+		// Encoding
 		cons.gridx = 0;
 		cons.gridy = 5;
+		cons.weightx = 0.0f;
+		cons.insets = labelInsets;
+		label = new JLabel(jEdit.getProperty("buffer-options.encoding"),
+			SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		panel.add(label);
+
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		cons.insets = nullInsets;
+
+		DefaultComboBoxModel encodings = new DefaultComboBoxModel();
+		StringTokenizer st = new StringTokenizer(jEdit.getProperty("encodings"));
+		while(st.hasMoreTokens())
+		{
+			encodings.addElement(st.nextToken());
+		}
+
+		encoding = new JComboBox(encodings);
+		encoding.setEditable(true);
+		encoding.setSelectedItem(buffer.getProperty(Buffer.ENCODING));
+		layout.setConstraints(encoding,cons);
+		panel.add(encoding);
+
+		// Syntax highlighting
+		cons.gridx = 0;
+		cons.gridy = 6;
 		cons.weightx = 0.0f;
 		cons.gridwidth = cons.REMAINDER;
 		cons.fill = GridBagConstraints.NONE;
@@ -194,7 +223,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(syntax);
 
 		// Indent on tab
-		cons.gridy = 6;
+		cons.gridy = 7;
 		indentOnTab = new JCheckBox(jEdit.getProperty(
 			"options.editing.indentOnTab"));
 		indentOnTab.setSelected(buffer.getBooleanProperty("indentOnTab"));
@@ -203,7 +232,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnTab);
 
 		// Indent on enter
-		cons.gridy = 7;
+		cons.gridy = 8;
 		indentOnEnter = new JCheckBox(jEdit.getProperty(
 			"options.editing.indentOnEnter"));
 		indentOnEnter.setSelected(buffer.getBooleanProperty("indentOnEnter"));
@@ -212,7 +241,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnEnter);
 
 		// Soft tabs
-		cons.gridy = 8;
+		cons.gridy = 9;
 		noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editing.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
@@ -221,7 +250,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(noTabs);
 
 		// Props label
-		cons.gridy = 9;
+		cons.gridy = 10;
 		cons.insets = new Insets(6,0,6,0);
 		label = new JLabel(jEdit.getProperty("buffer-options.props"));
 		layout.setConstraints(label,cons);
@@ -299,13 +328,24 @@ public class BufferOptions extends EnhancedDialog
 		else
 			throw new InternalError();
 
-		String oldLineSep = (String)buffer.getProperty("lineSeparator");
+		String oldLineSep = (String)buffer.getProperty(Buffer.LINESEP);
 		if(oldLineSep == null)
 			oldLineSep = System.getProperty("line.separator");
 		if(!oldLineSep.equals(lineSep))
 		{
 			buffer.putProperty("lineSeparator",lineSep);
 			buffer.setDirty(true);
+		}
+
+		String encoding = (String)this.encoding.getSelectedItem();
+		String oldEncoding = (String)buffer.getProperty(Buffer.ENCODING);
+		if(!oldEncoding.equals(encoding))
+		{
+			buffer.putProperty(Buffer.ENCODING,encoding);
+			buffer.setDirty(true);
+
+			// XXX this should be moved elsewhere!!!
+			EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.ENCODING_CHANGED));
 		}
 
 		buffer.putBooleanProperty("syntax",syntax.isSelected());
@@ -335,6 +375,7 @@ public class BufferOptions extends EnhancedDialog
 	private Mode[] modes;
 	private JComboBox mode;
 	private JComboBox lineSeparator;
+	private JComboBox encoding;
 	private JCheckBox indentOnTab;
 	private JCheckBox indentOnEnter;
 	private JCheckBox syntax;
@@ -390,62 +431,3 @@ public class BufferOptions extends EnhancedDialog
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.24  2000/12/08 04:03:43  sp
- * bug fixes
- *
- * Revision 1.23  2000/12/06 07:00:40  sp
- * Lotsa bug fixes
- *
- * Revision 1.22  2000/11/12 05:36:49  sp
- * BeanShell integration started
- *
- * Revision 1.21  2000/11/07 10:08:31  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.20  2000/11/05 05:25:46  sp
- * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
- *
- * Revision 1.19  2000/11/02 09:19:33  sp
- * more features
- *
- * Revision 1.18  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.17  2000/07/15 10:10:17  sp
- * improved printing
- *
- * Revision 1.16  2000/05/21 03:00:51  sp
- * Code cleanups and bug fixes
- *
- * Revision 1.15  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.14  2000/04/15 04:14:47  sp
- * XML files updated, jEdit.get/setBooleanProperty() method added
- *
- * Revision 1.13  2000/04/07 06:57:26  sp
- * Buffer options dialog box updates, API docs updated a bit in syntax package
- *
- * Revision 1.12  1999/11/26 07:37:11  sp
- * Escape/enter handling code moved to common superclass, bug fixes
- *
- * Revision 1.11  1999/10/23 03:48:22  sp
- * Mode system overhaul, close all dialog box, misc other stuff
- *
- * Revision 1.10  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.9  1999/08/21 01:48:18  sp
- * jEdit 2.0pre8
- *
- * Revision 1.8  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.7  1999/04/19 05:44:34  sp
- * GUI updates
- *
- */

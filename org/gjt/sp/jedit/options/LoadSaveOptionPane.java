@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.options;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
 
 public class LoadSaveOptionPane extends AbstractOptionPane
@@ -33,18 +34,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
-		/* Default file encoding */
-		String[] encodings = {
-			"ASCII", "8859_1", "UTF8", "Cp850", "Cp1252",
-			"MacRoman", "KOI8_R", "Unicode"
-		};
-
-		encoding = new JComboBox(encodings);
-		encoding.setEditable(true);
-		encoding.setSelectedItem(jEdit.getProperty("buffer.encoding",
-			System.getProperty("file.encoding")));
-		addComponent(jEdit.getProperty("options.loadsave.encoding"),encoding);
-
 		/* Autosave interval */
 		autosave = new JTextField(jEdit.getProperty("autosave"));
 		addComponent(jEdit.getProperty("options.loadsave.autosave"),autosave);
@@ -86,6 +75,20 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.loadsave.lineSeparator"),
 			lineSeparator);
 
+		/* Default file encoding */
+		DefaultComboBoxModel encodings = new DefaultComboBoxModel();
+		StringTokenizer st = new StringTokenizer(jEdit.getProperty("encodings"));
+		while(st.hasMoreTokens())
+		{
+			encodings.addElement(st.nextToken());
+		}
+
+		encoding = new JComboBox(encodings);
+		encoding.setEditable(true);
+		encoding.setSelectedItem(jEdit.getProperty("buffer.encoding",
+			System.getProperty("file.encoding")));
+		addComponent(jEdit.getProperty("options.loadsave.encoding"),encoding);
+
 		/* Number of I/O threads to start */
 		ioThreadCount = new JTextField(jEdit.getProperty("ioThreadCount"));
 		addComponent(jEdit.getProperty("options.loadsave.ioThreadCount"),
@@ -111,8 +114,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 
 	public void _save()
 	{
-		jEdit.setProperty("buffer.encoding",(String)
-			encoding.getSelectedItem());
 		jEdit.setProperty("autosave",autosave.getText());
 		jEdit.setProperty("backups",backups.getText());
 		jEdit.setProperty("backup.directory",backupDirectory.getText());
@@ -132,6 +133,8 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
+		jEdit.setProperty("buffer.encoding",(String)
+			encoding.getSelectedItem());
 		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
 		jEdit.setBooleanProperty("restore",restore.isSelected());
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
@@ -140,13 +143,13 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	}
 
 	// private members
-	private JComboBox encoding;
 	private JTextField autosave;
 	private JTextField backups;
 	private JTextField backupDirectory;
 	private JTextField backupPrefix;
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
+	private JComboBox encoding;
 	private JTextField ioThreadCount;
 	private JCheckBox restore;
 	private JCheckBox restoreCLI;
