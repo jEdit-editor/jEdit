@@ -287,6 +287,11 @@
    <figure><title>A tooltip</>
     <graphic scale=75 fileref=window-editor-tooltip></>
    </figure>
+   <para>
+    The text field labelled <quote>Find</> on the tool bar can be used
+    to quickly search for a string without displaying the
+    Search and Replace dialog box.
+   </para>
    <tip>
     <para>
      If you don't use the tool bar, disable it in the
@@ -1683,7 +1688,7 @@
     <quote>.c</> are edited in C mode. Then, it checks the entire
     <emphasis>file name</> against a list of known file names. For
     example, a file named <quote>CONFIG.SYS</> will be
-    edited in DOS INI mode. Finally, the first line of the file is
+    edited in a property file mode. Finally, the first line of the file is
     checked. For example, if the first line of
     a file is <quote>#!/bin/sh</>, (signifying a Unix shell script)
     the file will be edited in Shell Script mode.
@@ -1707,8 +1712,8 @@
    </sect2>
   <sect2><title>Available Edit Modes</>
    <table><title>Table of edit modes</>
-    <tgroup cols=3>
-     <colspec colnum=1 colwidth=1.5in>
+    <tgroup cols=2>
+     <colspec colnum=1 colwidth=1in>
      <thead>
       <row>
        <entry>Mode name</>
@@ -1966,7 +1971,8 @@
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>I</></keycombo>)
     will indent the current line using automatic indentation rules; see
-    <xhref linkend=autoindent> for details.
+    <xref linkend=autoindent> for details.
+   </para>
    <para>
     <indexterm><primary>Go to End Indent command</></indexterm>
     <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guisubmenu>Go to End Indent</>
@@ -2202,25 +2208,76 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <command>grep</>-like <quote>HyperSearch</> feature. This chapter
   covers it in detail.
  </para>
- <sect1 id=search-replace-dlog><title>The Search and Replace Dialog Box</>
+ <sect1 id=quicksearch><title>Searching for Text</>
   <para>
-   <indexterm><primary>selection</></indexterm>
    <indexterm><primary>Find command</></indexterm>
    <indexterm><primary>Search menu</></indexterm>
    <indexterm><primary>history text fields</></indexterm>
    <indexterm><primary>multiple file search and replace</></indexterm>
    <indexterm><primary>regular expressions</></indexterm>
-   <guimenu>Search</>&gt;<guimenuitem>Find</>
-   (keyboard equivalent: <keycombo><keycap>Control</><keycap>F</>
-   </keycombo>) displays the search and replace dialog box.
+   <guimenu>Search</>&gt;<guimenuitem>Find</> (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>F</></keycombo>)
+   moves the keyboard focus to the <quote>Find</> field in the tool bar. A
+   string to search for can then be entered. Pressing <keycap>Enter</> will
+   locate the next instance of that string. If <keycap>Enter</> is pressed
+   while no string is entered, the Search and Replace dialog box will be
+   displayed. The find field stores previously entered strings; see
+   <xref linkend=history>
+  </para>
+  <para>
+   <indexterm><primary>selection</></indexterm>
+   <indexterm><primary>Find Next command</></indexterm>
+   <guimenu>Search</>&gt;<guimenuitem>Find Next</> (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>G</></keycombo>)
+   locates the next instance of the search string.
+  </para>
+  <para>
+   <indexterm><primary>selection</></indexterm>
+   <indexterm><primary>Find Selection command</></indexterm>
+   <guimenu>Search</>&gt;<guimenuitem>Find Selection</> (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>H</></keycombo>)
+   moves the keyboard focus to the <quote>Find</> field in the tool bar
+   and inserts the currently selected text there. Pressing
+   <keycap>Enter</> will then search for that text.
+  </para>
+  <note>
+   <para>
+    If the tool bar is disabled, the <guimenuitem>Find</> and
+    <guimenuitem>Find Selection</> commands will display the Search and
+    Replace dialog box instead.
+   </para>
+  </note>
+  <indexterm><primary>old jEdit versions</></indexterm>
+  <sidebar>
+   <bridgehead renderas=sect3>jEdit 2.1 Users</>
+   <para>
+    jEdit 2.1 did not have a <quote>Find</> field in the tool bar, and
+    the searching commands always displayed the Search and Replace
+    dialog box.
+   </para>
+  </sidebar>
+ </sect1>
+ <sect1 id=search-replace-dlog><title>The Search and Replace Dialog Box</>
+  <para>
+   <indexterm><primary>Search and Replace command</></indexterm>
+   <indexterm><primary>Search menu</></indexterm>
+   <indexterm><primary>history text fields</></indexterm>
+   <indexterm><primary>multiple file search and replace</></indexterm>
+   <indexterm><primary>regular expressions</></indexterm>
+   <guimenu>Search</>&gt;<guimenuitem>Search and Replace</>
+   (keyboard equivalent: <keycap>F7</>) displays the Search and Replace
+   dialog box. The Search and Replace dialog box allows various search
+   settings to be changed,
+   as well as replacement, unlike the <quote>Find</> field in
+   the tool bar.
   </para>
   <itemizedlist>
    <listitem><para>The desired search string can be entered in the
-   <guibutton>Find:</> field. This field supports a history; see
-   <xref linkend=history> for details.</para></listitem>
+   <guibutton>Find:</> field. This field stores previously entered strings; see
+   <xref linkend=history></para></listitem>
    <listitem><para>The desired replacement string can be entered in the
-   <guibutton>Replace With:</> field. This field supports a history;
-   see <xref linkend=history> for details.
+   <guibutton>Replace With:</> field. This field stores previously entered strings; see
+   <xref linkend=history>
    </para></listitem>
    <listitem><para>If the <guibutton>Keep Dialog</guibutton> check box
    is selected, the find dialog box will remain open until it is explicitly
@@ -2287,8 +2344,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <itemizedlist>
    <listitem><para>
     The desired search string can be entered in the
-    <guibutton>Find:</> field. This field supports a history;
-    see <xref linkend=history> for details.
+    <guibutton>Find:</> field. This field stores previously entered strings; see
+   <xref linkend=history>.
    </para></listitem>
    <listitem><para>
     If the <guibutton>Regular Expression</> check box is selected,

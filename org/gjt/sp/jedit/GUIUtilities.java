@@ -218,14 +218,14 @@ public class GUIUtilities
 	 * @param name The property with the white space separated list
 	 * of tool bar buttons
 	 */
-	public static Component loadToolBar(String name)
+	public static JToolBar loadToolBar(String name)
 	{
-		JToolBar toolBar = new JToolBar();
-		toolBar.setFloatable(false);
-
 		String buttons = jEdit.getProperty(name);
 		if(buttons == null)
 			return null;
+
+		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
 
 		StringTokenizer st = new StringTokenizer(buttons);
 		while(st.hasMoreElements())
@@ -736,6 +736,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  1999/10/24 06:04:00  sp
+ * QuickSearch in tool bar, auto indent updates, macro recorder updates
+ *
  * Revision 1.34  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

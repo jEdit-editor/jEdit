@@ -2,25 +2,11 @@ JEDIT 2.2 TO DO
 
 ------- pre1 -------
 
-- Move caret on redo
-
-- set-search-parameters (regexp, icase, {current,all}) action
-
-- Line up opening/closing brackets
-
 - When pasting text, autoindent it
-  new lines at the start and end. Implement in jEdit, not text area
 
 - Recursive directory search
 
-------- pre2 -------
-
-- Trim tool bar a bit, add 'QuickSearch' field.
-  C+f activates it, F7 displays Search & Replace dialog box.
-  In search: ENTER finds next. ESC deactivates
-  ENTER with no string entered displays search and replace dialog box
-
-------- pre3+ -------
+------- pre2+ -------
 
 - Reverse search. This will require changes to gnu.regexp
 
@@ -28,14 +14,13 @@ JEDIT 2.2 TO DO
 
 - Integrate EditBus if enough plugins take advantage of it
 
-* Ideas for plugins:
+------- Ideas for plugins -------
 
 - Version control
 - Project manager
 - Application/applet/plugin wizard
 - Localizations for specific languages
 - Generic EditBus-aware plugin for invoking other programs inside the JVM
-- Debugger front-end (to jdb, gdb, and so on)
-- VI emulation (will be a bit tricky until the InputHandler changes planned
-for jEdit 2.2)
+- Debugger front-end
+- VI emulation
 - Menu bar/right-click context menu/toolbar editor

@@ -1,6 +1,6 @@
 /*
  * find.java
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.gui.SearchDialog;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
@@ -34,6 +34,11 @@ implements InputHandler.NonRecordable
 	
 	public void actionPerformed(ActionEvent evt)
 	{
-		new SearchDialog(getView(evt),null);
+		View view = getView(evt);
+		HistoryTextField quicksearch = view.getQuickSearch();
+		if(quicksearch == null)
+			new SearchDialog(view,null);
+		else
+			quicksearch.requestFocus();
 	}
 }

@@ -20,7 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.gui.SearchDialog;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 
 public class find_selection extends EditAction
@@ -33,7 +33,14 @@ public class find_selection extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		new SearchDialog(view,view.getTextArea().getSelectedText());
+		String selection = view.getTextArea().getSelectedText();
+		HistoryTextField quicksearch = view.getQuickSearch();
+		if(quicksearch == null)
+			new SearchDialog(view,selection);
+		else
+		{
+			quicksearch.requestFocus();
+			quicksearch.setText(selection);
+		}
 	}
 }

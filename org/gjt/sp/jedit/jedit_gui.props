@@ -35,29 +35,23 @@ jar.what.class=\tExistance of class {0}
 ###
 ### TOOLBAR
 ###
-view.toolbar=new-file open-file open-url close-file - save save-all - \
-	send print - undo redo - cut copy paste - \
-	find find-next hypersearch - \
-	help
+view.toolbar=new-file open-file close-file - save save-all - \
+	print - undo redo - cut copy paste - help
 
 new-file.icon=New.gif
 open-file.icon=Open.gif
-open-url.icon=World.gif
 close-file.icon=Delete.gif
 save.icon=Save.gif
 save-all.icon=SaveAll.gif
-send.icon=EnvelopeIn.gif
 print.icon=Print.gif
 undo.icon=Undo.gif
 redo.icon=Redo.gif
 cut.icon=Cut.gif
 copy.icon=Copy.gif
 paste.icon=Paste.gif
-find.icon=Magnify.gif
-find-next.icon=VCRFastForward.gif
-hypersearch.icon=DocumentIn.gif
 help.icon=Help.gif
 
+view.quicksearch=Find:\ 
 
 ###
 ### CONTEXT MENU
@@ -72,6 +66,9 @@ view.context=undo redo - cut copy paste paste-previous - scroll-line - \
 view.mbar=buffers file edit registers search macros plugins help-menu
 
 ### Buffers menu
+buffers=next-buffer \
+	prev-buffer \
+	-
 buffers.label=$Buffers
 next-buffer.label=$Open Next Buffer
 prev-buffer.label=O$pen Previous Buffer
@@ -255,6 +252,7 @@ search=find \
        find-next \
        find-selection \
        - \
+       search-and-replace \
        replace-in-selection \
        replace-all \
        - \
@@ -267,6 +265,7 @@ search=find \
        %clear-marker \
        %goto-marker
 search.label=$Search
+search-and-replace.label=Sear$ch and Replace...
 find.label=$Find...
 find-next.label=Fin$d Next
 find-selection.label=F$ind Selection...
@@ -276,8 +275,8 @@ hypersearch.label=H$yperSearch...
 hypersearch-selection.label=HyperSearch for Se$lection...
 multifile-search.label=M$ultifile Search Settings...
 set-marker.label=Set Mar$ker...
-clear-marker.label=$Clear Marker
-goto-marker.label=$Go to Marker
+clear-marker.label=Clear Marker
+goto-marker.label=Go to Marker
 no-markers.label=No Markers Defined
 
 ### Macros menu

@@ -28,6 +28,8 @@ import java.awt.event.*;
 import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.event.*;
+import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.textarea.*;
@@ -50,7 +52,16 @@ public class View extends JFrame
 		if("on".equals(jEdit.getProperty("view.showToolbar")))
 		{
 			if(toolBar == null)
+			{
 				toolBar = GUIUtilities.loadToolBar("view.toolbar");
+				toolBar.add(Box.createHorizontalStrut(10));
+				toolBar.add(new JLabel(jEdit.getProperty("view.quicksearch")));
+				Box box = new Box(BoxLayout.Y_AXIS);
+				box.add(Box.createVerticalGlue());
+				box.add(quicksearch);
+				box.add(Box.createVerticalGlue());
+				toolBar.add(box);
+			}
 			if(toolBar.getParent() == null)
 				addToolBar(toolBar);
 		}
@@ -135,12 +146,16 @@ public class View extends JFrame
 	 */
 	public void updateBuffersMenu()
 	{
-		if(buffers.getMenuComponentCount() != 0)
-			buffers.removeAll();
-
-		buffers.add(GUIUtilities.loadMenuItem(this,"prev-buffer"));
-		buffers.add(GUIUtilities.loadMenuItem(this,"next-buffer"));
-		buffers.addSeparator();
+		// Because the buffers menu contains normal items as
+		// well as dynamically-generated stuff, we are careful
+		// to only remove the dynamic crap here...
+		for(int i = buffers.getMenuComponentCount() - 1; i >= 0; i--)
+		{
+			if(buffers.getMenuComponent(i) instanceof JSeparator)
+				break;
+			else
+				buffers.remove(i);
+		}
 
 		ButtonGroup grp = new ButtonGroup();
 		Buffer[] bufferArray = jEdit.getBuffers();
@@ -378,13 +393,25 @@ public class View extends JFrame
 	/**
 	 * Sets the focus onto the text area.
 	 */
-	public void focusOnTextArea()
+	public final void focusOnTextArea()
 	{
 		textArea.requestFocus();
 	}
 
 	/**
-	 * Returns this view's text area.
+	 * Returns the view's quicksearch text field, or null if the toolbar
+	 * is not showing.
+	 */
+	public final HistoryTextField getQuickSearch()
+	{
+		if(quicksearch.isShowing())
+			return quicksearch;
+		else
+			return null;
+	}
+
+	/**
+	 * Returns the view's text area.
 	 */
 	public final JEditTextArea getTextArea()
 	{
@@ -526,6 +553,12 @@ public class View extends JFrame
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
 
+		quicksearch = new HistoryTextField("find");
+		Dimension dim = quicksearch.getPreferredSize();
+		dim.width = Integer.MAX_VALUE;
+		quicksearch.setMaximumSize(dim);
+		quicksearch.addActionListener(new ActionHandler());
+
 		textArea = new JEditTextArea();
 
 		// Add the line number display
@@ -593,7 +626,8 @@ public class View extends JFrame
 	private JMenu plugins;
 
 	private Box toolBars;
-	private Component toolBar;
+	private JToolBar toolBar;
+	private HistoryTextField quicksearch;
 	private JEditTextArea textArea;
 	private StatusBar status;
 
@@ -693,6 +727,27 @@ public class View extends JFrame
 	}
 
 	// event listeners
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			if(evt.getSource() == quicksearch)
+			{
+				String text = quicksearch.getText();
+				if(text != null)
+				{
+					quicksearch.addCurrentToHistory();
+					quicksearch.setText(null);
+					SearchAndReplace.setSearchString(text);
+					SearchAndReplace.find(View.this);
+					textArea.requestFocus();
+				}
+				else
+					new SearchDialog(View.this,null);
+			}
+		}
+	}
+
 	class BufferHandler extends BufferAdapter
 	{
 		public void bufferDirtyChanged(BufferEvent evt)
@@ -813,6 +868,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.98  1999/10/24 06:04:00  sp
+ * QuickSearch in tool bar, auto indent updates, macro recorder updates
+ *
  * Revision 1.97  1999/10/24 02:06:41  sp
  * Miscallaneous pre1 stuff
  *

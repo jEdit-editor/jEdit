@@ -455,6 +455,24 @@ loop:			for(;;)
 				search);
 			recorder.actionPerformed(jEdit.getAction("set-replace-string"),
 				replace);
+
+			StringBuffer buf = new StringBuffer();
+			if(regexp)
+				buf.append("regexp ");
+			else
+				buf.append("literal ");
+			if(ignoreCase)
+				buf.append("icase");
+			else
+				buf.append("case");
+			if(fileset instanceof CurrentBufferSet)
+				buf.append(" current");
+			else if(fileset instanceof AllBufferSet)
+				buf.append(" all");
+
+			recorder.actionPerformed(jEdit.getAction("set-search-parameters"),
+				buf.toString());
+
 			recorder.actionPerformed(jEdit.getAction(action),null);
 		}
 	}
@@ -463,6 +481,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  1999/10/24 06:04:00  sp
+ * QuickSearch in tool bar, auto indent updates, macro recorder updates
+ *
  * Revision 1.16  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

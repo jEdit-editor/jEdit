@@ -23,6 +23,7 @@ import gnu.regexp.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import org.gjt.sp.jedit.syntax.TokenMarker;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -117,137 +118,156 @@ public class Mode
 	 * @param buffer The buffer where the tab key was pressed
 	 * @param view The view where the tab key was pressed
 	 * @param line The line number to indent
+	 * @param force If true, the line will be indented even if it already
+	 * has the right amount of indent
 	 * @return true if the tab key event should be swallowed (ignored)
 	 * false if a real tab should be inserted
 	 */
-	public boolean indentLine(Buffer buffer, View view, int lineIndex)
+	public boolean indentLine(Buffer buffer, View view,
+		int lineIndex, boolean force)
 	{
+		// Use JEditTextArea's line access methods
+		JEditTextArea textArea = view.getTextArea();
+
+		// Get properties
 		String openBrackets = (String)getProperty("indentOpenBrackets");
 		String closeBrackets = (String)getProperty("indentCloseBrackets");
-		if(openBrackets == null || closeBrackets == null
-			|| openBrackets.length() != closeBrackets.length())
-		{
-			openBrackets = closeBrackets = "";
-		}
+		if(openBrackets == null)
+			openBrackets = "";
+		if(closeBrackets == null)
+			closeBrackets = "";
 		int tabSize = buffer.getTabSize();
 		boolean noTabs = "yes".equals(buffer.getProperty("noTabs"));
-		Element map = buffer.getDefaultRootElement();
+
 		if(lineIndex == 0)
 			return false;
-		Element lineElement = map.getElement(lineIndex);
-		Element prevLineElement = null;
-		int prevStart = 0;
-		int prevEnd = 0;
-		while(--lineIndex >= 0)
+
+		// Get line text
+		String line = textArea.getLineText(lineIndex);
+		int start = textArea.getLineStartOffset(lineIndex);
+		String prevLine = null;
+		for(int i = lineIndex - 1; i >= 0; i--)
 		{
-			prevLineElement = map.getElement(lineIndex);
-			prevStart = prevLineElement.getStartOffset();
-			prevEnd = prevLineElement.getEndOffset();
-			if(prevEnd - prevStart > 1)
+			if(textArea.getLineLength(i) != 0)
+			{
+				prevLine = textArea.getLineText(i);
 				break;
+			}
 		}
-		if(prevLineElement == null)
+
+		if(prevLine == null)
 			return false;
+
+		/*
+		 * On the previous line,
+		 * if(bob) { --> +1
+		 * if(bob) { } --> 0
+		 * } else if(bob) { --> +1
+		 */
+		boolean prevLineStart = true; // False after initial indent
+		int prevLineIndent = 0; // Indent width (tab expanded)
+		int prevLineBrackets = 0; // Additional bracket indent
+		for(int i = 0; i < prevLine.length(); i++)
+		{
+			char c = prevLine.charAt(i);
+			switch(c)
+			{
+			case ' ':
+				if(prevLineStart)
+					prevLineIndent++;
+				break;
+			case '\t':
+				if(prevLineStart)
+				{
+					prevLineIndent += (tabSize
+						- (prevLineIndent
+						% tabSize));
+				}
+				break;
+			default:
+				prevLineStart = false;
+				if(closeBrackets.indexOf(c) != -1)
+					prevLineBrackets = Math.max(
+						prevLineBrackets-1,0);
+				else if(openBrackets.indexOf(c) != -1)
+					prevLineBrackets++;
+				break;
+			}
+		}
+
+		/*
+		 * On the current line,
+		 * } --> -1
+		 * } else if(bob) { --> -1
+		 * if(bob) { } --> 0
+		 */
+		boolean lineStart = true; // False after initial indent
+		int lineIndent = 0; // Indent width (tab expanded)
+		int lineWidth = 0; // White space count
+		int lineBrackets = 0; // Additional bracket indent
+		int closeBracketIndex = -1; // For lining up closing
+			// and opening brackets
+		for(int i = 0; i < line.length(); i++)
+		{
+			char c = line.charAt(i);
+			switch(c)
+			{
+			case ' ':
+				if(lineStart)
+				{
+					lineIndent++;
+					lineWidth++;
+				}
+				break;
+			case '\t':
+				if(lineStart)
+				{
+					lineIndent += (tabSize
+						- (lineIndent
+						% tabSize));
+					lineWidth++;
+				}
+				break;
+			default:
+				lineStart = false;
+				if(closeBrackets.indexOf(c) != -1)
+				{
+					if(lineBrackets == 0)
+						closeBracketIndex = i;
+					else
+						lineBrackets--;
+				}
+				else if(openBrackets.indexOf(c) != -1)
+					lineBrackets++;
+				break;
+			}
+		}
+
 		try
 		{
-			int start = lineElement.getStartOffset();
-			int end = lineElement.getEndOffset();
-			String line = buffer.getText(start,end - start);
-			String prevLine = buffer.getText(prevStart,prevEnd
-				- prevStart);
-
-			/*
-			 * On the previous line,
-			 * { should give us +1
-			 * { fred } should give us 0
-			 * } fred { should give us +1
-			 */
-			boolean prevLineStart = true; // False after initial indent
-			int prevLineIndent = 0; // Indent width (tab expanded)
-			int prevLineBrackets = 0; // Additional bracket indent
-			for(int i = 0; i < prevLine.length(); i++)
+			if(closeBracketIndex != -1)
 			{
-				char c = prevLine.charAt(i);
-				switch(c)
+				int offset = TextUtilities.findMatchingBracket(
+					buffer,start + closeBracketIndex);
+				if(offset != -1)
 				{
-				case ' ':
-					if(prevLineStart)
-						prevLineIndent++;
-					break;
-				case '\t':
-					if(prevLineStart)
-					{
-						prevLineIndent += (tabSize
-							- (prevLineIndent
-							% tabSize));
-					}
-					break;
-				default:
-					prevLineStart = false;
-					if(closeBrackets.indexOf(c) != -1)
-						prevLineBrackets = Math.max(
-							prevLineBrackets-1,0);
-					else if(openBrackets.indexOf(c) != -1)
-						prevLineBrackets++;
-					break;
+					String closeLine = textArea.getLineText(
+						textArea.getLineOfOffset(offset));
+					prevLineIndent = MiscUtilities
+						.getLeadingWhiteSpaceWidth(
+						closeLine,tabSize);
 				}
+				else
+					return false;
 			}
-	
-			/*
-			 * On the current line,
-			 * { should give us 0
-			 * } should give us -1
-			 * } fred { should give us -1
-			 * { fred } should give us 0
-			 */
-			boolean lineStart = true; // False after initial indent
-			int lineIndent = 0; // Indent width (tab expanded)
-			int lineWidth = 0; // White space count
-			int lineBrackets = 0; // Additional bracket indent
-			int lineOpenBrackets = 0; // Number of opening brackets
-			for(int i = 0; i < line.length(); i++)
+			else
 			{
-				char c = line.charAt(i);
-				switch(c)
-				{
-				case ' ':
-					if(lineStart)
-					{
-						lineIndent++;
-						lineWidth++;
-					}
-					break;
-				case '\t':
-					if(lineStart)
-					{
-						lineIndent += (tabSize
-							- (lineIndent
-							% tabSize));
-						lineWidth++;
-					}
-					break;
-				default:
-					lineStart = false;
-					if(closeBrackets.indexOf(c) != -1)
-					{
-						if(lineOpenBrackets != 0)
-							lineOpenBrackets--;
-						else
-							lineBrackets--;
-					}
-					else if(openBrackets.indexOf(c) != -1)
-						lineOpenBrackets++;
-					break;
-				}
+				prevLineIndent += (prevLineBrackets * tabSize);
 			}
-
-			prevLineIndent += (prevLineBrackets + lineBrackets)
-				* tabSize;
 
 			// Insert a tab if line already has correct indent
-			// However, we will do our indentation anyway if the
-			// line has a closing bracket on it
-			if(lineBrackets == 0 && lineIndent >= prevLineIndent)
+			// and force is not set
+			if(!force && lineIndent >= prevLineIndent)
 				return false;
 
 			// Do it
@@ -258,7 +278,9 @@ public class Mode
 		}
 		catch(BadLocationException bl)
 		{
+			bl.printStackTrace();
 		}
+
 		return false;
 	}
 
@@ -365,6 +387,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  1999/10/24 06:04:00  sp
+ * QuickSearch in tool bar, auto indent updates, macro recorder updates
+ *
  * Revision 1.14  1999/10/24 02:06:41  sp
  * Miscallaneous pre1 stuff
  *

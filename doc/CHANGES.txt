@@ -11,6 +11,8 @@ JEDIT VERSION HISTORY
 - 'Close All Buffers' and 'Exit' commands now display a dialog box listing
   all unsaved buffers
 - In C/C++/Java modes, typing '}' will immediately reindent the current line
+- 'QuickSearch' text field in the tool bar; no need to open Search&Replace
+  dialog box to find a string
 
 + Enhancements
 
@@ -24,6 +26,9 @@ JEDIT VERSION HISTORY
 
 - GUIUtilities.show/hideWaitCursor() becomes View.show/hideWaitCursor()
 - Mode system cleanup - this breaks XMode
+- Several images have been removed from org.gjt.sp.jedit.toolbar package,
+  so plugins that use them will have to include those images in their
+  JAR file
 
 * Version 2.1final
 

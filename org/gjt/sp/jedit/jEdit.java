@@ -660,6 +660,8 @@ public class jEdit
 	 * Closes the buffer, even if it has unsaved changes.
 	 * @param view The view
 	 * @param buffer The buffer
+	 *
+	 * @since jEdit 2.2pre1
 	 */
 	public static void _closeBuffer(View view, Buffer buffer)
 	{
@@ -1283,6 +1285,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.save_as());
 		addAction(new org.gjt.sp.jedit.actions.save_url());
 		addAction(new org.gjt.sp.jedit.actions.scroll_line());
+		addAction(new org.gjt.sp.jedit.actions.search_and_replace());
 		addAction(new org.gjt.sp.jedit.actions.select_all());
 		addAction(new org.gjt.sp.jedit.actions.select_block());
 		addAction(new org.gjt.sp.jedit.actions.select_buffer());
@@ -1294,6 +1297,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.set_caret_register());
 		addAction(new org.gjt.sp.jedit.actions.set_filename_register());
 		addAction(new org.gjt.sp.jedit.actions.set_replace_string());
+		addAction(new org.gjt.sp.jedit.actions.set_search_parameters());
 		addAction(new org.gjt.sp.jedit.actions.set_search_string());
 		addAction(new org.gjt.sp.jedit.actions.send());
 		addAction(new org.gjt.sp.jedit.actions.set_marker());
@@ -1579,6 +1583,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.144  1999/10/24 06:04:00  sp
+ * QuickSearch in tool bar, auto indent updates, macro recorder updates
+ *
  * Revision 1.143  1999/10/24 02:06:41  sp
  * Miscallaneous pre1 stuff
  *
