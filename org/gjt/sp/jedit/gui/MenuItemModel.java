@@ -118,7 +118,7 @@ public class MenuItemModel
 	/**
 	 * Some menu item models, such as macros, come and go, and should
 	 * not be cached.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public boolean isTransient()
 	{
@@ -144,6 +144,9 @@ public class MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/07/26 07:48:44  sp
+ * stuff
+ *
  * Revision 1.12  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

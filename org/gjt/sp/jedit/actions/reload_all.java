@@ -39,22 +39,11 @@ public class reload_all extends EditAction
 		if(result != JOptionPane.YES_OPTION)
 			return;
 
-		view.showWaitCursor();
-
 		Buffer[] buffers = jEdit.getBuffers();
 		for(int i = 0; i < buffers.length; i++)
 		{
 			Buffer buffer = buffers[i];
 			buffer.load(view,true);
 		}
-
-		// hide wait cursor after all I/O is complete
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				view.hideWaitCursor();
-			}
-		});
 	}
 }

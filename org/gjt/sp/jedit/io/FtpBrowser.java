@@ -124,6 +124,7 @@ public class FtpBrowser extends JDialog
 		list.addListSelectionListener(new ListHandler());
 		list.addMouseListener(new MouseHandler());
 		list.setCellRenderer(new FileCellRenderer());
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane listScroller = new JScrollPane(list);
 		layout.setConstraints(listScroller,cons);
 		centerPanel.add(listScroller);
@@ -705,6 +706,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/07/26 07:48:44  sp
+ * stuff
+ *
  * Revision 1.10  2000/07/22 12:37:39  sp
  * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
  *

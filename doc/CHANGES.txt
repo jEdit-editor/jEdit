@@ -1,6 +1,6 @@
-JEDIT 3.0 VERSION HISTORY
+JEDIT 2.6 VERSION HISTORY
 
-* Version 3.0pre1
+* Version 2.6pre1
 
 + New Features
 
@@ -47,7 +47,7 @@ JEDIT 3.0 VERSION HISTORY
   four files are autosaved at once
 - The 'Plugins' and 'Help' menus now display 'More' submenus if there are
   a lot of items. This prevents them from being too long
-- FTP browser is now threaded
+- Threaded FTP browser
 
 + Bug Fixes
 
@@ -60,16 +60,25 @@ JEDIT 3.0 VERSION HISTORY
 - JEditTextArea didn't unregister the gutter from the tooltip manager, this
   could result in memory leaks
 - C, C++, Java and JavaScript didn't indent 'default:' statements properly
+- Empty .marks files weren't deleted if no markers were set when saving to
+  an FTP server
+- The caret status in the status bar wouldn't be updated when switching
+  between buffers where the caret was at the beginning of both
 
 + API Changes
 
-- GUIUtilities.loadMenuItem(View,String) deprecated. Plugins targeted at
-  jEdit 3.0 or later should use GUIUTilities.loadMenuItem(String) instead.
-  Don't worry, since all existing plugins use the old method, it won't be
-  removed any time soon, if at all.
+- GUIUtilities.loadMenuItem(View,String) deprecated. Use
+  GUIUTilities.loadMenuItem(String) instead. Don't worry, since all existing
+  plugins use the old method, it won't be removed any time soon, if at all.
 - Return type of TokenMarker.markTokens() changed from Token to
   TokenMarker.LineInfo
 - EditActions can now be invoked without a view (of course the action
   will still fail if it calls EditAction.getView())
 - Signature of VFSManager.error() is now void error(Component comp,
   String msg, Object[] args)
+- JEditTextArea.get/setDocument(), getDocumentLength() deprecated; use
+  get/setBuffer(), getBufferLength() instead
+- VFS class changes:
+  delete(String path) changed to _delete(Buffer buffer, String path)
+  canDelete() changed to _canDelete()
+  new _getFileLength(Buffer buffer, String path) method

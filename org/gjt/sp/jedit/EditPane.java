@@ -93,6 +93,7 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			view.updateTitle();
 			view.updateBufferStatus();
+			view.updateCaretStatus();
 			view.updateBuffersMenu();
 			view.updateMarkerMenus();
 
@@ -554,6 +555,7 @@ public class EditPane extends JPanel implements EBComponent
 	private void updateTextArea()
 	{
 		textArea.setEditable(!buffer.isReadOnly());
+		textArea.getPainter().repaint();
 	}
 
 	private void handleBufferUpdate(BufferUpdate msg)
@@ -583,6 +585,10 @@ public class EditPane extends JPanel implements EBComponent
 			else if(_buffer == recentBuffer)
 				recentBuffer = null;
 		}
+		else if(msg.getWhat() == BufferUpdate.LOAD_STARTED)
+		{
+			textArea.getPainter().repaint();
+		}
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
@@ -608,6 +614,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/07/26 07:48:43  sp
+ * stuff
+ *
  * Revision 1.11  2000/07/22 12:37:38  sp
  * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
  *

@@ -571,7 +571,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final SyntaxDocument getDocument()
 	{
-		return (SyntaxDocument)buffer;
+		return buffer;
 	}
 
 	/**
@@ -2179,6 +2179,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.75  2000/07/26 07:48:45  sp
+ * stuff
+ *
  * Revision 1.74  2000/07/22 06:22:27  sp
  * I/O progress monitor done
  *

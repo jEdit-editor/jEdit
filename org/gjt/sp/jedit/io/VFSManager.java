@@ -181,7 +181,7 @@ public class VFSManager
 	/**
 	 * For use by VFS implementations and IO requests. Displays the
 	 * specified error in the AWT thread.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public static void error(final Component comp, final String error, final Object[] args)
 	{
@@ -243,6 +243,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.14  2000/07/26 07:48:45  sp
+ * stuff
+ *
  * Revision 1.13  2000/07/22 03:27:03  sp
  * threaded I/O improved, autosave rewrite started
  *

@@ -120,7 +120,7 @@ public class IOProgressMonitor extends JFrame
 		public void update()
 		{
 			WorkThread thread = VFSManager.getIOThreadPool().getThread(index);
-			if(thread.isRequestsRunning())
+			if(thread.isRequestRunning())
 			{
 				abort.setEnabled(true);
 				progress.setString(thread.getStatus());

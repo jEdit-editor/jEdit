@@ -414,7 +414,7 @@ help-menu.label=$Help
 about.label=About jEdit...
 help.label=jEdit User Guide
 help@README.txt.label=jEdit Read Me
-help@NEWS.txt.label=Major Changes in jEdit 3.0
+help@NEWS.txt.label=Major Changes in jEdit 2.6
 help@CHANGES.txt.label=Version History
 help@COPYING.txt.label=GNU General Public License
 

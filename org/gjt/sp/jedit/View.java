@@ -921,15 +921,6 @@ public class View extends JFrame implements EBComponent
 		EditPlugin[] plugins = jEdit.getPlugins();
 		for(int i = 0; i < plugins.length; i++)
 		{
-			if(menu.getItemCount() >= 20)
-			{
-				menu.addSeparator();
-				JMenu newMenu = new JMenu(jEdit.getProperty(
-					"common.more"));
-				menu.add(newMenu);
-				menu = newMenu;
-			}
-
 			EditPlugin plugin = plugins[i];
 			// don't include broken plugins in list
 			// ... why?
@@ -945,6 +936,16 @@ public class View extends JFrame implements EBComponent
 				java.net.URL docsURL = plugin.getClass().getResource(docs);
 				if(label != null && docsURL != null)
 				{
+					if(menu.getItemCount() >= 20)
+					{
+						menu.addSeparator();
+						JMenu newMenu = new JMenu(
+							jEdit.getProperty(
+							"common.more"));
+						menu.add(newMenu);
+						menu = newMenu;
+					}
+
 					menu.add(new EnhancedMenuItem(label,
 						action,docsURL.toString()));
 				}
@@ -1042,6 +1043,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.188  2000/07/26 07:48:44  sp
+ * stuff
+ *
  * Revision 1.187  2000/07/22 12:37:38  sp
  * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
  *

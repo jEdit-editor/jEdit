@@ -36,6 +36,12 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	public static final Object CREATED = "CREATED";
 
 	/**
+	 * Buffer load started.
+	 * @since jEdit 2.6pre1
+	 */
+	public static final Object LOAD_STARTED = "LOAD_STARTED";
+
+	/**
 	 * Buffer loaded.
 	 */
 	public static final Object LOADED = "LOADED";

@@ -1,4 +1,4 @@
-JEDIT 3.0 README
+JEDIT 2.6 README
 
 * About jEdit
 

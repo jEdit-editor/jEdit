@@ -27,7 +27,7 @@ import javax.swing.SwingUtilities;
  * @author Slava Pestov
  * @version $Id$
  * @see org.gjt.sp.util.WorkThread
- * @since jEdit 3.0pre1
+ * @since jEdit 2.6pre1
  */
 public class WorkThreadPool
 {
@@ -402,6 +402,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/07/26 07:48:46  sp
+ * stuff
+ *
  * Revision 1.4  2000/07/22 12:37:39  sp
  * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
  *

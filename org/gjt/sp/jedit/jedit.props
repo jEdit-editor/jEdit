@@ -8,7 +8,7 @@
 ###
 
 # Autosave interval in seconds, 0=off
-autosave=15
+autosave=30
 
 # Number of recent files
 recent=8

@@ -166,7 +166,7 @@ public class GUIUtilities
 	/**
 	 * Creates a menu item.
 	 * @param name The menu item name
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public static JMenuItem loadMenuItem(String name)
 	{
@@ -805,6 +805,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.70  2000/07/26 07:48:43  sp
+ * stuff
+ *
  * Revision 1.69  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
  *

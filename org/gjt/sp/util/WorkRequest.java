@@ -21,7 +21,7 @@ package org.gjt.sp.util;
 
 /**
  * A subclass of the Runnable interface.
- * @since jEdit 3.0pre1
+ * @since jEdit 2.6pre1
  */
 public abstract class WorkRequest implements Runnable
 {
@@ -64,6 +64,9 @@ public abstract class WorkRequest implements Runnable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/07/26 07:48:46  sp
+ * stuff
+ *
  * Revision 1.2  2000/07/22 03:27:04  sp
  * threaded I/O improved, autosave rewrite started
  *

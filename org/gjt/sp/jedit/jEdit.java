@@ -1067,8 +1067,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		// XXX
-		final Buffer newBuffer = new org.gjt.sp.jedit.syntax.SyntaxDocument(view,path,readOnly,
+		final Buffer newBuffer = new Buffer(view,path,readOnly,
 			newFile,false,props);
 
 		if(!newBuffer.load(view,false))
@@ -2313,6 +2312,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.258  2000/07/26 07:48:44  sp
+ * stuff
+ *
  * Revision 1.257  2000/07/22 12:37:38  sp
  * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
  *

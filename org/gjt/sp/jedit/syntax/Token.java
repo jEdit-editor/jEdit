@@ -62,7 +62,7 @@ public class Token
 
 	/**
 	 * The previous token in the linked list.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public Token prev;
 
@@ -94,6 +94,9 @@ public class Token
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/07/26 07:48:45  sp
+ * stuff
+ *
  * Revision 1.16  2000/07/14 06:00:45  sp
  * bracket matching now takes syntax info into account
  *

@@ -146,7 +146,7 @@ public class FileVFS extends VFS
 	 * Returns true if this VFS supports file deletion. This is required
 	 * for marker saving to work.
 	 */
-	public boolean canDelete()
+	public boolean _canDelete()
 	{
 		return true;
 	}
@@ -154,9 +154,17 @@ public class FileVFS extends VFS
 	/**
 	 * Deletes the specified file.
 	 */
-	public void delete(String path)
+	public void _delete(Buffer buffer, String path)
 	{
 		new File(path).delete();
+	}
+
+	/**
+	 * Returns the length of the specified file.
+	 */
+	public long _getFileLength(Buffer buffer, String path)
+	{
+		return new File(path).length();
 	}
 
 	/**

@@ -116,7 +116,7 @@ public class FtpVFS extends VFS
 	 * Returns true if this VFS supports file deletion. This is required
 	 * for marker saving to work.
 	 */
-	public boolean canDelete()
+	public boolean _canDelete()
 	{
 		return true;
 	}
@@ -124,7 +124,7 @@ public class FtpVFS extends VFS
 	/**
 	 * Deletes the specified file.
 	 */
-	public void delete(Buffer buffer, String path)
+	public void _delete(Buffer buffer, String path)
 	{
 		FtpAddress address = new FtpAddress(path);
 		FtpClient client = getFtpClient(null,buffer,address,true);
@@ -138,6 +138,37 @@ public class FtpVFS extends VFS
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,this,io);
+		}
+	}
+
+	/**
+	 * Returns the length of the specified file.
+	 */
+	public long _getFileLength(Buffer buffer, String path)
+	{
+		FtpAddress address = new FtpAddress(path);
+		FtpClient client = getFtpClient(null,buffer,address,true);
+		if(client == null)
+			return 0L;
+
+		try
+		{
+			BufferedReader reader = new BufferedReader(client.list(
+				address.path));
+			String line = reader.readLine();
+			reader.close();
+			if(line != null)
+			{
+				System.err.println(extractLength(line));
+				return Long.parseLong(extractLength(line));
+			}
+			else
+				return 0L;
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+			return 0L;
 		}
 	}
 
@@ -366,5 +397,41 @@ public class FtpVFS extends VFS
 		}
 
 		return client;
+	}
+
+	// extract file length from LIST output
+	private String extractLength(String line)
+	{
+		int fieldCount = 0;
+		boolean lastWasSpace = false;
+		int i;
+		for(i = 0; i < line.length(); i++)
+		{
+			if(line.charAt(i) == ' ')
+			{
+				if(lastWasSpace)
+					continue;
+				else
+				{
+					lastWasSpace = true;
+					fieldCount++;
+				}
+			}
+			else
+			{
+				lastWasSpace = false;
+				if(fieldCount == 8)
+					break;
+			}
+		}
+
+		int j;
+		for(j = i; j < line.length(); j++)
+		{
+			if(line.charAt(j) == ' ')
+				break;
+		}
+
+		return line.substring(i,j - i);
 	}
 }

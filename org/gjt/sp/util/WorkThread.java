@@ -37,7 +37,7 @@ public class WorkThread extends Thread
 
 	/**
 	 * Sets if the current request can be aborted.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public void setAbortable(boolean abortable)
 	{
@@ -52,9 +52,9 @@ public class WorkThread extends Thread
 	/**
 	 * Returns if the work thread is currently running a request.
 	 */
-	public boolean isRequestsRunning()
+	public boolean isRequestRunning()
 	{
-		return requestsRunning;
+		return requestRunning;
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class WorkThread extends Thread
 
 	/**
 	 * Sets the status text.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public void setStatus(String status)
 	{
@@ -85,7 +85,7 @@ public class WorkThread extends Thread
 
 	/**
 	 * Sets the progress value.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public void setProgressValue(int progressValue)
 	{
@@ -103,7 +103,7 @@ public class WorkThread extends Thread
 
 	/**
 	 * Sets the maximum progress value.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public void setProgressMaximum(int progressMaximum)
 	{
@@ -113,7 +113,7 @@ public class WorkThread extends Thread
 
 	/**
 	 * Aborts the currently running request, if allowed.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public void abortCurrentRequest()
 	{
@@ -138,7 +138,7 @@ public class WorkThread extends Thread
 	// private members
 	private WorkThreadPool pool;
 	private Object abortLock = new Object();
-	private boolean requestsRunning;
+	private boolean requestRunning;
 	private boolean abortable;
 	private boolean aborted;
 	private String status;
@@ -147,9 +147,6 @@ public class WorkThread extends Thread
 
 	private void doRequests()
 	{
-		requestsRunning = true;
-		pool.fireProgressChanged(this);
-
 		WorkThreadPool.Request request;
 		for(;;)
 		{
@@ -157,11 +154,15 @@ public class WorkThread extends Thread
 			if(request == null)
 				break;
 			else
+			{
+				requestRunning = true;
+				pool.fireProgressChanged(this);
 				doRequest(request);
+				requestRunning = false;
+				pool.fireProgressChanged(this);
+			}
 		}
 
-		requestsRunning = false;
-		pool.fireProgressChanged(this);
 
 		synchronized(pool.waitForAllLock)
 		{
@@ -226,6 +227,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.16  2000/07/26 07:48:46  sp
+ * stuff
+ *
  * Revision 1.15  2000/07/22 03:27:04  sp
  * threaded I/O improved, autosave rewrite started
  *

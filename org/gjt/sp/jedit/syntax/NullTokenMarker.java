@@ -27,7 +27,7 @@ import org.gjt.sp.util.Log;
 /**
  * Set a document's token marker to this to disable syntax highlighting.
  *
- * @since 3.0pre1
+ * @since 2.6pre1
  *
  * @author Slava Pestov
  * @version $Id$
@@ -79,6 +79,9 @@ public class NullTokenMarker extends TokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/07/26 07:48:45  sp
+ * stuff
+ *
  * Revision 1.1  2000/07/14 06:00:45  sp
  * bracket matching now takes syntax info into account
  *

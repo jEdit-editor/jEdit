@@ -55,7 +55,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class Buffer extends PlainDocument implements EBComponent
+public class Buffer extends SyntaxDocument implements EBComponent
 {
 	/**
 	 * Line separator property.
@@ -115,6 +115,11 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		setFlag(LOADING,true);
+
+		// view text areas temporarily blank out while a buffer is
+		// being loaded, to indicate to the user that there is no
+		// data available yet.
+		EditBus.send(new BufferUpdate(this,BufferUpdate.LOAD_STARTED));
 
 		undo = null;
 		final boolean loadAutosave;
@@ -557,7 +562,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	/**
 	 * Returns this buffer's icon.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public ImageIcon getIcon()
 	{
@@ -1208,7 +1213,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	/**
 	 * Removes all defined markers.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public void removeAllMarkers()
 	{
@@ -1645,6 +1650,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.164  2000/07/26 07:48:43  sp
+ * stuff
+ *
  * Revision 1.163  2000/07/22 12:37:38  sp
  * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
  *

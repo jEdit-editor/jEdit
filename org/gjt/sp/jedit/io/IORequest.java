@@ -43,7 +43,7 @@ public class IORequest extends WorkRequest
 	/**
 	 * Number of lines per progress increment.
 	 */
-	public static final int SAVE_STEP = 50;
+	public static final int PROGRESS_INTERVAL = 100;
 
 	/**
 	 * Property loaded data is stored in.
@@ -144,6 +144,7 @@ public class IORequest extends WorkRequest
 				setStatus(jEdit.getProperty("view.status.load",args));
 				setAbortable(true);
 
+				long length = vfs._getFileLength(buffer,path);
 				in = vfs._createInputStream(view,buffer,path,false);
 				if(in == null)
 					return;
@@ -151,7 +152,7 @@ public class IORequest extends WorkRequest
 				if(path.endsWith(".gz"))
 					in = new GZIPInputStream(in);
 
-				read(buffer,in);
+				read(buffer,in,length);
 			}
 			catch(IOException io)
 			{
@@ -218,10 +219,9 @@ public class IORequest extends WorkRequest
 	 * would be slow because it would require array enlarging, etc.
 	 * Better to do as few gap inserts as possible.
 	 *
-	 * <li>The StringBuffer is pre-allocated to Math.max(fileSize,
-	 * IOBUFSIZE * 4) because when loading from URLs, fileSize is 0
-	 * and we don't want to StringBuffer to enlarge 1000000 times for
-	 * large URLs
+	 * <li>The StringBuffer is pre-allocated to the file's size (obtained
+	 * from the VFS). If the file size is not known, we default to
+	 * IOBUFSIZE.
 	 *
 	 * <li>We read the stream in IOBUFSIZE (= 32k) blocks, and loop over
 	 * the read characters looking for line breaks.
@@ -254,27 +254,22 @@ public class IORequest extends WorkRequest
 	 * 
 	 * </ul>
 	 */
-	public void read(Buffer buffer, InputStream _in)
+	public void read(Buffer buffer, InputStream _in, long length)
 		throws IOException
 	{
-		boolean trackProgress; // only true if the file size is known
-		int bufLength;
+		// only true if the file size is known
+		boolean trackProgress = (length != 0);
 		File file = buffer.getFile();
-		if(file != null)
-		{
-			bufLength = (int)file.length();
-			setProgressMaximum(bufLength);
-			trackProgress = true;
-		}
-		else
-		{
-			bufLength = IOBUFSIZE * 4;
-			trackProgress = false;
-		}
 
 		setProgressValue(0);
+		setProgressMaximum((int)length);
 
-		StringBuffer sbuf = new StringBuffer(bufLength);
+		// if the file size is not known, start with a resonable
+		// default buffer size
+		if(length == 0)
+			length = IOBUFSIZE;
+
+		StringBuffer sbuf = new StringBuffer((int)length);
 
 		InputStreamReader in = new InputStreamReader(_in,
 			jEdit.getProperty("buffer.encoding",
@@ -297,6 +292,10 @@ public class IORequest extends WorkRequest
 		// If we read a \n and this is true, we assume
 		// we have a DOS/Windows file
 		boolean lastWasCR = false;
+
+		// Number of lines read. Every 100 lines, we update the
+		// progress bar
+		int lineCount = 0;
 
 		while((len = in.read(buf,0,buf.length)) != -1)
 		{
@@ -332,6 +331,8 @@ public class IORequest extends WorkRequest
 					sbuf.append(buf,lastLine,i -
 						lastLine);
 					sbuf.append('\n');
+					if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
+						setProgressValue(sbuf.length());
 
 					// This is i+1 to take the
 					// trailing \n into account
@@ -367,6 +368,8 @@ public class IORequest extends WorkRequest
 						sbuf.append(buf,lastLine,
 							i - lastLine);
 						sbuf.append('\n');
+						if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
+							setProgressValue(sbuf.length());
 						lastLine = i + 1;
 					}
 					break;
@@ -385,15 +388,13 @@ public class IORequest extends WorkRequest
 					break;
 				}
 			}
+
+			if(trackProgress)
+				setProgressValue(sbuf.length());
+
 			// Add remaining stuff from buffer
 			sbuf.append(buf,lastLine,len - lastLine);
-
-			setProgressValue(sbuf.length());
 		}
-
-		/* // Can't abort the rest, otherwise the buffer may be
-		// left in an inconsistent state
-		setAbortable(false); */
 
 		if(CRLF)
 			buffer.putProperty(Buffer.LINESEP,"\r\n");
@@ -404,15 +405,15 @@ public class IORequest extends WorkRequest
 		in.close();
 
 		// Chop trailing newline and/or ^Z (if any)
-		int length = sbuf.length();
-		if(length != 0)
+		int bufferLength = sbuf.length();
+		if(bufferLength != 0)
 		{
-			char ch = sbuf.charAt(length - 1);
+			char ch = sbuf.charAt(bufferLength - 1);
 			if(length >= 2 && ch == 0x1a /* DOS ^Z */
-				&& sbuf.charAt(length - 2) == '\n')
-				sbuf.setLength(length - 2);
+				&& sbuf.charAt(bufferLength - 2) == '\n')
+				sbuf.setLength(bufferLength - 2);
 			else if(ch == '\n')
-				sbuf.setLength(length - 1);
+				sbuf.setLength(bufferLength - 1);
 		}
 
 		// to avoid having to deal with read/write locks and such,
@@ -513,7 +514,7 @@ public class IORequest extends WorkRequest
 
 				// We only save markers to VFS's that support deletion.
 				// Otherwise, we will accumilate stale marks files.
-				if(vfs.canDelete() && buffer.getMarkerCount() != 0)
+				if(vfs._canDelete() && buffer.getMarkerCount() != 0)
 				{
 					setStatus(jEdit.getProperty("view.status.save-markers",args));
 					out = vfs._createOutputStream(view,buffer,markersPath);
@@ -521,7 +522,7 @@ public class IORequest extends WorkRequest
 						writeMarkers(buffer,out);
 				}
 				else
-					vfs.delete(markersPath);
+					vfs._delete(buffer,markersPath);
 			}
 			catch(BadLocationException bl)
 			{
@@ -630,10 +631,11 @@ public class IORequest extends WorkRequest
 			newline = System.getProperty("line.separator");
 		Element map = buffer.getDefaultRootElement();
 
-		setProgressMaximum(map.getElementCount() / SAVE_STEP);
+		setProgressMaximum(map.getElementCount() / PROGRESS_INTERVAL);
 		setProgressValue(0);
 
-		for(int i = 0; i < map.getElementCount(); i++)
+		int i = 0;
+		while(i < map.getElementCount())
 		{
 			Element line = map.getElement(i);
 			int start = line.getStartOffset();
@@ -643,8 +645,8 @@ public class IORequest extends WorkRequest
 				lineSegment.count);
 			out.write(newline);
 
-			if(i % SAVE_STEP == 0)
-				setProgressValue(i / SAVE_STEP);
+			if(++i % PROGRESS_INTERVAL == 0)
+				setProgressValue(i / PROGRESS_INTERVAL);
 		}
 		out.close();
 	}
@@ -671,6 +673,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.15  2000/07/26 07:48:45  sp
+ * stuff
+ *
  * Revision 1.14  2000/07/22 12:37:39  sp
  * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
  *

@@ -78,7 +78,7 @@ public class Macros
 	 * or another vector. If it is a vector, the first element is a
 	 * string label, the rest are again, either macro name strings
 	 * or vectors.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public static Vector getMacroHierarchy()
 	{
@@ -88,7 +88,7 @@ public class Macros
 	/**
 	 * Returns a single vector with all known macros in it. Each
 	 * element of this vector is a macro name string.
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public static Vector getMacroList()
 	{
@@ -98,7 +98,7 @@ public class Macros
 	/**
 	 * Returns the macro with the specified name.
 	 * @param macro The macro's name
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public static Macro getMacro(String macro)
 	{
@@ -497,6 +497,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/07/26 07:48:44  sp
+ * stuff
+ *
  * Revision 1.31  2000/07/19 08:35:59  sp
  * plugin devel docs updated, minor other changes
  *

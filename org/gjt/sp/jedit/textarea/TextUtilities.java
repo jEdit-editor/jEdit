@@ -39,7 +39,7 @@ public class TextUtilities
 	 * @param offset The offset within that line
 	 * @exception BadLocationException If an out-of-bounds access
 	 * was attempted on the buffer's text
-	 * @since jEdit 3.0pre1
+	 * @since jEdit 2.6pre1
 	 */
 	public static int findMatchingBracket(Buffer buffer, int line, int offset)
 		throws BadLocationException
@@ -304,6 +304,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/07/26 07:48:45  sp
+ * stuff
+ *
  * Revision 1.9  2000/07/22 03:27:04  sp
  * threaded I/O improved, autosave rewrite started
  *

@@ -230,14 +230,21 @@ public class StatusBar extends JPanel
 			{
 				WorkThread thread = ioThreadPool.getThread(i);
 				int max = thread.getProgressMaximum();
-				if(!thread.isRequestsRunning() || max == 0)
+				if(!thread.isRequestRunning() || max == 0)
 					continue;
 
-				int progress = ((progressWidth * thread
-					.getProgressValue()) / max);
+				double progressRatio = ((double)thread
+					.getProgressValue() / max);
+
+				// when loading gzip files, for example,
+				// progressValue (data read) can be larger
+				// than progressMaximum (file size)
+				progressRatio = Math.min(progressRatio,1.0);
+
 				g.fillRect(insets.left,insets.top
 					+ i * progressHeight,
-					progressWidth,progressHeight);
+					(int)(progressRatio * progressWidth),
+					progressHeight);
 			}
 		}
 
@@ -270,6 +277,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/07/26 07:48:44  sp
+ * stuff
+ *
  * Revision 1.6  2000/07/22 06:22:27  sp
  * I/O progress monitor done
  *

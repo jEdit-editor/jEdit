@@ -89,11 +89,13 @@ public abstract class VFS
 		return true;
 	}
 
+	// the remaining methods are only called from the I/O thread
+
 	/**
 	 * Returns true if this VFS supports file deletion. This is required
 	 * for marker saving to work. By default, this returns false.
 	 */
-	public boolean canDelete()
+	public boolean _canDelete()
 	{
 		return false;
 	}
@@ -101,11 +103,18 @@ public abstract class VFS
 	/**
 	 * Deletes the specified file. By default, this does nothing.
 	 */
-	public void delete(String path)
+	public void _delete(Buffer buffer, String path)
 	{
 	}
 
-	// the remaining methods are only called from the I/O thread
+	/**
+	 * Returns the length of the specified file. Can return 0 if this
+	 * filesystem doesn't support a way of obtaining the file size.
+	 */
+	public long _getFileLength(Buffer buffer, String path)
+	{
+		return 0;
+	}
 
 	/**
 	 * A buffer has been loaded. This method is called from the I/O
@@ -154,6 +163,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/07/26 07:48:45  sp
+ * stuff
+ *
  * Revision 1.7  2000/07/19 08:35:59  sp
  * plugin devel docs updated, minor other changes
  *
