@@ -29,7 +29,7 @@
 			destdir="."
 			deprecation="on"
 			includeJavaRuntime="yes"
-			debug="yes"
+			debug="no"
 		>
 			<include name="bsh/**/*.java"/>
 			<include name="com/microstar/xml/*.java"/>
@@ -54,7 +54,7 @@
 		</javac>
 	</target>
 
-	<target name="dist" depends="compile,compile14">
+	<target name="dist" depends="compile,compile14" description="Compile and package jEdit.">
 		<jar
 			jarfile="jedit.jar"
 			manifest="org/gjt/sp/jedit/jedit.manifest"
@@ -87,7 +87,7 @@
 	</target>
 
 	<!-- Generate HTML docs with xsltproc tool from www.xmlsoft.org -->
-	<target name="docs-html-xsltproc" depends="init">
+	<target name="docs-html-xsltproc" depends="init" description="Generate HTML documents with xsltproc tool.">
 		<exec executable="xsltproc" dir="doc/users-guide">
 			<arg value="--catalogs"/>
 			<arg value="../jedithtml.xsl"/>
@@ -106,7 +106,7 @@
 	</target>
 
 	<!-- Generate HTML docs with Xalan tool from xml.apache.org -->
-	<target name="docs-html-xalan" depends="init">
+	<target name="docs-html-xalan" depends="init" description="Generate HTML documents with Xalan tool.">
 		<style
 			in="doc/users-guide/users-guide.xml"
 			destdir="doc/users-guide"
@@ -122,7 +122,7 @@
 	</target>
 
 	<!-- Generate PDF docs with OpenJade tool from openjade.sf.net -->
-	<target name="docs-pdf-openjade-letter">
+	<target name="docs-pdf-openjade-letter" description="Generate PDF (letter size) documents with OpenJade tool.">
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
 			<arg value="../jeditprint-letter.dsl"/>
@@ -152,7 +152,7 @@
 			tofile="doc/users-guide/users-guide-letter.pdf" />
 	</target>
 
-	<target name="docs-pdf-openjade-a4">
+	<target name="docs-pdf-openjade-a4" description="Generate PDF (A4 size) documents with OpenJade tool.">
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
 			<arg value="../jeditprint-a4.dsl"/>
@@ -187,7 +187,7 @@
 		<pathelement location="."/>
 	</path>
 
-	<target name="javadoc">
+	<target name="javadoc" description="Generate documentation.">
 		<delete dir="doc/api"/>
 		<mkdir dir="doc/api"/>
 
@@ -214,7 +214,7 @@
 			sourcepath="."/>
 	</target>
 
-	<target name="clean">
+	<target name="clean" description="Clean old stuff.">
 		<delete>
 			<fileset dir="." includes="**/*.class"/>
 			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -246,7 +246,7 @@
 	</target>
 
 	<!-- Generate tags using 'ctags' program from ctags.sourceforge.net -->
-	<target name="tags">
+	<target name="tags" description="Generate tags using ctags program.">
 		<exec executable="ctags">
 			<arg value="-R" />
 			<arg path="." />
