@@ -2,7 +2,7 @@
 <HTML
 ><HEAD
 ><TITLE
->jEdit 2.5 User's Guide</TITLE
+>jEdit 2.6 User's Guide</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
@@ -19,7 +19,7 @@ CLASS="TITLEPAGE"
 CLASS="TITLE"
 ><A
 NAME="AEN2"
->jEdit 2.5 User's Guide</A
+>jEdit 2.6 User's Guide</A
 ></H1
 ><H3
 CLASS="AUTHOR"
@@ -98,7 +98,7 @@ HREF="opening.html"
 ><DL
 ><DT
 ><A
-HREF="opening.html#AEN181"
+HREF="opening.html#AEN204"
 >Searching for Files</A
 ></DT
 ></DL
@@ -142,17 +142,17 @@ HREF="saving.html"
 ><DL
 ><DT
 ><A
-HREF="saving.html#AEN432"
+HREF="saving.html#AEN459"
 >Autosave and Backups</A
 ></DT
 ><DT
 ><A
-HREF="saving.html#AEN454"
+HREF="saving.html#AEN485"
 >Line Separator Characters</A
 ></DT
 ><DT
 ><A
-HREF="saving.html#AEN471"
+HREF="saving.html#AEN506"
 >When Another Application Modifies the File</A
 ></DT
 ></DL
@@ -160,7 +160,7 @@ HREF="saving.html#AEN471"
 ><DT
 ><A
 HREF="printing-sending.html"
->Printing and Sending Files</A
+>Printing Files</A
 ></DT
 ><DT
 ><A
@@ -195,18 +195,23 @@ HREF="vfs.html"
 ><DL
 ><DT
 ><A
-HREF="vfs.html#AEN641"
+HREF="vfs.html#AEN674"
 >The Local Filesystem</A
 ></DT
 ><DT
 ><A
-HREF="vfs.html#AEN644"
+HREF="vfs.html#AEN677"
 >The FTP Filesystem</A
 ></DT
 ><DT
 ><A
-HREF="vfs.html#AEN680"
+HREF="vfs.html#AEN713"
 >The URL Filesystem</A
+></DT
+><DT
+><A
+HREF="vfs.html#THREADED-IO"
+>Multithreaded I/O</A
 ></DT
 ></DL
 ></DD
@@ -303,7 +308,7 @@ HREF="macros.html#MACRO-TEMP"
 ></DT
 ><DT
 ><A
-HREF="macros.html#AEN1392"
+HREF="macros.html#AEN1470"
 >Prompting for Input</A
 ></DT
 ><DT
@@ -313,7 +318,7 @@ HREF="macros.html#MACRO-SYNTAX"
 ></DT
 ><DT
 ><A
-HREF="macros.html#AEN1410"
+HREF="macros.html#AEN1488"
 >Some Sample Macros</A
 ></DT
 ></DL
@@ -351,37 +356,37 @@ HREF="writing-modes.html"
 ><DL
 ><DT
 ><A
-HREF="writing-modes.html#AEN1512"
+HREF="writing-modes.html#AEN1596"
 >An XML Primer</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1576"
+HREF="writing-modes.html#AEN1660"
 >The Preamble</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1583"
+HREF="writing-modes.html#AEN1667"
 >The MODE Tag</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1600"
+HREF="writing-modes.html#AEN1684"
 >The PROPS Tag</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1637"
+HREF="writing-modes.html#AEN1721"
 >The RULES Tag</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1696"
+HREF="writing-modes.html#AEN1780"
 >TERMINATE rule</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1709"
+HREF="writing-modes.html#AEN1793"
 >WHITESPACE rule</A
 ></DT
 ><DT
@@ -391,27 +396,27 @@ HREF="writing-modes.html#SPAN"
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1793"
+HREF="writing-modes.html#AEN1877"
 >EOL_SPAN rule</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1827"
+HREF="writing-modes.html#AEN1911"
 >MARK_PREVIOUS rule</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1860"
+HREF="writing-modes.html#AEN1944"
 >MARK_FOLLOWING rule</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1894"
+HREF="writing-modes.html#AEN1978"
 >SEQ rule</A
 ></DT
 ><DT
 ><A
-HREF="writing-modes.html#AEN1920"
+HREF="writing-modes.html#AEN2004"
 >KEYWORDS rule</A
 ></DT
 ><DT
@@ -454,7 +459,7 @@ HREF="indent.html#INDENT-SOFTTABS"
 ></DT
 ><DT
 ><A
-HREF="indent.html#AEN2107"
+HREF="indent.html#AEN2205"
 >Indentation-Related Commands</A
 ></DT
 ><DT
@@ -531,53 +536,58 @@ HREF="global-opts.html"
 ><DL
 ><DT
 ><A
-HREF="global-opts.html#AEN2697"
+HREF="global-opts.html#AEN2807"
 >The General Pane</A
 ></DT
 ><DT
 ><A
-HREF="global-opts.html#AEN2754"
->The Editor Pane</A
-></DT
-><DT
-><A
-HREF="global-opts.html#AEN2822"
->The Gutter Pane</A
+HREF="global-opts.html#AEN2815"
+>The Text Area Pane</A
 ></DT
 ><DT
 ><A
 HREF="global-opts.html#AEN2829"
->The Edit Modes Pane</A
-></DT
-><DT
-><A
-HREF="global-opts.html#AEN2844"
 >The Colors &amp; Styles Pane</A
 ></DT
 ><DT
 ><A
-HREF="global-opts.html#AEN2864"
->The File Filters Pane</A
+HREF="global-opts.html#AEN2849"
+>The Editor Pane</A
 ></DT
 ><DT
 ><A
-HREF="global-opts.html#AEN2872"
+HREF="global-opts.html#AEN2859"
+>The Printing Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2867"
 >The Tool Bar Pane</A
 ></DT
 ><DT
 ><A
-HREF="global-opts.html#AEN2876"
+HREF="global-opts.html#AEN2871"
 >The Context Menu Pane</A
 ></DT
 ><DT
 ><A
-HREF="global-opts.html#AEN2880"
+HREF="global-opts.html#AEN2875"
 >The Abbreviations Pane</A
 ></DT
 ><DT
 ><A
 HREF="global-opts.html#OPTIONS-SHORTCUTS"
 >The Shortcut Editing Panes</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2901"
+>The VFS Browser Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2921"
+>The File Filters Pane</A
 ></DT
 ></DL
 ></DD
@@ -673,17 +683,17 @@ HREF="plugin-dialogs.html"
 ><DL
 ><DT
 ><A
-HREF="plugin-dialogs.html#AEN3571"
+HREF="plugin-dialogs.html#AEN3569"
 >Canned Dialog Boxes</A
 ></DT
 ><DT
 ><A
-HREF="plugin-dialogs.html#AEN3686"
+HREF="plugin-dialogs.html#AEN3688"
 >Saving Window Geometry</A
 ></DT
 ><DT
 ><A
-HREF="plugin-dialogs.html#AEN3724"
+HREF="plugin-dialogs.html#AEN3726"
 >Improved Dialog Box Key Handling</A
 ></DT
 ></DL
@@ -702,48 +712,82 @@ HREF="plugin-editbus.html"
 ><DL
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3883"
+HREF="plugin-editbus.html#AEN3885"
 >BufferUpdate Message</A
 ></DT
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3912"
+HREF="plugin-editbus.html#AEN3917"
 >EditorExiting Message</A
 ></DT
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3916"
+HREF="plugin-editbus.html#AEN3921"
 >EditorStarted Message</A
 ></DT
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3920"
+HREF="plugin-editbus.html#AEN3925"
 >EditPaneUpdate Message</A
 ></DT
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3936"
+HREF="plugin-editbus.html#AEN3941"
 >MacrosChanged Message</A
 ></DT
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3942"
+HREF="plugin-editbus.html#AEN3947"
 >PropertiesChanged Message</A
 ></DT
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3951"
+HREF="plugin-editbus.html#AEN3956"
 >RegistersChanged Message</A
 ></DT
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3954"
+HREF="plugin-editbus.html#AEN3959"
 >SearchSettingsChanged Message</A
 ></DT
 ><DT
 ><A
-HREF="plugin-editbus.html#AEN3957"
+HREF="plugin-editbus.html#AEN3962"
 >ViewUpdate Message</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="plugin-vfs.html"
+>Developing Virtual File Systems</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="plugin-vfs.html#AEN3978"
+>Input/Output Basics</A
+></DT
+><DT
+><A
+HREF="plugin-vfs.html#AEN3986"
+>Buffer Loading and Saving</A
+></DT
+><DT
+><A
+HREF="plugin-vfs.html#AEN4033"
+>The VFSManager Class</A
+></DT
+><DT
+><A
+HREF="plugin-vfs.html#AEN4101"
+>The VFS Class</A
+></DT
+><DT
+><A
+HREF="plugin-vfs.html#AEN4104"
+>Advanced Topics</A
 ></DT
 ></DL
 ></DD
@@ -763,7 +807,7 @@ HREF="server.html"
 ><DL
 ><DT
 ><A
-HREF="server.html#AEN4159"
+HREF="server.html#AEN4304"
 >Background Mode</A
 ></DT
 ></DL

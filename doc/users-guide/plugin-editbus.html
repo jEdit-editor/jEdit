@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.5 User's Guide"
+TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="Developing Plugins"
@@ -16,17 +16,17 @@ REL="PREVIOUS"
 TITLE="The Activity Log"
 HREF="plugin-logging.html"><LINK
 REL="NEXT"
-TITLE="Command Line Usage"
-HREF="cli-usage.html"></HEAD
+TITLE="Developing Virtual File Systems"
+HREF="plugin-vfs.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.5 User's Guide</H1
+>jEdit 2.6 User's Guide</H1
 ><P
 ><A
-HREF="cli-usage.html"
+HREF="plugin-vfs.html"
 >Next</A
 >, <A
 HREF="plugin-logging.html"
@@ -311,7 +311,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3883"
+NAME="AEN3885"
 >BufferUpdate Message</A
 ></H2
 ><P
@@ -345,9 +345,18 @@ CLASS="COMMAND"
 ><P
 ><B
 CLASS="COMMAND"
+>BufferUpdate.LOAD_STARTED</B
+> - a
+   buffer load has begun. Most plugins will have no need to listen for this
+   message</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
 >BufferUpdate.LOADED</B
 > - a
-   buffer has been loaded from disk</P
+   buffer has been loaded</P
 ></LI
 ><LI
 ><P
@@ -397,7 +406,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3912"
+NAME="AEN3917"
 >EditorExiting Message</A
 ></H2
 ><P
@@ -415,7 +424,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3916"
+NAME="AEN3921"
 >EditorStarted Message</A
 ></H2
 ><P
@@ -433,7 +442,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3920"
+NAME="AEN3925"
 >EditPaneUpdate Message</A
 ></H2
 ><P
@@ -486,7 +495,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3936"
+NAME="AEN3941"
 >MacrosChanged Message</A
 ></H2
 ><P
@@ -504,7 +513,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3942"
+NAME="AEN3947"
 >PropertiesChanged Message</A
 ></H2
 ><P
@@ -525,7 +534,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3951"
+NAME="AEN3956"
 >RegistersChanged Message</A
 ></H2
 ><P
@@ -538,7 +547,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3954"
+NAME="AEN3959"
 >SearchSettingsChanged Message</A
 ></H2
 ><P
@@ -553,7 +562,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3957"
+NAME="AEN3962"
 >ViewUpdate Message</A
 ></H2
 ><P
@@ -606,9 +615,9 @@ HREF="developing-plugins.html"
 HREF="plugin-logging.html"
 >Prev</A
 >: The Activity Log<BR><A
-HREF="cli-usage.html"
+HREF="plugin-vfs.html"
 >Next</A
->: Command Line Usage<BR></DIV
+>: Developing Virtual File Systems<BR></DIV
 ></BODY
 ></HTML
 >

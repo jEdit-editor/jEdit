@@ -2,7 +2,7 @@
 # the current line (keeping the cursor in the same place)
 prev-char
 set-caret-register@q
-goto-end-indent
+end
 next-char
 set-search-string@([^ >]*)
 set-search-parameters@regexp case current

@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.5 User's Guide"
+TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="Customizing jEdit"
@@ -23,7 +23,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.5 User's Guide</H1
+>jEdit 2.6 User's Guide</H1
 ><P
 ><A
 HREF="plugins.html"
@@ -58,7 +58,14 @@ CLASS="FIRSTTERM"
 ><P
 >   The location of the settings
    directory is system-specific; to find out what it is, look in the
-   activity log (see <A
+   activity log (<SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Activity Log</SPAN
+>;
+   see <A
 HREF="activity-log.html"
 >the section called <I
 >The Activity Log</I
@@ -131,99 +138,55 @@ CLASS="COMMAND"
 ><P
 ><TT
 CLASS="FILENAME"
->abbrevs</TT
-> - a plain text file which
-   stores all defined abbreviations</P
-></LI
-><LI
-><P
-><TT
-CLASS="FILENAME"
->history</TT
-> - a plain text file which
-   stores history lists, used by
-   history text fields and the
-   <SPAN
+>cache</TT
+> - a directory where cached directory
+   listings from remote FTP servers are stored to improve browser performance.
+   To flush the cache, invoke the <SPAN
 CLASS="GUIMENU"
->Edit</SPAN
+>Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Paste Previous</SPAN
-> command. See
-   <A
-HREF="history.html"
->the section called <I
->History Text Fields</I
-> in Chapter 7</A
-> and <A
-HREF="clipboard.html"
->the section called <I
->The Clipboard</I
-> in Chapter 3</A
-></P
+>Flush
+   Remote Directory Cache</SPAN
+> command.</P
 ></LI
 ><LI
 ><P
 ><TT
 CLASS="FILENAME"
 >jars</TT
-> - a directory where plugins can be
-   installed; see
+> - a directory for user-installed
+   plugins. See
    <A
 HREF="plugins.html"
 >Chapter 9</A
-></P
+>.</P
 ></LI
 ><LI
 ><P
 ><TT
 CLASS="FILENAME"
 >macros</TT
-> - a directory where macros can be
-   stored; see
+> - a directory for recorded
+   macros. See
    <A
 HREF="macros.html"
 >the section called <I
 >Macros</I
 > in Chapter 4</A
-></P
-></LI
-><LI
-><P
-><TT
-CLASS="FILENAME"
->mode-cache</TT
-> - a binary file which stores
-   information about all available edit modes so that they can be loaded
-   on demand. See <A
-HREF="modes.html"
->Chapter 5</A
-></P
+>.</P
 ></LI
 ><LI
 ><P
 ><TT
 CLASS="FILENAME"
 >modes</TT
-> - a directory where edit modes can be
-   stored; see <A
+> - a directory for custom edit modes.
+   Each edit mode is a file in XML format. See <A
 HREF="modes.html"
 >Chapter 5</A
-></P
-></LI
-><LI
-><P
-><TT
-CLASS="FILENAME"
->PluginManager.backup</TT
-> - when the plugin
-   manager is asked to update or remove a plugin, it doesn't actually
-   delete it from disk; instead, it is moved to this directory. It may be
-   worthwhile to empty out its contents occasionally. See <A
-HREF="plugins.html"
->Chapter 9</A
->
-   for information about the plugin manager</P
+>.
+   </P
 ></LI
 ><LI
 ><P
@@ -242,6 +205,73 @@ HREF="plugins.html"
 ><P
 ><TT
 CLASS="FILENAME"
+>sessions</TT
+> - saved editor sessions. An editor
+   session is a list of open buffers and corresponding caret positions. The
+   session named "default" is saved when jEdit exits, and loaded when jEdit
+   starts. See <A
+HREF="advanced-features.html#SESSIONS"
+>the section called <I
+>Saving and Loading Sessions</I
+> in Chapter 4</A
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>abbrevs</TT
+> - a plain text file which
+   stores all defined abbreviations. See <A
+HREF="abbrevs.html"
+>the section called <I
+>Abbreviations</I
+> in Chapter 4</A
+>.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>history</TT
+> - a plain text file which
+   stores history lists, used by
+   history text fields and the
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Paste Previous</SPAN
+> command. See
+   <A
+HREF="clipboard.html"
+>the section called <I
+>The Clipboard</I
+> in Chapter 3</A
+> and <A
+HREF="history.html"
+>the section called <I
+>History Text Fields</I
+> in Chapter 7</A
+>.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>mode-cache</TT
+> - a binary file which stores
+   information about all available edit modes so that they can be loaded
+   on demand. See <A
+HREF="modes.html"
+>Chapter 5</A
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
 >properties</TT
 > - a plain text file where the
    bulk of jEdit's settings are stored</P
@@ -252,23 +282,11 @@ CLASS="FILENAME"
 CLASS="FILENAME"
 >server</TT
 > - a plain text file that only exists
-   while the edit server is running. The port number and authorization key
+   if the edit server is enabled and jEdit is running. The port number
+   and authorization key
    is stored here. See <A
 HREF="server.html"
 >Appendix B</A
-></P
-></LI
-><LI
-><P
-><TT
-CLASS="FILENAME"
->sessions</TT
-> - a directory where saved sessions can
-   be stored; see <A
-HREF="advanced-features.html#SESSIONS"
->the section called <I
->Saving and Loading Sessions</I
-> in Chapter 4</A
 ></P
 ></LI
 ></UL

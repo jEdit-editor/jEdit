@@ -1,0 +1,460 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Developing Virtual File Systems</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.6 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Developing Plugins"
+HREF="developing-plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="The EditBus"
+HREF="plugin-editbus.html"><LINK
+REL="NEXT"
+TITLE="Command Line Usage"
+HREF="cli-usage.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.6 User's Guide</H1
+><P
+><A
+HREF="cli-usage.html"
+>Next</A
+>, <A
+HREF="plugin-editbus.html"
+>Prev</A
+></P
+><H2
+>Chapter 10. Developing Plugins</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PLUGIN-VFS"
+>Developing Virtual File Systems</A
+></H1
+><P
+>   This chapter first explains the workings of jEdit's I/O system in
+   detail. Then, it overviews the APIs allowing plugins to extend it.
+  </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3978"
+>Input/Output Basics</A
+></H2
+><P
+>    jEdit performs all buffer loading and saving in a separate thread,
+    known as the <I
+CLASS="FIRSTTERM"
+>work thread</I
+>. It is an instance of the
+    <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.util.WorkThread</TT
+> class, and at its simplest,
+    all it does is execute queued requests. A requests can specify if it
+    is to be run in the work thread, or the AWT event dispatch thread.
+    In the former case, the work thread simply executes the request.
+    In the latter, passes it to the <TT
+CLASS="FUNCTION"
+>SwingUtilities.invokeLater()</TT
+>
+    method, which queues it up for execution in the event dispatch thread.
+    The ability to execute requests in the AWT thread may seem redudant,
+    but in fact it is very useful; for example, it is used to update
+    jEdit's GUI after a file load is complete.<A
+NAME="AEN3984"
+HREF="#FTN.AEN3984"
+>[1]</A
+>
+    The work thread is not limited to performing I/O; in fact,
+    plugins can create
+    their own work thread instances and use them for other purposes. However,
+    in this section, we will only cover I/O-related uses of the work
+    thread.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3986"
+>Buffer Loading and Saving</A
+></H2
+><P
+>    The <TT
+CLASS="FUNCTION"
+>Buffer.load()</TT
+> method is called when a buffer load
+    is requested by the user; either when a file is opened, or the
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Reload</SPAN
+> command is invoked.
+    The main purpose of this method is to queue two requests with the
+    I/O work thread; the first loads the buffer, the second performs
+    various post-load "cleanups", such as updating the GUI, setting
+    up a new undo queue, and so on. Because the latter is of little
+    relevance to the plugin VFS developer, it will not be discussed further.
+   </P
+><P
+>    The buffer loading request is an instance of the
+    <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.io.IORequest</TT
+> class. This class first
+    obtains the virtual filesystem used by that buffer (more on how this
+    is determined later). It then calls the <TT
+CLASS="FUNCTION"
+>_createInputStream()</TT
+>
+    method of the filesystem. This method does whatever is necessary to
+    obtain a stream to read from; for example, the "file" VFS simply
+    creates a <TT
+CLASS="CLASSNAME"
+>FileInputStream</TT
+>. The "ftp" VFS opens
+    a network connection, logs in, and begins downloading the specified file.
+    <TT
+CLASS="CLASSNAME"
+>IORequest</TT
+> then procceeds to read the buffer from this
+    input stream. Although in reality
+    the buffer load process is a bit more complicated than this,
+    but the above should still give you a good idea of how it works.
+   </P
+><P
+>    The <TT
+CLASS="FUNCTION"
+>Buffer.save()</TT
+> method behaves in a similar manner.
+    It also queues up an <TT
+CLASS="CLASSNAME"
+>IORequest</TT
+>, which calls
+    <TT
+CLASS="FUNCTION"
+>VFS._createOutputStream()</TT
+>
+    instead of <TT
+CLASS="FUNCTION"
+>VFS._createInputStream()</TT
+>.
+   </P
+><P
+>    Now wait a minute, you say. Why bother with all this <TT
+CLASS="CLASSNAME"
+>IORequest</TT
+>
+    stuff? Why doesn't <TT
+CLASS="FUNCTION"
+>Buffer.load()</TT
+> just call the VFS directly?
+    To understand, consider the above more carefully. <TT
+CLASS="FUNCTION"
+>Buffer.load()</TT
+>
+    queues two requests, and returns to its caller. The requests are then
+    run <I
+CLASS="EMPHASIS"
+>asynchronously</I
+>, in a <I
+CLASS="EMPHASIS"
+>different thread</I
+>.
+    This allows them to be aborted if the user wishes to do so. Views also
+    continue to be repainted.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN4033"
+>The VFSManager Class</A
+></H2
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public class VFSManager
+{
+        public static void registerVFS(String protocol, VFS vfs);
+        public static void waitForRequests();
+        public static void runInAWTThread(Runnable run);
+        public static void error(Component comp, String message, Object[] args);
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>    TODO
+   </P
+><H4
+CLASS="BRIDGEHEAD"
+>VFSManager.registerVFS() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.io.VFS;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void registerVFS</CODE
+>(String protocol, VFS vfs);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>    This method registers the specified virtual filesystem instance as
+    being able to handle buffers whose URL protocol is
+    <TT
+CLASS="PARAMETER"
+><I
+>protocol</I
+></TT
+>. In most cases, you would call this method from
+    your plugin's <TT
+CLASS="FUNCTION"
+>start()</TT
+> method.
+    The following example registers a new instance
+    of the (hypothetical) <TT
+CLASS="CLASSNAME"
+>ZipVFS</TT
+> class as being able to
+    handle URLs with protocol "zip:":
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>VFSManager.registerVFS("zip",new ZipVFS());</PRE
+></TD
+></TR
+></TABLE
+><H4
+CLASS="BRIDGEHEAD"
+>VFSManager.waitForRequests() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void waitForRequests</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>    This method blocks the current thread until the work thread finishes
+    executing all pending requests. Note that if you need to be notified
+    when a buffer finishes loading, it is a much better idea to listen
+    for the <TT
+CLASS="CLASSNAME"
+>BufferUpdate.LOADED</TT
+> EditBus message than to use
+    this method.
+   </P
+><H4
+CLASS="BRIDGEHEAD"
+>VFSManager.runInAWTThread() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void runInAWTThread</CODE
+>(Runnable run);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>    This method adds the specified <TT
+CLASS="CLASSNAME"
+>Runnable</TT
+> to the work
+    thread queue. When the request moves to the front of the queue, it
+    will be run in the AWT event dispatch thread. TODO: give examples
+    of this method's usage.
+   </P
+><H4
+CLASS="BRIDGEHEAD"
+>VFSManager.error() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void runInAWTThread</CODE
+>(Component comp, String message, Object[] args);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>    This method is exactly the same as <TT
+CLASS="FUNCTION"
+>GUIUtilities.error()</TT
+>,
+    except that it is safe to call it from the work thread.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN4101"
+>The VFS Class</A
+></H2
+><P
+>    TODO
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN4104"
+>Advanced Topics</A
+></H2
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN4106"
+>Reusing network connections</A
+></H3
+><P
+>     TODO: FtpVFS reuses the same FtpClient throughout a load or save...
+     describe how this is done with buffer-local properties, and the
+     VFS.load/saveComplete() methods.
+    </P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN4109"
+>Storing login information</A
+></H3
+><P
+>     TODO: Again, buffer-local properties are you friend...
+    </P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN4112"
+>Pre-load sanity checks</A
+></H3
+><P
+>     TODO: describe why opening an unreadable file doesn't create an
+     empty buffer; the return value of VFS.load() method
+    </P
+></DIV
+></DIV
+></DIV
+><H3
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN3984"
+HREF="plugin-vfs.html#AEN3984"
+>[1]</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Most Swing are
+    not thread safe and can only be called
+    from the AWT thread; attempting to call them from the work
+    thread can lead to race conditions.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="developing-plugins.html"
+>Up</A
+><BR><A
+HREF="plugin-editbus.html"
+>Prev</A
+>: The EditBus<BR><A
+HREF="cli-usage.html"
+>Next</A
+>: Command Line Usage<BR></DIV
+></BODY
+></HTML
+>

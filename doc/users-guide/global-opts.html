@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.5 User's Guide"
+TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="Customizing jEdit"
@@ -23,7 +23,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.5 User's Guide</H1
+>jEdit 2.6 User's Guide</H1
 ><P
 ><A
 HREF="settings-directory.html"
@@ -63,308 +63,32 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2697"
+NAME="AEN2807"
 >The General Pane</A
 ></H2
 ><P
 >    The <SPAN
 CLASS="GUIBUTTON"
 >General</SPAN
-> pane allows you to change the following settings:
+> option pane allows you to change various
+    miscallaneous settings, such as the number of recent files to remember,
+    file encoding, default file separator, and Swing look &amp; feel.
    </P
-><P
-></P
-><UL
-><LI
-><P
->The Swing look and feel - changes to this setting only
-    take effect after jEdit is restarted</P
-></LI
-><LI
-><P
->Number of recent files to list in the
-    <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUISUBMENU"
->Recent Files</SPAN
-> menu</P
-></LI
-><LI
-><P
->The file encoding used when loading and saving files -
-    you can enter any encoding supported by your Java version here, not just
-    the ones in the list</P
-></LI
-><LI
-><P
->The autosave frequency, in seconds - see
-    <A
-HREF="saving.html"
->the section called <I
->Saving Files</I
-> in Chapter 3</A
-></P
-></LI
-><LI
-><P
->The maximum number of entries to store in a history list.
-    History lists are used by the search and replace features to store
-    previously entered search strings. They are also used by the
-    <SPAN
-CLASS="GUIMENUITEM"
->Paste Previous</SPAN
-> command.
-    See <A
-HREF="history.html"
->the section called <I
->History Text Fields</I
-> in Chapter 7</A
->, <A
-HREF="clipboard.html"
->the section called <I
->The Clipboard</I
-> in Chapter 3</A
-> and
-    <A
-HREF="registers.html"
->the section called <I
->Registers</I
-> in Chapter 4</A
->.</P
-></LI
-><LI
-><P
->Number of backups to make when saving buffers - if this
-    is set to "0", no backups will be made at all. If set to
-    "1", only one backup will be made. Values higher than
-    "1" will cause numbered backups to be enabled, with higher numbers
-    being the older versions</P
-></LI
-><LI
-><P
->The directory to store backups in - if not set, backups will be
-    created in the current directory</P
-></LI
-><LI
-><P
->Backup filename prefix - if set, the specified string will
-    be prepended to backup filenames</P
-></LI
-><LI
-><P
->Backup filename suffix - if set, the specified string will
-    be suffixed to backup filenames - at least one of the backup prefix
-    and suffix must be set, otherwise interesting things will happen...
-    </P
-></LI
-><LI
-><P
->Default line separator - the line separator/end of line
-    characters that will be used for new files. Existing files will always use
-    whatever line separator they were found to have on loading. See
-    <A
-HREF="saving.html"
->the section called <I
->Saving Files</I
-> in Chapter 3</A
-></P
-></LI
-><LI
-><P
->If the current session should be automatically saved
-    when jEdit exits and restored when it starts up. See
-    <A
-HREF="advanced-features.html#SESSIONS"
->the section called <I
->Saving and Loading Sessions</I
-> in Chapter 4</A
-></P
-></LI
-><LI
-><P
->If buffer switching tabs should be shown
-    </P
-></LI
-><LI
-><P
->If the full path of buffers should be shown in view
-    title bars, instead of just the name</P
-></LI
-><LI
-><P
->If the buffer list should be sorted</P
-></LI
-><LI
-><P
->If the buffer list should be sorted by file name,
-    rather than full path name</P
-></LI
-><LI
-><P
->If jEdit should check if buffers have changed on disk
-    every time it gets focus</P
-></LI
-><LI
-><P
->If jEdit should parse files for syntax information
-    when they are being loaded. This results in slower file loading,
-    but more accurate highlighting of multi-line tokens</P
-></LI
-></UL
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2754"
->The Editor Pane</A
+NAME="AEN2815"
+>The Text Area Pane</A
 ></H2
 ><P
 >    The <SPAN
 CLASS="GUIBUTTON"
->Editor</SPAN
-> pane allows you to change the following settings:
-   </P
-><P
-></P
-><UL
-><LI
-><P
->Default edit mode for new files</P
-></LI
-><LI
-><P
->The text font</P
-></LI
-><LI
-><P
->The font size</P
-></LI
-><LI
-><P
->Default font style</P
-></LI
-><LI
-><P
->Default tab width</P
-></LI
-><LI
-><P
->Undo queue size</P
-></LI
-><LI
-><P
->If the line with the caret should be drawn with a
-    different background</P
-></LI
-><LI
-><P
->If matching brackets should be highlighted</P
-></LI
-><LI
-><P
->If a faint dot should be drawn at the end of each line</P
-></LI
-><LI
-><P
->If lines that are visible but are not actually in the
-    buffer should be drawn as red tildes</P
-></LI
-><LI
-><P
->If syntax highlighting should be performed</P
-></LI
-><LI
-><P
->If the current line should be indented when
-    <B
-CLASS="KEYCAP"
->Tab</B
-> is pressed - see <A
-HREF="indent.html#AUTOINDENT"
->the section called <I
->Automatic Indent</I
-> in Chapter 6</A
-></P
-></LI
-><LI
-><P
->If the correct indentation should automatically be
-    inserted when
-    <B
-CLASS="KEYCAP"
->Enter</B
-> is pressed - see <A
-HREF="indent.html#AUTOINDENT"
->the section called <I
->Automatic Indent</I
-> in Chapter 6</A
-></P
-></LI
-><LI
-><P
->If spaces should be used instead of "real" tabs
-    for indentation - see <A
-HREF="indent.html#INDENT-SOFTTABS"
->the section called <I
->Soft Tabs</I
-> in Chapter 6</A
-></P
-></LI
-><LI
-><P
->If the caret should blink</P
-></LI
-><LI
-><P
->If the caret should be drawn as a block or a vertical
-    line</P
-></LI
-><LI
-><P
->If placing the caret on the first three or last three
-    visible lines should automatically scroll</P
-></LI
-><LI
-><P
->If the <B
-CLASS="KEYCAP"
->Home</B
-> and <B
-CLASS="KEYCAP"
->End</B
-> should move
-    the caret to various useful locations when pressed repeatedly
-    - see <A
-HREF="caret.html"
->the section called <I
->The Caret</I
-> in Chapter 3</A
-></P
-></LI
-></UL
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN2822"
->The Gutter Pane</A
-></H2
-><P
->    The <SPAN
-CLASS="GUIBUTTON"
->Gutter</SPAN
-> pane allows you to change various settings
-    used by the gutter. Colors used by the gutter can be set in the
-    <SPAN
-CLASS="GUIBUTTON"
->Colors &amp; Styles</SPAN
-> option pane.
+>Text Area</SPAN
+> option pane allows you to customize the
+    appearance of the text area and gutter.
    </P
 ></DIV
 ><DIV
@@ -373,49 +97,6 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="AEN2829"
->The Edit Modes Pane</A
-></H2
-><P
->    The <SPAN
-CLASS="GUIBUTTON"
->Edit Modes</SPAN
-> pane allows you to change a subset of
-    the global editor settings on a per-mode basis. The combo box
-    labelled "edit mode" selects the edit mode whose settings
-    are to be changed. If the "use default settings" check box is
-    selected,
-    the edit mode will use the global editor settings. Otherwise, the
-    settings can be customized and they will only apply to this mode.
-   </P
-><P
->    The "file name glob" and "first line glob" fields allow
-    you to specify a glob pattern that names and first lines of buffers
-    will be matched against. The remaining fields and flags are the same
-    as in the <SPAN
-CLASS="GUIBUTTON"
->Editor</SPAN
-> pane.
-   </P
-><P
->    Changes to the tab size setting in this option pane only take effect
-    in newly opened files. All other settings take effect immediately.
-   </P
-><P
->    This option pane does not change mode definition files on disk; it
-    merely writes values to the user properties file which override those
-    in mode files. To find out how to edit mode files directly, see
-    <A
-HREF="modes.html"
->Chapter 5</A
->.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN2844"
 >The Colors &amp; Styles Pane</A
 ></H2
 ><P
@@ -433,34 +114,35 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2864"
->The File Filters Pane</A
+NAME="AEN2849"
+>The Editor Pane</A
 ></H2
 ><P
 >    The <SPAN
 CLASS="GUIBUTTON"
->File Filters</SPAN
-> pane allows you to add custom file filters
-    to the open file and save dialog boxes. Note that only user-defined
-    file filters can be added and changed here; filters used
-    to pick a file's edit mode can be changed in the <SPAN
-CLASS="GUIBUTTON"
->Edit Modes</SPAN
->
-    pane.
+>Editor</SPAN
+> option pane allows you to change settings such
+    as the tab size, syntax highlighting and soft tabs, on both a global and
+    edit mode-specific basis.
    </P
 ><P
->    Filters are added and removed in a rather peculiar fashion in this pane.
-    Changing the last line in the list (which is always blank) will add
-    another blank line. Lines with empty names or globs will
-    be ignored when the filters are being saved.
+>    When editing mode-specific settings,
+    the "file name glob" and "first line glob" fields allow
+    you to specify a glob pattern that names and first lines of buffers
+    will be matched against.
    </P
 ><P
->    The glob patterns are case insensitive. For information about
-    glob patterns, which are a simplified form of regular expressions,
-    see <A
-HREF="globs.html"
->Appendix D</A
+>    Due to a quirk in jEdit's properties implementation,
+    changes to some settings in this option pane only take effect
+    in newly opened files.
+   </P
+><P
+>    This option pane does not change mode definition files on disk; it
+    merely writes values to the user properties file which override those
+    in mode files. To find out how to edit mode files directly, see
+    <A
+HREF="modes.html"
+>Chapter 5</A
 >.
    </P
 ></DIV
@@ -469,7 +151,23 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2872"
+NAME="AEN2859"
+>The Printing Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Printing</SPAN
+> pane allows you to customize what printed
+    output looks like by changing the font, margins, and several flags.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2867"
 >The Tool Bar Pane</A
 ></H2
 ><P
@@ -486,7 +184,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2876"
+NAME="AEN2871"
 >The Context Menu Pane</A
 ></H2
 ><P
@@ -502,7 +200,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2880"
+NAME="AEN2875"
 >The Abbreviations Pane</A
 ></H2
 ><P
@@ -583,123 +281,85 @@ CLASS="FILENAME"
 >    jEdit also allows multiple keystroke bindings; for example,
     <SPAN
 CLASS="GUIMENUITEM"
->Open URL</SPAN
+>Open Path</SPAN
 > is bound to <B
 CLASS="KEYCAP"
 >C+e C+o</B
 >. Any number
     of keystrokes can be present in a key binding.
    </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-2. The General pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-general.gif"></P
 ></DIV
 ><DIV
-CLASS="FIGURE"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2901"
+>The VFS Browser Pane</A
+></H2
 ><P
-><B
->Figure 8-3. The Editor pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-editor.gif"></P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>VFS Browser</SPAN
+> pane allows you to customize the file system
+    browser used by the <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Open File</SPAN
+>,
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+> and
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>File System Browser</SPAN
+> commands.
+   </P
 ></DIV
 ><DIV
-CLASS="FIGURE"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2921"
+>The File Filters Pane</A
+></H2
 ><P
-><B
->Figure 8-4. The Edit Modes pane of the Global Options dialog box</B
-></P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>File Filters</SPAN
+> pane allows you to add custom file filters
+    to the open file and save dialog boxes. Note that only user-defined
+    file filters can be added and changed here; filters used
+    to pick a file's edit mode can be changed in the <SPAN
+CLASS="GUIBUTTON"
+>Edit Modes</SPAN
+>
+    pane.
+   </P
 ><P
-><IMG
-SRC="../images/dialog-options-modes.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
+>    Filters are added and removed in a rather peculiar fashion in this pane.
+    Changing the last line in the list (which is always blank) will add
+    another blank line. Lines with empty names or globs will
+    be ignored when the filters are being saved.
+   </P
 ><P
-><B
->Figure 8-5. The Gutter pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-gutter.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-6. The Colors &amp; Styles pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-styles.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-7. The File Filters pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-filters.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-8. The Abbreviations pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-abbrevs.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-9. The Tool Bar pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-toolbar.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-10. The Context Menu pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-context.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-11. The Command Shortcuts pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-cmd-shortcuts.gif"></P
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 8-12. The Macro Shortcuts pane of the Global Options dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-options-mac-shortcuts.gif"></P
-></DIV
+>    The glob patterns are case insensitive. For information about
+    glob patterns, which are a simplified form of regular expressions,
+    see <A
+HREF="globs.html"
+>Appendix D</A
+>.
+   </P
 ></DIV
 ></DIV
 ><DIV

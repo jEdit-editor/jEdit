@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.5 User's Guide"
+TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="Basic Features"
@@ -23,7 +23,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.5 User's Guide</H1
+>jEdit 2.6 User's Guide</H1
 ><P
 ><A
 HREF="creating.html"
@@ -111,27 +111,66 @@ CLASS="FIGURE"
 SRC="../images/dialog-open.gif"></P
 ></DIV
 ><P
->   All open buffers are listed in the <SPAN
+>   There are several ways to change the buffer displayed in the current
+   view. Firstly, you can use the <SPAN
 CLASS="GUIMENU"
->Buffers</SPAN
-> menu; selecting
-   one will display that buffer in the current view. The tabs that run
-   along the top of the text area can also be used to switch between
-   buffers. If you don't like the tabs, they can be disabled in
-   the <SPAN
+>View</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Current
+   Buffer</SPAN
+> menu, which displays a list of all open buffers. The tabs
+   that run along the top of the text area serve a similar purpose.
+   <SPAN
+CLASS="GUIMENU"
+>View</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to Previous Buffer</SPAN
+> selects the
+   buffer before the current one. <SPAN
+CLASS="GUIMENU"
+>View</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to
+   Next Buffer</SPAN
+> selects the buffer after the current one.
+   <SPAN
+CLASS="GUIMENU"
+>View</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to Last Edited Buffer</SPAN
+> selects the
+   buffer that was being edited before you switched to the current one.
+  </P
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>    The buffer switching tabs can take up a lot of room and get unweidly
+    if you have many buffers
+    open. If this bothers you, they can be disabled in
+    the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Global Options</SPAN
 > dialog box;
-   see <A
+    see <A
 HREF="global-opts.html"
 >the section called <I
 >The Global Options Dialog Box</I
 > in Chapter 8</A
 > for details.
-  </P
+   </P
+></BLOCKQUOTE
+></DIV
 ><P
 >   Files that you do not have write access to are automatically opened
    read only. Files can also be forced to open read only from the command line
@@ -145,10 +184,13 @@ CLASS="USERINPUT"
 ><P
 >   jEdit doesn't actually change a file on disk until you save it.
    If there are unsaved changes in a buffer, "(modified)" will
-   be displayed in the rightmost section of the status bar
-   and <SPAN
+   be displayed in the status bar
+   and the <SPAN
 CLASS="GUIMENU"
->Buffers</SPAN
+>View</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Current Buffer</SPAN
 > menu.
   </P
 ><DIV
@@ -156,7 +198,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN181"
+NAME="AEN204"
 >Searching for Files</A
 ></H2
 ><P

@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.5 User's Guide"
+TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="Developing Plugins"
@@ -23,7 +23,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.5 User's Guide</H1
+>jEdit 2.6 User's Guide</H1
 ><P
 ><A
 HREF="plugin-options.html"
@@ -133,8 +133,7 @@ WIDTH="100%"
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >import javax.swing.JMenu;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.View;</PRE
+import org.gjt.sp.jedit.GUIUtilities;</PRE
 ></TD
 ></TR
 ></TABLE
@@ -143,7 +142,7 @@ import org.gjt.sp.jedit.View;</PRE
 ><CODE
 CLASS="FUNCDEF"
 >public static JMenu loadMenu</CODE
->(View view, String name);</CODE
+>(String name);</CODE
 ></P
 ><P
 ></P
@@ -207,8 +206,7 @@ WIDTH="100%"
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >import javax.swing.JMenuItem;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.View;</PRE
+import org.gjt.sp.jedit.GUIUtilities;</PRE
 ></TD
 ></TR
 ></TABLE
@@ -217,7 +215,7 @@ import org.gjt.sp.jedit.View;</PRE
 ><CODE
 CLASS="FUNCDEF"
 >public static JMenuItem loadMenuItem</CODE
->(View view, String name);</CODE
+>(String name);</CODE
 ></P
 ><P
 ></P
@@ -244,6 +242,30 @@ CLASS="REPLACEABLE"
 >.label</SPAN
 >.
   </P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>    The <TT
+CLASS="FUNCTION"
+>loadMenuItem()</TT
+> and <TT
+CLASS="FUNCTION"
+>loadMenu()</TT
+>
+    methods of jEdit version 2.5 and earlier
+    also took a <TT
+CLASS="CLASSNAME"
+>View</TT
+> instance as a parameter. While the old
+    method still exists for backwards compatibility with existing plugins,
+    it is deprecated and should not be used in new plugins.
+   </P
+></BLOCKQUOTE
+></DIV
 ><H4
 CLASS="BRIDGEHEAD"
 >Example</H4
@@ -268,7 +290,7 @@ WIDTH="100%"
 CLASS="PROGRAMLISTING"
 >public void createMenuItems(View view, Vector menus, Vector menuItems)
 {
-        menuItems.addElement(GUIUtilities.loadMenuItem(view,"hello-world"));
+        menuItems.addElement(GUIUtilities.loadMenuItem("hello-world"));
 }</PRE
 ></TD
 ></TR

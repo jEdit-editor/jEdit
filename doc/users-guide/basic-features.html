@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.5 User's Guide"
+TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Keyboard Shortcuts"
@@ -20,7 +20,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.5 User's Guide</H1
+>jEdit 2.6 User's Guide</H1
 ><P
 ><A
 HREF="opening.html"
@@ -92,7 +92,7 @@ HREF="saving.html"
 ><DT
 ><A
 HREF="printing-sending.html"
->Printing and Sending Files</A
+>Printing Files</A
 ></DT
 ><DT
 ><A
@@ -137,10 +137,7 @@ HREF="cli-usage.html"
 ><P
 >   Once started, jEdit will display a "splash
    screen" with the jEdit logo and a progress bar that advances
-   while jEdit loads. After a short delay, the editor window will
-   appear. Most user interface elements will look familiar
-   to Windows or MacOS users, except for the text area, which has
-   some unique features.
+   while jEdit loads. 
   </P
 ><DIV
 CLASS="FIGURE"
@@ -152,8 +149,45 @@ CLASS="FIGURE"
 ><IMG
 SRC="../images/window-splash.gif"></P
 ></DIV
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
 ><P
->   The text area displays the contents of the currently opened buffer.
+></P
+><P
+>    The first time jEdit is run, it will display an "initial setup
+    wizard" which will help you configure firewall settings (so
+    that jEdit features that make HTTP connections will work), install
+    plugins using the plugin manager (see <A
+HREF="plugins.html"
+>Chapter 9</A
+> for
+    more information about plugins) and give you some pointers to
+    further information. Similarly, after upgrading to a new jEdit version,
+    an "update wizard" will help you update your plugins and
+    give pointers to the change log so you can see what's new.
+   </P
+><P
+>    Both of these wizards are self-explanatory and very easy to use,
+    and therefore will not be covered in any more detail in this manual.
+   </P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>   After jEdit has finished loading, the editor window will
+   appear. Most user interface elements will look familiar
+   to Windows or MacOS users, except for the text area, which has
+   some unique features.
+   The text area displays the contents of the currently opened buffer.
    The two scroll bars can be used to move around the buffer when there
    is more text than can fit on the screen. The blinking red line
    is called the <I
@@ -170,15 +204,6 @@ CLASS="FIRSTTERM"
 >end of
    line marker</I
 >.
-  </P
-><P
->   The lines painted with red tildes ("~")
-   are <I
-CLASS="FIRSTTERM"
->invalid lines</I
-> - they are visible for one
-   reason or another,
-   but don't actually exist in the document.
   </P
 ><P
 >   The text area never allows the caret to be positioned closer than 3 lines

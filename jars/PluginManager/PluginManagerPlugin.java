@@ -309,6 +309,11 @@ loop:		for(int i = 0; i < plugins.length; i++)
 
 	private static boolean removePlugin(JDialog dialog, String plugin)
 	{
+		// close JAR file
+		EditPlugin.JAR jar = jEdit.getPluginJAR(plugin);
+		if(jar != null)
+			jar.getClassLoader().closeZipFile();
+
 		// move JAR first
 		File jarFile = new File(plugin);
 		File srcFile = new File(plugin.substring(0,plugin.length() - 4));

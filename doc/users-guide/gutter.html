@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.5 User's Guide"
+TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="Advanced Features"
@@ -23,7 +23,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.5 User's Guide</H1
+>jEdit 2.6 User's Guide</H1
 ><P
 ><A
 HREF="words.html"
@@ -45,27 +45,42 @@ NAME="GUTTER"
 ></H1
 ><P
 >   The gutter is a strip on the left side of the text area that displays
-   line numbers, and marker and position register locations. It is hidden
-   by default. To show or hide the gutter, double-click on it (when it is
-   collapsed, it is shown as a thin vertical line), or select
+   line numbers. Lines with markers set in them will be drawn
+   with a light green background. Similarly, lines with position registers
+   will have a light yellow background.
+   The gutter is hidden by default; to make it visible, double-click on the
+   thin vertical line at the left of the text area, or select
    <SPAN
 CLASS="GUIMENU"
->Utilities</SPAN
+>View</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Gutter Expanded</SPAN
->.
+>. To hide the gutter,
+   you can double-click on The
+   <SPAN
+CLASS="GUIMENU"
+>View</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Line Numbering</SPAN
+> command can be used
+   to disable line numbering but keep the gutter visible. You might want
+   to do this if you find the line numbers distracting, but still want to
+   see position register and marker locations highlighted.
   </P
 ><P
 >   The gutter can be resized by dragging with the mouse. Resizing can
    sometimes
-   be necessary if line numbers become too long to be displayed. To save
-   the gutter's size for future sessions, right-click on it
-   and select <SPAN
+   be necessary if line numbers become too long to be displayed. The
+   <SPAN
+CLASS="GUIMENU"
+>View</SPAN
+>&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Save Gutter Size</SPAN
-> from the resulting context
-   menu.
+> command can
+   be used to save the gutter's size for future sessions.
   </P
 ><P
 >   Many options relating to the gutter (colors, behavior, etc) can be
@@ -87,7 +102,7 @@ HREF="global-opts.html"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 4-4. A view with the gutter showing</B
+>Figure 4-5. A view with the gutter showing</B
 ></P
 ><P
 ><IMG

@@ -52,6 +52,7 @@ jedit_pkgs = "com/microstar/xml"
     "com/fooware/net"
     jedit_pkg
     "org/gjt/sp/jedit/actions"
+    "org/gjt/sp/jedit/browser"
     "org/gjt/sp/jedit/gui"
     "org/gjt/sp/jedit/io"
     "org/gjt/sp/jedit/msg"

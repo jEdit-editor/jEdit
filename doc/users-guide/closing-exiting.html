@@ -7,13 +7,13 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
-TITLE="jEdit 2.5 User's Guide"
+TITLE="jEdit 2.6 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="Basic Features"
 HREF="basic-features.html"><LINK
 REL="PREVIOUS"
-TITLE="Printing and Sending Files"
+TITLE="Printing Files"
 HREF="printing-sending.html"><LINK
 REL="NEXT"
 TITLE="The Activity Log"
@@ -23,7 +23,7 @@ BGCOLOR="#FFFFFF"
 ><DIV
 CLASS="NAVHEADER"
 ><H1
->jEdit 2.5 User's Guide</H1
+>jEdit 2.6 User's Guide</H1
 ><P
 ><A
 HREF="activity-log.html"
@@ -45,6 +45,8 @@ NAME="CLOSING-EXITING"
 ></H1
 ><P
 >   
+   
+   
    
    
    
@@ -79,7 +81,7 @@ CLASS="GUIBUTTON"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 3-9. The message displayed if a file has unsaved changes</B
+>Figure 3-8. The message displayed if a file has unsaved changes</B
 ></P
 ><P
 ><IMG
@@ -111,7 +113,7 @@ CLASS="KEYCAP"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 3-10. The dialog box displayed by Close All Buffers if
+>Figure 3-9. The dialog box displayed by Close All Buffers if
   there are unsaved changes</B
 ></P
 ><P
@@ -131,16 +133,23 @@ CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
->E</B
->
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
 >Q</B
->) will completely
-   exit jEdit, asking if any unsaved buffers should be saved first.
+>)
+   will completely exit jEdit, asking for confirmation first. If you would
+   prefer not to be asked for confirmation, disable it in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+   see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+> for details.
   </P
 ></DIV
 ><DIV
@@ -154,7 +163,7 @@ HREF="basic-features.html"
 ><BR><A
 HREF="printing-sending.html"
 >Prev</A
->: Printing and Sending Files<BR><A
+>: Printing Files<BR><A
 HREF="activity-log.html"
 >Next</A
 >: The Activity Log<BR></DIV
