@@ -54,16 +54,6 @@ public class EnhancedMenuItem extends JMenuItem
 			setEnabled(false);
 
 		setActionCommand(actionCommand);
-
-		acceleratorFont = UIManager
-			.getFont("MenuItem.acceleratorFont");
-		acceleratorFont = new Font("Monospaced",
-			acceleratorFont.getStyle(),
-			acceleratorFont.getSize());
-		acceleratorForeground = UIManager
-			.getColor("MenuItem.acceleratorForeground");
-		acceleratorSelectionForeground = UIManager
-			.getColor("MenuItem.acceleratorSelectionForeground");
 	}
 
 	public Dimension getPreferredSize()
@@ -105,7 +95,19 @@ public class EnhancedMenuItem extends JMenuItem
 
 	// private members
 	private String keyBinding;
-	private Font acceleratorFont;
-	private Color acceleratorForeground;
-	private Color acceleratorSelectionForeground;
+	private static Font acceleratorFont;
+	private static Color acceleratorForeground;
+	private static Color acceleratorSelectionForeground;
+
+	static
+	{
+		acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
+		acceleratorFont = new Font("Monospaced",
+			acceleratorFont.getStyle(),
+			acceleratorFont.getSize());
+		acceleratorForeground = UIManager
+			.getColor("MenuItem.acceleratorForeground");
+		acceleratorSelectionForeground = UIManager
+			.getColor("MenuItem.acceleratorSelectionForeground");
+	}
 }

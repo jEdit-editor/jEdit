@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.gui;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
@@ -46,9 +47,11 @@ public class MenuBarModel
 	public JMenuBar create(View view)
 	{
 		JMenuBar mbar = new JMenuBar();
-		for(int i = 0; i < children.size(); i++)
+
+		Enumeration enum = children.elements();
+		while(enum.hasMoreElements())
 		{
-			MenuModel menu = (MenuModel)children.elementAt(i);
+			MenuModel menu = (MenuModel)enum.nextElement();
 			mbar.add((JMenu)menu.create(view));
 		}
 		return mbar;

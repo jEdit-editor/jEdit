@@ -300,17 +300,6 @@ public abstract class InputHandler extends KeyAdapter
 			return;
 		}
 
-		if(recorder != null)
-		{
-			if(!(listener instanceof InputHandler.NonRecordable))
-			{
-				if(repeatCount != 1)
-					recorder.actionPerformed(REPEAT,String.valueOf(repeatCount));
-
-				recorder.actionPerformed(listener,actionCommand);
-			}
-		}
-
 		// remember old values, in case action changes them
 		boolean _repeat = repeat;
 		int _repeatCount = getRepeatCount();
@@ -324,13 +313,28 @@ public abstract class InputHandler extends KeyAdapter
 				listener.actionPerformed(evt);
 		}
 
-		// If repeat was true originally, clear it
-		// Otherwise it might have been set by the action, etc
-		// don't clear for grab actions
-		if(grabAction == null && _repeat)
+		// do recording. Notice that we do no recording whatsoever
+		// for actions that grab keys
+		if(grabAction == null)
 		{
-			repeat = false;
-			repeatCount = 0;
+			if(recorder != null)
+			{
+				if(!(listener instanceof InputHandler.NonRecordable))
+				{
+					if(_repeatCount != 1)
+						recorder.actionPerformed(REPEAT,String.valueOf(_repeatCount));
+
+					recorder.actionPerformed(listener,actionCommand);
+				}
+			}
+
+			// If repeat was true originally, clear it
+			// Otherwise it might have been set by the action, etc
+			if(_repeat)
+			{
+				repeat = false;
+				repeatCount = 0;
+			}
 		}
 	}
 
@@ -1109,8 +1113,8 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
- * Revision 1.17  2000/01/17 07:03:42  sp
- * File->Current Dir menu, other stuff
+ * Revision 1.18  2000/01/21 00:35:29  sp
+ * Various updates
  *
  * Revision 1.16  1999/12/24 01:20:20  sp
  * Bug fixing and other stuff for 2.3pre1

@@ -1,6 +1,6 @@
 /*
  * indent_on_tab.java - Action
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,31 +22,17 @@ package org.gjt.sp.jedit.actions;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 public class indent_on_tab extends EditAction
-implements InputHandler.NonRecordable
 {
         public void actionPerformed(ActionEvent evt)
         {
                 View view = getView(evt);
                 Buffer buffer = view.getBuffer();
                 JEditTextArea textArea = view.getTextArea();
-
-		boolean enabled = "on".equals(buffer.getProperty("indentOnTab"));
-
-		InputHandler.MacroRecorder recorder = textArea.getInputHandler()
-			.getMacroRecorder();
-		if(recorder != null)
-		{
-			if(enabled)
-				recorder.actionPerformed(this,null);
-			else
-				recorder.actionPerformed(InputHandler.getAction(
-					"insert-break"),null);
-		}
 
 		// expand current word
 		if(Abbrevs.getExpandOnInput())
@@ -56,11 +42,12 @@ implements InputHandler.NonRecordable
 		int selStart = textArea.getSelectionStart();
 		int selEnd = textArea.getSelectionEnd();
 
-                if(selStart == selEnd && enabled
+                if(selStart == selEnd
+			&& "on".equals(buffer.getProperty("indentOnTab"))
 			&& mode.indentLine(buffer,view,textArea
 			.getSelectionStartLine(),false))
                 {
-			return;
+				return;
                 }
                 if("yes".equals(buffer.getProperty("noTabs")))
                 {

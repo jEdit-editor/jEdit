@@ -322,10 +322,10 @@ public class View extends JFrame implements EBComponent
 		clearMarker = GUIUtilities.loadMenu(this,"clear-marker");
 		gotoMarker = GUIUtilities.loadMenu(this,"goto-marker");
 		macros = GUIUtilities.loadMenu(this,"macros");
-		updateMacrosMenu();
 		help = GUIUtilities.loadMenu(this,"help-menu");
-		updateHelpMenu();
 		plugins = GUIUtilities.loadMenu(this,"plugins");
+		updateMacrosMenu();
+		updateHelpMenu();
 		updatePluginsMenu();
 
 		EditBus.addToBus(this);
@@ -987,6 +987,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.124  2000/01/21 00:35:29  sp
+ * Various updates
+ *
  * Revision 1.123  2000/01/17 07:03:41  sp
  * File->Current Dir menu, other stuff
  *

@@ -29,12 +29,14 @@ public class CurrentDirectoryMenu extends JMenu
 	{
 		String label = jEdit.getProperty("current-directory.label");
 		int index = label.indexOf('$');
+		char mnemonic = '\0';
 		if(index != -1)
 		{
-			setMnemonic(Character.toUpperCase(label.charAt(index)));
+			mnemonic = Character.toUpperCase(label.charAt(index+1));
 			label = label.substring(0,index) + label.substring(index+1);
 		}
 		setText(label);
+		setMnemonic(mnemonic);
 
 		this.view = view;
 	}

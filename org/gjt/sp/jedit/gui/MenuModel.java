@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
@@ -71,15 +72,15 @@ public class MenuModel extends MenuItemModel
 		menu = new JMenu(label);
 		menu.setMnemonic(mnemonic);
 
-		for(int i = 0; i < children.size(); i++)
+		Enumeration enum = children.elements();
+		while(enum.hasMoreElements())
 		{
-			Object obj = children.elementAt(i);
+			Object obj = enum.nextElement();
 			if(obj == SEPARATOR)
 				menu.addSeparator();
 			else
 			{
-				MenuItemModel menuItem = (MenuItemModel)obj;
-				menu.add(menuItem.create(view));
+				menu.add(((MenuItemModel)obj).create(view));
 			}
 		}
 
@@ -91,9 +92,10 @@ public class MenuModel extends MenuItemModel
 		JPopupMenu menu = new JPopupMenu();
 		menu.setInvoker(view);
 
-		for(int i = 0; i < children.size(); i++)
+		Enumeration enum = children.elements();
+		while(enum.hasMoreElements())
 		{
-			Object obj = children.elementAt(i);
+			Object obj = enum.nextElement();
 			if(obj == SEPARATOR)
 				menu.addSeparator();
 			else

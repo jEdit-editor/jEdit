@@ -1876,7 +1876,8 @@ http://www.sourceforge.net/mail/?group_id=588</>.
       <row>
        <entry>xml</>
        <entry>XML and SGML source code edit mode. Automatically selected for
-       files with extension <quote>.xml</>, <quote>.sgml</> or <quote>.sgm</>.
+       files with extension <quote>.xml</>, <quote>.sgml</>, <quote>.sgm</>,
+       <quote>.rdf</>, <quote>.rss</> or <quote>.xsd</>.
        </entry>
       </row>
      </tbody>

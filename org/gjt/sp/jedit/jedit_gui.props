@@ -447,8 +447,8 @@ about.message=jEdit version {0}\n\
 	At the time this version of jEdit was released, the following people\n\
 	are known to have have written plugins or contributed code to jEdit:\n\
 	\n\
-	Andre Kaplan, Andreas Schaefer, Artur Biesiadowski, Aziz Sharif,\n\
-	Chris Laird, Clancy Malcolm, Dirk Moebius, George Latkiewicz,\n\
+	Andre Kaplan, Artur Biesiadowski, Aziz Sharif, Chris Laird,\n\
+	Clancy Malcolm, Dirk Moebius, George Latkiewicz, Greg Merrill,\n\
 	Henrik Falk, Jason Ginchereau, Jonathan Revusky, Juha Lindfors,\n\
 	Kevin A. Burton, Oliver Rutherford, Mike Dillon, Nathan Tenney,\n\
 	Romain Guy, Steve Jakob, Tal Davison and Valery Kondakoff.\n\

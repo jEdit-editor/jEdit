@@ -52,16 +52,6 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 
 		setActionCommand(actionCommand);
 		setModel(new Model());
-
-		acceleratorFont = UIManager
-			.getFont("MenuItem.acceleratorFont");
-		acceleratorFont = new Font("Monospaced",
-			acceleratorFont.getStyle(),
-			acceleratorFont.getSize());
-		acceleratorForeground = UIManager
-			.getColor("MenuItem.acceleratorForeground");
-		acceleratorSelectionForeground = UIManager
-			.getColor("MenuItem.acceleratorSelectionForeground");
 	}
 
 	public Dimension getPreferredSize()
@@ -101,9 +91,21 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	// private members
 	private String keyBinding;
 	private EditAction action;
-	private Font acceleratorFont;
-	private Color acceleratorForeground;
-	private Color acceleratorSelectionForeground;
+	private static Font acceleratorFont;
+	private static Color acceleratorForeground;
+	private static Color acceleratorSelectionForeground;
+
+	static
+	{
+		acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
+		acceleratorFont = new Font("Monospaced",
+			acceleratorFont.getStyle(),
+			acceleratorFont.getSize());
+		acceleratorForeground = UIManager
+			.getColor("MenuItem.acceleratorForeground");
+		acceleratorSelectionForeground = UIManager
+			.getColor("MenuItem.acceleratorSelectionForeground");
+	}
 
 	class Model extends DefaultButtonModel
 	{

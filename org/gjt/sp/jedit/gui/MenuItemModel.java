@@ -82,7 +82,8 @@ public class MenuItemModel
 		else
 			mi = new EnhancedMenuItem(label,shortcut,action,arg);
 
-		mi.setMnemonic(mnemonic);
+		if(mnemonic != '\0')
+			mi.setMnemonic(mnemonic);
 
 		return mi;
 	}

@@ -1080,17 +1080,10 @@ public class JEditTextArea extends JComponent
 		if(newStart != selectionStart || newEnd != selectionEnd
 			|| newBias != biasLeft)
 		{
+			updateBracketHighlight(end);
+
 			int newStartLine = getLineOfOffset(newStart);
 			int newEndLine = getLineOfOffset(newEnd);
-
-			if(painter.isBracketHighlightEnabled())
-			{
-				if(bracketLine != -1)
-					painter.invalidateLine(bracketLine);
-				updateBracketHighlight(end);
-				if(bracketLine != -1)
-					painter.invalidateLine(bracketLine);
-			}
 
 			painter.invalidateLineRange(selectionStartLine,selectionEndLine);
 			painter.invalidateLineRange(newStartLine,newEndLine);
@@ -1610,6 +1603,12 @@ public class JEditTextArea extends JComponent
 
 	protected void updateBracketHighlight(int newCaretPosition)
 	{
+		if(!painter.isBracketHighlightEnabled())
+				return;
+
+		if(bracketLine != -1)
+			painter.invalidateLine(bracketLine);
+
 		if(newCaretPosition == 0)
 		{
 			bracketPosition = bracketLine = -1;
@@ -1624,6 +1623,9 @@ public class JEditTextArea extends JComponent
 			{
 				bracketLine = getLineOfOffset(offset);
 				bracketPosition = offset - getLineStartOffset(bracketLine);
+
+				if(bracketLine != -1)
+					painter.invalidateLine(bracketLine);
 				return;
 			}
 		}
@@ -1851,20 +1853,31 @@ public class JEditTextArea extends JComponent
 			int newStart;
 			int newEnd;
 
+			boolean change = false;
+
 			if(selectionStart > offset || (selectionStart 
 				== selectionEnd && selectionStart == offset))
+			{
+				change = true;
 				newStart = selectionStart + length;
+			}
 			else
 				newStart = selectionStart;
 
 			if(selectionEnd >= offset)
+			{
+				change = true;
 				newEnd = selectionEnd + length;
+			}
 			else
 				newEnd = selectionEnd;
 
-			select(newStart,newEnd);
+			if(change)
+				select(newStart,newEnd);
+			else
+				updateBracketHighlight(getCaretPosition());
 		}
-	
+
 		public void removeUpdate(DocumentEvent evt)
 		{
 			documentChanged(evt);
@@ -1875,8 +1888,12 @@ public class JEditTextArea extends JComponent
 			int newStart;
 			int newEnd;
 
+			boolean change = false;
+
 			if(selectionStart > offset)
 			{
+				change = true;
+
 				if(selectionStart > offset + length)
 					newStart = selectionStart - length;
 				else
@@ -1887,6 +1904,8 @@ public class JEditTextArea extends JComponent
 
 			if(selectionEnd > offset)
 			{
+				change = true;
+
 				if(selectionEnd > offset + length)
 					newEnd = selectionEnd - length;
 				else
@@ -1895,7 +1914,10 @@ public class JEditTextArea extends JComponent
 			else
 				newEnd = selectionEnd;
 
-			select(newStart,newEnd);
+			if(change)
+				select(newStart,newEnd);
+			else
+				updateBracketHighlight(getCaretPosition());
 		}
 
 		public void changedUpdate(DocumentEvent evt)
@@ -2141,6 +2163,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.38  2000/01/21 00:35:29  sp
+ * Various updates
+ *
  * Revision 1.37  2000/01/14 04:23:50  sp
  * 2.3pre2 stuff
  *

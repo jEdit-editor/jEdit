@@ -290,4 +290,4 @@ mode.xml.label=XML Files
 mode.xml.commentStart=<!--
 mode.xml.commentEnd=-->
 mode.xml.tokenMarker=org.gjt.sp.jedit.syntax.XMLTokenMarker
-mode.xml.filenameGlob=*.{xml,sgml,sgm,dtd}
+mode.xml.filenameGlob=*.{xml,sgml,sgm,dtd,rdf,rss,xsd}

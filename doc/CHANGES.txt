@@ -12,10 +12,6 @@ JEDIT VERSION HISTORY
 
 + Enhancements
 
-- Useless 'Save to URL' command removed (URL saving is not supported in
-  Java, all the current protocols return 'operation not supported').
-  Because the URL loading code is still in Buffer.java, re-adding this
-  command once URL saving is supported will be trivial
 - Macro updates
 - Menu items and tool bar looks better
 - Faster literal search, using the Boyer-Moore algorithm (Mike Dillon)
@@ -24,6 +20,7 @@ JEDIT VERSION HISTORY
 - Enhanced help menu
 - Files with extension '.php' are now recognized as PHP3 files
 - Documentation updates
+- .xsd, .rdf and .rss files are now opened in XML mode
 
 + Bug Fixes
 
@@ -38,7 +35,9 @@ JEDIT VERSION HISTORY
 - If you invoked undo when there were no undos in the queue, a flag would
   be set which prevented undos from working at all (since 2.2pre1)
 - If an error occurs while opening a plugin's ZIP file, any subsequent
-  plugins don't seem to load (since ???)
+  plugins don't seem to load (since 1.6pre6)
+- Editing with multiple views (or even using the forward delete key) could
+  mess up the bracket highlighting (since 1.3pre3)
 
 + API Changes
 

@@ -4,15 +4,16 @@ JEDIT TO DO
 
 - SIM: smaller logo
 - Finish documentation updates
-- Bracket highlight is broken by other views editing the buffer, etc
 - CaretUndo acts weird on 'redo' sometimes
+- Buffer options: show buffer-local properties
 - Need to redo window-editor-* snapshots in icewm
 - Need to redo dialog-options-* snapshots as well
-- Buffer options: show buffer-local properties
 
 ------- Stuff for 2.3pre3+ -------
 
 - 'Uncomment' command, removes comment strings from selected text
+- 'Window Home' and 'Window End' actions bound to A+HOME and A+END
+- Remove 'smart' home/end
 - HyperSearch - when doing a directory search, all buffers with matches
   are kept open, they should be closed
   - to fix this, HyperSearch should check if getNextBuffer() returns a
@@ -45,6 +46,8 @@ JEDIT TO DO
 
 ------- Maybe later, in 2.4 -------
 
+- Don't just blindly call updateBracketHighlight() all the time, only
+  call it if bracket highlighted region becomes dirty
 - Write an InputHandler subclass that displays the current repeat count,
   if any, in the view's status bar
 - Menu bar and tool bar loading needs to work outside of views
