@@ -1204,6 +1204,9 @@ public class View extends JFrame implements EBComponent
 		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
+			if(bufferTabs != null)
+				bufferTabs.removeBufferTab(_buffer);
+
 			if(_buffer == buffer)
 			{
 				Buffer newBuffer = (recentBuffer != null ?
@@ -1218,9 +1221,6 @@ public class View extends JFrame implements EBComponent
 
 			updateRecentMenu();
 			updateBuffersMenu();
-
-			if(bufferTabs != null)
-				bufferTabs.removeBufferTab(_buffer);
 		}
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
@@ -1416,6 +1416,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.149  2000/04/02 06:38:28  sp
+ * Bug fixes
+ *
  * Revision 1.148  2000/04/01 12:21:27  sp
  * mode cache implemented
  *
@@ -1449,11 +1452,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.138  2000/02/07 06:35:52  sp
  * Options dialog box updates
- *
- * Revision 1.137  2000/02/04 05:50:27  sp
- * More gutter updates from mike
- *
- * Revision 1.136  2000/02/02 07:52:32  sp
- * bug fixes
  *
  */

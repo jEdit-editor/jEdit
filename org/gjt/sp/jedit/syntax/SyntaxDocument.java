@@ -144,10 +144,19 @@ public class SyntaxDocument extends PlainDocument
 				getDefaultRootElement());
 			if(ch != null)
 			{
-				tokenMarker.insertLines(ch.getIndex() + 1,
-					ch.getChildrenAdded().length -
-					ch.getChildrenRemoved().length);
-				tokenMarker.linesChanged(ch.getIndex(),2);
+				int index = ch.getIndex();
+				int len = ch.getChildrenAdded().length -
+					ch.getChildrenRemoved().length;
+				//System.err.println("ch:" + index + ":" + 1);
+				tokenMarker.linesChanged(index,1);
+				//System.err.println("insert:" + (index + 1) + ":" + len);
+				tokenMarker.insertLines(ch.getIndex() + 1,len);
+				index += (len + 1);
+				if(index < tokenMarker.getLineCount())
+				{
+					//System.err.println("ch:" + index + ":" + 1);
+					tokenMarker.linesChanged(index,1);
+				}
 			}
 			else
 			{
@@ -172,10 +181,13 @@ public class SyntaxDocument extends PlainDocument
 				getDefaultRootElement());
 			if(ch != null)
 			{
-				tokenMarker.linesChanged(ch.getIndex(),2);
-				tokenMarker.deleteLines(ch.getIndex() + 1,
-					ch.getChildrenRemoved().length -
-					ch.getChildrenAdded().length);
+				int index = ch.getIndex();
+				int len = ch.getChildrenRemoved().length -
+					ch.getChildrenAdded().length;
+				//System.err.println("ch:" + index + ":" + 1);
+				tokenMarker.linesChanged(index,1);
+				//System.err.println("remove:" + (index + 1) + ":" + len);
+				tokenMarker.deleteLines(index + 1,len);
 			}
 			else
 			{
@@ -191,6 +203,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/04/02 06:38:28  sp
+ * Bug fixes
+ *
  * Revision 1.18  2000/04/01 08:40:55  sp
  * Streamlined syntax highlighting, Perl mode rewritten in XML
  *

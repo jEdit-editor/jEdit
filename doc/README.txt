@@ -54,24 +54,18 @@ Acrobat.
 I would like to thank the following people who have contributed code to
 the jEdit core:
 
-Artur Biesiadowski - Eiffel syntax highlighting
-Clancy Malcolm - PHP3 syntax highlighting
 Dirk Moebius - Enhanced plugin versioning
 Jason Ginchereau - Buffer tabs code
-Jonathan Revusky - Python syntax highlighting
-Juha Lindfors - IDL syntax highlighting
-Matthias Schneider - AWK and COBOL syntax highlighting
 Mike Dillon - XMode syntax highlighting engine, gutter, new options dialog box,
 faster literal search, many other patches
-Ralf Engels - PostScript syntax highlighting
 Tal Davidson - Original syntax highlighting engine
 Valery Kondakoff - Old Complete Word command
 
 If you are not on the above list but think you should be, e-mail me.
 
-In addition to the above people, I would like to thank all the plugin
-authors for their wonderful plugins, and the users for their feedback
-and comments.
+In addition to the above people, I would like to thank all the people
+who wrote edit modes, the plugin developers for their wonderful plugins,
+and the users for their feedback and comments.
 
 Have fun!
 

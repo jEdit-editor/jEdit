@@ -98,6 +98,12 @@
 			<END>"</END>
 		</SPAN>
 
+		<!-- This appears in some SGML documents -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="MAIN">
+			<BEGIN>[</BEGIN>
+			<END>]</END>
+		</SPAN>
+
 		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="OPERATOR">(</SEQ>
 		<SEQ TYPE="OPERATOR">)</SEQ>

@@ -57,8 +57,6 @@ public abstract class InputHandler extends KeyAdapter
 	public static final ActionListener DOCUMENT_END = new document_end(false);
 	public static final ActionListener SELECT_END = new end(true);
 	public static final ActionListener SELECT_DOC_END = new document_end(true);
-	public static final ActionListener INSERT_BREAK = new insert_break();
-	public static final ActionListener INSERT_TAB = new insert_tab();
 	public static final ActionListener HOME = new home(false);
 	public static final ActionListener DOCUMENT_HOME = new document_home(false);
 	public static final ActionListener SELECT_HOME = new home(true);
@@ -82,9 +80,6 @@ public abstract class InputHandler extends KeyAdapter
 	public static final ActionListener SELECT_PREV_WORD = new prev_word(true);
 	public static final ActionListener REPEAT = new repeat();
 
-	// Default action
-	public static final ActionListener INSERT_CHAR = new insert_char();
-
 	private static Hashtable actions;
 
 	static
@@ -98,8 +93,6 @@ public abstract class InputHandler extends KeyAdapter
 		actions.put("select-end",SELECT_END);
 		actions.put("document-end",DOCUMENT_END);
 		actions.put("select-doc-end",SELECT_DOC_END);
-		actions.put("insert-break",INSERT_BREAK);
-		actions.put("insert-tab",INSERT_TAB);
 		actions.put("home",HOME);
 		actions.put("select-home",SELECT_HOME);
 		actions.put("document-home",DOCUMENT_HOME);
@@ -122,7 +115,6 @@ public abstract class InputHandler extends KeyAdapter
 		actions.put("select-prev-page",SELECT_PREV_PAGE);
 		actions.put("select-prev-word",SELECT_PREV_WORD);
 		actions.put("repeat",REPEAT);
-		actions.put("insert-char",INSERT_CHAR);
 	}
 
 	/**
@@ -361,7 +353,7 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	// protected members
-	protected ActionListener inputAction = INSERT_CHAR;
+	protected ActionListener inputAction;
 	protected ActionListener grabAction;
 	protected boolean repeat;
 	protected int repeatCount;
@@ -730,38 +722,6 @@ public abstract class InputHandler extends KeyAdapter
 		}
 	}
 
-	public static class insert_break implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			JEditTextArea textArea = getTextArea(evt);
-
-			if(!textArea.isEditable())
-			{
-				textArea.getToolkit().beep();
-				return;
-			}
-
-			textArea.setSelectedText("\n");
-		}
-	}
-
-	public static class insert_tab implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			JEditTextArea textArea = getTextArea(evt);
-
-			if(!textArea.isEditable())
-			{
-				textArea.getToolkit().beep();
-				return;
-			}
-
-			textArea.overwriteSetSelectedText("\t");
-		}
-	}
-
 	public static class next_char implements ActionListener
 	{
 		private boolean select;
@@ -1067,34 +1027,14 @@ public abstract class InputHandler extends KeyAdapter
 			}
 		}
 	}
-
-	public static class insert_char implements ActionListener,
-		InputHandler.NonRepeatable
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			JEditTextArea textArea = getTextArea(evt);
-			String str = evt.getActionCommand();
-			int repeatCount = textArea.getInputHandler().getRepeatCount();
-
-			if(textArea.isEditable())
-			{
-				StringBuffer buf = new StringBuffer();
-				for(int i = 0; i < repeatCount; i++)
-					buf.append(str);
-				textArea.overwriteSetSelectedText(buf.toString());
-			}
-			else
-			{
-				textArea.getToolkit().beep();
-			}
-		}
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/04/02 06:38:28  sp
+ * Bug fixes
+ *
  * Revision 1.23  2000/03/27 07:31:22  sp
  * We now use Log.log() in some places instead of System.err.println, HTML mode
  * now supports <script> tags, external delegation bug fix

@@ -1,5 +1,13 @@
 JEDIT VERSION HISTORY
 
+* Version 2.4pre4
+
++ Bug Fixes
+
+- Fixed a bug in SyntaxDocument's line handling (since 2.4pre2)
+- Automatic abbrev expansion didn't work (since 2.4pre1)
+- BufferTabs had problems when buffers were closed sometimes (since 2.4pre1)
+
 * Version 2.4pre3
 
 jEdit 2.4pre3 is being released so soon after 2.4pre2 because an installer

@@ -84,7 +84,10 @@ public class BufferTabs extends JTabbedPane
 
 		buffers.removeElementAt(index);
 
+		boolean oldUpdating = updating;
+		updating = true;
 		removeTabAt(index);
+		updating = oldUpdating;
 
 		if(index < selectedIndex)
 		{
@@ -95,9 +98,9 @@ public class BufferTabs extends JTabbedPane
 		}
 		else if(index == selectedIndex)
 		{
-			Magic comp = (Magic)getSelectedComponent();
+			/*Magic comp = (Magic)getSelectedComponent();
 			if(comp != null)
-				comp.update();
+				comp.update();*/
 		}
 	}
 
@@ -130,6 +133,9 @@ public class BufferTabs extends JTabbedPane
 	{
 		int index = buffer.getIndex();
 		int selectedIndex = getSelectedIndex();
+		System.err.println("selecting " + buffer + " : " + index
+			+ " (current=" + selectedIndex + ")");
+
 		if(index == selectedIndex)
 			update();
 		else

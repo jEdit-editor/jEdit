@@ -1,13 +1,31 @@
 JEDIT TO DO
 
++ Features
+
 - XMode:
   - better error reporting
   - faster tokenizing of files
   - write docs
+  - update ogsj.syntax API docs
   - regexps
+  - graphical mode/grammar editor
+  - more modes
+- 'Uncomment' command that removes comment strings from selected text
+- Plugin devel manual needs more work:
+  - document views, buffers
+  - document GUIUtilities.load/saveGeometry
+  - how to write text area and gutter hilites
+  - each section should have some sample source code
+- Incremental search
+- Reverse search. Until gnu.regexp supports this, it can't be done very easily
+- Write custom 'document' class; Swing implementation has a few
+  problems. With a custom document, folding and such becomes much cleaner
+- i18n support - bidi, input methods, locale-sensitive GUI, etc
+- Word wrap
+
++ Enhancements
+
 - JARClassLoader: use GUIUtilities.error() to display errors
-- Option pane for changing mode-specific tab size, indent, comment
-  characters, and so on
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
   to 'Advanced Features'
 - EditPlugin.getName()/Version()/Author(), getPath(), getClassName(), etc
@@ -15,22 +33,12 @@ JEDIT TO DO
 - BrokenPlugin extends EditPlugin, used as a placeholder for broken
   plugins -- implements getPath() and getClassName()
 - jEdit.getPlugins() returns broken and non-broken plugins
-- 'Uncomment' command that removes comment strings from selected text
+
++ Bug Fixes
+
 - Double-click drag doesn't work backwards
 - Fix focus breakage, C+TAB/CS+TAB to navigate around all view components
   except for tool bar buttons
-- Plugin devel manual needs more work:
-  - document views, buffers
-  - document GUIUtilities.load/saveGeometry
-  - how to write text area and gutter hilites
-  - each section should have some sample source code
-
-- Incremental search
-- Reverse search. Until gnu.regexp supports this, it can't be done very easily
-- Write custom 'document' class; Swing implementation has a few
-  problems. With a custom document, folding and such becomes much cleaner
-- i18n support - bidi, input methods, locale-sensitive GUI, etc
-- Word wrap
 
 When we switch to JDK 1.2, do this:
 - drag and drop of files and text

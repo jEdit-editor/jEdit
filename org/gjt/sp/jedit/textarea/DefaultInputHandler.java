@@ -52,6 +52,7 @@ public class DefaultInputHandler extends InputHandler
 	public DefaultInputHandler(DefaultInputHandler copy)
 	{
 		bindings = currentBindings = copy.bindings;
+		inputAction = copy.inputAction;
 	}
 
 	/**
@@ -63,9 +64,6 @@ public class DefaultInputHandler extends InputHandler
 		addKeyBinding("C+BACK_SPACE",BACKSPACE_WORD);
 		addKeyBinding("DELETE",DELETE);
 		addKeyBinding("C+DELETE",DELETE_WORD);
-
-		addKeyBinding("ENTER",INSERT_BREAK);
-		addKeyBinding("TAB",INSERT_TAB);
 
 		addKeyBinding("INSERT",OVERWRITE);
 
@@ -359,6 +357,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/04/02 06:38:28  sp
+ * Bug fixes
+ *
  * Revision 1.22  2000/03/27 07:31:22  sp
  * We now use Log.log() in some places instead of System.err.println, HTML mode
  * now supports <script> tags, external delegation bug fix

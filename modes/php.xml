@@ -68,14 +68,13 @@
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
-<!--
+
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>
--->
 	</RULES>
 
 	<RULES SET="PHP" ESCAPE="\">

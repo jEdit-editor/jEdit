@@ -57,7 +57,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.04.03.00";
+		return "02.04.04.00";
 	}
 
 	/**
@@ -2058,6 +2058,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.207  2000/04/02 06:38:28  sp
+ * Bug fixes
+ *
  * Revision 1.206  2000/04/01 12:21:27  sp
  * mode cache implemented
  *
@@ -2089,17 +2092,5 @@ public class jEdit
  * Revision 1.197  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes
- *
- * Revision 1.196  2000/03/14 06:22:24  sp
- * Lots of new stuff
- *
- * Revision 1.195  2000/03/04 03:39:54  sp
- * *** empty log message ***
- *
- * Revision 1.194  2000/02/27 00:39:50  sp
- * Misc changes
- *
- * Revision 1.193  2000/02/24 04:13:06  sp
- * Bug fixes, misc updates, etc
  *
  */
