@@ -19,49 +19,16 @@
 
 package org.gjt.sp.jedit.textarea;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-
-import java.awt.event.InputEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 public class Gutter extends JComponent implements SwingConstants
 {
-	public Gutter(JEditTextArea textArea, TextAreaDefaults defaults)
+	public Gutter(JEditTextArea textArea)
 	{
 		this.textArea = textArea;
-
-		setBackground(defaults.gutterBgColor);
-		setForeground(defaults.gutterFgColor);
-		setHighlightedForeground(defaults.gutterHighlightColor);
-		setCurrentLineForeground(defaults.gutterCurrentLineColor);
-
-		setFont(defaults.gutterFont);
-
-		setBorder(defaults.gutterBorderWidth, defaults.gutterBorderColor);
-
-		setLineNumberAlignment(defaults.gutterNumberAlignment);
-
-		setGutterWidth(defaults.gutterWidth);
-		setCollapsed(defaults.gutterCollapsed);
 
 		GutterMouseListener ml = new GutterMouseListener();
 		addMouseListener(ml);

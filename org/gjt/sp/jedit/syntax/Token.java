@@ -34,19 +34,17 @@ public class Token
 	public static final byte COMMENT2 = 2;
 	public static final byte LITERAL1 = 3;
 	public static final byte LITERAL2 = 4;
-	public static final byte CONSTANT = 5;
-	public static final byte LABEL = 6;
-	public static final byte KEYWORD1 = 7;
-	public static final byte KEYWORD2 = 8;
-	public static final byte KEYWORD3 = 9;
-	public static final byte FUNCTION = 10;
-	public static final byte VARIABLE = 11;
-	public static final byte DATATYPE = 12;
-	public static final byte OPERATOR = 13;
-	public static final byte DIGIT = 14;
-	public static final byte INVALID = 15;
+	public static final byte LABEL = 5;
+	public static final byte KEYWORD1 = 6;
+	public static final byte KEYWORD2 = 7;
+	public static final byte KEYWORD3 = 8;
+	public static final byte FUNCTION = 9;
+	public static final byte MARKUP = 10;
+	public static final byte OPERATOR = 11;
+	public static final byte DIGIT = 12;
+	public static final byte INVALID = 13;
 
-	public static final byte ID_COUNT = 16;
+	public static final byte ID_COUNT = 14;
 	public static final byte INTERNAL_FIRST = 100;
 	public static final byte INTERNAL_LAST = 126;
 	public static final byte END = 127;
@@ -89,6 +87,9 @@ public class Token
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/04/08 02:39:33  sp
+ * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
+ *
  * Revision 1.14  2000/04/07 06:57:26  sp
  * Buffer options dialog box updates, API docs updated a bit in syntax package
  *

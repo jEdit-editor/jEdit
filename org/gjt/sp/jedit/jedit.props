@@ -101,8 +101,8 @@ view.fontsize=14
 view.fontstyle=0
 
 # Background and foreground colors (for the text area)
-view.bgColor=white
-view.fgColor=black
+view.bgColor=#ffffff
+view.fgColor=#000000
 
 # Line highlighting
 view.lineHighlight=on
@@ -110,7 +110,7 @@ view.lineHighlightColor=#e0e0e0
 
 # Bracket highlighting
 view.bracketHighlight=on
-view.bracketHighlightColor=black
+view.bracketHighlightColor=#000000
 
 # EOL markers
 view.eolMarkers=on
@@ -120,7 +120,7 @@ view.eolMarkerColor=#009999
 view.paintInvalid=on
 
 # Caret color
-view.caretColor=red
+view.caretColor=#ff0000
 
 # Selection color
 view.selectionColor=#ccccff
@@ -138,19 +138,19 @@ view.electricBorders=3
 view.homeEnd=yes
 
 # Gutter background color
-view.gutter.bgColor=white
+view.gutter.bgColor=#ffffff
 
 # Gutter foreground color
 view.gutter.fgColor=#8080c0
 
 # Gutter highlight color
-view.gutter.highlightColor=black
+view.gutter.highlightColor=#000000
 
 # Gutter current line highlight color
 view.gutter.currentLineColor=#d04040
 
 # Gutter border color
-view.gutter.borderColor=gray
+view.gutter.borderColor=#808080
 
 # Gutter font name
 view.gutter.font=Monospaced
@@ -191,14 +191,12 @@ view.style.comment1=style:i
 view.style.comment2=color:#990033 style:i
 view.style.literal1=color:#650099
 view.style.literal2=color:#650099 style:b
-view.style.constant=color:#650099 style:b
 view.style.keyword1=style:b
-view.style.keyword2=color:magenta
+view.style.keyword2=color:#ff00ff
 view.style.keyword3=color:#009600
 view.style.function=color:#d27e00
-view.style.variable=color:magenta
-view.style.datatype=color:#009600
+view.style.markup=color:#5e5e5e style:b
 view.style.label=color:#990033 style:b
 view.style.operator=style:b
 view.style.digit=color:#009191
-view.style.invalid=color:red style:b
+view.style.invalid=color:#ff0000 style:b

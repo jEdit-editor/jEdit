@@ -17,73 +17,73 @@
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPVB">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPVB">
 			<BEGIN>&lt;%@LANGUAGE="VBSCRIPT"%&gt;</BEGIN>
 			<END></END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPJS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPJS">
 			<BEGIN>&lt;%@LANGUAGE="JSCRIPT"%&gt;</BEGIN>
 			<END></END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPJS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPJS">
 			<BEGIN>&lt;%@LANGUAGE="JAVASCRIPT"%&gt;</BEGIN>
 			<END></END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPPL">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPPL">
 			<BEGIN>&lt;%@LANGUAGE="PERLSCRIPT"%&gt;</BEGIN>
 			<END></END>
 		</SPAN>
 
 		<!-- Inlined server-side VBScript -->
-		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
 		<!-- Server-side VBScript -->
-		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;script language="vbscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-side Javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-side PerlScript -->
-		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;script language="perlscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Client-side javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-Side include -->
-		<SPAN TYPE="LABEL">
+		<SPAN TYPE="MARKUP">
 			<BEGIN>&lt;!--#</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
@@ -95,13 +95,13 @@
 		</SPAN>
 
 		<!-- stylesheet -->
-		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="css::MAIN">
 			<BEGIN>&lt;STYLE&gt;</BEGIN>
 			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 
 		<!-- markup tags -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="ASPVB_TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPVB_TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -122,52 +122,52 @@
 		<WHITESPACE>	</WHITESPACE>
 
 		<!-- Inlined server-side VBScript -->
-		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
 		<!-- Server-side VBScript -->
-		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;script language="vbscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-side Javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-side PerlScript -->
-		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;script language="perlscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Client-side javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="ASPVB_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPVB_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPVB_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-Side include -->
-		<SPAN TYPE="LABEL">
+		<SPAN TYPE="MARKUP">
 			<BEGIN>&lt;!--#</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
@@ -179,18 +179,18 @@
 		</SPAN>
 
 		<!-- stylesheet -->
-		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="css::MAIN">
 			<BEGIN>&lt;STYLE&gt;</BEGIN>
 			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 
 		<!-- markup tags -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="ASPVB_TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPVB_TAGS">
 			<BEGIN>&lt;/</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="KEYWORD1" DELEGATE="ASPVB_TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPVB_TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -211,52 +211,52 @@
 		<WHITESPACE>	</WHITESPACE>
 
 		<!-- Inlined server-side Javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
 		<!-- Server-side VBScript -->
-		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;script language="vbscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-side Javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-side PerlScript -->
-		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;script language="perlscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Client-side javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="ASPJS_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPJS_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPJS_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-Side include -->
-		<SPAN TYPE="LABEL">
+		<SPAN TYPE="MARKUP">
 			<BEGIN>&lt;!--#</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
@@ -268,18 +268,18 @@
 		</SPAN>
 
 		<!-- stylesheet -->
-		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="css::MAIN">
 			<BEGIN>&lt;STYLE&gt;</BEGIN>
 			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 
 		<!-- markup tags -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="ASPJS_TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPJS_TAGS">
 			<BEGIN>&lt;/</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="KEYWORD1" DELEGATE="ASPJS_TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPJS_TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -300,52 +300,52 @@
 		<WHITESPACE>	</WHITESPACE>
 
 		<!-- Inlined server-side Perlscript -->
-		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
 		<!-- Server-side VBScript -->
-		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;script language="vbscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-side Javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-side PerlScript -->
-		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;script language="perlscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Client-side javascript -->
-		<SPAN TYPE="LABEL" DELEGATE="ASPPL_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPPL_CSJS">
 			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPPL_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPPL_CSJS">
 			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="ASPPL_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPPL_CSJS">
 			<BEGIN>&lt;script&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<!-- Server-Side include -->
-		<SPAN TYPE="LABEL">
+		<SPAN TYPE="MARKUP">
 			<BEGIN>&lt;!--#</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
@@ -357,18 +357,18 @@
 		</SPAN>
 
 		<!-- stylesheet -->
-		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="css::MAIN">
 			<BEGIN>&lt;STYLE&gt;</BEGIN>
 			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 
 		<!-- markup tags -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="ASPPL_TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPPL_TAGS">
 			<BEGIN>&lt;/</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="KEYWORD1" DELEGATE="ASPPL_TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="ASPPL_TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -383,46 +383,22 @@
 	<!-- ****************************************************************** --
 	  --  HTML Tags                                                         --
 	  -- ****************************************************************** -->
-	<RULES SET="ASPVB_TAGS" DEFAULT="KEYWORD1">
-		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+	<RULES SET="ASPVB_TAGS" DEFAULT="MARKUP">
+		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 	</RULES>
 
-	<RULES SET="ASPJS_TAGS" DEFAULT="KEYWORD1">
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+	<RULES SET="ASPJS_TAGS" DEFAULT="MARKUP">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 	</RULES>
 
-	<RULES SET="ASPPL_TAGS" DEFAULT="KEYWORD1">
-		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
-			<BEGIN>&lt;%</BEGIN>
-			<END>%&gt;</END>
-		</SPAN>
-	</RULES>
-
-	<!-- ****************************************************************** --
-	  -- Client-side Javascript                                             --
-	  -- ****************************************************************** -->
-	<RULES SET="ASPVB_CSJS" DEFAULT="LABEL">
-		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
-			<BEGIN>&lt;%</BEGIN>
-			<END>%&gt;</END>
-		</SPAN>
-	</RULES>
-
-	<RULES SET="ASPJS_CSJS" DEFAULT="LABEL">
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;%</BEGIN>
-			<END>%&gt;</END>
-		</SPAN>
-	</RULES>
-
-	<RULES SET="ASPJS_CSPL" DEFAULT="LABEL">
-		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+	<RULES SET="ASPPL_TAGS" DEFAULT="MARKUP">
+		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>

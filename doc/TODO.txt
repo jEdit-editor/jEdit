@@ -9,10 +9,8 @@ JEDIT TO DO
   - regexps
   - graphical mode/grammar editor
   - digit highlighting
+  - do MARK_PREVIOUS before markKeyword()
   - get rid of WHITESPACE rule
-  - maybe add highlight levels; the higher the level, the more stuff is
-    highlighted
-- Update existing modes to take advantage of new token types
 - 'Uncomment' command that removes comment strings from selected text
 - Plugin devel manual needs more work:
   - document views, buffers

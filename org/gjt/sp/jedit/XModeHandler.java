@@ -333,10 +333,6 @@ public class XModeHandler extends HandlerBase
 			{
 				addKeyword(lastKeyword,Token.LITERAL2);
 			}
-			else if (tag == "CONSTANT")
-			{
-				addKeyword(lastKeyword,Token.CONSTANT);
-			}
 			else if (tag == "LABEL")
 			{
 				addKeyword(lastKeyword,Token.LABEL);
@@ -357,13 +353,9 @@ public class XModeHandler extends HandlerBase
 			{
 				addKeyword(lastKeyword,Token.FUNCTION);
 			}
-			else if (tag == "VARIABLE")
+			else if (tag == "MARKUP")
 			{
-				addKeyword(lastKeyword,Token.VARIABLE);
-			}
-			else if (tag == "DATATYPE")
-			{
-				addKeyword(lastKeyword,Token.DATATYPE);
+				addKeyword(lastKeyword,Token.MARKUP);
 			}
 			else if (tag == "OPERATOR")
 			{
@@ -446,10 +438,6 @@ public class XModeHandler extends HandlerBase
 		{
 			return TokenMarker.AC_LITERAL2;
 		}
-		else if (value == "CONSTANT")
-		{
-			return TokenMarker.AC_CONSTANT;
-		}
 		else if (value == "LABEL")
 		{
 			return TokenMarker.AC_LABEL;
@@ -470,13 +458,9 @@ public class XModeHandler extends HandlerBase
 		{
 			return TokenMarker.AC_FUNCTION;
 		}
-		else if (value == "VARIABLE")
+		else if (value == "MARKUP")
 		{
-			return TokenMarker.AC_VARIABLE;
-		}
-		else if (value == "DATATYPE")
-		{
-			return TokenMarker.AC_DATATYPE;
+			return TokenMarker.AC_MARKUP;
 		}
 		else if (value == "OPERATOR")
 		{

@@ -66,17 +66,17 @@ public class TokenMarker implements Cloneable
 	public static final int AC_COMMENT2 = 1 << 18;
 	public static final int AC_LITERAL1 = 1 << 19;
 	public static final int AC_LITERAL2 = 1 << 20;
-	public static final int AC_CONSTANT = 1 << 21;
-	public static final int AC_LABEL = 1 << 22;
-	public static final int AC_KEYWORD1 = 1 << 23;
-	public static final int AC_KEYWORD2 = 1 << 24;
-	public static final int AC_KEYWORD3 = 1 << 25;
-	public static final int AC_FUNCTION = 1 << 26;
-	public static final int AC_VARIABLE = 1 << 27;
-	public static final int AC_DATATYPE = 1 << 28;
-	public static final int AC_OPERATOR = 1 << 29;
-	public static final int AC_DIGIT = 1 << 30;
-	public static final int AC_INVALID = 1 << 31;
+	public static final int AC_LABEL = 1 << 21;
+	public static final int AC_KEYWORD1 = 1 << 22;
+	public static final int AC_KEYWORD2 = 1 << 23;
+	public static final int AC_KEYWORD3 = 1 << 24;
+	public static final int AC_FUNCTION = 1 << 25;
+	public static final int AC_MARKUP = 1 << 26;
+	public static final int AC_OPERATOR = 1 << 27;
+	public static final int AC_DIGIT = 1 << 28;
+	public static final int AC_INVALID = 1 << 29;
+//	public static final int ACTION_TOKEN_30 = 1 << 30;
+//	public static final int ACTION_TOKEN_31 = 1 << 31;
 
 	public TokenMarker()
 	{
@@ -761,14 +761,12 @@ public class TokenMarker implements Cloneable
 			case AC_COMMENT2: return Token.COMMENT2;
 			case AC_LITERAL1: return Token.LITERAL1;
 			case AC_LITERAL2: return Token.LITERAL2;
-			case AC_CONSTANT: return Token.CONSTANT;
 			case AC_LABEL: return Token.LABEL;
 			case AC_KEYWORD1: return Token.KEYWORD1;
 			case AC_KEYWORD2: return Token.KEYWORD2;
 			case AC_KEYWORD3: return Token.KEYWORD3;
 			case AC_FUNCTION: return Token.FUNCTION;
-			case AC_VARIABLE: return Token.VARIABLE;
-			case AC_DATATYPE: return Token.DATATYPE;
+			case AC_MARKUP: return Token.MARKUP;
 			case AC_OPERATOR: return Token.OPERATOR;
 			case AC_DIGIT: return Token.DIGIT;
 			case AC_INVALID: return Token.INVALID;
@@ -911,6 +909,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.43  2000/04/08 02:39:33  sp
+ * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
+ *
  * Revision 1.42  2000/04/07 06:57:26  sp
  * Buffer options dialog box updates, API docs updated a bit in syntax package
  *

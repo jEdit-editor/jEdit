@@ -21,34 +21,34 @@
 		</SPAN>
 
 		<!-- markup tags -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="TAGS">
 			<BEGIN>&lt;/</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" DELEGATE="php::PHP">
+		<SPAN TYPE="MARKUP" DELEGATE="php::PHP">
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 		
-		<SPAN TYPE="LABEL" DELEGATE="java::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
 		<!-- JavaScript -->
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
 			<END>&lt;/SCRIPT&gt;</END>
 		</SPAN>
 
 		<!-- stylesheet -->
-		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="css::MAIN">
 			<BEGIN>&lt;STYLE&gt;</BEGIN>
 			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -60,7 +60,7 @@
 		</SPAN>
 	</RULES>
 
-	<RULES SET="TAGS" DEFAULT="KEYWORD1">
+	<RULES SET="TAGS" DEFAULT="MARKUP">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

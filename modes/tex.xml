@@ -31,18 +31,6 @@
 			<END>\]</END>
 		</SPAN>
 
-		<!-- [...] -->
-		<SPAN TYPE="LITERAL1" DELEGATE="BRACKET">
-			<BEGIN>[</BEGIN>
-			<END>]</END>
-		</SPAN>
-
-		<!-- {...} -->
-		<SPAN TYPE="LITERAL1" DELEGATE="BRACKET">
-			<BEGIN>{</BEGIN>
-			<END>}</END>
-		</SPAN>
-
 		<!-- some commands must be handled specially -->
 		<SEQ TYPE="KEYWORD1">\$</SEQ>
 		<SEQ TYPE="KEYWORD1">\\</SEQ>
@@ -57,28 +45,25 @@
 		<!-- word separators -->
 		<SEQ TYPE="NULL">)</SEQ>
 		<SEQ TYPE="NULL">(</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
 		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="NULL">!</SEQ>
-		<SEQ TYPE="NULL">&gt;=</SEQ>
-		<SEQ TYPE="NULL">&lt;=</SEQ>
 		<SEQ TYPE="NULL">+</SEQ>
 		<SEQ TYPE="NULL">-</SEQ>
 		<SEQ TYPE="NULL">/</SEQ>
 		<SEQ TYPE="NULL">*</SEQ>
 		<SEQ TYPE="NULL">&gt;</SEQ>
 		<SEQ TYPE="NULL">&lt;</SEQ>
-		<SEQ TYPE="NULL">%</SEQ>
 		<SEQ TYPE="NULL">&amp;</SEQ>
 		<SEQ TYPE="NULL">|</SEQ>
 		<SEQ TYPE="NULL">^</SEQ>
 		<SEQ TYPE="NULL">~</SEQ>
-		<SEQ TYPE="NULL">}</SEQ>
-		<SEQ TYPE="NULL">{</SEQ>
 		<SEQ TYPE="NULL">.</SEQ>
 		<SEQ TYPE="NULL">,</SEQ>
 		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="NULL">]</SEQ>
-		<SEQ TYPE="NULL">[</SEQ>
 		<SEQ TYPE="NULL">?</SEQ>
 		<SEQ TYPE="NULL">:</SEQ>
 	</RULES>
@@ -96,14 +81,30 @@
 		<!-- \... commands -->
 		<MARK_FOLLOWING TYPE="KEYWORD3">\</MARK_FOLLOWING>
 
-		<!-- comments -->
-		<EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>
-	</RULES>
-
-	<RULES SET="BRACKET" DEFAULT="LITERAL1">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
+		<!-- word separators -->
+		<SEQ TYPE="KEYWORD2">)</SEQ>
+		<SEQ TYPE="KEYWORD2">(</SEQ>
+		<SEQ TYPE="KEYWORD2">{</SEQ>
+		<SEQ TYPE="KEYWORD2">}</SEQ>
+		<SEQ TYPE="KEYWORD2">[</SEQ>
+		<SEQ TYPE="KEYWORD2">]</SEQ>
+		<SEQ TYPE="KEYWORD2">=</SEQ>
+		<SEQ TYPE="KEYWORD2">!</SEQ>
+		<SEQ TYPE="KEYWORD2">+</SEQ>
+		<SEQ TYPE="KEYWORD2">-</SEQ>
+		<SEQ TYPE="KEYWORD2">/</SEQ>
+		<SEQ TYPE="KEYWORD2">*</SEQ>
+		<SEQ TYPE="KEYWORD2">&gt;</SEQ>
+		<SEQ TYPE="KEYWORD2">&lt;</SEQ>
+		<SEQ TYPE="KEYWORD2">&amp;</SEQ>
+		<SEQ TYPE="KEYWORD2">|</SEQ>
+		<SEQ TYPE="KEYWORD2">^</SEQ>
+		<SEQ TYPE="KEYWORD2">~</SEQ>
+		<SEQ TYPE="KEYWORD2">.</SEQ>
+		<SEQ TYPE="KEYWORD2">,</SEQ>
+		<SEQ TYPE="KEYWORD2">;</SEQ>
+		<SEQ TYPE="KEYWORD2">?</SEQ>
+		<SEQ TYPE="KEYWORD2">:</SEQ>
 
 		<!-- comments -->
 		<EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>

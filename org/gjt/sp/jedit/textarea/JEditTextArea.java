@@ -60,25 +60,16 @@ public class JEditTextArea extends JComponent
 	public static String LEFT_OF_SCROLLBAR = "los";
 
 	/**
-	 * Creates a new JEditTextArea with the default settings.
+	 * Creates a new JEditTextArea.
 	 */
 	public JEditTextArea()
-	{
-		this(TextAreaDefaults.getDefaults());
-	}
-
-	/**
-	 * Creates a new JEditTextArea with the specified settings.
-	 * @param defaults The default settings
-	 */
-	public JEditTextArea(TextAreaDefaults defaults)
 	{
 		// Enable the necessary events
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
 		// Initialize some misc. stuff
-		painter = new TextAreaPainter(this,defaults);
-		gutter = new Gutter(this, defaults);
+		painter = new TextAreaPainter(this);
+		gutter = new Gutter(this);
 		documentHandler = new DocumentHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
@@ -101,14 +92,7 @@ public class JEditTextArea extends JComponent
 		painter.addMouseMotionListener(new DragHandler());
 		addFocusListener(new FocusHandler());
 
-		// Load the defaults
-		setInputHandler(defaults.inputHandler);
-		editable = defaults.editable;
-		caretVisible = defaults.caretVisible;
-		caretBlinks = defaults.caretBlinks;
-		electricScroll = defaults.electricScroll;
-
-		popup = defaults.popup;
+		caretVisible = true;
 
 		setDocument(new SyntaxDocument());
 
@@ -2266,6 +2250,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.50  2000/04/08 02:39:33  sp
+ * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
+ *
  * Revision 1.49  2000/03/27 07:31:23  sp
  * We now use Log.log() in some places instead of System.err.println, HTML mode
  * now supports <script> tags, external delegation bug fix

@@ -36,10 +36,10 @@ import org.gjt.sp.util.Log;
 public class TextAreaPainter extends JComponent implements TabExpander
 {
 	/**
-	 * Creates a new repaint manager. This should be not be called
+	 * Creates a new painter. Do not create instances of this class
 	 * directly.
 	 */
-	public TextAreaPainter(JEditTextArea textArea, TextAreaDefaults defaults)
+	public TextAreaPainter(JEditTextArea textArea)
 	{
 		this.textArea = textArea;
 
@@ -55,18 +55,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		setForeground(Color.black);
 		setBackground(Color.white);
 
-		blockCaret = defaults.blockCaret;
-		cols = defaults.cols;
-		rows = defaults.rows;
-		caretColor = defaults.caretColor;
-		selectionColor = defaults.selectionColor;
-		lineHighlightColor = defaults.lineHighlightColor;
-		lineHighlight = defaults.lineHighlight;
-		bracketHighlightColor = defaults.bracketHighlightColor;
-		bracketHighlight = defaults.bracketHighlight;
-		paintInvalid = defaults.paintInvalid;
-		eolMarkerColor = defaults.eolMarkerColor;
-		eolMarkers = defaults.eolMarkers;
+		cols = 80;
+		rows = 25;
 	}
 
 	/**
@@ -666,6 +656,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  2000/04/08 02:39:33  sp
+ * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
+ *
  * Revision 1.29  2000/04/06 13:09:46  sp
  * More token types added
  *

@@ -6,11 +6,11 @@ JEDIT VERSION HISTORY
 
 - New 'search bar' with incremental search support replaces QuickSearch
   field on toolbar
-- New token types added: Token.{CONSTANT,VARIABLE,FUNCTION,DATATYPE,DIGIT}
+- New token types added: Token.{FUNCTION,MARKUP,DIGIT}
 - New edit modes:
+  - JMK
   - CSS (Mike Dillon)
   - Pascal (Kristian Ovaska)
-  - JMK
 
 + Enhancements
 
@@ -29,6 +29,9 @@ JEDIT VERSION HISTORY
 
 + Bug Fixes
 
+- TeX mode had problems with some {...} sequences (since 2.4pre2)
+- TeX mode didn't highlight \... in math mode correctly (since 2.4pre2)
+- PHP mode didn't highlight scripts in <? ... ?> tags (since 2.4pre2)
 - Fixed a bug in SyntaxDocument's line handling (since 2.4pre2)
 - Automatic abbrev expansion didn't work (since 2.4pre1)
 - BufferTabs had problems when buffers were closed sometimes (since 2.4pre1)
