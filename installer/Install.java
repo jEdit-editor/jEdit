@@ -25,7 +25,7 @@ import java.util.Properties;
 
 public class Install
 {
-	public static final String VERSION = "0.6";
+	public static final String VERSION = "0.6.1";
 
 	public static void main(String[] args)
 	{

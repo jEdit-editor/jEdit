@@ -77,7 +77,7 @@ public abstract class OperatingSystem
 		public String getInstallDirectory(String name, String version)
 		{
 			return "/usr/local/share/" + name.toLowerCase()
-				+ "-" + version;
+				+ "/" + version;
 		}
 
 		public String getShortcutDirectory(String name, String version)
@@ -99,9 +99,12 @@ public abstract class OperatingSystem
 			// Write simple script
 			FileWriter out = new FileWriter(script);
 			out.write("#!/bin/sh\n");
+			out.write("# Java heap size, in megabytes (see doc/README.txt)\n");
+			out.write("JAVA_HEAP_SIZE=16\n");
 			out.write("exec "
 				+ System.getProperty("java.home")
-				+ "/bin/java ${" + name.toUpperCase()
+				+ "/bin/java -mx${JAVA_HEAP_SIZE}m ${"
+				+ name.toUpperCase()
 				+ "} -classpath \"${CLASSPATH}:"
 				+ installDir + File.separator
 				+ name.toLowerCase() + ".jar\" "
@@ -162,8 +165,11 @@ public abstract class OperatingSystem
 				+ name + ".bat";
 
 			FileWriter out = new FileWriter(script);
+			out.write("rem Java heap size, in megabytes (see doc/README.txt)\r\n");
+			out.write("@set JAVA_HEAP_SIZE=16\r\n");
 			out.write("\"" + System.getProperty("java.home")
 				+ "\\bin\\java\" -classpath \"%CLASSPATH%;"
+				+ " -mx%JAVA_HEAP_SIZE%m"
 				+ installDir + File.separator
 				+ name.toLowerCase() + ".jar\" "
 				+ installer.getProperty("app.main.class")

@@ -297,6 +297,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/12/24 02:54:47  sp
+ * fixing bugs
+ *
  * Revision 1.18  2000/11/29 06:53:00  sp
  * DSSSL syntax highlighting, documentation updates, bug fixes
  *

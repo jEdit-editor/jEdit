@@ -3,7 +3,7 @@
 path = Macros.input(view,"Directory to browse:");
 if(path != null)
 {
-	view.getDockableWindowManager().showDockableWindow("vfs.browser");
+	view.getDockableWindowManager().addDockableWindow("vfs.browser");
 	browser = view.getDockableWindowManager()
 		.getDockableWindow("vfs.browser");
 

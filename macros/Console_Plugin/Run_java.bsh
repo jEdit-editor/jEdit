@@ -26,9 +26,19 @@ runCommandInConsole(command)
 }
 
 // Construct the command which will be executed
-// Note that the console automatically expands '$n' to the buffer's name
-// without the extension
-command = "java -classpath $d $n";
+
+if(jEdit.getPlugin("JCompilerPlugin") != null)
+{
+	// If the JCompiler plugin is installed, we can use it to find out the full
+	// class name (including package) of the current Java file
+	command = "java " + buildtools.JavaUtils.getFullClassname(buffer.getPath());
+}
+else
+{
+	// Note that the console automatically expands '$n' to the buffer's name
+	// without the extension
+	command = "java -classpath $d $n";
+}
 
 // Call our runCommandInConsole() function
 runCommandInConsole(command);

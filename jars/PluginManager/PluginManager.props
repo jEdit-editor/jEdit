@@ -1,7 +1,7 @@
 ### plugin properties
 plugin.PluginManagerPlugin.name=Plugin Manager
 plugin.PluginManagerPlugin.author=Slava Pestov
-plugin.PluginManagerPlugin.version=0.6
+plugin.PluginManagerPlugin.version=0.6.1
 plugin.PluginManagerPlugin.depend.0=jedit 02.07.02.00
 
 ### URL to download plugin list from
@@ -51,7 +51,7 @@ install-plugins.info.description=Description:
 install-plugins.user=Install in user plugin directory ({0})
 install-plugins.none=none
 install-plugins.system=Install in system plugin directory ({0})
-install-plugins.install=Install Checked Plugins
+install-plugins.install=Install Plugins
 
 install-plugins.done.title=Plugins Installed
 install-plugins.done.message=You must now restart jEdit to be use the\n\
@@ -72,7 +72,7 @@ update-plugins.info.updated=Last updated:
 update-plugins.info.requires=Requires:
 update-plugins.info.description=Description:
 
-update-plugins.update=Update Checked Plugins
+update-plugins.update=Update Plugins
 
 update-plugins.done.title=Plugins Updated
 update-plugins.done.message=You must now restart jEdit to be use the\n\

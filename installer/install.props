@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=3.0
+app.version=3.0.1
 
 # Logo to display in installer window
 app.logo=logo.gif
@@ -23,7 +23,7 @@ app.main.class=org.gjt.sp.jedit.jEdit
 comp.count=3
 
 comp.0.name=jEdit program
-comp.0.size=2021
+comp.0.size=2034
 comp.0.fileset=jedit-program
 
 comp.1.name=jEdit online help (HTML format)
