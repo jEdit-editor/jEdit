@@ -314,11 +314,11 @@ registers=view-registers \
 	  copy-append-string-register \
 	  paste-string-register
 registers.label=Registers
-cut-string-register.label=Cut to Register [x]
-copy-string-register.label=Copy to Register [x]
-cut-append-string-register.label=Cut Append to Register [x]
-copy-append-string-register.label=Copy Append to Register [x]
-paste-string-register.label=Paste Register [x]
+cut-string-register.label=Cut to Register
+copy-string-register.label=Copy to Register
+cut-append-string-register.label=Cut Append to Register
+copy-append-string-register.label=Copy Append to Register
+paste-string-register.label=Paste Register
 view-registers.label=View Registers...
 
 ### Search menu
@@ -368,10 +368,10 @@ markers=add-marker \
 	  -
 markers.label=$Markers
 add-marker.label=$Add Marker
-add-marker-shortcut.label=Add Marker $With Shortcut [x]
-goto-marker.label=$Go to Marker [x]
-select-marker.label=$Select to Marker [x]
-swap-marker.label=Swa$p Caret and Marker [x]
+add-marker-shortcut.label=Add Marker $With Shortcut
+goto-marker.label=$Go to Marker
+select-marker.label=$Select to Marker
+swap-marker.label=Swa$p Caret and Marker
 remove-marker.label=$Remove Marker from Current Line
 remove-all-markers.label=Re$move All Markers
 prev-marker.label=Go to $Previous Marker
@@ -435,7 +435,7 @@ folding.label=Folding
 collapse-fold.label=Collapse Fold
 expand-one-level.label=Expand Fold One Level
 expand-fold.label=Expand Fold Fully
-expand-folds.label=Expand Folds [x]
+expand-folds.label=Expand Folds With Level
 expand-all-folds.label=Expand All Folds
 select-fold.label=Select Fold
 narrow.label=Narrow Buffer to Selection
@@ -955,7 +955,7 @@ options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.checkModStatus=Warn if file is modified on disk by another \
 	program
-options.general.showFullPath=Show full path of buffers in title bar
+options.general.showFullPath=Show full path of buffer in title bar
 options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher
 options.general.showTips=Show tips on startup
@@ -1221,10 +1221,10 @@ buffer-multiple-io.message=Each buffer can only execute one input/output\n\
 	before starting another one.
 
 browser-multiple-io.title=I/O Error
-browser-multiple-io.message=Each VFS browser can only execute one input/output\n\
-	operation at a time. Please wait until the current\n\
-	operation finishes (or abort it in the I/O progress monitor)\n\
-	before starting another one.
+browser-multiple-io.message=Each file system browser can only execute one input/output\n\
+	operation at a time. Please wait until the current operation\n\
+	finishes (or abort it in the I/O progress monitor) before starting\n\
+	another one.
 
 # VFS browser
 vfs.browser.title=File System Browser
@@ -1354,14 +1354,10 @@ plugin-manager.remove=Remove Plugins
 plugin-manager.update=Update Plugins
 plugin-manager.install=Install Plugins
 
-### plugin removal
-remove-plugins.title=Plugin Removal
-remove-plugins.message=Are you sure you want to remove the following plugins?\n\
+plugin-manager.roster.remove=Remove {0}
+
+plugin-manager.roster-confirm.title=Confirm Operations
+plugin-manager.roster-confirm.message=Are you sure you want to perform the \
+	following operations?\n\
 	\n\
 	{0}
-remove-plugins.done.title=Plugins Removed
-remove-plugins.done.message=You must restart jEdit for the plugin removal\n\
-	to take effect.
-remove-plugins.error.title=Cannot remove plugin
-remove-plugins.error.message=The plugin {0} cannot be removed because\n\
-	an error occurred.

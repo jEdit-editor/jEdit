@@ -33,6 +33,11 @@ import org.gjt.sp.util.Log;
 
 public class PluginManager extends JDialog
 {
+	public static void pluginListDebug()
+	{
+		new PluginList();
+	}
+
 	public PluginManager(View view)
 	{
 		super(view,jEdit.getProperty("plugin-manager.title"),true);
@@ -181,86 +186,10 @@ public class PluginManager extends JDialog
 			tree.expandRow(i);
 
 		remove.setEnabled(false);
-	}
 
-	private boolean removePlugins(Vector plugins)
-	{
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < plugins.size(); i++)
-		{
-			buf.append((String)plugins.elementAt(i));
-			buf.append('\n');
-		}
-		String[] args = { buf.toString() };
-
-		int result = GUIUtilities.confirm(this,"remove-plugins",args,
-			JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-		if(result != JOptionPane.YES_OPTION)
-			return false;
-
-		// this becomes true if at least one plugin was
-		// sucessfully removed (otherwise we don't bother
-		// displaying the 'removal ok' dialog box)
-
-		String jEditHome = jEdit.getJEditHome();
-		boolean ok = false;
-		for(int i = 0; i < plugins.size(); i++)
-		{
-			String plugin = (String)plugins.elementAt(i);
-			ok |= removePlugin(plugin);
-		}
-
-		if(ok)
-			GUIUtilities.message(this,"remove-plugins.done",new Object[0]);
-
-		return ok;
-	}
-
-	private boolean removePlugin(String plugin)
-	{
-		// close JAR file
-		EditPlugin.JAR jar = jEdit.getPluginJAR(plugin);
-		if(jar != null)
-			jar.getClassLoader().closeZipFile();
-
-		// move JAR first
-		File jarFile = new File(plugin);
-		File srcFile = new File(plugin.substring(0,plugin.length() - 4));
-
-		boolean ok = true;
-		ok &= deleteRecursively(jarFile);
-
-		if(srcFile.exists())
-			ok &= deleteRecursively(srcFile);
-
-		if(!ok)
-		{
-			String[] args = { jarFile.getName() };
-			GUIUtilities.error(this,"remove-plugins.error",args);
-		}
-
-		return ok;
-	}
-
-	private boolean deleteRecursively(File file)
-	{
-		Log.log(Log.NOTICE,this,"Deleting " + file + " recursively");
-
-		boolean ok = true;
-
-		if(file.isDirectory())
-		{
-			String path = file.getPath();
-			String[] children = file.list();
-			for(int i = 0; i < children.length; i++)
-			{
-				ok &= deleteRecursively(new File(path,children[i]));
-			}
-		}
-
-		ok &= file.delete();
-
-		return ok;
+		name.setText(null);
+		author.setText(null);
+		version.setText(null);
 	}
 
 	class Entry
@@ -326,7 +255,8 @@ public class PluginManager extends JDialog
 			{
 				TreePath[] selected = tree.getSelectionModel()
 					.getSelectionPaths();
-				Vector plugins = new Vector();
+
+				Roster roster = new Roster();
 				for(int i = 0; i < selected.length; i++)
 				{
 					Object last = ((DefaultMutableTreeNode)
@@ -337,25 +267,31 @@ public class PluginManager extends JDialog
 						Entry entry = (Entry)last;
 						for(int j = 0; j < entry.jars.size(); j++)
 						{
-							plugins.addElement((String)
-								entry.jars.elementAt(i));
+							roster.addOperation(
+								new Roster.Remove(
+								(String)entry.jars
+								.elementAt(j)));
 						}
 					}
 				}
 
-				if(plugins.size() == 0)
+				if(roster.isEmpty())
 				{
 					getToolkit().beep();
 					return;
 				}
 
-				setCursor(Cursor.getPredefinedCursor(
-					Cursor.WAIT_CURSOR));
-				if(removePlugins(plugins))
-					updateTree();
-				
-				setCursor(Cursor.getPredefinedCursor(
-					Cursor.DEFAULT_CURSOR));
+				if(roster.confirm(PluginManager.this))
+				{
+					setCursor(Cursor.getPredefinedCursor(
+						Cursor.WAIT_CURSOR));
+
+					if(roster.performOperations())
+						updateTree();
+
+					setCursor(Cursor.getPredefinedCursor(
+						Cursor.DEFAULT_CURSOR));
+				}
 			}
 			/* else if(source == update)
 			{

@@ -158,7 +158,7 @@ public class JARClassLoader extends ClassLoader
 	}
 
 	// package-private members
-	void loadAllPlugins()
+	void startAllPlugins()
 	{
 		for(int i = 0; i < pluginClasses.size(); i++)
 		{

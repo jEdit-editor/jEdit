@@ -35,9 +35,13 @@ public class BeanShellAction extends EditAction
 		this.noRepeat = noRepeat;
 		this.noRecord = noRecord;
 
+		/* Some characters that we like to use in action names
+		 * ('.', '-') are not allowed in BeanShell identifiers. */
+		sanitizedName = name.replace('.','_').replace('-','_');
+
 		if(isSelected != null)
 		{
-			String cachedIsSelectedName = "_action" + counter++;
+			String cachedIsSelectedName = "_selected_" + sanitizedName;
 			BeanShell.eval(null,cachedIsSelectedName + "(){"
 				+ isSelected + "}",false);
 			cachedIsSelected = BeanShell.getMethod(cachedIsSelectedName);
@@ -48,7 +52,7 @@ public class BeanShellAction extends EditAction
 	{
 		if(cachedCode == null)
 		{
-			String cachedCodeName = "_action" + counter++;
+			String cachedCodeName = "_action_" + sanitizedName;
 			BeanShell.eval(null,cachedCodeName + "(){"
 				+ code + "}",false);
 			cachedCode = BeanShell.getMethod(cachedCodeName);
@@ -96,4 +100,5 @@ public class BeanShellAction extends EditAction
 	private String code;
 	private BshMethod cachedCode;
 	private BshMethod cachedIsSelected;
+	private String sanitizedName;
 }

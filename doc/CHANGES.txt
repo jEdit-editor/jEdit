@@ -15,6 +15,8 @@ JEDIT 3.2 VERSION HISTORY
   menu
 - Views once again have a status bar which displays caret position info,
   prompts issued by register and marker commands, I/O status, and so on.
+  The status bar now displays caret location information in the same
+  style as VI, courtesy of Mike Dillon
 
 + Enhancements
 
@@ -40,6 +42,8 @@ JEDIT 3.2 VERSION HISTORY
 + Neutral
 
 - Modes no longer define a 'boxComment' property
+- 'Delete Marker at Caret' macro removed because the 'Remove Marker from
+  Current Line' command does the same thing
 
 + Bug Fixes
 
@@ -70,6 +74,10 @@ JEDIT 3.2 VERSION HISTORY
   was being loaded would throw a NullPointerException
 - Fixed bogus "The url filesystem does not support directory browsing"
   error message displayed when loading http:// URLs
+- An exception would be printed if the 'BeanShell' radio button was
+  selected in the search and replace dialog box, but nothing was entered
+  in the text field
+- CS+DOWN (select next paragraph) didn't work properly
 
 + API Changes
 

@@ -1,6 +1,7 @@
 /*
  * StatusBar.java - The status bar displayed at the bottom of views
  * Copyright (C) 2001 Slava Pestov
+ * Portions copyright (C) 2001 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.border.*;
+import javax.swing.text.Segment;
 import javax.swing.*;
 import java.awt.*;
 import org.gjt.sp.jedit.io.*;
@@ -50,8 +52,13 @@ public class StatusBar extends JPanel
 
 		this.view = view;
 
-		caretStatus = new CaretStatus();
-		add(BorderLayout.WEST,caretStatus);
+		JPanel panel = new JPanel(new BorderLayout());
+		caretStatus = new VICaretStatus();
+		panel.add(BorderLayout.WEST,caretStatus);
+		lineStatus = new VILineStatus();
+		panel.add(BorderLayout.EAST,lineStatus);
+
+		add(BorderLayout.WEST,panel);
 
 		message = new JLabel();
 		message.setForeground(UIManager.getColor("Button.foreground"));
@@ -80,53 +87,166 @@ public class StatusBar extends JPanel
 		caretStatus.repaint();
 	}
 
+	public void repaintLineStatus()
+	{
+		lineStatus.repaint();
+	}
+
 	// private members
 	private View view;
-	private CaretStatus caretStatus;
+	private VICaretStatus caretStatus;
+	private VILineStatus lineStatus;
 	private JLabel message;
 	private MiniIOProgress ioProgress;
 
-	class CaretStatus extends JComponent
+	public class VICaretStatus extends JComponent
 	{
-		public CaretStatus()
+		public VICaretStatus()
 		{
-			CaretStatus.this.setDoubleBuffered(true);
-			CaretStatus.this.setForeground(UIManager.getColor("Button.foreground"));
-			CaretStatus.this.setBackground(UIManager.getColor("Label.background"));
-			CaretStatus.this.setFont(new Font("Dialog",Font.BOLD,10));
+			VICaretStatus.this.setForeground(UIManager.getColor("Button.foreground"));
+			VICaretStatus.this.setBackground(UIManager.getColor("Label.background"));
+
+			Font font = new Font("Dialog", Font.BOLD, 10);
+			VICaretStatus.this.setFont(font);
+
+			FontMetrics fm = VICaretStatus.this.getToolkit()
+				.getFontMetrics(font);
+			size = new Dimension(fm.stringWidth(testStr) + 4,
+				fm.getHeight());
+
+			VICaretStatus.this.setPreferredSize(size);
+			VICaretStatus.this.setMaximumSize(size);
 		}
 
 		public void paintComponent(Graphics g)
 		{
+			Buffer buffer = view.getBuffer();
+
+			if(!buffer.isLoaded())
+				return;
+
 			FontMetrics fm = g.getFontMetrics();
 
 			JEditTextArea textArea = view.getTextArea();
-			int dot = textArea.getCaretPosition();
 
 			int currLine = textArea.getCaretLine();
-			int start = textArea.getLineStartOffset(currLine);
-			int numLines = textArea.getLineCount();
+			int dot = textArea.getCaretPosition()
+				- textArea.getLineStartOffset(currLine);
+			int virtualPosition = getVirtualPosition(dot,buffer,textArea);
 
-			String str = "col " + ((dot - start) + 1) + " : line "
-				+ (currLine + 1) + " / " + numLines;
+			buf.setLength(0);
+			buf.append(Integer.toString(currLine + 1));
+			buf.append(", ");
+			buf.append(Integer.toString(dot + 1));
 
-			g.drawString(str,2,(CaretStatus.this.getHeight()
-				+ fm.getAscent()) / 2 - 1);
+			if (virtualPosition != dot)
+			{
+				buf.append('-');
+				buf.append(Integer.toString(virtualPosition + 1));
+			}
+
+			g.drawString(buf.toString(), 2,
+				(VICaretStatus.this.getHeight() + fm.getAscent()) / 2 - 1);
 		}
 
-		public Dimension getPreferredSize()
-		{
-			FontMetrics fm = CaretStatus.this.getToolkit()
-				.getFontMetrics(CaretStatus.this.getFont());
+		// private members
+		private static final String testStr = "9999, 999-999";
 
-			return new Dimension(fm.stringWidth("col 999 : line 9999 / 9999") + 4,
+		private Dimension size;
+		private StringBuffer buf = new StringBuffer(testStr);
+		private Segment seg = new Segment();
+
+		private int getVirtualPosition(int dot, Buffer buffer, JEditTextArea textArea)
+		{
+			int line = textArea.getCaretLine();
+
+			textArea.getLineText(line, seg);
+
+			int virtualPosition = 0;
+			int tabSize = buffer.getTabSize();
+
+			for (int i = 0; i < seg.count && i < dot; ++i)
+			{
+				char ch = seg.array[seg.offset + i];
+
+				if (ch == '\t')
+				{
+					virtualPosition += tabSize
+						- (virtualPosition % tabSize);
+				}
+				else
+				{
+					++virtualPosition;
+				}
+			}
+
+			return virtualPosition;
+		}
+	}
+
+	public class VILineStatus extends JComponent
+	{
+		public VILineStatus()
+		{
+			VILineStatus.this.setForeground(UIManager.getColor("Button.foreground"));
+			VILineStatus.this.setBackground(UIManager.getColor("Label.background"));
+
+			Font font = new Font("Dialog", Font.BOLD, 10);
+			VILineStatus.this.setFont(font);
+
+			FontMetrics fm = VILineStatus.this.getToolkit()
+				.getFontMetrics(font);
+			size = new Dimension(fm.stringWidth(testStr) + 4,
 				fm.getHeight());
+
+			VILineStatus.this.setPreferredSize(size);
+			VILineStatus.this.setMaximumSize(size);
 		}
 
-		public Dimension getMaximumSize()
+		public void paintComponent(Graphics g)
 		{
-			return CaretStatus.this.getPreferredSize();
+			if(!view.getBuffer().isLoaded())
+				return;
+
+			FontMetrics fm = g.getFontMetrics();
+
+			JEditTextArea textArea = view.getTextArea();
+
+			int firstLine = textArea.getFirstLine();
+			int visible = textArea.getVisibleLines();
+			int lineCount = textArea.getVirtualLineCount();
+
+			buf.setLength(0);
+
+			if (visible >= lineCount)
+			{
+				buf.append("All");
+			}
+			else if (firstLine == 0)
+			{
+				buf.append("Top");
+			}
+			else if (firstLine + visible >= lineCount)
+			{
+				buf.append("Bot");
+			}
+			else
+			{
+				float percent = (float)firstLine / (float)lineCount
+					* 100.0f;
+				buf.append(Integer.toString((int)percent));
+				buf.append('%');
+			}
+
+			g.drawString(buf.toString(), 2,
+				(VILineStatus.this.getHeight() + fm.getAscent()) / 2 - 1);
 		}
+
+		// private members
+		private static final String testStr = "999%";
+
+		private Dimension size;
+		private StringBuffer buf = new StringBuffer(testStr);
 	}
 
 	class MiniIOProgress extends JComponent
@@ -203,7 +323,7 @@ public class StatusBar extends JPanel
 
 		public Dimension getPreferredSize()
 		{
-			return new Dimension(40,0);
+			return new Dimension(40,icon.getIconHeight());
 		}
 
 		public Dimension getMaximumSize()

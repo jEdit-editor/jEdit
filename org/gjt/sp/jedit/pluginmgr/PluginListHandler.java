@@ -60,7 +60,12 @@ class PluginListHandler extends HandlerBase
 		value = (value == null) ? null : value.intern();
 
 		if(aname == "NAME")
+		{
+			System.err.println("name=" + value);
 			name = value;
+		}
+		else if(aname == "JAR")
+			jar = value;
 		else if(aname == "VERSION")
 			version = value;
 		else if(aname == "OBSOLETE")
@@ -90,7 +95,10 @@ class PluginListHandler extends HandlerBase
 		String text = new String(c, off, len);
 
 		if(tag == "DESCRIPTION")
+		{
+			System.err.println(text);
 			description = text;
+		}
 		else if(tag == "PLUGIN_SET_ENTRY")
 			pluginSetEntry = text;
 		else if(tag == "AUTHOR")
@@ -127,61 +135,53 @@ class PluginListHandler extends HandlerBase
 		}
 	}
 
-	public void endElement(String name)
+	public void endElement(String tag)
 	{
-		if(name == null)
+		if(tag == null)
 			return;
 
-		String tag = peekElement();
+		popElement();
 
-		if(name.equals(tag))
+		if(tag == "PLUGIN_SET")
 		{
-			if(tag == "PLUGIN_SET")
-			{
-				pluginList.addPluginSet(pluginSet);
-				pluginSet = null;
-				pluginSetEntry = null;
-			}
-			else if(tag == "PLUGIN_SET_ENTRY")
-			{
-				pluginSet.plugins.addElement(pluginSetEntry);
-				pluginSetEntry = null;
-			}
-			else if(tag == "PLUGIN")
-			{
-				plugin.name = name;
-				plugin.author = author;
-				pluginList.addPlugin(plugin);
-				name = null;
-				author = null;
-			}
-			else if(tag == "BRANCH")
-			{
-				branch.version = version;
-				branch.download = download;
-				branch.obsolete = obsolete;
-				plugin.branches.addElement(branch);
-				version = null;
-				download = null;
-				obsolete = false;
-			}
-			else if(tag == "DEPEND")
-			{
-				PluginList.Dependency dep = new PluginList.Dependency(
-					depWhat,depFrom,depTo,depPlugin);
-				branch.deps.addElement(dep);
-				depWhat = null;
-				depFrom = null;
-				depTo = null;
-				depPlugin = null;
-			}
-
-			popElement();
+			pluginList.addPluginSet(pluginSet);
+			pluginSet = null;
+			pluginSetEntry = null;
 		}
-		else
+		else if(tag == "PLUGIN_SET_ENTRY")
 		{
-			// can't happen
-			throw new InternalError();
+			pluginSet.plugins.addElement(pluginSetEntry);
+			pluginSetEntry = null;
+		}
+		else if(tag == "PLUGIN")
+		{
+			plugin.jar = jar;
+			plugin.name = name;
+			plugin.author = author;
+			pluginList.addPlugin(plugin);
+			jar = null;
+			name = null;
+			author = null;
+		}
+		else if(tag == "BRANCH")
+		{
+			branch.version = version;
+			branch.download = download;
+			branch.obsolete = obsolete;
+			plugin.branches.addElement(branch);
+			version = null;
+			download = null;
+			obsolete = false;
+		}
+		else if(tag == "DEPEND")
+		{
+			PluginList.Dependency dep = new PluginList.Dependency(
+				depWhat,depFrom,depTo,depPlugin);
+			branch.deps.addElement(dep);
+			depWhat = null;
+			depFrom = null;
+			depTo = null;
+			depPlugin = null;
 		}
 	}
 
@@ -207,6 +207,7 @@ class PluginListHandler extends HandlerBase
 	private String pluginSetEntry;
 
 	private PluginList.Plugin plugin;
+	private String jar;
 	private String author;
 
 	private PluginList.Branch branch;

@@ -69,6 +69,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		filenameField = new JTextField(20);
 		filenameField.setText(name);
 		filenameField.addKeyListener(new KeyHandler());
+		filenameField.selectAll();
 		Dimension dim = filenameField.getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		filenameField.setMaximumSize(dim);

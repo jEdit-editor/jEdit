@@ -263,6 +263,8 @@ public class JEditTextArea extends JComponent
 
 		painter.repaint();
 		gutter.repaint();
+
+		fireScrollEvent(true);
 	}
 
 	/**
@@ -301,6 +303,8 @@ public class JEditTextArea extends JComponent
 		if(horizontalOffset != horizontal.getValue())
 			updateScrollBars();
 		painter.repaint();
+
+		fireScrollEvent(false);
 	}
 
 	/**
@@ -500,6 +504,10 @@ public class JEditTextArea extends JComponent
 
 			view.synchroScrollVertical(this,firstLine);
 			view.synchroScrollHorizontal(this,horizontalOffset);
+
+			// fire events for both a horizontal and vertical scroll
+			fireScrollEvent(true);
+			fireScrollEvent(false);
 		}
 	}
 
@@ -1930,6 +1938,26 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Adds a scroll listener to this text area.
+	 * @param listener The listener
+	 * @since jEdit 3.2pre2
+	 */
+	public final void addScrollListener(ScrollListener listener)
+	{
+		listenerList.add(ScrollListener.class,listener);
+	}
+
+	/**
+	 * Removes a scroll listener from this text area.
+	 * @param listener The listener
+	 * @since jEdit 3.2pre2
+	 */
+	public final void removeScrollListener(ScrollListener listener)
+	{
+		listenerList.remove(ScrollListener.class,listener);
+	}
+
+	/**
 	 * Deletes the character before the caret, or the selection, if one is
 	 * active.
 	 * @since jEdit 2.7pre2
@@ -2493,7 +2521,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		if(select)
-			select(caret,newCaret);
+			extendSelection(caret,newCaret);
 		else if(!multi)
 			selectNone();
 		moveCaretPosition(newCaret);
@@ -4145,6 +4173,21 @@ forward_scan:		do
 			if(listeners[i] == CaretListener.class)
 			{
 				((CaretListener)listeners[i+1]).caretUpdate(caretEvent);
+			}
+		}
+	}
+
+	private void fireScrollEvent(boolean vertical)
+	{
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = listeners.length - 2; i >= 0; i--)
+		{
+			if(listeners[i] == ScrollListener.class)
+			{
+				if(vertical)
+					((ScrollListener)listeners[i+1]).scrolledVertically(this);
+				else
+					((ScrollListener)listeners[i+1]).scrolledHorizontally(this);
 			}
 		}
 	}

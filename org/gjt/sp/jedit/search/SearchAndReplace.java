@@ -282,11 +282,11 @@ public class SearchAndReplace
 		String replace = (SearchAndReplace.replace == null ? "" : SearchAndReplace.replace);
 
 		BshMethod replaceMethod;
-		if(beanshell)
+		if(beanshell && replace.length() != 0)
 		{
 			Interpreter interp = BeanShell.getInterpreter();
 			interp.eval(
-				"_replace(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9)\n{\n("
+				"_replace(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9)\n{\nreturn ("
 				+ replace + ");\n}");
 			replaceMethod = interp.getNameSpace().getMethod("_replace");
 		}

@@ -89,6 +89,10 @@ public class CurrentDirectoryMenu extends JMenu
 				{
 					String name = list[i];
 
+					// skip marker files
+					if(name.endsWith(".marks"))
+						continue;
+
 					// skip autosave files
 					if(name.startsWith("#") && name.endsWith("#"))
 						continue;

@@ -1,28 +1,33 @@
 TO DO
 
-- scroll lock support
-- console shell: use StreamTokenizer
 - document restore.cli property
-- cvs: remove MiniIOProgress, CaretStatus
-- cvs: add StatusBar.java
+- document new status
 - status: display overwrite, multi select
-- on OS X, make macos l&f the default
 - document new readNextChar()
-- VI-style caret status
+- CVS: add ScrollListener.java, Roster.java
+- catch MalformedInputException and display a better error message
+- scrollToCaret() doesn't always work
+- caret event not always fired
+- XThis: don't throw exceptions for non-existent methods
+- C+ENTER: display prompt
+- document removal of [x] from menu item labels
 
+- scroll lock key toggles 'scroll mode'
+- console shell: use StreamTokenizer
+- on OS X, make macos l&f the default
+- folding paint up bug
+- prev line fold gutter bug
 - plugin manager:
   - dependency checker
-  - roster - PluginList.update(Roster),
-    PluginList.Plugin.install(Roster),
-    PluginList.PluginSet.install(Roster)
-
+  - a combined roster confirm/progress dialog box
+  - dialog box displayed while downloading plugin list from server
+  - plugin update
+  - plugin install dialog
 - enter:
-{
+  {
 	foo
-}
-
-Collapse { line, put caret at start, delete line, undo.
-
+  }
+  Collapse { line, put caret at start, delete line, undo.
 - tabbing to text area fails
 - rewritten folding: Fold object, pointer to next of curr. level, each
   text area has visibility hashtable
@@ -37,12 +42,8 @@ Collapse { line, put caret at start, delete line, undo.
 - DELEGATE in EOL_SPAN
 - encoding option in VFS browser
 - failed saves should not clear the dirty flag
-- catch MalformedInputException and display a better error message
 - reverse regexp search
 - finish persistent splits
-- scrollToCaret() doesn't always work
-- caret event not always fired
-- XThis: don't throw exceptions for non-existent methods
 - see if new beanshell fixes trailing \n bug
 - get rid of final blank page of user's guide
 - update macro guide for misc. API changes:

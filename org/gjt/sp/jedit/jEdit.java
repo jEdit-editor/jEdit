@@ -313,7 +313,7 @@ public class jEdit
 		for(int i = 0; i < jars.size(); i++)
 		{
 			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
-				.loadAllPlugins();
+				.startAllPlugins();
 		}
 
 		// Must be after plugins are started!!!

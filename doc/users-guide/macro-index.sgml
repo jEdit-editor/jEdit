@@ -78,16 +78,6 @@
 </listitem>
 
 <listitem>
-    <para><filename>Delete_Marker_at_Caret.bsh</></para>
-    <abstract><para>
-        Deletes any existing marker placed in a buffer at the caret line.
-    </para></abstract>
-    <para>
-        Alerts user if no marker exists.
-    </para>
-</listitem>
-
-<listitem>
     <para><filename>Insert_Date.bsh</></para>
     <abstract><para>
         Inserts the current date and time in the current buffer.

@@ -941,6 +941,7 @@ public class View extends JFrame implements EBComponent
 		JEditTextArea textArea = editPane.getTextArea();
 		textArea.addFocusListener(new FocusHandler());
 		textArea.addCaretListener(new CaretHandler());
+		textArea.addScrollListener(new ScrollHandler());
 		EditBus.send(new EditPaneUpdate(editPane,EditPaneUpdate.CREATED));
 		return editPane;
 	}
@@ -949,6 +950,7 @@ public class View extends JFrame implements EBComponent
 	{
 		this.editPane = editPane;
 		status.repaintCaretStatus();
+		status.repaintLineStatus();
 	}
 
 	/**
@@ -1138,6 +1140,7 @@ public class View extends JFrame implements EBComponent
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
 			status.repaintCaretStatus();
+			status.repaintLineStatus();
 
 			if(!buffer.isDirty())
 			{
@@ -1160,7 +1163,10 @@ public class View extends JFrame implements EBComponent
 	{
 		if(msg.getEditPane().getView() == this
 			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED)
+		{
 			status.repaintCaretStatus();
+			status.repaintLineStatus();
+		}
 	}
 
 	class CaretHandler implements CaretListener
@@ -1189,6 +1195,17 @@ public class View extends JFrame implements EBComponent
 
 			setEditPane((EditPane)comp);
 		}
+	}
+
+	class ScrollHandler implements ScrollListener
+	{
+		public void scrolledVertically(JEditTextArea textArea)
+		{
+			if(getTextArea() == textArea)
+				status.repaintLineStatus();
+		}
+
+		public void scrolledHorizontally(JEditTextArea textArea) {}
 	}
 
 	class WindowHandler extends WindowAdapter

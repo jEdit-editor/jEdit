@@ -24,15 +24,15 @@ import java.io.*;
 import java.net.URL;
 import java.util.Vector;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.*;
 
 /**
  * Plugin list downloaded from server.
  * @since jEdit 3.2pre2
  */
-public class PluginList
+class PluginList
 {
-	public PluginList()
+	PluginList()
 	{
 		plugins = new Vector();
 		pluginSets = new Vector();
@@ -63,6 +63,7 @@ public class PluginList
 	// package-private members
 	void addPlugin(Plugin plugin)
 	{
+		plugin.checkIfInstalled();
 		Log.log(Log.ERROR,this,plugin);
 		plugins.addElement(plugin);
 	}
@@ -83,6 +84,16 @@ public class PluginList
 		String description;
 		Vector plugins = new Vector();
 
+		void install(Roster roster, String installDirectory)
+		{
+			for(int i = 0; i < plugins.size(); i++)
+			{
+				Plugin plugin = (Plugin)plugins.elementAt(i);
+				if(plugin.canBeInstalled())
+					plugin.install(roster,installDirectory);
+			}
+		}
+
 		public String toString()
 		{
 			return plugins.toString();
@@ -91,15 +102,86 @@ public class PluginList
 
 	static class Plugin
 	{
+		String jar;
 		String name;
 		String description;
 		String author;
 		Vector branches = new Vector();
+		String installed;
+		String installedVersion;
+
+		void checkIfInstalled()
+		{
+			// check if the plugin is already installed.
+			// this is a bit of hack
+			EditPlugin.JAR[] jars = jEdit.getPluginJARs();
+			for(int i = 0; i < jars.length; i++)
+			{
+				String path = jars[i].getPath();
+				if(!new File(path).exists())
+					continue;
+
+				System.err.println(MiscUtilities.getFileName(path)
+					+ ":" + jar);
+				if(MiscUtilities.getFileName(path).equals(jar))
+				{
+					installed = path;
+
+					EditPlugin[] plugins = jars[i].getPlugins();
+					if(plugins.length >= 1)
+					{
+						installedVersion = jEdit.getProperty(
+							"plugin." + plugins[0].getClassName()
+							+ ".version");
+					}
+					break;
+				}
+			}
+
+			String[] notLoaded = jEdit.getNotLoadedPluginJARs();
+			for(int i = 0; i < notLoaded.length; i++)
+			{
+				String path = notLoaded[i];
+
+				if(MiscUtilities.getFileName(path).equals(jar))
+				{
+					installed = path;
+					break;
+				}
+			}
+		}
+
+		/**
+		 * Find the first branch compatible with the running jEdit release.
+		 */
+		Branch getCompatibleBranch()
+		{
+			for(int i = 0; i < branches.size(); i++)
+			{
+				Branch branch = (Branch)branches.elementAt(i);
+				if(branch.canSatisfyDependencies())
+					return branch;
+			}
+
+			return null;
+		}
+
+		boolean canBeInstalled()
+		{
+			return getCompatibleBranch() != null;
+		}
+
+		void install(Roster roster, String installDirectory)
+		{
+			
+		}
 
 		public String toString()
 		{
-			return "name=" + name + ",description=" + description
-				+ ",author=" + author + ",branches=" + branches;
+			return "[jar=" + jar + ",name=" + name + ",description="
+				+ description + ",author=" + author + ",branches="
+				+ branches + ",installed=" + installed
+				+ ",installedVersion=" + installedVersion + "]";
 		}
 	}
 
@@ -110,10 +192,19 @@ public class PluginList
 		boolean obsolete;
 		Vector deps = new Vector();
 
+		boolean canSatisfyDependencies()
+		{
+			return false;
+		}
+
+		void satisfyDependencies(Roster roster)
+		{
+		}
+
 		public String toString()
 		{
-			return "version=" + version + ",download=" + download
-				+ ",obsolete=" + obsolete + ",deps=" + deps;
+			return "[version=" + version + ",download=" + download
+				+ ",obsolete=" + obsolete + ",deps=" + deps + "]";
 		}
 	}
 
@@ -135,8 +226,8 @@ public class PluginList
 
 		public String toString()
 		{
-			return "what=" + what + ",from=" + from
-				+ ",to=" + to + ",plugin=" + plugin;
+			return "[what=" + what + ",from=" + from
+				+ ",to=" + to + ",plugin=" + plugin + "]";
 		}
 	}
 }
