@@ -1048,7 +1048,8 @@ public class JEditTextArea extends JComponent
 
 	// OLD (NON-MULTI AWARE) SELECTION API
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, obtain a Selection instance using
+		 * any means, and call its <code>getStart()</code> method
 		 */
 		public final int getSelectionStart()
 		{
@@ -1059,7 +1060,8 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, obtain a Selection instance using
+		 * any means, and call its <code>getStart(int)</code> method
 		 */
 		public int getSelectionStart(int line)
 		{
@@ -1071,7 +1073,8 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, obtain a Selection instance using
+		 * any means, and call its <code>getStartLine()</code> method
 		 */
 		public final int getSelectionStartLine()
 		{
@@ -1090,7 +1093,8 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, obtain a Selection instance using
+		 * any means, and call its <code>getEnd()</code> method
 		 */
 		public final int getSelectionEnd()
 		{
@@ -1101,7 +1105,8 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, obtain a Selection instance using
+		 * any means, and call its <code>getEnd(int)</code> method
 		 */
 		public int getSelectionEnd(int line)
 		{
@@ -1113,7 +1118,8 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, obtain a Selection instance using
+		 * any means, and call its <code>getEndLine()</code> method
 		 */
 		public final int getSelectionEndLine()
 		{
@@ -1166,7 +1172,8 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, call either <code>addToSelection()</code>,
+		 * or <code>setSelection()</code> with a new Selection instance.
 		 */
 		public void select(int start, int end)
 		{
@@ -1174,7 +1181,8 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, call either <code>addToSelection()</code>,
+		 * or <code>setSelection()</code> with a new Selection instance.
 		 */
 		public void select(int start, int end, boolean doElectricScroll)
 		{
@@ -1197,7 +1205,8 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * @deprecated Do not use.
+		 * @deprecated Instead, check if the appropriate Selection
+		 * is an instance of the Selection.Rect class.
 		 */
 		public boolean isSelectionRectangular()
 		{
@@ -2943,6 +2952,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else if(!multi)
 			selectNone();
 		moveCaretPosition(newCaret);
+
+		// so that end followed by up arrow will always put caret at
+		// the end of the previous line, for example
+		setMagicCaretPosition(Integer.MAX_VALUE);
 	}
 
 	/**

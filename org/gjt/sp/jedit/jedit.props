@@ -35,6 +35,9 @@ persistentMarkers=true
 # Caret saving toggle
 saveCaret=true
 
+# Parse files fully when loading for syntax info
+parseFully=false
+
 # I/O thread count
 ioThreadCount=4
 

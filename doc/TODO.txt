@@ -1,12 +1,5 @@
 TO DO
 
-- +line: to buffer already selected
-
-- cvs add: recent.dtd
-- cvs add: writing-modes.xml
-- cvs remove: modes.xml
-- obsolete plugins!!!
-
 - FTP plugin: soft links???
 - FTP plugin: make a 3.2 version with better error messages?
 
@@ -31,42 +24,27 @@ TO DO
   - what about \"foo\"?
   - some % commands can be used without % prefix; clear, cd, pwd
 
-+ before pre4:
++ before 3.2pre5:
 
-- don't invoke updateUI unnecessarily
-- jEditLauncher
+- jedit -usage/-version doesn't work
 - get web start to work
+- don't invoke updateUI unnecessarily
+- popup menus; make sure they are on-screen? GUIUtilities method?
+- $" bug, visible in Perl mode
 - fix '... is not a function name' when running openjade
+- BeanShell 1.2?
+- plugin manager & obsolete plugins
 - installing source for already installed plugins
-
-+ before 3.2final:
-
-- does loading and saving user settings take a long time?
-- maybe rewrite file restore to use XML -- allow plugins to read/write
-  arbitriary restore files? -- eg BufferList
-- custom splitter control?
-- finish persistent splits: resize splits to make them in the middle
+- reload: preserve caret position
+- jEditLauncher
 - documentation
   - mention registers in API guide
   - JOptionPane not a good idea for getting user input?
   - formatting problems in user's guide in table cells
-  - Include John's upcoming plugin guide
+  - Include John's upcoming plugin guide when ready
   - document new edit server
   - document differences between web start and stand-alone version
 - help viewer: links to .txt files?
-- C+\
-- docking improvements:
-  - multiple instances of a dockable
-  - make dockable menu items not be toggles.
-    - if floating, open new instance.
-    - if docked, go to existing instance, if not open, then open
-  - create non-menu 'toggle' actions, for those who want them
-  - each dockable has a close box in its tool bar; or a button that
-    shows a menu, with commands for moving the dockable, making it
-    floating, toggling auto-open, etc.
-  - require that each dockable have a tool bar with a close button?
-- next time i'm making an RPM, fix the shell script
-- reload: preserve caret position
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
     ugly with different backgrounds
@@ -74,6 +52,16 @@ TO DO
   - selected borders in list, tree, table wrong colors
   - updateUI doesn't update tree colors
   - restart should not be necessary for 'globalColors' to take effect
+
++ before 3.2final:
+
+- does loading and saving user settings take a long time?
+- maybe rewrite file restore to use XML -- allow plugins to read/write
+  arbitriary restore files? -- eg BufferList
+- custom splitter control?
+- finish persistent splits: resize splits to put them in the middle
+- C+\
+- next time i'm making an RPM, fix the shell script
 - 'globalFont' property?
   - maybe don't give text fields a new font?...
 - swing font customization
@@ -106,6 +94,7 @@ TO DO
 
 + later:
 
+- much better rect select, along the lines of 'column mode'
 - modes have a reference counter; unload modes which have no buffers open
 - scrolling while caret is on a bracket over long distances slows things
   down
@@ -124,9 +113,18 @@ TO DO
 - improve handling of DIGIT sequences
 - DELEGATE in EOL_SPAN
 - reverse regexp search
-- improved rectangular selections
 - a 'reinsertOnNextLine' regexp for word wrap?
 - soft wrap
 - support Shift-clicks in JTextComponents (impossible?)
 - support jEdit keyboard shortcuts in JTextComponents
 - support middle mouse button clicks in JTextComponents
+- docking improvements:
+  - multiple instances of a dockable
+  - make dockable menu items not be toggles.
+    - if floating, open new instance.
+    - if docked, go to existing instance, if not open, then open
+  - create non-menu 'toggle' actions, for those who want them
+  - each dockable has a close box in its tool bar; or a button that
+    shows a menu, with commands for moving the dockable, making it
+    floating, toggling auto-open, etc.
+  - require that each dockable have a tool bar with a close button?

@@ -479,6 +479,12 @@ public class Buffer extends PlainDocument implements EBComponent
 						view,BufferUpdate.MARKERS_CHANGED));
 				}
 
+				if(jEdit.getBooleanProperty("parseFully"))
+				{
+					for(int i = 0; i < lineCount; i++)
+						markTokens(i);
+				}
+
 				try
 				{
 					int collapseFolds = ((Integer)

@@ -505,7 +505,12 @@ public class Abbrevs
 							}
 						}
 						else
+						{
+							// $key will be $key, for
+							// example
+							buf.append('$');
 							buf.append(ch);
+						}
 					}
 				}
 				else

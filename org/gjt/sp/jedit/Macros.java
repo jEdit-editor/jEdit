@@ -117,7 +117,7 @@ public class Macros
 		{
 			public void run()
 			{
-				browser.setDirectory(userMacroPath);
+				browser.setDirectory(systemMacroPath);
 			}
 		});
 	}

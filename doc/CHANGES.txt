@@ -39,6 +39,8 @@ JEDIT 3.2 VERSION HISTORY
 - Running jEdit with the -bshclient switch will read a BeanShell script
   from standard input and send it to an already running instance of
   jEdit for evaluation.
+- The feature to fully parse files for syntax information when loading
+  has been added again
 
 + Enhancements
 
@@ -57,6 +59,7 @@ JEDIT 3.2 VERSION HISTORY
 - Improved reporting of I/O errors throughout the editor
 - The buffer history (formely $HOME/.jedit/recent) is now written to
   $HOME/.jedit/recent.xml, as XML
+- Minor improvement to magic caret code
 
 + Bug Fixes
 
@@ -76,6 +79,18 @@ JEDIT 3.2 VERSION HISTORY
   parameters have been fixed. A side-effect of this is that the -nogui
   command line switch is no longer available.
 - The default size of the file system browser was wrong
+- Fixed edit server bug that occured on some systems (probably only
+  Windows?) (John Gellene)
+- Both 'Browse System Macros' and 'Browse User Macros' commands opened
+  the user macro directory (Ollie Rutherfurd)
+- Errors connecting to the server were never written to the activity.log
+  file, nor were they written to standard output, even if the default
+  log level was changed
+- Dollar signs followed by a non-digit character would disappear without
+  trace when the abbrev is expanded. Now, they are left as-is unless a
+  digit follows
+- Setting the CARET property by passing a Hashtable to the openFile()
+  method should now work even if the buffer is already open.
 
 + API Changes
 

@@ -31,8 +31,7 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		super("loadsave");
 	}
 
-	// protected members
-	protected void _init()
+	public void _init()
 	{
 		/* Autosave interval */
 		autosave = new JTextField(jEdit.getProperty("autosave"));
@@ -110,6 +109,12 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		persistentMarkers.setSelected(jEdit.getBooleanProperty(
 			"persistentMarkers"));
 		addComponent(persistentMarkers);
+
+		/* Parse fully */
+		parseFully = new JCheckBox(jEdit.getProperty(
+			"options.loadsave.parseFully"));
+		parseFully.setSelected(jEdit.getBooleanProperty("parseFully"));
+		addComponent(parseFully);
 	}
 
 	public void _save()
@@ -140,6 +145,7 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());
+		jEdit.setBooleanProperty("parseFully",parseFully.isSelected());
 	}
 
 	// private members
@@ -154,4 +160,5 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	private JCheckBox restore;
 	private JCheckBox restoreCLI;
 	private JCheckBox persistentMarkers;
+	private JCheckBox parseFully;
 }

@@ -146,24 +146,27 @@ public class EditServer extends Thread
 	/**
 	 * @param restore Ignored unless no views are open
 	 * @param newView Create a new view, or reuse first view?
+	 * @param parent The client's parent directory
 	 * @param args A list of files. Null entries are ignored, for convinience
 	 * @since jEdit 3.2pre4
 	 */
-	public static void handleClient(boolean restore, boolean newView, String[] args)
+	public static void handleClient(boolean restore, boolean newView,
+		String parent, String[] args)
 	{
-		Buffer buffer = jEdit.openFiles(null,args);
 		String splitConfig = null;
 
 		// we have to deal with a huge range of possible border cases here.
-		if(jEdit.getFirstView() == null)
+		if(jEdit.getFirstView() == null || newView)
 		{
 			// coming out of background mode.
 			// no views open.
 			// no buffers open if args empty.
 
+			Buffer buffer = jEdit.openFiles(null,parent,args);
+
 			if(restore)
 			{
-				if(buffer == null)
+				if(jEdit.getFirstBuffer() == null)
 					splitConfig = jEdit.restoreOpenFiles();
 				else if(jEdit.getBooleanProperty("restore.cli"))
 				{
@@ -176,16 +179,18 @@ public class EditServer extends Thread
 			// we need an initial buffer
 			if(jEdit.getFirstBuffer() == null)
 				buffer = jEdit.newFile(null);
+
+			if(splitConfig != null)
+				jEdit.newView(null,splitConfig);
+			else
+				jEdit.newView(null,buffer);
 		}
-		else if(!newView)
+		else
 		{
 			// no background mode, and reusing existing view
 			View view = jEdit.getFirstView();
 
-			// no need to worry about not having any buffers open
-			// if not in background mode
-			if(buffer != null)
-				view.setBuffer(buffer);
+			jEdit.openFiles(view,parent,args);
 
 			view.requestFocus();
 			view.toFront();
@@ -193,13 +198,6 @@ public class EditServer extends Thread
 			// do not create a new view
 			return;
 		}
-
-		// we reach here either if newView is specified, or there
-		// is no initial view (or both)
-		if(splitConfig != null)
-			jEdit.newView(null,splitConfig);
-		else
-			jEdit.newView(null,buffer);
 	}
 
 	// package-private members

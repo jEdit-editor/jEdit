@@ -1039,6 +1039,7 @@ options.loadsave.restore=Restore previously open files on startup
 options.loadsave.restore.cli=... even if file names were specified on the \
 	command line
 options.loadsave.persistentMarkers=Save marker positions
+options.loadsave.parseFully=More accurate syntax highlighting (slows file loading)
 
 options.textarea.label=Text Area
 options.textarea.font=Text font:

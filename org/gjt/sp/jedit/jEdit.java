@@ -85,6 +85,8 @@ public class jEdit
 			}
 		}
 
+		Log.init(true,level);
+
 		// Parse command line
 		boolean endOpts = false;
 		boolean newView = false; // only used by EditServer client
@@ -165,7 +167,7 @@ public class jEdit
 				key = Integer.parseInt(in.readLine());
 				in.close();
 
-				Socket socket = new Socket(InetAddress.getLocalHost(),port);
+				Socket socket = new Socket(InetAddress.getByName("127.0.0.1"),port);
 				Writer out = new OutputStreamWriter(socket.getOutputStream(),"UTF8");
 				out.write(String.valueOf(key));
 				out.write('\n');
@@ -264,7 +266,8 @@ public class jEdit
 		if(showSplash)
 			GUIUtilities.showSplashScreen();
 
-		Log.init(true,level,stream);
+		Log.setLogWriter(stream);
+
 		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
 		Log.log(Log.MESSAGE,jEdit.class,"Settings directory is "
 			+ settingsDirectory);
@@ -365,7 +368,7 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 
-		Buffer buffer = openFiles(System.getProperty("user.dir"),args);
+		Buffer buffer = openFiles(null,System.getProperty("user.dir"),args);
 
 		String splitConfig = null;
 
@@ -1049,9 +1052,9 @@ public class jEdit
 	 * line parser.
 	 * @param parent The parent directory
 	 * @param args The file names to open
-	 * @since jEdit 2.6pre4
+	 * @since jEdit 3.2pre4
 	 */
-	public static Buffer openFiles(String parent, String[] args)
+	public static Buffer openFiles(View view, String parent, String[] args)
 	{
 		Buffer retVal = null;
 		Buffer lastBuffer = null;
@@ -1064,7 +1067,7 @@ public class jEdit
 			else if(arg.startsWith("+line:") || arg.startsWith("+marker:"))
 			{
 				if(lastBuffer != null)
-					gotoMarker(lastBuffer,arg);
+					gotoMarker(view,lastBuffer,arg);
 				continue;
 			}
 
@@ -1150,6 +1153,7 @@ public class jEdit
 		{
 			if(view != null)
 				view.setBuffer(buffer);
+
 			return buffer;
 		}
 
@@ -2093,7 +2097,7 @@ public class jEdit
 		System.out.println("	-newview: Open new view if connecting to edit server");
 		System.out.println("	-bshclient: Send BeanShell script read from"
 			+ " standard input");
-		System.err.println("		to edit server (for developers)");
+		System.out.println("		to edit server (for developers)");
 
 		System.out.println();
 		System.out.println("To set minimum activity log level,"
@@ -2115,6 +2119,12 @@ public class jEdit
 	private static String makeServerScript(boolean restore, boolean newView, String[] args)
 	{
 		StringBuffer script = new StringBuffer();
+
+		script.append("parent = \"");
+		script.append(MiscUtilities.charsToEscapes(
+			System.getProperty("user.dir")));
+		script.append("\";\n");
+
 		script.append("args = new String[");
 		script.append(args.length);
 		script.append("];\n");
@@ -2137,7 +2147,8 @@ public class jEdit
 			script.append(";\n");
 		}
 
-		script.append("EditServer.handleClient(" + restore + "," + newView + ",args);\n");
+		script.append("EditServer.handleClient(" + restore + "," + newView
+			+ ",parent,args);\n");
 
 		return script.toString();
 	}
@@ -2466,60 +2477,51 @@ loop:		for(int i = 0; i < list.length; i++)
 		}
 	}
 
-	private static void gotoMarker(Buffer buffer, String marker)
+	private static void gotoMarker(final View view, final Buffer buffer,
+		final String marker)
 	{
-		VFSManager.runInAWTThread(new GotoMarkerSafely(buffer,marker));
-	}
-
-	static class GotoMarkerSafely implements Runnable
-	{
-		Buffer buffer;
-		String marker;
-
-		GotoMarkerSafely(Buffer buffer, String marker)
+		VFSManager.runInAWTThread(new Runnable()
 		{
-			this.buffer = buffer;
-			this.marker = marker;
-		}
-
-		public void run()
-		{
-			int pos;
-
-			// Handle line number
-			if(marker.startsWith("+line:"))
+			public void run()
 			{
-				try
-				{
-					int line = Integer.parseInt(marker.substring(6));
-					Element lineElement = buffer.getDefaultRootElement()
-						.getElement(line - 1);
-					pos = lineElement.getStartOffset();
-				}
-				catch(Exception e)
-				{
-					return;
-				}
-			}
-			// Handle marker
-			else if(marker.startsWith("+marker:"))
-			{
-				if(marker.length() != 9)
-					return;
+				int pos;
 
-				Marker m = buffer.getMarker(marker.charAt(8));
-				if(m == null)
-					return;
-				pos = m.getPosition();
-			}
-			// Can't happen
-			else
-				throw new InternalError();
+				// Handle line number
+				if(marker.startsWith("+line:"))
+				{
+					try
+					{
+						int line = Integer.parseInt(marker.substring(6));
+						Element lineElement = buffer.getDefaultRootElement()
+							.getElement(line - 1);
+						pos = lineElement.getStartOffset();
+					}
+					catch(Exception e)
+					{
+						return;
+					}
+				}
+				// Handle marker
+				else if(marker.startsWith("+marker:"))
+				{
+					if(marker.length() != 9)
+						return;
 
-			buffer.putProperty(Buffer.CARET,new Integer(pos));
-			buffer.getDocumentProperties().remove(Buffer.SCROLL_HORIZ);
-			buffer.getDocumentProperties().remove(Buffer.SCROLL_VERT);
-		}
+					Marker m = buffer.getMarker(marker.charAt(8));
+					if(m == null)
+						return;
+					pos = m.getPosition();
+				}
+				// Can't happen
+				else
+					throw new InternalError();
+
+				if(view != null && view.getBuffer() == buffer)
+					view.getTextArea().setCaretPosition(pos);
+				else
+					buffer.putProperty(Buffer.CARET,new Integer(pos));
+			}
+		});
 	}
 
 	private static void addBufferToList(Buffer buffer)
