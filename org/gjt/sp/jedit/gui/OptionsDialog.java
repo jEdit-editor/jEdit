@@ -262,6 +262,7 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionPane(new StyleOptionPane(), jEditGroup);
 		addOptionPane(new EditorOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
+		addOptionPane(new DockingOptionPane(), jEditGroup);
 		addOptionPane(new ToolBarOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
@@ -596,6 +597,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  2000/08/17 08:04:10  sp
+ * Marker loading bug fixed, docking option pane
+ *
  * Revision 1.29  2000/08/11 09:06:52  sp
  * Browser option pane
  *

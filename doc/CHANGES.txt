@@ -33,6 +33,7 @@ JEDIT 2.6 VERSION HISTORY
   the file name filter, and not check any files within them (since 2.6pre2)
 - On some JVMs, IORequest.java would cause VerifyErrors, and as a result,
   buffers could not be loaded or saved (since 2.6pre2)
+- Markers would not be loaded properly (since 2.6pre1)
 
 * Version 2.6pre2
 

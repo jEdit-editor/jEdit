@@ -213,6 +213,10 @@ view.style.operator=color:#000000 style:b
 view.style.digit=color:#009191
 view.style.invalid=color:#ff0000 style:b
 
+# Docking
+view.docking.alternateLayout=false
+view.docking.tabsPos=0
+
 ###
 ### PRINTING
 ###

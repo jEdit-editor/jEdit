@@ -490,6 +490,7 @@ public class IORequest extends WorkRequest
 						//Log.log(Log.ERROR,this,nf);
 						end = 0;
 					}
+
 					buffer.addMarker(name,start,end);
 					name = null;
 					start = -1;
@@ -697,6 +698,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.23  2000/08/17 08:04:10  sp
+ * Marker loading bug fixed, docking option pane
+ *
  * Revision 1.22  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

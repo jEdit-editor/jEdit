@@ -72,8 +72,6 @@ public class DockableWindowManager extends JPanel
 	 */
 	public DockableWindowManager(View view)
 	{
-		super(new BorderLayout());
-
 		this.view = view;
 		windows = new Hashtable();
 	}
@@ -273,6 +271,25 @@ public class DockableWindowManager extends JPanel
 			right.saveDimension();
 	}
 
+	/**
+	 * Called by the view when properties change.
+	 * @since jEdit 2.6pre3
+	 */
+	public void propertiesChanged()
+	{
+		setLayout(new CustomBorderLayout(jEdit.getBooleanProperty(
+			"view.docking.alternateLayout")));
+
+		if(left != null)
+			left.propertiesChanged();
+		if(right != null)
+			right.propertiesChanged();
+		if(top != null)
+			top.propertiesChanged();
+		if(bottom != null)
+			bottom.propertiesChanged();
+	}
+
 	// private members
 	private View view;
 	private Hashtable windows;
@@ -309,6 +326,16 @@ public class DockableWindowManager extends JPanel
 		}
 	}
 
+	static class CustomBorderLayout extends BorderLayout
+	{
+		boolean alternateLayout;
+
+		CustomBorderLayout(boolean alternateLayout)
+		{
+			this.alternateLayout = alternateLayout;
+		}
+	}
+
 	// factory for creating the dockables built into the jEdit core
 	// (VFS browser, etc)
 	static class DefaultFactory implements EBComponent
@@ -332,6 +359,9 @@ public class DockableWindowManager extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/17 08:04:10  sp
+ * Marker loading bug fixed, docking option pane
+ *
  * Revision 1.1  2000/08/13 07:35:24  sp
  * Dockable window API
  *

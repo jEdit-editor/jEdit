@@ -861,11 +861,11 @@ options.general.lf=Swing look & feel:
 options.general.showFullPath=Show full path of buffers in title bar
 options.general.showBufferTabs=Show buffer tabs
 options.general.bufferTabsPos=Buffer tabs position:
-options.general.bufferTabsPos.off=Off
-options.general.bufferTabsPos.top=Top
-options.general.bufferTabsPos.left=Left
-options.general.bufferTabsPos.bottom=Bottom
-options.general.bufferTabsPos.right=Right
+options.general.bufferTabsPos.off=off
+options.general.bufferTabsPos.top=top
+options.general.bufferTabsPos.left=left
+options.general.bufferTabsPos.bottom=bottom
+options.general.bufferTabsPos.right=right
 
 options.textarea.label=Text Area
 options.textarea.textarea=Text area
@@ -960,6 +960,13 @@ options.print.margin.top=Top:
 options.print.margin.left=Left:
 options.print.margin.bottom=Bottom:
 options.print.margin.right=Right:
+
+options.docking.label=Docking
+options.docking.layout=Docked window placement:
+options.docking.tabsPos=Docked window tabs position:
+options.docking.title=Window
+options.docking.dockPosition=Docking position
+options.docking.autoOpen=Auto open
 
 options.toolbar.label=Tool Bar
 options.toolbar.showToolbar=Show tool bar

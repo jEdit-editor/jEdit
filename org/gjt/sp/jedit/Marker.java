@@ -1,6 +1,6 @@
 /*
- * Marker.java - Named location in a document
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Marker.java - Named location in a buffer
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,7 +19,9 @@
 
 package org.gjt.sp.jedit;
 
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Position;
+import org.gjt.sp.util.Log;
 
 /**
  * A marker is a name/position pair, that can be used to name locations
@@ -45,11 +47,28 @@ public class Marker
 	 * normal circumstances - use <code>Buffer.addMarker()</code>
 	 * instead.
 	 */
-	public Marker(String name, Position start, Position end)
+	public Marker(Buffer buffer, String name, int start, int end)
 	{
+		this.buffer = buffer;
 		this.name = name;
 		this.start = start;
 		this.end = end;
+	}
+
+	/**
+	 * Creates the floating positions.
+	 */
+	public void createPositions()
+	{
+		try
+		{
+			startPosition = buffer.createPosition(start);
+			endPosition = buffer.createPosition(end);
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
 	}
 
 	/**
@@ -65,7 +84,7 @@ public class Marker
 	 */
 	public int getStart()
 	{
-		return start.getOffset();
+		return startPosition.getOffset();
 	}
 
 	/**
@@ -73,18 +92,22 @@ public class Marker
 	 */
 	public int getEnd()
 	{
-		return end.getOffset();
+		return endPosition.getOffset();
 	}
 
 	// private members
+	private Buffer buffer;
 	private String name;
-	private Position start;
-	private Position end;
+	private int start, end;
+	private Position startPosition, endPosition;
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/08/17 08:04:09  sp
+ * Marker loading bug fixed, docking option pane
+ *
  * Revision 1.3  1999/03/12 07:54:47  sp
  * More Javadoc updates
  *

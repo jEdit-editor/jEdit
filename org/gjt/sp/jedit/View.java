@@ -410,7 +410,6 @@ public class View extends JFrame implements EBComponent
 		dockableWindowManager = new DockableWindowManager(this);
 
 		editPane = createEditPane(null,buffer);
-		dockableWindowManager.add(BorderLayout.CENTER,editPane);
 
 		// Dynamic menus
 		buffers = GUIUtilities.loadMenu(this,"buffers");
@@ -435,6 +434,10 @@ public class View extends JFrame implements EBComponent
 			jEdit.getInputHandler());
 
 		propertiesChanged();
+
+		// must do this after propertiesChanged() so that the
+		// window manager will have a valid layout
+		dockableWindowManager.add(BorderLayout.CENTER,editPane);
 
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
@@ -673,6 +676,8 @@ public class View extends JFrame implements EBComponent
 		updateTitle();
 
 		updateRecentMenu();
+
+		dockableWindowManager.propertiesChanged();
 	}
 
 	private void loadToolBars()
@@ -1019,6 +1024,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.191  2000/08/17 08:04:09  sp
+ * Marker loading bug fixed, docking option pane
+ *
  * Revision 1.190  2000/08/13 07:35:22  sp
  * Dockable window API
  *

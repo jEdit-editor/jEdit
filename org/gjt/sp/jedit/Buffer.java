@@ -181,6 +181,13 @@ public class Buffer extends PlainDocument implements EBComponent
 								line.getEndOffset() - line.getStartOffset() - 1);
 							processProperty(text);
 						}
+
+						// Create marker positions
+						for(int i = 0; i < markers.size(); i++)
+						{
+							((Marker)markers.elementAt(i))
+								.createPositions();
+						}
 					}
 					catch(BadLocationException bl)
 					{
@@ -1165,22 +1172,14 @@ public class Buffer extends PlainDocument implements EBComponent
 		setDirty(true);
 
 		name = name.replace(';',' ');
-		Marker markerN;
-		try
-		{
-			markerN = new Marker(name,createPosition(start),
-				createPosition(end));
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-			return;
-		}
+		Marker markerN = new Marker(this,name,start,end);
 		boolean added = false;
 
 		// don't sort markers while buffer is being loaded
 		if(!getFlag(LOADING))
 		{
+			markerN.createPositions();
+
 			for(int i = 0; i < markers.size(); i++)
 			{
 				Marker marker = (Marker)markers.elementAt(i);
@@ -1663,6 +1662,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.173  2000/08/17 08:04:09  sp
+ * Marker loading bug fixed, docking option pane
+ *
  * Revision 1.172  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

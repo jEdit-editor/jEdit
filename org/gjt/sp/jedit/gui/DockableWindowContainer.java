@@ -77,6 +77,8 @@ public interface DockableWindowContainer
 			MouseHandler mouseHandler = new MouseHandler();
 			addMouseListener(mouseHandler);
 			addMouseMotionListener(mouseHandler);
+
+			propertiesChanged();
 		}
 
 		public void saveDimension()
@@ -86,6 +88,16 @@ public interface DockableWindowContainer
 
 			jEdit.setProperty("view.dock." + position + ".dimension",
 				String.valueOf(dimension));
+		}
+
+		public void propertiesChanged()
+		{
+			int tabsPos = Integer.parseInt(jEdit.getProperty(
+				"view.docking.tabsPos"));
+			if(tabsPos == 0)
+				tabbedPane.setTabPlacement(JTabbedPane.TOP);
+			else if(tabsPos == 1)
+				tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		}
 
 		public Dimension getMinimumSize()
@@ -269,6 +281,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/17 08:04:10  sp
+ * Marker loading bug fixed, docking option pane
+ *
  * Revision 1.2  2000/08/15 08:07:11  sp
  * A bunch of bug fixes
  *
