@@ -13,8 +13,8 @@ REL="PREVIOUS"
 TITLE="Closing Files and Exiting jEdit"
 HREF="closing-exiting.html"><LINK
 REL="NEXT"
-TITLE="Working With Lines"
-HREF="lines.html"></HEAD
+TITLE="Virtual File Systems"
+HREF="vfs.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -23,7 +23,7 @@ CLASS="NAVHEADER"
 >jEdit 2.5 User's Guide</H1
 ><P
 ><A
-HREF="lines.html"
+HREF="vfs.html"
 >Next</A
 >, <A
 HREF="closing-exiting.html"
@@ -46,18 +46,13 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="advanced-features.html#WORDS"
->Working With Words</A
+HREF="advanced-features.html#SESSIONS"
+>Saving and Loading Sessions</A
 ></DT
 ><DT
 ><A
-HREF="lines.html"
->Working With Lines</A
-></DT
-><DT
-><A
-HREF="paragraphs.html"
->Working With Paragraphs</A
+HREF="vfs.html"
+>Virtual File Systems</A
 ></DT
 ><DT
 ><A
@@ -71,8 +66,18 @@ HREF="gutter.html"
 ></DT
 ><DT
 ><A
-HREF="sessions.html"
->Saving and Loading Sessions</A
+HREF="words.html"
+>Working With Words</A
+></DT
+><DT
+><A
+HREF="lines.html"
+>Working With Lines</A
+></DT
+><DT
+><A
+HREF="paragraphs.html"
+>Working With Paragraphs</A
 ></DT
 ><DT
 ><A
@@ -116,130 +121,116 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="WORDS"
->Working With Words</A
+NAME="SESSIONS"
+>Saving and Loading Sessions</A
 ></H1
 ><P
->   You can move the caret a word at a time by holding down <B
-CLASS="KEYCAP"
->Control</B
+>   
+   
+   
+   
+   
+   
+   When working on a project, it can be convenient to save
+   a list of open files, and re-open those files at a later time.
+   jEdit's saved sessions do exactly that.
+  </P
+><P
+>   Sessions are plain text files with the extension
+   <TT
+CLASS="FILENAME"
+>.session</TT
+>, stored in the
+   <TT
+CLASS="FILENAME"
+>.jedit/sessions</TT
+> subdirectory of the user's home directory.
+   The session named
+   <TT
+CLASS="FILENAME"
+>default.session</TT
+> is loaded on startup, and the list of
+   open files is recorded into it when jEdit exits. The end result is
+   that open files are retained across editing sessions. This
+   "default" session can be disabled in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
 >
-   in addition to <B
-CLASS="KEYCAP"
->Left</B
-> or <B
-CLASS="KEYCAP"
->Right</B
->. Words can be
-   selected if you hold down <B
-CLASS="KEYCAP"
->Shift</B
-> in addition to
-   <B
-CLASS="KEYCAP"
->Control</B
+   dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
 >.
   </P
 ><P
->   A single word can be selected by double-clicking with the mouse.
-   If you double-click and then drag, the resulting selection will
-   always begin and end on word boundaries. Because mouse clicks
-   cannot be recorded in macros, you can use the
-   <SPAN
+>   <SPAN
 CLASS="GUIMENU"
->Edit</SPAN
->&gt;<SPAN
-CLASS="GUISUBMENU"
->Selection</SPAN
+>Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Select
-   Word</SPAN
-> command
-   (keyboard equivalent:
+>Load Session</SPAN
+> can be used to
+   load a session while jEdit is running, and
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save Session</SPAN
+> saves the list of
+   open files to a session you specify.
+  </P
+><P
+>   A session to load can be specified on the command line using the
    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->E</B
+CLASS="COMMAND"
+>-session</B
+> switch. The <B
+CLASS="COMMAND"
+>-nosession</B
 >
-   <B
-CLASS="KEYCAP"
->W</B
->) to select the word the caret is positioned on
-   when recording a macro.
-  </P
-><P
->   
-   Pressing <B
-CLASS="KEYCAP"
->Control</B
-> in addition to
-   <B
-CLASS="KEYCAP"
->Backspace</B
-> or <B
-CLASS="KEYCAP"
->Delete</B
-> deletes the word
-   before and after the caret, respectively.
-  </P
-><P
->   
-   <SPAN
-CLASS="GUIMENU"
->Edit</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Word Count</SPAN
+   switch will instruct jEdit not to load any sessions, and
+   open an <TT
+CLASS="FILENAME"
+>Untitled</TT
+> file instead.
+   For example, the following will open
+   all files in the <TT
+CLASS="FILENAME"
+>website</TT
+> session (it is not
+   necessary to specify the <TT
+CLASS="FILENAME"
+>.session</TT
 >
-   displays a dialog box with the number of characters,
-   words and lines in the current buffer.
-  </P
-><DIV
-CLASS="FIGURE"
-><P
+   suffix):
+   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>$</TT
+> <TT
+CLASS="USERINPUT"
 ><B
->Figure 4-1. The word count dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-wordcount.gif"></P
-></DIV
-><P
->   
-   <SPAN
-CLASS="GUIMENU"
->Edit</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Complete Word</SPAN
-> (keyboard
-   equivalent:
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->B</B
->) searches the
-   current buffer for possible completions of the current word.
-   If multiple completions were found, they will be listed in a dialog box.
-   If there is only one completion it will be inserted into the buffer
-   immediately. This feature be used to
-   enter previously typed long identifiers in program source, for example.
+>jedit -session=website</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-2. The Complete Word dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-complete-word.gif"></P
-></DIV
 ></DIV
 ></DIV
 ><DIV
@@ -251,9 +242,9 @@ HREF="index.html"
 HREF="closing-exiting.html"
 >Prev</A
 >: Closing Files and Exiting jEdit<BR><A
-HREF="lines.html"
+HREF="vfs.html"
 >Next</A
->: Working With Lines<BR></DIV
+>: Virtual File Systems<BR></DIV
 ></BODY
 ></HTML
 >

@@ -1,7 +1,5 @@
 # This macro surrounds the word under the cursor with HTML <b> tags.
 
 select-word
-cut-string-register@!
-insert-char@<b>
-paste-string-register@!
-insert-char@</b>
+cut
+insert-char@<b>$$</b>

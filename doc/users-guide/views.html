@@ -13,8 +13,8 @@ REL="UP"
 TITLE="Advanced Features"
 HREF="advanced-features.html"><LINK
 REL="PREVIOUS"
-TITLE="Working With Paragraphs"
-HREF="paragraphs.html"><LINK
+TITLE="Virtual File Systems"
+HREF="vfs.html"><LINK
 REL="NEXT"
 TITLE="The Gutter"
 HREF="gutter.html"></HEAD
@@ -29,7 +29,7 @@ CLASS="NAVHEADER"
 HREF="gutter.html"
 >Next</A
 >, <A
-HREF="paragraphs.html"
+HREF="vfs.html"
 >Prev</A
 ></P
 ><H2
@@ -46,16 +46,16 @@ NAME="VIEWS"
 ><P
 >   
    
-   jEdit starts up with only one editor window, or <I
+   jEdit is very flexible when it comes to working with multiple windows.
+   When it starts up, it only creates one editor window, or
+   <I
 CLASS="FIRSTTERM"
 >view</I
->.
-   However, it is possible to have any number of views open at once, with
-   each buffer being edited in one or more views. Views can also be split
-   into multiple panes, for side-by-side viewing of two or more locations in a
-   single buffer. Note that a view can still only edit one buffer at a time,
-   even when split. Another limitation is any splits are removed when
-   switching buffers or reloading.
+>. However, it is possible to have any number of views
+   open at once. Furthermore, each view can be split into multiple panes.
+   Each pane can be editing a different buffer; alternatively, you can select
+   the same buffer in more than one pane to view multiple locations
+   simultaneously.
   </P
 ><P
 >   
@@ -132,7 +132,7 @@ CLASS="KEYCAP"
    <B
 CLASS="KEYCAP"
 >2</B
->) will horizontally split the text area.
+>) will horizontally split the view.
    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -150,7 +150,7 @@ CLASS="KEYCAP"
    <B
 CLASS="KEYCAP"
 >3</B
->) will vertically split the text area.
+>) will vertically split the view.
    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -169,12 +169,15 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >1</B
 >) will remove all splits from the current view.
+   When a view is split into multiple panes, editing commands operate
+   on the pane that has keyboard focus (or if no pane is focused,
+   the one that last had keyboard focus).
   </P
 ><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 4-3. A view split into two panes</B
+>Figure 4-2. A view split into two panes</B
 ></P
 ><P
 ><IMG
@@ -190,9 +193,9 @@ HREF="index.html"
 HREF="advanced-features.html"
 >Up</A
 ><BR><A
-HREF="paragraphs.html"
+HREF="vfs.html"
 >Prev</A
->: Working With Paragraphs<BR><A
+>: Virtual File Systems<BR><A
 HREF="gutter.html"
 >Next</A
 >: The Gutter<BR></DIV

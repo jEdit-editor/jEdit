@@ -352,7 +352,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1300"
+NAME="AEN1359"
 >Prompting for Input</A
 ></H2
 ><P
@@ -372,7 +372,7 @@ CLASS="GUIMENUITEM"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 4-8. The Prompt for Input dialog box</B
+>Figure 4-9. The Prompt for Input dialog box</B
 ></P
 ><P
 ><IMG
@@ -384,7 +384,37 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1308"
+NAME="AEN1367"
+>Registers in Macros</A
+></H2
+><P
+>    In an action command (the text after the "@"), strings of
+    the form <TT
+CLASS="FILENAME"
+>$<TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+></TT
+> will be replaced with
+    the contents of register <TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+> when the macro is
+    executed. This is a very powerful feature; you could, for example,
+    write a macro that prompts the user for some input, does something
+    to it, and then performs a search, based on that input.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1374"
 >Some Sample Macros</A
 ></H2
 ><P
@@ -470,11 +500,7 @@ input@a@Enter a URL:
 input@b@Enter link text:
 
 # Insert &lt;A&gt; tag
-insert-char@&lt;A HREF="
-paste-string-register@a
-insert-char@"&gt;
-paste-string-register@b
-insert-char@&lt;/A&gt;</PRE
+insert-char@&lt;A HREF="$a"&gt;$b&lt;/A&gt;</PRE
 ></TD
 ></TR
 ></TABLE

@@ -212,8 +212,11 @@ HREF="global-opts.html"
 >.
   </P
 ><P
->   The status area at the bottom left of the editor window displays
-   information about the caret position. Here is an example:
+>   The status bar at the bottom of the editor window displays useful
+   information such as the current caret location, status messages
+   issued by commands,
+   and the state of the current buffer (modified since last save, read only, etc).
+   The caret location is displayed in the following format:
   </P
 ><TABLE
 BORDER="0"
@@ -223,20 +226,30 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->col 42 line 70/100 70%</PRE
+>col <TT
+CLASS="REPLACEABLE"
+><I
+>column position</I
+></TT
+> line <TT
+CLASS="REPLACEABLE"
+><I
+>current line</I
+></TT
+>/<TT
+CLASS="REPLACEABLE"
+><I
+>total lines</I
+></TT
+> <TT
+CLASS="REPLACEABLE"
+><I
+>ratio</I
+></TT
+>%</PRE
 ></TD
 ></TR
 ></TABLE
-><P
->   The first number is the <I
-CLASS="FIRSTTERM"
->column position</I
->, or how
-   far the caret is from the start of the line. The second pair of
-   numbers is the current line, and the total number of lines in
-   the buffer. The third number is the ratio of the current line
-   to the total number of lines.
-  </P
 ><DIV
 CLASS="FIGURE"
 ><P

@@ -2,10 +2,5 @@
 # We assume that the link text is selected.
 
 input@a@URL:
-cut-string-register@b
-
-insert-char@<A HREF="
-paste-string-register@a
-insert-char@">
-paste-string-register@b
-insert-char@</A>
+cut
+insert-char@<A HREF="$$"></A>

@@ -1,13 +1,5 @@
 # This macro surrounds the selection with HTML <h4>...</h4> tags.
-# It uses the ! register for temporary storage.
 
-# Copy selection, if any to register !.
-clear-register@!
-copy-string-register@!
-
-insert-char@<h4>
-
-# Now insert the formely selected text
-paste-string-register@!
-
-insert-char@</h4>
+clear-register@$
+copy
+insert-char@<h4>$$</h4>

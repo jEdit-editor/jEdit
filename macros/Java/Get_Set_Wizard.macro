@@ -13,40 +13,22 @@ prev-word
 select-next-word
 cut-string-register@c
 
-insert-char@public 
-paste-string-register@a
-insert-char@ get
-paste-string-register@c
-insert-char@()
+insert-char@public $a get$c()
 indent-on-enter
 indent-lines@{
 indent-on-enter
-insert-char@return 
-paste-string-register@b
-insert-char@;
+insert-char@return $b;
 indent-on-enter
 indent-lines@}
 
 indent-on-enter
 indent-on-enter
 
-insert-char@public 
-paste-string-register@a
-insert-char@ set
-paste-string-register@c
-insert-char@(
-paste-string-register@a
-insert-char@ 
-paste-string-register@b
-insert-char@)
+insert-char@public void set$c($a $b)
 indent-on-enter
 indent-lines@{
 indent-on-enter
-insert-char@this.
-paste-string-register@b
-insert-char@ = 
-paste-string-register@b
-insert-char@;
+insert-char@this.$b = $b;
 indent-on-enter
 indent-lines@}
 indent-on-enter

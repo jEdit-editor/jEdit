@@ -311,7 +311,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3657"
+NAME="AEN3725"
 >BufferUpdate Message</A
 ></H2
 ><P
@@ -397,7 +397,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3686"
+NAME="AEN3754"
 >EditorExiting Message</A
 ></H2
 ><P
@@ -415,7 +415,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3690"
+NAME="AEN3758"
 >EditorStarted Message</A
 ></H2
 ><P
@@ -433,7 +433,60 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3694"
+NAME="AEN3762"
+>EditPaneUpdate Message</A
+></H2
+><P
+>    This message is sent by jEdit when an edit pane-related update occurs.
+    The <TT
+CLASS="FUNCTION"
+>getEditPane()</TT
+> method of the
+    <TT
+CLASS="CLASSNAME"
+>EditPaneUpdate</TT
+>
+    class returns the edit pane involved. The <TT
+CLASS="FUNCTION"
+>getWhat()</TT
+> method
+    returns one of the following:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+><B
+CLASS="COMMAND"
+>EditPaneUpdate.CREATED</B
+> - a
+   new edit pane has been created (ie, a view has been split)</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>EditPaneUpdate.DESTROYED</B
+> - an edit pane has
+   been destroyed (ie, a view has been unsplit)</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>EditPaneUpdate.BUFFER_CHANGED</B
+> - an edit pane
+   is now editing a different buffer</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3778"
 >MacrosChanged Message</A
 ></H2
 ><P
@@ -451,7 +504,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3700"
+NAME="AEN3784"
 >PropertiesChanged Message</A
 ></H2
 ><P
@@ -472,7 +525,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3709"
+NAME="AEN3793"
 >SearchSettingsChanged Message</A
 ></H2
 ><P
@@ -487,7 +540,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3712"
+NAME="AEN3796"
 >ViewUpdate Message</A
 ></H2
 ><P
@@ -498,7 +551,7 @@ CLASS="FUNCTION"
 > method of the
     <TT
 CLASS="CLASSNAME"
->BufferView</TT
+>ViewUpdate</TT
 >
     class returns the view involved. The <TT
 CLASS="FUNCTION"
@@ -516,41 +569,6 @@ CLASS="COMMAND"
 >ViewUpdate.CREATED</B
 > - a
    new view has been created</P
-></LI
-><LI
-><P
-><B
-CLASS="COMMAND"
->ViewUpdate.TEXTAREA_CREATED</B
-> - a
-   new text area has been created - this message is sent when the view
-   is split. The <TT
-CLASS="FUNCTION"
->getTextArea()</TT
-> method returns the new text
-   area</P
-></LI
-><LI
-><P
-><B
-CLASS="COMMAND"
->ViewUpdate.TEXTAREA_DESTROYED</B
-> - a
-   text area has been disposed of - this message is sent when the view
-   is unsplit. The <TT
-CLASS="FUNCTION"
->getTextArea()</TT
-> method returns the disposed
-   text
-   area</P
-></LI
-><LI
-><P
-><B
-CLASS="COMMAND"
->ViewUpdate.BUFFER_CHANGED</B
-> - a view
-   is now editing a different buffer</P
 ></LI
 ><LI
 ><P
