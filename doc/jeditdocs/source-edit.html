@@ -10,11 +10,11 @@ REL="HOME"
 TITLE="jEdit 2.4 User's Guide"
 HREF="index.html"><LINK
 REL="PREVIOUS"
-TITLE="Macros"
-HREF="macros.html"><LINK
+TITLE="Writing Edit Modes"
+HREF="writing-modes.html"><LINK
 REL="NEXT"
-TITLE="Bracket Matching"
-HREF="bracket-matching.html"></HEAD
+TITLE="Tabbing and Indentation"
+HREF="indent.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -23,10 +23,10 @@ CLASS="NAVHEADER"
 >jEdit 2.4 User's Guide</H1
 ><P
 ><A
-HREF="bracket-matching.html"
+HREF="indent.html"
 >Next</A
 >, <A
-HREF="macros.html"
+HREF="writing-modes.html"
 >Prev</A
 ></P
 ><HR></DIV
@@ -35,7 +35,7 @@ CLASS="CHAPTER"
 ><H1
 ><A
 NAME="SOURCE-EDIT"
->Chapter 6. Source Code Editing</A
+>Chapter 7. Source Code Editing</A
 ></H1
 ><DIV
 CLASS="TOC"
@@ -46,12 +46,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="source-edit.html#MODES"
->Edit Modes</A
-></DT
-><DT
-><A
-HREF="bracket-matching.html"
+HREF="source-edit.html#BRACKET-MATCHING"
 >Bracket Matching</A
 ></DT
 ><DT
@@ -64,111 +59,161 @@ HREF="indent.html"
 HREF="commenting.html"
 >Commenting Out Code</A
 ></DT
-><DT
-><A
-HREF="syntax-hilite.html"
->Syntax Highlighting</A
-></DT
 ></DL
 ></DIV
 ><P
 >  Most often, a text editor is used to edit files with some sort
   of structure, like program source code, or HTML, TeX, and so on.
-  jEdit has several features for making this easier, including edit modes,
-  bracket matching, various indentation commands, auto indent,
-  commands for commenting source, and syntax highlighting.
+  jEdit has several features for making this easier, including
+  bracket matching, various indentation commands, auto indent, and
+  commands for commenting source.
  </P
 ><DIV
 CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="MODES"
->Edit Modes</A
+NAME="BRACKET-MATCHING"
+>Bracket Matching</A
 ></H1
-><H4
-CLASS="BRIDGEHEAD"
->Because the XMode plugin has been integrated into
-  jEdit, this section is out of date. It will be updated in the next jEdit
-  release.</H4
 ><P
->   Because it is impossible to provide optimal editing for all types of
-   files at once, jEdit provides various <I
-CLASS="FIRSTTERM"
->edit modes</I
->. An edit mode
-   is an editor configuration suitable for editing a specific
-   type of file. Edit modes can specify syntax highlighting, auto indent,
-   and various other settings for editing a file type.
+>   Misplaced and unmatched brackets are one of the most common syntax
+   errors encountered when writing code. jEdit has several features
+   which make brackets easier to deal with.
   </P
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN1614"
->Automatic Mode Selection</A
-></H2
 ><P
->    
-    When a file is opened, jEdit first checks the file name against a list
-    of known patterns. For example, files whose names end with ".c"
-    are edited in C mode, and files named <TT
-CLASS="FILENAME"
->Makefile</TT
-> are edited in
-    Makefile mode. If a suitable match based on file name cannot be found,
-    jEdit checks the first line of the file. For example, files whose first
-    line is "#!/bin/sh" are edited in shell script mode.
-   </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN1622"
->Manually Setting the Edit Mode</A
-></H2
-><P
->    If automatic mode selection is not appropriate, the edit mode can
-    be specified manually. To set the current buffer's edit mode
-    on a one-time basis, select the edit mode in the
-    <SPAN
+>   If the caret is in front of a bracket, the matching
+   one is highlighted (assuming it is visible on the
+   screen). The bracket highlight color can be changed in the
+   Colors &amp; Styles pane of the <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global
+   Options</SPAN
+> dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 9</A
+>.
+   Bracket highlighting can be disabled
+   in the Editor pane of the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Buffer Options</SPAN
-> dialog box;
-    see <A
-HREF="customizing.html#BUFFER-OPTS"
+>Global Options</SPAN
+>
+   dialog box; see <A
+HREF="global-opts.html"
 >the section called <I
->The Buffer Options Dialog Box</I
-> in Chapter 8</A
+>The Global Options Dialog Box</I
+> in Chapter 9</A
 >.
-    To have a buffer open with a specific edit mode every time,
-    set the "mode" buffer-local property to the
-    name of the desired edit mode by placing
-    the following text in one of the first 10 lines of the buffer:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->:mode=<TT
-CLASS="REPLACEABLE"
-><I
->edit mode</I
-></TT
->:</PRE
-></TD
-></TR
-></TABLE
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Source Code</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Select Code Block</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>[</B
+>)
+   will select the code block containing the caret. A code block is defined
+   as a bracket-delimited range of text. Pressing this with a code block
+   already selected will select the next outer code block.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Source Code</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Locate Bracket</SPAN
+> (keyboard
+   equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>]</B
+>)
+   will move the caret to the bracket matching the one before the caret.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Source Code</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to Previous Bracket</SPAN
+> (keyboard
+   equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Alt</B
+>-<B
+CLASS="KEYCAP"
+>[</B
+>)
+   will move the caret to the previous opening bracket.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Source Code</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to Next Bracket</SPAN
+> (keyboard
+   equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Alt</B
+>-<B
+CLASS="KEYCAP"
+>]</B
+>)
+   will move the caret to the next closing bracket.
+  </P
+><P
+>   Double clicking on a bracket in the text area will select the code block it
+   delimits.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 7-1. Bracket highlighting in action</B
+></P
+><P
+><IMG
+SRC="../images/window-editor-bracket.gif"></P
 ></DIV
 ></DIV
 ></DIV
@@ -178,12 +223,12 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 ><BR><A
-HREF="macros.html"
+HREF="writing-modes.html"
 >Prev</A
->: Macros<BR><A
-HREF="bracket-matching.html"
+>: Writing Edit Modes<BR><A
+HREF="indent.html"
 >Next</A
->: Bracket Matching<BR></DIV
+>: Tabbing and Indentation<BR></DIV
 ></BODY
 ></HTML
 >
