@@ -45,14 +45,14 @@
 		>
 			<fileset dir=".">
 				<include name="bsh/**/*.class"/>
+				<include name="com/**/*.class"/>
+				<include name="gnu/**/*.class"/>
+				<include name="org/**/*.class"/>
+
 				<include name="bsh/commands/*.bsh"/>
 
-				<include name="com/microstar/xml/*.class"/>
-				<include name="gnu/regexp/*.class"/>
 				<include name="gnu/regexp/MessagesBundle.properties"/>
 
-				<include name="org/gjt/sp/jedit/**/*.class"/>
-				<include name="org/gjt/sp/util/**/*.class"/>
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
 				<include name="org/gjt/sp/jedit/icons/*.gif"/>
 				<include name="org/gjt/sp/jedit/icons/*.jpg"/>
@@ -155,15 +155,15 @@
 
 	<target name="clean">
 		<delete>
+			<fileset dir="." includes="**/*.class"/>
 			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
 			<fileset dir="." includes="**/#*#" defaultexcludes="no"/>
-			<fileset dir="." includes="**/*.orig"/>
 			<fileset dir="." includes="**/*.rej"/>
+			<fileset dir="." includes="**/*.orig"/>
 			<fileset dir="." includes="**/.*.swp"/>
 			<fileset dir="." includes="**/.#*"/>
 			<fileset dir="." includes="**/.new*"/>
 			<fileset dir="." includes="**/.directory"/>
-			<fileset dir="." includes="**/*.class"/>
 <!--
 			<fileset dir="." includes="doc/users-guide/*.html"/>
 			<fileset dir="." includes="doc/users-guide/toc.xml"/>
@@ -173,7 +173,6 @@
 			<fileset dir="." includes="doc/FAQ/toc.xml"/>
 			<fileset dir="." includes="doc/FAQ/word-index.xml"/>
 -->
-
 			<fileset dir="." includes="doc/users-guide/*.pdf"/>
 			<fileset dir="." includes="doc/users-guide/*.aux"/>
 			<fileset dir="." includes="doc/users-guide/*.tex"/>
