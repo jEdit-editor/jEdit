@@ -1336,7 +1336,6 @@ plugin-manager.not-loaded=Not loaded due to errors
 plugin-manager.loaded=Loaded plugins
 plugin-manager.new=Newly installed plugins
 
-plugin-manager.info.path=JAR file path:
 plugin-manager.info.name=Plugin name:
 plugin-manager.info.author=Author:
 plugin-manager.info.version=Version:
@@ -1344,3 +1343,15 @@ plugin-manager.info.version=Version:
 plugin-manager.remove=Remove Plugins
 plugin-manager.update=Update Plugins
 plugin-manager.install=Install Plugins
+
+### plugin removal
+remove-plugins.title=Plugin Removal
+remove-plugins.message=Are you sure you want to remove the following plugins?\n\
+	\n\
+	{0}
+remove-plugins.done.title=Plugins Removed
+remove-plugins.done.message=You must restart jEdit for the plugin removal\n\
+	to take effect.
+remove-plugins.error.title=Cannot remove plugin
+remove-plugins.error.message=The plugin {0} cannot be removed because\n\
+	an error occurred.

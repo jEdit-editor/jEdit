@@ -26,9 +26,10 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class PluginManager extends JDialog
 {
@@ -108,14 +109,10 @@ public class PluginManager extends JDialog
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		pack();
-		GUIUtilities.loadGeometry(this,"plugin-manager");
-		show();
-	}
 
-	public void dispose()
-	{
-		GUIUtilities.saveGeometry(this,"plugin-manager");
-		super.dispose();
+		setLocationRelativeTo(view);
+
+		show();
 	}
 
 	// private members
@@ -153,17 +150,13 @@ public class PluginManager extends JDialog
 
 			if(plugin instanceof EditPlugin.Broken)
 			{
-				PluginInfo info = new PluginInfo(
-					PluginInfo.LOADED_AND_BROKEN,
-					path,plugin.getClassName());
-				notLoadedTree.add(new DefaultMutableTreeNode(info));
+				Entry entry = new Entry(path,plugin.getClassName(),true);
+				notLoadedTree.add(new DefaultMutableTreeNode(entry));
 			}
 			else
 			{
-				PluginInfo info = new PluginInfo(
-					PluginInfo.LOADED,
-					path,plugin.getClassName());
-				loadedTree.add(new DefaultMutableTreeNode(info));
+				Entry entry = new Entry(path,plugin.getClassName(),false);
+				loadedTree.add(new DefaultMutableTreeNode(entry));
 			}
 		}
 
@@ -176,10 +169,8 @@ public class PluginManager extends JDialog
 		String[] newPlugins = jEdit.getNotLoadedPluginJARs();
 		for(int i = 0; i < newPlugins.length; i++)
 		{
-			PluginInfo info = new PluginInfo(
-				PluginInfo.NOT_LOADED,
-				newPlugins[i],null);
-			newTree.add(new DefaultMutableTreeNode(info));
+			Entry entry = new Entry(newPlugins[i],null,false);
+			newTree.add(new DefaultMutableTreeNode(entry));
 		}
 
 		if(newTree.getChildCount() != 0)
@@ -192,11 +183,143 @@ public class PluginManager extends JDialog
 		remove.setEnabled(false);
 	}
 
+	private boolean removePlugins(Vector plugins)
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < plugins.size(); i++)
+		{
+			buf.append((String)plugins.elementAt(i));
+			buf.append('\n');
+		}
+		String[] args = { buf.toString() };
+
+		int result = GUIUtilities.confirm(this,"remove-plugins",args,
+			JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+		if(result != JOptionPane.YES_OPTION)
+			return false;
+
+		// this becomes true if at least one plugin was
+		// sucessfully removed (otherwise we don't bother
+		// displaying the 'removal ok' dialog box)
+
+		String jEditHome = jEdit.getJEditHome();
+		boolean ok = false;
+		for(int i = 0; i < plugins.size(); i++)
+		{
+			String plugin = (String)plugins.elementAt(i);
+			ok |= removePlugin(plugin);
+		}
+
+		if(ok)
+			GUIUtilities.message(this,"remove-plugins.done",new Object[0]);
+
+		return ok;
+	}
+
+	private boolean removePlugin(String plugin)
+	{
+		// close JAR file
+		EditPlugin.JAR jar = jEdit.getPluginJAR(plugin);
+		if(jar != null)
+			jar.getClassLoader().closeZipFile();
+
+		// move JAR first
+		File jarFile = new File(plugin);
+		File srcFile = new File(plugin.substring(0,plugin.length() - 4));
+
+		boolean ok = true;
+		ok &= deleteRecursively(jarFile);
+
+		if(srcFile.exists())
+			ok &= deleteRecursively(srcFile);
+
+		if(!ok)
+		{
+			String[] args = { jarFile.getName() };
+			GUIUtilities.error(this,"remove-plugins.error",args);
+		}
+
+		return ok;
+	}
+
+	private boolean deleteRecursively(File file)
+	{
+		Log.log(Log.NOTICE,this,"Deleting " + file + " recursively");
+
+		boolean ok = true;
+
+		if(file.isDirectory())
+		{
+			String path = file.getPath();
+			String[] children = file.list();
+			for(int i = 0; i < children.length; i++)
+			{
+				ok &= deleteRecursively(new File(path,children[i]));
+			}
+		}
+
+		ok &= file.delete();
+
+		return ok;
+	}
+
+	class Entry
+	{
+		String clazz;
+		String name, version, author;
+		Vector jars;
+		boolean broken;
+
+		Entry(String path, String clazz, boolean broken)
+		{
+			Entry.this.clazz = clazz;
+			Entry.this.broken = broken;
+
+			jars = new Vector();
+			jars.addElement(path);
+
+			if(clazz == null)
+				Entry.this.name = path;
+			else
+			{
+				Entry.this.name = jEdit.getProperty("plugin." + clazz + ".name");
+				if(name == null)
+					name = clazz;
+
+				Entry.this.version = jEdit.getProperty("plugin." + clazz
+					+ ".version");
+
+				Entry.this.author = jEdit.getProperty("plugin." + clazz
+					+ ".author");
+
+				String jarsProp = jEdit.getProperty("plugins." + clazz
+					+ ".jars");
+
+				if(jarsProp != null)
+				{
+					String directory = MiscUtilities.getParentOfPath(path);
+
+					StringTokenizer st = new StringTokenizer(jarsProp);
+					while(st.hasMoreElements())
+					{
+						jars.addElement(MiscUtilities.constructPath(
+							directory,st.nextToken()));
+					}
+				}
+			}
+		}
+
+		public String toString()
+		{
+			return Entry.this.name;
+		}
+	}
+
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			/* Object source = evt.getSource();
+			Object source = evt.getSource();
 			if(source == close)
 				dispose();
 			else if(source == remove)
@@ -210,7 +333,14 @@ public class PluginManager extends JDialog
 						selected[i].getLastPathComponent())
 						.getUserObject();
 					if(last instanceof Entry)
-						plugins.addElement(((Entry)last).path);
+					{
+						Entry entry = (Entry)last;
+						for(int j = 0; j < entry.jars.size(); j++)
+						{
+							plugins.addElement((String)
+								entry.jars.elementAt(i));
+						}
+					}
 				}
 
 				if(plugins.size() == 0)
@@ -219,18 +349,15 @@ public class PluginManager extends JDialog
 					return;
 				}
 
-				String[] array = new String[plugins.size()];
-				plugins.copyInto(array);
 				setCursor(Cursor.getPredefinedCursor(
 					Cursor.WAIT_CURSOR));
-
-				if(PluginManagerPlugin.removePlugins(PluginManager.this,array))
+				if(removePlugins(plugins))
 					updateTree();
-
+				
 				setCursor(Cursor.getPredefinedCursor(
 					Cursor.DEFAULT_CURSOR));
 			}
-			else if(source == update)
+			/* else if(source == update)
 			{
 				if(PluginManagerPlugin.updatePlugins(PluginManager.this))
 					updateTree();
@@ -264,17 +391,17 @@ public class PluginManager extends JDialog
 			version.setText(null);
 
 			if(node != null && node.isLeaf()
-				&& node.getUserObject() instanceof PluginInfo)
+				&& node.getUserObject() instanceof Entry)
 			{
 				remove.setEnabled(true);
 
-				PluginInfo info = (PluginInfo)node.getUserObject();
+				Entry entry = (Entry)node.getUserObject();
 
-				if(info.clazz != null)
+				if(entry.clazz != null)
 				{
-					name.setText(info.name);
-					author.setText(info.author);
-					version.setText(info.version);
+					name.setText(entry.name);
+					author.setText(entry.author);
+					version.setText(entry.version);
 				}
 			}
 			else

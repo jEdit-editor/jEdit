@@ -66,6 +66,9 @@ public class TipOfTheDay extends EnhancedDialog
 			tipText = new JEditorPane();
 			tipText.setEditable(false);
 			tipText.setContentType("text/html");
+
+			nextTip();
+
 			JScrollPane scroller = new JScrollPane(tipText);
 			Dimension dim = scroller.getPreferredSize();
 			dim.height = 150;
@@ -101,8 +104,6 @@ public class TipOfTheDay extends EnhancedDialog
 			close.setPreferredSize(dim);
 
 			TipPanel.this.add(BorderLayout.SOUTH,buttons);
-
-			nextTip();
 		}
 
 		// private members

@@ -6,8 +6,8 @@ might never be implemented at all.
 
 + before 3.2pre1
 
-- CVS: add PluginInfo.java
 - finish new plugin manager
+- scrollToCaret() doesn't always work
 
 + later
 
@@ -15,6 +15,8 @@ might never be implemented at all.
 - update buffer history for multiple selection
 - reload edit modes command
 - start preparing for web start (handle jEditHome == null, jedit_jnlp.jar)
+- when loading a plugin, check if all the jars are present?
+- 'find' -vs- 'find in files'?
 
 - reverse regexp search
 - hypersearch: select button, clear button
