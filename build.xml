@@ -110,22 +110,6 @@
 		</exec>
 	</target>
 
-	<!-- Generate HTML docs with Xalan tool from xml.apache.org -->
-	<target name="docs-html-xalan" depends="init" description="Generate HTML documents with Xalan tool.">
-		<style
-			in="doc/users-guide/users-guide.xml"
-			destdir="doc/users-guide"
-			style="doc/jedithtml.xsl"/>
-		<style
-			in="doc/FAQ/faq.xml"
-			destdir="doc/FAQ"
-			style="doc/jedithtml.xsl"/>
-		<style
-			in="doc/news42/news.xml"
-			destdir="doc/news42"
-			style="doc/jedithtml.xsl"/>
-	</target>
-
 	<!-- Generate PDF docs with OpenJade tool from openjade.sf.net -->
 	<!-- Do not call directly. Expects paper.size property to be set. -->
 	<target name="docs-pdf-openjade" description="Generate PDF documents with OpenJade tool.">
