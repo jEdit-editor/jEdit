@@ -47,12 +47,14 @@ public class home extends EditAction
 		int caret = textArea.getCaretPosition();
 		int line = textArea.getCaretLine();
 
-		int firstIndent = textArea.getLineStartOffset(line)
-			+ MiscUtilities.getLeadingWhiteSpace(textArea
+		int firstIndent = MiscUtilities.getLeadingWhiteSpace(textArea
 			.getLineText(line));
 
-		int firstOfLine = textArea.getLineStartOffset(
-			textArea.getCaretLine());
+		int firstOfLine = textArea.getLineStartOffset(line);
+
+		firstindent = firstOfLine + firstIndent;
+		if(firstIndent == textArea.getLineEndOffset(line))
+			firstIndent = firstOfLine;
 
 		int firstLine = textArea.getFirstLine();
 		int electricScroll = textArea.getElectricScroll();

@@ -4,7 +4,8 @@ JEDIT 2.5 VERSION HISTORY
 
 + Bug Fixes
 
-- WorkThread class no longer prints debugging messages as errors (since 2.5pre6)
+- WorkThread class no longer prints debugging messages as errors
+  (since 2.5pre6)
 - Delete line didn't work properly if the buffer only had two lines, both
   empty
 - Fixed possible ArrayIndexOutOfBounds in select-paragraph command
@@ -13,7 +14,9 @@ JEDIT 2.5 VERSION HISTORY
   entered
 - Geometry of search & replace dialog box was only saved if the user
   clicked the 'cancel' button
-- Asynchronous work requests would be executed twice (since 2.5pre6)
+- Asynchronous work requests could be executed twice (since 2.5pre6)
+- Fixed incorrect behaviour of home/end keys on lines which only
+  contained whitespace (since 2.5pre5)
 
 * Version 2.5pre6
 

@@ -47,12 +47,14 @@ public class end extends EditAction
 		int caret = textArea.getCaretPosition();
 		int line = textArea.getCaretLine();
 
-		int lastIndent = textArea.getLineEndOffset(line)
-			- MiscUtilities.getTrailingWhiteSpace(textArea
-			.getLineText(line)) - 1;
+		int lastIndent = MiscUtilities.getTrailingWhiteSpace(textArea
+			.getLineText(line));
 
-		int lastOfLine = textArea.getLineEndOffset(
-			textArea.getCaretLine()) - 1;
+		int lastOfLine = textArea.getLineEndOffset(line) - 1;
+
+		lastIndent = lastOfLine - lastIndent;
+		if(lastIndent == textArea.getLineStartOffset(line))
+			lastIndent = lastOfLine;
 
 		int lastVisibleLine = textArea.getFirstLine()
 			+ textArea.getVisibleLines();
