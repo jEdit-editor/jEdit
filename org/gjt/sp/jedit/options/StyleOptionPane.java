@@ -28,6 +28,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -456,62 +457,64 @@ class StyleTableModel extends AbstractTableModel
 	}
 }
 
-class StyleEditor extends JDialog
-implements ActionListener, KeyListener
+class StyleEditor extends EnhancedDialog implements ActionListener
 {
 	StyleEditor(Component comp, SyntaxStyle style)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
-			jEdit.getProperty("styleEditor.title"),true);
+			jEdit.getProperty("style-editor.title"),true);
 
-		getContentPane().setLayout(new BorderLayout());
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
 
 		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(0,0,12,0));
 		panel.add(italics = new JCheckBox(
-			jEdit.getProperty("styleEditor.italics")));
+			jEdit.getProperty("style-editor.italics")));
 		italics.setSelected(style.isItalic());
+		panel.add(Box.createHorizontalStrut(2));
 		panel.add(bold = new JCheckBox(
-			jEdit.getProperty("styleEditor.bold")));
+			jEdit.getProperty("style-editor.bold")));
 		bold.setSelected(style.isBold());
-		panel.add(new JLabel(
-			jEdit.getProperty("styleEditor.fgColor")));
+		panel.add(Box.createHorizontalStrut(12));
+		panel.add(new JLabel(jEdit.getProperty("style-editor.fgColor")));
+		panel.add(Box.createHorizontalStrut(12));
 		panel.add(fgColor = new JButton("    "));
 		fgColor.setBackground(style.getForegroundColor());
 		fgColor.setRequestFocusEnabled(false);
 		fgColor.addActionListener(this);
-		panel.add(new JLabel(jEdit.getProperty("styleEditor.bgColor")));
+		fgColor.setMargin(new Insets(0,0,0,0));
+		panel.add(Box.createHorizontalStrut(12));
+		panel.add(new JLabel(jEdit.getProperty("style-editor.bgColor")));
+		panel.add(Box.createHorizontalStrut(12));
 		panel.add(bgColor = new JButton("    "));
 		if(style.getBackgroundColor() == null)
-		{
 			bgColor.setBackground(GUIUtilities.parseColor(jEdit.getProperty("view.bgColor")));
-		}
 		else
-		{
 			bgColor.setBackground(style.getBackgroundColor());
-		}
 		bgColor.setRequestFocusEnabled(false);
 		bgColor.addActionListener(this);
+		bgColor.setMargin(new Insets(0,0,0,0));
 
-		getContentPane().add(BorderLayout.CENTER,panel);
+		content.add(BorderLayout.CENTER,panel);
 
-		panel = new JPanel();
-		panel.add(ok = new JButton(jEdit.getProperty("common.ok")));
+		Box box = new Box(BoxLayout.X_AXIS);
+		box.add(Box.createGlue());
+		box.add(ok = new JButton(jEdit.getProperty("common.ok")));
 		getRootPane().setDefaultButton(ok);
 		ok.addActionListener(this);
-		panel.add(cancel = new JButton(jEdit.getProperty("common.cancel")));
+		box.add(Box.createHorizontalStrut(6));
+		box.add(cancel = new JButton(jEdit.getProperty("common.cancel")));
 		cancel.addActionListener(this);
+		box.add(Box.createGlue());
 
-		getContentPane().add(BorderLayout.SOUTH,panel);
-
-		addKeyListener(this);
-
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		content.add(BorderLayout.SOUTH,box);
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setLocationRelativeTo(comp);
 		show();
 	}
 
@@ -519,12 +522,9 @@ implements ActionListener, KeyListener
 	{
 		Object source = evt.getSource();
 		if(source == ok)
-		{
-			okClicked = true;
-			dispose();
-		}
+			ok();
 		else if(source == cancel)
-			dispose();
+			cancel();
 		else if (source == fgColor || source == bgColor)
 		{
 			JButton b = (JButton)source;
@@ -536,24 +536,17 @@ implements ActionListener, KeyListener
 		}
 	}
 
-	public void keyPressed(KeyEvent evt)
+	// EnhancedDialog implementation
+	public void ok()
 	{
-		switch(evt.getKeyCode())
-		{
-		case KeyEvent.VK_ENTER:
-			okClicked = true;
-			dispose();
-			evt.consume();
-			break;
-		case KeyEvent.VK_ESCAPE:
-			dispose();
-			evt.consume();
-			break;
-		}
+		okClicked = true;
+		dispose();
 	}
 
-	public void keyReleased(KeyEvent evt) {}
-	public void keyTyped(KeyEvent evt) {}
+	public void cancel()
+	{
+		dispose();
+	}
 
 	public SyntaxStyle getStyle()
 	{
@@ -584,9 +577,13 @@ implements ActionListener, KeyListener
 	private JButton cancel;
 	private boolean okClicked;
 }
-/**
+
+/*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/06/03 07:28:26  sp
+ * User interface updates, bug fixes
+ *
  * Revision 1.16  2000/05/22 12:05:45  sp
  * Markers are highlighted in the gutter, bug fixes
  *
@@ -616,8 +613,5 @@ implements ActionListener, KeyListener
  *
  * Revision 1.7  1999/10/04 03:20:51  sp
  * Option pane change, minor tweaks and bug fixes
- *
- * Revision 1.6  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
  *
  */

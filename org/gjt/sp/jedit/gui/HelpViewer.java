@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
 import java.awt.*;
@@ -28,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.EnhancedFrame;
 import org.gjt.sp.util.Log;
 
 /**
@@ -36,7 +38,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HelpViewer extends JFrame
+public class HelpViewer extends EnhancedFrame
 {
 	/**
 	 * Goes to the specified URL, creating a new help viewer or
@@ -61,6 +63,10 @@ public class HelpViewer extends JFrame
 	{
 		super(jEdit.getProperty("helpviewer.title"));
 
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
 		setIconImage(GUIUtilities.getEditorIcon());
 
 		history = new URL[25];
@@ -68,39 +74,44 @@ public class HelpViewer extends JFrame
 		ActionHandler actionListener = new ActionHandler();
 
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(BorderLayout.WEST,new JLabel(
-			jEdit.getProperty("helpviewer.url")));
+		panel.setBorder(new EmptyBorder(0,0,12,0));
+		JLabel label = new JLabel(jEdit.getProperty("helpviewer.url"));
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		panel.add(BorderLayout.WEST,label);
 		urlField = new JTextField();
-		urlField.addKeyListener(new KeyHandler());
 		panel.add(urlField);
-		
-		getContentPane().add(BorderLayout.NORTH,panel);
+
+		content.add(BorderLayout.NORTH,panel);
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
+		viewer.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		viewer.addHyperlinkListener(new LinkHandler());
-		getContentPane().add(BorderLayout.CENTER,
-			new JScrollPane(viewer));
+		content.add(BorderLayout.CENTER,new JScrollPane(viewer));
 
 		panel = new JPanel();
-
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(12,0,0,0));
+		panel.add(Box.createGlue());
 		back = new JButton(jEdit.getProperty("helpviewer.back"));
 		back.setIcon(new ImageIcon(getClass().getResource(
 			"/org/gjt/sp/jedit/toolbar/Left.gif")));
 		back.addActionListener(actionListener);
 		panel.add(back);
+		panel.add(Box.createHorizontalStrut(6));
 		forward = new JButton(jEdit.getProperty("helpviewer.forward"));
 		forward.setIcon(new ImageIcon(getClass().getResource(
 			"/org/gjt/sp/jedit/toolbar/Right.gif")));
 		forward.addActionListener(actionListener);
 		panel.add(forward);
+		panel.add(Box.createGlue());
 
 		back.setPreferredSize(forward.getPreferredSize());
 
-		getContentPane().add(BorderLayout.SOUTH,panel);
+		content.add(BorderLayout.SOUTH,panel);
 
 		gotoURL(url,true);
-		
+
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		setSize(600,400);
@@ -141,13 +152,30 @@ public class HelpViewer extends JFrame
 			GUIUtilities.error(this,"ioerror",args);
 		}
 	}
-	
-	public void dispose()
+
+	public void ok()
+	{
+		try
+		{
+			gotoURL(new URL(urlField.getText()),
+				true);
+		}
+		catch(MalformedURLException mu)
+		{
+			Log.log(Log.ERROR,this,mu);
+			String[] args = { urlField.getText() };
+			GUIUtilities.error(HelpViewer.this,
+				"badurl",args);
+		}
+	}
+
+	public void cancel()
 	{
 		GUIUtilities.saveGeometry(this,"helpviewer");
 		if(helpViewer == this)
 			helpViewer = null;
-		super.dispose();
+		viewer.setText("");
+		dispose();
 	}
 
 	// private members
@@ -189,28 +217,6 @@ public class HelpViewer extends JFrame
 						historyPos++;
 						gotoURL(url,false);
 					}
-				}
-			}
-		}
-	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-			{
-				try
-				{
-					gotoURL(new URL(urlField.getText()),
-						true);
-				}
-				catch(MalformedURLException mu)
-				{
-					Log.log(Log.ERROR,this,mu);
-					String[] args = { urlField.getText() };
-					GUIUtilities.error(HelpViewer.this,
-						"badurl",args);
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 /*
  * SelectLineRange.java - Selects a range of lines
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,65 +19,52 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.text.Element;
-import javax.swing.*;
 import org.gjt.sp.jedit.*;
 
-/**
- * Select line range dialog.
- * @author Slava Pestov
- * @version $Id$
- */
-public class SelectLineRange extends EnhancedDialog
-implements ActionListener
+public class SelectLineRange extends EnhancedDialog implements ActionListener
 {
 	public SelectLineRange(View view)
 	{
 		super(view,jEdit.getProperty("selectlinerange.title"),true);
+		this.view = view;
 
-		buffer = view.getBuffer();
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,6,12,9));
+		setContentPane(content);
 
-		getContentPane().add(BorderLayout.NORTH,new JLabel(
-			jEdit.getProperty("selectlinerange.caption")));
+		JLabel label = new JLabel(jEdit.getProperty(
+			"selectlinerange.caption"));
+		label.setBorder(new EmptyBorder(0,6,3,0));
+		content.add(BorderLayout.NORTH,label);
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(2,2));		
-		panel.add(new JLabel(jEdit.getProperty("selectlinerange.start"),
-			SwingConstants.RIGHT));
-		panel.add(start = new JTextField());
+		JPanel panel = createFieldPanel();
 
-		panel.add(new JLabel(jEdit.getProperty("selectlinerange.end"),
-			SwingConstants.RIGHT));
-		panel.add(end = new JTextField());
-		getContentPane().add(BorderLayout.CENTER,panel);
+		content.add(BorderLayout.CENTER,panel);
 
-		panel = new JPanel();
-		panel.add(ok = new JButton(jEdit.getProperty("common.ok")));
+		Box box = new Box(BoxLayout.X_AXIS);
+		box.add(Box.createGlue());
+		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(this);
-		panel.add(cancel = new JButton(jEdit.getProperty(
-			"common.cancel")));
-		cancel.addActionListener(this);
-		getContentPane().add(BorderLayout.SOUTH,panel);
-
 		getRootPane().setDefaultButton(ok);
+		box.add(ok);
+		box.add(Box.createHorizontalStrut(6));
+		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		cancel.addActionListener(this);
+		box.add(cancel);
+		box.add(Box.createGlue());
 
-		GUIUtilities.requestFocus(this,start);
+		content.add(box,BorderLayout.SOUTH);
+
+		GUIUtilities.requestFocus(this,startField);
 
 		pack();
 		setLocationRelativeTo(view);
 		show();
-	}
-
-	public void actionPerformed(ActionEvent evt)
-	{
-		Object source = evt.getSource();
-
-		if(source == ok)
-			ok();
-		else if(source == cancel)
-			cancel();
 	}
 
 	// EnhancedDialog implementation
@@ -88,14 +75,16 @@ implements ActionListener
 
 		try
 		{
-			startLine = Integer.parseInt(start.getText()) - 1;
-			endLine = Integer.parseInt(end.getText()) - 1;
+			startLine = Integer.parseInt(startField.getText()) - 1;
+			endLine = Integer.parseInt(endField.getText()) - 1;
 		}
 		catch(NumberFormatException nf)
 		{
 			getToolkit().beep();
 			return;
 		}
+
+		Buffer buffer = view.getBuffer();
 
 		Element startElement = buffer.getDefaultRootElement()
 			.getElement(startLine);
@@ -111,7 +100,7 @@ implements ActionListener
 		int startOffset = startElement.getStartOffset();
 		int endOffset = endElement.getEndOffset() - 1;
 
-		((View)getParent()).getTextArea().select(startOffset,endOffset);
+		view.getTextArea().select(startOffset,endOffset);
 
 		dispose();
 	}
@@ -122,17 +111,68 @@ implements ActionListener
 	}
 	// end EnhancedDialog implementation
 
+	public void actionPerformed(ActionEvent evt)
+	{
+		Object source = evt.getSource();
+		if(source == ok)
+			ok();
+		else if(source == cancel)
+			cancel();
+	}
+
 	// private members
-	private Buffer buffer;
-	private JTextField start;
-	private JTextField end;
+	private View view;
+	private JTextField startField;
+	private JTextField endField;
 	private JButton ok;
 	private JButton cancel;
+
+	private JPanel createFieldPanel()
+	{
+		GridBagLayout layout = new GridBagLayout();
+		JPanel panel = new JPanel(layout);
+		panel.setBorder(new EmptyBorder(3,0,9,0));
+
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.insets = new Insets(3,6,3,3);
+		cons.gridwidth = cons.gridheight = 1;
+		cons.gridx = cons.gridy = 0;
+		cons.fill = GridBagConstraints.BOTH;
+		JLabel label = new JLabel(jEdit.getProperty("selectlinerange.start"),
+			SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		panel.add(label);
+
+		startField = new JTextField(10);
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		layout.setConstraints(startField,cons);
+		panel.add(startField);
+
+		label = new JLabel(jEdit.getProperty("selectlinerange.end"),
+			SwingConstants.RIGHT);
+		cons.gridx = 0;
+		cons.weightx = 0.0f;
+		cons.gridy = 1;
+		layout.setConstraints(label,cons);
+		panel.add(label);
+
+		endField = new JTextField(10);
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		layout.setConstraints(endField,cons);
+		panel.add(endField);
+
+		return panel;
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/06/03 07:28:26  sp
+ * User interface updates, bug fixes
+ *
  * Revision 1.12  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *
@@ -164,8 +204,5 @@ implements ActionListener
  *
  * Revision 1.3  1999/03/20 05:23:32  sp
  * Code cleanups
- *
- * Revision 1.2  1999/03/19 08:32:22  sp
- * Added a status bar to views, Escape key now works in dialog boxes
  *
  */

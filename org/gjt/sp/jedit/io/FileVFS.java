@@ -241,7 +241,7 @@ public class FileVFS extends VFS
 			// Perhaps here we would want to guard with
 			// a property for parallel backups or not.
 			backupDirectory = MiscUtilities.concatPath(
-				backupDirectory,file.getPath());
+				backupDirectory,file.getParent());
 
 			File dir = new File(backupDirectory);
 

@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 import java.awt.event.*;
 import java.awt.*;
+import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.*;
@@ -36,8 +37,9 @@ public class SearchBar extends JToolBar
 		setFloatable(false);
 
 		setLayout(new BorderLayout());
-		add(new JLabel(jEdit.getProperty("view.search.find")),
-			BorderLayout.WEST);
+		JLabel label = new JLabel(jEdit.getProperty("view.search.find"));
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		add(label,BorderLayout.WEST);
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
 		box.add(find = new HistoryTextField("find"));
@@ -54,22 +56,22 @@ public class SearchBar extends JToolBar
 		Insets margin = new Insets(1,1,1,1);
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
-		buttons.add(Box.createHorizontalStrut(5));
+		buttons.add(Box.createHorizontalStrut(12));
 		buttons.add(incremental = new JCheckBox(jEdit.getProperty(
 			"view.search.incremental")));
 		incremental.addActionListener(new ActionHandler());
 		incremental.setMargin(margin);
-		buttons.add(Box.createHorizontalStrut(5));
+		buttons.add(Box.createHorizontalStrut(2));
 		buttons.add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.ignoreCase")));
 		ignoreCase.addActionListener(new ActionHandler());
 		ignoreCase.setMargin(margin);
-		buttons.add(Box.createHorizontalStrut(5));
+		buttons.add(Box.createHorizontalStrut(2));
 		buttons.add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
 		regexp.addActionListener(new ActionHandler());
 		regexp.setMargin(margin);
-		buttons.add(Box.createHorizontalStrut(5));
+		buttons.add(Box.createHorizontalStrut(2));
 		buttons.add(multifile = new JCheckBox());
 		multifile.addActionListener(new ActionHandler());
 		multifile.setMargin(margin);
@@ -256,6 +258,9 @@ public class SearchBar extends JToolBar
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.14  2000/06/03 07:28:26  sp
+ * User interface updates, bug fixes
+ *
  * Revision 1.13  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *

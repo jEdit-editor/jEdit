@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -33,7 +34,11 @@ implements ActionListener, ListSelectionListener, MouseListener
 	{
 		super(view,jEdit.getProperty("pasteprev.title"),true);
 		this.view = view;
-		Container content = getContentPane();
+
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
 		clipHistory = HistoryModel.getModel("clipboard");
 
 		clips = new JList(new AbstractListModel() {
@@ -55,18 +60,25 @@ implements ActionListener, ListSelectionListener, MouseListener
 		clips.addListSelectionListener(this);
 		insert = new JButton(jEdit.getProperty("pasteprev.insert"));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
-		content.setLayout(new BorderLayout());
-		content.add(new JLabel(jEdit.getProperty("pasteprev.caption")),
-			BorderLayout.NORTH);
+
+		JLabel label = new JLabel(jEdit.getProperty("pasteprev.caption"));
+		label.setBorder(new EmptyBorder(0,0,6,0));
+		content.add(BorderLayout.NORTH,label);
 
 		JScrollPane scroller = new JScrollPane(clips);
 		Dimension dim = scroller.getPreferredSize();
 		scroller.setPreferredSize(new Dimension(640,dim.height));
 
 		content.add(scroller, BorderLayout.CENTER);
+
 		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(12,0,0,0));
+		panel.add(Box.createGlue());
 		panel.add(insert);
+		panel.add(Box.createHorizontalStrut(6));
 		panel.add(cancel);
+		panel.add(Box.createGlue());
 		content.add(panel, BorderLayout.SOUTH);
 		updateButtons();
 

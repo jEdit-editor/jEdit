@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -52,15 +53,18 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		resultModel = new DefaultListModel();
 		Container content = getContentPane();
 		content.setLayout(new BorderLayout());
+
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(new JLabel(jEdit.getProperty("hypersearch.find")),
-			BorderLayout.NORTH);
+		panel.setBorder(new EmptyBorder(12,12,12,12));
+
+		JPanel fieldPanel = new JPanel(new BorderLayout());
+		fieldPanel.setBorder(new EmptyBorder(0,0,6,0));
+		JLabel label = new JLabel(jEdit.getProperty("hypersearch.find"));
+		label.setBorder(new EmptyBorder(0,0,2,0));
+		fieldPanel.add(label,BorderLayout.NORTH);
 		find = new HistoryTextField("find");
-
-		panel.add(find, BorderLayout.CENTER);
-		content.add(panel, BorderLayout.NORTH);
-
-		JPanel stretchPanel = new JPanel(new BorderLayout());
+		fieldPanel.add(find, BorderLayout.CENTER);
+		panel.add(fieldPanel, BorderLayout.NORTH);
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		ignoreCase = new JCheckBox(jEdit.getProperty(
@@ -72,36 +76,35 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		multifileBtn = new JButton(jEdit.getProperty(
 			"search.multifile"));
 		box.add(ignoreCase);
-		box.add(Box.createHorizontalStrut(5));
+		box.add(Box.createHorizontalStrut(3));
 		box.add(regexp);
-		box.add(Box.createHorizontalStrut(5));
+		box.add(Box.createHorizontalStrut(3));
 		box.add(multifile);
 		box.add(multifileBtn);
-		box.add(Box.createHorizontalStrut(5));
+		box.add(Box.createHorizontalStrut(6));
 		start = new JButton(jEdit.getProperty("hypersearch.start"));
 		box.add(start);
-		box.add(Box.createHorizontalStrut(5));
+		box.add(Box.createHorizontalStrut(6));
 		stop = new JButton(jEdit.getProperty("hypersearch.stop"));
 		box.add(stop);
-		box.add(Box.createHorizontalStrut(5));
+		box.add(Box.createHorizontalStrut(6));
 		status = new JLabel();
 		box.add(status);
 		getRootPane().setDefaultButton(start);
 		updateEnabled();
-
 		updateStatus();
 		Dimension size = status.getPreferredSize();
 		size.width = Math.max(size.width,100);
 		status.setPreferredSize(size);
 		status.setMinimumSize(size);
-		stretchPanel.add(box,BorderLayout.NORTH);
+		panel.add(box, BorderLayout.CENTER);
+
+		content.add(panel, BorderLayout.NORTH);
 
 		results = new JList(resultModel);
 		results.setVisibleRowCount(16);
 		results.addMouseListener(new MouseHandler());
-		stretchPanel.add(new JScrollPane(results), BorderLayout.CENTER);
-
-		content.add(stretchPanel, BorderLayout.CENTER);
+		content.add(new JScrollPane(results), BorderLayout.CENTER);
 
 		ActionHandler actionListener = new ActionHandler();
 
@@ -478,6 +481,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.63  2000/06/03 07:28:26  sp
+ * User interface updates, bug fixes
+ *
  * Revision 1.62  2000/05/21 06:06:43  sp
  * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
  *

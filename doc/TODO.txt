@@ -1,5 +1,10 @@
 JEDIT TO DO
 
+- CVS: add dialog-ftp-login
+- Prettify: multifile search, close all, option panes, send,
+  macro input, buffer options, ftp browser
+- Update screenshots
+
 Later:
 
 - Documentation:

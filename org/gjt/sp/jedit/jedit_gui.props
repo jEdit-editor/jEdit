@@ -67,7 +67,7 @@ icons=\
       Unsplit.gif \
       blank-20.gif
 
-view.search.find=Find:\ 
+view.search.find=Find:
 view.search.incremental=Incremental
 
 ###
@@ -402,6 +402,7 @@ help-menu=about \
      help@NEWS.txt \
      help@CHANGES.txt \
      help@TODO.txt \
+     help@COPYING.txt \
      -
 help-menu.label=$Help
 about.label=About jEdit...
@@ -410,6 +411,7 @@ help@README.txt.label=jEdit Read Me
 help@NEWS.txt.label=Major Changes in jEdit 2.5
 help@CHANGES.txt.label=Version History
 help@TODO.txt.label=To Do and Known Bugs
+help@COPYING.txt.label=GNU General Public License
 
 ###
 ### MACRO STRINGS
@@ -506,11 +508,12 @@ print.page=Page {0}
 
 # About dialog
 about.title=About jEdit
-about.caption=jEdit version {0}
-about.message=jEdit was written by Slava Pestov with code\n\
-	contributions from several others. It is released\n\
-	under the GNU General Public License.\n\
-	See the README file for more information.
+about.message=<html><center><font size=+1>jEdit version {0}</font><br>\n\
+	<u><font color=blue>http://jedit.sourceforge.net</font></u><p>\n\
+	jEdit is mostly &copy; 1998-2000 Slava Pestov.<p>\n\
+	See <b>Help</b>&gt;<b>jEdit Read Me</b> for a list of code\n\
+	contributions. See <b>Help</b>&gt;<b>GNU General Public License</b>\n\
+	for license info and warranty disclamer.</center></html>
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
@@ -752,14 +755,14 @@ fileexists.message=The file {0} already exists. Are you sure you want\n\
 # Select line range
 selectlinerange.title=Select Line Range
 selectlinerange.caption=Select line range:
-selectlinerange.start=Start line:\ 
-selectlinerange.end=End line:\ 
+selectlinerange.start=Start line:
+selectlinerange.end=End line:
 
 # View registers
 view-registers.title=Registers
-view-registers.caption=Register:\ 
+view-registers.caption=Register:
 view-registers.clipboard=$ (clipboard)
-view-registers.type=Type:\ 
+view-registers.type=Type:
 view-registers.text=text
 view-registers.position=position
 view-registers.other=other
@@ -1020,17 +1023,15 @@ options.macro-keys.label=Macros
 colorChooser.title=Pick a Color
 
 # Style editor, used by options.styles
-styleEditor.title=Style Editor
-styleEditor.italics=Italics
-styleEditor.bold=Bold
-styleEditor.fgColor=Text color:\ 
-styleEditor.bgColor=Background color:\ 
+style-editor.title=Style Editor
+style-editor.italics=Italics
+style-editor.bold=Bold
+style-editor.fgColor=Text color:
+style-editor.bgColor=Background color:
 
 # Help viewer
 helpviewer.title=jEdit Help
-helpviewer.width=600
-helpviewer.height=400
-helpviewer.url=URL:\ 
+helpviewer.url=URL:
 helpviewer.back=Back
 helpviewer.forward=Forward
 
@@ -1050,9 +1051,9 @@ mode.text.label=Plain Text
 
 # Login dialog box
 login.title=Log in
-login.caption=Enter user name and password for {0}:\ 
-login.user=User name:\ 
-login.password=Password:\ 
+login.caption=Enter user name and password for {0}:
+login.user=User name:
+login.password=Password:
 
 # Browser dialog box
 vfs.ftp.browser.open-title=Open from FTP Server

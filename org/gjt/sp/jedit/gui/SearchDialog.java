@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -36,6 +37,10 @@ public class SearchDialog extends EnhancedDialog
 	{
 		super(view,jEdit.getProperty("search.title"),false);
 		this.view = view;
+
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(0,12,12,12));
+		setContentPane(content);
 
 		fileset = SearchAndReplace.getSearchFileSet();
 
@@ -63,27 +68,49 @@ public class SearchDialog extends EnhancedDialog
 		replaceAll.setMnemonic(jEdit.getProperty("search.replaceAll"
 			+ ".mnemonic").charAt(0));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
-		getContentPane().setLayout(new BorderLayout());
-		JPanel panel = new JPanel(new GridLayout(4,1));
-		panel.add(new JLabel(jEdit.getProperty("search.find")));
-		panel.add(find);
-		panel.add(new JLabel(jEdit.getProperty("search.replace")));
-		panel.add(replace);
-		getContentPane().add(BorderLayout.NORTH,panel);
+
+		JPanel panel = new JPanel(new GridLayout(2,1));
+		JPanel panel2 = new JPanel(new BorderLayout());
+		JLabel label = new JLabel(jEdit.getProperty("search.find"));
+		label.setBorder(new EmptyBorder(12,0,2,0));
+		panel2.add(BorderLayout.NORTH,label);
+		panel2.add(BorderLayout.CENTER,find);
+		panel.add(panel2);
+		panel2 = new JPanel(new BorderLayout());
+		label = new JLabel(jEdit.getProperty("search.replace"));
+		label.setBorder(new EmptyBorder(12,0,2,0));
+		panel2.add(BorderLayout.NORTH,label);
+		panel2.add(BorderLayout.CENTER,replace);
+		panel.add(panel2);
+		content.add(BorderLayout.NORTH,panel);
+
 		panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(6,0,12,0));
+		panel.add(Box.createGlue());
 		panel.add(keepDialog);
+		panel.add(Box.createHorizontalStrut(2));
 		panel.add(ignoreCase);
+		panel.add(Box.createHorizontalStrut(2));
 		panel.add(regexp);
+		panel.add(Box.createHorizontalStrut(2));
 		panel.add(multifile);
 		panel.add(multifileBtn);
-		getContentPane().add(BorderLayout.CENTER,panel);
-		panel = new JPanel();
-		panel.add(findBtn);
-		panel.add(replaceSelection);
-		panel.add(replaceAll);
-		panel.add(cancel);
+		panel.add(Box.createGlue());
+		content.add(BorderLayout.CENTER,panel);
+
+		Box box = new Box(BoxLayout.X_AXIS);
+		box.add(Box.createGlue());
+		box.add(findBtn);
+		box.add(Box.createHorizontalStrut(6));
+		box.add(replaceSelection);
+		box.add(Box.createHorizontalStrut(6));
+		box.add(replaceAll);
+		box.add(Box.createHorizontalStrut(6));
+		box.add(cancel);
+		box.add(Box.createGlue());
 		getRootPane().setDefaultButton(findBtn);
-		getContentPane().add(BorderLayout.SOUTH,panel);
+		content.add(BorderLayout.SOUTH,box);
 
 		ActionHandler actionListener = new ActionHandler();
 		multifile.addActionListener(actionListener);
@@ -97,7 +124,7 @@ public class SearchDialog extends EnhancedDialog
 
 		pack();
 
-		GUIUtilities.loadGeometry(this,"find");
+		GUIUtilities.loadGeometry(this,"search");
 		show();
 	}
 
@@ -115,7 +142,7 @@ public class SearchDialog extends EnhancedDialog
 
 	public void cancel()
 	{
-		GUIUtilities.saveGeometry(this,"find");
+		GUIUtilities.saveGeometry(this,"search");
 		dispose();
 	}
 	// end EnhancedDialog implementation
@@ -216,6 +243,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/06/03 07:28:26  sp
+ * User interface updates, bug fixes
+ *
  * Revision 1.12  2000/05/21 06:06:43  sp
  * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
  *
@@ -245,14 +275,5 @@ public class SearchDialog extends EnhancedDialog
  *
  * Revision 1.3  1999/06/09 07:28:10  sp
  * Multifile search and replace tweaks, removed console.html
- *
- * Revision 1.2  1999/06/09 05:22:11  sp
- * Find next now supports multi-file searching, minor Perl mode tweak
- *
- * Revision 1.1  1999/06/03 08:40:03  sp
- * More cvs fixing
- *
- * Revision 1.1  1999/05/31 04:42:38  sp
- * oops #2
  *
  */

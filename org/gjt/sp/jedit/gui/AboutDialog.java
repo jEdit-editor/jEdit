@@ -32,35 +32,34 @@ public class AboutDialog extends EnhancedDialog
 	{
 		super(view,jEdit.getProperty("about.title"),true);
 
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
 		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(new EmptyBorder(0,0,12,0));
+
+		JLabel label1 = new JLabel(new ImageIcon(getClass().getResource(
+			"/org/gjt/sp/jedit/jedit_logo.gif")));
+		label1.setBorder(new CompoundBorder(new EmptyBorder(0,0,0,12),
+			new BevelBorder(BevelBorder.LOWERED)));
+		panel.add(BorderLayout.CENTER,label1);
 
 		String[] args = { jEdit.getVersion() };
-		JLabel label = new JLabel(jEdit.getProperty("about.caption",args),
-			SwingConstants.CENTER);
-		panel.add(BorderLayout.NORTH,label);
+		JLabel label2 = new JLabel(jEdit.getProperty("about.message",args));
+		label2.setPreferredSize(label1.getPreferredSize());
+		panel.add(BorderLayout.EAST,label2);
 
-		label = new JLabel(new ImageIcon(getClass().getResource(
-			"/org/gjt/sp/jedit/jedit_logo.gif")));
-		label.setBorder(new CompoundBorder(new EmptyBorder(5,5,5,5),
-			new BevelBorder(BevelBorder.LOWERED)));
-		panel.add(BorderLayout.CENTER,label);
-		JPanel panel2 = new JPanel(new GridLayout(0,1));
-		StringTokenizer st = new StringTokenizer(
-			jEdit.getProperty("about.message"),"\n");
-		while(st.hasMoreTokens())
-		{
-			panel2.add(new JLabel(st.nextToken(),
-				SwingConstants.CENTER));
-		}
-		panel.add(BorderLayout.SOUTH,panel2);
-		getContentPane().add(BorderLayout.CENTER,panel);
+		content.add(BorderLayout.CENTER,panel);
 
-		panel = new JPanel();
-		ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(new ActionHandler());
-		getRootPane().setDefaultButton(ok);
-		panel.add(ok);
-		getContentPane().add(BorderLayout.SOUTH,panel);
+		Box box = new Box(BoxLayout.X_AXIS);
+		box.add(Box.createGlue());
+		close = new JButton(jEdit.getProperty("common.close"));
+		close.addActionListener(new ActionHandler());
+		getRootPane().setDefaultButton(close);
+		box.add(close);
+		box.add(Box.createGlue());
+		content.add(BorderLayout.SOUTH,box);
 
 		pack();
 		setLocationRelativeTo(view);
@@ -78,7 +77,7 @@ public class AboutDialog extends EnhancedDialog
 	}
 
 	// private members
-	private JButton ok;
+	private JButton close;
 
 	class ActionHandler implements ActionListener
 	{

@@ -37,8 +37,11 @@ public abstract class EnhancedDialog extends JDialog
 	{
 		super(parent,title,modal);
 
+		((Container)getLayeredPane()).addContainerListener(
+			new ContainerHandler());
 		((Container)getContentPane()).addContainerListener(
 			new ContainerHandler());
+
 		keyHandler = new KeyHandler();
 		addKeyListener(keyHandler);
 		addWindowListener(new WindowHandler());

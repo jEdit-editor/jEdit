@@ -30,11 +30,12 @@ public class StatusBar extends JPanel
 	public StatusBar(View view)
 	{
 		super(new BorderLayout());
+		setBorder(new EmptyBorder(0,1,0,1));
 
 		this.view = view;
-		Border border = new CompoundBorder(new EmptyBorder(2,2,2,2),
+		Border border = new CompoundBorder(new EmptyBorder(2,1,2,1),
 			new LineBorder(UIManager.getColor("Label.foreground")));
-		border = new CompoundBorder(border,new EmptyBorder(2,2,2,2));
+		border = new CompoundBorder(border,new EmptyBorder(2,1,2,1));
 		Font font = new Font("Dialog",Font.BOLD,10);
 
 		caret = new CaretStatus();
@@ -153,6 +154,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/06/03 07:28:26  sp
+ * User interface updates, bug fixes
+ *
  * Revision 1.2  2000/05/14 10:55:22  sp
  * Tool bar editor started, improved view registers dialog box
  *

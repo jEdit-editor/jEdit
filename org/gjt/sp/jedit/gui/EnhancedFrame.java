@@ -37,8 +37,11 @@ public abstract class EnhancedFrame extends JFrame
 	{
 		super(title);
 
+		((Container)getLayeredPane()).addContainerListener(
+			new ContainerHandler());
 		((Container)getContentPane()).addContainerListener(
 			new ContainerHandler());
+
 		keyHandler = new KeyHandler();
 		addKeyListener(keyHandler);
 		addWindowListener(new WindowHandler());

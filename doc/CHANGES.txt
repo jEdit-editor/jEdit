@@ -19,6 +19,9 @@ JEDIT 2.5 VERSION HISTORY
   (Valery Kondakoff)
 - 'Print' command now prints a footer with the date/time and page number
   at the bottom of each page
+- The help viewer now displays plain text files in a monospaced font
+- Many dialog boxes tweaked to comply with Java look & feel guidelines;
+  as a result they look better
 
 + Bug Fixes
 
@@ -31,6 +34,9 @@ JEDIT 2.5 VERSION HISTORY
 - Symlinks should now work in the FTP browser (but even directory links
   are still disaplayed as regular files; fixing this would require more
   work) (since 2.5pre1)
+- Backup directory code was broken (since 2.5pre1)
+- Entering an invalid FTP URL in the 'Open Path' dialog box will no longer
+  throw an IllegalArgumentException and hang jEdit (since 2.5pre1)
 
 * Version 2.5pre4
 

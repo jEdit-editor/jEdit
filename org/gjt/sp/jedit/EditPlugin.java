@@ -23,9 +23,7 @@ import java.util.Vector;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 
 /**
- * The interface between jEdit and a plugin. Plugins provide implementations
- * of this class to register any edit modes and actions they provide, and to
- * add their commands the jEdit's menu bar.<p>
+ * The interface between jEdit and a plugin.<p>
  *
  * This class obsoletes the <code>Plugin</code> interface from jEdit 2.0
  * and earlier. Its main advantage over the old system is the more flexible
@@ -174,6 +172,9 @@ public abstract class EditPlugin
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/06/03 07:28:25  sp
+ * User interface updates, bug fixes
+ *
  * Revision 1.6  2000/06/02 02:21:05  sp
  * minor bug fixes
  *

@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -34,7 +35,10 @@ implements ActionListener, MouseListener
 		super(view,jEdit.getProperty("complete-word.title"),true);
 		this.view = view;
 		this.word = word;
-		Container content = getContentPane();
+
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
 
 		words = new JList(completions);
 
@@ -49,16 +53,22 @@ implements ActionListener, MouseListener
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		content.setLayout(new BorderLayout());
 		String[] args = { word };
-		content.add(new JLabel(jEdit.getProperty("complete-word.caption",args)),
-			BorderLayout.NORTH);
+		JLabel label = new JLabel(jEdit.getProperty("complete-word.caption",args));
+		label.setBorder(new EmptyBorder(0,0,6,0));
+		content.add(label,BorderLayout.NORTH);
 
 		JScrollPane scroller = new JScrollPane(words);
 		Dimension dim = scroller.getPreferredSize();
 
 		content.add(scroller, BorderLayout.CENTER);
 		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(12,0,0,0));
+		panel.add(Box.createGlue());
 		panel.add(insert);
+		panel.add(Box.createHorizontalStrut(6));
 		panel.add(cancel);
+		panel.add(Box.createGlue());
 		content.add(panel, BorderLayout.SOUTH);
 
 		getRootPane().setDefaultButton(insert);

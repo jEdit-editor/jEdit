@@ -313,7 +313,14 @@ public class FtpVFS extends VFS
 		String savedUser = (String)buffer.getProperty(USERNAME_PROPERTY);
 		String savedPassword = (String)buffer.getProperty(PASSWORD_PROPERTY);
 
-		FtpAddress address = new FtpAddress(path);
+		try
+		{
+			FtpAddress address = new FtpAddress(path);
+		}
+		catch(IllegalArgumentException ia)
+		{
+			return false;
+		}
 
 		if(address.user == null)
 			address.user = savedUser;

@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -32,7 +33,9 @@ public class ViewRegisters extends EnhancedDialog
 	{
 		super(view,jEdit.getProperty("view-registers.title"),true);
 
-		Container content = getContentPane();
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
 
 		contents = new Vector();
 		registerCombo = new JComboBox();
@@ -74,25 +77,32 @@ public class ViewRegisters extends EnhancedDialog
 
 		registerCombo.setMaximumSize(registerCombo.getPreferredSize());
 
-		Box box = new Box(BoxLayout.X_AXIS);
-		box.add(new JLabel(jEdit.getProperty("view-registers.caption")));
-		box.add(registerCombo);
-		box.add(Box.createGlue());
-		box.add(new JLabel(jEdit.getProperty("view-registers.type")));
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(0,0,6,0));
+		panel.add(new JLabel(jEdit.getProperty("view-registers.caption")));
+		panel.add(Box.createHorizontalStrut(12));
+		panel.add(registerCombo);
+		panel.add(Box.createGlue());
+		panel.add(new JLabel(jEdit.getProperty("view-registers.type")));
+		panel.add(Box.createHorizontalStrut(12));
 		type = new JLabel();
-		box.add(type);
-		box.add(Box.createHorizontalStrut(5));
-		content.add(BorderLayout.NORTH,box);
+		panel.add(type);
+		content.add(BorderLayout.NORTH,panel);
 
 		contentTextArea = new JTextArea(10,80);
 		contentTextArea.setFont(view.getTextArea().getPainter().getFont());
 		contentTextArea.setEditable(false);
 		content.add(BorderLayout.CENTER,new JScrollPane(contentTextArea));
 
-		JPanel panel = new JPanel();
+		panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(12,0,0,0));
 		close = new JButton(jEdit.getProperty("common.close"));
 		close.addActionListener(new ActionHandler());
+		panel.add(Box.createGlue());
 		panel.add(close);
+		panel.add(Box.createGlue());
 		getRootPane().setDefaultButton(close);
 		content.add(BorderLayout.SOUTH,panel);
 
