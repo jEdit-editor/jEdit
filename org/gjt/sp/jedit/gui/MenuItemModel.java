@@ -76,13 +76,23 @@ public class MenuItemModel
 
 	public JMenuItem create(View view)
 	{
+		return create(view,true);
+	}
+
+	public JMenuItem createForPopup(View view)
+	{
+		return create(view,false);
+	}
+
+	public JMenuItem create(View view, boolean setMnemonic)
+	{
 		JMenuItem mi;
 		if(action != null && action.isToggle())
 			mi = new EnhancedCheckBoxMenuItem(label,action,arg);
 		else
 			mi = new EnhancedMenuItem(label,null,action,arg);
 
-		if(mnemonic != '\0')
+		if(setMnemonic && mnemonic != '\0')
 			mi.setMnemonic(mnemonic);
 
 		return mi;
@@ -102,3 +112,11 @@ public class MenuItemModel
 	protected EditAction action;
 	protected String arg;
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.8  2000/04/18 11:44:31  sp
+ * Context menu editor finished
+ *
+ */

@@ -101,7 +101,7 @@ public class MenuModel extends MenuItemModel
 			else
 			{
 				MenuItemModel menuItem = (MenuItemModel)obj;
-				menu.add(menuItem.create(view));
+				menu.add(menuItem.createForPopup(view));
 			}
 		}
 
@@ -111,3 +111,11 @@ public class MenuModel extends MenuItemModel
 	// protected members
 	protected Vector children;
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.3  2000/04/18 11:44:31  sp
+ * Context menu editor finished
+ *
+ */

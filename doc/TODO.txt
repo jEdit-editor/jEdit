@@ -3,7 +3,7 @@ JEDIT TO DO
 2.4:
 
 - do MARK_PREVIOUS after markKeyword()
-- finish context menu editor
+- CVS: add dialog-options-context, ContextOptionPane
 
 2.5:
 
@@ -11,6 +11,7 @@ JEDIT TO DO
   - better error reporting
   - regexps
 - Editable toolbar
+- Add macros to context menu and toolbar
 - XML-driven auto indent
 - Plugin devel manual needs more work:
   - document views, buffers

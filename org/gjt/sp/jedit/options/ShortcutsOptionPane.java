@@ -202,8 +202,8 @@ class ShortcutsModel extends AbstractTableModel
 			ShortcutsOptionPane.KeyBinding k1 = (ShortcutsOptionPane.KeyBinding)obj1;
 			ShortcutsOptionPane.KeyBinding k2 = (ShortcutsOptionPane.KeyBinding)obj2;
 
-			String label1 = k1.label;
-			String label2 = k2.label;
+			String label1 = k1.label.toLowerCase();
+			String label2 = k2.label.toLowerCase();
 
 			if(col == 0)
 				return label1.compareTo(label2);
@@ -228,6 +228,9 @@ class ShortcutsModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/04/18 11:44:31  sp
+ * Context menu editor finished
+ *
  * Revision 1.3  2000/04/16 08:56:24  sp
  * Option pane updates
  *

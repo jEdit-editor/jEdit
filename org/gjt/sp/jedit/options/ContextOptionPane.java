@@ -24,6 +24,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -51,8 +52,17 @@ public class ContextOptionPane extends AbstractOptionPane
 		listModel = new DefaultListModel();
 		while(st.hasMoreTokens())
 		{
-			listModel.addElement(new MenuItem(
-				(String)st.nextToken()));
+			String actionName = (String)st.nextToken();
+			String label;
+			if(actionName.equals("-"))
+				label = "-";
+			else
+			{
+				label = jEdit.getProperty(actionName + ".label");
+				if(label == null)
+					continue;
+			}
+			listModel.addElement(new MenuItem(actionName,label));
 		}
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -77,6 +87,35 @@ public class ContextOptionPane extends AbstractOptionPane
 
 		updateButtons();
 		add(BorderLayout.SOUTH,buttons);
+
+		// create actions list
+		EditAction[] actions = jEdit.getActions();
+		Vector vector = new Vector(actions.length);
+		for(int i = 0; i < actions.length; i++)
+		{
+			String actionName = actions[i].getName();
+			String label = jEdit.getProperty(actionName + ".label");
+			if(label == null)
+				continue;
+			vector.addElement(new MenuItem(actionName,label));
+		}
+		MiscUtilities.quicksort(vector,new MenuItemCompare());
+
+		actionsList = new DefaultListModel();
+		actionsList.ensureCapacity(vector.size());
+		for(int i = 0; i < vector.size(); i++)
+		{
+			actionsList.addElement(vector.elementAt(i));
+		}
+	}
+
+	class MenuItemCompare implements MiscUtilities.Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			return ((MenuItem)obj1).label.toLowerCase().compareTo(
+				((MenuItem)obj2).label.toLowerCase());
+		}
 	}
 
 	protected void _save()
@@ -100,6 +139,8 @@ public class ContextOptionPane extends AbstractOptionPane
 	private JButton remove;
 	private JButton moveUp, moveDown;
 
+	private DefaultListModel actionsList;
+
 	private void updateButtons()
 	{
 		int index = list.getSelectedIndex();
@@ -108,21 +149,18 @@ public class ContextOptionPane extends AbstractOptionPane
 		moveDown.setEnabled(index != -1 && index != listModel.getSize() - 1);
 	}
 
-	class MenuItem
+	static class MenuItem
 	{
 		String actionName;
 		String label;
 
-		MenuItem(String actionName)
+		MenuItem(String actionName, String label)
 		{
 			this.actionName = actionName;
-			if(actionName.equals("-"))
-				label = actionName;
+			if(label.equals("-"))
+				this.label = label;
 			else
-			{
-				label = GUIUtilities.prettifyMenuLabel(
-					jEdit.getProperty(actionName + ".label"));
-			}
+				this.label = GUIUtilities.prettifyMenuLabel(label);
 		}
 
 		public String toString()
@@ -137,7 +175,25 @@ public class ContextOptionPane extends AbstractOptionPane
 		{
 			Object source = evt.getSource();
 
-			if(source == remove)
+			if(source == add)
+			{
+				AddDialog dialog = new AddDialog(
+					ContextOptionPane.this,
+					actionsList);
+				MenuItem selection = dialog.getSelection();
+				if(selection == null)
+					return;
+
+				int index = list.getSelectedIndex();
+				if(index == -1)
+					index = listModel.getSize();
+				else
+					index++;
+
+				listModel.insertElementAt(selection,index);
+				list.setSelectedIndex(index);
+			}
+			else if(source == remove)
 			{
 				int index = list.getSelectedIndex();
 				listModel.removeElementAt(index);
@@ -171,9 +227,116 @@ public class ContextOptionPane extends AbstractOptionPane
 	}
 }
 
+class AddDialog extends EnhancedDialog
+{
+	public AddDialog(Component comp, ListModel actionsList)
+	{
+		super(JOptionPane.getFrameForComponent(comp),
+			jEdit.getProperty("options.context.add.title"),
+			true);
+		getContentPane().add(BorderLayout.NORTH,new JLabel(
+			jEdit.getProperty("options.context.add.caption")));
+
+		JPanel centerPanel = new JPanel(new BorderLayout());
+		JPanel radioPanel = new JPanel(new GridLayout(2,1));
+
+		ActionHandler actionHandler = new ActionHandler();
+		ButtonGroup grp = new ButtonGroup();
+
+		separator = new JRadioButton(jEdit.getProperty("options.context"
+			+ ".add.separator"));
+		separator.getModel().setSelected(true);
+		separator.addActionListener(actionHandler);
+		grp.add(separator);
+		radioPanel.add(separator);
+
+		action = new JRadioButton(jEdit.getProperty("options.context"
+			+ ".add.action"));
+		action.addActionListener(actionHandler);
+		grp.add(action);
+		radioPanel.add(action);
+
+		centerPanel.add(BorderLayout.NORTH,radioPanel);
+
+		list = new JList(actionsList);
+		list.setVisibleRowCount(16);
+		list.setEnabled(false);
+		centerPanel.add(BorderLayout.CENTER,new JScrollPane(list));
+		getContentPane().add(BorderLayout.CENTER,centerPanel);
+
+		JPanel southPanel = new JPanel();
+		ok = new JButton(jEdit.getProperty("common.ok"));
+		ok.addActionListener(actionHandler);
+		getRootPane().setDefaultButton(ok);
+		southPanel.add(ok);
+		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		cancel.addActionListener(actionHandler);
+		southPanel.add(cancel);
+
+		getContentPane().add(BorderLayout.SOUTH,southPanel);
+
+		pack();
+		Dimension screen = getToolkit().getScreenSize();
+		setLocation((screen.width - getSize().width) / 2,
+			(screen.height - getSize().height) / 2);
+		show();
+	}
+
+	public void ok()
+	{
+		isOK = true;
+		dispose();
+	}
+
+	public void cancel()
+	{
+		dispose();
+	}
+
+	public ContextOptionPane.MenuItem getSelection()
+	{
+		if(!isOK)
+			return null;
+
+		if(separator.getModel().isSelected())
+			return new ContextOptionPane.MenuItem("-","-");
+		else if(action.getModel().isSelected())
+		{
+			return (ContextOptionPane.MenuItem)list.getSelectedValue();
+		}
+		else
+			throw new InternalError();
+	}
+
+	// private members
+	private boolean isOK;
+	private JRadioButton separator, action;
+	private JList list;
+	private JButton ok, cancel;
+
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			Object source = evt.getSource();
+			if(source == separator)
+				list.setEnabled(false);
+			else if(source == action)
+				list.setEnabled(true);
+			else if(source == ok)
+				ok();
+			else if(source == cancel)
+				cancel();
+		}
+	}
+}
+
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/04/18 11:44:31  sp
+ * Context menu editor finished
+ *
  * Revision 1.1  2000/04/18 08:27:52  sp
  * Context menu editor started
  *

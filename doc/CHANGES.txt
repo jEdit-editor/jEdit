@@ -2,12 +2,19 @@ JEDIT VERSION HISTORY
 
 * Version 2.4pre7
 
++ New Features
+
+- The text area right-click menu can now be edited in the Global Options
+  dialog box. Any action whatsoever (including plugin actions) can be added
+  to the menu now
+
 + Enhancements
 
 - Firewall plugin sources moved to their own fileset
 - The 'Open' and 'Save As' dialog boxes are now loaded in a background thread
   with minimum priority once jEdit has started
 - Documentation updates
+- Menu item mnemonics no longer shown in context menu
 
 + Bug Fixes
 
