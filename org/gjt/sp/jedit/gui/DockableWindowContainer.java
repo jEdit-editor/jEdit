@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.border.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -56,11 +57,21 @@ public interface DockableWindowContainer
 
 			this.position = position;
 
-			int top = position.equals(DockableWindowManager.BOTTOM) ? 4 : 0;
-			int left = position.equals(DockableWindowManager.RIGHT) ? 4 : 0;
-			int bottom = position.equals(DockableWindowManager.TOP) ? 4 : 0;
-			int right = position.equals(DockableWindowManager.LEFT) ? 4 : 0;
-			setBorder(new MatteBorder(top,left,bottom,right,Color.black));
+			int top = position.equals(DockableWindowManager.BOTTOM) ? 5 : 0;
+			int left = position.equals(DockableWindowManager.RIGHT) ? 5 : 0;
+			int bottom = position.equals(DockableWindowManager.TOP) ? 5 : 0;
+			int right = position.equals(DockableWindowManager.LEFT) ? 5 : 0;
+
+			if(UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+			{
+				setBorder(new MatteBorder(top,left,bottom,right,
+					MetalLookAndFeel.getPrimaryControl()));
+			}
+			else
+			{
+				setBorder(new MatteBorder(top,left,bottom,right,
+					Color.black));
+			}
 
 			try
 			{
@@ -127,10 +138,10 @@ public interface DockableWindowContainer
 			{
 				if(position.equals(DockableWindowManager.LEFT)
 					|| position.equals(DockableWindowManager.RIGHT))
-					prefSize.width = 4;
+					prefSize.width = 5;
 				else if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
-					prefSize.height = 4;
+					prefSize.height = 5;
 			}
 			else
 			{
@@ -250,7 +261,7 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.RIGHT))
 					dimension = getWidth() - evt.getX();
 
-				dimension = Math.max(4,dimension);
+				dimension = Math.max(5,dimension);
 
 				revalidate();
 			}
@@ -319,6 +330,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.9  2000/09/09 04:00:34  sp
  * 2.6pre6
  *

@@ -49,15 +49,12 @@ public class insert_literal extends EditAction
 		{
 			view.showStatus(null);
 
-			if(!str.equals("\0"))
-			{
-				int repeatCount = view.getInputHandler().getRepeatCount();
+			int repeatCount = view.getInputHandler().getRepeatCount();
 
-				StringBuffer buf = new StringBuffer();
-				for(int i = 0; i < repeatCount; i++)
-					buf.append(str);
-				textArea.overwriteSetSelectedText(buf.toString());
-			}
+			StringBuffer buf = new StringBuffer();
+			for(int i = 0; i < repeatCount; i++)
+				buf.append(str);
+			textArea.overwriteSetSelectedText(buf.toString());
 		}
 	}
 

@@ -261,24 +261,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	}
 
 	/**
-	 * Returns true if invalid lines are painted as red tildes (~),
-	 * false otherwise.
-	 */
-	public boolean getInvalidLinesPainted()
-	{
-		return paintInvalid;
-	}
-
-	/**
-	 * Sets if invalid lines are to be painted as red tildes.
-	 * @param paintInvalid True if invalid lines should be drawn, false otherwise
-	 */
-	public void setInvalidLinesPainted(boolean paintInvalid)
-	{
-		this.paintInvalid = paintInvalid;
-	}
-
-	/**
 	 * Adds a custom highlight painter.
 	 * @param highlight The highlight
 	 */
@@ -458,7 +440,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private boolean blockCaret;
 	private boolean lineHighlight;
 	private boolean bracketHighlight;
-	private boolean paintInvalid;
 	private boolean eolMarkers;
 	private int cols;
 	private int rows;
@@ -480,15 +461,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			|| line >= textArea.getLineCount());
 		paintHighlight(gfx,line,y,invalid);
 
-		if(invalid)
-		{
-			if(paintInvalid)
-			{
-				styles[Token.INVALID].setGraphicsFlags(gfx,defaultFont);
-				gfx.drawString("~",0,y + fm.getHeight());
-			}
-		}
-		else
+		if(!invalid)
 		{
 			gfx.setFont(defaultFont);
 			gfx.setColor(defaultColor);
@@ -640,6 +613,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.41  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.40  2000/07/22 03:27:04  sp
  * threaded I/O improved, autosave rewrite started
  *

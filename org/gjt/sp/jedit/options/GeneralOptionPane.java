@@ -55,12 +55,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		confirmExit.setSelected(jEdit.getBooleanProperty("confirmExit"));
 		addComponent(confirmExit);
 
-		/* Sort buffer list */
-		sortBuffers = new JCheckBox(jEdit.getProperty(
-			"options.general.sortBuffers"));
-		sortBuffers.setSelected(jEdit.getBooleanProperty("sortBuffers"));
-		addComponent(sortBuffers);
-
 		/* Sort buffers by names */
 		sortByName = new JCheckBox(jEdit.getProperty(
 			"options.general.sortByName"));
@@ -141,12 +135,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.general.ioThreadCount"),
 			ioThreadCount);
 
-		/* Tokenize files on load */
-		tokenize = new JCheckBox(jEdit.getProperty(
-			"options.general.tokenize"));
-		tokenize.setSelected(jEdit.getBooleanProperty("buffer.tokenize"));
-		addComponent(tokenize);
-
 		addSeparator("options.general.ui");
 
 		/* Look and feel */
@@ -204,7 +192,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("history",history.getText());
 		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
 		jEdit.setBooleanProperty("confirmExit",confirmExit.isSelected());
-		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
 			.isSelected());
@@ -232,7 +219,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
-		jEdit.setBooleanProperty("buffer.tokenize",tokenize.isSelected());
 		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
 
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
@@ -250,7 +236,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JTextField history;
 	private JCheckBox saveDesktop;
 	private JCheckBox confirmExit;
-	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
 	private JCheckBox passiveFTP;
@@ -263,7 +248,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
 	private JTextField ioThreadCount;
-	private JCheckBox tokenize;
 
 	private UIManager.LookAndFeelInfo[] lfs;
 	private JComboBox lookAndFeel;
@@ -274,6 +258,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.43  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.42  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

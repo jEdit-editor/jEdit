@@ -78,7 +78,7 @@ public class HelpfulJList extends JList implements MouseListener
 
 				// XXX: this shouldn't be hardcoded!
 				if(!cellRectIsVisible(cellRect))
-					return new Point(cellRect.x + 20, cellRect.y);
+					return new Point(cellRect.x + 20, cellRect.y + 1);
 			}
 		}
 		return null;
@@ -120,6 +120,9 @@ public class HelpfulJList extends JList implements MouseListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.5  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

@@ -832,8 +832,7 @@ options.general.recent=Max recent files:
 options.general.history=Max history list length:
 options.general.confirmExit=Ask for confirmation before exiting
 options.general.saveDesktop=Save session on exit
-options.general.sortBuffers=Sort buffer list
-options.general.sortByName=Sort by file name only (instead of full path)
+options.general.sortByName=Sort buffers by file name, instead of path name
 options.general.checkModStatus=Check file modification time on focus
 options.general.passiveFTP=Use passive-mode FTP
 
@@ -846,13 +845,11 @@ options.general.backupPrefix=Backup filename prefix:
 options.general.backupSuffix=Backup filename suffix:
 options.general.lineSeparator=Default line separator:
 options.general.ioThreadCount=Number of I/O threads:
-options.general.tokenize=Fully parse files for syntax info when loading
 
 options.general.ui=User interface
 options.general.lf.note=Restart jEdit for look & feel changes to take effect
 options.general.lf=Swing look & feel:
 options.general.showFullPath=Show full path of buffers in title bar
-options.general.showBufferTabs=Show buffer tabs
 options.general.bufferTabsPos=Buffer tabs position:
 options.general.bufferTabsPos.off=off
 options.general.bufferTabsPos.top=top
@@ -866,7 +863,6 @@ options.textarea.font=Text area font:
 options.textarea.lineHighlight=Current line highlighting
 options.textarea.bracketHighlight=Bracket highlighting
 options.textarea.eolMarkers=EOL markers
-options.textarea.paintInvalid=Paint invalid lines as red tildes
 options.textarea.blinkCaret=Blinking caret
 options.textarea.blockCaret=Block-shaped caret
 options.textarea.electricBorders=Electric (auto scroll) borders
@@ -1020,6 +1016,7 @@ options.browser.showHiddenFiles=Show hidden files
 options.browser.sortFiles=Sort file list
 options.browser.sortIgnoreCase=Case insensitive sort
 options.browser.sortMixFilesAndDirs=Mix files and directories
+options.browser.doubleClickClose=Double-clicking an open file closes it
 
 options.browser.filters=Additional Filename Filters
 options.browser.filters.name=Name
@@ -1049,7 +1046,7 @@ style-editor.bgColor=Background color:
 
 # Help viewer
 helpviewer.title=jEdit Help
-helpviewer.url=URL:
+helpviewer.url=Location:
 helpviewer.back=Back
 helpviewer.forward=Forward
 

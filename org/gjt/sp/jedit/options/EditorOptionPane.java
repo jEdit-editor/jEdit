@@ -129,8 +129,8 @@ public class EditorOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editor.noWordSep"),
 			noWordSep = new JTextField());
 
-		addComponent(noTabs = new JCheckBox(jEdit.getProperty(
-			"options.editor.noTabs")));
+		addComponent(syntax = new JCheckBox(jEdit.getProperty(
+			"options.editor.syntax")));
 
 		addComponent(indentOnTab = new JCheckBox(jEdit.getProperty(
 			"options.editor.indentOnTab")));
@@ -138,8 +138,8 @@ public class EditorOptionPane extends AbstractOptionPane
 		addComponent(indentOnEnter = new JCheckBox(jEdit.getProperty(
 			"options.editor.indentOnEnter")));
 
-		addComponent(syntax = new JCheckBox(jEdit.getProperty(
-			"options.editor.syntax")));
+		addComponent(noTabs = new JCheckBox(jEdit.getProperty(
+			"options.editor.noTabs")));
 
 		selectMode();
 	}
@@ -213,7 +213,7 @@ public class EditorOptionPane extends AbstractOptionPane
 	{
 		current = modeProps[mode.getSelectedIndex()];
 		current.edited = true;
-		current.mode.loadIfNecessary();
+		current.load();
 
 		useDefaults.setSelected(current.useDefaults);
 		filenameGlob.setText(current.filenameGlob);
@@ -271,6 +271,7 @@ public class EditorOptionPane extends AbstractOptionPane
 	{
 		Mode mode;
 		boolean edited;
+		boolean loaded;
 
 		boolean useDefaults;
 		String filenameGlob;
@@ -289,6 +290,16 @@ public class EditorOptionPane extends AbstractOptionPane
 		ModeProperties(Mode mode)
 		{
 			this.mode = mode;
+		}
+
+		void load()
+		{
+			if(loaded)
+				return;
+
+			loaded = true;
+
+			mode.loadIfNecessary();
 
 			useDefaults = !jEdit.getBooleanProperty("mode."
 				+ mode.getName() + ".customSettings");
@@ -353,6 +364,9 @@ public class EditorOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.27  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.26  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

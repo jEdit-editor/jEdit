@@ -303,8 +303,6 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getProperty("view.bracketHighlightColor")));
 		painter.setEOLMarkersPainted(jEdit.getBooleanProperty(
 			"view.eolMarkers"));
-		painter.setInvalidLinesPainted(jEdit.getBooleanProperty(
-			"view.paintInvalid"));
 		painter.setEOLMarkerColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.eolMarkerColor")));
 		painter.setCaretColor(GUIUtilities.parseColor(
@@ -472,7 +470,6 @@ public class EditPane extends JPanel implements EBComponent
 		myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
 		myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
 		myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
-		myPainter.setInvalidLinesPainted(painter.getInvalidLinesPainted());
 		myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
 		myPainter.setCaretColor(painter.getCaretColor());
 		myPainter.setSelectionColor(painter.getSelectionColor());
@@ -626,6 +623,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.18  2000/09/26 10:19:45  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.17  2000/09/23 03:01:09  sp
  * pre7 yayayay
  *

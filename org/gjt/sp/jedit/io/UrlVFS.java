@@ -50,6 +50,11 @@ public class UrlVFS extends VFS
 			return parent + '/' + path;
 	}
 
+	public String getParentOfPath(String path)
+	{
+		return MiscUtilities.getParentOfPath(path);
+	}
+
 	public InputStream _createInputStream(VFSSession session,
 		String path, boolean ignoreErrors, Component comp)
 		throws IOException
@@ -88,6 +93,9 @@ public class UrlVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.7  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

@@ -65,7 +65,7 @@ public class KeyEventWorkaround
 			if(ch == KeyEvent.CHAR_UNDEFINED)
 				return null;
 
-			if(ch < 0x20 || ch == 0x7f)
+			if(ch != '\b' && (ch < 0x20 || ch == 0x7f))
 				return null;
 
 			// some Java versions send a Control+Alt KEY_PRESSED
@@ -115,6 +115,9 @@ public class KeyEventWorkaround
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.3  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

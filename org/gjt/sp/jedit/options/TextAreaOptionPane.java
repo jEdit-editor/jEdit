@@ -79,12 +79,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		eolMarkers.setSelected(jEdit.getBooleanProperty("view.eolMarkers"));
 		addComponent(eolMarkers);
 
-		/* Paint invalid */
-		paintInvalid = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".paintInvalid"));
-		paintInvalid.setSelected(jEdit.getBooleanProperty("view.paintInvalid"));
-		addComponent(paintInvalid);
-
 		/* Blinking caret */
 		blinkCaret = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".blinkCaret"));
@@ -195,8 +189,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.eolMarkers",eolMarkers
 			.isSelected());
-		jEdit.setBooleanProperty("view.paintInvalid",paintInvalid
-			.isSelected());
 		jEdit.setBooleanProperty("view.caretBlink",blinkCaret.isSelected());
 		jEdit.setBooleanProperty("view.blockCaret",blockCaret.isSelected());
 		jEdit.setProperty("view.electricBorders",electricBorders
@@ -239,7 +231,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox lineHighlight;
 	private JCheckBox bracketHighlight;
 	private JCheckBox eolMarkers;
-	private JCheckBox paintInvalid;
 	private JCheckBox blinkCaret;
 	private JCheckBox blockCaret;
 	private JCheckBox electricBorders;
@@ -258,6 +249,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.2  2000/08/11 09:06:52  sp
  * Browser option pane
  *

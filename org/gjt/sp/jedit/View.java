@@ -506,6 +506,7 @@ public class View extends JFrame implements EBComponent
 		editPane = createEditPane(null,buffer);
 
 		updateBuffersMenu();
+		updateMarkerMenus();
 		updateMacrosMenu();
 		updatePluginsMenu();
 		updateHelpMenu();
@@ -1063,6 +1064,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.199  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.198  2000/09/23 03:01:09  sp
  * pre7 yayayay
  *

@@ -37,4 +37,14 @@ public class play_temp_macro extends EditAction
 
 		Macros.playMacro(view,null);
 	}
+
+	public boolean isRepeatable()
+	{
+		return false;
+	}
+
+	public boolean isRecordable()
+	{
+		return false;
+	}
 }

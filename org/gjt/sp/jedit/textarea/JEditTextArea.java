@@ -19,8 +19,9 @@
 
 package org.gjt.sp.jedit.textarea;
 
-import javax.swing.border.Border;
+import javax.swing.border.*;
 import javax.swing.event.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.*;
 import javax.swing.undo.*;
 import javax.swing.*;
@@ -81,6 +82,21 @@ public class JEditTextArea extends JComponent
 		add(CENTER,painter);
 		add(RIGHT,vertical = new JScrollBar(JScrollBar.VERTICAL));
 		add(BOTTOM,horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
+
+		// this ensures that the text area's look is slightly
+		// more consistent with the rest of the metal l&f.
+		// while it depends on not-so-well-documented portions
+		// of Swing, it only affects appearance, so future
+		// breakage shouldn't matter
+		if(UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+		{
+			setBorder(new TextAreaBorder());
+			vertical.putClientProperty("JScrollBar.isFreeStanding",
+				Boolean.FALSE);
+			horizontal.putClientProperty("JScrollBar.isFreeStanding",
+				Boolean.FALSE);
+			horizontal.setBorder(null);
+		}
 
 		// Add some event listeners
 		vertical.addAdjustmentListener(new AdjustHandler());
@@ -1596,6 +1612,35 @@ public class JEditTextArea extends JComponent
 	// for event handlers only
 	private int clickCount;
 
+	static class TextAreaBorder extends AbstractBorder
+	{
+		private static final Insets insets = new Insets(1, 1, 2, 2);
+
+		public void paintBorder(Component c, Graphics g, int x, int y,
+			int width, int height)
+		{
+			g.translate(x,y);
+
+			g.setColor(MetalLookAndFeel.getControlDarkShadow());
+			g.drawRect(0,0,width-2,height-2);
+			g.setColor(MetalLookAndFeel.getControlHighlight());
+
+			g.drawLine(width-1,1,width-1,height-1);
+			g.drawLine(1,height-1,width-1,height-1);
+
+			g.setColor(MetalLookAndFeel.getControl());
+			g.drawLine(width-2,2,width-2,2);
+			g.drawLine(1,height-2,1,height-2);
+
+			g.translate(-x,-y);
+		}
+
+		public Insets getBorderInsets(Component c)
+		{
+			return new Insets(1,1,2,2);
+		}
+	}
+
 	class ScrollLayout implements LayoutManager
 	{
 		public void addLayoutComponent(String name, Component comp)
@@ -1654,7 +1699,16 @@ public class JEditTextArea extends JComponent
 		public Dimension minimumLayoutSize(Container parent)
 		{
 			Dimension dim = new Dimension();
-			Insets insets = getInsets();
+			Border border = getBorder();
+			Insets insets;
+			if(border == null)
+				insets = new Insets(0,0,0,0);
+			else
+			{
+				insets = getBorder().getBorderInsets(
+					JEditTextArea.this);
+			}
+
 			dim.width = insets.left + insets.right;
 			dim.height = insets.top + insets.bottom;
 
@@ -1674,7 +1728,16 @@ public class JEditTextArea extends JComponent
 		public void layoutContainer(Container parent)
 		{
 			Dimension size = parent.getSize();
-			Insets insets = parent.getInsets();
+			Border border = getBorder();
+			Insets insets;
+			if(border == null)
+				insets = new Insets(0,0,0,0);
+			else
+			{
+				insets = getBorder().getBorderInsets(
+					JEditTextArea.this);
+			}
+
 			int itop = insets.top;
 			int ileft = insets.left;
 			int ibottom = insets.bottom;
@@ -2140,7 +2203,7 @@ public class JEditTextArea extends JComponent
 			{
 				int length = focusedComponent
 					.getBuffer().getLength();
-				if(start < length && end < length)
+				if(start <= length && end <= length)
 					focusedComponent.select(start,end);
 				else
 					Log.log(Log.WARNING,this,
@@ -2179,6 +2242,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.85  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.84  2000/09/23 03:01:11  sp
  * pre7 yayayay
  *

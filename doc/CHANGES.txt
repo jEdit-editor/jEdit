@@ -1,5 +1,50 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6pre8
+
++ New Features
+
+- When the new 'double-click close' option is enabled, double-clicking on
+  an open file in the VFS browser will close it. This is disabled by
+  default; enable it in Utilities->Global Options->VFS Browser
+
++ Enhancements
+
+- Text area now has a border and looks a bit better
+- Pressing 'Escape' in the command line field now resets the repeat count
+- Help viewer has a new look
+- Documentation updates
+- Deleting, renaming, etc macros from the VFS browser will now update the
+  macros list
+
++ Neutral
+
+- 'Sort buffers' check box gone from Global Options. Buffer sorting is now
+  always enabled
+- 'Paint invalid lines as red tildes' check box gone from Global Options.
+  This feature is no longer available
+- 'Fully parse buffers for syntax info when loading' check box gone from
+  Global Options. This feature slowed down file loading and provided
+  little of benefit, so is no longer available
+- Minor cosmetic changes to Editor option pane
+
++ Bug Fixes
+
+- Repeating macro playback didn't work
+- Marker menus were initially empty for newly opened buffers
+- The 'Editor' option pane didn't display settings for modes that weren't
+  loaded
+- Fixed (harmless) NullPointerException when loading files from a URL
+- Listing the root of a drive letter didn't work on Windows
+- Backspace key didn't work in command line field on some Java versions
+- Nested compound edits have been broken since some 2.6preX release, so stuff
+  like a 'Replace All' would take several invocations of 'Undo' to fully
+  reverse
+
++ API Changes
+
+- No-args Buffer.tokenizeLines() method deprecated
+
 * Version 2.6pre7
 
 + Enhancements

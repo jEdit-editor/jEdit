@@ -385,11 +385,6 @@ public class Buffer extends PlainDocument implements EBComponent
 				{
 					if(!getPath().equals(oldPath))
 						jEdit.updatePosition(Buffer.this);
-
-					// getPath() used since 'path' in containing
-					// method isn't final
-					if(getPath().toLowerCase().endsWith(".macro"))
-						Macros.loadMacros();
 				}
 
 				EditBus.send(new BufferUpdate(Buffer.this,
@@ -765,8 +760,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		if(compoundEditCount == 0)
 			return;
+
 		compoundEditCount--;
-		if(compoundEdit != null)
+		if(compoundEditCount == 0)
 		{
 			compoundEdit.end();
 			if(compoundEditNonEmpty && compoundEdit.canUndo())
@@ -829,11 +825,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			throw new NullPointerException("Mode must be non-null");
 
 		if(this.mode == mode)
-		{
-			// this helps out with reloading and so on
-			tokenizeLines();
 			return;
-		}
 
 		Mode oldMode = this.mode;
 
@@ -1144,21 +1136,12 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		tokenMarker = tm;
 		tokenMarker.insertLines(0,getDefaultRootElement().getElementCount());
-		tokenizeLines();
 	}
 
 	/**
-	 * Reparses the document, by passing all lines to the token
-	 * marker. This should be called after the document is first
-	 * loaded.
+	 * @deprecated Don't call this method.
 	 */
-	public void tokenizeLines()
-	{
-		if(!jEdit.getBooleanProperty("buffer.tokenize"))
-			return;
-
-		tokenizeLines(0,getDefaultRootElement().getElementCount());
-	}
+	public void tokenizeLines() {}
 
 	/**
 	 * Reparses the document, by passing the specified lines to the
@@ -1723,6 +1706,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.180  2000/09/26 10:19:45  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.179  2000/09/23 03:01:09  sp
  * pre7 yayayay
  *

@@ -191,6 +191,11 @@ public class DefaultInputHandler extends InputHandler
 		int modifiers = evt.getModifiers();
 		char c = evt.getKeyChar();
 
+		// KeyEventWorkaround doesn't filter these out (CommandLine
+		// needs to handle them)
+		if(c == '\b')
+			return;
+
 		KeyStroke keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c));
 		Object o = currentBindings.get(keyStroke);
 
@@ -295,6 +300,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.4  2000/09/07 04:46:08  sp
  * bug fixes
  *

@@ -68,50 +68,53 @@ public class HelpViewer extends EnhancedFrame
 	{
 		super(jEdit.getProperty("helpviewer.title"));
 
-		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,12,12,12));
-		setContentPane(content);
-
 		setIconImage(GUIUtilities.getEditorIcon());
 
 		history = new URL[25];
 
 		ActionHandler actionListener = new ActionHandler();
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(new EmptyBorder(0,0,12,0));
+		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
+
 		JLabel label = new JLabel(jEdit.getProperty("helpviewer.url"));
 		label.setBorder(new EmptyBorder(0,0,0,12));
-		panel.add(BorderLayout.WEST,label);
+		toolBar.add(label);
+		Box box = new Box(BoxLayout.Y_AXIS);
+		box.add(Box.createGlue());
 		urlField = new JTextField();
-		panel.add(urlField);
+		Dimension dim = urlField.getPreferredSize();
+		dim.width = Integer.MAX_VALUE;
+		urlField.setMaximumSize(dim);
+		box.add(urlField);
+		box.add(Box.createGlue());
+		toolBar.add(box);
 
-		content.add(BorderLayout.NORTH,panel);
+		toolBar.add(Box.createHorizontalStrut(6));
+
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
+		buttons.setBorder(new EmptyBorder(0,12,0,0));
+		back = new JButton(GUIUtilities.loadIcon("Back24.gif"));
+		back.setToolTipText(jEdit.getProperty("helpviewer.back"));
+		back.addActionListener(actionListener);
+		back.setRequestFocusEnabled(false);
+		toolBar.add(back);
+		forward = new JButton(GUIUtilities.loadIcon("Forward24.gif"));
+		forward.addActionListener(actionListener);
+		forward.setToolTipText(jEdit.getProperty("helpviewer.forward"));
+		forward.setRequestFocusEnabled(false);
+		toolBar.add(forward);
+		back.setPreferredSize(forward.getPreferredSize());
+
+		getContentPane().add(BorderLayout.NORTH,toolBar);
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
 		viewer.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		viewer.addHyperlinkListener(new LinkHandler());
-		content.add(BorderLayout.CENTER,new JScrollPane(viewer));
-
-		panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(12,0,0,0));
-		panel.add(Box.createGlue());
-		back = new JButton(jEdit.getProperty("helpviewer.back"));
-		back.setIcon(GUIUtilities.loadIcon("Back24.gif"));
-		back.addActionListener(actionListener);
-		panel.add(back);
-		panel.add(Box.createHorizontalStrut(6));
-		forward = new JButton(jEdit.getProperty("helpviewer.forward"));
-		forward.setIcon(GUIUtilities.loadIcon("Foward24.gif"));
-		forward.addActionListener(actionListener);
-		panel.add(forward);
-		panel.add(Box.createGlue());
-
-		back.setPreferredSize(forward.getPreferredSize());
-
-		content.add(BorderLayout.SOUTH,panel);
+		getContentPane().add(BorderLayout.CENTER,new JScrollPane(viewer));
 
 		gotoURL(url,true);
 
@@ -255,6 +258,9 @@ public class HelpViewer extends EnhancedFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.27  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

@@ -94,6 +94,13 @@ public class BrowserOptionPane extends AbstractOptionPane
 		sortMixFilesAndDirs.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".sortMixFilesAndDirs"));
 		addComponent(sortMixFilesAndDirs);
+
+		/* Double-click close */
+		doubleClickClose = new JCheckBox(jEdit.getProperty("options.browser"
+			+ ".doubleClickClose"));
+		doubleClickClose.setSelected(jEdit.getBooleanProperty("vfs.browser"
+			+ ".doubleClickClose"));
+		addComponent(doubleClickClose);
 	}
 
 	public void _save()
@@ -112,6 +119,8 @@ public class BrowserOptionPane extends AbstractOptionPane
 			sortIgnoreCase.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.sortMixFilesAndDirs",
 			sortMixFilesAndDirs.isSelected());
+		jEdit.setBooleanProperty("vfs.browser.doubleClickClose",
+			doubleClickClose.isSelected());
 	}
 
 	// private members
@@ -121,11 +130,15 @@ public class BrowserOptionPane extends AbstractOptionPane
 	private JCheckBox sortFiles;
 	private JCheckBox sortIgnoreCase;
 	private JCheckBox sortMixFilesAndDirs;
+	private JCheckBox doubleClickClose;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.4  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

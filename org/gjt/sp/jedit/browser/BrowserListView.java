@@ -20,10 +20,10 @@
 
 package org.gjt.sp.jedit.browser;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 
 /**
@@ -196,6 +196,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.10  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

@@ -142,6 +142,21 @@ public class FileVFS extends VFS
 	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String path,
 		Component comp)
 	{
+		/* Fix for the bug where listing a drive letter on Windows
+		 * doesn't work. On Windows, paths of the form X: list the
+		 * last *working directory* on that drive. To list the root
+		 * of the drive, you must use X:\.
+		 *
+		 * However, the VFS browser and friends strip off trailing
+		 * path separators, for various reasons. So to work around
+		 * that, we add a '\' to drive letter paths on Windows.
+		 */
+		if(File.separatorChar == '\\')
+		{
+			if(path.length() == 2 && path.charAt(1) == ':')
+				path = path.concat(File.separator);
+		}
+
 		File directory = new File(path);
 		String[] list = directory.list();
 		if(list == null)
@@ -321,6 +336,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/09/26 10:19:47  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.22  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

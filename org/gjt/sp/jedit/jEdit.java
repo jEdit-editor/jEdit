@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.07.00";
+		return "02.06.08.00";
 	}
 
 	/**
@@ -207,11 +207,10 @@ public class jEdit
 				// endlessly, so log it as NOTICE, not
 				// ERROR
 				Log.log(Log.NOTICE,jEdit.class,"An error occurred"
-					+ " while connecting to the jEdit server instance."
-					+ " This probably");
-				Log.log(Log.NOTICE,jEdit.class,"means that jEdit crashed"
-					+ " and/or exited abnormally the last"
-					+ " time it was run.");
+					+ " while connecting to the jEdit server instance.");
+				Log.log(Log.NOTICE,jEdit.class,"This probably means that"
+					+ " jEdit crashed and/or exited abnormally");
+				Log.log(Log.NOTICE,jEdit.class,"the last time it was run.");
 				Log.log(Log.NOTICE,jEdit.class,"If you don't"
 					+ " know what this means, don't worry.");
 				Log.log(Log.NOTICE,jEdit.class,e);
@@ -280,7 +279,6 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 
 		// Buffer sort
-		sortBuffers = getBooleanProperty("sortBuffers");
 		sortByName = getBooleanProperty("sortByName");
 
 		propertiesChanged();
@@ -1711,11 +1709,8 @@ public class jEdit
 	 */
 	static void updatePosition(Buffer buffer)
 	{
-		if(sortBuffers)
-		{
-			removeBufferFromList(buffer);
-			addBufferToList(buffer);
-		}
+		removeBufferFromList(buffer);
+		addBufferToList(buffer);
 	}
 
 	// private members
@@ -1736,7 +1731,6 @@ public class jEdit
 	private static InputHandler inputHandler;
 
 	// buffer link list
-	private static boolean sortBuffers;
 	private static boolean sortByName;
 	private static int bufferCount;
 	private static Buffer buffersFirst;
@@ -2225,7 +2219,7 @@ public class jEdit
 			buffersFirst = buffersLast = buffer;
 			return;
 		}
-		else if(sortBuffers)
+		else
 		{
 			String name1 = (sortByName ? buffer.getName()
 				: buffer.getPath()).toLowerCase();
@@ -2365,6 +2359,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.280  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.279  2000/09/23 03:01:09  sp
  * pre7 yayayay
  *

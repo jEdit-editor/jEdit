@@ -38,17 +38,7 @@ public class play_macro extends EditAction
 			return;
 		}
 
-		// This hackery is necessary to prevent actions inside the
-		// macro from picking up the repeat count
-		InputHandler inputHandler = view.getInputHandler();
-		int repeatCount = inputHandler.getRepeatCount();
-		inputHandler.setRepeatEnabled(false);
-		inputHandler.setRepeatCount(1);
-
-		for(int i = repeatCount - 1; i >= 0; i--)
-		{
-			Macros.playMacro(view,macro.path);
-		}
+		Macros.playMacro(view,macro.path);
 	}
 
 	public boolean isRepeatable()

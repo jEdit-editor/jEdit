@@ -30,8 +30,7 @@ import java.io.IOException;
 import java.util.*;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.msg.BufferUpdate;
-import org.gjt.sp.jedit.msg.MacrosChanged;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -55,15 +54,17 @@ public class Macros
 		macroHierarchy = new Vector();
 		macrosHash = new Hashtable();
 
-		loadMacros(macroHierarchy,"",new File(MiscUtilities.constructPath(
-			jEdit.getJEditHome(),"macros")));
+		systemMacroPath = MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"macros");
+		loadMacros(macroHierarchy,"",new File(systemMacroPath));
 
 		String settings = jEdit.getSettingsDirectory();
 
 		if(settings != null)
 		{
-			loadMacros(macroHierarchy,"",new File(MiscUtilities.constructPath(
-				settings,"macros")));
+			userMacroPath = MiscUtilities.constructPath(
+				settings,"macros");
+			loadMacros(macroHierarchy,"",new File(userMacroPath));
 		}
 
 		// sort macro list
@@ -189,30 +190,40 @@ public class Macros
 	{
 		lastMacro = name;
 
-		if(name == null)
+		// This hackery is necessary to prevent actions inside the
+		// macro from picking up the repeat count
+		InputHandler inputHandler = view.getInputHandler();
+		int repeatCount = inputHandler.getRepeatCount();
+		inputHandler.setRepeatEnabled(false);
+
+		for(int i = repeatCount; i > 0; i--)
 		{
-			Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
-				jEdit.getSettingsDirectory(),"macros","__temporary__.macro"));
-			if(buffer == null)
+			if(name == null)
 			{
-				view.getToolkit().beep();
-				return;
+				Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
+					jEdit.getSettingsDirectory(),"macros","__temporary__.macro"));
+				if(buffer == null)
+				{
+					view.getToolkit().beep();
+					return;
+				}
+	
+				playMacroFromBuffer(view,"__temporary__.macro",buffer);
 			}
+			else
+			{
+				String fileName = MiscUtilities.constructPath(
+					jEdit.getSettingsDirectory(),"macros",name);
 
-			playMacroFromBuffer(view,"__temporary__.macro",buffer);
-			return;
+				// Check if it's open
+				Buffer buffer = jEdit.getBuffer(fileName);
+
+				if(buffer == null)
+					playMacroFromFile(view,name,fileName);
+				else
+					playMacroFromBuffer(view,name,buffer);
+			}
 		}
-
-		String fileName = MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(),"macros",name);
-
-		// Check if it's open
-		Buffer buffer = jEdit.getBuffer(fileName);
-
-		if(buffer == null)
-			playMacroFromFile(view,name,fileName);
-		else
-			playMacroFromBuffer(view,name,buffer);
 	}
 
 	/**
@@ -273,10 +284,18 @@ public class Macros
 	}
 
 	// private members
+	private static String systemMacroPath;
+	private static String userMacroPath;
+
 	private static Vector macroList;
 	private static Vector macroHierarchy;
 	private static Hashtable macrosHash;
 	private static String lastMacro;
+
+	static
+	{
+		EditBus.addToBus(new MacrosEBComponent());
+	}
 
 	private static void loadMacros(Vector vector, String path, File directory)
 	{
@@ -423,6 +442,42 @@ public class Macros
 		return buf.toString();
 	}
 
+	static class MacrosEBComponent implements EBComponent
+	{
+		public void handleMessage(EBMessage msg)
+		{
+			if(msg instanceof BufferUpdate)
+			{
+				BufferUpdate bmsg = (BufferUpdate)msg;
+				if(bmsg.getWhat() == BufferUpdate.DIRTY_CHANGED
+					&& !bmsg.getBuffer().isDirty())
+					maybeReloadMacros(bmsg.getBuffer().getPath());
+			}
+			else if(msg instanceof VFSUpdate)
+			{
+				maybeReloadMacros(((VFSUpdate)msg).getPath());
+			}
+		}
+
+		private void maybeReloadMacros(String path)
+		{
+			// On Windows and MacOS, path names are case insensitive
+			if(File.separatorChar == '\\' || File.separatorChar == ':')
+			{
+				path = path.toLowerCase();
+				if(path.startsWith(systemMacroPath.toLowerCase())
+					|| path.startsWith(userMacroPath.toLowerCase()))
+					loadMacros();
+			}
+			else
+			{
+				if(path.startsWith(systemMacroPath)
+					|| path.startsWith(userMacroPath))
+					loadMacros();
+			}
+		}
+	}
+
 	static class BufferRecorder implements InputHandler.MacroRecorder,
 		EBComponent
 	{
@@ -513,6 +568,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.35  2000/09/03 03:16:52  sp
  * Search bar integrated with command line, enhancements throughout
  *
@@ -542,20 +600,5 @@ public class Macros
  *
  * Revision 1.26  2000/05/09 10:51:51  sp
  * New status bar, a few other things
- *
- * Revision 1.25  2000/05/07 05:48:30  sp
- * You can now edit several buffers side-by-side in a split view
- *
- * Revision 1.24  2000/05/05 11:08:26  sp
- * Johnny Ryall
- *
- * Revision 1.23  2000/05/04 10:37:04  sp
- * Wasting time
- *
- * Revision 1.22  2000/04/28 09:29:11  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.21  2000/04/14 11:57:38  sp
- * Text area actions moved to org.gjt.sp.jedit.actions package
  *
  */

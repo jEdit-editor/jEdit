@@ -522,6 +522,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 				Buffer buffer = jEdit.getBuffer(file.path);
 				if(buffer == null)
 					buffer = jEdit.openFile(null,file.path);
+				else if(doubleClickClose)
+				{
+					jEdit.closeBuffer(view,buffer);
+					break;
+				}
 
 				if(buffer != null)
 				{
@@ -572,6 +577,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private boolean sortFiles;
 	private boolean sortMixFilesAndDirs;
 	private boolean sortIgnoreCase;
+	private boolean doubleClickClose;
 
 	private boolean requestRunning;
 
@@ -642,6 +648,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		sortFiles = jEdit.getBooleanProperty("vfs.browser.sortFiles");
 		sortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
 		sortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
+		doubleClickClose = jEdit.getBooleanProperty("vfs.browser.doubleClickClose");
 
 		String defaultView = jEdit.getProperty("vfs.browser.defaultView");
 		if(defaultView.equals("tree"))
@@ -956,6 +963,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.23  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.22  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *
@@ -985,8 +995,5 @@ public class VFSBrowser extends JPanel implements EBComponent
  *
  * Revision 1.13  2000/08/15 08:07:10  sp
  * A bunch of bug fixes
- *
- * Revision 1.12  2000/08/13 07:35:23  sp
- * Dockable window API
  *
  */

@@ -471,6 +471,7 @@ public class CommandLine extends JPanel
 
 				if(modifiers == 0 && keyCode == KeyEvent.VK_ESCAPE)
 				{
+					view.getInputHandler().setRepeatCount(1);
 					setState(NULL_STATE);
 					evt.consume();
 					break;
@@ -751,6 +752,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/09/26 10:19:46  sp
+ * Bug fixes, spit and polish
+ *
  * Revision 1.5  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

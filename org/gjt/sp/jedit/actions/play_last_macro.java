@@ -34,4 +34,14 @@ public class play_last_macro extends EditAction
 		else
 			Macros.playMacro(view,macro);
 	}
+
+	public boolean isRepeatable()
+	{
+		return false;
+	}
+
+	public boolean isRecordable()
+	{
+		return false;
+	}
 }
