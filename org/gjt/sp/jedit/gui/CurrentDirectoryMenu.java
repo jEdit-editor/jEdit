@@ -24,28 +24,19 @@ import java.awt.event.*;
 import java.io.File;
 import org.gjt.sp.jedit.*;
 
-public class CurrentDirectoryMenu extends JMenu
+public class CurrentDirectoryMenu extends EnhancedMenu
 {
-	public CurrentDirectoryMenu(View view)
+	public CurrentDirectoryMenu()
 	{
-		String label = jEdit.getProperty("current-directory.label");
-		int index = label.indexOf('$');
-		char mnemonic = '\0';
-		if(index != -1)
-		{
-			mnemonic = Character.toUpperCase(label.charAt(index+1));
-			label = label.substring(0,index) + label.substring(index+1);
-		}
-		setText(label);
-		setMnemonic(mnemonic);
-
-		this.view = view;
+		super("current-directory");
 	}
 
 	public void setPopupMenuVisible(boolean b)
 	{
 		if(b)
 		{
+			final View view = EditAction.getView(this);
+
 			if(getMenuComponentCount() != 0)
 				removeAll();
 
@@ -130,7 +121,4 @@ public class CurrentDirectoryMenu extends JMenu
 
 		super.setPopupMenuVisible(b);
 	}
-
-	// private members
-	private View view;
 }

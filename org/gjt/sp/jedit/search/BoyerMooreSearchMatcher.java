@@ -22,7 +22,7 @@
 
 package org.gjt.sp.jedit.search;
 
-import bsh.*;
+import bsh.NameSpace;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.BeanShell;
 import org.gjt.sp.util.Log;
@@ -34,7 +34,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 */
 	public BoyerMooreSearchMatcher(String pattern, String replace,
 		boolean ignoreCase, boolean reverseSearch,
-		boolean beanshell, BshMethod replaceMethod)
+		boolean beanshell, String replaceMethod)
 	{
 		if (ignoreCase)
 		{
@@ -59,8 +59,13 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		this.ignoreCase = ignoreCase;
 		this.reverseSearch = reverseSearch;
 		this.beanshell = beanshell;
-		this.replaceMethod = replaceMethod;
-		replaceArgs = new Object[10];
+
+		if(beanshell)
+		{
+			this.replaceMethod = replaceMethod;
+			replaceNS = new NameSpace(BeanShell.getNameSpace(),
+				"search and replace");
+		}
 
 		generateSkipArray();
 		generateSuffixArray();
@@ -98,11 +103,9 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	{
 		if(beanshell)
 		{
-			Interpreter interp = BeanShell.getInterpreter();
-			Object[] args = new Object[10];
-			args[0] = text;
-			Object obj = replaceMethod.invokeDeclaredMethod(
-				interp.getNameSpace(),args,interp);
+			replaceNS.setVariable("_0",text);
+			Object obj = BeanShell.runCachedBlock(replaceMethod,
+				null,replaceNS);
 			if(obj == null)
 				return null;
 			else
@@ -198,8 +201,8 @@ SEARCH:
 	private boolean ignoreCase;
 	private boolean reverseSearch;
 	private boolean beanshell;
-	private BshMethod replaceMethod;
-	private Object[] replaceArgs;
+	private String replaceMethod;
+	private NameSpace replaceNS;
 
 	// Boyer-Moore member fields
 	private int[] skip;

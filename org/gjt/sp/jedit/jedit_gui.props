@@ -29,7 +29,8 @@ lineSep.windows=DOS/Windows (\\r\\n)
 lineSep.mac=MacOS (\\r)
 
 # A list of common file encodings used in various places
-encodings=ASCII 8859_1 UTF8 Cp850 Cp1252 MacRoman Big5 GBK KOI8_R SJIS Unicode
+encodings=ASCII 8859_1 Cp850 Cp1252 ISO8859_1 ISO8859_2 MacRoman Big5 GBK \
+	KOI8_R SJIS Unicode UTF8 
 
 ###
 ### TOOLBAR
@@ -979,11 +980,9 @@ macro-message.title=Macro Message
 # BeanShell stuff
 
 beanshell-error.title=BeanShell Execution Error
-beanshell-error.message=While executing "{0}",\n\
-	the following error was encountered:\n\
-	{1}\n\
-	\n\
-	More information can be found in the activity log.
+beanshell-error.message.1=A BeanShell execution error occurred. More details can \
+	be found
+beanshell-error.message.2=in the activity log (Utilities->Activity Log).
 
 beanshell-eval-input.title=Evaluate BeanShell Expression
 beanshell-eval-input.message=BeanShell expression:

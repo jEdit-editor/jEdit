@@ -2,12 +2,28 @@ JEDIT 3.2 VERSION HISTORY
 
 * Version 3.2pre5
 
++ New Features
+
+- BeanShell 1.2 included, replaces BeanShell 1.01.
+  - Better error reporting
+  - Cleaned up internals
+  - Performance improvements
+  - You can now access JavaBeans properties using bean.prop or
+    bean{"prop"} syntax
+  - 'import' statements can be used in any block scope, not just top
+    level. This means you can have import statements in actions.xml, for
+    example.
+  - Some jEdit code dealing with BeanShell has been cleaned up
+
 + Enhancements
 
 - Updated XSL mode (Ollie Rutherfurd)
 - A set of XSL abbreviations is now included in the default abbreviation
   set
 - The 'Update Plugins' dialog box now deletes obsolete plugins
+- Minor improvement to Javadoc highlighting in Java source
+- Improved 'BeanShell Error' dialog box
+- Internal code cleanups
 
 + Bug Fixes
 
@@ -20,6 +36,12 @@ JEDIT 3.2 VERSION HISTORY
     Toolkit.getFontMetrics() throughout
 - Opening a recent file could create a pseudo-random selection, due to a
   bug in the recent file handler
+- Replace all was a bit buggy
+
++ API Changes
+
+- GUIUtilities.loadMenu(view,name) deprecated; use loadMenu(name)
+  instead
 
 * Version 3.2pre4
 

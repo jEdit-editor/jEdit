@@ -1,6 +1,10 @@
 /* This script is run on jEdit startup. It should be short and simple for
  * performance reasons. */
 
+// We use the '__cruft' scripted object to store various junk.
+// do not remove this line.
+__cruft = object();
+
 // Import all jEdit packages so that macros don't have to
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.*;
@@ -39,3 +43,7 @@ print(arg)
 			Log.log(Log.WARNING,BeanShell.class,String.valueOf(arg));
 	}
 }
+
+bsh.help.print = "usage: print ( arg )";
+
+Log.log(Log.DEBUG,this,"BeanShell interpreter version " + this.interpreter.VERSION);

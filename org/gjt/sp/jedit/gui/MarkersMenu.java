@@ -28,38 +28,19 @@ import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public class MarkersMenu extends JMenu
+public class MarkersMenu extends EnhancedMenu
 {
-	public MarkersMenu(View view)
+	public MarkersMenu()
 	{
-		String label = jEdit.getProperty("markers.label");
-		int index = label.indexOf('$');
-		char mnemonic = '\0';
-		if(index != -1)
-		{
-			mnemonic = Character.toUpperCase(label.charAt(index+1));
-			label = label.substring(0,index) + label.substring(index+1);
-		}
-		setText(label);
-		setMnemonic(mnemonic);
-
-		StringTokenizer st = new StringTokenizer(jEdit.getProperty("markers"));
-		while(st.hasMoreTokens())
-		{
-			String menuItem = st.nextToken();
-			if(menuItem.equals("-"))
-				addSeparator();
-			else
-				add(GUIUtilities.loadMenuItem(menuItem));
-		}
-
-		this.view = view;
+		super("markers");
 	}
 
 	public void setPopupMenuVisible(boolean b)
 	{
 		if(b)
 		{
+			final View view = EditAction.getView(this);
+
 			if(getMenuComponentCount() != 0)
 			{
 				for(int i = getMenuComponentCount() - 1;
@@ -123,9 +104,6 @@ public class MarkersMenu extends JMenu
 
 		super.setPopupMenuVisible(b);
 	}
-
-	// private members
-	private View view;
 
 	static class MarkersMenuItem extends JMenuItem
 	{

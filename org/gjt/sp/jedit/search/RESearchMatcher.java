@@ -19,7 +19,7 @@
 
 package org.gjt.sp.jedit.search;
 
-import bsh.*;
+import bsh.NameSpace;
 import gnu.regexp.*;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.BeanShell;
@@ -46,7 +46,7 @@ public class RESearchMatcher implements SearchMatcher
 	 */
 	public RESearchMatcher(String search, String replace,
 		boolean ignoreCase, boolean beanshell,
-		BshMethod replaceMethod) throws Exception
+		String replaceMethod) throws Exception
 	{
 		// gnu.regexp doesn't seem to support \n and \t in the replace
 		// string, so implement it here
@@ -54,7 +54,7 @@ public class RESearchMatcher implements SearchMatcher
 
 		this.beanshell = beanshell;
 		this.replaceMethod = replaceMethod;
-		replaceArgs = new Object[10];
+		replaceNS = new NameSpace(BeanShell.getNameSpace(),"search and replace");
 
 		re = new RE(search,(ignoreCase ? RE.REG_ICASE : 0)
 			| RE.REG_MULTILINE,RE_SYNTAX_JEDIT);
@@ -99,14 +99,12 @@ public class RESearchMatcher implements SearchMatcher
 
 		if(beanshell)
 		{
-			Interpreter interp = BeanShell.getInterpreter();
-
 			int count = match.getSubCount();
 			for(int i = 0; i < count; i++)
-				replaceArgs[i] = match.toString(i);
+				replaceNS.setVariable("_" + i,match.toString(i));
 
-			Object obj = replaceMethod.invokeDeclaredMethod(
-				interp.getNameSpace(),replaceArgs,interp);
+			Object obj = BeanShell.runCachedBlock(replaceMethod,
+				null,replaceNS);
 			if(obj == null)
 				return null;
 			else
@@ -120,6 +118,6 @@ public class RESearchMatcher implements SearchMatcher
 	private String replace;
 	private RE re;
 	private boolean beanshell;
-	private BshMethod replaceMethod;
-	Object[] replaceArgs;
+	private String replaceMethod;
+	private NameSpace replaceNS;
 }

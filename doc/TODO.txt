@@ -1,7 +1,5 @@
 TO DO
 
-- cvs: add installing-modes.xml, mode-tips.xml
-
 - FTP plugin: soft links???
 - FTP plugin: make a 3.2 version with better error messages?
 - update console macros and tell john
@@ -9,22 +7,25 @@ TO DO
 
 + before 3.2pre5:
 
-- replace some links to writing-macros-part with using-macros
+- macros menu too slow?
 - get web start to work
-- don't invoke updateUI unnecessarily
 - fix '... is not a function name' when running openjade
-- BeanShell 1.2?
 - installing source for already installed plugins
 - reload: preserve caret position
 - jEditLauncher
 - documentation
+  - replace some links to writing-macros-part with using-macros
   - using macros docs
+  - bsh interface all implement docs -- also invoke() method!!!
   - mention registers in API guide
   - JOptionPane not a good idea for getting user input?
   - formatting problems in user's guide in table cells
   - Include John's upcoming plugin guide when ready
   - document new edit server
   - document differences between web start and stand-alone version
+  - jEditLauncher docs
+  - maybe docs on BeanShell 1.2 features in macro guide?
+    - incorporate portions of the beanshell manual into the macro guide.
 - help viewer: links to .txt files?
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
@@ -77,13 +78,9 @@ TO DO
 + later:
 
 - much better rect select, along the lines of 'column mode'
-- modes have a reference counter; unload modes which have no buffers open
 - scrolling while caret is on a bracket over long distances slows things
   down
 - status bar: show recording status, encoding, line separator?
-- server property
-- reuseview property
-- background property
 - macros in web start version
 - scroll lock key toggles 'scroll mode'
 - rewritten folding: Fold object, pointer to next of curr. level, each
@@ -95,7 +92,7 @@ TO DO
 - improve handling of DIGIT sequences
 - DELEGATE in EOL_SPAN
 - reverse regexp search
-- a 'reinsertOnNextLine' regexp for word wrap?
+- a 'reinsertOnNextLine' regexp for hard word wrap?
 - soft wrap
 - support Shift-clicks in JTextComponents (impossible?)
 - support jEdit keyboard shortcuts in JTextComponents

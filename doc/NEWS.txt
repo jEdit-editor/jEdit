@@ -1,7 +1,6 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.1 AND 3.2
 
-- don't forget to document jEditLauncher, plugin guide, BeanShell 1.2 if
-  it ends up being included
+- don't forget to document jEditLauncher, plugin guide
 
 * Markers
 
@@ -54,6 +53,12 @@ effect.
 
 Syntax highlighting for Verilog, MIPS R2000 assembly and Occam files has
 been added.
+
+* New version of BeanShell
+
+jEdit now bundles BeanShell 1.1a17. Changes since BeanShell 1.01 include
+improved performance, cleaner internals, bug fixes, and a few new
+language features.
 
 * Search and replace improvements
 
@@ -180,3 +185,7 @@ MacOS applications do.
 
 jEdit is now fully compatible with the newly released Java 1.4, which is
 still beta at the time of writing.
+
+* Improved documentation
+
+The user's guide has once again been restructured, expanded and revised.

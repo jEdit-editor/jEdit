@@ -1,6 +1,6 @@
 /*
  * BeanShellAction.java - BeanShell action
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,8 +19,6 @@
 
 package org.gjt.sp.jedit;
 
-import bsh.BshMethod;
-import bsh.Primitive;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 
@@ -41,10 +39,9 @@ public class BeanShellAction extends EditAction
 
 		if(isSelected != null)
 		{
-			String cachedIsSelectedName = "_selected_" + sanitizedName;
-			BeanShell.eval(null,cachedIsSelectedName + "(){"
-				+ isSelected + "}",false);
-			cachedIsSelected = BeanShell.getMethod(cachedIsSelectedName);
+			String cachedIsSelectedName = "selected_" + sanitizedName;
+			cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
+				isSelected,true);
 		}
 	}
 
@@ -52,12 +49,10 @@ public class BeanShellAction extends EditAction
 	{
 		if(cachedCode == null)
 		{
-			String cachedCodeName = "_action_" + sanitizedName;
-			BeanShell.eval(null,cachedCodeName + "(){"
-				+ code + "}",false);
-			cachedCode = BeanShell.getMethod(cachedCodeName);
+			String cachedCodeName = "action_" + sanitizedName;
+			cachedCode = BeanShell.cacheBlock(cachedCodeName,code,true);
 		}
-		BeanShell.invokeMethod(view,cachedCode,EMPTY_ARGS);
+		BeanShell.runCachedBlock(cachedCode,view,null);
 	}
 
 	public boolean isToggle()
@@ -65,14 +60,13 @@ public class BeanShellAction extends EditAction
 		return cachedIsSelected != null;
 	}
 
-	public boolean isSelected(Component comp)
+	public boolean isSelected(View view)
 	{
 		if(cachedIsSelected == null)
 			return false;
 
-		Primitive returnValue = (Primitive)BeanShell.invokeMethod(
-			getView(comp),cachedIsSelected,EMPTY_ARGS);
-		return returnValue.getValue().equals(Boolean.TRUE);
+		return Boolean.TRUE.equals(BeanShell.runCachedBlock(cachedIsSelected,
+			view,null));
 	}
 
 	public boolean noRepeat()
@@ -91,14 +85,10 @@ public class BeanShellAction extends EditAction
 	}
 
 	// private members
-	private static final Object[] EMPTY_ARGS = new Object[0];
-
-	private static int counter;
-
 	private boolean noRepeat;
 	private boolean noRecord;
 	private String code;
-	private BshMethod cachedCode;
-	private BshMethod cachedIsSelected;
+	private String cachedCode;
+	private String cachedIsSelected;
 	private String sanitizedName;
 }

@@ -27,44 +27,16 @@ import java.util.EventObject;
 import org.gjt.sp.util.Log;
 
 /**
- * The class all jEdit actions must extend.<p>
- *
- * The <i>internal</i> name of an action is the string passed to the
- * EditAction constructor. An action instance can be obtained from it's
- * internal name with the <code>jEdit.getAction()</code> method. An
- * action's internal name can be obtained with the <code>getName()</code>
- * method.<p>
- *
- * Actions can be added at run-time with the <code>jEdit.addAction()</code>
- * method.
- *
- * An array of available actions can be obtained with the
- * <code>jEdit.getActions()</code> method.<p>
- *
- * The following properties relate to actions:
- * <ul>
- * <li><code><i>internal name</i>.label</code> - the label of the
- * action appearing in the menu bar or tooltip of a tool bar button
- * <li><code><i>internal name</i>.shortcut</code> - the keyboard
- * shortcut of the action
- * </ul>
+ * Instead of subclassing EditAction directly, you should now write an
+ * actions.xml file.
  *
  * @author Slava Pestov
  * @version $Id$
- *
- * @see jEdit#getProperty(String)
- * @see jEdit#getProperty(String,String)
- * @see jEdit#getAction(String)
- * @see jEdit#getActions()
- * @see jEdit#addAction(org.gjt.sp.jedit.EditAction)
- * @see GUIUtilities#loadMenuItem(org.gjt.sp.jedit.View,String)
  */
 public abstract class EditAction
 // no longer implements ActionListener
 {
 	/**
-	 * Creates a new <code>EditAction</code>.
-	 * @param name The name of the action
 	 * @deprecated Create an actions.xml file instead of writing
 	 * EditAction implementations!
 	 */
@@ -186,8 +158,16 @@ public abstract class EditAction
 
 	/**
 	 * If this edit action is a toggle, returns if it is selected or not.
-	 * @param comp The component
-	 * @since jEdit 2.2pre4
+	 * @param view The view
+	 * @since jEdit 3.2pre5
+	 */
+	public boolean isSelected(View view)
+	{
+		return isSelected((Component)view);
+	}
+
+	/**
+	 * @deprecated Override the form that accepts a view instead
 	 */
 	public boolean isSelected(Component comp)
 	{

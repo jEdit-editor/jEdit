@@ -2197,6 +2197,9 @@ public class jEdit
 			Log.log(Log.DEBUG,jEdit.class,"Web start mode");
 
 		actionHash = new Hashtable();
+
+		plugins = new EditPlugin.JAR(null,null);
+		jars = new Vector();
 	}
 
 	/**
@@ -2296,9 +2299,6 @@ public class jEdit
 	 */
 	private static void initPlugins()
 	{
-		plugins = new EditPlugin.JAR(null,null);
-		jars = new Vector();
-
 		if(jEditHome != null)
 			loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
 		else

@@ -20,7 +20,6 @@
 
 package org.gjt.sp.jedit.search;
 
-import bsh.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.JOptionPane;
@@ -39,25 +38,6 @@ import org.gjt.sp.util.Log;
  */
 public class SearchAndReplace
 {
-	/**
-	 * Displays the search & replace dialog box for the specified view.
-	 * @param view The view
-	 * @param defaultFind The initial search string
-	 * @since jEdit 2.7pre1
-	 */
-	/* public static void showSearchDialog(View view, String defaultFind)
-	{
-		SearchDialog dialog = (SearchDialog)view.getRootPane()
-			.getClientProperty(SEARCH_DIALOG_KEY);
-		if(dialog == null)
-		{
-			dialog = new SearchDialog(view);
-			view.getRootPane().putClientProperty(SEARCH_DIALOG_KEY,dialog);
-		}
-
-		dialog.setSearchString(defaultFind);
-	} */
-
 	/**
 	 * Sets the current search string.
 	 * @param search The new search string
@@ -281,14 +261,11 @@ public class SearchAndReplace
 		// replace must not be null
 		String replace = (SearchAndReplace.replace == null ? "" : SearchAndReplace.replace);
 
-		BshMethod replaceMethod;
+		String replaceMethod;
 		if(beanshell && replace.length() != 0)
 		{
-			Interpreter interp = BeanShell.getInterpreter();
-			interp.eval(
-				"_replace(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9)\n{\nreturn ("
-				+ replace + ");\n}");
-			replaceMethod = interp.getNameSpace().getMethod("_replace");
+			replaceMethod = BeanShell.cacheBlock("replace","return ("
+				+ replace + ");",false);
 		}
 		else
 			replaceMethod = null;
@@ -696,7 +673,7 @@ loop:		for(;;)
 				buffer.remove(_start,_end);
 				buffer.insertString(_start,subst,null);
 				occurCount++;
-				offset += occur[0] + found.length();
+				offset += occur[0] + subst.length();
 			}
 			else
 				offset += _end;
@@ -749,10 +726,6 @@ loop:		for(;;)
 	}
 
 	// private members
-
-	// used to cache search dialogs in view client properties
-	//private static final String SEARCH_DIALOG_KEY = "SearchDialog";
-
 	private static String search;
 	private static String replace;
 	private static boolean regexp;

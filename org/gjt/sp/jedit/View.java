@@ -25,12 +25,9 @@ import javax.swing.text.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.search.SearchBar;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
@@ -584,8 +581,6 @@ public class View extends JFrame implements EBComponent
 	{
 		if(msg instanceof PropertiesChanged)
 			propertiesChanged();
-		else if(msg instanceof MacrosChanged)
-			updateMacrosMenu();
 		else if(msg instanceof SearchSettingsChanged)
 		{
 			if(searchBar != null)
@@ -595,26 +590,6 @@ public class View extends JFrame implements EBComponent
 			handleBufferUpdate((BufferUpdate)msg);
 		else if(msg instanceof EditPaneUpdate)
 			handleEditPaneUpdate((EditPaneUpdate)msg);
-	}
-
-	public JMenu getMenu(String name)
-	{
-		if(name.equals("open-encoding"))
-			return openEncoding;
-		else if(name.equals("recent-files"))
-			return recent;
-		else if(name.equals("current-directory"))
-			return currentDirectory;
-		else if(name.equals("markers"))
-			return markers;
-		else if(name.equals("macros"))
-			return macros;
-		else if(name.equals("plugins"))
-			return plugins;
-		else if(name.equals("help-menu"))
-			return help;
-		else
-			return null;
 	}
 
 	/**
@@ -692,25 +667,12 @@ public class View extends JFrame implements EBComponent
 
 		dockableWindowManager = new DockableWindowManager(this);
 
-		// Dynamic menus
-		openEncoding = GUIUtilities.loadMenu(this,"open-encoding");
-		recent = GUIUtilities.loadMenu(this,"recent-files");
-		currentDirectory = new CurrentDirectoryMenu(this);
-		markers = new MarkersMenu(this);
-		macros = GUIUtilities.loadMenu(this,"macros");
-		help = GUIUtilities.loadMenu(this,"help-menu");
-		plugins = GUIUtilities.loadMenu(this,"plugins");
-
 		Component comp = restoreSplitConfig(buffer,splitConfig);
 		dockableWindowManager.add(comp);
 
-		updateOpenEncodingMenu();
-		updateMacrosMenu();
-		updatePluginsMenu();
-
 		EditBus.addToBus(this);
 
-		setJMenuBar(GUIUtilities.loadMenuBar(this,"view.mbar"));
+		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
 
@@ -746,8 +708,6 @@ public class View extends JFrame implements EBComponent
 
 		// null some variables so that retaining references
 		// to closed views won't hurt as much.
-		recent = currentDirectory = markers
-			= macros = plugins = help = null;
 		toolBars = null;
 		toolBar = null;
 		searchBar = null;
@@ -789,14 +749,6 @@ public class View extends JFrame implements EBComponent
 	private boolean closed;
 
 	private DockableWindowManager dockableWindowManager;
-
-	private JMenu openEncoding;
-	private JMenu recent;
-	private JMenu currentDirectory;
-	private JMenu markers;
-	private JMenu macros;
-	private JMenu plugins;
-	private JMenu help;
 
 	private Box toolBars;
 	private JToolBar toolBar;
@@ -917,8 +869,6 @@ public class View extends JFrame implements EBComponent
 		showFullPath = jEdit.getBooleanProperty("view.showFullPath");
 		updateTitle();
 
-		updateRecentMenu();
-
 		dockableWindowManager.propertiesChanged();
 
 		SwingUtilities.updateComponentTreeUI(getRootPane());
@@ -977,234 +927,10 @@ public class View extends JFrame implements EBComponent
 		status.updateMiscStatus();
 	}
 
-	/**
-	 * Creates the 'Open Encoding' menu.
-	 */
-	private void updateOpenEncodingMenu()
-	{
-		ActionListener listener = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				Hashtable props = new Hashtable();
-				props.put("encoding",evt.getActionCommand());
-				jEdit.showOpenFileDialog(View.this,props);
-			}
-		};
-
-		// used twice...
-		String systemEncoding = System.getProperty("file.encoding");
-
-		JMenuItem mi = new JMenuItem(jEdit.getProperty("os-encoding"));
-		mi.setActionCommand(systemEncoding);
-		mi.addActionListener(listener);
-		openEncoding.add(mi);
-
-		mi = new JMenuItem(jEdit.getProperty("jedit-encoding"));
-		mi.setActionCommand(jEdit.getProperty("buffer.encoding",systemEncoding));
-		mi.addActionListener(listener);
-		openEncoding.add(mi);
-
-		openEncoding.addSeparator();
-
-		StringTokenizer st = new StringTokenizer(jEdit.getProperty("encodings"));
-		while(st.hasMoreTokens())
-		{
-			mi = new JMenuItem(st.nextToken());
-			mi.addActionListener(listener);
-			openEncoding.add(mi);
-		}
-
-		openEncoding.addSeparator();
-
-		openEncoding.add(GUIUtilities.loadMenuItem("other-encoding"));
-	}
-
-	/**
-	 * Recreates the recent menu.
-	 */
-	private void updateRecentMenu()
-	{
-		if(recent.getMenuComponentCount() != 0)
-			recent.removeAll();
-		ActionListener actionListener = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				jEdit.openFile(View.this,evt.getActionCommand());
-				status.setMessage(null);
-			}
-		};
-
-		MouseListener mouseListener = new MouseAdapter()
-		{
-			public void mouseEntered(MouseEvent evt)
-			{
-				status.setMessage(((JMenuItem)evt.getSource())
-					.getActionCommand());
-			}
-
-			public void mouseExited(MouseEvent evt)
-			{
-				status.setMessage(null);
-			}
-		};
-
-		Vector recentVector = BufferHistory.getBufferHistory();
-
-		if(recentVector.size() == 0)
-		{
-			recent.add(GUIUtilities.loadMenuItem("no-recent"));
-			return;
-		}
-
-		/*
-		 * While recentVector has 50 entries or so, we only display
-		 * a few of those in the menu (otherwise it will be way too
-		 * long)
-		 */
-		int recentFileCount = Math.min(recentVector.size(),
-			Integer.parseInt(jEdit.getProperty("history")));
-
-		for(int i = 0; i < recentFileCount; i++)
-		{
-			String path = ((BufferHistory.Entry)recentVector
-				.elementAt(i)).path;
-			VFS vfs = VFSManager.getVFSForPath(path);
-			JMenuItem menuItem = new JMenuItem(vfs.getFileName(path));
-			menuItem.setActionCommand(path);
-			menuItem.addActionListener(actionListener);
-			menuItem.addMouseListener(mouseListener);
-			recent.add(menuItem);
-		}
-	}
-
-	/**
-	 * Recreates the macros menu.
-	 */
-	private void updateMacrosMenu()
-	{
-		// Because the macros menu contains normal items as
-		// well as dynamically-generated stuff, we are careful
-		// to only remove the dynamic crap here...
-		for(int i = macros.getMenuComponentCount() - 1; i >= 0; i--)
-		{
-			if(macros.getMenuComponent(i) instanceof JSeparator)
-				break;
-			else
-				macros.remove(i);
-		}
-
-		int count = macros.getMenuComponentCount();
-
-		Vector macroVector = Macros.getMacroHierarchy();
-		createMacrosMenu(macros,macroVector,0);
-
-		if(count == macros.getMenuComponentCount())
-			macros.add(GUIUtilities.loadMenuItem("no-macros"));
-	}
-
-	private void createMacrosMenu(JMenu menu, Vector vector, int start)
-	{
-		for(int i = start; i < vector.size(); i++)
-		{
-			Object obj = vector.elementAt(i);
-			if(obj instanceof Macros.Macro)
-			{
-				Macros.Macro macro = (Macros.Macro)obj;
-				String label = macro.name;
-				int index = label.lastIndexOf('/');
-				label = label.substring(index + 1)
-					.replace('_',' ');
-
-				menu.add(new EnhancedMenuItem(label,
-					macro.action));
-			}
-			else if(obj instanceof Vector)
-			{
-				Vector subvector = (Vector)obj;
-				String name = (String)subvector.elementAt(0);
-				JMenu submenu = new JMenu(name);
-				createMacrosMenu(submenu,subvector,1);
-				if(submenu.getMenuComponentCount() == 0)
-				{
-					submenu.add(GUIUtilities.loadMenuItem(
-						"no-macros"));
-				}
-				menu.add(submenu);
-			}
-		}
-	}
-
-	/**
-	 * Recreates the plugins menu.
-	 */
-	private void updatePluginsMenu()
-	{
-		// Query plugins for menu items
-		Vector pluginMenuItems = new Vector();
-
-		EditPlugin[] pluginArray = jEdit.getPlugins();
-		for(int i = 0; i < pluginArray.length; i++)
-		{
-			try
-			{
-				EditPlugin plugin = pluginArray[i];
-
-				// call old API
-				int count = pluginMenuItems.size();
-				plugin.createMenuItems(this,pluginMenuItems,
-					pluginMenuItems);
-				if(count != pluginMenuItems.size())
-				{
-					Log.log(Log.WARNING,this,plugin.getClassName()
-						+ " is using the obsolete"
-						+ " createMenuItems() API.");
-				}
-
-				// call new API
-				plugin.createMenuItems(pluginMenuItems);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,this,"Error creating menu items"
-					+ " for plugin");
-				Log.log(Log.ERROR,this,t);
-			}
-		}
-
-		if(pluginMenuItems.isEmpty())
-		{
-			plugins.add(GUIUtilities.loadMenuItem("no-plugins"));
-			return;
-		}
-
-		// Sort them
-		MiscUtilities.quicksort(pluginMenuItems,
-			new MiscUtilities.MenuItemCompare());
-
-		JMenu menu = plugins;
-		for(int i = 0; i < pluginMenuItems.size(); i++)
-		{
-			if(menu.getItemCount() >= 20)
-			{
-				menu.addSeparator();
-				JMenu newMenu = new JMenu(jEdit.getProperty(
-					"common.more"));
-				menu.add(newMenu);
-				menu = newMenu;
-			}
-
-			menu.add((JMenuItem)pluginMenuItems.elementAt(i));
-		}
-	}
-
 	private void handleBufferUpdate(BufferUpdate msg)
 	{
 		Buffer buffer = msg.getBuffer();
-		if(msg.getWhat() == BufferUpdate.CLOSED)
-			updateRecentMenu();
-		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
+		if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
 			if(!buffer.isDirty())
 			{

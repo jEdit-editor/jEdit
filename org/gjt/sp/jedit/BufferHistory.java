@@ -100,8 +100,6 @@ public class BufferHistory
 
 	public static void save(File file)
 	{
-		Log.log(Log.MESSAGE,jEdit.class,"Saving recent file list " + file);
-
 		String lineSep = System.getProperty("line.separator");
 
 		try

@@ -157,19 +157,22 @@ jEdit depends on, and comes bundled with the following libraries:
 
 - BeanShell scripting language, by Pat Niemeyer. This is used to
   implement macros, among other things. The version included with jEdit
-  is basically a stripped down BeanShell 1.01, with the following
+  is basically a stripped down BeanShell 1.1a17, with the following
   changes (don't worry if these mean nothing to you):
 
-  - getNameSpace() method added to class Interpreter
-  - BshMethod class made public
-  - NameSpace.classForName() now checks if a 'classLoader' variable is
-    set in that namespace, and if it is, uses that class loader to load
-    classes instead of calling Class.forName()
-  - Fixed a bug where imports in namespaces would shadow all imports
-    from their parent
-  - Allowed methods to be invoked with a different namespace
+  - Removed bsh.util package
+  - Removed bsh.Console class
+  - Removed (unneeded) import of bsh.util.JConsole from
+    InterpreterTokenManager
+  - Removed unused bsh.lib package
+  - Removed bsh.classpath package
+  - Removed unused XTargetErrorPrinter.java file
+  - Added Interpreter(NameSpace) constructor
+  - Added BshClassManager.get/setDefaultClassLoader() methods
+  - Removed annoying 'No class manager available' message when running
+    on Java 1.1
 
-  The BeanShell homepage is <http://www.beanshell.org>.
+  The BeanShell homepage is located at <http://www.beanshell.org>.
 
 - The Sun Java look and Feel icon collection. The license may be found
   in the ICONS.LICENSE.txt file.
@@ -184,6 +187,8 @@ Alwyn Barry:
 Andre Kaplan:
 	- ASP, JavaScript, VBScript, BCEL syntax highlighting
 	- Syntax token background highlighting
+	- Andre has written lots of really cool plugins for jEdit. Check
+	  them out!
 
 Artur Biesiadowski:
 	- Eiffel syntax highlighting
@@ -217,6 +222,7 @@ Jerry McBride:
 John Gellene:
 	- Macros section of user's guide
 	- A large number of sample macros
+	- Lots of other stuff too
 
 Jonathan Revusky:
 	- Python syntax highlighting
@@ -250,7 +256,7 @@ Mike Dillon:
 	- ColdFusion, CSS, HTML, Java, JSP, LISP, Patch, PHP, SHTML,
 	  TSQL, XML, XSL syntax highlighting
 	- Plugin central (http://plugins.jedit.org) web master
-	- ... lots more
+	- Lots more
 
 Nitsan Vardi:
 	- VHDL syntax highlighting
@@ -260,6 +266,7 @@ Ollie Rutherfurd:
 	- C# syntax highlighting
 	- Improvements to XSL syntax highlighting
 	- Default set of XSL abbreviations included with jEdit
+	- Lots of other bug fixes and minor enhancements
 
 Peter Graves:
 	- Code for preserving file permissions on Unix was taken from

@@ -139,7 +139,7 @@
 		</KEYWORDS>
 	</RULES>
 
-	<RULES SET="JAVADOC" DEFAULT="COMMENT2">
+	<RULES SET="JAVADOC" DEFAULT="COMMENT2" IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
@@ -149,6 +149,12 @@
 
 		<!-- so that *@param is highlighted -->
 		<SEQ TYPE="COMMENT2">*</SEQ>
+
+		<!-- Javadoc ignores tags inside <pre> -->
+		<SPAN TYPE="MARKUP" DELEGATE="JAVADOC_PRE">
+			<BEGIN>&lt;pre&gt;</BEGIN>
+			<END>&lt;/pre&gt;</END>
+		</SPAN>
 
 		<!-- HTML tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
@@ -199,4 +205,6 @@
 			<LABEL>@version</LABEL>
 		</KEYWORDS>
 	</RULES>
+
+	<RULES NAME="JAVADOC_PRE" DEFAULT="COMMENT2" />
 </MODE>
