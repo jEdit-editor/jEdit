@@ -86,10 +86,6 @@ public class EditPane extends JPanel implements EBComponent
 
 		updateTextArea();
 
-		// only do this if we are the current edit pane
-		if(view.getEditPane() == this)
-			focusOnTextArea();
-
 		if(!init)
 		{
 			view.updateTitle();
@@ -101,6 +97,10 @@ public class EditPane extends JPanel implements EBComponent
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
 				.BUFFER_CHANGED));
 		}
+
+		// only do this if we are the current edit pane
+		if(view.getEditPane() == this)
+			focusOnTextArea();
 
 		// Only do this after all I/O requests are complete
 		Runnable runnable = new Runnable()
@@ -244,6 +244,8 @@ public class EditPane extends JPanel implements EBComponent
 		}
 		else
 			setBuffer(buffer);
+
+		status.updateBuffers(); // create buffers popup
 
 		init = false;
 	}
@@ -518,7 +520,7 @@ public class EditPane extends JPanel implements EBComponent
 	private void updateTextArea()
 	{
 		textArea.setEditable(!buffer.isReadOnly());
-		textArea.getPainter().repaint();
+		textArea.repaint();
 	}
 
 	private void handleBufferUpdate(BufferUpdate msg)
@@ -526,17 +528,19 @@ public class EditPane extends JPanel implements EBComponent
 		Buffer _buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.CREATED)
 		{
+			status.updateBuffers();
+
 			/* When closing the last buffer, the BufferUpdate.CLOSED
 			 * handler doesn't call setBuffer(), because null buffers
 			 * are not supported. Instead, it waits for the subsequent
 			 * 'Untitled' file creation. */
 			if(buffer.isClosed())
 				setBuffer(jEdit.getFirstBuffer());
-
-			status.updateBuffers();
 		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
+			status.updateBuffers();
+
 			if(_buffer == buffer)
 			{
 				Buffer newBuffer = (recentBuffer != null ?
@@ -545,8 +549,6 @@ public class EditPane extends JPanel implements EBComponent
 					setBuffer(newBuffer);
 				else if(jEdit.getBufferCount() != 0)
 					setBuffer(jEdit.getFirstBuffer());
-
-				status.updateBuffers();
 
 				recentBuffer = null;
 			}
@@ -561,8 +563,7 @@ public class EditPane extends JPanel implements EBComponent
 				textArea.getPainter().repaint();
 			}
 		}
-		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
-			|| msg.getWhat() == BufferUpdate.LOADED)
+		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
 			if(_buffer == buffer)
 			{
@@ -572,6 +573,16 @@ public class EditPane extends JPanel implements EBComponent
 					status.updateBufferStatus();
 				else
 					status.updateBuffers();
+			}
+		}
+		else if(msg.getWhat() == BufferUpdate.LOADED)
+		{
+			if(_buffer == buffer)
+			{
+				status.updateCaretStatus();
+				textArea.setCaretPosition(0);
+				updateTextArea();
+				status.updateBuffers();
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
@@ -598,6 +609,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.20  2000/11/02 09:19:31  sp
+ * more features
+ *
  * Revision 1.19  2000/10/30 07:14:03  sp
  * 2.7pre1 branched, GUI improvements
  *

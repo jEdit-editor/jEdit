@@ -33,64 +33,19 @@ import org.gjt.sp.util.Log;
  */
 public class NullTokenMarker extends TokenMarker
 {
-	public LineInfo markTokens(Buffer buffer, int lineIndex)
+	public NullTokenMarker()
 	{
-		Element lineElement = buffer.getDefaultRootElement()
-			.getElement(lineIndex);
-		nullLineInfo.lastToken = null;
-		addToken(nullLineInfo,lineElement.getEndOffset()
-			- lineElement.getStartOffset() - 1,Token.NULL);
-		addToken(nullLineInfo,0,Token.END);
-		return nullLineInfo;
+		setName("null");
+		addRuleSet("MAIN",new ParserRuleSet());
 	}
-
-	public LineInfo markTokens(Segment line, int lineIndex)
-	{
-		nullLineInfo.lastToken = null;
-		addToken(nullLineInfo,line.count,Token.NULL);
-		addToken(nullLineInfo,0,Token.END);
-		return nullLineInfo;
-	}
-
-	/**
-	 * Does nothing.
-	 */
-	public void insertLines(int index, int len) {}
-
-	/**
-	 * Does nothing.
-	 */
-	public void deleteLines(int index, int len) {}
-
-	/**
-	 * Does nothing.
-	 */
-	public void linesChanged(int index, int len) {}
-
-	public Object clone()
-	{
-		return this;
-	}
-
-	/**
-	 * Returns the global instance of the NullTokenMarker. Since
-	 * it carries no state, all users can share this one instance.
-	 */
-	public static NullTokenMarker getSharedInstance()
-	{
-		return sharedInstance;
-	}
-
-	// private members
-	private static NullTokenMarker sharedInstance = new NullTokenMarker();
-	private LineInfo nullLineInfo = new LineInfo();
-
-	private NullTokenMarker() {}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/11/02 09:19:34  sp
+ * more features
+ *
  * Revision 1.3  2000/10/12 09:28:27  sp
  * debugging and polish
  *

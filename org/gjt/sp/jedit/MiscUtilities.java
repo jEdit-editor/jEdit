@@ -696,6 +696,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.40  2000/11/02 09:19:31  sp
+ * more features
+ *
  * Revision 1.39  2000/08/29 07:47:10  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

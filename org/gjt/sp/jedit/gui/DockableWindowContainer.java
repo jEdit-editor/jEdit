@@ -77,6 +77,20 @@ public interface DockableWindowContainer
 			propertiesChanged();
 		}
 
+		public boolean isCollapsed()
+		{
+			return getComponentCount() == 0 || collapsed;
+		}
+
+		public void setCollapsed(boolean collapsed)
+		{
+			if(getComponentCount() == 0)
+				return;
+
+			this.collapsed = collapsed;
+			revalidate();
+		}
+
 		public void saveDimension()
 		{
 			if(dimension == 0)
@@ -194,10 +208,7 @@ public interface DockableWindowContainer
 			public void mouseClicked(MouseEvent evt)
 			{
 				if(evt.getClickCount() == 2)
-				{
-					collapsed = !collapsed;
-					revalidate();
-				}
+					setCollapsed(!isCollapsed());
 			}
 
 			public void mouseMoved(MouseEvent evt)
@@ -244,6 +255,9 @@ public interface DockableWindowContainer
 
 			public void mouseDragged(MouseEvent evt)
 			{
+				if(!canDrag)
+					return;
+
 				collapsed = false;
 
 				if(dragStart == null) // can't happen?
@@ -327,6 +341,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.12  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

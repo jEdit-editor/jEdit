@@ -58,6 +58,9 @@ sortByName=true
 # Tab width
 buffer.tabSize=8
 
+# Indent width
+buffer.indentSize=8
+
 # Soft tabs
 buffer.noTabs=false
 

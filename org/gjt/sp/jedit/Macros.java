@@ -160,6 +160,7 @@ public class Macros
 	{
 		lastMacro = name;
 
+		view.setRecordingStatus(true);
 		view.getInputHandler().setMacroRecorder(
 			new BufferRecorder(view,buffer));
 	}
@@ -612,6 +613,7 @@ public class Macros
 		private void dispose()
 		{
 			view.getInputHandler().setMacroRecorder(null);
+			view.setRecordingStatus(false);
 			EditBus.removeFromBus(this);
 		}
 	}
@@ -620,6 +622,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.41  2000/11/02 09:19:31  sp
+ * more features
+ *
  * Revision 1.40  2000/10/30 07:14:03  sp
  * 2.7pre1 branched, GUI improvements
  *

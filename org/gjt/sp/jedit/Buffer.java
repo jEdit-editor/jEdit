@@ -82,6 +82,11 @@ public class Buffer extends PlainDocument implements EBComponent
 	public void propertiesChanged()
 	{
 		setFlag(SYNTAX,getBooleanProperty("syntax"));
+		if(getFlag(SYNTAX))
+			setTokenMarker(mode.createTokenMarker());
+		else
+			setTokenMarker(new NullTokenMarker());
+
 		if(undo != null)
 		{
 			try
@@ -218,33 +223,73 @@ public class Buffer extends PlainDocument implements EBComponent
 				if(getFlag(TEMPORARY))
 					return;
 
-				View _view = jEdit.getFirstView();
-				while(_view != null)
-				{
-					EditPane[] editPanes = _view
-						.getEditPanes();
-					for(int i = 0; i < editPanes.length; i++)
-					{
-						EditPane editPane = editPanes[i];
-						if(editPane.getBuffer() == Buffer.this)
-						{
-							editPane.getTextArea().setCaretPosition(0);
-							editPane.getTextArea().repaint();
-						}
-					}
-	
-					_view = _view.getNext();
-				}
-
 				setMode();
-				propertiesChanged();
-				EditBus.addToBus(Buffer.this);
 
 				// send some EditBus messages
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.LOADED));
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.MARKERS_CHANGED));
+			}
+		});
+
+		return true;
+	}
+
+	/**
+	 * Loads a file from disk, and inserts it into this buffer.
+	 * @param view The view
+	 *
+	 * @since 2.7pre1
+	 */
+	public boolean insert(final View view, String path)
+	{
+		if(getFlag(LOADING) || getFlag(SAVING))
+		{
+			GUIUtilities.error(view,"buffer-multiple-io",null);
+			return false;
+		}
+
+		if(!MiscUtilities.isURL(path))
+			path = MiscUtilities.constructPath(this.path,path);
+
+		Buffer buffer = jEdit.getBuffer(path);
+		if(buffer != null)
+		{
+			try
+			{
+				view.getTextArea().setSelectedText(
+					buffer.getText(0,buffer.getLength()));
+			}
+			catch(BadLocationException bl)
+			{
+				bl.printStackTrace();
+			}
+			return true;
+		}
+
+		VFS vfs = VFSManager.getVFSForPath(path);
+
+		// this returns false if initial sanity
+		// checks (if the file is a directory, etc)
+		// fail
+		if(!vfs.insert(view,this,path))
+			return false;
+
+		// Do some stuff once loading is finished
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				StringBuffer sbuf = (StringBuffer)getProperty(
+					BufferIORequest.LOAD_DATA);
+				if(sbuf != null)
+				{
+					getDocumentProperties().remove(
+						BufferIORequest.LOAD_DATA);
+
+					view.getTextArea().setSelectedText(sbuf.toString());
+				}
 			}
 		});
 
@@ -381,10 +426,11 @@ public class Buffer extends PlainDocument implements EBComponent
 				if(file != null)
 					modTime = file.lastModified();
 
-				if(rename)
+				if(!getPath().equals(oldPath))
 				{
-					if(!getPath().equals(oldPath))
+					if(rename)
 						jEdit.updatePosition(Buffer.this);
+					VFSManager.sendVFSUpdate(getVFS(),getPath(),true);
 				}
 
 				EditBus.send(new BufferUpdate(Buffer.this,
@@ -778,6 +824,16 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
+	 * Returns the indent size used in this buffer. This is equivalent
+	 * to calling getProperty("indentSize").
+	 * @since jEdit 2.7pre1
+	 */
+	public int getIndentSize()
+	{
+		return ((Integer)getProperty("indentSize")).intValue();
+	}
+
+	/**
 	 * Returns the value of a boolean property.
 	 * @param name The property name
 	 */
@@ -828,7 +884,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		this.mode = mode;
 
-		setTokenMarker(mode.createTokenMarker());
+		propertiesChanged(); // sets up token marker
 
 		// don't fire it for initial mode set
 		if(oldMode != null)
@@ -934,6 +990,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		int tabSize = getTabSize();
+		int indentSize = getIndentSize();
 		boolean noTabs = getBooleanProperty("noTabs");
 
 		// Get line text
@@ -1084,11 +1141,11 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 			else
 			{
-				prevLineIndent += (prevLineBrackets * tabSize);
+				prevLineIndent += (prevLineBrackets * indentSize);
 			}
 
 			if(prevLineMatches)
-				prevLineIndent += tabSize;
+				prevLineIndent += indentSize;
 
 			if(!canDecreaseIndent && prevLineIndent <= lineIndent)
 				return false;
@@ -1115,10 +1172,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public final TokenMarker getTokenMarker()
 	{
-		if(getFlag(SYNTAX))
-			return tokenMarker;
-		else
-			return NullTokenMarker.getSharedInstance();
+		return tokenMarker;
 	}
 
 	/**
@@ -1324,7 +1378,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public String toString()
 	{
-		return path;
+		return name + " (" + vfs.getParentOfPath(path) + ")";
 	}
 
 	public void handleMessage(EBMessage msg)
@@ -1343,7 +1397,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		setFlag(TEMPORARY,temp);
 		setFlag(READ_ONLY,readOnly);
 
-		tokenMarker = NullTokenMarker.getSharedInstance();
+		tokenMarker = new NullTokenMarker();
 		markers = new Vector();
 
 		addDocumentListener(new DocumentHandler());
@@ -1376,6 +1430,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		if(file != null)
 			newFile |= !file.exists();
+
+		if(!temp)
+			EditBus.addToBus(Buffer.this);
 
 		setFlag(NEW_FILE,newFile);
 	}
@@ -1549,8 +1606,6 @@ public class Buffer extends PlainDocument implements EBComponent
 			return false;
 	}
 
-	
-
 	private void processProperty(String prop)
 	{
 		StringBuffer buf = new StringBuffer();
@@ -1703,6 +1758,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.183  2000/11/02 09:19:31  sp
+ * more features
+ *
  * Revision 1.182  2000/10/30 07:14:03  sp
  * 2.7pre1 branched, GUI improvements
  *

@@ -48,8 +48,6 @@ public class StatusBar extends JPanel
 		caret = new CaretStatus();
 		caret.setFont(font);
 		add(BorderLayout.EAST,caret);
-
-		updateBuffers();
 	}
 
 	public void selectBuffer(Buffer buffer)
@@ -59,6 +57,11 @@ public class StatusBar extends JPanel
 
 	public void updateBuffers()
 	{
+		// if the buffer count becomes 0, then it is guaranteed to
+		// become 1 very soon, so don't do anything in that case.
+		if(jEdit.getBufferCount() == 0)
+			return;
+
 		updating = true;
 		buffers.setModel(new DefaultComboBoxModel(jEdit.getBuffers()));
 		buffers.setSelectedItem(editPane.getBuffer());
@@ -111,9 +114,7 @@ public class StatusBar extends JPanel
 			else
 			{
 				setIcon(buffer.getIcon());
-				setText(buffer.getName() + " ("
-					+ buffer.getVFS().getParentOfPath(
-					buffer.getPath()) + ")");
+				setText(buffer.toString());
 				return this;
 			}
 			return this;
@@ -170,6 +171,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.10  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

@@ -203,6 +203,30 @@ public abstract class VFS
 		return true;
 	}
 
+	/**
+	 * Inserts a file into the specified buffer. The default implementation
+	 * posts an I/O request to the I/O thread.
+	 * @param view The view
+	 * @param buffer The buffer
+	 * @param path The path
+	 */
+	public boolean insert(View view, Buffer buffer, String path)
+	{
+		if((getCapabilities() & READ_CAP) == 0)
+		{
+			VFSManager.error(view,"vfs.not-supported.load",new String[] { name });
+			return false;
+		}
+
+		VFSSession session = createVFSSession(path,view);
+		if(session == null)
+			return false;
+
+		VFSManager.runInWorkThread(new BufferIORequest(
+			BufferIORequest.INSERT,view,buffer,session,this,path));
+		return true;
+	}
+
 	// the remaining methods are only called from the I/O thread
 
 	/**
@@ -320,22 +344,6 @@ public abstract class VFS
 	}
 
 	/**
-	 * A buffer has been loaded. This method is called from the I/O
-	 * thread.
-	 * @param buffer The buffer
-	 * @exception IOException If an I/O error occurs
-	 */
-	public void _loadComplete(Buffer buffer) throws IOException {}
-
-	/**
-	 * A buffer has been saved. This method is called from the I/O
-	 * thread.
-	 * @param buffer The buffer
-	 * @exception IOException If an I/O error occurs
-	 */
-	public void _saveComplete(Buffer buffer) throws IOException {}
-
-	/**
 	 * Creates an input stream. This method is called from the I/O
 	 * thread.
 	 * @param session the VFS session
@@ -392,6 +400,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.20  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.19  2000/10/15 04:10:35  sp
  * bug fixes
  *

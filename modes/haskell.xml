@@ -16,6 +16,9 @@
 		<PROPERTY NAME="blockComment" VALUE="--" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.hs" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
+		<!-- apparently, this is required... -->
+		<PROPERTY NAME="tabSize" VALUE="8" />
+		<PROPERTY NAME="indentSize" VALUE="8" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" ESCAPE="\">
@@ -101,7 +104,7 @@
 
 		<!-- Defining this as OPERATOR causes float numbers not to be
 		highlighted... Which is more important? -->
-		<!-- <SEQ TYPE="NULL">.</SEQ> -->
+		<SEQ TYPE="NULL">.</SEQ>
 
 		<KEYWORDS IGNORE_CASE="FALSE">
 			<!-- Reserved words. -->

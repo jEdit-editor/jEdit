@@ -1,6 +1,6 @@
 /*
  * find_selection.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.*;
 
 public class find_selection extends EditAction
@@ -29,7 +29,7 @@ public class find_selection extends EditAction
 	{
 		View view = getView(evt);
 		String selection = view.getTextArea().getSelectedText();
-		new SearchDialog(view,selection);
+		SearchAndReplace.showSearchDialog(view,selection);
 	}
 
 	public boolean isRecordable()

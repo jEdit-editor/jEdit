@@ -334,7 +334,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			for(int line = firstInvalid; line <= lastInvalid; line++)
 			{
-				paintLine(gfx,tokenMarker,line,x);
+				textArea.updateScrollBarsAfterPaint
+					|= paintLine(gfx,tokenMarker,line,x);
 			}
 
 			if(tokenMarker != null && tokenMarker.isNextLineRequested())
@@ -342,6 +343,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				int h = clipRect.y + clipRect.height;
 				repaint(0,h,getWidth(),getHeight() - h);
 			}
+
+			if(textArea.updateScrollBarsAfterPaint)
+				textArea.maybeUpdateScrollBars();
 		}
 		catch(Exception e)
 		{
@@ -349,6 +353,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				+ " range {" + firstInvalid + ","
 				+ lastInvalid + "}:");
 			Log.log(Log.ERROR,this,e);
+		}
+
+		if(textArea.updateScrollBarsAfterPaint)
+		{
+			textArea.updateScrollBars();
+			textArea.updateScrollBarsAfterPaint = false;
 		}
 	}
 
@@ -448,7 +458,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private TextAreaHighlight highlights;
 
-	private void paintLine(Graphics gfx, TokenMarker tokenMarker,
+	private boolean paintLine(Graphics gfx, TokenMarker tokenMarker,
 		int line, int x)
 	{
 		Font defaultFont = getFont();
@@ -460,24 +470,34 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			|| line >= textArea.getLineCount());
 		paintHighlight(gfx,line,y,invalid);
 
+		int width;
 		if(!invalid)
 		{
 			gfx.setFont(defaultFont);
 			gfx.setColor(defaultColor);
-			y += fm.getHeight();
 
 			textArea.getLineText(line,textArea.lineSegment);
 			x = SyntaxUtilities.paintSyntaxLine(textArea.lineSegment,
 				tokenMarker.markTokens(textArea.getBuffer(),line)
-				.firstToken,styles,this,gfx,getBackground(),x,y);
+				.firstToken,styles,this,gfx,getBackground(),x,y + fm.getHeight());
 
 			if(eolMarkers)
 			{
 				gfx.setFont(defaultFont);
 				gfx.setColor(eolMarkerColor);
-				gfx.drawString(".",x,y);
+				gfx.drawString(".",x,y + fm.getHeight());
 			}
+
+			width = x + fm.charWidth('.') - textArea.getHorizontalOffset();
+			textArea.getTokenMarker().setLineWidth(line,width);
+
+			if(!invalid && line == textArea.getCaretLine() && textArea.isCaretVisible())
+				paintCaret(gfx,line,y);
 		}
+		else
+			width = 0;
+
+		return (width > textArea.maxHorizontalScrollWidth);
 	}
 
 	private void paintHighlight(Graphics gfx, int line, int y, boolean invalid)
@@ -496,9 +516,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		if(highlights != null)
 			highlights.paintHighlight(gfx,line,y);
-
-		if(!invalid && line == textArea.getCaretLine() && textArea.isCaretVisible())
-			paintCaret(gfx,line,y);
 	}
 
 	private void paintLineHighlight(Graphics gfx, int line, int y)
@@ -590,22 +607,31 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		int offset = textArea.getCaretPosition() 
 			- textArea.getLineStartOffset(line);
 		int caretX = textArea.offsetToX(line,offset);
-		int caretWidth = ((blockCaret ||
-			textArea.isOverwriteEnabled()) ?
-			fm.charWidth('w') : 1);
-		y += fm.getLeading() + fm.getDescent();
 		int height = fm.getHeight();
-		
+
+		y += fm.getLeading() + fm.getDescent();
+
 		gfx.setColor(caretColor);
 
 		if(textArea.isOverwriteEnabled())
 		{
-			gfx.fillRect(caretX,y + height - 1,
-				caretWidth,1);
+			gfx.drawLine(caretX,y + height - 1,
+				caretX + fm.charWidth('w'),y + height - 1);
+		}
+		else if(blockCaret)
+		{
+			if(textArea.getSelectionStart() == textArea.getSelectionEnd()
+				&& lineHighlight)
+				gfx.setXORMode(lineHighlightColor);
+			else
+				gfx.setXORMode(getBackground());
+
+			gfx.fillRect(caretX,y,fm.charWidth('w'),height);
+			gfx.setPaintMode();
 		}
 		else
 		{
-			gfx.drawRect(caretX,y,caretWidth - 1,height - 1);
+			gfx.drawLine(caretX,y,caretX,y + height - 1);
 		}
 	}
 }
@@ -613,6 +639,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.45  2000/11/02 09:19:34  sp
+ * more features
+ *
  * Revision 1.44  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *
@@ -642,15 +671,5 @@ public class TextAreaPainter extends JComponent implements TabExpander
  *
  * Revision 1.35  2000/05/10 08:22:21  sp
  * EOL marker bug fix, documentation updates
- *
- * Revision 1.34  2000/04/30 07:27:14  sp
- * Ftp VFS hacking, bug fixes
- *
- * Revision 1.33  2000/04/27 08:32:58  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.32  2000/04/17 06:34:24  sp
- * More focus debugging, linesChanged() tweaked
  *
  */

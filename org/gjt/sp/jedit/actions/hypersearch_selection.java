@@ -20,7 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.gui.HyperSearch;
+import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.*;
 
 public class hypersearch_selection extends EditAction
@@ -28,6 +28,7 @@ public class hypersearch_selection extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		new HyperSearch(view, view.getTextArea().getSelectedText());
+		String selection = view.getTextArea().getSelectedText();
+		SearchAndReplace.showHyperSearchDialog(view,selection);
 	}
 }

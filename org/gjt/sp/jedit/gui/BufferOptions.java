@@ -57,29 +57,11 @@ public class BufferOptions extends EnhancedDialog
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 
-		// Tab size
-		JLabel label = new JLabel(jEdit.getProperty(
-			"options.editor.tabSize"),SwingConstants.RIGHT);
-		layout.setConstraints(label,cons);
-		panel.add(label);
-
-		cons.gridx = 1;
-		cons.weightx = 1.0f;
-		cons.insets = nullInsets;
-		String[] tabSizes = { "2", "4", "8" };
-		tabSize = new JComboBox(tabSizes);
-		tabSize.setEditable(true);
-		tabSize.setSelectedItem(buffer.getProperty("tabSize"));
-		tabSize.addActionListener(actionListener);
-		layout.setConstraints(tabSize,cons);
-		panel.add(tabSize);
-
 		// Edit mode
 		cons.gridx = 0;
-		cons.gridy = 1;
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
-		label = new JLabel(jEdit.getProperty(
+		JLabel label = new JLabel(jEdit.getProperty(
 			"buffer-options.mode"),SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
@@ -104,9 +86,50 @@ public class BufferOptions extends EnhancedDialog
 		layout.setConstraints(mode,cons);
 		panel.add(mode);
 
-		// Line separator
+		// Tab size
+		cons.gridx = 0;
+		cons.gridy = 1;
+		cons.weightx = 0.0f;
+		cons.insets = labelInsets;
+		label = new JLabel(jEdit.getProperty(
+			"options.editor.tabSize"),SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		panel.add(label);
+
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		cons.insets = nullInsets;
+		String[] tabSizes = { "2", "4", "8" };
+		tabSize = new JComboBox(tabSizes);
+		tabSize.setEditable(true);
+		tabSize.setSelectedItem(buffer.getProperty("tabSize"));
+		tabSize.addActionListener(actionListener);
+		layout.setConstraints(tabSize,cons);
+		panel.add(tabSize);
+
+		// Indent size
 		cons.gridx = 0;
 		cons.gridy = 2;
+		cons.weightx = 0.0f;
+		cons.insets = labelInsets;
+		label = new JLabel(jEdit.getProperty(
+			"options.editor.indentSize"),SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		panel.add(label);
+
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		cons.insets = nullInsets;
+		indentSize = new JComboBox(tabSizes);
+		indentSize.setEditable(true);
+		indentSize.setSelectedItem(buffer.getProperty("indentSize"));
+		indentSize.addActionListener(actionListener);
+		layout.setConstraints(indentSize,cons);
+		panel.add(indentSize);
+
+		// Line separator
+		cons.gridx = 0;
+		cons.gridy = 3;
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty("buffer-options.lineSeparator"),
@@ -134,9 +157,9 @@ public class BufferOptions extends EnhancedDialog
 		layout.setConstraints(lineSeparator,cons);
 		panel.add(lineSeparator);
 
-		// Syntax colorizing
+		// Syntax highlighting
 		cons.gridx = 0;
-		cons.gridy = 3;
+		cons.gridy = 4;
 		cons.weightx = 0.0f;
 		cons.gridwidth = cons.REMAINDER;
 		cons.fill = GridBagConstraints.NONE;
@@ -149,7 +172,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(syntax);
 
 		// Indent on tab
-		cons.gridy = 4;
+		cons.gridy = 5;
 		indentOnTab = new JCheckBox(jEdit.getProperty(
 			"options.editor.indentOnTab"));
 		indentOnTab.setSelected(buffer.getBooleanProperty("indentOnTab"));
@@ -158,7 +181,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnTab);
 
 		// Indent on enter
-		cons.gridy = 5;
+		cons.gridy = 6;
 		indentOnEnter = new JCheckBox(jEdit.getProperty(
 			"options.editor.indentOnEnter"));
 		indentOnEnter.setSelected(buffer.getBooleanProperty("indentOnEnter"));
@@ -167,7 +190,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnEnter);
 
 		// Soft tabs
-		cons.gridy = 6;
+		cons.gridy = 7;
 		noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editor.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
@@ -176,7 +199,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(noTabs);
 
 		// Props label
-		cons.gridy = 7;
+		cons.gridy = 8;
 		cons.insets = new Insets(6,0,6,0);
 		label = new JLabel(jEdit.getProperty("buffer-options.props"));
 		layout.setConstraints(label,cons);
@@ -222,6 +245,15 @@ public class BufferOptions extends EnhancedDialog
 		{
 		}
 
+		try
+		{
+			buffer.putProperty("indentSize",new Integer(
+				indentSize.getSelectedItem().toString()));
+		}
+		catch(NumberFormatException nf)
+		{
+		}
+
 		int index = mode.getSelectedIndex();
 		buffer.setMode(modes[index]);
 
@@ -259,6 +291,7 @@ public class BufferOptions extends EnhancedDialog
 	private View view;
 	private Buffer buffer;
 	private JComboBox tabSize;
+	private JComboBox indentSize;
 	private Mode[] modes;
 	private JComboBox mode;
 	private JComboBox lineSeparator;
@@ -273,6 +306,7 @@ public class BufferOptions extends EnhancedDialog
 	private void updatePropsField()
 	{
 		props.setText(":tabSize=" + tabSize.getSelectedItem()
+			+ ":indentSize=" + indentSize.getSelectedItem()
 			+ ":noTabs=" + noTabs.isSelected()
 			+ ":mode=" + modes[mode.getSelectedIndex()].getName()
 			+ ":indentOnTab=" + indentOnTab.isSelected()
@@ -300,6 +334,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.18  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

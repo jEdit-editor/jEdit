@@ -142,15 +142,13 @@ Jason Ginchereau - Portions of QuickFile plugin code are used in the
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
 	dialog box, faster literal search, passive mode FTP, many
 	other patches
-Ollie Rutherford - Commands in View->Scrolling menu
+Ollie Rutherford - Some commands in View->Scrolling menu
 Tal Davidson - Original syntax highlighting engine
-Valery Kondakoff - Old Complete Word command
 
 The following people contributed edit modes:
 
 Andre Kaplan - ASP, JavaScript, VBScript
 Artur Biesiadowski - Eiffel
-Clancy Malcolm - Original version of PHP3 mode
 Dante Fabrizio - VHDL
 Dominic Stolerman - ML
 Ian Maclean - Ruby

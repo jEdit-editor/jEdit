@@ -93,7 +93,7 @@ public class Mode
 		TokenMarker marker = getTokenMarker();
 
 		if(marker == null)
-			return NullTokenMarker.getSharedInstance();
+			return new NullTokenMarker();
 
 		return (TokenMarker)marker.clone();
 	}
@@ -285,6 +285,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  2000/11/02 09:19:31  sp
+ * more features
+ *
  * Revision 1.29  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
  *

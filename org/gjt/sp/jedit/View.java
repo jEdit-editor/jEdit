@@ -52,10 +52,22 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Sets if the 'macro recording' message should be displayed.
+	 * @since jEdit 2.7pre1
+	 */
+	public void setRecordingStatus(boolean recording)
+	{
+		if(recording)
+			this.recording.setText(jEdit.getProperty("view.status.recording"));
+		else
+			this.recording.setText(null);
+	}
+
+	/**
 	 * Returns the command line prompt.
 	 * @since jEdit 2.6pre5
 	 */
-	public final CommandLine getCommandLine()
+	public CommandLine getCommandLine()
 	{
 		return commandLine;
 	}
@@ -64,7 +76,7 @@ public class View extends JFrame implements EBComponent
 	 * Returns the listener that will handle all key events in this
 	 * view, if any.
 	 */
-	public final KeyListener getKeyEventInterceptor()
+	public KeyListener getKeyEventInterceptor()
 	{
 		return keyEventInterceptor;
 	}
@@ -84,7 +96,7 @@ public class View extends JFrame implements EBComponent
 	/**
 	 * Returns the input handler.
 	 */
-	public final InputHandler getInputHandler()
+	public InputHandler getInputHandler()
 	{
 		return inputHandler;
 	}
@@ -297,7 +309,7 @@ public class View extends JFrame implements EBComponent
 	 * Returns true if this view has been closed with
 	 * <code>jEdit.closeView()</code>.
 	 */
-	public final boolean isClosed()
+	public boolean isClosed()
 	{
 		return closed;
 	}
@@ -349,9 +361,70 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Returns if synchronized scrolling is enabled.
+	 * @since jEdit 2.7pre1
+	 */
+	public boolean isSynchroScrollEnabled()
+	{
+		return synchroScroll;
+	}
+
+	/**
+	 * Toggles synchronized scrolling.
+	 * @since jEdit 2.7pre1
+	 */
+	public void setSynchroScrollEnabled(boolean synchroScroll)
+	{
+		this.synchroScroll = synchroScroll;
+		JEditTextArea textArea = getTextArea();
+		int firstLine = textArea.getFirstLine();
+		int horizontalOffset = textArea.getHorizontalOffset();
+		synchroScrollVertical(textArea,firstLine);
+		synchroScrollHorizontal(textArea,horizontalOffset);
+	}
+
+	/**
+	 * Sets the first line of all text areas.
+	 * @param textArea The text area that is propagating this change
+	 * @param firstLine The first line
+	 * @since jEdit 2.7pre1
+	 */
+	public void synchroScrollVertical(JEditTextArea textArea, int firstLine)
+	{
+		if(!synchroScroll)
+			return;
+
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+		{
+			if(editPanes[i].getTextArea() != textArea)
+				editPanes[i].getTextArea()._setFirstLine(firstLine);
+		}
+	}
+
+	/**
+	 * Sets the horizontal offset of all text areas.
+	 * @param textArea The text area that is propagating this change
+	 * @param horizontalOffset The horizontal offset
+	 * @since jEdit 2.7pre1
+	 */
+	public void synchroScrollHorizontal(JEditTextArea textArea, int horizontalOffset)
+	{
+		if(!synchroScroll)
+			return;
+
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+		{
+			if(editPanes[i].getTextArea() != textArea)
+				editPanes[i].getTextArea()._setHorizontalOffset(horizontalOffset);
+		}
+	}
+
+	/**
 	 * Returns the next view in the list.
 	 */
-	public final View getNext()
+	public View getNext()
 	{
 		return next;
 	}
@@ -359,7 +432,7 @@ public class View extends JFrame implements EBComponent
 	/**
 	 * Returns the previous view in the list.
 	 */
-	public final View getPrev()
+	public View getPrev()
 	{
 		return prev;
 	}
@@ -403,6 +476,9 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void processKeyEvent(KeyEvent evt)
 	{
+		if(isClosed())
+			return;
+
 		// JTextComponents don't consume events...
 		if(getFocusOwner() instanceof JTextComponent)
 		{
@@ -492,6 +568,7 @@ public class View extends JFrame implements EBComponent
 		JMenuBar menuBar = GUIUtilities.loadMenuBar(this,"view.mbar");
 		menuBar.add(Box.createGlue());
 		menuBar.add(new MiniIOProgress());
+		menuBar.add(recording = new JLabel());
 		setJMenuBar(menuBar);
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
@@ -610,8 +687,12 @@ public class View extends JFrame implements EBComponent
 	private JMenu plugins;
 	private JMenu help;
 
+	private JLabel recording;
+
 	private Box toolBars;
 	private JToolBar toolBar;
+
+	private boolean synchroScroll;
 
 	private EditPane editPane;
 	private JSplitPane splitPane;
@@ -973,6 +1054,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.204  2000/11/02 09:19:31  sp
+ * more features
+ *
  * Revision 1.203  2000/10/30 07:14:03  sp
  * 2.7pre1 branched, GUI improvements
  *
@@ -1002,38 +1086,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.194  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
- *
- * Revision 1.193  2000/08/29 07:47:11  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.192  2000/08/19 08:26:26  sp
- * More docking API tweaks
- *
- * Revision 1.191  2000/08/17 08:04:09  sp
- * Marker loading bug fixed, docking option pane
- *
- * Revision 1.190  2000/08/13 07:35:22  sp
- * Dockable window API
- *
- * Revision 1.189  2000/07/30 09:04:18  sp
- * More VFS browser hacking
- *
- * Revision 1.188  2000/07/26 07:48:44  sp
- * stuff
- *
- * Revision 1.187  2000/07/22 12:37:38  sp
- * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
- *
- * Revision 1.186  2000/07/21 10:23:49  sp
- * Multiple work threads
- *
- * Revision 1.185  2000/07/19 11:45:18  sp
- * I/O requests can be aborted now
- *
- * Revision 1.184  2000/07/19 08:35:59  sp
- * plugin devel docs updated, minor other changes
- *
- * Revision 1.183  2000/07/14 06:00:44  sp
- * bracket matching now takes syntax info into account
  *
  */

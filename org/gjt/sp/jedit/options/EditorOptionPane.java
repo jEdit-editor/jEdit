@@ -60,6 +60,12 @@ public class EditorOptionPane extends AbstractOptionPane
 		defaultTabSize.setSelectedItem(jEdit.getProperty("buffer.tabSize"));
 		addComponent(jEdit.getProperty("options.editor.tabSize"),defaultTabSize);
 
+		/* Indent size */
+		defaultIndentSize = new JComboBox(tabSizes);
+		defaultIndentSize.setEditable(true);
+		defaultIndentSize.setSelectedItem(jEdit.getProperty("buffer.indentSize"));
+		addComponent(jEdit.getProperty("options.editor.indentSize"),defaultIndentSize);
+
 		/* Undo queue size */
 		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
 		addComponent(jEdit.getProperty("options.editor.undoCount"),undoCount);
@@ -114,6 +120,10 @@ public class EditorOptionPane extends AbstractOptionPane
 			tabSize = new JComboBox(tabSizes));
 		tabSize.setEditable(true);
 
+		addComponent(jEdit.getProperty("options.editor.indentSize"),
+			indentSize = new JComboBox(tabSizes));
+		indentSize.setEditable(true);
+
 		addComponent(jEdit.getProperty("options.editor.commentStart"),
 			commentStart = new JTextField());
 
@@ -150,6 +160,8 @@ public class EditorOptionPane extends AbstractOptionPane
 			modeProps[defaultMode.getSelectedIndex()].mode.getName());
 		jEdit.setProperty("buffer.tabSize",(String)defaultTabSize
 			.getSelectedItem());
+		jEdit.setProperty("buffer.indentSize",(String)defaultIndentSize
+			.getSelectedItem());
 		jEdit.setProperty("buffer.undoCount",undoCount.getText());
 		jEdit.setBooleanProperty("buffer.syntax",defaultSyntax.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
@@ -169,6 +181,7 @@ public class EditorOptionPane extends AbstractOptionPane
 	// private members
 	private JComboBox defaultMode;
 	private JComboBox defaultTabSize;
+	private JComboBox defaultIndentSize;
 	private JTextField undoCount;
 	private JCheckBox defaultSyntax;
 	private JCheckBox defaultIndentOnTab;
@@ -182,6 +195,7 @@ public class EditorOptionPane extends AbstractOptionPane
 	private JTextField filenameGlob;
 	private JTextField firstlineGlob;
 	private JComboBox tabSize;
+	private JComboBox indentSize;
 	private JTextField commentStart;
 	private JTextField commentEnd;
 	private JTextField boxComment;
@@ -198,6 +212,7 @@ public class EditorOptionPane extends AbstractOptionPane
 		current.filenameGlob = filenameGlob.getText();
 		current.firstlineGlob = firstlineGlob.getText();
 		current.tabSize = (String)tabSize.getSelectedItem();
+		current.indentSize = (String)indentSize.getSelectedItem();
 		current.commentStart = commentStart.getText();
 		current.commentEnd = commentEnd.getText();
 		current.boxComment = boxComment.getText();
@@ -219,6 +234,7 @@ public class EditorOptionPane extends AbstractOptionPane
 		filenameGlob.setText(current.filenameGlob);
 		firstlineGlob.setText(current.firstlineGlob);
 		tabSize.setSelectedItem(current.tabSize);
+		indentSize.setSelectedItem(current.indentSize);
 		commentStart.setText(current.commentStart);
 		commentEnd.setText(current.commentEnd);
 		boxComment.setText(current.boxComment);
@@ -238,6 +254,7 @@ public class EditorOptionPane extends AbstractOptionPane
 		filenameGlob.setEnabled(enabled);
 		firstlineGlob.setEnabled(enabled);
 		tabSize.setEnabled(enabled);
+		indentSize.setEnabled(enabled);
 		commentStart.setEnabled(enabled);
 		commentEnd.setEnabled(enabled);
 		boxComment.setEnabled(enabled);
@@ -277,6 +294,7 @@ public class EditorOptionPane extends AbstractOptionPane
 		String filenameGlob;
 		String firstlineGlob;
 		String tabSize;
+		String indentSize;
 		String commentStart;
 		String commentEnd;
 		String boxComment;
@@ -306,6 +324,7 @@ public class EditorOptionPane extends AbstractOptionPane
 			filenameGlob = (String)mode.getProperty("filenameGlob");
 			firstlineGlob = (String)mode.getProperty("firstlineGlob");
 			tabSize = mode.getProperty("tabSize").toString();
+			indentSize = mode.getProperty("indentSize").toString();
 			commentStart = (String)mode.getProperty("commentStart");
 			commentEnd = (String)mode.getProperty("commentEnd");
 			boxComment = (String)mode.getProperty("boxComment");
@@ -332,6 +351,7 @@ public class EditorOptionPane extends AbstractOptionPane
 				jEdit.resetProperty(prefix + "filenameGlob");
 				jEdit.resetProperty(prefix + "firstlineGlob");
 				jEdit.resetProperty(prefix + "tabSize");
+				jEdit.resetProperty(prefix + "indentSize");
 				jEdit.resetProperty(prefix + "commentStart");
 				jEdit.resetProperty(prefix + "commentEnd");
 				jEdit.resetProperty(prefix + "boxComment");
@@ -347,6 +367,7 @@ public class EditorOptionPane extends AbstractOptionPane
 				jEdit.setProperty(prefix + "filenameGlob",filenameGlob);
 				jEdit.setProperty(prefix + "firstlineGlob",firstlineGlob);
 				jEdit.setProperty(prefix + "tabSize",tabSize);
+				jEdit.setProperty(prefix + "indentSize",indentSize);
 				jEdit.setProperty(prefix + "commentStart",commentStart);
 				jEdit.setProperty(prefix + "commentEnd",commentEnd);
 				jEdit.setProperty(prefix + "boxComment",boxComment);
@@ -364,6 +385,9 @@ public class EditorOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.28  2000/11/02 09:19:34  sp
+ * more features
+ *
  * Revision 1.27  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *

@@ -92,6 +92,7 @@ file=new-file \
      open-file \
      %recent-files \
      %current-directory \
+     insert-file \
      - \
      reload \
      reload-all \
@@ -101,6 +102,7 @@ file=new-file \
      - \
      save \
      save-as \
+     save-a-copy-as \
      save-all \
      - \
      print \
@@ -115,6 +117,7 @@ open-file.label=$Open File...
 recent-files.label=Recent Files
 current-directory.label=Current Directory
 current-directory.not-local=Cannot list directories on remote filesystems
+insert-file.label=$Insert File...
 no-recent.label=No Recent Files
 reload.label=$Reload
 reload-all.label=Reload $All Buffers...
@@ -122,6 +125,7 @@ close-buffer.label=$Close Buffer
 close-all.label=Close All $Buffers
 save.label=$Save
 save-as.label=Sa$ve As...
+save-a-copy-as.label=Save a Cop$y As...
 save-all.label=Save A$ll Buffers...
 print.label=$Print...
 load-session.label=Loa$d Session...
@@ -276,6 +280,7 @@ search=find \
        find-next \
        - \
        replace-in-selection \
+       replace-and-find-next \
        replace-all \
        - \
        hypersearch \
@@ -296,6 +301,7 @@ find.label=$Find...
 find-next.label=Fin$d Next
 find-selection.label=F$ind Selection...
 replace-in-selection.label=$Replace in Selection
+replace-and-find-next.label=Re$place and Find Next
 replace-all.label=Replace $All
 hypersearch.label=$HyperSearch...
 hypersearch-selection.label=HyperSearch for Se$lection...
@@ -323,27 +329,16 @@ view=new-view \
      recent-buffer \
      - \
      %scrolling \
-     %splitting
+     %splitting \
+     %docking
 view.label=$View
-new-view.label=$New View
+new-view.label=New $View
 close-view.label=$Close View
 toggle-gutter.label=$Gutter Expanded
 toggle-line-numbers.label=$Line Numbering
-prev-buffer.label=Go to Previous Buffer
-next-buffer.label=Go to Next Buffer
+prev-buffer.label=Go to $Previous Buffer
+next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to Last $Edited Buffer
-
-splitting=unsplit \
-	  split-horizontal \
-	  split-vertical \
-	  prev-split \
-	  next-split
-splitting.label=Splitting
-split-horizontal.label=Split $Horizontally
-split-vertical.label=Split $Vertically
-unsplit.label=$Unsplit
-prev-split.label=Go to Previous Split
-next-split.label=Go to Next Split
 
 scrolling=scroll-to-current-line \
 	  center-cursor \
@@ -352,7 +347,9 @@ scrolling=scroll-to-current-line \
 	  scroll-down-line \
 	  - \
 	  scroll-up-page \
-	  scroll-down-page
+	  scroll-down-page \
+	  - \
+	  toggle-synchro-scroll
 scrolling.label=Scrolling
 scroll-to-current-line.label=Scroll to Current Line
 center-cursor.label=Center Cursor on Screen
@@ -360,6 +357,29 @@ scroll-up-line.label=Line Scroll Up
 scroll-down-line.label=Line Scroll Down
 scroll-up-page.label=Page Scroll Up
 scroll-down-page.label=Page Scroll Down
+toggle-synchro-scroll.label=Synchronized Scrolling
+
+splitting=unsplit \
+	  split-horizontal \
+	  split-vertical \
+	  prev-split \
+	  next-split
+splitting.label=Splitting
+split-horizontal.label=Split Horizontally
+split-vertical.label=Split Vertically
+unsplit.label=Unsplit
+prev-split.label=Go to Previous Split
+next-split.label=Go to Next Split
+
+docking=docking-top-expanded \
+	docking-bottom-expanded \
+	docking-left-expanded \
+	docking-right-expanded
+docking.label=Docking Areas
+docking-top-expanded.label=Top Area Expanded
+docking-bottom-expanded.label=Bottom Area Expanded
+docking-left-expanded.label=Left Area Expanded
+docking-right-expanded.label=Right Area Expanded
 
 ### Utilities menu
 utils=command-line \
@@ -432,7 +452,7 @@ help-menu.label=$Help
 about.label=About jEdit...
 help.label=jEdit User Guide
 help@README.txt.label=jEdit Read Me
-help@NEWS.txt.label=Major Changes in jEdit 2.6
+help@NEWS.txt.label=Major Changes in jEdit 2.7
 help@CHANGES.txt.label=Version History
 help@COPYING.txt.label=GNU General Public License
 
@@ -510,10 +530,11 @@ view.status.select-caret-register=Select to register:
 view.status.exchange-caret-register=Swap position with register:
 view.status.clear-register=Clear register:
 view.status.insert-literal=Insert without expanding:
-view.status.recording=Macro recording
+view.status.recording=(recording)
 view.status.goto-line=Go to line:
 view.status.vfs-browser=Enter directory or URL to browse:
 view.status.open-file=Enter path or URL to open:
+view.status.insert-file=Enter path or URL to insert in current buffer:
 view.status.quick-search=Quick search for:
 view.status.incremental-search=Incremental search for:
 
@@ -642,18 +663,24 @@ unknown-action.message=Unknown action "{0}".
 # Search and replace dialog
 search.title=Search And Replace
 search.find=Search for: (up arrow recalls previous)
+search.find.mnemonic=s
 search.replace=Replace with:
+search.replace.mnemonic=r
 search.keepDialog=Keep Dialog 
+search.keepDialog.mnemonic=k
 search.ignoreCase=Ignore Case
 search.ignoreCase.mnemonic=i
 search.regexp=Regexp
-search.regexp.mnemonic=r
+search.regexp.mnemonic=x
 search.multifile=Multi File...
+search.multifile.mnemonic=m
 search.findBtn=Find
-search.replaceSelection=Replace in Selection
-search.replaceSelection.mnemonic=s
+search.replace=Replace
+search.replace.mnemonic=p
+search.replaceFind=Replace & Find
+search.replaceFind.mnemonic=l
 search.replaceAll=Replace All
-search.replaceAll.mnemonic=r
+search.replaceAll.mnemonic=a
 
 # Multifile search dialog
 multifile.title=Multi File Search Settings
@@ -928,6 +955,7 @@ options.editor.label=Editor
 options.editor.global=Default editor settings
 options.editor.defaultMode=Default edit mode:
 options.editor.tabSize=Tab width:
+options.editor.indentSize=Indent width:
 options.editor.undoCount=Number of undos:
 options.editor.syntax=Highlight syntax tokens
 options.editor.indentOnTab=Indent line when Tab key is pressed
@@ -1169,7 +1197,7 @@ vfs.browser.rename-exists.message=A file named {0} already exists.
 
 vfs.browser.rename-error.title=Rename Error
 vfs.browser.rename-error.message=An error occurred while attempting\n\
-	to delete {0}.
+	to rename {0}.
 
 vfs.browser.mkdir.title=New Directory
 vfs.browser.mkdir.message=Create new directory named:

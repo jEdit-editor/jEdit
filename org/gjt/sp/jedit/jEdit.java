@@ -333,7 +333,7 @@ public class jEdit
 
 		Buffer buffer = openFiles(userDir,args);
 
-		if(bufferCount == 0)
+		if(bufferCount == 0 && settingsDirectory != null)
 		{
 			// don't load default session when in background mode
 			if(defaultSession)
@@ -1965,6 +1965,7 @@ public class jEdit
 		addAction("indent-lines");
 		addAction("indent-on-enter");
 		addAction("indent-on-tab");
+		addAction("insert-file");
 		addAction("insert-literal");
 		addAction("input");
 		addAction("io-progress-monitor");
@@ -2010,9 +2011,11 @@ public class jEdit
 		addAction("reload-all");
 		addAction("reload-modes");
 		addAction("replace-all");
+		addAction("replace-and-find-next");
 		addAction("replace-in-selection");
 		addAction("rescan-macros");
 		addAction("save");
+		addAction("save-a-copy-as");
 		addAction("save-all");
 		addAction("save-as");
 		addAction("save-gutter-size");
@@ -2079,7 +2082,12 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.toggle_gutter());
 		addAction(new org.gjt.sp.jedit.actions.toggle_line_numbers());
 		addAction(new org.gjt.sp.jedit.actions.toggle_rect());
+		addAction(new org.gjt.sp.jedit.actions.toggle_synchro_scroll());
 		addAction(new org.gjt.sp.jedit.actions.vfs_browser());
+		addAction(new org.gjt.sp.jedit.actions.docking_bottom_expanded());
+		addAction(new org.gjt.sp.jedit.actions.docking_left_expanded());
+		addAction(new org.gjt.sp.jedit.actions.docking_right_expanded());
+		addAction(new org.gjt.sp.jedit.actions.docking_top_expanded());
 
 		// this is the default action, used to handle key typed events
 		inputHandler.setInputAction(getAction("insert-char"));
@@ -2380,6 +2388,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.285  2000/11/02 09:19:31  sp
+ * more features
+ *
  * Revision 1.284  2000/10/30 07:14:03  sp
  * 2.7pre1 branched, GUI improvements
  *

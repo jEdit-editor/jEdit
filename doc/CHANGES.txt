@@ -14,7 +14,19 @@ JEDIT 2.7 VERSION HISTORY
   as well as the 'Save As' dialog box
 - A buffer list combo box replaces the buffer tabs component and
   View->Current Buffer menu
-- Caret status moved to top right of text area
+- 'File->Save a Copy As' command: same as 'Save As', except that the
+  buffer's name isn't changed to the new name
+- Commands in View->Docking Areas menu collapse/expand the window
+  docking areas (bound to F6, F7, F8, F9 for top, left, right and bottom
+  collapse/expand, respectively)
+- jEdit now differentiates between the 'indent width' and 'tab width'.
+  - the 'tab width' is only used when displaying tabs (\t), so should
+    probably be set to 8 in most circumstances
+  - the 'indent width' is used when shifting the indent, either using
+    the 'shift-left' or 'shift-right' commands, or auto indent feature
+- 'Synchronized Scrolling', which can be enabled in View->Scrolling,
+  forces all text areas in a view to have the same scroll bar positions
+- 'Insert File' command in File menu
 
 + Enhancements
 
@@ -22,12 +34,22 @@ JEDIT 2.7 VERSION HISTORY
 - Better icons to indicate buffer new, dirty, read-only status
 - If a selection is active, the left and right arrow keys now move to
   caret to the beginning and end of the selection, respectively
+- Block cursor feature improved
+- Search & replace and HyperSearch dialog boxes are 'pooled' and reused;
+  as a result, after one of these dialogs has been opened once,
+  subsequent displays should be faster
+- More extensive Alt-key mnemonics in searching dialog boxes
+- File system browsers are now reloaded if necessary after a 'save as'
+- Caret location info moved to top right of text area
+- The horizontal scroll bar, instead of having a fixed maximum value,
+  is how adjusted according to the width of the longest visible line
 
 + Neutral
 
 - Key binding changes:
   - 'Gutter Expanded' now bound to C+e C+g instead of C+'
   - 'Expand Abbreviation' now bound to C+; instead of C+/
+  - 'View Registers' now bound to S+F5 instead of F6
 - List view removed from browser, only tree view supported
 
 -- Slava Pestov

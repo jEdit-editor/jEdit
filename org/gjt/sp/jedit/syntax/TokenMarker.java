@@ -242,6 +242,36 @@ public class TokenMarker implements Cloneable
 	}
 
 	/**
+	 * Store the width of a line, in pixels.
+	 * @param lineIndex The line number
+	 * @param width The width
+	 */
+	public boolean setLineWidth(int lineIndex, int width)
+	{
+		LineInfo info = lineInfo[lineIndex];
+		int oldWidth = info.width;
+		info.width = width;
+		return width != oldWidth;
+	}
+
+	/**
+	 * Returns the maximum line width in the specified line range.
+	 * @param start The first line
+	 * @param len The number of lines
+	 */
+	public int getMaxLineWidth(int start, int len)
+	{
+		int retVal = 0;
+		for(int i = start; i < start + len; i++)
+		{
+			if(i >= length)
+				break;
+			retVal = Math.max(lineInfo[i].width,retVal);
+		}
+		return retVal;
+	}
+
+	/**
 	 * Informs the token marker that lines have been inserted into
 	 * the document. This inserts a gap in the <code>lineInfo</code>
 	 * array.
@@ -966,6 +996,11 @@ loop:			for(int i = 0; i < len; i++)
 		 * The line context.
 		 */
 		/* package-private */ LineContext context;
+
+		/**
+		 * The line width.
+		 */
+		/* package-private */ int width;
 	}
 
 	public static class LineContext
@@ -1010,6 +1045,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.56  2000/11/02 09:19:34  sp
+ * more features
+ *
  * Revision 1.55  2000/10/15 04:10:35  sp
  * bug fixes
  *
@@ -1040,29 +1078,5 @@ loop:			for(int i = 0; i < len; i++)
  *
  * Revision 1.46  2000/04/09 10:41:26  sp
  * NO_WORD_BREAK SPANs fixed, action tokens removed
- *
- * Revision 1.45  2000/04/08 06:57:14  sp
- * Parser rules are now hashed; this dramatically speeds up tokenization
- *
- * Revision 1.44  2000/04/08 06:10:51  sp
- * Digit highlighting, search bar bug fix
- *
- * Revision 1.43  2000/04/08 02:39:33  sp
- * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
- *
- * Revision 1.42  2000/04/07 06:57:26  sp
- * Buffer options dialog box updates, API docs updated a bit in syntax package
- *
- * Revision 1.41  2000/04/06 13:09:46  sp
- * More token types added
- *
- * Revision 1.40  2000/04/06 00:28:14  sp
- * Resource handling bugs fixed, minor token marker tweaks
- *
- * Revision 1.39  2000/04/03 07:33:11  sp
- * Mode updates, delegate bug fixed, close all bug fixed
- *
- * Revision 1.38  2000/04/02 02:17:59  sp
- * delegates bug fixes, mode updates
  *
  */

@@ -42,6 +42,7 @@ public class shift_right extends EditAction
 				return;
 			}
 			int tabSize = buffer.getTabSize();
+			int indentSize = buffer.getIndentSize();
 			boolean noTabs = buffer.getBooleanProperty("noTabs");
 			Element map = buffer.getDefaultRootElement();
 			int start = textArea.getSelectionStartLine();
@@ -56,7 +57,7 @@ public class shift_right extends EditAction
 					.getLeadingWhiteSpace(line);
 				int whiteSpaceWidth = MiscUtilities
 					.getLeadingWhiteSpaceWidth(
-					line,tabSize) + tabSize;
+					line,tabSize) + indentSize;
 				buffer.remove(lineStart,whiteSpace);
 				buffer.insertString(lineStart,MiscUtilities
 					.createWhiteSpace(whiteSpaceWidth,

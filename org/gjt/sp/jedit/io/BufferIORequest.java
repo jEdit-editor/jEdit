@@ -66,6 +66,11 @@ public class BufferIORequest extends WorkRequest
 	public static final int AUTOSAVE = 2;
 
 	/**
+	 * An insert file request.
+	 */
+	public static final int INSERT = 3;
+
+	/**
 	 * Creates a new buffer I/O request.
 	 * @param type The request type
 	 * @param view The view
@@ -101,6 +106,9 @@ public class BufferIORequest extends WorkRequest
 			break;
 		case AUTOSAVE:
 			autosave();
+			break;
+		case INSERT:
+			insert();
 			break;
 		}
 	}
@@ -163,7 +171,7 @@ public class BufferIORequest extends WorkRequest
 				if(path.endsWith(".gz"))
 					in = new GZIPInputStream(in);
 
-				read(buffer,in,length);
+				read(buffer,in,length,false);
 			}
 			catch(IOException io)
 			{
@@ -176,10 +184,6 @@ public class BufferIORequest extends WorkRequest
 			{
 				String[] args = { MiscUtilities.getFileName(path) };
 				setStatus(jEdit.getProperty("vfs.status.load-markers",args));
-
-				// just before inserting the text into the
-				// buffer, read() calls setAbortable(false)
-				setAbortable(true);
 
 				in = vfs._createInputStream(session,markersPath,true,view);
 				if(in != null)
@@ -207,7 +211,6 @@ public class BufferIORequest extends WorkRequest
 		{
 			try
 			{
-				vfs._loadComplete(buffer);
 				vfs._endVFSSession(session,view);
 			}
 			catch(IOException io)
@@ -271,7 +274,7 @@ public class BufferIORequest extends WorkRequest
 	 * 
 	 * </ul>
 	 */
-	public void read(Buffer buffer, InputStream _in, long length)
+	private void read(Buffer buffer, InputStream _in, long length, boolean insert)
 		throws IOException
 	{
 		// only true if the file size is known
@@ -413,12 +416,17 @@ public class BufferIORequest extends WorkRequest
 			sbuf.append(buf,lastLine,len - lastLine);
 		}
 
-		if(CRLF)
-			buffer.putProperty(Buffer.LINESEP,"\r\n");
-		else if(CROnly)
-			buffer.putProperty(Buffer.LINESEP,"\r");
-		else
-			buffer.putProperty(Buffer.LINESEP,"\n");
+		if(!insert)
+		{
+			if(CRLF)
+				buffer.putProperty(Buffer.LINESEP,"\r\n");
+			else if(CROnly)
+				buffer.putProperty(Buffer.LINESEP,"\r");
+			else
+				buffer.putProperty(Buffer.LINESEP,"\n");
+			buffer.setNewFile(false);
+		}
+
 		in.close();
 
 		// Chop trailing newline and/or ^Z (if any)
@@ -437,10 +445,9 @@ public class BufferIORequest extends WorkRequest
 		// we insert the loaded data into the buffer in the
 		// post-load cleanup runnable, which runs in the AWT thread.
 		buffer.putProperty(LOAD_DATA,sbuf);
-		buffer.setNewFile(false);
 	}
 
-	public void readMarkers(Buffer buffer, InputStream in)
+	private void readMarkers(Buffer buffer, InputStream in)
 		throws IOException
 	{
 		// For `reload' command
@@ -575,7 +582,6 @@ public class BufferIORequest extends WorkRequest
 		{
 			try
 			{
-				vfs._saveComplete(buffer);
 				vfs._endVFSSession(session,view);
 			}
 			catch(IOException io)
@@ -693,78 +699,85 @@ public class BufferIORequest extends WorkRequest
 		}
 		o.close();
 	}
+
+	private void insert()
+	{
+		InputStream in = null;
+
+		try
+		{
+			try
+			{
+				String[] args = { MiscUtilities.getFileName(path) };
+				setStatus(jEdit.getProperty("vfs.status.load",args));
+				setAbortable(true);
+
+				VFS.DirectoryEntry entry = vfs._getDirectoryEntry(
+					session,path,view);
+				long length;
+				if(entry != null)
+					length = entry.length;
+				else
+					length = 0L;
+
+				in = vfs._createInputStream(session,path,false,view);
+				if(in == null)
+					return;
+
+				if(path.endsWith(".gz"))
+					in = new GZIPInputStream(in);
+
+				read(buffer,in,length,true);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				Object[] args = { io.toString() };
+				VFSManager.error(view,"ioerror",args);
+			}
+		}
+		catch(WorkThread.Abort a)
+		{
+			if(in != null)
+			{
+				try
+				{
+					in.close();
+				}
+				catch(IOException io)
+				{
+				}
+			}
+		}
+		finally
+		{
+			try
+			{
+				vfs._endVFSSession(session,view);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				String[] args = { io.getMessage() };
+				VFSManager.error(view,"ioerror",args);
+			}
+			catch(WorkThread.Abort a)
+			{
+			}
+		}
+	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.2  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *
  * Revision 1.1  2000/08/23 09:51:48  sp
  * Documentation updates, abbrev updates, bug fixes
- *
- * Revision 1.23  2000/08/17 08:04:10  sp
- * Marker loading bug fixed, docking option pane
- *
- * Revision 1.22  2000/08/16 12:14:29  sp
- * Passwords are now saved, bug fixes, documentation updates
- *
- * Revision 1.21  2000/08/15 08:07:11  sp
- * A bunch of bug fixes
- *
- * Revision 1.20  2000/08/06 09:44:27  sp
- * VFS browser now has a tree view, rename command
- *
- * Revision 1.19  2000/08/05 11:41:03  sp
- * More VFS browser work
- *
- * Revision 1.18  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.17  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.16  2000/07/29 12:24:08  sp
- * More VFS work, VFS browser started
- *
- * Revision 1.15  2000/07/26 07:48:45  sp
- * stuff
- *
- * Revision 1.14  2000/07/22 12:37:39  sp
- * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
- *
- * Revision 1.13  2000/07/22 06:22:27  sp
- * I/O progress monitor done
- *
- * Revision 1.12  2000/07/22 03:27:03  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.11  2000/07/21 10:23:49  sp
- * Multiple work threads
- *
- * Revision 1.10  2000/07/19 11:45:18  sp
- * I/O requests can be aborted now
- *
- * Revision 1.9  2000/05/23 04:04:52  sp
- * Marker highlight updates, next/prev-marker actions
- *
- * Revision 1.8  2000/05/14 10:55:22  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.7  2000/05/09 10:51:52  sp
- * New status bar, a few other things
- *
- * Revision 1.6  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
- *
- * Revision 1.5  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.4  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.3  2000/04/25 03:32:40  sp
- * Even more VFS hacking
  *
  */

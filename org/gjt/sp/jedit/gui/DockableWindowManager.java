@@ -284,6 +284,24 @@ public class DockableWindowManager extends JPanel
 	}
 
 	/**
+	 * Returns the specified docking area.
+	 * @since jEdit 2.7pre1
+	 */
+	public DockableWindowContainer.TabbedPane getDockingArea(String name)
+	{
+		if(name.equals(TOP))
+			return top;
+		else if(name.equals(LEFT))
+			return left;
+		else if(name.equals(BOTTOM))
+			return bottom;
+		else if(name.equals(RIGHT))
+			return right;
+		else
+			return null;
+	}
+
+	/**
 	 * Called by the view when properties change.
 	 * @since jEdit 2.6pre3
 	 */
@@ -402,6 +420,9 @@ public class DockableWindowManager extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.5  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

@@ -57,24 +57,34 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(new EmptyBorder(12,12,12,12));
 
+		find = new HistoryTextField("find");
+
 		JPanel fieldPanel = new JPanel(new BorderLayout());
 		fieldPanel.setBorder(new EmptyBorder(0,0,6,0));
 		JLabel label = new JLabel(jEdit.getProperty("hypersearch.find"));
 		label.setBorder(new EmptyBorder(0,0,2,0));
+		label.setDisplayedMnemonic(jEdit.getProperty("search.find.mnemonic")
+			.charAt(0));
+		label.setLabelFor(find);
 		fieldPanel.add(label,BorderLayout.NORTH);
-		find = new HistoryTextField("find");
 		fieldPanel.add(find, BorderLayout.CENTER);
 		panel.add(fieldPanel, BorderLayout.NORTH);
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.ignoreCase"),SearchAndReplace.getIgnoreCase());
+		ignoreCase.setMnemonic(jEdit.getProperty("search.ignoreCase"
+			+ ".mnemonic").charAt(0));
 		regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp"),SearchAndReplace.getRegexp());
+		regexp.setMnemonic(jEdit.getProperty("search.regexp.mnemonic")
+			.charAt(0));
 		multifile = new JCheckBox();
 		multifile.setSelected(!(fileset instanceof CurrentBufferSet));
 		multifileBtn = new JButton(jEdit.getProperty(
 			"search.multifile"));
+		multifileBtn.setMnemonic(jEdit.getProperty("search.multifile"
+			+ ".mnemonic").charAt(0));
 		box.add(ignoreCase);
 		box.add(Box.createHorizontalStrut(3));
 		box.add(regexp);
@@ -140,16 +150,31 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		SearchAndReplace.setSearchFileSet(fileset);
 	}
 
-	public void dispose()
+	public void setSearchString(final String search)
 	{
-		GUIUtilities.saveGeometry(this,"hypersearch");
+		find.setText(search);
+		resultModel.removeAllElements();
 
-		if(thread != null)
+		if(!isVisible())
 		{
-			thread.stop();
-			thread = null;
+			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
+			regexp.setSelected(SearchAndReplace.getRegexp());
+			multifile.setSelected(!(fileset instanceof CurrentBufferSet));
+
+			setVisible(true);
 		}
-		super.dispose();
+
+		toFront();
+		requestFocus();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				find.requestFocus();
+				if(search != null)
+					ok();
+			}
+		});
 	}
 
 	// EnhancedDialog implementation
@@ -166,9 +191,16 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 	public void cancel()
 	{
-		EditBus.removeFromBus(this);
+		GUIUtilities.saveGeometry(this,"hypersearch");
 		save();
-		dispose();
+
+		if(thread != null)
+		{
+			thread.stop();
+			thread = null;
+		}
+
+		setVisible(false);
 	}
 	// end EnhancedDialog implementation
 
@@ -206,7 +238,10 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			if(vmsg.getWhat() == ViewUpdate.CLOSED)
 			{
 				if(this.view == view)
-					this.view = jEdit.getFirstView();
+				{
+					EditBus.removeFromBus(this);
+					dispose();
+				}
 			}
 		}
 	}
@@ -483,6 +518,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.69  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.68  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

@@ -105,16 +105,13 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		content.add(BorderLayout.SOUTH,panel);
 
 		pack();
-		GUIUtilities.loadGeometry(this,"vfs.browser.dialog."
-			+ (mode == VFSBrowser.OPEN_DIALOG ? "open" : "save"));
+		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
 		show();
 	}
 
 	public void dispose()
 	{
-		GUIUtilities.saveGeometry(this,"vfs.browser.dialog."
-			+ (browser.getMode() == VFSBrowser.OPEN_DIALOG
-			? "open" : "save"));
+		GUIUtilities.saveGeometry(this,"vfs.browser.dialog");
 		super.dispose();
 	}
 
@@ -277,7 +274,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	{
 		public void keyPressed(KeyEvent evt)
 		{
-			System.err.println("yo");
 			browser.getBrowserView().selectNone();
 		}
 	}
@@ -286,6 +282,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.14  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.13  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

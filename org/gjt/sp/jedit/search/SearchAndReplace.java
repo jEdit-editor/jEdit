@@ -23,7 +23,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.JOptionPane;
 import java.awt.Component;
-import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
@@ -38,6 +38,44 @@ import org.gjt.sp.util.Log;
  */
 public class SearchAndReplace
 {
+	/**
+	 * Displays the search & replace dialog box for the specified view.
+	 * @param view The view
+	 * @param defaultFind The initial search string
+	 * @since jEdit 2.7pre1
+	 */
+	public static void showSearchDialog(View view, String defaultFind)
+	{
+		SearchDialog dialog = (SearchDialog)view.getRootPane()
+			.getClientProperty(SEARCH_DIALOG_KEY);
+		if(dialog != null)
+			dialog.setSearchString(defaultFind);
+		else
+		{
+			dialog = new SearchDialog(view,defaultFind);
+			view.getRootPane().putClientProperty(SEARCH_DIALOG_KEY,dialog);
+		}
+	}
+
+	/**
+	 * Displays the HyperSearch dialog box for the specified view.
+	 * @param view The view
+	 * @param defaultFind The initial search string
+	 * @since jEdit 2.7pre1
+	 */
+	public static void showHyperSearchDialog(View view, String defaultFind)
+	{
+		HyperSearch dialog = (HyperSearch)view.getRootPane()
+			.getClientProperty(HYPERSEARCH_DIALOG_KEY);
+		if(dialog != null)
+			dialog.setSearchString(defaultFind);
+		else
+		{
+			dialog = new HyperSearch(view,defaultFind);
+			view.getRootPane().putClientProperty(HYPERSEARCH_DIALOG_KEY,dialog);
+		}
+	}
+
 	/**
 	 * Sets the current search string.
 	 * @param search The new search string
@@ -499,6 +537,9 @@ loop:			for(;;)
 	}
 
 	// private members
+	private static final String SEARCH_DIALOG_KEY = "SearchDialog";
+	private static final String HYPERSEARCH_DIALOG_KEY = "HyperSearch";
+
 	private static String search;
 	private static String replace;
 	private static boolean regexp;
@@ -543,6 +584,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.37  2000/11/02 09:19:34  sp
+ * more features
+ *
  * Revision 1.36  2000/10/13 06:57:20  sp
  * Edit User/System Macros command, gutter mouse handling improved
  *
@@ -573,20 +617,5 @@ loop:			for(;;)
  *
  * Revision 1.27  2000/04/06 02:22:12  sp
  * Incremental search, documentation updates
- *
- * Revision 1.26  2000/04/01 12:21:27  sp
- * mode cache implemented
- *
- * Revision 1.25  2000/01/31 05:04:48  sp
- * C+e C+x will ask to add abbrev if not found, other minor updates
- *
- * Revision 1.24  2000/01/14 07:50:51  sp
- * Documentation updates, faster literal search, GUI updates, bug fixes
- *
- * Revision 1.23  1999/12/20 06:05:27  sp
- * Search settings buttons on tool bar, static abbrevs
- *
- * Revision 1.22  1999/12/10 03:22:47  sp
- * Bug fixes, old loading code is now used again
  *
  */

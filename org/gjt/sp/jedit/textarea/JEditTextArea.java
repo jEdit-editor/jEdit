@@ -191,6 +191,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void updateScrollBars()
 	{
+		System.err.println("updating scroll bars");
 		if(vertical != null && visibleLines != 0)
 		{
 			// don't display stuff past the end of the buffer if
@@ -221,7 +222,8 @@ public class JEditTextArea extends JComponent
 		int width = painter.getWidth();
 		if(horizontal != null && width != 0)
 		{
-			horizontal.setValues(-horizontalOffset,width,0,width * 5);
+			horizontal.setValues(-horizontalOffset,width,0,
+				maxHorizontalScrollWidth);
 			horizontal.setUnitIncrement(painter.getFontMetrics()
 				.charWidth('w'));
 			horizontal.setBlockIncrement(width / 2);
@@ -244,10 +246,18 @@ public class JEditTextArea extends JComponent
 		if(firstLine == this.firstLine)
 			return;
 
+		_setFirstLine(firstLine);
+
+		view.synchroScrollVertical(this,firstLine);
+	}
+
+	public void _setFirstLine(int firstLine)
+	{
 		this.firstLine = firstLine;
 
 		if(firstLine != vertical.getValue())
-			updateScrollBars();
+			updateScrollBarsAfterPaint = true;
+
 		painter.repaint();
 		gutter.repaint();
 	}
@@ -258,20 +268,6 @@ public class JEditTextArea extends JComponent
 	public final int getVisibleLines()
 	{
 		return visibleLines;
-	}
-
-	/**
-	 * Recalculates the number of visible lines. This should not
-	 * be called directly.
-	 */
-	public final void recalculateVisibleLines()
-	{
-		if(painter == null)
-			return;
-		int height = painter.getHeight();
-		int lineHeight = painter.getFontMetrics().getHeight();
-		visibleLines = height / lineHeight;
-		updateScrollBars();
 	}
 
 	/**
@@ -291,9 +287,16 @@ public class JEditTextArea extends JComponent
 	{
 		if(horizontalOffset == this.horizontalOffset)
 			return;
+		_setHorizontalOffset(horizontalOffset);
+
+		view.synchroScrollHorizontal(this,horizontalOffset);
+	}
+
+	public void _setHorizontalOffset(int horizontalOffset)
+	{
 		this.horizontalOffset = horizontalOffset;
 		if(horizontalOffset != horizontal.getValue())
-			updateScrollBars();
+			updateScrollBarsAfterPaint = true;
 		painter.repaint();
 	}
 
@@ -323,7 +326,7 @@ public class JEditTextArea extends JComponent
 
 		if(vertChanged || horizChanged)
 		{
-			updateScrollBars();
+			updateScrollBarsAfterPaint = true;
 			painter.repaint();
 			gutter.repaint();
 		}
@@ -587,7 +590,7 @@ public class JEditTextArea extends JComponent
 		painter.updateTabSize();
 
 		select(0,0);
-		updateScrollBars();
+		updateScrollBarsAfterPaint = true;
 		painter.repaint();
 		gutter.repaint();
 	}
@@ -1029,7 +1032,8 @@ public class JEditTextArea extends JComponent
 		// Clear the `magic' caret position used by up/down
 		magicCaret = -1;
 
-		scrollToCaret();
+		if(focusedComponent == this)
+			scrollToCaret();
 	}
 
 	/**
@@ -1401,6 +1405,8 @@ public class JEditTextArea extends JComponent
 	// package-private members
 	Segment lineSegment;
 	MouseHandler mouseHandler;
+	boolean updateScrollBarsAfterPaint;
+	int maxHorizontalScrollWidth;
 
 	/**
 	 * Returns true if the caret is visible, false otherwise.
@@ -1416,6 +1422,32 @@ public class JEditTextArea extends JComponent
 	final boolean isHighlightVisible()
 	{
 		return focusedComponent == this && hasFocus();
+	}
+
+	/**
+	 * Recalculates the number of visible lines. This should not
+	 * be called directly.
+	 */
+	void recalculateVisibleLines()
+	{
+		if(painter == null)
+			return;
+		int height = painter.getHeight();
+		int lineHeight = painter.getFontMetrics().getHeight();
+		visibleLines = height / lineHeight;
+		updateScrollBarsAfterPaint = true;
+	}
+
+	void maybeUpdateScrollBars()
+	{
+		updateScrollBarsAfterPaint = false;
+		int _maxHorizontalScrollWidth = getTokenMarker().getMaxLineWidth(
+			firstLine,visibleLines);
+		if(_maxHorizontalScrollWidth != maxHorizontalScrollWidth)
+		{
+			maxHorizontalScrollWidth = _maxHorizontalScrollWidth;
+			updateScrollBars();
+		}
 	}
 
 	// protected members
@@ -1587,9 +1619,9 @@ public class JEditTextArea extends JComponent
 		// end of magic stuff
 		else
 		{
+			updateScrollBarsAfterPaint = true;
 			painter.invalidateLineRange(line,firstLine + visibleLines);
 			gutter.invalidateLineRange(line,firstLine + visibleLines);
-			updateScrollBars();
 		}
 	}
 
@@ -1802,16 +1834,10 @@ public class JEditTextArea extends JComponent
 			if(!scrollBarsInitialized)
 				return;
 
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					if(evt.getAdjustable() == vertical)
-						setFirstLine(vertical.getValue());
-				else
-					setHorizontalOffset(-horizontal.getValue());
-				}
-			});
+			if(evt.getAdjustable() == vertical)
+				setFirstLine(vertical.getValue());
+			else
+				setHorizontalOffset(-horizontal.getValue());
 		}
 	}
 
@@ -2224,6 +2250,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.91  2000/11/02 09:19:34  sp
+ * more features
+ *
  * Revision 1.90  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *
@@ -2253,11 +2282,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.81  2000/09/03 03:16:53  sp
  * Search bar integrated with command line, enhancements throughout
- *
- * Revision 1.80  2000/09/01 11:31:01  sp
- * Rudimentary 'command line', similar to emacs minibuf
- *
- * Revision 1.79  2000/08/31 02:54:01  sp
- * Improved activity log, bug fixes
  *
  */

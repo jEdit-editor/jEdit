@@ -148,6 +148,30 @@ public class FileVFS extends VFS
 		return super.save(view,buffer,path);
 	}
 
+	public boolean insert(View view, Buffer buffer, String path)
+	{
+		File file = new File(path);
+
+		if(!file.exists())
+			return false;
+
+		if(file.isDirectory())
+		{
+			String[] args = { file.getPath() };
+			GUIUtilities.error(view,"open-directory",args);
+			return false;
+		}
+
+		if(!file.canRead())
+		{
+			String[] args = { file.getPath() };
+			GUIUtilities.error(view,"no-read",args);
+			return false;
+		}
+
+		return super.load(view,buffer,path);
+	}
+
 	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String path,
 		Component comp)
 	{
@@ -345,6 +369,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.24  2000/10/12 09:28:27  sp
  * debugging and polish
  *

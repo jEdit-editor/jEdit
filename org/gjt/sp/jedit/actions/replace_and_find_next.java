@@ -1,6 +1,6 @@
 /*
- * hypersearch.java
- * Copyright (C) 1998, 2000 Slava Pestov
+ * replace_and_find_next.java - Action
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,18 @@ import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.*;
 
-public class hypersearch extends EditAction
+public class replace_and_find_next extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		SearchAndReplace.showHyperSearchDialog(view,null);
+		Buffer buffer = view.getBuffer();
+		if(SearchAndReplace.replace(view,view))
+			SearchAndReplace.find(view,view);
+	}
+
+	public boolean isRecordable()
+	{
+		return false;
 	}
 }

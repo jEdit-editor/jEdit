@@ -1,6 +1,6 @@
 /*
- * hypersearch.java
- * Copyright (C) 1998, 2000 Slava Pestov
+ * docking_right_expanded.java - Action
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,14 +20,32 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.SearchAndReplace;
+import java.awt.Component;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 
-public class hypersearch extends EditAction
+public class docking_right_expanded extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		SearchAndReplace.showHyperSearchDialog(view,null);
+		DockableWindowContainer.TabbedPane c
+			= view.getDockableWindowManager().getDockingArea(
+			DockableWindowManager.RIGHT);
+		c.setCollapsed(!c.isCollapsed());
+	}
+
+	public boolean isToggle()
+	{
+		return true;
+	}
+
+	public boolean isSelected(Component comp)
+	{
+		View view = getView(comp);
+		DockableWindowContainer.TabbedPane c
+			= view.getDockableWindowManager().getDockingArea(
+			DockableWindowManager.RIGHT);
+		return !c.isCollapsed();
 	}
 }

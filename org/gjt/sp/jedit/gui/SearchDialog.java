@@ -45,25 +45,32 @@ public class SearchDialog extends EnhancedDialog
 		fileset = SearchAndReplace.getSearchFileSet();
 
 		find = new HistoryTextField("find");
-		find.setText(defaultFind);
 
 		replace = new HistoryTextField("replace");
 		keepDialog = new JCheckBox(jEdit.getProperty(
-			"search.keepDialog"),jEdit.getBooleanProperty(
-			"search.keepDialog.toggle"));
+			"search.keepDialog"));
+		keepDialog.setMnemonic(jEdit.getProperty("search.keepDialog"
+			+ ".mnemonic").charAt(0));
 		ignoreCase = new JCheckBox(jEdit.getProperty(
-			"search.ignoreCase"),SearchAndReplace.getIgnoreCase());
+			"search.ignoreCase"));
+		ignoreCase.setMnemonic(jEdit.getProperty("search.ignoreCase"
+			+ ".mnemonic").charAt(0));
 		regexp = new JCheckBox(jEdit.getProperty(
-			"search.regexp"),SearchAndReplace.getRegexp());
+			"search.regexp"));
+		regexp.setMnemonic(jEdit.getProperty("search.regexp.mnemonic")
+			.charAt(0));
 		multifile = new JCheckBox();
-		multifile.setSelected(!(fileset instanceof CurrentBufferSet));
 		multifileBtn = new JButton(jEdit.getProperty(
 			"search.multifile"));
+		multifileBtn.setMnemonic(jEdit.getProperty("search.multifile"
+			+ ".mnemonic").charAt(0));
 		findBtn = new JButton(jEdit.getProperty("search.findBtn"));
-		replaceSelection = new JButton(jEdit.getProperty("search"
-			+ ".replaceSelection"));
-		replaceSelection.setMnemonic(jEdit.getProperty("search"
-			+ ".replaceSelection.mnemonic").charAt(0));
+		replaceBtn = new JButton(jEdit.getProperty("search.replace"));
+		replaceBtn.setMnemonic(jEdit.getProperty("search.replace"
+			+ ".mnemonic").charAt(0));
+		replaceFind = new JButton(jEdit.getProperty("search.replaceFind"));
+		replaceFind.setMnemonic(jEdit.getProperty("search.replaceFind"
+			+ ".mnemonic").charAt(0));
 		replaceAll = new JButton(jEdit.getProperty("search.replaceAll"));
 		replaceAll.setMnemonic(jEdit.getProperty("search.replaceAll"
 			+ ".mnemonic").charAt(0));
@@ -72,12 +79,18 @@ public class SearchDialog extends EnhancedDialog
 		JPanel panel = new JPanel(new GridLayout(2,1));
 		JPanel panel2 = new JPanel(new BorderLayout());
 		JLabel label = new JLabel(jEdit.getProperty("search.find"));
+		label.setDisplayedMnemonic(jEdit.getProperty("search.find.mnemonic")
+			.charAt(0));
+		label.setLabelFor(find);
 		label.setBorder(new EmptyBorder(12,0,2,0));
 		panel2.add(BorderLayout.NORTH,label);
 		panel2.add(BorderLayout.CENTER,find);
 		panel.add(panel2);
 		panel2 = new JPanel(new BorderLayout());
 		label = new JLabel(jEdit.getProperty("search.replace"));
+		label.setDisplayedMnemonic(jEdit.getProperty("search.replace.mnemonic")
+			.charAt(0));
+		label.setLabelFor(replace);
 		label.setBorder(new EmptyBorder(12,0,2,0));
 		panel2.add(BorderLayout.NORTH,label);
 		panel2.add(BorderLayout.CENTER,replace);
@@ -103,7 +116,9 @@ public class SearchDialog extends EnhancedDialog
 		box.add(Box.createGlue());
 		box.add(findBtn);
 		box.add(Box.createHorizontalStrut(6));
-		box.add(replaceSelection);
+		box.add(replaceBtn);
+		box.add(Box.createHorizontalStrut(6));
+		box.add(replaceFind);
 		box.add(Box.createHorizontalStrut(6));
 		box.add(replaceAll);
 		box.add(Box.createHorizontalStrut(6));
@@ -118,7 +133,8 @@ public class SearchDialog extends EnhancedDialog
 		multifile.addActionListener(actionListener);
 		multifileBtn.addActionListener(actionListener);
 		findBtn.addActionListener(actionListener);
-		replaceSelection.addActionListener(actionListener);
+		replaceBtn.addActionListener(actionListener);
+		replaceFind.addActionListener(actionListener);
 		replaceAll.addActionListener(actionListener);
 		close.addActionListener(actionListener);
 
@@ -144,7 +160,7 @@ public class SearchDialog extends EnhancedDialog
 
 		save();
 		if(SearchAndReplace.find(view,SearchDialog.this))
-			disposeOrKeepDialog();
+			closeOrKeepDialog();
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
@@ -153,9 +169,35 @@ public class SearchDialog extends EnhancedDialog
 	{
 		save();
 		GUIUtilities.saveGeometry(this,"search");
-		dispose();
+		setVisible(false);
 	}
 	// end EnhancedDialog implementation
+
+	public void setSearchString(String search)
+	{
+		find.setText(search);
+		replace.setText(null);
+
+		if(!isVisible())
+		{
+			keepDialog.setSelected(jEdit.getBooleanProperty("search.keepDialog.toggle"));
+			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
+			regexp.setSelected(SearchAndReplace.getRegexp());
+			multifile.setSelected(!(fileset instanceof CurrentBufferSet));
+
+			setVisible(true);
+		}
+
+		toFront();
+		requestFocus();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				find.requestFocus();
+			}
+		});
+	}
 
         // private members
 	private View view;
@@ -168,7 +210,8 @@ public class SearchDialog extends EnhancedDialog
 	private JCheckBox multifile;
 	private JButton multifileBtn;
 	private JButton findBtn;
-	private JButton replaceSelection;
+	private JButton replaceBtn;
+	private JButton replaceFind;
 	private JButton replaceAll;
 	private JButton close;
 	
@@ -191,12 +234,12 @@ public class SearchDialog extends EnhancedDialog
 		SearchAndReplace.setSearchFileSet(fileset);
 	}
 
-	private void disposeOrKeepDialog()
+	private void closeOrKeepDialog()
 	{
 		if(keepDialog.isSelected())
 			return;
 		GUIUtilities.saveGeometry(this,"search");
-		dispose();
+		setVisible(false);
 	}
 
 	private void showMultiFileDialog()
@@ -223,11 +266,19 @@ public class SearchDialog extends EnhancedDialog
 			{
 				ok();
 			}
-			else if(source == replaceSelection)
+			else if(source == replaceBtn)
 			{
 				save();
 				if(SearchAndReplace.replace(view,SearchDialog.this))
-					disposeOrKeepDialog();
+					closeOrKeepDialog();
+				else
+					getToolkit().beep();
+			}
+			else if(source == replaceFind)
+			{
+				save();
+				if(SearchAndReplace.replace(view,SearchDialog.this))
+					ok();
 				else
 					getToolkit().beep();
 			}
@@ -237,7 +288,7 @@ public class SearchDialog extends EnhancedDialog
 
 				save();
 				if(SearchAndReplace.replaceAll(view,SearchDialog.this))
-					disposeOrKeepDialog();
+					closeOrKeepDialog();
 				else
 					getToolkit().beep();
 
@@ -261,6 +312,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/11/02 09:19:33  sp
+ * more features
+ *
  * Revision 1.18  2000/10/13 06:57:20  sp
  * Edit User/System Macros command, gutter mouse handling improved
  *
@@ -287,23 +341,5 @@ public class SearchDialog extends EnhancedDialog
  *
  * Revision 1.10  2000/05/04 10:37:04  sp
  * Wasting time
- *
- * Revision 1.9  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.8  2000/04/15 04:14:47  sp
- * XML files updated, jEdit.get/setBooleanProperty() method added
- *
- * Revision 1.7  2000/04/03 10:22:24  sp
- * Search bar
- *
- * Revision 1.6  1999/12/24 01:20:20  sp
- * Bug fixing and other stuff for 2.3pre1
- *
- * Revision 1.5  1999/11/26 07:37:11  sp
- * Escape/enter handling code moved to common superclass, bug fixes
- *
- * Revision 1.4  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
  *
  */
