@@ -214,15 +214,12 @@ public abstract class Wizard extends JComponent
 			currentPageBounds.width = size.width - PADDING * 6;
 			currentPageBounds.height = size.height - topBorder
 				- bottomBorder - PADDING * 2;
-			Rectangle nullBounds = new Rectangle(0,0,0,0);
 
 			for(int i = 0; i < pages.length; i++)
 			{
 				Component page = pages[i];
-				if(i == currentPage)
-					page.setBounds(currentPageBounds);
-				else
-					page.setBounds(nullBounds);
+				page.setBounds(currentPageBounds);
+				page.setVisible(i == currentPage);
 			}
 		}
 	}

@@ -300,6 +300,7 @@ public class SwingInstall extends JFrame
 					+ "Kb)");
 				checkBox.getModel().setSelected(true);
 				checkBox.addActionListener(this);
+				checkBox.setRequestFocusEnabled(false);
 				panel.add(checkBox);
 			}
 
