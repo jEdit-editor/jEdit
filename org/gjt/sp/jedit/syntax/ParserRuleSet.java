@@ -171,6 +171,9 @@ public class ParserRuleSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:38:02  spestov
+ * Initial revision
+ *
  * Revision 1.7  2000/04/09 10:41:26  sp
  * NO_WORD_BREAK SPANs fixed, action tokens removed
  *

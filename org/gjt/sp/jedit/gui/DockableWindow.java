@@ -53,6 +53,9 @@ public interface DockableWindow
 /*
  * Change Log:
  * $Log$
+ * Revision 1.1  2001/09/02 05:37:37  spestov
+ * Initial revision
+ *
  * Revision 1.1  2000/08/13 07:35:24  sp
  * Dockable window API
  *

@@ -321,6 +321,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.1  2001/09/02 05:38:16  spestov
+ * Initial revision
+ *
  * Revision 1.23  2001/03/01 11:03:27  sp
  * Improved folding, vfs bug fix
  *

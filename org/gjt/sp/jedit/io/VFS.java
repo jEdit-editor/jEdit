@@ -452,6 +452,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.1  2001/09/02 05:38:17  spestov
+ * Initial revision
+ *
  * Revision 1.28  2001/05/29 11:30:05  sp
  * foo
  *

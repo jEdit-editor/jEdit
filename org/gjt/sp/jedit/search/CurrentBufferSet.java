@@ -76,6 +76,9 @@ public class CurrentBufferSet implements SearchFileSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:37:55  spestov
+ * Initial revision
+ *
  * Revision 1.8  2000/11/24 06:48:35  sp
  * Caret position history
  *

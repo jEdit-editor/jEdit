@@ -529,6 +529,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:37:31  spestov
+ * Initial revision
+ *
  * Revision 1.7  2001/01/25 02:03:37  sp
  * Started folding, messed up some code, added a few bugs
  *

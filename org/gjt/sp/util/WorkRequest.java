@@ -72,6 +72,9 @@ public abstract class WorkRequest implements Runnable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:38:25  spestov
+ * Initial revision
+ *
  * Revision 1.4  2000/10/15 04:10:35  sp
  * bug fixes
  *

@@ -61,6 +61,9 @@ public interface OptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:37:24  spestov
+ * Initial revision
+ *
  * Revision 1.8  2000/04/28 09:29:11  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

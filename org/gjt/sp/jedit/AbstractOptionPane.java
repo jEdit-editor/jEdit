@@ -188,6 +188,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:37:00  spestov
+ * Initial revision
+ *
  * Revision 1.7  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

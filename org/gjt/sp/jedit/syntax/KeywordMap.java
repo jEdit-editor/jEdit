@@ -150,6 +150,9 @@ public class KeywordMap
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:38:01  spestov
+ * Initial revision
+ *
  * Revision 1.18  2000/11/07 10:08:32  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

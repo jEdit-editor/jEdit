@@ -239,6 +239,9 @@ public class HistoryModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:37:41  spestov
+ * Initial revision
+ *
  * Revision 1.13  2000/11/16 10:25:17  sp
  * More macro work
  *

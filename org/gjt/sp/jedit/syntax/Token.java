@@ -93,6 +93,9 @@ public class Token
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.1  2001/09/02 05:38:03  spestov
+ * Initial revision
+ *
  * Revision 1.18  2001/05/13 07:21:27  sp
  * more stuff
  *

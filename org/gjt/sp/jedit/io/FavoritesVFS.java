@@ -141,6 +141,9 @@ public class FavoritesVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.1  2001/09/02 05:38:16  spestov
+ * Initial revision
+ *
  * Revision 1.7  2000/11/11 02:59:30  sp
  * FTP support moved out of the core into a plugin
  *

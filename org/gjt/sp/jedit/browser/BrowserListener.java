@@ -48,6 +48,9 @@ public interface BrowserListener extends EventListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.1  2001/09/02 05:38:19  spestov
+ * Initial revision
+ *
  * Revision 1.1  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

@@ -81,6 +81,9 @@
 <MODE NAME="javascript"		FILE="javascript.xml"
 				FILE_NAME_GLOB="*.js" />
 
+<MODE NAME="jhtml"		FILE="jhtml.xml"
+				FILE_NAME_GLOB="*.jhtml" />
+
 <MODE NAME="jmk"		FILE="jmk.xml"
 				FILE_NAME_GLOB="*.jmk" />
 

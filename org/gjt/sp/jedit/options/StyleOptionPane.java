@@ -367,6 +367,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.1  2001/09/02 05:37:53  spestov
+ * Initial revision
+ *
  * Revision 1.28  2001/07/15 09:55:14  sp
  * AWT/2D text render code split almost finished
  *

@@ -302,6 +302,9 @@ class WindowTableModel extends AbstractTableModel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.1  2001/09/02 05:37:50  spestov
+ * Initial revision
+ *
  * Revision 1.4  2001/07/24 08:15:44  sp
  * plugin guide updated
  *

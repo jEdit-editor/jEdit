@@ -1,4 +1,4 @@
-JEDIT 3.2 README
+JEDIT 4.0 README
 
 * Contents
 
