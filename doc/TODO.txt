@@ -1,10 +1,6 @@
 JEDIT TO DO
 
-Before 2.5final:
-
-- CVS: add dialog-ftp-login
-- Do some testing
-- Proofread docs
+Update plugin manager screenshots in docs
 
 Later:
 
@@ -14,7 +10,7 @@ Later:
   - write VFS developer docs
   - document EditBus plugin
 - Switch to DocBook 4.0 for the documentation
-- Prettify options and plugin manager dialog boxes with JLF guidelines
+- Prettify options dialog boxes with JLF guidelines
 - Improve symlink handling in FTP browser
 - Buffer-local property to disable marker persistance
 - Word wrap
@@ -47,6 +43,8 @@ Later:
 - Improve rectangular selections
 - Print option pane for changing printing settings
 - 'Print Selection' command
+- 'autosave' session created by autosave thread, list all autosaved files
+  in one dialog box
 
 When we switch to Java 2:
 - drag and drop

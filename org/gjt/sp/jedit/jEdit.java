@@ -2267,8 +2267,6 @@ public class jEdit
 			// jEdit process
 			saveSettings();
 
-			System.err.println(viewsFirst + ":" + viewsLast
-				+ ":" + buffersFirst + ":" + buffersLast);
 			return;
 		}
 
@@ -2305,6 +2303,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.246  2000/06/05 04:05:13  sp
+ * Documentation updates
+ *
  * Revision 1.245  2000/06/03 07:28:25  sp
  * User interface updates, bug fixes
  *
