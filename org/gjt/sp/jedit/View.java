@@ -401,7 +401,7 @@ public class View extends JFrame implements EBComponent
 	{
 		StringBuffer splitConfig = new StringBuffer();
 		if(splitPane != null)
-			saveSplitConfig(splitPane,splitConfig);
+			getSplitConfig(splitPane,splitConfig);
 		else
 			splitConfig.append(getBuffer().getPath());
 		return splitConfig.toString();
@@ -832,21 +832,21 @@ public class View extends JFrame implements EBComponent
 	 * horizontal split
 	 * A path name creates an edit pane editing that buffer
 	 */
-	private void saveSplitConfig(JSplitPane splitPane,
+	private void getSplitConfig(JSplitPane splitPane,
 		StringBuffer splitConfig)
 	{
 		Component left = splitPane.getLeftComponent();
 		if(left instanceof JSplitPane)
-			saveSplitConfig((JSplitPane)left,splitConfig);
+			getSplitConfig((JSplitPane)left,splitConfig);
 		else
 		{
 			splitConfig.append('\t');
 			splitConfig.append(((EditPane)left).getBuffer().getPath());
 		}
 
-		Component right = splitPane.getLeftComponent();
+		Component right = splitPane.getRightComponent();
 		if(right instanceof JSplitPane)
-			saveSplitConfig((JSplitPane)right,splitConfig);
+			getSplitConfig((JSplitPane)right,splitConfig);
 		else
 		{
 			splitConfig.append('\t');
@@ -878,6 +878,7 @@ public class View extends JFrame implements EBComponent
 					(Component)stack.pop(),
 					(Component)stack.pop()));
 				splitPane.setBorder(null);
+				splitPane.setDividerLocation(0.5);
 			}
 			else if(token.equals("horizontal"))
 			{
@@ -886,6 +887,7 @@ public class View extends JFrame implements EBComponent
 					(Component)stack.pop(),
 					(Component)stack.pop()));
 				splitPane.setBorder(null);
+				splitPane.setDividerLocation(0.5);
 			}
 			else
 			{

@@ -2,6 +2,9 @@ TO DO
 
 - next time i'm making an RPM, fix the shell script
 - console: windows built-ins don't work?
+- move user's guide to jedit.jar
+- have copy of .txt files in jedit.jar
+- macros fileset in installer
 
 + to figure out before pre3:
 
@@ -11,7 +14,7 @@ TO DO
 - test edit server
 - vfs browser: >1 request error when clicking 'up'?
 - italics font metrics bugs
-- finish persistent splits
+- finish persistent splits: resize splits to make them in the middle
 - new preferences engine?
 
 - get web start to work

@@ -1776,10 +1776,11 @@ public class jEdit
 	}
 
 	/**
-	 * Registers an edit mode with the editor.
+	 * Do not call this method. It is only public so that classes
+	 * in the org.gjt.sp.jedit.syntax package can access it.
 	 * @param mode The edit mode
 	 */
-	/* package-private */ static void addMode(Mode mode)
+	public static void addMode(Mode mode)
 	{
 		Log.log(Log.DEBUG,jEdit.class,"Adding edit mode "
 			+ mode.getName());
