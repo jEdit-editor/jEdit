@@ -326,7 +326,7 @@ class ContextAddDialog extends EnhancedDialog
 		content.add(BorderLayout.SOUTH,southPanel);
 
 		pack();
-		setLocationRelativeTo(comp);
+		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
 		show();
 	}
 
@@ -388,6 +388,9 @@ class ContextAddDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.9  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

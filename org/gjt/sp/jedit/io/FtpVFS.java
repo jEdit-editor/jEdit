@@ -60,10 +60,11 @@ public class FtpVFS extends VFS
 			return null;
 
 		session.put(HOSTNAME_KEY,dialog.getHost());
-		session.put(USERNAME_KEY,dialog.getUser());
+		//session.put(USERNAME_KEY,dialog.getUser());
 		session.put(PASSWORD_KEY,dialog.getPassword());
 
-		return PROTOCOL + "://" + dialog.getHost() + "/";
+		return PROTOCOL + "://" + dialog.getUser() + "@"
+			+ dialog.getHost() + "/";
 	}
 
 	public String getFileParent(String path)
@@ -526,6 +527,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.17  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

@@ -88,15 +88,15 @@ public class MenuItemModel
 	// GUIUtilities class).
 	public JMenuItem create(View view)
 	{
-		return create(view,true);
+		return create(true);
 	}
 
-	public JMenuItem createForPopup(View view)
+	public JMenuItem createForPopup()
 	{
-		return create(view,false);
+		return create(false);
 	}
 
-	public JMenuItem create(View view, boolean setMnemonic)
+	public JMenuItem create(boolean setMnemonic)
 	{
 		JMenuItem mi;
 		if(action != null && action.isToggle())
@@ -144,6 +144,9 @@ public class MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/08/10 08:30:40  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.13  2000/07/26 07:48:44  sp
  * stuff
  *

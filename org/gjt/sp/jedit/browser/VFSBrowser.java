@@ -259,7 +259,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void rename(String from)
 	{
-		String[] args = { from };
+		String[] args = { MiscUtilities.getFileName(from) };
 		String to = GUIUtilities.input(this,"vfs.browser.rename",
 			args,null);
 		if(to == null)
@@ -805,7 +805,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			setIcon(GUIUtilities.loadToolBarIcon(jEdit.getProperty(
 				"vfs.browser.view.icon")));
-			ViewMenuButton.this.setToolTipText(jEdit.getProperty("view.browser.label"));
+			ViewMenuButton.this.setToolTipText(jEdit.getProperty("view.browser.view.label"));
 			ViewMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(0,0,0,0));
 			ViewMenuButton.this.addMouseListener(new MouseHandler());
@@ -885,6 +885,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/08/10 08:30:40  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.8  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

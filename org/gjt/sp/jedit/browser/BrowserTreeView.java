@@ -46,6 +46,7 @@ public class BrowserTreeView extends BrowserView
 		tree.setEditable(false);
 		tree.addMouseListener(new MouseHandler());
 		tree.addTreeExpansionListener(new TreeHandler());
+		tree.putClientProperty("JTree.lineStyle", "Angled");
 
 		if(browser.isMultipleSelectionEnabled())
 			tree.getSelectionModel().setSelectionMode(
@@ -235,6 +236,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/10 08:30:40  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.1  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

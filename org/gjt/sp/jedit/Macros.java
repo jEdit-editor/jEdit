@@ -114,7 +114,7 @@ public class Macros
 		public String name;
 		public String path;
 
-		public Macro(String name, final String path)
+		public Macro(final String name, String path)
 		{
 			this.name = name;
 			this.path = path;
@@ -130,7 +130,7 @@ public class Macros
 						action.actionPerformed(
 							new ActionEvent(
 							evt.getSource(),
-							evt.getID(),path));
+							evt.getID(),name));
 					}
 
 					public boolean isWrapper()
@@ -497,6 +497,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/08/10 08:30:40  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.32  2000/07/26 07:48:44  sp
  * stuff
  *

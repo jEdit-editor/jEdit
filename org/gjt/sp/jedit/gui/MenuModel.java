@@ -65,11 +65,14 @@ public class MenuModel extends MenuItemModel
 
 	public JMenuItem create(View view)
 	{
-		JMenu menu = view.getMenu(name);
-		if(menu != null)
-			return menu;
+		if(view != null)
+		{
+			JMenu menu = view.getMenu(name);
+			if(menu != null)
+				return menu;
+		}
 
-		menu = new JMenu(label);
+		JMenu menu = new JMenu(label);
 		menu.setMnemonic(mnemonic);
 
 		Enumeration enum = children.elements();
@@ -87,10 +90,9 @@ public class MenuModel extends MenuItemModel
 		return menu;
 	}
 
-	public JPopupMenu createPopup(View view)
+	public JPopupMenu createPopup()
 	{
 		JPopupMenu menu = new JPopupMenu();
-		menu.setInvoker(view);
 
 		Enumeration enum = children.elements();
 		while(enum.hasMoreElements())
@@ -101,7 +103,7 @@ public class MenuModel extends MenuItemModel
 			else
 			{
 				MenuItemModel menuItem = (MenuItemModel)obj;
-				menu.add(menuItem.createForPopup(view));
+				menu.add(menuItem.createForPopup());
 			}
 		}
 
@@ -115,6 +117,9 @@ public class MenuModel extends MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.3  2000/04/18 11:44:31  sp
  * Context menu editor finished
  *

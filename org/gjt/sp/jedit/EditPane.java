@@ -222,7 +222,7 @@ public class EditPane extends JPanel implements EBComponent
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addCustomHighlight(markerHighlight);
 		textArea.getGutter().setContextMenu(GUIUtilities
-			.loadPopupMenu(view,"view.gutter.context"));
+			.loadPopupMenu("view.gutter.context"));
 
 		if(editPane != null)
 			initTextArea(editPane.textArea);
@@ -417,7 +417,7 @@ public class EditPane extends JPanel implements EBComponent
 
 		// Set up the right-click popup menu
 		textArea.setRightClickPopup(GUIUtilities
-			.loadPopupMenu(view,"view.context"));
+			.loadPopupMenu("view.context"));
 	}
 
 	private void loadStyles()
@@ -517,7 +517,7 @@ public class EditPane extends JPanel implements EBComponent
 
 		// Set up the right-click popup menu
 		textArea.setRightClickPopup(GUIUtilities
-			.loadPopupMenu(view,"view.context"));
+			.loadPopupMenu("view.context"));
 	}
 
 	private void initBufferTabs()
@@ -614,6 +614,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2000/08/10 08:30:40  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.12  2000/07/26 07:48:43  sp
  * stuff
  *

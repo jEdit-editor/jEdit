@@ -132,6 +132,17 @@ public class GUIUtilities
 
 	/**
 	 * Creates a menu.
+	 * @param name The menu name
+	 * @since jEdit 2.6pre2
+	 */
+	public static JMenu loadMenu(String name)
+	{
+		return (JMenu)loadMenuModel(name).create(null);
+	}
+
+	/**
+	 * Creates a menu. This form of loadMenu() does not need to be used
+	 * by plugins; use the other form instead.
 	 * @param view The view to load the menu for
 	 * @param name The menu name
 	 */
@@ -142,12 +153,12 @@ public class GUIUtilities
 
 	/**
 	 * Creates a popup menu.
-	 * @param view The view to load the popup menu for
 	 * @param name The menu name
+	 * @since jEdit 2.6pre2
 	 */
-	public static JPopupMenu loadPopupMenu(View view, String name)
+	public static JPopupMenu loadPopupMenu(String name)
 	{
-		return loadMenuModel(name).createPopup(view);
+		return loadMenuModel(name).createPopup();
 	}
 
 	/**
@@ -184,7 +195,7 @@ public class GUIUtilities
 
 	/**
 	 * @deprecated If you are writing a plugin that specifically
-	 * targets jEdit 3.0 or later, you should use the
+	 * targets jEdit 2.6pre1 or later, you should use the
 	 * <code>loadMenuItem()</code> method that doesn't take
 	 * the <code>view</code> parameter.
 	 * @param view Unused
@@ -773,6 +784,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.74  2000/08/10 08:30:40  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.73  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

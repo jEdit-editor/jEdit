@@ -113,18 +113,17 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridy = y++;
 		cons.gridheight = 1;
-		cons.gridwidth = 3;
+		cons.gridwidth = 1;
+		cons.weightx = 0.0f;
 		cons.fill = GridBagConstraints.BOTH;
-		cons.weightx = 1.0f;
 
-		cons.gridx = 0;
 		JLabel l = new JLabel(label,SwingConstants.RIGHT);
 		l.setBorder(new EmptyBorder(0,0,0,12));
 		gridBag.setConstraints(l,cons);
 		add(l);
 
-		cons.gridx = 3;
-		cons.gridwidth = 1;
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
 		gridBag.setConstraints(comp,cons);
 		add(comp);
 	}
@@ -189,6 +188,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/08/10 08:30:40  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.6  2000/08/05 07:16:11  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

@@ -21,7 +21,7 @@ package org.gjt.sp.jedit.options;
 
 import javax.swing.*;
 import java.awt.*;
-import org.gjt.sp.jedit.gui.FontComboBox;
+import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.*;
 
 public class PrintOptionPane extends AbstractOptionPane
@@ -37,33 +37,27 @@ public class PrintOptionPane extends AbstractOptionPane
 		addSeparator("options.print.misc");
 
 		/* Font */
-		font = new FontComboBox();
-		font.setSelectedItem(jEdit.getProperty("print.font"));
-		addComponent(jEdit.getProperty("options.print.font"),font);
-
-		/* Font style */
-		String[] styles = { jEdit.getProperty("options.textarea-gutter.plain"),
-			jEdit.getProperty("options.textarea-gutter.bold"),
-			jEdit.getProperty("options.textarea-gutter.italic"),
-			jEdit.getProperty("options.textarea-gutter.boldItalic") };
-		style = new JComboBox(styles);
+		String _fontFamily = jEdit.getProperty("print.font");
+		int _fontStyle;
 		try
 		{
-			style.setSelectedIndex(Integer.parseInt(jEdit
-				.getProperty("print.fontstyle")));
+			_fontStyle = Integer.parseInt(jEdit.getProperty("print.fontstyle"));
 		}
 		catch(NumberFormatException nf)
 		{
+			_fontStyle = Font.PLAIN;
 		}
-		addComponent(jEdit.getProperty("options.print.fontstyle"),
-			style);
-
-		/* Font size */
-		String[] sizes = { "9", "10", "12", "14", "18", "24" };
-		size = new JComboBox(sizes);
-		size.setEditable(true);
-		size.setSelectedItem(jEdit.getProperty("print.fontsize"));
-		addComponent(jEdit.getProperty("options.print.fontsize"),size);
+		int _fontSize;
+		try
+		{
+			_fontSize = Integer.parseInt(jEdit.getProperty("print.fontsize"));
+		}
+		catch(NumberFormatException nf)
+		{
+			_fontSize = 14;
+		}
+		font = new FontSelector(new Font(_fontFamily,_fontStyle,_fontSize));
+		addComponent(jEdit.getProperty("options.print.font"),font);
 
 		/* Header */
 		printHeader = new JCheckBox(jEdit.getProperty("options.print"
@@ -104,10 +98,11 @@ public class PrintOptionPane extends AbstractOptionPane
 
 	protected void _save()
 	{
-		jEdit.setProperty("print.font",(String)font.getSelectedItem());
-		jEdit.setProperty("print.fontsize",(String)size.getSelectedItem());
-		jEdit.setProperty("print.fontstyle",String.valueOf(style
-			.getSelectedIndex()));
+		Font _font = font.getFont();
+		jEdit.setProperty("print.font",_font.getFamily());
+		jEdit.setProperty("print.fontsize",String.valueOf(_font.getSize()));
+		jEdit.setProperty("print.fontstyle",String.valueOf(_font.getStyle()));
+
 		jEdit.setBooleanProperty("print.header",printHeader.isSelected());
 		jEdit.setBooleanProperty("print.footer",printFooter.isSelected());
 		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());
@@ -119,9 +114,7 @@ public class PrintOptionPane extends AbstractOptionPane
 	}
 
 	// private members
-	private JComboBox font;
-	private JComboBox style;
-	private JComboBox size;
+	private FontSelector font;
 	private JCheckBox printHeader;
 	private JCheckBox printFooter;
 	private JCheckBox printLineNumbers;
@@ -135,6 +128,9 @@ public class PrintOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.2  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

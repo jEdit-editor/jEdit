@@ -60,7 +60,7 @@ public class FileVFS extends VFS
 
 	public String constructPath(String parent, String path)
 	{
-		return MiscUtilities.constructPath(parent,path,false);
+		return MiscUtilities.constructPath(parent,path);
 	}
 
 	public boolean load(View view, Buffer buffer, String path)
@@ -136,8 +136,7 @@ public class FileVFS extends VFS
 		{
 			String name = list[i];
 			list2[i] = _getDirectoryEntry(session,
-				MiscUtilities.constructPath(path,name,false),
-				comp);
+				MiscUtilities.constructPath(path,name),comp);
 		}
 
 		return list2;
@@ -287,6 +286,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.14  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

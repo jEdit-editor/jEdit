@@ -113,7 +113,6 @@ file=new-file \
      save-as \
      save-all \
      - \
-     send \
      print \
      - \
      exit
@@ -132,7 +131,6 @@ close-all.label=Close All $Buffers
 save.label=$Save
 save-as.label=Sa$ve As...
 save-all.label=Save A$ll Buffers...
-send.label=Sen$d...
 print.label=$Print...
 exit.label=E$xit
 
@@ -557,31 +555,6 @@ badurl.message=The following URL is invalid: {0}
 saveurl.title=Save To URL
 saveurl.message=Enter a local path name or URL:
 
-# Send dialog
-send.title=Send
-send.smtp=SMTP Server:
-send.from=From:
-send.to=To:
-send.subject=Subject:
-send.selectionOnly=Send selected text only
-send.send=Send
-sendempty.title=Send Error
-sendempty.message=The "SMTP Server", "From" and "To" fields must be\n\
-	specified before the buffer can be sent.
-badport.title=Invalid Port
-badport.message=The specified port number is invalid.
-serverdown.title=Server Is Down
-serverdown.message=The SMTP server is down.
-badhost.title=The Server Doesn't Like You
-badhost.message=The SMTP server doesn't like you.
-badsender.title=Invalid Sender
-badsender.message=Invalid From: line. Check if it's okay.
-badrecepient.title=Invalid Recepient
-badrecepient.message=Invalid To: line. Check if it's okay.
-badmsg.title=Invalid Message
-badmsg.message=The server doesn't like your message.
-send.connect=Connecting to {0}...
-
 # Go to line dialog
 gotoline.title=Go To Line
 gotoline.message=Go to line:
@@ -890,35 +863,27 @@ options.general.showFullPath=Show full path of buffers in title bar
 options.general.showBufferTabs=Show buffer tabs
 options.general.bufferTabsPos=Buffer tabs position:
 
-options.textarea-gutter.label=Text Area & Gutter
-options.textarea-gutter.textarea=Text area
-options.textarea-gutter.font=Text font:
-options.textarea-gutter.fontstyle=Text font style:
-options.textarea-gutter.plain=Plain
-options.textarea-gutter.bold=Bold
-options.textarea-gutter.italic=Italic
-options.textarea-gutter.boldItalic=Bold Italic
-options.textarea-gutter.fontsize=Text font size:
-options.textarea-gutter.lineHighlight=Current line highlighting
-options.textarea-gutter.bracketHighlight=Bracket highlighting
-options.textarea-gutter.eolMarkers=EOL markers
-options.textarea-gutter.paintInvalid=Paint invalid lines as red tildes
-options.textarea-gutter.blinkCaret=Blinking caret
-options.textarea-gutter.blockCaret=Block-shaped caret
-options.textarea-gutter.electricBorders=Electric (auto scroll) borders
-options.textarea-gutter.homeEnd="Smart" home/end behaviour
+options.textarea.label=Text Area
+options.textarea.textarea=Text area
+options.textarea.font=Text area font:
+options.textarea.lineHighlight=Current line highlighting
+options.textarea.bracketHighlight=Bracket highlighting
+options.textarea.eolMarkers=EOL markers
+options.textarea.paintInvalid=Paint invalid lines as red tildes
+options.textarea.blinkCaret=Blinking caret
+options.textarea.blockCaret=Block-shaped caret
+options.textarea.electricBorders=Electric (auto scroll) borders
+options.textarea.homeEnd="Smart" home/end behaviour
 
-options.textarea-gutter.gutter=Gutter
-options.textarea-gutter.gutter.expanded=Gutter expanded by default
-options.textarea-gutter.gutter.interval=Line highlight interval (0=none):
-options.textarea-gutter.gutter.lineNumbers=Line numbering enabled
-options.textarea-gutter.gutter.currentLineHighlight=Current line highlight enabled
-options.textarea-gutter.gutter.width=Gutter width:
-options.textarea-gutter.gutter.borderWidth=Gutter border width:
-options.textarea-gutter.gutter.numberAlignment=Line number alignment:
-options.textarea-gutter.gutter.font=Gutter font:
-options.textarea-gutter.gutter.fontsize=Gutter font size:
-options.textarea-gutter.gutter.fontstyle=Gutter font style:
+options.textarea.gutter=Gutter
+options.textarea.gutter.font=Gutter font:
+options.textarea.gutter.width=Gutter width:
+options.textarea.gutter.borderWidth=Gutter border width:
+options.textarea.gutter.numberAlignment=Line number alignment:
+options.textarea.gutter.expanded=Gutter expanded by default
+options.textarea.gutter.interval=Line highlight interval (0=none):
+options.textarea.gutter.lineNumbers=Line numbering enabled
+options.textarea.gutter.currentLineHighlight=Current line highlight enabled
 
 options.editor.label=Editor
 options.editor.global=Default editor settings
@@ -1045,6 +1010,19 @@ options.command-keys.label=Commands
 
 options.macro-keys.label=Macros
 
+# Font selector
+font-selector.text=aA bB 12 () {}
+font-selector.title=Font Selector
+font-selector.family=Font family:
+font-selector.size=Font size:
+font-selector.style=Font style:
+font-selector.plain=Plain
+font-selector.bold=Bold
+font-selector.italic=Italic
+font-selector.bolditalic=Bold italic
+font-selector.preview=Preview
+font-selector.long-text=The quick brown fox jumped over the lazy dog.
+
 # Color chooser, used by options.styles
 colorChooser.title=Pick a Color
 
@@ -1126,8 +1104,8 @@ vfs.browser.gotoFavorites.icon=Favorite.gif
 vfs.browser.view.label=View
 vfs.browser.view.icon=ViewMenu.gif
 
-vfs.browser.view.list.label=List View
-vfs.browser.view.tree.label=Tree View
+vfs.browser.view.list.label=View as List
+vfs.browser.view.tree.label=View as Tree
 vfs.browser.view.showHiddenFiles.label=Show Hidden Files
 
 vfs.browser.menu.close.label=Close

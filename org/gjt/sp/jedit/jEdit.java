@@ -2013,7 +2013,6 @@ public class jEdit
 		addAction("select-prev-paragraph");
 		addAction("select-prev-word");
 		addAction("select-word");
-		addAction("send");
 		addAction("set-caret-register");
 		addAction("set-filename-register");
 		addAction("set-marker");
@@ -2325,6 +2324,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.265  2000/08/10 08:30:40  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.264  2000/08/05 07:16:11  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

@@ -162,30 +162,29 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.general.lf"),
 			lookAndFeel);
 
+		/* Buffer tabs position */
+		String[] positions = {
+			"off", "top", "left", "bottom", "right"
+		};
+
+		bufferTabsPos = new JComboBox(positions);
+		if(!jEdit.getBooleanProperty("view.showBufferTabs"))
+			bufferTabsPos.setSelectedIndex(0);
+		else
+		{
+			bufferTabsPos.setSelectedIndex(Integer.parseInt(jEdit.getProperty(
+				"view.bufferTabsPos")));
+		}
+
+		addComponent(jEdit.getProperty("options.general.bufferTabsPos"),
+			bufferTabsPos);
+
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.general.showFullPath"));
 		showFullPath.setSelected(jEdit.getBooleanProperty(
 			"view.showFullPath"));
 		addComponent(showFullPath);
-
-		/* Show buffer tabs */
-		showBufferTabs = new JCheckBox(jEdit.getProperty(
-			"options.general.showBufferTabs"));
-		showBufferTabs.setSelected(jEdit.getBooleanProperty(
-			"view.showBufferTabs"));
-		addComponent(showBufferTabs);
-
-		/* Buffer tabs position */
-		String[] positions = {
-			"top", "left", "bottom", "right"
-		};
-
-		bufferTabsPos = new JComboBox(positions);
-		bufferTabsPos.setSelectedIndex(Integer.parseInt(jEdit.getProperty(
-			"view.bufferTabsPos")) - 1);
-		addComponent(jEdit.getProperty("options.general.bufferTabsPos"),
-			bufferTabsPos);
 	}
 
 	protected void _save()
@@ -225,12 +224,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
+		int index = bufferTabsPos.getSelectedIndex();
+		jEdit.setBooleanProperty("view.showBufferTabs",index != 0);
+		if(index != 0)
+			jEdit.setProperty("view.bufferTabsPos",String.valueOf(index));
 		jEdit.setBooleanProperty("view.showFullPath",showFullPath
 			.isSelected());
-		jEdit.setBooleanProperty("view.showBufferTabs",showBufferTabs
-			.isSelected());
-		jEdit.setProperty("view.bufferTabsPos",String.valueOf(
-			bufferTabsPos.getSelectedIndex() + 1));
 	}
 
 	// private members
@@ -254,14 +253,16 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 	private UIManager.LookAndFeelInfo[] lfs;
 	private JComboBox lookAndFeel;
-	private JCheckBox showFullPath;
-	private JCheckBox showBufferTabs;
 	private JComboBox bufferTabsPos;
+	private JCheckBox showFullPath;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.40  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.39  2000/08/05 11:41:03  sp
  * More VFS browser work
  *

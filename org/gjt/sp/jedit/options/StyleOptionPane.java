@@ -516,7 +516,7 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocationRelativeTo(comp);
+		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
 		show();
 	}
 
@@ -583,6 +583,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.20  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

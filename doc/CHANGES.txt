@@ -26,6 +26,7 @@ JEDIT 2.6 VERSION HISTORY
 - Updated JavaScript mode (Ollie Rutherford)
 - Tool bar buttons now have a 'rollover' effect
 - Global Options dialog box re-arranged somewhat
+- 'Send' command moved to a plugin, out of the core
 
 + Bug Fixes
 
@@ -35,18 +36,23 @@ JEDIT 2.6 VERSION HISTORY
 - FtpVFS would throw a NullPointerException if an error occurred while
   connecting to the FTP server
 - An autosave setting of '0' caused problems (since 2.6pre1)
+- Macros invoked using keyboard shortcuts would always fail with a
+  "macro not found" error (since 2.6pre1)
+- 'HTML/Close Tag' macro relied on non-existent goto-end-indent action
 
 + API Changes
 
 - org.gjt.sp.jedit.REFileFilter class removed
 - Many changes made to org.gjt.sp.jedit.VFS class
-- New MiscUtilities.constructPath(String,String,boolean) method allows you
-  to specify if the final path should be canonical (ie, symlinks resolved)
-  or not
 - New AbstractOptionPane.addSeparator(String) method
 - New methods added to GUIUtilities class:
   input(Component comp, String name, String[] args, String def);
   inputProperty(Component comp, String name, String[] args, String def);
+- MiscUtilities.constructPath() no longer returns a canonical path (ie,
+  with all symlinks resolved)
+- New method: GUIUtilities.loadMenu(String). Plugins that target jEdit
+  2.6pre2 (or 2.5.2) can use this method instead of the older loadMenu()
+  form.
 
 * Version 2.6pre1
 

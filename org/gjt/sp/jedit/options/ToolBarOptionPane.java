@@ -446,7 +446,7 @@ class ToolBarAddDialog extends EnhancedDialog
 		updateEnabled();
 
 		pack();
-		setLocationRelativeTo(comp);
+		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
 		show();
 	}
 
@@ -579,6 +579,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.7  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *

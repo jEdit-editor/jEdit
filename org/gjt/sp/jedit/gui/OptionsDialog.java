@@ -258,7 +258,7 @@ public class OptionsDialog extends EnhancedDialog
 		jEditGroup = new OptionGroup("jedit");
 
 		addOptionPane(new GeneralOptionPane(), jEditGroup);
-		addOptionPane(new TextAreaAndGutterOptionPane(), jEditGroup);
+		addOptionPane(new TextAreaOptionPane(), jEditGroup);
 		addOptionPane(new EditorOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new StyleOptionPane(), jEditGroup);
@@ -594,6 +594,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  2000/08/10 08:30:41  sp
+ * VFS browser work, options dialog work, more random tweaks
+ *
  * Revision 1.27  2000/08/05 07:16:12  sp
  * Global options dialog box updated, VFS browser now supports right-click menus
  *
