@@ -6,7 +6,6 @@
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
  *
- *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -18,14 +17,14 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
+ * along with the jEdit program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Version 1.1 - Tue Mar 27 17:10:43 EST 2001 @965 /Internet Time/
- * Some loop optimizations from the version sent to jEdit-users mailing list.
+ * This version requires jEdit3.2pre1 or greater
+ *
+ * $Id$
+ *
  */
-
-// Make_Double_Box_Comment.bsh
 
 void makeDoubleBoxComment()
 {
@@ -39,19 +38,17 @@ void makeDoubleBoxComment()
         return;
     }
 
-    endLine = textArea.getSelectionEndLine() + 1;
-    startLine = textArea.getSelectionStartLine();
-
-    Vector lines = new Vector( endLine - startLine);
+	selectedLines = textArea.getSelectedLines();
+    Vector newLines = new Vector(selectedLines.length);
 
     maxLineLength = 0;
-
-    for(line = startLine; line < endLine; ++line)
+	for(i = 0; i < selectedLines.length; ++i)
     {
-        fullLine = TextUtilities.tabsToSpaces( textArea.getLineText(line),
+        fullLine = TextUtilities.tabsToSpaces(
+			textArea.getLineText(selectedLines[i]),
             buffer.getTabSize());
         maxLineLength = Math.max(maxLineLength, fullLine.length());
-        lines.addElement(fullLine);
+        newLines.addElement(fullLine);
     }
 
     newLineLength = maxLineLength + startComment.length() +
@@ -59,9 +56,9 @@ void makeDoubleBoxComment()
 
     sb = new StringBuffer(startComment);
 
-    for(line = startLine; line < endLine; ++line)
+    for(i = 0; i < selectedLines.length; ++i)
     {
-        oldLine = lines.elementAt(line - startLine).toString();
+        oldLine = newLines.elementAt(i).toString();
         extraSpaces = maxLineLength - oldLine.length();
         sb.append(' ')
           .append(oldLine);
@@ -69,7 +66,7 @@ void makeDoubleBoxComment()
             sb.append(' ');
         sb.append(' ')
           .append(endComment);
-        offsetBOL = textArea.getLineStartOffset(line);
+        offsetBOL = textArea.getLineStartOffset(selectedLines[i]);
         textArea.setCaretPosition(offsetBOL);
         textArea.goToEndOfLine(true);
         textArea.setSelectedText(sb.toString());

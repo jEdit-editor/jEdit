@@ -1,0 +1,33 @@
+<!-- This file defines actions. Each action is a short snippet of
+     BeanShell code that may be bound to a menu item or keystroke.
+
+     Menu item labels for actions should be defined in properties named
+     <action>.label.
+
+     Shortcuts for actions should *not* be assigned by plugins. -->
+
+<?xml version="1.0"?>
+
+<!DOCTYPE ACTIONS SYSTEM "actions.dtd">
+
+<ACTIONS>
+	<!-- Definition for an action named hello-dockable -->
+	<ACTION NAME="hello-dockable">
+
+		<!-- The code to execute when the menu item is selected,
+		     or a key bound to this action is pressed -->
+		<CODE>
+			view.getDockableWindowManager()
+				.toggleDockableWindow("hello-dockable");
+		</CODE>
+
+		<!-- If an IS_SELECTED element is specified, the action
+		     becomes a check box menu item, selected when this
+		     snipped returns 'true', and unselected when it
+		     returns 'false' -->
+		<IS_SELECTED>
+			return view.getDockableWindowManager()
+				.isDockableWindowVisible("hello-dockable");
+		</IS_SELECTED>
+	</ACTION>
+</ACTIONS>

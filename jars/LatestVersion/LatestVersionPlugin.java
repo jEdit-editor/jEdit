@@ -69,8 +69,9 @@ public class LatestVersionPlugin extends EditPlugin
 		}
 		catch(IOException e)
 		{
-			String[] args = { e.getMessage() };
-			GUIUtilities.error(view,"ioerror",args);
+			String[] args = { jEdit.getProperty("version-check.url"),
+				e.toString() };
+			GUIUtilities.error(view,"read-error",args);
 		}
 
 		view.hideWaitCursor();

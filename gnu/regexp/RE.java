@@ -21,6 +21,9 @@ package gnu.regexp;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 class IntPair implements Serializable {
@@ -84,14 +87,21 @@ class CharUnit implements Serializable {
  * <P>
  * You can optionally affect the execution environment by using a
  * combination of execution flags (constants listed below).
+ * 
+ * <P>
+ * All operations on a regular expression are performed in a
+ * thread-safe manner.
  *
  * @author <A HREF="mailto:wes@cacas.org">Wes Biggs</A>
- * @version 1.1.2, 11 April 2001 
+ * @version 1.1.3, 18 June 2001 
  */
 
 public final class RE extends REToken {
   // This String will be returned by getVersion()
-  private static final String s_version = "1.1.2";
+  private static final String s_version = "1.1.3";
+
+  // The localized strings are kept in a separate file
+  private static ResourceBundle messages = PropertyResourceBundle.getBundle("gnu/regexp/MessagesBundle", Locale.getDefault());
 
   // These are, respectively, the first and last tokens in our linked list
   // If there is only one token, firstToken == lastToken
@@ -187,6 +197,11 @@ public final class RE extends REToken {
   /** Returns a string representing the version of the gnu.regexp package. */
   public static final String version() {
     return s_version;
+  }
+
+  // Retrieves a message from the ResourceBundle
+  static final String getLocalizedMessage(String key) {
+    return messages.getString(key);
   }
 
   /**
@@ -302,10 +317,12 @@ public final class RE extends REToken {
 	   && !syntax.get(RESyntax.RE_LIMITED_OPS)) {
 	// make everything up to here be a branch. create vector if nec.
 	addToken(currentToken);
+	RE theBranch = new RE(firstToken, lastToken, numSubs, subIndex, minimumLength);
 	if (branches == null) {
 	    branches = new Vector();
+	    minimumLength = 0;
 	}
-	branches.addElement(new RE(firstToken,lastToken,numSubs,subIndex, minimumLength));
+	branches.addElement(theBranch);
 	firstToken = lastToken = currentToken = null;
       }
       
@@ -317,12 +334,25 @@ public final class RE extends REToken {
       //  what is proper interpretation of '{' at start of string?
 
       else if ((unit.ch == '{') && syntax.get(RESyntax.RE_INTERVALS) && (syntax.get(RESyntax.RE_NO_BK_BRACES) ^ unit.bk)) {
-	if (currentToken == null) throw new REException("{ without preceding token",REException.REG_EBRACE,index);
-	  
-	index = getMinMax(pattern,index,minMax,syntax);
-	if ((currentToken.getMinimumLength() == 0) && (minMax.second == Integer.MAX_VALUE))
-	  throw new REException("repeated argument may be empty",REException.REG_BADRPT,index);
-	currentToken = setRepeated(currentToken,minMax.first,minMax.second,index);  
+	int newIndex = getMinMax(pattern,index,minMax,syntax);
+        if (newIndex > index) {
+          if (minMax.first > minMax.second)
+            throw new REException(getLocalizedMessage("interval.order"),REException.REG_BADRPT,newIndex);
+          if (currentToken == null)
+            throw new REException(getLocalizedMessage("repeat.no.token"),REException.REG_BADRPT,newIndex);
+          if (currentToken instanceof RETokenRepeated) 
+            throw new REException(getLocalizedMessage("repeat.chained"),REException.REG_BADRPT,newIndex);
+          if (currentToken instanceof RETokenWordBoundary || currentToken instanceof RETokenWordBoundary)
+            throw new REException(getLocalizedMessage("repeat.assertion"),REException.REG_BADRPT,newIndex);
+          if ((currentToken.getMinimumLength() == 0) && (minMax.second == Integer.MAX_VALUE))
+            throw new REException(getLocalizedMessage("repeat.empty.token"),REException.REG_BADRPT,newIndex);
+          index = newIndex;
+          currentToken = setRepeated(currentToken,minMax.first,minMax.second,index); 
+        }
+        else {
+          addToken(currentToken);
+          currentToken = new RETokenChar(subIndex,unit.ch,insens);
+        } 
       }
       
       // LIST OPERATOR:
@@ -332,24 +362,24 @@ public final class RE extends REToken {
 	Vector options = new Vector();
 	boolean negative = false;
 	char lastChar = 0;
-	if (index == pLength) throw new REException("unmatched [",REException.REG_EBRACK,index);
+	if (index == pLength) throw new REException(getLocalizedMessage("unmatched.bracket"),REException.REG_EBRACK,index);
 	
 	// Check for initial caret, negation
 	if ((ch = pattern[index]) == '^') {
 	  negative = true;
-	  if (++index == pLength) throw new REException("no end of list",REException.REG_EBRACK,index);
+	  if (++index == pLength) throw new REException(getLocalizedMessage("class.no.end"),REException.REG_EBRACK,index);
 	  ch = pattern[index];
 	}
 
 	// Check for leading right bracket literal
 	if (ch == ']') {
 	  lastChar = ch;
-	  if (++index == pLength) throw new REException("no end of list",REException.REG_EBRACK,index);
+	  if (++index == pLength) throw new REException(getLocalizedMessage("class.no.end"),REException.REG_EBRACK,index);
 	}
 
 	while ((ch = pattern[index++]) != ']') {
 	  if ((ch == '-') && (lastChar != 0)) {
-	    if (index == pLength) throw new REException("no end of list",REException.REG_EBRACK,index);
+	    if (index == pLength) throw new REException(getLocalizedMessage("class.no.end"),REException.REG_EBRACK,index);
 	    if ((ch = pattern[index]) == ']') {
 	      options.addElement(new RETokenChar(subIndex,lastChar,insens));
 	      lastChar = '-';
@@ -359,10 +389,11 @@ public final class RE extends REToken {
 	      index++;
 	    }
           } else if ((ch == '\\') && syntax.get(RESyntax.RE_BACKSLASH_ESCAPE_IN_LISTS)) {
-            if (index == pLength) throw new REException("no end of list",REException.REG_EBRACK,index);
+            if (index == pLength) throw new REException(getLocalizedMessage("class.no.end"),REException.REG_EBRACK,index);
 	    int posixID = -1;
 	    boolean negate = false;
-	    if (syntax.get(RESyntax.RE_CHAR_CLASS_ESC_IN_LISTS)) {
+            char asciiEsc = 0;
+	    if (("dswDSW".indexOf(pattern[index]) != -1) && syntax.get(RESyntax.RE_CHAR_CLASS_ESC_IN_LISTS)) {
 	      switch (pattern[index]) {
 	      case 'D':
 		negate = true;
@@ -381,15 +412,30 @@ public final class RE extends REToken {
 		break;
 	      }
 	    }
+            else if ("nrt".indexOf(pattern[index]) != -1) {
+              switch (pattern[index]) {
+                case 'n':
+                  asciiEsc = '\n';
+                  break;
+                case 't':
+                  asciiEsc = '\t';
+                  break;
+                case 'r':
+                  asciiEsc = '\r';
+                  break;
+              }
+            }
 	    if (lastChar != 0) options.addElement(new RETokenChar(subIndex,lastChar,insens));
 	    
 	    if (posixID != -1) {
 	      options.addElement(new RETokenPOSIX(subIndex,posixID,insens,negate));
+	    } else if (asciiEsc != 0) {
+	      lastChar = asciiEsc;
 	    } else {
 	      lastChar = pattern[index];
 	    }
 	    ++index;
-	  } else if ((ch == '[') && (syntax.get(RESyntax.RE_CHAR_CLASSES)) && (pattern[index] == ':')) {
+	  } else if ((ch == '[') && (syntax.get(RESyntax.RE_CHAR_CLASSES)) && (index < pLength) && (pattern[index] == ':')) {
 	    StringBuffer posixSet = new StringBuffer();
 	    index = getPosixSet(pattern,index+1,posixSet);
 	    int posixId = RETokenPOSIX.intValue(posixSet.toString());
@@ -399,7 +445,7 @@ public final class RE extends REToken {
 	    if (lastChar != 0) options.addElement(new RETokenChar(subIndex,lastChar,insens));
 	    lastChar = ch;
 	  }
-	  if (index == pLength) throw new REException("no end of list",REException.REG_EBRACK,index);
+	  if (index == pLength) throw new REException(getLocalizedMessage("class.no.end"),REException.REG_EBRACK,index);
 	} // while in list
 	// Out of list, index is one past ']'
 	    
@@ -417,8 +463,25 @@ public final class RE extends REToken {
       else if ((unit.ch == '(') && (syntax.get(RESyntax.RE_NO_BK_PARENS) ^ unit.bk)) {
 	boolean pure = false;
 	boolean comment = false;
+        boolean lookAhead = false;
+        boolean negativelh = false;
 	if ((index+1 < pLength) && (pattern[index] == '?')) {
 	  switch (pattern[index+1]) {
+          case '!':
+            if (syntax.get(RESyntax.RE_LOOKAHEAD)) {
+              pure = true;
+              negativelh = true;
+              lookAhead = true;
+              index += 2;
+            }
+            break;
+          case '=':
+            if (syntax.get(RESyntax.RE_LOOKAHEAD)) {
+              pure = true;
+              lookAhead = true;
+              index += 2;
+            }
+            break;
 	  case ':':
 	    if (syntax.get(RESyntax.RE_PURE_GROUPING)) {
 	      pure = true;
@@ -430,11 +493,13 @@ public final class RE extends REToken {
 	      comment = true;
 	    }
 	    break;
+          default:
+            throw new REException(getLocalizedMessage("repeat.no.token"), REException.REG_BADRPT, index);
 	  }
 	}
 
 	if (index >= pLength) {
-	    throw new REException("no end of subexpression", REException.REG_ESUBREG,index);
+	    throw new REException(getLocalizedMessage("unmatched.paren"), REException.REG_ESUBREG,index);
 	}
 
 	// find end of subexpression
@@ -445,7 +510,7 @@ public final class RE extends REToken {
 	while ( ((nextIndex = getCharUnit(pattern,endIndex,unit)) > 0)
 		&& !(nested == 0 && (unit.ch == ')') && (syntax.get(RESyntax.RE_NO_BK_PARENS) ^ unit.bk)) )
 	  if ((endIndex = nextIndex) >= pLength)
-	    throw new REException("no end of subexpression",REException.REG_ESUBREG,index-1);
+	    throw new REException(getLocalizedMessage("subexpr.no.end"),REException.REG_ESUBREG,nextIndex);
 	  else if (unit.ch == '(' && (syntax.get(RESyntax.RE_NO_BK_PARENS) ^ unit.bk))
 	    nested++;
 	  else if (unit.ch == ')' && (syntax.get(RESyntax.RE_NO_BK_PARENS) ^ unit.bk))
@@ -462,10 +527,13 @@ public final class RE extends REToken {
 	    numSubs++;
 	  }
 
-	  int useIndex = pure ? 0 : nextSub + numSubs;
-
-	  currentToken = new RE(String.valueOf(pattern,index,endIndex-index).toCharArray(),cflags,syntax,useIndex,nextSub + numSubs);
-	  numSubs += ((RE) currentToken).getNumSubs();
+          if (lookAhead)
+            currentToken = new RETokenLookAhead(String.valueOf(pattern,index,endIndex-index).toCharArray(),cflags,syntax,negativelh);
+          else {
+            int useIndex = pure ? 0 : nextSub + numSubs;
+            currentToken = new RE(String.valueOf(pattern,index,endIndex-index).toCharArray(),cflags,syntax,useIndex,nextSub + numSubs);
+            numSubs += ((RE) currentToken).getNumSubs();
+          }
 	  index = nextIndex;
 	} // not a comment
       } // subexpression
@@ -474,7 +542,7 @@ public final class RE extends REToken {
       // ) or \) throw exception if
       // !syntax.get(RESyntax.RE_UNMATCHED_RIGHT_PAREN_ORD)
       else if (!syntax.get(RESyntax.RE_UNMATCHED_RIGHT_PAREN_ORD) && ((unit.ch == ')') && (syntax.get(RESyntax.RE_NO_BK_PARENS) ^ unit.bk))) {
-	throw new REException("unmatched right paren",REException.REG_EPAREN,index);
+	throw new REException(getLocalizedMessage("unmatched.paren"),REException.REG_EPAREN,index);
       }
 
       // START OF LINE OPERATOR
@@ -507,8 +575,14 @@ public final class RE extends REToken {
       //  *
 
       else if ((unit.ch == '*') && !unit.bk) {
-	if ((currentToken == null) || (currentToken.getMinimumLength() == 0))
-	  throw new REException("repeated argument may be empty",REException.REG_BADRPT,index);
+	if (currentToken == null)
+          throw new REException(getLocalizedMessage("repeat.no.token"),REException.REG_BADRPT,index);
+	if (currentToken instanceof RETokenRepeated)
+          throw new REException(getLocalizedMessage("repeat.chained"),REException.REG_BADRPT,index);
+	if (currentToken instanceof RETokenWordBoundary || currentToken instanceof RETokenWordBoundary)
+	  throw new REException(getLocalizedMessage("repeat.assertion"),REException.REG_BADRPT,index);
+	if (currentToken.getMinimumLength() == 0)
+	  throw new REException(getLocalizedMessage("repeat.empty.token"),REException.REG_BADRPT,index);
 	currentToken = setRepeated(currentToken,0,Integer.MAX_VALUE,index);
       }
 
@@ -517,8 +591,14 @@ public final class RE extends REToken {
       //  not available if RE_LIMITED_OPS is set
 
       else if ((unit.ch == '+') && !syntax.get(RESyntax.RE_LIMITED_OPS) && (!syntax.get(RESyntax.RE_BK_PLUS_QM) ^ unit.bk)) {
-	if ((currentToken == null) || (currentToken.getMinimumLength() == 0))
-	  throw new REException("repeated argument may be empty",REException.REG_BADRPT,index);
+	if (currentToken == null)
+          throw new REException(getLocalizedMessage("repeat.no.token"),REException.REG_BADRPT,index);
+	if (currentToken instanceof RETokenRepeated)
+          throw new REException(getLocalizedMessage("repeat.chained"),REException.REG_BADRPT,index);
+	if (currentToken instanceof RETokenWordBoundary || currentToken instanceof RETokenWordBoundary)
+	  throw new REException(getLocalizedMessage("repeat.assertion"),REException.REG_BADRPT,index);
+	if (currentToken.getMinimumLength() == 0)
+	  throw new REException(getLocalizedMessage("repeat.empty.token"),REException.REG_BADRPT,index);
 	currentToken = setRepeated(currentToken,1,Integer.MAX_VALUE,index);
       }
 
@@ -528,11 +608,17 @@ public final class RE extends REToken {
       //  stingy matching if RE_STINGY_OPS is set and it follows a quantifier
 
       else if ((unit.ch == '?') && !syntax.get(RESyntax.RE_LIMITED_OPS) && (!syntax.get(RESyntax.RE_BK_PLUS_QM) ^ unit.bk)) {
-	if (currentToken == null) throw new REException("? without preceding token",REException.REG_BADRPT,index);
+	if (currentToken == null) throw new REException(getLocalizedMessage("repeat.no.token"),REException.REG_BADRPT,index);
 
 	// Check for stingy matching on RETokenRepeated
-	if ((currentToken instanceof RETokenRepeated) && (syntax.get(RESyntax.RE_STINGY_OPS)))
-	  ((RETokenRepeated) currentToken).makeStingy();
+	if (currentToken instanceof RETokenRepeated) {
+          if (syntax.get(RESyntax.RE_STINGY_OPS) && !((RETokenRepeated)currentToken).isStingy())
+            ((RETokenRepeated)currentToken).makeStingy();
+          else
+            throw new REException(getLocalizedMessage("repeat.chained"),REException.REG_BADRPT,index);
+        }
+        else if (currentToken instanceof RETokenWordBoundary || currentToken instanceof RETokenWordBoundary)
+          throw new REException(getLocalizedMessage("repeat.assertion"),REException.REG_BADRPT,index);
 	else
 	  currentToken = setRepeated(currentToken,0,1,index);
       }
@@ -693,7 +779,7 @@ public final class RE extends REToken {
     if (unit.bk = (unit.ch == '\\'))
       if (index < input.length)
 	unit.ch = input[index++];
-      else throw new REException("\\ at end of pattern.",REException.REG_ESCAPE,index);
+      else throw new REException(getLocalizedMessage("ends.with.backslash"),REException.REG_ESCAPE,index);
     return index;
   }
 
@@ -1103,7 +1189,7 @@ public final class RE extends REToken {
   }
 
   private static REToken setRepeated(REToken current, int min, int max, int index) throws REException {
-    if (current == null) throw new REException("repeat preceding token",REException.REG_BADRPT,index);
+    if (current == null) throw new REException(getLocalizedMessage("repeat.no.token"),REException.REG_BADRPT,index);
     return new RETokenRepeated(current.subIndex,current,min,max);
   }
 
@@ -1122,38 +1208,63 @@ public final class RE extends REToken {
   private int getMinMax(char[] input,int index,IntPair minMax,RESyntax syntax) throws REException {
     // Precondition: input[index-1] == '{', minMax != null
 
-    if (index == input.length) throw new REException("no matching brace",REException.REG_EBRACE,index);
-	
+    boolean mustMatch = !syntax.get(RESyntax.RE_NO_BK_BRACES);
+    int startIndex = index;
+    if (index == input.length) {
+      if (mustMatch)
+        throw new REException(getLocalizedMessage("unmatched.brace"),REException.REG_EBRACE,index);
+      else
+        return startIndex;
+    }
+    
     int min,max=0;
     CharUnit unit = new CharUnit();
     StringBuffer buf = new StringBuffer();
     
     // Read string of digits
-    while (((index = getCharUnit(input,index,unit)) != input.length)
-	   && Character.isDigit(unit.ch))
-      buf.append(unit.ch);
+    do {
+      index = getCharUnit(input,index,unit);
+      if (Character.isDigit(unit.ch))
+        buf.append(unit.ch);
+    } while ((index != input.length) && Character.isDigit(unit.ch));
 
     // Check for {} tomfoolery
-    if (buf.length() == 0) throw new REException("bad brace construct",REException.REG_EBRACE,index);
+    if (buf.length() == 0) {
+      if (mustMatch)
+        throw new REException(getLocalizedMessage("interval.error"),REException.REG_EBRACE,index);
+      else
+        return startIndex;
+    }
 
     min = Integer.parseInt(buf.toString());
 	
     if ((unit.ch == '}') && (syntax.get(RESyntax.RE_NO_BK_BRACES) ^ unit.bk))
       max = min;
+    else if (index == input.length)
+      if (mustMatch)
+        throw new REException(getLocalizedMessage("interval.no.end"),REException.REG_EBRACE,index);
+      else
+        return startIndex;
     else if ((unit.ch == ',') && !unit.bk) {
       buf = new StringBuffer();
       // Read string of digits
-      while (((index = getCharUnit(input,index,unit)) != input.length)
-	     && Character.isDigit(unit.ch))
+      while (((index = getCharUnit(input,index,unit)) != input.length) && Character.isDigit(unit.ch))
 	buf.append(unit.ch);
 
       if (!((unit.ch == '}') && (syntax.get(RESyntax.RE_NO_BK_BRACES) ^ unit.bk)))
-	throw new REException("expected end of interval",REException.REG_EBRACE,index);
+        if (mustMatch)
+          throw new REException(getLocalizedMessage("interval.error"),REException.REG_EBRACE,index);
+        else
+          return startIndex;
 
       // This is the case of {x,}
       if (buf.length() == 0) max = Integer.MAX_VALUE;
       else max = Integer.parseInt(buf.toString());
-    } else throw new REException("invalid character in brace expression",REException.REG_EBRACE,index);
+    } else
+      if (mustMatch)
+        throw new REException(getLocalizedMessage("interval.error"),REException.REG_EBRACE,index);
+      else
+        return startIndex;
 
     // We know min and max now, and they are valid.
 
@@ -1163,6 +1274,7 @@ public final class RE extends REToken {
     // return the index following the '}'
     return index;
   }
+
    /**
     * Return a human readable form of the compiled regular expression,
     * useful for debugging.

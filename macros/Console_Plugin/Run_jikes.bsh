@@ -1,34 +1,36 @@
-// This macro executes the 'jikes' (IBM fast Java compiler) command in the
-// Console plugin.
+/*
+ * Run_jikes.bsh - a BeanShell macro script for the
+ * jEdit text editor - executes the 'jikes' command
+ * (IBM's fast Java compiler) in the Console plugin
+ * Copyright (C) 2001 Slava Pestov
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the jEdit program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * $Id$
+ */
 
-/* This is a generic function that executes the specified command in the
- * console. You can copy and paste it into your own macros. */
-runCommandInConsole(command)
+void runJikes()
 {
-	// firstly, check if the plugin is installed.
-	if(jEdit.getPlugin("console.ConsolePlugin") == null)
-	{
-		Macros.error(view,"You must install the Console plugin"
-			+ " to use this macro.");
-		return;
-	}
+	// Main routine: construct the command which will be executed
+	// Note that the console automatically expands '$f' to the buffer's path
+	command = "jikes -classpath $d $f";
 
-	// Open the console if it isn't already open
-	view.getDockableWindowManager().addDockableWindow("console");
-
-	// Obtain the console instance
-	console = view.getDockableWindowManager().getDockableWindow("console");
-
-	// Ensure we are using the console shell
-	console.setShell("Console");
-
-	// Call its run() method
-	console.run(command);
+	// Call our runCommandInConsole() function
+	runCommandInConsole(view,command);
 }
 
-// Construct the command which will be executed
-// Note that the console automatically expands '$f' to the buffer's path
-command = "jikes -classpath $d $f";
+runJikes();
 
-// Call our runCommandInConsole() function
-runCommandInConsole(command);
+// end Run_jikes.bsh

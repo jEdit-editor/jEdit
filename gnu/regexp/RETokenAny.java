@@ -40,9 +40,9 @@ final class RETokenAny extends REToken {
     char ch = input.charAt(mymatch.index);
     if ((ch == CharIndexed.OUT_OF_BOUNDS)
 	|| (!newline && (ch == '\n'))
-	|| (matchNull && (ch == 0)))
-      return false;
-    
+	|| (matchNull && (ch == 0))) {
+	return false;
+    }
     ++mymatch.index;
     return next(input, mymatch);
   }

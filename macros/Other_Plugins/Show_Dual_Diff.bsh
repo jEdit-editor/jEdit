@@ -1,6 +1,6 @@
 /*
  * Show_Dual_Diff.bsh - a BeanShell macro script for the
- * jEdit text editor - a front end to the JDiff plugin
+ * jEdit text editor - provides a front end to the JDiff plugin
  * Copyright (C) author John Gellene
  * jgellene@nyc.rr.com
  *
@@ -15,10 +15,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
+ * along with the jEdit program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Version 1.0 - Tue Apr 03 01:19:45 EDT 2001 @263 /Internet Time/
+ * $Id$
  */
 
 import java.awt.event.*;
@@ -30,17 +30,6 @@ import javax.swing.JPanel;
 
 import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.*;
-
-
-void runDualJDiff(String basePath, String newPath)
-{
-    view.unsplit();
-    jEdit.openFile(view, basePath);
-    view.splitVertically();
-    jEdit.openFile(view, newPath);
-    DualDiff.toggleFor(view);
-}
-
 
 void showDualJDiff()
 {
@@ -143,7 +132,12 @@ void showDualJDiff()
             else
             {
                 dialog.dispose();
-                runDualJDiff(basePath, newPath);
+				// here is where JDiff gets activated
+				view.unsplit();
+				jEdit.openFile(view, basePath);
+				view.splitVertically();
+				jEdit.openFile(view, newPath);
+				DualDiff.toggleFor(view);
             }
         }
         else
@@ -176,7 +170,6 @@ void showDualJDiff()
     dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialog.show();
 }
-
 
 showDualJDiff();
 

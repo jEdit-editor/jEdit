@@ -6,7 +6,8 @@
 # jedit-program fileset
 echo jedit.jar > installer/jedit-program
 echo jars/LatestVersion.jar >> installer/jedit-program
-echo properties/example.props >> installer/jedit-program
+echo properties/README.txt >> installer/jedit-program
+echo startup/README.txt >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
 echo modes/catalog >> installer/jedit-program
 find doc -type f -name \*.txt >> installer/jedit-program

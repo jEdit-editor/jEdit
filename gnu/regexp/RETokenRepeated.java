@@ -31,11 +31,22 @@ final class RETokenRepeated extends REToken {
 	this.min = min;
 	this.max = max;
     }
-    
+
+    /** Sets the minimal matching mode to true. */
     void makeStingy() {
 	stingy = true;
     }
     
+    /** Queries if this token has minimal matching enabled. */
+    boolean isStingy() {
+	return stingy;
+    }
+    
+    /**
+     * The minimum length of a repeated token is the minimum length
+     * of the token multiplied by the minimum number of times it must
+     * match.
+     */
     int getMinimumLength() {
 	return (min * token.getMinimumLength());
     }
@@ -49,7 +60,8 @@ final class RETokenRepeated extends REToken {
     // the subexpression back-reference operator allow that?
 
     boolean match(CharIndexed input, REMatch mymatch) {
-	int numRepeats = 0;
+	// number of times we've matched so far
+	int numRepeats = 0; 
 	
 	// Possible positions for the next repeat to match at
 	REMatch newMatch = mymatch;
@@ -69,11 +81,10 @@ final class RETokenRepeated extends REToken {
 	do {
 	    // Check for stingy match for each possibility.
 	    if (stingy && (numRepeats >= min)) {
-		for (current = newMatch; current != null; current = current.next) {
-		    if (next(input, current)) {
-			mymatch.assignFrom(current);
-			return true;
-		    }
+		REMatch result = matchRest(input, newMatch);
+		if (result != null) {
+		    mymatch.assignFrom(result);
+		    return true;
 		}
 	    }
 
@@ -119,37 +130,60 @@ final class RETokenRepeated extends REToken {
 	
 	// At this point we've either got too many or just the right amount.
 	// See if this numRepeats works with the rest of the regexp.
-	REMatch doneIndex = null;
-	REMatch doneIndexLast = null;
+	REMatch allResults = null;
+	REMatch allResultsLast = null;
+
+	REMatch results = null;
 	while (--posIndex >= min) {
 	    newMatch = (REMatch) positions.elementAt(posIndex);
-	    // If rest of pattern matches
-	    // XXX has this already been tested?
-	    for (current = newMatch; current != null; current = current.next) {
-		// XXX why do we have to clone?
-		recurrent = (REMatch) current.clone();
-		if (next(input, recurrent)) {
-		    // add all items in current to doneIndex array
-		    if (doneIndex == null) {
-			doneIndex = recurrent;
-			doneIndexLast = recurrent;
-		    } else {
-			doneIndexLast.next = recurrent;
-		    }
-		    // Find new doneIndexLast
-		    while (doneIndexLast.next != null) {
-			doneIndexLast = doneIndexLast.next;
-		    }
+	    results = matchRest(input, newMatch);
+	    if (results != null) {
+		if (allResults == null) {
+		    allResults = results;
+		    allResultsLast = results;
+		} else {
+		    // Order these from longest to shortest
+		    // Start by assuming longest (more repeats)
+		    allResultsLast.next = results;
+		}
+		// Find new doablesLast
+		while (allResultsLast.next != null) {
+		    allResultsLast = allResultsLast.next;
 		}
 	    }
 	    // else did not match rest of the tokens, try again on smaller sample
 	}
-	if (doneIndex == null) {
-	    return false;
-	} else {
-	    mymatch.assignFrom(doneIndex);
+	if (allResults != null) {
+	    mymatch.assignFrom(allResults); // does this get all?
 	    return true;
 	}
+	// If we fall out, no matches.
+	return false;
+    }
+
+    private REMatch matchRest(CharIndexed input, final REMatch newMatch) {
+	REMatch current, single;
+	REMatch doneIndex = null;
+	REMatch doneIndexLast = null;
+	// Test all possible matches for this number of repeats
+	for (current = newMatch; current != null; current = current.next) {
+	    // clone() separates a single match from the chain
+	    single = (REMatch) current.clone();
+	    if (next(input, single)) {
+		// chain results to doneIndex
+		if (doneIndex == null) {
+		    doneIndex = single;
+		    doneIndexLast = single;
+		} else {
+		    doneIndexLast.next = single;
+		}
+		// Find new doneIndexLast
+		while (doneIndexLast.next != null) {
+		    doneIndexLast = doneIndexLast.next;
+		}
+	    }
+	}
+	return doneIndex;
     }
 
     void dump(StringBuffer os) {

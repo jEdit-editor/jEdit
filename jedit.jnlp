@@ -20,8 +20,8 @@
 
   <resources>
     <j2se version="1.2+" />
-    <jar href="jedit32pre3webstart_aux1.jar" />
-    <jar href="jedit32pre3webstart.jar" />
+    <jar href="jedit32pre4webstart_aux1.jar" />
+    <jar href="jedit32pre4webstart.jar" />
   </resources>
 
   <security>

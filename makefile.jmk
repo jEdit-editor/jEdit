@@ -56,40 +56,40 @@ pkgs = re_pkg bsh_pkgs jedit_pkgs
     "doc"
     "doc/users-guide";
 
-# Additional stuff that is bundled into the web start version
-jnlp_pkgs = pkgs "modes";
-
 # Installer sources
 installer_srcs = (subst ".java", ".class", (glob "installer/*.java"));
 
 # All sources
 srcs = re_srcs bsh_srcs jedit_srcs installer_srcs;
 
-get_file_list = function(list)
+get_file_list = function(dummy)
 {
     (glob
-        (join list, "/*.class")
-        (join list, "/*.gif")
-        (join list, "/*.jpg")
-        (join list, "/*.props")
-        (join list, "/*.bsh")
-        (join list, "/*.html")
-        (join list, "/*.xml")
-        (join list, "/*.dtd")
+        (join pkgs, "/*.class")
+        (join pkgs, "/*.gif")
+        (join pkgs, "/*.jpg")
+        (join pkgs, "/*.props")
+        (join pkgs, "/*.bsh")
+        (join pkgs, "/*.html")
+        (join pkgs, "/*.dtd")
+        "org/gjt/sp/jedit/actions.xml"
         "org/gjt/sp/jedit/default.abbrevs"
         "bsh/lib/defaultImports"
-        "bsh/lib/javaPackages")
+        "bsh/lib/javaPackages"
+        "doc/users-guide/toc.xml"
+        "gnu/regexp/MessagesBundle.properties")
 }
 end;
 
 "all": srcs;
 {
-    exec cmd_jar "cmf" jedit_mf "jedit.jar" (get_file_list pkgs);
+    exec cmd_jar "cmf" jedit_mf "jedit.jar" (get_file_list);
 }
 
 "webstart": srcs;
 {
-    exec "/opt/jdk1.2.2/bin/jar" "cmf" jedit_mf "jedit_jnlp.jar" (get_file_list jnlp_pkgs)
+    exec "/opt/jdk1.2.2/bin/jar" "cmf" jedit_mf "jedit_jnlp.jar" (get_file_list)
+        (glob "modes/*.xml")
         "modes/catalog";
     exec "/home/slava/signjar" "jedit_jnlp.jar";
     exec "/home/slava/signjar" "jars/Firewall.jar";

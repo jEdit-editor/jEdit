@@ -59,6 +59,7 @@ public final class REMatch implements Serializable, Cloneable {
 	start = other.start;
 	end = other.end;
 	index = other.index;
+	// need to deep clone?
 	next = other.next;
     }
 
@@ -110,16 +111,7 @@ public final class REMatch implements Serializable, Cloneable {
     public String toString() {
 	return matchedText;
     }
-   
-
-// ADDED BY SLAVA
-
-    public int getSubCount() {
-        return start.length;
-    }
-
-// END OF SLAVA'S STUFF
- 
+    
     /**
      * Returns the index within the input text where the match in its entirety
      * began.
@@ -216,7 +208,16 @@ public final class REMatch implements Serializable, Cloneable {
 	int x = end[sub];
 	return (x == -1) ? x : offset + x;
     }
-    
+
+    /**
+     * Returns the number of subexpressions in this match.
+     * @author Slava Pestov
+     */
+    public int getSubCount()
+    {
+        return start.length;
+    }
+
     /**
      * Substitute the results of this match to create a new string.
      * This is patterned after PERL, so the tokens to watch out for are

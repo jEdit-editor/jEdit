@@ -24,7 +24,7 @@ TO DO
   - what about \"foo\"?
   - some % commands can be used without % prefix; clear, cd, pwd
 
-+ before 3.2pre5:
++ before 3.2final:
 
 - jedit -usage/-version doesn't work
 - get web start to work
@@ -37,14 +37,21 @@ TO DO
 - installing source for already installed plugins
 - reload: preserve caret position
 - jEditLauncher
+- does loading and saving user settings take a long time?
+- maybe rewrite file restore to use XML -- allow plugins to read/write
+  arbitriary restore files? -- eg BufferList
+- custom splitter control?
+- finish persistent splits: resize splits to put them in the middle
 - documentation
   - mention registers in API guide
   - JOptionPane not a good idea for getting user input?
   - formatting problems in user's guide in table cells
-  - Include John's upcoming plugin guide when ready
+  - Include John's upcoming plugin guide
   - document new edit server
   - document differences between web start and stand-alone version
 - help viewer: links to .txt files?
+- C+\
+- next time i'm making an RPM, fix the shell script
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
     ugly with different backgrounds
@@ -52,22 +59,13 @@ TO DO
   - selected borders in list, tree, table wrong colors
   - updateUI doesn't update tree colors
   - restart should not be necessary for 'globalColors' to take effect
-
-+ before 3.2final:
-
-- does loading and saving user settings take a long time?
-- maybe rewrite file restore to use XML -- allow plugins to read/write
-  arbitriary restore files? -- eg BufferList
-- custom splitter control?
-- finish persistent splits: resize splits to put them in the middle
-- C+\
-- next time i'm making an RPM, fix the shell script
 - 'globalFont' property?
   - maybe don't give text fields a new font?...
 - swing font customization
 
 + bugs that need to be fixed at some stage:
 
+- much better rect select, along the lines of 'column mode'
 - Java 1.4 key events: DefaultInputHandler?
 - XThis: don't throw exceptions for non-existent methods
 - only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>
@@ -94,7 +92,6 @@ TO DO
 
 + later:
 
-- much better rect select, along the lines of 'column mode'
 - modes have a reference counter; unload modes which have no buffers open
 - scrolling while caret is on a bracket over long distances slows things
   down

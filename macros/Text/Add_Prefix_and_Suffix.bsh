@@ -1,11 +1,10 @@
 /*
- * add_prefix_and_suffix.bsh - a BeanShell macro script
- * for use in the jEdit text editor program;
- * obtains and processes input for prefix and suffix text to be
- * inserted in selected lines in the current editing buffer
- *
+ * Add_Prefix_and_Suffix.bsh - a BeanShell macro script for the
+ * jEdit text editor - obtains and processes input for prefix and
+ * suffix text to be inserted in selected lines in the current
+ * editing buffer
  * Copyright (C) 2001 John Gellene
- * email: jgellene@nyc.rr.com
+ * jgellene@nyc.rr.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,11 +17,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the jEdit program; if not, write to the Free Software
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * version 1.0 - Sat Mar 03 08:48:06 EST 2001
- * tested on jEdit 3.1pre1, JDK1.3
+ * $Id$
  *
  * Notes on use:
  *
@@ -121,10 +119,10 @@ void prefixSuffixDialog()
 
         // text manipulation begins here using calls
         // to jEdit methods
-        end = textArea.getSelectionEndLine() + 1;
-        for(line = textArea.getSelectionStartLine(); line < end; ++line)
+		selectedLines = textArea.getSelectedLines();
+		for(i = 0; i < selectedLines.length; ++i)
         {
-            offsetBOL = textArea.getLineStartOffset(line);
+            offsetBOL = textArea.getLineStartOffset(selectedLines[i]);
             textArea.setCaretPosition(offsetBOL);
             textArea.goToStartOfWhiteSpace(false);
             textArea.goToEndOfWhiteSpace(true);

@@ -19,6 +19,8 @@
 
 package gnu.regexp;
 
+import java.text.MessageFormat;
+
 /**
  * This is the regular expression exception class.  An exception of this type
  * defines the three attributes:
@@ -151,8 +153,10 @@ public class REException extends Exception {
    * being compiled.
    */
   public String getMessage() {
+    Object[] args = {new Integer(pos)};
     StringBuffer sb = new StringBuffer();
-    sb.append("At position " + pos + " in regular expression pattern: ");
+    String prefix = RE.getLocalizedMessage("error.prefix");
+    sb.append(MessageFormat.format(prefix, args));
     sb.append('\n');
     sb.append(super.getMessage());
     return sb.toString();

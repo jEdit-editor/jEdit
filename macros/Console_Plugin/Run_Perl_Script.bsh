@@ -18,6 +18,8 @@
  * along with the distribution of the jEdit program;
  * if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * $Id$
  */
 
 /*
@@ -38,7 +40,7 @@
  *
  * This version runs perl without command line options;
  * if you typically run perl with options, add them to the
- * string at line 75.
+ * string at line 77.
  *
  * Output from stdout and stderr (including compliation errors)
  * will be displayed in the console window unless redirected
@@ -53,10 +55,10 @@ import javax.swing.JOptionPane;
 import console.Console;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 
+runPerlScript()
 {
-	Buffer b = view.getBuffer();
-	String strName = b.getName();
-	String strPath = b.getPath();
+	String strName = buffer.getName();
+	String strPath = buffer.getPath();
 	if( !strPath.endsWith(".pl"))
 	{
 		Macros.error(view,"Current file is not a perl script");
@@ -77,7 +79,7 @@ import org.gjt.sp.jedit.gui.DockableWindowManager;
 	jEdit.saveAllBuffers( view, false);
 	// if you want to save only the script file before execution,
 	// use the next line instead
-	// b.save(view, null);
+	// buffer.save(view, null);
 
 	DockableWindowManager wm = view.getDockableWindowManager();
 	console = wm.getDockableWindow("console");
@@ -89,4 +91,6 @@ import org.gjt.sp.jedit.gui.DockableWindowManager;
 	else
 		Macros.message(view, "Console plugin not found.");
 }
+
+runPerlScript();
 

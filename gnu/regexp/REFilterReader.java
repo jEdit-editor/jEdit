@@ -57,7 +57,7 @@ public class REFilterReader extends FilterReader {
   }
 
   /**
-   * Reads the next byte from the stream per the general contract of
+   * Reads the next character from the stream per the general contract of
    * Reader.read().  Returns -1 on error or end of stream.
    */
   public int read() {
@@ -98,20 +98,20 @@ public class REFilterReader extends FilterReader {
   }
 
   /** Reads from the stream into the provided array. */
-  public int read(byte[] b, int off, int len) {
+  public int read(char[] b, int off, int len) {
     int i;
     int ok = 0;
     while (len-- > 0) {
       i = read();
       if (i == -1) return (ok == 0) ? -1 : ok;
-      b[off++] = (byte) i;
+      b[off++] = (char) i;
       ok++;
     }
     return ok;
   }
 
   /** Reads from the stream into the provided array. */
-  public int read(byte[] b) {
+  public int read(char[] b) {
     return read(b,0,b.length);
   }
 }

@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=3.2pre3
+app.version=3.2pre4
 
 # Info to display on first page of installer
 app.readme=readme.html
@@ -20,11 +20,11 @@ app.main.class=org.gjt.sp.jedit.jEdit
 comp.count=4
 
 comp.0.name=jEdit text editor
-comp.0.size=1584
+comp.0.size=1635
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
-comp.1.size=124
+comp.1.size=133
 comp.1.fileset=jedit-macros
 
 comp.2.name=HTTP firewall support (Java 2 only)

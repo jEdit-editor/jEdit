@@ -35,7 +35,7 @@ import java.util.BitSet;
 public final class RESyntax implements Serializable {
     static final String DEFAULT_LINE_SEPARATOR = System.getProperty("line.separator");
 
-    private static final String SYNTAX_IS_FINAL = "Syntax has been declared final and cannot be modified";
+    private static final String SYNTAX_IS_FINAL = RE.getLocalizedMessage("syntax.final");
 
     private BitSet bits;
 
@@ -158,7 +158,8 @@ public final class RESyntax implements Serializable {
   public static final int RE_PURE_GROUPING             = 20;
 
   /**
-   * Syntax bit. <B>Not implemented</B>.
+   * Syntax bit. Allow use of (?=xxx) and (?!xxx) apply the subexpression
+   * to the text following the current position without cousuming that text.
    */
   public static final int RE_LOOKAHEAD                 = 21;
 
@@ -411,7 +412,7 @@ public final class RESyntax implements Serializable {
      * for your syntaxes as well.  Causes IllegalAccessError to
      * be thrown if any attempt to modify the syntax is made.
      *
-     * @returns this object for convenient chaining
+     * @return this object for convenient chaining
      */
     public RESyntax makeFinal() {
 	isFinal = true;
@@ -437,7 +438,7 @@ public final class RESyntax implements Serializable {
    * Set a given bit in this syntax. 
    *
    * @param index the constant (RESyntax.RE_xxx) bit to set.
-   * @returns a reference to this object for easy chaining.
+   * @return a reference to this object for easy chaining.
    */
   public RESyntax set(int index) {
       if (isFinal) throw new IllegalAccessError(SYNTAX_IS_FINAL);
@@ -449,7 +450,7 @@ public final class RESyntax implements Serializable {
    * Clear a given bit in this syntax. 
    *
    * @param index the constant (RESyntax.RE_xxx) bit to clear.
-   * @returns a reference to this object for easy chaining.
+   * @return a reference to this object for easy chaining.
    */
   public RESyntax clear(int index) {
       if (isFinal) throw new IllegalAccessError(SYNTAX_IS_FINAL);
@@ -472,7 +473,7 @@ public final class RESyntax implements Serializable {
      * characters that have specific meaning within the current syntax
      * can cause unexpected chronosynclastic infundibula.
      *
-     * @returns this object for convenient chaining 
+     * @return this object for convenient chaining 
      */
     public RESyntax setLineSeparator(String aSeparator) {
 	if (isFinal) throw new IllegalAccessError(SYNTAX_IS_FINAL);
