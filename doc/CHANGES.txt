@@ -4,7 +4,23 @@ JEDIT 2.6 VERSION HISTORY
 
 + Enhancements
 
-- 'VFS Browser' and 'File Filters' option panes merged
+- Improved abbreviations feature:
+  - Abbrevs are now only expanded when a space is entered
+  - Abbrevs are now only saved on exit if they were changed while
+    the editor was running. This improves performance a little bit
+  - Abbrev expansions can now contain newlines
+  - The caret position can be specified by placing "\|" inside an abbrev
+    expansion
+- I/O and VFS browser improvements:
+  - 'VFS Browser' and 'File Filters' option panes merged
+  - New VFSUpdate message is sent when a file or a directory changes. As a
+    result, VFS browsers are automatically updated when files are created
+    or deleted (within jEdit)
+  - When a file is added or removed, the VFS browser tree view now only
+    updates the branch where the file is located, not the entire tree
+  - The VFS browser now displays an error message if you attempt to execute
+    more than one request simultaneously. Because the browser was not
+    designed with this in mind, it would cause strange problems
 - Previously, to position the caret on a specific marker or line number
   from the command line, you would write:
   jedit filename#<marker name>
@@ -14,18 +30,8 @@ JEDIT 2.6 VERSION HISTORY
   jedit filename +line:<line>
 - This is not an enhancement, but anyway: the -readonly command line
   flag has been removed
-- New VFSUpdate message is sent when a file or a directory changes. As a
-  result, VFS browsers are automatically updated when files are created
-  or deleted (within jEdit)
-- When a file is added or removed, the VFS browser tree view now only
-  updates the branch where the file is located, not the entire tree
-- The VFS browser now displays an error message if you attempt to execute
-  more than one request simultaneously. Because the browser was not
-  designed with this in mind, it would cause strange problems
 - doc/NEWS.txt written
-- Abbreviations are now only expanded when a space is entered
-- Abbreviations are now only saved on exit if they were changed while
-  the editor was running. This improves performance a little bit
+- Documentation updates
 
 + Bug Fixes
 
@@ -40,6 +46,10 @@ JEDIT 2.6 VERSION HISTORY
 - The 'Up' button in the VFS browser would behave incorrectly if it was
   pressed while the current directory was a file system root
 - Double-click on directory bug in 'save as' dialog box fixed yet again
+- The 'New Directory' command didn't appear in the 'More' menu of the
+  VFS browser
+- Closing the global options dialog box while a VFS browser was open
+  would reload the current directory twice
 
 * Version 2.6pre3
 

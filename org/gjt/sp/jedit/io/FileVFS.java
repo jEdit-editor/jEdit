@@ -109,7 +109,9 @@ public class FileVFS extends VFS
 
 	public boolean save(View view, Buffer buffer, String path)
 	{
-		File file = buffer.getFile();
+		// can't call buffer.getFile() here because this
+		// method is called *before* setPath()
+		File file = new File(path);
 
 		// Check that we can actually write to the file
 		if((file.exists() && !file.canWrite())
@@ -119,6 +121,14 @@ public class FileVFS extends VFS
 			GUIUtilities.error(view,"no-write",args);
 			return false;
 		}
+
+		/* When doing a 'save as', the path to save to (path)
+		 * will not be the same as the buffer's previous path
+		 * (buffer.getPath()). In that case, we want to create
+		 * a backup of the new path, even if the old path was
+		 * backed up as well (BACKED_UP property set) */
+		if(!path.equals(buffer.getPath()))
+			buffer.getDocumentProperties().remove(BACKED_UP_PROPERTY);
 
 		backup(buffer,file);
 		return super.save(view,buffer,path);
@@ -302,6 +312,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/08/23 09:51:48  sp
+ * Documentation updates, abbrev updates, bug fixes
+ *
  * Revision 1.18  2000/08/22 07:25:01  sp
  * Improved abbrevs, bug fixes
  *

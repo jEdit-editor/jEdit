@@ -159,8 +159,8 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
-		VFSManager.runInWorkThread(new IORequest(IORequest.LOAD,
-			view,buffer,session,this,path));
+		VFSManager.runInWorkThread(new BufferIORequest(
+			BufferIORequest.LOAD,view,buffer,session,this,path));
 		return true;
 	}
 
@@ -177,8 +177,8 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
-		VFSManager.runInWorkThread(new IORequest(IORequest.SAVE,
-			view,buffer,session,this,path));
+		VFSManager.runInWorkThread(new BufferIORequest(
+			BufferIORequest.SAVE,view,buffer,session,this,path));
 		return true;
 	}
 
@@ -367,6 +367,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.17  2000/08/23 09:51:48  sp
+ * Documentation updates, abbrev updates, bug fixes
+ *
  * Revision 1.16  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

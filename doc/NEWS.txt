@@ -1,5 +1,8 @@
 MAJOR CHANGES IN JEDIT 2.6 SINCE 2.5
 
+to do:
+- mention abbrev improvements
+
 * Streamlined I/O system
 
 The I/O system has been considerably improved in jEdit 2.6. Non-blocking

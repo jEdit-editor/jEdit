@@ -116,6 +116,13 @@ public class Abbrevs
 					textArea.setCaretPosition(lineStart + wordStart
 						+ expand.caretPosition);
 				}
+
+				// note that if expand.lineCount is 0, we
+				// don't do any indentation at all
+				for(int i = line + 1; i < line + expand.lineCount; i++)
+				{
+					buffer.indentLine(textArea,i,true);
+				}
 			}
 			catch(BadLocationException bl)
 			{
@@ -136,15 +143,18 @@ public class Abbrevs
 	public static Expansion expandAbbrev(String mode, String abbrev)
 	{
 		// try mode-specific abbrevs first
-		Expansion expand = null;
+		String expand = null;
 		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
 		if(modeAbbrevs != null)
-			expand = (Expansion)modeAbbrevs.get(abbrev);
+			expand = (String)modeAbbrevs.get(abbrev);
 
 		if(expand == null)
-			expand = (Expansion)globalAbbrevs.get(abbrev);
+			expand = (String)globalAbbrevs.get(abbrev);
 
-		return expand;
+		if(expand == null)
+			return null;
+		else
+			return new Expansion(expand);
 	}
 
 	/**
@@ -362,7 +372,7 @@ public class Abbrevs
 			{
 				int index = line.indexOf('|');
 				currentAbbrevs.put(line.substring(0,index),
-					new Expansion(line.substring(index + 1)));
+					line.substring(index + 1));
 			}
 		}
 
@@ -442,10 +452,10 @@ public class Abbrevs
 				modeAbbrevs = new Hashtable();
 				modes.put(mode,modeAbbrevs);
 			}
-			modeAbbrevs.put(abbrev,new Expansion(expand));
+			modeAbbrevs.put(abbrev,expand);
 		}
 		else
-			globalAbbrevs.put(abbrev,new Expansion(expand));
+			globalAbbrevs.put(abbrev,expand);
 
 		abbrevsChanged = true;
 
@@ -456,6 +466,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/08/23 09:51:48  sp
+ * Documentation updates, abbrev updates, bug fixes
+ *
  * Revision 1.13  2000/08/22 07:25:00  sp
  * Improved abbrevs, bug fixes
  *

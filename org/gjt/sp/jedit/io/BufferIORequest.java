@@ -1,5 +1,5 @@
 /*
- * IORequest.java - I/O request
+ * BufferIORequest.java - I/O request
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -29,11 +29,11 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 
 /**
- * An I/O request.
+ * A buffer I/O request.
  * @author Slava Pestov
  * @version $Id$
  */
-public class IORequest extends WorkRequest
+public class BufferIORequest extends WorkRequest
 {
 	/**
 	 * Size of I/O buffers.
@@ -66,7 +66,7 @@ public class IORequest extends WorkRequest
 	public static final int AUTOSAVE = 2;
 
 	/**
-	 * Creates a new I/O request.
+	 * Creates a new buffer I/O request.
 	 * @param type The request type
 	 * @param view The view
 	 * @param buffer The buffer
@@ -74,8 +74,8 @@ public class IORequest extends WorkRequest
 	 * @param vfs The VFS
 	 * @param path The path
 	 */
-	public IORequest(int type, View view, Buffer buffer, VFSSession session, 
-		VFS vfs, String path)
+	public BufferIORequest(int type, View view, Buffer buffer,
+		VFSSession session, VFS vfs, String path)
 	{
 		this.type = type;
 		this.view = view;
@@ -698,6 +698,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.1  2000/08/23 09:51:48  sp
+ * Documentation updates, abbrev updates, bug fixes
+ *
  * Revision 1.23  2000/08/17 08:04:10  sp
  * Marker loading bug fixed, docking option pane
  *

@@ -161,10 +161,11 @@ public class Buffer extends PlainDocument implements EBComponent
 			public void run()
 			{
 				StringBuffer sbuf = (StringBuffer)getProperty(
-					IORequest.LOAD_DATA);
+					BufferIORequest.LOAD_DATA);
 				if(sbuf != null)
 				{
-					getDocumentProperties().remove(IORequest.LOAD_DATA);
+					getDocumentProperties().remove(
+						BufferIORequest.LOAD_DATA);
 
 					try
 					{
@@ -261,9 +262,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		VFSManager.runInWorkThread(new IORequest(IORequest.AUTOSAVE,
-			null,this,new VFSSession(),VFSManager.getFileVFS(),
-			autosaveFile.getPath()));
+		VFSManager.runInWorkThread(new BufferIORequest(
+			BufferIORequest.AUTOSAVE,null,this,new VFSSession(),
+			VFSManager.getFileVFS(),autosaveFile.getPath()));
 	}
 
 	/**
@@ -323,14 +324,14 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(path == null)
 			path = this.path;
 
-		final String oldPath = this.path;
-		setPath(path);
-
 		if(!vfs.save(view,this,path))
 		{
 			setFlag(SAVING,false);
 			return false;
 		}
+
+		final String oldPath = this.path;
+		setPath(path);
 
 		// Once save is complete, do a few other things
 		VFSManager.runInAWTThread(new Runnable()
@@ -862,6 +863,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * @return true if the tab key event should be swallowed (ignored)
 	 * false if a real tab should be inserted
 	 */
+	// XXX: having to pass a textArea around sucks! Should update this
+	// method to use Elements one day
 	public boolean indentLine(JEditTextArea textArea, int lineIndex, boolean force)
 	{
 		if(lineIndex == 0)
@@ -1662,6 +1665,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.174  2000/08/23 09:51:48  sp
+ * Documentation updates, abbrev updates, bug fixes
+ *
  * Revision 1.173  2000/08/17 08:04:09  sp
  * Marker loading bug fixed, docking option pane
  *
@@ -1688,47 +1694,4 @@ public class Buffer extends PlainDocument implements EBComponent
  *
  * Revision 1.165  2000/07/29 12:24:07  sp
  * More VFS work, VFS browser started
- *
- * Revision 1.164  2000/07/26 07:48:43  sp
- * stuff
- *
- * Revision 1.163  2000/07/22 12:37:38  sp
- * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
- *
- * Revision 1.162  2000/07/22 06:22:26  sp
- * I/O progress monitor done
- *
- * Revision 1.161  2000/07/22 03:27:03  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.160  2000/07/21 10:23:49  sp
- * Multiple work threads
- *
- * Revision 1.159  2000/07/19 11:45:18  sp
- * I/O requests can be aborted now
- *
- * Revision 1.158  2000/07/14 06:00:44  sp
- * bracket matching now takes syntax info into account
- *
- * Revision 1.157  2000/07/03 03:32:15  sp
- * *** empty log message ***
- *
- * Revision 1.156  2000/06/12 02:43:29  sp
- * pre6 almost ready
- *
- * Revision 1.155  2000/06/06 04:38:08  sp
- * WorkThread's AWT request stuff reworked
- *
- * Revision 1.154  2000/06/05 08:22:25  sp
- * bug fixes
- *
- * Revision 1.153  2000/06/04 08:57:35  sp
- * GUI updates, bug fixes
- *
- * Revision 1.152  2000/05/24 07:56:04  sp
- * bug fixes
- *
- * Revision 1.151  2000/05/22 12:05:45  sp
- * Markers are highlighted in the gutter, bug fixes
- *
  */

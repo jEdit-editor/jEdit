@@ -385,9 +385,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		add(BorderLayout.CENTER,browserView);
 
 		revalidate();
-
-		if(path != null)
-			reloadDirectory(false);
 	}
 
 	public VFS.DirectoryEntry[] getSelectedFiles()
@@ -691,13 +688,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 		sortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
 		sortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
 
-		filterCombo.setModel(new DefaultComboBoxModel(filters));
-
 		String defaultView = jEdit.getProperty("vfs.browser.defaultView");
 		if(defaultView.equals("tree"))
 			setBrowserView(new BrowserTreeView(this));
 		else // default
 			setBrowserView(new BrowserListView(this));
+
+		filterCombo.setModel(new DefaultComboBoxModel(filters));
 	}
 
 	/* We do this stuff because the browser is not able to handle
@@ -821,9 +818,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 			popup.addSeparator();
 
 			JMenuItem newDirectory = new JMenuItem(jEdit.getProperty(
-				"vfs.browser.mode.newDirectory.label"));
+				"vfs.browser.more.newDirectory.label"));
 			newDirectory.setActionCommand("newDirectory");
 			newDirectory.addActionListener(actionHandler);
+			popup.add(newDirectory);
+
+			popup.addSeparator();
 
 			JMenuItem addToFavorites = new JMenuItem(jEdit.getProperty(
 				"vfs.browser.more.addToFavorites.label"));
@@ -860,9 +860,15 @@ public class VFSBrowser extends JPanel implements EBComponent
 			{
 				String actionCommand = evt.getActionCommand();
 				if(actionCommand.equals("list"))
+				{
 					setBrowserView(new BrowserListView(VFSBrowser.this));
+					reloadDirectory(false);
+				}
 				else if(actionCommand.equals("tree"))
+				{
 					setBrowserView(new BrowserTreeView(VFSBrowser.this));
+					reloadDirectory(false);
+				}
 				else if(actionCommand.equals("showHiddenFiles"))
 				{
 					showHiddenFiles = !showHiddenFiles;
@@ -936,6 +942,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.16  2000/08/23 09:51:48  sp
+ * Documentation updates, abbrev updates, bug fixes
+ *
  * Revision 1.15  2000/08/20 07:29:30  sp
  * I/O and VFS browser improvements
  *
