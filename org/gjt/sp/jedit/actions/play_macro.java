@@ -20,7 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.*;
 
 public class play_macro extends EditAction
@@ -32,7 +32,7 @@ public class play_macro extends EditAction
 
 		// This hackery is necessary to prevent actions inside the
 		// macro from picking up the repeat count
-		InputHandler inputHandler = view.getTextArea().getInputHandler();
+		InputHandler inputHandler = view.getInputHandler();
 		int repeatCount = inputHandler.getRepeatCount();
 		inputHandler.setRepeatEnabled(false);
 		inputHandler.setRepeatCount(1);

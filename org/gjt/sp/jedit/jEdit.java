@@ -32,8 +32,6 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.search.SearchAndReplace;
-import org.gjt.sp.jedit.textarea.DefaultInputHandler;
-import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.util.Log;
 
 /**
@@ -1263,7 +1261,7 @@ public class jEdit
 
 	/**
 	 * Returns the current input handler (key binding to action mapping)
-	 * @see org.gjt.sp.jedit.textarea.InputHandler
+	 * @see org.gjt.sp.jedit.gui.InputHandler
 	 */
 	public static InputHandler getInputHandler()
 	{
@@ -1336,7 +1334,6 @@ public class jEdit
 		}
 
 		newView.show();
-		newView.focusOnTextArea();
 
 		return newView;
 	}
@@ -1420,6 +1417,52 @@ public class jEdit
 	public static String getSettingsDirectory()
 	{
 		return settingsDirectory;
+	}
+
+	/**
+	 * Saves all user preferences to disk.
+	 */
+	public static void saveSettings()
+	{
+		if(settingsDirectory != null)
+		{
+			// Save the recent file list
+			for(int i = 0; i < recent.size(); i++)
+			{
+				String file = (String)recent.elementAt(i);
+				setProperty("recent." + i,file);
+			}
+			unsetProperty("recent." + maxRecent);
+
+			HistoryModel.saveHistory(MiscUtilities.constructPath(
+				settingsDirectory, "history"));
+
+			SearchAndReplace.save();
+			Abbrevs.save();
+
+			File file = new File(MiscUtilities.constructPath(
+				settingsDirectory,"properties"));
+			if(file.lastModified() > propsModTime)
+			{
+				Log.log(Log.WARNING,jEdit.class,file + " changed"
+					+ " on disk; will not save user properties");
+			}
+			else
+			{
+				propsModTime = file.lastModified();
+
+				try
+				{
+					OutputStream out = new FileOutputStream(file);
+					props.save(out,"jEdit properties");
+					out.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,jEdit.class,io);
+				}
+			}
+		}
 	}
 
 	/**
@@ -1553,7 +1596,7 @@ public class jEdit
 		Log.log(Log.MESSAGE,jEdit.class,"Settings directory is "
 			+ settingsDirectory);
 
-		inputHandler = new DefaultInputHandler();
+		inputHandler = new DefaultInputHandler(null);
 
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
@@ -2083,7 +2126,6 @@ public class jEdit
 	// Exit bottom-half
 	private static void _exit(View view)
 	{
-		
 		if(settingsDirectory != null && session != null)
 			Sessions.saveSession(view,session);
 
@@ -2112,44 +2154,8 @@ public class jEdit
 		// Send EditorExiting
 		EditBus.send(new EditorExiting(null));
 
-		// Save various settings
-		if(settingsDirectory != null)
-		{
-			// Save the recent file list
-			for(int i = 0; i < recent.size(); i++)
-			{
-				String file = (String)recent.elementAt(i);
-				setProperty("recent." + i,file);
-			}
-			unsetProperty("recent." + maxRecent);
-
-			HistoryModel.saveHistory(MiscUtilities.constructPath(
-				settingsDirectory, "history"));
-
-			SearchAndReplace.save();
-			Abbrevs.save();
-
-			File file = new File(MiscUtilities.constructPath(
-				settingsDirectory,"properties"));
-			if(file.lastModified() > propsModTime)
-			{
-				Log.log(Log.WARNING,jEdit.class,file + " changed"
-					+ " on disk; will not save user properties");
-			}
-			else
-			{
-				try
-				{
-					OutputStream out = new FileOutputStream(file);
-					props.save(out,"jEdit properties");
-					out.close();
-				}
-				catch(IOException io)
-				{
-					Log.log(Log.ERROR,jEdit.class,io);
-				}
-			}
-		}
+		// Save settings
+		saveSettings();
 
 		// Byebye...
 		System.exit(0);
@@ -2159,6 +2165,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.228  2000/04/28 09:29:11  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.227  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature
@@ -2189,26 +2198,5 @@ public class jEdit
  *
  * Revision 1.218  2000/04/15 04:14:47  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
- *
- * Revision 1.217  2000/04/14 11:57:38  sp
- * Text area actions moved to org.gjt.sp.jedit.actions package
- *
- * Revision 1.216  2000/04/14 07:02:42  sp
- * Better error handling, XML files updated
- *
- * Revision 1.215  2000/04/13 05:16:31  sp
- * Documentation updates
- *
- * Revision 1.214  2000/04/10 08:46:16  sp
- * Autosave recovery support, documentation updates
- *
- * Revision 1.213  2000/04/08 06:10:51  sp
- * Digit highlighting, search bar bug fix
- *
- * Revision 1.212  2000/04/07 06:57:26  sp
- * Buffer options dialog box updates, API docs updated a bit in syntax package
- *
- * Revision 1.211  2000/04/06 09:28:08  sp
- * Better plugin error reporting, search bar updates
  *
  */

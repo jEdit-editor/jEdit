@@ -94,6 +94,8 @@ public class SearchDialog extends EnhancedDialog
 		replaceAll.addActionListener(actionListener);
 		cancel.addActionListener(actionListener);
 
+		GUIUtilities.requestFocus(this,find);
+
 		pack();
 
 		// hack so that people upgrading from older jEdit don't
@@ -102,8 +104,6 @@ public class SearchDialog extends EnhancedDialog
 		jEdit.unsetProperty("search.height");
 		GUIUtilities.loadGeometry(this,"search");
 		show();
-
-		find.requestFocus();
 	}
 
 	// EnhancedDialog implementation
@@ -222,6 +222,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.8  2000/04/15 04:14:47  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
  *

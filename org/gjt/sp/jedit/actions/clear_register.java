@@ -32,8 +32,7 @@ public class clear_register extends EditAction
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
 			view.pushStatus(jEdit.getProperty("view.status.clear-register"));
-			view.getTextArea().getInputHandler()
-				.grabNextKeyStroke(this);
+			view.getInputHandler().grabNextKeyStroke(this);
 		}
 		else
 		{

@@ -80,7 +80,6 @@ public class IORequest implements Runnable
 			String message = jEdit.getProperty("view.status." + status,args);
 			for(int i = 0; i < views.length; i++)
 			{
-				views[i].showWaitCursor();
 				views[i].pushStatus(message);
 			}
 
@@ -103,7 +102,6 @@ public class IORequest implements Runnable
 			{
 				for(int i = 0; i < views.length; i++)
 				{
-					views[i].hideWaitCursor();
 					views[i].popStatus();
 				}
 			}
@@ -177,10 +175,6 @@ public class IORequest implements Runnable
 				}
 			}
 		}
-		finally
-		{
-			vfs.loadCompleted(view,buffer,path);
-		}
 	}
 
 	private void save()
@@ -231,16 +225,15 @@ public class IORequest implements Runnable
 				}
 			}
 		}
-		finally
-		{
-			vfs.saveCompleted(view,buffer,path);
-		}
 	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.4  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

@@ -42,7 +42,7 @@ public class insert_literal extends EditAction
 		if(str == null)
 		{
 			view.pushStatus(jEdit.getProperty("view.status.insert-literal"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
+			view.getInputHandler().grabNextKeyStroke(this);
 			return;
 		}
 		else
@@ -51,7 +51,7 @@ public class insert_literal extends EditAction
 
 			if(!str.equals("\0"))
 			{
-				int repeatCount = textArea.getInputHandler().getRepeatCount();
+				int repeatCount = view.getInputHandler().getRepeatCount();
 
 				StringBuffer buf = new StringBuffer();
 				for(int i = 0; i < repeatCount; i++)

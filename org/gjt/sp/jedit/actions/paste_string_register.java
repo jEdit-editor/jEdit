@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.*;
 
@@ -29,9 +28,8 @@ public class paste_string_register extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		JEditTextArea textArea = view.getTextArea();
 
-		if(!textArea.isEditable())
+		if(!view.getTextArea().isEditable())
 		{
 			view.getToolkit().beep();
 			return;
@@ -41,7 +39,7 @@ public class paste_string_register extends EditAction
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
 			view.pushStatus(jEdit.getProperty("view.status.paste-string-register"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
+			view.getInputHandler().grabNextKeyStroke(this);
 		}
 		else
 		{
@@ -69,12 +67,12 @@ public class paste_string_register extends EditAction
 					return;
 				}
 
-				int repeatCount = textArea.getInputHandler().getRepeatCount();
+				int repeatCount = view.getInputHandler().getRepeatCount();
 				StringBuffer buf = new StringBuffer();
 				for(int i = 0; i < repeatCount; i++)
 					buf.append(selection);
 
-				textArea.setSelectedText(buf.toString());
+				view.getTextArea().setSelectedText(buf.toString());
 				HistoryModel.getModel("clipboard").addItem(selection);
 			}
 		}

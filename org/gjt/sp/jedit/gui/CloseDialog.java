@@ -68,6 +68,8 @@ public class CloseDialog extends EnhancedDialog
 
 		getContentPane().add(BorderLayout.SOUTH,buttons);
 
+		GUIUtilities.requestFocus(this,bufferList);
+
 		pack();
 		setLocationRelativeTo(view);
 		show();

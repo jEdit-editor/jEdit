@@ -74,11 +74,11 @@ implements ActionListener, ListSelectionListener, MouseListener
 		insert.addActionListener(this);
 		cancel.addActionListener(this);
 
+		GUIUtilities.requestFocus(this,clips);
+
 		pack();
 		setLocationRelativeTo(view);
 		show();
-
-		clips.requestFocus();
 	}
 
 	// EnhancedDialog implementation
@@ -94,8 +94,7 @@ implements ActionListener, ListSelectionListener, MouseListener
 
 		String clip = clipHistory.getItem(selected);
 
-		int repeatCount = view.getTextArea().getInputHandler()
-			.getRepeatCount();
+		int repeatCount = view.getInputHandler().getRepeatCount();
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < repeatCount; i++)
 			buf.append(clip);

@@ -17,15 +17,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.textarea;
+package org.gjt.sp.jedit.gui;
 
-import javax.swing.text.*;
 import javax.swing.JPopupMenu;
 import java.awt.event.*;
 import java.awt.Component;
 import java.util.*;
-import org.gjt.sp.jedit.EditAction;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -38,10 +37,19 @@ import org.gjt.sp.util.Log;
  *
  * @author Slava Pestov
  * @version $Id$
- * @see org.gjt.sp.jedit.textarea.DefaultInputHandler
+ * @see org.gjt.sp.jedit.gui.DefaultInputHandler
  */
 public abstract class InputHandler extends KeyAdapter
 {
+	/**
+	 * Creates a new input handler.
+	 * @param view The view
+	 */
+	public InputHandler(View view)
+	{
+		this.view = view;
+	}
+
 	/**
 	 * Adds a key binding to this input handler.
 	 * @param keyBinding The key binding (the format of this is
@@ -91,6 +99,13 @@ public abstract class InputHandler extends KeyAdapter
 		this.repeat = repeat;
 		if(!repeat)
 			repeatCount = 0;
+
+		if(view != null)
+		{
+			JEditTextArea[] textAreas = view.getTextAreas();
+			for(int i = 0; i < textAreas.length; i++)
+				textAreas[i].getStatus().repaint();
+		}
 	}
 
 	/**
@@ -108,6 +123,13 @@ public abstract class InputHandler extends KeyAdapter
 	public void setRepeatCount(int repeatCount)
 	{
 		this.repeatCount = repeatCount;
+
+		if(view != null)
+		{
+			JEditTextArea[] textAreas = view.getTextAreas();
+			for(int i = 0; i < textAreas.length; i++)
+				textAreas[i].getStatus().repaint();
+		}
 	}
 
 	/**
@@ -208,6 +230,7 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	// protected members
+	protected View view;
 	protected EditAction inputAction;
 	protected EditAction grabAction;
 	protected boolean repeat;
@@ -255,32 +278,7 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
- * Revision 1.26  2000/04/14 11:57:39  sp
- * Text area actions moved to org.gjt.sp.jedit.actions package
- *
- * Revision 1.25  2000/04/03 10:22:24  sp
- * Search bar
- *
- * Revision 1.24  2000/04/02 06:38:28  sp
- * Bug fixes
- *
- * Revision 1.23  2000/03/27 07:31:22  sp
- * We now use Log.log() in some places instead of System.err.println, HTML mode
- * now supports <script> tags, external delegation bug fix
- *
- * Revision 1.22  2000/03/18 05:45:25  sp
- * Complete word overhaul, various other changes
- *
- * Revision 1.21  2000/02/15 07:44:30  sp
- * bug fixes, doc updates, etc
- *
- * Revision 1.20  2000/02/10 08:32:51  sp
- * Bug fixes, doc updates
- *
- * Revision 1.19  2000/01/28 00:20:58  sp
- * Lots of stuff
- *
- * Revision 1.18  2000/01/21 00:35:29  sp
- * Various updates
+ * Revision 1.1  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
  *
  */

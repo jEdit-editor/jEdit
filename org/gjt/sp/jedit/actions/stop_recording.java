@@ -28,7 +28,7 @@ public class stop_recording extends EditAction
 	{
 		View view = getView(evt);
 
-		if(view.getTextArea().getInputHandler().getMacroRecorder() == null)
+		if(view.getInputHandler().getMacroRecorder() == null)
 		{
 			GUIUtilities.error(view,"not-recording",new String[0]);
 		}

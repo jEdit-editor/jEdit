@@ -28,9 +28,9 @@ import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.MacrosChanged;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -133,7 +133,7 @@ public class Macros
 	{
 		lastMacro = name;
 
-		view.getTextArea().getInputHandler().setMacroRecorder(
+		view.getInputHandler().setMacroRecorder(
 			new BufferRecorder(view,buffer));
 	}
 
@@ -143,7 +143,7 @@ public class Macros
 	 */
 	public static void endRecording(View view)
 	{
-		InputHandler inputHandler = view.getTextArea().getInputHandler();
+		InputHandler inputHandler = view.getInputHandler();
 		BufferRecorder recorder = (BufferRecorder)inputHandler
 			.getMacroRecorder();
 
@@ -227,8 +227,7 @@ public class Macros
 			return false;
 		}
 
-		JEditTextArea textArea = view.getTextArea();
-		textArea.getInputHandler().executeAction(_action,textArea,
+		view.getInputHandler().executeAction(_action,view.getTextArea(),
 			actionCommand);
 
 		return true;
@@ -338,8 +337,7 @@ public class Macros
 		{
 			if(buffer.isClosed())
 			{
-				view.getTextArea().getInputHandler()
-					.setMacroRecorder(null);
+				view.getInputHandler().setMacroRecorder(null);
 				view.popStatus();
 				return;
 			}
@@ -383,6 +381,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/04/28 09:29:11  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.21  2000/04/14 11:57:38  sp
  * Text area actions moved to org.gjt.sp.jedit.actions package
  *

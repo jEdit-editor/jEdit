@@ -65,11 +65,11 @@ implements ActionListener, MouseListener
 		insert.addActionListener(this);
 		cancel.addActionListener(this);
 
+		GUIUtilities.requestFocus(this,words);
+
 		pack();
 		setLocationRelativeTo(view);
 		show();
-
-		words.requestFocus();
 	}
 
 	// EnhancedDialog implementation

@@ -77,11 +77,6 @@ public abstract class VFS
 	}
 
 	/**
-	 * Called when the I/O thread has finished loading a buffer.
-	 */
-	public void loadCompleted(View view, Buffer buffer, String path) {}
-
-	/**
 	 * Saves the specifies buffer. The default implementation posts
 	 * an I/O request to the I/O thread.
 	 * @param view The view
@@ -92,21 +87,6 @@ public abstract class VFS
 	{
 		VFSManager.addIORequest(IORequest.SAVE,view,buffer,path,this);
 		return true;
-	}
-
-	/**
-	 * Called when the I/O thread has finished saving a buffer.
-	 */
-	public void saveCompleted(View view, Buffer buffer, String path) {}
-
-	/**
-	 * Returns the last time the specified path has been modified on disk
-	 * (or other storage medium). The default implementation returns 0
-	 * (meaning this VFS doesn't support last modification times)
-	 */
-	public long getLastModified(String path)
-	{
-		return 0L;
 	}
 
 	/**
@@ -154,6 +134,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.4  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

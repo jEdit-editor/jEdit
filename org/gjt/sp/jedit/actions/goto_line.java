@@ -32,12 +32,11 @@ public class goto_line extends EditAction
 	{
 		View view = getView(evt);
 		Buffer buffer = view.getBuffer();
-		JEditTextArea textArea = view.getTextArea();
 
 		int line = 0;
 
-		if(textArea.getInputHandler().isRepeatEnabled())
-			line = textArea.getInputHandler().getRepeatCount();
+		if(view.getInputHandler().isRepeatEnabled())
+			line = view.getInputHandler().getRepeatCount();
 		else
 		{
 			String str = (String)GUIUtilities.input(view,"gotoline",null);

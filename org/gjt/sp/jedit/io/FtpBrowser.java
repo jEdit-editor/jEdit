@@ -77,7 +77,7 @@ public class FtpBrowser extends JDialog
 		JPanel topFields = new JPanel(new GridLayout(4,1));
 		topFields.add(host = new JTextField(_host));
 		topFields.add(username = new JTextField(_username));
-		topFields.add(password = new JTextField(_password));
+		topFields.add(password = new JPasswordField(_password));
 		topFields.add(path = new JTextField(_path));
 		topPanel.add(BorderLayout.CENTER,topFields);
 
@@ -115,9 +115,20 @@ public class FtpBrowser extends JDialog
 		show();
 	}
 
+	public String getPath()
+	{
+		return null;
+	}
+
+	public String getPassword()
+	{
+		return null;
+	}
+
 	// private members
 	private int type;
-	private JTextField host, username, password, path;
+	private JTextField host, username, path;
+	private JPasswordField password;
 	private DefaultListModel listModel;
 	private JList list;
 	private JButton select, connect, home, refresh, cancel;
@@ -131,7 +142,7 @@ public class FtpBrowser extends JDialog
 		password.setEnabled(!connected);
 
 		connect.setText(jEdit.getProperty("vfs.ftp.browser."
-			+ (connected ? "connect" : "disconnect")));
+			+ (connected ? "disconnect" : "connect")));
 		home.setEnabled(connected);
 		refresh.setEnabled(connected);
 
@@ -153,6 +164,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.1  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

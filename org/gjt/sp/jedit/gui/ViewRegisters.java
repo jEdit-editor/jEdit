@@ -84,11 +84,11 @@ public class ViewRegisters extends EnhancedDialog
 		ActionHandler actionListener = new ActionHandler();
 		close.addActionListener(actionListener);
 
+		GUIUtilities.requestFocus(this,registerList);
+
 		pack();
 		setLocationRelativeTo(view);
 		show();
-
-		registerList.requestFocus();
 	}
 
 	// EnhancedDialog implementation

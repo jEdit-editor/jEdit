@@ -30,8 +30,6 @@ import java.util.StringTokenizer;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
-import org.gjt.sp.jedit.textarea.InputHandler;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
 /**
@@ -318,9 +316,13 @@ public class GUIUtilities
 
 		int retVal = chooser.showDialog(view,null);
 		if(retVal == JFileChooser.APPROVE_OPTION)
-			return chooser.getSelectedFile().getAbsolutePath();
-		else
-			return null;
+		{
+			File selectedFile = chooser.getSelectedFile();
+			if(selectedFile != null)
+				return selectedFile.getAbsolutePath();
+		}
+
+		return null;
 	}
 
 	/**
@@ -576,6 +578,24 @@ public class GUIUtilities
 			"jedit_icon2.gif")).getImage();
 	}
 
+	/**
+	 * Focuses on the specified component as soon as the window becomes
+	 * active.
+	 * @param win The window
+	 * @param comp The component
+	 */
+	public static void requestFocus(final Window win, final Component comp)
+	{
+		win.addWindowListener(new WindowAdapter()
+		{
+			public void windowActivated(WindowEvent evt)
+			{
+				comp.requestFocus();
+				win.removeWindowListener(this);
+			}
+		});
+	}
+
 	// package-private members
 	static JFileChooser chooser;
 
@@ -698,6 +718,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.56  2000/04/28 09:29:11  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.55  2000/04/18 08:27:51  sp
  * Context menu editor started
  *

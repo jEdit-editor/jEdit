@@ -25,7 +25,6 @@ import javax.swing.text.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
@@ -51,7 +50,10 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void pushStatus(String str)
 	{
-		((StatusBar)textArea.getStatus()).pushStatus(str);
+		statusMsg.push(str);
+		JEditTextArea[] textAreas = getTextAreas();
+		for(int i = 0 ; i < textAreas.length; i++)
+			textAreas[i].getStatus().repaint();
 	}
 
 	/**
@@ -59,7 +61,10 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void popStatus()
 	{
-		((StatusBar)textArea.getStatus()).popStatus();
+		statusMsg.pop();
+		JEditTextArea[] textAreas = getTextAreas();
+		for(int i = 0 ; i < textAreas.length; i++)
+			textAreas[i].getStatus().repaint();
 	}
 
 	/**
@@ -143,6 +148,14 @@ public class View extends JFrame implements EBComponent
 	public final SearchBar getSearchBar()
 	{
 		return searchBar;
+	}
+
+	/**
+	 * Returns the input handler.
+	 */
+	public final InputHandler getInputHandler()
+	{
+		return inputHandler;
 	}
 
 	/**
@@ -474,6 +487,11 @@ public class View extends JFrame implements EBComponent
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
 
+		statusMsg = new Stack();
+
+		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
+			jEdit.getInputHandler());
+
 		textArea = createTextArea();
 
 		if(view == null)
@@ -509,6 +527,26 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
+	// protected members
+
+	/**
+	 * Forwards key events directly to the input handler.
+	 * This is slightly faster than using a KeyListener
+	 * because some Swing overhead is avoided.
+	 */
+	protected void processKeyEvent(KeyEvent evt)
+	{
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_PRESSED:
+			inputHandler.keyPressed(evt);
+			break;
+		case KeyEvent.KEY_RELEASED:
+			inputHandler.keyReleased(evt);
+			break;
+		}
+	}
+
 	// private members
 	private Buffer buffer;
 	private Buffer recentBuffer;
@@ -529,9 +567,13 @@ public class View extends JFrame implements EBComponent
 	private JToolBar toolBar;
 	private SearchBar searchBar;
 
+	private Stack statusMsg;
+
 	private BufferTabs bufferTabs;
 	private JSplitPane splitPane;
 	private JEditTextArea textArea;
+
+	private InputHandler inputHandler;
 
 	private int waitCount;
 
@@ -868,8 +910,6 @@ public class View extends JFrame implements EBComponent
 		textArea.getGutter().setContextMenu(GUIUtilities
 			.loadPopupMenu(this,"gutter.context"));
 
-		textArea.setInputHandler(new StatusInputHandler(textArea,
-			(DefaultInputHandler)jEdit.getInputHandler()));
 		textArea.addCaretListener(new CaretHandler());
 		textArea.addFocusListener(new FocusHandler());
 
@@ -1338,6 +1378,17 @@ public class View extends JFrame implements EBComponent
 
 	class WindowHandler extends WindowAdapter
 	{
+		boolean gotFocus;
+
+		public void windowActivated(WindowEvent evt)
+		{
+			if(!gotFocus)
+			{
+				focusOnTextArea();
+				gotFocus = true;
+			}
+		}
+
 		public void windowClosing(WindowEvent evt)
 		{
 			jEdit.closeView(View.this);
@@ -1346,35 +1397,16 @@ public class View extends JFrame implements EBComponent
 
 	class StatusBar extends JComponent
 	{
-		Stack status;
 		JEditTextArea textArea;
 
 		StatusBar(JEditTextArea textArea)
 		{
-			status = new Stack();
-
 			StatusBar.this.textArea = textArea;
 			StatusBar.this.setDoubleBuffered(true);
 			StatusBar.this.setFont(UIManager.getFont("Label.font"));
 			StatusBar.this.setForeground(UIManager.getColor("Label.foreground"));
 			StatusBar.this.setBackground(UIManager.getColor("Label.background"));
 		}
-
-		void pushStatus(String str)
-		{
-			status.push(str);
-			StatusBar.this.repaint();
-		}
-
-		void popStatus()
-		{
-			if(status.isEmpty())
-				return;
-
-			status.pop();
-			StatusBar.this.repaint();
-		}
-
 
 		public void paint(Graphics g)
 		{
@@ -1387,10 +1419,9 @@ public class View extends JFrame implements EBComponent
 			int numLines = StatusBar.this.textArea.getLineCount();
 
 			String str;
-			if(textArea.getInputHandler().isRepeatEnabled())
+			if(inputHandler.isRepeatEnabled())
 			{
-				int repeatCount = textArea.getInputHandler()
-					.getRepeatCount();
+				int repeatCount = inputHandler.getRepeatCount();
 				if(repeatCount == 1)
 					str = "";
 				else
@@ -1398,8 +1429,8 @@ public class View extends JFrame implements EBComponent
 				Object[] args = { str };
 				str = jEdit.getProperty("view.status.repeat",args);
 			}
-			else if(!status.isEmpty())
-				str = (String)status.peek();
+			else if(!statusMsg.isEmpty())
+				str = (String)statusMsg.peek();
 			else
 			{
 				str = ("col " + ((dot - start) + 1) + " line "
@@ -1417,34 +1448,14 @@ public class View extends JFrame implements EBComponent
 			return new Dimension(200,0);
 		}
 	}
-
-	static class StatusInputHandler extends DefaultInputHandler
-	{
-		JEditTextArea textArea;
-
-		StatusInputHandler(JEditTextArea textArea, DefaultInputHandler inputHandler)
-		{
-			super(inputHandler);
-			this.textArea = textArea;
-		}
-
-		public void setRepeatEnabled(boolean repeat)
-		{
-			super.setRepeatEnabled(repeat);
-			textArea.getStatus().repaint();
-		}
-
-		public void setRepeatCount(int repeatCount)
-		{
-			super.setRepeatCount(repeatCount);
-			textArea.getStatus().repaint();
-		}
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.162  2000/04/28 09:29:11  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.161  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *
@@ -1474,29 +1485,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.152  2000/04/08 02:39:33  sp
  * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
- *
- * Revision 1.151  2000/04/06 13:09:46  sp
- * More token types added
- *
- * Revision 1.150  2000/04/03 10:22:24  sp
- * Search bar
- *
- * Revision 1.149  2000/04/02 06:38:28  sp
- * Bug fixes
- *
- * Revision 1.148  2000/04/01 12:21:27  sp
- * mode cache implemented
- *
- * Revision 1.147  2000/04/01 03:17:41  sp
- * Tiny fixes here and there
- *
- * Revision 1.146  2000/03/22 07:02:42  sp
- * pink noise
- *
- * Revision 1.145  2000/03/21 07:18:53  sp
- * bug fixes
- *
- * Revision 1.144  2000/03/20 06:06:36  sp
- * Mode internals cleaned up
  *
  */

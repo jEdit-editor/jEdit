@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class set_caret_register extends EditAction
@@ -28,13 +27,12 @@ public class set_caret_register extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		JEditTextArea textArea = view.getTextArea();
 
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
 			view.pushStatus(jEdit.getProperty("view.status.set-caret-register"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
+			view.getInputHandler().grabNextKeyStroke(this);
 		}
 		else
 		{
@@ -48,7 +46,7 @@ public class set_caret_register extends EditAction
 			}
 
 			Registers.setRegister(ch,new Registers.CaretRegister(
-				view.getBuffer(),textArea.getCaretPosition()));
+				view.getBuffer(),view.getTextArea().getCaretPosition()));
 		}
 	}
 }

@@ -22,7 +22,7 @@ package org.gjt.sp.jedit.actions;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import org.gjt.sp.jedit.gui.MacroInputDialog;
-import org.gjt.sp.jedit.textarea.InputHandler;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.*;
 
 public class input extends EditAction
@@ -34,8 +34,8 @@ public class input extends EditAction
 
 		if(actionCommand == null)
 		{
-			InputHandler.MacroRecorder recorder = view.getTextArea()
-				.getInputHandler().getMacroRecorder();
+			InputHandler.MacroRecorder recorder = view.getInputHandler()
+				.getMacroRecorder();
 			if(recorder == null)
 			{
 				GUIUtilities.error(view,"macro-input.no-record",null);

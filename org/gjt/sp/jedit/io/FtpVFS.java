@@ -51,8 +51,13 @@ public class FtpVFS extends VFS
 	 */
 	public Buffer showOpenDialog(View view, Buffer buffer)
 	{
-		new FtpBrowser(view,buffer,FtpBrowser.OPEN);
-		return null;
+		FtpBrowser browser = new FtpBrowser(view,buffer,FtpBrowser.OPEN);
+		String path = browser.getPath();
+		if(path == null)
+			return null;
+
+		buffer.putProperty(PASSWORD_PROPERTY,browser.getPassword());
+		return jEdit.openFile(view,null,path,false,false);
 	}
 
 	/**
@@ -62,7 +67,13 @@ public class FtpVFS extends VFS
 	 */
 	public String showSaveDialog(View view, Buffer buffer)
 	{
-		return null;
+		FtpBrowser browser = new FtpBrowser(view,buffer,FtpBrowser.SAVE);
+		String path = browser.getPath();
+		if(path == null)
+			return null;
+
+		buffer.putProperty(PASSWORD_PROPERTY,browser.getPassword());
+		return path;
 	}
 
 	/**

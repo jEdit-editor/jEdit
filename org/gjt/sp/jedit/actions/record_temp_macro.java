@@ -38,7 +38,7 @@ public class record_temp_macro extends EditAction
 			GUIUtilities.error(view,"no-settings",new String[0]);
 			return;
 		}
-		if(view.getTextArea().getInputHandler().getMacroRecorder() != null)
+		if(view.getInputHandler().getMacroRecorder() != null)
 		{
 			GUIUtilities.error(view,"already-recording",new String[0]);
 			return;

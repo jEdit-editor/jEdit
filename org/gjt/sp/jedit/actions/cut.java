@@ -1,6 +1,6 @@
 /*
  * cut.java
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.actions;
 
+import java.awt.datatransfer.*;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
@@ -27,9 +28,25 @@ public class cut extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		JEditTextArea textArea = getView(evt).getTextArea();
+		View view = getView(evt);
+		JEditTextArea textArea = view.getTextArea();
 		if(textArea.isEditable())
-			textArea.cut();
+		{
+			String selection = textArea.getSelectedText();
+			if(selection == null)
+				return;
+
+			Clipboard clipboard = view.getToolkit().getSystemClipboard();
+
+			int repeatCount = view.getInputHandler().getRepeatCount();
+			StringBuffer buf = new StringBuffer();
+			for(int i = 0; i < repeatCount; i++)
+				buf.append(selection);
+
+			clipboard.setContents(new StringSelection(buf.toString()),null);
+
+			textArea.setSelectedText("");
+		}
 		else
 			textArea.getToolkit().beep();
 	}

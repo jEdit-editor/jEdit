@@ -110,6 +110,8 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 		EditBus.addToBus(this);
 
+		GUIUtilities.requestFocus(this,find);
+
 		pack();
 		GUIUtilities.loadGeometry(this,"hypersearch");
 
@@ -117,8 +119,6 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 		if(defaultFind != null)
 			doHyperSearch();
-
-		find.requestFocus();
 	}
 	
 	public void save()
@@ -389,6 +389,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.56  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.55  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

@@ -1,29 +1,26 @@
 JEDIT TO DO
 
-2.5pre1:
+2.5:
 
+- GlassPane.setBounds(0,0,getWidth(),getHeight())
+- Plugin manager: use swing centering code, JARClassLoader.getLoaded() method
+- CVS: add dialog-macro-input
+- CVS: remove textarea/*InputHandler, add gui
 - Annoying BufferTabs flicker
-- Text area scroll bar size bug
-- Create macro-input snap
-- Update dialog-options-general snap
-- Save As: don't do disk mod check
-- make HyperSearch a JFrame
-
-Later:
-
-- Fix dialog box focus problems
+- Make HyperSearch a JFrame
 - VFS:
-  - Show wait cursor only once for a set of requests
+  - Show wait cursor
   - Abortable FTP
   - FTP VFS GUI
   - If an error occurs while saving, we shouldn't clear the dirty flag
     (VFSManager.waitForRequests() returns a boolean value. If it is false,
-    _closeFile() doesn't close the buffer)
+    _closeFile() doesn't close the buffer. VFS.error() sets this flag)
   - Write VFS docs - user and developer
   - Filter events in view to implement ESCAPE, etc
   - move InputHandler to gui package and implement key handling in View
     (but let child components handle events first!!!)
-
+- Load abbrevs from system abbrev file and user abbrev file, don't merge them
+  on save
 - JEditTextArea.CaretUndo: set textArea reference to null when it is removed?
 - text area doesn't lose focus sometimes
 - TokenMarker: MARK_PREVIOUS should mark to lastOffset not lastKeyword

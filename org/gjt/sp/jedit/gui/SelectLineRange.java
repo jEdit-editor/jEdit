@@ -63,11 +63,11 @@ implements ActionListener
 
 		getRootPane().setDefaultButton(ok);
 
+		GUIUtilities.requestFocus(this,start);
+
 		pack();
 		setLocationRelativeTo(view);
 		show();
-
-		start.requestFocus();
 	}
 
 	public void actionPerformed(ActionEvent evt)
@@ -133,6 +133,9 @@ implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.11  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

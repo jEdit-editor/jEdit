@@ -134,7 +134,6 @@ implements ActionListener, Runnable
 		pack();
 		setLocationRelativeTo(view);
 		show();
-		show();
 	}
 
 	public void run()

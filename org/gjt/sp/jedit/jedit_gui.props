@@ -740,8 +740,8 @@ plugin.start-error.title=Cannot Start Plugin
 plugin.start-error.message=The plugin {0} cannot be started\n\
 	({1}).\n\
 	Possible reasons include:\n\
-	- the plugin is incompatible with this jEdit release; try installing\n\
-	a new version\n\
+	- the plugin is incompatible with this jEdit release; try updating\n\
+	the plugin\n\
 	- a plugin that this one depends on is not installed. Consult the\n\
 	plugin documentation to find out which plugins this one requires.\n\
 	- there is a bug in this plugin. If you suspect this is the case,\n\
@@ -778,7 +778,7 @@ plugin.dep-class.message=The plugin {0} requires the class {1}.\n\
 macro-input.title=Macro Input
 macro-input.caption=This action lets you prompt the user for input in macro.
 macro-input.prompt=Prompt to display:\ 
-macro-input.register=Register to store in:\ 
+macro-input.register=Store in register:\ 
 
 macro-input.no-record.title=Not Recording
 macro-input.no-record.message=This command is only useful while recording\n\

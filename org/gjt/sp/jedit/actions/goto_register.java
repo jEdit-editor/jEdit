@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class goto_register extends EditAction
@@ -28,13 +27,12 @@ public class goto_register extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		JEditTextArea textArea = view.getTextArea();
 
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
 			view.pushStatus(jEdit.getProperty("view.status.goto-register"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
+			view.getInputHandler().grabNextKeyStroke(this);
 		}
 		else
 		{
@@ -59,7 +57,7 @@ public class goto_register extends EditAction
 				if(buffer == null)
 					return;
 				view.setBuffer(buffer);
-				textArea.setCaretPosition(caretReg.getOffset());
+				view.getTextArea().setCaretPosition(caretReg.getOffset());
 			}
 			else
 				jEdit.openFile(view,register.toString());

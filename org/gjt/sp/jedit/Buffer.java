@@ -116,6 +116,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		if(!getFlag(NEW_FILE))
 		{
+			if(file != null)
+				modTime = file.lastModified();
+
 			boolean doLoad;
 			// Only on initial load
 			if(!reload && autosaveFile != null && autosaveFile.exists())
@@ -237,6 +240,23 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(path == null && getFlag(NEW_FILE))
 			return saveAs(view);
 
+		if(path == null && file != null)
+		{
+			long newModTime = file.lastModified();
+
+			if(newModTime != modTime)
+			{
+				Object[] args = { this.path };
+				int result = JOptionPane.showConfirmDialog(view,
+					jEdit.getProperty("filechanged-save.message",args),
+					jEdit.getProperty("filechanged.title"),
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+				if(result != JOptionPane.YES_OPTION)
+					return false;
+			}
+		}
+
 		setFlag(SAVING,true);
 		EditBus.send(new BufferUpdate(this,BufferUpdate.SAVING));
 
@@ -265,6 +285,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 				if(getFlag(NEW_FILE) || mode.getName().equals("text"))
 					setMode();
+
+				if(file != null)
+					modTime = file.lastModified();
 
 				jEdit.updatePosition(Buffer.this);
 
@@ -306,13 +329,13 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		// don't do these checks while a save is in progress,
 		// because for a moment newModTime will be greater than
 		// oldModTime, due to the multithreading
-		if(getFlag(NEW_FILE) || getFlag(SAVING))
+		if(file == null || getFlag(NEW_FILE) || getFlag(SAVING))
 			return;
 
 		long oldModTime = modTime;
-		long newModTime = vfs.getLastModified(path);
+		long newModTime = file.lastModified();
 
-		if(newModTime !=  oldModTime)
+		if(newModTime != oldModTime)
 		{
 			modTime = newModTime;
 
@@ -1758,6 +1781,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.144  2000/04/28 09:29:11  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.143  2000/04/27 08:32:56  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

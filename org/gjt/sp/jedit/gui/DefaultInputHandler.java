@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.textarea;
+package org.gjt.sp.jedit.gui;
 
 import javax.swing.KeyStroke;
 import java.awt.event.*;
@@ -25,6 +25,7 @@ import java.awt.Toolkit;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.Log;
 
 /**
@@ -37,9 +38,12 @@ public class DefaultInputHandler extends InputHandler
 {
 	/**
 	 * Creates a new input handler with no key bindings defined.
+	 * @param view The view
 	 */
-	public DefaultInputHandler()
+	public DefaultInputHandler(View view)
 	{
+		super(view);
+
 		bindings = currentBindings = new Hashtable();
 	}
 
@@ -49,9 +53,12 @@ public class DefaultInputHandler extends InputHandler
 	 * a pointer to exactly the same key binding table; so adding
 	 * a key binding in one will also add it to the other.
 	 * @param copy The input handler to copy key bindings from
+	 * @param view The view
 	 */
-	public DefaultInputHandler(DefaultInputHandler copy)
+	public DefaultInputHandler(View view, DefaultInputHandler copy)
 	{
+		super(view);
+
 		bindings = currentBindings = copy.bindings;
 		inputAction = copy.inputAction;
 	}
@@ -137,6 +144,7 @@ public class DefaultInputHandler extends InputHandler
 			if(grabAction != null)
 			{
 				handleGrabAction(evt);
+				evt.consume();
 				return;
 			}
 
@@ -316,39 +324,7 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
- * Revision 1.24  2000/04/14 11:57:39  sp
- * Text area actions moved to org.gjt.sp.jedit.actions package
- *
- * Revision 1.23  2000/04/02 06:38:28  sp
- * Bug fixes
- *
- * Revision 1.22  2000/03/27 07:31:22  sp
- * We now use Log.log() in some places instead of System.err.println, HTML mode
- * now supports <script> tags, external delegation bug fix
- *
- * Revision 1.21  2000/03/18 05:45:25  sp
- * Complete word overhaul, various other changes
- *
- * Revision 1.20  2000/02/12 03:56:58  sp
- * 2.3pre5 stuff
- *
- * Revision 1.19  1999/12/19 11:14:29  sp
- * Static abbrev expansion started
- *
- * Revision 1.18  1999/12/13 03:40:30  sp
- * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.17  1999/12/03 23:48:10  sp
- * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
- *
- * Revision 1.16  1999/11/16 08:21:20  sp
- * Various fixes, attempt at beefing up expand-abbrev
- *
- * Revision 1.15  1999/11/09 10:14:34  sp
- * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
- * word commands, check box menu item support
- *
- * Revision 1.14  1999/10/26 07:43:59  sp
- * Session loading and saving, directory list search started
+ * Revision 1.1  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
  *
  */

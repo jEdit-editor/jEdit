@@ -28,6 +28,11 @@ JEDIT 2.5 VERSION HISTORY
 - Improved backup directory feature (Richard S. Hall)
 - If the pre-load checks (if the file is a directory, if the file is readable,
   etc) fail, then jEdit will no longer create an empty buffer
+- jEdit now saves it's settings when the global options dialog box is closed,
+  instead of waiting until you exit
+- The default focus in many dialog boxes should now be set properly
+- Improved key binding handling -- the text area no longer needs to have focus
+  for keyboard shortcuts to work
 
 + Bug Fixes
 
@@ -36,6 +41,8 @@ JEDIT 2.5 VERSION HISTORY
 - Multiline tokens would not be highlighted correctly sometimes (since 2.4pre1)
 - Several actions didn't check the read only flag of a buffer before making
   changes
+- Sometimes when files were opened the text area wouldn't update its internal
+  count of visible lines. This caused problems with scrolling
 
 + API Changes
 
@@ -52,3 +59,10 @@ JEDIT 2.5 VERSION HISTORY
     are completed.
 - jEdit.openFile() may now return a null value, if, for example, an invalid URL   was specified. This is different from previous jEdit versions, where this
   method would always return a value.
+- Plugins whose option panes don't implement the init() will no longer work.
+  Previously, this method was called with reflection, but now it has been
+  added to the OptionPane interface
+- InputHandler and DefaultInputHandler classes moved to org.gjt.sp.jedit.gui
+  package
+- JEditTextArea.getInputHandler() method removed; use View.getInputHandler()
+  instead

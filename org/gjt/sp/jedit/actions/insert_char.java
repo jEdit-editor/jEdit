@@ -49,7 +49,7 @@ public class insert_char extends EditAction
 			Abbrevs.expandAbbrev(view,false);
 		}
 
-		int repeatCount = textArea.getInputHandler().getRepeatCount();
+		int repeatCount = view.getInputHandler().getRepeatCount();
 
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < repeatCount; i++)

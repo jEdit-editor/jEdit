@@ -24,8 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
 import java.util.EventObject;
-import org.gjt.sp.jedit.textarea.InputHandler;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
 /**
@@ -236,10 +234,9 @@ public abstract class EditAction implements ActionListener
 			loadIfNecessary();
 
 			View view = EditAction.getView(evt);
-			JEditTextArea textArea = view.getTextArea();
 
-			textArea.getInputHandler().executeAction(action,
-				textArea,evt.getActionCommand());
+			view.getInputHandler().executeAction(action,
+				view.getTextArea(),evt.getActionCommand());
 		}
 
 		/**
@@ -308,6 +305,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/04/28 09:29:11  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.24  2000/04/14 11:57:38  sp
  * Text area actions moved to org.gjt.sp.jedit.actions package
  *

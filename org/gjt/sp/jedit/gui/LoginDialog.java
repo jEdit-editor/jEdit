@@ -59,14 +59,12 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 
 		content.add(panel, BorderLayout.SOUTH);
 
+		GUIUtilities.requestFocus(this,(password == null ? userField
+			: passwordField));
+
 		pack();
 		setLocationRelativeTo(view);
 		show();
-
-		if(password == null)
-			userField.requestFocus();
-		else
-			passwordField.requestFocus();
 	}
 
 	// EnhancedDialog implementation

@@ -143,6 +143,9 @@ public class OptionsDialog extends EnhancedDialog
 		/* This will fire the PROPERTIES_CHANGED event */
 		jEdit.propertiesChanged();
 
+		// Save settings to disk
+		jEdit.saveSettings();
+
 		// get rid of this dialog if necessary
 		if (dispose) dispose();
 	}
@@ -217,18 +220,8 @@ public class OptionsDialog extends EnhancedDialog
 		}
 
 		currentLabel.setText(buf.toString());
-		// Fuck JBrowse, fuck QuickFile
-		//optionPane.init();
-		try
-		{
-			optionPane.getClass().getMethod("init",new Class[0])
-				.invoke(optionPane,new Object[0]);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.WARNING,this,optionPane.getClass()
-				.getName() + " uses old API");
-		}
+
+		optionPane.init();
 
 		pack();
 		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
@@ -588,6 +581,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.22  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *
@@ -617,14 +613,5 @@ public class OptionsDialog extends EnhancedDialog
  *
  * Revision 1.13  2000/02/02 10:03:31  sp
  * Option groups added
- *
- * Revision 1.11  2000/01/30 04:23:23  sp
- * New about box, minor bug fixes and updates here and there
- *
- * Revision 1.10  2000/01/16 06:09:27  sp
- * Bug fixes
- *
- * Revision 1.9  2000/01/14 22:11:24  sp
- * Enhanced options dialog box
  *
  */

@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class copy_string_register extends EditAction
@@ -28,8 +27,7 @@ public class copy_string_register extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		JEditTextArea textArea = view.getTextArea();
-		String selection = textArea.getSelectedText();
+		String selection = view.getTextArea().getSelectedText();
 
 		if(selection == null)
 			return;
@@ -38,7 +36,7 @@ public class copy_string_register extends EditAction
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
 			view.pushStatus(jEdit.getProperty("view.status.copy-string-register"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
+			view.getInputHandler().grabNextKeyStroke(this);
 		}
 		else
 		{
@@ -51,7 +49,7 @@ public class copy_string_register extends EditAction
 				return;
 			}
 
-			int repeatCount = textArea.getInputHandler().getRepeatCount();
+			int repeatCount = view.getInputHandler().getRepeatCount();
 			StringBuffer buf = new StringBuffer();
 			for(int i = 0; i < repeatCount; i++)
 				buf.append(selection);

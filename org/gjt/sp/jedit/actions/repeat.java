@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
 public class repeat extends EditAction
@@ -28,12 +27,11 @@ public class repeat extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		JEditTextArea textArea = view.getTextArea();
-		textArea.getInputHandler().setRepeatEnabled(true);
+		view.getInputHandler().setRepeatEnabled(true);
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand != null)
 		{
-			textArea.getInputHandler().setRepeatCount(
+			view.getInputHandler().setRepeatCount(
 				Integer.parseInt(actionCommand));
 		}
 	}

@@ -50,6 +50,11 @@ public class EnhancedButton extends JButton
 		setRequestFocusEnabled(false);
 	}
 
+	public boolean isFocusTraversable()
+	{
+		return false;
+	}
+
 	public String getActionCommand()
 	{
 		return getModel().getActionCommand();

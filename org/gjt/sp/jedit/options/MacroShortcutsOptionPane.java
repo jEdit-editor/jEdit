@@ -24,7 +24,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -79,6 +78,9 @@ public class MacroShortcutsOptionPane extends ShortcutsOptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.2  2000/04/16 08:56:24  sp
  * Option pane updates
  *

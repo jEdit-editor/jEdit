@@ -23,12 +23,13 @@ import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.undo.*;
 import javax.swing.*;
-import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.Enumeration;
 import java.util.Vector;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.util.Log;
 
 /**
@@ -99,15 +100,6 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Returns if this component can be traversed by pressing
-	 * the Tab key. This returns false.
-	 */
-	public final boolean isManagingFocus()
-	{
-		return true;
-	}
-
-	/**
 	 * Returns 0,0 for split pane compatibility.
 	 */
 	public final Dimension getMinimumSize()
@@ -130,23 +122,6 @@ public class JEditTextArea extends JComponent
 	public final Gutter getGutter()
 	{
 		return gutter;
-	}
-
-	/**
-	 * Returns the input handler.
-	 */
-	public final InputHandler getInputHandler()
-	{
-		return inputHandler;
-	}
-
-	/**
-	 * Sets the input handler.
-	 * @param inputHandler The new input handler
-	 */
-	public void setInputHandler(InputHandler inputHandler)
-	{
-		this.inputHandler = inputHandler;
 	}
 
 	/**
@@ -291,7 +266,6 @@ public class JEditTextArea extends JComponent
 			return;
 		int height = painter.getHeight();
 		int lineHeight = painter.getFontMetrics().getHeight();
-		int oldVisibleLines = visibleLines;
 		visibleLines = height / lineHeight;
 		updateScrollBars();
 	}
@@ -1415,71 +1389,6 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Deletes the selected text from the text area and places it
-	 * into the clipboard.
-	 */
-	public void cut()
-	{
-		if(editable)
-		{
-			copy();
-			setSelectedText("");
-		}
-	}
-
-	/**
-	 * Places the selected text into the clipboard.
-	 */
-	public void copy()
-	{
-		if(selectionStart != selectionEnd)
-		{
-			Clipboard clipboard = getToolkit().getSystemClipboard();
-
-			String selection = getSelectedText();
-
-			int repeatCount = inputHandler.getRepeatCount();
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < repeatCount; i++)
-				buf.append(selection);
-
-			clipboard.setContents(new StringSelection(buf.toString()),null);
-		}
-	}
-
-	/**
-	 * Inserts the clipboard contents into the text.
-	 */
-	public void paste()
-	{
-		if(editable)
-		{
-			Clipboard clipboard = getToolkit().getSystemClipboard();
-			try
-			{
-				// The MacOS MRJ doesn't convert \r to \n,
-				// so do it here
-				String selection = ((String)clipboard
-					.getContents(this).getTransferData(
-					DataFlavor.stringFlavor))
-					.replace('\r','\n');
-
-				int repeatCount = inputHandler.getRepeatCount();
-				StringBuffer buf = new StringBuffer();
-				for(int i = 0; i < repeatCount; i++)
-					buf.append(selection);
-				selection = buf.toString();
-				setSelectedText(selection);
-			}
-			catch(Exception e)
-			{
-				getToolkit().beep();
-				Log.log(Log.DEBUG,this,e);
-			}
-		}
-	}
-
-	/**
 	 * Returns the status bar component (which was added with a name
 	 * of LEFT_OF_SCROLLBAR).
 	 */
@@ -1509,6 +1418,8 @@ public class JEditTextArea extends JComponent
 			documentHandlerInstalled = true;
 			document.addDocumentListener(documentHandler);
 		}
+
+		recalculateVisibleLines();
 	}
 
 	/**
@@ -1531,29 +1442,6 @@ public class JEditTextArea extends JComponent
 		{
 			document.removeDocumentListener(documentHandler);
 			documentHandlerInstalled = false;
-		}
-	}
-
-	/**
-	 * Forwards key events directly to the input handler.
-	 * This is slightly faster than using a KeyListener
-	 * because some Swing overhead is avoided.
-	 */
-	public void processKeyEvent(KeyEvent evt)
-	{
-		if(inputHandler == null)
-			return;
-		switch(evt.getID())
-		{
-		case KeyEvent.KEY_TYPED:
-			inputHandler.keyTyped(evt);
-			break;
-		case KeyEvent.KEY_PRESSED:
-			inputHandler.keyPressed(evt);
-			break;
-		case KeyEvent.KEY_RELEASED:
-			inputHandler.keyReleased(evt);
-			break;
 		}
 	}
 
@@ -1594,7 +1482,6 @@ public class JEditTextArea extends JComponent
 	protected JScrollBar horizontal;
 	protected boolean scrollBarsInitialized;
 
-	protected InputHandler inputHandler;
 	protected SyntaxDocument document;
 	protected DocumentHandler documentHandler;
 	protected boolean documentHandlerInstalled;
@@ -1694,6 +1581,27 @@ public class JEditTextArea extends JComponent
 			painter.invalidateLineRange(line,firstLine + visibleLines);
 			gutter.invalidateLineRange(line,firstLine + visibleLines);
 			updateScrollBars();
+		}
+	}
+
+	/**
+	 * "Me and my crew were out breakin' windows" -- Beastie Boys
+	 */
+	protected void processKeyEvent(KeyEvent evt)
+	{
+		InputHandler inputHandler = EditAction.getView(evt)
+			.getInputHandler();
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_TYPED:
+			inputHandler.keyTyped(evt);
+			break;
+		case KeyEvent.KEY_PRESSED:
+			inputHandler.keyPressed(evt);
+			break;
+		case KeyEvent.KEY_RELEASED:
+			inputHandler.keyReleased(evt);
+			break;
 		}
 	}
 
@@ -2273,6 +2181,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.55  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.54  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

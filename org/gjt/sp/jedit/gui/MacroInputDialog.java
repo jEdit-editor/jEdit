@@ -61,6 +61,8 @@ public class MacroInputDialog extends EnhancedDialog implements ActionListener
 
 		content.add(panel, BorderLayout.SOUTH);
 
+		GUIUtilities.requestFocus(this,promptField);
+
 		pack();
 		setLocationRelativeTo(view);
 		show();

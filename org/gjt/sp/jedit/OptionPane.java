@@ -48,10 +48,7 @@ public interface OptionPane
 	/**
 	 * This method should create the option pane's GUI.
 	 */
-	// commented to out to preserve compatibility with JBrowse and
-	// QuickFile plugins. We use reflection to call 'init' now.
-	// this hack will go away in 2.5pre1.
-	//void init();
+	void init();
 
 	/**
 	 * Called when the options dialog's "ok" button is clicked.
@@ -64,6 +61,9 @@ public interface OptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/04/28 09:29:11  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.7  2000/04/23 03:58:00  sp
  * ContextOptionPane didn't compile, hack to let JBrowse and QuickFile work
  *

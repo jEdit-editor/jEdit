@@ -22,9 +22,10 @@ package org.gjt.sp.jedit.search;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.JOptionPane;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
-import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -501,8 +502,8 @@ loop:			for(;;)
 
 	private static void record(View view, String action)
 	{
-		InputHandler.MacroRecorder recorder = view.getTextArea()
-			.getInputHandler().getMacroRecorder();
+		InputHandler.MacroRecorder recorder = view.getInputHandler()
+			.getMacroRecorder();
 
 		if(recorder != null)
 		{
@@ -536,6 +537,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  2000/04/28 09:29:12  sp
+ * Key binding handling improved, VFS updates, some other stuff
+ *
  * Revision 1.30  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

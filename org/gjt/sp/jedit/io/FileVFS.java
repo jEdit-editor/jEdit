@@ -111,7 +111,6 @@ public class FileVFS extends VFS
 	public boolean load(View view, Buffer buffer, String path)
 	{
 		File file = new File(path);
-		buffer.setLastModified(file.lastModified());
 
 		if(!checkFile(view,buffer,file))
 			return false;
@@ -129,20 +128,6 @@ public class FileVFS extends VFS
 	public boolean save(View view, Buffer buffer, String path)
 	{
 		File file = new File(path);
-		long modTime = buffer.getLastModified();
-		long newModTime = file.lastModified();
-
-		if(!buffer.isNewFile() && newModTime != modTime)
-		{
-			Object[] args = { path };
-			int result = JOptionPane.showConfirmDialog(view,
-				jEdit.getProperty("filechanged-save.message",args),
-				jEdit.getProperty("filechanged.title"),
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.WARNING_MESSAGE);
-			if(result != JOptionPane.YES_OPTION)
-				return false;
-		}
 
 		// Check that we can actually write to the file
 		if((file.exists() && !file.canWrite())
@@ -155,20 +140,6 @@ public class FileVFS extends VFS
 
 		backup(buffer,file);
 		return super.save(view,buffer,path);
-	}
-
-	public void saveCompleted(View view, Buffer buffer, String path)
-	{
-		buffer.setLastModified(getLastModified(path));
-	}
-
-	/**
-	 * Returns the last time the specified path has been modified on disk
-	 * (or other storage medium).
-	 */
-	public long getLastModified(String path)
-	{
-		return new File(path).lastModified();
 	}
 
 	/**
