@@ -63,6 +63,7 @@ public class PluginResURLConnection extends URLConnection
 	public InputStream getInputStream()
 		throws IOException
 	{
+		connect();
 		return in;
 	}
 
@@ -92,5 +93,4 @@ public class PluginResURLConnection extends URLConnection
 	private InputStream in;
 	private int pluginIndex;
 	private String resource;
-	private boolean connected;
 }
