@@ -2,10 +2,10 @@ MAJOR CHANGES IN JEDIT 2.5 SINCE 2.4
 
 * New I/O subsystem
 
-The file loading and saving code has been completely overhauled in
-jEdit 2.5. The code is cleaner and more modular, which should make it
-easier to extend in the future. Also, all I/O is now performed in a
-separate thread, which improves responsiveness.
+The file loading and saving code has been completely overhauled in jEdit
+2.5. The code is cleaner and more modular, which should make it easier
+to extend in the future. Also, all I/O is now performed in a separate
+thread, which improves responsiveness.
 
 * FTP load and save
 
@@ -59,8 +59,8 @@ in progress, and allows the search to be interrupted.
 
 The behaviour of the HOME and END keys has changed. Pressing them
 multiple times will now go to the first/last non-whitespace character on
-the current line, then the start/end of the current line, and finally the
-first/last visible line.
+the current line, then the start/end of the current line, and finally
+the first/last visible line.
 
 * Background mode
 

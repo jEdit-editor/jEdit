@@ -1,18 +1,14 @@
 JEDIT TO DO
 
-2.5:
+Later:
 
-- Can't follow symlinks in FTP browser
 - Documentation:
   - document view, edit pane, buffer API
   - how to write text area and gutter hilites
   - write VFS developer docs
   - document EditBus plugin
-  - proofread
 - Switch to DocBook 4.0 for the documentation
-
-Later:
-
+- Improve symlink handling in FTP browser
 - Buffer-local property to disable marker persistance
 - Word wrap
 - Abortable I/O
@@ -42,6 +38,8 @@ Later:
   etc. It would be nice if its parser was a bit more intelligent
 - New preferences system for easier storage of non-string values
 - Improve rectangular selections
+- Print option pane for changing printing settings
+- 'Print Selection' command
 
 When we switch to Java 2:
 - drag and drop

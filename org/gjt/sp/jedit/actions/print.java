@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.actions;
 import javax.swing.text.*;
 import java.awt.event.ActionEvent;
 import java.awt.*;
+import java.util.Date;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditAction;
@@ -40,6 +41,8 @@ public class print extends EditAction
 		PrintJob job = view.getToolkit().getPrintJob(view,buffer.getName(),null);
 		if(job == null)
 			return;
+
+		view.showWaitCursor();
 
 		int topMargin;
 		int leftMargin;
@@ -85,15 +88,14 @@ public class print extends EditAction
 		}
 
 		String header = buffer.getPath();
+		String footer = new Date().toString();
 
 		JEditTextArea textArea = view.getTextArea();
-		int tabSize = buffer.getTabSize() * textArea.getToolkit()
-			.getFontMetrics(textArea.getFont()).charWidth('m');
 
 		Segment lineSegment = new Segment();
 		TokenMarker tokenMarker = textArea.getTokenMarker();
 		SyntaxStyle[] styles = textArea.getPainter().getStyles();
-		TabExpander expander = new PrintTabExpander(leftMargin,tabSize);
+		TabExpander expander = null;
 
 		Graphics gfx = null;
 		Font font = textArea.getPainter().getFont();
@@ -102,25 +104,33 @@ public class print extends EditAction
 		int pageWidth = pageDimension.width;
 		int pageHeight = pageDimension.height;
 		int y = 0;
+		int tabSize = 0;
+		int lineHeight = 0;
+		int page = 0;
 
 		for(int i = 0; i < textArea.getLineCount(); i++)
 		{
 			if(gfx == null)
 			{
+				page++;
+
 				gfx = job.getGraphics();
 				gfx.setFont(font);
-				gfx.setColor(Color.lightGray);
 				fm = gfx.getFontMetrics();
+				lineHeight = fm.getHeight();
+				tabSize = buffer.getTabSize() * fm.charWidth(' ');
+				expander = new PrintTabExpander(leftMargin,tabSize);
+				gfx.setColor(Color.lightGray);
 				gfx.fillRect(leftMargin,topMargin,pageWidth
-					- leftMargin - rightMargin,fm.getHeight());
+					- leftMargin - rightMargin,lineHeight);
 				gfx.setColor(Color.black);
-				y = topMargin + fm.getHeight() - fm.getDescent()
+				y = topMargin + lineHeight - fm.getDescent()
 					- fm.getLeading();
 				gfx.drawString(header,leftMargin,y);
-				y += fm.getHeight();
+				y += lineHeight;
 			}
 
-			y += fm.getHeight();
+			y += lineHeight;
 			textArea.getLineText(i,lineSegment);
 
 			if(tokenMarker == null)
@@ -140,15 +150,33 @@ public class print extends EditAction
 					leftMargin,y);
 			}
 
-			if((y > pageHeight - bottomMargin) ||
+			if((y >= pageHeight - bottomMargin - lineHeight * 3) ||
 				(i == textArea.getLineCount() - 1))
 			{
+				y = pageHeight - bottomMargin;
+
+				gfx.setColor(Color.lightGray);
+				gfx.setFont(font);
+				gfx.fillRect(leftMargin,y - lineHeight,pageWidth
+					- leftMargin - rightMargin,lineHeight);
+				gfx.setColor(Color.black);
+				y -= (lineHeight - fm.getAscent());
+				gfx.drawString(footer,leftMargin,y);
+
+				Integer[] args = { new Integer(page) };
+				String pageStr = jEdit.getProperty("print.page",args);
+				int width = fm.stringWidth(pageStr);
+				gfx.drawString(pageStr,pageWidth - rightMargin
+					- width,y);
+
 				gfx.dispose();
 				gfx = null;
 			}
 		}
 
 		job.end();
+
+		view.hideWaitCursor();
 	}
 
 	class PrintTabExpander implements TabExpander

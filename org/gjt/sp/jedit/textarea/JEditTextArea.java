@@ -1774,10 +1774,16 @@ public class JEditTextArea extends JComponent
 			if(!scrollBarsInitialized)
 				return;
 
-			if(evt.getAdjustable() == vertical)
-				setFirstLine(vertical.getValue());
-			else
-				setHorizontalOffset(-horizontal.getValue());
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					if(evt.getAdjustable() == vertical)
+						setFirstLine(vertical.getValue());
+				else
+					setHorizontalOffset(-horizontal.getValue());
+				}
+			});
 		}
 	}
 
@@ -2176,6 +2182,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.69  2000/06/02 08:43:03  sp
+ * Printing fixes and enhancements, other bug fixes
+ *
  * Revision 1.68  2000/06/02 02:21:06  sp
  * minor bug fixes
  *

@@ -365,6 +365,7 @@ public class FtpBrowser extends JDialog
 	private String getShortName(String line)
 	{
 		boolean directory = (line.charAt(0) == 'd');
+		boolean symlink = (line.charAt(0) == 'l');
 		int fieldCount = 0;
 		boolean lastWasSpace = false;
 		int i;
@@ -389,7 +390,13 @@ public class FtpBrowser extends JDialog
 		}
 
 		line = line.substring(i);
-		if(directory)
+		if(symlink)
+		{
+			int index = line.lastIndexOf(" -> ");
+			if(index != 0)
+				line = line.substring(0,index);
+		}
+		else if(directory)
 			line = line + '/';
 		return line;
 	}
@@ -556,6 +563,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/06/02 08:43:03  sp
+ * Printing fixes and enhancements, other bug fixes
+ *
  * Revision 1.7  2000/05/12 11:07:39  sp
  * Bug fixes, documentation updates
  *

@@ -15,6 +15,10 @@ JEDIT 2.5 VERSION HISTORY
 
 - 'Go to End Of Indent' command removed (just use HOME instead); shortcut
   of 'Indent Selected Lines' changed to C+i
+- 'Create new java file' and 'Create new java applet' macros added
+  (Valery Kondakoff)
+- 'Print' command now prints a footer with the date/time and page number
+  at the bottom of each page
 
 + Bug Fixes
 
@@ -23,6 +27,10 @@ JEDIT 2.5 VERSION HISTORY
 - Plugin manager's 'update' feature didn't work (since 2.5pre3)
 - Minor changes to scrolling code, might solve recently reported problems
   when running on Java 2
+- The tab width was incorrect in printed output
+- Symlinks should now work in the FTP browser (but even directory links
+  are still disaplayed as regular files; fixing this would require more
+  work) (since 2.5pre1)
 
 * Version 2.5pre4
 

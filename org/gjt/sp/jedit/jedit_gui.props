@@ -497,6 +497,9 @@ view.status.new=(new)
 view.status.read-only=(read only)
 view.status.recording=(recording)
 
+# Printing
+print.page=Page {0}
+
 ###
 ### VARIOUS DIALOGS
 ###
