@@ -20,6 +20,8 @@ JEDIT 3.1 VERSION HISTORY
   - Gutter can no longer be resized
   - 'Gutter Expanded' and 'Line Numbering' commands merged into one
   - Marker/register highlighting can now be toggled
+- Multiple subsequent insertions are now batched into one undo - no more
+  undoing character-by-character!
 
 + API Changes
 
@@ -28,3 +30,8 @@ JEDIT 3.1 VERSION HISTORY
 - MenuBarModel, MenuModel, MenuItemModel, ToolBarModel classes removed.
   Since plugins do not use these classes directly, it should not cause
   any breakage.
+
++ Bug Fixes
+
+- .shortcut properties in plugins that specified shortcuts for built-in
+  actions didn't work

@@ -4032,6 +4032,8 @@ forward_scan:		do
 	{
 		public void mousePressed(MouseEvent evt)
 		{
+			buffer.endCompoundEdit();
+
 			grabFocus();
 
 			blink = true;

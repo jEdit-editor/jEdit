@@ -39,12 +39,6 @@ public class CommandShortcutsOptionPane extends ShortcutsOptionPane
 	}
 
 	// protected members
-	protected void _save()
-	{
-		super._save();
-		jEdit.reloadKeyBindings();
-	}
-
 	protected Vector createBindings()
 	{
 		EditAction[] actions = jEdit.getActions();

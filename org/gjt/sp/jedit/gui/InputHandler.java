@@ -1,6 +1,6 @@
 /*
  * InputHandler.java - Manages key bindings and executes actions
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,6 +153,10 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public void invokeAction(EditAction action)
 	{
+		Buffer buffer = view.getBuffer();
+
+		buffer.endCompoundEdit();
+
 		// remember the last executed action
 		if(lastAction == action)
 			lastActionCount++;
@@ -171,12 +175,10 @@ public abstract class InputHandler extends KeyAdapter
 			action.invoke(view);
 		else
 		{
-			Buffer buffer = view.getBuffer();
-
 			try
 			{
 				buffer.beginCompoundEdit();
-	
+
 				for(int i = 0; i < _repeatCount; i++)
 					action.invoke(view);
 			}
@@ -195,8 +197,8 @@ public abstract class InputHandler extends KeyAdapter
 		// Otherwise it might have been set by the action, etc
 		if(_repeat)
 		{
-			// first of all, if this action set a readNextChar,
-			// do not clear the repeat
+			// first of all, if this action set a
+			// readNextChar, do not clear the repeat
 			if(readNextChar != null)
 				return;
 
@@ -223,22 +225,18 @@ public abstract class InputHandler extends KeyAdapter
 			invokeReadNextChar(ch);
 		else
 		{
+			Buffer buffer = view.getBuffer();
+			if(!buffer.insideCompoundEdit())
+				buffer.beginCompoundEdit();
+
 			JEditTextArea textArea = view.getTextArea();
 			int _repeatCount = getRepeatCount();
 			if(_repeatCount == 1)
 				textArea.userInput(ch);
 			else
 			{
-				try
-				{
-					view.getBuffer().beginCompoundEdit();
-					for(int i = 0; i < _repeatCount; i++)
-						textArea.userInput(ch);
-				}
-				finally
-				{
-					view.getBuffer().endCompoundEdit();
-				}
+				for(int i = 0; i < _repeatCount; i++)
+					textArea.userInput(ch);
 			}
 
 			Macros.Recorder recorder = view.getMacroRecorder();

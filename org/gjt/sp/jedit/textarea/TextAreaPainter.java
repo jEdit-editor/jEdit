@@ -702,6 +702,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.50  2001/01/24 02:14:13  sp
+ * funky undo, thanks Romain
+ *
  * Revision 1.49  2000/11/11 02:59:31  sp
  * FTP support moved out of the core into a plugin
  *

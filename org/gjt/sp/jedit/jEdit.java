@@ -561,6 +561,8 @@ public class jEdit
 	 */
 	public static void propertiesChanged()
 	{
+		initKeyBindings();
+
 		int interval;
 		try
 		{
@@ -754,13 +756,7 @@ public class jEdit
 	 */
 	public static void addAction(EditAction action)
 	{
-		String name = action.getName();
-		actionHash.put(name,action);
-
-		// Register key binding
-		String binding = getProperty(name + ".shortcut");
-		if(binding != null)
-			inputHandler.addKeyBinding(binding,action);
+		actionHash.put(action.getName(),action);
 	}
 
 	/**
@@ -1516,10 +1512,10 @@ public class jEdit
 	}
 
 	/**
-	 * Reloads all key bindings from the properties.
-	 * @since 2.3pre1
+	 * Loads all key bindings from the properties.
+	 * @since 3.1pre1
 	 */
-	public static void reloadKeyBindings()
+	public static void initKeyBindings()
 	{
 		inputHandler.removeAllKeyBindings();
 

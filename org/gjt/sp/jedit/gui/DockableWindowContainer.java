@@ -46,7 +46,7 @@ public interface DockableWindowContainer
 	 */
 	public class TabbedPane extends JTabbedPane implements DockableWindowContainer
 	{
-		public static final int SPLITTER_WIDTH = 5;
+		public static final int SPLITTER_WIDTH = 10;
 
 		String position;
 		int dimension;
@@ -108,18 +108,7 @@ public interface DockableWindowContainer
 
 		public void propertiesChanged()
 		{
-			int top = position.equals(DockableWindowManager.BOTTOM)
-				? SPLITTER_WIDTH : 0;
-			int left = position.equals(DockableWindowManager.RIGHT)
-				? SPLITTER_WIDTH : 0;
-			int bottom = position.equals(DockableWindowManager.TOP)
-				? SPLITTER_WIDTH : 0;
-			int right = position.equals(DockableWindowManager.LEFT)
-				? SPLITTER_WIDTH : 0;
-
-			setBorder(new MatteBorder(top,left,bottom,right,
-				GUIUtilities.parseColor(jEdit.getProperty(
-				"view.docking.borderColor"))));
+			setBorder(new DockBorder(position));
 
 			int tabsPos = Integer.parseInt(jEdit.getProperty(
 				"view.docking.tabsPos"));
@@ -301,6 +290,120 @@ public interface DockableWindowContainer
 			{
 				setCursor(Cursor.getPredefinedCursor(
 					Cursor.DEFAULT_CURSOR));
+			}
+		}
+
+		static class DockBorder implements Border
+		{
+			String position;
+			Insets insets;
+			Color color1;
+			Color color2;
+			Color color3;
+
+			DockBorder(String position)
+			{
+				if(UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+				{
+					color1 = MetalLookAndFeel.getControlHighlight();
+					color2 = MetalLookAndFeel.getControlDarkShadow();
+					color3 = MetalLookAndFeel.getControl();
+				}
+				else
+				{
+					color1 = color2 = null;
+					color3 = GUIUtilities.parseColor(
+						jEdit.getProperty(
+						"view.docking.borderColor"));
+				}
+
+				this.position = position;
+				insets = new Insets(
+					position.equals(DockableWindowManager.BOTTOM)
+						? SPLITTER_WIDTH : 0,
+					position.equals(DockableWindowManager.RIGHT)
+						? SPLITTER_WIDTH : 0,
+					position.equals(DockableWindowManager.TOP)
+						? SPLITTER_WIDTH : 0,
+					position.equals(DockableWindowManager.LEFT)
+						? SPLITTER_WIDTH : 0);
+			}
+
+			public void paintBorder(Component c, Graphics g,
+				int x, int y, int width, int height)
+			{
+				if(position.equals(DockableWindowManager.BOTTOM))
+					paintHorizBorder(g,x,y,width);
+				else if(position.equals(DockableWindowManager.RIGHT))
+					paintVertBorder(g,x,y,height);
+				else if(position.equals(DockableWindowManager.TOP))
+				{
+					paintHorizBorder(g,x,y + height
+						- SPLITTER_WIDTH,width);
+				}
+				else if(position.equals(DockableWindowManager.LEFT))
+				{
+					paintVertBorder(g,x + width
+						- SPLITTER_WIDTH,y,height);
+				}
+			}
+
+			public Insets getBorderInsets(Component c)
+			{
+				return insets;
+			}
+
+			public boolean isBorderOpaque()
+			{
+				return false;
+			}
+
+			private void paintHorizBorder(Graphics g, int x, int y, int width)
+			{
+				g.setColor(color3);
+				g.fillRect(x,y,width,SPLITTER_WIDTH);
+
+				if(color1 == null || color2 == null)
+					return;
+
+				for(int i = 0; i < width / 4 + 1; i++)
+				{
+					g.setColor(color1);
+					g.drawLine(x + i * 4,y + 3,x + i * 4,y + 3);
+					g.setColor(color2);
+					g.drawLine(x + i * 4 + 1,y + 4,
+						x + i * 4 + 1,y + 4);
+					g.setColor(color1);
+					g.drawLine(x + i * 4 + 2,y + 5,
+						x + i * 4 + 2,y + 5);
+					g.setColor(color2);
+					g.drawLine(x + i * 4 + 3,y + 6,
+						x + i * 4 + 3,y + 6);
+				}
+			}
+
+			private void paintVertBorder(Graphics g, int x, int y, int height)
+			{
+				g.setColor(color3);
+				g.fillRect(x,y,SPLITTER_WIDTH,height);
+
+				if(color1 == null || color2 == null)
+					return;
+
+				for(int i = 0; i < height / 4 + 1; i++)
+				{
+					g.setColor(color1);
+					g.drawLine(x + 3,y + i * 4,x + 3,y + i * 4);
+					g.setColor(color2);
+					g.drawLine(x + 4,y + i * 4 + 1,
+						x + 4,y + i * 4 + 1);
+					g.setColor(color1);
+					g.drawLine(x + 5,y + i * 4 + 2,
+						x + 5,y + i * 4 + 2);
+					g.setColor(color2);
+					g.drawLine(x + 6,y + i * 4 + 3,
+						x + 6,y + i * 4 + 3);
+				}
 			}
 		}
 	}

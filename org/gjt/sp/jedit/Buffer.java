@@ -1136,6 +1136,15 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
+	 * Returns if a compound edit is currently active.
+	 * @since jEdit 3.1pre1
+	 */
+	public boolean insideCompoundEdit()
+	{
+		return compoundEdit != null;
+	}
+
+	/**
 	 * Removes trailing whitespace from all lines in the specified range.
 	 * @param first The start line
 	 * @param last The end line

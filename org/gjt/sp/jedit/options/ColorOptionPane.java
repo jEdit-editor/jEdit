@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.options;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -139,8 +140,11 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.focusBorderColor");
 		addColorChoice("options.color.gutterNoFocusBorderColor",
 			"view.gutter.noFocusBorderColor");
-		addColorChoice("options.color.dockingBorderColor",
-			"view.docking.borderColor");
+		if(!(UIManager.getLookAndFeel() instanceof MetalLookAndFeel))
+		{
+			addColorChoice("options.color.dockingBorderColor",
+				"view.docking.borderColor");
+		}
 	}
 
 	public int getColumnCount()
@@ -227,7 +231,7 @@ class ColorTableModel extends AbstractTableModel
 			setOpaque(true);
 			setBorder(StyleOptionPane.noFocusBorder);
 		}
-	
+
 		// TableCellRenderer implementation
 		public Component getTableCellRendererComponent(
 			JTable table,
@@ -247,10 +251,10 @@ class ColorTableModel extends AbstractTableModel
 				setBackground(table.getBackground());
 				setForeground(table.getForeground());
 			}
-	
+
 			if (value != null)
 				setBackground((Color)value);
-	
+
 			setBorder((cellHasFocus) ? UIManager.getBorder(
 				"Table.focusCellHighlightBorder")
 				: StyleOptionPane.noFocusBorder);
@@ -259,11 +263,3 @@ class ColorTableModel extends AbstractTableModel
 		// end TableCellRenderer implementation
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.1  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- */
