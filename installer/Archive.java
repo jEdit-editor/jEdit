@@ -71,7 +71,7 @@ public class Archive
 		in.readFully(headerbuf,0,HEADERLEN);
 		String header = new String(headerbuf);
 		if(!header.equals(HEADER))
-			throw new IOException("Entry does not begin with " + header);
+			throw new IOException("Entry does not begin with " + HEADER);
 
 		int namelen = in.readInt();
 		byte[] namebuf = new byte[namelen];
@@ -258,6 +258,8 @@ public class Archive
 
 		public long skip(long n) throws IOException
 		{
+			if(count + n > length)
+				n = length - count;
 			return in.skip(n);
 		}
 	}

@@ -136,29 +136,7 @@ public abstract class OperatingSystem
 
 		public String getShortcutDirectory()
 		{
-			return "C:\\Windows";
-		}
-
-		public void createScript(Install installer,
-			String installDir, String binDir, String name)
-			throws IOException
-		{
-			/**
-			 * This method creates a batch file in binDir
-			 * to start the app.
-			 */
-			FileWriter out = new FileWriter(binDir
-				+ File.separatorChar + name + ".bat");
-			out.write("@echo off\r\n\"");
-			out.write(System.getProperty("java.home"));
-			out.write("\\bin\\java\" -classpath \"%CLASSPATH%;");
-			out.write(installDir);
-			out.write(File.separatorChar);
-			out.write(name.toLowerCase());
-			out.write(".jar\" ");
-			out.write(installer.getProperty("app.main.class"));
-			out.write(" %1 %2 %3 %4 %5 %6 %7 %8 %9\r\n");
-			out.close();
+			return null;
 		}
 	}
 
