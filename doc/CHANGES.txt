@@ -5,6 +5,8 @@ JEDIT 2.5 VERSION HISTORY
 + New Features
 
 - VHDL edit mode (Dante Fabrizio)
+- View.setInputHandler() method added, for plugins that want to do non-trivial
+  input handling (eg, CodeAid)
 
 + Enhancements
 

@@ -88,6 +88,15 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Sets the input handler.
+	 * @param inputHandler The new input handler
+	 */
+	public void setInputHandler(InputHandler inputHandler)
+	{
+		this.inputHandler = inputHandler;
+	}
+
+	/**
 	 * Splits the view.
 	 * @since jEdit 2.3pre2
 	 */
@@ -1031,6 +1040,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.180  2000/06/25 03:19:41  sp
+ * View.setInputHandler() method added
+ *
  * Revision 1.179  2000/06/12 02:43:29  sp
  * pre6 almost ready
  *
