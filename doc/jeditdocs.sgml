@@ -652,6 +652,13 @@
     and instead reload the file from disk. If the buffer has unsaved changes,
     you will be asked for confirmation first.
    </para>
+   <para>
+    <guimenu>File</>&gt;<guimenuitem>Reload All Buffers</> will discard your
+    changes in <emphasis>all open buffers</>
+    and reload them from disk. This command will ask for comfirmation first.
+    It is useful after performing a CVS checkin or similar; CVS inserts
+    version info in the file.
+   </para>
    <figure><title>Warning message displayed when another application
    changed the file on disk</>
     <graphic scale=75 fileref=dialog-diskmod></>

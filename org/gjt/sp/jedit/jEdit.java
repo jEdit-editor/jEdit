@@ -1258,6 +1258,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.record_temp_macro());
 		addAction(new org.gjt.sp.jedit.actions.redo());
 		addAction(new org.gjt.sp.jedit.actions.reload());
+		addAction(new org.gjt.sp.jedit.actions.reload_all());
 		addAction(new org.gjt.sp.jedit.actions.replace_all());
 		addAction(new org.gjt.sp.jedit.actions.replace_in_selection());
 		addAction(new org.gjt.sp.jedit.actions.rescan_macros());
@@ -1525,6 +1526,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.159  1999/11/23 05:43:55  sp
+ * Reload All command
+ *
  * Revision 1.158  1999/11/21 07:59:30  sp
  * JavaDoc updates
  *

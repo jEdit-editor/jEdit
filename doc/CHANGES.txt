@@ -17,6 +17,7 @@ JEDIT VERSION HISTORY
   Options->Editor
 - Expand Abbreviation now supports multiple matches (Valery Kondakoff)
 - doc/NEWS.txt file written :-)
+- File->Reload All Buffers command
 
 + Enhancements
 

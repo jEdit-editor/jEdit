@@ -75,6 +75,7 @@ file=new-file \
      %open-recent \
      - \
      reload \
+     reload-all \
      - \
      close-file \
      close-all \
@@ -105,6 +106,7 @@ open-selection.label=Open Sele$ction
 open-recent.label=O$pen Recent
 no-recent.label=No Recent Files
 reload.label=Re$load
+reload-all.label=Reload All Buffers
 close-file.label=$Close File
 close-all.label=Close All $Buffers
 close-view.label=Close Vie$w
@@ -496,6 +498,11 @@ autosaveexists.message=An autosave file {0} was found!\n\
 # Save all confirm dialog
 saveall.title=Save All Buffers
 saveall.message=Are you sure you want to save all modified buffers?
+
+# Reload all confirm dialog
+reload-all.title=Reload All Buffers
+reload-all.message=Are you sure you want to reload all buffers from disk?\n\
+	Unsaved changes in any open buffers WILL BE LOST!
 
 # Macro recording already in progress dialog
 already-recording.title=Already Recording
