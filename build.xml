@@ -78,6 +78,8 @@
 
 				<include name="org/gjt/sp/jedit/actions.xml"/>
 				<include name="org/gjt/sp/jedit/dockables.xml"/>
+				<include name="org/gjt/sp/jedit/services.xml"/>
+
 				<include name="org/gjt/sp/jedit/default.abbrevs"/>
 				<include name="org/gjt/sp/jedit/jedit.bsh"/>
 			</fileset>
