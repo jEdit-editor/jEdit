@@ -77,11 +77,13 @@ in the View->Scrolling menu. (Contributed by Ollie Rutherfurd
 * New edit modes
 
 Syntax highlighting was added for the following file types, bringing the
-total number of supported file types up to 43:
+total number of supported file types up to 46:
 
 - Assembly (Intel x86 MASM/NASM)
 - C#
 - DSSSL
+- RPM spec
+- Texinfo
 
 Assembly syntax highlighting was contributed by Kristian Ovaska
 (<kristian.ovaska@helsinki.fi>). C# syntax highlighting was contributed

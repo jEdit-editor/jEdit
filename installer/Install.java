@@ -1,6 +1,6 @@
 /*
  * Install.java - Main installer class
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,13 +17,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package installer;
+
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 public class Install
 {
-	public static final String VERSION = "0.4";
+	public static final String VERSION = "0.6";
 
 	public static void main(String[] args)
 	{
@@ -34,7 +36,7 @@ public class Install
 		else
 		{
 			System.err.println("Usage:");
-			System.err.println("jre -cp <installer JAR> Install [text] (Java 1.1)");
+			System.err.println("jre -cp <installer JAR> installer.Install [text] (Java 1.1)");
 			System.err.println("java -jar <installer JAR> [text] (Java 2)");
 			System.err.println("text parameter starts installer in text-only mode");
 		}
@@ -45,13 +47,13 @@ public class Install
 		props = new Properties();
 		try
 		{
-			InputStream in = getClass().getResourceAsStream("/install.props");
+			InputStream in = getClass().getResourceAsStream("install.props");
 			props.load(in);
 			in.close();
 		}
 		catch(IOException io)
 		{
-			System.err.println("Error loading '/install.props':");
+			System.err.println("Error loading 'install.props':");
 			io.printStackTrace();
 		}
 	}

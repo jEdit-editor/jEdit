@@ -23,118 +23,124 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Random;
+import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public class TipOfTheDay extends JPanel
+public class TipOfTheDay extends EnhancedDialog
 {
-	public TipOfTheDay(JDialog dialog)
+	public TipOfTheDay(View view)
 	{
-		super(new BorderLayout(12,12));
-		setBorder(new EmptyBorder(12,12,12,12));
-
-		this.dialog = dialog;
-
-		JLabel label = new JLabel(jEdit.getProperty("tip.caption"));
-		label.setFont(new Font("SansSerif",Font.PLAIN,24));
-		label.setForeground(UIManager.getColor("Button.foreground"));
-		add(BorderLayout.NORTH,label);
-
-		tipText = new JEditorPane();
-		tipText.setEditable(false);
-		tipText.setContentType("text/html");
-		tipText.addKeyListener(new KeyHandler());
-		JScrollPane scroller = new JScrollPane(tipText);
-		Dimension dim = scroller.getPreferredSize();
-		dim.height = 150;
-		scroller.setPreferredSize(dim);
-		add(BorderLayout.CENTER,scroller);
-
-		ActionHandler actionHandler = new ActionHandler();
-
-		Box buttons = new Box(BoxLayout.X_AXIS);
-
-		showNextTime = new JCheckBox(jEdit.getProperty("tip.show-next-time"),
-			jEdit.getBooleanProperty("tip.show"));
-		showNextTime.addActionListener(actionHandler);
-		buttons.add(showNextTime);
-
-		buttons.add(Box.createHorizontalStrut(6));
-		buttons.add(Box.createGlue());
-
-		nextTip = new JButton(jEdit.getProperty("tip.next-tip"));
-		nextTip.addActionListener(actionHandler);
-		buttons.add(nextTip);
-
-		buttons.add(Box.createHorizontalStrut(6));
-
-		close = new JButton(jEdit.getProperty("common.close"));
-		close.addActionListener(actionHandler);
-		buttons.add(close);
-		dialog.getRootPane().setDefaultButton(close);
-
-		dim = nextTip.getPreferredSize();
-		dim.width = Math.max(dim.width,close.getPreferredSize().width);
-		nextTip.setPreferredSize(dim);
-		close.setPreferredSize(dim);
-
-		add(BorderLayout.SOUTH,buttons);
-
-		addKeyListener(new KeyHandler());
-
-		nextTip();
+		super(view,jEdit.getProperty("tip.title"),false);
+		setContentPane(new TipPanel());
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		pack();
+		setLocationRelativeTo(view);
+		show();
 	}
 
-	// private members
-	private JDialog dialog;
-	private JCheckBox showNextTime;
-	private JButton nextTip, close;
-	private JEditorPane tipText;
-	private int currentTip = -1;
-
-	private void nextTip()
+	public void ok()
 	{
-		int count = Integer.parseInt(jEdit.getProperty("tip.count"));
-		// so that we don't see the same tip again if the user
-		// clicks 'Next Tip'
-		int tipToShow = currentTip;
-		while(tipToShow == currentTip)
-			tipToShow = Math.abs(new Random().nextInt()) % count;
-		try
-		{
-			tipText.setPage(getClass().getResource("tip" + tipToShow + ".html"));
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
+		dispose();
 	}
 
-	class ActionHandler implements ActionListener
+	public void cancel()
 	{
-		public void actionPerformed(ActionEvent evt)
+		dispose();
+	}
+
+	class TipPanel extends JPanel
+	{
+		TipPanel()
 		{
-			Object source = evt.getSource();
-			if(source == showNextTime)
+			super(new BorderLayout(12,12));
+			setBorder(new EmptyBorder(12,12,12,12));
+
+			JLabel label = new JLabel(jEdit.getProperty("tip.caption"));
+			label.setFont(new Font("SansSerif",Font.PLAIN,24));
+			label.setForeground(UIManager.getColor("Button.foreground"));
+			add(BorderLayout.NORTH,label);
+
+			tipText = new JEditorPane();
+			tipText.setEditable(false);
+			tipText.setContentType("text/html");
+			JScrollPane scroller = new JScrollPane(tipText);
+			Dimension dim = scroller.getPreferredSize();
+			dim.height = 150;
+			scroller.setPreferredSize(dim);
+			add(BorderLayout.CENTER,scroller);
+
+			ActionHandler actionHandler = new ActionHandler();
+
+			Box buttons = new Box(BoxLayout.X_AXIS);
+
+			showNextTime = new JCheckBox(jEdit.getProperty("tip.show-next-time"),
+				jEdit.getBooleanProperty("tip.show"));
+			showNextTime.addActionListener(actionHandler);
+			buttons.add(showNextTime);
+
+			buttons.add(Box.createHorizontalStrut(6));
+			buttons.add(Box.createGlue());
+
+			nextTip = new JButton(jEdit.getProperty("tip.next-tip"));
+			nextTip.addActionListener(actionHandler);
+			buttons.add(nextTip);
+
+			buttons.add(Box.createHorizontalStrut(6));
+
+			close = new JButton(jEdit.getProperty("common.close"));
+			close.addActionListener(actionHandler);
+			buttons.add(close);
+			TipOfTheDay.this.getRootPane().setDefaultButton(close);
+
+			dim = nextTip.getPreferredSize();
+			dim.width = Math.max(dim.width,close.getPreferredSize().width);
+			nextTip.setPreferredSize(dim);
+			close.setPreferredSize(dim);
+
+			add(BorderLayout.SOUTH,buttons);
+
+			nextTip();
+		}
+
+		// private members
+		private JCheckBox showNextTime;
+		private JButton nextTip, close;
+		private JEditorPane tipText;
+		private int currentTip = -1;
+
+		private void nextTip()
+		{
+			int count = Integer.parseInt(jEdit.getProperty("tip.count"));
+			// so that we don't see the same tip again if the user
+			// clicks 'Next Tip'
+			int tipToShow = currentTip;
+			while(tipToShow == currentTip)
+				tipToShow = Math.abs(new Random().nextInt()) % count;
+			try
 			{
-				jEdit.setBooleanProperty("tip.show",showNextTime
-					.isSelected());
+				tipText.setPage(getClass().getResource("tip" + tipToShow + ".html"));
 			}
-			else if(source == nextTip)
-				nextTip();
-			else if(source == close)
-				dialog.dispose();
-		}
-	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+			catch(Exception e)
 			{
-				dialog.dispose();
-				evt.consume();
+				Log.log(Log.ERROR,this,e);
+			}
+		}
+
+		class ActionHandler implements ActionListener
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				Object source = evt.getSource();
+				if(source == showNextTime)
+				{
+					jEdit.setBooleanProperty("tip.show",showNextTime
+						.isSelected());
+				}
+				else if(source == nextTip)
+					nextTip();
+				else if(source == close)
+					dispose();
 			}
 		}
 	}

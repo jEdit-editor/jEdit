@@ -45,9 +45,6 @@ public class BufferHistory
 
 	public static void load(File file)
 	{
-		Log.log(Log.MESSAGE,BufferHistory.class,"Loading buffer history"
-			+ " from " + file);
-
 		try
 		{
 			max = Integer.parseInt(jEdit.getProperty("history"));
@@ -85,9 +82,6 @@ public class BufferHistory
 
 	public static void save(File file)
 	{
-		Log.log(Log.MESSAGE,BufferHistory.class,"Saving buffer history"
-			+ " to " + file);
-
 		String lineSep = System.getProperty("line.separator");
 
 		try

@@ -889,13 +889,11 @@ macro-message.title=Macro Message
 # BeanShell stuff
 
 beanshell-error.title=BeanShell Execution Error
-beanshell-error.message=While executing:\n\
+beanshell-error.message=While executing "{0}",\n\
+	the following error was encountered:\n\
+	{1}\n\
 	\n\
-	{0}\n\
-	\n\
-	The following error was encountered:\n\
-	\n\
-	{1}
+	More information can be found in the activity log.
 
 beanshell-notfound.title=BeanShell Script Not Found
 beanshell-notfound.message=The BeanShell script {0} does not exist.
@@ -947,10 +945,10 @@ options.textarea.label=Text Area
 options.textarea.font=Text area font:
 options.textarea.lineHighlight=Current line highlighting
 options.textarea.bracketHighlight=Bracket highlighting
-options.textarea.eolMarkers=EOL markers
+options.textarea.eolMarkers=End of line markers
 options.textarea.wrapGuide=Wrap guide
 options.textarea.blinkCaret=Blinking caret
-options.textarea.blockCaret=Block-shaped caret
+options.textarea.blockCaret=Block caret
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.homeEnd="Smart" home/end key behaviour
 
@@ -1009,7 +1007,7 @@ options.editing.indentSize=Indent width:
 options.editing.maxLineLen=Wrap lines at column:
 options.editing.wordBreakChars=Break lines at these characters:
 options.editing.undoCount=Number of undos:
-options.editing.syntax=Highlight syntax tokens
+options.editing.syntax=Syntax highlighting
 options.editing.indentOnTab=Indent line when Tab key is pressed
 options.editing.indentOnEnter=Indent line when Enter key is pressed
 options.editing.noTabs=Soft (emulated with spaces) tabs

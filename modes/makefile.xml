@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 
-<!-- :mode=xml: -->
-
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <MODE NAME="makefile">
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="#" />
-		<PROPERTY NAME="filenameGlob" VALUE="*makefile" />
+		<PROPERTY NAME="filenameGlob" VALUE="*{makefile,.mak}" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->

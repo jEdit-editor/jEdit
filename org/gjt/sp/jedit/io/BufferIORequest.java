@@ -227,8 +227,6 @@ public class BufferIORequest extends WorkRequest
 			{
 			}
 		}
-
-		setAbortable(false);
 	}
 
 	/**

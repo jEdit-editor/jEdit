@@ -182,7 +182,7 @@ view.gutter.fontsize=10
 view.gutter.width=40
 
 # Gutter border width
-view.gutter.borderWidth=2
+view.gutter.borderWidth=3
 
 # Gutter collapsed/expanded by default
 view.gutter.collapsed=true

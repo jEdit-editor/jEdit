@@ -31,14 +31,6 @@ The lineInfo array and associated methods (markTokens(), insertLines(),
 deleteLines()) will be moved from the TokenMarker class to the Buffer
 class.
 
-* Simplify internals
-
-Remove the MenuItemModel, MenuModel, ToolBarModel classes. I once
-thought they would improve performance if multiple views were opened,
-but the improvement is very slight and complicates the code needlessly.
-In addition, opening multiple views is not as useful as it once was,
-because views can be split now.
-
 * Image preview
 
 When opening a buffer, if its filename matches a glob
@@ -86,18 +78,20 @@ A catalog file could look like so:
 
 So basically, a catalog is a manually-created mode cache.
 
-* More edit modes
-
-- M4
-- Troff
-- TeXinfo
-- Verilog (use VerilogTokenMarker in Jext as a reference)
-
 * Faster HyperSearch
 
 When searching a directory, instead of loading each file into memory
 entirely, HyperSearch will read them from an input stream. This will
 speed things up a lot.
+
+* More reliable saving
+
+When saving a file, it will first be saved to .<filename>.save, and
+only then renamed to <filename> if the save was successful.
+
+* More than one shortcut per command
+
+It should be possible to assign more than one shortcut to each command.
 
 * Minor changes
 
@@ -113,12 +107,12 @@ speed things up a lot.
 - When running with the Metal L&F, the docking area border will look
   like a split pane divider
 
-- Search and replace: don't use search.{search,replace}.value properties
+- Improve next/prev-paragraph commands -- if a line contains ONLY
+  whitespace, treat it as a paragraph separator
 
-- Search and replace: getFlag()/setFlag() methods replace manual
-  search.batch.value, search.keepDialog.value, etc property accesses
-
-- Improve next/prev-paragraph commands
+- Better support for read-only files: option for changing read only
+  flag in buffer options dialog, automatic detect when read only
+  status is changed on disk
 
 * UI changes
 
@@ -130,9 +124,5 @@ decided what keyboard shortcuts these commands will have yet.
 The Edit menu should be simplified. The 'Selection', 'Lines',
 'Paragraphs' and 'Brackets' submenus should be merged and reorganized
 into 'Text' and 'Source Code' submenus.
-
-* API changes
-
-Deprecation will be used to prevent breaking plugins directly.
 
 -- Slava Pestov <sp@gjt.org>

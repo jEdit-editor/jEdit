@@ -17,6 +17,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package installer;
+
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -181,7 +183,7 @@ public class SwingInstall extends JFrame
 			Box box = new Box(BoxLayout.Y_AXIS);
 
 			String _binDir = OperatingSystem.getOperatingSystem()
-				.getShortcutDirectory();
+				.getShortcutDirectory(appName,appVersion);
 
 			JPanel directoryPanel = new JPanel();
 			GridBagLayout layout = new GridBagLayout();

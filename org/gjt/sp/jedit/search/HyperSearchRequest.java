@@ -81,6 +81,9 @@ public class HyperSearchRequest extends WorkRequest
 				args[0] = e.toString();
 			VFSManager.error(view,"searcherror",args);
 		}
+		catch(WorkThread.Abort a)
+		{
+		}
 	}
 
 	// private members
@@ -92,6 +95,8 @@ public class HyperSearchRequest extends WorkRequest
 	private boolean doHyperSearch(Buffer buffer, SearchMatcher matcher)
 		throws Exception
 	{
+		setAbortable(false);
+
 		final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
 			buffer.getPath());
 
@@ -146,6 +151,8 @@ loop:			for(;;)
 				resultTreeModel.reload(resultTreeRoot);
 			}
 		});
+
+		setAbortable(true);
 
 		return true;
 	}

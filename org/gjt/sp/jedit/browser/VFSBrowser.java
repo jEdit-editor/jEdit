@@ -158,9 +158,9 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		String filter;
 		if(mode == BROWSER)
 		{
-			filter = jEdit.getProperty("vfs.browser.default-filter");
+			filter = jEdit.getProperty("vfs.browser.last-filter");
 			if(filter == null)
-				filter = jEdit.getProperty("vfs.browser.last-filter");
+				filter = jEdit.getProperty("vfs.browser.default-filter");
 		}
 		else if(index == -1)
 			filter = jEdit.getProperty("vfs.browser.default-filter");

@@ -21,7 +21,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -30,17 +29,19 @@ public class EditBuddyPlugin extends EBPlugin
 {
 	public void start()
 	{
-		String build = jEdit.getProperty("update-plugins.last-version");
+		// use plugin manager's last-version property
+		// for backwards compatibility
+		lastBuild = jEdit.getProperty("update-plugins.last-version");
 
 		// reset toolbar when upgrading from 2.6pre6 to
 		// avoid confusion
-		if(build != null && build.compareTo("02.06.06.00") <= 0)
+		if(lastBuild != null && lastBuild.compareTo("02.06.06.00") <= 0)
 			resetToolBar();
 	}
 
 	public void createMenuItems(Vector menuItems)
 	{
-		menuItems.addElement(GUIUtilities.loadMenuItem("show-tip"));
+		menuItems.addElement(GUIUtilities.loadMenu("edit-buddy"));
 	}
 
 	public void handleMessage(EBMessage msg)
@@ -50,94 +51,39 @@ public class EditBuddyPlugin extends EBPlugin
 			ViewUpdate vmsg = (ViewUpdate)msg;
 			if(vmsg.getWhat() == ViewUpdate.CREATED)
 			{
-				View view = vmsg.getView();
-
-				// use plugin manager's last-version property
-				// for backwards compatibility
-				String build = jEdit.getProperty("update-plugins.last-version");
-
-				String myBuild = jEdit.getBuild();
-				if(build == null)
+				final View view = vmsg.getView();
+				view.addWindowListener(new WindowAdapter()
 				{
-					doFirstTimeWizard(view);
-				}
-				else if(myBuild.compareTo(build) > 0)
-				{
-					doNewVersionWizard(view);
-				}
-				else if(myBuild.compareTo(build) < 0)
-				{
-					Log.log(Log.WARNING,EditBuddyPlugin.class,
-						"You downgraded from jEdit " + build
-						+ " to " + myBuild + "!");
-				}
-				else
-					showTipOfTheDay(view);
+					public void windowOpened(WindowEvent evt)
+					{
+						if(lastBuild == null)
+							welcome(view);
+						else if(jEdit.getBooleanProperty("tip.show"))
+							tipOfTheDay(view);
 
-				jEdit.setProperty("update-plugins.last-version",myBuild);
+						jEdit.setProperty("update-plugins.last-version",jEdit.getBuild());
 
-				EditBus.removeFromBus(this);
+						EditBus.removeFromBus(EditBuddyPlugin.this);
+						view.removeWindowListener(this);
+					}
+				});
 			}
 		}
 	}
 
-	public static void doFirstTimeWizard(View view)
+	public static void welcome(View view)
 	{
-		if(jEdit.getSettingsDirectory() == null)
-		{
-			Log.log(Log.WARNING,EditBuddyPlugin.class,
-				"Cannot run first-time wizard if -nosettings"
-				+ " switch is specified");
-			return;
-		}
-
-		FirstTimeWizard wizard = new FirstTimeWizard();
-		doWizard(view,"first-time",wizard);
+		new Welcome(view);
 	}
 
-	public static void doNewVersionWizard(View view)
+	public static void tipOfTheDay(View view)
 	{
-		if(jEdit.getSettingsDirectory() == null)
-		{
-			Log.log(Log.WARNING,EditBuddyPlugin.class,
-				"Cannot run new version wizard if -nosettings"
-				+ " switch is specified");
-			return;
-		}
-
-		NewVersionWizard wizard = new NewVersionWizard(
-			MiscUtilities.buildToVersion(jEdit.getProperty(
-			"update-plugins.last-version")),
-			MiscUtilities.buildToVersion(jEdit.getBuild()));;
-		doWizard(view,"new-version",wizard);
-	}
-
-	public static void showTipOfTheDay(final View view)
-	{
-		final JDialog dialog = new JDialog(view,jEdit.getProperty("tip.title"),false);
-		dialog.setContentPane(new TipOfTheDay(dialog));
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.pack();
-
-		if(view.isVisible())
-		{
-			dialog.setLocationRelativeTo(view);
-			dialog.show();
-		}
-		else
-		{
-			view.addWindowListener(new WindowAdapter()
-			{
-				public void windowOpened(WindowEvent evt)
-				{
-					dialog.setLocationRelativeTo(view);
-					dialog.show();
-				}
-			});
-		}
+		new TipOfTheDay(view);
 	}
 
 	// private members
+	private static String lastBuild;
+
 	private static void resetToolBar()
 	{
 		Log.log(Log.WARNING,EditBuddyPlugin.class,"Upgrading from jEdit"
@@ -152,32 +98,5 @@ public class EditBuddyPlugin extends EBPlugin
 		}
 		jEdit.resetProperty("view.toolbar");
 		GUIUtilities.invalidateMenuModels();
-	}
-
-	private static void doWizard(final View view, String title, Wizard wizard)
-	{
-		final JDialog dialog = new JDialog(view,jEdit.getProperty(
-			"edit-buddy." + title + ".title"),false);
-		wizard.setPreferredSize(new Dimension(640,480));
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setContentPane(wizard);
-		dialog.pack();
-
-		if(view.isVisible())
-		{
-			dialog.setLocationRelativeTo(view);
-			dialog.show();
-		}
-		else
-		{
-			view.addWindowListener(new WindowAdapter()
-			{
-				public void windowOpened(WindowEvent evt)
-				{
-					dialog.setLocationRelativeTo(view);
-					dialog.show();
-				}
-			});
-		}
 	}
 }

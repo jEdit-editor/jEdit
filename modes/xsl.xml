@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE MODE>
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <MODE NAME="xsl">
 	<PROPS>

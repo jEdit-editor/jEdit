@@ -37,14 +37,3 @@ do
 	sort $file > $file.tmp
 	mv $file.tmp $file
 done
-
-cat /dev/null > installer/file_list
-
-for file in installer/jedit-*
-do
-	echo FILESET_`basename $file` >> installer/file_list
-	cat $file >> installer/file_list
-done
-
-export CLASSPATH=$CLASSPATH:installer
-java Archive c installer/install.dat `cat installer/file_list` > /dev/null

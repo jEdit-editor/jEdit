@@ -17,6 +17,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package installer;
+
 import java.io.*;
 import java.util.Vector;
 
@@ -50,7 +52,7 @@ public class ConsoleInstall
 			installDir = _installDir;
 
 		String binDir = OperatingSystem.getOperatingSystem()
-			.getShortcutDirectory();
+			.getShortcutDirectory(appName,appVersion);
 
 		if(binDir != null)
 		{

@@ -12,19 +12,19 @@
 		<WHITESPACE>	</WHITESPACE>
 
 		<!-- $$...$$ -->
-		<SPAN TYPE="KEYWORD2" DELEGATE="MATH">
+		<SPAN TYPE="MARKUP" DELEGATE="MATH">
 			<BEGIN>$$</BEGIN>
 			<END>$$</END>
 		</SPAN>
 
 		<!-- $...$ -->
-		<SPAN TYPE="KEYWORD2" DELEGATE="MATH">
+		<SPAN TYPE="MARKUP" DELEGATE="MATH">
 			<BEGIN>$</BEGIN>
 			<END>$</END>
 		</SPAN>
 
 		<!-- \[...\] (LaTeX math mode) -->
-		<SPAN TYPE="KEYWORD2" DELEGATE="MATH">
+		<SPAN TYPE="MARKUP" DELEGATE="MATH">
 			<BEGIN>\[</BEGIN>
 			<END>\]</END>
 		</SPAN>
@@ -69,7 +69,7 @@
 		<SEQ TYPE="NULL">`</SEQ>
 	</RULES>
 
-	<RULES SET="MATH" DEFAULT="KEYWORD2">
+	<RULES SET="MATH" DEFAULT="MARKUP">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

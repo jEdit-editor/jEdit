@@ -69,14 +69,7 @@ public class HelpViewer extends JFrame
 	 */
 	public static void gotoURL(URL url)
 	{
-		if(helpViewer == null)
-			helpViewer = new HelpViewer(url);
-		else
-		{
-			helpViewer.toFront();
-			helpViewer.requestFocus();
-			helpViewer.gotoURL(url,true);
-		}
+		new HelpViewer(url);
 	}
 
 	/**
@@ -165,11 +158,15 @@ public class HelpViewer extends JFrame
 			viewer.setPage(url);
 			if(addToHistory)
 			{
-				history[historyPos++] = url;
-				if(history.length == historyPos)
+				history[historyPos] = url;
+				if(historyPos + 1 == history.length)
+				{
 					System.arraycopy(history,1,history,
-						0,history.length);
-				history[historyPos] = null;
+						0,history.length - 1);
+					history[historyPos] = null;
+				}
+				else
+					historyPos++;
 			}
 		}
 		catch(IOException io)
@@ -184,12 +181,9 @@ public class HelpViewer extends JFrame
 	{
 		GUIUtilities.saveGeometry(this,"helpviewer");
 		super.dispose();
-		helpViewer = null;
 	}
 
 	// private members
-	private static HelpViewer helpViewer;
-
 	private JButton back;
 	private JButton forward;
 	private JEditorPane viewer;

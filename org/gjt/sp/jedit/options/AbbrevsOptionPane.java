@@ -297,15 +297,15 @@ class AbbrevsModel extends AbstractTableModel
 
 			if(col == 0)
 			{
-				String abbrev1 = a1.abbrev;
-				String abbrev2 = a2.abbrev;
+				String abbrev1 = a1.abbrev.toLowerCase();
+				String abbrev2 = a2.abbrev.toLowerCase();
 
 				return abbrev1.compareTo(abbrev2);
 			}
 			else
 			{
-				String expand1 = a1.expand;
-				String expand2 = a2.expand;
+				String expand1 = a1.expand.toLowerCase();
+				String expand2 = a2.expand.toLowerCase();
 
 				return expand1.compareTo(expand2);
 			}
@@ -330,6 +330,9 @@ class Abbrev
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/12/14 01:01:57  sp
+ * Bug fixes, 2 new edit modes
+ *
  * Revision 1.7  2000/11/11 02:59:31  sp
  * FTP support moved out of the core into a plugin
  *

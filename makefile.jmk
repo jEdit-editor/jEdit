@@ -1,10 +1,9 @@
 # A makefile file for jEdit
-# Based on jmk makefile
 #
 # To recompile jEdit, start jmk in the root of the jEdit directory structure.
 #
 # jEdit buffer-local properties:
-# :indentSize=4:noTabs=yes:
+# :indentSize=4:noTabs=true:
 
 cmd_javac = "jikes" "-deprecation" "+D";
 #cmd_javac = "javac" "-g";
@@ -70,30 +69,17 @@ bsh_srcs = (subst ".java", ".class", (glob (join bsh_pkgs, "/*.java")));
 # All source directories
 pkgs = re_pkg bsh_pkgs jedit_pkgs "org/gjt/sp/jedit/icons";
 
+# Installer sources
+installer_srcs = (subst ".java", ".class", (glob "installer/*.java"));
+
 # All sources
-srcs = re_srcs bsh_srcs jedit_srcs;
+srcs = re_srcs bsh_srcs jedit_srcs installer_srcs;
 
 jar = "jedit.jar";
 
 "all": srcs;
 {
     exec cmd_jar "cmf0" jedit_mf jar (glob
-        (join pkgs, "/*.class")
-        (join pkgs, "/*.gif")
-        (join pkgs, "/*.jpg")
-        (join pkgs, "/*.props")
-        (join pkgs, "/*.bsh")
-        "org/gjt/sp/jedit/default.abbrevs"
-        "org/gjt/sp/jedit/actions.xml"
-        "org/gjt/sp/jedit/actions.dtd"
-	"bsh/lib/defaultImports"
-	"bsh/lib/javaPackages");
-}
-
-"everything":;
-{
-    exec cmd_javac (glob (join jedit_pkgs, "/*.java"));
-    exec cmd_jar "cmf0" jedit_mf "jedit.jar" (glob
         (join pkgs, "/*.class")
         (join pkgs, "/*.gif")
         (join pkgs, "/*.jpg")

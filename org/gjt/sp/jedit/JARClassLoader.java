@@ -148,6 +148,15 @@ public class JARClassLoader extends ClassLoader
 		zipFile = null;
 	}
 
+	/**
+	 * Returns the ZIP file associated with this class loader.
+	 * @since jEdit 3.0final
+	 */
+	public ZipFile getZipFile()
+	{
+		return zipFile;
+	}
+
 	// package-private members
 	void loadAllPlugins()
 	{

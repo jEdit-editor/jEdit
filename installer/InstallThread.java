@@ -17,6 +17,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package installer;
+
 import java.io.*;
 import java.util.Vector;
 
@@ -51,32 +53,9 @@ public class InstallThread extends Thread
 
 		try
 		{
-			Archive archive = new Archive(getClass()
-				.getResourceAsStream("/install.dat"));
-			String name;
-			boolean write = false;
-			while((name = archive.nextEntry()) != null)
+			for(int i = 0; i < components.size(); i++)
 			{
-				if(name.startsWith("FILESET_"))
-				{
-					if(components.indexOf(name.substring(8)) != -1)
-						write = true;
-					else
-						write = false;
-				}
-				else
-				{
-					if(write)
-					{
-						String outfile = installDir
-							+ File.separatorChar
-							+ name.replace('/',
-							File.separatorChar);
-						copy(archive.readEntry(),outfile);
-					}
-					else
-						archive.skipEntry();
-				}
+				installComponent((String)components.elementAt(i));
 			}
 
 			// create it in case it doesn't already exist
@@ -104,6 +83,27 @@ public class InstallThread extends Thread
 	private int size;
 	private Vector components;
 	private byte[] buf;
+
+	private void installComponent(String name) throws IOException
+	{
+		BufferedReader fileList = new BufferedReader(
+			new InputStreamReader(getClass()
+			.getResourceAsStream(name)));
+
+		String fileName;
+		while((fileName = fileList.readLine()) != null)
+		{
+			String outfile = installDir + File.separatorChar
+				+ fileName.replace('/',File.separatorChar);
+
+			InputStream in = new BufferedInputStream(
+				getClass().getResourceAsStream("/" + fileName));
+			copy(in,outfile);
+			in.close();
+		}
+
+		fileList.close();
+	}
 
 	private void copy(InputStream in, String outfile) throws IOException
 	{

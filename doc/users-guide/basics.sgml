@@ -40,10 +40,6 @@
   <indexterm><primary>Windows</></indexterm>
   <indexterm><primary>Unix</></indexterm>
   <indexterm><primary>splash screen</></indexterm>
-  <indexterm><primary>first-time wizard</></indexterm>
-  <indexterm><primary>upgrade wizard</></indexterm>
-  <indexterm><primary>firewall</></indexterm>
-  <indexterm><primary>plugins</></indexterm>
   <indexterm><primary>edit server</></indexterm>
   <para>
    Exactly how jEdit is started depends on the operating system;
@@ -59,7 +55,7 @@
    transferred to the running copy, and a second instance is not loaded.
    This saves time and memory if jEdit is started multiple times.
    Communication between instances of jEdit is implemented using
-   TCP/IP sockets; the initial instance is known as the
+   UDP/IP sockets; the initial instance is known as the
    <firstterm>server</>, and subsequent invocations are known as
    <firstterm>clients</>.
   </para>
@@ -76,6 +72,21 @@
    For more information about command line switches that control the
    server feature, see <xref linkend=cli-usage>.
   </para>
+  <sidebar><title>The edit server and security</>
+   <para>
+    Not only does the server pick a random UDP port number on startup,
+    it also requires that clients provide an <firstterm>authorization
+    key</>; a randomly-generated number only accessable to
+    processes running on the local machine.
+    So not only will <quote>bad guys</> have to guess a 64-bit integer,
+    they will need to get it right on the first try; the edit server
+    shuts itself off upon receiving an invalid packet.
+   </para>
+   <para>
+    In environments that demand absolute security, the edit server can be
+    disabled by specifying the <command>-noserver</> command line switch.
+   </para>
+  </sidebar>
   <!-- <figure><title>The jEdit splash screen</>
    <graphic scale=50 fileref=window-splash></>
   </figure> -->

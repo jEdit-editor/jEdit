@@ -163,41 +163,56 @@ public class jEdit
 
 		if(portFile != null && new File(portFile).exists())
 		{
-			int port, key;
+			int port;
+			String key;
 			try
 			{
 				BufferedReader in = new BufferedReader(new FileReader(portFile));
 				port = Integer.parseInt(in.readLine());
-				key = Integer.parseInt(in.readLine());
+				key = in.readLine();
 				in.close();
 
-				Socket socket = new Socket(InetAddress.getLocalHost(),port);
-				Writer out = new OutputStreamWriter(socket.getOutputStream());
-				out.write(String.valueOf(key));
-				out.write('\n');
+				StringBuffer buf = new StringBuffer();
+				buf.append(key);
+				buf.append('\n');
 
 				if(!defaultSession)
 				{
 					if(session != null)
-						out.write("session=" + session + "\n");
+						buf.append("session=" + session + "\n");
 					else
-						out.write("nosession\n");
+						buf.append("nosession\n");
 				}
 				if(newView)
-					out.write("newview\n");
-				out.write("parent=" + userDir + "\n");
-				out.write("--\n");
+					buf.append("newview\n");
+				buf.append("parent=" + userDir + "\n");
+				buf.append("--\n");
 
 				for(int i = 0; i < args.length; i++)
 				{
 					if(args[i] != null)
 					{
-						out.write(args[i]);
-						out.write('\n');
+						buf.append(args[i]);
+						buf.append('\n');
 					}
 				}
 
-				out.close();
+				byte[] bytes = buf.toString().getBytes("UTF8");
+				DatagramPacket packet = new DatagramPacket(
+					bytes,bytes.length,
+					InetAddress.getLocalHost(),
+					port);
+				DatagramSocket socket = new DatagramSocket();
+				socket.send(packet);
+
+				// wait for an ACK
+				packet = new DatagramPacket(new byte[0],0);
+
+				// wait up to 1 sec for other instance to
+				// respond.
+				socket.setSoTimeout(1000);
+				socket.receive(packet);
+				socket.close();
 
 				System.exit(0);
 			}

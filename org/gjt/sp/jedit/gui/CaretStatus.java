@@ -67,7 +67,7 @@ public class CaretStatus extends JComponent
 	{
 		FontMetrics fm = getToolkit().getFontMetrics(getFont());
 
-		return new Dimension(fm.stringWidth("col 999 : line 9999 / 9999"),
+		return new Dimension(fm.stringWidth("col 999 : line 9999 / 9999") + 4,
 			fm.getHeight());
 	}
 

@@ -17,6 +17,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package installer;
+
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.event.*;
@@ -63,7 +65,6 @@ implements ActionListener, Progress
 		setBounds((screen.width - size.width) / 2,
 			(screen.height - size.height) / 2,
 			size.width,size.height);
-		setResizable(false);
 		show();
 	}
 

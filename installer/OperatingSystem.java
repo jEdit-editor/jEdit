@@ -1,6 +1,6 @@
 /*
  * OperatingSystem.java
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +17,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package installer;
+
 import java.io.*;
 
 /*
@@ -27,7 +29,10 @@ public abstract class OperatingSystem
 {
 	public abstract String getInstallDirectory(String name, String version);
 
-	public abstract String getShortcutDirectory();
+	public String getShortcutDirectory(String name, String version)
+	{
+		return null;
+	}
 
 	public void createScript(Install installer, String installDir,
 		String binDir, String name) throws IOException {}
@@ -65,11 +70,6 @@ public abstract class OperatingSystem
 		{
 			return "/Applications/" + name + " " + version;
 		}
-
-		public String getShortcutDirectory()
-		{
-			return null;
-		}
 	}
 
 	public static class Unix extends OperatingSystem
@@ -80,7 +80,7 @@ public abstract class OperatingSystem
 				+ "-" + version;
 		}
 
-		public String getShortcutDirectory()
+		public String getShortcutDirectory(String name, String version)
 		{
 			return "/usr/local/bin";
 		}
@@ -106,7 +106,7 @@ public abstract class OperatingSystem
 				+ installDir + File.separator
 				+ name.toLowerCase() + ".jar\" "
 				+ installer.getProperty("app.main.class")
-				+ " $@ &\n");
+				+ " $@\n");
 			out.close();
 
 			// Make it executable
@@ -148,9 +148,27 @@ public abstract class OperatingSystem
 			return "C:\\Program Files\\" + name + " " + version;
 		}
 
-		public String getShortcutDirectory()
+		public String getShortcutDirectory(String name, String version)
 		{
-			return null;
+			return "C:\\Program Files\\" + name + " " + version;
+		}
+
+		public void createScript(Install installer,
+			String installDir, String binDir, String name)
+			throws IOException
+		{
+			// create app start script
+			String script = binDir + File.separatorChar
+				+ name + ".bat";
+
+			FileWriter out = new FileWriter(script);
+			out.write("@" + System.getProperty("java.home")
+				+ "\\bin\\java -classpath \"%CLASSPATH%:"
+				+ installDir + File.separator
+				+ name.toLowerCase() + ".jar\" "
+				+ installer.getProperty("app.main.class")
+				+ " %1 %2 %3 %4 %5 %6 %7 %8 %9\r\n");
+			out.close();
 		}
 	}
 
@@ -160,11 +178,6 @@ public abstract class OperatingSystem
 		{
 			return name + " " + version;
 		}
-
-		public String getShortcutDirectory()
-		{
-			return null;
-		}
 	}
 
 	public static class HalfAnOS extends OperatingSystem
@@ -172,11 +185,6 @@ public abstract class OperatingSystem
 		public String getInstallDirectory(String name, String version)
 		{
 			return "C:\\" + name + " " + version;
-		}
-
-		public String getShortcutDirectory()
-		{
-			return null;
 		}
 	}
 

@@ -17,10 +17,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
- /*
-  * An interface for reporting installation progress. ConsoleProgress and
-  * SwingProcess are the two existing implementations.
-  */
+package installer;
+
+/*
+ * An interface for reporting installation progress. ConsoleProgress and
+ * SwingProcess are the two existing implementations.
+ */
 public interface Progress
 {
 	public void showMessage(String msg);

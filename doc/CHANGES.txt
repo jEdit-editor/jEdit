@@ -2,6 +2,11 @@ JEDIT 3.0 VERSION HISTORY
 
 * Version 3.0pre5
 
++ New Features
+
+- RPM spec file syntax highlighting
+- Texinfo syntax highlighting
+
 + Enhancements
 
 - The default filter in the 'Open File' and 'Save As' dialog boxes is
@@ -16,11 +21,15 @@ JEDIT 3.0 VERSION HISTORY
 - Plugins are no longer loaded if plugins they depend on could not be
   loaded
 - jEdit.bat file is created on Windows again
+- The edit server reimplemented to use UDP packets, instead of TCP/IP.
+  This makes it virtually immune to DoS attacks, and simplifies the
+  code.
 
 + Neutral
 
 - 'New Version' wizard removed
 - 'First Time' wizard replaced with a 'Welcome to jEdit' window
+- Main class of installer changed to 'installer.Install'
 
 + Bug Fixes
 
@@ -49,10 +58,19 @@ JEDIT 3.0 VERSION HISTORY
 - Workaround for bug found in some Java versions where pressing 'Enter'
   in the buffer options dialog box while the focus was inside an
   editable combo box didn't pick up the edit
-
-+ API Changes
-
-- BeanShell.getInterpreter() method added
+- File system browser always opened with the default filter
+- When selecting to the end of the document, the text area will scroll
+  by one line less than necessary
+- 'Old style' installer used again, with one file per ZIP entry. The
+  'archive' scheme, where everything was stored in an 'install.dat'
+  file, was faster and more compact but it caused problems for some
+  people
+- Fixed minor horizontal scrolling flaw
+- Search bar history wouldn't be set up correctly if the search bar
+  commands in the 'Search' menu were used
+- Aborting HyperSearches didn't work
+- Visiting more than 25 pages in one help viewer window would throw
+  exceptions (but the help viewer woulds till work)
 
 * Version 3.0pre4
 

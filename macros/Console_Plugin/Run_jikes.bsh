@@ -19,6 +19,9 @@ runCommandInConsole(command)
 	// Obtain the console instance
 	console = view.getDockableWindowManager().getDockableWindow("console");
 
+	// Ensure we are using the console shell
+	console.setShell("Console");
+
 	// Call its run() method
 	console.run(command);
 }

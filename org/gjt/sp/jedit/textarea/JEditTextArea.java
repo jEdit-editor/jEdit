@@ -444,8 +444,8 @@ public class JEditTextArea extends JComponent
 			// center {markLine,caretLine} on screen
 			firstLine = markLine - (visibleLines
 				- caretLine + markLine) / 2;
-			firstLine = Math.max(caretLine - visibleLines + electricScroll,firstLine);
-			firstLine = Math.min(caretLine /* + visibleLines */ - electricScroll,firstLine);
+ 			firstLine = Math.max(caretLine - visibleLines + electricScroll + 1,firstLine);
+ 			firstLine = Math.min(caretLine /* + visibleLines */ - electricScroll,firstLine);
 
 			changed = true;
 		}
@@ -458,9 +458,9 @@ public class JEditTextArea extends JComponent
 		else if(caretLine >= _lastLine)
 		{
 			firstLine = (caretLine - visibleLines) + electricScroll + 1;
-			if(_firstLine >= getLineCount() - visibleLines)
+			if(firstLine >= getLineCount() - visibleLines)
 				firstLine = getLineCount() - visibleLines;
-			if(firstLine < 0)
+			else if(firstLine < 0)
 				firstLine = 0;
 
 			changed = true;
@@ -3303,7 +3303,8 @@ forward_scan:		do
 		{
 			maxHorizontalScrollWidth = _maxHorizontalScrollWidth;
 			horizontal.setValues(-horizontalOffset,painter.getWidth(),
-				0,maxHorizontalScrollWidth);
+				0,maxHorizontalScrollWidth
+				+ painter.getFontMetrics().charWidth('w'));
 		}
 	}
 

@@ -1,58 +1,19 @@
 ### plugin properties
 plugin.EditBuddyPlugin.name=Edit Buddy
 plugin.EditBuddyPlugin.author=Slava Pestov
-plugin.EditBuddyPlugin.version=0.2
+plugin.EditBuddyPlugin.version=0.3
 plugin.EditBuddyPlugin.docs=EditBuddy.html
 plugin.EditBuddyPlugin.depend.0=jedit 02.07.03.00
-plugin.EditBuddyPlugin.depend.1=plugin PluginManagerPlugin 0.5.6
 
-### common wizard strings
-edit-buddy.prev=Previous
-edit-buddy.next=Next
-edit-buddy.finish=Finish
+### First time dialog box
+welcome.title=Welcome to jEdit
+welcome.caption=Thank you for installing jEdit!
 
-### first-time wizard
-edit-buddy.first-time.title=Running jEdit for the first time
-edit-buddy.first-time.caption=jEdit initial setup wizard
-
-edit-buddy.firewall-config.label=Configure firewall settings
-edit-buddy.firewall-config.code=new OptionPaneDialog(new FirewallOptionPane());
-edit-buddy.firewall-config.dependsOnPlugin=FirewallPlugin
-
-edit-buddy.install-plugins.label=Install some plugins
-edit-buddy.install-plugins.code=PluginManagerPlugin.installPlugins(null);
-edit-buddy.install-plugins.dependsOnPlugin=PluginManagerPlugin
-
-### new-version wizard
-edit-buddy.new-version.title=New jEdit version installed
-edit-buddy.new-version.caption=jEdit update wizard
-edit-buddy.new-version.text=<h2>You have upgraded from jEdit {0} to {1}.</h2>\n\
-	\n\
-	Because the plugin API changes over time, older plugins might have\n\
-	problems running under newer jEdit releases. Therefore, it is a good\n\
-	idea to update your plugins to their latest versions after installing\n\
-	a new version of jEdit.<p>\n\
-	\n\
-	This wizard will offer to update your plugins, and give pointers to\n\
-	what is new in this jEdit release.\n\
-	<ul>\n\
-	<li>The <b>Next</b> button goes to the next page of the wizard\n\
-	<li>The <b>Previous</b> button goes back\n\
-	<li>The <b>Cancel</b> button closes the wizard\n\
-	</ul>
-
-edit-buddy.update-plugins.label=Update Plugins
-edit-buddy.update-plugins.code=PluginManagerPlugin.updatePlugins(null);
-edit-buddy.update-plugins.dependsOnPlugin=PluginManagerPlugin
-
-edit-buddy.view-changes.label=Detailed Change Log
-edit-buddy.view-changes.code=HelpViewer.gotoFile("CHANGES.txt");
-
-edit-buddy.view-news.label=Overview of Changes
-edit-buddy.view-news.code=HelpViewer.gotoFile("NEWS.txt");
-
-### Menu item label
+### Menu bar stuff
+edit-buddy=show-tip show-welcome
+edit-buddy.label=EditBuddy
 show-tip.label=Tip of the Day
+show-welcome.label=Welcome Message
 
 ### Show on startup?
 tip.show=true
@@ -64,4 +25,4 @@ tip.show-next-time=Show tips on jEdit startup
 tip.next-tip=Next Tip
 
 ### Number of tips
-tip.count=28
+tip.count=29

@@ -22,8 +22,7 @@ package org.gjt.sp.jedit;
 import javax.swing.SwingUtilities;
 import java.io.*;
 import java.net.*;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -40,32 +39,35 @@ class EditServer extends Thread
 
 		try
 		{
-			socket = new ServerSocket(0); // Bind to any port
-			authKey = Math.abs(new Random().nextInt());
+			socket = new DatagramSocket(); // Bind to any port
+			authKey = String.valueOf(Math.abs(new Random().nextInt()));
 			int port = socket.getLocalPort();
 
 			FileWriter out = new FileWriter(portFile);
 			out.write(String.valueOf(port));
 			out.write("\n");
-			out.write(String.valueOf(authKey));
+			out.write(authKey);
 			out.write("\n");
 			out.close();
 
-			Log.log(Log.DEBUG,this,"jEdit server started on port "
+			Log.log(Log.DEBUG,this,"UDP server started on port "
 				+ socket.getLocalPort());
 			Log.log(Log.DEBUG,this,"Authorization key is "
 				+ authKey);
 
+			// is 1k enough?
+			buf = new byte[1024];
+
 			ok = true;
 		}
-		catch(IOException io)
+		catch(Exception e)
 		{
 			/* on some Windows versions, connections to localhost
 			 * fail if the network is not running. To avoid
 			 * confusing newbies with weird error messages, log
 			 * errors that occur while starting the server
 			 * as NOTICE, not ERROR */
-			Log.log(Log.NOTICE,this,io);
+			Log.log(Log.NOTICE,this,e);
 		}
 	}
 
@@ -80,59 +82,71 @@ class EditServer extends Thread
 		{
 			for(;;)
 			{
-				Socket client = socket.accept();
-				Log.log(Log.MESSAGE,this,client + ": connected");
+				DatagramPacket packet = new DatagramPacket(buf,buf.length);
+				socket.receive(packet);
 
-				BufferedReader in = new BufferedReader(
-					new InputStreamReader(client.getInputStream()));
+				String host = packet.getAddress().getHostName();
+				Log.log(Log.MESSAGE,this,"Got UDP packet from " + host + ":");
+				String received = new String(buf,0,packet.getLength(),"UTF8");
+				Log.log(Log.DEBUG,this,received);
 
-				try
+				StringTokenizer st = new StringTokenizer(received,"\n");
+
+				if(!st.hasMoreTokens())
 				{
-					int key = Integer.parseInt(in.readLine());
-					if(key != authKey)
-					{
-						Log.log(Log.ERROR,this,
-							client + ": wrong"
-							+ " authorization key");
-						in.close();
-						client.close();
-						continue;
-					}
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,
-							client + ": invalid"
-							+ " authorization key");
-					in.close();
-					client.close();
-					continue;
+					Log.log(Log.ERROR,this,"Received empty packet"
+						+ " from " + host);
+					Log.log(Log.ERROR,this,"Stopping server to"
+						+ " prevent further attacks");
+					stopServer();
+					return;
 				}
 
-				Log.log(Log.DEBUG,this,client + ": authenticated"
+				String key = st.nextToken();
+				if(!key.equals(authKey))
+				{
+					Log.log(Log.ERROR,this,"Received incorrect"
+						+ " authorization key " + key
+						+ " from " + host);
+					Log.log(Log.ERROR,this,"Stopping server to"
+						+ " prevent further attacks");
+					stopServer();
+					return;
+				}
+
+				Log.log(Log.DEBUG,this,host + ": authenticated"
 					+ " successfully");
-				handleClient(client,in);
 
-				client.close();
+				// send ACK packet to let the client know
+				// that we picked it up
+				packet = new DatagramPacket(new byte[0],0,
+					packet.getAddress(),packet.getPort());
+				socket.send(packet);
+
+				handleClient(host,st);
 			}
 		}
-		catch(IOException io)
+		catch(Exception e)
 		{
-			Log.log(Log.ERROR,this,io);
+			Log.log(Log.ERROR,this,e);
+			stopServer();
 		}
 	}
 
 	void stopServer()
 	{
 		stop();
+		socket.close();
 		new File(portFile).delete();
 	}
 
 	// private members
 	private String portFile;
-	private ServerSocket socket;
-	private int authKey;
+	private DatagramSocket socket;
+	private String authKey;
 	private boolean ok;
+
+	private byte[] buf;
 
 	// Thread-safe wrapper for jEdit.newView()
 	private void TSnewView(final Buffer buffer)
@@ -219,8 +233,8 @@ class EditServer extends Thread
 		});
 	}
 
-	private void handleClient(Socket client, BufferedReader in)
-		throws IOException
+	private void handleClient(String host, StringTokenizer st)
+		throws Exception
 	{
 		boolean readOnly = false;
 		boolean newView = false;
@@ -232,9 +246,10 @@ class EditServer extends Thread
 		View view = null;
 		Vector args = new Vector();
 
-		String command;
-		while((command = in.readLine()) != null)
+		while(st.hasMoreTokens())
 		{
+			String command = st.nextToken();
+
 			if(endOpts)
 				args.addElement(command);
 			else
@@ -252,9 +267,14 @@ class EditServer extends Thread
 				else if(command.startsWith("nosession"))
 					session = null;
 				else
-					Log.log(Log.ERROR,this,client
-						+ ": unknown server"
-						+ " command: " + command);
+				{
+					Log.log(Log.ERROR,this,"Got unknown"
+						+ " command " + command
+						+ " from " + host);
+					Log.log(Log.ERROR,this,"Stopping server to"
+						+ " prevent further attacks");
+					stopServer();
+				}
 			}
 		}
 
@@ -293,58 +313,3 @@ class EditServer extends Thread
 			TSnewView(buffer);
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.18  2000/11/29 06:53:00  sp
- * DSSSL syntax highlighting, documentation updates, bug fixes
- *
- * Revision 1.17  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.16  2000/09/06 04:39:47  sp
- * bug fixes
- *
- * Revision 1.15  2000/08/20 07:29:30  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.14  2000/06/12 02:43:29  sp
- * pre6 almost ready
- *
- * Revision 1.13  2000/04/29 03:07:37  sp
- * Indentation rules updated, VFS displays wait cursor properly, background mode
- *
- * Revision 1.12  2000/04/27 08:32:57  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.11  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.10  2000/04/21 05:32:20  sp
- * Focus tweak
- *
- * Revision 1.9  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
- *
- * Revision 1.8  2000/02/27 00:39:50  sp
- * Misc changes
- *
- * Revision 1.7  2000/02/20 03:14:13  sp
- * jEdit.getBrokenPlugins() method
- *
- * Revision 1.6  2000/02/03 04:53:48  sp
- * Bug fixes and small updates
- *
- * Revision 1.5  2000/01/21 00:35:29  sp
- * Various updates
- *
- * Revision 1.4  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.3  1999/10/30 02:44:18  sp
- * Miscallaneous stuffs
- *
- */

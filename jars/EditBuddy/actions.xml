@@ -5,7 +5,12 @@
 <ACTIONS>
 	<ACTION NAME="show-tip">
 		<CODE>
-			EditBuddyPlugin.showTipOfTheDay(view);
+			EditBuddyPlugin.tipOfTheDay(view);
+		</CODE>
+	</ACTION>
+	<ACTION NAME="show-welcome">
+		<CODE>
+			EditBuddyPlugin.welcome(view);
 		</CODE>
 	</ACTION>
 </ACTIONS>

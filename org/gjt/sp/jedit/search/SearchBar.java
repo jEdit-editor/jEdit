@@ -45,7 +45,7 @@ public class SearchBar extends JPanel
 		add(label,BorderLayout.WEST);
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
-		box.add(find = new HistoryTextField("find",false,false));
+		box.add(find = new HistoryTextField("find"));
 		find.setFont(plainFont);
 		Dimension min = find.getMinimumSize();
 		min.width = Integer.MAX_VALUE;
@@ -89,16 +89,18 @@ public class SearchBar extends JPanel
 		return find;
 	}
 
-	public void setHyperSearch(boolean hyperSearch)
-	{
-		this.hyperSearch.setSelected(hyperSearch);
-	}
-
 	public void update()
 	{
-		find.setModel(hyperSearch.isSelected() ? "find" : null);
 		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 		regexp.setSelected(SearchAndReplace.getRegexp());
+		setHyperSearch(hyperSearch.isSelected());
+	}
+
+	public void setHyperSearch(boolean hyperSearch)
+	{
+		jEdit.setBooleanProperty("search.hypersearch.toggle",hyperSearch);
+		this.hyperSearch.setSelected(hyperSearch);
+		find.setModel(hyperSearch ? "find" : null);
 	}
 
 	// private members
@@ -153,7 +155,6 @@ public class SearchBar extends JPanel
 				}
 				else if(hyperSearch.isSelected())
 				{
-					find.addCurrentToHistory();
 					find.setText(null);
 					SearchAndReplace.setSearchString(text);
 					SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
@@ -177,11 +178,7 @@ public class SearchBar extends JPanel
 				}
 			}
 			else if(evt.getSource() == hyperSearch)
-			{
-				jEdit.setBooleanProperty("search.hypersearch.toggle",
-					hyperSearch.isSelected());
 				update();
-			}
 			else if(evt.getSource() == ignoreCase)
 			{
 				SearchAndReplace.setIgnoreCase(ignoreCase
@@ -218,7 +215,7 @@ public class SearchBar extends JPanel
 			if(!hyperSearch.isSelected())
 			{
 				String text = find.getText();
-				if(text != null && text.length() != 0)
+				if(text.length() != 0)
 				{
 					// don't beep if not found.
 					// subsequent beeps are very
