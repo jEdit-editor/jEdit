@@ -243,7 +243,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		int lineNumberDigits = (int)Math.ceil(Math.log(
 			lineCount) / Math.log(10));
 
-		TextRenderer renderer = TextRenderer.createTextRenderer();
+		TextRenderer renderer = TextRenderer.createPrintTextRenderer();
 
 		renderer.configure(false,false);
 
@@ -1792,11 +1792,12 @@ public class Buffer extends PlainDocument implements EBComponent
 			if(id == Token.END)
 				break;
 
-			Color bg = null;
+			Color tokenForeground;
+			Color tokenBackground = null;
 			if(id == Token.NULL)
 			{
-				gfx.setColor(foreground);
 				gfx.setFont(defaultFont);
+				tokenForeground = foreground;
 			}
 			else
 			{
@@ -1807,15 +1808,16 @@ public class Buffer extends PlainDocument implements EBComponent
 
 				if(color)
 				{
-					bg = styles[id].getBackgroundColor();
-					gfx.setColor(styles[id].getForegroundColor());
+					tokenBackground = styles[id].getBackgroundColor();
+					tokenForeground = styles[id].getForegroundColor();
 				}
 				else
-					gfx.setColor(foreground);
+					tokenForeground = foreground;
 			}
 
 			int len = tokens.length;
-			x = renderer.drawChars(text,off,len,gfx,x,y,expander,bg);
+			x = renderer.drawChars(text,off,len,gfx,x,y,expander,
+				tokenForeground,tokenBackground,background);
 
 			off += len;
 
@@ -3070,8 +3072,8 @@ loop:				for(int i = 0; i < count; i++)
 
 	private void clearProperties()
 	{
-		String lineSeparator = (String)getProperty(LINESEP);
-		String encoding = (String)getProperty(ENCODING);
+		Object lineSeparator = getProperty(LINESEP);
+		Object encoding = getProperty(ENCODING);
 		((BufferProps)getDocumentProperties()).clear();
 		putProperty("i18n",Boolean.FALSE);
 		if(lineSeparator != null)

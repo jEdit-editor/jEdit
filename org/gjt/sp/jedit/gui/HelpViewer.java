@@ -307,6 +307,10 @@ public class HelpViewer extends JFrame implements EBComponent
 
 	private void loadUserGuideTOC(DefaultMutableTreeNode root)
 	{
+		URL resource = getClass().getResource("/doc/users-guide/toc.xml");
+		if(resource == null)
+			return;
+
 		TOCHandler h = new TOCHandler(root);
 		XmlParser parser = new XmlParser();
 		parser.setHandler(h);
@@ -316,8 +320,7 @@ public class HelpViewer extends JFrame implements EBComponent
 			// use a URL here because with Web Start version,
 			// toc.xml is not a local file
 			parser.parse(null, null, new InputStreamReader(
-				getClass().getResource("/doc/users-guide/toc.xml")
-				.openStream()));
+				resource.openStream()));
 		}
 		catch(XmlException xe)
 		{

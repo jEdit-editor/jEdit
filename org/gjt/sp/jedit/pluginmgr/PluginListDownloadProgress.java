@@ -76,13 +76,17 @@ class PluginListDownloadProgress extends JDialog
 			try
 			{
 				list = new PluginList();
+				dispose();
 			}
 			catch(InterruptedIOException iio)
 			{
 				// do nothing, user clicked Stop
+				dispose();
 			}
 			catch(XmlException xe)
 			{
+				dispose();
+
 				int line = xe.getLine();
 				String path = jEdit.getProperty("plugin-manager.url");
 				String message = xe.getMessage();
@@ -94,19 +98,13 @@ class PluginListDownloadProgress extends JDialog
 			}
 			catch(Exception e)
 			{
+				dispose();
+
 				Log.log(Log.ERROR,this,e);
 				String[] pp = { e.toString() };
 				GUIUtilities.error(PluginListDownloadProgress.this,
 					"plugin-list.ioerror",pp);
 			}
-
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					PluginListDownloadProgress.this.dispose();
-				}
-			});
 		}
 	}
 

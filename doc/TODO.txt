@@ -10,6 +10,7 @@ TO DO
 - FTP plugin: improve it in general before 3.2
 - next time i'm making an RPM, fix the shell script
 - virtual line map: how can it get smaller than virtualLineCount?
+- cvs remove Console_Plugin macros
 
 + bugs:
 

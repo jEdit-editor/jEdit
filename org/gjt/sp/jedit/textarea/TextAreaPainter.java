@@ -586,7 +586,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			x = buffer.paintSyntaxLine(physicalLine,gfx,x,baseLine,
 				this,true,true,defaultFont,defaultColor,
-				getBackground(),styles,
+				(lineHighlight
+				&& textArea.getSelectionCount() == 0
+				&& physicalLine == textArea.getCaretLine()
+				? lineHighlightColor
+				: getBackground()),styles,
 				textArea.getTextRenderer());
 
 			if(eolMarkers)

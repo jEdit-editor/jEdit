@@ -193,6 +193,9 @@ Andre Kaplan:
 Artur Biesiadowski:
 	- Eiffel syntax highlighting
 
+Ben Sarsgard:
+	- Improved PHP syntax highlighting
+
 Bruno Tatibouet:
 	- B formal method syntax highlighting
 

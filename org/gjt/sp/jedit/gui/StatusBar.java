@@ -131,7 +131,7 @@ public class StatusBar extends JPanel
 			}
 		});
 
-		tempTimer.setInitialDelay(2000);
+		tempTimer.setInitialDelay(10000);
 		tempTimer.setRepeats(false);
 		tempTimer.start();
 	}

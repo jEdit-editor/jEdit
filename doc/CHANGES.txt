@@ -1,5 +1,23 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2final
+
++ Enhancements
+
+- Improved PHP syntax highlighting (Ben Sarsgard)
+- Minor change to plugin manager error reporting
+- Console_Plugin macros removed, Console 3.0 incorporates all relevant
+  features
+- Transient status messages (replace all results, for example) are now
+  shown for 10 seconds, instead of 2
+
++ Bug Fixes
+
+- Help viewer will no longer print an exception if the toc.xml file
+  could not be found
+- Token backgrounds were not being drawn
+- Printing didn't work on Java 2
+
 * Version 3.2pre6
 
 + New Features

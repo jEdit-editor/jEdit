@@ -58,15 +58,21 @@ public abstract class TextRenderer
 			return new TextRendererAWT();
 	}
 
+	public static TextRenderer createPrintTextRenderer()
+	{
+		return new TextRendererAWT();
+	}
+
 	public void setupGraphics(Graphics g) {}
 
 	public void configure(boolean antiAlias, boolean fracFontMetrics) {}
 
 	public float drawChars(char[] text, int off, int len, Graphics g,
-		float x, float y, TabExpander e, Color background)
+		float x, float y, TabExpander e, Color foreground,
+		Color tokenBackground, Color componentBackground)
 	{
 		// this probably should be moved elsewhere
-		if(background != null)
+		if(tokenBackground != null)
 		{
 			float width = charsWidth(text,off,len,g.getFont(),x,e);
 
@@ -75,13 +81,15 @@ public abstract class TextRenderer
 			float descent = fm.getDescent();
 			float leading = fm.getLeading();
 
-			g.setColor(background);
-			g.setXORMode(background);
+			g.setXORMode(componentBackground);
+			g.setColor(tokenBackground);
 			g.fillRect((int)x,(int)(y - height + descent + leading),
 				(int)width,(int)height);
 
 			g.setPaintMode();
 		}
+
+		g.setColor(foreground);
 
 		int flushLen = 0;
 		int flushIndex = off;
