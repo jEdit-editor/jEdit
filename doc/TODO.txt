@@ -14,6 +14,7 @@ TO DO
 - FTP plugin: better error messages
 - FTP plugin: chmod
 - complete word: keys to navigate don't work
+- mention plugins in done-*.html
 
 + bugs:
 

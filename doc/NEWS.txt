@@ -180,6 +180,9 @@ installation and user settings directories are run on startup. This
 replaces the clunky 'startup macro' feature found in earlier jEdit
 versions.
 
+The -run command-line parameter can also be used to specify an
+arbitriary script to run.
+
 * Edit server
 
 Other programs running on the same machine can send jEdit arbitriary
@@ -187,11 +190,6 @@ BeanShell code to execute. On multi-user machines, this does not open a
 security hole, assuming file permissions are set up correctly, because
 clients must first send an authorization key stored in the user settings
 directory.
-
-If you are technically-inclined want to try this feature out, run jEdit
-with the '-bshclient' command line switch while another instance is
-already running. This will read a BeanShell script from standard input
-and send it to the already running instance.
 
 * jEdit launcher for Windows
 
@@ -216,12 +214,16 @@ obsolete.
 Previous versions of jEdit exhibited problems running under the newly
 released JDK 1.4 beta; these are now fixed.
 
-* Better MacOS X support
+* Better MacOS support
 
-When running on MacOS X, jEdit now uses the Command key as the primary
-modifier, as opposed to Control. In addition, jEdit's menus are now
-added to the system menu bar, just like with all other MacOS
-applications.
+When running on MacOS, jEdit now uses the Command key as the primary
+modifier, as opposed to Control.
+
+jEdit now follows the Mac convention of having a Control-click display
+context menus.
+
+On MacOS X, jEdit's menus are now added to the system menu bar, just
+like with all other MacOS applications.
 
 * Improved documentation
 
