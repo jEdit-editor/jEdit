@@ -226,7 +226,7 @@ public class DefaultInputHandler implements InputHandler
 	 */
 	public int getRepeatCount()
 	{
-		return (repeat ? repeatCount : 1);
+		return (repeat ? Math.max(1,repeatCount) : 1);
 	}
 
 	/**
@@ -296,21 +296,23 @@ public class DefaultInputHandler implements InputHandler
 
 		ActionEvent evt = new ActionEvent(source,
 			ActionEvent.ACTION_PERFORMED,
-			actionCommand,0);
+			actionCommand);
 
-		boolean oldRepeat = repeat;
+		boolean _repeat = repeat;
 
 		if(listener instanceof InputHandler.NonRepeatable)
 			listener.actionPerformed(evt);
 		else
 		{
-			for(int i = 0; i < Math.max(1,repeatCount); i++)
+			int _repeatCount = repeatCount;
+			repeatCount = 0;
+			for(int i = 0; i < Math.max(1,_repeatCount); i++)
 				listener.actionPerformed(evt);
 		}
 
 		// If repeat was true originally, clear it
 		// Otherwise it might have been set by the action, etc
-		if(oldRepeat)
+		if(_repeat)
 		{
 			repeat = false;
 			repeatCount = 0;
@@ -1114,6 +1116,9 @@ public class DefaultInputHandler implements InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.10  1999/10/06 08:39:46  sp
  * Fixes to repeating and macro features
  *

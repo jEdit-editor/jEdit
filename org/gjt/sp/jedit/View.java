@@ -289,6 +289,11 @@ public class View extends JFrame
 			return;
 		}
 
+		// Sort them
+		MenuItemCompare comp = new MenuItemCompare();
+		MiscUtilities.quicksort(pluginMenus,comp);
+		MiscUtilities.quicksort(pluginMenuItems,comp);
+
 		for(int i = 0; i < pluginMenus.size(); i++)
 			plugins.add((JMenu)pluginMenus.elementAt(i));
 
@@ -297,6 +302,15 @@ public class View extends JFrame
 
 		for(int i = 0; i < pluginMenuItems.size(); i++)
 			plugins.add((JMenuItem)pluginMenuItems.elementAt(i));
+	}
+
+	private static class MenuItemCompare implements MiscUtilities.Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			return ((JMenuItem)obj1).getText().compareTo(
+				((JMenuItem)obj2).getText());
+		}
 	}
 
 	/**
@@ -757,6 +771,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.92  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.91  1999/10/05 10:55:29  sp
  * File dialogs open faster, and experimental keyboard macros
  *

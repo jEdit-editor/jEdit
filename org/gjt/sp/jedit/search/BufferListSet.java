@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.search;
 
 import org.gjt.sp.jedit.*;
-import java.util.Vector;
 
 /**
  * A file set for searching a user-specified list of buffers.
@@ -31,12 +30,20 @@ public class BufferListSet implements SearchFileSet
 {
 	/**
 	 * Creates a new buffer list search set.
-	 * @param buffers The buffers to search
+	 * @param files The path names to search
 	 */
-	public BufferListSet(Object[] buffers)
+	public BufferListSet(Object[] files)
 	{
-		this.buffers = new Buffer[buffers.length];
-		System.arraycopy(buffers,0,this.buffers,0,buffers.length);
+		this.files = files;
+	}
+
+	/**
+	 * Returns the first buffer to search.
+	 * @param view The view performing the search
+	 */
+	public Buffer getFirstBuffer(View view)
+	{
+		return getBuffer((String)files[0]);
 	}
 
 	/**
@@ -46,66 +53,55 @@ public class BufferListSet implements SearchFileSet
 	 */
 	public Buffer getNextBuffer(View view, Buffer buffer)
 	{
-		updateBufferList();
 		if(buffer == null)
-		{
-			Buffer viewBuffer = view.getBuffer();
-			for(int i = 0; i < buffers.length; i++)
-			{
-				buffer = buffers[i];
-				if(buffer == viewBuffer)
-					return buffer;
-			}
-			return buffers[0];
-		}
+			return getBuffer((String)files[0]);
 		else
 		{
-			for(int i = 0; i < buffers.length; i++)
+			// -1 so that the last isn't checked
+			for(int i = 0; i < files.length - 1; i++)
 			{
-				if(buffers[i] == buffer)
-				{
-					if(buffers.length - i > 1)
-						return buffers[i+1];
-					else
-						break;
-				}
+				if(files[i].equals(buffer.getPath()))
+					return getBuffer((String)files[i+1]);
 			}
+
+			return null;
 		}
-		return null;
 	}
 
 	/**
-	 * Returns the first buffer to search.
-	 * @param view The view performing the search
+	 * Called if the specified buffer didn't have any matches.
+	 * @param buffer The buffer
 	 */
-	public Buffer getFirstBuffer(View view)
+	public void doneWithBuffer(Buffer buffer)
 	{
-		updateBufferList();
-		return buffers[0];
+		// close it, but only if we opened it
+		if(buffer.getProperty(OPENED_PROP) != null && !buffer.isDirty())
+			jEdit.closeBuffer(null,buffer);
 	}
 
-	private Buffer[] buffers;
+	// private members
+	private Object[] files;
+	private static final String OPENED_PROP = "TheyKilledKenny";
 
-	private void updateBufferList()
+	private Buffer getBuffer(String path)
 	{
-		Vector _buffers = new Vector(buffers.length);
-		for(int i = 0; i < buffers.length; i++)
+		Buffer buffer = jEdit.getBuffer(path);
+		if(buffer != null)
+			return buffer;
+		else
 		{
-			Buffer buffer = buffers[i];
-			if(!buffer.isClosed())
-				_buffers.addElement(buffer);
-		}
-		if(_buffers.size() != buffers.length)
-		{
-			Buffer[] bufferArray = new Buffer[_buffers.size()];
-			_buffers.copyInto(bufferArray);
-			buffers = bufferArray;
+			buffer = jEdit.openFile(null,null,path,false,false);
+			buffer.putProperty(OPENED_PROP,Boolean.TRUE);
+			return buffer;
 		}
 	}
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.6  1999/10/02 01:12:36  sp
  * Search and replace updates (doesn't work yet), some actions moved to TextTools
  *

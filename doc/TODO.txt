@@ -1,20 +1,8 @@
 JEDIT TO DO
 
-* 2.1 TODO:
+- Scrolling is too slow on certain JDKs
 
-- Plugin devel:
-  - GUIUtilities.message/error/input/inputProperty
-  - Edit modes
-  - Token markers
-  - Views
-  - Buffers
-  - The text area
-
-- Slow scrolling
-
-- getSelectedText() if end > lineLength
-
-* 2.2+ TODO:
+- Finish plugin development section of user's guide
 
 - Macro recorder
   - Write the following actions:

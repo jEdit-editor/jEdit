@@ -27,7 +27,7 @@ import java.awt.*;
  *
  * @see org.gjt.sp.jedit.OptionPane
  */
-public class AbstractOptionPane extends JPanel implements OptionPane
+public abstract class AbstractOptionPane extends JPanel implements OptionPane
 {
 	/**
 	 * Creates a new option pane.
@@ -124,6 +124,9 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.1  1999/10/04 03:20:50  sp
  * Option pane change, minor tweaks and bug fixes
  *

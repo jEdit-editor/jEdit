@@ -29,6 +29,15 @@ import org.gjt.sp.jedit.*;
 public class AllBufferSet implements SearchFileSet
 {
 	/**
+	 * Returns the first buffer to search.
+	 * @param view The view performing the search
+	 */
+	public Buffer getFirstBuffer(View view)
+	{
+		return jEdit.getFirstBuffer();
+	}
+
+	/**
 	 * Returns the next buffer to search.
 	 * @param view The view performing the search
 	 * @param buffer The last buffer searched
@@ -56,17 +65,17 @@ public class AllBufferSet implements SearchFileSet
 	}
 
 	/**
-	 * Returns the first buffer to search.
-	 * @param view The view performing the search
+	 * Called if the specified buffer didn't have any matches.
+	 * @param buffer The buffer
 	 */
-	public Buffer getFirstBuffer(View view)
-	{
-		return jEdit.getFirstBuffer();
-	}
+	public void doneWithBuffer(Buffer buffer) {}
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.5  1999/10/03 03:47:16  sp
  * Minor stupidity, IDL mode
  *

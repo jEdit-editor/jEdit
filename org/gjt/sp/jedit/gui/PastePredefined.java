@@ -190,7 +190,7 @@ implements ActionListener, KeyListener, MouseListener
 			int repeatCount = view.getTextArea().getInputHandler()
 				.getRepeatCount();
 			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < repeatCount; i--)
+			for(int i = 0; i < repeatCount; i++)
 				buf.append(clip);
 
 			view.getTextArea().setSelectedText(buf.toString());

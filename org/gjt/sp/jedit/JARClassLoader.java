@@ -169,7 +169,7 @@ public class JARClassLoader extends ClassLoader
 
 		for(int i = 0; i < plugins.length; i++)
 		{
-			if(plugins[i]._getName().equals(name))
+			if(plugins[i].getClass().getName().equals(name))
 			{
 				if(width != 0)
 				{
@@ -192,7 +192,8 @@ public class JARClassLoader extends ClassLoader
 		Class clazz = loadClass(name,true);
 		int modifiers = clazz.getModifiers();
 		if(!Modifier.isInterface(modifiers)
-			&& !Modifier.isAbstract(modifiers))
+			&& !Modifier.isAbstract(modifiers)
+			&& EditPlugin.class.isAssignableFrom(clazz))
 		{
 			int nameWidth = name.length() + 1;
 			if((width + nameWidth) >= 79)
@@ -209,14 +210,7 @@ public class JARClassLoader extends ClassLoader
 			System.out.print(name);
 			System.out.flush();
 
-			if(EditPlugin.class.isAssignableFrom(clazz))
-			{
-				jEdit.addPlugin((EditPlugin)clazz.newInstance());
-			}
-			else if(Plugin.class.isAssignableFrom(clazz))
-			{
-				jEdit.addPlugin((Plugin)clazz.newInstance());
-			}
+			jEdit.addPlugin((EditPlugin)clazz.newInstance());
 		}
 	}
 
@@ -381,6 +375,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.17  1999/10/05 04:43:58  sp
  * Minor bug fixes and updates
  *
@@ -407,15 +404,4 @@ public class JARClassLoader extends ClassLoader
  *
  * Revision 1.8  1999/05/08 06:37:21  sp
  * jEdit.VERSION/BUILD becomes jEdit.getVersion()/getBuild(), plugin dependencies
- *
- * Revision 1.7  1999/05/07 06:15:43  sp
- * Resource loading update, fix for abstract Plugin classes in JARs
- *
- * Revision 1.6  1999/05/06 07:16:14  sp
- * Plugins can use classes from other loaded plugins
- *
- * Revision 1.5  1999/04/27 06:53:38  sp
- * JARClassLoader updates, shell script token marker update, token marker compiles
- * now
- *
  */

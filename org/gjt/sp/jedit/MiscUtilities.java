@@ -20,12 +20,14 @@
 package org.gjt.sp.jedit;
 
 import java.io.*;
+import java.util.Vector;
 
 /**
  * Class with several useful miscellaneous functions.<p>
  *
  * It provides methods for converting file names to class names, for
  * constructing path names, and for various indentation calculations.
+ * A quicksort implementation is also available.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -230,6 +232,58 @@ loop:		for(int i = 0; i < str.length(); i++)
 	}
 
 	/**
+	 * Sorts the specified array.
+	 * @param obj The array
+	 * @param compare Compares the objects
+	 */
+	public static void quicksort(Object[] obj, Compare compare)
+	{
+		quicksort(obj,0,obj.length - 1,compare);
+	}
+
+	/**
+	 * Sorts the specified vector.
+	 * @param vector The vector
+	 * @param compare Compares the objects
+	 */
+	public static void quicksort(Vector vector, Compare compare)
+	{
+		quicksort(vector,0,vector.size() - 1,compare);
+	}
+
+	/**
+	 * An interface for comparing objects.
+	 */
+	public static interface Compare
+	{
+		public int compare(Object obj1, Object obj2);
+	}
+
+	/**
+	 * Compares strings.
+	 */
+	public static class StringCompare implements Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			return obj1.toString().compareTo(obj2.toString());
+		}
+	}
+
+	/**
+	 * Compares strings ignoring case.
+	 */
+	public static class StringICaseCompare implements Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			return obj1.toString().toLowerCase()
+				.compareTo(obj2.toString()
+				.toLowerCase());
+		}
+	}
+
+	/**
 	 * Converts an internal version number (build) into a
 	 * `human-readable' form.
 	 * @param build The build
@@ -266,11 +320,88 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return path;
 		}
 	}
+
+	private static void quicksort(Object[] obj, int _start, int _end,
+		Compare compare)
+	{
+		int start = _start;
+		int end = _end;
+
+		Object mid = obj[(_start + _end) / 2];
+
+		if(_start > _end)
+			return;
+
+		while(start <= end)
+		{
+			while((start < _end) && (compare.compare(obj[start],mid) < 0))
+				start++;
+
+			while((end > _start) && (compare.compare(obj[end],mid) > 0))
+				end--;
+
+			if(start <= end)
+			{
+				Object o = obj[start];
+				obj[start] = obj[end];
+				obj[end] = o;
+
+				start++;
+				end--;
+			}
+		}
+
+		if(_start < end)
+			quicksort(obj,_start,end,compare);
+
+		if(start < _end)
+			quicksort(obj,start,_end,compare);
+	}
+
+	private static void quicksort(Vector obj, int _start, int _end,
+		Compare compare)
+	{
+		int start = _start;
+		int end = _end;
+
+		Object mid = obj.elementAt((_start + _end) / 2);
+
+		if(_start > _end)
+			return;
+
+		while(start <= end)
+		{
+			while((start < _end) && (compare.compare(obj.elementAt(start),mid) < 0))
+				start++;
+
+			while((end > _start) && (compare.compare(obj.elementAt(end),mid) > 0))
+				end--;
+
+			if(start <= end)
+			{
+				Object o = obj.elementAt(start);
+				obj.setElementAt(obj.elementAt(end),start);
+				obj.setElementAt(o,end);
+
+				start++;
+				end--;
+			}
+		}
+
+		if(_start < end)
+			quicksort(obj,_start,end,compare);
+
+		if(start < _end)
+			quicksort(obj,start,_end,compare);
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.17  1999/10/07 04:57:13  sp
  * Images updates, globs implemented, file filter bug fix, close all command
  *
@@ -298,21 +429,5 @@ loop:		for(int i = 0; i < str.length(); i++)
  * Revision 1.8  1999/04/23 07:35:10  sp
  * History engine reworking (shared history models, history saved to
  * .jedit-history)
- *
- * Revision 1.7  1999/04/19 05:47:35  sp
- * ladies and gentlemen, 1.6pre1
- *
- * Revision 1.6  1999/03/21 07:53:14  sp
- * Plugin doc updates, action API change, new method in MiscUtilities, new class
- * loader, new plugin interface
- *
- * Revision 1.5  1999/03/19 07:12:10  sp
- * JOptionPane changes, did a fromdos of the source
- *
- * Revision 1.4  1999/03/13 08:50:39  sp
- * Syntax colorizing updates and cleanups, general code reorganizations
- *
- * Revision 1.3  1999/03/12 07:54:47  sp
- * More Javadoc updates
  *
  */

@@ -21,6 +21,7 @@ package org.gjt.sp.jedit;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -178,8 +179,8 @@ public class Macros
 			return false;
 		}
 
-		view.getTextArea().getInputHandler().executeAction(_action,
-			view.getTextArea(),actionCommand);
+		_action.actionPerformed(new ActionEvent(view.getTextArea(),
+			ActionEvent.ACTION_PERFORMED,actionCommand));
 
 		return true;
 	}
@@ -255,3 +256,11 @@ public class Macros
 		}
 	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.3  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
+ */

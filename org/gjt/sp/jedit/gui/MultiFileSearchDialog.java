@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.Vector;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 
@@ -65,15 +66,23 @@ public class MultiFileSearchDialog extends JDialog
 
 		getContentPane().add(BorderLayout.NORTH,panel);
 
-		bufferList = new JList(jEdit.getBuffers());
-		ListModel bufferListModel = bufferList.getModel();
+		DefaultListModel bufferListModel = new DefaultListModel();
+
+		Buffer buffer = jEdit.getFirstBuffer();
+		while(buffer != null)
+		{
+			bufferListModel.addElement(buffer.getPath());
+			buffer = buffer.getNext();
+		}
+
+		bufferList = new JList(bufferListModel);
 		bufferList.setSelectionMode(ListSelectionModel
 			.MULTIPLE_INTERVAL_SELECTION);
 
 		if(fileset instanceof BufferListSet)
 		{
 			bufferList.setEnabled(true);
-			Buffer buffer = fileset.getFirstBuffer(view);
+			buffer = fileset.getFirstBuffer(view);
 			do
 			{
 				for(int j = 0; j < bufferListModel.getSize(); j++)

@@ -269,6 +269,8 @@ public class GUIUtilities
 			return null;
 		}
 		JButton button = new JButton(new ImageIcon(url));
+		Insets zeroInsets = new Insets(0,0,0,0);
+		button.setMargin(zeroInsets);
 		button.setRequestFocusEnabled(false);
 
 		String toolTip = jEdit.getProperty(name + ".label");
@@ -730,6 +732,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.32  1999/10/07 04:57:13  sp
  * Images updates, globs implemented, file filter bug fix, close all command
  *

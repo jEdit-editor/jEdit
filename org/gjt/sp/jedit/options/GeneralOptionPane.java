@@ -39,7 +39,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		for(int i = 0; i < names.length; i++)
 		{
 			names[i] = lfs[i].getName();
-			if(lf.equals(lfs[i].getClass().getName()))
+			if(lf.equals(lfs[i].getClassName()))
 				index = i;
 		}
 

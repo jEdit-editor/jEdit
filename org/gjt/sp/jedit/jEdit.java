@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.01.03.00";
+		return "02.01.04.00";
 	}
 
 	/**
@@ -418,7 +418,7 @@ public class jEdit
 		for(int i = 0; i < plugins.size(); i++)
 		{
 			EditPlugin p = (EditPlugin)plugins.elementAt(i);
-			if(p._getName().equals(name))
+			if(p.getClass().getName().equals(name))
 				return p;
 		}
 
@@ -1569,69 +1569,14 @@ public class jEdit
 			closeView((View)evt.getSource());
 		}
 	}
-
-	////////
-	//////// BEGIN LEGACY API CODE
-	////////
-
-	private static Plugin.OldAPI oldAPI;
-
-	private static void initOldAPI()
-	{
-		if(oldAPI == null)
-		{
-			oldAPI = new Plugin.OldAPI();
-			addPlugin(oldAPI);
-		}
-	}
-
-	/**
-	 * Registers an old API plugin with the editor. This will also call
-	 * the <code>start()</code> method of the plugin.
-	 * @see org.gjt.sp.jedit.Plugin#start()
-	 */
-	public static void addPlugin(Plugin plugin)
-	{
-		initOldAPI();
-		addPlugin(new Plugin.Wrapper(plugin));
-	}
-
-	/**
-	 * Registers a plugin menu with the editor. The menu
-	 * resulting from the call to <code>GUIUtilities.loadMenu(menu)</code>
-	 * will be added to the plugins menu.
-	 * @param menu The menu's name
-	 * @see org.gjt.sp.jedit.GUIUtilities#loadMenu(org.gjt.sp.jedit.View,java.lang.String)
-	 *
-	 * @deprecated As of jEdit 2.1pre1, use EditPlugin.createMenuItems()
-	 * instead
-	 */
-	public static void addPluginMenu(String menu)
-	{
-		initOldAPI();
-		oldAPI.addPluginMenu(menu);
-	}
-
-	/**
-	 * Registers an action with the editor and adds it to the plugin
-	 * action list (so it will appear in the plugins menu).
-	 * @param action The action
-	 *
-	 * @deprecated As of jEdit 2.1pre1, use EditPlugin.createMenuItems()
-	 * instead
-	 */
-	public static void addPluginAction(EditAction action)
-	{
-		addAction(action);
-
-		initOldAPI();
-		oldAPI.addPluginAction(action);
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.136  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.135  1999/10/07 04:57:13  sp
  * Images updates, globs implemented, file filter bug fix, close all command
  *
@@ -1658,36 +1603,4 @@ public class jEdit
  *
  * Revision 1.127  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.125  1999/08/21 01:48:18  sp
- * jEdit 2.0pre8
- *
- * Revision 1.124  1999/07/29 08:50:21  sp
- * Misc stuff for 1.7pre7
- *
- * Revision 1.123  1999/07/21 05:45:14  sp
- * AltGr fix, documentation restructuring
- *
- * Revision 1.122  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.121  1999/07/08 06:06:04  sp
- * Bug fixes and miscallaneous updates
- *
- * Revision 1.120  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.119  1999/06/23 08:02:14  sp
- * Text area updates
- *
- * Revision 1.118  1999/06/22 06:14:39	sp
- * RMI updates, text area updates, flag to disable geometry saving
- *
- * Revision 1.117  1999/06/20 02:15:45	sp
- * Syntax coloring optimizations
- *
- * Revision 1.116  1999/06/16 03:29:59	sp
- * Added <title> tags to docs, configuration data is now stored in a
- * ~/.jedit directory, style option pane finished
  */

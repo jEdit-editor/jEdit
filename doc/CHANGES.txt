@@ -1,5 +1,31 @@
 JEDIT VERSION HISTORY
 
+* Version 2.1pre4
+
++ API Changes
+
+- Old plugin API removed
+
++ Enhancements
+
+- Minor multifile search and replace cleanups
+- MiscUtilities.quicksort() methods added.
+  MiscUtilities(Object[], MiscUtilities.Compare) sorts an array,
+  MiscUtilities(Vector, MiscUtilities.Compare) sorts a vector.
+
+  Compare defines one method, compare. MiscUtilities.StringCompare and
+  MiscUtilities.StringICaseCompare are the two provided implementations
+  of this interface
+
++ Bug Fixes
+
+- Rectangles at the end of lines had minor problems regarding newlines
+- Repeating macros didn't work
+- Fixed infinite loop in Paste Previous and Paste Predefined
+- The tool bar was broken with the Windows look and feel
+- The look and feel selector in 'Global Options' would always display
+  'Metal'
+
 * Version 2.1pre3
 
 + New Features

@@ -2939,8 +2939,8 @@ The following is required to use this plugin:
   <bridgehead renderas=sect3>jEdit 2.0 Users</>
   <para>
    jEdit 2.1 introduced a new plugin API, based around the
-   <classname>EditPlugin</> class. Old jEdit 2.0 plugins will continue
-   to work, but all new plugins should be coded for the 2.1 API.
+   <classname>EditPlugin</> class. Old jEdit 2.0 plugins will need to
+   be updated for the new API.
   </para>
  </sidebar>
  <sect1 id=plugin-jar><title>General Structure of a Plugin</>
@@ -3160,9 +3160,6 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
    plugins will require that version. Futhermore, the option pane API changed
    in jEdit 2.1pre3 (build 02.01.03.00), so plugins
    using option panes will require that.
-   If your plugin uses the old API, many older releases will also work,
-   but pinpointing which one it was is rather tricky, so just specify
-   that it requires 2.0final (build 02.00.99.00).
   </para>
  </sect1>
  <sect1 id=plugin-actions><title>Plugin Actions</>

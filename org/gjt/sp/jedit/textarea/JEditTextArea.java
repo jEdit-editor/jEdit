@@ -1122,8 +1122,10 @@ public class JEditTextArea extends JComponent
 				int lineEnd = lineElement.getEndOffset() - 1;
 				int lineLen = lineEnd - lineStart;
 
-				getText(Math.min(lineStart + start,lineEnd),
-					Math.min(end - start,lineLen),seg);
+				lineStart = Math.min(lineStart + start,lineEnd);
+				lineLen = Math.min(end - start,lineEnd - lineStart);
+
+				getText(lineStart,lineLen,seg);
 				buf.append(seg.array,seg.offset,seg.count);
 
 				if(i != selectionEndLine)
@@ -2026,6 +2028,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  1999/10/10 06:38:46  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.21  1999/10/06 08:39:46  sp
  * Fixes to repeating and macro features
  *

@@ -82,14 +82,14 @@ public abstract class EditPlugin
 	 * @since jEdit 2.1pre1
 	 */
 	public void createOptionPanes(OptionsDialog optionsDialog) {}
-
-	// needed for old plugin API
-	String _getName() { return getClass().getName(); }
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/10/10 06:38:45  sp
+ * Bug fixes and quicksort routine
+ *
  * Revision 1.1  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *
