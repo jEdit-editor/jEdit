@@ -13,7 +13,7 @@
 			includeJavaRuntime="yes"
 		>
 			<include name="bsh/**/*.java"/>
-			<include name="com/microstar/*.java"/>
+			<include name="com/microstar/xml/*.java"/>
 			<include name="gnu/regexp/*.java"/>
 			<include name="installer/*.java"/>
 			<include name="org/gjt/sp/jedit/**/*.java"/>
@@ -31,7 +31,7 @@
 				<include name="bsh/**/*.class"/>
 				<include name="bsh/commands/*.bsh"/>
 
-				<include name="com/microstar/*.class"/>
+				<include name="com/microstar/xml/*.class"/>
 				<include name="gnu/regexp/*.class"/>
 				<include name="gnu/regexp/MessagesBundle.properties"/>
 				<include name="javax/help/**/*.class"/>
