@@ -6,9 +6,11 @@
 
 <project name="jEdit" default="dist" basedir=".">
 
-	<available property="jdk14" classname="java.awt.KeyboardFocusManager" />
+	<target name="init">
+		<available property="jdk14" classname="java.awt.KeyboardFocusManager" />
+	</target>
 
-	<target name="compile">
+	<target name="compile" depends="init">
 		<javac
 			srcdir="."
 			destdir="."
@@ -25,7 +27,7 @@
 		</javac>
 	</target>
 
-	<target name="compile14" if="jdk14">
+	<target name="compile14" depends="init" if="jdk14">
 		<javac
 			srcdir="."
 			destdir="."
@@ -67,7 +69,7 @@
 	</target>
 
 	<!-- Generate HTML docs with xsltproc tool from www.xmlsoft.org -->
-	<target name="docs-html-xsltproc">
+	<target name="docs-html-xsltproc" depends="init">
 		<exec executable="xsltproc" dir="doc/users-guide">
 			<arg value="--catalogs"/>
 			<arg value="../jedithtml.xsl"/>
@@ -81,7 +83,7 @@
 	</target>
 
 	<!-- Generate HTML docs with Xalan tool from xml.apache.org -->
-	<target name="docs-html-xalan">
+	<target name="docs-html-xalan" depends="init">
 		<style
 			in="doc/users-guide/users-guide.xml"
 			destdir="doc/users-guide"
