@@ -2,26 +2,24 @@ JEDIT TO DO
 
 2.5pre3:
 
-- Divide by zero with JDK 1.3 in recalculateVisibleLines()
-- Increase file chooser's preferred size
 - Finish tool bar editor
 - Update dialog-options-* and window-editor-* screenshots
 - Document tool bar editor
 
 2.5:
 
+- -session= parameter should work even if files were specified on the
+  command line
+- Increase file chooser's preferred size
 - Abortable I/O
-- Document macro syntax in more detail
-- Add macros to context menu and toolbar
 - Annoying BufferTabs flicker
 - Make HyperSearch a JFrame
-- Improve FtpBrowser; add bookmarks, filtering, make it threaded, etc
 - text area doesn't lose focus sometimes
-- TokenMarker: MARK_PREVIOUS should mark to lastOffset not lastKeyword
-- Plugin devel manual needs more work:
-  - document views, edit panes, buffers
+- Documentation:
+  - document macro syntax in more detail
+  - document view, edit pane, buffer API
   - how to write text area and gutter hilites
-  - document VFS stuff
+  - write VFS developer docs
 - Buffer tabs focus is still screwed with JDK 1.3
 
 Later:
@@ -40,6 +38,9 @@ Later:
 - XMode:
   - better error reporting
   - regexps
+  - MARK_PREVIOUS should mark to lastOffset not lastKeyword
+- Add macros to context menu and toolbar
+- Improve FtpBrowser; add bookmarks, filtering, make it threaded, etc
 - Mode grammar editor
 - Set dirty to false when all undos undone (will be easy with new document
   model)

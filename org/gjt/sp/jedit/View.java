@@ -677,7 +677,7 @@ public class View extends JFrame implements EBComponent
 		if(jEdit.getBooleanProperty("view.showSearchbar"))
 		{
 			if(searchBar != null)
-				removeToolBar(toolBar);
+				removeToolBar(searchBar);
 
 			searchBar = new SearchBar(this);
 			addToolBar(searchBar);
@@ -1018,6 +1018,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.175  2000/05/16 10:47:40  sp
+ * More work on toolbar editor, -gui command line switch
+ *
  * Revision 1.174  2000/05/14 10:55:21  sp
  * Tool bar editor started, improved view registers dialog box
  *

@@ -177,7 +177,7 @@ public class ContextOptionPane extends AbstractOptionPane
 
 			if(source == add)
 			{
-				AddDialog dialog = new AddDialog(
+				ContextAddDialog dialog = new ContextAddDialog(
 					ContextOptionPane.this,
 					actionsList);
 				MenuItem selection = dialog.getSelection();
@@ -227,9 +227,9 @@ public class ContextOptionPane extends AbstractOptionPane
 	}
 }
 
-class AddDialog extends EnhancedDialog
+class ContextAddDialog extends EnhancedDialog
 {
-	public AddDialog(Component comp, ListModel actionsList)
+	public ContextAddDialog(Component comp, ListModel actionsList)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("options.context.add.title"),
@@ -334,6 +334,9 @@ class AddDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/05/16 10:47:40  sp
+ * More work on toolbar editor, -gui command line switch
+ *
  * Revision 1.5  2000/05/06 05:53:46  sp
  * HyperSearch bug fix
  *

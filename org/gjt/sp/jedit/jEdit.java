@@ -90,6 +90,9 @@ public class jEdit
 		boolean defaultSession = true;
 		session = "default";
 		boolean showSplash = true;
+		// don't freak because 'false' is the default. This flag
+		// is only checked when running in background mode
+		boolean showGUI = false;
 
 		for(int i = 0; i < args.length; i++)
 		{
@@ -124,8 +127,8 @@ public class jEdit
 					portFile = arg.substring(8);
 				else if(arg.startsWith("-background"))
 					background = true;
-				else if(arg.startsWith("-nobackground"))
-					background = false;
+				else if(arg.startsWith("-gui"))
+					showGUI = true;
 				else if(arg.equals("-nosession"))
 					session = null;
 				else if(arg.startsWith("-session="))
@@ -205,6 +208,14 @@ public class jEdit
 			}
 			catch(Exception e)
 			{
+				System.err.println("An error occurred while connecting"
+					+ " to the jEdit server instance."
+					+ " This probably");
+				System.err.println("means that jEdit crashed"
+					+ " and/or exited abnormally the last"
+					+ " time it was run.");
+				System.err.println("If you don't"
+					+ " know what this means, don't worry.");
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
 		}
@@ -302,6 +313,7 @@ public class jEdit
 		}
 
 		// Create the view and hide the splash screen.
+		final boolean _showGUI = showGUI;
 		final Buffer _buffer = buffer;
 
 		GUIUtilities.setProgressText("Creating view");
@@ -312,7 +324,7 @@ public class jEdit
 
 				// If no files to open were specified in
 				// background mode, don't create a view.
-				if(background)
+				if(background && !_showGUI)
 				{
 					if(bufferCount != 0)
 						newView(null,_buffer);
@@ -1628,7 +1640,7 @@ public class jEdit
 			+ " settings from <path>");
 		System.out.println("	-nosplash: Don't show splash screen");
 		System.out.println("	-background: Run in background mode");
-		System.out.println("	-nobackground: Don't run in background mode");
+		System.out.println("	-gui: Create initial view in background mode");
 		System.out.println();
 		System.out.println("Client-only options:");
 		System.out.println("	-reuseview: Don't open new view");
@@ -2277,6 +2289,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.239  2000/05/16 10:47:40  sp
+ * More work on toolbar editor, -gui command line switch
+ *
  * Revision 1.238  2000/05/14 10:55:21  sp
  * Tool bar editor started, improved view registers dialog box
  *

@@ -1,6 +1,6 @@
 /*
  * GUIUtilities.java - Various GUI utility functions
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.net.URL;
+import java.net.*;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
@@ -195,6 +195,41 @@ public class GUIUtilities
 	public static EnhancedButton loadToolButton(String name)
 	{
 		return loadMenuItemModel(name).createButton();
+	}
+
+	/**
+	 * Loads a tool bar icon.
+	 * @param iconName The icon name
+	 */
+	public static Icon loadToolBarIcon(String iconName)
+	{
+		// check if there is a cached version first
+		Icon icon = (Icon)icons.get(iconName);
+		if(icon != null)
+			return icon;
+
+		// get the icon
+		URL url;
+
+		if(iconName.startsWith("file:"))
+		{
+			try
+			{
+				url = new URL(iconName);
+			}
+			catch(MalformedURLException mf)
+			{
+				url = null;
+			}
+		}
+		else
+		{
+			url = GUIUtilities.class.getResource("/org/gjt/sp/jedit/toolbar/"
+				+ iconName);
+		}
+		icon = new ImageIcon(url);
+		icons.put(iconName,icon);
+		return icon;
 	}
 
 	/**
@@ -654,6 +689,7 @@ public class GUIUtilities
 	// unique because of properties, we can store all in one
 	// hashtable.
 	private static Hashtable menus = new Hashtable();
+	private static Hashtable icons = new Hashtable();
 
 	private GUIUtilities() {}
 
@@ -731,6 +767,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.60  2000/05/16 10:47:40  sp
+ * More work on toolbar editor, -gui command line switch
+ *
  * Revision 1.59  2000/05/14 10:55:21  sp
  * Tool bar editor started, improved view registers dialog box
  *

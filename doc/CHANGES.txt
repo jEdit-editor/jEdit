@@ -6,9 +6,10 @@ JEDIT 2.5 VERSION HISTORY
 
 - Various properties can now be set on a mode-specific basis in
   Utilities->Global Options->Edit Modes
-- The buttons displayed on the tool bar can be changed in
-  Utilities->Global Options->Tool Bar
+- The tool bar can be customized in Utilities->Global Options->Tool Bar
 - The HyperSearch feature now performs searches in a background thread
+- The '-gui' command line switch will force jEdit to create an initial
+  view, even if background mode is active
 
 + Enhancements
 
@@ -20,7 +21,7 @@ JEDIT 2.5 VERSION HISTORY
 + Bug Fixes
 
 - EditPaneUpdate.CREATED message was never sent (since 2.5pre2)
-- Sometimes, resizing of the split panes wasn't possible (since 2.5pre2)
+- Sometimes, resizing the split panes wasn't possible (since 2.5pre2)
 - FtpClient didn't work on MacOS (since 2.5pre1)
 - When splitting a view, the newly created edit pane would edit the wrong
   buffer (since 2.5pre2)
@@ -35,6 +36,7 @@ JEDIT 2.5 VERSION HISTORY
   entered (since 2.5pre2)
 - Fixed possible NPE when C+e C+w was pressed (since 2.5pre2)
 - Console macros were broken (since 2.5pre2)
+- Batch file mode didn't highlight variables correctly (since 2.4pre2)
 
 * Version 2.5pre2
 
