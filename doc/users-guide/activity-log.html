@@ -92,26 +92,27 @@ CLASS="GUIMENU"
 CLASS="GUIMENUITEM"
 >Activity Log</SPAN
 > displays a
-   window showing the activity log. Text can be copied from
-   the log by selecting it and pressing <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->C</B
->.
+   window showing the last 500 lines of the activity log. The complete
+   log can be found in the <TT
+CLASS="FILENAME"
+>activity.log</TT
+> file inside the
+   jEdit settings directory, the path of which is system-specific and
+   is shown inside the activity log window.
   </P
 ><P
->   To clear the activity log, click the <SPAN
-CLASS="GUIBUTTON"
->Clear Log</SPAN
->
-   button in the log window.
-   To save the activity log to a file, click
-   <SPAN
-CLASS="GUIBUTTON"
->Save Log</SPAN
->.
+>   While jEdit is running, the log file on disk may not always accurately reflect
+   what has been logged, due to buffering done for performance reasons.
+   To ensure the file on disk is up to
+   date, invoke the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Update Activity
+   Log on Disk</SPAN
+> command. The log file is also automatically updated on
+   disk when jEdit exits.
   </P
 ><DIV
 CLASS="FIGURE"

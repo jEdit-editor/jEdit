@@ -116,7 +116,7 @@ HREF="global-opts.html"
 > in Chapter 9</A
 >. The browser consists of a
    tool bar, a path field,
-   a filename filter combo box, and the file list itself.
+   a filename filter field, and the file list itself.
   </P
 ><P
 >   The toolbar buttons perform the following actions, from left to right:
@@ -130,7 +130,9 @@ HREF="global-opts.html"
 CLASS="GUIBUTTON"
 >Up</SPAN
 > - takes you to the current
-   directory's parent</P
+   directory's parent. The popup arrow next to this button displays a
+   menu listing all the parent directories of the current directory,
+   up to the filesystem root</P
 ></LI
 ><LI
 ><P
@@ -241,6 +243,23 @@ CLASS="GUIMENUITEM"
 >Delete</SPAN
 > from the resulting popup menu</P
 ></LI
+><LI
+><P
+><SPAN
+CLASS="GUIMENUITEM"
+>Clear Remote Directory Cache</SPAN
+> and
+   <SPAN
+CLASS="GUIMENUITEM"
+>Forget Remote Passwords</SPAN
+> - see <A
+HREF="vfs-ftp.html"
+>the section called <I
+>The FTP Filesystem</I
+></A
+>
+   </P
+></LI
 ></UL
 ><P
 >   The filter text field allows you to specify a subset
@@ -252,9 +271,7 @@ HREF="globs.html"
    Both the path and filter fields support a history;
    see <A
 HREF="history.html"
->the section called <I
->History Text Fields</I
-> in Chapter 7</A
+>Appendix E</A
 > for
    details.
   </P
@@ -264,7 +281,8 @@ HREF="history.html"
    display it in the current view, display it in a new view, or close it.
    Unopened file popups have items for opening, deleting and renaming.
    Note that not all virtual filesystems may support deletion and renaming.
-   Also, only empty directories can be deleted.
+   Attempting to delete a non-empty directory will give an error; only
+   empty directories can be deleted.
   </P
 ><P
 >   Several aspects of the VFS browser can be customized in the
@@ -282,6 +300,80 @@ HREF="global-opts.html"
 > in Chapter 9</A
 > for details.
   </P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><P
+></P
+><P
+>    The VFS browser can be navigated from the keyboard.
+    The following keystrokes are defined:
+    <P
+></P
+><UL
+><LI
+><P
+><B
+CLASS="KEYCAP"
+>Enter</B
+> - opens the currently selected file or
+     directory</P
+></LI
+><LI
+><P
+><B
+CLASS="KEYCAP"
+>Left</B
+> - goes to the current directory's parent
+     </P
+></LI
+><LI
+><P
+><B
+CLASS="KEYCAP"
+>Up</B
+> - selects previous file in list
+     </P
+></LI
+><LI
+><P
+><B
+CLASS="KEYCAP"
+>Down</B
+> - selects next file in list
+     </P
+></LI
+><LI
+><P
+>Only in the list view: typing the first few characters of
+     a file's name will select that file.
+     </P
+></LI
+></UL
+>
+    Note that the file list must have focus for this to work.
+   </P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-1. The stand-alone VFS Browser</B
+></P
+><P
+><IMG
+SRC="../images/window-vfs-browser.gif"></P
+></DIV
 ></DIV
 ></DIV
 ><DIV

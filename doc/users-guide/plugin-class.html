@@ -76,7 +76,7 @@ CLASS="PROGRAMLISTING"
 {
         public void start();
         public void stop();
-        public void createMenuItems(Vector menuItems, Vector menus);
+        public void createMenuItems(Vector menuItems);
         public void createOptionPanes(OptionsDialog optionsDialog);
 }</PRE
 ></TD
@@ -156,7 +156,7 @@ public class HelloWorldPlugin extends EditPlugin
                 jEdit.addAction(new hello_world());
         }
 
-        public void createMenuItems(View view, Vector menus, Vector menuItems)
+        public void createMenuItems(Vector menuItems)
         {
                 menuItems.addElement(GUIUtilities.loadMenuItem("hello-world"));
         }

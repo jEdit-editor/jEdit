@@ -42,7 +42,7 @@ public class PluginManagerPlugin extends EditPlugin
 			deleteRecursively(backupDir);
 	}
 
-	public void createMenuItems(View view, Vector menus, Vector menuItems)
+	public void createMenuItems(Vector menuItems)
 	{
 		menuItems.addElement(GUIUtilities.loadMenuItem("plugin-manager"));
 	}

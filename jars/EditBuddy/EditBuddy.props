@@ -31,7 +31,7 @@ edit-buddy.first-time.settings-dir.files=jars/ macros/ modes/\n\
 ### new-version wizard
 edit-buddy.new-version.title=New jEdit version installed
 edit-buddy.new-version.caption=jEdit update wizard
-edit-buddy.new-version.text=You have just upgraded from jEdit {0} to {1}.<p>\n\
+edit-buddy.new-version.text=You have upgraded from jEdit {0} to {1}.<p>\n\
 	\n\
 	Because the plugin API changes over time, older plugins might have\n\
 	problems running under newer jEdit releases. Therefore, it is a good\n\

@@ -17,6 +17,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+import javax.swing.JOptionPane;
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.net.URL;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 
@@ -24,11 +28,79 @@ public class LatestVersionPlugin extends EditPlugin
 {
 	public void start()
 	{
-		jEdit.addAction(new version_check());
+		jEdit.addAction(new DoVersionCheckAction());
 	}
 
-	public void createMenuItems(View view, Vector menus, Vector menuItems)
+	public void createMenuItems(Vector menuItems)
 	{
 		menuItems.addElement(GUIUtilities.loadMenuItem("version-check"));
+	}
+
+	static class DoVersionCheckAction extends EditAction
+	{
+		public DoVersionCheckAction()
+		{
+			super("version-check");
+		}
+
+		public void actionPerformed(ActionEvent evt)
+		{
+			View view = getView(evt);
+			view.showWaitCursor();
+
+			try
+			{
+				URL url = new URL(jEdit.getProperty(
+					"version-check.url"));
+				InputStream in = url.openStream();
+				BufferedReader bin = new BufferedReader(
+					new InputStreamReader(in));
+
+				String line;
+				String version = null;
+				String build = null;
+				while((line = bin.readLine()) != null)
+				{
+					if(line.startsWith(".version"))
+						version = line.substring(8).trim();
+					else if(line.startsWith(".build"))
+						build = line.substring(6).trim();
+				}
+
+				bin.close();
+
+				if(version != null && build != null)
+				{
+					if(jEdit.getBuild().compareTo(build) < 0)
+						newVersionAvailable(view,version,url);
+					else
+					{
+						GUIUtilities.message(view,"version-check"
+							+ ".up-to-date",new String[0]);
+					}
+				}
+			}
+			catch(IOException e)
+			{
+				String[] args = { e.getMessage() };
+				GUIUtilities.error(view,"ioerror",args);
+			}
+
+			view.hideWaitCursor();
+		}
+
+		public void newVersionAvailable(View view, String version, URL url)
+		{
+			String[] args = { version };
+
+			int result = JOptionPane.showConfirmDialog(view,
+				jEdit.getProperty("version-check.new-version.message",args),
+				jEdit.getProperty("version-check.new-version.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE);
+
+			if(result == JOptionPane.YES_OPTION)
+				jEdit.openFile(view,null,url.toString(),true,false);
+		}
 	}
 }

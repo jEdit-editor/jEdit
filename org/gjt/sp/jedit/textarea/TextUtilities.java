@@ -153,7 +153,7 @@ public class TextUtilities
 					int len = lineTokens.length;
 					if(id == idOfBracket)
 					{
-						for(int j = scanStartOffset; j > tokenListOffset - len; j--)
+						for(int j = scanStartOffset; j >= Math.max(0,tokenListOffset - len); j--)
 						{
 							if(j >= lineText.count)
 								System.err.println("WARNING: " + j + " >= " + lineText.count);

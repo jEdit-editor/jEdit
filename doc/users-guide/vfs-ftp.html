@@ -64,7 +64,7 @@ CLASS="GUIMENU"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-1. The FTP login dialog box</B
+>Figure 8-2. The FTP login dialog box</B
 ></P
 ><P
 ><IMG
@@ -111,27 +111,45 @@ CLASS="GUIMENUITEM"
 ><P
 >   To improve performance, jEdit caches directory listings from remote
    FTP servers. Adding and deleting files from within jEdit will automatically
-   update the cache when necessary, but if you use another FTP client, file
-   listings may become out of date. To flush the cache, invoke
+   update the cache when necessary, but if you also use another FTP client, file
+   listings may become out of date. Double-clicking or typing a URL in the
+   VFS browser will consult the cache first; the <SPAN
+CLASS="GUIBUTTON"
+>Reload</SPAN
+> button
+   will force a reload. To clear all cached listings,
+   invoke <SPAN
+CLASS="GUIMENUITEM"
+>Clear Remote Directory Cache</SPAN
+> from
+   either the VFS browser's <SPAN
+CLASS="GUIMENU"
+>More</SPAN
+> menu, or jEdit's
    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Flush Remote Directory Cache</SPAN
->.
-   jEdit also remembers passwords on remote servers until it is closed.
-   To force jEdit to forget saved passwords without quitting and restarting
-   it, invoke <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Forget Remote Passwords</SPAN
->.
+> menu.
   </P
 ><P
->   If you are connected to the Internet from behind a firewall, you may need
+>   jEdit also remembers passwords on remote servers until it is closed.
+   To force jEdit to forget saved passwords without quitting and restarting
+   it, invoke <SPAN
+CLASS="GUIMENUITEM"
+>Forget Remote Passwords</SPAN
+> from
+   either the VFS browser's <SPAN
+CLASS="GUIMENU"
+>More</SPAN
+> menu, or jEdit's
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+> menu.
+  </P
+><P
+>   If you are connected to the Internet from behind a firewall that blocks
+   incoming connections, you may need
    to enable passive-mode FTP in the <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -154,7 +172,23 @@ CLASS="TIP"
 ><B
 >Tip: </B
 >    If you know the exact path name of a buffer you want to open via FTP,
-    you can forgo the VFS browser by entering an FTP URL
+    you can forgo the VFS browser by using the jEdit command line.
+    Type <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Enter</B
+>
+    <TT
+CLASS="USERINPUT"
+><B
+>open-file</B
+></TT
+> <B
+CLASS="KEYCAP"
+>Enter</B
+>, followed by an FTP URL
     (<TT
 CLASS="FILENAME"
 >ftp://<TT
@@ -173,16 +207,9 @@ CLASS="REPLACEABLE"
 >path</I
 ></TT
 ></TT
->)
-    directly in the
-    <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Open Path</SPAN
-> dialog box. You will
-    then be prompted for a password, and the file will be loaded.
+>).
+    You will then be prompted for a password, and the file will be loaded.
+    XXX -- link to command line docs
    </P
 ></BLOCKQUOTE
 ></DIV

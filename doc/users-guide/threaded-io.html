@@ -44,8 +44,8 @@ NAME="THREADED-IO"
 >Multithreaded I/O</A
 ></H1
 ><P
->   Because it is undesirable to block the GUI while loading or saving
-   buffers (especially with FTP filesystem)
+>   Because blocking the GUI is undesirable while loading or saving
+   buffers, especially if they are stored on a remote server,
    jEdit executes all I/O operations asynchronously.
   </P
 ><P
@@ -79,24 +79,20 @@ CLASS="GUIBUTTON"
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-2. The I/O Progress Monitor window</B
+>Figure 8-3. The I/O Progress Monitor window</B
 ></P
 ><P
 ><IMG
 SRC="../images/window-io-progress.gif"></P
 ></DIV
 ><P
->   View status bars also have a miniature I/O monitor. Clicking on it
-   will open the <SPAN
-CLASS="GUIMENUITEM"
->I/O Progress Monitor</SPAN
-> window.
+>   View status bars also have a miniature I/O monitor.
   </P
 ><DIV
 CLASS="FIGURE"
 ><P
 ><B
->Figure 8-3. The I/O monitor in the view status bar</B
+>Figure 8-4. The I/O monitor in the view status bar</B
 ></P
 ><P
 ><IMG

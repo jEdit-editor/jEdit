@@ -76,8 +76,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
->import java.util.Vector;
-import org.gjt.sp.jedit.View;</PRE
+>import java.util.Vector;</PRE
 ></TD
 ></TR
 ></TABLE
@@ -86,7 +85,7 @@ import org.gjt.sp.jedit.View;</PRE
 ><CODE
 CLASS="FUNCDEF"
 >void createMenuItems</CODE
->(View view, Vector menus, Vector menuItems);</CODE
+>(Vector menuItems);</CODE
 ></P
 ><P
 ></P
@@ -102,7 +101,7 @@ CLASS="CLASSNAME"
 CLASS="CLASSNAME"
 >javax.swing.JMenuItem</TT
 > to
-   the appropriate vectors. While you could create instances of
+   the menu item vector. While you could create instances of
    <TT
 CLASS="CLASSNAME"
 >JMenu</TT
@@ -242,30 +241,6 @@ CLASS="REPLACEABLE"
 >.label</SPAN
 >.
   </P
-><DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->    The <TT
-CLASS="FUNCTION"
->loadMenuItem()</TT
-> and <TT
-CLASS="FUNCTION"
->loadMenu()</TT
->
-    methods of jEdit version 2.5 and earlier
-    also took a <TT
-CLASS="CLASSNAME"
->View</TT
-> instance as a parameter. While the old
-    method still exists for backwards compatibility with existing plugins,
-    it is deprecated and should not be used in new plugins.
-   </P
-></BLOCKQUOTE
-></DIV
 ><H4
 CLASS="BRIDGEHEAD"
 >Example</H4
@@ -288,7 +263,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->public void createMenuItems(View view, Vector menus, Vector menuItems)
+>public void createMenuItems(Vector menuItems)
 {
         menuItems.addElement(GUIUtilities.loadMenuItem("hello-world"));
 }</PRE

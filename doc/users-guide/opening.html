@@ -61,37 +61,22 @@ CLASS="KEYCAP"
 >) pops
    up a dialog box allowing you to browse and search the file system and
    select a
-   file to open. <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Open Path</SPAN
->  (keyboard
-   equivalent: <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->E</B
->
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->O</B
->) pops up up a dialog box
-   allowing you to either type in a path name or URL.
-   Recently edited files are listed in the
+   file to open. For a detailed treatement of this dialog box, see
+   <A
+HREF="vfs.html#VFS-BROWSER"
+>the section called <I
+>The VFS Browser</I
+> in Chapter 8</A
+>.
+   jEdit remembers the last few edited files; they listed in the
    <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Recent Files</SPAN
-> menu; selecting one
-   will open it. Similarly, the <SPAN
+> menu.
+   The <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
@@ -193,66 +178,6 @@ CLASS="GUISUBMENU"
 >Current Buffer</SPAN
 > menu.
   </P
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AEN204"
->Searching for Files</A
-></H2
-><P
->    The <SPAN
-CLASS="GUIMENUITEM"
->Open File</SPAN
-> dialog box has a widget for quickly
-    searching the filesystem for files with a specific
-    name and/or modification time. The search is performed from the currently
-    viewed directory.
-   </P
-><P
->    File names to search for can be specified in the <SPAN
-CLASS="GUIBUTTON"
->Name</SPAN
-> tab.
-    The options in the combo box left of the text field allow you to specify
-    how file names will be matched. Selecting "is" will only match
-    files whose name is exactly that specified in the text field.
-    "Contains", "starts with", "ends with" should be
-    self-explanatory. "Pattern" will treat the contents of the
-    text field as a glob pattern (see <A
-HREF="globs.html"
->Appendix D</A
->) and match
-    file names against that. If "Ignore Case" is selected, all
-    file name matching will be case-insensitive.
-   </P
-><P
->    The <SPAN
-CLASS="GUIBUTTON"
->Date</SPAN
-> tab allows you to specify a start and end date,
-    inclusive, that
-    matched files's modification time must be in. The "big bang"
-    and "big crunch" options allow you to specify an unbounded time
-    range.
-   </P
-><P
->    Clicking <SPAN
-CLASS="GUIBUTTON"
->Start</SPAN
-> will begin the search. While a search is
-    in progress, it can be interrupted by clicking <SPAN
-CLASS="GUIBUTTON"
->Stop</SPAN
->.
-    Found files will be listed in the <SPAN
-CLASS="GUIBUTTON"
->Results</SPAN
-> tab; clicking
-    on one will select it in the file chooser.
-   </P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -123,10 +123,13 @@ public class PluginList
 			{
 				EditPlugin.JAR checkJar = jars[i];
 				EditPlugin[] plugins = checkJar.getPlugins();
-				if(plugins.length == 0)
-					continue;
-				String clazz = plugins[0].getClassName();
+				String clazz;
+				if(plugins.length != 0)
+					clazz = plugins[0].getClassName();
+				else
+					clazz = null;
 				String path = checkJar.getPath();
+				System.err.println(jar + ":" + path);
 				if(MiscUtilities.getFileName(path).equals(jar))
 				{
 					currVersion = jEdit.getProperty(
