@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.01.05.00";
+		return "02.01.99.00";
 	}
 
 	/**
@@ -1590,6 +1590,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.141  1999/10/22 07:05:37  sp
+ * Version number changed to 2.1final
+ *
  * Revision 1.140  1999/10/21 07:59:24  sp
  * Eiffel mode and better font list added
  *
