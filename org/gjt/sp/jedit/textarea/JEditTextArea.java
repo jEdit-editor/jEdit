@@ -1939,6 +1939,10 @@ public class JEditTextArea extends JComponent
 		{
 			requestFocus();
 
+			// Focus events not fired sometimes?
+			setCaretVisible(true);
+			focusedComponent = JEditTextArea.this;
+
 			if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0
 				&& popup != null)
 			{
@@ -2138,6 +2142,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  1999/12/06 00:06:15  sp
+ * Bug fixes
+ *
  * Revision 1.34  1999/12/03 23:48:11  sp
  * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
  *

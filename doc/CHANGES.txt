@@ -6,11 +6,17 @@ JEDIT VERSION HISTORY
 
 - Buffers are only loaded when necessary. This improves jEdit's
   perceived speed when opening lots of files, etc
+- Possible workaround for buggy focus handling
 
 + Bug Fixes
 
 - Fixed minor bug in style option pane (since 1.7pre4)
 - Perl mode had problems with << EOF statements (Andre Kaplan) (since 1.7pre3)
+- Action loading code should now work if jEdit was loaded with a non-system
+  class loader(since 2.2pre7)
+- Reload command didn't work (since 2.2pre7)
+- jEdit now ignores empty command line parameters - so the windows batch
+  file should work properly now (since 2.2pre7)
 
 * Version 2.2pre7
 

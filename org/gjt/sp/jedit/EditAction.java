@@ -217,8 +217,14 @@ public abstract class EditAction implements ActionListener
 
 			try
 			{
-				action = (EditAction)Class.forName(className)
-					.newInstance();
+				Class clazz;
+				ClassLoader loader = getClass().getClassLoader();
+				if(loader == null)
+					clazz = Class.forName(className);
+				else
+					clazz = loader.loadClass(className);
+
+				action = (EditAction)clazz.newInstance();
 			}
 			catch(Exception e)
 			{
@@ -232,6 +238,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  1999/12/06 00:06:14  sp
+ * Bug fixes
+ *
  * Revision 1.16  1999/11/28 00:33:06  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *

@@ -87,7 +87,9 @@ public class jEdit
 		for(int i = 0; i < args.length; i++)
 		{
 			String arg = args[i];
-			if(arg.startsWith("-") && !endOpts)
+			if(arg.length() == 0)
+				args[i] = null;
+			else if(arg.startsWith("-") && !endOpts)
 			{
 				if(arg.equals("--"))
 					endOpts = true;
@@ -1651,6 +1653,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.167  1999/12/06 00:06:14  sp
+ * Bug fixes
+ *
  * Revision 1.166  1999/12/05 03:01:05  sp
  * Perl token marker bug fix, file loading is deferred, style option pane fix
  *

@@ -9,7 +9,7 @@ JEDIT TO DO
 - jEdit.getBooleanProperty() for yes/no stuff
 - Plugin loading and startup is slow
 - Update docs for shortcut pane changes
-- Reload is broken
+- File loading is broken for some people
 
 ------- Features -------
 
