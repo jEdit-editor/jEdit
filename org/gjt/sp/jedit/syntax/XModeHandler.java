@@ -522,6 +522,10 @@ public class XModeHandler extends HandlerBase
 		{
 			return Token.DIGIT;
 		}
+		else if (value == "INVALID")
+		{
+			return Token.INVALID;
+		}
 		else
 		{
 			error("token-invalid",value);

@@ -769,7 +769,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(file == null || getFlag(NEW_FILE) || getFlag(IO))
 			return;
 
-		boolean newReadOnly = !file.canWrite();
+		boolean newReadOnly = (file.exists() && !file.canWrite());
 		if(newReadOnly != getFlag(READ_ONLY))
 		{
 			setFlag(READ_ONLY,newReadOnly);

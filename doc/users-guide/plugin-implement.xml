@@ -61,7 +61,7 @@
   windows would allow the notepad to be displayed or hidden with a single
   mouse click or keypress (if a keyboard shortcut were defined). The
   contents of the notepad could be saved at program exit (or, if earlier,
-  deactivation ofthe plugin) and retrieved at program startup or plugin
+  deactivation of the plugin) and retrieved at program startup or plugin
   activation.
 </para>
 
@@ -117,9 +117,6 @@
   </para></listitem>
   <listitem><para>
     Will the plugin have settings that the user can configure?
-  </para></listitem>
-  <listitem><para>
-    Will the plugin have error reporting?
   </para></listitem>
 
 </itemizedlist>
@@ -268,17 +265,6 @@
   </listitem>
 </itemizedlist>
 
-<para>
-  If the plugin will provide error reporting, the <function>start()</function>
-  method or the core class's constructor should create and register its
-  error source.  The following code should suffice for most plugins:
-</para>
-
-<informalexample><programlisting>    private DefaultErrorSource errorSource =
-        new DefaultErrorSource(<quote><replaceable>plugin name</replaceable></quote>);
-    EditBus.addToNamedList(ErrorSource.ERROR_SOURCES_LIST, errorSource);
-    EditBus.addToBus(errorSource);</programlisting></informalexample>
-
 </sect3>
 
 <sect3 id="plugin-implement-base-example">
@@ -305,7 +291,6 @@
 </para>
 
 <informalexample><programlisting>public class QuickNotepadPlugin extends EBPlugin {
-
     public static final String NAME = "quicknotepad";
     public static final String MENU = "quicknotepad.menu";
     public static final String PROPERTY_PREFIX = "plugin.QuickNotepadPlugin.";
@@ -317,7 +302,7 @@
 
     public void stop() {}
 
-    public void createMenuItems(Vector menuItems){
+    public void createMenuItems(Vector menuItems) {
         menuItems.addElement(GUIUtilities.loadMenu(MENU));
     }
 
@@ -335,7 +320,6 @@
             }
         }
     }
-
 }</programlisting></informalexample>
 
 <para>
@@ -343,7 +327,7 @@
   <function>createOptionPane()</function> (assuming options are enabled)
   are typically trivial, because the real work will be done using other
   program elements. Menu creation is performed by a utility function in
-  jEdit's API, using prperties defined in the plugin's properties file.
+  jEdit's API, using properties defined in the plugin's properties file.
   The option pane is constructed in its own class.
 </para>
 
@@ -373,11 +357,11 @@
 <sect2 id="plugin-implement-resources">
 <title>Resources for the Plugin Core Class</title>
 
-<sect3 id="plugin-implement-actions"><title>User Actions</title>
+<sect3 id="plugin-implement-actions"><title>Actions</title>
 
 <para>
   The plugin's user action catalog, <filename>actions.xml</filename>, is
-  the resource used by the Plugin API to get the names and definitions of
+  the resource used by the plugin API to get the names and definitions of
   user actions. If you are unfamiliar with XML or with implementing a
   document type definition, the following <filename>actions.xml</filename>
   file from the <application>QuickNotepad</application> plugin can
@@ -444,9 +428,10 @@
   If you are unfamiliar with BeanShell code, you may nevertheless notice
   that the code statements bear a strong resemblance to Java code, with
   two exceptions: the variable <varname>wm</varname> is not typed, and the
-  variable <varname>view</varname> is never assigned any value. The jEdit
-  Macro Guide can provide answers to these and other BeanShell
-  mysteries; two observations will suffice here. First, the
+  variable <varname>view</varname> is never assigned any value. For
+  complete answers to these and other BeanShell
+  mysteries, see <xref linkend="writing-macros-part" />; two
+  observations will suffice here. First, the
   BeanShell scripting language is based upon Java syntax, but allows
   variables to be typed at run time, so explicit types for variables such
   as <varname>wm</varname> need not be declared. Second, the variable
@@ -517,7 +502,9 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 <sect1 id="window-implement"><title>Implementing a Plugin Window Class</title>
 
 <para>
-  A plugin window class must implement the
+  The <application>QuickNotepad</application> plugin uses the dockable
+  window API and provides one dockable window. Dockable window classes
+  must implement the
   <classname>DockableWindow</classname> interface. There are basically two
   approaches to doing this. One is to have the top-level visible component
   also serve as the plugin window. The other is to derive a lightweight
@@ -579,7 +566,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 <sect2 id="window-implement-actions"><title>An Action Interface</title>
 
 <para>
-  When a user action is selected, program control must pass to the
+  When an action is invoked, program control must pass to the
   component responsible for executing the action. The use of an internal
   table of BeanShell scripts that implement actions avoids the need for
   plugins to implement <classname>ActionListener</classname> or similar
@@ -669,7 +656,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 
 <para>
   Here is where most of the features of the plugin will be implemented.
-  To work with the Plugin API, the top level window will be a
+  To work with the dockable window API, the top level window will be a
   <classname>JPanel</classname>.  The visible components reflect a
   simple layout. Inside the top-level panel we will place a scroll pane with
   a text area. Above the scroll pane we will place a panel containing a small

@@ -26,18 +26,34 @@
 		<EOL_SPAN TYPE="KEYWORD2">#if</EOL_SPAN>
 		<EOL_SPAN TYPE="KEYWORD2">#else</EOL_SPAN>
 		<EOL_SPAN TYPE="KEYWORD2">#end</EOL_SPAN>
-
+		
+		<!-- To avoid commenting out most SQL statements and mathematical operations, 
+			Comments must start with one of these formats: 
+			*<space><space><space>
+			*<tab>
+			*!
+			**
+			*-
+		-->
+			
 		<EOL_SPAN TYPE="COMMENT1">&amp;&amp;</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">*   </EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">*	</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">*!</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">**</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">*-</EOL_SPAN>
+
+		
 		<SEQ TYPE="NULL">)</SEQ>
 		<SEQ TYPE="NULL">(</SEQ>
 
 		<!-- Comparison operators -->
+		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
-		<SEQ TYPE="OPERATOR">=</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">.</SEQ>
 		<!-- See in keywords: is -->
 
@@ -52,6 +68,7 @@
 
 		<!-- Concatenation operators -->
 		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<!-- <SEQ TYPE="OPERATOR">+</SEQ> -->
  
 		<!-- Logical operators -->
 		<!-- See in keywords: and, or, not, xor, eqv -->
@@ -727,9 +744,11 @@
 			<KEYWORD3>Aerror</KEYWORD3>
 			<KEYWORD3>Afields</KEYWORD3>
 			<KEYWORD3>Afont</KEYWORD3>
+			<KEYWORD3>Again</KEYWORD3>
 			<KEYWORD3>Ains</KEYWORD3>
 			<KEYWORD3>Ainstance</KEYWORD3>
 			<KEYWORD3>Alen</KEYWORD3>
+			<KEYWORD3>All</KEYWORD3>
 			<KEYWORD3>Alltrim</KEYWORD3>
 			<KEYWORD3>Alter</KEYWORD3>
 			<KEYWORD3>Amembers</KEYWORD3>
@@ -752,9 +771,11 @@
 			<KEYWORD3>Autoform</KEYWORD3>
 			<KEYWORD3>Autoreport</KEYWORD3>
 			<KEYWORD3>Average</KEYWORD3>
+			<KEYWORD3>Bar</KEYWORD3>
 			<KEYWORD3>BatchMode</KEYWORD3>
 			<KEYWORD3>BatchUpdateCount</KEYWORD3>
 			<KEYWORD3>Begin</KEYWORD3>
+			<KEYWORD3>Bell</KEYWORD3>
 			<KEYWORD3>BellSound</KEYWORD3>
 			<KEYWORD3>Bitand</KEYWORD3>
 			<KEYWORD3>Bitclear</KEYWORD3>
@@ -766,11 +787,13 @@
 			<KEYWORD3>Bittest</KEYWORD3>
 			<KEYWORD3>Bitxor</KEYWORD3>
 			<KEYWORD3>Bof</KEYWORD3>
+			<KEYWORD3>Bottom</KEYWORD3>
 			<KEYWORD3>Browse</KEYWORD3>
 			<KEYWORD3>BrowseRefresh</KEYWORD3>
 			<KEYWORD3>Buffering</KEYWORD3>
 			<KEYWORD3>Build</KEYWORD3>
 			<KEYWORD3>BuilderLock</KEYWORD3>
+			<KEYWORD3>By</KEYWORD3>
 			<KEYWORD3>Calculate</KEYWORD3>
 			<KEYWORD3>Call</KEYWORD3>
 			<KEYWORD3>Capslock</KEYWORD3>
@@ -779,6 +802,7 @@
 			<KEYWORD3>Cdow</KEYWORD3>
 			<KEYWORD3>Ceiling</KEYWORD3>
 			<KEYWORD3>Central</KEYWORD3>
+			<KEYWORD3>Century</KEYWORD3>
 			<KEYWORD3>Change</KEYWORD3>
 			<KEYWORD3>Char</KEYWORD3>
 			<KEYWORD3>Chdir</KEYWORD3>
@@ -814,6 +838,7 @@
 			<KEYWORD3>Count</KEYWORD3>
 			<KEYWORD3>Cpconvert</KEYWORD3>
 			<KEYWORD3>Cpcurrent</KEYWORD3>
+			<KEYWORD3>CPDialog</KEYWORD3>
 			<KEYWORD3>Cpdbf</KEYWORD3>
 			<KEYWORD3>Cpnotrans</KEYWORD3>
 			<KEYWORD3>Create</KEYWORD3>
@@ -838,6 +863,7 @@
 			<KEYWORD3>Curval</KEYWORD3>
 			<KEYWORD3>Custom</KEYWORD3>
 			<KEYWORD3>DataEnvironment</KEYWORD3>
+			<KEYWORD3>Databases</KEYWORD3>
 			<KEYWORD3>Datetime</KEYWORD3>
 			<KEYWORD3>Day</KEYWORD3>
 			<KEYWORD3>Dayname</KEYWORD3>
@@ -891,6 +917,7 @@
 			<KEYWORD3>Display</KEYWORD3>
 			<KEYWORD3>DispLogin</KEYWORD3>
 			<KEYWORD3>DispWarnings</KEYWORD3>
+			<KEYWORD3>Distinct</KEYWORD3>
 			<KEYWORD3>Dmy</KEYWORD3>
 			<KEYWORD3>Do</KEYWORD3>
 			<KEYWORD3>Doc</KEYWORD3>
@@ -921,6 +948,7 @@
 			<KEYWORD3>Eof</KEYWORD3>
 			<KEYWORD3>Erase</KEYWORD3>
 			<KEYWORD3>Evaluate</KEYWORD3>
+			<KEYWORD3>Exact</KEYWORD3>
 			<KEYWORD3>Exclusive</KEYWORD3>
 			<KEYWORD3>Exit</KEYWORD3>
 			<KEYWORD3>Exp</KEYWORD3>
@@ -936,6 +964,7 @@
 			<KEYWORD3>FetchSize</KEYWORD3>
 			<KEYWORD3>Fflush</KEYWORD3>
 			<KEYWORD3>Fgets</KEYWORD3>
+			<KEYWORD3>File</KEYWORD3>
 			<KEYWORD3>Filer</KEYWORD3>
 			<KEYWORD3>Find</KEYWORD3>
 			<KEYWORD3>Fklabel</KEYWORD3>
@@ -963,6 +992,7 @@
 			<KEYWORD3>Foxview</KEYWORD3>
 			<KEYWORD3>Fputs</KEYWORD3>
 			<KEYWORD3>Fread</KEYWORD3>
+			<KEYWORD3>From</KEYWORD3>
 			<KEYWORD3>Fseek</KEYWORD3>
 			<KEYWORD3>Fsize</KEYWORD3>
 			<KEYWORD3>Function</KEYWORD3>
@@ -1016,6 +1046,7 @@
 			<KEYWORD3>Insert</KEYWORD3>
 			<KEYWORD3>InsertTrigger</KEYWORD3>
 			<KEYWORD3>Insmode</KEYWORD3>
+			<KEYWORD3>Into</KEYWORD3>
 			<KEYWORD3>Isalpha</KEYWORD3>
 			<KEYWORD3>Iscolor</KEYWORD3>
 			<KEYWORD3>Isdigit</KEYWORD3>
@@ -1092,6 +1123,7 @@
 			<KEYWORD3>ODBChdbc</KEYWORD3>
 			<KEYWORD3>ODBChstmt</KEYWORD3>
 			<KEYWORD3>Oemtoansi</KEYWORD3>
+			<KEYWORD3>Off</KEYWORD3>
 			<KEYWORD3>Oldval</KEYWORD3>
 			<KEYWORD3>OleBaseControl</KEYWORD3>
 			<KEYWORD3>OleBoundControl</KEYWORD3>
@@ -1115,6 +1147,7 @@
 			<KEYWORD3>Parameters</KEYWORD3>
 			<KEYWORD3>Payment</KEYWORD3>
 			<KEYWORD3>Pcol</KEYWORD3>
+			<KEYWORD3>Percent</KEYWORD3>
 			<KEYWORD3>Pi</KEYWORD3>
 			<KEYWORD3>Pivot</KEYWORD3>
 			<KEYWORD3>Play</KEYWORD3>
@@ -1127,6 +1160,7 @@
 			<KEYWORD3>Prmbar</KEYWORD3>
 			<KEYWORD3>Prmpad</KEYWORD3>
 			<KEYWORD3>Procedure</KEYWORD3>
+			<KEYWORD3>Program</KEYWORD3>
 			<KEYWORD3>ProjectClick</KEYWORD3>
 			<KEYWORD3>Proper</KEYWORD3>
 			<KEYWORD3>Protected</KEYWORD3>
@@ -1166,6 +1200,7 @@
 			<KEYWORD3>Replace</KEYWORD3>
 			<KEYWORD3>Replicate</KEYWORD3>
 			<KEYWORD3>Report</KEYWORD3>
+			<KEYWORD3>Reprocess</KEYWORD3>
 			<KEYWORD3>ResHeight</KEYWORD3>
 			<KEYWORD3>ResourceOn</KEYWORD3>
 			<KEYWORD3>ResourceTo</KEYWORD3>
@@ -1187,6 +1222,7 @@
 			<KEYWORD3>Runscript</KEYWORD3>
 			<KEYWORD3>Rview</KEYWORD3>
 			<KEYWORD3>Save</KEYWORD3>
+			<KEYWORD3>Safety</KEYWORD3>
 			<KEYWORD3>ScaleUnits</KEYWORD3>
 			<KEYWORD3>Scan</KEYWORD3>
 			<KEYWORD3>Scatter</KEYWORD3>
@@ -1203,6 +1239,7 @@
 			<KEYWORD3>Setfldstate</KEYWORD3>
 			<KEYWORD3>Setup</KEYWORD3>
 			<KEYWORD3>Shape</KEYWORD3>
+			<KEYWORD3>Shared</KEYWORD3>
 			<KEYWORD3>ShareConnection</KEYWORD3>
 			<KEYWORD3>ShowOLEControls</KEYWORD3>
 			<KEYWORD3>ShowOLEInsertable</KEYWORD3>
@@ -1232,6 +1269,7 @@
 			<KEYWORD3>Sqrt</KEYWORD3>
 			<KEYWORD3>Srows</KEYWORD3>
 			<KEYWORD3>StatusBar</KEYWORD3>
+			<KEYWORD3>Status</KEYWORD3>
 			<KEYWORD3>Store</KEYWORD3>
 			<KEYWORD3>Str</KEYWORD3>
 			<KEYWORD3>Strtran</KEYWORD3>
@@ -1247,15 +1285,17 @@
 			<KEYWORD3>Tablerevert</KEYWORD3>
 			<KEYWORD3>Tableupdate</KEYWORD3>
 			<KEYWORD3>TabOrdering</KEYWORD3>
+			<KEYWORD3>Talk</KEYWORD3>
 			<KEYWORD3>Tan</KEYWORD3>
 			<KEYWORD3>Target</KEYWORD3>
 			<KEYWORD3>Text</KEYWORD3>
 			<KEYWORD3>TextBox</KEYWORD3>
 			<KEYWORD3>Timestamp</KEYWORD3>
 			<KEYWORD3>Timestampdiff</KEYWORD3>
+			<KEYWORD3>To</KEYWORD3>
 			<KEYWORD3>Toolbar</KEYWORD3>
 			<KEYWORD3>Total</KEYWORD3>
-			<KEYWORD3>Transactions</KEYWORD3>
+			<KEYWORD3>Transaction</KEYWORD3>
 			<KEYWORD3>Transform</KEYWORD3>
 			<KEYWORD3>Trim</KEYWORD3>
 			<KEYWORD3>Truncate</KEYWORD3>
@@ -1283,6 +1323,7 @@
 			<KEYWORD3>UseMemoSize</KEYWORD3>
 			<KEYWORD3>Val</KEYWORD3>
 			<KEYWORD3>Validate</KEYWORD3>
+			<KEYWORD3>Values</KEYWORD3>
 			<KEYWORD3>Varread</KEYWORD3>
 			<KEYWORD3>Version</KEYWORD3>
 			<KEYWORD3>Wait</KEYWORD3>
@@ -1293,6 +1334,7 @@
 			<KEYWORD3>Week</KEYWORD3>
 			<KEYWORD3>Wexist</KEYWORD3>
 			<KEYWORD3>Wfont</KEYWORD3>
+			<KEYWORD3>Where</KEYWORD3>
 			<KEYWORD3>WhereType</KEYWORD3>
 			<KEYWORD3>While</KEYWORD3>
 			<KEYWORD3>Windcmd</KEYWORD3>

@@ -531,65 +531,69 @@ else if(msg instanceof ViewUpdate)
   file. A simple action catalog looks like so:
 </para>
 
-<informalexample><programlisting><![CDATA[<?xml version="1.0"?>
-<!DOCTYPE ACTIONS SYSTEM "actions.dtd">
+<informalexample><programlisting><![CDATA[&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
 
-<ACTIONS>
-    <ACTION NAME="myplugin">
-      <CODE>
-        ... BeanShell code ...
-      </CODE>
-    </ACTION>
+&lt;ACTIONS&gt;
+    &lt;ACTION NAME="quicknotepad.toggle"&gt;
+        &lt;CODE&gt;
+            view.getDockableWindowManager()
+                .toggleDockableWindow(QuickNotepadPlugin.NAME);
+        &lt;/CODE&gt;
+        &lt;IS_SELECTED&gt;
+            return view.getDockableWindowManager()
+                .isDockableWindowVisible(QuickNotepadPlugin.NAME);
+        &lt;/IS_SELECTED&gt;
+    &lt;/ACTION&gt;
 
-    <ACTION NAME="myplugin">
-      <CODE>
-        ... BeanShell code ...
-      </CODE>
-      <IS_SELECTED>
-        ... BeanShell code to return state of check box menu item ...
-      </IS_SELECTED>
-    </ACTION>
-</ACTIONS>]]></programlisting></informalexample>
+    &lt;ACTION NAME="quicknotepad-to-front"&gt;
+    &lt;CODE&gt;
+      view.getDockableWindowManager()
+                .addDockableWindow(QuickNotepadPlugin.NAME);
+        &lt;/CODE&gt;
+    &lt;/ACTION&gt;
+&lt;/ACTIONS&gt;]]>
+</programlisting></informalexample>
 
 <para>
   The defined elements have the following functions:
-  <itemizedlist>
-    <listitem>
-      <para>
-        <varname>ACTIONS</varname> is the top-level element and refers
-        to the set of actions used by the plugin.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        An <varname>ACTION</varname> contains the data for a particular action.
-        It has three attributes: a required <varname>NAME</varname>; a flag
-        indicating whether the action should not be repeated with the
-        <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-        command (see <xref linkend="repeat" />);
-        and a flag indicating whether the
-        action should be recorded if it is invoked while a user is recording a
-        macro (<varname>NO_RECORD</varname>). The two flag attributes
-        can have two possible values, <quote>TRUE</quote> or
-        <quote>FALSE</quote>. In both cases, <quote>FALSE</quote> is the
-        default if not specified.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        An <varname>ACTION</varname> contains two child elements
-        within it: a required <varname>CODE</varname> element which
-        specifies the
-        BeanShell code that will be executed when the action is invoked,
-        and an optional <varname>IS_SELECTED</varname> element, used for
-        checkbox
-        menu items.  The <varname>IS_SELECTED</varname> element contains
-        BeanShell code that is designed to return a boolean flag that will
-        determine the state of the checkbox.
-      </para>
-    </listitem>
-  </itemizedlist>
 </para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      <varname>ACTIONS</varname> is the top-level element and refers
+      to the set of actions used by the plugin.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      An <varname>ACTION</varname> contains the data for a particular action.
+      It has three attributes: a required <varname>NAME</varname>; a flag
+      indicating whether the action should not be repeated with the
+      <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
+      command (see <xref linkend="repeat" />);
+      and a flag indicating whether the
+      action should be recorded if it is invoked while a user is recording a
+      macro (<varname>NO_RECORD</varname>). The two flag attributes
+      can have two possible values, <quote>TRUE</quote> or
+      <quote>FALSE</quote>. In both cases, <quote>FALSE</quote> is the
+      default if not specified.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      An <varname>ACTION</varname> contains two child elements
+      within it: a required <varname>CODE</varname> element which
+      specifies the
+      BeanShell code that will be executed when the action is invoked,
+      and an optional <varname>IS_SELECTED</varname> element, used for
+      checkbox
+      menu items.  The <varname>IS_SELECTED</varname> element contains
+      BeanShell code that is designed to return a boolean flag that will
+      determine the state of the checkbox.
+    </para>
+  </listitem>
+</itemizedlist>
 
 </sect2>
 
@@ -617,7 +621,7 @@ long.property=Long property value, split over \
     several lines
 escape.property=Newlines and tabs can be inserted \
     using the \t and \n escapes
-backslash.property=A backslash can be inserted by writing\\.</programlisting>
+backslash.property=A backslash can be inserted by writing \\.</programlisting>
 </informalexample>
 
 <para>
@@ -670,9 +674,23 @@ plugin.MyPlugin.depend.3=plugin Console 3.0</programlisting>
 </informalexample>
 
   </listitem>
+
   <listitem>
     <para>
-      The title of dockable windows, as displayed in a tabbed or
+      A list of external class library JARs shipped with the plugin.
+      If your plugin bundles extra JARs, this property is required
+      for the plugin manager to be able to remove the plugin completely.
+    </para>
+    <para>
+      The property is a space-separated list of filenames. Here is an
+      example:
+    </para>
+    <informalexample><programlisting>plugin.MyPlugin.jars=crimson.jar jaxp.jar</programlisting></informalexample>
+  </listitem>
+
+  <listitem>
+    <para>
+      The titles of dockable windows, as displayed in a tabbed or
       floating container.
     </para>
     <para>

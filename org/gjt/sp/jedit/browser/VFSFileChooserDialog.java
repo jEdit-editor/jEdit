@@ -134,17 +134,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			}
 			else if(MiscUtilities.isURL(filename))
 				return;
-			else
-			{
-				VFS vfs = VFSManager.getVFSForPath(directory);
-				filename = vfs.constructPath(directory,filename);
-
-				if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
-				{
-					if(vfs instanceof FileVFS && doFileExistsWarning(filename))
-						return;
-				}
-			}
 		}
 		else
 		{
@@ -158,6 +147,15 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					return;
 				}
 			}
+		}
+
+		VFS vfs = VFSManager.getVFSForPath(directory);
+		filename = vfs.constructPath(directory,filename);
+
+		if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
+		{
+			if(vfs instanceof FileVFS && doFileExistsWarning(filename))
+				return;
 		}
 
 		isOK = true;

@@ -509,7 +509,7 @@ loop:			for(;;)
 				this sucks, so we hack to avoid it. */
 				int start = s.getStart();
 
-				retVal += replaceAll(view,buffer,
+				retVal += _replace(view,buffer,
 					s.getStart(),s.getEnd());
 
 				// this has no effect if the selection
@@ -534,6 +534,45 @@ loop:			for(;;)
 			}
 
 			return true;
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,SearchAndReplace.class,e);
+			Object[] args = { e.getMessage() };
+			if(args[0] == null)
+				args[0] = e.toString();
+			GUIUtilities.error(view,"searcherror",args);
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Replaces text in the specified range with the replacement string.
+	 * @param view The view
+	 * @param buffer The buffer
+	 * @param start The start offset
+	 * @param end The end offset
+	 * @return True if the operation was successful, false otherwise
+	 */
+	public static boolean replace(View view, Buffer buffer, int start, int end)
+	{
+		JEditTextArea textArea = view.getTextArea();
+
+		try
+		{
+			int retVal = 0;
+
+			buffer.beginCompoundEdit();
+
+			retVal += _replace(view,buffer,start,end);
+
+			if(retVal != 0)
+				return true;
 		}
 		catch(Exception e)
 		{
@@ -579,7 +618,7 @@ loop:			for(;;)
 				try
 				{
 					buffer.beginCompoundEdit();
-					int retVal = replaceAll(view,buffer,
+					int retVal = _replace(view,buffer,
 						0,buffer.getLength());
 					if(retVal != 0)
 					{
@@ -618,57 +657,6 @@ loop:			for(;;)
 		}
 
 		return (fileCount != 0);
-	}
-
-	/**
-	 * Replaces all occurances of the search string with the replacement
-	 * string.
-	 * @param view The view
-	 * @param buffer The buffer
-	 * @param start The start offset
-	 * @param end The end offset
-	 * @return True if the replace operation was successful, false
-	 * if no matches were found
-	 */
-	public static int replaceAll(View view, Buffer buffer,
-		int start, int end) throws Exception
-	{
-		if(!buffer.isEditable())
-			return 0;
-
-		SearchMatcher matcher = getSearchMatcher(false);
-		if(matcher == null)
-			return 0;
-
-		int occurCount = 0;
-
-		Segment text = new Segment();
-		int offset = start;
-loop:		for(;;)
-		{
-			buffer.getText(offset,end - offset,text);
-			int[] occur = matcher.nextMatch(text);
-			if(occur == null)
-				break loop;
-			int _start = occur[0];
-			int _length = occur[1] - occur[0];
-
-			String found = new String(text.array,text.offset + _start,_length);
-			String subst = matcher.substitute(found);
-
-			if(subst != null)
-			{
-				buffer.remove(offset + _start,_length);
-				buffer.insertString(offset + _start,subst,null);
-				occurCount++;
-				offset += _start + subst.length();
-				end += (subst.length() - found.length());
-			}
-			else
-				offset += _start + _length;
-		}
-
-		return occurCount;
 	}
 
 	/**
@@ -764,5 +752,56 @@ loop:		for(;;)
 
 			recorder.record("SearchAndReplace." + action + ";");
 		}
+	}
+
+	/**
+	 * Replaces all occurances of the search string with the replacement
+	 * string.
+	 * @param view The view
+	 * @param buffer The buffer
+	 * @param start The start offset
+	 * @param end The end offset
+	 * @return True if the replace operation was successful, false
+	 * if no matches were found
+	 */
+	private static int _replace(View view, Buffer buffer,
+		int start, int end) throws Exception
+	{
+		if(!buffer.isEditable())
+			return 0;
+
+		SearchMatcher matcher = getSearchMatcher(false);
+		if(matcher == null)
+			return 0;
+
+		int occurCount = 0;
+
+		Segment text = new Segment();
+		int offset = start;
+loop:		for(;;)
+		{
+			buffer.getText(offset,end - offset,text);
+			int[] occur = matcher.nextMatch(text);
+			if(occur == null)
+				break loop;
+			int _start = occur[0];
+			int _length = occur[1] - occur[0];
+
+			String found = new String(text.array,text.offset + _start,_length);
+			String subst = matcher.substitute(found);
+
+			if(subst != null)
+			{
+				buffer.remove(offset + _start,_length);
+				buffer.insertString(offset + _start,subst,null);
+				occurCount++;
+				offset += _start + subst.length();
+				end += (subst.length() - found.length());
+			}
+			else
+				offset += _start + _length;
+		}
+
+		return occurCount;
 	}
 }

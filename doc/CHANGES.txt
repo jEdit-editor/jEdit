@@ -23,6 +23,16 @@ JEDIT 3.2 VERSION HISTORY
 
 + Enhancements
 
+- Improved jEditLauncher (John Gellene):
+   - executes scripts and runs JDiff from Windows shell menu or from
+     scripting interface.
+   - launcher waits for extended timeout period for jEdit to load.
+   - multiple requests to run jEdit, launch files or run scripts are
+     queued by the launcher while jEdit is loading.
+   - javaw.exe is default interpreter for launching, subject to change
+     by configuation utility.
+   - automatic reboot when installation replaces in-memory modules.
+   - fixes for all reported bugs.
 - Improved PHP syntax highlighting (Ben Sarsgard)
 - Minor change to plugin manager error reporting
 - Console_Plugin macros removed, Console 3.0 incorporates all relevant
@@ -48,6 +58,8 @@ JEDIT 3.2 VERSION HISTORY
   class path
 - -newview command line switch is now a property that can be set in the
   Loading and Saving pane of the Global Options dialog box
+- New method for use in macros:
+  SearchAndReplace.replace(View view, Buffer buffer, int start, int end)
 
 + Bug Fixes
 
@@ -73,6 +85,11 @@ JEDIT 3.2 VERSION HISTORY
   swapped on MacOS
 - PHP mode was missing a SEQ rule for '=', so sequences like $var=TRUE
   would be highlighted incorrectly
+- Deleted files no longer become read only
+- INVALID token type could not be used in edit mode definitions
+- jEdit wouldn't ask for confirmation when saving over an existing file
+  in some circumstances
+- 'OS/2 startup script' fileset was never shown in the installer on OS/2
 
 * Version 3.2pre6
 

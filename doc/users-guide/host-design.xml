@@ -15,8 +15,8 @@
   the host application does with one. We start our discussion of
   plugins by outlining how jEdit loads and displays them. This section
   only provides a broad overview of the more important components that
-  make up jEdit; specifics of the API will be documented in the
-  following chapters.
+  make up jEdit; specifics of the API will be documented in
+  subsequent chapters.
 </para>
 
 <sect1 id="host-design-load"><title>Loading Plugins</title>
@@ -33,7 +33,7 @@
     </para></listitem>
     <listitem><para>
       started the edit server (unless instructed not to
-      by a command line option); and
+      by a command line option) and;
     </para></listitem>
     <listitem><para>
       loaded application properties, any user-supplied properties, and the
@@ -47,17 +47,17 @@
   for editing. It also occurs before jEdit runs any startup scripts.
 </para>
 
+<sect2 id="host-design-loader"><title>The JARClassLoader</title>
+
 <para>
-  Plugins are loaded from <filename>.jar</filename>
-  in the <filename>jars</filename>
+  Plugins are loaded from files with the <filename>.jar</filename>
+  filename extension located in the <filename>jars</filename>
   subdirectories of the jEdit installation and user settings directories
   (see <xref linkend="settings-directory" />).
 </para>
 
-<sect2 id="host-design-loader"><title>The JARClassLoader</title>
-
 <para>
-  For each jar archive file it finds, jEdit creates an instance of the
+  For each JAR archive file it finds, jEdit creates an instance of the
   <classname>JARClassLoader</classname> class. This is a jEdit-specific
   class
   that implements the Java platform's abstract class
@@ -65,23 +65,25 @@
   <classname>JARClassLoader</classname> object does the following:
     <itemizedlist>
       <listitem><para>
-        loads any data on the plugin's actions from a file named
-        <filename>actions.xml</filename> (if it exists) contained at the
-        top level of the archive file;
-      </para></listitem>
-      <listitem><para>
-        loads any properties defined in files ending with
-        the extension <filename>.props</filename> that are contained
-        in the archive;
-      </para></listitem>
-      <listitem><para>
-        adds any class file with a name ending with
+        Adds any class file with a name ending with
         <filename>Plugin.class</filename> to an internal collection of
         plugin class names maintained by the
-        <classname>JARClassLoader</classname>; and
+        <classname>JARClassLoader</classname>. See <xref
+        linkend="plugin-classes" />.
       </para></listitem>
       <listitem><para>
-        adds to a collection maintained by jEdit a new object of
+        Loads any properties defined in files ending with
+        the extension <filename>.props</filename> that are contained
+        in the archive. See <xref linkend="api-resource-properties" />.
+      </para></listitem>
+      <listitem><para>
+        Loads any data on the plugin's actions from a file named
+        <filename>actions.xml</filename> (if it exists) contained at the
+        top level of the archive file. See <xref
+        linkend="api-resources-action" />.
+      </para></listitem>
+      <listitem><para>
+       Adds to a collection maintained by jEdit a new object of
         type <classname>EditPlugin.JAR</classname>. This is a data structure
         holding the name of the jar archive file, a reference to the
         <classname>JARClassLoader</classname> and a collection,
@@ -132,6 +134,13 @@
   separate JARs, for example.
 </para>
 
+<para>
+  A plugin that bundles extra JARs needs to define a property that lists
+  these JAR files in order for the plugin manager to be able to
+  remove the plugin completely. See
+  <xref linkend="api-resource-properties" />.
+</para>
+
 </sidebar>
 
 </sect2>
@@ -154,8 +163,8 @@
   members. It can also register its identity and other information with
   jEdit's <firstterm>EditBus</firstterm> object, which manages messaging
   between plugins and the host application. We will discuss the
-  EditBus in more detail shortly, as it plays a key role in the display
-  of plugins.
+  EditBus in more detail in <xref linkend="host-display-manager" />
+  and <xref linkend="api-plugin-classes" />.
 </para>
 
 <para>
@@ -172,7 +181,7 @@
     class whose name ends in <filename>Plugin</filename>;
   </para></listitem>
   <listitem><para>
-    each plugin core class must implement the <classname>EditPlugin</classname>
+    each plugin core class must exnted the <classname>EditPlugin</classname>
     abstract class;
   </para></listitem>
   <listitem><para>
@@ -199,10 +208,11 @@
 <sect1 id="host-design-display"><title>The User Interface of a Plugin</title>
 
 <para>
-  Plugin windows, whenever they are dockable or directly extend Java's
+  To display a user interface, plugins can either directly extend Java's
   <classname>JFrame</classname>, <classname>JDialog</classname>, or
-  <classname>JWindow</classname> class, are typically defined in a class
-  that is part of the plugin package but separate from the plugin core
+  <classname>JWindow</classname> classes, or use jEdit's dockable window
+  API. They are typically defined in classes that are
+  part of the plugin package but separate from the plugin core
   class.
 </para>
 
@@ -240,6 +250,12 @@
   responsible for creating, closing and managing dockable windows.
 </para>
 
+<para>
+  The <classname>View</classname> class contains a number of methods
+  that can be called from plugins; see <xref linkend="class-View" /> for
+  details.
+</para>
+
 </sect2>
 
 <sect2 id="host-display-manager">
@@ -271,10 +287,7 @@
 <para>
   EditBus subscribers must implement the
   <classname>EBComponent</classname> interface, which defines the single
-  method <function>handleMessage()</function>.
-  This interface is required
-  for any
-  class that subscribes to messages published on the EditBus. A
+  method <function>handleMessage()</function>. A
   <classname>View</classname>, for example, can receive and handle EditBus
   messages because it also implements <classname>EBComponent</classname>.
 </para>
@@ -283,7 +296,7 @@
   Plugins that wish to
   receive messages can explicitly provide implementations of this
   interface, and register them with the EditBus using the
-  <function>addToBus()</function> method.
+  <function>EditBus.addToBus()</function> method.
   However, it can be more convinient to have the plugin core
   class extend the <classname>EBPlugin</classname> abstract class,
   which is identical to the <classname>EditPlugin</classname> class,
@@ -301,8 +314,6 @@
   the <function>send()</function> method of the
   <classname>EditBus</classname> class.
 </para>
-
-</sect2>
 
 <sect2 id="host-display-message">
 <title>Message Routing and Dockable Window Creation</title>
@@ -336,31 +347,39 @@
 <para>
   Eventually the <classname>DockableWindowManager</classname> destroys
   the plugin window,
-  wwhether docking or floating, in response to user action or as
+  whether docking or floating, in response to user action or as
   part of the destruction of the corresponding <classname>View</classname>
   object.
 </para>
 
 <para>
+  The <classname>DockableWindowManager</classname> and
+  <classname>EditBus</classname> classes contain a number of methods
+  that can be called from plugins; see <xref linkend="class-View" /> for
+  details.
+</para>
+
+<para>
   This summary shows that a plugin wishing to use the dockable window
   API has the following additional requirements:
-  <itemizedlist>
-    <listitem><para>
-      the plugin class must extend <classname>EBPlugin</classname>
-      instead of <classname>EditPlugin</classname> in order to
-      receive the <classname>CreateDockableWindow</classname> message;
-    </para></listitem>
-    <listitem><para>
-      it must register its dockable windows in its
-      <function>start()</function> method; and
-    </para></listitem>
-    <listitem><para>
-      it must create and arrange any dockable windows it provides
-      in response to the appropriate
-      <classname>CreateDockableWindow</classname> message;
-    </para></listitem>
-  </itemizedlist>
 </para>
+
+<itemizedlist>
+  <listitem><para>
+    the plugin class must extend <classname>EBPlugin</classname>
+    instead of <classname>EditPlugin</classname> in order to
+    receive the <classname>CreateDockableWindow</classname> message;
+  </para></listitem>
+  <listitem><para>
+    it must register its dockable windows in its
+    <function>start()</function> method; and
+  </para></listitem>
+  <listitem><para>
+    it must create and arrange any dockable windows it provides
+    in response to the appropriate
+    <classname>CreateDockableWindow</classname> message;
+  </para></listitem>
+</itemizedlist>
 
 <para>
   With this broad outline of how jEdit behaves as a plugin host in the

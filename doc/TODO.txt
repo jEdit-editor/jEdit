@@ -1,7 +1,8 @@
 TO DO
 
 - proofread user's guide
-- wait for John to send latest jEditLauncher
+- wait for John to send latest jEditLauncher sources
+- find out about jEdit cli args & jEditLauncher
 - finish console 3.0
 - -1 being passed to virtualToPhysical() by documentChanged()
 - formatting problems in user's guide in table cells
@@ -11,7 +12,6 @@ TO DO
 - FTP plugin: better error messages
 - FTP plugin: chmod
 - scrollToCaret() still broken
-- save a copy as: doesn't warn if overwriting?
 
 + bugs:
 

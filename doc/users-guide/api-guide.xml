@@ -2701,6 +2701,21 @@ JEditTextArea</title>
 </para>
 </listitem>
 
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public static boolean <function>replace</function></funcdef>
+  <paramdef>View <parameter>view</parameter></paramdef>
+  <paramdef>Buffer <parameter>buffer</parameter></paramdef>
+  <paramdef>int <parameter>start</parameter></paramdef>
+  <paramdef>int <parameter>end</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    This will replace the each occurrence of the <quote>search string</quote>
+    in the specified range with the <quote>replace string</quote>.
+</para>
+</listitem>
 
 <listitem>
 <funcsynopsis>
