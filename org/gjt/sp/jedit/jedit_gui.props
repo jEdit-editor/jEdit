@@ -50,8 +50,7 @@ view.quicksearch=Find:\
 ### CONTEXT MENU
 ###
 view.context=undo redo - cut copy paste paste-previous - scroll-line - \
-	view-registers - record-temp-macro stop-recording play-temp-macro \
-	play-last-macro
+	view-registers - record-temp-macro stop-recording play-temp-macro
 
 ###
 ### MENUBAR

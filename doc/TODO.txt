@@ -3,15 +3,9 @@ JEDIT TO DO
 - Expand abbreviation sucks:
   - > 1 match on one line doesn't work
   - need to finish match cycling
-- Do searching in a background thread. For it to work properly, the following
-  methods will need to be made thread-safe:
-    - jEdit.openFile()
-    - jEdit.closeBuffer()
-    - jEdit.getBuffer()
-    - View.setBuffer()
-    - JEditTextArea.select()
-  XXX: what about macros? Macros invoking multiple search and replace
-  operations rely on the actions being synchronous...
+- Action: shell
+- Invoke EditBus commands from macros, macros written using other shells
+- Shell interface so that ExecuteCommands are not necessary
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
 - Word wrap. True word-wrap would require significant changes to the text area,

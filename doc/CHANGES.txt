@@ -5,6 +5,12 @@ JEDIT VERSION HISTORY
 + New Features
 
 - EditBus plugin integrated into the core, old event system removed
+- New classes for EditBus plugins: LogOutput, LazyOutput
+
++ Enhancements
+
+- The wait cursor is now displayed in the HyperSearch dialog box while
+  searching
 
 + Bug Fixes
 
@@ -13,10 +19,13 @@ JEDIT VERSION HISTORY
 - DIRTY_CHANGED events are no longer fired at nearly every autosave (since
   1.7pre2???)
 - Removed debugging message ('hi') from GUIUtilities class (since 2.2pre5)
+- GUIUtilities.java didn't compile with the JDK 1.3 javac (since 2.2pre5)
 
 + API Changes
 
 - Plugins that rely on the old event system will no longer work
+- GetOutput message changed. This breaks Console 1.9 and earlier. Use Console
+  1.9.1
 
 * Version 2.2pre5
 

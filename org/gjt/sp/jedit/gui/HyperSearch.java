@@ -162,6 +162,7 @@ public class HyperSearch extends JDialog implements EBComponent
 
 	private void doHyperSearch()
 	{
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try
 		{
 			resultModel.removeAllElements();
@@ -195,6 +196,7 @@ public class HyperSearch extends JDialog implements EBComponent
 				args[0] = e.toString();
 			GUIUtilities.error(view,"searcherror",args);
 		}
+		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	private boolean doHyperSearch(Buffer buffer, SearchMatcher matcher)
@@ -333,6 +335,9 @@ public class HyperSearch extends JDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.42  1999/11/20 02:34:22  sp
+ * more pre6 stuffs
+ *
  * Revision 1.41  1999/11/19 08:54:52  sp
  * EditBus integrated into the core, event system gone, bug fixes
  *

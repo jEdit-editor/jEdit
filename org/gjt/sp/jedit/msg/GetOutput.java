@@ -48,18 +48,6 @@ public class GetOutput extends EBMessage
 	}
 
 	/**
-	 * Checks that the return value is an output, and only allows
-	 * one per message.
-	 */
-	public void addReturn(Object obj)
-	{
-		if(!(obj instanceof Output))
-			throw new InternalError("GetOutput expects a GetOutput.Output");
-		output = (Output)obj;
-		veto();
-	}
-
-	/**
 	 * Returns the requested output name.
 	 */
 	public String getOutputName()
@@ -73,6 +61,15 @@ public class GetOutput extends EBMessage
 	public View getView()
 	{
 		return view;
+	}
+
+	/**
+	 * Sets the output.
+	 */
+	public void setOutput(Output output)
+	{
+		this.output = output;
+		veto();
 	}
 
 	/**

@@ -1083,6 +1083,22 @@ public class jEdit
 	 */
 	private static void initMisc()
 	{
+		// Initialize the EditBus 'Log' output
+		final String logName = "Log";
+		EditBus.addToBus(new EBComponent()
+		{
+			public void handleMessage(EBMessage msg)
+			{
+				if(msg instanceof GetOutput)
+				{
+					GetOutput gmsg = (GetOutput)msg;
+					if(gmsg.getOutputName().equals(logName))
+						gmsg.setOutput(new LogOutput());
+				}
+			}
+		});
+		EditBus.addToNamedList(EditBus.OUTPUTS,logName);
+
 		inputHandler = new DefaultInputHandler();
 		windowHandler = new WindowHandler();
 
@@ -1525,6 +1541,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.156  1999/11/20 02:34:22  sp
+ * more pre6 stuffs
+ *
  * Revision 1.155  1999/11/19 08:54:51  sp
  * EditBus integrated into the core, event system gone, bug fixes
  *

@@ -1,5 +1,5 @@
 /*
- * Output.java - EditBus output interface
+ * LogOutput.java - Log output
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,37 +20,51 @@
 package org.gjt.sp.jedit;
 
 import java.awt.Color;
+import org.gjt.sp.jedit.msg.GetOutput;
+import org.gjt.sp.util.Log;
 
 /**
- * An interface for displaying text output.
+ * Outputs to the jEdit activity log
  * @author Slava Pestov
  * @version $Id$
  *
  * @since jEdit 2.2pre6
  */
-public interface Output
+public class LogOutput implements Output
 {
 	/**
 	 * Appends some output.
-	 * @param color The color to display it in (null will use
-	 * the default)
+	 * @param color The color to display it in. This is ignored
 	 * @param text The text
 	 */
-	public void addOutput(Color color, String text);
+	public void addOutput(Color color, String text)
+	{
+		Log.log(Log.MESSAGE,this,text);
+	}
 
 	/**
 	 * This method must be called when the command
-	 * finishes executing.
+	 * finishes executing. This is ignored.
 	 */
-	public void commandDone();
+	public void commandDone()
+	{}
 
 	/**
 	 * Returns the default color for informational messages.
 	 */
-	public Color getInfoColor();
+	public Color getInfoColor()
+	{
+		return null;
+	}
 
 	/**
 	 * Returns the default color for error messages.
 	 */
-	public Color getErrorColor();
+	public Color getErrorColor()
+	{
+		return null;
+	}
+
+	// package-private members
+	LogOutput() {}
 }

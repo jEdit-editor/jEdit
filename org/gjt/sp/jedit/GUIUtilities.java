@@ -623,12 +623,12 @@ public class GUIUtilities
 	 * @param win The window
 	 * @param name The window name
 	 */
-	public static void loadGeometry(final Window win, String name)
+	public static void loadGeometry(Window win, String name)
 	{
 		if(!"on".equals(jEdit.getProperty("saveGeometry")))
 			return;
 
-		final int x, y, width, height;
+		int x, y, width, height;
 
 		try
 		{
@@ -658,16 +658,30 @@ public class GUIUtilities
 		win.setSize(width,height);
 
 		// workaround for broken Linux JDK
-		win.addWindowListener(new WindowAdapter()
-		{
-			public void windowOpened(WindowEvent evt)
-			{
-				win.setLocation(x,y);
-				win.setSize(width,height);
+		win.addWindowListener(new LinuxWorkaround(win,x,y,width,height));
+	}
 
-				win.removeWindowListener(this);
-			}
-		});
+	static class LinuxWorkaround extends WindowAdapter
+	{
+		Window win;
+		int x, y, width, height;
+
+		LinuxWorkaround(Window win, int x, int y, int width, int height)
+		{
+			this.win = win;
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+		}
+
+		public void windowOpened(WindowEvent evt)
+		{
+			win.setLocation(x,y);
+			win.setSize(width,height);
+
+			win.removeWindowListener(this);
+		}
 	}
 
 	/**
@@ -837,6 +851,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.42  1999/11/20 02:34:22  sp
+ * more pre6 stuffs
+ *
  * Revision 1.41  1999/11/19 08:54:51  sp
  * EditBus integrated into the core, event system gone, bug fixes
  *
