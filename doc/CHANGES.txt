@@ -12,11 +12,14 @@ JEDIT VERSION HISTORY
 - TokenMarker now uses a hashing algorithm to check against far fewer rules
   than previously. This should result in a 2-10x speed improvement! This is
   particularly noticable when loading files
+- XMode documentation started
 
 + Bug Fixes
 
 - Incremental search didn't beep if no match was found (since 2.4pre4)
 - xmode.dtd didn't define attributes of KEYWORDS tag (since 2.4pre2)
+- Inserting characters after using the splitting commands didn't work
+  (since 2.4pre4)
 
 * Version 2.4pre4
 

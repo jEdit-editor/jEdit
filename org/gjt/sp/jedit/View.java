@@ -853,7 +853,12 @@ public class View extends JFrame implements EBComponent
 		textArea.addFocusListener(new FocusHandler());
 
 		if(buffer != null)
+		{
 			textArea.setDocument(buffer);
+			textArea.setEditable(!buffer.isReadOnly());
+		}
+		else
+			textArea.setEditable(true);
 
 		EditBus.send(new ViewUpdate(this,textArea,
 			ViewUpdate.TEXTAREA_CREATED));
@@ -1367,6 +1372,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.154  2000/04/08 09:34:58  sp
+ * Documentation updates, minor syntax changes
+ *
  * Revision 1.153  2000/04/08 06:10:51  sp
  * Digit highlighting, search bar bug fix
  *

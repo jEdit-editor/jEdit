@@ -32,15 +32,12 @@ public class ParserRuleSet
 {
 	public ParserRuleSet()
 	{
-		rules = new Vector(RULE_VECTOR_SIZE);
 		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
 		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
 	}
 
 	public void addRule(ParserRule r)
 	{
-		rules.addElement(r);
-
 		int key = Character.toUpperCase(r.searchChars[0])
 			% RULE_BUCKET_COUNT;
 		ParserRule last = ruleMapLast[key];
@@ -77,11 +74,6 @@ public class ParserRuleSet
 	{
 		int key = Character.toUpperCase(ch) % RULE_BUCKET_COUNT;
 		return ruleMapFirst[key];
-	}
-
-	public Vector getRules()
-	{
-		return rules;
 	}
 
 	public int getTerminateChar()
@@ -163,14 +155,12 @@ public class ParserRuleSet
 		defaultID = def;
 	}
 
-	private static final int RULE_VECTOR_SIZE = 48;
 	private static final int RULE_BUCKET_COUNT = 32;
 	private KeywordMap keywords;
 
 	private ParserRule[] ruleMapFirst;
 	private ParserRule[] ruleMapLast;
 
-	private Vector rules;
 	private ParserRule escapeRule;
 	private Segment escapePattern;
 	private int terminateChar = -1;
@@ -182,6 +172,9 @@ public class ParserRuleSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/04/08 09:34:58  sp
+ * Documentation updates, minor syntax changes
+ *
  * Revision 1.5  2000/04/08 06:57:14  sp
  * Parser rules are now hashed; this dramatically speeds up tokenization
  *
