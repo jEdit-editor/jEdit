@@ -41,7 +41,7 @@ public class indent_on_enter extends EditAction
 		int selEnd = textArea.getSelectionEnd();
 
                 if(selStart == selEnd
-			&& "on".equals(buffer.getProperty("indentOnEnter")))
+			&& buffer.getBooleanProperty("indentOnEnter"))
 		{
 			buffer.indentLine(view,textArea.getCaretLine(),false);
                 }

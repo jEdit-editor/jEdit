@@ -81,71 +81,71 @@ public class EditorOptionPane extends AbstractOptionPane
 		/* Line highlight */
 		lineHighlight = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".lineHighlight"));
-		lineHighlight.getModel().setSelected("on".equals(jEdit
-			.getProperty("view.lineHighlight")));
+		lineHighlight.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.lineHighlight"));
 		addComponent(lineHighlight);
 
 		/* Bracket highlight */
 		bracketHighlight = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".bracketHighlight"));
-		bracketHighlight.getModel().setSelected("on".equals(jEdit
-			.getProperty("view.bracketHighlight")));
+		bracketHighlight.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.bracketHighlight"));
 		addComponent(bracketHighlight);
 
 		/* EOL markers */
 		eolMarkers = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".eolMarkers"));
-		eolMarkers.getModel().setSelected("on".equals(jEdit
-			.getProperty("view.eolMarkers")));
+		eolMarkers.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.eolMarkers"));
 		addComponent(eolMarkers);
 
 		/* Paint invalid */
 		paintInvalid = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".paintInvalid"));
-		paintInvalid.getModel().setSelected("on".equals(jEdit
-			.getProperty("view.paintInvalid")));
+		paintInvalid.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.paintInvalid"));
 		addComponent(paintInvalid);
 
-		/* Syntax colorizing */
+		/* Syntax highlighting */
 		syntax = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".syntax"));
-		syntax.getModel().setSelected("on".equals(jEdit.getProperty(
-			"buffer.syntax")));
+		syntax.getModel().setSelected(jEdit.getBooleanProperty(
+			"buffer.syntax"));
 		addComponent(syntax);
 
 		/* Indent on tab */
 		indentOnTab = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".indentOnTab"));
-		indentOnTab.getModel().setSelected("on".equals(jEdit.getProperty(
-			"buffer.indentOnTab")));
+		indentOnTab.getModel().setSelected(jEdit.getBooleanProperty(
+			"buffer.indentOnTab"));
 		addComponent(indentOnTab);
 
 		/* Indent on enter */
 		indentOnEnter = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".indentOnEnter"));
-		indentOnEnter.getModel().setSelected("on".equals(jEdit.getProperty(
-			"buffer.indentOnEnter")));
+		indentOnEnter.getModel().setSelected(jEdit.getBooleanProperty(
+			"buffer.indentOnEnter"));
 		addComponent(indentOnEnter);
 
 		/* Soft tabs */
 		noTabs = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".noTabs"));
-		noTabs.getModel().setSelected("yes".equals(jEdit.getProperty(
-			"buffer.noTabs")));
+		noTabs.getModel().setSelected(jEdit.getBooleanProperty(
+			"buffer.noTabs"));
 		addComponent(noTabs);
 
 		/* Blinking caret */
 		blinkCaret = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".blinkCaret"));
-		blinkCaret.getModel().setSelected("on".equals(jEdit.getProperty(
-			"view.caretBlink")));
+		blinkCaret.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.caretBlink"));
 		addComponent(blinkCaret);
 
 		/* Block caret */
 		blockCaret = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".blockCaret"));
-		blockCaret.getModel().setSelected("on".equals(jEdit.getProperty(
-			"view.blockCaret")));
+		blockCaret.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.blockCaret"));
 		addComponent(blockCaret);
 
 		/* Electric borders */
@@ -158,8 +158,8 @@ public class EditorOptionPane extends AbstractOptionPane
 		/* Smart home/end */
 		homeEnd = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".homeEnd"));
-		homeEnd.getModel().setSelected("yes".equals(jEdit.getProperty(
-			"view.homeEnd")));
+		homeEnd.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.homeEnd"));
 		addComponent(homeEnd);
 	}
 
@@ -173,30 +173,29 @@ public class EditorOptionPane extends AbstractOptionPane
 			.getSelectedIndex()));
 		jEdit.setProperty("buffer.tabSize",(String)tabSize
 			.getSelectedItem());
-		jEdit.setProperty("view.lineHighlight",lineHighlight.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("view.bracketHighlight",bracketHighlight.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("view.eolMarkers",eolMarkers.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("view.paintInvalid",paintInvalid.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("buffer.syntax",syntax.getModel().isSelected()
-			? "on" : "off");
-		jEdit.setProperty("buffer.indentOnTab",indentOnTab.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("buffer.indentOnEnter",indentOnEnter.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("view.caretBlink",blinkCaret.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("view.blockCaret",blockCaret.getModel()
-			.isSelected() ? "on" : "off");
+		jEdit.setBooleanProperty("view.lineHighlight",lineHighlight.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.bracketHighlight",bracketHighlight.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.eolMarkers",eolMarkers.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.paintInvalid",paintInvalid.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("buffer.syntax",syntax.getModel().isSelected());
+		jEdit.setBooleanProperty("buffer.indentOnTab",indentOnTab.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("buffer.indentOnEnter",indentOnEnter.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.caretBlink",blinkCaret.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.blockCaret",blockCaret.getModel()
+			.isSelected());
 		jEdit.setProperty("view.electricBorders",electricBorders.getModel()
 			.isSelected() ? "3" : "0");
-		jEdit.setProperty("buffer.noTabs",noTabs.getModel()
-			.isSelected() ? "yes" : "no");
-		jEdit.setProperty("view.homeEnd",homeEnd.getModel()
-			.isSelected() ? "yes" : "no");
+		jEdit.setBooleanProperty("buffer.noTabs",noTabs.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.homeEnd",homeEnd.getModel()
+			.isSelected());
 	}
 
 	// private members

@@ -455,8 +455,8 @@ loop:			for(;;)
 		fileset = new CurrentBufferSet();
 		search = jEdit.getProperty("search.find.value");
 		replace = jEdit.getProperty("search.replace.value");
-		regexp = "on".equals(jEdit.getProperty("search.regexp.toggle"));
-		ignoreCase = "on".equals(jEdit.getProperty("search.ignoreCase.toggle"));
+		regexp = jEdit.getBooleanProperty("search.regexp.toggle");
+		ignoreCase = jEdit.getBooleanProperty("search.ignoreCase.toggle");
 	}
 
 	/**
@@ -466,10 +466,8 @@ loop:			for(;;)
 	{
 		jEdit.setProperty("search.find.value",search);
 		jEdit.setProperty("search.replace.value",replace);
-		jEdit.setProperty("search.ignoreCase.toggle",
-			ignoreCase ? "on" : "off");
-		jEdit.setProperty("search.regexp.toggle",
-			regexp ? "on" : "off");
+		jEdit.setBooleanProperty("search.ignoreCase.toggle",ignoreCase);
+		jEdit.setBooleanProperty("search.regexp.toggle",regexp);
 	}
 
 	// private members
@@ -517,6 +515,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  2000/04/15 04:14:47  sp
+ * XML files updated, jEdit.get/setBooleanProperty() method added
+ *
  * Revision 1.27  2000/04/06 02:22:12  sp
  * Incremental search, documentation updates
  *

@@ -155,8 +155,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 			jEdit.setProperty("multifile.directory.path.value",_directory);
 			jEdit.setProperty("multifile.directory.glob.value",_glob);
-			jEdit.setProperty("multifile.directory.recurse.value",
-				_recurse ? "on" : "off");
+			jEdit.setBooleanProperty("multifile.directory.recurse.value",_recurse);
 
 			return new DirectoryListSet(_directory,_glob,_recurse);
 		}
@@ -315,8 +314,8 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		directoryRecurse = new JCheckBox(jEdit.getProperty("multifile"
 			+ ".directory.recurse"));
-		directoryRecurse.getModel().setSelected("on".equals(
-			jEdit.getProperty("multifile.directory.recurse.value")));
+		directoryRecurse.getModel().setSelected(jEdit.getBooleanProperty(
+			"multifile.directory.recurse.value"));
 		directoryRecurse.addActionListener(new ActionHandler());
 		box3.add(BorderLayout.EAST,directoryRecurse);
 
@@ -357,6 +356,9 @@ public class MultiFileSearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/04/15 04:14:47  sp
+ * XML files updated, jEdit.get/setBooleanProperty() method added
+ *
  * Revision 1.10  2000/03/14 06:22:25  sp
  * Lots of new stuff
  *

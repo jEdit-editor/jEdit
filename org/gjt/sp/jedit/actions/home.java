@@ -58,7 +58,7 @@ public class home extends EditAction
 			view.getToolkit().beep();
 			return;
 		}
-		else if(!"yes".equals(jEdit.getProperty("view.homeEnd")))
+		else if(!jEdit.getBooleanProperty("view.homeEnd"))
 			caret = firstOfLine;
 		else if(caret == firstVisible)
 			caret = 0;

@@ -537,8 +537,8 @@ public class View extends JFrame implements EBComponent
 		loadToolBars();
 		initBufferTabs();
 
-		showFullPath = "on".equals(jEdit.getProperty("view.showFullPath"));
-		checkModStatus = "yes".equals(jEdit.getProperty("view.checkModStatus"));
+		showFullPath = jEdit.getBooleanProperty("view.showFullPath");
+		checkModStatus = jEdit.getBooleanProperty("view.checkModStatus");
 		if(buffer != null)
 			updateTitle();
 
@@ -581,14 +581,14 @@ public class View extends JFrame implements EBComponent
 		Font font = new Font(family,style,size);
 
 		painter.setFont(font);
-		painter.setBracketHighlightEnabled("on".equals(jEdit.getProperty(
-			"view.bracketHighlight")));
+		painter.setBracketHighlightEnabled(jEdit.getBooleanProperty(
+			"view.bracketHighlight"));
 		painter.setBracketHighlightColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.bracketHighlightColor")));
-		painter.setEOLMarkersPainted("on".equals(jEdit.getProperty(
-			"view.eolMarkers")));
-		painter.setInvalidLinesPainted("on".equals(jEdit.getProperty(
-			"view.paintInvalid")));
+		painter.setEOLMarkersPainted(jEdit.getBooleanProperty(
+			"view.eolMarkers"));
+		painter.setInvalidLinesPainted(jEdit.getBooleanProperty(
+			"view.paintInvalid"));
 		painter.setEOLMarkerColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.eolMarkerColor")));
 		painter.setCaretColor(GUIUtilities.parseColor(
@@ -599,10 +599,10 @@ public class View extends JFrame implements EBComponent
 			jEdit.getProperty("view.bgColor")));
 		painter.setForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.fgColor")));
-		painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
-			"view.blockCaret")));
-		painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
-			"view.lineHighlight")));
+		painter.setBlockCaretEnabled(jEdit.getBooleanProperty(
+			"view.blockCaret"));
+		painter.setLineHighlightEnabled(jEdit.getBooleanProperty(
+			"view.lineHighlight"));
 		painter.setLineHighlightColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.lineHighlightColor")));
 
@@ -617,10 +617,10 @@ public class View extends JFrame implements EBComponent
 		{
 			// retain the default gutter width
 		}
-		gutter.setCollapsed("yes".equals(jEdit.getProperty(
-			"view.gutter.collapsed")));
-		gutter.setLineNumberingEnabled(!"no".equals(jEdit.getProperty(
-			"view.gutter.lineNumbers")));
+		gutter.setCollapsed(jEdit.getBooleanProperty(
+			"view.gutter.collapsed"));
+		gutter.setLineNumberingEnabled(jEdit.getBooleanProperty(
+			"view.gutter.lineNumbers"));
 		try
 		{
 			int interval = Integer.parseInt(jEdit.getProperty(
@@ -631,8 +631,8 @@ public class View extends JFrame implements EBComponent
 		{
 			// retain the default highlight interval
 		}
-		gutter.setCurrentLineHighlightEnabled("yes".equals(jEdit.getProperty(
-			"view.gutter.highlightCurrentLine")));
+		gutter.setCurrentLineHighlightEnabled(jEdit.getBooleanProperty(
+			"view.gutter.highlightCurrentLine"));
 		gutter.setBackground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.bgColor")));
 		gutter.setForeground(GUIUtilities.parseColor(
@@ -680,8 +680,8 @@ public class View extends JFrame implements EBComponent
 			// retain the default font
 		}
 
-		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
-			"view.caretBlink")));
+		textArea.setCaretBlinkEnabled(jEdit.getBooleanProperty(
+			"view.caretBlink"));
 
 		try
 		{
@@ -799,7 +799,7 @@ public class View extends JFrame implements EBComponent
 
 	private void loadToolBars()
 	{
-		if("on".equals(jEdit.getProperty("view.showToolbar")))
+		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
 			if(toolBar == null)
 			{
@@ -815,7 +815,7 @@ public class View extends JFrame implements EBComponent
 			toolBar = null;
 		}
 
-		if("on".equals(jEdit.getProperty("view.showSearchbar")))
+		if(jEdit.getBooleanProperty("view.showSearchbar"))
 		{
 			if(searchBar == null)
 				searchBar = new SearchBar(this);
@@ -880,7 +880,7 @@ public class View extends JFrame implements EBComponent
 		else
 			comp = splitPane;
 
-		if("on".equals(jEdit.getProperty("view.showBufferTabs")))
+		if(jEdit.getBooleanProperty("view.showBufferTabs"))
 		{
 			if(bufferTabs == null)
 			{
@@ -1366,6 +1366,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.157  2000/04/15 04:14:47  sp
+ * XML files updated, jEdit.get/setBooleanProperty() method added
+ *
  * Revision 1.156  2000/04/14 11:57:38  sp
  * Text area actions moved to org.gjt.sp.jedit.actions package
  *

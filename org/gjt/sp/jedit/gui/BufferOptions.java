@@ -130,8 +130,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.anchor = GridBagConstraints.WEST;
 		syntax = new JCheckBox(jEdit.getProperty(
 			"options.editor.syntax"));
-		syntax.getModel().setSelected("on".equals(
-			buffer.getProperty("syntax")));
+		syntax.getModel().setSelected(buffer.getBooleanProperty("syntax"));
 		syntax.addActionListener(actionListener);
 		layout.setConstraints(syntax,cons);
 		panel.add(syntax);
@@ -140,8 +139,8 @@ public class BufferOptions extends EnhancedDialog
 		cons.gridy = 4;
 		indentOnTab = new JCheckBox(jEdit.getProperty(
 			"options.editor.indentOnTab"));
-		indentOnTab.getModel().setSelected("on".equals(
-			buffer.getProperty("indentOnTab")));
+		indentOnTab.getModel().setSelected(buffer
+			.getBooleanProperty("indentOnTab"));
 		indentOnTab.addActionListener(actionListener);
 		layout.setConstraints(indentOnTab,cons);
 		panel.add(indentOnTab);
@@ -150,8 +149,8 @@ public class BufferOptions extends EnhancedDialog
 		cons.gridy = 5;
 		indentOnEnter = new JCheckBox(jEdit.getProperty(
 			"options.editor.indentOnEnter"));
-		indentOnEnter.getModel().setSelected("on".equals(
-			buffer.getProperty("indentOnEnter")));
+		indentOnEnter.getModel().setSelected(buffer
+			.getBooleanProperty("indentOnEnter"));
 		indentOnEnter.addActionListener(actionListener);
 		layout.setConstraints(indentOnEnter,cons);
 		panel.add(indentOnEnter);
@@ -160,8 +159,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.gridy = 6;
 		noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editor.noTabs"));
-		noTabs.getModel().setSelected("yes".equals(
-			buffer.getProperty("noTabs")));
+		noTabs.getModel().setSelected(buffer.getBooleanProperty("noTabs"));
 		noTabs.addActionListener(actionListener);
 		layout.setConstraints(noTabs,cons);
 		panel.add(noTabs);
@@ -225,14 +223,13 @@ public class BufferOptions extends EnhancedDialog
 			throw new InternalError();
 		buffer.putProperty("lineSeparator",lineSep);
 
-		buffer.putProperty("syntax",syntax.getModel()
-			.isSelected() ? "on" : "off");
-		buffer.putProperty("indentOnTab",indentOnTab.getModel()
-			.isSelected() ? "on" : "off");
-		buffer.putProperty("indentOnEnter",indentOnEnter.getModel()
-			.isSelected() ? "on" : "off");
-		buffer.putProperty("noTabs",noTabs.getModel().isSelected()
-			? "yes" : "no");
+		buffer.putBooleanProperty("syntax",syntax.getModel()
+			.isSelected());
+		buffer.putBooleanProperty("indentOnTab",indentOnTab.getModel()
+			.isSelected());
+		buffer.putBooleanProperty("indentOnEnter",indentOnEnter.getModel()
+			.isSelected());
+		buffer.putBooleanProperty("noTabs",noTabs.getModel().isSelected());
 
 		buffer.propertiesChanged();
 		dispose();
@@ -265,15 +262,11 @@ public class BufferOptions extends EnhancedDialog
 	private void updatePropsField()
 	{
 		props.setText(":tabSize=" + tabSize.getSelectedItem()
-			+ ":noTabs=" + (noTabs.getModel().isSelected()
-			? "on" : "off")
+			+ ":noTabs=" + noTabs.getModel().isSelected()
 			+ ":mode=" + modes[mode.getSelectedIndex()].getName()
-			+ ":indentOnTab=" + (indentOnTab.getModel().isSelected()
-			? "on" : "off")
-			+ ":indentOnEnter=" + (indentOnEnter.getModel().isSelected()
-			? "on" : "off")
-			+ ":syntax=" + (syntax.getModel().isSelected()
-			? "on" : "off")
+			+ ":indentOnTab=" + indentOnTab.getModel().isSelected()
+			+ ":indentOnEnter=" + indentOnEnter.getModel().isSelected()
+			+ ":syntax=" + syntax.getModel().isSelected()
 			+ ":");
 	}
 
@@ -296,6 +289,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/04/15 04:14:47  sp
+ * XML files updated, jEdit.get/setBooleanProperty() method added
+ *
  * Revision 1.13  2000/04/07 06:57:26  sp
  * Buffer options dialog box updates, API docs updated a bit in syntax package
  *

@@ -44,8 +44,8 @@ public class SearchDialog extends EnhancedDialog
 
 		replace = new HistoryTextField("replace");
 		keepDialog = new JCheckBox(jEdit.getProperty(
-			"search.keepDialog"),"on".equals(jEdit.getProperty(
-			"search.keepDialog.toggle")));
+			"search.keepDialog"),jEdit.getBooleanProperty(
+			"search.keepDialog.toggle"));
 		ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.ignoreCase"),SearchAndReplace.getIgnoreCase());
 		regexp = new JCheckBox(jEdit.getProperty(
@@ -146,8 +146,8 @@ public class SearchDialog extends EnhancedDialog
 		SearchAndReplace.setSearchString(find.getText());
 		replace.addCurrentToHistory();
 		SearchAndReplace.setReplaceString(replace.getText());
-		jEdit.setProperty("search.keepDialog.toggle",keepDialog
-			.getModel().isSelected() ? "on" : "off");
+		jEdit.setBooleanProperty("search.keepDialog.toggle",keepDialog
+			.getModel().isSelected());
 		SearchAndReplace.setIgnoreCase(ignoreCase.getModel().isSelected());
 		SearchAndReplace.setRegexp(regexp.getModel().isSelected());
 		SearchAndReplace.setSearchFileSet(fileset);
@@ -222,6 +222,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/04/15 04:14:47  sp
+ * XML files updated, jEdit.get/setBooleanProperty() method added
+ *
  * Revision 1.7  2000/04/03 10:22:24  sp
  * Search bar
  *

@@ -111,29 +111,29 @@ public class GeneralOptionPane extends AbstractOptionPane
 		/* Session management */
 		saveDesktop = new JCheckBox(jEdit.getProperty(
 			"options.general.saveDesktop"));
-		saveDesktop.getModel().setSelected("on".equals(jEdit.getProperty(
-			"saveDesktop")));
+		saveDesktop.getModel().setSelected(jEdit.getBooleanProperty(
+			"saveDesktop"));
 		addComponent(saveDesktop);
 
 		/* Show toolbar */
 		showToolbar = new JCheckBox(jEdit.getProperty(
 			"options.general.showToolbar"));
-		showToolbar.getModel().setSelected("on".equals(jEdit.getProperty(
-			"view.showToolbar")));
+		showToolbar.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.showToolbar"));
 		addComponent(showToolbar);
 
 		/* Show search bar */
 		showSearchbar = new JCheckBox(jEdit.getProperty(
 			"options.general.showSearchbar"));
-		showSearchbar.getModel().setSelected("on".equals(jEdit.getProperty(
-			"view.showSearchbar")));
+		showSearchbar.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.showSearchbar"));
 		addComponent(showSearchbar);
 
 		/* Show buffer tabs */
 		showBufferTabs = new JCheckBox(jEdit.getProperty(
 			"options.general.showBufferTabs"));
-		showBufferTabs.getModel().setSelected("on".equals(jEdit.getProperty(
-			"view.showBufferTabs")));
+		showBufferTabs.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.showBufferTabs"));
 		addComponent(showBufferTabs);
 
 		/* Buffer tabs position */
@@ -150,29 +150,29 @@ public class GeneralOptionPane extends AbstractOptionPane
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.general.showFullPath"));
-		showFullPath.getModel().setSelected("on".equals(jEdit.getProperty(
-			"view.showFullPath")));
+		showFullPath.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.showFullPath"));
 		addComponent(showFullPath);
 
 		/* Sort buffer list */
 		sortBuffers = new JCheckBox(jEdit.getProperty(
 			"options.general.sortBuffers"));
-		sortBuffers.getModel().setSelected("on".equals(jEdit.getProperty(
-			"sortBuffers")));
+		sortBuffers.getModel().setSelected(jEdit.getBooleanProperty(
+			"sortBuffers"));
 		addComponent(sortBuffers);
 
 		/* Sort buffers by names */
 		sortByName = new JCheckBox(jEdit.getProperty(
 			"options.general.sortByName"));
-		sortByName.getModel().setSelected("on".equals(jEdit.getProperty(
-			"sortByName")));
+		sortByName.getModel().setSelected(jEdit.getBooleanProperty(
+			"sortByName"));
 		addComponent(sortByName);
 
 		/* Check mod status on focus */
 		checkModStatus = new JCheckBox(jEdit.getProperty(
 			"options.general.checkModStatus"));
-		checkModStatus.getModel().setSelected("yes".equals(jEdit.getProperty(
-			"view.checkModStatus")));
+		checkModStatus.getModel().setSelected(jEdit.getBooleanProperty(
+			"view.checkModStatus"));
 		addComponent(checkModStatus);
 	}
 
@@ -180,8 +180,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 	{
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
-		jEdit.setProperty("saveDesktop",saveDesktop.getModel()
-			.isSelected() ? "on" : "off");
+		jEdit.setBooleanProperty("saveDesktop",saveDesktop.getModel()
+			.isSelected());
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
 		jEdit.setProperty("autosave",autosave.getText());
@@ -205,22 +205,22 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
-		jEdit.setProperty("view.showToolbar",showToolbar.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("view.showSearchbar",showSearchbar.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("view.showBufferTabs",showBufferTabs.getModel()
-			.isSelected() ? "on" : "off");
+		jEdit.setBooleanProperty("view.showToolbar",showToolbar.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.showSearchbar",showSearchbar.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.showBufferTabs",showBufferTabs.getModel()
+			.isSelected());
 		jEdit.setProperty("view.bufferTabsPos",String.valueOf(
 			bufferTabsPos.getSelectedIndex() + 1));
-		jEdit.setProperty("view.showFullPath",showFullPath.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("sortBuffers",sortBuffers.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("sortByName",sortByName.getModel()
-			.isSelected() ? "on" : "off");
-		jEdit.setProperty("view.checkModStatus",checkModStatus.getModel()
-			.isSelected() ? "yes" : "no");
+		jEdit.setBooleanProperty("view.showFullPath",showFullPath.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("sortBuffers",sortBuffers.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("sortByName",sortByName.getModel()
+			.isSelected());
+		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus.getModel()
+			.isSelected());
 	}
 
 	// private members

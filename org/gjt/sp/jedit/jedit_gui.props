@@ -868,6 +868,7 @@ options.gutter.lineNumbers=Line numbering enabled
 options.gutter.currentLineHighlight=Current line highlight enabled
 options.gutter.width=Gutter width:\ 
 options.gutter.borderWidth=Gutter border width:\ 
+options.gutter.numberAlignment=Line number alignment:\ 
 options.gutter.font=Gutter font:\ 
 options.gutter.fontsize=Gutter font size:\ 
 options.gutter.fontstyle=Gutter font style:\ 

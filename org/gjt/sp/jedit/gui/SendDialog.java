@@ -112,8 +112,8 @@ implements ActionListener, Runnable
 		constraints.anchor = constraints.WEST;
 		selectionOnly = new JCheckBox(jEdit.getProperty(
 			"send.selectionOnly"));
-		selectionOnly.getModel().setSelected("on".equals(
-			jEdit.getProperty("send.selectionOnly.value")));
+		selectionOnly.getModel().setSelected(
+			jEdit.getBooleanProperty("send.selectionOnly.value"));
 		layout.setConstraints(selectionOnly,constraints);
 		panel.add(selectionOnly);
 		
@@ -350,8 +350,8 @@ implements ActionListener, Runnable
 		jEdit.setProperty("send.from.value",from.getText());
 		jEdit.setProperty("send.to.value",to.getText());
 		jEdit.setProperty("send.subject.value",subject.getText());
-		jEdit.setProperty("send.selectionOnly.value",
-			selectionOnly.getModel().isSelected() ? "on" : "off");
+		jEdit.setBooleanProperty("send.selectionOnly.value",
+			selectionOnly.getModel().isSelected());
 		
 		if(thread != null)
 			thread.stop();

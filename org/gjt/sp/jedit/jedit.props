@@ -17,7 +17,7 @@ recent=8
 history=25
 
 # Desktop saving toggle
-saveDesktop=on
+saveDesktop=true
 
 # Number of backups to make, 0=no backups
 backups=1
@@ -30,8 +30,8 @@ backup.prefix=
 backup.suffix=~
 
 # Buffer list sorting
-sortBuffers=off
-sortByName=off
+sortBuffers=false
+sortByName=false
 
 ###
 ### BUFFER SETTINGS
@@ -53,11 +53,11 @@ sortByName=off
 buffer.tabSize=8
 
 # Soft tabs
-buffer.noTabs=no
+buffer.noTabs=false
 
 # Auto indent
-buffer.indentOnTab=off
-buffer.indentOnEnter=on
+buffer.indentOnTab=false
+buffer.indentOnEnter=true
 
 # Default edit mode
 buffer.defaultMode=text
@@ -70,29 +70,29 @@ buffer.margin.bottom=0.5
 buffer.margin.right=0.5
 
 # Syntax highlighting
-buffer.syntax=on
+buffer.syntax=true
 
 ###
 ### VIEW SETTINGS
 ###
 
-# Show toolbar? (on/off)
-view.showToolbar=off
+# Show toolbar?
+view.showToolbar=false
 
-# Show search bar? (on/off)
-view.showSearchbar=on
+# Show search bar?
+view.showSearchbar=true
 
-# Show buffer tabs? (on/off)
-view.showBufferTabs=on
+# Show buffer tabs?
+view.showBufferTabs=true
 
 # Buffer tabs position (1=top, 2=left, 3=bottom, 4=right)
 view.bufferTabsPos=1
 
-# Show full path in title bar? (on/off)
-view.showFullPath=off
+# Show full path in title bar?
+view.showFullPath=false
 
 # Check modification status on focus?
-view.checkModStatus=yes
+view.checkModStatus=true
 
 # Font
 view.font=Monospaced
@@ -105,19 +105,19 @@ view.bgColor=#ffffff
 view.fgColor=#000000
 
 # Line highlighting
-view.lineHighlight=on
+view.lineHighlight=true
 view.lineHighlightColor=#e0e0e0
 
 # Bracket highlighting
-view.bracketHighlight=on
+view.bracketHighlight=true
 view.bracketHighlightColor=#000000
 
 # EOL markers
-view.eolMarkers=on
+view.eolMarkers=true
 view.eolMarkerColor=#009999
 
 # Invalid lines
-view.paintInvalid=on
+view.paintInvalid=true
 
 # Caret color
 view.caretColor=#ff0000
@@ -126,16 +126,16 @@ view.caretColor=#ff0000
 view.selectionColor=#ccccff
 
 # Caret blinking
-view.caretBlink=on
+view.caretBlink=true
 
 # Block caret
-view.blockCaret=off
+view.blockCaret=false
 
 # Electric borders
 view.electricBorders=3
 
 # Smart home/end
-view.homeEnd=yes
+view.homeEnd=true
 
 # Gutter background color
 view.gutter.bgColor=#ffffff
@@ -169,10 +169,10 @@ view.gutter.width=40
 view.gutter.borderWidth=4
 
 # Gutter collapsed/expanded by default
-view.gutter.collapsed=yes
+view.gutter.collapsed=true
 
 # Gutter displays line numbers
-view.gutter.lineNumbers=yes
+view.gutter.lineNumbers=true
 
 # Line numbers are drawn with this alignment (left, center, right)
 view.gutter.numberAlignment=right
@@ -181,22 +181,22 @@ view.gutter.numberAlignment=right
 view.gutter.highlightInterval=5
 
 # Gutter displays line numbers
-view.gutter.highlightCurrentLine=yes
+view.gutter.highlightCurrentLine=true
 
 # Expand abbrevs when user finishes typing a word
-view.expandOnInput=no
+view.expandOnInput=false
 
 # Syntax styles
-view.style.comment1=bgColor:#cfcfcf style:i
+view.style.comment1=color:#000000 bgColor:#cfcfcf style:i
 view.style.comment2=color:#990033 bgColor:#cfcfcf style:i
 view.style.literal1=color:#650099
 view.style.literal2=color:#650099 style:b
-view.style.keyword1=style:b
+view.style.keyword1=color:#000000 style:b
 view.style.keyword2=color:#ff00ff
 view.style.keyword3=color:#009600
 view.style.function=color:#d27e00
 view.style.markup=color:#5e5e5e style:b
 view.style.label=color:#990033 bgColor:#cfcfcf style:b
-view.style.operator=style:b
+view.style.operator=color:#000000 style:b
 view.style.digit=color:#009191
 view.style.invalid=color:#ff0000 style:b

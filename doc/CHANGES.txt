@@ -9,11 +9,16 @@ JEDIT VERSION HISTORY
   (Oliver Rutherfurd)
 - jEdit will now display more meaningful error messages when you try to
   open a directory, or a file with insufficent permissions
+- Text area actions are now implementations of the EditAction class. This
+  simplifies matters in a few places
+- New jEdit.getBooleanProperty() and setBooleanProperty() methods
 
 + Bug Fixes
 
 - If an error occurred while loading or saving a file, jEdit would claim that
   the file had been modified on disk (since 2.4pre1)
+- All mode files were invalid because their first line was not
+  '<?xml version="1.0"?>' (since 2.4pre2)
 
 + API Changes
 

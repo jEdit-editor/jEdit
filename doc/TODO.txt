@@ -1,42 +1,25 @@
 JEDIT TO DO
 
-+ Features
-
+- do MARK_PREVIOUS before markKeyword()
+- Double-click drag doesn't work backwards
 - XMode:
   - better error reporting
   - regexps
-  - graphical mode/grammar editor
-  - do MARK_PREVIOUS before markKeyword()
-- 'Uncomment' command that removes comment strings from selected text
-- Reverse search. Until gnu.regexp supports this, it can't be done very easily
-- Write custom 'document' class; Swing implementation has a few
-  problems. With a custom document, folding and such becomes much cleaner
-- i18n support - bidi, input methods, locale-sensitive GUI, etc
+  - mode editor
+- Reverse search
+- New document model
 - Word wrap
+- Folding
+- i18n support - bidi, input methods, locale-sensitive GUI, etc
 - Plugin devel manual needs more work:
   - document views, buffers
   - document GUIUtilities.load/saveGeometry
   - how to write text area and gutter hilites
+- Editable toolbar and context menu
+- Smarter auto indent
 
-+ Enhancements
-
-- EditPlugin.getName()/Version()/Author(), getPath(), getClassName(), etc
-  methods
-- BrokenPlugin extends EditPlugin, used as a placeholder for broken
-  plugins -- implements getPath() and getClassName()
-- jEdit.getPlugins() returns broken and non-broken plugins
-
-+ Bug Fixes
-
-- Fix focus breakage, C+TAB/CS+TAB to navigate around all view components
-  except for tool bar buttons
-- Double-click drag doesn't work backwards
-- Untitled files not replaced sometimes?
-
-When we switch to JDK 1.2, do this:
-- drag and drop of files and text
-- Use collections instead of MiscUtilities.quicksort()
-- Enhanced printing:
-  - print selection only
-  - print line numbers option
+When we switch to JDK 1.2:
+- drag and drop
+- Use collections
+- Enhanced printing
 - Integrate HTTP proxy support

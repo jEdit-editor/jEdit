@@ -176,7 +176,7 @@ public class Abbrevs
 	// package-private members
 	static void load()
 	{
-		expandOnInput = "yes".equals(jEdit.getProperty("view.expandOnInput"));
+		expandOnInput = jEdit.getBooleanProperty("view.expandOnInput");
 
 		globalAbbrevs = new Hashtable();
 		modes = new Hashtable();
@@ -221,8 +221,7 @@ public class Abbrevs
 
 	static void save()
 	{
-		jEdit.setProperty("view.expandOnInput",expandOnInput
-			? "yes" : "no");
+		jEdit.setBooleanProperty("view.expandOnInput",expandOnInput);
 
 		String settings = jEdit.getSettingsDirectory();
 		if(settings != null)
@@ -372,6 +371,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/04/15 04:14:46  sp
+ * XML files updated, jEdit.get/setBooleanProperty() method added
+ *
  * Revision 1.9  2000/03/21 07:18:53  sp
  * bug fixes
  *

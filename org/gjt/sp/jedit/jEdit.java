@@ -221,8 +221,8 @@ public class jEdit
 		}
 
 		// Buffer sort
-		sortBuffers = "on".equals(getProperty("sortBuffers"));
-		sortByName = "on".equals(getProperty("sortByName"));
+		sortBuffers = getBooleanProperty("sortBuffers");
+		sortByName = getBooleanProperty("sortByName");
 
 		propertiesChanged();
 		initRecent();
@@ -243,7 +243,7 @@ public class jEdit
 		GUIUtilities.loadMenuBarModel("view.mbar");
 		GUIUtilities.loadMenuModel("view.context");
 		GUIUtilities.loadMenuModel("gutter.context");
-		if("on".equals(getProperty("view.showToolbar")))
+		if(getBooleanProperty("view.showToolbar"))
 			GUIUtilities.loadToolBarModel("view.toolbar");
 
 		// Start server
@@ -265,7 +265,7 @@ public class jEdit
 		{
 			if(defaultSession)
 			{
-				if(session != null && "on".equals(getProperty("saveDesktop")))
+				if(session != null && getBooleanProperty("saveDesktop"))
 					buffer = Sessions.loadSession(session,true);
 			}
 			else
@@ -344,6 +344,22 @@ public class jEdit
 	}
 
 	/**
+	 * Returns the value of a boolean property.
+	 * @param name The property
+	 */
+	public static final boolean getBooleanProperty(String name)
+	{
+		String value = getProperty(name);
+		if(value == null)
+			return false;
+		else if(value.equals("true") || value.equals("yes")
+			|| value.equals("on"))
+			return true;
+		else
+			return false;
+	}
+
+	/**
 	 * Sets a property to a new value.
 	 * @param name The property
 	 * @param value The new value
@@ -392,6 +408,16 @@ public class jEdit
 	public static final void setDefaultProperty(String name, String value)
 	{
 		setTemporaryProperty(name,value);
+	}
+
+	/**
+	 * Sets a boolean property.
+	 * @param name The property
+	 * @param value The value
+	 */
+	public static final void setBooleanProperty(String name, boolean value)
+	{
+		setProperty(name,value ? "true" : "false");
 	}
 
 	/**
@@ -2071,6 +2097,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.218  2000/04/15 04:14:47  sp
+ * XML files updated, jEdit.get/setBooleanProperty() method added
+ *
  * Revision 1.217  2000/04/14 11:57:38  sp
  * Text area actions moved to org.gjt.sp.jedit.actions package
  *

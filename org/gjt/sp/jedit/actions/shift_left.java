@@ -42,8 +42,7 @@ public class shift_left extends EditAction
 				return;
 			}
 			int tabSize = buffer.getTabSize();
-			boolean noTabs = ("yes".equals(buffer.getProperty(
-				"noTabs")));
+			boolean noTabs = buffer.getBooleanProperty("noTabs");
 			Element map = buffer.getDefaultRootElement();
 			int start = textArea.getSelectionStartLine();
 			int end = textArea.getSelectionEndLine();

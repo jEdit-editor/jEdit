@@ -86,7 +86,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void propertiesChanged()
 	{
-		setFlag(SYNTAX,"on".equals(getProperty("syntax")));
+		setFlag(SYNTAX,getBooleanProperty("syntax"));
 	}
 
 	/**
@@ -640,6 +640,31 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
+	 * Returns the value of a boolean property.
+	 * @param name The property name
+	 */
+	public boolean getBooleanProperty(String name)
+	{
+		Object obj = getProperty(name);
+		if(obj instanceof Boolean)
+			return ((Boolean)obj).booleanValue();
+		else if("true".equals(obj) || "on".equals(obj) || "yes".equals(obj))
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * Sets a boolean property.
+	 * @param name The property name
+	 * @param value The value
+	 */
+	public void putBooleanProperty(String name, boolean value)
+	{
+		putProperty(name,value ? Boolean.TRUE : Boolean.FALSE);
+	}
+
+	/**
 	 * Returns this buffer's edit mode.
 	 */
 	public final Mode getMode()
@@ -752,7 +777,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(closeBrackets == null)
 			closeBrackets = "";
 		int tabSize = getTabSize();
-		boolean noTabs = "yes".equals(getProperty("noTabs"));
+		boolean noTabs = getBooleanProperty("noTabs");
 
 		if(lineIndex == 0)
 			return false;
@@ -1817,6 +1842,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.137  2000/04/15 04:14:46  sp
+ * XML files updated, jEdit.get/setBooleanProperty() method added
+ *
  * Revision 1.136  2000/04/14 07:02:42  sp
  * Better error handling, XML files updated
  *

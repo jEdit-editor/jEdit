@@ -32,20 +32,20 @@ public class GutterOptionPane extends AbstractOptionPane
 
 		gutterExpanded = new JCheckBox(jEdit.getProperty(
 			"options.gutter.expanded"));
-		gutterExpanded.getModel().setSelected(!"yes".equals(
-			jEdit.getProperty("view.gutter.collapsed")));
+		gutterExpanded.getModel().setSelected(
+			!jEdit.getBooleanProperty("view.gutter.collapsed"));
 		addComponent(gutterExpanded);
 
 		lineNumbersEnabled = new JCheckBox(jEdit.getProperty(
 			"options.gutter.lineNumbers"));
-		lineNumbersEnabled.getModel().setSelected(!"no".equals(
-			jEdit.getProperty("view.gutter.lineNumbers")));
+		lineNumbersEnabled.getModel().setSelected(
+			jEdit.getBooleanProperty("view.gutter.lineNumbers"));
 		addComponent(lineNumbersEnabled);
 
 		currentLineHighlightEnabled = new JCheckBox(jEdit.getProperty(
 			"options.gutter.currentLineHighlight"));
-		currentLineHighlightEnabled.getModel().setSelected("yes".equals(
-			jEdit.getProperty("view.gutter.highlightCurrentLine")));
+		currentLineHighlightEnabled.getModel().setSelected(
+			jEdit.getBooleanProperty("view.gutter.highlightCurrentLine"));
 		addComponent(currentLineHighlightEnabled);
 
 		gutterWidth = new JTextField(jEdit.getProperty(
@@ -74,7 +74,7 @@ public class GutterOptionPane extends AbstractOptionPane
 			numberAlignment.setSelectedIndex(1);
 		else
 			numberAlignment.setSelectedIndex(0);
-		addComponent("Line number alignment: ", numberAlignment);
+		addComponent(jEdit.getProperty("options.gutter.numberAlignment"), numberAlignment);
 
 		font = new FontComboBox();
 		font.setSelectedItem(jEdit.getProperty("view.gutter.font"));
@@ -105,12 +105,12 @@ public class GutterOptionPane extends AbstractOptionPane
 
 	public void save()
 	{
-		jEdit.setProperty("view.gutter.collapsed",
-			gutterExpanded.getModel().isSelected() ? "no" : "yes");
-		jEdit.setProperty("view.gutter.lineNumbers", lineNumbersEnabled
-			.getModel().isSelected() ? "yes" : "no");
-		jEdit.setProperty("view.gutter.highlightCurrentLine",
-			currentLineHighlightEnabled.getModel().isSelected() ? "yes" : "no");
+		jEdit.setBooleanProperty("view.gutter.collapsed",
+			!gutterExpanded.getModel().isSelected());
+		jEdit.setBooleanProperty("view.gutter.lineNumbers", lineNumbersEnabled
+			.getModel().isSelected());
+		jEdit.setBooleanProperty("view.gutter.highlightCurrentLine",
+			currentLineHighlightEnabled.getModel().isSelected());
 		jEdit.setProperty("view.gutter.width", gutterWidth.getText());
 		jEdit.setProperty("view.gutter.borderWidth",
 			gutterBorderWidth.getText());

@@ -42,13 +42,13 @@ public class indent_on_tab extends EditAction
 		int selEnd = textArea.getSelectionEnd();
 
                 if(selStart == selEnd
-			&& "on".equals(buffer.getProperty("indentOnTab"))
+			&& buffer.getBooleanProperty("indentOnTab")
 			&& buffer.indentLine(view,textArea
 			.getSelectionStartLine(),false))
                 {
 				return;
                 }
-                if("yes".equals(buffer.getProperty("noTabs")))
+                if(buffer.getBooleanProperty("noTabs"))
                 {
 			Element map = buffer.getDefaultRootElement();
 			Element lineElement = map.getElement(textArea.getSelectionStartLine());

@@ -64,7 +64,7 @@ public class end extends EditAction
 			view.getToolkit().beep();
 			return;
 		}
-		else if(!"yes".equals(jEdit.getProperty("view.homeEnd")))
+		else if(!jEdit.getBooleanProperty("view.homeEnd"))
 			caret = lastOfLine;
 		else if(caret == lastVisible)
 			caret = lastDocument;
