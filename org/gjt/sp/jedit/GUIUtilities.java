@@ -53,6 +53,15 @@ import org.gjt.sp.util.Log;
 public class GUIUtilities
 {
 	/**
+	 * Instructs jEdit to invalidate all menu models.
+	 * @param name The menu name
+	 */
+	public static void invalidateMenuModels()
+	{
+		menus.clear();
+	}
+
+	/**
 	 * Loads a menubar model.
 	 * @param name The menu bar name
 	 */
@@ -91,16 +100,6 @@ public class GUIUtilities
 			menus.put(name,menu);
 		}
 		return menu;
-	}
-
-	/**
-	 * Instructs jEdit to reload this menu model the next time it is
-	 * requested.
-	 * @param name The menu name
-	 */
-	public static void invalidateMenuModel(String name)
-	{
-		menus.remove(name);
 	}
 
 	/**
@@ -161,18 +160,6 @@ public class GUIUtilities
 			menus.put(name,toolbar);
 		}
 		return toolbar;
-	}
-
-	/**
-	 * Instructs jEdit to reload this tool bar model the next time it is
-	 * requested.
-	 * @param name The menu name
-	 */
-	public static void invalidateToolBarModel(String name)
-	{
-		// that's right; we store tool bars and menus in the
-		// same hash
-		menus.remove(name);
 	}
 
 	/**
@@ -348,6 +335,8 @@ public class GUIUtilities
 	 */
 	public static String showFileDialog(View view, String file, int type)
 	{
+		if(file == null)
+			file = System.getProperty("user.dir");
 		File _file = new File(file);
 		JFileChooser chooser = getFileChooser(view);
 
@@ -767,6 +756,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.61  2000/05/20 07:02:04  sp
+ * Documentation updates, tool bar editor finished, a few other enhancements
+ *
  * Revision 1.60  2000/05/16 10:47:40  sp
  * More work on toolbar editor, -gui command line switch
  *

@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.text.*;
 import gnu.regexp.*;
 import java.awt.*;
@@ -108,7 +107,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 		results = new JList(resultModel);
 		results.setVisibleRowCount(16);
-		results.addListSelectionListener(new ListHandler());
+		results.addMouseListener(new MouseHandler());
 		stretchPanel.add(new JScrollPane(results), BorderLayout.CENTER);
 
 		content.add(stretchPanel, BorderLayout.CENTER);
@@ -239,9 +238,6 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 	private void updateStatus()
 	{
-		if(thread == null)
-			current = 0;
-
 		Object[] args = { new Integer(current), new Integer(fileset.getBufferCount()) };
 		status.setText(jEdit.getProperty("hypersearch.status",args));
 	}
@@ -367,14 +363,16 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		}
 	}
 
-	class ListHandler implements ListSelectionListener
+	class MouseHandler extends MouseAdapter
 	{
-		public void valueChanged(ListSelectionEvent evt)
+		public void mousePressed(MouseEvent evt)
 		{
-			if(results.isSelectionEmpty() || evt.getValueIsAdjusting())
+			int index = results.locationToIndex(evt.getPoint());
+			if(index == -1)
 				return;
 
-			final SearchResult result = (SearchResult)results.getSelectedValue();
+			final SearchResult result = (SearchResult)resultModel
+				.getElementAt(index);
 			final Buffer buffer = result.getBuffer();
 
 			if(buffer == null)
@@ -495,6 +493,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.60  2000/05/20 07:02:04  sp
+ * Documentation updates, tool bar editor finished, a few other enhancements
+ *
  * Revision 1.59  2000/05/14 10:55:21  sp
  * Tool bar editor started, improved view registers dialog box
  *

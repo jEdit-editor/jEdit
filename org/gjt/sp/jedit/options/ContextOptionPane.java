@@ -129,7 +129,7 @@ public class ContextOptionPane extends AbstractOptionPane
 		}
 		jEdit.setProperty("view.context",buf.toString());
 
-		GUIUtilities.invalidateMenuModel("view.context");
+		GUIUtilities.invalidateMenuModels();
 	}
 
 	// private members
@@ -334,6 +334,9 @@ class ContextAddDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/05/20 07:02:04  sp
+ * Documentation updates, tool bar editor finished, a few other enhancements
+ *
  * Revision 1.6  2000/05/16 10:47:40  sp
  * More work on toolbar editor, -gui command line switch
  *

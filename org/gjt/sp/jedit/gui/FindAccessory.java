@@ -776,24 +776,17 @@ public class FindAccessory extends JPanel implements Runnable, PropertyChangeLis
 			fileList.setCellRenderer(new FindResultsCellRenderer());
 			add(fileList, BorderLayout.CENTER);
 
-			// Double click listener
+			// Click listener
 			MouseListener mouseListener = new MouseAdapter()
 			{
 				public void mouseClicked(MouseEvent e)
 				{
-					if (e.getClickCount() == 2)
-					{
-						try
-						{
-							int index =fileList.locationToIndex(
-								e.getPoint());
-							File f = (File) model.elementAt(index);
-							goTo(f);
-						}
-						catch (Throwable err)
-						{
-						}
-					}
+					int index = fileList.locationToIndex(e.getPoint());
+					if(index == -1)
+						return;
+
+					File f = (File)model.elementAt(index);
+					goTo(f);
 				}
 			};
 			fileList.addMouseListener(mouseListener);
@@ -1293,6 +1286,9 @@ class FindByName extends JPanel implements FindFilterFactory
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/05/20 07:02:04  sp
+ * Documentation updates, tool bar editor finished, a few other enhancements
+ *
  * Revision 1.3  2000/05/12 11:07:39  sp
  * Bug fixes, documentation updates
  *

@@ -130,7 +130,15 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			if(!isShowing())
 				return false;
 
-			return action.isSelected(EnhancedCheckBoxMenuItem.this);
+			try
+			{
+				return action.isSelected(EnhancedCheckBoxMenuItem.this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,t);
+				return false;
+			}
 		}
 
 		public void setSelected(boolean b) {}

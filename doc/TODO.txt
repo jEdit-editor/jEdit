@@ -1,15 +1,10 @@
 JEDIT TO DO
 
-2.5pre3:
-
-- Finish tool bar editor
-- Update dialog-options-* and window-editor-* screenshots
-- Document tool bar editor
-- Single-clicking, not double-clicking should select a found file in the
-  file chooser
-
 2.5:
 
+- Update window-editor-* screenshots
+- Apparently, FTP doesn't work on Linux
+- Can't follow symlinks in FTP browser
 - -session= parameter should work even if files were specified on the
   command line
 - Increase file chooser's preferred size

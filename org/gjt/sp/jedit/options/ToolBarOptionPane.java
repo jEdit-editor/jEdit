@@ -23,9 +23,12 @@ import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.File;
+import java.net.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * Tool bar editor.
@@ -179,7 +182,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		}
 		jEdit.setProperty("view.toolbar",buf.toString());
 
-		GUIUtilities.invalidateToolBarModel("view.toolbar");
+		GUIUtilities.invalidateMenuModels();
 	}
 
 	// private members
@@ -382,7 +385,14 @@ class ToolBarAddDialog extends EnhancedDialog
 		builtinCombo = new JComboBox(iconList);
 		builtinCombo.setRenderer(new ToolBarOptionPane.IconCellRenderer());
 		compPanel.add(builtinCombo);
-		compPanel.add(new JLabel("not yet finished"));
+
+		fileButton = new JButton(jEdit.getProperty("options.toolbar.add.no-icon"));
+		fileButton.setMargin(new Insets(1,1,1,1));
+		fileButton.setIcon(new ImageIcon(getClass().getResource(
+			"/org/gjt/sp/jedit/toolbar/blank-20.gif")));
+		fileButton.setHorizontalAlignment(SwingConstants.LEFT);
+		fileButton.addActionListener(actionHandler);
+		compPanel.add(fileButton);
 		iconPanel.add(BorderLayout.CENTER,compPanel);
 		centerPanel.add(BorderLayout.SOUTH,iconPanel);
 
@@ -440,8 +450,10 @@ class ToolBarAddDialog extends EnhancedDialog
 			}
 			else
 			{
-				icon = null;
-				iconName = null;
+				icon = fileButton.getIcon();
+				iconName = fileIcon;
+				if(iconName == null)
+					iconName = "blank-20.gif";
 			}
 
 			ToolBarOptionPane.Button button = (ToolBarOptionPane.Button)
@@ -460,6 +472,8 @@ class ToolBarAddDialog extends EnhancedDialog
 	private JRadioButton builtin;
 	private JComboBox builtinCombo;
 	private JRadioButton file;
+	private JButton fileButton;
+	private String fileIcon;
 	private JButton ok, cancel;
 
 	private void updateEnabled()
@@ -468,6 +482,7 @@ class ToolBarAddDialog extends EnhancedDialog
 		builtin.setEnabled(enabled);
 		file.setEnabled(enabled);
 		builtinCombo.setEnabled(enabled && builtin.getModel().isSelected());
+		fileButton.setEnabled(enabled && file.getModel().isSelected());
 		list.setEnabled(enabled);
 	}
 
@@ -486,6 +501,31 @@ class ToolBarAddDialog extends EnhancedDialog
 				cancel();
 			else if(source == builtin || source == file)
 				updateEnabled();
+			else if(source == fileButton)
+			{
+				String directory;
+				if(fileIcon == null)
+					directory = null;
+				else
+					directory = MiscUtilities.getFileParent(fileIcon);
+				String path = GUIUtilities.showFileDialog(null,directory,
+					JFileChooser.OPEN_DIALOG);
+				if(path != null)
+				{
+					fileIcon = "file://" + path.replace(
+						File.separatorChar,'/');
+					try
+					{
+						fileButton.setIcon(new ImageIcon(new URL(
+							fileIcon)));
+					}
+					catch(MalformedURLException mf)
+					{
+						Log.log(Log.ERROR,this,mf);
+					}
+					fileButton.setText(MiscUtilities.getFileName(fileIcon));
+				}
+			}
 		}
 	}
 }
@@ -493,6 +533,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/05/20 07:02:04  sp
+ * Documentation updates, tool bar editor finished, a few other enhancements
+ *
  * Revision 1.2  2000/05/16 10:47:40  sp
  * More work on toolbar editor, -gui command line switch
  *

@@ -64,7 +64,8 @@ icons=\
       SplitHorizontal.gif \
       SplitVertical.gif \
       Undo.gif \
-      Unsplit.gif
+      Unsplit.gif \
+      blank-20.gif
 
 view.search.find=Find:\ 
 view.search.incremental=Incremental
@@ -496,13 +497,11 @@ view.status.recording=(recording)
 
 # About dialog
 about.title=About jEdit
-about.message=jEdit {0}\n\
-	<http://jedit.sourceforge.net>\n\
+about.message=jEdit version {0}\n\
 	jEdit was written by Slava Pestov with code\n\
 	contributions from several others. It is released\n\
 	under the GNU General Public License.\n\
-	See the README file for a detailed list\n\
-	of code contributions, and other information.
+	See the README file for more information.
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
@@ -965,7 +964,7 @@ options.filters.re=Glob pattern
 
 options.abbrevs.label=Abbreviations
 options.abbrevs.set=Abbrev set:
-options.abbrevs.expandOnInput=Auto-expand abbrevs
+options.abbrevs.expandOnInput=Automatically expand abbrevs when they are typed
 options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
 options.abbrevs.sort.abbrev=Sort by abbrev
@@ -985,6 +984,7 @@ options.toolbar.add.icon=Icon:
 options.toolbar.add.builtin=Built in:\ 
 options.toolbar.add.file=From file:\ 
 options.toolbar.add.choose=Choose
+options.toolbar.add.no-icon=No icon selected
 
 options.context.label=Context Menu
 options.context.caption=Items in text area right click menu:
