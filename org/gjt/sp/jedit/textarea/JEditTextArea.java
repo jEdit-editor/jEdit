@@ -134,6 +134,14 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Returns 0,0 for split pane compatibility.
+	 */
+	public final Dimension getMinimumSize()
+	{
+		return new Dimension(0,0);
+	}
+
+	/**
 	 * Returns the object responsible for painting this text area.
 	 */
 	public final TextAreaPainter getPainter()
@@ -1508,6 +1516,15 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Returns the status bar component (which was added with a name
+	 * of LEFT_OF_SCROLLBAR).
+	 */
+	public Component getStatus()
+	{
+		return ((ScrollLayout)getLayout()).leftOfScrollBar;
+	}
+
+	/**
 	 * Called by the AWT when this component is added to a parent.
 	 * Adds document listener.
 	 */
@@ -1708,7 +1725,7 @@ public class JEditTextArea extends JComponent
 			else if(name.equals(BOTTOM))
 				bottom = comp;
 			else if(name.equals(LEFT_OF_SCROLLBAR))
-				leftOfScrollBar.addElement(comp);
+				leftOfScrollBar = comp;
 		}
 
 		public void removeLayoutComponent(Component comp)
@@ -1720,7 +1737,7 @@ public class JEditTextArea extends JComponent
 			if(bottom == comp)
 				bottom = null;
 			else
-				leftOfScrollBar.removeElement(comp);
+				leftOfScrollBar = null;
 		}
 
 		public Dimension preferredLayoutSize(Container parent)
@@ -1785,18 +1802,12 @@ public class JEditTextArea extends JComponent
 				rightWidth,
 				centerHeight);
 
-			// Lay out all status components, in order
-			Enumeration status = leftOfScrollBar.elements();
-			while(status.hasMoreElements())
-			{
-				Component comp = (Component)status.nextElement();
-				Dimension dim = comp.getPreferredSize();
-				comp.setBounds(ileft,
-					itop + centerHeight,
-					dim.width,
-					bottomHeight);
-				ileft += dim.width;
-			}
+			Dimension dim = leftOfScrollBar.getPreferredSize();
+			leftOfScrollBar.setBounds(ileft,
+				itop + centerHeight,
+				dim.width,
+				bottomHeight);
+			ileft += dim.width;
 
 			bottom.setBounds(
 				ileft,
@@ -1805,11 +1816,10 @@ public class JEditTextArea extends JComponent
 				bottomHeight);
 		}
 
-		// private members
-		private Component center;
-		private Component right;
-		private Component bottom;
-		private Vector leftOfScrollBar = new Vector();
+		Component center;
+		Component right;
+		Component bottom;
+		Component leftOfScrollBar;
 	}
 
 	static class CaretBlinker implements ActionListener
@@ -2242,6 +2252,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.41  2000/01/29 03:27:20  sp
+ * Split window functionality added
+ *
  * Revision 1.40  2000/01/29 01:56:51  sp
  * Buffer tabs updates, some other stuff
  *

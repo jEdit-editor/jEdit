@@ -22,10 +22,8 @@ JEDIT TO DO
   - if the buffer is not temporary, create positions cos it's going stay
     open
 - 'Uncomment' command, removes comment strings from selected text
-- Split window functionality
 - Incremental search
 - Indent selected lines function
-- Buffer tabs icons
 
 ------- Later -------
 

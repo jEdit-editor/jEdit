@@ -97,6 +97,9 @@ insert-literal.shortcut=C+e C+v
 close-view.shortcut=C+e C+w
 redo.shortcut=C+e C+z
 expand-abbrev.shortcut=C+e C+x
+unsplit.shortcut=C+e 1
+split-vertical.shortcut=C+e 2
+split-horizontal.shortcut=C+e 3
 
 # C+m
 play-last-macro.shortcut=C+m C+l

@@ -62,7 +62,6 @@ next-buffer.label=$Open Next Buffer
 
 ### File menu
 file=new-file \
-     new-view \
      open-file \
      open-url \
      %recent-files \
@@ -73,7 +72,6 @@ file=new-file \
      - \
      close-file \
      close-all \
-     close-view \
      - \
      save \
      save-as \
@@ -85,7 +83,6 @@ file=new-file \
      exit
 file.label=$File
 new-file.label=$New File
-new-view.label=New $View
 open-file.label=$Open File...
 open-url.label=Open $URL...
 recent-files.label=$Recent Files
@@ -96,7 +93,6 @@ reload.label=Re$load
 reload-all.label=Reload $All Buffers...
 close-file.label=$Close File
 close-all.label=Close All $Buffers
-close-view.label=Close Vie$w
 save.label=$Save
 save-as.label=Sa$ve As...
 save-all.label=Save A$ll Buffers...
@@ -283,24 +279,33 @@ goto-marker.label=Go to Marker
 no-markers.label=No Markers Defined
 
 ### Utilities menu
-utils=load-session \
+utils=new-view \
+      close-view \
+      - \
+      unsplit \
+      split-vertical \
+      split-horizontal \
+      - \
+      load-session \
       save-session \
       - \
       log-viewer \
       save-log \
       clear-log \
       - \
-      view-editbus \
-      - \
       buffer-options \
       global-options
 utils.label=$Utilities
 load-session.label=$Load Session...
 save-session.label=$Save Session...
+new-view.label=$New View
+close-view.label=$Close View
+split-vertical.label=Split $Vertically
+split-horizontal.label=Split $Horizontally
+unsplit.label=U$nsplit
 log-viewer.label=Show $Activity Log...
-save-log.label=Sa$ve Activity Log...
-clear-log.label=$Clear Activity Log
-view-editbus.label=Show $EditBus...
+save-log.label=Save Ac$tivity Log...
+clear-log.label=C$lear Activity Log
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 
@@ -758,11 +763,3 @@ helpviewer.forward=Forward
 
 # Activity log
 log-viewer.title=Activity Log
-
-# View editbus dialog
-view-editbus.title=EditBus Viewer
-view-editbus.update=Update
-
-view-editbus.editbus=EditBus
-view-editbus.components=Components
-view-editbus.lists=Lists

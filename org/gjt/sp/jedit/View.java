@@ -51,7 +51,7 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void pushStatus(String str)
 	{
-		status.pushStatus(str);
+		((StatusBar)textArea.getStatus()).pushStatus(str);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void popStatus()
 	{
-		status.popStatus();
+		((StatusBar)textArea.getStatus()).popStatus();
 	}
 
 	/**
@@ -93,11 +93,19 @@ public class View extends JFrame implements EBComponent
 		}
 		this.buffer = buffer;
 
-		textArea.setDocument(buffer);
+		// until we can find a better way to store caret info...
+		unsplit();
+		/* JEditTextArea[] textAreas = getTextAreas();
+		for(int i = 0; i < textAreas.length; i++)
+		{
+			JEditTextArea textArea = textAreas[i]; */
+			textArea.setDocument(buffer);
+			((StatusBar)textArea.getStatus()).repaint();
+		/* } */
+
 		loadCaretInfo();
 		updateMarkerMenus();
 		updateTitle();
-		status.repaint();
 
 		Mode mode = buffer.getMode();
 		if(mode != null)
@@ -140,6 +148,90 @@ public class View extends JFrame implements EBComponent
 	public final JEditTextArea getTextArea()
 	{
 		return textArea;
+	}
+
+	/**
+	 * Splits the view.
+	 * @since jEdit 2.3pre2
+	 */
+	public void split(int orientation)
+	{
+		if(splitPane == null)
+		{
+			saveCaretInfo();
+			splitPane = new JSplitPane(orientation,textArea,
+				textArea = createTextArea());
+			loadCaretInfo();
+			splitPane.setBorder(null);
+			if(bufferTabs != null)
+				bufferTabs.update();
+			else
+			{
+				JComponent parent = (JComponent)textArea.getParent();
+				parent.add(splitPane);
+				parent.revalidate();
+			}
+		}
+		else
+			splitPane.setOrientation(orientation);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				splitPane.setDividerLocation(0.5);
+				focusOnTextArea();
+			}
+		});
+	}
+
+	/**
+	 * Unsplits the view.
+	 * @since jEdit 2.3pre2
+	 */
+	public void unsplit()
+	{
+		if(splitPane != null)
+		{
+			JComponent parent = (JComponent)splitPane.getParent();
+			parent.remove(splitPane);
+			splitPane = null;
+			if(bufferTabs != null)
+				bufferTabs.update();
+			else
+				parent.revalidate();
+		}
+
+		focusOnTextArea();
+	}
+
+	/**
+	 * Returns the split pane.
+	 * @since jEdit 2.3pre2
+	 */
+	public JSplitPane getSplitPane()
+	{
+		return splitPane;
+	}
+
+	/**
+	 * Returns all text areas.
+	 * @since jEdit 2.3pre2
+	 */
+	public JEditTextArea[] getTextAreas()
+	{
+		if(splitPane == null)
+		{
+			JEditTextArea[] ta = { textArea };
+			return ta;
+		}
+		else
+		{
+			JEditTextArea[] ta = {
+				(JEditTextArea)splitPane.getLeftComponent(),
+				(JEditTextArea)splitPane.getRightComponent()
+			};
+			return ta;
+		}
 	}
 
 	/**
@@ -229,7 +321,12 @@ public class View extends JFrame implements EBComponent
 		{
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 			setCursor(cursor);
-			getTextArea().getPainter().setCursor(cursor);
+			JEditTextArea[] textAreas = getTextAreas();
+			for(int i = 0; i < textAreas.length; i++)
+			{
+				JEditTextArea textArea = textAreas[i];
+				textArea.getPainter().setCursor(cursor);
+			}
 		}
 	}
 
@@ -246,7 +343,12 @@ public class View extends JFrame implements EBComponent
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 			setCursor(cursor);
 			cursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
-			getTextArea().getPainter().setCursor(cursor);
+			JEditTextArea[] textAreas = getTextAreas();
+			for(int i = 0; i < textAreas.length; i++)
+			{
+				JEditTextArea textArea = textAreas[i];
+				textArea.getPainter().setCursor(cursor);
+			}
 		}
 	}
 
@@ -338,17 +440,7 @@ public class View extends JFrame implements EBComponent
 		quicksearch.addActionListener(new ActionHandler());
 		quicksearch.addKeyListener(new KeyHandler());
 
-		textArea = new JEditTextArea();
-
-		// Add the line number display
-		textArea.add(JEditTextArea.LEFT_OF_SCROLLBAR,status = new StatusBar());
-
-		// Set up the right-click popup menu
-		textArea.setRightClickPopup(GUIUtilities
-			.loadPopupMenu(this,"view.context"));
-
-		textArea.setInputHandler(jEdit.getInputHandler().copy());
-		textArea.addCaretListener(new CaretHandler());
+		textArea = createTextArea();
 
 		if(view == null)
 			propertiesChanged();
@@ -398,9 +490,9 @@ public class View extends JFrame implements EBComponent
 	private EnhancedButton regexp;
 	private EnhancedButton multifile;
 
-	private JEditTextArea textArea;
-	private StatusBar status;
 	private BufferTabs bufferTabs;
+	private JSplitPane splitPane;
+	private JEditTextArea textArea;
 
 	private int waitCount;
 
@@ -441,47 +533,51 @@ public class View extends JFrame implements EBComponent
 		}
 		Font font = new Font(family,style,size);
 
-		TextAreaPainter painter = textArea.getPainter();
-
-		painter.setFont(font);
-		painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
-			"view.lineHighlight")));
-		painter.setLineHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.lineHighlightColor")));
-		painter.setBracketHighlightEnabled("on".equals(jEdit.getProperty(
-			"view.bracketHighlight")));
-		painter.setBracketHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.bracketHighlightColor")));
-		painter.setEOLMarkersPainted("on".equals(jEdit.getProperty(
-			"view.eolMarkers")));
-		painter.setInvalidLinesPainted("on".equals(jEdit.getProperty(
-			"view.paintInvalid")));
-		painter.setEOLMarkerColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.eolMarkerColor")));
-		painter.setCaretColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.caretColor")));
-		painter.setSelectionColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.selectionColor")));
-		painter.setBackground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.bgColor")));
-		painter.setForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.fgColor")));
-		painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
-			"view.blockCaret")));
-
-		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
-			"view.caretBlink")));
-
-		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
-			new Boolean("yes".equals(jEdit.getProperty("view.homeEnd"))));
-		try
+		JEditTextArea[] textAreas = getTextAreas();
+		for(int i = 0; i < textAreas.length; i++)
 		{
-			textArea.setElectricScroll(Integer.parseInt(jEdit
-				.getProperty("view.electricBorders")));
-		}
-		catch(NumberFormatException nf)
-		{
-			textArea.setElectricScroll(0);
+			TextAreaPainter painter = textArea.getPainter();
+
+			painter.setFont(font);
+			painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
+				"view.lineHighlight")));
+			painter.setLineHighlightColor(GUIUtilities.parseColor(
+				jEdit.getProperty("view.lineHighlightColor")));
+			painter.setBracketHighlightEnabled("on".equals(jEdit.getProperty(
+				"view.bracketHighlight")));
+			painter.setBracketHighlightColor(GUIUtilities.parseColor(
+				jEdit.getProperty("view.bracketHighlightColor")));
+			painter.setEOLMarkersPainted("on".equals(jEdit.getProperty(
+				"view.eolMarkers")));
+			painter.setInvalidLinesPainted("on".equals(jEdit.getProperty(
+				"view.paintInvalid")));
+			painter.setEOLMarkerColor(GUIUtilities.parseColor(
+				jEdit.getProperty("view.eolMarkerColor")));
+			painter.setCaretColor(GUIUtilities.parseColor(
+				jEdit.getProperty("view.caretColor")));
+			painter.setSelectionColor(GUIUtilities.parseColor(
+				jEdit.getProperty("view.selectionColor")));
+			painter.setBackground(GUIUtilities.parseColor(
+				jEdit.getProperty("view.bgColor")));
+			painter.setForeground(GUIUtilities.parseColor(
+				jEdit.getProperty("view.fgColor")));
+			painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
+				"view.blockCaret")));
+
+			textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
+				"view.caretBlink")));
+
+			textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
+				new Boolean("yes".equals(jEdit.getProperty("view.homeEnd"))));
+			try
+			{
+				textArea.setElectricScroll(Integer.parseInt(jEdit
+					.getProperty("view.electricBorders")));
+			}
+			catch(NumberFormatException nf)
+			{
+				textArea.setElectricScroll(0);
+			}
 		}
 
 		loadStyles();
@@ -516,7 +612,12 @@ public class View extends JFrame implements EBComponent
 			styles[Token.INVALID] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.invalid"));
 
-			textArea.getPainter().setStyles(styles);
+			JEditTextArea[] textAreas = getTextAreas();
+			for(int i = 0; i < textAreas.length; i++)
+			{
+				JEditTextArea textArea = textAreas[i];
+				textArea.getPainter().setStyles(styles);
+			}
 		}
 		catch(Exception e)
 		{
@@ -530,28 +631,34 @@ public class View extends JFrame implements EBComponent
 		initBufferTabs();
 
 		showFullPath = view.showFullPath;
-		TextAreaPainter painter = view.textArea.getPainter();
-		TextAreaPainter myPainter = textArea.getPainter();
-		myPainter.setFont(painter.getFont());
-		myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
-		myPainter.setLineHighlightColor(painter.getLineHighlightColor());
-		myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
-		myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
-		myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
-		myPainter.setInvalidLinesPainted(painter.getInvalidLinesPainted());
-		myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
-		myPainter.setCaretColor(painter.getCaretColor());
-		myPainter.setSelectionColor(painter.getSelectionColor());
-		myPainter.setBackground(painter.getBackground());
-		myPainter.setForeground(painter.getForeground());
-		myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
 
-		textArea.setCaretBlinkEnabled(view.textArea.isCaretBlinkEnabled());
-		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
-			view.textArea.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
-		textArea.setElectricScroll(view.textArea.getElectricScroll());
+		JEditTextArea[] textAreas = getTextAreas();
+		for(int i = 0; i < textAreas.length; i++)
+		{
+			JEditTextArea textArea = textAreas[i];
+			TextAreaPainter painter = view.textArea.getPainter();
+			TextAreaPainter myPainter = textArea.getPainter();
+			myPainter.setFont(painter.getFont());
+			myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
+			myPainter.setLineHighlightColor(painter.getLineHighlightColor());
+			myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
+			myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
+			myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
+			myPainter.setInvalidLinesPainted(painter.getInvalidLinesPainted());
+			myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
+			myPainter.setCaretColor(painter.getCaretColor());
+			myPainter.setSelectionColor(painter.getSelectionColor());
+			myPainter.setBackground(painter.getBackground());
+			myPainter.setForeground(painter.getForeground());
+			myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
 
-		myPainter.setStyles(painter.getStyles());
+			textArea.setCaretBlinkEnabled(view.textArea.isCaretBlinkEnabled());
+			textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
+				view.textArea.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
+			textArea.setElectricScroll(view.textArea.getElectricScroll());
+
+			myPainter.setStyles(painter.getStyles());
+		}
 
 		updateRecentMenu();
 	}
@@ -589,36 +696,70 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
+	private JEditTextArea createTextArea()
+	{
+		JEditTextArea textArea = new JEditTextArea();
+
+		// Add the line number display
+		textArea.add(JEditTextArea.LEFT_OF_SCROLLBAR,new StatusBar(textArea));
+
+		// Set up the right-click popup menu
+		textArea.setRightClickPopup(GUIUtilities
+			.loadPopupMenu(this,"view.context"));
+
+		textArea.setInputHandler(jEdit.getInputHandler().copy());
+		textArea.addCaretListener(new CaretHandler());
+		textArea.addFocusListener(new FocusHandler());
+
+		if(buffer != null)
+			textArea.setDocument(buffer);
+
+		return textArea;
+	}
+
 	private void initBufferTabs()
 	{
-		Container c = (bufferTabs != null ? bufferTabs.getParent()
-			: textArea.getParent());
-		if(c == null)
-			c = getContentPane();
+		Container parent;
+
+		if(bufferTabs != null)
+			parent = bufferTabs.getParent();
+		else if(splitPane != null)
+			parent = splitPane.getParent();
+		else
+			parent = textArea.getParent();
+
+		if(parent == null)
+			parent = getContentPane();
+
+		Container comp;
+		if(splitPane == null)
+			comp = textArea;
+		else
+			comp = splitPane;
 
 		if("on".equals(jEdit.getProperty("view.showBufferTabs")))
 		{
 			if(bufferTabs == null)
 			{
-				bufferTabs = new BufferTabs(this,textArea);
-				c.remove(textArea);
+				bufferTabs = new BufferTabs(this);
+				parent.remove(comp);
 
 				// BorderLayout adds to center by default,
 				// but this will also work with other layouts.
-				c.add(bufferTabs);
+				parent.add(bufferTabs);
 			}
 		}
 		else
 		{
 			if(bufferTabs != null)
 			{
-				c.remove(bufferTabs);
+				parent.remove(bufferTabs);
 				bufferTabs = null;
-				c.add(textArea);
+				parent.add(comp);
 			}
-			else if(textArea.getParent() == null)
+			else if(comp.getParent() == null)
 			{
-			c.add(textArea);
+				parent.add(comp);
 			}
 		}
 
@@ -638,7 +779,13 @@ public class View extends JFrame implements EBComponent
 			new Integer(buffer.isDirty() ? 1: 0),
 			new Integer(buffer.isNewFile() ? 1: 0)};
 		setTitle(jEdit.getProperty("view.title",args));
-		textArea.setEditable(!buffer.isReadOnly());
+
+		JEditTextArea[] textAreas = getTextAreas();
+		for(int i = 0; i < textAreas.length; i++)
+		{
+			JEditTextArea textArea = textAreas[i];
+			textArea.setEditable(!buffer.isReadOnly());
+		}
 	}
 
 	/**
@@ -928,7 +1075,14 @@ public class View extends JFrame implements EBComponent
 		else if(msg.getWhat() == BufferUpdate.MODE_CHANGED)
 		{
 			if(_buffer == buffer)
-				textArea.getPainter().repaint();
+			{
+				JEditTextArea[] textAreas = getTextAreas();
+				for(int i = 0; i < textAreas.length; i++)
+				{
+					JEditTextArea textArea = textAreas[i];
+					textArea.getPainter().repaint();
+				}
+			}
 		}
 	}
 
@@ -946,7 +1100,7 @@ public class View extends JFrame implements EBComponent
 					quicksearch.setText(null);
 					SearchAndReplace.setSearchString(text);
 					SearchAndReplace.find(View.this);
-					textArea.requestFocus();
+					focusOnTextArea();
 				}
 				else
 					new SearchDialog(View.this,null);
@@ -958,7 +1112,20 @@ public class View extends JFrame implements EBComponent
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
-			status.repaint();
+			JEditTextArea textArea = (JEditTextArea)evt.getSource();
+			((StatusBar)textArea.getStatus()).repaint();
+		}
+	}
+
+	class FocusHandler implements FocusListener
+	{
+		public void focusGained(FocusEvent evt)
+		{
+			textArea = (JEditTextArea)evt.getSource();
+		}
+
+		public void focusLost(FocusEvent evt)
+		{
 		}
 	}
 
@@ -985,11 +1152,13 @@ public class View extends JFrame implements EBComponent
 	class StatusBar extends JComponent
 	{
 		Stack status;
+		JEditTextArea textArea;
 
-		StatusBar()
+		StatusBar(JEditTextArea textArea)
 		{
 			status = new Stack();
 
+			StatusBar.this.textArea = textArea;
 			StatusBar.this.setDoubleBuffered(true);
 			StatusBar.this.setFont(UIManager.getFont("Label.font"));
 			StatusBar.this.setForeground(UIManager.getColor("Label.foreground"));
@@ -1018,9 +1187,9 @@ public class View extends JFrame implements EBComponent
 
 			int dot = textArea.getCaretPosition();
 
-			int currLine = textArea.getCaretLine();
-			int start = textArea.getLineStartOffset(currLine);
-			int numLines = textArea.getLineCount();
+			int currLine = StatusBar.this.textArea.getCaretLine();
+			int start = StatusBar.this.textArea.getLineStartOffset(currLine);
+			int numLines = StatusBar.this.textArea.getLineCount();
 
 			String str;
 			if(status.isEmpty())
@@ -1047,6 +1216,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.129  2000/01/29 03:27:20  sp
+ * Split window functionality added
+ *
  * Revision 1.128  2000/01/29 01:56:51  sp
  * Buffer tabs updates, some other stuff
  *
@@ -1076,11 +1248,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.119  1999/12/22 06:36:40  sp
  * 2.3pre1 stuff
- *
- * Revision 1.118  1999/12/20 08:38:43  sp
- * Abbrevs option pane
- *
- * Revision 1.117  1999/12/20 06:05:26  sp
- * Search settings buttons on tool bar, static abbrevs
  *
  */

@@ -1482,14 +1482,16 @@ public class jEdit
 		addAction("set-marker");
 		addAction("shift-left");
 		addAction("shift-right");
+		addAction("split-horizontal");
+		addAction("split-vertical");
 		addAction("stop-recording");
 		addAction("tab");
 		addAction("to-lower");
 		addAction("to-upper");
 		addAction("toggle-rect");
 		addAction("undo");
+		addAction("unsplit");
 		addAction("untab");
-		addAction("view-editbus");
 		addAction("view-registers");
 		addAction("wing-comment");
 		addAction("word-count");
@@ -1766,6 +1768,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.185  2000/01/29 03:27:20  sp
+ * Split window functionality added
+ *
  * Revision 1.184  2000/01/28 09:24:16  sp
  * Buffer tabs updated (uses better impl == less bugs)
  *

@@ -1,6 +1,6 @@
 /*
- * view_editbus.java - EditBus Plugin
- * Copyright (C) 1999 Slava Pestov
+ * unsplit.java
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,13 +20,13 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.gui.EditBusViewer;
-import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.*;
 
-public class view_editbus extends EditAction
+public class unsplit extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		new EditBusViewer();
+		View view = getView(evt);
+		view.unsplit();
 	}
 }

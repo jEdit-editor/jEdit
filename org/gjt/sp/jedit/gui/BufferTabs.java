@@ -33,10 +33,9 @@ import org.gjt.sp.jedit.*;
  */
 public class BufferTabs extends JTabbedPane
 {
-	public BufferTabs(View view, JEditTextArea textArea)
+	public BufferTabs(View view)
 	{
 		this.view = view;
-		this.textArea = textArea;
 
 		buffers = new Vector();
 
@@ -47,7 +46,7 @@ public class BufferTabs extends JTabbedPane
 			buffer = buffer.getNext();
 		}
 
-		((Magic)getSelectedComponent()).update();
+		update();
 		addChangeListener(new ChangeHandler());
 	}
 
@@ -132,14 +131,18 @@ public class BufferTabs extends JTabbedPane
 		int index = buffer.getIndex();
 		int selectedIndex = getSelectedIndex();
 		if(index == selectedIndex)
-			((Magic)getSelectedComponent()).update();
+			update();
 		else
 			setSelectedIndex(buffer.getIndex());
 	}
 
+	public void update()
+	{
+		((Magic)getSelectedComponent()).update();
+	}
+
 	// private members
 	private View view;
-	private JEditTextArea textArea;
 	private Vector buffers;
 	private boolean removing;
 	private boolean updating;
@@ -159,7 +162,7 @@ public class BufferTabs extends JTabbedPane
 
 	private ImageIcon getIcon(Buffer buffer)
 	{
-		if(buffer.isNew())
+		if(buffer.isNewFile())
 		{
 			if(buffer.isDirty())
 				return newDirtyIcon;
@@ -215,7 +218,12 @@ public class BufferTabs extends JTabbedPane
 
 		void update()
 		{
-			this.add(BorderLayout.CENTER,textArea);
+			Component comp;
+			if(view.getSplitPane() == null)
+				comp = view.getTextArea();
+			else
+				comp = view.getSplitPane();
+			this.add(BorderLayout.CENTER,comp);
 			this.revalidate();
 
 			view.focusOnTextArea();

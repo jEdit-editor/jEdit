@@ -2,6 +2,11 @@ JEDIT VERSION HISTORY
 
 * Version 2.3pre3
 
++ New Features
+
+- Views can be split - C+e 1 unsplits, C+e 2 splits vertically,
+  C+e 3 splits horizontally.
+
 + Enhancements
 
 - Buffer tabs position (top, left, right, bottom) can now be set
@@ -13,7 +18,7 @@ JEDIT VERSION HISTORY
 - Buffer tabs are now implemented differently, and should work better
 - Fixed a very minor memory leak (buffers would sometimes retain pointers
   to closed views' text areas) (since 1.7pre5)
-- Docking plugins should now work (since 2.3pre2)
+- Docked plugins didn't work (Jason Ginchereau) (since 2.3pre2)
 
 * Version 2.3pre2
 
