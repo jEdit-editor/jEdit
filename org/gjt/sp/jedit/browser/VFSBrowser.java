@@ -119,6 +119,19 @@ public class VFSBrowser extends JPanel implements EBComponent
 		add(BorderLayout.CENTER,browserView);
 
 		propertiesChanged();
+		int lastFilter;
+		try
+		{
+			lastFilter = Integer.parseInt(jEdit.getProperty("vfs"
+				+ ".browser.lastFilter"));
+		}
+		catch(NumberFormatException nf)
+		{
+			lastFilter = 0;
+		}
+
+		if(lastFilter < filterCombo.getItemCount())
+			filterCombo.setSelectedIndex(lastFilter);
 
 		vfsSession = new VFSSession();
 
@@ -167,6 +180,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 	{
 		super.removeNotify();
 		EditBus.removeFromBus(this);
+		jEdit.setProperty("vfs.browser.lastFilter",String.valueOf(
+			filterCombo.getSelectedIndex()));
 	}
 
 	public void handleMessage(EBMessage msg)
@@ -214,6 +229,63 @@ public class VFSBrowser extends JPanel implements EBComponent
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,this,
 			vfsSession,vfs,path));
+	}
+
+	public void delete(String path)
+	{
+		Object[] args = { path };
+		int result = JOptionPane.showConfirmDialog(this,
+			jEdit.getProperty("vfs.browser.delete-confirm.message",args),
+			jEdit.getProperty("vfs.browser.delete-confirm.title"),
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE);
+		if(result != JOptionPane.YES_OPTION)
+			return;
+
+		if(!vfs.setupVFSSession(vfsSession,this))
+			return;
+
+		VFSManager.runInWorkThread(new BrowserIORequest(
+			BrowserIORequest.DELETE,this,
+			vfsSession,vfs,path));
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				reloadDirectory(true);
+			}
+		});
+	}
+
+	public void mkdir()
+	{
+		String newDirectory = GUIUtilities.input(this,"vfs.browser.mkdir",null);
+		if(newDirectory == null)
+			return;
+
+		// path is the currently viewed directory in the browser
+		newDirectory = vfs.constructPath(path,newDirectory);
+
+		if(!vfs.setupVFSSession(vfsSession,this))
+			return;
+
+		VFSManager.runInWorkThread(new BrowserIORequest(
+			BrowserIORequest.MKDIR,this,
+			vfsSession,vfs,newDirectory));
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				reloadDirectory(true);
+			}
+		});
+	}
+
+	public View getView()
+	{
+		return view;
 	}
 
 	public VFS getVFS()
@@ -425,7 +497,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private VFSSession vfsSession;
 	private HistoryTextField pathField;
 	private JComboBox filterCombo;
-	private JButton up, reload, roots, home, synchronize,
+	private JButton up, reload, mkdir, roots, home, synchronize,
 		addToFavorites, gotoFavorites;
 	private BrowserView browserView;
 	private VFSFilter filenameFilter;
@@ -517,9 +589,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 	{
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
+		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
 		toolBar.add(up = createToolButton("up",false));
 		toolBar.add(reload = createToolButton("reload",false));
+		toolBar.add(mkdir = createToolButton("mkdir",false));
 		toolBar.addSeparator();
 		toolBar.add(roots = createToolButton("roots",false));
 		toolBar.add(home = createToolButton("home",false));
@@ -620,6 +694,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 				setDirectory(vfs.getFileParent(path));
 			else if(source == reload)
 				reloadDirectory(true);
+			else if(source == mkdir)
+				mkdir();
 			else if(source == roots)
 				setDirectory(FileRootsVFS.PROTOCOL + ":");
 			else if(source == home)
@@ -658,6 +734,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.5  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *

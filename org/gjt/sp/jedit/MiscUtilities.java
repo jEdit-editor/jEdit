@@ -68,15 +68,34 @@ public class MiscUtilities
 	 */
 	public static String constructPath(String parent, String path)
 	{
+		return constructPath(parent,path,true);
+	}
+
+	/**
+	 * Constructs an absolute path name from a directory and another
+	 * path name.
+	 * @param parent The directory
+	 * @param path The path name
+	 * @param canonical True if the final path name should be canonical
+	 * @since jEdit 2.6pre2
+	 */
+	public static String constructPath(String parent, String path,
+		boolean canonical)
+	{
 		if(new File(path).isAbsolute())
 			return canonPath(path);
 		else if(parent == null)
 			parent = System.getProperty("user.dir");
 
 		if(parent.endsWith(File.separator))
-			return canonPath(parent + path);
+			path = parent + path;
 		else
-			return canonPath(parent + File.separator + path);
+			path = parent + File.separator + path;
+
+		if(canonical)
+			return canonPath(path);
+		else
+			return path;
 	}
 
 	/**
@@ -88,7 +107,22 @@ public class MiscUtilities
 	public static String constructPath(String parent,
 		String path1, String path2)
 	{
-		return constructPath(constructPath(parent,path1),path2);
+		return constructPath(parent,path1,path2,true);
+	}
+
+	/**
+	 * Constructs an absolute path name from three path components.
+	 * @param parent The parent directory
+	 * @param path1 The first path
+	 * @param path2 The second path
+	 * @param canonical True if the final path name should be canonical
+	 * @since jEdit 2.6pre2
+	 */
+	public static String constructPath(String parent,
+		String path1, String path2)
+	{
+		return constructPath(constructPath(parent,path1,false),path2,
+			canonical);
 	}
 
 	/**
@@ -109,9 +143,9 @@ public class MiscUtilities
 			parent = System.getProperty("user.dir");
 
 		if (parent.endsWith(File.separator))
-			return canonPath(parent + path);
+			return parent + path;
 		else
-			return canonPath(parent + File.separator + path);
+			return parent + File.separator + path;
 	}
 	
 	/**
@@ -682,6 +716,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  2000/08/05 07:16:11  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.35  2000/08/03 07:43:41  sp
  * Favorites added to browser, lots of other stuff too
  *

@@ -1,6 +1,6 @@
 /*
  * AbstractOptionPane.java - Abstract option pane
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,7 @@ import java.awt.*;
 
 /**
  * The default implementation of the option pane interface. It lays out
- * components in a vertical fashion, much like in the Global Options dialog
- * box.
+ * components in a vertical fashion.
  *
  * @see org.gjt.sp.jedit.OptionPane
  */
@@ -149,6 +148,40 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		add(comp);
 	}
 
+	/**
+	 * Adds a separator component.
+	 * @param label The separator label property
+	 * @since jEdit 2.6pre2
+	 */
+	protected void addSeparator(String label)
+	{
+		Box box = new Box(BoxLayout.X_AXIS);
+		Box box2 = new Box(BoxLayout.Y_AXIS);
+		box2.add(Box.createGlue());
+		box2.add(new JSeparator(JSeparator.HORIZONTAL));
+		box2.add(Box.createGlue());
+		box.add(box2);
+		JLabel l = new JLabel(jEdit.getProperty(label));
+		l.setMaximumSize(l.getPreferredSize());
+		box.add(l);
+		Box box3 = new Box(BoxLayout.Y_AXIS);
+		box3.add(Box.createGlue());
+		box3.add(new JSeparator(JSeparator.HORIZONTAL));
+		box3.add(Box.createGlue());
+		box.add(box3);
+
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.gridy = y++;
+		cons.gridheight = 1;
+		cons.gridwidth = cons.REMAINDER;
+		cons.fill = GridBagConstraints.BOTH;
+		cons.anchor = GridBagConstraints.WEST;
+		cons.weightx = 1.0f;
+
+		gridBag.setConstraints(box,cons);
+		add(box);
+	}
+
 	// private members
 	private String name;
 }
@@ -156,6 +189,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/08/05 07:16:11  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.5  2000/07/15 10:10:17  sp
  * improved printing
  *

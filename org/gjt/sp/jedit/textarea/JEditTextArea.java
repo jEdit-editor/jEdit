@@ -1000,9 +1000,8 @@ public class JEditTextArea extends JComponent
 				gutter.invalidateLine(newBias ? newStartLine : newEndLine);
 			}
 
-			buffer.addUndoableEdit(new CaretUndo(
-				selectionStart,selectionEnd,
-				newStart,newEnd));
+			buffer.addUndoableEdit(new CaretUndo(selectionStart,
+				selectionEnd));
 
 			selectionStart = newStart;
 			selectionEnd = newEnd;
@@ -2098,16 +2097,11 @@ public class JEditTextArea extends JComponent
 	{
 		private int start;
 		private int end;
-		private int newStart;
-		private int newEnd;
 
-		CaretUndo(int start, int end, int newStart, int newEnd)
+		CaretUndo(int start, int end)
 		{
 			this.start = start;
 			this.end = end;
-
-			this.newStart = newStart;
-			this.newEnd = newEnd;
 		}
 
 		public boolean isSignificant()
@@ -2163,6 +2157,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.77  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.76  2000/07/30 09:04:19  sp
  * More VFS browser hacking
  *

@@ -39,6 +39,16 @@ public class BrowserIORequest extends WorkRequest
 	public static final int LIST_DIRECTORY = 0;
 
 	/**
+	 * Delete file I/O request.
+	 */
+	public static final int DELETE = 1;
+
+	/**
+	 * Make directory I/O request.
+	 */
+	public static final int MKDIR = 2;
+
+	/**
 	 * Creates a new browser I/O request.
 	 * @param type The request type
 	 * @param browser The VFS browser instance
@@ -60,6 +70,12 @@ public class BrowserIORequest extends WorkRequest
 		{
 		case LIST_DIRECTORY:
 			listDirectory();
+			break;
+		case DELETE:
+			delete();
+			break;
+		case MKDIR:
+			mkdir();
 			break;
 		}
 	}
@@ -110,11 +126,86 @@ public class BrowserIORequest extends WorkRequest
 		setAbortable(false);
 		browser.directoryLoaded(directory);
 	}
+
+	private void delete()
+	{
+		try
+		{
+			setAbortable(true);
+			String[] args = { path };
+			setStatus(jEdit.getProperty("vfs.status.deleting",args));
+
+			try
+			{
+				if(!vfs._delete(session,path,browser))
+					VFSManager.error(browser,"vfs.browser.delete-error",args);
+			}
+			catch(IOException io)
+			{
+				args[0] = io.getMessage();
+				VFSManager.error(browser,"ioerror",args);
+			}
+		}
+		catch(WorkThread.Abort a)
+		{
+		}
+		finally
+		{
+			try
+			{
+				vfs._endVFSSession(session,browser);
+			}
+			catch(IOException io)
+			{
+				String[] args = { io.getMessage() };
+				VFSManager.error(browser,"ioerror",args);
+			}
+		}
+	}
+
+	private void mkdir()
+	{
+		try
+		{
+			setAbortable(true);
+			String[] args = { path };
+			setStatus(jEdit.getProperty("vfs.status.mkdir",args));
+
+			try
+			{
+				if(!vfs._mkdir(session,path,browser))
+					VFSManager.error(browser,"vfs.browser.mkdir-error",args);
+			}
+			catch(IOException io)
+			{
+				args[0] = io.getMessage();
+				VFSManager.error(browser,"ioerror",args);
+			}
+		}
+		catch(WorkThread.Abort a)
+		{
+		}
+		finally
+		{
+			try
+			{
+				vfs._endVFSSession(session,browser);
+			}
+			catch(IOException io)
+			{
+				String[] args = { io.getMessage() };
+				VFSManager.error(browser,"ioerror",args);
+			}
+		}
+	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.1  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

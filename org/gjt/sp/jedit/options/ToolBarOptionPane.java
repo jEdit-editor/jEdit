@@ -52,13 +52,13 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 		/* Show toolbar */
 		showToolbar = new JCheckBox(jEdit.getProperty(
-			"options.general.showToolbar"));
+			"options.toolbar.showToolbar"));
 		showToolbar.setSelected(jEdit.getBooleanProperty("view.showToolbar"));
 		panel.add(showToolbar);
 
 		/* Show search bar */
 		showSearchbar = new JCheckBox(jEdit.getProperty(
-			"options.general.showSearchbar"));
+			"options.toolbar.showSearchbar"));
 		showSearchbar.setSelected(jEdit.getBooleanProperty(
 			"view.showSearchbar"));
 		panel.add(showSearchbar);
@@ -579,6 +579,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.6  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

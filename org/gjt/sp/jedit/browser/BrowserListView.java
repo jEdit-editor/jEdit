@@ -1,5 +1,5 @@
 /*
- * BrowserListView.java - Browser list view
+ * BrowserListView.java
  * Copyright (C) 1999 Jason Ginchereau
  * Portions copyright (C) 2000 Slava Pestov
  *
@@ -24,7 +24,6 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.jEdit;
@@ -49,8 +48,6 @@ public class BrowserListView extends BrowserView
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		list.addMouseListener(new MouseHandler());
-		list.addListSelectionListener(new ListHandler());
-		list.setMinimumSize(new Dimension(0,0));
 		list.setVisibleRowCount(10);
 
 		setLayout(new BorderLayout());
@@ -83,23 +80,19 @@ public class BrowserListView extends BrowserView
 
 	private static FileCellRenderer renderer = new FileCellRenderer();
 
-	class ListHandler implements ListSelectionListener
-	{
-		public void valueChanged(ListSelectionEvent evt)
-		{
-			browser.filesSelected();
-		}
-	}
-
 	class MouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
-			if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0 &&
-				evt.getClickCount() == 2)
+			if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 			{
-				if(list.getSelectedIndex() != -1);
-					browser.filesActivated();
+				if(list.getSelectedIndex() != -1)
+				{
+					if(evt.getClickCount() == 1)
+						browser.filesSelected();
+					else if(evt.getClickCount() == 2)
+						browser.filesActivated();
+				}
 			}
 		}
 
@@ -126,6 +119,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.3  2000/08/01 11:44:15  sp
  * More VFS browser work
  *

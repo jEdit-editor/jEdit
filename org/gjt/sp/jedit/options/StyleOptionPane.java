@@ -56,8 +56,6 @@ public class StyleOptionPane extends AbstractOptionPane
 		panel.add(BorderLayout.CENTER,createColorTableScroller());
 		add(panel);
 
-		setLayout(new GridLayout(2,1));
-
 		panel = new JPanel(new BorderLayout());
 		panel.add(BorderLayout.NORTH,new JLabel(jEdit.getProperty(
 			"options.styles.styles")));
@@ -585,6 +583,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.19  2000/07/14 06:00:45  sp
  * bracket matching now takes syntax info into account
  *

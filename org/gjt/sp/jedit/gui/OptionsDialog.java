@@ -45,13 +45,15 @@ public class OptionsDialog extends EnhancedDialog
 
 		view.showWaitCursor();
 
-		getContentPane().setLayout(new BorderLayout());
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
 
-		JPanel stage = new JPanel(new BorderLayout(4, 8));
-		stage.setBorder(BorderFactory.createCompoundBorder(
-			new SoftBevelBorder(SoftBevelBorder.RAISED),
-			BorderFactory.createEmptyBorder(2, 2, 2, 2)));
-		getContentPane().add(stage, BorderLayout.CENTER);
+		content.setLayout(new BorderLayout());
+
+		JPanel stage = new JPanel(new BorderLayout());
+		stage.setBorder(new EmptyBorder(0,6,0,0));
+		content.add(stage, BorderLayout.CENTER);
 
 		// currentLabel displays the path of the currently selected
 		// OptionPane at the top of the stage area
@@ -62,6 +64,7 @@ public class OptionsDialog extends EnhancedDialog
 		stage.add(currentLabel, BorderLayout.NORTH);
 
 		cardPanel = new JPanel(new CardLayout());
+		cardPanel.setBorder(new EmptyBorder(5,0,0,0));
 		stage.add(cardPanel, BorderLayout.CENTER);
 
 		paneTree = new JTree(createOptionTreeModel());
@@ -70,17 +73,20 @@ public class OptionsDialog extends EnhancedDialog
 		paneTree.putClientProperty("JTree.lineStyle", "Angled");
 		paneTree.setShowsRootHandles(true);
 		paneTree.setRootVisible(false);
-		getContentPane().add(new JScrollPane(paneTree,
+		content.add(new JScrollPane(paneTree,
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
 			BorderLayout.WEST);
 
 		JPanel buttons = new JPanel();
-		getContentPane().add(buttons, BorderLayout.SOUTH);
+		buttons.setBorder(new EmptyBorder(12,0,0,0));
+		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
+		buttons.add(Box.createGlue());
 
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(this);
 		buttons.add(ok);
+		buttons.add(Box.createHorizontalStrut(6));
 		getRootPane().setDefaultButton(ok);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
@@ -88,6 +94,10 @@ public class OptionsDialog extends EnhancedDialog
 		/* apply = new JButton(jEdit.getProperty("common.apply"));
 		apply.addActionListener(this);
 		buttons.add(apply); */
+
+		buttons.add(Box.createGlue());
+
+		content.add(buttons, BorderLayout.SOUTH);
 
 		// compute the jEdit branch
 		TreePath jEditPath = new TreePath(new Object[]{ paneTree
@@ -248,9 +258,8 @@ public class OptionsDialog extends EnhancedDialog
 		jEditGroup = new OptionGroup("jedit");
 
 		addOptionPane(new GeneralOptionPane(), jEditGroup);
+		addOptionPane(new TextAreaAndGutterOptionPane(), jEditGroup);
 		addOptionPane(new EditorOptionPane(), jEditGroup);
-		addOptionPane(new ModeOptionPane(), jEditGroup);
-		addOptionPane(new GutterOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new StyleOptionPane(), jEditGroup);
 		addOptionPane(new FileFilterOptionPane(), jEditGroup);
@@ -585,6 +594,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.26  2000/07/15 10:10:18  sp
  * improved printing
  *

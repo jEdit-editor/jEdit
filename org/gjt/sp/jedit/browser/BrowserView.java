@@ -59,12 +59,17 @@ public abstract class BrowserView extends JPanel
 
 	protected void showFilePopup(VFS.DirectoryEntry file, Component comp, Point p)
 	{
+		BrowserPopupMenu popup = new BrowserPopupMenu(browser,file);
+		popup.show(comp,p.x,p.y);
 	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.2  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

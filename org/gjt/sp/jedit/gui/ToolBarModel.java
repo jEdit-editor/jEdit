@@ -54,6 +54,7 @@ public class ToolBarModel extends MenuItemModel
 	{
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
+		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
 		for(int i = 0; i < children.size(); i++)
 		{

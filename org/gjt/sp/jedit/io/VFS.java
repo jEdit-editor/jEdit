@@ -107,14 +107,14 @@ public abstract class VFS
 	}
 
 	/**
-	 * Returns the parent of the specified directory. By default,
+	 * Returns the parent of the specified URL. By default,
 	 * same as MiscUtilities.getFileParent().
-	 * @param path The directory
+	 * @param url The URL
 	 * @since jEdit 2.6pre2
 	 */
-	public String getFileParent(String path)
+	public String getFileParent(String url)
 	{
-		return MiscUtilities.getFileParent(path);
+		return MiscUtilities.getFileParent(url);
 	}
 
 	/**
@@ -200,6 +200,21 @@ public abstract class VFS
 	}
 
 	/**
+	 * Returns the specified directory entry.
+	 * @param session The session
+	 * @param url The URL
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurred
+	 * @since jEdit 2.6pre2
+	 */
+	public DirectoryEntry _getDirectoryEntry(VFSSession session, String url,
+		Component comp)
+		throws IOException
+	{
+		return null;
+	}
+
+	/**
 	 * A directory entry.
 	 * @since jEdit 2.6pre2
 	 */
@@ -241,25 +256,24 @@ public abstract class VFS
 	 * @exception IOException if an I/O error occurs
 	 * @since jEdit 2.6pre2
 	 */
-	public void _delete(VFSSession session, String url, Component comp)
+	public boolean _delete(VFSSession session, String url, Component comp)
 		throws IOException
 	{
+		return false;
 	}
 
 	/**
-	 * Returns the length of the specified URL. Can return 0 if this
-	 * filesystem doesn't support a way of obtaining the file size.
+	 * Creates a new directory with the specified URL.
 	 * @param session The VFS session
-	 * @param url The URL
+	 * @param directory The directory
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurs
 	 * @since jEdit 2.6pre2
 	 */
-	public long _getFileLength(VFSSession session, String url,
-		Component comp)
+	public boolean _mkdir(VFSSession session, String directory, Component comp)
 		throws IOException
 	{
-		return 0;
+		return false;
 	}
 
 	/**
@@ -345,6 +359,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.12  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *

@@ -30,8 +30,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.io.DirectoryCache;
-import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.util.Log;
 
@@ -251,8 +250,8 @@ public class jEdit
 		sortByName = getBooleanProperty("sortByName");
 
 		propertiesChanged();
-		initRecent();
 		initPLAF();
+		initRecent();
 		SearchAndReplace.load();
 
 		initActions();
@@ -2326,6 +2325,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.264  2000/08/05 07:16:11  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.263  2000/08/03 07:43:41  sp
  * Favorites added to browser, lots of other stuff too
  *

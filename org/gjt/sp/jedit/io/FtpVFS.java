@@ -209,33 +209,59 @@ public class FtpVFS extends VFS
 		}
 	}
 
-	public void _delete(VFSSession session, String url, Component comp)
+	public boolean _delete(VFSSession session, String url, Component comp)
 		throws IOException
 	{
 		FtpAddress address = new FtpAddress(url);
 		FtpClient client = _getFtpClient(session,address,true,comp);
 		if(client == null)
-			return;
+			return false;
 
-		client.delete(address.path);
+		VFS.DirectoryEntry directoryEntry = _getDirectoryEntry(
+			session,url,comp);
+		if(directoryEntry.type == VFS.DirectoryEntry.FILE)
+			client.delete(address.path);
+		else if(directoryEntry.type == VFS.DirectoryEntry.DIRECTORY)
+		{
+			client.removeDirectory(address.path);
+			DirectoryCache.flushCachedDirectory(url);
+		}
 
-		DirectoryCache.flushCachedDirectory(MiscUtilities.getFileParent(url));
+		DirectoryCache.flushCachedDirectory(getFileParent(url));
+
+		return client.getResponse().isPositiveCompletion();
 	}
 
-	public long _getFileLength(VFSSession session, String url, Component comp)
+	public boolean _mkdir(VFSSession session, String directory, Component comp)
 		throws IOException
 	{
-		FtpAddress address = new FtpAddress(url);
+		FtpAddress address = new FtpAddress(directory);
 		FtpClient client = _getFtpClient(session,address,true,comp);
 		if(client == null)
-			return 0L;
+			return false;
+
+		client.makeDirectory(address.path);
+
+		DirectoryCache.flushCachedDirectory(getFileParent(directory));
+
+		return client.getResponse().isPositiveCompletion();
+	}
+
+	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+		Component comp)
+		throws IOException
+	{
+		FtpAddress address = new FtpAddress(path);
+		FtpClient client = _getFtpClient(session,address,true,comp);
+		if(client == null)
+			return null;
 
 		client.dataPort();
 		Reader _reader = client.list(address.path);
 		if(_reader == null)
 		{
 			// eg, file not found
-			return 0L;
+			return null;
 		}
 
 		BufferedReader reader = new BufferedReader(_reader);
@@ -243,11 +269,10 @@ public class FtpVFS extends VFS
 		reader.close();
 		if(line != null)
 		{
-			VFS.DirectoryEntry entry = lineToDirectoryEntry(line);
-			return entry.length;
+			return lineToDirectoryEntry(line);
 		}
 		else
-			return 0L;
+			return null;
 	}
 
 	public InputStream _createInputStream(VFSSession session, String path,
@@ -292,7 +317,7 @@ public class FtpVFS extends VFS
 			VFSManager.error(comp,"vfs.ftp.upload-error",args);
 		}
 
-		DirectoryCache.flushCachedDirectory(MiscUtilities.getFileParent(path));
+		DirectoryCache.flushCachedDirectory(getFileParent(path));
 
 		return out;
 	}
@@ -479,6 +504,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.15  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *

@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.io;
 
 import java.awt.Component;
 import java.util.Vector;
+import org.gjt.sp.jedit.jEdit;
 
 /**
  * A VFS used for remembering frequently-visited directories. Listing it
@@ -38,8 +39,6 @@ public class FavoritesVFS extends VFS
 	public FavoritesVFS()
 	{
 		super("favorites");
-		lock = new Object();
-		favorites = new Vector();
 	}
 
 	public int getCapabilities()
@@ -58,32 +57,42 @@ public class FavoritesVFS extends VFS
 			for(int i = 0; i < retVal.length; i++)
 			{
 				String favorite = (String)favorites.elementAt(i);
-				retVal[i] = new VFS.DirectoryEntry(favorite,
-					favorite,"favorites:" + favorite,
-					VFS.DirectoryEntry.DIRECTORY,
-					0L,false);
+				retVal[i] = _getDirectoryEntry(session,favorite,comp);
 			}
 			return retVal;
 		}
 	}
 
-	public void _delete(VFSSession session, String path, Component comp)
+	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+		Component comp)
+	{
+		return new VFS.DirectoryEntry(path,path,"favorites:" + path,
+					VFS.DirectoryEntry.DIRECTORY,
+					0L,false);
+	}
+
+	public boolean _delete(VFSSession session, String path, Component comp)
 	{
 		synchronized(lock)
 		{
 			path = path.substring("favorites:".length());
 			favorites.removeElement(path);
 		}
+
+		return true;
 	}
 
 	public static void loadFavorites()
 	{
-		String favorite;
-		int i = 0;
-		while((favorite = jEdit.getProperty("vfs.favorite." + i)) != null)
+		synchronized(lock)
 		{
-			favorites.addElement(favorite);
-			i++;
+			String favorite;
+			int i = 0;
+			while((favorite = jEdit.getProperty("vfs.favorite." + i)) != null)
+			{
+				favorites.addElement(favorite);
+				i++;
+			}
 		}
 	}
 
@@ -97,20 +106,27 @@ public class FavoritesVFS extends VFS
 
 	public static void saveFavorites()
 	{
-		for(int i = 0; i < favorites.size(); i++)
+		synchronized(lock)
 		{
-			jEdit.setProperty("vfs.favorite." + i,favorites.elementAt(i));
+			for(int i = 0; i < favorites.size(); i++)
+			{
+				jEdit.setProperty("vfs.favorite." + i,
+					(String)favorites.elementAt(i));
+			}
 		}
 	}
 
 	// private members
-	private static Object lock;
-	private static Vector favorites;
+	private static Object lock = new Object();
+	private static Vector favorites = new Vector();
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.1  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *

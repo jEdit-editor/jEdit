@@ -20,6 +20,9 @@ JEDIT 2.6 VERSION HISTORY
 + Enhancements
 
 - Major changes to VFS code to support browsing
+- Updated JavaScript mode (Ollie Rutherford)
+- Tool bar buttons now have a 'rollover' effect
+- Global Options dialog box re-arranged somewhat
 
 + Bug Fixes
 
@@ -34,6 +37,10 @@ JEDIT 2.6 VERSION HISTORY
 
 - org.gjt.sp.jedit.REFileFilter class removed
 - Many changes made to org.gjt.sp.jedit.VFS class
+- New MiscUtilities.constructPath(String,String,boolean) method allows you
+  to specify if the final path should be canonical (ie, symlinks resolved)
+  or not
+- New AbstractOptionPane.addSeparator(String) method
 
 * Version 2.6pre1
 

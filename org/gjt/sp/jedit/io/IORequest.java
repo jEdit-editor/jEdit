@@ -145,7 +145,14 @@ public class IORequest extends WorkRequest
 				setStatus(jEdit.getProperty("vfs.status.load",args));
 				setAbortable(true);
 
-				long length = vfs._getFileLength(session,path,view);
+				VFS.DirectoryEntry entry = vfs._getDirectoryEntry(
+					session,path,view);
+				long length;
+				if(entry != null)
+					length = entry.length;
+				else
+					length = 0L;
+
 				in = vfs._createInputStream(session,path,false,view);
 				if(in == null)
 					return;
@@ -693,6 +700,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.18  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.17  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

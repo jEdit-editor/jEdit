@@ -113,6 +113,8 @@ public class SearchDialog extends EnhancedDialog
 		content.add(BorderLayout.SOUTH,box);
 
 		ActionHandler actionListener = new ActionHandler();
+		find.addActionListener(actionListener);
+		replace.addActionListener(actionListener);
 		multifile.addActionListener(actionListener);
 		multifileBtn.addActionListener(actionListener);
 		findBtn.addActionListener(actionListener);
@@ -209,7 +211,8 @@ public class SearchDialog extends EnhancedDialog
 			Buffer buffer = view.getBuffer();
 			if(source == cancel)
 				cancel();
-			else if(source == findBtn)
+			else if(source == findBtn || source == find
+				|| source == replace)
 			{
 				ok();
 			}
@@ -251,6 +254,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.14  2000/06/16 10:11:06  sp
  * Bug fixes ahoy
  *

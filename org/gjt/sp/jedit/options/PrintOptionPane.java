@@ -34,16 +34,18 @@ public class PrintOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
+		addSeparator("options.print.misc");
+
 		/* Font */
 		font = new FontComboBox();
 		font.setSelectedItem(jEdit.getProperty("print.font"));
 		addComponent(jEdit.getProperty("options.print.font"),font);
 
 		/* Font style */
-		String[] styles = { jEdit.getProperty("options.editor.plain"),
-			jEdit.getProperty("options.editor.bold"),
-			jEdit.getProperty("options.editor.italic"),
-			jEdit.getProperty("options.editor.boldItalic") };
+		String[] styles = { jEdit.getProperty("options.textarea-gutter.plain"),
+			jEdit.getProperty("options.textarea-gutter.bold"),
+			jEdit.getProperty("options.textarea-gutter.italic"),
+			jEdit.getProperty("options.textarea-gutter.boldItalic") };
 		style = new JComboBox(styles);
 		try
 		{
@@ -62,16 +64,6 @@ public class PrintOptionPane extends AbstractOptionPane
 		size.setEditable(true);
 		size.setSelectedItem(jEdit.getProperty("print.fontsize"));
 		addComponent(jEdit.getProperty("options.print.fontsize"),size);
-
-		/* Margins */
-		topMargin = new JTextField(jEdit.getProperty("print.margin.top"));
-		addComponent(jEdit.getProperty("options.print.margin.top"),topMargin);
-		leftMargin = new JTextField(jEdit.getProperty("print.margin.left"));
-		addComponent(jEdit.getProperty("options.print.margin.left"),leftMargin);
-		bottomMargin = new JTextField(jEdit.getProperty("print.margin.bottom"));
-		addComponent(jEdit.getProperty("options.print.margin.bottom"),bottomMargin);
-		rightMargin = new JTextField(jEdit.getProperty("print.margin.right"));
-		addComponent(jEdit.getProperty("options.print.margin.right"),rightMargin);
 
 		/* Header */
 		printHeader = new JCheckBox(jEdit.getProperty("options.print"
@@ -96,6 +88,18 @@ public class PrintOptionPane extends AbstractOptionPane
 			+ ".syntax"));
 		syntax.setSelected(jEdit.getBooleanProperty("print.syntax"));
 		addComponent(syntax);
+
+		addSeparator("options.print.margins");
+
+		/* Margins */
+		topMargin = new JTextField(jEdit.getProperty("print.margin.top"));
+		addComponent(jEdit.getProperty("options.print.margin.top"),topMargin);
+		leftMargin = new JTextField(jEdit.getProperty("print.margin.left"));
+		addComponent(jEdit.getProperty("options.print.margin.left"),leftMargin);
+		bottomMargin = new JTextField(jEdit.getProperty("print.margin.bottom"));
+		addComponent(jEdit.getProperty("options.print.margin.bottom"),bottomMargin);
+		rightMargin = new JTextField(jEdit.getProperty("print.margin.right"));
+		addComponent(jEdit.getProperty("options.print.margin.right"),rightMargin);
 	}
 
 	protected void _save()
@@ -104,26 +108,34 @@ public class PrintOptionPane extends AbstractOptionPane
 		jEdit.setProperty("print.fontsize",(String)size.getSelectedItem());
 		jEdit.setProperty("print.fontstyle",String.valueOf(style
 			.getSelectedIndex()));
-		jEdit.setProperty("print.margin.top",topMargin.getText());
-		jEdit.setProperty("print.margin.left",leftMargin.getText());
-		jEdit.setProperty("print.margin.bottom",bottomMargin.getText());
-		jEdit.setProperty("print.margin.right",rightMargin.getText());
 		jEdit.setBooleanProperty("print.header",printHeader.isSelected());
 		jEdit.setBooleanProperty("print.footer",printFooter.isSelected());
 		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());
 		jEdit.setBooleanProperty("print.syntax",syntax.isSelected());
+		jEdit.setProperty("print.margin.top",topMargin.getText());
+		jEdit.setProperty("print.margin.left",leftMargin.getText());
+		jEdit.setProperty("print.margin.bottom",bottomMargin.getText());
+		jEdit.setProperty("print.margin.right",rightMargin.getText());
 	}
 
 	// private members
 	private JComboBox font;
 	private JComboBox style;
 	private JComboBox size;
-	private JTextField topMargin;
-	private JTextField leftMargin;
-	private JTextField bottomMargin;
-	private JTextField rightMargin;
 	private JCheckBox printHeader;
 	private JCheckBox printFooter;
 	private JCheckBox printLineNumbers;
 	private JCheckBox syntax;
+	private JTextField topMargin;
+	private JTextField leftMargin;
+	private JTextField bottomMargin;
+	private JTextField rightMargin;
 }
+
+/*
+ * Change Log:
+ * $Log$
+ * Revision 1.2  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
+ */

@@ -118,10 +118,10 @@ public class FileVFS extends VFS
 		return super.save(view,buffer,path);
 	}
 
-	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
+	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String path,
 		Component comp)
 	{
-		File directory = new File(url);
+		File directory = new File(path);
 		String[] list = directory.list();
 		if(list == null)
 			return null;
@@ -130,30 +130,37 @@ public class FileVFS extends VFS
 		for(int i = 0; i < list.length; i++)
 		{
 			String name = list[i];
-			String path = MiscUtilities.constructPath(url,name);
-			File file = new File(path);
-			int type;
-			if(file.isDirectory())
-				type = VFS.DirectoryEntry.DIRECTORY;
-			else
-				type = VFS.DirectoryEntry.FILE;
-
-			// XXX: need non-canonical form of constructPath()
-			list2[i] = new VFS.DirectoryEntry(name,path,path,type,
-				file.length(),fsView.isHiddenFile(file));
+			list2[i] = _getDirectoryEntry(session,
+				MiscUtilities.constructPath(path,name,false),
+				comp);
 		}
 
 		return list2;
 	}
 
-	public void _delete(VFSSession session, String path, Component comp)
+	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+		Component comp)
 	{
-		new File(path).delete();
+		File file = new File(path);
+		int type;
+		if(file.isDirectory())
+			type = VFS.DirectoryEntry.DIRECTORY;
+		else
+			type = VFS.DirectoryEntry.FILE;
+
+		return new VFS.DirectoryEntry(file.getName(),
+			MiscUtilities.constructPath(null,path,true),path,type,
+			file.length(),fsView.isHiddenFile(file));
 	}
 
-	public long _getFileLength(VFSSession session, String path, Component comp)
+	public boolean _delete(VFSSession session, String path, Component comp)
 	{
-		return new File(path).length();
+		return new File(path).delete();
+	}
+
+	public boolean _mkdir(VFSSession session, String directory, Component comp)
+	{
+		return new File(directory).mkdir();
 	}
 
 	public InputStream _createInputStream(VFSSession session, String path,
@@ -266,6 +273,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.12  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *

@@ -57,11 +57,17 @@ public class FileRootsVFS extends VFS
 		for(int i = 0; i < roots.length; i++)
 		{
 			String name = roots[i].getPath();
-			rootDE[i] = new VFS.DirectoryEntry(name,name,name,
-				VFS.DirectoryEntry.FILESYSTEM,0L,false);
+			rootDE[i] = _getDirectoryEntry(session,name,comp);
 		}
 
 		return rootDE;
+	}
+
+	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+		Component comp)
+	{
+		return new VFS.DirectoryEntry(path,path,path,VFS.DirectoryEntry
+			.FILESYSTEM,0L,false);
 	}
 
 	// private members
@@ -71,6 +77,9 @@ public class FileRootsVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.1  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *

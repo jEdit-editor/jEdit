@@ -20,8 +20,8 @@
 package org.gjt.sp.jedit.options;
 
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
-import org.gjt.sp.jedit.gui.FontComboBox;
 import org.gjt.sp.jedit.*;
 
 public class EditorOptionPane extends AbstractOptionPane
@@ -34,16 +34,18 @@ public class EditorOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
+		addSeparator("options.editor.global");
+
 		/* Modes */
-		modes = jEdit.getModes();
-		String mode = jEdit.getProperty("buffer.defaultMode");
+		Mode[] modes = jEdit.getModes();
+		String defaultModeString = jEdit.getProperty("buffer.defaultMode");
 		String[] modeNames = new String[modes.length];
 		int index = 0;
 		for(int i = 0; i < modes.length; i++)
 		{
 			Mode _mode = modes[i];
 			modeNames[i] = _mode.getName();
-			if(mode.equals(_mode.getName()))
+			if(defaultModeString.equals(_mode.getName()))
 				index = i;
 		}
 		defaultMode = new JComboBox(modeNames);
@@ -51,171 +53,307 @@ public class EditorOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editor.defaultMode"),
 			defaultMode);
 
-		/* Font */
-		font = new FontComboBox();
-		font.setSelectedItem(jEdit.getProperty("view.font"));
-		addComponent(jEdit.getProperty("options.editor.font"),font);
-
-		/* Font style */
-		String[] styles = { jEdit.getProperty("options.editor.plain"),
-			jEdit.getProperty("options.editor.bold"),
-			jEdit.getProperty("options.editor.italic"),
-			jEdit.getProperty("options.editor.boldItalic") };
-		style = new JComboBox(styles);
-		try
-		{
-			style.setSelectedIndex(Integer.parseInt(jEdit
-				.getProperty("view.fontstyle")));
-		}
-		catch(NumberFormatException nf)
-		{
-		}
-		addComponent(jEdit.getProperty("options.editor.fontstyle"),
-			style);
-
-		/* Font size */
-		String[] sizes = { "9", "10", "12", "14", "18", "24" };
-		size = new JComboBox(sizes);
-		size.setEditable(true);
-		size.setSelectedItem(jEdit.getProperty("view.fontsize"));
-		addComponent(jEdit.getProperty("options.editor.fontsize"),size);
-
 		/* Tab size */
 		String[] tabSizes = { "2", "4", "8" };
-		tabSize = new JComboBox(tabSizes);
-		tabSize.setEditable(true);
-		tabSize.setSelectedItem(jEdit.getProperty("buffer.tabSize"));
-		addComponent(jEdit.getProperty("options.editor.tabSize"),tabSize);
+		defaultTabSize = new JComboBox(tabSizes);
+		defaultTabSize.setEditable(true);
+		defaultTabSize.setSelectedItem(jEdit.getProperty("buffer.tabSize"));
+		addComponent(jEdit.getProperty("options.editor.tabSize"),defaultTabSize);
 
 		/* Undo queue size */
 		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
 		addComponent(jEdit.getProperty("options.editor.undoCount"),undoCount);
 
-		/* Line highlight */
-		lineHighlight = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".lineHighlight"));
-		lineHighlight.setSelected(jEdit.getBooleanProperty("view.lineHighlight"));
-		addComponent(lineHighlight);
-
-		/* Bracket highlight */
-		bracketHighlight = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".bracketHighlight"));
-		bracketHighlight.setSelected(jEdit.getBooleanProperty(
-			"view.bracketHighlight"));
-		addComponent(bracketHighlight);
-
-		/* EOL markers */
-		eolMarkers = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".eolMarkers"));
-		eolMarkers.setSelected(jEdit.getBooleanProperty("view.eolMarkers"));
-		addComponent(eolMarkers);
-
-		/* Paint invalid */
-		paintInvalid = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".paintInvalid"));
-		paintInvalid.setSelected(jEdit.getBooleanProperty("view.paintInvalid"));
-		addComponent(paintInvalid);
-
 		/* Syntax highlighting */
-		syntax = new JCheckBox(jEdit.getProperty("options.editor"
+		defaultSyntax = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".syntax"));
-		syntax.setSelected(jEdit.getBooleanProperty("buffer.syntax"));
-		addComponent(syntax);
+		defaultSyntax.setSelected(jEdit.getBooleanProperty("buffer.syntax"));
+		addComponent(defaultSyntax);
 
 		/* Indent on tab */
-		indentOnTab = new JCheckBox(jEdit.getProperty("options.editor"
+		defaultIndentOnTab = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".indentOnTab"));
-		indentOnTab.setSelected(jEdit.getBooleanProperty("buffer.indentOnTab"));
-		addComponent(indentOnTab);
+		defaultIndentOnTab.setSelected(jEdit.getBooleanProperty("buffer.indentOnTab"));
+		addComponent(defaultIndentOnTab);
 
 		/* Indent on enter */
-		indentOnEnter = new JCheckBox(jEdit.getProperty("options.editor"
+		defaultIndentOnEnter = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".indentOnEnter"));
-		indentOnEnter.setSelected(jEdit.getBooleanProperty("buffer.indentOnEnter"));
-		addComponent(indentOnEnter);
+		defaultIndentOnEnter.setSelected(jEdit.getBooleanProperty("buffer.indentOnEnter"));
+		addComponent(defaultIndentOnEnter);
 
 		/* Soft tabs */
-		noTabs = new JCheckBox(jEdit.getProperty("options.editor"
+		defaultNoTabs = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".noTabs"));
-		noTabs.setSelected(jEdit.getBooleanProperty("buffer.noTabs"));
-		addComponent(noTabs);
+		defaultNoTabs.setSelected(jEdit.getBooleanProperty("buffer.noTabs"));
+		addComponent(defaultNoTabs);
 
-		/* Blinking caret */
-		blinkCaret = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".blinkCaret"));
-		blinkCaret.setSelected(jEdit.getBooleanProperty("view.caretBlink"));
-		addComponent(blinkCaret);
+		addSeparator("options.editor.mode-specific");
 
-		/* Block caret */
-		blockCaret = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".blockCaret"));
-		blockCaret.setSelected(jEdit.getBooleanProperty("view.blockCaret"));
-		addComponent(blockCaret);
+		modeProps = new ModeProperties[modes.length];
+		for(int i = 0; i < modes.length; i++)
+		{
+			modeProps[i] = new ModeProperties(modes[i]);
+		}
+		mode = new JComboBox(modeNames);
+		mode.addActionListener(new ActionHandler());
 
-		/* Electric borders */
-		electricBorders = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".electricBorders"));
-		electricBorders.setSelected(!"0".equals(jEdit.getProperty(
-			"view.electricBorders")));
-		addComponent(electricBorders);
+		addComponent(jEdit.getProperty("options.editor.mode"),mode);
 
-		/* Smart home/end */
-		homeEnd = new JCheckBox(jEdit.getProperty("options.editor"
-			+ ".homeEnd"));
-		homeEnd.setSelected(jEdit.getBooleanProperty("view.homeEnd"));
-		addComponent(homeEnd);
+		useDefaults = new JCheckBox(jEdit.getProperty("options.editor.useDefaults"));
+		useDefaults.addActionListener(new ActionHandler());
+		addComponent(useDefaults);
+
+		addComponent(jEdit.getProperty("options.editor.filenameGlob"),
+			filenameGlob = new JTextField());
+
+		addComponent(jEdit.getProperty("options.editor.firstlineGlob"),
+			firstlineGlob = new JTextField());
+
+		addComponent(jEdit.getProperty("options.editor.tabSize"),
+			tabSize = new JComboBox(tabSizes));
+		tabSize.setEditable(true);
+
+		addComponent(jEdit.getProperty("options.editor.commentStart"),
+			commentStart = new JTextField());
+
+		addComponent(jEdit.getProperty("options.editor.commentEnd"),
+			commentEnd = new JTextField());
+
+		addComponent(jEdit.getProperty("options.editor.boxComment"),
+			boxComment = new JTextField());
+
+		addComponent(jEdit.getProperty("options.editor.blockComment"),
+			blockComment = new JTextField());
+
+		addComponent(jEdit.getProperty("options.editor.noWordSep"),
+			noWordSep = new JTextField());
+
+		addComponent(noTabs = new JCheckBox(jEdit.getProperty(
+			"options.editor.noTabs")));
+
+		addComponent(indentOnTab = new JCheckBox(jEdit.getProperty(
+			"options.editor.indentOnTab")));
+
+		addComponent(indentOnEnter = new JCheckBox(jEdit.getProperty(
+			"options.editor.indentOnEnter")));
+
+		addComponent(syntax = new JCheckBox(jEdit.getProperty(
+			"options.editor.syntax")));
+
+		selectMode();
 	}
 
 	protected void _save()
 	{
 		jEdit.setProperty("buffer.defaultMode",
-			modes[defaultMode.getSelectedIndex()].getName());
-		jEdit.setProperty("view.font",(String)font.getSelectedItem());
-		jEdit.setProperty("view.fontsize",(String)size.getSelectedItem());
-		jEdit.setProperty("view.fontstyle",String.valueOf(style
-			.getSelectedIndex()));
-		jEdit.setProperty("buffer.tabSize",(String)tabSize
+			modeProps[defaultMode.getSelectedIndex()].mode.getName());
+		jEdit.setProperty("buffer.tabSize",(String)defaultTabSize
 			.getSelectedItem());
 		jEdit.setProperty("buffer.undoCount",undoCount.getText());
-		jEdit.setBooleanProperty("view.lineHighlight",lineHighlight
+		jEdit.setBooleanProperty("buffer.syntax",defaultSyntax.isSelected());
+		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
 			.isSelected());
-		jEdit.setBooleanProperty("view.bracketHighlight",bracketHighlight
+		jEdit.setBooleanProperty("buffer.indentOnEnter",defaultIndentOnEnter
 			.isSelected());
-		jEdit.setBooleanProperty("view.eolMarkers",eolMarkers
-			.isSelected());
-		jEdit.setBooleanProperty("view.paintInvalid",paintInvalid
-			.isSelected());
-		jEdit.setBooleanProperty("buffer.syntax",syntax.isSelected());
-		jEdit.setBooleanProperty("buffer.indentOnTab",indentOnTab
-			.isSelected());
-		jEdit.setBooleanProperty("buffer.indentOnEnter",indentOnEnter
-			.isSelected());
-		jEdit.setBooleanProperty("view.caretBlink",blinkCaret.isSelected());
-		jEdit.setBooleanProperty("view.blockCaret",blockCaret.isSelected());
-		jEdit.setProperty("view.electricBorders",electricBorders
-			.isSelected() ? "3" : "0");
-		jEdit.setBooleanProperty("buffer.noTabs",noTabs.isSelected());
-		jEdit.setBooleanProperty("view.homeEnd",homeEnd.isSelected());
+		jEdit.setBooleanProperty("buffer.noTabs",defaultNoTabs.isSelected());
+
+		saveMode();
+
+		for(int i = 0; i < modeProps.length; i++)
+		{
+			modeProps[i].save();
+		}
 	}
 
 	// private members
-	private Mode[] modes;
 	private JComboBox defaultMode;
-	private JComboBox font;
-	private JComboBox style;
-	private JComboBox size;
-	private JComboBox tabSize;
+	private JComboBox defaultTabSize;
 	private JTextField undoCount;
-	private JCheckBox lineHighlight;
-	private JCheckBox bracketHighlight;
-	private JCheckBox eolMarkers;
-	private JCheckBox paintInvalid;
-	private JCheckBox syntax;
+	private JCheckBox defaultSyntax;
+	private JCheckBox defaultIndentOnTab;
+	private JCheckBox defaultIndentOnEnter;
+	private JCheckBox defaultNoTabs;
+
+	private ModeProperties[] modeProps;
+	private ModeProperties current;
+	private JComboBox mode;
+	private JCheckBox useDefaults;
+	private JTextField filenameGlob;
+	private JTextField firstlineGlob;
+	private JComboBox tabSize;
+	private JTextField commentStart;
+	private JTextField commentEnd;
+	private JTextField boxComment;
+	private JTextField blockComment;
+	private JTextField noWordSep;
+	private JCheckBox noTabs;
 	private JCheckBox indentOnTab;
 	private JCheckBox indentOnEnter;
-	private JCheckBox blinkCaret;
-	private JCheckBox blockCaret;
-	private JCheckBox electricBorders;
-	private JCheckBox noTabs;
-	private JCheckBox homeEnd;
+	private JCheckBox syntax;
+
+	private void saveMode()
+	{
+		current.useDefaults = useDefaults.isSelected();
+		current.filenameGlob = filenameGlob.getText();
+		current.firstlineGlob = firstlineGlob.getText();
+		current.tabSize = (String)tabSize.getSelectedItem();
+		current.commentStart = commentStart.getText();
+		current.commentEnd = commentEnd.getText();
+		current.boxComment = boxComment.getText();
+		current.blockComment = blockComment.getText();
+		current.noWordSep = noWordSep.getText();
+		current.noTabs = noTabs.isSelected();
+		current.indentOnEnter = indentOnEnter.isSelected();
+		current.indentOnTab = indentOnTab.isSelected();
+		current.syntax = syntax.isSelected();
+	}
+
+	private void selectMode()
+	{
+		current = modeProps[mode.getSelectedIndex()];
+		current.edited = true;
+		current.mode.loadIfNecessary();
+
+		useDefaults.setSelected(current.useDefaults);
+		filenameGlob.setText(current.filenameGlob);
+		firstlineGlob.setText(current.firstlineGlob);
+		tabSize.setSelectedItem(current.tabSize);
+		commentStart.setText(current.commentStart);
+		commentEnd.setText(current.commentEnd);
+		boxComment.setText(current.boxComment);
+		blockComment.setText(current.blockComment);
+		noWordSep.setText(current.noWordSep);
+		noTabs.setSelected(current.noTabs);
+		indentOnTab.setSelected(current.indentOnTab);
+		indentOnEnter.setSelected(current.indentOnEnter);
+		syntax.setSelected(current.syntax);
+
+		updateEnabled();
+	}
+
+	private void updateEnabled()
+	{
+		boolean enabled = !modeProps[mode.getSelectedIndex()].useDefaults;
+		filenameGlob.setEnabled(enabled);
+		firstlineGlob.setEnabled(enabled);
+		tabSize.setEnabled(enabled);
+		commentStart.setEnabled(enabled);
+		commentEnd.setEnabled(enabled);
+		boxComment.setEnabled(enabled);
+		blockComment.setEnabled(enabled);
+		noWordSep.setEnabled(enabled);
+		noTabs.setEnabled(enabled);
+		indentOnTab.setEnabled(enabled);
+		indentOnEnter.setEnabled(enabled);
+		syntax.setEnabled(enabled);
+	}
+
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			if(evt.getSource() == mode)
+			{
+				saveMode();
+				selectMode();
+			}
+			else if(evt.getSource() == useDefaults)
+			{
+				modeProps[mode.getSelectedIndex()].useDefaults =
+					useDefaults.isSelected();
+				updateEnabled();
+			}
+		}
+	}
+
+	class ModeProperties
+	{
+		Mode mode;
+		boolean edited;
+
+		boolean useDefaults;
+		String filenameGlob;
+		String firstlineGlob;
+		String tabSize;
+		String commentStart;
+		String commentEnd;
+		String boxComment;
+		String blockComment;
+		String noWordSep;
+		boolean noTabs;
+		boolean indentOnTab;
+		boolean indentOnEnter;
+		boolean syntax;
+
+		ModeProperties(Mode mode)
+		{
+			this.mode = mode;
+
+			useDefaults = !jEdit.getBooleanProperty("mode."
+				+ mode.getName() + ".customSettings");
+			filenameGlob = (String)mode.getProperty("filenameGlob");
+			firstlineGlob = (String)mode.getProperty("firstlineGlob");
+			tabSize = mode.getProperty("tabSize").toString();
+			commentStart = (String)mode.getProperty("commentStart");
+			commentEnd = (String)mode.getProperty("commentEnd");
+			boxComment = (String)mode.getProperty("boxComment");
+			blockComment = (String)mode.getProperty("blockComment");
+			noWordSep = (String)mode.getProperty("noWordSep");
+			noTabs = mode.getBooleanProperty("noTabs");
+			indentOnTab = mode.getBooleanProperty("indentOnTab");
+			indentOnEnter = mode.getBooleanProperty("indentOnEnter");
+			syntax = mode.getBooleanProperty("syntax");
+		}
+
+		void save()
+		{
+			// don't do anything if the user didn't change
+			// any settings
+			if(!edited)
+				return;
+
+			String prefix = "mode." + mode.getName() + ".";
+			jEdit.setBooleanProperty(prefix + "customSettings",!useDefaults);
+
+			if(useDefaults)
+			{
+				jEdit.resetProperty(prefix + "filenameGlob");
+				jEdit.resetProperty(prefix + "firstlineGlob");
+				jEdit.resetProperty(prefix + "tabSize");
+				jEdit.resetProperty(prefix + "commentStart");
+				jEdit.resetProperty(prefix + "commentEnd");
+				jEdit.resetProperty(prefix + "boxComment");
+				jEdit.resetProperty(prefix + "blockComment");
+				jEdit.resetProperty(prefix + "noWordSep");
+				jEdit.resetProperty(prefix + "noTabs");
+				jEdit.resetProperty(prefix + "indentOnTab");
+				jEdit.resetProperty(prefix + "indentOnEnter");
+				jEdit.resetProperty(prefix + "syntax");
+			}
+			else
+			{
+				jEdit.setProperty(prefix + "filenameGlob",filenameGlob);
+				jEdit.setProperty(prefix + "firstlineGlob",firstlineGlob);
+				jEdit.setProperty(prefix + "tabSize",tabSize);
+				jEdit.setProperty(prefix + "commentStart",commentStart);
+				jEdit.setProperty(prefix + "commentEnd",commentEnd);
+				jEdit.setProperty(prefix + "boxComment",boxComment);
+				jEdit.setProperty(prefix + "blockComment",blockComment);
+				jEdit.setProperty(prefix + "noWordSep",noWordSep);
+				jEdit.setBooleanProperty(prefix + "noTabs",noTabs);
+				jEdit.setBooleanProperty(prefix + "indentOnTab",indentOnTab);
+				jEdit.setBooleanProperty(prefix + "indentOnEnter",indentOnEnter);
+				jEdit.setBooleanProperty(prefix + "syntax",syntax);
+			}
+		}
+	}
 }
+
+/*
+ * Change Log:
+ * $Log$
+ * Revision 1.26  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
+ */

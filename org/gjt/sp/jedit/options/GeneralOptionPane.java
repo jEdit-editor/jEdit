@@ -33,23 +33,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
-		/* Look and feel */
-		lfs = UIManager.getInstalledLookAndFeels();
-		String[] names = new String[lfs.length];
-		String lf = UIManager.getLookAndFeel().getClass().getName();
-		int index = 0;
-		for(int i = 0; i < names.length; i++)
-		{
-			names[i] = lfs[i].getName();
-			if(lf.equals(lfs[i].getClassName()))
-				index = i;
-		}
-
-		lookAndFeel = new JComboBox(names);
-		lookAndFeel.setSelectedIndex(index);
-
-		addComponent(jEdit.getProperty("options.general.lf"),
-			lookAndFeel);
+		addSeparator("options.general.misc");
 
 		/* Recent file count */
 		recent = new JTextField(jEdit.getProperty("recent"));
@@ -58,6 +42,39 @@ public class GeneralOptionPane extends AbstractOptionPane
 		/* History count */
 		history = new JTextField(jEdit.getProperty("history"));
 		addComponent(jEdit.getProperty("options.general.history"),history);
+
+		/* Session management */
+		saveDesktop = new JCheckBox(jEdit.getProperty(
+			"options.general.saveDesktop"));
+		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
+		addComponent(saveDesktop);
+
+		/* Exit confirmation */
+		confirmExit = new JCheckBox(jEdit.getProperty(
+			"options.general.confirmExit"));
+		confirmExit.setSelected(jEdit.getBooleanProperty("confirmExit"));
+		addComponent(confirmExit);
+
+		/* Sort buffer list */
+		sortBuffers = new JCheckBox(jEdit.getProperty(
+			"options.general.sortBuffers"));
+		sortBuffers.setSelected(jEdit.getBooleanProperty("sortBuffers"));
+		addComponent(sortBuffers);
+
+		/* Sort buffers by names */
+		sortByName = new JCheckBox(jEdit.getProperty(
+			"options.general.sortByName"));
+		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
+		addComponent(sortByName);
+
+		/* Check mod status on focus */
+		checkModStatus = new JCheckBox(jEdit.getProperty(
+			"options.general.checkModStatus"));
+		checkModStatus.setSelected(jEdit.getBooleanProperty(
+			"view.checkModStatus"));
+		addComponent(checkModStatus);
+
+		addSeparator("options.general.loadsave");
 
 		/* Default file encoding */
 		String[] encodings = {
@@ -117,17 +134,38 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.general.ioThreadCount"),
 			ioThreadCount);
 
-		/* Session management */
-		saveDesktop = new JCheckBox(jEdit.getProperty(
-			"options.general.saveDesktop"));
-		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
-		addComponent(saveDesktop);
+		/* Tokenize files on load */
+		tokenize = new JCheckBox(jEdit.getProperty(
+			"options.general.tokenize"));
+		tokenize.setSelected(jEdit.getBooleanProperty("buffer.tokenize"));
+		addComponent(tokenize);
 
-		/* Exit confirmation */
-		confirmExit = new JCheckBox(jEdit.getProperty(
-			"options.general.confirmExit"));
-		confirmExit.setSelected(jEdit.getBooleanProperty("confirmExit"));
-		addComponent(confirmExit);
+		addSeparator("options.general.ui");
+
+		/* Look and feel */
+		lfs = UIManager.getInstalledLookAndFeels();
+		String[] names = new String[lfs.length];
+		String lf = UIManager.getLookAndFeel().getClass().getName();
+		int index = 0;
+		for(int i = 0; i < names.length; i++)
+		{
+			names[i] = lfs[i].getName();
+			if(lf.equals(lfs[i].getClassName()))
+				index = i;
+		}
+
+		lookAndFeel = new JComboBox(names);
+		lookAndFeel.setSelectedIndex(index);
+
+		addComponent(jEdit.getProperty("options.general.lf"),
+			lookAndFeel);
+
+		/* Show full path */
+		showFullPath = new JCheckBox(jEdit.getProperty(
+			"options.general.showFullPath"));
+		showFullPath.setSelected(jEdit.getBooleanProperty(
+			"view.showFullPath"));
+		addComponent(showFullPath);
 
 		/* Show buffer tabs */
 		showBufferTabs = new JCheckBox(jEdit.getProperty(
@@ -146,49 +184,22 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"view.bufferTabsPos")) - 1);
 		addComponent(jEdit.getProperty("options.general.bufferTabsPos"),
 			bufferTabsPos);
-
-		/* Show full path */
-		showFullPath = new JCheckBox(jEdit.getProperty(
-			"options.general.showFullPath"));
-		showFullPath.setSelected(jEdit.getBooleanProperty(
-			"view.showFullPath"));
-		addComponent(showFullPath);
-
-		/* Sort buffer list */
-		sortBuffers = new JCheckBox(jEdit.getProperty(
-			"options.general.sortBuffers"));
-		sortBuffers.setSelected(jEdit.getBooleanProperty("sortBuffers"));
-		addComponent(sortBuffers);
-
-		/* Sort buffers by names */
-		sortByName = new JCheckBox(jEdit.getProperty(
-			"options.general.sortByName"));
-		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
-		addComponent(sortByName);
-
-		/* Check mod status on focus */
-		checkModStatus = new JCheckBox(jEdit.getProperty(
-			"options.general.checkModStatus"));
-		checkModStatus.setSelected(jEdit.getBooleanProperty(
-			"view.checkModStatus"));
-		addComponent(checkModStatus);
-
-		/* Tokenize files on load */
-		tokenize = new JCheckBox(jEdit.getProperty(
-			"options.general.tokenize"));
-		tokenize.setSelected(jEdit.getBooleanProperty("buffer.tokenize"));
-		addComponent(tokenize);
 	}
 
 	protected void _save()
 	{
-		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
-		jEdit.setProperty("lookAndFeel",lf);
+		jEdit.setProperty("recent",recent.getText());
+		jEdit.setProperty("history",history.getText());
+		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
+		jEdit.setBooleanProperty("confirmExit",confirmExit.isSelected());
+		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
+		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
+		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
+			.isSelected());
+
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
 		jEdit.setProperty("autosave",autosave.getText());
-		jEdit.setProperty("recent",recent.getText());
-		jEdit.setProperty("history",history.getText());
 		jEdit.setProperty("backups",backups.getText());
 		jEdit.setProperty("backup.directory",backupDirectory.getText());
 		jEdit.setProperty("backup.prefix",backupPrefix.getText());
@@ -207,27 +218,28 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
+		jEdit.setBooleanProperty("buffer.tokenize",tokenize.isSelected());
 		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
-		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
-		jEdit.setBooleanProperty("confirmExit",confirmExit.isSelected());
+
+		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
+		jEdit.setProperty("lookAndFeel",lf);
+		jEdit.setBooleanProperty("view.showFullPath",showFullPath
+			.isSelected());
 		jEdit.setBooleanProperty("view.showBufferTabs",showBufferTabs
 			.isSelected());
 		jEdit.setProperty("view.bufferTabsPos",String.valueOf(
 			bufferTabsPos.getSelectedIndex() + 1));
-		jEdit.setBooleanProperty("view.showFullPath",showFullPath
-			.isSelected());
-		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
-		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
-		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
-			.isSelected());
-		jEdit.setBooleanProperty("buffer.tokenize",tokenize.isSelected());
 	}
 
 	// private members
-	private UIManager.LookAndFeelInfo[] lfs;
-	private JComboBox lookAndFeel;
 	private JTextField recent;
 	private JTextField history;
+	private JCheckBox saveDesktop;
+	private JCheckBox confirmExit;
+	private JCheckBox sortBuffers;
+	private JCheckBox sortByName;
+	private JCheckBox checkModStatus;
+
 	private JComboBox encoding;
 	private JTextField autosave;
 	private JTextField backups;
@@ -236,13 +248,19 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
 	private JTextField ioThreadCount;
-	private JCheckBox saveDesktop;
-	private JCheckBox confirmExit;
+	private JCheckBox tokenize;
+
+	private UIManager.LookAndFeelInfo[] lfs;
+	private JComboBox lookAndFeel;
+	private JCheckBox showFullPath;
 	private JCheckBox showBufferTabs;
 	private JComboBox bufferTabsPos;
-	private JCheckBox showFullPath;
-	private JCheckBox sortBuffers;
-	private JCheckBox sortByName;
-	private JCheckBox checkModStatus;
-	private JCheckBox tokenize;
 }
+
+/*
+ * Change Log:
+ * $Log$
+ * Revision 1.38  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
+ */

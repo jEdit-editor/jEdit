@@ -75,7 +75,7 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 	{
 		if(hostField.hasFocus() && userField.getText().length() == 0)
 			userField.requestFocus();
-		if(userField.hasFocus() && passwordField.getPassword().length == 0)
+		else if(userField.hasFocus() && passwordField.getPassword().length == 0)
 			passwordField.requestFocus();
 		else
 		{
@@ -196,6 +196,9 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/08/05 07:16:12  sp
+ * Global options dialog box updated, VFS browser now supports right-click menus
+ *
  * Revision 1.7  2000/08/03 07:43:42  sp
  * Favorites added to browser, lots of other stuff too
  *
