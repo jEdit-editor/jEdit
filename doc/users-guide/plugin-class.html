@@ -49,7 +49,7 @@ NAME="PLUGIN-CLASS"
 CLASS="CLASSNAME"
 >org.gjt.sp.jedit.EditPlugin</TT
 > class. It registers the plugin's
-   actions and edit modes with jEdit, takes care of setting up the
+   actions with jEdit, takes care of setting up the
    plugin's menus and menu items, and so on. When a plugin JAR is
    loaded, jEdit scans for any class files whose names end with
    <TT
@@ -105,7 +105,7 @@ CLASS="FUNCDEF"
    the jEdit startup sequence, after all plugins are loaded (so by the time this
    method is called, classes from
    other plugins are available, and so on). Most plugins will want to
-   override this method and so some initialization.
+   override this method and do some initialization.
   </P
 ><H4
 CLASS="BRIDGEHEAD"
@@ -128,6 +128,9 @@ CLASS="FUNCDEF"
 >   This method is called just before jEdit exits. Overriding it is rarely
    necessary.
   </P
+><H4
+CLASS="BRIDGEHEAD"
+>Example</H4
 ><P
 >   Here is the source file (which should be named <TT
 CLASS="FILENAME"

@@ -44,19 +44,19 @@ NAME="PLUGIN-INFO"
 >Plugin Documentation</A
 ></H1
 ><P
->   Unless your plugin does something extremely trivial,  providing
-   documentation is probably a good idea. For your plugin to appear
-   in jEdit's help menu, you must define the following properties, where
+>   jEdit queries various properties to get information about plugins.
+   Defining these properties is highly recommended.
+   In the below property names,
    <TT
 CLASS="REPLACEABLE"
 ><I
 >plugin</I
 ></TT
-> is the class name of your <TT
+> should be the class name of your
+   <TT
 CLASS="CLASSNAME"
 >EditPlugin</TT
->
-   implementation:
+> implementation.
   </P
 ><P
 ></P
@@ -85,8 +85,8 @@ CLASS="REPLACEABLE"
 >plugin</I
 ></TT
 >.author</SPAN
-> - the plugin
-    author's name (optional)
+> - the plugin's
+    author
    </P
 ></LI
 ><LI
@@ -100,11 +100,8 @@ CLASS="REPLACEABLE"
 ></TT
 >.version</SPAN
 > - the plugin
-    version. This property <I
-CLASS="EMPHASIS"
->must</I
-> be defined, otherwise the
-    plugin will not load
+    version (defining this property is highly recommended; otherwise the
+    plugin manager's "update" function will not work)
    </P
 ></LI
 ><LI

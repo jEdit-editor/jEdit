@@ -1,0 +1,4 @@
+# Closes all open buffers and loads a session
+
+close-all
+load-session
