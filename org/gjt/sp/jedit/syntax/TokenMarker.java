@@ -172,12 +172,15 @@ public class TokenMarker implements Cloneable
 			prev = lineInfo[lineIndex - 1];
 
 		ParserRule oldRule = info.context.inRule;
+		LineContext oldParent = info.context.parent;
 		markTokensImpl(line,prev,info);
 		ParserRule newRule = info.context.inRule;
+		LineContext newParent = info.context.parent;
 
 		info.tokensValid = true;
 
-		nextLineRequested = (oldRule != newRule);
+		nextLineRequested = (oldRule != newRule ||
+			oldParent != newParent);
 		if(nextLineRequested && length - lineIndex > 1)
 		{
 			lineInfo[lineIndex + 1].tokensValid = false;
@@ -319,7 +322,8 @@ public class TokenMarker implements Cloneable
 
 		context = info.context;
 
-		context.parent = lastContext.parent;
+		context.parent = (lastContext.parent == null ? null
+			: (LineContext)lastContext.parent.clone());
 		context.inRule = lastContext.inRule;
 		context.rules = lastContext.rules;
 
@@ -877,13 +881,7 @@ public class TokenMarker implements Cloneable
 		public LineContext(ParserRuleSet rs, LineContext lc)
 		{
 			rules = rs;
-			try
-			{
-				parent = (lc == null) ? null : (LineContext) lc.clone();
-			}
-			catch (CloneNotSupportedException e)
-			{
-			}
+			parent = (lc == null ? null : (LineContext)lc.clone());
 		}
 
 		public LineContext(ParserRule r)
@@ -895,19 +893,12 @@ public class TokenMarker implements Cloneable
 		{
 		}
 
-		protected Object clone() throws CloneNotSupportedException
+		public Object clone()
 		{
 			LineContext lc = new LineContext();
 			lc.inRule = inRule;
 			lc.rules = rules;
-
-			try
-			{
-				lc.parent = (parent == null) ? null : (LineContext) parent.clone();
-			}
-			catch (CloneNotSupportedException e)
-			{
-			}
+			lc.parent = (parent == null) ? null : (LineContext) parent.clone();
 
 			return lc;
 		}
@@ -917,6 +908,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  2000/04/01 09:49:36  sp
+ * multiline token highlight was messed up
+ *
  * Revision 1.35  2000/04/01 08:40:55  sp
  * Streamlined syntax highlighting, Perl mode rewritten in XML
  *
@@ -948,8 +942,5 @@ public class TokenMarker implements Cloneable
  * Revision 1.26  1999/07/05 04:38:39  sp
  * Massive batch of changes... bug fixes, also new text component is in place.
  * Have fun
- *
- * Revision 1.25  1999/06/06 05:05:25  sp
- * Search and replace tweaks, Perl/Shell Script mode updates
  *
  */

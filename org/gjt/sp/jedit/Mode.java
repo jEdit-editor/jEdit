@@ -93,17 +93,7 @@ public class Mode
 		if(marker == null)
 			return null;
 
-		TokenMarker copy;
-
-		try
-		{
-			copy = (TokenMarker) marker.clone();
-		}
-		catch (CloneNotSupportedException e)
-		{
-			copy = null;
-		}
-		return copy;
+		return (TokenMarker)marker.clone();
 	}
 
 	/**
@@ -205,6 +195,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/04/01 09:49:36  sp
+ * multiline token highlight was messed up
+ *
  * Revision 1.23  2000/04/01 08:40:54  sp
  * Streamlined syntax highlighting, Perl mode rewritten in XML
  *

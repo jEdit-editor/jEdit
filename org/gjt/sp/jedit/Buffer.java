@@ -1409,7 +1409,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			}
 
 			setFlag(NEW_FILE,false);
-			setFlag(READ_ONLY,false);
 			setDirty(false);
 
 			modTime = file.lastModified();
@@ -1778,6 +1777,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.131  2000/04/01 09:49:36  sp
+ * multiline token highlight was messed up
+ *
  * Revision 1.130  2000/03/21 07:18:53  sp
  * bug fixes
  *

@@ -347,7 +347,6 @@
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
 
-		
 		<!-- Variables -->
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
 			<BEGIN>${</BEGIN>
@@ -372,6 +371,10 @@
 	</RULES>
 
 	<RULES SET="VARIABLE" DEFAULT="KEYWORD2" ESCAPE="\">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
 		<!-- Variables -->
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
 			<BEGIN>${</BEGIN>

@@ -1,5 +1,6 @@
 JEDIT TO DO
 
+- <delegate escape><char><delegate end> not highlighted properly
 - XMode:
   - better error reporting
   - faster loading of modes
