@@ -203,6 +203,11 @@ mode.extension.hh=cc
 mode.extension.cpp=cc
 mode.extension.cxx=cc
 
+# Eiffel mode
+mode.eiffel.name=Eiffel
+mode.extension.e=eiffel
+mode.extension.se=eiffel
+
 # HTML mode
 mode.html.name=HTML
 mode.html.commentStart=<!--

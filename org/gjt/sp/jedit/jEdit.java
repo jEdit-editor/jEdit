@@ -1170,6 +1170,7 @@ public class jEdit
 		addMode(new org.gjt.sp.jedit.mode.bat());
 		addMode(new org.gjt.sp.jedit.mode.c());
 		addMode(new org.gjt.sp.jedit.mode.cc());
+		addMode(new org.gjt.sp.jedit.mode.eiffel());
 		addMode(new org.gjt.sp.jedit.mode.html());
 		addMode(new org.gjt.sp.jedit.mode.idl());
 		addMode(new org.gjt.sp.jedit.mode.java_mode());
@@ -1589,6 +1590,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.140  1999/10/21 07:59:24  sp
+ * Eiffel mode and better font list added
+ *
  * Revision 1.139  1999/10/19 09:10:13  sp
  * pre5 bug fixing
  *

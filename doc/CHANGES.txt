@@ -1,5 +1,16 @@
 JEDIT VERSION HISTORY
 
+* Version 2.1final
+
++ New Features
+
+- Eiffel syntax highlighting (Artur Biesiadowski)
+
++ Enhancements
+
+- Font selector lists all available fonts if JDK 1.2 is available (defaults
+  to Java predefined fonts with JDK 1.1) (Jason Ginchereau)
+
 * Version 2.1pre5
 
 + New Features

@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.options;
 
 import javax.swing.*;
 import java.awt.*;
+import org.gjt.sp.jedit.gui.FontComboBox;
 import org.gjt.sp.jedit.*;
 
 public class EditorOptionPane extends AbstractOptionPane
@@ -44,7 +45,7 @@ public class EditorOptionPane extends AbstractOptionPane
 			defaultMode);
 
 		/* Font */
-		font = new JComboBox(getToolkit().getFontList());
+		font = new FontComboBox();
 		font.setSelectedItem(jEdit.getProperty("view.font"));
 		addComponent(jEdit.getProperty("options.editor.font"),font);
 

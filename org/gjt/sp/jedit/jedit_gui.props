@@ -28,7 +28,7 @@ jar.disabled=Disabled at user request: {0}
 jar.error.init=Initialization failed: {0}
 jar.error.deps=Dependency check failed: {0}\n\
 	The following is required to use this plugin:
-jar.what.jdk=\tJDK version >= {0}
+jar.what.jdk=\tJava version >= {0}
 jar.what.jedit=\tjEdit version >= {0}
 jar.what.class=\tExistance of class {0}
 
@@ -386,17 +386,16 @@ view.status.exchange-caret-register=Swap caret with register?
 # {4} - OS version
 # {5} - OS architecture
 about.title=About jEdit
-about.message=jEdit version {0} (JDK {1}, {2} {3})\n\
+about.message=jEdit version {0} (Java {1}, {2} {3})\n\
 	jEdit was written by Slava Pestov with the help of several others.\n\
 	See the README.txt file for redistribution information and warranty\n\
 	disclamer.\n\
 	\n\
-	Thanks to Aziz Sharif, Chris Laird, George Latkiewicz, Henrik Falk\n\
-	Jason Ginchereau, Jonathan Revusky, Juha Lindfors, Mike Dillon,\n\
-	Nathan Tenney, Romain Guy and Tal Davison.\n\
-	\n\
-	... plus all the users, plugin authors, and people who sent me\n\
-	feedback and bug reports.
+	The following people have written plugins or contributed code to the\n\
+	jEdit project: Artur Biesiadowski, Aziz Sharif, Chris Laird,\n\
+	George Latkiewicz, Henrik Falk, Jason Ginchereau, Jonathan Revusky,\n\
+	Juha Lindfors, Mike Dillon, Nathan Tenney, Romain Guy and\n\
+	Tal Davison. Thanks for your help!
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error

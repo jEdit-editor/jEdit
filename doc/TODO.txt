@@ -1,5 +1,7 @@
 JEDIT 2.2 TO DO
 
+CVS: add Eiffel stuff, also FontComboBox
+
 * New features:
 
 - 'startup.action' property, executed when jEdit started with no files
