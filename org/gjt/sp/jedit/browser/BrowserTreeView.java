@@ -23,7 +23,7 @@ import javax.swing.event.*;
 import javax.swing.tree.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.io.VFS;
 
@@ -47,6 +47,7 @@ public class BrowserTreeView extends BrowserView
 		tree.addMouseListener(new MouseHandler());
 		tree.addTreeExpansionListener(new TreeHandler());
 		tree.putClientProperty("JTree.lineStyle", "Angled");
+		tree.setRowHeight(22);
 
 		if(browser.isMultipleSelectionEnabled())
 			tree.getSelectionModel().setSelectionMode(
@@ -56,7 +57,7 @@ public class BrowserTreeView extends BrowserView
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		setLayout(new BorderLayout());
-		add(BorderLayout.CENTER, new JScrollPane(tree));
+		add(BorderLayout.CENTER, scroller = new JScrollPane(tree));
 	}
 
 	public VFS.DirectoryEntry[] getSelectedFiles()
@@ -83,7 +84,10 @@ public class BrowserTreeView extends BrowserView
 	public void directoryLoaded(Vector directory)
 	{
 		if(currentlyLoadingTreeNode == rootNode)
+		{
 			rootNode.setUserObject(browser.getDirectory());
+			scroller.getViewport().setViewPosition(new Point(0,0));
+		}
 
 		currentlyLoadingTreeNode.removeAllChildren();
 
@@ -127,6 +131,7 @@ public class BrowserTreeView extends BrowserView
 
 	// private members
 	private JTree tree;
+	private JScrollPane scroller;
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
 	private DefaultMutableTreeNode currentlyLoadingTreeNode;
@@ -231,6 +236,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/13 07:35:23  sp
+ * Dockable window API
+ *
  * Revision 1.4  2000/08/11 12:13:14  sp
  * Preparing for 2.6pre2 release
  *

@@ -372,7 +372,7 @@ utils.label=$Utilities
 repeat.label=$Repeat Next Command
 load-session.label=$Load Session...
 save-session.label=$Save Session...
-vfs-browser.label=$File System Browser...
+vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$Activity Log...
 flush-directory-cache.label=Flush Remote Directory $Cache
@@ -1017,7 +1017,6 @@ options.browser.defaultPath.last=Most recently visited directory
 options.browser.defaultView=Default browser view:
 options.browser.defaultView.list=List
 options.browser.defaultView.tree=Tree
-options.browser.doubleClickClose=Double-click closes open files
 options.browser.showHiddenFiles=Show hidden files
 options.browser.sortFiles=Sort file list
 options.browser.sortIgnoreCase=Case insensitive sort
@@ -1098,7 +1097,7 @@ login.password=Password:
 
 # VFS browser
 vfs.browser.title=File System Browser
-vfs.browser.directory=Directory:
+vfs.browser.path=Path:
 vfs.browser.filter=Filter:
 vfs.browser.filter.all=All Files
 
@@ -1128,7 +1127,6 @@ vfs.browser.menu.close.label=Close
 vfs.browser.menu.open.label=Open in Current View
 vfs.browser.menu.open-view.label=Open in New View
 vfs.browser.menu.goto.label=Go to
-vfs.browser.menu.new-browser.label=Open in New Browser Window
 vfs.browser.menu.select.label=Select
 vfs.browser.menu.delete.label=Delete...
 vfs.browser.menu.rename.label=Rename...

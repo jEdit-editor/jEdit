@@ -1,5 +1,5 @@
 /*
- * VFSBrowserFrame.java - VFS browser frame
+ * VFSBrowserDockable.java - Dockable VFS browser
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,49 +19,42 @@
 
 package org.gjt.sp.jedit.browser;
 
-import javax.swing.*;
-import java.awt.BorderLayout;
-import org.gjt.sp.jedit.GUIUtilities;
+import java.awt.Component;
+import org.gjt.sp.jedit.gui.DockableWindow;
 import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.jEdit;
 
 /**
- * Wraps the VFS browser in a frame.
+ * Wraps the VFS browser in a dockable window.
  * @author Slava Pestov
  * @version $Id$
  */
-public class VFSBrowserFrame extends JFrame
+public class VFSBrowserDockable implements DockableWindow
 {
-	public VFSBrowserFrame(View view, String path)
+	public static final String NAME = "vfs.browser";
+
+	public VFSBrowserDockable(View view, String path)
 	{
-		super(jEdit.getProperty("vfs.browser.title"));
-
-		getContentPane().add(new VFSBrowser(view,path,VFSBrowser.BROWSER,true));
-
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		pack();
-		GUIUtilities.loadGeometry(this,"vfs.browser");
-		show();
+		comp = new VFSBrowser(view,path,VFSBrowser.BROWSER,false);
 	}
 
-	public void dispose()
+	public String getName()
 	{
-		GUIUtilities.saveGeometry(this,"vfs.browser");
-		super.dispose();
+		return NAME;
 	}
+
+	public Component getComponent()
+	{
+		return comp;
+	}
+
+	// private members
+	private Component comp;
 }
 
 /*
  * Change Log:
  * $Log$
- * Revision 1.3  2000/08/01 11:44:15  sp
- * More VFS browser work
- *
- * Revision 1.2  2000/07/30 09:04:19  sp
- * More VFS browser hacking
- *
- * Revision 1.1  2000/07/29 12:24:08  sp
- * More VFS work, VFS browser started
+ * Revision 1.1  2000/08/13 07:35:23  sp
+ * Dockable window API
  *
  */

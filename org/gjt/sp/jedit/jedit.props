@@ -241,7 +241,6 @@ print.margin.right=0.5
 ### VFS BROWSER
 ###
 
-vfs.browser.doubleClickClose=true
 vfs.browser.showHiddenFiles=false
 vfs.browser.sortFiles=true
 vfs.browser.sortMixFilesAndDirs=false

@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.02.00";
+		return "02.06.03.00";
 	}
 
 	/**
@@ -2032,7 +2032,6 @@ public class jEdit
 		addAction("undo");
 		addAction("unsplit");
 		addAction("untab");
-		addAction("vfs-browser");
 		addAction("view-registers");
 		addAction("wing-comment");
 		addAction("word-count");
@@ -2042,10 +2041,11 @@ public class jEdit
 		inputHandler.setInputAction(getAction("insert-char"));
 
 		// Preload these actions so that isToggle()
-		// will always return the correct value
+		// will return the correct value
 		addAction(new org.gjt.sp.jedit.actions.toggle_gutter());
 		addAction(new org.gjt.sp.jedit.actions.toggle_line_numbers());
 		addAction(new org.gjt.sp.jedit.actions.toggle_rect());
+		addAction(new org.gjt.sp.jedit.actions.vfs_browser());
 	}
 
 	/**
@@ -2324,6 +2324,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.266  2000/08/13 07:35:22  sp
+ * Dockable window API
+ *
  * Revision 1.265  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

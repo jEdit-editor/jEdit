@@ -1,5 +1,12 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6pre3
+
++ Bug Fixes
+
+- Double-clicking on a directory in the 'save as' dialog box did not have
+  the desired effect (since jEdit 2.6pre2)
+
 * Version 2.6pre2
 
 + New Features

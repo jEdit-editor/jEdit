@@ -49,7 +49,7 @@ public class BrowserListView extends BrowserView
 		list.setVisibleRowCount(10);
 
 		setLayout(new BorderLayout());
-		add(BorderLayout.CENTER, new JScrollPane(list));
+		add(BorderLayout.CENTER, scroller = new JScrollPane(list));
 	}
 
 	public VFS.DirectoryEntry[] getSelectedFiles()
@@ -66,6 +66,8 @@ public class BrowserListView extends BrowserView
 			list.setListData(new Object[0]);
 		else
 			list.setListData(directory);
+
+		scroller.getViewport().setViewPosition(new Point(0,0));
 	}
 
 	public void updateFileView()
@@ -80,6 +82,7 @@ public class BrowserListView extends BrowserView
 
 	// private members
 	private JList list;
+	private JScrollPane scroller;
 
 	private static FileCellRenderer renderer = new FileCellRenderer();
 
@@ -122,6 +125,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/08/13 07:35:23  sp
+ * Dockable window API
+ *
  * Revision 1.5  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

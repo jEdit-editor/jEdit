@@ -83,7 +83,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		cons.gridwidth = cons.gridheight = 1;
 		cons.gridx = cons.gridy = 0;
 		cons.fill = GridBagConstraints.BOTH;
-		JLabel label = new JLabel(jEdit.getProperty("vfs.browser.directory"),
+		JLabel label = new JLabel(jEdit.getProperty("vfs.browser.path"),
 			SwingConstants.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		layout.setConstraints(label,cons);
@@ -488,15 +488,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			else if(mode == BROWSER)
 			{
 				Buffer buffer = jEdit.getBuffer(file.path);
-				if(buffer != null)
-				{
-					if(jEdit.getBooleanProperty("vfs.browser.doubleClickClose"))
-					{
-						jEdit.closeBuffer(view,buffer);
-						continue;
-					}
-				}
-				else
+				if(buffer == null)
 				{
 					Hashtable props = new Hashtable();
 					props.put(Buffer.VFS_SESSION_HACK,vfsSession);
@@ -915,6 +907,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/08/13 07:35:23  sp
+ * Dockable window API
+ *
  * Revision 1.11  2000/08/11 09:06:52  sp
  * Browser option pane
  *

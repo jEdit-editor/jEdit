@@ -1,6 +1,6 @@
 /*
- * view_register.java
- * Copyright (C) 1999 Slava Pestov
+ * vfs_browser.java
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,13 +20,26 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.browser.VFSBrowserFrame;
+import java.awt.Component;
+import org.gjt.sp.jedit.browser.VFSBrowserDockable;
 import org.gjt.sp.jedit.EditAction;
 
 public class vfs_browser extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		new VFSBrowserFrame(getView(evt),null);
+		getView(evt).getDockableWindowManager().toggleDockableWindow(
+			VFSBrowserDockable.NAME);
+	}
+
+	public boolean isToggle()
+	{
+		return true;
+	}
+
+	public boolean isSelected(Component comp)
+	{
+		return getView(comp).getDockableWindowManager()
+			.isDockableWindowVisible(VFSBrowserDockable.NAME);
 	}
 }

@@ -211,11 +211,17 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 			if(filenameField != null)
 			{
-				String path = files[0].path;
-				if(path.startsWith(browser.getDirectory()))
-					path = files[0].name;
+				VFS.DirectoryEntry file = files[0];
+				if(file.type != VFS.DirectoryEntry.FILE)
+					filenameField.setText(null);
+				else
+				{
+					String path = file.path;
+					if(path.startsWith(browser.getDirectory()))
+						path = file.name;
 
-				filenameField.setText(path);
+					filenameField.setText(path);
+				}
 			}
 		}
 
@@ -229,6 +235,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/13 07:35:23  sp
+ * Dockable window API
+ *
  * Revision 1.4  2000/08/10 11:55:58  sp
  * VFS browser toolbar improved a little bit, font selector tweaks
  *

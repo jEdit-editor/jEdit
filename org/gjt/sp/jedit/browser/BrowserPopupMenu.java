@@ -46,12 +46,9 @@ public class BrowserPopupMenu extends JPopupMenu
 
 		if(jEdit.getBuffer(file.path) != null)
 		{
-			// file is currently opened in jEdit
-			boolean dcclose = jEdit.getBooleanProperty("vfs.browser"
-				+ ".doubleClickClose");
-			add(createMenuItem("close",dcclose));
-			add(createMenuItem("open",!dcclose));
+			add(createMenuItem("open",true));
 			add(createMenuItem("open-view",false));
+			add(createMenuItem("close",false));
 		}
 		else
 		{
@@ -59,7 +56,6 @@ public class BrowserPopupMenu extends JPopupMenu
 				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
 			{
 				add(createMenuItem("goto",true));
-				add(createMenuItem("new-browser",false));
 			}
 			else if(browser.getMode() != VFSBrowser.BROWSER)
 			{
@@ -131,10 +127,6 @@ public class BrowserPopupMenu extends JPopupMenu
 			{
 				browser.setDirectory(file.path);
 			}
-			else if(actionCommand.equals("new-browser"))
-			{
-				new VFSBrowserFrame(browser.getView(),file.path);
-			}
 			else if(evt.getActionCommand().equals("rename"))
 			{
 				browser.rename(file.path);
@@ -150,6 +142,9 @@ public class BrowserPopupMenu extends JPopupMenu
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/13 07:35:23  sp
+ * Dockable window API
+ *
  * Revision 1.2  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

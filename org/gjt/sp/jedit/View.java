@@ -43,6 +43,15 @@ import org.gjt.sp.util.Log;
 public class View extends JFrame implements EBComponent
 {
 	/**
+	 * Returns the dockable window manager associated with this view.
+	 * @since jEdit 2.6pre3
+	 */
+	public DockableWindowManager getDockableWindowManager()
+	{
+		return dockableWindowManager;
+	}
+
+	/**
 	 * Displays the specified string in the status area of this view.
 	 * @param str The string to display
 	 * @since jEdit 2.5pre2
@@ -398,7 +407,10 @@ public class View extends JFrame implements EBComponent
 	{
 		setIconImage(GUIUtilities.getEditorIcon());
 
+		dockableWindowManager = new DockableWindowManager(this);
+
 		editPane = createEditPane(null,buffer);
+		dockableWindowManager.add(BorderLayout.CENTER,editPane);
 
 		// Dynamic menus
 		buffers = GUIUtilities.loadMenu(this,"buffers");
@@ -425,18 +437,24 @@ public class View extends JFrame implements EBComponent
 		propertiesChanged();
 
 		getContentPane().add(BorderLayout.NORTH,toolBars);
-		getContentPane().add(BorderLayout.CENTER,editPane);
+		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
 
 		status = new StatusBar(this);
 		getContentPane().add(BorderLayout.SOUTH,status);
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
+
+		dockableWindowManager.init();
 	}
 
 	void close()
 	{
 		closed = true;
+
+		// save dockable window geometry, and close 'em
+		dockableWindowManager.close();
+
 		GUIUtilities.saveGeometry(this,"view");
 		EditBus.removeFromBus(this);
 		dispose();
@@ -603,6 +621,8 @@ public class View extends JFrame implements EBComponent
 
 	// private members
 	private boolean closed;
+
+	private DockableWindowManager dockableWindowManager;
 
 	private JMenu buffers;
 	private JMenu recent;
@@ -999,6 +1019,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.190  2000/08/13 07:35:22  sp
+ * Dockable window API
+ *
  * Revision 1.189  2000/07/30 09:04:18  sp
  * More VFS browser hacking
  *
