@@ -1339,13 +1339,26 @@ public class jEdit
 	 */
 	public static Buffer getBuffer(String path)
 	{
+		boolean caseInsensitiveFilesystem = (File.separatorChar == '\\'
+			|| File.separatorChar == ':' /* Windows or MacOS */);
+
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
 		{
-			if(buffer.getPath().equals(path))
-				return buffer;
+			String _path = buffer.getPath();
+			if(caseInsensitiveFilesystem)
+			{
+				if(_path.equalsIgnoreCase(path))
+					return buffer;
+			}
+			else
+			{
+				if(_path.equals(path))
+					return buffer;
+			}
 			buffer = buffer.next;
 		}
+
 		return null;
 	}
 
@@ -2357,6 +2370,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.278  2000/09/09 04:00:34  sp
+ * 2.6pre6
+ *
  * Revision 1.277  2000/09/06 04:39:47  sp
  * bug fixes
  *

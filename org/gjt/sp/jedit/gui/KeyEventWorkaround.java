@@ -58,7 +58,7 @@ public class KeyEventWorkaround
 
 			return evt;
 		case KeyEvent.KEY_TYPED:
-			if(modifiers != 0 && modifiers != ALT_GRAPH_MASK)
+			if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) != 0)
 				return null;
 
 			if(ch == KeyEvent.CHAR_UNDEFINED)
@@ -111,6 +111,9 @@ public class KeyEventWorkaround
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/09/09 04:00:34  sp
+ * 2.6pre6
+ *
  * Revision 1.1  2000/09/07 04:46:08  sp
  * bug fixes
  *

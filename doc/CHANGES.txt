@@ -30,6 +30,12 @@ JEDIT 2.6 VERSION HISTORY
 
 - Incremental search didn't work
 - Fixed compile error on JDK 1.3 in BrowserListView.java
+- On Windows, opening FILE.txt and then file.txt used to open the same
+  file in two buffers. jEdit now detects when it is running on an OS
+  with a case-insensitive filesystem (Windows or MacOS) and adjusts
+  accordingly
+- Attempting to fix some bugs people have experienced with the Complete Word
+  and command line completion popups under certain Java versions
 
 * Version 2.6pre5
 

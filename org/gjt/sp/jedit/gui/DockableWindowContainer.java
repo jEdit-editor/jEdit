@@ -56,12 +56,11 @@ public interface DockableWindowContainer
 
 			this.position = position;
 
-			int top = position.equals(DockableWindowManager.BOTTOM) ? 5 : 0;
-			int left = position.equals(DockableWindowManager.RIGHT) ? 5 : 0;
-			int bottom = position.equals(DockableWindowManager.TOP) ? 5 : 0;
-			int right = position.equals(DockableWindowManager.LEFT) ? 5 : 0;
-			setBorder(new MatteBorder(top,left,bottom,right,
-				UIManager.getColor("Label.foreground")));
+			int top = position.equals(DockableWindowManager.BOTTOM) ? 4 : 0;
+			int left = position.equals(DockableWindowManager.RIGHT) ? 4 : 0;
+			int bottom = position.equals(DockableWindowManager.TOP) ? 4 : 0;
+			int right = position.equals(DockableWindowManager.LEFT) ? 4 : 0;
+			setBorder(new MatteBorder(top,left,bottom,right,Color.black));
 
 			try
 			{
@@ -128,10 +127,10 @@ public interface DockableWindowContainer
 			{
 				if(position.equals(DockableWindowManager.LEFT)
 					|| position.equals(DockableWindowManager.RIGHT))
-					prefSize.width = 5;
+					prefSize.width = 4;
 				else if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
-					prefSize.height = 5;
+					prefSize.height = 4;
 			}
 			else
 			{
@@ -251,7 +250,7 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.RIGHT))
 					dimension = getWidth() - evt.getX();
 
-				dimension = Math.max(5,dimension);
+				dimension = Math.max(4,dimension);
 
 				revalidate();
 			}
@@ -320,6 +319,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/09/09 04:00:34  sp
+ * 2.6pre6
+ *
  * Revision 1.8  2000/09/07 04:46:08  sp
  * bug fixes
  *

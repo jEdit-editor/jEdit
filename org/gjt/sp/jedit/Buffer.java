@@ -293,8 +293,21 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * @param view The view
 	 * @param path The path name to save the buffer to, or null to use
 	 * the existing path
+	 */
+	public boolean save(View view, String path)
+	{
+		return save(view,path,true);
+	}
+
+	/**
+	 * Saves this buffer to the specified path name, or the current path
+	 * name if it's null.
+	 * @param view The view
+	 * @param path The path name to save the buffer to, or null to use
+	 * the existing path
 	 * @param rename True if the buffer's path should be changed, false
 	 * if only a copy should be saved to the specified filename
+	 * @since jEdit 2.6pre5
 	 */
 	public boolean save(final View view, String path, final boolean rename)
 	{
@@ -1705,6 +1718,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.178  2000/09/09 04:00:33  sp
+ * 2.6pre6
+ *
  * Revision 1.177  2000/09/03 03:16:52  sp
  * Search bar integrated with command line, enhancements throughout
  *
