@@ -63,6 +63,7 @@ implements ActionListener, Progress
 		setBounds((screen.width - size.width) / 2,
 			(screen.height - size.height) / 2,
 			size.width,size.height);
+		setResizable(false);
 		show();
 	}
 

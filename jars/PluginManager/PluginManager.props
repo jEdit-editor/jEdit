@@ -28,9 +28,7 @@ plugin-manager.install=Install New Plugins
 
 ### plugin removal
 remove-plugins.title=Plugin Removal
-remove-plugins.message=Are you sure you want to remove the following\n\
-	plugins? You will need to re-install them if you ever want to\n\
-	use them again.\n\
+remove-plugins.message=Are you sure you want to remove the following plugins?\n\
 	\n\
 	{0}
 remove-plugins.done.title=Plugins Removed

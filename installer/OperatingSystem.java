@@ -101,7 +101,7 @@ public abstract class OperatingSystem
 			out.write("#!/bin/sh\n");
 			out.write("exec "
 				+ System.getProperty("java.home")
-				+ "/bin/java} ${" + name.toUpperCase()
+				+ "/bin/java ${" + name.toUpperCase()
 				+ "} -classpath \"${CLASSPATH}:"
 				+ installDir + File.separator
 				+ name.toLowerCase() + ".jar\" "

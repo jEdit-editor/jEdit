@@ -34,7 +34,7 @@ public class BeanShellButton extends JButton
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				BeanShell.eval(null,code);
+				BeanShell.eval(null,code,false);
 			}
 		});
 

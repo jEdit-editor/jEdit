@@ -1,0 +1,34 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :tabSize=1:indentSize=1:noTabs=yes: -->
+
+<appendix id=history><title>History Text Fields</>
+ <indexterm><primary>history text fields</></indexterm>
+ <indexterm><primary>file system browser</></indexterm>
+ <indexterm><primary>Utilities menu</></indexterm>
+ <indexterm><primary>Global Options command</></indexterm>
+ <para>
+  The text fields in the search and replace dialog box
+  and file system browser remember the last 20 entered strings by
+  default. The number of strings to remember can be changed in the
+  <guibutton>General</> pane of the
+  <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+ </para>
+ <para>
+  Pressing <keycap>Up</> recalls previous strings.
+  Pressing <keycap>Down</> after recalling previous strings
+  recalls later strings.
+ </para>
+ <para>
+  Pressing <keycombo><keycap>Control</><keycap>Up</></keycombo>
+  or <keycombo><keycap>Control</><keycap>Down</></keycombo>
+  will search backwards or forwards, respectively, for strings
+  beginning with the text already entered in the text field.
+ </para>
+ <para>
+  Clicking the text field with the right mouse button will display
+  a pop-up menu of all previously entered strings; selecting one will
+  input it into the text field. Holding down <keycap>Control</>
+  while clicking will display a menu of all previously entered
+  strings that begin with the text already entered.
+ </para>
+</appendix>

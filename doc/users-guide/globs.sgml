@@ -1,0 +1,28 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :tabSize=1:indentSize=1:noTabs=yes: -->
+
+<appendix id=globs><title>Glob Patterns</>
+ <indexterm><primary>glob patterns</></indexterm>
+ <indexterm><primary>Unix</></indexterm>
+ <indexterm><primary>file system browser</></indexterm>
+ <para>
+  jEdit uses glob patterns similar to those in the various
+  Unix shells to implement file name filters in the file system browser.
+  Glob patterns resemble regular expressions somewhat,
+  but have a much simpler
+  syntax. The following character sequences have special meaning within a glob
+  pattern:
+ </para>
+ <itemizedlist>
+  <listitem><para><command>?</> matches any one character</para></listitem>
+  <listitem><para><command>*</> matches any number of characters</para></listitem>
+  <listitem><para><command>{<replaceable>a</>,<replaceable>b</>,<replaceable>c</>}</>
+  matches any one of <replaceable>a</>, <replaceable>b</> or
+  <replaceable>c</></para></listitem>
+ </itemizedlist>
+ <para>
+  Character class expressions (<command>[abc]</>, etc) are supported in globs
+  and behave exactly like regular expression character classes; see
+  <xref linkend=regexps> for details.
+ </para>
+</appendix>

@@ -1,0 +1,34 @@
+# A makefile for the jEdit documentation
+#
+# To build the HTML documentation, you will need:
+# - DocBook 4.1 DTD
+# - Jade (I use version 1.2.1)
+# - DocBook modular DSSSL style sheets (I use version 1.59)
+#
+# To build toe PDF documentation, you will need all the above, plus:
+# - TeX
+# - JadeTeX PDF format (this can be created from the JadeTeX format
+# pretty easily)
+#
+# More information and links to all these tools can be found at
+# <http://www.docbook.org>.
+#
+# jEdit buffer-local properties:
+# :indentSize=4:noTabs=true:
+
+"all": "htmldocs" "pdfdocs";
+
+"htmldocs":;
+{
+    exec "jade" "-d" "jedithtml.dsl" "-D" "." "-t" "xml" "users-guide.sgml";
+}
+
+"pdfdocs":;
+{
+    exec "jade" "-d" "jeditprint.dsl" "-t" "tex" "users-guide.sgml";
+    exec "pdftex" "&jadetexpdf" "users-guide.tex";
+    exec "pdftex" "&jadetexpdf" "users-guide.tex";
+    exec "pdftex" "&jadetexpdf" "users-guide.tex";
+}
+
+".PHONY" : "all" "htmldocs" "pdfdocs";

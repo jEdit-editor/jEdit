@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=2.7pre3
+app.version=3.0pre4
 
 # Logo to display in installer window
 app.logo=/logo.gif
@@ -20,28 +20,16 @@ app.main.class=org.gjt.sp.jedit.jEdit
 # Each component must have a name, a size, and a 'fileset'. Within the
 # install.dat file, each component is delimited by an empty entry named
 # FILESET_<id> where <id> is the fileset name.
-comp.count=6
+comp.count=3
 
 comp.0.name=jEdit program
-comp.0.size=1945
+comp.0.size=2047
 comp.0.fileset=jedit-program
 
 comp.1.name=jEdit online help (HTML format)
-comp.1.size=294
+comp.1.size=218
 comp.1.fileset=jedit-html
 
 comp.2.name=HTTP firewall support (Java 2 only)
-comp.2.size=31
+comp.2.size=11
 comp.2.fileset=jedit-firewall
-
-comp.3.name=jEdit program source code
-comp.3.size=2018
-comp.3.fileset=jedit-source
-
-comp.4.name=HTTP firewall source code (Java 2 only)
-comp.4.size=12
-comp.4.fileset=jedit-firewall-source
-
-comp.5.name=jEdit installer source code
-comp.5.size=46
-comp.5.fileset=jedit-installer-source

@@ -1,0 +1,88 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :tabSize=1:indentSize=1:noTabs=yes: -->
+
+<chapter id=plugins><title>Installing and Using Plugins</>
+ <para>
+  Plugins are loadable modules of code that extend jEdit's
+  functionality. This chapter covers their installation and use.
+ </para>
+ <sect1 id=plugin-manager><title>The Plugin Manager</>
+  <indexterm><primary>Plugin Manager command</></indexterm>
+  <indexterm><primary>Plugins menu</></indexterm>
+  <para>
+   <guimenu>Plugins</>&gt;<guimenuitem>Plugin Manager</> displays
+   the plugin manager window, which shows a list of all installed plugins.
+   Clicking on a plugin will display information about it.
+  <!-- </para>
+  <figure><title>The Plugin Manager window</>
+   <graphic scale=50 fileref=dialog-pluginmgr></>
+  </figure>
+  <para> -->
+   To remove some plugins, select them and click <guibutton>Remove
+   Selected Plugins</>. This will issue a confirmation dialog box first.
+  </para>
+ </sect1>
+ <sect1 id=installing-plugins><title>Installing Plugins</>
+  <para>
+   Clicking the <guibutton>Install New Plugins</>
+   button in the plugin manager will obtain a list of plugins which are
+   not yet installed from the jEdit web site, and display them in the
+   plugin installer dialog box.
+  </para>
+  <para>
+   Plugins to install can be selected from the list. Multiple plugins
+   can be selected by holding down <keycap>Control</>.
+  </para>
+  <para>
+   Radio buttons in the plugin installer dialog box select the location
+   where plugins are to be installed.
+   Plugins can be installed in either the <filename>jars</> subdirectory
+   of the jEdit install directory, or the <filename>jars</> subdirectory
+   of the jEdit settings directory. The location of the setting
+   directory is operating system-specific; see <xref
+   linkend=settings-directory>.
+  </para>
+  <para>
+   Once plugins to install have been selected and the installation
+   directory specified, clicking <guibutton>Install</> will begin
+   downloading the new plugins.
+  </para>
+  <!-- <figure><title>The Install New Plugins dialog box</>
+   <graphic scale=50 fileref=dialog-pluginmgr-install></>
+  </figure> -->
+  
+  <!-- <figure><title>The plugin download dialog box</>
+   <graphic scale=50 fileref=dialog-pluginmgr-download></>
+  </figure> -->
+ </sect1>
+ <sect1 id=updating-plugins><title>Updating Plugins</>
+  <para>
+   To check if updated versions of installed plugins are available,
+   click the <guibutton>Update Plugins</> button in the plugin manager.
+   The plugin manager will then connect to the jEdit web site and
+   compare currently installed plugins against the latest available ones.
+   Plugins to update can be selected from the resulting list. Multiple
+   plugins can be selected by holding down <keycap>Control</>.
+   Clicking <guibutton>Update</> will begin the
+   downloading the updated plugins.
+  </para>
+  <!-- <figure><title>The Update Plugins dialog box</>
+   <graphic scale=50 fileref=dialog-pluginmgr-update></>
+  </figure> -->
+  <!-- <figure><title>The plugin download dialog box</>
+   <graphic scale=50 fileref=dialog-pluginmgr-download></>
+  </figure> -->
+ </sect1>
+ <sect1 id=using-plugins><title>Using Plugins</>
+  <indexterm><primary>Plugins menu</></indexterm>
+  <indexterm><primary>Global Options command</></indexterm>
+  <indexterm><primary>Utilities menu</></indexterm>
+  <indexterm><primary>Help menu</></indexterm>
+  <para>
+   Most plugins have documentation listed in the <guimenu>Help</> menu.
+   Plugins usually add submenus or menu items to the
+   <guimenu>Plugins</> menu. Some plugins add panes to the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  </para>
+ </sect1>
+</chapter>

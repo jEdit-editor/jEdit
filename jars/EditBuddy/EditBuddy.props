@@ -1,7 +1,7 @@
 ### plugin properties
 plugin.EditBuddyPlugin.name=Edit Buddy
 plugin.EditBuddyPlugin.author=Slava Pestov
-plugin.EditBuddyPlugin.version=0.1.8
+plugin.EditBuddyPlugin.version=0.2
 plugin.EditBuddyPlugin.docs=EditBuddy.html
 plugin.EditBuddyPlugin.depend.0=jedit 02.07.03.00
 plugin.EditBuddyPlugin.depend.1=plugin PluginManagerPlugin 0.5.6
@@ -15,19 +15,6 @@ edit-buddy.finish=Finish
 edit-buddy.first-time.title=Running jEdit for the first time
 edit-buddy.first-time.caption=jEdit initial setup wizard
 
-### can't store as an HTML resource, since this text is dynamic
-edit-buddy.first-time.settings-dir.text=<h2>The settings directory</h2>\n\
-	jEdit has created the directory\n\
-	<b>"{0}"</b> for storing configuration files.\n\
-	Editing these files by hand is seldom necessary, but knowing\n\
-	about them still helps in many situations.<p>\n\
-	For more detailed information about the settings directory, see\n\
-	Chapter 5 of the jEdit user guide.
-
-edit-buddy.first-time.settings-dir.files=jars/ macros/ modes/ \
-	PluginManager.download/ sessions/ abbrevs activity.log \
-	history mode-cache\n\ properties recent server
-
 edit-buddy.firewall-config.label=Configure firewall settings
 edit-buddy.firewall-config.code=new OptionPaneDialog(new FirewallOptionPane());
 edit-buddy.firewall-config.dependsOnPlugin=FirewallPlugin
@@ -39,7 +26,7 @@ edit-buddy.install-plugins.dependsOnPlugin=PluginManagerPlugin
 ### new-version wizard
 edit-buddy.new-version.title=New jEdit version installed
 edit-buddy.new-version.caption=jEdit update wizard
-edit-buddy.new-version.text=You have upgraded from jEdit {0} to {1}.<p>\n\
+edit-buddy.new-version.text=<h2>You have upgraded from jEdit {0} to {1}.</h2>\n\
 	\n\
 	Because the plugin API changes over time, older plugins might have\n\
 	problems running under newer jEdit releases. Therefore, it is a good\n\
@@ -51,15 +38,30 @@ edit-buddy.new-version.text=You have upgraded from jEdit {0} to {1}.<p>\n\
 	<ul>\n\
 	<li>The <b>Next</b> button goes to the next page of the wizard\n\
 	<li>The <b>Previous</b> button goes back\n\
-	<li>The <b>Cancel</b> button will close the wizard\n\
+	<li>The <b>Cancel</b> button closes the wizard\n\
 	</ul>
 
 edit-buddy.update-plugins.label=Update Plugins
 edit-buddy.update-plugins.code=PluginManagerPlugin.updatePlugins(null);
 edit-buddy.update-plugins.dependsOnPlugin=PluginManagerPlugin
 
-edit-buddy.view-changes.label=View CHANGES.txt
+edit-buddy.view-changes.label=Detailed Change Log
 edit-buddy.view-changes.code=HelpViewer.gotoFile("CHANGES.txt");
 
-edit-buddy.view-news.label=View NEWS.txt
+edit-buddy.view-news.label=Overview of Changes
 edit-buddy.view-news.code=HelpViewer.gotoFile("NEWS.txt");
+
+### Menu item label
+show-tip.label=Tip of the Day
+
+### Show on startup?
+tip.show=true
+
+### Tip of the day window
+tip.title=Tip of the Day
+tip.caption=Did you know...
+tip.show-next-time=Show tips on jEdit startup
+tip.next-tip=Next Tip
+
+### Number of tips
+tip.count=28

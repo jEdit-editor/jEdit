@@ -1,0 +1,22 @@
+// Rot13's the selection
+
+doRot13(str)
+{
+	chars = str.toCharArray();
+	for(int i = 0; i < chars.length; i++)
+	{
+		char c = chars[i];
+		if(c >= 'a' && c <= 'z')
+			c = (char)('a' + ((c - 'a') + 13) % 26);
+		else if(c >= 'A' && c <= 'Z')
+			c = (char)('A' + ((c - 'A') + 13) % 26);
+		chars[i] = c;
+	}
+	return new String(chars);
+}
+
+selection = textArea.getSelectedText();
+if(selection == null)
+	view.getToolkit().beep();
+else
+	textArea.setSelectedText(doRot13(selection));

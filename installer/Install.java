@@ -23,7 +23,7 @@ import java.util.Properties;
 
 public class Install
 {
-	public static final String VERSION = "0.3";
+	public static final String VERSION = "0.4";
 
 	public static void main(String[] args)
 	{
@@ -34,7 +34,7 @@ public class Install
 		else
 		{
 			System.err.println("Usage:");
-			System.err.println("jre -cp <installer JAR> install [text] (Java 1.1)");
+			System.err.println("jre -cp <installer JAR> Install [text] (Java 1.1)");
 			System.err.println("java -jar <installer JAR> [text] (Java 2)");
 			System.err.println("text parameter starts installer in text-only mode");
 		}

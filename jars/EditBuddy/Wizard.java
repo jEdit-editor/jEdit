@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -26,61 +26,63 @@ import java.net.URL;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public abstract class Wizard extends JComponent
+public abstract class Wizard extends JPanel
 {
 	public Wizard(String title, Component[] pages)
 	{
-		this.title = title;
+		super(new BorderLayout(12,12));
+		setBorder(new EmptyBorder(12,12,12,12));
+
+		JLabel label = new JLabel(title);
+		label.setFont(new Font("SansSerif",Font.PLAIN,36));
+		label.setForeground(UIManager.getColor("Button.foreground"));
+		add(BorderLayout.NORTH,label);
 
 		ActionHandler actionHandler = new ActionHandler();
 
+		Box buttons = new Box(BoxLayout.X_AXIS);
+
 		cancelButton = new JButton(jEdit.getProperty("common.cancel"));
-		cancelButton.setRequestFocusEnabled(false);
 		cancelButton.addActionListener(actionHandler);
+		buttons.add(cancelButton);
+		buttons.add(Box.createHorizontalStrut(6));
+		buttons.add(Box.createGlue());
+
 		prevButton = new JButton(jEdit.getProperty("edit-buddy.prev"));
-		prevButton.setRequestFocusEnabled(false);
 		prevButton.addActionListener(actionHandler);
+		buttons.add(prevButton);
+		buttons.add(Box.createHorizontalStrut(6));
+
 		nextButton = new JButton();
-		nextButton.setRequestFocusEnabled(false);
 		nextButton.addActionListener(actionHandler);
+		buttons.add(nextButton);
+
+		// give all the buttons the same width
+		Dimension dim = cancelButton.getPreferredSize();
+		dim.width = Math.max(dim.width,prevButton.getPreferredSize().width);
+		dim.width = Math.max(dim.width,nextButton.getPreferredSize().width);
+		cancelButton.setPreferredSize(dim);
+		prevButton.setPreferredSize(dim);
+		nextButton.setPreferredSize(dim);
+
+		add(BorderLayout.SOUTH,buttons);
+
 		nextButtonLabel = jEdit.getProperty("edit-buddy.next");
 		finishButtonLabel = jEdit.getProperty("edit-buddy.finish");
+
+		pagesPanel = new JPanel(new WizardLayout());
+		//pagesPanel.setBorder(UIManager.getBorder("TextField.border"));
+		//pagesPanel.setBackground(Color.white);
 
 		this.pages = pages;
 		for(int i = 0; i < pages.length; i++)
 		{
-			add(pages[i]);
+			pagesPanel.add(pages[i]);
 		}
 
-		setLayout(new WizardLayout());
-		add(cancelButton);
-		add(prevButton);
-		add(nextButton);
-
-		// title font
-		setFont(new Font("SansSerif",Font.PLAIN,36));
-		metrics = getToolkit().getFontMetrics(getFont());
+		add(BorderLayout.CENTER,pagesPanel);
 
 		pageChanged();
-	}
-
-	public void paintComponent(Graphics g)
-	{
-		int topBorder = metrics.getHeight() + PADDING * 2;
-		int sideBorder = PADDING * 2;
-		int bottomBorder = cancelButton.getPreferredSize().height + PADDING * 2;
-
-		g.setColor(new Color(204,204,204));
-		g.fillRect(0,0,getWidth(),getHeight());
-
-		g.setColor(Color.black);
-		g.drawString(title,sideBorder,PADDING + metrics.getAscent());
-		int width = getWidth() - sideBorder * 2;
-		int height = getHeight() - topBorder - bottomBorder;
-
-		g.setColor(Color.white);
-		g.fillRoundRect(sideBorder,topBorder,width,height,
-			PADDING * 2,PADDING * 2);
 	}
 
 	// protected members
@@ -112,16 +114,16 @@ public abstract class Wizard extends JComponent
 	protected static JComponent createHTMLScrollPane(JComponent comp, String[] buttons)
 	{
 		JScrollPane scroller = new JScrollPane(comp);
-		scroller.setBorder(null);
+		//scroller.setBorder(null);
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(BorderLayout.CENTER,scroller);
 		if(buttons != null)
 		{
 			JPanel buttonPanel = new JPanel();
-			buttonPanel.setBackground(Color.white);
 			buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.X_AXIS));
-			buttonPanel.setBorder(new EmptyBorder(12,12,12,12));
+			buttonPanel.setBorder(new EmptyBorder(12,0,0,0));
+			//buttonPanel.setBackground(Color.white);
 			buttonPanel.add(Box.createGlue());
 			for(int i = 0; i < buttons.length; i++)
 			{
@@ -137,16 +139,13 @@ public abstract class Wizard extends JComponent
 	}
 
 	// private members
-	private String title;
-	private FontMetrics metrics;
 	private JButton cancelButton;
 	private JButton prevButton;
 	private JButton nextButton;
 	private String nextButtonLabel, finishButtonLabel;
 	private Component[] pages;
 	private int currentPage;
-
-	private static int PADDING = 12;
+	private JPanel pagesPanel;
 
 	private void pageChanged()
 	{
@@ -156,7 +155,7 @@ public abstract class Wizard extends JComponent
 		else
 			nextButton.setText(nextButtonLabel);
 
-		revalidate();
+		pagesPanel.revalidate();
 	}
 
 	class ActionHandler implements ActionListener
@@ -205,68 +204,20 @@ public abstract class Wizard extends JComponent
 				dim.height = Math.max(_dim.height,dim.height);
 			}
 
-			dim.width = Math.max(metrics.stringWidth(title)
-				- PADDING * 2,dim.width);
-
-			dim.width += PADDING * 6;
-			dim.height += (metrics.getHeight() + cancelButton
-				.getPreferredSize().height + PADDING * 6);
 			return dim;
 		}
 
 		public Dimension minimumLayoutSize(Container parent)
 		{
-			Dimension dim = new Dimension();
-
-			for(int i = 0; i < pages.length; i++)
-			{
-				Dimension _dim = pages[i].getMinimumSize();
-				dim.width = Math.max(_dim.width,dim.width);
-				dim.height = Math.max(_dim.height,dim.height);
-			}
-
-			dim.width = Math.max(metrics.stringWidth(title)
-				- PADDING * 2,dim.width);
-
-			dim.width += PADDING * 6;
-			dim.height += (metrics.getHeight() + cancelButton
-				.getPreferredSize().height + PADDING * 6);
-			return dim;
+			return preferredLayoutSize(parent);
 		}
 
 		public void layoutContainer(Container parent)
 		{
-			Dimension size = getSize();
+			Dimension size = parent.getSize();
 
-			// make all buttons the same size
-			Dimension buttonSize = cancelButton.getPreferredSize();
-			buttonSize.width = Math.max(buttonSize.width,prevButton.getPreferredSize().width);
-			buttonSize.width = Math.max(buttonSize.width,nextButton.getPreferredSize().width);
-
-			int topBorder = metrics.getHeight() + PADDING * 2;
-			int sideBorder = PADDING * 2;
-			int bottomBorder = buttonSize.height + PADDING * 2;
-
-			// cancel button goes on far left
-			cancelButton.setBounds(sideBorder,size.height - buttonSize.height
-				- PADDING,buttonSize.width,buttonSize.height);
-
-			// prev and next buttons are on the right
-			prevButton.setBounds(size.width - buttonSize.width * 2 - 6 - sideBorder,
-				size.height - buttonSize.height - PADDING,
-				buttonSize.width,buttonSize.height);
-
-			nextButton.setBounds(size.width - buttonSize.width - sideBorder,
-				size.height - buttonSize.height - PADDING,
-				buttonSize.width,buttonSize.height);
-
-			// calculate size for current page
-			Rectangle currentPageBounds = new Rectangle();
-			currentPageBounds.x = PADDING * 3;
-			currentPageBounds.y = topBorder + PADDING;
-			currentPageBounds.width = size.width - PADDING * 6;
-			currentPageBounds.height = size.height - topBorder
-				- bottomBorder - PADDING * 2;
+			Rectangle currentPageBounds = new Rectangle(
+				0,0,size.width,size.height);
 
 			for(int i = 0; i < pages.length; i++)
 			{

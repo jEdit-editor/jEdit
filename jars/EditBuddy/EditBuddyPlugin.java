@@ -20,7 +20,7 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.StringTokenizer;
+import java.util.*;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.*;
@@ -36,6 +36,11 @@ public class EditBuddyPlugin extends EBPlugin
 		// avoid confusion
 		if(build != null && build.compareTo("02.06.06.00") <= 0)
 			resetToolBar();
+	}
+
+	public void createMenuItems(Vector menuItems)
+	{
+		menuItems.addElement(GUIUtilities.loadMenuItem("show-tip"));
 	}
 
 	public void handleMessage(EBMessage msg)
@@ -66,6 +71,8 @@ public class EditBuddyPlugin extends EBPlugin
 						"You downgraded from jEdit " + build
 						+ " to " + myBuild + "!");
 				}
+				else
+					showTipOfTheDay(view);
 
 				jEdit.setProperty("update-plugins.last-version",myBuild);
 
@@ -105,6 +112,31 @@ public class EditBuddyPlugin extends EBPlugin
 		doWizard(view,"new-version",wizard);
 	}
 
+	public static void showTipOfTheDay(final View view)
+	{
+		final JDialog dialog = new JDialog(view,jEdit.getProperty("tip.title"),false);
+		dialog.setContentPane(new TipOfTheDay(dialog));
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.pack();
+
+		if(view.isVisible())
+		{
+			dialog.setLocationRelativeTo(view);
+			dialog.show();
+		}
+		else
+		{
+			view.addWindowListener(new WindowAdapter()
+			{
+				public void windowOpened(WindowEvent evt)
+				{
+					dialog.setLocationRelativeTo(view);
+					dialog.show();
+				}
+			});
+		}
+	}
+
 	// private members
 	private static void resetToolBar()
 	{
@@ -131,13 +163,21 @@ public class EditBuddyPlugin extends EBPlugin
 		dialog.setContentPane(wizard);
 		dialog.pack();
 
-		view.addWindowListener(new WindowAdapter()
+		if(view.isVisible())
 		{
-			public void windowOpened(WindowEvent evt)
+			dialog.setLocationRelativeTo(view);
+			dialog.show();
+		}
+		else
+		{
+			view.addWindowListener(new WindowAdapter()
 			{
-				dialog.setLocationRelativeTo(view);
-				dialog.show();
-			}
-		});
+				public void windowOpened(WindowEvent evt)
+				{
+					dialog.setLocationRelativeTo(view);
+					dialog.show();
+				}
+			});
+		}
 	}
 }

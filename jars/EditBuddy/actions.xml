@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE ACTIONS SYSTEM "actions.dtd">
+
+<ACTIONS>
+	<ACTION NAME="show-tip">
+		<CODE>
+			EditBuddyPlugin.showTipOfTheDay(view);
+		</CODE>
+	</ACTION>
+</ACTIONS>

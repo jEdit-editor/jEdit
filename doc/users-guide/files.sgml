@@ -1,0 +1,415 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=yes: -->
+
+<chapter id=files><title>Working With Files</>
+ <sect1 id=creating><title>Creating New Files</>
+  <indexterm><primary>New File command</></indexterm>
+  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>buffers</></indexterm>
+  <indexterm><primary>Untitled buffers</></indexterm>
+  <indexterm><primary>command line</></indexterm>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>New File</> (shortcut:
+   <keycombo><keycap>Control</><keycap>N</></>) opens a new untitled
+   buffer. When it is saved, a file will be created on disk.
+   Another way to create a new file is to specify a non-existent file
+   name when starting jEdit from your operating system's command line.
+  </para>
+ </sect1>
+ <sect1 id=opening><title>Opening Files</>
+  <indexterm><primary>buffers</></indexterm>
+  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>Open File command</></indexterm>
+  <indexterm><primary>Recent Files menu</></indexterm>
+  <indexterm><primary>Current Directory menu</></indexterm>
+  <indexterm><primary>Insert File command</></indexterm>
+  <indexterm><primary>file system browser</></indexterm>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Open File</> (shortcut:
+   <keycombo><keycap>Control</><keycap>O</></>) displays
+   a file selector dialog box and loads the specified file into a new
+   buffer. Multiple files to open can be selected by holding down
+   <keycap>Control</>.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Insert File</> displays a file
+   selector dialog box and inserts the specified file into the current
+   buffer.
+  </para>
+  <para>
+   The <guimenu>File</>&gt;<guimenuitem>Current
+   Directory</> menu lists all files in the current buffer's directory.
+  </para>
+  <para>
+   Recent files are listed in
+   the <guimenu>File</>&gt;<guimenuitem>Recent Files</> menu. When a
+   recent file is opened, the caret
+   is automatically moved to its previous location in that file.
+   The number of recent files to remember can be changed and caret
+   position saving can be disabled in the <guibutton>General</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  </para>
+  <para>
+   Files that you do not have write access to are opened in read-only
+   mode, and editing will not be permitted.
+  </para>
+  <!-- <figure><title>The Open File dialog box</>
+   <graphic scale=50 fileref=dialog-open></>
+  </figure> -->
+ </sect1>
+ <sect1 id=saving><title>Saving Files</>
+  <para>
+   <indexterm><primary>buffers</></indexterm>
+   <indexterm><primary>File menu</></indexterm>
+   <indexterm><primary>Save command</></indexterm>
+   <indexterm><primary>Save As command</></indexterm>
+   <indexterm><primary>Save a Copy As command</></indexterm>
+   <indexterm><primary>file system browser</></indexterm>
+   Changed made to a buffer do not affect the disk file until the
+   buffer is <firstterm>saved</>.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Save</> (shortcut:
+   <keycombo><keycap>Control</><keycap>S</></keycombo>)
+   saves the current buffer to disk.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Save All Buffers</>
+   (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>S</></keycombo>) saves all open
+   buffers to disk, asking for confirmation first.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Save As</> saves the buffer to a
+   different specified file on disk. The buffer is then
+   renamed, and subsequent saves also save to the specified file.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Save a Copy As</> saves the buffer to a
+   different specified file on disk, but doesn't rename the
+   buffer, and doesn't clear the <quote>modified</> flag.
+  </para>
+  <sect2><title>Autosave and Backups</>
+   <indexterm><primary>autosave</></indexterm>
+   <indexterm><primary>backups</></indexterm>
+   <indexterm><primary>Global Options command</></indexterm>
+   <indexterm><primary>Utilities menu</></indexterm>
+   <para>
+    The autosave feature protects your work from computer crashes and
+    such. Every 30 seconds, all buffers with unsaved changes are
+    written out to their respective file names, enclosed in hash
+    (<quote>#</>) characters. For example, <filename>program.c</> will
+    be autosaved to <filename>#program.c#</>. Because saving a buffer using
+    one of the commands in the previous section automatically deletes the
+    autosave file, they will never be visible during normal operation.
+    However, if jEdit crashes before you have a
+    chance to save, the autosave file will remain, along with your unsaved
+    changes, and jEdit will offer to recover the autosaved data next time the
+    original file is opened.
+   </para>
+   <!-- <figure><title>Dialog box shown if a file has autosaved changes</>
+    <graphic fileref=dialog-autosave scale=50></>
+   </figure> -->
+   <para>
+    The backup feature can be used to roll back to the previous version
+    of a file after changes were made. When a buffer is saved
+    for the first time after being opened, its original contents are
+    preserved in the buffer's file name suffixed with a tilde (<quote>~</>).
+    For example, <filename>paper.tex</> will be backed up to
+    <filename>paper.tex~</>.
+   </para>
+   <para>
+    The autosave and backup features can be configured
+    in the <guibutton>Loading and Saving</> pane of the
+    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+   </para>
+  </sect2>
+  <sect2><title>Line Separator Characters</>
+   <indexterm><primary>Global Options command</></indexterm>
+   <indexterm><primary>Utilities menu</></indexterm>
+   <indexterm><primary>MacOS</></indexterm>
+   <indexterm><primary>Windows</></indexterm>
+   <indexterm><primary>Unix</></indexterm>
+   <indexterm><primary>line separators</></indexterm>
+   <indexterm><primary>Utilities menu</></indexterm>
+   <indexterm><primary>Buffer Options command</></indexterm>
+   <indexterm><primary>Global Options command</></indexterm>
+   <para>
+    The three major operating systems use different conventions to mark
+    line endings in text files.
+    The MacOS uses Carriage-Return characters (\r, ^M) for that purpose. Unix
+    uses Newline characters (\n, ^J). DOS and Windows use both
+    (\r\n, ^M^J). jEdit can read and write files in all three formats.
+    When a file is opened, the line separator is automatically
+    detected. It can be changed
+    in the <guimenu>Utilities</>&gt;<guimenuitem>Buffer Options</> dialog box.
+    The default for new files can be set in the
+    <guibutton>Loading and Saving</> pane of the
+    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+   </para>
+  </sect2>
+  <sect2><title>When Another Application Modifies the File</>
+   <indexterm><primary>Reload command</></indexterm>
+   <indexterm><primary>Reload All Buffers command</></indexterm>
+   <indexterm><primary>File menu</></indexterm>
+   <indexterm><primary>Utilities menu</></indexterm>
+   <indexterm><primary>Global Options command</></indexterm>
+   <para>
+    If an open buffer is modified on disk by another application, a warning
+    dialog box is displayed, offering to either continue editing
+    (and lose changes made by the other application)
+    or reload the buffer from disk. This feature can be disabled in the
+    <guibutton>General</> pane of the
+    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+   </para>
+   <para>
+    <guimenu>File</>&gt;<guimenuitem>Reload</>
+    can be used to reload the current buffer from disk at any other
+    time; a confirmation dialog box will be displayed first if the buffer
+    has unsaved changes.
+   </para>
+   <para>
+    <guimenu>File</>&gt;<guimenuitem>Reload All Buffers</> discards
+    unsaved changes in all open buffers and reload them from disk,
+    asking for confirmation first.
+   </para>
+   <!-- <figure><title>Warning message displayed when another application
+   changed the file on disk</>
+    <graphic scale=50 fileref=dialog-diskmod></>
+   </figure> -->
+  </sect2>
+ </sect1>
+ <sect1 id=vfs-browser><title>The File System Browser</>
+  <indexterm><primary>Utilities menu</></>
+  <indexterm><primary>File System Browser command</></>
+  <indexterm><primary>Global Options command</></>
+  <indexterm><primary>Open File command</></indexterm>
+  <indexterm><primary>Save As command</></indexterm>
+  <indexterm><primary>Save a Copy As command</></indexterm>
+  <indexterm><primary>Insert File command</></indexterm>
+  <indexterm><primary>file system browser</></indexterm>
+  <para>
+   <guimenu>Utilities</>&gt;<guimenuitem>File System Browser</> displays a
+   file system browser window.
+   By default, the file system browser is shown in a floating window;
+   it can be set to dock into the view in the <guibutton>Docking</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  </para>
+  <para>
+   The directory path to view is specified in the <guibutton>Path</> text
+   field. A subset of the current directory to display can be specified in the
+   form of a glob pattern in the <guibutton>Filter</> text field.
+   See <xref linkend=globs> for information about glob patterns.
+   Pressing the <keycap>Up</> and <keycap>Down</> keys in both text
+   fields recalls previously entered strings; see <xref linkend=history>
+   for details.
+  </para>
+  <para>
+   You can view an entire directory hierarchy at once by clicking
+   the expander controls next to directories in the tree.
+  </para>
+  <para>
+   The toolbar buttons perform the following actions, from left to right:
+  </para>
+  <itemizedlist>
+   <listitem><para><guibutton>Up</> - displays the current
+   directory's parent in the file system view. The popup arrow next to
+   this button displays a
+   menu listing all the parent directories of the current directory,
+   up to the filesystem root</para></listitem>
+   <listitem><para><guibutton>Reload</> - reloads the file list
+   </para></listitem>
+   <listitem><para><guibutton>Local Drives</> - displays all
+   local drives. On Windows, this will be a list of
+   drive letters; on Unix, the list will only contain one entry, the
+   root directory</para></listitem>
+   <listitem><para><guibutton>Home Directory</> - displays your
+   home directory in the file system browser</para></listitem>
+   <listitem><para><guibutton>Parent Directory of Current Buffer</> -
+   displays the directory containing the current buffer
+   in the file system browser</para></listitem>
+  </itemizedlist>
+  <para>
+   Clicking the <guimenu>More</> button displays a menu containing
+   several less frequently-used commands:
+  </para>
+  <itemizedlist>
+   <listitem><para><guimenuitem>Show Hidden Files</> - a check box menu
+   item that controls if hidden
+   files will be shown in the file list</para></listitem>
+   <listitem><para><guimenuitem>New Directory</> - creates a new
+   directory, prompting for the desired name
+   </para></listitem>
+   <listitem><para><guimenuitem>Add to Favorites</> - adds the currently
+   selected (or the currently displayed, if there is nothing
+   selected) directory to the favorites list</para></listitem>
+   <listitem><para><guimenuitem>Go to Favorites</> - displays the favorites
+   list. To remove a directory from the list, right-click on it and select
+   <guimenuitem>Delete</> from the resulting popup menu</para></listitem>
+  </itemizedlist>
+  <para>
+   Right-clicking on a file in the file system browser displays a popup menu,
+   containing commands for manipulating that file, in addition to all the
+   commands from the <guibutton>More</> menu.
+   If the file is already open, the popup will have commands to
+   display it in the current view, display it in a new view, or close it.
+   Unopened file popups have commands for opening, deleting and renaming.
+   Note that attempting to delete a directory containing files
+   will give an error;
+   only empty directories may be deleted.
+  </para>
+  <para>
+   The file system browser can be navigated from the keyboard:
+  </para>
+  <itemizedlist>
+   <listitem><para><keycap>Enter</> - opens the currently selected file or
+   directory</para></listitem>
+   <listitem><para><keycap>Left</> - goes to the current directory's parent
+   </para></listitem>
+   <listitem><para><keycap>Up</> - selects previous file in list
+   </para></listitem>
+   <listitem><para><keycap>Down</> - selects next file in list
+   </para></listitem>
+   <listitem><para>Typing the first few characters of
+   a file's name will select that file
+   </para></listitem>
+  </itemizedlist>
+  <para>
+   The file system view must have keyboard focus for these keys
+   to work. In the <guimenuitem>Open File</> dialog box, it is given
+   keyboard focus by default. In other instances, it can be given
+   keyboard focus by clicking with the mouse.
+  </para>
+  <para>
+   The file system browser can be customized in the <guibutton>File
+   System Browser</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  </para>
+  <!-- <figure><title>The stand-alone VFS Browser</>
+   <graphic fileref=window-vfs-browser scale=50></>
+  </figure> -->
+ </sect1>
+ <sect1 id=threaded-io><title>Multi-threaded I/O</>
+  <indexterm><primary>Utilities menu</></>
+  <indexterm><primary>I/O Progress Monitor command</></>
+  <indexterm><primary>Global Options command</></indexterm>
+  <indexterm><primary>buffers</></indexterm>
+  <indexterm><primary>I/O threads</></indexterm>
+  <para>
+   To improve responsiveness and perceived performance,
+   jEdit executes all input/output operations asynchronously.
+   While I/O is in progress, a small disk icon is displayed in the menu bar,
+   in addition to progress meters for each running operation.
+   The <guimenu>Utilities</>&gt;<guimenuitem>I/O Progress Monitor</> command
+   displays a window with more detailed status information. Requests
+   can also be aborted in this window. Note that aborting a buffer save can
+   result in data loss.
+  </para>
+  <para>
+   By default, four I/O threads are created, which means that up
+   to four buffers can be loaded or saved simultaneously. The number of
+   threads can be changed in the
+   <guibutton>Loading and Saving</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+   Setting the number to zero disables multi-threaded I/O completely; doing
+   this is not recommended.
+  </para>
+  <!-- <figure><title>The I/O Progress Monitor window</>
+   <graphic fileref=window-io-progress scale=50></>
+  </figure>
+  <figure><title>The miniature I/O monitor in the menu bar</>
+   <graphic fileref=window-editor-io-progress></>
+  </figure> -->
+ </sect1>
+ <sect1 id=printing><title>Printing Files</>
+  <indexterm><primary>Print command</></indexterm>
+  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>syntax highlighting</></indexterm>
+  <indexterm><primary>Global Options command</></indexterm>
+  <indexterm><primary>Utilities menu</></indexterm>
+  <indexterm><primary>printing</></indexterm>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Print</>
+   (shortcut: <keycombo><keycap>Control</><keycap>P</></keycombo>)
+   will print the current buffer. By default, the printed output will have
+   syntax highlighting, and each page will have a header with the file name,
+   and a footer with the current date/time and page number. The appearance of
+   printed output
+   can be customized in the <guibutton>Printing</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global
+   Options</> dialog box.
+  </para>
+ </sect1>
+ <sect1 id=sessions><title>Editor Sessions</>
+  <indexterm><primary>sessions</></>
+  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>Load Session command</></indexterm>
+  <indexterm><primary>Save Session command</></indexterm>
+  <indexterm><primary>Utilities menu</></indexterm>
+  <indexterm><primary>Global Options command</></indexterm>
+  <para>
+   A <firstterm>session</> is a list of file names. Sessions are stored
+   as plain text files with the extension <filename>.session</> in the
+   <filename>sessions</> subdirectory of the jEdit settings directory.
+   The location of the settings directory is operating system-specific; see
+   <xref linkend=settings-directory>.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Load Session</> displays a file
+   selector dialog box and opens all file names
+   listed in the specified session.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Save Session</> displays a file
+   selector dialog box and saves the list of
+   open buffers to the specified session.
+  </para>
+  <para>
+   The session named
+   <filename>default.session</> is loaded when jEdit starts, and the list of
+   open files is recorded into it when jEdit exits. The end result is
+   that open files are retained if jEdit is closed and reopened. This
+   can be disabled in the <guibutton>Loading &amp; Saving</> pane
+   of the <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+   dialog box.
+  </para>
+ </sect1>
+ <sect1 id=closing-exiting><title>Closing Files and Exiting jEdit</>
+  <indexterm><primary>buffers</></indexterm>
+  <indexterm><primary>Close Buffer command</></indexterm>
+  <indexterm><primary>Close All Buffers command</></indexterm>
+  <indexterm><primary>File menu</></indexterm>
+  <indexterm><primary>Exit command</></indexterm>
+  <indexterm><primary>saving</></indexterm>
+  <indexterm><primary>Global Options command</></indexterm>
+  <indexterm><primary>Utilities menu</></indexterm>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Close Buffer</>
+   (shortcut: <keycombo><keycap>Control</><keycap>W</></keycombo>)
+   closes the current buffer. If it has unsaved changes, jEdit
+   will ask if they should be saved first.
+  </para>
+  <!-- <figure><title>The message displayed if a file has unsaved changes</>
+   <graphic scale=50 fileref=dialog-unsaved></>
+  </figure> -->
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Close All Buffers</>
+   (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>W</></keycombo>)
+   closes all buffers. If any buffers have unsaved
+   changes, they will be listed in a dialog box where they can be saved
+   or discarded. In the dialog box, multiple buffers to operate on at
+   once can be selected by clicking on them in the list while holding
+   down <keycap>Control</>.
+  </para>
+  <!-- <figure><title>The dialog box displayed by Close All Buffers if
+  there are unsaved changes</title>
+   <graphic scale=50 fileref=dialog-unsaved-list></>
+  </figure> -->
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Exit</>
+   (shortcut: <keycombo><keycap>Control</><keycap>Q</></keycombo>)
+   will completely exit jEdit.
+  </para>
+ </sect1>
+</chapter>

@@ -21,10 +21,7 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.util.StringTokenizer;
 import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.util.Log;
 
 public class FirstTimeWizard extends Wizard
 {
@@ -40,7 +37,6 @@ public class FirstTimeWizard extends Wizard
 		Component[] pages = {
 			createHTMLScrollPane(createHTMLView(FirstTimeWizard.class
 				.getResource("/first-time.html")),null),
-			new SettingsDirPanel(),
 			createHTMLScrollPane(createHTMLView(FirstTimeWizard.class
 				.getResource("/firewall.html")),
 				new String[] { "firewall-config" }),
@@ -51,92 +47,5 @@ public class FirstTimeWizard extends Wizard
 				.getResource("/first-time-finished.html")),null)
 		};
 		return pages;
-	}
-
-	static class SettingsDirPanel extends JPanel
-	{
-		SettingsDirPanel()
-		{
-			super(new BorderLayout());
-
-			String[] args = { jEdit.getSettingsDirectory() };
-			add(BorderLayout.NORTH,createHTMLScrollPane(
-				createHTMLView(jEdit.getProperty("edit-buddy.first-time"
-				+ ".settings-dir.text",args)),null));
-
-			DefaultListModel listModel = new DefaultListModel();
-			StringTokenizer st = new StringTokenizer(jEdit.getProperty(
-				"edit-buddy.first-time.settings-dir.files"));
-			while(st.hasMoreTokens())
-			{
-				listModel.addElement(st.nextToken());
-			}
-
-			list = new JList(listModel);
-			list.setCellRenderer(new Renderer());
-			list.addListSelectionListener(new ListHandler());
-			JScrollPane scroller = new JScrollPane(list);
-			scroller.setVerticalScrollBarPolicy(JScrollPane
-				.VERTICAL_SCROLLBAR_ALWAYS);
-			scroller.setBorder(new MatteBorder(1,1,1,1,Color.black));
-			add(BorderLayout.WEST,scroller);
-
-			description = createHTMLView(getClass().getResource("/settings-dir.html"));
-			add(BorderLayout.CENTER,createHTMLScrollPane(description,null));
-		}
-
-		// private members
-		private JList list;
-		private JEditorPane description;
-
-		static class Renderer extends DefaultListCellRenderer
-		{
-			public Component getListCellRendererComponent(
-				JList list, Object value, int index,
-				boolean isSelected, boolean cellHasFocus)
-			{
-				super.getListCellRendererComponent(list,value,
-					index,isSelected,cellHasFocus);
-
-				String svalue = (String)value;
-				if(svalue.endsWith("/"))
-				{
-					setIcon(UIManager.getIcon("FileView.directoryIcon"));
-					svalue = svalue.substring(0,svalue.length() - 1);
-				}
-				else
-					setIcon(UIManager.getIcon("FileView.fileIcon"));
-
-				setText(svalue);
-
-				return this;
-			}
-		}
-
-		class ListHandler implements ListSelectionListener
-		{
-			public void valueChanged(ListSelectionEvent evt)
-			{
-				if(evt.getValueIsAdjusting())
-					return;
-
-				String value = (String)list.getSelectedValue();
-				if(value == null)
-					return;
-
-				if(value.endsWith("/"))
-					value = value.substring(0,value.length() - 1);
-				try
-				{
-					description.setPage(FirstTimeWizard.class
-						.getResource("settings-dir-"
-						+ value + ".html"));
-				}
-				catch(IOException io)
-				{
-					Log.log(Log.ERROR,this,io);
-				}
-			}
-		}
 	}
 }

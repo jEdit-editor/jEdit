@@ -1,0 +1,20 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :tabSize=1:noTabs=yes: -->
+
+<chapter id=developing-plugins><title>Developing Plugins</>
+ <sect1 id=plugin-jar><title>General Structure of a Plugin</>
+  <para>
+   JAR files, property files
+  </para>
+ </sect1>
+ <sect1 id=plugin-class><title>The EditPlugin Class</>
+  <para>
+   EditPlugin class, plugin.XXX.YYY properties
+  </para>
+ </sect1>
+ <sect1 id=plugin-actions><title>Actions</>
+  <para>
+   actions.xml file, loadMenuItem method, loadMenu method
+  </para>
+ </sect1>
+</chapter>

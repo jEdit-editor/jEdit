@@ -1,0 +1,68 @@
+<!-- jEdit documentation, (C) 1999, 2000 Slava Pestov -->
+<!-- Released under the GNU General Public License; see COPYING.txt -->
+
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=yes: -->
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+
+<!ENTITY basics SYSTEM "basics.sgml">
+<!ENTITY files SYSTEM "files.sgml">
+<!ENTITY textedit SYSTEM "text-edit.sgml">
+<!ENTITY modes SYSTEM "modes.sgml">
+<!ENTITY sourceedit SYSTEM "source-edit.sgml">
+<!ENTITY customizing SYSTEM "customizing.sgml">
+<!ENTITY macros SYSTEM "macros.sgml">
+<!ENTITY usingplugins SYSTEM "using-plugins.sgml">
+<!ENTITY develplugins SYSTEM "devel-plugins.sgml">
+
+<!ENTITY shortcuts SYSTEM "shortcuts.sgml">
+<!ENTITY history SYSTEM "history.sgml">
+<!ENTITY globs SYSTEM "globs.sgml">
+<!ENTITY regexps SYSTEM "regexps.sgml">
+<!ENTITY activitylog SYSTEM "activity-log.sgml">
+<!ENTITY cliusage SYSTEM "cli-usage.sgml">
+
+<!ENTITY index SYSTEM "index.sgml"> ]>
+
+<book>
+
+<bookinfo>
+ <title>jEdit 3.0 User's Guide</>
+ <author><firstname>Slava</><surname>Pestov</></author>
+ <legalnotice><title>Legal Notice</>
+  <para>
+   jEdit is released under the GNU General Public License. A copy
+   of the GPL is available in the <filename>COPYING.txt</> file
+   supplied with jEdit.
+  </para>
+  <para>
+   jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
+   section 11 and 12 of the GPL for details.
+  </para>
+ </legalnotice>
+ <copyright><year>1998-2000</year><holder>Slava Pestov</holder></copyright>
+</bookinfo>
+
+&basics;
+&files;
+&textedit;
+&modes;
+&sourceedit;
+&customizing;
+&macros;
+&usingplugins;
+
+<!-- not yet written
+develplugins -->
+
+&shortcuts;
+&history;
+&globs;
+&regexps;
+&activitylog;
+&cliusage;
+
+<!-- &index; -->
+
+</book>

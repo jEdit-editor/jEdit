@@ -1,0 +1,152 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :tabSize=1:indentSize=1:noTabs=yes: -->
+
+<appendix id=cli-usage><title>Command Line Usage</>
+ <indexterm><primary>command line</></indexterm>
+ <indexterm><primary>caret</></indexterm>
+ <indexterm><primary>markers</></indexterm>
+ <indexterm><primary>background mode</></indexterm>
+ <indexterm><primary>edit server</></indexterm>
+ <indexterm><primary>sessions</></indexterm>
+ <para>
+  On operating systems that support a command line, jEdit can be passed
+  a multitude of options that control its behavior.
+ </para>
+ <para>
+  When opening files from the command line, a line number or marker to
+  position the caret on can be specified like so:
+ </para>
+ <screen><prompt>$ </><userinput>jedit MyApplet.java +line:10</>
+<prompt>$ </><userinput>jedit thesis.tex +marker:chapter5</>
+</screen>
+ <indexterm><primary>command line</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-version</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-usage</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-nosettings</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-settings</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-session</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-noserver</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-server</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-nosessions</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-nosplash</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-newview</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-background</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>-nogui</></indexterm>
+ <indexterm><primary>command line switches</>
+ <secondary>- -</></indexterm>
+ <indexterm><primary>moving the caret</>
+ <secondary>to a line number</></indexterm>
+ <indexterm><primary>Save Session command</></>
+ <indexterm><primary>Global Options command</></>
+ <indexterm><primary>File menu</></>
+ <indexterm><primary>Utilities menu</></>
+ <informaltable><!-- <title>Table of command line switches</> -->
+  <tgroup cols=2>
+   <colspec colnum=1 colwidth=1.5in>
+   <thead>
+    <row><entry>Switch</><entry>Effect</></row>
+   </thead>
+   <tbody>
+    <row>
+     <entry>-background</>
+     <entry>Runs jEdit in background mode. In background mode,
+     the edit server will continue listening for
+     client connections even after all views are closed.
+     See <xref linkend=starting>.</entry>
+    </row>
+    <row>
+     <entry>-newview</>
+     <entry>Only valid when connecting to another instance.
+     Instead of opening files in an existing view, they will be opened
+     in a new view.
+     </entry>
+    </row>
+    <row>
+     <entry>-nogui</>
+     <entry>Only valid when running in background mode. Forces jEdit
+     to start without an initial view.</>
+    </row>
+    <row>
+     <entry>-noserver</>
+     <entry>Disables the edit server. Does not attempt to
+     connect to the server, and does not start one either. For
+     information about the edit server, see <xref linkend=starting>.</entry>
+    </row>
+    <row>
+     <entry>-nosession</>
+     <entry>jEdit will not attempt to load
+     the default session. The default session can be
+     disabled permanently in the <guibutton>General</> pane of the
+     <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+     dialog box. Has no effect when connecting to
+     another instance via the edit server. For information about editor
+     sessions, see <xref linkend=sessions>.
+     </entry>
+    </row>
+    <row>
+     <entry>-nosettings</>
+     <entry>Starts jEdit without loading user-specific settings.
+     See <xref linkend=settings-directory>.</entry>
+    </row>
+    <row>
+     <entry>-nosplash</>
+     <entry>Starts jEdit without displaying the splash screen.
+     Has no effect
+     when connecting to another instance via the edit server.</entry>
+    </row>
+    <row>
+     <entry>-server=<replaceable>name</></entry>
+     <entry>Stores the server port info in the file named
+     <replaceable>name</>. File names for this
+     parameter are relative to the settings directory.</entry>
+    </row>
+    <row>
+     <entry>-session=<replaceable>name</></entry>
+     <entry>Loads a previously-saved session from the
+     <filename>sessions</> subdirectory of the settings directory.
+     Sessions can be saved with the <guimenu>File</>&gt;<guimenuitem>Save
+     Session</> command. For information about editor sessions, see
+     see <xref linkend=sessions>.
+     </entry>
+    </row>
+    <row>
+     <entry>-settings=<replaceable>dir</></entry>
+     <entry>Loads and saves the user-specific settings from
+     the directory named <replaceable>dir</>, instead of the
+     default <filename><replaceable>user.home</>/.jedit</>. <replaceable>dir</> will
+     be created if it does not exist. Has no effect
+     when connecting to another instance via the edit server.</entry>
+    </row>
+    <row>
+     <entry>-usage</>
+     <entry>Shows a brief command line usage message without starting
+     jEdit.
+     This message is also shown if an invalid switch was specified.</>
+    </row>
+    <row>
+     <entry>-version</>
+     <entry>Shows the version number without starting jEdit.</>
+    </row>
+    <row>
+     <entry>- -</>
+     <entry>Specifies the end of the command line switches. Further
+     parameters are treated as file names, even if they begin with
+     a dash. Can be used to open files whose names start with a
+     dash, and so on.</entry>
+    </row>
+   </tbody>
+  </tgroup>
+ </informaltable>
+</appendix>

@@ -1,0 +1,3 @@
+// Inserts the current date at the caret position
+import java.util.Date;
+textArea.setSelectedText(new Date().toString());

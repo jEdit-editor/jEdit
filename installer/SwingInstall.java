@@ -169,7 +169,7 @@ public class SwingInstall extends JFrame
 
 		ChooseDirectory()
 		{
-			setLayout(new BorderLayout());
+			super(new BorderLayout());
 
 			JLabel caption = new JLabel("First, specify where "
 				+ appName + " is to be installed:");
@@ -178,56 +178,68 @@ public class SwingInstall extends JFrame
 
 			add(BorderLayout.NORTH,caption);
 
+			Box box = new Box(BoxLayout.Y_AXIS);
+
 			String _binDir = OperatingSystem.getOperatingSystem()
 				.getShortcutDirectory();
 
-			Box box = new Box(BoxLayout.Y_AXIS);
+			JPanel directoryPanel = new JPanel();
+			GridBagLayout layout = new GridBagLayout();
+			directoryPanel.setLayout(layout);
+			GridBagConstraints cons = new GridBagConstraints();
+			cons.anchor = GridBagConstraints.WEST;
+			cons.fill = GridBagConstraints.HORIZONTAL;
+			cons.gridy = 1;
+			cons.insets = new Insets(0,0,6,0);
 
-			Box fieldBox = new Box(BoxLayout.X_AXIS);
+			JLabel label = new JLabel("Install program in: ",SwingConstants.RIGHT);
+			label.setBorder(new EmptyBorder(0,0,0,12));
+			layout.setConstraints(label,cons);
+			directoryPanel.add(label);
 
-			Box labels = new Box(BoxLayout.Y_AXIS);
-			labels.add(new JLabel("Install program in: ",SwingConstants.RIGHT));
-			if(_binDir != null)
-			{
-				labels.add(Box.createVerticalStrut(5));
-				labels.add(new JLabel("Install shortcut in: ",
-					SwingConstants.RIGHT));
-			}
-
-			fieldBox.add(labels);
-
-			Box fields = new Box(BoxLayout.Y_AXIS);
-			fields.add(installDir = new JTextField());
+			cons.weightx = 1.0f;
+			installDir = new JTextField();
 			installDir.setText(OperatingSystem.getOperatingSystem()
 				.getInstallDirectory(appName,appVersion));
+			layout.setConstraints(installDir,cons);
+			directoryPanel.add(installDir);
 
-			fields.add(Box.createVerticalStrut(5));
 			if(_binDir != null)
-				fields.add(binDir = new JTextField(_binDir));
+			{
+				cons.gridy = 2;
+				cons.weightx = 0.0f;
+				cons.insets = new Insets(0,0,0,0);
+				label = new JLabel("Install shortcut in: ",SwingConstants.RIGHT);
+				label.setBorder(new EmptyBorder(0,0,0,12));
+				layout.setConstraints(label,cons);
+				directoryPanel.add(label);
 
-			fieldBox.add(fields);
+				cons.weightx = 1.0f;
+				binDir = new JTextField(_binDir);
+				layout.setConstraints(binDir,cons);
+				directoryPanel.add(binDir);
+			}
 
-			box.add(fieldBox);
+			box.add(directoryPanel);
 
-			JPanel buttons = new JPanel();
+			Box buttons = new Box(BoxLayout.X_AXIS);
 			chooseInstall = new JButton("Choose Install Directory...");
 			chooseInstall.setRequestFocusEnabled(false);
 			chooseInstall.addActionListener(this);
 			buttons.add(chooseInstall);
-
 			if(_binDir != null)
 			{
+				buttons.add(Box.createHorizontalStrut(6));
 				chooseBin = new JButton("Choose Shortcut Directory...");
 				chooseBin.setRequestFocusEnabled(false);
 				chooseBin.addActionListener(this);
 				buttons.add(chooseBin);
 			}
-
 			box.add(buttons);
 
-			JPanel panel = new JPanel();
-			panel.add(box);
-			add(BorderLayout.CENTER,panel);
+			box.add(Box.createGlue());
+
+			add(BorderLayout.CENTER,box);
 		}
 
 		public void actionPerformed(ActionEvent evt)
@@ -254,33 +266,24 @@ public class SwingInstall extends JFrame
 
 		SelectComponents()
 		{
-			GridBagLayout layout = new GridBagLayout();
-			setLayout(layout);
-			GridBagConstraints cons = new GridBagConstraints();
-			cons.anchor = GridBagConstraints.NORTHWEST;
-			cons.fill = GridBagConstraints.HORIZONTAL;
-			cons.weightx = 1.0f;
-			cons.weighty = 1.0f;
-			cons.gridy = 1;
+			super(new BorderLayout());
 
 			JLabel caption = new JLabel("Now, specify program"
 				+ " components to install:");
 			Font font = caption.getFont();
 			caption.setFont(new Font(font.getFamily(),font.getStyle(),18));
 
-			layout.setConstraints(caption,cons);
-			add(caption);
+			add(BorderLayout.NORTH,caption);
 
-			comp = createCompPanel();
+			Box box = new Box(BoxLayout.Y_AXIS);
+			box.add(Box.createGlue());
+			box.add(comp = createCompPanel());
+			box.add(Box.createGlue());
 
-			cons.gridy++;
-			layout.setConstraints(comp,cons);
-			add(comp);
+			add(BorderLayout.CENTER,box);
 
 			sizeLabel = new JLabel("",SwingConstants.LEFT);
-			cons.gridy++;
-			layout.setConstraints(sizeLabel,cons);
-			add(sizeLabel);
+			add(BorderLayout.SOUTH,sizeLabel);
 
 			updateSize();
 		}
@@ -306,6 +309,10 @@ public class SwingInstall extends JFrame
 				checkBox.setRequestFocusEnabled(false);
 				panel.add(checkBox);
 			}
+
+			Dimension dim = panel.getPreferredSize();
+			dim.width = Integer.MAX_VALUE;
+			panel.setMaximumSize(dim);
 
 			return panel;
 		}

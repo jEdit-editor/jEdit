@@ -1,0 +1,10 @@
+// Reverses the selection
+
+selection = textArea.getSelectedText();
+if(selection == null)
+	textArea.getToolkit().beep();
+else
+{
+	textArea.setSelectedText(new StringBuffer(selection).reverse()
+		.toString());
+}

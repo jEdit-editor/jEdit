@@ -1,0 +1,301 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=yes: -->
+
+<chapter id=basics><title>Basic Concepts</>
+ <sect1 id=menu-items><title>Conventions</>
+  <indexterm><primary>menu bar</></indexterm>
+  <para>
+   Whenever a specific menu item selection is referenced, the
+   top level menu is listed first, followed by successive levels of submenus,
+   finally followed by the menu item itself. All menu components are separated
+   by greater-than symbols (<quote>&gt;</>). For example,
+   <guimenu>View</>&gt;<guisubmenu>Scrolling</>&gt;<guimenuitem>Scroll
+   to Current Line</> refers to the <guimenuitem>Scroll to Current Line</>
+   command contained in the
+   <guisubmenu>Scrolling</> submenu of the <guimenu>View</> menu.
+  </para>
+  <para>
+   As with many other applications, menu items that end with
+   ellipsis (...) display dialog boxes or windows when invoked.
+   An additional jEdit-only convention is that menu items that end with
+   <quote>[x]</quote> expect a character to be typed at the keyboard after
+   being invoked.
+  </para>
+  <indexterm><primary>keyboard shortcuts</></indexterm>
+  <para>
+   Many jEdit commands can be also be invoked using keystrokes. This speeds
+   up editing by letting you keep your hands on the keyboard. Not all
+   commands with keyboard shortcuts
+   are accessible with one key stroke; for example, the
+   keyboard shortcut for <guimenuitem>Scroll to Current Line</> is
+   <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>J</></keycombo>. That is, you must first
+   press <keycombo><keycap>Control</><keycap>E</></keycombo>, followed by
+   <keycombo><keycap>Control</><keycap>J</></keycombo>.
+  </para>
+ </sect1>
+ <sect1 id=starting><title>Starting jEdit</>
+  <indexterm><primary>command line</></indexterm>
+  <indexterm><primary>sessions</></indexterm>
+  <indexterm><primary>Windows</></indexterm>
+  <indexterm><primary>Unix</></indexterm>
+  <indexterm><primary>splash screen</></indexterm>
+  <indexterm><primary>first-time wizard</></indexterm>
+  <indexterm><primary>upgrade wizard</></indexterm>
+  <indexterm><primary>firewall</></indexterm>
+  <indexterm><primary>plugins</></indexterm>
+  <indexterm><primary>edit server</></indexterm>
+  <para>
+   Exactly how jEdit is started depends on the operating system;
+   on Unix systems, usually you would
+   run the <quote>jedit</quote> command at the command line,
+   or select jEdit from a menu; on Windows, you might
+   double click on the jEdit icon. Unless initial files to open were
+   specified on the command line or dropped onto jEdit's icon, jEdit
+   will load any files that were open in the previous editing session.
+  </para>
+  <para>
+   If jEdit is started while another copy is already running, control is
+   transferred to the running copy, and a second instance is not loaded.
+   This saves time and memory if jEdit is started multiple times.
+   Communication between instances of jEdit is implemented using
+   TCP/IP sockets; the initial instance is known as the
+   <firstterm>server</>, and subsequent invocations are known as
+   <firstterm>clients</>.
+  </para>
+  <para>
+   If the <command>-background</> command line switch is specified,
+   jEdit will continue running and waiting for client requests even
+   after all editor windows are closed. The advantage of background mode
+   is that you can open and close jEdit any number of times, only having
+   to wait for it to start up the first time. The downside of background
+   mode is that jEdit will continue to consume memory when no windows
+   are open.
+  </para>
+  <para>
+   For more information about command line switches that control the
+   server feature, see <xref linkend=cli-usage>.
+  </para>
+  <para>
+   The first time jEdit is run, an <quote>initial setup
+   wizard</quote> is shown. This wizard helps
+   configure firewall settings (might be
+   necessary in order for plugin download to work) and downloads and
+   installs plugins (see <xref linkend=plugins> for
+   more information about plugins). Similarly, after upgrading to a new
+   jEdit version,
+   an <quote>update wizard</quote> will optionally
+   update installed plugins and
+   give pointers to what's new.
+  </para>
+  <para>
+   Both of these wizards are self-explanatory and very easy to use,
+   and therefore will not be covered in any more detail in this manual.
+  </para>
+  <!-- <figure><title>The jEdit splash screen</>
+   <graphic scale=50 fileref=window-splash></>
+  </figure> -->
+ </sect1>
+ <sect1 id=buffers><title>Buffers</>
+  <indexterm><primary>buffers</></indexterm>
+  <indexterm><primary>text area</></indexterm>
+  <indexterm><primary>View menu</></indexterm>
+  <indexterm><primary>Go to Next Buffer command</></indexterm>
+  <indexterm><primary>Go to Previous Buffer command</></indexterm>
+  <indexterm><primary>Go to Last Edited Buffer</></indexterm>
+  <para>
+   Several files can be opened and edited at once.
+   Each open file is referred to as a <firstterm>buffer</>.
+   The combo box above the text area selects the buffer to edit.
+   Different emblems are displayed next to buffer names in the list,
+   depending the buffer's state;
+   a red disk is shown for buffers with unsaved changes,
+   a lock is shown for read-only buffers,
+   and a spark is shown for new buffers which don't yet exist on disk.
+  </para>
+  <para>
+   In addition to the buffer combo box, various commands can also be
+   used to select the buffer to edit.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guimenuitem>Go to Previous Buffer</>
+   (keyboard shortcut: <keycombo><keycap>Control</><keycap>Page Up</></>)
+   switches to the previous buffer in the list.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guimenuitem>Go to Next Buffer</>
+   (keyboard shortcut: <keycombo><keycap>Control</><keycap>Page Down</></>)
+   switches to the next buffer in the list.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guimenuitem>Go to Recent Buffer</>
+   (keyboard shortcut: <keycombo><keycap>Control</><keycap>`</></>)
+   switches to the buffer that was being edited prior to the current one.
+  </para>
+ </sect1>
+ <sect1 id=views><title>Views</>
+  <indexterm><primary>views</></indexterm>
+  <indexterm><primary>View menu</></indexterm>
+  <indexterm><primary>New View command</></indexterm>
+  <indexterm><primary>Close View command</></indexterm>
+  <indexterm><primary>background mode</></indexterm>
+  <indexterm><primary>edit server</></indexterm>
+  <indexterm><primary>Split Horizontally command</></indexterm>
+  <indexterm><primary>Split Vertically command</></indexterm>
+  <indexterm><primary>Unsplit command</></indexterm>
+  <indexterm><primary>gutter</></indexterm>
+  <para>
+   Each editor window is referred to as a <firstterm>view</>.
+   It is possible to have multiple views open at once, and each view can
+   be split into multiple panes.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guimenuitem>New View</> creates a new view.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guimenuitem>Close View</> closes the
+   current view. If only one view is open, closing it will exit jEdit,
+   unless background mode is on; see <xref linkend=starting> for information
+   about starting jEdit in background mode.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Splitting</>&gt;<guimenuitem>Split Horizontally</>
+   (shortcut: <keycombo><keycap>Control</><keycap>2</></keycombo>)
+   splits the view into two text areas, above each other.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Splitting</>&gt;<guimenuitem>Split Vertically</>
+   (shortcut: <keycombo><keycap>Control</><keycap>3</></keycombo>)
+   splits the view into two text areas, next to each other.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Splitting</>&gt;<guimenuitem>Unsplit</>
+   (shortcut: <keycombo><keycap>Control</><keycap>1</></keycombo>)
+   removes all but the current text area from the view.
+  </para>
+  <para>
+   When a view is split, editing commands operate on the text area that
+   has keyboard focus. To give a text area keyboard focus, click in it
+   with the mouse, or use the following commands.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Splitting</>&gt;<guimenuitem>Go to
+   Previous Text Area</>
+   (shortcut: <keycombo><keycap>Alt</><keycap>Page Up</></keycombo>)
+   shifts keyboard focus to the previous text area.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Splitting</>&gt;<guimenuitem>Go to
+   Next Text Area</>
+   (shortcut: <keycombo><keycap>Alt</><keycap>Page Down</></keycombo>)
+   shifts keyboard focus to the next text area.
+  </para>
+  <para>
+   Clicking the text area with the right mouse button displays a popup menu.
+   Both this menu and the tool bar at the top of the view offer quick
+   mouse-based access to frequently-used commands.
+   The contents of the tool bar and right-click menu can be
+   changed in the <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+   dialog box.
+  </para>
+  <para>
+   The file system browser, HyperSearch results window, and many plugin
+   windows can optionally be docked into the view. This can be
+   configured in the <guibutton>Docking</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+  </para>
+  <para>
+   When windows are docked into the view,
+   the commands in the <guimenu>View</>&gt;<guisubmenu>Docking</> menu
+   (shortcuts: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycap>1</>, <keycap>2</>, <keycap>3</>, <keycap>4</>) can be used
+   to collapse and expand the top, bottom, left and right docking areas,
+   respectively. Double-clicking on the borders of each area has the
+   same effect.
+  </para>
+  <!-- <figure><title>A view split into two panes</>
+   <graphic scale=50 fileref=window-editor-split></>
+  </figure> -->
+ </sect1>
+ <sect1 id=textarea><title>The Text Area</>
+  <indexterm><primary>text area</></indexterm>
+  <indexterm><primary>end of line markers</></indexterm>
+  <indexterm><primary>whitespace</></indexterm>
+  <indexterm><primary>Utilities menu</></indexterm>
+  <indexterm><primary>Global Options command</></indexterm>
+  <indexterm><primary>wrap guide</></indexterm>
+  <indexterm><primary>word wrap</></indexterm>
+  <indexterm><primary>wrap guide</></indexterm>
+  <indexterm><primary>tool bar</></indexterm>
+  <indexterm><primary>context menu</></indexterm>
+  <indexterm><primary>caret location</></indexterm>
+  <indexterm><primary>line numbers</></indexterm>
+  <indexterm><primary>gutter</></indexterm>
+  <indexterm><primary>View menu</></indexterm>
+  <indexterm><primary>Gutter Expanded command</></indexterm>
+  <indexterm><primary>Save Gutter Size command</></indexterm>
+  <indexterm><primary>markers</></indexterm>
+  <indexterm><primary>position registers</></indexterm>
+  <indexterm><primary>Windows</></indexterm>
+  <indexterm><primary>MacOS</></indexterm>
+  <para>
+   Text editing takes place in the text area. It behaves in a similar
+   manner to many Windows and MacOS editors; the few
+   unique features will be described in this section.
+  </para>
+  <para>
+   The text area will automatically scroll up or down if the caret is moved
+   closer than three lines to the first or last visible line. This
+   feature is called <firstterm>electric scrolling</> and can be disabled
+   in the <guibutton>Text Area</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+   dialog box.
+  </para>
+  <para>
+   To aid in locating the caret, the current line is drawn with a
+   different background color. To make it clear which lines end with
+   white space, end of line markers are drawn at the end of each line.
+   Both these features can be disabled in the <guibutton>Text Area</>
+   pane of the <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+   dialog box.
+  </para>
+  <para>
+   The column and line number
+   containing the caret, as well as the total number of lines in the buffer,
+   is shown in the bottom-left corner of the text area.
+   In addition, the text area can optionally show line numbers next to
+   displayed lines in the so-called <firstterm>gutter</> area. To show the
+   gutter, either
+   double-click on the thin vertical strip to the left of the text area, or
+   invoke
+   <guimenu>View</>&gt;<guimenuitem>Gutter Expanded</> (shortcut:
+   <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycombo><keycap>Control</><keycap>T</></keycombo>). In addition to line
+   numbers, the gutter also indicates which lines have markers or position
+   registers pointing to them.
+   The gutter's width can be changed by dragging the mouse. The
+   <guimenu>View</>&gt;<guimenuitem>Save Gutter Size</> command makes
+   the gutter's current size the default for future sessions.
+  </para>
+  <!-- <figure><title>The editor window</title>
+   <graphic scale=50 fileref=window-editor></>
+  </figure> -->
+ </sect1>
+ <sect1 id=repeat><title>Command Repetition</>
+  <para>
+   To repeat a command any number of times, invoke
+   <guimenu>Utilities</>&gt;<guimenuitem>Repeat Next Command</>
+   (shortcut:
+   <keycombo><keycap>Control</><keycap>Enter</></keycombo>) and enter the
+   desired repeat count, followed by the command to repeat (either a keystroke
+   or menu item selection). For example,
+   <quote><keycombo><keycap>Control</><keycap>Enter</></keycombo>
+   <keycap>1</> <keycap>4</>
+   <keycombo><keycap>Control</><keycap>D</></keycombo></quote> will delete
+   14 lines, and <quote><keycombo><keycap>Control</><keycap>Enter</></keycombo>
+   <keycap>8</>
+   <keycap>#</></quote>
+   will insert <quote>########</> in the buffer.
+  </para>
+ </sect1>
+</chapter>
