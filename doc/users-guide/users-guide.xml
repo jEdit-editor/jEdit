@@ -20,14 +20,17 @@
 <!ENTITY history SYSTEM "history.xml">
 <!ENTITY globs SYSTEM "globs.xml">
 <!ENTITY regexps SYSTEM "regexps.xml">
+<!ENTITY macro-index SYSTEM "macro-index.xml">
 
 <!ENTITY writing-modes SYSTEM "writing-modes.xml">
+<!ENTITY mode-tips SYSTEM "mode-tips.xml">
+<!ENTITY installing-modes SYSTEM "installing-modes.xml">
+
 <!ENTITY macro-basics SYSTEM "macro-basics.xml">
 <!ENTITY simple-macros SYSTEM "simple-macros.xml">
 <!ENTITY dialog-macro SYSTEM "dialog-macro.xml">
 <!ENTITY macro-tips SYSTEM "macro-tips.xml">
-<!ENTITY api-guide SYSTEM "api-guide.xml">
-<!ENTITY macro-index SYSTEM "macro-index.xml"> ]>
+<!ENTITY api-guide SYSTEM "api-guide.xml"> ]>
 
 <book>
 
@@ -53,7 +56,7 @@
  </legalnotice>
 </bookinfo>
 
-<part id="using-jedit"><title>Using jEdit</title>
+<part id="using-jedit-part"><title>Using jEdit</title>
  &basics;
  &files;
  &text-edit;
@@ -66,16 +69,28 @@
  &history;
  &globs;
  &regexps;
+ &macro-index;
 </part>
 
-<part id="macros"><title>Extending jEdit</title>
+<part id="writing-modes-part"><title>Writing Edit Modes</title>
  &writing-modes;
+ &mode-tips;
+ &installing-modes;
+</part>
+
+<part id="writing-macros-part"><title>Writing Macros</title>
  &macro-basics;
  &simple-macros;
  &dialog-macro;
  &macro-tips;
+</part>
+
+<part id="writing-plugins-part"><title>Writing Plugins</title>
+
+</part>
+
+<part id="api-guide-part"><title>jEdit API Guide</title>
  &api-guide;
- &macro-index;
 </part>
 
 </book>

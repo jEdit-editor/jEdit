@@ -761,7 +761,7 @@
    </para></listitem></itemizedlist>
    <para>
     BeanShell syntax and features are covered in great detail in
-    <xref linkend="macros" />, but here are some examples:
+    <xref linkend="writing-macros-part" />, but here are some examples:
    </para>
    <informalexample>
     <para>

@@ -1,5 +1,7 @@
 TO DO
 
+- cvs: add installing-modes.xml, mode-tips.xml
+
 - FTP plugin: soft links???
 - FTP plugin: make a 3.2 version with better error messages?
 - update console macros and tell john
@@ -7,6 +9,7 @@ TO DO
 
 + before 3.2pre5:
 
+- replace some links to writing-macros-part with using-macros
 - get web start to work
 - don't invoke updateUI unnecessarily
 - fix '... is not a function name' when running openjade
@@ -15,6 +18,7 @@ TO DO
 - reload: preserve caret position
 - jEditLauncher
 - documentation
+  - using macros docs
   - mention registers in API guide
   - JOptionPane not a good idea for getting user input?
   - formatting problems in user's guide in table cells
