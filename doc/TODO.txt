@@ -1,13 +1,10 @@
 JEDIT TO DO
 
-CVS: remove GlobalOptions.java, PluginOptions.java, plugin_options
+CVS: remove jeditdocs directory
 
 ------- Stuff for 2.3pre2 -------
 
 - Finish documentation updates
-- Finish new help menu
-- Remove 'jeditdocs:' protocol
-- Remove 'Contents' button from help viewer
 - 'File->Current Directory' menu lists files in $d
 - CaretUndo acts weird on 'redo' sometimes
 - Need to redo window-editor-* snapshots in icewm

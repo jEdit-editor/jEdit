@@ -38,10 +38,12 @@ public class help extends EditAction
 		if(actionCommand == null)
 			actionCommand = "jeditdocs/index.html";
 
+		if(!actionCommand.startsWith("jeditresource:"))
+			actionCommand = "file:" + jEditHome + '/' + actionCommand;
+
 		try
 		{
-			HelpViewer.gotoURL(new URL("file:" + jEditHome + '/'
-				+ actionCommand));
+			HelpViewer.gotoURL(new URL(actionCommand));
 		}
 		catch(MalformedURLException mf)
 		{

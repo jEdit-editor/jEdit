@@ -16,6 +16,7 @@ JEDIT VERSION HISTORY
 - Faster literal search, using the Boyer-Moore algorithm (Mike Dillon)
 - Menu bar rearranged a little bit
 - Improved 'global options' dialog box (Mike Dillon)
+- Enhanced help menu
 
 + Bug Fixes
 

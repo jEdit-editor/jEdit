@@ -1,6 +1,6 @@
 /*
  * View.java - jEdit view
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,270 +46,6 @@ import org.gjt.sp.util.Log;
 public class View extends JFrame implements EBComponent
 {
 	/**
-	 * Reloads various settings from the properties.
-	 */
-	public void propertiesChanged()
-	{
-		loadToolBar();
-
-		showFullPath = "on".equals(jEdit.getProperty("view.showFullPath"));
-
-		String family = jEdit.getProperty("view.font");
-		int size;
-		try
-		{
-			size = Integer.parseInt(jEdit.getProperty(
-				"view.fontsize"));
-		}
-		catch(NumberFormatException nf)
-		{
-			size = 14;
-		}
-		int style;
-		try
-		{
-			style = Integer.parseInt(jEdit.getProperty(
-				"view.fontstyle"));
-		}
-		catch(NumberFormatException nf)
-		{
-			style = Font.PLAIN;
-		}
-		Font font = new Font(family,style,size);
-
-		TextAreaPainter painter = textArea.getPainter();
-
-		painter.setFont(font);
-		painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
-			"view.lineHighlight")));
-		painter.setLineHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.lineHighlightColor")));
-		painter.setBracketHighlightEnabled("on".equals(jEdit.getProperty(
-			"view.bracketHighlight")));
-		painter.setBracketHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.bracketHighlightColor")));
-		painter.setEOLMarkersPainted("on".equals(jEdit.getProperty(
-			"view.eolMarkers")));
-		painter.setInvalidLinesPainted("on".equals(jEdit.getProperty(
-			"view.paintInvalid")));
-		painter.setEOLMarkerColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.eolMarkerColor")));
-		painter.setCaretColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.caretColor")));
-		painter.setSelectionColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.selectionColor")));
-		painter.setBackground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.bgColor")));
-		painter.setForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.fgColor")));
-		painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
-			"view.blockCaret")));
-
-		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
-			"view.caretBlink")));
-
-		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
-			new Boolean("yes".equals(jEdit.getProperty("view.homeEnd"))));
-		try
-		{
-			textArea.setElectricScroll(Integer.parseInt(jEdit
-				.getProperty("view.electricBorders")));
-		}
-		catch(NumberFormatException nf)
-		{
-			textArea.setElectricScroll(0);
-		}
-
-		loadStyles();
-
-		updateOpenRecentMenu();
-	}
-	
-	/**
-	 * Recreates the buffers menu.
-	 */
-	public void updateBuffersMenu()
-	{
-		if(jEdit.getBufferCount() == 0)
-		{
-			// if this becomes zero, it is guaranteed that
-			// a new untitled buffer will open again. So
-			// we just ignore this and update the menu
-			// when the untitled buffer comes in
-			return;
-		}
-
-		// Because the buffers menu contains normal items as
-		// well as dynamically-generated stuff, we are careful
-		// to only remove the dynamic crap here...
-		for(int i = buffers.getMenuComponentCount() - 1; i >= 0; i--)
-		{
-			if(buffers.getMenuComponent(i) instanceof JSeparator)
-				break;
-			else
-				buffers.remove(i);
-		}
-
-		Buffer[] bufferArray = jEdit.getBuffers();
-		ButtonGroup grp = new ButtonGroup();
-		for(int i = 0; i < bufferArray.length; i++)
-		{
-			Buffer b = bufferArray[i];
-			String name = b.getPath();
-			Object[] args = { name,
-				new Integer(b.isReadOnly() ? 1: 0),
-				new Integer(b.isDirty() ? 1 : 0),
-				new Integer(b.isNewFile() ? 1 : 0) };
-			JRadioButtonMenuItem menuItem =
-				new JRadioButtonMenuItem(jEdit.getProperty(
-					"view.title",args));
-			menuItem.addActionListener(jEdit.getAction("select-buffer"));
-			grp.add(menuItem);
-			menuItem.setActionCommand(name);
-			if(buffer == b)
-				menuItem.getModel().setSelected(true);
-			buffers.add(menuItem);
-		}
-	}
-	
-	/**
-	 * Recreates the open recent menu.
-	 */
-	public void updateOpenRecentMenu()
-	{
-		if(openRecent.getMenuComponentCount() != 0)
-			openRecent.removeAll();
-		EditAction action = jEdit.getAction("open-path");
-		String[] recentArray = jEdit.getRecent();
-		if(recentArray.length == 0)
-		{
-			openRecent.add(GUIUtilities.loadMenuItem(this,"no-recent"));
-			return;
-		}
-		for(int i = 0; i < recentArray.length; i++)
-		{
-			String path = recentArray[i];
-			EnhancedMenuItem menuItem = new EnhancedMenuItem(path,
-				null,action,path);
-			openRecent.add(menuItem);
-		}
-	}
-	
-	/**
-	 * Recreates the goto marker and clear marker menus.
-	 */
-	public void updateMarkerMenus()
-	{
-		if(clearMarker.getMenuComponentCount() != 0)
-			clearMarker.removeAll();
-		if(gotoMarker.getMenuComponentCount() != 0)
-			gotoMarker.removeAll();
-		EditAction clearMarkerAction = jEdit.getAction("clear-marker");
-		EditAction gotoMarkerAction = jEdit.getAction("goto-marker");
-		Enumeration enum = buffer.getMarkers();
-		if(!enum.hasMoreElements())
-		{
-			clearMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
-			gotoMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
-			return;
-		}
-		while(enum.hasMoreElements())
-		{
-			String name = ((Marker)enum.nextElement())
-				.getName();
-			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
-				null,clearMarkerAction,name);
-			clearMarker.add(menuItem);
-			menuItem = new EnhancedMenuItem(name,null,
-				gotoMarkerAction,name);
-			gotoMarker.add(menuItem);
-		}
-	}
-
-	/**
-	 * Recreates the macros menu.
-	 */
-	public void updateMacrosMenu()
-	{
-		// Because the macros menu contains normal items as
-		// well as dynamically-generated stuff, we are careful
-		// to only remove the dynamic crap here...
-		for(int i = macros.getMenuComponentCount() - 1; i >= 0; i--)
-		{
-			if(macros.getMenuComponent(i) instanceof JSeparator)
-				break;
-			else
-				macros.remove(i);
-		}
-
-		int count = macros.getMenuComponentCount();
-
-		Vector macroVector = Macros.getMacros();
-		createMacrosMenu(macros,macroVector,0);
-
-		if(count == macros.getMenuComponentCount())
-			macros.add(GUIUtilities.loadMenuItem(this,"no-macros"));
-	}
-
-	/**
-	 * Recreates the plugins menu.
-	 */
-	public void updatePluginsMenu()
-	{
-		if(plugins.getMenuComponentCount() != 0)
-			plugins.removeAll();
-
-		// Query plugins for menu items
-		Vector pluginMenus = new Vector();
-		Vector pluginMenuItems = new Vector();
-
-		EditPlugin[] pluginArray = jEdit.getPlugins();
-		for(int i = 0; i < pluginArray.length; i++)
-		{
-			try
-			{
-				pluginArray[i].createMenuItems(this,pluginMenus,
-					pluginMenuItems);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,this,"Error creating menu items"
-					+ " for plugin");
-				Log.log(Log.ERROR,this,t);
-			}
-		}
-
-		if(pluginMenus.isEmpty() && pluginMenuItems.isEmpty())
-		{
-			plugins.add(GUIUtilities.loadMenuItem(this,"no-plugins"));
-			return;
-		}
-
-		// Sort them
-		MenuItemCompare comp = new MenuItemCompare();
-		MiscUtilities.quicksort(pluginMenus,comp);
-		MiscUtilities.quicksort(pluginMenuItems,comp);
-
-		for(int i = 0; i < pluginMenus.size(); i++)
-			plugins.add((JMenu)pluginMenus.elementAt(i));
-
-		if(!pluginMenus.isEmpty() && !pluginMenuItems.isEmpty())
-			plugins.addSeparator();
-
-		for(int i = 0; i < pluginMenuItems.size(); i++)
-			plugins.add((JMenuItem)pluginMenuItems.elementAt(i));
-	}
-
-	private static class MenuItemCompare implements MiscUtilities.Compare
-	{
-		public int compare(Object obj1, Object obj2)
-		{
-			return ((JMenuItem)obj1).getText().compareTo(
-				((JMenuItem)obj2).getText());
-		}
-	}
-
-	/**
 	 * Displays the specified string in the status area of this view.
 	 * @param str The string to display
 	 */
@@ -324,22 +60,6 @@ public class View extends JFrame implements EBComponent
 	public void popStatus()
 	{
 		status.popStatus();
-	}
-
-
-	/**
-	 * Updates the title bar and read only status of the text
-	 * area.
-	 */
-	public void updateTitle()
-	{
-		Object[] args = { ((showFullPath && !buffer.isNewFile())
-			? buffer.getPath() : buffer.getName()),
-			new Integer(buffer.isReadOnly() ? 1 : 0),
-			new Integer(buffer.isDirty() ? 1: 0),
-			new Integer(buffer.isNewFile() ? 1: 0)};
-		setTitle(jEdit.getProperty("view.title",args));
-		textArea.setEditable(!buffer.isReadOnly());
 	}
 
 	/**
@@ -579,6 +299,8 @@ public class View extends JFrame implements EBComponent
 			return macros;
 		else if(name.equals("plugins"))
 			return plugins;
+		else if(name.equals("help-menu"))
+			return help;
 		else
 			return null;
 	}
@@ -598,6 +320,8 @@ public class View extends JFrame implements EBComponent
 		gotoMarker = GUIUtilities.loadMenu(this,"goto-marker");
 		macros = GUIUtilities.loadMenu(this,"macros");
 		updateMacrosMenu();
+		help = GUIUtilities.loadMenu(this,"help-menu");
+		updateHelpMenu();
 		plugins = GUIUtilities.loadMenu(this,"plugins");
 		updatePluginsMenu();
 
@@ -661,6 +385,7 @@ public class View extends JFrame implements EBComponent
 	private JMenu gotoMarker;
 	private JMenu macros;
 	private JMenu plugins;
+	private JMenu help;
 
 	private Box toolBars;
 	private JToolBar toolBar;
@@ -678,6 +403,121 @@ public class View extends JFrame implements EBComponent
 	private int waitCount;
 
 	private boolean showFullPath;
+
+	/**
+	 * Reloads various settings from the properties.
+	 */
+	private void propertiesChanged()
+	{
+		loadToolBar();
+
+		showFullPath = "on".equals(jEdit.getProperty("view.showFullPath"));
+
+		String family = jEdit.getProperty("view.font");
+		int size;
+		try
+		{
+			size = Integer.parseInt(jEdit.getProperty(
+				"view.fontsize"));
+		}
+		catch(NumberFormatException nf)
+		{
+			size = 14;
+		}
+		int style;
+		try
+		{
+			style = Integer.parseInt(jEdit.getProperty(
+				"view.fontstyle"));
+		}
+		catch(NumberFormatException nf)
+		{
+			style = Font.PLAIN;
+		}
+		Font font = new Font(family,style,size);
+
+		TextAreaPainter painter = textArea.getPainter();
+
+		painter.setFont(font);
+		painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
+			"view.lineHighlight")));
+		painter.setLineHighlightColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.lineHighlightColor")));
+		painter.setBracketHighlightEnabled("on".equals(jEdit.getProperty(
+			"view.bracketHighlight")));
+		painter.setBracketHighlightColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.bracketHighlightColor")));
+		painter.setEOLMarkersPainted("on".equals(jEdit.getProperty(
+			"view.eolMarkers")));
+		painter.setInvalidLinesPainted("on".equals(jEdit.getProperty(
+			"view.paintInvalid")));
+		painter.setEOLMarkerColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.eolMarkerColor")));
+		painter.setCaretColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.caretColor")));
+		painter.setSelectionColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.selectionColor")));
+		painter.setBackground(GUIUtilities.parseColor(
+			jEdit.getProperty("view.bgColor")));
+		painter.setForeground(GUIUtilities.parseColor(
+			jEdit.getProperty("view.fgColor")));
+		painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
+			"view.blockCaret")));
+
+		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
+			"view.caretBlink")));
+
+		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
+			new Boolean("yes".equals(jEdit.getProperty("view.homeEnd"))));
+		try
+		{
+			textArea.setElectricScroll(Integer.parseInt(jEdit
+				.getProperty("view.electricBorders")));
+		}
+		catch(NumberFormatException nf)
+		{
+			textArea.setElectricScroll(0);
+		}
+
+		loadStyles();
+
+		updateOpenRecentMenu();
+	}
+
+	private void loadStyles()
+	{
+		try
+		{
+			SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
+
+			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.comment1"));
+			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.comment2"));
+			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.keyword1"));
+			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.keyword2"));
+			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.keyword3"));
+			styles[Token.LABEL] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.label"));
+			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.literal1"));
+			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.literal2"));
+			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.operator"));
+			styles[Token.INVALID] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.invalid"));
+
+			textArea.getPainter().setStyles(styles);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+		}
+	}
 
 	private void loadPropertiesFromView(View view)
 	{
@@ -743,6 +583,147 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
+	/**
+	 * Updates the title bar and read only status of the text
+	 * area.
+	 */
+	public void updateTitle()
+	{
+		Object[] args = { ((showFullPath && !buffer.isNewFile())
+			? buffer.getPath() : buffer.getName()),
+			new Integer(buffer.isReadOnly() ? 1 : 0),
+			new Integer(buffer.isDirty() ? 1: 0),
+			new Integer(buffer.isNewFile() ? 1: 0)};
+		setTitle(jEdit.getProperty("view.title",args));
+		textArea.setEditable(!buffer.isReadOnly());
+	}
+
+	/**
+	 * Recreates the buffers menu.
+	 */
+	private void updateBuffersMenu()
+	{
+		if(jEdit.getBufferCount() == 0)
+		{
+			// if this becomes zero, it is guaranteed that
+			// a new untitled buffer will open again. So
+			// we just ignore this and update the menu
+			// when the untitled buffer comes in
+			return;
+		}
+
+		// Because the buffers menu contains normal items as
+		// well as dynamically-generated stuff, we are careful
+		// to only remove the dynamic crap here...
+		for(int i = buffers.getMenuComponentCount() - 1; i >= 0; i--)
+		{
+			if(buffers.getMenuComponent(i) instanceof JSeparator)
+				break;
+			else
+				buffers.remove(i);
+		}
+
+		Buffer[] bufferArray = jEdit.getBuffers();
+		ButtonGroup grp = new ButtonGroup();
+		for(int i = 0; i < bufferArray.length; i++)
+		{
+			Buffer b = bufferArray[i];
+			String name = b.getPath();
+			Object[] args = { name,
+				new Integer(b.isReadOnly() ? 1: 0),
+				new Integer(b.isDirty() ? 1 : 0),
+				new Integer(b.isNewFile() ? 1 : 0) };
+			JRadioButtonMenuItem menuItem =
+				new JRadioButtonMenuItem(jEdit.getProperty(
+					"view.title",args));
+			menuItem.addActionListener(jEdit.getAction("select-buffer"));
+			grp.add(menuItem);
+			menuItem.setActionCommand(name);
+			if(buffer == b)
+				menuItem.getModel().setSelected(true);
+			buffers.add(menuItem);
+		}
+	}
+	
+	/**
+	 * Recreates the open recent menu.
+	 */
+	private void updateOpenRecentMenu()
+	{
+		if(openRecent.getMenuComponentCount() != 0)
+			openRecent.removeAll();
+		EditAction action = jEdit.getAction("open-path");
+		String[] recentArray = jEdit.getRecent();
+		if(recentArray.length == 0)
+		{
+			openRecent.add(GUIUtilities.loadMenuItem(this,"no-recent"));
+			return;
+		}
+		for(int i = 0; i < recentArray.length; i++)
+		{
+			String path = recentArray[i];
+			EnhancedMenuItem menuItem = new EnhancedMenuItem(path,
+				null,action,path);
+			openRecent.add(menuItem);
+		}
+	}
+	
+	/**
+	 * Recreates the goto marker and clear marker menus.
+	 */
+	private void updateMarkerMenus()
+	{
+		if(clearMarker.getMenuComponentCount() != 0)
+			clearMarker.removeAll();
+		if(gotoMarker.getMenuComponentCount() != 0)
+			gotoMarker.removeAll();
+		EditAction clearMarkerAction = jEdit.getAction("clear-marker");
+		EditAction gotoMarkerAction = jEdit.getAction("goto-marker");
+		Enumeration enum = buffer.getMarkers();
+		if(!enum.hasMoreElements())
+		{
+			clearMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
+			gotoMarker.add(GUIUtilities.loadMenuItem(this,"no-markers"));
+			return;
+		}
+		while(enum.hasMoreElements())
+		{
+			String name = ((Marker)enum.nextElement())
+				.getName();
+			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
+				null,clearMarkerAction,name);
+			clearMarker.add(menuItem);
+			menuItem = new EnhancedMenuItem(name,null,
+				gotoMarkerAction,name);
+			gotoMarker.add(menuItem);
+		}
+	}
+
+	/**
+	 * Recreates the macros menu.
+	 */
+	private void updateMacrosMenu()
+	{
+		// Because the macros menu contains normal items as
+		// well as dynamically-generated stuff, we are careful
+		// to only remove the dynamic crap here...
+		for(int i = macros.getMenuComponentCount() - 1; i >= 0; i--)
+		{
+			if(macros.getMenuComponent(i) instanceof JSeparator)
+				break;
+			else
+				macros.remove(i);
+		}
+
+		int count = macros.getMenuComponentCount();
+
+		Vector macroVector = Macros.getMacros();
+		createMacrosMenu(macros,macroVector,0);
+
+		if(count == macros.getMenuComponentCount())
+			macros.add(GUIUtilities.loadMenuItem(this,"no-macros"));
+	}
+
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
 		EditAction action = jEdit.getAction("play-macro");
@@ -776,38 +757,87 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	private void loadStyles()
+	/**
+	 * Recreates the plugins menu.
+	 */
+	private void updatePluginsMenu()
 	{
-		try
+		if(plugins.getMenuComponentCount() != 0)
+			plugins.removeAll();
+
+		// Query plugins for menu items
+		Vector pluginMenus = new Vector();
+		Vector pluginMenuItems = new Vector();
+
+		EditPlugin[] pluginArray = jEdit.getPlugins();
+		for(int i = 0; i < pluginArray.length; i++)
 		{
-			SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
-
-			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment1"));
-			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment2"));
-			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword1"));
-			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword2"));
-			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword3"));
-			styles[Token.LABEL] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.label"));
-			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal1"));
-			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal2"));
-			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.operator"));
-			styles[Token.INVALID] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.invalid"));
-
-			textArea.getPainter().setStyles(styles);
+			try
+			{
+				pluginArray[i].createMenuItems(this,pluginMenus,
+					pluginMenuItems);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Error creating menu items"
+					+ " for plugin");
+				Log.log(Log.ERROR,this,t);
+			}
 		}
-		catch(Exception e)
+
+		if(pluginMenus.isEmpty() && pluginMenuItems.isEmpty())
 		{
-			Log.log(Log.ERROR,this,e);
+			plugins.add(GUIUtilities.loadMenuItem(this,"no-plugins"));
+			return;
+		}
+
+		// Sort them
+		MenuItemCompare comp = new MenuItemCompare();
+		MiscUtilities.quicksort(pluginMenus,comp);
+		MiscUtilities.quicksort(pluginMenuItems,comp);
+
+		for(int i = 0; i < pluginMenus.size(); i++)
+			plugins.add((JMenu)pluginMenus.elementAt(i));
+
+		if(!pluginMenus.isEmpty() && !pluginMenuItems.isEmpty())
+			plugins.addSeparator();
+
+		for(int i = 0; i < pluginMenuItems.size(); i++)
+			plugins.add((JMenuItem)pluginMenuItems.elementAt(i));
+	}
+
+	private void updateHelpMenu()
+	{
+		EditAction action = jEdit.getAction("help");
+
+		EditPlugin[] plugins = jEdit.getPlugins();
+		for(int i = 0; i < plugins.length; i++)
+		{
+			EditPlugin plugin = plugins[i];
+			String name = plugin.getClass().getName();
+
+			String label = jEdit.getProperty("plugin." + name + ".name");
+			String version = jEdit.getProperty("plugin." + name + ".version");
+			String docs = jEdit.getProperty("plugin." + name + ".docs");
+			if(docs != null)
+			{
+				java.net.URL docsURL = plugin.getClass().getResource(docs);
+				if(label != null && version != null && docsURL != null)
+				{
+					help.add(new EnhancedMenuItem(label + " ("
+						+ version + ")",null,action,
+						docsURL.toString()));
+				}
+			}
+		}
+	}
+
+	private static class MenuItemCompare implements MiscUtilities.Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			return ((JMenuItem)obj1).getText().compareTo(
+				((JMenuItem)obj2).getText());
 		}
 	}
 
@@ -952,6 +982,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.121  2000/01/15 04:15:51  sp
+ * Help menu updates, misc. GUI updates
+ *
  * Revision 1.120  2000/01/14 04:23:50  sp
  * 2.3pre2 stuff
  *
@@ -981,51 +1014,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.111  1999/11/28 00:33:06  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
- *
- * Revision 1.110  1999/11/26 07:37:11  sp
- * Escape/enter handling code moved to common superclass, bug fixes
- *
- * Revision 1.109  1999/11/26 01:18:49  sp
- * Optimizations, splash screen updates, misc stuff
- *
- * Revision 1.108  1999/11/21 03:40:18  sp
- * Parts of EditBus not used by core moved to EditBus.jar
- *
- * Revision 1.107  1999/11/21 01:20:30  sp
- * Bug fixes, EditBus updates, fixed some warnings generated by jikes +P
- *
- * Revision 1.106  1999/11/19 08:54:51  sp
- * EditBus integrated into the core, event system gone, bug fixes
- *
- * Revision 1.105  1999/11/12 09:06:01  sp
- * HTML bug fix
- *
- * Revision 1.104  1999/11/10 10:43:01  sp
- * Macros can now have shortcuts, various miscallaneous updates
- *
- * Revision 1.103  1999/11/09 10:14:34  sp
- * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
- * word commands, check box menu item support
- *
- * Revision 1.102  1999/11/07 06:51:43  sp
- * Check box menu items supported
- *
- * Revision 1.101  1999/11/06 02:06:50  sp
- * Logging updates, bug fixing, icons, various other stuff
- *
- * Revision 1.100  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.99  1999/10/28 09:07:21  sp
- * Directory list search
- *
- * Revision 1.98  1999/10/24 06:04:00  sp
- * QuickSearch in tool bar, auto indent updates, macro recorder updates
- *
- * Revision 1.97  1999/10/24 02:06:41  sp
- * Miscallaneous pre1 stuff
- *
- * Revision 1.96  1999/10/23 03:48:22  sp
- * Mode system overhaul, close all dialog box, misc other stuff
  *
  */

@@ -1,6 +1,6 @@
 /*
  * HelpViewer.java - HTML Help viewer
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public class HelpViewer extends JFrame
 	public HelpViewer(URL url)
 	{
 		super(jEdit.getProperty("helpviewer.title"));
-		
+
 		setIconImage(GUIUtilities.getEditorIcon());
 
 		history = new URL[25];
@@ -96,12 +96,8 @@ public class HelpViewer extends JFrame
 		forward.addActionListener(actionListener);
 		panel.add(forward);
 
-		home = new JButton(jEdit.getProperty("helpviewer.home"));
-		home.setIcon(new ImageIcon(getClass().getResource(
-			"/org/gjt/sp/jedit/toolbar/Help.gif")));
-		home.addActionListener(actionListener);
-		panel.add(home);
-		
+		back.setPreferredSize(forward.getPreferredSize());
+
 		getContentPane().add(BorderLayout.SOUTH,panel);
 
 		gotoURL(url,true);
@@ -160,7 +156,6 @@ public class HelpViewer extends JFrame
 
 	private JButton back;
 	private JButton forward;
-	private JButton home;
 	private JEditorPane viewer;
 	private JTextField urlField;
 	private URL[] history;
@@ -195,17 +190,6 @@ public class HelpViewer extends JFrame
 						historyPos++;
 						gotoURL(url,false);
 					}
-				}
-			}
-			else if(source == home)
-			{
-				try
-				{
-					gotoURL(new URL("jeditdocs:"),true);
-				}
-				catch(MalformedURLException mu)
-				{
-					Log.log(Log.ERROR,this,mu);
 				}
 			}
 		}

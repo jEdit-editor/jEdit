@@ -49,7 +49,7 @@ view.context=undo redo - cut copy paste paste-previous - scroll-line - \
 ###
 ### MENUBAR
 ###
-view.mbar=buffers file edit search tools macros plugins help-menu
+view.mbar=buffers file edit search utils macros plugins help-menu
 
 ### Buffers menu
 buffers=prev-buffer \
@@ -280,8 +280,8 @@ clear-marker.label=Clear Marker
 goto-marker.label=Go to Marker
 no-markers.label=No Markers Defined
 
-### Tools menu
-tools=load-session \
+### Utilities menu
+utils=load-session \
       save-session \
       - \
       log-viewer \
@@ -292,7 +292,7 @@ tools=load-session \
       - \
       buffer-options \
       global-options
-tools.label=$Tools
+utils.label=$Utilities
 load-session.label=$Load Session...
 save-session.label=$Save Session...
 log-viewer.label=Show $Activity Log...
@@ -741,7 +741,6 @@ helpviewer.height=400
 helpviewer.url=URL:\ 
 helpviewer.back=Back
 helpviewer.forward=Forward
-helpviewer.home=Contents
 
 # Activity log
 log-viewer.title=Activity Log
