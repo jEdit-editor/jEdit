@@ -23,6 +23,7 @@
 			deprecation="on"
 			includeJavaRuntime="yes"
 			debug="yes"
+			encoding="UTF8" 
 		>
 			<include name="bsh/**/*.java"/>
 			<include name="com/microstar/xml/*.java"/>
@@ -42,6 +43,7 @@
 			deprecation="on"
 			includeJavaRuntime="yes"
 			debug="yes"
+			encoding="UTF8" 
 		>
 			<include name="org/gjt/sp/jedit/Java14.java"/>
 			<include name="org/gjt/sp/jedit/print/BufferPrinter1_4.java"/>
