@@ -102,8 +102,6 @@ public class CommandLine extends JPanel
 		{
 			view.showStatus(null);
 			textField.setModel("cli");
-			// must return focus to text area after a repeat
-			view.getEditPane().focusOnTextArea();
 		}
 		else if(state == TOPLEVEL_STATE)
 		{
@@ -331,17 +329,16 @@ public class CommandLine extends JPanel
 		else
 			action = null;
 
+		setState(NULL_STATE);
+		view.getEditPane().focusOnTextArea();
+
 		if(action == null)
 		{
 			String[] args = { actionName };
 			GUIUtilities.error(view,"unknown-action",args);
-			view.getEditPane().focusOnTextArea();
 		}
 		else
-		{
-			setState(NULL_STATE);
 			view.getInputHandler().executeAction(action,this,null);
-		}
 	}
 
 	private void doQuickSearch()
@@ -356,7 +353,7 @@ public class CommandLine extends JPanel
 			SearchAndReplace.find(view,view);
 		}
 
-		setState(NULL_STATE);
+		view.getEditPane().focusOnTextArea();
 	}
 
 	private void doIncrementalSearch(int start)
@@ -441,6 +438,7 @@ public class CommandLine extends JPanel
 					else
 					{
 						setState(NULL_STATE);
+						view.getEditPane().focusOnTextArea();
 						view.getInputHandler().keyTyped(evt);
 					}
 				}
@@ -471,6 +469,7 @@ public class CommandLine extends JPanel
 				{
 					view.getInputHandler().setRepeatCount(1);
 					setState(NULL_STATE);
+					view.getEditPane().focusOnTextArea();
 					evt.consume();
 					break;
 				}
@@ -539,6 +538,7 @@ public class CommandLine extends JPanel
 				else if(state == REPEAT_STATE)
 				{
 					setState(NULL_STATE);
+					view.getEditPane().focusOnTextArea();
 					view.getInputHandler().keyPressed(evt);
 				}
 			}
@@ -622,6 +622,7 @@ public class CommandLine extends JPanel
 			String arg = String.valueOf(ch);
 			EditAction _promptAction = promptAction;
 			setState(NULL_STATE);
+			view.getEditPane().focusOnTextArea();
 
 			view.getInputHandler().executeAction(_promptAction,
 				this,arg);
@@ -634,6 +635,7 @@ public class CommandLine extends JPanel
 
 			textField.addCurrentToHistory();
 			setState(NULL_STATE);
+			view.getEditPane().focusOnTextArea();
 
 			view.getInputHandler().executeAction(_promptAction,
 				this,text);
@@ -734,21 +736,19 @@ public class CommandLine extends JPanel
 		{
 			public void keyTyped(KeyEvent evt)
 			{
+				textField.requestFocus();
 				textField.processKeyEvent(evt);
 			}
 
 			public void keyPressed(KeyEvent evt)
 			{
+				textField.requestFocus();
+
 				if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-				{
 					hideCompletionWindow();
-					textField.requestFocus();
-				}
 				else if(evt.getKeyCode() == KeyEvent.VK_ENTER
 					|| evt.getKeyCode() == KeyEvent.VK_TAB)
-				{
 					executeAction((String)list.getSelectedValue());
-				}
 				else
 					textField.processKeyEvent(evt);
 			}
@@ -767,6 +767,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.9  2000/10/15 04:10:34  sp
  * bug fixes
  *

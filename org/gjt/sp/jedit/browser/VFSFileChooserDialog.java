@@ -122,7 +122,15 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	{
 		if(filenameField != null)
 		{
-			String filename = filenameField.getText();
+			String directory;
+
+			VFS.DirectoryEntry[] files = browser.getSelectedFiles();
+			if(files.length == 1 && files[0].type == VFS.DirectoryEntry.DIRECTORY)
+				directory = files[0].path;
+			else
+				directory = browser.getDirectory();
+
+			filename = filenameField.getText();
 			if(filename.length() == 0)
 			{
 				getToolkit().beep();
@@ -130,12 +138,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			}
 			else
 			{
-				// only do this for the file VFS
-				if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
-				{
-					if(doFileExistsWarning(filename))
-						return;
-				}
+				VFS vfs = VFSManager.getVFSForPath(directory);
+				filename = vfs.constructPath(directory,filename);
+				if(vfs instanceof FileVFS && doFileExistsWarning(filename))
+					return;
 			}
 		}
 		else
@@ -170,14 +176,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(!isOK)
 			return null;
 
-		if(filenameField != null)
-		{
-			String directory = browser.getDirectory();
-			VFS vfs = VFSManager.getVFSForPath(directory);
-			String[] retVal = { vfs.constructPath(directory,
-				filenameField.getText()) };
-			return retVal;
-		}
+		if(filename != null)
+			return new String[] { filename };
 		else
 		{
 			Vector vector = new Vector();
@@ -197,17 +197,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	// private members
 	private VFSBrowser browser;
 	private JTextField filenameField;
+	private String filename;
 	private JButton ok;
 	private JButton cancel;
 	private boolean isOK;
 
 	private boolean doFileExistsWarning(String filename)
 	{
-		String directory = browser.getDirectory();
-		VFS vfs = VFSManager.getVFSForPath(directory);
-		filename = vfs.constructPath(directory,filename);
-
-		if(vfs instanceof FileVFS && new File(filename).exists())
+		if(new File(filename).exists())
 		{
 			String[] args = { MiscUtilities.getFileName(filename) };
 			int result = JOptionPane.showConfirmDialog(
@@ -277,6 +274,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.11  2000/10/15 04:10:34  sp
  * bug fixes
  *

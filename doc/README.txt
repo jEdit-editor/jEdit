@@ -52,14 +52,18 @@ list that is very low traffic, a general discussion list, and a
 development discussion list. To subscribe, unsubscribe or view list
 archives, visit <http://www.sourceforge.net/mail/?group_id=588>.
 
-The preferred way to report bugs and to suggest features is to use
-jEdit's bug tracker; <http://www.sourceforge.net/bugs/?group_id=588>.
-When writing a bug report, please try to be as specific as possible.
-You should specify your jEdit version, Java version, operating system,
-any relevant output from the activity log, and an e-mail address, in
-case we need further information to fix the bug. If you want to
-suggest a feature, it might be a good idea to post to one of the
-mailing lists first.
+The preferred way to report bugs is to use our bug tracker;
+<http://www.sourceforge.net/bugs/?groups_id=588>. When writing a bug
+report, please try to be as specific as possible. You should specify
+your jEdit version, Java version, operating system, any relevant output
+from the activity log, and an e-mail address, in case we need further
+information to fix the bug.
+
+The preferred way to suggest features is to first post a message to the
+jEdit-users or jEdit-devel mailing list. One of the jEdit developers
+will then add the feature request to our task manager if it is deemed
+appropriate. A list of pending tasks may be viewed at
+<http://www.sourceforge.net/pm/?group_id=588>.
 
 Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
@@ -151,12 +155,13 @@ Andre Kaplan - ASP, JavaScript, VBScript
 Artur Biesiadowski - Eiffel
 Clancy Malcolm - Original version of PHP3 mode
 Dante Fabrizio - VHDL
+Dominic Stolerman - ML
 Ian Maclean - Ruby
 Jerry McBride - NetRexx
 Jonathan Revusky - Python
 Juha Lindfors - IDL
-Kristian Ovaska - Pascal
-Matthias Schneider - AWK and COBOL
+Kristian Ovaska - Haskell, Pascal
+Matthias Schneider - AWK, COBOL
 Michael P Jacobson - TCL
 Ralf Engels - PostScript
 Romain Guy - POVRay

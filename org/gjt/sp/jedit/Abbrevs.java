@@ -121,7 +121,7 @@ public class Abbrevs
 				// don't do any indentation at all
 				for(int i = line + 1; i <= line + expand.lineCount; i++)
 				{
-					buffer.indentLine(textArea,i,true,true);
+					buffer.indentLine(textArea,i,true,false);
 				}
 			}
 			catch(BadLocationException bl)
@@ -175,9 +175,7 @@ public class Abbrevs
 			for(int i = 0; i < text.length(); i++)
 			{
 				char ch = text.charAt(i);
-				if(ch == '\\')
-					backslash = true;
-				else if(backslash)
+				if(backslash)
 				{
 					backslash = false;
 
@@ -188,11 +186,11 @@ public class Abbrevs
 						buf.append('\n');
 						lineCount++;
 					}
-					else if(ch == 't')
-						buf.append('\t');
 					else
 						buf.append(ch);
 				}
+				else if(ch == '\\')
+					backslash = true;
 				else
 					buf.append(ch);
 			}
@@ -470,6 +468,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.17  2000/10/12 09:28:26  sp
  * debugging and polish
  *

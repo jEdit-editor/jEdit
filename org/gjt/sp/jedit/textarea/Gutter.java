@@ -488,23 +488,20 @@ public class Gutter extends JComponent implements SwingConstants
 
 	class MouseHandler extends MouseAdapter implements MouseMotionListener
 	{
-		public void mouseClicked(MouseEvent e)
+		public void mousePressed(MouseEvent e)
 		{
 			if(e.getX() >= getWidth() - borderWidth)
 			{
 				e.translatePoint(-getWidth(),0);
-				textArea.mouseHandler.mouseClicked(e);
-				return;
+				textArea.mouseHandler.mousePressed(e);
+				//return;
 			}
-
-			int count = e.getClickCount();
-			if (count == 1)
+			else if(context != null && (e.getModifiers()
+				& InputEvent.BUTTON3_MASK) != 0)
 			{
-				if (context == null || context.isVisible())
-					return;
-
-				if ((e.getModifiers() & InputEvent.BUTTON3_MASK)
-					!= 0)
+				if(context.isVisible())
+					context.setVisible(false);
+				else
 				{
 					//XXX this is a hack to make sure the
 					//XXX actions get the right text area
@@ -514,27 +511,20 @@ public class Gutter extends JComponent implements SwingConstants
 						e.getX(), e.getY());
 				}
 			}
-			else if (count >= 2)
-			{
+			else if(e.getClickCount() == 2)
 				toggleCollapsed();
-			}
-		}
-
-		public void mousePressed(MouseEvent e)
-		{
-			if(e.getX() >= getWidth() - borderWidth)
+			else
 			{
-				e.translatePoint(-getWidth(),0);
-				textArea.mouseHandler.mousePressed(e);
-				//return;
+				dragStart = e.getPoint();
+				startWidth = gutterSize.width;
 			}
-
-			dragStart = e.getPoint();
-			startWidth = gutterSize.width;
 		}
 
 		public void mouseDragged(MouseEvent e)
 		{
+			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
+				return;
+
 			if(collapsed || e.getX() >= getWidth() - borderWidth)
 			{
 				e.translatePoint(-getWidth(),0);
@@ -569,6 +559,9 @@ public class Gutter extends JComponent implements SwingConstants
 
 		public void mouseReleased(MouseEvent e)
 		{
+			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
+				return;
+
 			if(collapsed || e.getX() >= getWidth() - borderWidth)
 			{
 				e.translatePoint(-getWidth(),0);
@@ -583,3 +576,8 @@ public class Gutter extends JComponent implements SwingConstants
 		private int startWidth = 0;
 	}
 }
+
+/*
+ * ChangeLog:
+ * $ Log$
+ */

@@ -186,8 +186,6 @@ public class View extends JFrame implements EBComponent
 				public void run()
 				{
 					editPane.focusOnTextArea();
-					editPane.getTextArea().getGutter()
-						.updateBorder();
 				}
 			});
 		}
@@ -224,8 +222,6 @@ public class View extends JFrame implements EBComponent
 			public void run()
 			{
 				editPane.focusOnTextArea();
-				editPane.getTextArea().getGutter()
-					.updateBorder();
 			}
 		});
 	}
@@ -291,6 +287,18 @@ public class View extends JFrame implements EBComponent
 			vec.copyInto(ep);
 			return ep;
 		}
+	}
+
+	/**
+	 * Updates the borders of all gutters in this view to reflect the
+	 * currently focused text area.
+	 * @since jEdit 2.6final
+	 */
+	public void updateGutterBorders()
+	{
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+			editPanes[i].getTextArea().getGutter().updateBorder();
 	}
 
 	/**
@@ -792,20 +800,6 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Returns true if at least one edit pane is editing this buffer.
-	 */
-	private boolean isOpen(Buffer buffer)
-	{
-		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
-		{
-			if(editPanes[i].getBuffer() == buffer)
-				return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Recreates the recent menu.
 	 */
 	private void updateRecentMenu()
@@ -1014,13 +1008,33 @@ public class View extends JFrame implements EBComponent
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
-			if(isOpen(buffer))
+			if(buffer == getBuffer())
+			{
 				status.updateBufferStatus();
+				status.updateCaretStatus();
+			}
+
+
+			if(!buffer.isDirty())
+			{
+				// have to update title after each save
+				// in case it was a 'save as'
+				EditPane[] editPanes = getEditPanes();
+				for(int i = 0; i < editPanes.length; i++)
+				{
+					if(editPanes[i].getBuffer() == buffer)
+					{
+						updateTitle();
+						break;
+					}
+				}
+			}
+
 			updateBuffersMenu();
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
 		{
-			if(isOpen(buffer))
+			if(buffer == getBuffer())
 				updateMarkerMenus();
 		}
 	}
@@ -1029,7 +1043,7 @@ public class View extends JFrame implements EBComponent
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
-			status.repaint();
+			status.updateCaretStatus();
 		}
 	}
 
@@ -1077,6 +1091,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.202  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.201  2000/10/15 04:10:34  sp
  * bug fixes
  *

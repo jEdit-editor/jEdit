@@ -3,7 +3,7 @@ MAJOR CHANGES IN JEDIT 2.6 SINCE 2.5
 * Streamlined I/O system
 
 The I/O system has been considerably improved in jEdit 2.6. Non-blocking
-I/O is now supported, and you can abort hung I/O requests. The FTP
+I/O is now supported, and hung I/O requests can be aborted. The FTP
 virtual filesystem now caches remote directory lists for improved
 performance, and remembers passwords better.
 

@@ -56,7 +56,7 @@ class EditServer extends Thread
 			Log.log(Log.DEBUG,this,"Authorization key is "
 				+ authKey);
 
-			start();
+			ok = true;
 		}
 		catch(IOException io)
 		{
@@ -66,8 +66,12 @@ class EditServer extends Thread
 			 * errors that occur while starting the server
 			 * as NOTICE, not ERROR */
 			Log.log(Log.NOTICE,this,io);
-			return;
 		}
+	}
+
+	public boolean isOK()
+	{
+		return ok;
 	}
 
 	public void run()
@@ -128,6 +132,7 @@ class EditServer extends Thread
 	private String portFile;
 	private ServerSocket socket;
 	private int authKey;
+	private boolean ok;
 
 	// Thread-safe wrapper for jEdit.newView()
 	private void TSnewView(final Buffer buffer)
@@ -292,6 +297,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.16  2000/09/06 04:39:47  sp
  * bug fixes
  *

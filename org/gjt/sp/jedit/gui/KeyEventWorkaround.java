@@ -111,7 +111,10 @@ public class KeyEventWorkaround
 
 		if((modifiers & KeyEvent.ALT_MASK) != 0)
 			last = LAST_ALT;
-		else if(keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
+		else if((keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
+			&& keyCode != KeyEvent.VK_LEFT && keyCode != KeyEvent.VK_RIGHT
+			&& keyCode != KeyEvent.VK_UP && keyCode != KeyEvent.VK_DOWN
+			&& keyCode != KeyEvent.VK_DELETE && keyCode != KeyEvent.VK_BACK_SPACE)
 			last = LAST_BROKEN;
 		else
 			last = LAST_NOTHING;
@@ -123,6 +126,9 @@ public class KeyEventWorkaround
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.5  2000/10/05 04:30:10  sp
  * *** empty log message ***
  *

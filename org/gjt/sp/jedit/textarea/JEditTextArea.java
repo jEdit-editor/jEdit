@@ -109,7 +109,6 @@ public class JEditTextArea extends JComponent
 
 		addFocusListener(new FocusHandler());
 
-		caretVisible = true;
 		editable = true;
 	}
 
@@ -147,27 +146,6 @@ public class JEditTextArea extends JComponent
 		this.caretBlinks = caretBlinks;
 		if(!caretBlinks)
 			blink = false;
-
-		painter.invalidateSelectedLines();
-	}
-
-	/**
-	 * Returns true if the caret is visible, false otherwise.
-	 */
-	public final boolean isCaretVisible()
-	{
-		return (!caretBlinks || blink) && caretVisible;
-	}
-
-	/**
-	 * Sets if the caret should be visible.
-	 * @param caretVisible True if the caret should be visible, false
-	 * otherwise
-	 */
-	public void setCaretVisible(boolean caretVisible)
-	{
-		this.caretVisible = caretVisible;
-		blink = true;
 
 		painter.invalidateSelectedLines();
 	}
@@ -575,7 +553,9 @@ public class JEditTextArea extends JComponent
 		int height = fm.getHeight();
 		int line = y / height + firstLine;
 
-		if(line >= getLineCount())
+		if(line < 0)
+			return 0;
+		else if(line >= getLineCount())
 			return getBufferLength();
 		else
 			return getLineStartOffset(line) + xToOffset(line,x);
@@ -1385,10 +1365,7 @@ public class JEditTextArea extends JComponent
 		super.addNotify();
 
 		if(hasFocus())
-		{
-			setCaretVisible(true);
 			focusedComponent = this;
-		}
 
 		ToolTipManager.sharedInstance().registerComponent(painter);
 		ToolTipManager.sharedInstance().registerComponent(gutter);
@@ -1436,6 +1413,22 @@ public class JEditTextArea extends JComponent
 	Segment lineSegment;
 	MouseHandler mouseHandler;
 
+	/**
+	 * Returns true if the caret is visible, false otherwise.
+	 */
+	final boolean isCaretVisible()
+	{
+		return blink && focusedComponent == this && hasFocus();
+	}
+
+	/**
+	 * Returns true if the line and bracket is visible, false otherwise.
+	 */
+	final boolean isHighlightVisible()
+	{
+		return focusedComponent == this && hasFocus();
+	}
+
 	// protected members
 	protected void processKeyEvent(KeyEvent evt)
 	{
@@ -1481,8 +1474,8 @@ public class JEditTextArea extends JComponent
 	private static String LEFT = "left";
 	private static String BOTTOM = "bottom";
 
-	private static JEditTextArea focusedComponent;
 	private static Timer caretTimer;
+	private static JEditTextArea focusedComponent;
 
 	private View view;
 	private Gutter gutter;
@@ -1494,7 +1487,6 @@ public class JEditTextArea extends JComponent
 	private MutableCaretEvent caretEvent;
 
 	private boolean caretBlinks;
-	private boolean caretVisible;
 	private boolean blink;
 
 	private boolean editable;
@@ -1791,8 +1783,7 @@ public class JEditTextArea extends JComponent
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(focusedComponent != null
-				&& focusedComponent.hasFocus())
+			if(focusedComponent != null && focusedComponent.hasFocus())
 				focusedComponent.blinkCaret();
 		}
 	}
@@ -1946,24 +1937,18 @@ public class JEditTextArea extends JComponent
 	{
 		public void focusGained(FocusEvent evt)
 		{
-			setCaretVisible(true);
+			blink = true;
 			focusedComponent = JEditTextArea.this;
+			painter.invalidateSelectedLines();
 
 			// repaint the gutter so that the border color
 			// reflects the focus state
-			gutter.updateBorder();
+			view.updateGutterBorders();
 		}
 
 		public void focusLost(FocusEvent evt)
 		{
-			setCaretVisible(false);
-			// so that caret undos use the most recently
-			// focused text area
-			//focusedComponent = null;
-
-			// repaint the gutter so that the border color
-			// reflects the focus state
-			gutter.updateBorder();
+			painter.invalidateSelectedLines();
 		}
 	}
 
@@ -1975,18 +1960,25 @@ public class JEditTextArea extends JComponent
 
 			// This is not done properly sometimes
 			focusedComponent = JEditTextArea.this;
-			setCaretVisible(true);
+			blink = true;
+			painter.invalidateSelectedLines();
 
 			if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0
 				&& popup != null)
 			{
-				popup.show(painter,evt.getX(),evt.getY());
+				if(popup.isVisible())
+					popup.setVisible(false);
+				else
+					popup.show(painter,evt.getX(),evt.getY());
 				return;
 			}
 
-			dragStartLine = yToLine(evt.getY());
-			dragStartOffset = xToOffset(dragStartLine,evt.getX());
-			int dot = xyToOffset(evt.getX(),evt.getY());
+			int x = evt.getX();
+			int y = evt.getY();
+
+			dragStartLine = yToLine(y);
+			dragStartOffset = xToOffset(dragStartLine,x);
+			int dot = xyToOffset(x,y);
 
 			clickCount = evt.getClickCount();
 			switch(clickCount)
@@ -2006,7 +1998,7 @@ public class JEditTextArea extends JComponent
 					bl.printStackTrace();
 				}
 				break;
-			case 3:
+			default: //case 3:
 				doTripleClick(evt);
 				break;
 			}
@@ -2076,7 +2068,8 @@ public class JEditTextArea extends JComponent
 
 		public void mouseDragged(MouseEvent evt)
 		{
-			if(popup != null && popup.isVisible())
+			if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0
+				|| (popup != null && popup.isVisible()))
 				return;
 
 			setSelectionRectangular((evt.getModifiers()
@@ -2090,7 +2083,7 @@ public class JEditTextArea extends JComponent
 			case 2:
 				doDoubleDrag(evt);
 				break;
-			case 3:
+			default: //case 3:
 				doTripleDrag(evt);
 				break;
 			}
@@ -2244,6 +2237,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.89  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.88  2000/10/15 04:10:35  sp
  * bug fixes
  *
@@ -2273,32 +2269,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.79  2000/08/31 02:54:01  sp
  * Improved activity log, bug fixes
- *
- * Revision 1.78  2000/08/29 07:47:13  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.77  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.76  2000/07/30 09:04:19  sp
- * More VFS browser hacking
- *
- * Revision 1.75  2000/07/26 07:48:45  sp
- * stuff
- *
- * Revision 1.74  2000/07/22 06:22:27  sp
- * I/O progress monitor done
- *
- * Revision 1.73  2000/07/22 03:27:03  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.72  2000/07/14 06:00:45  sp
- * bracket matching now takes syntax info into account
- *
- * Revision 1.71  2000/07/12 09:11:38  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.70  2000/06/24 06:24:55  sp
- * work thread bug fixes
  *
  */

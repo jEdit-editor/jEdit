@@ -45,8 +45,7 @@ global-options.icon=Preferences24.gif
 help.icon=Help24.gif
 
 # Used by toolbar editor
-icons=Applet24.gif \
-	Blank24.gif \
+icons=Blank24.gif \
 	Copy24.gif \
 	Cut24.gif \
 	Find24.gif \
@@ -55,6 +54,7 @@ icons=Applet24.gif \
 	Home24.gif \
 	Import24.gif \
 	New24.gif \
+	NewView24.gif \
 	Open24.gif \
 	Paste24.gif \
 	Preferences24.gif \

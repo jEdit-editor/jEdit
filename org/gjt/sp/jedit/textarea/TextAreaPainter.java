@@ -489,16 +489,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				&& line <= textArea.getSelectionEndLine())
 				paintLineHighlight(gfx,line,y);
 
-			if(bracketHighlight && line == textArea.getBracketLine())
+			if(bracketHighlight && line == textArea.getBracketLine()
+				&& textArea.isHighlightVisible())
 				paintBracketHighlight(gfx,line,y);
 		}
 
 		if(highlights != null)
 			highlights.paintHighlight(gfx,line,y);
 
-		// don't do this in the 'if' above because plugin highlights
-		// need to be painted before the caret
-		if(!invalid && line == textArea.getCaretLine())
+		if(!invalid && line == textArea.getCaretLine() && textArea.isCaretVisible())
 			paintCaret(gfx,line,y);
 	}
 
@@ -512,7 +511,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		if(selectionStart == selectionEnd)
 		{
-			if(lineHighlight)
+			if(lineHighlight && textArea.isHighlightVisible())
 			{
 				gfx.setColor(lineHighlightColor);
 				gfx.fillRect(0,y,getWidth(),height);
@@ -588,28 +587,25 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private void paintCaret(Graphics gfx, int line, int y)
 	{
-		if(textArea.isCaretVisible())
-		{
-			int offset = textArea.getCaretPosition() 
-				- textArea.getLineStartOffset(line);
-			int caretX = textArea.offsetToX(line,offset);
-			int caretWidth = ((blockCaret ||
-				textArea.isOverwriteEnabled()) ?
-				fm.charWidth('w') : 1);
-			y += fm.getLeading() + fm.getDescent();
-			int height = fm.getHeight();
-			
-			gfx.setColor(caretColor);
+		int offset = textArea.getCaretPosition() 
+			- textArea.getLineStartOffset(line);
+		int caretX = textArea.offsetToX(line,offset);
+		int caretWidth = ((blockCaret ||
+			textArea.isOverwriteEnabled()) ?
+			fm.charWidth('w') : 1);
+		y += fm.getLeading() + fm.getDescent();
+		int height = fm.getHeight();
+		
+		gfx.setColor(caretColor);
 
-			if(textArea.isOverwriteEnabled())
-			{
-				gfx.fillRect(caretX,y + height - 1,
-					caretWidth,1);
-			}
-			else
-			{
-				gfx.drawRect(caretX,y,caretWidth - 1,height - 1);
-			}
+		if(textArea.isOverwriteEnabled())
+		{
+			gfx.fillRect(caretX,y + height - 1,
+				caretWidth,1);
+		}
+		else
+		{
+			gfx.drawRect(caretX,y,caretWidth - 1,height - 1);
 		}
 	}
 }
@@ -617,6 +613,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.43  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.42  2000/10/12 09:28:27  sp
  * debugging and polish
  *

@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.09.00";
+		return "02.06.99.00";
 	}
 
 	/**
@@ -258,6 +258,23 @@ public class jEdit
 		Log.log(Log.MESSAGE,jEdit.class,"Settings directory is "
 			+ settingsDirectory);
 
+		// Initialize server
+		if(portFile != null)
+		{
+			server = new EditServer(portFile);
+			if(!server.isOK())
+				server = null;
+		}
+		else
+		{
+			if(background)
+			{
+				background = false;
+				System.err.println("You cannot specify both the"
+					+ " -background and -noserver switches");
+			}
+		}
+
 		// Get things rolling
 		initMisc();
 		initSystemProperties();
@@ -313,19 +330,6 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 
-		// Start server
-		if(portFile != null)
-			server = new EditServer(portFile);
-		else
-		{
-			if(background)
-			{
-				background = false;
-				System.err.println("You cannot specify both the"
-					+ " -background and -noserver switches");
-			}
-		}
-
 		Buffer buffer = openFiles(userDir,args);
 
 		if(bufferCount == 0)
@@ -370,8 +374,12 @@ public class jEdit
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
 					+ "complete");
 
-				// Start I/O thread
+				// Start I/O threads
 				VFSManager.start();
+
+				// Start edit server
+				if(server != null)
+					server.start();
 			}
 		});
 	}
@@ -480,7 +488,10 @@ public class jEdit
 		}
 		else
 		{
-			if(!value.equals(getProperty(name)))
+			String prop = (String)defaultProps.get(name);
+			if(value.equals(prop))
+				props.remove(name);
+			else
 				props.put(name,value);
 		}
 	}
@@ -2065,8 +2076,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.toggle_rect());
 		addAction(new org.gjt.sp.jedit.actions.vfs_browser());
 
-		// this is the default action. We override the text area's
-		// one to handle abbrev expansion
+		// this is the default action, used to handle key typed events
 		inputHandler.setInputAction(getAction("insert-char"));
 	}
 
@@ -2365,6 +2375,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.283  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.282  2000/10/13 06:57:20  sp
  * Edit User/System Macros command, gutter mouse handling improved
  *
@@ -2394,89 +2407,5 @@ public class jEdit
  *
  * Revision 1.273  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
- *
- * Revision 1.272  2000/08/29 07:47:11  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.271  2000/08/22 07:25:00  sp
- * Improved abbrevs, bug fixes
- *
- * Revision 1.270  2000/08/20 07:29:30  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.269  2000/08/16 12:14:29  sp
- * Passwords are now saved, bug fixes, documentation updates
- *
- * Revision 1.268  2000/08/16 08:47:18  sp
- * Stuff
- *
- * Revision 1.267  2000/08/15 08:07:10  sp
- * A bunch of bug fixes
- *
- * Revision 1.266  2000/08/13 07:35:22  sp
- * Dockable window API
- *
- * Revision 1.265  2000/08/10 08:30:40  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.264  2000/08/05 07:16:11  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.263  2000/08/03 07:43:41  sp
- * Favorites added to browser, lots of other stuff too
- *
- * Revision 1.262  2000/08/01 11:44:14  sp
- * More VFS browser work
- *
- * Revision 1.261  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.260  2000/07/30 09:04:18  sp
- * More VFS browser hacking
- *
- * Revision 1.259  2000/07/29 12:24:07  sp
- * More VFS work, VFS browser started
- *
- * Revision 1.258  2000/07/26 07:48:44  sp
- * stuff
- *
- * Revision 1.257  2000/07/22 12:37:38  sp
- * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
- *
- * Revision 1.256  2000/07/22 06:22:27  sp
- * I/O progress monitor done
- *
- * Revision 1.255  2000/07/22 03:27:03  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.254  2000/07/19 08:35:59  sp
- * plugin devel docs updated, minor other changes
- *
- * Revision 1.253  2000/07/14 06:00:44  sp
- * bracket matching now takes syntax info into account
- *
- * Revision 1.252  2000/07/12 09:11:38  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.251  2000/07/03 03:32:16  sp
- * *** empty log message ***
- *
- * Revision 1.250  2000/06/29 06:20:45  sp
- * Tool bar icon code bug fix
- *
- * Revision 1.249  2000/06/24 03:46:48  sp
- * VHDL mode, bug fixing
- *
- * Revision 1.248  2000/06/16 10:11:06  sp
- * Bug fixes ahoy
- *
- * Revision 1.247  2000/06/05 08:22:26  sp
- * bug fixes
- *
- * Revision 1.246  2000/06/05 04:05:13  sp
- * Documentation updates
- *
- * Revision 1.245  2000/06/03 07:28:25  sp
- * User interface updates, bug fixes
  *
  */

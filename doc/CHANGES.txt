@@ -1,5 +1,23 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6final
+
++ Enhancements
+
+- Clicking 'Save' in the 'Save As' dialog box while a directory is
+  selected in the list will save the buffer to the selected directory
+- The edit server is now initialized earlier in jEdit's startup
+  sequence
+- Haskell mode (Kristian Ovaska)
+- ML mode (Dominic Stolerman)
+
++ Bug Fixes
+
+- Fixed a minor bug relating to abbreviations and auto indent
+- The 'Sort Buffers' option in global options didn't work
+- 'Save As' didn't update the title bar
+- Minor command line and text area focus bugs fixed
+
 * Version 2.6pre9
 
 + Enhancements

@@ -99,6 +99,7 @@ public abstract class InputHandler extends KeyAdapter
 		{
 			repeatCount = 0;
 			view.getCommandLine().setState(CommandLine.NULL_STATE);
+			view.getEditPane().focusOnTextArea();
 		}
 	}
 
@@ -266,7 +267,10 @@ public abstract class InputHandler extends KeyAdapter
 			// used to be something else, then we *do* reset
 			// it to NULL_STATE
 			if(_state != CommandLine.NULL_STATE)
+			{
 				cli.setState(CommandLine.NULL_STATE);
+				view.getEditPane().focusOnTextArea();
+			}
 			repeat = false;
 			repeatCount = 0;
 		}
@@ -294,6 +298,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.13  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

@@ -198,6 +198,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("history",history.getText());
 		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
 		jEdit.setBooleanProperty("confirmExit",confirmExit.isSelected());
+		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
 			.isSelected());
@@ -265,6 +266,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.45  2000/10/28 00:36:58  sp
+ * ML mode, Haskell mode
+ *
  * Revision 1.44  2000/10/12 09:28:27  sp
  * debugging and polish
  *
