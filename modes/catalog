@@ -121,6 +121,9 @@
 <MODE NAME="povray"		FILE="povray.xml"
 				FILE_NAME_GLOB="*.{pov,povray}" />
 
+<MODE NAME="progress"           FILE="progress.xml"
+                                FILE_NAME_GLOB="*.{p,i,w,f}" />
+
 <MODE NAME="properties"		FILE="props.xml"
 				FILE_NAME_GLOB="*{properties,props}" />
 

@@ -12,6 +12,7 @@ JEDIT 3.2 VERSION HISTORY
   pane of Global Options dialog box. Replaces AntiAlias plugin, and
   works better, because Java2D text measurement code is used to
   calculate offsets
+- Progress 4GL syntax highlighting (Patrick Tingen)
 
 + Enhancements
 

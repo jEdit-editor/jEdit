@@ -156,6 +156,12 @@
 			<END>&lt;/pre&gt;</END>
 		</SPAN>
 
+		<!-- HTML comments -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
 		<!-- HTML tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
 			<BEGIN>&lt;</BEGIN>

@@ -263,6 +263,9 @@ Ollie Rutherfurd:
 	- Some commands in View->Scrolling menu
 	- ... and more
 
+Patrick Tingen:
+	- Progress 4GL syntax highlighting
+
 Peter Graves:
 	- Code for preserving file permissions on Unix was taken from
 	  Peter's j text editor (http://www.armedbear.org)

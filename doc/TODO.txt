@@ -2,16 +2,18 @@ TO DO
 
 + before pre6:
 
-- edit server doesn't work
-- printing: syntax output doesn't use print font!!!
+- edit server doesn't call setBuffer()
+- printing: syntax output doesn't use print font
 - console: add go to console action
-- console 3.0: MUST FINISH!!!
 - reload: preserve caret position
 - finish duplicate shortcut code
-- cvs: remove *TextRenderingManager*, add TextRenderer*
+- finish doc/NEWS.txt
+- update docs for jEdit launcher
 
 + lower priority/later:
 
+- finish console 3.0 before 3.2final because older console versions
+  don't work with 3.2
 - Java 1.3: pseudo-random window positioning?
 - installing source for already installed plugins
 - make XML plugin more respectable
@@ -21,17 +23,14 @@ TO DO
 - document differences between web start and stand-alone version
 - next time i'm making an RPM, fix the shell script
 - mention using Macros.message() in macro-tips
-- Ditch LatestVersion?
 
 + bugs:
 
 - a line consisting entirely of spaces & word wrap
 - switching option panes real fast
 - fix '... is not a function name' when running openjade
-- popup menus; make sure they are on-screen? GUIUtilities method?
-- does loading and saving user settings take a long time?
-- only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>
-  in PHP)
+- GUIUtilities method that makes sure popups appear within the screen
+  bounds
 - vfs browser: >1 request error when clicking 'up'?
 - broken reverse search?
 - prev line fold gutter bug
