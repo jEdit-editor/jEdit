@@ -30,6 +30,9 @@ import org.gjt.sp.util.Log;
  */
 public class Sessions
 {
+	/**
+	 * @since jEdit 2.2pre1
+	 */
 	public static Buffer loadSession(String session, boolean ignoreNotFound)
 	{
 		String filename = createSessionFileName(session);
@@ -69,6 +72,9 @@ public class Sessions
 		return buffer;
 	}
 
+	/**
+	 * @since jEdit 2.2pre1
+	 */
 	public static void saveSession(View view, String session)
 	{
 		view.saveCaretInfo();
@@ -99,6 +105,9 @@ public class Sessions
 		}
 	}
 
+	/**
+	 * @since jEdit 2.2pre1
+	 */
 	public static String createSessionFileName(String session)
 	{
 		String filename = MiscUtilities.constructPath(
@@ -173,6 +182,10 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.5  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

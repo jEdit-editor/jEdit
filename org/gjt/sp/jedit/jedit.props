@@ -120,6 +120,9 @@ view.blockCaret=off
 # Electric borders
 view.electricBorders=3
 
+# Smart home/end
+view.homeEnd=yes
+
 # Syntax styles
 view.style.comment1=style:i
 view.style.comment2=color:#990033 style:i
@@ -172,7 +175,7 @@ mode.eiffel.label=Eiffel Source Files
 mode.eiffel.blockComment=--
 mode.eiffel.noWordSep=_
 mode.eiffel.tokenMarker=org.gjt.sp.jedit.syntax.EiffelTokenMarker
-mode.eiffel.filenameGlob=.*{e,se}
+mode.eiffel.filenameGlob=*.e
 
 # HTML mode
 mode.html.label=HTML Files

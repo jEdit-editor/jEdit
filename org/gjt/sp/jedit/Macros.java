@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 import org.gjt.sp.jedit.event.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
@@ -41,6 +42,50 @@ import org.gjt.sp.util.Log;
  */
 public class Macros
 {
+	/**
+	 * @since jEdit 2.2pre4
+	 */
+	public static void loadMacros()
+	{
+		macros = new Vector();
+
+		loadMacros(macros,new File(MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"macros")));
+
+		String settings = jEdit.getSettingsDirectory();
+
+		if(settings != null)
+		{
+			loadMacros(macros,new File(MiscUtilities.constructPath(
+				settings,"macros")));
+		}
+
+		jEdit.fireEditorEvent(EditorEvent.MACROS_CHANGED,null,null);
+	}
+
+	/**
+	 * @since jEdit 2.2pre4
+	 */
+	public static Vector getMacros()
+	{
+		return macros;
+	}
+
+	/**
+	 * @since jEdit 2.2pre4
+	 */
+	public static class Macro
+	{
+		public String name;
+		public String path;
+
+		public Macro(String name, String path)
+		{
+			this.name = name;
+			this.path = path;
+		}
+	}
+
 	public static void beginRecording(View view, String name, Buffer buffer)
 	{
 		lastMacro = name;
@@ -63,31 +108,6 @@ public class Macros
 		}
 	}
 
-	static
-	{
-		jEdit.addEditorListener(new EditorHandler());
-	}
-
-	static class EditorHandler extends EditorAdapter
-	{
-		public void bufferClosed(EditorEvent evt)
-		{
-			View view = evt.getView();
-
-			InputHandler inputHandler = view.getTextArea()
-				.getInputHandler();
-			BufferRecorder recorder = (BufferRecorder)inputHandler
-				.getMacroRecorder();
-
-			if(recorder != null)
-			{
-				if(evt.getBuffer() == recorder.buffer)
-					inputHandler.setMacroRecorder(null);
-				view.showStatus(null);
-			}
-		}
-	}
-
 	public static void playMacro(View view, String name)
 	{
 		lastMacro = name;
@@ -95,14 +115,14 @@ public class Macros
 		if(name == null)
 		{
 			Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
-				null,"<< temp macro >>"));
+				null,"__temporary__.macro"));
 			if(buffer == null)
 			{
 				view.getToolkit().beep();
 				return;
 			}
 
-			playMacroFromBuffer(view,"<< temp macro >>",buffer);
+			playMacroFromBuffer(view,"__temporary.macro__",buffer);
 			return;
 		}
 
@@ -140,23 +160,7 @@ public class Macros
 
 		ActionListener _action = jEdit.getAction(action);
 		if(_action == null)
-		{
-			// it's a text area action
-			ActionListener[] actions = DefaultInputHandler.ACTIONS;
-			String[] names = DefaultInputHandler.ACTION_NAMES;
-
-			// Start from end because insert-char is the last
-			// one, and it's probably the most frequently invoked
-			// action
-			for(int i = actions.length - 1; i >= 0; i--)
-			{
-				if(names[i].equals(action))
-				{
-					_action = actions[i];
-					break;
-				}
-			}
-		}
+			_action = InputHandler.getAction(action);
 
 		if(_action /* still */ == null)
 		{
@@ -177,8 +181,46 @@ public class Macros
 		return lastMacro;
 	}
 
+	// package-private members
+	static BufferHandler bufferHandler;
+
+	static void init()
+	{
+		bufferHandler = new BufferHandler();
+		jEdit.addEditorListener(new EditorHandler());
+		loadMacros();
+	}
+
 	// private members
+	private static Vector macros;
 	private static String lastMacro;
+
+	private static void loadMacros(Vector vector, File directory)
+	{
+		String[] macroFiles = directory.list();
+		if(macroFiles == null)
+			return;
+
+		MiscUtilities.quicksort(macroFiles,new MiscUtilities.StringICaseCompare());
+
+		for(int i = 0; i < macroFiles.length; i++)
+		{
+			String name = macroFiles[i];
+			File file = new File(directory,name);
+			if(name.toLowerCase().endsWith(".macro"))
+			{
+				name = name.substring(0,name.length() - 6);
+				vector.addElement(new Macro(name,file.getPath()));
+			}
+			else if(file.isDirectory())
+			{
+				Vector submenu = new Vector();
+				submenu.addElement(name);
+				loadMacros(submenu,file);
+				vector.addElement(submenu);
+			}
+		}
+	}
 
 	private static void playMacroFromBuffer(View view, String macro,
 		Buffer buffer)
@@ -234,18 +276,9 @@ public class Macros
 			return ((EditAction)listener).getName();
 		else
 		{
-			// it's a text area action
-			ActionListener[] actions = DefaultInputHandler.ACTIONS;
-			String[] names = DefaultInputHandler.ACTION_NAMES;
-
-			// Start from end because insert-char is the last
-			// one, and it's probably the most frequently invoked
-			// action
-			for(int i = actions.length - 1; i >= 0; i--)
-			{
-				if(actions[i] == listener)
-					return names[i];
-			}
+			String retVal = InputHandler.getActionName(listener);
+			if(retVal != null)
+				return retVal;
 		}
 
 		throw new InternalError("Unknown action: " + listener);
@@ -298,11 +331,52 @@ public class Macros
 			}
 		}
 	}
+
+	static class BufferHandler extends BufferAdapter
+	{
+		public void bufferDirtyChanged(EditorEvent evt)
+		{
+			if(evt.getBuffer().getPath().toLowerCase()
+				.endsWith(".macro"))
+				loadMacros();
+		}
+	}
+
+	static class EditorHandler extends EditorAdapter
+	{
+		public void bufferOpened(EditorEvent evt)
+		{
+			evt.getBuffer().addBufferListener(bufferHandler);
+		}
+
+		public void bufferClosed(EditorEvent evt)
+		{
+			evt.getBuffer().removeBufferListener(bufferHandler);
+
+			View view = evt.getView();
+
+			InputHandler inputHandler = view.getTextArea()
+				.getInputHandler();
+			BufferRecorder recorder = (BufferRecorder)inputHandler
+				.getMacroRecorder();
+
+			if(recorder != null)
+			{
+				if(evt.getBuffer() == recorder.buffer)
+					inputHandler.setMacroRecorder(null);
+				view.showStatus(null);
+			}
+		}
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.9  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

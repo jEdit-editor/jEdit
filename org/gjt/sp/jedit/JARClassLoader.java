@@ -137,6 +137,7 @@ public class JARClassLoader extends ClassLoader
 			}
 			catch(Throwable t)
 			{
+				Log.log(Log.ERROR,this,"Error while starting plugin " + name);
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -333,6 +334,10 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.19  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

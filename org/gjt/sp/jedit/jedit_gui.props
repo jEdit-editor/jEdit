@@ -335,7 +335,9 @@ macro.header=# This is a freshly recorded macro. First, check over the\n\
 ###
 
 backspace.label=Delete Previous Character
+backspace-word.label=Delete Previous Word
 delete.label=Delete Next Character
+delete-word.label=Delete Next Word
 overwrite.label=Overwrite Mode On/Off
 home.label=Beginning of Line
 end.label=End of Line
@@ -632,6 +634,7 @@ options.editor.blinkCaret=Blinking caret
 options.editor.blockCaret=Block-shaped caret
 options.editor.electricBorders=Electric (auto scroll) borders
 options.editor.noTabs=Soft (emulated with spaces) tabs
+options.editor.homeEnd="Smart" home/end behaviour
 options.styles.label=Colors & Styles
 options.styles.colors=Colors:
 options.styles.styles=Styles:

@@ -866,6 +866,14 @@
    buffer. jEdit has no equivalent; instead, press <keycap>Home</> or
    <keycap>End</> three times.
   </para>
+  <tip>
+   <para>
+    If the overloaded behaviour of <keycap>Home</> and <keycap>End</>
+    bothers you, disable it in the <guimenu>File</>&gt;<guimenuitem>Global
+    Options</> dialog box;
+    see <xref linkend=global-opts>.
+   </para>
+  </tip>
   <para>
    <indexterm><primary>moving the caret</>
    <secondary>by screenfuls</></indexterm>
@@ -1006,6 +1014,13 @@
    The <keycap>Backspace</> key deletes the character <firstterm>before</>
    the caret, and <keycap>Delete</> deletes the character <firstterm>in front of</>
    the caret.
+  </para>
+  <para>
+   <indexterm><primary>deleting</><secondary>words</></indexterm>
+   Pressing <keycap>Control</> in addition to
+   <keycap>Backspace</> or <keycap>Delete</> deletes the word
+   <firstterm>before</> and <firstterm>in front of</>
+   the caret, respectively.
   </para>
   <para>
    <indexterm><primary>deleting</><secondary>lines</></indexterm>
@@ -1589,9 +1604,8 @@
    <para>
     While a recording is in progress, <quote>Macro recording</> is
     displayed in the status bar, instead of the caret position information.
-    Currently, jEdit records all key strokes and commands invoked from
-    the menu bar; recording tool bar button clicks is not currently
-    implemented.
+    Currently, jEdit records key strokes, commands invoked from
+    the menu bar, and tool bar clicks.
    </para>
    <para>
     Search and replace operations are recorded as you would expect;
@@ -1630,7 +1644,7 @@
     <keycap>M</>
     <keycap>M</>) works in a
     similar fashion to the <guimenuitem>Record Macro</> command, except that
-    it records to a buffer named <filename>&lt;&lt; temporary macro &gt;&gt;</>.
+    it records to a buffer named <filename>__temporary__.macro</>.
     Once recording is complete, the buffer should not be saved.
    </para>
    <indexterm><primary>Stop Recording command</></indexterm>
@@ -1646,7 +1660,7 @@
     <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycap>M</>
     <keycap>P</>) plays the
-    macro recorded to the <filename>&lt;&lt; temporary macro &gt;&gt;</> buffer.
+    macro recorded to the <filename>__temporary__.macro</> buffer.
    </para>
   </sect2>
  </sect1>

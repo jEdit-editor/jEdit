@@ -23,7 +23,7 @@ import javax.swing.text.*;
 import javax.swing.JPopupMenu;
 import java.awt.event.*;
 import java.awt.Component;
-import java.util.EventObject;
+import java.util.*;
 
 /**
  * An abstract class for a key event handler. Concrete implementations
@@ -34,8 +34,18 @@ import java.util.EventObject;
  */
 public abstract class InputHandler extends KeyAdapter
 {
+	/**
+	 * If this client property is set to Boolean.TRUE on the text area,
+	 * the home/end keys will support 'smart' BRIEF-like behaviour
+	 * (one press = start/end of line, two presses = start/end of
+	 * viewscreen, three presses = start/end of document)
+	 */
+	public static final String SMART_HOME_END_PROPERTY = "InputHandler.homeEnd";
+
 	public static final ActionListener BACKSPACE = new backspace();
+	public static final ActionListener BACKSPACE_WORD = new backspace_word();
 	public static final ActionListener DELETE = new delete();
+	public static final ActionListener DELETE_WORD = new delete_word();
 	public static final ActionListener END = new end(false);
 	public static final ActionListener SELECT_END = new end(true);
 	public static final ActionListener INSERT_BREAK = new insert_break();
@@ -65,23 +75,74 @@ public abstract class InputHandler extends KeyAdapter
 	// Default action
 	public static final ActionListener INSERT_CHAR = new insert_char();
 
-	public static final ActionListener[] ACTIONS = {
-		BACKSPACE, DELETE, END, SELECT_END, INSERT_BREAK,
-		INSERT_TAB, HOME, SELECT_HOME, NEXT_CHAR, NEXT_LINE,
-		NEXT_PAGE, NEXT_WORD, SELECT_NEXT_CHAR, SELECT_NEXT_LINE,
-		SELECT_NEXT_PAGE, SELECT_NEXT_WORD, OVERWRITE, PREV_CHAR,
-		PREV_LINE, PREV_PAGE, PREV_WORD, SELECT_PREV_CHAR,
-		SELECT_PREV_LINE, SELECT_PREV_PAGE, SELECT_PREV_WORD,
-		REPEAT, TOGGLE_RECT, INSERT_CHAR };
+	private static Hashtable actions;
 
-	public static final String[] ACTION_NAMES = {
-		"backspace", "delete", "end", "select-end", "insert-break",
-		"insert-tab", "home", "select-home", "next-char", "next-line",
-		"next-page", "next-word", "select-next-char", "select-next-line",
-		"select-next-page", "select-next-word", "overwrite", "prev-char",
-		"prev-line", "prev-page", "prev-word", "select-prev-char",
-		"select-prev-line", "select-prev-page", "select-prev-word",
-		"repeat", "toggle-rect", "insert-char" };
+	static
+	{
+		actions = new Hashtable();
+		actions.put("backspace",BACKSPACE);
+		actions.put("backspace-word",BACKSPACE_WORD);
+		actions.put("delete",DELETE);
+		actions.put("delete-word",DELETE_WORD);
+		actions.put("end",END);
+		actions.put("select-end",END);
+		actions.put("insert-break",INSERT_BREAK);
+		actions.put("insert-tab",INSERT_TAB);
+		actions.put("home",HOME);
+		actions.put("select-home",SELECT_HOME);
+		actions.put("next-char",NEXT_CHAR);
+		actions.put("next-line",NEXT_LINE);
+		actions.put("next-page",NEXT_PAGE);
+		actions.put("next-word",NEXT_WORD);
+		actions.put("select-next-char",SELECT_NEXT_CHAR);
+		actions.put("select-next-line",SELECT_NEXT_LINE);
+		actions.put("select-next-page",SELECT_NEXT_PAGE);
+		actions.put("select-next-word",SELECT_NEXT_WORD);
+		actions.put("overwrite",OVERWRITE);
+		actions.put("prev-char",PREV_CHAR);
+		actions.put("prev-line",PREV_LINE);
+		actions.put("prev-page",PREV_PAGE);
+		actions.put("prev-word",PREV_WORD);
+		actions.put("select-prev-char",SELECT_PREV_CHAR);
+		actions.put("select-prev-line",SELECT_PREV_LINE);
+		actions.put("select-prev-page",SELECT_PREV_PAGE);
+		actions.put("select-prev-word",SELECT_PREV_WORD);
+		actions.put("repeat",REPEAT);
+		actions.put("toggle-rect",TOGGLE_RECT);
+		actions.put("insert-char",INSERT_CHAR);
+	}
+
+	/**
+	 * Returns a named text area action.
+	 */
+	public static ActionListener getAction(String name)
+	{
+		return (ActionListener)actions.get(name);
+	}
+
+	/**
+	 * Returns an action's name.
+	 */
+	public static String getActionName(ActionListener listener)
+	{
+		Enumeration enum = getActions();
+		while(enum.hasMoreElements())
+		{
+			String name = (String)enum.nextElement();
+			ActionListener _listener = getAction(name);
+			if(_listener == listener)
+				return name;
+		}
+		return null;
+	}
+
+	/**
+	 * Returns an enumeration of all available actions.
+	 */
+	public static Enumeration getActions()
+	{
+		return actions.keys();
+	}
 
 	/**
 	 * Adds the default key bindings to this input handler.
@@ -350,6 +411,73 @@ public abstract class InputHandler extends KeyAdapter
 		}
 	}
 
+	public static class backspace_word implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			JEditTextArea textArea = getTextArea(evt);
+			int start = textArea.getSelectionStart();
+			if(start != textArea.getSelectionEnd())
+			{
+				textArea.setSelectedText("");
+			}
+
+			int line = textArea.getCaretLine();
+			int lineStart = textArea.getLineStartOffset(line);
+			int caret = start - lineStart;
+
+			String lineText = textArea.getLineText(textArea
+				.getCaretLine());
+
+			if(caret == 0)
+			{
+				if(lineStart == 0)
+				{
+					textArea.getToolkit().beep();
+					return;
+				}
+				caret--;
+			}
+			else
+			{
+				char ch = lineText.charAt(caret - 1);
+
+				String noWordSep = (String)textArea.getDocument()
+					.getProperty("noWordSep");
+				if(noWordSep == null)
+					noWordSep = "";
+				boolean selectNoLetter = (!Character
+					.isLetterOrDigit(ch)
+					&& noWordSep.indexOf(ch) == -1);
+
+				int wordStart = 0;
+				for(int i = caret - 1; i >= 0; i--)
+				{
+					ch = lineText.charAt(i);
+					if(selectNoLetter ^ (!Character
+						.isLetterOrDigit(ch) &&
+						noWordSep.indexOf(ch) == -1))
+					{
+						wordStart = i + 1;
+						break;
+					}
+				}
+				caret = wordStart;
+			}
+
+			try
+			{
+				textArea.getDocument().remove(
+						caret + lineStart,
+						start - (caret + lineStart));
+			}
+			catch(BadLocationException bl)
+			{
+				bl.printStackTrace();
+			}
+		}
+	}
+
 	public static class delete implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -383,6 +511,73 @@ public abstract class InputHandler extends KeyAdapter
 				{
 					bl.printStackTrace();
 				}
+			}
+		}
+	}
+
+	public static class delete_word implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			JEditTextArea textArea = getTextArea(evt);
+			int start = textArea.getSelectionStart();
+			if(start != textArea.getSelectionEnd())
+			{
+				textArea.setSelectedText("");
+			}
+
+			int line = textArea.getCaretLine();
+			int lineStart = textArea.getLineStartOffset(line);
+			int caret = start - lineStart;
+
+			String lineText = textArea.getLineText(textArea
+				.getCaretLine());
+
+			if(caret == lineText.length())
+			{
+				if(lineStart + caret == textArea.getDocumentLength())
+				{
+					textArea.getToolkit().beep();
+					return;
+				}
+				caret++;
+			}
+			else
+			{
+
+				char ch = lineText.charAt(caret);
+
+				String noWordSep = (String)textArea.getDocument()
+					.getProperty("noWordSep");
+				if(noWordSep == null)
+					noWordSep = "";
+				boolean selectNoLetter = (!Character
+					.isLetterOrDigit(ch)
+					&& noWordSep.indexOf(ch) == -1);
+
+				int wordEnd = lineText.length();
+				for(int i = caret; i < lineText.length(); i++)
+				{
+					ch = lineText.charAt(i);
+					if(selectNoLetter ^ (!Character
+						.isLetterOrDigit(ch) &&
+						noWordSep.indexOf(ch) == -1))
+					{
+						wordEnd = i;
+						break;
+					}
+				}
+				caret = wordEnd;
+			}
+
+			try
+			{
+				textArea.getDocument().remove(start,
+					(caret + lineStart) - start);
+			}
+			catch(BadLocationException bl)
+			{
+				bl.printStackTrace();
 			}
 		}
 	}
@@ -422,6 +617,9 @@ public abstract class InputHandler extends KeyAdapter
 				textArea.getToolkit().beep();
 				return;
 			}
+			else if(Boolean.TRUE.equals(textArea.getClientProperty(
+				SMART_HOME_END_PROPERTY)))
+				caret = lastOfLine;
 			else if(caret == lastVisible)
 				caret = lastDocument;
 			else if(caret == lastOfLine)
@@ -465,6 +663,9 @@ public abstract class InputHandler extends KeyAdapter
 				textArea.getToolkit().beep();
 				return;
 			}
+			else if(Boolean.TRUE.equals(textArea.getClientProperty(
+				SMART_HOME_END_PROPERTY)))
+				caret = firstOfLine;
 			else if(caret == firstVisible)
 				caret = 0;
 			else if(caret == firstOfLine)
@@ -897,6 +1098,10 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.6  1999/10/24 02:06:41  sp
  * Miscallaneous pre1 stuff
  *

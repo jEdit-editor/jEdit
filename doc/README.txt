@@ -7,19 +7,6 @@ has many advanced features that make text editing easier, such as syntax
 highlighting, auto indent, abbreviation expansion, registers, macros,
 regular expressions, and multiple file search and replace.
 
-jEdit has a plugin system, allowing for almost unlimited extensibility.
-The following plugins are included in the core distribution, and more
-can be downloaded from jEdit plugin central
-<http://www.icg-online.de/jedit>:
-
-- BufferTabs 0.3 by Jason Ginchereau
-- Console 1.8 by Slava Pestov
-- EditBus 0.3 by Slava Pestov
-- ErrorList 0.1 by Slava Pestov
-- HTML 2.0 by Romain Guy and Slava Pestov
-- JBrowse 0.9.9 by George Latkiewicz
-- QuickFile 0.6 by Jason Ginchereau
-
 jEdit requires either Java 1.1 with Swing 1.1, or Java 2 (including the
 new JDK 1.3beta) to work.
 

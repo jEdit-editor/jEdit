@@ -272,9 +272,12 @@ public class Log
 	private static void _log(int urgency, String source,
 		String message)
 	{
-		if(message.charAt(message.length() - 1) == '\n')
+		String lineSeparator = System.getProperty("line.separator");
+		if(message.endsWith(lineSeparator) || (message.charAt(message
+			.length() - 1) == '\n'))
 		{
-			if(message.length() == 1)
+			if(message.length() == lineSeparator.length()
+				|| message.length() == 1)
 				return;
 		}
 		else
@@ -324,6 +327,10 @@ public class Log
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.2  1999/11/06 02:06:50  sp
  * Logging updates, bug fixing, icons, various other stuff
  *

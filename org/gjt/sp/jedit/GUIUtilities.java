@@ -29,6 +29,8 @@ import java.util.StringTokenizer;
 import org.gjt.sp.jedit.event.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.textarea.InputHandler;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
 /**
@@ -50,6 +52,20 @@ import org.gjt.sp.util.Log;
  */
 public class GUIUtilities
 {
+	/**
+	 * Executes the specified runnable in the AWT thread. If the
+	 * current thread is the AWT thread, it runs the runnable
+	 * directly.
+	 * @param r The runnable
+	 */
+	public static void runInAWT(Runnable r)
+	{
+		if(SwingUtilities.isEventDispatchThread())
+			r.run();
+		else
+			SwingUtilities.invokeLater(r);
+	}
+
 	/**
 	 * Loads a menubar from the properties for the specified view.
 	 * @param view The view to load the menubar for
@@ -209,11 +225,15 @@ public class GUIUtilities
 		JMenuItem mi;
 		EditAction a = jEdit.getAction(action);
 		if(a != null && a.isToggle())
-			mi = new EnhancedCheckBoxMenuItem(label,keyStroke,a);
+			mi = new EnhancedCheckBoxMenuItem(label,keyStroke,
+				a,arg);
 		else
-			mi = new EnhancedMenuItem(label,keyStroke,a);
+		{
+			mi = new EnhancedMenuItem(label,keyStroke,a,arg);
+			mi.setEnabled(a != null);
+		}
+
 		mi.setMnemonic(mnemonic);
-		mi.setActionCommand(arg);
 
 		return mi;
 	}
@@ -307,7 +327,7 @@ public class GUIUtilities
 			button.setEnabled(false);
 		else
 		{
-			button.addActionListener(action);
+			button.addActionListener(createActionWrapper(action));
 			button.setActionCommand(actionCommand);
 		}
 		return button;
@@ -329,6 +349,31 @@ public class GUIUtilities
 		if(label.endsWith("..."))
 			label = label.substring(0,label.length() - 3);
 		return label;
+	}
+
+	/**
+	 * Creates an action listener that invokes the specified action,
+	 * taking into account the current repeat count, macro recorder,
+	 * and so on.
+	 */
+	public static ActionListener createActionWrapper(final ActionListener l)
+	{
+		if(l instanceof InputHandler.NonRepeatable &&
+			l instanceof InputHandler.NonRecordable)
+			return l;
+		else
+		{
+			return new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					View view = EditAction.getView(evt);
+					JEditTextArea textArea = view.getTextArea();
+					textArea.getInputHandler().executeAction(l,textArea,
+						evt.getActionCommand());
+				}
+			};
+		}
 	}
 
 	/**
@@ -783,6 +828,10 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  1999/11/09 10:14:33  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.38  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

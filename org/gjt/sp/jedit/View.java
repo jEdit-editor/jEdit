@@ -127,6 +127,8 @@ public class View extends JFrame
 		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
 			"view.caretBlink")));
 
+		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
+			new Boolean("yes".equals(jEdit.getProperty("view.homeEnd"))));
 		try
 		{
 			textArea.setElectricScroll(Integer.parseInt(jEdit
@@ -198,8 +200,7 @@ public class View extends JFrame
 		{
 			String path = recentArray[i];
 			EnhancedMenuItem menuItem = new EnhancedMenuItem(path,
-				null,action);
-			menuItem.setActionCommand(path);
+				null,action,path);
 			openRecent.add(menuItem);
 		}
 	}
@@ -227,12 +228,10 @@ public class View extends JFrame
 			String name = ((Marker)enum.nextElement())
 				.getName();
 			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
-				null,clearMarkerAction);
-			menuItem.setActionCommand(name);
+				null,clearMarkerAction,name);
 			clearMarker.add(menuItem);
 			menuItem = new EnhancedMenuItem(name,null,
-				gotoMarkerAction);
-			menuItem.setActionCommand(name);
+				gotoMarkerAction,name);
 			gotoMarker.add(menuItem);
 		}
 	}
@@ -255,14 +254,8 @@ public class View extends JFrame
 
 		int count = macros.getMenuComponentCount();
 
-		createMacrosMenu(macros,new File(MiscUtilities.constructPath(
-			jEdit.getJEditHome(),"macros")));
-
-		String settings = jEdit.getSettingsDirectory();
-
-		if(settings != null)
-			createMacrosMenu(macros,new File(MiscUtilities.constructPath(
-				settings,"macros")));
+		Vector macroVector = Macros.getMacros();
+		createMacrosMenu(macros,macroVector,0);
 
 		if(count == macros.getMenuComponentCount())
 			macros.add(GUIUtilities.loadMenuItem(this,"no-macros"));
@@ -642,32 +635,28 @@ public class View extends JFrame
 	private BufferListener bufferListener;
 	private EditorListener editorListener;
 
-	private void createMacrosMenu(JMenu menu, File directory)
+	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
 		EditAction action = jEdit.getAction("play-macro");
 
-		String[] macroFiles = directory.list();
-		if(macroFiles == null)
-			return;
-
-		MiscUtilities.quicksort(macroFiles,new MiscUtilities.StringCompare());
-
-		for(int i = 0; i < macroFiles.length; i++)
+		for(int i = start; i < vector.size(); i++)
 		{
-			String name = macroFiles[i];
-			File file = new File(directory,name);
-			if(name.toLowerCase().endsWith(".macro"))
+			Object obj = vector.elementAt(i);
+			if(obj instanceof Macros.Macro)
 			{
-				name = name.substring(0,name.length() - 6);
+				Macros.Macro macro = (Macros.Macro)obj;
+				String name = macro.name;
+				String path = macro.path;
 				EnhancedMenuItem menuItem = new EnhancedMenuItem(
-					name,null,action);
-				menuItem.setActionCommand(file.getPath());
+					name,null,action,path);
 				menu.add(menuItem);
 			}
-			else if(file.isDirectory())
+			else if(obj instanceof Vector)
 			{
+				Vector subvector = (Vector)obj;
+				String name = (String)subvector.elementAt(0);
 				JMenu submenu = new JMenu(name);
-				createMacrosMenu(submenu,file);
+				createMacrosMenu(submenu,subvector,1);
 				if(submenu.getMenuComponentCount() == 0)
 				{
 					submenu.add(GUIUtilities.loadMenuItem(
@@ -758,14 +747,6 @@ public class View extends JFrame
 			if(_buffer == buffer)
 				updateTitle();
 
-			// Check if it's a macro that's just been saved
-			if(_buffer.getName().toLowerCase().endsWith(".macro")
-				&& !_buffer.isDirty())
-			{
-				// Then update the macros menu
-				updateMacrosMenu();
-			}
-
 			updateBuffersMenu();
 		}
 
@@ -821,6 +802,11 @@ public class View extends JFrame
 		{
 			View.this.propertiesChanged();
 		}
+
+		public void macrosChanged(EditorEvent evt)
+		{
+			updateMacrosMenu();
+		}
 	}
 
 	class StatusBar extends JComponent
@@ -870,6 +856,10 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.103  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.102  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

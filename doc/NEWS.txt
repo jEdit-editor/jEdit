@@ -1,4 +1,14 @@
 MAJOR CHANGES IN JEDIT 2.2 SINCE 2.1
 
-All advanced editing commands have been removed and jEdit now has the
-functionality of Windows Notepad.
+- XXX: will need to mention:
+  - activity log
+  - file encoding can be changed
+  - recursive directory search
+  - new 'close all' dialog box
+  - auto indent updates
+  - session load/save
+  - move caret on undo
+  - bundled macros
+  - highlights on the text area (= ErrorList plugin)
+  - menu item selections and tool bar clicks can be recorded to macros
+  - recordable search and replace

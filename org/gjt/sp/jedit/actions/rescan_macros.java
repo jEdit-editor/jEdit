@@ -31,6 +31,6 @@ public class rescan_macros extends EditAction
 
 	public void actionPerformed(ActionEvent evt)
 	{
-		getView(evt).updateMacrosMenu();
+		Macros.loadMacros();
 	}
 }

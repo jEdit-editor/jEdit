@@ -147,6 +147,13 @@ public class EditorOptionPane extends AbstractOptionPane
 		electricBorders.getModel().setSelected(!"0".equals(jEdit.getProperty(
 			"view.electricBorders")));
 		addComponent(electricBorders);
+
+		/* Smart home/end */
+		homeEnd = new JCheckBox(jEdit.getProperty("options.editor"
+			+ ".homeEnd"));
+		homeEnd.getModel().setSelected("yes".equals(jEdit.getProperty(
+			"view.homeEnd")));
+		addComponent(homeEnd);
 	}
 
 	public void save()
@@ -179,6 +186,8 @@ public class EditorOptionPane extends AbstractOptionPane
 			.isSelected() ? "3" : "0");
 		jEdit.setProperty("buffer.noTabs",noTabs.getModel()
 			.isSelected() ? "yes" : "no");
+		jEdit.setProperty("view.homeEnd",homeEnd.getModel()
+			.isSelected() ? "yes" : "no");
 	}
 
 	// private members
@@ -198,4 +207,5 @@ public class EditorOptionPane extends AbstractOptionPane
 	private JCheckBox blockCaret;
 	private JCheckBox electricBorders;
 	private JCheckBox noTabs;
+	private JCheckBox homeEnd;
 }

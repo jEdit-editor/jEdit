@@ -58,6 +58,7 @@ public class JavaTokenMarker extends CTokenMarker
 			javaKeywords.add("public",Token.KEYWORD1);
 			javaKeywords.add("static",Token.KEYWORD1);
 			javaKeywords.add("synchronized",Token.KEYWORD1);
+			javaKeywords.add("native",Token.KEYWORD1);
 			javaKeywords.add("volatile",Token.KEYWORD1);
 			javaKeywords.add("transient",Token.KEYWORD1);
 			javaKeywords.add("break",Token.KEYWORD1);
@@ -96,6 +97,10 @@ public class JavaTokenMarker extends CTokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.3  1999/06/05 00:22:58  sp
  * LGPL'd syntax package
  *

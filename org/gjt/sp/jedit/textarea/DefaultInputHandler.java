@@ -47,7 +47,9 @@ public class DefaultInputHandler extends InputHandler
 	public void addDefaultKeyBindings()
 	{
 		addKeyBinding("BACK_SPACE",BACKSPACE);
+		addKeyBinding("C+BACK_SPACE",BACKSPACE_WORD);
 		addKeyBinding("DELETE",DELETE);
+		addKeyBinding("C+DELETE",DELETE_WORD);
 
 		addKeyBinding("ENTER",INSERT_BREAK);
 		addKeyBinding("TAB",INSERT_TAB);
@@ -347,6 +349,10 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.14  1999/10/26 07:43:59  sp
  * Session loading and saving, directory list search started
  *

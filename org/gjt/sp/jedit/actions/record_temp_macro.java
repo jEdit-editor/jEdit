@@ -41,7 +41,7 @@ public class record_temp_macro extends EditAction
 			return;
 		}
 
-		Buffer buffer = jEdit.openFile(null,null,"<< temp macro >>",false,true);
+		Buffer buffer = jEdit.openFile(null,null,"__temporary__.macro",false,true);
 
 		try
 		{

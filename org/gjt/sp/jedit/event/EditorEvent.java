@@ -74,9 +74,17 @@ public class EditorEvent extends AbstractEditorEvent
 	public static final int PROPERTIES_CHANGED = EDITOR_FIRST + 4;
 
 	/**
+	 * The return value of the <code>getID()</code> function when
+	 * the list of available macros has changed.
+	 *
+	 * @since jEdit 2.2pre4
+	 */
+	public static final int MACROS_CHANGED = EDITOR_FIRST + 5;
+
+	/**
 	 * The last event id that denotes an editor event.
 	 */
-	public static final int EDITOR_LAST = EDITOR_FIRST + 4;
+	public static final int EDITOR_LAST = EDITOR_FIRST + 5;
 
 	/**
 	 * Creates a new editor event.
@@ -123,6 +131,9 @@ public class EditorEvent extends AbstractEditorEvent
 		case PROPERTIES_CHANGED:
 			l.propertiesChanged(this);
 			break;
+		case MACROS_CHANGED:
+			l.macrosChanged(this);
+			break;
 		default:
 			// shouldn't happen
 			throw new InternalError();
@@ -133,6 +144,10 @@ public class EditorEvent extends AbstractEditorEvent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.7  1999/07/08 06:06:04  sp
  * Bug fixes and miscallaneous updates
  *

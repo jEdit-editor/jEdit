@@ -1,5 +1,5 @@
 /*
- * CTokenMarker.java - C token marker
+ * EiffelTokenMarker.java - C token marker
  * Copyright (C) 1999 Slava Pestov
  * Copyright (C) 1999 Artur Biesiadowski
  *
@@ -230,21 +230,7 @@ loop:		for(int i = offset; i < length; i++)
 			eiffelKeywords.add("strip",Token.LITERAL2);
 			eiffelKeywords.add("true",Token.LITERAL2);
 			eiffelKeywords.add("unique",Token.LITERAL2);
-         eiffelKeywords.add("void",Token.LITERAL2);
-
-
-			eiffelKeywords.add("ANY",Token.KEYWORD3);
-			eiffelKeywords.add("BIT",Token.KEYWORD3);
-			eiffelKeywords.add("BOOLEAN",Token.KEYWORD3);
-			eiffelKeywords.add("CHARACTER",Token.KEYWORD3);
-			eiffelKeywords.add("DOUBLE",Token.KEYWORD3);
-			eiffelKeywords.add("GENERAL",Token.KEYWORD3);
-			eiffelKeywords.add("INTEGER",Token.KEYWORD3);
-			eiffelKeywords.add("NONE",Token.KEYWORD3);
-			eiffelKeywords.add("PLATFORM",Token.KEYWORD3);
-			eiffelKeywords.add("POINTER",Token.KEYWORD3);
-			eiffelKeywords.add("REAL",Token.KEYWORD3);
-			eiffelKeywords.add("STRING",Token.KEYWORD3);
+			eiffelKeywords.add("void",Token.LITERAL2);
 
 		}
 		return eiffelKeywords;
@@ -261,9 +247,26 @@ loop:		for(int i = offset; i < length; i++)
 	private boolean doKeyword(Segment line, int i, char c)
 	{
 		int i1 = i+1;
+		boolean klassname = false;
 
 		int len = i - lastKeyword;
 		byte id = keywords.lookup(line,lastKeyword,len);
+		if ( id == Token.NULL )
+		{
+			klassname = true;
+			for ( int at = lastKeyword; at < lastKeyword + len; at++ )
+			{
+				char ch = line.array[at];
+				if ( ch != '_' && !Character.isUpperCase(ch) )
+				{
+					klassname = false;
+					break;
+				}
+			}
+			if ( klassname )
+				id = Token.KEYWORD3;
+		}
+
 		if(id != Token.NULL)
 		{
 			if(lastKeyword != lastOffset)

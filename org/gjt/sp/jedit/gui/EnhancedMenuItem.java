@@ -24,28 +24,26 @@ import java.awt.event.ActionEvent;
 import java.awt.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditAction;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.GUIUtilities;
 
 /**
  * Mega hackery in this class.
  * <ul>
  * <li>Painting of custom strings (for the multi-key accelerators)
  * <li>Support for null action commands
- * <li>Support for repeating and recording menu items by sending all
- * action execution to the text area's input handler (this also
- * allows us to add text area actions to the menu bar)
  * </ul>
  */
 public class EnhancedMenuItem extends JMenuItem
 {
 	public EnhancedMenuItem(String label, String keyBinding,
-		EditAction action)
+		EditAction action, String actionCommand)
 	{
 		super(label);
 		this.keyBinding = keyBinding;
-		this.action = action;
 
-		setEnabled(action != null);
+		if(action != null)
+			addActionListener(GUIUtilities.createActionWrapper(action));
+		setActionCommand(actionCommand);
 
 		acceleratorFont = UIManager
 			.getFont("MenuItem.acceleratorFont");
@@ -89,21 +87,8 @@ public class EnhancedMenuItem extends JMenuItem
 		return getModel().getActionCommand();
 	}
 
-	public void fireActionPerformed(ActionEvent evt)
-	{
-		if(action != null)
-		{
-			// Get the view that owns us
-			View view = EditAction.getView(this);
-			JEditTextArea textArea = view.getTextArea();
-			textArea.getInputHandler().executeAction(
-				action,textArea,getActionCommand());
-		}
-	}
-
 	// private members
 	private String keyBinding;
-	private EditAction action;
 	private Font acceleratorFont;
 	private Color acceleratorForeground;
 	private Color acceleratorSelectionForeground;

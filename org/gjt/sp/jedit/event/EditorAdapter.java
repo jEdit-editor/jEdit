@@ -57,11 +57,21 @@ public abstract class EditorAdapter implements EditorListener
 	 * This is invoked by the Options dialog box.
 	 */
 	public void propertiesChanged(EditorEvent evt) {}
+
+	/**
+	 * Method invoked when the list of available macros has
+	 * changed.
+	 */
+	 public void macrosChanged(EditorEvent evt) {}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.5  1999/03/16 04:34:46  sp
  * HistoryTextField updates, moved generate-text to a plugin, fixed spelling mistake in EditAction Javadocs
  *

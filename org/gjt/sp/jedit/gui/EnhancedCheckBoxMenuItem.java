@@ -24,27 +24,27 @@ import java.awt.event.ActionEvent;
 import java.awt.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditAction;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.GUIUtilities;
 
 /**
  * Mega hackery in this class.
  * <ul>
  * <li>Painting of custom strings (for the multi-key accelerators)
  * <li>Support for null action commands
- * <li>Support for repeating and recording menu items by sending all
- * action execution to the text area's input handler (this also
- * allows us to add text area actions to the menu bar)
  * </ul>
  */
 public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
 	public EnhancedCheckBoxMenuItem(String label, String keyBinding,
-		EditAction action)
+		EditAction action, String actionCommand)
 	{
 		super(label);
 		this.keyBinding = keyBinding;
 		this.action = action;
 
+		if(action != null)
+			addActionListener(GUIUtilities.createActionWrapper(action));
+		setActionCommand(actionCommand);
 		setModel(new Model());
 		setEnabled(action != null);
 
@@ -88,18 +88,6 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	public String getActionCommand()
 	{
 		return getModel().getActionCommand();
-	}
-
-	public void fireActionPerformed(ActionEvent evt)
-	{
-		if(action != null)
-		{
-			// Get the view that owns us
-			View view = EditAction.getView(this);
-			JEditTextArea textArea = view.getTextArea();
-			textArea.getInputHandler().executeAction(
-				action,textArea,getActionCommand());
-		}
 	}
 
 	// private members

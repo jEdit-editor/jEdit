@@ -228,6 +228,7 @@ public class jEdit
 						GUIUtilities.advanceProgress();
 		}
 		SearchAndReplace.load();
+		Macros.init();
 
 		// Start plugins
 		JARClassLoader.initPlugins();	GUIUtilities.advanceProgress();
@@ -1416,19 +1417,20 @@ public class jEdit
 	}
 
 	/**
-	 * Loads the key bindings.
+	 * Loads the text area key bindings.
 	 */
 	private static void initKeyBindings()
 	{
-		// Register text area key bindings
-		ActionListener[] textActions = DefaultInputHandler.ACTIONS;
-		for(int i = 0; i < textActions.length; i++)
+		Enumeration textActions = InputHandler.getActions();
+		while(textActions.hasMoreElements())
 		{
-			String binding = jEdit.getProperty(DefaultInputHandler
-				.ACTION_NAMES[i] + ".shortcut");
+			String name = (String)textActions.nextElement();
+			String binding = jEdit.getProperty(
+				name + ".shortcut");
 			if(binding != null)
 			{
-				inputHandler.addKeyBinding(binding,textActions[i]);
+				inputHandler.addKeyBinding(binding,
+					InputHandler.getAction(name));
 			}
 		}
 	}
@@ -1569,6 +1571,10 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.152  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.151  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

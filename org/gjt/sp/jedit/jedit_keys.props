@@ -8,7 +8,9 @@
 ###
 
 backspace.shortcut=BACK_SPACE
+backspace-word.shortcut=C+BACK_SPACE
 delete.shortcut=DELETE
+delete-word.shortcut=C+DELETE
 overwrite.shortcut=INSERT
 toggle-rect.shortcut=C+\\
 home.shortcut=HOME

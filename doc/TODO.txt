@@ -1,14 +1,13 @@
 JEDIT TO DO
 
 - Keyboard shortcuts for macros
-- Record toolbar clicks
-- Let user specify minimum log level in the activity log
-- Do searching in a background thread
-- Low-priority background thread that plugins can use to do background
-  parsing, etc: jEdit.addWorkRequest(Runnable r), WorkerThread
-- On some Java implementations, scrolling doesn't stop after mouse is released.
-  I've only seen this with 2.0, never with 2.1 or 2.2, but it is still reported
-  sometimes
+- Do searching in a background thread. This will use the work request thread
+  - For it to be fast, these methods would have to be thread safe:
+    - jEdit.openFile()
+    - jEdit.closeBuffer()
+    - jEdit.getBuffer()
+    - View.setBuffer()
+    - JEditTextArea.select()
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
 - Integrate EditBus if enough plugins take advantage of it. This will also

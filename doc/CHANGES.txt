@@ -2,22 +2,31 @@ JEDIT VERSION HISTORY
 
 * Version 2.2pre4
 
+As of this version, plugins are no longer part of the core distribution.
+
 + New Features
 
-- Menu item selections can now be recorded to macros
+- C+BACKSPACE deletes the word before the caret, C+DELETE deletes
+  the next word
+- Menu item selections and tool bar clicks can now be recorded to macros
 - Check box menu items are now supported; override the isToggle() method
   of EditAction to return true, then override isSelected() to return if the
   menu item should be checked
+- The "smart" home/end key behaviour can now be set in the Global Options
+  dialog box
 
 + Enhancements
 
 - More exceptions are logged now
+- New version of Eiffel syntax highlighting
+- Java mode now highlights the 'native' keyword
+- Macro code cleanup
 
-+ Plugin Updates
++ Bug Fixes
 
-- Console 1.8.1
-- EditBus 0.4
-- ErrorList 0.3
+- *.e files were not opened in Eiffel mode (since 2.1final)
+- Temporary macro filename changed to '__temporary__.macro'. This should
+  stop exceptions from being thrown while autosaving
 
 * Version 2.2pre3
 

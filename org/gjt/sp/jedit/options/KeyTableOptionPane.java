@@ -22,8 +22,8 @@ package org.gjt.sp.jedit.options;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Vector;
-import org.gjt.sp.jedit.textarea.DefaultInputHandler;
+import java.util.*;
+import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -75,15 +75,15 @@ class KeyTableModel extends AbstractTableModel
 
 	KeyTableModel()
 	{
-		String[] textActions = DefaultInputHandler.ACTION_NAMES;
+		Enumeration textActions = InputHandler.getActions();
 		EditAction[] actions = jEdit.getActions();
 
-		bindings = new Vector(textActions.length + actions.length);
+		bindings = new Vector(actions.length + 20);
 
 		// Add text area key bindings
-		for(int i = 0; i < textActions.length; i++)
+		while(textActions.hasMoreElements())
 		{
-			String name = textActions[i];
+			String name = (String)textActions.nextElement();
 			String label = jEdit.getProperty(name + ".label");
 			// Skip certain actions this way (ENTER, TAB)
 			if(label == null)
@@ -195,6 +195,10 @@ class KeyTableModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/11/09 10:14:34  sp
+ * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
+ * word commands, check box menu item support
+ *
  * Revision 1.6  1999/10/11 07:14:22  sp
  * doneWithBuffer()
  *
