@@ -19,10 +19,10 @@
 
 package gnu.regexp;
 
-class RETokenPOSIX extends REToken {
-  int m_type;
-  boolean m_insens;
-  boolean m_negated;
+final class RETokenPOSIX extends REToken {
+  int type;
+  boolean insens;
+  boolean negated;
 
   static final int  ALNUM = 0;
   static final int  ALPHA = 1;
@@ -51,11 +51,11 @@ class RETokenPOSIX extends REToken {
     return -1;
   }
 
-  RETokenPOSIX(int f_subIndex, int f_type,boolean f_insens, boolean f_negated) {
-    super(f_subIndex);
-    m_type = f_type;
-    m_insens = f_insens;
-    m_negated = f_negated;
+  RETokenPOSIX(int subIndex, int type, boolean insens, boolean negated) {
+    super(subIndex);
+    this.type = type;
+    this.insens = insens;
+    this.negated = negated;
   }
 
     int getMinimumLength() {
@@ -68,7 +68,7 @@ class RETokenPOSIX extends REToken {
       return false;
     
     boolean retval = false;
-    switch (m_type) {
+    switch (type) {
     case ALNUM:
 	// Note that there is some debate over whether '_' should be included
 	retval = Character.isLetterOrDigit(ch) || (ch == '_');
@@ -89,7 +89,7 @@ class RETokenPOSIX extends REToken {
 	retval = (!(Character.isWhitespace(ch) || Character.isISOControl(ch)));
 	break;
     case LOWER:
-	retval = ((m_insens && Character.isLetter(ch)) || Character.isLowerCase(ch));
+	retval = ((insens && Character.isLetter(ch)) || Character.isLowerCase(ch));
 	break;
     case PRINT:
 	retval = (!(Character.isWhitespace(ch) || Character.isISOControl(ch)))
@@ -103,14 +103,14 @@ class RETokenPOSIX extends REToken {
 	retval = Character.isWhitespace(ch);
 	break;
     case UPPER:
-	retval = ((m_insens && Character.isLetter(ch)) || Character.isUpperCase(ch));
+	retval = ((insens && Character.isLetter(ch)) || Character.isUpperCase(ch));
 	break;
     case XDIGIT:
 	retval = (Character.isDigit(ch) || ("abcdefABCDEF".indexOf(ch)!=-1));
 	break;
     }
 
-    if (m_negated) retval = !retval;
+    if (negated) retval = !retval;
     if (retval) {
 	++mymatch.index;
 	return next(input, mymatch);
@@ -119,7 +119,7 @@ class RETokenPOSIX extends REToken {
   }
 
   void dump(StringBuffer os) {
-    if (m_negated) os.append('^');
-    os.append("[:" + s_nameTable[m_type] + ":]");
+    if (negated) os.append('^');
+    os.append("[:" + s_nameTable[type] + ":]");
   }
 }

@@ -34,8 +34,8 @@ package gnu.regexp;
  */
 
 public class REException extends Exception {
-  private int m_type;
-  private int m_pos;
+  private int type;
+  private int pos;
 
   // Error conditions from GNU regcomp(3) manual
 
@@ -123,8 +123,8 @@ public class REException extends Exception {
 
   REException(String msg, int type, int position) { 
     super(msg); 
-    m_type = type;
-    m_pos = position;
+    this.type = type;
+    this.pos = position;
   }
 
   /**
@@ -132,7 +132,7 @@ public class REException extends Exception {
    */
 
   public int getType() {
-    return m_type;
+    return type;
   }
 
   /**
@@ -142,7 +142,7 @@ public class REException extends Exception {
    * a bad subexpression.
    */
   public int getPosition() {
-    return m_pos;
+    return pos;
   }
 
   /**
@@ -152,7 +152,7 @@ public class REException extends Exception {
    */
   public String getMessage() {
     StringBuffer sb = new StringBuffer();
-    sb.append("At position "+m_pos+" in regular expression pattern: ");
+    sb.append("At position " + pos + " in regular expression pattern: ");
     sb.append('\n');
     sb.append(super.getMessage());
     return sb.toString();

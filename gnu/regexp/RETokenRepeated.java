@@ -20,16 +20,16 @@
 package gnu.regexp;
 import java.util.Vector;
 
-class RETokenRepeated extends REToken {
+final class RETokenRepeated extends REToken {
     private REToken token;
     private int min,max;
     private boolean stingy;
     
-    RETokenRepeated(int f_subIndex, REToken f_token, int f_min, int f_max) {
-	super(f_subIndex);
-	token = f_token;
-	min = f_min;
-	max = f_max;
+    RETokenRepeated(int subIndex, REToken token, int min, int max) {
+	super(subIndex);
+	this.token = token;
+	this.min = min;
+	this.max = max;
     }
     
     void makeStingy() {
@@ -39,10 +39,17 @@ class RETokenRepeated extends REToken {
     int getMinimumLength() {
 	return (min * token.getMinimumLength());
     }
-    
+
+    // We do need to save every possible point, but the number of clone()
+    // invocations here is really a killer for performance on non-stingy
+    // repeat operators.  I'm open to suggestions...
+
+    // Hypothetical question: can you have a RE that matches 1 times,
+    // 3 times, 5 times, but not 2 times or 4 times?  Does having
+    // the subexpression back-reference operator allow that?
+
     boolean match(CharIndexed input, REMatch mymatch) {
 	int numRepeats = 0;
-	Vector positions = new Vector();
 	
 	// Possible positions for the next repeat to match at
 	REMatch newMatch = mymatch;
@@ -51,8 +58,14 @@ class RETokenRepeated extends REToken {
 
 	// Add the '0-repeats' index
 	// positions.elementAt(z) == position [] in input after <<z>> matches
+	Vector positions = new Vector();
 	positions.addElement(newMatch);
 	
+	// Declare variables used in loop
+	REMatch doables;
+	REMatch doablesLast;
+	REMatch recurrent;
+
 	do {
 	    // Check for stingy match for each possibility.
 	    if (stingy && (numRepeats >= min)) {
@@ -64,12 +77,12 @@ class RETokenRepeated extends REToken {
 		}
 	    }
 
-	    REMatch doables = null;
-	    REMatch doablesLast = null;
+	    doables = null;
+	    doablesLast = null;
 
 	    // try next repeat at all possible positions
 	    for (current = newMatch; current != null; current = current.next) {
-		REMatch recurrent = (REMatch) current.clone();
+		recurrent = (REMatch) current.clone();
 		if (token.match(input, recurrent)) {
 		    // add all items in current to doables array
 		    if (doables == null) {
@@ -78,7 +91,6 @@ class RETokenRepeated extends REToken {
 		    } else {
 			// Order these from longest to shortest
 			// Start by assuming longest (more repeats)
-			
 			doablesLast.next = recurrent;
 		    }
 		    // Find new doablesLast
@@ -112,8 +124,10 @@ class RETokenRepeated extends REToken {
 	while (--posIndex >= min) {
 	    newMatch = (REMatch) positions.elementAt(posIndex);
 	    // If rest of pattern matches
+	    // XXX has this already been tested?
 	    for (current = newMatch; current != null; current = current.next) {
-		REMatch recurrent = (REMatch) current.clone();
+		// XXX why do we have to clone?
+		recurrent = (REMatch) current.clone();
 		if (next(input, recurrent)) {
 		    // add all items in current to doneIndex array
 		    if (doneIndex == null) {

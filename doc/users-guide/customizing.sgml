@@ -322,9 +322,6 @@
    history text fields and the
    <guimenu>Edit</>&gt;<guimenuitem>Paste Previous</> command. See
    <xref linkend=clipboard> and <xref linkend=history>.</para></listitem>
-   <listitem><para><filename>mode-cache</> - a binary file which stores
-   information about all available edit modes so that they can be loaded
-   on demand. See <xref linkend=modes>.</para></listitem>
    <listitem><para><filename>properties</> - a plain text file which
    stores the majority of jEdit's settings.</para></listitem>
    <listitem><para><filename>recent</> - a plain text file which stores

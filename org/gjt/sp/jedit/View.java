@@ -687,7 +687,7 @@ public class View extends JFrame implements EBComponent
 		updateMarkerMenus();
 		updateMacrosMenu();
 		updatePluginsMenu();
-		updateHelpMenu();
+		//updateHelpMenu();
 
 		EditBus.addToBus(this);
 
@@ -1153,7 +1153,8 @@ public class View extends JFrame implements EBComponent
 		}
 
 		// Sort them
-		MiscUtilities.quicksort(pluginMenuItems,new MenuItemCompare());
+		MiscUtilities.quicksort(pluginMenuItems,
+			new MiscUtilities.MenuItemCompare());
 
 		JMenu menu = plugins;
 		for(int i = 0; i < pluginMenuItems.size(); i++)
@@ -1171,20 +1172,13 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	private void updateHelpMenu()
+	/* private void updateHelpMenu()
 	{
 		ActionListener listener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				try
-				{
-					HelpViewer.gotoURL(new URL(evt.getActionCommand()));
-				}
-				catch(MalformedURLException e)
-				{
-					Log.log(Log.ERROR,View.this,e);
-				}
+				new HelpViewer(evt.getActionCommand());
 			}
 		};
 
@@ -1194,47 +1188,41 @@ public class View extends JFrame implements EBComponent
 		for(int i = 0; i < plugins.length; i++)
 		{
 			EditPlugin plugin = plugins[i];
-			// don't include broken plugins in list
-			// ... why?
-			//if(plugin instanceof EditPlugin.Broken)
-			//	continue;
+			EditPlugin.JAR jar = plugin.getJAR();
+			if(jar == null)
+				continue;
 
 			String name = plugin.getClassName();
 
-			String label = jEdit.getProperty("plugin." + name + ".name");
 			String docs = jEdit.getProperty("plugin." + name + ".docs");
+			String label = jEdit.getProperty("plugin." + name + ".name");
 			if(docs != null)
 			{
-				java.net.URL docsURL = plugin.getClass().getResource(docs);
-				if(label != null && docsURL != null)
+				if(label != null && docs != null)
 				{
-					if(menu.getItemCount() >= 20)
+					java.net.URL url = jar.getClassLoader()
+						.getResource(docs);
+					if(url != null)
 					{
-						menu.addSeparator();
-						JMenu newMenu = new JMenu(
-							jEdit.getProperty(
-							"common.more"));
-						menu.add(newMenu);
-						menu = newMenu;
-					}
+						if(menu.getItemCount() >= 20)
+						{
+							menu.addSeparator();
+							JMenu newMenu = new JMenu(
+								jEdit.getProperty(
+								"common.more"));
+							menu.add(newMenu);
+							menu = newMenu;
+						}
 
-					JMenuItem menuItem = new JMenuItem(label);
-					menuItem.setActionCommand(docsURL.toString());
-					menuItem.addActionListener(listener);
-					menu.add(menuItem);
+						JMenuItem menuItem = new JMenuItem(label);
+						menuItem.setActionCommand(url.toString());
+						menuItem.addActionListener(listener);
+						menu.add(menuItem);
+					}
 				}
 			}
 		}
-	}
-
-	private static class MenuItemCompare implements MiscUtilities.Compare
-	{
-		public int compare(Object obj1, Object obj2)
-		{
-			return ((JMenuItem)obj1).getText().compareTo(
-				((JMenuItem)obj2).getText());
-		}
-	}
+	} */
 
 	private void handleBufferUpdate(BufferUpdate msg)
 	{

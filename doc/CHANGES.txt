@@ -1,5 +1,54 @@
 JEDIT 3.1 VERSION HISTORY
 
+* Version 3.1pre5
+
++ New Features
+
+- Reverse search (Tom Locke)
+  - 'Reverse search' check box in Find dialog box controls direction of
+    find when 'Find' is clicked.
+  - 'Find Next' and 'Find Previous' commands always search in the
+    respective direction.
+  - Only literal reverse search currently supported.
+  - Search bar uses reverse search when Backspace pressed during
+    incremental search.
+  - Enter in search bar searches forward, Shift+Enter searches backwards
+  - Keyboard shortcuts:
+    'Find Previous' is bound to C+h
+    'Find Selection', formely bound to C+h, is now bound to C+e C+f
+- Ada95 syntax highlighting (Alwyn Barry)
+- BCEL Java disassembler syntax highlighting, primarily intended for
+  use in Andre's upcoming ByteCode plugin (Andre Kaplan)
+- Help viewer now displays tree of available documentation, including
+  all sections of the user's guide, for one-click access
+
++ Enhancements
+
+- Virtual file systems in the 'More' menu are now sorted
+- New class: MiscUtilities.MenuItemCompare
+- Updated to gnu.regexp 1.1.2
+- New EditPlugin.getJAR() method
+
++ Neutral
+
+- EditBuddy plugin moved into the core
+
++ Bug Fixes
+
+- Fixed possible NPE when splitting view
+- Removed duplicate 'Return from Find' macro
+- ^ and $ didn't work in regexps because of a change in gnu.regexp 1.1.1
+- Register commands were not properly recorded in macros
+- Startup macro would not run if it was one of the files opened at startup
+- Entering a URL in the file system browser's file name field should now
+  work
+- Fixed several minor bugs regarding resizing docking areas
+- Attempting a search with nothing in the 'Find' field of the search and
+  replace dialog box will now fail, instead of searching for the most
+  recent string
+- Caret position in current file was not saved properly on exit
+- Documentation for plugins that weren't loaded properly didn't come up
+
 * Version 3.1pre4
 
 + New Features
@@ -33,7 +82,7 @@ JEDIT 3.1 VERSION HISTORY
 - Markers can now be set in read only files
 - Fixed meaningless error message displayed when a plugin depends on
   another one that cannot be loaded
-- All edits performed by a macro are now batched into one compound edit
+- All edits performed by a macro are now b`atched into one compound edit
 - Minor tweak: Invoking 'Wing Comment' with nothing selected now
   positions the caret between the command start and end strings
 

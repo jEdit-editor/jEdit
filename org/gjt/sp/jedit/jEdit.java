@@ -58,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.01.04.00";
+		return "03.01.05.00";
 	}
 
 	/**
@@ -354,6 +354,17 @@ public class jEdit
 					BeanShell.runScript(viewsFirst,macro.path,false,false);
 				}
 
+				// if there is a view around, show tip of the day
+				if(viewCount != 0)
+				{
+					if(jEdit.getBooleanProperty("firstTime"))
+						new HelpViewer("welcome.html");
+					else if(jEdit.getBooleanProperty("tip.show"))
+						new TipOfTheDay(viewsFirst);
+
+					setBooleanProperty("firstTime",false);
+				}
+
 				GUIUtilities.hideSplashScreen();
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
 					+ "complete");
@@ -601,7 +612,8 @@ public class jEdit
 			String path = MiscUtilities.constructPath(directory,plugin);
 
 			if(plugin.equals("BeanShell.jar")
-				|| plugin.equals("bsh-1.0.jar"))
+				|| plugin.equals("bsh-1.0.jar")
+				|| plugin.equals("EditBuddy.jar"))
 			{
 				String[] args = { plugin };
 				GUIUtilities.error(null,"plugin.obsolete",args);
@@ -1016,8 +1028,17 @@ public class jEdit
 			String line;
 			while((line = in.readLine()) != null)
 			{
+				boolean current;
+				if(line.endsWith("\t*"))
+				{
+					line = line.substring(0,line.length() - 2);
+					current = true;
+				}
+				else
+					current = false;
+
 				Buffer _buffer = openFile(null,line);
-				if(_buffer != null)
+				if(current && _buffer != null)
 					buffer = _buffer;
 			}
 
@@ -1034,12 +1055,15 @@ public class jEdit
 
 	/**
 	 * Saves the list of open files.
-	 * @since jEdit 3.1pre4
+	 * @since jEdit 3.1pre5
 	 */
-	public static void saveOpenFiles()
+	public static void saveOpenFiles(View view)
 	{
 		if(settingsDirectory == null)
 			return;
+
+		view.getEditPane().saveCaretInfo();
+		Buffer current = view.getBuffer();
 
 		File session = new File(MiscUtilities.constructPath(
 			settingsDirectory,"session"));
@@ -1054,6 +1078,8 @@ public class jEdit
 			while(buffer != null)
 			{
 				out.write(buffer.getPath());
+				if(buffer == current)
+					out.write("\t*");
 				out.write(lineSep);
 				buffer = buffer.next;
 			}
@@ -1732,6 +1758,14 @@ public class jEdit
 	}
 
 	/**
+	 * Returns the jEdit documentation URL.
+	 * @since jEdit 3.1pre5
+	 */
+	public static String getDocumentationURL()
+	{
+		return docsHome;
+	}
+	/**
 	 * Returns the user settings directory.
 	 */
 	public static String getSettingsDirectory()
@@ -1822,7 +1856,7 @@ public class jEdit
 		// if background mode is off
 		reallyExit |= !background;
 
-		saveOpenFiles();
+		saveOpenFiles(view);
 
 		// Close all buffers
 		if(!closeAllBuffers(view,reallyExit))
@@ -1897,6 +1931,7 @@ public class jEdit
 
 	// private members
 	private static String jEditHome;
+	private static String docsHome;
 	private static String settingsDirectory;
 	private static long propsModTime, historyModTime, recentModTime;
 	private static Properties defaultProps;
@@ -1997,6 +2032,10 @@ public class jEdit
 			else
 				jEditHome = System.getProperty("user.dir");
 		}
+
+		docsHome = MiscUtilities.constructPath(jEdit.getJEditHome(),"doc");
+		docsHome = "file:" + docsHome.replace(File.separatorChar,'/')
+			+ File.separatorChar;
 
 		actionHash = new Hashtable();
 	}

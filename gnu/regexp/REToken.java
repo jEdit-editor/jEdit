@@ -22,20 +22,20 @@ import java.io.Serializable;
 
 abstract class REToken implements Serializable {
 
-  protected REToken m_next = null;
-  protected REToken m_uncle = null;
-  protected int m_subIndex;
+  protected REToken next = null;
+  protected REToken uncle = null;
+  protected int subIndex;
 
-  protected REToken(int f_subIndex) {
-    m_subIndex = f_subIndex;
+  protected REToken(int aSubIndex) {
+      subIndex = aSubIndex;
   }
 
   int getMinimumLength() {
     return 0;
   }
 
-  void setUncle(REToken f_uncle) {
-    m_uncle = f_uncle;
+  void setUncle(REToken anUncle) {
+    uncle = anUncle;
   }
 
     /** Returns true if the match succeeded, false if it failed. */
@@ -43,20 +43,20 @@ abstract class REToken implements Serializable {
   
     /** Returns true if the rest of the tokens match, false if they fail. */
     protected boolean next(CharIndexed input, REMatch mymatch) {
-	if (m_next == null) {
-	    if (m_uncle == null) {
+	if (next == null) {
+	    if (uncle == null) {
 		return true;
 	    } else {
-		return m_uncle.match(input, mymatch);
+		return uncle.match(input, mymatch);
 	    }
 	} else {
-	    return m_next.match(input, mymatch);
+	    return next.match(input, mymatch);
 	}
     }
   
-  boolean chain(REToken next) {
-    m_next = next;
-    return true; // Token was accepted
+  boolean chain(REToken token) {
+      next = token;
+      return true; // Token was accepted
   }
 
   void dump(StringBuffer os) { 
@@ -64,6 +64,6 @@ abstract class REToken implements Serializable {
 
   void dumpAll(StringBuffer os) {
     dump(os);
-    if (m_next != null) m_next.dumpAll(os);
+    if (next != null) next.dumpAll(os);
   }
 }

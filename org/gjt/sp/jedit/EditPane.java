@@ -281,12 +281,12 @@ public class EditPane extends JPanel implements EBComponent
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addCustomHighlight(markerHighlight);
 
+		propertiesChanged();
+
 		if(buffer == null)
 			setBuffer(jEdit.getFirstBuffer());
 		else
 			setBuffer(buffer);
-
-		propertiesChanged();
 
 		loadBufferSwitcher();
 

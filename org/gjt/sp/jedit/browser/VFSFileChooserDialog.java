@@ -125,11 +125,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			String directory = browser.getDirectory();
 
 			filename = filenameField.getText();
+
 			if(filename.length() == 0)
 			{
 				getToolkit().beep();
 				return;
 			}
+			else if(MiscUtilities.isURL(filename))
+				return;
 			else
 			{
 				VFS vfs = VFSManager.getVFSForPath(directory);

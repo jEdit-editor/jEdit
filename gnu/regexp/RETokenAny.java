@@ -19,17 +19,17 @@
 
 package gnu.regexp;
 
-class RETokenAny extends REToken {
+final class RETokenAny extends REToken {
   /** True if '.' can match a newline (RE_DOT_NEWLINE) */
-  private boolean m_newline; 
+  private boolean newline; 
 
   /** True if '.' can't match a null (RE_DOT_NOT_NULL) */
-  private boolean m_null;    
+  private boolean matchNull;    
   
-  RETokenAny(int f_subIndex, boolean f_newline, boolean f_null) { 
-    super(f_subIndex);
-    m_newline = f_newline;
-    m_null = f_null;
+  RETokenAny(int subIndex, boolean newline, boolean matchNull) { 
+    super(subIndex);
+    this.newline = newline;
+    this.matchNull = matchNull;
   }
 
   int getMinimumLength() {
@@ -39,8 +39,8 @@ class RETokenAny extends REToken {
     boolean match(CharIndexed input, REMatch mymatch) {
     char ch = input.charAt(mymatch.index);
     if ((ch == CharIndexed.OUT_OF_BOUNDS)
-	|| (!m_newline && (ch == '\n'))
-	|| (m_null && (ch == 0)))
+	|| (!newline && (ch == '\n'))
+	|| (matchNull && (ch == 0)))
       return false;
     
     ++mymatch.index;

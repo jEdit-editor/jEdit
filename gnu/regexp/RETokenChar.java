@@ -19,12 +19,12 @@
 
 package gnu.regexp;
 
-class RETokenChar extends REToken {
+final class RETokenChar extends REToken {
   private char[] ch;
   private boolean insens;
 
-  RETokenChar(int f_subIndex, char c, boolean ins) {
-    super(f_subIndex);
+  RETokenChar(int subIndex, char c, boolean ins) {
+    super(subIndex);
     ch = new char [1];
     ch[0] = (insens = ins) ? Character.toLowerCase(c) : c;
   }

@@ -22,16 +22,16 @@ package gnu.regexp;
 /**
  * Represents a combination lookahead/lookbehind for POSIX [:alnum:].
  */
-class RETokenWordBoundary extends REToken {
+final class RETokenWordBoundary extends REToken {
     private boolean negated;
     private int where;
     static final int BEGIN = 1;
     static final int END = 2;
 
-    RETokenWordBoundary(int f_subIndex, int f_where, boolean isNegated) {
-	super(f_subIndex);
-	where = f_where;
-	negated = isNegated;
+    RETokenWordBoundary(int subIndex, int where, boolean negated) {
+	super(subIndex);
+	this.where = where;
+	this.negated = negated;
     }
     
     boolean match(CharIndexed input, REMatch mymatch) {
@@ -41,21 +41,24 @@ class RETokenWordBoundary extends REToken {
 	//  In the string "one two three", these positions match:
 	//  |o|n|e| |t|w|o| |t|h|r|e|e|
 	//  ^     ^ ^     ^ ^         ^
-	boolean after = false;
-	boolean before = false;
+	boolean after = false;  // is current character a letter or digit?
+	boolean before = false; // is previous character a letter or digit?
 	char ch;
 
-	if (mymatch.index > 0) {
-	    ch = input.charAt(mymatch.index - 1);
-	    before = Character.isLetterOrDigit(ch) || (ch == '_');
+	// TODO: Also check REG_ANCHORINDEX vs. anchor
+	if (((mymatch.eflags & RE.REG_ANCHORINDEX) != RE.REG_ANCHORINDEX) 
+	    || (mymatch.offset + mymatch.index > mymatch.anchor)) {
+	    if ((ch = input.charAt(mymatch.index - 1)) != CharIndexed.OUT_OF_BOUNDS) {
+		before = Character.isLetterOrDigit(ch) || (ch == '_');
+	    }
 	}
 
 	if ((ch = input.charAt(mymatch.index)) != CharIndexed.OUT_OF_BOUNDS) {
 	    after = Character.isLetterOrDigit(ch) || (ch == '_');
 	}
 
-	// if (before) and (!after), we're at end
-	// if (after) and (!before), we're at beginning
+	// if (before) and (!after), we're at end (\>)
+	// if (after) and (!before), we're at beginning (\<)
 	boolean doNext = false;
 
 	if ((where & BEGIN) == BEGIN) {
@@ -71,6 +74,12 @@ class RETokenWordBoundary extends REToken {
     }
     
     void dump(StringBuffer os) {
-	os.append( negated ? "\\B" : "\\b" );
+	if (where == (BEGIN | END)) {
+	    os.append( negated ? "\\B" : "\\b" );
+	} else if (where == BEGIN) {
+	    os.append("\\<");
+	} else {
+	    os.append("\\>");
+	}
     }
 }

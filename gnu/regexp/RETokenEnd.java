@@ -18,15 +18,15 @@
  */
 package gnu.regexp;
 
-class RETokenEnd extends REToken {
+final class RETokenEnd extends REToken {
     /**
      * Indicates whether this token should match on a line break.
      */
   private String newline;
 
-  RETokenEnd(int f_subIndex,String f_newline) { 
-    super(f_subIndex);
-    newline = f_newline;
+  RETokenEnd(int subIndex,String newline) { 
+    super(subIndex);
+    this.newline = newline;
   }
 
     boolean match(CharIndexed input, REMatch mymatch) {

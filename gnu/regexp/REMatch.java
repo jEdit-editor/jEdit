@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @author <A HREF="mailto:wes@cacas.org">Wes Biggs</A>
  */
 public final class REMatch implements Serializable, Cloneable {
-    private String m_match;
+    private String matchedText;
 
     // These variables are package scope for fast access within the engine
     int eflags; // execution flags this match was made using
@@ -46,11 +46,8 @@ public final class REMatch implements Serializable, Cloneable {
 	    REMatch copy = (REMatch) super.clone();
 	    copy.next = null;
 
-	    copy.start = new int [start.length];
-	    System.arraycopy(start,0,copy.start,0,start.length);
-
-	    copy.end = new int [end.length];
-	    System.arraycopy(end,0,copy.end,0,end.length);
+	    copy.start = (int[]) start.clone();
+	    copy.end = (int[]) end.clone();
 
 	    return copy;
 	} catch (CloneNotSupportedException e) {
@@ -65,12 +62,12 @@ public final class REMatch implements Serializable, Cloneable {
 	next = other.next;
     }
 
-    REMatch(int f_subs, int f_index, int f_eflags) {
-	start = new int[f_subs+1];
-	end = new int[f_subs+1];
-	anchor = f_index;
-	eflags = f_eflags;
-	clear(f_index);
+    REMatch(int subs, int index, int eflags) {
+	start = new int[subs+1];
+	end = new int[subs+1];
+	anchor = index;
+	this.eflags = eflags;
+	clear(index);
     }
 
     void finish(CharIndexed text) {
@@ -79,7 +76,7 @@ public final class REMatch implements Serializable, Cloneable {
 	int i;
 	for (i = 0; i < end[0]; i++)
 	    sb.append(text.charAt(i));
-	m_match = sb.toString();
+	matchedText = sb.toString();
 	for (i = 0; i < start.length; i++) {
 	    // If any subexpressions didn't terminate, they don't count
 	    // TODO check if this code ever gets hit
@@ -92,9 +89,9 @@ public final class REMatch implements Serializable, Cloneable {
     }
     
     /** Clears the current match and moves the offset to the new index. */
-    void clear(int f_index) {
-	offset = f_index;
-	index = 0;
+    void clear(int index) {
+	offset = index;
+	this.index = 0;
 	for (int i = 0; i < start.length; i++) {
 	    start[i] = end[i] = -1;
 	}
@@ -111,7 +108,7 @@ public final class REMatch implements Serializable, Cloneable {
      * </code>
      */
     public String toString() {
-	return m_match;
+	return matchedText;
     }
     
     /**
@@ -153,7 +150,7 @@ public final class REMatch implements Serializable, Cloneable {
      */
     public String toString(int sub) {
 	if ((sub >= start.length) || (start[sub] == -1)) return "";
-	return (m_match.substring(start[sub],end[sub]));
+	return (matchedText.substring(start[sub],end[sub]));
     }
     
     /** 

@@ -336,6 +336,7 @@ view-registers.label=View Registers...
 search=find \
        find-selection \
        find-next \
+       find-prev \
        - \
        replace-in-selection \
        replace-and-find-next \
@@ -354,6 +355,7 @@ search=find \
 search.label=$Search
 find.label=$Find...
 find-next.label=Fin$d Next
+find-prev.label=Find Pre$vious
 find-selection.label=F$ind Selection...
 replace-in-selection.label=$Replace in Selection
 replace-and-find-next.label=Re$place and Find Next
@@ -507,26 +509,18 @@ no-plugins.label=No Plugins
 ### Help menu
 help-menu=about \
      help \
-     - \
-     help-readme \
-     help-news \
-     help-todo \
-     help-changes \
-     help-copying \
-     help-copying-doc \
-     - \
-     help-api \
-     -
+     tip-of-the-day
 help-menu.label=$Help
 about.label=About jEdit...
-help.label=jEdit User Guide
-help-readme.label=jEdit Read Me
-help-news.label=Major Changes in jEdit 3.0
-help-todo.label=Changes Planned for jEdit 3.1
-help-changes.label=Version History
-help-copying.label=GNU General Public License
-help-copying-doc.label=GNU Free Documentation License
-help-api.label=jEdit API Quick Reference
+help.label=jEdit Help
+tip-of-the-day.label=Tip of the Day
+
+#help-readme.label=jEdit Read Me
+#help-news.label=Major Changes in jEdit 3.0
+#help-todo.label=Changes Planned for jEdit 3.1
+#help-changes.label=Version History
+#help-copying.label=GNU General Public License
+#help-copying-doc.label=GNU Free Documentation License
 
 ###
 ### MACRO STRINGS
@@ -636,7 +630,9 @@ no-write.message=Cannot save to {0}.\n\
 # Malformed URL error
 badurl.title=Invalid URL
 # {0} - the URL
-badurl.message=The following URL is invalid: {0}
+# {1} - the error
+badurl.message=The following URL is invalid: {0}\n
+	({1})
 
 # Go to line dialog
 goto-line.title=Go To Line
@@ -698,10 +694,6 @@ no-settings.title=Feature Unavailable
 no-settings.message=jEdit was started with the -nosettings switch.\n\
 	To use this feature, you must start jEdit without that switch.
 
-# No such action dialog
-unknown-action.title=Unknown Action
-unknown-action.message=Unknown action "{0}".
-
 # Search and replace dialog
 search.title=Search And Replace
 
@@ -716,6 +708,8 @@ search.case=Ignore case
 search.case.mnemonic=g
 search.regexp=Regular expressions
 search.regexp.mnemonic=x
+search.reverse=Reverse search
+search.reverse.mnemonic=v
 search.hypersearch=HyperSearch
 search.hypersearch.mnemonic=h
 
@@ -747,7 +741,7 @@ search.replaceAllBtn.mnemonic=a
 # Keep searching dialog
 keepsearching.title=No More Matches Found
 keepsearching.message=No more matches were found. Continue search from\n\
-	beginning?
+	{0,choice,0#beginning|1#end}?
 
 # HyperSearch results dialog
 hypersearch-results.title=HyperSearch Results
@@ -948,6 +942,7 @@ options.general.checkModStatus=Warn if file is modified on disk by another \
 options.general.showFullPath=Show full path of buffers in title bar
 options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher
+options.general.showTips=Show tips on startup
 
 options.loadsave.label=Loading & Saving
 options.loadsave.restore=Restore previously open files on startup
@@ -1158,6 +1153,28 @@ helpviewer.title=jEdit Help
 helpviewer.url=Location:
 helpviewer.back=Back
 helpviewer.forward=Forward
+
+helpviewer.toc.welcome=Welcome to jEdit
+helpviewer.toc.misc=Miscellaneous Documentation
+helpviewer.toc.readme=jEdit Read Me
+helpviewer.toc.news=Major Changes in jEdit 3.1
+helpviewer.toc.todo=Changes Planned for jEdit 3.2
+helpviewer.toc.changes=Version History
+helpviewer.toc.copying=GNU General Public License
+helpviewer.toc.copying-doc=GNU Free Documentation License
+helpviewer.toc.plugins=Plugin Documentation
+
+# Tip of the day window
+tip.title=Tip of the Day
+tip.caption=Did you know...
+tip.show-next-time=Show tips on startup
+tip.next-tip=Next Tip
+
+# Show on startup?
+tip.show=true
+
+# Number of tips
+tip.count=33
 
 # Activity log
 log-viewer.title=Activity Log

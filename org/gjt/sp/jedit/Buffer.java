@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 
@@ -1456,7 +1457,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			try
 			{
 				indentPrevLineRE = new RE(_indentPrevLine,
-					RE.REG_ICASE,RESyntax.RE_SYNTAX_PERL5);
+					RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
 			}
 			catch(REException re)
 			{

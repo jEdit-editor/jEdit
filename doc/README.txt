@@ -14,16 +14,16 @@ JEDIT 3.1 README
 
 * About jEdit
 
-jEdit is an Open Source, cross platform text editor written in Java. It
-has many advanced features that make text editing easier, such as syntax
+jEdit is a cross platform text editor written in Java. It has many
+advanced features that make text editing easier, such as syntax
 highlighting, auto indent, abbreviation expansion, registers, macros,
-regular expressions, and multiple file search and replace.
+folding, regular expressions, and multiple file search and replace.
 
-jEdit requires either Java 1.1 with Swing 1.1, or Java 2 to work.
+jEdit is free software, and you are welcome to redistribute it under the
+terms of the GNU General Public License. See thefile COPYING.txt for
+details.
 
-jEdit is released under the _GNU General Public License_, which can be
-found in the COPYING.txt file. jEdit comes with ABSOLUTELY NO WARRANTY
-OF ANY KIND; see section 11 and 12 of the GPL for details.
+jEdit requires Java 2 (or Java 1.1 with Swing 1.1) in order to work.
 
 * jEdit on the Internet
 
@@ -135,10 +135,9 @@ actually a Java bug, or a well-known problem.
 jEdit depends on, and comes bundled with the following libraries:
 
 - gnu.regexp by the Free Software Foundation. This is used to implement
-  regular expression search and replace, among other things. gnu.regexp
-  is released under the _GNU Lesser General Public License_. The version
-  included with jEdit differs slightly from the latest official version.
-  The original can be found at <http://www.cacas.org/java/gnu/regexp/>.
+  regular expression search and replace, among other things.
+
+  The gnu.regexp homepage is <http://www.cacas.org/java/gnu/regexp/>.
 
 - AElfred XML parser by Microstar corporation. This is used by the
   syntax highlighting code to parse mode files. This class library is
@@ -150,12 +149,13 @@ jEdit depends on, and comes bundled with the following libraries:
   to redistribute AElfred with your modifications, provided that the
   modifications are clearly documented."
 
-  The complete AElfred package is located at <http://www.microstar.com>.
+  The AElfred home page is <http://www.microstar.com>.
 
 - BeanShell scripting language, by Pat Niemeyer. This is used to
   implement macros, among other things. The version included with jEdit
   is basically a stripped down BeanShell 1.01, with a few minor changes.
-  The original package is located at <http://www.beanshell.org>.
+
+  The BeanShell homepage is <http://www.beanshell.org>.
 
 - The Sun Java look and Feel icon collection. The license may be found
   in the ICONS.LICENSE.txt file.
@@ -164,8 +164,11 @@ jEdit depends on, and comes bundled with the following libraries:
 
 The following people contributed code and edit modes to the jEdit core:
 
+Alwyn Barry:
+	- Ada95 syntax highlighting
+
 Andre Kaplan:
-	- ASP, JavaScript, VBScript syntax highlighting
+	- ASP, JavaScript, VBScript, BCEL syntax highlighting
 	- Syntax token background highlighting
 
 Artur Biesiadowski:
@@ -198,7 +201,7 @@ Jerry McBride:
 	- NetRexx syntax highlighting
 
 John Gellene:
-	- 'Writing macros' section of user's guide
+	- Macros section of user's guide
 	- A large number of sample macros
 
 Jonathan Revusky:
@@ -247,6 +250,9 @@ Romain Guy:
 
 Tal Davidson:
 	- Original syntax highlighting engine
+
+Tom Locke:
+	- Reverse search
 
 If you are not on the above list but think you should be, e-mail me.
 

@@ -7,6 +7,9 @@
 
 <MODES>
 
+<MODE NAME="ada95"		FILE="ada95.xml"
+				FILE_NAME_GLOB="*.{ada,adb,ads}" />
+
 <MODE NAME="asp"		FILE="asp.xml"
 				FILE_NAME_GLOB="*.{asp,asa}" />
 
@@ -24,6 +27,10 @@
 
 <MODE NAME="beanshell"		FILE="beanshell.xml"
 				FILE_NAME_GLOB="*.bsh" />
+
+<!-- if anyone knows a file name glob that can be used with this mode,
+     please let me know -->
+<MODE NAME="bcel"		FILE="bcel.xml" />
 
 <MODE NAME="c"			FILE="c.xml"
 				FILE_NAME_GLOB="*.[ch]" />

@@ -19,14 +19,14 @@
 
 package gnu.regexp;
 
-class RETokenRange extends REToken {
+final class RETokenRange extends REToken {
   private char lo, hi;
   private boolean insens;
 
-  RETokenRange(int f_subIndex, char f_lo, char f_hi, boolean ins) {
-    super(f_subIndex);
-    lo = (insens = ins) ? Character.toLowerCase(f_lo) : f_lo;
-    hi = ins ? Character.toLowerCase(f_hi) : f_hi;
+  RETokenRange(int subIndex, char lo, char hi, boolean ins) {
+    super(subIndex);
+    this.lo = (insens = ins) ? Character.toLowerCase(lo) : lo;
+    this.hi = ins ? Character.toLowerCase(hi) : hi;
   }
 
   int getMinimumLength() {

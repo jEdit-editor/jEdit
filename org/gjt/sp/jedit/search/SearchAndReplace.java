@@ -1,6 +1,7 @@
 /*
  * SearchAndReplace.java - Search and replace
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Portions copyright (C) 2001 Tom Locke
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,6 +155,34 @@ public class SearchAndReplace
 	}
 
 	/**
+	 * Sets the reverse search flag. Note that currently, only literal
+	 * reverse searches are supported.
+	 * @param reverse True if searches should go backwards,
+	 * false otherwise
+	 */
+	public static void setReverseSearch(boolean reverse)
+	{
+		if(reverse == SearchAndReplace.reverse)
+			return;
+
+		SearchAndReplace.reverse = reverse;
+
+		matcher = null;
+
+		EditBus.send(new SearchSettingsChanged(null));
+	}
+
+	/**
+	 * Returns the state of the reverse search flag.
+	 * @return True if searches should go backwards,
+	 * false otherwise
+	 */
+	public static boolean getReverseSearch()
+	{
+		return reverse;
+	}
+
+	/**
 	 * Sets the current search string matcher. Note that calling
 	 * <code>setSearchString</code>, <code>setReplaceString</code>,
 	 * <code>setIgnoreCase</code> or <code>setRegExp</code> will
@@ -174,7 +203,22 @@ public class SearchAndReplace
 	public static SearchMatcher getSearchMatcher()
 		throws IllegalArgumentException
 	{
-		if(matcher != null)
+		return getSearchMatcher(true);
+	}
+
+	/**
+	 * Returns the current search string matcher.
+	 * @param reverseOK Replacement commands need a non-reversed matcher,
+	 * so they set this to false
+	 * @exception IllegalArgumentException if regular expression search
+	 * is enabled, the search string or replacement string is invalid
+	 */
+	public static SearchMatcher getSearchMatcher(boolean reverseOK)
+		throws IllegalArgumentException
+	{
+		reverseOK &= (fileset instanceof CurrentBufferSet);
+
+		if(matcher != null && (reverseOK || !reverse))
 			return matcher;
 
 		if(search == null || "".equals(search))
@@ -186,7 +230,8 @@ public class SearchAndReplace
 		if(regexp)
 			matcher = new RESearchMatcher(search,replace,ignoreCase);
 		else
-			matcher = new BoyerMooreSearchMatcher(search,replace,ignoreCase);
+			matcher = new BoyerMooreSearchMatcher(search,replace,
+				ignoreCase,reverse && reverseOK);
 
 		return matcher;
 	}
@@ -229,7 +274,7 @@ public class SearchAndReplace
 		try
 		{
 			VFSManager.runInWorkThread(new HyperSearchRequest(view,
-				getSearchMatcher(),results.getTreeModel()));
+				getSearchMatcher(false),results.getTreeModel()));
 			return true;
 		}
 		catch(Exception e)
@@ -263,7 +308,7 @@ public class SearchAndReplace
 		boolean repeat = false;
 		Buffer buffer = fileset.getNextBuffer(view,null);
 
-		SearchMatcher matcher = getSearchMatcher();
+		SearchMatcher matcher = getSearchMatcher(true);
 		if(matcher == null)
 		{
 			view.getToolkit().beep();
@@ -285,11 +330,20 @@ loop:			for(;;)
 						VFSManager.waitForRequests();
 
 					int start;
+
 					if(view.getBuffer() == buffer && !repeat)
-						start = view.getTextArea()
-							.getSelectionEnd();
+					{
+						start = reverse
+							? view.getTextArea().getSelectionStart()
+							: view.getTextArea().getSelectionEnd();
+					}
 					else
-						start = 0;
+					{
+						start = reverse
+							? buffer.getLength()
+							: 0;
+					}
+
 					if(find(view,buffer,start))
 						return true;
 
@@ -307,8 +361,9 @@ loop:			for(;;)
 				if(BeanShell.isScriptRunning())
 					break loop;
 
+				Integer[] args = { new Integer(reverse ? 1 : 0) };
 				int result = GUIUtilities.confirm(view,
-					"keepsearching",null,
+					"keepsearching",args,
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 				if(result == JOptionPane.YES_OPTION)
@@ -350,7 +405,7 @@ loop:			for(;;)
 	public static boolean find(final View view, final Buffer buffer, final int start)
 		throws BadLocationException, IllegalArgumentException
 	{
-		SearchMatcher matcher = getSearchMatcher();
+		SearchMatcher matcher = getSearchMatcher(true);
 
 		Segment text = new Segment();
 		buffer.getText(start,buffer.getLength() - start,text);
@@ -396,7 +451,7 @@ loop:			for(;;)
 
 		try
 		{
-			SearchMatcher matcher = getSearchMatcher();
+			SearchMatcher matcher = getSearchMatcher(false);
 			if(matcher == null)
 			{
 				view.getToolkit().beep();
@@ -511,7 +566,7 @@ loop:			for(;;)
 		if(!buffer.isEditable())
 			return 0;
 
-		SearchMatcher matcher = getSearchMatcher();
+		SearchMatcher matcher = getSearchMatcher(false);
 		if(matcher == null)
 			return 0;
 
@@ -583,6 +638,7 @@ loop:		for(;;)
 	private static String replace;
 	private static boolean regexp;
 	private static boolean ignoreCase;
+	private static boolean reverse;
 	private static SearchMatcher matcher;
 	private static SearchFileSet fileset;
 
@@ -606,6 +662,8 @@ loop:		for(;;)
 				+ ignoreCase + ");");
 			recorder.record("SearchAndReplace.setRegexp("
 				+ regexp + ");");
+			recorder.record("SearchAndReplace.setReverseSearch("
+				+ reverse + ");");
 
 			if(recordFileSet)
 			{

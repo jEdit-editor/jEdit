@@ -161,7 +161,8 @@ public class JEditTextArea extends JComponent
 		if(!caretBlinks)
 			blink = false;
 
-		invalidateSelectedLines();
+		if(buffer != null)
+			invalidateSelectedLines();
 	}
 
 	/**

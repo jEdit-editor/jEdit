@@ -38,12 +38,12 @@
 		</SPAN>
 
 		<!-- DSSSL stuff -->
-		<SPAN TYPE="KEYWORD2">
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
 			<BEGIN>$</BEGIN>
 			<END>$</END>
 		</SPAN>
 
-		<SPAN TYPE="KEYWORD2">
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
 			<BEGIN>%</BEGIN>
 			<END>%</END>
 		</SPAN>
@@ -127,6 +127,7 @@
 			<FUNCTION>literal</FUNCTION>
 			<FUNCTION>process-node-list</FUNCTION>
 			<FUNCTION>element</FUNCTION>
+			<FUNCTION>mode</FUNCTION>
 			<FUNCTION>gi</FUNCTION>
 			<FUNCTION>sosofo-append</FUNCTION>
 			<FUNCTION>sequence</FUNCTION>

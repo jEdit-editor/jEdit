@@ -20,7 +20,7 @@
 package gnu.regexp;
 import java.util.Vector;
 
-class RETokenOneOf extends REToken {
+final class RETokenOneOf extends REToken {
   private Vector options;
   private boolean negative;
 
@@ -28,18 +28,18 @@ class RETokenOneOf extends REToken {
   // e.g. \d --> new RETokenOneOf("0123456789",false, ..)
   //      \D --> new RETokenOneOf("0123456789",true, ..)
 
-  RETokenOneOf(int f_subIndex, String f_options,boolean f_negative,boolean f_insens) {
-    super(f_subIndex);
+  RETokenOneOf(int subIndex, String optionsStr, boolean negative, boolean insens) {
+    super(subIndex);
     options = new Vector();
-    negative = f_negative;
-    for (int i=0; i<f_options.length(); i++)
-      options.addElement(new RETokenChar(f_subIndex,f_options.charAt(i),f_insens));
+    this.negative = negative;
+    for (int i = 0; i < optionsStr.length(); i++)
+      options.addElement(new RETokenChar(subIndex,optionsStr.charAt(i),insens));
   }
 
-  RETokenOneOf(int f_subIndex, Vector f_options,boolean f_negative) {
-    super(f_subIndex);
-    options = f_options;
-    negative = f_negative;
+  RETokenOneOf(int subIndex, Vector options, boolean negative) {
+    super(subIndex);
+    this.options = options;
+    this.negative = negative;
   }
 
   int getMinimumLength() {

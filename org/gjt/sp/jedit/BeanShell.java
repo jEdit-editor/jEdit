@@ -99,7 +99,18 @@ public class BeanShell
 		String path = GUIUtilities.showFileDialog(view,
 			null,JFileChooser.OPEN_DIALOG);
 		if(path != null)
-			runScript(view,path,true,false);
+		{
+			Buffer buffer = view.getBuffer();
+			try
+			{
+				buffer.beginCompoundEdit();
+				runScript(view,path,true,false);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+		}
 	}
 
 	/**
@@ -111,7 +122,7 @@ public class BeanShell
 	{
 		Reader in;
 		Buffer buffer = jEdit.getBuffer(path);
-		if(buffer != null)
+		if(buffer != null && buffer.isLoaded())
 		{
 			Segment seg = new Segment();
 			try

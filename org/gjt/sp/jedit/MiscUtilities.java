@@ -1,6 +1,6 @@
 /*
  * MiscUtilities.java - Various miscallaneous utility functions
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 2000 Richard S. Hall
  *
  * This program is free software; you can redistribute it and/or
@@ -20,6 +20,7 @@
 
 package org.gjt.sp.jedit;
 
+import javax.swing.JMenuItem;
 import java.io.*;
 import java.util.Vector;
 import java.util.StringTokenizer;
@@ -542,6 +543,15 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return obj1.toString().toLowerCase()
 				.compareTo(obj2.toString()
 				.toLowerCase());
+		}
+	}
+
+	public static class MenuItemCompare implements Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			return ((JMenuItem)obj1).getText().compareTo(
+				((JMenuItem)obj2).getText());
 		}
 	}
 

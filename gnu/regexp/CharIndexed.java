@@ -38,6 +38,10 @@ public interface CharIndexed {
     /**
      * Returns the character at the given offset past the current cursor
      * position in the input.  The index of the current position is zero.
+     * It is possible for this method to be called with a negative index.
+     * This happens when using the '^' operator in multiline matching mode
+     * or the '\b' or '\<' word boundary operators.  In any case, the lower
+     * bound is currently fixed at -2 (for '^' with a two-character newline).
      */
     public char charAt(int index);
 

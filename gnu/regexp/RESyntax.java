@@ -32,7 +32,7 @@ import java.util.BitSet;
  * @author <A HREF="mailto:wes@cacas.org">Wes Biggs</A>
  */
 
-public class RESyntax implements Serializable {
+public final class RESyntax implements Serializable {
     static final String DEFAULT_LINE_SEPARATOR = System.getProperty("line.separator");
 
     private static final String SYNTAX_IS_FINAL = "Syntax has been declared final and cannot be modified";

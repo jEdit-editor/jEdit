@@ -52,7 +52,8 @@
   </sidebar>
  </sect1>
  <sect1 id=saving><title>Saving Files</>
-  <para>   Changed made to a buffer do not affect the disk file until the
+  <para>
+   Changed made to a buffer do not affect the file on disk until the
    buffer is <firstterm>saved</>.
   </para>
   <para>
@@ -117,10 +118,10 @@
     The three major operating systems use different conventions to mark
     line endings in text files.
     The MacOS uses Carriage-Return characters (\r, ^M) for that purpose. Unix
-    uses Newline characters (\n, ^J). DOS and Windows use both
+    uses Newline characters (\n, ^J). Windows uses both
     (\r\n, ^M^J). jEdit can read and write files in all three formats.
     When a file is opened, the line separator is automatically
-    detected. It can be changed
+    detected. The line separator can be set on a buffer-specific basis
     in the <guimenu>Utilities</>&gt;<guimenuitem>Buffer Options</> dialog box.
     The default for new files can be set in the
     <guibutton>Loading and Saving</> pane of the
@@ -255,7 +256,7 @@
    <graphic scale=50 fileref=dialog-diskmod></>
   </figure> -->
  </sect1>
- <sect1 id=threaded-io><title>Multi-threaded I/O</>
+ <sect1 id=threaded-io><title>Multi-Threaded I/O</>
   <para>
    To improve responsiveness and perceived performance,
    jEdit executes all input/output operations asynchronously.

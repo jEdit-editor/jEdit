@@ -1,6 +1,6 @@
 /*
  * TipOfTheDay.java - Tip of the day window
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,13 +17,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package org.gjt.sp.jedit.gui;
+
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
-import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -119,7 +121,9 @@ public class TipOfTheDay extends EnhancedDialog
 				tipToShow = Math.abs(new Random().nextInt()) % count;
 			try
 			{
-				tipText.setPage(getClass().getResource("tip" + tipToShow + ".html"));
+				tipText.setPage(getClass().getResource(
+					"/org/gjt/sp/jedit/tips/tip"
+					+ tipToShow + ".html"));
 			}
 			catch(Exception e)
 			{

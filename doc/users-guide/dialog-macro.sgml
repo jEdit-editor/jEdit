@@ -169,7 +169,7 @@ prefixSuffixDialog();
 </informalexample>
 </sect1>
 
-<sect1 id="macro-anaylsis"><title>Analysis of the Macro</title>
+<sect1 id="macro-analysis"><title>Analysis of the Macro</title>
 
 <sect2 id="explain-imports"><title>Import Statements</>
 

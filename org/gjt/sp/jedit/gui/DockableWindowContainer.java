@@ -66,6 +66,12 @@ public interface DockableWindowContainer
 				dimension = -1;
 			}
 
+			if(dimension <= SPLITTER_WIDTH)
+				collapsed = true;
+
+			collapsed = jEdit.getBooleanProperty("view.dock."
+				+ position + ".collapsed");
+
 			MouseHandler mouseHandler = new MouseHandler();
 			addMouseListener(mouseHandler);
 			addMouseMotionListener(mouseHandler);
@@ -84,7 +90,7 @@ public interface DockableWindowContainer
 				return;
 
 			if(dimension <= SPLITTER_WIDTH)
-				collapsed = true;
+				dimension = -1;
 
 			this.collapsed = collapsed;
 			revalidate();
@@ -97,9 +103,6 @@ public interface DockableWindowContainer
 
 		public void saveDimension()
 		{
-			if(dimension <= SPLITTER_WIDTH)
-				dimension = -1;
-
 			jEdit.setProperty("view.dock." + position + ".dimension",
 				String.valueOf(dimension));
 			jEdit.setBooleanProperty("view.dock." + position
@@ -138,7 +141,7 @@ public interface DockableWindowContainer
 					|| position.equals(DockableWindowManager.BOTTOM))
 					prefSize.height = SPLITTER_WIDTH;
 			}
-			else if(dimension == -1)
+			else if(dimension <= SPLITTER_WIDTH)
 			{
 				if(position.equals(DockableWindowManager.LEFT)
 					|| position.equals(DockableWindowManager.RIGHT))
@@ -165,8 +168,6 @@ public interface DockableWindowContainer
 			addTab(jEdit.getProperty(win.getName()
 				+ ".title"),win.getComponent());
 			setSelectedComponent(win.getComponent());
-			if(dimension == 0)
-				dimension = -1;
 
 			collapsed = false;
 
@@ -200,10 +201,12 @@ public interface DockableWindowContainer
 		class MouseHandler extends MouseAdapter implements MouseMotionListener
 		{
 			boolean canDrag;
+			int dragStartDimension;
 			Point dragStart;
 
 			public void mousePressed(MouseEvent evt)
 			{
+				dragStartDimension = dimension;
 				dragStart = evt.getPoint();
 				dragStart.x = (getWidth() - dragStart.x);
 				dragStart.y = (getHeight() - dragStart.y);
@@ -270,14 +273,20 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.LEFT))
 					dimension = evt.getX() + dragStart.x;
 				else if(position.equals(DockableWindowManager.BOTTOM))
-					dimension = getHeight() - evt.getY();
+				{
+					dimension = getHeight() - (/* dragStart.y
+						- */ evt.getY());
+				}
 				else if(position.equals(DockableWindowManager.RIGHT))
-					dimension = getWidth() - evt.getX();
+				{
+					dimension = getWidth() - (/* dragStart.x
+						- */ evt.getX());
+				}
 
 				dimension = Math.max(SPLITTER_WIDTH,dimension);
 				if(dimension == SPLITTER_WIDTH)
 				{
-					dimension = -1;
+					dimension = dragStartDimension;
 					collapsed = true;
 				}
 				else

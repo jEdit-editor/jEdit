@@ -298,6 +298,14 @@
 
 <ACTION NAME="find-next" NO_RECORD="TRUE">
 	<CODE>
+		SearchAndReplace.setReverseSearch(false);
+		SearchAndReplace.find(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="find-prev" NO_RECORD="TRUE">
+	<CODE>
+		SearchAndReplace.setReverseSearch(true);
 		SearchAndReplace.find(view);
 	</CODE>
 </ACTION>
@@ -334,49 +342,43 @@
 
 <ACTION NAME="help">
 	<CODE>
-		HelpViewer.gotoFile("users-guide/index.html");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="help-api">
-	<CODE>
-		HelpViewer.gotoFile("users-guide/api-guide.html");
+		new HelpViewer("users-guide/index.html");
 	</CODE>
 </ACTION>
 
 <ACTION NAME="help-changes">
 	<CODE>
-		HelpViewer.gotoFile("CHANGES.txt");
+		new HelpViewer("CHANGES.txt");
 	</CODE>
 </ACTION>
 
 <ACTION NAME="help-copying">
 	<CODE>
-		HelpViewer.gotoFile("COPYING.txt");
+		new HelpViewer("COPYING.txt");
 	</CODE>
 </ACTION>
 
 <ACTION NAME="help-copying-doc">
 	<CODE>
-		HelpViewer.gotoFile("COPYING.DOC.txt");
+		new HelpViewer("COPYING.DOC.txt");
 	</CODE>
 </ACTION>
 
 <ACTION NAME="help-news">
 	<CODE>
-		HelpViewer.gotoFile("NEWS.txt");
+		new HelpViewer("NEWS.txt");
 	</CODE>
 </ACTION>
 
 <ACTION NAME="help-readme">
 	<CODE>
-		HelpViewer.gotoFile("README.txt");
+		new HelpViewer("README.txt");
 	</CODE>
 </ACTION>
 
 <ACTION NAME="help-todo">
 	<CODE>
-		HelpViewer.gotoFile("TODO.txt");
+		new HelpViewer("TODO.txt");
 	</CODE>
 </ACTION>
 
@@ -960,6 +962,12 @@
 <ACTION NAME="tabs-to-spaces">
 	<CODE>
 		textArea.tabsToSpaces();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="tip-of-the-day">
+	<CODE>
+		new TipOfTheDay(view);
 	</CODE>
 </ACTION>
 

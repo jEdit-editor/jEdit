@@ -108,7 +108,45 @@ public class SearchBar extends JPanel
 	private HistoryTextField find;
 	private JCheckBox ignoreCase, regexp, hyperSearch;
 
-	private boolean incrementalSearch(int start)
+	private void find(boolean reverse)
+	{
+		String text = find.getText();
+		if(text.length() == 0)
+		{
+			jEdit.setBooleanProperty("search.hypersearch.toggle",
+				hyperSearch.isSelected());
+			SearchAndReplace.showSearchDialog(view,null);
+		}
+		else if(hyperSearch.isSelected())
+		{
+			find.setText(null);
+			SearchAndReplace.setSearchString(text);
+			SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+			SearchAndReplace.hyperSearch(view);
+		}
+		else
+		{
+			// on enter, start search from end
+			// of current match to find next one
+			int start = reverse 
+				? view.getTextArea().getSelectionStart()
+				: view.getTextArea().getSelectionEnd();
+
+			if(!incrementalSearch(start,reverse))
+			{
+				// not found. start from
+				// beginning
+				if(!incrementalSearch(reverse
+					? view.getBuffer().getLength()
+					: 0,reverse))
+				{
+					// not found at all. beep.
+					getToolkit().beep();
+				}
+			}
+		}
+	}
+	private boolean incrementalSearch(int start, boolean reverse)
 	{
 		/* For example, if the current fileset is a directory,
 		 * C+g will find the next match within that fileset.
@@ -116,8 +154,8 @@ public class SearchBar extends JPanel
 		 * incremental search and want the next occurrence
 		 * in the current buffer. */
 		SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
-
 		SearchAndReplace.setSearchString(find.getText());
+		SearchAndReplace.setReverseSearch(reverse);
 
 		try
 		{
@@ -147,38 +185,7 @@ public class SearchBar extends JPanel
 		{
 			Object source = evt.getSource();
 			if(evt.getSource() == find)
-			{
-				String text = find.getText();
-				if(text.length() == 0)
-				{
-					jEdit.setBooleanProperty("search.hypersearch.toggle",
-						hyperSearch.isSelected());
-					SearchAndReplace.showSearchDialog(view,null);
-				}
-				else if(hyperSearch.isSelected())
-				{
-					find.setText(null);
-					SearchAndReplace.setSearchString(text);
-					SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
-					SearchAndReplace.hyperSearch(view);
-				}
-				else
-				{
-					// on enter, start search from end
-					// of current match to find next one
-					if(!incrementalSearch(view.getTextArea()
-						.getSelectionEnd()))
-					{
-						// not found. start from
-						// beginning
-						if(!incrementalSearch(0))
-						{
-							// not found at all. beep.
-							getToolkit().beep();
-						}
-					}
-				}
-			}
+				find(false);
 			else if(evt.getSource() == hyperSearch)
 				update();
 			else if(evt.getSource() == ignoreCase)
@@ -204,16 +211,20 @@ public class SearchBar extends JPanel
 			if(!hyperSearch.isSelected())
 			{
 				if(!incrementalSearch(view.getTextArea()
-					.getSelectionStart()))
-					getToolkit().beep();
+					.getSelectionStart(),false))
+				{
+					if(!incrementalSearch(0,false))
+					{
+						// not found at all. beep.
+						getToolkit().beep();
+					}
+				}
 			}
 		}
 
 		public void removeUpdate(DocumentEvent evt)
 		{
 			// on backspace, restart from beginning
-			// when we write reverse search, implement real
-			// backtracking
 			if(!hyperSearch.isSelected())
 			{
 				String text = find.getText();
@@ -223,7 +234,20 @@ public class SearchBar extends JPanel
 					// subsequent beeps are very
 					// annoying when backspacing an
 					// invalid search string.
-					incrementalSearch(0);
+					if(regexp.isSelected())
+					{
+						// reverse regexp search
+						// not supported yet, so
+						// 'sumulate' with restart
+						incrementalSearch(0,false);
+					}
+					else
+					{
+						incrementalSearch(
+							view.getTextArea()
+							.getSelectionStart(),
+							true);
+					}
 				}
 			}
 		}
@@ -241,6 +265,12 @@ public class SearchBar extends JPanel
 			{
 				evt.consume();
 				view.getEditPane().focusOnTextArea();
+			}
+			else if(evt.getKeyCode() == KeyEvent.VK_ENTER
+				&& evt.getModifiers() == InputEvent.SHIFT_MASK)
+			{
+				evt.consume();
+				find(true);
 			}
 		}
 	}

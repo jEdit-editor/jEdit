@@ -11,8 +11,8 @@
 
 <chapter id="simple-macros"><title>A Few Simple Macros</title>
  <para>
-  As you might expect, the power of BeanShell goes far beyond
-  performing simple arithmetic.
+  <!-- As you might expect, the power of BeanShell goes far beyond
+  performing simple arithmetic. -->
   Now we'll look at some simple macro scripts and show you how they
   work.
  </para>
@@ -180,7 +180,7 @@
  </sect1>
 
  <sect1 id="helpful-methods"><title>Helpful Methods in the
-  <classname>Macros</classname> Class</title>
+  Macros Class</title>
 
   <para>
    Including <function>message()</function>, there are three static methods
@@ -190,14 +190,15 @@
    class.
   </para>
 
+  <itemizedlist><listitem>
   <funcsynopsis>
 	 <funcprototype>
 	  <funcdef>public static void <function>message</function></funcdef>
 	  <paramdef>View <parameter>view</parameter></paramdef>
       <paramdef>String <parameter>message</parameter></paramdef>
 	 </funcprototype>
-	</funcsynopsis>
-
+	</funcsynopsis></listitem>
+<listitem>
 	<funcsynopsis>
 	 <funcprototype>
 	  <funcdef>public static void <function>error</function></funcdef>
@@ -205,7 +206,7 @@
       <paramdef>String <parameter>message</parameter></paramdef>
 	 </funcprototype>
 	</funcsynopsis>
-
+</listitem><listitem>
     <funcsynopsis>
      <funcprototype>
       <funcdef>public static String <function>input</function></funcdef>
@@ -213,7 +214,7 @@
       <paramdef>String <parameter>prompt</parameter></paramdef>
      </funcprototype>
     </funcsynopsis>
-
+</listitem></itemizedlist>
   <para>
    If this format is unfamiliar to you, here is a short explanation. The
    format is used in defining the methods in the source code of the

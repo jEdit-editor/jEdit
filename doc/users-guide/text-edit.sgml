@@ -372,11 +372,10 @@
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
   </para>
   <sidebar><title>The X Window System</>
-   <para>    The X Window System on Unix actually has two
-    <quote>clipboards</>;
-    the so called <quote>primary selection</>, and the <quote>Motif
-    clipboard</>. jEdit only uses the Motif clipboard. However, the
-    XClipboard plugin
+   <para>
+    The X Window System on Unix actually has two storage areas for text;
+    the <quote>primary selection</>, and the <quote>clipboard</>.
+    jEdit only uses the clipboard. However, the XClipboard plugin
     (see <xref linkend=plugins> for information about installing
     plugins) allows read-only access to the primary selection.
    </para>
@@ -593,15 +592,18 @@
     Regular expressions may be used to match inexact sequences of text if the
     <guibutton>Regular expressions</> check box is selected; see <xref
     linkend=regexps> for more information about regular expressions.
+    Note that regular expressions can only be used when searching forwards.
    </para>
    <para>
-    Clicking <guibutton>Find</> will locate the next occurrence of the search
-    string after the caret position. If the
+    If the <guibutton>Reverse search</> check box is not selected,
+    clicking <guibutton>Find</> will locate the next occurrence of the search
+    string after the caret position. Otherwise, it will locate
+    the previous occurence before the caret position. If the
     <guibutton>Keep dialog</> check box is selected, the dialog box will remain
     open; otherwise, it will be closed after the search string is located.
-    If no occurrences from the caret position onwards could be found, a dialog
+    If no occurrences could be found, a dialog
     box will be displayed, offering to restart the search from the
-    beginning of the buffer.
+    beginning (or end, if reverse search is enabled) of the buffer.
    </para>
    <para>
     <guimenu>Search</>&gt;<guimenuitem>Find Next</> (shortcut:
@@ -610,8 +612,15 @@
     and replace dialog box.
    </para>
    <para>
+    <guimenu>Search</>&gt;<guimenuitem>Find Previous</> (shortcut:
+    <keycombo><keycap>Control</><keycap>H</></keycombo>) locates the previous
+    occurrence of the most recent search string without displaying the search
+    and replace dialog box.
+   </para>
+   <para>
     <guimenu>Search</>&gt;<guimenuitem>Find Selection</> (shortcut:
-    <keycombo><keycap>Control</><keycap>H</></keycombo>) displays the
+    <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>F</></keycombo>) displays the
     search and replace dialog box with the currently selected text
     entered in the <guibutton>Search for:</> text field.
    </para>
@@ -689,7 +698,9 @@
     Initially, the search bar is in <firstterm>incremental search</>
     mode. In incremental search mode, the first occurrence of the search
     string is located in the current buffer as is it is being typed.
-    Subsequent occurrences can be located by pressing <keycap>Enter</>.
+    Subsequent occurrences can be located by pressing <keycap>Enter</>
+    and <keycombo><keycap>Shift</><keycap>Enter</></keycombo> to search
+    forwards and backwards, respectively.
     Once the desired occurrence has been found, press <keycap>Escape</>
     to return keyboard focus to the text area.
    </para>

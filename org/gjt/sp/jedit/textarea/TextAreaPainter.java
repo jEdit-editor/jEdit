@@ -108,7 +108,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setCaretColor(Color caretColor)
 	{
 		this.caretColor = caretColor;
-		textArea.invalidateSelectedLines();
+		if(textArea.getBuffer() != null)
+			textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -126,7 +127,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setSelectionColor(Color selectionColor)
 	{
 		this.selectionColor = selectionColor;
-		textArea.invalidateSelectedLines();
+		if(textArea.getBuffer() != null)
+			textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -144,7 +146,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setLineHighlightColor(Color lineHighlightColor)
 	{
 		this.lineHighlightColor = lineHighlightColor;
-		textArea.invalidateSelectedLines();
+		if(textArea.getBuffer() != null)
+			textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -163,7 +166,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setLineHighlightEnabled(boolean lineHighlight)
 	{
 		this.lineHighlight = lineHighlight;
-		textArea.invalidateSelectedLines();
+		if(textArea.getBuffer() != null)
+			textArea.invalidateSelectedLines();
 	}
 
 	/**
@@ -181,7 +185,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setBracketHighlightColor(Color bracketHighlightColor)
 	{
 		this.bracketHighlightColor = bracketHighlightColor;
-		textArea.invalidateLine(textArea.getBracketLine());
+		if(textArea.getBuffer() != null)
+			textArea.invalidateLine(textArea.getBracketLine());
 	}
 
 	/**
@@ -204,7 +209,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setBracketHighlightEnabled(boolean bracketHighlight)
 	{
 		this.bracketHighlight = bracketHighlight;
-		textArea.invalidateLine(textArea.getBracketLine());
+		if(textArea.getBuffer() != null)
+			textArea.invalidateLine(textArea.getBracketLine());
 	}
 
 	/**
@@ -223,7 +229,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setBlockCaretEnabled(boolean blockCaret)
 	{
 		this.blockCaret = blockCaret;
-		textArea.invalidateSelectedLines();
+		if(textArea.getBuffer() != null)
+			textArea.invalidateSelectedLines();
 	}
 
 	/**

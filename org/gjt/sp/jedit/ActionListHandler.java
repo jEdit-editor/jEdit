@@ -70,7 +70,7 @@ class ActionListHandler extends HandlerBase
 	public void doctypeDecl(String name, String publicId,
 		String systemId) throws Exception
 	{
-		if("ACTIONS".equalsIgnoreCase(name))
+		if("ACTIONS".equals(name))
 			return;
 
 		Log.log(Log.ERROR,this,path + ": DOCTYPE must be ACTIONS");
@@ -109,7 +109,7 @@ class ActionListHandler extends HandlerBase
 
 		String tag = peekElement();
 
-		if(name.equalsIgnoreCase(tag))
+		if(name.equals(tag))
 		{
 			if(tag == "ACTION")
 			{

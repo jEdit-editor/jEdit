@@ -2,6 +2,7 @@
  * BoyerMooreSearchMatcher.java - Literal pattern String matcher utilizing the
  *         Boyer-Moore algorithm
  * Copyright (C) 1999, 2000 mike dillon
+ * Portions copyright (C) 2001 Tom Locke
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +34,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 * false otherwise
 	 */
 	public BoyerMooreSearchMatcher(String pattern, String replace,
-		boolean ignoreCase)
+		boolean ignoreCase, boolean reverseSearch)
 	{
 		if (ignoreCase)
 		{
@@ -43,8 +44,20 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		{
 			this.pattern = pattern.toCharArray();
 		}
+
+		if (reverseSearch)
+		{
+			char[] tmp = new char[this.pattern.length];
+			for (int i = 0; i < tmp.length; i++)
+			{
+				tmp[i] = this.pattern[this.pattern.length - (i + 1)];
+			}
+			this.pattern = tmp;
+		}
+
 		this.replace = replace;
 		this.ignoreCase = ignoreCase;
+		this.reverseSearch = reverseSearch;
 
 		generateSkipArray();
 		generateSuffixArray();
@@ -80,6 +93,9 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 */
 	public String substitute(String text)
 	{
+		if (reverseSearch)
+			throw new RuntimeException("Reverse substitution not implemented");
+
 		StringBuffer buf = null;
 
 		int pos, lastMatch = 0;
@@ -129,7 +145,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	public int match(char[] text, int offset, int length)
 	{
 		// position variable for pattern start
-		int anchor = offset;
+		int anchor = reverseSearch ? offset - 1 : offset;
 
 		// position variable for pattern test position
 		int pos;
@@ -137,7 +153,9 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		// last possible start position of a match with this pattern;
 		// this is negative if the pattern is longer than the text
 		// causing the search loop below to immediately fail
-		int last_anchor = length - pattern.length;
+		int last_anchor = reverseSearch
+			? pattern.length - 1
+			: length - pattern.length;
 
 		// each time the pattern is checked, we start this many
 		// characters ahead of 'anchor'
@@ -159,13 +177,14 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		// pattern to determine the furthest we can move the anchor
 		// without missing any potential pattern matches.
 SEARCH:
-		while (anchor <= last_anchor)
+		while (reverseSearch ? anchor >= last_anchor : anchor <= last_anchor)
 		{
 			for (pos = pattern_end; pos >= 0; --pos)
 			{
+				int idx = reverseSearch ? anchor - pos : anchor + pos;
 				ch = ignoreCase
-					? Character.toUpperCase(text[anchor + pos])
-					: text[anchor + pos];
+					? Character.toUpperCase(text[idx])
+					: text[idx];
 
 				// pattern test
 				if (ch != pattern[pos])
@@ -180,7 +199,8 @@ SEARCH:
 
 					// skip the greater of the two distances provided by the
 					// heuristics
-					anchor += (bad_char > good_suffix) ? bad_char : good_suffix;
+					int skip = (bad_char > good_suffix) ? bad_char : good_suffix;
+					anchor += reverseSearch ? -skip : skip;
 
 					// go back to the while loop
 					continue SEARCH;
@@ -188,7 +208,7 @@ SEARCH:
 			}
 
 			// MATCH: return the position of its first character
-			return anchor;
+			return reverseSearch ? anchor - (pattern.length - 1) : anchor;
 		}
 
 		// MISMATCH: return -1 as defined by API
@@ -199,6 +219,7 @@ SEARCH:
 	private char[] pattern;
 	private String replace;
 	private boolean ignoreCase;
+	private boolean reverseSearch;
 
 	// Boyer-Moore member fields
 	private int[] skip;

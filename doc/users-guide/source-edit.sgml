@@ -302,24 +302,22 @@
  <sect1 id=folding><title>Folding</>
   <para>
    The folding feature allows lines to be hidden or shown, depending on their
-   leading
    indent level. Since most programming languages use indentation to nest
    code, folding away lines with a lot of indent has the effect of displaying
-   an <quote>overview</> of the buffer only, while displaying successively
-   higher indent levels <quote>zooms in</> and shows more <quote>detail</>.
+   an <quote>overview</> of the buffer only, while displaying
+   higher indent levels <quote>zooms in</> on the code
+   and shows more <quote>detail</>.
   </para>
   <para>
    A set of consecutive lines with the same leading indent is referred to as
    a <firstterm>fold</>. The visibility of each fold can be set independently.
-   Text hidden due to folding is still present in the buffer, and can be made
-   visible again using the appropriate commands. Cursor movement commands behave
-   like the text is not there, but text manipulation commands will act on the
-   hidden text.
+   Text hidden by folding is still present in the buffer, and can be made
+   visible again using the appropriate commands. Cursor movement commands
+   skip over the hidden text, but text manipulation commands act on it.
   </para>
   <para>
-   The initial fold visibility level,in multiples of the current tab size,
-   can be specified on a mode-specific or
-   global basis in the
+   The initial fold visibility level, in multiples of the current tab size,
+   can be specified on a mode-specific or global basis in the
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box. Folds
    with a level higher than this will be automatically collapsed after a buffer
    is loaded. Setting this value to zero makes all folds expanded initially
@@ -345,14 +343,14 @@
    <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand
    Fold One Level</> (keyboard shortcut:
    <keycombo><keycap>Alt</><keycap>Enter</></keycombo>) expands the fold
-   containing the caret, leaving nested folds collapsed.
+   containing the caret. Nested folds will remain collapsed.
   </para>
   <para>
    <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand
    Fold Fully</> (keyboard shortcut:
    <keycombo><keycap>Alt</><keycap>Shift</><keycap>Enter</></keycombo>)
    expands the fold
-   containing the caret, also expanding nested folds.
+   containing the caret, also expanding any nested folds.
   </para>
   <para>
    <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand All

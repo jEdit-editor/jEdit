@@ -1,6 +1,6 @@
 /*
  * HistoryTextField.java - Text field with a history
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,10 +140,14 @@ public class HistoryTextField extends JTextField
 			{
 				if(enterAddsToHistory)
 					addCurrentToHistory();
-				fireActionPerformed();
-				evt.consume();
+
+				if(evt.getModifiers() == 0)
+				{
+					fireActionPerformed();
+					evt.consume();
+				}
 			}
-			if(evt.getKeyCode() == KeyEvent.VK_UP)
+			else if(evt.getKeyCode() == KeyEvent.VK_UP)
 			{
 				if((evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
 					doBackwardSearch();
@@ -357,44 +361,3 @@ public class HistoryTextField extends JTextField
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.37  2000/11/13 11:19:27  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.36  2000/09/01 11:31:00  sp
- * Rudimentary 'command line', similar to emacs minibuf
- *
- * Revision 1.35  2000/08/29 07:47:12  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.34  2000/08/16 08:47:19  sp
- * Stuff
- *
- * Revision 1.33  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.32  2000/01/29 01:56:51  sp
- * Buffer tabs updates, some other stuff
- *
- * Revision 1.31  1999/11/21 07:59:30  sp
- * JavaDoc updates
- *
- * Revision 1.30  1999/11/16 08:21:20  sp
- * Various fixes, attempt at beefing up expand-abbrev
- *
- * Revision 1.29  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.28  1999/05/09 04:48:47  sp
- * Funky history menus
- *
- * Revision 1.27  1999/05/09 03:50:17  sp
- * HistoryTextField is now a text field again
- *
- * Revision 1.26  1999/05/08 00:13:00  sp
- * Splash screen change, minor documentation update, toolbar API fix
- *
- */

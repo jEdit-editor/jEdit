@@ -21,7 +21,7 @@
 <!ENTITY activitylog SYSTEM "activity-log.sgml">
 <!ENTITY cliusage SYSTEM "cli-usage.sgml">
 
-<!ENTITY macro-intro SYSTEM "macro-intro.sgml">
+<!ENTITY macro-basics SYSTEM "macro-basics.sgml">
 <!ENTITY simple-macros SYSTEM "simple-macros.sgml">
 <!ENTITY dialog-macro SYSTEM "dialog-macro.sgml">
 <!ENTITY api-guide SYSTEM "api-guide.sgml">
@@ -69,7 +69,7 @@
 </part>
 
 <part id="macros"><title>Extending jEdit With Macros</>
- &macro-intro;
+ &macro-basics;
  &simple-macros;
  &dialog-macro;
  &api-guide;

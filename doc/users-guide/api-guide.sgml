@@ -19,7 +19,7 @@
     that are useful in writing macros.
 </para>
 
-<sect1 id=class-jEdit><title>Class <classname>jEdit</></>
+<sect1 id=class-jEdit><title>Class jEdit</>
 
 <para>
     This is the main class of the application. The methods likely
@@ -367,7 +367,7 @@ a macro may need to use. They include the following:</para>
 </itemizedlist>
 </sect1>
 
-<sect1 id=class-View><title>Class <classname>View</></>
+<sect1 id=class-View><title>Class View</>
 
 <para>
     This class represents the <quote>parent</> or top-level frame window
@@ -466,7 +466,7 @@ a macro may need to use. They include the following:</para>
 
 </sect1>
 
-<sect1 id=class-JEditTextArea><title>Class <classname>JEditTextArea</></>
+<sect1 id=class-JEditTextArea><title>Class JEditTextArea</>
 
 <para>
     This class is the visible component that displays the file
@@ -1117,7 +1117,7 @@ Returns the line containing the position of the selection's beginning or end.
 
 </sect1>
 
-<sect1 id=class-Buffer><title>Class <classname>Buffer</></>
+<sect1 id=class-Buffer><title>Class Buffer</>
 
 <para>
     A <classname>Buffer</> represents the contents of an open text
@@ -1359,7 +1359,7 @@ Returns the line containing the position of the selection's beginning or end.
 
 </sect1>
 
-<sect1 id=class-Macros><title>Class <classname>Macros</></>
+<sect1 id=class-Macros><title>Class Macros</>
 
 <para>
     The following shortcut methods are useful in displaying output messages
@@ -1417,7 +1417,7 @@ Returns the line containing the position of the selection's beginning or end.
 
 </sect1>
 
-<sect1 id=class-SearchAndReplace><title>Class <classname>SearchAndReplace</></>
+<sect1 id=class-SearchAndReplace><title>Class SearchAndReplace</>
 
 <para>
     Search and replace routines are undertaken by jEdit's
@@ -1574,7 +1574,7 @@ Returns the line containing the position of the selection's beginning or end.
 </itemizedlist>
 
 <para>
-<emphasis>class <classname>CurrentBufferSet</></>
+<emphasis>class CurrentBufferSet</>
 </para>
 
 <para>
@@ -1689,7 +1689,7 @@ Returns the line containing the position of the selection's beginning or end.
 </sect1>
 
 
-<sect1 id=class-GUIUtilities><title>Class <classname>GUIUtilities</></>
+<sect1 id=class-GUIUtilities><title>Class GUIUtilities</>
 
 <para>
     Two <type>static</> methods in this class encapsulate the creation and
@@ -1740,7 +1740,7 @@ The <parameter>type</> parameter can either be <constant>JFileChooser.OPEN_DIALO
 
 </sect1>
 
-<sect1 id=class-TextUtilities><title>Class <classname>TextUtilities</></>
+<sect1 id=class-TextUtilities><title>Class TextUtilities</>
 
 <para>
     This class contains a number of <type>static</> methods
@@ -1840,7 +1840,7 @@ The <parameter>type</> parameter can either be <constant>JFileChooser.OPEN_DIALO
 
 </sect1>
 
-<sect1 id=class-MiscUtilities><title>Class <classname>MiscUtilities</></>
+<sect1 id=class-MiscUtilities><title>Class MiscUtilities</>
 
 <para>
 This class is another collection of <type>static</> utility methods.
@@ -2010,7 +2010,7 @@ This class is another collection of <type>static</> utility methods.
 </sect1>
 
 
-<sect1 id=class-BeanShell><title>Class <classname>BeanShell</></>
+<sect1 id=class-BeanShell><title>Class BeanShell</>
 
 <para>
     This class integrates the BeanShell interpreter into jEdit.  One method is

@@ -1,6 +1,6 @@
 /*
  * GeneralOptionPane.java - General options panel
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,6 +102,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 		showBufferSwitcher.setSelected(jEdit.getBooleanProperty(
 			"view.showBufferSwitcher"));
 		addComponent(showBufferSwitcher);
+
+		/* Show buffer switcher */
+		showTips = new JCheckBox(jEdit.getProperty(
+			"options.general.showTips"));
+		showTips.setSelected(jEdit.getBooleanProperty("tip.show"));
+		addComponent(showTips);
 	}
 
 	protected void _save()
@@ -120,6 +126,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.showBufferSwitcher",
 			showBufferSwitcher.isSelected());
+		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
 	}
 
 	// private members
@@ -133,4 +140,5 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox showFullPath;
 	private JCheckBox showSearchbar;
 	private JCheckBox showBufferSwitcher;
+	private JCheckBox showTips;
 }

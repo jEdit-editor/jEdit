@@ -96,6 +96,15 @@ public abstract class EditPlugin
 	public void createOptionPanes(OptionsDialog optionsDialog) {}
 
 	/**
+	 * Returns the JAR file containing this plugin.
+	 * @since jEdit 3.1pre5
+	 */
+	public EditPlugin.JAR getJAR()
+	{
+		return jar;
+	}
+
+	/**
 	 * A placeholder for a plugin that didn't load.
 	 */
 	public static class Broken extends EditPlugin
@@ -132,6 +141,8 @@ public abstract class EditPlugin
 
 		public void addPlugin(EditPlugin plugin)
 		{
+			plugin.jar = JAR.this;
+
 			plugins.addElement(plugin);
 			plugin.start();
 		}
@@ -171,33 +182,7 @@ public abstract class EditPlugin
 		private JARClassLoader classLoader;
 		private Vector plugins;
 	}
-}
 
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.8  2000/08/31 02:54:00  sp
- * Improved activity log, bug fixes
- *
- * Revision 1.7  2000/06/03 07:28:25  sp
- * User interface updates, bug fixes
- *
- * Revision 1.6  2000/06/02 02:21:05  sp
- * minor bug fixes
- *
- * Revision 1.5  2000/05/14 10:55:21  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.4  2000/02/20 03:14:13  sp
- * jEdit.getBrokenPlugins() method
- *
- * Revision 1.3  1999/12/11 06:34:39  sp
- * Bug fixes
- *
- * Revision 1.2  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
- *
- * Revision 1.1  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- */
+	// private members
+	private EditPlugin.JAR jar;
+}

@@ -19,13 +19,13 @@
 
 package gnu.regexp;
 
-class RETokenEndSub extends REToken {
-    RETokenEndSub(int f_subIndex) {
-	super(f_subIndex);
+final class RETokenEndSub extends REToken {
+    RETokenEndSub(int subIndex) {
+	super(subIndex);
     }
     
     boolean match(CharIndexed input, REMatch mymatch) {
-	mymatch.end[m_subIndex] = mymatch.index;
+	mymatch.end[subIndex] = mymatch.index;
 	return next(input, mymatch);
     }
     

@@ -22,9 +22,9 @@ package gnu.regexp;
 class RETokenStart extends REToken {
     private String newline; // matches after a newline
     
-    RETokenStart(int f_subIndex, String f_newline) {
-	super(f_subIndex);
-	newline = f_newline;
+    RETokenStart(int subIndex, String newline) {
+	super(subIndex);
+	this.newline = newline;
     }
     
     boolean match(CharIndexed input, REMatch mymatch) {

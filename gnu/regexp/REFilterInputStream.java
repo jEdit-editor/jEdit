@@ -34,12 +34,12 @@ import java.io.InputStream;
 
 public class REFilterInputStream extends FilterInputStream {
 
-  private RE m_expr;
-  private String m_replace;
-  private String m_buffer;
-  private int m_bufpos;
-  private int m_offset;
-  private CharIndexedInputStream m_stream;
+    private RE expr;
+    private String replace;
+    private String buffer;
+    private int bufpos;
+    private int offset;
+    private CharIndexedInputStream stream;
 
   /**
    * Creates an REFilterInputStream.  When reading from this stream,
@@ -48,15 +48,15 @@ public class REFilterInputStream extends FilterInputStream {
    * metacharacters $0 through $9 may be used to refer to the full
    * match or subexpression matches).
    *
-   * @param f_stream The InputStream to be filtered.
-   * @param f_expr The regular expression to search for.
-   * @param f_replace The text pattern to replace matches with.  
+   * @param stream The InputStream to be filtered.
+   * @param expr The regular expression to search for.
+   * @param replace The text pattern to replace matches with.  
    */
-  public REFilterInputStream(InputStream f_stream, RE f_expr, String f_replace) {
-    super(f_stream);
-    m_stream = new CharIndexedInputStream(f_stream,0);
-    m_expr = f_expr;
-    m_replace = f_replace;
+  public REFilterInputStream(InputStream stream, RE expr, String replace) {
+    super(stream);
+    this.stream = new CharIndexedInputStream(stream,0);
+    this.expr = expr;
+    this.replace = replace;
   }
 
   /**
@@ -65,31 +65,31 @@ public class REFilterInputStream extends FilterInputStream {
    */
   public int read() {
     // If we have buffered replace data, use it.
-    if ((m_buffer != null) && (m_bufpos < m_buffer.length())) {
-      return (int) m_buffer.charAt(m_bufpos++);
+    if ((buffer != null) && (bufpos < buffer.length())) {
+      return (int) buffer.charAt(bufpos++);
     }
 
     // check if input is at a valid position
-    if (!m_stream.isValid()) return -1;
+    if (!stream.isValid()) return -1;
 
-    REMatch mymatch = new REMatch(m_expr.getNumSubs(),m_offset,0);
-    if (m_expr.match(m_stream, mymatch)) {
+    REMatch mymatch = new REMatch(expr.getNumSubs(),offset,0);
+    if (expr.match(stream, mymatch)) {
       mymatch.end[0] = mymatch.index;
-      mymatch.finish(m_stream);
-      m_stream.move(mymatch.toString().length());
-      m_offset += mymatch.toString().length();
-      m_buffer = mymatch.substituteInto(m_replace);
-      m_bufpos = 1;
+      mymatch.finish(stream);
+      stream.move(mymatch.toString().length());
+      offset += mymatch.toString().length();
+      buffer = mymatch.substituteInto(replace);
+      bufpos = 1;
 
       // This is prone to infinite loops if replace string turns out empty.
-      if (m_buffer.length() > 0) {
-	  return m_buffer.charAt(0);
+      if (buffer.length() > 0) {
+	  return buffer.charAt(0);
       }
     }
-    char ch = m_stream.charAt(0);
+    char ch = stream.charAt(0);
     if (ch == CharIndexed.OUT_OF_BOUNDS) return -1;
-    m_stream.move(1);
-    m_offset++;
+    stream.move(1);
+    offset++;
     return ch;
   }
 

@@ -19,14 +19,14 @@
 
 package gnu.regexp;
 
-class RETokenBackRef extends REToken {
+final class RETokenBackRef extends REToken {
   private int num;
   private boolean insens;
   
-  RETokenBackRef(int f_subIndex, int mynum, boolean ins) {
-    super(f_subIndex);
-    insens = ins;
-    num = mynum;
+  RETokenBackRef(int subIndex, int num, boolean insens) {
+    super(subIndex);
+    this.num = num;
+    this.insens = insens;
   }
 
   // should implement getMinimumLength() -- any ideas?

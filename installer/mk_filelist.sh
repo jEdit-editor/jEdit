@@ -9,11 +9,11 @@
 echo jedit.jar > installer/jedit-program
 echo jars/PluginManager.jar >> installer/jedit-program
 echo jars/LatestVersion.jar >> installer/jedit-program
-echo jars/EditBuddy.jar >> installer/jedit-program
 echo site-props/*.props >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
 echo modes/catalog >> installer/jedit-program
 find doc -type f -name \*.txt >> installer/jedit-program
+echo doc/welcome.html >> installer/jedit-program
 find macros -name \*.bsh >> installer/jedit-program
 
 echo -n "jedit-program: "
@@ -27,7 +27,8 @@ ls -l `cat installer/jedit-firewall` | awk 'BEGIN { size=0 } { size+=$5 } END { 
 
 # jedit-html fileset
 
-find doc/users-guide -type f -name \*.html -print > installer/jedit-html
+find doc/users-guide/ -name \*.html > installer/jedit-html
+echo doc/users-guide/toc.xml >> installer/jedit-html
 
 echo -n "jedit-html: "
 ls -l `cat installer/jedit-html` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'

@@ -1,11 +1,26 @@
-+ before 3.1pre4
- - api guide formatting problems
+TO DO
+
++ before 3.1final
+ - macro guide formatting problems in PDF version
+ - word wrap when > 1 word over margin
+ - magic caret code a bit annoying
+ - check beanshell import stuff
 
  - CVS: add the macro guide SGML files, COPYING.DOC.txt
  - CVS: add CharIndexedSegment.java
  - CVS: remove macros.sgml, devel-plugins.sgml
+ - CVS: add ada95.xml, bcel.xml
+ - CVS: add ogsj/tips, TipOfTheDay.java, welcome.html
 
 + sometime in the future
+ - fix dragStart handling in DockableWindowContainer.TabbedPane
+ - better reverse search from search bar
+ - wing comment with rect sel active puts comment start/end at the
+   beginning/end of each selected chunk
+ - can mini io progress, io progress command
+ - display io progress automatically after > 1 sec I/O
+ - find next/prev occurrence commands in core, instead of macros
+ - reverse regexp search
  - C+i in shortcuts editor
  - expand-fold doesn't expand narrowed regions
  - macro performance sucks
@@ -36,6 +51,7 @@
    and binary search in virtualToPhysical()
  - escape in 'add abbrev' dialog
  - search in selection option; find-next disabled, hypersearch, replace-all
-   ok, repalce button does same thing???
+   ok, replace button does same thing???
  - option for auto wrap around in search
  - display all plugin errors, batched in one window on startup
+ - move plugin manager into the core?

@@ -467,6 +467,11 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>H</></keycombo></>
+      <entry>Find previous.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
+      <keycombo><keycap>Control</><keycap>F</></keycombo></>
       <entry>Find selection.</entry>
      </row>
      <row>

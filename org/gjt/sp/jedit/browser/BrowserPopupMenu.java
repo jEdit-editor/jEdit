@@ -98,8 +98,9 @@ public class BrowserPopupMenu extends JPopupMenu
 		add(createMenuItem("add-to-favorites"));
 		add(createMenuItem("go-to-favorites"));
 
+		// put them in a vector for sorting
+		Vector vec = new Vector();
 		Enumeration enum = VFSManager.getFilesystems();
-		boolean addedSeparator = false;
 
 		while(enum.hasMoreElements())
 		{
@@ -107,17 +108,20 @@ public class BrowserPopupMenu extends JPopupMenu
 			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
 				continue;
 
-			if(!addedSeparator)
-			{
-				addSeparator();
-				addedSeparator = true;
-			}
-
 			JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
 				"vfs." + vfs.getName() + ".label"));
 			menuItem.setActionCommand("vfs." + vfs.getName());
 			menuItem.addActionListener(new ActionHandler());
-			add(menuItem);
+			vec.addElement(menuItem);
+		}
+
+		if(vec.size() != 0)
+		{
+			addSeparator();
+
+			MiscUtilities.quicksort(vec,new MiscUtilities.MenuItemCompare());
+			for(int i = 0; i < vec.size(); i++)
+				add((JMenuItem)vec.elementAt(i));
 		}
 	}
 

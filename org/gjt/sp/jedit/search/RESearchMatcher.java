@@ -36,7 +36,8 @@ public class RESearchMatcher implements SearchMatcher
 	 */
 	public static final RESyntax RE_SYNTAX_JEDIT
 		= new RESyntax(RESyntax.RE_SYNTAX_PERL5)
-		.set(RESyntax.RE_CHAR_CLASSES);
+		.set(RESyntax.RE_CHAR_CLASSES)
+		.setLineSeparator("\n");
 
 	/**
 	 * Creates a new regular expression string matcher.

@@ -264,17 +264,17 @@ public abstract class InputHandler extends KeyAdapter
 		if(recorder != null)
 			recorder.record(repeatCount,readNextChar);
 
-		if(repeat && repeatCount != 1)
+		if(getRepeatCount() != 1)
 		{
 			Buffer buffer = view.getBuffer();
 
 			try
 			{
 				buffer.beginCompoundEdit();
-	
-				BeanShell.eval(view,"for(int i = 1; i < " + repeatCount
-					+ "; i++)\n{\n" + readNextChar + "\n}",
-					false);
+
+				BeanShell.eval(view,"for(int i = 1; i < "
+					+ getRepeatCount() + "; i++)\n{\n"
+					+ readNextChar + "\n}",false);
 			}
 			finally
 			{

@@ -20,23 +20,24 @@ package gnu.regexp;
 import java.io.Serializable;
 
 class CharIndexedStringBuffer implements CharIndexed, Serializable {
-  private StringBuffer s;
-  private int m_index;
+    private StringBuffer s;
+    private int anchor;
 
-  CharIndexedStringBuffer(StringBuffer str, int index) {
-    s = str;
-    m_index = index;
-  }
+    CharIndexedStringBuffer(StringBuffer str, int index) {
+	s = str;
+	anchor = index;
+    }
 
   public char charAt(int index) {
-    return ((m_index + index) < s.length()) ? s.charAt(m_index + index) : CharIndexed.OUT_OF_BOUNDS;
+      int pos = anchor + index;
+    return ((pos < s.length()) && (pos >= 0)) ? s.charAt(pos) : OUT_OF_BOUNDS;
   }
 
   public boolean isValid() {
-    return (m_index < s.length());
+    return (anchor < s.length());
   }
 
   public boolean move(int index) {
-    return ((m_index += index) < s.length());
+    return ((anchor += index) < s.length());
   }
 }

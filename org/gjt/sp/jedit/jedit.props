@@ -7,6 +7,10 @@
 ### GLOBAL SETTINGS
 ###
 
+# If true, welcome screen will be displayed.
+# Set to false after initial startup.
+firstTime=true
+
 # Autosave interval in seconds, 0=off
 autosave=30
 

@@ -14,5 +14,4 @@ find . -name .directory -exec rm {} \;
 rm -f doc/users-guide/*.{aux,tex,log}
 rm -f doc/users-guide/*.out
 rm -f doc/users-guide/users-guide.pdf
-rm -f doc/users-guide/*.html
 rm -f installer/jedit-*
