@@ -13,8 +13,11 @@
 <MODE NAME="assembly-x86"	FILE="assembly-x86.xml"
 				FILE_NAME_GLOB="*.asm" />
 
-<MODE NAME="awk"		FILE="awt.xml"
+<MODE NAME="awk"		FILE="awk.xml"
 				FILE_NAME_GLOB="*.awk" />
+
+<MODE NAME="b"			FILE="b.xml"
+				FILE_NAME_GLOB="*.{imp,ref,mch}" />
 
 <MODE NAME="batch"		FILE="batch.xml"
 				FILE_NAME_GLOB="*.bat" />
@@ -68,7 +71,7 @@
 				FILE_NAME_GLOB="*.jmk" />
 
 <MODE NAME="jsp"		FILE="jsp.xml"
-				FILE_NAME_GLOB="*.jsp" />
+				FILE_NAME_GLOB="*.{jsp,jsf,jspf}" />
 
 <MODE NAME="lisp"		FILE="lisp.xml"
 				FILE_NAME_GLOB="*.{lisp,lsp,el}" />

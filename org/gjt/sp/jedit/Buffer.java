@@ -2440,7 +2440,10 @@ loop:				for(int i = 0; i < count; i++)
 
 		virtualLineCount = lineCount;
 		for(int i = 0; i < lineCount; i++)
+		{
 			virtualLines[i] = i;
+			lineInfo[i].visible = true;
+		}
 
 		fireFoldStructureChanged();
 	}

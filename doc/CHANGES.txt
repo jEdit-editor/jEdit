@@ -1,5 +1,23 @@
 JEDIT 3.1 VERSION HISTORY
 
+* Version 3.1pre3
+
++ Enhancements
+
+- Variables and functions defined in the 'Startup' macro are now
+  available to all macros and BeanShell commands
+- Edit mode for "B formal method" (Bruno Tatibouet)
+  (see http://www.comlab.ox.ac.uk/archive/formal-methods/b.html)
+- New directories are created in the currently selected directory,
+  instead of the root directory of the tree
+- Slightly faster local filesystem code
+
++ Bug Fixes
+
+- 'Current Directory' menu didn't ignore backup files properly
+- 'Expand All Folds' command was broken
+- AWK mode didn't work
+
 * Version 3.1pre2
 
 + New Features

@@ -99,7 +99,7 @@ public class BeanShell
 		String path = GUIUtilities.showFileDialog(view,
 			null,JFileChooser.OPEN_DIALOG);
 		if(path != null)
-			runScript(view,path,false);
+			runScript(view,path,true,false);
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class BeanShell
 	 * @since jEdit 2.7pre3
 	 */
 	public static void runScript(View view, String path,
-		boolean rethrowBshErrors)
+		boolean ownNamespace, boolean rethrowBshErrors)
 	{
 		Reader in;
 		Buffer buffer = jEdit.getBuffer(path);
@@ -140,9 +140,9 @@ public class BeanShell
 			}
 		}
 
-		NameSpace namespace = new NameSpace(interp.getNameSpace(),
-			"macro namespace");
-
+		NameSpace namespace = interp.getNameSpace();
+		if(ownNamespace)
+			namespace = new NameSpace(namespace,"macro namespace");
 
 		try
 		{

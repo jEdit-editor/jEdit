@@ -168,6 +168,9 @@ Andre Kaplan:
 Artur Biesiadowski:
 	- Eiffel syntax highlighting
 
+Bruno Tatibouet:
+	- B formal method syntax highlighting
+
 Dante Fabrizio:
 	- VHDL syntax highlighting
 

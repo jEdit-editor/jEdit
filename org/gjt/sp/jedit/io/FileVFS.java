@@ -208,10 +208,25 @@ public class FileVFS extends VFS
 		for(int i = 0; i < list.length; i++)
 		{
 			String name = list[i];
-			VFS.DirectoryEntry file = _getDirectoryEntry(session,
-				MiscUtilities.constructPath(path,name),comp);
-			if(file != null)
-				list2.addElement(file);
+			String _path;
+			if(path.endsWith(File.separator))
+				_path = path + name;
+			else
+				_path = path + File.separatorChar + name;
+
+			File file = new File(_path);
+
+			int type;
+			if(file.isDirectory())
+				type = VFS.DirectoryEntry.DIRECTORY;
+			else
+				type = VFS.DirectoryEntry.FILE;
+
+			VFS.DirectoryEntry entry = new VFS.DirectoryEntry(
+				name,_path,_path,type,file.length(),
+				fsView.isHiddenFile(file));
+
+			list2.addElement(entry);
 		}
 
 		VFS.DirectoryEntry[] retVal = new VFS.DirectoryEntry[list2.size()];
@@ -237,8 +252,8 @@ public class FileVFS extends VFS
 		else
 			type = VFS.DirectoryEntry.FILE;
 
-		return new VFS.DirectoryEntry(file.getName(),
-			path,path,type,file.length(),fsView.isHiddenFile(file));
+		return new VFS.DirectoryEntry(file.getName(),path,path,type,
+			file.length(),fsView.isHiddenFile(file));
 	}
 
 	public boolean _delete(Object session, String path, Component comp)

@@ -93,12 +93,14 @@ public class CurrentDirectoryMenu extends JMenu
 					if(name.startsWith("#") && name.endsWith("#"))
 						continue;
 
+					// skip backup files
 					if((backupPrefix.length() != 0
 						&& name.startsWith(backupPrefix))
 						|| (backupSuffix.length() != 0
-						&& name.startsWith(backupSuffix)))
+						&& name.endsWith(backupSuffix)))
 						continue;
 
+					// skip directories
 					file = new File(dir,name);
 					if(file.isDirectory())
 						continue;

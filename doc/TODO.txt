@@ -1,21 +1,32 @@
-- document Startup macro
-- update to new gnu.regexp version
++ grave
+
+- cvs add b.xml
 - inserting text causes random problems with folding
 - undo causes problems sometimes (is this related to folding at all?)
 - sometimes fold markers are not repainted in gutter
 - scrolling bug
 - replace all fucks shit up
 - press enter on a fold start line fucks up
+- scrollbar bug
+- filesystem browser: deleting causes random '>1 request' errors
+- macro shortcuts do not work
+
++ important
+
+- document Startup macro
+- update to new gnu.regexp version
+- finish persistent splits
+- finish \t in abbrevs
+- Folding docs - in source-edit.sgml
+- confirm() method in GUIUtilities
+- .description plugin property
+- Migrate documentation to DocBook/XML
+
++ not really
+
 - XMode rule inclusion
 - when saving local files, save to .<filename>.save, then rename to
   <filename>
 - The base Metal L&F font will be configurable.
 - Bracket double click behavior is really annoying - make if configurable
-- finish persistent splits
-- finish \t in abbrevs
 - Two-pane view in filesystem browser
-- Migrate documentation to DocBook/XML
-- Folding docs - in source-edit.sgml
-- confirm() method in GUIUtilities
-- .description plugin property
-- scrollbar bug

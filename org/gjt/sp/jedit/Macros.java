@@ -208,7 +208,7 @@ public class Macros
 				public void invoke(View view)
 				{
 					lastMacro = path;
-					BeanShell.runScript(view,path,false);
+					BeanShell.runScript(view,path,true,false);
 				}
 			};
 
@@ -355,7 +355,7 @@ public class Macros
 			jEdit.getSettingsDirectory(),"macros",
 			"Temporary_Macro.bsh");
 
-		BeanShell.runScript(view,lastMacro,false);
+		BeanShell.runScript(view,lastMacro,true,false);
 	}
 
 	/**
@@ -368,7 +368,7 @@ public class Macros
 		if(lastMacro == null)
 			view.getToolkit().beep();
 		else
-			BeanShell.runScript(view,lastMacro,false);
+			BeanShell.runScript(view,lastMacro,true,false);
 	}
 
 	// private members

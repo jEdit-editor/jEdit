@@ -1,6 +1,6 @@
 /*
  * VFSBrowser.java - VFS browser
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -388,10 +388,25 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		if(newDirectory == null)
 			return;
 
-		VFS vfs = VFSManager.getVFSForPath(path);
+		// if a directory is selected, create new dir in there.
+		// if a file is selected, create new dir inside its parent.
+		VFS.DirectoryEntry[] selected = getSelectedFiles();
+		String parent;
+		if(selected.length == 0)
+			parent = path;
+		else if(selected[0].type == VFS.DirectoryEntry.FILE)
+		{
+			parent = selected[0].path;
+			parent = VFSManager.getVFSForPath(parent)
+				.getParentOfPath(parent);
+		}
+		else
+			parent = selected[0].path;
+
+		VFS vfs = VFSManager.getVFSForPath(parent);
 
 		// path is the currently viewed directory in the browser
-		newDirectory = vfs.constructPath(path,newDirectory);
+		newDirectory = vfs.constructPath(parent,newDirectory);
 
 		Object session = vfs.createVFSSession(newDirectory,this);
 		if(session == null)
