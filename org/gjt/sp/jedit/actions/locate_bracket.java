@@ -33,12 +33,13 @@ public class locate_bracket extends EditAction
 		View view = getView(evt);
 		Buffer buffer = view.getBuffer();
 		JEditTextArea textArea = view.getTextArea();
-		int dot = textArea.getCaretPosition();
+		int line = textArea.getCaretLine();
+		int dot = textArea.getCaretPosition() - textArea.getLineStartOffset(line);
 
 		try
 		{
 			int bracket = TextUtilities.findMatchingBracket(
-				buffer,Math.max(0,dot - 1));
+				buffer,line,Math.max(0,dot - 1));
 			if(bracket != -1)
 			{
 				textArea.setCaretPosition(bracket + 1);

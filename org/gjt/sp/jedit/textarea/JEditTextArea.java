@@ -438,53 +438,41 @@ public class JEditTextArea extends JComponent
 		int segmentOffset = lineSegment.offset;
 		int x = horizontalOffset;
 
-		/* If syntax coloring is disabled, do simple translation */
-		if(tokenMarker == null)
-		{
-			lineSegment.count = offset;
-			return x + Utilities.getTabbedTextWidth(lineSegment,
-				fm,x,painter,0);
-		}
-		/* If syntax coloring is enabled, we have to do this because
-		 * tokens can vary in width */
-		else
-		{
-			Token tokens = tokenMarker.markTokens(lineSegment,line);
+		Token tokens = tokenMarker.markTokens(lineSegment,line).firstToken;
 
-			Toolkit toolkit = painter.getToolkit();
-			Font defaultFont = painter.getFont();
-			SyntaxStyle[] styles = painter.getStyles();
+		Toolkit toolkit = painter.getToolkit();
+		Font defaultFont = painter.getFont();
+		SyntaxStyle[] styles = painter.getStyles();
 
-			for(;;)
+		for(;;)
+		{
+			byte id = tokens.id;
+			if(id == Token.END)
 			{
-				byte id = tokens.id;
-				if(id == Token.END)
-				{
-					return x;
-				}
-
-				if(id == Token.NULL)
-					fm = painter.getFontMetrics();
-				else
-					fm = styles[id].getFontMetrics(defaultFont);
-
-				int length = tokens.length;
-
-				if(offset + segmentOffset < lineSegment.offset + length)
-				{
-					lineSegment.count = offset - (lineSegment.offset - segmentOffset);
-					return x + Utilities.getTabbedTextWidth(
-						lineSegment,fm,x,painter,0);
-				}
-				else
-				{
-					lineSegment.count = length;
-					x += Utilities.getTabbedTextWidth(
-						lineSegment,fm,x,painter,0);
-					lineSegment.offset += length;
-				}
-				tokens = tokens.next;
+				return x;
 			}
+
+			if(id == Token.NULL)
+				fm = painter.getFontMetrics();
+			else
+				fm = styles[id].getFontMetrics(defaultFont);
+
+			int length = tokens.length;
+
+			if(offset + segmentOffset < lineSegment.offset + length)
+			{
+				lineSegment.count = offset - (lineSegment.offset - segmentOffset);
+				return x + Utilities.getTabbedTextWidth(
+					lineSegment,fm,x,painter,0);
+			}
+			else
+			{
+				lineSegment.count = length;
+				x += Utilities.getTabbedTextWidth(
+					lineSegment,fm,x,painter,0);
+				lineSegment.offset += length;
+			}
+			tokens = tokens.next;
 		}
 	}
 
@@ -508,14 +496,32 @@ public class JEditTextArea extends JComponent
 
 		int width = horizontalOffset;
 
-		if(tokenMarker == null)
+		Token tokens = tokenMarker.markTokens(lineSegment,line).firstToken;
+
+		int offset = 0;
+		Toolkit toolkit = painter.getToolkit();
+		Font defaultFont = painter.getFont();
+		SyntaxStyle[] styles = painter.getStyles();
+
+		for(;;)
 		{
-			for(int i = 0; i < segmentCount; i++)
+			byte id = tokens.id;
+			if(id == Token.END)
+				return offset;
+
+			if(id == Token.NULL)
+				fm = painter.getFontMetrics();
+			else
+				fm = styles[id].getFontMetrics(defaultFont);
+
+			int length = tokens.length;
+
+			for(int i = 0; i < length; i++)
 			{
-				char c = segmentArray[i + segmentOffset];
+				char c = segmentArray[segmentOffset + offset + i];
 				int charWidth;
 				if(c == '\t')
-					charWidth = (int)painter.nextTabStop(width,i)
+					charWidth = (int)painter.nextTabStop(width,offset + i)
 						- width;
 				else
 					charWidth = fm.charWidth(c);
@@ -523,68 +529,19 @@ public class JEditTextArea extends JComponent
 				if(painter.isBlockCaretEnabled())
 				{
 					if(x - charWidth <= width)
-						return i;
+						return offset + i;
 				}
 				else
 				{
 					if(x - charWidth / 2 <= width)
-						return i;
+						return offset + i;
 				}
 
 				width += charWidth;
 			}
 
-			return segmentCount;
-		}
-		else
-		{
-			Token tokens = tokenMarker.markTokens(lineSegment,line);
-
-			int offset = 0;
-			Toolkit toolkit = painter.getToolkit();
-			Font defaultFont = painter.getFont();
-			SyntaxStyle[] styles = painter.getStyles();
-
-			for(;;)
-			{
-				byte id = tokens.id;
-				if(id == Token.END)
-					return offset;
-
-				if(id == Token.NULL)
-					fm = painter.getFontMetrics();
-				else
-					fm = styles[id].getFontMetrics(defaultFont);
-
-				int length = tokens.length;
-
-				for(int i = 0; i < length; i++)
-				{
-					char c = segmentArray[segmentOffset + offset + i];
-					int charWidth;
-					if(c == '\t')
-						charWidth = (int)painter.nextTabStop(width,offset + i)
-							- width;
-					else
-						charWidth = fm.charWidth(c);
-
-					if(painter.isBlockCaretEnabled())
-					{
-						if(x - charWidth <= width)
-							return offset + i;
-					}
-					else
-					{
-						if(x - charWidth / 2 <= width)
-							return offset + i;
-					}
-
-					width += charWidth;
-				}
-
-				offset += length;
-				tokens = tokens.next;
-			}
+			offset += length;
+			tokens = tokens.next;
 		}
 	}
 
@@ -1022,10 +979,11 @@ public class JEditTextArea extends JComponent
 		if(newStart != selectionStart || newEnd != selectionEnd
 			|| newBias != biasLeft)
 		{
-			updateBracketHighlight(end);
-
 			int newStartLine = getLineOfOffset(newStart);
 			int newEndLine = getLineOfOffset(newEnd);
+
+			updateBracketHighlight(newEndLine,newEnd
+				- getLineStartOffset(newEndLine));
 
 			painter.invalidateLineRange(selectionStartLine,selectionEndLine);
 			painter.invalidateLineRange(newStartLine,newEndLine);
@@ -1555,7 +1513,7 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	private void updateBracketHighlight(int newCaretPosition)
+	private void updateBracketHighlight(int line, int offset)
 	{
 		if(!painter.isBracketHighlightEnabled())
 			return;
@@ -1563,7 +1521,7 @@ public class JEditTextArea extends JComponent
 		if(bracketLine != -1)
 			painter.invalidateLine(bracketLine);
 
-		if(newCaretPosition == 0)
+		if(offset == 0)
 		{
 			bracketPosition = bracketLine = -1;
 			return;
@@ -1571,12 +1529,13 @@ public class JEditTextArea extends JComponent
 
 		try
 		{
-			int offset = TextUtilities.findMatchingBracket(
-				document,newCaretPosition - 1);
+			int bracketOffset = TextUtilities.findMatchingBracket(
+				document,line,offset - 1);
 			if(offset != -1)
 			{
-				bracketLine = getLineOfOffset(offset);
-				bracketPosition = offset - getLineStartOffset(bracketLine);
+				bracketLine = getLineOfOffset(bracketOffset);
+				bracketPosition = bracketOffset
+					- getLineStartOffset(bracketLine);
 
 				if(bracketLine != -1)
 					painter.invalidateLine(bracketLine);
@@ -1835,7 +1794,11 @@ public class JEditTextArea extends JComponent
 			if(change)
 				select(newStart,newEnd);
 			else
-				updateBracketHighlight(getCaretPosition());
+			{
+				int caretLine = getCaretLine();
+				updateBracketHighlight(caretLine,getCaretPosition()
+					- getLineStartOffset(caretLine));
+			}
 		}
 
 		public void removeUpdate(DocumentEvent evt)
@@ -1880,7 +1843,11 @@ public class JEditTextArea extends JComponent
 			if(change)
 				select(newStart,newEnd);
 			else
-				updateBracketHighlight(getCaretPosition());
+			{
+				int caretLine = getCaretLine();
+				updateBracketHighlight(caretLine,getCaretPosition()
+					- getLineStartOffset(caretLine));
+			}
 		}
 
 		public void changedUpdate(DocumentEvent evt)
@@ -2082,7 +2049,9 @@ public class JEditTextArea extends JComponent
 			try
 			{
 				int bracket = TextUtilities.findMatchingBracket(
-					document,Math.max(0,dot - 1));
+					document,dragStartLine,
+					Math.max(0,dragStartOffset - 1));
+
 				if(bracket != -1)
 				{
 					int mark = getMarkPosition();
@@ -2192,6 +2161,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.72  2000/07/14 06:00:45  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.71  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *
@@ -2221,55 +2193,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.62  2000/05/12 11:07:39  sp
  * Bug fixes, documentation updates
- *
- * Revision 1.61  2000/05/09 10:51:52  sp
- * New status bar, a few other things
- *
- * Revision 1.60  2000/05/07 05:48:30  sp
- * You can now edit several buffers side-by-side in a split view
- *
- * Revision 1.59  2000/05/06 05:53:46  sp
- * HyperSearch bug fix
- *
- * Revision 1.58  2000/05/04 10:37:04  sp
- * Wasting time
- *
- * Revision 1.57  2000/04/30 07:27:14  sp
- * Ftp VFS hacking, bug fixes
- *
- * Revision 1.56  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
- *
- * Revision 1.55  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.54  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.53  2000/04/18 05:56:26  sp
- * Documentation updates
- *
- * Revision 1.52  2000/04/17 06:34:24  sp
- * More focus debugging, linesChanged() tweaked
- *
- * Revision 1.51  2000/04/09 03:14:14  sp
- * Syntax token backgrounds can now be specified
- *
- * Revision 1.50  2000/04/08 02:39:33  sp
- * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
- *
- * Revision 1.49  2000/03/27 07:31:23  sp
- * We now use Log.log() in some places instead of System.err.println, HTML mode
- * now supports <script> tags, external delegation bug fix
- *
- * Revision 1.48  2000/03/21 07:18:53  sp
- * bug fixes
- *
- * Revision 1.47  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
- *
- * Revision 1.46  2000/03/14 06:22:25  sp
- * Lots of new stuff
  *
  */

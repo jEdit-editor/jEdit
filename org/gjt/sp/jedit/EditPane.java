@@ -346,8 +346,10 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getProperty("view.gutter.fgColor")));
 		gutter.setHighlightedForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.highlightColor")));
-		markerHighlight.setHighlightColor(GUIUtilities.parseColor(
+		markerHighlight.setMarkerHighlightColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.markerColor")));
+		markerHighlight.setRegisterHighlightColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.gutter.registerColor")));
 		gutter.setCurrentLineForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.currentLineColor")));
 		String alignment = jEdit.getProperty(
@@ -601,6 +603,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/07/14 06:00:44  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.8  2000/07/12 09:11:37  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

@@ -71,7 +71,7 @@ public class BufferTabs extends JTabbedPane
 		int selectedIndex = getSelectedIndex();
 
 		buffers.insertElementAt(buffer,index);
-		insertTab(buffer.getName(),getIcon(buffer),
+		insertTab(buffer.getName(),buffer.getIcon(),
 			new Magic(buffer),buffer.getPath(),
 			index);
 
@@ -112,7 +112,7 @@ public class BufferTabs extends JTabbedPane
 		// means just saved)
 		if(buffer.isDirty())
 		{
-			setIconAt(index,getIcon(buffer));
+			setIconAt(index,buffer.getIcon());
 		}
 		else
 		{
@@ -160,34 +160,6 @@ public class BufferTabs extends JTabbedPane
 	private EditPane editPane;
 	private Vector buffers;
 	private boolean updating;
-
-	private static ImageIcon newDirtyIcon, newIcon, dirtyIcon, normalIcon;
-	static
-	{
-		newDirtyIcon = new ImageIcon(BufferTabs.class.getResource(
-			"/org/gjt/sp/jedit/new_dirty.gif"));
-		newIcon = new ImageIcon(BufferTabs.class.getResource(
-			"/org/gjt/sp/jedit/new.gif"));
-		dirtyIcon = new ImageIcon(BufferTabs.class.getResource(
-			"/org/gjt/sp/jedit/dirty.gif"));
-		normalIcon = new ImageIcon(BufferTabs.class.getResource(
-			"/org/gjt/sp/jedit/normal.gif"));
-	}
-
-	private ImageIcon getIcon(Buffer buffer)
-	{
-		if(buffer.isNewFile())
-		{
-			if(buffer.isDirty())
-				return newDirtyIcon;
-			else
-				return newIcon;
-		}
-		else if(buffer.isDirty())
-			return dirtyIcon;
-		else
-			return normalIcon;
-	}
 
 	class ChangeHandler implements ChangeListener
 	{

@@ -133,22 +133,12 @@ public class print extends EditAction
 			y += lineHeight;
 			textArea.getLineText(i,lineSegment);
 
-			if(tokenMarker == null)
-			{
-				gfx.setColor(Color.black);
-				gfx.setFont(font);
-				Utilities.drawTabbedText(lineSegment,leftMargin,
-					y,gfx,expander,0);
-			}
-			else
-			{
-				gfx.setColor(Color.black);
-				gfx.setFont(font);
-				Token tokens = tokenMarker.markTokens(lineSegment,i);
-				SyntaxUtilities.paintSyntaxLine(lineSegment,
-					tokens,styles,expander,gfx,Color.white,
-					leftMargin,y);
-			}
+			gfx.setColor(Color.black);
+			gfx.setFont(font);
+			Token tokens = tokenMarker.markTokens(lineSegment,i).firstToken;
+			SyntaxUtilities.paintSyntaxLine(lineSegment,
+				tokens,styles,expander,gfx,Color.white,
+				leftMargin,y);
 
 			if((y >= pageHeight - bottomMargin - lineHeight * 3) ||
 				(i == textArea.getLineCount() - 1))

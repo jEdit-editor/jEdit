@@ -22,6 +22,7 @@ package org.gjt.sp.jedit;
 
 import gnu.regexp.*;
 import java.util.Hashtable;
+import org.gjt.sp.jedit.syntax.NullTokenMarker;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.util.Log;
 
@@ -92,7 +93,7 @@ public class Mode
 		TokenMarker marker = getTokenMarker();
 
 		if(marker == null)
-			return null;
+			return NullTokenMarker.getSharedInstance();
 
 		return (TokenMarker)marker.clone();
 	}
@@ -284,6 +285,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/07/14 06:00:44  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.28  2000/05/13 05:13:31  sp
  * Mode option pane
  *
@@ -310,11 +314,5 @@ public class Mode
  *
  * Revision 1.20  2000/01/29 08:18:08  sp
  * bug fixes, misc updates
- *
- * Revision 1.19  1999/12/19 08:12:34  sp
- * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
- *
- * Revision 1.18  1999/12/11 06:34:39  sp
- * Bug fixes
  *
  */

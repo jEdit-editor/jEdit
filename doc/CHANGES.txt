@@ -5,11 +5,20 @@ JEDIT 3.0 VERSION HISTORY
 + New Features
 
 - Macros can now be added to the tool bar and right-click context menu
+- The bracket matching code now only checks syntax tokens of the same type
+  as the bracket for matches. As a result, string literals and comments
+  containing brackets should no longer cause problems
 
 + Enhancements
 
 - Gutter border color now reflects if the respective text area has focus
 - Menu bar code restructured somewhat
+- View-related commands moved out of Utilities menu to new View top-level
+  menu, Buffers menu is now a submenu of the new View menu as well
+- Colored 'orbs' displaying file modification status are now displayed in
+  the Buffers menu
+- Registers and markers are now highlighted using different colors in the
+  gutter
 
 + Incompatibilities
 
@@ -25,3 +34,7 @@ JEDIT 3.0 VERSION HISTORY
   jEdit 3.0 or later should use GUIUTilities.loadMenuItem(String) instead.
   Don't worry, since all existing plugins use the old method, it won't be
   removed any time soon, if at all.
+- Signature of TextUtilities.findMatchingBracket() is now
+  findMatchingBracket(SyntaxDocument doc, int line, int offset)
+- Return type of TokenMarker.markTokens() changed from Token to
+  TokenMarker.LineInfo

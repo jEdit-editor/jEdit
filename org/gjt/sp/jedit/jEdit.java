@@ -228,9 +228,9 @@ public class jEdit
 		Log.init(true,level);
 		initMisc();
 		initSystemProperties();
-		GUIUtilities.setProgressText("Loading plugins");
+		GUIUtilities.advanceSplashProgress();
 		initPlugins();
-		GUIUtilities.setProgressText("Loading user properties");
+		GUIUtilities.advanceSplashProgress();
 		initUserProperties();
 		if(settingsDirectory != null)
 		{
@@ -238,6 +238,8 @@ public class jEdit
 				settingsDirectory,"history");
 			HistoryModel.loadHistory(history);
 		}
+
+		GUIUtilities.advanceSplashProgress();
 
 		// Buffer sort
 		sortBuffers = getBooleanProperty("sortBuffers");
@@ -248,26 +250,32 @@ public class jEdit
 		initPLAF();
 		SearchAndReplace.load();
 		Abbrevs.load();
+
+		GUIUtilities.advanceSplashProgress();
+
 		initActions();
 		initModes();
 		Macros.loadMacros();
 
+		GUIUtilities.advanceSplashProgress();
+
 		// Start plugins
-		GUIUtilities.setProgressText("Starting plugins");
 		for(int i = 0; i < jars.size(); i++)
 		{
 			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
 				.loadAllPlugins();
 		}
 
-		// Preload menu and tool bar models
-		GUIUtilities.setProgressText("Loading user interface");
+		GUIUtilities.advanceSplashProgress();
 
+		// Preload menu and tool bar models
 		GUIUtilities.loadMenuBarModel("view.mbar");
 		GUIUtilities.loadMenuModel("view.context");
 		GUIUtilities.loadMenuModel("gutter.context");
 		if(getBooleanProperty("view.showToolbar"))
 			GUIUtilities.loadToolBarModel("view.toolbar");
+
+		GUIUtilities.advanceSplashProgress();
 
 		// Start server
 		if(portFile != null)
@@ -316,7 +324,8 @@ public class jEdit
 		final boolean _showGUI = showGUI;
 		final Buffer _buffer = buffer;
 
-		GUIUtilities.setProgressText("Creating view");
+		GUIUtilities.advanceSplashProgress();
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
@@ -729,7 +738,7 @@ public class jEdit
 		if(!file.exists())
 			return false;
 
-		GUIUtilities.setProgressText("Loading edit mode cache");
+		GUIUtilities.advanceSplashProgress();
 
 		BufferedReader in = null;
 		try
@@ -1827,7 +1836,7 @@ public class jEdit
 		else
 			path = null;
 
-		GUIUtilities.setProgressText("Creating edit mode cache");
+		GUIUtilities.advanceSplashProgress();
 		createModeCache(path);
 	}
 
@@ -2289,6 +2298,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.253  2000/07/14 06:00:44  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.252  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

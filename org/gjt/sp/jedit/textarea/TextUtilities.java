@@ -1,6 +1,6 @@
 /*
  * TextUtilities.java - Utility functions used by the text area classes
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.textarea;
 
 import javax.swing.text.*;
+import org.gjt.sp.jedit.syntax.*;
 
 /**
  * Class with several utility functions used by the text area component.
@@ -33,16 +34,26 @@ public class TextUtilities
 	 * specified offset of the document, or -1 if the bracket is
 	 * unmatched (or if the character is not a bracket).
 	 * @param doc The document
-	 * @param offset The offset
+	 * @param line The line
+	 * @param offset The offset within that line
 	 * @exception BadLocationException If an out-of-bounds access
 	 * was attempted on the document text
+	 * @since jEdit 3.0pre1
 	 */
-	public static int findMatchingBracket(Document doc, int offset)
+	public static int findMatchingBracket(SyntaxDocument doc, int line, int offset)
 		throws BadLocationException
 	{
 		if(doc.getLength() == 0)
 			return -1;
-		char c = doc.getText(offset,1).charAt(0);
+
+		Element map = doc.getDefaultRootElement();
+		Element lineElement = map.getElement(line);
+		Segment lineText = new Segment();
+		int lineStart = lineElement.getStartOffset();
+		doc.getText(lineStart,lineElement.getEndOffset() - lineStart - 1,
+			lineText);
+
+		char c = lineText.array[lineText.offset + offset];
 		char cprime; // c` - corresponding character
 		boolean direction; // true = back, false = forward
 
@@ -59,74 +70,148 @@ public class TextUtilities
 
 		int count;
 
-		// How to merge these two cases is left as an exercise
-		// for the reader.
+		TokenMarker tokenMarker = doc.getTokenMarker();
 
-		// Go back or forward
+		// Get the syntax token at 'offset'
+		// only tokens with the same type will be checked for
+		// the corresponding bracket
+		byte idOfBracket = Token.NULL;
+
+		TokenMarker.LineInfo lineInfo = tokenMarker.markTokens(lineText,line);
+		Token lineTokens = lineInfo.firstToken;
+
+		int tokenListOffset = 0;
+		for(;;)
+		{
+			if(lineTokens.id == Token.END)
+				throw new InternalError("offset > line length");
+	
+			if(tokenListOffset + lineTokens.length > offset)
+			{
+				idOfBracket = lineTokens.id;
+				break;
+			}
+			else
+			{
+				tokenListOffset += lineTokens.length;
+				lineTokens = lineTokens.next;
+			}
+		}
+
 		if(direction)
 		{
-			// Count is 1 initially because we have already
-			// `found' one closing bracket
-			count = 1;
+			// scan backwards
 
-			// Get text[0,offset-1];
-			String text = doc.getText(0,offset);
+			count = 0;
 
-			// Scan backwards
-			for(int i = offset - 1; i >= 0; i--)
+			for(int i = line; i > 0; i--)
 			{
-				// If text[i] == c, we have found another
-				// closing bracket, therefore we will need
-				// two opening brackets to complete the
-				// match.
-				char x = text.charAt(i);
-				if(x == c)
-					count++;
+				// get text
+				lineElement = map.getElement(i);
+				lineStart = lineElement.getStartOffset();
+				int lineLength = lineElement.getEndOffset()
+					- lineStart - 1;
 
-				// If text[i] == cprime, we have found a
-				// opening bracket, so we return i if
-				// --count == 0
-				else if(x == cprime)
+				doc.getText(lineStart,lineLength,lineText);
+
+				int scanStartOffset;
+				if(i != line)
 				{
-					if(--count == 0)
-						return i;
+					lineTokens = tokenMarker.markTokens(lineText,i).lastToken;
+					tokenListOffset = lineLength;
+					scanStartOffset = lineLength - 1;
+				}
+				else
+				{
+					if(tokenListOffset != lineLength)
+						tokenListOffset += lineTokens.length;
+					lineTokens = lineInfo.lastToken;
+					scanStartOffset = offset;
+				}
+
+				// only check tokens with id 'idOfBracket'
+				while(lineTokens != null)
+				{
+					byte id = lineTokens.id;
+					if(id == Token.END)
+					{
+						lineTokens = lineTokens.prev;
+						continue;
+					}
+
+					int len = lineTokens.length;
+					if(id == idOfBracket)
+					{
+						for(int j = scanStartOffset; j >= tokenListOffset - len; j--)
+						{
+							if(j >= lineText.count)
+								System.err.println("WARNING: " + j + " >= " + lineText.count);
+
+							char ch = lineText.array[lineText.offset + j];
+							if(ch == c)
+								count++;
+							else if(ch == cprime)
+							{
+								if(--count == 0)
+									return lineStart + j;
+							}
+						}
+					}
+
+					scanStartOffset = tokenListOffset = tokenListOffset - len;
+					lineTokens = lineTokens.prev;
 				}
 			}
 		}
 		else
 		{
-			// Count is 1 initially because we have already
-			// `found' one opening bracket
-			count = 1;
+			// scan forwards
 
-			// So we don't have to + 1 in every loop
-			offset++;
+			count = 0;
 
-			// Number of characters to check
-			int len = doc.getLength() - offset;
-
-			// Get text[offset+1,len];
-			String text = doc.getText(offset,len);
-
-			// Scan forwards
-			for(int i = 0; i < len; i++)
+			for(int i = line; i < map.getElementCount(); i++)
 			{
-				// If text[i] == c, we have found another
-				// opening bracket, therefore we will need
-				// two closing brackets to complete the
-				// match.
-				char x = text.charAt(i);
+				// get text
+				lineElement = map.getElement(i);
+				lineStart = lineElement.getStartOffset();
+				doc.getText(lineStart,lineElement.getEndOffset()
+					- lineStart - 1,lineText);
 
-				if(x == c)
-					count++;
-
-				// If text[i] == cprime, we have found an
-				// closing bracket, so we return i if
-				// --count == 0
-				else if(x == cprime)
+				int scanStartOffset;
+				if(i != line)
 				{
-					if(--count == 0)
-						return i + offset;
+					lineTokens = tokenMarker.markTokens(lineText,i).firstToken;
+					tokenListOffset = 0;
+					scanStartOffset = 0;
+				}
+				else
+					scanStartOffset = offset + 1;
+
+				// only check tokens with id 'idOfBracket'
+				for(;;)
+				{
+					byte id = lineTokens.id;
+					if(id == Token.END)
+						break;
+
+					int len = lineTokens.length;
+					if(id == idOfBracket)
+					{
+						for(int j = scanStartOffset; j < tokenListOffset + len; j++)
+						{
+							char ch = lineText.array[lineText.offset + j];
+							if(ch == c)
+								count++;
+							else if(ch == cprime)
+							{
+								if(count-- == 0)
+									return lineStart + j;
+							}
+						}
+					}
+
+					scanStartOffset = tokenListOffset = tokenListOffset + len;
+					lineTokens = lineTokens.next;
 				}
 			}
 		}
@@ -203,6 +288,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/07/14 06:00:45  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.6  2000/01/28 00:20:58  sp
  * Lots of stuff
  *

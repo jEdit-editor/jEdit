@@ -52,6 +52,31 @@ import org.gjt.sp.util.Log;
  */
 public class GUIUtilities
 {
+	// some icons
+
+	public static final ImageIcon NEW_DIRTY_BUFFER_ICON;
+	public static final ImageIcon NEW_BUFFER_ICON;
+	public static final ImageIcon DIRTY_BUFFER_ICON;
+	public static final ImageIcon NORMAL_BUFFER_ICON;
+	public static final ImageIcon EDITOR_WINDOW_ICON;
+	public static final ImageIcon PLUGIN_WINDOW_ICON;
+
+	static
+	{
+		NEW_DIRTY_BUFFER_ICON = new ImageIcon(GUIUtilities.class
+			.getResource("/org/gjt/sp/jedit/new_dirty.gif"));
+		NEW_BUFFER_ICON = new ImageIcon(GUIUtilities.class
+			.getResource("/org/gjt/sp/jedit/new.gif"));
+		DIRTY_BUFFER_ICON = new ImageIcon(GUIUtilities.class
+			.getResource("/org/gjt/sp/jedit/dirty.gif"));
+		NORMAL_BUFFER_ICON = new ImageIcon(GUIUtilities.class
+			.getResource("/org/gjt/sp/jedit/normal.gif"));
+		EDITOR_WINDOW_ICON = new ImageIcon(GUIUtilities.class
+			.getResource("/org/gjt/sp/jedit/jedit_icon1.gif"));
+		PLUGIN_WINDOW_ICON = new ImageIcon(GUIUtilities.class
+			.getResource("/org/gjt/sp/jedit/jedit_icon2.gif"));
+	}
+
 	/**
 	 * Instructs jEdit to invalidate all menu models.
 	 * @param name The menu name
@@ -622,8 +647,7 @@ public class GUIUtilities
 	 */
 	public static Image getEditorIcon()
 	{
-		return new ImageIcon(GUIUtilities.class.getResource(
-			"jedit_icon1.gif")).getImage();
+		return EDITOR_WINDOW_ICON.getImage();
 	}
 
 	/**
@@ -631,8 +655,7 @@ public class GUIUtilities
 	 */
 	public static Image getPluginIcon()
 	{
-		return new ImageIcon(GUIUtilities.class.getResource(
-			"jedit_icon2.gif")).getImage();
+		return PLUGIN_WINDOW_ICON.getImage();
 	}
 
 	/**
@@ -685,20 +708,20 @@ public class GUIUtilities
 		splash = new SplashScreen();
 	}
 
-	// advances progress bar
-	static void setProgressText(String message)
+	static void advanceSplashProgress()
 	{
 		if(splash != null)
-			splash.advance(message);
+			splash.advance();
 	}
 
 	// private members
 	private static LoadThread thread;
 	private static SplashScreen splash;
 	// since the names of menu items, menus, tool bars, etc are
-	// unique because of properties, we can store all in one
-	// hashtable.
+	// unique because of the property namespace, we can store all
+	// in one hashtable.
 	private static Hashtable menus = new Hashtable();
+
 	private static Hashtable icons = new Hashtable();
 
 	private GUIUtilities() {}
@@ -782,6 +805,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.69  2000/07/14 06:00:44  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.68  2000/07/12 09:11:37  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *
@@ -811,11 +837,5 @@ public class GUIUtilities
  *
  * Revision 1.59  2000/05/14 10:55:21  sp
  * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.58  2000/05/08 11:20:07  sp
- * New file finder in open dialog box
- *
- * Revision 1.57  2000/05/04 10:37:04  sp
- * Wasting time
  *
  */

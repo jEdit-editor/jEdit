@@ -187,6 +187,8 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.currentLineColor");
 		addColorChoice("options.styles.gutterMarkerColor",
 			"view.gutter.markerColor");
+		addColorChoice("options.styles.gutterRegisterColor",
+			"view.gutter.registerColor");
 		addColorChoice("options.styles.gutterFocusBorderColor",
 			"view.gutter.focusBorderColor");
 		addColorChoice("options.styles.gutterNoFocusBorderColor",
@@ -583,6 +585,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/07/14 06:00:45  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.18  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

@@ -139,7 +139,7 @@ public class TokenMarker implements Cloneable
 	 * @param line The line
 	 * @param lineIndex The line number
 	 */
-	public Token markTokens(Segment line, int lineIndex)
+	public LineInfo markTokens(Segment line, int lineIndex)
 	{
 		if(lineIndex >= length)
 		{
@@ -151,7 +151,7 @@ public class TokenMarker implements Cloneable
 
 		/* If cached tokens are valid, return 'em */
 		if(info.tokensValid)
-			return info.firstToken;
+			return info;
 
 		/* Otherwise, prepare for tokenization */
 		info.lastToken = null;
@@ -185,7 +185,7 @@ public class TokenMarker implements Cloneable
 
 		addToken(info,0,Token.END);
 
-		return info.firstToken;
+		return info;
 	}
 
 	/**
@@ -835,7 +835,8 @@ loop:			for(int i = 0; i < len; i++)
 		}
 	}
 
-	private void addToken(LineInfo info, int length, byte id)
+	// must be protected for NullTokenMarker subclass
+	protected void addToken(LineInfo info, int length, byte id)
 	{
 		if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
 			throw new InternalError("Invalid id: " + id);
@@ -861,6 +862,7 @@ loop:			for(int i = 0; i < len; i++)
 		else if(info.lastToken.next == null)
 		{
 			info.lastToken.next = new Token(length,id);
+			info.lastToken.next.prev = info.lastToken;
 			info.lastToken = info.lastToken.next;
 		}
 		else
@@ -890,12 +892,12 @@ loop:			for(int i = 0; i < len; i++)
 		 * True if the tokens can be used, false if markTokensImpl()
 		 * needs to be called.
 		 */
-		public boolean tokensValid;
+		/* package-private */ boolean tokensValid;
 
 		/**
 		 * The line context.
 		 */
-		public LineContext context;
+		/* package-private */ LineContext context;
 	}
 
 	public static class LineContext
@@ -940,6 +942,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.52  2000/07/14 06:00:45  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.51  2000/06/30 09:08:09  sp
  * SHTML mode, SPAN+EXCLUDE_MATCH bug fix
  *

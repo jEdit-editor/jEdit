@@ -550,6 +550,25 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
+	 * Returns this buffer's icon.
+	 * @since jEdit 3.0pre1
+	 */
+	public ImageIcon getIcon()
+	{
+		if(getFlag(NEW_FILE))
+		{
+			if(getFlag(DIRTY))
+				return GUIUtilities.NEW_DIRTY_BUFFER_ICON;
+			else
+				return GUIUtilities.NEW_BUFFER_ICON;
+		}
+		else if(getFlag(DIRTY))
+			return GUIUtilities.DIRTY_BUFFER_ICON;
+		else
+			return GUIUtilities.NORMAL_BUFFER_ICON;
+	}
+
+	/**
 	 * Undoes the most recent edit. Returns true if the undo was
 	 * successful.
 	 *
@@ -980,7 +999,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			if(closeBracketIndex != -1)
 			{
 				int offset = TextUtilities.findMatchingBracket(
-					this,start + closeBracketIndex);
+					this,lineIndex,closeBracketIndex);
 				if(offset != -1)
 				{
 					String closeLine = textArea.getLineText(
@@ -1027,7 +1046,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(getFlag(SYNTAX))
 			return super.getTokenMarker();
 		else
-			return null;
+			return NullTokenMarker.getSharedInstance();
 	}
 
 	/**
@@ -1831,6 +1850,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.158  2000/07/14 06:00:44  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.157  2000/07/03 03:32:15  sp
  * *** empty log message ***
  *

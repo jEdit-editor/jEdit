@@ -34,14 +34,15 @@ public class MarkerHighlight implements TextAreaHighlight
 
 	public void paintHighlight(Graphics gfx, int line, int y)
 	{
-		if(!isLineHighlighted(line))
+		Color color = getHighlightColor(line);
+		if(color == null)
 			return;
 
 		int firstLine = textArea.getFirstLine();
 		line -= firstLine;
 
 		FontMetrics fm = textArea.getPainter().getFontMetrics();
-		gfx.setColor(highlightColor);
+		gfx.setColor(color);
 		gfx.fillRect(0,line * fm.getHeight(),textArea.getGutter()
 			.getWidth(),fm.getHeight());
 
@@ -62,23 +63,33 @@ public class MarkerHighlight implements TextAreaHighlight
 			return null;
 	}
 
-	public Color getHighlightColor()
+	public Color getMarkerHighlightColor()
 	{
-		return highlightColor;
+		return markerHighlightColor;
 	}
 
-	public void setHighlightColor(Color highlightColor)
+	public void setMarkerHighlightColor(Color markerHighlightColor)
 	{
-		this.highlightColor = highlightColor;
+		this.markerHighlightColor = markerHighlightColor;
+	}
+
+	public Color getRegisterHighlightColor()
+	{
+		return registerHighlightColor;
+	}
+
+	public void setRegisterHighlightColor(Color registerHighlightColor)
+	{
+		this.registerHighlightColor = registerHighlightColor;
 	}
 
 	// private members
 	private JEditTextArea textArea;
 	private TextAreaHighlight next;
 
-	private Color highlightColor;
+	private Color markerHighlightColor, registerHighlightColor;
 
-	private boolean isLineHighlighted(int line)
+	private Color getHighlightColor(int line)
 	{
 		Buffer buffer = (Buffer)textArea.getDocument();
 		Vector registers = Registers.getCaretRegisters();
@@ -91,7 +102,7 @@ public class MarkerHighlight implements TextAreaHighlight
 			if(reg.getBuffer() == buffer)
 			{
 				if(line == textArea.getLineOfOffset(reg.getOffset()))
-					return true;
+					return registerHighlightColor;
 			}
 		}
 
@@ -100,10 +111,10 @@ public class MarkerHighlight implements TextAreaHighlight
 		{
 			Marker marker = (Marker)markers.elementAt(i);
 			if(line == textArea.getLineOfOffset(marker.getStart()))
-				return true;
+				return markerHighlightColor;
 		}
 
-		return false;
+		return null;
 	}
 
 	private String getLineToolTip(int line)
@@ -155,6 +166,9 @@ public class MarkerHighlight implements TextAreaHighlight
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/07/14 06:00:45  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.3  2000/06/12 02:43:30  sp
  * pre6 almost ready
  *

@@ -1,6 +1,6 @@
 /*
  * SplashScreen.java - Splash screen
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.Random;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
@@ -40,15 +41,15 @@ public class SplashScreen extends JWindow
 				BorderLayout.CENTER);
 		}
 
-		splash.add(BorderLayout.NORTH,new JLabel("jEdit "
-			+ jEdit.getVersion(),JLabel.CENTER));
-
-		progress = new JProgressBar(0,6);
+		progress = new JProgressBar(0,9);
 		progress.setStringPainted(true);
-		progress.setString("jEdit is starting up...");
+		progress.setBorderPainted(false);
+		progress.setString("jEdit " + jEdit.getVersion()
+			+ " is starting up...");
+		progress.setBackground(Color.white);
 		splash.add(BorderLayout.SOUTH,progress);
 
-		splash.setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
+		splash.setBorder(new MatteBorder(1,1,1,1,Color.black));
 
 		setContentPane(splash);
 
@@ -59,7 +60,7 @@ public class SplashScreen extends JWindow
 		show();
 	}
 
-	public void advance(final String text)
+	public void advance()
 	{
 		try
 		{
@@ -67,7 +68,6 @@ public class SplashScreen extends JWindow
 				public void run()
 				{
 					progress.setValue(progress.getValue() + 1);
-					progress.setString(text);
 				}
 			});
 			Thread.yield();

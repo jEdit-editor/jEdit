@@ -33,7 +33,7 @@ public class SyntaxDocument extends PlainDocument
 {
 	/**
 	 * Returns the token marker that is to be used to split lines
-	 * of this document up into tokens. May return null.
+	 * of this document up into tokens.
 	 */
 	public TokenMarker getTokenMarker()
 	{
@@ -47,9 +47,10 @@ public class SyntaxDocument extends PlainDocument
 	 */
 	public void setTokenMarker(TokenMarker tm)
 	{
-		tokenMarker = tm;
 		if(tm == null)
-			return;
+			throw new NullPointerException("token marker cannot be null");
+
+		tokenMarker = tm;
 		tokenMarker.insertLines(0,getDefaultRootElement()
 			.getElementCount());
 		tokenizeLines();
@@ -62,7 +63,6 @@ public class SyntaxDocument extends PlainDocument
 	 */
 	public void tokenizeLines()
 	{
-		long start = System.currentTimeMillis();
 		tokenizeLines(0,getDefaultRootElement().getElementCount());
 	}
 
@@ -75,7 +75,7 @@ public class SyntaxDocument extends PlainDocument
 	 */
 	public void tokenizeLines(int start, int len)
 	{
-		if(tokenMarker == null)
+		if(tokenMarker instanceof NullTokenMarker)
 			return;
 
 		tokenMarker.linesChanged(start,len);
@@ -139,7 +139,7 @@ public class SyntaxDocument extends PlainDocument
 	}
 
 	// protected members
-	protected TokenMarker tokenMarker;
+	protected TokenMarker tokenMarker = NullTokenMarker.getSharedInstance();
 
 	/**
 	 * We overwrite this method to update the token marker
@@ -148,25 +148,22 @@ public class SyntaxDocument extends PlainDocument
 	 */
 	protected void fireInsertUpdate(DocumentEvent evt)
 	{
-		if(tokenMarker != null)
+		DocumentEvent.ElementChange ch = evt.getChange(
+			getDefaultRootElement());
+		if(ch != null)
 		{
-			DocumentEvent.ElementChange ch = evt.getChange(
-				getDefaultRootElement());
-			if(ch != null)
-			{
-				int index = ch.getIndex();
-				int len = ch.getChildrenAdded().length -
-					ch.getChildrenRemoved().length;
-				tokenMarker.linesChanged(index,
-					tokenMarker.getLineCount() - index);
-				tokenMarker.insertLines(ch.getIndex() + 1,len);
-				index += (len + 1);
-			}
-			else
-			{
-				tokenMarker.linesChanged(getDefaultRootElement()
-					.getElementIndex(evt.getOffset()),1);
-			}
+			int index = ch.getIndex();
+			int len = ch.getChildrenAdded().length -
+				ch.getChildrenRemoved().length;
+			tokenMarker.linesChanged(index,
+				tokenMarker.getLineCount() - index);
+			tokenMarker.insertLines(ch.getIndex() + 1,len);
+			index += (len + 1);
+		}
+		else
+		{
+			tokenMarker.linesChanged(getDefaultRootElement()
+				.getElementIndex(evt.getOffset()),1);
 		}
 
 		super.fireInsertUpdate(evt);
@@ -179,24 +176,21 @@ public class SyntaxDocument extends PlainDocument
 	 */
 	protected void fireRemoveUpdate(DocumentEvent evt)
 	{
-		if(tokenMarker != null)
+		DocumentEvent.ElementChange ch = evt.getChange(
+			getDefaultRootElement());
+		if(ch != null)
 		{
-			DocumentEvent.ElementChange ch = evt.getChange(
-				getDefaultRootElement());
-			if(ch != null)
-			{
-				int index = ch.getIndex();
-				int len = ch.getChildrenRemoved().length -
-					ch.getChildrenAdded().length;
-				tokenMarker.linesChanged(index,
-					tokenMarker.getLineCount() - index);
-				tokenMarker.deleteLines(index + 1,len);
-			}
-			else
-			{
-				tokenMarker.linesChanged(getDefaultRootElement()
-					.getElementIndex(evt.getOffset()),1);
-			}
+			int index = ch.getIndex();
+			int len = ch.getChildrenRemoved().length -
+				ch.getChildrenAdded().length;
+			tokenMarker.linesChanged(index,
+				tokenMarker.getLineCount() - index);
+			tokenMarker.deleteLines(index + 1,len);
+		}
+		else
+		{
+			tokenMarker.linesChanged(getDefaultRootElement()
+				.getElementIndex(evt.getOffset()),1);
 		}
 
 		super.fireRemoveUpdate(evt);
@@ -206,6 +200,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/07/14 06:00:45  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.26  2000/04/24 11:00:23  sp
  * More VFS hacking
  *
@@ -235,12 +232,5 @@ public class SyntaxDocument extends PlainDocument
  *
  * Revision 1.17  2000/03/24 04:52:17  sp
  * bug fixing
- *
- * Revision 1.16  2000/03/21 07:18:53  sp
- * bug fixes
- *
- * Revision 1.15  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
  *
  */

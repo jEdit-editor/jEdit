@@ -329,6 +329,7 @@ public class View extends JFrame implements EBComponent
 		if(waitCount == 0)
 		{
 			Log.log(Log.DEBUG,this,"hideWaitCursor(): hiding glass pane");
+
 			glassPane.setVisible(false);
 
 			// still needed even though glass pane
@@ -549,7 +550,7 @@ public class View extends JFrame implements EBComponent
 				new Integer(b.isNewFile() ? 1 : 0) };
 			JRadioButtonMenuItem menuItem =
 				new JRadioButtonMenuItem(jEdit.getProperty(
-					"view.buffer-label",args));
+					"view.buffer-label",args),b.getIcon());
 			menuItem.addActionListener(jEdit.getAction("select-buffer"));
 			grp.add(menuItem);
 			menuItem.setActionCommand(b.getPath());
@@ -1044,6 +1045,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.183  2000/07/14 06:00:44  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.182  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

@@ -489,51 +489,23 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				gfx.drawString("~",0,y + fm.getHeight());
 			}
 		}
-		else if(tokenMarker == null)
-		{
-			paintPlainLine(gfx,line,defaultFont,defaultColor,x,y);
-		}
 		else
 		{
-			paintSyntaxLine(gfx,tokenMarker,line,defaultFont,
-				defaultColor,x,y);
-		}
-	}
-
-	private void paintPlainLine(Graphics gfx, int line, Font defaultFont,
-		Color defaultColor, int x, int y)
-	{
-		gfx.setFont(defaultFont);
-		gfx.setColor(defaultColor);
-
-		y += fm.getHeight();
-		textArea.getLineText(line,textArea.lineSegment);
-		x = Utilities.drawTabbedText(textArea.lineSegment,x,y,gfx,this,0);
-
-		if(eolMarkers)
-		{
-			gfx.setColor(eolMarkerColor);
-			gfx.drawString(".",x,y);
-		}
-	}
-
-	private void paintSyntaxLine(Graphics gfx, TokenMarker tokenMarker,
-		int line, Font defaultFont, Color defaultColor, int x, int y)
-	{
-		gfx.setFont(defaultFont);
-		gfx.setColor(defaultColor);
-		y += fm.getHeight();
-
-		textArea.getLineText(line,textArea.lineSegment);
-		x = SyntaxUtilities.paintSyntaxLine(textArea.lineSegment,
-			tokenMarker.markTokens(textArea.lineSegment,line),
-			styles,this,gfx,getBackground(),x,y);
-
-		if(eolMarkers)
-		{
 			gfx.setFont(defaultFont);
-			gfx.setColor(eolMarkerColor);
-			gfx.drawString(".",x,y);
+			gfx.setColor(defaultColor);
+			y += fm.getHeight();
+
+			textArea.getLineText(line,textArea.lineSegment);
+			x = SyntaxUtilities.paintSyntaxLine(textArea.lineSegment,
+				tokenMarker.markTokens(textArea.lineSegment,line).firstToken,
+				styles,this,gfx,getBackground(),x,y);
+
+			if(eolMarkers)
+			{
+				gfx.setFont(defaultFont);
+				gfx.setColor(eolMarkerColor);
+				gfx.drawString(".",x,y);
+			}
 		}
 	}
 
@@ -669,6 +641,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  2000/07/14 06:00:45  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.38  2000/06/24 06:24:56  sp
  * work thread bug fixes
  *

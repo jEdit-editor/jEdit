@@ -302,7 +302,7 @@ public class Macros
 			else if(file.isDirectory())
 			{
 				Vector submenu = new Vector();
-				submenu.addElement(fileName);
+				submenu.addElement(fileName.replace('_',' '));
 				loadMacros(submenu,path + fileName + '/',file);
 				vector.addElement(submenu);
 			}
@@ -497,6 +497,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  2000/07/14 06:00:44  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.29  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

@@ -1,6 +1,6 @@
 /*
  * Token.java - Generic token
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,10 +19,11 @@
 package org.gjt.sp.jedit.syntax;
 
 /**
- * A linked list of tokens. Each token has three fields - a token
+ * A linked list of tokens. Each token has four fields - a token
  * identifier, which can be mapped to a color or font style for
  * painting, a length value which is the length of the token in the
- * text, and a pointer to the next token in the list.
+ * text, and pointers to the previous and next tokens in the list,
+ * respectively.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -60,6 +61,12 @@ public class Token
 	public byte id;
 
 	/**
+	 * The previous token in the linked list.
+	 * @since jEdit 3.0pre1
+	 */
+	public Token prev;
+
+	/**
 	 * The next token in the linked list.
 	 */
 	public Token next;
@@ -87,6 +94,9 @@ public class Token
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/07/14 06:00:45  sp
+ * bracket matching now takes syntax info into account
+ *
  * Revision 1.15  2000/04/08 02:39:33  sp
  * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
  *
