@@ -16,6 +16,12 @@ JEDIT 3.2 VERSION HISTORY
   - Some jEdit code dealing with BeanShell has been cleaned up
   - bsh.util package included. This package contains a bunch of
     miscellaneous BeanShell scripts, like the BeanShell server
+- I have been improving and reorganizing the user's manual all throughout
+  the 3.2 series, and now I think it is almost ready. It now includes a
+  'Writing Plugins' section by John Gellene
+- The three sample 'Hello' plugins included with the source download have
+  been replaced with a single, more comprehensive demonstration plugin
+  written by John Gellene named 'QuickNotepad'
 
 + Enhancements
 
@@ -53,6 +59,8 @@ JEDIT 3.2 VERSION HISTORY
 - Manipulating markers will no longer set the 'dirty' flag if the
   persistent markers feature is disabled
 - Fixed another recent file list bug
+- 'Paste' command displayed a cryptic exception if the buffer was read
+  only. Now it just beeps
 
 + API Changes
 

@@ -632,7 +632,7 @@
 
  <bridgehead renderas="sect1">Macros</bridgehead>
   <para>
-   For details, see <xref linkend="writing-macros" />.
+   For details, see <xref linkend="using-macros" />.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">

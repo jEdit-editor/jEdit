@@ -406,10 +406,6 @@ public class jEdit
 				else if(jEdit.getBooleanProperty("tip.show"))
 					new TipOfTheDay(view);
 
-				String[] pp = { getVersion() };
-				view.getStatus().setMessageAndClear(
-					getProperty("view.status.welcome",pp));
-
 				setBooleanProperty("firstTime",false);
 
 				// Start I/O threads

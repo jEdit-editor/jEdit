@@ -1,0 +1,1449 @@
+<!-- jEdit 3.2 Plugin Guide, (C) 2001 John Gellene            -->
+
+<!-- jEdit buffer-local properties:                           -->
+<!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
+
+<!-- Sat Jun 23 08:54:21 EDT 2001 @579 /Internet Time/        -->
+
+<!-- This chapter of the jEdit 3.2 Plugin Guide               -->
+<!-- describes the principal elements of the jEdit Plugin API -->
+
+
+<chapter id="plugin-api"><title>The jEdit Plugin API</title>
+
+<sect1 id="api-plugin-classes"><title>Plugin Core Classes</title>
+
+<para>
+    As mentioned earlier, a plugin application, consisting of all of the
+    class files and other resources comprising the plugin, must provide for
+    a <quote>plugin core class</quote>. That class must implement
+    either <classname>EditPlugin</classname> or its child,
+    <classname>EBPlugin</classname>. We begin our review of the jEdit
+    Plugin API by describing these two classes.
+</para>
+
+<sect2 id="class-EditPlugin"><title>Class EditPlugin</title>
+
+<para>
+  This abstract class is the base for every plugin core class.  Its methods
+  provide for basic interaction between the plugin and jEdit as a host
+  application.
+</para>
+
+<sect3 id="class-EditPlugin-abstract"><title>Abstract Methods</title>
+
+<para>
+  The following are abstract methods of <classname>EditPlugin</classname>
+  that must be implemented by every derived plugin class:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>start</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method is called by jEdit as part of its startup routine. It can
+      perform initialization of the class's data members. It also is used
+      for registering information with the EditBus.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>stop</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      When jEdit exits, it calls this method on each plugin. The plugin class
+      typically implements this as a <quote>no-op</quote>. If the plugin uses
+      or creates state information or other persistent data that should be
+      stored in a special format, this would be a good place to write the data
+      to storage.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>createMenuItems</function></funcdef>
+        <paramdef>Vector <parameter>menuItems</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      When a <classname>View</classname> object is created, it calls this
+      method on each plugin to obtain entries to be displayed in the view's
+      <guimenu>Plugins</guimenu> menu section. The
+      <parameter>menuItems</parameter> parameter is a
+      <classname>Vector</classname> of menu objects that grows as it is passed
+      from plugin to plugin, through successive calls to
+      <function>createMenuItems()</function>.
+    </para>
+    <para>
+      The Plugin API does not require a plugin to supply menu items, so this
+      method can be implemented as an empty <quote>no-op</quote>. If menu
+      items are desired, the easiest way to provide for them is to package the
+      desired menu items as entries in the plugin's property file and
+      implement <function>createMenuItems()</function> with a call to
+      jEdit's <function>GUIUtilities.loadMenu()</function> method.  That method
+      requires a single parameter: a <classname>String</classname>
+      representing the key name of the plugin's menu property. We
+      will illustrate this technique in the next chapter.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>createOptionsPane</function></funcdef>
+        <paramdef>OptionsDialog <parameter>od</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method is called for each plugin during the creation of
+      the options dialog that is displayed in response to the
+      <guimenu>Utilities</guimenu>&gt;<guimenuitem>General Options</guimenuitem>
+      command. There are basically two ways to implement this method. One is an
+      empty <quote>no-op</quote>, where there are no user options to
+      configure. The other is an implementation in the following form:
+    </para>
+<informalexample><programlisting>od.addOptionPane(new MyPluginOptionPane());</programlisting></informalexample>
+    <para>
+      We will discuss the design and elements of an option pane object
+      below.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect3>
+
+<sect3 id="class-EditPlugin-other"><title>Other Methods</title>
+<para>
+  <classname>EditPlugin</classname> contains the following methods to
+  provide access to attributes of a plugin object. While not declared
+  <function>final</function>, these methods ordinarily should not be
+  overridden.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getClassName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This shortcut returns <function>getClass().getName()</function>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EditPlugin.JAR <function>getJAR</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method returns the <classname>EditPlugin.JAR</classname> data
+      object associated with the plugin.  It allows you to obtain the
+      path name for the plugin's jar archive file and the class loader
+      used to extract the plugin's resources by calling
+      <function>getPath()</function> and
+      <function>getClassLoader()</function> on the return value of
+      <function>getJAR()</function>.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="class-EBPlugin"><title>Class EBPlugin</title>
+
+<para>
+  This class, derived from <classname>EditPlugin</classname>, is the base
+  class for every plugin class that uses the EditBus for messaging. It
+  adds two methods to those of its parent.  Both deal with messaging.
+</para>
+
+<sect3 id="class-EBComponent_EBMessage">
+<title>EBComponent and EBMessage</title>
+
+<para>
+  One of the methods comes from another interface that
+  <classname>EBPlugin</classname>implements:
+  <classname>EBComponent</classname>. This interface is required for any
+  class that subscribes to messages published on the EditBus. A
+  <classname>View</classname>, for example, can receive and handle EditBus
+  messages because it also implements <classname>EBComponent</classname>.
+</para>
+
+<para>
+  The <classname>EBComponent</classname>interface contains a single method
+  that an implementing class (including any class derived from
+  <classname>EBPlugin</classname>) must provide:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>handleMessage</function></funcdef>
+        <paramdef>EBMessage <parameter>message</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+</itemizedlist>
+
+<para>
+  <classname>EBMessage</classname> is another abstract class which
+  establishes the core elements of any message that is published to the
+  EditBus. It has two attributes: an <classname>EBComponent</classname>
+  that is the source of the message, and a <type>boolean</type> data
+  member, <varname>vetoed</varname>. This flag indicates whether a prior
+  recipient of the message has determined that the message has been
+  handled and need not be published to other subscribers. The flag is set
+  by a call to<function>EBMessage.veto()</function>. Some message
+  classes, however, are configured so that they cannot be vetoed, to
+  ensure that a paritcular message is received by all subscribers.
+</para>
+
+<para>
+  Message classes inheriting from <classname>EBMessage</classname> may add
+  other data members and methods to provide subscribers with whatever is
+  needed to handle the message appropriately.
+  <classname>CreateDockableWindow</classname> is an example of a message
+  class that is derived from<classname>EBMessage</classname>. We will
+  mention others later.
+</para>
+
+
+<para>
+  The implementation of <function>handleMessage()</function> contained in
+  <classname>EBPlugin</classname> is an empty <quote>no-op</quote>. This
+  means that that the default behavior of an
+  <classname>EBPlugin</classname> object is to ignore all messsages it
+  receives from the EditBus. This also means that a plugin class derived
+  from <classname>EBPlugin</classname> must specify the type of responses
+  the plugin will have for various subclasses of
+  <classname>EBMessage</classname> objects. Typically this is done with
+  one or more <function>if</function> blocks that test whether the message
+  is an instance of a derived message class in which the plugin has an
+  interest. We will illustrate this approach when we build an example plugin.
+</para>
+
+<para>
+  Note that any object, whether or not derived from
+  <classname>EBComponent</classname>, can send a message to the EditBus
+  by calling the static method <function>EditBus.send()</function>.
+  This method takes a single parameter, an <classname>EBMessage</classname>
+  object that is the message being sent.
+</para>
+
+</sect3>
+
+<sect3 id="EBPlugin-constructor"><title>Constructor Method</title>
+
+<para>
+  The other method provided by <classname>EBPlugin</classname> is a
+  protected constructor that takes no parameters. It ensures that every
+  object derived from <classname>EBPlugin</classname> is registered with
+  the EditBus upon its creation by calling
+  <function>EditBus.addToBus(this)</function>.
+</para>
+
+</sect3>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="api-window-classes"><title>Plugin Window Classes</title>
+
+<para>
+  The jEdit Plugin API provides a single plugin window interface,
+  <classname>DockableWindow</classname>.  It links the visible
+  components of a plugin with jEdit's plugin management facility. The
+  interface gives developers flexibility and minimizes code refactoring,
+  for it can be implemented as part of the plugin's top-level display
+  window or in a separate, lightweight class. The Plugin API
+  handles the display of plugins as either docked or floating
+  windows without specific direction from the plugin.
+</para>
+
+<sect2 id="interface-DockableWindow"><title>Interface DockableWindow</title>
+
+  <para>
+    This interface provides the connection between the plugin's visible
+    components and a top-level <classname>View</classname> object of the
+    host application. As mentioned earlier, the plugin window class
+    implementing this interface must be created by the plugin core class in
+    response to a <classname>CreateDockableWindow</classname> message and
+    attached to the message for routing back to the host application.
+  </para>
+
+  <para>
+    The <classname>DockableWindow</classname> interface contains two
+    methods that must be implemented by a plugin window class:
+  </para>
+
+  <itemizedlist>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>String  <function>getName</function></funcdef>
+          <paramdef></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        This method should return the internal working name of the
+        plugin window.
+      </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>Component <function>getComponent</function></funcdef>
+          <paramdef></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        This method should return the top-level visible component of the plugin.
+        Typically this component is a <classname>JPanel</classname> containing
+        other components, but any object derived from the
+        <classname>Component</classname> class will suffice. If that component
+        implements the <classname>DockableWindow</classname> interface, so that
+        the plugin window and the top-level visible window are implemented in
+        the same class, the implementation of
+        <function>getComponent()</function> would simply return
+        <varname>this</varname>.
+      </para>
+    </listitem>
+
+  </itemizedlist>
+
+  <para>
+    The interface also contains a single <classname>String</classname> data
+    member, <varname>DOCKABLE_WINDOW_LIST</varname>. This is used to
+    designate the list of dockable windows maintained by the EditBus.
+  </para>
+
+</sect2>
+
+<sect2 id="interface-DockableWindowContainer">
+<title>Interface DockableWindowContainer</title>
+
+<para>
+  Depending upon the settings chosen by the user, the jEdit Plugin API
+  will place the <classname>Component</classname> returned by the
+  <function>getComponent()</function> method in a floating frame
+  window or in a tabbed window at the designated docking location. Both
+  types of containing windows implement the interface
+  <classname>DockableWindowContainer</classname> and are managed entirely
+  by the host application.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>
+      The <classname>DockableWindowContainer.Floating</classname> class is
+      derived from <classname>JFrame</classname> and uses a
+      <classname>BorderLayout</classname>.  The plugin window's component is
+      placed in the center position of the frame's content pane.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The <classname>DockableWindowContainer.TabbedPane</classname> class is
+      derived from <classname>JTabbedPane</classname>. Here the plugin
+      window's component is added to the container's collection of tabbed
+      components.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="api-option-classes"><title>Plugin Option Pane Classes</title>
+
+<para>
+  The jEdit Plugin API provides a mechanism for displaying a plugin's
+  configuration options in one pane of the application's <guilabel>Global
+  Options</guilabel> dialog. A plugin that allows user configuration must
+  implement jEdit's <classname>OptionPane</classname> interface to have
+  configuration options displayed in a manner consistent wth the rest of
+  the application. The Plugin API also includes an abstract class,
+  <classname>AbstractOptionPane</classname>, that provides a convenient
+  default framework for laying out configuration options.
+</para>
+
+<sect2 id="interface-OptionPane"><title>Interface OptionPane</title>
+
+<para>
+  This interface contains four basic methods that a plugin option pane
+  class must implement:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>String <function>getName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The options dialog uses a tree control as an index of options panes and
+      as a means for the user to select a visible option pane for input. The
+      <function>getName()</function> method should return the name for the
+      plugin that will be displayed in the tree control.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>Component <function>getComponent</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should return the top-level visible component of the option
+      pane. Like dockable windows, typically the top-level visible component
+      is a <classname>JPanel</classname> containing other components.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>init</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should create and layout the option pane's visible interface.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should save any settings that the user has changed.  The
+      options dialog will call this method when its <guilabel>OK</guilabel>
+      button is pressed to commit changed settings and dismiss the
+      entire dialog.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="class-AbstractOptionPane"><title>Class AbstractOptionPane</title>
+
+<para>
+  This default implementation of <classname>OptionPane</classname> is a
+  useful base class for a plugin's option pane class. It is also derived
+  from <classname>JPanel</classname>. It contains a
+  <classname>GridBagLayout</classname> object for component management,
+  but also contains shortcut methods to simplify layout.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>AbstractOptionPane</function></funcdef>
+        <paramdef>String <parameter>name</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The constructor's single parameter represents the name of the
+      option pane.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Implements <classname>OptionPane</classname>; returns the option
+      pane's name.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getComponent</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Implements <classname>OptionPane</classname>; returns
+      <varname>this</varname>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>init</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>protected void <function>_init</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The first method implements <classname>OptionPane</classname> and calls
+      the second method if the option pane has not yet been initialized. The
+      second method is implemented as an empty <quote>no-op</quote>. It should
+      be overriden in a derived class to perform initialization.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>protected void <function>_save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The first method implements <classname>OptionPane</classname> and calls
+      the second method if the option pane has been initialized. The second
+      method is implemented as an empty <quote>no-op</quote>. It should be
+      overriden in a derived class to save any plugin settings that have been
+      changed in the option pane.
+    </para>
+  </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addComponent</function></funcdef>
+          <paramdef>String <parameter>label</parameter></paramdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addComponent</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        These shortcut methods add components to the option pane in a
+        single vertical column, running top to bottom.  The first
+        displays the text of the <parameter>label</parameter> parameter
+        to the left of the <classname>Component</classname> represented
+        by <parameter>comp</parameter>.
+      </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addSeparator</function></funcdef>
+          <paramdef>String <parameter>label</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        This is another shortcut method that adds a text label between
+        two horizontal separators to the option pane.
+        The <parameter>label</parameter> parameter represents the name
+        of a property (typically a property defined in the plugin's
+        property file) whose value will be used as the separator text.
+      </para>
+    </listitem>
+
+</itemizedlist>
+
+
+</sect2>
+
+<sect2 id="class-OptionGroup"><title>Class OptionGroup</title>
+
+<para>
+  In those cases where a single option pane is inadequate to present all
+  of a plugin's configuration options, this class can be used to create a
+  group of options panes. The group will appear as a single node in the
+  options dialog tree-based index. The member option panes will appear as
+  leaf nodes under the group's node.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>OptionGroup</function></funcdef>
+        <paramdef>String <parameter>name</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The constructor's single parameter represents the name of the
+      option group.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the options group's name.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>addOptionPane</function></funcdef>
+        <paramdef>OptionPane <parameter>pane</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>addOptionGroup</function></funcdef>
+        <paramdef>OptionGroup <parameter>group</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      These methods add members to the option group.  The second method
+      permits option groups to be added and nested.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Enumeration <function>getMembers</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This methods facilitates iteration through members of an option group.
+      The loop must test each element to determine whether it is an
+      <classname>OptionPane</classname> or a nested<classname>OptionGroup</classname>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getMember</function></funcdef>
+        <paramdef>int <parameter>index</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getMemberIndex</function></funcdef>
+        <paramdef>Object <parameter>member</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getMemberCount</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      These three methods allow random access to the members of an
+      <classname>OptionGroup</classname>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Performs recursive iteration to call <function>save()</function>
+      on all member and nested option panes.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="api-other-resources"><title>Other Plugin Resources</title>
+
+<para>
+  There are three other types of files containing resources used by a
+  plugin:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      a catalog of the plugin's user actions in a specified XML format,
+      contained in a file named <filename>actions.xml</filename>;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      one or more properties files named with a <filename>.props</filename>
+      extension, each containing key-value pairs in conventional Java
+      format; and
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      a help file written in HTML format.
+    </para>
+  </listitem>
+</itemizedlist>
+
+<sect2 id="api-resources-action"><title>The User Action Catalog</title>
+
+<para>
+  User actions define procedures that can be performed by the plugin
+  when it does not have input focus.  They can be executed from a menu
+  item, a toolbar button or a keyboard shortcut. They can perform any
+  task encompassed in a public method of any class currently loaded in
+  jEdit, including plugin classes and classes of the host application.
+  Among other things, they can cause the appearance and disappearance of
+  the plugin's visible window.
+</para>
+
+<para>
+  To manage user actions, jEdit maintains a lookup table of actions
+  using descriptive strings as keys.  The values in the table are
+  sets of statements written in BeanShell, jEdit's macro sriting
+  language.  These scripts either direct the action themselves,
+  delegate performance to a method of one of jEdit's classes that
+  encapsulates the action, or do a little of both.  The scripts are
+  usually short; elaborate action protocols are usually contained in
+  compiled code, rather than an interpreted macro script, to speed
+  execution.
+</para>
+
+<para>
+  The easiest way to define user actions is the way the host application
+  defines its own actions: by creating an XML file entitled
+  <filename>actions.xml</filename> that will be included as one of the
+  resources of the plugin's jar archive file.  The requirements of such a
+  file are set forth in this document type definition:
+</para>
+
+<informalexample><programlisting>&lt;!ENTITY % att-bool '( TRUE | FALSE )' &gt;
+
+&lt;!-- ACTIONS element --&gt;
+&lt;!ELEMENT ACTIONS ( ACTION+ ) &gt;
+
+&lt;!-- ACTION element --&gt;
+&lt;!ELEMENT ACTION ( CODE | IS_SELECTED )+ &gt;
+&lt;!ATTLIST ACTION
+    NAME CDATA #REQUIRED
+    NO_REPEAT %att-bool; "FALSE"
+    NO_RECORD %att-bool; "FALSE" &gt;
+
+&lt;!-- ACTION children --&gt;
+&lt;!ELEMENT CODE ( #PCDATA ) &gt;
+&lt;!ELEMENT IS_SELECTED ( #PCDATA ) &gt;
+</programlisting></informalexample>
+
+<para>
+  The defined elements have the following functions:
+  <itemizedlist>
+    <listitem>
+      <para>
+        <varname>ACTIONS</varname> is the top-level element and refers
+        to the set of actions used by the plugin.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        An <varname>ACTION</varname> contains the data for a particular action.
+        It has three attributes: a required <varname>NAME</varname>, a flag
+        indicating whether the action should not be repeated when a repeat
+        command is used (<varname>NO_REPEAT</varname>) and a flag whether the
+        action should be recorded if it is invoked while a user is recording a
+        macro (<varname>NO_RECORD</varname>). The two flag attributs are set to
+        <constant>false</constant> by default if they are not set explicitly.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        An <varname>ACTION</varname> contains two type of elements
+        within it: a <varname>CODE</varname> element which specifies the
+        BeanShell code that will be executed when the action is invoked,
+        and an <varname>IS_SELECTED</varname> element, used for checkbox
+        menu items.  The <varname>IS_SELECTED</varname> element contains
+        BeanShell code that is designed to return a boolean flag that will
+        determine the state of the checkbox. An <varname>ACTION</varname>
+        must contain one of these elements and may contain both.
+      </para>
+    </listitem>
+  </itemizedlist>
+</para>
+
+</sect2>
+
+<sect2 id="api-resource-properties"><title>Plugin Properties</title>
+
+<para>
+  While the jEdit Plugin API does not absolutely require a plugin to
+  have a properties file, the property format is by far the easiest way
+  to provide a variety of information about the plugin to jEdit.  During
+  startup, the host application loads the plugin's properties file even before
+  any plugin objects are created.  The information so stored can be used
+  by the plugin itself during its creation and initialization.
+</para>
+
+<para>
+  The following types of plugin information are practical, if not syntatical,
+  requirements of the Plugin API and are most easily supplied using
+  properties:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      Information regarding the name, author, and version of the plugin.
+    </para>
+    <para>
+      These data should be supplied in a series of properties beginning with
+      the prefix <varname>plugin.[plugin name]Plugin.</varname>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Identification of any dependencies the plugin may have on a
+      particular version of a Java runtime environment, the jEdit
+      application, or other plugins.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The title of the plugin as displayed in a tabbed docking window or
+      a floating frame window.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Labels for user actions for inclusion in menus and option panes
+      relating to toolbars and keyboard shortcuts.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Labels and other information regarding the controls contained in
+      the plugin's option pane.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The file name of the plugin's help documentation contained in
+      its jar archive file.
+    </para>
+  </listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="api-resources-help"><title>Plugin Documentation</title>
+
+<para>
+  While not required by the Plugin API, a help file is an essential
+  element of any plugin written for public release. A single web page is
+  often all that is required. There are no specific requirements on
+  layout, but because of the design of jEdit's help viewer, the use of
+  frames should be avoided. Topics that would be useful include
+  the following:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      a description of the purpose of the plugin;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      an explanation of the type of input the user can supply through its
+      visible interface (such as mouse action or text entry in controls);
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      a listing of available user actions that can be taken when the
+      plugin does not have input focus;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      a summary of configuration options;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      information on development of the plugin (such as a change log,
+      a list of <quote>to do</quote> items, and contact information for
+      the plugin's author); and
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      licensing information, including acknowledgements for any library
+      software used by the plugin.
+    </para>
+  </listitem>
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="api-error-reporting"><title>Error Reporting by Plugins</title>
+
+<para>
+  A final major feature of the Plugin API is its facility for serializing,
+  parsing and reporting errors encountered during the plugin's operation.
+  The <application>ErrorList</application> plugin can display these
+  errors. When a displayed error references a line in source code or some
+  other text file, the ErrorList provides <quote>one-click</quote> access
+  to the file and automatic highlighting of the line giving rise to the
+  error. Typically this facility is used to parse and display error
+  messages from an output stream of an external process. A plugin can also
+  use it to generate and display its own error output.
+</para>
+
+<para>
+  The error reporting facility has four elements: an error source that
+  generate and maintains a collection of errors, an error data object,
+  a message class, <classname>ErrorSourceUpdate</classname>, that is
+  published on the EditBus to alert subscribing components of new
+  errors, and the <application>ErrorList</application> plugin itself.
+  We will outline each of these elements.
+</para>
+
+<sect2 id="api-error-source"><title>Class DefaultErrorSource</title>
+
+<para>
+  The Plugin API implements error sources with an interface,
+  <classname>ErrorSource</classname> and a default implementing class,
+  <classname>DefaultErrorSource</classname>. The latter class should be
+  adequate for most error reporting tasks.  An outline of the
+  <classname>ErrorSource</classname> interface appears as part of
+  <xref linkend="api-guide"/>
+</para>
+
+<para>
+  The constructor for a <classname>DefaultErrorSource</classname> object
+  takes a single parameter: a <classname>String</classname> representing
+  the name assigned to the error source.  The name can be obtained with the
+  method <function>getName()</function>.
+</para>
+
+<para>
+  When a <classname>DefaultErrorSource</classname> (or any object
+  derived from the <classname>ErrorSource</classname> interface) is
+  created, the object owning the error source (typically a plugin core
+  object) should register the source's name with the EditBus. The
+  following code serves this purpose:
+</para>
+
+<informalexample><programlisting>    EditBus.addToNamedList(ErrorSource.ERROR_SOURCES_LIST,<replaceable>errorSource</replaceable>);
+</programlisting></informalexample>
+
+<para>
+  The following methods supply information about the contents of the
+  error source:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getErrorCount</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public ErrorSource.Error[] <function>getAllErrors</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getFileErrorCount</function></funcdef>
+        <paramdef>String <parameter>path</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the number of errors in the file specified by the
+      <parameter>file</parameter> parameter.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public ErrorSource.Error[] <function>getLineErrors</function></funcdef>
+        <paramdef>Buffer <parameter>buffer</parameter></paramdef>
+        <paramdef>int <parameter>lineIndex</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns an array of error objects for the file contained in
+      <parameter>buffer</parameter> at the line index represented
+      by <parameter>line</parameter>.
+    </para>
+  </listitem>
+</itemizedlist>
+
+<para>
+  At the heart of this class is the following thread-safe method that
+  creates an error object, adds it to the source's collection, and
+  notifies other components of the new error:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public synchronized void <function>addError</function></funcdef>
+        <paramdef>int <parameter>type</parameter></paramdef>
+        <paramdef>String <parameter>path</parameter></paramdef>
+        <paramdef>int <parameter>lineIndex</parameter></paramdef>
+        <paramdef>int <parameter>start</parameter></paramdef>
+        <paramdef>int <parameter>end</parameter></paramdef>
+        <paramdef>String <parameter>error</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The <parameter>type</parameter> parameter may either be
+      <constant>ErrorSource.ERROR</constant> (equal to 0) or
+      <constant>ErrorSource.WARNING</constant> (equal to 1). The other
+      parameters describe components of typical error output by a compiler:
+      the file name referenced by the error, the line number and starting and
+      ending line offsets (not file offsets) of the text referenced by the
+      error, and a <classname>String</classname>containing a description of
+      the error.
+    </para>
+    <para>
+      This method also sends an <classname>ErrorSourceUpdate</classname>
+      message to the EditBus with a reference to the new error
+      object and other details.
+    </para>
+  </listitem>
+ </itemizedlist>
+
+<para>
+  To remove all errors from the error source's internal collection,
+  call <function>clear()</function>. The method takes no parameters.
+  The method also sends an <classname>ErrorSourceUpdate</classname>
+  message to the EditBus signalling that the error source is now empty.
+</para>
+
+<para>
+  <classname>DefaultErrorSource</classname> also implements the
+  <classname>EBComponent</classname> interface.  As discussed earlier,
+  this means that the object can receive EditBus messages if it is registered
+  with a call to <function>EditBus.addToBus()</function>. It handles
+  <classname>BufferUpdate</classname> messages by iterating over any
+  error objects and causing them to obtain data from a buffer being
+  opened and clear the data when that buffer is closed.
+</para>
+
+<!--
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>clear</function></funcdef>
+      <funcprototype>
+    </funcsynopsis>
+    <para>
+      Removes all errors from the error source's internal collection.
+    </para>
+  </listitem>
+-->
+
+</sect2>
+
+<sect2 id="api-error-object"><title>The Error Object</title>
+
+<para>
+  The <classname>ErrorSource</classname> interface contains an inner
+  interface <classname>Error</classname> that defines required behavior of
+  an error object. <classname>DefaultErrorSource</classname> likewise
+  contains an inner class <classname>DefaultError</classname>.
+  Objects of the inner class are created as part of the
+  <function>DefaultErrorSource.addObject()</function> method.
+</para>
+
+<para>
+  The following methods retrieve attributes of the
+  <classname>DefaultError</classname> object:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getErrorType</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns <constant>ErrorSource.ERROR</constant> or
+      <constant>ErrorSource.WARNING</constant>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public ErrorSource <function>getErrorSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the <classname>DefaultErrorSource</classname> object
+      that created it (cast as an <classname>ErrorSource</classname>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getFilePath</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getFileName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the full path or the name of the file with which the
+      <classname>DefaultError</classname> is associated.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getLineNumber</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getStartOffset</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getEndOffset</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      These three methods return parameters identifying the text segment
+      associated with the error.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getErrorMessage</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the text describing the error.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Buffer <function>getBuffer</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the open buffer containing the file associated with the
+      error, or <constant>null</constant> if no such buffer is open.
+    </para>
+  </listitem>
+</itemizedlist>
+
+<para>
+  The <classname>DefaultErrorSource</classname> object managing a set of
+  error objects calls two other important methods in
+  <classname>DefaultError</classname> in response to
+  <classname>BufferUpdate</classname> messages. The purpose of the methods
+  is to keep the state of<classname>DefaultError</classname> objects
+  synchronized with open text buffers.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>openNotify</function></funcdef>
+        <paramdef>Buffer <parameter>buffer</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method is called in response to
+      <classname>BufferUpdate</classname> messages that signal the
+      opening of a text buffer. When a buffer is opened,
+      <function>openNotify</function> obtains and stores
+      <classname>Position</classname> objects representing the location
+      of the buffer text referenced by the error. These objects allow the
+      error object to locate the relative position of error text after
+      insertions or deletions are made in the buffer.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>closeNotify</function></funcdef>
+        <paramdef>Buffer <parameter>buffer</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      In response to <classname>BufferUpdate</classname> messages that signal
+      the closing of a text buffer, this method clears the
+      <classname>Position</classname> objects acquired by
+      <function>openNotify()</function>.
+    </para>
+  </listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="api-error-message"><title>Class ErrorSourceUpdate</title>
+
+<para>
+  In the default error source implementation, this message is sent after
+  an new error object is created and added to the source's error
+  collection. It is used by the <application>ErrorList</application>
+  plugin to update its display of error information.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>ErrorSourceUpdate</function></funcdef>
+        <paramdef>EBComponent <parameter>source</parameter></paramdef>
+        <paramdef>Object <parameter>what</parameter></paramdef>
+        <paramdef>ErrorSource <parameter>errorSource</parameter></paramdef>
+        <paramdef>ErrorSource.Error <parameter>error</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The parameter <parameter>what</parameter> is an <classname>Object</classname>
+      consisting of one of the following string literals:
+    </para>
+    <itemizedlist mark="bullet">
+      <listitem><para><constant>"ERROR_ADDED"</constant></para></listitem>
+      <listitem><para><constant>"ERROR_REMOVED"</constant></para></listitem>
+      <listitem><para><constant>"ERRORS_CLEARED"</constant></para></listitem>
+    </itemizedlist>
+  </listitem>
+</itemizedlist>
+
+<para>
+  The following methods retrieve the attributes of the message:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EBComponent <function>getSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getWhat</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the string literal indicating the change in view status.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public ErrorSource <function>getErrorSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public ErrorSource.Error <function>getError</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+</itemizedlist>
+</sect2>
+
+<sect2 id="api-error-errorlist"><title>Using the ErrorList Plugin</title>
+
+<para>
+  While the error reporting facility can be used for any purpose, its
+  most prevalent use is to generate structured data for display by the
+  <application>ErrorList</application> plugin. Both the plugin and the
+  error reporting facility as a whole is complex, but the various default
+  implementations in the Plugin API provide a simple mechanism for
+  structured error reporting and display.  In most cases it will
+  only be necessary to take the followng steps:
+</para>
+
+<itemizedlist>
+  <listitem><para>
+    Have the plugin core object create a
+    <classname>DefaultErrorSource</classname> object;
+  </para></listitem>
+  <listitem><para>
+    Register the name of the error source with the Edit Bus with
+    <function>EditBus.addToNamedList()</function>;
+  </para></listitem>
+  <listitem><para>
+    Register the error source itself as a subscriber to the Edit Bus
+    by calling <function>EditBus.addToBus()</function>;
+  </para></listitem>
+  <listitem><para>
+    When the plugin's working component (usually contained in the
+    plugin's top-level visible component or the plugin window object)
+    begins a process or operation that may generate error data, call
+    <function>clear()</function> on the error source to reset the source
+    and the ErrorList plugin display; and
+  </para></listitem>
+  <listitem><para>
+    When the plugin creates or encounters an error, call
+    <function>DefaultErrorSource.addError()</function> with the elements of
+    error data.
+  </para></listitem>
+</itemizedlist>
+
+<para>
+  The plugin can either generate its own error data or parse it from the
+  output stream of a process started by the plugin. The
+  <application>Console</application> plugin, for example, relies on an
+  <classname>ErrorMatcher</classname> object for error parsing. The
+  <classname>ErrorMatcher</classname> compares each line from the output
+  stream of an external process with a succession of regular expressions.
+  The <application>Console</application> plugin provides a number of
+  default error pattterns; users can add to those patterns and set the
+  order in which various patterns are examined. A match with one of the
+  expressions delimits the fields required by
+  <function>DefaultErrorSource.addError()</function>.
+</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>

@@ -7,7 +7,7 @@
 <!-- This file contains the jEdit API Quick Reference            -->
 
 
-<appendix id="api-guide-xxx"><title>jEdit API Quick Reference</title>
+<appendix id="api-guide"><title>jEdit API Quick Reference</title>
 
 <para>
     The source code for jEdit covers over 200 classes (not counting classes

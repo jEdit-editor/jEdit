@@ -747,13 +747,6 @@
 </listitem>
 
 <listitem>
-    <para><filename>Notepad.bsh</filename></para>
-    <abstract><para>
-        Displays a tabbed set of text windows in a floating frame.
-    </para></abstract>
-</listitem>
-
-<listitem>
     <para><filename>Run_Macro_at_Caret.bsh</filename></para>
     <abstract><para>
         Executes the macro whose name appears at the editing caret.

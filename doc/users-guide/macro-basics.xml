@@ -6,31 +6,19 @@
 <!--                                                             -->
 <!-- This file cover the introductory section of the macro guide -->
 
-<chapter id="macro-basics"><title>Macro Basics</title>
+<chapter id="macro-basics"><title>Introducing BeanShell</title>
 
  <para>
-  This part of the user's guide is an introduction to using and writing
-  macros in jEdit. First we will tell you a little about BeanShell,
-  jEdit's macro scripting language, and how to invoke and organize your
-  macros. Next, we will walk through a few simple macros. We then discuss
-  some of the building blocks you will use in writing more complicated
-  macros. Finally, we provide a reference guide of the most frequently
-  used jEdit APIs.
+  This part of the User's Guide is an introduction to using and writing
+  macros in jEdit. First, we will tell you a little about BeanShell,
+  jEdit's macro scripting language. Next, we will walk through a few
+  simple macros. We then present and analyze a dialog-based macro to
+  illustrate additional macro writing techniques. Finally, we discuss
+  several tips and techniques for writing and debugging macros.
  </para>
 
- <para>
-  Throughout this part of the user's guide, we will be referring to some of
-  the plugins available for use with jEdit (in particular, the
-  <application>Console</application> plugin). If you have not installed
-  plugins, you really should consider doing so (see <xref
-  linkend="using-plugins"/> for information), but you will not need plugins for
-  most of what we discuss.
- </para>
-
- <sect1 id="whatis-beanshell"><title>What is BeanShell?</title>
   <para>
-   Here is how BeanShell's author, Pat Niemeyer,
-   describes his creation:
+   Here is how BeanShell's author, Pat Niemeyer, describes his creation:
   </para>
 
   <blockquote>
@@ -45,12 +33,11 @@
   </blockquote>
 
   <para>
-   As you might gather from this short quote, BeanShell is very similar
-   to Java and is designed to be easy for Java programmers to pick up.
-   If you know how to program in Java, you already
-   know how to write BeanShell macros. Nonetheless, the
-   premise of this guide is that you should not have to know
-   anything about Java to begin writing your own macros for
+   As you might gather from this short quote, BeanShell is very similar to
+   Java and is designed to be easy for Java programmers to pick up. If you
+   know how to program in Java, you already know how to write BeanShell
+   macros. Nonetheless, the premise of this guide is that you should not
+   have to know anything about Java to begin writing your own macros for
    jEdit.
   </para>
 
@@ -67,225 +54,21 @@
   </para>
 
   <para>
-   This guide focuses on using BeanShell in macros. If you are
-   interested in learning more about BeanShell generally, consult the
-   <ulink url="http://www.beanshell.org">BeanShell web site</ulink>.
-  </para>
-  <sidebar>
-    <para>
-      The version of BeanShell used in jEdit 3.2 is version 1.01 with a few
-      modifications detailed in the file <filename>README.txt</filename>
-      included in the jEdit distribution. At the time of writing, plans are
-      being made for a beta release of BeanShell 1.2. The incorporation of a
-      new version of BeanShell into jEdit should not require modification to
-      existing macro code.
-    </para>
-  </sidebar>
- </sect1>
-
- <sect1 id="recording-macros"><title>Recording Macros</title>
-  <para>
-   The simplest use of macros is to record a series of key strokes and
-   menu commands as a BeanShell script, and play them back at a later
-   time. While this doesn't let you take advantage of the full power of
-   BeanShell, it is still a great time saver and can even be used to
-   <quote>prototype</quote> more complicated macros.
+   This guide focuses on using BeanShell in macros. If you are interested
+   in learning more about BeanShell generally, consult the <ulink
+   url="http://www.beanshell.org">BeanShell web site</ulink>. Information
+   on how to run and organize macros, whether included with the jEdit
+   installation or written by you, can be found in part I of the User
+   Guide in <xref linkend="using-macros"/>.
   </para>
 
-  <para>
-   <guimenu>Macros</guimenu>&gt;<guimenuitem>Record Macro</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>) prompts for a macro
-   name and begins recording.
-  </para>
-  <para>
-   While recording is in progress, the string
-   <quote>Macro recording</quote> is displayed in the status bar. jEdit records
-   the following:
-  </para>
-  <itemizedlist>
-   <listitem><para>Key strokes</para></listitem>
-   <listitem><para>Menu item commands</para></listitem>
-   <listitem><para>Tool bar clicks</para></listitem>
-   <listitem><para>All search and replace operations except incremental
-   search</para></listitem>
-  </itemizedlist>
-  <para>
-   Mouse clicks in the text area are
-   <emphasis>not</emphasis> recorded; to record the equivalent of mouse operations,
-   use the text selection commands or arrow keys.
-  </para>
-  <para>
-   <guimenu>Macros</guimenu>&gt;<guimenuitem>Stop Recording</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>) stops
-   recording. It also switches to the buffer containing the recorded macro,
-   giving you a chance to check over the recorded commands and make any
-   necessary changes. The file name extension <filename>.bsh</filename> is
-   automatically appended to the macro name, and all spaces are converted
-   to underscore characters, in order to make the macro name a valid file
-   name. These two operations are reversed when macros are displayed in the
-   <guimenu>Macros</guimenu> menu. See <xref linkend="organizing-macros"/>
-   for details. When you are happy with the macro, save the buffer and it
-   will appear in the <guimenu>Macros</guimenu> menu. To discard the macro,
-   close the buffer without saving.
-  </para>
-  <para>
-   If a complicated operation only needs to be repeated a few of
-   times, using the temporary macro feature is easier than saving a new
-   macro file.
-  </para>
-  <para>
-   <guimenu>Macros</guimenu>&gt;<guimenuitem>Record Temporary
-   Macro</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>) begins
-   recording to a buffer named <filename>Temporary_Macro.bsh</filename>.
-   Once recording is complete, you don't need to save the
-   <filename>Temporary_Macro.bsh</filename>buffer before playing it back.
-  </para>
-  <para>
-   <guimenu>Macros</guimenu>&gt;<guimenuitem>Play Temporary
-   Macro</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) plays
-   the macrorecorded to the <filename>Temporary_Macro.bsh</filename> buffer.
-  </para>
-
-  <para>
-   If you do not save the temporary macro, you must keep the buffer
-   containing the macro script open during your jEdit session. To have the
-   macro available for your next jEdit session, save the buffer
-   <filename>Temporary_Macro.bsh</filename> as an ordinary macro with a
-   descriptive name of your choice. The new name will then be displayed in
-   the<guimenu>Macros</guimenu> menu.
-  </para>
- </sect1>
-
- <sect1 id="organizing-macros"><title>How jEdit Organizes Macros</title>
-  <para>
-   Every macro, whether or not you originally recorded it, is stored on
-   disk and can be edited as a text file. The file names of macros
-   must have a <filename>.bsh</filename> extension.
-   By default, jEdit associates a
-   <filename>.bsh</filename> file with the <quote>beanshell</quote> edit
-   mode for purposes of syntax highlighting, indentation and other
-   formatting. However, BeanShell syntax does not impose any indentation or
-   line break requirements.
-  </para>
-
-  <para>
-   The <guimenu>Macros</guimenu> menu
-   lists all macros stored in two places: the <filename>macros</filename>
-   subdirectory of the jEdit install directory, and the
-   <filename>macros</filename> subdirectory of the user-specific
-   settings directory (see <xref linkend="settings-directory"/> for
-   information about the settings directory). Any macros you record will be
-   stored in the user-specific directory.
-  </para>
-
-  <para>
-   The listing of individual macros in the <guimenu>Macros</guimenu> menu
-   item can be organized in a hierarchy using subdirectories in the general
-   or user-specific macro folders. Each subdirectory containing BeanShell
-   macros appears as a submenu. You will find such a hierarchy in the
-   default macro set included with jEdit.
-  </para>
-
-  <para>
-   When jEdit first loads, it scans the designated macro directories and
-   assembles a listing of individual macros in the <guimenu>Macros</guimenu>
-   menu. When scanning the names, jEdit will delete underscore characters
-   and the <filename>.bsh</filename> extension for menu labels, so that
-   <filename>List_Useful_Information.bsh</filename>, for example, will be
-   displayed in the <guimenu>Macros</guimenu> menu as <guimenuitem>List
-   Useful Information</guimenuitem>. To update the menu listing by
-   rescanning the general and user-specific macro directories, invoke
-   <guimenu>Macros</guimenu>&gt;<guimenuitem>Rescan Macros</guimenuitem>.
-  </para>
-
-  <!-- <para>
-   If a macro named <filename>Startup.bsh</filename> exists in either of
-   the designated macro directories, it is executed near the end of the jEdit
-   startup sequence. Unlike with other macros, any variables and methods
-   defined in the startup macro are available to all other macros and
-   BeanShell commands.  If you take advantage of this feature, be sure to
-   have only one macro named <filename>Startup.bsh</filename> (capitalization
-   matters!), and place it in the either of the two macro directories.
-   See <xref linkend="startup-macro"/> for a more detailed discussion on
-   the use of a startup macro.
-  </para> -->
-
-  <para>
-   You can run any macro, regardless of where it is located, by
-   invoking <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Other
-   Macro</guimenuitem>. You will be presented with the usual file
-   selection dialog box.
-  </para>
-
-  <para>
-   You can also assign a macro to a toolbar button, a keyboard
-   shortcut or the context pop-up menu in the
-   <guilabel>Macro Shortcuts</guilabel>, <guilabel>Tool Bar</guilabel> and
-   <guilabel>Context Menu</guilabel> panes of the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
-  </para>
-
-  <sidebar><title>XInsert plugin</title>
-   <para>
-    The <application>XInsert</application> plugin has a feature that
-    lists the title of macros, organized by subdirectories, as part of
-    its tree list display.  Clicking on the leaf of the tree
-    corresponding to a macro name causes jEdit to execute the macro
-    immediately.  The plugin allows you to keep a list of macros and
-    cut-and-paste text fragments available while editing
-    without opening menus. For information about installing plugins, see
-    <xref linkend="using-plugins"/>.
-   </para>
-  </sidebar>
- </sect1>
-
- <sect1 id="single-macros"><title>Single Execution Macros</title>
-  <para>
-   There are two ways jEdit lets you use BeanShell quickly on a
-   <quote>one time only</quote> basis. You will find both of them in the
-   <guimenu>Utilities</guimenu> menu.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
-   Expression</guimenuitem> causes jEdit to display a text input dialog
-   that asks you to type a single line of BeanShell commands. You can type
-   more than one BeanShell statement so long as each of them ends with a
-   semicolon. If BeanShell successfully interprets your input, a message
-   box will appear with the return value of the last statement. You can do
-   the same thing using the BeanShell interpreter provided with the
-   <application>Console</application> plugin; the return value will appear
-   in the output window.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
-   evaluates the selected text as a BeanShell script and
-   replaces the selected text with the return value of the last BeanShell
-   statement.
-  </para>
-
-  <para>
-    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
-    easy way to do arithmetic calculations inline while editing. BeanShell
-    uses numbers and arithmetic operations in an ordinary, intuitive way.
-  </para>
-
-  <informalexample>
-   <para>
-    Try typing an expression like <userinput>(3745*856)+74</userinput>
-    in the buffer, select it, and choose
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>.
-    The selected text will be replaced by the answer,
-    <userinput>3205794</userinput>.
-   </para>
-  </informalexample>
- </sect1>
+ <para>
+  Throughout this part of the User's Guide, we will be referring to some
+  of the plugins available for use with jEdit (in particular, the
+  <application>Console</application> plugin). If you have not installed
+  plugins, you really should consider doing so (see <xref
+  linkend="using-plugins"/> for information), but you will not need
+  plugins for most of what we discuss.
+ </para>
 
 </chapter>

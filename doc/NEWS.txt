@@ -1,6 +1,7 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.1 AND 3.2
 
-- don't forget to document jEditLauncher, plugin guide
+- don't forget to document jEditLauncher, improved documentation, plugin
+guide
 
 * Markers
 

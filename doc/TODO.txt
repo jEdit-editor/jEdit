@@ -2,34 +2,37 @@ TO DO
 
 - FTP plugin: soft links???
 - FTP plugin: make a 3.2 version with better error messages?
-- update console macros and tell john
 - make xml plugin more respectable before 3.2final
 
 + before 3.2final:
 
-- installing source for already installed plugins
-- documentation
-  - replace some links to writing-macros-part with using-macros
-  - bsh interface all implement docs -- also invoke() method!!!
-  - mention registers in API guide
-  - JOptionPane not a good idea for getting user input?
+- use something else instead of caps lock
+
+- documentation:
+  - update using-plugins
+  - write mode-tips
   - formatting problems in user's guide in table cells
   - document differences between web start and stand-alone version
+  - JOptionPane not a good idea for getting user input?
   - maybe docs on BeanShell 1.2 features in macro guide?
     - incorporate portions of the beanshell manual into the macro guide.
-  - document setMessageAndClear() in API guide
   - BSH language reference appendix
   - BSH command reference appendix
-  - finish writing-modes-part
+  - proofread it
+
+- don't use hacked BeanShell 1.1a18
+- 'rem' in vbscript
+- delete line aiob?
+- installing source for already installed plugins
 - get web start to work
 - fix '... is not a function name' when running openjade
 - reload: preserve caret position
 - next time i'm making an RPM, fix the shell script
+
 - John Gellene:
-  - using macros docs
   - jEditLauncher docs
-  - Include John's upcoming plugin guide when ready
   - jEditLauncher
+  - rest of macro guide changes
 
 + bugs that need to be fixed at some stage:
 

@@ -1,0 +1,333 @@
+<!-- jEdit 3.2 Plugin Guide, (C) 2001 John Gellene            -->
+
+<!-- jEdit buffer-local properties:                           -->
+<!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
+
+<!-- Fri Jun 22 09:04:50 EDT 2001 @586 /Internet Time/        -->
+
+<!-- This file contains a discussion of the host architecture -->
+<!-- in the jEditPlugin API                                   -->
+
+<chapter id="host-design"><title>jEdit As a Plugin Host</title>
+
+<para>
+	A good way to start learning what a plugin requires is to look at what
+  the host application does with one. We start our discussion of
+  plugins by outlining how jEdit loads and displays them.
+</para>
+
+<sect1 id="host-design-load"><title>Loading Plugins</title>
+
+<para>
+  As part of its startup routine, the <function>main</function> method of
+  the jEdit application calls the methods
+  <function>initPlugins()</function> and
+  <function>loadPlugins()</function>. This occurs after the
+  application has done the following:
+  <itemizedlist>
+    <listitem><para>
+      parsed command line options;
+    </para></listitem>
+    <listitem><para>
+      started the edit server (unless instructed not to
+      by a command line option); and
+    </para></listitem>
+    <listitem><para>
+      loaded its application properties, any user-supplied properties, and the
+      application's set of actions that will be available from jEdit's menu
+      bar (as well as the toolbar and keyboard shortcuts);
+    </para></listitem>
+  </itemizedlist>
+  Plugin loading occurs before jEdit creates any windows or loads any files
+  for editing. It also occurs before jEdit runs any <quote>startup</quote>
+  macros.
+</para>
+
+<para>
+  The two methods cause a search in two subdirectories named
+  <filename>/jar</filename> for files ending with the extension
+  <filename>.jar</filename>. One subdirectory is in the directory where
+  jEdit is installed, and the other is found where the user's individual
+  settings are stored. When installing plugins over the Internet, the
+  <application>Plugin Manager</application> offers a choice between these
+  two subdirectories as the location for a new or updated plugin. If a
+  plugin is manually installed, its <filename>.jar</filename> archive file
+  must be copied to one ofthese two subdirectories or jEdit will not see it.
+</para>
+
+<sect2 id="host-design-loader"><title>The JARClassLoader</title>
+
+<para>
+  For each jar archive file it finds, jEdit creates an instance of
+  <classname>JARClassLoader</classname>. This is a class native to jEdit
+  that implements the Java platform's abstract class
+  <classname>ClassLoader</classname>. The constructor used for the
+  <classname>JARClassLoader</classname>object does the following:
+    <itemizedlist>
+      <listitem><para>
+        loads any data on the plugin's actions found in a file called
+        <filename>actions.xml</filename> that is contained in the
+        archive file;
+      </para></listitem>
+      <listitem><para>
+        loads any properties set forth in files ending with
+        the extension <filename>.props</filename> that are contained
+        in the archive;
+      </para></listitem>
+      <listitem><para>
+        adds any archived file with a name ending with
+        <filename>Plugin.class</filename> to an internal collection of
+        plugin class names maintained by the
+        <classname>JARClassLoader</classname>; and
+      </para></listitem>
+      <listitem><para>
+        adds to a collection maintained by the host application a new object of
+        type <classname>EditPlugin.JAR</classname>. This is a data structure
+        holding the name of the jar archive file, a reference to the
+        <classname>JARClassLoader</classname> and a collection,
+        initially empty, of plugins found in the archive file.
+      </para></listitem>
+    </itemizedlist>
+</para>
+
+<para>
+  Once all jar archive files have been examined, the host application
+  activates the <classname>JARClassLoader</classname> for each jar file it
+  has identified, calling the method
+  <function>startAllPlugins()</function>. This method iterates through all
+  the archive's class files whose names end in
+  <filename>Plugin.class</filename>, as identified in the first pass
+  through the jar archive.  We will call these classes
+  <firstterm>plugin core classes</firstterm>.
+</para>
+
+<para>
+  For each plugin core class, the loader first checks the plugin's
+  properties to see if it is subject to any dependencies. For example, a
+  plugin may require that the version of the Java runtime environment or
+  of jEdit itself be equal to or above some threshold version. A plugin
+  can also require the presence of another plugin. If any dependency is
+  not satisified, the loader marks the plugin as <quote>broken</quote> and
+  logs an error message. If all dependencies are satisfied, a new instance
+  of the plugin core class is created and added to the collection
+  maintained by the <classname>EditPlugin.JAR</classname> object. By
+  accessing that object, which is stored in a collection maintained by
+  jEdit, the host can keep track of plugins that it has successfully
+  loaded. It can also call methods or perform routines on loaded plugin
+  core objects byiterating through the collection.
+</para>
+
+</sect2>
+
+<sect2 id="host-design-plugin-start"><title>Starting the Plugin</title>
+
+<para>
+  After creating and storing the plugin core object, jEdit calls the
+  <function>start()</function> method of the plugin core class. This method is
+  part of the interface of the <classname>EditPlugin</classname> abstract
+  class that all plugin core classes must implement. The
+  <function>start()</function> method must therefore be
+  implemented in the plugin core class. It can be implemented as an empty
+  <quote>no-op</quote>. It can perform initialization of the object's data
+  members. It can also register its identity and other information with
+  jEdit's <firstterm>EditBus</firstterm> object, which manages messaging
+  between plugins and the host application. We will discuss the
+  EditBus in more detail shortly, as it plays a key role in the display
+  of plugins.
+</para>
+
+<para>
+  At this point, we can identify the following practical requirements
+  for a plugin:
+  <itemizedlist>
+    <listitem><para>
+      it must be packaged as a jar archive;
+    </para></listitem>
+    <listitem><para>
+      the jar archive must contain at least one <quote>plugin core</quote>
+      class whose name ends in <filename>Plugin</filename> (but it may have
+      more than one, so that ajar archive may hold more than one plugin);
+    </para></listitem>
+    <listitem><para>
+      each plugin core class (which is only one of the many classes comprising
+      a plugin application) must implement the <classname>EditPlugin</classname>
+      abstract class;
+    </para></listitem>
+    <listitem><para>
+      the jar archive should contain data concerning user actions for display
+      in the host's menu and elsewhere in a file entitled
+      <filename>actions.xml</filename>; and
+    </para></listitem>
+    <listitem><para>
+      the archive may (and the better practice is that it should) contain
+      at least one properties file having a <filename>.props</filename>
+      extension.
+    </para></listitem>
+  </itemizedlist>
+  We will provide more detail on these requirements later.
+</para>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="host-design-display"><title>Displaying Visible Plugins</title>
+
+<para>
+  At this point the host has created an instance of the plugin core class.
+  This class is the principal point of contact between jEdit as a host
+  application and the plugin application taken as a whole. It need not be,
+  and typically is not, the <quote>working</quote> element or the visible
+  element of the plugin. If a plugin provides for its own separate
+  display, either in a <quote>floating</quote> frame window or in a
+  docking window, the initialization of the plugin is not yet complete.
+</para>
+
+<para>
+  The <firstterm>plugin window</firstterm> is typically defined in a class
+  that is part of the plugin package but separate from the plugin core class
+  that implements <classname>EditPlugin</classname>. The plugin window may
+  either be derived from a Java component class such as
+  <classname>JPanel</classname> or act as a wrapper aroung such a class.
+  Regardless of which approach is used, the visible window is created and
+  displayed during the final steps of jEdit's startup routine, after the
+  application creates an initial <classname>View</classname> object.
+</para>
+
+<sect2 id="host-display-view"><title>The Role of the View Object</title>
+
+<para>
+  A <classname>View</classname> is jEdit's top-level frame window that
+  contains the text editing area, a menu bar, toolbar and other window
+  decorations, as well as plugin windows. The constructor method for the
+  <classname>View</classname> performs two important operations that deal
+  with plugins.
+</para>
+
+<para>
+  First, it calls <function>updatePluginsMenu()</function> to obtain menu
+  information from each loaded plugin. This method iterates through the
+  application's collection of plugins and calls
+  <function>createMenuItems()</function> on each one. This is another
+  method that plugins must implement as part of the
+  <classname>EditPlugin</classname> class interface. As we will explain
+  later, the typical plugin relies on a method in a utility class to
+  create menu entries relating to the plugin.
+</para>
+
+<para>
+  Second, the <classname>View</classname> creates and initializes a
+  <classname>DockableWindowManager</classname>. This object is responsible
+  for the activation of plugin windows.
+</para>
+
+</sect2>
+
+<sect2 id="host-display-manager">
+<title>The DockableWindowManager and the EditBus</title>
+
+<para>
+  The <classname>DockableWindowManager</classname> is derived from
+  <classname>JPanel</classname> and incorporates a custom layout manager
+  for displaying docking windows within the view. It also keeps track of
+  plugins that are displayed in separate floating frame windows. When the
+  <classname>View</classname> object initializes its
+  <classname>DockableWindowManager</classname>, the manager iterates
+  through the list of loaded plugins and causes those plugins to be
+  displayed that the user earlier designated through option settings.
+</para>
+
+<para>
+  The <classname>DockableWindowManager</classname> creates and displays
+  plugin windows by routing messages through the application's
+  <classname>EditBus</classname> object that we mentioned earlier. The
+  EditBus contains a <quote>publish and subscribe</quote> messaging
+  facility. To subscribe to the facility, a plugin class must implement
+  the <classname>EBPlugin</classname> abstract class, which is derived
+  from the <classname>EditPlugin</classname> class. To subscribe to
+  individually addressed messages, it must also register a
+  <classname>String</classname> representing the plugin's name with the
+  EditBus. Typically this registration occurs as part of the plugin's
+  <function>start()</function> method.
+</para>
+
+<para>
+  To activate a plugin window, the
+  <classname>DockableWindowManager</classname> creates a
+  <classname>CreateDockableWindow</classname> message object containing
+  three data items: a reference to the view that will contain the plugin,
+  the name of the plugin and the relative position of the window in which
+  the plugin will be placed. That message is published to the EditBus by
+  passing it as a parameter to <function>EditBus.send()</function>.
+</para>
+
+</sect2>
+
+<sect2 id="host-display-message">
+<title>Message Routing and Plugin Window Creation</title>
+
+<para>
+  In the case of a <classname>CreateDockableWindow</classname> message,
+  successive subscribers to the EditBus receive the message, through a
+  call to each subscriber's <function>handleMessage()</function> method,
+  until one subscriber signals that it has handled the message. This
+  occurs when a subscriber matches the message's
+  <parameter>name</parameter> data member with the name it had registered
+  with the EditBus. The intended recipient then handles the message by
+  creating an appropriate plugin window object that directly or indirectly
+  holds the plugin's visible components. The plugin attaches the new
+  plugin window to the message, so that when message routing is completed,
+  the <classname>DockableWindowManager</classname> can retrieve and store
+  the new plugin window.
+</para>
+
+<para>
+  As a final step in plugin activation, the manager create another window
+  object that will contain the visible components of the plugin.  This object
+  implements the <classname>DockableWindowContainer</classname> interface;
+  depending on the settings for the plugin selected by the user, it will
+  either be a tabbed window pane in one of the docking windows attached
+  to the <classname>View</classname> object, or a separate, floating frame
+  window.
+</para>
+
+<para>
+  If the plugin is contained in a docking window, the manager maintains
+  the plugin's visible size and position through the use of its internal
+  layout manager. Eventually the manager destroys the plugin's visible
+  window, whether docking or floating, in response to user action or as
+  part of the destruction of the corresponding <classname>View</classname>
+  object.
+</para>
+
+<para>
+  This summary shows that a visible plugin has the following additional
+  requirements:
+  <itemizedlist>
+    <listitem><para>
+      the plugin class must implement <classname>EBPlugin</classname>
+      instead of the parent class <classname>EditPlugin</classname>;
+    </para></listitem>
+    <listitem><para>
+      it must provide its name to the EditBus as part of its
+      <function>start()</function> method; and
+    </para></listitem>
+    <listitem><para>
+      it must create and arrange its plugin window, and through that object,
+      its display window and other visible components, in response to a
+      <type>CreateDockableWindow</type>message;
+    </para></listitem>
+  </itemizedlist>
+</para>
+
+<para>
+  With this broad outline of how jEdit behaves as a plugin host in the
+  background, we will next review the programming elements that make up
+  a plugin.
+</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>

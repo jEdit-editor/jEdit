@@ -13,6 +13,7 @@
 <!ENTITY text-edit SYSTEM "text-edit.xml">
 <!ENTITY source-edit SYSTEM "source-edit.xml">
 <!ENTITY customizing SYSTEM "customizing.xml">
+<!ENTITY using-macros SYSTEM "using-macros.xml">
 <!ENTITY using-plugins SYSTEM "using-plugins.xml">
 <!ENTITY cli-usage SYSTEM "cli-usage.xml">
 <!ENTITY shortcuts SYSTEM "shortcuts.xml">
@@ -30,6 +31,12 @@
 <!ENTITY simple-macros SYSTEM "simple-macros.xml">
 <!ENTITY dialog-macro SYSTEM "dialog-macro.xml">
 <!ENTITY macro-tips SYSTEM "macro-tips.xml">
+
+<!ENTITY plugin-intro SYSTEM "plugin-intro.xml">
+<!ENTITY host-design SYSTEM "host-design.xml">
+<!ENTITY plugin-api SYSTEM "plugin-api.xml">
+<!ENTITY plugin-implement SYSTEM "plugin-implement.xml">
+
 <!ENTITY api-guide SYSTEM "api-guide.xml"> ]>
 
 <book>
@@ -62,6 +69,7 @@
  &text-edit;
  &source-edit;
  &customizing;
+ &using-macros;
  &using-plugins;
  &cli-usage;
  &shortcuts;
@@ -86,10 +94,13 @@
 </part>
 
 <part id="writing-plugins-part"><title>Writing Plugins</title>
-
+ &plugin-intro;
+ &host-design;
+ &plugin-api;
+ &plugin-implement;
 </part>
 
-<part id="api-guide-part"><title>jEdit API Guide</title>
+<part id="api-guide-part"><title>jEdit API Reference</title>
  &api-guide;
 </part>
 

@@ -162,7 +162,9 @@ public class Registers
 	 */
 	public static void paste(JEditTextArea textArea, char register)
 	{
-		Register reg = getRegister(register);
+		if(!textArea.isEditable())
+			textArea.getToolkit().beep();
+
 		if(reg == null)
 		{
 			textArea.getToolkit().beep();

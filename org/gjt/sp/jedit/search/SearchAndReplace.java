@@ -670,14 +670,12 @@ loop:		for(;;)
 			String found = buffer.getText(_start,_end);
 			String subst = matcher.substitute(found);
 
-			end -= (found.length() - subst.length());
-
 			if(subst != null)
 			{
 				buffer.remove(_start,_end);
 				buffer.insertString(_start,subst,null);
 				occurCount++;
-				offset += occur[0] + subst.length();
+				offset = _start + subst.length();
 			}
 			else
 				offset += _end;

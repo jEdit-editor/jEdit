@@ -319,7 +319,7 @@
    <listitem><para><filename>jars</filename> - this directory contains
    plugins. See <xref linkend="using-plugins" />.</para></listitem>
    <listitem><para><filename>macros</filename> - this directory contains
-   macros. See <xref linkend="writing-macros-part" />.</para></listitem>
+   macros. See <xref linkend="using-macros" />.</para></listitem>
    <listitem><para><filename>modes</filename> - this directory contains custom
    edit modes. See <xref linkend="writing-modes-part" />.
    </para></listitem>
