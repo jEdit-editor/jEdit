@@ -4,6 +4,8 @@ JEDIT 3.2 VERSION HISTORY
 
 + New Features
 
+- Visual Foxpro syntax highlighting (Matt Price)
+- SQR syntax highlighting (Richard Ashwell)
 - Cruddy -bshclient command-line switch replaced with -run=<script>
   parameter; it will run the specified script file, and works in both
   the initial and client instances of jEdit.
@@ -71,6 +73,7 @@ JEDIT 3.2 VERSION HISTORY
 - AltGR key didn't work with Java 2 version 1.4 (Vicente Salvador)
 - Global options dialog box looked a bit dodgy with the 'global colors'
   setting
+- Could paste into read-only buffers
 
 * Version 3.2pre6
 

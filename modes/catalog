@@ -59,6 +59,9 @@
 <MODE NAME="eiffel"		FILE="eiffel.xml"
 				FILE_NAME_GLOB="*.e" />
 
+<MODE NAME="foxpro"		FILE="foxpro.xml"
+				FILE_NAME_GLOB="*.fox" />
+
 <MODE NAME="haskell"		FILE="haskell.xml"
 				FILE_NAME_GLOB="*.hs" />
 
@@ -149,6 +152,9 @@
 
 <MODE NAME="shtml"		FILE="shtml.xml"
 				FILE_NAME_GLOB="*.{shtml,shtm}" />
+
+<MODE NAME="sqr"                FILE="sqr.xml"
+                                FILE_NAME_GLOB="*.{sqr,sqc}" />
 
 <MODE NAME="tcl"		FILE="tcl.xml"
 				FILE_NAME_GLOB="*.{tcl,tsh}" />

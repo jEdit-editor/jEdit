@@ -62,7 +62,7 @@ public class Registers
 	 */
 	public static void append(JEditTextArea textArea, char register)
 	{
-		append(textArea,register,"\n");
+		append(textArea,register,"\n",false);
 	}
 
 	/**
@@ -75,17 +75,7 @@ public class Registers
 	public static void append(JEditTextArea textArea, char register,
 		String separator)
 	{
-		String selection = textArea.getSelectedText();
-		if(selection == null)
-			return;
-
-		Register reg = getRegister(register);
-
-		if(reg != null && reg.toString() != null)
-			selection = reg.toString() + separator + selection;
-
-		setRegister(register,selection);
-		HistoryModel.getModel("clipboard").addItem(selection);
+		append(textArea,register,separator,false);
 	}
 
 	/**
@@ -163,7 +153,10 @@ public class Registers
 	public static void paste(JEditTextArea textArea, char register)
 	{
 		if(!textArea.isEditable())
+		{
 			textArea.getToolkit().beep();
+			return;
+		}
 
 		Register reg = getRegister(register);
 

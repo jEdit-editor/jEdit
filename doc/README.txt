@@ -250,6 +250,9 @@ Marc Rummel:
 Matt Albrecht:
 	- Inform syntax highlighting
 
+Matt Price:
+	- Visual Foxpro syntax highlighting
+
 Matthias Schneider:
 	- AWK, COBOL syntax highlighting
 
@@ -285,6 +288,9 @@ Peter Graves:
 
 Ralf Engels:
 	- PostScript syntax highlighting
+
+Richard Ashwell:
+	- SQR syntax highlighting
 
 Romain Guy:
 	- POVRay syntax highlighting
