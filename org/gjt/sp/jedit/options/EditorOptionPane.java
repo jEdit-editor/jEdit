@@ -1,6 +1,6 @@
 /*
  * EditorOptionPane.java - Editor options panel
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,6 +385,9 @@ public class EditorOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.29  2000/11/05 00:44:15  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.28  2000/11/02 09:19:34  sp
  * more features
  *

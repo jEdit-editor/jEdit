@@ -45,7 +45,7 @@ public class SearchDialog extends EnhancedDialog
 		fileset = SearchAndReplace.getSearchFileSet();
 
 		find = new HistoryTextField("find");
-
+		find.setText(defaultFind);
 		replace = new HistoryTextField("replace");
 		keepDialog = new JCheckBox(jEdit.getProperty(
 			"search.keepDialog"));
@@ -65,8 +65,8 @@ public class SearchDialog extends EnhancedDialog
 		multifileBtn.setMnemonic(jEdit.getProperty("search.multifile"
 			+ ".mnemonic").charAt(0));
 		findBtn = new JButton(jEdit.getProperty("search.findBtn"));
-		replaceBtn = new JButton(jEdit.getProperty("search.replace"));
-		replaceBtn.setMnemonic(jEdit.getProperty("search.replace"
+		replaceBtn = new JButton(jEdit.getProperty("search.replaceBtn"));
+		replaceBtn.setMnemonic(jEdit.getProperty("search.replaceBtn"
 			+ ".mnemonic").charAt(0));
 		replaceFind = new JButton(jEdit.getProperty("search.replaceFind"));
 		replaceFind.setMnemonic(jEdit.getProperty("search.replaceFind"
@@ -312,6 +312,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/11/05 00:44:14  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.19  2000/11/02 09:19:33  sp
  * more features
  *

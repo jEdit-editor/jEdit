@@ -191,7 +191,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public void updateScrollBars()
 	{
-		System.err.println("updating scroll bars");
 		if(vertical != null && visibleLines != 0)
 		{
 			// don't display stuff past the end of the buffer if
@@ -222,8 +221,10 @@ public class JEditTextArea extends JComponent
 		int width = painter.getWidth();
 		if(horizontal != null && width != 0)
 		{
+			/* int maxHorizontalScrollWidth = getTokenMarker().getMaxLineWidth(
+				firstLine,visibleLines);
 			horizontal.setValues(-horizontalOffset,width,0,
-				maxHorizontalScrollWidth);
+				maxHorizontalScrollWidth); */
 			horizontal.setUnitIncrement(painter.getFontMetrics()
 				.charWidth('w'));
 			horizontal.setBlockIncrement(width / 2);
@@ -255,8 +256,10 @@ public class JEditTextArea extends JComponent
 	{
 		this.firstLine = firstLine;
 
+		maxHorizontalScrollWidth = 0;
+
 		if(firstLine != vertical.getValue())
-			updateScrollBarsAfterPaint = true;
+			updateScrollBars();
 
 		painter.repaint();
 		gutter.repaint();
@@ -296,7 +299,7 @@ public class JEditTextArea extends JComponent
 	{
 		this.horizontalOffset = horizontalOffset;
 		if(horizontalOffset != horizontal.getValue())
-			updateScrollBarsAfterPaint = true;
+			updateScrollBars();
 		painter.repaint();
 	}
 
@@ -324,9 +327,10 @@ public class JEditTextArea extends JComponent
 			horizChanged = true;
 		}
 
-		if(vertChanged || horizChanged)
+		if(vertChanged || horizChanged /* || horizontal.getMaximum()
+			!= maxHorizontalScrollWidth */)
 		{
-			updateScrollBarsAfterPaint = true;
+			updateScrollBars();
 			painter.repaint();
 			gutter.repaint();
 		}
@@ -587,10 +591,12 @@ public class JEditTextArea extends JComponent
 		buffer.addDocumentListener(documentHandler);
 		documentHandlerInstalled = true;
 
+		maxHorizontalScrollWidth = 0;
+
 		painter.updateTabSize();
 
 		select(0,0);
-		updateScrollBarsAfterPaint = true;
+		updateScrollBars();
 		painter.repaint();
 		gutter.repaint();
 	}
@@ -1194,17 +1200,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final boolean isEditable()
 	{
-		return (buffer.isLoaded() && !buffer.isSaving() && editable);
-	}
-
-	/**
-	 * Sets if this component is editable.
-	 * @param editable True if this text area should be editable,
-	 * false otherwise
-	 */
-	public final void setEditable(boolean editable)
-	{
-		this.editable = editable;
+		return buffer.isEditable();
 	}
 
 	/**
@@ -1405,7 +1401,6 @@ public class JEditTextArea extends JComponent
 	// package-private members
 	Segment lineSegment;
 	MouseHandler mouseHandler;
-	boolean updateScrollBarsAfterPaint;
 	int maxHorizontalScrollWidth;
 
 	/**
@@ -1435,18 +1430,18 @@ public class JEditTextArea extends JComponent
 		int height = painter.getHeight();
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
-		updateScrollBarsAfterPaint = true;
+		updateScrollBars();
 	}
 
-	void maybeUpdateScrollBars()
+	void updateMaxHorizontalScrollWidth()
 	{
-		updateScrollBarsAfterPaint = false;
 		int _maxHorizontalScrollWidth = getTokenMarker().getMaxLineWidth(
 			firstLine,visibleLines);
 		if(_maxHorizontalScrollWidth != maxHorizontalScrollWidth)
 		{
 			maxHorizontalScrollWidth = _maxHorizontalScrollWidth;
-			updateScrollBars();
+			horizontal.setValues(-horizontalOffset,painter.getWidth(),
+				0,maxHorizontalScrollWidth);
 		}
 	}
 
@@ -1615,11 +1610,12 @@ public class JEditTextArea extends JComponent
 		else if(line < firstLine)
 		{
 			setFirstLine(firstLine + count);
+			// calls updateScrollBars()
 		}
 		// end of magic stuff
 		else
 		{
-			updateScrollBarsAfterPaint = true;
+			updateScrollBars();
 			painter.invalidateLineRange(line,firstLine + visibleLines);
 			gutter.invalidateLineRange(line,firstLine + visibleLines);
 		}
@@ -2250,6 +2246,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.92  2000/11/05 00:44:15  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.91  2000/11/02 09:19:34  sp
  * more features
  *

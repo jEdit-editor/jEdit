@@ -282,6 +282,8 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 		initPlugins();
 		GUIUtilities.advanceSplashProgress();
+		initSiteProperties();
+		GUIUtilities.advanceSplashProgress();
 		initUserProperties();
 		if(settingsDirectory != null)
 		{
@@ -479,7 +481,7 @@ public class jEdit
 		 * - if default equals value, ignore
 		 * - if default doesn't equal value, set user
 		 */
-		if(value == null || value.length() == 0)
+		if(value == null)
 		{
 			String prop = (String)defaultProps.get(name);
 			if(prop == null || prop.length() == 0)
@@ -593,7 +595,7 @@ public class jEdit
 			+ directory);
 
 		File file = new File(directory);
-		if(!(file.exists() || file.isDirectory()))
+		if(!(file.exists() && file.isDirectory()))
 			return;
 		String[] plugins = file.list();
 		if(plugins == null)
@@ -1247,7 +1249,7 @@ public class jEdit
 	public static boolean closeBuffer(View view, Buffer buffer)
 	{
 		// Wait for pending I/O requests
-		if(!buffer.isLoaded() || buffer.isSaving())
+		if(buffer.isPerformingIO())
 		{
 			VFSManager.waitForRequests();
 			if(VFSManager.errorOccurred())
@@ -1871,6 +1873,56 @@ public class jEdit
 	}
 
 	/**
+	 * Load site properties.
+	 */
+	private static void initSiteProperties()
+	{
+		// site properties are loaded as default properties, overwriting
+		// jEdit's system properties
+
+		String siteSettingsDirectory = MiscUtilities.constructPath(
+			jEditHome, "site-props");
+		File siteSettings = new File(siteSettingsDirectory);
+
+		if (!(siteSettings.exists() && siteSettings.isDirectory()))
+			return;
+
+		String[] snippets = siteSettings.list();
+		if (snippets == null)
+			return;
+
+		MiscUtilities.quicksort(snippets,
+			new MiscUtilities.StringICaseCompare());
+
+		for (int i = 0; i < snippets.length; ++i)
+		{
+			String snippet = snippets[i];
+			if(!snippet.toLowerCase().endsWith(".props"))
+				continue;
+
+			try
+			{
+				String path = MiscUtilities.constructPath(
+					siteSettingsDirectory,snippet);
+				Log.log(Log.DEBUG,jEdit.class,
+					"Loading site snippet: " + path);
+
+				loadProps(new FileInputStream(new File(path)));
+			}
+			catch(FileNotFoundException fnf)
+			{
+				Log.log(Log.DEBUG,jEdit.class,fnf);
+			}
+			catch(IOException e)
+			{
+				Log.log(Log.ERROR,jEdit.class,"Cannot load site snippet "
+					+ snippet);
+				Log.log(Log.ERROR,jEdit.class,e);
+			}
+		}
+	}
+
+	/**
 	 * Load edit modes.
 	 */
 	private static void initModes()
@@ -2388,6 +2440,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.286  2000/11/05 00:44:14  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.285  2000/11/02 09:19:31  sp
  * more features
  *

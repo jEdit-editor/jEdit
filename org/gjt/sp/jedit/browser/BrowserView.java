@@ -1,5 +1,5 @@
 /*
- * BrowserTreeView.java
+ * BrowserView.java
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -120,6 +120,9 @@ public class BrowserView extends JPanel
 		 * to a setDirectory(), we set the currentlyLoadingTreeNode
 		 * to null here. */
 		currentlyLoadingTreeNode = rootNode;
+
+		timer.stop();
+		typeSelectBuffer.setLength(0);
 	}
 
 	public void updateFileView()
@@ -168,6 +171,17 @@ public class BrowserView extends JPanel
 	private DefaultMutableTreeNode currentlyLoadingTreeNode;
 
 	private static FileCellRenderer renderer = new FileCellRenderer();
+
+	private StringBuffer typeSelectBuffer = new StringBuffer();
+	private Timer timer = new Timer(0,new ClearTypeSelect());
+
+	class ClearTypeSelect implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			typeSelectBuffer.setLength(0);
+		}
+	}
 
 	private boolean reloadDirectory(DefaultMutableTreeNode node, String path)
 	{
@@ -293,6 +307,17 @@ public class BrowserView extends JPanel
 					break;
 				}
 			}
+			else if(evt.getID() == KeyEvent.KEY_TYPED)
+			{
+				char ch = evt.getKeyChar();
+				typeSelectBuffer.append(ch);
+				doTypeSelect(typeSelectBuffer.toString());
+
+				timer.stop();
+				timer.setInitialDelay(500);
+				timer.setRepeats(false);
+				timer.start();
+			}
 
 			if(!evt.isConsumed())
 				super.processKeyEvent(evt);
@@ -366,8 +391,7 @@ public class BrowserView extends JPanel
 					return;
 				}
 
-				super.processMouseEvent(evt);
-				break;
+				// fall through
 			default:
 				super.processMouseEvent(evt);
 				break;
@@ -378,12 +402,34 @@ public class BrowserView extends JPanel
 		private int toolTipInitialDelay = -1;
 		private int toolTipReshowDelay = -1;
 
-		private final boolean cellRectIsVisible(Rectangle cellRect)
+		private boolean cellRectIsVisible(Rectangle cellRect)
 		{
 			Rectangle vr = BrowserJTree.this.getVisibleRect();
 			return vr.contains(cellRect.x,cellRect.y) &&
 				vr.contains(cellRect.x + cellRect.width,
 				cellRect.y + cellRect.height);
+		}
+
+		private void doTypeSelect(String str)
+		{
+			Enumeration enum = getExpandedDescendants(
+				new TreePath(getModel().getRoot()));
+			while(enum.hasMoreElements())
+			{
+				System.err.println(enum.nextElement());
+			}
+			/* ListModel model = list.getModel();
+			for(int i = 0; i < model.getSize(); i++)
+			{
+				VFS.DirectoryEntry file = (VFS.DirectoryEntry)
+					model.getElementAt(i);
+				if(file.name.regionMatches(true,0,str,0,str.length()))
+				{
+					list.setSelectedIndex(i);
+					list.ensureIndexIsVisible(i);
+					return;
+				}
+			} */
 		}
 	}
 
@@ -425,6 +471,9 @@ public class BrowserView extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/11/05 00:44:14  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.6  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

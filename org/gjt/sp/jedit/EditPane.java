@@ -84,8 +84,6 @@ public class EditPane extends JPanel implements EBComponent
 
 		textArea.setBuffer(buffer);
 
-		updateTextArea();
-
 		if(!init)
 		{
 			view.updateTitle();
@@ -112,7 +110,7 @@ public class EditPane extends JPanel implements EBComponent
 			}
 		};
 
-		if(!buffer.isLoaded() || buffer.isSaving())
+		if(buffer.isPerformingIO())
 			VFSManager.runInAWTThread(runnable);
 		else
 			runnable.run();
@@ -517,12 +515,6 @@ public class EditPane extends JPanel implements EBComponent
 			.loadPopupMenu("view.context"));
 	}
 
-	private void updateTextArea()
-	{
-		textArea.setEditable(!buffer.isReadOnly());
-		textArea.repaint();
-	}
-
 	private void handleBufferUpdate(BufferUpdate msg)
 	{
 		Buffer _buffer = msg.getBuffer();
@@ -568,7 +560,6 @@ public class EditPane extends JPanel implements EBComponent
 			if(_buffer == buffer)
 			{
 				status.updateCaretStatus();
-				updateTextArea();
 				if(buffer.isDirty())
 					status.updateBufferStatus();
 				else
@@ -581,7 +572,7 @@ public class EditPane extends JPanel implements EBComponent
 			{
 				status.updateCaretStatus();
 				textArea.setCaretPosition(0);
-				updateTextArea();
+				textArea.repaint();
 				status.updateBuffers();
 			}
 		}
@@ -609,6 +600,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.21  2000/11/05 00:44:14  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.20  2000/11/02 09:19:31  sp
  * more features
  *

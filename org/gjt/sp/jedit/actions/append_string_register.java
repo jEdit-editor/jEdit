@@ -58,7 +58,7 @@ public class append_string_register extends EditAction
 			else
 			{
 				Registers.setRegister(ch,new Registers.StringRegister(register.toString()
-					+ selection));
+					+ "\n" + selection));
 			}
 		}
 	}

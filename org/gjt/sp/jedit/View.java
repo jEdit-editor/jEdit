@@ -803,7 +803,10 @@ public class View extends JFrame implements EBComponent
 		for(int i = 0; i < recentArray.length; i++)
 		{
 			String path = recentArray[i];
-			EnhancedMenuItem menuItem = new EnhancedMenuItem(path,
+			VFS vfs = VFSManager.getVFSForPath(path);
+			EnhancedMenuItem menuItem = new EnhancedMenuItem(
+				MiscUtilities.getFileName(path) + " ("
+				+ vfs.getParentOfPath(path) + ")",
 				action,path);
 			recent.add(menuItem);
 		}
@@ -1054,6 +1057,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.205  2000/11/05 00:44:14  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.204  2000/11/02 09:19:31  sp
  * more features
  *

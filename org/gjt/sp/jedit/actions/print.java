@@ -99,7 +99,7 @@ public class print extends EditAction
 
 		Segment lineSegment = new Segment();
 		TokenMarker tokenMarker = (syntax ? textArea.getTokenMarker()
-			: NullTokenMarker.getSharedInstance());
+			: new NullTokenMarker());
 		SyntaxStyle[] styles = textArea.getPainter().getStyles();
 		TabExpander expander = null;
 

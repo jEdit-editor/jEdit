@@ -326,26 +326,37 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		// of the font height, we subtract 1 from it, otherwise one
 		// too many lines will always be painted.
 		int lastInvalid = firstLine + (clipRect.y + clipRect.height - 1) / height;
+		int lineCount = textArea.getLineCount();
 
 		try
 		{
 			TokenMarker tokenMarker = textArea.getTokenMarker();
 			int x = textArea.getHorizontalOffset();
+			int maxWidth = textArea.maxHorizontalScrollWidth;
 
+			boolean updateMaxHorizontalScrollWidth = false;
 			for(int line = firstInvalid; line <= lastInvalid; line++)
 			{
-				textArea.updateScrollBarsAfterPaint
-					|= paintLine(gfx,tokenMarker,line,x);
+				boolean valid = textArea.getBuffer().isLoaded()
+					&& line >= 0 && line < lineCount;
+
+				int width = paintLine(gfx,tokenMarker,valid,line,x) - x;
+				if(valid)
+				{
+					tokenMarker.setLineWidth(line,width);
+					if(width > maxWidth)
+						updateMaxHorizontalScrollWidth = true;
+				}
 			}
 
-			if(tokenMarker != null && tokenMarker.isNextLineRequested())
+			if(tokenMarker.isNextLineRequested())
 			{
 				int h = clipRect.y + clipRect.height;
 				repaint(0,h,getWidth(),getHeight() - h);
 			}
 
-			if(textArea.updateScrollBarsAfterPaint)
-				textArea.maybeUpdateScrollBars();
+			if(updateMaxHorizontalScrollWidth)
+				textArea.updateMaxHorizontalScrollWidth();
 		}
 		catch(Exception e)
 		{
@@ -353,12 +364,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				+ " range {" + firstInvalid + ","
 				+ lastInvalid + "}:");
 			Log.log(Log.ERROR,this,e);
-		}
-
-		if(textArea.updateScrollBarsAfterPaint)
-		{
-			textArea.updateScrollBars();
-			textArea.updateScrollBarsAfterPaint = false;
 		}
 	}
 
@@ -458,20 +463,17 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private TextAreaHighlight highlights;
 
-	private boolean paintLine(Graphics gfx, TokenMarker tokenMarker,
-		int line, int x)
+	private int paintLine(Graphics gfx, TokenMarker tokenMarker,
+		boolean valid, int line, int x)
 	{
 		Font defaultFont = getFont();
 		Color defaultColor = getForeground();
 
 		int y = textArea.lineToY(line);
 
-		boolean invalid = (!textArea.getBuffer().isLoaded() || line < 0
-			|| line >= textArea.getLineCount());
-		paintHighlight(gfx,line,y,invalid);
+		paintHighlight(gfx,line,y,valid);
 
-		int width;
-		if(!invalid)
+		if(valid)
 		{
 			gfx.setFont(defaultFont);
 			gfx.setColor(defaultColor);
@@ -488,22 +490,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				gfx.drawString(".",x,y + fm.getHeight());
 			}
 
-			width = x + fm.charWidth('.') - textArea.getHorizontalOffset();
-			textArea.getTokenMarker().setLineWidth(line,width);
-
-			if(!invalid && line == textArea.getCaretLine() && textArea.isCaretVisible())
+			if(valid && line == textArea.getCaretLine() && textArea.isCaretVisible())
 				paintCaret(gfx,line,y);
 		}
-		else
-			width = 0;
 
-		return (width > textArea.maxHorizontalScrollWidth);
+		return x;
 	}
 
-	private void paintHighlight(Graphics gfx, int line, int y, boolean invalid)
+	private void paintHighlight(Graphics gfx, int line, int y, boolean valid)
 	{
-		// only paint plugin highlights on invalid lines
-		if(!invalid)
+		if(valid)
 		{
 			if(line >= textArea.getSelectionStartLine()
 				&& line <= textArea.getSelectionEndLine())
@@ -639,6 +635,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.46  2000/11/05 00:44:15  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.45  2000/11/02 09:19:34  sp
  * more features
  *

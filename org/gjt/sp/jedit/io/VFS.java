@@ -174,8 +174,14 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
-		VFSManager.runInWorkThread(new BufferIORequest(
-			BufferIORequest.LOAD,view,buffer,session,this,path));
+		BufferIORequest request = new BufferIORequest(
+			BufferIORequest.LOAD,view,buffer,session,this,path);
+		if(buffer.isTemporary())
+			// this makes HyperSearch much faster
+			request.run();
+		else
+			VFSManager.runInWorkThread(request);
+
 		return true;
 	}
 
@@ -400,6 +406,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.21  2000/11/05 00:44:14  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.20  2000/11/02 09:19:33  sp
  * more features
  *

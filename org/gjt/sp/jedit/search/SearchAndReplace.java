@@ -420,7 +420,7 @@ loop:			for(;;)
 			do
 			{
 				// Wait for buffer to finish loading
-				if(!buffer.isLoaded() || buffer.isSaving())
+				if(buffer.isPerformingIO())
 					VFSManager.waitForRequests();
 
 				// Leave buffer in a consistent state if
@@ -483,7 +483,7 @@ loop:			for(;;)
 	public static int replaceAll(View view, Buffer buffer)
 		throws BadLocationException
 	{
-		if(!view.getTextArea().isEditable())
+		if(!buffer.isEditable())
 			return 0;
 
 		SearchMatcher matcher = getSearchMatcher();
@@ -584,6 +584,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.38  2000/11/05 00:44:15  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.37  2000/11/02 09:19:34  sp
  * more features
  *

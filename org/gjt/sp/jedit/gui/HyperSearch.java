@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -50,7 +51,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 		fileset = SearchAndReplace.getSearchFileSet();
 
-		resultModel = new DefaultListModel();
 		Container content = getContentPane();
 		content.setLayout(new BorderLayout());
 
@@ -111,10 +111,18 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 		content.add(panel, BorderLayout.NORTH);
 
-		results = new JList(resultModel);
-		results.setVisibleRowCount(16);
-		results.addMouseListener(new MouseHandler());
-		content.add(new JScrollPane(results), BorderLayout.CENTER);
+		resultTreeRoot = new DefaultMutableTreeNode();
+		resultTreeModel = new DefaultTreeModel(resultTreeRoot);
+		resultTree = new JTree(resultTreeModel);
+		resultTree.setCellRenderer(new ResultCellRenderer());
+		resultTree.setVisibleRowCount(16);
+		resultTree.setRootVisible(false);
+		resultTree.setShowsRootHandles(true);
+		resultTree.putClientProperty("JTree.lineStyle", "Angled");
+		resultTree.setEditable(false);
+
+		resultTree.addMouseListener(new MouseHandler());
+		content.add(new JScrollPane(resultTree), BorderLayout.CENTER);
 
 		ActionHandler actionListener = new ActionHandler();
 
@@ -153,7 +161,8 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 	public void setSearchString(final String search)
 	{
 		find.setText(search);
-		resultModel.removeAllElements();
+		resultTreeRoot.removeAllChildren();
+		resultTreeModel.nodeChanged(resultTreeRoot);
 
 		if(!isVisible())
 		{
@@ -184,7 +193,18 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			return;
 
 		save();
-		thread = new HyperSearchThread();
+
+		SearchMatcher matcher = SearchAndReplace.getSearchMatcher();
+		if(matcher == null)
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
+		resultTreeRoot.removeAllChildren();
+		resultTreeModel.reload(resultTreeRoot);
+
+		thread = new HyperSearchThread(matcher);
 		updateEnabled();
 		thread.start();
 	}
@@ -199,9 +219,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			thread.stop();
 			thread = null;
 		}
-
 		setVisible(false);
 	}
+
 	// end EnhancedDialog implementation
 
 	public void handleMessage(EBMessage msg)
@@ -212,22 +232,38 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			Buffer buffer = bmsg.getBuffer();
 			if(bmsg.getWhat() == BufferUpdate.LOADED)
 			{
-				for(int i = resultModel.getSize() - 1; i >= 0; i--)
+				for(int i = resultTreeRoot.getChildCount() - 1; i >= 0; i--)
 				{
-					SearchResult result = (SearchResult)resultModel
-						.elementAt(i);
-					if(buffer.getPath().equals(result.path))
-						result.bufferOpened(buffer);
+					DefaultMutableTreeNode bufferNode = (DefaultMutableTreeNode)
+						resultTreeRoot.getChildAt(i);
+
+					for(int j = bufferNode.getChildCount() - 1;
+						j >= 0; j--)
+					{
+						SearchResult result = (SearchResult)
+							((DefaultMutableTreeNode)bufferNode
+							.getChildAt(j)).getUserObject();
+						if(buffer.getPath().equals(result.path))
+							result.bufferOpened(buffer);
+					}
 				}
 			}
 			else if(bmsg.getWhat() == BufferUpdate.CLOSED)
 			{
-				for(int i = resultModel.getSize() - 1; i >= 0; i--)
+				for(int i = resultTreeRoot.getChildCount() - 1; i >= 0; i--)
 				{
-					SearchResult result = (SearchResult)resultModel
-						.elementAt(i);
-					if(buffer == result.buffer)
-						result.bufferClosed();
+					DefaultMutableTreeNode bufferNode = (DefaultMutableTreeNode)
+						resultTreeRoot.getChildAt(i);
+
+					for(int j = bufferNode.getChildCount() - 1;
+						j >= 0; j--)
+					{
+						SearchResult result = (SearchResult)
+							((DefaultMutableTreeNode)bufferNode
+							.getChildAt(j)).getUserObject();
+						if(buffer.getPath().equals(result.path))
+							result.bufferClosed();
+					}
 				}
 			}
 		}
@@ -257,8 +293,10 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 	private JButton start;
 	private JButton stop;
 	private JLabel status;
-	private JList results;
-	private DefaultListModel resultModel;
+	private JTree resultTree;
+	private DefaultMutableTreeNode resultTreeRoot;
+	private DefaultTreeModel resultTreeModel;
+
 	private HyperSearchThread thread;
 	private int current;
 
@@ -275,8 +313,7 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 	private void updateStatus()
 	{
-		Object[] args = { new Integer(current), new Integer(fileset.getBufferCount()) };
-		status.setText(jEdit.getProperty("hypersearch.status",args));
+		status.setText(current + " / " + fileset.getBufferCount());
 	}
 
 	private void showMultiFileDialog()
@@ -305,8 +342,8 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			if(!buffer.isTemporary())
 				bufferOpened(buffer);
 
-			str = buffer.getName() + ":" + (line + 1) + ":"
-				+ getLine(buffer,buffer.getDefaultRootElement()
+			str = (line + 1) + ": " + getLine(buffer,
+				buffer.getDefaultRootElement()
 				.getElement(line));
 		}
 
@@ -388,37 +425,82 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
-			int index = results.locationToIndex(evt.getPoint());
-			if(index == -1)
+			TreePath path = resultTree.getPathForLocation(
+				evt.getX(),evt.getY());
+			if(path == null)
 				return;
 
-			final SearchResult result = (SearchResult)resultModel
-				.getElementAt(index);
-			final Buffer buffer = result.getBuffer();
+			Object value = ((DefaultMutableTreeNode)path
+				.getLastPathComponent()).getUserObject();
 
-			if(buffer == null)
-				return;
-
-			VFSManager.runInAWTThread(new Runnable()
+			if(value instanceof String)
 			{
-				public void run()
+				Buffer buffer = jEdit.openFile(view,(String)value);
+				if(buffer == null)
+					return;
+
+				view.setBuffer(buffer);
+				view.toFront();
+				view.requestFocus();
+			}
+			else
+			{
+				final SearchResult result = (SearchResult)value;
+				final Buffer buffer = result.getBuffer();
+
+				if(buffer == null)
+					return;
+
+				VFSManager.runInAWTThread(new Runnable()
 				{
-					int pos = result.linePos.getOffset();
-					view.setBuffer(buffer);
-					view.getTextArea().setCaretPosition(pos);
-					view.toFront();
-					view.requestFocus();
-				}
-			});
+					public void run()
+					{
+						int pos = result.linePos.getOffset();
+						view.setBuffer(buffer);
+						view.getTextArea().setCaretPosition(pos);
+						view.toFront();
+						view.requestFocus();
+					}
+				});
+			}
+		}
+	}
+
+	class ResultCellRenderer extends DefaultTreeCellRenderer
+	{
+		public Component getTreeCellRendererComponent(JTree tree,
+			Object value, boolean sel, boolean expanded,
+			boolean leaf, int row, boolean hasFocus)
+		{
+			super.getTreeCellRendererComponent(tree,value,sel,
+				expanded,leaf,row,hasFocus);
+
+			setIcon(null);
+			Font font = UIManager.getFont("Label.font");
+			if(value instanceof String)
+			{
+				font = new Font(font.getFamily(),Font.BOLD,
+					font.getSize());
+			}
+			else
+			{
+				font = new Font(font.getFamily(),Font.PLAIN,
+					font.getSize());
+			}
+			ResultCellRenderer.this.setFont(font);
+
+			return this;
 		}
 	}
 
 	class HyperSearchThread extends Thread
 	{
-		HyperSearchThread()
+		SearchMatcher matcher;
+
+		HyperSearchThread(SearchMatcher matcher)
 		{
 			super("jEdit HyperSearch thread");
-			setPriority(4);
+			this.matcher = matcher;
 		}
 
 		public void run()
@@ -429,33 +511,43 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-				resultModel.removeAllElements();
-				SearchMatcher matcher = SearchAndReplace
-					.getSearchMatcher();
-				if(matcher == null)
-				{
-					view.getToolkit().beep();
-					return;
-				}
-
 				SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 				Buffer buffer = fileset.getFirstBuffer(view);
+
+				boolean retVal = false;
 
 				do
 				{
 					// Wait for buffer to finish loading
-					if(!buffer.isLoaded())
+					if(buffer.isPerformingIO())
 						VFSManager.waitForRequests();
 
-					doHyperSearch(buffer,matcher);
+					retVal |= doHyperSearch(buffer,matcher);
 
 					current++;
 					updateStatus();
 				}
 				while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 
-				if(resultModel.isEmpty())
+				if(!retVal)
+				{
 					view.getToolkit().beep();
+					return;
+				}
+
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						if(resultTreeRoot.getChildCount() == 1)
+						{
+							resultTree.expandPath(new TreePath(
+								((DefaultMutableTreeNode)
+								resultTreeRoot.getChildAt(0))
+								.getPath()));
+						}
+					}
+				});
 			}
 			catch(Exception e)
 			{
@@ -468,23 +560,18 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			finally
 			{
 				thread = null;
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						updateEnabled();
-						updateStatus();
+				updateEnabled();
+				updateStatus();
 
-						setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-					}
-				});
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
 
 		private boolean doHyperSearch(Buffer buffer, SearchMatcher matcher)
 			throws Exception
 		{
-			boolean retVal = false;
+			final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
+				buffer.getPath());
 
 			try
 			{
@@ -500,8 +587,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 					int[] match = matcher.nextMatch(lineString);
 					if(match != null)
 					{
-						resultModel.addElement(new SearchResult(buffer,i));
-						retVal = true;
+						bufferNode.insert(new DefaultMutableTreeNode(
+							new SearchResult(buffer,i),false),
+							bufferNode.getChildCount());
 					}
 				}
 			}
@@ -510,7 +598,20 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 				buffer.readUnlock();
 			}
 
-			return retVal;
+			if(bufferNode.getChildCount() == 0)
+				return false;
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					resultTreeRoot.insert(bufferNode,
+						resultTreeRoot.getChildCount());
+					resultTreeModel.reload(resultTreeRoot);
+				}
+			});
+
+			return true;
 		}
 	}
 }
@@ -518,6 +619,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.70  2000/11/05 00:44:14  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.69  2000/11/02 09:19:33  sp
  * more features
  *
@@ -544,20 +648,5 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
  *
  * Revision 1.61  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
- *
- * Revision 1.60  2000/05/20 07:02:04  sp
- * Documentation updates, tool bar editor finished, a few other enhancements
- *
- * Revision 1.59  2000/05/14 10:55:21  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.58  2000/05/06 05:53:46  sp
- * HyperSearch bug fix
- *
- * Revision 1.57  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
- *
- * Revision 1.56  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
  *
  */

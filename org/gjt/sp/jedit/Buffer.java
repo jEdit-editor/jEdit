@@ -114,7 +114,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean load(final View view, final boolean reload)
 	{
-		if(getFlag(LOADING) || getFlag(SAVING))
+		if(isPerformingIO())
 		{
 			GUIUtilities.error(view,"buffer-multiple-io",null);
 			return false;
@@ -161,7 +161,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			loadAutosave = false;
 
 		// Do some stuff once loading is finished
-		VFSManager.runInAWTThread(new Runnable()
+		Runnable runnable = new Runnable()
 		{
 			public void run()
 			{
@@ -220,9 +220,6 @@ public class Buffer extends PlainDocument implements EBComponent
 				if(loadAutosave)
 					setFlag(DIRTY,true);
 
-				if(getFlag(TEMPORARY))
-					return;
-
 				setMode();
 
 				// send some EditBus messages
@@ -231,7 +228,12 @@ public class Buffer extends PlainDocument implements EBComponent
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.MARKERS_CHANGED));
 			}
-		});
+		};
+
+		if(getFlag(TEMPORARY))
+			runnable.run();
+		else
+			VFSManager.runInAWTThread(runnable);
 
 		return true;
 	}
@@ -244,7 +246,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean insert(final View view, String path)
 	{
-		if(getFlag(LOADING) || getFlag(SAVING))
+		if(isPerformingIO())
 		{
 			GUIUtilities.error(view,"buffer-multiple-io",null);
 			return false;
@@ -270,17 +272,24 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		VFS vfs = VFSManager.getVFSForPath(path);
 
+		setFlag(IO,true);
+
 		// this returns false if initial sanity
 		// checks (if the file is a directory, etc)
 		// fail
 		if(!vfs.insert(view,this,path))
+		{
+			setFlag(IO,false);
 			return false;
+		}
 
 		// Do some stuff once loading is finished
 		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
 			{
+				setFlag(IO,false);
+
 				StringBuffer sbuf = (StringBuffer)getProperty(
 					BufferIORequest.LOAD_DATA);
 				if(sbuf != null)
@@ -302,7 +311,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	public void autosave()
 	{
 		if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY)
-			|| getFlag(LOADING) || getFlag(SAVING))
+			|| getFlag(LOADING) || getFlag(IO))
 			return;
 
 		setFlag(AUTOSAVE_DIRTY,false);
@@ -356,7 +365,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean save(final View view, String path, final boolean rename)
 	{
-		if(getFlag(LOADING) || getFlag(SAVING))
+		if(isPerformingIO())
 		{
 			GUIUtilities.error(view,"buffer-multiple-io",null);
 			return false;
@@ -382,7 +391,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 		}
 
-		setFlag(SAVING,true);
+		setFlag(IO,true);
 		EditBus.send(new BufferUpdate(this,BufferUpdate.SAVING));
 
 		if(path == null)
@@ -395,7 +404,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		if(!vfs.save(view,this,path))
 		{
-			setFlag(SAVING,false);
+			setFlag(IO,false);
 			return false;
 		}
 
@@ -408,23 +417,36 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			public void run()
 			{
-				if(autosaveFile != null)
-					autosaveFile.delete();
+				if(rename)
+				{
+					if(autosaveFile != null)
+						autosaveFile.delete();
 
-				setFlag(AUTOSAVE_DIRTY,false);
-				setFlag(READ_ONLY,false);
-				setFlag(NEW_FILE,false);
-				setFlag(UNTITLED,false);
-				setFlag(DIRTY,false);
-				setFlag(SAVING,false);
+					saveUndo = undo.editToBeUndone();
+					if(oldPath.equals(getPath()))
+					{
+						setFlag(AUTOSAVE_DIRTY,false);
+						setFlag(READ_ONLY,false);
+						setFlag(NEW_FILE,false);
+						setFlag(UNTITLED,false);
+						setFlag(DIRTY,false);
+						setFlag(IO,false);
 
-				saveUndo = undo.editToBeUndone();
+						saveUndo = undo.editToBeUndone();
 
-				if(!getPath().equals(oldPath))
+						if(!getPath().equals(oldPath))
+							setMode();
+
+						if(file != null)
+							modTime = file.lastModified();
+					}
+
+					if(!getPath().equals(oldPath))
 					setMode();
 
-				if(file != null)
-					modTime = file.lastModified();
+					if(file != null)
+						modTime = file.lastModified();
+				}
 
 				if(!getPath().equals(oldPath))
 				{
@@ -466,7 +488,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		// don't do these checks while a save is in progress,
 		// because for a moment newModTime will be greater than
 		// oldModTime, due to the multithreading
-		if(file == null || getFlag(NEW_FILE) || getFlag(SAVING))
+		if(file == null || getFlag(NEW_FILE) || getFlag(IO))
 			return;
 
 		long oldModTime = modTime;
@@ -553,11 +575,20 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Returns true if the buffer is currently being saved.
+	 * Returns true if the buffer is currently performing I/O.
+	 * @since jEdit 2.7pre1
+	 */
+	public final boolean isPerformingIO()
+	{
+		return getFlag(LOADING) || getFlag(IO);
+	}
+
+	/**
+	 * @deprecated Call isPerformingIO() instead
 	 */
 	public final boolean isSaving()
 	{
-		return getFlag(SAVING);
+		return getFlag(IO);
 	}
 
 	/**
@@ -593,13 +624,22 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		return getFlag(DIRTY);
 	}
-	
+
 	/**
 	 * Returns true if this file is read only, false otherwise.
 	 */
 	public final boolean isReadOnly()
 	{
 		return getFlag(READ_ONLY);
+	}
+
+	/**
+	 * Returns true if this file is editable, false otherwise.
+	 * @since jEdit 2.7pre1
+	 */
+	public final boolean isEditable()
+	{
+		return !(getFlag(READ_ONLY) || getFlag(IO) || getFlag(LOADING));
 	}
 
 	/**
@@ -1397,7 +1437,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		setFlag(TEMPORARY,temp);
 		setFlag(READ_ONLY,readOnly);
 
-		tokenMarker = new NullTokenMarker();
+		setMode(jEdit.getMode("text"));
 		markers = new Vector();
 
 		addDocumentListener(new DocumentHandler());
@@ -1527,7 +1567,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	private static final int CLOSED = 0;
 	private static final int LOADING = 1;
-	private static final int SAVING = 2;
+	private static final int IO = 2;
 	private static final int NEW_FILE = 3;
 	private static final int UNTITLED = 4;
 	private static final int AUTOSAVE_DIRTY = 5;
@@ -1758,6 +1798,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.184  2000/11/05 00:44:13  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.183  2000/11/02 09:19:31  sp
  * more features
  *

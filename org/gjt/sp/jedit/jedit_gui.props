@@ -177,27 +177,27 @@ select=select-word \
        select-line \
        select-paragraph \
        - \
+       wing-comment \
+       box-comment \
+       block-comment \
+       - \
        to-lower \
        to-upper \
        tab \
        untab \
-       - \
-       wing-comment \
-       box-comment \
-       block-comment \
        - \
        toggle-rect
 select.label=Selection
 select-word.label=Select Word
 select-line.label=Select Line
 select-paragraph.label=Select Paragraph
+wing-comment.label=Wing Comment
+box-comment.label=Box Comment
+block-comment.label=Block Comment
 to-lower.label=To Lower Case
 to-upper.label=To Upper Case
 tab.label=Spaces to Tabs
 untab.label=Tabs to Spaces
-wing-comment.label=Wing Comment
-box-comment.label=Box Comment
-block-comment.label=Block Comment
 toggle-rect.label=Rectangular Selection
 
 ### Line menu
@@ -675,8 +675,8 @@ search.regexp.mnemonic=x
 search.multifile=Multi File...
 search.multifile.mnemonic=m
 search.findBtn=Find
-search.replace=Replace
-search.replace.mnemonic=p
+search.replaceBtn=Replace
+search.replaceBtn.mnemonic=p
 search.replaceFind=Replace & Find
 search.replaceFind.mnemonic=l
 search.replaceAll=Replace All
@@ -716,7 +716,6 @@ hypersearch.title=HyperSearch
 hypersearch.find=Search for: (up arrow recalls previous)
 hypersearch.start=Start
 hypersearch.stop=Stop
-hypersearch.status={0}/{1}
 
 # Replace all results
 replace-results.title=Replacement Complete

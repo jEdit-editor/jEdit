@@ -62,6 +62,7 @@ public class TokenMarker implements Cloneable
 	public TokenMarker()
 	{
 		ruleSets = new Hashtable(64);
+		lineInfo = new LineInfo[0];
 	}
 
 	public void addRuleSet(String setName, ParserRuleSet rules)
@@ -262,7 +263,7 @@ public class TokenMarker implements Cloneable
 	public int getMaxLineWidth(int start, int len)
 	{
 		int retVal = 0;
-		for(int i = start; i < start + len; i++)
+		for(int i = start; i <= start + len; i++)
 		{
 			if(i >= length)
 				break;
@@ -378,6 +379,7 @@ public class TokenMarker implements Cloneable
 		name = copy.name;
 		rulePfx = copy.rulePfx;
 		ruleSets = copy.ruleSets;
+		lineInfo = new LineInfo[0];	
 	}
 
 	private void markTokensImpl(Segment line, LineInfo prevInfo,
@@ -922,9 +924,7 @@ loop:			for(int i = 0; i < len; i++)
 
 	private void ensureCapacity(int index)
 	{
-		if(lineInfo == null)
-			lineInfo = new LineInfo[index + 1];
-		else if(lineInfo.length <= index)
+		if(lineInfo.length <= index)
 		{
 			LineInfo[] lineInfoN = new LineInfo[(index + 1) * 2];
 			System.arraycopy(lineInfo,0,lineInfoN,0,
@@ -933,8 +933,7 @@ loop:			for(int i = 0; i < len; i++)
 		}
 	}
 
-	// must be protected for NullTokenMarker subclass
-	protected void addToken(LineInfo info, int length, byte id)
+	private void addToken(LineInfo info, int length, byte id)
 	{
 		if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
 			throw new InternalError("Invalid id: " + id);
@@ -1045,6 +1044,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.57  2000/11/05 00:44:15  sp
+ * Improved HyperSearch, improved horizontal scroll, other stuff
+ *
  * Revision 1.56  2000/11/02 09:19:34  sp
  * more features
  *

@@ -27,6 +27,12 @@ JEDIT 2.7 VERSION HISTORY
 - 'Synchronized Scrolling', which can be enabled in View->Scrolling,
   forces all text areas in a view to have the same scroll bar positions
 - 'Insert File' command in File menu
+- 'Replace and Find Next' command added (replaces 'Replace and Find Next'
+  macro)
+- If the <jedit install dir>/site-props directory exists, all property
+  files are loaded from it on jEdit startup before user-specific properties.
+  This can be used to enforce site-wide key bindings, color schemes, etc
+  on multi-user systems (Mike Dillon)
 
 + Enhancements
 
@@ -43,11 +49,15 @@ JEDIT 2.7 VERSION HISTORY
 - Caret location info moved to top right of text area
 - The horizontal scroll bar, instead of having a fixed maximum value,
   is how adjusted according to the width of the longest visible line
+- The 'append-to-register' command adds a newline to the text already in
+  the register before appending
+- Slightly faster HyperSearch over a directory of files
+- HyperSearch now displays results in a tree format
 
 + Neutral
 
 - Key binding changes:
-  - 'Gutter Expanded' now bound to C+e C+g instead of C+'
+  - 'Gutter Expanded' now bound to C+e C+t instead of C+'
   - 'Expand Abbreviation' now bound to C+; instead of C+/
   - 'View Registers' now bound to S+F5 instead of F6
 - List view removed from browser, only tree view supported
