@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.zip.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -664,6 +665,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		 * doing stuff like buffer.setMode(jEdit.getMode(...)); */
 		if(mode == null)
 			throw new NullPointerException("Mode must be non-null");
+
 		if(this.mode == mode)
 		{
 			// this helps out with reloading and so on
@@ -671,32 +673,11 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			return;
 		}
 
-		View[] views = jEdit.getViews();
-
 		Mode oldMode = this.mode;
-		if(oldMode != null)
-		{
-			for(int i = 0; i < views.length; i++)
-			{
-				View view = views[i];
-				if(view.getBuffer() == this)
-					oldMode.leaveView(view);
-			}
-			oldMode.leave(this);
-		}
 
 		this.mode = mode;
 
-		mode.enter(this);
-
 		setTokenMarker(mode.createTokenMarker());
-
-		for(int i = 0; i < views.length; i++)
-		{
-			View view = views[i];
-			if(view.getBuffer() == this)
-				mode.enterView(view);
-		}
 
 		// don't fire it for initial mode set
 		if(oldMode != null)
@@ -756,6 +737,177 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				defaultMode = jEdit.getMode("text");
 			setMode(defaultMode);
 		}
+	}
+
+	/**
+	 * If auto indent is enabled, this method is called when the `Tab'
+	 * or `Enter' key is pressed to perform mode-specific indentation
+	 * and return true, or return false if a normal tab is to be inserted.
+	 * @param view The view where the tab key was pressed
+	 * @param line The line number to indent
+	 * @param force If true, the line will be indented even if it already
+	 * has the right amount of indent
+	 * @return true if the tab key event should be swallowed (ignored)
+	 * false if a real tab should be inserted
+	 */
+	public boolean indentLine(View view, int lineIndex, boolean force)
+	{
+		// Use JEditTextArea's line access methods
+		JEditTextArea textArea = view.getTextArea();
+
+		// Get properties
+		String openBrackets = (String)getProperty("indentOpenBrackets");
+		String closeBrackets = (String)getProperty("indentCloseBrackets");
+		if(openBrackets == null)
+			openBrackets = "";
+		if(closeBrackets == null)
+			closeBrackets = "";
+		int tabSize = getTabSize();
+		boolean noTabs = "yes".equals(getProperty("noTabs"));
+
+		if(lineIndex == 0)
+			return false;
+
+		// Get line text
+		String line = textArea.getLineText(lineIndex);
+		int start = textArea.getLineStartOffset(lineIndex);
+		String prevLine = null;
+		for(int i = lineIndex - 1; i >= 0; i--)
+		{
+			if(textArea.getLineLength(i) != 0)
+			{
+				prevLine = textArea.getLineText(i);
+				break;
+			}
+		}
+
+		if(prevLine == null)
+			return false;
+
+		/*
+		 * On the previous line,
+		 * if(bob) { --> +1
+		 * if(bob) { } --> 0
+		 * } else if(bob) { --> +1
+		 */
+		boolean prevLineStart = true; // False after initial indent
+		int prevLineIndent = 0; // Indent width (tab expanded)
+		int prevLineBrackets = 0; // Additional bracket indent
+		for(int i = 0; i < prevLine.length(); i++)
+		{
+			char c = prevLine.charAt(i);
+			switch(c)
+			{
+			case ' ':
+				if(prevLineStart)
+					prevLineIndent++;
+				break;
+			case '\t':
+				if(prevLineStart)
+				{
+					prevLineIndent += (tabSize
+						- (prevLineIndent
+						% tabSize));
+				}
+				break;
+			default:
+				prevLineStart = false;
+				if(closeBrackets.indexOf(c) != -1)
+					prevLineBrackets = Math.max(
+						prevLineBrackets-1,0);
+				else if(openBrackets.indexOf(c) != -1)
+					prevLineBrackets++;
+				break;
+			}
+		}
+
+		/*
+		 * On the current line,
+		 * } --> -1
+		 * } else if(bob) { --> -1
+		 * if(bob) { } --> 0
+		 */
+		boolean lineStart = true; // False after initial indent
+		int lineIndent = 0; // Indent width (tab expanded)
+		int lineWidth = 0; // White space count
+		int lineBrackets = 0; // Additional bracket indent
+		int closeBracketIndex = -1; // For lining up closing
+			// and opening brackets
+		for(int i = 0; i < line.length(); i++)
+		{
+			char c = line.charAt(i);
+			switch(c)
+			{
+			case ' ':
+				if(lineStart)
+				{
+					lineIndent++;
+					lineWidth++;
+				}
+				break;
+			case '\t':
+				if(lineStart)
+				{
+					lineIndent += (tabSize
+						- (lineIndent
+						% tabSize));
+					lineWidth++;
+				}
+				break;
+			default:
+				lineStart = false;
+				if(closeBrackets.indexOf(c) != -1)
+				{
+					if(lineBrackets == 0)
+						closeBracketIndex = i;
+					else
+						lineBrackets--;
+				}
+				else if(openBrackets.indexOf(c) != -1)
+					lineBrackets++;
+				break;
+			}
+		}
+
+		try
+		{
+			if(closeBracketIndex != -1)
+			{
+				int offset = TextUtilities.findMatchingBracket(
+					this,start + closeBracketIndex);
+				if(offset != -1)
+				{
+					String closeLine = textArea.getLineText(
+						textArea.getLineOfOffset(offset));
+					prevLineIndent = MiscUtilities
+						.getLeadingWhiteSpaceWidth(
+						closeLine,tabSize);
+				}
+				else
+					return false;
+			}
+			else
+			{
+				prevLineIndent += (prevLineBrackets * tabSize);
+			}
+
+			// Insert a tab if line already has correct indent
+			// and force is not set
+			if(!force && lineIndent >= prevLineIndent)
+				return false;
+
+			// Do it
+			remove(start,lineWidth);
+			insertString(start,MiscUtilities.createWhiteSpace(
+				prevLineIndent,(noTabs ? 0 : tabSize)),null);
+			return true;
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
+
+		return false;
 	}
 
 	/**
@@ -1622,6 +1774,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.129  2000/03/20 06:06:36  sp
+ * Mode internals cleaned up
+ *
  * Revision 1.128  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes

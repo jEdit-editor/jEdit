@@ -93,12 +93,7 @@ public class View extends JFrame implements EBComponent
 
 		recentBuffer = this.buffer;
 		if(recentBuffer != null)
-		{
 			saveCaretInfo();
-			Mode mode = recentBuffer.getMode();
-			if(mode != null)
-				mode.leaveView(this);
-		}
 		this.buffer = buffer;
 
 		unsplit();
@@ -108,10 +103,6 @@ public class View extends JFrame implements EBComponent
 		loadCaretInfo();
 		updateMarkerMenus();
 		updateTitle();
-
-		Mode mode = buffer.getMode();
-		if(mode != null)
-			mode.enterView(this);
 
 		// Don't fire event for the initial buffer set
 		if(recentBuffer != null)
@@ -1421,6 +1412,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.144  2000/03/20 06:06:36  sp
+ * Mode internals cleaned up
+ *
  * Revision 1.143  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes

@@ -1,5 +1,6 @@
 JEDIT TO DO
 
+- Integrate XMode
 - Option pane for changing mode-specific tab size, indent, comment
   characters, and so on
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
@@ -10,7 +11,6 @@ JEDIT TO DO
   plugins -- implements getPath() and getClassName()
 - jEdit.getPlugins() returns broken and non-broken plugins
 - 'Uncomment' command that removes comment strings from selected text
-
 - Double-click drag doesn't work backwards
 - Fix focus breakage, C+TAB/CS+TAB to navigate around all view components
   except for tool bar buttons
@@ -22,7 +22,6 @@ JEDIT TO DO
   - each section should have some sample source code
 
 - Incremental search
-- Integrate XMode
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Write custom 'document' class; Swing implementation has a few
   problems. With a custom document, folding and such becomes much cleaner

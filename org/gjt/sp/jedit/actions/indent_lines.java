@@ -30,7 +30,6 @@ public class indent_lines extends EditAction
                 View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
                 Buffer buffer = view.getBuffer();
-		Mode mode = buffer.getMode();
 
 		String actionCommand = evt.getActionCommand();
 
@@ -61,7 +60,7 @@ public class indent_lines extends EditAction
 		buffer.beginCompoundEdit();
 		for(int i = start; i <= end; i++)
 		{
-			mode.indentLine(buffer,view,i,true);
+			buffer.indentLine(view,i,true);
 		}
 		buffer.endCompoundEdit();
 	}

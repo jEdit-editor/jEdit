@@ -31,6 +31,7 @@ JEDIT VERSION HISTORY
   another file will close the untitled file
 - 'Save As' warns you before overwriting an existing file
 - Plugin manager now prints exception tracebacks to the activity log
+- Mode class simplified a bit
 
 + Bug Fixes
 
@@ -39,6 +40,7 @@ JEDIT VERSION HISTORY
 - Removed debugging message when doing a 'save as' (since 2.3pre2)
 - When doing a 'save as', buffers weren't repositioned in the buffer
   list if sorting is enabled (since 2.3pre2)
+- CreateGetSet macro didn't work (since 2.3pre3)
 
 + API Changes
 

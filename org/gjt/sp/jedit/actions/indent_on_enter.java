@@ -37,14 +37,13 @@ public class indent_on_enter extends EditAction
 
 		textArea.setSelectedText("\n");
 
-                Mode mode = buffer.getMode();
 		int selStart = textArea.getSelectionStart();
 		int selEnd = textArea.getSelectionEnd();
 
                 if(selStart == selEnd
 			&& "on".equals(buffer.getProperty("indentOnEnter")))
 		{
-			mode.indentLine(buffer,view,textArea.getCaretLine(),false);
+			buffer.indentLine(view,textArea.getCaretLine(),false);
                 }
         }
 }

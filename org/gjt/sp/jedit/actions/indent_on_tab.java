@@ -38,13 +38,12 @@ public class indent_on_tab extends EditAction
 		if(Abbrevs.getExpandOnInput())
 			Abbrevs.expandAbbrev(view,false);
 
-                Mode mode = buffer.getMode();
 		int selStart = textArea.getSelectionStart();
 		int selEnd = textArea.getSelectionEnd();
 
                 if(selStart == selEnd
 			&& "on".equals(buffer.getProperty("indentOnTab"))
-			&& mode.indentLine(buffer,view,textArea
+			&& buffer.indentLine(view,textArea
 			.getSelectionStartLine(),false))
                 {
 				return;
