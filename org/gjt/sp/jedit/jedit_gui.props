@@ -1188,28 +1188,38 @@ options.abbrevs.expandOnInput=Space bar expands abbrevs
 options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
 
-options.keys.name=Command
-options.keys.shortcut1=Primary shortcut
-options.keys.shortcut2=Alternative shortcut
+options.shortcuts.label=Shortcuts
+options.shortcuts.select.label=Edit Shortcuts:
+options.shortcuts.select.commands=Command Shortcuts
+options.shortcuts.select.plugins=Plugin Shortcuts
+options.shortcuts.select.macros=Macro Shortcuts
+options.shortcuts.name=Command
+options.shortcuts.shortcut1=Primary shortcut
+options.shortcuts.shortcut2=Alternative shortcut
 
 grab-key.title=Specify Shortcut
 grab-key.caption=Press the desired shortcut for "{0}", then click OK.
+grab-key.assigned-to=Currently assigned to: {0}
+grab-key.assigned-to.none=<none>
+grab-key.clear=Clear
+grab-key.remove=Remove Current
 
-duplicate-alt-shortcut.title=Duplicate Shortcut
-duplicate-alt-shortcut.message=The shortcut you selected duplicates the other\n\
+grab-key.remove-ask.title=Remove Shortcut?
+grab-key.remove-ask.message=\
+	You didn't specify a new shortcut.\n\
+	Do you want to remove the current shortcut?
+
+grab-key.duplicate-alt-shortcut.title=Duplicate Shortcut
+grab-key.duplicate-alt-shortcut.message=\
+	The shortcut you selected duplicates the other\n\
 	shortcut for this item. Please choose another.
 
-duplicate-shortcut.title=Duplicate Shortcut
-duplicate-shortcut.message=The shortcut you selected conflicts with\n\
-	{0}. Please choose another.
-
-duplicate-shortcut.prefix=an existing prefix
-
-options.command-keys.label=Command Shortcuts
-
-options.plugin-keys.label=Plugin Shortcuts
-
-options.macro-keys.label=Macro Shortcuts
+grab-key.duplicate-shortcut.title=Duplicate Shortcut
+grab-key.duplicate-shortcut.message=\
+	This shortcut is already assigned to\n\
+	"{0}".\n\
+	\n\
+	Do you want to overwrite this assignment?
 
 options.browser.label=File System Browser
 options.browser.defaultPath=Default path:

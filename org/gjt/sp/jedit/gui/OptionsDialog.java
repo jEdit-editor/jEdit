@@ -263,9 +263,7 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionPane(new GutterOptionPane(), jEditGroup);
 		addOptionPane(new ColorOptionPane(), jEditGroup);
 		addOptionPane(new StyleOptionPane(), jEditGroup);
-		addOptionPane(new CommandShortcutsOptionPane(), jEditGroup);
-		addOptionPane(new PluginShortcutsOptionPane(), jEditGroup);
-		addOptionPane(new MacroShortcutsOptionPane(), jEditGroup);
+		addOptionPane(new ShortcutsOptionPane(), jEditGroup);
 		addOptionPane(new DockingOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
 		addOptionPane(new ToolBarOptionPane(), jEditGroup);

@@ -9,12 +9,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 package org.gjt.sp.jedit.gui;
@@ -28,20 +28,35 @@ import java.util.Hashtable;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
+/**
+ * A dialog for getting shortcut keys.
+ */
 public class GrabKeyDialog extends JDialog
 {
-	public GrabKeyDialog(Component comp, String command, String oldShortcut,
-		String altShortcut)
+	/**
+	 * Create and show a new modal dialog.
+	 *
+	 * @param  comp  center dialog on this component.
+	 * @param  binding  the action/macro that should get a binding.
+	 * @param  allBindings  all other key bindings.
+	 * @param  shortcutNo  number of the shortcut that should be assigned,
+	 *     either 1 or 2.
+	 * @since jEdit 3.2pre8
+	 */
+	public GrabKeyDialog(Component comp, KeyBinding binding,
+		Hashtable allBindings, int shortcutNo)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("grab-key.title"),true);
-		this.command = command;
-		this.oldShortcut = oldShortcut;
-		this.altShortcut = altShortcut;
+		this.binding = binding;
+		this.allBindings = allBindings;
+		this.shortcutNo = shortcutNo;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
-		JPanel content = new JPanel(new BorderLayout())
+		// create a panel with a BoxLayout. Can't use Box here
+		// because Box doesn't have setBorder().
+		JPanel content = new JPanel(new GridLayout(0,1,0,6))
 		{
 			/**
 			 * Returns if this component can be traversed by pressing the
@@ -65,31 +80,46 @@ public class GrabKeyDialog extends JDialog
 		setContentPane(content);
 
 		JLabel label = new JLabel(jEdit.getProperty(
-			"grab-key.caption",new String[] { command }));
-		label.setBorder(new EmptyBorder(0,0,6,0));
+			"grab-key.caption",new String[] { binding.label }));
 
-		content.add(BorderLayout.NORTH,label);
+		Box input = Box.createHorizontalBox();
 
 		shortcut = new InputPane();
-		content.add(BorderLayout.CENTER,shortcut);
+		input.add(shortcut);
+		input.add(Box.createHorizontalStrut(12));
 
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		buttons.setBorder(new EmptyBorder(12,0,0,0));
+		clear = new JButton(jEdit.getProperty("grab-key.clear"));
+		clear.addActionListener(new ActionHandler());
+		input.add(clear);
+
+		assignedTo = new JLabel();
+		updateAssignedTo("");
+
+		Box buttons = Box.createHorizontalBox();
 		buttons.add(Box.createGlue());
 
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(new ActionHandler());
 		buttons.add(ok);
-
 		buttons.add(Box.createHorizontalStrut(12));
+
+		if(isAssigned()) {
+			// show "remove" button
+			remove = new JButton(jEdit.getProperty("grab-key.remove"));
+			remove.addActionListener(new ActionHandler());
+			buttons.add(remove);
+			buttons.add(Box.createHorizontalStrut(12));
+		}
 
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(new ActionHandler());
 		buttons.add(cancel);
-
 		buttons.add(Box.createGlue());
-		content.add(BorderLayout.SOUTH,buttons);
+
+		content.add(label);
+		content.add(input);
+		content.add(assignedTo);
+		content.add(buttons);
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -133,14 +163,38 @@ public class GrabKeyDialog extends JDialog
 
 	// private members
 
-	// this is a bad hack
-	private InputPane shortcut;
+	private InputPane shortcut; // this is a bad hack
+	private JLabel assignedTo;
 	private JButton ok;
+	private JButton remove;
 	private JButton cancel;
+	private JButton clear;
 	private boolean isOK;
-	private String command;
-	private String oldShortcut;
-	private String altShortcut;
+	private KeyBinding binding;
+	private Hashtable allBindings;
+	private int shortcutNo;
+
+	private boolean isAssigned()
+	{
+		if(shortcutNo == 1)
+			return binding.shortcut1 != null
+				&& binding.shortcut1.length() > 0;
+		else
+			return binding.shortcut2 != null
+				&& binding.shortcut2.length() > 0;
+	}
+
+	private String getOldShortcut()
+	{
+		return shortcutNo == 1
+			? binding.shortcut1: binding.shortcut2;
+	}
+
+	private String getAltShortcut()
+	{
+		return shortcutNo == 1
+			? binding.shortcut2: binding.shortcut1;
+	}
 
 	private String getSymbolicName(int keyCode)
 	{
@@ -176,6 +230,37 @@ public class GrabKeyDialog extends JDialog
 		return null;
 	}
 
+	private void updateAssignedTo(String shortcutString)
+	{
+		if(shortcutString == null)
+			return;
+		KeyBinding other = (KeyBinding)allBindings.get(shortcutString);
+		String label = other != null ? other.label
+			: jEdit.getProperty("grab-key.assigned-to.none");
+		assignedTo.setText(jEdit.getProperty(
+			"grab-key.assigned-to",new String[] { label }));
+	}
+
+	/**
+	 * A jEdit action or macro with its two possible shortcuts.
+	 * @since jEdit 3.2pre8
+	 */
+	public static class KeyBinding
+	{
+		public KeyBinding(String name, String label,
+			String shortcut1, String shortcut2)
+		{
+			this.name = name;
+			this.label = label;
+			this.shortcut1 = shortcut1;
+			this.shortcut2 = shortcut2;
+		}
+
+		public String name;
+		public String label;
+		public String shortcut1, shortcut2;
+	}
+
 	class InputPane extends JTextField
 	{
 		/**
@@ -200,6 +285,8 @@ public class GrabKeyDialog extends JDialog
 			}
 			else
 				Log.log(Log.DEBUG,this,"Event " + _evt + " passed");
+
+			evt.consume();
 
 			StringBuffer keyString = new StringBuffer(getText());
 
@@ -249,6 +336,7 @@ public class GrabKeyDialog extends JDialog
 			keyString.append(symbolicName);
 
 			setText(keyString.toString());
+			updateAssignedTo(keyString.toString());
 		}
 
 		private boolean macOS = (System.getProperty("os.name")
@@ -261,47 +349,81 @@ public class GrabKeyDialog extends JDialog
 		{
 			if(evt.getSource() == ok)
 			{
-				Log.log(Log.DEBUG, this, "Command = " + command);
-				String shortcutString = shortcut.getText();
-				// removing the shortcut is always OK
-				if(shortcutString.length() == 0)
+				if(canClose())
+					dispose();
+			}
+			else if(evt.getSource() == remove)
+			{
+				shortcut.setText("");
+				allBindings.remove(getOldShortcut());
+				isOK = true;
+				dispose();
+			}
+			else if(evt.getSource() == cancel)
+				dispose();
+			else if(evt.getSource() == clear)
+			{
+				shortcut.setText("");
+				updateAssignedTo("");
+			}
+		}
+
+		private boolean canClose()
+		{
+			String shortcutString = shortcut.getText();
+			if(shortcutString.length() == 0
+				&& getOldShortcut() != null)
+			{
+				// ask whether to remove the shortcut
+				int answer = GUIUtilities.confirm(
+					GrabKeyDialog.this,
+					"grab-key.remove-ask",
+					null,
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
+				if(answer == JOptionPane.YES_OPTION)
 				{
 					isOK = true;
+					allBindings.remove(getOldShortcut());
 				}
+				else if(answer == JOptionPane.CANCEL_OPTION)
+					return false;
+			}
+			else if(shortcutString.equals(getAltShortcut()))
+			{
 				// we don't need two identical shortcuts
-				else if(shortcutString.equals(altShortcut))
+				GUIUtilities.error(GrabKeyDialog.this,
+					"grab-key.duplicate-alt-shortcut",
+					null);
+			}
+			else
+			{
+				// check whether this shortcut already exists
+				KeyBinding other = (KeyBinding)allBindings
+					.get(shortcutString);
+				if(other != null && other != binding)
 				{
-					GUIUtilities.error(GrabKeyDialog.this,
-						"duplicate-alt-shortcut",null);
+					int answer = GUIUtilities.confirm(
+						GrabKeyDialog.this,
+						"grab-key.duplicate-shortcut",
+						new Object[] { other.label },
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE);
+					if(answer == JOptionPane.YES_OPTION)
+					{
+						// remove other shortcut
+						if(shortcutString.equals(other.shortcut1))
+							other.shortcut1 = null;
+						else
+							other.shortcut2 = null;
+						isOK = true;
+						allBindings.remove(shortcutString);
+					}
 				}
 				else
 					isOK = true;
-
-				// this doesn't work properly if changes have already
-				// been made to the shortcuts, because the input
-				// handler is only updated after the options dialog
-				// is closed...
-
-				/* // a new shortcut is tested against existing shortcuts
-				else if(!shortcutString.equals(oldShortcut))
-				{
-					DefaultInputHandler handler =
-						(DefaultInputHandler)jEdit.getFirstView().getInputHandler();
-					Object binding = handler.getKeyBinding(shortcutString);
-					if(binding != null)
-					{
-						String[] pp = { binding instanceof Hashtable
-							? jEdit.getProperty("duplicate-shortcut.prefix")
-							: binding.toString()
-						};
-						GUIUtilities.error(GrabKeyDialog.this,
-							"duplicate-shortcut",pp);
-					}
-					else
-						isOK = true;
-				} */
 			}
-			dispose();
+			return true;
 		}
 	}
 }

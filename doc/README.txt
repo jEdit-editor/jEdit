@@ -199,6 +199,7 @@ Dante Fabrizio:     - VHDL edit mode
 Denis Lambot:       - Selecting files from the keyboard in the file
                       system browser
 Dirk Moebius:       - HTTP firewall plugin
+                    - Improved shortcuts option pane
                     - EditorExitRequested message code
                     - VariableGridLayout code
                     - Show Free Memory macro
