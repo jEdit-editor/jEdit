@@ -28,7 +28,7 @@ select-caret-register.shortcut=C+u
 paste.shortcut=C+v
 close-buffer.shortcut=C+w
 cut.shortcut=C+x
-goto-register.shortcut=C+y
+goto-caret-register.shortcut=C+y
 undo.shortcut=C+z
 toggle-rect.shortcut=C+BACK_SLASH
 recent-buffer.shortcut=C+BACK_QUOTE
@@ -92,7 +92,7 @@ stop-recording.shortcut=C+m C+s
 # C+r
 append-string-register.shortcut=C+r C+a
 copy-string-register.shortcut=C+r C+c
-set-filename-register.shortcut=C+r C+f
+clear-register.shortcut=C+r C+l
 paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x
 

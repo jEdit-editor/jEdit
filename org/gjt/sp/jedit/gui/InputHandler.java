@@ -246,9 +246,9 @@ public abstract class InputHandler extends KeyAdapter
 		int index = readNextChar.indexOf("__char__");
 		if(index != -1)
 		{
-			BeanShell.eval(view,readNextChar.substring(0,index)
+			readNextChar = readNextChar.substring(0,index)
 				+ '\'' + charStr + '\''
-				+ readNextChar.substring(index + 8));
+				+ readNextChar.substring(index + 8);
 		}
 
 		Macros.Recorder recorder = view.getMacroRecorder();
@@ -271,6 +271,8 @@ public abstract class InputHandler extends KeyAdapter
 				buffer.endCompoundEdit();
 			}
 		}
+		else
+			BeanShell.eval(view,readNextChar);
 
 		readNextChar = null;
 	}
@@ -279,6 +281,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.19  2000/11/17 11:16:04  sp
  * Actions removed, documentation updates, more BeanShell work
  *

@@ -211,6 +211,12 @@ public class Registers
 		if(reg instanceof CaretRegister)
 		{
 			CaretRegister caretReg = (CaretRegister)reg;
+			if(caretReg.openFile() != editPane.getBuffer())
+			{
+				editPane.getToolkit().beep();
+				return;
+			}
+
 			editPane.getTextArea().select(editPane.getTextArea()
 				.getCaretPosition(),caretReg.getOffset());
 		}
@@ -224,13 +230,11 @@ public class Registers
 	 * @param editPane The edit pane
 	 * @param register The register
 	 */
-	public static void goToRegister(EditPane editPane, char register)
+	public static void goToCaretRegister(EditPane editPane, char register)
 	{
 		Register reg = getRegister(register);
 
-		if(reg == null)
-			editPane.getToolkit().beep();
-		else if(reg instanceof CaretRegister)
+		if(reg instanceof CaretRegister)
 		{
 			CaretRegister caretReg = (CaretRegister)reg;
 			Buffer buffer = caretReg.openFile();
@@ -240,7 +244,7 @@ public class Registers
 			editPane.getTextArea().setCaretPosition(caretReg.getOffset());
 		}
 		else
-			jEdit.openFile(editPane.getView(),reg.toString());
+			editPane.getToolkit().beep();
 	}
 
 	/**
@@ -617,6 +621,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.14  2000/11/13 11:19:26  sp
  * Search bar reintroduced, more BeanShell stuff
  *

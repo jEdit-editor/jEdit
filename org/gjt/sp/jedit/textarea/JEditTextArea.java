@@ -454,7 +454,7 @@ public class JEditTextArea extends JComponent
 		}
 		else if(caretLine >= _lastLine)
 		{
-			firstLine = (caretLine - visibleLines) + electricScroll + 1;
+			firstLine = (caretLine - visibleLines) + electricScroll;
 			if(_firstLine >= getLineCount())
 				firstLine = getLineCount() - visibleLines;
 			if(firstLine < 0)
@@ -1431,7 +1431,7 @@ public class JEditTextArea extends JComponent
 		buffer.beginCompoundEdit();
 		for(int i = selectionStartLine; i <= selectionEndLine; i++)
 		{
-			buffer.indentLine(this,i,true,true);
+			buffer.indentLine(i,true,true);
 		}
 		buffer.endCompoundEdit();
 	}
@@ -1463,7 +1463,7 @@ public class JEditTextArea extends JComponent
 		{
 			if(buffer.getBooleanProperty("indentOnTab")
 				&& selectionStart == selectionEnd
-				&& buffer.indentLine(this,selectionStartLine,true,false))
+				&& buffer.indentLine(selectionStartLine,true,false))
 				return;
 			else if(buffer.getBooleanProperty("noTabs"))
 			{
@@ -1483,7 +1483,7 @@ public class JEditTextArea extends JComponent
 				buffer.beginCompoundEdit();
 				setSelectedText("\n");
 				if(buffer.getBooleanProperty("indentOnEnter"))
-					buffer.indentLine(this,selectionStartLine,true,false);
+					buffer.indentLine(selectionStartLine,true,false);
 			}
 			finally
 			{
@@ -1540,7 +1540,7 @@ public class JEditTextArea extends JComponent
 		if((indentCloseBrackets != null && indentCloseBrackets.indexOf(ch) != -1)
 			|| (indentOpenBrackets != null && indentOpenBrackets.indexOf(ch) != -1))
 		{
-			buffer.indentLine(this,caretLine,false,true);
+			buffer.indentLine(caretLine,false,true);
 		}
 	}
 
@@ -2708,6 +2708,12 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		}
 		int maxLineLength = ((Integer)buffer.getProperty("maxLineLen"))
 			.intValue();
+		if(maxLineLength <= 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
 		String text = getSelectedText();
 		if(text != null)
 			setSelectedText(TextUtilities.format(text,maxLineLength));
@@ -2736,6 +2742,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			}
 			try
 			{
+				buffer.beginCompoundEdit();
+
 				text = buffer.getText(start,end - start);
 				buffer.remove(start,end - start);
 				buffer.insertString(start,TextUtilities.format(
@@ -2744,6 +2752,10 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			catch(BadLocationException bl)
 			{
 				return;
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
 			}
 		}
 	}
@@ -2993,7 +3005,7 @@ forward_scan:		do
 
 		try
 		{
-			int lineNumber = Integer.parseInt(line);
+			int lineNumber = Integer.parseInt(line) - 1;
 			setCaretPosition(getLineStartOffset(lineNumber));
 		}
 		catch(Exception e)
@@ -3483,7 +3495,7 @@ forward_scan:		do
 				{
 					buffer.beginCompoundEdit();
 					buffer.insertString(lastWordOffset + start,"\n",null);
-					buffer.indentLine(this,line + 1,true,true);
+					buffer.indentLine(line + 1,true,true);
 				}
 				finally
 				{
@@ -4237,6 +4249,9 @@ forward_scan:		do
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.101  2000/11/19 07:51:26  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.100  2000/11/17 11:16:05  sp
  * Actions removed, documentation updates, more BeanShell work
  *

@@ -44,12 +44,10 @@ import org.gjt.sp.util.Log;
  */
 public class HyperSearch extends EnhancedFrame implements EBComponent
 {
-	public HyperSearch(View view, String defaultFind)
+	public HyperSearch(View view)
 	{
 		super(jEdit.getProperty("hypersearch.title"));
 		this.view = view;
-
-		fileset = SearchAndReplace.getSearchFileSet();
 
 		Container content = getContentPane();
 		content.setLayout(new BorderLayout());
@@ -102,7 +100,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		box.add(status);
 		getRootPane().setDefaultButton(start);
 		updateEnabled();
-		updateStatus();
 		Dimension size = status.getPreferredSize();
 		size.width = Math.max(size.width,100);
 		status.setPreferredSize(size);
@@ -132,9 +129,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		start.addActionListener(actionListener);
 		stop.addActionListener(actionListener);
 
-		if(defaultFind != null)
-			find.setText(defaultFind);
-
 		EditBus.addToBus(this);
 
 		setIconImage(GUIUtilities.getEditorIcon());
@@ -143,10 +137,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 		pack();
 		GUIUtilities.loadGeometry(this,"hypersearch");
-		show();
-
-		if(defaultFind != null)
-			ok();
 	}
 
 	public void save()
@@ -166,12 +156,17 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 
 		if(!isVisible())
 		{
+			fileset = SearchAndReplace.getSearchFileSet();
+
 			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 			regexp.setSelected(SearchAndReplace.getRegexp());
 			multifile.setSelected(!(fileset instanceof CurrentBufferSet));
 
 			setVisible(true);
 		}
+
+		System.err.println(fileset);
+		updateStatus();
 
 		toFront();
 		requestFocus();
@@ -632,6 +627,9 @@ loop:				for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.72  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.71  2000/11/07 10:08:32  sp
  * Options dialog improvements, documentation changes, bug fixes
  *

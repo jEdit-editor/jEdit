@@ -34,6 +34,13 @@ import org.gjt.sp.util.Log;
  */
 public class JARClassLoader extends ClassLoader
 {
+	// no-args constructor is for loading classes from all plugins
+	// eg BeanShell uses one of these so that scripts can use
+	// plugin classes
+	public JARClassLoader()
+	{
+	}
+
 	public JARClassLoader(String path)
 		throws IOException
 	{
@@ -65,11 +72,14 @@ public class JARClassLoader extends ClassLoader
 	public Class loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
-		return loadClassFromZip(clazz,resolveIt,true);
+		return loadClass(clazz,resolveIt,true);
 	}
 
 	public InputStream getResourceAsStream(String name)
 	{
+		if(zipFile == null)
+			return null;
+
 		try
 		{
 			ZipEntry entry = zipFile.getEntry(name);
@@ -88,6 +98,9 @@ public class JARClassLoader extends ClassLoader
 
 	public URL getResource(String name)
 	{
+		if(zipFile == null)
+			return null;
+
 		ZipEntry entry = zipFile.getEntry(name);
 		if(entry == null)
 			return getSystemResource(name);
@@ -105,6 +118,9 @@ public class JARClassLoader extends ClassLoader
 
 	public String getResourceAsPath(String name)
 	{
+		if(zipFile == null)
+			return null;
+
 		return "jeditresource:" + jar.getIndex() + "/" + name;
 	}
 
@@ -115,6 +131,9 @@ public class JARClassLoader extends ClassLoader
 	 */
 	public void closeZipFile()
 	{
+		if(zipFile == null)
+			return;
+
 		closed = true;
 		try
 		{
@@ -309,7 +328,7 @@ public class JARClassLoader extends ClassLoader
 		for(int i = 0; i < jars.length; i++)
 		{
 			JARClassLoader loader = jars[i].getClassLoader();
-			Class cls = loader.loadClassFromZip(clazz,resolveIt,
+			Class cls = loader.loadClass(clazz,resolveIt,
 				false);
 			if(cls != null)
 				return cls;
@@ -324,8 +343,7 @@ public class JARClassLoader extends ClassLoader
 		return findSystemClass(clazz);
 	}
 
-	private Class loadClassFromZip(String clazz, boolean resolveIt,
-		boolean doDepencies)
+	private Class loadClass(String clazz, boolean resolveIt, boolean doDepencies)
 		throws ClassNotFoundException
 	{
 		Class cls = findLoadedClass(clazz);
@@ -334,6 +352,14 @@ public class JARClassLoader extends ClassLoader
 			if(resolveIt)
 				resolveClass(cls);
 			return cls;
+		}
+
+		if(zipFile == null)
+		{
+			if(doDepencies)
+				return findOtherClass(clazz,resolveIt);
+			else
+				return null;
 		}
 
 		String name = MiscUtilities.classToFile(clazz);
@@ -392,6 +418,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.38  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.37  2000/07/29 12:24:07  sp
  * More VFS work, VFS browser started
  *
@@ -421,11 +450,5 @@ public class JARClassLoader extends ClassLoader
  *
  * Revision 1.28  2000/02/16 05:51:20  sp
  * Misc updates, dirk's changes integrated
- *
- * Revision 1.27  2000/02/07 06:35:52  sp
- * Options dialog box updates
- *
- * Revision 1.26  2000/01/30 04:23:23  sp
- * New about box, minor bug fixes and updates here and there
  *
  */

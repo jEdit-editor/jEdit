@@ -48,13 +48,13 @@ public class SearchAndReplace
 	{
 		SearchDialog dialog = (SearchDialog)view.getRootPane()
 			.getClientProperty(SEARCH_DIALOG_KEY);
-		if(dialog != null)
-			dialog.setSearchString(defaultFind);
-		else
+		if(dialog == null)
 		{
-			dialog = new SearchDialog(view,defaultFind);
+			dialog = new SearchDialog(view);
 			view.getRootPane().putClientProperty(SEARCH_DIALOG_KEY,dialog);
 		}
+
+		dialog.setSearchString(defaultFind);
 	}
 
 	/**
@@ -67,13 +67,13 @@ public class SearchAndReplace
 	{
 		HyperSearch dialog = (HyperSearch)view.getRootPane()
 			.getClientProperty(HYPERSEARCH_DIALOG_KEY);
-		if(dialog != null)
-			dialog.setSearchString(defaultFind);
-		else
+		if(dialog == null)
 		{
-			dialog = new HyperSearch(view,defaultFind);
+			dialog = new HyperSearch(view);
 			view.getRootPane().putClientProperty(HYPERSEARCH_DIALOG_KEY,dialog);
 		}
+
+		dialog.setSearchString(defaultFind);
 	}
 
 	/**
@@ -595,6 +595,9 @@ loop:		for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.42  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.41  2000/11/16 10:25:18  sp
  * More macro work
  *

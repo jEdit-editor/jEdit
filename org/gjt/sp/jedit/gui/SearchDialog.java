@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.*;
  */
 public class SearchDialog extends EnhancedDialog
 {
-	public SearchDialog(View view, String defaultFind)
+	public SearchDialog(View view)
 	{
 		super(view,jEdit.getProperty("search.title"),false);
 		this.view = view;
@@ -43,7 +43,6 @@ public class SearchDialog extends EnhancedDialog
 		setContentPane(content);
 
 		find = new HistoryTextField("find");
-		find.setText(defaultFind);
 		replace = new HistoryTextField("replace");
 		keepDialog = new JCheckBox(jEdit.getProperty(
 			"search.keepDialog"));
@@ -136,8 +135,6 @@ public class SearchDialog extends EnhancedDialog
 		replaceAll.addActionListener(actionListener);
 		close.addActionListener(actionListener);
 
-		GUIUtilities.requestFocus(this,find);
-
 		pack();
 
 		// don't remember the width and height of the dialog box,
@@ -148,7 +145,6 @@ public class SearchDialog extends EnhancedDialog
 		jEdit.unsetProperty("search.width");
 		jEdit.unsetProperty("search.height");
 		GUIUtilities.loadGeometry(this,"search");
-		show();
 	}
 
 	// EnhancedDialog implementation
@@ -189,13 +185,16 @@ public class SearchDialog extends EnhancedDialog
 
 		toFront();
 		requestFocus();
-		SwingUtilities.invokeLater(new Runnable()
+
+		GUIUtilities.requestFocus(this,find);
+
+		/* SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
 				find.requestFocus();
 			}
-		});
+		}); */
 	}
 
         // private members
@@ -311,6 +310,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.22  2000/11/19 00:14:30  sp
  * Documentation updates, some bug fixes
  *

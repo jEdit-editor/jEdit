@@ -65,7 +65,7 @@ appropriate. A list of pending tasks may be viewed at
 
 If you would like to discuss the BeanShell scripting language,
 subscribe to one of the BeanShell mailing lists by visiting
-<http://www.sourceforge.net/mail/?group_id=4075>.
+<http://www.beanshell.org/contact.html>.
 
 Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 

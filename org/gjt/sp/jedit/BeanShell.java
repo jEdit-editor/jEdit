@@ -22,6 +22,7 @@ package org.gjt.sp.jedit;
 import bsh.BshMethod;
 import bsh.Interpreter;
 import bsh.NameSpace;
+import bsh.TargetError;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.JFileChooser;
@@ -45,12 +46,27 @@ public class BeanShell
 			textArea.setSelectedText(returnValue.toString());
 	}
 
-	public static void eval(View view)
+	public static void showEvaluateDialog(View view)
 	{
 		String command = GUIUtilities.input(view,"beanshell-eval-input",null);
 		if(command != null)
 		{
-			Object returnValue = eval(view,command);
+			if(!command.endsWith(";"))
+				command = command + ";";
+
+			int repeat = view.getInputHandler().getRepeatCount();
+
+			if(view.getMacroRecorder() != null)
+			{
+				view.getMacroRecorder().record(repeat,command);
+			}
+
+			Object returnValue = null;
+			for(int i = 0; i < repeat; i++)
+			{
+				returnValue = eval(view,command);
+			}
+
 			if(returnValue != null)
 			{
 				String[] args = { returnValue.toString() };
@@ -100,42 +116,40 @@ public class BeanShell
 			}
 		}
 
-		if(view != null)
-		{
-			EditPane editPane = view.getEditPane();
-			interp.setVariable("view",view);
-			interp.setVariable("editPane",editPane);
-			interp.setVariable("buffer",editPane.getBuffer());
-			interp.setVariable("textArea",editPane.getTextArea());
-		}
+		NameSpace namespace = new NameSpace(interp.getNameSpace(),
+			"macro namespace");
+
 
 		try
 		{
+			if(view != null)
+			{
+				EditPane editPane = view.getEditPane();
+				namespace.setVariable("view",view);
+				namespace.setVariable("editPane",editPane);
+				namespace.setVariable("buffer",editPane.getBuffer());
+				namespace.setVariable("textArea",editPane.getTextArea());
+			}
+
 			running = true;
 
-			NameSpace namespace = new NameSpace("global");
 			interp.eval(in,namespace,path);
 		}
 		catch(Throwable e)
 		{
+			if(e instanceof TargetError)
+				e = ((TargetError)e).getTarget();
+
 			if(e instanceof InvocationTargetException)
 				e = ((InvocationTargetException)e).getTargetException();
 
 			Log.log(Log.ERROR,BeanShell.class,e);
 			GUIUtilities.error(view,"beanshell-error",
-				new String[] { path, e.getMessage() });
+				new String[] { path, e.toString() });
 		}
 		finally
 		{
 			running = false;
-		}
-
-		if(view != null)
-		{
-			interp.setVariable("view",null);
-			interp.setVariable("editPane",null);
-			interp.setVariable("buffer",null);
-			interp.setVariable("textArea",null);
 		}
 	}
 
@@ -158,12 +172,16 @@ public class BeanShell
 		catch(Throwable e)
 		{
 			returnValue = null;
+
+			if(e instanceof TargetError)
+				e = ((TargetError)e).getTarget();
+
 			if(e instanceof InvocationTargetException)
 				e = ((InvocationTargetException)e).getTargetException();
 
 			Log.log(Log.ERROR,BeanShell.class,e);
 			GUIUtilities.error(view,"beanshell-error",
-				new String[] { command, e.getMessage() });
+				new String[] { command, e.toString() });
 		}
 
 		if(view != null)
@@ -212,12 +230,16 @@ public class BeanShell
 		catch(Throwable e)
 		{
 			returnValue = null;
+
+			if(e instanceof TargetError)
+				e = ((TargetError)e).getTarget();
+
 			if(e instanceof InvocationTargetException)
 				e = ((InvocationTargetException)e).getTargetException();
 
 			Log.log(Log.ERROR,BeanShell.class,e);
 			GUIUtilities.error(view,"beanshell-error",
-				new String[] { String.valueOf(method), e.getMessage() });
+				new String[] { String.valueOf(method), e.toString() });
 		}
 
 		if(view != null)
@@ -248,6 +270,7 @@ public class BeanShell
 		try
 		{
 			interp = new Interpreter();
+			interp.setVariable("classLoader",new JARClassLoader());
 			interp.eval(new BufferedReader(new InputStreamReader(
 				BeanShell.class.getResourceAsStream("jedit.bsh"))));
 		}

@@ -39,8 +39,10 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class VFSBrowser extends JPanel implements EBComponent
+public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 {
+	public static final String NAME = "vfs.browser";
+
 	/**
 	 * Open file dialog mode. Equals JFileChooser.OPEN_DIALOG for
 	 * backwards compatibility.
@@ -57,6 +59,16 @@ public class VFSBrowser extends JPanel implements EBComponent
 	 * Stand-alone browser mode.
 	 */
 	public static final int BROWSER = 2;
+
+	/**
+	 * Creates a new VFS browser.
+	 * @param view The view to open buffers in by default
+	 * @param path The path to display
+	 */
+	public VFSBrowser(View view, String path)
+	{
+		this(view,path,BROWSER,false);
+	}
 
 	/**
 	 * Creates a new VFS browser.
@@ -199,6 +211,18 @@ public class VFSBrowser extends JPanel implements EBComponent
 			filterCheckbox.isSelected());
 		EditBus.removeFromBus(this);
 	}
+
+	// DockableWindow implementation
+	public String getName()
+	{
+		return NAME;
+	}
+
+	public Component getComponent()
+	{
+		return this;
+	}
+	// end DockableWindow implementation
 
 	public void handleMessage(EBMessage msg)
 	{
@@ -851,6 +875,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.28  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.27  2000/11/11 02:59:30  sp
  * FTP support moved out of the core into a plugin
  *

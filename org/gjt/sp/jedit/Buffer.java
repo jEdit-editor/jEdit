@@ -33,7 +33,6 @@ import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -546,7 +545,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public void autosave()
 	{
 		if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY)
-			|| getFlag(LOADING) || getFlag(IO))
+			|| !getFlag(DIRTY)
+			|| getFlag(LOADING)
+			|| getFlag(IO))
 			return;
 
 		setFlag(AUTOSAVE_DIRTY,false);
@@ -664,14 +665,6 @@ public class Buffer extends PlainDocument implements EBComponent
 					setFlag(NEW_FILE,false);
 					setFlag(UNTITLED,false);
 					setFlag(DIRTY,false);
-
-					saveUndo = undo.editToBeUndone();
-
-					if(!getPath().equals(oldPath))
-						setMode();
-
-					if(file != null)
-						modTime = file.lastModified();
 
 					if(!getPath().equals(oldPath))
 					{
@@ -923,6 +916,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			// clear the dirty flag
 			saveUndo = undo.editToBeUndone();
 			setFlag(DIRTY,false);
+			setFlag(AUTOSAVE_DIRTY,false);
 		}
 
 		if(d != old_d)
@@ -1325,12 +1319,6 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		this.mode = mode;
 
-		// don't do this while loading, otherwise we will
-		// blow away caret location properties
-		if(!getFlag(LOADING))
-			clearProperties();
-		parseBufferLocalProperties();
-
 		propertiesChanged(); // sets up token marker
 
 		// don't fire it for initial mode set
@@ -1344,6 +1332,12 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void setMode()
 	{
+		// don't do this while loading, otherwise we will
+		// blow away caret location properties
+		if(!getFlag(LOADING))
+			clearProperties();
+		parseBufferLocalProperties();
+
 		String userMode = (String)getProperty("mode");
 		if(userMode != null)
 		{
@@ -1394,7 +1388,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * If auto indent is enabled, this method is called when the `Tab'
 	 * or `Enter' key is pressed to perform mode-specific indentation
 	 * and return true, or return false if a normal tab is to be inserted.
-	 * @param textArea The text area
 	 * @param line The line number to indent
 	 * @param canIncreaseIndent If false, nothing will be done if the
 	 * calculated indent is greater than the current
@@ -1403,10 +1396,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * @return true if the tab key event should be swallowed (ignored)
 	 * false if a real tab should be inserted
 	 */
-	// XXX: having to pass a textArea around sucks! Should update this
-	// method to use Elements one day
-	public boolean indentLine(JEditTextArea textArea, int lineIndex,
-		boolean canIncreaseIndent, boolean canDecreaseIndent)
+	public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
+		boolean canDecreaseIndent)
 	{
 		if(lineIndex == 0)
 			return false;
@@ -1440,21 +1431,39 @@ public class Buffer extends PlainDocument implements EBComponent
 		int indentSize = getIndentSize();
 		boolean noTabs = getBooleanProperty("noTabs");
 
-		// Get line text
-		String line = textArea.getLineText(lineIndex);
-		int start = textArea.getLineStartOffset(lineIndex);
-		String prevLine = null;
-		for(int i = lineIndex - 1; i >= 0; i--)
-		{
-			if(textArea.getLineLength(i) != 0)
-			{
-				prevLine = textArea.getLineText(i);
-				break;
-			}
-		}
+		Element map = getDefaultRootElement();
 
-		if(prevLine == null)
+		String prevLine = null;
+		String line = null;
+
+		Element lineElement = map.getElement(lineIndex);
+		int start = lineElement.getStartOffset();
+
+		// Get line text
+		try
+		{
+			line = getText(start,lineElement.getEndOffset() - start - 1);
+
+			for(int i = lineIndex - 1; i >= 0; i--)
+			{
+				lineElement = map.getElement(i);
+				int lineStart = lineElement.getStartOffset();
+				int len = lineElement.getEndOffset() - lineStart - 1;
+				if(len != 0)
+				{
+					prevLine = getText(lineStart,len);
+					break;
+				}
+			}
+	
+			if(prevLine == null)
+				return false;
+		}
+		catch(BadLocationException e)
+		{
+			Log.log(Log.ERROR,this,e);
 			return false;
+		}
 
 		/*
 		 * If 'prevLineIndent' matches a line --> +1
@@ -1577,8 +1586,11 @@ public class Buffer extends PlainDocument implements EBComponent
 					this,lineIndex,closeBracketIndex);
 				if(offset != -1)
 				{
-					String closeLine = textArea.getLineText(
-						textArea.getLineOfOffset(offset));
+					lineElement = map.getElement(map.getElementIndex(
+						offset));
+					int startOffset = lineElement.getStartOffset();
+					String closeLine = getText(startOffset,
+						lineElement.getEndOffset() - startOffset - 1);
 					prevLineIndent = MiscUtilities
 						.getLeadingWhiteSpaceWidth(
 						closeLine,tabSize);
@@ -2249,6 +2261,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.191  2000/11/19 07:51:24  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.190  2000/11/19 00:14:29  sp
  * Documentation updates, some bug fixes
  *

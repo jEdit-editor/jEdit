@@ -46,6 +46,32 @@ import org.gjt.sp.util.Log;
 public class Macros
 {
 	/**
+	 * Utility method that can be used to display a message dialog in a macro.
+	 * @param view The view
+	 * @param message The message
+	 * @since jEdit 2.7pre2
+	 */
+	public static void message(View view, String message)
+	{
+		JOptionPane.showMessageDialog(view,message,
+			jEdit.getProperty("macro-message.title"),
+			JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	/**
+	 * Utility method that can be used to display an error dialog in a macro.
+	 * @param view The view
+	 * @param message The message
+	 * @since jEdit 2.7pre2
+	 */
+	public static void error(View view, String message)
+	{
+		JOptionPane.showMessageDialog(view,message,
+			jEdit.getProperty("macro-message.title"),
+			JOptionPane.ERROR_MESSAGE);
+	}
+
+	/**
 	 * Utility method that can be used to prompt for input in a macro.
 	 * @param view The view
 	 * @param prompt The prompt string
@@ -68,10 +94,9 @@ public class Macros
 		DockableWindowManager dockableWindowManager
 			= view.getDockableWindowManager();
 
-		dockableWindowManager.addDockableWindow(VFSBrowserDockable.NAME);
+		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
 		VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockableWindow(VFSBrowserDockable.NAME)
-			.getComponent();
+			.getDockableWindow(VFSBrowser.NAME);
 
 		browser.setDirectory(MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"macros"));
@@ -95,10 +120,9 @@ public class Macros
 		DockableWindowManager dockableWindowManager
 			= view.getDockableWindowManager();
 
-		dockableWindowManager.addDockableWindow(VFSBrowserDockable.NAME);
+		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
 		VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockableWindow(VFSBrowserDockable.NAME)
-			.getComponent();
+			.getDockableWindow(VFSBrowser.NAME);
 
 		browser.setDirectory(MiscUtilities.constructPath(settings,"macros"));
 	}
@@ -464,27 +488,37 @@ public class Macros
 			{
 				record("for(int i = 1; i <= " + repeat + "; i++)\n"
 					+ "{\n"
-					+ code + ";\n"
+					+ code + "\n"
 					+ "}");
 			}
 		}
 
 		public void record(int repeat, char ch)
 		{
-			String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
-
-			if(repeat == 1)
-			{
-				if(lastWasInput)
-					append(charStr);
-				else
-				{
-					append("\ntextArea.userInput(\"" + charStr);
-					lastWasInput = true;
-				}
-			}
+			// record \n and \t on lines of their own
+			// because userInput() can only do indent if
+			// the *only* char in the string is \n and \t
+			if(ch == '\n')
+				record(repeat,"textArea.userInput(\"\\n\");");
+			else if(ch == '\t')
+				record(repeat,"textArea.userInput(\"\\t\");");
 			else
-				record(repeat,"textArea.userInput(\"" + charStr + "\");");
+			{
+				String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
+
+				if(repeat == 1)
+				{
+					if(lastWasInput)
+						append(charStr);
+					else
+					{
+						append("\ntextArea.userInput(\"" + charStr);
+						lastWasInput = true;
+					}
+				}
+				else
+					record(repeat,"textArea.userInput(\"" + charStr + "\");");
+			}
 		}
 
 		public void handleMessage(EBMessage msg)
@@ -514,6 +548,13 @@ public class Macros
 
 		private void dispose()
 		{
+			int lineCount = buffer.getDefaultRootElement()
+				.getElementCount();
+			for(int i = 0; i < lineCount; i++)
+			{
+				buffer.indentLine(i,true,true);
+			}
+
 			view.setRecordingStatus(false);
 			EditBus.removeFromBus(this);
 		}
@@ -523,6 +564,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.47  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.46  2000/11/19 00:14:29  sp
  * Documentation updates, some bug fixes
  *

@@ -171,7 +171,7 @@ public class SearchBar extends JPanel
 				String text = find.getText();
 				if(text == null && text.length() == 0)
 				{
-					new SearchDialog(view,null);
+					SearchAndReplace.showSearchDialog(view,null);
 				}
 				else if(incremental.isSelected())
 				{
@@ -266,6 +266,9 @@ public class SearchBar extends JPanel
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.18  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.17  2000/11/16 10:25:18  sp
  * More macro work
  *

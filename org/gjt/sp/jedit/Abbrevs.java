@@ -121,7 +121,7 @@ public class Abbrevs
 				// don't do any indentation at all
 				for(int i = line + 1; i <= line + expand.lineCount; i++)
 				{
-					buffer.indentLine(textArea,i,true,false);
+					buffer.indentLine(i,true,false);
 				}
 			}
 			catch(BadLocationException bl)
@@ -468,6 +468,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/11/19 07:51:24  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.18  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

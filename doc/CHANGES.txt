@@ -8,7 +8,6 @@ JEDIT 2.7 VERSION HISTORY
   - BeanShell 1.01 with a few minor modifications is bundled. I will switch
     to BeanShell 1.1 as soon as the beta version is released
   - Replaces old macro system and BeanShell plugin (remove it)
-  - Recording is still supported (and better than before)
   - New commands in 'Utilities' menu for evaluating an arbitriary command, the
     selection, or a script
   - The hundreds of classes in the org.gjt.sp.jedit.actions package are now
@@ -18,6 +17,8 @@ JEDIT 2.7 VERSION HISTORY
   - There is a new EditAction API. Because the new API offers no compelling
     advantages at this point in time, I do not suggest that plugins are
     updated for the new API until after jEdit 2.7final is out.
+  - Old macros will need to be rewritten. A conversion tool may appear in a
+    future release.
 
 + Enhancements
 
@@ -46,6 +47,7 @@ JEDIT 2.7 VERSION HISTORY
   - recent-buffer is now bound to C+`
   - close-all is now bound to C+e C+w
   - reload, reload-all and new-view no longer have keyboard shortcuts
+  - note how none of the function keys are now bound (except for F1).
 
 + Bug Fixes
 
@@ -56,6 +58,11 @@ JEDIT 2.7 VERSION HISTORY
 - Mode-specific tab size and wrap column settings were not respected
 - Unknown files could be opened with a random edit mode if some edit modes had
   settings customized in the Global Options dialog box
+- The 'Format Paragraph' command messed up if the maximum line length was set
+  to 0, and it didn't use compound edits so it took two invocations of 'Undo'
+  to undo
+- Reloading a file with unsaved changes could under some circumstances create
+  an unneeded autosave file
 
 + API Changes
 

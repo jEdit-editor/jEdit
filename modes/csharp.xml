@@ -2,7 +2,7 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="c-sharp">
+<MODE NAME="csharp">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="C-Sharp" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

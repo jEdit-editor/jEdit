@@ -215,9 +215,9 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="eval">
+<ACTION NAME="eval" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
-		BeanShell.eval(view);
+		BeanShell.showEvaluateDialog(view);
 	</CODE>
 </ACTION>
 
@@ -275,15 +275,15 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="goto-line">
+<ACTION NAME="goto-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
-		textArea.showGoToLineDialog();
+		view.getInputHandler().readNextChar("Registers.goToCaretRegister(editPane,__char__);");
 	</CODE>
 </ACTION>
 
-<ACTION NAME="goto-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+<ACTION NAME="goto-line">
 	<CODE>
-		view.getInputHandler().readNextChar("Registers.goToRegister(editPane,__char__);");
+		textArea.showGoToLineDialog();
 	</CODE>
 </ACTION>
 
@@ -873,12 +873,6 @@
 <ACTION NAME="set-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar("Registers.setCaretRegister(editPane,__char__);");
-	</CODE>
-</ACTION>
-
-<ACTION NAME="set-filename-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		view.getInputHandler().readNextChar("Registers.setRegister(__char__,buffer.getPath());");
 	</CODE>
 </ACTION>
 

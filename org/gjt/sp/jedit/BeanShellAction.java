@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit;
 
 import bsh.BshMethod;
+import bsh.Primitive;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 
@@ -65,8 +66,9 @@ public class BeanShellAction extends EditAction
 		if(cachedIsSelected == null)
 			return false;
 
-		return(Boolean.TRUE.equals(BeanShell.invokeMethod(getView(comp),
-			cachedIsSelected,EMPTY_ARGS)));
+		Primitive returnValue = (Primitive)BeanShell.invokeMethod(
+			getView(comp),cachedIsSelected,EMPTY_ARGS);
+		return returnValue.getValue().equals(Boolean.TRUE);
 	}
 
 	public boolean noRepeat()

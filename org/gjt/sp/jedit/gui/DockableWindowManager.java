@@ -19,7 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
-import org.gjt.sp.jedit.browser.VFSBrowserDockable;
+import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.msg.CreateDockableWindow;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -414,7 +414,7 @@ public class DockableWindowManager extends JPanel
 				String name = cmsg.getDockableWindowName();
 				if(name.equals("vfs.browser"))
 				{
-					cmsg.setDockableWindow(new VFSBrowserDockable(
+					cmsg.setDockableWindow(new VFSBrowser(
 						cmsg.getView(),null));
 				}
 			}
@@ -425,6 +425,9 @@ public class DockableWindowManager extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/11/19 07:51:25  sp
+ * Documentation updates, bug fixes
+ *
  * Revision 1.8  2000/11/12 05:36:49  sp
  * BeanShell integration started
  *
