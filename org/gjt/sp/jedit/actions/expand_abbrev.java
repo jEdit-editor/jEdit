@@ -24,6 +24,7 @@ import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class expand_abbrev extends EditAction
 {
@@ -124,6 +125,7 @@ loop2:					for(int j = index + 1; j < lineLen; j++)
 		}
 		catch(BadLocationException bl)
 		{
+			Log.log(Log.ERROR,this,bl);
 		}
 		view.getToolkit().beep();
 	}

@@ -23,6 +23,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class goto_end_indent extends EditAction
 {
@@ -48,6 +49,7 @@ public class goto_end_indent extends EditAction
 		}
 		catch(BadLocationException bl)
 		{
+			Log.log(Log.ERROR,this,bl);
 		}
 	}
 }

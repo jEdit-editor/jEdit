@@ -1,7 +1,7 @@
 JEDIT TO DO
 
-- Log all exceptions to the log; there are a lot of catch() statements in the
-  jEdit source that either ignore the error or just display a dialog box
+- Keyboard shortcuts for macros
+- Record toolbar clicks
 - Let user specify minimum log level in the activity log
 - Do searching in a background thread
 - Low-priority background thread that plugins can use to do background
@@ -17,8 +17,6 @@ JEDIT TO DO
 - Word wrap. True word-wrap would require significant changes to the text area,
   and would probably slow things down (think yToLine()). Maybe some sort of
   'soft wrap' that inserts newlines into the text could be implemented instead?
-  Like JEditTextArea.wrapSetSelectedText(), and a paste-wrapped command
-- Macros bound to keys
 
 ------- Installer -------
 

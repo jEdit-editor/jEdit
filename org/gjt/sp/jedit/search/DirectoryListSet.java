@@ -53,8 +53,9 @@ public class DirectoryListSet extends BufferListSet
 		{
 			filter = new REFileFilter(MiscUtilities.globToRE(glob));
 		}
-		catch(REException re)
+		catch(Exception e)
 		{
+			Log.log(Log.ERROR,DirectoryListSet.class,e);
 			filter = null;
 		}
 
@@ -101,6 +102,9 @@ public class DirectoryListSet extends BufferListSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.1  1999/11/06 02:49:53  sp
  * Added missing files
  *

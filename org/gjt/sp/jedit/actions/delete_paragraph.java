@@ -23,6 +23,7 @@ import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.util.Log;
 
 public class delete_paragraph extends EditAction
 {
@@ -71,6 +72,7 @@ public class delete_paragraph extends EditAction
 		}
 		catch(BadLocationException bl)
 		{
+			Log.log(Log.ERROR,this,bl);
 		}
 	}
 }

@@ -170,6 +170,7 @@ public class HyperSearch extends JDialog
 		}
 		catch(Exception e)
 		{
+			Log.log(Log.ERROR,this,e);
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
@@ -328,6 +329,9 @@ public class HyperSearch extends JDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.40  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.39  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

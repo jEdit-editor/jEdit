@@ -1,5 +1,24 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2pre4
+
++ New Features
+
+- Menu item selections can now be recorded to macros
+- Check box menu items are now supported; override the isToggle() method
+  of EditAction to return true, then override isSelected() to return if the
+  menu item should be checked
+
++ Enhancements
+
+- More exceptions are logged now
+
++ Plugin Updates
+
+- Console 1.8.1
+- EditBus 0.4
+- ErrorList 0.3
+
 * Version 2.2pre3
 
 + New Features

@@ -1590,7 +1590,8 @@
     While a recording is in progress, <quote>Macro recording</> is
     displayed in the status bar, instead of the caret position information.
     Currently, jEdit records all key strokes and commands invoked from
-    the keyboard; recording of menu item selections is not yet possible.
+    the menu bar; recording tool bar button clicks is not currently
+    implemented.
    </para>
    <para>
     Search and replace operations are recorded as you would expect;
@@ -3426,7 +3427,7 @@ implements OptionPane
   <funcsynopsis>
    <funcsynopsisinfo>import java.awt.Frame;</>
    <funcprototype>
-    <funcdef>public static void <function>message</></funcdef>
+    <funcdef>public static void <function>error</></funcdef>
     <paramdef>Frame <parameter>frame</></paramdef>
     <paramdef>String <parameter>name</></paramdef>
     <paramdef>Object[] <parameter>args</></paramdef>

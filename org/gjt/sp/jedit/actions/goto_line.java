@@ -24,6 +24,7 @@ import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class goto_line extends EditAction
 implements InputHandler.NonRepeatable

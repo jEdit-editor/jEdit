@@ -89,22 +89,7 @@ public abstract class EditAction implements ActionListener
 		{
 			Object o = evt.getSource();
 			if(o instanceof Component)
-			{
-				// find the parent view
-				Component c = (Component)o;
-				for(;;)
-				{
-					if(c instanceof View)
-						return (View)c;
-					else if(c == null)
-						break;
-					if(c instanceof JPopupMenu)
-						c = ((JPopupMenu)c)
-							.getInvoker();
-					else
-						c = c.getParent();
-				}
-			}
+				return getView((Component)o);
 		}
 		// this shouldn't happen
 		return null;
@@ -115,11 +100,50 @@ public abstract class EditAction implements ActionListener
 	 */
 	public static Buffer getBuffer(EventObject evt)
 	{
-		// Call getBuffer() method of view
 		View view = getView(evt);
 		if(view != null)
 			return view.getBuffer();
 		return null;
+	}
+
+	/**
+	 * Finds the view parent of the specified component.
+	 * @since jEdit 2.2pre4
+	 */
+	public static View getView(Component comp)
+	{
+		for(;;)
+		{
+			if(comp instanceof View)
+				return (View)comp;
+			else if(comp == null)
+				break;
+			else if(comp instanceof JPopupMenu)
+				comp = ((JPopupMenu)comp).getInvoker();
+			else
+				comp = comp.getParent();
+		}
+		return null;
+	}
+
+	/**
+	 * Returns if this edit action should be displayed as a check box
+	 * in menus.
+	 * @since jEdit 2.2pre4
+	 */
+	public boolean isToggle()
+	{
+		return false;
+	}
+
+	/**
+	 * If this edit action is a toggle, returns if it is selected or not.
+	 * @param comp The component
+	 * @since jEdit 2.2pre4
+	 */
+	public boolean isSelected(Component comp)
+	{
+		return false;
 	}
 
 	// private members
@@ -129,6 +153,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.13  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

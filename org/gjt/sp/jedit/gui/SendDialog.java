@@ -294,11 +294,13 @@ implements ActionListener, KeyListener, Runnable
 		}
 		catch(IOException io)
 		{
+			Log.log(Log.ERROR,this,io);
 			args[0] = io.toString();
 			GUIUtilities.error(view,"ioerror",args);
 		}
 		catch(NumberFormatException nf)
 		{
+			Log.log(Log.ERROR,this,nf);
 			GUIUtilities.error(view,"badport",new Object[0]);
 		}
 

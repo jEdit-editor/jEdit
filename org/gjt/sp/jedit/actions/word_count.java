@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.actions;
 import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class word_count extends EditAction
 {
@@ -46,6 +47,7 @@ public class word_count extends EditAction
 		}
 		catch(BadLocationException bl)
 		{
+			Log.log(Log.ERROR,this,bl);
 		}
 	}
 

@@ -186,8 +186,8 @@ public class GUIUtilities
 			arg = null;
 			action = name;
 		}
-		JMenuItem mi;
-                String label = jEdit.getProperty(name.concat(".label"));
+
+		String label = jEdit.getProperty(name.concat(".label"));
 		String keyStroke = jEdit.getProperty(name.concat(".shortcut"));
 		if(label == null)
 		{
@@ -197,21 +197,24 @@ public class GUIUtilities
 		}
 
 		index = label.indexOf('$');
+		char mnemonic;
                 if(index != -1 && label.length() - index > 1)
 		{
-			mi = new EnhancedMenuItem(label.substring(0,index)
-				.concat(label.substring(++index)),keyStroke);
-                        mi.setMnemonic(Character.toLowerCase(label.charAt(index)));
+                        mnemonic = Character.toLowerCase(label.charAt(index));
+			label = label.substring(0,index).concat(label.substring(++index));
 		}
 		else
-			mi = new EnhancedMenuItem(label,keyStroke);
-		
+			mnemonic = '\0';
+
+		JMenuItem mi;
 		EditAction a = jEdit.getAction(action);
-		if(a == null)
-			mi.setEnabled(false);
+		if(a != null && a.isToggle())
+			mi = new EnhancedCheckBoxMenuItem(label,keyStroke,a);
 		else
-			mi.addActionListener(a);
+			mi = new EnhancedMenuItem(label,keyStroke,a);
+		mi.setMnemonic(mnemonic);
 		mi.setActionCommand(arg);
+
 		return mi;
 	}
 
@@ -780,6 +783,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.38  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.37  1999/11/06 02:06:50  sp
  * Logging updates, bug fixing, icons, various other stuff
  *

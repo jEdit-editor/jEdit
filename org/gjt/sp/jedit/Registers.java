@@ -228,6 +228,7 @@ public class Registers
 			}
 			catch(Exception e)
 			{
+				Log.log(Log.NOTICE,this,e);
 				return null;
 			}
 		}
@@ -266,6 +267,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.3  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

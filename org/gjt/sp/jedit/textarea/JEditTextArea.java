@@ -767,6 +767,7 @@ public class JEditTextArea extends JComponent
 		}
 		catch(BadLocationException bl)
 		{
+			bl.printStackTrace();
 			return null;
 		}
 	}
@@ -806,6 +807,7 @@ public class JEditTextArea extends JComponent
 		}
 		catch(BadLocationException bl)
 		{
+			bl.printStackTrace();
 			return null;
 		}
 	}
@@ -825,6 +827,7 @@ public class JEditTextArea extends JComponent
 		}
 		catch(BadLocationException bl)
 		{
+			bl.printStackTrace();
 			segment.offset = segment.count = 0;
 		}
 	}
@@ -2095,6 +2098,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.26  1999/10/28 09:07:21  sp
  * Directory list search
  *

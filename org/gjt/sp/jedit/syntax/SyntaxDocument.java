@@ -97,6 +97,7 @@ public class SyntaxDocument extends PlainDocument
 		}
 		catch(BadLocationException bl)
 		{
+			bl.printStackTrace();
 		}
 	}
 
@@ -176,6 +177,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.10  1999/10/24 02:06:41  sp
  * Miscallaneous pre1 stuff
  *

@@ -1,5 +1,5 @@
 /*
- * EnhancedMenuItem.java - Menu item with user-specified accelerator string
+ * EnhancedCheckBoxMenuItem.java - Check box menu item
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -36,15 +36,16 @@ import org.gjt.sp.jedit.View;
  * allows us to add text area actions to the menu bar)
  * </ul>
  */
-public class EnhancedMenuItem extends JMenuItem
+public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
-	public EnhancedMenuItem(String label, String keyBinding,
+	public EnhancedCheckBoxMenuItem(String label, String keyBinding,
 		EditAction action)
 	{
 		super(label);
 		this.keyBinding = keyBinding;
 		this.action = action;
 
+		setModel(new Model());
 		setEnabled(action != null);
 
 		acceleratorFont = UIManager
@@ -107,4 +108,14 @@ public class EnhancedMenuItem extends JMenuItem
 	private Font acceleratorFont;
 	private Color acceleratorForeground;
 	private Color acceleratorSelectionForeground;
+
+	class Model extends DefaultButtonModel
+	{
+		public boolean isSelected()
+		{
+			return action.isSelected(EnhancedCheckBoxMenuItem.this);
+		}
+
+		public void setSelected(boolean b) {}
+	}
 }

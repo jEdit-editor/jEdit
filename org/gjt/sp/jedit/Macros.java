@@ -222,6 +222,7 @@ public class Macros
 		}
 		catch(IOException io)
 		{
+			Log.log(Log.ERROR,Macros.class,io);
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(view,"ioerror",args);
 		}
@@ -302,6 +303,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.8  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

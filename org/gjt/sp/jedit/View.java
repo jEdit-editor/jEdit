@@ -197,9 +197,9 @@ public class View extends JFrame
 		for(int i = 0; i < recentArray.length; i++)
 		{
 			String path = recentArray[i];
-			JMenuItem menuItem = new JMenuItem(path);
+			EnhancedMenuItem menuItem = new EnhancedMenuItem(path,
+				null,action);
 			menuItem.setActionCommand(path);
-			menuItem.addActionListener(action);
 			openRecent.add(menuItem);
 		}
 	}
@@ -226,13 +226,13 @@ public class View extends JFrame
 		{
 			String name = ((Marker)enum.nextElement())
 				.getName();
-			JMenuItem menuItem = new JMenuItem(name);
+			EnhancedMenuItem menuItem = new EnhancedMenuItem(name,
+				null,clearMarkerAction);
 			menuItem.setActionCommand(name);
-			menuItem.addActionListener(clearMarkerAction);
 			clearMarker.add(menuItem);
-			menuItem = new JMenuItem(name);
+			menuItem = new EnhancedMenuItem(name,null,
+				gotoMarkerAction);
 			menuItem.setActionCommand(name);
-			menuItem.addActionListener(gotoMarkerAction);
 			gotoMarker.add(menuItem);
 		}
 	}
@@ -659,8 +659,8 @@ public class View extends JFrame
 			if(name.toLowerCase().endsWith(".macro"))
 			{
 				name = name.substring(0,name.length() - 6);
-				JMenuItem menuItem = new JMenuItem(name);
-				menuItem.addActionListener(action);
+				EnhancedMenuItem menuItem = new EnhancedMenuItem(
+					name,null,action);
 				menuItem.setActionCommand(file.getPath());
 				menu.add(menuItem);
 			}
@@ -870,6 +870,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.102  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.101  1999/11/06 02:06:50  sp
  * Logging updates, bug fixing, icons, various other stuff
  *

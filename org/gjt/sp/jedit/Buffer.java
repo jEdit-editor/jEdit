@@ -90,7 +90,7 @@ public class Buffer extends SyntaxDocument
 				 * containing this file was renamed.
 				 * we ignore the error then so the user
 				 * isn't flooded with exceptions. */
-				Log.log(Log.DEBUG,this,fnf);
+				Log.log(Log.NOTICE,this,fnf);
 			}
 			catch(Exception e)
 			{
@@ -1011,7 +1011,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		catch(FileNotFoundException fnf)
 		{
 			setFlag(NEW_FILE,true);
-			Log.log(Log.DEBUG,this,fnf);
+			Log.log(Log.NOTICE,this,fnf);
 		}
 		catch(IOException io)
 		{
@@ -1376,6 +1376,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.102  1999/11/07 06:51:42  sp
+ * Check box menu items supported
+ *
  * Revision 1.101  1999/11/06 02:06:50  sp
  * Logging updates, bug fixing, icons, various other stuff
  *

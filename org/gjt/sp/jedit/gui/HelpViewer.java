@@ -125,6 +125,7 @@ public class HelpViewer extends JFrame
 		}
 		catch(IOException io)
 		{
+			Log.log(Log.ERROR,this,io);
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(this,"ioerror",args);
 		}
@@ -186,8 +187,9 @@ public class HelpViewer extends JFrame
 					gotoURL(new URL(urlField.getText()),
 						true);
 				}
-				catch(MalformedURLException mf)
+				catch(MalformedURLException mu)
 				{
+					Log.log(Log.ERROR,this,mu);
 					String[] args = { urlField.getText() };
 					GUIUtilities.error(HelpViewer.this,
 						"badurl",args);

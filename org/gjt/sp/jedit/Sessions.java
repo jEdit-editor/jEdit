@@ -53,7 +53,7 @@ public class Sessions
 		}
 		catch(FileNotFoundException fnf)
 		{
-			Log.log(Log.DEBUG,Sessions.class,fnf);
+			Log.log(Log.NOTICE,Sessions.class,fnf);
 			if(ignoreNotFound)
 				return null;
 			String[] args = { filename };
@@ -173,6 +173,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  1999/11/07 06:51:43  sp
+ * Check box menu items supported
+ *
  * Revision 1.4  1999/11/06 02:06:50  sp
  * Logging updates, bug fixing, icons, various other stuff
  *
