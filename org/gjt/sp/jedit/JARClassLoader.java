@@ -74,13 +74,37 @@ public class JARClassLoader extends ClassLoader
 	public Class loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
-		return loadClass(clazz,resolveIt,true);
+		try
+		{
+			/* Defer to whoever loaded us (such as JShell, Echidna, etc) */
+			ClassLoader loader = getClass().getClassLoader();
+			if (loader != null)
+				return loader.loadClass(clazz);
+
+			/* Look in system classes */
+			return findSystemClass(clazz);
+		}
+		catch(ClassNotFoundException cnf)
+		{
+		}
+
+		if(zipFile == null)
+			return findOtherClass(clazz,resolveIt);
+
+		Class cls = _loadClass(clazz,resolveIt);
+		if(cls == null)
+			return findOtherClass(clazz,resolveIt);
+		else
+			return cls;
 	}
 
 	public InputStream getResourceAsStream(String name)
 	{
 		if(zipFile == null)
 			return null;
+
+		if(name.startsWith("/"))
+			name = name.substring(0);
 
 		try
 		{
@@ -103,6 +127,9 @@ public class JARClassLoader extends ClassLoader
 		if(zipFile == null)
 			return null;
 
+		if(name.startsWith("/"))
+			name = name.substring(0);
+
 		ZipEntry entry = zipFile.getEntry(name);
 		if(entry == null)
 			return getSystemResource(name);
@@ -123,7 +150,10 @@ public class JARClassLoader extends ClassLoader
 		if(zipFile == null)
 			return null;
 
-		return "jeditresource:" + jar.getIndex() + "/" + name;
+		return "jeditresource:/"
+			+ MiscUtilities.getFileName(jar.getPath())
+			+ "!"
+			+ name;
 	}
 
 	/**
@@ -345,22 +375,15 @@ public class JARClassLoader extends ClassLoader
 		for(int i = 0; i < jars.length; i++)
 		{
 			JARClassLoader loader = jars[i].getClassLoader();
-			Class cls = loader.loadClass(clazz,resolveIt,
-				false);
+			Class cls = loader._loadClass(clazz,resolveIt);
 			if(cls != null)
 				return cls;
 		}
 
-		/* Defer to whoever loaded us (such as JShell, Echidna, etc) */
-                ClassLoader loader = getClass().getClassLoader();
-		if (loader != null)
-			return loader.loadClass(clazz);
-
-		/* Doesn't exist in any other plugin, look in system classes */
-		return findSystemClass(clazz);
+		throw new ClassNotFoundException(clazz);
 	}
 
-	private Class loadClass(String clazz, boolean resolveIt, boolean doDepencies)
+	private Class _loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
 		Class cls = findLoadedClass(clazz);
@@ -371,14 +394,7 @@ public class JARClassLoader extends ClassLoader
 			return cls;
 		}
 
-		if(zipFile == null)
-		{
-			if(doDepencies)
-				return findOtherClass(clazz,resolveIt);
-			else
-				return null;
-		}
-
+		//System.err.println("load class: " + clazz);
 		String name = MiscUtilities.classToFile(clazz);
 
 		try
@@ -386,12 +402,7 @@ public class JARClassLoader extends ClassLoader
 			ZipEntry entry = zipFile.getEntry(name);
 
 			if(entry == null)
-			{
-				if(doDepencies)
-					return findOtherClass(clazz,resolveIt);
-				else
-					return null;
-			}
+				return null;
 
 			InputStream in = zipFile.getInputStream(entry);
 

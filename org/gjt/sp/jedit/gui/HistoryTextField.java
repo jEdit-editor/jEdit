@@ -146,6 +146,9 @@ public class HistoryTextField extends JTextField
 	// protected members
 	protected void processKeyEvent(KeyEvent evt)
 	{
+		if(!isEnabled())
+			return;
+
 		evt = KeyEventWorkaround.processKeyEvent(evt);
 		if(evt == null)
 			return;
@@ -193,6 +196,9 @@ public class HistoryTextField extends JTextField
 
 	protected void processMouseEvent(MouseEvent evt)
 	{
+		if(!isEnabled())
+			return;
+
 		switch(evt.getID())
 		{
 		case MouseEvent.MOUSE_PRESSED:
@@ -377,12 +383,6 @@ public class HistoryTextField extends JTextField
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(!HistoryTextField.this.isEnabled())
-			{
-				getToolkit().beep();
-				return;
-			}
-
 			int ind = Integer.parseInt(evt.getActionCommand());
 			if(ind == -1)
 			{

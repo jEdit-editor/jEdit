@@ -327,23 +327,12 @@ public class BeanShell
 		else
 			name = "b_" + id;
 
-		if(childNamespace)
-		{
-			code = "setNameSpace(__cruft.namespace);\n"
-				+ name
-				+ "() {\n"
-				+ code
-				+ "\n}";
-		}
-		else
-		{
-			code = "setNameSpace(__cruft.namespace);\n"
-				+ name
-				+ "(ns) {\n"
-				+ "setNameSpace(ns);"
-				+ code
-				+ "\n}";
-		}
+		code = "setNameSpace(__cruft.namespace);\n"
+			+ name
+			+ "(ns) {\n"
+			+ "setNameSpace(ns);"
+			+ code
+			+ "\n}";
 
 		eval(null,code,false);
 
@@ -361,17 +350,10 @@ public class BeanShell
 	 */
 	public static Object runCachedBlock(String id, View view, NameSpace namespace)
 	{
-		Object[] args;
 		if(namespace == null)
-		{
-			args = new Object[0];
 			namespace = internal;
-		}
-		else
-		{
-			args = new Object[1];
-			args[0] = namespace;
-		}
+
+		Object[] args = { namespace };
 
 		try
 		{

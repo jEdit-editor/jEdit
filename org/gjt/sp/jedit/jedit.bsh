@@ -29,6 +29,13 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.*;
 
+// speed things up for commonly-used classes
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.search.CurrentBufferSet;
+import org.gjt.sp.jedit.search.AllBufferSet;
+import org.gjt.sp.jedit.search.DirectoryListSet;
+
 /* This function prints the specified object to the current console if one
  * exists; otherwise, to the activity log. */
 print(arg)

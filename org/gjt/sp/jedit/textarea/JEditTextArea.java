@@ -2650,7 +2650,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				extendSelection(caret,newCaret);
 			else if(!multi)
 				selectNone();
-			moveCaretPosition(caret);
+			moveCaretPosition(newCaret);
 		}
 	}
 
@@ -3740,6 +3740,15 @@ forward_scan:		do
 			return;
 		}
 
+		char ch = line.charAt(dot-1);
+		if(!Character.isLetterOrDigit(ch)
+			&& noWordSep.indexOf(ch) == -1)
+		{
+			// attempting to expand non-word char
+			getToolkit().beep();
+			return;
+		}
+
 		int wordStart = TextUtilities.findWordStart(line,dot-1,noWordSep);
 		String word = line.substring(wordStart,dot);
 		if(word.length() == 0)
@@ -4060,8 +4069,6 @@ forward_scan:		do
 		if(painter == null)
 			return;
 		int height = painter.getHeight();
-		if(height < 0)
-			System.err.println("faggots");
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
 		updateScrollBars();
@@ -4861,7 +4868,6 @@ forward_scan:		do
 					s.startLine = getLineOfOffset(s.start);
 					s.endLine = getLineOfOffset(s.end);
 					invalidateLineRange(s.startLine,s.endLine);
-					System.err.println(i + ": " + s);
 				}
 			}
 

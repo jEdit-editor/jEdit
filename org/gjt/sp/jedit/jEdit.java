@@ -758,22 +758,12 @@ public class jEdit
 	}
 
 	/**
-	 * Returns the JAR at the specified index.
-	 * @since jEdit 2.5pre3
-	 */
-	public static EditPlugin.JAR getPluginJAR(int index)
-	{
-		return (EditPlugin.JAR)jars.elementAt(index);
-	}
-
-	/**
 	 * Adds a plugin JAR to the editor.
 	 * @param plugin The plugin
 	 * @since jEdit 3.2pre10
 	 */
 	public static void addPluginJAR(EditPlugin.JAR plugin)
 	{
-		plugin.index = jars.size();
 		jars.addElement(plugin);
 	}
 

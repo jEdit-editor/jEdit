@@ -1,5 +1,17 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2final
+
++ Enhancements
+
+- Improvements to plugin resource handling, required for XML plugin 0.4
+- Changes to BeanShellAction and JARClassLoader to improve performance
+
++ Bug Fixes
+
+- Removed debug message from JEditTextArea.java
+- 'Go to Previous Bracket' command didn't work
+
 * Version 3.2pre10
 
 + New Features

@@ -353,7 +353,7 @@
 
 <ACTION NAME="help">
 	<CODE>
-		new HelpViewer("users-guide/index.html");
+		new HelpViewer("jeditresource:/doc/users-guide/index.html");
 	</CODE>
 </ACTION>
 

@@ -154,11 +154,6 @@ public abstract class EditPlugin
 			return array;
 		}
 
-		public int getIndex()
-		{
-			return index;
-		}
-
 		public JAR(String path, JARClassLoader classLoader)
 		{
 			this.path = path;
@@ -167,8 +162,6 @@ public abstract class EditPlugin
 		}
 
 		// package-private members
-		int index;
-
 		void getPlugins(Vector vector)
 		{
 			for(int i = 0; i < plugins.size(); i++)

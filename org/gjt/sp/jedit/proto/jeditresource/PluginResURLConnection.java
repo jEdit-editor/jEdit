@@ -1,6 +1,6 @@
 /*
  * PluginResURLConnection.java - jEdit plugin resource URL connection
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@ package org.gjt.sp.jedit.proto.jeditresource;
 
 import java.io.*;
 import java.net.*;
-import java.text.MessageFormat;
 import org.gjt.sp.jedit.*;
 
 public class PluginResURLConnection extends URLConnection
@@ -32,24 +31,51 @@ public class PluginResURLConnection extends URLConnection
 		super(url);
 
 		String file = url.getFile();
-		int index = file.indexOf('/',1);
+
+		int index = file.indexOf('!',0);
 		if(index == -1)
-			throw new IOException("Invalid plugin resource URL");
-		int start;
-		if(file.charAt(0) == '/')
-			start = 1;
+		{
+			plugin = null;
+			resource = file;
+		}
 		else
-			start = 0;
-		pluginIndex = Integer.parseInt(file.substring(start,index));
-		resource = file.substring(index + 1);
+		{
+			int start;
+			if(file.charAt(0) == '/')
+				start = 1;
+			else
+				start = 0;
+
+			plugin = file.substring(start,index);
+			resource = file.substring(index + 1);
+		}
 	}
 
 	public void connect() throws IOException
 	{
 		if(!connected)
 		{
-			in = jEdit.getPluginJAR(pluginIndex).getClassLoader()
-				.getResourceAsStream(resource);
+			if(plugin == null)
+			{
+				in = jEdit.class.getResourceAsStream(resource);
+			}
+			else
+			{
+				EditPlugin.JAR[] plugins = jEdit.getPluginJARs();
+				for(int i = 0; i < plugins.length; i++)
+				{
+					EditPlugin.JAR jar = plugins[i];
+					if(MiscUtilities.getFileName(jar.getPath())
+						.equalsIgnoreCase(plugin))
+					{
+						in = jar.getClassLoader()
+							.getResourceAsStream(
+							resource);
+						break;
+					}
+				}
+			}
+
 			if(in == null)
 			{
 				throw new IOException("Resource not found: "
@@ -71,16 +97,16 @@ public class PluginResURLConnection extends URLConnection
 	{
 		if(name.equals("content-type"))
 		{
-			String filename = getURL().getFile().toLowerCase();
-			if(filename.endsWith(".html"))
+			if(resource.endsWith(".html"))
 				return "text/html";
-			else if(filename.endsWith(".txt"))
+			else if(resource.endsWith(".txt"))
 				return "text/plain";
-			else if(filename.endsWith(".rtf"))
+			else if(resource.endsWith(".rtf"))
 				return "text/rtf";
-			else if(filename.endsWith(".gif"))
+			else if(resource.endsWith(".gif"))
 				return "image/gif";
-			else if(filename.endsWith(".jpg") || filename.endsWith(".jpeg"))
+			else if(resource.endsWith(".jpg")
+				|| resource.endsWith(".jpeg"))
 				return "image/jpeg";
 			else
 				return null;
@@ -91,6 +117,6 @@ public class PluginResURLConnection extends URLConnection
 
 	// private members
 	private InputStream in;
-	private int pluginIndex;
+	private String plugin;
 	private String resource;
 }

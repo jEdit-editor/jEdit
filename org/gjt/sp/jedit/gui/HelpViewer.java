@@ -162,21 +162,7 @@ public class HelpViewer extends JFrame implements EBComponent
 		URL _url = null;
 		try
 		{
-			if(!MiscUtilities.isURL(url))
-			{
-				// this is fucked up because #foo can't be passed
-				// to getResource()
-				_url = getClass().getResource("/doc/" + (index != -1
-					? url.substring(0,index)
-					: url));
-				if(index != -1)
-				{
-					_url = new URL(_url.getProtocol(),_url.getHost(),
-						_url.getFile() + url.substring(index));
-				}
-			}
-			else
-				_url = new URL(url);
+			_url = new URL(url);
 
 			urlField.setText(_url.toString());
 			viewer.setPage(_url);
@@ -256,17 +242,17 @@ public class HelpViewer extends JFrame implements EBComponent
 		root.add(createNode("welcome.html",
 			jEdit.getProperty("helpviewer.toc.welcome")));
 
-		root.add(createNode("README.txt",
+		root.add(createNode("jeditresource:/doc/README.txt",
 			jEdit.getProperty("helpviewer.toc.readme")));
-		root.add(createNode("NEWS.txt",
+		root.add(createNode("jeditresource:/doc/NEWS.txt",
 			jEdit.getProperty("helpviewer.toc.news")));
-		root.add(createNode("TODO.txt",
+		root.add(createNode("jeditresource:/doc/TODO.txt",
 			jEdit.getProperty("helpviewer.toc.todo")));
-		root.add(createNode("CHANGES.txt",
+		root.add(createNode("jeditresource:/doc/CHANGES.txt",
 			jEdit.getProperty("helpviewer.toc.changes")));
-		root.add(createNode("COPYING.txt",
+		root.add(createNode("jeditresource:/doc/COPYING.txt",
 			jEdit.getProperty("helpviewer.toc.copying")));
-		root.add(createNode("COPYING.DOC.txt",
+		root.add(createNode("jeditresource:/doc/COPYING.DOC.txt",
 			jEdit.getProperty("helpviewer.toc.copying-doc")));
 
 		loadUserGuideTOC(root);

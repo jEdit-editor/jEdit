@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.options;
 
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
@@ -97,10 +98,19 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		restore = new JCheckBox(jEdit.getProperty(
 			"options.loadsave.restore"));
 		restore.setSelected(jEdit.getBooleanProperty("restore"));
+		restore.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				restoreCLI.setEnabled(restore.isSelected());
+			}
+		});
+
 		addComponent(restore);
 		restoreCLI = new JCheckBox(jEdit.getProperty(
 			"options.loadsave.restore.cli"));
 		restoreCLI.setSelected(jEdit.getBooleanProperty("restore.cli"));
+		restoreCLI.setEnabled(restore.isSelected());
 		addComponent(restoreCLI);
 
 		/* Clients open files in new view */
