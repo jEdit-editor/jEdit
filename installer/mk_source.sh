@@ -8,10 +8,10 @@ if [ "$1" = "" ]; then
 fi
 
 sh clean.sh
-rm doc/users-guide/*.html
-rm doc/users-guide/toc.xml
+rm -f doc/users-guide/*.html
+rm -f doc/users-guide/toc.xml
 
 cd ..
 tar cvfz jedit${1}source.tar.gz `find jEdit -type f \! \( -name Entries \
 	-o -name Root -o -name Entries.Static -o -name Repository \
-	-o -name \*.class -o -name \*.jar \)`
+	-o -name \*.class -o -name \*.jar -o -name .\*.marks -o -name .xvpics \)`

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<jnlp spec="1.0+" codebase="ftp://jedit.sourceforge.net/pub/jedit/"
+  href="http://www.jedit.org/jedit_devel.jnlp">
+  <information>
+    <title>jEdit</title>
+
+    <vendor>Slava Pestov</vendor>
+    <homepage href="http://www.jedit.org" />
+
+    <description>jEdit programmer's text editor</description>
+    <description kind="short">jEdit is a powerful programmer's text editor.</description>
+    <description kind="tooltip">jEdit programmer's text editor</description>
+
+    <!--icon href="icon.gif" width="32" height="32" /-->
+
+    <offline-allowed />
+  </information>
+
+  <resources>
+    <j2se version="1.2+" />
+    <jar href="jedit32pre2webstart_aux1.jar" />
+    <jar href="jedit32pre2webstart.jar" />
+  </resources>
+
+  <security>
+    <all-permissions />
+  </security>
+
+  <application-desc main-class="org.gjt.sp.jedit.jEdit" />
+</jnlp>

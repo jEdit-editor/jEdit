@@ -54,17 +54,7 @@ pkgs = re_pkg bsh_pkgs jedit_pkgs "org/gjt/sp/jedit/icons"
     "org/gjt/sp/jedit/tips";
 
 # Additional stuff that is bundled into the web start version
-jnlp_pkgs = pkgs "doc" "doc/users-guide"
-    "macros"
-    "macros/Console_Plugin"
-    "macros/Files"
-    "macros/Java"
-    "macros/Misc"
-    "macros/Misc/Properties"
-    "macros/Other_Plugins"
-    "macros/Search"
-    "macros/Text"
-    "modes";
+jnlp_pkgs = pkgs "doc" "doc/users-guide" "modes";
 
 # Installer sources
 installer_srcs = (subst ".java", ".class", (glob "installer/*.java"));
@@ -96,10 +86,12 @@ end;
     exec cmd_jar "cmf0" jedit_mf "jedit.jar" (get_file_list pkgs);
 }
 
-"jnlp": srcs;
+"webstart": srcs;
 {
-    exec cmd_jar "cmf" jedit_mf "jedit_jnlp.jar" (get_file_list jnlp_pkgs)
+    exec "/opt/jdk1.2.2/bin/jar" "cmf" jedit_mf "jedit_jnlp.jar" (get_file_list jnlp_pkgs)
         "modes/catalog";
+    exec "/home/slava/signjar" "jedit_jnlp.jar";
+    exec "/home/slava/signjar" "jars/Firewall.jar";
 }
 
 "srcs": srcs;

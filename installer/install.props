@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=3.2pre1
+app.version=3.2pre2
 
 # Info to display on first page of installer
 app.readme=readme.html
@@ -20,11 +20,11 @@ app.main.class=org.gjt.sp.jedit.jEdit
 comp.count=3
 
 comp.0.name=jEdit text editor
-comp.0.size=2626
+comp.0.size=2788
 comp.0.fileset=jedit-program
 
 comp.1.name=HTTP firewall support (Java 2 only)
-comp.1.size=11
+comp.1.size=13
 comp.1.fileset=jedit-firewall
 
 #comp.2.name=Windows launcher and context menu addition (Windows only)
