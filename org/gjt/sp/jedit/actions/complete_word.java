@@ -70,7 +70,6 @@ public class complete_word extends EditAction
 		int wordLen = word.length();
 
 		// now loop through all lines of current buffer
-
 		for(int i = 0; i < textArea.getLineCount(); i++)
 		{
 			line = textArea.getLineText(i);
@@ -79,6 +78,9 @@ public class complete_word extends EditAction
 
 			if(line.startsWith(word))
 			{
+				if(i == lineIndex && wordStart == 0)
+					continue;
+
 				String _word = getWord(line,0,noWordSep);
 				if(_word.length() != wordLen)
 				{
@@ -89,13 +91,15 @@ public class complete_word extends EditAction
 			}
 
 			// check for match inside line
-
 			int len = line.length() - word.length();
 			for(int j = 0; j < len; j++)
 			{
 				char c = line.charAt(j);
 				if(!Character.isLetterOrDigit(c) && noWordSep.indexOf(c) == -1)
 				{
+					if(i == lineIndex && wordStart == (j + 1))
+						continue;
+
 					if(line.regionMatches(j + 1,word,0,wordLen))
 					{
 						String _word = getWord(line,j + 1,noWordSep);

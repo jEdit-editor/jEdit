@@ -136,19 +136,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 		else
 			filter = filterModel.getItem(0);
 
-		try
-		{
-			filenameFilter = new RE(MiscUtilities.globToRE(filter),
-				RE.REG_ICASE);
-
-			filterField.setText(filter);
-			// so that the default will be added to the history
-			filterField.addCurrentToHistory();
-		}
-		catch(Exception e)
-		{
-			// leave the filter field blank
-		}
+		filterField.setText(filter);
+		filterField.addCurrentToHistory();
 
 		if(path == null)
 		{
@@ -237,6 +226,21 @@ public class VFSBrowser extends JPanel implements EBComponent
 		if(clearCache)
 			DirectoryCache.clearCachedDirectory(path);
 
+		try
+		{
+			String filter = filterField.getText();
+			if(filter.length() == 0)
+				filter = "*";
+			filenameFilter = new RE(MiscUtilities.globToRE(filter),RE.REG_ICASE);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,VFSBrowser.this,e);
+			String[] args = { filterField.getText(),
+				e.getMessage() };
+			GUIUtilities.error(VFSBrowser.this,"vfs.browser.bad-filter",args);
+		}
+
 		loadDirectory(path);
 	}
 
@@ -254,8 +258,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,this,
 			session,vfs,path,null));
-
-		endRequest();
 	}
 
 	public void delete(String path)
@@ -296,8 +298,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.DELETE,this,
 			session,vfs,path,null));
-
-		endRequest();
 	}
 
 	public void rename(String from)
@@ -322,8 +322,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.RENAME,this,
 			session,vfs,from,to));
-
-		endRequest();
 	}
 
 	public void mkdir()
@@ -347,8 +345,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
 			session,vfs,newDirectory,null));
-
-		endRequest();
 	}
 
 	public View getView()
@@ -552,7 +548,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 				l.filesActivated(this,selectedFiles);
 			}
 		}
+	}
 
+	// has to be package-private so that BrowserIORequest can call it
+	void endRequest()
+	{
+		requestRunning = false;
 	}
 
 	// private members
@@ -602,7 +603,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		JButton button = new JButton();
 		String prefix = "vfs.browser.";
 
-		button.setIcon(GUIUtilities.loadToolBarIcon(jEdit.getProperty(
+		button.setIcon(GUIUtilities.loadIcon(jEdit.getProperty(
 			prefix + name + ".icon")));
 		button.setToolTipText(jEdit.getProperty(prefix + name + ".label"));
 
@@ -665,17 +666,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		}
 	}
 
-	private void endRequest()
-	{
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				requestRunning = false;
-			}
-		});
-	}
-
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -683,23 +673,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 			Object source = evt.getSource();
 			if(source == pathField || source == filterField)
 			{
-				try
-				{
-					String filter = filterField.getText();
-					if(filter.length() == 0)
-						filter = "*";
-					filenameFilter = new RE(MiscUtilities
-						.globToRE(filter),RE.REG_ICASE);
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,VFSBrowser.this,e);
-					String[] args = { filterField.getText(),
-						e.getMessage() };
-					GUIUtilities.error(VFSBrowser.this,
-						"vfs.browser.bad-filter",args);
-				}
-
 				String path = pathField.getText();
 				if(path != null)
 					setDirectory(path);
@@ -738,7 +711,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			// to the right of it
 			this.upButton = upButton;
 
-			setIcon(GUIUtilities.loadToolBarIcon(
+			setIcon(GUIUtilities.loadIcon(
 				jEdit.getProperty("vfs.browser.up-menu.icon")));
 			UpMenuButton.this.setToolTipText(jEdit.getProperty(
 				"vfs.browser.up-menu.label"));
@@ -803,7 +776,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		MoreMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.more.label"));
-			setIcon(GUIUtilities.loadToolBarIcon(jEdit.getProperty(
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty(
 				"vfs.browser.more.icon")));
 			setHorizontalTextPosition(SwingConstants.LEFT);
 
@@ -983,6 +956,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.22  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.21  2000/09/06 04:39:47  sp
  * bug fixes
  *
@@ -1012,17 +988,5 @@ public class VFSBrowser extends JPanel implements EBComponent
  *
  * Revision 1.12  2000/08/13 07:35:23  sp
  * Dockable window API
- *
- * Revision 1.11  2000/08/11 09:06:52  sp
- * Browser option pane
- *
- * Revision 1.10  2000/08/10 11:55:58  sp
- * VFS browser toolbar improved a little bit, font selector tweaks
- *
- * Revision 1.9  2000/08/10 08:30:40  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.8  2000/08/06 09:44:27  sp
- * VFS browser now has a tree view, rename command
  *
  */

@@ -221,7 +221,7 @@ public class EditPane extends JPanel implements EBComponent
 
 		EditBus.addToBus(this);
 
-		textArea = new JEditTextArea();
+		textArea = new JEditTextArea(view);
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addCustomHighlight(markerHighlight);
 		textArea.getGutter().setContextMenu(GUIUtilities
@@ -536,6 +536,8 @@ public class EditPane extends JPanel implements EBComponent
 
 			bufferTabs.setTabPlacement(Integer.parseInt(
 				jEdit.getProperty("view.bufferTabsPos")));
+			if(buffer != null)
+				bufferTabs.selectBufferTab(buffer);
 		}
 		else
 		{
@@ -624,6 +626,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.17  2000/09/23 03:01:09  sp
+ * pre7 yayayay
+ *
  * Revision 1.16  2000/09/01 11:31:00  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

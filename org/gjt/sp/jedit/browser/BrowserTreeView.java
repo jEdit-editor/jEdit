@@ -281,13 +281,17 @@ public class BrowserTreeView extends BrowserView
 		{
 			if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 			{
-				if(tree.getSelectionCount() != 0)
-				{
-					if(evt.getClickCount() == 1)
-						browser.filesSelected();
-					else if(evt.getClickCount() == 2)
-						browser.filesActivated();
-				}
+				TreePath path = tree.getPathForLocation(evt.getX(),evt.getY());
+				if(path == null)
+					return;
+
+				if(!tree.isPathSelected(path))
+					tree.setSelectionPath(path);
+
+				if(evt.getClickCount() == 1)
+					browser.filesSelected();
+				else if(evt.getClickCount() == 2)
+					browser.filesActivated();
 			}
 		}
 
@@ -296,11 +300,11 @@ public class BrowserTreeView extends BrowserView
 			if((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
 			{
 				TreePath path = tree.getPathForLocation(evt.getX(),evt.getY());
-				if(path != null)
-				{
-					if(!tree.isPathSelected(path))
-						tree.setSelectionPath(path);
-				}
+				if(path == null)
+					return;
+
+				if(!tree.isPathSelected(path))
+					tree.setSelectionPath(path);
 
 				Object userObject = ((DefaultMutableTreeNode)path
 					.getLastPathComponent()).getUserObject();
@@ -352,6 +356,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.10  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

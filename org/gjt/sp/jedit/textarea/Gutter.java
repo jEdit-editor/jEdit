@@ -23,11 +23,13 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import org.gjt.sp.jedit.View;
 
 public class Gutter extends JComponent implements SwingConstants
 {
-	public Gutter(JEditTextArea textArea)
+	public Gutter(View view, JEditTextArea textArea)
 	{
+		this.view = view;
 		this.textArea = textArea;
 
 		setDoubleBuffered(true);
@@ -47,7 +49,8 @@ public class Gutter extends JComponent implements SwingConstants
 			gfx.fillRect(r.x, r.y, r.width, r.height);
 
 			// if buffer is loading, don't paint anything
-			if (!textArea.getBuffer().isLoaded()) return;
+			if (!textArea.getBuffer().isLoaded())
+				return;
 
 			// paint custom highlights, if there are any
 			if (highlights != null) paintCustomHighlights(gfx);
@@ -199,10 +202,22 @@ public class Gutter extends JComponent implements SwingConstants
 	 */
 	public void updateBorder()
 	{
-		if(textArea.hasFocus())
-			setBorder(focusBorder);
-		else
-			setBorder(noFocusBorder);
+		// because we are called from the text area's focus handler,
+		// we do an invokeLater() so that the view's focus handler
+		// has a chance to execute and set the edit pane properly
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				if(view.getEditPane() == null)
+					return;
+
+				if(view.getEditPane().getTextArea() == textArea)
+					setBorder(focusBorder);
+				else
+					setBorder(noFocusBorder);
+			}
+		});
 	}
 
 	/*
@@ -441,7 +456,7 @@ public class Gutter extends JComponent implements SwingConstants
 	}
 
 	// private members
-	// the JEditTextArea this gutter is attached to
+	private View view;
 	private JEditTextArea textArea;
 
 	private JPopupMenu context;

@@ -59,15 +59,15 @@ public class JEditTextArea extends JComponent
 	/**
 	 * Creates a new JEditTextArea.
 	 */
-	public JEditTextArea()
+	public JEditTextArea(View view)
 	{
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 
-		// Initialize some misc. stuff
-		//setBorder(UIManager.getBorder("ScrollPane.border"));
+		this.view = view;
 
+		// Initialize some misc. stuff
 		painter = new TextAreaPainter(this);
-		gutter = new Gutter(this);
+		gutter = new Gutter(view,this);
 		documentHandler = new DocumentHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
@@ -1422,8 +1422,6 @@ public class JEditTextArea extends JComponent
 		if(evt == null)
 			return;
 
-		View view = EditAction.getView(evt);
-
 		// Ignore
 		if(view.isClosed())
 			return;
@@ -1464,10 +1462,10 @@ public class JEditTextArea extends JComponent
 
 	private static JEditTextArea focusedComponent;
 	private static Timer caretTimer;
-	
-	private TextAreaPainter painter;
 
+	private View view;
 	private Gutter gutter;
+	private TextAreaPainter painter;
 
 	private JPopupMenu popup;
 
@@ -2181,6 +2179,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.84  2000/09/23 03:01:11  sp
+ * pre7 yayayay
+ *
  * Revision 1.83  2000/09/07 04:46:08  sp
  * bug fixes
  *

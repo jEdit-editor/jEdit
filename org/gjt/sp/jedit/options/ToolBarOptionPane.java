@@ -85,7 +85,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				if(iconName == null)
 					continue;
 
-				icon = GUIUtilities.loadToolBarIcon(iconName);
+				icon = GUIUtilities.loadIcon(iconName);
 			}
 			listModel.addElement(new Button(actionName,iconName,icon,label));
 		}
@@ -149,7 +149,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		{
 			String icon = st.nextToken();
 			iconList.addElement(new IconListEntry(
-				GUIUtilities.loadToolBarIcon(icon),icon));
+				GUIUtilities.loadIcon(icon),icon));
 		}
 	}
 
@@ -407,8 +407,7 @@ class ToolBarAddDialog extends EnhancedDialog
 
 		fileButton = new JButton(jEdit.getProperty("options.toolbar.add.no-icon"));
 		fileButton.setMargin(new Insets(1,1,1,1));
-		fileButton.setIcon(new ImageIcon(getClass().getResource(
-			"/org/gjt/sp/jedit/toolbar/blank-20.gif")));
+		fileButton.setIcon(GUIUtilities.loadIcon("Blank24.gif"));
 		fileButton.setHorizontalAlignment(SwingConstants.LEFT);
 		fileButton.addActionListener(actionHandler);
 		compPanel.add(fileButton);
@@ -475,7 +474,7 @@ class ToolBarAddDialog extends EnhancedDialog
 				icon = fileButton.getIcon();
 				iconName = fileIcon;
 				if(iconName == null)
-					iconName = "blank-20.gif";
+					iconName = "Blank24.gif";
 			}
 
 			String label;
@@ -569,6 +568,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/09/23 03:01:11  sp
+ * pre7 yayayay
+ *
  * Revision 1.10  2000/09/03 03:16:53  sp
  * Search bar integrated with command line, enhancements throughout
  *

@@ -1,5 +1,48 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6pre7
+
++ Enhancements
+
+- Numbers like 1e10 should now be highlighted by the syntax code
+- 'Apply' button in Global Options dialog box
+- When 'Complete Word' is invoked in the middle of the word, that word is no
+  longer displayed in the list of completions
+- The gutter border is now the focused color for the edit pane that last had
+  focus, even if it doesn't have focus currently. This makes it easier to see
+  which edit pane operations will take place in when using the command line,
+  for example
+- Open files in the VFS browser are now indicated by a thin vertical line to
+  the left of the file's icon
+- Standard Metal tool bar icons are now used instead of the JFA ones. Note
+  that because of the above change, the toolbar is reset to the default when
+  you upgrade from jEdit 2.6pre6 or earlier. This avoids problems with the
+  toolbar costomizations using no longer existent icons, and so on.
+
++ Bug Fixes
+
+- The activity log code would throw a NullPointerException the first time jEdit
+  was started
+- The command line and plugin manager should no longer print debugging messages
+- The VFS browser would sometimes display 'You can only execute one I/O request
+  per VFS browser...' messages, even if only one request was executing
+- The bug where keys typed in docked plugins and the command line go to the
+  text area should be fixed, for real, this time
+- Disabling and then enabling the buffer tabs in the Global Options dialog box
+  would select the wrong buffer tab
+- EditBuddy (the first-time and new-version wizard plugin) was broken
+- Clicking beyond the end of the list or tree in the VFS browser could have
+  unexpected results
+- Sometimes, clicking 'Start' in the HyperSearch window with no string
+  entered would 'lock up' the window and make it unusable
+- Repeating commands from the command line was really broken and didn't work
+  most of the time; should be fixed now
+
++ API Changes
+
+- GUIUtilities.loadToolBarIcon() deprecated; call loadIcon() instead
+- Plugins that used the old JFA icons in the jEdit JAR file will break
+
 * Version 2.6pre6
 
 + Enhancements

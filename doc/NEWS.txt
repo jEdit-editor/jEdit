@@ -14,7 +14,7 @@ new 'VFS Browser'. It is much more powerful than the Swing file chooser;
 its features include an optional tree view, a 'favorites' list for
 quick access to frequently-used directories, basic file manipulation
 (delete, rename), a history of previously visited directories, and more
-flexible sorting. The VFS Browser supports non-blocking I/O.
+flexible sorting. The VFS Browser also supports non-blocking I/O.
 
 * Dockable windows
 
@@ -40,7 +40,7 @@ problems.
 Abbreviation expansions can contain multiple lines, and the final caret
 position can be specified. Also, if automatic abbreviation expansion is
 enabled, only the space bar, not any non-alphanumeric character as
-before now expands abbrevs.
+before, expands abbrevs.
 
 * jEdit command line
 
@@ -55,7 +55,8 @@ to invoke editor actions, for quick access to any jEdit feature.
 Macros can now be added to the tool bar and text area right-click menu,
 for even easier access to complicated and tedious operations. The menu
 bar and global options dialog box have been streamlined to make them
-more intuitive to newbies and experts alike.
+more intuitive to newbies and experts alike. The standard Java look and
+feel tool bar icons are now used.
 
 * First-time and new-version wizards
 

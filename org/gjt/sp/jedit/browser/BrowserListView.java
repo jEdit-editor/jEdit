@@ -159,13 +159,17 @@ public class BrowserListView extends BrowserView
 		{
 			if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 			{
-				if(list.getSelectedIndex() != -1)
-				{
-					if(evt.getClickCount() == 1)
-						browser.filesSelected();
-					else if(evt.getClickCount() == 2)
-						browser.filesActivated();
-				}
+				int index = list.locationToIndex(evt.getPoint());
+				if(index == -1)
+					return;
+
+				if(list.getSelectedIndex() != index)
+					list.setSelectedIndex(index);
+
+				if(evt.getClickCount() == 1)
+					browser.filesSelected();
+				else if(evt.getClickCount() == 2)
+					browser.filesActivated();
 			}
 		}
 
@@ -174,11 +178,11 @@ public class BrowserListView extends BrowserView
 			if((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
 			{
 				int index = list.locationToIndex(evt.getPoint());
-				if(index >= 0)
-				{
-					if(list.getSelectedIndex() != index)
-						list.setSelectedIndex(index);
-				}
+				if(index == -1)
+					return;
+
+				if(list.getSelectedIndex() != index)
+					list.setSelectedIndex(index);
 
 				VFS.DirectoryEntry file = (VFS.DirectoryEntry)
 					list.getSelectedValue();
@@ -192,6 +196,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.9  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

@@ -161,6 +161,7 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		save();
 		thread = new HyperSearchThread();
 		updateEnabled();
+		thread.start();
 	}
 
 	public void cancel()
@@ -383,7 +384,6 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		{
 			super("jEdit HyperSearch thread");
 			setPriority(4);
-			start();
 		}
 
 		public void run()
@@ -433,10 +433,16 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 			finally
 			{
 				thread = null;
-				updateEnabled();
-				updateStatus();
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						updateEnabled();
+						updateStatus();
 
-				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+						setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					}
+				});
 			}
 		}
 
@@ -477,6 +483,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.68  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.67  2000/08/29 07:47:12  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

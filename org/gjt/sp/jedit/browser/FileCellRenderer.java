@@ -40,11 +40,15 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		treeSelectionBackground = UIManager.getColor("Tree.selectionBackground");
 		treeNoSelectionBackground = UIManager.getColor("Tree.textBackground");
 
-		fileIcon = GUIUtilities.loadToolBarIcon("Document.gif");
-		openFileIcon = GUIUtilities.loadToolBarIcon("DocumentIn.gif");
-		dirIcon = GUIUtilities.loadToolBarIcon("Folder.gif");
-		filesystemIcon = GUIUtilities.loadToolBarIcon("CD.gif");
-		loadingIcon = GUIUtilities.loadToolBarIcon("Reload.gif");
+		// use metal icons because not all looks and feels define these.
+		// note that metal is guaranteed to exist, so this shouldn't
+		// cause problems in the future.
+		UIDefaults metalDefaults = new javax.swing.plaf.metal.MetalLookAndFeel()
+			.getDefaults();
+		fileIcon = metalDefaults.getIcon("FileView.fileIcon");
+		dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
+		filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
+		loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 	}
 
 	public Component getListCellRendererComponent(JList list, Object value,
@@ -53,13 +57,13 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		if(listCellRenderer == null)
 		{
 			listCellRenderer = new JLabel();
-			listCellRenderer.setBorder(border);
 			listCellRenderer.setOpaque(true);
 			listCellRenderer.setFont(font);
 		}
 
 		VFS.DirectoryEntry file = (VFS.DirectoryEntry)value;
 		boolean opened = (jEdit.getBuffer(file.path) != null);
+		listCellRenderer.setBorder(opened ? openBorder : closedBorder);
 
 		if(sel)
 		{
@@ -86,7 +90,6 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		if(treeCellRenderer == null)
 		{
 			treeCellRenderer = new JLabel();
-			treeCellRenderer.setBorder(border);
 			treeCellRenderer.setOpaque(true);
 			treeCellRenderer.setFont(font);
 		}
@@ -111,6 +114,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 			VFS.DirectoryEntry file = (VFS.DirectoryEntry)userObject;
 
 			boolean opened = (jEdit.getBuffer(file.path) != null);
+			treeCellRenderer.setBorder(opened ? openBorder : closedBorder);
 
 			treeCellRenderer.setIcon(getIconForFile(file));
 			treeCellRenderer.setText(file.name);
@@ -119,11 +123,13 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		{
 			treeCellRenderer.setIcon(loadingIcon);
 			treeCellRenderer.setText(jEdit.getProperty("vfs.browser.tree.loading"));
+			treeCellRenderer.setBorder(closedBorder);
 		}
 		else if(userObject instanceof String)
 		{
 			treeCellRenderer.setIcon(dirIcon);
 			treeCellRenderer.setText((String)userObject);
+			treeCellRenderer.setBorder(closedBorder);
 		}
 
 		return treeCellRenderer;
@@ -137,12 +143,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
 			return filesystemIcon;
 		else
-		{
-			if(jEdit.getBuffer(file.path) != null)
-				return openFileIcon;
-			else
-				return fileIcon;
-		}
+			return fileIcon;
 	}
 
 	// private members
@@ -152,12 +153,14 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 	private Font font;
 
 	private Icon fileIcon;
-	private Icon openFileIcon;
 	private Icon dirIcon;
 	private Icon filesystemIcon;
 	private Icon loadingIcon;
 
-	private Border border = new EmptyBorder(1,0,1,0);
+	private Border closedBorder = new EmptyBorder(0,3,1,0);
+	private Border openBorder = new CompoundBorder(new EmptyBorder(0,1,1,0),
+		new MatteBorder(0,2,0,0,Color.black));
+
 	private Color treeSelectionForeground;
 	private Color treeNoSelectionForeground;
 	private Color treeSelectionBackground;
@@ -167,6 +170,9 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.4  2000/08/16 08:47:19  sp
  * Stuff
  *

@@ -206,31 +206,27 @@ public abstract class InputHandler extends KeyAdapter
 		}
 
 		// remember old values, in case action changes them
+		CommandLine cli = view.getCommandLine();
 		boolean _repeat = repeat;
 		int _repeatCount = getRepeatCount();
+		int _state = cli.getState();
 
 		// execute the action
 		if(action.isRepeatable())
 		{
 			View view = EditAction.getView((Component)source);
-			Buffer buffer;
-			if(view == null)
-				buffer = null;
-			else
-				buffer = view.getBuffer();
+			Buffer buffer = view.getBuffer();
 
 			try
 			{
-				if(buffer != null)
-					buffer.beginCompoundEdit();
+				buffer.beginCompoundEdit();
 
 				for(int i = 0; i < _repeatCount; i++)
 					action.actionPerformed(evt);
 			}
 			finally
 			{
-				if(buffer != null)
-					buffer.endCompoundEdit();
+				buffer.endCompoundEdit();
 			}
 		}
 		else
@@ -255,8 +251,24 @@ public abstract class InputHandler extends KeyAdapter
 		// Otherwise it might have been set by the action, etc
 		if(_repeat)
 		{
-			setRepeatEnabled(false);
-			view.getCommandLine().setState(CommandLine.NULL_STATE);
+			// first of all, if the state became TOPLEVEL,
+			// PROMPT_LINE or PROMPT_ONE_CHAR, do *not*
+			// reset the repeat count, or in fact do anything
+			// at all.
+			int state = cli.getState();
+			if(state == CommandLine.TOPLEVEL_STATE
+				|| state == CommandLine.PROMPT_ONE_CHAR_STATE
+				|| state == CommandLine.PROMPT_LINE_STATE)
+				return;
+
+			// now; if the state used to be NULL_STATE and
+			// became something, don't reset it. If the state
+			// used to be something else, then we *do* reset
+			// it to NULL_STATE
+			if(_state != CommandLine.NULL_STATE)
+				cli.setState(CommandLine.NULL_STATE);
+			repeat = false;
+			repeatCount = 0;
 		}
 	}
 
@@ -282,6 +294,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.12  2000/09/07 04:46:08  sp
  * bug fixes
  *

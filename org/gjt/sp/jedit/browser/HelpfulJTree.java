@@ -58,7 +58,7 @@ public class HelpfulJTree extends JTree implements MouseListener
 			Rectangle cellRect = getPathBounds(path);
 			if(cellRect != null && !cellRectIsVisible(cellRect))
 			{
-				return new Point(cellRect.x + 21, cellRect.y + 2);
+				return new Point(cellRect.x + 20, cellRect.y);
 			}
 		}
 		return null;
@@ -100,6 +100,9 @@ public class HelpfulJTree extends JTree implements MouseListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.3  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

@@ -224,6 +224,8 @@ public class Log
 
 	static
 	{
+		level = WARNING;
+
 		realOut = System.out;
 		realErr = System.err;
 
@@ -329,6 +331,9 @@ public class Log
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/09/23 03:01:11  sp
+ * pre7 yayayay
+ *
  * Revision 1.11  2000/08/31 02:54:01  sp
  * Improved activity log, bug fixes
  *

@@ -343,6 +343,11 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(path == null)
 			path = this.path;
 
+		// can't call setPath() here because we don't want a failed
+		// 'save as' to change the buffer's path, so obtain the VFS
+		// instance 'manually'
+		VFS vfs = VFSManager.getVFSForPath(path);
+
 		if(!vfs.save(view,this,path))
 		{
 			setFlag(SAVING,false);
@@ -607,9 +612,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	/**
 	 * Returns this buffer's icon.
-	 * @since jEdit 2.6pre1
+	 * @since jEdit 2.6pre6
 	 */
-	public ImageIcon getIcon()
+	public Icon getIcon()
 	{
 		if(getFlag(NEW_FILE))
 		{
@@ -1718,6 +1723,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.179  2000/09/23 03:01:09  sp
+ * pre7 yayayay
+ *
  * Revision 1.178  2000/09/09 04:00:33  sp
  * 2.6pre6
  *

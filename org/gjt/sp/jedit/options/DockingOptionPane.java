@@ -38,15 +38,13 @@ public class DockingOptionPane extends AbstractOptionPane
 		Box box = new Box(BoxLayout.X_AXIS);
 		ButtonGroup grp = new ButtonGroup();
 
-		layout1 = new JToggleButton(new ImageIcon(getClass()
-			.getResource("/org/gjt/sp/jedit/dock_layout1.gif")));
+		layout1 = new JToggleButton(GUIUtilities.loadIcon("dock_layout1.gif"));
 		grp.add(layout1);
 		box.add(layout1);
 
 		box.add(Box.createHorizontalStrut(6));
 
-		layout2 = new JToggleButton(new ImageIcon(getClass()
-			.getResource("/org/gjt/sp/jedit/dock_layout2.gif")));
+		layout2 = new JToggleButton(GUIUtilities.loadIcon("dock_layout2.gif"));
 		grp.add(layout2);
 		box.add(layout2);
 
@@ -301,6 +299,9 @@ class WindowTableModel extends AbstractTableModel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/09/23 03:01:11  sp
+ * pre7 yayayay
+ *
  * Revision 1.1  2000/08/17 08:04:10  sp
  * Marker loading bug fixed, docking option pane
  *

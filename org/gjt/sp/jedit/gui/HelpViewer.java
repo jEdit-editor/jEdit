@@ -99,14 +99,12 @@ public class HelpViewer extends EnhancedFrame
 		panel.setBorder(new EmptyBorder(12,0,0,0));
 		panel.add(Box.createGlue());
 		back = new JButton(jEdit.getProperty("helpviewer.back"));
-		back.setIcon(new ImageIcon(getClass().getResource(
-			"/org/gjt/sp/jedit/toolbar/Left.gif")));
+		back.setIcon(GUIUtilities.loadIcon("Back24.gif"));
 		back.addActionListener(actionListener);
 		panel.add(back);
 		panel.add(Box.createHorizontalStrut(6));
 		forward = new JButton(jEdit.getProperty("helpviewer.forward"));
-		forward.setIcon(new ImageIcon(getClass().getResource(
-			"/org/gjt/sp/jedit/toolbar/Right.gif")));
+		forward.setIcon(GUIUtilities.loadIcon("Foward24.gif"));
 		forward.addActionListener(actionListener);
 		panel.add(forward);
 		panel.add(Box.createGlue());
@@ -257,6 +255,9 @@ public class HelpViewer extends EnhancedFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.26  2000/07/03 03:32:16  sp
  * *** empty log message ***
  *

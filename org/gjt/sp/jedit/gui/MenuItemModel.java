@@ -72,7 +72,7 @@ public class MenuItemModel
 		String iconName = jEdit.getProperty(name + ".icon");
 		if(iconName != null)
 		{
-			icon = GUIUtilities.loadToolBarIcon(iconName);
+			icon = GUIUtilities.loadIcon(iconName);
 			toolTip = label;
 			String shortcut = jEdit.getProperty(name + ".shortcut");
 			if(shortcut != null)
@@ -144,6 +144,9 @@ public class MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.14  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

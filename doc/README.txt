@@ -41,8 +41,6 @@ jEdit depends on, and is bundled with the following class libraries:
   <http://www.fooware.com>. Note that the version shipped with jEdit is
   slightly different from the official one.
 
-- The toolbar icons are (C) 1998 Dean S. Jones <dean@gallant.com>.
-
 * jEdit on the Internet
 
 The jEdit homepage, located at <http://jedit.sourceforge.net> contains
@@ -92,7 +90,8 @@ actually a Java bug, or a well-known problem.
 
 - The AltGR key doesn't work for some people. I'm not sure if this is a
   jEdit bug, a Java bug or both. Allegedly Java 1.1.8 and 1.2.2 fix
-  these problems, but I'm not sure.
+  these problems, but I'm not sure. jEdit 2.6pre6 and later might fix
+  this problem.
 
 - On a related note, composed keys don't work either, so international
   characters can be hard to type. I can't do anything about this until

@@ -56,28 +56,12 @@ public class GUIUtilities
 {
 	// some icons
 
-	public static final ImageIcon NEW_DIRTY_BUFFER_ICON;
-	public static final ImageIcon NEW_BUFFER_ICON;
-	public static final ImageIcon DIRTY_BUFFER_ICON;
-	public static final ImageIcon NORMAL_BUFFER_ICON;
-	public static final ImageIcon EDITOR_WINDOW_ICON;
-	public static final ImageIcon PLUGIN_WINDOW_ICON;
-
-	static
-	{
-		NEW_DIRTY_BUFFER_ICON = new ImageIcon(GUIUtilities.class
-			.getResource("/org/gjt/sp/jedit/new_dirty.gif"));
-		NEW_BUFFER_ICON = new ImageIcon(GUIUtilities.class
-			.getResource("/org/gjt/sp/jedit/new.gif"));
-		DIRTY_BUFFER_ICON = new ImageIcon(GUIUtilities.class
-			.getResource("/org/gjt/sp/jedit/dirty.gif"));
-		NORMAL_BUFFER_ICON = new ImageIcon(GUIUtilities.class
-			.getResource("/org/gjt/sp/jedit/normal.gif"));
-		EDITOR_WINDOW_ICON = new ImageIcon(GUIUtilities.class
-			.getResource("/org/gjt/sp/jedit/jedit_icon1.gif"));
-		PLUGIN_WINDOW_ICON = new ImageIcon(GUIUtilities.class
-			.getResource("/org/gjt/sp/jedit/jedit_icon2.gif"));
-	}
+	public static final Icon NEW_DIRTY_BUFFER_ICON;
+	public static final Icon NEW_BUFFER_ICON;
+	public static final Icon DIRTY_BUFFER_ICON;
+	public static final Icon NORMAL_BUFFER_ICON;
+	public static final Icon EDITOR_WINDOW_ICON;
+	public static final Icon PLUGIN_WINDOW_ICON;
 
 	/**
 	 * Instructs jEdit to invalidate all menu models.
@@ -243,10 +227,19 @@ public class GUIUtilities
 	}
 
 	/**
-	 * Loads a tool bar icon.
-	 * @param iconName The icon name
+	 * @deprecated Call loadToolBarIcon() instead
 	 */
 	public static Icon loadToolBarIcon(String iconName)
+	{
+		return loadIcon(iconName);
+	}
+
+	/**
+	 * Loads a tool bar icon.
+	 * @param iconName The icon name
+	 * @since jEdit 2.6pre7
+	 */
+	public static Icon loadIcon(String iconName)
 	{
 		// check if there is a cached version first
 		Icon icon = (Icon)icons.get(iconName);
@@ -260,8 +253,16 @@ public class GUIUtilities
 		}
 		else
 		{
-			icon = new ImageIcon(GUIUtilities.class.getResource(
-				"/org/gjt/sp/jedit/toolbar/" + iconName));
+			URL url = GUIUtilities.class.getResource(
+				"/org/gjt/sp/jedit/icons/" + iconName);
+			if(url == null)
+			{
+				Log.log(Log.ERROR,GUIUtilities.class,
+					"Icon not found: " + iconName);
+				return null;
+			}
+
+			icon = new ImageIcon(url);
 		}
 
 		icons.put(iconName,icon);
@@ -809,7 +810,7 @@ public class GUIUtilities
 	 */
 	public static Image getEditorIcon()
 	{
-		return EDITOR_WINDOW_ICON.getImage();
+		return ((ImageIcon)EDITOR_WINDOW_ICON).getImage();
 	}
 
 	/**
@@ -817,7 +818,7 @@ public class GUIUtilities
 	 */
 	public static Image getPluginIcon()
 	{
-		return PLUGIN_WINDOW_ICON.getImage();
+		return ((ImageIcon)PLUGIN_WINDOW_ICON).getImage();
 	}
 
 	/**
@@ -856,16 +857,32 @@ public class GUIUtilities
 	// since the names of menu items, menus, tool bars, etc are
 	// unique because of the property namespace, we can store all
 	// in one hashtable.
-	private static Hashtable menus = new Hashtable();
+	private static Hashtable menus;
 
-	private static Hashtable icons = new Hashtable();
+	private static Hashtable icons;
 
 	private GUIUtilities() {}
+
+	static
+	{
+		menus = new Hashtable();
+		icons = new Hashtable();
+		NEW_DIRTY_BUFFER_ICON = loadIcon("new_dirty.gif");
+		NEW_BUFFER_ICON = loadIcon("new.gif");
+		DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
+		NORMAL_BUFFER_ICON = loadIcon("normal.gif");
+		EDITOR_WINDOW_ICON = loadIcon("jedit_icon1.gif");
+		PLUGIN_WINDOW_ICON = loadIcon("jedit_icon2.gif");
+	}
+
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.77  2000/09/23 03:01:09  sp
+ * pre7 yayayay
+ *
  * Revision 1.76  2000/09/04 06:34:53  sp
  * bug fixes
  *
@@ -895,20 +912,5 @@ public class GUIUtilities
  *
  * Revision 1.67  2000/06/29 06:20:45  sp
  * Tool bar icon code bug fix
- *
- * Revision 1.66  2000/06/12 02:43:29  sp
- * pre6 almost ready
- *
- * Revision 1.65  2000/06/05 08:22:25  sp
- * bug fixes
- *
- * Revision 1.64  2000/05/24 07:56:04  sp
- * bug fixes
- *
- * Revision 1.63  2000/05/23 04:04:52  sp
- * Marker highlight updates, next/prev-marker actions
- *
- * Revision 1.62  2000/05/21 06:06:43  sp
- * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
  *
  */

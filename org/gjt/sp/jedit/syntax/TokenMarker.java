@@ -17,6 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.Segment;
@@ -742,6 +743,7 @@ public class TokenMarker implements Cloneable
 			char[] array = line.array;
 			boolean octal = false;
 			boolean hex = false;
+			boolean seenSomeDigits = false;
 loop:			for(int i = 0; i < len; i++)
 			{
 				char ch = array[start+i];
@@ -750,10 +752,12 @@ loop:			for(int i = 0; i < len; i++)
 				case '0':
 					if(i == 0)
 						octal = true;
+					seenSomeDigits = true;
 					continue loop;
 				case '1': case '2': case '3':
 				case '4': case '5': case '6':
 				case '7': case '8': case '9':
+					seenSomeDigits = true;
 					continue loop;
 				case 'x': case 'X':
 					if(octal && i == 1)
@@ -763,18 +767,28 @@ loop:			for(int i = 0; i < len; i++)
 					}
 					else
 						break;
-				case 'd': case 'D': case 'f': case 'F':
+				case 'd': case 'D':
 					if(hex)
 						continue loop;
+					else
+						break;
+				case 'f': case 'F':
+					if(hex || seenSomeDigits)
+						continue loop;
+					else
+						break;
 				case 'l': case 'L':
-					// len != 1 ensures that an 'l' by
-					// itself won't be highlighted
-					if(i == len-1 && len != 1)
+					if(seenSomeDigits)
+						continue loop;
+					else
+						break;
+				case 'e': case 'E':
+					if(seenSomeDigits)
 						continue loop;
 					else
 						break;
 				case 'a': case 'A': case 'b': case 'B':
-				case 'c': case 'C': case 'e': case 'E':
+				case 'c': case 'C':
 					if(hex)
 						continue loop;
 					else
@@ -942,6 +956,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.53  2000/09/23 03:01:11  sp
+ * pre7 yayayay
+ *
  * Revision 1.52  2000/07/14 06:00:45  sp
  * bracket matching now takes syntax info into account
  *

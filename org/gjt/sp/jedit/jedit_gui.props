@@ -1,4 +1,4 @@
-s###
+###
 ### jEdit user interface definitions
 ### By Slava Pestov <sp@gjt.org>
 ###
@@ -20,59 +20,56 @@ lineSep.mac=MacOS (\\r)
 ###
 ### TOOLBAR
 ###
-view.toolbar=new-file open-file save close-buffer print - \
-	undo redo cut copy paste - goto-line find - new-view unsplit \
+view.toolbar=new-file open-file save print - \
+	undo redo cut copy paste - find find-next - new-view unsplit \
 	split-horizontal split-vertical - buffer-options global-options - \
 	help
 
-new-file.icon=New.gif
-open-file.icon=Open.gif
-close-buffer.icon=Delete.gif
-save.icon=Save.gif
-print.icon=Print.gif
-undo.icon=Undo.gif
-redo.icon=Redo.gif
-cut.icon=Cut.gif
-copy.icon=Copy.gif
-paste.icon=Paste.gif
-goto-line.icon=FingerRight.gif
-find.icon=Binocular.gif
-new-view.icon=NewView.gif
-unsplit.icon=Unsplit.gif
-split-horizontal.icon=SplitHorizontal.gif
-split-vertical.icon=SplitVertical.gif
-buffer-options.icon=Document.gif
-global-options.icon=Hammer.gif
-help.icon=Help.gif
+new-file.icon=New24.gif
+open-file.icon=Open24.gif
+save.icon=Save24.gif
+print.icon=Print24.gif
+undo.icon=Undo24.gif
+redo.icon=Redo24.gif
+cut.icon=Cut24.gif
+copy.icon=Copy24.gif
+paste.icon=Paste24.gif
+find.icon=Find24.gif
+find-next.icon=FindAgain24.gif
+new-view.icon=Applet24.gif
+unsplit.icon=Stop24.gif
+split-horizontal.icon=SplitHorizontal24.gif
+split-vertical.icon=SplitVertical24.gif
+buffer-options.icon=Properties24.gif
+global-options.icon=Preferences24.gif
+help.icon=Help24.gif
 
 # Used by toolbar editor
-icons=\
-      Binocular.gif \
-      Copy.gif \
-      Cut.gif \
-      Delete.gif \
-      Document.gif \
-      FingerRight.gif \
-      Folder.gif \
-      FolderUp.gif \
-      Hammer.gif \
-      Help.gif \
-      Home.gif \
-      New.gif \
-      NewView.gif \
-      Open.gif \
-      Paste.gif \
-      Print.gif \
-      Redo.gif \
-      Reload.gif \
-      Save.gif \
-      SplitHorizontal.gif \
-      SplitVertical.gif \
-      Synchronize.gif \
-      ToolbarMenu.gif \
-      Undo.gif \
-      Unsplit.gif \
-      blank-20.gif
+icons=Applet24.gif \
+	Blank24.gif \
+	Copy24.gif \
+	Cut24.gif \
+	Find24.gif \
+	FindAgain24.gif \
+	Help24.gif \
+	Home24.gif \
+	Import24.gif \
+	New24.gif \
+	Open24.gif \
+	Paste24.gif \
+	Preferences24.gif \
+	Print24.gif \
+	Properties24.gif \
+	Redo24.gif \
+	Refresh24.gif \
+	Save24.gif \
+	SaveAll24.gif \
+	Server24.gif \
+	SplitHorizontal24.gif \
+	SplitVertical24.gif \
+	Stop24.gif \
+	Undo24.gif \
+	Up24.gif
 
 ###
 ### CONTEXT MENUS
@@ -1108,17 +1105,17 @@ vfs.browser.filter=Filter:
 vfs.browser.default-filter=[^#]*[^~#]
 
 vfs.browser.up.label=Parent Directory
-vfs.browser.up.icon=FolderUp.gif
+vfs.browser.up.icon=Up24.gif
 vfs.browser.up-menu.label=Parent Directories
 vfs.browser.up-menu.icon=ToolbarMenu.gif
 vfs.browser.reload.label=Reload Directory
-vfs.browser.reload.icon=Reload.gif
+vfs.browser.reload.icon=Refresh24.gif
 vfs.browser.roots.label=Local Drives
-vfs.browser.roots.icon=CD.gif
+vfs.browser.roots.icon=Server24.gif
 vfs.browser.home.label=Home Directory
-vfs.browser.home.icon=Home.gif
+vfs.browser.home.icon=Home24.gif
 vfs.browser.synchronize.label=Parent Directory of Current Buffer
-vfs.browser.synchronize.icon=Synchronize.gif
+vfs.browser.synchronize.icon=Import24.gif
 vfs.browser.more.label=More
 vfs.browser.more.icon=ToolbarMenu.gif
 

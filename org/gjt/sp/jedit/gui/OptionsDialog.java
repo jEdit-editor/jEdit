@@ -91,9 +91,10 @@ public class OptionsDialog extends EnhancedDialog
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
 		buttons.add(cancel);
-		/* apply = new JButton(jEdit.getProperty("common.apply"));
+		buttons.add(Box.createHorizontalStrut(6));
+		apply = new JButton(jEdit.getProperty("common.apply"));
 		apply.addActionListener(this);
-		buttons.add(apply); */
+		buttons.add(apply);
 
 		buttons.add(Box.createGlue());
 
@@ -596,6 +597,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.32  2000/08/27 02:06:52  sp
  * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
  *

@@ -47,11 +47,12 @@ public class KeyEventWorkaround
 			if(keyCode == '\0')
 				return null;
 
-			lastWasAltGR = (modifiers == (KeyEvent.ALT_MASK
-				| KeyEvent.CTRL_MASK));
+			lastWasAltGR = (modifiers == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK)
+				|| modifiers == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK
+				| KeyEvent.SHIFT_MASK));
 
 			if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) != 0
-				&& isBrokenModifierKey(keyCode))
+				&& isBrokenKey(modifiers,keyCode))
 				lastKeyTime = System.currentTimeMillis();
 			else
 				lastKeyTime = 0L;
@@ -69,7 +70,7 @@ public class KeyEventWorkaround
 
 			// some Java versions send a Control+Alt KEY_PRESSED
 			// before an AltGR KEY_TYPED...
-			if(lastWasAltGR && modifiers == ALT_GRAPH_MASK)
+			if(lastWasAltGR && (modifiers & ALT_GRAPH_MASK) != 0)
 			{
 				lastWasAltGR = false;
 				lastKeyTime = 0L;
@@ -79,7 +80,7 @@ public class KeyEventWorkaround
 			// with some Java versions, the modifiers are
 			// lost in the KEY_TYPED event. As a very crude
 			// workaround, we get rid of KEY_TYPED events
-			// that occur 100ms or less after KEY_RELEASED
+			// that occur 500ms or less after KEY_RELEASED
 			if(System.currentTimeMillis() - lastKeyTime < 500)
 			{
 				lastWasAltGR = false;
@@ -97,10 +98,13 @@ public class KeyEventWorkaround
 	private static long lastKeyTime;
 	private static boolean lastWasAltGR;
 
-	private static boolean isBrokenModifierKey(int keyCode)
+	private static boolean isBrokenKey(int modifiers, int keyCode)
 	{
 		// If you have any keys you would like to add to this list,
 		// e-mail me
+		if((modifiers & KeyEvent.ALT_MASK) != 0)
+			return true;
+
 		if(keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
 			return true;
 		else
@@ -111,6 +115,9 @@ public class KeyEventWorkaround
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.2  2000/09/09 04:00:34  sp
  * 2.6pre6
  *

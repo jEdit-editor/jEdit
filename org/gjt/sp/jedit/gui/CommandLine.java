@@ -81,15 +81,22 @@ public class CommandLine extends JPanel
 		updateSearchSettings();
 	}
 
+	public int getState()
+	{
+		return state;
+	}
+
 	public void setState(int state)
 	{
 		if(this.state == state)
 			return;
 
-		System.err.println("Changing state to " + state);
 		this.state = state;
 
-		reset();
+		textField.setText(null);
+		completionTimer.stop();
+		hideCompletionWindow();
+		remove(searchSettings);
 
 		if(state == NULL_STATE)
 		{
@@ -202,24 +209,7 @@ public class CommandLine extends JPanel
 	private JPanel searchSettings;
 	private JCheckBox ignoreCase, regexp;
 
-	private int savedRepeatCount = 1;
-
-	private void reset()
-	{
-		textField.setText(null);
-		completionTimer.stop();
-		hideCompletionWindow();
-		remove(searchSettings);
-		savedRepeatCount = view.getInputHandler().getRepeatCount();
-		System.out.println("Reset: " + savedRepeatCount);
-	}
-
-	private void setRepeatCount()
-	{
-		System.err.println("Repeat count is " + savedRepeatCount);
-		view.getInputHandler().setRepeatCount(savedRepeatCount);
-		savedRepeatCount = 1;
-	}
+	private int savedRepeatCount;
 
 	private void getCompletions(String text)
 	{
@@ -349,8 +339,7 @@ public class CommandLine extends JPanel
 		}
 		else
 		{
-			setRepeatCount();
-			view.getEditPane().focusOnTextArea();
+			setState(NULL_STATE);
 			view.getInputHandler().executeAction(action,this,null);
 		}
 	}
@@ -453,7 +442,6 @@ public class CommandLine extends JPanel
 						handleDigit(evt);
 					else
 					{
-						setRepeatCount();
 						setState(NULL_STATE);
 						view.getInputHandler().keyTyped(evt);
 					}
@@ -549,9 +537,7 @@ public class CommandLine extends JPanel
 				}
 				else if(state == REPEAT_STATE)
 				{
-					setRepeatCount();
 					setState(NULL_STATE);
-					System.err.println(evt);
 					view.getInputHandler().keyPressed(evt);
 				}
 			}
@@ -559,11 +545,21 @@ public class CommandLine extends JPanel
 
 		void handleDigit(KeyEvent evt)
 		{
-			savedRepeatCount *= 10;
-			savedRepeatCount += (evt.getKeyChar() - '0');
-
 			// in case we're in TOPLEVEL
 			setState(REPEAT_STATE);
+
+			int repeatCount;
+			InputHandler inputHandler = view.getInputHandler();
+			if(inputHandler.isRepeatEnabled())
+				repeatCount = inputHandler.getRepeatCount();
+			else
+				repeatCount = 0;
+
+			repeatCount *= 10;
+			repeatCount += (evt.getKeyChar() - '0');
+
+			inputHandler.setRepeatEnabled(true);
+			inputHandler.setRepeatCount(repeatCount);
 
 			// insert number into text field
 			super.processKeyEvent(evt);
@@ -624,7 +620,6 @@ public class CommandLine extends JPanel
 			char ch = evt.getKeyChar();
 			String arg = String.valueOf(ch);
 			EditAction _promptAction = promptAction;
-			setRepeatCount();
 			setState(NULL_STATE);
 
 			view.getInputHandler().executeAction(_promptAction,
@@ -635,7 +630,6 @@ public class CommandLine extends JPanel
 		{
 			EditAction _promptAction = promptAction;
 			String text = textField.getText();
-			setRepeatCount();
 
 			textField.addCurrentToHistory();
 			setState(NULL_STATE);
@@ -757,6 +751,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/09/23 03:01:10  sp
+ * pre7 yayayay
+ *
  * Revision 1.4  2000/09/07 04:46:08  sp
  * bug fixes
  *

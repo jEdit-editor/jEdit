@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.06.00";
+		return "02.06.07.00";
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class jEdit
 		if(session != null)
 			session = Sessions.createSessionFileName(session);
 
-		// Connect to server
+		// Try connecting to another running jEdit instance
 		String userDir = System.getProperty("user.dir");
 
 		if(portFile != null && new File(portFile).exists())
@@ -222,9 +222,20 @@ public class jEdit
 		if(showSplash)
 			GUIUtilities.showSplashScreen();
 
+		// Initialize activity log and settings directory
 		Writer stream;
 		if(settingsDirectory != null)
 		{
+			File _settingsDirectory = new File(settingsDirectory);
+			if(!_settingsDirectory.exists())
+				_settingsDirectory.mkdirs();
+			File _macrosDirectory = new File(settingsDirectory,"macros");
+			if(!_macrosDirectory.exists())
+				_macrosDirectory.mkdir();
+			File _sessionsDirectory = new File(settingsDirectory,"sessions");
+			if(!_sessionsDirectory.exists())
+				_sessionsDirectory.mkdir();
+
 			String logPath = MiscUtilities.constructPath(
 				settingsDirectory,"activity.log");
 
@@ -244,6 +255,9 @@ public class jEdit
 		}
 
 		Log.init(true,level,stream);
+		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
+		Log.log(Log.MESSAGE,jEdit.class,"Settings directory is "
+			+ settingsDirectory);
 
 		// Get things rolling
 		initMisc();
@@ -1783,22 +1797,16 @@ public class jEdit
 	}
 
 	/**
-	 * Initialise various objects, register protocol handlers,
-	 * register editor listener, and determine installation
-	 * directory.
+	 * Initialise various objects, register protocol handlers.
 	 */
 	private static void initMisc()
 	{
-		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
-		Log.log(Log.MESSAGE,jEdit.class,"Settings directory is "
-			+ settingsDirectory);
-
-		inputHandler = new DefaultInputHandler(null);
-
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
 			"org.gjt.sp.jedit.proto|" +
 			System.getProperty("java.protocol.handler.pkgs",""));
+
+		inputHandler = new DefaultInputHandler(null);
 
 		// Determine installation directory
 		jEditHome = System.getProperty("jedit.home");
@@ -1817,19 +1825,6 @@ public class jEdit
 			}
 			else
 				jEditHome = System.getProperty("user.dir");
-		}
-
-		if(settingsDirectory != null)
-		{
-			File _settingsDirectory = new File(settingsDirectory);
-			if(!_settingsDirectory.exists())
-				_settingsDirectory.mkdirs();
-			File _macrosDirectory = new File(settingsDirectory,"macros");
-			if(!_macrosDirectory.exists())
-				_macrosDirectory.mkdir();
-			File _sessionsDirectory = new File(settingsDirectory,"sessions");
-			if(!_sessionsDirectory.exists())
-				_sessionsDirectory.mkdir();
 		}
 	}
 
@@ -2370,6 +2365,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.279  2000/09/23 03:01:09  sp
+ * pre7 yayayay
+ *
  * Revision 1.278  2000/09/09 04:00:34  sp
  * 2.6pre6
  *

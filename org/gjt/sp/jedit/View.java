@@ -428,6 +428,22 @@ public class View extends JFrame implements EBComponent
 		// JTextComponents don't consume events...
 		if(getFocusOwner() instanceof JTextComponent)
 		{
+			// fix for the bug where key events in JTextComponents
+			// inside views are also handled by the input handler
+			if(evt.getID() == KeyEvent.KEY_PRESSED)
+			{
+				switch(evt.getKeyCode())
+				{
+				// have to do this because jEdit handles these
+				// keys on KEY_PRESSED, but text components only
+				// register them in their keymaps as KEY_TYPED
+				case KeyEvent.VK_BACK_SPACE:
+				case KeyEvent.VK_ENTER:
+				case KeyEvent.VK_TAB:
+					return;
+				}
+			}
+
 			Keymap keymap = ((JTextComponent)getFocusOwner())
 				.getKeymap();
 			if(keymap.getAction(KeyStroke.getKeyStrokeForEvent(evt)) != null)
@@ -720,12 +736,12 @@ public class View extends JFrame implements EBComponent
 	{
 		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
-			if(toolBar == null)
-			{
-				toolBar = GUIUtilities.loadToolBar("view.toolbar");
-				toolBar.add(Box.createGlue());
-				addToolBar(toolBar);
-			}
+			if(toolBar != null)
+				removeToolBar(toolBar);
+
+			toolBar = GUIUtilities.loadToolBar("view.toolbar");
+			toolBar.add(Box.createGlue());
+			addToolBar(toolBar);
 		}
 		else if(toolBar != null)
 		{
@@ -1047,6 +1063,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.198  2000/09/23 03:01:09  sp
+ * pre7 yayayay
+ *
  * Revision 1.197  2000/09/07 04:46:08  sp
  * bug fixes
  *

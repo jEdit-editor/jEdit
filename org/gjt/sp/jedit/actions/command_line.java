@@ -25,11 +25,9 @@ import org.gjt.sp.jedit.*;
 
 public class command_line extends EditAction
 {
-	public void actionPerformed(ActionEvent evt)
+	public void actionPerformed(final ActionEvent evt)
 	{
 		View view = getView(evt);
-		InputHandler input = view.getInputHandler();
-		int repeatCount = input.getRepeatCount();
 
 		view.getCommandLine().getTextField().requestFocus();
 	}

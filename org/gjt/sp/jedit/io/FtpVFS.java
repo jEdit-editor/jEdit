@@ -535,6 +535,8 @@ public class FtpVFS extends VFS
 		}
 		catch(Exception e)
 		{
+			Log.log(Log.NOTICE,this,"_lineToDirectoryEntry("
+				+ line + ") failed:");
 			Log.log(Log.NOTICE,this,e);
 			return null;
 		}
@@ -572,6 +574,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/09/23 03:01:11  sp
+ * pre7 yayayay
+ *
  * Revision 1.25  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *
