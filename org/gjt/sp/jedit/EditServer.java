@@ -1,6 +1,6 @@
 /*
  * EditServer.java - jEdit server
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,13 @@ import javax.swing.SwingUtilities;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
-import java.util.Vector;
 import org.gjt.sp.util.Log;
 
 /**
  * @author Slava Pestov
  * @version $Id$
  */
-class EditServer extends Thread
+public class EditServer extends Thread
 {
 	EditServer(String portFile)
 	{
@@ -125,6 +124,43 @@ class EditServer extends Thread
 		}
 	}
 
+	// called by client BeanShell scripts
+	public static void handleClient(boolean restore, boolean newView, String[] args)
+	{
+		Buffer buffer = jEdit.openFiles(null,args);
+		String splitConfig = null;
+
+		if(restore)
+		{
+			if(buffer == null)
+				splitConfig = jEdit.restoreOpenFiles();
+			else if(jEdit.getBooleanProperty("restore.cli"))
+				jEdit.restoreOpenFiles();
+		}
+
+		if(buffer == null && splitConfig == null)
+			buffer = jEdit.newFile(null);
+
+		View view = null;
+
+		if(!newView)
+			view = jEdit.getFirstView();
+
+		if(view != null)
+		{
+			if(buffer != null)
+				view.setBuffer(buffer);
+
+			view.requestFocus();
+			view.toFront();
+		}
+		else if(splitConfig != null)
+			jEdit.newView(null,splitConfig);
+		else
+			jEdit.newView(null,buffer);
+	}
+
+	// package-private members
 	void stopServer()
 	{
 		stop();
@@ -137,164 +173,26 @@ class EditServer extends Thread
 	private int authKey;
 	private boolean ok;
 
-	// Thread-safe wrapper for jEdit.newView()
-	private void TSnewView(final Buffer buffer, final String splitConfig)
-	{
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run()
-			{
-				View view;
-
-				if(buffer == null)
-					view = jEdit.newView(jEdit.getFirstView(),splitConfig);
-				else
-					view = jEdit.newView(jEdit.getFirstView(),buffer);
-
-				view.requestFocus();
-				view.toFront();
-			}
-		});
-	}
-
-	// Thread-safe wrapper for jEdit.newFile()
-	private Buffer TSnewFile()
-	{
-		final Buffer[] retVal = new Buffer[1];
-		try
-		{
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run()
-				{
-					retVal[0] = jEdit.newFile(null);
-				}
-			});
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
-		return retVal[0];
-	}
-
-	// Thread-safe wrapper for jEdit.openFile()
-	private Buffer TSopenFiles(final String parent, final String[] args)
-	{
-		final Buffer[] retVal = new Buffer[1];
-		try
-		{
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run()
-				{
-					retVal[0] = jEdit.openFiles(parent,args);
-				}
-			});
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
-		return retVal[0];
-	}
-
-	// Thread-safe wrapper for jEdit.restoreOpenFiles()
-	private String TSrestoreOpenFiles()
-	{
-		final String[] retVal = new String[0];
-		try
-		{
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run()
-				{
-					retVal[0] = jEdit.restoreOpenFiles();
-				}
-			});
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
-		return retVal[0];
-	}
-
-	// Thread-safe wrapper for View.setBuffer()
-	private void TSsetBuffer(final View view, final Buffer buffer)
-	{
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run()
-			{
-				view.setBuffer(buffer);
-			}
-		});
-	}
-
-	private void handleClient(Socket client, BufferedReader in)
+	private void handleClient(Socket client, Reader in)
 		throws IOException
 	{
-		boolean readOnly = false;
-		boolean newView = false;
-		String parent = null;
-		boolean restore = jEdit.getBooleanProperty("restore");
-		boolean endOpts = false;
+		final StringBuffer script = new StringBuffer();
+		char[] buf = new char[1024];
+		int count;
 
-		View view = null;
-		Vector args = new Vector();
-
-		String command;
-		while((command = in.readLine()) != null)
+		while((count = in.read(buf,0,buf.length)) != -1)
 		{
-			if(endOpts)
-				args.addElement(command);
-			else
+			script.append(buf,0,count);
+		}
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
 			{
-				if(command.equals("--"))
-					endOpts = true;
-				else if(command.equals("readonly"))
-					readOnly = true;
-				else if(command.equals("newview"))
-					newView = true;
-				else if(command.startsWith("parent="))
-					parent = command.substring(7);
-				else if(command.startsWith("norestore"))
-					restore = false;
-				else
-				{
-					Log.log(Log.ERROR,this,client
-						+ ": unknown server"
-						+ " command: " + command);
-					in.close();
-					socket.close();
-					stopServer();
-				}
+				String scriptString = script.toString();
+				Log.log(Log.DEBUG,this,scriptString);
+				BeanShell.eval(null,scriptString,false);
 			}
-		}
-
-		String[] _args = new String[args.size()];
-		args.copyInto(_args);
-		Buffer buffer = TSopenFiles(parent,_args);
-		String splitConfig = null;
-
-		if(restore)
-		{
-			if(buffer == null)
-				splitConfig = TSrestoreOpenFiles();
-			else if(jEdit.getBooleanProperty("restore.cli"))
-				TSrestoreOpenFiles();
-		}
-
-		if(buffer == null)
-			buffer = TSnewFile();
-
-		// Create new view
-		if(!newView)
-			view = jEdit.getFirstView();
-
-		if(view != null)
-		{
-			TSsetBuffer(view,buffer);
-			view.requestFocus();
-			view.toFront();
-		}
-		else
-			TSnewView(buffer,splitConfig);
+		});
 	}
 }

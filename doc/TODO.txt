@@ -8,6 +8,7 @@ TO DO
     %bg - send current to background
     %kill <n>
     %kill - kill <n> or current
+    cmd & - runs cmd in background
   - each console should be able to have it's own process
   - deleting backup files
   - aliases:
@@ -21,29 +22,26 @@ TO DO
   - wild cards
   - what about \"foo\"?
   - console.bsh script has runCommandInConsole() method
+  - some % commands can be used without % prefix; clear, cd, pwd
 
 + before pre4:
 
 - jEditLauncher
-- finish NEWS.txt
 - get web start to work
 - fix 'is not a function name' when running openjade
-- grab latest macros from CVS
 - installing source for already installed plugins
 - non-existent files and caret history
-- encoding option in VFS browser
-- catch MalformedInputException and display a better error message
 - macro guide:
-  - bce()/ece() not really needed
   - mention registers
   - runCommandInConsole()
   - new startup script scheme
 
 + before 3.2final:
 
+- encoding option in VFS browser
+- catch MalformedInputException and display a better error message
 - help viewer: links to .txt files?
 - C+\
-- edit server rewrite - BeanShell commands
 - docking improvements:
   - multiple instances of a dockable
   - make dockable menu items not be toggles.

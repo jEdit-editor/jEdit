@@ -93,7 +93,7 @@ public class jEdit
 		String portFile = "server";
 		boolean restore = true;
 		boolean showGUI = true;
-		boolean noStartupMacro = false;
+		boolean noStartupScripts = false;
 
 		for(int i = 0; i < args.length; i++)
 		{
@@ -134,8 +134,8 @@ public class jEdit
 					showGUI = false;
 				else if(arg.equals("-norestore"))
 					restore = false;
-				else if(arg.equals("-nostartupmacro"))
-					noStartupMacro = true;
+				else if(arg.equals("-nostartupscripts"))
+					noStartupScripts = true;
 				else if(arg.equals("-newview"))
 					newView = true;
 				else
@@ -155,8 +155,6 @@ public class jEdit
 			portFile = null;
 
 		// Try connecting to another running jEdit instance
-		String userDir = System.getProperty("user.dir");
-
 		if(portFile != null && new File(portFile).exists())
 		{
 			int port, key;
@@ -172,22 +170,8 @@ public class jEdit
 				out.write(String.valueOf(key));
 				out.write('\n');
 
-				if(!restore)
-					out.write("norestore\n");
-
-				if(newView)
-					out.write("newview\n");
-				out.write("parent=" + userDir + "\n");
-				out.write("--\n");
-
-				for(int i = 0; i < args.length; i++)
-				{
-					if(args[i] != null)
-					{
-						out.write(args[i]);
-						out.write('\n');
-					}
-				}
+				String script = makeServerScript(restore,newView,args);
+				out.write(script);
 
 				out.close();
 
@@ -335,7 +319,7 @@ public class jEdit
 
 		// Run startup scripts, after plugins, proeprties, etc
 		// are loaded
-		if(jEditHome != null)
+		if(!noStartupScripts && jEditHome != null)
 		{
 			String path = MiscUtilities.constructPath(settingsDirectory,"startup");
 			File file = new File(path);
@@ -343,7 +327,7 @@ public class jEdit
 				runStartupScripts(file);
 		}
 
-		if(settingsDirectory != null)
+		if(!noStartupScripts && settingsDirectory != null)
 		{
 			String path = MiscUtilities.constructPath(settingsDirectory,"startup`");
 			File file = new File(path);
@@ -358,7 +342,7 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 
-		Buffer buffer = openFiles(userDir,args);
+		Buffer buffer = openFiles(System.getProperty("user.dir"),args);
 
 		String splitConfig = null;
 
@@ -369,14 +353,6 @@ public class jEdit
 			|| jEdit.getBooleanProperty("restore.cli")))
 		{
 			splitConfig = restoreOpenFiles();
-		}
-
-		// execute startup macro
-		Macros.Macro macro = Macros.getMacro("Startup");
-		if(!noStartupMacro && macro != null)
-		{
-			Log.log(Log.NOTICE,jEdit.class,"Running startup macro");
-			BeanShell.runScript(null,macro.path,false,false);
 		}
 
 		// Create the view and hide the splash screen.
@@ -2050,7 +2026,7 @@ public class jEdit
 			+ " settings");
 		System.out.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
-		System.out.println("	-nostartupmacro: Don't run startup macro");
+		System.out.println("	-nostartupscripts: Don't run startup scripts");
 		System.out.println("	-background: Run in background mode");
 		System.out.println("	-nogui: Don't create initial view in background mode");
 		System.out.println();
@@ -2068,6 +2044,30 @@ public class jEdit
 	private static void version()
 	{
 		System.out.println("jEdit " + getVersion());
+	}
+
+	/**
+	 * Creates a BeanShell script that can be sent to a running edit server.
+	 */
+	private static String makeServerScript(boolean restore, boolean newView, String[] args)
+	{
+		StringBuffer script = new StringBuffer();
+		script.append("args = new String[");
+		script.append(args.length);
+		script.append("];\n");
+
+		for(int i = 0; i < args.length; i++)
+		{
+			script.append("args[");
+			script.append(i);
+			script.append("] = \"");
+			script.append(MiscUtilities.charsToEscapes(args[i]));
+			script.append("\";\n");
+		}
+
+		script.append("EditServer.handleClient(" + restore + "," + newView + ",args);\n");
+
+		return script.toString();
 	}
 
 	/**

@@ -1,6 +1,6 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.1 AND 3.2
 
-- add: startup macro, sample plugins
+- new edit server
 
 * Markers
 
@@ -62,8 +62,8 @@ the search and replace dialog box.
 Two new commands, 'Search in Open Buffers' and 'Search in Directory',
 pre-select the appropriate multi-file search settings.
 
-Occurences of the search string can now be replaced with the result of a
-BeanShell code snippet that is evaluated for each occurence. This can be
+Occurrences of the search string can now be replaced with the result of a
+BeanShell code snippet that is evaluated for each occurrence. This can be
 used to perform complicated text transforms, like converting all HTML
 tags to lower case.
 
@@ -122,6 +122,19 @@ download plugin binaries, without source code.
 
 Finally, removing a plugin consisting of multiple JAR files will now
 remove all JAR files, instead of only removing the primary JAR file.
+
+* Running BeanShell scripts on startup
+
+Any .bsh files found in the 'startup' subdirectory of the jEdit
+installation and user settings directories are run on startup. This
+replaces the clunky 'startup macro' feature found in earlier jEdit
+versions.
+
+* Sample plugins
+
+The three sample plugins that were formerly available from the jEdit web
+site (HelloWorld, HelloEditBus, HelloDockable) are now included in the
+source code download.
 
 * Better MacOS X support
 

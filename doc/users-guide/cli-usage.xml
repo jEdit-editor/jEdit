@@ -60,8 +60,8 @@
      See <xref linkend="settings-directory" />.</entry>
     </row>
     <row>
-     <entry>-nostartupmacro</entry>
-     <entry>Does not run the startup macro if one is present.
+     <entry>-nostartupscrupts</entry>
+     <entry>Does not run any startup scripts.
      See <xref linkend="startup-macro" />.
      Has no effect
      when connecting to another instance via the edit server.</entry>

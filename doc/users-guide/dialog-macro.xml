@@ -159,7 +159,6 @@ void prefixSuffixDialog()
 
 <anchor id="jEdit-calls"/>        // text manipulation begins here using calls
         // to jEdit methods  (see <xref linkend="explain-jedit-calls"/>)
-        buffer.beginCompoundEdit();
         selectedLines = textArea.getSelectedLines();
         for(i = 0; i &lt; selectedLines.length; ++i)
         {
@@ -171,7 +170,6 @@ void prefixSuffixDialog()
             if(text == null) text = &quot;&quot;;
             textArea.setSelectedText(prefix + text + suffix);
         }
-        buffer.endCompoundEdit();
     }
 }
 
@@ -519,7 +517,6 @@ void processText()
 
 <informalexample><programlisting>    // text manipulation begins here using calls
     // to jEdit methods
-    buffer.beginCompoundEdit();
     selectedLines = textArea.getSelectedLines();
     for(i = 0; i &lt; selectedLines.length; ++i)
     {
@@ -531,7 +528,6 @@ void processText()
         if(text == null) text = &quot;&quot;;
         textArea.setSelectedText(prefix + text + suffix);
     }
-    buffer.endCompoundEdit();
 }</programlisting></informalexample>
 
   <para>
@@ -609,7 +605,7 @@ void processText()
 
 </itemizedlist>
 
-  <para>
+  <!-- <para>
     The loop routine is bracketed by calls to
     <function>buffer.beginCompoundEdit()</function> and
     <function>buffer.endCompoundEdit()</function>.  These methods
@@ -618,7 +614,7 @@ void processText()
     treated as a single operation for undo purposes.  A single undo
     command issued immediately after the macro completes will thus remove
     the prefix and suffix text from all of the previously selected lines.
-  </para>
+  </para> -->
 
 </sect2>
 
