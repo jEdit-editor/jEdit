@@ -32,8 +32,27 @@ public class indent_line extends EditAction
                 Buffer buffer = view.getBuffer();
 
 		String actionCommand = evt.getActionCommand();
+
+		/* This action is invoked with an action command when
+		* the user presses } or some 'indentCloseBrackets' key.
+		* The idea is that when the user presses } in a Java file,
+		* the line will be reindented properly.
+		*
+		* however, since key bindings act globally, we don't attempt
+		* to reindent the line in modes which don't have this key in
+		* 'indentCloseBrackets'.
+		*/
 		if(actionCommand != null)
+		{
 			textArea.overwriteSetSelectedText(actionCommand);
+
+			String indentCloseBrackets = (String)buffer
+				.getProperty("indentCloseBrackets");
+			if(indentCloseBrackets == null)
+				return;
+			if(indentCloseBrackets.indexOf(actionCommand) == -1)
+				return;
+		}
 
 		buffer.getMode().indentLine(buffer,view,textArea.getCaretLine(),true);
 	}

@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.02.99.01";
+		return "02.03.01.00";
 	}
 
 	/**
@@ -911,6 +911,35 @@ public class jEdit
 	}
 
 	/**
+	 * Reloads all key bindings from the properties.
+	 * @since 2.3pre1
+	 */
+	public static void reloadKeyBindings()
+	{
+		inputHandler.removeAllKeyBindings();
+
+		EditAction[] actions = getActions();
+		for(int i = 0; i < actions.length; i++)
+		{
+			EditAction action = actions[i];
+			String shortcut = jEdit.getProperty(action.getName()
+				+ ".shortcut");
+			if(shortcut != null)
+				inputHandler.addKeyBinding(shortcut,action);
+		}
+
+		// load text area bindings
+		initKeyBindings();
+
+		// load mode-specific keys
+		Mode[] modes = getModes();
+		for(int i = 0; i < modes.length; i++)
+		{
+			modes[i].initKeyBindings();
+		}
+	}
+
+	/**
 	 * Creates a new view of a buffer.
 	 * @param view The view from which to take the geometry, buffer and
 	 * caret position from
@@ -1325,6 +1354,7 @@ public class jEdit
 		addAction("close-all");
 		addAction("close-file");
 		addAction("close-view");
+		addAction("complete-word");
 		addAction("copy");
 		addAction("copy-string-register");
 		addAction("cut");
@@ -1336,7 +1366,6 @@ public class jEdit
 		addAction("edit-macro");
 		addAction("exchange-caret-register");
 		addAction("exit");
-		addAction("expand-abbrev");
 		addAction("find");
 		addAction("find-next");
 		addAction("find-selection");
@@ -1654,6 +1683,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.171  1999/12/19 08:12:34  sp
+ * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
+ *
  * Revision 1.170  1999/12/14 04:20:35  sp
  * Various updates, PHP3 mode added
  *
@@ -1677,20 +1709,5 @@ public class jEdit
  *
  * Revision 1.163  1999/11/28 00:33:06  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
- *
- * Revision 1.162  1999/11/27 06:01:20  sp
- * Faster file loading, geometry fix
- *
- * Revision 1.161  1999/11/26 07:37:11  sp
- * Escape/enter handling code moved to common superclass, bug fixes
- *
- * Revision 1.160  1999/11/26 01:18:49  sp
- * Optimizations, splash screen updates, misc stuff
- *
- * Revision 1.159  1999/11/23 05:43:55  sp
- * Reload All command
- *
- * Revision 1.158  1999/11/21 07:59:30  sp
- * JavaDoc updates
  *
  */

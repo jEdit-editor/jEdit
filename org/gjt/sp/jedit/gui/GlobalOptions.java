@@ -38,7 +38,8 @@ public class GlobalOptions extends OptionsDialog
 
 		addOptionPane(new org.gjt.sp.jedit.options.GeneralOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.EditorOptionPane());
-		addOptionPane(new org.gjt.sp.jedit.options.KeyTableOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.CommandShortcutsOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.MacroShortcutsOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.StyleOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.FileFilterOptionPane());
 
@@ -56,6 +57,9 @@ public class GlobalOptions extends OptionsDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  1999/12/19 08:12:34  sp
+ * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
+ *
  * Revision 1.12  1999/11/19 08:54:52  sp
  * EditBus integrated into the core, event system gone, bug fixes
  *
@@ -88,12 +92,5 @@ public class GlobalOptions extends OptionsDialog
  *
  * Revision 1.3  1999/03/20 05:23:32  sp
  * Code cleanups
- *
- * Revision 1.2  1999/03/20 04:52:55  sp
- * Buffer-specific options panel finished, attempt at fixing OS/2 caret bug, code
- * cleanups
- *
- * Revision 1.1  1999/03/20 02:07:59  sp
- * Starting work on buffer-specific options panel
  *
  */

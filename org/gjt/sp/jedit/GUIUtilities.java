@@ -473,8 +473,8 @@ public class GUIUtilities
 		win.setLocation(x,y);
 		win.setSize(width,height);
 
-		if(System.getProperty("os.name").indexOf("Linux") != -1)
-			win.addWindowListener(new LinuxWorkaround(win,x,y,width,height));
+		// workaround for broken Linux JDK
+		win.addWindowListener(new LinuxWorkaround(win,x,y,width,height));
 	}
 
 	static class LinuxWorkaround extends WindowAdapter
@@ -493,7 +493,8 @@ public class GUIUtilities
 
 		public void windowOpened(WindowEvent evt)
 		{
-			win.setLocation(x,y);
+			//Insets insets = win.getInsets();
+			win.setLocation(x /*- insets.left*/,y /*- insets.top*/);
 			win.setSize(width,height);
 
 			win.removeWindowListener(this);
@@ -646,6 +647,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.47  1999/12/19 08:12:34  sp
+ * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
+ *
  * Revision 1.46  1999/12/15 10:40:40  sp
  * HelpViewer updates, bug fixing, getting ready for 2.2final
  *

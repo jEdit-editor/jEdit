@@ -50,20 +50,6 @@ public class Mode
 	{
 		this.name = name;
 
-		// Bind indentCloseBrackets to indent-line
-		String indentCloseBrackets = (String)getProperty("indentCloseBrackets");
-		if(indentCloseBrackets != null)
-		{
-			EditAction action = jEdit.getAction("indent-line");
-
-			for(int i = 0; i < indentCloseBrackets.length(); i++)
-			{
-				jEdit.getInputHandler().addKeyBinding(
-					indentCloseBrackets.substring(i,i+1),
-					action);
-			}
-		}
-
 		try
 		{
 			String filenameGlob = (String)getProperty("filenameGlob");
@@ -86,6 +72,8 @@ public class Mode
 				+ " globs in mode " + name);
 			Log.log(Log.ERROR,this,re);
 		}
+
+		initKeyBindings();
 	}
 
 	/**
@@ -379,6 +367,26 @@ public class Mode
 		return getClass().getName() + "[" + getName() + "]";
 	}
 
+	// package-private members
+
+	// called by jEdit.reloadKeyBindings()
+	void initKeyBindings()
+	{
+		// Bind indentCloseBrackets to indent-line
+		String indentCloseBrackets = (String)getProperty("indentCloseBrackets");
+		if(indentCloseBrackets != null)
+		{
+			EditAction action = jEdit.getAction("indent-line");
+
+			for(int i = 0; i < indentCloseBrackets.length(); i++)
+			{
+				jEdit.getInputHandler().addKeyBinding(
+					indentCloseBrackets.substring(i,i+1),
+					action);
+			}
+		}
+	}
+
 	// protected members
 
 	/**
@@ -398,6 +406,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  1999/12/19 08:12:34  sp
+ * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
+ *
  * Revision 1.18  1999/12/11 06:34:39  sp
  * Bug fixes
  *

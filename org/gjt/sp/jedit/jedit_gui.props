@@ -128,7 +128,7 @@ edit=undo \
      goto-line \
      select-line-range \
      - \
-     expand-abbrev \
+     complete-word \
      tab \
      untab \
      word-count \
@@ -147,7 +147,7 @@ select-all.label=Select $All
 select-none.label=Select $None
 goto-line.label=$Go to Line...
 select-line-range.label=Select L$ine Range...
-expand-abbrev.label=E$xpand Abbreviation
+complete-word.label=Co$mplete Word
 tab.label=$Spaces to Tabs
 untab.label=$Tabs to Spaces
 word-count.label=$Word Count...
@@ -394,8 +394,8 @@ about.title=About jEdit
 about.message=jEdit version {0}\n\
 	\n\
 	jEdit was written by Slava Pestov with the help of several others.\n\
-	See the README.txt file for redistribution information and warranty\n\
-	disclamer.\n\
+	It is released under the GNU General Public License; see the\n\
+	README.txt file for more information.\n\
 	\n\
 	At the time this version of jEdit was released, the following people\n\
 	are known to have have written plugins or contributed code to jEdit:\n\
@@ -662,12 +662,12 @@ options.styles.keyword2Style=Keyword 2
 options.styles.keyword3Style=Keyword 3
 options.styles.operatorStyle=Operator
 options.styles.invalidStyle=Invalid token
-options.keys.label=Shortcuts
-options.keys.note=Restart jEdit for shortcut changes to take effect
 options.keys.name=Command
 options.keys.binding=Keyboard shortcut
 options.keys.sort.label=Sort by label
 options.keys.sort.shortcut=Sort by shortcut
+options.command-keys.label=Command Shortcuts
+options.macro-keys.label=Macro Shortcuts
 options.filters.label=File Filters
 options.filters.name=Name
 options.filters.re=Glob Pattern

@@ -1,5 +1,5 @@
 /*
- * expand_abbrev.java
+ * complete_word.java
  * Copyright (C) 1998, 1999 Slava Pestov
  * Copyright (C) 1999 Valery Kondakoff
  *
@@ -28,7 +28,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public class expand_abbrev extends EditAction
+public class complete_word extends EditAction
 {
 	private boolean createSet = true, forward = true;
 	private Vector wordSet = new Vector();
@@ -40,11 +40,6 @@ public class expand_abbrev extends EditAction
 	private int count = 1;
 	private int myLength;
 	private int[] array;
-
-	public expand_abbrev()
-	{
-		super("expand-abbrev");
-	}
 
 	public void actionPerformed(ActionEvent evt)
 	{

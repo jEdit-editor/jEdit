@@ -61,7 +61,7 @@ next-buffer.shortcut=F12
 
 # Single key
 select-all.shortcut=C+a
-expand-abbrev.shortcut=C+b
+complete-word.shortcut=C+b
 copy.shortcut=C+c
 delete-line.shortcut=C+d
 find.shortcut=C+f

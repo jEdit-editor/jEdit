@@ -1,5 +1,5 @@
 /*
- * KeyTableOptionPane.java - Key table options panel
+ * ShortcutsOptionPane.java - Shortcuts options panel
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -28,18 +28,16 @@ import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
 /**
- * Key binding editor option pane.
+ * Generic key binding editor.
  * @author Slava Pestov
  * @version $Id$
  */
-public class KeyTableOptionPane extends AbstractOptionPane
+public abstract class ShortcutsOptionPane extends AbstractOptionPane
 {
-	public KeyTableOptionPane()
+	public ShortcutsOptionPane(String name)
 	{
-		super("keys");
+		super(name);
 		setLayout(new BorderLayout());
-		add(BorderLayout.NORTH,new JLabel(jEdit.getProperty("options"
-			+ ".keys.note")));
 		add(BorderLayout.CENTER,createKeyTableScroller());
 
 		JPanel panel = new JPanel();
@@ -57,15 +55,18 @@ public class KeyTableOptionPane extends AbstractOptionPane
 		keyModel.save();
 	}
 
+	// protected members
+	protected abstract Vector createBindings();
+
 	// private members
 	private JTable keyTable;
 	private JButton label;
 	private JButton shortcut;
-	private KeyTableModel keyModel;
+	private ShortcutsModel keyModel;
 
 	private JScrollPane createKeyTableScroller()
 	{
-		keyModel = createKeyTableModel();
+		keyModel = createShortcutsModel();
 		keyTable = new JTable(keyModel);
 		keyTable.getTableHeader().setReorderingAllowed(false);
 		Dimension d = keyTable.getPreferredSize();
@@ -75,9 +76,9 @@ public class KeyTableOptionPane extends AbstractOptionPane
 		return scroller;
 	}
 
-	private KeyTableModel createKeyTableModel()
+	private ShortcutsModel createShortcutsModel()
 	{
-		return new KeyTableModel();
+		return new ShortcutsModel(createBindings());
 	}
 
 	class ActionHandler implements ActionListener
@@ -89,45 +90,13 @@ public class KeyTableOptionPane extends AbstractOptionPane
 	}
 }
 
-class KeyTableModel extends AbstractTableModel
+class ShortcutsModel extends AbstractTableModel
 {
 	private Vector bindings;
 
-	KeyTableModel()
+	ShortcutsModel(Vector bindings)
 	{
-		Enumeration textActions = InputHandler.getActions();
-		EditAction[] actions = jEdit.getActions();
-
-		bindings = new Vector(actions.length + 30);
-
-		// Add text area key bindings
-		while(textActions.hasMoreElements())
-		{
-			String name = (String)textActions.nextElement();
-			String label = jEdit.getProperty(name + ".label");
-			// Skip certain actions this way (ENTER, TAB)
-			if(label == null)
-				continue;
-			String shortcut = jEdit.getProperty(name + ".shortcut");
-			bindings.addElement(new KeyBinding(name,label,shortcut));
-		}
-
-		// Add menu item key bindings
-		for(int i = 0; i < actions.length; i++)
-		{
-			String name = actions[i].getName();
-			String label = jEdit.getProperty(name + ".label");
-			// Skip certain actions this way (ENTER, TAB)
-			if(label == null)
-				continue;
-			label = GUIUtilities.prettifyMenuLabel(label);
-			String shortcut = jEdit.getProperty(name + ".shortcut");
-			bindings.addElement(new KeyBinding(name,label,shortcut));
-		}
-
-		// Add macros
-		addMacroBindings(Macros.getMacros());
-
+		this.bindings = bindings;
 		sort(0);
 	}
 
@@ -196,26 +165,6 @@ class KeyTableModel extends AbstractTableModel
 		}
 	}
 
-	// private members
-	private void addMacroBindings(Vector macros)
-	{
-		for(int i = 0; i < macros.size(); i++)
-		{
-			Object obj = macros.elementAt(i);
-			if(obj instanceof Macros.Macro)
-			{
-				Macros.Macro macro = (Macros.Macro)obj;
-				bindings.addElement(new KeyBinding(macro.name,
-					"Macro: " + macro.name,
-					jEdit.getProperty(macro.name + ".shortcut")));
-			}
-			else if(obj instanceof Vector)
-			{
-				addMacroBindings((Vector)obj);
-			}
-		}
-	}
-
 	class KeyCompare implements MiscUtilities.Compare
 	{
 		int col;
@@ -251,51 +200,26 @@ class KeyTableModel extends AbstractTableModel
 			}
 		}
 	}
+}
 
-	class KeyBinding
+class KeyBinding
+{
+	KeyBinding(String name, String label, String shortcut)
 	{
-		KeyBinding(String name, String label, String shortcut)
-		{
-			this.name = name;
-			this.label = label;
-			this.shortcut = shortcut;
-		}
-
-		String name;
-		String label;
-		String shortcut;
+		this.name = name;
+		this.label = label;
+		this.shortcut = shortcut;
 	}
+
+	String name;
+	String label;
+	String shortcut;
 }
 
 /*
  * ChangeLog:
  * $Log$
- * Revision 1.9  1999/11/30 01:37:35  sp
- * New view icon, shortcut pane updates, session bug fix
- *
- * Revision 1.8  1999/11/10 10:43:01  sp
- * Macros can now have shortcuts, various miscallaneous updates
- *
- * Revision 1.7  1999/11/09 10:14:34  sp
- * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
- * word commands, check box menu item support
- *
- * Revision 1.6  1999/10/11 07:14:22  sp
- * doneWithBuffer()
- *
- * Revision 1.5  1999/10/04 03:20:51  sp
- * Option pane change, minor tweaks and bug fixes
- *
- * Revision 1.4  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.3  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.2  1999/05/04 07:45:22  sp
- * Event mutlicaster is now re-entrant, key binding editor updates
- *
- * Revision 1.1  1999/05/03 08:28:14  sp
- * Documentation updates, key binding editor, syntax text area bug fix
+ * Revision 1.1  1999/12/19 08:12:34  sp
+ * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
  *
  */

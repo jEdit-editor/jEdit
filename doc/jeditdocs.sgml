@@ -11,7 +11,7 @@
 
 <!-- General information -->
 <bookinfo>
- <title>jEdit 2.2 User's Guide</>
+ <title>jEdit 2.3 User's Guide</>
  <author><firstname>Slava</><surname>Pestov</></author>
  <legalnotice><title>Legal Notice</>
   <para>
@@ -58,111 +58,10 @@ http://www.sourceforge.net/mail/?group_id=588</>.
  </sect1>
  <sect1 id=release-notes><title>Release Notes</>
   <para>
-   The following is an overview of the major changes in jEdit 2.2 since
-   2.1. A complete list can be found in the file named
+   The following is an overview of the major changes in jEdit 2.3 since
+   2.2. A complete list can be found in the file named
    <filename>CHANGES.txt</>, which is part of the jEdit distribution.
   </para>
-<bridgehead renderas=sect3>IMPORTANT: Syntax highlighting package no longer
-LGPL'd</>
-
-<para>
-The license of the syntax highlighting and text area classes has been
-changed back to the GNU General Public License. This means that these
-packages can no longer be used in non-Open Source programs.
-</para>
-<para>
-When we LGPL'd the syntax package, jEdit had no IDE features, so it was
-natural to let commercial IDEs use it; after all, we weren't competing.
-Now that a range of plugins are being written for jEdit which give it
-IDE-like functionality, we were basically giving the competition a free
-ride.
-</para>
-<bridgehead renderas=sect3>Directory search</>
-<para>
-jEdit can now search inside all files in a directory. It can even
-recurse into subdirectories. The original implementation of this was
-written by Andreas Schaefer <email>andreas.schaefer@ubs.com</>, but I rewrote it
-from scratch because the original had a few problems.
-</para>
-<bridgehead renderas=sect3>Updated 'Expand Abbreviation' command</>
-<para>
-The 'Expand Abbreviation' command now cycles through all available
-matches, instead of only locating the first one. The code to do this was
-contributed by Valery Kondakoff <email>strauss@orc.ru</>.
-</para>
-<bridgehead renderas=sect3>New 'Close All' dialog box</>
-<para>
-Previously, exiting jEdit or closing all buffers would ask if each
-unsaved buffer should be saved, one-by-one. Now, all unsaved buffers are
-listed in one dialog box.
-</para>
-<bridgehead renderas=sect3>More intelligent auto indent</>
-<para>
-Pressing '}' in an edit mode that supports bracket indentation (C, C++,
-IDL, Java, JavaScript) now immediately re-indents the line accordingly.
-</para>
-<bridgehead renderas=sect3>QuickSearch on toolbar</>
-<para>
-The tool bar now has a text field for quick and easy searching, without
-having to bring up a Search and Replace dialog box.
-</para>
-<bridgehead renderas=sect3>Commands for deleting words</>
-<para>
-Two new commands, `Backspace Word' (C+BACK_SPACE) and `Delete Word'
-(C+DELETE) have been added. They delete the word before and after the
-caret, respectively.
-</para>
-<bridgehead renderas=sect3>Improved undo</>
-<para>
-Invoking 'Undo' or 'Redo' now moves the caret to the location of the
-change. Previously, there was no way to know exactly what was undone.
-</para>
-<bridgehead renderas=sect3>Session loading and saving</>
-<para>
-All jEdit versions since 1.3 could save the list of open files on exit,
-and restore those files the next time it was started. jEdit 2.2 takes
-this one step further, allowing you to create multiple such 'sessions',
-and load and save them while the editor is running.
-</para>
-<bridgehead renderas=sect3>Macro recorder updates</>
-<para>
-Previously, only key strokes were recorded in macros. Now, menu item
-selections, tool bar clicks, and even search and replace operations are
-recorded.
-</para>
-<bridgehead renderas=sect3>Extensible text area</>
-<para>
-jEdit's text area component now allows custom 'highlighters' to be
-added. A highlighter is a piece of code that is called each time a line
-is painted. The ErrorList plugin, for example, uses a highlighter to
-paint errors in the text as wavy red underlines.
-</para>
-<bridgehead renderas=sect3>EditBus message passing integrated</>
-<para>
-The EditBus system allows plugins to communicate and exchange data with
-one another by sending typed messages. Previously, the EditBus classes
-were distributed as a separate plugin. Now, most of EditBus has been
-moved into the core. The EditBus plugin still remains, however; it
-contains a few message types that are only used by plugins.
-</para>
-<para>
-The event system has been removed, because EditBus messages can be used
-to accomplish the same thing. Plugins that depend on the event system
-will no longer work with jEdit 2.2. Fortunately, most plugins that used
-the event system have been updated for EditBus already; check out jEdit
-Plugin Central <ulink url="http://www.icg-online.de/jedit">http://www.icg-online.de/jedit</>.
-</para>
-<bridgehead renderas=sect3>Activity log</>
-<para>
-jEdit now saves all thrown exceptions, as well as various informational
-messages, to an 'activity log'. The activity log can be viewed with
-the 'Help->Show Activity Log' command. It can also be saved to a file
-with 'Help->Save Activity Log'.
-</para>
-<bridgehead renderas=sect3>File encoding can be set</>
-<para>
-The file encoding used for reading and writing files can now be changed,
-so you can edit files written in non-Latin1 (human) languages.
 </para>
  </sect1>
  <sect1 id=features><title>jEdit Features</>
@@ -1812,10 +1711,10 @@ so you can edit files written in non-Latin1 (human) languages.
    </para>
    <screen>new Widget(Foo.createDefaultFoo());</screen>
   </sect2>
-  <sect2><title>Dynamic Abbreviation Expansion</>
+  <sect2><title>Word Competion</title>
    <para>
-    <indexterm><primary>Expand Abbreviation command</></indexterm>
-    <guimenu>Edit</>&gt;<guimenuitem>Expand Abbreviation</> (keyboard
+    <indexterm><primary>Complete Word command</></indexterm>
+    <guimenu>Edit</>&gt;<guimenuitem>Complete Word</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>B</></keycombo>) attempts to
     compete the current word by searching the buffer for
@@ -1828,7 +1727,7 @@ so you can edit files written in non-Latin1 (human) languages.
     <secondary>noWordSep</></indexterm>
     A word is defined as a string of alphanumeric characters, and
     any non-alphanumeric characters listed in the <quote>noWordSep</>
-    buffer-local property. For example, to expand words containing
+    buffer-local property. For example, to be able to complete words containing
     hyphens (<quote>-</>), place the following in the first 10 lines of
     the buffer:
    </para>
@@ -2769,7 +2668,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
       be treated as word separators. For example, in Java mode the
       default value is <quote>_</> because the underscore can be used
       in Java identifiers, and it is useful to be able to select
-      and expand them in one operation.</entry>
+      and complete them in one operation.</entry>
      </row>
      <row>
       <entry>syntax</>
@@ -2855,8 +2754,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     keys plus a modifier such as <keycap>Control</> or <keycap>Alt</>.
    </para>
    <para>
-    Changes to the key bindings take effect the next time jEdit is
-    started.
+    Changes to the key bindings take effect immediately, but due to a
+    quirk in jEdit's implementation, menu item labels will contain
+    the old shortcuts until jEdit is restarted.
    </para>
    <figure><title>The Shortcuts tab of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-shortcuts></>
