@@ -2,7 +2,12 @@
 <!-- :indentSize=1:noTabs=true: -->
 
 <appendix id="shortcuts"><title>Keyboard Shortcuts</title>
- <!-- TODO: C+e v not documented here -->
+ <para>
+  This appendix documents the default set of keyboard shortcuts. They can
+  be customized to suit your taste in the
+  <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+  dialog box; see <xref linkend="global-opts" />.
+ </para>
  <bridgehead renderas="sect1">Files</bridgehead>
   <para>
    For details, see <xref linkend="buffers" />,

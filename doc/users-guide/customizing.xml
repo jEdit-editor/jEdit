@@ -317,7 +317,7 @@
   </para>
   <itemizedlist>
    <listitem><para><filename>jars</filename> - this directory contains
-   plugins. See <xref linkend="plugins" />.</para></listitem>
+   plugins. See <xref linkend="using-plugins" />.</para></listitem>
    <listitem><para><filename>macros</filename> - this directory contains
    macros. See <xref linkend="macros" />.</para></listitem>
    <listitem><para><filename>modes</filename> - this directory contains custom
@@ -326,7 +326,7 @@
    <listitem><para><filename>PluginManager.download</filename> - this directory
    is usually empty. It only contains files while the plugin manager is
    downloading a plugin. For information about the plugin manager,
-   see <xref linkend="plugins" />.</para></listitem>
+   see <xref linkend="using-plugins" />.</para></listitem>
    <listitem><para><filename>session</filename> - a list of files, used when
    restoring previously open files on startup.</para></listitem>
    <listitem><para><filename>abbrevs</filename> - a plain text file which

@@ -6,7 +6,7 @@
 # - OpenSP (I use version 1.4)
 # - DocBook modular DSSSL style sheets (I use version 1.64)
 #
-# To build toe PDF documentation, you will also need TeX.
+# To build the PDF documentation, you will also need TeX.
 #
 # More information and links to all these tools can be found at
 # <http://www.docbook.org> and <http://openjade.sourceforge.net>.
@@ -14,16 +14,20 @@
 # jEdit buffer-local properties:
 # :indentSize=4:noTabs=true:
 
+# this sucks
+xml_dcl = "/usr/local/share/OpenSP/xml.dcl";
+
 "all": "htmldocs" "pdfdocs" "pdfdocs-a4";
 
 "htmldocs":;
 {
-    exec "openjade" "-d" "jedithtml.dsl" "-D" "." "-t" "sgml" "users-guide.xml";
+    exec "openjade" "-d" "jedithtml.dsl" "-D" "." "-t" "sgml"
+        xml_dcl "users-guide.xml";
 }
 
 "pdfdocs":;
 {
-    exec "openjade" "-d" "jeditprint.dsl" "-t" "tex" "users-guide.xml";
+    exec "openjade" "-d" "jeditprint.dsl" "-t" "tex" xml_dcl "users-guide.xml";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";
@@ -32,7 +36,7 @@
 
 "pdfdocs-a4":;
 {
-    exec "openjade" "-d" "jeditprint-a4.dsl" "-t" "tex" "users-guide.xml";
+    exec "openjade" "-d" "jeditprint-a4.dsl" "-t" "tex" xml_dcl "users-guide.xml";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";

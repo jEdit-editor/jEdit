@@ -61,7 +61,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.02.04.00";
+		return "03.02.05.00";
 	}
 
 	/**
@@ -84,8 +84,6 @@ public class jEdit
 				args[0] = null;
 			}
 		}
-
-		Log.init(true,level);
 
 		// Parse command line
 		boolean endOpts = false;
@@ -156,6 +154,8 @@ public class jEdit
 		else
 			portFile = null;
 
+		Log.init(true,level);
+
 		// Try connecting to another running jEdit instance
 		if(portFile != null && new File(portFile).exists())
 		{
@@ -213,8 +213,9 @@ public class jEdit
 		}
 		else if(client)
 		{
-			System.err.println("The -bshclient switch can only be"
-				+ "  used if an edit server is already running.");
+			Log.log(Log.ERROR,jEdit.class,"The -bshclient switch"
+				+ " can only be used if an edit server is");
+			Log.log(Log.ERROR,jEdit.class,"already running.");
 			System.exit(1);
 		}
 

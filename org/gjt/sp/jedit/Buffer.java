@@ -1799,8 +1799,9 @@ public class Buffer extends PlainDocument implements EBComponent
 				Color bg = styles[id].getBackgroundColor();
 				if(color && bg != null)
 				{
-					FontMetrics fm = (style ? styles[id].getFontMetrics(defaultFont)
-						: gfx.getFontMetrics(defaultFont));
+					FontMetrics fm = gfx.getFontMetrics(style ?
+						styles[id].getStyledFont(defaultFont)
+						: defaultFont);
 					int width   = Utilities.getTabbedTextWidth(seg, fm, x, expander, 0); 
 					int height  = fm.getHeight();
 					int descent = fm.getDescent();

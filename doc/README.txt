@@ -258,6 +258,8 @@ Nitsan Vardi:
 Ollie Rutherfurd:
 	- Some commands in View->Scrolling menu
 	- C# syntax highlighting
+	- Improvements to XSL syntax highlighting
+	- Default set of XSL abbreviations included with jEdit
 
 Peter Graves:
 	- Code for preserving file permissions on Unix was taken from

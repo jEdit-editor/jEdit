@@ -126,26 +126,6 @@ public class SyntaxStyle
 	}
 
 	/**
-	 * Returns the font metrics for the styled font.
-	 */
-	public FontMetrics getFontMetrics(Font font)
-	{
-		if(font == null)
-			throw new NullPointerException("font param must not"
-				+ " be null");
-		if(font.equals(lastFont) && fontMetrics != null)
-			return fontMetrics;
-		lastFont = font;
-		lastStyledFont = new Font(font.getFamily(),
-			(bold ? Font.BOLD : 0)
-			| (italic ? Font.ITALIC : 0),
-			font.getSize());
-		fontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(
-			lastStyledFont);
-		return fontMetrics;
-	}
-
-	/**
 	 * Returns a string representation of this object.
 	 */
 	public String toString()
@@ -163,7 +143,6 @@ public class SyntaxStyle
 	private boolean bold;
 	private Font lastFont;
 	private Font lastStyledFont;
-	private FontMetrics fontMetrics;
 	private static Method method;
 
 	static

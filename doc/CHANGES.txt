@@ -1,5 +1,26 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2pre5
+
++ Enhancements
+
+- Updated XSL mode (Ollie Rutherfurd)
+- A set of XSL abbreviations is now included in the default abbreviation
+  set
+- The 'Update Plugins' dialog box now deletes obsolete plugins
+
++ Bug Fixes
+
+- The -version and -usage command line parameters produced no output
+- The 'caret not being drawn in the right place' but that occured with
+  certain Java versions should now be fixed, because of the following
+  two bug fixes:
+  - SyntaxStyle.getFontMetrics() didn't call deriveFont() on Java 2
+  - jEdit now uses Component.getFontMetrics() instead of
+    Toolkit.getFontMetrics() throughout
+- Opening a recent file could create a pseudo-random selection, due to a
+  bug in the recent file handler
+
 * Version 3.2pre4
 
 + New Features

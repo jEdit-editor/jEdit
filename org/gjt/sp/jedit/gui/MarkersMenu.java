@@ -161,7 +161,7 @@ public class MarkersMenu extends JMenu
 
 			if(shortcut != null)
 			{
-				d.width += (getToolkit().getFontMetrics(acceleratorFont)
+				d.width += (getFontMetrics(acceleratorFont)
 					.stringWidth(shortcut) + 10);
 			}
 			return d;

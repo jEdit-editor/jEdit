@@ -1456,11 +1456,14 @@ install-plugins.caption=Click the check box next to plugins you wish to install:
 install-plugins.info.name=Name:
 install-plugins.info.author=Author:
 install-plugins.info.latest-version=Latest version:
+install-plugins.info.obsolete=Obsolete (will be deleted)
 install-plugins.info.installed-version=Installed version:
 install-plugins.info.updated=Last updated:
 install-plugins.info.description=Description:
 install-plugins.info.also-install=\ Installing this plugin will also install \
 	the following plugins:\ 
+install-plugins.info.obsolete-text=\ This plugin is obsolete and no longer \
+	needed. It will be deleted if you check the box next to its name.
 
 install-plugins.user=Install in user plugin directory ({0})
 install-plugins.system=Install in system plugin directory ({0})

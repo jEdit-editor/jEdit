@@ -62,7 +62,7 @@ public class EnhancedMenuItem extends JMenuItem
 
 		if(shortcut != null)
 		{
-			d.width += (getToolkit().getFontMetrics(acceleratorFont)
+			d.width += (getFontMetrics(acceleratorFont)
 				.stringWidth(shortcut) + 10);
 		}
 		return d;

@@ -1,10 +1,10 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :tabSize=1:indentSize=1:noTabs=yes: -->
 
-<appendix id="cli-usage"><title>Command Line Usage</title>
+<chapter id="cli-usage"><title>Command Line Usage</title>
  <para>
   On operating systems that support a command line, jEdit can be passed
-  a multitude of options that control its behavior.
+  various arguments to control its behavior.
  </para>
  <para>
   When opening files from the command line, a line number or marker to
@@ -12,11 +12,15 @@
  </para>
  <screen><prompt>$ </prompt><userinput>jedit MyApplet.java +line:10</userinput>
 <prompt>$ </prompt><userinput>jedit thesis.tex +marker:chapter5</userinput></screen>
-<informaltable>
+ <para>
+  A number of options can also be specified to control several obscure features.
+  They are listed in the following table.
+ </para>
+ <informaltable>
   <tgroup cols="2">
    <colspec colnum="1" colwidth="1.5in" />
    <thead>
-    <row><entry>Switch</entry><entry>Effect</entry></row>
+    <row><entry>Option</entry><entry>Description</entry></row>
    </thead>
    <tbody>
     <row>
@@ -107,4 +111,4 @@
    </tbody>
   </tgroup>
  </informaltable>
-</appendix>
+</chapter>

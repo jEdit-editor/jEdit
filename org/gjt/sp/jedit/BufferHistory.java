@@ -306,7 +306,13 @@ public class BufferHistory
 		public void endElement(String name)
 		{
 			if(name.equals("ENTRY"))
+			{
 				addEntry(new Entry(path,caret,selection,encoding));
+				path = null;
+				caret = 0;
+				selection = null;
+				encoding = null;
+			}
 			else if(name.equals("PATH"))
 				path = charData;
 			else if(name.equals("CARET"))

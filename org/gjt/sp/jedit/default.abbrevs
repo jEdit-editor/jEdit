@@ -52,3 +52,42 @@ sl|std_logic
 slv|std_logic_vector( x downto y )
 var|variable
 sig|signal
+
+[xsl]
+fes|<xsl:for-each select="\|">\n</xsl:for-each>
+nc|<xsl:number count="\|"/>
+asn|<xsl:attribute-set name="\|">\n</xsl:attribute-set>
+sse|<xsl:strip-space elements="\|"/>
+cos|<xsl:copy-of select="\|"/>
+com|<xsl:comment>\|</xsl:comment>
+imh|<xsl:import href="\|"/>
+an|<xsl:attribute name="\|"></xsl:attribute>
+mt|<xsl:message terminate="\|"></xsl:message>
+vns|<xsl:variable name="\|" select=""/>
+ai|<xsl:apply-imports/>
+ss|<xsl:sort select="\|"/>
+pn|<xsl:param name="\|"/>
+vn|<xsl:variable name="\|"/>
+pse|<xsl:preserve-space elements="\|"/>
+cwt|<xsl:choose>\n\t<xsl:when test="\|">\n\t</xsl:when>\n</xsl:choose>
+wpn|<xsl:with-param name="\|" select=""/>
+it|<xsl:if test="\|">\n</xsl:if>
+ctn|<xsl:call-template name="\|"/>
+co|<xsl:copy>\|</xsl:copy>
+tnm|<xsl:template name="\|" match="">\n</xsl:template>
+om|<xsl:output method="\|"/>
+ats|<xsl:apply-templates select="\|"/>
+tdoe|<xsl:text disable-output-escaping="\|"></xsl:text>
+t|<xsl:text>\|</xsl:text>
+ctnwp|<xsl:call-template name="\|">\n\t<xsl:with-param name="" select=""/>\n</xsl:call-template>
+s|<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">\n\|\n</xsl:stylesheet>
+o|<xsl:otherwise>\n\|\n</xsl:otherwise>
+cwto|<xsl:choose>\n\t<xsl:when test="\|">\n\t</xsl:when>\n\t<xsl:otherwise>\n\t</xsl:otherwise>\n</xsl:choose>
+m|<xsl:message>\|</xsl:message>
+inh|<xsl:include href="\|"/>
+k|<xsl:key name="\|" match="" use=""/>
+en|<xsl:element name="\|">\n</xsl:element>
+vos|<xsl:value-of select="\|"/>
+f|<xsl:fallback>\|</xsl:fallback>
+tn|<xsl:template name="\|">\n</xsl:template>
+tm|<xsl:template match="\|">\n</xsl:template>

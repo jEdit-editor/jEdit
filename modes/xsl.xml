@@ -6,6 +6,8 @@
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+		<PROPERTY NAME="noWordSep" VALUE="-" />
+		<PROPERTY NAME="wordBreakChars" VALUE="@:|.[]{},+=&lt;&gt;/?^&amp;*" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
 		<!-- WHITE SPACE ( SPACE, TAB ) -->
@@ -23,7 +25,7 @@
 			<BEGIN>&lt;xsl:eval&gt;</BEGIN>
 			<END>&lt;/xsl:eval&gt;</END>
 		</SPAN>
-		
+
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
@@ -109,12 +111,12 @@
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
 		
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" DELEGATE="XPATH">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 		
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" DELEGATE="XPATH">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
@@ -122,4 +124,40 @@
 		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
+
+	<RULES SET="XPATH" DEFAULT="LITERAL1">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- entity refs -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">@</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+
+		<!-- axis specifiers (needs '-' as noWordSep) -->
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="FALSE">::</MARK_PREVIOUS>
+		<!-- functions -->
+		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+		<!-- variables -->
+		<MARK_FOLLOWING TYPE="LITERAL2">$</MARK_FOLLOWING>
+
+		<!-- after axis specifyer, so it doesn't interfere -->
+		<SEQ TYPE="OPERATOR">:</SEQ>
+
+	</RULES>
+
 </MODE>

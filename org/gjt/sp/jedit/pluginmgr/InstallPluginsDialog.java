@@ -264,7 +264,11 @@ class InstallPluginsDialog extends EnhancedDialog
 				PluginList.Branch branch = plugin.getCompatibleBranch();
 				name.setText(plugin.name);
 				author.setText(plugin.author);
-				latestVersion.setText(branch.version);
+				if(branch.obsolete)
+					latestVersion.setText(jEdit.getProperty(
+						"install-plugins.info.obsolete"));
+				else
+					latestVersion.setText(branch.version);
 				if(installedVersion != null)
 					installedVersion.setText(plugin.installedVersion);
 				updated.setText(branch.date);
@@ -287,7 +291,9 @@ class InstallPluginsDialog extends EnhancedDialog
 				description.setText(plugin.description
 					+ (buf.length() == 0 ? ""
 					: jEdit.getProperty("install-plugins.info"
-					+ ".also-install") + buf.toString()));
+					+ ".also-install") + buf.toString()
+					+ (branch.obsolete ? jEdit.getProperty(
+					"install-plugins.info.obsolete-text") : "")));
 			}
 			else
 			{

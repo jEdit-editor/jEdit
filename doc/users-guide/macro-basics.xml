@@ -23,7 +23,7 @@
   the plugins available for use with jEdit (in particular, the
   <application>Console</application> plugin). If you have not installed
   plugins, you really should consider doing so (see <xref
-  linkend="plugins"/> for information), but you will not need plugins for
+  linkend="using-plugins"/> for information), but you will not need plugins for
   most of what we discuss.
  </para>
 
@@ -240,7 +240,7 @@
     immediately.  The plugin allows you to keep a list of macros and
     cut-and-paste text fragments available while editing
     without opening menus. For information about installing plugins, see
-    <xref linkend="plugins"/>.
+    <xref linkend="using-plugins"/>.
    </para>
   </sidebar>
  </sect1>

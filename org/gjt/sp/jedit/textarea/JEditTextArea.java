@@ -548,7 +548,7 @@ public class JEditTextArea extends JComponent
 	{
 		Token tokens = buffer.markTokens(line).getFirstToken();
 
-		FontMetrics fm = painter.getFontMetrics();
+		FontMetrics fm;
 
 		getLineText(line,lineSegment);
 
@@ -570,7 +570,7 @@ public class JEditTextArea extends JComponent
 			if(id == Token.NULL)
 				fm = painter.getFontMetrics();
 			else
-				fm = styles[id].getFontMetrics(defaultFont);
+				fm = painter.getFontMetrics(styles[id].getStyledFont(defaultFont));
 
 			int length = tokens.length;
 
@@ -600,7 +600,7 @@ public class JEditTextArea extends JComponent
 	{
 		Token tokens = buffer.markTokens(line).getFirstToken();
 
-		FontMetrics fm = painter.getFontMetrics();
+		FontMetrics fm;
 
 		getLineText(line,lineSegment);
 
@@ -624,7 +624,7 @@ public class JEditTextArea extends JComponent
 			if(id == Token.NULL)
 				fm = painter.getFontMetrics();
 			else
-				fm = styles[id].getFontMetrics(defaultFont);
+				fm = painter.getFontMetrics(styles[id].getStyledFont(defaultFont));
 
 			int length = tokens.length;
 
