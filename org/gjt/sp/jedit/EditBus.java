@@ -77,8 +77,6 @@ public class EditBus
 	{
 		Log.log(Log.DEBUG,EditBus.class,message.toString());
 
-		EBComponent source = message.getSource();
-
 		// To avoid any problems if components are added or removed
 		// while the message is being sent
 		EBComponent[] comps = getComponents();
@@ -87,15 +85,7 @@ public class EditBus
 		{
 			try
 			{
-				EBComponent comp = comps[i];
-				if(comp == source)
-				{
-					// send to source last
-					continue;
-				}
-				comp.handleMessage(message);
-				// Comes back to the source with the veto
-				// flag on
+				comps[i].handleMessage(message);
 				if(message.isVetoed())
 					break;
 			}
@@ -106,9 +96,6 @@ public class EditBus
 				Log.log(Log.ERROR,EditBus.class,t);
 			}
 		}
-
-		if(source != null)
-			source.handleMessage(message);
 	}
 
 	/**

@@ -692,8 +692,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <indexterm><primary>syntax highlighting</></indexterm>
   </para>
   <para>
-   <guimenu>File</>&gt;<guimenuitem>Send</>
-   (keyboard equivalent: <keycap>F4</>) will display the send file
+   <guimenu>File</>&gt;<guimenuitem>Send</> will display the send file
    dialog box. <quote>SMTP Server</> should be set to your outgoing
    mail server. <quote>From</> and <quote>To</> are self-explanatory.
    <quote>Subject</> is set to the file name by default; this should
@@ -3018,8 +3017,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
 <chapter id=developing-plugins><title>Developing Plugins</>
  <para>
   This chapter overviews jEdit plugin development. A knowledge
-  of Java, Swing, and the core JDK tools (<application>javac</> and
-  <application>jar</>, or equivalent) is assumed. This chapter
+  of Java, Swing, and JDK tools (<application>javac</>,
+  <application>jar</>, and so on) is assumed. This chapter
   is meant to be read together with the jEdit API documentation; the
   text in this chapter presents brief <quote>cookbook</>-style instructions
   for the most common tasks, while the API documentation gives more
@@ -3044,9 +3043,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    class.
   </para>
   <para>
-   Plugins can use classes loaded from other plugins; an example of this
-   is the <quote>EditBus</> plugin, which provides enhanced communication
-   services to other plugins.
+   Plugins can use classes loaded from other plugins; for example,
+   the <quote>EditBus</> plugin provides enhanced communication
+   services, which other plugins can use.
   </para>
  </sect1>
  <sect1 id=plugin-class><title>The EditPlugin Class</>
@@ -3079,9 +3078,10 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <para>
    This method is responsible for adding actions and edit modes to jEdit,
    and doing other initialization tasks. It is called at the end of
-   the startup sequence, after all plugins are loaded (so classes from
+   the jEdit startup sequence, after all plugins are loaded (so by the time this
+   method is called, classes from
    other plugins are available, and so on). Most plugins will want to
-   override this method.
+   override this method and so some initialization.
   </para>
   <indexterm><primary>method</><secondary>stop() of EditPlugin class</></indexterm>
   <bridgehead renderas=sect3>EditPlugin.stop() method</>
@@ -3092,14 +3092,16 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    </funcprototype>
   </funcsynopsis>
   <para>
-   This method is called just before jEdit exits. It is rarely used.
+   This method is called just before jEdit exits. Overriding it is rarely
+   necessary.
   </para>
  </sect1>
  <sect1 id=plugin-props><title>Plugin Properties</>
   <para>
-   Plugins can use property files to store name/value pairs. These name/value
-   pairs should be used to store human-readable strings and settings used
-   by the plugin. Some properties can contain information for use by jEdit.
+   Plugins can use property files to store name/value pairs. Possible name/value
+   pairs include human-readable strings, settings for
+   the plugin, and so on. Certain properties can also
+   contain information for use by jEdit.
   </para>
   <para>
    When a plugin JAR is being loaded, all files with extension
@@ -3120,7 +3122,7 @@ foo.baz=Hello World
 qux=$</programlisting>
   <para>
    Various static methods in the <classname>jEdit</> class can be used
-   to obtain the values of properties.
+   to manipulate properties.
   </para>
   <indexterm><primary>class</><secondary>jEdit</></indexterm>
   <indexterm><primary>method</><secondary>getProperty() of jEdit class</></indexterm>
@@ -3143,11 +3145,11 @@ qux=$</programlisting>
    is used, elements of <parameter>args</> array will be substituted every
    time a string of the form <property>{<replaceable>n</>}</> occurs in the
    property value. For example,
-   the below code will produce the output <computeroutput>Hello, World-6</> if the
-   value of the <property>Foo</> property is <property>{1}, {0}-{2}</>:
+   the below code will produce the output <computeroutput>Hello, World</> if the
+   value of the <property>foo</> property is <property>{1}, {2}</>:
   </para>
-  <programlisting>Object[] args = { "World", "Hello", new Integer(6) };
-System.out.println(jEdit.getProperty("Foo",args));</>
+  <programlisting>Object[] args = { "Hello", "World" };
+System.out.println(jEdit.getProperty("foo",args));</>
   <para>
    Under the hood, this form of <function>getProperty()</> uses
    <classname>java.text.MessageFormat</> to do the formatting, and so
@@ -3189,10 +3191,10 @@ System.out.println(jEdit.getProperty("Foo",args));</>
  <sect1 id=plugin-info><title>Plugin Documentation</>
   <para>
    Unless your plugin does something extremely trivial,  providing
-   documentation is probably a good idea. To get your plugin to appear
-   in the help index, you must define the following properties, where
-   <replaceable>plugin</> is the class name of the <classname>EditPlugin</>
-   instance:
+   documentation is probably a good idea. For your plugin to appear
+   in jEdit's help index, you must define the following properties, where
+   <replaceable>plugin</> is the class name of your <classname>EditPlugin</>
+   implementation:
   </para>
   <itemizedlist>
    <listitem><para>
@@ -3211,32 +3213,42 @@ System.out.println(jEdit.getProperty("Foo",args));</>
    <listitem><para>
     <property>plugin.<replaceable>plugin</>.docs</property> - the filename,
     relative to the plugin's JAR root, where the documentation is stored in
-    HTML format (a text file could also be used, but HTML is much better).
+    HTML format
    </para></listitem>
   </itemizedlist>
+  <para>
+   All these properties must be defined for your plugin to be listed in the
+   help system. Here is an example:
+  </para>
+  <screen>plugin.ConsolePlugin.name=Console
+plugin.ConsolePlugin.author=Slava Pestov
+plugin.ConsolePlugin.version=1.9.3
+plugin.ConsolePlugin.docs=index.html</>
  </sect1>
  <sect1 id=plugin-dependencies><title>Plugin Dependencies</>
   <para>
    You can use plugin dependencies to prevent your plugin from loading on
    versions of jEdit and the JDK earlier than you specify. This should be
-   used if your plugin uses features specific to those versions to
+   used if your plugin uses features specific to those versions, to
    prevent people with earlier software from seeing endless streams of
    exceptions.
   </para>
   <para>
-   Before a plugin is loaded, jEdit checks for dependency properties
+   Before a plugin is loaded, jEdit checks any dependency properties
    defined by the plugin. These properties are named
    <property>plugin.<replaceable>plugin</>.depend.<replaceable>n</></>,
-   where <replaceable>plugin</> is the class name of the 
-   <classname>EditPlugin</> instance, and <replaceable>i</> is an index.
+   where <replaceable>plugin</> is the class name of your
+   <classname>EditPlugin</> implementation, and <replaceable>i</> is an index.
    The indexing of the dependencies must start at 0 and be consecutive.
   </para>
   <para>
-   The value of each dependency property should be either <quote>jedit</>
-   or <quote>jdk</>, followed by a space then a version number.
-   The <quote>jedit</> directive requires the jEdit <quote>build</>,
-   which is at the very top of the <filename>org/gjt/sp/jedit/jEdit.java</>
-   file.
+   To add a dependency for a specific JDK version, specify <quote>jdk</>,
+   followed by a version number as the value of a dependency property.
+   To depend on a specific jEdit release, specify <quote>jedit</> followed
+   by the <firstterm>build number</>. The build number of a jEdit release
+   can be found in the <filename>org/gjt/sp/jedit/jEdit.java</> file.
+  </para>
+  <para>
    Here is a typical example for a plugin that requires JDK 1.2 and
    jEdit 2.1pre3:
   </para>
@@ -3244,18 +3256,21 @@ System.out.println(jEdit.getProperty("Foo",args));</>
 plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
   <para>
    How do you know exactly which jEdit version your plugin requires?
-   The EditPlugin API was added in jEdit 2.1pre1 (build 02.01.01.00), so most
-   plugins will require that version. The option pane API changed
+   The EditPlugin API was added in jEdit 2.1pre1 (build 02.01.01.00), so all
+   current
+   plugins will require at least that version. The option pane API changed
    in jEdit 2.1pre3 (build 02.01.03.00), so plugins
    using option panes will require that. Finally, another major change
    occurred in jEdit 2.2pre6 (build 02.02.06.00); the EditBus message
-   system was integrated. There have been many other smaller API changes,
+   system was integrated into the core. There have been many other smaller
+   API changes along the way,
    but most don't affect plugins.
   </para>
  </sect1>
  <sect1 id=plugin-actions><title>Plugin Actions</>
   <para>
-   An <firstterm>action</> is basically an AWT action listener with a name
+   An <firstterm>action</> is basically an AWT action listener with a
+   <quote>name</>
    attached. The name is used to obtain several properties, such as the
    action's menu item label and such. Actions are called by jEdit
    in response
@@ -3281,9 +3296,7 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
    view and buffer that invoked the action. It implements the
    <classname>java.awt.event.ActionListener</> interface, and hence can be
    used anywhere an ordinary action listener would, for example to
-   handle menu item and button clicks. Currently, jEdit uses actions for
-   menus, keyboard shortcuts, and the tool bar. Plugins can only
-   customize the first two.
+   handle menu item and button clicks.
   </para>
   <bridgehead renderas=sect3>EditAction.EditAction() constructor</>
   <funcsynopsis>
@@ -3298,7 +3311,7 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
    provide a constructor with no parameters.
   </para>
   <para>
-   jEdit's built-in actions have all-lower case names, with words
+   jEdit's built-in actions have all-lower case names, with multiple words
    separated by dashes (<quote>-</>). You should follow this convention
    in your own plugins, too.
   </para>
@@ -3329,12 +3342,13 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
    This method is only called if <function>isToggle()</> returns
    <command>true</>. It should return if the menu item's check box should be
    selected. <parameter>comp</> is the component performing the query;
+   for example,
    if the menu item state is determined on a per-view basis, you can pass
    the component to the <function>getView()</> method to obtain the
    current view instance.
   </para>
   <indexterm><primary>method</><secondary>actionPerformed() of EditAction class</></indexterm>
-  <bridgehead renderas=sect3>EditAction.actionPerformed() constructor</>
+  <bridgehead renderas=sect3>EditAction.actionPerformed() method</>
   <funcsynopsis>
    <funcsynopsisinfo>import java.awt.event.ActionEvent;</>
    <funcprototype>
@@ -3344,10 +3358,10 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
   </funcsynopsis>
   <para>
    This abstract method must be implemented to do the work of the action.
-   The static <function>getView()</> and <function>getBuffer()</>
-   (which is identical to calling <function>getView().getBuffer()</>)
-   accept an action event as a parameter, and return the view instance that
-   invoked the action, either from the menu bar or with a key stroke.
+   To obtain the view or buffer instance that invoked this action,
+   pass the <parameter>evt</> event instance to the
+   <function>getView()</> or <function>getBuffer()</> methods,
+   respectively.
   </para>
   <indexterm><primary>class</><secondary>jEdit</></indexterm>
   <indexterm><primary>method</><secondary>addAction() of jEdit class</></indexterm>
@@ -3362,8 +3376,8 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
   <para>
    This method adds the action to jEdit's action list, making it available
    to the <function>GUIUtilities.loadMenuItem()</> method, and so on.
-   Plugin actions should be added in the <function>start()</> method of
-   the plugin.
+   Plugin should add their actions to jEdit in their
+   <function>start()</> methods.
   </para>
  </sect1>
  <sect1 id=plugin-menus><title>The Plugins Menu</>
@@ -3397,8 +3411,10 @@ import org.gjt.sp.jedit.View;</>
    implementation does nothing, but most plugins will want to override it
    to add instances of <classname>javax.swing.JMenu</>
    and <classname>javax.swing.JMenuItem</> to
-   the appropriate vectors. The menus and menu items can be created
-   dynamically by the plugin, but the preferred way is to use the
+   the appropriate vectors. While you could create instances of
+   <classname>JMenu</> and <classname>JMenuItem</> directly,
+   the preferred
+   way is to use the
    methods of the <classname>GUIUtilities</> class.
   </para>
   <indexterm><primary>class</><secondary>GUIUtilities</></indexterm>
@@ -3427,13 +3443,6 @@ import org.gjt.sp.jedit.View;</>
    menu. A dash (<quote>-</>) in the list will insert a menu separator
    </para></listitem>
   </itemizedlist>
-  <tip>
-   <para>
-    After loading a menu with <function>loadMenu()</>, you can add dynamically
-    generated menu items as well. The console plugin does this to let the
-    user add frequently-used command lines to the menu.
-   </para>
-  </tip>
   <indexterm><primary>class</><secondary>GUIUtilities</></indexterm>
   <indexterm><primary>method</><secondary>loadMenuItem() of GUIUtilities class</></indexterm>
   <bridgehead renderas=sect3>GUIUtilities.loadMenuItem() method</>
@@ -3466,13 +3475,14 @@ import org.gjt.sp.jedit.View;</>
    </para>
   </note>
  </sect1>
- <sect1 id=plugin-options><title>Plugin Option Panes</>
+ <sect1 id=plugin-options><title>The Plugin Options Dialog Box</>
   <para>
-   The Plugin Options dialog box is a common location for changing plugin settings.
-   Each tab in the dialog box is implemented as an implementation of the
-   <classname>org.gjt.sp.jedit.OptionPane</> interface (though most plugins
+   The Plugin Options dialog box is a common location for changing plugin
+   settings.
+   Each tab in the dialog box is actually an implementation of the
+   <classname>org.gjt.sp.jedit.OptionPane</> interface - though most plugins
    will subclass the <classname>org.gjt.sp.jedit.AbstractOptionPane</> class
-   which provides a default layout implementation).
+   which provides a default layout implementation.
   </para>
   <indexterm><primary>interface</><secondary>OptionPane</></indexterm>
   <indexterm><primary>class</><secondary>AbstractOptionPane</></indexterm>
@@ -3529,8 +3539,9 @@ implements OptionPane
    </funcprototype>
   </funcsynopsis>
   <para>
-   The <function>createOptionPanes()</> method is invoked every time the
-   Plugin Options dialog box is displayed. The canonical implementation
+   The Plugin Options dialog box invokes the
+   <function>createOptionPanes()</> method of each plugin when it is being
+   displayed. The canonical implementation
    would add a new <classname>OptionPane</> instance to the options dialog
    using the <function>addOptionPane()</> method.
   </para>
@@ -3606,9 +3617,13 @@ implements OptionPane
    property
    <property><replaceable>name</>.title</property> and
    message from the property <property><replaceable>name</>.message</property>.
-   The default value of the text field is <parameter>defaultValue</>.
+   An input dialog box is similar to a message, except that a text field is
+   added where the user can type a one-line string.
+   The <parameter>defaultValue</> parameter is the
+   initial contents of the text field.
    When the user enters a value and clicks <guibutton>OK</>,
-   the value is returned. If they click <guibutton>Cancel</>, the
+   the currently entered
+   value is returned. If they click <guibutton>Cancel</>, the
    method returns <command>null</>.
   </para>
   <indexterm><primary>method</><secondary>inputProperty() of GUIUtilities class</></indexterm>
@@ -3662,11 +3677,11 @@ implements OptionPane
   </para>
   <itemizedlist>
    <listitem><para>
-    The user might not want to keep a console window open to watch jEdit
+    The user might not want to keep a system console window open to watch jEdit
     messages
    </para></listitem>
    <listitem><para>
-    People who do use the console might get annoyed if you print too
+    People who use the console might get annoyed if you print too
     many messages
    </para></listitem>
    <listitem><para>
@@ -3710,31 +3725,45 @@ implements OptionPane
    message; it is either an object or
    a class. If <parameter>source</>
    is <command>null</>, the current thread's name is used.
-   The <parameter>message</> parameter is the actual logged message;
+   The <parameter>message</> parameter is the message that is to
+   be logged;
    it should either be a string or
    a <classname>java.lang.Throwable</> (the common superclass of all
-   exceptions and errors).
+   exceptions and errors). If you pass a <classname>Throwable</>, its
+   stack trace is logged.
   </para>
+  <para>
+   Assuming that the below example occurs in the implementation for the
+   <classname>FooPlugin</> class, the text
+   <quote>[notice] FooPlugin: loading foo.dat...</> will be appended to
+   the activity log:
+  </para>
+  <screen>Log.log(Log.NOTICE,this,"loading foo.dat...");</>
  </sect1>
 </chapter>
 
 <appendix id=cli-usage><title>Command Line Usage</>
  <para>
   When jEdit is started, it opens any files specified on the
-  command line, and parses the options. An option is a command
-  line argument that begins with <quote>-</>. To open a file
-  whose name begins with <quote>-</>, specify <quote>--</> on
-  the command line before the file name. The <quote>--</>
+  command line, and parses any specified the options. An option is a command
+  line argument that begins with <quote>-</>. If you actually want to
+  open a file
+  whose name begins with <quote>-</>, specify <quote>- -</> on
+  the command line before the file name. The <quote>- -</>
   switch makes jEdit ignore any remaining command line switches
   and interpret them as file names.
  </para>
  <indexterm><primary>moving the caret</>
  <secondary>to a marker</></indexterm>
+ <indexterm><primary>moving the caret</><secondary>
+    to a line number</></indexterm>
  <indexterm><primary>markers</></indexterm>
  <para>
   If a file name contains the hash (<quote>#</>) character, the
   remainder of the file name after the hash will be the name of
-  the marker to move the caret to.
+  the marker to move the caret to. If the first character of the
+  marker name is a plus sign (<quote>+</>) the remainder is treated as a
+  line number to move the caret to.
  </para>
  <indexterm><primary>command line</></indexterm>
  <indexterm><primary>command line switches</>
@@ -3771,7 +3800,7 @@ implements OptionPane
   <tgroup cols=2>
    <colspec colnum=1 colwidth=1.5in>
    <thead>
-    <row><entry>Switch</><entry>Description</></row>
+    <row><entry>Switch</><entry>Effect</></row>
    </thead>
    <tbody>
     <row>
@@ -3783,7 +3812,7 @@ implements OptionPane
     </row>
     <row>
      <entry>-nosession</>
-     <entry>If this switch is specified, jEdit will not attempt to load
+     <entry>jEdit will not attempt to load
      a saved session. Session saving can be
      disabled permanently in the <guimenu>File</>&gt;<guimenuitem>Global Options</>
      dialog box; see <xref linkend=global-opts>. Has no effect when connecting to
@@ -3852,11 +3881,11 @@ implements OptionPane
      <entry>Prints the jEdit version number and exists.</>
     </row>
     <row>
-     <entry>--</>
+     <entry>- -</>
      <entry>Specifies the end of the command line switches. Further
      parameters are treated as file names, even if they begin with
      a dash. Can be used to open files whose names start with a
-     dash, for example.</entry>
+     dash, and so on.</entry>
     </row>
    </tbody>
   </tgroup>
@@ -4011,7 +4040,8 @@ implements OptionPane
   jEdit uses glob patterns similar to those in MS-DOS and the various
   Unix shells to implement file name filters in the <guimenuitem>Open File</> and
   <guimenuitem>Save As</> dialog boxes.
-  Glob patterns are similar to regular expressions, but have a much simpler
+  Glob patterns resemble regular expressions somewhat,
+  but have a much simpler
   syntax. The following character sequences have special meaning within a glob
   pattern:
  </para>
@@ -4054,10 +4084,12 @@ implements OptionPane
   impressed me was John Jensen's <application>TextEdit</>.
   It's most interesting feature was a plugin system; it could
   load external JAR files to extend the editor. TextEdit got me into
-  text editors again. I liked TextEdit, but knew I could do better.
+  text editors again. It was a neat idea, but TextEdit didn't take it far
+  enough; for example, plugins we limited to filtering the selected text,
+  and couldn't do much else.
  </para>
  <para>
-  I began coding <quote>JEdit</> (note
+  So soon after seeing TextEdit, I began coding <quote>JEdit</> (note
   that the first character was capitalized, unlike today's
   <quote>jEdit</>). I implemented a plugin system similar to TextEdit's,
   and added many other features that TextEdit lacked, such as
@@ -4077,8 +4109,11 @@ implements OptionPane
   Java editors available at the time.
  </para>
  <para>
-  However, I never released JE either; it had too many limitations and
-  flaws, mostly because I didn't know Swing very well at the time.
+  However, I never released JE either; because I didn't know Swing very
+  well at the time, it had many flaws; for example, the go to line function
+  parsed the text area for
+  line break (\n) characters, instead of using the much faster
+  Swing element map.
  </para>
  <bridgehead renderas=sect2>Third Time Lucky</>
  <para>
@@ -4087,80 +4122,59 @@ implements OptionPane
   rewrote the rest from scratch. I also released early and often. After I
   implemented file loading, saving, and several other fundamental
   features, I released the first jEdit with a <quote>version number</>;
-  I called it jEdit 0.2.
- </para>
- <para>
-  After jEdit 0.2, I released several more 0.x versions which implemented
-  more basic functionality, such as search and replace.
-  I started announcing jEdit on the Linux
-  news site <quote>freshmeat</>. This heightened publicity attracted
-  several people, including those from the FreeBuilder Java IDE
-  project (and in fact, nowadays FreeBuilder uses jEdit's text component).
+  I called it jEdit 0.2. After version 0.2, I made a few more
+  0.x releases which added some more basic
+  functionality, such as printing and search and replace.
  </para>
  <bridgehead renderas=sect2>jEdit 1.0 and 1.1</>
  <para>
-  jEdit 1.0 was released around September 1998. At the time, it
-  was basically a Windows Notepad work-alike/clone,
-  with several additional features such as auto indent (and the plugin
-  system of course). Around the time of 1.0's release, the jEdit mailing
-  list had 2 or 3 members. jEdit 1.1 was released approximately one month
-  later, but it was a relatively minor update.
+  In September 1998, after only about a month of development, jEdit 1.0 was
+  released. I labelled this version <quote>1.0</> because I never
+  intended it to be anything more than a trivial text editor.
+  jEdit 1.1 was released approximately one month
+  later, but it only added a few minor features, and was still rather
+  spartan.
  </para>
  <bridgehead renderas=sect2>jEdit 1.2</>
  <para>
-  After 1.1, things started to get interesting.
-  I was having an e-mail discussion with Tal Davidson
-  (author of JStyle and Artistic Style) about syntax
-  highlighting. As a quick  hack, he wrote a syntax parser
-  called <application>JSTokenMarker</>.
-  I integrated it into jEdit immediately.
-  jEdit 1.2pre2 was the first release with syntax highlighting, but
-  it didn't cause much of a stir because it was unstable and slow.
+  After releasing jEdit 1.1, I more-or-less stopped developing it, not
+  sure what to do next. But then
+  as a quick hack,
+  Tal Davidson
+  (author of JStyle and Artistic Style) wrote a simple syntax highlighting
+  backend parser
+  that he called <application>JSTokenMarker</>.
+  After he sent it to me, I started work on jEdit 1.2 immediately.
+  1.2pre1 was a cleanup release, and 1.2pre2 integrated his code.
+  It was buggy and slow, but it changed jEdit forever; it was no longer
+  just a toy.
  </para>
  <para>
   I continued enhancing JSTokenMarker throughout the 1.2 pre-releases.
   At version 1.2pre7, it was pretty stable, and it supported
-  HTML and various other file types. Unfortunately, it was too slow, so
-  with 1.2pre8 I rewrote it from scratch. I scrapped Tal's original
-  code (sorry :) ) and wrote my own system, thinking it over more
-  carefully for speed. The result was much better; it was fast enough
-  to be usable.
+  HTML and various other file types. Unfortunately, it was too slow and
+  wasn't very well implemented (it was a quick hack, after all). So
+  in jEdit 1.2pre8, I scrapped Tal's original
+  code and wrote my own system, implementing it more
+  carefully. It was a total rewrite, and in fact none of Tal's original
+  code remains, but the JSTokenMarker legacy
+  lives on; the main syntax parser class is named <classname>TokenMarker</>,
+  and many other class and method names are similar or exactly the same
+  as in Tal's original implementation - <function>markTokens()</>, and so on.
  </para>
  <para>
-  Another major change that occurred in the 1.2 series is the switch
-  to Swing 1.1. This made jEdit compatible with JDK 1.2, and jEdit
-  benefited from Swing 1.1's improved performance and features.
+  By the time jEdit 1.2 was released, I began using it as my primary
+  text editor. Because of this, jEdit 1.2 was probably the
+  most significant release ever.
+  Version 1.1 was just a trivial hack I wrote for fun. Then, in a
+  little less than a month, it became a serious tool.
  </para>
+ <bridgehead renderas=sect2>After 1.2</>
  <para>
-  By the time 1.2final was released, it had a pretty functional syntax
-  highlighting system, and there were
-  about 30 members on the list. I also started using jEdit as my
-  primary text editor around this time. So jEdit was no longer a stupid hack;
-  it was something that I actually used.
- </para>
- <bridgehead renderas=sect2>jEdit 1.3 and 1.4</>
- <para>
-  jEdit 1.3 and 1.4 focused on adding features. jEdit 1.3 added bracket
-  highlighting and various editing commands, and jEdit 1.4 added compiler
-  error parsing (since unbundled from jEdit as a plugin).
- </para>
- <para>
-  The first third-party plugin
-  appeared only after 1.3final was released, even though jEdit had a plugin
-  system from the very start. It was the Accent Converter
-  plugin by Romain Guy.
- </para>
- <bridgehead renderas=sect2>jEdit 1.5 and 1.6</>
- <para>
-  jEdit 1.5 and 1.6 focused on cleaning up jEdit's internals, and enhancing
-  the plugin API. Because of the much-improved plugin API, more plugins
-  started showing up. Plugin central was set up.
- </para>
- <bridgehead renderas=sect2>jEdit 2.0</>
- <para>
-  In jEdit 2.0, I rewrote the text area component from scratch, without
-  basing it on Swing code. Many limitations and problems that were present
-  from the very start were solved in jEdit 2.0. It was also faster.
+  Subsequent jEdit versions added many more features and enhancements.
+  jEdit 1.2 seems primitive in comparison to the latest releases.
+  But nothing really notable has happened since 1.2 was released; jEdit
+  has more or less stayed on the same path.
  </para>
 </appendix>
 

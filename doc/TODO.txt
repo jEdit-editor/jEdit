@@ -2,9 +2,12 @@ JEDIT TO DO
 
 ------- Stuff for 2.3pre1 -------
 
-- Better ignore case/regexp/multifile options icons
-- Retake all docs snapshots with the icewm window manager
-- Remove dialog-options-shortcuts.gif from the CVS
+- Need to redo these snapshots: window-editor-*, view-registers,
+  paste-prev
+- complete-word shouldn't scan entire document every time a match needs
+  to be completed, also storing view/textArea instances in actions is
+  not a good idea
+- better ignore case, regexp icons
 
 ------- After 2.3pre1 -------
 

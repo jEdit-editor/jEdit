@@ -370,6 +370,9 @@ loop:		for(int i = offset; i < length; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/12/22 06:36:40  sp
+ * 2.3pre1 stuff
+ *
  * Revision 1.1  1999/12/14 04:20:35  sp
  * Various updates, PHP3 mode added
  *

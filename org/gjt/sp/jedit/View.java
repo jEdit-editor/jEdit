@@ -378,29 +378,7 @@ public class View extends JFrame implements EBComponent
 
 		textArea.setDocument(buffer);
 
-		Integer start = (Integer)buffer.getProperty(Buffer.SELECTION_START);
-		Integer end = (Integer)buffer.getProperty(Buffer.SELECTION_END);
-		Boolean rectSel = (Boolean)buffer.getProperty(Buffer.SELECTION_RECT);
-		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
-		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
-		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
-
-		if(start != null && end != null
-			&& firstLine != null && horizontalOffset != null)
-		{
-			textArea.select(Math.min(start.intValue(),
-				buffer.getLength()),
-				Math.min(end.intValue(),
-				buffer.getLength()));
-			textArea.setFirstLine(firstLine.intValue());
-			textArea.setHorizontalOffset(horizontalOffset.intValue());
-		}
-
-		if(rectSel != null && overwrite != null)
-		{
-			textArea.setSelectionRectangular(rectSel.booleanValue());
-			textArea.setOverwriteEnabled(overwrite.booleanValue());
-		}
+		loadCaretInfo();
 
 		updateMarkerMenus();
 		updateTitle();
@@ -484,6 +462,36 @@ public class View extends JFrame implements EBComponent
 			textArea.getHorizontalOffset()));
 		buffer.putProperty(Buffer.OVERWRITE,new Boolean(
 			textArea.isOverwriteEnabled()));
+	}
+
+	/**
+	 * Loads the caret information from the curret buffer.
+	 */
+	public void loadCaretInfo()
+	{
+		Integer start = (Integer)buffer.getProperty(Buffer.SELECTION_START);
+		Integer end = (Integer)buffer.getProperty(Buffer.SELECTION_END);
+		Boolean rectSel = (Boolean)buffer.getProperty(Buffer.SELECTION_RECT);
+		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
+		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
+		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
+
+		if(start != null && end != null
+			&& firstLine != null && horizontalOffset != null)
+		{
+			textArea.select(Math.min(start.intValue(),
+				buffer.getLength()),
+				Math.min(end.intValue(),
+				buffer.getLength()));
+			textArea.setFirstLine(firstLine.intValue());
+			textArea.setHorizontalOffset(horizontalOffset.intValue());
+		}
+
+		if(rectSel != null && overwrite != null)
+		{
+			textArea.setSelectionRectangular(rectSel.booleanValue());
+			textArea.setOverwriteEnabled(overwrite.booleanValue());
+		}
 	}
 
 	/**
@@ -943,6 +951,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.119  1999/12/22 06:36:40  sp
+ * 2.3pre1 stuff
+ *
  * Revision 1.118  1999/12/20 08:38:43  sp
  * Abbrevs option pane
  *

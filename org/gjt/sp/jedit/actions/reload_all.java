@@ -40,11 +40,22 @@ public class reload_all extends EditAction
 
 		view.showWaitCursor();
 
+		View[] views = jEdit.getViews();
+		for(int i = 0; i < views.length; i++)
+		{
+			view.saveCaretInfo();
+		}
+
 		Buffer[] buffers = jEdit.getBuffers();
 		for(int i = 0; i < buffers.length; i++)
 		{
 			Buffer buffer = buffers[i];
 			buffer.load(view);
+		}
+
+		for(int i = 0; i < views.length; i++)
+		{
+			views[i].loadCaretInfo();
 		}
 
 		view.hideWaitCursor();

@@ -41,17 +41,16 @@ public class reload extends EditAction
 			if(result != JOptionPane.YES_OPTION)
 				return;
 		}
-		
-		JEditTextArea textArea = view.getTextArea();
-		int selStart = textArea.getSelectionStart();
-		int selEnd = textArea.getSelectionEnd();
+
+		view.saveCaretInfo();
 
 		buffer.load(view);
 
-		if(selStart < buffer.getLength()
-			&& selEnd < buffer.getLength())
+		View[] views = jEdit.getViews();
+		for(int i = 0; i < views.length; i++)
 		{
-			textArea.select(selStart,selEnd);
+			if(view.getBuffer() == buffer)
+				view.loadCaretInfo();
 		}
 	}
 }

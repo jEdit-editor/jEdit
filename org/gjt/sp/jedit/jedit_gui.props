@@ -36,7 +36,7 @@ paste.icon=Paste.gif
 help.icon=Help.gif
 ignore-case.icon=IgnoreCase.gif
 regexp.icon=Regexp.gif
-multifile-search.icon=Folder.gif
+multifile-search.icon=Multifile.gif
 
 view.quicksearch=Find:\ 
 

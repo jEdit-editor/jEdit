@@ -24,15 +24,20 @@ JEDIT VERSION HISTORY
 - Cancelling a 'save as' when exiting from jEdit now aborts the exit
 - Regexps are only longer compiled once in a multifile search; this should
   make things faster when regexps are enabled
+- The cursor no longer jumps to the end of the buffer when reload-all is
+  invoked
 - Documentation updates
 
 + Bug Fixes
 
-- Geometry fix from in 2.2final backed out -- it caused problems for some
-  people
-- Fixed various bugs with NEW_FILE flag (since 2.2pre7)
 - Undos are now cleared when a buffer is reloaded (this was a bug because
   the reload garbled existing undos anyway)
+- PHP3 mode didn't perform syntax highlighting (since 2.2final)
+- Geometry loading moved windows up by the height of the title bar each time
+  (since 2.2final)
+- The NEW_FILE flag wasn't set for new files until an attempt was made
+  to load them from disk, this caused problems with BufferTabs, etc
+  (since 2.2pre8)
 
 * Version 2.2final
 
