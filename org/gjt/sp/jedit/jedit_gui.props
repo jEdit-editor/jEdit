@@ -401,7 +401,6 @@ help-menu=about \
      help@README.txt \
      help@NEWS.txt \
      help@CHANGES.txt \
-     help@TODO.txt \
      help@COPYING.txt \
      -
 help-menu.label=$Help
@@ -410,7 +409,6 @@ help.label=jEdit User Guide
 help@README.txt.label=jEdit Read Me
 help@NEWS.txt.label=Major Changes in jEdit 2.5
 help@CHANGES.txt.label=Version History
-help@TODO.txt.label=To Do and Known Bugs
 help@COPYING.txt.label=GNU General Public License
 
 ###

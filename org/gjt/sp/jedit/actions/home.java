@@ -52,8 +52,8 @@ public class home extends EditAction
 
 		int firstOfLine = textArea.getLineStartOffset(line);
 
-		firstindent = firstOfLine + firstIndent;
-		if(firstIndent == textArea.getLineEndOffset(line))
+		firstIndent = firstOfLine + firstIndent;
+		if(firstIndent == textArea.getLineEndOffset(line) - 1)
 			firstIndent = firstOfLine;
 
 		int firstLine = textArea.getFirstLine();
