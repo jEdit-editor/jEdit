@@ -53,6 +53,7 @@ total number of edit modes up to 42:
 - Intel x86 assembly (contributed by Kristian Ovaska
   <kristian.ovaska@helsinki.fi>)
 - C# (contributed by Ollie Rutherfurd <oliver@rutherfurd.net>)
+- DSSSL
 
 * FTP support moved to a plugin
 

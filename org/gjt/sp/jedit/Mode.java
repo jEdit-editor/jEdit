@@ -22,7 +22,6 @@ package org.gjt.sp.jedit;
 
 import gnu.regexp.*;
 import java.util.Hashtable;
-import org.gjt.sp.jedit.syntax.NullTokenMarker;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.util.Log;
 
@@ -87,13 +86,7 @@ public class Mode
 	 */
 	public TokenMarker createTokenMarker()
 	{
-		// load if necessary
-		TokenMarker marker = getTokenMarker();
-
-		if(marker == null)
-			return new NullTokenMarker();
-
-		return (TokenMarker)marker.clone();
+		return (TokenMarker)getTokenMarker().clone();
 	}
 
 	/**
@@ -124,11 +117,7 @@ public class Mode
 	public void loadIfNecessary()
 	{
 		if(marker == null)
-		{
-			String grammar = (String)getProperty("grammar");
-			if(grammar != null)
-				jEdit.loadMode(grammar);
-		}
+			jEdit.loadMode((String)getProperty("grammar"));
 	}
 
 	/**
@@ -248,41 +237,3 @@ public class Mode
 	private RE filenameRE;
 	private TokenMarker marker;
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.32  2000/11/19 00:14:29  sp
- * Documentation updates, some bug fixes
- *
- * Revision 1.31  2000/11/12 05:36:48  sp
- * BeanShell integration started
- *
- * Revision 1.30  2000/11/02 09:19:31  sp
- * more features
- *
- * Revision 1.29  2000/07/14 06:00:44  sp
- * bracket matching now takes syntax info into account
- *
- * Revision 1.28  2000/05/13 05:13:31  sp
- * Mode option pane
- *
- * Revision 1.27  2000/05/12 11:07:38  sp
- * Bug fixes, documentation updates
- *
- * Revision 1.26  2000/04/15 07:07:24  sp
- * Smarter auto indent
- *
- * Revision 1.25  2000/04/01 12:21:27  sp
- * mode cache implemented
- *
- * Revision 1.24  2000/04/01 09:49:36  sp
- * multiline token highlight was messed up
- *
- * Revision 1.23  2000/04/01 08:40:54  sp
- * Streamlined syntax highlighting, Perl mode rewritten in XML
- *
- * Revision 1.22  2000/03/26 03:30:48  sp
- * XMode integrated
- *
- */

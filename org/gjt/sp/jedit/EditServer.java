@@ -223,7 +223,7 @@ class EditServer extends Thread
 		throws IOException
 	{
 		boolean readOnly = false;
-		boolean reuseView = false;
+		boolean newView = false;
 		String parent = null;
 		String session = (jEdit.getBooleanProperty("saveDesktop")
 			? "default" : null);
@@ -243,8 +243,8 @@ class EditServer extends Thread
 					endOpts = true;
 				else if(command.equals("readonly"))
 					readOnly = true;
-				else if(command.equals("reuseview"))
-					reuseView = true;
+				else if(command.equals("newview"))
+					newView = true;
 				else if(command.startsWith("parent="))
 					parent = command.substring(7);
 				else if(command.startsWith("session="))
@@ -280,7 +280,7 @@ class EditServer extends Thread
 			buffer = TSnewFile();
 
 		// Create new view
-		if(reuseView)
+		if(!newView)
 			view = jEdit.getFirstView();
 
 		if(view != null)
@@ -297,6 +297,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/11/29 06:53:00  sp
+ * DSSSL syntax highlighting, documentation updates, bug fixes
+ *
  * Revision 1.17  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

@@ -135,20 +135,26 @@ public class SearchDialog extends EnhancedDialog
 
 	public void ok()
 	{
-		if(batchSearch.isSelected())
-		{
-			save();
-			if(SearchAndReplace.batchSearch(view));
-				closeOrKeepDialog();
-		}
-		else
+		try
 		{
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-			save();
-			if(SearchAndReplace.find(view))
-				closeOrKeepDialog();
+			if(!save())
+				return;
 
+			if(batchSearch.isSelected())
+			{
+				if(SearchAndReplace.batchSearch(view));
+					closeOrKeepDialog();
+			}
+			else
+			{
+				if(SearchAndReplace.find(view))
+					closeOrKeepDialog();
+			}
+		}
+		finally
+		{
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 	}
@@ -284,7 +290,7 @@ public class SearchDialog extends EnhancedDialog
 		cons.anchor = GridBagConstraints.WEST;
 		cons.fill = GridBagConstraints.HORIZONTAL;
 
-		filter = new HistoryTextField("filter");
+		filter = new HistoryTextField("search.filter");
 
 		cons.insets = new Insets(0,0,3,0);
 
@@ -305,7 +311,7 @@ public class SearchDialog extends EnhancedDialog
 
 		cons.gridy++;
 
-		directory = new HistoryTextField("directory");
+		directory = new HistoryTextField("search.directory");
 
 		label = new JLabel(jEdit.getProperty("search.directoryField"),
 			SwingConstants.RIGHT);
@@ -413,16 +419,19 @@ public class SearchDialog extends EnhancedDialog
 		searchSubDirectories.setEnabled(directoryEnabled);
 	}
 
-	private void save()
+	private boolean save()
 	{
+		String filter = this.filter.getText();
+		if(filter.length() == 0)
+			filter = "*";
+
 		if(searchCurrentBuffer.isSelected())
 			fileset = new CurrentBufferSet();
 		else if(searchAllBuffers.isSelected())
-			fileset = new AllBufferSet(filter.getText());
+			fileset = new AllBufferSet(filter);
 		else if(searchDirectory.isSelected())
 		{
 			String directory = this.directory.getText();
-			String filter = this.filter.getText();
 			boolean recurse = searchSubDirectories.isSelected();
 
 			if(fileset instanceof DirectoryListSet)
@@ -435,6 +444,13 @@ public class SearchDialog extends EnhancedDialog
 			}
 			else
 				fileset = new DirectoryListSet(directory,filter,recurse);
+		}
+
+		if(fileset.getBufferCount() == 0)
+		{
+			// oops
+			GUIUtilities.error(this,"empty-fileset",null);
+			return false;
 		}
 
 		SearchAndReplace.setSearchFileSet(fileset);
@@ -451,6 +467,8 @@ public class SearchDialog extends EnhancedDialog
 			keepDialog.isSelected());
 
 		jEdit.setBooleanProperty("search.batch.toggle",batchSearch.isSelected());
+
+		return true;
 	}
 
 	private void closeOrKeepDialog()

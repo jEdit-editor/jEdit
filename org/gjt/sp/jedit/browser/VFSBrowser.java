@@ -106,7 +106,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		layout.setConstraints(label,cons);
 		pathAndFilterPanel.add(label);
 
-		pathField = new HistoryTextField("directory",true,false);
+		pathField = new HistoryTextField("vfs.browser.path",true,false);
 
 		// because its preferred size can be quite wide, we
 		// don't want it to make the browser way too big,
@@ -136,7 +136,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		layout.setConstraints(filterCheckbox,cons);
 		pathAndFilterPanel.add(filterCheckbox);
 
-		filterField = new HistoryTextField("filter",true);
+		filterField = new HistoryTextField("vfs.browser.filter",true);
 		filterField.addActionListener(actionHandler);
 
 		cons.gridx = 1;
@@ -871,59 +871,3 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.29  2000/11/23 08:34:10  sp
- * Search and replace UI improvements
- *
- * Revision 1.28  2000/11/19 07:51:25  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.27  2000/11/11 02:59:30  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.26  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.25  2000/10/12 09:28:27  sp
- * debugging and polish
- *
- * Revision 1.24  2000/10/05 04:30:10  sp
- * *** empty log message ***
- *
- * Revision 1.23  2000/09/26 10:19:46  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.22  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.21  2000/09/06 04:39:47  sp
- * bug fixes
- *
- * Revision 1.20  2000/09/03 03:16:53  sp
- * Search bar integrated with command line, enhancements throughout
- *
- * Revision 1.19  2000/08/31 02:54:00  sp
- * Improved activity log, bug fixes
- *
- * Revision 1.18  2000/08/29 07:47:12  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.17  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.16  2000/08/23 09:51:48  sp
- * Documentation updates, abbrev updates, bug fixes
- *
- * Revision 1.15  2000/08/20 07:29:30  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.14  2000/08/16 12:14:29  sp
- * Passwords are now saved, bug fixes, documentation updates
- *
- * Revision 1.13  2000/08/15 08:07:10  sp
- * A bunch of bug fixes
- *
- */

@@ -686,6 +686,12 @@ searcherror.title=Search and Replace Error
 # {0} - error message
 searcherror.message=An error occurred while performing this operation. ({0})
 
+# Empty fileset error dialog
+empty-fileset.title=Empty File Set
+empty-fileset.message=The specified search file set contains no files.\n\
+	Please ensure that the file name filter and directory to search\n\
+	(if applicable) are set correctly.
+
 # Paste previous dialog
 pasteprev.title=Paste Previous
 pasteprev.caption=Previous clippings:
@@ -1019,7 +1025,7 @@ options.command-keys.label=Command Shortcuts
 
 options.macro-keys.label=Macro Shortcuts
 
-options.browser.label=VFS Browser
+options.browser.label=File System Browser
 options.browser.defaultPath=Default path:
 options.browser.defaultPath.buffer=Parent directory of current buffer
 options.browser.defaultPath.home=Home directory
@@ -1065,14 +1071,6 @@ helpviewer.forward=Forward
 # Activity log
 log-viewer.title=Activity Log
 log-viewer.caption=Full text of log is stored in {0}.
-
-###
-### MISC
-###
-
-# Force .txt files to open in text mode, even if a different default
-# mode was specified
-mode.text.filenameGlob=*.txt
 
 ###
 ### VFS STRINGS

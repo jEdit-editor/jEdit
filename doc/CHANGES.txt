@@ -1,5 +1,40 @@
 JEDIT 2.7 VERSION HISTORY
 
+* Version 2.7pre4
+
++ New Features
+
+- DSSSL syntax highlighting
+
++ Enhancements
+
+- jEdit now displays a warning if an attempt is made to search in a file
+  set with no files
+- Minor 'Go to Previous Paragraph' and 'Go to Next Paragraph' tweak
+- Minor installer UI tweaks
+- Documentation updates
+
++ Neutral
+
+- -gui command line switch removed; now, when running in background
+  mode, an initial view is created by default. To force jEdit to start
+  without an initial view, specify the -nogui switch.
+- -reuseview command line switch removed; now, client instances open
+  buffers in existing views by default. To force a new view to be
+  created by the client, specify the -newview switch.
+
++ Bug Fixes
+
+- If the file system browser was set to display the last visted
+  directory by default, it would obtain this directory from the wrong
+  history list
+- The buttons in the first-time and new-version wizards didn't work
+- Word wrap didn't behave correctly if there was more than one word
+  beyond the wrap column position
+- Entering a blank file name filter in the search and replace dialog box
+  now searches in all files. Previously, it would generate an empty file
+  set
+
 * Version 2.7pre3
 
 + New Features

@@ -86,7 +86,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(getFlag(SYNTAX))
 			setTokenMarker(mode.createTokenMarker());
 		else
-			setTokenMarker(new NullTokenMarker());
+			setTokenMarker(jEdit.getMode("text").createTokenMarker());
 
 		if(undo != null)
 		{
@@ -195,7 +195,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		String footer = new Date().toString();
 
 		TokenMarker tokenMarker = (syntax ? this.tokenMarker
-			: new NullTokenMarker());
+			: jEdit.getMode("text").createTokenMarker());
 		SyntaxStyle[] styles = view.getTextArea().getPainter().getStyles();
 		TabExpander expander = null;
 
@@ -780,8 +780,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Returns the file this buffer is editing. This may be null if
-	 * the file is non-local.
+	 * Returns the file for this buffer. This may be null if the buffer
+	 * is non-local.
 	 */
 	public final File getFile()
 	{
@@ -1676,9 +1676,6 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void tokenizeLines(int start, int len)
 	{
-		if(tokenMarker instanceof NullTokenMarker)
-			return;
-
 		tokenMarker.linesChanged(start,len);
 
 		Segment lineSegment = new Segment();
@@ -2268,64 +2265,3 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.193  2000/11/27 02:22:16  sp
- * Type selection in file system browser, word wrap bug fixes, autosave race fix
- *
- * Revision 1.192  2000/11/24 06:48:34  sp
- * Caret position history
- *
- * Revision 1.191  2000/11/19 07:51:24  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.190  2000/11/19 00:14:29  sp
- * Documentation updates, some bug fixes
- *
- * Revision 1.189  2000/11/13 11:19:25  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.188  2000/11/12 05:36:48  sp
- * BeanShell integration started
- *
- * Revision 1.187  2000/11/11 02:59:28  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.186  2000/11/08 09:31:35  sp
- * Junk
- *
- * Revision 1.185  2000/11/07 10:08:30  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.184  2000/11/05 00:44:13  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.183  2000/11/02 09:19:31  sp
- * more features
- *
- * Revision 1.182  2000/10/30 07:14:03  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.181  2000/10/12 09:28:26  sp
- * debugging and polish
- *
- * Revision 1.180  2000/09/26 10:19:45  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.179  2000/09/23 03:01:09  sp
- * pre7 yayayay
- *
- * Revision 1.178  2000/09/09 04:00:33  sp
- * 2.6pre6
- *
- * Revision 1.177  2000/09/03 03:16:52  sp
- * Search bar integrated with command line, enhancements throughout
- *
- * Revision 1.176  2000/08/31 02:54:00  sp
- * Improved activity log, bug fixes
- *
- * Revision 1.175  2000/08/29 07:47:10  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- */

@@ -58,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.07.03.00";
+		return "02.07.04.00";
 	}
 
 	/**
@@ -84,16 +84,14 @@ public class jEdit
 
 		// Parse command line
 		boolean endOpts = false;
-		boolean reuseView = false;
+		boolean newView = false;
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
 		boolean defaultSession = true;
 		session = "default";
 		boolean showSplash = true;
-		// don't freak because 'false' is the default. This flag
-		// is only checked when running in background mode
-		boolean showGUI = false;
+		boolean showGUI = true;
 
 		for(int i = 0; i < args.length; i++)
 		{
@@ -128,8 +126,8 @@ public class jEdit
 					portFile = arg.substring(8);
 				else if(arg.startsWith("-background"))
 					background = true;
-				else if(arg.startsWith("-gui"))
-					showGUI = true;
+				else if(arg.startsWith("-nogui"))
+					showGUI = false;
 				else if(arg.equals("-nosession"))
 					session = null;
 				else if(arg.startsWith("-session="))
@@ -139,8 +137,8 @@ public class jEdit
 				}
 				else if(arg.equals("-nosplash"))
 					showSplash = false;
-				else if(arg.equals("-reuseview"))
-					reuseView = true;
+				else if(arg.equals("-newview"))
+					newView = true;
 				else
 				{
 					System.err.println("Unknown option: "
@@ -185,8 +183,8 @@ public class jEdit
 					else
 						out.write("nosession\n");
 				}
-				if(reuseView)
-					out.write("reuseview\n");
+				if(newView)
+					out.write("newview\n");
 				out.write("parent=" + userDir + "\n");
 				out.write("--\n");
 
@@ -898,12 +896,6 @@ public class jEdit
 	{
 		// remove existing modes
 		modes = new Vector();
-
-		// 'manually' create text mode
-		Mode text = new Mode("text");
-		text.setProperty("filenameGlob",getProperty("mode.text.filenameGlob"));
-		text.init();
-		addMode(text);
 
 		loadModes(MiscUtilities.constructPath(getJEditHome(),"modes"));
 
@@ -1954,7 +1946,6 @@ public class jEdit
 	{
 		System.out.println("Usage: jedit [<options>] [<files>]");
 
-		System.out.println("Common options:");
 		System.out.println("	+marker:<marker>: Positions caret"
 			+ " at marker <marker>");
 		System.out.println("	+line:<line>: Positions caret"
@@ -1971,17 +1962,15 @@ public class jEdit
 			+ " info to $HOME/.jedit/<name>");
 
 		System.out.println();
-		System.out.println("Server-only options:");
 		System.out.println("	-nosettings: Don't load user-specific"
 			+ " settings");
 		System.out.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
 		System.out.println("	-nosplash: Don't show splash screen");
 		System.out.println("	-background: Run in background mode");
-		System.out.println("	-gui: Create initial view in background mode");
+		System.out.println("	-nogui: Don't create initial view in background mode");
 		System.out.println();
-		System.out.println("Client-only options:");
-		System.out.println("	-reuseview: Don't open new view");
+		System.out.println("	-newview: Open new view if connecting to edit server");
 
 		System.out.println();
 		System.out.println("To set minimum activity log level,"

@@ -119,8 +119,6 @@ public class JEditTextArea extends JComponent
 
 		addFocusListener(new FocusHandler());
 
-		editable = true;
-
 		// This doesn't seem very correct, but it fixes a problem
 		// when setting the initial caret position for a buffer
 		// (eg, from the recent file list)
@@ -1292,7 +1290,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setSelectedText(String selectedText)
 	{
-		if(!editable)
+		if(!isEditable())
 		{
 			throw new InternalError("Text component"
 				+ " read only");
@@ -1380,7 +1378,7 @@ public class JEditTextArea extends JComponent
 			buffer.endCompoundEdit();
 		}
 
-		setCaretPosition(selectionEnd);
+		select(selectionEnd,selectionEnd,false);
 	}
 
 	/**
@@ -2109,7 +2107,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 	{
 		int lineNo = getCaretLine();
 
-		int caret = -1;
+		int caret = getBufferLength();
 
 		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
@@ -2120,15 +2118,10 @@ loop:		for(int i = 0; i < text.length(); i++)
 			}
 		}
 
-		if(caret == -1)
-			getToolkit().beep();
+		if(select)
+			select(getMarkPosition(),caret);
 		else
-		{
-			if(select)
-				select(getMarkPosition(),caret);
-			else
-				setCaretPosition(caret);
-		}
+			setCaretPosition(caret);
 	}
 
 	/**
@@ -2324,7 +2317,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	{
 		int lineNo = getCaretLine();
 
-		int caret = -1;
+		int caret = 0;
 
 		for(int i = lineNo - 1; i >= 0; i--)
 		{
@@ -2335,15 +2328,10 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			}
 		}
 
-		if(caret == -1)
-			getToolkit().beep();
+		if(select)
+			select(getMarkPosition(),caret);
 		else
-		{
-			if(select)
-				select(getMarkPosition(),caret);
-			else
-				setCaretPosition(caret);
-		}
+			setCaretPosition(caret);
 	}
 
 	/**
@@ -3364,8 +3352,6 @@ forward_scan:		do
 	private boolean caretBlinks;
 	private boolean blink;
 
-	private boolean editable;
-
 	private int firstLine;
 	private int visibleLines;
 	private int electricScroll;
@@ -3470,7 +3456,7 @@ forward_scan:		do
 			if(ch == '\t')
 			{
 				logicalLength += tabSize - (logicalLength % tabSize);
-				if(!lastWasSpace)
+				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
 					lastWordOffset = i;
 					lastWasSpace = true;
@@ -3479,7 +3465,7 @@ forward_scan:		do
 			else if(ch == ' ')
 			{
 				logicalLength++;
-				if(!lastWasSpace)
+				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
 					lastWordOffset = i;
 					lastWasSpace = true;
@@ -3488,7 +3474,7 @@ forward_scan:		do
 			else if(wordBreakChars != null && wordBreakChars.indexOf(ch) != -1)
 			{
 				logicalLength++;
-				if(!lastWasSpace)
+				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
 					lastWordOffset = i;
 					lastWasSpace = true;
