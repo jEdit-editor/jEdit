@@ -1,39 +1,91 @@
-<?XML VERSION="1.0"?>
+<!-- ASP mode by Andre Kaplan -->
 
+<?XML VERSION="1.0"?>
 <!DOCTYPE MODE>
 
 <MODE NAME="asp">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="ASP (JScript)" />
+		<PROPERTY NAME="label" VALUE="ASP Mode" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+		<PROPERTY NAME="boxComment" VALUE="--" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.asp" />
-		<PROPERTY NAME="firstlineGlob" VALUE="<%@" />
 	</PROPS>
+
 	<RULES IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
 
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="LABEL" DELEGATE="ASPVB">
+			<BEGIN>&lt;%@LANGUAGE="VBSCRIPT"%&gt;</BEGIN>
+			<END></END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPJS">
+			<BEGIN>&lt;%@LANGUAGE="JSCRIPT"%&gt;</BEGIN>
+			<END></END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPJS">
+			<BEGIN>&lt;%@LANGUAGE="JAVASCRIPT"%&gt;</BEGIN>
+			<END></END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPPL">
+			<BEGIN>&lt;%@LANGUAGE="PERLSCRIPT"%&gt;</BEGIN>
+			<END></END>
+		</SPAN>
+
+		<!-- Inlined server-side VBScript -->
+		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
+		<!-- Server-side VBScript -->
+		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+			<BEGIN>&lt;script language="vbscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-side Javascript -->
 		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;%=</BEGIN>
-			<END>%&gt;</END>
+			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
-			<END>&lt;/SCRIPT&gt;</END>
+			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<!-- stylesheet -->
-		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
-			<BEGIN>&lt;STYLE&gt;</BEGIN>
-			<END>&lt;/STYLE&gt;</END>
+		<!-- Server-side PerlScript -->
+		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+			<BEGIN>&lt;script language="perlscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Client-side javascript -->
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;script&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-Side include -->
+		<SPAN TYPE="LABEL">
+			<BEGIN>&lt;!--#</BEGIN>
+			<END>--&gt;</END>
 		</SPAN>
 
 		<!-- SGML comment -->
@@ -42,8 +94,14 @@
 			<END>--&gt;</END>
 		</SPAN>
 
+		<!-- stylesheet -->
+		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
+		</SPAN>
+
 		<!-- markup tags -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
+		<SPAN TYPE="KEYWORD1" DELEGATE="ASPVB_TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -55,29 +113,318 @@
 		</SPAN>
 	</RULES>
 
-	<RULES SET="TAGS" DEFAULT="KEYWORD1">
+	<!-- ****************************************************************** --
+	  -- ASP with VBScript as default script engine                         --
+	  -- ****************************************************************** -->
+	<RULES SET="ASPVB" IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
 
+		<!-- Inlined server-side VBScript -->
+		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<!-- Server-side VBScript -->
+		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+			<BEGIN>&lt;script language="vbscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-side Javascript -->
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-side PerlScript -->
+		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+			<BEGIN>&lt;script language="perlscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Client-side javascript -->
+		<SPAN TYPE="LABEL" DELEGATE="ASPVB_CSJS">
+			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPVB_CSJS">
+			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPVB_CSJS">
+			<BEGIN>&lt;script&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-Side include -->
+		<SPAN TYPE="LABEL">
+			<BEGIN>&lt;!--#</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- stylesheet -->
+		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="ASPVB_TAGS">
+			<BEGIN>&lt;/</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="KEYWORD1" DELEGATE="ASPVB_TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- SGML entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	</RULES>
+
+	<!-- ****************************************************************** --
+	  -- ASP with JScript as default script engine                          --
+	  -- ****************************************************************** -->
+	<RULES SET="ASPJS" IGNORE_CASE="TRUE">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- Inlined server-side Javascript -->
 		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
+		<!-- Server-side VBScript -->
+		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+			<BEGIN>&lt;script language="vbscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-side Javascript -->
 		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;%=</BEGIN>
+			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-side PerlScript -->
+		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+			<BEGIN>&lt;script language="perlscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Client-side javascript -->
+		<SPAN TYPE="LABEL" DELEGATE="ASPJS_CSJS">
+			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPJS_CSJS">
+			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPJS_CSJS">
+			<BEGIN>&lt;script&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-Side include -->
+		<SPAN TYPE="LABEL">
+			<BEGIN>&lt;!--#</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- stylesheet -->
+		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="ASPJS_TAGS">
+			<BEGIN>&lt;/</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="KEYWORD1" DELEGATE="ASPJS_TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- SGML entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	</RULES>
+
+	<!-- ****************************************************************** --
+	  -- ASP with PerlScript as default script engine                       --
+	  -- ****************************************************************** -->
+	<RULES SET="ASPPL" IGNORE_CASE="TRUE">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- Inlined server-side Perlscript -->
+		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1">
-			<BEGIN>"</BEGIN>
-			<END>"</END>
+		<!-- Server-side VBScript -->
+		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+			<BEGIN>&lt;script language="vbscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1">
-			<BEGIN>'</BEGIN>
-			<END>'</END>
+		<!-- Server-side Javascript -->
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-side PerlScript -->
+		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+			<BEGIN>&lt;script language="perlscript" runat="server"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Client-side javascript -->
+		<SPAN TYPE="LABEL" DELEGATE="ASPPL_CSJS">
+			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPPL_CSJS">
+			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LABEL" DELEGATE="ASPPL_CSJS">
+			<BEGIN>&lt;script&gt;</BEGIN>
+			<END>&lt;/script&gt;</END>
+		</SPAN>
+
+		<!-- Server-Side include -->
+		<SPAN TYPE="LABEL">
+			<BEGIN>&lt;!--#</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- stylesheet -->
+		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="ASPPL_TAGS">
+			<BEGIN>&lt;/</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="KEYWORD1" DELEGATE="ASPPL_TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- SGML entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	</RULES>
+
+	<!-- ****************************************************************** --
+	  --  HTML Tags                                                         --
+	  -- ****************************************************************** -->
+	<RULES SET="ASPVB_TAGS" DEFAULT="KEYWORD1">
+		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+	</RULES>
+
+	<RULES SET="ASPJS_TAGS" DEFAULT="KEYWORD1">
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+	</RULES>
+
+	<RULES SET="ASPPL_TAGS" DEFAULT="KEYWORD1">
+		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+	</RULES>
+
+	<!-- ****************************************************************** --
+	  -- Client-side Javascript                                             --
+	  -- ****************************************************************** -->
+	<RULES SET="ASPVB_CSJS" DEFAULT="LABEL">
+		<SPAN TYPE="LABEL" DELEGATE="vbscript::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+	</RULES>
+
+	<RULES SET="ASPJS_CSJS" DEFAULT="LABEL">
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+	</RULES>
+
+	<RULES SET="ASPJS_CSPL" DEFAULT="LABEL">
+		<SPAN TYPE="LABEL" DELEGATE="perl::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
 		</SPAN>
 	</RULES>
 </MODE>

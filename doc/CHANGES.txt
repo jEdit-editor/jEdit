@@ -5,17 +5,21 @@ JEDIT VERSION HISTORY
 + New Features
 
 - CSS mode added; HTML and friends now highlight CSS stylesheets inside
-  <style> tags
+  <style> tags (Mike Dillon)
+- ASP mode (Andre Kaplan)
 
 + Enhancements
 
-- More modes support inline JavaScript; PHP, JSP, ColdFusion
+- PHP, JSP, ColdFusion now support inline JavaScript
+- Updated VBScript and JavaScript modes (Andre Kaplan)
 
 + Bug Fixes
 
 - Fixed a bug in SyntaxDocument's line handling (since 2.4pre2)
 - Automatic abbrev expansion didn't work (since 2.4pre1)
 - BufferTabs had problems when buffers were closed sometimes (since 2.4pre1)
+- If ruleset a::A delegated to b::B which delegated to C, jEdit would look
+  for a::C instead of b::C (since 2.4pre2) (Mike Dillon)
 
 * Version 2.4pre3
 

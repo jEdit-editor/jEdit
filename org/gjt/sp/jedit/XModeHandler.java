@@ -387,6 +387,11 @@ public class XModeHandler extends HandlerBase
 				}
 				else
 				{
+					if (lastDelegateSet.indexOf("::") == -1)
+					{
+						lastDelegateSet = modeName + "::" + lastDelegateSet;
+					}
+
 					addRule(ParserRuleFactory
 						.createDelegateSpanRule(
 						lastStart,lastEnd,

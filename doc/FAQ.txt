@@ -10,7 +10,8 @@ Please read this file before reporting bugs.
 - 4. Why do I get OutOfMemoryErrors?
 - 5. Why do I get a ClassDefNotFoundError on startup?
 - 6. Why doesn't plugin XXX work?
-- 7. Why is jEdit so slow?
+- 7. Why don't newly installed edit modes work?
+- 8. Why is jEdit so slow?
 
 * 1. Java bugs that cause problems in jEdit
 
@@ -92,7 +93,23 @@ Download updated jEdit versions from <http://jedit.sourceforge.net>.
 To update plugins, either use the Plugin Manager's 'Update' function,
 or go to jEdit plugin central <http://jedit.standmed.com>.
 
-* 7. Why is jEdit so slow?
+* 7. Why don't newly installed edit modes work?
+
+Just placing an edit mode file in the modes directory is not enough to
+get jEdit to recognise it. You must also update the mode cache. To
+update the mode cache, invoke `Utilities->Reload Edit Modes' in jEdit.
+
+This must be done because jEdit doesn't actually load all edit modes
+on startup, instead it just reads a cache file which is much faster.
+The cache file stores the most important details about all known edit
+modes. The actual mode grammar files are only loaded and parsed when
+necessary.
+
+Note that updating the cache file when installing after installing a new
+jEdit release is not necessary. jEdit detects when a new version has
+been installed and updates the cache automatically.
+
+* 8. Why is jEdit so slow?
 
 Because jEdit is written in Java, it's performance will always be slower
 than native applications. A fast system with a good Java implementation

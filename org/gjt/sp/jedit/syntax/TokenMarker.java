@@ -96,27 +96,40 @@ public class TokenMarker implements Cloneable
 	{
 		ParserRuleSet rules;
 
-		int delim = setName.indexOf("::");
+		rules = (ParserRuleSet) ruleSets.get(setName);
 
-		if (delim == -1)
+		if (rules == null && !setName.startsWith(rulePfx))
 		{
-			rules = (ParserRuleSet) ruleSets.get(rulePfx.concat(setName));
-		}
-		else
-		{
-			rules = (ParserRuleSet) ruleSets.get(setName);
+			int delim = setName.indexOf("::");
 
-			if (rules == null && !setName.startsWith(rulePfx))
+			String modeName = setName.substring(0, delim);
+
+			Mode mode = jEdit.getMode(modeName);
+			if(mode == null)
 			{
-				String modeName = setName.substring(0, delim);
-
-				rules = getExternalRuleSet(modeName,
-					setName.substring(delim + 2));
-
-				// store external ParserRuleSet in the local hashtable for
-				// faster lookups later
-				if (rules != null) ruleSets.put(setName, rules);
+				Log.log(Log.ERROR,TokenMarker.class,
+					"Unknown edit mode: " + modeName);
+				rules = null;
 			}
+			else
+			{
+				TokenMarker marker = mode.getTokenMarker();
+
+				if (marker == null)
+				{
+					Log.log(Log.ERROR,TokenMarker.class,
+					"Cannot delegate to plain text mode");
+					rules = null;
+				}
+				else
+				{
+					rules = marker.getRuleSet(setName);
+				}
+			}
+
+			// store external ParserRuleSet in the local hashtable for
+			// faster lookups later
+			ruleSets.put(setName, rules);
 		}
 
 		if (rules == null)
@@ -205,11 +218,12 @@ public class TokenMarker implements Cloneable
 		System.arraycopy(lineInfo,index,lineInfo,len,
 			lineInfo.length - len);
 
+		ParserRuleSet mainSet = getRuleSet(rulePfx.concat("MAIN"));
+
 		for(int i = index + lines - 1; i >= index; i--)
 		{
 			lineInfo[i] = new LineInfo();
-			lineInfo[i].context = new LineContext(null,
-				getRuleSet("MAIN"));
+			lineInfo[i].context = new LineContext(null, mainSet);
 		}
 	}
 	
@@ -286,28 +300,6 @@ public class TokenMarker implements Cloneable
 	private int pos;
 	private boolean escaped;
 
-	private static ParserRuleSet getExternalRuleSet(String modeName, String setName)
-	{
-		Mode mode = jEdit.getMode(modeName);
-		if(mode == null)
-		{
-			Log.log(Log.ERROR,TokenMarker.class,
-				"Unknown edit mode: " + modeName);
-			return null;
-		}
-
-		TokenMarker marker = mode.getTokenMarker();
-
-		if (marker == null)
-		{
-			Log.log(Log.ERROR,TokenMarker.class,
-				"Cannot delegate to plain text mode");
-			return null;
-		}
-
-		return marker.getRuleSet(setName);
-	}
-
 	private TokenMarker(TokenMarker copy)
 	{
 		name = copy.name;
@@ -320,8 +312,8 @@ public class TokenMarker implements Cloneable
 	{
 		LineContext lastContext = (prevInfo == null ? null
 			: prevInfo.context);
-		if(lastContext == null)
-			lastContext = new LineContext(null,getRuleSet("MAIN"));
+		if(lastContext == null) lastContext = new LineContext(null,
+			getRuleSet(rulePfx.concat("MAIN")));
 
 		context = info.context;
 
@@ -926,6 +918,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  2000/04/03 07:33:11  sp
+ * Mode updates, delegate bug fixed, close all bug fixed
+ *
  * Revision 1.38  2000/04/02 02:17:59  sp
  * delegates bug fixes, mode updates
  *

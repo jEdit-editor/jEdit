@@ -70,7 +70,7 @@ public class BufferTabs extends JTabbedPane
 			new Magic(buffer),buffer.getPath(),
 			index);
 
-		if(index <= selectedIndex)
+		if(getComponentCount() != 1 && index <= selectedIndex)
 		{
 			selectedIndex++;
 			setSelectedIndex(selectedIndex);
@@ -195,6 +195,9 @@ public class BufferTabs extends JTabbedPane
 				buffer = buffer.getNext();
 				index--;
 			}
+
+			if(getComponentCount() == 0)
+				return;
 
 			Magic comp = (Magic)getSelectedComponent();
 			if(comp != null)

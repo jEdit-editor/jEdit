@@ -140,12 +140,16 @@
 		<KEYWORDS>
 			<LABEL>@author</LABEL>
 			<LABEL>@deprecated</LABEL>
+			<LABEL>@docRoot</LABEL>
 			<LABEL>@exception</LABEL>
 			<LABEL>@link</LABEL>
 			<LABEL>@param</LABEL>
 			<LABEL>@return</LABEL>
 			<LABEL>@see</LABEL>
+			<LABEL>@serialData</LABEL>
+			<LABEL>@serialField</LABEL>
 			<LABEL>@since</LABEL>
+			<LABEL>@throws</LABEL>
 			<LABEL>@version</LABEL>
 		</KEYWORDS>
 	</RULES>
