@@ -1,5 +1,155 @@
 JEDIT VERSION HISTORY
 
+* Version 2.1pre3
+
++ New Features
+
+- Simple keyboard macros
+  - Macros are stored as files with extension '.macro' in $HOME/.jedit/macros
+  - Only keystrokes are recorded, not menu item selections
+  - Search and replace operations cannot be recorded yet
+- Repeat counts. Enter C+ENTER <count> <action> to repeat <action>
+  <number> times. Examples:
+  C+ENTER 1 0 C+d C+d: deletes 10 lines
+  C+ENTER 5 m: inserts 'm' 5 times
+  C+ENTER 5 C+c: copies selection, repeated 5 times, to the clipboard
+  C+ENTER 4 0 C+l: moves caret to line 40 (if goto line command is invoked
+  with a repeat count, it goes to that line, otherwise it displays the
+  goto line dialog box)
+- Plugin updates:
+  Console 1.7 included
+
++ API Changes
+
+- OptionPane is now an interface, and default layout code is now in
+  the AbstractOptionPane subclass. This breaks all existing plugins
+  that use option panes.
+- Option pane support removed from old API plugins. Now if you want
+  to use option panes, you MUST rewrite for the new API.
+
++ Enhancements
+
+- File choosers are reused, so the open file and save as dialogs should
+  display faster
+- Less verbose plugin loading
+- Plugin development documentation updated
+- A message is displayed after a 'Replace All' showing how many lines of
+  text were changed
+
++ Bug Fixes
+
+- Save As dialogs didn't display the file name
+- The key binding editor didn't work for built in actions
+- Help contents showed '{1}' for the files in the 'Miscellaenous' section
+- 'Spaces to Tabs' command didn't work with column selections
+
+* Version 2.1pre2
+
++ New Features
+
+- RMI server is gone (and so are all of its problems), old socket-based
+  system reintroduced (Slava Pestov)
+- IDL mode added (Juha Lindfors)
+- Some third-party plugins are now bundled with jEdit:
+  - Console 1.6 by Slava Pestov
+  - EditBus 0.2 by Slava Pestov
+  - WWWBrowser 1.2.1 by Slava Pestov
+  - QuickFile 0.5 by Jason Ginchereau
+  - jBrowse 0.9.8 by George Latkiewicz
+
++ Enhancements
+
+- File not found errors are no longer shown, instead (new) is displayed
+  in the title bar
+- To uppercase, to lowercase, insert date, and format actions moved to
+  TextTools plugin
+- Removed AMSTeX and LaTeX modes, now that the console is a plugin they
+  are no longer needed (TeX mode remains of course)
+
++ Bug Fixes
+
+- PDF, HTML and API documentation was not included with 2.1pre1
+- Help index didn't work if jEdit was installed in a directory whose name
+  contained a space character
+
+* Version 2.1pre1
+
++ New Features
+
+- Rectangular selection added; Control-drag to select rectangles,
+  and press C+\ to toggle between a normal selection and a
+  rectangle
+- Registers. A register can store a string, caret position, or
+  file name. The anchor commands are no longer supported; use
+  caret registers instead. Any number of registers can be used
+- `Previous Bracket' and `Next Bracket' commands added
+- File filters are now supported in the `Open File' and `Save As'
+  dialog boxes
+- Python editing mode, contributed by Jonathan Revusky <jrevusky@jet.es>
+- `Select None' command
+- Documentation is now available in PDF format. It includes
+  hyperlinks, and uses less space on disk due to PDF compression
+  (to view PDF, get Acrobat Reader from <http://www.adobe.com>,
+  it is available for a large number of operating systems)
+- XML editing mode, identical to HTML except that JavaScripts are not
+  highlighted. Automatically selected for .xml, .sgml and .sgm files
+
++ API Changes
+
+- The BufferListener interface has changed. Any plugins that
+  directly implement BufferListener will have to be modified
+- Removed the SyntaxDocument interface, DefaultSyntaxDocument class
+  is now named SyntaxDocument
+- DefaultSyntaxDocument contains beginCompoundEdit() and
+  endCompoundEdit() methods, by default they are empty, but Buffer
+  provides implementations
+- jEdit.setProperty() method only sets properties if their value is
+  different from that already entered
+- View.addToolBar(int,Component) changed to View.addToolBar(Component)
+- Removed unused viewCurrentErrorChanged() method from ViewListener
+- VIEW_CREATED event is fired just before the view is displayed, so that it
+  is not necessary to call revalidate(), etc when adding stuff to a view
+- New plugin API: extend the EditPlugin class instead. Plugin-interface
+  plugins will continue to work, but jEdit will print a warning message
+  on startup
+
++ Enhancements
+
+- The text area now uses Swing double buffering, and should be a bit
+  faster
+- More responsive mouse dragging
+- Slightly faster C and HTML token markers
+- Removed some dead code from View.java
+- New BUFFER_SAVING event that is fired just before a buffer
+  is saved. Can be used by plugins to do some sort of filtering
+  before a buffer is saved, eg removing trailing whitespace
+- Various minor fixes to the paragraph commands
+- Slightly faster keyboard response
+- Minor menu bar rearrangement (keyboard shortcuts mostly remain the same)
+- Configure script is gone; edit Rules.make by hand, if necessary
+- The line number indicator is now displayed to the left of the
+  horizontal scroll bar (this means that hints are no longer shown,
+  but they weren't very useful anyway)
+- 'clear' action removed (why don't you just press 'Backspace'?)
+- Closing all buffers will open a new untitled file, instead of exiting
+  jEdit
+
++ Bug Fixes
+
+- Minor change to exit() method that should stop autosave files
+  from being left around
+- Possible fix for the NullPointerExceptions people were seeing
+  when opening files
+- Several minor problems in Perl mode fixed
+- Previous word/next word commands didn't work in modes which
+  didn't define the noWordSep buffer-property
+- Scroll to Line command would scroll horizontally by an absurd
+  amount
+- Sometimes the buffer and view lists would "break" in the middle
+  when a view or buffer was being closed
+- Resource loading from plugins didn't work with JDK 1.3
+- addPluginAction() ignored plugins' keyboard shortcuts
+
 * Version 2.0final
 
 + Enhancements
@@ -1588,6 +1738,3 @@ file dialog as soon as Swing 1.1 final is out
 * Version 0.2
 
 - Change log started
-
--- Slava Pestov
-<sp@gjt.org>

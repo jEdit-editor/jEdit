@@ -5,9 +5,7 @@ Please read this file before reporting bugs.
 * Contents
 
 - 1. JDK bugs that cause problems in jEdit
-- 2. What happened to the console?
-- 3. What happened to the `Open in WWW Browser' command?
-- 4. What happened to the Rot13 and Reverse plugins?
+- 4. What happened to the various text commands?
 - 5. Why are file permissions reset to the defaults when I save?
 - 6. Why can't I copy and paste between jEdit and other applications?
 - 7. Why do I get OutOfMemoryErrors?
@@ -18,9 +16,6 @@ Please read this file before reporting bugs.
 
 Before reporting a problem with jEdit, make sure it's not a JDK bug:
 
-- Bug #4060861 - not having your computer's host name aliased to
-127.0.0.1 will cause RMI to throw an AccessException (fixed in JDK 1.1.8
-and 1.2, Unix only)
 - Bug #4186108, maybe others - printing doesn't work very well with JDK
 1.2 (not yet fixed)
 - Bug #4159610 - Alt key menu mnemonics insert the mnemonic character
@@ -34,30 +29,25 @@ is to disable geometry saving in File->Global Options->General)
 - Bug ???? - the HTMLEditorKit (hence the jEdit help viewer) is buggy
 and doesn't support some HTML
 
-* 2. What happened to the console?
+* 2. What happened to the various text commands?
 
-As of jEdit version 2.0, the console is a plugin distributed separately
-from jEdit. Download it from <http://www.icg-online.de/jedit/>.
+As of jEdit 2.1, the following commands and plugins have been moved
+to Mike Dillon's TextTools plugin, available from jEdit plugin central
+<http://www.icg-online.de/jedit/>:
 
-* 3. What happened to the `Open in WWW Browser' command?
+- Format
+- Insert Date
+- Reverse
+- Rot13
+- To Lowercase
+- To Uppercase
 
-As of jEdit version 2.0, the `Open in WWW Browser' command is a plugin
-distributed separately from jEdit. Download it from
-<http://www.icg-online.de/jedit/>.
-
-* 4. What happened to the Rot13 and Reverse plugins?
-
-You mean you actually *USE* them? As of jEdit 2.0, Rot13 and Reverse
-have been rolled into Mike Dillon's TextTools plugin, which is
-distributed separately from jEdit. Download it from
-<http://www.icg-online.de/jedit/>.
-
-* 5. Why are file permissions reset to the defaults when I save?
+* 3. Why are file permissions reset to the defaults when I save?
 
 This occurs because of a Java limitation. The only workaround is to
 disable backups in `File->Global Options->General'.
 
-* 6. Why can't I copy and paste between jEdit and other applications?
+* 4. Why can't I copy and paste between jEdit and other applications?
 
 If you're using jEdit on a Unix system, you will not be able to access
 the `middle-mouse-button' cut buffer, only the Motif clipboard. This is
@@ -69,7 +59,7 @@ clipboards, such as nedit, to transfer data.
 Some people also reported that copy & paste doesn't work very well on
 Windows, either. So the JDK sucks when it comes to clipboard handling.
 
-* 7. Why do I get OutOfMemoryErrors?
+* 5. Why do I get OutOfMemoryErrors?
 
 When you have lots of buffers open, there might not be enough free space
 in the Java heap, even though lots of RAM is available. The solution is
@@ -93,12 +83,11 @@ command line before starting jEdit, or place it in your .csh.login or
 
 setenv JEDIT -mxNNm
 
-Where NN is the size of the Java heap, in megabytes. The default is 32
-Mb - if you like to open lots of files at once, 64 might be better.
+Where NN is the size of the Java heap, in megabytes. The default is 16
+Mb - if you like to open lots of files at once, 32 or even more might
+be better.
 
-Note that JDK 1.1.8 has a dynamic heap, so this is not necessary.
-
-* 8. Why do I get a ClassDefNotFoundError on startup?
+* 6. Why do I get a ClassDefNotFoundError on startup?
 
 If you get a `ClassDefNotFoundError' when jEdit is starting up, the most
 likely problem is that you do not have Swing 1.1 or later installed
@@ -107,20 +96,21 @@ it's swingall.jar file must be in the CLASSPATH.
 
 Swing can be downloaded from <java.sun.com/products/jfc/index.html>.
 
-* 9. Why is jEdit so slow?
+* 7. Why is jEdit so slow?
 
 Because jEdit is written in Java, it's performance will always be slower
 than native applications. A fast system with a good JVM will narrow the
 performance gap.
 
-On all systems, a speedup can be achieved by installing the latest Swing
-version. Swing 1.1.1 seems to be much faster than Swing 1.1final.
-
-Installing more RAM may improve performance - more RAM will result in
-less garbage collection.
+On all systems, a speedup can be achieved by installing the latest JDK
+and/or Swing version. For those using JDK 1.1, Swing 1.1.1 seems to be
+much faster than Swing 1.1final. Those using JDK 1.2 should try the
+early access version of JDK 1.3, or the new HotSpot VM: both make
+speed up jEdit significantly.
 
 On Linux, try installing the TYA JIT
 <ftp://gonzales.cyberus.ca/pub/Linux/java>.
 
--- Slava Pestov
-<sp@gjt.org>
+Finally, if your jEdit version is more than a couple of months old,
+chances are a newer version is already available. Improvements to
+jEdit's speed are always being made.

@@ -1,0 +1,8 @@
+MAJOR CHANGES IN JEDIT 2.1 SINCE 2.0
+
+This file outlines the major changes in jEdit 2.1 since 2.0. A complete
+list can be found in the file named CHANGES.txt.
+
+- XXX to do
+
+There are many more less important changes, as well as bug fixes.
