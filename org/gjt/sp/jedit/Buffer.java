@@ -330,10 +330,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(getFlag(DIRTY))
 		{
 			String[] args = { name };
-			int result = JOptionPane.showConfirmDialog(view,
-				jEdit.getProperty("changedreload.message",args),
-				jEdit.getProperty("changedreload.title"),
-				JOptionPane.YES_NO_OPTION,
+			int result = GUIUtilities.confirm(view,"changedreload",
+				args,JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)
 				return;
@@ -645,9 +643,8 @@ public class Buffer extends PlainDocument implements EBComponent
 			if(newModTime != modTime)
 			{
 				Object[] args = { this.path };
-				int result = JOptionPane.showConfirmDialog(view,
-					jEdit.getProperty("filechanged-save.message",args),
-					jEdit.getProperty("filechanged.title"),
+				int result = GUIUtilities.confirm(view,
+					"filechanged-save",args,
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE);
 				if(result != JOptionPane.YES_OPTION)
@@ -793,14 +790,12 @@ public class Buffer extends PlainDocument implements EBComponent
 				return;
 			}
 
-			String prop = (isDirty() ? "filechanged-dirty.message"
-				: "filechanged-focus.message");
+			String prop = (isDirty() ? "filechanged-dirty"
+				: "filechanged-focus");
 
 			Object[] args = { path };
-			int result = JOptionPane.showConfirmDialog(view,
-				jEdit.getProperty(prop,args),
-				jEdit.getProperty("filechanged.title"),
-				JOptionPane.YES_NO_OPTION,
+			int result = GUIUtilities.confirm(view,
+				prop,args,JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.YES_OPTION)
 			{
@@ -2951,11 +2946,8 @@ loop:				for(int i = 0; i < count; i++)
 		GUIUtilities.hideSplashScreen();
 
 		final Object[] args = { autosaveFile.getPath() };
-		int result = JOptionPane.showConfirmDialog(view,
-			jEdit.getProperty("autosave-found.message",args),
-			jEdit.getProperty("autosave-found.title"),
-			JOptionPane.YES_NO_OPTION,
-			JOptionPane.WARNING_MESSAGE);
+		int result = GUIUtilities.confirm(view,"autosave-found",args,
+			JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
 
 		if(result == JOptionPane.YES_OPTION)
 		{

@@ -295,6 +295,7 @@ class FontSelectorDialog extends EnhancedDialog
 
 		cons.gridy = 4;
 		cons.gridheight = GridBagConstraints.REMAINDER;
+		cons.weighty = 1.0f;
 		JScrollPane scroller = new JScrollPane(list);
 		layout.setConstraints(scroller,cons);
 		panel.add(scroller);

@@ -1,22 +1,18 @@
-+ grave
++ before 3.1final
+ - better folding docs
  - undo causes problems sometimes (is this related to folding at all?)
- - scrolling bug
+ - scrolling bug with folding
  - replace all fucks shit up
- - scrollbar bug
- - if the first line of the buffer is a collapsed fold, delete, undo;
-   undo inaccessable until C+e x
-
-+ important
- - document Startup macro
+ - scrollbar is not updated when view first comes up sometimes
+ - if the first line of the buffer is a collapsed fold: delete, undo,
+   text inaccessable until C+e x
+ - horizontal scroll bar not updated: insert text, undo
  - update to new gnu.regexp version
  - finish persistent splits
- - finish \t in abbrevs
- - Folding/narrowing docs - in source-edit.sgml
- - confirm() method in GUIUtilities
  - .description plugin property
  - Migrate documentation to DocBook/XML
 
-+ not really
++ sometime in the future
  - XMode rule inclusion
  - when saving local files, save to .<filename>.save, then rename to
    <filename>
@@ -24,3 +20,7 @@
  - Bracket double click behavior is really annoying - make if configurable
  - Two-pane view in filesystem browser
  - Perhaps try an alternative implementation of narrowing
+ - encoding option in VFS browser
+ - per-view fold visibility: bit-field used to store this in LineInfo
+ - eliminate virtual line map with 'virtualLine' fields in LineInfo
+   and binary search in virtualToPhysical()

@@ -376,7 +376,7 @@
 
 <ACTION NAME="indent-lines">
 	<CODE>
-		buffer.indentLines(textArea.getSelectionStartLine(),textArea.getSelectionEndLine();
+		textArea.indentSelectedLines();
 	</CODE>
 </ACTION>
 
@@ -762,6 +762,12 @@
 <ACTION NAME="select-caret-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar("Registers.selectCaretRegister(editPane,__char__);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-fold">
+	<CODE>
+		textArea.selectFold();
 	</CODE>
 </ACTION>
 

@@ -1,6 +1,6 @@
 [global]
 EMAIL|sp@gjt.org
-JEDIT|http://jedit.sourceforge.net
+JEDIT|http://www.jedit.org
 
 [java]
 Ex|Exception
@@ -18,16 +18,16 @@ sout|System.out.println(\|);
 cg|Box.createGlue()
 chs|Box.createHorizontalStrut(\|)
 cvs|Box.createVerticalStrut(\|)
-Yil|SwingUtilities.invokeLater(new Runnable()\n{\npublic void run()\n{\n\|\n}\n});
+Yil|SwingUtilities.invokeLater(new Runnable()\n{\n\tpublic void run()\n\t{\n\t\t\|\n\t}\n});
 
-Yif|if(\|)\n;
-YYif|if(\|)\n{\n\n}
-Yelse|else(\|)\n;
-YYelse|else(\|)\n{\n\n}
-Yfor|for(\|)\n;
-YYfor|for(\|)\n{\n\n}
-Ywhile|while(\|)\n;
-YYwhile|while(\|)\n{\n\n}
+Yif|if(\|)\n\t;
+YYif|if(\|)\n{\n\t\n}
+Yelse|else(\|)\n\t;
+YYelse|else(\|)\n{\n\t\n}
+Yfor|for(\|)\n\t;
+YYfor|for(\|)\n{\n\t\n}
+Ywhile|while(\|)\n\t;
+YYwhile|while(\|)\n{\n\t\n}
 
 Vi|View
 B|Buffer

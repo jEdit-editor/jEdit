@@ -301,7 +301,107 @@
  </sect1>
  <sect1 id=folding><title>Folding</>
   <para>
-   foo
+   The folding feature allows lines to be hidden or shown, depending on their
+   leading
+   indent level. Since most programming languages use indentation to nest
+   code, folding away lines with a lot of indent has the effect of displaying
+   an <quote>overview</> of the buffer only, while displaying successively
+   higher indent levels <quote>zooms in</> and shows more <quote>detail</>.
   </para>
+  <para>
+   A set of consecutive lines with the same leading indent is referred to as
+   a <firstterm>fold</>, and the amount of indent is the <firstterm>fold level</>.
+   The visibility of each fold can be set independently.
+   Text hidden due to folding is still present in the buffer, and can be made
+   visible again using the appropriate commands. Cursor movement commands behave
+   like the text is not there, but text manipulation commands will act on the
+   hidden text.
+  </para>
+  <para>
+   The initial fold visibility level can be specified on a mode-specific or
+   global basis in the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box. Folds
+   with a level higher than this will be automatically collapsed after a buffer
+   is loaded. Setting this value to zero makes all folds expanded initially
+   (this is the default).
+  </para>
+  <para>
+   The simplest way to expand and collapse folds is to click the fold markers
+   in the gutter to the left of the text area; a fold marker is drawn next to
+   the first line of each fold. An empty square is drawn next to an
+   expanded fold; a filled square next to a collapsed fold. Unless the
+   <keycap>Shift</> key is held down, clicking a filled square will expand
+   the fold by one level only; nested folds will remain collapsed. Holding down
+   <keycap>Shift</> while clicking will filly expand the fold and all nested
+   folds.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Collapse
+   Fold</> (keyboard shortcut:
+   <keycombo><keycap>Alt</><keycap>Backspace</></keycombo>) collapses the fold
+   containing the caret.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand
+   Fold One Level</> (keyboard shortcut:
+   <keycombo><keycap>Alt</><keycap>Enter</></keycombo>) expands the fold
+   containing the caret, leaving nested folds collapsed.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand
+   Fold Fully</> (keyboard shortcut:
+   <keycombo><keycap>Alt</><keycap>Shift</><keycap>Enter</></keycombo>)
+   expands the fold
+   containing the caret, also expanding nested folds.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand All
+   Folds</> (keyboard shortcut:
+   <keycombo><keycap>Control</><keycap>E</></keycombo> <keycap>ENTER</>)
+   reads the next character entered at the keyboard, and expands all folds
+   in the buffer
+   with a fold level less than that specified, and collapsed all others.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand All
+   Folds</> (keyboard shortcut:
+   <keycombo><keycap>Control</><keycap>E</></keycombo> <keycap>X</>)
+   expands all folds in the buffer.
+  </para>
+  <para>
+   <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Select Fold</>
+   (keyboard shortcut:
+   <keycombo><keycap>Control</><keycap>E</></keycombo> <keycap>S</>)
+   selects all lines in the fold containing the caret. Control-clicking on a
+   fold marker in the gutter on the left of the text area has the same effect.
+  </para>
+  <para>
+   Because folding is based on indent levels, changing the leading indent of a
+   line while folds are collapsed may result in portions of the buffer becoming
+   temporarily inaccessable. In such a case, simply invoke <guimenuitem>Expand
+   All Folds</> to restore the visibility of the hidden lines.
+  </para>
+  <sect2 id=narrowing><title>Narrowing</>
+   <para>
+    The narrowing feature hides all parts of the buffer except for one
+    specified region. While that region appears to be all there is, the
+    rest of the text is still in the buffer; just not visible.
+    While it may seem unrelated to folding, both folding and
+    narrowing are implemented using the same code internally.
+   </para>
+   <para>
+    <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Narrow Buffer to
+    Selection</> (keyboard shortcut:
+    <keycombo><keycap>Control</><keycap>E</></keycombo> <keycap>N</>)
+    hides all lines the buffer except those in the selection.
+   </para>
+   <para>
+    <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand All
+    Folds</> (keyboard shortcut:
+    <keycombo><keycap>Control</><keycap>E</></keycombo> <keycap>X</>)
+    will make visible any lines
+    hidden by narrowing.
+   </para>
+  </sect2>
  </sect1>
 </chapter>

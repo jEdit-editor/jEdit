@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit;
 
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
@@ -113,6 +114,11 @@ public class Abbrevs
 			buffer.beginCompoundEdit();
 			try
 			{
+				// obtain the leading indent for later use
+				lineText = buffer.getText(lineStart,wordStart);
+				int leadingIndent = MiscUtilities.getLeadingWhiteSpaceWidth(
+					lineText,buffer.getTabSize());
+
 				buffer.remove(lineStart + wordStart,pos - wordStart);
 				buffer.insertString(lineStart + wordStart,expand.text,null);
 				if(expand.caretPosition != -1)
@@ -121,11 +127,19 @@ public class Abbrevs
 						+ expand.caretPosition);
 				}
 
+				String whiteSpace = MiscUtilities.createWhiteSpace(
+					leadingIndent,buffer.getBooleanProperty("noTabs")
+					? 0 : buffer.getTabSize());
+
+				Element map = buffer.getDefaultRootElement();
+
 				// note that if expand.lineCount is 0, we
 				// don't do any indentation at all
 				for(int i = line + 1; i <= line + expand.lineCount; i++)
 				{
-					buffer.indentLine(i,true,false);
+					Element elem = map.getElement(i);
+					buffer.insertString(elem.getStartOffset(),
+						whiteSpace,null);
 				}
 			}
 			catch(BadLocationException bl)

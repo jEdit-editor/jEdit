@@ -80,11 +80,8 @@ public class LatestVersionPlugin extends EditPlugin
 	{
 		String[] args = { version };
 
-		int result = JOptionPane.showConfirmDialog(view,
-			jEdit.getProperty("version-check.new-version.message",args),
-			jEdit.getProperty("version-check.new-version.title"),
-			JOptionPane.YES_NO_OPTION,
-			JOptionPane.INFORMATION_MESSAGE);
+		int result = GUIUtilities.confirm(view,"version-check.new-version",
+			args,JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
 
 		if(result == JOptionPane.YES_OPTION)
 			jEdit.openFile(view,null,url.toString(),true,false);

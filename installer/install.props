@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=3.1pre2
+app.version=3.1pre3
 
 # Info to display on first page of installer
 app.readme=readme.html
@@ -20,11 +20,11 @@ app.main.class=org.gjt.sp.jedit.jEdit
 comp.count=3
 
 comp.0.name=jEdit program
-comp.0.size=2045
+comp.0.size=2055
 comp.0.fileset=jedit-program
 
 comp.1.name=jEdit online help (HTML format)
-comp.1.size=216
+comp.1.size=223
 comp.1.fileset=jedit-html
 
 comp.2.name=HTTP firewall support (Java 2 only)

@@ -271,8 +271,8 @@ public class JEditTextArea extends JComponent
 
 		// hack so that if we scroll and the matching bracket
 		// comes into view, it is highlighted
-		//if(bracketPosition == -1)
-		//	updateBracketHighlight();
+		if(bracketPosition == -1)
+			updateBracketHighlight();
 
 		if(this.firstLine != vertical.getValue())
 			updateScrollBars();
@@ -3367,6 +3367,52 @@ forward_scan:		do
 			SwingUtilities.convertPointToScreen(location,painter);
 			new CompleteWord(view,word,completions,location);
 		}
+	}
+
+	/**
+	 * Selects the fold that contains the caret line number.
+	 * @since jEdit 3.1pre3
+	 */
+	public void selectFold()
+	{
+		selectFoldAt(getCaretLine());
+	}
+
+	/**
+	 * Selects the fold that contains the specified line number.
+	 * @param line The line number
+	 * @since jEdit 3.1pre3
+	 */
+	public void selectFoldAt(int line)
+	{
+		int start;
+		int end;
+
+		if(buffer.isFoldStart(line))
+		{
+			start = line;
+			int foldLevel = buffer.getFoldLevel(line);
+
+			line++;
+
+			while(line < buffer.getLineCount()
+				&& buffer.getFoldLevel(line) > foldLevel)
+				line++;
+			end = line;
+		}
+		else
+		{
+			start = line;
+			int foldLevel = buffer.getFoldLevel(line);
+			while(start >= 0 && buffer.getFoldLevel(start) >= foldLevel)
+				start--;
+			end = line;
+			while(end < buffer.getLineCount()
+				&& buffer.getFoldLevel(end) >= foldLevel)
+				end++;
+		}
+
+		select(getLineStartOffset(start),getLineEndOffset(end) - 1);
 	}
 
 	/**

@@ -422,6 +422,8 @@ folding=collapse-fold \
 	expand-folds \
 	expand-all-folds \
 	- \
+	select-fold \
+	- \
 	narrow
 
 folding.label=Folding
@@ -430,6 +432,7 @@ expand-one-level.label=Expand Fold One Level
 expand-fold.label=Expand Fold Fully
 expand-folds.label=Expand Folds [x]
 expand-all-folds.label=Expand All Folds
+select-fold.label=Select Fold
 narrow.label=Narrow Buffer to Selection
 
 splitting=unsplit \
@@ -603,7 +606,7 @@ print.page=Page {0}
 # About dialog
 about.title=About jEdit
 about.version=jEdit version: {0}
-about.caption=jEdit web site: <http://jedit.sourceforge.net>
+about.caption=jEdit web site: <http://www.jedit.org>
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
@@ -771,13 +774,15 @@ pasteprev.caption=Previous clippings:
 pasteprev.insert=Insert
 
 # File changed on disk dialogs
-filechanged.title=File Changed on Disk
+filechanged-save.title=File Changed on Disk
 filechanged-save.message=The file {0}\n\
 	has been modified on disk by another program. Are you sure\n\
 	you want to continue saving it?
+filechanged-focus.title=File Changed on Disk
 filechanged-focus.message=The file {0}\n\
 	has been modified on disk by another program. Would you like to\n\
 	reload it from disk?
+filechanged-dirty.title=File Changed on Disk
 filechanged-dirty.message=The file {0}\n\
 	has been modified on disk by another program. Would you like to\n\
 	reload it from disk? IF YOU RELOAD, UNSAVED CHANGES WILL BE LOST.
@@ -872,7 +877,7 @@ plugin.dep-jdk.message=The plugin {0} requires Java {1} or later,\n\
 plugin.dep-jedit.title=Unsatisfied Dependency
 plugin.dep-jedit.message=The plugin {0} requires jEdit {1} or later,\n\
 	but you only have version {2}. Download new\n\
-	jEdit versions from <http://jedit.sourceforge.net>.
+	jEdit versions from <http://www.jedit.org>.
 
 plugin.dep-plugin.no-version.title=Unsatisfied Dependency
 plugin.dep-plugin.no-version.message=The plugin {0} requires version {1} or later of {2},\n\

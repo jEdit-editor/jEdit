@@ -1276,9 +1276,7 @@ public class jEdit
 		if(buffer.isDirty())
 		{
 			Object[] args = { buffer.getName() };
-			int result = JOptionPane.showConfirmDialog(view,
-				getProperty("notsaved.message",args),
-				getProperty("notsaved.title"),
+			int result = GUIUtilities.confirm(view,"notsaved",args,
 				JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.YES_OPTION)
@@ -1411,9 +1409,7 @@ public class jEdit
 	{
 		if(confirm)
 		{
-			int result = JOptionPane.showConfirmDialog(view,
-				jEdit.getProperty("saveall.message"),
-				jEdit.getProperty("saveall.title"),
+			int result = GUIUtilities.confirm(view,"saveall",null,
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)
@@ -1439,9 +1435,7 @@ public class jEdit
 	{
 		if(confirm)
 		{
-			int result = JOptionPane.showConfirmDialog(view,
-				jEdit.getProperty("reload-all.message"),
-				jEdit.getProperty("reload-all.title"),
+			int result = GUIUtilities.confirm(view,"reload-all",null,
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)

@@ -336,9 +336,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 			MiscUtilities.getProtocolOfURL(path)))
 		{
 			Object[] args = { path.substring(FavoritesVFS.PROTOCOL.length() + 1) };
-			int result = JOptionPane.showConfirmDialog(this,
-				jEdit.getProperty("vfs.browser.delete-favorites.message",args),
-				jEdit.getProperty("vfs.browser.delete-favorites.title"),
+			int result = GUIUtilities.confirm(this,
+				"vfs.browser.delete-favorites",args,
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)
@@ -347,9 +346,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		else
 		{
 			Object[] args = { path };
-			int result = JOptionPane.showConfirmDialog(this,
-				jEdit.getProperty("vfs.browser.delete-confirm.message",args),
-				jEdit.getProperty("vfs.browser.delete-confirm.title"),
+			int result = GUIUtilities.confirm(this,
+				"vfs.browser.delete-confirm",args,
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)

@@ -198,11 +198,8 @@ loop:		for(int i = 0; i < plugins.length; i++)
 		}
 		String[] args = { buf.toString() };
 
-		int result = JOptionPane.showConfirmDialog(dialog,
-			jEdit.getProperty("remove-plugins.message",args),
-			jEdit.getProperty("remove-plugins.title"),
-			JOptionPane.YES_NO_OPTION,
-			JOptionPane.QUESTION_MESSAGE);
+		int result = GUIUtilities.confirm(dialog,"remove-plugins",args,
+			JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 		if(result != JOptionPane.YES_OPTION)
 			return false;
 

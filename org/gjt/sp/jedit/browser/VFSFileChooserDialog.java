@@ -200,10 +200,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(new File(filename).exists())
 		{
 			String[] args = { MiscUtilities.getFileName(filename) };
-			int result = JOptionPane.showConfirmDialog(
-				browser,
-				jEdit.getProperty("fileexists.message",args),
-				jEdit.getProperty("fileexists.title"),
+			int result = GUIUtilities.confirm(browser,
+				"fileexists",args,
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)

@@ -304,9 +304,8 @@ loop:			for(;;)
 				if(BeanShell.isScriptRunning())
 					break loop;
 
-				int result = JOptionPane.showConfirmDialog(view,
-					jEdit.getProperty("keepsearching.message"),
-					jEdit.getProperty("keepsearching.title"),
+				int result = GUIUtilities.confirm(view,
+					"keepsearching",null,
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 				if(result == JOptionPane.YES_OPTION)

@@ -8,8 +8,17 @@ JEDIT 3.1 VERSION HISTORY
   except those in the selection. Use 'Expand All Folds' command to
   make all lines visible. Default shortcut is C+e n
 - 'Expand Fold One Level' command
+- 'Select Fold' command; Control-clicking in gutter also has the same
+  effect
 
 + Enhancements
+
+- Folding and narrowing documentation in user's guide
+- You begged, you pleaded, you bribed, you sent death threats -- and
+  now you have it:
+
+  GUIUtilities.confirm(Component comp, String name, Object[] args,
+      int buttons, int type);
 
 - Variables and functions defined in the 'Startup' macro are now
   available to all macros and BeanShell commands
@@ -20,6 +29,24 @@ JEDIT 3.1 VERSION HISTORY
 - Slightly faster local filesystem code
 - Clicking on a closed fold in the gutter now only expands one level by
   default. To expand the fold fully, Shift-click it.
+- Tabs in abbreviation expansions should finally work now, for real.
+  However, to make this change work, the expansion is no longer
+  auto-indented. So, while previously an abbrev of if()\n{\nfoo\n}
+  became:
+
+  if()
+  {
+          foo
+  }
+
+  It will now be:
+
+  if()
+  {
+  foo
+  }
+
+  Unless you insert a tab before the 'foo' in the expansion.
 
 + Bug Fixes
 
@@ -34,6 +61,17 @@ JEDIT 3.1 VERSION HISTORY
 - The filesystem browser would display 'multiple request' errors when
   deleting an expanded directory with no files inside it
 - Pressing enter on the first line of a fold caused problems
+- Bracket matching if the offending bracket is outside the bounds of the
+  screen should now work
+
++ API Changes
+
+- The jEdit 2.6 form of inputProperty() and input() took a 'String[] args'
+  parameter, which was obviously broken because all other canned dialog
+  methods accepted 'Object[] args'. I have changed inputProperty() and
+  input() to take an Object[] as well. This should not affect plugins in
+  a major way because most use the old form of these methods (which did
+  not have an 'args' parameter)
 
 * Version 3.1pre2
 

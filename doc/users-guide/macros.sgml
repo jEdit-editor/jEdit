@@ -10,12 +10,8 @@
  </para>
  <para>
   Macros are written in the <firstterm>BeanShell</>
-  scripting language.
-  While this section will only cover basic uses of BeanShell, macros are
-  by no means limited to what is described here; BeanShell is
-  a complete programming language, and your imagination is the limit to
-  what macros can do. A full description of BeanShell can be found at
-  <ulink url="http://www.beanshell.org">http://www.beanshell.org</ulink>.
+  scripting language. For information about BeanShell, see <xref
+  linkend=beanshell>.
  </para>
  <sect1 id=macro-files><title>Macro Files</>
   <para>
@@ -72,7 +68,7 @@
  </sect1>
  <sect1 id=macro-temp><title>Temporary Macros</>
   <para>
-   if a complicated operation only needs to be repeated a few of
+   If a complicated operation only needs to be repeated a few of
    times, using the temporary macro feature is easier than saving a new
    macro file.
   </para>
@@ -100,7 +96,22 @@
    macro recorded to the <filename>Temporary_Macro.bsh</> buffer.
   </para>
  </sect1>
- <sect1 id=beanshell-expr><title>Evaluating BeanShell Expressions</>
+ <sect1 id=macro-startup><title>The Startup Macro</>
+  <para>
+   If a macro named <filename>Startup.bsh</filename> exists, it is executed
+   near the end of the jEdit startup sequence. Unlike with other macros, any
+   variables and functions defined in the startup macro are available to all
+   other macros and BeanShell commands.
+  </para>
+ </sect1>
+ <sect1 id=beanshell><title>BeanShell Scripting</>
+  <para>
+   BeanShell is a complete programming language, and your imagination is the
+   limit to
+   what macros can do. A full description of BeanShell can be found at
+   <ulink url="http://www.beanshell.org">http://www.beanshell.org</ulink>.
+   This section will only cover jEdit-specific BeanShell features.
+  </para>
   <para>
    <guimenu>Utilities</>&gt;<guimenuitem>Evaluate BeanShell Expression</>
    prompts for a BeanShell expression, evaluates it, and displays the

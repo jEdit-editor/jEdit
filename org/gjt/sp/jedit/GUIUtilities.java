@@ -477,10 +477,10 @@ public class GUIUtilities
 	 * @param def The text to display by default in the input field
 	 * @param args Positional parameters to be substituted into the
 	 * message text
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 3.1pre3
 	 */
 	public static String input(Component comp, String name,
-		String[] args, Object def)
+		Object[] args, Object def)
 	{
 		hideSplashScreen();
 
@@ -501,10 +501,10 @@ public class GUIUtilities
 	 * @param args Positional parameters to be substituted into the
 	 * message text
 	 * @param def The property whose text to display in the input field
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 3.1pre3
 	 */
 	public static String inputProperty(Component comp, String name,
-		String[] args, String def)
+		Object[] args, String def)
 	{
 		hideSplashScreen();
 
@@ -516,6 +516,31 @@ public class GUIUtilities
 		if(retVal != null)
 			jEdit.setProperty(def,retVal);
 		return retVal;
+	}
+
+	/**
+	 * Displays a confirm dialog box and returns the button pushed by the
+	 * user. The title of the dialog is fetched from the
+	 * <code><i>name</i>.title</code> property. The message is fetched
+	 * from the <code><i>name</i>.message</code> property.
+	 * @param comp The component to display the dialog for
+	 * @param name The name of the dialog
+	 * @param args Positional parameters to be substituted into the
+	 * message text
+	 * @param buttons The buttons to display - for example,
+	 * JOptionPane.YES_NO_CANCEL_OPTION
+	 * @param type The dialog type - for example,
+	 * JOptionPane.WARNING_MESSAGE
+	 * @since jEdit 3.1pre3
+	 */
+	public static int confirm(Component comp, String name,
+		Object[] args, int buttons, int type)
+	{
+		hideSplashScreen();
+
+		return JOptionPane.showConfirmDialog(comp,
+			jEdit.getProperty(name + ".message",args),
+			jEdit.getProperty(name + ".title"),buttons,type);
 	}
 
 	/**

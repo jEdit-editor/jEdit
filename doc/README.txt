@@ -27,8 +27,8 @@ OF ANY KIND; see section 11 and 12 of the GPL for details.
 
 * jEdit on the Internet
 
-The jEdit homepage, located at <http://jedit.sourceforge.net> contains
-the latest version of jEdit, along with plugin downloads.
+The jEdit homepage, located at <http://www.jedit.org> contains the
+latest version of jEdit, along with plugin downloads.
 
 There are three mailing lists dedicated to jEdit; an announcement
 list that is very low traffic, a general discussion list, and a
@@ -45,11 +45,11 @@ Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
 Before reporting a bug, please read the `Common Problems' section below.
 If that doesn't answer your question, report a bug with our bug tracker;
-<http://www.sourceforge.net/bugs/?groups_id=588>. When writing a bug
-report, please try to be as specific as possible. You should specify
-your jEdit version, Java version, operating system, any relevant output
-from the activity log, and an e-mail address, in case we need further
-information to fix the bug.
+<http://sourceforge.net/tracker/?group_id=588&atid=100588>. When writing
+a bug report, please try to be as specific as possible. You should
+specify your jEdit version, Java version, operating system, any relevant
+output from the activity log, and an e-mail address, in case we need
+further information to fix the bug.
 
 * Suggesting features
 
@@ -62,8 +62,8 @@ An HTML version of the jEdit user's guide is included with jEdit; to
 view it, invoke `Help->jEdit User Guide' from jEdit's menu bar, or open
 `doc/users-guide/index.html' in a WWW browser such as Netscape.
 
-A PDF version can be obtained from <http://jedit.sourceforge.net>. It
-can be viewed in a PDF viewer such as Adobe Acrobat.
+A PDF version can be obtained from <http://www.jedit.org>. It can be
+viewed in a PDF viewer such as Adobe Acrobat.
 
 * Common problems
 

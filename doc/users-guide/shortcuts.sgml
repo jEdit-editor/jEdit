@@ -540,18 +540,25 @@
    </tgroup>
   </informaltable>
 
- <bridgehead renderas=sect1>Folding</>
+ <bridgehead renderas=sect1>Folding and Narrowing</>
   <para>
-   For details, see <xref linkend=folding>.
+   For details, see <xref linkend=folding> and <xref linkend=narrowing>.
   </para>
   <informaltable frame=none>
    <tgroup cols=2>
     <colspec colnum=1 colwidth=2.2in>
     <tbody>
      <row>
-      <entry><keycombo><keycap>Alt</><keycap>Backspace</></keycombo>;
-      <keycombo><keycap>Alt</><keycap>Enter</></keycombo></entry>
-      <entry>Collapse; expand fold containing caret.</entry>
+      <entry><keycombo><keycap>Alt</><keycap>Backspace</></keycombo>;</entry>
+      <entry>Collapse fold containing caret.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</><keycap>Enter</></keycombo></entry>
+      <entry>Expand fold containing caret one level only.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</><keycap>Shift</><keycap>Enter</></keycombo></entry>
+      <entry>Expand fold containing caret fully.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
@@ -564,6 +571,18 @@
       <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
       <keycap>X</></entry>
       <entry>Expand all folds.
+      </entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
+      <keycap>S</></entry>
+      <entry>Select fold.
+      </entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
+      <keycap>N</></entry>
+      <entry>Narrow to selection.
       </entry>
      </row>
     </tbody>
