@@ -836,7 +836,7 @@
 
 <ACTION NAME="select-prev-char">
 	<CODE>
-		textArea.goToPrevChar(true);
+		textArea.goToPrevCharacter(true);
 	</CODE>
 </ACTION>
 

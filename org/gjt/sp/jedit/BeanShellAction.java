@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import bsh.BshMethod;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 
@@ -35,9 +36,10 @@ public class BeanShellAction extends EditAction
 
 		if(isSelected != null)
 		{
-			cachedIsSelected = "_action" + counter++ + "()";
-			BeanShell.eval(null,cachedIsSelected + "{"
+			String cachedIsSelectedName = "_action" + counter++;
+			BeanShell.eval(null,cachedIsSelectedName + "(){"
 				+ isSelected + "}");
+			cachedIsSelected = BeanShell.getMethod(cachedIsSelectedName);
 		}
 	}
 
@@ -45,11 +47,12 @@ public class BeanShellAction extends EditAction
 	{
 		if(cachedCode == null)
 		{
-			cachedCode = "_action" + counter++ + "()";
-			BeanShell.eval(null,cachedCode + "{"
+			String cachedCodeName = "_action" + counter++;
+			BeanShell.eval(null,cachedCodeName + "(){"
 				+ code + "}");
+			cachedCode = BeanShell.getMethod(cachedCodeName);
 		}
-		BeanShell.eval(view,cachedCode);
+		BeanShell.invokeMethod(view,cachedCode,EMPTY_ARGS);
 	}
 
 	public boolean isToggle()
@@ -62,8 +65,8 @@ public class BeanShellAction extends EditAction
 		if(cachedIsSelected == null)
 			return false;
 
-		return(Boolean.TRUE.equals(BeanShell.eval(getView(comp),
-			cachedIsSelected)));
+		return(Boolean.TRUE.equals(BeanShell.invokeMethod(getView(comp),
+			cachedIsSelected,EMPTY_ARGS)));
 	}
 
 	public boolean noRepeat()
@@ -82,11 +85,13 @@ public class BeanShellAction extends EditAction
 	}
 
 	// private members
+	private static final Object[] EMPTY_ARGS = new Object[0];
+
 	private static int counter;
 
 	private boolean noRepeat;
 	private boolean noRecord;
 	private String code;
-	private String cachedCode;
-	private String cachedIsSelected;
+	private BshMethod cachedCode;
+	private BshMethod cachedIsSelected;
 }

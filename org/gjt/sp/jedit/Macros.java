@@ -170,16 +170,11 @@ public class Macros
 			this.name = name;
 			this.path = path;
 
-			action = new EditAction()
+			action = new EditAction("no use for a name")
 			{
-				public void actionPerformed(ActionEvent evt)
+				public void invoke(View view)
 				{
-					BeanShell.runScript(getView(evt),path);
-				}
-
-				public boolean isWrapper()
-				{
-					return true;
+					BeanShell.runScript(view,path);
 				}
 			};
 
@@ -528,6 +523,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.46  2000/11/19 00:14:29  sp
+ * Documentation updates, some bug fixes
+ *
  * Revision 1.45  2000/11/17 11:15:59  sp
  * Actions removed, documentation updates, more BeanShell work
  *

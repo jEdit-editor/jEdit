@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import bsh.BshMethod;
 import bsh.Interpreter;
 import bsh.NameSpace;
 import javax.swing.text.BadLocationException;
@@ -163,6 +164,60 @@ public class BeanShell
 			Log.log(Log.ERROR,BeanShell.class,e);
 			GUIUtilities.error(view,"beanshell-error",
 				new String[] { command, e.getMessage() });
+		}
+
+		if(view != null)
+		{
+			interp.setVariable("view",null);
+			interp.setVariable("editPane",null);
+			interp.setVariable("buffer",null);
+			interp.setVariable("textArea",null);
+		}
+
+		return returnValue;
+	}
+
+	/**
+	 * Returns the specified method reference.
+	 * @param method The method name
+	 * @since jEdit 2.7pre2
+	 */
+	public static BshMethod getMethod(String name)
+	{
+		return interp.getNameSpace().getMethod(name);
+	}
+
+	/**
+	 * Invokes the specified method reference.
+	 * @param view The view
+	 * @param method The method reference
+	 * @param args Arguments to pass the method
+	 */
+	public static Object invokeMethod(View view, BshMethod method, Object[] args)
+	{
+		if(view != null)
+		{
+			EditPane editPane = view.getEditPane();
+			interp.setVariable("view",view);
+			interp.setVariable("editPane",editPane);
+			interp.setVariable("buffer",editPane.getBuffer());
+			interp.setVariable("textArea",editPane.getTextArea());
+		}
+
+		Object returnValue;
+		try
+		{
+			returnValue = method.invokeDeclaredMethod(args,interp);
+		}
+		catch(Throwable e)
+		{
+			returnValue = null;
+			if(e instanceof InvocationTargetException)
+				e = ((InvocationTargetException)e).getTargetException();
+
+			Log.log(Log.ERROR,BeanShell.class,e);
+			GUIUtilities.error(view,"beanshell-error",
+				new String[] { String.valueOf(method), e.getMessage() });
 		}
 
 		if(view != null)

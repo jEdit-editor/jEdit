@@ -270,16 +270,16 @@ registers=cut-string-register \
 	  - \
 	  view-registers
 registers.label=Registers
-cut-string-register.label=Cut to Register
-copy-string-register.label=Copy to Register
-append-string-register.label=Append to Register
-paste-string-register.label=Paste Register
-set-filename-register.label=Save File Name to Register
-set-caret-register.label=Save Position to Register
-goto-register.label=Go to Register
-select-caret-register.label=Select to Register
-exchange-caret-register.label=Swap Position with Register
-clear-register.label=Clear Register
+cut-string-register.label=Cut to Register [.]
+copy-string-register.label=Copy to Register [.]
+append-string-register.label=Append to Register [.]
+paste-string-register.label=Paste Register [.]
+set-filename-register.label=Save File Name to Register [.]
+set-caret-register.label=Save Position to Register [.]
+goto-register.label=Go to Register [.]
+select-caret-register.label=Select to Register [.]
+exchange-caret-register.label=Swap Position with Register [.]
+clear-register.label=Clear Register [.]
 view-registers.label=View Registers...
 
 ### Search menu
@@ -405,8 +405,8 @@ utils=repeat \
       buffer-options \
       global-options
 utils.label=$Utilities
-repeat.label=$Repeat Next Command
-insert-literal.label=$Insert Next Character Literally
+repeat.label=$Repeat Next Command [.]
+insert-literal.label=$Insert Next Character Literally [.]
 eval.label=$Evaluate...
 eval-selection.label=E$valuate Selection
 run-script.label=Run $Script...

@@ -35,6 +35,11 @@ jEdit depends on, and comes bundled with the following class libraries:
 
   The complete AElfred package can be found at <http://www.microstar.com>.
 
+- BeanShell scripting language, by Pat Niemeyer. This is used to implement
+  macros, among other things. The version included with jEdit is basically
+  a stripped down BeanShell 1.01, with a few minor changes. The original
+  package can be downloaded from <http://www.beanshell.org>.
+
 * jEdit on the Internet
 
 The jEdit homepage, located at <http://jedit.sourceforge.net> contains
@@ -57,6 +62,10 @@ jEdit-users or jEdit-devel mailing list. One of the jEdit developers
 will then add the feature request to our task manager if it is deemed
 appropriate. A list of pending tasks may be viewed at
 <http://www.sourceforge.net/pm/?group_id=588>.
+
+If you would like to discuss the BeanShell scripting language,
+subscribe to one of the BeanShell mailing lists by visiting
+<http://www.sourceforge.net/mail/?group_id=4075>.
 
 Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 

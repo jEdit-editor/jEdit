@@ -42,8 +42,6 @@ public class SearchDialog extends EnhancedDialog
 		content.setBorder(new EmptyBorder(0,12,12,12));
 		setContentPane(content);
 
-		fileset = SearchAndReplace.getSearchFileSet();
-
 		find = new HistoryTextField("find");
 		find.setText(defaultFind);
 		replace = new HistoryTextField("replace");
@@ -183,6 +181,7 @@ public class SearchDialog extends EnhancedDialog
 			keepDialog.setSelected(jEdit.getBooleanProperty("search.keepDialog.toggle"));
 			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 			regexp.setSelected(SearchAndReplace.getRegexp());
+			fileset = SearchAndReplace.getSearchFileSet();
 			multifile.setSelected(!(fileset instanceof CurrentBufferSet));
 
 			setVisible(true);
@@ -312,6 +311,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/11/19 00:14:30  sp
+ * Documentation updates, some bug fixes
+ *
  * Revision 1.21  2000/11/16 10:25:18  sp
  * More macro work
  *

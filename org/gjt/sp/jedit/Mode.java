@@ -60,14 +60,14 @@ public class Mode
 		try
 		{
 			String filenameGlob = (String)getProperty("filenameGlob");
-			if(filenameGlob != null)
+			if(filenameGlob != null && filenameGlob.length() != 0)
 			{
 				filenameRE = new RE(MiscUtilities.globToRE(
 					filenameGlob),RE.REG_ICASE);
 			}
 
 			String firstlineGlob = (String)getProperty("firstlineGlob");
-			if(firstlineGlob != null)
+			if(firstlineGlob != null && firstlineGlob.length() != 0)
 			{
 				firstlineRE = new RE(MiscUtilities.globToRE(
 					firstlineGlob),RE.REG_ICASE);
@@ -252,6 +252,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/11/19 00:14:29  sp
+ * Documentation updates, some bug fixes
+ *
  * Revision 1.31  2000/11/12 05:36:48  sp
  * BeanShell integration started
  *
@@ -281,11 +284,5 @@ public class Mode
  *
  * Revision 1.22  2000/03/26 03:30:48  sp
  * XMode integrated
- *
- * Revision 1.21  2000/03/20 06:06:36  sp
- * Mode internals cleaned up
- *
- * Revision 1.20  2000/01/29 08:18:08  sp
- * bug fixes, misc updates
  *
  */

@@ -411,6 +411,12 @@ public class Buffer extends PlainDocument implements EBComponent
 					clearProperties();
 				else
 				{
+					// reload maxLineLen and tabSize
+					// from the global/mode properties
+					getDocumentProperties().remove(
+						"tabSize");
+					getDocumentProperties().remove(
+						"maxLineLen");
 					getDocumentProperties().remove(
 						BufferIORequest.LOAD_DATA);
 				}
@@ -2243,6 +2249,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.190  2000/11/19 00:14:29  sp
+ * Documentation updates, some bug fixes
+ *
  * Revision 1.189  2000/11/13 11:19:25  sp
  * Search bar reintroduced, more BeanShell stuff
  *
