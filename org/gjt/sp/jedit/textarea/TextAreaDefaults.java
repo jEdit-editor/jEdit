@@ -89,10 +89,8 @@ public class TextAreaDefaults
 			DEFAULTS.gutterCollapsed = true;
 			DEFAULTS.gutterWidth = 40;
 			DEFAULTS.gutterBgColor = Color.white;
-			DEFAULTS.gutterFgColor =
-				UIManager.getColor("Label.foreground");
-			DEFAULTS.gutterHighlightColor =
-				DEFAULTS.gutterFgColor.brighter();
+			DEFAULTS.gutterFgColor = Color.black;
+			DEFAULTS.gutterHighlightColor = new Color(0x8080c0);
 			DEFAULTS.gutterBorderColor = Color.gray;
 			DEFAULTS.gutterBorderWidth = 4;
 			DEFAULTS.gutterNumberAlignment = Gutter.RIGHT;

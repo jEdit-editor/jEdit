@@ -452,7 +452,7 @@ public class Gutter extends JComponent implements SwingConstants
 			dragStart = e.getPoint();
 
 			startWidth = gutterSize.width;
-	}
+		}
 
 		public void mouseDragged(MouseEvent e)
 		{
@@ -493,7 +493,7 @@ public class Gutter extends JComponent implements SwingConstants
 				});
 			}
 
-			dragStart = null;
+			//dragStart = null;
 		}
 
 		public void mouseMoved(MouseEvent e) {}

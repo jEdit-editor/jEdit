@@ -5,13 +5,20 @@ JEDIT VERSION HISTORY
 + New Features
 
 - ViewUpdate.TEXTAREA_DESTROYED message fired when view is being unsplit
+- Gutter updates: (Mike Dillon)
+  - gutter option pane added
+  - right-click context menu added
+  - 'show line numbers' and 'gutter expanded' menu item commands added
+    (you can assign shortcuts to them)
+  - gutter can be resized by dragging the mouse
+  - gutter looks better
 
 + Enhancements
 
-- Gutter updates (Mike Dillon)
 - Improved options dialog box now uses a tree instead of a list, plugins
   can add their own tree nodes (Mike Dillon)
 - New ignore case and regexp icons for tool bar (Andre Kaplan)
+- Documentation updates
 
 + Bug Fixes
 

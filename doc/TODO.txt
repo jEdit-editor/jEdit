@@ -4,14 +4,13 @@ JEDIT TO DO
 
 - Double-click drag doesn't work backwards
 - CaretUndo doesn't work on 'redo'
-- Check file modification status on focus
-- Document gutter
+- Document option groups
 - Update window-editor-* screenshots
-- Update dialog-options-* screenshots
 - Fix gutter repaint bug
 
 ------- Later -------
 
+- Check file modification status on focus
 - Having more than 2 split panes should be possible
 - load/saveCaretInfo() save data in split.n.<property name> so that we
   don't have to unsplit when switching buffers, closing, reloading, etc

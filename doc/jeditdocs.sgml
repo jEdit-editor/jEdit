@@ -1202,6 +1202,29 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <graphic scale=75 fileref=window-editor-split></>
   </figure>
  </sect1>
+ <sect1 id=gutter><title>The Gutter</>
+  <indexterm><primary>gutter</></indexterm>
+  <para>
+   The gutter is the strip on the left side of the text area that displays
+   line numbers for the corresponding lines. It is hidden by default. To
+   show or hide the gutter, double-click on it (when it is collapsed,
+   it is shown as a thin vertical line), or select
+   <guimenu>Utilities</>&gt;<guimenuitem>Gutter Expanded</>.
+  </para>
+  <para>
+   The gutter can be resized by dragging with the mouse. Resizing can
+   sometimes
+   be necessary if line numbers become to long to be displayed. To save
+   the gutter's size for future sessions, right-click on it
+   and select <guimenuitem>Save Gutter Size</> from the resulting context
+   menu.
+  </para>
+  <para>
+   Many options relating to the gutter (colors, behaviour, etc) can be
+   changed in the <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+   dialog box; see <xref linkend=global-opts> for details.
+  </para>
+ </sect1>
  <sect1 id=server><title>The Edit Server</>
   <para>
    Because opening a new copy of jEdit every time it was invoked from the command
@@ -2890,6 +2913,14 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     repeatedly - see <xref linkend=caret></para></listitem>
    </itemizedlist>
   </sect2>
+  <sect2><title>The Gutter Pane</>
+   <indexterm><primary>gutter</></indexterM>
+   <para>
+    The <guibutton>Gutter</> pane allows you to change various settings
+    used by the gutter. Colors used by the gutter can be set in the
+    <guibutton>Colors &amp; Styles</> option pane.
+   </para>
+  </sect2>
   <sect2><title>The Colors &amp; Styles Pane</>
    <indexterm><primary>syntax highlighting</></indexterm>
    <indexterm><primary>text area</></indexterm>
@@ -2898,6 +2929,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <indexterm><primary>line highlighting</></indexterm>
    <indexterm><primary>end of line markers</></indexterm>
    <indexterm><primary>invalid lines</></indexterm>
+   <indexterm><primary>gutter</></indexterm>
    <para>
     The <guibutton>Colors &amp; Styles</> pane allows you to change various
     colors used by the text area, and the text styles used by syntax
@@ -2976,6 +3008,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    </figure>
    <figure><title>The Editor pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-editor></>
+   </figure>
+   <figure><title>The Gutter pane of the Global Options dialog box</>
+    <graphic scale=75 fileref=dialog-options-gutter></>
    </figure>
    <figure><title>The Colors &amp; Styles pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-styles></>

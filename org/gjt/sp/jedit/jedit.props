@@ -137,10 +137,10 @@ view.homeEnd=yes
 view.gutter.bgColor=white
 
 # Gutter foreground color
-view.gutter.fgColor=#6060a0
+view.gutter.fgColor=#8080c0
 
 # Gutter highlight color
-view.gutter.highlightColor=#8080c0
+view.gutter.highlightColor=black
 
 # Gutter border color
 view.gutter.borderColor=gray
@@ -162,7 +162,7 @@ view.gutter.width=40
 view.gutter.borderWidth=4
 
 # Gutter collapsed/expanded by default
-view.gutter.collapsed=no
+view.gutter.collapsed=yes
 
 # Gutter displays line numbers
 view.gutter.lineNumbers=yes

@@ -61,7 +61,6 @@ public class OptionsDialog extends EnhancedDialog
 		rootNode.add(jEditNode);
 
 		pluginsNode = new DefaultMutableTreeNode("plugins");
-		rootNode.add(pluginsNode);
 
 		paneTree = new JTree(paneTreeModel);
 		paneTree.setCellRenderer(new PaneNameRenderer());
@@ -82,8 +81,8 @@ public class OptionsDialog extends EnhancedDialog
 
 		addOptionPane(new GeneralOptionPane(), jEditNode);
 		addOptionPane(new EditorOptionPane(), jEditNode);
-		addOptionPane(new StyleOptionPane(), jEditNode);
 		addOptionPane(new GutterOptionPane(), jEditNode);
+		addOptionPane(new StyleOptionPane(), jEditNode);
 		addOptionPane(new FileFilterOptionPane(), jEditNode);
 
 		OptionGroup shortcutsGroup = new OptionGroup("shortcuts");
@@ -108,6 +107,9 @@ public class OptionsDialog extends EnhancedDialog
 				Log.log(Log.ERROR, this, t);
 			}
 		}
+
+		if(pluginsNode.getChildCount() != 0)
+			rootNode.add(pluginsNode);
 
 		paneTree.expandPath(new TreePath(paneTreeModel.getPathToRoot(
 			jEditNode)));
@@ -288,6 +290,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/02/04 07:56:10  sp
+ * Documentation updates, some other stuff
+ *
  * Revision 1.15  2000/02/04 05:50:27  sp
  * More gutter updates from mike
  *
