@@ -1,13 +1,9 @@
 JEDIT TO DO
 
-CVS: Remove ExecuteCommand, StopCommand
-Add Shell
-
 ------- 2.2 to do -------
 
-- Shell.waitFor()?
-- s/overwriteSetSelectedText/userInput/g. userInput() performs soft wrap
-- execute-command action for invoking EB shell commands from macros
+- Open URL: no trailing file separator
+- Double click: 'bob|fred' with point at |
 - Expand abbreviation sucks:
   - > 1 match on one line doesn't work
   - need to finish match cycling
@@ -23,6 +19,9 @@ Add Shell
 
 + Features
 
+- s/overwriteSetSelectedText/userInput/g. userInput() performs soft wrap
+- execute-command action for invoking EB shell commands from macros
+- Shell.waitFor()?
 - Write user and developer documentation for EditBus
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode

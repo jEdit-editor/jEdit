@@ -134,11 +134,71 @@ public class TextUtilities
 		// Nothing found
 		return -1;
 	}
+
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 */
+	public static int findWordStart(String line, int pos, String noWordSep)
+	{
+		char ch = line.charAt(pos - 1);
+
+		if(noWordSep == null)
+			noWordSep = "";
+		boolean selectNoLetter = (!Character.isLetterOrDigit(ch)
+			&& noWordSep.indexOf(ch) == -1);
+
+		int wordStart = 0;
+		for(int i = pos - 1; i >= 0; i--)
+		{
+			ch = line.charAt(i);
+			if(selectNoLetter ^ (!Character.isLetterOrDigit(ch) &&
+				noWordSep.indexOf(ch) == -1))
+			{
+				wordStart = i + 1;
+				break;
+			}
+		}
+
+		return wordStart;
+	}
+
+	/**
+	 * Locates the end of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 */
+	public static int findWordEnd(String line, int pos, String noWordSep)
+	{
+		char ch = line.charAt(pos);
+
+		if(noWordSep == null)
+			noWordSep = "";
+		boolean selectNoLetter = (!Character.isLetterOrDigit(ch)
+			&& noWordSep.indexOf(ch) == -1);
+
+		int wordEnd = line.length();
+		for(int i = pos; i < line.length(); i++)
+		{
+			ch = line.charAt(i);
+			if(selectNoLetter ^ (!Character.isLetterOrDigit(ch) &&
+				noWordSep.indexOf(ch) == -1))
+			{
+				wordEnd = i;
+				break;
+			}
+		}
+		return wordEnd;
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  1999/11/21 03:40:18  sp
+ * Parts of EditBus not used by core moved to EditBus.jar
+ *
  * Revision 1.2  1999/07/16 23:45:49  sp
  * 1.7pre6 BugFree version
  *

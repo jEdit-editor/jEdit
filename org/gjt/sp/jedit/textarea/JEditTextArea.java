@@ -1986,44 +1986,9 @@ public class JEditTextArea extends JComponent
 
 			// Ok, it's not a bracket... select the word
 			String lineText = getLineText(line);
-			char ch = lineText.charAt(Math.max(0,offset - 1));
-
 			String noWordSep = (String)document.getProperty("noWordSep");
-			if(noWordSep == null)
-				noWordSep = "";
-
-			// If the user clicked on a non-letter char,
-			// we select the surrounding non-letters
-			boolean selectNoLetter = (!Character
-				.isLetterOrDigit(ch)
-				&& noWordSep.indexOf(ch) == -1);
-
-			int wordStart = 0;
-
-			for(int i = offset - 1; i >= 0; i--)
-			{
-				ch = lineText.charAt(i);
-				if(selectNoLetter ^ (!Character
-					.isLetterOrDigit(ch) &&
-					noWordSep.indexOf(ch) == -1))
-				{
-					wordStart = i + 1;
-					break;
-				}
-			}
-
-			int wordEnd = lineText.length();
-			for(int i = offset; i < lineText.length(); i++)
-			{
-				ch = lineText.charAt(i);
-				if(selectNoLetter ^ (!Character
-					.isLetterOrDigit(ch) &&
-					noWordSep.indexOf(ch) == -1))
-				{
-					wordEnd = i;
-					break;
-				}
-			}
+			int wordStart = TextUtilities.findWordStart(lineText,offset,noWordSep);
+			int wordEnd = TextUtilities.findWordEnd(lineText,offset,noWordSep);
 
 			int lineStart = getLineStartOffset(line);
 			select(lineStart + wordStart,lineStart + wordEnd);
@@ -2098,6 +2063,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  1999/11/21 03:40:18  sp
+ * Parts of EditBus not used by core moved to EditBus.jar
+ *
  * Revision 1.28  1999/11/12 09:06:01  sp
  * HTML bug fix
  *

@@ -409,7 +409,9 @@ about.message=jEdit version {0} (Java {1}, {2} {3})\n\
 	The following people have written plugins or contributed code to jEdit:\n\
 	Andreas Schaefer, Artur Biesiadowski, Aziz Sharif, Chris Laird,\n\
 	George Latkiewicz, Henrik Falk, Jason Ginchereau, Jonathan Revusky,\n\
-	Juha Lindfors, Mike Dillon, Nathan Tenney, Romain Guy and Tal Davison.\n\
+	Juha Lindfors, Kevin A. Burton, Mike Dillon, Nathan Tenney,\n\
+	Romain Guy, Tal Davison and Valery Kondakoff.\n\
+	\n\
 	Thanks for your help!
 
 # IO Error dialog, {0}=the error message
@@ -629,6 +631,7 @@ options.editor.tabSize=Tab width:\
 options.editor.lineHighlight=Current line highlighting
 options.editor.bracketHighlight=Bracket highlighting
 options.editor.eolMarkers=EOL markers
+options.editor.paintInvalid=Paint invalid lines as red tildes
 options.editor.syntax=Highlight syntax tokens
 options.editor.indentOnTab=Indent line when Tab key is pressed
 options.editor.indentOnEnter=Indent line when Enter key is pressed

@@ -4,16 +4,14 @@ JEDIT VERSION HISTORY
 
 + New Features
 
-- EditBus plugin integrated into the core, old event system removed
-- New classes for EditBus plugins: LogOutput, LazyOutput
-  LogOutput is not accessable by plugins directly; you have to use the
-  GetOutput message with a parameter of "Log". It prints all output to
-  the activity log, and plugins that display output can use it as a
-  last resort.
-  LazyOutput is passed the name of an underlying output, which is only
-  created if something is actually printed; so you can safely create
-  LazyOutput instances, without cluttering the user's screen with
-  consoles unless you print something
+- Some parts of the EditBus plugin integrated into the core, old event
+  system removed
+- New methods in TextUtilities class:
+  findWordStart(String line, int pos, String noWordSep)
+  findWordEnd(String line, int pos, String noWordSep)
+- The painting of invalid lines can now be toggled in File->Global
+  Options->Editor
+- Expand Abbreviation now supports multiple matches (Valery Kondakoff)
 
 + Enhancements
 
@@ -40,8 +38,8 @@ JEDIT VERSION HISTORY
 
 - Plugins that rely on the old event system will no longer work
 - EditBus command messages have changed:
-  - Shell interface and GetShells message replaces ExecuteCommand and StopCommand
-    messages
+  - Shell interface and GetShells message replaces ExecuteCommand
+    and StopCommand messages
   - GetOutput.addReturn() renamed to GetOutput.setOutput()
   - This breaks Console 1.9 and earlier; use 1.9.1 or later
 

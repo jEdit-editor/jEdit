@@ -53,6 +53,7 @@ public class TextAreaDefaults
 	public boolean bracketHighlight;
 	public Color eolMarkerColor;
 	public boolean eolMarkers;
+	public boolean paintInvalid;
 
 	public JPopupMenu popup;
 
@@ -86,6 +87,7 @@ public class TextAreaDefaults
 			DEFAULTS.bracketHighlight = true;
 			DEFAULTS.eolMarkerColor = new Color(0x009999);
 			DEFAULTS.eolMarkers = true;
+			DEFAULTS.paintInvalid = true;
 		}
 
 		return DEFAULTS;

@@ -1753,7 +1753,8 @@
     equivalent:
     <keycombo><keycap>Control</><keycap>B</></keycombo>) attempts to
     compete the current word by scanning backwards in the buffer for
-    other words beginning with the current word. This can be used to
+    other words beginning with the current word. Invoking it multiple times
+    will find earlier competions. This can be used to
     complete long identifiers in program source, for example.
    </para>
    <para>

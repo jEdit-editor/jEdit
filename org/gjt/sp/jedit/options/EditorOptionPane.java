@@ -99,6 +99,13 @@ public class EditorOptionPane extends AbstractOptionPane
 			.getProperty("view.eolMarkers")));
 		addComponent(eolMarkers);
 
+		/* Paint invalid */
+		paintInvalid = new JCheckBox(jEdit.getProperty("options.editor"
+			+ ".paintInvalid"));
+		paintInvalid.getModel().setSelected("on".equals(jEdit
+			.getProperty("view.paintInvalid")));
+		addComponent(paintInvalid);
+
 		/* Syntax colorizing */
 		syntax = new JCheckBox(jEdit.getProperty("options.editor"
 			+ ".syntax"));
@@ -172,6 +179,8 @@ public class EditorOptionPane extends AbstractOptionPane
 			.isSelected() ? "on" : "off");
 		jEdit.setProperty("view.eolMarkers",eolMarkers.getModel()
 			.isSelected() ? "on" : "off");
+		jEdit.setProperty("view.paintInvalid",paintInvalid.getModel()
+			.isSelected() ? "on" : "off");
 		jEdit.setProperty("buffer.syntax",syntax.getModel().isSelected()
 			? "on" : "off");
 		jEdit.setProperty("buffer.indentOnTab",indentOnTab.getModel()
@@ -200,6 +209,7 @@ public class EditorOptionPane extends AbstractOptionPane
 	private JCheckBox lineHighlight;
 	private JCheckBox bracketHighlight;
 	private JCheckBox eolMarkers;
+	private JCheckBox paintInvalid;
 	private JCheckBox syntax;
 	private JCheckBox indentOnTab;
 	private JCheckBox indentOnEnter;

@@ -102,6 +102,9 @@ view.bracketHighlightColor=black
 view.eolMarkers=on
 view.eolMarkerColor=#009999
 
+# Invalid lines
+view.paintInvalid=on
+
 # Caret color
 view.caretColor=red
 
