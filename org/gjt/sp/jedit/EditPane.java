@@ -86,7 +86,6 @@ public class EditPane extends JPanel implements EBComponent
 				if(bufferSwitcher.getSelectedItem() != buffer)
 					bufferSwitcher.setSelectedItem(buffer);
 			}
-			caretStatus.repaint();
 
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
 				.BUFFER_CHANGED));
@@ -270,9 +269,6 @@ public class EditPane extends JPanel implements EBComponent
 
 		textArea = new JEditTextArea(view);
 
-		textArea.add(JEditTextArea.LEFT_OF_SCROLLBAR,
-			caretStatus = new CaretStatus(this));
-		textArea.addCaretListener(new CaretHandler());
 		add(BorderLayout.CENTER,textArea);
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addCustomHighlight(markerHighlight);
@@ -302,7 +298,6 @@ public class EditPane extends JPanel implements EBComponent
 	private Buffer buffer;
 	private Buffer recentBuffer;
 	private BufferSwitcher bufferSwitcher;
-	private CaretStatus caretStatus;
 	private JEditTextArea textArea;
 	private MarkerHighlight markerHighlight;
 
@@ -553,7 +548,6 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				caretStatus.repaint();
 				textArea.setCaretPosition(0);
 				textArea.getPainter().repaint();
 			}
@@ -562,7 +556,6 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				caretStatus.repaint();
 				if(bufferSwitcher != null)
 				{
 					if(buffer.isDirty())
@@ -580,7 +573,6 @@ public class EditPane extends JPanel implements EBComponent
 				textArea.updateScrollBars();
 				if(bufferSwitcher != null)
 					bufferSwitcher.updateBufferList();
-				caretStatus.repaint();
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
@@ -596,16 +588,6 @@ public class EditPane extends JPanel implements EBComponent
 				if(bufferSwitcher != null)
 					bufferSwitcher.repaint();
 			}
-		}
-	}
-
-	class CaretHandler implements CaretListener
-	{
-		public void caretUpdate(CaretEvent evt)
-		{
-			caretStatus.repaint();
-			if(evt.getDot() != evt.getMark())
-				Registers.setRegister('%',textArea.getSelectedText());
 		}
 	}
 }

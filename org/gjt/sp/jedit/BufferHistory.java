@@ -53,11 +53,11 @@ public class BufferHistory
 	{
 		try
 		{
-			max = Integer.parseInt(jEdit.getProperty("history"));
+			max = Integer.parseInt(jEdit.getProperty("recentFiles"));
 		}
 		catch(NumberFormatException e)
 		{
-			max = 25;
+			max = 50;
 		}
 
 		try

@@ -528,13 +528,6 @@ about.label=About jEdit...
 help.label=jEdit Help
 tip-of-the-day.label=Tip of the Day
 
-#help-readme.label=jEdit Read Me
-#help-news.label=Major Changes in jEdit 3.0
-#help-todo.label=Changes Planned for jEdit 3.1
-#help-changes.label=Version History
-#help-copying.label=GNU General Public License
-#help-copying-doc.label=GNU Free Documentation License
-
 ###
 ### MACRO STRINGS
 ###
@@ -557,8 +550,8 @@ backspace-word.label=Delete Previous Word
 backspace.label=Delete Previous Character
 delete-word.label=Delete Next Word
 delete.label=Delete Next Character
-document-end.label=End of Document
-document-home.label=Beginning of Document
+document-end.label=End of Buffer
+document-home.label=Beginning of Buffer
 end.label=End of Line
 home.label=Beginning of Line
 insert-literal.label=Insert Next Character Literally
@@ -574,8 +567,8 @@ prev-page.label=Previous Page
 prev-paragraph.label=Go to Previous Paragraph
 prev-word.label=Previous Word
 repeat.label=Repeat Next Command
-select-document-end.label=Select to End of Document
-select-document-home.label=Select to Beginning of Document
+select-document-end.label=Select to End of Buffer
+select-document-home.label=Select to Beginning of Buffer
 select-end.label=Select to End of Line
 select-home.label=Select to Beginning of Line
 select-next-char.label=Select Next Character
@@ -588,6 +581,7 @@ select-prev-line.label=Select Previous Line
 select-prev-page.label=Select Previous Page
 select-prev-paragraph.label=Select Previous Paragraph
 select-prev-word.label=Select Previous Word
+toggle-multi-select.label=Multiple Selection
 
 ###
 ### VIEW STUFF
@@ -601,7 +595,11 @@ view.gutter.marker.no-name=Marker
 view.gutter.marker=Marker: {0}
 
 # Status messages
-view.status.recording=(recording)
+view.status.recording=Macro recording
+view.status.register-prompt=Press a key to specify register name
+view.status.marker-prompt=Press a key to specify marker shortcut
+view.status.expand-folds=Press 0-9 to specify fold level
+view.status.insert-literal=Press key to insert literally
 
 # Printing
 print.page=Page {0}
@@ -972,6 +970,8 @@ options.loadsave.backupSuffix=Backup filename suffix:
 options.loadsave.lineSeparator=Default line separator:
 options.loadsave.ioThreadCount=Number of I/O threads:
 options.loadsave.restore=Restore previously open files on startup
+options.loadsave.restore.cli=... even if file names were specified on the \
+	command line
 options.loadsave.persistentMarkers=Save marker positions
 
 options.textarea.label=Text Area

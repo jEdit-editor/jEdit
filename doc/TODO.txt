@@ -1,12 +1,18 @@
 TO DO
 
-- scroll lock
-- props mod check: if file no longer exists, write new props
+- scroll lock support
 - console shell: use StreamTokenizer
+- document restore.cli property
+- cvs: remove MiniIOProgress, CaretStatus
+- cvs: add StatusBar.java
+- status: display overwrite, multi select
+- on OS X, make macos l&f the default
+- document new readNextChar()
+- VI-style caret status
 
 - plugin manager:
   - dependency checker
-  - roster (PluginList.update(Roster),
+  - roster - PluginList.update(Roster),
     PluginList.Plugin.install(Roster),
     PluginList.PluginSet.install(Roster)
 
@@ -24,7 +30,6 @@ Collapse { line, put caret at start, delete line, undo.
 - fold browser
 - zlib decompression errors in plugin manager
 - when loading a plugin, check if all the jars are present?
-- finish new plugin manager
 - only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>
   in PHP)
 - regexps in XMode
@@ -35,7 +40,6 @@ Collapse { line, put caret at start, delete line, undo.
 - catch MalformedInputException and display a better error message
 - reverse regexp search
 - finish persistent splits
-- status bar for displaying readNextChar() prompts
 - scrollToCaret() doesn't always work
 - caret event not always fired
 - XThis: don't throw exceptions for non-existent methods

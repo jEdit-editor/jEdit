@@ -267,8 +267,13 @@ class EditServer extends Thread
 		args.copyInto(_args);
 		Buffer buffer = TSopenFiles(parent,_args);
 
-		if(buffer == null && restore)
-			buffer = TSrestoreOpenFiles();
+		if(restore)
+		{
+			if(buffer == null)
+				buffer = TSrestoreOpenFiles();
+			else if(jEdit.getBooleanProperty("restore.cli"))
+				TSrestoreOpenFiles();
+		}
 
 		if(buffer == null)
 			buffer = TSnewFile();

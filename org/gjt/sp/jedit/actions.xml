@@ -26,6 +26,7 @@
 <ACTION NAME="add-marker-shortcut" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.marker-prompt"),
 			"buffer.addMarker(__char__,textArea.getCaretPosition())");
 	</CODE>
 </ACTION>
@@ -125,13 +126,17 @@
 
 <ACTION NAME="copy-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
-		view.getInputHandler().readNextChar("Registers.append(textArea,__char__,\"\\n\",false);");
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.append(textArea,__char__,\"\\n\",false);");
 	</CODE>
 </ACTION>
 
 <ACTION NAME="copy-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
-		view.getInputHandler().readNextChar("Registers.copy(textArea,__char__);");
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.copy(textArea,__char__);");
 	</CODE>
 </ACTION>
 
@@ -149,13 +154,17 @@
 
 <ACTION NAME="cut-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
-		view.getInputHandler().readNextChar("Registers.append(textArea,__char__,\"\\n\",true);");
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.append(textArea,__char__,\"\\n\",true);");
 	</CODE>
 </ACTION>
 
 <ACTION NAME="cut-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
-		view.getInputHandler().readNextChar("Registers.cut(textArea,__char__);");
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.cut(textArea,__char__);");
 	</CODE>
 </ACTION>
 
@@ -293,7 +302,9 @@
 
 <ACTION NAME="expand-folds" NO_RECORD="TRUE">
 	<CODE>
-		view.getInputHandler().readNextChar("buffer.expandFolds(__char__);");
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.expand-folds"),
+			"buffer.expandFolds(__char__);");
 	</CODE>
 </ACTION>
 
@@ -344,6 +355,7 @@
 <ACTION NAME="goto-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.marker-prompt"),
 			"textArea.goToMarker(__char__,false)");
 	</CODE>
 </ACTION>
@@ -374,7 +386,9 @@
 
 <ACTION NAME="insert-literal">
 	<CODE>
-		view.getInputHandler().readNextChar("textArea.setSelectedText(String.valueOf(__char__));");
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.insert-literal"),
+			"textArea.setSelectedText(String.valueOf(__char__));");
 	</CODE>
 </ACTION>
 
@@ -506,7 +520,9 @@
 
 <ACTION NAME="paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
-		view.getInputHandler().readNextChar("Registers.paste(textArea,__char__);");
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.paste(textArea,__char__);");
 	</CODE>
 </ACTION>
 
@@ -832,6 +848,7 @@
 <ACTION NAME="select-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.marker-prompt"),
 			"textArea.goToMarker(__char__,true)");
 	</CODE>
 </ACTION>
@@ -965,6 +982,7 @@
 <ACTION NAME="swap-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.marker-prompt"),
 			"textArea.swapMarkerAndCaret(__char__)");
 	</CODE>
 </ACTION>

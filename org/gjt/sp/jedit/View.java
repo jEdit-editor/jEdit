@@ -55,18 +55,6 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Sets if the 'macro recording' message should be displayed.
-	 * @since jEdit 2.7pre1
-	 */
-	public void setRecordingStatus(boolean recording)
-	{
-		if(recording)
-			this.recording.setText(jEdit.getProperty("view.status.recording"));
-		else
-			this.recording.setText(null);
-	}
-
-	/**
 	 * Quick search.
 	 * @since jEdit 2.7pre2
 	 */
@@ -172,6 +160,15 @@ public class View extends JFrame implements EBComponent
 	public void setMacroRecorder(Macros.Recorder recorder)
 	{
 		this.recorder = recorder;
+	}
+
+	/**
+	 * Returns the status bar.
+	 * @since jEdit 3.2pre2
+	 */
+	public StatusBar getStatus()
+	{
+		return status;
 	}
 
 	/**
@@ -581,6 +578,8 @@ public class View extends JFrame implements EBComponent
 		}
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
+		else if(msg instanceof EditPaneUpdate)
+			handleEditPaneUpdate((EditPaneUpdate)msg);
 	}
 
 	public JMenu getMenu(String name)
@@ -691,15 +690,10 @@ public class View extends JFrame implements EBComponent
 
 		updateMacrosMenu();
 		updatePluginsMenu();
-		//updateHelpMenu();
 
 		EditBus.addToBus(this);
 
-		JMenuBar menuBar = GUIUtilities.loadMenuBar(this,"view.mbar");
-		menuBar.add(Box.createGlue());
-		menuBar.add(new MiniIOProgress());
-		menuBar.add(recording = new JLabel());
-		setJMenuBar(menuBar);
+		setJMenuBar(GUIUtilities.loadMenuBar(this,"view.mbar"));
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
 
@@ -710,6 +704,7 @@ public class View extends JFrame implements EBComponent
 
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
+		getContentPane().add(BorderLayout.SOUTH,status = new StatusBar(this));
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
@@ -797,8 +792,6 @@ public class View extends JFrame implements EBComponent
 	private JMenu plugins;
 	private JMenu help;
 
-	private JLabel recording;
-
 	private Box toolBars;
 	private JToolBar toolBar;
 	private SearchBar searchBar;
@@ -807,6 +800,8 @@ public class View extends JFrame implements EBComponent
 
 	private EditPane editPane;
 	private JSplitPane splitPane;
+
+	private StatusBar status;
 
 	private KeyListener keyEventInterceptor;
 	private InputHandler inputHandler;
@@ -945,6 +940,7 @@ public class View extends JFrame implements EBComponent
 		EditPane editPane = new EditPane(this,buffer);
 		JEditTextArea textArea = editPane.getTextArea();
 		textArea.addFocusListener(new FocusHandler());
+		textArea.addCaretListener(new CaretHandler());
 		EditBus.send(new EditPaneUpdate(editPane,EditPaneUpdate.CREATED));
 		return editPane;
 	}
@@ -952,6 +948,7 @@ public class View extends JFrame implements EBComponent
 	private void setEditPane(EditPane editPane)
 	{
 		this.editPane = editPane;
+		status.repaintCaretStatus();
 	}
 
 	/**
@@ -961,7 +958,7 @@ public class View extends JFrame implements EBComponent
 	{
 		if(recent.getMenuComponentCount() != 0)
 			recent.removeAll();
-		ActionListener listener = new ActionListener()
+		ActionListener actionListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
@@ -969,23 +966,45 @@ public class View extends JFrame implements EBComponent
 			}
 		};
 
+		MouseListener mouseListener = new MouseAdapter()
+		{
+			public void mouseEntered(MouseEvent evt)
+			{
+				status.setMessage(((JMenuItem)evt.getSource())
+					.getActionCommand());
+			}
+
+			public void mouseExited(MouseEvent evt)
+			{
+				status.setMessage(null);
+			}
+		};
+
 		Vector recentVector = BufferHistory.getBufferHistory();
+
 		if(recentVector.size() == 0)
 		{
 			recent.add(GUIUtilities.loadMenuItem("no-recent"));
 			return;
 		}
 
-		for(int i = 0; i < recentVector.size(); i++)
+		/*
+		 * While recentVector has 50 entries or so, we only display
+		 * a few of those in the menu (otherwise it will be way too
+		 * long)
+		 */
+		int recentFileCount = Math.min(recentVector.size(),
+			Integer.parseInt(jEdit.getProperty("history")));
+
+		for(int i = 0; i < recentFileCount; i++)
 		{
 			String path = ((BufferHistory.Entry)recentVector
 				.elementAt(i)).path;
 			VFS vfs = VFSManager.getVFSForPath(path);
-			JMenuItem menuItem = new JMenuItem(
-				vfs.getFileName(path) + " ("
-				+ vfs.getParentOfPath(path) + ")");
+			JMenuItem menuItem = new JMenuItem(vfs.getFileName(path));
 			menuItem.setActionCommand(path);
-			menuItem.addActionListener(listener);
+			menuItem.addActionListener(actionListener);
+			menuItem.addMouseListener(mouseListener);
 			recent.add(menuItem);
 		}
 	}
@@ -1110,58 +1129,6 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	/* private void updateHelpMenu()
-	{
-		ActionListener listener = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				new HelpViewer(evt.getActionCommand());
-			}
-		};
-
-		JMenu menu = help;
-
-		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
-		{
-			EditPlugin plugin = plugins[i];
-			EditPlugin.JAR jar = plugin.getJAR();
-			if(jar == null)
-				continue;
-
-			String name = plugin.getClassName();
-
-			String docs = jEdit.getProperty("plugin." + name + ".docs");
-			String label = jEdit.getProperty("plugin." + name + ".name");
-			if(docs != null)
-			{
-				if(label != null && docs != null)
-				{
-					java.net.URL url = jar.getClassLoader()
-						.getResource(docs);
-					if(url != null)
-					{
-						if(menu.getItemCount() >= 20)
-						{
-							menu.addSeparator();
-							JMenu newMenu = new JMenu(
-								jEdit.getProperty(
-								"common.more"));
-							menu.add(newMenu);
-							menu = newMenu;
-						}
-
-						JMenuItem menuItem = new JMenuItem(label);
-						menuItem.setActionCommand(url.toString());
-						menuItem.addActionListener(listener);
-						menu.add(menuItem);
-					}
-				}
-			}
-		}
-	} */
-
 	private void handleBufferUpdate(BufferUpdate msg)
 	{
 		Buffer buffer = msg.getBuffer();
@@ -1170,6 +1137,8 @@ public class View extends JFrame implements EBComponent
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
+			status.repaintCaretStatus();
+
 			if(!buffer.isDirty())
 			{
 				// have to update title after each save
@@ -1184,6 +1153,23 @@ public class View extends JFrame implements EBComponent
 					}
 				}
 			}
+		}
+	}
+
+	private void handleEditPaneUpdate(EditPaneUpdate msg)
+	{
+		if(msg.getEditPane().getView() == this
+			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED)
+			status.repaintCaretStatus();
+	}
+
+	class CaretHandler implements CaretListener
+	{
+		public void caretUpdate(CaretEvent evt)
+		{
+			status.repaintCaretStatus();
+			if(evt.getDot() != evt.getMark())
+				Registers.setRegister('%',getTextArea().getSelectedText());
 		}
 	}
 

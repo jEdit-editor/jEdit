@@ -34,7 +34,7 @@ public class MarkerHighlight implements TextAreaHighlight
 
 	public void paintHighlight(Graphics gfx, int line, int y)
 	{
-		if(highlightEnabled)
+		if(textArea.getBuffer().isLoaded() && highlightEnabled)
 		{
 			Buffer buffer = textArea.getBuffer();
 			if(buffer.getMarkerAtLine(buffer.virtualToPhysical(line)) != null)
@@ -55,7 +55,7 @@ public class MarkerHighlight implements TextAreaHighlight
 
 	public String getToolTipText(MouseEvent evt)
 	{
-		if(highlightEnabled)
+		if(textArea.getBuffer().isLoaded() && highlightEnabled)
 		{
 			FontMetrics fm = textArea.getPainter().getFontMetrics();
 			int line = textArea.getFirstLine() + evt.getY() / fm.getHeight();

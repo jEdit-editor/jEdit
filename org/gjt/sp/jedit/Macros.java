@@ -463,8 +463,11 @@ public class Macros
 	{
 		lastMacro = buffer.getPath();
 
-		view.setRecordingStatus(true);
 		view.setMacroRecorder(new Recorder(view,buffer,temporary));
+
+		// setting the message to 'null' causes the status bar to check
+		// if a recording is in progress
+		view.getStatus().setMessage(null);
 	}
 
 	static class MacrosEBComponent implements EBComponent
@@ -614,8 +617,11 @@ public class Macros
 				buffer.indentLine(i,true,true);
 			}
 
-			view.setRecordingStatus(false);
 			EditBus.removeFromBus(this);
+
+			// setting the message to 'null' causes the status bar to
+			// check if a recording is in progress
+			view.getStatus().setMessage(null);
 		}
 	}
 }

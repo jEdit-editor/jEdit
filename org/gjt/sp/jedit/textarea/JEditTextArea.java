@@ -48,12 +48,6 @@ import org.gjt.sp.util.Log;
 public class JEditTextArea extends JComponent
 {
 	/**
-	 * Adding components with this name to the text area will place
-	 * them left of the horizontal scroll bar.
-	 */
-	public static String LEFT_OF_SCROLLBAR = "los";
-
-	/**
 	 * Creates a new JEditTextArea.
 	 */
 	public JEditTextArea(View view)
@@ -4445,8 +4439,6 @@ forward_scan:		do
 				left = comp;
 			else if(name.equals(BOTTOM))
 				bottom = comp;
-			else if(name.equals(LEFT_OF_SCROLLBAR))
-				leftOfScrollBar = comp;
 		}
 
 		public void removeLayoutComponent(Component comp)
@@ -4459,8 +4451,6 @@ forward_scan:		do
 				left = null;
 			else if(bottom == comp)
 				bottom = null;
-			else if(leftOfScrollBar == comp)
-				leftOfScrollBar = null;
 		}
 
 		public Dimension preferredLayoutSize(Container parent)
@@ -4565,16 +4555,6 @@ forward_scan:		do
 				rightWidth,
 				centerHeight);
 
-			if(leftOfScrollBar != null)
-			{
-				Dimension dim = leftOfScrollBar.getPreferredSize();
-				leftOfScrollBar.setBounds(ileft,
-					itop + centerHeight,
-					dim.width,
-					bottomHeight);
-				ileft += dim.width;
-			}
-
 			bottom.setBounds(
 				ileft,
 				itop + centerHeight,
@@ -4586,7 +4566,6 @@ forward_scan:		do
 		Component left;
 		Component right;
 		Component bottom;
-		Component leftOfScrollBar;
 	}
 
 	static class CaretBlinker implements ActionListener

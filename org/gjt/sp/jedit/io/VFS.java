@@ -285,7 +285,6 @@ public abstract class VFS
 		Component comp)
 		throws IOException
 	{
-		VFSManager.error(comp,"vfs.not-supported.list",new String[] { name });
 		return null;
 	}
 
@@ -450,6 +449,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.27  2001/05/17 05:00:14  sp
+ * Status bar, various minor tweaks
+ *
  * Revision 1.26  2001/05/13 07:21:27  sp
  * more stuff
  *

@@ -26,6 +26,10 @@ import java.util.Vector;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.jEdit;
 
+/**
+ * Plugin list downloaded from server.
+ * @since jEdit 3.2pre2
+ */
 public class PluginList
 {
 	public PluginList()

@@ -56,7 +56,7 @@ public class Marker
 	 */
 	public int getPosition()
 	{
-		return position.getOffset();
+		return (position == null ? pos : position.getOffset());
 	}
 
 	// package-private members

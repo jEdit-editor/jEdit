@@ -163,7 +163,11 @@ public class DefaultInputHandler extends InputHandler
 			}
 		}
 
-		readNextChar = null;
+		if(readNextChar != null)
+		{
+			readNextChar = null;
+			view.getStatus().setMessage(null);
+		}
 
 		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
 			modifiers);

@@ -70,9 +70,7 @@ public class TipOfTheDay extends EnhancedDialog
 			nextTip();
 
 			JScrollPane scroller = new JScrollPane(tipText);
-			Dimension dim = scroller.getPreferredSize();
-			dim.height = 150;
-			scroller.setPreferredSize(dim);
+			scroller.setPreferredSize(new Dimension(150,150));
 			TipPanel.this.add(BorderLayout.CENTER,scroller);
 
 			ActionHandler actionHandler = new ActionHandler();
@@ -98,7 +96,7 @@ public class TipOfTheDay extends EnhancedDialog
 			buttons.add(close);
 			TipOfTheDay.this.getRootPane().setDefaultButton(close);
 
-			dim = nextTip.getPreferredSize();
+			Dimension dim = nextTip.getPreferredSize();
 			dim.width = Math.max(dim.width,close.getPreferredSize().width);
 			nextTip.setPreferredSize(dim);
 			close.setPreferredSize(dim);

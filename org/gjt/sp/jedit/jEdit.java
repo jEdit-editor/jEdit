@@ -20,6 +20,8 @@
 package org.gjt.sp.jedit;
 
 import com.microstar.xml.*;
+import javax.swing.plaf.metal.*;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.text.Element;
 import javax.swing.*;
 import java.awt.*;
@@ -321,10 +323,11 @@ public class jEdit
 
 		Buffer buffer = openFiles(userDir,args);
 
-		if(restore && bufferCount == 0
-			&& !background
+		if(restore && !background
 			&& settingsDirectory != null
-			&& jEdit.getBooleanProperty("restore"))
+			&& jEdit.getBooleanProperty("restore")
+			&& (jEdit.getBooleanProperty("restore.cli")
+			|| bufferCount == 0))
 			buffer = restoreOpenFiles();
 
 		// execute startup macro
@@ -1839,7 +1842,7 @@ public class jEdit
 			// Save the recent file list
 			File file = new File(MiscUtilities.constructPath(
 				settingsDirectory, "recent"));
-			if(file.lastModified() != recentModTime)
+			if(file.exists() && file.lastModified() != recentModTime)
 			{
 				Log.log(Log.WARNING,jEdit.class,file + " changed"
 					+ " on disk; will not save recent files");
@@ -1852,7 +1855,7 @@ public class jEdit
 
 			file = new File(MiscUtilities.constructPath(
 				settingsDirectory, "history"));
-			if(file.lastModified() != historyModTime)
+			if(file.exists() && file.lastModified() != historyModTime)
 			{
 				Log.log(Log.WARNING,jEdit.class,file + " changed"
 					+ " on disk; will not save history");
@@ -1869,7 +1872,7 @@ public class jEdit
 
 			file = new File(MiscUtilities.constructPath(
 				settingsDirectory,"properties"));
-			if(file.lastModified() != propsModTime)
+			if(file.exists() && file.lastModified() != propsModTime)
 			{
 				Log.log(Log.WARNING,jEdit.class,file + " changed"
 					+ " on disk; will not save user properties");
@@ -2260,6 +2263,40 @@ public class jEdit
 	 */
 	private static void initPLAF()
 	{
+		/* // People seem to hate the default Metal fonts because they are bold
+		MetalLookAndFeel.setCurrentTheme(new DefaultMetalTheme()
+		{
+			FontUIResource plain12 = new FontUIResource(new Font(
+				"Dialog",Font.PLAIN,12));
+			FontUIResource mono12 = new FontUIResource(new Font(
+				"Monospaced",Font.PLAIN,12));
+
+			public String getName()
+			{
+				return "jEdit";
+			}
+
+			public FontUIResource getControlTextFont()
+			{
+				return plain12;
+			}
+
+			public FontUIResource getSystemTextFont()
+			{
+				return mono12;
+			}
+
+			public FontUIResource getUserTextFont()
+			{
+				return plain12;
+			}
+
+			public FontUIResource getMenuTextFont()
+			{
+				return plain12;
+			}
+		}); */
+
 		String lf = getProperty("lookAndFeel");
 		try
 		{

@@ -137,8 +137,18 @@ public abstract class InputHandler extends KeyAdapter
 	/**
 	 * Invokes the specified BeanShell code, replacing __char__ in the
 	 * code with the next input character.
+	 * @param msg The prompt to display in the status bar
 	 * @param code The code
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 3.2pre2
+	 */
+	public void readNextChar(String msg, String code)
+	{
+		view.getStatus().setMessage(msg);
+		readNextChar(code);
+	}
+
+	/**
+	 * @deprecated Use the other form of this method instead
 	 */
 	public void readNextChar(String code)
 	{
@@ -286,5 +296,7 @@ public abstract class InputHandler extends KeyAdapter
 			BeanShell.eval(view,readNextChar,false);
 
 		readNextChar = null;
+
+		view.getStatus().setMessage(null);
 	}
 }

@@ -13,6 +13,8 @@ JEDIT 3.2 VERSION HISTORY
 - Utilities->Reload Edit Modes command
 - 'Search in Directory' command added to file system browser right click
   menu
+- Views once again have a status bar which displays caret position info,
+  prompts issued by register and marker commands, I/O status, and so on.
 
 + Enhancements
 
@@ -26,6 +28,14 @@ JEDIT 3.2 VERSION HISTORY
   Search->Search in Open Buffers (C+e C+b) selects 'All Buffers' file set.
   Search->Search in Directory (C+e C+d) selects 'Directory' file set
 - 'Search Buffer' and 'Search Directory Tree' macros removed
+- The File->Recent Files menu no longer displays path names, due to a
+  Swing bug that would display the menu in the wrong place if it was too
+  long. If you want to find out the full path name, move the mouse over
+  the relevant menu item, and the full path will be shown in the status
+  bar.
+- jEdit now restore previously open files on startup, even if file names
+  were specifed on the command line. This can be disabled in
+  Utilities->Global Options->Loading and Saving
 
 + Neutral
 
@@ -54,11 +64,23 @@ JEDIT 3.2 VERSION HISTORY
   the first occurrence
 - The edit server was supposed to bind to 127.0.0.1, but instead it
   bound to the machine's network address
+- Possible fix for the NullPointerException some people have experienced
+  with the tip of the day dialog box
+- Moving the mouse into the gutter while a buffer containing markers
+  was being loaded would throw a NullPointerException
+- Fixed bogus "The url filesystem does not support directory browsing"
+  error message displayed when loading http:// URLs
 
 + API Changes
 
 - SearchAndReplace.showSearchDialog() method removed. Simply create a
   new SearchDialog instance instead
+- InputHandler.readNextChar(String code) deprecated. Use the new form
+  instead:
+
+  readNextChar(String msg, String code).
+
+  'msg' will be shown in the status bar.
 
 * Version 3.2pre1
 

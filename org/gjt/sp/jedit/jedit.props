@@ -7,6 +7,9 @@
 ### GLOBAL SETTINGS
 ###
 
+# Swing look and feel
+#lookAndFeel=javax.swing.plaf.metal.MetalLookAndFeel;
+
 # If true, welcome screen will be displayed.
 # Set to false after initial startup.
 firstTime=true
@@ -17,8 +20,14 @@ autosave=30
 # Maximum number of elements in a history list
 history=20
 
+# Number of files for which to remember caret positions
+recentFiles=50
+
 # Restore open files on startup?
 restore=true
+
+# Restore even if file names specified on command line?
+restore.cli=true
 
 # Persistent markers
 persistentMarkers=true
