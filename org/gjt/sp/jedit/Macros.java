@@ -1,6 +1,6 @@
 /*
  * Macros.java - Macro manager
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,9 +77,20 @@ public class Macros
 	 */
 	public static String input(View view, String prompt)
 	{
+		return input(view,prompt,null);
+	}
+
+	/**
+	 * Utility method that can be used to prompt for input in a macro.
+	 * @param view The view
+	 * @param prompt The prompt string
+	 * @since jEdit 3.1final
+	 */
+	public static String input(View view, String prompt, String defaultValue)
+	{
 		return (String)JOptionPane.showInputDialog(view,prompt,
 			jEdit.getProperty("macro-input.title"),
-			JOptionPane.QUESTION_MESSAGE,null,null,null);
+			JOptionPane.QUESTION_MESSAGE,null,null,defaultValue);
 	}
 
 	/**

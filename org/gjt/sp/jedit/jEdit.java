@@ -944,42 +944,6 @@ public class jEdit
 	}
 
 	/**
-	 * Displays the 'about jEdit' dialog box.
-	 * @since jEdit 2.7pre2
-	 */
-	public static void showAboutDialog(View view)
-	{
-		new AboutDialog(view);
-	}
-
-	/**
-	 * Displays the global options dialog box.
-	 * @since jEdit 2.7pre2
-	 */
-	public static void showGlobalOptionsDialog(View view)
-	{
-		new OptionsDialog(view);
-	}
-
-	/**
-	 * Displays the I/O progress monitor dialog box.
-	 * @since jEdit 2.7pre2
-	 */
-	public static void showIOProgressMonitorDialog()
-	{
-		new IOProgressMonitor();
-	}
-
-	/**
-	 * Displays the activity log window.
-	 * @since jEdit 2.7pre2
-	 */
-	public static void showActivityLog()
-	{
-		new LogViewer();
-	}
-
-	/**
 	 * Displays the open file dialog box, and opens any selected files.
 	 * @param view The view
 	 * @since jEdit 2.7pre2
@@ -1976,9 +1940,9 @@ public class jEdit
 			+ " exit");
 		System.out.println("	-usage: Print this message and exit");
 		System.out.println("	-norestore: Don't restore previously open files");
-		System.out.println("	-noserver: Don't start editor server");
-		System.out.println("	-server=<name>: Reads/writes server"
-			+ " info to $HOME/.jedit/<name>");
+		System.out.println("	-noserver: Don't start edit server");
+		System.out.println("	-server=<name>: Read/write server"
+			+ " info from/to $HOME/.jedit/<name>");
 
 		System.out.println();
 		System.out.println("	-nosettings: Don't load user-specific"
@@ -1995,7 +1959,7 @@ public class jEdit
 		System.out.println("To set minimum activity log level,"
 			+ " specify a number as the first");
 		System.out.println("command line parameter"
-			+ " (1-9, 1 = debug, 9 = error)");
+			+ " (1-9, 1 = print everything, 9 = fatal errors only)");
 		System.out.println();
 		System.out.println("Report bugs to Slava Pestov <slava@jedit.org>.");
 	}

@@ -39,15 +39,15 @@
   program itself. That is in fact the major strength of using
   BeanShell with a program written in Java: it allows the user to
   customize the program's behavior by employing the same interfaces
-  designed and used by the program's developer. With a
+  designed and used by the program's developer.<!--  With a
   well-designed program, BeanShell turns a tool into a powerful
   toolkit. With a little effort (and hopefully some help from this
   guide) you quickly can be writing and using your own BeanShell
-  macros.
+  macros. -->
  </para>
 
  <para>
-  Throughout this part of the User Guide, we will be referring to some of
+  Throughout this part of the users guide, we will be referring to some of
   the plugins available for use with jEdit (in particular, the
   <application>Console</application> plugin). If you have not installed
   plugins, you really should consider doing so (see <xref
@@ -57,8 +57,8 @@
 
  <sect1 id="whatis-beanshell"><title>What is BeanShell?</>
   <para>
-   Recall that macros in jEdit use an open source scripting language called
-   BeanShell. Here is how BeanShell's author, Pat Niemeyer,
+   <!-- Recall that macros in jEdit use an open source scripting language called
+   BeanShell. --> Here is how BeanShell's author, Pat Niemeyer,
    describes his creation:
   </para>
   <blockquote>
@@ -170,7 +170,7 @@
    assembles a listing of individual macros in the <guimenu>Macros</guimenu>
    menu. When scanning the names, jEdit will delete underscore characters
    and the <filename>.bsh</filename> extension for menu labels, so that
-   <filename>List_Useful_Information.bsh </filename>, for example, will be
+   <filename>List_Useful_Information.bsh</filename>, for example, will be
    displayed in the <guimenu>Macros</guimenu> menu as <guimenuitem>List
    Useful Information</guimenuitem>. To update the menu listing by
    rescanning the general and user-specific macro directories, invoke

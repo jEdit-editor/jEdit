@@ -3,7 +3,7 @@
 <!DOCTYPE ACTIONS SYSTEM "actions.dtd">
 
 <!-- jEdit action table                                                      -->
-<!-- Copyright (C) 2000, 2001 Slava Pestov                                         -->
+<!-- Copyright (C) 2000, 2001 Slava Pestov                                   -->
 
 <!-- Actions are the 'glue' that binds menu item selections and keystrokes   -->
 <!-- to jEdit's APIs. For simplicity and compactness, they are written in    -->
@@ -13,7 +13,7 @@
 
 <ACTION NAME="about">
 	<CODE>
-		jEdit.showAboutDialog(view);
+		new AboutDialog(view);
 	</CODE>
 </ACTION>
 
@@ -76,7 +76,7 @@
 
 <ACTION NAME="buffer-options">
 	<CODE>
-		buffer.showBufferOptionsDialog(view);
+		new BufferOptions(view,buffer);
 	</CODE>
 </ACTION>
 
@@ -324,7 +324,7 @@
 
 <ACTION NAME="global-options">
 	<CODE>
-		jEdit.showGlobalOptionsDialog(view);
+		new OptionsDialog(view);
 	</CODE>
 </ACTION>
 
@@ -408,7 +408,7 @@
 
 <ACTION NAME="io-progress-monitor">
 	<CODE>
-		jEdit.showIOProgressMonitorDialog();
+		new IOProgressMonitor();
 	</CODE>
 </ACTION>
 
@@ -420,7 +420,7 @@
 
 <ACTION NAME="log-viewer">
 	<CODE>
-		jEdit.showActivityLog();
+		new LogViewer();
 	</CODE>
 </ACTION>
 
@@ -522,7 +522,7 @@
 
 <ACTION NAME="paste-previous">
 	<CODE>
-		Registers.showPastePreviousDialog(view);
+		new PastePrevious(view);
 	</CODE>
 </ACTION>
 
@@ -1039,7 +1039,7 @@
 
 <ACTION NAME="view-registers">
 	<CODE>
-		Registers.showViewRegistersDialog(view);
+		new ViewRegisters(view);
 	</CODE>
 </ACTION>
 

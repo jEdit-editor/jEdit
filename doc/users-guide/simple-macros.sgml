@@ -104,8 +104,8 @@
    <classname>View</classname> class. A <classname>View</classname>
    represents a <quote>parent</quote> or top-level frame window that
    contains the various visible components of the program, including the
-   editing window, menubar, toolbar, and any docking windows containing
-   plugins. It is a subclass of Java's <classname>JFrame</classname> class.
+   editing window, menu bar, toolbar, and any docked windows. It is a
+   subclass of Java's <classname>JFrame</classname> class.
    With jEdit, you can create and display multiple views simultaneously.
    The variable <varname>view</varname> is predefined for purposes of
    BeanShell as the current, active <classname>View</classname> object.
@@ -296,6 +296,17 @@ import javax.swing.JOptionPane;
       </funcsynopsis>
      </listitem>
 
+     <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static String <function>input</function></funcdef>
+          <paramdef>View <parameter>view</parameter></paramdef>
+          <paramdef>String <parameter>prompt</parameter></paramdef>
+          <paramdef>String <parameter>defaultValue</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+     </listitem>
+
   </itemizedlist>
 
   <!-- XXX: word this better, without GJT reference -->
@@ -333,10 +344,16 @@ import javax.swing.JOptionPane;
    <function>message()</function> but displays an error icon in the message
    box. The <function>input()</function> method furnishes a text field for
    input, an <guilabel>OK</guilabel> button and a
-   <guilabel>Cancel</guilabel> button. If <quote>Cancel</quote> is pressed,
+   <guilabel>Cancel</guilabel> button. Note that there are two forms
+   of the <function>input()</> method; the first displays an empty
+   input field initially, the other lets you specify a default value.
+   If <quote>Cancel</quote> is pressed,
    the method returns <constant>null</constant>, if <guilabel>OK</guilabel>
    is pressed, a <classname>String</classname> containing the contents of
-   the text field is returned. For those without Java experience, it is
+   the text field is returned.
+  </para>
+  <para>
+   For those without Java experience, it is
    important to know that <constant>null</constant> is
    <emphasis>not</emphasis> the same as an empty,
    <quote>zero-length</quote> <classname>String</classname>. It is Java's
@@ -360,7 +377,9 @@ import javax.swing.JOptionPane;
   <function>Macros.input()</function></title> -->
    <programlisting>Macros.error(view, "Goodbye, cruel world!");
 
-String result = Macros.input(view, "Type something here.");</programlisting>
+String result = Macros.input(view, "Type something here.");
+
+String name = Macros.input(view, "What is your name?", "Slava Pestov");</programlisting>
   </informalexample>
 
   <para>
@@ -420,8 +439,8 @@ many lines it covers */</programlisting>
  <sect1 id="something-useful"><title>Now For Something Useful</title>
 
   <para>
-    Here is a macro that inserts the path of the current file in
-    that file's edit buffer:
+    Here is a macro that inserts the path of the current buffer in
+    the text:
   </para>
 
 
@@ -440,16 +459,15 @@ textArea.setSelectedText(newText);</programlisting>
     <varname>textArea</varname> represents a
     <classname>JEditTextArea</classname> object. A
     <classname>Buffer</classname> represents the contents of an open text
-    file as it is maintained in the computer's memory (as opposed to how it
-    is stored on a disk). It is derived from Java's
+    file. It is derived from Java's
     <classname>PlainDocument</classname> class. The variable
-    <varname>buffer</varname> is predefined as the current View's current
-    text buffer. A <classname>JEditTextArea</classname> is the visible
+    <varname>buffer</varname> is predefined as the current buffer.
+    A <classname>JEditTextArea</classname> is the visible
     component that displays the file being edited. It is derived from the
     <classname>JComponent</>
     class. The variable <varname>textArea</varname> represents
-    the current View's <classname>JEditTextArea</classname> object, which in
-    turns displays the View's current text buffer.
+    the current <classname>JEditTextArea</classname> object, which in
+    turn displays the current buffer.
   </para>
 
   <para>
@@ -464,9 +482,9 @@ textArea.setSelectedText(newText);</programlisting>
   <para>
     In precise terms, the <function>setSelectedText()</function> method
     substitutes the text currently selected with the contents of the
-    String parameter. If no text is highlighted as being selected,
-    the effect of this operation is to insert text at the editing
-    caret.
+    String parameter. If no text is selected,
+    the effect of this operation is to insert text at the caret
+    position.
   </para>
 
   <para>
@@ -481,6 +499,9 @@ textArea.setSelectedText(newText);</programlisting>
 String newText = buffer.getName();
 
 // today's date
+import java.util.Date;
+import java.text.DateFormat;
+
 String newText = DateFormat.getDateInstance()
     .format(new Date());
 

@@ -43,26 +43,6 @@ import org.gjt.sp.util.Log;
 public class Registers
 {
 	/**
-	 * Displays the 'view registers' dialog box.
-	 * @param view The view
-	 * @since jEdit 2.7pre2
-	 */
-	public static void showViewRegistersDialog(View view)
-	{
-		new ViewRegisters(view);
-	}
-
-	/**
-	 * Displays the 'paste previous' dialog box.
-	 * @param view The view
-	 * @since jEdit 2.7pre2
-	 */
-	public static void showPastePreviousDialog(View view)
-	{
-		new PastePrevious(view);
-	}
-
-	/**
 	 * Convinience method that copies the text selected in the specified
 	 * text area into the specified register.
 	 * @param textArea The text area
@@ -634,6 +614,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2001/04/19 08:07:25  sp
+ * Macros.input(view,prompt,defaultValue) added
+ *
  * Revision 1.17  2001/03/23 10:38:50  sp
  * stuffs
  *

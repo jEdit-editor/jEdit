@@ -23,6 +23,7 @@ JEDIT 3.1 VERSION HISTORY
 + API Changes
 
 - BufferUpdate.getView() method added. This may return null.
+- Macros.input(View, String prompt, String defaultValue) method added
 
 * Version 3.1pre5
 

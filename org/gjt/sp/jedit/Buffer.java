@@ -29,7 +29,6 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.RESearchMatcher;
@@ -104,15 +103,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		// cache these for improved performance
 		putProperty("tabSize",getProperty("tabSize"));
 		putProperty("maxLineLen",getProperty("maxLineLen"));
-	}
-
-	/**
-	 * Displays the buffer options dialog box.
-	 * @since jEdit 2.7pre2
-	 */
-	public void showBufferOptionsDialog(View view)
-	{
-		new BufferOptions(view,this);
 	}
 
 	/**
