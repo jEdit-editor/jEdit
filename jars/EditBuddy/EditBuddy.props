@@ -1,9 +1,9 @@
 ### plugin properties
 plugin.EditBuddyPlugin.name=Edit Buddy
 plugin.EditBuddyPlugin.author=Slava Pestov
-plugin.EditBuddyPlugin.version=0.1.6
+plugin.EditBuddyPlugin.version=0.1.7
 plugin.EditBuddyPlugin.docs=EditBuddy.html
-plugin.EditBuddyPlugin.depend.0=jedit 02.07.01.00
+plugin.EditBuddyPlugin.depend.0=jedit 02.07.02.00
 plugin.EditBuddyPlugin.depend.1=plugin PluginManagerPlugin 0.5.6
 
 ### common wizard strings
@@ -29,11 +29,11 @@ edit-buddy.first-time.settings-dir.files=jars/ macros/ modes/ \
 	history mode-cache\n\ properties server
 
 edit-buddy.firewall-config.label=Configure firewall settings
-edit-buddy.firewall-config.action=edit-buddy-firewall-config
+edit-buddy.firewall-config.code=new OptionPaneDialog(new FirewallOptionPane());
 edit-buddy.firewall-config.dependsOnPlugin=FirewallPlugin
 
 edit-buddy.install-plugins.label=Install some plugins
-edit-buddy.install-plugins.action=edit-buddy-plugin-install
+edit-buddy.install-plugins.code=PluginManagerPlugin.installPlugins(null);
 edit-buddy.install-plugins.dependsOnPlugin=PluginManagerPlugin
 
 ### new-version wizard
@@ -55,11 +55,11 @@ edit-buddy.new-version.text=You have upgraded from jEdit {0} to {1}.<p>\n\
 	</ul>
 
 edit-buddy.update-plugins.label=Update Plugins
-edit-buddy.update-plugins.action=edit-buddy-plugin-update
+edit-buddy.update-plugins.code=PluginManagerPlugin.updatePlugins(null);
 edit-buddy.update-plugins.dependsOnPlugin=PluginManagerPlugin
 
 edit-buddy.view-changes.label=View CHANGES.txt
-edit-buddy.view-changes.action=help@CHANGES.txt
+edit-buddy.view-changes.code=HelpViewer.gotoFile("CHANGES.txt");
 
 edit-buddy.view-news.label=View NEWS.txt
-edit-buddy.view-news.action=help@NEWS.txt
+edit-buddy.view-news.code=HelpViewer.gotoFile("NEWS.txt");

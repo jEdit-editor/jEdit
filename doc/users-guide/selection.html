@@ -33,7 +33,7 @@ HREF="editing.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -52,12 +52,12 @@ CLASS="FIRSTTERM"
    two locations in a buffer, or it can cover a rectangular area.
   </P
 ><P
->   The simplest way to make a range selection is to drag the mouse from the start
-   of the selection to the end. All text between the two locations will
-   be marked. <B
+>   Dragging the mouse selects all text from the beginning of the drag to
+   the end. Holding down <B
 CLASS="KEYCAP"
 >Shift</B
->-clicking a location in the buffer
+> while clicking a location in the
+   buffer
    will create a selection from the caret position to where you clicked.
   </P
 ><P
@@ -106,22 +106,12 @@ CLASS="KEYCAP"
 >Escape</B
 >) deactivates the selection.
   </P
-><DIV
-CLASS="FIGURE"
 ><P
-><B
->Figure 4-1. A range selection</B
-></P
-><P
-><IMG
-SRC="../images/window-editor-select.gif"></P
-></DIV
-><P
->   A rectangular selection can be created by dragging the mouse while
-   holding down <B
+>   Holding down <B
 CLASS="KEYCAP"
 >Control</B
->. Holding down
+> and dragging will create a rectangular
+   selection. Holding down
    <B
 CLASS="KEYCAP"
 >Shift</B
@@ -129,7 +119,8 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >Control</B
 > while clicking a location in
-   the buffer will extend a rectangular selection.
+   the buffer will create a rectangular selection from the caret position to
+   where you clicked.
    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -153,7 +144,7 @@ CLASS="KEYCAP"
 ><P
 >   It is possible to select a rectangle with zero width but non-zero height.
    This can be used to insert a new column between two existing
-   columns. Such "zero-width" selections are shown as a thin
+   columns. Such zero-width selections are shown as a thin
    vertical line.
   </P
 ><P
@@ -165,16 +156,6 @@ CLASS="KEYCAP"
    when proportional-width fonts or tabs are used. For best results
    use monospaced fonts and soft tabs when editing columnar files.
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-2. A rectangular selection</B
-></P
-><P
-><IMG
-SRC="../images/window-editor-rect-sel.gif"></P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

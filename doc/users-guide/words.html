@@ -13,8 +13,8 @@ REL="UP"
 TITLE="Editing Text"
 HREF="editing.html"><LINK
 REL="PREVIOUS"
-TITLE="Scrolling"
-HREF="scrolling.html"><LINK
+TITLE="Inserting and Deleting Text"
+HREF="entering-text.html"><LINK
 REL="NEXT"
 TITLE="Working With Lines"
 HREF="lines.html"></HEAD
@@ -29,11 +29,11 @@ CLASS="NAVHEADER"
 HREF="lines.html"
 >Next</A
 >, <A
-HREF="scrolling.html"
+HREF="entering-text.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,7 +44,7 @@ NAME="WORDS"
 >Working With Words</A
 ></H1
 ><P
->   You can move the caret a word at a time by holding down <B
+>   Holding down <B
 CLASS="KEYCAP"
 >Control</B
 >
@@ -54,21 +54,17 @@ CLASS="KEYCAP"
 > or <B
 CLASS="KEYCAP"
 >Right</B
->. Words can be
-   selected if you hold down <B
+> moves the caret a word at
+   a time. As with other caret movement commands, holding down <B
 CLASS="KEYCAP"
 >Shift</B
-> in addition to
-   <B
-CLASS="KEYCAP"
->Control</B
->.
+>
+   in addition to the above
+   extends the selection, a word at a time.
   </P
 ><P
->   A single word can be selected by double-clicking with the mouse.
-   If you double-click and then drag, the resulting selection will
-   always begin and end on word boundaries. Because mouse clicks
-   cannot be recorded in macros, you can use the
+>   A single word can be selected by double-clicking with the mouse,
+   or using the
    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -79,24 +75,22 @@ CLASS="GUISUBMENU"
 CLASS="GUIMENUITEM"
 >Select
    Word</SPAN
-> command
-   (keyboard equivalent:
+> command (keyboard equivalent:
    <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
 >E</B
->
-   <B
+> <B
 CLASS="KEYCAP"
 >W</B
->) to select the word the caret is positioned on
-   when recording a macro.
+>).
+   A selection that begins and ends on word boundaries can be created by
+   double-clicking and dragging.
   </P
 ><P
->   
-   Pressing <B
+>   Pressing <B
 CLASS="KEYCAP"
 >Control</B
 > in addition to
@@ -121,16 +115,6 @@ CLASS="GUIMENUITEM"
    displays a dialog box with the number of characters,
    words and lines in the current buffer.
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-4. The word count dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-wordcount.gif"></P
-></DIV
 ><P
 >   
    <SPAN
@@ -149,8 +133,6 @@ CLASS="KEYCAP"
 >B</B
 >) searches the
    current buffer for possible completions of the current word.
-   This feature be used to
-   enter previously typed long identifiers in program source, for example.
    If there is only one completion it will be inserted into the buffer
    immediately.
    If multiple completions were found, they will be listed in a popup below
@@ -170,17 +152,9 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >Escape</B
 >.
+   This feature be used to
+   enter previously typed long identifiers in program source, for example.
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-5. The popup displayed by the Complete Word command</B
-></P
-><P
-><IMG
-SRC="../images/window-editor-complete-word.gif"></P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -191,9 +165,9 @@ HREF="index.html"
 HREF="editing.html"
 >Up</A
 ><BR><A
-HREF="scrolling.html"
+HREF="entering-text.html"
 >Prev</A
->: Scrolling<BR><A
+>: Inserting and Deleting Text<BR><A
 HREF="lines.html"
 >Next</A
 >: Working With Lines<BR></DIV

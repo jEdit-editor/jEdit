@@ -10,8 +10,8 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Working With Buffers"
-HREF="buffers.html"><LINK
+TITLE="Working With Files"
+HREF="files.html"><LINK
 REL="PREVIOUS"
 TITLE="Saving Files"
 HREF="saving.html"><LINK
@@ -33,7 +33,7 @@ HREF="saving.html"
 >Prev</A
 ></P
 ><H2
->Chapter 3. Working With Buffers</H2
+>Chapter 2. Working With Files</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -47,11 +47,18 @@ NAME="VFS-BROWSER"
 >   The <SPAN
 CLASS="GUIMENUITEM"
 >Open File</SPAN
-> and <SPAN
+>, <SPAN
 CLASS="GUIMENUITEM"
 >Save As</SPAN
-> dialog boxes
-   both show a file system browser embedded in a dialog box.
+>,
+   <SPAN
+CLASS="GUIMENUITEM"
+>Save a Copy As</SPAN
+> and <SPAN
+CLASS="GUIMENUITEM"
+>Insert File</SPAN
+> commands
+   all show a file system browser dialog box.
    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -59,10 +66,12 @@ CLASS="GUIMENU"
 CLASS="GUIMENUITEM"
 >File System Browser</SPAN
 > displays a
-   standalone version. By default, the standalone browser is shown in
-   a separate frame, but if you prefer, you can set it to be docked into
-   the current view in the
-   <SPAN
+   stand-alone file system browser. The difference between the dialog box
+   and stand-alone version is that the latter does not go away after a file is
+   selected.
+   By default, the standalone browser is shown in its own window;
+   it can also be set to dock into the view
+   in the <SPAN
 CLASS="GUIBUTTON"
 >Docking</SPAN
 > pane of the
@@ -71,14 +80,13 @@ CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Global
-   Options</SPAN
->.
+>Global Options</SPAN
+> dialog box.
   </P
 ><P
->   The browser consists of a tool bar, a path field,
-   a filename filter field, and the file tree itself. The file tree allows
-   an entire directory hierarchy to be viewed at once; try clicking
+>   In all instances, the file system browser consists of a tool bar, a path
+   field, a filename filter field, and the file tree itself. The file tree
+   allows an entire directory hierarchy to be viewed at once; try clicking
    on the expander control next to directories in the tree.
   </P
 ><P
@@ -92,7 +100,7 @@ CLASS="GUIMENUITEM"
 ><SPAN
 CLASS="GUIBUTTON"
 >Up</SPAN
-> - takes you to the current
+> - displays the current
    directory's parent. The popup arrow next to this button displays a
    menu listing all the parent directories of the current directory,
    up to the filesystem root</P
@@ -102,8 +110,8 @@ CLASS="GUIBUTTON"
 ><SPAN
 CLASS="GUIBUTTON"
 >Reload</SPAN
-> - updates the file list by
-   reloading the directory</P
+> - reloads the file list
+   </P
 ></LI
 ><LI
 ><P
@@ -111,19 +119,16 @@ CLASS="GUIBUTTON"
 CLASS="GUIBUTTON"
 >Local Drives</SPAN
 > - displays all
-   local drives in the file list. On Windows, this will be a list of
+   local drives. On Windows, this will be a list of
    drive letters; on Unix, the list will only contain one entry, the
-   root directory (<TT
-CLASS="FILENAME"
->/</TT
->)</P
+   root directory.</P
 ></LI
 ><LI
 ><P
 ><SPAN
 CLASS="GUIBUTTON"
 >Home Directory</SPAN
-> - takes you to your
+> - displays your
    home directory, the location of which is system-specific</P
 ></LI
 ><LI
@@ -132,9 +137,7 @@ CLASS="GUIBUTTON"
 CLASS="GUIBUTTON"
 >Parent Directory of Current Buffer</SPAN
 > -
-   take you to the directory containing the current buffer (if the current
-   view is split into multiple panes, the "current buffer" is
-   defined as the one that most recently had keyboard focus)</P
+   displays the directory containing the current buffer</P
 ></LI
 ></UL
 ><P
@@ -163,9 +166,7 @@ CLASS="GUIMENUITEM"
 CLASS="GUIMENUITEM"
 >New Directory</SPAN
 > - prompts for a directory
-   name and creates a directory with that name.
-   Note that not all virtual filesystems may support this operation (the
-   local and FTP filesystems do)
+   name and creates a directory with that name
    </P
 ></LI
 ><LI
@@ -191,8 +192,9 @@ CLASS="GUIMENUITEM"
 ></LI
 ></UL
 ><P
->   The filter text field allows you to specify a subset
+>   The filename filter text field specifies a subset
    of the current directory to display in the form of a glob pattern.
+   The default filter displays all files except for autosaves and backups.
    See <A
 HREF="globs.html"
 >Appendix F</A
@@ -201,46 +203,24 @@ HREF="globs.html"
    see <A
 HREF="history.html"
 >Appendix B</A
-> for
-   details.
+> for details.
   </P
 ><P
->   Right-clicking on a file in the VFS browser displays a popup menu, containing
-   commands for manipulating that file, in addition to all the commands in the
-   <SPAN
+>   Right-clicking on a file in the file system browser displays a popup menu,
+   containing commands for manipulating that file, in addition to all the
+   commands from the <SPAN
 CLASS="GUIBUTTON"
 >More</SPAN
 > menu.
-   If the buffer is already open, the popup will have commands to
+   If the file is already open, the popup will have commands to
    display it in the current view, display it in a new view, or close it.
-   Unopened file popups have items for opening, deleting and renaming.
-   Attempting to delete a non-empty directory will give an error; only
-   empty directories can be deleted.
+   Unopened file popups have commands for opening, deleting and renaming.
+   Note that attempting to delete a non-empty directory will give an error;
+   only empty directories can be deleted.
   </P
 ><P
->   Several aspects of the VFS browser can be customized in the
-   <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
-> dialog box.
-  </P
-><TABLE
-CLASS="SIDEBAR"
-BORDER="1"
-CELLPADDING="5"
-><TR
-><TD
-><DIV
-CLASS="SIDEBAR"
-><P
-></P
-><P
->    The VFS browser can be navigated from the keyboard.
-    The following keystrokes are supported:
-    <P
+>   The file system browser can be navigated from the keyboard:
+   <P
 ></P
 ><UL
 ><LI
@@ -249,7 +229,7 @@ CLASS="SIDEBAR"
 CLASS="KEYCAP"
 >Enter</B
 > - opens the currently selected file or
-     directory</P
+    directory</P
 ></LI
 ><LI
 ><P
@@ -257,7 +237,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >Left</B
 > - goes to the current directory's parent
-     </P
+    </P
 ></LI
 ><LI
 ><P
@@ -265,7 +245,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >Up</B
 > - selects previous file in list
-     </P
+    </P
 ></LI
 ><LI
 ><P
@@ -273,34 +253,28 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >Down</B
 > - selects next file in list
-     </P
+    </P
 ></LI
 ><LI
 ><P
 >Typing the first few characters of
-     a file's name will select that file
-     </P
+    a file's name will select that file
+    </P
 ></LI
 ></UL
 >
-    Note that the file list must have keyboard focus for these keys to work.
-   </P
+   Note that the file tree must have keyboard focus for these keys to work.
+  </P
 ><P
-></P
-></DIV
-></TD
-></TR
-></TABLE
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 3-4. The stand-alone VFS Browser</B
-></P
-><P
-><IMG
-SRC="../images/window-vfs-browser.gif"></P
-></DIV
+>   Several aspects of the file system browser can be customized in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box.
+  </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -308,7 +282,7 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="buffers.html"
+HREF="files.html"
 >Up</A
 ><BR><A
 HREF="saving.html"

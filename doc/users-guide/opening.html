@@ -10,11 +10,11 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Working With Buffers"
-HREF="buffers.html"><LINK
+TITLE="Working With Files"
+HREF="files.html"><LINK
 REL="PREVIOUS"
-TITLE="Working With Buffers"
-HREF="buffers.html"><LINK
+TITLE="Working With Files"
+HREF="files.html"><LINK
 REL="NEXT"
 TITLE="Saving Files"
 HREF="saving.html"></HEAD
@@ -29,11 +29,11 @@ CLASS="NAVHEADER"
 HREF="saving.html"
 >Next</A
 >, <A
-HREF="buffers.html"
+HREF="files.html"
 >Prev</A
 ></P
 ><H2
->Chapter 3. Working With Buffers</H2
+>Chapter 2. Working With Files</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,8 +44,7 @@ NAME="OPENING"
 >Opening Files</A
 ></H1
 ><P
->   There are various ways to open a file for editing.
-   <SPAN
+>   <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
@@ -58,24 +57,22 @@ CLASS="KEYCAP"
 >-<B
 CLASS="KEYCAP"
 >O</B
->) pops
-   up a dialog box allowing you to browse the file system and
-   select a
-   file to open. For a detailed treatment of this dialog box, see
-   <A
+>) displays
+   up a dialog box where the file to be edited can be located and chosen.
+   For a detailed treatment of this dialog box, see <A
 HREF="vfs-browser.html"
 >the section called <I
 >The File System Browser</I
 ></A
 >.
-   jEdit remembers the last few edited files; they listed in the
-   <SPAN
+   The <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Recent Files</SPAN
-> menu.
+> menu
+   lists the most recently opened files.
    The <SPAN
 CLASS="GUIMENU"
 >File</SPAN
@@ -100,25 +97,9 @@ CLASS="GUIMENUITEM"
    specified file into the current buffer, instead of creating a new buffer.
   </P
 ><P
->   Files that you do not have write access to are automatically opened
-   read only. Files can also be forced to open read only from the command line
-   by specifying the <TT
-CLASS="USERINPUT"
-><B
->-readonly</B
-></TT
-> option.
+>   Files that you do not have write access to are opened in read-only mode,
+   and no text editing will be allowed to take place.
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 3-1. The Open File dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-open.gif"></P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -126,12 +107,12 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="buffers.html"
+HREF="files.html"
 >Up</A
 ><BR><A
-HREF="buffers.html"
+HREF="files.html"
 >Prev</A
->: Working With Buffers<BR><A
+>: Working With Files<BR><A
 HREF="saving.html"
 >Next</A
 >: Saving Files<BR></DIV

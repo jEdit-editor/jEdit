@@ -33,7 +33,7 @@ HREF="bracket-matching.html"
 >Prev</A
 ></P
 ><H2
->Chapter 5. Editing Source Code</H2
+>Chapter 4. Editing Source Code</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -99,7 +99,7 @@ CLASS="GUIMENUITEM"
 ></LI
 ><LI
 ><P
->Thy can be changed in the current buffer
+>They can be changed in the current buffer
     for the duration of the editing session in the
     <SPAN
 CLASS="GUIMENU"
@@ -168,22 +168,23 @@ NAME="INDENT-SOFTTABS"
     
    
    
-    Sometimes, it is preferable to use multiple spaces instead of
-    tab stop characters to indent code. One might want to do this, so that,
-    for example,
-    the file will look the same if viewed with a different default
-    tab size. jEdit allows this with its "Soft Tabs"
-    feature.
+    Because files indented using tab characters may look less than ideal when
+    viewed on a system with a different default tab size, it is sometimes
+    desired to use multiple spaces, known as <I
+CLASS="FIRSTTERM"
+>soft tabs</I
+>,
+    instead of real tabs to indent code.
    </P
 ><P
->    There are three ways to use soft tabs:
+>    There are three ways to enable or disable soft tabs:
    </P
 ><P
 ></P
 ><UL
 ><LI
 ><P
->You can specify if soft tabs should be used
+>Soft tabs can be enabled or disabled
     on a global or edit mode-specific basis in the
     <SPAN
 CLASS="GUIBUTTON"
@@ -203,7 +204,7 @@ CLASS="GUIMENUITEM"
 ></LI
 ><LI
 ><P
->You can specify if soft tabs should be used
+>Soft tabs can be enabled or disabled
     in the current buffer for
     the duration of the editing session in the
     <SPAN
@@ -217,7 +218,7 @@ CLASS="GUIMENUITEM"
 ></LI
 ><LI
 ><P
->You can specify if soft tabs should be used
+>Soft tabs can be enabled or disabled
     in the current buffer for
     future editing sessions by placing the following in one of the first
     10 lines of the buffer, where <TT
@@ -226,13 +227,7 @@ CLASS="REPLACEABLE"
 >flag</I
 ></TT
 > is either
-    <B
-CLASS="COMMAND"
->true</B
-> or <B
-CLASS="COMMAND"
->false</B
->:
+    "true" or "false":
     </P
 ><TABLE
 BORDER="0"
@@ -253,13 +248,18 @@ CLASS="REPLACEABLE"
 ></TABLE
 ></LI
 ></UL
+><P
+>    Changing the soft tabs setting has no effect on existing tab characters;
+    it merely affects newly-inserted tabs. To convert existing hard tabs to
+    soft tabs and vice versa, see the commands in the next section.
+   </P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1627"
+NAME="AEN1735"
 >Indentation-Related Commands</A
 ></H2
 ><P
@@ -318,8 +318,7 @@ CLASS="GUISUBMENU"
 CLASS="GUIMENUITEM"
 >Spaces to Tabs</SPAN
 >
-    will convert
-    consecutive spaces to tabs in the selection.
+    and
     <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -330,8 +329,7 @@ CLASS="GUISUBMENU"
 CLASS="GUIMENUITEM"
 >Tabs to Spaces</SPAN
 >
-    will convert
-    tabs to soft tabs (multiple spaces) in the selection.
+    convert soft tabs to hard tabs, and vice versa, respectively.
    </P
 ></DIV
 ><DIV
@@ -372,7 +370,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >I</B
 >)
-    will indent all selected lines, or the current line if there is no
+    indents all selected lines, or the current line if there is no
     selection.
     If indent on enter is enabled, pressing <B
 CLASS="KEYCAP"
@@ -385,7 +383,7 @@ CLASS="KEYCAP"
 >Tab</B
 > on
     an unindented line will insert the appropriate amount of
-    indentation. Pressing it again will insert an actual tab.
+    indentation. Pressing it again will insert a tab character.
    </P
 ><P
 >    By default, indent on enter is enabled and indent on tab is
@@ -431,8 +429,8 @@ CLASS="GUIMENUITEM"
 ><LI
 ><P
 >Indent on enter and indent on tab can be set in the
-    current buffer for future editing sessions using buffer-local
-    properties by placing the following in the first 10 lines of a buffer,
+    current buffer for future editing sessions
+    by placing the following in the first 10 lines of a buffer,
     where <TT
 CLASS="REPLACEABLE"
 ><I
@@ -488,9 +486,6 @@ CLASS="KEYCAP"
 >
     <B
 CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
 >V</B
 >. For example,
     to create a new line without any indentation, type
@@ -502,9 +497,6 @@ CLASS="KEYCAP"
 >E</B
 >
     <B
-CLASS="KEYCAP"
->Control</B
->-<B
 CLASS="KEYCAP"
 >V</B
 > <B

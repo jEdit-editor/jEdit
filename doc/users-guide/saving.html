@@ -10,8 +10,8 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Working With Buffers"
-HREF="buffers.html"><LINK
+TITLE="Working With Files"
+HREF="files.html"><LINK
 REL="PREVIOUS"
 TITLE="Opening Files"
 HREF="opening.html"><LINK
@@ -33,7 +33,7 @@ HREF="opening.html"
 >Prev</A
 ></P
 ><H2
->Chapter 3. Working With Buffers</H2
+>Chapter 2. Working With Files</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -52,14 +52,11 @@ NAME="SAVING"
    
   </P
 ><P
->   Any changes made to a buffer aren't actually stored to disk immediately;
-   instead, they are stored in your computer's high
-   speed memory (RAM) until they are <I
+>   Changed made to a buffer leave the disk file unchanged until the
+   buffer is <I
 CLASS="FIRSTTERM"
 >saved</I
 >.
-   If there are unsaved changes in a buffer, an orange orb will be displayed
-   in buffer tab and status bar.
    <SPAN
 CLASS="GUIMENU"
 >File</SPAN
@@ -74,28 +71,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >S</B
 >)
-   will save the current buffer to disk.
-   <SPAN
-CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Save As</SPAN
-> and
-   <SPAN
-CLASS="GUIMENUITEM"
->Save a Copy As</SPAN
-> save the buffer to disk,
-   prompting for a file name first. The difference between the two is that
-   <SPAN
-CLASS="GUIMENUITEM"
->Save As</SPAN
-> renames the buffer to the selected path, whereas
-   <SPAN
-CLASS="GUIMENUITEM"
->Save a Copy As</SPAN
-> doesn't (so subsequent saves will still use
-   the old path name).
+   saves the current buffer to disk.
    <SPAN
 CLASS="GUIMENU"
 >File</SPAN
@@ -105,103 +81,121 @@ CLASS="GUIMENUITEM"
 >
    (keyboard equivalent: <B
 CLASS="KEYCAP"
->F4</B
->) will save all buffers.
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>S</B
+>) will save all buffers
+   to disk.
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+> and
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save a Copy As</SPAN
+> prompt for an
+   alternate file name to save
+   the buffer to. The two commands differ in that
+   <SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+> renames the buffer, so that subsequent saves
+   will use the new path, whereas
+   <SPAN
+CLASS="GUIMENUITEM"
+>Save a Copy As</SPAN
+> doesn't, so subsequent saves will continue
+   to use the old path. Also, the <SPAN
+CLASS="GUIMENUITEM"
+>Save a Copy As</SPAN
+> command
+   doesn't clear the buffer's "modified" flag.
   </P
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN368"
+NAME="AEN339"
 >Autosave and Backups</A
 ></H2
 ><P
->    
-    jEdit's autosave feature protects
-    against computer crashes and such.
-    Every 30 seconds, all buffers with changes are
+>    jEdit's autosave feature protects your work from computer crashes and
+    such. Every 30 seconds, all buffers with unsaved changes are
     written out to their respective file names, enclosed in hash
-    ("#") characters. (For example, <TT
+    ("#") characters. For example, <TT
 CLASS="FILENAME"
 >program.c</TT
 > will
     be autosaved to <TT
 CLASS="FILENAME"
 >#program.c#</TT
->). When you save a buffer, its
-    autosave file is deleted. But if jEdit crashes before you can save,
-    the autosave file will remain, and jEdit will offer to
-    recover the autosaved data next time the file is opened.
+>. Because saving a buffer using
+    one of the commands in the previous section automatically deletes the
+    autosave file, they will never be visible during normal operation.
+    However, if jEdit crashes before you have a
+    chance to save, the autosave file will remain, along with your unsaved
+    changes, and jEdit will offer to recover the autosaved data next time the
+    original file is opened.
    </P
-><DIV
-CLASS="FIGURE"
 ><P
-><B
->Figure 3-2. Dialog box shown if a file has autosaved changes</B
-></P
-><P
-><IMG
-SRC="../images/dialog-autosave.gif"></P
-></DIV
-><P
->    
-    Another useful safety feature is file backups. When you save a buffer
-    for the first time after opening it, its original contents are
-    saved to the buffer's file name suffixed with a tilde ("~").
+>    Another safety feature is file backups. When a buffer is saved
+    for the first time after being opened, its original contents are
+    preserved in buffer's file name suffixed with a tilde ("~").
     For example, <TT
 CLASS="FILENAME"
 >paper.tex</TT
-> is backed up to <TT
+> will get backed up to
+    <TT
 CLASS="FILENAME"
 >paper.tex~</TT
 >.
-    The point of backups so that if you make extensive changes to a file, and then
-    change your mind, you can go back to the previous version.
+    Backups can be used to roll back to the previous version
+    of a file after changes were made.
    </P
-><DIV
-CLASS="TIP"
-><BLOCKQUOTE
-CLASS="TIP"
 ><P
-><B
->Tip: </B
->     The autosave frequency and various backup-related
-     settings can be changed in the <SPAN
+>    The autosave and backup features can be configured
+    in the <SPAN
 CLASS="GUIBUTTON"
 >Loading and Saving</SPAN
 > pane of the
-     <SPAN
+    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Global Options</SPAN
 > dialog box.
-    </P
-></BLOCKQUOTE
-></DIV
+   </P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN394"
+NAME="AEN361"
 >Line Separator Characters</A
 ></H2
 ><P
->    
-    
-    
-    
-    
-    
-    The three major operating systems use different conventions to mark
+>    The three major operating systems use different conventions to mark
     line endings in text files.
-    The MacOS uses Carriage-Return (\r, ^M) for that purpose. Unix
-    uses Newline (\n, ^J). DOS and Windows use Carriage-Return-Newline
-    (\r\n, ^M^J). jEdit can read and write all three formats.
+    The MacOS uses Carriage-Return characters (\r, ^M) for that purpose. Unix
+    uses Newline characters (\n, ^J). DOS and Windows use both
+    (\r\n, ^M^J). jEdit can read and write files in all three formats.
     The line separator of the current buffer can be changed
     in the <SPAN
 CLASS="GUIMENU"
@@ -228,15 +222,14 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN414"
+NAME="AEN387"
 >When Another Application Modifies the File</A
 ></H2
 ><P
->    jEdit will issue a warning message if it notices that another application
-    has changed an open buffer on disk.
-    You will be given the choice to
-    continue editing (and lose changes made by the other application)
-    or to reload the buffer. If you prefer, this feature can be disabled in the
+>    If an open buffer is modified on disk by another application, a warning
+    dialog box is displayed, offering to either continue editing
+    (and lose changes made by the other application)
+    or reload the buffer from disk. This feature can be disabled in the
     <SPAN
 CLASS="GUIBUTTON"
 >General</SPAN
@@ -256,47 +249,23 @@ CLASS="GUIMENU"
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Reload</SPAN
-> (keyboard equivalent:
-    <B
-CLASS="KEYCAP"
->F2</B
->) can be used to reload a buffer from disk at any other
-    time. If the buffer has unsaved changes,
-    you will be asked for confirmation first.
+>
+    can be used to reload the current buffer from disk at any other
+    time; a confirmation dialog box will be displayed first if the buffer
+    has unsaved changes.
     <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Reload All Buffers</SPAN
-> (keyboard equivalent:
-    <B
-CLASS="KEYCAP"
->Shift</B
->-<B
-CLASS="KEYCAP"
->F2</B
->) will discard
+> discards
     changes in <I
 CLASS="EMPHASIS"
 >all open buffers</I
 >
-    and reload them from disk, asking for confirmation for first..
-    It is useful after performing a CVS checkin or similar; CVS inserts
-    version info in all files it commits, hence they must be re-read from
-    disk to be up-to-date.
+    and reload them from disk, asking for confirmation first..
    </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 3-3. Warning message displayed when another application
-   changed the file on disk</B
-></P
-><P
-><IMG
-SRC="../images/dialog-diskmod.gif"></P
-></DIV
 ></DIV
 ></DIV
 ><DIV
@@ -305,7 +274,7 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="buffers.html"
+HREF="files.html"
 >Up</A
 ><BR><A
 HREF="opening.html"

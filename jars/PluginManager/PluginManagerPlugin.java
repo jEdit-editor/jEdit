@@ -28,8 +28,6 @@ public class PluginManagerPlugin extends EditPlugin
 {
 	public void start()
 	{
-		jEdit.addAction(new OpenAction());
-
 		// old plugin manager versions didn't delete files for real,
 		// they just shoved them in a 'backup' dir
 
@@ -362,18 +360,5 @@ loop:		for(int i = 0; i < plugins.length; i++)
 			dialog,urls,dirs);
 
 		return progress.isOK();
-	}
-
-	static class OpenAction extends EditAction
-	{
-		OpenAction()
-		{
-			super("plugin-manager");
-		}
-
-		public void actionPerformed(ActionEvent evt)
-		{
-			new PluginManager(getView(evt));
-		}
 	}
 }

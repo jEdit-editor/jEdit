@@ -27,10 +27,10 @@ import org.gjt.sp.util.Log;
 
 public class OptionPaneDialog extends EnhancedDialog
 {
-	public OptionPaneDialog(Frame parent, OptionPane optPane, boolean modal)
+	public OptionPaneDialog(OptionPane optPane)
 	{
-		super(parent,jEdit.getProperty("options." + optPane.getName()
-			+ ".label"),modal);
+		super(null,jEdit.getProperty("options." + optPane.getName()
+			+ ".label"),true);
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));

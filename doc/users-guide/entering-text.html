@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="Selecting Text"
 HREF="selection.html"><LINK
 REL="NEXT"
-TITLE="Undo and Redo"
-HREF="undo-redo.html"></HEAD
+TITLE="Working With Words"
+HREF="words.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="undo-redo.html"
+HREF="words.html"
 >Next</A
 >, <A
 HREF="selection.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,8 +44,8 @@ NAME="ENTERING-TEXT"
 >Inserting and Deleting Text</A
 ></H1
 ><P
->   Unless overstrike mode is on (see below) any text typed at the
-   keyboard is inserted into the buffer. When you are inserting text,
+>   Text entered at the
+   keyboard is inserted into the buffer. When inserting text,
    keep in mind that the <B
 CLASS="KEYCAP"
 >Tab</B
@@ -58,32 +58,98 @@ CLASS="KEYCAP"
 HREF="indent.html"
 >the section called <I
 >Tabbing and Indentation</I
-> in Chapter 5</A
+> in Chapter 4</A
 > for details.
   </P
 ><P
->   If word wrap is enabled, attempting to insert text beyond the wrap column
-   position will automatically insert a newline at the appropriate word
-   boundary. XXX - changing the wrap column!!!
-  </P
-><P
->   Another way to enter text is with the overstrike mode. Pressing
+>   Another way to insert text is to use overstrike mode.
+   To activate overstrike mode, press
    <B
 CLASS="KEYCAP"
 >Insert</B
-> will change the caret into the overstrike caret.
-   Now, entered text will not be <I
-CLASS="EMPHASIS"
->inserted</I
->, but it will
-   <I
-CLASS="EMPHASIS"
->replace</I
-> the existing text, character by character.
+>. In overstrike mode, the caret is drawn differently,
+   and one character is deleted from in
+   front of the caret position for every character that is inserted.
   </P
 ><P
->   Regardless if overstrike mode is on, entering text while a selection
-   is active will replace the selection with the newly entered text.
+>   Inserting text while there is a selection
+   will replace the selection with the newly entered text.
+  </P
+><P
+>   Inserting text beyond the wrap column will automatically place a newline
+   at the appropriate word boundary. There are several ways to set the wrap
+   column:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+>The wrap column can be set on a global or mode-specific
+   basis in the
+   <SPAN
+CLASS="GUIBUTTON"
+>Editing</SPAN
+> and <SPAN
+CLASS="GUIBUTTON"
+>Mode-Specific</SPAN
+> panes of the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+   dialog box.</P
+></LI
+><LI
+><P
+>The wrap column can be set in the current buffer
+   for the duration of the editing session in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Buffer Options</SPAN
+> dialog box.
+   </P
+></LI
+><LI
+><P
+>The wrap column can be set in the current buffer
+   for future editing sessions with buffer-local properties by placing
+   the following in one of the first 10 lines of the buffer, where
+   <TT
+CLASS="REPLACEABLE"
+><I
+>flag</I
+></TT
+> is either "true" or "false":
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:maxLineLen=<TT
+CLASS="REPLACEABLE"
+><I
+>column</I
+></TT
+>:</PRE
+></TD
+></TR
+></TABLE
+></LI
+></UL
+><P
+>   To disable word wrap completely, set the wrap column to 0, using any of the
+   above ways.
   </P
 ><P
 >   
@@ -116,9 +182,9 @@ HREF="editing.html"
 HREF="selection.html"
 >Prev</A
 >: Selecting Text<BR><A
-HREF="undo-redo.html"
+HREF="words.html"
 >Next</A
->: Undo and Redo<BR></DIV
+>: Working With Words<BR></DIV
 ></BODY
 ></HTML
 >

@@ -2,7 +2,7 @@
 <HTML
 ><HEAD
 ><TITLE
->Working With Buffers</TITLE
+>Buffers</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
@@ -10,14 +10,14 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Using jEdit"
-HREF="using-jedit.html"><LINK
+TITLE="Basic Concepts"
+HREF="basics.html"><LINK
 REL="PREVIOUS"
-TITLE="Closing Files and Exiting jEdit"
-HREF="closing-exiting.html"><LINK
+TITLE="The Text Area"
+HREF="textarea.html"><LINK
 REL="NEXT"
-TITLE="Opening Files"
-HREF="opening.html"></HEAD
+TITLE="Views"
+HREF="views.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,93 +26,78 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="opening.html"
+HREF="views.html"
 >Next</A
 >, <A
-HREF="closing-exiting.html"
+HREF="textarea.html"
 >Prev</A
 ></P
+><H2
+>Chapter 1. Basic Concepts</H2
 ><HR></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="SECT1"
 ><H1
+CLASS="SECT1"
 ><A
 NAME="BUFFERS"
->Chapter 3. Working With Buffers</A
-></H1
-><DIV
-CLASS="TOC"
-><DL
-><DT
-><B
->Table of Contents</B
-></DT
-><DT
-><A
-HREF="buffers.html#CREATING"
->Creating New Files</A
-></DT
-><DT
-><A
-HREF="opening.html"
->Opening Files</A
-></DT
-><DT
-><A
-HREF="saving.html"
->Saving Files</A
-></DT
-><DT
-><A
-HREF="vfs-browser.html"
->The File System Browser</A
-></DT
-><DT
-><A
-HREF="threaded-io.html"
->Multithreaded I/O</A
-></DT
-><DT
-><A
-HREF="printing.html"
->Printing Files</A
-></DT
-><DT
-><A
-HREF="sessions.html"
->Editor Sessions</A
-></DT
-></DL
-></DIV
-><DIV
-CLASS="SECT1"
-><H1
-CLASS="SECT1"
-><A
-NAME="CREATING"
->Creating New Files</A
+>Buffers</A
 ></H1
 ><P
->   If an "Untitled" buffer is already open, you can just begin
-   typing and save it to create a new file. You can also create a
-   new untitled buffer by invoking <SPAN
+>   Several files can be opened and edited at once.
+   Each open file is referred to as a <I
+CLASS="FIRSTTERM"
+>buffer</I
+>.
+   The combo box above the text area selects the buffer to edit.
+   Different emblems are displayed next to buffer names in the list,
+   depending the buffer's state;
+   a red disk is shown for buffers with unsaved changes,
+   a lock is shown for read-only buffers,
+   and a spark is shown for new buffers which don't yet exist on disk.
+  </P
+><P
+>   An alternative way to switch buffers is to use the
+   buffer switching commands in the <SPAN
 CLASS="GUIMENU"
->File</SPAN
->&gt;<SPAN
+>View</SPAN
+> menu;
+   <SPAN
 CLASS="GUIMENUITEM"
->New
-   File</SPAN
-> (keyboard equivalent: <B
+>Go to Previous Buffer</SPAN
+>
+   (keyboard shortcut: <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
->N</B
->).
-   An alternate way to create a new file is to specify a non-existent file name
-   when starting jEdit from your operating system's command line.
+>Page Up</B
+>)
+   and <SPAN
+CLASS="GUIMENUITEM"
+>Go to Next Buffer</SPAN
+>
+   (keyboard shortcut: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Page Down</B
+>)
+   are self-explanatory.
+   <SPAN
+CLASS="GUIMENUITEM"
+>Go to Last Edited Buffer</SPAN
+>
+   (keyboard shortcut: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>`</B
+>)
+   switches to the buffer that was being edited prior to the current one.
   </P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -120,15 +105,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="using-jedit.html"
+HREF="basics.html"
 >Up</A
 ><BR><A
-HREF="closing-exiting.html"
+HREF="textarea.html"
 >Prev</A
->: Closing Files and Exiting jEdit<BR><A
-HREF="opening.html"
+>: The Text Area<BR><A
+HREF="views.html"
 >Next</A
->: Opening Files<BR></DIV
+>: Views<BR></DIV
 ></BODY
 ></HTML
 >

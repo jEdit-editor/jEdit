@@ -13,8 +13,8 @@ REL="UP"
 TITLE="Using jEdit"
 HREF="using-jedit.html"><LINK
 REL="PREVIOUS"
-TITLE="Editor Sessions"
-HREF="sessions.html"><LINK
+TITLE="Closing Files and Exiting jEdit"
+HREF="closing-exiting.html"><LINK
 REL="NEXT"
 TITLE="Selecting Text"
 HREF="selection.html"></HEAD
@@ -29,7 +29,7 @@ CLASS="NAVHEADER"
 HREF="selection.html"
 >Next</A
 >, <A
-HREF="sessions.html"
+HREF="closing-exiting.html"
 >Prev</A
 ></P
 ><HR></DIV
@@ -38,7 +38,7 @@ CLASS="CHAPTER"
 ><H1
 ><A
 NAME="EDITING"
->Chapter 4. Editing Text</A
+>Chapter 3. Editing Text</A
 ></H1
 ><DIV
 CLASS="TOC"
@@ -50,7 +50,7 @@ CLASS="TOC"
 ><DT
 ><A
 HREF="editing.html#CARET"
->The Caret</A
+>Moving The Caret</A
 ></DT
 ><DT
 ><A
@@ -61,21 +61,6 @@ HREF="selection.html"
 ><A
 HREF="entering-text.html"
 >Inserting and Deleting Text</A
-></DT
-><DT
-><A
-HREF="undo-redo.html"
->Undo and Redo</A
-></DT
-><DT
-><A
-HREF="clipboard.html"
->The Clipboard</A
-></DT
-><DT
-><A
-HREF="scrolling.html"
->Scrolling</A
 ></DT
 ><DT
 ><A
@@ -94,6 +79,21 @@ HREF="paragraphs.html"
 ></DT
 ><DT
 ><A
+HREF="undo-redo.html"
+>Undo and Redo</A
+></DT
+><DT
+><A
+HREF="clipboard.html"
+>The Clipboard</A
+></DT
+><DT
+><A
+HREF="scrolling.html"
+>Scrolling</A
+></DT
+><DT
+><A
 HREF="markers.html"
 >Markers</A
 ></DT
@@ -104,13 +104,8 @@ HREF="registers.html"
 ></DT
 ><DT
 ><A
-HREF="abbrevs.html"
->Abbreviations</A
-></DT
-><DT
-><A
-HREF="command-line.html"
->The jEdit Command Line</A
+HREF="search-replace.html"
+>Search and Replace</A
 ></DT
 ></DL
 ></DIV
@@ -120,22 +115,11 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="CARET"
->The Caret</A
+>Moving The Caret</A
 ></H1
 ><P
->   To aid in locating the caret, the current line is drawn with a slightly
-   different background color.
-   Moving the caret closer than three lines from the top or bottom of the
-   viewscreen will scroll the text area to make at least three lines above
-   and below the caret visible. This
-   feature is called <I
-CLASS="FIRSTTERM"
->electric scrolling</I
->.
-  </P
-><P
 >   The most direct way to move the caret is to click the
-   mouse where you want it to be positioned. It can also be moved using the
+   mouse at the desired position. It can also be moved using the
    keyboard;
    The <B
 CLASS="KEYCAP"
@@ -149,30 +133,31 @@ CLASS="KEYCAP"
 > and <B
 CLASS="KEYCAP"
 >Down</B
-> keys
-   move the caret in the respective direction.
-   The <B
+>
+   keys move the caret in the respective direction, and
+   the <B
 CLASS="KEYCAP"
 >PageUp</B
 > and <B
 CLASS="KEYCAP"
 >PageDown</B
 > keys move the caret up
-   and down one viewscreen, respectively.
+   and down one screenful, respectively.
   </P
 ><P
 >   When pressed once, the <B
 CLASS="KEYCAP"
 >Home</B
-> key will go to the first
-   non-whitespace character on the current line. Pressing it multiple
-   times will first move the caret to the beginning of the line, then to
+> key moves the caret to the first
+   non-whitespace character on the current line. Pressing it a second time
+   moves the caret to the beginning of the line. Pressing it a third time
+   moves the caret to
    the first visible line. <B
 CLASS="KEYCAP"
 >End</B
 > behaves in a
    similar manner, going to the last non-whitespace character, the end of
-   the line, and then to the last visible line.
+   the line, and finally to the last visible line.
    <B
 CLASS="KEYCAP"
 >Control</B
@@ -200,9 +185,9 @@ HREF="index.html"
 HREF="using-jedit.html"
 >Up</A
 ><BR><A
-HREF="sessions.html"
+HREF="closing-exiting.html"
 >Prev</A
->: Editor Sessions<BR><A
+>: Closing Files and Exiting jEdit<BR><A
 HREF="selection.html"
 >Next</A
 >: Selecting Text<BR></DIV

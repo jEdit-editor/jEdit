@@ -26,81 +26,67 @@ import org.gjt.sp.jedit.*;
 
 public class LatestVersionPlugin extends EditPlugin
 {
-	public void start()
-	{
-		jEdit.addAction(new DoVersionCheckAction());
-	}
-
 	public void createMenuItems(Vector menuItems)
 	{
 		menuItems.addElement(GUIUtilities.loadMenuItem("version-check"));
 	}
 
-	static class DoVersionCheckAction extends EditAction
+	public static void doVersionCheck(View view)
 	{
-		public DoVersionCheckAction()
+		view.showWaitCursor();
+
+		try
 		{
-			super("version-check");
-		}
+			URL url = new URL(jEdit.getProperty(
+				"version-check.url"));
+			InputStream in = url.openStream();
+			BufferedReader bin = new BufferedReader(
+				new InputStreamReader(in));
 
-		public void actionPerformed(ActionEvent evt)
-		{
-			View view = getView(evt);
-			view.showWaitCursor();
-
-			try
+			String line;
+			String version = null;
+			String build = null;
+			while((line = bin.readLine()) != null)
 			{
-				URL url = new URL(jEdit.getProperty(
-					"version-check.url"));
-				InputStream in = url.openStream();
-				BufferedReader bin = new BufferedReader(
-					new InputStreamReader(in));
-
-				String line;
-				String version = null;
-				String build = null;
-				while((line = bin.readLine()) != null)
-				{
-					if(line.startsWith(".version"))
-						version = line.substring(8).trim();
-					else if(line.startsWith(".build"))
-						build = line.substring(6).trim();
-				}
-
-				bin.close();
-
-				if(version != null && build != null)
-				{
-					if(jEdit.getBuild().compareTo(build) < 0)
-						newVersionAvailable(view,version,url);
-					else
-					{
-						GUIUtilities.message(view,"version-check"
-							+ ".up-to-date",new String[0]);
-					}
-				}
-			}
-			catch(IOException e)
-			{
-				String[] args = { e.getMessage() };
-				GUIUtilities.error(view,"ioerror",args);
+				if(line.startsWith(".version"))
+					version = line.substring(8).trim();
+				else if(line.startsWith(".build"))
+					build = line.substring(6).trim();
 			}
 
-			view.hideWaitCursor();
-		}
+			bin.close();
 
-		public void newVersionAvailable(View view, String version, URL url)
+			if(version != null && build != null)
+			{
+				if(jEdit.getBuild().compareTo(build) < 0)
+					newVersionAvailable(view,version,url);
+				else
+				{
+					GUIUtilities.message(view,"version-check"
+						+ ".up-to-date",new String[0]);
+				}
+			}
+		}
+		catch(IOException e)
 		{
-			String[] args = { version };
-
-			int result = JOptionPane.showConfirmDialog(view,
-				jEdit.getProperty("version-check.new-version.message",args),
-				jEdit.getProperty("version-check.new-version.title"),
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.INFORMATION_MESSAGE);
-
-			if(result == JOptionPane.YES_OPTION)
-				jEdit.openFile(view,null,url.toString(),true,false);
+			String[] args = { e.getMessage() };
+			GUIUtilities.error(view,"ioerror",args);
 		}
+
+		view.hideWaitCursor();
+	}
+
+	public static void newVersionAvailable(View view, String version, URL url)
+	{
+		String[] args = { version };
+
+		int result = JOptionPane.showConfirmDialog(view,
+			jEdit.getProperty("version-check.new-version.message",args),
+			jEdit.getProperty("version-check.new-version.title"),
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.INFORMATION_MESSAGE);
+
+		if(result == JOptionPane.YES_OPTION)
+			jEdit.openFile(view,null,url.toString(),true,false);
 	}
 }

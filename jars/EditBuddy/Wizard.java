@@ -127,7 +127,7 @@ public abstract class Wizard extends JComponent
 			{
 				if(i != 0)
 					buttonPanel.add(Box.createHorizontalStrut(6));
-				buttonPanel.add(new HTMLActionButton(buttons[i]));
+				buttonPanel.add(new BeanShellButton(buttons[i]));
 			}
 			buttonPanel.add(Box.createGlue());
 			panel.add(BorderLayout.SOUTH,buttonPanel);

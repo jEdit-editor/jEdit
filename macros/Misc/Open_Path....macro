@@ -1,4 +1,0 @@
-# Prompts for a path name and opens it
-
-input@p@Path name:
-open-file@$p

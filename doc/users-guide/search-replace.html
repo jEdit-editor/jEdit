@@ -10,14 +10,14 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Using jEdit"
-HREF="using-jedit.html"><LINK
+TITLE="Editing Text"
+HREF="editing.html"><LINK
 REL="PREVIOUS"
-TITLE="Commenting Out Code"
-HREF="commenting.html"><LINK
+TITLE="Registers"
+HREF="registers.html"><LINK
 REL="NEXT"
-TITLE="The HyperSearch Dialog Box"
-HREF="hypersearch.html"></HEAD
+TITLE="Editing Source Code"
+HREF="source-edit.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,247 +26,162 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="hypersearch.html"
+HREF="source-edit.html"
 >Next</A
 >, <A
-HREF="commenting.html"
+HREF="registers.html"
 >Prev</A
 ></P
+><H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="SECT1"
 ><H1
+CLASS="SECT1"
 ><A
 NAME="SEARCH-REPLACE"
->Chapter 6. Search and Replace</A
+>Search and Replace</A
 ></H1
 ><DIV
-CLASS="TOC"
-><DL
-><DT
-><B
->Table of Contents</B
-></DT
-><DT
-><A
-HREF="search-replace.html#SEARCH-REPLACE-DLOG"
->The Search and Replace Dialog Box</A
-></DT
-><DT
-><A
-HREF="hypersearch.html"
->The HyperSearch Dialog Box</A
-></DT
-><DT
-><A
-HREF="multifile.html"
->Searching in Multiple Files</A
-></DT
-><DT
-><A
-HREF="quick-search.html"
->Quick Search</A
-></DT
-></DL
-></DIV
-><DIV
-CLASS="SECT1"
-><H1
-CLASS="SECT1"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="SEARCH-REPLACE-DLOG"
 >The Search and Replace Dialog Box</A
-></H1
+></H2
 ><P
->   
-   
-   
-   
-   
-   
-   
-   <SPAN
+>    
+    
+    
+    
+    
+    
+    
+    <SPAN
 CLASS="GUIMENU"
 >Search</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Find</SPAN
 >
-   (keyboard equivalent: <B
+    (keyboard equivalent: <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
 >F</B
 >) displays the search and replace
-   dialog box.
-   <SPAN
+    dialog box.
+    <SPAN
 CLASS="GUIMENU"
 >Search</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Find Selection</SPAN
 > (keyboard equivalent:
-   <B
+    <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
 >E</B
 >
-   <B
+    <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
 >F</B
 >)
-   displays the search and replace dialog box
-   and with the currently selected text already inserted in the
-   <SPAN
+    displays the search and replace dialog box
+    and with the currently selected text in the
+    <SPAN
 CLASS="GUIBUTTON"
 >Search for</SPAN
 > field.
-  </P
+   </P
 ><P
-></P
-><UL
-><LI
-><P
->The search string can be entered in the
-   <SPAN
+>    The <SPAN
 CLASS="GUIBUTTON"
 >Search for:</SPAN
-> field. This field stores previously entered strings; see
-   <A
-HREF="history.html"
->Appendix B</A
->.</P
-></LI
-><LI
-><P
->The replacement string can be entered in the
-   <SPAN
+> and <SPAN
 CLASS="GUIBUTTON"
 >Replace with:</SPAN
-> field. This field stores previously entered strings; see
-   <A
+> field
+    store previously entered strings; see
+    <A
 HREF="history.html"
 >Appendix B</A
 >.
    </P
-></LI
-><LI
 ><P
->If the <SPAN
+>    Unless the <SPAN
 CLASS="GUIBUTTON"
 >Keep Dialog</SPAN
 > check box
-   is selected, the find dialog box will remain open until it is explicitly
-   closed. Otherwise,
-   it will be closed after a successful search or replace operation.
+    is selected, the dialog box will automatically close after a successful
+    search.
    </P
-></LI
-><LI
 ><P
->If the <SPAN
-CLASS="GUIBUTTON"
->Regexp</SPAN
-> check box
-   is selected, regular expressions can be used to match
-   inexact sequences of text; see <A
-HREF="regexps.html"
->Appendix E</A
->.
-   </P
-></LI
-><LI
-><P
->If the <SPAN
+>    If the <SPAN
 CLASS="GUIBUTTON"
 >Ignore Case</SPAN
 > check box is selected,
-   the search will be case insensitive; entering
-   "Hello" in the search field will locate "hello",
-   "HELLO", and "HeLlO"
+    the search will be case insensitive; for example, entering
+    "Hello" in the search field will locate "hello",
+    "HELLO", and "HeLlO"
    </P
-></LI
-><LI
 ><P
->If the
-   <SPAN
+>    If the <SPAN
+CLASS="GUIBUTTON"
+>Regexp</SPAN
+> check box
+    is selected, the search string will be interpreted as a regular expression.
+    Regular expressions can be used to match
+    inexact sequences of text; see <A
+HREF="regexps.html"
+>Appendix E</A
+> for details.
+   </P
+><P
+>    Clicking the
+    <SPAN
 CLASS="GUIBUTTON"
 >Multi File</SPAN
-> check box is selected,
-   multi file searching will be enabled.
-   For more information
-   about multi-file searching, see <A
-HREF="multifile.html"
->the section called <I
->Searching in Multiple Files</I
-></A
->.
+> button displays a dialog box chosing the file set
+    to search. Keep in mind that searches over a large number of files may
+    consume a large amount of memory, and/or take a long time to finish.
    </P
-></LI
-><LI
 ><P
->Clicking <SPAN
+>    Clicking <SPAN
 CLASS="GUIBUTTON"
 >Find</SPAN
 > or pressing
-   <B
+    <B
 CLASS="KEYCAP"
 >Enter</B
-> will begin the search. If an occurrence of
-   the search string can be found, it will be highlighted. If the search
-   was unsuccessful, a dialog box will prompt if the search should
-   be restarted from the beginning.
+> selects the next occurence of the search string.
    </P
-></LI
-><LI
 ><P
->Clicking <SPAN
+>    Clicking <SPAN
 CLASS="GUIBUTTON"
 >Replace</SPAN
 >
-   will replace all occurrences of the search string with
-   the replacement string in the selected text. This will beep
-   if there is no selection or if it doesn't contain the search
-   string.
-   </P
-></LI
-><LI
-><P
->Clicking <SPAN
+    replaces all occurrences of the search string in the selection with
+    the replacement string. Clicking <SPAN
 CLASS="GUIBUTTON"
 >Replace &amp; Find</SPAN
 >
-   will replace all occurrences of the search string with
-   the replacement string in the selected text, and locate the next
-   occurrence of the search string.
-   </P
-></LI
-><LI
-><P
->Clicking <SPAN
+    will do the above, and then and locate the next
+    occurrence of the search string. Clicking <SPAN
 CLASS="GUIBUTTON"
 >Replace All</SPAN
 >
-   will replace all occurrences of the search string with
-   the replacement string, spanning multiple buffers if
-   multi file search is enabled. This will beep
-   if the search string could not be found.
+    replaces all occurrences of the search string with
+    the replacement string.
    </P
-></LI
-><LI
-><P
->Clicking <SPAN
-CLASS="GUIBUTTON"
->Close</SPAN
-> will close the search
-   and replace dialog box.</P
-></LI
-></UL
 ><DIV
 CLASS="TIP"
 ><BLOCKQUOTE
@@ -274,24 +189,206 @@ CLASS="TIP"
 ><P
 ><B
 >Tip: </B
->    jEdit supports multiple-line search and replace; when regular expressions
-    are enabled, you can use
-    the "\n" (newline)
-    metacharacter in both the "search for" and
-    "replace with" fields.
-   </P
+>     When regular expressions
+     are enabled, the string "\n" will match newlines. This can be used
+     to perform multiple-line search and replace.
+    </P
 ></BLOCKQUOTE
 ></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 6-1. The search and replace dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-search.gif"></P
 ></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="HYPERSEARCH"
+>The HyperSearch Dialog Box</A
+></H2
+><P
+>    The HyperSearch dialog box lists all lines in a buffer (or a set of buffers, if
+    multiple file search is enabled) that contain a specified string.
+   </P
+><P
+>    <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>HyperSearch</SPAN
+> (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>H</B
+>) displays the HyperSearch dialog
+    box.
+    <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>HyperSearch For Selection</SPAN
+> (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>H</B
+>) displays the HyperSearch dialog box
+    and searches for all occurrences of the currently selected text.
+   </P
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Ignore Case</SPAN
+>, <SPAN
+CLASS="GUIBUTTON"
+>Regexp</SPAN
+> and
+    <SPAN
+CLASS="GUIBUTTON"
+>Multi File</SPAN
+> buttons behave exactly as they do in the search
+    and replace dialog box.
+   </P
+><P
+>    Clicking the <SPAN
+CLASS="GUIBUTTON"
+>Start</SPAN
+> button, or pressing
+    <B
+CLASS="KEYCAP"
+>Enter</B
+> will
+    begin the search. Clicking <SPAN
+CLASS="GUIBUTTON"
+>Stop</SPAN
+> aborts a
+    search in progress.
+   </P
+><P
+>    Once a search has been performed, the result are displayed in a tree,
+    with matches from different buffers shown in
+    dufferent branches of the tree. Clicking on a match
+    will open the respective buffer and move the caret to the line containing
+    the search string.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="SEARCHBAR"
+>The Search Bar</A
+></H2
+><P
+>    
+    
+    
+    
+    
+    
+    The "search bar" provides quick access to searching functions.
+    To search for a string, enter it into the search bar and press
+    <B
+CLASS="KEYCAP"
+>Enter</B
+>. The search bar stores previously entered strings; see
+    <A
+HREF="history.html"
+>Appendix B</A
+> for details. If <B
+CLASS="KEYCAP"
+>Enter</B
+> is pressed
+    with no string entered, the Search and Replace dialog box will be
+    displayed. Pressing <B
+CLASS="KEYCAP"
+>Escape</B
+> will return the keyboard
+    focus back to the text area.
+   </P
+><P
+>    If the <SPAN
+CLASS="GUIBUTTON"
+>Incremental</SPAN
+> check box is selected, the search string
+    will be searched for immediately as it is being typed; otherwise, the
+    search will only commence when <B
+CLASS="KEYCAP"
+>Enter</B
+> is pressed. Note that when
+    incremental search is active, the <SPAN
+CLASS="GUIBUTTON"
+>Multi File</SPAN
+> button is grayed out
+    and multiple file searching becomes unavailable.
+   </P
+><P
+>    <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Quick Search</SPAN
+> (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>,</B
+>) activates the search
+    bar.
+    <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Incremental Search</SPAN
+>
+    (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>.</B
+>) is like the
+    <SPAN
+CLASS="GUIMENUITEM"
+>Quick Search</SPAN
+> activates the search bar and selects the
+    <SPAN
+CLASS="GUIBUTTON"
+>Incremental</SPAN
+> check box.
+   </P
+><P
+>    The search bar can be disabled in the
+    <SPAN
+CLASS="GUIBUTTON"
+>General</SPAN
+> pane of the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box.
+   </P
 ></DIV
 ></DIV
 ><DIV
@@ -300,15 +397,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="using-jedit.html"
+HREF="editing.html"
 >Up</A
 ><BR><A
-HREF="commenting.html"
+HREF="registers.html"
 >Prev</A
->: Commenting Out Code<BR><A
-HREF="hypersearch.html"
+>: Registers<BR><A
+HREF="source-edit.html"
 >Next</A
->: The HyperSearch Dialog Box<BR></DIV
+>: Editing Source Code<BR></DIV
 ></BODY
 ></HTML
 >

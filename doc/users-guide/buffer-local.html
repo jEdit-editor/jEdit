@@ -33,7 +33,7 @@ HREF="customizing.html"
 >Prev</A
 ></P
 ><H2
->Chapter 7. Customizing jEdit</H2
+>Chapter 5. Customizing jEdit</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,15 +44,15 @@ NAME="BUFFER-LOCAL"
 >Buffer-Local Properties</A
 ></H1
 ><P
->   The Buffer Options dialog box only changes settings
-   for the duration of the editing session. It is also possible to
-   change settings for all future editing sessions using buffer-local
-   properties.
+>   Buffer-local properties offer an alternative way to change editor settings
+   on a per-buffer basis. While changes made in the Buffer Options dialog box
+   are lost after the buffer is closed, buffer-local properties take effect
+   each time the file is opened, because they are embedded in the file.
   </P
 ><P
 >   When jEdit loads a file, it checks the first 10 lines for
    colon-enclosed name/value pairs. The following example
-   will set the tab size to 8 characters, enable soft tabs, and set
+   will set the tab width to 8 characters, enable soft tabs, and set
    the default edit mode of the file to Perl:
   </P
 ><TABLE
@@ -68,8 +68,7 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ><P
->   Buffer-local properties take effect the next time the file is opened.
-   The following table lists all valid properties.
+>   The following table lists all property names that may be used.
    
    
    
@@ -91,7 +90,7 @@ CLASS="SCREEN"
 CLASS="TABLE"
 ><P
 ><B
->Table 7-1. Table of buffer-local properties</B
+>Table 5-1. Table of buffer-local properties</B
 ></P
 ><TABLE
 BORDER="1"
@@ -122,7 +121,7 @@ VALIGN="TOP"
 HREF="commenting.html"
 >the section called <I
 >Commenting Out Code</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -141,7 +140,7 @@ VALIGN="TOP"
 HREF="commenting.html"
 >the section called <I
 >Commenting Out Code</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -158,7 +157,7 @@ VALIGN="TOP"
 HREF="commenting.html"
 >the section called <I
 >Commenting Out Code</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -175,7 +174,7 @@ VALIGN="TOP"
 HREF="commenting.html"
 >the section called <I
 >Commenting Out Code</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -214,7 +213,7 @@ CLASS="KEYCAP"
 HREF="indent.html"
 >the section called <I
 >Tabbing and Indentation</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -234,7 +233,7 @@ CLASS="KEYCAP"
 HREF="indent.html"
 >the section called <I
 >Tabbing and Indentation</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -298,7 +297,25 @@ VALIGN="TOP"
 HREF="indent.html"
 >the section called <I
 >Tabbing and Indentation</I
-> in Chapter 5</A
+> in Chapter 4</A
+>.</TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+>maxLineLen</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>The maximum line length. This is the position of the wrap guide,
+      and inserting text beyond this column will insert a line break.
+      See <A
+HREF="entering-text.html"
+>the section called <I
+>Inserting and Deleting Text</I
+> in Chapter 3</A
 >.</TD
 ></TR
 ><TR
@@ -315,7 +332,7 @@ VALIGN="TOP"
 HREF="source-edit.html#MODES"
 >the section called <I
 >Edit Modes</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -332,7 +349,7 @@ VALIGN="TOP"
 HREF="indent.html"
 >the section called <I
 >Tabbing and Indentation</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -361,10 +378,10 @@ ALIGN="LEFT"
 VALIGN="TOP"
 >If set to "true", syntax highlighting will be performed.
       See <A
-HREF="source-edit.html#SYNTAX-HILITE"
+HREF="syntax-hilite.html"
 >the section called <I
 >Syntax Highlighting</I
-> in Chapter 5</A
+> in Chapter 4</A
 >.</TD
 ></TR
 ><TR
@@ -381,7 +398,25 @@ VALIGN="TOP"
 HREF="indent.html"
 >the section called <I
 >Tabbing and Indentation</I
-> in Chapter 5</A
+> in Chapter 4</A
+>.</TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+>wordBreakChars</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Characters, in addition to spaces and tabs, at which lines may be
+      split when word wrapping.
+      See <A
+HREF="entering-text.html"
+>the section called <I
+>Inserting and Deleting Text</I
+> in Chapter 3</A
 >.</TD
 ></TR
 ></TABLE

@@ -42,7 +42,7 @@ get_files = function (dummy)
 {
 	extensions = "class" "gif" "html" "props";
 	file_globs = (join "/*.", extensions);
-#	other_files = "./CHANGES" "./README" "./TODO" "./LICENSE";
+	other_files = "actions.xml";
 
 	(glob (join (dirs "."), file_globs)) other_files
 }

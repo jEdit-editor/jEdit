@@ -1,4 +1,0 @@
-# Opens selected path name
-
-copy-string-register@p
-open-file@$p

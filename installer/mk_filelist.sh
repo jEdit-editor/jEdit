@@ -28,16 +28,17 @@ ls -l `cat installer/jedit-firewall` | awk 'BEGIN { size=0 } { size+=$5 } END { 
 # jedit-html fileset
 
 find doc/users-guide -type f -name \*.html -print > installer/jedit-html
-find doc/images -type f -name \*.gif -print >> installer/jedit-html
 
 echo -n "jedit-html: "
 ls -l `cat installer/jedit-html` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'
 
 # jedit-source fileset
 
-find com -type f -name \*.java -print > installer/jedit-source
+find bsh -type f \( -name \*.java -o -name \*.bsh -o -name \*.txt \) -print > installer/jedit-source
+echo bsh/lib/{javaPackages,defaultImports} >> installer/jedit-source
+find com -type f -name \*.java -print >> installer/jedit-source
 find gnu -type f -name \*.java -print >> installer/jedit-source
-find org -type f \( -name \*.java -o -name \*.gif -o -name \*.props -o -name \*.jpg \) >> installer/jedit-source
+find org -type f \( -name \*.java -o -name \*.bsh -o -name \*.gif -o -name \*.props -o -name \*.jpg \) >> installer/jedit-source
 find jars/PluginManager -type f -print >> installer/jedit-source
 find jars/LatestVersion -type f -print >> installer/jedit-source
 find jars/EditBuddy -type f -print >> installer/jedit-source
@@ -45,6 +46,7 @@ echo makefile.jmk >> installer/jedit-source
 echo clean.sh >> installer/jedit-source
 echo org/gjt/sp/jedit/jedit.manifest >> installer/jedit-source
 echo org/gjt/sp/jedit/default.abbrevs >> installer/jedit-source
+echo org/gjt/sp/jedit/actions.{xml,dtd} >> installer/jedit-source
 
 echo -n "jedit-source: "
 ls -l `cat installer/jedit-source` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'

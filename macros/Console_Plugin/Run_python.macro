@@ -1,4 +1,0 @@
-# This macro saves the current file and executes python in the console.
-
-save
-console@python \$f

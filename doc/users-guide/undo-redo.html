@@ -13,8 +13,8 @@ REL="UP"
 TITLE="Editing Text"
 HREF="editing.html"><LINK
 REL="PREVIOUS"
-TITLE="Inserting and Deleting Text"
-HREF="entering-text.html"><LINK
+TITLE="Working With Paragraphs"
+HREF="paragraphs.html"><LINK
 REL="NEXT"
 TITLE="The Clipboard"
 HREF="clipboard.html"></HEAD
@@ -29,11 +29,11 @@ CLASS="NAVHEADER"
 HREF="clipboard.html"
 >Next</A
 >, <A
-HREF="entering-text.html"
+HREF="paragraphs.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,8 +44,7 @@ NAME="UNDO-REDO"
 >Undo and Redo</A
 ></H1
 ><P
->   If you make a mistake while editing text,
-   <SPAN
+>   <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
 >&gt;<SPAN
@@ -58,12 +57,14 @@ CLASS="KEYCAP"
 >-<B
 CLASS="KEYCAP"
 >Z</B
->) will undo the
-   most recently performed action. For example, if some text was deleted, this
-   will bring it back again. Up to 100 actions can be undone. (If you want
-   more, change the undo queue size in the <SPAN
+>) undoes the effects
+   of the most recent text editing command. For example, this can be used to
+   restore unintentionally deleted text. More complicated operations,
+   such as a search and replace, can also be undone. By default, the undo
+   queue remembers the last 100 edits; older edits are discarded.
+   The undo queue size can be changed in the <SPAN
 CLASS="GUIBUTTON"
->Editor</SPAN
+>Editing</SPAN
 > pane of the
    <SPAN
 CLASS="GUIMENU"
@@ -71,7 +72,7 @@ CLASS="GUIMENU"
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Global Options</SPAN
-> dialog box.)
+> dialog box.
   </P
 ><P
 >   <SPAN
@@ -87,17 +88,16 @@ CLASS="KEYCAP"
 >-<B
 CLASS="KEYCAP"
 >R</B
->) will redo the
-   most recently undone action. For example, if some text was deleted,
-   invoking <SPAN
+>) goes forward in the
+   undo queue, bringing back changes which were undone. For example, if some
+   text was inserted, <SPAN
 CLASS="GUIMENUITEM"
 >Undo</SPAN
-> will make the text come back again.
-   Invoking <SPAN
+> will remove it.
+   <SPAN
 CLASS="GUIMENUITEM"
 >Redo</SPAN
-> after it was undone will once again
-   delete that text.
+> will bring it back again.
   </P
 ></DIV
 ><DIV
@@ -109,9 +109,9 @@ HREF="index.html"
 HREF="editing.html"
 >Up</A
 ><BR><A
-HREF="entering-text.html"
+HREF="paragraphs.html"
 >Prev</A
->: Inserting and Deleting Text<BR><A
+>: Working With Paragraphs<BR><A
 HREF="clipboard.html"
 >Next</A
 >: The Clipboard<BR></DIV

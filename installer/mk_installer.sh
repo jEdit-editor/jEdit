@@ -12,5 +12,5 @@ fi
 # By default, put it in your home directory, because that's what I do.
 DESTDIR=$HOME
 
-jar cfm $DESTDIR/jedit-$1.jar install.mf install.props install.dat \
+jar cfm $DESTDIR/jedit$1install.jar install.mf install.props install.dat \
 	readme.html logo.gif *.class

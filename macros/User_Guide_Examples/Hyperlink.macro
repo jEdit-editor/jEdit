@@ -1,6 +1,0 @@
-# This macro inserts an HTML hyperlink.
-# We assume that the link text is selected.
-
-input@a@URL:
-cut
-insert-char@<A HREF="$$"></A>

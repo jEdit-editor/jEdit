@@ -10,14 +10,14 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Editing Text"
-HREF="editing.html"><LINK
+TITLE="Editing Source Code"
+HREF="source-edit.html"><LINK
 REL="PREVIOUS"
-TITLE="Registers"
-HREF="registers.html"><LINK
+TITLE="Editing Source Code"
+HREF="source-edit.html"><LINK
 REL="NEXT"
-TITLE="The jEdit Command Line"
-HREF="command-line.html"></HEAD
+TITLE="Syntax Highlighting"
+HREF="syntax-hilite.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="command-line.html"
+HREF="syntax-hilite.html"
 >Next</A
 >, <A
-HREF="registers.html"
+HREF="source-edit.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 4. Editing Source Code</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,15 +44,20 @@ NAME="ABBREVS"
 >Abbreviations</A
 ></H1
 ><P
->   An abbreviation is a string, that when inserted in the buffer, expands
-   into a longer and harder to type string. For example,
-   you can define an abbreviation "sout" that expands to
-   "System.out.println()" in Java mode.
-  </P
-><P
->   There are two types of abbreviations; global abbrevs and mode-specific
-   abbrevs. Global abbrevs can be expanded in any edit mode, and
-   mode-specific ones only affect one particular edit mode.
+>   Using abbreviations reduces the time spent typing long but commonly used
+   strings. For example, in Java mode, the abbreviation "sout" is
+   defined to expand to "System.out.println()", so to insert
+   "System.out.println()" in a Java buffer, you only need to type
+   "sout" followed by
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>;</B
+>.
+   Each abbreviation can either be global, in which case it will expand in all
+   edit modes, or mode-specific.
   </P
 ><P
 >   <SPAN
@@ -67,11 +72,15 @@ CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
->/</B
->) will
-   attempt to
+>;</B
+>)
+   attempts to
    expand the word before the caret. If no expansion could be found, it will
-   offer to create a new one. Existing abbreviations can be edited in the
+   offer to define one. Existing abbreviations can be edited in the
+   <SPAN
+CLASS="GUIBUTTON"
+>Abbrevs</SPAN
+> pane of the
    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
@@ -80,16 +89,6 @@ CLASS="GUIMENUITEM"
 >Global Options</SPAN
 > dialog box.
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-8. The Add Abbreviation dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-add-abbrev.gif"></P
-></DIV
 ><P
 >   If automatic abbreviation expansion is enabled, pressing the space bar
    will first attempt to expand the word before the caret, and only insert
@@ -102,9 +101,8 @@ CLASS="GUIMENUITEM"
   </P
 ><P
 >   If automatic expansion
-   is enabled and you want to enter a space without
-   expanding the current word, press
-   <B
+   is enabled, a space can be inserted without expanding the word before the
+   caret by pressing <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
@@ -113,42 +111,12 @@ CLASS="KEYCAP"
 >
    <B
 CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
 >V</B
 > <B
 CLASS="KEYCAP"
 >Space</B
 >.
   </P
-><DIV
-CLASS="WARNING"
-><P
-></P
-><TABLE
-CLASS="WARNING"
-BORDER="1"
-WIDTH="100%"
-><TR
-><TD
-ALIGN="CENTER"
-><B
->Warning</B
-></TD
-></TR
-><TR
-><TD
-ALIGN="LEFT"
-><P
->    Automatic abbreviation expansion doesn't always work
-    when done from a macro - don't rely on automatic abbrev
-    expansion when recording macros.
-   </P
-></TD
-></TR
-></TABLE
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -156,15 +124,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="editing.html"
+HREF="source-edit.html"
 >Up</A
 ><BR><A
-HREF="registers.html"
+HREF="source-edit.html"
 >Prev</A
->: Registers<BR><A
-HREF="command-line.html"
+>: Editing Source Code<BR><A
+HREF="syntax-hilite.html"
 >Next</A
->: The jEdit Command Line<BR></DIV
+>: Syntax Highlighting<BR></DIV
 ></BODY
 ></HTML
 >

@@ -13,8 +13,8 @@ REL="UP"
 TITLE="Editing Source Code"
 HREF="source-edit.html"><LINK
 REL="PREVIOUS"
-TITLE="Editing Source Code"
-HREF="source-edit.html"><LINK
+TITLE="Syntax Highlighting"
+HREF="syntax-hilite.html"><LINK
 REL="NEXT"
 TITLE="Tabbing and Indentation"
 HREF="indent.html"></HEAD
@@ -29,11 +29,11 @@ CLASS="NAVHEADER"
 HREF="indent.html"
 >Next</A
 >, <A
-HREF="source-edit.html"
+HREF="syntax-hilite.html"
 >Prev</A
 ></P
 ><H2
->Chapter 5. Editing Source Code</H2
+>Chapter 4. Editing Source Code</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -49,20 +49,19 @@ NAME="BRACKET-MATCHING"
    to make brackets easier to deal with.
   </P
 ><P
->   If the caret is in front of a bracket, the matching
-   one is highlighted (assuming it is visible on the
+>   If the character immediately before the caret position is a bracket, the
+   matching one is highlighted (assuming it is visible on the
    screen). Bracket highlighting can be disabled in the
    <SPAN
 CLASS="GUIBUTTON"
->Editor</SPAN
+>Text Area</SPAN
 > pane of the
    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Global
-   Options</SPAN
+>Global Options</SPAN
 > dialog box.
   </P
 ><P
@@ -83,7 +82,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >[</B
 >)
-   will select the code block containing the caret. Double-clicking on a
+   selects the code block containing the caret. Double-clicking on a
    bracket in the text area also has the same effect. A code block is
    a bracket-delimited range of text.
   </P
@@ -105,7 +104,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >]</B
 >)
-   will move the caret to the bracket matching the one before the caret.
+   moves the caret to the bracket matching the one before the caret.
   </P
 ><P
 >   <SPAN
@@ -129,7 +128,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >[</B
 >)
-   will move the caret to the previous opening bracket.
+   moves the caret to the previous opening bracket.
    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -151,7 +150,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >]</B
 >)
-   will move the caret to the next closing bracket.
+   moves the caret to the next closing bracket.
   </P
 ><DIV
 CLASS="NOTE"
@@ -160,22 +159,12 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->    jEdit's bracket matching code only checks syntax tokens with the same
+>    jEdit's bracket matching algorithm only checks syntax tokens with the same
     type as the original bracket for matches. So brackets inside string
-    literals and comments will not cause problems because they will
+    literals and comments will not cause problems, as they will
     be skipped.
    </P
 ></BLOCKQUOTE
-></DIV
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 5-2. Bracket matching in action</B
-></P
-><P
-><IMG
-SRC="../images/window-editor-bracket.gif"></P
 ></DIV
 ></DIV
 ><DIV
@@ -187,9 +176,9 @@ HREF="index.html"
 HREF="source-edit.html"
 >Up</A
 ><BR><A
-HREF="source-edit.html"
+HREF="syntax-hilite.html"
 >Prev</A
->: Editing Source Code<BR><A
+>: Syntax Highlighting<BR><A
 HREF="indent.html"
 >Next</A
 >: Tabbing and Indentation<BR></DIV

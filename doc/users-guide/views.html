@@ -2,7 +2,7 @@
 <HTML
 ><HEAD
 ><TITLE
->Working With Views</TITLE
+>Views</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
@@ -13,11 +13,11 @@ REL="UP"
 TITLE="Basic Concepts"
 HREF="basics.html"><LINK
 REL="PREVIOUS"
-TITLE="Basic Concepts"
-HREF="basics.html"><LINK
+TITLE="Buffers"
+HREF="buffers.html"><LINK
 REL="NEXT"
-TITLE="The Gutter"
-HREF="gutter.html"></HEAD
+TITLE="Command Repetition"
+HREF="repeats.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="gutter.html"
+HREF="repeats.html"
 >Next</A
 >, <A
-HREF="basics.html"
+HREF="buffers.html"
 >Prev</A
 ></P
 ><H2
->Chapter 2. Basic Concepts</H2
+>Chapter 1. Basic Concepts</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -41,80 +41,37 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="VIEWS"
->Working With Views</A
+>Views</A
 ></H1
 ><P
->   
-   
-   jEdit is very flexible when it comes to working with multiple windows.
-   When it starts up, it only creates one editor window, or
-   <I
+>   Each editor window is referred to as a <I
 CLASS="FIRSTTERM"
 >view</I
->. However, it is possible to have any number of views
-   open at once. Furthermore, each view can be split into multiple panes.
-   Each pane can be editing a different buffer; alternatively, you can select
-   the same buffer in more than one pane to view multiple locations
-   simultaneously.
-  </P
-><P
->   
-   
-   
+>.
+   It is possible to have multiple views open at once.
    <SPAN
 CLASS="GUIMENU"
 >View</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >New View</SPAN
->
-   (keyboard equivalent: <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->E</B
->
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->N</B
->) will create a new
-   view. Initially, it will display the same buffer as the current view.
+> creates a new view.
    <SPAN
 CLASS="GUIMENU"
 >View</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Close View</SPAN
->
-   (keyboard equivalent: <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->E</B
->
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->W</B
->) will close the
-   current view. Unless background mode is on, jEdit will exit when the
-   last view is closed. See <A
+> closes the
+   current view. If only one view is open, closing it will exit jEdit,
+   unless background mode is on; see <A
 HREF="server.html"
 >Appendix D</A
 > for more information
    about background mode.
   </P
 ><P
->   
-   
-   
+>   A quicker way to edit two locations simultaneously is to split the view.
    <SPAN
 CLASS="GUIMENU"
 >View</SPAN
@@ -129,7 +86,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >2</B
 >)
-   will horizontally split the view.
+   splits the text area into two text areas, stacked above each other.
    <SPAN
 CLASS="GUIMENU"
 >View</SPAN
@@ -144,7 +101,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >3</B
 >)
-   will vertically split the view.
+   splits the text area into two text areas, next to each other.
    <SPAN
 CLASS="GUIMENU"
 >View</SPAN
@@ -159,22 +116,11 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >1</B
 >)
-   will remove all splits from the current view.
-   When a view is split into multiple panes, editing commands operate
-   on the pane that has keyboard focus (or if no pane is focused,
-   the one that last had keyboard focus). This pane is indicated using
-   a different gutter border color.
+   removes all but the current text area from the view.
+   Editing commands operate in the text area that has keyboard focus
+   (or if no text area is focused,
+   the one that last had keyboard focus).
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 2-3. A view split into two panes</B
-></P
-><P
-><IMG
-SRC="../images/window-editor-split.gif"></P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -185,12 +131,12 @@ HREF="index.html"
 HREF="basics.html"
 >Up</A
 ><BR><A
-HREF="basics.html"
+HREF="buffers.html"
 >Prev</A
->: Basic Concepts<BR><A
-HREF="gutter.html"
+>: Buffers<BR><A
+HREF="repeats.html"
 >Next</A
->: The Gutter<BR></DIV
+>: Command Repetition<BR></DIV
 ></BODY
 ></HTML
 >

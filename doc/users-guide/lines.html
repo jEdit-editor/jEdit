@@ -33,7 +33,7 @@ HREF="words.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,11 +44,8 @@ NAME="LINES"
 >Working With Lines</A
 ></H1
 ><P
->   An entire line can be selected by triple-clicking with the mouse.
-   If you triple-click and drag, the resulting selection will start and
-   end on line boundaries.
-   Because mouse clicks
-   cannot be recorded in macros, you can use the
+>   An entire line can be selected by triple-clicking with the mouse,
+   or using the
    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -59,20 +56,19 @@ CLASS="GUISUBMENU"
 CLASS="GUIMENUITEM"
 >Select
    Line</SPAN
-> command
-   (keyboard equivalent:
+> command (keyboard equivalent:
    <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
 >E</B
->
-   <B
+> <B
 CLASS="KEYCAP"
 >L</B
->) to select the current line
-   when recording a macro.
+>).
+   A selection that begins and ends on line boundaries can be created
+   by triple-clicking and dragging.
   </P
 ><P
 >   <SPAN
@@ -88,8 +84,8 @@ CLASS="KEYCAP"
 >-<B
 CLASS="KEYCAP"
 >L</B
->) moves the caret
-   to a specified line. 
+>) prompts for
+   a line number to move the caret to.
    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -111,7 +107,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >L</B
 >) selects all text
-   between two line numbers (inclusive).
+   between between two specified lines, inclusive.
   </P
 ><P
 >   
@@ -133,9 +129,8 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >J</B
 >)
-   removes any whitespace from the start of the next line and joins the
-   current and next lines. This will beep if the caret is on the last
-   line of the buffer. For example, invoking <SPAN
+   removes any whitespace from the start of the next line and joins it with
+   the current line. For example, invoking <SPAN
 CLASS="GUIMENUITEM"
 >Join Lines</SPAN
 >
@@ -155,7 +150,7 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ><P
->   Will change it to:
+>   Changes it to:
   </P
 ><TABLE
 BORDER="0"
@@ -191,8 +186,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >D</B
 >)
-   will
-   delete the  current line.
+   deletes the current line.
    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -234,6 +228,32 @@ CLASS="KEYCAP"
 >)
    delete all text from the caret to the start and end of the line,
    respectively.
+  </P
+><P
+>   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Delete Line</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>R</B
+>) removes all whitespace from the end of each selected line, or
+   the current line if there is no selection.
   </P
 ></DIV
 ><DIV

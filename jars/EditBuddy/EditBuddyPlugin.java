@@ -30,14 +30,6 @@ public class EditBuddyPlugin extends EBPlugin
 {
 	public void start()
 	{
-		// these actions are only used by wizards.
-		// they do not have defined '.label' properties,
-		// therefore they do not appear in the 'Command Shortcuts'
-		// option pane, nor can they be added to menus.
-		jEdit.addAction(new edit_buddy_firewall_config());
-		jEdit.addAction(new edit_buddy_plugin_install());
-		jEdit.addAction(new edit_buddy_plugin_update());
-
 		String build = jEdit.getProperty("update-plugins.last-version");
 
 		// reset toolbar when upgrading from 2.6pre6 to

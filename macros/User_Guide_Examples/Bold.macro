@@ -1,4 +1,0 @@
-# This macro surrounds the selection with HTML <b> tags.
-
-cut
-insert-char@<b>$$</b>

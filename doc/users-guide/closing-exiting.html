@@ -10,14 +10,14 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Basic Concepts"
-HREF="basics.html"><LINK
+TITLE="Working With Files"
+HREF="files.html"><LINK
 REL="PREVIOUS"
-TITLE="The Gutter"
-HREF="gutter.html"><LINK
+TITLE="Editor Sessions"
+HREF="sessions.html"><LINK
 REL="NEXT"
-TITLE="Working With Buffers"
-HREF="buffers.html"></HEAD
+TITLE="Editing Text"
+HREF="editing.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="buffers.html"
+HREF="editing.html"
 >Next</A
 >, <A
-HREF="gutter.html"
+HREF="sessions.html"
 >Prev</A
 ></P
 ><H2
->Chapter 2. Basic Concepts</H2
+>Chapter 2. Working With Files</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,13 +44,7 @@ NAME="CLOSING-EXITING"
 >Closing Files and Exiting jEdit</A
 ></H1
 ><P
->   
-   
-   
-   
-   
-   
-   <SPAN
+>   <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
@@ -64,32 +58,11 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >W</B
 >)
-   will close the current buffer. If it has unsaved changes, jEdit
-   will ask if they should be saved first. The
-   <SPAN
-CLASS="GUIBUTTON"
->No</SPAN
-> option discards the unsaved changes with no further
-   ado. If you decide you didn't want to close the buffer after all,
-   <SPAN
-CLASS="GUIBUTTON"
->Cancel</SPAN
-> cancels the close operation and
-   returns to the editor.
+   closes the current buffer. If it has unsaved changes, jEdit
+   will ask if they should be saved first.
   </P
-><DIV
-CLASS="FIGURE"
 ><P
-><B
->Figure 2-5. The message displayed if a file has unsaved changes</B
-></P
-><P
-><IMG
-SRC="../images/dialog-unsaved.gif"></P
-></DIV
-><P
->   
-   <SPAN
+>   <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
@@ -98,9 +71,19 @@ CLASS="GUIMENUITEM"
 >
    (keyboard equivalent: <B
 CLASS="KEYCAP"
->F3</B
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>W</B
 >)
-   will close all currently open buffers. If any buffers have unsaved
+   closes all buffers. If any buffers have unsaved
    changes, they will be listed in a dialog box where you can choose
    to save or discard them.
    Multiple buffers to operate on can be selected by clicking on them
@@ -109,17 +92,6 @@ CLASS="KEYCAP"
 >Control</B
 >.
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 2-6. The dialog box displayed by Close All Buffers if
-  there are unsaved changes</B
-></P
-><P
-><IMG
-SRC="../images/dialog-unsaved-list.gif"></P
-></DIV
 ><P
 >   <SPAN
 CLASS="GUIMENU"
@@ -135,19 +107,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >Q</B
 >)
-   will completely exit jEdit, asking for confirmation first. If you would
-   prefer not to be asked for confirmation, disable it in the
-   <SPAN
-CLASS="GUIBUTTON"
->General</SPAN
-> pane of the
-   <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
-> dialog box.
+   will completely exit jEdit.
   </P
 ></DIV
 ><DIV
@@ -156,15 +116,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="basics.html"
+HREF="files.html"
 >Up</A
 ><BR><A
-HREF="gutter.html"
+HREF="sessions.html"
 >Prev</A
->: The Gutter<BR><A
-HREF="buffers.html"
+>: Editor Sessions<BR><A
+HREF="editing.html"
 >Next</A
->: Working With Buffers<BR></DIV
+>: Editing Text<BR></DIV
 ></BODY
 ></HTML
 >

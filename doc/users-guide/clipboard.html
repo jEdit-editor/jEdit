@@ -33,7 +33,7 @@ HREF="undo-redo.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -80,10 +80,11 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >C</B
 >)
-   place the selected text in the clipboard. <SPAN
+   place the selected text in the clipboard. The two differ in that
+   <SPAN
 CLASS="GUIMENUITEM"
 >Cut</SPAN
-> then removes it
+> then removes the selection
    from the buffer, while <SPAN
 CLASS="GUIMENUITEM"
 >Copy</SPAN
@@ -104,8 +105,8 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >V</B
 >)
-   will insert the clipboard contents at the caret position
-   (replacing the selection if there is one).
+   will insert the clipboard contents in place of the selection (or at the
+   caret position, if there is no selection).
    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -115,11 +116,21 @@ CLASS="GUIMENUITEM"
 > (keyboard equivalent:
    <B
 CLASS="KEYCAP"
->F5</B
->) will display a dialog box listing
-   the 25 most recently pasted strings.
-   If you want more than 25 strings to be remembered, you can
-   change the number in the <SPAN
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>V</B
+>)
+   displays a dialog box listing recently copied and
+   pasted text. By default, the last 25 strings are remembered; this can be
+   changed in the <SPAN
 CLASS="GUIBUTTON"
 >General</SPAN
 > pane of the
@@ -150,7 +161,7 @@ CLASS="SIDEBAR"
     XClipboard plugin
     (see <A
 HREF="plugins.html"
->Chapter 8</A
+>Chapter 6</A
 > for information about installing and
     using plugins)
     allows read-only access to the primary selection.
@@ -161,16 +172,6 @@ HREF="plugins.html"
 ></TD
 ></TR
 ></TABLE
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-3. The Paste Previous dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-pasteprev.gif"></P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -1,4 +1,0 @@
-# This macro saves the current file and executes c++ in the console.
-
-save
-console@c++ \$f

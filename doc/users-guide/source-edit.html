@@ -13,11 +13,11 @@ REL="UP"
 TITLE="Using jEdit"
 HREF="using-jedit.html"><LINK
 REL="PREVIOUS"
-TITLE="The jEdit Command Line"
-HREF="command-line.html"><LINK
+TITLE="Search and Replace"
+HREF="search-replace.html"><LINK
 REL="NEXT"
-TITLE="Bracket Matching"
-HREF="bracket-matching.html"></HEAD
+TITLE="Abbreviations"
+HREF="abbrevs.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,10 +26,10 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="bracket-matching.html"
+HREF="abbrevs.html"
 >Next</A
 >, <A
-HREF="command-line.html"
+HREF="search-replace.html"
 >Prev</A
 ></P
 ><HR></DIV
@@ -38,7 +38,7 @@ CLASS="CHAPTER"
 ><H1
 ><A
 NAME="SOURCE-EDIT"
->Chapter 5. Editing Source Code</A
+>Chapter 4. Editing Source Code</A
 ></H1
 ><DIV
 CLASS="TOC"
@@ -51,6 +51,16 @@ CLASS="TOC"
 ><A
 HREF="source-edit.html#MODES"
 >Edit Modes</A
+></DT
+><DT
+><A
+HREF="abbrevs.html"
+>Abbreviations</A
+></DT
+><DT
+><A
+HREF="syntax-hilite.html"
+>Syntax Highlighting</A
 ></DT
 ><DT
 ><A
@@ -81,9 +91,10 @@ NAME="MODES"
 >   An <I
 CLASS="FIRSTTERM"
 >edit mode</I
-> is an editor configuration customized to
+> is an editor configuration intended to
    edit a specific type of file. Edit modes can specify syntax highlighting,
-   auto indent and various other settings useful when editing a file type.
+   auto indent, a default set of abbreviations, and various other useful
+   customizations.
   </P
 ><DIV
 CLASS="SECT2"
@@ -150,125 +161,11 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="SYNTAX-HILITE"
->Syntax Highlighting</A
-></H2
-><P
->    Syntax highlighting is the display of programming language
-    syntax tokens using different fonts and colors. This makes the source
-    easier to follow and errors such as misplaced quotes easier to spot.
-    All edit modes except for
-    the plain text mode perform syntax highlighting.
-   </P
-><P
->    The colors and styles used to highlight syntax tokens can be changed
-    in the <SPAN
-CLASS="GUIBUTTON"
->Styles</SPAN
-> pane of the
-    <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
-> dialog box.
-   </P
-><P
->    Syntax highlighting can be enabled or disabled in one of
-    the following three ways:
-   </P
-><P
-></P
-><UL
-><LI
-><P
->You can specify if
-    syntax highlighting is to be performed on a global or mode-specific
-    basis in the
-    <SPAN
-CLASS="GUIBUTTON"
->Editing</SPAN
-> and <SPAN
-CLASS="GUIBUTTON"
->Mode-Specific</SPAN
-> panes of the
-    <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
->
-    dialog box.</P
-></LI
-><LI
-><P
->You can specify if
-    syntax highlighting is to be performed in the current buffer
-    for the duration of the editing session in the
-    <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Buffer Options</SPAN
-> dialog box.
-    </P
-></LI
-><LI
-><P
->You can specify if
-    syntax highlighting is to be performed in the current buffer
-    for future editing sessions with buffer-local properties by placing
-    the following in one of the first 10 lines of the buffer, where
-    <TT
-CLASS="REPLACEABLE"
-><I
->flag</I
-></TT
-> is either "true" or "false":
-    </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->:syntax=<TT
-CLASS="REPLACEABLE"
-><I
->flag</I
-></TT
->:</PRE
-></TD
-></TR
-></TABLE
-></LI
-></UL
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 5-1. Syntax highlighting in action</B
-></P
-><P
-><IMG
-SRC="../images/window-editor-syntax.gif"></P
-></DIV
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
 NAME="INSTALLING-MODES"
 >Installing New Edit Modes</A
 ></H2
 ><P
->    Each jEdit edit mode is actually a file written in XML,
+>    Each edit mode is defined in an XML file. XML is
     the <I
 CLASS="FIRSTTERM"
 >extensible markup language</I
@@ -312,8 +209,8 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
-> [message] jEdit: Loading edit modes from /usr/local/jedit-2.6final/modes
- [message] jEdit: Loading edit modes from /home/slava/.jedit/modes</PRE
+>[message] jEdit: Loading edit modes from /usr/local/jedit-2.7final/modes
+[message] jEdit: Loading edit modes from /home/slava/.jedit/modes</PRE
 ></TD
 ></TR
 ></TABLE
@@ -323,14 +220,14 @@ CLASS="PROGRAMLISTING"
     most important details about each edit mode, and then only loads
     individual edit
     modes when they are actually required. A side effect of this is that
-    newly installed modes are not immediately available for use; you must
-    first rebuild the cache by invoking <SPAN
+    newly installed modes are not immediately available for use; the cache
+    must first be recreated by invoking
+    <SPAN
 CLASS="GUIMENU"
 >Utilities</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Reload
-    Edit Modes</SPAN
+>Reload Edit Modes</SPAN
 >.
    </P
 ><DIV
@@ -365,12 +262,12 @@ HREF="index.html"
 HREF="using-jedit.html"
 >Up</A
 ><BR><A
-HREF="command-line.html"
+HREF="search-replace.html"
 >Prev</A
->: The jEdit Command Line<BR><A
-HREF="bracket-matching.html"
+>: Search and Replace<BR><A
+HREF="abbrevs.html"
 >Next</A
->: Bracket Matching<BR></DIV
+>: Abbreviations<BR></DIV
 ></BODY
 ></HTML
 >

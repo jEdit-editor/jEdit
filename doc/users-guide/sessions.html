@@ -10,14 +10,14 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Working With Buffers"
-HREF="buffers.html"><LINK
+TITLE="Working With Files"
+HREF="files.html"><LINK
 REL="PREVIOUS"
 TITLE="Printing Files"
 HREF="printing.html"><LINK
 REL="NEXT"
-TITLE="Editing Text"
-HREF="editing.html"></HEAD
+TITLE="Closing Files and Exiting jEdit"
+HREF="closing-exiting.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="editing.html"
+HREF="closing-exiting.html"
 >Next</A
 >, <A
 HREF="printing.html"
 >Prev</A
 ></P
 ><H2
->Chapter 3. Working With Buffers</H2
+>Chapter 2. Working With Files</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,15 +44,7 @@ NAME="SESSIONS"
 >Editor Sessions</A
 ></H1
 ><P
->   
-   
-   
-   
-   
-   
-   
-   
-   When working on a project, it can be convenient to save
+>   When working on a project, it can be convenient to save
    a list of open files, and re-open those files at a later time.
    jEdit's saved sessions do exactly that.
   </P
@@ -66,89 +58,42 @@ CLASS="FILENAME"
 CLASS="FILENAME"
 >.jedit/sessions</TT
 > subdirectory of the user's home directory.
-   The session named
-   <TT
-CLASS="FILENAME"
->default.session</TT
-> is loaded on startup, and the list of
-   open files is recorded into it when jEdit exits. The end result is
-   that open files are retained if jEdit is closed and reopened. This
-   "default" session can be disabled in the
+   The
    <SPAN
-CLASS="GUIBUTTON"
->Editor</SPAN
-> pane of the
-   <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Global Options</SPAN
->.
-  </P
-><P
->   <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Load Session</SPAN
-> can be used to
-   load a session while jEdit is running, and
+> and
    <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Save Session</SPAN
-> saves the list of
-   open files to a session you specify.
+> commands load and save
+   sessions.
   </P
 ><P
->   A session to load can be specified on the command line using the
-   <B
-CLASS="COMMAND"
->-session</B
-> switch. The <B
-CLASS="COMMAND"
->-nosession</B
->
-   switch will instruct jEdit not to load any sessions, and
-   open an <TT
+>   The session named
+   <TT
 CLASS="FILENAME"
->Untitled</TT
-> file instead.
-   For example, the following will start jEdit and open
-   all files in the <TT
-CLASS="FILENAME"
->website</TT
-> session (it is not
-   necessary to specify the <TT
-CLASS="FILENAME"
->.session</TT
->
-   suffix):
-   <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
-><TT
-CLASS="PROMPT"
->$</TT
-> <TT
-CLASS="USERINPUT"
-><B
->jedit -session=website</B
-></TT
-></PRE
-></TD
-></TR
-></TABLE
->
+>default.session</TT
+> is loaded on startup, and the list of
+   open files is recorded into it when jEdit exits. The end result is
+   that open files are retained if jEdit is closed and reopened. This
+   default session feature can be disabled in the <SPAN
+CLASS="GUIBUTTON"
+>Editor</SPAN
+> pane
+   of the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>.
   </P
 ></DIV
 ><DIV
@@ -157,15 +102,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="buffers.html"
+HREF="files.html"
 >Up</A
 ><BR><A
 HREF="printing.html"
 >Prev</A
 >: Printing Files<BR><A
-HREF="editing.html"
+HREF="closing-exiting.html"
 >Next</A
->: Editing Text<BR></DIV
+>: Closing Files and Exiting jEdit<BR></DIV
 ></BODY
 ></HTML
 >

@@ -1,0 +1,10 @@
+Differences between BeanShell 1.01 and jEdit's BeanShell:
+
+- getNameSpace() method added to class Interpreter
+- BshMethod class made public
+- NameSpace.classForName() now checks if a 'classLoader' variable is set in
+  that namespace, and if it is, uses that class loader to load classes instead
+  of calling Class.forName()
+
+-- Slava Pestov
+<sp@gjt.org>

@@ -10,8 +10,8 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Working With Buffers"
-HREF="buffers.html"><LINK
+TITLE="Working With Files"
+HREF="files.html"><LINK
 REL="PREVIOUS"
 TITLE="The File System Browser"
 HREF="vfs-browser.html"><LINK
@@ -33,7 +33,7 @@ HREF="vfs-browser.html"
 >Prev</A
 ></P
 ><H2
->Chapter 3. Working With Buffers</H2
+>Chapter 2. Working With Files</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,16 +44,25 @@ NAME="THREADED-IO"
 >Multithreaded I/O</A
 ></H1
 ><P
->   Because blocking the GUI is undesirable while loading or saving
-   buffers, especially if they are stored on a remote server,
-   jEdit executes all I/O operations asynchronously.
+>   To improve responsiveness and percieved performance,
+   jEdit executes all input/output operations asynchronously.
+   While I/O is in progress, a small disk icon is displayed in the menu bar,
+   in addition to progress meters for each running operation.
+   The <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>I/O Progress Monitor</SPAN
+> command
+   displays a window with more detailed status information. Requests
+   can also be aborted in this window. Note that aborting a buffer save can
+   result in data loss.
   </P
 ><P
->   When jEdit starts up, it creates a pool of "I/O work threads".
-   By default, four threads are started, which should be enough for most
-   purposes. If you find yourself loading, saving or otherwise manipulating
-   more than four files at the same time, you might want to increase the
-   number of threads in the
+>   By default, four I/O threads are created, which means that up
+   to four buffers can be loaded or saved simultaneously. The number of
+   threads can be changed in the
    <SPAN
 CLASS="GUIBUTTON"
 >Loading and Saving</SPAN
@@ -65,45 +74,9 @@ CLASS="GUIMENU"
 CLASS="GUIMENUITEM"
 >Global Options</SPAN
 > dialog box.
+   Setting the number to zero disables multithreaded I/O completely; doing
+   this is not recommended.
   </P
-><P
->   <SPAN
-CLASS="GUIMENU"
->Utilities</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->I/O Progress Monitor</SPAN
-> displays a
-   window showing what each I/O thread is doing. Clicking the <SPAN
-CLASS="GUIBUTTON"
->Abort</SPAN
->
-   button next to a progress bar will abort the operation executing
-   in that thread. You will be asked for confirmation first.
-  </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 3-5. The I/O Progress Monitor window</B
-></P
-><P
-><IMG
-SRC="../images/window-io-progress.gif"></P
-></DIV
-><P
->   View menu bars also embed a miniature I/O monitor.
-  </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 3-6. The miniature I/O monitor in the menu bar</B
-></P
-><P
-><IMG
-SRC="../images/window-editor-io-progress.gif"></P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -111,7 +84,7 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="buffers.html"
+HREF="files.html"
 >Up</A
 ><BR><A
 HREF="vfs-browser.html"

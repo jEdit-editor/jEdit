@@ -1,10 +1,10 @@
-# A makefile file for jEdit 2.5
+# A makefile file for jEdit
 # Based on jmk makefile
 #
 # To recompile jEdit, start jmk in the root of the jEdit directory structure.
 #
 # jEdit buffer-local properties:
-# :tabSize=4:noTabs=yes:
+# :indentSize=4:noTabs=yes:
 
 cmd_javac = "jikes" "-deprecation" "+D";
 #cmd_javac = "javac" "-g";
@@ -50,7 +50,6 @@ jedit_pkg = "org/gjt/sp/jedit";
 # jEdit's packages
 jedit_pkgs = "com/microstar/xml"
     jedit_pkg
-    "org/gjt/sp/jedit/actions"
     "org/gjt/sp/jedit/browser"
     "org/gjt/sp/jedit/gui"
     "org/gjt/sp/jedit/io"
@@ -65,11 +64,14 @@ jedit_pkgs = "com/microstar/xml"
 jedit_srcs = (subst ".java", ".class", (glob (join jedit_pkgs, "/*.java")));
 jedit_mf = (cat jedit_pkg "/jedit.manifest");
 
+bsh_pkgs = "bsh" "bsh/lib" "bsh/commands";
+bsh_srcs = (subst ".java", ".class", (glob (join bsh_pkgs, "/*.java")));
+
 # All source directories
-pkgs = re_pkg jedit_pkgs "org/gjt/sp/jedit/icons";
+pkgs = re_pkg bsh_pkgs jedit_pkgs "org/gjt/sp/jedit/icons";
 
 # All sources
-srcs = re_srcs jedit_srcs;
+srcs = re_srcs bsh_srcs jedit_srcs;
 
 jar = "jedit.jar";
 
@@ -80,7 +82,12 @@ jar = "jedit.jar";
         (join pkgs, "/*.gif")
         (join pkgs, "/*.jpg")
         (join pkgs, "/*.props")
-	"org/gjt/sp/jedit/default.abbrevs");
+        (join pkgs, "/*.bsh")
+        "org/gjt/sp/jedit/default.abbrevs"
+        "org/gjt/sp/jedit/actions.xml"
+        "org/gjt/sp/jedit/actions.dtd"
+	"bsh/lib/defaultImports"
+	"bsh/lib/javaPackages");
 }
 
 "everything":;
@@ -91,7 +98,12 @@ jar = "jedit.jar";
         (join pkgs, "/*.gif")
         (join pkgs, "/*.jpg")
         (join pkgs, "/*.props")
-        "org/gjt/sp/jedit/default.abbrevs");
+        (join pkgs, "/*.bsh")
+        "org/gjt/sp/jedit/default.abbrevs"
+        "org/gjt/sp/jedit/actions.xml"
+        "org/gjt/sp/jedit/actions.dtd"
+	"bsh/lib/defaultImports"
+	"bsh/lib/javaPackages");
 }
 
 "%.class" : "%.java";

@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="Markers"
 HREF="markers.html"><LINK
 REL="NEXT"
-TITLE="Abbreviations"
-HREF="abbrevs.html"></HEAD
+TITLE="Search and Replace"
+HREF="search-replace.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="abbrevs.html"
+HREF="search-replace.html"
 >Next</A
 >, <A
 HREF="markers.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,13 +44,13 @@ NAME="REGISTERS"
 >Registers</A
 ></H1
 ><P
->   A <I
+>   Each <I
 CLASS="FIRSTTERM"
 >register</I
-> is place where you can save a text string or caret
+> can hold either a text string or caret
    position for later use.
-   Each register has a single-character name; hence the number of available
-   registers is limited by how many keys can be typed on your keyboard.
+   Registers have single-character names, hhence their number
+   is limited by how many keys can be typed on your keyboard.
    Register contents are global to the editor; all buffers and views share
    the same set. Registers are not persistent and their contents are lost when
    jEdit exits. The register
@@ -71,32 +71,23 @@ CLASS="GUISUBMENU"
 CLASS="GUIMENUITEM"
 >View Registers</SPAN
 >
-   (keyboard equivalent: <B
-CLASS="KEYCAP"
->F6</B
->) displays a dialog box for
+   displays a dialog box for
    viewing register contents. The popup menu lists all defined registers;
    selecting one will display its contents and type (text or position).
    It is not possible to change or add registers in this
    dialog box; it is only for viewing.
   </P
-><DIV
-CLASS="FIGURE"
 ><P
-><B
->Figure 4-6. The View Registers dialog box</B
-></P
-><P
-><IMG
-SRC="../images/dialog-view-registers.gif"></P
-></DIV
-><P
->   Register manipulation commands wait for a key press and
-   use that key as the register to operate on. So to copy the
+>   All register commands except for <SPAN
+CLASS="GUIMENUITEM"
+>View Registers</SPAN
+>
+   listen for the next key press and operate on the register with
+   that name. For example, to copy the
    selection to register <TT
 CLASS="FILENAME"
 >X</TT
->, you would type
+>, you would press
    <B
 CLASS="KEYCAP"
 >Control</B
@@ -113,18 +104,9 @@ CLASS="KEYCAP"
 > <B
 CLASS="KEYCAP"
 >X</B
->.
+>
+   (The character "x" will not be inserted into the buffer).
   </P
-><DIV
-CLASS="FIGURE"
-><P
-><B
->Figure 4-7. A register command prompting for a register to operate on</B
-></P
-><P
-><IMG
-SRC="../images/window-editor-prompt.gif"></P
-></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
@@ -215,9 +197,7 @@ CLASS="KEYCAP"
 >A</B
 >) reads the next
     character entered at the keyboard, and appends the selected text to that
-    register, leaving the original text in the buffer. This can be
-    to collate
-    distinct text strings from several places.
+    register, leaving the original text in the buffer.
    </P
 ><P
 >    <SPAN
@@ -245,21 +225,7 @@ CLASS="KEYCAP"
 >V</B
 >) reads the next
     character entered at the keyboard, and replaces the selection with the
-    contents of that register. Every time you paste from a register,
-    the pasted text is added to the list in the
-    <SPAN
-CLASS="GUIMENU"
->Edit</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Paste Previous</SPAN
-> dialog box;
-    see <A
-HREF="clipboard.html"
->the section called <I
->The Clipboard</I
-></A
->.
+    contents of that register.
    </P
 ></DIV
 ><DIV
@@ -290,7 +256,7 @@ CLASS="KEYCAP"
 >)
     reads the next character entered at the keyboard, and stores the current
     buffer name and caret position in that register. Because buffer names
-    are saved in position registers, you can use them to quickly flip between
+    are saved in position registers, they can be used to quickly flip between
     multiple buffers.
    </P
 ><P
@@ -302,7 +268,8 @@ CLASS="GUISUBMENU"
 >Registers</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
->Go to Register</SPAN
+>Go to Position
+    in Register</SPAN
 >
     (keyboard equivalent: <B
 CLASS="KEYCAP"
@@ -311,8 +278,8 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >Y</B
 >)
-    reads the next character entered at the keyboard, switches to the buffer
-    name stored in that register (opening it if necessary), and moves the caret
+    reads the next character entered at the keyboard, opens the buffer
+    named in that register (if necessary), and moves the caret
     to the saved position.
    </P
 ><P
@@ -335,8 +302,6 @@ CLASS="KEYCAP"
 >)
     reads the next character entered at the keyboard, and creates a selection
     from the current caret position to the offset specified in that register.
-    Keep in mind that if the register points to a different buffer than the
-    current one, the resulting selection will most likely be meaningless.
    </P
 ><P
 >    <SPAN
@@ -357,9 +322,7 @@ CLASS="KEYCAP"
 >K</B
 >)
     reads the next character entered at the keyboard, and swaps the caret
-    position and current buffer with that entered in the register. If invoked
-    repeatedly, it can be used to flip between two buffers and/or caret
-    positions.
+    position and current buffer with that entered in the register.
    </P
 ><DIV
 CLASS="NOTE"
@@ -377,72 +340,6 @@ CLASS="FILENAME"
 ></BLOCKQUOTE
 ></DIV
 ></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="FILENAME-REGISTERS"
->File Name Registers</A
-></H2
-><P
->    Registers can also be used to store file names to edit. Internally,
-    jEdit makes no distinction between a file name and text register;
-    so for example, you can paste a
-    file name register into a buffer to get the file's name.
-   </P
-><P
->    <SPAN
-CLASS="GUIMENU"
->Edit</SPAN
->&gt;<SPAN
-CLASS="GUISUBMENU"
->Registers</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Save File
-    Name to Register</SPAN
->
-    (keyboard equivalent: <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->R</B
->
-    <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->F</B
->) reads the next
-    character entered at the keyboard and stores the current buffer's path
-    name in that register.
-   </P
-><P
->    <SPAN
-CLASS="GUIMENU"
->Edit</SPAN
->&gt;<SPAN
-CLASS="GUISUBMENU"
->Registers</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Go to Register</SPAN
->
-    (keyboard equivalent: <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->Y</B
->)
-    reads the next character entered at the keyboard and opens the file
-    whose name is stored in that register. This is the same command
-    used to go to a position register.
-   </P
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -456,9 +353,9 @@ HREF="editing.html"
 HREF="markers.html"
 >Prev</A
 >: Markers<BR><A
-HREF="abbrevs.html"
+HREF="search-replace.html"
 >Next</A
->: Abbreviations<BR></DIV
+>: Search and Replace<BR></DIV
 ></BODY
 ></HTML
 >

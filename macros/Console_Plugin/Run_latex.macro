@@ -1,4 +1,0 @@
-# This macro saves the current file and executes latex in the console.
-
-save
-console@latex \$f

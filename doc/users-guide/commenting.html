@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="Tabbing and Indentation"
 HREF="indent.html"><LINK
 REL="NEXT"
-TITLE="Search and Replace"
-HREF="search-replace.html"></HEAD
+TITLE="Customizing jEdit"
+HREF="customizing.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="search-replace.html"
+HREF="customizing.html"
 >Next</A
 >, <A
 HREF="indent.html"
 >Prev</A
 ></P
 ><H2
->Chapter 5. Editing Source Code</H2
+>Chapter 4. Editing Source Code</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,9 +44,10 @@ NAME="COMMENTING"
 >Commenting Out Code</A
 ></H1
 ><P
->   Most programming languages support "comments", or regions of
+>   Most programming and markup languages support "comments", or
+   regions of
    code which are ignored by the compiler/interpreter. jEdit has several
-   commands which make commenting out code slightly easier.
+   commands which make inserting comments slightly more convinient.
   </P
 ><P
 >   
@@ -80,7 +81,7 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >C</B
 >) will enclose the
-   selection with comment start and end strings. An example of C++
+   selection with comment start and end strings. An example of Java
    wing commented code looks like so:
   </P
 ><TABLE
@@ -91,9 +92,10 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->/* Process *proc = Process::getThisProcess();
-proc-&gt;getMainThread()-&gt;postMessage(msg);
-proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</PRE
+>/* if(obj instanceof DBConnection)
+{
+    ((DBConnection)obj).close();
+} */</PRE
 ></TD
 ></TR
 ></TABLE
@@ -156,7 +158,7 @@ CLASS="KEYCAP"
 >B</B
 >) will enclose the
    selection with comment start and end strings, and places the box
-   comment string at the start of each line. An example of C++
+   comment string at the start of each line. An example of Java
    box commented code looks like so:
   </P
 ><TABLE
@@ -167,9 +169,10 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->/* Process *proc = Process::getThisProcess();
-* proc-&gt;getMainThread()-&gt;postMessage(msg);
-* proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</PRE
+>/* if(obj instanceof DBConnection)
+* {
+*     ((DBConnection)obj).close();
+* } */</PRE
 ></TD
 ></TR
 ></TABLE
@@ -189,7 +192,7 @@ CLASS="GUIMENUITEM"
    dialog box, or on a buffer-specific basis using buffer-local
    properties. For example, placing the following in one of the first 10 lines
    of a buffer will change the box comment strings to "(*" and
-   "*"), with "(-" placed at the start of each line:
+   "*"), with "**" placed at the start of each line:
   </P
 ><TABLE
 BORDER="0"
@@ -199,7 +202,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->:commentStart=(*:commentEnd=*):boxComment=(-:</PRE
+>:commentStart=(*:commentEnd=*):boxComment=**:</PRE
 ></TD
 ></TR
 ></TABLE
@@ -231,7 +234,7 @@ CLASS="KEYCAP"
 >K</B
 >) will place the
    block comment character at the start of each line in the selection.
-   An example of C++ block commented code looks like so:
+   An example of Java block commented code looks like so:
   </P
 ><TABLE
 BORDER="0"
@@ -241,9 +244,10 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->// Process *proc = Process::getThisProcess();
-// proc-&gt;getMainThread()-&gt;postMessage(msg);
-// proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP);</PRE
+>// if(obj instanceof DBConnection)
+// {
+//     ((DBConnection)obj).close();
+// }</PRE
 ></TD
 ></TR
 ></TABLE
@@ -262,7 +266,7 @@ CLASS="GUIMENUITEM"
 >
    dialog box, or on a buffer-specific basis using buffer-local
    properties. For example, placing the following in one of the first 10 lines
-   of a buffer will change the block comment string to "--":
+   of a buffer will change the block comment string to "#":
   </P
 ><TABLE
 BORDER="0"
@@ -272,7 +276,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->:blockComment=--:</PRE
+>:blockComment=#:</PRE
 ></TD
 ></TR
 ></TABLE
@@ -289,9 +293,9 @@ HREF="source-edit.html"
 HREF="indent.html"
 >Prev</A
 >: Tabbing and Indentation<BR><A
-HREF="search-replace.html"
+HREF="customizing.html"
 >Next</A
->: Search and Replace<BR></DIV
+>: Customizing jEdit<BR></DIV
 ></BODY
 ></HTML
 >

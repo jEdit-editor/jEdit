@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="Working With Lines"
 HREF="lines.html"><LINK
 REL="NEXT"
-TITLE="Markers"
-HREF="markers.html"></HEAD
+TITLE="Undo and Redo"
+HREF="undo-redo.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="markers.html"
+HREF="undo-redo.html"
 >Next</A
 >, <A
 HREF="lines.html"
 >Prev</A
 ></P
 ><H2
->Chapter 4. Editing Text</H2
+>Chapter 3. Editing Text</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -54,7 +54,7 @@ CLASS="APPLICATION"
    by a leading indent.
   </P
 ><P
->   You can move the caret a paragraph at a time by holding down
+>   Holding down
    <B
 CLASS="KEYCAP"
 >Control</B
@@ -64,15 +64,14 @@ CLASS="KEYCAP"
 > or <B
 CLASS="KEYCAP"
 >Down</B
->.
-   Paragraphs can be selected if you hold down <B
+>
+   moves the caret to the previous and next paragraph, respectively.
+   As with other caret movement commands, holding down <B
 CLASS="KEYCAP"
 >Shift</B
-> in
-   addition to <B
-CLASS="KEYCAP"
->Control</B
->.
+>
+   in addition to the above
+   extends the selection, a paragraph at a time.
   </P
 ><P
 >   
@@ -101,8 +100,8 @@ CLASS="KEYCAP"
    <B
 CLASS="KEYCAP"
 >P</B
->) will
-   select the paragraph containing the caret.
+>)
+   selects the paragraph containing the caret.
    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
@@ -121,12 +120,37 @@ CLASS="KEYCAP"
 >E</B
 > <B
 CLASS="KEYCAP"
+>D</B
+>)
+   deletes the paragraph containing the caret.
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Paragraphs</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Format
+   Paragraph</SPAN
+> (keyboard equivalent: <B
+CLASS="KEYCAP"
 >Control</B
 >-<B
 CLASS="KEYCAP"
->D</B
->) will
-   delete the paragraph containing the caret.
+>E</B
+> <B
+CLASS="KEYCAP"
+>F</B
+>)
+   fills each line of the paragraph to fit within the wrap guide. See
+   <A
+HREF="entering-text.html"
+>the section called <I
+>Inserting and Deleting Text</I
+></A
+> for information and word wrap and changing the
+   wrap guide position.
   </P
 ></DIV
 ><DIV
@@ -141,9 +165,9 @@ HREF="editing.html"
 HREF="lines.html"
 >Prev</A
 >: Working With Lines<BR><A
-HREF="markers.html"
+HREF="undo-redo.html"
 >Next</A
->: Markers<BR></DIV
+>: Undo and Redo<BR></DIV
 ></BODY
 ></HTML
 >

@@ -1,4 +1,0 @@
-# Prompts for a path name and opens it in the VFS browser
-
-input@p@Path name to browse:
-vfs-browser@$p
