@@ -5,7 +5,6 @@ JEDIT TO DO
   - faster loading of modes
   - faster tokenizing of files
   - write docs
-  - escapes in delegates don't work
 - Get rid of loadIfNecessary() crap?
 - JARClassLoader: use GUIUtilities.error() to display errors
 - Option pane for changing mode-specific tab size, indent, comment

@@ -4,6 +4,16 @@ JEDIT VERSION HISTORY
 
 + New Features
 
+- The XMode plugin by Mike Dillon has been integrated into the core. This means
+  that:
+  - you can now define edit modes using an XML syntax
+  - there are more modes available -- COBOL, ColdFusion, Ruby, Scheme, AWK, etc
+  - many existing modes now work better; operators are highlighted, etc
+  - jEdit starts up a little slower now, because it has to parse all XML mode
+    files. In a future release, we will implement a cache mechanism that will
+    speed up startup
+  - the Perl mode is still implemented using the old syntax system, because the
+    XMode parser doesn't yet have the necessary features to highlight Perl mode
 - The current line is highlighted in the gutter now
 
 + Enhancements

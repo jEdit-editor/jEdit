@@ -75,7 +75,7 @@ public class GenericTokenMarker extends TokenMarker
 
 	public GenericTokenMarker()
 	{
-		ruleSets = new Hashtable();
+		ruleSets = new Hashtable(16);
 	}
 
 	public void addRuleSet(String setName, ParserRuleSet rules)
@@ -190,14 +190,18 @@ public class GenericTokenMarker extends TokenMarker
 		escaped = false;
 
 		boolean b;
+		boolean tempEscaped;
 		ParserRule tempRule;
 		Enumeration rule_enum;
+		Segment tempPattern;
+		LineContext tempContext;
 
 		for(pos = line.offset; pos < searchLimit; pos++)
 		{
+			// if we are not in the top level context, we are delegated
 			if (context.parent != null)
 			{
-				LineContext tempContext = context;
+				tempContext = context;
 
 				context = context.parent;
 
@@ -205,50 +209,55 @@ public class GenericTokenMarker extends TokenMarker
 				pattern.count = context.inRule.sequenceLengths[1];
 				pattern.offset = context.inRule.sequenceLengths[0];
 
-				b = handleRule(info,line, context.inRule);
+				tempEscaped = escaped;
+
+				b = handleRule(info, line, context.inRule);
 
 				context = tempContext;
 
 				if (!b)
 				{
-					if (pos != lastOffset)
+					if (!tempEscaped)
 					{
-						if (context.inRule == null)
+						if (pos != lastOffset)
 						{
-							if(context.rules.getKeywords() != null)
+							if (context.inRule == null)
 							{
-								markKeyword(info,line, lastKeyword, pos);
-							}
+								if(context.rules.getKeywords() != null)
+								{
+									markKeyword(info,line, lastKeyword, pos);
+								}
 
-							addToken(info,pos - lastOffset,
-								getActionToken(context.rules.getDefault()));
+								addToken(info,pos - lastOffset,
+									getActionToken(context.rules.getDefault()));
+							}
+							else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
+							{
+								addToken(info,pos - lastOffset,
+									getActionToken(context.inRule.action));
+							}
+							else
+							{
+								addToken(info,pos - lastOffset, Token.INVALID);
+							}
 						}
-						else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
+
+						context = (LineContext) context.parent;
+
+						if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
-							addToken(info,pos - lastOffset,
-								getActionToken(context.inRule.action));
+							addToken(info,pattern.count,
+								getActionToken(context.rules.getDefault()));
 						}
 						else
 						{
-							addToken(info,pos - lastOffset, Token.INVALID);
+							addToken(info,pattern.count, getActionToken(context.inRule.action));
 						}
+
+						context.inRule = null;
+
+						lastKeyword = lastOffset = pos + pattern.count;
 					}
-
-					context = (LineContext) context.parent;
-
-					if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
-					{
-						addToken(info,pattern.count,
-							getActionToken(context.rules.getDefault()));
-					}
-					else
-					{
-						addToken(info,pattern.count, getActionToken(context.inRule.action));
-					}
-
-					context.inRule = null;
-
-					lastKeyword = lastOffset = pos + pattern.count;
 
 					pos += (pattern.count - 1); // move pos to last character of match sequence
 
@@ -256,14 +265,16 @@ public class GenericTokenMarker extends TokenMarker
 				}
 			}
 
-			if (context.rules.getEscapeRule() != null)
+			// check the escape rule for the current context, if there is one
+			if ((tempRule = context.rules.getEscapeRule()) != null)
 			{
 				// assign tempPattern to mutable "buffer" pattern
-				Segment tempPattern = pattern;
+				tempPattern = pattern;
+
 				// swap in the escape pattern
 				pattern = context.rules.getEscapePattern();
 
-				b = handleRule(info,line, context.rules.getEscapeRule());
+				b = handleRule(info, line, tempRule);
 
 				// swap back the buffer pattern
 				pattern = tempPattern;

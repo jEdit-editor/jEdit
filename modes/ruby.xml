@@ -40,7 +40,7 @@
 		<!-- Null Exclusionss -->				
 		<SEQ TYPE="NULL">.</SEQ>
 		
-		<!-- Not Operators but like the syntak hightligh to match operators -->
+		<!-- Not Operators but like the syntak hightlight to match operators -->
 		<SEQ TYPE="OPERATOR">{</SEQ>		
 		<SEQ TYPE="OPERATOR">}</SEQ>			
 		<SEQ TYPE="OPERATOR">(</SEQ>		
@@ -89,7 +89,7 @@
 			<KEYWORD1>END</KEYWORD1>				
 			<KEYWORD1>alias</KEYWORD1>
 			<KEYWORD1>and</KEYWORD1>
-			<KEYWORD1>begin</KEYWORD1	>
+			<KEYWORD1>begin</KEYWORD1>
 			<KEYWORD1>break</KEYWORD1>						
 			<KEYWORD1>case</KEYWORD1>
 			<KEYWORD1>class</KEYWORD1>
