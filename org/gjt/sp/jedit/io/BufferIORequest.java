@@ -617,6 +617,13 @@ public class BufferIORequest extends WorkRequest
 			{
 				buffer.readLock();
 
+				if(!buffer.isDirty())
+				{
+					// buffer has been saved while we
+					// were waiting.
+					return;
+				}
+
 				out = vfs._createOutputStream(session,path,view);
 				if(out == null)
 					return;
@@ -776,6 +783,9 @@ public class BufferIORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/11/27 02:22:16  sp
+ * Type selection in file system browser, word wrap bug fixes, autosave race fix
+ *
  * Revision 1.5  2000/11/23 08:34:11  sp
  * Search and replace UI improvements
  *

@@ -36,9 +36,7 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
 
 /**
- * This class records and plays macros. Thanks to Romain Guy for writing
- * the S<sup>3</sup> plugin, which provided the insparation for this
- * class.
+ * This class records and runs macros.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -495,29 +493,26 @@ public class Macros
 
 		public void record(int repeat, char ch)
 		{
-			// record \n and \t on lines of their own
-			// because userInput() can only do indent if
-			// the *only* char in the string is \n and \t
+			// record \n and \t on lines specially so that auto indent
+			// can take place
 			if(ch == '\n')
-				record(repeat,"textArea.userInput(\"\\n\");");
+				record(repeat,"textArea.userInput(\'\\n\');");
 			else if(ch == '\t')
-				record(repeat,"textArea.userInput(\"\\t\");");
+				record(repeat,"textArea.userInput(\'\\t\');");
 			else
 			{
-				String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
+				StringBuffer buf = new StringBuffer();
+				for(int i = 0; i < repeat; i++)
+					buf.append(ch);
+				String charStr = MiscUtilities.charsToEscapes(buf.toString());
 
-				if(repeat == 1)
-				{
-					if(lastWasInput)
-						append(charStr);
-					else
-					{
-						append("\ntextArea.userInput(\"" + charStr);
-						lastWasInput = true;
-					}
-				}
+				if(lastWasInput)
+					append(charStr);
 				else
-					record(repeat,"textArea.userInput(\"" + charStr + "\");");
+				{
+					append("\ntextArea.setSelectedText(\"" + charStr);
+					lastWasInput = true;
+				}
 			}
 		}
 

@@ -17,6 +17,9 @@ JEDIT 2.7 VERSION HISTORY
     beginning, the caret saving feature can be disabled in
     Utilities->Global Options->General.
 - x86 assembly syntax highlighting (Kristian Ovaska)
+- You can now once again select files in the file system browser by
+  typing the first few characters of their name (this feature was
+  removed in 2.7pre1) (Denis Lambot)
 
 + Enhancements
 
@@ -56,6 +59,9 @@ JEDIT 2.7 VERSION HISTORY
 - Searching in a directory with no files would throw a
   NullPointerException
 - Backspace key didn't work in history text fields on some Java versions
+- Fixed race between autosave I/O request and save cleanup that could
+  result in autosave files being left after a successful save
+  (Denis Lambot)
 
 * Version 2.7pre2
 

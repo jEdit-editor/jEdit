@@ -138,6 +138,7 @@ actually a Java bug, or a well-known problem.
 The following people contributed code to the jEdit core:
 
 Andre Kaplan - Syntax token background highlighting
+Denis Lambot - Selecting files from the keyboard in the file system browser
 Dirk Moebius - HTTP firewall plugin
 Jason Ginchereau - Portions of QuickFile plugin code are used in the
 	VFS browser

@@ -223,12 +223,9 @@ public abstract class InputHandler extends KeyAdapter
 			invokeReadNextChar(ch);
 		else
 		{
-			StringBuffer buf = new StringBuffer();
 			int _repeatCount = getRepeatCount();
 			for(int i = 0; i < _repeatCount; i++)
-				buf.append(ch);
-
-			view.getTextArea().userInput(buf.toString());
+				view.getTextArea().userInput(ch);
 
 			Macros.Recorder recorder = view.getMacroRecorder();
 
@@ -278,47 +275,3 @@ public abstract class InputHandler extends KeyAdapter
 		readNextChar = null;
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.21  2000/11/24 06:48:35  sp
- * Caret position history
- *
- * Revision 1.20  2000/11/19 07:51:25  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.19  2000/11/17 11:16:04  sp
- * Actions removed, documentation updates, more BeanShell work
- *
- * Revision 1.18  2000/11/16 10:25:18  sp
- * More macro work
- *
- * Revision 1.17  2000/11/16 04:01:11  sp
- * BeanShell macros started
- *
- * Revision 1.16  2000/11/13 11:19:27  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.15  2000/11/12 05:36:49  sp
- * BeanShell integration started
- *
- * Revision 1.14  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.13  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.12  2000/09/07 04:46:08  sp
- * bug fixes
- *
- * Revision 1.11  2000/09/01 11:31:01  sp
- * Rudimentary 'command line', similar to emacs minibuf
- *
- * Revision 1.10  2000/08/10 11:55:58  sp
- * VFS browser toolbar improved a little bit, font selector tweaks
- *
- * Revision 1.9  2000/07/15 10:10:18  sp
- * improved printing
- *
- */

@@ -136,7 +136,6 @@ public class JARClassLoader extends ClassLoader
 		if(zipFile == null)
 			return;
 
-		closed = true;
 		try
 		{
 			zipFile.close();
@@ -145,6 +144,8 @@ public class JARClassLoader extends ClassLoader
 		{
 			Log.log(Log.ERROR,this,io);
 		}
+
+		zipFile = null;
 	}
 
 	// package-private members
@@ -175,7 +176,6 @@ public class JARClassLoader extends ClassLoader
 	private EditPlugin.JAR jar;
 	private Vector pluginClasses = new Vector();
 	private ZipFile zipFile;
-	private boolean closed;
 
 	private void loadPluginClass(String name)
 		throws Exception
@@ -368,11 +368,7 @@ public class JARClassLoader extends ClassLoader
 
 		try
 		{
-			ZipEntry entry;
-			if(closed)
-				entry = null;
-			else
-				entry = zipFile.getEntry(name);
+			ZipEntry entry = zipFile.getEntry(name);
 
 			if(entry == null)
 			{
@@ -416,44 +412,3 @@ public class JARClassLoader extends ClassLoader
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.39  2000/11/21 02:58:03  sp
- * 2.7pre2 finished
- *
- * Revision 1.38  2000/11/19 07:51:25  sp
- * Documentation updates, bug fixes
- *
- * Revision 1.37  2000/07/29 12:24:07  sp
- * More VFS work, VFS browser started
- *
- * Revision 1.36  2000/05/14 10:55:21  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.35  2000/04/06 09:28:08  sp
- * Better plugin error reporting, search bar updates
- *
- * Revision 1.34  2000/04/06 00:55:39  sp
- * didn't compile
- *
- * Revision 1.33  2000/04/06 00:28:14  sp
- * Resource handling bugs fixed, minor token marker tweaks
- *
- * Revision 1.32  2000/03/18 05:45:25  sp
- * Complete word overhaul, various other changes
- *
- * Revision 1.31  2000/03/14 06:22:24  sp
- * Lots of new stuff
- *
- * Revision 1.30  2000/02/27 00:39:50  sp
- * Misc changes
- *
- * Revision 1.29  2000/02/20 03:14:13  sp
- * jEdit.getBrokenPlugins() method
- *
- * Revision 1.28  2000/02/16 05:51:20  sp
- * Misc updates, dirk's changes integrated
- *
- */

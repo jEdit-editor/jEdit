@@ -96,6 +96,7 @@ public class SearchBar extends JPanel
 
 	public void update()
 	{
+		find.setModel(batch.isSelected() ? "find" : null);
 		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 		regexp.setSelected(SearchAndReplace.getRegexp());
 	}
@@ -159,11 +160,9 @@ public class SearchBar extends JPanel
 			}
 			else if(evt.getSource() == batch)
 			{
-				if(batch.isSelected())
-				{
-					jEdit.setProperty("search.mode.value",
-						"batch");
-				}
+				jEdit.setBooleanProperty("search.batch.toggle",
+					batch.isSelected());
+				update();
 			}
 			else if(evt.getSource() == ignoreCase)
 			{

@@ -265,17 +265,18 @@ public class HelpViewer extends JFrame
 		{
 			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
 			{
-			try
-			{
-				gotoURL(new URL(urlField.getText()),
-					true);
-			}
-			catch(MalformedURLException mu)
-			{
-				Log.log(Log.ERROR,this,mu);
-				String[] args = { urlField.getText() };
-				GUIUtilities.error(HelpViewer.this,
-					"badurl",args);
+				try
+				{
+					gotoURL(new URL(urlField.getText()),
+						true);
+				}
+				catch(MalformedURLException mu)
+				{
+					Log.log(Log.ERROR,this,mu);
+					String[] args = { urlField.getText() };
+					GUIUtilities.error(HelpViewer.this,
+						"badurl",args);
+				}
 			}
 		}
 	}

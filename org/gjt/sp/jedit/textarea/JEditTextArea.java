@@ -1442,15 +1442,14 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Similar to <code>setSelectedText()</code>, but overstrikes the
-	 * appropriate number of characters if overwrite mode is enabled,
-	 * performs word wrap and auto indent, and expands abbreviations.
-	 * @param str The string
+	 * Handles the insertion of the specified character. Performs
+	 * auto indent, expands abbreviations, does word wrap, etc.
+	 * @param ch The character
 	 * @see #setSelectedText(String)
 	 * @see #isOverwriteEnabled()
 	 * @since jEdit 2.7pre1
 	 */
-	public void userInput(String str)
+	public void userInput(char ch)
 	{
 		if(!isEditable())
 		{
@@ -1458,16 +1457,16 @@ public class JEditTextArea extends JComponent
 			return;
 		}
 
+		boolean selection = (selectionStart != selectionEnd);
 		int caretLine = getCaretLine();
 
-		char ch = str.charAt(0);
 		if(ch == ' ' && Abbrevs.getExpandOnInput()
 			&& Abbrevs.expandAbbrev(view,false))
 			return;
 		else if(ch == '\t')
 		{
 			if(buffer.getBooleanProperty("indentOnTab")
-				&& selectionStart == selectionEnd
+				&& !selection
 				&& buffer.indentLine(selectionStartLine,true,false))
 				return;
 			else if(buffer.getBooleanProperty("noTabs"))
@@ -1498,43 +1497,51 @@ public class JEditTextArea extends JComponent
 		}
 		else
 		{
+			String str = String.valueOf(ch);
+			if(selection)
+			{
+				setSelectedText(str);
+				return;
+			}
+
 			try
 			{
-				doWordWrap(caretLine,str);
+				if(ch == ' ')
+				{
+					if(doWordWrap(caretLine,true))
+						return;
+				}
+				else
+					doWordWrap(caretLine,false);
 			}
 			catch(BadLocationException bl)
 			{
 				Log.log(Log.ERROR,this,bl);
 			}
 
-			if(!overwrite || selectionStart != selectionEnd)
-				setSelectedText(str);
-			else
+			try
 			{
+				buffer.beginCompoundEdit();
+
 				// Don't overstrike if we're on the end of
 				// the line
 				int caret = getCaretPosition();
-				int caretLineEnd = getLineEndOffset(caretLine);
-				if(caretLineEnd - caret <= str.length())
-					setSelectedText(str);
-				else
+				if(overwrite)
 				{
-					buffer.beginCompoundEdit();
-	
-					try
-					{
-						buffer.remove(caret,str.length());
-						buffer.insertString(caret,str,null);
-					}
-					catch(BadLocationException bl)
-					{
-						bl.printStackTrace();
-					}
-					finally
-					{
-						buffer.endCompoundEdit();
-					}
+					int caretLineEnd = getLineEndOffset(caretLine);
+					if(caretLineEnd - caret > 1)
+						buffer.remove(caret,1);
 				}
+
+				buffer.insertString(caret,str,null);
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
 			}
 		}
 
@@ -3428,16 +3435,14 @@ forward_scan:		do
 		return MiscUtilities.createWhiteSpace(tabSize - pos,0);
 	}
 
-	private void doWordWrap(int line, String str)
+	private boolean doWordWrap(int line, boolean spaceInserted)
 		throws BadLocationException
 	{
 		int maxLineLen = ((Integer)buffer.getProperty("maxLineLen"))
 			.intValue();
 
 		if(maxLineLen <= 0)
-			return;
-
-		int strLen = str.length();
+			return false;
 
 		Element lineElement = buffer.getDefaultRootElement()
 			.getElement(line);
@@ -3447,7 +3452,7 @@ forward_scan:		do
 
 		// don't wrap unless we're at the end of the line
 		if(getCaretPosition() != end - 1)
-			return;
+			return false;
 
 		int tabSize = buffer.getTabSize();
 
@@ -3495,7 +3500,23 @@ forward_scan:		do
 				lastWasSpace = false;
 			}
 
-			if(logicalLength + strLen > maxLineLen && lastWordOffset != -1)
+			if(spaceInserted && logicalLength == maxLineLen)
+			{
+				// insert newline at the end of the line
+				try
+				{
+					buffer.beginCompoundEdit();
+					buffer.insertString(end - 1,"\n",null);
+					buffer.indentLine(line + 1,true,true);
+				}
+				finally
+				{
+					buffer.endCompoundEdit();
+				}
+
+				return true;
+			}
+			else if(logicalLength >= maxLineLen && lastWordOffset != -1)
 			{
 				// break line at lastWordOffset
 				try
@@ -3509,9 +3530,11 @@ forward_scan:		do
 					buffer.endCompoundEdit();
 				}
 
-				break;
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	private void doWordCount(View view, String text)

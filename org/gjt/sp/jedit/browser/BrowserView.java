@@ -309,10 +309,20 @@ public class BrowserView extends JPanel
 			}
 			else if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
-                              int i;
 				char ch = evt.getKeyChar();
-				typeSelectBuffer.append(ch);
-				doTypeSelect(typeSelectBuffer.toString());
+				if(typeSelectBuffer.length() == 0)
+				{
+					typeSelectBuffer.append(ch);
+					doTypeSelect(typeSelectBuffer.toString(),true);
+				}
+				else if(typeSelectBuffer.length() != 1
+					|| typeSelectBuffer.charAt(0) != ch)
+				{
+					typeSelectBuffer.append(ch);
+					doTypeSelect(typeSelectBuffer.toString(),false);
+				}
+				else
+					doTypeSelect(typeSelectBuffer.toString(),true);
 
 				timer.stop();
 				timer.setInitialDelay(500);
@@ -411,26 +421,47 @@ public class BrowserView extends JPanel
 				cellRect.y + cellRect.height);
 		}
 
-		private void doTypeSelect(String str)
+		private void doTypeSelect(String str, boolean skipSelection)
 		{
-			Enumeration enum = getExpandedDescendants(
-				new TreePath(getModel().getRoot()));
-			while(enum.hasMoreElements())
+			if(getSelectionCount() == 0)
+				doTypeSelect(str,0,getRowCount());
+			else
 			{
-				System.err.println(enum.nextElement());
-			}
-			/* ListModel model = list.getModel();
-			for(int i = 0; i < model.getSize(); i++)
-			{
-				VFS.DirectoryEntry file = (VFS.DirectoryEntry)
-					model.getElementAt(i);
-				if(file.name.regionMatches(true,0,str,0,str.length()))
+				int start = getMaxSelectionRow();
+				if(skipSelection)
+					start++;
+				boolean retVal = doTypeSelect(str,start,getRowCount());
+
+				if(!retVal)
 				{
-					list.setSelectedIndex(i);
-					list.ensureIndexIsVisible(i);
-					return;
+					// scan from selection to end failed, so
+					// scan from start to selection
+					doTypeSelect(str,0,getMaxSelectionRow());
 				}
-			} */
+			}
+		}
+
+		private boolean doTypeSelect(String str, int start, int end)
+		{
+			for(int i = start; i < end; i++)
+			{
+				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)
+					getPathForRow(i).getLastPathComponent();
+				Object obj = treeNode.getUserObject();
+				if(obj instanceof VFS.DirectoryEntry)
+				{
+					VFS.DirectoryEntry file = (VFS.DirectoryEntry)obj;
+					if(file.name.regionMatches(true,0,str,0,str.length()))
+					{
+						clearSelection();
+						setSelectionRow(i);
+						scrollRowToVisible(i);
+						return true;
+					}
+				}
+			}
+
+			return false;
 		}
 	}
 
@@ -468,47 +499,3 @@ public class BrowserView extends JPanel
 
 	class LoadingPlaceholder {}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.8  2000/11/26 01:43:35  sp
- * x86 assembly mode, various other stuff
- *
- * Revision 1.7  2000/11/05 00:44:14  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.6  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.12  2000/10/05 04:30:10  sp
- * *** empty log message ***
- *
- * Revision 1.11  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.10  2000/08/31 02:54:00  sp
- * Improved activity log, bug fixes
- *
- * Revision 1.9  2000/08/29 07:47:12  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.8  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.7  2000/08/20 07:29:30  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.6  2000/08/15 08:07:10  sp
- * A bunch of bug fixes
- *
- * Revision 1.5  2000/08/13 07:35:23  sp
- * Dockable window API
- *
- * Revision 1.4  2000/08/11 12:13:14  sp
- * Preparing for 2.6pre2 release
- *
- * Revision 1.3  2000/08/10 11:55:58  sp
- * VFS browser toolbar improved a little bit, font selector tweaks
- *
- */

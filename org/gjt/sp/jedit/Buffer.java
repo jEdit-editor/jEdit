@@ -655,16 +655,30 @@ public class Buffer extends PlainDocument implements EBComponent
 			{
 				if(rename)
 				{
-					if(autosaveFile != null)
-						autosaveFile.delete();
+					// we do a write lock so that the
+					// autosave, which grabs a read lock,
+					// is not executed between the
+					// deletion of the autosave file
+					// and clearing of the dirty flag
+					try
+					{
+						writeLock();
 
-					saveUndo = undo.editToBeUndone();
+						if(autosaveFile != null)
+							autosaveFile.delete();
 
-					setFlag(AUTOSAVE_DIRTY,false);
-					setFlag(READ_ONLY,false);
-					setFlag(NEW_FILE,false);
-					setFlag(UNTITLED,false);
-					setFlag(DIRTY,false);
+						saveUndo = undo.editToBeUndone();
+
+						setFlag(AUTOSAVE_DIRTY,false);
+						setFlag(READ_ONLY,false);
+						setFlag(NEW_FILE,false);
+						setFlag(UNTITLED,false);
+						setFlag(DIRTY,false);
+					}
+					finally
+					{
+						writeUnlock();
+					}
 
 					if(!getPath().equals(oldPath))
 					{
@@ -2258,6 +2272,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.193  2000/11/27 02:22:16  sp
+ * Type selection in file system browser, word wrap bug fixes, autosave race fix
+ *
  * Revision 1.192  2000/11/24 06:48:34  sp
  * Caret position history
  *
