@@ -261,6 +261,21 @@ public class BeanShell
 		boolean rethrowBshErrors)
 	{
 		NameSpace namespace = new NameSpace(global,"inline eval");
+		return eval(view,namespace,command,rethrowBshErrors);
+	}
+
+	/**
+	 * Evaluates the specified BeanShell expression.
+	 * @param view The view (may be null)
+	 * @param namespace The namespace
+	 * @param command The expression
+	 * @param rethrowBshErrors If true, BeanShell errors will
+	 * be re-thrown to the caller
+	 * @since jEdit 3.2pre7
+	 */
+	public static Object eval(View view, NameSpace namespace,
+		String command, boolean rethrowBshErrors)
+	{
 		Interpreter interp = createInterpreter(namespace);
 
 		try

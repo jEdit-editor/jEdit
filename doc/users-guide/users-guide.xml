@@ -7,7 +7,8 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+	"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 
 <!ENTITY starting SYSTEM "starting.xml">
 <!ENTITY basics SYSTEM "basics.xml">
@@ -23,6 +24,7 @@
 <!ENTITY globs SYSTEM "globs.xml">
 <!ENTITY regexps SYSTEM "regexps.xml">
 <!ENTITY macro-index SYSTEM "macro-index.xml">
+<!ENTITY launcher-guide SYSTEM "launcher-guide.xml">
 
 <!ENTITY writing-modes SYSTEM "writing-modes.xml">
 <!ENTITY installing-modes SYSTEM "installing-modes.xml">
@@ -89,6 +91,7 @@
  &globs;
  &regexps;
  &macro-index;
+ &launcher-guide;
 </part>
 
 <part id="writing-modes-part"><title>Writing Edit Modes</title>

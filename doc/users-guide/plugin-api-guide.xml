@@ -29,7 +29,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public void <function>start</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -42,7 +42,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public void <function>stop</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -71,7 +71,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public void <function>createOptionsPane</function></funcdef>
-        <paramdef>OptionsDialog <parameter>od</parameter></paramdef>
+        <paramdef>OptionsDialog <parameter>dialog</parameter></paramdef>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -86,7 +86,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public String <function>getClassName</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -98,7 +98,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public EditPlugin.JAR <function>getJAR</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -142,7 +142,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Component <function>getSource</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -151,7 +151,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public boolean <function>isVetoed</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -160,7 +160,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public void <function>veto</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -268,7 +268,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public EBComponent[] <function>getComponents</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
 	<para>
@@ -307,7 +307,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef>String  <function>getName</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>
@@ -320,7 +320,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef>Component <function>getComponent</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>
@@ -387,7 +387,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>String <function>getName</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -400,7 +400,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>Component <function>getComponent</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -414,7 +414,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>void <function>init</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -426,7 +426,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>void <function>save</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -470,7 +470,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public String <function>getName</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -483,7 +483,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Component <function>getComponent</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -496,7 +496,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public void <function>init</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -505,7 +505,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>protected void <function>_init</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -520,7 +520,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public void <function>save</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -529,7 +529,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>protected void <function>_save</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -617,7 +617,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public String <function>getName</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -651,7 +651,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Enumeration <function>getMembers</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -683,7 +683,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public int <function>getMemberCount</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -696,7 +696,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public void <function>save</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>

@@ -132,6 +132,8 @@
   separate JARs, for example.
 </para>
 
+</sidebar>
+
 </sect2>
 
 <sect2 id="host-design-plugin-start"><title>Starting the Plugin</title>

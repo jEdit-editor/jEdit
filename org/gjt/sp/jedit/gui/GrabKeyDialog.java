@@ -30,13 +30,14 @@ import org.gjt.sp.util.Log;
 
 public class GrabKeyDialog extends JDialog
 {
-	public GrabKeyDialog(Component comp, String[] shortcutData)
+	public GrabKeyDialog(Component comp, String command, String oldShortcut,
+		String altShortcut)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("grab-key.title"),true);
-		this.command = shortcutData[0];
-		this.oldShortcut = shortcutData[1];
-		this.altShortcut = shortcutData[2];
+		this.command = command;
+		this.oldShortcut = oldShortcut;
+		this.altShortcut = altShortcut;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
@@ -207,9 +208,12 @@ public class GrabKeyDialog extends JDialog
 
 			boolean appendPlus = false;
 
+			// On MacOS, C+ is command, M+ is control
+			// so that jEdit's default shortcuts are
+			// mapped to the Command
 			if(evt.isControlDown())
 			{
-				keyString.append('C');
+				keyString.append(macOS ? 'M' : 'C');
 				appendPlus = true;
 			}
 
@@ -221,7 +225,7 @@ public class GrabKeyDialog extends JDialog
 
 			if(evt.isMetaDown())
 			{
-				keyString.append('M');
+				keyString.append(macOS ? 'C' : 'M');
 				appendPlus = true;
 			}
 
@@ -246,6 +250,9 @@ public class GrabKeyDialog extends JDialog
 
 			setText(keyString.toString());
 		}
+
+		private boolean macOS = (System.getProperty("os.name")
+			.indexOf("MacOS") != -1);
 	}
 
 	class ActionHandler implements ActionListener

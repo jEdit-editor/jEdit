@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit;
 
 import javax.swing.text.*;
+import java.lang.reflect.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
@@ -300,13 +301,18 @@ public class Registers
 	 */
 	public static class ClipboardRegister implements Register
 	{
+		Clipboard clipboard;
+
+		public ClipboardRegister(Clipboard clipboard)
+		{
+			this.clipboard = clipboard;
+		}
+
 		/**
 		 * Sets the clipboard contents.
 		 */
 		public void setValue(String value)
 		{
-			Clipboard clipboard = Toolkit.getDefaultToolkit()
-				.getSystemClipboard();
 			StringSelection selection = new StringSelection(value);
 			clipboard.setContents(selection,null);
 		}
@@ -316,8 +322,6 @@ public class Registers
 		 */
 		public String toString()
 		{
-			Clipboard clipboard = Toolkit.getDefaultToolkit()
-				.getSystemClipboard();
 			try
 			{
 				String selection = (String)(clipboard
@@ -400,7 +404,39 @@ public class Registers
 	static
 	{
 		registers = new Register[256];
-		registers['$'] = new ClipboardRegister();
-		registers['%'] = new StringRegister("");
+		registers['$'] = new ClipboardRegister(Toolkit
+			.getDefaultToolkit().getSystemClipboard());
+
+		// Check for Java 1.4 method that returns PRIMARY selection
+		// on X Windows
+		try
+		{
+			Method method = Toolkit.class.getMethod(
+				"getSystemSelection",new Class[0]);
+			Clipboard selection = (Clipboard)method.invoke(
+				Toolkit.getDefaultToolkit(),new Object[0]);
+			if(selection != null)
+			{
+				Log.log(Log.DEBUG,Registers.class,
+					"Toolkit.getSystemSelection() detected");
+				Log.log(Log.DEBUG,Registers.class,"% register is system selection");
+				registers['%'] = new ClipboardRegister(selection);
+			}
+			else
+			{
+				Log.log(Log.DEBUG,Registers.class,
+					"Toolkit.getSystemSelection() "
+					+ "detected, but returns null");
+				Log.log(Log.DEBUG,Registers.class,"% register is jEdit-specific");
+				registers['%'] = new StringRegister("");
+			}
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.DEBUG,Registers.class,
+				"Toolkit.getSystemSelection() not detected");
+			Log.log(Log.DEBUG,Registers.class,"% register is jEdit-specific");
+			registers['%'] = new StringRegister("");
+		}
 	}
 }

@@ -5,6 +5,9 @@ JEDIT 3.2 VERSION HISTORY
 + New Features
 
 - BeanShell 1.2beta1 included
+- When running on Unix with Java 2 version 1.4, clicking the middle
+  mouse button in the text area now pastes the primary selection. This
+  obsoletes the XClipboard plugin
 - Visual Foxpro syntax highlighting (Matt Price)
 - SQR syntax highlighting (Richard Ashwell)
 - Cruddy -bshclient command-line switch replaced with -run=<script>
@@ -16,27 +19,7 @@ JEDIT 3.2 VERSION HISTORY
   - The 'view', 'buffer', 'editPane' and 'textArea' variables are not
     set in this script; if it is being run at startup, it will also be
     run before the first view is even initialized. Just like a startup
-    script.
-
-    To get around this, you can write something like this in the script:
-
-    void doUsefulThing()
-    {
-        void run()
-        {
-            view = jEdit.getLastView();
-
-            // do something useful here
-        }
-
-        if(jEdit.getLastView() == null)
-            VFSManager.runInAWTThread(this);
-        else
-            run();
-    }
-
-    doUsefulThing();
-    // end of script
+    script
 
 + Enhancements
 
@@ -60,13 +43,20 @@ JEDIT 3.2 VERSION HISTORY
 - Clicking on the mode and encoding display in the status bar opens the
   Buffer Options dialog box, clicking the overwrite and multiple
   selection display toggles those settings
+- When running on Unix with Java 2, the installer writes a shorter shell
+  script that uses the -jar command line switch, instead of setting the
+  class path
+- -newview command line switch is now a property that can be set in the
+  Loading and Saving pane of the Global Options dialog box
 
 + Bug Fixes
 
 - Help viewer will no longer print an exception if the toc.xml file
   could not be found
 - Token backgrounds were not being drawn
-- Printing didn't work on Java 2
+- Trying to print threw an exception with Java 2. This has been fixed,
+  but the other problems with printing on Java 2, such as huge spool
+  files being created, remain.
 - GrabKeyDialog bug fix for JDK 1.4 (Alan Moore)
 - roots: virtual filesystem didn't list all filesystem roots on JDK 1.4
 - Possible workaround for window positioning bugs on Unix with KDE 2
@@ -79,6 +69,10 @@ JEDIT 3.2 VERSION HISTORY
   setting
 - Could paste into read-only buffers
 - Commands which used readNextChar() were not recorded properly
+- The grab key dialog box would record the Control and Command keys
+  swapped on MacOS
+- PHP mode was missing a SEQ rule for '=', so sequences like $var=TRUE
+  would be highlighted incorrectly
 
 * Version 3.2pre6
 

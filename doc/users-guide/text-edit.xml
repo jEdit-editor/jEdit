@@ -468,13 +468,21 @@
     in the <filename>%</filename> register (recall that registers have
     single-character names).
    </para>
+   <sidebar><title>X Windows primary selection</title>
+    <para>
+     If jEdit is being run under Java 2 version 1.4 on Unix, you will be
+     able to transfer text with other X Windows applications using the
+     quick copy feature. On other platforms and Java versions, the contents
+     of the quick copy register are only accessable from within jEdit.
+    </para>
+   </sidebar>
   </sect2>
   <sect2><title>The System Clipboard</title>
    <para>
     Quick copy is very useful in many situations, but it has a number of
     drawbacks; it requires the use of the mouse, it cannot be used to replace an
     existing selection, and it cannot be used to transfer text between different
-    applications.
+    applications (unless you are using Java 2 version 1.4 on Unix).
    </para>
    <para>
     The system clipboard, internally known as the <filename>$</filename>

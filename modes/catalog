@@ -60,7 +60,7 @@
 				FILE_NAME_GLOB="*.e" />
 
 <MODE NAME="foxpro"		FILE="foxpro.xml"
-				FILE_NAME_GLOB="*.fox" />
+				FILE_NAME_GLOB="*.prg" />
 
 <MODE NAME="haskell"		FILE="haskell.xml"
 				FILE_NAME_GLOB="*.hs" />

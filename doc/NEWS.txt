@@ -54,6 +54,12 @@ clicking the middle mouse button without holding down Alt) inserts the
 most recently selected text at the clicked location. This can be used to
 quickly transfer text from one place to another using the mouse.
 
+If jEdit is being run under Java 2 version 1.4 on Unix, you will be able
+to use the quick copy feature to transfer text to and from other X
+Windows applications that use the primary selection. Previously, one-way
+transfer to jEdit was possible if the XClipboard plugin was installed;
+XClipboard is now obsolete.
+
 * Clipboard improvements
 
 Two new commands, 'Cut Append' and 'Copy Append', add the selected text
@@ -214,7 +220,7 @@ box. The AntiAlias plugin that did this with older jEdit versions is now
 obsolete.
 
 Previous versions of jEdit exhibited problems running under the newly
-released JDK 1.4 beta; these are now fixed.
+released Java 2 version 1.4 beta; these are now fixed.
 
 * Better MacOS support
 

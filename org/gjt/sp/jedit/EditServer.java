@@ -145,15 +145,16 @@ public class EditServer extends Thread
 
 	/**
 	 * @param restore Ignored unless no views are open
-	 * @param newView Create a new view, or reuse first view?
 	 * @param parent The client's parent directory
 	 * @param args A list of files. Null entries are ignored, for convinience
-	 * @since jEdit 3.2pre4
+	 * @since jEdit 3.2pre7
 	 */
-	public static void handleClient(boolean restore, boolean newView,
-		String parent, String[] args)
+	public static void handleClient(boolean restore, String parent,
+		String[] args)
 	{
 		String splitConfig = null;
+
+		boolean newView = jEdit.getBooleanProperty("client.newView");
 
 		// we have to deal with a huge range of possible border cases here.
 		if(jEdit.getFirstView() == null || newView)

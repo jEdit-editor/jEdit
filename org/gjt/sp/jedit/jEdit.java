@@ -87,7 +87,6 @@ public class jEdit
 
 		// Parse command line
 		boolean endOpts = false;
-		boolean newView = false; // only used by EditServer client
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
@@ -137,8 +136,6 @@ public class jEdit
 					restore = false;
 				else if(arg.equals("-nostartupscripts"))
 					noStartupScripts = true;
-				else if(arg.equals("-newview"))
-					newView = true;
 				else if(arg.startsWith("-run="))
 					scriptFile = arg.substring(5);
 				else
@@ -175,8 +172,7 @@ public class jEdit
 				out.write(String.valueOf(key));
 				out.write('\n');
 
-				String script = makeServerScript(restore,newView,
-					args,scriptFile);
+				String script = makeServerScript(restore,args,scriptFile);
 
 				out.write(script);
 
@@ -2084,26 +2080,21 @@ public class jEdit
 		System.out.println("	<file> +line:<line>: Positions caret"
 			+ " at line number <line>");
 		System.out.println("	--: End of options");
-		System.out.println("	-version: Print jEdit version and exit");
-		System.out.println("	-usage: Print this message and exit");
+		System.out.println("	-background: Run in background mode");
 		System.out.println("	-norestore: Don't restore previously open files");
-		System.out.println("	-noserver: Don't start edit server");
+		System.out.println("	-run=<script>: Run the specified BeanShell script");
 		System.out.println("	-server: Read/write server"
 			+ " info from/to $HOME/.jedit/server");
 		System.out.println("	-server=<name>: Read/write server"
 			+ " info from/to $HOME/.jedit/<name>");
-
-		System.out.println();
-		System.out.println("	-nosettings: Don't load user-specific"
-			+ " settings");
+		System.out.println("	-noserver: Don't start edit server");
 		System.out.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
+		System.out.println("	-nosettings: Don't load user-specific"
+			+ " settings");
 		System.out.println("	-nostartupscripts: Don't run startup scripts");
-		System.out.println("	-background: Run in background mode");
-		System.out.println();
-		System.out.println("	-newview: Open new view if connecting to edit server");
-		System.out.println("	-run=<script>: Run the specified BeanShell script");
-
+		System.out.println("	-version: Print jEdit version and exit");
+		System.out.println("	-usage: Print this message and exit");
 		System.out.println();
 		System.out.println("To set minimum activity log level,"
 			+ " specify a number as the first");
@@ -2121,7 +2112,7 @@ public class jEdit
 	/**
 	 * Creates a BeanShell script that can be sent to a running edit server.
 	 */
-	private static String makeServerScript(boolean restore, boolean newView,
+	private static String makeServerScript(boolean restore,
 		String[] args, String scriptFile)
 	{
 		StringBuffer script = new StringBuffer();
@@ -2154,8 +2145,7 @@ public class jEdit
 			script.append(";\n");
 		}
 
-		script.append("EditServer.handleClient(" + restore + "," + newView
-			+ ",parent,args);\n");
+		script.append("EditServer.handleClient(" + restore + ",parent,args);\n");
 
 		if(scriptFile != null)
 		{

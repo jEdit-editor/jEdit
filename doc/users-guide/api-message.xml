@@ -53,7 +53,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Buffer <function>getBuffer</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -62,7 +62,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public View <function>getView</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -71,7 +71,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Object <function>getWhat</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -114,7 +114,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public View <function>getView</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -123,7 +123,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public String <function>getDockableWindowName</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -132,7 +132,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public String <function>getPosition</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -144,7 +144,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public DockableWindow <function>getDockableWindow</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -183,7 +183,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Component <function>getSource</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -222,7 +222,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public View <function>getView</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -259,7 +259,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Component <function>getSource</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -303,7 +303,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public EditPane <function>getEditPane</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -312,7 +312,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Object <function>getWhat</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -349,7 +349,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Component <function>getSource</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -386,7 +386,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Component <function>getSource</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -423,7 +423,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Component <function>getSource</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>
@@ -462,7 +462,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public String <function>getPath</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -502,7 +502,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public View <function>getView</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
   </listitem>
@@ -511,7 +511,7 @@
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Object <function>getWhat</function></funcdef>
-        <paramdef></paramdef>
+        <void/>
       </funcprototype>
     </funcsynopsis>
     <para>

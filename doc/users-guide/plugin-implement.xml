@@ -1161,7 +1161,7 @@ options.quicknotepad.filepath=
   plugins:
 </para>
 
-<informalexample><programlisting># A plugin makefile
+<informalexample><programlisting><![CDATA[# A plugin makefile
 #
 # To recompile this plugin, start jmk in the plugin's source directory.
 #
@@ -1227,7 +1227,7 @@ jar: srcs;
 }
 
 ".PHONY": "all";
-</programlisting></informalexample>
+]]></programlisting></informalexample>
 
 <para>
   For a full discussion of the <filename>jmk</filename> file format and

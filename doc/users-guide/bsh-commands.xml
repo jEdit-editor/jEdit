@@ -133,7 +133,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef>void <function>pwd</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>
@@ -294,7 +294,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef>URL[] <function>getClassPath</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>
@@ -315,7 +315,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef>void <function>reloadClasses</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>
@@ -452,7 +452,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef>bsh.This <function>object</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>
@@ -542,7 +542,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef>void <function>exit</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>
@@ -559,7 +559,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef>void <function>debug</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>
@@ -572,7 +572,7 @@
       <funcsynopsis>
         <funcprototype>
           <funcdef><function>getSourceFileInfo</function></funcdef>
-          <paramdef></paramdef>
+          <void/>
         </funcprototype>
       </funcsynopsis>
       <para>

@@ -566,7 +566,7 @@ else if(msg instanceof ViewUpdate)
         It has three attributes: a required <varname>NAME</varname>; a flag
         indicating whether the action should not be repeated with the
         <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-        command (see <xref linkend="command-repeat" />);
+        command (see <xref linkend="repeat" />);
         and a flag indicating whether the
         action should be recorded if it is invoked while a user is recording a
         macro (<varname>NO_RECORD</varname>). The two flag attributes
@@ -695,7 +695,7 @@ plugin.MyPlugin.depend.3=plugin Console 3.0</programlisting>
     </para>
 <informalexample><programlisting>myplugin.label=My Plugin
 myplugin-grok.label=Grok Current Buffer</programlisting>
-<informalexample>
+</informalexample>
   </listitem>
   <listitem>
     <para>

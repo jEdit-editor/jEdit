@@ -68,9 +68,9 @@
   </listitem>
 
   <listitem><para>
-    Plugins may (and typically do) define <firstterm>actions</firsterm>
+    Plugins may (and typically do) define <firstterm>actions</firstterm>
     that jEdit will perform on behalf of the plugin upon
-    user request. User actions are short snippets of BeanShell code that
+    user request. Actions are short snippets of BeanShell code that
     provide the <quote>glue</quote> between user input and
     specifc plugin routines.
   </para>
