@@ -35,11 +35,16 @@ public class FileFilterOptionPane extends AbstractOptionPane
 	public FileFilterOptionPane()
 	{
 		super("filters");
+	}
+
+	// protected members
+	protected void _init()
+	{
 		setLayout(new BorderLayout());
 		add(BorderLayout.CENTER,createFileFilterScroller());
 	}
 
-	public void save()
+	protected void _save()
 	{
 		filterModel.save();
 	}
@@ -196,6 +201,9 @@ class FileFilterTableModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/04/16 08:56:24  sp
+ * Option pane updates
+ *
  * Revision 1.3  1999/10/05 10:55:29  sp
  * File dialogs open faster, and experimental keyboard macros
  *

@@ -39,9 +39,10 @@ public class MacroShortcutsOptionPane extends ShortcutsOptionPane
 		super("macro-keys");
 	}
 
-	public void save()
+	// protected members
+	protected void _save()
 	{
-		super.save();
+		super._save();
 		Macros.loadMacros();
 	}
 
@@ -78,6 +79,9 @@ public class MacroShortcutsOptionPane extends ShortcutsOptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/04/16 08:56:24  sp
+ * Option pane updates
+ *
  * Revision 1.1  1999/12/19 08:12:34  sp
  * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
  *

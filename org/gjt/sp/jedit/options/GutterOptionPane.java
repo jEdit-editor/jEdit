@@ -29,7 +29,11 @@ public class GutterOptionPane extends AbstractOptionPane
 	public GutterOptionPane()
 	{
 		super("gutter");
+	}
 
+	// protected members
+	protected void _init()
+	{
 		gutterExpanded = new JCheckBox(jEdit.getProperty(
 			"options.gutter.expanded"));
 		gutterExpanded.getModel().setSelected(
@@ -103,7 +107,7 @@ public class GutterOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.gutter.fontsize"),size);
 	}
 
-	public void save()
+	protected void _save()
 	{
 		jEdit.setBooleanProperty("view.gutter.collapsed",
 			!gutterExpanded.getModel().isSelected());

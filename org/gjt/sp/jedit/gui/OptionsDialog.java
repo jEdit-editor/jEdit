@@ -65,6 +65,7 @@ public class OptionsDialog extends EnhancedDialog
 		stage.add(cardPanel, BorderLayout.CENTER);
 
 		paneTree = new JTree(createOptionTreeModel());
+
 		paneTree.setCellRenderer(new PaneNameRenderer());
 		paneTree.putClientProperty("JTree.lineStyle", "Angled");
 		paneTree.setShowsRootHandles(true);
@@ -177,6 +178,7 @@ public class OptionsDialog extends EnhancedDialog
 
 		StringBuffer buf = new StringBuffer();
 
+		OptionPane optionPane = null;
 		String name = null;
 
 		int lastIdx = nodes.length - 1;
@@ -186,7 +188,8 @@ public class OptionsDialog extends EnhancedDialog
 		{
 			if (nodes[i] instanceof OptionPane)
 			{
-				name = ((OptionPane)nodes[i]).getName();
+				optionPane = (OptionPane)nodes[i];
+				name = optionPane.getName();
 			}
 			else if (nodes[i] instanceof OptionGroup)
 			{
@@ -216,6 +219,8 @@ public class OptionsDialog extends EnhancedDialog
 		}
 
 		currentLabel.setText(buf.toString());
+		optionPane.init();
+		pack();
 		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
 	}
 
@@ -573,6 +578,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/04/16 08:56:24  sp
+ * Option pane updates
+ *
  * Revision 1.18  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *
@@ -599,31 +607,5 @@ public class OptionsDialog extends EnhancedDialog
  *
  * Revision 1.9  2000/01/14 22:11:24  sp
  * Enhanced options dialog box
- *
- * Revision 1.8  1999/11/26 07:37:11  sp
- * Escape/enter handling code moved to common superclass, bug fixes
- *
- * Revision 1.7  1999/11/19 08:54:52  sp
- * EditBus integrated into the core, event system gone, bug fixes
- *
- * Revision 1.6  1999/10/23 03:48:22  sp
- * Mode system overhaul, close all dialog box, misc other stuff
- *
- * Revision 1.5  1999/10/04 03:20:51  sp
- * Option pane change, minor tweaks and bug fixes
- *
- * Revision 1.4  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.3  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.2  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.1  1999/06/07 06:36:32  sp
- * Syntax `styling' (bold/italic tokens) added,
- * plugin options dialog for plugin option panes
  *
  */

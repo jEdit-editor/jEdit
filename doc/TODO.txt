@@ -3,10 +3,12 @@ JEDIT TO DO
 2.4:
 
 - do MARK_PREVIOUS before markKeyword()
-- write 'indentPrevLine' regexp for Perl mode, maybe others
-- Double-click drag doesn't work backwards
+- write 'indentPrevLine' regexp for a few other modes
+- double-click drag doesn't work backwards
+- linesChanged() still broken?
+- caret move on undo still screwed?
 
-3.0:
+2.5:
 
 - XMode:
   - better error reporting
@@ -16,12 +18,12 @@ JEDIT TO DO
 - Plugin devel manual needs more work:
   - document views, buffers
   - how to write text area and gutter hilites
+- Mode editor
+
+3.0:
+
 - New document model
 - Folding
-
-3.1:
-
-- Mode editor
 - Word wrap
 - Reverse search
 - i18n support - bidi, input methods, locale-sensitive GUI, etc

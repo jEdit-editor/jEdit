@@ -5,6 +5,11 @@
 <MODE NAME="beanshell">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="BeanShell" />
+		<!-- the ; hack is there so that stuff like if(bob) fred();
+		  -- does not indent the next line -->
+		<PROPERTY NAME="indentPrevLine" VALUE="\s*(if|else if|else|while|for|case)\s*\([^;]*" />
+		<!-- set this to 'true' if you want to use GNU coding style -->
+		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

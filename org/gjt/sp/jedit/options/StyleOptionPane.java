@@ -42,7 +42,11 @@ public class StyleOptionPane extends AbstractOptionPane
 	public StyleOptionPane()
 	{
 		super("styles");
+	}
 
+	// protected members
+	protected void _init()
+	{
 		setLayout(new GridLayout(2,1));
 
 		JPanel panel = new JPanel(new BorderLayout());
@@ -60,7 +64,7 @@ public class StyleOptionPane extends AbstractOptionPane
 		add(panel);
 	}
 
-	public void save()
+	protected void _save()
 	{
 		colorModel.save();
 		styleModel.save();
@@ -581,6 +585,9 @@ implements ActionListener, KeyListener
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/04/16 08:56:24  sp
+ * Option pane updates
+ *
  * Revision 1.13  2000/04/09 03:14:14  sp
  * Syntax token backgrounds can now be specified
  *

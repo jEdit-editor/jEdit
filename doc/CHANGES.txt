@@ -22,6 +22,8 @@ JEDIT VERSION HISTORY
   simplifies matters in a few places
 - New jEdit.getBooleanProperty() and setBooleanProperty() methods
 - Documentation updates
+- Option panes now only create their UIs on demand, as a result the
+  'Global Options' dialog box should appear much more quickly
 
 + Bug Fixes
 
@@ -35,6 +37,12 @@ JEDIT VERSION HISTORY
 
 - InputHandler.addKeyBinding() and executeAction() now take EditActions, not
   ActionListeners as parameters
+- The OptionPane API has changed:
+  - If you are implementing the OptionPane interface directly, you must now
+    implement an init() method which takes care of setting up the GUI.
+  - If you extend AbstractOptionPane, you must implement an _init() method
+    which takes care of setting up the GUI, and rename your save() method to
+    _save()
 
 * Version 2.4pre5
 

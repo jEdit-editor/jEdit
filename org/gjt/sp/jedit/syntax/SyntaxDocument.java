@@ -1,6 +1,6 @@
 /*
  * SyntaxDocument.java - Document that can be tokenized
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,14 +146,14 @@ public class SyntaxDocument extends PlainDocument
 				int index = ch.getIndex();
 				int len = ch.getChildrenAdded().length -
 					ch.getChildrenRemoved().length;
-				//System.err.println("ch:" + index + ":" + 1);
+//				System.err.println("ch:" + index + ":" + 1);
 				tokenMarker.linesChanged(index,1);
-				//System.err.println("insert:" + (index + 1) + ":" + len);
+//				System.err.println("insert:" + (index + 1) + ":" + len);
 				tokenMarker.insertLines(ch.getIndex() + 1,len);
 				index += (len + 1);
 				if(index < tokenMarker.getLineCount())
 				{
-					//System.err.println("ch:" + index + ":" + 1);
+//					System.err.println("ch:" + index + ":" + 1);
 					tokenMarker.linesChanged(index,1);
 				}
 			}
@@ -183,9 +183,9 @@ public class SyntaxDocument extends PlainDocument
 				int index = ch.getIndex();
 				int len = ch.getChildrenRemoved().length -
 					ch.getChildrenAdded().length;
-				//System.err.println("ch:" + index + ":" + 1);
+				System.err.println("ch:" + index + ":" + 1);
 				tokenMarker.linesChanged(index,1);
-				//System.err.println("remove:" + (index + 1) + ":" + len);
+				System.err.println("remove:" + (index + 1) + ":" + len);
 				tokenMarker.deleteLines(index + 1,len);
 			}
 			else
@@ -202,6 +202,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/04/16 08:56:24  sp
+ * Option pane updates
+ *
  * Revision 1.22  2000/04/10 08:46:16  sp
  * Autosave recovery support, documentation updates
  *
@@ -232,14 +235,5 @@ public class SyntaxDocument extends PlainDocument
  *
  * Revision 1.13  1999/12/10 03:22:47  sp
  * Bug fixes, old loading code is now used again
- *
- * Revision 1.12  1999/12/07 08:16:55  sp
- * Reload bug nailed to the wall
- *
- * Revision 1.11  1999/11/07 06:51:43  sp
- * Check box menu items supported
- *
- * Revision 1.10  1999/10/24 02:06:41  sp
- * Miscallaneous pre1 stuff
  *
  */

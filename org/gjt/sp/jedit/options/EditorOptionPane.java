@@ -29,7 +29,11 @@ public class EditorOptionPane extends AbstractOptionPane
 	public EditorOptionPane()
 	{
 		super("editor");
+	}
 
+	// protected members
+	protected void _init()
+	{
 		/* Modes */
 		modes = jEdit.getModes();
 		String[] modeNames = new String[modes.length];
@@ -163,7 +167,7 @@ public class EditorOptionPane extends AbstractOptionPane
 		addComponent(homeEnd);
 	}
 
-	public void save()
+	protected void _save()
 	{
 		jEdit.setProperty("buffer.defaultMode",
 			modes[defaultMode.getSelectedIndex()].getName());

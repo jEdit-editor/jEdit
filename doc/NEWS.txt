@@ -47,6 +47,7 @@ autosaved changes.
 - The 'Buffer Options' dialog box now displays the buffer-local
   properties corresponding to the currently selected settings
 - The current line is highlighted in the gutter
+- The 'Global Options' dialog box should load quicker
 - The Firewall plugin by Dirk Moebius <dmoebius@gmx.net> is now
   included in the core distribution. The Firewall plugin allows you to
   use the plugin manager from behind a firewall

@@ -28,7 +28,11 @@ public class GeneralOptionPane extends AbstractOptionPane
 	public GeneralOptionPane()
 	{
 		super("general");
+	}
 
+	// protected members
+	protected void _init()
+	{
 		/* Look and feel */
 		lfs = UIManager.getInstalledLookAndFeels();
 		String[] names = new String[lfs.length];
@@ -176,7 +180,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(checkModStatus);
 	}
 
-	public void save()
+	protected void _save()
 	{
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);

@@ -36,6 +36,11 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	public AbbrevsOptionPane()
 	{
 		super("abbrevs");
+	}
+
+	// protected members
+	protected void _init()
+	{
 		setLayout(new BorderLayout());
 
 		JPanel panel = new JPanel(new BorderLayout());
@@ -80,7 +85,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		add(BorderLayout.SOUTH,panel);
 	}
 
-	public void save()
+	protected void _save()
 	{
 		Abbrevs.setExpandOnInput(expandOnInput.getModel().isSelected());
 
@@ -319,6 +324,9 @@ class Abbrev
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/04/16 08:56:24  sp
+ * Option pane updates
+ *
  * Revision 1.3  2000/01/14 22:11:24  sp
  * Enhanced options dialog box
  *

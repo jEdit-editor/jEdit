@@ -37,6 +37,13 @@ public abstract class ShortcutsOptionPane extends AbstractOptionPane
 	public ShortcutsOptionPane(String name)
 	{
 		super(name);
+	}
+
+	// protected members
+	protected abstract Vector createBindings();
+
+	protected void _init()
+	{
 		setLayout(new BorderLayout());
 		add(BorderLayout.CENTER,createKeyTableScroller());
 
@@ -50,13 +57,10 @@ public abstract class ShortcutsOptionPane extends AbstractOptionPane
 		add(BorderLayout.SOUTH,panel);
 	}
 
-	public void save()
+	protected void _save()
 	{
 		keyModel.save();
 	}
-
-	// protected members
-	protected abstract Vector createBindings();
 
 	// private members
 	private JTable keyTable;
@@ -224,6 +228,9 @@ class ShortcutsModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/04/16 08:56:24  sp
+ * Option pane updates
+ *
  * Revision 1.2  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *

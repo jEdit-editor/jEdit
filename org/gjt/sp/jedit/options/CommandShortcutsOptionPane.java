@@ -39,9 +39,10 @@ public class CommandShortcutsOptionPane extends ShortcutsOptionPane
 		super("command-keys");
 	}
 
-	public void save()
+	// protected members
+	protected void _save()
 	{
-		super.save();
+		super._save();
 		jEdit.reloadKeyBindings();
 	}
 
@@ -70,6 +71,9 @@ public class CommandShortcutsOptionPane extends ShortcutsOptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/04/16 08:56:24  sp
+ * Option pane updates
+ *
  * Revision 1.2  2000/04/14 11:57:39  sp
  * Text area actions moved to org.gjt.sp.jedit.actions package
  *
