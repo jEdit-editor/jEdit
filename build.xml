@@ -57,6 +57,7 @@
 		<jar
 			jarfile="jedit.jar"
 			manifest="org/gjt/sp/jedit/jedit.manifest"
+			compress="false"
 		>
 			<fileset dir=".">
 				<include name="bsh/**/*.class"/>
