@@ -198,7 +198,7 @@ implements ActionListener, ChangeListener
 			installer,os,progress,
 			(installDir == null ? null : installDir),
 			(binDir == null ? null : binDir.getText()),
-			0,components);
+			size,components);
 		progress.setThread(thread);
 		thread.start();
 	}
@@ -347,7 +347,8 @@ implements ActionListener, ChangeListener
 			develComp = createDevelPanel();
 			develComp.setBorder(new TitledBorder("Components for developers"));
 
-			box.add(develComp);
+			if(develComp.getComponentCount() != 0)
+				box.add(develComp);
 
 			box.add(sizeLabel = new JLabel("",SwingConstants.LEFT));
 

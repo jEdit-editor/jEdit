@@ -59,10 +59,8 @@ public class ConsoleInstall
 				binDir = _binDir;
 		}
 
-		int userCompCount = Integer.parseInt(installer
-			.getProperty("comp.user.count"));
-		int develCompCount = Integer.parseInt(
-			installer.getProperty("comp.devel.count"));
+		int userCompCount = installer.getIntProperty("comp.user.count");
+		int develCompCount = installer.getIntProperty("comp.devel.count");
 		Vector components = new Vector(userCompCount + develCompCount);
 
 		System.out.println("*** User components");
@@ -82,8 +80,10 @@ public class ConsoleInstall
 				components.addElement(fileset);
 		}
 
-		System.out.println("*** Developer components");
-		for(int i = 0; i < userCompCount; i++)
+		if(develCompCount != 0)
+			System.out.println("*** Developer components");
+
+		for(int i = 0; i < develCompCount; i++)
 		{
 			String fileset = installer.getProperty("comp.devel." + i + ".fileset");
 
