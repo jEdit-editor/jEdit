@@ -29,7 +29,7 @@ import org.gjt.sp.jedit.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class BufferOptions extends JDialog
+public class BufferOptions extends EnhancedDialog
 {
 	public BufferOptions(View view)
 	{
@@ -167,9 +167,6 @@ public class BufferOptions extends JDialog
 		panel.add(cancel);
 		getContentPane().add(BorderLayout.SOUTH,panel);
 
-		addKeyListener(new KeyHandler());
-
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
@@ -177,21 +174,8 @@ public class BufferOptions extends JDialog
 		show();
 	}
 
-        // private members
-	private View view;
-	private Buffer buffer;
-	private JComboBox tabSize;
-	private Mode[] modes;
-	private JComboBox mode;
-	private JComboBox lineSeparator;
-	private JCheckBox indentOnTab;
-	private JCheckBox indentOnEnter;
-	private JCheckBox syntax;
-	private JCheckBox noTabs;
-	private JButton ok;
-	private JButton cancel;
-
-	private void ok()
+	// EnhancedDialog implementation
+	public void ok()
 	{
 		try
 		{
@@ -225,13 +209,33 @@ public class BufferOptions extends JDialog
 			.isSelected() ? "on" : "off");
 		buffer.putProperty("noTabs",noTabs.getModel().isSelected()
 			? "yes" : "no");
-			
+
 		buffer.propertiesChanged();
 		dispose();
 
 		// Update text area
 		view.getTextArea().getPainter().repaint();
 	}
+
+	public void cancel()
+	{
+		dispose();
+	}
+	// end EnhancedDialog implementation
+
+        // private members
+	private View view;
+	private Buffer buffer;
+	private JComboBox tabSize;
+	private Mode[] modes;
+	private JComboBox mode;
+	private JComboBox lineSeparator;
+	private JCheckBox indentOnTab;
+	private JCheckBox indentOnEnter;
+	private JCheckBox syntax;
+	private JCheckBox noTabs;
+	private JButton ok;
+	private JButton cancel;
 
 	class ActionHandler implements ActionListener
 	{
@@ -241,16 +245,7 @@ public class BufferOptions extends JDialog
 			if(source == ok)
 				ok();
 			else if(source == cancel)
-				dispose();
-		}
-	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyReleased(KeyEvent evt)
-		{
-			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-				dispose();
+				cancel();
 		}
 	}
 }
@@ -258,6 +253,9 @@ public class BufferOptions extends JDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.11  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *
@@ -288,8 +286,5 @@ public class BufferOptions extends JDialog
  *
  * Revision 1.2  1999/03/20 06:16:41  sp
  * Buffer options panel updates, color table option pane updates
- *
- * Revision 1.1  1999/03/20 05:23:32  sp
- * Code cleanups
  *
  */

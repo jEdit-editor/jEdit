@@ -25,7 +25,7 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 
-public class CloseDialog extends JDialog
+public class CloseDialog extends EnhancedDialog
 {
 	public CloseDialog(View view)
 	{
@@ -68,10 +68,6 @@ public class CloseDialog extends JDialog
 
 		getContentPane().add(BorderLayout.SOUTH,buttons);
 
-		addKeyListener(new KeyHandler());
-
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
@@ -83,6 +79,18 @@ public class CloseDialog extends JDialog
 	{
 		return ok;
 	}
+
+	// EnhancedDialog implementation
+	public void ok()
+	{
+		// do nothing
+	}
+
+	public void cancel()
+	{
+		dispose();
+	}
+	// end EnhancedDialog implementation
 
 	// private members
 	private View view;
@@ -148,16 +156,7 @@ public class CloseDialog extends JDialog
 				}
 			}
 			else if(source == cancel)
-				dispose();
-		}
-	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-				dispose();
+				cancel();
 		}
 	}
 

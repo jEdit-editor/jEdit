@@ -24,14 +24,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * An abstract tabbed options dialog box.
  * @author Slava Pestov
  * @version $Id$
  */
-public class OptionsDialog extends JDialog
-implements ActionListener, KeyListener, WindowListener
+public class OptionsDialog extends EnhancedDialog
+implements ActionListener
 {
 	public OptionsDialog(View view, String title)
 	{
@@ -52,10 +53,8 @@ implements ActionListener, KeyListener, WindowListener
 		cancel.addActionListener(this);
 		buttons.add(cancel);
 		getContentPane().add(BorderLayout.SOUTH,buttons);
-		addKeyListener(this);
-		addWindowListener(this);
 	}
-	
+
 	public void addOptionPane(OptionPane pane)
 	{
 		tabs.addTab(jEdit.getProperty("options." + pane.getName()
@@ -63,16 +62,33 @@ implements ActionListener, KeyListener, WindowListener
 		panes.addElement(pane);
 	}
 
+	// EnhancedDialog implementation
 	public void ok()
 	{
 		Enumeration enum = panes.elements();
 		while(enum.hasMoreElements())
-			((OptionPane)enum.nextElement()).save();
+		{
+			try
+			{
+				((OptionPane)enum.nextElement()).save();
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Error saving option pane");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
 
 		/* This will fire the PROPERTIES_CHANGED event */
 		jEdit.propertiesChanged();
 		dispose();
 	}
+
+	public void cancel()
+	{
+		dispose();
+	}
+	// end EnhancedDialog implementation
 
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -80,38 +96,8 @@ implements ActionListener, KeyListener, WindowListener
 		if(source == ok)
 			ok();
 		else if(source == cancel)
-			dispose();
+			cancel();
 	}
-
-	public void keyPressed(KeyEvent evt)
-	{
-		switch(evt.getKeyCode())
-		{
-		case KeyEvent.VK_ENTER:
-			ok();
-			break;
-		case KeyEvent.VK_ESCAPE:
-			dispose();
-			break;
-		}
-	}
-
-	public void keyReleased(KeyEvent evt) {}
-
-	public void keyTyped(KeyEvent evt) {}
-	
-	public void windowOpened(WindowEvent evt) {}
-	
-	public void windowClosing(WindowEvent evt)
-	{
-		dispose();
-	}
-	
-	public void windowClosed(WindowEvent evt) {}
-	public void windowIconified(WindowEvent evt) {}
-	public void windowDeiconified(WindowEvent evt) {}
-	public void windowActivated(WindowEvent evt) {}
-	public void windowDeactivated(WindowEvent evt) {}
 
 	// protected members
 	protected Vector panes;
@@ -125,6 +111,9 @@ implements ActionListener, KeyListener, WindowListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.7  1999/11/19 08:54:52  sp
  * EditBus integrated into the core, event system gone, bug fixes
  *

@@ -43,7 +43,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HyperSearch extends JDialog implements EBComponent
+public class HyperSearch extends EnhancedDialog implements EBComponent
 {
 	public HyperSearch(View view, String defaultFind)
 	{
@@ -93,13 +93,8 @@ public class HyperSearch extends JDialog implements EBComponent
 
 		content.add(stretchPanel, BorderLayout.CENTER);
 
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		KeyHandler keyListener = new KeyHandler();
 		ActionHandler actionListener = new ActionHandler();
 
-		find.addKeyListener(keyListener);
-		addKeyListener(keyListener);
 		multifile.addActionListener(actionListener);
 		multifileBtn.addActionListener(actionListener);
 		find.addActionListener(actionListener);
@@ -127,13 +122,21 @@ public class HyperSearch extends JDialog implements EBComponent
 		SearchAndReplace.setRegexp(regexp.getModel().isSelected());
 		SearchAndReplace.setSearchFileSet(fileset);
 	}
-	
-	public void dispose()
+
+	// EnhancedDialog implementation
+	public void ok()
+	{
+		save();
+		doHyperSearch();
+	}
+
+	public void cancel()
 	{
 		EditBus.removeFromBus(this);
 		GUIUtilities.saveGeometry(this,"hypersearch");
-		super.dispose();
+		dispose();
 	}
+	// end EnhancedDialog implementation
 
 	public void handleMessage(EBMessage msg)
 	{
@@ -292,16 +295,11 @@ public class HyperSearch extends JDialog implements EBComponent
 		{
 			Object source = evt.getSource();
 			if(source == close)
-				dispose();
+				cancel();
 			else if(source == findBtn || source == find)
-			{
-				save();
-				doHyperSearch();
-			}
+				ok();
 			else if(source == multifileBtn)
-			{
 				showMultiFileDialog();
-			}
 			else if(source == multifile)
 			{
 				if(multifile.getModel().isSelected())
@@ -309,15 +307,6 @@ public class HyperSearch extends JDialog implements EBComponent
 				else
 					fileset = new CurrentBufferSet();
 			}
-		}
-	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-				dispose();
 		}
 	}
 
@@ -342,6 +331,9 @@ public class HyperSearch extends JDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.45  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.44  1999/11/23 08:03:21  sp
  * Miscallaeneous stuff
  *
@@ -369,43 +361,5 @@ public class HyperSearch extends JDialog implements EBComponent
  * Revision 1.36  1999/07/05 04:38:39  sp
  * Massive batch of changes... bug fixes, also new text component is in place.
  * Have fun
- *
- * Revision 1.35  1999/06/09 07:28:10  sp
- * Multifile search and replace tweaks, removed console.html
- *
- * Revision 1.34  1999/06/05 07:17:08  sp
- * Cascading makefiles, HyperSearch tweak, doc updates
- *
- * Revision 1.33  1999/06/03 08:24:13  sp
- * Fixing broken CVS
- *
- * Revision 1.34  1999/05/31 08:11:10  sp
- * Syntax coloring updates, expand abbrev bug fix
- *
- * Revision 1.33  1999/05/31 04:38:51  sp
- * Syntax optimizations, HyperSearch for Selection added (Mike Dillon)
- *
- * Revision 1.32  1999/05/30 01:28:43  sp
- * Minor search and replace updates
- *
- * Revision 1.31  1999/05/29 08:06:56  sp
- * Search and replace overhaul
- *
- * Revision 1.30  1999/05/09 03:50:17  sp
- * HistoryTextField is now a text field again
- *
- * Revision 1.29  1999/04/23 07:35:11  sp
- * History engine reworking (shared history models, history saved to
- * .jedit-history)
- *
- * Revision 1.28  1999/04/19 05:44:34  sp
- * GUI updates
- *
- * Revision 1.27  1999/04/08 04:44:51  sp
- * New _setBuffer method in View class, new addTab method in Console class
- *
- * Revision 1.26  1999/04/02 03:21:09  sp
- * Added manifest file, common strings such as OK, etc are no longer duplicated
- * many times in jedit_gui.props
  *
  */

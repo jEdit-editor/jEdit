@@ -26,7 +26,7 @@ import java.awt.event.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 
-public class ViewRegisters extends JDialog
+public class ViewRegisters extends EnhancedDialog
 {
 	public ViewRegisters(View view)
 	{
@@ -71,12 +71,10 @@ public class ViewRegisters extends JDialog
 		panel.add(close);
 		content.add(panel, BorderLayout.SOUTH);
 
-		addKeyListener(new KeyHandler());
 		getRootPane().setDefaultButton(close);
 
 		ActionHandler actionListener = new ActionHandler();
 		close.addActionListener(actionListener);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
@@ -86,6 +84,18 @@ public class ViewRegisters extends JDialog
 		registerList.requestFocus();
 	}
 
+	// EnhancedDialog implementation
+	public void ok()
+	{
+		dispose();
+	}
+
+	public void cancel()
+	{
+		dispose();
+	}
+	// end EnhancedDialog implementation
+
 	// private members
 	private JButton close;
 
@@ -94,21 +104,7 @@ public class ViewRegisters extends JDialog
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == close)
-				dispose();
-		}
-	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			switch(evt.getKeyCode())
-			{
-			case KeyEvent.VK_ENTER:
-			case KeyEvent.VK_ESCAPE:
-				dispose();
-				break;
-			}
+				cancel();
 		}
 	}
 }

@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class MultiFileSearchDialog extends JDialog
+public class MultiFileSearchDialog extends EnhancedDialog
 {
 	public MultiFileSearchDialog(View view, SearchFileSet fileset)
 	{
@@ -120,11 +120,8 @@ public class MultiFileSearchDialog extends JDialog
 		layout.setConstraints(panel,cons);
 		getContentPane().add(panel);
 
-		addKeyListener(new KeyHandler());
-
 		updateEnabled();
 
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
@@ -160,6 +157,19 @@ public class MultiFileSearchDialog extends JDialog
 		else
 			return null;
 	}
+
+	// EnhancedDialog implementation
+	public void ok()
+	{
+		isOK = true;
+		dispose();
+	}
+
+	public void cancel()
+	{
+		dispose();
+	}
+	// end EnhancedDialog implementation
 
 	// private members
 	private View view;
@@ -330,29 +340,9 @@ public class MultiFileSearchDialog extends JDialog
 					directoryPath.setText(chooser.getSelectedFile().getPath());
 			}
 			else if(source == ok)
-			{
-				isOK = true;
-				dispose();
-			}
+				ok();
 			else if(source == cancel)
-				dispose();
-		}
-	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			switch(evt.getKeyCode())
-			{
-			case KeyEvent.VK_ENTER:
-				isOK = true;
-				dispose();
-				break;
-			case KeyEvent.VK_ESCAPE:
-				dispose();
-				break;
-			}
+				cancel();
 		}
 	}
 }
@@ -360,6 +350,9 @@ public class MultiFileSearchDialog extends JDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.7  1999/10/28 09:07:21  sp
  * Directory list search
  *

@@ -256,7 +256,19 @@ public class View extends JFrame implements EBComponent
 
 		EditPlugin[] pluginArray = jEdit.getPlugins();
 		for(int i = 0; i < pluginArray.length; i++)
-			pluginArray[i].createMenuItems(this,pluginMenus,pluginMenuItems);
+		{
+			try
+			{
+				pluginArray[i].createMenuItems(this,pluginMenus,
+					pluginMenuItems);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Error creating menu items"
+					+ " for plugin");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
 
 		if(pluginMenus.isEmpty() && pluginMenuItems.isEmpty())
 		{
@@ -835,6 +847,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.110  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.109  1999/11/26 01:18:49  sp
  * Optimizations, splash screen updates, misc stuff
  *

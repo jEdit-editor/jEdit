@@ -421,9 +421,9 @@ ioerror.title=I/O Error
 # {0} - the error message
 ioerror.message=An I/O error occurred ({0})
 
-# Backup failed dialog, {0}=file name
-backup-failed.title=Backup Failed
-backup-failed.message=An error occurred while backing up {0}.
+# File not found dialog, {0}=file name
+filenotfound.title=File Not Found
+filenotfound.message=File not found: {0}
 
 # Open URL dialog
 openurl.title=Open URL

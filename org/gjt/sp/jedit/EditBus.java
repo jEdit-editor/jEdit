@@ -99,9 +99,9 @@ public class EditBus
 		// while the message is being sent
 		EBComponent[] comps = getComponents();
 
-		try
+		for(int i = 0; i < comps.length; i++)
 		{
-			for(int i = 0; i < comps.length; i++)
+			try
 			{
 				EBComponent comp = comps[i];
 				if(comp == source)
@@ -115,12 +115,12 @@ public class EditBus
 				if(message.isVetoed())
 					break;
 			}
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,EditBus.class,"Exception while"
-				+ " sending message on EditBus:");
-			Log.log(Log.ERROR,EditBus.class,e);
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,EditBus.class,"Exception"
+					+ " while sending message on EditBus:");
+				Log.log(Log.ERROR,EditBus.class,t);
+			}
 		}
 
 		if(source != null)

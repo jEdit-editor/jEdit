@@ -30,15 +30,15 @@ import org.gjt.sp.jedit.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class SelectLineRange extends JDialog
-implements ActionListener, KeyListener
+public class SelectLineRange extends EnhancedDialog
+implements ActionListener
 {
 	public SelectLineRange(View view)
 	{
 		super(view,jEdit.getProperty("selectlinerange.title"),true);
 
 		buffer = view.getBuffer();
-		
+
 		getContentPane().add(BorderLayout.NORTH,new JLabel(
 			jEdit.getProperty("selectlinerange.caption")));
 
@@ -47,12 +47,10 @@ implements ActionListener, KeyListener
 		panel.add(new JLabel(jEdit.getProperty("selectlinerange.start"),
 			SwingConstants.RIGHT));
 		panel.add(start = new JTextField());
-		start.addKeyListener(this);
 
 		panel.add(new JLabel(jEdit.getProperty("selectlinerange.end"),
 			SwingConstants.RIGHT));
 		panel.add(end = new JTextField());
-		end.addKeyListener(this);
 		getContentPane().add(BorderLayout.CENTER,panel);
 
 		panel = new JPanel();
@@ -63,9 +61,7 @@ implements ActionListener, KeyListener
 		cancel.addActionListener(this);
 		getContentPane().add(BorderLayout.SOUTH,panel);
 
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getRootPane().setDefaultButton(ok);
-		addKeyListener(this);
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
@@ -79,35 +75,13 @@ implements ActionListener, KeyListener
 		Object source = evt.getSource();
 
 		if(source == ok)
-			doSelectLineRange();
+			ok();
 		else if(source == cancel)
-			dispose();
+			cancel();
 	}
 
-	public void keyPressed(KeyEvent evt)
-	{
-		switch(evt.getKeyCode())
-		{
-		case KeyEvent.VK_ENTER:
-			doSelectLineRange();
-			break;
-		case KeyEvent.VK_ESCAPE:
-			dispose();
-			break;
-		}
-	}
-
-	public void keyReleased(KeyEvent evt) {}
-	public void keyTyped(KeyEvent evt) {}
-
-	// private members
-	private Buffer buffer;
-	private JTextField start;
-	private JTextField end;
-	private JButton ok;
-	private JButton cancel;
-
-	private void doSelectLineRange()
+	// EnhancedDialog implementation
+	public void ok()
 	{
 		int startLine;
 		int endLine;
@@ -143,11 +117,27 @@ implements ActionListener, KeyListener
 
 		dispose();
 	}
+
+	public void cancel()
+	{
+		dispose();
+	}
+	// end EnhancedDialog implementation
+
+	// private members
+	private Buffer buffer;
+	private JTextField start;
+	private JTextField end;
+	private JButton ok;
+	private JButton cancel;
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.8  1999/05/04 04:51:25  sp
  * Fixed HistoryTextField for Swing 1.1.1
  *

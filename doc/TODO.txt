@@ -6,6 +6,9 @@ JEDIT TO DO
   macros. This is very stupid, and the menu code needs to be made more
   flexible, so that BeanShell and friends can also have shortcuts (that
   can be edited in the shortcuts option pane!)
+- jEdit.getBooleanProperty() for yes/no stuff
+- SHIFT+Click broken in ta?
+- test if search and replace beeps
 
 + Features
 
@@ -20,35 +23,6 @@ JEDIT TO DO
   - print line numbers option
 - If the BeanShell plugin becomes mature enough, maybe replace built-in macro
   system with it?
-
-+ Somewhat pointless changes that probably won't be made that make sense anyway:
-
-- File=NewFile NewView
-  NewFile.label=New File
-  # multiple actions can be specified:
-  PreviousTag.action=SetSearchString '<' FindPrevious SelectNone
-  Bob.action=BeanShell 'some stuff'
-  # to disable the menu item, do:
-  NoRecent.disabled=yes
-- Only load actions when necessary. JARClassLoader builds a list of classes
-  whose names end with Action:
-  package.bob.GonkAction -> Gonk
-  if an action cannot be found in plugin JAR files, try loading
-  org.gjt.sp.jedit.actions.<name>Action
-- EditPlugin instances no longer call addAction()
-- Scrap EditAction, use a Command interface instead?
-  class Command
-  {
-  	abstract void execute(View view, String parameter);
-  }
-- With the number of plugins already out there, must preserve backwards
-  compatibility
-- What about InputHandlers? Should Command be moved to org.gjt.sp.util, with
-  a jEdit-specific subclass, say EditCommand?
-- XML can be used to load the menu bar if XMode is ever integrated
-- Replace shortcut editor with full menu bar/tool bar/right click menu editor
-- It would be nice if this plugin/action stuff was moved to org.gjt.sp.util, so
-  that other applications could use it
 
 ------- Installer -------
 

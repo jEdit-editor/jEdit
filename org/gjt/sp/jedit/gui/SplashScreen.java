@@ -43,7 +43,7 @@ public class SplashScreen extends JWindow
 		splash.add(BorderLayout.NORTH,new JLabel("jEdit "
 			+ jEdit.getVersion(),JLabel.CENTER));
 
-		progress = new JProgressBar(0,9);
+		progress = new JProgressBar(0,7);
 		progress.setStringPainted(true);
 		progress.setString("jEdit is starting up...");
 		splash.add(BorderLayout.SOUTH,progress);
@@ -70,6 +70,7 @@ public class SplashScreen extends JWindow
 					progress.setString(text);
 				}
 			});
+			Thread.yield();
 		}
 		catch(Exception e)
 		{

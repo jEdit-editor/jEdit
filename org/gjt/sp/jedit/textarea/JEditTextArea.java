@@ -1979,7 +1979,7 @@ public class JEditTextArea extends JComponent
 			if((evt.getModifiers() & InputEvent.SHIFT_MASK) != 0)
 			{
 				rectSelect = (evt.getModifiers() & InputEvent.CTRL_MASK) != 0;
-				setSelectionEnd(dot);
+				select(getMarkPosition(),dot);
 			}
 			else
 				setCaretPosition(dot);
@@ -2138,6 +2138,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.31  1999/11/26 01:18:50  sp
  * Optimizations, splash screen updates, misc stuff
  *

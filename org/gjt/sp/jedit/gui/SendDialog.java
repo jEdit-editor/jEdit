@@ -32,8 +32,8 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.Log;
 
-public class SendDialog extends JDialog
-implements ActionListener, KeyListener, Runnable
+public class SendDialog extends EnhancedDialog
+implements ActionListener, Runnable
 {
 	public static final String CRLF = "\r\n";
 	
@@ -133,10 +133,7 @@ implements ActionListener, KeyListener, Runnable
 		setLocation((screen.width - getSize().width) / 2,
 			(screen.height - getSize().height) / 2);
 		
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
 		getRootPane().setDefaultButton(send);
-		addKeyListener(this);
 		send.addActionListener(this);
 		cancel.addActionListener(this);
 		
@@ -311,27 +308,23 @@ implements ActionListener, KeyListener, Runnable
 	public void actionPerformed(ActionEvent evt)
 	{
 		Object source = evt.getSource();
-		if(source == cancel)
-			dispose();
+		if(source == send)
+			ok();
 		else if(source == send)
-			doSend();
+			cancel();
 	}
 
-	public void keyPressed(KeyEvent evt)
+	// EnhancedDialog implementation
+	public void ok()
 	{
-		switch(evt.getKeyCode())
-		{
-		case KeyEvent.VK_ENTER:
-			doSend();
-			break;
-		case KeyEvent.VK_ESCAPE:
-			dispose();
-			break;
-		}
+		(thread = new Thread(this)).start();
 	}
 
-	public void keyReleased(KeyEvent evt) {}
-	public void keyTyped(KeyEvent evt) {}
+	public void cancel()
+	{
+		dispose();
+	}
+	// end EnhancedDialog implementation
 
 	// private members
 	private View view;
@@ -362,10 +355,5 @@ implements ActionListener, KeyListener, Runnable
 		
 		if(thread != null)
 			thread.stop();
-	}
-
-	private void doSend()
-	{
-		(thread = new Thread(this)).start();
 	}
 }

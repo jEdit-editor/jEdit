@@ -117,72 +117,52 @@ public abstract class EBMessage
 	 * to collect information from all other members of the bus, it is
 	 * non-vetoable.
 	 */
-	public static abstract class ReturnValue extends NonVetoable
-	{
-		/**
-		 * Creates a new return value message.
-		 * @param source The message source
-		 */
-		public ReturnValue(EBComponent source)
-		{
-			super(source);
-		}
-
-		/**
-		 * Adds data to the return value list. Subclasses should
-		 * check that the object is of the correct type.
-		 * @param obj The object
-		 */
-		public void addReturn(Object obj)
-		{
-			if(returnValues == null)
-				returnValues = new Vector();
-			returnValues.addElement(obj);
-		}
-
-		/**
-		 * Returns the values added to the return list by other
-		 * handlers of this message. Returns null if no values were
-		 * present.
-		 */
-		public Object[] getReturnValues()
-		{
-			if(returnValues == null)
-				return null;
-			Object[] array = new Object[returnValues.size()];
-			returnValues.copyInto(array);
-			return array;
-		}
-
-		/**
-		 * Returns a string representation of this message's parameters.
-		 */
-		public String paramString()
-		{
-			return super.paramString() + ",returnValues=" + returnValues;
-		}
-
-		// private members
-		private Vector returnValues;
-	}
-
-	/**
-	 * When a message needs to return a handle to some object, it can
-	 * create an instance of this class.
-	 */
-	public static class Tag
-	{
-		private static int COUNT;
-		private int count;
-
-		public Tag()
-		{
-			count = COUNT++;
-		}
-
-		public String toString()
-		{
-			return getClass().getName() + "[" + count + "]";
-		}
-	}
+// 	public static abstract class ReturnValue extends NonVetoable
+// 	{
+// 		/**
+// 		 * Creates a new return value message.
+// 		 * @param source The message source
+// 		 */
+// 		public ReturnValue(EBComponent source)
+// 		{
+// 			super(source);
+// 		}
+// 
+// 		/**
+// 		 * Adds data to the return value list. Subclasses should
+// 		 * check that the object is of the correct type.
+// 		 * @param obj The object
+// 		 */
+// 		public void addReturn(Object obj)
+// 		{
+// 			if(returnValues == null)
+// 				returnValues = new Vector();
+// 			returnValues.addElement(obj);
+// 		}
+// 
+// 		/**
+// 		 * Returns the values added to the return list by other
+// 		 * handlers of this message. Returns null if no values were
+// 		 * present.
+// 		 */
+// 		public Object[] getReturnValues()
+// 		{
+// 			if(returnValues == null)
+// 				return null;
+// 			Object[] array = new Object[returnValues.size()];
+// 			returnValues.copyInto(array);
+// 			return array;
+// 		}
+// 
+// 		/**
+// 		 * Returns a string representation of this message's parameters.
+// 		 */
+// 		public String paramString()
+// 		{
+// 			return super.paramString() + ",returnValues=" + returnValues;
+// 		}
+// 
+// 		// private members
+// 		private Vector returnValues;
+// 	}
 }

@@ -30,7 +30,7 @@ import org.gjt.sp.jedit.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class SearchDialog extends JDialog
+public class SearchDialog extends EnhancedDialog
 {
 	public SearchDialog(View view, String defaultFind)
 	{
@@ -109,14 +109,6 @@ public class SearchDialog extends JDialog
 		getRootPane().setDefaultButton(findBtn);
 		getContentPane().add(BorderLayout.SOUTH,panel);
 
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		KeyHandler keyListener = new KeyHandler();
-		addKeyListener(keyListener);
-
-		find.addKeyListener(keyListener);
-		replace.addKeyListener(keyListener);
-
 		ActionHandler actionListener = new ActionHandler();
 		multifile.addActionListener(actionListener);
 		multifileBtn.addActionListener(actionListener);
@@ -132,11 +124,20 @@ public class SearchDialog extends JDialog
 		find.requestFocus();
 	}
 
-	public void dispose()
+	// EnhancedDialog implementation
+	public void ok()
+	{
+		save();
+		if(SearchAndReplace.find(view))
+			disposeOrKeepDialog();
+	}
+
+	public void cancel()
 	{
 		GUIUtilities.saveGeometry(this,"search");
-		super.dispose();
+		dispose();
 	}
+	// end EnhancedDialog implementation
 
         // private members
 	private View view;
@@ -195,11 +196,7 @@ public class SearchDialog extends JDialog
 				dispose();
 			else if(source == findBtn)
 			{
-				save();
-				if(SearchAndReplace.find(view))
-					disposeOrKeepDialog();
-				else
-					view.getToolkit().beep();
+				ok();
 			}
 			else if(source == replaceSelection)
 			{
@@ -230,28 +227,14 @@ public class SearchDialog extends JDialog
 			}
 		}
 	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-			{
-				save();
-				if(SearchAndReplace.find(view))
-					disposeOrKeepDialog();
-			}
-			else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-			{
-				dispose();
-			}
-		}
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.4  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

@@ -202,28 +202,25 @@ public class jEdit
 
 		// Get things rolling
 		initMisc();
-		GUIUtilities.advanceProgress("Loading default properties...");
 		initSystemProperties();
 		GUIUtilities.advanceProgress("Loading plugins...");
 		initPlugins();
 		GUIUtilities.advanceProgress("Loading user properties...");
 		initUserProperties();
-		GUIUtilities.advanceProgress("Loading tables and settings...");
-		initActions();
-		initModes();
-		initPLAF();
-		initKeyBindings();
-		propertiesChanged();
-		initRecent();
 		if(settingsDirectory != null)
 		{
-			GUIUtilities.advanceProgress("Loading history...");
 			String history = MiscUtilities.constructPath(
 				settingsDirectory,"history");
 			HistoryModel.loadHistory(history);
 		}
-		GUIUtilities.advanceProgress("Loading macros...");
+		propertiesChanged();
+		initRecent();
+		initPLAF();
 		SearchAndReplace.load();
+		GUIUtilities.advanceProgress("Loading actions and modes...");
+		initActions();
+		initModes();
+		initKeyBindings();
 		Macros.init();
 
 		// Start plugins
@@ -260,7 +257,7 @@ public class jEdit
 					buffer = Sessions.loadSession(session,true);
 			}
 			else
-				buffer = Sessions.loadSession(session,false);
+				buffer = Sessions.loadSession(session,true);
 		}
 		if(buffer == null)
 			buffer = newFile(null);
@@ -839,9 +836,7 @@ public class jEdit
 			view.saveCaretInfo();
 		}
 
-		long start = System.currentTimeMillis();
 		View newView = new View(view,buffer);
-		System.err.println(System.currentTimeMillis() - start);
 		addViewToList(newView);
 
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
@@ -1540,6 +1535,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.161  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.160  1999/11/26 01:18:49  sp
  * Optimizations, splash screen updates, misc stuff
  *

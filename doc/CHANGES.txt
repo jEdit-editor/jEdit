@@ -43,6 +43,11 @@ JEDIT VERSION HISTORY
   - on my machine, views now open about 200 ms faster. On slower machines,
     this will be much more noticable
 - Improved splash screen
+- More robust error checking; a buggy plugin is now less likely to stop
+  jEdit from working completely
+- The default key handler functionality has been moved into a new class,
+  EnhancedDialog, that all jEdit dialogs subclass. This avoids duplicating the
+  ENTER/ESCAPE handlers 10000 times
 
 + Bug Fixes
 
@@ -56,6 +61,10 @@ JEDIT VERSION HISTORY
   (since 2.2pre2)
 - HyperSearch didn't deal with closed buffers correctly (since 1.7pre2???,
   another similar bug has been around since 2.2pre1)
+- -session command line parameter displayed bogus 'file not found' message
+  (since 2.2pre1)
+- Shift-clicks on text area behaved in a slightly strange manner (since
+  1.7pre5)
 
 + API Changes
 

@@ -24,6 +24,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * The plugin settings dialog.
@@ -39,7 +40,17 @@ public class PluginOptions extends OptionsDialog
 		// Query plugins for option panes
 		EditPlugin[] plugins = jEdit.getPlugins();
 		for(int i = 0; i < plugins.length; i++)
-			plugins[i].createOptionPanes(this);
+		{
+			try
+			{
+				plugins[i].createOptionPanes(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Error creating option pane");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
 
 		view.hideWaitCursor();
 
@@ -55,6 +66,9 @@ public class PluginOptions extends OptionsDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  1999/11/26 07:37:11  sp
+ * Escape/enter handling code moved to common superclass, bug fixes
+ *
  * Revision 1.4  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

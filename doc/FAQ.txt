@@ -82,16 +82,16 @@ Swing can be downloaded from <java.sun.com/products/jfc/index.html>.
 * 6. Why is jEdit so slow?
 
 Because jEdit is written in Java, it's performance will always be slower
-than native applications. A fast system with a good JVM will narrow the
-performance gap.
+than native applications. A fast system with a good Java implementation
+will narrow the performance gap.
 
 On all systems, a speedup can be achieved by installing the latest JDK
 and/or Swing version. For those using JDK 1.1, Swing 1.1.1 seems to be
-much faster than Swing 1.1final. Those using JDK 1.2 should try the
-early access version of JDK 1.3, or the new HotSpot VM: both make
-speed up jEdit significantly.
+faster than Swing 1.1final. Those using JDK 1.2 should try the early
+access version of JDK 1.3 with the new HotSpot VM: apparently it speeds
+up jEdit significantly.
 
-On Linux, try installing the TYA JIT
+Linux users should try using the TYA JIT, which can be obtained from
 <ftp://gonzales.cyberus.ca/pub/Linux/java>.
 
 Finally, if your jEdit version is more than a couple of months old,

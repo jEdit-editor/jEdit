@@ -26,8 +26,8 @@ import java.awt.event.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 
-public class PastePrevious extends JDialog
-implements ActionListener, KeyListener, ListSelectionListener, MouseListener
+public class PastePrevious extends EnhancedDialog
+implements ActionListener, ListSelectionListener, MouseListener
 {
 	public PastePrevious(View view)
 	{
@@ -70,11 +70,10 @@ implements ActionListener, KeyListener, ListSelectionListener, MouseListener
 		content.add(panel, BorderLayout.SOUTH);
 		updateButtons();
 
-		addKeyListener(this);
 		getRootPane().setDefaultButton(insert);
 		insert.addActionListener(this);
 		cancel.addActionListener(this);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
@@ -83,37 +82,49 @@ implements ActionListener, KeyListener, ListSelectionListener, MouseListener
 		clips.requestFocus();
 	}
 
+	// EnhancedDialog implementation
+	public void ok()
+	{
+		int selected = clips.getSelectedIndex();
+
+		if(selected == -1)
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
+		String clip = clipHistory.getItem(selected);
+
+		int repeatCount = view.getTextArea().getInputHandler()
+			.getRepeatCount();
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < repeatCount; i++)
+			buf.append(clip);
+
+		view.getTextArea().setSelectedText(buf.toString());
+
+		dispose();
+	}
+
+	public void cancel()
+	{
+		dispose();
+	}
+	// end EnhancedDialog implementation
+
 	public void actionPerformed(ActionEvent evt)
 	{
 		Object source = evt.getSource();
 		if(source == insert)
-			doInsert();
+			ok();
 		else if(source == cancel)
-			dispose();
+			cancel();
 	}
-
-	public void keyPressed(KeyEvent evt)
-	{
-		switch(evt.getKeyCode())
-		{
-		case KeyEvent.VK_ENTER:
-			doInsert();
-			break;
-		case KeyEvent.VK_ESCAPE:
-			dispose();
-			break;
-		}
-	}
-
-	public void keyReleased(KeyEvent evt) {}
-	public void keyTyped(KeyEvent evt) {}
 
 	public void mouseClicked(MouseEvent evt)
 	{
-		if (evt.getClickCount() == 2)
-		{
-			doInsert();
-		}
+		if(evt.getClickCount() == 2)
+			ok();
 	}
 
 	public void mouseEntered(MouseEvent evt) {}
@@ -137,28 +148,5 @@ implements ActionListener, KeyListener, ListSelectionListener, MouseListener
 	{
 		int selected = clips.getSelectedIndex();
 		insert.setEnabled(selected != -1);
-	}
-
-	private void doInsert()
-	{
-		int selected = clips.getSelectedIndex();
-
-		if(selected == -1)
-		{
-			view.getToolkit().beep();
-			return;
-		}
-
-		String clip = clipHistory.getItem(selected);
-
-		int repeatCount = view.getTextArea().getInputHandler()
-			.getRepeatCount();
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < repeatCount; i++)
-			buf.append(clip);
-
-		view.getTextArea().setSelectedText(buf.toString());
-
-		dispose();
 	}
 }
