@@ -29,9 +29,6 @@ JEDIT TO DO
 
 + Features
 
-- Macros -- \n, \t in action command, indent-on-enter/-tab record themselves
-  as insert-char@\n and @\t if disabled
-
 - Abbreviation expansion (use TypeSaver code). Newly inserted abbrevs will
   be indented relative to current line
 
@@ -46,10 +43,13 @@ JEDIT TO DO
 
 - Stackable status messages
 
-------- Maybe later -------
+------- After 2.3pre1 -------
 
 - Clean way of embedding token markers in one another, so that HTMLTokenMarker
   can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
+- Macros -- \n, \t in action command, indent-on-enter/-tab record themselves
+  as insert-char@\n and @\t if disabled
+- Buttons on tool bar for ignore case, regexp, multifile options
 - 'Uncomment' command, removes comment strings from selected text
 - Bookmarks and history window in help viewer
 - context-sensitive edit modes - Buffer.getMode(int line) method. For example,

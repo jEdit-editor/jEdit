@@ -35,20 +35,15 @@
    http://www.gjt.org/~sp/jedit.html</>
    contains the latest version of jEdit, along with plugin downloads.
   </para><para>
-   There are two mailing lists dedicated to jEdit, one is for
-   announcements, the other is for general discussion.
-  </para><para>
-  To subscribe to the discussion list, e-mail
-  <email>jedit-subscribe@listbot.com</>. To unsubscribe, e-mail
-  <email>jedit-unsubscribe@listbot.com</>. To view the archive, go to
-  <ulink url="http://jedit.listbot.com">http://jedit.listbot.com</>.
-  </para><para>
-  To subscribe to the announcement list, e-mail
-  <email>jedit.announce-subscribe@listbot.com</>. To unsubscribe, e-mail
-  <email>jedit.announce-unsubscribe@listbot.com</>. To view the archive, go to
-  <ulink url="http://jedit.announce.listbot.com">http://jedit.announce.listbot.com</>.
-  </para><para>
-  You may also contact me directly by e-mailing <email>sp@gjt.org</>.
+   
+There are three mailing lists dedicated to jEdit; an announcement
+list that is very low traffic, a general discussion list, and a
+development discussion list. To subscribe, unsubscribe or view
+a list archive, visit <ulink
+url="http://www.sourceforge.net/mail/?group_id=588">
+http://www.sourceforge.net/mail/?group_id=588</>.
+</para><para>
+  Finally, you may contact me directly by e-mailing <email>sp@gjt.org</>.
   </para>
  </sect1>
  <sect1 id=licensing><title>Licensing Information</>
