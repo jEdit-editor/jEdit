@@ -1,12 +1,20 @@
 JEDIT TO DO
 
-Get rid of URL saving from Buffer.java
-Dox: finish words, lines, paragraphs sections
-Finish help menu
+CVS: remove GlobalOptions.java, PluginOptions.java, plugin_options
 
 ------- Stuff for 2.3pre2 -------
 
+- Finish documentation updates
+- Finish new help menu
+- Remove 'jeditdocs:' protocol
+- Remove 'Contents' button from help viewer
+- 'File->Current Directory' menu lists files in $d
 - CaretUndo acts weird on 'redo' sometimes
+- Need to redo window-editor-* snapshots in icewm
+- Need to redo dialog-options-* snapshots as well
+
+------- Stuff for 2.3pre3+ -------
+
 - 'Uncomment' command, removes comment strings from selected text
 - HyperSearch - when doing a directory search, all buffers with matches
   are kept open, they should be closed
@@ -17,13 +25,7 @@ Finish help menu
     open
 - Beef up 'Marker' class to support this sort of file/line number/message
   thing, EditBus will also use it for errors
-- Write an InputHandler subclass that displays the current repeat count,
-  if any, in the view's status bar
-
-------- Stuff for 2.3pre3 -------
-
 - Double-click/drag
-- Need to redo window-editor-* snapshots in icewm
 - better ignore case, regexp icons
 - Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
   to TextAreaHighlight and use that same interface to paint stuff in the
@@ -47,9 +49,8 @@ Finish help menu
      calls markTokensImpl() of child
   -- more than one level of embedding will require a major reworking of the
      syntax system, so don't do it for now
-
-------- Maybe in 2.3 -------
-
+- Write an InputHandler subclass that displays the current repeat count,
+  if any, in the view's status bar
 - Document EditBus in plugin development docs
 - complete-word shouldn't scan entire document every time a match needs
   to be completed, also storing view/textArea instances in actions is

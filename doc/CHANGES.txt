@@ -4,8 +4,8 @@ JEDIT VERSION HISTORY
 
 + New Features
 
-- Edit menu rearranged, with To Upper Case, To Lower Case and Remove
-  Trailing Whitespace actions from TextTools plugin moved into the core
+- To Upper Case, To Lower Case and Remove Trailing Whitespace actions from
+  TextTools plugin moved into the core
 
 + Enhancements
 
@@ -14,6 +14,8 @@ JEDIT VERSION HISTORY
 - Macro updates
 - Menu items look better
 - Faster literal search, using the Boyer-Moore algorithm (Mike Dillon)
+- Menu bar rearranged a little bit
+- Improved 'global options' dialog box (Mike Dillon)
 
 + Bug Fixes
 
@@ -23,7 +25,10 @@ JEDIT VERSION HISTORY
 - Blank entries should no longer be printed in the log when printing stack
   traces, etc (since 2.2pre2)
 - Files weren't added to the recent file list on exiting (since 2.2pre7)
-- Clicking 'Cancel' in the 'goto line' dialog box would beep (since ???)
+- Clicking 'Cancel' in the 'goto line' dialog box would beep (since the
+  dawn of time)
+- If you invoked undo when there were no undos in the queue, a flag would
+  be set which prevented undos from working at all (since 2.2pre1)
 
 * Version 2.3pre1
 

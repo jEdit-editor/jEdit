@@ -1395,7 +1395,6 @@ public class jEdit
 		addAction("play-last-macro");
 		addAction("play-temp-macro");
 		addAction("play-macro");
-		addAction("plugin-options");
 		addAction("prev-bracket-exp");
 		addAction("prev-buffer");
 		addAction("prev-paragraph");
@@ -1705,6 +1704,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.177  2000/01/14 22:11:24  sp
+ * Enhanced options dialog box
+ *
  * Revision 1.176  2000/01/14 04:23:50  sp
  * 2.3pre2 stuff
  *

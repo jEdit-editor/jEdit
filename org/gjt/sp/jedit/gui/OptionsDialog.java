@@ -1,6 +1,7 @@
 /*
  * OptionsDialog.java - Abstract tabbed options dialog
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Portions copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,8 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -32,18 +35,28 @@ import org.gjt.sp.util.Log;
  * @version $Id$
  */
 public class OptionsDialog extends EnhancedDialog
-implements ActionListener
+	implements ActionListener, ListSelectionListener
 {
-	public OptionsDialog(View view, String title)
+	public OptionsDialog(View view)
 	{
-		super(view,title,true);
+		super(view,jEdit.getProperty("options.title"),true);
 
 		view.showWaitCursor();
 
 		getContentPane().setLayout(new BorderLayout());
 		panes = new Vector();
-		tabs = new JTabbedPane();
-		getContentPane().add(BorderLayout.CENTER,tabs);
+
+		cardPanel = new JPanel(new CardLayout());
+		cardPanel.setBorder(new CompoundBorder(new BevelBorder(
+			BevelBorder.RAISED), new EmptyBorder(2, 2, 2, 2)));
+		getContentPane().add(cardPanel, BorderLayout.CENTER);
+
+		paneNames = new DefaultListModel();
+		paneList = new JList(paneNames);
+		paneList.addListSelectionListener(this);
+		getContentPane().add(new JScrollPane(paneList),
+			BorderLayout.WEST);
+
 		JPanel buttons = new JPanel();
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(this);
@@ -53,13 +66,50 @@ implements ActionListener
 		cancel.addActionListener(this);
 		buttons.add(cancel);
 		getContentPane().add(BorderLayout.SOUTH,buttons);
+
+		addOptionPane(new org.gjt.sp.jedit.options.GeneralOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.EditorOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.StyleOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.FileFilterOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.CommandShortcutsOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.MacroShortcutsOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.AbbrevsOptionPane());
+
+		// Query plugins for option panes
+		EditPlugin[] plugins = jEdit.getPlugins();
+		for(int i = 0; i < plugins.length; i++)
+		{
+			try
+			{
+				plugins[i].createOptionPanes(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Error creating option pane");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+
+		view.hideWaitCursor();
+
+		Dimension screen = getToolkit().getScreenSize();
+		pack();
+		setLocation((screen.width - getSize().width) / 2,
+			(screen.height - getSize().height) / 2);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		show();
 	}
 
 	public void addOptionPane(OptionPane pane)
 	{
-		tabs.addTab(jEdit.getProperty("options." + pane.getName()
-			+ ".label"),pane.getComponent());
+		String label = jEdit.getProperty("options." + pane.getName()
+			+ ".label");
+
+		cardPanel.add(pane.getComponent(), pane.getName());
 		panes.addElement(pane);
+		paneNames.addElement(label);
+		if (paneList.getSelectedIndex() == -1)
+			paneList.setSelectedIndex(0);
 	}
 
 	// EnhancedDialog implementation
@@ -99,9 +149,29 @@ implements ActionListener
 			cancel();
 	}
 
+	public void valueChanged(ListSelectionEvent evt)
+	{
+		Object source = evt.getSource();
+
+		if (source != paneList) return; // eh? (SP)
+
+		int idx = ((JList)source).getSelectedIndex();
+
+		if (idx != -1)
+		{
+			String cardName = ((OptionPane)panes.elementAt(idx))
+				.getName();
+			((CardLayout)cardPanel.getLayout()).show(cardPanel,
+				cardName);
+		}
+	}
+
 	// protected members
 	protected Vector panes;
 	protected JTabbedPane tabs;
+	protected JList paneList;
+	protected JPanel cardPanel;
+	protected DefaultListModel paneNames;
 
 	// private members
 	private JButton ok;
@@ -111,6 +181,9 @@ implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/01/14 22:11:24  sp
+ * Enhanced options dialog box
+ *
  * Revision 1.8  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *

@@ -1,4 +1,4 @@
-<!-- jEdit documentation, (C) 1999 Slava Pestov -->
+<!-- jEdit documentation, (C) 1999, 2000 Slava Pestov -->
 <!-- Released under the GNU General Public License; see COPYING.txt -->
 
 <!-- jEdit buffer-local properties: -->
@@ -472,7 +472,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     types; selecting one will make only files of that type visible in
     the file list. This is handy when navigating directories with lots
     of files of different types. The filters can be changed in the
-    <guibutton>File Filters</> tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
+    <guibutton>File Filters</> pane of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
     dialog box; see <xref linkend=global-opts>.
    </para>
   </sect2>
@@ -592,7 +592,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     on a per-buffer
     basis in the <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> dialog box;
     see <xref linkend=buffer-opts>.
-    The default for new files can be changed in the Editor tab of the
+    The default for new files can be changed in the Editor pane of the
     <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
     see <xref linkend=global-opts>.
    </para>
@@ -654,7 +654,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     types; selecting one will make only files of that type visible in
     the file list. This is handy when navigating directories with lots
     of files of different types. The filters can be changed in the
-    <guibutton>File Filters</> tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
+    <guibutton>File Filters</> pane of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
     dialog box; see <xref linkend=global-opts>.
    </para>
   </sect2>
@@ -1435,7 +1435,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <keycombo><keycap>Control</><keycap>V</></keycombo> <keycap>Space</>.
   </para>
   <para>
-   Abbreviations can be edited in the <guibutton>Abbreviations</> tab
+   Abbreviations can be edited in the <guibutton>Abbreviations</> pane
    of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
    see <xref linkend=global-opts>. Abbreviations are preserved across
    editing sessions.
@@ -1855,10 +1855,10 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    If the caret is in front of a bracket, the matching
    one is highlighted (assuming it is visible on the
    screen). The bracket highlight color can be changed in the
-   Colors &amp; Styles tab of the <guimenu>File</>&gt;<guimenuitem>Global
+   Colors &amp; Styles pane of the <guimenu>File</>&gt;<guimenuitem>Global
    Options</> dialog box; see <xref linkend=global-opts>.
    Bracket highlighting can be disabled
-   in the Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
+   in the Editor pane of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
    dialog box; see <xref linkend=global-opts>.
   </para>
   <para>
@@ -1913,7 +1913,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    </para>
    <itemizedlist>
     <listitem><para>The tab size can be changed on a global basis in
-    the Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
+    the Editor pane of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</> dialog box;
     see <xref linkend=global-opts>.</para></listitem>
     <listitem><para>The tab size can be changed in the current buffer
     for the duration of the editing session in the
@@ -1950,7 +1950,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <itemizedlist>
     <listitem><para>You can specify if soft tabs should be used
     on a global basis in the
-    Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
+    Editor pane of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
     dialog box; see <xref linkend=global-opts>.</para></listitem>
     <listitem><para>You can specify if soft tabs should be used
     in the current buffer for
@@ -2053,15 +2053,15 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     performed:
    </para>
    <itemizedlist>
-    <listitem><para>Indent on enter and tab can be set on a global
-    basis in the Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
+    <listitem><para>Indent on enter and indent on tab can be set on a global
+    basis in the Editor pane of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
     dialog box; see <xref linkend=global-opts>.</para></listitem>
-    <listitem><para>Indent on enter and tab can be set in the
+    <listitem><para>Indent on enter and indent on tab can be set in the
     current buffer for the duration of the editing session in the
     <guimenu>Tools</>&gt;<guimenuitem>Buffer Options</> dialog box;
    see <xref linkend=buffer-opts>.
     </para></listitem>
-    <listitem><para>Indent on enter and tab can be set in the
+    <listitem><para>Indent on enter and indent on tab can be set in the
     current buffer for future editing sessions using buffer-local
     properties by placing the following in the first 10 lines of a buffer,
     where <replaceable>flag</> is either <quote>on</> or <quote>off</>:
@@ -2186,7 +2186,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   </para>
   <para>
    The colors and styles used to highlight syntax tokens can be changed
-   in the Colors &amp; Styles tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
+   in the Colors &amp; Styles pane of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
    dialog box; see <xref linkend=global-opts>.
   </para>
   <para>
@@ -2196,7 +2196,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <itemizedlist>
    <listitem><para>You can specify if
    syntax highlighting is to be performed on a global basis in the
-   Editor tab of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
+   Editor pane of the <guimenu>Tools</>&gt;<guimenuitem>Global Options</>
    dialog box;
    see <xref linkend=global-opts>.</para></listitem>
    <listitem><para>You can specify if
@@ -2639,15 +2639,18 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <para>
    <guimenu>Tools</>&gt;<guimenuitem>Global Options</> displays the
    global options dialog box. A whole slew of settings can be
-   customized here. The dialog box is divided into several tabs,
-   each tab containing a set of related options.
+   customized here. The dialog box is divided into several panes,
+   each pane containing a set of related options. To switch between
+   panes, use the list on the left of the dialog box. Only panes
+   created by jEdit are described here; some plugins add their own option
+   panes, and information about them can be found in the plugin documentation.
   </para>
-  <sect2><title>The General Tab</>
+  <sect2><title>The General Pane</>
    <indexterm><primary>line separator</></indexterm>
    <indexterm><primary>backups</></indexterm>
    <indexterm><primary>autosave</></indexterm>
    <para>
-    The <guibutton>General</> tab allows you to change the following settings:
+    The <guibutton>General</> pane allows you to change the following settings:
    </para>
    <itemizedlist>
     <listitem><para>The Swing look and feel - changes to this settings only
@@ -2690,7 +2693,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     title bars, instead of just the name</para></listitem>
    </itemizedlist>
    </sect2>
-  <sect2><title>The Editor Tab</>
+  <sect2><title>The Editor Pane</>
    <indexterm><primary>tab width</></indexterm>
    <indexterm><primary>auto indent</></indexterm>
    <indexterm><primary>text area</></indexterm>
@@ -2700,7 +2703,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <indexterm><primary>end of line markers</></indexterm>
    <indexterm><primary>electric scrolling</></indexterm>
    <para>
-    The <guibutton>Editor</> tab allows you to change the following settings:
+    The <guibutton>Editor</> pane allows you to change the following settings:
    </para>
    <itemizedlist>
     <listitem><para>Default edit mode for new files</para></listitem>
@@ -2733,7 +2736,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     repeatedly - see <xref linkend=caret></para></listitem>
    </itemizedlist>
   </sect2>
-  <sect2><title>The Colors &amp; Styles Tab</>
+  <sect2><title>The Colors &amp; Styles Pane</>
    <indexterm><primary>syntax highlighting</></indexterm>
    <indexterm><primary>text area</></indexterm>
    <indexterm><primary>caret</></indexterm>
@@ -2742,21 +2745,21 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <indexterm><primary>end of line markers</></indexterm>
    <indexterm><primary>invalid lines</></indexterm>
    <para>
-    The <guibutton>Colors &amp; Styles</> tab allows you to change various
+    The <guibutton>Colors &amp; Styles</> pane allows you to change various
     colors used by the text area, and the text styles used by syntax
     highlighting. Clicking on a color or style will display the appropriate
     editor for changing it.
    </para>
   </sect2>
-  <sect2><title>The File Filters Tab</>
+  <sect2><title>The File Filters Pane</>
    <para>
-    The <guibutton>File Filters</> tab allows you to add custom file filters
+    The <guibutton>File Filters</> pane allows you to add custom file filters
     to the open file and save dialog boxes. Note that the file filters
     built into jEdit (the ones for the standard editing modes) cannot
     be changed; only user-defined file filters can be added and changed.
    </para>
    <para>
-    Filters are added and removed in a rather peculiar fashion in this tab.
+    Filters are added and removed in a rather peculiar fashion in this pane.
     Changing the last line in the list (which is always blank) will add
     another blank line. Lines with empty names or globs will
     be ignored when the filters are being saved.
@@ -2767,12 +2770,12 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     see <xref linkend=globs>.
    </para>
   </sect2>
-  <sect2 id=options-shortcuts><title>The Shortcut Editing Tabs</>
+  <sect2 id=options-shortcuts><title>The Shortcut Editing Panes</>
   <indexterm><primary>keyboard shortcuts</>
   <secondary>customizing</></indexterm>
    <para>
-    The <guibutton>Command Shortcuts</> tab allows you to change key
-    bindings for jEdit's commands. The <guibutton>Macro Shortcuts</> tag
+    The <guibutton>Command Shortcuts</> pane allows you to change key
+    bindings for jEdit's commands. The <guibutton>Macro Shortcuts</> pane
     allows you to change macro key bindings.
    </para>
    <para>
@@ -2797,9 +2800,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     the old shortcuts until jEdit is restarted.
    </para>
   </sect2>
-  <sect2><title>The Abbreviations Tab</>
+  <sect2><title>The Abbreviations Pane</>
    <para>
-    The <guibutton>Abbreviations</> tab allows you to enable or disable
+    The <guibutton>Abbreviations</> pane allows you to enable or disable
     automatic abbreviation expansion, and edit the defined abbrevs.
    </para>
    <para>
@@ -2809,30 +2812,30 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     entries allow you to edit abbrevs on a per-mode basis.
    </para>
    <para>
-    Abbrevs are added and removed in a rather peculiar fashion in this tab.
+    Abbrevs are added and removed in a rather peculiar fashion in this pane.
     Changing the last line in the list (which is always blank) will add
     another blank line. Lines with empty abbrevs or expansions will
     be ignored when the abbrevs are being saved.
    </para>
-   <figure><title>The General tab of the Global Options dialog box</>
+   <figure><title>The General pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-general></>
    </figure>
-   <figure><title>The Editor tab of the Global Options dialog box</>
+   <figure><title>The Editor pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-editor></>
    </figure>
-   <figure><title>The Colors &amp; Styles tab of the Global Options dialog box</>
+   <figure><title>The Colors &amp; Styles pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-styles></>
    </figure>
-   <figure><title>The File Filters tab of the Global Options dialog box</>
+   <figure><title>The File Filters pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-filters></>
    </figure>
-   <figure><title>The Command Shortcuts tab of the Global Options dialog box</>
+   <figure><title>The Command Shortcuts pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-cmd-shortcuts></>
    </figure>
-   <figure><title>The Macro Shortcuts tab of the Global Options dialog box</>
+   <figure><title>The Macro Shortcuts pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-mac-shortcuts></>
    </figure>
-   <figure><title>The Abbreviations tab of the Global Options dialog box</>
+   <figure><title>The Abbreviations pane of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-abbrevs></>
    </figure>
   </sect2>
@@ -2909,21 +2912,20 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  </sect1>
  <sect1 id=using-plugins><title>Using Plugins</>
   <indexterm><primary>Plugins menu</></indexterm>
-  <indexterm><primary>Plugin Options command</></indexterm>
+  <indexterm><primary>Global Options command</></indexterm>
   <indexterm><primary>Tools menu</></indexterm>
   <indexterm><primary>Help Contents command</></indexterm>
   <indexterm><primary>Help menu</></indexterm>
   <para>
    Exactly how a plugin can be used of course depends on the plugin. The
    first place to look in should probably be the plugin's help; plugins
-   with documentation are listed in the online help, which can be opened
-   by selecting <guimenu>Help</>&gt;<guimenuitem>Help Contents</>. Some
+   with documentation are listed in the <guimenu>Help</> menu. Some
    plugins might not have any documentation, however.
   </para>
   <para>
    Most plugins add submenus or menu items to the <guimenu>Plugins</> menu.
-   Some plugins with options that can be changed add tabs to the
-   <guimenu>File</>&gt;<guimenuitem>Plugin Options</> dialog box.
+   Some plugins with customizable options add panes to the
+   <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box.
   </para>
  </sect1>
 </chapter>
@@ -3389,11 +3391,11 @@ import org.gjt.sp.jedit.View;</>
    </para>
   </note>
  </sect1>
- <sect1 id=plugin-options><title>The Plugin Options Dialog Box</>
+ <sect1 id=plugin-options><title>The Global Options Dialog Box</>
   <para>
-   The Plugin Options dialog box is a common location for changing plugin
-   settings.
-   Each tab in the dialog box is actually an implementation of the
+   The Global Options dialog box is a common location for changing editor-wide
+   settings, including plugin settings.
+   Each pane in the dialog box is actually an implementation of the
    <classname>org.gjt.sp.jedit.OptionPane</> interface - though most plugins
    will subclass the <classname>org.gjt.sp.jedit.AbstractOptionPane</> class
    which provides a default layout implementation.
@@ -3411,14 +3413,16 @@ implements OptionPane
         public void addComponent(Component comp);
 }</programlisting>
   <para>
-   Most plugins will want to use the <classname>AbstractOptionPane</> class,
+   Because
+   most plugins will want to use the <classname>AbstractOptionPane</> class,
    instead of the <classname>OptionPane</> interface; only the former will
    be covered here.
-   <classname>AbstractOptionPane</> instances, like many other jEdit objects, have
-   <quote>names</> which are used to query properties. In the case of
-   option panes, the only property currently supported is
+   Each <classname>AbstractOptionPane</> instance, like many other jEdit objects,
+   has a unique
+   <quote>name</> which is used to query properties.
+   The only option pane property currently used is
    <property>options.<replaceable>name</>.label</property>, which stores
-   the label for the option pane's tab in the options dialog box.
+   the label for the option pane in the options dialog box.
   </para>
   <para>
    The two <function>addComponent()</> methods can be used to add components

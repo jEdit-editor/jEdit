@@ -1,6 +1,6 @@
 /*
  * Buffer.java - jEdit buffer
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -444,13 +444,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,true);
 			undo.undo();
-			setFlag(UNDO_IN_PROGRESS,false);
 			return true;
 		}
 		catch(CannotUndoException cu)
 		{
 			Log.log(Log.DEBUG,this,cu);
 			return false;
+		}
+		finally
+		{
+			setFlag(UNDO_IN_PROGRESS,false);
 		}
 	}
 
@@ -469,13 +472,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,true);
 			undo.redo();
-			setFlag(UNDO_IN_PROGRESS,false);
 			return true;
 		}
 		catch(CannotRedoException cr)
 		{
 			Log.log(Log.DEBUG,this,cr);
 			return false;
+		}
+		finally
+		{
+			setFlag(UNDO_IN_PROGRESS,false);
 		}
 	}
 
@@ -1514,6 +1520,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.120  2000/01/14 22:11:24  sp
+ * Enhanced options dialog box
+ *
  * Revision 1.119  1999/12/22 06:36:40  sp
  * 2.3pre1 stuff
  *
@@ -1543,20 +1552,4 @@ loop:		for(int i = 0; i < markers.size(); i++)
  *
  * Revision 1.110  1999/12/05 03:01:05  sp
  * Perl token marker bug fix, file loading is deferred, style option pane fix
- *
- * Revision 1.109  1999/12/03 23:48:10  sp
- * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
- *
- * Revision 1.108  1999/11/29 02:45:50  sp
- * Scroll bar position saved when switching buffers
- *
- * Revision 1.107  1999/11/28 00:33:06  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
- *
- * Revision 1.106  1999/11/27 06:01:20  sp
- * Faster file loading, geometry fix
- *
- * Revision 1.105  1999/11/19 08:54:51  sp
- * EditBus integrated into the core, event system gone, bug fixes
- *
  */

@@ -291,8 +291,7 @@ tools=load-session \
       view-editbus \
       - \
       buffer-options \
-      global-options \
-      plugin-options
+      global-options
 tools.label=$Tools
 load-session.label=$Load Session...
 save-session.label=$Save Session...
@@ -302,7 +301,6 @@ clear-log.label=$Clear Activity Log
 view-editbus.label=Show $EditBus...
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
-plugin-options.label=$Plugin Options...
 
 ### Macros menu
 macros=record-macro \
@@ -654,15 +652,15 @@ options.general.label=General
 options.general.lf.note=Restart jEdit for L&F changes to take effect
 options.general.lf=Swing look & feel:\ 
 options.general.encoding=File encoding:\ 
-options.general.autosave=Autosave frequency (seconds):\ 
-options.general.recent=Number of recent files:\ 
-options.general.history=Maximum elements in a history list:\ 
-options.general.backups=Number of backups when saving:\ 
-options.general.backupDirectory=Backup directory (none=current):\ 
+options.general.autosave=Autosave frequency (secs):\ 
+options.general.recent=Max recent files:\ 
+options.general.history=Max history list length:\ 
+options.general.backups=Max number of backups:\ 
+options.general.backupDirectory=Backup directory:\ 
 options.general.backupPrefix=Backup filename prefix:\ 
 options.general.backupSuffix=Backup filename suffix:\ 
 options.general.lineSeparator=Default line separator:\ 
-options.general.saveDesktop=Save default session on exit
+options.general.saveDesktop=Save session on exit
 options.general.showToolbar=Show toolbar
 options.general.showFullPath=Show full path of buffers in title bar
 options.editor.label=Editor
@@ -735,9 +733,6 @@ styleEditor.title=Style Editor
 styleEditor.italics=Italics
 styleEditor.bold=Bold
 styleEditor.color=Text color:\ 
-
-# Plugin options dialog
-plugin-options.title=Plugin Options
 
 # Help viewer
 helpviewer.title=jEdit Help

@@ -1,6 +1,6 @@
 /*
  * global_options.java
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,13 +20,13 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.gui.GlobalOptions;
+import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.EditAction;
 
 public class global_options extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		new GlobalOptions(getView(evt));
+		new OptionsDialog(getView(evt));
 	}
 }

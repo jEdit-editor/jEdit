@@ -38,13 +38,18 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		super("abbrevs");
 		setLayout(new BorderLayout());
 
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanel(new BorderLayout());
+
+		JPanel panel2 = new JPanel();
 
 		expandOnInput = new JCheckBox(jEdit.getProperty("options.abbrevs"
 			+ ".expandOnInput"),Abbrevs.getExpandOnInput());
-		panel.add(expandOnInput);
+		panel2.add(expandOnInput);
+		panel.add(panel2,BorderLayout.NORTH);
 
-		panel.add(new JLabel(jEdit.getProperty("options.abbrevs.set")));
+		JPanel panel3 = new JPanel();
+		panel3.add(new JLabel(jEdit.getProperty("options.abbrevs.set")));
+		panel.add(panel3,BorderLayout.SOUTH);
 
 		Hashtable _modeAbbrevs = Abbrevs.getModeAbbrevs();
 		modeAbbrevs = new Hashtable();
@@ -59,7 +64,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		}
 		setsComboBox = new JComboBox(sets);
 		setsComboBox.addActionListener(new ActionHandler());
-		panel.add(setsComboBox);
+		panel3.add(setsComboBox);
 
 		add(BorderLayout.NORTH,panel);
 
@@ -314,6 +319,9 @@ class Abbrev
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/01/14 22:11:24  sp
+ * Enhanced options dialog box
+ *
  * Revision 1.2  1999/12/21 06:50:51  sp
  * Documentation updates, abbrevs option pane finished, bug fixes
  *
