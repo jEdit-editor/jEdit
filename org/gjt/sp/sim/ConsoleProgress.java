@@ -39,11 +39,6 @@ public class ConsoleProgress implements Progress
 		System.out.println("*** Installation complete");
 	}
 
-	public void aborted()
-	{
-		System.err.println("*** Installation aborted");
-	}
-
 	public void error(String message)
 	{
 		System.err.println("*** An error ocurred: " + message);

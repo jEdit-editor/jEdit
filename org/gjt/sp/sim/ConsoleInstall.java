@@ -34,7 +34,7 @@ public class ConsoleInstall
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 			System.in));
 
-		System.out.println("*** SIM - installing " + appName);
+		System.out.println("*** " + appName + " " + appVersion + " installer");
 
 		OperatingSystem os = OperatingSystem.getOperatingSystem();
 

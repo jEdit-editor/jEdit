@@ -25,7 +25,7 @@ import java.util.Properties;
 
 public class SIMInstaller
 {
-	public static final String VERSION = "0.1";
+	public static final String VERSION = "0.2";
 
 	public SIMInstaller()
 	{
@@ -38,7 +38,7 @@ public class SIMInstaller
 		}
 		catch(IOException io)
 		{
-			System.err.println("Error loading 'SIMInstaller.props':");
+			System.err.println("Error loading '/install.props':");
 			io.printStackTrace();
 		}
 	}

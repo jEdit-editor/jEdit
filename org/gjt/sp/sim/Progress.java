@@ -29,7 +29,5 @@ public interface Progress
 
 	public void done();
 
-	public void aborted();
-
 	public void error(String message);
 }

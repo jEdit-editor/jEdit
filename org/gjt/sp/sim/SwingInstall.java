@@ -1,6 +1,6 @@
 /*
  * SwingInstall.java - Swing installer
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.Vector;
 
 public class SwingInstall extends JFrame
-implements ActionListener, ChangeListener
 {
 	public SwingInstall()
 	{
@@ -38,50 +37,11 @@ implements ActionListener, ChangeListener
 		appName = installer.getProperty("app.name");
 		appVersion = installer.getProperty("app.version");
 
-		setTitle("SIM - installing " + appName);
+		setTitle(appName + " " + appVersion + " installer");
 
-		JLabel imgLabel = new JLabel(createIcon(installer.getProperty(
-			"app.logo")));
-		imgLabel.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-		getContentPane().add(BorderLayout.WEST,imgLabel);
-
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		exit = new JButton("Exit",createIcon("Exit.gif"));
-		exit.addActionListener(this);
-		exit.setRequestFocusEnabled(false);
-		prev = new JButton("Previous",createIcon("Left.gif"));
-		prev.addActionListener(this);
-		prev.setRequestFocusEnabled(false);
-		next = new JButton();
-		nextIcon = createIcon("Right.gif");
-		installIcon = createIcon("SaveDB.gif");
-		next.addActionListener(this);
-		next.setRequestFocusEnabled(false);
-
-		exit.setPreferredSize(prev.getPreferredSize());
-		next.setPreferredSize(prev.getPreferredSize());
-
-		buttons.add(exit);
-		buttons.add(Box.createGlue());
-		buttons.add(prev);
-		buttons.add(Box.createHorizontalStrut(10));
-		buttons.add(next);
-		buttons.setBorder(new EmptyBorder(10,10,10,10));
-
-		tabs = new JTabbedPane();
-		tabs.addTab("About " + appName,createIcon("Help.gif"),new About());
-		tabs.addTab("Install Directory",createIcon("FolderIn.gif"),
-			chooseDirTab = new ChooseDirectory());
-		tabs.addTab("Components to Install",createIcon("SaveAll.gif"),
-			selectCompTab = new SelectComponents());
-		getContentPane().add(BorderLayout.CENTER,tabs);
-
-		// update button enabled/disabled state
-		tabs.addChangeListener(this);
-		updatePrevNext();
-
-		getContentPane().add(BorderLayout.SOUTH,buttons);
+		getContentPane().add(BorderLayout.CENTER,new InstallWizard(
+			chooseDirectory = new ChooseDirectory(),
+			selectComponents = new SelectComponents()));
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
@@ -101,63 +61,20 @@ implements ActionListener, ChangeListener
 		}
 	}
 
-	public void actionPerformed(ActionEvent evt)
-	{
-		if(evt.getSource() == exit)
-			System.exit(0);
-		else if(evt.getSource() == prev)
-			tabs.setSelectedIndex(tabs.getSelectedIndex() - 1);
-		else if(evt.getSource() == next)
-		{
-			if(tabs.getSelectedIndex() == tabs.getComponentCount() - 1)
-				install();
-			else
-				tabs.setSelectedIndex(tabs.getSelectedIndex() + 1);
-		}
-	}
-
-	public void stateChanged(ChangeEvent evt)
-	{
-		updatePrevNext();
-	}
-
 	// package-private members
 	SIMInstaller installer;
 	String appName;
 	String appVersion;
 
-	JTabbedPane tabs;
-	ChooseDirectory chooseDirTab;
-	SelectComponents selectCompTab;
-
-	JButton exit;
-	JButton prev;
-	JButton next;
-
-	ImageIcon nextIcon;
-	ImageIcon installIcon;
-
-	ImageIcon createIcon(String name)
-	{
-		return new ImageIcon(getClass().getResource(name));
-	}
-
-	void updatePrevNext()
-	{
-		int index = tabs.getSelectedIndex();
-		prev.setEnabled(index != 0);
-		next.setText(index == tabs.getComponentCount() - 1
-			? "Install" : "Next");
-		next.setIcon(index == tabs.getComponentCount() - 1
-			? installIcon : nextIcon);
-	}
+	ChooseDirectory chooseDirectory;
+	SelectComponents selectComponents;
 
 	void install()
 	{
 		Vector components = new Vector();
 		int size = 0;
 
-		JPanel comp = selectCompTab.comp;
+		JPanel comp = selectComponents.comp;
 
 		for(int i = 0; i < comp.getComponentCount(); i++)
 		{
@@ -173,8 +90,8 @@ implements ActionListener, ChangeListener
 
 		dispose();
 
-		JTextField binDir = chooseDirTab.binDir;
-		String installDir = chooseDirTab.installDir.getText();
+		JTextField binDir = chooseDirectory.binDir;
+		String installDir = chooseDirectory.installDir.getText();
 
 		SwingProgress progress = new SwingProgress(appName);
 		InstallThread thread = new InstallThread(
@@ -186,20 +103,38 @@ implements ActionListener, ChangeListener
 		thread.start();
 	}
 
+	class InstallWizard extends Wizard
+	{
+		InstallWizard(ChooseDirectory chooseDirectory,
+			SelectComponents selectComponents)
+		{
+			super(new Color(0xccccff),
+				new ImageIcon(InstallWizard.class.getResource(
+				installer.getProperty("app.logo"))),
+				"Cancel","Previous","Next","Install",
+				new Component[] { new About(), chooseDirectory,
+				selectComponents });
+		}
+
+		protected void cancelCallback()
+		{
+			System.exit(0);
+		}
+
+		protected void finishCallback()
+		{
+			install();
+		}
+	}
+				
 	class About extends JPanel
 	{
 		About()
 		{
-			setLayout(new BorderLayout());
-
-			JLabel caption = new JLabel(appName + " "
-				+ appVersion + " installer");
-			Font font = caption.getFont();
-			caption.setFont(new Font(font.getFamily(),font.getStyle(),24));
-
-			add(BorderLayout.NORTH,caption);
+			super(new BorderLayout());
 
 			JEditorPane text = new JEditorPane();
+
 			String readme = installer.getProperty("app.readme");
 
 			try
@@ -213,7 +148,11 @@ implements ActionListener, ChangeListener
 				io.printStackTrace();
 			}
 
-			add(BorderLayout.CENTER,new JScrollPane(text));
+			JScrollPane scrollPane = new JScrollPane(text);
+			Dimension dim = scrollPane.getPreferredSize();
+			dim.height = 250;
+			scrollPane.setPreferredSize(dim);
+			add(BorderLayout.CENTER,scrollPane);
 		}
 	}
 
@@ -229,10 +168,10 @@ implements ActionListener, ChangeListener
 		{
 			setLayout(new BorderLayout());
 
-			JLabel caption = new JLabel("Step 1 - specify where "
-				+ appName + " is to be installed");
+			JLabel caption = new JLabel("First, specify where "
+				+ appName + " is to be installed:");
 			Font font = caption.getFont();
-			caption.setFont(new Font(font.getFamily(),font.getStyle(),24));
+			caption.setFont(new Font(font.getFamily(),font.getStyle(),18));
 
 			add(BorderLayout.NORTH,caption);
 
@@ -321,10 +260,10 @@ implements ActionListener, ChangeListener
 			cons.weighty = 1.0f;
 			cons.gridy = 1;
 
-			JLabel caption = new JLabel("Step 2 - specify"
-				+ " components to install");
+			JLabel caption = new JLabel("Now, specify program"
+				+ " components to install:");
 			Font font = caption.getFont();
-			caption.setFont(new Font(font.getFamily(),font.getStyle(),24));
+			caption.setFont(new Font(font.getFamily(),font.getStyle(),18));
 
 			layout.setConstraints(caption,cons);
 			add(caption);

@@ -123,15 +123,6 @@ public class InstallThread extends Thread
 
 			out.write(buf,0,count);
 			progress.advance(count);
-
-			if(Thread.interrupted())
-			{
-				in.close();
-				out.close();
-
-				progress.aborted();
-				return;
-			}
 		}
 
 		in.close();

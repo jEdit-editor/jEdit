@@ -29,24 +29,31 @@ implements ActionListener, Progress
 {
 	public SwingProgress(String appName)
 	{
-		super("SIM - installing " + appName);
+		super("Installing " + appName);
+
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
 
 		this.appName = appName;
 
 		message = new JLabel("Installing " + appName + "...");
-		message.setBorder(new EmptyBorder(10,10,10,10));
-		getContentPane().add(BorderLayout.NORTH,message);
+		message.setBorder(new EmptyBorder(0,0,12,0));
+		content.add(BorderLayout.NORTH,message);
 
 		progress = new JProgressBar();
 		progress.setStringPainted(true);
-		getContentPane().add(BorderLayout.CENTER,progress);
+		content.add(BorderLayout.CENTER,progress);
 
 		stop = new JButton("Stop");
 		stop.addActionListener(this);
 		JPanel panel = new JPanel();
-		panel.setBorder(new EmptyBorder(10,10,10,10));
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(12,0,0,0));
+		panel.add(Box.createGlue());
 		panel.add(stop);
-		getContentPane().add(BorderLayout.SOUTH,panel);
+		panel.add(Box.createGlue());
+		content.add(BorderLayout.SOUTH,panel);
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
@@ -115,22 +122,6 @@ implements ActionListener, Progress
 		});
 	}
 
-	public void aborted()
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				dispose();
-				JOptionPane.showMessageDialog(null,
-					"Installation aborted.",
-					"Installation aborted",
-					JOptionPane.ERROR_MESSAGE);
-				System.exit(1);
-			}
-		});
-	}
-
 	public void error(final String message)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -157,7 +148,14 @@ implements ActionListener, Progress
 		if(evt.getSource() == stop)
 		{
 			stop.getModel().setEnabled(false);
-			thread.interrupt();
+			thread.stop();
+
+			dispose();
+			JOptionPane.showMessageDialog(null,
+				"Installation aborted.",
+				"Installation aborted",
+				JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
 		}
 	}
 
