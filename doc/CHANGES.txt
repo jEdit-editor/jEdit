@@ -21,6 +21,7 @@ JEDIT VERSION HISTORY
 - JavaDoc comments (/** */) are now only treated specially in Java mode;
   they have no special meaning in other C-derived languages, such as
   C++, IDL, JavaScript or BeanShell
+- Enhanced about box, displays info about loaded plugins
 
 + Bug Fixes
 

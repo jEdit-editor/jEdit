@@ -107,6 +107,11 @@ public class JARClassLoader extends ClassLoader
 		return "jeditresource:" + index + "/" + name;
 	}
 
+	public String getPath()
+	{
+		return zipFile.getName();
+	}
+
 	public static void initPlugins()
 	{
 		for(int i = 0; i < classLoaders.size(); i++)
@@ -340,6 +345,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/01/30 04:23:23  sp
+ * New about box, minor bug fixes and updates here and there
+ *
  * Revision 1.25  2000/01/28 00:54:26  sp
  * Blacklisting removed
  *

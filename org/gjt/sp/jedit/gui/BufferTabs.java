@@ -117,7 +117,7 @@ public class BufferTabs extends JTabbedPane
 
 			removeBufferTab(buffer);
 			addBufferTab(buffer);
-			selectBufferTab(buffer);
+// 			selectBufferTab(buffer);
 
 			updating = false;
 

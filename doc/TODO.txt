@@ -2,17 +2,18 @@ JEDIT TO DO
 
 ------- 2.3 to do -------
 
+- Help viewer -- open text file, open plugin help, boom
+- If no abbrev found, C+e C+x should ask if it should be added
 - Double-click drag doesn't work backwards
 - Integrate Mike Dillon's "Gutter" code
-- CaretUndo acts weird on 'redo' sometimes
-- If no abbrev found, C+e C+x should ask if it should be added
-- If there is > 1 possible match, complete-word should list them in a
-  dialog box
-- 'Uncomment' command that removes comment strings from selected text
-- Incremental search
+- CaretUndo doesn't work on 'redo'
 
 ------- Later -------
 
+- Incremental search
+- If there is > 1 possible match, complete-word should list them in a
+  dialog box
+- 'Uncomment' command that removes comment strings from selected text
 - EnhancedDialog and EnhancedFrame that automatically load/save geometry
   and/or center themselves on the screen
 - Beef up 'Marker' class to support file/line number/message stuff, EditBus
@@ -29,8 +30,6 @@ JEDIT TO DO
 - Menu bar and tool bar loading needs to work outside of views
 - Integrate XMode
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
-- More than one level of token marker delegation (required for XMode
-  integration)
 - Folding
 
 ------- JDK 1.2 -------

@@ -97,7 +97,6 @@ public class OptionsDialog extends EnhancedDialog
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
 			(screen.height - getSize().height) / 2);
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		show();
 	}
 
@@ -180,6 +179,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/01/30 04:23:23  sp
+ * New about box, minor bug fixes and updates here and there
+ *
  * Revision 1.10  2000/01/16 06:09:27  sp
  * Bug fixes
  *

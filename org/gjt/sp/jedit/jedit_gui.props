@@ -444,32 +444,15 @@ view.status.insert-literal=Insert without expanding
 
 # About dialog
 about.title=About jEdit
+about.about=Information
 about.message=jEdit version {0}\n\
-	http://www.gjt.org/~sp/jedit.html\n\
-	\n\
-	jEdit was written by Slava Pestov with the help of several\n\
-	others. It is released under the GNU General Public License;\n\
-	see the README.txt file for more information.\n\
-	\n\
-	The following people contributed code to the jEdit core:\n\
-	\n\
-	Artur Biesiadowski - Eiffel syntax highlighting\n\
-	Clancy Malcolm - PHP3 syntax highlighting\n\
-	Jason Ginchereau - Buffer tabs code\n\
-	Jonathan Revusky - Python syntax highlighting\n\
-	Juha Lindfors - IDL syntax highlighting\n\
-	Mike Dillon - TSQL syntax highlighting, faster literal search,\n\
-	options dialog stuff, various other things\n\
-	Ralf Engels - PostScript syntax highlighting\n\
-	Tal Davidson - Original syntax highlighting engine\n\
-	Valery Kondakoff - Complete Word command\n\
-	\n\
-	If you are not on the above list but think you should be,\n\
-	e-mail me (<sp@gjt.org>).\n\
-	\n\
-	In addition to the above people, I would like to thank all\n\
-	the plugin authors for their wonderful plugins, and the\n\
-	users for their feedback and comments.
+	<http://www.gjt.org/~sp/jedit.html>\n\
+	jEdit was written by Slava Pestov with code\n\
+	contributions of several others. It is released\n\
+	under the GNU General Public License; see the\n\
+	README file for more information.
+about.plugins=Loaded Plugins
+about.plugins.label={0} (loaded from {1})
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error

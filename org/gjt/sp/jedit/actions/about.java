@@ -20,13 +20,13 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.AboutDialog;
 import org.gjt.sp.jedit.*;
 
 public class about extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		Object[] aboutArgs = { jEdit.getVersion() };
-		GUIUtilities.message(getView(evt),"about",aboutArgs);
+		new AboutDialog(getView(evt));
 	}
 }

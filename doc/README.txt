@@ -49,6 +49,27 @@ To view the HTML version, select `Help->Help Contents' in jEdit, or open
 doc/jeditdocs/index.html in a WWW browser such as Netscape. To view the
 PDF, open jedit-<version>.pdf in a PDF viewer such as Adobe Acrobat.
 
+* Credits
+
+The following people contributed code to the jEdit core:
+
+Artur Biesiadowski - Eiffel syntax highlighting
+Clancy Malcolm - PHP3 syntax highlighting
+Jason Ginchereau - Buffer tabs code
+Jonathan Revusky - Python syntax highlighting
+Juha Lindfors - IDL syntax highlighting
+Mike Dillon - TSQL syntax highlighting, faster literal search, options
+dialog stuff, various other things
+Ralf Engels - PostScript syntax highlighting
+Tal Davidson - Original syntax highlighting engine
+Valery Kondakoff - Complete Word command
+
+If you are not on the above list but think you should be, e-mail me.
+
+In addition to the above people, I would like to thank all the plugin
+authors for their wonderful plugins, and the users for their feedback
+and comments.
+
 Have fun!
 
 Slava Pestov

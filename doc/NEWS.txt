@@ -1,6 +1,17 @@
 MAJOR CHANGES IN JEDIT 2.3 SINCE 2.2
 
-No changes, just a spiffy new splash screen.
+Will need to mention:
+- abbrevs
+- file->current directory
+- buffer tabs
+- search and replace options on tool bar
+- view splitting
+- new commands (select-word, to-upper ...)
+- ps and bsh syntax highlighting
+- buffer list sorting
+- better hypersearch
+- key bindings can be changed on the fly
+- double-click/drag
 
 -- Slava Pestov
 <sp@gjt.org>
