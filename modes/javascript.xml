@@ -69,8 +69,8 @@
 		<SEQ TYPE="NULL">:</SEQ>
 
 		<KEYWORDS IGNORE_CASE="FALSE">
-			<KEYWORD3>function</KEYWORD3>
-			<KEYWORD3>var</KEYWORD3>
+			<KEYWORD1>function</KEYWORD1>
+			<KEYWORD1>var</KEYWORD1>
 			<KEYWORD1>else</KEYWORD1>
 			<KEYWORD1>for</KEYWORD1>
 			<KEYWORD1>if</KEYWORD1>
@@ -83,9 +83,9 @@
 			<KEYWORD1>case</KEYWORD1>
 			<KEYWORD1>continue</KEYWORD1>
 			<KEYWORD1>default</KEYWORD1>
-			<LABEL>false</LABEL>
-			<LABEL>this</LABEL>
-			<LABEL>true</LABEL>
+			<LITERAL2>false</LITERAL2>
+			<LITERAL2>this</LITERAL2>
+			<LITERAL2>true</LITERAL2>
 		</KEYWORDS>
 	</RULES>
 </MODE>

@@ -133,8 +133,6 @@ public class BufferTabs extends JTabbedPane
 	{
 		int index = buffer.getIndex();
 		int selectedIndex = getSelectedIndex();
-		System.err.println("selecting " + buffer + " : " + index
-			+ " (current=" + selectedIndex + ")");
 
 		if(index == selectedIndex)
 			update();

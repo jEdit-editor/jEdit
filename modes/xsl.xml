@@ -9,7 +9,7 @@
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.xsl" />
 	</PROPS>
-	<RULES>
+	<RULES IGNORE_CASE="TRUE">
 		<!-- WHITE SPACE ( SPACE, TAB ) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
@@ -44,34 +44,28 @@
 		
 		<!-- XSL TAGS -->
 		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
-			<BEGIN>&lt;xsl</BEGIN>
-			<END>/&gt;</END>
-		</SPAN>
-		
-		<!-- XSL TAGS -->
-		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
 			<BEGIN>&lt;/xsl</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
-		
+
+		<!-- JavaScript -->
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
+			<END>&lt;/SCRIPT&gt;</END>
+		</SPAN>
+
+		<!-- stylesheet -->
+		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
+		</SPAN>
+
 		<!-- HTML TAGS -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="HTMLTAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
-		
-		<!-- HTML TAGS -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="HTMLTAGS">
-			<BEGIN>&lt;</BEGIN>
-			<END>/&gt;</END>
-		</SPAN>
-		
-		<!-- HTML TAGS -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="HTMLTAGS">
-			<BEGIN>&lt;/</BEGIN>
-			<END>&gt;</END>
-		</SPAN>
-		
+
 		<!-- ENTITY REFERENCES -->
 		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
 			<BEGIN>&amp;</BEGIN>
@@ -96,7 +90,6 @@
 		</SPAN>
 		
 		<SEQ TYPE="NULL">=</SEQ>
-		
 	</RULES>
 	
 	<!-- XSL TAGS -->
@@ -116,8 +109,5 @@
 		
 		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
-		
 	</RULES>
-	
 </MODE>
-

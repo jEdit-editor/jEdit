@@ -2,6 +2,15 @@ JEDIT VERSION HISTORY
 
 * Version 2.4pre4
 
++ New Features
+
+- CSS mode added; HTML and friends now highlight CSS stylesheets inside
+  <style> tags
+
++ Enhancements
+
+- More modes support inline JavaScript; PHP, JSP, ColdFusion
+
 + Bug Fixes
 
 - Fixed a bug in SyntaxDocument's line handling (since 2.4pre2)

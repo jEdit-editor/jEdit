@@ -7,15 +7,13 @@
 		<PROPERTY NAME="label" VALUE="PHP" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
-		<PROPERTY NAME="commentStart" VALUE="/*" />
-		<PROPERTY NAME="commentEnd" VALUE="*/" />
-		<PROPERTY NAME="boxComment" VALUE="*" />
-		<PROPERTY NAME="blockComment" VALUE="//" />
+		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
+		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{php,php3,phtml}" />
 		<PROPERTY NAME="firstlineGlob" VALUE="&lt;?php" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
-	<RULES>
+	<RULES IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
@@ -36,12 +34,19 @@
 			<END>--&gt;</END>
 		</SPAN>
 
-		<!-- markup tags -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
-			<BEGIN>&lt;/</BEGIN>
-			<END>&gt;</END>
+		<!-- JavaScript -->
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
+			<END>&lt;/SCRIPT&gt;</END>
 		</SPAN>
 
+		<!-- stylesheet -->
+		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
@@ -72,6 +77,11 @@
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
 		</SPAN>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>

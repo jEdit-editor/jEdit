@@ -7,7 +7,6 @@
 		<PROPERTY NAME="label" VALUE="HTML" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="boxComment" VALUE="--" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{html,htm}" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
@@ -22,9 +21,15 @@
 		</SPAN>
 
 		<!-- JavaScript -->
-		<SPAN TYPE="KEYWORD1" DELEGATE="javascript::MAIN">
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
 			<END>&lt;/SCRIPT&gt;</END>
+		</SPAN>
+
+		<!-- stylesheet -->
+		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 
 		<!-- markup tags -->
@@ -53,6 +58,11 @@
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
 		</SPAN>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>

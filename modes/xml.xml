@@ -73,6 +73,11 @@
 			<END>"</END>
 		</SPAN>
 
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
 		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
@@ -96,6 +101,11 @@
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
 		</SPAN>
 
 		<!-- This appears in some SGML documents -->
