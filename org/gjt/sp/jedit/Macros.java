@@ -105,8 +105,9 @@ public class Macros
 			return;
 		}
 
-		String fileName = jEdit.getSettingsDirectory() + File.separator
-			+ "macros" + File.separator + name + ".macro";
+		String fileName = MiscUtilities.constructPath(
+			jEdit.getSettingsDirectory() + File.separator
+			+ "macros",name);
 
 		// Check if it's open
 		Buffer buffer = jEdit.getBuffer(fileName);
@@ -115,6 +116,60 @@ public class Macros
 			playMacroFromFile(view,name,fileName);
 		else
 			playMacroFromBuffer(view,name,buffer);
+	}
+
+	public static boolean playMacroCommand(View view, String macro,
+		int lineNo, String line)
+	{
+		if(line.length() == 0 || line.charAt(0) == '#')
+			return true;
+
+		String action;
+		String actionCommand;
+		int index = line.indexOf('@');
+		if(index == -1)
+		{
+			action = line;
+			actionCommand = null;
+		}
+		else
+		{
+			action = line.substring(0,index);
+			actionCommand = line.substring(index + 1);
+		}
+
+		ActionListener _action = jEdit.getAction(action);
+		if(_action == null)
+		{
+			// it's a text area action
+			ActionListener[] actions = DefaultInputHandler.ACTIONS;
+			String[] names = DefaultInputHandler.ACTION_NAMES;
+
+			// Start from end because insert-char is the last
+			// one, and it's probably the most frequently invoked
+			// action
+			for(int i = actions.length - 1; i >= 0; i--)
+			{
+				if(names[i].equals(action))
+				{
+					_action = actions[i];
+					break;
+				}
+			}
+		}
+
+		if(_action /* still */ == null)
+		{
+			Object[] args = { macro, new Integer(lineNo), action };
+			GUIUtilities.error(view,"macro-error",args);
+			return false;
+		}
+
+		JEditTextArea textArea = view.getTextArea();
+		textArea.getInputHandler().executeAction(_action,textArea,
+			actionCommand);
+
+		return true;
 	}
 
 	public static String getLastMacro()
@@ -170,60 +225,6 @@ public class Macros
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(view,"ioerror",args);
 		}
-	}
-
-	private static boolean playMacroCommand(View view, String macro,
-		int lineNo, String line)
-	{
-		if(line.length() == 0 || line.charAt(0) == '#')
-			return true;
-
-		String action;
-		String actionCommand;
-		int index = line.indexOf('@');
-		if(index == -1)
-		{
-			action = line;
-			actionCommand = null;
-		}
-		else
-		{
-			action = line.substring(0,index);
-			actionCommand = line.substring(index + 1);
-		}
-
-		ActionListener _action = jEdit.getAction(action);
-		if(_action == null)
-		{
-			// it's a text area action
-			ActionListener[] actions = DefaultInputHandler.ACTIONS;
-			String[] names = DefaultInputHandler.ACTION_NAMES;
-
-			// Start from end because insert-char is the last
-			// one, and it's probably the most frequently invoked
-			// action
-			for(int i = actions.length - 1; i >= 0; i--)
-			{
-				if(names[i].equals(action))
-				{
-					_action = actions[i];
-					break;
-				}
-			}
-		}
-
-		if(_action /* still */ == null)
-		{
-			Object[] args = { macro, new Integer(lineNo), action };
-			GUIUtilities.error(view,"macro-error",args);
-			return false;
-		}
-
-		JEditTextArea textArea = view.getTextArea();
-		textArea.getInputHandler().executeAction(_action,textArea,
-			actionCommand);
-
-		return true;
 	}
 
 	private static String getActionName(ActionListener listener)
@@ -301,6 +302,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  1999/10/19 09:10:13  sp
+ * pre5 bug fixing
+ *
  * Revision 1.5  1999/10/17 04:16:28  sp
  * Bug fixing
  *

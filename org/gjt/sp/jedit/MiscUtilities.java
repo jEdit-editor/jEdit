@@ -238,6 +238,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static void quicksort(Object[] obj, Compare compare)
 	{
+		if(obj.length == 0)
+			return;
+
 		quicksort(obj,0,obj.length - 1,compare);
 	}
 
@@ -248,6 +251,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static void quicksort(Vector vector, Compare compare)
 	{
+		if(vector.size() == 0)
+			return;
+
 		quicksort(vector,0,vector.size() - 1,compare);
 	}
 
@@ -399,6 +405,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  1999/10/19 09:10:13  sp
+ * pre5 bug fixing
+ *
  * Revision 1.18  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

@@ -51,7 +51,7 @@ public class ViewRegisters extends JDialog
 		}
 
 		JList registerList = new JList(strings);
-		registerList.setVisibleRowCount(10);
+		registerList.setVisibleRowCount(16);
 		registerList.setFont(view.getTextArea().getPainter().getFont());
 
 		close = new JButton(jEdit.getProperty("common.close"));

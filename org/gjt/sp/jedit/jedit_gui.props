@@ -62,8 +62,9 @@ help.icon=Help.gif
 ###
 ### CONTEXT MENU
 ###
-view.context=undo redo - cut copy paste paste-previous - view-registers - \
-	scroll-line
+view.context=undo redo - cut copy paste paste-previous - scroll-line - \
+	view-registers - record-temp-macro stop-recording play-temp-macro \
+	play-last-macro
 
 ###
 ### MENUBAR

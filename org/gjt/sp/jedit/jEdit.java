@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.01.99.00";
+		return "02.01.05.00";
 	}
 
 	/**
@@ -377,6 +377,8 @@ public class jEdit
 		if(!(file.exists() || file.isDirectory()))
 			return;
 		String[] plugins = file.list();
+		MiscUtilities.quicksort(plugins,new MiscUtilities.StringICaseCompare());
+
 		if(plugins == null)
 			return;
 		for(int i = 0; i < plugins.length; i++)
@@ -1587,6 +1589,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.139  1999/10/19 09:10:13  sp
+ * pre5 bug fixing
+ *
  * Revision 1.138  1999/10/17 04:16:28  sp
  * Bug fixing
  *

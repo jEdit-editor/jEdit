@@ -1,6 +1,6 @@
 JEDIT VERSION HISTORY
 
-* Version 2.1final
+* Version 2.1pre5
 
 + New Features
 
@@ -10,8 +10,10 @@ JEDIT VERSION HISTORY
 
 - Documentation updates
 - New plugin makefile template (Mike Dillon)
-- Paste Predefined command removed. Use macros instead
+- Paste Predefined command removed. Use macros or Clipper plugin instead
 - Macros menu is sorted now
+- Plugin updates;
+  BufferTabs 0.2
 
 + Bug Fixes
 
@@ -21,7 +23,7 @@ JEDIT VERSION HISTORY
   problems
 - 'Close All Buffers' didn't fire BUFFER_CLOSED events
 - The register commands weren't recorded properly
-- Repeating commands in macros did't play back correctly
+- Repeating commands in macros didn't play back correctly
 
 * Version 2.1pre4
 

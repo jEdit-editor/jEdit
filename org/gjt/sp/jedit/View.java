@@ -598,7 +598,7 @@ public class View extends JFrame
 				name = name.substring(0,name.length() - 6);
 				JMenuItem menuItem = new JMenuItem(name);
 				menuItem.addActionListener(action);
-				menuItem.setActionCommand(name);
+				menuItem.setActionCommand(file.getPath());
 				menu.add(menuItem);
 			}
 			else if(file.isDirectory())
@@ -787,6 +787,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.95  1999/10/19 09:10:13  sp
+ * pre5 bug fixing
+ *
  * Revision 1.94  1999/10/17 04:16:28  sp
  * Bug fixing
  *
