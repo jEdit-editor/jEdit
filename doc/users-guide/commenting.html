@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Commenting Out Code</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Source Code Editing"
+HREF="source-edit.html"><LINK
+REL="PREVIOUS"
+TITLE="Tabbing and Indentation"
+HREF="indent.html"><LINK
+REL="NEXT"
+TITLE="Search and Replace"
+HREF="search-replace.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="search-replace.html"
+>Next</A
+>, <A
+HREF="indent.html"
+>Prev</A
+></P
+><H2
+>Chapter 6. Source Code Editing</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="COMMENTING"
+>Commenting Out Code</A
+></H1
+><P
+>   Most programming languages support "comments", or regions of
+   code which are ignored by the compiler/interpreter. jEdit has several
+   commands which make commenting out code slightly easier.
+  </P
+><P
+>   
+   
+   
+   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Wing Comment</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>C</B
+>) will enclose the
+   selection with comment start and end strings. An example of C++
+   wing commented code looks like so:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>/* Process *proc = Process::getThisProcess();
+proc-&gt;getMainThread()-&gt;postMessage(msg);
+proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</PRE
+></TD
+></TR
+></TABLE
+><P
+>   The strings used for wing commenting can be changed using buffer-local
+   properties. For example, placing the following in one of the first 10 lines
+   of a buffer will change the wing comment strings to "(*" and
+   "*)":
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:commentStart=(*:commentEnd=*):</PRE
+></TD
+></TR
+></TABLE
+><P
+>   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Box Comment</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>B</B
+>) will enclose the
+   selection with comment start and end strings, and places the box
+   comment string at the start of each line. An example of C++
+   box commented code looks like so:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>/* Process *proc = Process::getThisProcess();
+* proc-&gt;getMainThread()-&gt;postMessage(msg);
+* proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</PRE
+></TD
+></TR
+></TABLE
+><P
+>   The strings used for box commenting can be changed using buffer-local
+   properties. For example, placing the following in one of the first 10 lines
+   of a buffer will change the box comment strings to "(*" and
+   "*"), with "(-" placed at the start of each line:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:commentStart=(*:commentEnd=*):boxComment=(-:</PRE
+></TD
+></TR
+></TABLE
+><P
+>   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Block Comment</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>K</B
+>) will place the
+   block comment character at the start of each line in the selection.
+   An example of C++ block commented code looks like so:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>// Process *proc = Process::getThisProcess();
+// proc-&gt;getMainThread()-&gt;postMessage(msg);
+// proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP);</PRE
+></TD
+></TR
+></TABLE
+><P
+>   The string used for block commenting can be changed using buffer-local
+   properties. For example, placing the following in one of the first 10 lines
+   of a buffer will change the box comment string to "--":
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:blockComment=--:</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="source-edit.html"
+>Up</A
+><BR><A
+HREF="indent.html"
+>Prev</A
+>: Tabbing and Indentation<BR><A
+HREF="search-replace.html"
+>Next</A
+>: Search and Replace<BR></DIV
+></BODY
+></HTML
+>

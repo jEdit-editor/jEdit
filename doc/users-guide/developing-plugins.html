@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Developing Plugins</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Using Plugins"
+HREF="using-plugins.html"><LINK
+REL="NEXT"
+TITLE="The EditPlugin Class"
+HREF="plugin-class.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="plugin-class.html"
+>Next</A
+>, <A
+HREF="using-plugins.html"
+>Prev</A
+></P
+><HR></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="DEVELOPING-PLUGINS"
+>Chapter 10. Developing Plugins</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="developing-plugins.html#PLUGIN-JAR"
+>General Structure of a Plugin</A
+></DT
+><DT
+><A
+HREF="plugin-class.html"
+>The EditPlugin Class</A
+></DT
+><DT
+><A
+HREF="plugin-props.html"
+>Plugin Properties</A
+></DT
+><DT
+><A
+HREF="plugin-info.html"
+>Plugin Documentation</A
+></DT
+><DT
+><A
+HREF="plugin-dependencies.html"
+>Plugin Dependencies</A
+></DT
+><DT
+><A
+HREF="plugin-actions.html"
+>Plugin Actions</A
+></DT
+><DT
+><A
+HREF="plugin-menus.html"
+>The Plugins Menu</A
+></DT
+><DT
+><A
+HREF="plugin-options.html"
+>The Global Options Dialog Box</A
+></DT
+><DT
+><A
+HREF="plugin-dialogs.html"
+>Canned Dialog Boxes</A
+></DT
+><DT
+><A
+HREF="plugin-logging.html"
+>The Activity Log</A
+></DT
+><DT
+><A
+HREF="plugin-editbus.html"
+>The EditBus</A
+></DT
+></DL
+></DIV
+><P
+>  This chapter overviews jEdit plugin development. A knowledge
+  of Java, Swing, and JDK tools (<SPAN
+CLASS="APPLICATION"
+>javac</SPAN
+>,
+  <SPAN
+CLASS="APPLICATION"
+>jar</SPAN
+>, and so on) is assumed. This chapter only
+  convers the most frequently used jEdit APIs and services; you will
+  still need to study the source of a few other plugins, and possibly
+  jEdit itself, to write a good plugin.
+ </P
+><P
+>  This section is under construction; more is still to come.
+ </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PLUGIN-JAR"
+>General Structure of a Plugin</A
+></H1
+><P
+>   A plugin is a JAR (Java Archive) file that adds to or modifies jEdit's
+   functionality. The JAR file can contain class files, property files
+   (more on that later), or any other file type, such as images, and so on.
+  </P
+><P
+>   jEdit handles the loading of property and class files from JARs
+   automatically, but other file types such as images can be fetched
+   using the standard <TT
+CLASS="FUNCTION"
+>getResource()</TT
+> method of the
+   <TT
+CLASS="CLASSNAME"
+>Class</TT
+>
+   class.
+  </P
+><P
+>   Plugins can use classes loaded from other plugins; for example,
+   the "EditBus" plugin provides enhanced communication
+   services, which other plugins can use.
+  </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+><BR><A
+HREF="using-plugins.html"
+>Prev</A
+>: Using Plugins<BR><A
+HREF="plugin-class.html"
+>Next</A
+>: The EditPlugin Class<BR></DIV
+></BODY
+></HTML
+>

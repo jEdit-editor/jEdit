@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Rectangular Selection</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Features"
+HREF="advanced-features.html"><LINK
+REL="PREVIOUS"
+TITLE="Command Repetition"
+HREF="repeats.html"><LINK
+REL="NEXT"
+TITLE="Registers"
+HREF="registers.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="registers.html"
+>Next</A
+>, <A
+HREF="repeats.html"
+>Prev</A
+></P
+><H2
+>Chapter 4. Advanced Features</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="RECT-SELECT"
+>Rectangular Selection</A
+></H1
+><P
+>   
+   As mentioned in <A
+HREF="selection.html"
+>the section called <I
+>Selecting Text</I
+> in Chapter 3</A
+>, selections can span rectangular
+   regions. Deleting, replacing, copying, pasting, and so on works
+   as expected on rectangles. All jEdit builtin commands are rectangle-aware;
+   however, some plugins might not be. Note that because rectangular
+   selections are implemented using character offsets, rather than
+   absolute screen positions, they might not behave as one might expect
+   when proportional-width fonts or tabs are used. For best results
+   use monospaced fonts and soft tabs when editing columnar files.
+  </P
+><P
+>   A rectangular selection can be created by dragging the mouse while
+   holding down <B
+CLASS="KEYCAP"
+>Control</B
+>. Holding down
+   <B
+CLASS="KEYCAP"
+>Shift</B
+> and <B
+CLASS="KEYCAP"
+>Control</B
+> while clicking a location in
+   the buffer will extend a rectangular selection.
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Rectangular
+   Selection</SPAN
+> (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>\</B
+>)
+   will toggle the current selection between continuous and rectangular mode.
+  </P
+><P
+>   It is possible to select a rectangle with zero width but non-zero height.
+   This can be used to insert a new column between two existing
+   columns. Such "zero-width" selections are shown as a thin
+   vertical line.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 4-5. A rectangular selection</B
+></P
+><P
+><IMG
+SRC="../images/window-editor-rect-sel.gif"></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="advanced-features.html"
+>Up</A
+><BR><A
+HREF="repeats.html"
+>Prev</A
+>: Command Repetition<BR><A
+HREF="registers.html"
+>Next</A
+>: Registers<BR></DIV
+></BODY
+></HTML
+>

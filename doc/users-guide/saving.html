@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Saving Files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Basic Features"
+HREF="basic-features.html"><LINK
+REL="PREVIOUS"
+TITLE="The Clipboard"
+HREF="clipboard.html"><LINK
+REL="NEXT"
+TITLE="Printing and Sending Files"
+HREF="printing-sending.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="printing-sending.html"
+>Next</A
+>, <A
+HREF="clipboard.html"
+>Prev</A
+></P
+><H2
+>Chapter 3. Basic Features</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="SAVING"
+>Saving Files</A
+></H1
+><P
+>   
+   
+   
+   
+   
+   
+   Any changes made to a buffer aren't actually stored to disk immediately;
+   instead, they are stored in the computer's high
+   speed memory (RAM) until they are <I
+CLASS="FIRSTTERM"
+>saved</I
+>.
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save</SPAN
+> (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>S</B
+>)
+   will immediately save the current buffer to disk, unless the buffer
+   is untitled, in which case it will prompt for a file name first.
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+> also saves the buffer to disk,
+   but prompts for a file name every time.
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save All Buffers</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>F4</B
+>) will save all open buffers
+   immediately;
+   a confirmation dialog box will be issued first.
+  </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN438"
+>Autosave and Backups</A
+></H2
+><P
+>    
+    jEdit's autosave feature protects
+    against computer crashes and such.
+    Every 15 seconds, all buffers with changes are
+    written out to their respective file names, enclosed in hash
+    ("#") characters. (For example, <TT
+CLASS="FILENAME"
+>program.c</TT
+> will
+    be autosaved to <TT
+CLASS="FILENAME"
+>#program.c#</TT
+>). When you save a buffer, its
+    autosave file is deleted. But if jEdit crashes before you can save a
+    file, the autosave will remain, with your unsaved changes in it.
+    Next time that file is opened, jEdit will ask if you want to
+    recover the autosaved data.
+   </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 3-6. Dialog box shown if a file has autosaved changes</B
+></P
+><P
+><IMG
+SRC="../images/dialog-autosave.gif"></P
+></DIV
+><P
+>    
+    Another useful safety feature is file backups. When you save a buffer
+    for the first time after opening it, its original contents are
+    saved to the buffer's file name suffixed with a tilde ("~").
+    For example, <TT
+CLASS="FILENAME"
+>paper.tex</TT
+> is backed up to <TT
+CLASS="FILENAME"
+>paper.tex~</TT
+>.
+    The point of backups so that if you make extensive changes to a file, and then
+    change your mind, you can go back to the previous version.
+   </P
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>     The autosave interval and various backup-related
+     settings can be changed in the
+     <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+     see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN460"
+>Line Separator Characters</A
+></H2
+><P
+>    
+    
+    
+    
+    The three major operating systems use different conventions to mark
+    line endings in text files.
+    The MacOS uses Carriage-Return (\r, ^M) for that purpose. Unix
+    uses Newline (\n, ^J). DOS and Windows use Carriage-Return-Newline
+    (\r\n, ^M^J). jEdit can read and write all three formats.
+    The line separator used in a buffer can be changed
+    in the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Buffer Options</SPAN
+> dialog box;
+    see <A
+HREF="customizing.html#BUFFER-OPTS"
+>the section called <I
+>The Buffer Options Dialog Box</I
+> in Chapter 8</A
+>.
+    The default for new files can be changed in the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+    see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN477"
+>When Another Application Modifies the File</A
+></H2
+><P
+>    jEdit will issue a warning message if it notices that another application
+    has changed an open buffer on disk.
+    You will be given the choice to
+    continue editing (and lose changes made by the other application)
+    or to reload the buffer.
+   </P
+><P
+>    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Reload</SPAN
+> (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>F2</B
+>) can be used to reload a buffer from disk at any other
+    time. If the buffer has unsaved changes,
+    you will be asked for confirmation first.
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Reload All Buffers</SPAN
+> (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>Shift</B
+>-<B
+CLASS="KEYCAP"
+>F2</B
+>) will discard
+    changes in <I
+CLASS="EMPHASIS"
+>all open buffers</I
+>
+    and reload them from disk. This command will ask for confirmation first.
+    It is useful after performing a CVS checkin or similar; CVS inserts
+    version info in all files it commits, hence they must be re-read from
+    disk.
+   </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 3-7. Warning message displayed when another application
+   changed the file on disk</B
+></P
+><P
+><IMG
+SRC="../images/dialog-diskmod.gif"></P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="basic-features.html"
+>Up</A
+><BR><A
+HREF="clipboard.html"
+>Prev</A
+>: The Clipboard<BR><A
+HREF="printing-sending.html"
+>Next</A
+>: Printing and Sending Files<BR></DIV
+></BODY
+></HTML
+>

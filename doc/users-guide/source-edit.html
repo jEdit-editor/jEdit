@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Source Code Editing</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Writing Edit Modes"
+HREF="writing-modes.html"><LINK
+REL="NEXT"
+TITLE="Tabbing and Indentation"
+HREF="indent.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="indent.html"
+>Next</A
+>, <A
+HREF="writing-modes.html"
+>Prev</A
+></P
+><HR></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="SOURCE-EDIT"
+>Chapter 6. Source Code Editing</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="source-edit.html#BRACKET-MATCHING"
+>Bracket Matching</A
+></DT
+><DT
+><A
+HREF="indent.html"
+>Tabbing and Indentation</A
+></DT
+><DT
+><A
+HREF="commenting.html"
+>Commenting Out Code</A
+></DT
+></DL
+></DIV
+><P
+>  Most often, a text editor is used to edit files with some sort
+  of structure, like program source code, or HTML, TeX, and so on.
+  jEdit has several features for making this easier, including
+  bracket matching, various indentation commands, auto indent, and
+  commands for commenting source.
+ </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="BRACKET-MATCHING"
+>Bracket Matching</A
+></H1
+><P
+>   Misplaced and unmatched brackets are one of the most common syntax
+   errors encountered when writing code. jEdit has several features
+   to make brackets easier to deal with.
+  </P
+><P
+>   If the caret is in front of a bracket, the matching
+   one is highlighted (assuming it is visible on the
+   screen). The bracket highlight color can be changed in the
+   Colors &amp; Styles pane of the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global
+   Options</SPAN
+> dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>,
+   and it can be disabled entirely in the
+   Editor pane of the same dialog box.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Brackets</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Select Code Block</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>[</B
+>)
+   will select the code block containing the caret. Double-clicking on a
+   bracket in the text area also has the same effect. A code block is
+   a bracket-delimited range of text.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Brackets</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Locate Bracket</SPAN
+> (keyboard
+   equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>]</B
+>)
+   will move the caret to the bracket matching the one before the caret.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Brackets</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to Previous Bracket</SPAN
+> (keyboard
+   equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Alt</B
+>-<B
+CLASS="KEYCAP"
+>[</B
+>)
+   will move the caret to the previous opening bracket.
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Brackets</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to Next Bracket</SPAN
+> (keyboard
+   equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Alt</B
+>-<B
+CLASS="KEYCAP"
+>]</B
+>)
+   will move the caret to the next closing bracket.
+  </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 6-1. Bracket highlighting in action</B
+></P
+><P
+><IMG
+SRC="../images/window-editor-bracket.gif"></P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+><BR><A
+HREF="writing-modes.html"
+>Prev</A
+>: Writing Edit Modes<BR><A
+HREF="indent.html"
+>Next</A
+>: Tabbing and Indentation<BR></DIV
+></BODY
+></HTML
+>

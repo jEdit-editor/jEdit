@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Edit Modes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Macros"
+HREF="macros.html"><LINK
+REL="NEXT"
+TITLE="Syntax Highlighting"
+HREF="syntax-hilite.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="syntax-hilite.html"
+>Next</A
+>, <A
+HREF="macros.html"
+>Prev</A
+></P
+><HR></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="MODES"
+>Chapter 5. Edit Modes</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="modes.html#MODE-SELECTION"
+>Mode Selection</A
+></DT
+><DT
+><A
+HREF="syntax-hilite.html"
+>Syntax Highlighting</A
+></DT
+><DT
+><A
+HREF="installing-modes.html"
+>Installing New Edit Modes</A
+></DT
+><DT
+><A
+HREF="writing-modes.html"
+>Writing Edit Modes</A
+></DT
+></DL
+></DIV
+><P
+>  Because it is impossible to provide optimal editing for all types of
+  files at once, jEdit provides various <I
+CLASS="FIRSTTERM"
+>edit modes</I
+>. An edit mode
+  is an editor configuration suitable for editing a specific
+  type of file. Edit modes can specify syntax highlighting, auto indent,
+  and various other settings for editing a file type.
+ </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MODE-SELECTION"
+>Mode Selection</A
+></H1
+><P
+>   
+   When a file is opened, jEdit first checks the file name against a list
+   of known patterns. For example, files whose names end with ".c"
+   are edited in C mode, and files named <TT
+CLASS="FILENAME"
+>Makefile</TT
+> are edited in
+   Makefile mode. If a suitable match based on file name cannot be found,
+   jEdit checks the first line of the file. For example, files whose first
+   line is "#!/bin/sh" are edited in shell script mode.
+  </P
+><P
+>   If automatic mode selection is not appropriate, the edit mode can
+   be specified manually. To set the current buffer's edit mode
+   on a one-time basis, select the edit mode in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Buffer Options</SPAN
+> dialog box;
+   see <A
+HREF="customizing.html#BUFFER-OPTS"
+>the section called <I
+>The Buffer Options Dialog Box</I
+> in Chapter 8</A
+>.
+   To have a buffer open with a specific edit mode every time,
+   set the "mode" buffer-local property to the
+   name of the desired edit mode by placing
+   the following text in one of the first 10 lines of the buffer,
+   where <TT
+CLASS="REPLACEABLE"
+><I
+>edit mode</I
+></TT
+> is the desired edit mode:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:mode=<TT
+CLASS="REPLACEABLE"
+><I
+>edit mode</I
+></TT
+>:</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+><BR><A
+HREF="macros.html"
+>Prev</A
+>: Macros<BR><A
+HREF="syntax-hilite.html"
+>Next</A
+>: Syntax Highlighting<BR></DIV
+></BODY
+></HTML
+>

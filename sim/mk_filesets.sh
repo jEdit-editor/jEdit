@@ -7,6 +7,7 @@ echo jedit.jar > sim/jedit-program
 echo jars/PluginManager.jar >> sim/jedit-program
 echo jars/LatestVersion.jar >> sim/jedit-program
 find modes -name \*.xml >> sim/jedit-program
+find modes -name \*.dtd >> sim/jedit-program
 find doc -type f -name \*.txt >> sim/jedit-program
 
 echo -n "jedit-program: "
@@ -21,7 +22,7 @@ ls -l `cat sim/jedit-macros` | awk 'BEGIN { size=0 } { size+=$5 } END { print si
 
 # jedit-html fileset
 
-find doc/jeditdocs -type f -name \*.html -print > sim/jedit-html
+find doc/users-guide -type f -name \*.html -print > sim/jedit-html
 find doc/images -type f -name \*.gif -print >> sim/jedit-html
 
 echo -n "jedit-html: "

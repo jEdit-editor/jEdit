@@ -1,0 +1,583 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The EditBus</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Developing Plugins"
+HREF="developing-plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="The Activity Log"
+HREF="plugin-logging.html"><LINK
+REL="NEXT"
+TITLE="Command Line Usage"
+HREF="cli-usage.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="cli-usage.html"
+>Next</A
+>, <A
+HREF="plugin-logging.html"
+>Prev</A
+></P
+><H2
+>Chapter 10. Developing Plugins</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PLUGIN-EDITBUS"
+>The EditBus</A
+></H1
+><P
+>   The EditBus is a message passing system. Any number of components
+   can be connected to the bus. Each component can send messages, as
+   well as receive them.
+  </P
+><P
+>   jEdit itself sends various messages to the bus - buffers being opened
+   and closed, and so on. Plugins can also define their own message types
+   to communicate with each other. The jEdit core only includes a small
+   set of messages that are meant to be sent by jEdit itself only;
+   the EditBus plugin includes a wider range of messages that can be
+   used for inter-plugin communication. Get the EditBus plugin from
+   <A
+HREF="http://jedit.standmed.com"
+TARGET="_top"
+>http://jedit.standmed.com</A
+>.
+  </P
+><P
+>   Each message type is a subclass of <TT
+CLASS="CLASSNAME"
+>EBMessage</TT
+>.
+   All messages included with jEdit live in the
+   <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.msg</TT
+> package.
+   Because messages are full-fledged objects, they can carry any type of
+   information.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EBComponent interface</H4
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public interface EBComponent
+{
+        public void handleMessage(EBMessage msg);
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>   Each component on the bus must implement this interface. When a message
+   is sent to the bus, the <TT
+CLASS="FUNCTION"
+>handleMessage()</TT
+> method of each
+   component is called in turn. Typically, this method will check if the
+   message is of a known type using <TT
+CLASS="FUNCTION"
+>instanceof</TT
+>, and take
+   appropriate action.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditBus.addToBus() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EditBus;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void addToBus</CODE
+>(EBComponent comp);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method adds the specified component to the bus. It will now
+   receive all messages sent to the bus. Note that to avoid memory
+   leaks, you must remember to remove components from the bus when
+   they are no longer needed.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditBus.removeFromBus() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EditBus;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void removeFromBus</CODE
+>(EBComponent comp);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method removes the specified component from the bus, hence it
+   will no longer receive any messages.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EBPlugin class</H4
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public abstract class EBPlugin extends EditPlugin
+implements EBComponent
+{
+        public void handleMessage(EBMessage msg);
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>   The <TT
+CLASS="CLASSNAME"
+>EBPlugin</TT
+> class is identical to <TT
+CLASS="CLASSNAME"
+>EditPlugin</TT
+>,
+   except that the plugin is automatically added to the bus. If your
+   plugin needs to receive messages, you can subclass <TT
+CLASS="CLASSNAME"
+>EBPlugin</TT
+>.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EBMessage interface</H4
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public abstract class EBMessage
+{
+        public EBMessage(EBComponent source);
+        public EBComponent getSource();
+        public void veto();
+        public boolean isVetoed();
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>   The <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.EBMessage</TT
+> class is the common
+   superclass of all
+   EditBus messages.
+   Most methods in this class should be self-explanatory, except
+   for the vetoing methods. Here is how it works; once you
+   <TT
+CLASS="FUNCTION"
+>veto()</TT
+> a message, it will not propogate further
+   along the bus. The <TT
+CLASS="FUNCTION"
+>isVetoed()</TT
+> method returns if the
+   method has already been vetoed.
+  </P
+><P
+>   The vetoing system is useful for messages that request some action
+   to be taken; if some component on the bus can perform the action,
+   it calls <TT
+CLASS="FUNCTION"
+>veto()</TT
+>. The sender will then
+   check the return value of <TT
+CLASS="FUNCTION"
+>isVetoed()</TT
+> and display an
+   error message
+   if it is false (meaning no-one
+   called <TT
+CLASS="FUNCTION"
+>veto()</TT
+>).
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditBus.send() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void send</CODE
+>(EBMessage msg);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method sends the specified message to the
+   bus (ie, it calls the <TT
+CLASS="FUNCTION"
+>handleMessage()</TT
+> method of each
+   component). Plugins should never send jEdit core messages (BufferUpdate,
+   ViewUpdate, etc) directly; only send messages intended to be sent
+   from plugins, for example the messages included in the EditBus plugin.
+  </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3558"
+>BufferUpdate Message</A
+></H2
+><P
+>    This message is sent by jEdit when a buffer-related update occurs.
+    The <TT
+CLASS="FUNCTION"
+>getBuffer()</TT
+> method of the
+    <TT
+CLASS="CLASSNAME"
+>BufferUpdate</TT
+>
+    class returns the buffer involved. The <TT
+CLASS="FUNCTION"
+>getWhat()</TT
+> method
+    returns one of the following:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+><B
+CLASS="COMMAND"
+>BufferUpdate.CREATED</B
+> - a
+   new buffer has been created</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>BufferUpdate.LOADING</B
+> - a
+   buffer is being loaded from disk</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>BufferUpdate.DIRTY_CHANGED</B
+> - the
+   "dirty" flag has changed; either the buffer has been saved, or
+   some changes have been made</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>BufferUpdate.MARKERS_CHANGED</B
+> - a marker has
+   been added or removed</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>BufferUpdate.MODE_CHANGED</B
+> - the buffer's
+   edit mode has changed</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>BufferUpdate.SAVING</B
+> - a buffer is about to
+   be saved</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>BufferUpdate.CLOSED</B
+> - a buffer has been
+   closed</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3587"
+>EditorExiting Message</A
+></H2
+><P
+>    This message is sent by jEdit just before it exits.
+    Hence, it is similar to the
+    <TT
+CLASS="FUNCTION"
+>stop()</TT
+> method of a plugin, but it is not limited
+    to plugins.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3591"
+>EditorStarted Message</A
+></H2
+><P
+>    This message is sent by jEdit after it has finished starting, but
+    before the initial view is created. Hence, it is similar to the
+    <TT
+CLASS="FUNCTION"
+>start()</TT
+> method of a plugin, but it is not limited
+    to plugins.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3595"
+>MacrosChanged Message</A
+></H2
+><P
+>    This message is sent by jEdit when the list of available macros changes.
+    Its main use is to keep the <SPAN
+CLASS="GUIMENU"
+>Macros</SPAN
+> menu up to date;
+    plugins will
+    almost never need to handle this message.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3601"
+>PropertiesChanged Message</A
+></H2
+><P
+>    This message is sent by jEdit after the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+    dialog box is closed; your plugin should reload any
+    editable settings when it receives this message.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3610"
+>SearchSettingsChanged Message</A
+></H2
+><P
+>    This message is sent by jEdit when search and replace flags (ignore case,
+    regular expression, multiple file search) are changed. Its main
+    use is to keep view's search bars up to date; plugins will
+    almost never need to handle this message.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN3613"
+>ViewUpdate Message</A
+></H2
+><P
+>    This message is sent by jEdit when a view-related update occurs.
+    The <TT
+CLASS="FUNCTION"
+>getView()</TT
+> method of the
+    <TT
+CLASS="CLASSNAME"
+>BufferView</TT
+>
+    class returns the view involved. The <TT
+CLASS="FUNCTION"
+>getWhat()</TT
+> method
+    returns one of the following:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+><B
+CLASS="COMMAND"
+>ViewUpdate.CREATED</B
+> - a
+   new view has been created</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>ViewUpdate.TEXTAREA_CREATED</B
+> - a
+   new text area has been created - this message is sent when the view
+   is split. The <TT
+CLASS="FUNCTION"
+>getTextArea()</TT
+> method returns the new text
+   area</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>ViewUpdate.TEXTAREA_DESTROYED</B
+> - a
+   text area has been disposed of - this message is sent when the view
+   is unsplit. The <TT
+CLASS="FUNCTION"
+>getTextArea()</TT
+> method returns the disposed
+   text
+   area</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>ViewUpdate.BUFFER_CHANGED</B
+> - a view
+   is now editing a different buffer</P
+></LI
+><LI
+><P
+><B
+CLASS="COMMAND"
+>ViewUpdate.CLOSED</B
+> - a view has been
+   closed</P
+></LI
+></UL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="developing-plugins.html"
+>Up</A
+><BR><A
+HREF="plugin-logging.html"
+>Prev</A
+>: The Activity Log<BR><A
+HREF="cli-usage.html"
+>Next</A
+>: Command Line Usage<BR></DIV
+></BODY
+></HTML
+>

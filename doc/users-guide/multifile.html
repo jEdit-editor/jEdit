@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Searching in Multiple Files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Search and Replace"
+HREF="search-replace.html"><LINK
+REL="PREVIOUS"
+TITLE="History Text Fields"
+HREF="history.html"><LINK
+REL="NEXT"
+TITLE="Customizing jEdit"
+HREF="customizing.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="customizing.html"
+>Next</A
+>, <A
+HREF="history.html"
+>Prev</A
+></P
+><H2
+>Chapter 7. Search and Replace</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MULTIFILE"
+>Searching in Multiple Files</A
+></H1
+><P
+>   
+   
+   
+   jEdit has the ability to search and replace in multiple files.
+   Clicking the <SPAN
+CLASS="GUIBUTTON"
+>Multi File</SPAN
+> in search and replace, HyperSearch
+   or the search bar will display the multifile settings dialog box.
+  </P
+><P
+>   The first two file sets ("current buffer only" and
+   "all open buffers") should be self-explanatory. With "search in
+   selected buffers", you must <B
+CLASS="KEYCAP"
+>Control</B
+>-click to select
+   multiple buffers from the list.
+   "Search in a directory" requires you to specify a starting
+   path, a glob pattern that file names will be matched against
+   (see <A
+HREF="globs.html"
+>Appendix C</A
+>), and if the search should recurse into
+   subdirectories or not. Keep in mind that the resulting
+   search could require a very large number of files to be
+   opened, which might take a while, and/or use a large amount of
+   RAM.
+  </P
+><P
+>   Once you have selected the appropriate buffer set and clicked
+   <SPAN
+CLASS="GUIBUTTON"
+>OK</SPAN
+>, any subsequent search and replace operations
+   will be performed on the specified file set.
+  </P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>    
+    
+    The <SPAN
+CLASS="GUIMENUITEM"
+>Undo</SPAN
+> command only undoes editing
+    done in the current buffer. If a multi-file replace has been
+    performed, <SPAN
+CLASS="GUIMENUITEM"
+>Undo</SPAN
+> will have to be invoked in multiple
+    buffers to fully reverse any changes.
+   </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 7-4. The Multi File Search Settings dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-multifile.gif"></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="search-replace.html"
+>Up</A
+><BR><A
+HREF="history.html"
+>Prev</A
+>: History Text Fields<BR><A
+HREF="customizing.html"
+>Next</A
+>: Customizing jEdit<BR></DIV
+></BODY
+></HTML
+>

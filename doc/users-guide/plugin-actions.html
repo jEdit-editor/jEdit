@@ -1,0 +1,393 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Plugin Actions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Developing Plugins"
+HREF="developing-plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="Plugin Dependencies"
+HREF="plugin-dependencies.html"><LINK
+REL="NEXT"
+TITLE="The Plugins Menu"
+HREF="plugin-menus.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="plugin-menus.html"
+>Next</A
+>, <A
+HREF="plugin-dependencies.html"
+>Prev</A
+></P
+><H2
+>Chapter 10. Developing Plugins</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PLUGIN-ACTIONS"
+>Plugin Actions</A
+></H1
+><P
+>   An <I
+CLASS="FIRSTTERM"
+>action</I
+> is basically an AWT action listener with a
+   "name"
+   attached. The name is used to obtain several properties, such as the
+   action's menu item label and such. Actions are called by jEdit
+   in response
+   to user feedback such as menu item selections, keystrokes, etc.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditAction class</H4
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public abstract class EditAction implements ActionListener
+{
+        public EditAction(String name);
+        public String getName();
+        public boolean isToggle();
+        public boolean isSelected(Component comp);
+        public abstract void actionPerformed(ActionEvent evt);
+        public static Buffer getBuffer(ActionEvent evt);
+        public static View getView(Component comp);
+        public static View getView(ActionEvent evt);
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>   The <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.EditAction</TT
+> class is the base class for
+   all actions.
+   It allows actions to be named and provides methods for obtaining the
+   view and buffer that invoked the action. It implements the
+   <TT
+CLASS="CLASSNAME"
+>java.awt.event.ActionListener</TT
+> interface, and hence can be
+   used anywhere an ordinary action listener would, for example to
+   handle menu item and button clicks.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditAction.EditAction() constructor</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public EditAction</CODE
+>(String name);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   The constructor for the <TT
+CLASS="CLASSNAME"
+>EditAction</TT
+> class takes the action
+   name as a parameter. Concrete implementations of this class should
+   provide a constructor with no parameters.
+  </P
+><P
+>   jEdit's built-in actions have all-lower case names, with multiple words
+   separated by dashes ("-"). You should follow this convention
+   in your own plugins, too.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditAction.isToggle() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public void isToggle</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method returns true if the action should be represented as a check
+   box menu item, false if it should be a normal menu item. By default, it
+   returns <B
+CLASS="COMMAND"
+>false</B
+>; override it to return <B
+CLASS="COMMAND"
+>true</B
+> if you
+   want the action to be a toggle.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditAction.isSelected() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import java.awt.Component;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public void isToggle</CODE
+>(Component comp);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method is only called if <TT
+CLASS="FUNCTION"
+>isToggle()</TT
+> returns
+   <B
+CLASS="COMMAND"
+>true</B
+>. It should return if the menu item's check box should be
+   selected. <TT
+CLASS="PARAMETER"
+><I
+>comp</I
+></TT
+> is the component performing the query;
+   for example,
+   if the menu item state is determined on a per-view basis, you can pass
+   the component to the <TT
+CLASS="FUNCTION"
+>getView()</TT
+> method to obtain the
+   current view instance.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditAction.actionPerformed() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import java.awt.event.ActionEvent;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public abstract void actionPerformed</CODE
+>(ActionEvent evt);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This abstract method must be implemented to do the work of the action.
+   To obtain the view or buffer instance that invoked this action,
+   pass the <TT
+CLASS="PARAMETER"
+><I
+>evt</I
+></TT
+> event instance to the
+   <TT
+CLASS="FUNCTION"
+>getView()</TT
+> or <TT
+CLASS="FUNCTION"
+>getBuffer()</TT
+> methods,
+   respectively.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>jEdit.addAction() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.EditAction;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void addAction</CODE
+>(EditAction action);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method adds the action to jEdit's action list, making it available
+   to the <TT
+CLASS="FUNCTION"
+>GUIUtilities.loadMenuItem()</TT
+> method, and so on.
+   Plugin should add their actions to jEdit in their
+   <TT
+CLASS="FUNCTION"
+>start()</TT
+> methods.
+  </P
+><P
+>   Here is the source file (which should be named
+   <TT
+CLASS="FILENAME"
+>hello_world.java</TT
+>) to a very simple action:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.*;
+
+public class hello_world extends EditAction
+{
+        public hello_world()
+        {
+                super("hello-world");
+        }
+
+        public void actionPerformed(ActionEvent evt)
+        {
+                System.err.println(jEdit.getProperty("hello.world"));
+                View view = getView(evt);
+                String[] args = { view.getBuffer().getName() };
+                System.err.println(jEdit.getProperty("hello.buffer"));
+
+                // now we get the value of a property...
+                String prop = jEdit.getProperty("hello.used");
+                if(prop == null)
+                {
+                        // user has never run this action before!
+                        System.err.println(jEdit.getProperty("hello.first-time"));
+
+                        // set property for next time
+                        jEdit.setProperty("hello.used","yes");
+                }
+                else
+                {
+                        System.err.println(jEdit.getProperty("hello.already-run"));
+                }
+        }
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>   And here are the corresponding properties needed for this action to
+   work:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>hello-world.label=Hello World!
+
+# String printed by System.err.println()
+hello.world=Hello, World!
+
+# The view's buffer's name is substituted for {0}
+hello.buffer=The view's buffer is {0}
+
+# Shown when action run for the first time
+hello.first-time=This is the first time you invoked 'Hello World'
+
+# Shown when it is run subsequent times
+hello.already-run=You have run 'Hello World' before</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="developing-plugins.html"
+>Up</A
+><BR><A
+HREF="plugin-dependencies.html"
+>Prev</A
+>: Plugin Dependencies<BR><A
+HREF="plugin-menus.html"
+>Next</A
+>: The Plugins Menu<BR></DIV
+></BODY
+></HTML
+>

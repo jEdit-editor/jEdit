@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Working With Lines</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Features"
+HREF="advanced-features.html"><LINK
+REL="PREVIOUS"
+TITLE="Advanced Features"
+HREF="advanced-features.html"><LINK
+REL="NEXT"
+TITLE="Working With Paragraphs"
+HREF="paragraphs.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="paragraphs.html"
+>Next</A
+>, <A
+HREF="advanced-features.html"
+>Prev</A
+></P
+><H2
+>Chapter 4. Advanced Features</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LINES"
+>Working With Lines</A
+></H1
+><P
+>   An entire line can be selected by triple-clicking with the mouse.
+   If you triple-click and drag, the resulting selection will start and
+   end on line boundaries.
+   Because mouse clicks
+   cannot be recorded in macros, you can use the
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Select
+   Line</SPAN
+> command
+   (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>L</B
+>) to select the current line
+   when recording a macro.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Go to Line</SPAN
+> (keyboard
+   equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>L</B
+>) moves the caret
+   to the beginning of a line you specify.
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Select Line Range</SPAN
+> (keyboard
+   equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>L</B
+>) prompts for a start line and
+   end line, and selects all text between these lines, inclusive.
+  </P
+><P
+>   
+   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Scroll
+   to Current Line</SPAN
+> (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>J</B
+>) centers
+   the current line on the screen.
+  </P
+><P
+>   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Join
+   Lines</SPAN
+> (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>J</B
+>)
+   removes any whitespace from the start of the next line and joins the
+   current and next lines. This will beep if the caret is on the last
+   line of the buffer. For example, invoking <SPAN
+CLASS="GUIMENUITEM"
+>Join Lines</SPAN
+>
+   on the first line of the following Java code:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>new Widget(Foo
+       .createDefaultFoo());</PRE
+></TD
+></TR
+></TABLE
+><P
+>   Will change it to:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>new Widget(Foo.createDefaultFoo());</PRE
+></TD
+></TR
+></TABLE
+><P
+>   
+   
+   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Delete Line</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>D</B
+>)
+   will
+   delete the  current line.
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Delete to
+   Start Of Line</SPAN
+>
+   (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Shift</B
+>-<B
+CLASS="KEYCAP"
+>Backspace</B
+>)
+   and
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Delete to
+   End Of Line</SPAN
+>
+   (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Shift</B
+>-<B
+CLASS="KEYCAP"
+>Delete</B
+>)
+   delete all text from the caret to the start and end of the line,
+   respectively.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="advanced-features.html"
+>Up</A
+><BR><A
+HREF="advanced-features.html"
+>Prev</A
+>: Advanced Features<BR><A
+HREF="paragraphs.html"
+>Next</A
+>: Working With Paragraphs<BR></DIV
+></BODY
+></HTML
+>

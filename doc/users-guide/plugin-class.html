@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The EditPlugin Class</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.4 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Developing Plugins"
+HREF="developing-plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="Developing Plugins"
+HREF="developing-plugins.html"><LINK
+REL="NEXT"
+TITLE="Plugin Properties"
+HREF="plugin-props.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.4 User's Guide</H1
+><P
+><A
+HREF="plugin-props.html"
+>Next</A
+>, <A
+HREF="developing-plugins.html"
+>Prev</A
+></P
+><H2
+>Chapter 10. Developing Plugins</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PLUGIN-CLASS"
+>The EditPlugin Class</A
+></H1
+><P
+>   At the heart of every plugin is an implementation of the
+   <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.EditPlugin</TT
+> class. It registers the plugin's
+   actions and edit modes with jEdit, takes care of setting up the
+   plugin's menus and menu items, and so on. When a plugin JAR is
+   loaded, jEdit scans for any class files whose names end with
+   <TT
+CLASS="FILENAME"
+>Plugin</TT
+> (for example, <TT
+CLASS="FILENAME"
+>FooPlugin</TT
+>). Those classes
+   are instantiated and added to jEdit's plugin list.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditPlugin class</H4
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public abstract class EditPlugin
+{
+        public void start();
+        public void stop();
+        public void createMenuItems(Vector menuItems, Vector menus);
+        public void createOptionPanes(OptionsDialog optionsDialog);
+}</PRE
+></TD
+></TR
+></TABLE
+><H4
+CLASS="BRIDGEHEAD"
+>EditPlugin.start() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void start</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method is responsible for adding actions and edit modes to jEdit,
+   and doing other initialization tasks. It is called at the end of
+   the jEdit startup sequence, after all plugins are loaded (so by the time this
+   method is called, classes from
+   other plugins are available, and so on). Most plugins will want to
+   override this method and so some initialization.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditPlugin.stop() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void stop</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method is called just before jEdit exits. Overriding it is rarely
+   necessary.
+  </P
+><P
+>   Here is the source file (which should be named <TT
+CLASS="FILENAME"
+>HelloWorldPlugin.java</TT
+>)
+   for a simple plugin:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>import org.gjt.sp.jedit.*;
+import java.util.Vector;
+
+public class HelloWorldPlugin extends EditPlugin
+{
+        public void start()
+        {
+                jEdit.addAction(new hello_world());
+        }
+
+        public void createMenuItems(View view, Vector menus, Vector menuItems)
+        {
+                menuItems.addElement(GUIUtilities.loadMenuItem(view,"hello-world"));
+        }
+}</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="developing-plugins.html"
+>Up</A
+><BR><A
+HREF="developing-plugins.html"
+>Prev</A
+>: Developing Plugins<BR><A
+HREF="plugin-props.html"
+>Next</A
+>: Plugin Properties<BR></DIV
+></BODY
+></HTML
+>
