@@ -89,6 +89,9 @@ JEDIT 3.2 VERSION HISTORY
   readNextChar(String msg, String code).
 
   'msg' will be shown in the status bar.
+- JEditTextArea.isSelectionRectangular() method was removed in 3.2pre1,
+  but I have added it again (marking it deprecated) so that JDiff can
+  continue working until it is updated for the new API.
 
 * Version 3.2pre1
 

@@ -1355,6 +1355,7 @@ plugin-manager.update=Update Plugins
 plugin-manager.install=Install Plugins
 
 plugin-manager.roster.remove=Remove {0}
+plugin-manager.roster.install=Install {0}
 
 plugin-manager.roster-confirm.title=Confirm Operations
 plugin-manager.roster-confirm.message=Are you sure you want to perform the \

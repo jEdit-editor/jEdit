@@ -27,7 +27,7 @@ recentFiles=50
 restore=true
 
 # Restore even if file names specified on command line?
-restore.cli=true
+restore.cli=false
 
 # Persistent markers
 persistentMarkers=true

@@ -980,6 +980,11 @@ public class View extends JFrame implements EBComponent
 			{
 				status.setMessage(null);
 			}
+
+			public void mouseClicked(MouseEvent evt)
+			{
+				status.setMessage(null);
+			}
 		};
 
 		Vector recentVector = BufferHistory.getBufferHistory();

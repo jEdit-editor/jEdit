@@ -16,9 +16,6 @@
   <para>
    As with many other applications, menu items that end with
    ellipsis (...) display dialog boxes or windows when invoked.
-   An additional jEdit-only convention is that menu items that end with
-   <quote>[x]</quote> expect a character to be typed at the keyboard after
-   being invoked.
   </para>
   <para>
    Many jEdit commands can be also be invoked using keystrokes. This speeds

@@ -35,6 +35,12 @@ class Roster
 
 	void addOperation(Operation op)
 	{
+		for(int i = 0; i < operations.size(); i++)
+		{
+			if(operations.elementAt(i).equals(op))
+				return;
+		}
+
 		operations.addElement(op);
 	}
 
@@ -45,13 +51,7 @@ class Roster
 
 	boolean confirm(Component comp)
 	{
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < operations.size(); i++)
-		{
-			buf.append(operations.elementAt(i));
-			buf.append('\n');
-		}
-		String[] args = { buf.toString() };
+		String[] args = { toString() };
 
 		int result = GUIUtilities.confirm(comp,"plugin-manager.roster-confirm",
 			args,JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
@@ -70,6 +70,17 @@ class Roster
 		return true;
 	}
 
+	public String toString()
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < operations.size(); i++)
+		{
+			buf.append(operations.elementAt(i));
+			buf.append('\n');
+		}
+		return buf.toString();
+	}
+
 	// private members
 	private Vector operations;
 
@@ -78,6 +89,7 @@ class Roster
 		boolean inAWTThread();
 		boolean perform();
 		String toString();
+		boolean equals(Object o);
 	}
 
 	static class Remove implements Operation
@@ -118,6 +130,15 @@ class Roster
 			return jEdit.getProperty("plugin-manager.roster.remove",args);
 		}
 
+		public boolean equals(Object o)
+		{
+			if(o instanceof Remove
+				&& ((Remove)o).plugin.equals(plugin))
+				return true;
+			else
+				return false;
+		}
+
 		// private members
 		private String plugin;
 
@@ -141,5 +162,51 @@ class Roster
 
 			return ok;
 		}
+	}
+
+	static class Install implements Operation
+	{
+		Install(String url, String installDirectory)
+		{
+			// catch those hooligans passing null urls
+			if(url == null)
+				throw new NullPointerException();
+
+			this.url = url;
+			this.installDirectory = installDirectory;
+		}
+
+		public boolean inAWTThread()
+		{
+			return false;
+		}
+
+		public boolean perform()
+		{
+			Log.log(Log.ERROR,this,"foo");
+			return false;
+		}
+
+		public String toString()
+		{
+			String[] args = { url };
+			return jEdit.getProperty("plugin-manager.roster.install",args);
+		}
+
+		public boolean equals(Object o)
+		{
+			if(o instanceof Install
+				&& ((Install)o).url.equals(url))
+			{
+				/* even if installDirectory is different */
+				return true;
+			}
+			else
+				return false;
+		}
+
+		// private members
+		private String url;
+		private String installDirectory;
 	}
 }

@@ -325,10 +325,13 @@ public class jEdit
 
 		if(restore && !background
 			&& settingsDirectory != null
-			&& jEdit.getBooleanProperty("restore")
-			&& (jEdit.getBooleanProperty("restore.cli")
-			|| bufferCount == 0))
-			buffer = restoreOpenFiles();
+			&& jEdit.getBooleanProperty("restore"))
+		{
+			if(bufferCount == 0)
+				buffer = restoreOpenFiles();
+			else if(jEdit.getBooleanProperty("restore.cli"))
+				/* buffer = */ restoreOpenFiles();
+		}
 
 		// execute startup macro
 		Macros.Macro macro = Macros.getMacro("Startup");

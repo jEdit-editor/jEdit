@@ -60,10 +60,7 @@ class PluginListHandler extends HandlerBase
 		value = (value == null) ? null : value.intern();
 
 		if(aname == "NAME")
-		{
-			System.err.println("name=" + value);
 			name = value;
-		}
 		else if(aname == "JAR")
 			jar = value;
 		else if(aname == "VERSION")
@@ -95,10 +92,7 @@ class PluginListHandler extends HandlerBase
 		String text = new String(c, off, len);
 
 		if(tag == "DESCRIPTION")
-		{
-			System.err.println(text);
 			description = text;
-		}
 		else if(tag == "PLUGIN_SET_ENTRY")
 			pluginSetEntry = text;
 		else if(tag == "AUTHOR")
@@ -139,6 +133,8 @@ class PluginListHandler extends HandlerBase
 	{
 		if(tag == null)
 			return;
+		else
+			tag = tag.intern();
 
 		popElement();
 
@@ -195,6 +191,11 @@ class PluginListHandler extends HandlerBase
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public void endDocument()
+	{
+		pluginList.finished();
 	}
 	// end HandlerBase implementation
 

@@ -1,16 +1,16 @@
 TO DO
 
+- write some tips
 - document restore.cli property
 - document new status
 - status: display overwrite, multi select
 - document new readNextChar()
-- CVS: add ScrollListener.java, Roster.java
 - catch MalformedInputException and display a better error message
 - scrollToCaret() doesn't always work
 - caret event not always fired
 - XThis: don't throw exceptions for non-existent methods
 - C+ENTER: display prompt
-- document removal of [x] from menu item labels
+- need to track down s.end < s.start cases
 
 - scroll lock key toggles 'scroll mode'
 - console shell: use StreamTokenizer
@@ -18,7 +18,6 @@ TO DO
 - folding paint up bug
 - prev line fold gutter bug
 - plugin manager:
-  - dependency checker
   - a combined roster confirm/progress dialog box
   - dialog box displayed while downloading plugin list from server
   - plugin update

@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.pluginmgr;
 import com.microstar.xml.*;
 import java.io.*;
 import java.net.URL;
+import java.util.Hashtable;
 import java.util.Vector;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.*;
@@ -35,6 +36,7 @@ class PluginList
 	PluginList()
 	{
 		plugins = new Vector();
+		pluginHash = new Hashtable();
 		pluginSets = new Vector();
 
 		String path = jEdit.getProperty("plugin-manager.url");
@@ -60,22 +62,67 @@ class PluginList
 		}
 	}
 
-	// package-private members
 	void addPlugin(Plugin plugin)
 	{
 		plugin.checkIfInstalled();
-		Log.log(Log.ERROR,this,plugin);
 		plugins.addElement(plugin);
+		pluginHash.put(plugin.name,plugin);
 	}
 
 	void addPluginSet(PluginSet set)
 	{
-		Log.log(Log.ERROR,this,set);
 		pluginSets.addElement(set);
+	}
+
+	void finished()
+	{
+		// after the entire list is loaded, fill out plugin field
+		// in dependencies
+		for(int i = 0; i < plugins.size(); i++)
+		{
+			Plugin plugin = (Plugin)plugins.elementAt(i);
+			for(int j = 0; j < plugin.branches.size(); j++)
+			{
+				Branch branch = (Branch)plugin.branches.elementAt(j);
+				for(int k = 0; k < branch.deps.size(); k++)
+				{
+					Dependency dep = (Dependency)branch.deps.elementAt(k);
+					if(dep.what.equals("plugin"))
+						dep.plugin = (Plugin)pluginHash.get(dep.pluginName);
+				}
+			}
+		}
+	}
+
+	void updatePlugins(Roster roster, String installDirectory)
+	{
+		for(int i = 0; i < plugins.size(); i++)
+		{
+			Plugin plugin = (Plugin)plugins.elementAt(i);
+			Branch branch = plugin.getCompatibleBranch();
+
+			if(branch != null
+				&& plugin.installedVersion != null
+				&& MiscUtilities.compareVersions(branch.version,
+				plugin.installedVersion) > 0)
+			{
+				plugin.install(roster,installDirectory);
+			}
+		}
+	}
+
+	void dump()
+	{
+		for(int i = 0; i < plugins.size(); i++)
+		{
+			System.err.println((Plugin)plugins.elementAt(i));
+			System.err.println();
+		}
 	}
 
 	// private members
 	private Vector plugins;
+	private Hashtable pluginHash;
 	private Vector pluginSets;
 
 	static class PluginSet
@@ -121,8 +168,6 @@ class PluginList
 				if(!new File(path).exists())
 					continue;
 
-				System.err.println(MiscUtilities.getFileName(path)
-					+ ":" + jar);
 				if(MiscUtilities.getFileName(path).equals(jar))
 				{
 					installed = path;
@@ -173,7 +218,23 @@ class PluginList
 
 		void install(Roster roster, String installDirectory)
 		{
-			
+			if(installed != null)
+				roster.addOperation(new Roster.Remove(installed));
+
+			Branch branch = getCompatibleBranch();
+			if(branch.obsolete)
+				return;
+
+			branch.satisfyDependencies(roster,installDirectory);
+
+			if(installed != null)
+			{
+				installDirectory = MiscUtilities.getParentOfPath(
+					installed);
+			}
+
+			roster.addOperation(new Roster.Install(branch.download,
+				installDirectory));
 		}
 
 		public String toString()
@@ -194,11 +255,23 @@ class PluginList
 
 		boolean canSatisfyDependencies()
 		{
-			return false;
+			for(int i = 0; i < deps.size(); i++)
+			{
+				Dependency dep = (Dependency)deps.elementAt(i);
+				if(!dep.canSatisfy())
+					return false;
+			}
+
+			return true;
 		}
 
-		void satisfyDependencies(Roster roster)
+		void satisfyDependencies(Roster roster, String installDirectory)
 		{
+			for(int i = 0; i < deps.size(); i++)
+			{
+				Dependency dep = (Dependency)deps.elementAt(i);
+				dep.satisfy(roster,installDirectory);
+			}
 		}
 
 		public String toString()
@@ -214,14 +287,82 @@ class PluginList
 		String from;
 		String to;
 		// only used if what is "plugin"
-		String plugin;
+		String pluginName;
+		Plugin plugin;
 
-		Dependency(String what, String from, String to, String plugin)
+		Dependency(String what, String from, String to, String pluginName)
 		{
 			this.what = what;
 			this.from = from;
 			this.to = to;
-			this.plugin = plugin;
+			this.pluginName = pluginName;
+		}
+
+		boolean canSatisfy()
+		{
+			if(what.equals("plugin"))
+			{
+				// assume Mike doesn't put an inconsistent set of
+				// plugins up
+				return true;
+			}
+			else if(what.equals("jdk"))
+			{
+				String javaVersion = System.getProperty("java.version");
+
+				if((from == null || MiscUtilities.compareVersions(
+					javaVersion,from) >= 0)
+					&&
+				   (to == null || MiscUtilities.compareVersions(
+				   	javaVersion,to) <= 0))
+					return true;
+				else
+					return false;
+			}
+			else if(what.equals("jedit"))
+			{
+				String build = jEdit.getBuild();
+
+				if((from == null || MiscUtilities.compareVersions(
+					build,from) >= 0)
+					&&
+				   (to == null || MiscUtilities.compareVersions(
+				   	build,to) <= 0))
+					return true;
+				else
+					return false;
+			}
+			else
+			{
+				Log.log(Log.ERROR,this,"Invalid dependency: " + what);
+				return false;
+			}
+		}
+
+		void satisfy(Roster roster, String installDirectory)
+		{
+			if(what.equals("plugin"))
+			{
+				for(int i = 0; i < plugin.branches.size(); i++)
+				{
+					Branch branch = (Branch)plugin.branches
+						.elementAt(i);
+					if((plugin.installedVersion == null
+						||
+					MiscUtilities.compareVersions(
+						plugin.installedVersion,branch.version) < 0)
+						&&
+					(from == null || MiscUtilities.compareVersions(
+						branch.version,from) >= 0)
+						&&
+					   (to == null || MiscUtilities.compareVersions(
+					   	branch.version,to) <= 0))
+					{
+						plugin.install(roster,installDirectory);
+						return;
+					}
+				}
+			}
 		}
 
 		public String toString()

@@ -1191,6 +1191,18 @@ public class JEditTextArea extends JComponent
 			setSelection(new Selection.Range(newStart,newEnd));
 			moveCaretPosition(end,doElectricScroll);
 		}
+
+		/**
+		 * @deprecated Do not use.
+		 */
+		public boolean isSelectionRectangular()
+		{
+			Selection s = getSelectionAtOffset(caret);
+			if(s == null)
+				return false;
+			else
+				return (s instanceof Selection.Rect);
+		}
 	// OLD SELECTION API ENDS HERE
 
 	/**

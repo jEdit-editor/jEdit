@@ -35,7 +35,7 @@ public class PluginManager extends JDialog
 {
 	public static void pluginListDebug()
 	{
-		new PluginList();
+		new PluginList().dump();
 	}
 
 	public PluginManager(View view)
@@ -293,12 +293,13 @@ public class PluginManager extends JDialog
 						Cursor.DEFAULT_CURSOR));
 				}
 			}
-			/* else if(source == update)
+			else if(source == update)
 			{
-				if(PluginManagerPlugin.updatePlugins(PluginManager.this))
-					updateTree();
+				Roster roster = new Roster();
+				new PluginList().updatePlugins(roster,"/tmp");
+				System.err.println(roster);
 			}
-			else if(source == install)
+			/* else if(source == install)
 			{
 				if(PluginManagerPlugin.installPlugins(PluginManager.this))
 					updateTree();

@@ -57,6 +57,7 @@
 		<!-- Variables -->
 		<SEQ TYPE="KEYWORD2">$`</SEQ>
 		<SEQ TYPE="KEYWORD2">$'</SEQ>
+		<SEQ TYPE="KEYWORD2">$"</SEQ>
 
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
 			<BEGIN>${</BEGIN>
@@ -561,32 +562,33 @@
 
 		<MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
 	</RULES>
-      <RULES SET="REGEXP" DEFAULT="LITERAL2" ESCAPE="\">
-              <!-- whitespace: (space and tab) -->
-              <WHITESPACE> </WHITESPACE>
-              <WHITESPACE>    </WHITESPACE>
 
-              <!-- Variables -->
-              <SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
-                      <BEGIN>${</BEGIN>
-                      <END>}</END>
-              </SPAN>
+	<RULES SET="REGEXP" DEFAULT="LITERAL2" ESCAPE="\">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>    </WHITESPACE>
 
-              <MARK_FOLLOWING TYPE="KEYWORD2">$#</MARK_FOLLOWING>
-              <MARK_FOLLOWING TYPE="KEYWORD2">$</MARK_FOLLOWING>
+		<!-- Variables -->
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+			<BEGIN>${</BEGIN>
+			<END>}</END>
+		</SPAN>
 
-              <SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
-                      <BEGIN>@{</BEGIN>
-                      <END>}</END>
-              </SPAN>
+		<MARK_FOLLOWING TYPE="KEYWORD2">$#</MARK_FOLLOWING>
+		<MARK_FOLLOWING TYPE="KEYWORD2">$</MARK_FOLLOWING>
 
-              <MARK_FOLLOWING TYPE="KEYWORD2">@</MARK_FOLLOWING>
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+			<BEGIN>@{</BEGIN>
+			<END>}</END>
+		</SPAN>
 
-              <SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
-                      <BEGIN>%{</BEGIN>
-                      <END>}</END>
-              </SPAN>
+		<MARK_FOLLOWING TYPE="KEYWORD2">@</MARK_FOLLOWING>
 
-              <MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
-      </RULES>
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+			<BEGIN>%{</BEGIN>
+			<END>}</END>
+		</SPAN>
+
+		<MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
+	</RULES>
 </MODE>
