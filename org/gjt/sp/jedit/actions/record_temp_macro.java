@@ -60,8 +60,8 @@ public class record_temp_macro extends EditAction
 			Log.log(Log.ERROR,this,bl);
 		}
 
-		view.pushStatus(jEdit.getProperty("view.status.recording"));
 		Macros.beginRecording(view,null,buffer);
+		view.updateStatus();
 	}
 
 	public boolean isRecordable()

@@ -27,11 +27,13 @@ import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public class SearchBar extends JPanel
+public class SearchBar extends JToolBar
 {
 	public SearchBar(View view)
 	{
 		this.view = view;
+
+		setFloatable(false);
 
 		setLayout(new BorderLayout());
 		add(new JLabel(jEdit.getProperty("view.search.find")),
@@ -49,23 +51,29 @@ public class SearchBar extends JPanel
 		box.add(Box.createGlue());
 		add(box,BorderLayout.CENTER);
 
+		Insets margin = new Insets(1,1,1,1);
+
 		JPanel panel = new JPanel();
 		panel.add(Box.createHorizontalStrut(5));
 		panel.add(incremental = new JCheckBox(jEdit.getProperty(
 			"view.search.incremental")));
 		incremental.addActionListener(new ActionHandler());
+		incremental.setMargin(margin);
 		panel.add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.ignoreCase")));
 		ignoreCase.addActionListener(new ActionHandler());
+		ignoreCase.setMargin(margin);
 		panel.add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
 		regexp.addActionListener(new ActionHandler());
+		regexp.setMargin(margin);
 		panel.add(multifile = new JCheckBox());
 		multifile.addActionListener(new ActionHandler());
+		multifile.setMargin(margin);
 		panel.add(multifileBtn = new JButton(jEdit.getProperty(
 			"search.multifile")));
 		multifileBtn.addActionListener(new ActionHandler());
-		multifileBtn.setMargin(new Insets(1,1,1,1));
+		multifileBtn.setMargin(margin);
 
 		update();
 
@@ -244,6 +252,9 @@ public class SearchBar extends JPanel
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.10  2000/05/09 10:51:52  sp
+ * New status bar, a few other things
+ *
  * Revision 1.9  2000/05/07 07:29:02  sp
  * Splitting fixes
  *

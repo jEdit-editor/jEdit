@@ -2,10 +2,9 @@ JEDIT TO DO
 
 2.5pre2:
 
-- Add FindAccessory.java
-- Status bar
 - Write VFS docs - user and developer
 - Document EditPaneUpdate message
+- Increase file chooser's preferred size
 
 2.5:
 

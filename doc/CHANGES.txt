@@ -13,6 +13,7 @@ JEDIT 2.5 VERSION HISTORY
 - You can now edit more than one buffer at once in a split view
 - Open and save dialog boxes now have a nifty 'find file' tool (written by
   Ken Klinner, kklinner@opiom.com)
+- Nifty new status bar
 
 + Enhancements
 

@@ -31,12 +31,12 @@ public class goto_register extends EditAction
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
-			view.pushStatus(jEdit.getProperty("view.status.goto-register"));
+			view.showStatus(jEdit.getProperty("view.status.goto-register"));
 			view.getInputHandler().grabNextKeyStroke(this);
 		}
 		else
 		{
-			view.popStatus();
+			view.showStatus(null);
 
 			char ch = actionCommand.charAt(0);
 			if(ch == '\0')

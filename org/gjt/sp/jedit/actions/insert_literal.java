@@ -41,13 +41,13 @@ public class insert_literal extends EditAction
 
 		if(str == null)
 		{
-			view.pushStatus(jEdit.getProperty("view.status.insert-literal"));
+			view.showStatus(jEdit.getProperty("view.status.insert-literal"));
 			view.getInputHandler().grabNextKeyStroke(this);
 			return;
 		}
 		else
 		{
-			view.popStatus();
+			view.showStatus(null);
 
 			if(!str.equals("\0"))
 			{

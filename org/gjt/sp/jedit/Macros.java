@@ -395,7 +395,7 @@ public class Macros
 			if(buffer.isClosed())
 			{
 				view.getInputHandler().setMacroRecorder(null);
-				view.popStatus();
+				view.showStatus(null);
 				return;
 			}
 
@@ -438,6 +438,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/05/09 10:51:51  sp
+ * New status bar, a few other things
+ *
  * Revision 1.25  2000/05/07 05:48:30  sp
  * You can now edit several buffers side-by-side in a split view
  *

@@ -84,7 +84,7 @@ public class FtpBrowser extends JDialog
 		topFields.add(hostField = new JTextField(host));
 		topFields.add(userField = new JTextField(user));
 		topFields.add(passwordField = new JPasswordField(password));
-		topFields.setBorder(new EmptyBorder(0,0,0,5));
+		topFields.setBorder(new EmptyBorder(0,0,5,0));
 		topPanel.add(BorderLayout.CENTER,topFields);
 
 		getContentPane().add(BorderLayout.NORTH,topPanel);
@@ -101,7 +101,7 @@ public class FtpBrowser extends JDialog
 		pathPanel.add(BorderLayout.WEST,new JLabel(jEdit.getProperty(
 			"vfs.ftp.browser.path"),SwingConstants.RIGHT));
 		pathPanel.add(BorderLayout.CENTER,pathField = new JTextField(path));
-		pathPanel.setBorder(new EmptyBorder(0,5,0,0));
+		pathPanel.setBorder(new EmptyBorder(5,0,0,0));
 		centerPanel.add(BorderLayout.SOUTH,pathPanel);
 
 		getContentPane().add(BorderLayout.CENTER,centerPanel);
@@ -298,7 +298,11 @@ public class FtpBrowser extends JDialog
 				if(line.startsWith("total"))
 					continue;
 
-				fileList.addElement(getShortName(line));
+				String shortName = getShortName(line);
+				if(shortName.equals("./"))
+					continue;
+
+				fileList.addElement(shortName);
 			}
 			MiscUtilities.quicksort(fileList,new FileCompare());
 			list.setListData(fileList);
@@ -555,6 +559,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/05/09 10:51:52  sp
+ * New status bar, a few other things
+ *
  * Revision 1.5  2000/05/01 11:53:24  sp
  * More icons added to toolbar, minor updates here and there
  *

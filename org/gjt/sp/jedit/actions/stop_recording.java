@@ -33,8 +33,8 @@ public class stop_recording extends EditAction
 			GUIUtilities.error(view,"not-recording",new String[0]);
 		}
 
-		view.popStatus();
 		Macros.endRecording(view);
+		view.updateStatus();
 	}
 
 	public boolean isRecordable()

@@ -92,6 +92,7 @@ public class EditPane extends JPanel implements EBComponent
 		if(!init)
 		{
 			view.updateTitle();
+			view.updateStatus();
 			view.updateBuffersMenu();
 			view.updateMarkerMenus();
 
@@ -558,6 +559,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/05/09 10:51:51  sp
+ * New status bar, a few other things
+ *
  * Revision 1.1  2000/05/07 05:48:30  sp
  * You can now edit several buffers side-by-side in a split view
  *

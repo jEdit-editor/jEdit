@@ -69,8 +69,8 @@ public class record_macro extends EditAction
 			Log.log(Log.ERROR,this,bl);
 		}
 
-		view.pushStatus(jEdit.getProperty("view.status.recording"));
 		Macros.beginRecording(view,name,buffer);
+		view.updateStatus();
 	}
 
 	public boolean isRecordable()

@@ -151,6 +151,8 @@ public class FindAccessory extends JPanel implements Runnable, PropertyChangeLis
 		add(controlPanel = new FindControls(actionStart, actionStop, true),
 			BorderLayout.SOUTH);
 
+		setMinimumSize(getPreferredSize());
+
 		updateFindDirectory();
 	}
 
@@ -717,7 +719,7 @@ public class FindAccessory extends JPanel implements Runnable, PropertyChangeLis
 			// Fix the width of the scrolling results panel so the layout
 			// managers don't try to make it too wide for JFileChooser
 			Dimension dim = resultsScroller.getSize();
-			resultsScroller.setMaximumSize(dim);
+			//resultsScroller.setMaximumSize(dim);
 			resultsScroller.setPreferredSize(dim);
 
 			// Return an array of FindFilters
@@ -1290,6 +1292,9 @@ class FindByName extends JPanel implements FindFilterFactory
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/05/09 10:51:52  sp
+ * New status bar, a few other things
+ *
  * Revision 1.1  2000/05/08 11:20:08  sp
  * New file finder in open dialog box
  *

@@ -55,13 +55,6 @@ import org.gjt.sp.util.Log;
 public class JEditTextArea extends JComponent
 {
 	/**
-	 * Adding components with this name to the text area will place
-	 * them left of the horizontal scroll bar. In jEdit, the status
-	 * bar is added this way.
-	 */
-	public static String LEFT_OF_SCROLLBAR = "los";
-
-	/**
 	 * Creates a new JEditTextArea.
 	 */
 	public JEditTextArea()
@@ -1410,15 +1403,6 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Returns the status bar component (which was added with a name
-	 * of LEFT_OF_SCROLLBAR).
-	 */
-	public Component getStatus()
-	{
-		return ((ScrollLayout)getLayout()).leftOfScrollBar;
-	}
-
-	/**
 	 * Called by the AWT when this component is added to a parent.
 	 * Adds document listener.
 	 */
@@ -1653,8 +1637,6 @@ public class JEditTextArea extends JComponent
 				left = comp;
 			else if(name.equals(BOTTOM))
 				bottom = comp;
-			else if(name.equals(LEFT_OF_SCROLLBAR))
-				leftOfScrollBar = comp;
 		}
 
 		public void removeLayoutComponent(Component comp)
@@ -1667,8 +1649,6 @@ public class JEditTextArea extends JComponent
 				left = null;
 			else if(bottom == comp)
 				bottom = null;
-			else
-				leftOfScrollBar = null;
 		}
 
 		public Dimension preferredLayoutSize(Container parent)
@@ -1746,16 +1726,6 @@ public class JEditTextArea extends JComponent
 				rightWidth,
 				centerHeight);
 
-			if(leftOfScrollBar != null)
-			{
-				Dimension dim = leftOfScrollBar.getPreferredSize();
-				leftOfScrollBar.setBounds(ileft,
-					itop + centerHeight,
-					dim.width,
-					bottomHeight);
-				ileft += dim.width;
-			}
-
 			bottom.setBounds(
 				ileft,
 				itop + centerHeight,
@@ -1767,7 +1737,6 @@ public class JEditTextArea extends JComponent
 		Component left;
 		Component right;
 		Component bottom;
-		Component leftOfScrollBar;
 	}
 
 	static class CaretBlinker implements ActionListener
@@ -2214,6 +2183,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.61  2000/05/09 10:51:52  sp
+ * New status bar, a few other things
+ *
  * Revision 1.60  2000/05/07 05:48:30  sp
  * You can now edit several buffers side-by-side in a split view
  *

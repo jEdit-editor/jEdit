@@ -45,26 +45,20 @@ public class View extends JFrame implements EBComponent
 	/**
 	 * Displays the specified string in the status area of this view.
 	 * @param str The string to display
+	 * @since jEdit 2.5pre2
 	 */
-	public void pushStatus(String str)
+	public void showStatus(String str)
 	{
-		statusMsg.push(str);
-		/*JEditTextArea[] textAreas = getTextAreas();
-		for(int i = 0 ; i < textAreas.length; i++)
-			textAreas[i].getStatus().repaint();*/
+		status.showStatus(str);
 	}
 
 	/**
-	 * Displays the previous status bar message.
+	 * Updates the status bar.
+	 * @since jEdit 2.5pre2
 	 */
-	public void popStatus()
+	public void updateStatus()
 	{
-		if(!statusMsg.isEmpty())
-			statusMsg.pop();
-
-		/*JEditTextArea[] textAreas = getTextAreas();
-		for(int i = 0 ; i < textAreas.length; i++)
-			textAreas[i].getStatus().repaint();*/
+		status.updateBufferStatus();
 	}
 
 	/**
@@ -412,8 +406,6 @@ public class View extends JFrame implements EBComponent
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
 
-		statusMsg = new Stack();
-
 		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
 			jEdit.getInputHandler());
 
@@ -421,6 +413,9 @@ public class View extends JFrame implements EBComponent
 
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 		getContentPane().add(BorderLayout.CENTER,editPane);
+
+		status = new StatusBar(this);
+		getContentPane().add(BorderLayout.SOUTH,status);
 
 		glassPane = new GlassPane();
 		getRootPane().setGlassPane(glassPane);
@@ -448,7 +443,7 @@ public class View extends JFrame implements EBComponent
 		toolBars = null;
 		toolBar = null;
 		searchBar = null;
-		statusMsg = null;
+		status = null;
 		splitPane = null;
 		inputHandler = null;
 		glassPane = null;
@@ -613,10 +608,10 @@ public class View extends JFrame implements EBComponent
 	private JToolBar toolBar;
 	private SearchBar searchBar;
 
-	private Stack statusMsg;
-
 	private EditPane editPane;
 	private JSplitPane splitPane;
+
+	private StatusBar status;
 
 	private InputHandler inputHandler;
 	private GlassPane glassPane;
@@ -687,6 +682,7 @@ public class View extends JFrame implements EBComponent
 	private EditPane createEditPane(EditPane pane, Buffer buffer)
 	{
 		EditPane editPane = new EditPane(this,pane,buffer);
+		editPane.getTextArea().addCaretListener(new CaretHandler());
 		editPane.getTextArea().addFocusListener(new FocusHandler());
 		return editPane;
 	}
@@ -699,7 +695,10 @@ public class View extends JFrame implements EBComponent
 		{
 			updateBuffersMenu();
 			updateMarkerMenus();
+			status.updateBufferStatus();
 		}
+		else
+			status.repaint();
 	}
 
 	/**
@@ -930,7 +929,10 @@ public class View extends JFrame implements EBComponent
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
 			if(isOpen(buffer))
+			{
 				updateTitle();
+				status.updateBufferStatus();
+			}
 			updateBuffersMenu();
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
@@ -940,14 +942,13 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	/*class CaretHandler implements CaretListener
+	class CaretHandler implements CaretListener
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
-			JEditTextArea textArea = (JEditTextArea)evt.getSource();
-			((StatusBar)textArea.getStatus()).repaint();
+			status.repaint();
 		}
-	}*/
+	}
 
 	class FocusHandler extends FocusAdapter
 	{
@@ -997,65 +998,14 @@ public class View extends JFrame implements EBComponent
 				Cursor.WAIT_CURSOR));
 		}
 	}
-
-	/*class StatusBar extends JComponent
-	{
-		JEditTextArea textArea;
-
-		StatusBar(JEditTextArea textArea)
-		{
-			StatusBar.this.textArea = textArea;
-			StatusBar.this.setDoubleBuffered(true);
-			StatusBar.this.setFont(UIManager.getFont("Label.font"));
-			StatusBar.this.setForeground(UIManager.getColor("Label.foreground"));
-			StatusBar.this.setBackground(UIManager.getColor("Label.background"));
-		}
-
-		public void paint(Graphics g)
-		{
-			FontMetrics fm = g.getFontMetrics();
-
-			int dot = textArea.getCaretPosition();
-
-			int currLine = StatusBar.this.textArea.getCaretLine();
-			int start = StatusBar.this.textArea.getLineStartOffset(currLine);
-			int numLines = StatusBar.this.textArea.getLineCount();
-
-			String str;
-			if(inputHandler.isRepeatEnabled())
-			{
-				int repeatCount = inputHandler.getRepeatCount();
-				if(repeatCount == 1)
-					str = "";
-				else
-					str = String.valueOf(repeatCount);
-				Object[] args = { str };
-				str = jEdit.getProperty("view.status.repeat",args);
-			}
-			else if(!statusMsg.isEmpty())
-				str = (String)statusMsg.peek();
-			else
-			{
-				str = ("col " + ((dot - start) + 1) + " line "
-					+ (currLine + 1) + "/"
-					+ numLines + " "
-					+ (((currLine + 1) * 100) / numLines) + "%");
-			}
-
-			g.drawString(str,0,(StatusBar.this.getHeight()
-				+ fm.getAscent()) / 2);
-		}
-
-		public Dimension getPreferredSize()
-		{
-			return new Dimension(200,0);
-		}
-	}*/
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.171  2000/05/09 10:51:51  sp
+ * New status bar, a few other things
+ *
  * Revision 1.170  2000/05/08 11:20:08  sp
  * New file finder in open dialog box
  *
@@ -1085,17 +1035,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.161  2000/04/25 03:32:40  sp
  * Even more VFS hacking
- *
- * Revision 1.160  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.159  2000/04/21 05:32:20  sp
- * Focus tweak
- *
- * Revision 1.158  2000/04/18 08:27:52  sp
- * Context menu editor started
- *
- * Revision 1.157  2000/04/15 04:14:47  sp
- * XML files updated, jEdit.get/setBooleanProperty() method added
  *
  */

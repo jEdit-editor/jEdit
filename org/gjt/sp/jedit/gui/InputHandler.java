@@ -109,11 +109,7 @@ public abstract class InputHandler extends KeyAdapter
 			repeatCount = 0;
 
 		if(view != null)
-		{
-			//JEditTextArea[] textAreas = view.getTextAreas();
-			//for(int i = 0; i < textAreas.length; i++)
-			//	textAreas[i].getStatus().repaint();
-		}
+			view.updateStatus();
 	}
 
 	/**
@@ -286,6 +282,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/05/09 10:51:52  sp
+ * New status bar, a few other things
+ *
  * Revision 1.3  2000/05/07 05:48:30  sp
  * You can now edit several buffers side-by-side in a split view
  *

@@ -76,11 +76,11 @@ public class IORequest implements Runnable
 		{
 			views = jEdit.getViews();
 			String status = (type == LOAD ? "loading" : "saving");
-			String[] args = { MiscUtilities.getFileName(path) };
+			String[] args = { path };
 			String message = jEdit.getProperty("view.status." + status,args);
 			for(int i = 0; i < views.length; i++)
 			{
-				views[i].pushStatus(message);
+				views[i].showStatus(message);
 			}
 
 			switch(type)
@@ -102,7 +102,7 @@ public class IORequest implements Runnable
 			{
 				for(int i = 0; i < views.length; i++)
 				{
-					views[i].popStatus();
+					views[i].showStatus(null);
 				}
 			}
 		}
@@ -250,6 +250,9 @@ public class IORequest implements Runnable
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/05/09 10:51:52  sp
+ * New status bar, a few other things
+ *
  * Revision 1.6  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

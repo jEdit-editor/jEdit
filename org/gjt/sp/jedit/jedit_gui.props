@@ -447,7 +447,6 @@ view.buffer-label={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,c
 # Status messages
 view.status.loading=Loading {0}
 view.status.saving=Saving {0}
-view.status.recording=Macro recording
 view.status.cut-string-register=Cut to register:
 view.status.copy-string-register=Copy to register:
 view.status.append-string-register=Append to register:
@@ -461,6 +460,13 @@ view.status.clear-register=Clear register:
 view.status.insert-literal=Insert without expanding:
 view.status.repeat.none=Enter repeat count:
 view.status.repeat=Enter repeat count: {0}
+
+# Buffer status message
+view.status.ok=:-)
+view.status.modified=(modified)
+view.status.new=(new)
+view.status.read-only=(read only)
+view.status.recording=(recording)
 
 ###
 ### VARIOUS DIALOGS
