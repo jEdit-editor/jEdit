@@ -637,8 +637,8 @@ public class BufferIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
-				Log.log(Log.ERROR,this,io);
-				/* args[0] = io.toString();
+				/* Log.log(Log.ERROR,this,io);
+				args[0] = io.toString();
 				VFSManager.error(view,"ioerror",args); */
 			}
 			finally

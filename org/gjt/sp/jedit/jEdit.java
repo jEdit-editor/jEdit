@@ -1,6 +1,6 @@
 /*
  * jEdit.java - Main class of the jEdit editor
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1009,8 +1009,8 @@ public class jEdit
 	{
 		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
 
-		XModeHandler xmh = new XModeHandler(fileName);
 		XmlParser parser = new XmlParser();
+		XModeHandler xmh = new XModeHandler(parser,fileName);
 		parser.setHandler(xmh);
 		try
 		{

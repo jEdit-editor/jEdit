@@ -83,10 +83,10 @@ public class DockableWindowManager extends JPanel
 		bottom = new DockableWindowContainer.TabbedPane(BOTTOM);
 		right = new DockableWindowContainer.TabbedPane(RIGHT);
 
-		add(top);
-		add(left);
-		add(bottom);
-		add(right);
+		add(BorderLayout.NORTH,top);
+		add(BorderLayout.WEST,left);
+		add(BorderLayout.SOUTH,bottom);
+		add(BorderLayout.EAST,right);
 	}
 
 	/**
@@ -351,19 +351,42 @@ public class DockableWindowManager extends JPanel
 		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"hypersearch-results");
 	}
 
-	class DockableLayout implements LayoutManager
+	class DockableLayout implements LayoutManager2
 	{
+		// these are Containers so that we can call getComponentCount()
+		Container top, left, bottom, right;
 		Component center;
 
 		public void addLayoutComponent(String name, Component comp)
 		{
-			if(name == null || name.equals(BorderLayout.CENTER))
+			addLayoutComponent(comp,name);
+		}
+
+		public void addLayoutComponent(Component comp, Object cons)
+		{
+			if(BorderLayout.NORTH.equals(cons))
+				top = (Container)comp;
+			else if(BorderLayout.WEST.equals(cons))
+				left = (Container)comp;
+			else if(BorderLayout.SOUTH.equals(cons))
+				bottom = (Container)comp;
+			else if(BorderLayout.EAST.equals(cons))
+				right = (Container)comp;
+			else
 				center = comp;
 		}
 
 		public void removeLayoutComponent(Component comp)
 		{
-			if(comp == center)
+			if(top == comp)
+				top = null;
+			else if(left == comp)
+				left = null;
+			else if(bottom == comp)
+				bottom = null;
+			else if(right == comp)
+				right = null;
+			else if(center == comp)
 				center = null;
 		}
 
@@ -387,6 +410,11 @@ public class DockableWindowManager extends JPanel
 		public Dimension minimumLayoutSize(Container parent)
 		{
 			return preferredLayoutSize(parent);
+		}
+
+		public Dimension maximumLayoutSize(Container parent)
+		{
+			return new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE);
 		}
 
 		public void layoutContainer(Container parent)
@@ -467,6 +495,18 @@ public class DockableWindowManager extends JPanel
 			if(center != null)
 				center.setBounds(_left.width,_top.height,_width,_height);
 		}
+
+		public float getLayoutAlignmentX(Container target)
+		{
+			return 0.5f;
+		}
+
+		public float getLayoutAlignmentY(Container target)
+		{
+			return 0.5f;
+		}
+
+		public void invalidateLayout(Container target) {}
 	}
 
 	static class Entry

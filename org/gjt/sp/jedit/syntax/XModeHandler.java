@@ -1,6 +1,7 @@
 /*
  * XModeHandler.java - XML handler for mode files
  * Copyright (C) 1999 mike dillon
+ * Portions copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +21,7 @@
 package org.gjt.sp.jedit.syntax;
 
 import com.microstar.xml.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Stack;
@@ -31,9 +31,11 @@ import org.gjt.sp.util.Log;
 public class XModeHandler extends HandlerBase
 {
 	// public members
-	public XModeHandler (String path)
+	public XModeHandler (XmlParser parser, String path)
 	{
+		this.parser = parser;
 		this.path = path;
+		stateStack = new Stack();
 	}
 
 	// begin HandlerBase implementation
@@ -45,13 +47,13 @@ public class XModeHandler extends HandlerBase
 				jEdit.getJEditHome(),"modes","xmode.dtd");
 			try
 			{
-				return new BufferedReader(new FileReader(path));
+				return new BufferedReader(new InputStreamReader(
+					getClass().getResourceAsStream(
+					"/org/gjt/sp/jedit/xmode.dtd")));
 			}
 			catch(Exception e)
 			{
-				Log.log(Log.ERROR,this,"Error while opening"
-					+ " xmode.dtd:");
-				Log.log(Log.ERROR,this,e);
+				error("dtd",e);
 			}
 		}
 
@@ -124,8 +126,7 @@ public class XModeHandler extends HandlerBase
 			}
 			catch (NumberFormatException e)
 			{
-				String[] args = { path, value };
-				GUIUtilities.error(null,"xmode-termchar-invalid",args);
+				error("termchar-invalid",value);
 				termChar = -1;
 			}
 		}
@@ -152,8 +153,7 @@ public class XModeHandler extends HandlerBase
 	{
 		if ("MODE".equalsIgnoreCase(name)) return;
 
-		String[] args = { path, name };
-		GUIUtilities.error(null,"xmode-invalid-doctype",args);
+		error("doctype-invalid",name);
 	}
 
 	public void charData(char[] c, int off, int len)
@@ -213,7 +213,7 @@ public class XModeHandler extends HandlerBase
 	{
 		if (name == null) return;
 
-		String tag = peekElement();
+		String tag = popElement();
 
 		if (name.equalsIgnoreCase(tag))
 		{
@@ -258,6 +258,12 @@ public class XModeHandler extends HandlerBase
 			}
 			else if (tag == "WHITESPACE")
 			{
+				if(lastStart == null)
+				{
+					error("empty-tag","WHITESPACE");
+					return;
+				}
+
 				addRule(ParserRuleFactory.createWhitespaceRule(
 					lastStart));
 				lastStart = null;
@@ -265,6 +271,12 @@ public class XModeHandler extends HandlerBase
 			}
 			else if (tag == "EOL_SPAN")
 			{
+				if(lastStart == null)
+				{
+					error("empty-tag","EOL_SPAN");
+					return;
+				}
+
 				addRule(ParserRuleFactory.createEOLSpanRule(
 					lastStart,lastTokenID,lastAtLineStart,
 					lastExcludeMatch));
@@ -276,6 +288,12 @@ public class XModeHandler extends HandlerBase
 			}
 			else if (tag == "MARK_PREVIOUS")
 			{
+				if(lastStart == null)
+				{
+					error("empty-tag","MARK_PREVIOUS");
+					return;
+				}
+
 				addRule(ParserRuleFactory
 					.createMarkPreviousRule(lastStart,
 					lastTokenID,lastAtLineStart,
@@ -288,6 +306,12 @@ public class XModeHandler extends HandlerBase
 			}
 			else if (tag == "MARK_FOLLOWING")
 			{
+				if(lastStart == null)
+				{
+					error("empty-tag","MARK_FOLLOWING");
+					return;
+				}
+
 				addRule(ParserRuleFactory
 					.createMarkFollowingRule(lastStart,
 					lastTokenID,lastAtLineStart,
@@ -300,6 +324,12 @@ public class XModeHandler extends HandlerBase
 			}
 			else if (tag == "SEQ")
 			{
+				if(lastStart == null)
+				{
+					error("empty-tag","SEQ");
+					return;
+				}
+
 				addRule(ParserRuleFactory.createSequenceRule(
 					lastStart,lastTokenID,lastAtLineStart));
 				lastStart = null;
@@ -309,6 +339,14 @@ public class XModeHandler extends HandlerBase
 			}
 			else if (tag == "END")
 			{
+				// empty END tags should be supported; see
+				// asp.xml, for example
+				/* if(lastEnd == null)
+				{
+					error("empty-tag","END");
+					return;
+				} */
+
 				if (lastDelegateSet == null)
 				{
 					addRule(ParserRuleFactory
@@ -396,8 +434,6 @@ public class XModeHandler extends HandlerBase
 			{
 				addKeyword(lastKeyword,Token.DIGIT);
 			}
-
-			popElement();
 		}
 		else
 		{
@@ -422,6 +458,7 @@ public class XModeHandler extends HandlerBase
 	// end HandlerBase implementation
 
 	// private members
+	private XmlParser parser;
 	private String path;
 
 	private TokenMarker marker;
@@ -504,20 +541,25 @@ public class XModeHandler extends HandlerBase
 		}
 		else
 		{
-			// XXX invalid token id
+			error("token-invalid",value);
 			return Token.NULL;
 		}
 	}
 
 	private void addKeyword(String k, byte id)
 	{
+		if(k == null)
+		{
+			error("empty-keyword");
+			return;
+		}
+
 		if (keywords == null) return;
 		keywords.add(k,id);
 	}
 
 	private void addRule(ParserRule r)
 	{
-		if (rules == null) return;
 		rules.addRule(r);
 	}
 
@@ -528,8 +570,6 @@ public class XModeHandler extends HandlerBase
 
 	private String pushElement(String name)
 	{
-		if (stateStack == null) stateStack = new Stack();
-
 		name = (name == null) ? null : name.intern();
 
 		stateStack.push(name);
@@ -539,23 +579,35 @@ public class XModeHandler extends HandlerBase
 
 	private String peekElement()
 	{
-		if (stateStack == null) stateStack = new Stack();
-
 		return (String) stateStack.peek();
 	}
 
 	private String popElement()
 	{
-		if (stateStack == null) stateStack = new Stack();
-
 		return (String) stateStack.pop();
 	}
-}
 
-/*
- * Change Log:
- * $Log$
- * Revision 1.1  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- */
+	private void error(String msg)
+	{
+		_error(jEdit.getProperty("xmode-error." + msg));
+	}
+
+	private void error(String msg, String subst)
+	{
+		_error(jEdit.getProperty("xmode-error." + msg,new String[] { subst }));
+	}
+
+	private void error(String msg, Throwable t)
+	{
+		_error(jEdit.getProperty("xmode-error." + msg,new String[] { t.toString() }));
+		Log.log(Log.ERROR,this,t);
+	}
+
+	private void _error(String msg)
+	{
+		Object[] args = { path, new Integer(parser.getLineNumber()),
+			new Integer(parser.getColumnNumber()), msg };
+
+		GUIUtilities.error(null,"xmode-error",args);
+	}
+}

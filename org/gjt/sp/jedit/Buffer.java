@@ -1,6 +1,6 @@
 /*
  * Buffer.java - jEdit buffer
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -442,6 +442,17 @@ public class Buffer extends PlainDocument implements EBComponent
 				}
 
 				undo = new MyUndoManager();
+				undo.addEdit(saveUndo = new SaveUndo());
+				try
+				{
+					undo.setLimit(Integer.parseInt(
+						jEdit.getProperty(
+						"buffer.undoCount")));
+				}
+				catch(NumberFormatException nf)
+				{
+					undo.setLimit(100);
+				}
 
 				setMode();
 
@@ -681,13 +692,17 @@ public class Buffer extends PlainDocument implements EBComponent
 						if(autosaveFile != null)
 							autosaveFile.delete();
 
-						saveUndo = undo.editToBeUndone();
-
 						setFlag(AUTOSAVE_DIRTY,false);
 						setFlag(READ_ONLY,false);
 						setFlag(NEW_FILE,false);
 						setFlag(UNTITLED,false);
 						setFlag(DIRTY,false);
+
+						// can only have one of these in the queue
+						if(saveUndo != null)
+							saveUndo.die();
+
+						undo.addEdit(saveUndo = new SaveUndo());
 					}
 					finally
 					{
@@ -931,12 +946,14 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 		else
 		{
-			// remember the undo associated with a clean buffer,
-			// so that if we ever return to that undo we can
-			// clear the dirty flag
-			saveUndo = undo.editToBeUndone();
 			setFlag(DIRTY,false);
 			setFlag(AUTOSAVE_DIRTY,false);
+
+			// can only have one of these in the queue
+			if(saveUndo != null)
+				saveUndo.die();
+
+			undo.addEdit(saveUndo = new SaveUndo());
 		}
 
 		if(d != old_d)
@@ -1001,10 +1018,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
 		}
-
-		UndoableEdit toUndo = undo.editToBeUndone();
-		if(toUndo == saveUndo)
-			setDirty(false);
 	}
 
 	/**
@@ -1039,10 +1052,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
 		}
-
-		UndoableEdit toUndo = undo.editToBeUndone();
-		if(toUndo == saveUndo)
-			setDirty(false);
 	}
 
 	/**
@@ -1391,16 +1400,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		catch(BadLocationException bl)
 		{
 			Log.log(Log.ERROR,this,bl);
-		}
-
-		// if we are being run on startup, we must ensure that
-		// a valid mode exists after we're done!
-		if(mode == null)
-		{
-			Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
-			if(defaultMode == null)
-				defaultMode = jEdit.getMode("text");
-			setMode(defaultMode);
 		}
 	}
 
@@ -1875,7 +1874,11 @@ public class Buffer extends PlainDocument implements EBComponent
 			putProperty(keys.nextElement(),values.nextElement());
 		}
 
-		setMode(jEdit.getMode("text"));
+		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
+		if(defaultMode == null)
+			defaultMode = jEdit.getMode("text");
+		setMode(defaultMode);
+
 		setPath(path);
 
 		/* Magic: UNTITLED is only set if newFile param to
@@ -2240,6 +2243,68 @@ public class Buffer extends PlainDocument implements EBComponent
 		public UndoableEdit editToBeRedone()
 		{
 			return super.editToBeRedone();
+		}
+	}
+
+	class SaveUndo implements UndoableEdit
+	{
+		boolean dead;
+
+		public void undo()
+		{
+			//System.err.println("dirty false");
+			//if(!dead)
+			//	setDirty(false);
+		}
+
+		public boolean canUndo()
+		{
+			return true;
+		}
+
+		public void redo()
+		{
+			undo();
+		}
+
+		public boolean canRedo()
+		{
+			return true;
+		}
+
+		public boolean isSignificant()
+		{
+			return false;
+		}
+
+		public void die()
+		{
+			dead = true;
+		}
+
+		public boolean addEdit(UndoableEdit edit)
+		{
+			return false;
+		}
+
+		public boolean replaceEdit(UndoableEdit edit)
+		{
+			return false;
+		}
+
+		public String getPresentationName()
+		{
+			return null;
+		}
+
+		public String getUndoPresentationName()
+		{
+			return null;
+		}
+
+		public String getRedoPresentationName()
+		{
+			return null;
 		}
 	}
 

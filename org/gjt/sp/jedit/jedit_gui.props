@@ -820,19 +820,17 @@ add-abbrev.mode=Mode-specific
 add-abbrev.global=Global
 
 # XMode errors
-xmode-invalid-termchar.title=Invalid Attribute
-xmode-invalid-termchar.message=The AT_CHAR attribute ({1}) of the\
-	TERMINATE tag in\n\
-	{0} is not a number.
+xmode-error.title=XML Parse Error
+# {2} is the column number, but it's not too useful so we don't show it
+xmode-error.message=An error occurred while parsing {0}, line {1}:\n\
+	{3}
 
-xmode-invalid-doctype.title=Invalid Document Type
-xmode-invalid-doctype.message=The DOCTYPE of {0}\n\
-	is "{1}", not "MODE" as expected. The mode will be loaded anyway,\n\
-	but please ensure that this is a valid mode definition.
-
-xmode-parse.title=XML Parse Error
-xmode-parse.message=An error occurred while parsing {0}, line {1}:\n\
-	{2}
+xmode-error.dtd=The DTD could not be loaded ({0})
+xmode-error.termchar-invalid=The value of the AT_CHAR attribute is invalid ({0})
+xmode-error.doctype-invalid=Expected a document type of MODE, found {0}
+xmode-error.empty-tag=The {0} tag cannot be empty
+xmode-error.token-invalid=The token type {0} is invalid
+xmode-error.empty-keyword=The keyword text cannot be empty
 
 # JARClassLoader errors
 plugin.load-error.title=Cannot Load Plugin

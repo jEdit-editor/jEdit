@@ -20,24 +20,19 @@
 		</SPAN>
 
 		<!-- markup tags -->
-		<SPAN TYPE="MARKUP" DELEGATE="TAGS">
-			<BEGIN>&lt;/</BEGIN>
-			<END>&gt;</END>
-		</SPAN>
-
-		<SPAN TYPE="LABEL">
+		<SPAN TYPE="LABEL" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 		
-		<SPAN TYPE="LABEL">
+		<SPAN TYPE="LABEL" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 
 		<!-- JavaScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;SCRIPT</BEGIN>
+			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
 			<END>&lt;/SCRIPT&gt;</END>
 		</SPAN>
 
@@ -47,7 +42,7 @@
 			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="MARKUP" DELEGATE="TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -57,59 +52,5 @@
 			<BEGIN>&amp;</BEGIN>
 			<END>;</END>
 		</SPAN>
-	</RULES>
-
-	<RULES SET="TAGS" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
-		<SPAN TYPE="LITERAL1">
-			<BEGIN>"</BEGIN>
-			<END>"</END>
-		</SPAN>
-
-		<SPAN TYPE="LITERAL1">
-			<BEGIN>'</BEGIN>
-			<END>'</END>
-		</SPAN>
-
-		<SEQ TYPE="OPERATOR">=</SEQ>
-		
-		<KEYWORDS IGNORE_CASE="TRUE">
-			<KEYWORD1>html</KEYWORD1>
-			<KEYWORD1>head</KEYWORD1>
-			<KEYWORD1>meta</KEYWORD1>
-			<KEYWORD1>body</KEYWORD1>
-			<KEYWORD1>table</KEYWORD1>
-			<KEYWORD1>tr</KEYWORD1>
-			<KEYWORD1>td</KEYWORD1>
-			<KEYWORD2>link</KEYWORD2>
-			<KEYWORD2>alink</KEYWORD2>
-			<KEYWORD2>vlink</KEYWORD2>
-			<KEYWORD2>bgcolor</KEYWORD2>
-			<KEYWORD2>id</KEYWORD2>
-			<KEYWORD2>name</KEYWORD2>
-			<KEYWORD2>type</KEYWORD2>
-			<KEYWORD2>value</KEYWORD2>
-			<KEYWORD2>size</KEYWORD2>
-			<KEYWORD2>border</KEYWORD2>
-			<KEYWORD2>cellpadding</KEYWORD2>
-			<KEYWORD2>cellspacing</KEYWORD2>
-			<KEYWORD2>width</KEYWORD2>
-			<KEYWORD2>height</KEYWORD2>
-			<KEYWORD2>class</KEYWORD2>
-			<KEYWORD2>nowrap</KEYWORD2>
-			<KEYWORD2>valign</KEYWORD2>
-			<KEYWORD2>align</KEYWORD2>
-			<KEYWORD2>hspace</KEYWORD2>
-			<KEYWORD2>src</KEYWORD2>
-			<KEYWORD2>type</KEYWORD2>
-			<KEYWORD2>name</KEYWORD2>
-			<KEYWORD2>value</KEYWORD2>
-			<KEYWORD2>size</KEYWORD2>
-			<KEYWORD2>colspan</KEYWORD2>
-			<KEYWORD2>rowspan</KEYWORD2>
-		</KEYWORDS>
 	</RULES>
 </MODE>

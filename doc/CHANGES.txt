@@ -6,11 +6,16 @@ JEDIT 3.0 VERSION HISTORY
 
 - 'Favorites' is now an option for the 'default path' option in the
   'File System Browser' option pane
+- Mode parser is more resistent to errors and no longer throws various
+  exceptions with malformed mode files
+- The JSP mode in jEdit 2.5.1 was better than the 2.6/3.0 one, so it is
+  included again
 
 + Neutral
 
 - Default install directory is now /usr/share/jedit/<version> on Unix.
   It used to be /usr/share/jedit-<version>
+- xmode.dtd moved from modes directory to jedit.jar
 
 + Bug Fixes
 
@@ -33,6 +38,13 @@ JEDIT 3.0 VERSION HISTORY
 - The batch file created on Windows, and the shell script created on
   Unix by the installer now make it easier to change the Java heap size
 - The 'Style' option pane displayed syntax styles incorrectly on Java 2
+- Untitled files always used the default undo queue size (100) instead
+  of the value specified in the Global Options dialog box
+- The 'default edit mode' setting was not respected in all cases
+- The feature that cleared the dirty flag when all edits up to a save were
+  undone had a bug where the flag would sometimes be cleared at the wrong
+  time. A proper fix for the problem will be added in jEdit 3.1; in the
+  meantime, the feature has been disabled.
 
 * Version 3.0final
 
