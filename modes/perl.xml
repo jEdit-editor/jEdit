@@ -23,6 +23,38 @@
 			<BEGIN>=head1</BEGIN>
 			<END>=cut</END>
 		</SPAN>
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=head2</BEGIN>
+			<END>=cut</END>
+		</SPAN>
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=item</BEGIN>
+			<END>=cut</END>
+		</SPAN>
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=over</BEGIN>
+			<END>=cut</END>
+		</SPAN>
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=back</BEGIN>
+			<END>=cut</END>
+		</SPAN>
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=pod</BEGIN>
+			<END>=cut</END>
+		</SPAN>
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=for</BEGIN>
+			<END>=cut</END>
+		</SPAN>
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=begin</BEGIN>
+			<END>=cut</END>
+		</SPAN>
+		<SPAN TYPE="LABEL" AT_LINE_START="TRUE" DELEGATE="POD">
+			<BEGIN>=end</BEGIN>
+			<END>=cut</END>
+		</SPAN>
 
 		<!-- Variables -->
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
@@ -46,6 +78,12 @@
 		</SPAN>
 
 		<MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
+
+		<!-- RegExps -->
+		<!-- <SPAN TYPE="LITERAL2" DELEGATE="REGEXP" NO_LINE_BREAK="TRUE" >
+			<BEGIN>/</BEGIN>
+			<END>/</END>
+		</SPAN> -->
 
 		<!-- Literals -->
 		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL">
@@ -522,4 +560,32 @@
 
 		<MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
 	</RULES>
+      <RULES SET="REGEXP" DEFAULT="LITERAL2" ESCAPE="\">
+              <!-- whitespace: (space and tab) -->
+              <WHITESPACE> </WHITESPACE>
+              <WHITESPACE>    </WHITESPACE>
+
+              <!-- Variables -->
+              <SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+                      <BEGIN>${</BEGIN>
+                      <END>}</END>
+              </SPAN>
+
+              <MARK_FOLLOWING TYPE="KEYWORD2">$#</MARK_FOLLOWING>
+              <MARK_FOLLOWING TYPE="KEYWORD2">$</MARK_FOLLOWING>
+
+              <SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+                      <BEGIN>@{</BEGIN>
+                      <END>}</END>
+              </SPAN>
+
+              <MARK_FOLLOWING TYPE="KEYWORD2">@</MARK_FOLLOWING>
+
+              <SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+                      <BEGIN>%{</BEGIN>
+                      <END>}</END>
+              </SPAN>
+
+              <MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
+      </RULES>
 </MODE>

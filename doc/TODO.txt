@@ -135,6 +135,9 @@ considerably.
 
 - Bracket double click behavior is really annoying - make if configurable
 
+- .shortcut properties in plugins don't work. This is not too critical,
+  but it would be nice if it was fixed anyway.
+
 * UI changes
 
 The Edit menu should be simplified. The 'Selection', 'Lines',

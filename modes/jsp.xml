@@ -20,12 +20,12 @@
 		</SPAN>
 
 		<!-- markup tags -->
-		<SPAN TYPE="LABEL" DELEGATE="java::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 		
-		<SPAN TYPE="LABEL" DELEGATE="java::MAIN">
+		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
