@@ -148,7 +148,7 @@ public abstract class OperatingSystem
 
 		public String getShortcutDirectory()
 		{
-			return "C:\\Windows\\Desktop";
+			return "C:\\Windows";
 		}
 
 		public void createScript(SIMInstaller installer,
