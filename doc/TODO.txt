@@ -10,7 +10,6 @@ JEDIT TO DO
   - document EditBus plugin
   - proofread
 - Switch to DocBook 4.0 for the documentation
-- CVS: remove goto-end-indent
 
 Later:
 

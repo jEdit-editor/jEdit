@@ -16,6 +16,14 @@ JEDIT 2.5 VERSION HISTORY
 - 'Go to End Of Indent' command removed (just use HOME instead); shortcut
   of 'Indent Selected Lines' changed to C+i
 
++ Bug Fixes
+
+- Fixed incorrect error message displayed when a plugin depends on another
+  one that isn't installed
+- Plugin manager's 'update' feature didn't work (since 2.5pre3)
+- Minor changes to scrolling code, might solve recently reported problems
+  when running on Java 2
+
 * Version 2.5pre4
 
 + New Features

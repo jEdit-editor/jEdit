@@ -575,6 +575,9 @@ public class View extends JFrame implements EBComponent
 	 */
 	protected void processKeyEvent(KeyEvent evt)
 	{
+		if(evt.isConsumed())
+			return;
+
 		if(glassPane.isVisible())
 		{
 			super.processKeyEvent(evt);
@@ -1021,6 +1024,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.177  2000/06/02 02:21:05  sp
+ * minor bug fixes
+ *
  * Revision 1.176  2000/05/22 12:05:45  sp
  * Markers are highlighted in the gutter, bug fixes
  *

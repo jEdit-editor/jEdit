@@ -833,7 +833,7 @@ plugin.dep-plugin.no-version.message=The plugin {0} requires version {1} or late
 
 plugin.dep-plugin.title=Unsatisfied Dependency
 plugin.dep-plugin.message=The plugin {0} requires version {1} or later of {2},\n\
-	but you only have {1} version {3}.
+	but you only have {2} version {3}.
 
 plugin.dep-class.title=Unsatisfied Dependency
 plugin.dep-class.message=The plugin {0} requires the class {1}.\n\

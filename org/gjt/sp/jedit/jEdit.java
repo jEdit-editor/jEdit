@@ -603,6 +603,7 @@ public class jEdit
 	public static void addPlugin(EditPlugin plugin)
 	{
 		plugins.addPlugin(plugin);
+		plugin.start();
 	}
 
 	/**
@@ -2305,6 +2306,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.244  2000/06/02 02:21:05  sp
+ * minor bug fixes
+ *
  * Revision 1.243  2000/05/27 05:52:06  sp
  * Improved home/end actions
  *

@@ -23,8 +23,8 @@ view. Previously, all splits had to edit the same buffer.
 
 Settings such as the tab size, comment strings, and various flags can
 now be set on a mode-by-mode basis in the Utilities->Global Options
-dialog box. The patterns used to match file names to edit modes can
-be customized as well.
+dialog box. The patterns used to match file names to modes can be
+customized as well.
 
 * Customizable tool bar
 
@@ -40,27 +40,27 @@ This widget was written by Ken Klinner <kklinner@opiom.com>.
 * Register and marker improvements
 
 Markers and position registers are now highlighted in the gutter.
-Commands have been added to move the caret to the closest marker before
-and after the caret.
+Commands have been added to go to the closest marker before and after
+the caret.
 
 * Macro improvements
 
-Macros can now be written that prompt for input. Also, register contents
-can now be substituted into action commands by writing '$x', where 'x'
-is the desired register.
+Macros can now prompt for input. Also, register contents can now be
+substituted into action commands by writing '$x', where 'x' is the
+desired register.
 
 * HyperSearch improvements
 
 The 'HyperSearch' window now performs searches in a background thread.
-This improves percieved performance, gives feedback as while the
-search is in progress, and allows the search to be interrupted.
+This improves percieved performance, gives feedback while the search is
+in progress, and allows the search to be interrupted.
 
 * Improved home/end commands
 
 The behaviour of the HOME and END keys has changed. Pressing them
-multiple times will now cycle between the first/last non-whitespace
-character on the current line, the start/end of the current line, and
-the first/last visible line.
+multiple times will now go to the first/last non-whitespace character on
+the current line, then the start/end of the current line, and finally the
+first/last visible line.
 
 * Background mode
 

@@ -130,8 +130,8 @@ public abstract class EditPlugin
 
 		public void addPlugin(EditPlugin plugin)
 		{
-			plugin.start();
 			plugins.addElement(plugin);
+			plugin.start();
 		}
 
 		public EditPlugin[] getPlugins()
@@ -174,6 +174,9 @@ public abstract class EditPlugin
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/06/02 02:21:05  sp
+ * minor bug fixes
+ *
  * Revision 1.5  2000/05/14 10:55:21  sp
  * Tool bar editor started, improved view registers dialog box
  *

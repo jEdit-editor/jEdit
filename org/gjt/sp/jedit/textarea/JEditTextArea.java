@@ -1414,8 +1414,13 @@ public class JEditTextArea extends JComponent
 			document.addDocumentListener(documentHandler);
 		}
 
-		if(isValid())
-			recalculateVisibleLines();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				recalculateVisibleLines();
+			}
+		});
 	}
 
 	/**
@@ -1769,18 +1774,10 @@ public class JEditTextArea extends JComponent
 			if(!scrollBarsInitialized)
 				return;
 
-			// If this is not done, mousePressed events accumilate
-			// and the result is that scrolling doesn't stop after
-			// the mouse is released
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run()
-				{
-					if(evt.getAdjustable() == vertical)
-						setFirstLine(vertical.getValue());
-					else
-						setHorizontalOffset(-horizontal.getValue());
-				}
-			});
+			if(evt.getAdjustable() == vertical)
+				setFirstLine(vertical.getValue());
+			else
+				setHorizontalOffset(-horizontal.getValue());
 		}
 	}
 
@@ -2179,6 +2176,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.68  2000/06/02 02:21:06  sp
+ * minor bug fixes
+ *
  * Revision 1.67  2000/05/24 07:56:05  sp
  * bug fixes
  *
