@@ -122,7 +122,7 @@ public class StatusBar extends JPanel
 			{
 				int repeatCount = view.getInputHandler()
 					.getRepeatCount();
-				if(repeatCount == 1)
+				if(repeatCount == 0)
 					str = "";
 				else
 					str = String.valueOf(repeatCount);
@@ -154,6 +154,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/07/15 10:10:18  sp
+ * improved printing
+ *
  * Revision 1.3  2000/06/03 07:28:26  sp
  * User interface updates, bug fixes
  *

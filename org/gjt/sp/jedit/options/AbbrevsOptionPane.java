@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.options;
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -53,8 +54,9 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		panel.add(panel2,BorderLayout.NORTH);
 
 		JPanel panel3 = new JPanel();
-		panel3.add(new JLabel(jEdit.getProperty("options.abbrevs.set")));
-		panel.add(panel3,BorderLayout.SOUTH);
+		JLabel label = new JLabel(jEdit.getProperty("options.abbrevs.set"));
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		panel3.add(label);
 
 		Hashtable _modeAbbrevs = Abbrevs.getModeAbbrevs();
 		modeAbbrevs = new Hashtable();
@@ -70,6 +72,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		setsComboBox = new JComboBox(sets);
 		setsComboBox.addActionListener(new ActionHandler());
 		panel3.add(setsComboBox);
+		panel.add(panel3,BorderLayout.SOUTH);
 
 		add(BorderLayout.NORTH,panel);
 
@@ -324,6 +327,9 @@ class Abbrev
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/07/15 10:10:18  sp
+ * improved printing
+ *
  * Revision 1.5  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *

@@ -117,7 +117,7 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public int getRepeatCount()
 	{
-		return (repeat ? Math.max(1,repeatCount) : 1);
+		return (repeat ? repeatCount : 1);
 	}
 
 	/**
@@ -308,6 +308,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/07/15 10:10:18  sp
+ * improved printing
+ *
  * Revision 1.8  2000/05/27 05:52:06  sp
  * Improved home/end actions
  *

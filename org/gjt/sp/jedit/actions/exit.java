@@ -1,6 +1,6 @@
 /*
  * exit.java
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.actions;
 
+import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
 
@@ -26,6 +27,23 @@ public class exit extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		jEdit.exit(getView(evt),true);
+		View view = getView(evt);
+
+		boolean ok;
+		if(jEdit.getBooleanProperty("confirmExit"))
+		{
+			int result = JOptionPane.showConfirmDialog(view,
+				jEdit.getProperty("confirm-exit.message"),
+				jEdit.getProperty("confirm-exit.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+
+			ok = (result == JOptionPane.YES_OPTION);
+		}
+		else
+			ok = true;
+
+		if(ok)
+			jEdit.exit(view,true);
 	}
 }

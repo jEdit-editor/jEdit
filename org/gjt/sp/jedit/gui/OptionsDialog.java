@@ -251,6 +251,7 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionPane(new EditorOptionPane(), jEditGroup);
 		addOptionPane(new ModeOptionPane(), jEditGroup);
 		addOptionPane(new GutterOptionPane(), jEditGroup);
+		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new StyleOptionPane(), jEditGroup);
 		addOptionPane(new FileFilterOptionPane(), jEditGroup);
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
@@ -584,6 +585,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/07/15 10:10:18  sp
+ * improved printing
+ *
  * Revision 1.25  2000/05/14 10:55:22  sp
  * Tool bar editor started, improved view registers dialog box
  *

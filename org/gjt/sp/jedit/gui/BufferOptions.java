@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -37,17 +38,24 @@ public class BufferOptions extends EnhancedDialog
 		this.view = view;
 		this.buffer = view.getBuffer();
 
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
 		ActionHandler actionListener = new ActionHandler();
 		JPanel panel = new JPanel();
 		GridBagLayout layout = new GridBagLayout();
 		panel.setLayout(layout);
 
+		Insets nullInsets = new Insets(0,0,0,0);
+		Insets labelInsets = new Insets(0,0,0,12);
+
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridx = cons.gridy = 0;
-		cons.gridwidth = 3;
-		cons.gridheight = 1;
+		cons.gridwidth = cons.gridheight = 1;
 		cons.fill = GridBagConstraints.BOTH;
-		cons.weightx = 1.0f;
+		cons.weightx = 0.0f;
+		cons.insets = labelInsets;
 
 		// Tab size
 		JLabel label = new JLabel(jEdit.getProperty(
@@ -55,8 +63,9 @@ public class BufferOptions extends EnhancedDialog
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		cons.gridx = 3;
-		cons.gridwidth = 1;
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		cons.insets = nullInsets;
 		String[] tabSizes = { "2", "4", "8" };
 		tabSize = new JComboBox(tabSizes);
 		tabSize.setEditable(true);
@@ -68,14 +77,16 @@ public class BufferOptions extends EnhancedDialog
 		// Edit mode
 		cons.gridx = 0;
 		cons.gridy = 1;
-		cons.gridwidth = 3;
+		cons.weightx = 0.0f;
+		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty(
 			"buffer-options.mode"),SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		cons.gridx = 3;
-		cons.gridwidth = 1;
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		cons.insets = nullInsets;
 		modes = jEdit.getModes();
 		String bufferMode = buffer.getMode().getName();
 		int index = 0;
@@ -97,14 +108,16 @@ public class BufferOptions extends EnhancedDialog
 		// Line separator
 		cons.gridx = 0;
 		cons.gridy = 2;
-		cons.gridwidth = 3;
+		cons.weightx = 0.0f;
+		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty("buffer-options.lineSeparator"),
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		cons.gridx = 3;
-		cons.gridwidth = 1;
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		cons.insets = nullInsets;
 		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
@@ -125,6 +138,7 @@ public class BufferOptions extends EnhancedDialog
 		// Syntax colorizing
 		cons.gridx = 0;
 		cons.gridy = 3;
+		cons.weightx = 0.0f;
 		cons.gridwidth = cons.REMAINDER;
 		cons.fill = GridBagConstraints.NONE;
 		cons.anchor = GridBagConstraints.WEST;
@@ -164,28 +178,33 @@ public class BufferOptions extends EnhancedDialog
 
 		// Props label
 		cons.gridy = 7;
+		cons.insets = new Insets(6,0,6,0);
 		label = new JLabel(jEdit.getProperty("buffer-options.props"));
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(BorderLayout.NORTH,panel);
+		content.add(BorderLayout.NORTH,panel);
 
-		props = new JTextArea(4,30);
+		props = new JTextArea(4,4);
 		props.setLineWrap(true);
 		props.setWrapStyleWord(false);
-		getContentPane().add(BorderLayout.CENTER,new JScrollPane(props));
+		content.add(BorderLayout.CENTER,new JScrollPane(props));
 		updatePropsField();
 
 		panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(new EmptyBorder(12,0,0,0));
+		panel.add(Box.createGlue());
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(actionListener);
 		getRootPane().setDefaultButton(ok);
 		panel.add(ok);
+		panel.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(actionListener);
 		panel.add(cancel);
-		getContentPane().add(BorderLayout.SOUTH,panel);
+		panel.add(Box.createGlue());
+		content.add(BorderLayout.SOUTH,panel);
 
 		pack();
 		setLocationRelativeTo(view);
@@ -282,6 +301,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/07/15 10:10:17  sp
+ * improved printing
+ *
  * Revision 1.16  2000/05/21 03:00:51  sp
  * Code cleanups and bug fixes
  *
@@ -311,18 +333,5 @@ public class BufferOptions extends EnhancedDialog
  *
  * Revision 1.7  1999/04/19 05:44:34  sp
  * GUI updates
- *
- * Revision 1.6  1999/04/08 04:44:51  sp
- * New _setBuffer method in View class, new addTab method in Console class
- *
- * Revision 1.5  1999/04/07 05:22:46  sp
- * Buffer options bug fix, keyword map API change (get/setIgnoreCase() methods)
- *
- * Revision 1.4  1999/04/02 03:21:09  sp
- * Added manifest file, common strings such as OK, etc are no longer duplicated
- * many times in jedit_gui.props
- *
- * Revision 1.3  1999/04/02 02:39:46  sp
- * Updated docs, console fix, getDefaultSyntaxColors() method, hypersearch update
  *
  */

@@ -1,6 +1,6 @@
 /*
  * GeneralOptionPane.java - General options panel
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,6 +118,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
 		addComponent(saveDesktop);
 
+		/* Exit confirmation */
+		confirmExit = new JCheckBox(jEdit.getProperty(
+			"options.general.confirmExit"));
+		confirmExit.setSelected(jEdit.getBooleanProperty("confirmExit"));
+		addComponent(confirmExit);
+
 		/* Show buffer tabs */
 		showBufferTabs = new JCheckBox(jEdit.getProperty(
 			"options.general.showBufferTabs"));
@@ -173,7 +179,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	{
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
-		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
 		jEdit.setProperty("autosave",autosave.getText());
@@ -197,6 +202,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
+		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
+		jEdit.setBooleanProperty("confirmExit",confirmExit.isSelected());
 		jEdit.setBooleanProperty("view.showBufferTabs",showBufferTabs
 			.isSelected());
 		jEdit.setProperty("view.bufferTabsPos",String.valueOf(
@@ -223,6 +230,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
 	private JCheckBox saveDesktop;
+	private JCheckBox confirmExit;
 	private JCheckBox showBufferTabs;
 	private JComboBox bufferTabsPos;
 	private JCheckBox showFullPath;

@@ -19,6 +19,9 @@ history=25
 # Desktop saving toggle
 saveDesktop=true
 
+# Ask for confirmation before exiting
+confirmExit=true
+
 # Number of backups to make, 0=no backups
 backups=1
 
@@ -67,13 +70,6 @@ buffer.undoCount=100
 
 # Should files be tokenized on load?
 buffer.tokenize=true
-
-# Print margins (these cannot be set on a per-buffer basis currently.
-# Not much point fixing this though)
-buffer.margin.top=0.5
-buffer.margin.left=0.5
-buffer.margin.bottom=0.5
-buffer.margin.right=0.5
 
 # Syntax highlighting
 buffer.syntax=true
@@ -213,3 +209,27 @@ view.style.label=color:#990033 bgColor:#cfcfcf style:b
 view.style.operator=color:#000000 style:b
 view.style.digit=color:#009191
 view.style.invalid=color:#ff0000 style:b
+
+###
+### PRINTING
+###
+
+# Font
+print.font=Monospaced
+print.fontsize=10
+print.fontstyle=0
+
+# Print header?
+print.header=true
+
+# Print footer?
+print.footer=true
+
+# Print line numbers?
+print.lineNumbers=true
+
+# Margins
+print.margin.top=0.5
+print.margin.left=0.5
+print.margin.bottom=0.5
+print.margin.right=0.5

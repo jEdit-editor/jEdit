@@ -1,6 +1,6 @@
 /*
  * print.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public class print extends EditAction
 		try
 		{
 			topMargin = (int)(Float.valueOf(jEdit.getProperty(
-				"buffer.margin.top")).floatValue() * ppi);
+				"print.margin.top")).floatValue() * ppi);
 		}
 		catch(NumberFormatException nf)
 		{
@@ -62,7 +62,7 @@ public class print extends EditAction
 		try
 		{
 			leftMargin = (int)(Float.valueOf(jEdit.getProperty(
-				"buffer.margin.left")).floatValue() * ppi);
+				"print.margin.left")).floatValue() * ppi);
 		}
 		catch(NumberFormatException nf)
 		{
@@ -71,7 +71,7 @@ public class print extends EditAction
 		try
 		{
 			bottomMargin = (int)(Float.valueOf(jEdit.getProperty(
-				"buffer.margin.bottom")).floatValue() * ppi);
+				"print.margin.bottom")).floatValue() * ppi);
 		}
 		catch(NumberFormatException nf)
 		{
@@ -80,12 +80,17 @@ public class print extends EditAction
 		try
 		{
 			rightMargin = (int)(Float.valueOf(jEdit.getProperty(
-				"buffer.margin.right")).floatValue() * ppi);
+				"print.margin.right")).floatValue() * ppi);
 		}
 		catch(NumberFormatException nf)
 		{
 			rightMargin = leftMargin;
 		}
+
+		boolean printHeader = jEdit.getBooleanProperty("print.header");
+		boolean printFooter = jEdit.getBooleanProperty("print.footer");
+		boolean printLineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
+		boolean syntax = jEdit.getBooleanProperty("print.syntax");
 
 		String header = buffer.getPath();
 		String footer = new Date().toString();
@@ -93,12 +98,37 @@ public class print extends EditAction
 		JEditTextArea textArea = view.getTextArea();
 
 		Segment lineSegment = new Segment();
-		TokenMarker tokenMarker = textArea.getTokenMarker();
+		TokenMarker tokenMarker = (syntax ? textArea.getTokenMarker()
+			: NullTokenMarker.getSharedInstance());
 		SyntaxStyle[] styles = textArea.getPainter().getStyles();
 		TabExpander expander = null;
 
 		Graphics gfx = null;
-		Font font = textArea.getPainter().getFont();
+
+		String fontFamily = jEdit.getProperty("print.font");
+		int fontSize;
+		try
+		{
+			fontSize = Integer.parseInt(jEdit.getProperty(
+				"print.fontsize"));
+		}
+		catch(NumberFormatException nf)
+		{
+			fontSize = 10;
+		}
+		int fontStyle;
+		try
+		{
+			fontStyle = Integer.parseInt(jEdit.getProperty(
+				"print.fontstyle"));
+		}
+		catch(NumberFormatException nf)
+		{
+			fontStyle = Font.PLAIN;
+		}
+
+		Font font = new Font(fontFamily,fontStyle,fontSize);
+
 		FontMetrics fm = null;
 		Dimension pageDimension = job.getPageDimension();
 		int pageWidth = pageDimension.width;
@@ -107,6 +137,10 @@ public class print extends EditAction
 		int tabSize = 0;
 		int lineHeight = 0;
 		int page = 0;
+
+		int lineNumberDigits = (int)Math.ceil(Math.log(
+			textArea.getLineCount()) / Math.log(10));
+		System.err.println(lineNumberDigits);
 
 		for(int i = 0; i < textArea.getLineCount(); i++)
 		{
@@ -120,14 +154,19 @@ public class print extends EditAction
 				lineHeight = fm.getHeight();
 				tabSize = buffer.getTabSize() * fm.charWidth(' ');
 				expander = new PrintTabExpander(leftMargin,tabSize);
-				gfx.setColor(Color.lightGray);
-				gfx.fillRect(leftMargin,topMargin,pageWidth
-					- leftMargin - rightMargin,lineHeight);
-				gfx.setColor(Color.black);
+
 				y = topMargin + lineHeight - fm.getDescent()
 					- fm.getLeading();
-				gfx.drawString(header,leftMargin,y);
-				y += lineHeight;
+
+				if(printHeader)
+				{
+					gfx.setColor(Color.lightGray);
+					gfx.fillRect(leftMargin,topMargin,pageWidth
+						- leftMargin - rightMargin,lineHeight);
+					gfx.setColor(Color.black);
+					gfx.drawString(header,leftMargin,y);
+					y += lineHeight;
+				}
 			}
 
 			y += lineHeight;
@@ -135,29 +174,45 @@ public class print extends EditAction
 
 			gfx.setColor(Color.black);
 			gfx.setFont(font);
+
+			int x = leftMargin;
+			if(printLineNumbers)
+			{
+				int lineNumberWidth = fm.charWidth('0') * lineNumberDigits;
+				String lineNumber = String.valueOf(i + 1);
+				gfx.drawString(lineNumber,(leftMargin + lineNumberWidth)
+					- fm.stringWidth(lineNumber),y);
+				x += lineNumberWidth + fm.charWidth('0');
+			}
+
 			Token tokens = tokenMarker.markTokens(lineSegment,i).firstToken;
 			SyntaxUtilities.paintSyntaxLine(lineSegment,
-				tokens,styles,expander,gfx,Color.white,
-				leftMargin,y);
+				tokens,styles,expander,gfx,Color.white,x,y);
 
-			if((y >= pageHeight - bottomMargin - lineHeight * 3) ||
-				(i == textArea.getLineCount() - 1))
+			int bottomOfPage = pageHeight - bottomMargin - lineHeight;
+			if(printFooter)
+				bottomOfPage -= lineHeight * 2;
+
+			if(y >= bottomOfPage || i == textArea.getLineCount() - 1)
 			{
-				y = pageHeight - bottomMargin;
+				if(printFooter)
+				{
+					y = pageHeight - bottomMargin;
 
-				gfx.setColor(Color.lightGray);
-				gfx.setFont(font);
-				gfx.fillRect(leftMargin,y - lineHeight,pageWidth
-					- leftMargin - rightMargin,lineHeight);
-				gfx.setColor(Color.black);
-				y -= (lineHeight - fm.getAscent());
-				gfx.drawString(footer,leftMargin,y);
+					gfx.setColor(Color.lightGray);
+					gfx.setFont(font);
+					gfx.fillRect(leftMargin,y - lineHeight,pageWidth
+						- leftMargin - rightMargin,lineHeight);
+					gfx.setColor(Color.black);
+					y -= (lineHeight - fm.getAscent());
+					gfx.drawString(footer,leftMargin,y);
 
-				Integer[] args = { new Integer(page) };
-				String pageStr = jEdit.getProperty("print.page",args);
-				int width = fm.stringWidth(pageStr);
-				gfx.drawString(pageStr,pageWidth - rightMargin
-					- width,y);
+					Integer[] args = { new Integer(page) };
+					String pageStr = jEdit.getProperty("print.page",args);
+					int width = fm.stringWidth(pageStr);
+					gfx.drawString(pageStr,pageWidth - rightMargin
+						- width,y);
+				}
 
 				gfx.dispose();
 				gfx = null;

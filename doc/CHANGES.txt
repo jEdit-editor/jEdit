@@ -13,6 +13,8 @@ JEDIT 3.0 VERSION HISTORY
   when a new version is installed, respectively. These wizards help you
   configure firewall settings, install and update plugins, view the
   change log, and other such stuff.
+- 'Print' command now supports printing of line numbers, and many printing
+  settings can now be customized in Utilities->Global Options->Printing
 
 + Enhancements
 
@@ -26,6 +28,16 @@ JEDIT 3.0 VERSION HISTORY
   gutter
 - The plugin manager now deletes files for real when removing and upgrading
   plugins; previously, it shoved them in a 'backup' directory
+- Shortcut of 'Exit' command changed to C+q
+- 'Exit' command now asks for confirmation (can be disabled in
+  Utilities->Global Options)
+
++ Bug Fixes
+
+- Fixed installer layout bug which might be the cause of exceptions people
+  have been seeing on certain platforms
+- Fixed minor cosmetic problem in status bar when entering repeat counts
+  where the first digit is '1'
 
 + Incompatibilities
 

@@ -534,6 +534,7 @@ no-write.title=Cannot Save File
 no-write.message=Cannot save to {0}.\n\
 	This probably means you have insufficent permissions.
 
+# Find accessory in open/save dialog boxes?
 findAccessory.find=Find
 findAccessory.start=Start
 findAccessory.stop=Stop
@@ -779,6 +780,10 @@ close.save.mnemonic=s
 close.discard=Discard Selected
 close.discard.mnemonic=d
 
+# Confirm exit dialog
+confirm-exit.title=Confirm Exit
+confirm-exit.message=Are you sure you want to exit from jEdit?
+
 # Add abbrev dialog
 add-abbrev.title=Add Abbreviation
 add-abbrev.message=The abbreviation "{0}" is undefined.\n\
@@ -860,10 +865,9 @@ macro-input.no-record.message=This command is only useful while recording\n\
 
 # Buffer options dialog
 buffer-options.title=Buffer Options
-buffer-options.mode=Edit mode:\ 
-buffer-options.lineSeparator=Line separator:\ 
-buffer-options.props=Corresponding buffer-local properties: \
-	(C+c copies)
+buffer-options.mode=Edit mode:
+buffer-options.lineSeparator=Line separator:
+buffer-options.props=Corresponding buffer-local properties: (C+c copies)
 
 # Global options dialog
 options.title=Global Options
@@ -872,21 +876,22 @@ options.plugins.label=Plugin Options
 options.shortcuts.label=Shortcuts
 
 options.general.label=General
-options.general.lf=Swing look & feel:\ 
-options.general.encoding=File encoding:\ 
-options.general.autosave=Autosave frequency (secs):\ 
-options.general.recent=Max recent files:\ 
-options.general.history=Max history list length:\ 
-options.general.backups=Max number of backups:\ 
-options.general.backupDirectory=Backup directory:\ 
-options.general.backupPrefix=Backup filename prefix:\ 
-options.general.backupSuffix=Backup filename suffix:\ 
-options.general.lineSeparator=Default line separator:\ 
+options.general.lf=Swing look & feel:
+options.general.encoding=File encoding:
+options.general.autosave=Autosave frequency (secs):
+options.general.recent=Max recent files:
+options.general.history=Max history list length:
+options.general.backups=Max number of backups:
+options.general.backupDirectory=Backup directory:
+options.general.backupPrefix=Backup filename prefix:
+options.general.backupSuffix=Backup filename suffix:
+options.general.lineSeparator=Default line separator:
 options.general.saveDesktop=Save session on exit
+options.general.confirmExit=Ask for confirmation before exiting
 options.general.showToolbar=Show toolbar
 options.general.showSearchbar=Show search bar
 options.general.showBufferTabs=Show buffer tabs
-options.general.bufferTabsPos=Buffer tabs position:\ 
+options.general.bufferTabsPos=Buffer tabs position:
 options.general.showFullPath=Show full path of buffers in title bar
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort by file name only (instead of full path)
@@ -894,16 +899,16 @@ options.general.checkModStatus=Check file modification time on focus
 options.general.tokenize=Fully parse files for syntax info when loading
 
 options.editor.label=Editor
-options.editor.defaultMode=Default edit mode:\ 
-options.editor.font=Text font:\ 
-options.editor.fontstyle=Text font style:\ 
+options.editor.defaultMode=Default edit mode:
+options.editor.font=Text font:
+options.editor.fontstyle=Text font style:
 options.editor.plain=Plain
 options.editor.bold=Bold
 options.editor.italic=Italic
 options.editor.boldItalic=Bold Italic
-options.editor.fontsize=Text font size:\ 
-options.editor.tabSize=Tab width:\ 
-options.editor.undoCount=Number of undos:\ 
+options.editor.fontsize=Text font size:
+options.editor.tabSize=Tab width:
+options.editor.undoCount=Number of undos:
 options.editor.lineHighlight=Current line highlighting
 options.editor.bracketHighlight=Bracket highlighting
 options.editor.eolMarkers=EOL markers
@@ -918,27 +923,40 @@ options.editor.noTabs=Soft (emulated with spaces) tabs
 options.editor.homeEnd="Smart" home/end behaviour
 
 options.modes.label=Edit Modes
-options.modes.mode=Edit mode:\ 
+options.modes.mode=Edit mode:
 options.modes.useDefaults=Use default settings
-options.modes.filenameGlob=File name glob:\ 
-options.modes.firstlineGlob=First line glob:\ 
-options.modes.commentStart=Comment start:\ 
-options.modes.commentEnd=Comment end:\ 
-options.modes.boxComment=Box comment:\ 
-options.modes.blockComment=Block comment:\ 
-options.modes.noWordSep=Extra word characters:\ 
+options.modes.filenameGlob=File name glob:
+options.modes.firstlineGlob=First line glob:
+options.modes.commentStart=Comment start:
+options.modes.commentEnd=Comment end:
+options.modes.boxComment=Box comment:
+options.modes.blockComment=Block comment:
+options.modes.noWordSep=Extra word characters:
 
 options.gutter.label=Gutter
 options.gutter.expanded=Gutter expanded by default
-options.gutter.interval=Line highlight interval (0=none):\ 
+options.gutter.interval=Line highlight interval (0=none):
 options.gutter.lineNumbers=Line numbering enabled
 options.gutter.currentLineHighlight=Current line highlight enabled
-options.gutter.width=Gutter width:\ 
-options.gutter.borderWidth=Gutter border width:\ 
-options.gutter.numberAlignment=Line number alignment:\ 
-options.gutter.font=Gutter font:\ 
-options.gutter.fontsize=Gutter font size:\ 
-options.gutter.fontstyle=Gutter font style:\ 
+options.gutter.width=Gutter width:
+options.gutter.borderWidth=Gutter border width:
+options.gutter.numberAlignment=Line number alignment:
+options.gutter.font=Gutter font:
+options.gutter.fontsize=Gutter font size:
+options.gutter.fontstyle=Gutter font style:
+
+options.print.label=Printing
+options.print.font=Print font:
+options.print.fontstyle=Print font style:
+options.print.fontsize=Print font size:
+options.print.margin.top=Top margin (inches):
+options.print.margin.left=Left margin (inches):
+options.print.margin.bottom=Bottom margin (inches):
+options.print.margin.right=Right margin (inches):
+options.print.header=Print a header with the file name
+options.print.footer=Print a footer with the date, time and page number
+options.print.lineNumbers=Print line numbers
+options.print.syntax=Syntax highlighting
 
 options.styles.label=Colors & Styles
 options.styles.colors=Colors:

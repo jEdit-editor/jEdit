@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 
@@ -119,6 +120,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 
 		cons.gridx = 0;
 		JLabel l = new JLabel(label,SwingConstants.RIGHT);
+		l.setBorder(new EmptyBorder(0,0,0,12));
 		gridBag.setConstraints(l,cons);
 		add(l);
 
@@ -154,6 +156,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/07/15 10:10:17  sp
+ * improved printing
+ *
  * Revision 1.4  2000/04/16 08:56:24  sp
  * Option pane updates
  *
