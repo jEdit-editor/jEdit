@@ -116,6 +116,8 @@ public class OptionsDialog extends EnhancedDialog
 
 		paneTree.getSelectionModel().addTreeSelectionListener(this);
 
+		paneTree.setSelectedRow(1);
+
 		view.hideWaitCursor();
 
 		Dimension screen = getToolkit().getScreenSize();
@@ -286,6 +288,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/02/03 06:02:29  sp
+ * options dialog updated
+ *
  * Revision 1.13  2000/02/02 10:03:31  sp
  * Option groups added
  *
