@@ -1,4 +1,8 @@
 + before 3.1final
+ - 'new file' in file system browser doesn't work if 'untitled-1' is open
+ - gutter not repainted when all lines visible and delete lines
+ - file dialog: why clear field on directory change?
+ - highlight px, pt, in, em, etc in CSS mode
  - better folding docs
  - undo causes problems sometimes (is this related to folding at all?)
  - scrolling bug with folding

@@ -1,5 +1,17 @@
 JEDIT 3.1 VERSION HISTORY
 
+* Version 3.1pre4
+
++ Enhancements
+
+- Gutter line highlight code now highlights (if the interval is set to 5)
+  line 5, 10, 15, etc. Before it would highlight line 1, 6, 11, etc.
+
++ Bug Fixes
+
+- jEdit no longer uses the java.specification.version property, because
+  on IBM 1.3 VMs, it is set to 1.2
+
 * Version 3.1pre3
 
 + New Features

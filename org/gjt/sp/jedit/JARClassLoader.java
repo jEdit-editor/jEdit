@@ -257,10 +257,7 @@ public class JARClassLoader extends ClassLoader
 
 			if(what.equals("jdk"))
 			{
-				String jreVersion = System.getProperty("java.specification.version");
-				if (jreVersion == null) jreVersion = System.getProperty("java.version");
-
-				if(jreVersion.compareTo(arg) < 0)
+				if(System.getProperty("java.version").compareTo(arg) < 0)
 				{
 					String[] args = { name, arg,
 						jreVersion };

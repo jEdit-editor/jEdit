@@ -124,7 +124,7 @@ public class Gutter extends JComponent implements SwingConstants
 
 			if (physicalLine == textArea.getCaretLine() && highlightCurrentLine)
 				gfx.setColor(currentLineHighlight);
-			else if (interval > 1 && line % interval == 0)
+			else if (interval > 1 && (line + 1) % interval == 0)
 				gfx.setColor(intervalHighlight);
 			else
 				gfx.setColor(fg);
