@@ -53,7 +53,7 @@
 			<END>&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
@@ -62,6 +62,42 @@
 		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
 			<BEGIN>&amp;</BEGIN>
 			<END>;</END>
+		</SPAN>
+	</RULES>
+	<RULES SET="TAGS" DEFAULT="MARKUP">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" DELEGATE="ATTRVALUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" DELEGATE="ATTRVALUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SEQ TYPE="MARKUP">/</SEQ>
+		<SEQ TYPE="NULL">=</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+	</RULES>
+	<RULES SET="ATTRVALUE" DEFAULT="LITERAL1">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		<!-- JSP tags -->
+		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
 		</SPAN>
 	</RULES>
 </MODE>

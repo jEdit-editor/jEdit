@@ -12,8 +12,10 @@ JEDIT 3.2 VERSION HISTORY
 - The jedit.spec file for creating the Linux RPM package can now be used
   to compile and build jEdit from scratch
 - Improved RPM spec syntax highlighting
-- Read-only flag is automatically said when loading files from read-only
+- Read-only flag is automatically set when loading files from read-only
   filesystems, like the Archive plugin VFS
+- Improved JSP syntax highlighting (Daiji Takamori)
+- Nicer looking history text fields (Dirk Moebius)
 
 + Bug Fixes
 
@@ -30,7 +32,7 @@ JEDIT 3.2 VERSION HISTORY
 - Most plugins probably use openFile(View,String), which is still the
   same as ever.
 - jEdit.addPluginJAR() is now public, for plugins that want to load the
-  JDK's tools.jar of whatever
+  JDK's tools.jar or whatever
 - EditPlugin.JAR constructor is now public, for the same reason as above
 
 * Version 3.2pre9
