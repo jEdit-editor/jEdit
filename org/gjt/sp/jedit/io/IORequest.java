@@ -77,38 +77,14 @@ public class IORequest extends WorkRequest
 	 */
 	public void run()
 	{
-		View[] views = null;
-
-		try
+		switch(type)
 		{
-			views = jEdit.getViews();
-			String status = (type == LOAD ? "loading" : "saving");
-			String[] args = { MiscUtilities.getFileName(path) };
-			String message = jEdit.getProperty("view.status." + status,args);
-			for(int i = 0; i < views.length; i++)
-			{
-				views[i].showStatus(message);
-			}
-
-			switch(type)
-			{
-			case LOAD:
-				load();
-				break;
-			case SAVE:
-				save();
-				break;
-			}
-		}
-		finally
-		{
-			if(views != null)
-			{
-				for(int i = 0; i < views.length; i++)
-				{
-					views[i].showStatus(null);
-				}
-			}
+		case LOAD:
+			load();
+			break;
+		case SAVE:
+			save();
+			break;
 		}
 	}
 
@@ -665,6 +641,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/07/21 10:23:49  sp
+ * Multiple work threads
+ *
  * Revision 1.10  2000/07/19 11:45:18  sp
  * I/O requests can be aborted now
  *

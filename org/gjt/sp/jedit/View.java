@@ -296,12 +296,8 @@ public class View extends JFrame implements EBComponent
 	 */
 	public synchronized void showWaitCursor()
 	{
-		Log.log(Log.DEBUG,this,"showWaitCursor(): entering - waitCount=" + waitCount);
 		if(waitCount++ == 0)
 		{
-			Log.log(Log.DEBUG,this,"showWaitCursor(): showing glass pane");
-			glassPane.setVisible(true);
-
 			// still needed even though glass pane
 			// has a wait cursor
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
@@ -314,7 +310,6 @@ public class View extends JFrame implements EBComponent
 					.setCursor(cursor);
 			}
 		}
-		Log.log(Log.DEBUG,this,"showWaitCursor(): leaving - waitCount=" + waitCount);
 	}
 
 	/**
@@ -322,15 +317,11 @@ public class View extends JFrame implements EBComponent
 	 */
 	public synchronized void hideWaitCursor()
 	{
-		Log.log(Log.DEBUG,this,"hideWaitCursor(): entering - waitCount=" + waitCount);
 		if(waitCount > 0)
 			waitCount--;
 
 		if(waitCount == 0)
 		{
-			Log.log(Log.DEBUG,this,"hideWaitCursor(): hiding glass pane");
-			glassPane.setVisible(false);
-
 			// still needed even though glass pane
 			// has a wait cursor
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
@@ -344,8 +335,6 @@ public class View extends JFrame implements EBComponent
 					.setCursor(cursor);
 			}
 		}
-
-		Log.log(Log.DEBUG,this,"hideWaitCursor(): leaving - waitCount=" + waitCount);
 	}
 
 	/**
@@ -448,9 +437,6 @@ public class View extends JFrame implements EBComponent
 		status = new StatusBar(this);
 		getContentPane().add(BorderLayout.SOUTH,status);
 
-		glassPane = new GlassPane();
-		getRootPane().setGlassPane(glassPane);
-
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
 	}
@@ -477,7 +463,6 @@ public class View extends JFrame implements EBComponent
 		status = null;
 		splitPane = null;
 		inputHandler = null;
-		glassPane = null;
 
 		setContentPane(new JPanel());
 	}
@@ -600,27 +585,6 @@ public class View extends JFrame implements EBComponent
 		if(evt.isConsumed())
 			return;
 
-		if(VFSManager.getRequestCount() != 0
-			&& evt.getID() == KeyEvent.KEY_PRESSED
-			&& evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-		{
-			// if Escape is pressed while I/O is in progress,
-			// abort I/O
-			int result = JOptionPane.showConfirmDialog(this,
-				jEdit.getProperty("abort.message"),
-				jEdit.getProperty("abort.title"),
-				JOptionPane.YES_NO_OPTION);
-			if(result == JOptionPane.YES_OPTION)
-				VFSManager.abortCurrentRequest();
-			return;
-		}
-
-		if(glassPane.isVisible())
-		{
-			super.processKeyEvent(evt);
-			return;
-		}
-
 		// possible workaround for bug some people have experienced,
 		// where both the find text field and the text area handle
 		// a key stroke
@@ -669,7 +633,6 @@ public class View extends JFrame implements EBComponent
 	private StatusBar status;
 
 	private InputHandler inputHandler;
-	private GlassPane glassPane;
 
 	private int waitCount;
 
@@ -1043,23 +1006,14 @@ public class View extends JFrame implements EBComponent
 			jEdit.closeView(View.this);
 		}
 	}
-
-	class GlassPane extends JComponent
-	{
-		GlassPane()
-		{
-			GlassPane.this.enableEvents(AWTEvent.KEY_EVENT_MASK);
-			GlassPane.this.enableEvents(AWTEvent.MOUSE_EVENT_MASK);
-			GlassPane.this.setOpaque(false);
-			GlassPane.this.setCursor(Cursor.getPredefinedCursor(
-				Cursor.WAIT_CURSOR));
-		}
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.186  2000/07/21 10:23:49  sp
+ * Multiple work threads
+ *
  * Revision 1.185  2000/07/19 11:45:18  sp
  * I/O requests can be aborted now
  *
@@ -1086,53 +1040,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.177  2000/06/02 02:21:05  sp
  * minor bug fixes
- *
- * Revision 1.176  2000/05/22 12:05:45  sp
- * Markers are highlighted in the gutter, bug fixes
- *
- * Revision 1.175  2000/05/16 10:47:40  sp
- * More work on toolbar editor, -gui command line switch
- *
- * Revision 1.174  2000/05/14 10:55:21  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.173  2000/05/13 05:13:31  sp
- * Mode option pane
- *
- * Revision 1.172  2000/05/12 11:07:38  sp
- * Bug fixes, documentation updates
- *
- * Revision 1.171  2000/05/09 10:51:51  sp
- * New status bar, a few other things
- *
- * Revision 1.170  2000/05/08 11:20:08  sp
- * New file finder in open dialog box
- *
- * Revision 1.169  2000/05/07 07:29:01  sp
- * Splitting fixes
- *
- * Revision 1.168  2000/05/07 05:48:30  sp
- * You can now edit several buffers side-by-side in a split view
- *
- * Revision 1.167  2000/05/05 11:08:26  sp
- * Johnny Ryall
- *
- * Revision 1.166  2000/05/04 10:37:04  sp
- * Wasting time
- *
- * Revision 1.165  2000/05/01 11:53:23  sp
- * More icons added to toolbar, minor updates here and there
- *
- * Revision 1.164  2000/04/30 07:27:13  sp
- * Ftp VFS hacking, bug fixes
- *
- * Revision 1.163  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
- *
- * Revision 1.162  2000/04/28 09:29:11  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.161  2000/04/25 03:32:40  sp
- * Even more VFS hacking
  *
  */

@@ -479,8 +479,6 @@ view.gutter.register=Register "{0}" points to this line
 view.gutter.marker=Marker "{0}" points to this line
 
 # Status messages
-view.status.loading=Loading {0}
-view.status.saving=Saving {0}
 view.status.cut-string-register=Cut to register:
 view.status.copy-string-register=Copy to register:
 view.status.append-string-register=Append to register:

@@ -38,6 +38,8 @@ JEDIT 3.0 VERSION HISTORY
 - Abbreviations and history files are not saved if they are changed on disk
   while jEdit is running
 - The 'Help' menu now displays documentation for plugins that didn't load
+- Improved Python mode (Ivan Frohne)
+- Improved JSP mode (Vicente Salvador)
 
 + Bug Fixes
 

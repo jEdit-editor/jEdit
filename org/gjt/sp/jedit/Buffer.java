@@ -115,9 +115,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		if(!getFlag(NEW_FILE))
 		{
-			if(!getFlag(TEMPORARY) && view != null)
-				view.showWaitCursor();
-
 			if(file != null)
 				modTime = file.lastModified();
 
@@ -138,8 +135,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				// fail
 				if(!vfs.load(view,this,path))
 				{
-					if(!getFlag(TEMPORARY) && view != null)
-						view.hideWaitCursor();
 					setFlag(LOADING,false);
 					return false;
 				}
@@ -202,9 +197,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 					BufferUpdate.LOADED));
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.MARKERS_CHANGED));
-
-				if(view != null)
-					view.hideWaitCursor();
 			}
 		});
 
@@ -285,8 +277,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			}
 		}
 
-		view.showWaitCursor();
-
 		setFlag(SAVING,true);
 		EditBus.send(new BufferUpdate(this,BufferUpdate.SAVING));
 
@@ -299,8 +289,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(!vfs.save(view,this,path))
 		{
 			setFlag(SAVING,false);
-			view.hideWaitCursor();
-
 			return false;
 		}
 
@@ -332,8 +320,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.DIRTY_CHANGED));
-
-				view.hideWaitCursor();
 			}
 		});
 
@@ -1454,6 +1440,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.160  2000/07/21 10:23:49  sp
+ * Multiple work threads
+ *
  * Revision 1.159  2000/07/19 11:45:18  sp
  * I/O requests can be aborted now
  *

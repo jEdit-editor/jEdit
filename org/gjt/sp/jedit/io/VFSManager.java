@@ -26,8 +26,9 @@ import java.awt.Component;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.WorkThread;
+import org.gjt.sp.util.WorkThreadPool;
 
 /**
  * jEdit's virtual filesystem allows it to transparently edit files
@@ -40,7 +41,7 @@ public class VFSManager
 {
 	public static void start()
 	{
-		ioThread.start();
+		ioThreadPool.start();
 	}
 
 	/**
@@ -119,7 +120,7 @@ public class VFSManager
 	 */
 	public static void waitForRequests()
 	{
-		ioThread.waitForRequests();
+		ioThreadPool.waitForRequests();
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class VFSManager
 	 */
 	public static int getRequestCount()
 	{
-		return ioThread.getRequestCount();
+		return ioThreadPool.getRequestCount();
 	}
 
 	/**
@@ -143,7 +144,7 @@ public class VFSManager
 	 */
 	public static void abortCurrentRequest()
 	{
-		ioThread.abortCurrentRequest();
+		//ioThread.abortCurrentRequest();
 	}
 
 	/**
@@ -153,7 +154,7 @@ public class VFSManager
 	public static void addIORequest(int type, View view, Buffer buffer,
 		String path, VFS vfs)
 	{
-		ioThread.addWorkRequest(new IORequest(type,view,buffer,path,vfs),false);
+		ioThreadPool.addWorkRequest(new IORequest(type,view,buffer,path,vfs),false);
 	}
 
 	/**
@@ -163,7 +164,7 @@ public class VFSManager
 	 */
 	public static void runInAWTThread(Runnable run)
 	{
-		ioThread.addWorkRequest(run,true);
+		ioThreadPool.addWorkRequest(run,true);
 	}
 
 	/**
@@ -203,7 +204,7 @@ public class VFSManager
 	}
 
 	// private members
-	private static WorkThread ioThread = new WorkThread("jEdit I/O daemon");
+	private static WorkThreadPool ioThreadPool;
 	private static VFS fileVFS = new FileVFS();
 	private static VFS urlVFS = new UrlVFS();
 	private static Hashtable vfsHash;
@@ -211,6 +212,16 @@ public class VFSManager
 
 	static
 	{
+		int count;
+		try
+		{
+			count = Integer.parseInt(jEdit.getProperty("ioThreadCount"));
+		}
+		catch(NumberFormatException nf)
+		{
+			count = 4;
+		}
+		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
 		vfsHash = new Hashtable();
 		registerVFS("ftp",new FtpVFS());
 	}
@@ -221,6 +232,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/07/21 10:23:49  sp
+ * Multiple work threads
+ *
  * Revision 1.11  2000/07/19 11:45:18  sp
  * I/O requests can be aborted now
  *
@@ -248,11 +262,5 @@ public class VFSManager
  *
  * Revision 1.3  2000/04/25 03:32:40  sp
  * Even more VFS hacking
- *
- * Revision 1.2  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.1  2000/04/24 04:45:37  sp
- * New I/O system started, and a few minor updates
  *
  */

@@ -2,10 +2,25 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- Python mode, by Slava Pestov. Based on PythonTokenMarker by
-     Jonathan Revusky -->
-<MODE NAME="python">
+<!-- Python mode, by Slava Pestov. Based on PythonTokenMarker by -->
+<!-- Jonathan Revusky -->
+
+<!-- Modified 19-Jul-00 by Ivan Frohne to: -->
+<!--  (a) implement 'indentOnEnter'; -->
+<!--  (b) indent next line automatically after control structures followed -->
+<!--	  by ':'; -->
+<!--  (c) make """ or ''' multiline quotes TYPE LITERAL2; -->
+<!--  (d) add TYPE FUNCTION identified by a following '(' -->
+<!--  (e) eliminate the '?' SEQ TYPE ('?' has no meaning in Python); -->
+<!--  (f) change the TYPE of 'and', 'or', and 'not' to KEYWORD1; and -->
+<!--  (g) add all builtin functions, builtin exceptions, -->
+<!--	  builtin type methods, File object methods, and special type -->
+<!--	  attributes as TYPE KEYWORD3. -->
+
+	<MODE NAME="python">
 	<PROPS>
+		<PROPERTY NAME="indentOnEnter" VALUE="TRUE" />
+		<PROPERTY NAME="indentPrevLine" VALUE="\s*.{3,}:\s*(#.*)?" />
 		<PROPERTY NAME="label" VALUE="Python" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.py" />
@@ -20,12 +35,12 @@
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
 
 		<!-- Triple-quotes -->
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL2">
 			<BEGIN>"""</BEGIN>
 			<END>"""</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL2">
 			<BEGIN>'''</BEGIN>
 			<END>'''</END>
 		</SPAN>
@@ -41,7 +56,6 @@
 		</SPAN>
 
 		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
@@ -64,13 +78,16 @@
 		<SEQ TYPE="NULL">;</SEQ>
 		<SEQ TYPE="NULL">]</SEQ>
 		<SEQ TYPE="NULL">[</SEQ>
-		<SEQ TYPE="NULL">?</SEQ>
 		<SEQ TYPE="NULL">:</SEQ>
 
+	   	<MARK_PREVIOUS TYPE="FUNCTION"
+			EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+
 		<KEYWORDS IGNORE_CASE="FALSE">
-			<KEYWORD3>and</KEYWORD3>
-			<KEYWORD3>not</KEYWORD3>
-			<KEYWORD3>or</KEYWORD3>
+		<!--  Reserved Words  -->
+			<KEYWORD1>and</KEYWORD1>
+			<KEYWORD1>not</KEYWORD1>
+			<KEYWORD1>or</KEYWORD1>
 			<KEYWORD1>if</KEYWORD1>
 			<KEYWORD1>for</KEYWORD1>
 			<KEYWORD1>assert</KEYWORD1>
@@ -96,6 +113,132 @@
 			<KEYWORD2>lambda</KEYWORD2>
 			<KEYWORD2>pass</KEYWORD2>
 			<KEYWORD2>print</KEYWORD2>
+		<!-- Builtin Functions  -->
+			<KEYWORD3>__import__</KEYWORD3>
+			<KEYWORD3>abs</KEYWORD3>
+			<KEYWORD3>apply</KEYWORD3>
+			<KEYWORD3>callable</KEYWORD3>
+			<KEYWORD3>chr</KEYWORD3>
+			<KEYWORD3>cmp</KEYWORD3>
+			<KEYWORD3>coerce</KEYWORD3>
+			<KEYWORD3>compile</KEYWORD3>
+			<KEYWORD3>complex</KEYWORD3>
+			<KEYWORD3>delattr</KEYWORD3>
+			<KEYWORD3>dir</KEYWORD3>
+			<KEYWORD3>divmod</KEYWORD3>
+			<KEYWORD3>eval</KEYWORD3>
+			<KEYWORD3>execfile</KEYWORD3>
+			<KEYWORD3>filter</KEYWORD3>
+			<KEYWORD3>float</KEYWORD3>
+			<KEYWORD3>getattr</KEYWORD3>
+			<KEYWORD3>globals</KEYWORD3>
+			<KEYWORD3>hasattr</KEYWORD3>
+			<KEYWORD3>hash</KEYWORD3>
+			<KEYWORD3>hex</KEYWORD3>
+			<KEYWORD3>id</KEYWORD3>
+			<KEYWORD3>input</KEYWORD3>
+			<KEYWORD3>int</KEYWORD3>
+			<KEYWORD3>intern</KEYWORD3>
+			<KEYWORD3>isinstance</KEYWORD3>
+			<KEYWORD3>issubclass</KEYWORD3>
+			<KEYWORD3>len</KEYWORD3>
+			<KEYWORD3>list</KEYWORD3>
+			<KEYWORD3>locals</KEYWORD3>
+			<KEYWORD3>long</KEYWORD3>
+			<KEYWORD3>map</KEYWORD3>
+			<KEYWORD3>max</KEYWORD3>
+			<KEYWORD3>min</KEYWORD3>
+			<KEYWORD3>oct</KEYWORD3>
+			<KEYWORD3>open</KEYWORD3>
+			<KEYWORD3>ord</KEYWORD3>
+			<KEYWORD3>pow</KEYWORD3>
+			<KEYWORD3>range</KEYWORD3>
+			<KEYWORD3>raw_input</KEYWORD3>
+			<KEYWORD3>reduce</KEYWORD3>
+			<KEYWORD3>reload</KEYWORD3>
+			<KEYWORD3>repr</KEYWORD3>
+			<KEYWORD3>round</KEYWORD3>
+			<KEYWORD3>setattr</KEYWORD3>
+			<KEYWORD3>slice</KEYWORD3>
+			<KEYWORD3>str</KEYWORD3>
+			<KEYWORD3>tuple</KEYWORD3>
+			<KEYWORD3>type</KEYWORD3>
+			<KEYWORD3>vars</KEYWORD3>
+			<KEYWORD3>xrange</KEYWORD3>
+		<!--  Builtin Exceptions  -->
+		<!--  Exception Root Classes  --> 
+			<KEYWORD3>Exception</KEYWORD3>
+			<KEYWORD3>StandardError</KEYWORD3>
+			<KEYWORD3>ArithmeticError</KEYWORD3>
+			<KEYWORD3>LookupError</KEYWORD3>
+			<KEYWORD3>EnvironmentError</KEYWORD3>
+		<!--  Raised Exceptions  -->
+			<KEYWORD3>AssertionError</KEYWORD3>
+			<KEYWORD3>AttributeError</KEYWORD3>
+			<KEYWORD3>EOFError</KEYWORD3>
+			<KEYWORD3>FloatingPointError</KEYWORD3>
+			<KEYWORD3>IOError</KEYWORD3>
+			<KEYWORD3>ImportError</KEYWORD3>
+			<KEYWORD3>IndexError</KEYWORD3>
+			<KEYWORD3>KeyError</KEYWORD3>
+			<KEYWORD3>KeyboardInterrupt</KEYWORD3>
+			<KEYWORD3>MemoryError</KEYWORD3>
+			<KEYWORD3>NameError</KEYWORD3>
+			<KEYWORD3>OSError</KEYWORD3>
+			<KEYWORD3>NotImplementedError</KEYWORD3>
+			<KEYWORD3>OverflowError</KEYWORD3>
+			<KEYWORD3>RuntimeError</KEYWORD3>
+			<KEYWORD3>SyntaxError</KEYWORD3>
+			<KEYWORD3>SystemError</KEYWORD3>
+			<KEYWORD3>SystemExit</KEYWORD3>
+			<KEYWORD3>TypeError</KEYWORD3>
+			<KEYWORD3>ValueError</KEYWORD3>
+			<KEYWORD3>ZeroDivisionError</KEYWORD3>
+		<!--  Builtin Type Methods  -->
+		<!--  Methods for Numeric Types  -->
+			<KEYWORD3>conjugate</KEYWORD3>
+		<!--  Methods for Mutable Sequence Types: []  -->
+			<KEYWORD3>append</KEYWORD3>
+			<KEYWORD3>extend</KEYWORD3>
+			<KEYWORD3>count</KEYWORD3>
+			<KEYWORD3>index</KEYWORD3>
+			<KEYWORD3>insert</KEYWORD3>
+			<KEYWORD3>pop</KEYWORD3>
+			<KEYWORD3>remove</KEYWORD3>
+			<KEYWORD3>reverse</KEYWORD3>
+			<KEYWORD3>sort</KEYWORD3>
+		<!--  Methods for Mapping Types: {}  -->
+			<KEYWORD3>clear</KEYWORD3>
+			<KEYWORD3>copy</KEYWORD3>
+			<KEYWORD3>has_key</KEYWORD3>
+			<KEYWORD3>items</KEYWORD3>
+			<KEYWORD3>keys</KEYWORD3>
+			<KEYWORD3>update</KEYWORD3>
+			<KEYWORD3>values</KEYWORD3>
+			<KEYWORD3>get</KEYWORD3>
+		<!--  Methods for File Objects  -->
+			<KEYWORD3>close</KEYWORD3>
+			<KEYWORD3>flush</KEYWORD3>
+			<KEYWORD3>isatty</KEYWORD3>
+			<KEYWORD3>fileno</KEYWORD3>
+			<KEYWORD3>read</KEYWORD3>
+			<KEYWORD3>readline</KEYWORD3>
+			<KEYWORD3>readlines</KEYWORD3>
+			<KEYWORD3>seek</KEYWORD3>
+			<KEYWORD3>tell</KEYWORD3>
+			<KEYWORD3>truncate</KEYWORD3>
+			<KEYWORD3>write</KEYWORD3>
+			<KEYWORD3>writelines</KEYWORD3>
+			<KEYWORD3>closed</KEYWORD3>
+			<KEYWORD3>mode</KEYWORD3>
+			<KEYWORD3>name</KEYWORD3>
+			<KEYWORD3>softspace</KEYWORD3>
+		<!--  Special Type attributes  -->
+			<KEYWORD3>__dict__</KEYWORD3>
+			<KEYWORD3>__methods__</KEYWORD3>
+			<KEYWORD3>__members__</KEYWORD3>
+			<KEYWORD3>__class__</KEYWORD3>
+			<KEYWORD3>__bases__</KEYWORD3>
 		</KEYWORDS>
 	</RULES>
 </MODE>

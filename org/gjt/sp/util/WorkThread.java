@@ -19,8 +19,6 @@
 
 package org.gjt.sp.util;
 
-import javax.swing.SwingUtilities;
-
 /**
  * Services work requests in the background.
  * @author Slava Pestov
@@ -28,91 +26,13 @@ import javax.swing.SwingUtilities;
  */
 public class WorkThread extends Thread
 {
-	public WorkThread(String name)
+	public WorkThread(WorkThreadPool pool, ThreadGroup group, String name)
 	{
-		super(name);
+		super(group, name);
 		setDaemon(true);
 		setPriority(4);
-	}
 
-	/**
-	 * Adds a work request to the queue.
-	 * @param run The runnable
-	 * @param inAWT If true, will be executed in AWT thread. Otherwise,
-	 * will be executed in work thread
-	 */
-	public void addWorkRequest(Runnable run, boolean inAWT)
-	{
-		// if inAWT is set and there are no requests
-		// pending, execute it immediately
-		if(inAWT && requestCount == 0 && awtRequestCount == 0
-			&& SwingUtilities.isEventDispatchThread())
-		{
-			Log.log(Log.DEBUG,this,"AWT immediate: " + run);
-			run.run();
-			return;
-		}
-
-		Request request = new Request(run,inAWT);
-
-		synchronized(lock)
-		{
-			if(firstRequest == null && lastRequest == null)
-				firstRequest = lastRequest = request;
-			else
-			{
-				lastRequest.next = request;
-				lastRequest = request;
-			}
-
-			requestCount++;
-
-			lock.notify();
-		}
-	}
-
-	/**
-	 * Waits until all requests are complete.
-	 */
-	public void waitForRequests()
-	{
-		Log.log(Log.DEBUG,this,"waitForRequests(): entering");
-
-		synchronized(lock)
-		{
-			while(firstRequest != null)
-			{
-				try
-				{
-					lock.wait();
-				}
-				catch(InterruptedException ie)
-				{
-					Log.log(Log.ERROR,this,ie);
-				}
-			}
-		}
-
-		// FIXME: when called from a non-AWT thread,
-		// waitForRequests() will return before all
-		// AWT runnables have completed
-		if(SwingUtilities.isEventDispatchThread())
-		{
-			Log.log(Log.DEBUG,this,"waitForRequests() running"
-				+ " remaining AWT requests");
-			// do any queued AWT runnables
-			doAWTRequests();
-		}
-
-		Log.log(Log.DEBUG,this,"waitForRequests(): leaving");
-	}
-
-	/**
-	 * Returns the number of pending requests.
-	 */
-	public int getRequestCount()
-	{
-		return requestCount;
+		this.pool = pool;
 	}
 
 	/**
@@ -145,7 +65,7 @@ public class WorkThread extends Thread
 
 	public void run()
 	{
-		Log.log(Log.DEBUG,this,"Work request thread starting");
+		Log.log(Log.DEBUG,this,"Work request thread starting [" + getName() + "]");
 
 		for(;;)
 		{
@@ -154,38 +74,35 @@ public class WorkThread extends Thread
 	}
 
 	// private members
-	private Object lock = new Object();
-	private Request firstRequest;
-	private Request lastRequest;
-	private int requestCount;
-
-	// AWT thread magic
-	private boolean awtRunnerQueued;
-	private Request firstAWTRequest;
-	private Request lastAWTRequest;
-	private int awtRequestCount;
-
-	// Aborting
+	private WorkThreadPool pool;
 	private Object abortLock = new Object();
 	private boolean abortable;
 	private boolean aborted;
 
 	private void doRequests()
 	{
-		while(firstRequest != null)
+		WorkThreadPool.Request request;
+		for(;;)
 		{
-			doRequest(getNextRequest());
+			request = pool.getNextRequest();
+			if(request == null)
+				break;
+			else
+				doRequest(request);
 		}
 
-		synchronized(lock)
+		synchronized(pool.waitForAllLock)
 		{
 			// notify a running waitForRequests() method
-			lock.notifyAll();
+			pool.waitForAllLock.notifyAll();
+		}
 
+		synchronized(pool.lock)
+		{
 			// wait for more requests
 			try
 			{
-				lock.wait();
+				pool.lock.wait();
 			}
 			catch(InterruptedException ie)
 			{
@@ -194,194 +111,31 @@ public class WorkThread extends Thread
 		}
 	}
 
-	private void doAWTRequests()
+	private void doRequest(WorkThreadPool.Request request)
 	{
-		Log.log(Log.DEBUG,this,"Running requests in AWT thread");
-
-		while(firstAWTRequest != null)
-		{
-			doAWTRequest(getNextAWTRequest());
-		}
-
-		Log.log(Log.DEBUG,this,"Finished running requests in AWT thread");
-	}
-
-	private void doRequest(final Request request)
-	{
-		if(request.inAWT)
-		{
-			Log.log(Log.DEBUG,this,"Adding request to AWT queue: "
-				+ request);
-
-			synchronized(lock)
-			{
-				request.next = null;
-				request.alreadyRun = false;
-
-				if(firstAWTRequest == null && lastAWTRequest == null)
-					firstAWTRequest = lastAWTRequest = request;
-				else
-				{
-					lastAWTRequest.next = request;
-					lastAWTRequest = request;
-				}
-
-				awtRequestCount++;
-
-				queueAWTRunner();
-			}
-		}
-		else
-		{
-			Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: "
-				+ request);
-			try
-			{
-				request.run.run();
-			}
-			catch(Abort a)
-			{
-				Log.log(Log.ERROR,WorkThread.class,"Unhandled abort");
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,WorkThread.class,"Exception "
-					+ "in work thread:");
-				Log.log(Log.ERROR,WorkThread.class,t);
-			}
-			finally
-			{
-				synchronized(abortLock)
-				{
-					aborted = abortable = false;
-				}
-				requestCount--;
-			}
-		}
-	}
-
-	public void doAWTRequest(Request request)
-	{
-		Log.log(Log.DEBUG,this,"Running in AWT thread: " + request);
+		Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: " + request);
 
 		try
 		{
 			request.run.run();
 		}
+		catch(Abort a)
+		{
+			Log.log(Log.ERROR,WorkThread.class,"Unhandled abort");
+		}
 		catch(Throwable t)
 		{
 			Log.log(Log.ERROR,WorkThread.class,"Exception "
-				+ "in AWT thread:");
+				+ "in work thread:");
 			Log.log(Log.ERROR,WorkThread.class,t);
 		}
-
-		awtRequestCount--;
-
-		// since this is also counted as a normal request...
-		requestCount--;
-	}
-
-	private void queueAWTRunner()
-	{
-		if(!awtRunnerQueued)
+		finally
 		{
-			awtRunnerQueued = true;
-			SwingUtilities.invokeLater(new RunRequestsInAWTThread());
-			Log.log(Log.DEBUG,this,"AWT runner queued");
-		}
-	}
-
-	private Request getNextRequest()
-	{
-		synchronized(lock)
-		{
-			Request request = firstRequest;
-			firstRequest = firstRequest.next;
-			if(firstRequest == null)
-				lastRequest = null;
-
-			if(request.alreadyRun)
-				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
-			request.alreadyRun = true;
-
-			Log.log(Log.DEBUG,this,"getNextRequest() returning " + request);
-
-			StringBuffer buf = new StringBuffer("request queue is now: ");
-			Request _request = request.next;
-			while(_request != null)
+			synchronized(abortLock)
 			{
-				buf.append(_request.id);
-				if(_request.next != null)
-					buf.append(",");
-				_request = _request.next;
+				aborted = abortable = false;
 			}
-			Log.log(Log.DEBUG,this,buf.toString());
-
-			return request;
-		}
-	}
-
-	private Request getNextAWTRequest()
-	{
-		synchronized(lock)
-		{
-			Request request = firstAWTRequest;
-			firstAWTRequest = firstAWTRequest.next;
-			if(firstAWTRequest == null)
-				lastAWTRequest = null;
-
-			if(request.alreadyRun)
-				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
-			request.alreadyRun = true;
-
-			Log.log(Log.DEBUG,this,"getNextAWTRequest() returning " + request);
-
-			StringBuffer buf = new StringBuffer("AWT request queue is now: ");
-			Request _request = request.next;
-			while(_request != null)
-			{
-				buf.append(_request.id);
-				if(_request.next != null)
-					buf.append(",");
-				_request = _request.next;
-			}
-			Log.log(Log.DEBUG,this,buf.toString());
-
-			return request;
-		}
-	}
-
-	static int ID;
-
-	static class Request
-	{
-		int id = ++ID;
-
-		Runnable run;
-		boolean inAWT;
-
-		boolean alreadyRun;
-
-		Request next;
-
-		Request(Runnable run, boolean inAWT)
-		{
-			this.run = run;
-			this.inAWT = inAWT;
-		}
-
-		public String toString()
-		{
-			return "[id=" + id + ",run=" + run + "]";
-		}
-	}
-
-	class RunRequestsInAWTThread implements Runnable
-	{
-		public void run()
-		{
-			awtRunnerQueued = false;
-			doAWTRequests();
+			pool.requestDone();
 		}
 	}
 
@@ -397,6 +151,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.14  2000/07/21 10:23:49  sp
+ * Multiple work threads
+ *
  * Revision 1.13  2000/07/19 11:45:18  sp
  * I/O requests can be aborted now
  *
@@ -426,9 +183,5 @@ public class WorkThread extends Thread
  *
  * Revision 1.4  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
- *
- * Revision 1.3  2000/04/27 08:32:58  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
  *
  */
