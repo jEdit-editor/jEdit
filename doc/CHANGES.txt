@@ -6,7 +6,6 @@ JEDIT 2.5 VERSION HISTORY
 
 - Various properties can now be set on a mode-specific basis in
   Utilities->Global Options->Edit Modes
-- The tool bar can be customized in Utilities->Global Options->Tool Bar
 - The HyperSearch feature now performs searches in a background thread
 - The '-gui' command line switch will force jEdit to create an initial
   view, even if background mode is active

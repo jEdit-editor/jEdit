@@ -5,6 +5,8 @@ JEDIT TO DO
 - Finish tool bar editor
 - Update dialog-options-* and window-editor-* screenshots
 - Document tool bar editor
+- Single-clicking, not double-clicking should select a found file in the
+  file chooser
 
 2.5:
 
@@ -44,6 +46,8 @@ Later:
 - Mode grammar editor
 - Set dirty to false when all undos undone (will be easy with new document
   model)
+- Bracket matching code doesn't pay attention to comments, string literals,
+  etc. It would be nice if its parser was a bit more intelligent
 
 When we switch to Java 2:
 - drag and drop
