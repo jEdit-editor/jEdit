@@ -86,7 +86,7 @@
    <guimenu>Macros</>&gt;<guimenuitem>Record Macro</> (shortcut:
    <keycombo><keycap>Control</><keycap>M</></keycombo>
    <keycombo><keycap>Control</><keycap>R</></keycombo>) prompts for a macro
-   name and begins recording. The file name extension <quote>.bsh</> is
+   name and begins recording. The file name extension <filename>.bsh</> is
    automatically appended to the macro name, and
    all spaces are converted to underscore characters, in order to
    make the macro name a valid file name. These two operations are
@@ -168,7 +168,7 @@
    item can be organized in a hierarchy using subdirectories in the general
    or user-specific macro folders. Each subdirectory containing BeanShell
    macros appears as a submenu. You will find such a hierarchy in the
-   default macro set displayed under the <guimenu>Macros</guimenu> menu.
+   default macro set included with jEdit.
   </para>
 
   <para>
@@ -192,7 +192,7 @@
    have only one macro named <filename>Startup.bsh</filename> (capitalization
    matters!), and place it in the either of the two macro directories.
    See <xref linkend=
-   "startup-startup"> for a more detailed discussion on the use of a
+   "startup-macro"> for a more detailed discussion on the use of a
    startup macro.
   </para>
 

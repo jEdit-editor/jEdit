@@ -53,6 +53,17 @@ public class NameSpace implements java.io.Serializable
     public NameSpace( NameSpace parent, String name ) {
 		this.name = name;
 		this.parent = parent;
+
+		if(parent != null)
+		{
+			importedPackages = (Vector)parent.importedPackages.clone();
+			importedClasses = (Hashtable)parent.importedClasses.clone();
+		}
+		else
+		{
+			importedPackages = new Vector();
+			importedClasses = new Hashtable();
+		}
     }
 
     public void	setVariable(String name, Object	o) throws EvalError {

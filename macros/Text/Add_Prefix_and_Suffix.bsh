@@ -41,7 +41,6 @@
 // import statements
 import javax.swing.*;
 import javax.swing.border.*;
-import org.gjt.sp.jedit.gui.HistoryTextField;
 
 // main routine
 void prefixSuffixDialog()
@@ -50,13 +49,12 @@ void prefixSuffixDialog()
     title = "Add prefix and suffix to selected lines";
     dialog = new JDialog(view, title, false);
     content = new JPanel(new BorderLayout());
-    content.setBorder(new EmptyBorder(5, 10, 10, 10));
-    content.setPreferredSize(new Dimension(320, 160));
+    content.setBorder(new EmptyBorder(12, 12, 12, 12));
     dialog.setContentPane(content);
 
     // add to the dialog a panel containing the text fields for
     // entry of the prefix and suffix text
-    fieldPanel = new JPanel(new GridLayout( 4, 1, 0, 5));
+    fieldPanel = new JPanel(new GridLayout(4, 1, 0, 6));
     prefixField = new HistoryTextField("macro.add-prefix");
     prefixLabel = new JLabel("Prefix to add:");
     suffixField = new HistoryTextField("macro.add-suffix");
@@ -68,14 +66,19 @@ void prefixSuffixDialog()
     content.add(fieldPanel, "Center");
 
     // add a panel containing the buttons
-    buttonPanel = new JPanel(new BorderLayout(0, 0));
-    buttonPanel.setBorder(new EmptyBorder(15, 50, 0, 50));
+    buttonPanel = new JPanel();
+    buttonPanel.setLayout(new BoxLayout(buttonPanel,
+        BoxLayout.X_AXIS));
+    buttonPanel.setBorder(new EmptyBorder(12, 50, 0, 50));
+    buttonPanel.add(Box.createGlue());
     ok = new JButton("OK");
     cancel = new JButton("Cancel");
     ok.setPreferredSize(cancel.getPreferredSize());
     dialog.getRootPane().setDefaultButton(ok);
-    buttonPanel.add(ok, "West");
-    buttonPanel.add(cancel, "East");
+    buttonPanel.add(ok);
+    buttonPanel.add(Box.createHorizontalStrut(6));
+    buttonPanel.add(cancel);
+    buttonPanel.add(Box.createGlue());
     content.add(buttonPanel, "South");
 
     // register this method as an ActionListener for
@@ -86,13 +89,14 @@ void prefixSuffixDialog()
     suffixField.addActionListener(this);
 
     // locate the dialog in the center of the
-    // editing pane and activates
+    // editing pane and make it visible
     dialog.pack();
     dialog.setLocationRelativeTo(view);
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialog.setVisible(true);
 
     // this method will be called when a button is clicked
-    // or when ENTER or ESCAPE is pressed
+    // or when ENTER is pressed
     void actionPerformed(e)
     {
         if(e.getSource() != cancel)

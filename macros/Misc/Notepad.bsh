@@ -1,0 +1,35 @@
+/**
+ * Implements a simple notepad.
+ */
+
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.*;
+
+createWindowListener()
+{
+	windowOpened(e)
+	{
+		GUIUtilities.loadGeometry(e.getSource(),"macro.notepad");
+	}
+
+	windowClosing(e)
+	{
+		GUIUtilities.saveGeometry(e.getSource(),"macro.notepad");
+		dispose();
+	}
+
+	return this;
+}
+
+tabs = new JTabbedPane();
+for(int i = 1; i <= 5; i++)
+{
+	tabs.addTab("Page " + i,new JScrollPane(new JTextArea(10,30)));
+}
+
+frame = new JFrame("Notepad");
+frame.getContentPane().add(tabs);
+frame.pack();
+frame.addWindowListener(createWindowListener());
+frame.show();

@@ -19,8 +19,8 @@ Copyright: GPL
 Group: Application/Editors
 Source0: http://download.sourceforge.net/jedit/jedit31source.tar.gz
 NoSource: 0
-URL: http://jedit.sourceforge.net
-Packager: Slava Pestov <sp@gjt.org>
+URL: http://www.jedit.org
+Packager: Slava Pestov <slava@jedit.org>
 
 %description
 jEdit is an Open Source, cross platform text editor written in Java. It
@@ -28,7 +28,7 @@ has many advanced features that make text editing easier, such as syntax
 highlighting, auto indent, abbreviation expansion, registers, macros,
 regular expressions, and multiple file search and replace.
 
-jEdit requires either Java 1.1 with Swing 1.1, or Java 2 to work.
+jEdit requires Java 2 (or Java 1.1 with Swing 1.1) in order to work.
 
 %prep
 rm -f /usr/doc/jedit-3.1

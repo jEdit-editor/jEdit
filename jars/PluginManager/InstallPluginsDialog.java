@@ -95,7 +95,7 @@ public class InstallPluginsDialog extends EnhancedDialog
 		String settings = jEdit.getSettingsDirectory();
 		if(settings == null)
 		{
-			settings = jEdit.getProperty("install-plugins.info.none");
+			settings = jEdit.getProperty("install-plugins.none");
 			installUser.setEnabled(false);
 		}
 		else

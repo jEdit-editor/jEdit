@@ -273,6 +273,7 @@ void showAbbrevs()
 	dialog.getRootPane().setDefaultButton(close);
 	dialog.pack();
 	dialog.setLocationRelativeTo(view);
+	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	dialog.show();
 }
 
@@ -347,12 +348,10 @@ void writeSet(Vector v, String setName)
 /*
  * main routine, including definition of global variables
  */
-{
 STARTING_SET = "global";
 EXCLUDE_EMPTY_SETS = true;
 abbrevSets = getActiveSets();
 currentSet = null;
 Vector data = new Vector(20, 5);
 showAbbrevs();
-}
 

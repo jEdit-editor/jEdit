@@ -1,0 +1,14 @@
+// System_Properties.bsh
+
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
+props = System.getProperties();
+sw = new StringWriter();
+pw = new PrintWriter(sw);
+props.list(pw);
+jEdit.newFile(view);
+textArea.setSelectedText(sw.toString());
+
+// end of System_Properties.bsh
+

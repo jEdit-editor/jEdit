@@ -104,7 +104,7 @@
    <classname>View</classname> class. A <classname>View</classname>
    represents a <quote>parent</quote> or top-level frame window that
    contains the various visible components of the program, including the
-   editing window, menu bar, toolbar, and any docked windows. It is a
+   text area, menu bar, toolbar, and any docked windows. It is a
    subclass of Java's <classname>JFrame</classname> class.
    With jEdit, you can create and display multiple views simultaneously.
    The variable <varname>view</varname> is predefined for purposes of
@@ -163,8 +163,8 @@
   </para>
 
   <para>
-   In some circumstances, BeanShell's class name rules may seem
-   difficult to discern. You will rarely go wrong if you keep a few
+   Sometimes it is unclear if an <function>import</> statement is
+   required. You will rarely go wrong if you keep a few
    points in mind:
   </para>
 
@@ -178,11 +178,6 @@
     example, a dialog window or other GUI elements) you will need
     use import statements or fully qualified class names for those
     components - see <xref linkend="dialog-macro"> for details.</para>
-   </listitem>
-   <listitem>
-    <para>If you are using classes defined in any of jEdit's plugins,
-    you will have to <function>import</function> those classes
-    as well or use fully qualified names.</para>
    </listitem>
    <listitem>
     <para>If you try to use a class that is not imported and
@@ -209,7 +204,7 @@
   Macros Class</title>
 
   <para>
-   Including <function>message()</function>, there are three static methods
+   Including <function>message()</function>, there are four static methods
    in the <classname>Macros</classname> class that allow you to converse
    easily with your macros. They all encapsulate calls to methods of the
    <classname>JOptionPane</classname> class.
@@ -459,8 +454,7 @@ String newText = DateFormat.getDateInstance()
 
 // a line count for the current buffer
 String newText = "This file contains "
-    + String.valueOf(textArea.getLineCount())
-    + " lines.";</programlisting>
+    + textArea.getLineCount() + " lines.";</programlisting>
 </informalexample>
 
   <para>
@@ -545,16 +539,8 @@ String result = df.format(d);
 
 	  <listitem>
 	   <para>
-       <function>String.valueOf()</function> is one of a set of static
-       methods that takes another type (in this case, an
-       <classname>int</classname>) and returns a text representation.
-       </para>
-	  </listitem>
-
-	  <listitem>
-	   <para>
        The use of the <function>+</function> operator (which can be chained,
-       as here) appends <classname>String</classname> objects and string
+       as here) appends objects and string
        literals to return a concatenated <classname>String</classname>.
        </para>
 	  </listitem>

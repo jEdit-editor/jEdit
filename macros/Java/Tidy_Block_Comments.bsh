@@ -260,6 +260,8 @@ void tidyBlockComments(int atColumn, boolean useTabs,
         return resultString;
     }
 
+    dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     /*  BeanShell has to see everything it needs before the modal dialog
      *  becomes active; when using a modal dialog, make this the
      *  last line of the method.

@@ -127,7 +127,7 @@ void addRowsForMacros(Vector v)
 /*
  * helper method to make vector of row data for table
  */
-Vector makeRow( String name, String shortcut1, String shortcut2)
+Vector makeRow(String name, String shortcut1, String shortcut2)
 {
 	Vector row = new Vector(3);
 	row.addElement(name);
@@ -153,7 +153,7 @@ void writeTableToNewBuffer(Vector v)
 	}
 }
 
-void writeLine( Vector row)
+void writeLine(Vector row)
 {
 	StringBuffer sb = new StringBuffer(85);
 	spaceString = "                                        ";
@@ -308,16 +308,8 @@ void showShortcuts()
 	data_midpoint = findFirstItem('M');
 	dialog.pack();
 	dialog.setLocationRelativeTo(view);
+	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	dialog.show();
-}
-
-runnableShowShortcuts()
-{
-	run()
-	{
-		showShortcuts();
-	}
-	return this;
 }
 
 /*
@@ -327,6 +319,5 @@ runnableShowShortcuts()
 USE_MACRO_LABEL = true;
 PUT_MACROS_AT_END = false;
 Vector v = null;
-doShowShortcuts = runnableShowShortcuts();
-SwingUtilities.invokeLater(doShowShortcuts);
 
+showShortcuts();

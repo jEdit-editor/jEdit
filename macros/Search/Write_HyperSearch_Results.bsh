@@ -20,8 +20,6 @@
  * along with the jEdit program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Version 1.0 - Sat Mar 24 2001 12:26:13 EST
- *
  * Notes on use:
  *
  * The macro operates by dumping the contents of the HyperSearch Results
@@ -39,7 +37,6 @@
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.tree.*;
-import org.gjt.sp.jedit.search.*;
 
 void writeHyperSearchResults()
 {
@@ -85,24 +82,32 @@ void writeHyperSearchResults()
     }
 }
 
-void writeResultsForFile(TreeNode node)
+void writeResultsForFile( node)
 {
     node = (DefaultMutableTreeNode)node;
     if(node == null) return;
     childCount = node.getChildCount();
     if( childCount == 0) return;
-    ++global.fileCount;
-    global.hitCount += childCount;
+    ++fileCount;
+    hitCount += childCount;
     obj = node.getUserObject();
     sb.setLength(0);
     sb.append("Results for file:\n");
     sb.append(node.getUserObject().toString());
     sb.append("\n\n");
     lineNode = (DefaultMutableTreeNode)node.getFirstChild();
+	if(lineNode == null) return;
     for( int i = 0; i < childCount; ++i)
     {
+		if(lineNode == null)
+		{
+			sb.append(" Null node for i = " + String.valueOf(i));
+		}
+		else
+		{
         sb.append("\tline ");
         sb.append(lineNode.getUserObject().toString());
+		}
         sb.append('\n');
         lineNode = lineNode.getNextSibling();
     }

@@ -43,200 +43,223 @@
  * instance variables. Otherwise, the macro will parse C++ variables and
  * write C++ methods (with an equal potential for writing nonsense if an data
  * member is not being grabbed).
- *
  */
 
 import javax.swing.*;
 import javax.swing.border.*;
 
-
 void makeGetSetDialog()
 {
+    title = "Make get and set methods from caret line text";
 
-	title = "Make get and set methods from caret line text";
-
-	dialog = new JDialog(view, title, false);
+    dialog = new JDialog(view, title, false);
     content = new JPanel(new BorderLayout());
     content.setBorder(new EmptyBorder(5, 10, 10, 10));
     content.setPreferredSize(new Dimension(480, 320));
     dialog.setContentPane(content);
 
-	// textPanel holds a getPanel and a setPanel; each of
-	// the child panels holds a label and a scrolling text area
-	textPanel = new JPanel(new GridLayout(2, 1, 0, 10));
-	textPanel.setBorder( new EmptyBorder(5, 5, 5, 5));
+    // textPanel holds a getPanel and a setPanel; each of
+    // the child panels holds a label and a scrolling text area
+    textPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+    textPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-	setPanel = new JPanel(new BorderLayout());
-	setLabel = new JLabel("set() methods", SwingConstants.LEFT);
-	setText = new JTextArea();
-	setPanel.add(setLabel, "North");
-	setPanel.add(new JScrollPane( setText), "Center");
-	textPanel.add(setPanel);
+    setPanel = new JPanel(new BorderLayout());
+    setLabel = new JLabel("set() methods", SwingConstants.LEFT);
+    setText = new JTextArea();
+    setPanel.add(setLabel, "North");
+    setPanel.add(new JScrollPane( setText), "Center");
+    textPanel.add(setPanel);
 
-	getPanel = new JPanel(new BorderLayout());
-	getLabel = new JLabel("get() methods", SwingConstants.LEFT);
-	getText = new JTextArea();
-	getPanel.add(getLabel, "North");
-	getPanel.add(new JScrollPane( getText), "Center");
-	textPanel.add(getPanel);
+    getPanel = new JPanel(new BorderLayout());
+    getLabel = new JLabel("get() methods", SwingConstants.LEFT);
+    getText = new JTextArea();
+    getPanel.add(getLabel, "North");
+    getPanel.add(new JScrollPane( getText), "Center");
+    textPanel.add(getPanel);
 
-	content.add(textPanel, "Center");
-
-
-	buttonPanel = new JPanel(new GridLayout(5, 1, 0, 30));
-	buttonPanel.setBorder( new EmptyBorder(22, 5, 5, 5));
-
-	makeSetButton = new JButton("Make Set");
-	insertSetButton = new JButton("Insert Set");
-	doneButton = new JButton("Done");
-	insertGetButton = new JButton("Insert Get");
-	makeGetButton = new JButton("Make Get");
-
-	buttonPanel.add(makeSetButton);
-	buttonPanel.add(insertSetButton);
-	buttonPanel.add(doneButton);
-	buttonPanel.add(makeGetButton);
-	buttonPanel.add(insertGetButton);
-
-	content.add(buttonPanel, "East");
-
-	// action listener for buttons
-
-	makeSetButton.addActionListener(this);
-	insertSetButton.addActionListener(this);
-	doneButton.addActionListener(this);
-	insertGetButton.addActionListener(this);
-	makeGetButton.addActionListener(this);
+    content.add(textPanel, "Center");
 
 
-	actionPerformed( e)
-	{
-		cmd = e.getActionCommand();
-		if(cmd.indexOf("Done") != -1)
-		{
-			this.dialog.dispose();
-			return;
-		}
-		isGetCmd = (cmd.indexOf("Get") != -1);
-		if(cmd.indexOf("Insert") != -1)
-			doInsert(isGetCmd ? this.getText : this.setText);
-		else if(isGetCmd)
-			doMakeGet(this.getText);
-		else
-			doMakeSet(this.setText);
-	}
+    buttonPanel = new JPanel(new GridLayout(5, 1, 0, 30));
+    buttonPanel.setBorder( new EmptyBorder(22, 5, 5, 5));
+
+    makeSetButton = new JButton("Make Set");
+    insertSetButton = new JButton("Insert Set");
+    doneButton = new JButton("Done");
+    insertGetButton = new JButton("Insert Get");
+    makeGetButton = new JButton("Make Get");
+
+    buttonPanel.add(makeSetButton);
+    buttonPanel.add(insertSetButton);
+    buttonPanel.add(doneButton);
+    buttonPanel.add(makeGetButton);
+    buttonPanel.add(insertGetButton);
+
+    content.add(buttonPanel, "East");
+
+    // action listener for buttons
+
+    makeSetButton.addActionListener(this);
+    insertSetButton.addActionListener(this);
+    doneButton.addActionListener(this);
+    insertGetButton.addActionListener(this);
+    makeGetButton.addActionListener(this);
+
+
+    actionPerformed(e)
+    {
+        cmd = e.getActionCommand();
+        if(cmd.indexOf("Done") != -1)
+        {
+            this.dialog.dispose();
+            return;
+        }
+        isGetCmd = (cmd.indexOf("Get") != -1);
+        if(cmd.indexOf("Insert") != -1)
+            doInsert(isGetCmd ? this.getText : this.setText);
+        else if(isGetCmd)
+            doMakeGet(this.getText);
+        else
+            doMakeSet(this.setText);
+    }
 
 
     dialog.pack();
     dialog.setLocationRelativeTo(view);
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialog.setVisible(true);
 }
 
 void doMakeSet(JTextArea setText)
 {
-	result = parseLine();
-	if(result.variable.length() == 0) return;
-	c = result.variable.substring(0,1);
-	c = c.toUpperCase();
-	sb = new StringBuffer();
-	if(USE_JAVA)
-		sb.append("public ");
-	sb.append("void set");
-	sb.append(c);
-	sb.append(result.variable.substring(1));
-	sb.append("(");
-	sb.append(result.type);
-	sb.append(" ");
-	sb.append(result.variable);
-	if(!USE_JAVA)
-		sb.append("Param");
-	sb.append(") {\n\t");
-	if(USE_JAVA)
-		sb.append("this.");
-	sb.append(result.variable);
-	sb.append(" = ");
-	sb.append(result.variable);
-	if(!USE_JAVA)
-		sb.append("Param");
-	sb.append(";\n}\n");
-	setText.append(sb.toString());
+    result = parseLine();
+    if(result.variable.length() == 0) return;
+    c = result.variable.substring(0,1);
+    c = c.toUpperCase();
+    sb = new StringBuffer();
+    if(USE_JAVA == true)
+        sb.append("public ");
+    else
+    {
+        sb.append("/* header:\nvoid set");
+        sb.append(c);
+        sb.append(result.variable.substring(1));
+        sb.append("(");
+        sb.append(result.type);
+        sb.append(" ");
+        sb.append(result.variable);
+        sb.append("Param");
+        sb.append(");\n*/\n");
+    }
+    sb.append("void set");
+    sb.append(c);
+    sb.append(result.variable.substring(1));
+    sb.append("(");
+    sb.append(result.type);
+    sb.append(" ");
+    sb.append(result.variable);
+    if(USE_JAVA == false)
+        sb.append("Param");
+    sb.append(") {\n\t");
+    if(USE_JAVA == true)
+        sb.append("this.");
+    sb.append(result.variable);
+    sb.append(" = ");
+    sb.append(result.variable);
+    if(USE_JAVA == false)
+        sb.append("Param");
+    sb.append(";\n}\n");
+    setText.append(sb.toString());
 }
 
 
 
 void doMakeGet(JTextArea getText)
 {
-	result = parseLine();
-	if(result.variable.length() == 0) return;
-	c = result.variable.substring(0,1);
-	c = c.toUpperCase();
-	sb = new StringBuffer();
-	if(USE_JAVA)
-		sb.append("public ");
-	sb.append(result.type);
-	sb.append(" get");
-	sb.append(c);
-	sb.append(result.variable.substring(1));
-	sb.append("() {\n\treturn ");
-	sb.append(result.variable);
-	sb.append(";\n}\n");
-	getText.append(sb.toString());
+    result = parseLine();
+    if(result.variable.length() == 0) return;
+    c = result.variable.substring(0,1);
+    c = c.toUpperCase();
+    sb = new StringBuffer();
+    if(USE_JAVA == true)
+        sb.append("public ");
+    else
+    {
+        sb.append("/* header:\n");
+        sb.append(result.type);
+        sb.append(" get");
+        sb.append(c);
+        sb.append(result.variable.substring(1));
+        sb.append("() const;\n*/\n");
+    }
+
+    sb.append(result.type);
+    sb.append(" get");
+    sb.append(c);
+    sb.append(result.variable.substring(1));
+    sb.append("()");
+    if(USE_JAVA == false)
+        sb.append(" const");
+    sb.append(" {\n\treturn ");
+    sb.append(result.variable);
+    sb.append(";\n}\n");
+    getText.append(sb.toString());
 }
 
 parseLine()
 {
-	// scripted object stores result of parsing
-	resultObject( t, v)
-	{
-		type = t;
-		variable = v;
-		return this;
-	}
-	line = mainTextArea.getLineText(mainTextArea.getCaretLine()).trim();
-	if(!(line == null || line.equals("")))
-	{
-		tokenizer = new StringTokenizer(line);
-		if(tokenizer.countTokens() >= 2)
-		{
-			// get the first non-modifier token if there is one
-			returnType = tokenizer.nextToken();
-			if(USE_JAVA)
-			{
-				while( modifiers.indexOf(returnType) != -1
-						&& tokenizer.hasMoreTokens())
-						returnType = tokenizer.nextToken();
-			}
+    // scripted object stores result of parsing
+    resultObject( t, v)
+    {
+        type = t;
+        variable = v;
+        return this;
+    }
+    line = mainTextArea.getLineText(mainTextArea.getCaretLine()).trim();
+    if(!(line == null || line.equals("")))
+    {
+        tokenizer = new StringTokenizer(line);
+        if(tokenizer.countTokens() >= 2)
+        {
+            // get the first non-modifier token if there is one
+            returnType = tokenizer.nextToken();
+            if(USE_JAVA)
+            {
+                while( modifiers.indexOf(returnType) != -1
+                        && tokenizer.hasMoreTokens())
+                        returnType = tokenizer.nextToken();
+            }
 
-			if(tokenizer.hasMoreTokens())
-			{
-				// a non-modifier token was found and
-				// there is also an instance variable.
-				instanceVar = tokenizer.nextToken();
-				// remove the ; if there is one
-				if(instanceVar.endsWith(";"))
-				instanceVar =
-				instanceVar.substring(0, instanceVar.length() - 1);
-				// if the code doesn't have a space between the instance
-				// variable and the possible '=';
-				// get the correct instance variable.
-				if(instanceVar.indexOf('=') != -1)
-					instanceVar =
-						instanceVar.substring(0, instanceVar.indexOf('='));
-				return resultObject( returnType, instanceVar);
-			}
-		}
-	}
-	Macros.message(mainView, "Nothing to parse");
-	return resultObject( "", "");
+            if(tokenizer.hasMoreTokens())
+            {
+                // a non-modifier token was found and
+                // there is also an instance variable.
+                instanceVar = tokenizer.nextToken();
+                // remove the ; if there is one
+                if(instanceVar.endsWith(";"))
+                instanceVar =
+                instanceVar.substring(0, instanceVar.length() - 1);
+                // if the code doesn't have a space between the instance
+                // variable and the possible '=';
+                // get the correct instance variable.
+                if(instanceVar.indexOf('=') != -1)
+                    instanceVar =
+                        instanceVar.substring(0, instanceVar.indexOf('='));
+                return resultObject( returnType, instanceVar);
+            }
+        }
+    }
+    Macros.message(mainView, "Nothing to parse");
+    return resultObject( "", "");
 }
 
 
 
 void doInsert(JTextArea insertText)
 {
-	insert = insertText.getText();
-	if(insert != null)
-		mainTextArea.setSelectedText(insert);
+    insert = insertText.getText();
+    if(insert != null)
+        mainTextArea.setSelectedText(insert);
 }
 
 
@@ -247,8 +270,8 @@ void doInsert(JTextArea insertText)
 // for reading and writing C++ source code
 USE_JAVA = buffer.getMode().getName().equals("java");
 modifiers = "public protected private static transient final //";
-if(!USE_JAVA)
-	modifiers = "//";
+if(USE_JAVA == false)
+    modifiers = "//";
 
 // external global variables imported by jEdit are
 // not visible in methods called by ActionListener

@@ -34,56 +34,56 @@ import org.gjt.sp.jedit.*;
 
 void runDualJDiff(String basePath, String newPath)
 {
-	view.unsplit();
-	jEdit.openFile(view, basePath);
-	view.splitVertically();
-	jEdit.openFile(view, newPath);
-	DualDiff.toggleFor(view);
+    view.unsplit();
+    jEdit.openFile(view, basePath);
+    view.splitVertically();
+    jEdit.openFile(view, newPath);
+    DualDiff.toggleFor(view);
 }
 
 
 void showDualJDiff()
 {
-	// check for JDiff plugin
-	if(jEdit.getPlugin("JDiffPlugin") == null)
-	{
-		Macros.error(view, "You must have the JDiff plugin "
-			+ "installed to run this macro.");
-		return;
-	}
+    // check for JDiff plugin
+    if(jEdit.getPlugin("JDiffPlugin") == null)
+    {
+        Macros.error(view, "You must have the JDiff plugin "
+            + "installed to run this macro.");
+        return;
+    }
 
-	title = "Show dual diff display";
-	dialog = new JDialog(view, title, true);
-	content = new JPanel(new GridLayout(5, 1, 0, 0));
-	content.setPreferredSize(new Dimension(390, 180));
-	content.setBorder(new EmptyBorder(0, 10, 5, 10));
-	dialog.setContentPane(content);
+    title = "Show dual diff display";
+    dialog = new JDialog(view, title, true);
+    content = new JPanel(new GridLayout(5, 1, 0, 0));
+    content.setPreferredSize(new Dimension(390, 180));
+    content.setBorder(new EmptyBorder(0, 10, 5, 10));
+    dialog.setContentPane(content);
 
-	baseLabel = new JLabel("Base file:");
-	baseLabel.setForeground(Color.black);
-	content.add(baseLabel);
+    baseLabel = new JLabel("Base file:");
+    baseLabel.setForeground(Color.black);
+    content.add(baseLabel);
 
-	baseFilePanel = new JPanel(new BorderLayout(5, 5));
-	baseFilePanel.setBorder( new EmptyBorder(0, 0, 10, 0));
-	baseFileField = new HistoryTextField("user.showDualDiff.basefile");
-	baseFileField.setText(buffer.getName());
-	baseFilePanel.add(baseFileField, "Center");
+    baseFilePanel = new JPanel(new BorderLayout(5, 5));
+    baseFilePanel.setBorder( new EmptyBorder(0, 0, 10, 0));
+    baseFileField = new HistoryTextField("user.showDualDiff.basefile");
+    baseFileField.setText(buffer.getName());
+    baseFilePanel.add(baseFileField, "Center");
 
-	baseChooseButton = new JButton("Choose");
-	baseFilePanel.add(baseChooseButton, "East");
-	content.add(baseFilePanel);
+    baseChooseButton = new JButton("Choose");
+    baseFilePanel.add(baseChooseButton, "East");
+    content.add(baseFilePanel);
 
-	newLabel = new JLabel("New file:");
-	newLabel.setForeground(Color.black);
-	content.add(newLabel);
+    newLabel = new JLabel("New file:");
+    newLabel.setForeground(Color.black);
+    content.add(newLabel);
 
-	newFilePanel = new JPanel(new BorderLayout(5, 5));
-	newFilePanel.setBorder( new EmptyBorder(0, 0, 10, 0));
-	newFileField = new HistoryTextField("user.showDualDiff.newfile");
-	newFilePanel.add(newFileField, "Center");
-	newChooseButton = new JButton("Choose");
-	newFilePanel.add(newChooseButton, "East");
-	content.add(newFilePanel);
+    newFilePanel = new JPanel(new BorderLayout(5, 5));
+    newFilePanel.setBorder( new EmptyBorder(0, 0, 10, 0));
+    newFileField = new HistoryTextField("user.showDualDiff.newfile");
+    newFilePanel.add(newFileField, "Center");
+    newChooseButton = new JButton("Choose");
+    newFilePanel.add(newChooseButton, "East");
+    content.add(newFilePanel);
 
     buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
     buttonPanel.setBorder(new EmptyBorder(5, 50, 0, 50));
@@ -95,71 +95,71 @@ void showDualJDiff()
     buttonPanel.add(cancel);
     content.add(buttonPanel);
 
-	baseChooseButton.addActionListener(this);
-	newChooseButton.addActionListener(this);
-	ok.addActionListener(this);
-	cancel.addActionListener(this);
+    baseChooseButton.addActionListener(this);
+    newChooseButton.addActionListener(this);
+    ok.addActionListener(this);
+    cancel.addActionListener(this);
 
-	void actionPerformed(e)
-	{
-		if(e.getSource() == cancel)
-		{
-			dialog.dispose();
-		}
-		else if(e.getSource() == ok)
-		{
-			currentDir = MiscUtilities.getParentOfPath(buffer.getPath());
-			basePath = baseFileField.getText();
-			newPath = newFileField.getText();
-			if(basePath.length() == 0 || newPath.length() == 0)
-			{
-				Macros.message(view, "Two files must be selected.");
-				return;
-			}
-			err = "";
-			errCount = 0;
-			if(basePath.indexOf(File.separatorChar) == -1)
-				basePath = currentDir + File.separator + basePath;
-			if(newPath.indexOf(File.separatorChar) == -1)
-				newPath = currentDir + File.separator + newPath;
-			if( new File(basePath).exists() == false)
-			{
-				err += "Base file ";
-				++errCount;
-			}
-			if( new File(newPath).exists() == false)
-			{
-				err += ((errCount == 1) ?
-					"and new file do not exist." : "New file ");
-				++errCount;
-			}
-			if(errCount > 0)
-			{
-				if(errCount == 1)
-					err += "does not exist.";
-				Macros.error(view, err);
-				return;
-			}
-			else
-			{
-				dialog.dispose();
-				runDualJDiff(basePath, newPath);
-			}
-		}
-		else
-		{
-			field = e.getSource() == baseChooseButton ?
-				baseFileField : newFileField;
-			fieldText = field.getText();
-			if(fieldText.indexOf(File.separatorChar) == -1)
-				fieldText = null;
-			result = GUIUtilities.showVFSFileDialog(view, fieldText, 0, false);
-			if(result != null)
-				field.setText(result[0]);
-		}
-	}
+    void actionPerformed(e)
+    {
+        if(e.getSource() == cancel)
+        {
+            dialog.dispose();
+        }
+        else if(e.getSource() == ok)
+        {
+            currentDir = MiscUtilities.getParentOfPath(buffer.getPath());
+            basePath = baseFileField.getText();
+            newPath = newFileField.getText();
+            if(basePath.length() == 0 || newPath.length() == 0)
+            {
+                Macros.message(view, "Two files must be selected.");
+                return;
+            }
+            err = "";
+            errCount = 0;
+            if(basePath.indexOf(File.separatorChar) == -1)
+                basePath = currentDir + File.separator + basePath;
+            if(newPath.indexOf(File.separatorChar) == -1)
+                newPath = currentDir + File.separator + newPath;
+            if( new File(basePath).exists() == false)
+            {
+                err += "Base file ";
+                ++errCount;
+            }
+            if( new File(newPath).exists() == false)
+            {
+                err += ((errCount == 1) ?
+                    "and new file do not exist." : "New file ");
+                ++errCount;
+            }
+            if(errCount > 0)
+            {
+                if(errCount == 1)
+                    err += "does not exist.";
+                Macros.error(view, err);
+                return;
+            }
+            else
+            {
+                dialog.dispose();
+                runDualJDiff(basePath, newPath);
+            }
+        }
+        else
+        {
+            field = e.getSource() == baseChooseButton ?
+                baseFileField : newFileField;
+            fieldText = field.getText();
+            if(fieldText.indexOf(File.separatorChar) == -1)
+                fieldText = null;
+            result = GUIUtilities.showVFSFileDialog(view, fieldText, 0, false);
+            if(result != null)
+                field.setText(result[0]);
+        }
+    }
 
-	dialog.addKeyListener(this);
+    dialog.addKeyListener(this);
 
     void keyPressed(e)
     {
@@ -171,9 +171,10 @@ void showDualJDiff()
     }
     void keyReleased(e) {}
 
-	dialog.pack();
-	dialog.setLocationRelativeTo(view);
-	dialog.show();
+    dialog.pack();
+    dialog.setLocationRelativeTo(view);
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    dialog.show();
 }
 
 

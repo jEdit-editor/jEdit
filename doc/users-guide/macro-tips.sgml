@@ -28,7 +28,7 @@
     As mentioned earlier in <xref linkend="helpful-methods">, the method
     <function>Macros.input()</function> offers a convenient way to obtain
     a single line of text input. Here is an example that inserts a pair
-    of markup tags specified by the user.
+    of HTML markup tags specified by the user.
   </para>
 
 <informalexample><programlisting>// Insert_Tag.bsh
@@ -79,8 +79,7 @@ insertTag();
     <listitem>
       <funcsynopsis>
         <funcprototype>
-          <funcdef>public static int <function>showConfirmDialog</function>
-          </funcdef>
+          <funcdef>public static int <function>showConfirmDialog</function></funcdef>
           <paramdef>Component <parameter>parentComponent</parameter></paramdef>
           <paramdef>Object <parameter>message</parameter></paramdef>
           <paramdef>String <parameter>title</parameter></paramdef>
@@ -94,7 +93,7 @@ insertTag();
   <para>
     The usefulness of this method arises from the fact that the
     <varname>message</varname> parameter can be an object of any
-    Java class (since all clases are derived from
+    Java class (since all classes are derived from
     <classname>Object</classname>), or any array of objects.  The
     following example shows how this feature can be used.
   </para>
@@ -410,8 +409,7 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
     <listitem>
       <funcsynopsis>
         <funcprototype>
-          <funcdef>public void <function>readNextChar</function>
-          </funcdef>
+          <funcdef>public void <function>readNextChar</function></funcdef>
           <paramdef>String <parameter>code</parameter></paramdef>
         </funcprototype>
       </funcsynopsis>
@@ -424,7 +422,7 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
     string <varname>__char__</varname> appears in the parameter script, it
     will be substituted by the character value of the next key pressed after
     <function>readNextChar()</function> is called. The value of the key
-    pressed is <quote>eaten</quote> by <function>readNextChar()</function>.
+    pressed is <quote>consumed</quote> by <function>readNextChar()</function>.
     It will not be displayed on the screen or otherwise processed by jEdit.
   </para>
 
@@ -444,10 +442,9 @@ script = new StringBuffer(512);
 script.append( "start = textArea.getCaretPosition();"         );
 script.append( "line = textArea.getCaretLine();"              );
 script.append( "end = textArea.getLineEndOffset(line) + 1;"   );
-script.append( "seg = new javax.swing.text.Segment();"        );
-script.append( "buffer.getText(start, end - start, seg);"     );
+script.append( "text = buffer.getText(start, end - start);"   );
 script.append( "ch = __char__;"                               );
-script.append( "match = seg.toString().indexOf(ch, 1);"       );
+script.append( "match = text.indexOf(ch, 1);"                 );
 script.append( "if(match != -1) {"                            );
 script.append(   "if(ch != '\\n') ++match;"                   );
 script.append(   "textArea.select(start, start + match - 1);" );
@@ -502,19 +499,6 @@ view.getInputHandler().readNextChar(script.toString());
         the character value of the keypress for <varname>__char__</varname>
         the first time it occurs in the child script string; then it
         executes the resulting string as a macro.
-      </para>
-    </listitem>
-
-    <listitem>
-      <para>
-        The use of Java's <classname>Segment</classname> class is invoked with a
-        fully qualified name instead of an <function>import</function>
-        statement. A <classname>Segment</classname> refers to a portion of a
-        character array, such as the buffer encapsulated by a
-        <classname>String</classname>. It is used by jEdit in its
-        <function>View.getText()</function> method to identify a portion of a
-        text buffer efficiently, without allocating memory for an additional
-        character array.
       </para>
     </listitem>
 
@@ -587,7 +571,7 @@ orphanMessage = <quote>This is from Startup.bsh </quote>
 startup2 = Macros.getMacro(<quote>Startup2</quote>);
 if(startup2 != null)
 {
-    BeanShell.runScript(view, startup2.path, false, true);
+    BeanShell.runScript(view, startup2.path, false, false);
     orphanMessage += <quote>\nStartup2 was found.</quote>;
 }
 else
@@ -769,12 +753,11 @@ This is from Startup2.bsh but is not part of a scripted object.
 
 </sect1>
 
-<sect1 id=macro-tips-debugging><title>Debugging Macro Scripts</title>
+<sect1 id=macro-tips-debugging><title>Debugging Macros</title>
 
   <para>
-    Because BeanShell is an interpreted and not a compiled dialect of
-    Java, there are no separate tools for debugging a macro script.
-    Here are a few techniques that can prove helpful.
+    Here are a few techniques that can prove helpful in debugging
+    macros.
   </para>
 
 <sect2 id=macro-tips-debugging-exceptions>
@@ -917,7 +900,7 @@ This is from Startup2.bsh but is not part of a scripted object.
 
   <para>
     The following code would send a typical debugging message to the
-    Activity Log:
+    activity log:
   </para>
 
     <informalexample>
@@ -927,24 +910,13 @@ This is from Startup2.bsh but is not part of a scripted object.
     </informalexample>
 
   <para>
-    The corresponding Activity Log entry might read as follows:
+    The corresponding activity log entry might read as follows:
   </para>
 
     <informalexample>
     <programlisting>[debug] BeanShell: counter = 15; line = The corresponding
     activity log entry might read as follows:</programlisting>
     </informalexample>
-
-  <!-- <para>
-    The fully qualified name of the <classname>Log</classname> class is
-    <classname>org.gjt.sp.util.Log</classname>. The corresponding
-    <function>import</function> statement would be:
-    <informalexample>
-    <programlisting>import org.gjt.sp.util.Log;</programlisting>
-    </informalexample>
-    Either expression would be necessary to use the <function>log()</function>
-    method in macro code.
-  </para> -->
 
 </sect2>
 

@@ -167,6 +167,7 @@ void copyModeAbbrevs()
 
     dialog.pack();
     dialog.setLocationRelativeTo(view);
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialog.setVisible(true);
 }
 

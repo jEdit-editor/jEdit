@@ -1,70 +1,115 @@
 TO DO
 
-+ before 3.1final
- - proofread macro guide
- - get rid of final blank page of user's guide
+This list is a real mess... Note that not all these changes will be
+implemented in jEdit 3.2. Some might appear in a future version, some
+might never be implemented at all.
 
-+ sometime in the future
- - only exit delegates at the top level (eg <?php "<?xml ...?>" ?> in PHP)
- - improve handling of __char__
- - print() in BeanShell
- - magic caret code a bit annoying
- - fix dragStart handling in DockableWindowContainer.TabbedPane
- - wing comment with rect sel active puts comment start/end at the
-   beginning/end of each selected chunk
- - can mini io progress, io progress command
- - display io progress automatically after > 1 sec I/O
++ search and replace
  - reverse regexp search
- - C+i in shortcuts editor
+ - option for auto wrap around in search
+ - search and replace: option to use BeanShell in replace string,
+   eg $0.toLowerCase(). That would be rather cool.
+ - don't clear hypersearch results between subsequent searches, instead
+   have a 'Clear' button in the results window
+ - hypersearch: select all found results
+
++ merge position registers and markers
+ - Markers top level menu:
+    Add Marker (C+e C+m)
+    Add Marker With Shortcut [x] (C+t)
+    Go to Marker With Shortcut [x] (C+y)
+    Select to Marker With Shortcut [x] (C+u)
+    Swap Caret With Marker [x] (C+k)
+    Clear Marker (???)
+    Clear All Markers
+    Go to Previous Marker
+    Go to Next Marker
+    ----
+    <list of markers>
+
+ - each marker's "name" is the line of text (w/o whitespace) containing it.
+ - the shortcut is a single key, used by the register-like commands.
+ - markers are still persistent, etc.
+ - config option for controlling marker persistance
+
++ editing
+ - most recently selected text stored in % register, middle mouse button
+    inserts contents of that register
+ - magic caret code a bit annoying
+ - wing comment with rect sel active puts comment start/end at the
+    beginning/end of each selected chunk
+ - improved rectangular selections
+ - soft wrap
+ - discontinuous selection
+   - Edit->Discontinuous Selection command
+ - cut-append, copy-append, cut-append-register actions
+ - Bracket double click behavior is really annoying - make if configurable
+
++ folding
  - expand-fold doesn't expand narrowed regions
- - if a plugin is removed and put in a new dir, it is shown in both the
-   update and install lists
- - zlib decompression errors in plugin manager
- - aborts not always fired
- - ensure find field doesn't get too large
- - move local fs-specific stuff from MiscUtilities to FileVFS (UrlVFS
-   calls getParentOfPath()?)
- - finish persistent splits
- - .description plugin property
- - Migrate documentation to DocBook/XML
  - if the first line of the buffer is a collapsed fold: delete, undo,
    text inaccessable until C+e x
- - use Dirk's VariableGridLayout more
- - BeanShell class uses deprecated showFileDialog() method
- - XMode rule inclusion
- - when saving local files, save to .<filename>.save, then rename to
-   <filename>
- - The base Metal L&F font will be configurable.
- - Bracket double click behavior is really annoying - make if configurable
- - Two-pane view in filesystem browser
  - Perhaps try an alternative implementation of narrowing
- - encoding option in VFS browser
  - per-view fold visibility: bit-field used to store this in LineInfo
  - eliminate virtual line map with 'virtualLine' fields in LineInfo
    and binary search in virtualToPhysical()
- - escape in 'add abbrev' dialog
- - option for auto wrap around in search
+
++ plugins
+ - if a plugin is removed and put in a new dir, it is shown in both the
+   update and install lists
+ - zlib decompression errors in plugin manager
  - display all plugin errors, batched in one window on startup
- - 'new view' creates incorrectly sized views due to Java bugs
- - regexps in XMode
- - improved rectangular selections
- - soft wrap
- - search and replace: option to use BeanShell in replace string,
-   eg $0.toLowerCase(). That would be rather cool.
- - s&r dialog:
-
-   Replace with ( ) string:
-   _________________________________________
-                ( ) script:
-                    ( ) to lower case
-                    ( ) to upper case
-                    ( ) other:
-   _________________________________________
-                ( ) macro: [combo of macros]
-
- - runmacro= switch, -nomacro switch
-+ minor cleanups:
  - plugin directory should be named 'plugins', not 'jars'
- - site-props directory should be named 'properties'
  - move latest version plugin into the core
  - move plugin manager into the core
+ - plugin manager: track dependencies, branches
+
++ syntax highlighting
+ - only exit delegates at the top level (eg <?php "<?xml ...?>" ?> in PHP)
+ - XMode rule inclusion
+ - regexps in XMode
+
++ io
+ - can mini io progress, io progress command
+ - display io progress automatically after > 1 sec I/O
+ - move local fs-specific stuff from MiscUtilities to FileVFS (UrlVFS
+   calls getParentOfPath()?)
+ - encoding option in VFS browser
+ - when saving local files, save to .<filename>.save, then rename to
+   <filename>
+ - aborts not always fired
+ - encoding option in VFS browser
+ - Two-pane view in filesystem browser
+
++ ui
+ - ensure find field doesn't get too large
+ - finish persistent splits
+ - The base Metal L&F font will be configurable.
+ - use Dirk's VariableGridLayout more
+ - escape in 'add abbrev' dialog
+ - docked windows: discourage use of check box menu items, instead menu
+   item calls addDockableWindow() and right click on tab shows menu with
+   'Close'
+ - fix dragStart handling in DockableWindowContainer.TabbedPane
+ - C+i in shortcuts editor
+ - 'new view' creates incorrectly sized views due to Java bugs
+
++ beanshell
+ - print() in BeanShell
+ - actions.xml ACTIONS::ACTION attributes:
+   NO_READ_ONLY, NO_DISCONT_SEL -- automatic error msg if read only or
+   selection is discont.
+ - improve handling of __char__
+ - BeanShell class uses deprecated showFileDialog() method
+ - runmacro= switch, nomacro switch
+
++ documentation
+ - get rid of final blank page of user's guide
+ - Migrate documentation to DocBook/XML
+ - documentation: merge 'Text Registers' and 'The Clipboard' sections,
+   also mention MMB in those sections. Merge 'Markers' and 'Position
+   Registers'.
+ - Include John's upcoming plugin guide
+
++ misc
+ - site-props directory should be named 'properties'

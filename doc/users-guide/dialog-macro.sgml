@@ -80,13 +80,13 @@ void prefixSuffixDialog()
     title = &quot;Add prefix and suffix to selected lines&quot;;
     dialog = new JDialog(view, title, false);
     content = new JPanel(new BorderLayout());
-    content.setBorder(new EmptyBorder(5, 10, 10, 10));
+    content.setBorder(new EmptyBorder(12, 12, 12, 12));
     content.setPreferredSize(new Dimension(320, 160));
     dialog.setContentPane(content);
 
 <anchor id="fields-panel">    // add the text fields (see <xref linkend=
 "explain-fields-panel">)
-    fieldPanel = new JPanel(new GridLayout(4, 1, 0, 5));
+    fieldPanel = new JPanel(new GridLayout(4, 1, 0, 6));
     prefixField = new HistoryTextField(&quot;macro.add-prefix&quot;);
     prefixLabel = new JLabel(&quot;Prefix to add:&quot;);
     suffixField = new HistoryTextField(&quot;macro.add-suffix&quot;);
@@ -99,14 +99,19 @@ void prefixSuffixDialog()
 
 <anchor id="button-panel">    // add the buttons (see <xref
  linkend="explain-button-panel">)
-    buttonPanel = new JPanel(new BorderLayout(0, 0));
-    buttonPanel.setBorder(new EmptyBorder(15, 50, 0, 50));
+    buttonPanel = new JPanel();
+    buttonPanel.setLayout(new BoxLayout(buttonPanel,
+        BoxLayout.X_AXIS));
+    buttonPanel.setBorder(new EmptyBorder(12, 50, 0, 50));
+    buttonPanel.add(Box.createGlue());
     ok = new JButton(&quot;OK&quot;);
     cancel = new JButton(&quot;Cancel&quot;);
     ok.setPreferredSize(cancel.getPreferredSize());
     dialog.getRootPane().setDefaultButton(ok);
-    buttonPanel.add(ok, &quot;West&quot;);
-    buttonPanel.add(cancel, &quot;East&quot;);
+    buttonPanel.add(ok);
+    buttonPanel.add(Box.createHorizontalStrut(6));
+    buttonPanel.add(cancel);
+    buttonPanel.add(Box.createGlue());
     content.add(buttonPanel, &quot;South&quot;);
 
 <anchor id="add-listeners">    // register this method as an ActionListener for
@@ -122,6 +127,7 @@ void prefixSuffixDialog()
 "explain-set-visible">)
     dialog.pack();
     dialog.setLocationRelativeTo(view);
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialog.setVisible(true);
 
 <anchor id="action-listener">    // this method will be called when a button is clicked
@@ -220,9 +226,9 @@ content.setBorder(new EmptyBorder(12, 12, 12, 12));
 dialog.setContentPane(content);</></informalexample>
 
 <para>To get input for the macro, we need a dialog that permits
-input of the prefix and suffix string, an <guilabel>OK</guilabel> button to
-activate text insertion, and a <guilabel>Cancel</guilabel> button in case
-we change our mind. All of these elements will be contained in a dialog window.
+input of the prefix and suffix string, an <guibutton>OK</guibutton> button to
+perform text insertion, and a <guibutton>Cancel</guibutton> button in case
+we change our mind.
 We have decided to make the dialog window non-modal. This will allow
 us to move around in the text buffer to find things we may need
 (including text to cut and paste) to run the macro.</para>
@@ -311,11 +317,11 @@ package. The constructor we use takes the label text as a single
 one after the other. To achieve that, we use a
 <classname>JPanel</classname> object named <varname>fieldPanel</varname> that
 will be nested inside the dialog's content pane that we have
-already created. In the constrcutor for <varname>fieldPanel</varname>,
+already created. In the constructor for <varname>fieldPanel</varname>,
 we assign a new <classname>GridLayout</classname> with the indicated
 parameters: four rows, one column, zero spacing between columns (a
 meaningless element of a grid with only one column, but
-nevertheless a required parameter) and five pixel spacing between
+nevertheless a required parameter) and six pixel spacing between
 rows. The spacing between rows spreads out the four "grid"
 elements. After the components, the panel and the layout are
 specified, the components are added to <varname>fieldPanel</varname>
@@ -332,19 +338,22 @@ buttonPanel = new JPanel();
 buttonPanel.setLayout(new BoxLayout(buttonPanel,
     BoxLayout.X_AXIS));
 buttonPanel.setBorder(new EmptyBorder(12, 50, 0, 50));
+buttonPanel.add(Box.createGlue());
 ok = new JButton(&quot;OK&quot;);
 cancel = new JButton(&quot;Cancel&quot;);
 ok.setPreferredSize(cancel.getPreferredSize());
 dialog.getRootPane().setDefaultButton(ok);
 buttonPanel.add(ok);
-buttonPanel.add(cancel);
 buttonPanel.add(Box.createHorizontalStrut(6));
+buttonPanel.add(cancel);
+buttonPanel.add(Box.createGlue());
 content.add(buttonPanel, &quot;South&quot;);</></informalexample>
 
 <para>Creating the buttons repeats the pattern we used in creating
 the text fields. First, we create a new, nested panel with a
 <classname>BoxLayout</classname>. A <classname>BoxLayout</> places
-components either vertically or horizontally.
+components either in a single row or column, depending on the
+parameter passed to its constructor.
 We put an <classname>EmptyBorder</classname>
 in the new panel to set margins for placing the buttons. Then we
 create the buttons, using a <classname>JButton</classname> constructor that
@@ -352,7 +361,7 @@ specifies the button text. After setting the size of the <guilabel>OK</guilabel>
 button to equal the size of the <guilabel>Cancel</guilabel> button, we designate the
 <guilabel>OK</guilabel> button as the default button in the dialog. This causes the
 <guilabel>OK</guilabel> button to be outlined as the default button. Finally, we
-place the button side by side with a 6-pixel gap between them (for
+place the button side by side with a 6 pixel gap between them (for
 aesthetic reasons), and place the
 completed <varname>buttonPanel</varname> in the <quote>South</> section of the
 dialog's content pane.</para>
@@ -380,8 +389,7 @@ be implemented:</para>
 
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public void <function>actionPerformed</function>
-  </funcdef>
+  <funcdef>public void <function>actionPerformed</function></funcdef>
   <paramdef>ActionEvent <parameter>e</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -405,20 +413,25 @@ interface. We will do that shortly.</para>
 // editing pane and make it visible
 dialog.pack();
 dialog.setLocationRelativeTo(view);
+dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 dialog.setVisible(true);</></informalexample>
 
 <para>Here we do three things. First, we activate all the layout
 routines we have established by calling the <function>pack</function>
 methods. Next we center the dialog's position in the active jEdit
 <varname>view</varname> by calling <function>setLocationRelativeTo()</function>
-on the dialog. Finally, we activate the dialog by calling
+on the dialog. We also call the
+<function>setDefaultCloseOperation()</> function to specify that the
+dialog box should be immediately disposed if the user clicks the close
+box.
+Finally, we activate the dialog by calling
 <function>setVisible()</function> with the state parameter set to
 <constant>true</constant>.</para>
 
 <para>At this point we have a decent looking dialog window that
 doesn't do anything. Without more code, it will not respond to
 user input and will not accomplish any text manipulation. The
-balance of the script deals with these two requirements.</para>
+remainder of the script deals with these two requirements.</para>
 </sect2>
 
 <sect2 id="explain-action-listener">
@@ -437,9 +450,9 @@ void actionPerformed(e)
 
 <para>The method <function>actionPerformed()</function> nested inside
 <function>prefixSuffixDialog()</function> implements the implicit
-<classname>actionListener</classname> interface. It looks at the source of
+<classname>ActionListener</classname> interface. It looks at the source of
 the <classname>ActionEvent</classname>, determined by a call to
-<function>ActionEvent.getSource()</function>. What we do with this return
+<function>getSource()</function>. What we do with this return
 value is simple: if the source is not the "Cancel" button, we
 call the <function>processText()</function> method to insert the prefix
 and suffix text. Then the dialog is closed by calling its

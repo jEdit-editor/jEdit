@@ -10,7 +10,7 @@ if(browser == null)
 }
 manager.showDockableWindow("vfs.browser");
 
-browser.getBrowserView().getDefaultFocusComponent().grabFocus();
+browser.getBrowserView().getDefaultFocusComponent().requestFocus();
 
 // end Go_to_File_System_Browser.bsh
 

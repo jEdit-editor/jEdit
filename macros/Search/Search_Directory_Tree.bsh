@@ -12,6 +12,7 @@ void searchCurrentDirectoryTree()
 		new DirectoryListSet(dir, mask, true));
 	jEdit.setBooleanProperty("search.hypersearch.toggle", true);
 	jEdit.setBooleanProperty("search.keepDialog.toggle", false);
+	SearchAndReplace.setReverse(false);
 	SearchAndReplace.showSearchDialog(view, null);
 }
 

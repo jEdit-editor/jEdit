@@ -23,10 +23,10 @@
 
 jEdit.setTemporaryProperty("temp.findXXX.type", "first");
 
-searchMacro = Macros.getMacro("Search/Find_occurrence");
+searchMacro = Macros.getMacro("Search/Find_Occurrence");
 
 if(searchMacro == null)
 	Macros.message(view, "Cannot find search macro.");
 else
-	BeanShell.runScript(view, searchMacro.path, false, true);
+	BeanShell.runScript(view, searchMacro.path, true, false);
 

@@ -1,11 +1,11 @@
 ### plugin properties
 plugin.PluginManagerPlugin.name=Plugin Manager
 plugin.PluginManagerPlugin.author=Slava Pestov
-plugin.PluginManagerPlugin.version=0.6.2
+plugin.PluginManagerPlugin.version=0.6.3
 plugin.PluginManagerPlugin.depend.0=jedit 02.07.02.00
 
 ### URL to download plugin list from
-plugin-manager.url=http://jedit.sourceforge.net/export/plugin_manager.php
+plugin-manager.url=http://www.jedit.org/export/plugin_manager.php
 
 ### Plugin manager menu item
 plugin-manager.label=Plugin Manager...

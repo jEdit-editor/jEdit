@@ -5,6 +5,7 @@ void searchCurrentBuffer()
 	SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
 	jEdit.setBooleanProperty("search.hypersearch.toggle", false);
 	jEdit.setBooleanProperty("search.keepDialog.toggle", true);
+	SearchAndReplace.setReverse(false);
 	SearchAndReplace.showSearchDialog(view, null);
 }
 

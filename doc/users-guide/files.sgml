@@ -113,7 +113,7 @@
     <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
    </para>
   </sect2>
-  <sect2><title>Line Separator Characters</>
+  <sect2><title>Line Separators</>
    <para>
     The three major operating systems use different conventions to mark
     line endings in text files.

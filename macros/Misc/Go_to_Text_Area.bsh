@@ -1,0 +1,6 @@
+// Go_to_TextArea.bsh
+
+textArea.requestFocus();
+
+// end of Go_to_TextArea.bsh
+

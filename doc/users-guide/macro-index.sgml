@@ -428,7 +428,7 @@
 
 </sect1>
 
-<sect1 id=macros-console><title>Console Macros</title>
+<sect1 id=macros-console><title>Console Plugin Macros</title>
 <para>
     The Console plugin allows the user to run commands in various available
     shells and view output in a dedicated text window.  The following macros

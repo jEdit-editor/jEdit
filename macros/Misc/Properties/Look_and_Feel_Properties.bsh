@@ -1,0 +1,17 @@
+// Look_and_Feel_Properties.bsh
+
+keys = javax.swing.UIManager.getLookAndFeelDefaults().keys();
+
+sb = new StringBuffer("--listing look and feel property names--\n");
+
+while(keys.hasMoreElements())
+{
+    sb.append(keys.nextElement());
+    sb.append('\n');
+}
+
+jEdit.newFile(view);
+textArea.setText(sb.toString());
+
+// end of Look_and_Feel_Properties.bsh
+

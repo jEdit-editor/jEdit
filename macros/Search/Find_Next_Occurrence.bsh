@@ -28,5 +28,5 @@ searchMacro = Macros.getMacro("Search/Find_occurrence");
 if(searchMacro == null)
 	Macros.message(view, "Cannot find search macro.");
 else
-	BeanShell.runScript(view, searchMacro.path, false, true);
+	BeanShell.runScript(view, searchMacro.path, true, false);
 
