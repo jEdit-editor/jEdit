@@ -1240,7 +1240,13 @@ public class JEditTextArea extends JComponent
 		caretTimer.restart();
 
 		if(caret == newCaret)
+		{
+			// so that C+y <marker>, for example, will return
+			// to the saved location even if the caret was
+			// never moved but the user scrolled instead
+			scrollToCaret(doElectricScroll);
 			return;
+		}
 
 		int newCaretLine = getLineOfOffset(newCaret);
 
@@ -1697,6 +1703,8 @@ public class JEditTextArea extends JComponent
 			line = (Integer)keys.nextElement();
 			returnValue[i++] = line.intValue();
 		}
+
+		quicksort(returnValue,0,returnValue.length - 1);
 
 		return returnValue;
 	}
@@ -3045,12 +3053,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	}
 
 	/**
-	 * Prepends each line of the selection with the block comment string.
-	 * @since jEdit 2.7pre2
+	 * Prepends each line of the selection with the line comment string.
+	 * @since jEdit 3.2pre1
 	 */
-	public void blockComment()
+	public void lineComment()
 	{
-		String comment = (String)buffer.getProperty("blockComment");
+		String comment = (String)buffer.getProperty("lineComment");
 		if(!buffer.isEditable() || comment == null || comment.length() == 0)
 		{
 			getToolkit().beep();
@@ -3085,66 +3093,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	/**
 	 * Adds comment start and end strings to the beginning and end of the
-	 * selection, and box comment strings to the beginning of each line of
-	 * the selection.
-	 * @since jEdit 2.7pre2
-	 */
-	public void boxComment()
-	{
-		/* String commentStart = (String)buffer.getProperty("commentStart");
-		String commentEnd = (String)buffer.getProperty("commentEnd");
-		String boxComment = (String)buffer.getProperty("boxComment");
-		if(!buffer.isEditable() || commentStart == null
-			|| commentEnd == null || boxComment == null
-			|| commentStart.length() == 0 || commentEnd.length() == 0
-			|| boxComment.length() == 0)
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		commentStart = commentStart + ' ';
-		commentEnd = ' ' + commentEnd;
-		boxComment = boxComment + ' ';
-
-		Element map = buffer.getDefaultRootElement();
-
-		buffer.beginCompoundEdit();
-
-		try
-		{
-			Element lineElement = map.getElement(selectionStartLine);
-			int start = lineElement.getStartOffset();
-
-			buffer.insertString(start,commentStart,null);
-			for(int i = selectionStartLine + 1; i <= selectionEndLine; i++)
-			{
-				lineElement = map.getElement(i);
-				start = lineElement.getStartOffset();
-				buffer.insertString(start,boxComment,null);
-			}
-			lineElement = map.getElement(selectionEndLine);
-			int end = lineElement.getEndOffset() - 1;
-			buffer.insertString(end,commentEnd,null);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
-		finally
-		{
-			buffer.endCompoundEdit();
-		}
-
-		selectNone(); */
-	}
-
-	/**
-	 * Adds comment start and end strings to the beginning and end of the
 	 * selection.
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 3.2pre1
 	 */
-	public void wingComment()
+	public void rangeComment()
 	{
 		String commentStart = (String)buffer.getProperty("commentStart");
 		String commentEnd = (String)buffer.getProperty("commentEnd");
@@ -4063,6 +4015,42 @@ forward_scan:		do
 	private static boolean multi;
 	private boolean overwrite;
 
+	private static void quicksort(int[] obj, int _start, int _end)
+	{
+		int start = _start;
+		int end = _end;
+
+		int mid = obj[(_start + _end) / 2];
+
+		if(_start > _end)
+			return;
+
+		while(start <= end)
+		{
+			while(start < _end && obj[start] < mid)
+				start++;
+
+			while(end > _start && obj[end] > mid)
+				end--;
+
+			if(start <= end)
+			{
+				int tmp = obj[start];
+				obj[start] = obj[end];
+				obj[end] = tmp;
+
+				start++;
+				end--;
+			}
+		}
+
+		if(_start < end)
+			quicksort(obj,_start,end);
+
+		if(start < _end)
+			quicksort(obj,start,_end);
+	}
+
 	private void _addToSelection(Selection addMe)
 	{
 		// this is stupid but it makes things much simpler for
@@ -4274,20 +4262,21 @@ forward_scan:		do
 				continue;
 
 			// if the first non-whitespace string of the
-			// line is the blockComment or boxComment
+			// line is the lineComment or boxComment
 			// string, insert that string on the next
 			// line as well
 			String nextLineStart = null;
-			String blockComment = (String)buffer.getProperty("blockComment");
-			if(blockComment != null)
+			String lineComment = (String)buffer.getProperty("lineComment");
+			if(lineComment != null)
 			{
-				char[] blockCommentChars = blockComment.toCharArray();
+				char[] lineCommentChars = lineComment.toCharArray();
 				if(TextUtilities.regionMatches(true,lineSegment,
 					    lineSegment.offset + initialWhiteSpaceLength,
-					    blockCommentChars))
-					    nextLineStart = blockComment;
+					    lineCommentChars))
+					    nextLineStart = lineComment;
 			}
 
+			// undocumented feature!
 			String boxComment = (String)buffer.getProperty("boxComment");
 			if(boxComment != null)
 			{
@@ -4732,12 +4721,7 @@ forward_scan:		do
 			int length = evt.getLength();
 			int end = offset + length;
 
-			if(caret > offset && caret <= end)
-				moveCaretPosition(offset,false);
-			else if(caret > end)
-				moveCaretPosition(caret - length,false);
-			else
-				updateBracketHighlight();
+			boolean caretEvent = false;
 
 			// loop through all selections, resizing them if
 			// necessary
@@ -4750,23 +4734,23 @@ forward_scan:		do
 				if(s.start > offset && s.start <= end)
 				{
 					s.start = offset;
-					changed = true;
+					changed = caretEvent = true;
 				}
 				else if(s.start > end)
 				{
 					s.start -= length;
-					changed = true;
+					changed = caretEvent = true;
 				}
 
 				if(s.end > offset && s.end <= end)
 				{
 					s.end = offset;
-					changed = true;
+					changed = caretEvent = true;
 				}
 				else if(s.end > end)
 				{
 					s.end -= length;
-					changed = true;
+					changed = caretEvent = true;
 				}
 
 				if(s.start == s.end)
@@ -4781,6 +4765,18 @@ forward_scan:		do
 					s.endLine = getLineOfOffset(s.end);
 					invalidateLineRange(s.startLine,s.endLine);
 				}
+			}
+
+			if(caret > offset && caret <= end)
+				moveCaretPosition(offset,false);
+			else if(caret > end)
+				moveCaretPosition(caret - length,false);
+			else
+			{
+				updateBracketHighlight();
+
+				if(caretEvent)
+					fireCaretEvent();
 			}
 
 			documentChanged(evt);

@@ -241,14 +241,12 @@
    has commands which make inserting comments more convenient.
   </para>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Wing Comment</>
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Range Comment</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>C</></keycombo>) encloses the
-   selection with comment start and end strings. An example of Java
-   wing commented code looks like so:
+   selection with comment start and end strings, for example <literal>/*</>
+   and <literal>*/</> in Java mode.
   </para>
-  <screen>/* if(obj instanceof DBConnection)
-    ((DBConnection)obj).close(); */</screen>
   <para>
    Comment start and end strings can be changed on a mode-specific
    basis in the
@@ -256,48 +254,26 @@
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
    dialog box, or on a buffer-specific basis using buffer-local
    properties. For example, placing the following in one of the first 10 lines
-   of a buffer will change the wing comment strings to <quote>(*</> and
+   of a buffer will change the range comment strings to <quote>(*</> and
    <quote>*)</>:
   </para>
   <screen>:commentStart=(*:commentEnd=*):</screen>
   <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Box Comment</>
-   (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>B</></keycombo>) encloses the
-   selection with comment start and end strings, and places the box
-   comment string at the start of each line. An example of Java
-   box commented code looks like so:
-  </para>
-  <screen>/* if(obj instanceof DBConnection)
-*     ((DBConnection)obj).close(); */</screen>
-  <para>
-   The strings used for box commenting can be changed on a mode-specific
-   basis in the <guibutton>Mode-Specific</> pane of the
-   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
-   dialog box, or on a buffer-specific basis using buffer-local
-   properties. For example, placing the following in one of the first 10 lines
-   of a buffer will change the box comment strings to <quote>(*</> and
-   <quote>*</>), with <quote>**</> placed at the start of each line:
-  </para>
-  <screen>:commentStart=(*:commentEnd=*):boxComment=**:</screen>
-  <para>
-   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Block Comment</>
+   <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Line Comment</>
    (shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>K</></keycombo>) inserts the
-   block comment string at the start of each selected line.
-   An example of Java block commented code looks like so:
+   line comment string, for example <literal>//</> in Java mode,
+   at the start of each selected line.
   </para>
-  <screen>// if(obj instanceof DBConnection)
-//     ((DBConnection)obj).close();</screen>
   <para>
-   The block comment string can be changed on a mode-specific
+   The line comment string can be changed on a mode-specific
    basis in the <guibutton>Mode-Specific</> pane of the
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
    dialog box, or on a buffer-specific basis using buffer-local
    properties. For example, placing the following in one of the first 10 lines
-   of a buffer will change the block comment string to <quote>#</>:
+   of a buffer will change the line comment string to <quote>#</>:
   </para>
-  <screen>:blockComment=#:</screen>
+  <screen>:lineComment=#:</screen>
  </sect1>
  <sect1 id=folding><title>Folding</>
   <para>

@@ -86,21 +86,17 @@ public class BufferSwitcher extends JComboBox
 			else
 			{
 				setIcon(buffer.getIcon());
-				setText(buffer.toString() + " ("
-					+ buffer.getMode().getName() + ")");
+				if(!buffer.isLoaded())
+					setText(buffer.toString());
+				else
+				{
+					setText(buffer.toString() + " ("
+						+ buffer.getMode().getName() + ")");
+				}
+
 				return this;
 			}
 			return this;
 		}
 	}
-
-	
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.1  2000/11/13 11:19:27  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- */

@@ -98,7 +98,7 @@ public class RESearchMatcher implements SearchMatcher
 				replaceArgs[i] = match.toString(i);
 
 			Object obj = replaceMethod.invokeDeclaredMethod(
-				replaceArgs,interp);
+				interp.getNameSpace(),replaceArgs,interp);
 			if(obj == null)
 				return null;
 			else

@@ -5,7 +5,7 @@
 <!-- COBOL mode, by Matthias Schneider -->
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="blockComment" VALUE="*" />
+		<PROPERTY NAME="lineComment" VALUE="*" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">

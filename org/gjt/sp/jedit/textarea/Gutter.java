@@ -400,8 +400,26 @@ public class Gutter extends JComponent implements SwingConstants
 	private int borderWidth;
 	private Border focusBorder, noFocusBorder;
 
-	class MouseHandler extends MouseAdapter implements MouseMotionListener
+	class MouseHandler implements MouseListener, MouseMotionListener
 	{
+		int toolTipInitialDelay, toolTipReshowDelay;
+
+		public void mouseEntered(MouseEvent e)
+		{
+			ToolTipManager ttm = ToolTipManager.sharedInstance();
+			toolTipInitialDelay = ttm.getInitialDelay();
+			toolTipReshowDelay = ttm.getReshowDelay();
+			ttm.setInitialDelay(0);
+			ttm.setReshowDelay(0);
+		}
+
+		public void mouseExited(MouseEvent evt)
+		{
+			ToolTipManager ttm = ToolTipManager.sharedInstance();
+			ttm.setInitialDelay(toolTipInitialDelay);
+			ttm.setReshowDelay(toolTipReshowDelay);
+		}
+
 		public void mousePressed(MouseEvent e)
 		{
 			if(e.getX() < getWidth() - borderWidth * 2)
@@ -455,5 +473,7 @@ public class Gutter extends JComponent implements SwingConstants
 				textArea.mouseHandler.mouseReleased(e);
 			}
 		}
+
+		public void mouseClicked(MouseEvent e) {}
 	}
 }

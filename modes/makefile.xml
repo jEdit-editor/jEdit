@@ -4,7 +4,7 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="blockComment" VALUE="#" />
+		<PROPERTY NAME="lineComment" VALUE="#" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->

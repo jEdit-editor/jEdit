@@ -102,7 +102,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 			Object[] args = new Object[10];
 			args[0] = text;
 			Object obj = replaceMethod.invokeDeclaredMethod(
-				args,interp);
+				interp.getNameSpace(),args,interp);
 			if(obj == null)
 				return null;
 			else

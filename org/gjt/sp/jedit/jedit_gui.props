@@ -283,9 +283,8 @@ spaces-to-tabs.label=Spaces to Tabs
 tabs-to-spaces.label=Tabs to Spaces
 
 ### Source menu
-source=wing-comment \
-       box-comment \
-       block-comment \
+source=range-comment \
+       line-comment \
        - \
        indent-lines \
        shift-left \
@@ -296,9 +295,8 @@ source=wing-comment \
        prev-bracket \
        next-bracket
 source.label=Source
-wing-comment.label=Wing Comment
-box-comment.label=Box Comment
-block-comment.label=Block Comment
+range-comment.label=Range Comment
+line-comment.label=Line Comment
 indent-lines.label=Indent Selected Lines
 shift-left.label=Shift Indent Left
 shift-right.label=Shift Indent Right
@@ -314,8 +312,7 @@ registers=view-registers \
           copy-string-register \
 	  cut-append-string-register \
 	  copy-append-string-register \
-	  paste-string-register \
-	  -
+	  paste-string-register
 registers.label=Registers
 cut-string-register.label=Cut to Register [x]
 copy-string-register.label=Copy to Register [x]
@@ -592,8 +589,8 @@ select-prev-word.label=Select Previous Word
 view.title=jEdit - 
 
 # Gutter highlight
-view.gutter.marker.no-name=Marker is set here
-view.gutter.marker=Marker with shortcut "{0}" is set here
+view.gutter.marker.no-name=Marker
+view.gutter.marker=Marker: {0}
 
 # Status messages
 view.status.recording=(recording)
@@ -819,6 +816,8 @@ view-registers.caption=Register:
 view-registers.clipboard=$ (clipboard)
 view-registers.selection=% (selection)
 view-registers.none=No registers defined
+view-registers.registers=Registers:
+view-registers.contents=Contents:
 
 # Close all buffers dialog
 close.title=Unsaved Changes
@@ -1046,7 +1045,7 @@ options.mode.firstlineGlob=First line glob:
 options.mode.commentStart=Comment start:
 options.mode.commentEnd=Comment end:
 options.mode.boxComment=Box comment:
-options.mode.blockComment=Block comment:
+options.mode.lineComment=Line comment:
 options.mode.noWordSep=Extra word characters:
 
 options.print.label=Printing
@@ -1341,7 +1340,6 @@ plugin-manager.info.path=JAR file path:
 plugin-manager.info.name=Plugin name:
 plugin-manager.info.author=Author:
 plugin-manager.info.version=Version:
-plugin-manager.info.unknown=Unknown
 
 plugin-manager.remove=Remove Plugins
 plugin-manager.update=Update Plugins

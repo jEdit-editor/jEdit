@@ -51,19 +51,6 @@
     </thead>
     <tbody>
      <row>
-      <entry>blockComment</>
-      <entry>The block comment string. A block comment
-      extends to the end of the line. For example, in Java mode the
-      default value is <quote>//</>. See <xref linkend=commenting>.</entry>
-     </row>
-     <row>
-      <entry>boxComment</>
-      <entry>The box comment string. A box comment is one delimited
-      by the wing comment start and end strings, with the box comment string
-      at the beginning of each line. For example, in Java mode the
-      default value is <quote>*</>. See <xref linkend=commenting>.</entry>
-     </row>
-     <row>
       <entry>collapseFolds</>
       <entry>Folds with a level of this or higher will be collapsed when the
       buffer is opened. If set to zero, all folds will be expanded initially.
@@ -71,12 +58,12 @@
      </row>
      <row>
       <entry>commentEnd</>
-      <entry>The wing comment end string. For example, in Java mode
+      <entry>The range comment end string. For example, in Java mode
       the default value is <quote>*/</>. See <xref linkend=commenting>.</entry>
      </row>
      <row>
       <entry>commentStart</>
-      <entry>The wing comment start string. For example, in Java mode
+      <entry>The range comment start string. For example, in Java mode
       the default value is <quote>/*</>. See <xref linkend=commenting>.</entry>
      </row>
      <row>
@@ -94,6 +81,11 @@
       <entry>The width, in characters, of one indent.
       Must be an integer greater than 0.
       See <xref linkend=indent>.</entry>
+     </row>
+     <row>
+      <entry>lineComment</>
+      <entry>The line comment string. For example, in Java mode the
+      default value is <quote>//</>. See <xref linkend=commenting>.</entry>
      </row>
      <row>
       <entry>maxLineLen</>

@@ -6,7 +6,7 @@
      cplusplus and pascal modes used as reference. -->
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="blockComment" VALUE="#" />
+		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />

@@ -66,6 +66,13 @@
      when connecting to another instance via the edit server.</entry>
     </row>
     <row>
+     <entry>-nostartupmacro</>
+     <entry>Does not run the startup macro if one is present.
+     See <xref linkend=startup-macro>.
+     Has no effect
+     when connecting to another instance via the edit server.</entry>
+    </row>
+    <row>
      <entry>-server=<replaceable>name</></entry>
      <entry>Stores the server port info in the file named
      <replaceable>name</>. File names for this

@@ -1,7 +1,6 @@
 /*
  * PluginManager.java - Plugin manager window
  * Copyright (C) 2000, 2001 Slava Pestov
- * Portions copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,11 +30,11 @@ import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 
-public class PluginManager extends JFrame
+public class PluginManager extends JDialog
 {
-	public PluginManager()
+	public PluginManager(View view)
 	{
-		super(jEdit.getProperty("plugin-manager.title"));
+		super(view,jEdit.getProperty("plugin-manager.title"),true);
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -50,8 +49,32 @@ public class PluginManager extends JFrame
 		tree.setCellRenderer(new Renderer());
 		tree.setRootVisible(false);
 		tree.setVisibleRowCount(16);
+		tree.addTreeSelectionListener(new TreeHandler());
 
-		content.add(BorderLayout.CENTER,new JScrollPane(tree));
+		JPanel panel = new JPanel(new BorderLayout());
+
+		panel.add(BorderLayout.CENTER,new JScrollPane(tree));
+
+		JPanel panel2 = new JPanel(new BorderLayout());
+		panel2.setBorder(new EmptyBorder(6,0,0,0));
+		JPanel labelBox = new JPanel(new GridLayout(3,1,0,3));
+		labelBox.setBorder(new EmptyBorder(0,0,0,12));
+		labelBox.add(new JLabel(jEdit.getProperty("plugin-manager"
+			+ ".info.name"),SwingConstants.RIGHT));
+		labelBox.add(new JLabel(jEdit.getProperty("plugin-manager"
+			+ ".info.author"),SwingConstants.RIGHT));
+		labelBox.add(new JLabel(jEdit.getProperty("plugin-manager"
+			+ ".info.version"),SwingConstants.RIGHT));
+		panel2.add(BorderLayout.WEST,labelBox);
+
+		JPanel valueBox = new JPanel(new GridLayout(3,1,0,3));
+		valueBox.add(name = new JLabel());
+		valueBox.add(author = new JLabel());
+		valueBox.add(version = new JLabel());
+		panel2.add(BorderLayout.CENTER,valueBox);
+
+		panel.add(BorderLayout.SOUTH,panel2);
+		content.add(BorderLayout.CENTER,panel);
 
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
@@ -97,6 +120,9 @@ public class PluginManager extends JFrame
 
 	// private members
 	private JTree tree;
+	private JLabel name;
+	private JLabel author;
+	private JLabel version;
 	private JButton remove;
 	private JButton update;
 	private JButton install;
@@ -125,14 +151,20 @@ public class PluginManager extends JFrame
 				continue;
 			}
 
-			Entry entry = new Entry(path,plugin.getClassName());
 			if(plugin instanceof EditPlugin.Broken)
 			{
-				entry.broken = true;
-				notLoadedTree.add(new DefaultMutableTreeNode(entry));
+				PluginInfo info = new PluginInfo(
+					PluginInfo.LOADED_AND_BROKEN,
+					path,plugin.getClassName());
+				notLoadedTree.add(new DefaultMutableTreeNode(info));
 			}
 			else
-				loadedTree.add(new DefaultMutableTreeNode(entry));
+			{
+				PluginInfo info = new PluginInfo(
+					PluginInfo.LOADED,
+					path,plugin.getClassName());
+				loadedTree.add(new DefaultMutableTreeNode(info));
+			}
 		}
 
 		if(notLoadedTree.getChildCount() != 0)
@@ -144,8 +176,10 @@ public class PluginManager extends JFrame
 		String[] newPlugins = jEdit.getNotLoadedPluginJARs();
 		for(int i = 0; i < newPlugins.length; i++)
 		{
-			Entry entry = new Entry(newPlugins[i],null);
-			newTree.add(new DefaultMutableTreeNode(entry));
+			PluginInfo info = new PluginInfo(
+				PluginInfo.NOT_LOADED,
+				newPlugins[i],null);
+			newTree.add(new DefaultMutableTreeNode(info));
 		}
 
 		if(newTree.getChildCount() != 0)
@@ -156,33 +190,6 @@ public class PluginManager extends JFrame
 			tree.expandRow(i);
 
 		remove.setEnabled(false);
-	}
-
-	class Entry
-	{
-		String path;
-		String clazz;
-		String name, version, author;
-		boolean broken;
-		String breakReason;
-
-		Entry(String path, String clazz)
-		{
-			Entry.this.path = path;
-			Entry.this.clazz = clazz;
-			Entry.this.broken = broken;
-
-			Entry.this.name = jEdit.getProperty("plugin."
-				+ clazz + ".name");
-			if(Entry.this.name == null)
-				Entry.this.name = clazz;
-
-			Entry.this.version = jEdit.getProperty("plugin."
-				+ clazz + ".version");
-
-			Entry.this.author = jEdit.getProperty("plugin."
-				+ clazz + ".author");
-		}
 	}
 
 	class ActionHandler implements ActionListener
@@ -236,90 +243,57 @@ public class PluginManager extends JFrame
 		}
 	}
 
-	static class Renderer extends JPanel implements TreeCellRenderer
+	class TreeHandler implements TreeSelectionListener
 	{
-		JLabel name;
-		JLabel version;
-		JLabel author;
-		JLabel breakReason;
-
-		Renderer()
+		public void valueChanged(TreeSelectionEvent evt)
 		{
-			Renderer.this.setLayout(new BoxLayout(this,
-				BoxLayout.Y_AXIS));
+			TreePath selection = evt.getPath();
+			DefaultMutableTreeNode node;
+			if(selection == null)
+			{
+				node = null;
+			}
+			else
+			{
+				node = (DefaultMutableTreeNode)
+					selection.getLastPathComponent();
+			}
 
-			setOpaque(true);
+			name.setText(null);
+			author.setText(null);
+			version.setText(null);
 
-			Font font = UIManager.getFont("Tree.font");
+			if(node != null && node.isLeaf()
+				&& node.getUserObject() instanceof PluginInfo)
+			{
+				remove.setEnabled(true);
 
-			name = new JLabel();
-			name.setFont(new Font("SansSerif",Font.BOLD,14));
-			name.setForeground(Color.black);
-			version = new JLabel();
-			version.setForeground(Color.black);
-			version.setFont(font);
+				PluginInfo info = (PluginInfo)node.getUserObject();
 
-			author = new JLabel();
-			author.setForeground(Color.black);
-			author.setFont(font);
-
-			breakReason = new JLabel();
-			breakReason.setForeground(Color.black);
-			breakReason.setFont(font);
-
-			Box box = new Box(BoxLayout.X_AXIS);
-			box.add(name);
-			box.add(Box.createHorizontalStrut(6));
-			box.add(version);
-			Renderer.this.add(box);
-
-			Renderer.this.add(author);
-			Renderer.this.add(breakReason);
+				if(info.clazz != null)
+				{
+					name.setText(info.name);
+					author.setText(info.author);
+					version.setText(info.version);
+				}
+			}
+			else
+				remove.setEnabled(false);
 		}
+	}
 
+	class Renderer extends DefaultTreeCellRenderer
+	{
 		public Component getTreeCellRendererComponent(JTree tree,
 			Object value, boolean selected, boolean expanded,
 			boolean leaf, int row, boolean hasFocus)
 		{
-			if (selected)
-			{
-				Renderer.this.setBackground(UIManager.getColor(
-					"Tree.selectionBackground"));
-				Renderer.this.setForeground(UIManager.getColor(
-					"Tree.selectionForeground"));
-			}
-			else
-			{
-				Renderer.this.setBackground(tree.getBackground());
-				Renderer.this.setForeground(tree.getForeground());
-			}
+			super.getTreeCellRendererComponent(tree,value,
+				selected,expanded,leaf,row,hasFocus);
 
-			Object _value = ((DefaultMutableTreeNode)value)
-				.getUserObject();
-
-			if(_value instanceof Entry)
-			{
-				Entry entry = (Entry)_value;
-				name.setText(entry.name);
-				version.setText(entry.version);
-
-				// BAD
-				author.setText("by " + entry.author);
-			}
-			else if(_value != null)
-			{
-				name.setText(_value.toString());
-				version.setText(null);
-				author.setText(null);
-				breakReason.setText(null);
-			}
+			setIcon(null);
 
 			return this;
-		}
-
-		public boolean isShowing()
-		{
-			return true;
 		}
 	}
 }

@@ -4,7 +4,7 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="blockComment" VALUE="rem " />
+		<PROPERTY NAME="lineComment" VALUE="rem " />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE">
 		<WHITESPACE> </WHITESPACE>

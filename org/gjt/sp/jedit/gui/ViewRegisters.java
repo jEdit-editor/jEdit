@@ -1,6 +1,6 @@
 /*
  * ViewRegisters.java - View registers dialog
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +37,18 @@ public class ViewRegisters extends EnhancedDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		contents = new Vector();
-		registerCombo = new JComboBox();
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(new EmptyBorder(0,12,0,0));
+
+		JLabel label = new JLabel(jEdit.getProperty("view-registers.registers"));
+		label.setBorder(new EmptyBorder(0,0,3,0));
+		panel.add(BorderLayout.NORTH,label);
+
+		DefaultListModel registerModel = new DefaultListModel();
+		registerList = new JList(registerModel);
+		registerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		registerList.setCellRenderer(new Renderer());
+
 		Registers.Register[] registers = Registers.getRegisters();
 
 		int index = 0;
@@ -49,50 +59,31 @@ public class ViewRegisters extends EnhancedDialog
 				continue;
 
 			String value = reg.toString();
-			if(value == null)
+			if(value == null || value.length() == 0)
 				continue;
 
-			String name;
-			if(i == '\n')
-				name = "\n";
-			else if(i == '\t')
-				name = "\t";
-			else if(i == '$')
-			{
-				index = registerCombo.getItemCount();
-				name = jEdit.getProperty("view-registers.clipboard");
-			}
-			else if(i == '%')
-				name = jEdit.getProperty("view-registers.selection");
-			else
-				name = String.valueOf((char)i);
-
-			registerCombo.addItem(name);
-			contents.addElement(reg);
+			registerModel.addElement(new Character((char)i));
 		}
 
-		if(registerCombo.getItemCount() == 0)
-		{
-			registerCombo.addItem(jEdit.getProperty("view-registers.none"));
-			contents.addElement(null);
-		}
+		if(registerModel.getSize() == 0)
+			registerModel.addElement(jEdit.getProperty("view-registers.none"));
 
-		registerCombo.setMaximumSize(registerCombo.getPreferredSize());
+		panel.add(BorderLayout.CENTER,new JScrollPane(registerList));
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(0,0,6,0));
-		panel.add(new JLabel(jEdit.getProperty("view-registers.caption")));
-		panel.add(Box.createHorizontalStrut(12));
-		panel.add(registerCombo);
-		panel.add(Box.createGlue());
-		panel.add(Box.createHorizontalStrut(12));
-		content.add(BorderLayout.NORTH,panel);
+		content.add(BorderLayout.WEST,panel);
+
+		panel = new JPanel(new BorderLayout());
+		panel.setBorder(new EmptyBorder(0,12,0,0));
+
+		label = new JLabel(jEdit.getProperty("view-registers.contents"));
+		label.setBorder(new EmptyBorder(0,0,3,0));
+		panel.add(BorderLayout.NORTH,label);
 
 		contentTextArea = new JTextArea(10,80);
 		contentTextArea.setFont(view.getTextArea().getPainter().getFont());
 		contentTextArea.setEditable(false);
-		content.add(BorderLayout.CENTER,new JScrollPane(contentTextArea));
+		panel.add(BorderLayout.CENTER,new JScrollPane(contentTextArea));
+		content.add(BorderLayout.CENTER,panel);
 
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
@@ -105,8 +96,8 @@ public class ViewRegisters extends EnhancedDialog
 		getRootPane().setDefaultButton(close);
 		content.add(BorderLayout.SOUTH,panel);
 
-		registerCombo.addActionListener(new ActionHandler());
-		registerCombo.setSelectedIndex(index);
+		registerList.addListSelectionListener(new ListHandler());
+		registerList.setSelectedIndex(index);
 
 		pack();
 		setLocationRelativeTo(view);
@@ -126,28 +117,68 @@ public class ViewRegisters extends EnhancedDialog
 	// end EnhancedDialog implementation
 
 	// private members
-	private JComboBox registerCombo;
-	private Vector contents;
+	private JList registerList;
 	private JTextArea contentTextArea;
 	private JButton close;
+
+	class Renderer extends DefaultListCellRenderer
+	{
+		public Component getListCellRendererComponent(
+			JList list, Object value, int index,
+			boolean isSelected, boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list,value,
+				index,isSelected,cellHasFocus);
+
+			if(value instanceof Character)
+			{
+				char name = ((Character)value).charValue();
+
+				String label;
+
+				if(name == '\n')
+					label = "\n";
+				else if(name == '\t')
+					label = "\t";
+				else if(name == '$')
+					label = jEdit.getProperty("view-registers.clipboard");
+				else if(name == '%')
+					label = jEdit.getProperty("view-registers.selection");
+				else
+					label = String.valueOf((char)name);
+
+				setText(label);
+			}
+
+			return this;
+		}
+	}
 
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(evt.getSource() == registerCombo)
-			{
-				Registers.Register reg = (Registers.Register)
-					contents.elementAt(registerCombo
-					.getSelectedIndex());
-
-				if(reg == null)
-					return;
-
-				contentTextArea.setText(reg.toString());
-			}
-			else if(evt.getSource() == close)
+			if(evt.getSource() == close)
 				cancel();
+		}
+	}
+
+	class ListHandler implements ListSelectionListener
+	{
+		public void valueChanged(ListSelectionEvent evt)
+		{
+			Object value = registerList.getSelectedValue();
+			if(!(value instanceof Character))
+				return;
+
+			char name = ((Character)value).charValue();
+
+			Registers.Register reg = Registers.getRegister(name);
+
+			if(reg == null)
+				return;
+
+			contentTextArea.setText(reg.toString());
 		}
 	}
 }

@@ -4,20 +4,26 @@ This list is a real mess... Note that not all these changes will be
 implemented in jEdit 3.2. Some might appear in a future version, some
 might never be implemented at all.
 
++ before 3.2pre1
+
+- CVS: add PluginInfo.java
+- finish new plugin manager
+
++ later
+
+- what to do with boxComment property?
+- update buffer history for multiple selection
+- reload edit modes command
+- start preparing for web start (handle jEditHome == null, jedit_jnlp.jar)
+
 - reverse regexp search
 - hypersearch: select button, clear button
 - XThis: don't throw exceptions for non-existent methods
-- CVS: add pluginmgr, remove RegistersChanged
 - caret event not always fired
-- reload edit modes command
 - folding bug
 - most recently deleted text in ^ register?
-- replace in selection: restore selection
-- blockComment()
-- BeanShell replace: global variables!
-- update buffer history for multiple selection
-
 - web start version
+- failed saves should not clear the dirty flag
 
 + editing
  - improved rectangular selections

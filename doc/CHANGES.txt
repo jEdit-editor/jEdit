@@ -19,6 +19,11 @@ JEDIT 3.2 VERSION HISTORY
   - Unlike caret registers, which were global to the editor, markers are
     buffer-specific.
   - Registers are now only used to store text.
+  - Note that adding a marker with a shortcut of an existing one does
+    not delete the existing marker, it merely clears its shortcut.
+  - Registers and marker shortcuts are stored in a different namespace,
+    so you can have text in register 'a' and a marker with shortcut 'a'
+    at the same time
 - X-Windows style copy and paste now supported: most recently selected
   text is stored in the '%' register, middle mouse button click (or
   Alt-click if you only have a 2 button mouse) inserts contents of that
@@ -41,6 +46,8 @@ JEDIT 3.2 VERSION HISTORY
 - View->Scrolling->Scroll to Caret (C+e C+j) now expands the fold
   containing the caret, if necessary
 - -nostartupmacro command line switch
+- Improved 'View Registers' dialog box
+- The gutter now shows marker tooltips immediately
 
 + Neutral
 
@@ -50,6 +57,13 @@ JEDIT 3.2 VERSION HISTORY
 - 'Rectangular Selection' command removed. Now, the only way to create
   a rectangular selection is to either Control-drag and
   Control-Shift-click
+- 'Box Comment' command removed (it might reappear later. I just can't
+  be bothered updating it for the new selection code right now.)
+- 'Wing Comment' renamed 'Range Comment', 'Block Comment' renamed 'Line
+  Comment'
+- Startup macro is now run before the first view is created (so the
+  Swing font hack script floating around can now work without the
+  view.splitVertically()/view.unsplit() hackery)
 
 + Bug Fixes
 

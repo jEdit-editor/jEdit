@@ -245,8 +245,6 @@ public class EditPane extends JPanel implements EBComponent
 			propertiesChanged();
 			loadBufferSwitcher();
 		}
-		else if(msg instanceof RegistersChanged)
-			textArea.getGutter().repaint();
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
 	}

@@ -11,7 +11,7 @@
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE="*" />
-		<PROPERTY NAME="blockComment" VALUE="//" />
+		<PROPERTY NAME="lineComment" VALUE="//" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\">

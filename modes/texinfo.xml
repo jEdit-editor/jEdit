@@ -4,7 +4,7 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="blockComment" VALUE="@c" />
+		<PROPERTY NAME="lineComment" VALUE="@c" />
 	</PROPS>
 	<RULES>
 		<WHITESPACE> </WHITESPACE>
