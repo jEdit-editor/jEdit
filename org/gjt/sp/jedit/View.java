@@ -396,10 +396,12 @@ public class View extends JFrame implements EBComponent
 	 */
 	public String getSplitConfig()
 	{
+		// this code isn't finished yet
+
 		StringBuffer splitConfig = new StringBuffer();
-		if(splitPane != null)
-			getSplitConfig(splitPane,splitConfig);
-		else
+		//if(splitPane != null)
+		//	getSplitConfig(splitPane,splitConfig);
+		//else
 			splitConfig.append(getBuffer().getPath());
 		return splitConfig.toString();
 	}

@@ -108,13 +108,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				continue;
 
 			label = GUIUtilities.prettifyMenuLabel(label);
-			String shortcut1 = jEdit.getProperty(name + ".shortcut");
-			String shortcut2 = jEdit.getProperty(name + ".shortcut2");
-			GrabKeyDialog.KeyBinding binding
-				= new GrabKeyDialog.KeyBinding(name,
-					label,shortcut1,shortcut2);
-			bindings.addElement(binding);
-			allBindings.addElement(binding);
+			addBindings(name,label,bindings);
 		}
 
 		return new ShortcutsModel(id,bindings);
@@ -128,16 +122,35 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		for(int i = 0; i < macroList.size(); i++)
 		{
 			String name = macroList.elementAt(i).toString();
-			String shortcut1 = jEdit.getProperty(name + ".shortcut");
-			String shortcut2 = jEdit.getProperty(name + ".shortcut2");
-			GrabKeyDialog.KeyBinding binding
-				= new GrabKeyDialog.KeyBinding(name,
-					name,shortcut1,shortcut2);
-			bindings.addElement(binding);
-			allBindings.addElement(binding);
+			addBindings(name,name,bindings);
 		}
 
 		return new ShortcutsModel("macros",bindings);
+	}
+
+	private void addBindings(String name, String label, Vector bindings)
+	{
+		GrabKeyDialog.KeyBinding b[] = new GrabKeyDialog.KeyBinding[2];
+
+		b[0] = createBinding(name,label,
+			jEdit.getProperty(name + ".shortcut"));
+		b[1] = createBinding(name,label,
+			jEdit.getProperty(name + ".shortcut2"));
+
+		bindings.addElement(b);
+	}
+
+	private GrabKeyDialog.KeyBinding createBinding(String name,
+		String label, String shortcut)
+	{
+		if(shortcut != null && shortcut.length() == 0)
+			shortcut = null;
+
+		GrabKeyDialog.KeyBinding binding
+			= new GrabKeyDialog.KeyBinding(name,label,shortcut,false);
+
+		allBindings.addElement(binding);
+		return binding;
 	}
 
 	// private members
@@ -171,17 +184,16 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		public void mouseClicked(MouseEvent evt)
 		{
 			int row = keyTable.getSelectedRow();
-			int column = keyTable.getSelectedColumn();
-			if(column != 0 && row != -1)
+			int col = keyTable.getSelectedColumn();
+			if(col != 0 && row != -1)
 			{
-				String shortcut = new GrabKeyDialog(
+				 GrabKeyDialog gkd = new GrabKeyDialog(
 					ShortcutsOptionPane.this,
-					currentModel.getBindingAt(row),
-					allBindings,
-					column)
-					.getShortcut();
-				if(shortcut != null)
-					currentModel.setValueAt(shortcut,row,column);
+					currentModel.getBindingAt(row,col-1),
+					allBindings);
+				if(gkd.isOK())
+					currentModel.setValueAt(
+						gkd.getShortcut(),row,col);
 			}
 		}
 	}
@@ -231,16 +243,14 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public Object getValueAt(int row, int col)
 		{
-			GrabKeyDialog.KeyBinding binding = getBindingAt(row);
-
 			switch(col)
 			{
 			case 0:
-				return binding.label;
+				return getBindingAt(row,0).label;
 			case 1:
-				return binding.shortcut1;
+				return getBindingAt(row,0).shortcut;
 			case 2:
-				return binding.shortcut2;
+				return getBindingAt(row,1).shortcut;
 			default:
 				return null;
 			}
@@ -251,12 +261,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			if(col == 0)
 				return;
 
-			GrabKeyDialog.KeyBinding binding = getBindingAt(row);
-
-			if(col == 1)
-				binding.shortcut1 = (String)value;
-			else if(col == 2)
-				binding.shortcut2 = (String)value;
+			getBindingAt(row,col-1).shortcut = (String)value;
 
 			// redraw the whole table because a second shortcut
 			// might have changed, too
@@ -280,19 +285,27 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public void save()
 		{
-			for(int i = 0; i < bindings.size(); i++)
+			Enumeration enum = bindings.elements();
+			while(enum.hasMoreElements())
 			{
-				GrabKeyDialog.KeyBinding binding = getBindingAt(i);
-				jEdit.setProperty(binding.name + ".shortcut",
-					binding.shortcut1);
-				jEdit.setProperty(binding.name + ".shortcut2",
-					binding.shortcut2);
+				GrabKeyDialog.KeyBinding binding[]
+					= (GrabKeyDialog.KeyBinding[])
+						enum.nextElement();
+				jEdit.setProperty(
+					binding[0].name + ".shortcut",
+					binding[0].shortcut);
+				jEdit.setProperty(
+					binding[1].name + ".shortcut2",
+					binding[1].shortcut);
 			}
 		}
 
-		public GrabKeyDialog.KeyBinding getBindingAt(int row)
+		public GrabKeyDialog.KeyBinding getBindingAt(int row, int nr)
 		{
-			return (GrabKeyDialog.KeyBinding)bindings.elementAt(row);
+			GrabKeyDialog.KeyBinding binding[]
+				= (GrabKeyDialog.KeyBinding[])
+					bindings.elementAt(row);
+			return binding[nr];
 		}
 
 		public String toString()
@@ -312,13 +325,13 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 			public int compare(Object obj1, Object obj2)
 			{
-				GrabKeyDialog.KeyBinding k1
-					= (GrabKeyDialog.KeyBinding)obj1;
-				GrabKeyDialog.KeyBinding k2
-					= (GrabKeyDialog.KeyBinding)obj2;
+				GrabKeyDialog.KeyBinding[] k1
+					= (GrabKeyDialog.KeyBinding[])obj1;
+				GrabKeyDialog.KeyBinding[] k2
+					= (GrabKeyDialog.KeyBinding[])obj2;
 
-				String label1 = k1.label.toLowerCase();
-				String label2 = k2.label.toLowerCase();
+				String label1 = k1[0].label.toLowerCase();
+				String label2 = k2[0].label.toLowerCase();
 
 				if(col == 0)
 					return label1.compareTo(label2);
@@ -328,13 +341,13 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 					if(col == 1)
 					{
-						shortcut1 = k1.shortcut1;
-						shortcut2 = k2.shortcut1;
+						shortcut1 = k1[0].shortcut;
+						shortcut2 = k2[0].shortcut;
 					}
 					else
 					{
-						shortcut1 = k1.shortcut2;
-						shortcut2 = k2.shortcut2;
+						shortcut1 = k1[1].shortcut;
+						shortcut2 = k2[1].shortcut;
 					}
 
 					if(shortcut1 == null && shortcut2 != null)

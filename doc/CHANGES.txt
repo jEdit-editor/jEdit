@@ -1,5 +1,30 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2pre9
+
++ New Features
+
+- Keys can now be bound to letter keys without modifiers; eg you can
+  bind a macro to '>' that in HTML mode inserts the appropriate closing
+  tab automatically. Note that the actual cahracter is not inserted, so
+  the macro would need to insert '>' first itself.
+
++ Bug Fixes
+
+- Fixed a few bugs in the shortcuts option pane (Dirk Moebius)
+- Fixed typo in a tip of the day
+- If the text area was too small, it would report a negative number of
+  visible lines, which caused problems
+- Disabled non-working persistent splits feature, which could have
+  caused problems
+
++ API Changes
+
+- FileVFS.getPermissions() and setPermissions() methods get and set file
+  permissions on Unix. These methods were formely private, now they are
+  public and static. They do nothing if jEdit is not being run on a Unix
+  platform.
+
 * Version 3.2pre8
 
 + New Features

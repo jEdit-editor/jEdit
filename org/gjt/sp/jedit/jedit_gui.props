@@ -1220,7 +1220,15 @@ grab-key.duplicate-alt-shortcut.message=\
 grab-key.duplicate-shortcut.title=Duplicate Shortcut
 grab-key.duplicate-shortcut.message=\
 	This shortcut is already assigned to\n\
-	"{0}".
+	"{0}".\n\
+	\n\
+	Do you want to override this assignment?
+	
+grab-key.prefix-shortcut.title=Invalid Shortcut
+grab-key.prefix-shortcut.message=\
+	You cannot use this shortcut, because\n\
+	it is a prefix to other shortcuts.\n\
+	Please choose another.
 
 options.browser.label=File System Browser
 options.browser.defaultPath=Default path:

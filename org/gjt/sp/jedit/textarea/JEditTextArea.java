@@ -4080,6 +4080,8 @@ forward_scan:		do
 		if(painter == null)
 			return;
 		int height = painter.getHeight();
+		if(height < 0)
+			System.err.println("faggots");
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
 		updateScrollBars();
@@ -4695,10 +4697,10 @@ forward_scan:		do
 			int rightWidth = right.getPreferredSize().width;
 			int leftWidth = left.getPreferredSize().width;
 			int bottomHeight = bottom.getPreferredSize().height;
-			int centerWidth = size.width - leftWidth - rightWidth -
-				ileft - iright;
-			int centerHeight = size.height - bottomHeight - itop -
-				ibottom;
+			int centerWidth = Math.max(0,size.width - leftWidth
+				- rightWidth - ileft - iright);
+			int centerHeight = Math.max(0,size.height
+				- bottomHeight - itop - ibottom);
 
 			left.setBounds(
 				ileft,
@@ -4721,7 +4723,7 @@ forward_scan:		do
 			bottom.setBounds(
 				ileft,
 				itop + centerHeight,
-				size.width - rightWidth - ileft - iright,
+				Math.max(0,size.width - rightWidth - ileft - iright),
 				bottomHeight);
 		}
 

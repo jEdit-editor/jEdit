@@ -50,9 +50,8 @@ public class KeyEventWorkaround
 		case KeyEvent.KEY_TYPED:
 			// need to let \b through so that backspace will work
 			// in HistoryTextFields
-			if((ch < 0x20 || ch == 0x7f) && ch != '\b')
+			if((ch < 0x20 || ch == 0x7f || ch == 0xff) && ch != '\b')
 				return null;
-
 
 			if(!java14)
 			{

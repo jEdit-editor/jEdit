@@ -95,7 +95,8 @@
     </para>
 <informalexample><programlisting>public void createMenuItems(Vector menuItems)
 {
-    menuItems.addElement(GUIUtilities.loadMenu("myplugin.menu"));
+    menuItems.addElement(GUIUtilities.loadMenu(
+        "myplugin.menu"));
 }</programlisting></informalexample>
 
     <para>

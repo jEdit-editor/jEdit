@@ -252,34 +252,32 @@ public class DefaultInputHandler extends InputHandler
 		if(c == '\b')
 			return;
 
-		if(currentBindings != bindings)
+		KeyStroke keyStroke;
+
+		// this is a hack. a literal space is impossible to
+		// insert in a key binding string, but you can write
+		// SPACE.
+		if(c == ' ')
+			keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0);
+		else
+			keyStroke = KeyStroke.getKeyStroke(c);
+
+		Object o = currentBindings.get(keyStroke);
+
+		if(o instanceof Hashtable)
 		{
-			KeyStroke keyStroke;
-
-			// this is a hack. a literal space is impossible to
-			// insert in a key binding string, but you can write
-			// SPACE.
-			if(c == ' ')
-				keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0);
-			else
-				keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c));
-
-			Object o = currentBindings.get(keyStroke);
-
-			if(o instanceof Hashtable)
-			{
-				currentBindings = (Hashtable)o;
-				return;
-			}
-			else if(o instanceof EditAction)
-			{
-				currentBindings = bindings;
-				invokeAction((EditAction)o);
-				return;
-			}
-
-			currentBindings = bindings;
+			currentBindings = (Hashtable)o;
+			return;
 		}
+		else if(o instanceof EditAction)
+		{
+			currentBindings = bindings;
+			invokeAction((EditAction)o);
+			return;
+		}
+
+		// otherwise, reset to default map and do user input
+		currentBindings = bindings;
 
 		if(repeat && Character.isDigit(c))
 		{
@@ -337,11 +335,14 @@ public class DefaultInputHandler extends InputHandler
 		String key = keyStroke.substring(index + 1);
 		if(key.length() == 1)
 		{
-			char ch = Character.toUpperCase(key.charAt(0));
+			char ch = key.charAt(0);
 			if(modifiers == 0)
 				return KeyStroke.getKeyStroke(ch);
 			else
-				return KeyStroke.getKeyStroke(ch,modifiers);
+			{
+				return KeyStroke.getKeyStroke(Character.toUpperCase(ch),
+					modifiers);
+			}
 		}
 		else if(key.length() == 0)
 		{

@@ -309,8 +309,10 @@ MsgBox "The server authorization code is " + _
 	FormatNumber(launcher.ServerKey, 0, 0, 0, 0) + ".", _
 	vbOKOnly + vbInformation, "jEditLauncher"
 launcher.openFiles(a)
-myScript = "jEdit.newFile(view); textArea.setSelectedText(" &amp; CHR(34) _
-  &amp; "Welcome to jEditLauncher." &amp; CHR(34) &amp; ");"
+myScript = "jEdit.newFile(view); textArea.setSelectedText(" _
+  &amp; CHR(34) _
+  &amp; "Welcome to jEditLauncher." _
+  &amp; CHR(34) &amp; ");"
 launcher.evalScript(myScript)</programlisting></informalexample>
 
 <informalexample><programlisting>/* Example JScript using jEditLauncher interface
@@ -336,7 +338,8 @@ foreach $entry (@ARGV) {
     push(@files,@new);
 }
 $launcher->openFiles(\@files);
-my($script) = "Macros.message(view, \"I found ".(scalar @files)." files.\");"
+my($script) = "Macros.message(view, \"I found "
+    .(scalar @files)." files.\");";
 $launcher->evalScript($script);</programlisting></informalexample>
 
 <informalexample><programlisting># Example Python script using jEditLauncher interface

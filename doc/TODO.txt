@@ -1,11 +1,9 @@
 TO DO
 
 - proofread user's guide
-- finish console 3.0
-- -1 being passed to virtualToPhysical() by documentChanged()
-- scrollToCaret() still broken
 - formatting problems in user's guide in table cells
 - next time i'm making an RPM, fix the shell script
+- check Alt-key behavior
 
 + bugs:
 

@@ -387,45 +387,15 @@ public class FileVFS extends VFS
 		setPermissions(buffer.getPath(),permissions);
 	}
 
-	// private members
-	private FileSystemView fsView;
-	private static boolean isUnix;
-
-	static
-	{
-		// If the file separator is '/', the OS is either Unix,
-		// MacOS X, or MacOS.
-		if(File.separatorChar == '/')
-		{
-			String osName = System.getProperty("os.name");
-			if(osName.indexOf("MacOS") != -1)
-			{
-				if(osName.indexOf("X") != -1)
-				{
-					// MacOS X is Unix.
-					isUnix = true;
-				}
-				else
-				{
-					// Classic MacOS is definately not Unix.
-					isUnix = false;
-				}
-			}
-			else
-			{
-				// Unix.
-				isUnix = true;
-			}
-		}
-
-		Log.log(Log.DEBUG,FileVFS.class,"Unix operating system "
-			+ (isUnix ? "detected; will" : "not detected; will not")
-			+ " use permission-preserving code");
-	}
-
 	/** Code borrowed from j text editor (http://www.armedbear.org) */
 	/** I made some changes to make it support suid, sgid and sticky files */
-	private int getPermissions(String path)
+
+	/**
+	 * Returns numeric permissions of a file. On non-Unix systems, always
+	 * returns zero.
+	 * @since jEdit 3.2pre9
+	 */
+	public static int getPermissions(String path)
 	{
 		int permissions = 0;
 
@@ -492,7 +462,12 @@ public class FileVFS extends VFS
 		return permissions;
 	}
 
-	private void setPermissions(String path, int permissions)
+	/**
+	 * Sets numeric permissions of a file. On non-Unix platforms,
+	 * does nothing.
+	 * @since jEdit 3.2pre9
+	 */
+	public static void setPermissions(String path, int permissions)
 	{
 		if(permissions != 0)
 		{
@@ -519,5 +494,41 @@ public class FileVFS extends VFS
 				}
 			}
 		}
+	}
+	
+	// private members
+	private FileSystemView fsView;
+	private static boolean isUnix;
+
+	static
+	{
+		// If the file separator is '/', the OS is either Unix,
+		// MacOS X, or MacOS.
+		if(File.separatorChar == '/')
+		{
+			String osName = System.getProperty("os.name");
+			if(osName.indexOf("MacOS") != -1)
+			{
+				if(osName.indexOf("X") != -1)
+				{
+					// MacOS X is Unix.
+					isUnix = true;
+				}
+				else
+				{
+					// Classic MacOS is definately not Unix.
+					isUnix = false;
+				}
+			}
+			else
+			{
+				// Unix.
+				isUnix = true;
+			}
+		}
+
+		Log.log(Log.DEBUG,FileVFS.class,"Unix operating system "
+			+ (isUnix ? "detected; will" : "not detected; will not")
+			+ " use permission-preserving code");
 	}
 }

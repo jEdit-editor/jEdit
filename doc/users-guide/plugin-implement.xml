@@ -393,7 +393,8 @@
         &lt;CODE&gt;
           wm = view.getDockableWindowManager();
           wm.addDockableWindow(QuickNotepadPlugin.NAME);
-          wm.getDockableWindow(QuickNotepadPlugin.NAME).chooseFile();
+          wm.getDockableWindow(QuickNotepadPlugin.NAME)
+            .chooseFile();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 
@@ -401,7 +402,8 @@
         &lt;CODE&gt;
           wm = view.getDockableWindowManager();
           wm.addDockableWindow(QuickNotepadPlugin.NAME);
-          wm.getDockableWindow(QuickNotepadPlugin.NAME).saveFile();
+          wm.getDockableWindow(QuickNotepadPlugin.NAME)
+            .saveFile();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 
@@ -409,7 +411,8 @@
         &lt;CODE&gt;
           wm = view.getDockableWindowManager();
           wm.addDockableWindow(QuickNotepadPlugin.NAME);
-          wm.getDockableWindow(QuickNotepadPlugin.NAME).copyToBuffer();
+          wm.getDockableWindow(QuickNotepadPlugin.NAME)
+            .copyToBuffer();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 &lt;/ACTIONS&gt;</programlisting></informalexample>
@@ -735,17 +738,17 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
         super(new BorderLayout());
 
         this.view = view;
-        this.floating  = position.equals(DockableWindowManager.FLOATING);
+        this.floating = position.equals(
+            DockableWindowManager.FLOATING);
 
-        this.filename = jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "filepath");
+        this.filename = jEdit.getProperty(QuickNotepadPlugin.OPTION_PREFIX
+            + "filepath");
         if(this.filename == null || this.filename.length() == 0)
         {
             this.filename = new String(jEdit.getSettingsDirectory()
                 + File.separator + "qn.txt");
-            jEdit.setProperty(
-                QuickNotepadPlugin.OPTION_PREFIX + "filepath",
-                this.filename);
+            jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX
+                + "filepath",this.filename);
         }
         this.defaultFilename = new String(this.filename);
 
@@ -997,23 +1000,23 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 
 <informalexample><programlisting>public void _save()
 {
-    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX + "filepath",
-        pathName.getText());
+    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX
+        + "filepath", pathName.getText());
     Font _font = font.getFont();
-    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX + "font",
-        _font.getFamily());
-    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX + "fontsize",
-        String.valueOf(_font.getSize()));
-    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX + "fontstyle",
-        String.valueOf(_font.getStyle()));
-    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX + "show-filepath",
-        String.valueOf(showPath.isSelected()));
+    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX
+        + "font", _font.getFamily());
+    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX
+        + "fontsize", String.valueOf(_font.getSize()));
+    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX
+        + "fontstyle", String.valueOf(_font.getStyle()));
+    jEdit.setProperty(QuickNotepadPlugin.OPTION_PREFIX
+        + "show-filepath", String.valueOf(showPath.isSelected()));
 }</programlisting></informalexample>
 
 <para>
   The class has only two other methods, one to display a file chooser
   dialog in response to user action, and the other
-  to construct a<classname>Font</classname> object from the plugin's font
+  to construct a <classname>Font</classname> object from the plugin's font
   properties. They do not require discussion here.
 </para>
 

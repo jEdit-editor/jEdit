@@ -61,7 +61,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.02.08.00";
+		return "03.02.09.00";
 	}
 
 	/**
@@ -583,7 +583,7 @@ public class jEdit
 		}
 		catch(NumberFormatException nf)
 		{
-			Log.log(Log.ERROR,jEdit.class,nf);
+			//Log.log(Log.ERROR,jEdit.class,nf);
 			interval = 30;
 		}
 		Autosave.setInterval(interval);

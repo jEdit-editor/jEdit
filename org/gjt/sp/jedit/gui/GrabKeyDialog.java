@@ -39,18 +39,15 @@ public class GrabKeyDialog extends JDialog
 	 * @param  comp  center dialog on this component.
 	 * @param  binding  the action/macro that should get a binding.
 	 * @param  allBindings  all other key bindings.
-	 * @param  shortcutNo  number of the shortcut that should be assigned,
-	 *     either 1 or 2.
-	 * @since jEdit 3.2pre8
+	 * @since jEdit 3.2pre9
 	 */
 	public GrabKeyDialog(Component comp, KeyBinding binding,
-		Vector allBindings, int shortcutNo)
+		Vector allBindings)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("grab-key.title"),true);
 		this.binding = binding;
 		this.allBindings = allBindings;
-		this.shortcutNo = shortcutNo;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
@@ -103,7 +100,7 @@ public class GrabKeyDialog extends JDialog
 		buttons.add(ok);
 		buttons.add(Box.createHorizontalStrut(12));
 
-		if(isAssigned()) {
+		if(binding.isAssigned()) {
 			// show "remove" button
 			remove = new JButton(jEdit.getProperty("grab-key.remove"));
 			remove.addActionListener(new ActionHandler());
@@ -129,12 +126,26 @@ public class GrabKeyDialog extends JDialog
 		show();
 	}
 
+	/**
+	 * Returns the shortcut, or null if the current shortcut should be
+	 * removed or the dialog either has been cancelled. Use isOK()
+	 * to determine if the latter is true.
+	 */
 	public String getShortcut()
 	{
 		if(isOK)
 			return shortcut.getText();
 		else
 			return null;
+	}
+
+	/**
+	 * Returns true, if the dialog has not been cancelled.
+	 * @since jEdit 3.2pre9
+	 */
+	public boolean isOK()
+	{
+		return isOK;
 	}
 
 	/**
@@ -172,29 +183,6 @@ public class GrabKeyDialog extends JDialog
 	private boolean isOK;
 	private KeyBinding binding;
 	private Vector allBindings;
-	private int shortcutNo;
-
-	private boolean isAssigned()
-	{
-		if(shortcutNo == 1)
-			return binding.shortcut1 != null
-				&& binding.shortcut1.length() > 0;
-		else
-			return binding.shortcut2 != null
-				&& binding.shortcut2.length() > 0;
-	}
-
-	private String getOldShortcut()
-	{
-		return shortcutNo == 1
-			? binding.shortcut1: binding.shortcut2;
-	}
-
-	private String getAltShortcut()
-	{
-		return shortcutNo == 1
-			? binding.shortcut2: binding.shortcut1;
-	}
 
 	private String getSymbolicName(int keyCode)
 	{
@@ -230,47 +218,56 @@ public class GrabKeyDialog extends JDialog
 		return null;
 	}
 
-	private void updateAssignedTo(String shortcutString)
+	private void updateAssignedTo(String shortcut)
 	{
-		assignedTo.setText(jEdit.getProperty(
-			"grab-key.assigned-to",new String[] {
-			getAssignedTo(shortcutString) }));
+		String text = jEdit.getProperty("grab-key.assigned-to.none");
+		KeyBinding kb = getKeyBinding(shortcut);
+
+		if(kb != null)
+			if(kb.isPrefix)
+				text = jEdit.getProperty(
+					"grab-key.assigned-to.prefix",
+					new String[] { shortcut });
+			else
+				text = kb.label;
+
+		if(ok != null)
+			ok.setEnabled(kb == null || !kb.isPrefix);
+
+		assignedTo.setText(
+			jEdit.getProperty("grab-key.assigned-to",
+				new String[] { text }));
 	}
 
-	private String getAssignedTo(String shortcutString)
+	private KeyBinding getKeyBinding(String shortcut)
 	{
-		String label = jEdit.getProperty("grab-key.assigned-to.none");
+		if(shortcut == null || shortcut.length() == 0)
+			return null;
 
-		if(shortcutString != null && shortcutString.length() != 0)
+		Enumeration enum = allBindings.elements();
+		while(enum.hasMoreElements())
 		{
-			Enumeration enum = allBindings.elements();
-			while(enum.hasMoreElements())
-			{
-				KeyBinding binding = (KeyBinding)enum.nextElement();
+			KeyBinding kb = (KeyBinding)enum.nextElement();
 
-				// eg, trying to bind C+n C+p if C+n already bound
-				if((binding.shortcut1 != null
-					&& shortcutString.startsWith(binding.shortcut1))
-					|| (binding.shortcut2 != null
-					&& shortcutString.startsWith(binding.shortcut2)))
-				{
-					label = binding.label;
-					break;
-				}
-				// eg, trying to bind C+e if C+e is a prefix
-				if((binding.shortcut1 != null
-					&& binding.shortcut1.startsWith(shortcutString))
-					|| (binding.shortcut2 != null
-					&& binding.shortcut2.startsWith(shortcutString)))
-				{
-					label = jEdit.getProperty("grab-key.assigned-to.prefix",
-						new String[] { shortcutString });
-					break;
-				}
+			if(!kb.isAssigned())
+				continue;
+
+			// eg, trying to bind C+n C+p if C+n already bound
+			if(shortcut.startsWith(kb.shortcut))
+				return kb;
+
+			// eg, trying to bind C+e if C+e is a prefix
+			if(kb.shortcut.startsWith(shortcut))
+//				&& kb.shortcut.length() > shortcut.length())
+			{
+				// create a temporary (synthetic) prefix
+				// KeyBinding, that won't be saved
+				return new KeyBinding(kb.name,kb.label,
+					shortcut,true);
 			}
 		}
 
-		return label;
+		return null;
 	}
 
 	/**
@@ -280,17 +277,23 @@ public class GrabKeyDialog extends JDialog
 	public static class KeyBinding
 	{
 		public KeyBinding(String name, String label,
-			String shortcut1, String shortcut2)
+			String shortcut, boolean isPrefix)
 		{
 			this.name = name;
 			this.label = label;
-			this.shortcut1 = shortcut1;
-			this.shortcut2 = shortcut2;
+			this.shortcut = shortcut;
+			this.isPrefix = isPrefix;
 		}
 
 		public String name;
 		public String label;
-		public String shortcut1, shortcut2;
+		public String shortcut;
+		public boolean isPrefix;
+
+		public boolean isAssigned()
+		{
+			return shortcut != null && shortcut.length() > 0;
+		}
 	}
 
 	class InputPane extends JTextField
@@ -403,9 +406,9 @@ public class GrabKeyDialog extends JDialog
 		{
 			String shortcutString = shortcut.getText();
 			if(shortcutString.length() == 0
-				&& getOldShortcut() != null)
+				&& binding.isAssigned())
 			{
-				// ask whether to remove the shortcut
+				// ask whether to remove the old shortcut
 				int answer = GUIUtilities.confirm(
 					GrabKeyDialog.this,
 					"grab-key.remove-ask",
@@ -419,8 +422,19 @@ public class GrabKeyDialog extends JDialog
 				}
 				else if(answer == JOptionPane.CANCEL_OPTION)
 					return false;
+				return true;
 			}
-			else if(shortcutString.equals(getAltShortcut()))
+
+			// check whether this shortcut already exists
+			KeyBinding other = getKeyBinding(shortcutString);
+			if(other == null || other == binding)
+			{
+				isOK = true;
+				return true;
+			}
+
+			// check whether the other shortcut is the alt. shortcut
+			if(other.name == binding.name)
 			{
 				// we don't need two identical shortcuts
 				GUIUtilities.error(GrabKeyDialog.this,
@@ -428,20 +442,36 @@ public class GrabKeyDialog extends JDialog
 					null);
 				return false;
 			}
-			else
+
+			// check whether shortcut is a prefix to others
+			if(other.isPrefix)
 			{
-				// check whether this shortcut already exists
-				String other = getAssignedTo(shortcutString);
-				if(other != null && !other.equals(binding.label))
-				{
-					GUIUtilities.error(GrabKeyDialog.this,
-						"grab-key.duplicate-shortcut",
-						new Object[] { other });
-					return false;
-				}
-				else
-					isOK = true;
+				// can't override prefix shortcuts
+				GUIUtilities.error(GrabKeyDialog.this,
+					"grab-key.prefix-shortcut",
+					null);
+				return false;
 			}
+
+			// ask whether to override that other shortcut
+			int answer = GUIUtilities.confirm(GrabKeyDialog.this,
+				"grab-key.duplicate-shortcut",
+				new Object[] { other.label },
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+			if(answer == JOptionPane.YES_OPTION)
+			{
+				if(other.shortcut != null
+					&& shortcutString.startsWith(other.shortcut))
+				{
+					other.shortcut = null;
+				}
+				isOK = true;
+				return true;
+			}
+			else if(answer == JOptionPane.CANCEL_OPTION)
+				return false;
+
 			return true;
 		}
 	}
