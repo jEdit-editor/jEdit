@@ -285,7 +285,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			setFlag(AUTOSAVE_DIRTY,false);
 			setFlag(READ_ONLY,false);
 			setFlag(NEW_FILE,false);
-			setDirty(false);
+			setFlag(DIRTY,false);
+			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
 
 			autosaveFile.delete();
 			modTime = file.lastModified();
@@ -572,15 +573,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		View[] views = jEdit.getViews();
 
-		if(this.mode != null)
+		Mode oldMode = this.mode;
+		if(oldMode != null)
 		{
 			for(int i = 0; i < views.length; i++)
 			{
 				View view = views[i];
 				if(view.getBuffer() == this)
-					this.mode.leaveView(view);
+					oldMode.leaveView(view);
 			}
-			this.mode.leave(this);
+			oldMode.leave(this);
 		}
 
 		this.mode = mode;
@@ -593,12 +595,11 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		{
 			View view = views[i];
 			if(view.getBuffer() == this)
-				this.mode.enterView(view);
+				mode.enterView(view);
 		}
 
-		// this is always fired, but there is no need to do it
-		// for temp. buffers
-		if(!getFlag(TEMPORARY))
+		// don't fire it for initial mode set
+		if(oldMode != null)
 			EditBus.send(new BufferUpdate(this,BufferUpdate.MODE_CHANGED));
 	}
 
@@ -637,13 +638,23 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				if(modes[i].accept(this,nogzName,line))
 				{
 					setMode(modes[i]);
-					break;
+					return;
 				}
 			}
 		}
 		catch(BadLocationException bl)
 		{
 			Log.log(Log.ERROR,this,bl);
+		}
+
+		// if we are being run on startup, we must ensure that
+		// a valid mode exists after we're done!
+		if(mode == null)
+		{
+			Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
+			if(defaultMode == null)
+				defaultMode = jEdit.getMode("text");
+			setMode(defaultMode);
 		}
 	}
 
@@ -653,7 +664,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public final TokenMarker getTokenMarker()
 	{
 		if(getFlag(SYNTAX))
-			return tokenMarker;
+			return super.getTokenMarker();
 		else
 			return null;
 	}
@@ -798,7 +809,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		addDocumentListener(new DocumentHandler());
 		addUndoableEditListener(new UndoHandler());
 
-		setMode(jEdit.getMode(jEdit.getProperty("buffer.defaultMode")));
 		setDocumentProperties(new BufferProps());
 		putProperty("i18n",Boolean.FALSE);
 
@@ -1424,9 +1434,12 @@ loop:		for(int i = 0; i < markers.size(); i++)
 				return null;
 
 			// Now try mode.<mode>.<property>
-			o = mode.getProperty((String)key);
-			if(o != null)
-				return o;
+			if(mode != null)
+			{
+				o = mode.getProperty((String)key);
+				if(o != null)
+					return o;
+			}
 
 			// Now try buffer.<property>
 			String value = jEdit.getProperty("buffer." + key);
@@ -1477,6 +1490,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.115  1999/12/11 06:34:39  sp
+ * Bug fixes
+ *
  * Revision 1.114  1999/12/10 03:22:46  sp
  * Bug fixes, old loading code is now used again
  *
@@ -1506,11 +1522,5 @@ loop:		for(int i = 0; i < markers.size(); i++)
  *
  * Revision 1.105  1999/11/19 08:54:51  sp
  * EditBus integrated into the core, event system gone, bug fixes
- *
- * Revision 1.104  1999/11/16 08:21:19  sp
- * Various fixes, attempt at beefing up expand-abbrev
- *
- * Revision 1.103  1999/11/10 10:43:01  sp
- * Macros can now have shortcuts, various miscallaneous updates
  *
  */

@@ -99,22 +99,13 @@ public class HelpViewer extends JFrame
 		show();
 	}
 
-	public void dispose()
-	{
-		GUIUtilities.saveGeometry(this,"helpviewer");
-		super.dispose();
-	}
-
-	// private members
-	private JButton back;
-	private JButton forward;
-	private JButton home;
-	private JEditorPane viewer;
-	private JTextField urlField;
-	private URL[] history;
-	private int historyPos;
-
-	private void gotoURL(URL url, boolean addToHistory)
+	/**
+	 * Displays the specified URL in the HTML component.
+	 * @param url The URL
+	 * @param addToHistory Should the URL be added to the back/forward
+	 * history?
+	 */
+	public void gotoURL(URL url, boolean addToHistory)
 	{
 		// reset default cursor so that the hand cursor doesn't
 		// stick around
@@ -141,6 +132,21 @@ public class HelpViewer extends JFrame
 		}
 	}
 	
+	public void dispose()
+	{
+		GUIUtilities.saveGeometry(this,"helpviewer");
+		super.dispose();
+	}
+
+	// private members
+	private JButton back;
+	private JButton forward;
+	private JButton home;
+	private JEditorPane viewer;
+	private JTextField urlField;
+	private URL[] history;
+	private int historyPos;
+
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)

@@ -371,6 +371,14 @@ public class Mode
 		return name;
 	}
 
+	/**
+	 * Returns a string representation of this edit mode.
+	 */
+	public String toString()
+	{
+		return getClass().getName() + "[" + getName() + "]";
+	}
+
 	// protected members
 
 	/**
@@ -390,6 +398,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  1999/12/11 06:34:39  sp
+ * Bug fixes
+ *
  * Revision 1.17  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

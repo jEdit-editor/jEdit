@@ -42,7 +42,7 @@ public abstract class EditPlugin
 	/**
 	 * Method called by jEdit to initialize the plugin.
 	 * Actions and edit modes should be registered here, along
-	 * with any initial event listeners.
+	 * with any EditBus paraphinalia.
 	 * @since jEdit 2.1pre1
 	 */
 	public void start() {}
@@ -87,6 +87,9 @@ public abstract class EditPlugin
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  1999/12/11 06:34:39  sp
+ * Bug fixes
+ *
  * Revision 1.2  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

@@ -2406,7 +2406,8 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    locate the next instance of that string. If <keycap>Enter</> is pressed
    while no string is entered, the Search and Replace dialog box will be
    displayed. The find field stores previously entered strings; see
-   <xref linkend=history>
+   <xref linkend=history>. Pressing <keycap>Escape</> in the <quote>Find</>
+   field will move the focus back to the text area.
   </para>
   <para>
    <indexterm><primary>selection</></indexterm>

@@ -403,8 +403,9 @@ public class View extends JFrame implements EBComponent
 
 		focusOnTextArea();
 
-		// Fire event
-		EditBus.send(new ViewUpdate(this,ViewUpdate.BUFFER_CHANGED));
+		// Don't fire event for the initial buffer set
+		if(oldBuffer != null)
+			EditBus.send(new ViewUpdate(this,ViewUpdate.BUFFER_CHANGED));
 
 		updateBuffersMenu();
 	}
@@ -588,6 +589,7 @@ public class View extends JFrame implements EBComponent
 		dim.width = Integer.MAX_VALUE;
 		quicksearch.setMaximumSize(dim);
 		quicksearch.addActionListener(new ActionHandler());
+		quicksearch.addKeyListener(new KeyHandler());
 
 		textArea = new JEditTextArea();
 
@@ -836,6 +838,18 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
+	class KeyHandler extends KeyAdapter
+	{
+		public void keyPressed(KeyEvent evt)
+		{
+			if(evt.getSource() == quicksearch
+				&& evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+			{
+				focusOnTextArea();
+			}
+		}
+	}
+
 	class StatusBar extends JComponent
 	{
 		String status;
@@ -885,6 +899,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.115  1999/12/11 06:34:39  sp
+ * Bug fixes
+ *
  * Revision 1.114  1999/12/05 03:01:05  sp
  * Perl token marker bug fix, file loading is deferred, style option pane fix
  *
