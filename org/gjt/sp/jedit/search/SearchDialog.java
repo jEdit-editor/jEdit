@@ -379,7 +379,9 @@ public class SearchDialog extends EnhancedDialog
 		cons.anchor = GridBagConstraints.WEST;
 		cons.fill = GridBagConstraints.HORIZONTAL;
 
+		MultiFileActionHandler actionListener = new MultiFileActionHandler();
 		filter = new HistoryTextField("search.filter");
+		filter.addActionListener(actionListener);
 
 		cons.insets = new Insets(0,0,3,0);
 
@@ -401,6 +403,7 @@ public class SearchDialog extends EnhancedDialog
 		cons.gridy++;
 
 		directory = new HistoryTextField("search.directory");
+		directory.addActionListener(actionListener);
 
 		label = new JLabel(jEdit.getProperty("search.directoryField"),
 			SwingConstants.RIGHT);
@@ -428,7 +431,7 @@ public class SearchDialog extends EnhancedDialog
 		cons.gridwidth = 1;
 		layout.setConstraints(choose,cons);
 		multifile.add(choose);
-		choose.addActionListener(new MultiFileActionHandler());
+		choose.addActionListener(actionListener);
 
 		cons.insets = new Insets(0,0,0,0);
 		cons.gridy++;
@@ -649,14 +652,23 @@ public class SearchDialog extends EnhancedDialog
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			File dir = new File(directory.getText());
-			JFileChooser chooser = new JFileChooser(dir.getParent());
-			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			chooser.setSelectedFile(dir);
+			if(evt.getSource() == choose)
+			{
+				File dir = new File(directory.getText());
+				JFileChooser chooser = new JFileChooser(dir.getParent());
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setSelectedFile(dir);
 
-			if(chooser.showOpenDialog(SearchDialog.this)
-				== JFileChooser.APPROVE_OPTION)
-				directory.setText(chooser.getSelectedFile().getPath());
+				if(chooser.showOpenDialog(SearchDialog.this)
+					== JFileChooser.APPROVE_OPTION)
+					directory.setText(chooser.getSelectedFile().getPath());
+			}
+			else // source is directory or filter field
+			{
+				// just as if Enter was pressed in another
+				// text field
+				ok();
+			}
 		}
 	}
 

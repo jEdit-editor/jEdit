@@ -359,8 +359,10 @@ public class OptionsDialog extends EnhancedDialog
 			}
 			else
 			{
-				this.setBackground(tree.getBackground());
-				this.setForeground(tree.getForeground());
+				this.setBackground(UIManager.getColor(
+					"Tree.background"));
+				this.setForeground(UIManager.getColor(
+					"Tree.foreground"));
 			}
 
 			String name = null;
@@ -395,7 +397,7 @@ public class OptionsDialog extends EnhancedDialog
 				}
 			}
 
-			setBorder(hasFocus ? focusBorder : noFocusBorder);
+			setIcon(null);
 
 			return this;
 		}

@@ -158,7 +158,7 @@ public class HistoryTextField extends JTextField
 			}
 			else if(evt.getKeyCode() == KeyEvent.VK_UP)
 			{
-				if(evt.isControlDown())
+				if(evt.isShiftDown())
 					doBackwardSearch();
 				else
 					historyPrevious();
@@ -166,7 +166,7 @@ public class HistoryTextField extends JTextField
 			}
 			else if(evt.getKeyCode() == KeyEvent.VK_DOWN)
 			{
-				if(evt.isControlDown())
+				if(evt.isShiftDown())
 					doForwardSearch();
 				else
 					historyNext();
@@ -360,12 +360,12 @@ public class HistoryTextField extends JTextField
 	{
 		public void mousePressed(MouseEvent evt)
 		{
-			if(evt.isControlDown())
+			if(evt.isShiftDown())
 			{
 				showPopupMenu(getText().substring(0,getSelectionStart()),
 					0,getHeight());
 			}
-			else if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
+			else if(evt.isPopupTrigger())
 				showPopupMenu("",0,getHeight());
 		}
 	}

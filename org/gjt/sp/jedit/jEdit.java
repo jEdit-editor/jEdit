@@ -88,12 +88,15 @@ public class jEdit
 		// Parse command line
 		boolean endOpts = false;
 		boolean newView = false; // only used by EditServer client
-		boolean client = false; // only used by EditServer client
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
 		boolean restore = true;
 		boolean noStartupScripts = false;
+		String userDir = System.getProperty("user.dir");
+
+		// script to run
+		String scriptFile = null;
 
 		for(int i = 0; i < args.length; i++)
 		{
@@ -136,8 +139,8 @@ public class jEdit
 					noStartupScripts = true;
 				else if(arg.equals("-newview"))
 					newView = true;
-				else if(arg.equals("-bshclient"))
-					client = true;
+				else if(arg.startsWith("-run="))
+					scriptFile = arg.substring(5);
 				else
 				{
 					System.err.println("Unknown option: "
@@ -172,25 +175,10 @@ public class jEdit
 				out.write(String.valueOf(key));
 				out.write('\n');
 
-				if(client)
-				{
-					// read script from standard input, in UTF8!!
-					in = new BufferedReader(new InputStreamReader(
-						System.in,"UTF8"));
-					char[] buf = new char[1024];
-					int count;
-					while((count = in.read(buf,0,buf.length)) != -1)
-					{
-						out.write(buf,0,count);
-					}
+				String script = makeServerScript(restore,newView,
+					args,scriptFile);
 
-					in.close();
-				}
-				else
-				{
-					String script = makeServerScript(restore,newView,args);
-					out.write(script);
-				}
+				out.write(script);
 
 				out.close();
 
@@ -210,13 +198,6 @@ public class jEdit
 					+ " know what this means, don't worry.");
 				Log.log(Log.NOTICE,jEdit.class,e);
 			}
-		}
-		else if(client)
-		{
-			Log.log(Log.ERROR,jEdit.class,"The -bshclient switch"
-				+ " can only be used if an edit server is");
-			Log.log(Log.ERROR,jEdit.class,"already running.");
-			System.exit(1);
 		}
 
 		// MacOS X GUI hacks
@@ -364,12 +345,19 @@ public class jEdit
 				runStartupScripts(file);
 		}
 
+		// Run script specified with -run= parameter
+		if(scriptFile != null)
+		{
+			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
+			BeanShell.runScript(null,scriptFile,false,false);
+		}
+
 		// Must be after plugins are started!!!
 		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress();
 
-		Buffer buffer = openFiles(null,System.getProperty("user.dir"),args);
+		Buffer buffer = openFiles(null,userDir,args);
 
 		String splitConfig = null;
 
@@ -628,7 +616,9 @@ public class jEdit
 			for(int i = 0; i < prefixes.length; i++)
 			{
 				String prefix = prefixes[i];
+				defaults.put(prefix + ".disabledBackground",background);
 				defaults.put(prefix + ".background",background);
+				defaults.put(prefix + ".disabledForeground",foreground);
 				defaults.put(prefix + ".foreground",foreground);
 				defaults.put(prefix + ".caretForeground",caretColor);
 				defaults.put(prefix + ".selectionForeground",foreground);
@@ -2112,9 +2102,7 @@ public class jEdit
 		System.out.println("	-background: Run in background mode");
 		System.out.println();
 		System.out.println("	-newview: Open new view if connecting to edit server");
-		System.out.println("	-bshclient: Send BeanShell script read from"
-			+ " standard input");
-		System.out.println("		to edit server (for developers)");
+		System.out.println("	-run=<script>: Run the specified BeanShell script");
 
 		System.out.println();
 		System.out.println("To set minimum activity log level,"
@@ -2133,13 +2121,15 @@ public class jEdit
 	/**
 	 * Creates a BeanShell script that can be sent to a running edit server.
 	 */
-	private static String makeServerScript(boolean restore, boolean newView, String[] args)
+	private static String makeServerScript(boolean restore, boolean newView,
+		String[] args, String scriptFile)
 	{
 		StringBuffer script = new StringBuffer();
 
+		String userDir = System.getProperty("user.dir");
+
 		script.append("parent = \"");
-		script.append(MiscUtilities.charsToEscapes(
-			System.getProperty("user.dir")));
+		script.append(MiscUtilities.charsToEscapes(userDir));
 		script.append("\";\n");
 
 		script.append("args = new String[");
@@ -2166,6 +2156,14 @@ public class jEdit
 
 		script.append("EditServer.handleClient(" + restore + "," + newView
 			+ ",parent,args);\n");
+
+		if(scriptFile != null)
+		{
+			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
+			script.append("BeanShell.runScript(null,\""
+				+ MiscUtilities.charsToEscapes(scriptFile)
+				+ "\",false,false);\n");
+		}
 
 		return script.toString();
 	}

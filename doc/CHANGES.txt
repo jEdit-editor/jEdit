@@ -2,6 +2,39 @@ JEDIT 3.2 VERSION HISTORY
 
 * Version 3.2pre7
 
++ New Features
+
+- Cruddy -bshclient command-line switch replaced with -run=<script>
+  parameter; it will run the specified script file, and works in both
+  the initial and client instances of jEdit.
+  - The script is run in the global namespace, so variables and
+    functions defined within will be available for the rest of the
+    editing session. Just like a startup script.
+  - The 'view', 'buffer', 'editPane' and 'textArea' variables are not
+    set in this script; if it is being run at startup, it will also be
+    run before the first view is even initialized. Just like a startup
+    script.
+
+    To get around this, you can write something like this in the script:
+
+    void doUsefulThing()
+    {
+        void run()
+        {
+            view = jEdit.getLastView();
+
+            // do something useful here
+        }
+
+        if(jEdit.getLastView() == null)
+            VFSManager.runInAWTThread(this);
+        else
+            run();
+    }
+
+    doUsefulThing();
+    // end of script
+
 + Enhancements
 
 - Improved PHP syntax highlighting (Ben Sarsgard)
@@ -11,6 +44,16 @@ JEDIT 3.2 VERSION HISTORY
 - Transient status messages (replace all results, for example) are now
   shown for 10 seconds, instead of 2
 - Updated 'Writing Plugins' section of user's guide (John Gellene)
+- isPopupTrigger() is now used, instead of explicitly checking for
+  Button 3 being pressed. This change was because on the Mac,
+  Control-clicking is used to simulate a right mouse button click.
+- History text fields previously used a Control click to display a menu
+  of completions; this has been changed to a Shift click
+- To be consistent with the above change, the search up and search down
+  shortcuts in history text fields have been changed from C+Up and
+  C+Down to S+Up and S+Down
+- You can now press Enter in the 'Directory' and 'Filter' fields of the
+  search and replace dialog box to begin a search
 
 + Bug Fixes
 
@@ -25,6 +68,9 @@ JEDIT 3.2 VERSION HISTORY
   2000
 - All files in the search set would be listed in the HyperSearch results
   window, even files which do not contain the search string
+- AltGR key didn't work with Java 2 version 1.4 (Vicente Salvador)
+- Global options dialog box looked a bit dodgy with the 'global colors'
+  setting
 
 * Version 3.2pre6
 

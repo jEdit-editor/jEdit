@@ -16,15 +16,15 @@
   recalls later strings.
  </para>
  <para>
-  Pressing <keycombo><keycap>Control</keycap><keycap>Up</keycap></keycombo>
-  or <keycombo><keycap>Control</keycap><keycap>Down</keycap></keycombo>
+  Pressing <keycombo><keycap>Shift</keycap><keycap>Up</keycap></keycombo>
+  or <keycombo><keycap>Shift</keycap><keycap>Down</keycap></keycombo>
   will search backwards or forwards, respectively, for strings
   beginning with the text already entered in the text field.
  </para>
  <para>
   Clicking the text field with the right mouse button will display
   a pop-up menu of all previously entered strings; selecting one will
-  input it into the text field. Holding down <keycap>Control</keycap>
+  input it into the text field. Holding down <keycap>Shift</keycap>
   while clicking will display a menu of all previously entered
   strings that begin with the text already entered.
  </para>

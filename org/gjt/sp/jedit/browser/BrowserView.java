@@ -382,7 +382,7 @@ public class BrowserView extends JPanel
 						break;
 					}
 				}
-				else if((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+				else if(evt.isPopupTrigger())
 					; // do nothing
 
 				super.processMouseEvent(evt);
@@ -396,7 +396,7 @@ public class BrowserView extends JPanel
 					if(evt.getClickCount() == 2)
 						break;
 				}
-				else if((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+				else if(evt.isPopupTrigger())
 				{
 					if(popup != null && popup.isVisible())
 					{

@@ -4932,8 +4932,7 @@ forward_scan:		do
 
 			grabFocus();
 
-			if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0
-				&& popup != null)
+			if(evt.isPopupTrigger() && popup != null)
 			{
 				if(popup.isVisible())
 					popup.setVisible(false);
@@ -5073,8 +5072,7 @@ forward_scan:		do
 
 		public void mouseDragged(MouseEvent evt)
 		{
-			if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0
-				|| (popup != null && popup.isVisible()))
+			if(evt.isPopupTrigger() || (popup != null && popup.isVisible()))
 				return;
 
 			boolean rect = evt.isControlDown();

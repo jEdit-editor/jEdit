@@ -30,7 +30,6 @@ public class KeyEventWorkaround
 	public static KeyEvent processKeyEvent(KeyEvent evt)
 	{
 		int keyCode = evt.getKeyCode();
-		int modifiers = evt.getModifiers();
 		char ch = evt.getKeyChar();
 
 		switch(evt.getID())
@@ -40,15 +39,12 @@ public class KeyEventWorkaround
 			if(keyCode == KeyEvent.VK_CONTROL ||
 				keyCode == KeyEvent.VK_SHIFT ||
 				keyCode == KeyEvent.VK_ALT ||
-				keyCode == KeyEvent.VK_META)
-				return null;
-
-			// get rid of undefined keys
-			if(keyCode == '\0')
+				keyCode == KeyEvent.VK_META ||
+				keyCode == '\0')
 				return null;
 
 			if(!java14)
-				handleBrokenKeys(modifiers,keyCode);
+				handleBrokenKeys(evt.getModifiers(),keyCode);
 
 			return evt;
 		case KeyEvent.KEY_TYPED:
@@ -57,11 +53,13 @@ public class KeyEventWorkaround
 			if((ch < 0x20 || ch == 0x7f) && ch != '\b')
 				return null;
 
-			if(evt.isControlDown() || evt.isAltDown() || evt.isMetaDown())
-				return null;
 
 			if(!java14)
 			{
+				if(evt.isControlDown() || evt.isAltDown()
+					|| evt.isMetaDown())
+					return null;
+
 				// if the last key was a broken key, filter
 				// out all except 'a'-'z' that occur 750 ms after.
 				if(last == LAST_BROKEN && System.currentTimeMillis()

@@ -54,12 +54,14 @@ public class CompleteWord extends JWindow
 
 		GUIUtilities.requestFocus(this,words);
 
-		show();
 		pack();
 		setLocation(location);
+		show();
 
 		KeyHandler keyHandler = new KeyHandler();
 		addKeyListener(keyHandler);
+		getRootPane().addKeyListener(keyHandler);
+		words.addKeyListener(keyHandler);
 		view.setKeyEventInterceptor(keyHandler);
 	}
 

@@ -562,6 +562,75 @@ view.getInputHandler().readNextChar("Enter a character",
   <informalexample><programlisting>doSomethingWithView(view, "something");</programlisting></informalexample>
 </sect1>
 
+<sect1 id="scripts-command-line"><title>Running Scripts from the Command
+Line</title>
+
+<para>
+  The <command>-run</command> command line switch specifies a BeanShell
+  script to run on startup:
+</para>
+
+<screen><prompt>$ </prompt><userinput>jedit -run=test.bsh</userinput></screen>
+
+<para>
+  Note that just like with startup scripts, the <varname>view</varname>,
+  <varname>textArea</varname>, <varname>editPane</varname> and
+  <varname>buffer</varname> variables are not defined.
+</para>
+
+<para>
+  If another instance is already running, the script will be run in that
+  instance, and you will be able to use the
+  <function>jEdit.getLastView()</function> method to obtain a view.
+  However, if a new instance of jEdit is being started, the script will
+  be run at the same time as all other startup scripts; that is, before
+  the first view is opened.
+</para>
+
+<para>
+  If your script needs a view instance to operate on, you can use the
+  following code snippet to obtain one, no matter how the script is
+  being run:
+</para>
+
+<programlisting>void doSomethingUseful()
+{
+    void run()
+    {
+        view = jEdit.getLastView();
+
+        // put actual script body here
+    }
+
+    if(jEdit.getLastView() == null)
+        VFSManager.runInAWTThread(this);
+    else
+        run();
+}
+
+doSomethingUseful();</programlisting>
+
+<para>
+  If the script is being run in a loaded
+  instance, the <function>run()</function> method can be invoked
+  directly. If the script is running on startup, a bit of magic has to
+  be performed first. The method that does the script's work must
+  be named <function>run()</function> so that the closure can implement
+  the <classname>Runnable</classname> interface; this closure is then
+  passed to the <function>runInAWTThread()</function> method.
+</para>
+
+<para>
+  When the <function>runInAWTThread()</function> method is
+  invoked during startup, it schedules the specified
+  <classname>Runnable</classname> to be run after startup is complete.
+  If invoked when jEdit is fully loaded, the runnable will be run after
+  all pending input/output is complete, or immediately if there are no
+  pending I/O operations. Only the former behavior is useful in macros.
+</para>
+
+</sect1>
+
 <sect1 id="macro-tips-BeanShell"><title>Advanced BeanShell Techniques</title>
 
 <para>

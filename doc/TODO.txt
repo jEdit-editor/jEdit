@@ -3,6 +3,7 @@ TO DO
 - proofread plugin guide, add note about error reporting needing
   EditBus and ErrorList plugins
 - wait for John to send uninstall.exe
+- wait for John to update jEditLauncher for pre7
 - check out latest jEditLauncher sources
 - finish console 3.0
 - -1 being passed to virtualToPhysical() by documentChanged()
@@ -11,9 +12,12 @@ TO DO
 - FTP plugin: investigate soft links
 - FTP plugin: not saving files, allegedly?
 - FTP plugin: better error messages
+- FTP plugin: chmod
+- complete word: keys to navigate don't work
 
 + bugs:
 
+- don't do #save# stuff if destination directory is not writeable
 - installing source for already installed plugins is not possible
 - finish duplicate shortcut code
 - directory search: continue even if a file can't be loaded
