@@ -133,7 +133,7 @@ public class BufferTabs extends JTabbedPane
 		if(index == selectedIndex)
 			update();
 		else
-			setSelectedIndex(buffer.getIndex());
+			setSelectedIndex(index);
 	}
 
 	public void update()

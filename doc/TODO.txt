@@ -2,11 +2,14 @@ JEDIT TO DO
 
 - Focus breaks when saving or switching buffers
 
-- Get rid of build numbers; MiscUtilities.compareJEditVersions() method
+- EditPlugin.getName()/Version()/Author(), getPath(), getClassName(), etc
+  methods
+- BrokenPlugin extends EditPlugin, used as a placeholder for broken
+  plugins -- implements getPath() and getClassName()
+- jEdit.getPlugins() returns broken and non-broken plugins
 - C/S+TAB to navigate around view's components
 - Directory search: current buffer's dir is the default
 - Next split pane/prev split pane commands bound to C+e ( and C+e )
-- Next view/prev view commands bound to C+e [ and C+e ]
 - Check file modification status on focus and buffer switch
   - Buffer.checkModStatus() method
 - 'Uncomment' command that removes comment strings from selected text
@@ -22,13 +25,13 @@ JEDIT TO DO
   - each section should have some sample source code
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
   to 'Advanced Features'
+- Save As: if overwriting an existing file, ask for confirmation
 
 - load/saveCaretInfo() save data in split.n.<property name> so that we
   don't have to unsplit when switching buffers, closing, reloading, etc
   - XXX: this will make the caret handling in split() a bit tricky
   - load/saveCaretInfo(int n) -- n=-1 for temporary saving, eg in
     split()
-- View tiling
 - Keystroke to switch between two must recently edited buffers
 - Incremental search
 - EditAction.isEnabled() method -- write new EditAction.Model class

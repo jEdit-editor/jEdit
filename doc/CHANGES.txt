@@ -8,14 +8,17 @@ JEDIT VERSION HISTORY
 
 + Bug Fixes
 
-- PluginManager's update function didn't work properly with BeanShell and
-  Console plugins
-- Fixed possible path-separator issue in PluginManager
+- The plugin manager's update function didn't work properly with BeanShell
+  and Console plugins
+- Fixed possible path-separator issue in the plugin manager
+- Newly-installed plugins are no longer always shown in the 'update' list
+  in the plugin manager
 
 + API Changes
 
 - jEdit.setDefaultProperty() deprecated; use jEdit.setTemporaryProperty()
   instead
+- Plugins without a 'version' property are not loaded
 
 * Version 2.3pre7
 

@@ -322,7 +322,10 @@ public class Abbrevs
 		Enumeration values = abbrevs.elements();
 		while(keys.hasMoreElements())
 		{
-			out.write((String)keys.nextElement());
+			String abbrev = (String)keys.nextElement();
+			if(abbrev.startsWith("["))
+				out.write('\\');
+			out.write(abbrev);
 			out.write('|');
 			out.write(MiscUtilities.charsToEscapes((String)values.nextElement()));
 			out.write(lineSep);
@@ -371,6 +374,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/03/11 03:02:15  sp
+ * 2.3final
+ *
  * Revision 1.7  2000/03/04 03:39:54  sp
  * *** empty log message ***
  *
