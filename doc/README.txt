@@ -29,8 +29,8 @@ contains the latest version of jEdit, along with plugin downloads.
 
 There are three mailing lists dedicated to jEdit; an announcement
 list that is very low traffic, a general discussion list, and a
-development discussion list. To subscribe, unsubscribe or view
-a list archive, visit <http://www.sourceforge.net/mail/?group_id=588>.
+development discussion list. To subscribe, unsubscribe or view list
+archives, visit <http://www.sourceforge.net/mail/?group_id=588>.
 
 Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
@@ -51,7 +51,8 @@ PDF, open jedit-<version>.pdf in a PDF viewer such as Adobe Acrobat.
 
 * Credits
 
-The following people contributed code to the jEdit core:
+I would like to thank the following people who have contributed code to
+the jEdit core:
 
 Artur Biesiadowski - Eiffel syntax highlighting
 Clancy Malcolm - PHP3 syntax highlighting

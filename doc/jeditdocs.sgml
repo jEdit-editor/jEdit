@@ -24,94 +24,35 @@
 </bookinfo>
 
 <chapter id=general-info><title>General Information</title>
- <sect1 id=about-jedit><title>About jEdit</title>
-  <para>
-   Thanks for obtaining a copy of jEdit, a text
-   editor written in Java. I hope you find it useful.
+ <para>
+  Thanks for obtaining a copy of jEdit, a text
+  editor written in Java. I hope you find it useful.
+ </para>
+ <para>
+  jEdit is released under the GNU General Public License, a copy of
+  which can be
+  found in the <filename>COPYING.txt</> file of the jEdit distribution.
+ </para>
+ <para>
+  jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
+  section 11 and 12 of the GPL for details.
   </para>
-  <para>
-   The jEdit homepage, located at <ulink
-   url="http://www.gjt.org/~sp/jedit.html">
-   http://www.gjt.org/~sp/jedit.html</>
-   contains the latest version of jEdit, along with plugin downloads.
-  </para><para>
-   
+ <para>
+  The jEdit homepage, located at <ulink
+  url="http://www.gjt.org/~sp/jedit.html">
+  http://www.gjt.org/~sp/jedit.html</>
+  contains the latest version of jEdit, along with plugin downloads.
+ </para><para>
+  
 There are three mailing lists dedicated to jEdit; an announcement
 list that is very low traffic, a general discussion list, and a
 development discussion list. To subscribe, unsubscribe or view
-a list archive, visit <ulink
+list archives, visit <ulink
 url="http://www.sourceforge.net/mail/?group_id=588">
 http://www.sourceforge.net/mail/?group_id=588</>.
 </para><para>
-  Finally, you may contact me directly by e-mailing <email>sp@gjt.org</>.
-  </para>
- </sect1>
- <sect1 id=licensing><title>Licensing Information</>
-  <para>
-   jEdit is released under the GNU General Public License, which can be
-   found in the <filename>COPYING.txt</> file of the jEdit distribution.
-  </para>
-  <para>
-   jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
-   section 11 and 12 of the GPL for details.
-   </para>
- </sect1>
- <sect1 id=release-notes><title>Release Notes</>
-  <para>
-   The following is an overview of the major changes in jEdit 2.3 since
-   2.2. A complete list can be found in the file named
-   <filename>CHANGES.txt</>, which is part of the jEdit distribution.
-  </para>
- </sect1>
- <sect1 id=features><title>jEdit Features</>
-  <para>
-   The current version of jEdit has many features, the most important being
-   the following:
-  </para>
-  <itemizedlist>
-   <listitem><para>
-    Syntax highlighting of language tokens using colors and styles
-   </para></listitem>
-   <listitem><para>
-    Automatic indentation and support for soft tabs
-   </para></listitem>
-   <listitem><para>
-    Bracket matching and highlighting
-   </para></listitem>
-   <listitem><para>
-    Keyboard macros and repeating commands for automating complex and
-    frequently performed operations
-   </para></listitem>
-   <listitem><para>
-    Any number of <quote>registers</> can be used to store text strings and
-    caret positions
-   </para></listitem>
-   <listitem><para>
-    Rectangular selections, for working with columns of text
-   </para></listitem>
-   <listitem><para>
-    Powerful search and replace that supports multi-file searching
-    (including recursive directory search)
-    and regular expressions (matching inexact sequences of text)
-   </para></listitem>
-   <listitem><para>
-    HyperSearch feature that shows all lines in the document that
-    contain a specified string
-   </para></listitem>
-   <listitem><para>
-    A variety of commands for working with words, lines and paragraphs
-   </para></listitem>
-   <listitem><para>
-    Support for files with Unix, Windows and MacOS line separators
-   </para></listitem>
-   <listitem><para>
-    <quote>Markers</> can be used to rapidly move around long documents
-   </para></listitem>
-   <listitem><para>
-    Comprehensive plugin system
-   </para></listitem>
-  </itemizedlist>
- </sect1>
+ Finally, you may contact me directly by e-mailing <email>sp@gjt.org</>.
+ </para>
 </chapter>
 
 <chapter id=conventions><title>Conventions Used in This Manual</title>
@@ -221,11 +162,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     Pressing <keycap>Alt</> in addition to an underlined character in the
     menu bar will display the respective menu. Once a menu is open,
     <keycap>Alt</> in addition to an underlined character in a menu item
-    label will invoke that menu item as if it was selected with the mouse,
-    and the arrow keys can be used to navigate the menu bar;
+    label will invoke that menu item.
+    While a menu is open, the arrow keys can be used to navigate the menu bar;
     <keycap>Left Arrow</> and <keycap>Right Arrow</> open the previous
     and next menu, respectively, and <keycap>Up Arrow</> and <keycap>Down Arrow</>
-    move up and down the currently open menu.
+    move up and down in the currently open menu.
    </para>
   </sect2>
   <sect2 id=toolbar><title>The Tool Bar</>
@@ -243,7 +184,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <para>
     The text field labelled <quote>Find</> on the tool bar can be used
     to quickly search for a string without displaying the
-    Search and Replace dialog box.
+    Search and Replace dialog box; see <xref linkend=quicksearch>.
    </para>
    <tip>
     <para>
@@ -261,7 +202,6 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <indexterm><primary>line highlighting</></indexterm>
    <indexterm><primary>end of line markers</></indexterm>
    <indexterm><primary>invalid lines</></indexterm>
-   <indexterm><primary>context menu</></indexterm>
    <indexterm><primary>right-click menu</></indexterm>
    <indexterm><primary>electric scrolling</></indexterm>
    <para>
@@ -285,7 +225,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     but don't actually exist in the document.
    </para>
    <para>
-    The text area never allows the caret to be positioned in the first or
+    The text area never allows the caret to be positioned on the first or
     last visible line. If It is moved closer than 3 lines to the top or
     bottom, the viewscreen will shift in the appropriate direction to
     make 3 lines above and below the caret
@@ -295,12 +235,12 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    </para>
    <para>
     Clicking the text area with the right mouse button will
-    display the <firstterm>context menu</>, which contains frequently-used
+    display a menu of frequently-used
     editing commands.
    </para>
    <tip>
     <para>
-     Many characteristics of the text area can be changed in the
+     The behaviour of the text area can be customized in the
      <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box;
      see <xref linkend=global-opts>.
     </para>
@@ -460,12 +400,12 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     <indexterm><primary>File menu</></indexterm>
     <guimenu>File</>&gt;<guimenuitem>Open File</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>O</></keycombo>)
-    will display the file open dialog box. Double clicking (or single
+    will display the open file dialog box. Double clicking (or single
     clicking and then clicking <guibutton>Open</>) on a file will open
     it. Double clicking on a directory will list that directory.
    </para>
    <para>
-    The file type popup menu in the dialog box contains a list of file
+    The file type popup menu in the open file dialog box contains a list of file
     types; selecting one will make only files of that type visible in
     the file list. This is handy when navigating directories with lots
     of files of different types. The filters can be changed in the
@@ -548,11 +488,9 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <sect2><title>Autosave and Backups</>
    <para>
     <indexterm><primary>autosave</></indexterm>
-    Because computers crash from time to time, not saving
-    changes to disk until the user manually does so is not a very good
-    idea; most people don't like having to hit <quote>save</> every 2
-    minutes, just in case. So jEdit has an autosave feature that should protect
-    against possible disasters. Every 15 seconds, all buffers with changes are
+    jEdit has an autosave feature that should protect
+    against possible disasters, such as computer crashes.
+    Every 15 seconds, all buffers with changes are
     written out to their respective file names, enclosed in hash
     (<quote>#</>) characters. For example, <filename>program.c</> will
     be autosaved to <filename>#program.c#</>. These autosave files do
@@ -599,7 +537,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     on a per-buffer
     basis in the <guimenu>Utilities</>&gt;<guimenuitem>Buffer Options</> dialog box;
     see <xref linkend=buffer-opts>.
-    The default for new files can be changed in the Editor pane of the
+    The default for new files can be changed in the
     <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box;
     see <xref linkend=global-opts>.
    </para>
@@ -654,10 +592,10 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     will prompt for an alternate file name to save the buffer to.
     Note that if you make some changes and <quote>Save As</>, the old
     file will not contain the changes, but the new one will.
-    This can be used to create an alternative version of the file and so on.
+    This can be used to create a new version of the file, etc.
    </para>
    <para>
-    The file type popup menu in the dialog box contains a list of file
+    The file type popup menu in the save as dialog box contains a list of file
     types; selecting one will make only files of that type visible in
     the file list. This is handy when navigating directories with lots
     of files of different types. The filters can be changed in the
@@ -983,10 +921,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <indexterm><primary>moving the caret</><secondary>by words</></>
   <para>
    jEdit has a variety of commands for working with words. In jEdit,
-   words are runs of text separated by non-alphanumeric characters.
-   For [a totally idiotic] example, <quote>hello, world</> is considered
-   two
-   words, <quote>hello</> and <quote>world</> obviously.
+   a word is a run of text delimited by non-alphanumeric characters.
   </para>
   <indexterm><primary>selecting text</><secondary>a word at a time</></>
   <indexterm><primary>Edit menu</></>
@@ -1174,16 +1109,16 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    current view. jEdit will then exit if no more views remain.
   </para>
   <para>
-   <indexterm><primary>Split Vertically command</></indexterm>
-   <guimenu>Utilities</>&gt;<guimenuitem>Split Vertically</>
-   (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycap>2</>) will vertically split the current view.
-  </para>
-  <para>
    <indexterm><primary>Split Horizonally command</></indexterm>
    <guimenu>Utilities</>&gt;<guimenuitem>Split Horizonally</>
    (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycap>3</>) will horizontally split the current view.
+   <keycap>2</>) will horizontally split the current view.
+  </para>
+  <para>
+   <indexterm><primary>Split Vertically command</></indexterm>
+   <guimenu>Utilities</>&gt;<guimenuitem>Split Vertically</>
+   (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycap>3</>) will vertically split the current view.
   </para>
   <para>
    <indexterm><primary>Unsplit command</></indexterm>
@@ -1224,20 +1159,24 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    changed in the <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
    dialog box; see <xref linkend=global-opts> for details.
   </para>
+  <figure><title>The Gutter</>
+   <graphic scale=75 fileref=window-editor-gutter></>
+  </figure>
  </sect1>
  <sect1 id=server><title>The Edit Server</>
   <para>
-   Because opening a new copy of jEdit every time it was invoked from the command
-   line, or had a file dropped onto its icon, would waste memory (and consume time),
-   jEdit has a feature known as the <firstterm>edit server</>. When jEdit is
-   started, it attempts to connect to another running jEdit instance. If the connection
+   When jEdit is
+   started, it attempts to connect to another running jEdit instance.
+   If the connection
    was
    successful, it transfers control to that running instance, passing it any
    necessary file names. Only if no other running instance can be found does
-   jEdit start up for real.
+   jEdit start up for real. This saves startup time if another instance is
+   already running.
   </para>
   <para>
-   The edit server is implemented using sockets. When a server is started, it
+   The edit server is implemented using TCP/IP
+   sockets. When a server is started, it
    picks a random port number and authorization key and writes it to a
    <firstterm>port file</> (usually in a well-known location). Client instances
    of jEdit then read the port file and connect to the specified port, passing
@@ -1252,7 +1191,8 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <indexterm><primary>command line switches</><secondary>-noserver</></indexterm>
    <indexterm><primary>command line</></indexterm>
    <indexterm><primary>command line switches</><secondary>-server</></indexterm>
-   The <command>-noserver</> command line switch disables the server features entirely;
+   The <command>-noserver</> command line switch disables the server features
+   entirely;
    no connection will be attempted, and no sever will be started. The
    <command>-server</> command line switch can be used to change the file
    where port information is stored. This can be used when
@@ -1498,9 +1438,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     see <xref linkend=clipboard>.
    </para>
    <para>
-    The register <filename>$</> is an alias for the clipboard; so copying
-    to that register has the same effect as
-    <guimenu>Edit</>&gt;<guimenu>Copy</>.
+    The register <filename>$</> is an alias for the clipboard; so copying,
+    pasting or cutting
+    to that register has the same effect as using the clipboard commands in
+    the <guimenu>Edit</> menu (<guimenuitem>Cut</>,
+    <guimenuitem>Copy</>, <guimenuitem>Paste</>).
    </para>
   </sect2>
   <sect2 id=pos-registers><title>Caret Registers</>
@@ -1580,7 +1522,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     file name and stored caret position is displayed.
    </para>
    <para>
-    Currently, it is not possible to change or add registers from this
+    Currently, it is not possible to change or add registers in this
     dialog box; use the register commands instead.
    </para>
    <figure><title>The View Registers dialog box</>
@@ -1594,7 +1536,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <para>
    An abbreviation is a string, that when inserted, expands into some
    other, presumably longer and harder to type string. Abbreviations are
-   useful for inserting long but frequently used strings easily. For example,
+   useful for inserting long but frequently used strings. For example,
    you can define an abbreviation <quote>sout</> that expands to
    <quote>System.out.println</> in Java mode.
   </para>
@@ -1608,12 +1550,16 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <guimenu>Edit</>&gt;<guimenuitem>Expand Abbreviation</> (keyboard
    shortcut: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>X</></keycombo>) will attempt to
-   expand the word before the caret. It will beep if no expansion could
-   be found. Secondly, if automatic abbreviation expansion is enabled, entering
+   expand the word before the caret. If no expansion could be found, it will
+   offer to define one.
+   Secondly, if automatic abbreviation expansion is enabled, entering
    a non-alphanumeric character will automatically try to expand the word
    before the caret. This is a very powerful feature, but it takes some
    getting used to, hence it is disabled by default.
   </para>
+  <figure><title>The Add Abbreviation dialog box</>
+   <graphic scale=75 fileref=dialog-add-abbrev></>
+  </figure>
   <para>
    If automatic expansion
    is enabled and you want to enter a non-alphanumeric character without
@@ -1637,19 +1583,6 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     recording macros.
    </para>
   </tip>
-  <tip>
-   <para>
-    A quick way to define an abbrev is to enter the desired abbrev, and
-    press <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>X</></keycombo>. If the abbrev
-    is not defined, a dialog box will appear, where you can enter the
-    expansion, and specify if it should be a mode-specific or global
-    abbrev.
-   </para>
-  </tip>
-  <figure><title>The Add Abbreviation dialog box</>
-   <graphic scale=75 fileref=dialog-add-abbrev></>
-  </figure>
  </sect1>
  <sect1 id=macros><title>Macros</>
   <para>
@@ -1685,7 +1618,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     refreshed when you update or create a macro file from within jEdit.
     Because macros are stored as ordinary files, they can be renamed,
     deleted and so on with your operating system's file manager. If you
-    make changes to the macros from outside of jEdit, the
+    make changes to macros in a program other than jEdit, the
     <guimenu>Macros</>&gt;<guimenuitem>Rescan Macros</> command should be used
     to update the macros menu with the changes.
    </para>
@@ -1701,7 +1634,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     <guimenu>Macros</>&gt;<guimenuitem>Play Last Macro</> command (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>M</></keycombo>
-    <keycombo><keycap>Control</><keycap>L</></keycombo>
+    <keycombo><keycap>Control</><keycap>L</></keycombo>)
    </para>
   </sect2>
   <sect2 id=macro-record><title>Recording Macros</>
@@ -1722,9 +1655,9 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     the menu bar, and tool bar clicks.
    </para>
    <para>
-    Search and replace operations are recorded to macros.
-    when the macro is played back, the actual search and replacement is
-    performed, and the dialog boxes are not displayed.
+    Search and replace operations can also be recorded in macros.
+    When the macro is played back, the actual search and replacement is
+    performed, and the search and replace dialog boxes are not displayed.
    </para>
    <indexterm><primary>Stop Recording command</></indexterm>
    <para>
@@ -4447,6 +4380,152 @@ import org.gjt.sp.jedit.EditBus;</>
  </para>
 </appendix>
 
+<appendix id=credits><title>Credits</>
+  <para>
+I would like to thank the following people who have
+contributed code to the jEdit core:</>
+
+<itemizedlist>
+<listitem><para>Artur Biesiadowski - Eiffel syntax highlighting</para></listitem>
+<listitem><para>Clancy Malcolm - PHP3 syntax highlighting</para></listitem>
+<listitem><para>Jason Ginchereau - Buffer tabs code</para></listitem>
+<listitem><para>Jonathan Revusky - Python syntax highlighting</para></listitem>
+<listitem><para>Juha Lindfors - IDL syntax highlighting</para></listitem>
+<listitem><para>Mike Dillon - TSQL syntax highlighting, gutter, new options dialog box,</para></listitem>
+<listitem><para>	faster literal search, many other patches</para></listitem>
+<listitem><para>Ralf Engels - PostScript syntax highlighting</para></listitem>
+<listitem><para>Tal Davidson - Original syntax highlighting engine</para></listitem>
+<listitem><para>Valery Kondakoff - Complete Word command</para></listitem>
+</itemizedlist>
+
+<para>
+If you are not on the above list but think you should be, e-mail me.</>
+<para>
+In addition to the above people, I would like to thank all the plugin
+authors for their wonderful plugins, and the users for their feedback
+and comments.</>
+</appendix>
+
+ <appendix id=release-notes><title>Release Notes</>
+  <para>
+   The following is an overview of the major changes in jEdit 2.3 since
+   2.2. A complete list can be found in the file named
+   <filename>CHANGES.txt</>, which is part of the jEdit distribution.
+  </para>
+<bridgehead renderas=sect3>Plugin manager</>
+
+<para>
+The 'plugin manager' is a tool for installing, updating and removing
+plugins. No more trips to plugin central if you want to install a new
+plugin, and no more digging through directories to remove an old one.
+</para>
+
+<bridgehead renderas=sect3>Abbreviations</>
+
+<para>
+To make long strings easier to type, you can now define shorthand forms,
+which if entered, will expand to the full string, either automatically
+(if automatic expansion is enabled) or when the 'Expand Abbreviation'
+command is invoked.
+</para>
+
+<bridgehead renderas=sect3>Views can be split</>
+
+<para>
+Views can now be split into two different panes, allowing two locations
+in a buffer to be viewed at the same time.
+</para>
+
+<bridgehead renderas=sect3>New 'gutter' shows line numbers</>
+
+<para>
+The gutter is a strip that runs along the left side of the text area.
+It displays line numbers. Plugins can also draw their own highlights
+in the gutter. The gutter was written by Mike Dillon <email>mdillon@gjt.org</>.
+</para>
+
+<bridgehead renderas=sect3>Buffer tabs plugin integrated</>
+
+<para>
+The BufferTabs plugin has been integrated into the jEdit core. It adds a
+series of tabs to views allowing for quick and easy switching between
+open buffers.
+</para>
+
+<bridgehead renderas=sect3>Search and replace options on tool bar</>
+
+<para>
+Three new buttons have been added to jEdit's tool bar for changing
+search and replace settings (regular expressions, ignore case, multiple
+file search). As a result, the 'Find' field in the tool bar is much more
+useful.
+</para>
+
+<bridgehead renderas=sect3>File->Current Directory menu</>
+
+<para>
+The new 'File->Current Directory' menu now lists all files in the
+current buffer's directory. Selecting a file will open it for editing.
+If the file you want to open is in the current directory, using this
+menu is often quicker than the 'File->Open' dialog box.
+</para>
+
+<bridgehead renderas=sect3>Enhanced text selection</>
+
+<para>
+You can now select a block of whole words by double-clicking, then
+dragging. Whole lines can be selected by triple-clicking and dragging.
+</para>
+
+<bridgehead renderas=sect3>New text editing commands</>
+
+<para>
+The following miscellaneous commands have been added:
+</para>
+
+<itemizedlist>
+<listitem><para>Select Word (taken from TextTools plugin by Mike Dillon)</para></listitem>
+<listitem><para>Select Line</para></listitem>
+<listitem><para>Select Paragraph</para></listitem>
+<listitem><para>To Upper Case (taken from TextTools)</para></listitem>
+<listitem><para>To Lower Case (taken from TextTools)</para></listitem>
+</itemizedlist>
+
+<bridgehead renderas=sect3>Improved HyperSearch</>
+
+<para>
+When performing a directory search, the 'HyperSearch' feature no longer
+opens all buffers which contained the search string. Instead, buffers
+are only opened when the user selects a search result from the list.
+</para>
+
+<bridgehead renderas=sect3>Key bindings can be changed on the fly</>
+
+<para>
+Changes to jEdit's key bindings now take effect immediately. In
+previous jEdit versions, you had to restart jEdit for changes to take
+effect.
+</para>
+
+<bridgehead renderas=sect3>Buffer list sorting</>
+
+<para>
+The buffer list can now be optionally sorted alphabetically. When many
+buffers are open, this makes the list somewhat easier to navigate.
+</para>
+
+<bridgehead renderas=sect3>Options dialog box updates</>
+
+<para>
+The 'Global Options' and 'Plugin Options' dialog boxes have been
+merged, and the tabs have been replaced with a tree that displays
+all option panes. Plugins can add 'option groups' to the tree, with
+each option group containing multiple related option panes. The new
+options dialog box was written by Mike Dillon <email>mdillon@gjt.org</>.
+</para>
+
+</appendix>
+
 <appendix id=jedit-history><title>History of jEdit</>
  <para>
   Open Source projects are often started with the author <quote>scratching
@@ -4497,15 +4576,15 @@ import org.gjt.sp.jedit.EditBus;</>
   Java editors available at the time.
  </para>
  <para>
-  However, I never released JE either; because I didn't know Swing very
-  well at the time, it had many flaws; for example, the go to line function
+  However, because I didn't know Swing very
+  well at the time, JE had many flaws; for example, the go to line function
   parsed the text area for
   line break (\n) characters, instead of using the much faster
-  Swing element map.
+  Swing element map. So I never released it either.
  </para>
  <bridgehead renderas=sect2>Third Time Lucky</>
  <para>
-  What I started coding next became the nowadays jEdit. I copied
+  What I started coding next became the modern jEdit. I copied
   the <quote>good</> bits from JE, such as the plugin system, and
   rewrote the rest from scratch. I also released early and often. After I
   implemented file loading, saving, and several other fundamental

@@ -16,6 +16,8 @@ JEDIT VERSION HISTORY
 - Opening URLs didn't work (since jEdit 2.2pre7)
 - The 'Rectangular Selection' action appeared twice in the command list in
   the key binding editor (since 2.3pre2)
+- Fixed repaint problems with gutter when splitting/unsplitting (since 2.3pre3)
+- Splitting didn't save the caret position (since 2.3pre4)
 
 * Version 2.3pre4
 

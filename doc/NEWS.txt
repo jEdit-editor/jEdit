@@ -16,7 +16,7 @@ command is invoked.
 * Views can be split
 
 Views can now be split into two different panes, allowing two locations
-in a buffer to be viewed simultaneously.
+in a buffer to be viewed at the same time.
 
 * New 'gutter' shows line numbers
 
@@ -34,7 +34,7 @@ open buffers.
 
 Three new buttons have been added to jEdit's tool bar for changing
 search and replace settings (regular expressions, ignore case, multiple
-file search). As a result, the 'Find' field in the tool bar much more
+file search). As a result, the 'Find' field in the tool bar is much more
 useful.
 
 * File->Current Directory menu

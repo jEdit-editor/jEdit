@@ -3,8 +3,8 @@ JEDIT TO DO
 ------- 2.3 to do -------
 
 - Double-click drag doesn't work backwards
-- Fix gutter repaint bug
 - Focus is broken with buffertabs
+- Redo window-editor-* snapshots
 
 ------- Later -------
 
