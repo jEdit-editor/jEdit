@@ -73,7 +73,7 @@
 			<END>"</END>
 		</SPAN>
 
-		<SEQ TYPE="NONE">=</SEQ>
+		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
 	<RULES SET="DTD-TAGS" DEFAULT="KEYWORD2">
@@ -98,7 +98,7 @@
 			<END>"</END>
 		</SPAN>
 
-		<SEQ TYPE="NONE">=</SEQ>
+		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="OPERATOR">(</SEQ>
 		<SEQ TYPE="OPERATOR">)</SEQ>
 		<SEQ TYPE="OPERATOR">|</SEQ>

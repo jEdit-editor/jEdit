@@ -1,7 +1,7 @@
 /*
  * TokenMarker.java - Tokenizes lines of text
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
- * Copyright (C) 1999, 2000 Mike Dillon
+ * Copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,10 +27,10 @@ import org.gjt.sp.util.Log;
 
 /**
  * A token marker splits lines of text into tokens. Each token carries
- * a length field and an indentification tag that can be mapped to a color
+ * a length field and an identification tag that can be mapped to a color
  * or font style for painting that token.
  *
- * @author Slava Pestov, Mike Dillon
+ * @author Slava Pestov, mike dillon
  * @version $Id$
  *
  * @see org.gjt.sp.jedit.syntax.Token
@@ -359,15 +359,17 @@ public class TokenMarker implements Cloneable
 				pattern.count = context.inRule.sequenceLengths[1];
 				pattern.offset = context.inRule.sequenceLengths[0];
 
-				tempEscaped = escaped;
-
 				b = handleRule(info, line, context.inRule);
 
 				context = tempContext;
 
 				if (!b)
 				{
-					if (!tempEscaped)
+					if (escaped)
+					{
+						escaped = false;
+					}
+					else
 					{
 						if (pos != lastOffset)
 						{
@@ -424,22 +426,29 @@ public class TokenMarker implements Cloneable
 				// swap in the escape pattern
 				pattern = context.rules.getEscapePattern();
 
+				tempEscaped = escaped;
+
 				b = handleRule(info, line, tempRule);
 
 				// swap back the buffer pattern
 				pattern = tempPattern;
 
-				if (!b) continue;
+				if (!b)
+				{
+					if (tempEscaped) escaped = false;
+					continue;
+				}
 			}
 
-			if (context.inRule != null && (context.inRule.action & SOFT_SPAN) == 0)
+			if (context.inRule != null &&
+				(context.inRule.action & SOFT_SPAN) == 0)
 			{
 				// we are in a hard span rule, so see if context.inRule matches
 				pattern.array = context.inRule.searchChars;
 				pattern.count = context.inRule.sequenceLengths[1];
 				pattern.offset = context.inRule.sequenceLengths[0];
 
-				if (handleRule(info,line, context.inRule) && escaped)
+				if (handleRule(info, line, context.inRule) && escaped)
 					escaped = false;
 			}
 			else
@@ -467,13 +476,15 @@ public class TokenMarker implements Cloneable
 					// stop checking rules if there was a match and go to next pos
 					if (!handleRule(info,line, tempRule)) break;
 				}
+
+				if (escaped) escaped = false;
 			}
 		}
 
 		// check for keywords at the line's end
 		if(context.rules.getKeywords() != null && context.inRule == null)
 		{
-			markKeyword(info,line, lastKeyword, lineLength);
+			markKeyword(info, line, lastKeyword, lineLength);
 		}
 
 		// mark all remaining characters
@@ -539,10 +550,14 @@ public class TokenMarker implements Cloneable
 			) return true;
 		}
 
-		// check for escape sequences
-		if (escaped || (checkRule.action & IS_ESCAPE) == IS_ESCAPE)
+		if (escaped)
 		{
-			escaped = !escaped;
+			pos += pattern.count - 1;
+			return false;
+		}
+		else if ((checkRule.action & IS_ESCAPE) == IS_ESCAPE)
+		{
+			escaped = true;
 			pos += pattern.count - 1;
 			return false;
 		}
@@ -911,6 +926,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.38  2000/04/02 02:17:59  sp
+ * delegates bug fixes, mode updates
+ *
  * Revision 1.37  2000/04/01 12:21:27  sp
  * mode cache implemented
  *
