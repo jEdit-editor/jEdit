@@ -9,6 +9,12 @@ JEDIT 3.2 VERSION HISTORY
 + Enhancements
 
 - Improved XSL abbrevs (Ollie Rutherfurd)
+- jEditLauncher updates (John Gellene)
+- Updated Duplicate_Line and Next_Char macros (John Gellene)
+
++ Neutral
+
+- Only selections created with the mouse are stored in the % register
 
 + Bug Fixes
 

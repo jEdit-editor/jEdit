@@ -4975,6 +4975,12 @@ forward_scan:		do
 			}
 		}
 
+		public void mouseReleased(MouseEvent evt)
+		{
+			if(getSelectionCount() != 0)
+				Registers.setRegister('%',getSelectedText());
+		}
+
 		private void doSingleClick(MouseEvent evt)
 		{
 			if(evt.isShiftDown())

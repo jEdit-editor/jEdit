@@ -967,10 +967,6 @@ public class View extends JFrame implements EBComponent
 		{
 			status.repaintCaretStatus();
 			status.updateMiscStatus();
-
-			JEditTextArea textArea = getTextArea();
-			if(textArea.getSelectionCount() != 0)
-				Registers.setRegister('%',textArea.getSelectedText());
 		}
 	}
 

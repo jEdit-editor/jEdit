@@ -1,16 +1,11 @@
 TO DO
 
 - proofread user's guide
-- add note to cli-usage about having to specify args in options dialog
 - finish console 3.0
 - -1 being passed to virtualToPhysical() by documentChanged()
+- scrollToCaret() still broken
 - formatting problems in user's guide in table cells
 - next time i'm making an RPM, fix the shell script
-- FTP plugin: investigate soft links
-- FTP plugin: not saving files, allegedly?
-- FTP plugin: better error messages
-- FTP plugin: chmod
-- scrollToCaret() still broken
 
 + bugs:
 

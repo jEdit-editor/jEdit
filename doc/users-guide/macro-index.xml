@@ -86,6 +86,14 @@
 </listitem>
 
 <listitem>
+    <para><filename>Duplicate_Line.bsh</filename></para>
+    <abstract><para>
+        Duplicates the line on which the caret lies immediately
+        beneath it and moves the caret to the new line.
+    </para></abstract>
+</listitem>
+
+<listitem>
     <para><filename>Insert_Date.bsh</filename></para>
     <abstract><para>
         Inserts the current date and time in the current buffer.

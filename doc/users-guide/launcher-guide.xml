@@ -53,9 +53,7 @@
 
     <para>
       <application>jedit.exe</application> supports four command-line
-      options, in
-      addition to the options supported on any platform (which are
-      documented in <xref linkend="cli-usage" />).
+      options.
       If any of these options
       are invoked correctly, the application will not load files or
       execute jEdit.
@@ -80,7 +78,7 @@
 
         <para>
           Using the dialog, you can change parameters specifying the executable for
-          the Java interpreter, the jar archive file or class name used as the
+          the Java interpreter, the JAR archive file or class name used as the
           target of the interpreter, and command line options for both. If the
           <userinput>-jar</userinput> option is not used for the Java executable,
           the principal jEdit class of
@@ -96,8 +94,22 @@
           and jEdit targets as well as the working directory. It will complain if
           the paths are invalid. It will not validate command-line options, but it
           will warn you if it finds the <userinput>-noserver</userinput> option
-          used for jEdit, since this will deactivate the EditServer and make it
+          used for jEdit, since this will deactivate the edit
+          server and make it
           impossible for jEditLauncher to open files.
+        </para>
+
+        <para>
+          Note that due to the design of
+          <application>jEditLauncher</application>,
+          platform-independent command line options
+          handled by jEdit itself (such as
+          <userinput>-background</userinput> and
+          <userinput>-norestore</userinput>) must be entered in the
+          <quote>Set jEdit Parameters</quote> dialog box, and cannot be
+          specified on the <application>jedit.exe</application> command line
+          directly. For information about platform-independent command
+          line options, see <xref linkend="cli-usage" />.
         </para>
       </listitem>
 
@@ -381,6 +393,11 @@ o.RunDiff(path + "Search.bsh", path + "Search2.bsh")
         <filename>jeservps.dll</filename>
       </para>
       </listitem>
+      <listitem>
+      <para>
+        <filename>unlaunch.exe</filename>
+      </para>
+      </listitem>
     </itemizedlist>
     <para>
       Anytime <filename>jedit.exe</filename> is executed (either directly or
@@ -394,23 +411,19 @@ o.RunDiff(path + "Search.bsh", path + "Search2.bsh")
     </para>
 </sect1>
 
-<sect1 id="launcher-uninstall"><title>Uninstalling jEditLauncher</title>
+<sect1 id="launcher-uninstall"><title>Uninstalling jEdit and jEditLauncher</title>
   <para>
-    There are three ways to uninstall <!-- jEdit and  -->jEditLauncher.
+
+  </para>
+  <para>
+    There are three ways to uninstall jEdit and jEditLauncher.
   </para>
 
   <itemizedlist>
     <listitem>
       <para>
-        First, you can invoke <filename>jedit.exe</filename> with the
-        <userinput>/u</userinput> option from the command line. This will
-        remove the entries for jEditLauncher from the Windows registry,
-        disabling the context menu handler, automatic launching and
-        scripting cpacability, but it will not delete any files.  The package
-        can be reinstalled by running <filename>jedit.exe</filename> again.
-        <!-- This will
-        uninstall the version of jEdit residing in the same directory as the
-        version of <filename>jedit.exe</filename> that you invoke. -->
+        First, you can run <filename>unlaunch.exe</filename> in the
+        jEdit installation directory.
       </para>
     </listitem>
     <listitem>
@@ -432,10 +445,23 @@ o.RunDiff(path + "Search.bsh", path + "Search2.bsh")
   </itemizedlist>
 
   <para>
-    At the present time each of this options deactivates
-    jEditLauncher but does not delete any files belonging to jEditLauncher
-    or jEdit. As a safeguard, jEditLauncher displays a warning window and
-    requires the user to confirm an uninstall operation.
+    Each of these options will deactivate jEditLauncher and delete all files
+    in jEdit's installation directory. As a safeguard, jEditLauncher
+    displays a warning window and requires the user to confirm an uninstall operation.
+    Because the user's settings directory can be set and changed from
+    one jEdit session to another, user settings files must be
+    deleted manually.
+  </para>
+
+  <para>
+    To deactivate jEditLauncher without deleting any files, run
+    <filename>jedit /u</filename> from any command prompt where the jEdit
+    installation directory is in the serach path. This will remove the
+    entries for jEditLauncher from the Windows registry, and disable the
+    context menu handler, and the automatic launching and scripting
+    capabilities. The package can reactivated by executing
+    <filename>jedit.exe</filename> again, and jEdit can be started in the
+    same manner as any other Java application on your system.
   </para>
 </sect1>
 
@@ -477,3 +503,4 @@ o.RunDiff(path + "Search.bsh", path + "Search2.bsh")
 </sect1>
 
 </appendix>
+
