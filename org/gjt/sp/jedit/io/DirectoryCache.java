@@ -36,6 +36,8 @@ public class DirectoryCache
 	 */
 	public static VFS.DirectoryEntry[] getCachedDirectory(String url)
 	{
+		url = canon(url);
+
 		synchronized(lock)
 		{
 			String path = (String)urlToCacheFileHash.get(url);
@@ -83,6 +85,8 @@ public class DirectoryCache
 	{
 		if(cacheDirectory == null)
 			return;
+
+		url = canon(url);
 
 		synchronized(lock)
 		{
@@ -132,6 +136,8 @@ public class DirectoryCache
 	 */
 	public static void flushCachedDirectory(String url)
 	{
+		url = canon(url);
+
 		synchronized(lock)
 		{
 			String path = (String)urlToCacheFileHash.remove(url);
@@ -172,6 +178,18 @@ public class DirectoryCache
 
 	private DirectoryCache() {}
 
+	/* This method exists so that foo/ and foo will both be cached
+	 * as the same URL. When the VFSPath class arrives, will get rid
+	 * of this kludge */
+	private static String canon(String url)
+	{
+		if(url.length() != 0 && (url.endsWith("/")
+			|| url.endsWith(File.separator)))
+			return url.substring(0,url.length() - 1);
+		else
+			return url;
+	}
+
 	static
 	{
 		urlToCacheFileHash = new Hashtable();
@@ -195,6 +213,9 @@ public class DirectoryCache
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/08/20 07:29:31  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.2  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

@@ -42,18 +42,17 @@ public interface DockableWindowContainer
 	/**
 	 * Tabbed pane container.
 	 */
-	public class TabbedPane extends JPanel implements DockableWindowContainer
+	public class TabbedPane extends JTabbedPane implements DockableWindowContainer
 	{
 
-		JTabbedPane tabbedPane;
 		String position;
 		int dimension;
 
 		public TabbedPane(String position)
 		{
-			super(new BorderLayout());
+			/* super(new BorderLayout());
 			tabbedPane = new JTabbedPane();
-			add(BorderLayout.CENTER,tabbedPane);
+			add(BorderLayout.CENTER,tabbedPane); */
 
 			this.position = position;
 
@@ -95,9 +94,9 @@ public interface DockableWindowContainer
 			int tabsPos = Integer.parseInt(jEdit.getProperty(
 				"view.docking.tabsPos"));
 			if(tabsPos == 0)
-				tabbedPane.setTabPlacement(JTabbedPane.TOP);
+				/* tabbedPane. */setTabPlacement(JTabbedPane.TOP);
 			else if(tabsPos == 1)
-				tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
+				/* tabbedPane. */setTabPlacement(JTabbedPane.BOTTOM);
 		}
 
 		public Dimension getMinimumSize()
@@ -107,7 +106,7 @@ public interface DockableWindowContainer
 
 		public Dimension getPreferredSize()
 		{
-			if(tabbedPane.getComponentCount() == 0)
+			if(/*tabbedPane.*/getComponentCount() == 0)
 				return new Dimension(0,0);
 
 			Dimension prefSize = super.getPreferredSize();
@@ -135,26 +134,26 @@ public interface DockableWindowContainer
 
 		public void addDockableWindow(DockableWindow win)
 		{
-			tabbedPane.addTab(jEdit.getProperty(win.getName()
+			/* tabbedPane. */addTab(jEdit.getProperty(win.getName()
 				+ ".title"),win.getComponent());
-			tabbedPane.setSelectedComponent(win.getComponent());
+			/* tabbedPane. */setSelectedComponent(win.getComponent());
 			if(dimension == 0)
 				dimension = -1;
 
-			tabbedPane.revalidate();
+			/*tabbedPane.*/revalidate();
 		}
 
 		public void saveDockableWindow(DockableWindow win) {}
 
 		public void removeDockableWindow(DockableWindow win)
 		{
-			tabbedPane.remove(win.getComponent());
-			tabbedPane.revalidate();
+			/* tabbedPane. */remove(win.getComponent());
+			/* tabbedPane. */revalidate();
 		}
 
 		public void showDockableWindow(DockableWindow win)
 		{
-			tabbedPane.setSelectedComponent(win.getComponent());
+			/* tabbedPane. */setSelectedComponent(win.getComponent());
 		}
 
 		class MouseHandler extends MouseAdapter implements MouseMotionListener
@@ -285,6 +284,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/20 07:29:30  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.4  2000/08/19 08:26:26  sp
  * More docking API tweaks
  *

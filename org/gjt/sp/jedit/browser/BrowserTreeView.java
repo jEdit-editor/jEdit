@@ -24,8 +24,10 @@ import javax.swing.tree.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.Enumeration;
 import java.util.Vector;
-import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.MiscUtilities;
 
 /**
  * VFS browser tree view.
@@ -125,8 +127,28 @@ public class BrowserTreeView extends BrowserView
 
 	public void reloadDirectory(String path)
 	{
-		// XXX: todo
-		browser.reloadDirectory(true);
+		// because this method is called for *every* VFS update,
+		// we don't want to scan the tree all the time. So we
+		// use the following algorithm to determine if the path
+		// might be part of the tree:
+		// - if the path starts with the browser's current directory,
+		//   we do the tree scan
+		// - if the browser's directory is 'favorites:' -- we have to
+		//   do the tree scan, as every path can appear under the
+		//   favorites list
+		// - if the browser's directory is 'roots:' and path is on
+		//   the local filesystem, do a tree scan
+		String browserDir = browser.getDirectory();
+		if(browserDir.startsWith(FavoritesVFS.PROTOCOL))
+			reloadDirectory(rootNode,path);
+		else if(browserDir.startsWith(FileRootsVFS.PROTOCOL))
+		{
+			if(!MiscUtilities.isURL(path) || MiscUtilities.getFileProtocol(path)
+				.equals("file"))
+				reloadDirectory(rootNode,path);
+		}
+		else if(path.startsWith(browserDir))
+			reloadDirectory(rootNode,path);
 	}
 
 	// private members
@@ -137,6 +159,68 @@ public class BrowserTreeView extends BrowserView
 	private DefaultMutableTreeNode currentlyLoadingTreeNode;
 
 	private static FileCellRenderer renderer = new FileCellRenderer();
+
+	private boolean reloadDirectory(DefaultMutableTreeNode node, String path)
+	{
+		// nodes which are not expanded need not be checked
+		if(!tree.isExpanded(new TreePath(node.getPath())))
+			return false;
+
+		Object userObject = node.getUserObject();
+		if(userObject instanceof String)
+		{
+			if(path.equals(userObject))
+			{
+				loadDirectoryNode(node,path,false);
+				return true;
+			}
+		}
+		else if(userObject instanceof VFS.DirectoryEntry)
+		{
+			VFS.DirectoryEntry file = (VFS.DirectoryEntry)userObject;
+
+			// we don't need to do anything with files!
+			if(file.type == VFS.DirectoryEntry.FILE)
+				return false;
+
+			if(path.equals(file.path))
+			{
+				loadDirectoryNode(node,path,false);
+				return true;
+			}
+		}
+
+		if(node.getChildCount() != 0)
+		{
+			Enumeration children = node.children();
+			while(children.hasMoreElements())
+			{
+				DefaultMutableTreeNode child = (DefaultMutableTreeNode)
+					children.nextElement();
+				if(reloadDirectory(child,path))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	private void loadDirectoryNode(DefaultMutableTreeNode node, String path,
+		boolean showLoading)
+	{
+		currentlyLoadingTreeNode = node;
+
+		if(showLoading)
+		{
+			node.removeAllChildren();
+			node.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
+		}
+
+		// fire events
+		model.reload(currentlyLoadingTreeNode);
+
+		browser.loadDirectory(path);
+	}
 
 	class BrowserJTree extends HelpfulJTree
 	{
@@ -210,9 +294,8 @@ public class BrowserTreeView extends BrowserView
 			Object userObject = treeNode.getUserObject();
 			if(userObject instanceof VFS.DirectoryEntry)
 			{
-				treeNode.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
-				currentlyLoadingTreeNode = treeNode;
-				browser.loadDirectory(((VFS.DirectoryEntry)userObject).path);
+				loadDirectoryNode(treeNode,((VFS.DirectoryEntry)
+					userObject).path,true);
 			}
 		}
 
@@ -223,6 +306,9 @@ public class BrowserTreeView extends BrowserView
 				path.getLastPathComponent();
 			if(treeNode.getUserObject() instanceof VFS.DirectoryEntry)
 			{
+				// we add the placeholder so that the node has
+				// 1 child (otherwise the user won't be able to
+				// expand it again)
 				treeNode.removeAllChildren();
 				treeNode.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
 				model.reload(treeNode);
@@ -236,6 +322,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/08/20 07:29:30  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.6  2000/08/15 08:07:10  sp
  * A bunch of bug fixes
  *

@@ -204,6 +204,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 			handleBufferUpdate((BufferUpdate)msg);
 		else if(msg instanceof PropertiesChanged)
 			propertiesChanged();
+		else if(msg instanceof VFSUpdate)
+			browserView.reloadDirectory(((VFSUpdate)msg).getPath());
 	}
 
 	public String getDirectory()
@@ -213,6 +215,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void setDirectory(String path)
 	{
+		// have to do this hack until VFSPath class is written
+		if(path.length() != 1 && (path.endsWith("/")
+			|| path.endsWith(java.io.File.separator)))
+			path = path.substring(0,path.length() - 1);
+
 		this.path = path;
 
 		pathField.setText(path);
@@ -231,6 +238,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void loadDirectory(String path)
 	{
+		if(!startRequest())
+			return;
+
 		if(MiscUtilities.isURL(path))
 		{
 			vfs = VFSManager.getVFSForProtocol(MiscUtilities
@@ -246,10 +256,15 @@ public class VFSBrowser extends JPanel implements EBComponent
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,this,
 			session,vfs,path,null));
+
+		endRequest();
 	}
 
 	public void delete(String path)
 	{
+		if(!startRequest())
+			return;
+
 		Object[] args = { path };
 		int result = JOptionPane.showConfirmDialog(this,
 			jEdit.getProperty("vfs.browser.delete-confirm.message",args),
@@ -267,11 +282,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 			BrowserIORequest.DELETE,this,
 			session,vfs,path,null));
 
-		reloadDirectorySafely(vfs.getFileParent(path));
+		endRequest();
 	}
 
 	public void rename(String from)
 	{
+		if(!startRequest())
+			return;
+
 		String[] args = { MiscUtilities.getFileName(from) };
 		String to = GUIUtilities.input(this,"vfs.browser.rename",
 			args,null);
@@ -288,11 +306,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 			BrowserIORequest.RENAME,this,
 			session,vfs,from,to));
 
-		reloadDirectorySafely(vfs.getFileParent(from));
+		endRequest();
 	}
 
 	public void mkdir()
 	{
+		if(!startRequest())
+			return;
+
 		String newDirectory = GUIUtilities.input(this,"vfs.browser.mkdir",null);
 		if(newDirectory == null)
 			return;
@@ -308,7 +329,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			BrowserIORequest.MKDIR,this,
 			session,vfs,newDirectory,null));
 
-		reloadDirectorySafely(vfs.getFileParent(newDirectory));
+		endRequest();
 	}
 
 	public View getView()
@@ -535,6 +556,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private boolean sortMixFilesAndDirs;
 	private boolean sortIgnoreCase;
 
+	private boolean requestRunning;
+
 	static
 	{
 		try
@@ -647,17 +670,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		return button;
 	}
 
-	private void reloadDirectorySafely(final String directory)
-	{
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				browserView.reloadDirectory(directory);
-			}
-		});
-	}
-
 	private void handleViewUpdate(ViewUpdate vmsg)
 	{
 		if(vmsg.getWhat() == ViewUpdate.CLOSED
@@ -686,6 +698,33 @@ public class VFSBrowser extends JPanel implements EBComponent
 			setBrowserView(new BrowserTreeView(this));
 		else // default
 			setBrowserView(new BrowserListView(this));
+	}
+
+	/* We do this stuff because the browser is not able to handle
+	 * more than one request yet */
+	private boolean startRequest()
+	{
+		if(requestRunning)
+		{
+			GUIUtilities.error(this,"browser-multiple-io",null);
+			return false;
+		}
+		else
+		{
+			requestRunning = true;
+			return true;
+		}
+	}
+
+	private void endRequest()
+	{
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				requestRunning = false;
+			}
+		});
 	}
 
 	class ActionHandler implements ActionListener
@@ -897,6 +936,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.15  2000/08/20 07:29:30  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.14  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

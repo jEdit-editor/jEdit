@@ -59,7 +59,7 @@ public class FtpVFS extends VFS
 			session[0] = newSession;
 
 		return PROTOCOL + "://" + newSession.get(VFSSession.USERNAME_KEY)
-			+ "@" + newSession.get(VFSSession.HOSTNAME_KEY) + "/";
+			+ "@" + newSession.get(VFSSession.HOSTNAME_KEY);
 	}
 
 	public String getFileParent(String path)
@@ -116,11 +116,6 @@ public class FtpVFS extends VFS
 	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
 		Component comp) throws IOException
 	{
-		// add trailing '/' if necessary, so that foo and foo/ aren't
-		// represented differently in cache
-		if(!url.endsWith("/"))
-			url = url + "/";
-
 		VFS.DirectoryEntry[] directory = DirectoryCache.getCachedDirectory(url);
 		if(directory != null)
 			return directory;
@@ -207,12 +202,9 @@ public class FtpVFS extends VFS
 		if(directoryEntry.type == VFS.DirectoryEntry.FILE)
 			client.delete(address.path);
 		else if(directoryEntry.type == VFS.DirectoryEntry.DIRECTORY)
-		{
 			client.removeDirectory(address.path);
-			DirectoryCache.flushCachedDirectory(url);
-		}
 
-		DirectoryCache.flushCachedDirectory(getFileParent(url));
+		VFSManager.sendVFSUpdate(this,url,true);
 
 		return client.getResponse().isPositiveCompletion();
 	}
@@ -231,10 +223,7 @@ public class FtpVFS extends VFS
 		client.renameFrom(address.path);
 		client.renameTo(new FtpAddress(to).path);
 
-		if(directoryEntry.type == VFS.DirectoryEntry.DIRECTORY)
-			DirectoryCache.flushCachedDirectory(from);
-
-		DirectoryCache.flushCachedDirectory(getFileParent(from));
+		VFSManager.sendVFSUpdate(this,from,true);
 
 		return client.getResponse().isPositiveCompletion();
 	}
@@ -249,7 +238,7 @@ public class FtpVFS extends VFS
 
 		client.makeDirectory(address.path);
 
-		DirectoryCache.flushCachedDirectory(getFileParent(directory));
+		VFSManager.sendVFSUpdate(this,directory,true);
 
 		return client.getResponse().isPositiveCompletion();
 	}
@@ -344,7 +333,7 @@ public class FtpVFS extends VFS
 			VFSManager.error(comp,"vfs.ftp.upload-error",args);
 		}
 
-		DirectoryCache.flushCachedDirectory(getFileParent(path));
+		VFSManager.sendVFSUpdate(this,path,true);
 
 		return out;
 	}
@@ -446,8 +435,8 @@ public class FtpVFS extends VFS
 				return null;
 
 			String response;
-			if(client != null)
-				response = client.getResponse().toString();
+			if(client != null && client.getResponse() != null)
+				response = String.valueOf(client.getResponse());
 			else
 				response = "";
 			String[] args = { host, port, response };
@@ -558,6 +547,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/08/20 07:29:31  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.20  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

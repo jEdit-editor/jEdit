@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
+import java.util.Vector;
 import org.gjt.sp.util.Log;
 
 /**
@@ -157,8 +158,7 @@ class EditServer extends Thread
 	}
 
 	// Thread-safe wrapper for jEdit.openFile()
-	private Buffer TSopenFile(final String parent, final String path,
-		final boolean readOnly)
+	private Buffer TSopenFiles(final String parent, final String[] args)
 	{
 		final Buffer[] retVal = new Buffer[1];
 		try
@@ -166,8 +166,7 @@ class EditServer extends Thread
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run()
 				{
-					retVal[0] = jEdit.openFile(null,
-						parent,path,readOnly,false);
+					retVal[0] = jEdit.openFiles(parent,args);
 				}
 			});
 		}
@@ -218,22 +217,15 @@ class EditServer extends Thread
 		String session = (jEdit.getBooleanProperty("saveDesktop")
 			? "default" : null);
 		boolean endOpts = false;
-		boolean error = false;
 
 		View view = null;
-		Buffer buffer = null;
+		Vector args = new Vector();
 
 		String command;
 		while((command = in.readLine()) != null)
 		{
 			if(endOpts)
-			{
-				Buffer _buffer = TSopenFile(parent,command,readOnly);
-				if(_buffer != null)
-					buffer = _buffer;
-				else
-					error = true;
-			}
+				args.addElement(command);
 			else
 			{
 				if(command.equals("--"))
@@ -255,10 +247,14 @@ class EditServer extends Thread
 			}
 		}
 
+		String[] _args = new String[args.size()];
+		args.copyInto(_args);
+		Buffer buffer = TSopenFiles(parent,_args);
+
 		// Try loading session, then new file
 		if("default".equals(session))
 		{
-			if(buffer == null && !error)
+			if(buffer == null)
 			{
 				// Load default session
 				buffer = TSloadSession(session);
@@ -267,12 +263,6 @@ class EditServer extends Thread
 		else if(session != null)
 		{
 			buffer = TSloadSession(session);
-		}
-		else if(error)
-		{
-			// If all buffers we tried to open caused errors,
-			// just return.
-			return;
 		}
 
 		if(buffer == null)
@@ -296,6 +286,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/08/20 07:29:30  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.14  2000/06/12 02:43:29  sp
  * pre6 almost ready
  *

@@ -39,6 +39,12 @@ public class FavoritesVFS extends VFS
 	public FavoritesVFS()
 	{
 		super("favorites");
+
+		/* addToFavorites(), which is a static method
+		 * (for convinience) needs an instance of the
+		 * VFS to pass to VFSManager.sendVFSUpdate(),
+		 * hence this hack. */
+		instance = this;
 	}
 
 	public int getCapabilities()
@@ -77,6 +83,8 @@ public class FavoritesVFS extends VFS
 		{
 			path = path.substring("favorites:".length());
 			favorites.removeElement(path);
+
+			VFSManager.sendVFSUpdate(this,PROTOCOL + ":",false);
 		}
 
 		return true;
@@ -101,6 +109,8 @@ public class FavoritesVFS extends VFS
 		synchronized(lock)
 		{
 			favorites.addElement(path);
+
+			VFSManager.sendVFSUpdate(instance,PROTOCOL + ":",false);
 		}
 	}
 
@@ -118,6 +128,7 @@ public class FavoritesVFS extends VFS
 	}
 
 	// private members
+	private static FavoritesVFS instance;
 	private static Object lock = new Object();
 	private static Vector favorites = new Vector();
 }
@@ -125,6 +136,9 @@ public class FavoritesVFS extends VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/20 07:29:31  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.3  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

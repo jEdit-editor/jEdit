@@ -1,17 +1,64 @@
 MAJOR CHANGES IN JEDIT 2.6 SINCE 2.5
 
-Not yet written. Will need to mention:
+* Streamlined I/O system
 
-- non-blocking I/O
-- file system browser
-- directory cache
-- password saving
-- improved bracket matching
-- improved printing
-- macros can be added to context menu and tool bar
-- first-time and upgrade wizards
-- improved UI - slightly restructured menu bar, tool bars have rollover effect
-- dockable windows
+The I/O system has been considerably improved in jEdit 2.6. Non-blocking
+I/O is now supported, and you can abort hung I/O requests. The FTP
+virtual filesystem now caches remote directory lists for improved
+performance, and remembers passwords better.
+
+* VFS browser
+
+The 'Open File' and 'FTP Browser' dialog boxes have been merged into a
+new 'VFS Browser'. It is much more powerful than the Swing file chooser;
+its features include an optional tree view, a 'favorites' list for
+quick access to frequently-used directories, basic file manipulation
+(delete, rename), a history of previously visited directories, and more
+flexible sorting. The VFS Browser supports non-blocking I/O.
+
+* Dockable window support added to core
+
+For quite some time, the PluginHolder plugin has allowed external
+windows to be "docked" into views, to reduce clutter and make
+frequently-used windows more convinient. This feature is now part of
+the editor core; PluginHolder is obsolete.
+
+* Improved printing
+
+jEdit's printing feature is now much more flexible; the print font and
+margins can be customized, optional line number printing has been added,
+and the header and footer and be toggled.
+
+* Improved bracket matching
+
+The bracket matching feature now takes syntax information into acount,
+so brackets in string literals and comments should no longer cause
+problems.
+
+* User interface improvements
+
+Macros can now be added to the tool bar and text area right-click menu,
+for even easier access to complicated and tedious operations. The view
+menu bar and global options dialog box have been streamlined to make
+them more intuitive for newbies and experts alike.
+
+* First-time and new-version wizards
+
+When jEdit is first started, the new first-time wizard offers to set up
+firewall settings and install plugins. The new-version wizard is shown
+after a new jEdit version is installed, and can update all installed
+plugins to their latest versions.
+
+* Removed features
+
+The following features are no longer part of the editor core as of jEdit
+version 2.6:
+
+- File->Send command: because it is so rarely used, it has been moved
+  into a separate SendBuffer plugin
+- 'Find File' widget in Open and Save As dialog boxes: no equivalent
+  functionality currently exists in the VFS browser. It may be added in
+  a future release
 
 -- Slava Pestov
 <sp@gjt.org>

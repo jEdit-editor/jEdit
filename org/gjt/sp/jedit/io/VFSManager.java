@@ -23,11 +23,10 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
+import java.util.Vector;
 import org.gjt.sp.jedit.gui.LoginDialog;
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.msg.VFSUpdate;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.WorkThreadPool;
 
@@ -223,17 +222,27 @@ public class VFSManager
 		String user = (String)session.get(VFSSession.USERNAME_KEY);
 		String password = (String)session.get(VFSSession.PASSWORD_KEY);
 
-		if(host != null && user != null)
+		if(host != null)
 		{
-			if(password != null)
-				return true;
+			LoginInfo login = (LoginInfo)loginHash.get(host);
 
-			password = (String)passwordHash.get(user + "@" + host);
-			if(password != null)
+			if(login != null && (user == null || login.user.equals(user)))
 			{
-				session.put(VFSSession.PASSWORD_KEY,password);
-				return true;
+				if(user == null)
+				{
+					user = login.user;
+					session.put(VFSSession.USERNAME_KEY,user);
+				}
+
+				if(password == null)
+				{
+					password = login.password;
+					session.put(VFSSession.PASSWORD_KEY,password);
+				}
 			}
+
+			if(user != null && password != null)
+				return true;
 		}
 
 		/* since this can be called at startup time,
@@ -252,7 +261,7 @@ public class VFSManager
 		session.put(VFSSession.USERNAME_KEY,user);
 		session.put(VFSSession.PASSWORD_KEY,password);
 
-		passwordHash.put(user + "@" + host,password);
+		loginHash.put(host,new LoginInfo(user,password));
 
 		return true;
 	}
@@ -263,7 +272,87 @@ public class VFSManager
 	 */
 	public static void forgetPasswords()
 	{
-		passwordHash.clear();
+		loginHash.clear();
+	}
+
+	static class LoginInfo
+	{
+		String user, password;
+
+		LoginInfo(String user, String password)
+		{
+			this.user = user;
+			this.password = password;
+		}
+	}
+
+	/**
+	 * Sends a VFS update message.
+	 * @param vfs The VFS
+	 * @param path The path that changed
+	 * @param parent True if an update should be sent for the path's
+	 * parent too
+	 * @since jEdit 2.6pre4
+	 */
+	public static void sendVFSUpdate(VFS vfs, String path, boolean parent)
+	{
+		if(parent)
+		{
+			sendVFSUpdate(vfs,path,false);
+			sendVFSUpdate(vfs,vfs.getFileParent(path),false);
+		}
+		else
+		{
+			// have to do this hack until VFSPath class is written
+			if(path.length() != 1 && (path.endsWith("/")
+				|| path.endsWith(java.io.File.separator)))
+				path = path.substring(0,path.length() - 1);
+
+			/* we do this here, and not in an EBComponent
+			 * inside DirectoryCache, to simplify matters */
+			DirectoryCache.flushCachedDirectory(path);
+
+			synchronized(vfsUpdateLock)
+			{
+				for(int i = 0; i < vfsUpdates.size(); i++)
+				{
+					VFSUpdate msg = (VFSUpdate)vfsUpdates
+						.elementAt(i);
+					if(msg.getPath().equals(path))
+					{
+						// don't send two updates
+						// for the same path
+						return;
+					}
+				}
+
+				vfsUpdates.addElement(new VFSUpdate(path));
+
+				if(vfsUpdates.size() == 1)
+				{
+					// we were the first to add an update;
+					// add update sending runnable to AWT
+					// thread
+					VFSManager.runInAWTThread(new SendVFSUpdatesSafely());
+				}
+			}
+		}
+	}
+
+	static class SendVFSUpdatesSafely implements Runnable
+	{
+		public void run()
+		{
+			synchronized(vfsUpdateLock)
+			{
+				for(int i = 0; i < vfsUpdates.size(); i++)
+				{
+					EditBus.send((VFSUpdate)vfsUpdates.elementAt(i));
+				}
+
+				vfsUpdates.removeAllElements();
+			}
+		}
 	}
 
 	// private members
@@ -272,8 +361,10 @@ public class VFSManager
 	private static VFS urlVFS = new UrlVFS();
 	private static Hashtable vfsHash;
 	private static Hashtable protocolHash;
-	private static Hashtable passwordHash;
+	private static Hashtable loginHash;
 	private static boolean error;
+	private static Object vfsUpdateLock;
+	private static Vector vfsUpdates;
 
 	static
 	{
@@ -289,7 +380,9 @@ public class VFSManager
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
 		vfsHash = new Hashtable();
 		protocolHash = new Hashtable();
-		passwordHash = new Hashtable();
+		loginHash = new Hashtable();
+		vfsUpdateLock = new Object();
+		vfsUpdates = new Vector();
 		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
 		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
 		registerVFS(FtpVFS.PROTOCOL,new FtpVFS());
@@ -301,6 +394,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.18  2000/08/20 07:29:31  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.17  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

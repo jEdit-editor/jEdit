@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.03.00";
+		return "02.06.04.00";
 	}
 
 	/**
@@ -82,7 +82,6 @@ public class jEdit
 
 		// Parse command line
 		boolean endOpts = false;
-		boolean readOnly = false;
 		boolean reuseView = false;
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
@@ -138,8 +137,6 @@ public class jEdit
 				}
 				else if(arg.equals("-nosplash"))
 					showSplash = false;
-				else if(arg.equals("-readonly"))
-					readOnly = true;
 				else if(arg.equals("-reuseview"))
 					reuseView = true;
 				else
@@ -186,8 +183,6 @@ public class jEdit
 					else
 						out.write("nosession\n");
 				}
-				if(readOnly)
-					out.write("readonly\n");
 				if(reuseView)
 					out.write("reuseview\n");
 				out.write("parent=" + userDir + "\n");
@@ -293,24 +288,9 @@ public class jEdit
 			}
 		}
 
-		// Load files specified on the command line
-		boolean error = false;
+		Buffer buffer = openFiles(userDir,args);
 
-		for(int i = 0; i < args.length; i++)
-		{
-			if(args[i] == null)
-				continue;
-			if(openFile(null,userDir,args[i],readOnly,false) == null)
-				error = true;
-		}
-
-		Buffer buffer = null;
-
-		// If the user tries to open a file they don't have access
-		// to, it would be a bit weird if jEdit loaded the last
-		// session. So we just create an untitled file if no
-		// specified buffers could not be opened
-		if(bufferCount == 0 && !error)
+		if(bufferCount == 0)
 		{
 			// don't load default session when in background mode
 			if(defaultSession)
@@ -976,6 +956,40 @@ public class jEdit
 	}
 
 	/**
+	 * Opens the file names specified in the argument array. This
+	 * handles +line and +marker arguments just like the command
+	 * line parser.
+	 * @param parent The parent directory
+	 * @param args The file names to open
+	 * @since jEdit 2.6pre4
+	 */
+	public static Buffer openFiles(String parent, String[] args)
+	{
+		Buffer retVal = null;
+		Buffer lastBuffer = null;
+
+		for(int i = 0; i < args.length; i++)
+		{
+			String arg = args[i];
+			if(arg == null)
+				continue;
+			else if(arg.startsWith("+line:") || arg.startsWith("+marker:"))
+			{
+				if(lastBuffer != null)
+					gotoMarker(lastBuffer,arg);
+				continue;
+			}
+
+			lastBuffer = openFile(null,parent,arg,false,false);
+
+			if(retVal == null && lastBuffer != null)
+				retVal = lastBuffer;
+		}
+
+		return retVal;
+	}
+
+	/**
 	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
 	 * null if the buffer could not be opened.
 	 * @param view The view to open the file in
@@ -1028,11 +1042,6 @@ public class jEdit
 				parent = file.getParent();
 		}
 
-		int index = path.indexOf('#');
-		final String marker = (index != -1 ? path.substring(index + 1) : null);
-		if(index != -1)
-			path = path.substring(0,index);
-
 		String protocol = MiscUtilities.getFileProtocol(path);
 		if(protocol == null)
 			protocol = "file";
@@ -1043,38 +1052,12 @@ public class jEdit
 		if(protocol.equals("file"))
 			path = MiscUtilities.constructPath(parent,path);
 
-		Buffer buffer = buffersFirst;
-
-		// XXX
-		Vector _history = new Vector();
-
-		while(buffer != null)
+		Buffer buffer = getBuffer(path);
+		if(buffer != null)
 		{
-			if(_history.contains(buffer))
-				throw new InternalError("AIEE!!! " + _history);
-			else
-				_history.addElement(buffer);
-
-			if(buffer.getPath().equals(path))
-			{
-				if(view != null)
-				{
-					view.setBuffer(buffer);
-
-					if(marker != null)
-					{
-						VFSManager.runInAWTThread(new Runnable()
-						{
-							public void run()
-							{
-								gotoMarker(view.getBuffer(),view,marker);
-							}
-						});
-					}
-				}
-				return buffer;
-			}
-			buffer = buffer.next;
+			if(view != null)
+				view.setBuffer(buffer);
+			return buffer;
 		}
 
 		final Buffer newBuffer = new Buffer(view,path,readOnly,
@@ -1087,17 +1070,8 @@ public class jEdit
 
 		EditBus.send(new BufferUpdate(newBuffer,BufferUpdate.CREATED));
 
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				if(marker != null)
-					gotoMarker(newBuffer,null,marker);
-
-				if(view != null)
-					view.setBuffer(newBuffer);
-			}
-		});
+		if(view != null)
+			view.setBuffer(newBuffer);
 
 		return newBuffer;
 	}
@@ -1721,15 +1695,14 @@ public class jEdit
 		System.out.println("Usage: jedit [<options>] [<files>]");
 
 		System.out.println("Common options:");
-		System.out.println("	<filename>#<marker>: Positions caret"
+		System.out.println("	+marker:<marker>: Positions caret"
 			+ " at marker <marker>");
-		System.out.println("	<filename>#+<line>: Positions caret"
+		System.out.println("	+line:<line>: Positions caret"
 			+ " at line number <line>");
 		System.out.println("	--: End of options");
 		System.out.println("	-version: Print jEdit version and"
 			+ " exit");
 		System.out.println("	-usage: Print this message and exit");
-		System.out.println("	-readonly: Open files read-only");
 		System.out.println("	-nosession: Don't load default session");
 		System.out.println("	-session=<name>: Load session from"
 			+ " $HOME/.jedit/sessions/<name>");
@@ -1853,7 +1826,7 @@ public class jEdit
 	{
 		/* Try to guess the eventual size to avoid unnecessary
 		 * copying */
-		modes = new Vector(40);
+		modes = new Vector(50);
 
 		// try loading cache file
 		String path;
@@ -2130,45 +2103,59 @@ public class jEdit
 		}
 	}
 
-	private static void gotoMarker(Buffer buffer, View view, String marker)
+	private static void gotoMarker(Buffer buffer, String marker)
 	{
-		if(marker.length() == 0)
-			return;
+		VFSManager.runInAWTThread(new GotoMarkerSafely(buffer,marker));
+	}
 
-		int start, end;
+	static class GotoMarkerSafely implements Runnable
+	{
+		Buffer buffer;
+		String marker;
 
-		// Handle line number
-		if(marker.charAt(0) == '+')
+		GotoMarkerSafely(Buffer buffer, String marker)
 		{
-			try
-			{
-				int line = Integer.parseInt(marker.substring(1));
-				Element lineElement = buffer.getDefaultRootElement()
-					.getElement(line - 1);
-				start = end = lineElement.getStartOffset();
-			}
-			catch(Exception e)
-			{
-				return;
-			}
-		}
-		// Handle marker
-		else
-		{
-			Marker m = buffer.getMarker(marker);
-			if(m == null)
-				return;
-			start = m.getStart();
-			end = m.getEnd();
+			this.buffer = buffer;
+			this.marker = marker;
 		}
 
-		if(view == null || view.getBuffer() != buffer)
+		public void run()
 		{
+			int start, end;
+
+			// Handle line number
+			if(marker.startsWith("+line:"))
+			{
+				try
+				{
+					int line = Integer.parseInt(marker.substring(6));
+					Element lineElement = buffer.getDefaultRootElement()
+						.getElement(line - 1);
+					start = end = lineElement.getStartOffset();
+				}
+				catch(Exception e)
+				{
+					return;
+				}
+			}
+			// Handle marker
+			else if(marker.startsWith("+marker:"))
+			{
+				Marker m = buffer.getMarker(marker.substring(8));
+				if(m == null)
+					return;
+				start = m.getStart();
+				end = m.getEnd();
+			}
+			// Can't happen
+			else
+				throw new InternalError();
+
 			buffer.putProperty(Buffer.SELECTION_START,new Integer(start));
 			buffer.putProperty(Buffer.SELECTION_END,new Integer(end));
+			buffer.getDocumentProperties().remove(Buffer.SCROLL_HORIZ);
+			buffer.getDocumentProperties().remove(Buffer.SCROLL_VERT);
 		}
-		else if(view != null)
-			view.getTextArea().select(start,end);
 	}
 
 	private static void addBufferToList(Buffer buffer)
@@ -2329,6 +2316,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.270  2000/08/20 07:29:30  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.269  2000/08/16 12:14:29  sp
  * Passwords are now saved, bug fixes, documentation updates
  *

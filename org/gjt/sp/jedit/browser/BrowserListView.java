@@ -67,7 +67,7 @@ public class BrowserListView extends BrowserView
 		else
 			list.setListData(directory);
 
-		scroller.getViewport().setViewPosition(new Point(0,0));
+		//scroller.getViewport().setViewPosition(new Point(0,0));
 	}
 
 	public void updateFileView()
@@ -77,7 +77,8 @@ public class BrowserListView extends BrowserView
 
 	public void reloadDirectory(String path)
 	{
-		browser.reloadDirectory(true);
+		if(path.equals(browser.getDirectory()))
+			browser.reloadDirectory(true);
 	}
 
 	// private members
@@ -125,6 +126,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/08/20 07:29:30  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.6  2000/08/13 07:35:23  sp
  * Dockable window API
  *

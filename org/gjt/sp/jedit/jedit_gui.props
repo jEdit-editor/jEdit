@@ -1029,10 +1029,9 @@ options.browser.sortFiles=Sort file list
 options.browser.sortIgnoreCase=Case insensitive sort
 options.browser.sortMixFilesAndDirs=Mix files and directories
 
-options.filters.label=File Filters
-options.filters.caption=Additional filters to display in file system browser:
-options.filters.name=Name
-options.filters.re=Glob pattern
+options.browser.filters=Additional Filename Filters
+options.browser.filters.name=Name
+options.browser.filters.glob=Glob pattern
 
 # Font selector
 font-selector.title=Font Selector
@@ -1089,12 +1088,18 @@ abort.message=Are you sure you want to abort the currently executing\n\
 	input/output request? If you are aborting a file save, this may\n\
 	result in data loss.
 
-# Multiple I/O requst error
+# Multiple I/O requst errors
 buffer-multiple-io.title=I/O Error
-buffer-multiple-io.message=You cannot execute more than one input/output\n\
-	request per buffer simultaneously. Please wait until\n\
-	the current request finishes (or abort it in the I/O\n\
-	progress monitor) before executing another one.
+buffer-multiple-io.message=You can only execute one input/output request per\n\
+	buffer simultaneously. Please wait until the current\n\
+	request finishes (or abort it in the I/O progress monitor)\n\
+	before starting another one.
+
+browser-multiple-io.title=I/O Error
+browser-multiple-io.message=You can only execute one input/output request per\n\
+	VFS browser simultaneously. Please wait until the current\n\
+	request finishes (or abort it in the I/O progress monitor)\n\
+	before starting another one.
 
 # Login dialog box
 login.title=Log in

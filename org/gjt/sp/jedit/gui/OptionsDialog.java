@@ -274,7 +274,6 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionGroup(shortcutsGroup, jEditGroup);
 
 		addOptionPane(new BrowserOptionPane(), jEditGroup);
-		addOptionPane(new FileFilterOptionPane(), jEditGroup);
 
 		addOptionGroup(jEditGroup, rootGroup);
 
@@ -597,6 +596,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  2000/08/20 07:29:31  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.30  2000/08/17 08:04:10  sp
  * Marker loading bug fixed, docking option pane
  *

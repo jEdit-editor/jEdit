@@ -1,5 +1,37 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6pre4
+
++ Enhancements
+
+- 'VFS Browser' and 'File Filters' option panes merged
+- Previously, to position the caret on a specific marker or line number
+  from the command line, you would write:
+  jedit filename#<marker name>
+  jedit filename#+<line>
+  Now, you must write:
+  jedit filename +marker:<marker name>
+  jedit filename +line:<line>
+- This is not an enhancement, but anyway: the -readonly command line
+  flag has been removed
+- New VFSUpdate message is sent when a file or a directory changes. As a
+  result, VFS browsers are automatically updated when files are created
+  or deleted (within jEdit)
+- When a file is added or removed, the VFS browser tree view now only
+  updates the branch where the file is located, not the entire tree
+- The VFS browser now displays an error message if you attempt to execute
+  more than one request simultaneously. Because the browser was not
+  designed with this in mind, it would cause strange problems
+- doc/NEWS.txt written
+
++ Bug Fixes
+
+- When using FTP URLs which don't specify the user name (for example,
+  ftp://hostname) jEdit would prompt for the user name/password for
+  every VFS operation
+- FtpVFS no longer throws NullPointerExceptions when an error occurs
+  while connecting to a server
+
 * Version 2.6pre3
 
 + New Features

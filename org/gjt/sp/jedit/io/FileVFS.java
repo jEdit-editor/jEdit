@@ -166,19 +166,25 @@ public class FileVFS extends VFS
 
 	public boolean _delete(VFSSession session, String path, Component comp)
 	{
-		return new File(path).delete();
+		boolean retVal = new File(path).delete();
+		VFSManager.sendVFSUpdate(this,path,true);
+		return retVal;
 	}
 
 	public boolean _rename(VFSSession session, String from, String to,
 		Component comp)
 	{
-		return new File(from).renameTo(new File(to));
+		boolean retVal = new File(from).renameTo(new File(to));
+		VFSManager.sendVFSUpdate(this,from,true);
+		return retVal;
 	}
 
 
 	public boolean _mkdir(VFSSession session, String directory, Component comp)
 	{
-		return new File(directory).mkdir();
+		boolean retVal = new File(directory).mkdir();
+		VFSManager.sendVFSUpdate(this,directory,true);
+		return retVal;
 	}
 
 	public InputStream _createInputStream(VFSSession session, String path,
@@ -200,7 +206,9 @@ public class FileVFS extends VFS
 	public OutputStream _createOutputStream(VFSSession session, String path,
 		Component comp) throws IOException
 	{
-		return new FileOutputStream(path);
+		OutputStream retVal = new FileOutputStream(path);
+		VFSManager.sendVFSUpdate(this,path,true);
+		return retVal;
 	}
 
 	// private members
@@ -209,6 +217,9 @@ public class FileVFS extends VFS
 	// The BACKED_UP flag prevents more than one backup from being
 	// written per session (I guess this should be made configurable
 	// in the future)
+	//
+	// we don't fire a VFSUpdate in this message as _createOutputStream()
+	// will do it anyway
 	private void backup(Buffer buffer, File file)
 	{
 		if(buffer.getProperty(BACKED_UP_PROPERTY) != null)
@@ -291,6 +302,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/08/20 07:29:31  sp
+ * I/O and VFS browser improvements
+ *
  * Revision 1.16  2000/08/15 08:07:11  sp
  * A bunch of bug fixes
  *
