@@ -13,6 +13,7 @@
 	<target name="compile">
 		<javac
 			srcdir="."
+			destdir="."
 			deprecation="on"
 			includeJavaRuntime="yes"
 		>
@@ -29,6 +30,7 @@
 	<target name="compile14" if="jdk14">
 		<javac
 			srcdir="."
+			destdir="."
 			deprecation="on"
 			includeJavaRuntime="yes"
 		>
@@ -65,45 +67,6 @@
 			</fileset>
 		</jar>
 	</target>
-
-	<!-- <target name="webstart" depends="compile">
-		<jar
-			jarfile="jedit_webstart.jar"
-			manifest="org/gjt/sp/jedit/jedit.manifest"
-		>
-			<fileset dir=".">
-				<include name="bsh/**/*.class"/>
-				<include name="bsh/commands/*.bsh"/>
-
-				<include name="com/microstar/xml/*.class"/>
-				<include name="gnu/regexp/*.class"/>
-				<include name="gnu/regexp/MessagesBundle.properties"/>
-
-				<include name="org/gjt/sp/jedit/**/*.class"/>
-				<include name="org/gjt/sp/util/**/*.class"/>
-				<include name="org/gjt/sp/jedit/**/*.dtd"/>
-				<include name="org/gjt/sp/jedit/icons/*.gif"/>
-				<include name="org/gjt/sp/jedit/icons/*.jpg"/>
-				<include name="org/gjt/sp/jedit/tips/*.html"/>
-				<include name="org/gjt/sp/jedit/*.props"/>
-
-				<include name="org/gjt/sp/jedit/actions.xml"/>
-				<include name="org/gjt/sp/jedit/dockables.xml"/>
-				<include name="org/gjt/sp/jedit/default.abbrevs"/>
-				<include name="org/gjt/sp/jedit/jedit.bsh"/>
-
-				<include name="doc/*.txt"/>
-				<include name="doc/welcome.html"/>
-				<include name="doc/jedit.gif"/>
-				<include name="doc/users-guide/*.html"/>
-				<include name="doc/users-guide/toc.xml"/>
-				<include name="doc/users-guide/word-index.xml"/>
-
-				<include name="modes/catalog"/>
-				<include name="modes/*.xml"/>
-			</fileset>
-		</jar>
-	</target> -->
 
 	<!-- Generate HTML docs with xsltproc tool from www.xmlsoft.org -->
 	<target name="docs-html-xsltproc">
@@ -176,8 +139,7 @@
 			tofile="doc/users-guide/users-guide-a4.pdf" />
 	</target>
 
-	<target name="javadoc"
-		description="Creates the API documentation" >
+	<target name="javadoc">
 		<delete dir="doc/api"/>
 		<mkdir dir="doc/api"/>
 
