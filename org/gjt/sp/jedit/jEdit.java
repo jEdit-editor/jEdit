@@ -68,6 +68,9 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
+		// Yes, we want stdio to go to the log
+		Log.redirectStdio();
+
 		// Log some stuff
 		Log.log(Log.MESSAGE,jEdit.class,"When reporting bugs, please"
 			+ " include the following information:");
@@ -1576,6 +1579,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.149  1999/10/31 08:31:36  sp
+ * Minor fixes
+ *
  * Revision 1.148  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *

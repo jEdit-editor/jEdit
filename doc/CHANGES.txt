@@ -41,6 +41,7 @@ JEDIT VERSION HISTORY
 + Plugin Updates
 
 - Console 1.7.2
+- QuickFile: minor hack to make it work with jEdit 2.2
 
 + Installer Updates
 

@@ -1,6 +1,6 @@
 JEDIT 2.2 TO DO
 
-- Document activity log in user and devel guide
+- Document activity log
 - Low-priority background thread that plugins can use to do background
   parsing, etc: jEdit.addWorkRequest(Runnable r), WorkerThread
 - Directory list set is slow; investigate exactly what happends in openFile()

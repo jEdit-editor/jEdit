@@ -21,9 +21,9 @@ lineSep.mac=MacOS (\\r)
 
 jar.error.deps=Dependency check failed: {0}\n\
 	The following is required to use this plugin:
-jar.what.jdk=\tJava version >= {0}
-jar.what.jedit=\tjEdit version >= {0}
-jar.what.class=\tExistance of class {0}
+jar.what.jdk=    Java version >= {0}
+jar.what.jedit=    jEdit version >= {0}
+jar.what.class=    Existance of class {0}
 
 ###
 ### TOOLBAR

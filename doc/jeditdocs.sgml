@@ -79,6 +79,9 @@
    <listitem><para>
     org.gjt.sp.jedit.textarea (Syntax highlighting text area component)
    </para></listitem>
+   <listitem><para>
+    org.gjt.sp.util (Various utility classes)
+   </para></listitem>
   </itemizedlist>
   <para>
    jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
@@ -126,6 +129,7 @@
    </para></listitem>
    <listitem><para>
     Powerful search and replace that supports multi-file searching
+    (including a recursive directory search)
     and regular expressions (inexact sequences of text)
    </para></listitem>
    <listitem><para>
@@ -153,21 +157,6 @@
   Various concepts are presented in a certain way in this manual.
   This chapter overviews the conventions used.
  </para>
- <sect1 id=old-jedit><title>Old jEdit Versions</>
-  <indexterm><primary>old jEdit versions</></indexterm>
-  <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.1 Users</>
-   <para>
-    In areas where jEdit has changed significantly since the last version,
-    a sidebar like this one will appear, describing what went away, the
-    advantages of the new way, and so on.
-   </para>
-   <para>
-    A list of all pages with such sidebars can be found by looking up
-    <quote>old jEdit versions</> in the index.
-   </para>
-  </sidebar>
- </sect1>
  <sect1 id=menu-items><title>Menu Items</>
   <indexterm><primary>menu bar</></indexterm>
   <para>
@@ -226,8 +215,10 @@
    Exactly how jEdit is started depends on the operating system;
    most often you would type <quote>jedit</quote> at the command line
    or double click on the jEdit icon (or select it from a menu,
-   or whatever). Once started, it will print some information messages as
-   it loads up, then after a short delay the editor window will appear.
+   or whatever). Once started, it will display a <quote>splash
+   screen</> with the jEdit logo and a progress bar that advances
+   while jEdit loads. After a short delay, the editor window will
+   appear.
    </para>
   <note>
    <para>
@@ -2284,15 +2275,6 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     Replace dialog box instead.
    </para>
   </note>
-  <indexterm><primary>old jEdit versions</></indexterm>
-  <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.1 Users</>
-   <para>
-    jEdit 2.1 did not have a <quote>Find</> field in the tool bar, and
-    the searching commands always displayed the Search and Replace
-    dialog box.
-   </para>
-  </sidebar>
  </sect1>
  <sect1 id=search-replace-dlog><title>The Search and Replace Dialog Box</>
   <para>
@@ -2769,19 +2751,37 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
  <sect1 id=installing-plugins><title>Installing Plugins</>
   <indexterm><primary>.jedit/jars directory</></indexterm>
   <indexterm><primary>JAR (Java Archive) files</></indexterm>
+  <indexterm><primary>Help menu</></indexterm>
+  <indexterm><primary>Show Activity Log command</></indexterm>
   <para>
    When jEdit starts up, it prints a number of messages detailing the
-   plugin load process.
+   plugin load process to the activity log. To view the log,
+   select <guimenu>Help</>&gt;<guimenuitem>Show Activity Log</>.
+   Here is an example:
   </para>
-  <screen>Scanning directory: /usr/local/share/jedit-2.1pre3/jars
-Scanning directory: /home/slava/.jedit/jars
-Loading plugins: ConsolePlugin EditBusPlugin JBrowsePlugin
-LatestVersionPlugin QuickFilePlugin WWWBrowserPlugin</screen>
+  <screen>[message] jEdit: Scanning directory: /usr/local/jedit-2.2pre2/jars
+[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/buffertabs.jar
+[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/Console.jar
+[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/EditBus.jar
+[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/HTML.jar
+[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/JBrowse.jar
+[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/LatestVersion.jar
+[debug] jEdit: Scanning JAR file: /usr/local/jedit-2.2pre2/jars/quickfile.jar
+[message] jEdit: Scanning directory: /home/slava/.jedit/jars
+[debug] jEdit: Scanning JAR file: /home/slava/.jedit/jars/TextTools.jar
+[notice] JARClassLoader: Starting plugin BufferTabsPlugin
+[notice] JARClassLoader: Starting plugin ConsolePlugin
+[notice] JARClassLoader: Starting plugin EditBusPlugin
+[notice] JARClassLoader: Starting plugin HTMLPlugin
+[notice] JARClassLoader: Starting plugin JBrowsePlugin
+[notice] JARClassLoader: Starting plugin LatestVersionPlugin
+[notice] JARClassLoader: Starting plugin QuickFilePlugin
+[notice] JARClassLoader: Starting plugin TextToolsPlugin</screen>
   <para>
    jEdit scans two directories for plugins on startup;
    the system-wide plugin directory, where plugins that are to be available
-   to all users can be placed, and the other is the user-specific plugin
-   directory, where plugins for a specific user can be placed.
+   to all users can be placed, and the user-specific plugin
+   directory, where plugins for a specific user can be installed.
   </para>
   <para>
    Plugins are distributed as ZIP or GZipped TAR files. Uncompressing
@@ -2793,15 +2793,19 @@ LatestVersionPlugin QuickFilePlugin WWWBrowserPlugin</screen>
  </sect1>
  <sect1 id=dependency-errors><title>Dependency Errors</>
   <indexterm><primary>dependency errors</></indexterm>
+  <indexterm><primary>Help menu</></indexterm>
+  <indexterm><primary>Show Activity Log command</></indexterm>
   <para>
    If jEdit detects that the plugin requires some capability
    that is not currently available, a
-   <quote>dependency error</> will be printed.
+   <quote>dependency error</> will be printed in the activity
+   log (<guimenu>Help</>&gt;<guimenuitem>Show Activity Log</>) and
+   console.
   </para>
-  <screen>Dependency check failed: ConsolePlugin
-The following is required to use this plugin:
-        JDK version >= 1.1
-        jEdit version >= 2.1pre3</screen>
+  <screen>[error] JARClassLoader: Dependency check failed: ConsolePlugin
+[error] JARClassLoader: The following is required to use this plugin:
+[error] JARClassLoader:         JDK version >= 1.1
+[error] JARClassLoader:         jEdit version >= 2.1pre3</screen>
   <para>
    This is a simple example; some plugins might not only depend on
    a jEdit and JDK version, but also other plugins and class libraries.
@@ -3309,6 +3313,186 @@ implements OptionPane
    Plugin Options dialog box is displayed. The canonical implementation
    would add a new <classname>OptionPane</> instance to the options dialog
    using the <function>addOptionPane()</> method.
+  </para>
+ </sect1>
+ <sect1 id=plugin-dialogs><title>Canned Dialog Boxes</>
+  <para>
+   The Swing <classname>JOptionPane</> class is a great way to present
+   simple
+   messages and errors to the user, but it has two limitations:
+  </para>
+  <itemizedlist>
+   <listitem><para>No support for localization; you must call
+   <function>jEdit.getProperty()</> manually for each element of
+   the message</para></listitem>
+   <listitem><para>Too complicated; the various methods of the
+   <classname>JOptionPane</> class have too many paremeters which
+   are too hard to remember</para></listitem>
+  </itemizedlist>
+  <para>
+   To solve this, jEdit has a number of wrappers around the
+   <classname>JOptionPane</> class in the <classname>GUIUtilities</> class
+   that simplify creation of canned dialog boxes.
+  </para>
+  <indexterm><primary>class</><secondary>GUIUtilities</></indexterm>
+  <indexterm><primary>method</><secondary>message() of GUIUtilities class</></indexterm>
+  <bridgehead renderas=sect3>GUIUtilities.message() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import java.awt.Frame;</>
+   <funcprototype>
+    <funcdef>public static void <function>message</></funcdef>
+    <paramdef>Frame <parameter>frame</></paramdef>
+    <paramdef>String <parameter>name</></paramdef>
+    <paramdef>Object[] <parameter>args</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method displays a message dialog box with title obtained from the
+   property
+   <property><replaceable>name</>.title</property> and
+   message from the property <property><replaceable>name</>.message</property>.
+   Elements of the <parameter>args</> array are substituted into
+   the message; see <xref linkend=plugin-props> for details.
+  </para>
+  <indexterm><primary>method</><secondary>error() of GUIUtilities class</></indexterm>
+  <bridgehead renderas=sect3>GUIUtilities.error() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import java.awt.Frame;</>
+   <funcprototype>
+    <funcdef>public static void <function>message</></funcdef>
+    <paramdef>Frame <parameter>frame</></paramdef>
+    <paramdef>String <parameter>name</></paramdef>
+    <paramdef>Object[] <parameter>args</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method displays an error dialog box. The only difference
+   between a message and error dialog box is the icon
+   displayed. Otherwise it is exactly the same as a message.
+  </para>
+  <indexterm><primary>method</><secondary>input() of GUIUtilities class</></indexterm>
+  <bridgehead renderas=sect3>GUIUtilities.input() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import java.awt.Frame;</>
+   <funcprototype>
+    <funcdef>public static String <function>input</></funcdef>
+    <paramdef>Frame <parameter>frame</></paramdef>
+    <paramdef>String <parameter>name</></paramdef>
+    <paramdef>String <parameter>defaultValue</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method displays an input dialog box with title obtained from the
+   property
+   <property><replaceable>name</>.title</property> and
+   message from the property <property><replaceable>name</>.message</property>.
+   The default value of the text field is <parameter>defaultValue</>.
+   When the user enters a value and clicks <guibutton>OK</>,
+   the value is returned. If they click <guibutton>Cancel</>, the
+   method returns <command>null</>.
+  </para>
+  <indexterm><primary>method</><secondary>inputProperty() of GUIUtilities class</></indexterm>
+  <bridgehead renderas=sect3>GUIUtilities.inputProperty() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import java.awt.Frame;</>
+   <funcprototype>
+    <funcdef>public static String <function>inputProperty</></funcdef>
+    <paramdef>Frame <parameter>frame</></paramdef>
+    <paramdef>String <parameter>name</></paramdef>
+    <paramdef>String <parameter>property</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method is exactly the same as <function>input()</> except that
+   the value entered by the user is automatically stored in
+   the property named <parameter>property</>.
+  </para>
+  <indexterm><primary>method</><secondary>showFileDialog() of GUIUtilities class</></indexterm>
+  <bridgehead renderas=sect3>GUIUtilities.showFileDialog() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import org.gjt.sp.jedit.View;</>
+   <funcprototype>
+    <funcdef>public static String <function>showFileDialog</></funcdef>
+    <paramdef>View <parameter>view</></paramdef>
+    <paramdef>String <parameter>file</></paramdef>
+    <paramdef>int <parameter>type</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This method is a wrapper around the <classname>JFileChooser</> class.
+   It displays a file chooser dialog, with the file named
+   <parameter>file</> selected. The <parameter>type</> parameter is
+   either <command>JFileChooser.OPEN_DIALOG</> or
+   <command>JFileChooser.SAVE_DIALOG</>. This method returns
+   <command>null</> if the user clicks <guibutton>Cancel</>, otherwise the
+   selected pathname is returned.
+  </para>
+ </sect1>
+ <sect1 id=plugin-logging><title>The Activity Log</>
+  <para>
+   In some circumstances, for example while jEdit is starting up,
+   it may not practical to call <function>GUIUtilities.message()</>
+   and <function>GUIUtilities.error()</> for every message and
+   error that comes up. In those cases, you probably want to print
+   the messages
+   to some sort of log that the user can review later.
+   While <function>System.out.println()</> and friends may
+   seem like an obvious choice for this task, it
+   is not always the best, for the following reasons:
+  </para>
+  <itemizedlist>
+   <listitem><para>
+    The user might not want to keep a console window open to watch jEdit
+    messages
+   </para></listitem>
+   <listitem><para>
+    People who do use the console might get annoyed if you print too
+    many messages
+   </para></listitem>
+   <listitem><para>
+    People trying to debug the plugin might find that it doesn't print
+    enough information
+   </para></listitem>
+   <listitem><para>
+    There is no easy way to save a plugin's output (on Unix you can
+    select output in an X terminal with the mouse and copy it, but this
+    is not possible on Windows).
+   </para></listitem>
+  </itemizedlist>
+  <para>
+   To overcome all these problems, jEdit has its own logging API.
+  </para>
+  <indexterm><primary>class</><secondary>Log</></indexterm>
+  <indexterm><primary>method</><secondary>log() of Log class</></indexterm>
+  <bridgehead renderas=sect3>Log.log() method</>
+  <funcsynopsis>
+   <funcsynopsisinfo>import org.gjt.sp.util.Log;</>
+   <funcprototype>
+    <funcdef>public static void <function>log</></funcdef>
+    <paramdef>int <parameter>urgency</></paramdef>
+    <paramdef>Object <parameter>source</></paramdef>
+    <paramdef>Object <parameter>message</></paramdef>
+   </funcprototype>
+  </funcsynopsis>
+  <para>
+   This methods appends a message to the activity log
+   (<guimenu>Help</>&gt;<guimenuitem>Show Activity Log</>).
+   <parameter>urgency</> is one of
+   <command>Log.DEBUG</>,
+   <command>Log.MESSAGE</>,
+   <command>Log.NOTICE</>,
+   <command>Log.WARNING</>, or
+   <command>Log.ERROR</>. Messages with an urgency below
+   <command>Log.WARNING</> are only printed in the log;
+   those with <command>Log.WARNING</> or <command>Log.ERROR</>
+   urgency are also printed on the system console.
+   The <parameter>source</> parameter is used to label the logged
+   message; it is either an object or
+   a class. If <parameter>source</>
+   is <command>null</>, the current thread's name is used.
+   The <parameter>message</> parameter is the actual logged message;
+   it is either a string or
+   a <classname>java.lang.Throwable</>.
   </para>
  </sect1>
 </chapter>

@@ -31,7 +31,6 @@ public class LogViewer extends JFrame
 		super(jEdit.getProperty("log-viewer.title"));
 		JTextArea textArea = new JTextArea(24,80);
 		textArea.setDocument(Log.getLogDocument());
-		textArea.setEditable(false);
 
 		Font font = view.getTextArea().getPainter().getFont();
 		textArea.setFont(font);
