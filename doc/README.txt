@@ -27,20 +27,12 @@ section 11 and 12 of the GPL for details.
 The jEdit homepage, located at <http://www.gjt.org/~sp/jedit.html>
 contains the latest version of jEdit, along with plugin downloads.
 
-There are two mailing lists dedicated to jEdit, one is for
-announcements, the other is for general discussion.
+There are three mailing lists dedicated to jEdit; an announcement
+list that is very low traffic, a general discussion list, and a
+development discussion list. To subscribe, unsubscribe or view
+a list archive, visit <http://www.sourceforge.net/mail/?group_id=588>.
 
-To subscribe to the discussion list, e-mail
-<jedit-subscribe@listbot.com>. To unsubscribe, e-mail
-<jedit-unsubscribe@listbot.com>. To view the archive, go to
-<http://jedit.listbot.com>.
-
-To subscribe to the announcement list, e-mail
-<jedit.announce-subscribe@listbot.com>. To unsubscribe, e-mail
-<jedit.announce-unsubscribe@listbot.com>. To view the archive, go to
-<http://jedit.announce.listbot.com>.
-
-You may also contact me directly by e-mailing <sp@gjt.org>.
+Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
 * Documentation
 

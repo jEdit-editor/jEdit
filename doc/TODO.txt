@@ -2,37 +2,66 @@ JEDIT TO DO
 
 ------- Stuff for 2.3pre1 -------
 
++ Cleanups / Fixes
+
+- Rename 'expand abbreviation' to 'complete word'
+
 - Higlight.paintHighlight(): instead of passing y co-ordinate, pass a
   rectangle with line bounds. Maybe rework TextAreaPainter internals to
   use a rectangle also, it could simplify some things. If one rectangle
   instance is stored and reused, it would not slow things down
+
 - HyperSearch - don't call matchesFound() on all buffers
-- Save registers. Simple register.n properties
-- Bookmarks and history window in help viewer
-- Clean way of embedding token markers in one another, so that HTMLTokenMarker
-  can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
-- Background colors for syntax tokens
+
+- Beef up 'Marker' class to support this sort of file/line number/message
+  thing, EditBus will also use it for errors
+
+- Should be able to change key bindings without restart.
+  jEdit.reloadKeyBindings() method
+
+- Split shortcuts option pane into "command shortcuts" and "macro shortcuts"
+  option panes, use a superclass for common functionality
+
+- CaretUndo acts weird on 'redo' sometimes
+
+- indentCloseBrackets: don't indent if the char is not in the
+  indentCloseBrackets list
+
++ Features
+
+- Macros -- \n, \t in action command, indent-on-enter/-tab record themselves
+  as insert-char@\n and @\t if disabled
+
+- Abbreviation expansion (use TypeSaver code). Newly inserted abbrevs will
+  be indented relative to current line
+
 - Integrate BufferTabs into the core
-- Document EditBus in plugin development docs
+
+- Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
+  to TextAreaHighlight and use that same interface to paint stuff in the
+  gutter
+
+- Write an InputHandler subclass that displays the current repeat count,
+  if any, in the view's status bar
+
+- Stackable status messages
 
 ------- Maybe later -------
 
-- currently, Macros.java has a huge kudge to implement key bindings for
-  macros. This is very stupid, and the menu code needs to be made more
-  flexible, so that BeanShell and friends can also have shortcuts (that
-  can be edited in the shortcuts option pane!)
-- Menu bar model - plugins should be able to load menu bars for their own
-  windows
-- Macro recording is a crock of sh*t. Eg:
-  C+ENTER 5 b c will give us "bbbbbc", but when recorded and played
-  back, comes out as "bcbcbcbcbc". Also, find-next and other actions that
-  record themselves "manually" cannot be repeated
-- Word wrap
+- Clean way of embedding token markers in one another, so that HTMLTokenMarker
+  can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
+- 'Uncomment' command, removes comment strings from selected text
+- Bookmarks and history window in help viewer
+- context-sensitive edit modes - Buffer.getMode(int line) method. For example,
+  pressing C+e C+c will insert /* */ in an HTML SCRIPT tag, but <!-- --> in
+  normal HTML
+- Menu bar and tool bar loading needs to work outside of views
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
 - Enhanced printing:
   - print selection only
   - print line numbers option
+- Document EditBus in plugin development docs
 
 ------- Installer to do -------
 
