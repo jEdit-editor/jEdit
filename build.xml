@@ -98,6 +98,11 @@
 			<arg value="../jedithtml.xsl"/>
 			<arg value="faq.xml"/>
 		</exec>
+		<exec executable="xsltproc" dir="doc/news42">
+			<arg value="--catalogs"/>
+			<arg value="../jedithtml.xsl"/>
+			<arg value="news.xml"/>
+		</exec>
 	</target>
 
 	<!-- Generate HTML docs with Xalan tool from xml.apache.org -->
@@ -110,6 +115,10 @@
 			in="doc/FAQ/faq.xml"
 			destdir="doc/FAQ"
 			style="doc/jedithtml.xsl"/>
+		<style
+			in="doc/news42/news.xml"
+			destdir="doc/news42"
+			style="doc/jedithtml.xsl"/>
 	</target>
 
 	<!-- Generate PDF docs with OpenJade tool from openjade.sf.net -->
@@ -117,6 +126,14 @@
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
 			<arg value="../jeditprint-letter.dsl"/>
+			<arg value="-c"/>
+			<arg value="/usr/share/xml/docbook/xml-dtd-4.1.2/catalog"/>
+			<arg value="-c"/>
+			<arg value="/usr/local/share/dsssl/docbook-dsssl-1.77/catalog"/>
+			<arg value="-c"/>
+			<arg value="/usr/local/share/dsssl/docbook-dsssl-1.77/catalog"/>
+			<arg value="-c"/>
+			<arg value="/usr/local/share/dsssl/catalog"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
 			<arg value="/usr/local/share/OpenSP/xml.dcl"/>
