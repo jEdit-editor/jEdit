@@ -2183,7 +2183,12 @@ public class jEdit
 				.indexOf("jedit.jar");
 			int start = classpath.lastIndexOf(File
 				.pathSeparator,index) + 1;
-			if(index > start)
+			// if started with java -jar jedit.jar
+			/* if(classpath.equalsIgnoreCase("jedit.jar"))
+			{
+				jEditHome = System.getProperty("user.dir");
+			}
+			else */ if(index > start)
 			{
 				jEditHome = classpath.substring(start,
 					index - 1);
@@ -2191,12 +2196,12 @@ public class jEdit
 			else
 			{
 				// check if web start
-				if(jEdit.class.getResource("/modes/catalog") != null)
+				/* if(jEdit.class.getResource("/modes/catalog") != null)
 				{
 					// modes bundled in; hence web start
 					jEditHome = null;
 				}
-				else
+				else */
 				{
 					// use user.dir as last resort
 					jEditHome = System.getProperty("user.dir");
@@ -2206,8 +2211,8 @@ public class jEdit
 
 		Log.log(Log.MESSAGE,jEdit.class,"jEdit home directory is " + jEditHome);
 
-		if(jEditHome == null)
-			Log.log(Log.DEBUG,jEdit.class,"Web start mode");
+		//if(jEditHome == null)
+		//	Log.log(Log.DEBUG,jEdit.class,"Web start mode");
 
 		actionHash = new Hashtable();
 

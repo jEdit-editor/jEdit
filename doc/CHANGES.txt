@@ -20,6 +20,9 @@ JEDIT 3.2 VERSION HISTORY
     set in this script; if it is being run at startup, it will also be
     run before the first view is even initialized. Just like a startup
     script
+- Just for fun, a sample startup script, named changeUIFonts.bsh is
+  included. This is an undocumented feature and will be replaced with
+  a setting in the global options dialog box in the next major release.
 
 + Enhancements
 

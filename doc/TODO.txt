@@ -1,7 +1,6 @@
 TO DO
 
 - proofread user's guide
-- wait for John to send latest jEditLauncher sources
 - find out about jEdit cli args & jEditLauncher
 - finish console 3.0
 - -1 being passed to virtualToPhysical() by documentChanged()
