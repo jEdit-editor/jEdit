@@ -4,10 +4,10 @@ JEDIT TO DO
 
 - Double-click drag doesn't work backwards
 - Focus is broken with buffertabs
+- Document plugin dep
 
 ------- 2.4 to do -------
 
-- Integrate Dirk's plugin versioning changes
 - Option pane for changing mode-specific tab size, indent, comment
   characters, and so on
 - EditAction.isEnabled() method

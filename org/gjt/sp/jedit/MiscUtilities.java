@@ -21,6 +21,7 @@ package org.gjt.sp.jedit;
 
 import java.io.*;
 import java.util.Vector;
+import java.util.StringTokenizer;
 
 /**
  * Class with several useful miscellaneous functions.<p>
@@ -381,6 +382,72 @@ loop:		for(int i = 0; i < str.length(); i++)
 	}
 
 	/**
+	 * Compares two version strings formatted like 'xxx.xx.xxx'.
+	 * The version string are tokenized at '.' and the substrings
+	 * of both strings are compared with one after another.
+	 * For each substring at first they are compared as Integers
+	 * and if that fails, as Strings. The comparison ends with
+	 * the first difference.
+	 * Note, that "1.2.0" < "1.2.0pre1", because "0" < "0pre1".
+	 * Therefore you should avoid mixing numbers and text.
+	 * Case is <i>not</i> ignored.
+	 */
+	public static class VersionCompare implements Compare
+	{
+		/**
+		 * compare two version strings 
+		 * @param obj1 first version. Should be a String.
+		 * @param obj2 secons version. Should be a String.
+		 * @return a negative value, if <code>obj1 < obj2</code>, 
+		 *         a positive value, if <code>obj1 > obj2</code>,
+		 *         0, if <code>obj1.equals(obj2)</code>.
+		 */
+		public int compare(Object obj1, Object obj2)
+		{
+			String v1 = obj1.toString();
+			String v2 = obj2.toString();
+			StringTokenizer vt1 = new StringTokenizer(v1,".");
+			StringTokenizer vt2 = new StringTokenizer(v2,".");
+			int comp = 0;
+			
+			while(vt1.hasMoreTokens() && vt2.hasMoreTokens()) {
+				String vt1tok = vt1.nextToken();
+				String vt2tok = vt2.nextToken();
+				try
+				{
+					int i1 = Integer.parseInt(vt1tok);
+					int i2 = Integer.parseInt(vt2tok);
+					comp = i1 < i2 ? -1 : i1 > i2 ? 1 : 0;
+				}
+				catch(NumberFormatException e)
+				{	
+					comp = vt1tok.compareTo(vt2tok);
+				}
+				if(comp != 0)
+					return comp;
+			}
+			
+			return vt1.hasMoreTokens() ? 1 
+				: vt2.hasMoreTokens() ? -1 : 0;
+		}
+	}
+
+	/**
+	 * Helper function to compare two version strings, using the 
+	 * VersionCompare class.
+	 * @param version1 the first version string
+	 * @param version2 the second version string
+	 * @return a negative value, if <code>version1 < version2</code>, 
+	 *         a positive value, if <code>version1 > version2</code>,
+	 *         0, if <code>version1.equals(version2)</code>.
+	 */
+	public static int compareVersions(String version1, String version2) {
+		VersionCompare comparator = new VersionCompare();
+		return comparator.compare(version1,version2);
+	}
+	
+	
+	/**
 	 * Converts an internal version number (build) into a
 	 * `human-readable' form.
 	 * @param build The build
@@ -496,6 +563,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/02/16 05:51:20  sp
+ * Misc updates, dirk's changes integrated
+ *
  * Revision 1.25  1999/12/19 11:14:28  sp
  * Static abbrev expansion started
  *

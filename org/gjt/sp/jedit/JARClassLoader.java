@@ -234,6 +234,40 @@ public class JARClassLoader extends ClassLoader
 					return false;
 				}
 			}
+			else if(what.equals("plugin"))
+			{
+				int index2 = arg.indexOf(' ');
+				if(index2 == -1)
+				{
+					Log.log(Log.ERROR,this,name 
+						+ " has an invalid dependency: "
+						+ dep + " (version is missing)");
+					return false;
+				}
+				
+				String plugin = arg.substring(0,index2);
+				String needVersion = arg.substring(index2 + 1);
+				String currVersion = jEdit.getProperty("plugin." 
+					+ plugin + ".version");
+				
+				if(currVersion == null)
+				{
+					Log.log(Log.ERROR,this,"No version info"
+						+ " found in plugin " + plugin
+						+ ". Plugin " + name + " needs"
+						+ " version " + needVersion);
+					return false;
+				}
+				
+				if(MiscUtilities.compareVersions(currVersion,
+					needVersion) < 0)
+				{
+					Log.log(Log.ERROR,this,name + " requires"
+						+ " plugin " + plugin + " version "
+						+ needVersion);
+					return false;
+				}
+			}
 			else if(what.equals("class"))
 			{
 				try
@@ -350,6 +384,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  2000/02/16 05:51:20  sp
+ * Misc updates, dirk's changes integrated
+ *
  * Revision 1.27  2000/02/07 06:35:52  sp
  * Options dialog box updates
  *

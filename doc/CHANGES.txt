@@ -2,6 +2,12 @@ JEDIT VERSION HISTORY
 
 * Version 2.3pre6
 
++ New Features
+
+- MiscUtilities.compareVersions() method compares strings of the form
+  XX.YY.ZZ
+- 'plugin <name> <version>' dependency added
+
 + Enhancements
 
 - Plugin Manager now deletes the ZIP files it downloads once they're
