@@ -3,7 +3,7 @@
 ###
 
 ### This is a hack. For it to work, you must first install jEdit using
-### the regular installer, then create a 'dummy' jedit31pre1source.tar.gz
+### the regular installer, then create a 'dummy' jedit31source.tar.gz
 ### file in the /usr/src/redhat/SOURCES directory.
 
 ### To create the RPM, invoke:
@@ -11,17 +11,16 @@
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 3.1pre1
+Version: 3.1
 Release: 1
 # REMIND: bump this with each RPM
-Serial: 10
+Serial: 11
 Copyright: GPL
 Group: Application/Editors
-Source0: http://download.sourceforge.net/jedit/jedit31pre1source.tar.gz
+Source0: http://download.sourceforge.net/jedit/jedit31source.tar.gz
 NoSource: 0
 URL: http://jedit.sourceforge.net
 Packager: Slava Pestov <sp@gjt.org>
-Prefix: /usr
 
 %description
 jEdit is an Open Source, cross platform text editor written in Java. It
@@ -32,29 +31,15 @@ regular expressions, and multiple file search and replace.
 jEdit requires either Java 1.1 with Swing 1.1, or Java 2 to work.
 
 %prep
-rm -f /usr/doc/jedit-3.1pre1
-ln -sf ../share/jedit/3.1pre1/doc /usr/doc/jedit-3.1pre1
+rm -f /usr/doc/jedit-3.1
+ln -sf ../share/jedit/3.1/doc /usr/doc/jedit-3.1
 
 %build
 
 %install
 
-%post
-# Create shell script here
-mkdir -p ${RPM_INSTALL_PREFIX}/bin
-echo "#!/bin/sh" > ${RPM_INSTALL_PREFIX}/bin/jedit
-echo "# Java heap size, in megabytes (see doc/README.txt)" \
-	>> ${RPM_INSTALL_PREFIX}/bin/jedit
-echo "JAVA_HEAP_SIZE=16" >> ${RPM_INSTALL_PREFIX}/bin/jedit
-echo 'exec java -mx${JAVA_HEAP_SIZE}m ${JEDIT} -classpath \
-	"${CLASSPATH}:'${RPM_INSTALL_PREFIX}'/share/jedit/3.1pre1/jedit.jar" \
-	org.gjt.sp.jedit.jEdit $@' >> ${RPM_INSTALL_PREFIX}/bin/jedit
-chmod 755 ${RPM_INSTALL_PREFIX}/bin/jedit
-
-%preun
-rm ${RPM_INSTALL_PREFIX}/bin/jedit
-
 %files
-/usr/doc/jedit-3.1pre1
-%docdir /usr/doc/jedit-3.1pre1/
-/usr/share/jedit/3.1pre1/
+/usr/bin/jedit
+/usr/doc/jedit-3.1
+%docdir /usr/doc/jedit-3.1/
+/usr/share/jedit/3.1/
