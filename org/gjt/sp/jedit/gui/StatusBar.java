@@ -23,73 +23,51 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 
 public class StatusBar extends JPanel
 {
-	public StatusBar(View view)
+	public StatusBar(EditPane editPane)
 	{
-		super(new BorderLayout());
+		super(new BorderLayout(2,0));
+		setBorder(new EmptyBorder(0,1,1,2));
 
-		this.view = view;
-		Border border = new EmptyBorder(2,2,2,2);
+		this.editPane = editPane;
 
-		Font font = new Font("Dialog",Font.BOLD,10); //UIManager.getFont("Label.font");
-		Color color = UIManager.getColor("Button.foreground");
+		Font font = new Font("Dialog",Font.BOLD,10);
+
+		buffers = new JComboBox();
+		buffers.setRenderer(new BufferCellRenderer());
+		buffers.setMaximumRowCount(10);
+		buffers.setFont(font);
+		buffers.addActionListener(new ActionHandler());
+		add(BorderLayout.CENTER,buffers);
 
 		caret = new CaretStatus();
-		caret.setBorder(border);
 		caret.setFont(font);
-		caret.setForeground(color);
-		add(BorderLayout.WEST,caret);
+		add(BorderLayout.EAST,caret);
 
-		statusMessage = new JLabel();
-		statusMessage.setBorder(border);
-		statusMessage.setFont(font);
-		statusMessage.setForeground(color);
-		add(BorderLayout.CENTER,statusMessage);
-
-		Box box = new Box(BoxLayout.X_AXIS);
-
-		ioProgress = new IOProgress();
-		ioProgress.setBorder(border);
-		ioProgress.setFont(font);
-		ioProgress.setForeground(color);
-		box.add(ioProgress);
-
-		bufferStatus = new JLabel();
-		bufferStatus.setBorder(border);
-		box.add(bufferStatus);
-
-		add(BorderLayout.EAST,box);
-
-		updateBufferStatus();
+		updateBuffers();
 	}
 
-	public void showStatus(String message)
+	public void selectBuffer(Buffer buffer)
 	{
-		if(message == null && view.getInputHandler().getMacroRecorder() != null)
-			message = jEdit.getProperty("view.status.recording");
+		buffers.setSelectedItem(buffer);
+	}
 
-		if(message == null)
-		{
-			add(BorderLayout.WEST,caret);
-			statusMessage.setText(view.getBuffer().getPath());
-		}
-		else
-		{
-			remove(caret);
-			statusMessage.setText(message);
-		}
+	public void updateBuffers()
+	{
+		updating = true;
+		buffers.setModel(new DefaultComboBoxModel(jEdit.getBuffers()));
+		buffers.setSelectedItem(editPane.getBuffer());
+		updating = false;
 	}
 
 	public void updateBufferStatus()
 	{
-		bufferStatus.setIcon(view.getBuffer().getIcon());
-		showStatus(null);
+		buffers.repaint();
 	}
 
 	public void updateCaretStatus()
@@ -98,11 +76,49 @@ public class StatusBar extends JPanel
 	}
 
 	// private members
-	private View view;
+	private EditPane editPane;
+	private JComboBox buffers;
 	private CaretStatus caret;
-	private JLabel statusMessage;
-	private JLabel bufferStatus;
-	private IOProgress ioProgress;
+	private boolean updating;
+
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			if(!updating)
+			{
+				Buffer buffer = (Buffer)buffers.getSelectedItem();
+				if(buffer != null)
+					editPane.setBuffer(buffer);
+			}
+		}
+	}
+
+	class BufferCellRenderer extends DefaultListCellRenderer
+	{
+		public Component getListCellRendererComponent(
+			JList list, Object value, int index,
+			boolean isSelected, boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list,null,index,
+				isSelected,cellHasFocus);
+			Buffer buffer = (Buffer)value;
+			if(buffer == null)
+			{
+				setIcon(null);
+				setText(null);
+			}
+			else
+			{
+				setIcon(buffer.getIcon());
+				setText(buffer.getName() + " ("
+					+ buffer.getVFS().getParentOfPath(
+					buffer.getPath()) + ")");
+				return this;
+			}
+			return this;
+		}
+	}
 
 	class CaretStatus extends JComponent
 	{
@@ -115,24 +131,23 @@ public class StatusBar extends JPanel
 
 		public void paintComponent(Graphics g)
 		{
+			if(!editPane.getBuffer().isLoaded())
+				return;
+
 			FontMetrics fm = g.getFontMetrics();
 
-			JEditTextArea textArea = view.getTextArea();
+			JEditTextArea textArea = editPane.getTextArea();
 			int dot = textArea.getCaretPosition();
 
 			int currLine = textArea.getCaretLine();
 			int start = textArea.getLineStartOffset(currLine);
 			int numLines = textArea.getLineCount();
 
-			String str = ("col " + ((dot - start) + 1) + " line "
-				+ (currLine + 1) + "/"
-				+ numLines + " "
-				+ (((currLine + 1) * 100) / numLines) + "%");
+			String str = ((dot - start) + 1) + " : " + (currLine + 1)
+				+ " / " + numLines;
 
-			Insets insets = CaretStatus.this.getBorder()
-				.getBorderInsets(this);
-			int offx = insets.left;
-			g.drawString(str,insets.left,(CaretStatus.this.getHeight()
+			g.drawString(str,CaretStatus.this.getWidth()
+				- fm.stringWidth(str),(CaretStatus.this.getHeight() 
 				+ fm.getAscent()) / 2 - 1);
 		}
 
@@ -140,107 +155,9 @@ public class StatusBar extends JPanel
 		{
 			FontMetrics fm = CaretStatus.this.getToolkit()
 				.getFontMetrics(CaretStatus.this.getFont());
-			Insets insets = CaretStatus.this.getBorder()
-				.getBorderInsets(this);
 
-			return new Dimension(fm.stringWidth("col 123 line 1234"
-				+ " / 1234 100%"),fm.getHeight() + insets.top
-				+ insets.bottom);
-		}
-
-		public Dimension getMaximumSize()
-		{
-			return getPreferredSize();
-		}
-	}
-
-	class IOProgress extends JComponent implements WorkThreadProgressListener
-	{
-		IOProgress()
-		{
-			IOProgress.this.setDoubleBuffered(true);
-			IOProgress.this.setForeground(UIManager.getColor("Label.foreground"));
-			IOProgress.this.setBackground(UIManager.getColor("Label.background"));
-		}
-
-		public void addNotify()
-		{
-			super.addNotify();
-			VFSManager.getIOThreadPool().addProgressListener(this);
-		}
-
-		public void removeNotify()
-		{
-			super.removeNotify();
-			VFSManager.getIOThreadPool().removeProgressListener(this);
-		}
-
-		public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
-		{
-			IOProgress.this.repaint();
-		}
-
-		public void paintComponent(Graphics g)
-		{
-			WorkThreadPool ioThreadPool = VFSManager.getIOThreadPool();
-			if(ioThreadPool.getThreadCount() == 0)
-				return;
-
-			FontMetrics fm = g.getFontMetrics();
-
-			JEditTextArea textArea = view.getTextArea();
-			int dot = textArea.getCaretPosition();
-
-			int currLine = textArea.getCaretLine();
-			int start = textArea.getLineStartOffset(currLine);
-			int numLines = textArea.getLineCount();
-
-			String str = String.valueOf(ioThreadPool.getRequestCount());
-
-			Insets insets = IOProgress.this.getBorder()
-				.getBorderInsets(this);
-			int offx = IOProgress.this.getWidth() - insets.right
-				- fm.stringWidth(str);
-			g.drawString(str,offx,(IOProgress.this.getHeight()
-				+ fm.getAscent()) / 2 - 1);
-
-			int progressHeight = (IOProgress.this.getHeight()
-				- insets.top - insets.bottom)
-				/ ioThreadPool.getThreadCount();
-			int progressWidth = IOProgress.this.getWidth() - insets.left
-				- insets.right - fm.stringWidth(str);
-
-			for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
-			{
-				WorkThread thread = ioThreadPool.getThread(i);
-				int max = thread.getProgressMaximum();
-				if(!thread.isRequestRunning() || max == 0)
-					continue;
-
-				double progressRatio = ((double)thread
-					.getProgressValue() / max);
-
-				// when loading gzip files, for example,
-				// progressValue (data read) can be larger
-				// than progressMaximum (file size)
-				progressRatio = Math.min(progressRatio,1.0);
-
-				g.fillRect(insets.left,insets.top
-					+ i * progressHeight,
-					(int)(progressRatio * progressWidth),
-					progressHeight);
-			}
-		}
-
-		public Dimension getPreferredSize()
-		{
-			FontMetrics fm = IOProgress.this.getToolkit()
-				.getFontMetrics(IOProgress.this.getFont());
-			Insets insets = IOProgress.this.getBorder()
-				.getBorderInsets(this);
-
-			return new Dimension(40,fm.getHeight() + insets.top
-				+ insets.bottom);
+			return new Dimension(fm.stringWidth("99 : 9999 / 9999"),
+				fm.getHeight());
 		}
 
 		public Dimension getMaximumSize()
@@ -253,6 +170,9 @@ public class StatusBar extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.9  2000/10/15 04:10:34  sp
  * bug fixes
  *

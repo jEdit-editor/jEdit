@@ -57,8 +57,8 @@ public class DockingOptionPane extends AbstractOptionPane
 
 		// reuse properties defined by the general option pane
 		String[] positions = {
-			jEdit.getProperty("options.general.bufferTabsPos.top"),
-			jEdit.getProperty("options.general.bufferTabsPos.bottom"),
+			jEdit.getProperty("options.docking.top"),
+			jEdit.getProperty("options.docking.bottom"),
 		};
 
 		tabsPos = new JComboBox(positions);
@@ -299,6 +299,9 @@ class WindowTableModel extends AbstractTableModel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.2  2000/09/23 03:01:11  sp
  * pre7 yayayay
  *

@@ -1,4 +1,4 @@
-JEDIT 2.6 README
+JEDIT 2.7 README
 
 * About jEdit
 
@@ -105,10 +105,6 @@ actually a Java bug, or a well-known problem.
   anything about this until someone submits code to add composed key
   support to jEdit.
 
-- The buffer tabs component has minor problems with focus handling;
-  jEdit 2.4 fixes most of these, but some remain, especially when
-  working with splits.
-
 - The Swing HTML component used by jEdit's help viewer is very buggy.
   Although recent releases are getting better, it still renders some
   HTML incorrectly and runs very slowly.
@@ -141,11 +137,12 @@ The following people contributed large amounts of code to the jEdit core:
 
 Andre Kaplan - Syntax token background highlighting
 Dirk Moebius - HTTP firewall plugin
-Jason Ginchereau - Buffer tabs code, portions of QuickFile plugin code
-	are used by the VFS browser
+Jason Ginchereau - Portions of QuickFile plugin code are used in the
+	VFS browser
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
 	dialog box, faster literal search, passive mode FTP, many
 	other patches
+Ollie Rutherford - Commands in View->Scrolling menu
 Tal Davidson - Original syntax highlighting engine
 Valery Kondakoff - Old Complete Word command
 

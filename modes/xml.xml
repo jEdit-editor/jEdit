@@ -4,7 +4,6 @@
 
 <MODE NAME="xml">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="XML/SGML" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />

@@ -612,7 +612,6 @@ public class Macros
 		private void dispose()
 		{
 			view.getInputHandler().setMacroRecorder(null);
-			view.showStatus(null);
 			EditBus.removeFromBus(this);
 		}
 	}
@@ -621,6 +620,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.40  2000/10/30 07:14:03  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.39  2000/10/13 06:57:19  sp
  * Edit User/System Macros command, gutter mouse handling improved
  *

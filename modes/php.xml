@@ -4,7 +4,6 @@
 
 <MODE NAME="php">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="PHP" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />

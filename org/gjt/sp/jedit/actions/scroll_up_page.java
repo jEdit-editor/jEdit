@@ -1,6 +1,6 @@
 /*
- * scroll_line.java
- * Copyright (C) 1999 Slava Pestov
+ * scroll_up_page.java
+ * Copyright (C) 2000 Ollie Rutherfurd
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,21 +19,27 @@
 
 package org.gjt.sp.jedit.actions;
 
-import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
-import java.awt.Rectangle;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
-public class scroll_line extends EditAction
+public class scroll_up_page extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
+		int firstLine = textArea.getFirstLine();
+		int visibleLines = textArea.getVisibleLines();
 
-		int line = textArea.getCaretLine();
-		textArea.setFirstLine(Math.max(0,line -
-			textArea.getVisibleLines() / 2));
+		if(firstLine > 0)
+		{
+			firstLine -= visibleLines;
+			textArea.setFirstLine(firstLine > 0 ? firstLine : 0);
+		}
+		else
+		{
+			view.getToolkit().beep();
+		}
 	}
 }

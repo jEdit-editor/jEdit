@@ -4,7 +4,6 @@
 
 <MODE NAME="jmk">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Java Make" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />

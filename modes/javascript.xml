@@ -4,7 +4,6 @@
 <!-- JavaScript mode by Andre Kaplan -->
 <MODE NAME="javascript">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="JavaScript" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<!-- the ; hack is there so that stuff like if(bob) fred();

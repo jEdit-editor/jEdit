@@ -53,22 +53,27 @@ public class CommandLine extends JPanel
 		completionTimer.setRepeats(false);
 
 		Font font = new Font("Dialog",Font.BOLD,10);
+
+		promptLabel = new JLabel();
+		promptLabel.setFont(font);
+		add(BorderLayout.WEST,promptLabel);
+
 		Insets margin = new Insets(0,0,0,0);
 		ActionHandler actionHandler = new ActionHandler();
 		ignoreCase = new JCheckBox(jEdit.getProperty("search.ignoreCase"));
 		ignoreCase.setMnemonic(jEdit.getProperty("search.ignoreCase.mnemonic")
 			.charAt(0));
-		ignoreCase.setFont(font);
 		ignoreCase.setMargin(margin);
 		ignoreCase.setRequestFocusEnabled(false);
 		ignoreCase.addActionListener(actionHandler);
+		ignoreCase.setFont(font);
 		regexp = new JCheckBox(jEdit.getProperty("search.regexp"));
 		regexp.setMnemonic(jEdit.getProperty("search.regexp.mnemonic")
 			.charAt(0));
-		regexp.setFont(font);
 		regexp.setMargin(margin);
 		regexp.setRequestFocusEnabled(false);
 		regexp.addActionListener(actionHandler);
+		regexp.setFont(font);
 
 		searchSettings = new JPanel();
 		searchSettings.setLayout(new BoxLayout(searchSettings,
@@ -100,27 +105,24 @@ public class CommandLine extends JPanel
 
 		if(state == NULL_STATE)
 		{
-			view.showStatus(null);
-			textField.setModel("cli");
+			showPrompt(null);
+			textField.setModel(null);
 		}
 		else if(state == TOPLEVEL_STATE)
 		{
-			view.showStatus(jEdit.getProperty(
-				"view.command-line.top-level"));
-			textField.setModel("cli");
+			showPrompt(jEdit.getProperty("view.command-line.top-level"));
+			textField.setModel(null);
 		}
 		else if(state == REPEAT_STATE)
 		{
-			view.showStatus(jEdit.getProperty(
-				"view.command-line.repeat"));
+			showPrompt(jEdit.getProperty("view.command-line.repeat"));
 			textField.setModel(null);
 		}
 		else if(state == PROMPT_LINE_STATE)
 			textField.setModel("cli.prompt");
 		else if(state == QUICK_SEARCH_STATE)
 		{
-			view.showStatus(jEdit.getProperty(
-				"view.status.quick-search"));
+			showPrompt(jEdit.getProperty("view.status.quick-search"));
 			textField.setModel("find");
 
 			add(BorderLayout.EAST,searchSettings);
@@ -135,8 +137,7 @@ public class CommandLine extends JPanel
 		}
 		else if(state == INCREMENTAL_SEARCH_STATE)
 		{
-			view.showStatus(jEdit.getProperty(
-				"view.status.incremental-search"));
+			showPrompt(jEdit.getProperty("view.status.incremental-search"));
 			textField.setModel("find");
 
 			add(BorderLayout.EAST,searchSettings);
@@ -165,7 +166,7 @@ public class CommandLine extends JPanel
 	 */
 	public void promptOneChar(String prompt, EditAction promptAction)
 	{
-		view.showStatus(prompt);
+		showPrompt(prompt);
 		this.promptAction = promptAction;
 		setState(PROMPT_ONE_CHAR_STATE);
 		textField.requestFocus();
@@ -180,7 +181,7 @@ public class CommandLine extends JPanel
 	 */
 	public void promptLine(String prompt, EditAction promptAction)
 	{
-		view.showStatus(prompt);
+		showPrompt(prompt);
 		this.promptAction = promptAction;
 		setState(PROMPT_LINE_STATE);
 		textField.requestFocus();
@@ -194,6 +195,7 @@ public class CommandLine extends JPanel
 
 	// private members
 	private View view;
+	private JLabel promptLabel;
 	private CLITextField textField;
 	private CompletionWindow window;
 	private EditAction[] actions;
@@ -208,6 +210,20 @@ public class CommandLine extends JPanel
 	private JCheckBox ignoreCase, regexp;
 
 	private int savedRepeatCount;
+
+	private void showPrompt(String prompt)
+	{
+		if(prompt == null)
+		{
+			promptLabel.setText(null);
+			promptLabel.setBorder(null);
+		}
+		else
+		{
+			promptLabel.setText(prompt);
+			promptLabel.setBorder(new EmptyBorder(0,0,0,6));
+		}
+	}
 
 	private void getCompletions(String text)
 	{
@@ -767,6 +783,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.10  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

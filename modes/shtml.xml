@@ -4,7 +4,6 @@
 
 <MODE NAME="shtml">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="SHTML" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{shtml,shtm}" />

@@ -4,7 +4,6 @@
 
 <MODE NAME="macro">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="jEdit Macro" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.macro" />
 	</PROPS>
 	<RULES>

@@ -52,34 +52,6 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Displays the specified string in the status area of this view.
-	 * @param str The string to display
-	 * @since jEdit 2.5pre2
-	 */
-	public void showStatus(String str)
-	{
-		status.showStatus(str);
-	}
-
-	/**
-	 * Updates the status bar.
-	 * @since jEdit 2.5pre3
-	 */
-	public void updateBufferStatus()
-	{
-		status.updateBufferStatus();
-	}
-
-	/**
-	 * Updates the caret status.
-	 * @since jEdit 2.5pre2
-	 */
-	public void updateCaretStatus()
-	{
-		status.updateCaretStatus();
-	}
-
-	/**
 	 * Returns the command line prompt.
 	 * @since jEdit 2.6pre5
 	 */
@@ -406,9 +378,7 @@ public class View extends JFrame implements EBComponent
 
 	public JMenu getMenu(String name)
 	{
-		if(name.equals("buffers"))
-			return buffers;
-		else if(name.equals("recent-files"))
+		if(name.equals("recent-files"))
 			return recent;
 		else if(name.equals("current-directory"))
 			return currentDirectory;
@@ -502,7 +472,6 @@ public class View extends JFrame implements EBComponent
 		dockableWindowManager = new DockableWindowManager(this);
 
 		// Dynamic menus
-		buffers = GUIUtilities.loadMenu(this,"buffers");
 		recent = GUIUtilities.loadMenu(this,"recent-files");
 		currentDirectory = new CurrentDirectoryMenu(this);
 		clearMarker = GUIUtilities.loadMenu(this,"clear-marker");
@@ -513,7 +482,6 @@ public class View extends JFrame implements EBComponent
 
 		editPane = createEditPane(null,buffer);
 
-		updateBuffersMenu();
 		updateMarkerMenus();
 		updateMacrosMenu();
 		updatePluginsMenu();
@@ -521,7 +489,10 @@ public class View extends JFrame implements EBComponent
 
 		EditBus.addToBus(this);
 
-		setJMenuBar(GUIUtilities.loadMenuBar(this,"view.mbar"));
+		JMenuBar menuBar = GUIUtilities.loadMenuBar(this,"view.mbar");
+		menuBar.add(Box.createGlue());
+		menuBar.add(new MiniIOProgress());
+		setJMenuBar(menuBar);
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
 
@@ -533,13 +504,8 @@ public class View extends JFrame implements EBComponent
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
 
-		Box statusBox = new Box(BoxLayout.Y_AXIS);
-		status = new StatusBar(this);
-		statusBox.add(status);
 		commandLine = new CommandLine(this);
-		statusBox.add(commandLine);
-
-		getContentPane().add(BorderLayout.SOUTH,statusBox);
+		getContentPane().add(BorderLayout.SOUTH,commandLine);
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
@@ -564,12 +530,11 @@ public class View extends JFrame implements EBComponent
 
 		// null some variables so that retaining references
 		// to closed views won't hurt as much.
-		buffers = recent = currentDirectory = clearMarker
+		recent = currentDirectory = clearMarker
 			= gotoMarker = macros = plugins = help = null;
 		toolBars = null;
 		toolBar = null;
 		commandLine = null;
-		status = null;
 		splitPane = null;
 		inputHandler = null;
 
@@ -577,8 +542,7 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Updates the title bar and read only status of the text
-	 * area.
+	 * Updates the title bar.
 	 */
 	void updateTitle()
 	{
@@ -602,55 +566,6 @@ public class View extends JFrame implements EBComponent
 				? buffer.getPath() : buffer.getName());
 		}
 		setTitle(title.toString());
-	}
-
-	/**
-	 * Recreates the buffers menu.
-	 */
-	void updateBuffersMenu()
-	{
-		if(jEdit.getBufferCount() == 0)
-		{
-			// if this becomes zero, it is guaranteed that
-			// a new untitled buffer will open again. So
-			// we just ignore this and update the menu
-			// when the untitled buffer comes in
-			return;
-		}
-
-/*
-		// Because the buffers menu contains normal items as
-		// well as dynamically-generated stuff, we are careful
-		// to only remove the dynamic crap here...
-		for(int i = buffers.getMenuComponentCount() - 1; i >= 0; i--)
-		{
-			if(buffers.getMenuComponent(i) instanceof JSeparator)
-				break;
-			else
-				buffers.remove(i);
-		}
-*/
-		buffers.removeAll();
-
-		Buffer[] bufferArray = jEdit.getBuffers();
-		ButtonGroup grp = new ButtonGroup();
-		for(int i = 0; i < bufferArray.length; i++)
-		{
-			Buffer b = bufferArray[i];
-			Object[] args = { b.getName(),
-				new Integer(b.isReadOnly() ? 1: 0),
-				new Integer(b.isDirty() ? 1 : 0),
-				new Integer(b.isNewFile() ? 1 : 0) };
-			JRadioButtonMenuItem menuItem =
-				new JRadioButtonMenuItem(jEdit.getProperty(
-					"view.buffer-label",args),b.getIcon());
-			menuItem.addActionListener(jEdit.getAction("select-buffer"));
-			grp.add(menuItem);
-			menuItem.setActionCommand(b.getPath());
-			if(editPane.getBuffer() == b)
-				menuItem.getModel().setSelected(true);
-			buffers.add(menuItem);
-		}
 	}
 
 	/**
@@ -687,7 +602,6 @@ public class View extends JFrame implements EBComponent
 
 	private DockableWindowManager dockableWindowManager;
 
-	private JMenu buffers;
 	private JMenu recent;
 	private JMenu currentDirectory;
 	private JMenu clearMarker;
@@ -702,7 +616,6 @@ public class View extends JFrame implements EBComponent
 	private EditPane editPane;
 	private JSplitPane splitPane;
 
-	private StatusBar status;
 	private CommandLine commandLine;
 
 	private KeyListener keyEventInterceptor;
@@ -779,7 +692,6 @@ public class View extends JFrame implements EBComponent
 	{
 		EditPane editPane = new EditPane(this,pane,buffer);
 		JEditTextArea textArea = editPane.getTextArea();
-		textArea.addCaretListener(new CaretHandler());
 		textArea.addFocusListener(new FocusHandler());
 		EditBus.send(new EditPaneUpdate(editPane,EditPaneUpdate.CREATED));
 		return editPane;
@@ -790,13 +702,7 @@ public class View extends JFrame implements EBComponent
 		EditPane oldPane = this.editPane;
 		this.editPane = editPane;
 		if(oldPane.getBuffer() != editPane.getBuffer())
-		{
-			updateBuffersMenu();
 			updateMarkerMenus();
-			status.updateBufferStatus();
-		}
-		else
-			status.updateCaretStatus();
 	}
 
 	/**
@@ -955,8 +861,8 @@ public class View extends JFrame implements EBComponent
 			EditPlugin plugin = plugins[i];
 			// don't include broken plugins in list
 			// ... why?
-			if(plugin instanceof EditPlugin.Broken)
-				continue;
+			//if(plugin instanceof EditPlugin.Broken)
+			//	continue;
 
 			String name = plugin.getClassName();
 
@@ -996,25 +902,11 @@ public class View extends JFrame implements EBComponent
 	private void handleBufferUpdate(BufferUpdate msg)
 	{
 		Buffer buffer = msg.getBuffer();
-		if(msg.getWhat() == BufferUpdate.CREATED)
-		{
-			updateBuffersMenu();
-		}
-		else if(msg.getWhat() == BufferUpdate.CLOSED)
-		{
+		if(msg.getWhat() == BufferUpdate.CLOSED)
 			updateRecentMenu();
-			updateBuffersMenu();
-		}
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
-			if(buffer == getBuffer())
-			{
-				status.updateBufferStatus();
-				status.updateCaretStatus();
-			}
-
-
 			if(!buffer.isDirty())
 			{
 				// have to update title after each save
@@ -1029,21 +921,11 @@ public class View extends JFrame implements EBComponent
 					}
 				}
 			}
-
-			updateBuffersMenu();
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
 		{
 			if(buffer == getBuffer())
 				updateMarkerMenus();
-		}
-	}
-
-	class CaretHandler implements CaretListener
-	{
-		public void caretUpdate(CaretEvent evt)
-		{
-			status.updateCaretStatus();
 		}
 	}
 
@@ -1091,6 +973,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.203  2000/10/30 07:14:03  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.202  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

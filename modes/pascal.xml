@@ -6,7 +6,6 @@
      Delphi 3 was used as reference. -->
 <MODE NAME="pascal">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Pascal" />
 		<PROPERTY NAME="commentStart" VALUE="{" />
 		<PROPERTY NAME="commentEnd" VALUE="}" />
 		<PROPERTY NAME="blockComment" VALUE="//" />

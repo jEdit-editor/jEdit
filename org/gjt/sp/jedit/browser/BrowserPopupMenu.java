@@ -30,8 +30,8 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 
 /**
- *
- * @author Jason Ginchereau
+ * @version $Id$
+ * @author Slava Pestov and Jason Ginchereau
  */
 public class BrowserPopupMenu extends JPopupMenu
 {
@@ -79,23 +79,6 @@ public class BrowserPopupMenu extends JPopupMenu
 
 			addSeparator();
 		}
-
-		ButtonGroup grp = new ButtonGroup();
-		JRadioButtonMenuItem list = new JRadioButtonMenuItem(
-			jEdit.getProperty("vfs.browser.menu.list.label"));
-		grp.add(list);
-		list.setActionCommand("list");
-		list.setSelected(browser.getBrowserView() instanceof BrowserListView);
-		list.addActionListener(new ActionHandler());
-		add(list);
-
-		JRadioButtonMenuItem tree = new JRadioButtonMenuItem(
-			jEdit.getProperty("vfs.browser.menu.tree.label"));
-		grp.add(tree);
-		tree.setActionCommand("tree");
-		tree.setSelected(browser.getBrowserView() instanceof BrowserTreeView);
-		tree.addActionListener(new ActionHandler());
-		add(tree);
 
 		JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
 			jEdit.getProperty("vfs.browser.menu.show-hidden-files.label"));
@@ -185,10 +168,6 @@ public class BrowserPopupMenu extends JPopupMenu
 				browser.rename(file.path);
 			else if(evt.getActionCommand().equals("delete"))
 				browser.delete(file.deletePath);
-			else if(actionCommand.equals("list"))
-				browser.setBrowserView(new BrowserListView(browser));
-			else if(actionCommand.equals("tree"))
-				browser.setBrowserView(new BrowserTreeView(browser));
 			else if(actionCommand.equals("show-hidden-files"))
 			{
 				browser.setShowHiddenFiles(!browser.getShowHiddenFiles());
@@ -247,6 +226,9 @@ public class BrowserPopupMenu extends JPopupMenu
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.6  2000/10/05 04:30:10  sp
  * *** empty log message ***
  *

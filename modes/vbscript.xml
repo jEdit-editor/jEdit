@@ -5,7 +5,6 @@
 <!-- VBScript mode by Andre Kaplan -->
 <MODE NAME="vbscript">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="VBScript" />
 		<PROPERTY NAME="blockComment" VALUE="'" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{vbs,bas,cls}" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />

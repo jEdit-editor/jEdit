@@ -4,7 +4,6 @@
 
 <MODE NAME="css">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Cascading Style Sheets" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE=" *" />

@@ -5,7 +5,6 @@
 <!-- COBOL mode, by Matthias Schneider -->
 <MODE NAME="cobol">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="COBOL" />
 		<PROPERTY NAME="blockComment" VALUE="*" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.cbl" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />

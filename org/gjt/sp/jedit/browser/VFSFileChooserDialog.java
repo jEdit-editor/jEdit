@@ -62,31 +62,31 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
 		panel.setBorder(new EmptyBorder(12,0,0,0));
 
+		panel.add(new JLabel(jEdit.getProperty("vfs.browser.dialog.filename")));
+		panel.add(Box.createHorizontalStrut(12));
+
+		filenameField = new JTextField(20);
+		filenameField.setText(name);
+		filenameField.addKeyListener(new KeyHandler());
+		Dimension dim = filenameField.getPreferredSize();
+		dim.width = Integer.MAX_VALUE;
+		filenameField.setMaximumSize(dim);
+		Box box = new Box(BoxLayout.Y_AXIS);
+		box.add(Box.createGlue());
+		box.add(filenameField);
+		box.add(Box.createGlue());
+		panel.add(box);
+
+		panel.add(Box.createHorizontalStrut(12));
+
 		if(mode == VFSBrowser.SAVE_DIALOG)
 		{
-			panel.add(new JLabel(jEdit.getProperty("vfs.browser.dialog.filename")));
-			panel.add(Box.createHorizontalStrut(12));
-
-			filenameField = new JTextField(20);
-			filenameField.setText(name);
-			Dimension dim = filenameField.getPreferredSize();
-			dim.width = Integer.MAX_VALUE;
-			filenameField.setMaximumSize(dim);
-			Box box = new Box(BoxLayout.Y_AXIS);
-			box.add(Box.createGlue());
-			box.add(filenameField);
-			box.add(Box.createGlue());
-			panel.add(box);
-
 			GUIUtilities.requestFocus(this,filenameField);
-
-			panel.add(Box.createHorizontalStrut(12));
 		}
 		else
 		{
 			GUIUtilities.requestFocus(this,browser.getBrowserView()
 				.getDefaultFocusComponent());
-			panel.add(Box.createGlue());
 		}
 
 		ok = new JButton(jEdit.getProperty("vfs.browser.dialog."
@@ -120,11 +120,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 	public void ok()
 	{
-		if(filenameField != null)
+		VFS.DirectoryEntry[] files = browser.getSelectedFiles();
+
+		if(files.length == 0)
 		{
 			String directory;
 
-			VFS.DirectoryEntry[] files = browser.getSelectedFiles();
 			if(files.length == 1 && files[0].type == VFS.DirectoryEntry.DIRECTORY)
 				directory = files[0].path;
 			else
@@ -146,10 +147,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 		else
 		{
-			VFS.DirectoryEntry[] files = browser.getSelectedFiles();
-			if(files.length == 0)
-				return;
-
 			for(int i = 0; i < files.length; i++)
 			{
 				VFS.DirectoryEntry file = files[i];
@@ -237,18 +234,24 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		{
 			if(files.length == 0)
 				return;
-
-			if(filenameField != null)
+			else if(files.length == 1)
 			{
+				filenameField.setEnabled(true);
 				VFS.DirectoryEntry file = files[0];
 				if(file.type == VFS.DirectoryEntry.FILE)
 				{
 					String path = file.path;
 					if(path.startsWith(browser.getDirectory()))
 						path = file.name;
-
+	
 					filenameField.setText(path);
 				}
+			}
+			else
+			{
+				filenameField.setEnabled(false);
+				filenameField.setText(jEdit.getProperty(
+					"vfs.browser.dialog.multi-select"));
 			}
 		}
 
@@ -269,11 +272,23 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			ok();
 		}
 	}
+
+	class KeyHandler extends KeyAdapter
+	{
+		public void keyPressed(KeyEvent evt)
+		{
+			System.err.println("yo");
+			browser.getBrowserView().selectNone();
+		}
+	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.12  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *
@@ -303,11 +318,5 @@ public class VFSFileChooserDialog extends EnhancedDialog
  *
  * Revision 1.3  2000/08/01 11:44:15  sp
  * More VFS browser work
- *
- * Revision 1.2  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- * Revision 1.1  2000/07/30 09:04:19  sp
- * More VFS browser hacking
  *
  */

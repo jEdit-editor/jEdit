@@ -1,6 +1,6 @@
 /*
- * insert_literal.java - Action
- * Copyright (C) 1999 Slava Pestov
+ * scroll_down_line.java
+ * Copyright (C) 2000 Ollie Rutherfurd
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,45 +19,26 @@
 
 package org.gjt.sp.jedit.actions;
 
+import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 
-public class insert_literal extends EditAction
+public class scroll_down_line extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
 		JEditTextArea textArea = view.getTextArea();
-		if(!textArea.isEditable())
-		{
-			view.getToolkit().beep();
-			return;
-		}
 
-		String str = evt.getActionCommand();
+		int firstLine = textArea.getFirstLine();
+		int numLines = textArea.getLineCount();
+		int visibleLines = textArea.getVisibleLines();
 
-		if(str == null)
-		{
-			view.getCommandLine().promptOneChar(jEdit.getProperty(
-				"view.status.insert-literal"),this);
-			return;
-		}
+		if(firstLine + visibleLines < numLines)
+			textArea.setFirstLine(firstLine + 1);
 		else
-		{
-			int repeatCount = view.getInputHandler().getRepeatCount();
+			view.getToolkit().beep();
 
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < repeatCount; i++)
-				buf.append(str);
-			textArea.overwriteSetSelectedText(buf.toString());
-		}
-	}
-
-	public boolean isRepeatable()
-	{
-		return false;
 	}
 }

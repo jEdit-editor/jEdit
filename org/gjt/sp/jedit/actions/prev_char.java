@@ -41,6 +41,13 @@ public class prev_char extends EditAction
 	{
 		View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
+
+		if(!select && textArea.getSelectionStart() != textArea.getSelectionEnd())
+		{
+			textArea.setCaretPosition(textArea.getSelectionStart());
+			return;
+		}
+
 		int caret = textArea.getCaretPosition();
 		if(caret == 0)
 		{

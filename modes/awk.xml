@@ -5,7 +5,6 @@
 <!-- AWK mode, by Matthias Schneider -->
 <MODE NAME="awk">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="AWK" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="blockComment" VALUE="#" />

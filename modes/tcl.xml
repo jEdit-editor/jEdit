@@ -6,7 +6,6 @@
      cplusplus and pascal modes used as reference. -->
 <MODE NAME="tcl">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="TCL" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />

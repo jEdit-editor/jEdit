@@ -52,21 +52,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.browser.defaultPath"),
 			defaultDirectory);
 
-		/* Default view */
-		String[] views = {
-			jEdit.getProperty("options.browser.defaultView.list"),
-			jEdit.getProperty("options.browser.defaultView.tree")
-		};
-
-		defaultView = new JComboBox(views);
-		String _defaultView = jEdit.getProperty("vfs.browser.defaultView");
-		if("list".equals(_defaultView))
-			defaultView.setSelectedIndex(0);
-		else if("tree".equals(_defaultView))
-			defaultView.setSelectedIndex(1);
-		addComponent(jEdit.getProperty("options.browser.defaultView"),
-			defaultView);
-
 		/* Show hidden files */
 		showHiddenFiles = new JCheckBox(jEdit.getProperty("options.browser"
 			+ ".showHiddenFiles"));
@@ -108,9 +93,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 		String[] dirs = { "buffer", "home", "last" };
 		jEdit.setProperty("vfs.browser.defaultPath",dirs[defaultDirectory
 			.getSelectedIndex()]);
-		String[] views = { "list", "tree" };
-		jEdit.setProperty("vfs.browser.defaultView",views[defaultView
-			.getSelectedIndex()]);
 		jEdit.setBooleanProperty("vfs.browser.showHiddenFiles",
 			showHiddenFiles.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.sortFiles",
@@ -125,7 +107,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 
 	// private members
 	private JComboBox defaultDirectory;
-	private JComboBox defaultView;
 	private JCheckBox showHiddenFiles;
 	private JCheckBox sortFiles;
 	private JCheckBox sortIgnoreCase;
@@ -136,6 +117,9 @@ public class BrowserOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.5  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *

@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
+import org.gjt.sp.jedit.syntax.XModeHandler;
 import org.gjt.sp.util.Log;
 
 /**
@@ -56,7 +57,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.99.00";
+		return "02.07.01.00";
 	}
 
 	/**
@@ -332,7 +333,7 @@ public class jEdit
 
 		Buffer buffer = openFiles(userDir,args);
 
-		if(bufferCount == 0 && settingsDirectory != null)
+		if(bufferCount == 0)
 		{
 			// don't load default session when in background mode
 			if(defaultSession)
@@ -478,7 +479,7 @@ public class jEdit
 		 * - if default equals value, ignore
 		 * - if default doesn't equal value, set user
 		 */
-		if(value == null)
+		if(value == null || value.length() == 0)
 		{
 			String prop = (String)defaultProps.get(name);
 			if(prop == null || prop.length() == 0)
@@ -1923,6 +1924,7 @@ public class jEdit
 		addAction("block-comment");
 		addAction("box-comment");
 		addAction("buffer-options");
+		addAction("center-cursor");
 		addAction("clear-directory-cache");
 		addAction("clear-register");
 		addAction("close-all");
@@ -2015,7 +2017,11 @@ public class jEdit
 		addAction("save-as");
 		addAction("save-gutter-size");
 		addAction("save-session");
-		addAction("scroll-line");
+		addAction("scroll-down-line");
+		addAction("scroll-down-page");
+		addAction("scroll-to-current-line");
+		addAction("scroll-up-line");
+		addAction("scroll-up-page");
 		addAction("select-all");
 		addAction("select-block");
 		addAction("select-caret-register");
@@ -2064,7 +2070,6 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.insert_char());
 		addAction(new org.gjt.sp.jedit.actions.play_macro());
 		addAction(new org.gjt.sp.jedit.actions.repeat());
-		addAction(new org.gjt.sp.jedit.actions.select_buffer());
 		addAction(new org.gjt.sp.jedit.actions.set_replace_string());
 		addAction(new org.gjt.sp.jedit.actions.set_search_parameters());
 		addAction(new org.gjt.sp.jedit.actions.set_search_string());
@@ -2375,6 +2380,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.284  2000/10/30 07:14:03  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.283  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

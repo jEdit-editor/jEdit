@@ -94,8 +94,7 @@ public class BufferOptions extends EnhancedDialog
 		for(int i = 0; i < modes.length; i++)
 		{
 			Mode mode = modes[i];
-			modeNames[i] = mode.getName()
-				+ " (" + mode.getProperty("label") + ")";
+			modeNames[i] = mode.getName();
 			if(bufferMode.equals(mode.getName()))
 				index = i;
 		}
@@ -301,6 +300,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.17  2000/07/15 10:10:17  sp
  * improved printing
  *

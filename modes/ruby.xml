@@ -5,7 +5,6 @@
 <!-- Ruby mode by Ian Maclean -->
 <MODE NAME="ruby">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Ruby" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="=begin" />

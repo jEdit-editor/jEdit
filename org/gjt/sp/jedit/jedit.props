@@ -81,12 +81,6 @@ buffer.syntax=true
 # Show toolbar?
 view.showToolbar=true
 
-# Show buffer tabs?
-view.showBufferTabs=true
-
-# Buffer tabs position (1=top, 2=left, 3=bottom, 4=right)
-view.bufferTabsPos=1
-
 # Show full path in title bar?
 view.showFullPath=false
 
@@ -196,19 +190,19 @@ view.docking.borderColor=#ccccff
 view.expandOnInput=false
 
 # Syntax styles
-view.style.comment1=color:#000000 bgColor:#cfcfcf style:i
-view.style.comment2=color:#990033 bgColor:#cfcfcf style:i
-view.style.literal1=color:#650099
-view.style.literal2=color:#650099 style:b
-view.style.keyword1=color:#000000 style:b
-view.style.keyword2=color:#ff00ff
-view.style.keyword3=color:#009600
-view.style.function=color:#990033
-view.style.markup=color:#5e5e5e style:b
-view.style.label=color:#990033 bgColor:#cfcfcf style:b
-view.style.operator=color:#000000 style:b
+view.style.comment1=color:#009900 style:i
+view.style.comment2=color:#990033 style:i
 view.style.digit=color:#009191
+view.style.function=color:#000099
 view.style.invalid=color:#ff0000 style:b
+view.style.keyword1=color:#000000 style:b
+view.style.keyword2=style:b
+view.style.keyword3=style:b
+view.style.label=color:#990033 style:ib
+view.style.literal1=color:#404040
+view.style.literal2=color:#404040
+view.style.markup=color:#5e5e5e style:b
+view.style.operator=style:b
 
 # Docking
 view.docking.alternateLayout=false
@@ -254,5 +248,5 @@ vfs.browser.doubleClickClose=false
 # Can be one of: buffer, home, last
 vfs.browser.defaultPath=buffer
 
-# Can be one of: list or tree
+# Can be either list or tree
 vfs.browser.defaultView=list

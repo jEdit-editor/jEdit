@@ -5,7 +5,6 @@
 <!-- ASP mode by Andre Kaplan -->
 <MODE NAME="asp">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="ASP" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />

@@ -61,7 +61,6 @@ public class record_temp_macro extends EditAction
 		}
 
 		Macros.beginRecording(view,null,buffer);
-		view.showStatus(null);
 	}
 
 	public boolean isRecordable()

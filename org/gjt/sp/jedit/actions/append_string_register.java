@@ -43,8 +43,6 @@ public class append_string_register extends EditAction
 		}
 		else
 		{
-			view.showStatus(null);
-
 			char ch = actionCommand.charAt(0);
 
 			int repeatCount = view.getInputHandler().getRepeatCount();

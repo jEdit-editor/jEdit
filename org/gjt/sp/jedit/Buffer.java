@@ -366,23 +366,20 @@ public class Buffer extends PlainDocument implements EBComponent
 				if(autosaveFile != null)
 					autosaveFile.delete();
 
-				if(rename || oldPath.equals(getPath()))
-				{
-					setFlag(AUTOSAVE_DIRTY,false);
-					setFlag(READ_ONLY,false);
-					setFlag(NEW_FILE,false);
-					setFlag(UNTITLED,false);
-					setFlag(DIRTY,false);
-					setFlag(SAVING,false);
+				setFlag(AUTOSAVE_DIRTY,false);
+				setFlag(READ_ONLY,false);
+				setFlag(NEW_FILE,false);
+				setFlag(UNTITLED,false);
+				setFlag(DIRTY,false);
+				setFlag(SAVING,false);
 
-					saveUndo = undo.editToBeUndone();
+				saveUndo = undo.editToBeUndone();
 
-					if(!getPath().equals(oldPath))
-						setMode();
+				if(!getPath().equals(oldPath))
+					setMode();
 
-					if(file != null)
-						modTime = file.lastModified();
-				}
+				if(file != null)
+					modTime = file.lastModified();
 
 				if(rename)
 				{
@@ -614,15 +611,12 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public Icon getIcon()
 	{
-		if(getFlag(NEW_FILE))
-		{
-			if(getFlag(DIRTY))
-				return GUIUtilities.NEW_DIRTY_BUFFER_ICON;
-			else
-				return GUIUtilities.NEW_BUFFER_ICON;
-		}
-		else if(getFlag(DIRTY))
+		if(getFlag(DIRTY))
 			return GUIUtilities.DIRTY_BUFFER_ICON;
+		else if(getFlag(READ_ONLY))
+			return GUIUtilities.READ_ONLY_BUFFER_ICON;
+		else if(getFlag(NEW_FILE))
+			return GUIUtilities.NEW_BUFFER_ICON;
 		else
 			return GUIUtilities.NORMAL_BUFFER_ICON;
 	}
@@ -1709,6 +1703,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.182  2000/10/30 07:14:03  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.181  2000/10/12 09:28:26  sp
  * debugging and polish
  *

@@ -4,7 +4,6 @@
 
 <MODE NAME="html">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="HTML" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{html,htm}" />

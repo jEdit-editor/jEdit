@@ -4,7 +4,6 @@
 
 <MODE NAME="patch">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Patch/DIFF" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{diff,patch}" />
 	</PROPS>
 	<RULES>

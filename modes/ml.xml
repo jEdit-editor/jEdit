@@ -4,7 +4,6 @@
 
 <MODE NAME="ml">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="ML" />
 		<PROPERTY NAME="commentStart" VALUE="(*" />
 		<PROPERTY NAME="boxComment" VALUE="*" />
 		<PROPERTY NAME="commentEnd" VALUE="*)" />

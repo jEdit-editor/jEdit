@@ -28,8 +28,7 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 
-public final class FileCellRenderer implements javax.swing.ListCellRenderer,
-	javax.swing.tree.TreeCellRenderer
+public final class FileCellRenderer implements javax.swing.tree.TreeCellRenderer
 {
 	public FileCellRenderer() {
 		font = UIManager.getFont("Tree.font");
@@ -49,38 +48,6 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
 		filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 		loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
-	}
-
-	public Component getListCellRendererComponent(JList list, Object value,
-		int index, boolean sel, boolean focus)
-	{
-		if(listCellRenderer == null)
-		{
-			listCellRenderer = new JLabel();
-			listCellRenderer.setOpaque(true);
-			listCellRenderer.setFont(font);
-		}
-
-		VFS.DirectoryEntry file = (VFS.DirectoryEntry)value;
-		boolean opened = (jEdit.getBuffer(file.path) != null);
-		listCellRenderer.setBorder(opened ? openBorder : closedBorder);
-
-		if(sel)
-		{
-			listCellRenderer.setBackground(list.getSelectionBackground());
-			listCellRenderer.setForeground(list.getSelectionForeground());
-		}
-		else
-		{
-			listCellRenderer.setBackground(list.getBackground());
-			listCellRenderer.setForeground(list.getForeground());
-		}
-
-		listCellRenderer.setIcon(getIconForFile(file));
-		listCellRenderer.setText(file.name);
-		listCellRenderer.setEnabled(list.isEnabled());
-
-		return listCellRenderer;
 	}
 
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
@@ -119,7 +86,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 			treeCellRenderer.setIcon(getIconForFile(file));
 			treeCellRenderer.setText(file.name);
 		}
-		else if(userObject instanceof BrowserTreeView.LoadingPlaceholder)
+		else if(userObject instanceof BrowserView.LoadingPlaceholder)
 		{
 			treeCellRenderer.setIcon(loadingIcon);
 			treeCellRenderer.setText(jEdit.getProperty("vfs.browser.tree.loading"));
@@ -147,7 +114,6 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 	}
 
 	// private members
-	private JLabel listCellRenderer = null;
 	private JLabel treeCellRenderer = null;
 
 	private Font font;
@@ -157,8 +123,8 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 	private Icon filesystemIcon;
 	private Icon loadingIcon;
 
-	private Border closedBorder = new EmptyBorder(0,3,1,0);
-	private Border openBorder = new CompoundBorder(new EmptyBorder(0,1,1,0),
+	private Border closedBorder = new EmptyBorder(0,3,0,0);
+	private Border openBorder = new CompoundBorder(new EmptyBorder(0,1,0,0),
 		new MatteBorder(0,2,0,0,Color.black));
 
 	private Color treeSelectionForeground;
@@ -170,6 +136,9 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.5  2000/09/23 03:01:10  sp
  * pre7 yayayay
  *

@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit;
+package org.gjt.sp.jedit.syntax;
 
 import com.microstar.xml.*;
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ import java.io.FileReader;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Stack;
-import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 public class XModeHandler extends HandlerBase
@@ -551,3 +551,11 @@ public class XModeHandler extends HandlerBase
 		return (String) stateStack.pop();
 	}
 }
+
+/*
+ * Change Log:
+ * $Log$
+ * Revision 1.1  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
+ */

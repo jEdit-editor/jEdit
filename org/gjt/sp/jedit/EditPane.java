@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.*;
@@ -83,26 +84,23 @@ public class EditPane extends JPanel implements EBComponent
 
 		textArea.setBuffer(buffer);
 
-		if(bufferTabs != null)
-			bufferTabs.selectBufferTab(buffer);
-
 		updateTextArea();
-
-		if(!init)
-		{
-			view.updateTitle();
-			view.updateBufferStatus();
-			view.updateCaretStatus();
-			view.updateBuffersMenu();
-			view.updateMarkerMenus();
-
-			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
-				.BUFFER_CHANGED));
-		}
 
 		// only do this if we are the current edit pane
 		if(view.getEditPane() == this)
 			focusOnTextArea();
+
+		if(!init)
+		{
+			view.updateTitle();
+			view.updateMarkerMenus();
+
+			status.selectBuffer(buffer);
+			status.updateCaretStatus();
+
+			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
+				.BUFFER_CHANGED));
+		}
 
 		// Only do this after all I/O requests are complete
 		Runnable runnable = new Runnable()
@@ -221,7 +219,12 @@ public class EditPane extends JPanel implements EBComponent
 
 		EditBus.addToBus(this);
 
+		status = new StatusBar(this);
+		add(BorderLayout.NORTH,status);
+
 		textArea = new JEditTextArea(view);
+		textArea.addCaretListener(new CaretHandler());
+		add(BorderLayout.CENTER,textArea);
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addCustomHighlight(markerHighlight);
 		textArea.getGutter().setContextMenu(GUIUtilities
@@ -230,9 +233,7 @@ public class EditPane extends JPanel implements EBComponent
 		if(editPane != null)
 			initTextArea(editPane.textArea);
 		else
-			initTextArea();
-
-		initBufferTabs();
+			propertiesChanged();
 
 		if(buffer == null)
 		{
@@ -259,17 +260,11 @@ public class EditPane extends JPanel implements EBComponent
 	private View view;
 	private Buffer buffer;
 	private Buffer recentBuffer;
-	private BufferTabs bufferTabs;
+	private StatusBar status;
 	private JEditTextArea textArea;
 	private MarkerHighlight markerHighlight;
 
 	private void propertiesChanged()
-	{
-		initTextArea();
-		initBufferTabs();
-	}
-
-	private void initTextArea()
 	{
 		TextAreaPainter painter = textArea.getPainter();
 
@@ -520,40 +515,6 @@ public class EditPane extends JPanel implements EBComponent
 			.loadPopupMenu("view.context"));
 	}
 
-	private void initBufferTabs()
-	{
-		if(jEdit.getBooleanProperty("view.showBufferTabs"))
-		{
-			if(bufferTabs == null)
-			{
-				bufferTabs = new BufferTabs(this);
-				remove(textArea);
-				add(bufferTabs);
-			}
-
-			bufferTabs.setTabPlacement(Integer.parseInt(
-				jEdit.getProperty("view.bufferTabsPos")));
-			if(buffer != null)
-				bufferTabs.selectBufferTab(buffer);
-		}
-		else
-		{
-			if(bufferTabs != null)
-			{
-				remove(bufferTabs);
-				bufferTabs = null;
-				add(textArea);
-			}
-			else if(textArea.getParent() == null)
-			{
-				add(textArea);
-			}
-		}
-
-		revalidate();
-		repaint();
-	}
-
 	private void updateTextArea()
 	{
 		textArea.setEditable(!buffer.isReadOnly());
@@ -565,21 +526,17 @@ public class EditPane extends JPanel implements EBComponent
 		Buffer _buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.CREATED)
 		{
-			if(bufferTabs != null)
-				bufferTabs.addBufferTab(_buffer);
-
 			/* When closing the last buffer, the BufferUpdate.CLOSED
 			 * handler doesn't call setBuffer(), because null buffers
 			 * are not supported. Instead, it waits for the subsequent
 			 * 'Untitled' file creation. */
 			if(buffer.isClosed())
 				setBuffer(jEdit.getFirstBuffer());
+
+			status.updateBuffers();
 		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
-			if(bufferTabs != null)
-				bufferTabs.removeBufferTab(_buffer);
-
 			if(_buffer == buffer)
 			{
 				Buffer newBuffer = (recentBuffer != null ?
@@ -589,6 +546,8 @@ public class EditPane extends JPanel implements EBComponent
 				else if(jEdit.getBufferCount() != 0)
 					setBuffer(jEdit.getFirstBuffer());
 
+				status.updateBuffers();
+
 				recentBuffer = null;
 			}
 			else if(_buffer == recentBuffer)
@@ -596,16 +555,24 @@ public class EditPane extends JPanel implements EBComponent
 		}
 		else if(msg.getWhat() == BufferUpdate.LOAD_STARTED)
 		{
-			textArea.getPainter().repaint();
+			if(_buffer == buffer)
+			{
+				status.updateCaretStatus();
+				textArea.getPainter().repaint();
+			}
 		}
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
 			if(_buffer == buffer)
+			{
+				status.updateCaretStatus();
 				updateTextArea();
-
-			if(bufferTabs != null)
-				bufferTabs.updateBufferTab(_buffer);
+				if(buffer.isDirty())
+					status.updateBufferStatus();
+				else
+					status.updateBuffers();
+			}
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
 		{
@@ -618,11 +585,22 @@ public class EditPane extends JPanel implements EBComponent
 				textArea.getPainter().repaint();
 		}
 	}
+
+	class CaretHandler implements CaretListener
+	{
+		public void caretUpdate(CaretEvent evt)
+		{
+			status.updateCaretStatus();
+		}
+	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.19  2000/10/30 07:14:03  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.18  2000/09/26 10:19:45  sp
  * Bug fixes, spit and polish
  *
@@ -652,29 +630,5 @@ public class EditPane extends JPanel implements EBComponent
  *
  * Revision 1.9  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
- *
- * Revision 1.8  2000/07/12 09:11:37  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.7  2000/06/24 03:46:48  sp
- * VHDL mode, bug fixing
- *
- * Revision 1.6  2000/05/23 04:04:52  sp
- * Marker highlight updates, next/prev-marker actions
- *
- * Revision 1.5  2000/05/22 12:05:45  sp
- * Markers are highlighted in the gutter, bug fixes
- *
- * Revision 1.4  2000/05/14 10:55:21  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.3  2000/05/12 11:07:38  sp
- * Bug fixes, documentation updates
- *
- * Revision 1.2  2000/05/09 10:51:51  sp
- * New status bar, a few other things
- *
- * Revision 1.1  2000/05/07 05:48:30  sp
- * You can now edit several buffers side-by-side in a split view
  *
  */

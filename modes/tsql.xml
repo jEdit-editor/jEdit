@@ -4,7 +4,6 @@
 
 <MODE NAME="tsql">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Transact-SQL" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE="*" />

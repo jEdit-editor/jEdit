@@ -44,10 +44,13 @@ toggle-rect.shortcut=C+BACK_SLASH
 unsplit.shortcut=C+1
 split-horizontal.shortcut=C+2
 split-vertical.shortcut=C+3
-expand-abbrev.shortcut=C+SLASH
-toggle-gutter.shortcut=C+QUOTE
+expand-abbrev.shortcut=C+SEMICOLON
 quick-search.shortcut=C+COMMA
 incremental-search.shortcut=C+PERIOD
+scroll-up-page.shortcut=A+QUOTE
+scroll-up-line.shortcut=C+QUOTE
+scroll-down-line.shortcut=C+SLASH
+scroll-down-page.shortcut=A+SLASH
 
 # C+e
 replace-all.shortcut=C+e C+a
@@ -55,8 +58,10 @@ box-comment.shortcut=C+e C+b
 wing-comment.shortcut=C+e C+c
 delete-paragraph.shortcut=C+e C+d
 find-selection.shortcut=C+e C+f
+toggle-gutter.shortcut=C+e C+g
 hypersearch-selection.shortcut=C+e C+h
-scroll-line.shortcut=C+e C+j
+center-cursor.shortcut=C+e C+i
+scroll-to-current-line.shortcut=C+e C+j
 block-comment.shortcut=C+e C+k
 select-line-range.shortcut=C+e C+l
 set-marker.shortcut=C+e C+m

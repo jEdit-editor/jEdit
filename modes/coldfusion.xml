@@ -4,7 +4,6 @@
 
 <MODE NAME="coldfusion">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="ColdFusion 4.0" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{cfm,dbm}" />

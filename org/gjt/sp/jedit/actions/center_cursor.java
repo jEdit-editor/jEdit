@@ -1,6 +1,6 @@
 /*
- * select_buffer.java
- * Copyright (C) 1998 Slava Pestov
+ * center_cursor.java
+ * Copyright (C) 2000 Ollie Rutherfurd
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,18 +19,32 @@
 
 package org.gjt.sp.jedit.actions;
 
+import javax.swing.*;
+import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import java.awt.Rectangle;
 import org.gjt.sp.jedit.*;
 
-public class select_buffer extends EditAction
+public class center_cursor extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		getView(evt).setBuffer(jEdit.getBuffer(evt.getActionCommand()));
-	}
+		View view = getView(evt);
+		JEditTextArea textArea = view.getTextArea();
+		Buffer buffer = view.getBuffer();
+		Element map = buffer.getDefaultRootElement();
 
-	public boolean needsActionCommand()
-	{
-		return true;
+		int firstLine = textArea.getFirstLine();
+		int gotoLine = firstLine + (textArea.getVisibleLines() / 2);
+
+		if(gotoLine < 0 || gotoLine >= map.getElementCount())
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
+		Element element = map.getElement(gotoLine);
+		view.getTextArea().setCaretPosition(element.getStartOffset());
 	}
 }

@@ -56,9 +56,9 @@ public class GUIUtilities
 {
 	// some icons
 
-	public static final Icon NEW_DIRTY_BUFFER_ICON;
 	public static final Icon NEW_BUFFER_ICON;
 	public static final Icon DIRTY_BUFFER_ICON;
+	public static final Icon READ_ONLY_BUFFER_ICON;
 	public static final Icon NORMAL_BUFFER_ICON;
 	public static final Icon EDITOR_WINDOW_ICON;
 	public static final Icon PLUGIN_WINDOW_ICON;
@@ -867,9 +867,9 @@ public class GUIUtilities
 	{
 		menus = new Hashtable();
 		icons = new Hashtable();
-		NEW_DIRTY_BUFFER_ICON = loadIcon("new_dirty.gif");
 		NEW_BUFFER_ICON = loadIcon("new.gif");
 		DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
+		READ_ONLY_BUFFER_ICON = loadIcon("readonly.gif");
 		NORMAL_BUFFER_ICON = loadIcon("normal.gif");
 		EDITOR_WINDOW_ICON = loadIcon("jedit_icon1.gif");
 		PLUGIN_WINDOW_ICON = loadIcon("jedit_icon2.gif");
@@ -880,6 +880,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.78  2000/10/30 07:14:03  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.77  2000/09/23 03:01:09  sp
  * pre7 yayayay
  *

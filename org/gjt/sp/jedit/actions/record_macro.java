@@ -70,7 +70,6 @@ public class record_macro extends EditAction
 		}
 
 		Macros.beginRecording(view,name,buffer);
-		view.showStatus(null);
 	}
 
 	public boolean isRecordable()

@@ -588,6 +588,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.22  2000/10/12 09:28:27  sp
  * debugging and polish
  *

@@ -6,7 +6,6 @@
      based on Java mode by Mike Dillon and IDLTokenMarker by Juha Lindfors -->
 <MODE NAME="idl">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="IDL" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

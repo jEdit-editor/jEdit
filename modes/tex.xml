@@ -4,7 +4,6 @@
 
 <MODE NAME="tex">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="TeX" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.{tex,sty,ltx}" />
 		<PROPERTY NAME="blockComment" VALUE="%" />
 	</PROPS>

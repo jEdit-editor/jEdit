@@ -205,17 +205,15 @@ line=indent-lines \
      delete-start-line \
      delete-end-line \
      - \
-     join-lines \
-     scroll-line
+     join-lines
 line.label=Lines
 indent-lines.label=Indent Selected Lines
-scroll-line.label=Scroll to Current Line
+shift-left.label=Shift Indent Left
+shift-right.label=Shift Indent Right
 delete-line.label=Delete Line
 delete-start-line.label=Delete to Start of Line
 delete-end-line.label=Delete to End of Line
 join-lines.label=Join Lines
-shift-left.label=Shift Indent Left
-shift-right.label=Shift Indent Right
 
 ### Paragraph menu
 paragraph=prev-paragraph \
@@ -316,12 +314,6 @@ goto-marker.label=Go to Marker
 view=new-view \
      close-view \
      - \
-     unsplit \
-     split-horizontal \
-     split-vertical \
-     prev-split \
-     next-split \
-     - \
      toggle-gutter \
      toggle-line-numbers \
      save-gutter-size \
@@ -329,23 +321,45 @@ view=new-view \
      prev-buffer \
      next-buffer \
      recent-buffer \
-     %buffers
+     - \
+     %scrolling \
+     %splitting
 view.label=$View
 new-view.label=$New View
 close-view.label=$Close View
-split-horizontal.label=Split $Horizontally
-split-vertical.label=Split $Vertically
-unsplit.label=$Unsplit
-prev-split.label=Go to Previous Split
-next-split.label=Go to Next Split
 toggle-gutter.label=$Gutter Expanded
 toggle-line-numbers.label=$Line Numbering
 prev-buffer.label=Go to Previous Buffer
 next-buffer.label=Go to Next Buffer
 recent-buffer.label=Go to Last $Edited Buffer
 
-### Buffers menu
-buffers.label=Current $Buffer
+splitting=unsplit \
+	  split-horizontal \
+	  split-vertical \
+	  prev-split \
+	  next-split
+splitting.label=Splitting
+split-horizontal.label=Split $Horizontally
+split-vertical.label=Split $Vertically
+unsplit.label=$Unsplit
+prev-split.label=Go to Previous Split
+next-split.label=Go to Next Split
+
+scrolling=scroll-to-current-line \
+	  center-cursor \
+	  - \
+	  scroll-up-line \
+	  scroll-down-line \
+	  - \
+	  scroll-up-page \
+	  scroll-down-page
+scrolling.label=Scrolling
+scroll-to-current-line.label=Scroll to Current Line
+center-cursor.label=Center Cursor on Screen
+scroll-up-line.label=Line Scroll Up
+scroll-down-line.label=Line Scroll Down
+scroll-up-page.label=Page Scroll Up
+scroll-down-page.label=Page Scroll Down
 
 ### Utilities menu
 utils=command-line \
@@ -852,12 +866,6 @@ options.general.ui=User interface
 options.general.lf.note=Restart jEdit for look & feel changes to take effect
 options.general.lf=Swing look & feel:
 options.general.showFullPath=Show full path of buffers in title bar
-options.general.bufferTabsPos=Buffer tabs position:
-options.general.bufferTabsPos.off=off
-options.general.bufferTabsPos.top=top
-options.general.bufferTabsPos.left=left
-options.general.bufferTabsPos.bottom=bottom
-options.general.bufferTabsPos.right=right
 
 options.textarea.label=Text Area
 options.textarea.textarea=Text area
@@ -956,6 +964,8 @@ options.print.margin.right=Right:
 options.docking.label=Docking
 options.docking.layout=Docked window placement:
 options.docking.tabsPos=Docked window tabs position:
+options.docking.top=top
+options.docking.bottom=bottom
 options.docking.title=Window
 options.docking.dockPosition=Docking position
 options.docking.autoOpen=Auto open
@@ -1012,9 +1022,6 @@ options.browser.defaultPath=Default path:
 options.browser.defaultPath.buffer=Parent directory of current buffer
 options.browser.defaultPath.home=Home directory
 options.browser.defaultPath.last=Most recently visited directory
-options.browser.defaultView=Default browser view:
-options.browser.defaultView.list=List
-options.browser.defaultView.tree=Tree
 options.browser.showHiddenFiles=Show hidden files
 options.browser.sortFiles=Sort file list
 options.browser.sortIgnoreCase=Case insensitive sort
@@ -1103,6 +1110,7 @@ vfs.browser.title=File System Browser
 vfs.browser.path=Path:
 vfs.browser.filter=Filter:
 vfs.browser.default-filter=[^#]*[^~#]
+vfs.browser.filter-enabled=true
 
 vfs.browser.up.label=Parent Directory
 vfs.browser.up.icon=Up24.gif
@@ -1127,8 +1135,6 @@ vfs.browser.menu.choose.label=Choose
 vfs.browser.menu.delete.label=Delete Selected File...
 vfs.browser.menu.rename.label=Rename Selected File...
 
-vfs.browser.menu.list.label=View as List
-vfs.browser.menu.tree.label=View as Tree
 vfs.browser.menu.show-hidden-files.label=Show Hidden Files
 vfs.browser.menu.new-directory.label=New Directory...
 vfs.browser.menu.add-to-favorites.label=Add to Favorites
@@ -1163,7 +1169,7 @@ vfs.browser.rename-exists.message=A file named {0} already exists.
 
 vfs.browser.rename-error.title=Rename Error
 vfs.browser.rename-error.message=An error occurred while attempting\n\
-	to rename {0}.
+	to delete {0}.
 
 vfs.browser.mkdir.title=New Directory
 vfs.browser.mkdir.message=Create new directory named:
@@ -1178,6 +1184,7 @@ vfs.ftp.label=Connect to FTP Server...
 vfs.browser.dialog.open=Open
 vfs.browser.dialog.save=Save
 vfs.browser.dialog.filename=File name:
+vfs.browser.dialog.multi-select=Multiple files selected
 
 # Status bar messages
 vfs.status.load=Loading {0}

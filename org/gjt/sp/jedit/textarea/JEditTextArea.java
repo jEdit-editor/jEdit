@@ -1364,9 +1364,6 @@ public class JEditTextArea extends JComponent
 	{
 		super.addNotify();
 
-		if(hasFocus())
-			focusedComponent = this;
-
 		ToolTipManager.sharedInstance().registerComponent(painter);
 		ToolTipManager.sharedInstance().registerComponent(gutter);
 
@@ -1376,13 +1373,7 @@ public class JEditTextArea extends JComponent
 			buffer.addDocumentListener(documentHandler);
 		}
 
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				recalculateVisibleLines();
-			}
-		});
+		recalculateVisibleLines();
 	}
 
 	/**
@@ -1398,9 +1389,7 @@ public class JEditTextArea extends JComponent
 		ToolTipManager.sharedInstance().unregisterComponent(gutter);
 
 		if(focusedComponent == this)
-		{
 			focusedComponent = null;
-		}
 
 		if(documentHandlerInstalled)
 		{
@@ -2235,6 +2224,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.90  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.89  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

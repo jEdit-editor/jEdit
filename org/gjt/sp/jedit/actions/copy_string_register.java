@@ -41,8 +41,6 @@ public class copy_string_register extends EditAction
 		}
 		else
 		{
-			view.showStatus(null);
-
 			char ch = actionCommand.charAt(0);
 			if(ch == '\0')
 			{

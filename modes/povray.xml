@@ -6,7 +6,6 @@
      based on PovrayTokenMarker, by Romain Guy -->
 <MODE NAME="povray">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Povray" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

@@ -21,7 +21,6 @@
 	<PROPS>
 		<PROPERTY NAME="indentOnEnter" VALUE="TRUE" />
 		<PROPERTY NAME="indentPrevLine" VALUE="\s*.{3,}:\s*(#.*)?" />
-		<PROPERTY NAME="label" VALUE="Python" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.py" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />

@@ -10,7 +10,6 @@
 <MODE NAME="haskell">
 
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Haskell" />
 		<PROPERTY NAME="commentStart" VALUE="{-" />
 		<PROPERTY NAME="commentEnd" VALUE="-}" />
 		<PROPERTY NAME="boxComment" VALUE="-" />

@@ -4,7 +4,6 @@
 
 <MODE NAME="jsp">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="JSP" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.jsp" />

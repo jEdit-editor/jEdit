@@ -4,7 +4,6 @@
 
 <MODE NAME="batch">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="MS-DOS Batch File" />
 		<PROPERTY NAME="blockComment" VALUE="rem " />
 		<PROPERTY NAME="filenameGlob" VALUE="*.bat" />
 	</PROPS>

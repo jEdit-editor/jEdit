@@ -244,10 +244,10 @@ public interface DockableWindowContainer
 
 			public void mouseDragged(MouseEvent evt)
 			{
-				if(!canDrag)
-					return;
-
 				collapsed = false;
+
+				if(dragStart == null) // can't happen?
+					return;
 
 				if(position.equals(DockableWindowManager.TOP))
 					dimension = evt.getY() + dragStart.y;
@@ -327,6 +327,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.11  2000/10/12 09:28:27  sp
  * debugging and polish
  *

@@ -163,27 +163,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.general.lf"),
 			lookAndFeel);
 
-		/* Buffer tabs position */
-		String[] positions = {
-			jEdit.getProperty("options.general.bufferTabsPos.off"),
-			jEdit.getProperty("options.general.bufferTabsPos.top"),
-			jEdit.getProperty("options.general.bufferTabsPos.left"),
-			jEdit.getProperty("options.general.bufferTabsPos.bottom"),
-			jEdit.getProperty("options.general.bufferTabsPos.right")
-		};
-
-		bufferTabsPos = new JComboBox(positions);
-		if(!jEdit.getBooleanProperty("view.showBufferTabs"))
-			bufferTabsPos.setSelectedIndex(0);
-		else
-		{
-			bufferTabsPos.setSelectedIndex(Integer.parseInt(jEdit.getProperty(
-				"view.bufferTabsPos")));
-		}
-
-		addComponent(jEdit.getProperty("options.general.bufferTabsPos"),
-			bufferTabsPos);
-
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.general.showFullPath"));
@@ -230,10 +209,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
-		int index = bufferTabsPos.getSelectedIndex();
-		jEdit.setBooleanProperty("view.showBufferTabs",index != 0);
-		if(index != 0)
-			jEdit.setProperty("view.bufferTabsPos",String.valueOf(index));
 		jEdit.setBooleanProperty("view.showFullPath",showFullPath
 			.isSelected());
 	}
@@ -259,13 +234,15 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 	private UIManager.LookAndFeelInfo[] lfs;
 	private JComboBox lookAndFeel;
-	private JComboBox bufferTabsPos;
 	private JCheckBox showFullPath;
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.46  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.45  2000/10/28 00:36:58  sp
  * ML mode, Haskell mode
  *

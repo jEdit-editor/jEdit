@@ -75,6 +75,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 		this.multipleSelection = multipleSelection;
 		this.view = view;
 
+		ActionHandler actionHandler = new ActionHandler();
+
 		Box topBox = new Box(BoxLayout.Y_AXIS);
 		topBox.add(createToolBar());
 
@@ -85,6 +87,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		cons.gridwidth = cons.gridheight = 1;
 		cons.gridx = cons.gridy = 0;
 		cons.fill = GridBagConstraints.BOTH;
+		cons.anchor = GridBagConstraints.EAST;
 		JLabel label = new JLabel(jEdit.getProperty("vfs.browser.path"),
 			SwingConstants.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
@@ -100,24 +103,29 @@ public class VFSBrowser extends JPanel implements EBComponent
 		prefSize.width = 0;
 		pathField.setPreferredSize(prefSize);
 
-		pathField.addActionListener(new ActionHandler());
+		pathField.addActionListener(actionHandler);
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
 
 		layout.setConstraints(pathField,cons);
 		pathAndFilterPanel.add(pathField);
 
-		label = new JLabel(jEdit.getProperty("vfs.browser.filter"),
-			SwingConstants.RIGHT);
-		label.setBorder(new EmptyBorder(0,0,0,12));
+		filterCheckbox = new JCheckBox(jEdit.getProperty("vfs.browser.filter"));
+		filterCheckbox.setMargin(new Insets(0,0,0,0));
+		filterCheckbox.setRequestFocusEnabled(false);
+		filterCheckbox.setBorder(new EmptyBorder(0,0,0,12));
+		filterCheckbox.setSelected(jEdit.getBooleanProperty(
+			"vfs.browser.filter-enabled"));
+		filterCheckbox.setForeground(UIManager.getColor("Label.foreground"));
+		filterCheckbox.addActionListener(actionHandler);
 		cons.gridx = 0;
 		cons.weightx = 0.0f;
 		cons.gridy = 1;
-		layout.setConstraints(label,cons);
-		pathAndFilterPanel.add(label);
+		layout.setConstraints(filterCheckbox,cons);
+		pathAndFilterPanel.add(filterCheckbox);
 
 		filterField = new HistoryTextField("vfs.browser.filter",true);
-		filterField.addActionListener(new ActionHandler());
+		filterField.addActionListener(actionHandler);
 
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
@@ -126,6 +134,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
+
+		add(BorderLayout.CENTER,browserView = new BrowserView(this));
 
 		propertiesChanged();
 
@@ -138,6 +148,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		filterField.setText(filter);
 		filterField.addCurrentToHistory();
+
+		updateFilterEnabled();
 
 		if(path == null)
 		{
@@ -183,6 +195,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 	public void removeNotify()
 	{
 		super.removeNotify();
+		jEdit.setBooleanProperty("vfs.browser.filter-enabled",
+			filterCheckbox.isSelected());
 		EditBus.removeFromBus(this);
 	}
 
@@ -387,20 +401,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		return browserView;
 	}
 
-	public void setBrowserView(BrowserView browserView)
-	{
-		if(this.browserView != null)
-			remove(this.browserView);
-		this.browserView = browserView;
-		add(BorderLayout.CENTER,browserView);
-
-		revalidate();
-
-		// path is null when we are called from the constructor
-		if(path != null)
-			reloadDirectory(false);
-	}
-
 	public VFS.DirectoryEntry[] getSelectedFiles()
 	{
 		return browserView.getSelectedFiles();
@@ -423,6 +423,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			public void run()
 			{
+				boolean filterEnabled = filterCheckbox.isSelected();
+
 				Vector directoryVector = new Vector();
 
 				if(list == null)
@@ -437,6 +439,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 					if(file.hidden && !showHiddenFiles)
 						continue;
 					if(file.type == VFS.DirectoryEntry.FILE
+						&& filterEnabled
 						&& filenameFilter != null
 						&& !filenameFilter.isMatch(file.name))
 						continue;
@@ -566,6 +569,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private View view;
 	private String path;
 	private HistoryTextField pathField;
+	private JCheckBox filterCheckbox;
 	private HistoryTextField filterField;
 	private JButton up, reload, roots, home, synchronize;
 	private BrowserView browserView;
@@ -650,7 +654,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		boolean newSortFiles = jEdit.getBooleanProperty("vfs.browser.sortFiles");
 		boolean newSortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
 		boolean newSortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
-		boolean newDoubleClickClose = jEdit.getBooleanProperty("vfs.browser.doubleClickClose");
+		doubleClickClose = jEdit.getBooleanProperty("vfs.browser.doubleClickClose");
 
 		boolean reload = false;
 
@@ -678,23 +682,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 			reload = true;
 		}
 
-		if(newDoubleClickClose != doubleClickClose)
-		{
-			doubleClickClose = newDoubleClickClose;
-			reload = true;
-		}
-
-		String defaultView = jEdit.getProperty("vfs.browser.defaultView");
-		if(defaultView.equals("tree"))
-		{
-			if(reload || !(browserView instanceof BrowserTreeView))
-				setBrowserView(new BrowserTreeView(this));
-		}
-		else if(defaultView.equals("list"))
-		{
-			if(reload || !(browserView instanceof BrowserListView))
-				setBrowserView(new BrowserListView(this));
-		}
+		if(path != null && reload)
+			reloadDirectory(false);
 	}
 
 	/* We do this stuff because the browser is not able to handle
@@ -713,13 +702,21 @@ public class VFSBrowser extends JPanel implements EBComponent
 		}
 	}
 
+	private void updateFilterEnabled()
+	{
+		filterField.setEnabled(filterCheckbox.isSelected());
+	}
+
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == pathField || source == filterField)
+			if(source == pathField || source == filterField
+				|| source == filterCheckbox)
 			{
+				updateFilterEnabled();
+
 				String path = pathField.getText();
 				if(path != null)
 					setDirectory(path);
@@ -857,6 +854,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.26  2000/10/30 07:14:04  sp
+ * 2.7pre1 branched, GUI improvements
+ *
  * Revision 1.25  2000/10/12 09:28:27  sp
  * debugging and polish
  *
