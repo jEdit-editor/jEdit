@@ -27,6 +27,11 @@ JEDIT 3.2 VERSION HISTORY
   inserted in the wrong place
 - Reverse search didn't work sometimes
 - AltGR key works on JDK 1.4 again
+- The plugin manager now only uses the first three characters of the
+  java.version property when checking plugin dependencies. This solves
+  the problem of the WheelMouse plugin not appearing on JDK 1.3.1, because
+  one version was listed as needing Java >= 1.2, <= 1.3, and the other
+  needing Java >= 1.4.
 
 + API Changes
 

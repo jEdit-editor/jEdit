@@ -29,8 +29,10 @@ public class Install
 	{
 		if(args.length == 0)
 			new SwingInstall();
-		else if(args[0].equals("text"))
+		else if(args.length == 1 && args[0].equals("text"))
 			new ConsoleInstall();
+		else if(args.length == 3 && args[0].equals("auto"))
+			new NonInteractiveInstall(args[1],args[2]);
 		else
 		{
 			System.err.println("Usage:");

@@ -10,14 +10,14 @@ jar_name = "LatestVersion";
 ##
 # javac executable and args
 ##
-javac_bin = "javac";
-javac_opts = "-deprecation";
+#javac_bin = "javac";
+#javac_opts = "-deprecation";
 
-#javac_bin = "jikes";
-#javac_opts = "-g" "-deprecation" "+E";
+javac_bin = "jikes";
+javac_opts = "-deprecation" "+E";
 
 # set up the class path
-new_class_path = "../../jedit.jar;../EditBus.jar;.";
+new_class_path = "../../jedit.jar;.";
 old_class_path = (getprop "java.class.path");
 
 # concatenate the old and new class paths

@@ -2,9 +2,8 @@ TO DO
 
 + before 3.2final:
 
-- release console 3.0, errorlist 1.1.1, editbus 1.1, charactermap 1.0.3
+- release console 3.0, errorlist 1.1.1, editbus 1.1
 - formatting problems in user's guide in table cells
-- wheelmouse not in list
 
 + next major release (4.0):
 

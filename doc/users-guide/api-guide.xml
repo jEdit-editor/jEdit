@@ -1832,16 +1832,16 @@ JEditTextArea</title>
       <funcdef>public void <function>userInput</function></funcdef>
       <paramdef>char <parameter>ch</parameter></paramdef>
     </funcprototype>
-    <para>
-      Inserts the character at the editing caret as if it were typed at
-      the keyboard (keyboard input is actually passed to this method).
-      Unlike <function>setSelectedText()</function> or
-      <function>insertString()</function> in the
-      <classname>Buffer</classname> class, this method triggers
-      any active text formatting features such as auto indent,
-      abbreviation expansion and word wrap.
-    </para>
   </funcsynopsis>
+  <para>
+     Inserts the character at the caret position as if it were typed at
+     the keyboard (keyboard input is actually passed to this method).
+     Unlike <function>setSelectedText()</function>, or
+     <function>insertString()</function> in the
+     <classname>Buffer</classname> class, this method triggers
+     any active text formatting features such as auto indent,
+     abbreviation expansion and word wrap.
+  </para>
 </listitem>
 
 </itemizedlist>

@@ -6,11 +6,11 @@
 VERSION    = "0.2.1";
 NAME       = "Firewall";
 
-#javac      = "jikes" "+E";
-javac      = "javac"; 
-javaflags  = "-g" "-deprecation"
+javac      = "jikes" "+E";
+#javac      = "javac"; 
+javaflags  = "-deprecation"
              "-classpath" (cat (getprop "java.class.path")
-             ";../../jedit.jar;../EditBus.jar;.");
+             ";../../jedit.jar;.");
 
 # directories to compile and include
 pkgs       = ".";

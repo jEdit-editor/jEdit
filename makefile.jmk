@@ -1,6 +1,12 @@
 # A makefile for jEdit
 #
-# To recompile jEdit, start jmk in the root of the jEdit directory structure.
+# Recompilation of jEdit is a bit involved. Basically, you need to run jmk
+# in the following directories, in this order:
+#
+# <root>/doc/users-guide, target htmldocs
+# <root>, default target
+# <root>/jars/LatestVersion, default target
+# <root>/jars/Firewall, default target
 #
 # jEdit buffer-local properties:
 # :indentSize=4:noTabs=true:

@@ -298,7 +298,7 @@ class PluginList
 			}
 			else if(what.equals("jdk"))
 			{
-				String javaVersion = System.getProperty("java.version");
+				String javaVersion = System.getProperty("java.version").substring(0,3);
 
 				if((from == null || MiscUtilities.compareVersions(
 					javaVersion,from) >= 0)
