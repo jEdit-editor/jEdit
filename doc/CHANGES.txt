@@ -19,6 +19,8 @@ JEDIT VERSION HISTORY
 - XMode documentation
 - xmode.dtd is actually a valid DTD now (Mike Dillon)
 - Documentation updates
+- Go to Line and Select Line Range commands moved to top level of Edit menu for
+  easier access
 
 + Bug Fixes
 

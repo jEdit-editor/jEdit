@@ -44,11 +44,7 @@ Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
 * Documentation
 
-jEdit's documentation is written in SGML-DocBook, which is a generic
-documentation format that can be coverted to HTML, PDF, PostScript, and
-so on.
-
-An HTML version of the documentation is included in the base jEdit
+An HTML version of the jEdit user's guide is included in the base jEdit
 distribution; a pretty PDF version can be obtained from
 <http://jedit.sourceforge.net/download.php>.
 
@@ -66,14 +62,18 @@ actually a Java bug, or a well-known problem.
   entirely Sun's fault. Their printing implementation is very buggy.
 
 - Some Java versions, especially early Java 2 versions and some Linux
-  ports, have broken keybinding handling; Alt-key mnemonics might not
+  ports, have broken key binding handling; Alt-key mnemonics might not
   work, some keystrokes might insert garbage into the text area, etc.
   The more recent Java versions fix these problems, so upgrade if you
-  experiece them.
+  experience them.
 
 - The AltGR key doesn't work for some people. I'm not sure if this is a
-  jEdit bug, a Java bug or both. Allegedly JDK 1.1.8 and 1.2.2 fix these
-  problems, but I'm not sure.
+  jEdit bug, a Java bug or both. Allegedly Java 1.1.8 and 1.2.2 fix
+  these problems, but I'm not sure.
+
+- The buffer tabs component has problems with focus handling sometimes;
+  you might notice that the caret stops flashing after you save a
+  buffer, for example. This is mostly caused by Java and Swing problems.
 
 - The Swing HTML component used by jEdit's help viewer is very buggy.
   Although it has been getting better with recent Swing releases, it

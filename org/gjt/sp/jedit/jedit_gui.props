@@ -125,6 +125,9 @@ edit=undo \
      complete-word \
      expand-abbrev \
      - \
+     goto-line \
+     select-line-range \
+     - \
      %select \
      %line \
      %paragraph \
@@ -142,6 +145,8 @@ select-none.label=Select $None
 word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
+goto-line.label=$Go to Line...
+select-line-range.label=$Select Line Range...
 
 ### Selection menu
 select=select-word \
@@ -171,10 +176,7 @@ box-comment.label=Box Comment
 block-comment.label=Block Comment
 
 ### Line menu
-line=goto-line \
-     select-line-range \
-     - \
-     indent-lines \
+line=indent-lines \
      goto-end-indent \
      shift-left \
      shift-right \
@@ -186,8 +188,6 @@ line=goto-line \
      join-lines \
      scroll-line
 line.label=Lines
-goto-line.label=Go to Line...
-select-line-range.label=Select Line Range...
 indent-lines.label=Indent Selected Lines
 goto-end-indent.label=Go to End of Indent
 scroll-line.label=Scroll to Current Line

@@ -1,6 +1,46 @@
 MAJOR CHANGES IN JEDIT 2.4 SINCE 2.3
 
-Will need to be written before 2.4final.
+* Major syntax highlighting changes
+
+The XMode syntax highlighting system, which allows syntax modes to be
+specified using XML, has been integrated into the jEdit core. It makes
+writing and debugging syntax modes much easier than before. Many more
+modes are now included with jEdit (over 30) and the existing modes are
+much more comprehensive. XMode was contributed by Mike Dillon
+<mdillon@gjt.org>.
+
+Also, syntax tokens can now be drawn with a background color other than
+the default. This can make certain tokens stand out more. The code to
+do this was contributed by Andre Kaplan <ak@village.uunet.be>.
+
+* Search and replace improvements
+
+A new 'search bar' with incremental search support replaces the find
+field on the tool bar. In the 'Multifile Search Options' dialog box,
+the default value of the 'directory' field is now set to the current
+buffer's parent directory, and the value of the 'filter' field is set
+to the current buffer's filename extension.
+
+* Autosave recovery
+
+If you open a file which has autosaved changes, you will be given the
+choice to load the autosave file and either save or discard the
+autosaved changes.
+
+* Miscellaneous improvements
+
+- It is now possible to have more than one split in a view
+- A keystroke switches between the current and most recently edited
+  buffer (C+e TAB)
+- If you try to open a file which is already open jEdit will offer to
+  reload it from disk
+- jEdit now checks if the current buffer has changed on disk when it
+  gains focus
+- The 'Complete Word' command now lists all possible completions in a
+  dialog box instead of cycling through them
+- The 'Buffer Options' dialog box now displays the buffer-local
+  properties corresponding to the currently selected settings
+- The current line is highlighted in the gutter
 
 -- Slava Pestov
 <sp@gjt.org>
