@@ -859,7 +859,8 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		newFile(view);
+		if(!isExiting)
+			newFile(view);
 
 		return true;
 	}
@@ -1778,6 +1779,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.183  2000/01/28 00:25:47  sp
+ * Minor tweak
+ *
  * Revision 1.182  2000/01/28 00:20:58  sp
  * Lots of stuff
  *
