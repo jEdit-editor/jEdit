@@ -609,6 +609,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int lineStart = textArea.getLineStartOffset(physicalLine);
 
 			int x1, x2;
+
 			if(textArea.isSelectionRectangular())
 			{
 				int lineLen = textArea.getLineLength(physicalLine);
@@ -618,8 +619,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				x2 = textArea.offsetToX(physicalLine,Math.min(lineLen,
 					selectionEnd - textArea.getLineStartOffset(
 					selectionEndLine)));
-				if(x1 == x2)
-					x2++;
+
+				if(x1 > x2)
+				{
+					int tmp = x2;
+					x2 = x1;
+					x1 = tmp;
+				}
 			}
 			else if(selectionStartLine == selectionEndLine)
 			{
@@ -646,9 +652,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				x2 = getWidth();
 			}
 
+			if(x1 == x2)
+				x2++;
+
 			// "inlined" min/max()
-			gfx.fillRect(x1 > x2 ? x2 : x1,y,x1 > x2 ?
-				(x1 - x2) : (x2 - x1),height);
+			gfx.fillRect(x1,y,x2 - x1,height);
 		}
 
 	}

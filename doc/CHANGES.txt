@@ -44,3 +44,4 @@ JEDIT 3.1 VERSION HISTORY
   actions didn't work
 - Fixed an obscure roundoff error in the gutter code that could cause
   line numbers to not be repainted fully
+- Mixed paths (eg, C:\files\project1/file) didn't work correctly on Windows

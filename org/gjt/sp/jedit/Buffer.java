@@ -1948,6 +1948,8 @@ public class Buffer extends PlainDocument implements EBComponent
 			return info.foldLevel;
 		else
 		{
+			boolean changed = false;
+
 			// make this configurable!
 			int tabSize = getTabSize();
 
@@ -1978,6 +1980,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 			else
 			{
+				// this is so that lines consisting of only
+				// whitespace don't cause disruptions
+				boolean seenNonWhitespace = false;
 loop:				for(int i = 0; i < count; i++)
 				{
 					switch(seg.array[offset + i])
@@ -1989,14 +1994,27 @@ loop:				for(int i = 0; i < count; i++)
 						whitespace += (tabSize - whitespace % tabSize);
 						break;
 					default:
+						seenNonWhitespace = true;
 						break loop;
 					}
 				}
+
+				if(!seenNonWhitespace)
+				{
+					if(line != 0)
+						whitespace = getFoldLevel(line - 1);
+					else
+						whitespace = 0;
+				}
 			}
 
-			info.foldLevel = whitespace;
-			info.foldLevelValid = true;
+			if(info.foldLevel != whitespace)
+			{
+				info.foldLevel = whitespace;
+				fireFoldLevelsChanged(line - 1,line - 1);
+			}
 
+			info.foldLevelValid = true;
 			return whitespace;
 		}
 	}
@@ -2027,8 +2045,39 @@ loop:				for(int i = 0; i < count; i++)
 				return i;
 		}
 
-		// no, not virtualLineCount - 1!
 		return virtualLineCount;
+
+		/* int start = 0;
+		int end = virtualLineCount - 1;
+
+		// funky hack
+		if(lineNo > virtualLines[end])
+			return virtualLineCount;
+
+		// funky binary search
+		for(;;)
+		{
+			switch(end - start)
+			{
+			case 0:
+				return start;
+			case 1:
+				if(virtualLines[start] < lineNo)
+					return end;
+				else
+					return start;
+			default:
+				int pivot = start + (end - start) / 2;
+				int value = virtualLines[pivot];
+				if(value == lineNo)
+					return pivot;
+				else if(value < lineNo)
+					start = pivot + 1;
+				else
+					end = pivot - 1;
+				break;
+			}
+		} */
 	}
 
 	/**
@@ -2090,35 +2139,37 @@ loop:				for(int i = 0; i < count; i++)
 			}
 		}
 
-		for(int i = start; i <= end; i++)
-			lineInfo[i].visible = false;
-
-		System.err.println("collapse from " + start + " to " + end);
-
 		int delta = (end - start + 1);
+
+		for(int i = start; i <= end; i++)
+		{
+			LineInfo info = lineInfo[i];
+			if(info.visible)
+				info.visible = false;
+			else
+				delta--;
+		}
+
+		//System.err.println("collapse from " + start + " to " + end);
 
 		// I forgot to do this at first and it took me ages to
 		// figure out
 		start = physicalToVirtual(start);
 
-		System.err.println("virtualized start is " + start);
+		//System.err.println("virtualized start is " + start);
 
 		// update virtual -> physical map
 		virtualLineCount -= delta;
 
-		System.err.println("new virtual line count is " + virtualLineCount);
+		//System.err.println("new virtual line count is " + virtualLineCount);
 
 		System.arraycopy(virtualLines,start + delta,virtualLines,start,
 			virtualLineCount);
 
-		System.err.println("copy from " + (start + delta)
-			+ " to " + start);
+		//System.err.println("copy from " + (start + delta)
+		//	+ " to " + start);
 
-		// this sucks how we use document changed events
-		// to notify that the fold structure changed...
-		// but then, it does make sense
-		fireChangedUpdate(new DefaultDocumentEvent(0,0,
-			DocumentEvent.EventType.CHANGE));
+		fireFoldStructureChanged();
 
 		return true;
 	}
@@ -2188,6 +2239,7 @@ loop:				for(int i = 0; i < count; i++)
 		int delta = (end - start + 1);
 
 		System.err.println("expand from " + start + " to " + end);
+
 		// I forgot to do this at first and it took me ages to
 		// figure out
 		int virtualLine = physicalToVirtual(start);
@@ -2220,13 +2272,29 @@ loop:				for(int i = 0; i < count; i++)
 			virtualLines[virtualLine + j] = start + j;
 		}
 
-		// this sucks how we use document changed events
-		// to notify that the fold structure changed...
-		// but then, it does make sense
-		fireChangedUpdate(new DefaultDocumentEvent(0,0,
-			DocumentEvent.EventType.CHANGE));
+		fireFoldStructureChanged();
 
 		return true;
+	}
+
+	/**
+	 * Adds a fold listener.
+	 * @param listener The listener
+	 * @since jEdit 3.1pre1
+	 */
+	public void addFoldListener(FoldListener l)
+	{
+		foldListeners.addElement(l);
+	}
+
+	/**
+	 * Removes a fold listener.
+	 * @param listener The listener
+	 * @since jEdit 3.1pre1
+	 */
+	public void removeFoldListener(FoldListener l)
+	{
+		foldListeners.removeElement(l);
 	}
 
 	/**
@@ -2418,6 +2486,7 @@ loop:				for(int i = 0; i < count; i++)
 
 		virtualLineCount = 1;
 		virtualLines = new int[1];
+		foldListeners = new Vector();
 
 		seg = new Segment();
 		lastTokenizedLine = -1;
@@ -2603,6 +2672,7 @@ loop:				for(int i = 0; i < count; i++)
 	// Folding
 	private int[] virtualLines;
 	private int virtualLineCount;
+	private Vector foldListeners;
 
 	private void setPath(String path)
 	{
@@ -2857,7 +2927,7 @@ loop:				for(int i = 0; i < count; i++)
 			virtualLineCount -= lines;
 
 			len = virtualLine + lines;
-			System.err.println("copy from " + len + " to " + virtualLine);
+			//System.err.println("copy from " + len + " to " + virtualLine);
 			System.arraycopy(virtualLines,len,virtualLines,
 				virtualLine,virtualLines.length - len);
 		}
@@ -2866,7 +2936,7 @@ loop:				for(int i = 0; i < count; i++)
 
 		for(int i = virtualLine; i < virtualLineCount; i++)
 		{
-			System.err.println(i + " maps to " + (virtualLines[i] - lines));
+			//System.err.println(i + " maps to " + (virtualLines[i] - lines));
 			virtualLines[i] -= lines;
 		}
 	}
@@ -2903,6 +2973,34 @@ loop:				for(int i = 0; i < count; i++)
 			int ntabs = ((int)x - leftMargin) / tabSize;
 			return (ntabs + 1) * tabSize + leftMargin;
 		}
+	}
+
+	private void fireFoldLevelsChanged(int firstLine, int lastLine)
+	{
+		for(int i = 0; i < foldListeners.size(); i++)
+		{
+			((FoldListener)foldListeners.elementAt(i))
+				.foldLevelsChanged(firstLine,lastLine);
+		}
+	}
+
+	private void fireFoldStructureChanged()
+	{
+		for(int i = 0; i < foldListeners.size(); i++)
+		{
+			((FoldListener)foldListeners.elementAt(i))
+				.foldStructureChanged();
+		}
+	}
+
+	/**
+	 * Only useful for the text area.
+	 */
+	public static interface FoldListener
+	{
+		void foldLevelsChanged(int firstLine, int lastLine);
+
+		void foldStructureChanged();
 	}
 
 	/**
@@ -3010,7 +3108,7 @@ loop:				for(int i = 0; i < count; i++)
 				String value = jEdit.getProperty("buffer." + key);
 				if(value == null)
 					return null;
-	
+
 				// Try returning it as an integer first
 				try
 				{

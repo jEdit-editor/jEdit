@@ -78,6 +78,7 @@ public class JEditTextArea extends JComponent
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(view,this);
 		documentHandler = new DocumentHandler();
+		foldHandler = new FoldHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
 		bracketLine = bracketPosition = -1;
@@ -720,10 +721,14 @@ public class JEditTextArea extends JComponent
 		if(this.buffer == buffer)
 			return;
 		if(this.buffer != null)
+		{
 			this.buffer.removeDocumentListener(documentHandler);
+			this.buffer.removeFoldListener(foldHandler);
+		}
 		this.buffer = buffer;
 
 		buffer.addDocumentListener(documentHandler);
+		buffer.addFoldListener(foldHandler);
 		documentHandlerInstalled = true;
 
 		maxHorizontalScrollWidth = 0;
@@ -3248,6 +3253,7 @@ forward_scan:		do
 		{
 			documentHandlerInstalled = true;
 			buffer.addDocumentListener(documentHandler);
+			buffer.addFoldListener(foldHandler);
 		}
 
 		recalculateVisibleLines();
@@ -3271,6 +3277,7 @@ forward_scan:		do
 		if(documentHandlerInstalled)
 		{
 			buffer.removeDocumentListener(documentHandler);
+			buffer.removeFoldListener(foldHandler);
 			documentHandlerInstalled = false;
 		}
 	}
@@ -3429,6 +3436,7 @@ forward_scan:		do
 
 	private Buffer buffer;
 	private DocumentHandler documentHandler;
+	private FoldHandler foldHandler;
 	private boolean documentHandlerInstalled;
 
 	private int selectionStart;
@@ -3674,8 +3682,9 @@ forward_scan:		do
 		{
 			int bracketOffset = TextUtilities.findMatchingBracket(
 				buffer,line,offset - 1,
-				firstLine,Math.min(getLineCount(),
-				firstLine + visibleLines));
+				physFirstLine,buffer.virtualToPhysical(
+					Math.min(getVirtualLineCount(),
+					firstLine + visibleLines)));
 			if(bracketOffset != -1)
 			{
 				bracketLine = getLineOfOffset(bracketOffset);
@@ -4050,9 +4059,17 @@ forward_scan:		do
 			}
 		}
 
-		// this is fired if the fold structure of the buffer
-		// changes
-		public void changedUpdate(DocumentEvent evt)
+		public void changedUpdate(DocumentEvent evt) {}
+	}
+
+	class FoldHandler implements Buffer.FoldListener
+	{
+		public void foldLevelsChanged(int firstLine, int lastLine)
+		{
+			invalidateLineRange(firstLine,lastLine);
+		}
+
+		public void foldStructureChanged()
 		{
 			// recalculate first line
 			setFirstLine(buffer.physicalToVirtual(physFirstLine));
