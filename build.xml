@@ -10,6 +10,7 @@
 
 	<target name="init">
 		<available property="jdk14" classname="java.awt.KeyboardFocusManager" />
+		<delete file="doc/docbook-wrapper.xsl" />
 		<echo file="doc/docbook-wrapper.xsl"
 			message="&lt;xsl:stylesheet"/>
 		<echo file="doc/docbook-wrapper.xsl" append="true"
