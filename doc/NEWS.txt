@@ -11,11 +11,16 @@ so non-programmers can continue to use jEdit's macro features.
 
 * User interface improvements
 
-- The buffer switching tabs have been replaced with a combo box
+- The buffer switching tabs have been replaced with a combo box (the
+  BufferTabs plugin, available from plugin central, can be installed to
+  get the old tabs back)
 - I/O progress is now displayed in the top-right corner of the editor
   window
 - Caret location information is now displayed in the bottom-left corner
   of the text area
+- Some of the larger option panes in the 'Utilities->Global Options'
+  dialog box have been split into multiple panes, for a less cluttered
+  apperance
 - A 'tip of the day' is now shown on jEdit startup (this can be
   disabled)
 

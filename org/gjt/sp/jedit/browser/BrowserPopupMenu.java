@@ -196,7 +196,19 @@ public class BrowserPopupMenu extends JPopupMenu
 					}
 				}
 				else
-					FavoritesVFS.addToFavorites(browser.getDirectory());
+				{
+					String directory = browser.getDirectory();
+					if(directory.equals(FavoritesVFS.PROTOCOL + ":"))
+					{
+						GUIUtilities.error(browser,
+							"vfs.browser.recurse-favorites",
+							null);
+					}
+					else
+					{
+						FavoritesVFS.addToFavorites(directory);
+					}
+				}
 			}
 			else if(actionCommand.equals("go-to-favorites"))
 				browser.setDirectory(FavoritesVFS.PROTOCOL + ":");
@@ -211,32 +223,3 @@ public class BrowserPopupMenu extends JPopupMenu
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.8  2000/11/11 02:59:30  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.7  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.6  2000/10/05 04:30:10  sp
- * *** empty log message ***
- *
- * Revision 1.5  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.4  2000/08/16 12:14:29  sp
- * Passwords are now saved, bug fixes, documentation updates
- *
- * Revision 1.3  2000/08/13 07:35:23  sp
- * Dockable window API
- *
- * Revision 1.2  2000/08/06 09:44:27  sp
- * VFS browser now has a tree view, rename command
- *
- * Revision 1.1  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- */

@@ -440,9 +440,9 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="next-split">
+<ACTION NAME="next-textarea">
 	<CODE>
-		view.nextSplit();
+		view.nextTextArea();
 	</CODE>
 </ACTION>
 
@@ -524,9 +524,9 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="prev-split">
+<ACTION NAME="prev-textarea">
 	<CODE>
-		view.prevSplit();
+		view.prevTextArea();
 	</CODE>
 </ACTION>
 

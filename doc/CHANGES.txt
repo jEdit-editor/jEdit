@@ -35,6 +35,10 @@ JEDIT 2.7 VERSION HISTORY
   created by the client, specify the -newview switch.
 - Batch search feature renamed to 'HyperSearch' (this is what it used to
   be called in previous jEdit versions)
+- 'Save session on exit' setting moved to 'Loading & Saving' option
+  pane, and renamed to 'Restore previously open files on startup'
+- 'Go to Next/Previous Split' commands renamed to 'Go to Next/Previous
+  Text Area'
 
 + Bug Fixes
 
@@ -56,6 +60,9 @@ JEDIT 2.7 VERSION HISTORY
 - A NullPointerException would be thrown when opening an unreadable file
 - The Home and End keys would not record themselves properly, and the
   resulting macro would not run
+- The favorites list can no longer be added to itself
+- When a buffer was being closed, the caret location would not always be
+  saved to the recent list
 
 * Version 2.7pre3
 

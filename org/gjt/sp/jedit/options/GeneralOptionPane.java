@@ -57,12 +57,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		history = new JTextField(jEdit.getProperty("history"));
 		addComponent(jEdit.getProperty("options.general.history"),history);
 
-		/* Session management */
-		saveDesktop = new JCheckBox(jEdit.getProperty(
-			"options.general.saveDesktop"));
-		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
-		addComponent(saveDesktop);
-
 		/* Save caret positions */
 		saveCaret = new JCheckBox(jEdit.getProperty(
 			"options.general.saveCaret"));

@@ -1420,6 +1420,7 @@ public class jEdit
 
 		if(!buffer.isNewFile())
 		{
+			view.getEditPane().saveCaretInfo();
 			Integer _caret = (Integer)buffer.getProperty(Buffer.SELECTION_START);
 			int caret = (_caret == null ? 0 : _caret.intValue());
 			BufferHistory.setCaretPosition(buffer.getPath(),caret);

@@ -432,14 +432,14 @@ toggle-synchro-scroll.label=Synchronized Scrolling
 splitting=unsplit \
 	  split-horizontal \
 	  split-vertical \
-	  prev-split \
-	  next-split
+	  prev-textarea \
+	  next-textarea
 splitting.label=Splitting
 split-horizontal.label=Split Horizontally
 split-vertical.label=Split Vertically
 unsplit.label=Unsplit
-prev-split.label=Go to Previous Split
-next-split.label=Go to Next Split
+prev-textarea.label=Go to Previous Text Area
+next-textarea.label=Go to Next Text Area
 
 docking=docking-top-expanded \
 	docking-bottom-expanded \
@@ -920,7 +920,6 @@ options.general.label=General
 options.general.lf.note=Restart jEdit for look & feel changes to take effect
 options.general.lf=Swing look & feel:
 options.general.history=Maximum history list length:
-options.general.saveDesktop=Save session on exit
 options.general.saveCaret=Save caret positions in recent file list
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
@@ -930,6 +929,7 @@ options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher
 
 options.loadsave.label=Loading & Saving
+options.loadsave.saveDesktop=Restore previously open files on startup
 options.loadsave.encoding=File encoding:
 options.loadsave.autosave=Autosave frequency (secs):
 options.loadsave.backups=Max number of backups:
@@ -948,7 +948,7 @@ options.textarea.wrapGuide=Wrap guide
 options.textarea.blinkCaret=Blinking caret
 options.textarea.blockCaret=Block-shaped caret
 options.textarea.electricBorders=Electric (auto scroll) borders
-options.textarea.homeEnd="Smart" home/end behaviour
+options.textarea.homeEnd="Smart" home/end key behaviour
 
 options.gutter.label=Gutter
 options.gutter.font=Gutter font:
@@ -958,7 +958,7 @@ options.gutter.numberAlignment=Line number alignment:
 options.gutter.expanded=Gutter expanded by default
 options.gutter.interval=Line highlight interval:
 options.gutter.lineNumbers=Line numbering enabled
-options.gutter.currentLineHighlight=Current line highlight enabled
+options.gutter.currentLineHighlight=Current line highlighting
 
 options.color.label=Colors
 options.color.object=Object
@@ -1213,6 +1213,9 @@ vfs.browser.bad-filter.message=The filter {0} is invalid ({1})
 
 vfs.browser.files-favorites.title=Cannot Add Files to Favorites
 vfs.browser.files-favorites.message=Only directories can be added to the favorites list.
+
+vfs.browser.recurse-favorites.title=Cannot Add Favorites to Itself
+vfs.browser.recurse-favorites.message=The favorites list cannot be added to itself.
 
 vfs.browser.tree.loading=Loading...
 

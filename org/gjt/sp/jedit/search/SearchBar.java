@@ -150,7 +150,6 @@ public class SearchBar extends JPanel
 				}
 				else if(hyperSearch.isSelected())
 				{
-					find.addCurrentToHistory();
 					find.setText(null);
 					SearchAndReplace.setSearchString(text);
 					SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
@@ -160,7 +159,6 @@ public class SearchBar extends JPanel
 				{
 					// on enter, start search from end
 					// of current match to find next one
-					find.addCurrentToHistory();
 					if(!incrementalSearch(view.getTextArea()
 						.getSelectionEnd()))
 					{

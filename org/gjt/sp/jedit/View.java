@@ -284,9 +284,9 @@ public class View extends JFrame implements EBComponent
 
 	/**
 	 * Moves keyboard focus to the next text area.
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 2.7pre4
 	 */
-	public void nextSplit()
+	public void nextTextArea()
 	{
 		EditPane[] editPanes = getEditPanes();
 		for(int i = 0; i < editPanes.length; i++)
@@ -304,9 +304,9 @@ public class View extends JFrame implements EBComponent
 
 	/**
 	 * Moves keyboard focus to the previous text area.
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 2.7pre4
 	 */
-	public void prevSplit()
+	public void prevTextArea()
 	{
 		EditPane[] editPanes = getEditPanes();
 		for(int i = 0; i < editPanes.length; i++)
