@@ -1,5 +1,11 @@
 JEDIT 2.4 VERSION HISTORY
 
+* Version 2.4.1
+
++ Bug Fixes
+
+- jEdit would hang if an untitled file was open on exit (since 2.4final)
+
 * Version 2.4final
 
 + Enhancements

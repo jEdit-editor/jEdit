@@ -101,7 +101,10 @@ public class Sessions
 			while(buffer != null)
 			{
 				if(buffer.isUntitled())
+				{
+					buffer = buffer.getNext();
 					continue;
+				}
 
 				writeSessionCommand(view,buffer,out);
 				out.write(lineSep);
