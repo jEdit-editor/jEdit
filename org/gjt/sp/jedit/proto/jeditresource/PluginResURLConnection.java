@@ -40,12 +40,25 @@ public class PluginResURLConnection extends URLConnection
 			start = 1;
 		else
 			start = 0;
-		int pluginIndex = Integer.parseInt(file.substring(start,index));
-		in = JARClassLoader.getClassLoader(pluginIndex)
-			.getResourceAsStream(file.substring(index + 1));
+		pluginIndex = Integer.parseInt(file.substring(start,index));
+		resource = file.substring(index + 1);
 	}
 
-	public void connect() {}
+	public void connect()
+	{
+		if(!connected)
+		{
+			in = JARClassLoader.getClassLoader(pluginIndex)
+				.getResourceAsStream(resource);
+			if(in == null)
+			{
+				throw new IOException("Resource not found: "
+					+ resource);
+			}
+
+			connected = true;
+		}
+	}
 
 	public InputStream getInputStream()
 		throws IOException
@@ -77,4 +90,7 @@ public class PluginResURLConnection extends URLConnection
 
 	// private members
 	private InputStream in;
+	private int pluginIndex;
+	private String resource;
+	private boolean connected;
 }

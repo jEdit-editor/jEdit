@@ -80,7 +80,7 @@ public class TokenMarker implements Cloneable
 
 	public TokenMarker()
 	{
-		ruleSets = new Hashtable(16);
+		ruleSets = new Hashtable(64);
 	}
 
 	public void addRuleSet(String setName, ParserRuleSet rules)
@@ -440,8 +440,7 @@ public class TokenMarker implements Cloneable
 				pattern.count = context.inRule.sequenceLengths[1];
 				pattern.offset = context.inRule.sequenceLengths[0];
 
-				if (handleRule(info, line, context.inRule) && escaped)
-					escaped = false;
+				handleRule(info, line, context.inRule);
 			}
 			else
 			{
@@ -468,9 +467,9 @@ public class TokenMarker implements Cloneable
 					// stop checking rules if there was a match and go to next pos
 					if (!handleRule(info,line, tempRule)) break;
 				}
-
-				if (escaped) escaped = false;
 			}
+
+			escaped = false;
 		}
 
 		// check for keywords at the line's end
@@ -918,6 +917,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.40  2000/04/06 00:28:14  sp
+ * Resource handling bugs fixed, minor token marker tweaks
+ *
  * Revision 1.39  2000/04/03 07:33:11  sp
  * Mode updates, delegate bug fixed, close all bug fixed
  *

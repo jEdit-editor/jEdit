@@ -92,6 +92,10 @@ public class JARClassLoader extends ClassLoader
 
 	public URL getResource(String name)
 	{
+		ZipEntry entry = zipFile.getEntry(name);
+		if(entry == null)
+			return getSystemResourceAsStream(name);
+
 		try
 		{
 			return new URL(getResourceAsPath(name));
@@ -404,6 +408,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.33  2000/04/06 00:28:14  sp
+ * Resource handling bugs fixed, minor token marker tweaks
+ *
  * Revision 1.32  2000/03/18 05:45:25  sp
  * Complete word overhaul, various other changes
  *

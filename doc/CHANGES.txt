@@ -27,6 +27,7 @@ JEDIT VERSION HISTORY
   for a::C instead of b::C (since 2.4pre2) (Mike Dillon)
 - Sources for AElfred XML parser were in the JAR but weren't installed
   (since 2.4pre2)
+- Fixed a few problems with resource handling
 
 * Version 2.4pre3
 
