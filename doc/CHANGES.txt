@@ -52,6 +52,8 @@ JEDIT 3.2 VERSION HISTORY
 - InputHandler.readNextChar() now substitutes every occurrence of
   "__char__" with the typed character. Previously, it only substituted
   the first occurrence
+- The edit server was supposed to bind to 127.0.0.1, but instead it
+  bound to the machine's network address
 
 + API Changes
 

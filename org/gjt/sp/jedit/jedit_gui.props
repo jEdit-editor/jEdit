@@ -1338,6 +1338,8 @@ vfs.not-supported.save.message=The {0} filesystem does not support\n\
 
 plugin-manager.title=Plugin Manager
 
+plugin-manager.url=file:///home/slava/test.xml
+
 plugin-manager.caption=Installed plugins:
 
 plugin-manager.not-loaded=Not loaded due to errors
