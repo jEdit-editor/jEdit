@@ -70,8 +70,8 @@ public class home extends EditAction
 			count = 2;
 		else if(inputHandler.getLastAction() == this)
 		{
-			count = (inputHandler.getLastActionCount() - 1)
-				% positions.length;
+			count = Math.min(positions.length,inputHandler
+				.getLastActionCount()) - 1;
 		}
 		else
 			count = 0;
