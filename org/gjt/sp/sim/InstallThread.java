@@ -118,6 +118,9 @@ public class InstallThread extends Thread
 
 			if(Thread.interrupted())
 			{
+				in.close();
+				out.close();
+
 				progress.aborted();
 				return;
 			}
