@@ -1,5 +1,24 @@
 JEDIT VERSION HISTORY
 
+* Version 2.3final
+
++ Enhancements
+
+- Plugin version numbers are now printed on startup
+- Improved content-type handling in plugin resources (Dirk Moebius)
+- Activity log improvements
+- Plugin manager can now update plugins that didn't load properly
+
++ Bug Fixes
+
+- Spaces are no longer allowed in macro names due to Java bugs
+
++ API Changes
+
+- Plugins without a 'version' property will not be loaded, because
+  without this property the plugin manager's 'update' function will
+  not work
+
 * Version 2.3pre6
 
 + New Features

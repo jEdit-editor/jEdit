@@ -82,11 +82,29 @@ public abstract class EditPlugin
 	 * @since jEdit 2.1pre1
 	 */
 	public void createOptionPanes(OptionsDialog optionsDialog) {}
+
+	/**
+	 * A placeholder for a plugin that didn't load.
+	 */
+	public static class Broken
+	{
+		public String jar;
+		public String clazz;
+
+		public Broken(String jar, String clazz)
+		{
+			this.jar = jar;
+			this.clazz = clazz;
+		}
+	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/02/20 03:14:13  sp
+ * jEdit.getBrokenPlugins() method
+ *
  * Revision 1.3  1999/12/11 06:34:39  sp
  * Bug fixes
  *

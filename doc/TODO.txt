@@ -2,15 +2,16 @@ JEDIT TO DO
 
 ------- 2.3 to do -------
 
-- Double-click drag doesn't work backwards
-- Focus is broken with buffertabs
+- Focus breaks when saving or switching buffers
 
 ------- 2.4 to do -------
 
+- Double-click drag doesn't work backwards
 - Option pane for changing mode-specific tab size, indent, comment
   characters, and so on
 - EditAction.isEnabled() method
-- Check file modification status on focus - Buffer.checkModStatus() method
+- Check file modification status on focus and buffer switch
+  - Buffer.checkModStatus() method
 - Having more than 2 split panes should be possible
 - load/saveCaretInfo() save data in split.n.<property name> so that we
   don't have to unsplit when switching buffers, closing, reloading, etc
@@ -31,6 +32,7 @@ JEDIT TO DO
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
   to 'Advanced Features'
 - Menu bar and tool bar loading needs to work outside of views
+- Changing key bindings should update menu item labels
 
 ------- jEdit 3.0 to do -------
 
@@ -39,6 +41,7 @@ JEDIT TO DO
 - Maybe write custom 'document' class; Swing implementation has a few
   problems. With a custom document, folding and such becomes much cleaner
 - i18n support - bidi, input methods, locale-sensitive GUI, etc
+- Hex file editing
 
 ------- JDK 1.2 -------
 

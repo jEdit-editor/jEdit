@@ -51,6 +51,8 @@ implements InputHandler.NonRecordable
 		if(name == null)
 			return;
 
+		name = name.replace(' ','_');
+
 		Buffer buffer = jEdit.openFile(null,null,
 			MiscUtilities.constructPath(settings,"macros",
 			name + ".macro"),

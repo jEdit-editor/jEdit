@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.03.06.00";
+		return "02.03.99.00";
 	}
 
 	/**
@@ -146,14 +146,6 @@ public class jEdit
 			}
 		}
 
-		// Initialize the activity log
-		Log.init(true,level);
-
-		// Log some stuff
-		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
-		Log.log(Log.DEBUG,jEdit.class,"Settings directory is "
-			+ settingsDirectory);
-
 		if(settingsDirectory != null && portFile != null)
 			portFile = MiscUtilities.constructPath(settingsDirectory,portFile);
 		else
@@ -213,6 +205,7 @@ public class jEdit
 			GUIUtilities.showSplashScreen();
 
 		// Get things rolling
+		Log.init(true,level);
 		initMisc();
 		initSystemProperties();
 		GUIUtilities.advanceProgress("Loading plugins...");
@@ -296,6 +289,8 @@ public class jEdit
 
 				newView(null,_buffer);
 				GUIUtilities.hideSplashScreen();
+				Log.log(Log.MESSAGE,jEdit.class,"Startup "
+					+ "complete");
 			}
 		});
 	}
@@ -504,6 +499,16 @@ public class jEdit
 	{
 		EditPlugin[] pluginArray = new EditPlugin[plugins.size()];
 		plugins.copyInto(pluginArray);
+		return pluginArray;
+	}
+
+	/**
+	 * Returns an array of plugin class names which didn't load.
+	 */
+	public static EditPlugin.Broken[] getBrokenPlugins()
+	{
+		EditPlugin.Broken[] pluginArray = new EditPlugin.Broken[brokenPlugins.size()];
+		brokenPlugins.copyInto(pluginArray);
 		return pluginArray;
 	}
 
@@ -1144,9 +1149,6 @@ public class jEdit
 			}
 			else
 			{
-				Log.log(Log.DEBUG,jEdit.class,"Saving user propeties"
-					+ " to " + file);
-
 				try
 				{
 					OutputStream out = new FileOutputStream(file);
@@ -1178,6 +1180,14 @@ public class jEdit
 		}
 	}
 
+	/**
+	 * This plugin didn't load.
+	 */
+	static void addBrokenPlugin(String jar, String name)
+	{
+		brokenPlugins.addElement(new EditPlugin.Broken(jar,name));
+	}
+
 	// private members
 	private static String jEditHome;
 	private static String settingsDirectory;
@@ -1189,6 +1199,7 @@ public class jEdit
 	private static EditServer server;
 	private static Hashtable actionHash;
 	private static Vector plugins;
+	private static Vector brokenPlugins;
 	private static Vector modes;
 	private static Vector recent;
 	private static int maxRecent;
@@ -1261,6 +1272,10 @@ public class jEdit
 	 */
 	private static void initMisc()
 	{
+		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
+		Log.log(Log.MESSAGE,jEdit.class,"Settings directory is "
+			+ settingsDirectory);
+
 		inputHandler = new DefaultInputHandler();
 
 		// Add our protocols to java.net.URL's list
@@ -1519,6 +1534,7 @@ public class jEdit
 	private static void initPlugins()
 	{
 		plugins = new Vector();
+		brokenPlugins = new Vector();
 		loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
 		if(settingsDirectory != null)
 		{
@@ -1775,6 +1791,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.192  2000/02/20 03:14:13  sp
+ * jEdit.getBrokenPlugins() method
+ *
  * Revision 1.191  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *
@@ -1804,8 +1823,5 @@ public class jEdit
  *
  * Revision 1.182  2000/01/28 00:20:58  sp
  * Lots of stuff
- *
- * Revision 1.181  2000/01/22 23:36:43  sp
- * Improved file close behaviour
  *
  */

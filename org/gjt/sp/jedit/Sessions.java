@@ -42,7 +42,6 @@ public class Sessions
 	public static Buffer loadSession(String session, boolean ignoreNotFound)
 	{
 		String filename = createSessionFileName(session);
-		Log.log(Log.DEBUG,Sessions.class,"Loading session " + filename);
 
 		Buffer buffer = null;
 
@@ -92,7 +91,6 @@ public class Sessions
 
 		String lineSep = System.getProperty("line.separator");
 		String filename = createSessionFileName(session);
-		Log.log(Log.DEBUG,Sessions.class,"Saving session " + filename);
 
 		Buffer buffer = jEdit.getFirstBuffer();
 
@@ -222,6 +220,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/02/20 03:14:13  sp
+ * jEdit.getBrokenPlugins() method
+ *
  * Revision 1.11  1999/12/21 06:50:51  sp
  * Documentation updates, abbrevs option pane finished, bug fixes
  *
@@ -252,8 +253,5 @@ public class Sessions
  *
  * Revision 1.2  1999/10/28 09:07:21  sp
  * Directory list search
- *
- * Revision 1.1  1999/10/26 07:43:59  sp
- * Session loading and saving, directory list search started
  *
  */

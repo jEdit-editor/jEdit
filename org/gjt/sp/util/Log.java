@@ -163,21 +163,20 @@ public class Log
 		{
 			logDocument.remove(0,logDocument.getLength());
 
-			log(NOTICE,Log.class,"To copy from the activity log, select"
+			log(MESSAGE,Log.class,"To copy from the activity log, select"
 				+ " the appropriate text and press C+c");
 
 			// Log some stuff
-			log(NOTICE,Log.class,"When reporting bugs, please"
+			log(MESSAGE,Log.class,"When reporting bugs, please"
 				+ " include the following information:");
 			String[] props = {
 				"java.version", "java.vendor",
-				"java.vendor.url",
 				"java.compiler", "os.name", "os.version",
-				"os.arch", "user.home", "user.dir"
+				"os.arch", "user.home"
 				};
 			for(int i = 0; i < props.length; i++)
 			{
-				log(NOTICE,Log.class,
+				log(MESSAGE,Log.class,
 					props[i] + "=" + System.getProperty(props[i]));
 			}
 		}
@@ -281,11 +280,23 @@ public class Log
 		}
 	}
 
-	private static void _log(int urgency, String source,
-		String message)
+	private static void _log(int urgency, String source, String message)
 	{
-		message = source + ": " + message + '\n';
-		_log(urgency,message);
+		String urgencyString = "[" + urgencyToString(urgency) + "] ";
+		message = message + '\n';
+
+		try
+		{
+			logDocument.insertString(logDocument.getLength(),
+				urgencyString + source + ": " + message + "\n",
+				null);
+		}
+		catch(BadLocationException bl)
+		{
+			bl.printStackTrace();
+		}
+
+		message = urgencyString +  message;
 
 		if(urgency >= level)
 		{
@@ -293,20 +304,6 @@ public class Log
 				realErr.print(message);
 			else
 				realOut.print(message);
-		}
-	}
-
-	private static void _log(int urgency, String message)
-	{
-		try
-		{
-			logDocument.insertString(logDocument.getLength(),
-				"[" + urgencyToString(urgency) + "] " + message,
-				null);
-		}
-		catch(BadLocationException bl)
-		{
-			bl.printStackTrace();
 		}
 	}
 
@@ -333,6 +330,9 @@ public class Log
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/02/20 03:14:13  sp
+ * jEdit.getBrokenPlugins() method
+ *
  * Revision 1.8  2000/01/28 00:20:58  sp
  * Lots of stuff
  *

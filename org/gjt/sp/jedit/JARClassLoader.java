@@ -37,6 +37,7 @@ public class JARClassLoader extends ClassLoader
 	public JARClassLoader(String path)
 		throws IOException
 	{
+		fileName = new File(path).getName();
 		zipFile = new ZipFile(path);
 
 		Enumeration entires = zipFile.entries();
@@ -140,6 +141,7 @@ public class JARClassLoader extends ClassLoader
 	private static Vector classLoaders = new Vector();
 	private int index;
 	private Vector pluginClasses = new Vector();
+	private String fileName;
 	private ZipFile zipFile;
 
 	private void loadAllPlugins()
@@ -156,6 +158,8 @@ public class JARClassLoader extends ClassLoader
 			{
 				Log.log(Log.ERROR,this,"Error while starting plugin " + name);
 				Log.log(Log.ERROR,this,t);
+
+				jEdit.addBrokenPlugin(fileName,name);
 			}
 		}
 	}
@@ -180,7 +184,10 @@ public class JARClassLoader extends ClassLoader
 
 		// Check dependencies
 		if(!checkDependencies(name))
+		{
+			jEdit.addBrokenPlugin(fileName,name);
 			return;
+		}
 
 		// JDK 1.1.8 throws a GPF when we do an isAssignableFrom()
 		// on an unresolved class
@@ -190,7 +197,25 @@ public class JARClassLoader extends ClassLoader
 			&& !Modifier.isAbstract(modifiers)
 			&& EditPlugin.class.isAssignableFrom(clazz))
 		{
-			Log.log(Log.NOTICE,this,"Starting plugin " + name);
+			String version = jEdit.getProperty("plugin."
+				+ name + ".version");
+
+			if(version == null)
+			{
+				Log.log(Log.ERROR,this,"Plugin " +
+					name + " doesn't"
+					+ " specify a 'version' property.");
+				Log.log(Log.ERROR,this,"This property"
+					+ " must be defined for the plugin manager"
+					+ " to work.");
+				jEdit.addBrokenPlugin(fileName,name);
+				return;
+			}
+			else
+			{
+				Log.log(Log.NOTICE,this,"Starting plugin " + name
+					+ " (version " + version + ")");
+			}
 
 			jEdit.addPlugin((EditPlugin)clazz.newInstance());
 		}
@@ -384,6 +409,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/02/20 03:14:13  sp
+ * jEdit.getBrokenPlugins() method
+ *
  * Revision 1.28  2000/02/16 05:51:20  sp
  * Misc updates, dirk's changes integrated
  *
@@ -415,9 +443,4 @@ public class JARClassLoader extends ClassLoader
  * Revision 1.19  1999/10/31 07:15:34  sp
  * New logging API, splash screen updates, bug fixes
  *
- * Revision 1.18  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
- *
- * Revision 1.17  1999/10/05 04:43:58  sp
- * Minor bug fixes and updates
  */

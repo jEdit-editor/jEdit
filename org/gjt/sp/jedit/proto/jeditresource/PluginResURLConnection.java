@@ -57,8 +57,17 @@ public class PluginResURLConnection extends URLConnection
 	{
 		if(name.equals("content-type"))
 		{
-			if(getURL().getFile().toLowerCase().endsWith(".html"))
+			String filename = getURL().getFile().toLowerCase();
+			if(filename.endsWith(".html"))
 				return "text/html";
+			else if(filename.endsWith(".txt"))
+				return "text/plain";
+			else if(filename.endsWith(".rtf"))
+				return "text/rtf";
+			else if(filename.endsWith(".gif"))
+				return "image/gif";
+			else if(filename.endsWith(".jpg") || filename.endsWith(".jpeg"))
+				return "image/jpeg";
 			else
 				return null;
 		}

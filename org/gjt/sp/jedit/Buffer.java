@@ -283,7 +283,15 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				out = new GZIPOutputStream(out);
 			save(out);
 			url = saveUrl;
-			this.path = path;
+
+			// reposition in buffer list if it is sorted
+			if(!this.path.equals(path))
+			{
+				System.err.println("Repositioning buffer");
+				jEdit.updatePosition(this);
+				this.path = path;
+			}
+
 			file = saveFile;
 			setPath();
 			saveMarkers();
@@ -293,9 +301,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			setFlag(READ_ONLY,false);
 			setFlag(NEW_FILE,false);
 			setFlag(DIRTY,false);
-
-			// reposition in buffer list if it is sorted
-			jEdit.updatePosition(this);
 
 			if(name.toLowerCase().endsWith(".macro"))
 				Macros.loadMacros();
@@ -1542,6 +1547,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.125  2000/02/20 03:14:13  sp
+ * jEdit.getBrokenPlugins() method
+ *
  * Revision 1.124  2000/02/17 05:37:59  sp
  * Bug fixes
  *

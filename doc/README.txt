@@ -56,6 +56,7 @@ the jEdit core:
 
 Artur Biesiadowski - Eiffel syntax highlighting
 Clancy Malcolm - PHP3 syntax highlighting
+Dirk Moebius - enhanced plugin versioning
 Jason Ginchereau - Buffer tabs code
 Jonathan Revusky - Python syntax highlighting
 Juha Lindfors - IDL syntax highlighting
