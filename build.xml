@@ -119,6 +119,21 @@
 			dest="doc/users-guide/users-guide-a4.pdf"/>
 	</target>
 
+	<target name="javadoc"
+		description="Creates the API documentation" >
+		<delete dir="javadoc"/>
+		<mkdir dir="javadoc"/>
+
+		<javadoc packagenames="com.*, gnu.*, org.*"
+			sourcepath="."
+			classpath="."
+			destdir="doc/api"
+			author="true"
+			version="true"
+			windowtitle="jEdit API"
+			doctitle="jEdit API" />
+	</target>
+
 	<target name="clean">
 		<delete>
 			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
