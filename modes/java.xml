@@ -146,8 +146,12 @@
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
 
+		<!-- so that @link{...} is highlighted -->
+		<SEQ TYPE="COMMENT2">{</SEQ>
+
 		<KEYWORDS>
 			<LABEL>@author</LABEL>
+			<LABEL>@beaninfo</LABEL>
 			<LABEL>@history</LABEL>
 			<LABEL>@bug</LABEL>
 			<LABEL>@review</LABEL>

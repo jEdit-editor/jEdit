@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.gui.EnhancedFrame;
 import org.gjt.sp.util.Log;
 
 /**
@@ -39,7 +38,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HelpViewer extends EnhancedFrame
+public class HelpViewer extends JFrame
 {
 	/**
 	 * Goes to the specified file, relative to the jEdit documentation
@@ -105,6 +104,7 @@ public class HelpViewer extends EnhancedFrame
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
 		urlField = new JTextField();
+		urlField.addKeyListener(new KeyHandler());
 		Dimension dim = urlField.getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		urlField.setMaximumSize(dim);
@@ -180,26 +180,10 @@ public class HelpViewer extends EnhancedFrame
 		}
 	}
 
-	public void ok()
-	{
-		try
-		{
-			gotoURL(new URL(urlField.getText()),
-				true);
-		}
-		catch(MalformedURLException mu)
-		{
-			Log.log(Log.ERROR,this,mu);
-			String[] args = { urlField.getText() };
-			GUIUtilities.error(HelpViewer.this,
-				"badurl",args);
-		}
-	}
-
-	public void cancel()
+	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,"helpviewer");
-		dispose();
+		super.dispose();
 		helpViewer = null;
 	}
 
@@ -274,30 +258,25 @@ public class HelpViewer extends EnhancedFrame
 			}
 		}
 	}
-}
 
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.29  2000/11/13 11:19:27  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.28  2000/09/26 10:19:47  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.27  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.26  2000/07/03 03:32:16  sp
- * *** empty log message ***
- *
- * Revision 1.25  2000/06/24 06:24:55  sp
- * work thread bug fixes
- *
- * Revision 1.24  2000/06/24 03:46:48  sp
- * VHDL mode, bug fixing
- *
- * Revision 1.23  2000/06/16 10:11:06  sp
- * Bug fixes ahoy
- *
- */
+	class KeyHandler extends KeyAdapter
+	{
+		public void keyPressed(KeyEvent evt)
+		{
+			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+			{
+			try
+			{
+				gotoURL(new URL(urlField.getText()),
+					true);
+			}
+			catch(MalformedURLException mu)
+			{
+				Log.log(Log.ERROR,this,mu);
+				String[] args = { urlField.getText() };
+				GUIUtilities.error(HelpViewer.this,
+					"badurl",args);
+			}
+		}
+	}
+}
