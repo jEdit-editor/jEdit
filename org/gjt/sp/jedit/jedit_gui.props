@@ -867,7 +867,8 @@ colorChooser.title=Pick a Color
 styleEditor.title=Style Editor
 styleEditor.italics=Italics
 styleEditor.bold=Bold
-styleEditor.color=Text color:\ 
+styleEditor.fgColor=Text color:\ 
+styleEditor.bgColor=Background color:\ 
 
 # Help viewer
 helpviewer.title=jEdit Help

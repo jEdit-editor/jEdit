@@ -857,8 +857,6 @@ public class View extends JFrame implements EBComponent
 			textArea.setDocument(buffer);
 			textArea.setEditable(!buffer.isReadOnly());
 		}
-		else
-			textArea.setEditable(true);
 
 		EditBus.send(new ViewUpdate(this,textArea,
 			ViewUpdate.TEXTAREA_CREATED));
@@ -1372,6 +1370,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.155  2000/04/09 03:14:14  sp
+ * Syntax token backgrounds can now be specified
+ *
  * Revision 1.154  2000/04/08 09:34:58  sp
  * Documentation updates, minor syntax changes
  *

@@ -322,8 +322,13 @@ public class GUIUtilities
 	 */
 	public static Color parseColor(String name)
 	{
+		return parseColor(name, Color.black);
+	}
+
+	public static Color parseColor(String name, Color defaultColor)
+	{
 		if(name == null)
-			return Color.black;
+			return defaultColor;
 		else if(name.startsWith("#"))
 		{
 			try
@@ -332,7 +337,7 @@ public class GUIUtilities
 			}
 			catch(NumberFormatException nf)
 			{
-				return Color.black;
+				return defaultColor;
 			}
 		}
 		else if("red".equals(name))
@@ -362,7 +367,7 @@ public class GUIUtilities
 		else if("pink".equals(name))
 			return Color.pink;
 		else
-			return Color.black;
+			return defaultColor;
 	}
 
 	/**
@@ -384,7 +389,8 @@ public class GUIUtilities
 	public static SyntaxStyle parseStyle(String str)
 		throws IllegalArgumentException
 	{
-		Color color = Color.black;
+		Color fgColor = Color.black;
+		Color bgColor = null;
 		boolean italic = false;
 		boolean bold = false;
 		StringTokenizer st = new StringTokenizer(str);
@@ -393,7 +399,11 @@ public class GUIUtilities
 			String s = st.nextToken();
 			if(s.startsWith("color:"))
 			{
-				color = GUIUtilities.parseColor(s.substring(6));
+				fgColor = GUIUtilities.parseColor(s.substring(6), Color.black);
+			}
+			else if(s.startsWith("bgColor:"))
+			{
+				bgColor = GUIUtilities.parseColor(s.substring(8), null);
 			}
 			else if(s.startsWith("style:"))
 			{
@@ -412,7 +422,7 @@ public class GUIUtilities
 				throw new IllegalArgumentException(
 					"Invalid directive: " + s);
 		}
-		return new SyntaxStyle(color,italic,bold);
+		return new SyntaxStyle(fgColor,bgColor,italic,bold);
 	}
 
 	/**
@@ -423,7 +433,11 @@ public class GUIUtilities
 	{
 		StringBuffer buf = new StringBuffer();
 
-		buf.append("color:" + getColorHexString(style.getColor()));
+		buf.append("color:" + getColorHexString(style.getForegroundColor()));
+		if(style.getBackgroundColor() != null) 
+		{
+			buf.append(" bgColor:" + getColorHexString(style.getBackgroundColor()));
+		}
 		if(!style.isPlain())
 		{
 			buf.append(" style:" + (style.isItalic() ? "i" : "")
@@ -649,6 +663,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.53  2000/04/09 03:14:14  sp
+ * Syntax token backgrounds can now be specified
+ *
  * Revision 1.52  2000/03/18 05:45:25  sp
  * Complete word overhaul, various other changes
  *

@@ -66,6 +66,7 @@ Acrobat.
 I would like to thank the following people who have contributed major
 modules of code to the jEdit core:
 
+Andre Kaplan - Syntax token background highlighting
 Jason Ginchereau - Buffer tabs code
 Mike Dillon - XMode syntax highlighting engine, gutter, new options
 dialog box, faster literal search, many other patches

@@ -22,6 +22,8 @@ package org.gjt.sp.jedit.syntax;
 import javax.swing.text.*;
 import java.awt.*;
 
+import org.gjt.sp.jedit.*;
+
 /**
  * Class with several utility functions used by jEdit's syntax highlighting
  * subsystem.
@@ -106,7 +108,7 @@ public class SyntaxUtilities
 	 */
 	public static int paintSyntaxLine(Segment line, Token tokens,
 		SyntaxStyle[] styles, TabExpander expander, Graphics gfx,
-		int x, int y)
+		Color background, int x, int y)
 	{
 		Font defaultFont = gfx.getFont();
 		Color defaultColor = gfx.getColor();
@@ -119,6 +121,7 @@ public class SyntaxUtilities
 				break;
 
 			int length = tokens.length;
+			line.count = length;
 			if(id == Token.NULL)
 			{
 				if(!defaultColor.equals(gfx.getColor()))
@@ -127,9 +130,24 @@ public class SyntaxUtilities
 					gfx.setFont(defaultFont);
 			}
 			else
-				styles[id].setGraphicsFlags(gfx,defaultFont);
+			{
+				Color bg = styles[id].getBackgroundColor();
+				if (bg != null)
+				{
+					FontMetrics fm = styles[id].getFontMetrics(defaultFont);
+					int width   = Utilities.getTabbedTextWidth(line, fm, x, expander, 0); 
+					int height  = fm.getHeight();
+					int descent = fm.getDescent();
+					int leading = fm.getLeading();
+					gfx.setColor(background);
+					gfx.setXORMode(bg);
+					gfx.fillRect(x, y - height + descent + leading, width, height);
+					gfx.setPaintMode();
+				}
 
-			line.count = length;
+				styles[id].setGraphicsFlags(gfx,defaultFont);
+			}
+
 			x = Utilities.drawTabbedText(line,x,y,gfx,expander,0);
 			line.offset += length;
 			offset += length;
@@ -147,6 +165,9 @@ public class SyntaxUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/04/09 03:14:14  sp
+ * Syntax token backgrounds can now be specified
+ *
  * Revision 1.11  2000/04/07 06:57:26  sp
  * Buffer options dialog box updates, API docs updated a bit in syntax package
  *

@@ -93,8 +93,7 @@ public class JEditTextArea extends JComponent
 		addFocusListener(new FocusHandler());
 
 		caretVisible = true;
-
-		setDocument(new SyntaxDocument());
+		editable = true;
 
 		// We don't seem to get the initial focus event?
 		focusedComponent = this;
@@ -2250,6 +2249,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.51  2000/04/09 03:14:14  sp
+ * Syntax token backgrounds can now be specified
+ *
  * Revision 1.50  2000/04/08 02:39:33  sp
  * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
  *

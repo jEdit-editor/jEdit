@@ -187,8 +187,8 @@ view.gutter.highlightCurrentLine=yes
 view.expandOnInput=no
 
 # Syntax styles
-view.style.comment1=style:i
-view.style.comment2=color:#990033 style:i
+view.style.comment1=bgColor:#cfcfcf style:i
+view.style.comment2=color:#990033 bgColor:#cfcfcf style:i
 view.style.literal1=color:#650099
 view.style.literal2=color:#650099 style:b
 view.style.keyword1=style:b
@@ -196,7 +196,7 @@ view.style.keyword2=color:#ff00ff
 view.style.keyword3=color:#009600
 view.style.function=color:#d27e00
 view.style.markup=color:#5e5e5e style:b
-view.style.label=color:#990033 style:b
+view.style.label=color:#990033 bgColor:#cfcfcf style:b
 view.style.operator=style:b
 view.style.digit=color:#009191
 view.style.invalid=color:#ff0000 style:b

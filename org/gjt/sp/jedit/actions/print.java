@@ -136,7 +136,8 @@ public class print extends EditAction
 				gfx.setFont(font);
 				Token tokens = tokenMarker.markTokens(lineSegment,i);
 				SyntaxUtilities.paintSyntaxLine(lineSegment,
-					tokens,styles,expander,gfx,leftMargin,y);
+					tokens,styles,expander,gfx,Color.white,
+					leftMargin,y);
 			}
 
 			if((y > pageHeight - bottomMargin) ||

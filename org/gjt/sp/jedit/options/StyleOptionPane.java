@@ -307,7 +307,7 @@ class StyleTableModel extends AbstractTableModel
 
 	StyleTableModel()
 	{
-		styleChoices = new Vector(10);
+		styleChoices = new Vector(13);
 		addStyleChoice("options.styles.comment1Style","view.style.comment1");
 		addStyleChoice("options.styles.comment2Style","view.style.comment2");
 		addStyleChoice("options.styles.literal1Style","view.style.literal1");
@@ -433,7 +433,11 @@ class StyleTableModel extends AbstractTableModel
 			if (value != null)
 			{
 				SyntaxStyle style = (SyntaxStyle)value;
-				setForeground(style.getColor());
+				setForeground(style.getForegroundColor());
+				if (style.getBackgroundColor() != null) 
+				{ 
+					setBackground(style.getBackgroundColor());
+				}
 				setFont(style.getStyledFont(getFont()));
 			}
 	
@@ -464,11 +468,23 @@ implements ActionListener, KeyListener
 			jEdit.getProperty("styleEditor.bold")));
 		bold.getModel().setSelected(style.isBold());
 		panel.add(new JLabel(
-			jEdit.getProperty("styleEditor.color")));
-		panel.add(color = new JButton("    "));
-		color.setBackground(style.getColor());
-		color.setRequestFocusEnabled(false);
-		color.addActionListener(this);
+			jEdit.getProperty("styleEditor.fgColor")));
+		panel.add(fgColor = new JButton("    "));
+		fgColor.setBackground(style.getForegroundColor());
+		fgColor.setRequestFocusEnabled(false);
+		fgColor.addActionListener(this);
+		panel.add(new JLabel(jEdit.getProperty("styleEditor.bgColor")));
+		panel.add(bgColor = new JButton("    "));
+		if(style.getBackgroundColor() == null)
+		{
+			bgColor.setBackground(GUIUtilities.parseColor(jEdit.getProperty("view.bgColor")));
+		}
+		else
+		{
+			bgColor.setBackground(style.getBackgroundColor());
+		}
+		bgColor.setRequestFocusEnabled(false);
+		bgColor.addActionListener(this);
 
 		getContentPane().add(BorderLayout.CENTER,panel);
 
@@ -503,13 +519,14 @@ implements ActionListener, KeyListener
 		}
 		else if(source == cancel)
 			dispose();
-		else if(source == color)
+		else if (source == fgColor || source == bgColor)
 		{
+			JButton b = (JButton)source;
 			Color c = JColorChooser.showDialog(this,
 				jEdit.getProperty("colorChooser.title"),
-				color.getBackground());
+				b.getBackground());
 			if(c != null)
-				color.setBackground(c);
+				b.setBackground(c);
 		}
 	}
 
@@ -536,15 +553,27 @@ implements ActionListener, KeyListener
 	{
 		if(!okClicked)
 			return null;
-		return new SyntaxStyle(color.getBackground(),
-				italics.getModel().isSelected(),
-				bold.getModel().isSelected());
+
+		if (bgColor.getBackground().equals(GUIUtilities.parseColor(jEdit.getProperty("view.bgColor"))))
+		{
+			return new SyntaxStyle(fgColor.getBackground(),null,
+					italics.getModel().isSelected(),
+					bold.getModel().isSelected());
+		}
+		else
+		{
+			return new SyntaxStyle(fgColor.getBackground(),
+					bgColor.getBackground(),
+					italics.getModel().isSelected(),
+					bold.getModel().isSelected());
+		}
 	}
 
 	// private members
 	private JCheckBox italics;
 	private JCheckBox bold;
-	private JButton color;
+	private JButton fgColor;
+	private JButton bgColor;
 	private JButton ok;
 	private JButton cancel;
 	private boolean okClicked;
@@ -552,6 +581,9 @@ implements ActionListener, KeyListener
 /**
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/04/09 03:14:14  sp
+ * Syntax token backgrounds can now be specified
+ *
  * Revision 1.12  2000/04/08 02:39:33  sp
  * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
  *

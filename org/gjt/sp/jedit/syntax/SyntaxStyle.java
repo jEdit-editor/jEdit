@@ -31,23 +31,33 @@ public class SyntaxStyle
 {
 	/**
 	 * Creates a new SyntaxStyle.
-	 * @param color The text color
+	 * @param fgColor The text color
+	 * @param bgColor The background color
 	 * @param italic True if the text should be italics
 	 * @param bold True if the text should be bold
 	 */
-	public SyntaxStyle(Color color, boolean italic, boolean bold)
+	public SyntaxStyle(Color fgColor, Color bgColor, boolean italic, boolean bold)
 	{
-		this.color = color;
+		this.fgColor = fgColor;
+		this.bgColor = bgColor;
 		this.italic = italic;
 		this.bold = bold;
 	}
 
 	/**
-	 * Returns the color specified in this style.
+	 * Returns the text color.
 	 */
-	public Color getColor()
+	public Color getForegroundColor()
 	{
-		return color;
+		return fgColor;
+	}
+
+	/**
+	 * Returns the background color.
+	 */
+	public Color getBackgroundColor()
+	{
+		return bgColor;
 	}
 
 	/**
@@ -123,7 +133,7 @@ public class SyntaxStyle
 	{
 		Font _font = getStyledFont(font);
 		gfx.setFont(_font);
-		gfx.setColor(color);
+		gfx.setColor(fgColor);
 	}
 
 	/**
@@ -131,13 +141,15 @@ public class SyntaxStyle
 	 */
 	public String toString()
 	{
-		return getClass().getName() + "[color=" + color +
+		return getClass().getName() + "[fgColor=" + fgColor +
+			((bgColor == null) ? "" : ",bgColor=" + bgColor) +
 			(italic ? ",italic" : "") +
 			(bold ? ",bold" : "") + "]";
 	}
 
 	// private members
-	private Color color;
+	private Color fgColor;
+	private Color bgColor;
 	private boolean italic;
 	private boolean bold;
 	private Font lastFont;
