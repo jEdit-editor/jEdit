@@ -506,12 +506,8 @@ print.page=Page {0}
 
 # About dialog
 about.title=About jEdit
-about.message=<html><center><font size=+1>jEdit version {0}</font><br>\n\
-	<u><font color=blue>http://jedit.sourceforge.net</font></u><p>\n\
-	jEdit is mostly &copy; 1998-2000 Slava Pestov.<p>\n\
-	See <b>Help</b>&gt;<b>jEdit Read Me</b> for a list of code\n\
-	contributions. See <b>Help</b>&gt;<b>GNU General Public License</b>\n\
-	for license info and warranty disclamer.</center></html>
+about.version=jEdit version {0}
+about.caption=See Help->jEdit Read Me for more information
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error

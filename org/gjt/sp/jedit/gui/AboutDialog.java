@@ -37,18 +37,21 @@ public class AboutDialog extends EnhancedDialog
 		setContentPane(content);
 
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(new EmptyBorder(0,0,12,0));
-
-		JLabel label1 = new JLabel(new ImageIcon(getClass().getResource(
-			"/org/gjt/sp/jedit/jedit_logo.gif")));
-		label1.setBorder(new CompoundBorder(new EmptyBorder(0,0,0,12),
-			new BevelBorder(BevelBorder.LOWERED)));
-		panel.add(BorderLayout.CENTER,label1);
-
 		String[] args = { jEdit.getVersion() };
-		JLabel label2 = new JLabel(jEdit.getProperty("about.message",args));
-		label2.setPreferredSize(label1.getPreferredSize());
-		panel.add(BorderLayout.EAST,label2);
+		JLabel label = new JLabel(jEdit.getProperty("about.version",args),
+			SwingConstants.CENTER);
+		label.setBorder(new EmptyBorder(0,0,12,0));
+		panel.add(BorderLayout.NORTH,label);
+
+		JLabel splash = new JLabel(new ImageIcon(getClass().getResource(
+			"/org/gjt/sp/jedit/jedit_logo.gif")));
+		splash.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		panel.add(BorderLayout.CENTER,splash);
+
+		label = new JLabel(jEdit.getProperty("about.caption"),
+			SwingConstants.CENTER);
+		label.setBorder(new EmptyBorder(12,0,12,0));
+		panel.add(BorderLayout.SOUTH,label);
 
 		content.add(BorderLayout.CENTER,panel);
 
@@ -62,6 +65,7 @@ public class AboutDialog extends EnhancedDialog
 		content.add(BorderLayout.SOUTH,box);
 
 		pack();
+		setResizable(false);
 		setLocationRelativeTo(view);
 		show();
 	}

@@ -76,6 +76,8 @@ public class WorkThread extends Thread
 	 */
 	public void waitForRequests()
 	{
+		Log.log(Log.DEBUG,this,"waitForRequests(): entering");
+
 		synchronized(lock)
 		{
 			while(firstRequest != null)
@@ -101,6 +103,8 @@ public class WorkThread extends Thread
 			// do any queued AWT runnables
 			doAWTRequests();
 		}
+
+		Log.log(Log.DEBUG,this,"waitForRequests(): leaving");
 	}
 
 	/**
@@ -341,6 +345,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/07/03 03:32:16  sp
+ * *** empty log message ***
+ *
  * Revision 1.11  2000/06/24 06:24:56  sp
  * work thread bug fixes
  *

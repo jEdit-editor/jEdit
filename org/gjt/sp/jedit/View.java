@@ -292,8 +292,10 @@ public class View extends JFrame implements EBComponent
 	 */
 	public synchronized void showWaitCursor()
 	{
+		Log.log(Log.DEBUG,this,"showWaitCursor(): entering - waitCount=" + waitCount);
 		if(waitCount++ == 0)
 		{
+			Log.log(Log.DEBUG,this,"showWaitCursor(): showing glass pane");
 			glassPane.setVisible(true);
 
 			// still needed even though glass pane
@@ -308,6 +310,7 @@ public class View extends JFrame implements EBComponent
 					.setCursor(cursor);
 			}
 		}
+		Log.log(Log.DEBUG,this,"showWaitCursor(): leaving - waitCount=" + waitCount);
 	}
 
 	/**
@@ -315,11 +318,13 @@ public class View extends JFrame implements EBComponent
 	 */
 	public synchronized void hideWaitCursor()
 	{
+		Log.log(Log.DEBUG,this,"hideWaitCursor(): entering - waitCount=" + waitCount);
 		if(waitCount > 0)
 			waitCount--;
 
 		if(waitCount == 0)
 		{
+			Log.log(Log.DEBUG,this,"hideWaitCursor(): hiding glass pane");
 			glassPane.setVisible(false);
 
 			// still needed even though glass pane
@@ -335,6 +340,8 @@ public class View extends JFrame implements EBComponent
 					.setCursor(cursor);
 			}
 		}
+
+		Log.log(Log.DEBUG,this,"hideWaitCursor(): leaving - waitCount=" + waitCount);
 	}
 
 	/**
@@ -1040,6 +1047,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.181  2000/07/03 03:32:15  sp
+ * *** empty log message ***
+ *
  * Revision 1.180  2000/06/25 03:19:41  sp
  * View.setInputHandler() method added
  *

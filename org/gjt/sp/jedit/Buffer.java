@@ -167,8 +167,15 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 				// if loadAutosave is false, we loaded an
 				// autosave file, so we set 'dirty' to true
+
+				// note that we don't use setDirty(),
+				// because a) that would send an unnecessary
+				// message, b) it would also set the
+				// AUTOSAVE_DIRTY flag, which will make
+				// the autosave thread write out a
+				// redundant autosave file
 				if(loadAutosave)
-					setDirty(true);
+					setFlag(DIRTY,true);
 
 				if(getFlag(TEMPORARY))
 					return;
@@ -214,7 +221,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void autosave()
 	{
-		if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY))
+		if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY)
+			|| getFlag(LOADING) || getFlag(SAVING))
 			return;
 
 		setFlag(AUTOSAVE_DIRTY,false);
@@ -1823,6 +1831,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.157  2000/07/03 03:32:15  sp
+ * *** empty log message ***
+ *
  * Revision 1.156  2000/06/12 02:43:29  sp
  * pre6 almost ready
  *

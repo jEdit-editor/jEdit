@@ -1564,20 +1564,70 @@ public class jEdit
 	 * is true, then jEdit will close all open views instead of exiting
 	 * entirely.
 	 */
-	public static void exit(final View view, final boolean reallyExit)
+	public static void exit(View view, boolean reallyExit)
 	{
 		// Wait for all requests to finish
 		VFSManager.waitForRequests();
 
-		// Give AWT thread a chance to display error dialog boxes
-		// by only exiting on the next event
-		VFSManager.runInAWTThread(new Runnable()
+		// Even if reallyExit is false, we still exit properly
+		// if background mode is off
+		reallyExit |= !background;
+
+		if(settingsDirectory != null && session != null)
+			Sessions.saveSession(view,session);
+
+		// Close all buffers
+		if(!closeAllBuffers(view,reallyExit))
+			return;
+
+		// If we are running in background mode and
+		// reallyExit was not specified, then return here.
+		if(!reallyExit)
 		{
-			public void run()
+			// in this case, we can't directly call
+			// view.close(); we have to call closeView()
+			// for all open views
+			view = viewsFirst;
+			while(view != null)
 			{
-				_exit(view,reallyExit);
+				closeView(view,false);
+				view = view.next;
 			}
-		});
+
+			// Save settings in case user kills the backgrounded
+			// jEdit process
+			saveSettings();
+
+			return;
+		}
+
+		// Save view properties here - it unregisters
+		// listeners, and we would have problems if the user
+		// closed a view but cancelled an unsaved buffer close
+		view.close();
+
+		// Stop autosave thread
+		autosave.stop();
+
+		// Stop server here
+		if(server != null)
+			server.stopServer();
+
+		// Stop all plugins
+		EditPlugin[] plugins = getPlugins();
+		for(int i = 0; i < plugins.length; i++)
+		{
+			plugins[i].stop();
+		}
+
+		// Send EditorExiting
+		EditBus.send(new EditorExiting(null));
+
+		// Save settings
+		saveSettings();
+
+		// Byebye...
+		System.exit(0);
 	}
 
 	// package-private members
@@ -2220,7 +2270,7 @@ public class jEdit
 	}
 
 	/**
-	 * closeView() used by _exit().
+	 * closeView() used by exit().
 	 */
 	private static void closeView(View view, boolean callExit)
 	{
@@ -2234,75 +2284,14 @@ public class jEdit
 			removeViewFromList(view);
 		}
 	}
-
-	// Exit bottom-half
-	private static void _exit(View view, boolean reallyExit)
-	{
-		// Even if reallyExit is false, we still exit properly
-		// if background mode is off
-		reallyExit |= !background;
-
-		if(settingsDirectory != null && session != null)
-			Sessions.saveSession(view,session);
-
-		// Close all buffers
-		if(!closeAllBuffers(view,reallyExit))
-			return;
-
-		// If we are running in background mode and
-		// reallyExit was not specified, then return here.
-		if(!reallyExit)
-		{
-			// in this case, we can't directly call
-			// view.close(); we have to call closeView()
-			// for all open views
-			view = viewsFirst;
-			while(view != null)
-			{
-				closeView(view,false);
-				view = view.next;
-			}
-
-			// Save settings in case user kills the backgrounded
-			// jEdit process
-			saveSettings();
-
-			return;
-		}
-
-		// Save view properties here - it unregisters
-		// listeners, and we would have problems if the user
-		// closed a view but cancelled an unsaved buffer close
-		view.close();
-
-		// Stop autosave thread
-		autosave.stop();
-
-		// Stop server here
-		if(server != null)
-			server.stopServer();
-
-		// Stop all plugins
-		EditPlugin[] plugins = getPlugins();
-		for(int i = 0; i < plugins.length; i++)
-		{
-			plugins[i].stop();
-		}
-
-		// Send EditorExiting
-		EditBus.send(new EditorExiting(null));
-
-		// Save settings
-		saveSettings();
-
-		// Byebye...
-		System.exit(0);
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.251  2000/07/03 03:32:16  sp
+ * *** empty log message ***
+ *
  * Revision 1.250  2000/06/29 06:20:45  sp
  * Tool bar icon code bug fix
  *
@@ -2329,75 +2318,5 @@ public class jEdit
  *
  * Revision 1.242  2000/05/23 04:04:52  sp
  * Marker highlight updates, next/prev-marker actions
- *
- * Revision 1.241  2000/05/21 06:06:43  sp
- * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
- *
- * Revision 1.240  2000/05/20 07:02:04  sp
- * Documentation updates, tool bar editor finished, a few other enhancements
- *
- * Revision 1.239  2000/05/16 10:47:40  sp
- * More work on toolbar editor, -gui command line switch
- *
- * Revision 1.238  2000/05/14 10:55:21  sp
- * Tool bar editor started, improved view registers dialog box
- *
- * Revision 1.237  2000/05/13 05:13:31  sp
- * Mode option pane
- *
- * Revision 1.236  2000/05/12 11:07:39  sp
- * Bug fixes, documentation updates
- *
- * Revision 1.235  2000/05/08 11:20:08  sp
- * New file finder in open dialog box
- *
- * Revision 1.234  2000/05/07 07:29:01  sp
- * Splitting fixes
- *
- * Revision 1.233  2000/05/07 05:48:30  sp
- * You can now edit several buffers side-by-side in a split view
- *
- * Revision 1.232  2000/05/04 10:37:04  sp
- * Wasting time
- *
- * Revision 1.231  2000/05/01 11:53:23  sp
- * More icons added to toolbar, minor updates here and there
- *
- * Revision 1.230  2000/04/29 09:17:07  sp
- * VFS updates, various fixes
- *
- * Revision 1.229  2000/04/29 03:07:37  sp
- * Indentation rules updated, VFS displays wait cursor properly, background mode
- *
- * Revision 1.228  2000/04/28 09:29:11  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.227  2000/04/27 08:32:57  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.226  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.225  2000/04/25 03:32:40  sp
- * Even more VFS hacking
- *
- * Revision 1.224  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.223  2000/04/24 04:45:36  sp
- * New I/O system started, and a few minor updates
- *
- * Revision 1.222  2000/04/21 05:32:20  sp
- * Focus tweak
- *
- * Revision 1.221  2000/04/17 07:40:51  sp
- * File dialog loaded in a background thread
- *
- * Revision 1.220  2000/04/17 06:34:23  sp
- * More focus debugging, linesChanged() tweaked
- *
- * Revision 1.219  2000/04/16 03:10:31  sp
- * getBooleanProperty() updated
  *
  */

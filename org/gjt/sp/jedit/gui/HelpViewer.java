@@ -53,7 +53,8 @@ public class HelpViewer extends EnhancedFrame
 			helpViewer = new HelpViewer(url);
 		else
 		{
-			helpViewer.setVisible(true);
+			helpViewer.toFront();
+			helpViewer.requestFocus();
 			helpViewer.gotoURL(url,true);
 		}
 	}
@@ -176,26 +177,12 @@ public class HelpViewer extends EnhancedFrame
 	public void cancel()
 	{
 		GUIUtilities.saveGeometry(this,"helpviewer");
-		viewer.setText("");
-		viewer.getDocument().putProperty(Document.StreamDescriptionProperty,
-			DUMMY_URL);
-		setVisible(false);
+		dispose();
+		helpViewer = null;
 	}
 
 	// private members
-	private static URL DUMMY_URL;
 	private static HelpViewer helpViewer;
-
-	static
-	{
-		try
-		{
-			DUMMY_URL = new URL("file:/");
-		}
-		catch(MalformedURLException mf)
-		{
-		}
-	}
 
 	private JButton back;
 	private JButton forward;
@@ -270,6 +257,9 @@ public class HelpViewer extends EnhancedFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/07/03 03:32:16  sp
+ * *** empty log message ***
+ *
  * Revision 1.25  2000/06/24 06:24:55  sp
  * work thread bug fixes
  *
