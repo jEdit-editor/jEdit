@@ -20,7 +20,6 @@ TO DO
 - FTP plugin: improve it in general before 3.2
 - document differences between web start and stand-alone version
 - next time i'm making an RPM, fix the shell script
-- jEditLauncher
 - mention using Macros.message() in macro-tips
 - Ditch LatestVersion?
 

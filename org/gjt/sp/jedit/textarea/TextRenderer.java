@@ -1,5 +1,5 @@
 /*
- * TextRenderingManager.java - Abstract differences between AWT and Java 2D
+ * TextRenderer.java - Abstract differences between AWT and Java 2D
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -23,17 +23,22 @@ import javax.swing.text.TabExpander;
 import java.awt.*;
 import org.gjt.sp.util.Log;
 
-public abstract class TextRenderingManager
+/**
+ * Java 1.1 and Java 2 have different APIs for drawing and measuring text.
+ * Using the Java 1.1 API in Java 2 can result in incorrect caret placement,
+ * etc. So we abstract away the differences with this class.
+ */
+public abstract class TextRenderer
 {
-	static final String JAVA2D_RENDER_CLASS = "org.gjt.sp.jedit.textarea.TextRenderingManager2D";
+	static final String JAVA2D_RENDER_CLASS = "org.gjt.sp.jedit.textarea.TextRenderer2D";
 
-	public static TextRenderingManager createTextRenderingManager()
+	public static TextRenderer createTextRenderer()
 	{
 		if(java2d)
 		{
 			try
 			{
-				ClassLoader loader = TextRenderingManager.class
+				ClassLoader loader = TextRenderer.class
 					.getClassLoader();
 
 				Class clazz;
@@ -42,7 +47,7 @@ public abstract class TextRenderingManager
 				else
 					clazz = loader.loadClass(JAVA2D_RENDER_CLASS);
 
-				return (TextRenderingManager)clazz.newInstance();
+				return (TextRenderer)clazz.newInstance();
 			}
 			catch(Exception e)
 			{
@@ -50,7 +55,7 @@ public abstract class TextRenderingManager
 			}
 		}
 		else
-			return new AWTTextRenderingManager();
+			return new TextRendererAWT();
 	}
 
 	public void setupGraphics(Graphics g) {}
@@ -89,7 +94,7 @@ public abstract class TextRenderingManager
 			{
 				if(flushLen > 0)
 				{
-					x += _drawCharsAndGetWidth(text,flushIndex,
+					x += _drawChars(text,flushIndex,
 						flushLen,g,x,y);
 					flushLen = 0;
 				}
@@ -103,7 +108,7 @@ public abstract class TextRenderingManager
 		}
 
 		if(flushLen > 0)
-			x += _drawCharsAndGetWidth(text,flushIndex,flushLen,g,x,y);
+			x += _drawChars(text,flushIndex,flushLen,g,x,y);
 
 		return x;
 	}
@@ -142,7 +147,7 @@ public abstract class TextRenderingManager
 		return newX - x;
 	}
 
-	public int xToOffset(char[] text, int off, int len, Font font, float x0,
+	public int xToOffset(char[] text, int off, int len, Font font, float x,
 		TabExpander e, boolean round, float[] widthArray)
 	{
 		int flushLen = 0;
@@ -164,7 +169,7 @@ public abstract class TextRenderingManager
 					{
 						return _xToOffset(text,flushIndex,
 							flushLen,font,x - width,
-							round) - off;
+							round) + flushIndex;
 					}
 					else
 						width += newWidth;
@@ -177,7 +182,7 @@ public abstract class TextRenderingManager
 				float newWidth = e.nextTabStop(width,i - off) - width;
 				if(x <= width + newWidth)
 				{
-					if(round || (x - width) < (width + newWidth - x))
+					if(round && (x - width) < (width + newWidth - x))
 						return i;
 					else
 						return i + 1;
@@ -195,7 +200,7 @@ public abstract class TextRenderingManager
 			if(x <= width + newWidth)
 			{
 				return _xToOffset(text,flushIndex,flushLen,font,
-					x - width,round) - off;
+					x - width,round) + flushIndex;
 			}
 			else
 				width += newWidth;
@@ -210,8 +215,8 @@ public abstract class TextRenderingManager
 
 	abstract float _getWidth(char[] text, int start, int len, Font font);
 
-	abstract int _offsetToX(char[] text, int start, int len, Font font, float x,
-		boolean round);
+	abstract int _xToOffset(char[] text, int start, int len, Font font,
+		float x, boolean round);
 
 	static boolean java2d;
 
@@ -219,20 +224,20 @@ public abstract class TextRenderingManager
 	{
 		try
 		{
-			ClassLoader loader = TextRenderingManager.class.getClassLoader();
+			ClassLoader loader = TextRenderer.class.getClassLoader();
 
 			if(loader == null)
 				Class.forName("java.awt.Graphics2D");
 			else
 				loader.loadClass("java.awt.Graphics2D");
 
-			Log.log(Log.DEBUG,TextRenderingManager.class,
+			Log.log(Log.DEBUG,TextRenderer.class,
 				"Java2D detected; will use new text rendering code");
 			java2d = true;
 		}
 		catch(ClassNotFoundException cnf)
 		{
-			Log.log(Log.DEBUG,TextRenderingManager.class,
+			Log.log(Log.DEBUG,TextRenderer.class,
 				"Java2D not detected; will use old text rendering code");
 			java2d = false;
 		}

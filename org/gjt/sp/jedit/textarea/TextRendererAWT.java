@@ -1,5 +1,5 @@
 /*
- * AWTTextRenderingManager.java - Uses old AWT methods to draw text
+ * TextRendererAWT.java - Uses old AWT methods to draw text
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@ package org.gjt.sp.jedit.textarea;
 
 import java.awt.*;
 
-class AWTTextRenderingManager extends TextRenderingManager
+class TextRendererAWT extends TextRenderer
 {
 	float _drawChars(char[] text, int start, int len, Graphics g,
 		float x, float y)
@@ -36,7 +36,7 @@ class AWTTextRenderingManager extends TextRenderingManager
 			.getFontMetrics(font).charsWidth(text,start,len);
 	}
 
-	int _offsetToX(char[] text, int start, int len, Font font, float x,
+	int _xToOffset(char[] text, int start, int len, Font font, float x,
 		boolean round)
 	{
 		int end = start + len;
@@ -51,11 +51,13 @@ class AWTTextRenderingManager extends TextRenderingManager
 			int newWidth = fm.charWidth(text[i]);
 			if(x <= width + newWidth)
 			{
-				if(round || (x - width) < (width + newWidth - x))
-					return i;
+				if(round && (x - width) < (width + newWidth - x))
+					return i - start;
 				else
-					return i + 1;
+					return i + 1 - start;
 			}
+			else
+				width += newWidth;
 		}
 
 		return -1;

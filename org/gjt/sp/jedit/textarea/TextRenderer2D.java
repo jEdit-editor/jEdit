@@ -1,5 +1,5 @@
 /*
- * TextRenderingManager2D.java - Uses new Java2D methods to draw text
+ * TextRenderer2D.java - Uses new Java2D methods to draw text
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -25,14 +25,14 @@ import java.awt.font.*;
 import java.awt.*;
 import java.util.Hashtable;
 
-class TextRenderingManager2D extends TextRenderingManager
+class TextRenderer2D extends TextRenderer
 {
-	void setupGraphics(Graphics g)
+	public void setupGraphics(Graphics g)
 	{
 		((Graphics2D)g).setRenderingHints(renderingHints);
 	}
 
-	void configure(boolean antiAlias, boolean fracFontMetrics)
+	public void configure(boolean antiAlias, boolean fracFontMetrics)
 	{
 		Hashtable hints = new Hashtable();
 
@@ -80,7 +80,7 @@ class TextRenderingManager2D extends TextRenderingManager
 		return (float)glyphs.getLogicalBounds().getWidth();
 	}
 
-	int _offsetToX(char[] text, int start, int len, Font font, float x,
+	int _xToOffset(char[] text, int start, int len, Font font, float x,
 		boolean round)
 	{
 		// this is slow!
@@ -88,7 +88,7 @@ class TextRenderingManager2D extends TextRenderingManager
 			fontRenderContext);
 
 		TextHitInfo info = layout.hitTestChar(x,0);
-		return (round ? info.getInsertIndex() : info.getCharIndex());
+		return (round ? info.getInsertionIndex() : info.getCharIndex());
 	}
 
 	// private members

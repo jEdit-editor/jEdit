@@ -4,6 +4,10 @@ JEDIT 3.2 VERSION HISTORY
 
 + New Features
 
+- jEditLauncher is a Windows native launcher for jEdit. It has an
+  EditServer client written in native code for improved performance,
+  and adds a command for starting jEdit to the Windows Explorer
+  right-click menu (John Gellene)
 - When running on Java 2, anti-aliasing can be enabled in Text Area
   pane of Global Options dialog box. Replaces AntiAlias plugin, and
   works better, because Java2D text measurement code is used to
