@@ -41,6 +41,6 @@ public class ConsoleProgress implements Progress
 
 	public void error(String message)
 	{
-		System.err.println("*** An error ocurred: " + message);
+		System.err.println("*** An error occurred: " + message);
 	}
 }

@@ -126,7 +126,7 @@ public class SwingInstall extends JFrame
 			install();
 		}
 	}
-				
+
 	class About extends JPanel
 	{
 		About()
@@ -139,8 +139,8 @@ public class SwingInstall extends JFrame
 
 			try
 			{
+				text.setText("Loading '" + readme + "'...");
 				text.setPage(getClass().getResource(readme));
-				text.setEditable(false);
 			}
 			catch(IOException io)
 			{
@@ -148,8 +148,10 @@ public class SwingInstall extends JFrame
 				io.printStackTrace();
 			}
 
+			text.setEditable(false);
+
 			JScrollPane scrollPane = new JScrollPane(text);
-			Dimension dim = scrollPane.getPreferredSize();
+			Dimension dim = new Dimension();
 			dim.height = 250;
 			scrollPane.setPreferredSize(dim);
 			add(BorderLayout.CENTER,scrollPane);

@@ -23,7 +23,11 @@ import java.io.*;
 
 public class Archive
 {
-	public static final int BUFSIZ = 32 * 1024;
+	public static final int BUFSIZE = 32 * 1024;
+	public static final String HEADER = "ArE!";
+	public static final int HEADERLEN = HEADER.length();
+	public static final String FIRST_ENTRY = "SIM_ARCHIVE_FMT_V2";
+	public static final String LAST_ENTRY = "SIM_END_OF_ARCHIVE";
 
 	public static void main(String[] args)
 	{
@@ -54,18 +58,25 @@ public class Archive
 		this.in = new DataInputStream(in);
 
 		String name = nextEntry();
-		if(!name.equals("SIM_BEGIN"))
-			throw new IOException("First entry is not SIM_BEGIN");
+		if(!name.equals(FIRST_ENTRY))
+			throw new IOException("First entry is not "
+				+ FIRST_ENTRY);
 	}
 
 	public String nextEntry() throws IOException
 	{
+		byte[] headerbuf = new byte[HEADERLEN];
+		in.readFully(headerbuf,0,HEADERLEN);
+		String header = new String(headerbuf);
+		if(!header.equals(HEADER))
+			throw new IOException("Entry does not begin with " + header);
+
 		int namelen = in.readInt();
 		byte[] namebuf = new byte[namelen];
 		in.readFully(namebuf,0,namelen);
 		length = in.readLong();
 		String name = new String(namebuf);
-		if(name.equals("SIM_END"))
+		if(name.equals(LAST_ENTRY))
 		{
 			in.close();
 			return null;
@@ -108,7 +119,7 @@ public class Archive
 		{
 			DataOutputStream out = new DataOutputStream(
 				new FileOutputStream(filename));
-			writeEntry(out,"SIM_BEGIN",0L,null);
+			writeEntry(out,FIRST_ENTRY,0L,null);
 			for(int i = 2; i < args.length; i++)
 			{
 				File file = new File(args[i]);
@@ -120,7 +131,7 @@ public class Archive
 					in = null;
 				writeEntry(out,args[i],length,in);
 			}
-			writeEntry(out,"SIM_END",0L,null);
+			writeEntry(out,LAST_ENTRY,0L,null);
 			out.close();
 		}
 		catch(IOException io)
@@ -134,6 +145,7 @@ public class Archive
 	{
 		System.out.println(name);
 
+		out.writeBytes(HEADER); // XXX: deprecated
 		out.writeInt(name.length());
 		out.writeBytes(name); // XXX: deprecated
 		out.writeLong(length);
@@ -141,9 +153,9 @@ public class Archive
 		if(in == null)
 			return;
 
-		byte[] buf = new byte[BUFSIZ];
+		byte[] buf = new byte[BUFSIZE];
 		int count;
-		while((count = in.read(buf,0,BUFSIZ)) != -1)
+		while((count = in.read(buf,0,BUFSIZE)) != -1)
 		{
 			out.write(buf,0,count);
 		}
@@ -170,9 +182,9 @@ public class Archive
 				if(!file.exists())
 					file.mkdirs();
 				FileOutputStream out = new FileOutputStream(name);
-				byte[] buf = new byte[BUFSIZ];
+				byte[] buf = new byte[BUFSIZE];
 				int count;
-				while((count = in.read(buf,0,BUFSIZ)) != -1)
+				while((count = in.read(buf,0,BUFSIZE)) != -1)
 				{
 					out.write(buf,0,count);
 				}

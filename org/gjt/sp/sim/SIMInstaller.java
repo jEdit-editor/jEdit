@@ -25,7 +25,7 @@ import java.util.Properties;
 
 public class SIMInstaller
 {
-	public static final String VERSION = "0.2";
+	public static final String VERSION = "0.2.1";
 
 	public SIMInstaller()
 	{
