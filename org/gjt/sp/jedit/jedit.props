@@ -58,8 +58,8 @@ buffer.tabSize=8
 buffer.noTabs=no
 
 # Auto indent
-buffer.indentOnTab=on
-buffer.indentOnEnter=off
+buffer.indentOnTab=off
+buffer.indentOnEnter=on
 
 # Default edit mode
 buffer.defaultMode=text

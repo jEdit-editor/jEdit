@@ -64,6 +64,8 @@ public class CloseDialog extends JDialog
 		buttons.add(cancel = new JButton(jEdit.getProperty("common.cancel")));
 		cancel.addActionListener(actionListener);
 
+		updateButtons();
+
 		getContentPane().add(BorderLayout.SOUTH,buttons);
 
 		addKeyListener(new KeyHandler());

@@ -1959,9 +1959,16 @@
   <sect2><title>Indentation-Related Commands</>
   <indexterm><primary>selection</></indexterm>
    <para>
-    <indexterm><primary>Go to End Indent command</></indexterm>
+    <indexterm><primary>Indent Line command</></indexterm>
     <indexterm><primary>Lines menu</></indexterm>
     <indexterm><primary>Edit menu</></indexterm>
+    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guisubmenu>Go to End Indent</>
+    (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>I</></keycombo>)
+    will indent the current line using automatic indentation rules; see
+    <xhref linkend=autoindent> for details.
+   <para>
+    <indexterm><primary>Go to End Indent command</></indexterm>
     <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guisubmenu>Go to End Indent</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>I</></keycombo>)
     will move the caret to the first non-whitespace character of the current
@@ -2002,15 +2009,11 @@
     If no selection is active, it will beep.
    </para>
   </sect2>
-  <sect2><title>Automatic Indent</>
+  <sect2 id=autoindent><title>Automatic Indent</>
    <indexterm><primary>buffer-local properties</>
    <secondary>indentOnEnter</></indexterm>
    <indexterm><primary>buffer-local properties</>
    <secondary>indentOnTab</></indexterm>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>indentOpenBrackets</></indexterm>
-   <indexterm><primary>buffer-local properties</>
-   <secondary>indentCloseBrackets</></indexterm>
    <indexterm><primary>Emacs text editor</></indexterm>
    <indexterm><primary>VIM text editor</></indexterm>
    <para>
@@ -2032,8 +2035,8 @@
     indentation.
    </para>
    <para>
-    By default, indent on enter is disabled and indent on tab is
-    enabled. There are three ways to specify when indentation should be
+    By default, indent on enter is enabled and indent on tab is
+    disabled. There are three ways to specify when indentation should be
     performed:
    </para>
    <itemizedlist>
@@ -2054,20 +2057,16 @@
     </listitem>
    </itemizedlist>
    <para>
-    The amount of indentation is mode-specific. In most edit modes,
-    it is always the indent of the previous line. However, in C, C++,
-    Java and JavaScript modes, if the previous line contains an open
-    curly bracket (<quote>{</>), an extra tab (or soft tab) is inserted.
-    Similarly, if the <emphasis>current</> line contains a
+    Auto indent rules are mode-specific. In most edit modes,
+    the indent of the previous line is simply copied over.
+    However, in C-like languages (C, C++, IDL, Java, JavaScript),
+    if the previous line contains an open
+    curly bracket (<quote>{</>) and you auto indent, an extra tab
+    (or soft tab) is inserted.
+    Similarly, if you type a
     closing curly bracket (<quote>}</>), a level of indentation is
     removed.
    </para>
-   <para>
-    The indentation brackets can be changed using buffer-local properties.
-    When editing Lisp code, you might try placing the following in the
-    first 10 lines of the buffer:
-   </para>
-   <screen>:indentOpenBrackets=(:indentCloseBrackets=):</screen>
   </sect2>
  </sect1>
  <sect1 id=commenting><title>Commenting Out Code</>

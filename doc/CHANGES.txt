@@ -10,15 +10,20 @@ JEDIT VERSION HISTORY
 - Search and replace operations can now be recorded in macros
 - 'Close All Buffers' and 'Exit' commands now display a dialog box listing
   all unsaved buffers
+- In C/C++/Java modes, typing '}' will immediately reindent the current line
+
++ Enhancements
+
+- The caret is now moved to where the change was when Undo is invoked
+
++ Bug Fixes
+
+- PatchTokenMarker had a bogus dependency on the jEdit core
 
 + API Changes
 
 - GUIUtilities.show/hideWaitCursor() becomes View.show/hideWaitCursor()
 - Mode system cleanup - this breaks XMode
-
-+ Bug Fixes
-
-- PatchTokenMarker had a bogus dependency on the jEdit core
 
 * Version 2.1final
 

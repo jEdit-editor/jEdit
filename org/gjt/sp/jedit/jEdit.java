@@ -184,10 +184,10 @@ public class jEdit
 		// Get things rolling
 		initMisc();
 		initSystemProperties();
-		initModes();
 		initPlugins();
 		initUserProperties();
 		initActions();
+		initModes();
 		initPLAF();
 		initKeyBindings();
 		propertiesChanged();
@@ -706,16 +706,16 @@ public class jEdit
 			if(!ok)
 				return false;
 		}
-		else
+
+		// close remaining buffers (CloseDialog only touches dirty
+		// ones)
+		buffer = buffersFirst;
+		while(buffer != null)
 		{
-			// close all buffers
-			buffer = buffersFirst;
-			while(buffer != null)
-			{
-				_closeBuffer(view,buffer);
-				buffer = buffer.next;
-			}
+			_closeBuffer(view,buffer);
+			buffer = buffer.next;
 		}
+
 		return true;
 	}
 
@@ -1245,6 +1245,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.help());
 		addAction(new org.gjt.sp.jedit.actions.hypersearch());
 		addAction(new org.gjt.sp.jedit.actions.hypersearch_selection());
+		addAction(new org.gjt.sp.jedit.actions.indent_line());
 		addAction(new org.gjt.sp.jedit.actions.indent_on_enter());
 		addAction(new org.gjt.sp.jedit.actions.indent_on_tab());
 		addAction(new org.gjt.sp.jedit.actions.join_lines());
@@ -1578,6 +1579,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.143  1999/10/24 02:06:41  sp
+ * Miscallaneous pre1 stuff
+ *
  * Revision 1.142  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

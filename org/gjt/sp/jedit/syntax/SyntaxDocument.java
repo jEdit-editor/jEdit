@@ -20,6 +20,7 @@ package org.gjt.sp.jedit.syntax;
 
 import javax.swing.event.*;
 import javax.swing.text.*;
+import javax.swing.undo.UndoableEdit;
 
 /**
  * A document implementation that can be tokenized by the syntax highlighting
@@ -115,6 +116,15 @@ public class SyntaxDocument extends PlainDocument
 	 */
 	public void endCompoundEdit() {}
 
+	/**
+	 * Adds an undoable edit to this document's undo list. The edit
+	 * should be ignored if something is currently being undone.
+	 * @param edit The undoable edit
+	 *
+	 * @since jEdit 2.2pre1
+	 */
+	public void addUndoableEdit(UndoableEdit edit) {}
+
 	// protected members
 	protected TokenMarker tokenMarker;
 
@@ -166,6 +176,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  1999/10/24 02:06:41  sp
+ * Miscallaneous pre1 stuff
+ *
  * Revision 1.9  1999/09/30 12:21:05  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

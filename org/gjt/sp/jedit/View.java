@@ -237,17 +237,18 @@ public class View extends JFrame
 				macros.remove(i);
 		}
 
+		int count = macros.getMenuComponentCount();
+
 		createMacrosMenu(macros,new File(jEdit.getJEditHome()
 			+ File.separator + "macros"));
-
-		macros.addSeparator();
 
 		String settings = jEdit.getSettingsDirectory();
 
 		if(settings != null)
 			createMacrosMenu(macros,new File(settings + File.separator
 				+ "macros"));
-		else
+
+		if(count == macros.getMenuComponentCount())
 			macros.add(GUIUtilities.loadMenuItem(this,"no-macros"));
 	}
 
@@ -606,16 +607,11 @@ public class View extends JFrame
 
 	private void createMacrosMenu(JMenu menu, File directory)
 	{
-		boolean noMacros = true;
-
 		EditAction action = jEdit.getAction("play-macro");
 
 		String[] macroFiles = directory.list();
 		if(macroFiles == null)
-		{
-			menu.add(GUIUtilities.loadMenuItem(this,"no-macros"));
 			return;
-		}
 
 		MiscUtilities.quicksort(macroFiles,new MiscUtilities.StringCompare());
 
@@ -625,8 +621,6 @@ public class View extends JFrame
 			File file = new File(directory,name);
 			if(name.toLowerCase().endsWith(".macro"))
 			{
-				noMacros = false;
-
 				name = name.substring(0,name.length() - 6);
 				JMenuItem menuItem = new JMenuItem(name);
 				menuItem.addActionListener(action);
@@ -635,16 +629,16 @@ public class View extends JFrame
 			}
 			else if(file.isDirectory())
 			{
-				noMacros = false;
-
 				JMenu submenu = new JMenu(name);
 				createMacrosMenu(submenu,file);
+				if(submenu.getMenuComponentCount() == 0)
+				{
+					submenu.add(GUIUtilities.loadMenuItem(
+						this,"no-macros"));
+				}
 				menu.add(submenu);
 			}
 		}
-
-		if(noMacros)
-			menu.add(GUIUtilities.loadMenuItem(this,"no-macros"));
 	}
 
 	private void fireViewEvent(int id, Buffer buffer)
@@ -819,6 +813,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.97  1999/10/24 02:06:41  sp
+ * Miscallaneous pre1 stuff
+ *
  * Revision 1.96  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

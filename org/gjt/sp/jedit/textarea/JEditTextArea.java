@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.textarea;
 
 import javax.swing.event.*;
 import javax.swing.text.*;
+import javax.swing.undo.*;
 import javax.swing.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
@@ -1066,6 +1067,9 @@ public class JEditTextArea extends JComponent
 			painter.invalidateLineRange(selectionStartLine,selectionEndLine);
 			painter.invalidateLineRange(newStartLine,newEndLine);
 
+			document.addUndoableEdit(new CaretUndo(
+				selectionStart,selectionEnd));
+
 			selectionStart = newStart;
 			selectionEnd = newEnd;
 			selectionStartLine = newStartLine;
@@ -2022,6 +2026,50 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
+	class CaretUndo extends AbstractUndoableEdit
+	{
+		private int start;
+		private int end;
+
+		CaretUndo(int start, int end)
+		{
+			this.start = start;
+			this.end = end;
+		}
+
+		public boolean isSignificant()
+		{
+			return false;
+		}
+
+		public String getPresentationName()
+		{
+			return "caret move";
+		}
+
+		public void undo() throws CannotUndoException
+		{
+			super.undo();
+
+			select(start,end);
+		}
+
+		public boolean addEdit(UndoableEdit edit)
+		{
+			if(edit instanceof CaretUndo)
+			{
+				CaretUndo cedit = (CaretUndo)edit;
+				start = cedit.start;
+				end = cedit.end;
+				cedit.die();
+
+				return true;
+			}
+			else
+				return false;
+		}
+	}
+
 	static
 	{
 		caretTimer = new Timer(500,new CaretBlinker());
@@ -2033,6 +2081,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  1999/10/24 02:06:41  sp
+ * Miscallaneous pre1 stuff
+ *
  * Revision 1.23  1999/10/16 09:43:00  sp
  * Final tweaking and polishing for jEdit 2.1final
  *
@@ -2059,24 +2110,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.14  1999/07/16 23:45:49  sp
  * 1.7pre6 BugFree version
- *
- * Revision 1.13  1999/07/08 06:43:54  sp
- * Fixed minor typo
- *
- * Revision 1.12  1999/07/08 06:35:41  sp
- * 1.7pre5, yay
- *
- * Revision 1.11  1999/07/08 06:06:04  sp
- * Bug fixes and miscallaneous updates
- *
- * Revision 1.10  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.9  1999/06/30 07:08:02  sp
- * Text area bug fixes
- *
- * Revision 1.8  1999/06/30 05:01:55  sp
- * Lots of text area bug fixes and optimizations
  *
  */

@@ -341,15 +341,86 @@ public class Buffer extends SyntaxDocument
 	}
 
 	/**
-	 * Returns this buffer's undo manager.
+	 * Undoes the most recent edit. Returns true if the undo was
+	 * successful.
+	 *
+	 * @since jEdit 2.2pre1
 	 */
-	public final UndoManager getUndo()
+	public boolean undo()
 	{
-		return undo;
+		try
+		{
+			undoInProgress = true;
+			undo.undo();
+			undoInProgress = false;
+			return true;
+		}
+		catch(CannotUndoException cu)
+		{
+			return false;
+		}
 	}
 
 	/**
-	 * Starts a compound edit that can be undone in one go.
+	 * Redoes the most recently undone edit. Returns true if the redo was
+	 * successful.
+	 *
+	 * @since jEdit 2.2pre1
+	 */
+	public boolean redo()
+	{
+		try
+		{
+			undoInProgress = true;
+			undo.redo();
+			undoInProgress = false;
+			return true;
+		}
+		catch(CannotRedoException cr)
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Adds an undoable edit to this document. This is non-trivial
+	 * mainly because the text area adds undoable edits every time
+	 * the caret is moved. First of all, undos are ignored while
+	 * an undo is already in progress. This is no problem with Swing
+	 * Document undos, but caret undos are fired all the time and
+	 * this needs to be done. Also, insignificant undos are ignored
+	 * if the redo queue is non-empty to stop something like a caret
+	 * move from flushing all redos.
+	 * @param edit The undoable edit
+	 *
+	 * @since jEdit 2.2pre1
+	 */
+	public void addUndoableEdit(UndoableEdit edit)
+	{
+		if(undoInProgress)
+			return;
+
+		// Ignore insificant edits if the redo queue is non-empty.
+		// This stops caret movement from killing redos.
+		if(undo.canRedo() && !edit.isSignificant())
+			return;
+
+		if(compoundEdit != null)
+			compoundEdit.addEdit(edit);
+		else
+			undo.addEdit(edit);
+	}
+
+	/**
+	 * Starts a compound edit. All edits from now on until
+	 * <code>endCompoundEdit()</code> are called will be merged
+	 * into one. This can be used to make a complex operation
+	 * undoable in one step. Nested calls to
+	 * <code>beginCompoundEdit()</code> behave as expected,
+	 * requiring the same number of <code>endCompoundEdit()</code>
+	 * calls to end the edit.
+	 * @see #endCompoundEdit()
+	 * @see #undo()
 	 */
 	public void beginCompoundEdit()
 	{
@@ -359,7 +430,11 @@ public class Buffer extends SyntaxDocument
 	}
 
 	/**
-	 * Ends a compound edit.
+	 * Ends a compound edit. All edits performed since
+	 * <code>beginCompoundEdit()</code> was called can now
+	 * be undone in one step by calling <code>undo()</code>.
+	 * @see #beginCompoundEdit()
+	 * @see #undo()
 	 */
 	public void endCompoundEdit()
 	{
@@ -452,8 +527,11 @@ public class Buffer extends SyntaxDocument
 				- start - 1);
 
 			Mode[] modes = jEdit.getModes();
-			// check last mode first
-			for(int i = modes.length - 1; i >= 0; i--)
+
+			// Plugin modes will appear first in the list
+			// (initPlugins() is called before initModes())
+			// so we start at 0
+			for(int i = 0; i < modes.length; i++)
 			{
 				if(modes[i].accept(this,nogzName,line))
 				{
@@ -731,6 +809,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	private boolean syntaxColorizing;
 	private Mode mode;
 	private UndoManager undo;
+	private boolean undoInProgress;
 	private CompoundEdit compoundEdit;
 	private int compoundEditCount;
 	private Vector markers;
@@ -1218,10 +1297,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	{
 		public void undoableEditHappened(UndoableEditEvent evt)
 		{
-			if(compoundEdit != null)
-				compoundEdit.addEdit(evt.getEdit());
-			else
-				getUndo().addEdit(evt.getEdit());
+			addUndoableEdit(evt.getEdit());
 		}
 	}
 
@@ -1247,6 +1323,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.98  1999/10/24 02:06:40  sp
+ * Miscallaneous pre1 stuff
+ *
  * Revision 1.97  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *
@@ -1277,57 +1356,4 @@ loop:		for(int i = 0; i < markers.size(); i++)
  *
  * Revision 1.88  1999/06/22 06:14:39  sp
  * RMI updates, text area updates, flag to disable geometry saving
- *
- * Revision 1.87  1999/06/20 02:15:45  sp
- * Syntax coloring optimizations
- *
- * Revision 1.86  1999/06/16 03:29:59  sp
- * Added <title> tags to docs, configuration data is now stored in a
- * ~/.jedit directory, style option pane finished
- *
- * Revision 1.85  1999/06/15 05:03:54  sp
- * RMI interface complete, save all hack, views & buffers are stored as a link
- * list now
- *
- * Revision 1.84  1999/06/13 05:47:02  sp
- * Minor changes required for LatestVersion plugin
- *
- * Revision 1.83  1999/06/12 02:30:27  sp
- * Find next can now perform multifile searches, multifile-search command added,
- * new style option pane
- *
- * Revision 1.82  1999/06/09 05:22:11  sp
- * Find next now supports multi-file searching, minor Perl mode tweak
- *
- * Revision 1.81  1999/06/07 06:36:32  sp
- * Syntax `styling' (bold/italic tokens) added,
- * plugin options dialog for plugin option panes
- *
- * Revision 1.80  1999/06/05 00:42:04  sp
- * Expand abbreviation & buffer mode selection bugs fixed
- *
- * Revision 1.79  1999/06/03 08:24:12  sp
- * Fixing broken CVS
- *
- * Revision 1.78  1999/05/29 08:06:56  sp
- * Search and replace overhaul
- *
- * Revision 1.77  1999/05/22 08:33:53  sp
- * FAQ updates, mode selection tweak, patch mode update, javadoc updates, JDK 1.1.8 fix
- *
- * Revision 1.76  1999/04/24 07:34:46  sp
- * Documentation updates
- *
- * Revision 1.75  1999/04/23 07:35:10  sp
- * History engine reworking (shared history models, history saved to
- * .jedit-history)
- *
- * Revision 1.74  1999/04/21 07:39:18  sp
- * FAQ added, plugins can now add panels to the options dialog
- *
- * Revision 1.73  1999/04/21 06:13:26  sp
- * Fixed bug in loadDesktop(), added idiot-proofing to Buffer.setMode()
- *
- * Revision 1.72  1999/04/20 06:38:26  sp
- * jEdit.addPluginMenu() method added
  */

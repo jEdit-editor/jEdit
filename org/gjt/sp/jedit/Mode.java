@@ -26,7 +26,11 @@ import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.*;
 
 /**
- * Yes.
+ * An edit mode defines specific settings for editing some type of file.
+ * One instance of this class is created for each supported edit mode.
+ * In most cases, instances of this class can be created directly, however
+ * if the edit mode needs to define custom indentation behaviour,
+ * subclassing is required.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -34,11 +38,29 @@ import org.gjt.sp.jedit.*;
 public class Mode
 {
 	/**
-	 * Creates a new edit mode
+	 * Creates a new edit mode.
+	 *
+	 * @param name The name used in mode listings and to query mode
+	 * properties
+	 * @see #getProperty(String)
 	 */
 	public Mode(String name)
 	{
 		this.name = name;
+
+		// Bind indentCloseBrackets to indent-line
+		String indentCloseBrackets = (String)getProperty("indentCloseBrackets");
+		if(indentCloseBrackets != null)
+		{
+			EditAction action = jEdit.getAction("indent-line");
+
+			for(int i = 0; i < indentCloseBrackets.length(); i++)
+			{
+				jEdit.getInputHandler().addKeyBinding(
+					indentCloseBrackets.substring(i,i+1),
+					action);
+			}
+		}
 
 		try
 		{
@@ -100,8 +122,8 @@ public class Mode
 	 */
 	public boolean indentLine(Buffer buffer, View view, int lineIndex)
 	{
-		String openBrackets = (String)buffer.getProperty("indentOpenBrackets");
-		String closeBrackets = (String)buffer.getProperty("indentCloseBrackets");
+		String openBrackets = (String)getProperty("indentOpenBrackets");
+		String closeBrackets = (String)getProperty("indentCloseBrackets");
 		if(openBrackets == null || closeBrackets == null
 			|| openBrackets.length() != closeBrackets.length())
 		{
@@ -242,7 +264,11 @@ public class Mode
 
 	/**
 	 * Returns a <code>TokenMarker</code> for this mode. Can return null
-	 * if this mode doesn's support syntax colorizing.
+	 * if this mode doesn's support syntax highlighting. The default
+	 * implementation creates a new instance of the class specified
+	 * by the "tokenMarker" mode property.
+	 *
+	 * @see #getProperty(String)
 	 */
 	public TokenMarker createTokenMarker()
 	{
@@ -271,8 +297,12 @@ public class Mode
 	}
 
 	/**
-	 * Returns a mode property.
+	 * Returns a mode property. The default implementation obtains the
+	 * property from the jEdit property named
+	 * "mode.<i>mode name</i>.<i>key</i>".
 	 * @param key The property name
+	 *
+	 * @since jEdit 2.2pre1
 	 */
 	public Object getProperty(String key)
 	{
@@ -289,10 +319,13 @@ public class Mode
 
 	/**
 	 * Returns if the edit mode is suitable for editing the specified
-	 * file.
+	 * file. The buffer name and first line is checked against the
+	 * file name and first line globs, respectively.
 	 * @param buffer The buffer
 	 * @param fileName The buffer's name
 	 * @param firstLine The first line of the buffer
+	 *
+	 * @since jEdit 2.2pre1
 	 */
 	public boolean accept(Buffer buffer, String fileName, String firstLine)
 	{
@@ -314,7 +347,15 @@ public class Mode
 	}
 
 	// protected members
+
+	/**
+	 * @since jEdit 2.2pre1
+	 */
 	protected RE filenameRE;
+
+	/**
+	 * @since jEdit 2.2pre1
+	 */
 	protected RE firstlineRE;
 
 	// private members
@@ -324,6 +365,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  1999/10/24 02:06:41  sp
+ * Miscallaneous pre1 stuff
+ *
  * Revision 1.13  1999/10/23 03:48:22  sp
  * Mode system overhaul, close all dialog box, misc other stuff
  *

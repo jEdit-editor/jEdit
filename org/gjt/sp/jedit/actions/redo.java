@@ -1,6 +1,6 @@
 /*
  * redo.java
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,13 +32,7 @@ public class redo extends EditAction
 	
 	public void actionPerformed(ActionEvent evt)
 	{
-		try
-		{
-			getBuffer(evt).getUndo().redo();
-		}
-		catch(CannotRedoException cr)
-		{
+		if(!getBuffer(evt).redo())
 			getView(evt).getToolkit().beep();
-		}
 	}
 }

@@ -166,7 +166,8 @@ untab.label=$Tabs to Spaces
 word-count.label=Word Count...
 
 ### Line menu
-line=goto-end-indent \
+line=indent-line \
+     goto-end-indent \
      scroll-line \
      - \
      delete-line \
@@ -177,6 +178,7 @@ line=goto-end-indent \
      shift-left \
      shift-right
 line.label=Lines
+indent-line.label=Indent Line
 goto-end-indent.label=Go to End of Indent
 scroll-line.label=Scroll to Current Line
 delete-line.label=Delete Line

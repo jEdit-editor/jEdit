@@ -1,6 +1,6 @@
 /*
  * undo.java
- * Copyright (C) 1998 Slava Pestov
+ * Copyright (C) 1998, 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,14 +32,7 @@ public class undo extends EditAction
 
 	public void actionPerformed(ActionEvent evt)
 	{
-		View view = getView(evt);
-		try
-		{
-			view.getBuffer().getUndo().undo();
-		}
-		catch(CannotUndoException cu)
-		{
-			view.getToolkit().beep();
-		}
+		if(!getBuffer(evt).undo())
+			getView(evt).getToolkit().beep();
 	}
 }

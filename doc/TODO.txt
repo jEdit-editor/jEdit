@@ -1,46 +1,32 @@
 JEDIT 2.2 TO DO
 
-- Document mode API changes
+------- pre1 -------
 
-* New features:
-
-- SyntaxDocument.addEdit() method. Buffer implements it to do the
-  compound-edit logic. JEditTextArea adds insignificant edits every time
-  the caret is moved.
+- Move caret on redo
 
 - set-search-parameters (regexp, icase, {current,all}) action
 
-- Recording and repeating menu items
-  - Could be implemented by giving menu items a 'proxy' action listener
-    that performed repetition and recording, and then passed the event
-    to the action
+- Line up opening/closing brackets
 
-- More intelligent auto indent.
-
-- When pasting text, indent it, also if it contains multiple lines, insert
+- When pasting text, autoindent it
   new lines at the start and end. Implement in jEdit, not text area
 
-- Reverse search. This will require changes to gnu.regexp
-
 - Recursive directory search
+
+------- pre2 -------
+
+- Trim tool bar a bit, add 'QuickSearch' field.
+  C+f activates it, F7 displays Search & Replace dialog box.
+  In search: ENTER finds next. ESC deactivates
+  ENTER with no string entered displays search and replace dialog box
+
+------- pre3+ -------
+
+- Reverse search. This will require changes to gnu.regexp
 
 - Integrate XMode
 
 - Integrate EditBus if enough plugins take advantage of it
-
-* Code cleanups:
-
-- Move some DefaultInputHandler logic to InputHandler (make it a class)
-
-- Move repeating and recording to JEditInputHandler, which calls
-  view.showStatus() to show the repeat count, and so on. This will mean
-  that we can get rid of InputHandler.{NonRepeatable,NonRecordable} and
-  instead implement them as methods in the EditAction class
-
-- indent-line action: when you press enter, indent-on-enter insert an
-  enter char and then calls execAction(indent-line). When recording a
-  macro, the indent-line will only be recorded if indent-on-enter is
-  enabled, thus making macros more portable
 
 * Ideas for plugins:
 
@@ -52,4 +38,4 @@ JEDIT 2.2 TO DO
 - Debugger front-end (to jdb, gdb, and so on)
 - VI emulation (will be a bit tricky until the InputHandler changes planned
 for jEdit 2.2)
-- Menu bar/right-click context menu editor
+- Menu bar/right-click context menu/toolbar editor
