@@ -71,7 +71,7 @@ public class InstallThread extends Thread
 			if(binDir != null)
 				os.mkdirs(binDir);
 
-			os.createScript(installer,this,installDir,binDir,
+			os.createScript(installer,installDir,binDir,
 				installer.getProperty("app.name"));
 		}
 		catch(IOException io)

@@ -91,11 +91,11 @@ public class ConsoleInstall
 				+ installer.getProperty("comp.devel." + i + ".name")
 				+ " ("
 				+ installer.getProperty("comp.devel." + i + ".size")
-				+ "Kb) [y/N]? ");
+				+ "Kb) [Y/n]? ");
 
 			String line = readLine(in);
-			if(line.length() != 0 && (line.charAt(0) == 'y'
-				|| line.charAt(0) == 'Y'))
+			if(line.length() != 0 && (line.charAt(0) != 'n'
+				&& line.charAt(0) != 'N'))
 				components.addElement(fileset);
 		}
 

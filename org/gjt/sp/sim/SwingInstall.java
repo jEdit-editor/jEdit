@@ -405,7 +405,7 @@ implements ActionListener, ChangeListener
 					installer.getProperty("comp.devel." + i + ".name")
 					+ " (" + installer.getProperty("comp.devel." + i + ".size")
 					+ "Kb)");
-				checkBox.getModel().setSelected(false);
+				checkBox.getModel().setSelected(true);
 				checkBox.addActionListener(this);
 				panel.add(checkBox);
 			}

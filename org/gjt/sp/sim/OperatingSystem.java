@@ -27,11 +27,9 @@ public abstract class OperatingSystem
 
 	public abstract String getShortcutDirectory();
 
-	public abstract void createScript(SIMInstaller installer,
-		InstallThread installThread, String installDir,
-		String binDir, String name) throws IOException;
+	public void createScript(SIMInstaller installer, String installDir,
+		String binDir, String name) throws IOException {}
 
-	// On Unix, we call chmod on the resulting directory...
 	public void mkdirs(String directory) throws IOException
 	{
 		new File(directory).mkdirs();
@@ -63,7 +61,8 @@ public abstract class OperatingSystem
 			return "/usr/local/bin";
 		}
 
-		public void mkdirs(String directory) throws IOException
+		/** maybe this is what causes the fd leak? */
+		/* public void mkdirs(String directory) throws IOException
 		{
 			// make it executable
 			String[] mkdirArgs = { "mkdir", "-m", "755",
@@ -75,33 +74,14 @@ public abstract class OperatingSystem
 			catch(InterruptedException e)
 			{
 			}
-		}
+		} */
 
 		public void createScript(SIMInstaller installer,
-			InstallThread installThread, String installDir,
-			String binDir, String name) throws IOException
+			String installDir, String binDir, String name)
+			throws IOException
 		{
-			/**
-			 * This method copies the simlaunch script to
-			 * binDir, then creates a simple script that
-			 * starts the app using simlaunch in installDir.
-			 * Finally, it symlinks installDir/app to
-			 * binDir/app.
-			 */
-
-			// copy simlaunch to /usr/local/bin.
-			// XXX: need to check if a newer version of simlaunch
-			// exists
-			String simlaunch = binDir + File.separatorChar
-				+ "simlaunch";
-			installThread.copy("simlaunch",simlaunch);
-
-			// make it executable
-			String[] chmodArgs = { "chmod", "755", simlaunch };
-			Runtime.getRuntime().exec(chmodArgs);
-
 			// create app start script
-			String script = installDir + File.separatorChar
+			String script = binDir + File.separatorChar
 				+ name.toLowerCase();
 
 			// Delete existing copy
@@ -110,32 +90,20 @@ public abstract class OperatingSystem
 			// Write simple script
 			FileWriter out = new FileWriter(script);
 			out.write("#!/bin/sh\n");
-			out.write("exec simlaunch ");
-			out.write(name.toLowerCase());
-			out.write(' ');
-			out.write(installer.getProperty("app.main.class"));
-			out.write(' ');
-			out.write("$@\n");
-			out.write("echo Cannot find the simlaunch script."
-				+ " make sure its directory is listed in"
-				+ " your PATH.\n");
+			out.write("exec ${JAVA-java} ${" + name.toUpperCase()
+				+ "} -classpath \"${CLASSPATH}:"
+				+ installDir + File.separator
+				+ name.toLowerCase() + ".jar\" "
+				+ installer.getProperty("app.main.class")
+				+ " $@\n");
+			out.write("echo Cannot find ${JAVA-java}."
+				+ " make sure its directory appears in"
+				+ " your PATH environment variable.\n");
 			out.close();
 
 			// Make it executable
-			chmodArgs[2] = script;
+			String[] chmodArgs = { "chmod", "755", script };
 			Runtime.getRuntime().exec(chmodArgs);
-
-			// Symlink installDir/app to binDir/app
-			String linkToScript = binDir + File.separatorChar
-				+ name.toLowerCase();
-
-			// Don't symlink if binDir == installDir
-			if(!script.equals(linkToScript))
-			{
-				String[] lnArgs = { "ln", "-sf", script,
-					linkToScript };
-				Runtime.getRuntime().exec(lnArgs);
-			}
 		}
 	}
 
@@ -152,8 +120,8 @@ public abstract class OperatingSystem
 		}
 
 		public void createScript(SIMInstaller installer,
-			InstallThread installThread, String installDir,
-			String binDir, String name) throws IOException
+			String installDir, String binDir, String name)
+			throws IOException
 		{
 			/**
 			 * This method creates a batch file in binDir
@@ -185,12 +153,6 @@ public abstract class OperatingSystem
 		{
 			return null;
 		}
-
-		public void createScript(SIMInstaller installer,
-			InstallThread installThread, String installDir,
-			String binDir, String name) throws IOException
-		{
-		}
 	}
 
 	public static class HalfAnOS extends OperatingSystem
@@ -203,12 +165,6 @@ public abstract class OperatingSystem
 		public String getShortcutDirectory()
 		{
 			return null;
-		}
-
-		public void createScript(SIMInstaller installer,
-			InstallThread installThread, String installDir,
-			String binDir, String name) throws IOException
-		{
 		}
 	}
 }
