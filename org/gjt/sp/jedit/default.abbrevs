@@ -1,6 +1,6 @@
 [global]
 EMAIL|sp@gjt.org
-JEDIT|http://www.gjt.org/~sp/jedit.html
+JEDIT|http://jedit.sourceforge.net
 
 [java]
 Ex|Exception
@@ -21,8 +21,8 @@ gp|getProperty
 ogs|org.gjt.sp
 ogsj|org.gjt.sp.jedit
 ogsjt|org.gjt.sp.jedit.textarea
-serr|System.err.println(
-sout|System.out.println(
+serr|System.err.println
+sout|System.out.println
 loge|Log.log(Log.ERROR
 logw|Log.log(Log.WARNING
 logn|Log.log(Log.NOTICE
@@ -33,5 +33,4 @@ ne|nextElement
 
 [html]
 EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>
-HOMELINK|<a href="http://www.geocities.com/slava_pestov">http://www.geocities.com/slava_pestov</a>
-JEDITLINK|<a href="http://www.gjt.org/~sp/jedit.html">jEdit</a>
+JEDITLINK|<a href="http://jedit.sourceforge.net">jEdit</a>

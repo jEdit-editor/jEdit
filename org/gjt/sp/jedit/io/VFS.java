@@ -106,26 +106,44 @@ public abstract class VFS
 	}
 
 	/**
+	 * A buffer has been loaded. This method is called from the I/O
+	 * thread.
+	 * @param buffer The buffer
+	 * @exception IOException If an I/O error occurs
+	 */
+	public void _loadComplete(Buffer buffer) throws IOException {}
+
+	/**
+	 * A buffer has been saved. This method is called from the I/O
+	 * thread.
+	 * @param buffer The buffer
+	 * @exception IOException If an I/O error occurs
+	 */
+	public void _saveComplete(Buffer buffer) throws IOException {}
+
+	/**
 	 * Creates an input stream. This method is called from the I/O
 	 * thread.
 	 * @param view The view
+	 * @param buffer The buffer
 	 * @param path The path
 	 * @param ignoreErrors If true, file not found errors should be
 	 * ignored
 	 * @exception IOException If an I/O error occurs
 	 */
-	public abstract  InputStream _createInputStream(View view, String path,
-		boolean ignoreErrors) throws IOException;
+	public abstract  InputStream _createInputStream(View view, Buffer buffer,
+		String path, boolean ignoreErrors) throws IOException;
 
 	/**
 	 * Creates an output stream. This method is called from the I/O
 	 * thread.
 	 * @param view The view
+	 * @param buffer The buffer
 	 * @param path The path
 	 * @exception IOException If an I/O error occurs
 	 */
-	public abstract OutputStream _createOutputStream(View view, String path)
-		throws IOException;
+	public abstract OutputStream _createOutputStream(View view, Buffer buffer,
+		String path) throws IOException;
 
 	// private members
 	private String name;
@@ -134,6 +152,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.5  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

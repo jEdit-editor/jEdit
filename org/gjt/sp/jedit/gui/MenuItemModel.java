@@ -65,7 +65,7 @@ public class MenuItemModel
 			if(url != null)
 			{
 				icon = new ImageIcon(url);
-				toolTip = GUIUtilities.prettifyMenuLabel(label);
+				toolTip = label;
 				String shortcut = jEdit.getProperty(name
 					+ ".shortcut");
 				if(shortcut != null)
@@ -116,6 +116,9 @@ public class MenuItemModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.9  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.8  2000/04/18 11:44:31  sp
  * Context menu editor finished
  *

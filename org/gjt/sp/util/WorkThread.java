@@ -32,6 +32,7 @@ public class WorkThread extends Thread
 	{
 		super("Work request thread");
 		setDaemon(true);
+		setPriority(4);
 	}
 
 	/**
@@ -42,12 +43,9 @@ public class WorkThread extends Thread
 	 */
 	public void addWorkRequest(Runnable run, boolean inAWT)
 	{
-		Log.log(Log.DEBUG,this,"Adding request: " + run +
-			(inAWT ? " in AWT thread" : ""));
-
 		// if inAWT is set and there are no requests
 		// pending, execute it immediately
-		if(requestCount == 0 && inAWT)
+		if(requestCount == 0 && inAWT && SwingUtilities.isEventDispatchThread())
 		{
 			Log.log(Log.DEBUG,this,"AWT immediate: " + run);
 			run.run();
@@ -100,14 +98,6 @@ public class WorkThread extends Thread
 		stop(new Abort());
 	}
 
-	/**
-	 * Returns if the I/O thread is currently running.
-	 */
-	public boolean isRunning()
-	{
-		return (requestCount != 0);
-	}
-
 	public void run()
 	{
 		Log.log(Log.DEBUG,this,"Work request thread starting");
@@ -124,18 +114,6 @@ public class WorkThread extends Thread
 		}
 	}
 
-	// protected members
-
-	/**
-	 * Called when the thread is starting to process a set of requests.
-	 */
-	protected void beginRunning() {}
-
-	/**
-	 * Called when the thread is finished processing a set of requests.
-	 */
-	protected void endRunning() {}
-
 	// private members
 	private Object lock = new Object();
 	private Request firstRequest;
@@ -144,23 +122,13 @@ public class WorkThread extends Thread
 
 	private void doRequests()
 	{
+		while(firstRequest != null)
+		{
+			doRequest(getNextRequest());
+		}
+
 		synchronized(lock)
 		{
-			Log.log(Log.DEBUG,this,"Waking up with "
-				+ requestCount + " request(s) pending");
-
-			if(firstRequest != null)
-			{
-				beginRunning();
-
-				while(firstRequest != null)
-				{
-					doRequest(getNextRequest());
-				}
-
-				endRunning();
-			}
-
 			// notify a running waitForRequests() method
 			lock.notifyAll();
 
@@ -180,26 +148,26 @@ public class WorkThread extends Thread
 	{
 		if(request.inAWT)
 		{
-			Log.log(Log.DEBUG,this,"Running in AWT thread: " + request.run);
-
 			// this hack ensures that requestCount is zero only
 			// when there are really no requests running
 			Runnable r = new Runnable()
 			{
 				public void run()
 				{
+					Log.log(Log.DEBUG,WorkThread.class,
+						"Running in AWT thread: "
+						+ request.run);
+
 					request.run.run();
-					synchronized(lock)
-					{
-						requestCount--;
-					}
+					requestCount--;
 				}
 			};
 			SwingUtilities.invokeLater(r);
 		}
 		else
 		{
-			Log.log(Log.DEBUG,this,"Running in work thread: " + request.run);
+			Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: "
+				+ request.run);
 			request.run.run();
 			requestCount--;
 		}
@@ -207,14 +175,14 @@ public class WorkThread extends Thread
 
 	private Request getNextRequest()
 	{
-		// no need to sync on 'lock' since we're only called
-		// from doRequests()
-
-		Request request = firstRequest;
-		firstRequest = firstRequest.next;
-		if(firstRequest == null)
-			lastRequest = null;
-		return request;
+		synchronized(lock)
+		{
+			Request request = firstRequest;
+			firstRequest = firstRequest.next;
+			if(firstRequest == null)
+				lastRequest = null;
+			return request;
+		}
 	}
 
 	class Request
@@ -243,6 +211,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.3  2000/04/27 08:32:58  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

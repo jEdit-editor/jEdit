@@ -203,9 +203,3 @@ view.style.label=color:#990033 bgColor:#cfcfcf style:b
 view.style.operator=color:#000000 style:b
 view.style.digit=color:#009191
 view.style.invalid=color:#ff0000 style:b
-
-###
-### MISC SETTINGS
-###
-
-vfs.ftp.anon-password=your@email.address.com

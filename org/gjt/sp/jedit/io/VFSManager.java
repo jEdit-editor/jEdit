@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.io;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import javax.swing.SwingUtilities;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
@@ -121,6 +122,14 @@ public class VFSManager
 	}
 
 	/**
+	 * Returns if the last request caused an error.
+	 */
+	public static boolean errorOccurred()
+	{
+		return error;
+	}
+
+	/**
 	 * Aborts the currently running I/O operation.
 	 * @since jEdit 2.5pre1
 	 */
@@ -150,24 +159,33 @@ public class VFSManager
 	}
 
 	/**
-	 * Returns if the I/O thread is currently running.
-	 */
-	public static boolean isIOThreadRunning()
-	{
-		return ioThread.isRunning();
-	}
-
-	/**
 	 * For use by VFS implementations and IO requests. Displays the
 	 * specified error in the AWT thread.
 	 * @since jEdit 2.5pre1
 	 */
 	public static void error(final View view, final String error, final Object[] args)
 	{
+		// if we are already in the AWT thread, take a shortcut
+		if(SwingUtilities.isEventDispatchThread())
+		{
+			GUIUtilities.error(view,error,args);
+			return;
+		}
+
+		// the 'error' chicanery ensures that stuff like:
+		// VFSManager.waitForRequests()
+		// if(VFSManager.errorOccurred())
+		//         ...
+		// will work (because the below runnable will only be
+		// executed in the next event)
+		VFSManager.error = true;
+
 		runInAWTThread(new Runnable()
 		{
 			public void run()
 			{
+				VFSManager.error = false;
+
 				if(view != null && !view.isShowing())
 					view = null;
 				GUIUtilities.error(view,error,args);
@@ -180,6 +198,7 @@ public class VFSManager
 	private static VFS fileVFS = new FileVFS();
 	private static VFS urlVFS = new UrlVFS();
 	private static Hashtable vfsHash;
+	private static boolean error;
 
 	static
 	{
@@ -193,6 +212,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.5  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

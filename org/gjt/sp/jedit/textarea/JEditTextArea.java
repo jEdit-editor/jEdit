@@ -2003,7 +2003,9 @@ public class JEditTextArea extends JComponent
 		public void focusLost(FocusEvent evt)
 		{
 			setCaretVisible(false);
-			focusedComponent = null;
+			// so that caret undos use the most recently
+			// focused text area
+			//focusedComponent = null;
 		}
 	}
 
@@ -2113,7 +2115,7 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	class CaretUndo extends AbstractUndoableEdit
+	static class CaretUndo extends AbstractUndoableEdit
 	{
 		private int start;
 		private int end;
@@ -2143,19 +2145,19 @@ public class JEditTextArea extends JComponent
 		{
 			super.undo();
 
-			select(start,end);
+			focusedComponent.select(start,end);
 		}
 
 		public boolean addEdit(UndoableEdit edit)
 		{
 			if(edit instanceof CaretUndo)
 			{
-				CaretUndo cedit = (CaretUndo)edit;
+//				CaretUndo cedit = (CaretUndo)edit;
 //				start = cedit.start;
 //				end = cedit.end;
 //				newStart = cedit.start;
 //				newEnd = cedit.end;
-				cedit.die();
+				edit.die();
 
 				return true;
 			}
@@ -2181,6 +2183,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.56  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.55  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *
@@ -2212,11 +2217,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.46  2000/03/14 06:22:25  sp
  * Lots of new stuff
- *
- * Revision 1.45  2000/02/27 00:39:51  sp
- * Misc changes
- *
- * Revision 1.44  2000/02/15 07:44:30  sp
- * bug fixes, doc updates, etc
  *
  */

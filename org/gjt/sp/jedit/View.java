@@ -508,7 +508,6 @@ public class View extends JFrame implements EBComponent
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
-		addFocusListener(new FocusHandler());
 	}
 
 	void close()
@@ -1344,35 +1343,11 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	class FocusHandler implements FocusListener
+	class FocusHandler extends FocusAdapter
 	{
-		boolean searchBarHasFocus;
-
 		public void focusGained(FocusEvent evt)
 		{
-			if(evt.getSource() instanceof View)
-			{
-				if(searchBarHasFocus)
-					searchBar.getField().requestFocus();
-				else
-					textArea.requestFocus();
-			}
-			else
-				textArea = (JEditTextArea)evt.getSource();
-
-			if(checkModStatus)
-				buffer.checkModTime(View.this);
-		}
-
-		public void focusLost(FocusEvent evt)
-		{
-			if(evt.getSource() instanceof View)
-			{
-				if(searchBar != null)
-					searchBarHasFocus = (searchBar.getField().hasFocus());
-				else
-					searchBarHasFocus = false;
-			}
+			textArea = (JEditTextArea)evt.getSource();
 		}
 	}
 
@@ -1384,9 +1359,12 @@ public class View extends JFrame implements EBComponent
 		{
 			if(!gotFocus)
 			{
-				focusOnTextArea();
+				textArea.requestFocus();
 				gotFocus = true;
 			}
+
+			if(checkModStatus)
+				buffer.checkModTime(View.this);
 		}
 
 		public void windowClosing(WindowEvent evt)
@@ -1453,6 +1431,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.163  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.162  2000/04/28 09:29:11  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

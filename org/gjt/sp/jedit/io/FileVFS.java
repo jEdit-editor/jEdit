@@ -163,13 +163,14 @@ public class FileVFS extends VFS
 	 * Creates an input stream. This method is called from the I/O
 	 * thread.
 	 * @param view The view
+	 * @param buffer The buffer
 	 * @param path The path
 	 * @param ignoreErrors If true, file not found errors should be
 	 * ignored
 	 * @exception IOException If an I/O error occurs
 	 */
-	public InputStream _createInputStream(View view, String path,
-		boolean ignoreErrors) throws IOException
+	public InputStream _createInputStream(View view, Buffer buffer,
+		String path, boolean ignoreErrors) throws IOException
 	{
 		try
 		{
@@ -188,10 +189,11 @@ public class FileVFS extends VFS
 	 * Creates an output stream. This method is called from the I/O
 	 * thread.
 	 * @param view The view
+	 * @param buffer The buffer
 	 * @param path The path
 	 * @exception IOException If an I/O error occurs
 	 */
-	public OutputStream _createOutputStream(View view, String path)
+	public OutputStream _createOutputStream(View view, Buffer buffer, String path)
 		throws IOException
 	{
 		return new FileOutputStream(path);

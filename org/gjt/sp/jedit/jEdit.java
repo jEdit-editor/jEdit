@@ -257,6 +257,15 @@ public class jEdit
 		// Start server
 		if(portFile != null)
 			server = new EditServer(portFile);
+		else
+		{
+			if(background)
+			{
+				background = false;
+				System.err.println("You cannot specify both the"
+					+ " -background and -noserver switches");
+			}
+		}
 
 		// Load files specified on the command line
 		boolean error = false;
@@ -1150,6 +1159,11 @@ public class jEdit
 				return false;
 		}
 
+		// Wait for pending I/O requests
+		VFSManager.waitForRequests();
+		if(VFSManager.errorOccurred())
+			return false;
+
 		_closeBuffer(view,buffer);
 
 		return true;
@@ -1175,9 +1189,6 @@ public class jEdit
 		// Create a new file when the last is closed
 		if(buffersFirst == null && buffersLast == null)
 			newFile(view);
-
-		// Wait for pending I/O requests
-		VFSManager.waitForRequests();
 	}
 
 	/**
@@ -1188,9 +1199,6 @@ public class jEdit
 	 */
 	public static boolean closeAllBuffers(View view, boolean isExiting)
 	{
-		// Wait for pending I/O requests
-		VFSManager.waitForRequests();
-
 		boolean dirty = false;
 
 		Buffer buffer = buffersFirst;
@@ -1210,6 +1218,11 @@ public class jEdit
 			if(!ok)
 				return false;
 		}
+
+		// Wait for pending I/O requests
+		VFSManager.waitForRequests();
+		if(VFSManager.errorOccurred())
+			return false;
 
 		// close remaining buffers (the close dialog only deals with
 		// dirty ones)
@@ -2244,6 +2257,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.230  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.229  2000/04/29 03:07:37  sp
  * Indentation rules updated, VFS displays wait cursor properly, background mode
  *

@@ -47,6 +47,9 @@ JEDIT 2.5 VERSION HISTORY
 - Sometimes when files were opened the text area wouldn't update its internal
   count of visible lines. This caused problems with scrolling
 - In C-like edit modes, 'for' statements weren't indented properly
+- Undos should no longer retain references to text areas which no longer
+  exist
+- Reloading a file would muck up HyperSearch results
 
 + API Changes
 

@@ -99,7 +99,7 @@ public class FtpAddress
 	{
 		StringBuffer buf = new StringBuffer();
 		buf.append("ftp://");
-		if(user != null && !user.equals("anonymous"))
+		if(user != null)
 		{
 			buf.append(user);
 			if(password != null && password.length() != 0)
@@ -124,6 +124,9 @@ public class FtpAddress
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.1  2000/04/25 11:00:20  sp
  * FTP VFS hacking, some other stuff
  *

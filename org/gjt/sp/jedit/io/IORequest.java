@@ -131,9 +131,10 @@ public class IORequest implements Runnable
 		{
 			try
 			{
-				in = vfs._createInputStream(view,path,false);
+				in = vfs._createInputStream(view,buffer,path,false);
 				if(in == null)
 					return;
+
 				if(path.endsWith(".gz"))
 					in = new GZIPInputStream(in);
 
@@ -152,14 +153,21 @@ public class IORequest implements Runnable
 
 			try
 			{
-				in = vfs._createInputStream(view,markersPath,true);
-				if(in == null)
-					return;
-				buffer._readMarkers(in);
+				in = vfs._createInputStream(view,buffer,markersPath,true);
+				if(in != null)
+					buffer._readMarkers(in);
 			}
 			catch(IOException io)
 			{
 				// ignore
+			}
+
+			try
+			{
+				vfs._loadComplete(buffer);
+			}
+			catch(IOException io)
+			{
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -182,35 +190,46 @@ public class IORequest implements Runnable
 		OutputStream out = null;
 		try
 		{
-			out = vfs._createOutputStream(view,path);
-			if(out == null)
-				return;
-			if(path.endsWith(".gz"))
-				out = new GZIPOutputStream(out);
-
-			buffer._write(out);
-
-			// We only save markers to VFS's that support deletion.
-			// Otherwise, we will accumilate stale marks files.
-			if(vfs.canDelete() && buffer.getMarkerCount() != 0)
+			try
 			{
-				out = vfs._createOutputStream(view,markersPath);
+				out = vfs._createOutputStream(view,buffer,path);
 				if(out == null)
 					return;
-				buffer._writeMarkers(out);
+
+				if(path.endsWith(".gz"))
+					out = new GZIPOutputStream(out);
+
+				buffer._write(out);
+
+				// We only save markers to VFS's that support deletion.
+				// Otherwise, we will accumilate stale marks files.
+				if(vfs.canDelete() && buffer.getMarkerCount() != 0)
+				{
+					out = vfs._createOutputStream(view,buffer,markersPath);
+					if(out != null)
+						buffer._writeMarkers(out);
+				}
+				else
+					vfs.delete(markersPath);
 			}
-			else
-				vfs.delete(markersPath);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
-			Object[] args = { io.toString() };
-			VFSManager.error(view,"ioerror",args);
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				Object[] args = { io.toString() };
+				VFSManager.error(view,"ioerror",args);
+			}
+
+			try
+			{
+				vfs._saveComplete(buffer);
+			}
+			catch(IOException io)
+			{
+			}
 		}
 		catch(WorkThread.Abort a)
 		{
@@ -231,6 +250,9 @@ public class IORequest implements Runnable
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.5  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

@@ -151,7 +151,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		{
 			BufferUpdate bmsg = (BufferUpdate)msg;
 			Buffer buffer = bmsg.getBuffer();
-			if(bmsg.getWhat() == BufferUpdate.CREATED)
+			if(bmsg.getWhat() == BufferUpdate.LOADED)
 			{
 				for(int i = resultModel.getSize() - 1; i >= 0; i--)
 				{
@@ -389,6 +389,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.57  2000/04/29 09:17:07  sp
+ * VFS updates, various fixes
+ *
  * Revision 1.56  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

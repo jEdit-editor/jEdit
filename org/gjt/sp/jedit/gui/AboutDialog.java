@@ -34,7 +34,7 @@ public class AboutDialog extends EnhancedDialog
 
 		JLabel label = new JLabel(
 			new ImageIcon(getClass().getResource(
-			"/org/gjt/sp/jedit/jedit_logo.jpg")));
+			"/org/gjt/sp/jedit/jedit_logo.gif")));
 		label.setBorder(new EmptyBorder(10,10,10,10));
 		getContentPane().add(BorderLayout.NORTH,label);
 		JPanel panel = new JPanel(new GridLayout(0,1));
