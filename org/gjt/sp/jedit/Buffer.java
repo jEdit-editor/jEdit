@@ -2590,7 +2590,8 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	public void addMarker(String name, int start, int end)
 	{
-		setDirty(true);
+		if(!getFlag(READ_ONLY))
+			setDirty(true);
 
 		name = name.replace(';',' ');
 		Marker markerN = new Marker(this,name,start,end);

@@ -17,6 +17,14 @@ JEDIT 3.1 VERSION HISTORY
 - The file dialog's file name field is no longer cleared when the user
   changes directories
 - Improved 'magic caret' code when moving caret up and down
+- New method for use in macros:
+
+  Registers.append(JEditTextArea textArea, char register, String separator)
+
+  Like the old append() method but you can specify a separator other than
+  the newline character used currently.
+
+- Markers can now be set in read only files
 
 + Neutral
 

@@ -3236,12 +3236,6 @@ forward_scan:		do
 	 */
 	public void showSetMarkerDialog()
 	{
-		if(!buffer.isEditable())
-		{
-			getToolkit().beep();
-			return;
-		}
-
 		String marker = GUIUtilities.input(view,"setmarker",
 			getSelectedText());
 		if(marker != null)

@@ -1,14 +1,15 @@
 + before 3.1final
+ - narrow insert undo
  - C+i in shortcuts editor
- - ensure find field doesn't get too large 
+ - ensure find field doesn't get too large
  - better folding docs
  - undo causes problems sometimes (is this related to folding at all?)
  - scrolling bug with folding
  - replace all fucks shit up
  - scrollbar is not updated when view first comes up sometimes
- - horizontal scroll bar not updated: insert text, undo
  - update to new gnu.regexp version
  - finish persistent splits
+ - include macro guide
 
 + sometime in the future
  - .description plugin property
@@ -32,3 +33,4 @@
  - search in selection option; find-next disabled, hypersearch, replace-all
    ok, repalce button does same thing???
  - option for auto wrap around
+ - display all plugin errors, batched in one window on startup
