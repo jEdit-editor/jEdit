@@ -72,7 +72,6 @@
 				<include name="org/gjt/sp/jedit/icons/*.gif"/>
 				<include name="org/gjt/sp/jedit/icons/*.jpg"/>
 				<include name="org/gjt/sp/jedit/icons/*.png"/>
-				<include name="org/gjt/sp/jedit/options/overview.html"/>
 				<include name="org/gjt/sp/jedit/*.props"/>
 
 				<include name="org/gjt/sp/jedit/actions.xml"/>
