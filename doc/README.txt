@@ -39,7 +39,7 @@ If you would like to discuss the BeanShell scripting language,
 subscribe to one of the BeanShell mailing lists by visiting
 <http://www.beanshell.org/contact.html>.
 
-Finally, you may contact me directly by e-mailing <sp@gjt.org>.
+Finally, you may contact me directly by e-mailing <slava@jedit.org>.
 
 * Reporting bugs
 
@@ -179,6 +179,8 @@ Denis Lambot:
 
 Dirk Moebius:
 	- HTTP firewall plugin
+	- EditorExitRequested message code
+	- VariableGridLayout code
 
 Dominic Stolerman:
 	- ML syntax highlighting
@@ -200,6 +202,9 @@ Juha Lindfors:
 
 Kristian Ovaska:
 	- x86 Assembly, Haskell, Pascal syntax highlighting
+
+Matt Albrecht:
+	- Inform syntax highlighting
 
 Matthias Schneider:
 	- AWK, COBOL syntax highlighting
@@ -241,6 +246,3 @@ If you are not on the above list but think you should be, e-mail me.
 In addition to the above people, I would like to thank the plugin
 developers for their plugins, and the users for their feedback and
 comments.
-
--- Slava Pestov
-<sp@gjt.org>

@@ -2,15 +2,42 @@ JEDIT 3.1 VERSION HISTORY
 
 * Version 3.1pre4
 
++ New Features
+
+- Inform syntax highlighting (Matt Albrecht)
+- EditorExitRequested message sent when editor is about to exit but
+  before settings are saved, buffers are closed, etc (Dirk Moebius)
+
 + Enhancements
 
 - Gutter line highlight code now highlights (if the interval is set to 5)
   line 5, 10, 15, etc. Before it would highlight line 1, 6, 11, etc.
+- 'Find Selection' initially selects text in 'Find' field now
+- Measurement units now highlighted in CSS mode
+- The file dialog's file name field is no longer cleared when the user
+  changes directories
+- Improved 'magic caret' code when moving caret up and down
+
++ Neutral
+
+- Session code moved to BufferList plugin. jEdit now supports one,
+  default session only
 
 + Bug Fixes
 
 - jEdit no longer uses the java.specification.version property, because
   on IBM 1.3 VMs, it is set to 1.2
+- The 'Rename' command was never shown in the file system's right-click
+  menu if the root of the directory tree was 'favorites:', even if a
+  file inside a directory on the local filesystem was created
+- Minor 'New File' command bug fixed
+- Fixed minor mapping bug in JEditTextArea.invalidateLineRange() which
+  caused gutter repaint problems when deleting lines
+
++ API Changes
+
+- GUIUtilities.showFileDialog() officially deprecated. Use
+  GUIUtilities.showVFSFileDialog() instead
 
 * Version 3.1pre3
 

@@ -62,7 +62,7 @@ public class Gutter extends JComponent implements SwingConstants
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
 		Color fg = getForeground();
 
-		int baseline = (int) Math.round((this.baseline + lineHeight
+		int baseline = (int)((this.baseline + lineHeight
 			- pfm.getDescent()) / 2.0);
 
 		boolean highlightCurrentLine = currentLineHighlightEnabled

@@ -701,7 +701,16 @@ public class JEditTextArea extends JComponent
 	public final void invalidateLineRange(int firstLine, int lastLine)
 	{
 		firstLine = buffer.physicalToVirtual(firstLine);
-		lastLine = buffer.physicalToVirtual(lastLine);
+
+		// all your bugs are belong to us
+		if(lastLine > buffer.virtualToPhysical(
+			buffer.getVirtualLineCount() - 1))
+		{
+			lastLine = (lastLine - buffer.getLineCount())
+				+ buffer.getVirtualLineCount();
+		}
+		else
+			lastLine = buffer.physicalToVirtual(lastLine);
 
 		FontMetrics fm = painter.getFontMetrics();
 		int y = lineToY(firstLine) + fm.getDescent() + fm.getLeading();
@@ -1241,6 +1250,9 @@ public class JEditTextArea extends JComponent
 			int newStartLine = getLineOfOffset(newStart);
 			int newEndLine = getLineOfOffset(newEnd);
 
+			magicCaret = offsetToX(newStartLine,newStart
+				- getLineStartOffset(newStartLine));
+
 			invalidateLineRange(selectionStartLine,selectionEndLine);
 			invalidateLineRange(newStartLine,newEndLine);
 
@@ -1272,9 +1284,6 @@ public class JEditTextArea extends JComponent
 		// Disable rectangle select if selection start = selection end
 		if(selectionStart == selectionEnd)
 			rectSelect = false;
-
-		// Clear the `magic' caret position used by up/down
-		magicCaret = -1;
 
 		if(focusedComponent == this)
 			scrollToCaret(doElectricScroll);
@@ -2097,11 +2106,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
-		int magic = getMagicCaretPosition();
-		if(magic == -1)
-		{
-			magic = offsetToX(line,caret - getLineStartOffset(line));
-		}
+		int magic = magicCaret;
 
 		int nextLine = buffer.getNextVisibleLine(line);
 
@@ -2163,11 +2168,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
-		int magic = getMagicCaretPosition();
-		if(magic == -1)
-		{
-			magic = offsetToX(line,caret - getLineStartOffset(line));
-		}
+		int magic = magicCaret;
 
 		if(firstLine + visibleLines * 2 >= lineCount - 1)
 			setFirstLine(lineCount - visibleLines);
@@ -2342,11 +2343,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		int caret = getCaretPosition();
 		int line = getCaretLine();
 
-		int magic = getMagicCaretPosition();
-		if(magic == -1)
-		{
-			magic = offsetToX(line,caret - getLineStartOffset(line));
-		}
+		int magic = magicCaret;
 
 		int prevLine = buffer.getPrevVisibleLine(line);
 		if(prevLine == -1)
@@ -2410,11 +2407,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		else
 			setFirstLine(firstLine - visibleLines);
 
-		int magic = getMagicCaretPosition();
-		if(magic == -1)
-		{
-			magic = offsetToX(line,caret - getLineStartOffset(line));
-		}
+		int magic = magicCaret;
 
 		line = buffer.virtualToPhysical(Math.max(0,
 			buffer.physicalToVirtual(line) - visibleLines));
@@ -4189,7 +4182,11 @@ forward_scan:		do
 				newEnd = selectionEnd;
 
 			if(change)
+			{
+				int oldMagic = magicCaret;
 				select(newStart,newEnd,true);
+				magicCaret = oldMagic;
+			}
 			else
 			{
 				updateBracketHighlight();
@@ -4236,7 +4233,11 @@ forward_scan:		do
 				newEnd = selectionEnd;
 
 			if(change)
+			{
+				int oldMagic = magicCaret;
 				select(newStart,newEnd,false);
+				magicCaret = oldMagic;
+			}
 			else
 				updateBracketHighlight();
 

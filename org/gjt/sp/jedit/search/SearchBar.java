@@ -47,7 +47,7 @@ public class SearchBar extends JPanel
 		box.add(Box.createGlue());
 		box.add(find = new HistoryTextField("find"));
 		find.setFont(plainFont);
-		Dimension min = find.getMinimumSize();
+		Dimension min = find.getPreferredSize();
 		min.width = Integer.MAX_VALUE;
 		find.setMaximumSize(min);
 		ActionHandler actionHandler = new ActionHandler();

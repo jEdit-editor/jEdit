@@ -186,9 +186,6 @@ file=new-file \
      - \
      print \
      - \
-     load-session \
-     save-session \
-     - \
      exit
 file.label=$File
 new-file.label=$New File
@@ -207,8 +204,6 @@ save-as.label=Sa$ve As...
 save-a-copy-as.label=Save a Cop$y As...
 save-all.label=Save A$ll Buffers...
 print.label=$Print...
-load-session.label=Loa$d Session...
-save-session.label=Sav$e Session...
 exit.label=E$xit
 
 ### Edit menu
@@ -950,7 +945,7 @@ options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher
 
 options.loadsave.label=Loading & Saving
-options.loadsave.saveDesktop=Restore previously open files on startup
+options.loadsave.restore=Restore previously open files on startup
 options.loadsave.encoding=File encoding:
 options.loadsave.autosave=Autosave frequency (secs):
 options.loadsave.backups=Max number of backups:

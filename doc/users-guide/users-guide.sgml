@@ -1,8 +1,8 @@
-<!-- jEdit documentation, (C) 1999, 2000 Slava Pestov -->
+<!-- jEdit documentation, (C) 1999, 2000, 2001 Slava Pestov -->
 <!-- Released under the GNU General Public License; see COPYING.txt -->
 
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 

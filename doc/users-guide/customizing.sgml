@@ -266,7 +266,7 @@
  </sect1>
  <sect1 id=settings-directory><title>The jEdit Settings Directory</>
   <para>
-   jEdit stores all settings, macros, sessions and so on as files
+   jEdit stores all settings, macros, and so on as files
    inside its <firstterm>settings directory</>. In most cases, editing these
    files is not necessary, since graphical tools and commands can do the
    job. However, being familiar with the structure of the settings directory
@@ -310,8 +310,8 @@
    is usually empty. It only contains files while the plugin manager is
    downloading a plugin. For information about the plugin manager,
    see <xref linkend=plugins>.</para></listitem>
-   <listitem><para><filename>sessions</> - this directory contains
-   saved editor sessions. See <xref linkend=sessions>.</para></listitem>
+   <listitem><para><filename>session</> - a list of files, used when
+   restoring previously open files on startup.</para></listitem>
    <listitem><para><filename>abbrevs</> - a plain text file which
    stores all defined abbreviations. See <xref linkend=abbrevs>.</para></listitem>
    <listitem><para><filename>activity.log</> - a plain text file which

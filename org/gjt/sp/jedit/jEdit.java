@@ -88,8 +88,7 @@ public class jEdit
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
-		boolean defaultSession = true;
-		session = "default";
+		boolean restore = true;
 		boolean showSplash = true;
 		boolean showGUI = true;
 
@@ -128,13 +127,8 @@ public class jEdit
 					background = true;
 				else if(arg.startsWith("-nogui"))
 					showGUI = false;
-				else if(arg.equals("-nosession"))
-					session = null;
-				else if(arg.startsWith("-session="))
-				{
-					session = arg.substring(9);
-					defaultSession = false;
-				}
+				else if(arg.equals("-norestore"))
+					restore = false;
 				else if(arg.equals("-nosplash"))
 					showSplash = false;
 				else if(arg.equals("-newview"))
@@ -155,9 +149,6 @@ public class jEdit
 		else
 			portFile = null;
 
-		if(session != null)
-			session = Sessions.createSessionFileName(session);
-
 		// Try connecting to another running jEdit instance
 		String userDir = System.getProperty("user.dir");
 
@@ -176,13 +167,9 @@ public class jEdit
 				out.write(String.valueOf(key));
 				out.write('\n');
 
-				if(!defaultSession)
-				{
-					if(session != null)
-						out.write("session=" + session + "\n");
-					else
-						out.write("nosession\n");
-				}
+				if(!restore)
+					out.write("norestore\n");
+
 				if(newView)
 					out.write("newview\n");
 				out.write("parent=" + userDir + "\n");
@@ -231,9 +218,6 @@ public class jEdit
 			File _macrosDirectory = new File(settingsDirectory,"macros");
 			if(!_macrosDirectory.exists())
 				_macrosDirectory.mkdir();
-			File _sessionsDirectory = new File(settingsDirectory,"sessions");
-			if(!_sessionsDirectory.exists())
-				_sessionsDirectory.mkdir();
 
 			String logPath = MiscUtilities.constructPath(
 				settingsDirectory,"activity.log");
@@ -331,18 +315,11 @@ public class jEdit
 
 		Buffer buffer = openFiles(userDir,args);
 
-		if(bufferCount == 0 && settingsDirectory != null)
-		{
-			// don't load default session when in background mode
-			if(defaultSession)
-			{
-				if(!background && session != null
-					&& getBooleanProperty("saveDesktop"))
-					buffer = Sessions.loadSession(session,true);
-			}
-			else
-				buffer = Sessions.loadSession(session,true);
-		}
+		if(restore && bufferCount == 0
+			&& !background
+			&& settingsDirectory != null
+			&& jEdit.getBooleanProperty("restore"))
+			buffer = restoreOpenFiles();
 
 		// Create the view and hide the splash screen.
 		final boolean _showGUI = showGUI;
@@ -1006,6 +983,80 @@ public class jEdit
 	}
 
 	/**
+	 * Opens files that were open last time.
+	 * @since jEdit 3.1pre4
+	 */
+	public static Buffer restoreOpenFiles()
+	{
+		if(settingsDirectory == null)
+			return null;
+
+		File session = new File(MiscUtilities.constructPath(
+			settingsDirectory,"session"));
+
+		if(!session.exists())
+			return null;
+
+		Buffer buffer = null;
+		try
+		{
+			BufferedReader in = new BufferedReader(new FileReader(
+				session));
+
+			String line;
+			while((line = in.readLine()) != null)
+			{
+				Buffer _buffer = openFile(null,line);
+				if(_buffer != null)
+					buffer = _buffer;
+			}
+
+			in.close();
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,jEdit.class,"Error while loading " + session);
+			Log.log(Log.ERROR,jEdit.class,io);
+		}
+
+		return buffer;
+	}
+
+	/**
+	 * Saves the list of open files.
+	 * @since jEdit 3.1pre4
+	 */
+	public static void saveOpenFiles()
+	{
+		if(settingsDirectory == null)
+			return;
+
+		File session = new File(MiscUtilities.constructPath(
+			settingsDirectory,"session"));
+
+		try
+		{
+			String lineSep = System.getProperty("line.separator");
+
+			BufferedWriter out = new BufferedWriter(new FileWriter(
+				session));
+			Buffer buffer = buffersFirst;
+			while(buffer != null)
+			{
+				out.write(buffer.getPath());
+				out.write(lineSep);
+				buffer = buffer.next;
+			}
+			out.close();
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,jEdit.class,"Error while saving " + session);
+			Log.log(Log.ERROR,jEdit.class,io);
+		}
+	}
+
+	/**
 	 * Opens the file names specified in the argument array. This
 	 * handles +line and +marker arguments just like the command
 	 * line parser.
@@ -1223,7 +1274,9 @@ public class jEdit
 	{
 		// If only one new file is open which is clean, just close
 		// it, which will create an 'Untitled-1'
-		if(buffersFirst != null && buffersFirst == buffersLast
+		if(dir != null
+			&& buffersFirst != null
+			&& buffersFirst == buffersLast
 			&& buffersFirst.isUntitled()
 			&& !buffersFirst.isDirty())
 		{
@@ -1752,12 +1805,15 @@ public class jEdit
 		// Wait for pending I/O requests
 		VFSManager.waitForRequests();
 
+		// Send EditorExitRequested
+		EditBus.send(new EditorExitRequested(view));
+
 		// Even if reallyExit is false, we still exit properly
 		// if background mode is off
 		reallyExit |= !background;
 
-		if(settingsDirectory != null && session != null)
-			Sessions.saveSession(view,session);
+		if(settingsDirectory != null)
+			saveOpenFiles();
 
 		// Close all buffers
 		if(!closeAllBuffers(view,reallyExit))
@@ -1834,7 +1890,6 @@ public class jEdit
 	private static String jEditHome;
 	private static String settingsDirectory;
 	private static long propsModTime, historyModTime, recentModTime;
-	private static String session;
 	private static Properties defaultProps;
 	private static Properties props;
 	private static EditServer server;
@@ -1873,9 +1928,7 @@ public class jEdit
 		System.out.println("	-version: Print jEdit version and"
 			+ " exit");
 		System.out.println("	-usage: Print this message and exit");
-		System.out.println("	-nosession: Don't load default session");
-		System.out.println("	-session=<name>: Load session from"
-			+ " $HOME/.jedit/sessions/<name>");
+		System.out.println("	-norestore: Don't restore previously open files");
 		System.out.println("	-noserver: Don't start editor server");
 		System.out.println("	-server=<name>: Reads/writes server"
 			+ " info to $HOME/.jedit/<name>");

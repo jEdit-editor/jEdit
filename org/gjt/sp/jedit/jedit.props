@@ -13,8 +13,8 @@ autosave=30
 # Maximum number of elements in a history list
 history=20
 
-# Desktop saving toggle
-saveDesktop=true
+# Restore open files on startup?
+restore=true
 
 # Caret saving toggle
 saveCaret=true

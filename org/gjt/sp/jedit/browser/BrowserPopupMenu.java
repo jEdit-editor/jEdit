@@ -42,7 +42,7 @@ public class BrowserPopupMenu extends JPopupMenu
 		if(file != null)
 		{
 			this.file = file;
-			this.vfs = VFSManager.getVFSForPath(browser.getDirectory());
+			this.vfs = VFSManager.getVFSForPath(file.path);
 
 			boolean delete = (vfs.getCapabilities() & VFS.DELETE_CAP) != 0;
 			boolean rename = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
@@ -186,7 +186,7 @@ public class BrowserPopupMenu extends JPopupMenu
 					}
 				}
 				else
-					jEdit.newFile(view,null);
+					jEdit.newFile(view,browser.getDirectory());
 			}
 			else if(actionCommand.equals("new-directory"))
 				browser.mkdir();

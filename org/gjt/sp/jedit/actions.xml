@@ -404,12 +404,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="load-session">
-	<CODE>
-		Sessions.showLoadSessionDialog(view);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="log-viewer">
 	<CODE>
 		jEdit.showActivityLog();
@@ -708,12 +702,6 @@
 <ACTION NAME="save-a-copy-as">
 	<CODE>
 		buffer.saveAs(view,false);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="save-session">
-	<CODE>
-		Sessions.showSaveSessionDialog(view);
 	</CODE>
 </ACTION>
 

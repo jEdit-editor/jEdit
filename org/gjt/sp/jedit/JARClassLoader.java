@@ -260,7 +260,7 @@ public class JARClassLoader extends ClassLoader
 				if(System.getProperty("java.version").compareTo(arg) < 0)
 				{
 					String[] args = { name, arg,
-						jreVersion };
+						System.getProperty("java.version") };
 					GUIUtilities.error(null,"plugin.dep-jdk",args);
 					return false;
 				}

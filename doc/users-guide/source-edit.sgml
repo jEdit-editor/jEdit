@@ -310,15 +310,15 @@
   </para>
   <para>
    A set of consecutive lines with the same leading indent is referred to as
-   a <firstterm>fold</>, and the amount of indent is the <firstterm>fold level</>.
-   The visibility of each fold can be set independently.
+   a <firstterm>fold</>. The visibility of each fold can be set independently.
    Text hidden due to folding is still present in the buffer, and can be made
    visible again using the appropriate commands. Cursor movement commands behave
    like the text is not there, but text manipulation commands will act on the
    hidden text.
   </para>
   <para>
-   The initial fold visibility level can be specified on a mode-specific or
+   The initial fold visibility level,in multiples of the current tab size,
+   can be specified on a mode-specific or
    global basis in the
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box. Folds
    with a level higher than this will be automatically collapsed after a buffer
@@ -357,7 +357,7 @@
   <para>
    <guimenu>View</>&gt;<guisubmenu>Folding</>&gt;<guimenuitem>Expand All
    Folds</> (keyboard shortcut:
-   <keycombo><keycap>Control</><keycap>E</></keycombo> <keycap>ENTER</>)
+   <keycombo><keycap>Control</><keycap>E</></keycombo> <keycap>Enter</>)
    reads the next character entered at the keyboard, and expands all folds
    in the buffer
    with a fold level less than that specified, and collapsed all others.

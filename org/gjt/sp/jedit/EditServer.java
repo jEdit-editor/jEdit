@@ -189,15 +189,15 @@ class EditServer extends Thread
 	}
 
 	// Thread-safe wrapper for Sessions.loadSession()
-	private Buffer TSloadSession(final String session)
+	private Buffer TSrestoreOpenFiles()
 	{
-		final Buffer[] retVal = new Buffer[1];
+		final Buffer[] retVal = new Buffer[0];
 		try
 		{
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run()
 				{
-					retVal[0] = Sessions.loadSession(session,false);
+					retVal[0] = jEdit.restoreOpenFiles();
 				}
 			});
 		}
@@ -225,8 +225,7 @@ class EditServer extends Thread
 		boolean readOnly = false;
 		boolean newView = false;
 		String parent = null;
-		String session = (jEdit.getBooleanProperty("saveDesktop")
-			? "default" : null);
+		boolean restore = jEdit.getBooleanProperty("restore");
 		boolean endOpts = false;
 
 		View view = null;
@@ -247,10 +246,8 @@ class EditServer extends Thread
 					newView = true;
 				else if(command.startsWith("parent="))
 					parent = command.substring(7);
-				else if(command.startsWith("session="))
-					session = command.substring(8);
-				else if(command.startsWith("nosession"))
-					session = null;
+				else if(command.startsWith("norestore"))
+					restore = false;
 				else
 				{
 					Log.log(Log.ERROR,this,client
@@ -267,19 +264,8 @@ class EditServer extends Thread
 		args.copyInto(_args);
 		Buffer buffer = TSopenFiles(parent,_args);
 
-		// Try loading session, then new file
-		if("default".equals(session))
-		{
-			if(buffer == null)
-			{
-				// Load default session
-				buffer = TSloadSession(session);
-			}
-		}
-		else if(session != null)
-		{
-			buffer = TSloadSession(session);
-		}
+		if(buffer == null && restore)
+			TSrestoreOpenFiles();
 
 		if(buffer == null)
 			buffer = TSnewFile();

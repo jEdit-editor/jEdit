@@ -295,34 +295,6 @@
    Options</> dialog box.
   </para>
  </sect1>
- <sect1 id=sessions><title>Editor Sessions</>
-  <para>
-   A <firstterm>session</> is a list of file names. Sessions are stored
-   as plain text files with the extension <filename>.session</> in the
-   <filename>sessions</> subdirectory of the jEdit settings directory.
-   The location of the settings directory is operating system-specific; see
-   <xref linkend=settings-directory>.
-  </para>
-  <para>
-   <guimenu>File</>&gt;<guimenuitem>Load Session</> displays a file
-   selector dialog box and opens all file names
-   listed in the specified session.
-  </para>
-  <para>
-   <guimenu>File</>&gt;<guimenuitem>Save Session</> displays a file
-   selector dialog box and saves the list of
-   open buffers to the specified session.
-  </para>
-  <para>
-   The session named
-   <filename>default.session</> is loaded when jEdit starts, and the list of
-   open files is recorded into it when jEdit exits. The end result is
-   that open files are retained if jEdit is closed and reopened. This
-   can be disabled in the <guibutton>Loading &amp; Saving</> pane
-   of the <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
-   dialog box.
-  </para>
- </sect1>
  <sect1 id=closing-exiting><title>Closing Files and Exiting jEdit</>
   <para>
    <guimenu>File</>&gt;<guimenuitem>Close Buffer</>

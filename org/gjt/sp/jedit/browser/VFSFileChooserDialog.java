@@ -241,11 +241,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 						parent = parent.substring(0,parent.length() - 1);
 					if(parent.equals(directory))
 						path = file.name;
-	
+
 					filenameField.setText(path);
 				}
-				else
-					filenameField.setText(null);
 			}
 			else
 			{

@@ -1,6 +1,6 @@
 /*
  * SearchDialog.java - Search and replace dialog
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,8 @@ public class SearchDialog extends EnhancedDialog
 	public void setSearchString(String searchString)
 	{
 		find.setText(searchString);
+		find.selectAll();
+
 		replace.setText(null);
 
 		if(!isVisible())

@@ -92,10 +92,10 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			ioThreadCount);
 
 		/* Session management */
-		saveDesktop = new JCheckBox(jEdit.getProperty(
-			"options.loadsave.saveDesktop"));
-		saveDesktop.setSelected(jEdit.getBooleanProperty("saveDesktop"));
-		addComponent(saveDesktop);
+		restore = new JCheckBox(jEdit.getProperty(
+			"options.loadsave.restore"));
+		restore.setSelected(jEdit.getBooleanProperty("restore"));
+		addComponent(restore);
 	}
 
 	public void _save()
@@ -122,7 +122,7 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		}
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
-		jEdit.setBooleanProperty("saveDesktop",saveDesktop.isSelected());
+		jEdit.setBooleanProperty("restore",restore.isSelected());
 	}
 
 	// private members
@@ -134,5 +134,5 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
 	private JTextField ioThreadCount;
-	private JCheckBox saveDesktop;
+	private JCheckBox restore;
 }

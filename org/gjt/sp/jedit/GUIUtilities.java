@@ -565,12 +565,8 @@ public class GUIUtilities
 	}
 
 	/**
-	 * Displays a standard file selection dialog box. You should use
-	 * the VFS file selected whenever possible, instead of this one.
-	 * @param view The view
-	 * @param file The file to select by default
-	 * @param type The dialog type
-	 * @return The selected file
+	 * @deprecated You should use the VFS file selected whenever
+	 * possible, instead of this one.
 	 */
 	public static String showFileDialog(View view, String file, int type)
 	{

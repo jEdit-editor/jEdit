@@ -694,7 +694,7 @@ public class Buffer extends PlainDocument implements EBComponent
 					// and clearing of the dirty flag
 					try
 					{
-						writeLock();
+						Buffer.this.writeLock();
 
 						if(autosaveFile != null)
 							autosaveFile.delete();
@@ -713,7 +713,7 @@ public class Buffer extends PlainDocument implements EBComponent
 					}
 					finally
 					{
-						writeUnlock();
+						Buffer.this.writeUnlock();
 					}
 
 					if(!getPath().equals(oldPath))
@@ -2135,22 +2135,23 @@ loop:				for(int i = 0; i < count; i++)
 	 */
 	public int physicalToVirtual(int lineNo)
 	{
-		/* for(int i = 0; i < virtualLineCount; i++)
-		{
-			if(virtualLines[i] >= lineNo)
-				return i;
-		}
-
-		return virtualLineCount; */
-
 		int start = 0;
 		int end = virtualLineCount - 1;
 
 		// funky hack
 		if(lineNo < virtualLines[start])
-			return 1; // for proper insertLines() operation
+		{
+			// for proper insertLines() operation
+			return 1;
+		}
 		else if(lineNo > virtualLines[end])
+		{
+			// for proper invalidateLineRange() operation
+			// return virtualLineCount + (lineNo - lineCount);
+
+			// for great justice (all your base are belong to us)
 			return virtualLineCount;
+		}
 
 		// funky binary search
 		for(;;)
