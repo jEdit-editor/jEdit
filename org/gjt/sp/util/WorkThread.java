@@ -115,6 +115,34 @@ public class WorkThread extends Thread
 		return requestCount;
 	}
 
+	/**
+	 * Sets if the current request can be aborted.
+	 * @since jEdit 3.0pre1
+	 */
+	public void setAbortable(boolean abortable)
+	{
+		synchronized(abortLock)
+		{
+			this.abortable = abortable;
+			if(aborted)
+				stop(new Abort());
+		}
+	}
+
+	/**
+	 * Aborts the currently running request, if allowed.
+	 * @since jEdit 3.0pre1
+	 */
+	public void abortCurrentRequest()
+	{
+		synchronized(abortLock)
+		{
+			if(abortable && !aborted)
+				stop(new Abort());
+			aborted = true;
+		}
+	}
+
 	public void run()
 	{
 		Log.log(Log.DEBUG,this,"Work request thread starting");
@@ -136,6 +164,11 @@ public class WorkThread extends Thread
 	private Request firstAWTRequest;
 	private Request lastAWTRequest;
 	private int awtRequestCount;
+
+	// Aborting
+	private Object abortLock = new Object();
+	private boolean abortable;
+	private boolean aborted;
 
 	private void doRequests()
 	{
@@ -206,13 +239,24 @@ public class WorkThread extends Thread
 			{
 				request.run.run();
 			}
+			catch(Abort a)
+			{
+				Log.log(Log.ERROR,WorkThread.class,"Unhandled abort");
+			}
 			catch(Throwable t)
 			{
 				Log.log(Log.ERROR,WorkThread.class,"Exception "
 					+ "in work thread:");
 				Log.log(Log.ERROR,WorkThread.class,t);
 			}
-			requestCount--;
+			finally
+			{
+				synchronized(abortLock)
+				{
+					aborted = abortable = false;
+				}
+				requestCount--;
+			}
 		}
 	}
 
@@ -340,11 +384,22 @@ public class WorkThread extends Thread
 			doAWTRequests();
 		}
 	}
+
+	public static class Abort extends Error
+	{
+		public Abort()
+		{
+			super("Work request aborted");
+		}
+	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2000/07/19 11:45:18  sp
+ * I/O requests can be aborted now
+ *
  * Revision 1.12  2000/07/03 03:32:16  sp
  * *** empty log message ***
  *
@@ -375,11 +430,5 @@ public class WorkThread extends Thread
  * Revision 1.3  2000/04/27 08:32:58  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature
- *
- * Revision 1.2  2000/04/25 03:32:40  sp
- * Even more VFS hacking
- *
- * Revision 1.1  2000/04/24 11:00:23  sp
- * More VFS hacking
  *
  */

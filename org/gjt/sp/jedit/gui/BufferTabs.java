@@ -28,8 +28,8 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 /**
- * This is basically Jason's BufferTabs.java, somewhat reformatted and
- * rearranged.
+ * Allows quick and easy buffer switching by display a row of tabs above
+ * the text area.
  */
 public class BufferTabs extends JTabbedPane
 {
@@ -197,13 +197,13 @@ public class BufferTabs extends JTabbedPane
 			this.add(BorderLayout.CENTER,editPane.getTextArea());
 			this.revalidate();
 
-			SwingUtilities.invokeLater(new Runnable()
+			/* SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()
 				{
 					editPane.focusOnTextArea();
 				}
-			});
+			}); */
 		}
 
 		public boolean isValidateRoot()

@@ -1075,6 +1075,12 @@ mode.text.filenameGlob=*.txt
 ### VFS STRINGS
 ###
 
+# I/O abort dialog box
+abort.title=Abort I/O
+abort.message=Are you sure you want to abort the currently executing\n\
+	input/output request? If you are aborting a file save, this may\n\
+	result in data loss.
+
 # Login dialog box
 login.title=Log in
 login.caption=Enter user name and password for {0}:

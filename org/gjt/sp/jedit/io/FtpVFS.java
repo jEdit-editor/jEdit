@@ -149,11 +149,17 @@ public class FtpVFS extends VFS
 	 */
 	public void _loadComplete(Buffer buffer) throws IOException
 	{
-		FtpClient client = (FtpClient)buffer.getProperty(CLIENT_PROPERTY);
-		if(client != null)
-			client.logout();
-
-		buffer.getDocumentProperties().remove(CLIENT_PROPERTY);
+		try
+		{
+			FtpClient client = (FtpClient)buffer.getProperty(CLIENT_PROPERTY);
+			if(client != null)
+				client.logout();
+		}
+		finally
+		{
+			// even if we are aborted...
+			buffer.getDocumentProperties().remove(CLIENT_PROPERTY);
+		}
 	}
 
 	/**
@@ -164,11 +170,8 @@ public class FtpVFS extends VFS
 	 */
 	public void _saveComplete(Buffer buffer) throws IOException
 	{
-		FtpClient client = (FtpClient)buffer.getProperty(CLIENT_PROPERTY);
-		if(client != null)
-			client.logout();
-
-		buffer.getDocumentProperties().remove(CLIENT_PROPERTY);
+		// does the same thing
+		_loadComplete(buffer);
 	}
 
 	/**

@@ -25,7 +25,7 @@ import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.undo.*;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
@@ -57,11 +57,6 @@ import org.gjt.sp.util.Log;
  */
 public class Buffer extends SyntaxDocument implements EBComponent
 {
-	/**
-	 * Size of I/O buffers.
-	 */
-	public static final int IOBUFSIZE = 32768;
-
 	/**
 	 * Line separator property.
 	 */
@@ -227,7 +222,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		try
+		/* try
 		{
 			File tmpAutosaveFile = new File(MiscUtilities
 				.getFileParent(path),'#' + name + "#tmp#");
@@ -237,16 +232,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		}
 		catch(FileNotFoundException fnf)
 		{
-			/* this could happen if eg, the directory
-			 * containing this file was renamed.
-			 * we ignore the error then so the user
-			 * isn't flooded with exceptions. */
+			// this could happen if eg, the directory
+			// containing this file was renamed.
+			// we ignore the error then so the user
+			/ isn't flooded with exceptions.
 			Log.log(Log.NOTICE,this,fnf);
 		}
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,this,e);
-		}
+		} */
 	}
 
 	/**
@@ -1146,7 +1141,21 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(!getFlag(LOADING))
 			EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
 	}
-	
+
+	/**
+	 * Removes all defined markers.
+	 * @since jEdit 3.0pre1
+	 */
+	public void removeAllMarkers()
+	{
+		setDirty(true);
+
+		markers.removeAllElements();
+
+		if(!getFlag(LOADING))
+			EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
+	}
+
 	/**
 	 * Returns the marker with the specified name.
 	 * @param name The marker name
@@ -1161,344 +1170,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				return marker;
 		}
 		return null;
-	}
-
-	/**
-	 * Reads the buffer from the specified input stream. This method
-	 * should only be called by the classes in the jedit.io package.
-	 * Read and understand all these notes if you want to snarf this
-	 * code for your own app; it has a number of subtle behaviours
-	 * which are not entirely obvious.<p>
-	 *
-	 * Some notes that will help future hackers:
-	 * <ul>
-	 * <li>
-	 * We use a StringBuffer because there is no way to pre-allocate
-	 * in the GapContent - and adding text each time to the GapContent
-	 * would be slow because it would require array enlarging, etc.
-	 * Better to do as few gap inserts as possible.
-	 *
-	 * <li>The StringBuffer is pre-allocated to Math.max(fileSize,
-	 * IOBUFSIZE * 4) because when loading from URLs, fileSize is 0
-	 * and we don't want to StringBuffer to enlarge 1000000 times for
-	 * large URLs
-	 *
-	 * <li>We read the stream in IOBUFSIZE (= 32k) blocks, and loop over
-	 * the read characters looking for line breaks.
-	 * <ul>
-	 * <li>a \r or \n causes a line to be added to the model, and appended
-	 * to the string buffer
-	 * <li>a \n immediately following an \r is ignored; so that Windows
-	 * line endings are handled
-	 * </ul>
-	 *
-	 * <li>This method remembers the line separator used in the file, and
-	 * stores it in the lineSeparator buffer-local property. However,
-	 * if the file contains, say, hello\rworld\n, lineSeparator will
-	 * be set to \n, and the file will be saved as hello\nworld\n.
-	 * Hence jEdit is not really appropriate for editing binary files.
-	 *
-	 * <li>To make reloading a bit easier, this method automatically
-	 * removes all data from the model before inserting it. This
-	 * shouldn't cause any problems, as most documents will be
-	 * empty before being loaded into anyway.
-	 *
-	 * <li>If the last character read from the file is a line separator,
-	 * it is not added to the model! There are two reasons:
-	 * <ul>
-	 * <li>On Unix, all text files have a line separator at the end,
-	 * there is no point wasting an empty screen line on that
-	 * <li>Because save() appends a line separator after *every* line,
-	 * it prevents the blank line count at the end from growing
-	 * </ul>
-	 * 
-	 * </ul>
-	 *
-	 * @since jEdit 2.5pre1
-	 */
-	public void _read(InputStream _in)
-		throws IOException, BadLocationException
-	{
-		int bufLength;
-		if(file != null)
-			bufLength = (int)file.length();
-		else
-			bufLength = IOBUFSIZE * 4;
-		StringBuffer sbuf = new StringBuffer(bufLength);
-
-		InputStreamReader in = new InputStreamReader(_in,
-			jEdit.getProperty("buffer.encoding",
-			System.getProperty("file.encoding")));
-		char[] buf = new char[IOBUFSIZE];
-		// Number of characters in 'buf' array.
-		// InputStream.read() doesn't always fill the
-		// array (eg, the file size is not a multiple of
-		// IOBUFSIZE, or it is a GZipped file, etc)
-		int len;
-
-		// True if a \n was read after a \r. Usually
-		// means this is a DOS/Windows file
-		boolean CRLF = false;
-
-		// A \r was read, hence a MacOS file
-		boolean CROnly = false;
-
-		// Was the previous read character a \r?
-		// If we read a \n and this is true, we assume
-		// we have a DOS/Windows file
-		boolean lastWasCR = false;
-		
-		while((len = in.read(buf,0,buf.length)) != -1)
-		{
-			// Offset of previous line, relative to
-			// the start of the I/O buffer (NOT
-			// relative to the start of the document)
-			int lastLine = 0;
-
-			for(int i = 0; i < len; i++)
-			{
-				// Look for line endings.
-				switch(buf[i])
-				{
-				case '\r':
-					// If we read a \r and
-					// lastWasCR is also true,
-					// it is probably a Mac file
-					// (\r\r in stream)
-					if(lastWasCR)
-					{
-						CROnly = true;
-						CRLF = false;
-					}
-					// Otherwise set a flag,
-					// so that \n knows that last
-					// was a \r
-					else
-					{
-						lastWasCR = true;
-					}
-
-					// Insert a line
-					sbuf.append(buf,lastLine,i -
-						lastLine);
-					sbuf.append('\n');
-
-					// This is i+1 to take the
-					// trailing \n into account
-					lastLine = i + 1;
-					break;
-				case '\n':
-					// If lastWasCR is true,
-					// we just read a \r followed
-					// by a \n. We specify that
-					// this is a Windows file,
-					// but take no further
-					// action and just ignore
-					// the \r.
-					if(lastWasCR)
-					{
-						CROnly = false;
-						CRLF = true;
-						lastWasCR = false;
-						// Bump lastLine so
-						// that the next line
-						// doesn't erronously
-						// pick up the \r
-						lastLine = i + 1;
-					}
-					// Otherwise, we found a \n
-					// that follows some other
-					// character, hence we have
-					// a Unix file
-					else
-					{
-						CROnly = false;
-						CRLF = false;
-						sbuf.append(buf,lastLine,
-							i - lastLine);
-						sbuf.append('\n');
-						lastLine = i + 1;
-					}
-					break;
-				default:
-					// If we find some other
-					// character that follows
-					// a \r, so it is not a
-					// Windows file, and probably
-					// a Mac file
-					if(lastWasCR)
-					{
-						CROnly = true;
-						CRLF = false;
-						lastWasCR = false;
-					}
-					break;
-				}
-			}
-			// Add remaining stuff from buffer
-			sbuf.append(buf,lastLine,len - lastLine);
-		}
-		if(CRLF)
-			putProperty(LINESEP,"\r\n");
-		else if(CROnly)
-			putProperty(LINESEP,"\r");
-		else
-			putProperty(LINESEP,"\n");
-		in.close();
-
-		// For `reload' command
-		remove(0,getLength());
-
-		// Chop trailing newline and/or ^Z (if any)
-		int length = sbuf.length();
-		if(length != 0)
-		{
-			char ch = sbuf.charAt(length - 1);
-			if(length >= 2 && ch == 0x1a /* DOS ^Z */
-				&& sbuf.charAt(length - 2) == '\n')
-				sbuf.setLength(length - 2);
-			else if(ch == '\n')
-				sbuf.setLength(length - 1);
-		}
-
-		insertString(0,sbuf.toString(),null);
-
-		// Process buffer-local properties
-		Element map = getDefaultRootElement();
-		for(int i = 0; i < Math.min(10,map.getElementCount()); i++)
-		{
-			Element line = map.getElement(i);
-			String text = getText(line.getStartOffset(),
-				line.getEndOffset() - line.getStartOffset() - 1);
-			processProperty(text);
-		}
-
-		setFlag(NEW_FILE,false);
-	}
-
-	/**
-	 * Reads markers from the specified input stream. Should only be
-	 * called by the classes in the jedit.io package.
-	 * @since jEdit 2.5pre1
-	 */
-	public void _readMarkers(InputStream in) throws IOException
-	{
-		// For `reload' command
-		markers.removeAllElements();
-
-		StringBuffer buf = new StringBuffer();
-		int c;
-		boolean eof = false;
-		String name = null;
-		int start = -1;
-		int end = -1;
-		for(;;)
-		{
-			if(eof)
-				break;
-			switch(c = in.read())
-			{
-			case -1:
-				eof = true;
-			case ';': case '\n': case '\r':
-				if(buf.length() == 0)
-					continue;
-				String str = buf.toString();
-				buf.setLength(0);
-				if(name == null)
-					name = str;
-				else if(start == -1)
-				{
-					try
-					{
-						start = Integer.parseInt(str);
-					}
-					catch(NumberFormatException nf)
-					{
-						//Log.log(Log.ERROR,this,nf);
-						start = 0;
-					}
-				}
-				else if(end == -1)
-				{
-					try
-					{
-						end = Integer.parseInt(str);
-					}
-					catch(NumberFormatException nf)
-					{
-						//Log.log(Log.ERROR,this,nf);
-						end = 0;
-					}
-					addMarker(name,start,end);
-					name = null;
-					start = -1;
-					end = -1;
-				}
-				break;
-			default:
-				buf.append((char)c);
-				break;
-			}
-		}
-		in.close();
-	}
-
-	/**
-	 * Writes the buffer to the specified output stream. This method
-	 * should only be called by the classes in the jedit.io package.
-	 *
-	 * @since jEdit 2.5pre1
-	 */
-	public void _write(OutputStream _out)
-		throws IOException, BadLocationException
-	{
-		BufferedWriter out = new BufferedWriter(
-			new OutputStreamWriter(_out,
-				jEdit.getProperty("buffer.encoding",
-				System.getProperty("file.encoding"))),
-				IOBUFSIZE);
-		Segment lineSegment = new Segment();
-		String newline = (String)getProperty(LINESEP);
-		if(newline == null)
-			newline = System.getProperty("line.separator");
-		Element map = getDefaultRootElement();
-		for(int i = 0; i < map.getElementCount(); i++)
-		{
-			Element line = map.getElement(i);
-			int start = line.getStartOffset();
-			getText(start,line.getEndOffset() - start - 1,
-				lineSegment);
-			out.write(lineSegment.array,lineSegment.offset,
-				lineSegment.count);
-			out.write(newline);
-		}
-		out.close();
-
-		if(autosaveFile != null)
-			autosaveFile.delete();
-	}
-
-	/**
-	 * Saves markers to the specified output stream. Should only be
-	 * called by the classes in the jedit.io package.
-	 * @since jEdit 2.5pre1
-	 */
-	public void _writeMarkers(OutputStream out) throws IOException
-	{
-		Writer o = new BufferedWriter(new OutputStreamWriter(out));
-		Enumeration enum = markers.elements();
-		while(enum.hasMoreElements())
-		{
-			Marker marker = (Marker)enum.nextElement();
-			o.write(marker.getName());
-			o.write(';');
-			o.write(String.valueOf(marker.getStart()));
-			o.write(';');
-			o.write(String.valueOf(marker.getEnd()));
-			o.write('\n');
-		}
-		o.close();
 	}
 
 	/**
@@ -1679,73 +1350,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
 		}
 	}
-			
-	private void processProperty(String prop)
-	{
-		StringBuffer buf = new StringBuffer();
-		String name = null;
-		boolean escape = false;
-		for(int i = 0; i < prop.length(); i++)
-		{
-			char c = prop.charAt(i);
-			switch(c)
-			{
-			case ':':
-				if(escape)
-				{
-					escape = false;
-					buf.append(':');
-					break;
-				}
-				if(name != null)
-				{
-					String value = buf.toString();
-					try
-					{
-						putProperty(name,new Integer(
-							value));
-					}
-					catch(NumberFormatException nf)
-					{
-						putProperty(name,value);
-					}
-				}
-				buf.setLength(0);
-				break;
-			case '=':
-				if(escape)
-				{
-					escape = false;
-					buf.append('=');
-					break;
-				}
-				name = buf.toString();
-				buf.setLength(0);
-				break;
-			case '\\':
-				if(escape)
-					buf.append('\\');
-				escape = !escape;
-				break;
-			case 'n':
-				if(escape)
-				{	buf.append('\n');
-					escape = false;
-					break;
-				}
-			case 't':
-				if(escape)
-				{
-					buf.append('\t');
-					escape = false;
-					break;
-				}
-			default:
-				buf.append(c);
-				break;
-			}
-		}
-	}
 
 	private boolean recoverAutosave(final View view)
 	{
@@ -1850,6 +1454,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.159  2000/07/19 11:45:18  sp
+ * I/O requests can be aborted now
+ *
  * Revision 1.158  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
  *
@@ -1876,69 +1483,5 @@ public class Buffer extends SyntaxDocument implements EBComponent
  *
  * Revision 1.150  2000/05/13 05:13:31  sp
  * Mode option pane
- *
- * Revision 1.149  2000/05/12 11:07:38  sp
- * Bug fixes, documentation updates
- *
- * Revision 1.148  2000/05/07 05:48:29  sp
- * You can now edit several buffers side-by-side in a split view
- *
- * Revision 1.147  2000/05/01 11:53:23  sp
- * More icons added to toolbar, minor updates here and there
- *
- * Revision 1.146  2000/04/30 07:27:13  sp
- * Ftp VFS hacking, bug fixes
- *
- * Revision 1.145  2000/04/29 03:07:37  sp
- * Indentation rules updated, VFS displays wait cursor properly, background mode
- *
- * Revision 1.144  2000/04/28 09:29:11  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.143  2000/04/27 08:32:56  sp
- * VFS fixes, read only fixes, macros can prompt user for input, improved
- * backup directory feature
- *
- * Revision 1.142  2000/04/25 11:00:20  sp
- * FTP VFS hacking, some other stuff
- *
- * Revision 1.141  2000/04/25 03:32:40  sp
- * Even more VFS hacking
- *
- * Revision 1.140  2000/04/24 11:00:23  sp
- * More VFS hacking
- *
- * Revision 1.139  2000/04/24 04:45:36  sp
- * New I/O system started, and a few minor updates
- *
- * Revision 1.138  2000/04/15 07:07:24  sp
- * Smarter auto indent
- *
- * Revision 1.137  2000/04/15 04:14:46  sp
- * XML files updated, jEdit.get/setBooleanProperty() method added
- *
- * Revision 1.136  2000/04/14 07:02:42  sp
- * Better error handling, XML files updated
- *
- * Revision 1.135  2000/04/10 08:46:16  sp
- * Autosave recovery support, documentation updates
- *
- * Revision 1.134  2000/04/09 09:27:51  sp
- * XMode docs finished
- *
- * Revision 1.133  2000/04/03 10:22:24  sp
- * Search bar
- *
- * Revision 1.132  2000/04/01 12:21:27  sp
- * mode cache implemented
- *
- * Revision 1.131  2000/04/01 09:49:36  sp
- * multiline token highlight was messed up
- *
- * Revision 1.130  2000/03/21 07:18:53  sp
- * bug fixes
- *
- * Revision 1.129  2000/03/20 06:06:36  sp
- * Mode internals cleaned up
  *
  */

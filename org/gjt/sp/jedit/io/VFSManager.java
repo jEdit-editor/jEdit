@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.io;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.swing.SwingUtilities;
+import java.awt.Component;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
@@ -138,6 +139,14 @@ public class VFSManager
 	}
 
 	/**
+	 * Aborts the currently running I/O request.
+	 */
+	public static void abortCurrentRequest()
+	{
+		ioThread.abortCurrentRequest();
+	}
+
+	/**
 	 * Adds an I/O request to the work thread.
 	 * @since jEdit 2.5pre1
 	 */
@@ -212,6 +221,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/07/19 11:45:18  sp
+ * I/O requests can be aborted now
+ *
  * Revision 1.10  2000/07/19 08:35:59  sp
  * plugin devel docs updated, minor other changes
  *

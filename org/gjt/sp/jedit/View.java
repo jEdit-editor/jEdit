@@ -329,7 +329,6 @@ public class View extends JFrame implements EBComponent
 		if(waitCount == 0)
 		{
 			Log.log(Log.DEBUG,this,"hideWaitCursor(): hiding glass pane");
-
 			glassPane.setVisible(false);
 
 			// still needed even though glass pane
@@ -600,6 +599,21 @@ public class View extends JFrame implements EBComponent
 	{
 		if(evt.isConsumed())
 			return;
+
+		if(VFSManager.getRequestCount() != 0
+			&& evt.getID() == KeyEvent.KEY_PRESSED
+			&& evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+		{
+			// if Escape is pressed while I/O is in progress,
+			// abort I/O
+			int result = JOptionPane.showConfirmDialog(this,
+				jEdit.getProperty("abort.message"),
+				jEdit.getProperty("abort.title"),
+				JOptionPane.YES_NO_OPTION);
+			if(result == JOptionPane.YES_OPTION)
+				VFSManager.abortCurrentRequest();
+			return;
+		}
 
 		if(glassPane.isVisible())
 		{
@@ -1046,6 +1060,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.185  2000/07/19 11:45:18  sp
+ * I/O requests can be aborted now
+ *
  * Revision 1.184  2000/07/19 08:35:59  sp
  * plugin devel docs updated, minor other changes
  *
