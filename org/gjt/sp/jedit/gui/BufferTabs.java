@@ -113,7 +113,7 @@ public class BufferTabs extends JTabbedPane
 		{
 			int oldIndex = buffers.indexOf(buffer);
 
-//			updating = true;
+			updating = true;
 
 			removeBufferTab(buffer);
 			addBufferTab(buffer);

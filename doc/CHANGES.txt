@@ -5,6 +5,8 @@ JEDIT VERSION HISTORY
 + Enhancements
 
 - Firewall plugin sources moved to their own fileset
+- The 'Open' and 'Save As' dialog boxes are now loaded in a background thread
+  with minimum priority once jEdit has started
 
 + Bug Fixes
 
@@ -15,6 +17,8 @@ JEDIT VERSION HISTORY
 - TokenMarker.linesChanged() tweaked once again -- this should result in more
   accurate syntax highlighting when lines are being deleted, for example
   (since 2.4pre1)
+- select-document-home and select-document-end actions didn't have key bindings
+  (since 2.4pre6)
 
 * Version 2.4pre6
 

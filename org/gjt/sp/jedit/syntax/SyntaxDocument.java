@@ -195,6 +195,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/04/17 07:40:51  sp
+ * File dialog loaded in a background thread
+ *
  * Revision 1.24  2000/04/17 06:34:24  sp
  * More focus debugging, linesChanged() tweaked
  *
@@ -225,8 +228,5 @@ public class SyntaxDocument extends PlainDocument
  * Revision 1.15  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes
- *
- * Revision 1.14  1999/12/13 03:40:30  sp
- * Bug fixes, syntax is now mostly GPL'd
  *
  */

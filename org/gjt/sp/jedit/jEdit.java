@@ -288,6 +288,9 @@ public class jEdit
 				GUIUtilities.hideSplashScreen();
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
 					+ "complete");
+
+				// Load filechooser in background
+				GUIUtilities.startLoadThread();
 			}
 		});
 	}
@@ -2110,6 +2113,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.221  2000/04/17 07:40:51  sp
+ * File dialog loaded in a background thread
+ *
  * Revision 1.220  2000/04/17 06:34:23  sp
  * More focus debugging, linesChanged() tweaked
  *
@@ -2139,26 +2145,5 @@ public class jEdit
  *
  * Revision 1.211  2000/04/06 09:28:08  sp
  * Better plugin error reporting, search bar updates
- *
- * Revision 1.210  2000/04/06 02:22:12  sp
- * Incremental search, documentation updates
- *
- * Revision 1.209  2000/04/05 08:33:42  sp
- * BufferTabs bug fix
- *
- * Revision 1.208  2000/04/03 10:22:24  sp
- * Search bar
- *
- * Revision 1.207  2000/04/02 06:38:28  sp
- * Bug fixes
- *
- * Revision 1.206  2000/04/01 12:21:27  sp
- * mode cache implemented
- *
- * Revision 1.205  2000/04/01 08:40:54  sp
- * Streamlined syntax highlighting, Perl mode rewritten in XML
- *
- * Revision 1.204  2000/04/01 03:17:41  sp
- * Tiny fixes here and there
  *
  */

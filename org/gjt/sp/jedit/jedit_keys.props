@@ -3,46 +3,6 @@
 ### by Slava Pestov <sp@gjt.org>
 ###
 
-###
-### TEXT AREA KEY BINDINGS
-###
-
-backspace.shortcut=BACK_SPACE
-backspace-word.shortcut=C+BACK_SPACE
-delete.shortcut=DELETE
-delete-word.shortcut=C+DELETE
-overwrite.shortcut=INSERT
-toggle-rect.shortcut=C+\\
-home.shortcut=HOME
-end.shortcut=END
-document-home.shortcut=C+HOME
-document-end.shortcut=C+END
-select-home.shortcut=S+HOME
-select-end.shortcut=S+END
-select-doc-home.shortcut=CS+HOME
-select-doc-end.shortcut=CS+END
-prev-page.shortcut=PAGE_UP
-next-page.shortcut=PAGE_DOWN
-select-prev-page.shortcut=S+PAGE_UP
-select-next-page.shortcut=S+PAGE_DOWN
-prev-char.shortcut=LEFT
-prev-word.shortcut=C+LEFT
-select-prev-char.shortcut=S+LEFT
-select-prev-word.shortcut=CS+LEFT
-next-char.shortcut=RIGHT
-next-word.shortcut=C+RIGHT
-select-next-char.shortcut=S+RIGHT
-select-next-word.shortcut=CS+RIGHT
-prev-line.shortcut=UP
-select-prev-line.shortcut=S+UP
-next-line.shortcut=DOWN
-select-next-line.shortcut=S+DOWN
-repeat.shortcut=C+ENTER
-
-###
-### MENU ITEM KEY BINDINGS
-###
-
 # Function keys
 help.shortcut=F1
 reload.shortcut=F2
@@ -81,6 +41,7 @@ close-file.shortcut=C+w
 cut.shortcut=C+x
 goto-register.shortcut=C+y
 undo.shortcut=C+z
+toggle-rect.shortcut=C+\\
 
 # C+e
 replace-all.shortcut=C+e C+a
@@ -140,3 +101,33 @@ shift-right.shortcut=A+RIGHT
 select-none.shortcut=ESCAPE
 delete-start-line.shortcut=CS+BACK_SPACE
 delete-end-line.shortcut=CS+DELETE
+backspace.shortcut=BACK_SPACE
+backspace-word.shortcut=C+BACK_SPACE
+delete.shortcut=DELETE
+delete-word.shortcut=C+DELETE
+overwrite.shortcut=INSERT
+home.shortcut=HOME
+end.shortcut=END
+document-home.shortcut=C+HOME
+document-end.shortcut=C+END
+select-home.shortcut=S+HOME
+select-end.shortcut=S+END
+select-document-home.shortcut=CS+HOME
+select-document-end.shortcut=CS+END
+prev-page.shortcut=PAGE_UP
+next-page.shortcut=PAGE_DOWN
+select-prev-page.shortcut=S+PAGE_UP
+select-next-page.shortcut=S+PAGE_DOWN
+prev-char.shortcut=LEFT
+prev-word.shortcut=C+LEFT
+select-prev-char.shortcut=S+LEFT
+select-prev-word.shortcut=CS+LEFT
+next-char.shortcut=RIGHT
+next-word.shortcut=C+RIGHT
+select-next-char.shortcut=S+RIGHT
+select-next-word.shortcut=CS+RIGHT
+prev-line.shortcut=UP
+select-prev-line.shortcut=S+UP
+next-line.shortcut=DOWN
+select-next-line.shortcut=S+DOWN
+repeat.shortcut=C+ENTER

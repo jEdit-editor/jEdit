@@ -569,6 +569,30 @@ public class GUIUtilities
 	// package-private members
 	static JFileChooser chooser;
 
+	static void startLoadThread()
+	{
+		thread = new LoadThread();
+	}
+
+	static class LoadThread extends Thread
+	{
+		LoadThread()
+		{
+			super("Loading file chooser in background");
+			setPriority(Thread.MIN_PRIORITY);
+			start();
+		}
+
+		public void run()
+		{
+			Log.log(Log.DEBUG,LoadThread.class,"Loading file"
+				+ " dialog...");
+			getFileChooser(null);
+			Log.log(Log.DEBUG,LoadThread.class,"File dialog"
+				+ " loaded");
+		}
+	}
+
 	static void showSplashScreen()
 	{
 		splash = new SplashScreen();
@@ -582,6 +606,7 @@ public class GUIUtilities
 	}
 
 	// private members
+	private static LoadThread thread;
 	private static SplashScreen splash;
 	// since the names of menu items, menus, tool bars, etc are
 	// unique because of properties, we can store all in one
@@ -592,7 +617,7 @@ public class GUIUtilities
 
 	// Since only one file chooser is every visible at any one
 	// time, we can reuse 'em
-	private static JFileChooser getFileChooser(View view)
+	private static synchronized JFileChooser getFileChooser(View view)
 	{
 		if(chooser == null)
 		{
@@ -663,6 +688,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.54  2000/04/17 07:40:51  sp
+ * File dialog loaded in a background thread
+ *
  * Revision 1.53  2000/04/09 03:14:14  sp
  * Syntax token backgrounds can now be specified
  *
@@ -692,14 +720,5 @@ public class GUIUtilities
  *
  * Revision 1.44  1999/11/27 06:01:20  sp
  * Faster file loading, geometry fix
- *
- * Revision 1.43  1999/11/26 01:18:49  sp
- * Optimizations, splash screen updates, misc stuff
- *
- * Revision 1.42  1999/11/20 02:34:22  sp
- * more pre6 stuffs
- *
- * Revision 1.41  1999/11/19 08:54:51  sp
- * EditBus integrated into the core, event system gone, bug fixes
  *
  */
