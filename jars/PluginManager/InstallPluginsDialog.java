@@ -262,8 +262,7 @@ public class InstallPluginsDialog extends EnhancedDialog
 
 		public void run()
 		{
-			PluginList.Plugin[] pluginList = new PluginList(view,true)
-				.getPlugins();
+			PluginList.Plugin[] pluginList = new PluginList(view).getPlugins();
 
 			// skip plugins that are already installed
 			String[] installed = PluginManagerPlugin.getPlugins();

@@ -25,7 +25,7 @@ import org.gjt.sp.util.Log;
 
 public class PluginList
 {
-	public PluginList(View view, boolean skipInstalled)
+	public PluginList(View view)
 	{
 		Vector pluginVector = new Vector();
 
@@ -121,7 +121,8 @@ public class PluginList
 				EditPlugin plugin = plugins[i];
 				JARClassLoader loader = (JARClassLoader)plugin
 					.getClass().getClassLoader();
-				if(PluginManagerPlugin.getLastPathComponent(
+				if(plugin.getClass().getName().endsWith("Plugin")
+					&& PluginManagerPlugin.getLastPathComponent(
 					loader.getPath()).equals(jar))
 				{
 					clazz = plugin.getClass().getName();

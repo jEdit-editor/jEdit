@@ -52,7 +52,7 @@ public class PluginManagerPlugin extends EBPlugin
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 				if(result == JOptionPane.YES_OPTION)
-					installPlugins(null);
+					new PluginManager(null);
 			}
 			else if(myBuild.compareTo(build) > 0)
 			{
@@ -67,7 +67,7 @@ public class PluginManagerPlugin extends EBPlugin
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 				if(result == JOptionPane.YES_OPTION)
-					updatePlugins(null);
+					new PluginManager(null);
 			}
 			else if(myBuild.compareTo(build) < 0)
 				return;
@@ -83,6 +83,29 @@ public class PluginManagerPlugin extends EBPlugin
 			index = path.lastIndexOf('/');
 
 		return path.substring(index + 1);
+	}
+
+	public static String getPluginPath(String clazz)
+	{
+		EditPlugin plugin = jEdit.getPlugin(clazz);
+		if(plugin != null)
+		{
+			JARClassLoader loader = (JARClassLoader)plugin
+				.getClass().getClassLoader();
+			return loader.getPath();
+		}
+		else
+		{
+			EditPlugin.Broken[] broken = jEdit.getBrokenPlugins();
+			for(int i = 0; i < broken.length; i++)
+			{
+				EditPlugin.Broken b = broken[i];
+				if(b.clazz.equals(clazz))
+					return b.jar;
+			}
+		}
+
+		return null;
 	}
 
 	public static String[] getPlugins()
@@ -198,6 +221,29 @@ public class PluginManagerPlugin extends EBPlugin
 		return retVal;
 	}
 
+	// returns plugins that we attemped to load at startup
+	public static String[] getLoadedPlugins()
+	{
+		Vector retVal = new Vector();
+
+		EditPlugin[] plugins = jEdit.getPlugins();
+		for(int i = 0; i < plugins.length; i++)
+		{
+			retVal.addElement(getLastPathComponent(((JARClassLoader)
+				plugins[i].getClass().getClassLoader()).getPath()));
+		}
+
+		EditPlugin.Broken[] broken = jEdit.getBrokenPlugins();
+		for(int i = 0; i < broken.length; i++)
+		{
+			retVal.addElement(getLastPathComponent(broken[i].jar));
+		}
+
+		String[] array = new String[retVal.size()];
+		retVal.copyInto(array);
+		return array;
+	}
+
 	public static boolean removePlugins(View view, String[] plugins)
 	{
 		StringBuffer buf = new StringBuffer();
@@ -271,11 +317,8 @@ public class PluginManagerPlugin extends EBPlugin
 			for(int i = 0; i < urls.length; i++)
 			{
 				String url = plugins[i].download;
-				EditPlugin plugin = jEdit.getPlugin(plugins[i].clazz);
-				JARClassLoader loader = (JARClassLoader)plugin
-					.getClass().getClassLoader();
+				String path = getPluginPath(plugins[i].clazz);
 
-				String path = loader.getPath();
 				File jarFile = new File(path);
 				File srcFile = new File(path.substring(0,
 					path.length() - 4));

@@ -119,15 +119,9 @@ plugin.BazPlugin.depend.2=plugin EditBusPlugin 0.9.1</PRE
 ></TABLE
 ><P
 >   How do you know exactly which jEdit version your plugin requires?
-   The EditPlugin API was added in jEdit 2.1pre1 (build 02.01.01.00), so all
-   current
-   plugins will require at least that version. The option pane API changed
-   in jEdit 2.1pre3 (build 02.01.03.00), so plugins
-   using option panes will require that. Finally, another major change
-   occurred in jEdit 2.2pre6 (build 02.02.06.00); the EditBus message
-   system was integrated into the core. There have been many other smaller
-   API changes along the way,
-   but most don't affect plugins.
+   To be on the safe side, you should just specify the jEdit version
+   you developed the plugin with. You can also test the plugin with
+   a few older releases.
   </P
 ></DIV
 ><DIV

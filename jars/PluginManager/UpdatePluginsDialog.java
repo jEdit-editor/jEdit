@@ -229,11 +229,11 @@ public class UpdatePluginsDialog extends EnhancedDialog
 
 		public void run()
 		{
-			PluginList.Plugin[] pluginList = new PluginList(view,true)
-				.getPlugins();
+			PluginList.Plugin[] pluginList = new PluginList(view).getPlugins();
 
-			// only add plugins that are already installed
-			String[] installed = PluginManagerPlugin.getPlugins();
+			// only add plugins that are already installed,
+			// and don't add freshly installed ones
+			String[] installed = PluginManagerPlugin.getLoadedPlugins();
 			final DefaultListModel model = new DefaultListModel();
 			for(int i = 0; i < pluginList.length; i++)
 			{

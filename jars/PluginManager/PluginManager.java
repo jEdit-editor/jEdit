@@ -191,7 +191,7 @@ public class PluginManager extends EnhancedDialog
 				if(name != null)
 					return name;
 				else
-					return clazz.substring(0,clazz.length() - 6);
+					return clazz;
 			}
 		}
 	}

@@ -101,7 +101,7 @@ public class PluginDownloadThread extends Thread
 		while(enum.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)enum.nextElement();
-			String name = entry.getName();
+			String name = entry.getName().replace('/',File.separatorChar);
 			File file = new File(dir,name);
 			if(entry.isDirectory())
 				file.mkdirs();

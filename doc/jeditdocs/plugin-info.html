@@ -72,7 +72,7 @@ CLASS="REPLACEABLE"
 ></TT
 >.name</SPAN
 > - the name
-    of the plugin
+    of the plugin (required for plugin to appear in help index)
    </P
 ></LI
 ><LI
@@ -86,7 +86,7 @@ CLASS="REPLACEABLE"
 ></TT
 >.author</SPAN
 > - the plugin
-    author's name
+    author's name (optional)
    </P
 ></LI
 ><LI
@@ -119,17 +119,16 @@ CLASS="REPLACEABLE"
 >.docs</SPAN
 > - the filename,
     relative to the plugin's JAR root, where the documentation is stored in
-    HTML format
+    HTML format (required for plugin to appear in help index)
    </P
 ></LI
 ></UL
 ><P
->   All these properties must be defined for your plugin to be listed in the
-   help system, and the <SPAN
-CLASS="PROPERTY"
->version</SPAN
-> property must be defined for
-   the plugin to load. Here is an example:
+>   Here is an example of setting these properties for a plugin named
+   <TT
+CLASS="FILENAME"
+>ConsolePlugin</TT
+>:
   </P
 ><TABLE
 BORDER="0"
