@@ -164,7 +164,11 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 		/* Buffer tabs position */
 		String[] positions = {
-			"off", "top", "left", "bottom", "right"
+			jEdit.getProperty("options.general.bufferTabsPos.off"),
+			jEdit.getProperty("options.general.bufferTabsPos.top"),
+			jEdit.getProperty("options.general.bufferTabsPos.left"),
+			jEdit.getProperty("options.general.bufferTabsPos.bottom"),
+			jEdit.getProperty("options.general.bufferTabsPos.right")
 		};
 
 		bufferTabsPos = new JComboBox(positions);
@@ -260,6 +264,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.41  2000/08/10 11:55:58  sp
+ * VFS browser toolbar improved a little bit, font selector tweaks
+ *
  * Revision 1.40  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *

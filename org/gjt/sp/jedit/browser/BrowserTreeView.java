@@ -103,8 +103,6 @@ public class BrowserTreeView extends BrowserView
 
 		tree.expandPath(new TreePath(currentlyLoadingTreeNode.getPath()));
 
-		System.err.println(currentlyLoadingTreeNode.getChildCount());
-
 		/* If the user expands a tree node manually, the tree
 		 * listener sets currentlyLoadingTreeNode to that.
 		 * But if VFSBrowser.setDirectory() is called, we want
@@ -208,7 +206,6 @@ public class BrowserTreeView extends BrowserView
 			Object userObject = treeNode.getUserObject();
 			if(userObject instanceof VFS.DirectoryEntry)
 			{
-				System.err.println("expanded: " + treeNode.getUserObject());
 				treeNode.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
 				currentlyLoadingTreeNode = treeNode;
 				browser.loadDirectory(((VFS.DirectoryEntry)userObject).path);
@@ -222,7 +219,6 @@ public class BrowserTreeView extends BrowserView
 				path.getLastPathComponent();
 			if(treeNode.getUserObject() instanceof VFS.DirectoryEntry)
 			{
-				System.err.println("collapsed: " + treeNode.getUserObject());
 				treeNode.removeAllChildren();
 				treeNode.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
 				model.reload(treeNode);
@@ -236,6 +232,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/10 11:55:58  sp
+ * VFS browser toolbar improved a little bit, font selector tweaks
+ *
  * Revision 1.2  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

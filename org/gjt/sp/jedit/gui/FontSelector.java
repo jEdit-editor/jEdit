@@ -35,12 +35,40 @@ public class FontSelector extends JButton
 {
 	public FontSelector(Font font)
 	{
-		setText(jEdit.getProperty("font-selector.text"));
 		setFont(font);
+
+		updateText();
 
 		setRequestFocusEnabled(false);
 
 		addActionListener(new ActionHandler());
+	}
+
+	// private members
+	private void updateText()
+	{
+		Font font = getFont();
+		String styleString;
+		switch(font.getStyle())
+		{
+		case Font.PLAIN:
+			styleString = jEdit.getProperty("font-selector.plain");
+			break;
+		case Font.BOLD:
+			styleString = jEdit.getProperty("font-selector.bold");
+			break;
+		case Font.ITALIC:
+			styleString = jEdit.getProperty("font-selector.italic");
+			break;
+		case Font.BOLD | Font.ITALIC:
+			styleString = jEdit.getProperty("font-selector.bolditalic");
+			break;
+		default:
+			styleString = "UNKNOWN!!!???";
+			break;
+		}
+
+		setText(font.getFamily() + " " + font.getSize() + " " + styleString);
 	}
 
 	class ActionHandler implements ActionListener
@@ -50,7 +78,10 @@ public class FontSelector extends JButton
 			Font font = new FontSelectorDialog(FontSelector.this,getFont())
 				.getSelectedFont();
 			if(font != null)
+			{
 				setFont(font);
+				updateText();
+			}
 		}
 	}
 }
@@ -112,13 +143,14 @@ class FontSelectorDialog extends EnhancedDialog
 		preview = new JLabel(jEdit.getProperty("font-selector.long-text"));
 		preview.setBorder(new TitledBorder(jEdit.getProperty(
 			"font-selector.preview")));
+
+		updatePreview();
+
 		Dimension prefSize = preview.getPreferredSize();
 		prefSize.height = 50;
 		preview.setPreferredSize(prefSize);
 
 		content.add(BorderLayout.CENTER,preview);
-
-		updatePreview();
 
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
@@ -292,6 +324,9 @@ class FontSelectorDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/10 11:55:58  sp
+ * VFS browser toolbar improved a little bit, font selector tweaks
+ *
  * Revision 1.1  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *

@@ -60,7 +60,6 @@ icons=\
       Help.gif \
       Home.gif \
       New.gif \
-      NewFolder.gif \
       NewView.gif \
       Open.gif \
       Paste.gif \
@@ -72,9 +71,9 @@ icons=\
       SplitHorizontal.gif \
       SplitVertical.gif \
       Synchronize.gif \
+      ToolbarMenu.gif \
       Undo.gif \
       Unsplit.gif \
-      World.gif \
       blank-20.gif
 
 view.search.find=Find:
@@ -862,6 +861,11 @@ options.general.lf=Swing look & feel:
 options.general.showFullPath=Show full path of buffers in title bar
 options.general.showBufferTabs=Show buffer tabs
 options.general.bufferTabsPos=Buffer tabs position:
+options.general.bufferTabsPos.off=Off
+options.general.bufferTabsPos.top=Top
+options.general.bufferTabsPos.left=Left
+options.general.bufferTabsPos.bottom=Bottom
+options.general.bufferTabsPos.right=Right
 
 options.textarea.label=Text Area
 options.textarea.textarea=Text area
@@ -1011,7 +1015,6 @@ options.command-keys.label=Commands
 options.macro-keys.label=Macros
 
 # Font selector
-font-selector.text=aA bB 12 () {}
 font-selector.title=Font Selector
 font-selector.family=Font family:
 font-selector.size=Font size:
@@ -1089,8 +1092,6 @@ vfs.browser.up.label=Parent Directory
 vfs.browser.up.icon=FolderUp.gif
 vfs.browser.reload.label=Reload Directory
 vfs.browser.reload.icon=Reload.gif
-vfs.browser.mkdir.label=New Directory
-vfs.browser.mkdir.icon=NewFolder.gif
 vfs.browser.roots.label=Local Drives
 vfs.browser.roots.icon=CD.gif
 vfs.browser.home.label=Home Directory
@@ -1101,12 +1102,13 @@ vfs.browser.addToFavorites.label=Add to Favorites
 vfs.browser.addToFavorites.icon=Plus.gif
 vfs.browser.gotoFavorites.label=Go to Favorites
 vfs.browser.gotoFavorites.icon=Favorite.gif
-vfs.browser.view.label=View
-vfs.browser.view.icon=ViewMenu.gif
+vfs.browser.more.label=More
+vfs.browser.more.icon=ToolbarMenu.gif
 
-vfs.browser.view.list.label=View as List
-vfs.browser.view.tree.label=View as Tree
-vfs.browser.view.showHiddenFiles.label=Show Hidden Files
+vfs.browser.more.list.label=View as List
+vfs.browser.more.tree.label=View as Tree
+vfs.browser.more.showHiddenFiles.label=Show Hidden Files
+vfs.browser.more.newDirectory.label=New Directory
 
 vfs.browser.menu.close.label=Close
 vfs.browser.menu.open.label=Open in Current View
@@ -1148,8 +1150,7 @@ vfs.browser.mkdir-error.message=An error occurred while attempting\n\
 	to create {0}.
 
 # FTP VFS
-vfs.ftp.label=FTP
-vfs.ftp.icon=World.gif
+vfs.ftp.label=Connect to FTP Server...
 
 vfs.browser.dialog.open=Open
 vfs.browser.dialog.save=Save

@@ -224,8 +224,26 @@ public abstract class InputHandler extends KeyAdapter
 		// execute the action
 		if(action.isRepeatable())
 		{
-			for(int i = 0; i < _repeatCount; i++)
-				action.actionPerformed(evt);
+			View view = EditAction.getView((Component)source);
+			Buffer buffer;
+			if(view == null)
+				buffer = null;
+			else
+				buffer = view.getBuffer();
+
+			try
+			{
+				if(buffer != null)
+					buffer.beginCompoundEdit();
+
+				for(int i = 0; i < _repeatCount; i++)
+					action.actionPerformed(evt);
+			}
+			finally
+			{
+				if(buffer != null)
+					buffer.endCompoundEdit();
+			}
 		}
 		else
 			action.actionPerformed(evt);
@@ -308,6 +326,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/08/10 11:55:58  sp
+ * VFS browser toolbar improved a little bit, font selector tweaks
+ *
  * Revision 1.9  2000/07/15 10:10:18  sp
  * improved printing
  *

@@ -79,7 +79,6 @@ public abstract class VFS
 	/**
 	 * Returns this VFS's name. The name is used to obtain the
 	 * label stored in the <code>vfs.<i>name</i>.label</code>
-	 * property, and the icon from the <code>vfs.<i>name</i>.icon</code>
 	 * property.
 	 */
 	public String getName()
@@ -379,6 +378,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.15  2000/08/10 11:55:58  sp
+ * VFS browser toolbar improved a little bit, font selector tweaks
+ *
  * Revision 1.14  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

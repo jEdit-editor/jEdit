@@ -210,7 +210,13 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				return;
 
 			if(filenameField != null)
-				filenameField.setText(files[0].name);
+			{
+				String path = files[0].path;
+				if(path.startsWith(browser.getDirectory()))
+					path = files[0].name;
+
+				filenameField.setText(path);
+			}
 		}
 
 		public void filesActivated(VFSBrowser browser, VFS.DirectoryEntry[] files)
@@ -223,6 +229,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/10 11:55:58  sp
+ * VFS browser toolbar improved a little bit, font selector tweaks
+ *
  * Revision 1.3  2000/08/01 11:44:15  sp
  * More VFS browser work
  *

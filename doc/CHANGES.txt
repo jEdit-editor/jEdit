@@ -27,6 +27,7 @@ JEDIT 2.6 VERSION HISTORY
 - Tool bar buttons now have a 'rollover' effect
 - Global Options dialog box re-arranged somewhat
 - 'Send' command moved to a plugin, out of the core
+- Repeated actions can now be undone in one operation
 
 + Bug Fixes
 
@@ -38,7 +39,7 @@ JEDIT 2.6 VERSION HISTORY
 - An autosave setting of '0' caused problems (since 2.6pre1)
 - Macros invoked using keyboard shortcuts would always fail with a
   "macro not found" error (since 2.6pre1)
-- 'HTML/Close Tag' macro relied on non-existent goto-end-indent action
+- 'HTML/Close Tag' macro called on non-existent goto-end-indent action
 
 + API Changes
 

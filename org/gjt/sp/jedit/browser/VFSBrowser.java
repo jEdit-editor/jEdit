@@ -90,6 +90,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 		pathAndFilterPanel.add(label);
 
 		pathField = new HistoryTextField("vfs.browser.path",true);
+
+		// because its preferred size can be quite wide, we
+		// don't want it to make the browser way too big,
+		// so set the preferred width to 0.
+		Dimension prefSize = pathField.getPreferredSize();
+		prefSize.width = 0;
+		pathField.setPreferredSize(prefSize);
+
 		pathField.addActionListener(new ActionHandler());
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
@@ -106,6 +114,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 		pathAndFilterPanel.add(label);
 
 		filterCombo = new JComboBox();
+
+		// because its preferred size can be quite wide, we
+		// don't want it to make the browser way too big,
+		// so set the preferred width to 0.
+		prefSize = filterCombo.getPreferredSize();
+		prefSize.width = 0;
+		filterCombo.setPreferredSize(prefSize);
+
 		filterCombo.addActionListener(new ActionHandler());
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
@@ -528,7 +544,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private VFSSession vfsSession;
 	private HistoryTextField pathField;
 	private JComboBox filterCombo;
-	private JButton up, reload, mkdir, roots, home, synchronize,
+	private JButton up, reload, roots, home, synchronize,
 		addToFavorites, gotoFavorites;
 	private BrowserView browserView;
 	private VFSFilter filenameFilter;
@@ -622,51 +638,34 @@ public class VFSBrowser extends JPanel implements EBComponent
 		toolBar.setFloatable(false);
 		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
-		toolBar.add(up = createToolButton("up",false));
-		toolBar.add(reload = createToolButton("reload",false));
-		toolBar.add(mkdir = createToolButton("mkdir",false));
+		toolBar.add(up = createToolButton("up"));
+		toolBar.add(reload = createToolButton("reload"));
 		toolBar.addSeparator();
-		toolBar.add(roots = createToolButton("roots",false));
-		toolBar.add(home = createToolButton("home",false));
-		toolBar.add(synchronize = createToolButton("synchronize",false));
+		toolBar.add(roots = createToolButton("roots"));
+		toolBar.add(home = createToolButton("home"));
+		toolBar.add(synchronize = createToolButton("synchronize"));
 		toolBar.addSeparator();
-		toolBar.add(addToFavorites = createToolButton("addToFavorites",false));
-		toolBar.add(gotoFavorites = createToolButton("gotoFavorites",false));
+		toolBar.add(addToFavorites = createToolButton("addToFavorites"));
+		toolBar.add(gotoFavorites = createToolButton("gotoFavorites"));
 		toolBar.addSeparator();
 
-		Enumeration enum = VFSManager.getFilesystems();
-		while(enum.hasMoreElements())
-		{
-			VFS vfs = (VFS)enum.nextElement();
-
-			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
-				continue;
-
-			toolBar.add(createToolButton(vfs.getName(),true));
-		}
-
-		toolBar.addSeparator();
-		toolBar.add(new ViewMenuButton());
+		toolBar.add(new MoreMenuButton());
 
 		toolBar.add(Box.createGlue());
 		return toolBar;
 	}
 
-	private JButton createToolButton(String name, boolean vfs)
+	private JButton createToolButton(String name)
 	{
 		JButton button = new JButton();
-		String prefix = (vfs ? "vfs." : "vfs.browser.");
+		String prefix = "vfs.browser.";
 
 		button.setIcon(GUIUtilities.loadToolBarIcon(jEdit.getProperty(
 			prefix + name + ".icon")));
-		String label = jEdit.getProperty(prefix + name + ".label");
-		if(vfs)
-			button.setText(label);
-		else
-			button.setToolTipText(label);
+		button.setToolTipText(jEdit.getProperty(prefix + name + ".label"));
+
 		button.setRequestFocusEnabled(false);
 		button.setMargin(new Insets(0,0,0,0));
-		button.setActionCommand(name); // so that VFS buttons will work
 		button.addActionListener(new ActionHandler());
 
 		return button;
@@ -739,8 +738,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 				setDirectory(vfs.getFileParent(path));
 			else if(source == reload)
 				reloadDirectory(true);
-			else if(source == mkdir)
-				mkdir();
 			else if(source == roots)
 				setDirectory(FileRootsVFS.PROTOCOL + ":");
 			else if(source == home)
@@ -787,28 +784,21 @@ public class VFSBrowser extends JPanel implements EBComponent
 			}
 			else if(source == gotoFavorites)
 				setDirectory(FavoritesVFS.PROTOCOL + ":");
-			else // it's a VFS button
-			{
-				String vfsName = ((JButton)source).getActionCommand();
-				VFS vfs = VFSManager.getVFSForName(vfsName);
-				String directory = vfs.showBrowseDialog(vfsSession,
-					VFSBrowser.this);
-				if(directory != null)
-					setDirectory(directory);
-			}
 		}
 	}
 
-	class ViewMenuButton extends JButton
+	class MoreMenuButton extends JButton
 	{
-		ViewMenuButton()
+		MoreMenuButton()
 		{
+			setText(jEdit.getProperty("vfs.browser.more.label"));
 			setIcon(GUIUtilities.loadToolBarIcon(jEdit.getProperty(
-				"vfs.browser.view.icon")));
-			ViewMenuButton.this.setToolTipText(jEdit.getProperty("view.browser.view.label"));
-			ViewMenuButton.this.setRequestFocusEnabled(false);
+				"vfs.browser.more.icon")));
+			setHorizontalTextPosition(SwingConstants.LEFT);
+
+			MoreMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(0,0,0,0));
-			ViewMenuButton.this.addMouseListener(new MouseHandler());
+			MoreMenuButton.this.addMouseListener(new MouseHandler());
 		}
 
 		// private members
@@ -820,7 +810,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			ButtonGroup grp = new ButtonGroup();
 
 			JRadioButtonMenuItem list = new JRadioButtonMenuItem(
-				jEdit.getProperty("vfs.browser.view.list.label"));
+				jEdit.getProperty("vfs.browser.more.list.label"));
 			grp.add(list);
 			list.setActionCommand("list");
 			list.setSelected(browserView instanceof BrowserListView);
@@ -828,21 +818,43 @@ public class VFSBrowser extends JPanel implements EBComponent
 			popup.add(list);
 
 			JRadioButtonMenuItem tree = new JRadioButtonMenuItem(
-				jEdit.getProperty("vfs.browser.view.tree.label"));
+				jEdit.getProperty("vfs.browser.more.tree.label"));
 			grp.add(tree);
 			tree.setActionCommand("tree");
 			tree.setSelected(browserView instanceof BrowserTreeView);
 			tree.addActionListener(new ActionHandler());
 			popup.add(tree);
 
-			popup.addSeparator();
-
 			JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
-				jEdit.getProperty("vfs.browser.view.showHiddenFiles.label"));
+				jEdit.getProperty("vfs.browser.more.showHiddenFiles.label"));
 			showHiddenFiles.setActionCommand("showHiddenFiles");
 			showHiddenFiles.setSelected(VFSBrowser.this.showHiddenFiles);
 			showHiddenFiles.addActionListener(new ActionHandler());
 			popup.add(showHiddenFiles);
+
+			popup.addSeparator();
+
+			JMenuItem newDirectory = new JMenuItem(jEdit.getProperty(
+				"vfs.browser.more.newDirectory.label"));
+			newDirectory.setActionCommand("newDirectory");
+			newDirectory.addActionListener(new ActionHandler());
+			popup.add(newDirectory);
+
+			popup.addSeparator();
+
+			Enumeration enum = VFSManager.getFilesystems();
+			while(enum.hasMoreElements())
+			{
+				VFS vfs = (VFS)enum.nextElement();
+				if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
+					continue;
+
+				JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
+					"vfs." + vfs.getName() + ".label"));
+				menuItem.setActionCommand("vfs." + vfs.getName());
+				menuItem.addActionListener(new ActionHandler());
+				popup.add(menuItem);
+			}
 		}
 
 		class ActionHandler implements ActionListener
@@ -859,6 +871,17 @@ public class VFSBrowser extends JPanel implements EBComponent
 					showHiddenFiles = !showHiddenFiles;
 					reloadDirectory(false);
 				}
+				else if(actionCommand.equals("newDirectory"))
+					mkdir();
+				else if(actionCommand.startsWith("vfs."))
+				{
+					String vfsName = actionCommand.substring(4);
+					VFS vfs = VFSManager.getVFSForName(vfsName);
+					String directory = vfs.showBrowseDialog(vfsSession,
+						VFSBrowser.this);
+					if(directory != null)
+						setDirectory(directory);
+				}
 			}
 		}
 
@@ -869,8 +892,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(popup == null || !popup.isVisible())
 				{
 					createPopup();
-					popup.show(ViewMenuButton.this,0,
-						ViewMenuButton.this.getHeight());
+					popup.show(MoreMenuButton.this,0,
+						MoreMenuButton.this.getHeight());
 				}
 				else
 				{
@@ -885,6 +908,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/08/10 11:55:58  sp
+ * VFS browser toolbar improved a little bit, font selector tweaks
+ *
  * Revision 1.9  2000/08/10 08:30:40  sp
  * VFS browser work, options dialog work, more random tweaks
  *
