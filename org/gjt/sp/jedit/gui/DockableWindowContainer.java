@@ -137,6 +137,10 @@ public interface DockableWindowContainer
 		{
 			tabbedPane.addTab(jEdit.getProperty(win.getName()
 				+ ".title"),win.getComponent());
+			tabbedPane.setSelectedComponent(win.getComponent());
+			if(dimension == 0)
+				dimension = -1;
+
 			tabbedPane.revalidate();
 		}
 
@@ -233,6 +237,8 @@ public interface DockableWindowContainer
 		public Floating(DockableWindowManager dockableWindowManager)
 		{
 			this.dockableWindowManager = dockableWindowManager;
+			setIconImage(GUIUtilities.getPluginIcon());
+			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		}
 
 		public void addDockableWindow(DockableWindow window)
@@ -242,8 +248,6 @@ public interface DockableWindowContainer
 			setTitle(jEdit.getProperty(name + ".title"));
 
 			getContentPane().add(BorderLayout.CENTER,window.getComponent());
-
-			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 			pack();
 			GUIUtilities.loadGeometry(this,name);
@@ -281,6 +285,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/19 08:26:26  sp
+ * More docking API tweaks
+ *
  * Revision 1.3  2000/08/17 08:04:10  sp
  * Marker loading bug fixed, docking option pane
  *

@@ -193,6 +193,7 @@ public class View extends JFrame implements EBComponent
 			parent.remove(splitPane);
 			parent.add(editPane);
 			parent.revalidate();
+
 			splitPane = null;
 			updateTitle();
 		}
@@ -434,10 +435,6 @@ public class View extends JFrame implements EBComponent
 			jEdit.getInputHandler());
 
 		propertiesChanged();
-
-		// must do this after propertiesChanged() so that the
-		// window manager will have a valid layout
-		dockableWindowManager.add(BorderLayout.CENTER,editPane);
 
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
@@ -1024,6 +1021,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.192  2000/08/19 08:26:26  sp
+ * More docking API tweaks
+ *
  * Revision 1.191  2000/08/17 08:04:09  sp
  * Marker loading bug fixed, docking option pane
  *

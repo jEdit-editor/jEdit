@@ -2,6 +2,13 @@ JEDIT 2.6 VERSION HISTORY
 
 * Version 2.6pre3
 
++ New Features
+
+- Window docking added to the core. This allows plugins and other windows
+  to be 'docked' into views. By default, all dockable windows are shown
+  in their own frames. This can be changed in Utilities->Global Options->
+  Docking. This obsoletes the PluginHolder plugin.
+
 + Enhancements
 
 - Previously, buffer closing and search & replace would block the GUI
@@ -34,6 +41,13 @@ JEDIT 2.6 VERSION HISTORY
 - On some JVMs, IORequest.java would cause VerifyErrors, and as a result,
   buffers could not be loaded or saved (since 2.6pre2)
 - Markers would not be loaded properly (since 2.6pre1)
+
++ API Changes
+
+- Plugins that use PluginHolder to dock themselves in views will need to
+  be updated to use the new API
+- Plugins that dock themselves in directly (eg, BufferSelector) will need
+  to be updated for the new component hierarchy
 
 * Version 2.6pre2
 

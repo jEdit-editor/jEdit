@@ -65,13 +65,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.browser.defaultView"),
 			defaultView);
 
-		/* Double-click close */
-		doubleClickClose = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".doubleClickClose"));
-		doubleClickClose.setSelected(jEdit.getBooleanProperty("vfs.browser"
-			+ ".doubleClickClose"));
-		addComponent(doubleClickClose);
-
 		/* Show hidden files */
 		showHiddenFiles = new JCheckBox(jEdit.getProperty("options.browser"
 			+ ".showHiddenFiles"));
@@ -109,8 +102,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 		String[] views = { "list", "tree" };
 		jEdit.setProperty("vfs.browser.defaultView",views[defaultView
 			.getSelectedIndex()]);
-		jEdit.setBooleanProperty("vfs.browser.doubleClickClose",
-			doubleClickClose.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.showHiddenFiles",
 			showHiddenFiles.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.sortFiles",
@@ -124,7 +115,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 	// private members
 	private JComboBox defaultDirectory;
 	private JComboBox defaultView;
-	private JCheckBox doubleClickClose;
 	private JCheckBox showHiddenFiles;
 	private JCheckBox sortFiles;
 	private JCheckBox sortIgnoreCase;
@@ -134,6 +124,9 @@ public class BrowserOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/19 08:26:27  sp
+ * More docking API tweaks
+ *
  * Revision 1.1  2000/08/11 09:06:52  sp
  * Browser option pane
  *

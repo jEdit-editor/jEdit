@@ -22,7 +22,7 @@ package org.gjt.sp.jedit.gui;
 import org.gjt.sp.jedit.browser.VFSBrowserDockable;
 import org.gjt.sp.jedit.msg.CreateDockableWindow;
 import org.gjt.sp.jedit.*;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
@@ -72,8 +72,14 @@ public class DockableWindowManager extends JPanel
 	 */
 	public DockableWindowManager(View view)
 	{
+		setLayout(new BorderLayout());
 		this.view = view;
 		windows = new Hashtable();
+
+		top = new DockableWindowContainer.TabbedPane(TOP);
+		left = new DockableWindowContainer.TabbedPane(LEFT);
+		bottom = new DockableWindowContainer.TabbedPane(BOTTOM);
+		right = new DockableWindowContainer.TabbedPane(RIGHT);
 	}
 
 	/**
@@ -93,6 +99,21 @@ public class DockableWindowManager extends JPanel
 					addDockableWindow(name);
 			}
 		}
+	}
+
+	/**
+	 * Focuses the specified dockable window.
+	 * @param name The dockable window name
+	 * @since jEdit 2.6pre3
+	 */
+	public void showDockableWindow(String name)
+	{
+		Entry entry = (Entry)windows.get(name);
+		if(entry == null)
+			throw new IllegalArgumentException("No such window: "
+				+ name);
+
+		entry.container.showDockableWindow(entry.win);
 	}
 
 	/**
@@ -161,45 +182,15 @@ public class DockableWindowManager extends JPanel
 		else
 		{
 			if(position.equals(TOP))
-			{
-				if(top == null)
-				{
-					top = new DockableWindowContainer.TabbedPane(TOP);
-					add(BorderLayout.NORTH,top);
-				}
 				container = top;
-			}
 			else if(position.equals(LEFT))
-			{
-				if(left == null)
-				{
-					left = new DockableWindowContainer.TabbedPane(LEFT);
-					add(BorderLayout.WEST,left);
-				}
 				container = left;
-			}
 			else if(position.equals(BOTTOM))
-			{
-				if(bottom == null)
-				{
-					bottom = new DockableWindowContainer.TabbedPane(BOTTOM);
-					add(BorderLayout.SOUTH,bottom);
-				}
 				container = bottom;
-			}
 			else if(position.equals(RIGHT))
-			{
-				if(right == null)
-				{
-					right = new DockableWindowContainer.TabbedPane(RIGHT);
-					add(BorderLayout.EAST,right);
-				}
 				container = right;
-			}
 			else
-			{
 				throw new InternalError("Unknown position: " + position);
-			}
 		}
 
 		container.addDockableWindow(win);
@@ -239,6 +230,19 @@ public class DockableWindowManager extends JPanel
 	}
 
 	/**
+	 * Returns the specified dockable window.
+	 * @param name The dockable window name.
+	 */
+	public DockableWindow getDockableWindow(String name)
+	{
+		Entry entry = (Entry)windows.get(name);
+		if(entry == null)
+			return null;
+		else
+			return entry.win;
+	}
+
+	/**
 	 * Returns if the specified dockable window is visible.
 	 * @param name The dockable window name
 	 */
@@ -261,14 +265,10 @@ public class DockableWindowManager extends JPanel
 			entry.container.removeDockableWindow(entry.win);
 		}
 
-		if(top != null)
-			top.saveDimension();
-		if(left != null)
-			left.saveDimension();
-		if(bottom != null)
-			bottom.saveDimension();
-		if(right != null)
-			right.saveDimension();
+		top.saveDimension();
+		left.saveDimension();
+		bottom.saveDimension();
+		right.saveDimension();
 	}
 
 	/**
@@ -277,17 +277,65 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void propertiesChanged()
 	{
-		setLayout(new CustomBorderLayout(jEdit.getBooleanProperty(
-			"view.docking.alternateLayout")));
+		JComponent center;
+		if(view.getSplitPane() == null)
+			center = view.getEditPane();
+		else
+			center = view.getSplitPane();
 
-		if(left != null)
-			left.propertiesChanged();
-		if(right != null)
-			right.propertiesChanged();
-		if(top != null)
-			top.propertiesChanged();
-		if(bottom != null)
-			bottom.propertiesChanged();
+		removeAll();
+
+		if(jEdit.getBooleanProperty("view.docking.alternateLayout"))
+		{
+			/*
+			 +-----------+
+			 |           |
+			 +--+-----+--+
+			 |  |     |  |
+			 |  |     |  |
+			 |  |     |  |
+			 |  |     |  |
+			 +--+-----+--+
+			 |           |
+			 +-----------+
+			 */
+
+			add(BorderLayout.NORTH,top);
+			add(BorderLayout.WEST,left);
+			add(BorderLayout.EAST,right);
+			add(BorderLayout.SOUTH,bottom);
+			add(BorderLayout.CENTER,center);
+		}
+		else
+		{
+			/*
+			 +-----------+
+			 |  |     |  |
+			 |  +-----+  |
+			 |  |     |  |
+			 |  |     |  |
+			 |  |     |  |
+			 |  |     |  |
+			 |  +-----+  |
+			 |  |     |  |
+			 +-----------+
+			 */
+
+			add(BorderLayout.WEST,left);
+			JPanel centerPanel = new JPanel(new BorderLayout());
+			centerPanel.add(BorderLayout.NORTH,top);
+			centerPanel.add(BorderLayout.CENTER,center);
+			centerPanel.add(BorderLayout.SOUTH,bottom);
+			add(BorderLayout.CENTER,centerPanel);
+			add(BorderLayout.EAST,right);
+		}
+
+		left.propertiesChanged();
+		right.propertiesChanged();
+		top.propertiesChanged();
+		bottom.propertiesChanged();
+
+		revalidate();
 	}
 
 	// private members
@@ -326,16 +374,6 @@ public class DockableWindowManager extends JPanel
 		}
 	}
 
-	static class CustomBorderLayout extends BorderLayout
-	{
-		boolean alternateLayout;
-
-		CustomBorderLayout(boolean alternateLayout)
-		{
-			this.alternateLayout = alternateLayout;
-		}
-	}
-
 	// factory for creating the dockables built into the jEdit core
 	// (VFS browser, etc)
 	static class DefaultFactory implements EBComponent
@@ -359,6 +397,9 @@ public class DockableWindowManager extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/19 08:26:27  sp
+ * More docking API tweaks
+ *
  * Revision 1.2  2000/08/17 08:04:10  sp
  * Marker loading bug fixed, docking option pane
  *
