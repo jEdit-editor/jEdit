@@ -1,0 +1,37 @@
+// This macro executes the 'jmk' command in the Console plugin.
+
+/* This is a generic function that executes the specified command in the
+ * console. You can copy and paste it into your own macros. */
+runCommandInConsole(command)
+{
+	// firstly, check if the plugin is installed.
+	if(jEdit.getPlugin("console.ConsolePlugin") == null)
+	{
+		Macros.error(view,"You must install the Console plugin"
+			+ " to use this macro.");
+		return;
+	}
+
+	// Open the console if it isn't already open
+	view.getDockableWindowManager().addDockableWindow("console");
+
+	// Obtain the console instance
+	console = view.getDockableWindowManager().getDockableWindow("console");
+
+	// Call its run() method
+	console.run(command);
+}
+
+// Prompt the user for input
+target = Macros.input(view,"Make target:");
+if(target == null)
+{
+	// if they didn't specify anything, assume they mean the default target
+	target = "";
+}
+
+// Construct the command which will be executed
+command = "jmk " + target;
+
+// Call our runCommandInConsole() function
+runCommandInConsole(command);

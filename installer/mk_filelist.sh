@@ -14,7 +14,7 @@ echo site-props/*.props >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
 find modes -name \*.dtd >> installer/jedit-program
 find doc -type f -name \*.txt >> installer/jedit-program
-find macros -name \*.macro >> installer/jedit-program
+find macros -name \*.bsh >> installer/jedit-program
 
 echo -n "jedit-program: "
 ls -l `cat installer/jedit-program` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'

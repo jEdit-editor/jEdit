@@ -2,19 +2,16 @@
 <HTML
 ><HEAD
 ><TITLE
->Macros</TITLE
+>Macros and Scripting</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
-REL="UP"
-TITLE="Extending jEdit"
-HREF="extending-jedit.html"><LINK
 REL="PREVIOUS"
-TITLE="Token Types"
-HREF="mode-syntax-tokens.html"><LINK
+TITLE="The jEdit Settings Directory"
+HREF="settings-directory.html"><LINK
 REL="NEXT"
 TITLE="Recording Macros"
 HREF="macro-record.html"></HEAD
@@ -29,7 +26,7 @@ CLASS="NAVHEADER"
 HREF="macro-record.html"
 >Next</A
 >, <A
-HREF="mode-syntax-tokens.html"
+HREF="settings-directory.html"
 >Prev</A
 ></P
 ><HR></DIV
@@ -38,7 +35,7 @@ CLASS="CHAPTER"
 ><H1
 ><A
 NAME="MACROS"
->Chapter 8. Macros</A
+>Chapter 7. Macros and Scripting</A
 ></H1
 ><DIV
 CLASS="TOC"
@@ -64,18 +61,8 @@ HREF="macro-temp.html"
 ></DT
 ><DT
 ><A
-HREF="macro-prompt.html"
->Prompting for Input</A
-></DT
-><DT
-><A
-HREF="macro-syntax.html"
->Macro File Syntax</A
-></DT
-><DT
-><A
-HREF="macro-samples.html"
->Some Sample Macros</A
+HREF="macro-writing.html"
+>Evaluating BeanShell Expressions</A
 ></DT
 ></DL
 ></DIV
@@ -83,10 +70,26 @@ HREF="macro-samples.html"
 >  A <I
 CLASS="FIRSTTERM"
 >macro</I
-> is a prerecorded sequence of events that can be
-  played back with a single menu item selection, keystroke, or tool bar
+> is a miniature program that can be
+  run with a single menu item selection, keystroke, or tool bar
   click. Macros are useful for automating operations that would be very
   boring or tedious to perform by hand.
+ </P
+><P
+>  Macros are written in the <I
+CLASS="FIRSTTERM"
+>BeanShell</I
+>
+  scripting language.
+  While this section will only cover basic uses of BeanShell, macros are
+  by no means limited to what is described here; BeanShell is
+  a complete programming language, and your imagination is the limit to
+  what macros can do. A full description of BeanShell can be found at
+  <A
+HREF="http://www.beanshell.org"
+TARGET="_top"
+>http://www.beanshell.org</A
+>.
  </P
 ><DIV
 CLASS="SECT1"
@@ -97,26 +100,23 @@ NAME="MACRO-FILES"
 >Macro Files</A
 ></H1
 ><P
->   Macro files have the extension ".macro". See <A
-HREF="macro-syntax.html"
->the section called <I
->Macro File Syntax</I
-></A
->
-   for information about their syntax.
-  </P
-><P
->   Macros can be stored in the <TT
+>   Macros are files with the extension ".bsh" and are stored in
+   the <TT
 CLASS="FILENAME"
 >macros</TT
 > subdirectory
    of the jEdit install directory or the <TT
 CLASS="FILENAME"
->.jedit/macros</TT
+>macros</TT
 >
-   subdirectory of the user's home directory. The former contains several
-   sample macros included with jEdit, and the latter should be used to
-   store user-defined macros.
+   subdirectory of the jEdit settings directory. The location of the
+   settings directory is system-specific; see
+   <A
+HREF="settings-directory.html"
+>the section called <I
+>The jEdit Settings Directory</I
+> in Chapter 6</A
+> for details.
   </P
 ><P
 >   The <SPAN
@@ -124,53 +124,26 @@ CLASS="GUIMENU"
 >Macros</SPAN
 > menu lists all known macros, in addition
    to commands for working with them. To play a macro, select it from
-   the menu. The most recently recorded or played macro can be played back with
-   the <SPAN
+   the menu. A large macro collection can be organized by creating
+   subdirectories
+   in the macros directory; they
+   are displayed as submenus in the <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
->&gt;<SPAN
-CLASS="GUIMENUITEM"
->Play Last Macro</SPAN
-> command (keyboard
-   equivalent:
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->M</B
->
-   <B
-CLASS="KEYCAP"
->Control</B
->-<B
-CLASS="KEYCAP"
->L</B
->).
-  </P
-><P
->   Creating subdirectories in the macros directory works as expected; they
-   are displayed as submenus of the <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
-> menu. This can be
-   used to organize a large collection of macros.
-   The <SPAN
-CLASS="GUIMENU"
->Macros</SPAN
-> menu is automatically
-   refreshed when you update or create a macro file from within jEdit.
-   However, because macros are stored as ordinary files, they can be renamed,
-   deleted and so on with your operating system's file manager. When you
-   make changes to macros in a program other than jEdit, you must
+> menu.
+   The menu is automatically
+   refreshed when macro files are created, deleted or renamed from within jEdit.
+   Because macros are ordinary files, they can also be renamed and
+   deleted with your operating system's file manager. The
    <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Rescan Macros</SPAN
->
-   to update the macros menu with the changes.
+> command must be
+   invoked to update the macros menu if changes are made in a program other
+   than jEdit.
   </P
 ><P
 >   Like most other menu item commands, macros can be assigned keyboard
@@ -190,13 +163,10 @@ CLASS="NAVFOOTER"
 ><HR><A
 HREF="index.html"
 >Home</A
->, <A
-HREF="extending-jedit.html"
->Up</A
 ><BR><A
-HREF="mode-syntax-tokens.html"
+HREF="settings-directory.html"
 >Prev</A
->: Token Types<BR><A
+>: The jEdit Settings Directory<BR><A
 HREF="macro-record.html"
 >Next</A
 >: Recording Macros<BR></DIV

@@ -45,7 +45,11 @@ public class EditBus
 	 */
 	public static void addToBus(EBComponent comp)
 	{
-		components.addElement(comp);
+		synchronized(components)
+		{
+			components.addElement(comp);
+			copyComponents = null;
+		}
 	}
 
 	/**
@@ -54,7 +58,11 @@ public class EditBus
 	 */
 	public static void removeFromBus(EBComponent comp)
 	{
-		components.removeElement(comp);
+		synchronized(components)
+		{
+			components.removeElement(comp);
+			copyComponents = null;
+		}
 	}
 
 	/**
@@ -62,9 +70,15 @@ public class EditBus
 	 */
 	public static EBComponent[] getComponents()
 	{
-		EBComponent[] comps = new EBComponent[components.size()];
-		components.copyInto(comps);
-		return comps;
+		synchronized(components)
+		{
+			if (copyComponents == null)
+			{
+				copyComponents = new EBComponent[components.size()];
+				components.copyInto(copyComponents);
+			}
+			return copyComponents;
+		}
 	}
 
 	/**
@@ -164,6 +178,7 @@ public class EditBus
 
 	// private members
 	private static Vector components = new Vector();
+	private static EBComponent[] copyComponents;
 	private static Hashtable listVectors = new Hashtable();
 	private static Hashtable listArrays = new Hashtable();
 

@@ -237,6 +237,8 @@ public class UpdatePluginsDialog extends EnhancedDialog
 		{
 			PluginList.Plugin[] pluginList = new PluginList(
 				UpdatePluginsDialog.this).getPlugins();
+			if(pluginList == null)
+				return;
 
 			// only add plugins that are already installed,
 			// and don't add freshly installed ones
@@ -267,6 +269,8 @@ public class UpdatePluginsDialog extends EnhancedDialog
 				public void run()
 				{
 					plugins.setModel(model);
+					if(model.getSize() == 0)
+						GUIUtilities.message(UpdatePluginsDialog.this,"up-to-date",null);
 				}
 			});
 

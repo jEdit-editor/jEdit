@@ -5,8 +5,9 @@ MAJOR CHANGES IN JEDIT 2.7 SINCE 2.6
 The limited macro language used in jEdit 2.6 and earlier has been
 replaced with BeanShell. BeanShell is a full-featured scripting language
 with a syntax very similar to Java; hence Java programmers will be able
-to pick it up very easily. Recording user actions is still supported,
-so non-programmers can continue to use of jEdit's macro features.
+to pick it up very easily. The BeanShell homepage is located at
+<http://www.beanshell.org>. Recording user actions is still supported,
+so non-programmers can continue to use jEdit's macro features.
 
 * User interface improvements
 

@@ -16,8 +16,8 @@ REL="PREVIOUS"
 TITLE="The Global Options Dialog Box"
 HREF="global-opts.html"><LINK
 REL="NEXT"
-TITLE="Installing and Using Plugins"
-HREF="plugins.html"></HEAD
+TITLE="Macros and Scripting"
+HREF="macros.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="plugins.html"
+HREF="macros.html"
 >Next</A
 >, <A
 HREF="global-opts.html"
 >Prev</A
 ></P
 ><H2
->Chapter 5. Customizing jEdit</H2
+>Chapter 6. Customizing jEdit</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -57,12 +57,11 @@ CLASS="FIRSTTERM"
   </P
 ><P
 >   The location of the settings
-   directory is system-specific; to find out what it is, look in the
+   directory is system-specific; it is printed to the
    activity log (see <A
 HREF="activity-log.html"
->Appendix A</A
->) for a message like the
-   following:
+>Appendix E</A
+>). For example:
   </P
 ><TABLE
 BORDER="0"
@@ -131,10 +130,9 @@ CLASS="COMMAND"
 CLASS="FILENAME"
 >jars</TT
 > - a directory for user-installed
-   plugins. See
-   <A
+   plugins. See <A
 HREF="plugins.html"
->Chapter 6</A
+>Chapter 8</A
 >.</P
 ></LI
 ><LI
@@ -142,11 +140,10 @@ HREF="plugins.html"
 ><TT
 CLASS="FILENAME"
 >macros</TT
-> - a directory for recorded
-   macros. See
-   <A
+> - a directory for
+   macros. See <A
 HREF="macros.html"
->Chapter 8</A
+>Chapter 7</A
 >.</P
 ></LI
 ><LI
@@ -155,11 +152,9 @@ HREF="macros.html"
 CLASS="FILENAME"
 >modes</TT
 > - a directory for custom edit modes.
-   Each edit mode is a file in XML format. See <A
-HREF="source-edit.html#MODES"
->the section called <I
->Edit Modes</I
-> in Chapter 4</A
+   See <A
+HREF="modes.html"
+>Chapter 4</A
 >.
    </P
 ></LI
@@ -172,7 +167,7 @@ CLASS="FILENAME"
    is usually empty. It only contains files while the plugin manager is
    downloading a plugin. See <A
 HREF="plugins.html"
->Chapter 6</A
+>Chapter 8</A
 >
    for information about the plugin manager</P
 ></LI
@@ -198,10 +193,10 @@ CLASS="FILENAME"
 >abbrevs</TT
 > - a plain text file which
    stores all defined abbreviations. See <A
-HREF="abbrevs.html"
+HREF="source-edit.html#ABBREVS"
 >the section called <I
 >Abbreviations</I
-> in Chapter 4</A
+> in Chapter 5</A
 >.</P
 ></LI
 ><LI
@@ -212,7 +207,7 @@ CLASS="FILENAME"
 > - a plain text file which
    contains the complete text of the activity log. See <A
 HREF="activity-log.html"
->Appendix A</A
+>Appendix E</A
 >
    for more information about the activity log.</P
 ></LI
@@ -249,10 +244,8 @@ CLASS="FILENAME"
 > - a binary file which stores
    information about all available edit modes so that they can be loaded
    on demand. See <A
-HREF="source-edit.html#MODES"
->the section called <I
->Edit Modes</I
-> in Chapter 4</A
+HREF="modes.html"
+>Chapter 4</A
 ></P
 ></LI
 ><LI
@@ -267,13 +260,24 @@ CLASS="FILENAME"
 ><P
 ><TT
 CLASS="FILENAME"
+>recent</TT
+> - a plain text file which stores
+   the list of recently opened files and where the caret was positioned within
+   them</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
 >server</TT
 > - a plain text file that only exists
    if the edit server is enabled and jEdit is running. The port number
    and authorization key
    is stored here. See <A
 HREF="server.html"
->Appendix D</A
+>the section called <I
+>The Edit Server</I
+> in Chapter 2</A
 ></P
 ></LI
 ></UL
@@ -290,9 +294,9 @@ HREF="customizing.html"
 HREF="global-opts.html"
 >Prev</A
 >: The Global Options Dialog Box<BR><A
-HREF="plugins.html"
+HREF="macros.html"
 >Next</A
->: Installing and Using Plugins<BR></DIV
+>: Macros and Scripting<BR></DIV
 ></BODY
 ></HTML
 >

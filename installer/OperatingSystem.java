@@ -99,15 +99,14 @@ public abstract class OperatingSystem
 			// Write simple script
 			FileWriter out = new FileWriter(script);
 			out.write("#!/bin/sh\n");
-			out.write("exec ${JAVA-java} ${" + name.toUpperCase()
+			out.write("exec "
+				+ System.getProperty("java.home")
+				+ "/bin/java} ${" + name.toUpperCase()
 				+ "} -classpath \"${CLASSPATH}:"
 				+ installDir + File.separator
 				+ name.toLowerCase() + ".jar\" "
 				+ installer.getProperty("app.main.class")
-				+ " $@\n");
-			out.write("echo Cannot find ${JAVA-java}."
-				+ " make sure its directory appears in"
-				+ " your PATH environment variable.\n");
+				+ " $@ &\n");
 			out.close();
 
 			// Make it executable

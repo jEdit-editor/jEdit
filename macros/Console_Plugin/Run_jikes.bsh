@@ -1,0 +1,31 @@
+// This macro executes the 'jikes' (IBM fast Java compiler) command in the
+// Console plugin.
+
+/* This is a generic function that executes the specified command in the
+ * console. You can copy and paste it into your own macros. */
+runCommandInConsole(command)
+{
+	// firstly, check if the plugin is installed.
+	if(jEdit.getPlugin("console.ConsolePlugin") == null)
+	{
+		Macros.error(view,"You must install the Console plugin"
+			+ " to use this macro.");
+		return;
+	}
+
+	// Open the console if it isn't already open
+	view.getDockableWindowManager().addDockableWindow("console");
+
+	// Obtain the console instance
+	console = view.getDockableWindowManager().getDockableWindow("console");
+
+	// Call its run() method
+	console.run(command);
+}
+
+// Construct the command which will be executed
+// Note that the console automatically expands '$f' to the buffer's path
+command = "jikes -classpath $d $f";
+
+// Call our runCommandInConsole() function
+runCommandInConsole(command);

@@ -62,6 +62,9 @@ JEDIT 2.7 VERSION HISTORY
 - Fixed race between autosave I/O request and save cleanup that could
   result in autosave files being left after a successful save
   (Denis Lambot)
+- Assigning shortcuts to plugins that used the new-style action system
+  wouldn't work
+- Minor performance improvement in EditBus class (Denis Lambot)
 
 * Version 2.7pre2
 

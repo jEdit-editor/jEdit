@@ -59,7 +59,7 @@ public class JARClassLoader extends ClassLoader
 					zipFile.getInputStream(entry))));
 			}
 			else if(lname.endsWith(".props"))
-				jEdit.loadProps(zipFile.getInputStream(entry));
+				jEdit.loadProps(zipFile.getInputStream(entry),true);
 			else if(name.endsWith("Plugin.class"))
 				pluginClasses.addElement(name);
 		}

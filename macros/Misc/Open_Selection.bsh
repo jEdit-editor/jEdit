@@ -1,0 +1,7 @@
+// Opens selected path name
+
+String path = textArea.getSelectedText();
+if(path == null)
+	view.getToolkit().beep();
+else
+	jEdit.openFile(view,path);

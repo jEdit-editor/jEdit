@@ -1069,7 +1069,9 @@ log-viewer.caption=Full text of log is stored in {0}.
 ###
 ### MISC
 ###
-mode.text.label=Plain Text
+
+# Force .txt files to open in text mode, even if a different default
+# mode was specified
 mode.text.filenameGlob=*.txt
 
 ###
@@ -1123,7 +1125,7 @@ vfs.browser.synchronize.icon=Import24.gif
 vfs.browser.more.label=More
 vfs.browser.more.icon=ToolbarMenu.gif
 
-vfs.browser.menu.close.label=Close
+vfs.browser.menu.close.label=Close Selected File
 vfs.browser.menu.open.label=Open Selected File
 vfs.browser.menu.open-view.label=Open Selected File in New View
 vfs.browser.menu.goto.label=Go to Selected Directory

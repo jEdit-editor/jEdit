@@ -10,14 +10,14 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Macros"
+TITLE="Macros and Scripting"
 HREF="macros.html"><LINK
 REL="PREVIOUS"
 TITLE="Recording Macros"
 HREF="macro-record.html"><LINK
 REL="NEXT"
-TITLE="Prompting for Input"
-HREF="macro-prompt.html"></HEAD
+TITLE="Evaluating BeanShell Expressions"
+HREF="macro-writing.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,14 +26,14 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="macro-prompt.html"
+HREF="macro-writing.html"
 >Next</A
 >, <A
 HREF="macro-record.html"
 >Prev</A
 ></P
 ><H2
->Chapter 8. Macros</H2
+>Chapter 7. Macros and Scripting</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -44,7 +44,7 @@ NAME="MACRO-TEMP"
 >Temporary Macros</A
 ></H1
 ><P
->   Sometimes, a complicated action only needs to be repeated a few of
+>   Sometimes, a complicated operation only needs to be repeated a few of
    times, and it is not worth creating a new macro file. The
    temporary macro feature is useful in those situations.
   </P
@@ -55,8 +55,7 @@ CLASS="GUIMENU"
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Record Temporary Macro</SPAN
-> (keyboard
-   equivalent:
+> (shortcut:
    <B
 CLASS="KEYCAP"
 >Control</B
@@ -70,14 +69,10 @@ CLASS="KEYCAP"
 >-<B
 CLASS="KEYCAP"
 >M</B
->) works in a
-   similar fashion to the <SPAN
-CLASS="GUIMENUITEM"
->Record Macro</SPAN
-> command, except that
-   it records to a buffer named <TT
+>) begins recording
+   to a buffer named <TT
 CLASS="FILENAME"
->__temporary__.macro</TT
+>Temporary_Macro.bsh</TT
 >.
   </P
 ><P
@@ -88,7 +83,7 @@ CLASS="GUIMENU"
 CLASS="GUIMENUITEM"
 >Stop Recording</SPAN
 >
-   (keyboard equivalent: <B
+   (shortcut: <B
 CLASS="KEYCAP"
 >Control</B
 >-<B
@@ -107,9 +102,9 @@ CLASS="KEYCAP"
    Once recording is complete, you don't need to save the
    <TT
 CLASS="FILENAME"
->__temporary__.macro</TT
+>Temporary_Macro.bsh</TT
 >
-   buffer before playing it back. If you do, it will become
+   buffer before playing it back- but if you do, it will become
    an ordinary macro, displayed in the <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
@@ -122,8 +117,7 @@ CLASS="GUIMENU"
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Play Temporary Macro</SPAN
-> (keyboard
-   equivalent:
+> (shortcut:
    <B
 CLASS="KEYCAP"
 >Control</B
@@ -140,7 +134,7 @@ CLASS="KEYCAP"
 >) plays the
    macro recorded to the <TT
 CLASS="FILENAME"
->__temporary__.macro</TT
+>Temporary_Macro.bsh</TT
 > buffer.
   </P
 ></DIV
@@ -156,9 +150,9 @@ HREF="macros.html"
 HREF="macro-record.html"
 >Prev</A
 >: Recording Macros<BR><A
-HREF="macro-prompt.html"
+HREF="macro-writing.html"
 >Next</A
->: Prompting for Input<BR></DIV
+>: Evaluating BeanShell Expressions<BR></DIV
 ></BODY
 ></HTML
 >

@@ -282,10 +282,11 @@ public class jEdit
 		initSystemProperties();
 		BeanShell.init();
 		GUIUtilities.advanceSplashProgress();
-		initPlugins();
-		GUIUtilities.advanceSplashProgress();
 		initSiteProperties();
 		initUserProperties();
+		GUIUtilities.advanceSplashProgress();
+		initPlugins();
+
 		if(settingsDirectory != null)
 		{
 			File history = new File(MiscUtilities.constructPath(
@@ -389,12 +390,18 @@ public class jEdit
 	 * calls the <code>load()</code> method of the properties object
 	 * and closes the stream.
 	 * @param in The input stream
+	 * @param def If true, the properties will be loaded into the
+	 * default table
 	 * @exception IOException if an I/O error occured
 	 */
-	public static void loadProps(InputStream in)
+	public static void loadProps(InputStream in, boolean def)
 		throws IOException
 	{
-		props.load(new BufferedInputStream(in));
+		in = new BufferedInputStream(in);
+		if(def)
+			defaultProps.load(in);
+		else
+			props.load(in);
 		in.close();
 	}
 
@@ -814,7 +821,7 @@ public class jEdit
 						line.substring(5),"\t");
 					String name = st.nextToken();
 					Mode mode = new Mode(name);
-					String[] props = { "label", "filenameGlob",
+					String[] props = { "filenameGlob",
 						"firstlineGlob", "grammar" };
 					for(int i = 0; i < props.length; i++)
 					{
@@ -894,7 +901,6 @@ public class jEdit
 
 		// 'manually' create text mode
 		Mode text = new Mode("text");
-		text.setProperty("label",getProperty("mode.text.label"));
 		text.setProperty("filenameGlob",getProperty("mode.text.filenameGlob"));
 		text.init();
 		addMode(text);
@@ -927,7 +933,7 @@ public class jEdit
 				Mode mode = (Mode)modes.elementAt(i);
 				out.write("mode ");
 				out.write(mode.getName());
-				String[] props = { "label", "filenameGlob",
+				String[] props = { "filenameGlob",
 					"firstlineGlob", "grammar" };
 				for(int j = 0; j < props.length; j++)
 				{
@@ -2035,11 +2041,11 @@ public class jEdit
 		try
 		{
 			loadProps(jEdit.class.getResourceAsStream(
-				"/org/gjt/sp/jedit/jedit.props"));
+				"/org/gjt/sp/jedit/jedit.props"),true);
 			loadProps(jEdit.class.getResourceAsStream(
-				"/org/gjt/sp/jedit/jedit_gui.props"));
+				"/org/gjt/sp/jedit/jedit_gui.props"),true);
 			loadProps(jEdit.class.getResourceAsStream(
-				"/org/gjt/sp/jedit/jedit_keys.props"));
+				"/org/gjt/sp/jedit/jedit_keys.props"),true);
 		}
 		catch(Exception e)
 		{
@@ -2091,7 +2097,7 @@ public class jEdit
 				Log.log(Log.DEBUG,jEdit.class,
 					"Loading site snippet: " + path);
 
-				loadProps(new FileInputStream(new File(path)));
+				loadProps(new FileInputStream(new File(path)),true);
 			}
 			catch(FileNotFoundException fnf)
 			{
@@ -2173,7 +2179,7 @@ public class jEdit
 
 			try
 			{
-				loadProps(new FileInputStream(file));
+				loadProps(new FileInputStream(file),false);
 			}
 			catch(FileNotFoundException fnf)
 			{

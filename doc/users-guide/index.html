@@ -7,8 +7,8 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet"><LINK
 REL="NEXT"
-TITLE="Using jEdit"
-HREF="using-jedit.html"></HEAD
+TITLE="Basic Concepts"
+HREF="basics.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -58,13 +58,6 @@ CLASS="TOC"
 >Table of Contents</B
 ></DT
 ><DT
->I. <A
-HREF="using-jedit.html"
->Using jEdit</A
-></DT
-><DD
-><DL
-><DT
 >1. <A
 HREF="basics.html"
 >Basic Concepts</A
@@ -74,12 +67,7 @@ HREF="basics.html"
 ><DT
 ><A
 HREF="basics.html#MENU-ITEMS"
->Menu Items</A
-></DT
-><DT
-><A
-HREF="shortcuts.html"
->Keyboard Shortcuts</A
+>Conventions</A
 ></DT
 ><DT
 ><A
@@ -103,7 +91,7 @@ HREF="views.html"
 ></DT
 ><DT
 ><A
-HREF="repeats.html"
+HREF="repeat.html"
 >Command Repetition</A
 ></DT
 ></DL
@@ -130,6 +118,25 @@ HREF="opening.html"
 HREF="saving.html"
 >Saving Files</A
 ></DT
+><DD
+><DL
+><DT
+><A
+HREF="saving.html#AEN336"
+>Autosave and Backups</A
+></DT
+><DT
+><A
+HREF="saving.html#AEN358"
+>Line Separator Characters</A
+></DT
+><DT
+><A
+HREF="saving.html#AEN384"
+>When Another Application Modifies the File</A
+></DT
+></DL
+></DD
 ><DT
 ><A
 HREF="vfs-browser.html"
@@ -140,6 +147,20 @@ HREF="vfs-browser.html"
 HREF="threaded-io.html"
 >Multithreaded I/O</A
 ></DT
+><DT
+><A
+HREF="server.html"
+>The Edit Server</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="server.html#BACKGROUND-MODE"
+>Background Mode</A
+></DT
+></DL
+></DD
 ><DT
 ><A
 HREF="printing.html"
@@ -219,15 +240,156 @@ HREF="markers.html"
 HREF="registers.html"
 >Registers</A
 ></DT
+><DD
+><DL
+><DT
+><A
+HREF="registers.html#TEXT-REGISTERS"
+>Text Registers</A
+></DT
+><DT
+><A
+HREF="registers.html#POS-REGISTERS"
+>Position Registers</A
+></DT
+></DL
+></DD
 ><DT
 ><A
 HREF="search-replace.html"
 >Search and Replace</A
 ></DT
+><DD
+><DL
+><DT
+><A
+HREF="search-replace.html#AEN1399"
+>Searching For Text</A
+></DT
+><DT
+><A
+HREF="search-replace.html#AEN1431"
+>Replacing Text</A
+></DT
+><DT
+><A
+HREF="search-replace.html#AEN1440"
+>Batch Search</A
+></DT
+><DT
+><A
+HREF="search-replace.html#AEN1453"
+>Multiple File Search</A
+></DT
+><DT
+><A
+HREF="search-replace.html#AEN1467"
+>The Search Bar</A
+></DT
+></DL
+></DD
 ></DL
 ></DD
 ><DT
 >4. <A
+HREF="modes.html"
+>Edit Modes</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="modes.html#MODE-SELECTION"
+>Mode Selection</A
+></DT
+><DT
+><A
+HREF="installing-modes.html"
+>Installing New Edit Modes</A
+></DT
+><DT
+><A
+HREF="writing-modes.html"
+>Writing Edit Modes</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="writing-modes.html#XML-PRIMER"
+>An XML Primer</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-PREAMBLE"
+>The Preamble</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-TAG"
+>The MODE Tag</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-TAG-PROPS"
+>The PROPS Tag</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-TAG-RULES"
+>The RULES Tag</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-RULE-TERMINATE"
+>TERMINATE Rule</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-RULE-WHITESPACE"
+>WHITESPACE Rule</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-RULE-SPAN"
+>SPAN Rule</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-RULE-EOL-SPAN"
+>EOL_SPAN Rule</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-RULE-MARK-PREV"
+>MARK_PREVIOUS Rule</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-RULE-MARK-FOLLOWING"
+>MARK_FOLLOWING Rule</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-RULE-SEQ"
+>SEQ Rule</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-RULE-KEYWORDS"
+>KEYWORDS Rule</A
+></DT
+><DT
+><A
+HREF="writing-modes.html#MODE-SYNTAX-TOKENS"
+>Token Types</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>5. <A
 HREF="source-edit.html"
 >Editing Source Code</A
 ></DT
@@ -235,12 +397,7 @@ HREF="source-edit.html"
 ><DL
 ><DT
 ><A
-HREF="source-edit.html#MODES"
->Edit Modes</A
-></DT
-><DT
-><A
-HREF="abbrevs.html"
+HREF="source-edit.html#ABBREVS"
 >Abbreviations</A
 ></DT
 ><DT
@@ -258,6 +415,30 @@ HREF="bracket-matching.html"
 HREF="indent.html"
 >Tabbing and Indentation</A
 ></DT
+><DD
+><DL
+><DT
+><A
+HREF="indent.html#INDENT-TABS"
+>Changing the Tab and Indent Width</A
+></DT
+><DT
+><A
+HREF="indent.html#INDENT-SOFTTABS"
+>Soft Tabs</A
+></DT
+><DT
+><A
+HREF="indent.html#AEN2229"
+>Indentation-Related Commands</A
+></DT
+><DT
+><A
+HREF="indent.html#AUTOINDENT"
+>Automatic Indent</A
+></DT
+></DL
+></DD
 ><DT
 ><A
 HREF="commenting.html"
@@ -266,7 +447,7 @@ HREF="commenting.html"
 ></DL
 ></DD
 ><DT
->5. <A
+>6. <A
 HREF="customizing.html"
 >Customizing jEdit</A
 ></DT
@@ -287,6 +468,85 @@ HREF="buffer-local.html"
 HREF="global-opts.html"
 >The Global Options Dialog Box</A
 ></DT
+><DD
+><DL
+><DT
+><A
+HREF="global-opts.html#AEN2593"
+>The General Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2597"
+>The Loading and Saving Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2601"
+>The Editing Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2608"
+>The Mode-Specific Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2617"
+>The Text Area Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2621"
+>The Gutter Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2625"
+>The Colors Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2629"
+>The Styles Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2633"
+>The Docking Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2638"
+>The Context Menu Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2642"
+>The Tool Bar Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#OPTIONS-SHORTCUTS"
+>The Shortcut Editing Panes</A
+></DT
+><DT
+><A
+HREF="global-opts.html#GLOBAL-OPTS-ABBREVS"
+>The Abbreviations Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2681"
+>The Printing Pane</A
+></DT
+><DT
+><A
+HREF="global-opts.html#AEN2689"
+>The VFS Browser Pane</A
+></DT
+></DL
+></DD
 ><DT
 ><A
 HREF="settings-directory.html"
@@ -295,7 +555,36 @@ HREF="settings-directory.html"
 ></DL
 ></DD
 ><DT
->6. <A
+>7. <A
+HREF="macros.html"
+>Macros and Scripting</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="macros.html#MACRO-FILES"
+>Macro Files</A
+></DT
+><DT
+><A
+HREF="macro-record.html"
+>Recording Macros</A
+></DT
+><DT
+><A
+HREF="macro-temp.html"
+>Temporary Macros</A
+></DT
+><DT
+><A
+HREF="macro-writing.html"
+>Evaluating BeanShell Expressions</A
+></DT
+></DL
+></DD
+><DT
+>8. <A
 HREF="plugins.html"
 >Installing and Using Plugins</A
 ></DT
@@ -324,172 +613,6 @@ HREF="using-plugins.html"
 ></DL
 ></DD
 ><DT
->A. <A
-HREF="activity-log.html"
->The Activity Log</A
-></DT
-><DT
->B. <A
-HREF="history.html"
->History Text Fields</A
-></DT
-><DT
->C. <A
-HREF="cli-usage.html"
->Command Line Usage</A
-></DT
-><DT
->D. <A
-HREF="server.html"
->The Edit Server</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="server.html#BACKGROUND-MODE"
->Background Mode</A
-></DT
-></DL
-></DD
-><DT
->E. <A
-HREF="regexps.html"
->Regular Expressions</A
-></DT
-><DT
->F. <A
-HREF="globs.html"
->Glob Patterns</A
-></DT
-></DL
-></DD
-><DT
->II. <A
-HREF="extending-jedit.html"
->Extending jEdit</A
-></DT
-><DD
-><DL
-><DT
->7. <A
-HREF="writing-modes.html"
->Writing Edit Modes</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="writing-modes.html#XML-PRIMER"
->An XML Primer</A
-></DT
-><DT
-><A
-HREF="mode-preamble.html"
->The Preamble</A
-></DT
-><DT
-><A
-HREF="mode-tag.html"
->The MODE Tag</A
-></DT
-><DT
-><A
-HREF="mode-tag-props.html"
->The PROPS Tag</A
-></DT
-><DT
-><A
-HREF="mode-tag-rules.html"
->The RULES Tag</A
-></DT
-><DT
-><A
-HREF="mode-rule-terminate.html"
->TERMINATE Rule</A
-></DT
-><DT
-><A
-HREF="mode-rule-whitespace.html"
->WHITESPACE Rule</A
-></DT
-><DT
-><A
-HREF="mode-rule-span.html"
->SPAN Rule</A
-></DT
-><DT
-><A
-HREF="mode-rule-eol-span.html"
->EOL_SPAN Rule</A
-></DT
-><DT
-><A
-HREF="mode-rule-mark-prev.html"
->MARK_PREVIOUS Rule</A
-></DT
-><DT
-><A
-HREF="mode-rule-mark-following.html"
->MARK_FOLLOWING Rule</A
-></DT
-><DT
-><A
-HREF="mode-rule-seq.html"
->SEQ Rule</A
-></DT
-><DT
-><A
-HREF="mode-rule-keywords.html"
->KEYWORDS Rule</A
-></DT
-><DT
-><A
-HREF="mode-syntax-tokens.html"
->Token Types</A
-></DT
-></DL
-></DD
-><DT
->8. <A
-HREF="macros.html"
->Macros</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="macros.html#MACRO-FILES"
->Macro Files</A
-></DT
-><DT
-><A
-HREF="macro-record.html"
->Recording Macros</A
-></DT
-><DT
-><A
-HREF="macro-temp.html"
->Temporary Macros</A
-></DT
-><DT
-><A
-HREF="macro-prompt.html"
->Prompting for Input</A
-></DT
-><DT
-><A
-HREF="macro-syntax.html"
->Macro File Syntax</A
-></DT
-><DT
-><A
-HREF="macro-samples.html"
->Some Sample Macros</A
-></DT
-></DL
-></DD
-><DT
 >9. <A
 HREF="developing-plugins.html"
 >Developing Plugins</A
@@ -508,67 +631,50 @@ HREF="plugin-class.html"
 ></DT
 ><DT
 ><A
-HREF="plugin-props.html"
->Plugin Properties</A
-></DT
-><DT
-><A
-HREF="plugin-info.html"
->Plugin Documentation</A
-></DT
-><DT
-><A
-HREF="plugin-dependencies.html"
->Plugin Dependencies</A
-></DT
-><DT
-><A
 HREF="plugin-actions.html"
->Plugin Actions</A
+>Actions</A
+></DT
+></DL
+></DD
+><DT
+>A. <A
+HREF="shortcuts-quickref.html"
+>Keyboard Shortcut Reference</A
 ></DT
 ><DT
-><A
-HREF="plugin-menus.html"
->The Plugins Menu</A
+>B. <A
+HREF="history.html"
+>History Text Fields</A
 ></DT
 ><DT
-><A
-HREF="plugin-options.html"
->The Global Options Dialog Box</A
+>C. <A
+HREF="regexps.html"
+>Regular Expressions</A
 ></DT
 ><DT
-><A
-HREF="plugin-dialogs.html"
->Useful UI Methods</A
+>D. <A
+HREF="globs.html"
+>Glob Patterns</A
 ></DT
 ><DT
-><A
-HREF="plugin-logging.html"
+>E. <A
+HREF="activity-log.html"
 >The Activity Log</A
 ></DT
 ><DT
-><A
-HREF="plugin-editbus.html"
->The EditBus</A
+>F. <A
+HREF="cli-usage.html"
+>Command Line Usage</A
 ></DT
-><DT
-><A
-HREF="plugin-vfs.html"
->Developing Virtual File Systems</A
-></DT
-></DL
-></DD
-></DL
-></DD
 ></DL
 ></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
 ><HR><A
-HREF="using-jedit.html"
+HREF="basics.html"
 >Next</A
->: Using jEdit<BR></DIV
+>: Basic Concepts<BR></DIV
 ></BODY
 ></HTML
 >

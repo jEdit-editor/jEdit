@@ -1,0 +1,11 @@
+// Prompts for a path name and opens it in the file system browser
+
+path = Macros.input(view,"Directory to browse:");
+if(path != null)
+{
+	view.getDockableWindowManager().showDockableWindow("vfs.browser");
+	browser = view.getDockableWindowManager()
+		.getDockableWindow("vfs.browser");
+
+	browser.setDirectory(path);
+}

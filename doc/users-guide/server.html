@@ -10,14 +10,14 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Using jEdit"
-HREF="using-jedit.html"><LINK
+TITLE="Working With Files"
+HREF="files.html"><LINK
 REL="PREVIOUS"
-TITLE="Command Line Usage"
-HREF="cli-usage.html"><LINK
+TITLE="Multithreaded I/O"
+HREF="threaded-io.html"><LINK
 REL="NEXT"
-TITLE="Regular Expressions"
-HREF="regexps.html"></HEAD
+TITLE="Printing Files"
+HREF="printing.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 ><DIV
@@ -26,58 +26,64 @@ CLASS="NAVHEADER"
 >jEdit 2.7 User's Guide</H1
 ><P
 ><A
-HREF="regexps.html"
+HREF="printing.html"
 >Next</A
 >, <A
-HREF="cli-usage.html"
+HREF="threaded-io.html"
 >Prev</A
 ></P
+><H2
+>Chapter 2. Working With Files</H2
 ><HR></DIV
 ><DIV
-CLASS="APPENDIX"
+CLASS="SECT1"
 ><H1
+CLASS="SECT1"
 ><A
 NAME="SERVER"
->Appendix D. The Edit Server</A
+>The Edit Server</A
 ></H1
 ><P
->  When jEdit is
-  launched, it first attempts to locate another running instance before
-  starting up for real. If another copy happens to be running, it
-  transfers control to it, passing any necessary file names.
-  This technique saves time and memory if jEdit is started multiple times.
- </P
+>   When jEdit is
+   launched, it first attempts to locate another running instance before
+   starting up. If another copy happens to be running, it
+   transfers control to it, passing any necessary file names.
+   This technique saves time and memory if jEdit is started multiple times.
+  </P
 ><P
->  Communication between instances of jEdit is implemented using
-  TCP/IP sockets. When a server is started, it
-  picks a random port number and authorization key (to prevent malicious
-  remote users from opening files) and writes it to a
-  <I
+>   Communication between instances of jEdit is implemented using
+   TCP/IP sockets. When the initial instance is started, a random port
+   number and authorization key is chosen, and written it to a
+   <I
 CLASS="FIRSTTERM"
 >port file</I
-> (usually in a well-known location). Client instances
-  of jEdit then read the port file and connect to the specified port, passing
-  it the authorization key and the file names to open, if any.
- </P
+> in a well-known location. An
+   <I
+CLASS="FIRSTTERM"
+>edit server</I
+> is then started which listens on the chosen port.
+   Subsequent instances
+   of jEdit then read the port file and connect to the specified port, passing
+   it the authorization key and the file names to open, if any.
+  </P
 ><P
->  
-  
-  
-  The <B
+>   
+   
+   
+   The <B
 CLASS="COMMAND"
 >-noserver</B
-> command line switch disables the server features
-  entirely;
-  no connection will be attempted, and no sever will be started. The
-  <B
+> command line switch disables the client/server
+   features entirely;
+   no connection will be attempted, and no sever will be started. The
+   <B
 CLASS="COMMAND"
 >-server</B
 > command line switch specifies
-  where port information is stored. This can be used to start more than
-  one copy of jEdit.
-  For example, you
-  can start a new jEdit like so:
- </P
+   where port information is stored. This can be used to start more than
+   one copy of jEdit. For example, you
+   can start a new jEdit like so:
+  </P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -99,69 +105,73 @@ CLASS="USERINPUT"
 ></TR
 ></TABLE
 ><P
->  Now any subsequent jEdit instances opened with the
-  <B
+>   Now any subsequent jEdit instances opened with the
+   <B
 CLASS="COMMAND"
 >-server=my-server-2</B
 > parameter will connect to this instance.
- </P
+  </P
 ><P
->  
-  
-  
-  
-  
-  All jEdit command line parameters except those that affect initial
-  startup (<B
+>   
+   
+   
+   
+   
+   All jEdit command line parameters except those that affect initial
+   startup (<B
 CLASS="COMMAND"
 >-nosettings</B
 >, <B
 CLASS="COMMAND"
 >-settings</B
 >
-  and <B
+   and <B
 CLASS="COMMAND"
 >-nosplash</B
 >) are handled appropriately by the server.
-  If the <B
+   If the <B
 CLASS="COMMAND"
 >-reuseview</B
 > switch is specified, the client instance will
-  open files in an existing view, rather than creating a new one.
- </P
+   open files in an existing view, rather than creating a new one.
+  </P
 ><DIV
-CLASS="SECT1"
-><H1
-CLASS="SECT1"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="BACKGROUND-MODE"
 >Background Mode</A
-></H1
+></H2
 ><P
->   If you find yourself launching and exiting jEdit often, you can save time
-   by running it in <I
+>    If you find yourself launching and exiting jEdit often, you can save time
+    by running it in <I
 CLASS="FIRSTTERM"
 >background mode</I
 >. In background mode, jEdit
-   will stay resident and wait for client requests, even when no views are
-   open. To start jEdit in background mode, specify the <B
+    will stay resident and wait for client requests, even when no views are
+    open. To start jEdit in background mode, specify the <B
 CLASS="COMMAND"
 >-background</B
 >
-   command line switch. jEdit will then start up normally, except that an
-   initial view will only be created when a client connects.
-  </P
+    command line switch. jEdit will then start up normally, except that an
+    initial view will only be created after a client connects. To force an
+    initial view to be created anyway, specify the <B
+CLASS="COMMAND"
+>-gui</B
+> switch.
+   </P
 ><P
->   To completely exit jEdit when running in background mode, you must invoke
-   <SPAN
+>    To completely exit jEdit when running in background mode, you must invoke
+    <SPAN
 CLASS="GUIMENU"
 >File</SPAN
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Exit</SPAN
 >; if you close all open views,
-   jEdit will continue running, waiting for more requests.
-  </P
+    jEdit will continue running, waiting for more requests.
+   </P
 ></DIV
 ></DIV
 ><DIV
@@ -170,15 +180,15 @@ CLASS="NAVFOOTER"
 HREF="index.html"
 >Home</A
 >, <A
-HREF="using-jedit.html"
+HREF="files.html"
 >Up</A
 ><BR><A
-HREF="cli-usage.html"
+HREF="threaded-io.html"
 >Prev</A
->: Command Line Usage<BR><A
-HREF="regexps.html"
+>: Multithreaded I/O<BR><A
+HREF="printing.html"
 >Next</A
->: Regular Expressions<BR></DIV
+>: Printing Files<BR></DIV
 ></BODY
 ></HTML
 >

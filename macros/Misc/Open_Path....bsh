@@ -1,0 +1,5 @@
+// Prompts for a path name and opens it
+
+String path = Macros.input(view,"Path name:");
+if(path != null)
+	jEdit.openFile(view,path);

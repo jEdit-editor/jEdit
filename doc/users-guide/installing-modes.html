@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Installing New Edit Modes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.7 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Edit Modes"
+HREF="modes.html"><LINK
+REL="PREVIOUS"
+TITLE="Edit Modes"
+HREF="modes.html"><LINK
+REL="NEXT"
+TITLE="Writing Edit Modes"
+HREF="writing-modes.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.7 User's Guide</H1
+><P
+><A
+HREF="writing-modes.html"
+>Next</A
+>, <A
+HREF="modes.html"
+>Prev</A
+></P
+><H2
+>Chapter 4. Edit Modes</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="INSTALLING-MODES"
+>Installing New Edit Modes</A
+></H1
+><P
+>   Each edit mode is defined in an XML file. XML is
+   the <I
+CLASS="FIRSTTERM"
+>extensible markup language</I
+>. XML enables programs
+   to load arbitrary data files without having to worry about implementing
+   a parser, doing error checking, etc.
+  </P
+><P
+>   There are two locations where new
+   edit modes can be installed; the user-specific
+   mode directory, and the system-wide mode directory. On Windows 95/98,
+   it doesn't make any difference where modes are installed. On
+   multiuser systems such as Unix or Windows NT, however, each user
+   has their own mode directory, while the system-wide mode
+   directory is shared by all users on the system.
+  </P
+><P
+>   To find out the path names of the two mode directories (which
+   vary from system to system),
+   invoke <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Reload Edit Modes</SPAN
+>
+   and look for messages like the following in the activity log
+   (<SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Activity Log</SPAN
+>):
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>[message] jEdit: Loading edit modes from /usr/local/jedit-2.7final/modes
+[message] jEdit: Loading edit modes from /home/slava/.jedit/modes</PRE
+></TD
+></TR
+></TABLE
+><P
+>   jEdit doesn't always load all edit modes on startup; doing so takes
+   a long time! Instead, it loads a "mode cache" that stores the
+   most important details about each edit mode, and then only loads
+   individual edit
+   modes when they are actually required. A side effect of this is that
+   newly installed modes are not immediately available for use; the cache
+   must first be recreated by invoking
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Reload Edit Modes</SPAN
+>.
+  </P
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>    The <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Reload
+    Edit Modes</SPAN
+> command is very helpful when you are writing your own edit modes
+    because it allows you to see changes to a mode definition file take
+    effect without having to restart jEdit.
+   </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="modes.html"
+>Up</A
+><BR><A
+HREF="modes.html"
+>Prev</A
+>: Edit Modes<BR><A
+HREF="writing-modes.html"
+>Next</A
+>: Writing Edit Modes<BR></DIV
+></BODY
+></HTML
+>

@@ -73,6 +73,9 @@ public class PluginList
 			}
 
 			in.close();
+
+			plugins = new Plugin[pluginVector.size()];
+			pluginVector.copyInto(plugins);
 		}
 		catch(IOException io)
 		{
@@ -84,9 +87,6 @@ public class PluginList
 		{
 			Log.log(Log.ERROR,this,e);
 		}
-
-		plugins = new Plugin[pluginVector.size()];
-		pluginVector.copyInto(plugins);
 	}
 
 	public Plugin[] getPlugins()

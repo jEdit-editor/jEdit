@@ -1,7 +1,7 @@
 ### plugin properties
 plugin.PluginManagerPlugin.name=Plugin Manager
 plugin.PluginManagerPlugin.author=Slava Pestov
-plugin.PluginManagerPlugin.version=0.5.11
+plugin.PluginManagerPlugin.version=0.5.12
 plugin.PluginManagerPlugin.docs=PluginManager.html
 plugin.PluginManagerPlugin.depend.0=jedit 02.07.02.00
 
@@ -80,6 +80,9 @@ update-plugins.update=Update
 update-plugins.done.title=Plugins Updated
 update-plugins.done.message=You must now restart jEdit to be use the\n\
 	updated plugins.
+
+up-to-date.title=Plugins Up to Date
+up-to-date.message=All installed plugins are their latest versions.
 
 ### download progress
 download-progress.title=Installing Plugins

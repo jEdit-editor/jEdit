@@ -10,10 +10,10 @@ REL="HOME"
 TITLE="jEdit 2.7 User's Guide"
 HREF="index.html"><LINK
 REL="UP"
-TITLE="Macros"
+TITLE="Macros and Scripting"
 HREF="macros.html"><LINK
 REL="PREVIOUS"
-TITLE="Macros"
+TITLE="Macros and Scripting"
 HREF="macros.html"><LINK
 REL="NEXT"
 TITLE="Temporary Macros"
@@ -33,7 +33,7 @@ HREF="macros.html"
 >Prev</A
 ></P
 ><H2
->Chapter 8. Macros</H2
+>Chapter 7. Macros and Scripting</H2
 ><HR></DIV
 ><DIV
 CLASS="SECT1"
@@ -50,8 +50,7 @@ CLASS="GUIMENU"
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Record Macro</SPAN
-> (keyboard
-   equivalent:
+> (shortcut:
    <B
 CLASS="KEYCAP"
 >Control</B
@@ -66,26 +65,17 @@ CLASS="KEYCAP"
 CLASS="KEYCAP"
 >R</B
 >) prompts for
-   a macro name, and begins recording to a file with that name
-   suffixed with ".macro".
-  </P
-><P
->   While a recording is in progress, "(recording)" is
-   displayed in the status bar, instead of the caret position information.
-   Currently, jEdit records key strokes, commands invoked from
-   the menu bar, and tool bar clicks. Caret movement and selection performed
-   using the mouse is <I
+   a macro name and begins recording.
+   While a recording is in progress, the string "(macro recording)" is
+   displayed in the menu bar.
+   jEdit records key strokes, commands invoked from
+   the menu bar, tool bar clicks, and search and replace operations.
+   Mouse clicks in the text area are <I
 CLASS="EMPHASIS"
 >not</I
-> recorded; to move the caret or
-   select text from a macro, use the text selection commands and arrow
-   keys.
-  </P
-><P
->   Search and replace operations can be recorded in macros.
-   When search and replace operations are played back,
-   the dialog boxes are not displayed, but the actual search and
-   replacement is done.
+> recorded; use
+   the text selection commands or arrow keys when recording macros
+   instead.
   </P
 ><P
 >   <SPAN
@@ -94,8 +84,7 @@ CLASS="GUIMENU"
 >&gt;<SPAN
 CLASS="GUIMENUITEM"
 >Stop Recording</SPAN
-> (keyboard
-   equivalent:
+> (shortcut:
    <B
 CLASS="KEYCAP"
 >Control</B
@@ -109,18 +98,15 @@ CLASS="KEYCAP"
 >-<B
 CLASS="KEYCAP"
 >S</B
->) stops any
-   recording currently in progress. It also switches to the buffer where
-   the macro was being recorded, giving you a chance to check over the
-   commands
-   and make any necessary changes.
-   When you are happy with the macro, simply
-   save it and it will automatically appear in the <SPAN
+>) stops recording.
+   It also switches to the buffer containing the recorded macro,
+   giving you a chance to check over the recorded commands
+   and make any necessary changes. When you are happy with the macro,
+   save the buffer and it will appear in the <SPAN
 CLASS="GUIMENU"
 >Macros</SPAN
->
-   menu. If you wish to discard the macro, close it without
-   saving.
+> menu.
+   To discard the macro, close the buffer without saving.
   </P
 ></DIV
 ><DIV
@@ -134,7 +120,7 @@ HREF="macros.html"
 ><BR><A
 HREF="macros.html"
 >Prev</A
->: Macros<BR><A
+>: Macros and Scripting<BR><A
 HREF="macro-temp.html"
 >Next</A
 >: Temporary Macros<BR></DIV

@@ -57,8 +57,6 @@ public class BufferHistory
 			max = 25;
 		}
 
-		history = new Vector();
-
 		try
 		{
 			BufferedReader in = new BufferedReader(
@@ -122,6 +120,7 @@ public class BufferHistory
 
 	static
 	{
+		history = new Vector();
 		pathsCaseInsensitive = (File.separatorChar == '\\'
 			|| File.separatorChar == ':');
 	}
