@@ -12,6 +12,7 @@ JEDIT VERSION HISTORY
 - PHP mode updates (Mike Dillon)
 - JMK (Java Make) mode added
 - New token types added: Token.{CONSTANT,VARIABLE,FUNCTION,DATATYPE,DIGIT}
+- Pascal mode (Kristian Ovaska)
 
 + Enhancements
 
