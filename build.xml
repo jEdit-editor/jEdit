@@ -200,13 +200,7 @@
 			<fileset dir="." includes="**/.#*"/>
 			<fileset dir="." includes="**/.new*"/>
 			<fileset dir="." includes="**/.directory"/>
-			<fileset dir=".">
-				<include name="**/*.class"/>
-				<exclude name="org/gjt/sp/jedit/textarea/TextRenderer2D.class"/>
-				<exclude name="org/gjt/sp/jedit/gui/PanelWindowContainer*.class"/>
-				<exclude name="bsh/XThis*.class"/>
-				<exclude name="bsh/reflect/ReflectManagerImpl.class"/>
-			</fileset>
+			<fileset dir="." includes="**/*.class"/>
 
 			<fileset dir="." includes="doc/users-guide/*.html"/>
 			<fileset dir="." includes="doc/users-guide/toc.xml"/>
