@@ -44,10 +44,10 @@ public abstract class VFS
 	public static final int WRITE_CAP = 1 << 1;
 
 	/**
-	 * List directory capability.
+	 * VFS browser capability.
 	 * @since jEdit 2.6pre2
 	 */
-	public static final int LIST_CAP = 1 << 2;
+	public static final int BROWSE_CAP = 1 << 2;
 
 	/**
 	 * Delete file capability.
@@ -78,7 +78,8 @@ public abstract class VFS
 
 	/**
 	 * Returns this VFS's name. The name is used to obtain the
-	 * menu item label stored in the <code>vfs.<i>name</i>.label</code>
+	 * label stored in the <code>vfs.<i>name</i>.label</code>
+	 * property, and the icon from the <code>vfs.<i>name</i>.icon</code>
 	 * property.
 	 */
 	public String getName()
@@ -93,9 +94,23 @@ public abstract class VFS
 	public abstract int getCapabilities();
 
 	/**
+	 * Displays a dialog box that should set up a session and return
+	 * the initial URL to browse.
+	 * @param session The VFS session
+	 * @param comp The component that will parent error dialog boxes
+	 * @return The URL
+	 * @since jEdit 2.6pre2
+	 */
+	public String showBrowseDialog(VFSSession session, Component comp)
+	{
+		return null;
+	}
+
+	/**
 	 * Returns the parent of the specified directory. By default,
 	 * same as MiscUtilities.getFileParent().
 	 * @param path The directory
+	 * @since jEdit 2.6pre2
 	 */
 	public String getFileParent(String path)
 	{
@@ -108,6 +123,7 @@ public abstract class VFS
 	 * MiscUtilities.constructPath().
 	 * @param parent The parent directory
 	 * @param path The path
+	 * @since jEdit 2.6pre2
 	 */
 	public String constructPath(String parent, String path)
 	{
@@ -195,15 +211,17 @@ public abstract class VFS
 
 		public String name;
 		public String path;
+		public String deletePath;
 		public int type;
 		public long length;
 		public boolean hidden;
 
-		public DirectoryEntry(String name, String path, int type,
-			long length, boolean hidden)
+		public DirectoryEntry(String name, String path, String deletePath,
+			int type, long length, boolean hidden)
 		{
 			this.name = name;
 			this.path = path;
+			this.deletePath = deletePath;
 			this.type = type;
 			this.length = length;
 			this.hidden = hidden;
@@ -327,6 +345,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.12  2000/08/03 07:43:42  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.11  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

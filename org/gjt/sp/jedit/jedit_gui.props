@@ -52,6 +52,7 @@ icons=\
       Cut.gif \
       Delete.gif \
       Document.gif \
+      Favorite.gif \
       FingerRight.gif \
       Folder.gif \
       FolderUp.gif \
@@ -62,6 +63,7 @@ icons=\
       NewView.gif \
       Open.gif \
       Paste.gif \
+      Plus.gif \
       Print.gif \
       Redo.gif \
       Reload.gif \
@@ -71,6 +73,7 @@ icons=\
       Synchronize.gif \
       Undo.gif \
       Unsplit.gif \
+      World.gif \
       blank-20.gif
 
 view.search.find=Find:
@@ -1103,7 +1106,7 @@ buffer-multiple-io.message=You cannot execute more than one input/output\n\
 
 # Login dialog box
 login.title=Log in
-login.caption=Enter user name and password for {0}:
+login.host=Remote host:
 login.user=User name:
 login.password=Password:
 
@@ -1117,12 +1120,20 @@ vfs.browser.up.label=Parent Directory
 vfs.browser.up.icon=FolderUp.gif
 vfs.browser.reload.label=Reload Directory
 vfs.browser.reload.icon=Reload.gif
-vfs.browser.filesystems.label=Filesystems
-vfs.browser.filesystems.icon=CD.gif
+vfs.browser.roots.label=Local Drives
+vfs.browser.roots.icon=CD.gif
 vfs.browser.home.label=Home Directory
 vfs.browser.home.icon=Home.gif
 vfs.browser.synchronize.label=Go to Current Buffer Directory
 vfs.browser.synchronize.icon=Synchronize.gif
+vfs.browser.addToFavorites.label=Add to Favorites
+vfs.browser.addToFavorites.icon=Plus.gif
+vfs.browser.gotoFavorites.label=Go to Favorites
+vfs.browser.gotoFavorites.icon=Favorite.gif
+
+# FTP VFS
+vfs.ftp.label=FTP
+vfs.ftp.icon=World.gif
 
 vfs.browser.dialog.open=Open
 vfs.browser.dialog.save=Save
@@ -1136,8 +1147,6 @@ vfs.status.save-markers=Saving markers for {0}
 vfs.status.autosave=Autosaving {0}
 vfs.status.listing-directory=Listing {0}
 
-# FTP VFS label
-vfs.ftp.label=FTP Server...
 
 # Connect error
 vfs.ftp.connect-error.title=Cannot Connect

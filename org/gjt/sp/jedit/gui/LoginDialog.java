@@ -37,12 +37,7 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 		content.setBorder(new EmptyBorder(12,12,12,0));
 		setContentPane(content);
 
-		JLabel label = new JLabel(jEdit.getProperty(
-			"login.caption",new String[] { host }));
-		label.setBorder(new EmptyBorder(0,0,6,12));
-		content.add(BorderLayout.NORTH,label);
-
-		JPanel panel = createFieldPanel(user,password);
+		JPanel panel = createFieldPanel(host,user,password);
 		content.add(BorderLayout.CENTER,panel);
 
 		panel = new JPanel();
@@ -61,8 +56,14 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 
 		content.add(panel,BorderLayout.SOUTH);
 
-		GUIUtilities.requestFocus(this,(user == null ? userField
-			: passwordField));
+		JTextField focus;
+		if(host == null)
+			focus = hostField;
+		else if(user == null)
+			focus = userField;
+		else
+			focus = passwordField;
+		GUIUtilities.requestFocus(this,focus);
 
 		pack();
 		setLocationRelativeTo(comp);
@@ -72,19 +73,20 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 	// EnhancedDialog implementation
 	public void ok()
 	{
+		if(hostField.hasFocus() && userField.getText().length() == 0)
+			userField.requestFocus();
 		if(userField.hasFocus() && passwordField.getPassword().length == 0)
 			passwordField.requestFocus();
 		else
 		{
+			host = hostField.getText();
 			user = userField.getText();
-			if(user == null || user.length() == 0)
+			if(host.length() == 0 || user.length() == 0)
 			{
 				getToolkit().beep();
 				return;
 			}
 			password = new String(passwordField.getPassword());
-			if(password == null)
-				password = "";
 			isOK = true;
 			dispose();
 		}
@@ -99,6 +101,11 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 	public boolean isOK()
 	{
 		return isOK;
+	}
+
+	public String getHost()
+	{
+		return host;
 	}
 
 	public String getUser()
@@ -121,15 +128,17 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 	}
 
 	// private members
+	private JTextField hostField;
 	private JTextField userField;
 	private JPasswordField passwordField;
+	private String host;
 	private String user;
 	private String password;
 	private boolean isOK;
 	private JButton ok;
 	private JButton cancel;
 
-	private JPanel createFieldPanel(String user, String password)
+	private JPanel createFieldPanel(String host, String user, String password)
 	{
 		GridBagLayout layout = new GridBagLayout();
 		JPanel panel = new JPanel(layout);
@@ -139,12 +148,28 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 		cons.gridwidth = cons.gridheight = 1;
 		cons.gridx = cons.gridy = 0;
 		cons.fill = GridBagConstraints.BOTH;
-		JLabel label = new JLabel(jEdit.getProperty("login.user"),
+		JLabel label = new JLabel(jEdit.getProperty("login.host"),
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		userField = new JTextField(user);
+		hostField = new JTextField(host,20);
+		if(host != null)
+			hostField.setEnabled(false);
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		layout.setConstraints(hostField,cons);
+		panel.add(hostField);
+
+		label = new JLabel(jEdit.getProperty("login.user"),
+			SwingConstants.RIGHT);
+		cons.gridx = 0;
+		cons.weightx = 0.0f;
+		cons.gridy = 1;
+		layout.setConstraints(label,cons);
+		panel.add(label);
+
+		userField = new JTextField(user,20);
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
 		layout.setConstraints(userField,cons);
@@ -154,11 +179,11 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 			SwingConstants.RIGHT);
 		cons.gridx = 0;
 		cons.weightx = 0.0f;
-		cons.gridy = 1;
+		cons.gridy = 2;
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		passwordField = new JPasswordField(password);
+		passwordField = new JPasswordField(password,20);
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
 		layout.setConstraints(passwordField,cons);
@@ -171,6 +196,9 @@ public class LoginDialog extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/08/03 07:43:42  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.6  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

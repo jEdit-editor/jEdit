@@ -259,6 +259,8 @@ public class jEdit
 		initModes();
 		Macros.loadMacros();
 
+		FavoritesVFS.loadFavorites();
+
 		GUIUtilities.advanceSplashProgress();
 
 		// Start plugins
@@ -1562,6 +1564,7 @@ public class jEdit
 
 			SearchAndReplace.save();
 			Abbrevs.save();
+			FavoritesVFS.saveFavorites();
 
 			file = new File(MiscUtilities.constructPath(
 				settingsDirectory,"properties"));
@@ -2323,6 +2326,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.263  2000/08/03 07:43:41  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.262  2000/08/01 11:44:14  sp
  * More VFS browser work
  *

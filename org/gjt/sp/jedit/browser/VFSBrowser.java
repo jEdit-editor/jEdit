@@ -25,8 +25,7 @@ import javax.swing.event.EventListenerList;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
@@ -187,9 +186,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	public void setDirectory(String path)
 	{
-		if(path.equals(this.path))
-			return;
-
 		this.path = path;
 		if(MiscUtilities.isURL(path))
 		{
@@ -282,6 +278,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			public void run()
 			{
+				if(list == null)
+					return;
+
 				Vector directoryVector = new Vector();
 				for(int i = 0; i < list.length; i++)
 				{
@@ -426,7 +425,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private VFSSession vfsSession;
 	private HistoryTextField pathField;
 	private JComboBox filterCombo;
-	private JButton filesystems, home, synchronize, up, reload;
+	private JButton up, reload, roots, home, synchronize,
+		addToFavorites, gotoFavorites;
 	private BrowserView browserView;
 	private VFSFilter filenameFilter;
 	private int mode;
@@ -518,26 +518,47 @@ public class VFSBrowser extends JPanel implements EBComponent
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 
-		toolBar.add(up = createToolButton("up"));
-		toolBar.add(reload = createToolButton("reload"));
+		toolBar.add(up = createToolButton("up",false));
+		toolBar.add(reload = createToolButton("reload",false));
 		toolBar.addSeparator();
-		toolBar.add(filesystems = createToolButton("filesystems"));
-		toolBar.add(home = createToolButton("home"));
-		toolBar.add(synchronize = createToolButton("synchronize"));
+		toolBar.add(roots = createToolButton("roots",false));
+		toolBar.add(home = createToolButton("home",false));
+		toolBar.add(synchronize = createToolButton("synchronize",false));
+		toolBar.addSeparator();
+		toolBar.add(addToFavorites = createToolButton("addToFavorites",false));
+		toolBar.add(gotoFavorites = createToolButton("gotoFavorites",false));
+		toolBar.addSeparator();
+
+		Enumeration enum = VFSManager.getFilesystems();
+		while(enum.hasMoreElements())
+		{
+			VFS vfs = (VFS)enum.nextElement();
+
+			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
+				continue;
+
+			toolBar.add(createToolButton(vfs.getName(),true));
+		}
 
 		toolBar.add(Box.createGlue());
 		return toolBar;
 	}
 
-	private JButton createToolButton(String name)
+	private JButton createToolButton(String name, boolean vfs)
 	{
 		JButton button = new JButton();
+		String prefix = (vfs ? "vfs." : "vfs.browser.");
+
 		button.setIcon(GUIUtilities.loadToolBarIcon(jEdit.getProperty(
-			"vfs.browser." + name + ".icon")));
-		button.setToolTipText(jEdit.getProperty("vfs.browser."
-			+ name + ".label"));
+			prefix + name + ".icon")));
+		String label = jEdit.getProperty(prefix + name + ".label");
+		if(vfs)
+			button.setText(label);
+		else
+			button.setToolTipText(label);
 		button.setRequestFocusEnabled(false);
 		button.setMargin(new Insets(0,0,0,0));
+		button.setActionCommand(name); // so that VFS buttons will work
 		button.addActionListener(new ActionHandler());
 
 		return button;
@@ -595,8 +616,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 						reloadDirectory(false);
 				}
 			}
-			else if(source == filesystems)
-				setDirectory(FileVFS.FILESYSTEM_ROOTS_URL);
+			else if(source == up)
+				setDirectory(vfs.getFileParent(path));
+			else if(source == reload)
+				reloadDirectory(true);
+			else if(source == roots)
+				setDirectory(FileRootsVFS.PROTOCOL + ":");
 			else if(source == home)
 				setDirectory(System.getProperty("user.home"));
 			else if(source == synchronize)
@@ -610,10 +635,22 @@ public class VFSBrowser extends JPanel implements EBComponent
 				else
 					getToolkit().beep();
 			}
-			else if(source == up)
-				setDirectory(vfs.getFileParent(path));
-			else if(source == reload)
+			else if(source == addToFavorites)
+			{
+				FavoritesVFS.addToFavorites(path);
 				reloadDirectory(true);
+			}
+			else if(source == gotoFavorites)
+				setDirectory(FavoritesVFS.PROTOCOL + ":");
+			else // it's a VFS button
+			{
+				String vfsName = ((JButton)source).getActionCommand();
+				VFS vfs = VFSManager.getVFSForName(vfsName);
+				String directory = vfs.showBrowseDialog(vfsSession,
+					VFSBrowser.this);
+				if(directory != null)
+					setDirectory(directory);
+			}
 		}
 	}
 }
@@ -621,6 +658,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/03 07:43:42  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.4  2000/08/01 11:44:15  sp
  * More VFS browser work
  *

@@ -33,7 +33,6 @@ import org.gjt.sp.util.Log;
 public class FileVFS extends VFS
 {
 	public static final String BACKED_UP_PROPERTY = "FileVFS__backedUp";
-	public static final String FILESYSTEM_ROOTS_URL = "filesystems";
 
 	public FileVFS()
 	{
@@ -43,20 +42,17 @@ public class FileVFS extends VFS
 
 	public int getCapabilities()
 	{
-		return READ_CAP | WRITE_CAP | LIST_CAP | DELETE_CAP
+		return READ_CAP | WRITE_CAP | BROWSE_CAP | DELETE_CAP
 			| RENAME_CAP | MKDIR_CAP;
 	}
 
 	public String getFileParent(String path)
 	{
-		if(path.equals(FILESYSTEM_ROOTS_URL))
-			return FILESYSTEM_ROOTS_URL;
-
 		File[] roots = fsView.getRoots();
 		for(int i = 0; i < roots.length; i++)
 		{
 			if(roots[i].getPath().equals(path))
-				return FILESYSTEM_ROOTS_URL;
+				return FileRootsVFS.PROTOCOL;
 		}
 
 		return MiscUtilities.getFileParent(path);
@@ -125,24 +121,6 @@ public class FileVFS extends VFS
 	public VFS.DirectoryEntry[] _listDirectory(VFSSession session, String url,
 		Component comp)
 	{
-		if(url.equals(FILESYSTEM_ROOTS_URL))
-		{
-			File[] roots = fsView.getRoots();
-
-			if(roots == null)
-				return null;
-
-			VFS.DirectoryEntry[] rootDE = new VFS.DirectoryEntry[roots.length];
-			for(int i = 0; i < roots.length; i++)
-			{
-				String name = roots[i].getPath();
-				rootDE[i] = new VFS.DirectoryEntry(name,name,
-					VFS.DirectoryEntry.FILESYSTEM,0L,false);
-			}
-
-			return rootDE;
-		}
-
 		File directory = new File(url);
 		String[] list = directory.list();
 		if(list == null)
@@ -160,8 +138,9 @@ public class FileVFS extends VFS
 			else
 				type = VFS.DirectoryEntry.FILE;
 
-			list2[i] = new VFS.DirectoryEntry(name,path,type,file.length(),
-				fsView.isHiddenFile(file));
+			// XXX: need non-canonical form of constructPath()
+			list2[i] = new VFS.DirectoryEntry(name,path,path,type,
+				file.length(),fsView.isHiddenFile(file));
 		}
 
 		return list2;
@@ -287,6 +266,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/08/03 07:43:42  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.11  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

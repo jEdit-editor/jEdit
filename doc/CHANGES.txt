@@ -12,6 +12,7 @@ JEDIT 2.6 VERSION HISTORY
     can be flushed with the Utilities->Flush Remote Directory Cache command
   - Tooltips are shown for obscured and truncated file names
   - More flexible sorting
+  - Frequently-visited directories can be stored in a 'favorites' list
   - Geometry of file chooser is saved
 - Utilities->File System Browser displays a stand-alone version of the file
   chooser
@@ -27,6 +28,7 @@ JEDIT 2.6 VERSION HISTORY
 - FtpVFS.getFileLength() always returned 0 (since 2.6pre1)
 - FtpVFS would throw a NullPointerException if an error occurred while
   connecting to the FTP server
+- An autosave setting of '0' caused problems (since 2.6pre1)
 
 + API Changes
 

@@ -74,6 +74,16 @@ public class VFSManager
 	}
 
 	/**
+	 * Returns the VFS for the specified name.
+	 * @param name The VFS name
+	 * @since jEdit 2.6pre2
+	 */
+	public static VFS getVFSForName(String name)
+	{
+		return (VFS)vfsHash.get(name);
+	}
+
+	/**
 	 * Returns the VFS for the specified protocol.
 	 * @param protocol The protocol
 	 * @since jEdit 2.5pre1
@@ -84,7 +94,7 @@ public class VFSManager
 			return fileVFS;
 		else
 		{
-			VFS vfs = (VFS)vfsHash.get(protocol);
+			VFS vfs = (VFS)protocolHash.get(protocol);
 			if(vfs != null)
 				return vfs;
 			else
@@ -103,17 +113,8 @@ public class VFSManager
 		Log.log(Log.DEBUG,VFSManager.class,"Registered "
 			+ vfs.getName() + " filesystem for "
 			+ protocol + " protocol");
-		vfsHash.put(protocol,vfs);
-	}
-
-	/**
-	 * Unregisters a virtual filesystem.
-	 * @param protocol The protocol
-	 * @since jEdit 2.5pre1
-	 */
-	public static void unregisterVFS(String protocol)
-	{
-		vfsHash.remove(protocol);
+		vfsHash.put(vfs.getName(),vfs);
+		protocolHash.put(protocol,vfs);
 	}
 
 	/**
@@ -210,6 +211,7 @@ public class VFSManager
 	private static VFS fileVFS = new FileVFS();
 	private static VFS urlVFS = new UrlVFS();
 	private static Hashtable vfsHash;
+	private static Hashtable protocolHash;
 	private static boolean error;
 
 	static
@@ -225,7 +227,10 @@ public class VFSManager
 		}
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
 		vfsHash = new Hashtable();
-		registerVFS("ftp",new FtpVFS());
+		protocolHash = new Hashtable();
+		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
+		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
+		registerVFS(FtpVFS.PROTOCOL,new FtpVFS());
 	}
 
 	private VFSManager() {}
@@ -234,6 +239,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.16  2000/08/03 07:43:42  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.15  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

@@ -35,7 +35,10 @@ import org.gjt.sp.util.Log;
  */
 public class FtpVFS extends VFS
 {
+	public static final String PROTOCOL = "ftp";
+
 	public static final String CLIENT_KEY = "FtpVFS__client";
+	public static final String HOSTNAME_KEY = "FtpVFS__hostname";
 	public static final String USERNAME_KEY = "FtpVFS__username";
 	public static final String PASSWORD_KEY = "FtpVFS__password";
 
@@ -46,8 +49,21 @@ public class FtpVFS extends VFS
 
 	public int getCapabilities()
 	{
-		return READ_CAP | WRITE_CAP | LIST_CAP | DELETE_CAP
+		return READ_CAP | WRITE_CAP | BROWSE_CAP | DELETE_CAP
 			| RENAME_CAP | MKDIR_CAP;
+	}
+
+	public String showBrowseDialog(VFSSession session, Component comp)
+	{
+		LoginDialog dialog = new LoginDialog(comp,null,null,null);
+		if(!dialog.isOK())
+			return null;
+
+		session.put(HOSTNAME_KEY,dialog.getHost());
+		session.put(USERNAME_KEY,dialog.getUser());
+		session.put(PASSWORD_KEY,dialog.getPassword());
+
+		return PROTOCOL + "://" + dialog.getHost() + "/";
 	}
 
 	public String getFileParent(String path)
@@ -70,12 +86,20 @@ public class FtpVFS extends VFS
 		super.setupVFSSession(session,comp);
 
 		String path = (String)session.get(VFSSession.PATH_KEY);
+		String savedHost = (String)session.get(HOSTNAME_KEY);
 		String savedUser = (String)session.get(USERNAME_KEY);
 		String savedPassword = (String)session.get(PASSWORD_KEY);
 
 		try
 		{
 			FtpAddress address = new FtpAddress(path);
+
+			if(!address.host.equals(savedHost))
+			{
+				// erase saved username and password if
+				// the user switches to a different host
+				savedUser = savedPassword = null;
+			}
 
 			if(address.user == null)
 				address.user = savedUser;
@@ -97,6 +121,7 @@ public class FtpVFS extends VFS
 				address.password = dialog.getPassword();
 			}
 
+			session.put(HOSTNAME_KEY,address.host);
 			session.put(USERNAME_KEY,address.user);
 			session.put(PASSWORD_KEY,address.password);
 
@@ -122,7 +147,7 @@ public class FtpVFS extends VFS
 			return directory;
 
 		FtpAddress address = new FtpAddress(url);
-		FtpClient client = getFtpClient(session,address,false,comp);
+		FtpClient client = _getFtpClient(session,address,false,comp);
 		if(client == null)
 			return null;
 
@@ -156,6 +181,8 @@ public class FtpVFS extends VFS
 				else
 					entry.path = url + '/' + entry.name;
 
+				entry.deletePath = entry.path;
+
 				directoryVector.addElement(entry);
 			}
 
@@ -186,7 +213,7 @@ public class FtpVFS extends VFS
 		throws IOException
 	{
 		FtpAddress address = new FtpAddress(url);
-		FtpClient client = getFtpClient(session,address,true,comp);
+		FtpClient client = _getFtpClient(session,address,true,comp);
 		if(client == null)
 			return;
 
@@ -199,7 +226,7 @@ public class FtpVFS extends VFS
 		throws IOException
 	{
 		FtpAddress address = new FtpAddress(url);
-		FtpClient client = getFtpClient(session,address,true,comp);
+		FtpClient client = _getFtpClient(session,address,true,comp);
 		if(client == null)
 			return 0L;
 
@@ -227,7 +254,7 @@ public class FtpVFS extends VFS
 		boolean ignoreErrors, Component comp) throws IOException
 	{
 		FtpAddress address = new FtpAddress(path);
-		FtpClient client = getFtpClient(session,address,ignoreErrors,comp);
+		FtpClient client = _getFtpClient(session,address,ignoreErrors,comp);
 		if(client == null)
 			return null;
 
@@ -251,7 +278,7 @@ public class FtpVFS extends VFS
 		Component comp) throws IOException
 	{
 		FtpAddress address = new FtpAddress(path);
-		FtpClient client = getFtpClient(session,address,false,comp);
+		FtpClient client = _getFtpClient(session,address,false,comp);
 		if(client == null)
 			return null;
 
@@ -288,8 +315,30 @@ public class FtpVFS extends VFS
 		super._endVFSSession(session,comp);
 	}
 
-	private static FtpClient createFtpClient(Component comp, String host, String port,
-		String user, String password, boolean ignoreErrors)
+	// private members
+	private FtpClient _getFtpClient(VFSSession session, FtpAddress address,
+		boolean ignoreErrors, Component comp)
+	{
+		FtpClient client = (FtpClient)session.get(CLIENT_KEY);
+		if(client == null)
+		{
+			if(address.user == null)
+				address.user = (String)session.get(USERNAME_KEY);
+			if(address.password == null)
+				address.password = (String)session.get(PASSWORD_KEY);
+
+			client = _createFtpClient(address.host,address.port,
+				address.user,address.password,ignoreErrors,comp);
+			if(client != null)
+				session.put(CLIENT_KEY,client);
+		}
+
+		return client;
+	}
+
+	private static FtpClient _createFtpClient(String host, String port,
+		String user, String password, boolean ignoreErrors,
+		Component comp)
 	{
 		FtpClient client = new FtpClient();
 
@@ -362,27 +411,6 @@ public class FtpVFS extends VFS
 		}
 	}
 
-	// private members
-	private FtpClient getFtpClient(VFSSession session, FtpAddress address,
-		boolean ignoreErrors, Component comp)
-	{
-		FtpClient client = (FtpClient)session.get(CLIENT_KEY);
-		if(client == null)
-		{
-			if(address.user == null)
-				address.user = (String)session.get(USERNAME_KEY);
-			if(address.password == null)
-				address.password = (String)session.get(PASSWORD_KEY);
-
-			client = createFtpClient(comp,address.host,address.port,
-				address.user,address.password,ignoreErrors);
-			if(client != null)
-				session.put(CLIENT_KEY,client);
-		}
-
-		return client;
-	}
-
 	// Convert a line of LIST output to a VFS.DirectoryEntry
 	private VFS.DirectoryEntry lineToDirectoryEntry(String line)
 	{
@@ -443,7 +471,7 @@ public class FtpVFS extends VFS
 			name = name.substring(0,name.indexOf(" -> "));
 
 		// path is null; it will be created later, by _listDirectory()
-		return new VFS.DirectoryEntry(name,null,type,length,
+		return new VFS.DirectoryEntry(name,null,null,type,length,
 			name.charAt(0) == '.' /* isHidden */);
 	}
 }
@@ -451,6 +479,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  2000/08/03 07:43:42  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.14  2000/08/01 11:44:15  sp
  * More VFS browser work
  *

@@ -300,7 +300,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 		int cIndex = path.indexOf(':');
 		if(cIndex <= 1) // D:\WINDOWS
 			return false;
-		else if(cIndex > fsIndex) // /tmp/RTF::read.pm
+		else if(fsIndex != -1 && cIndex > fsIndex) // /tmp/RTF::read.pm
 			return false;
 
 		return true;
@@ -682,6 +682,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  2000/08/03 07:43:41  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.34  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

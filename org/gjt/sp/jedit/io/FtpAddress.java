@@ -31,7 +31,7 @@ public class FtpAddress
 
 	public FtpAddress(String url)
 	{
-		if(!url.startsWith("ftp:"))
+		if(!url.startsWith(FtpVFS.PROTOCOL + ":"))
 			throw new IllegalArgumentException();
 
 		// remove any leading slashes, and ftp: from URL
@@ -98,7 +98,8 @@ public class FtpAddress
 	public String toString()
 	{
 		StringBuffer buf = new StringBuffer();
-		buf.append("ftp://");
+		buf.append(FtpVFS.PROTOCOL);
+		buf.append("://");
 		if(user != null)
 		{
 			buf.append(user);
@@ -124,6 +125,9 @@ public class FtpAddress
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/03 07:43:42  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.3  2000/08/01 11:44:15  sp
  * More VFS browser work
  *

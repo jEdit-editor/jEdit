@@ -55,7 +55,8 @@ class Autosave implements ActionListener
 
 	public static void stop()
 	{
-		timer.stop();
+		if(timer != null)
+			timer.stop();
 	}
 
 	public void actionPerformed(ActionEvent evt)
@@ -74,6 +75,9 @@ class Autosave implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/08/03 07:43:41  sp
+ * Favorites added to browser, lots of other stuff too
+ *
  * Revision 1.7  2000/07/22 03:27:03  sp
  * threaded I/O improved, autosave rewrite started
  *
