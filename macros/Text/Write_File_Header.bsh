@@ -1,0 +1,125 @@
+/*
+ * Write_File_Header.bsh - A BeanShell macro script
+ * for the jEdit text editor -- inserts a file header
+ * and marks the comment filed of the header
+ * Copyright (C) 2001 John Gellene
+ * email jgellene@nyc.rr.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * Notes on use:
+ *
+ * This macro has one variable specifically intended for customization:
+ * AUTHOR_NAME, in which any name or return value of a method call
+ * may be used.
+ *
+ */
+
+// Write_File_Header.bsh
+
+import java.text.DateFormat;
+import javax.swing.JOptionPane;
+
+void writeFileHeader()
+{
+	title = "Write file header";
+	if(buffer.getName().indexOf("Untitled") == 0)
+	{
+		answer = JOptionPane.showConfirmDialog(view,
+			"Do you want to write a header for "
+			+ buffer.getName() + " before naming it?",
+			title, JOptionPane.YES_NO_OPTION);
+		if(answer != JOptionPane.YES_OPTION) return;
+	}
+
+	descField = JOptionPane.showInputDialog(view,
+		"Enter text for \"Description\":", title,
+		JOptionPane.QUESTION_MESSAGE);
+
+	suppliedDesc = descField != null && descField.length() != 0;
+
+	tag = buffer.getMode().getProperty("blockComment");
+	if(tag == null)
+		tag = "//";
+	tagNL = tag.concat("\n");
+	border = tag.concat(
+		" * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n");
+	/*
+	 * this uses the line number of the "Description" field
+	 * as shown in the gutter (one more than the line index
+	 * used by jEditTextArea) to illustrate the technique
+	 */
+	descFieldLine = 11;
+
+	StringBuffer buf = new StringBuffer(border);
+	/*
+	 * calls to append() that will be written to
+	 * the same line of the buffer are indented
+	 */
+	buf
+		.append(tagNL)
+		.append(tag).append("  File Name:  ")
+			.append(buffer.getName()).append("\n")
+		.append(tagNL)
+		.append(tag).append("  Author:     ")
+			.append(AUTHOR_NAME).append("\n")
+		.append(tagNL);
+
+	Date d = new Date();
+	buf
+		.append(tag).append("  Date:       ")
+			.append(DateFormat.getDateInstance().format(d))
+			.append(", ")
+			.append(DateFormat.getTimeInstance(DateFormat.SHORT).format(d))
+			.append("\n");
+	buf
+		.append(tagNL)
+		.append(tag).append("  Full path:  ")
+			.append(buffer.getPath()).append("\n")
+		.append(tagNL)
+		.append(tag).append("  Description:  ");
+	if( suppliedDesc)
+		buf.append(descField);
+	buf.append("\n");
+
+	buf
+		.append(tagNL)
+		.append(tagNL)
+		.append(border)
+		.append("\n");
+
+	pos = textArea.getCaretPosition();
+	textArea.setCaretPosition(0);
+	textArea.setSelectedText(buf.toString());
+
+	/*
+	 * getLineEndOffset() puts you on the newline character
+	 * causes the caret to appear at the beginning of the
+	 * next line, so we back up one position
+	 */
+	if(!suppliedDesc)
+	{
+		marker = textArea.getLineEndOffset(descFieldLine - 1) - 1;
+		buffer.addMarker("Header description", marker, marker);
+	}
+
+	textArea.setCaretPosition(pos + buf.length());
+}
+
+AUTHOR_NAME = jEdit.getProperty("user.name");
+writeFileHeader();
+
+// end of Write_File_Header.bsh
+

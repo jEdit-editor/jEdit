@@ -62,7 +62,11 @@ public class JCheckBoxList extends JTable
 
 	public Object getSelectedValue()
 	{
-		return getModel().getValueAt(getSelectedRow(),1);
+		int row = getSelectedRow();
+		if(row == -1)
+			return null;
+		else
+			return getModel().getValueAt(row,1);
 	}
 
 	// private members

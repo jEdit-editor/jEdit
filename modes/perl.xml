@@ -55,6 +55,9 @@
 		</SPAN>
 
 		<!-- Variables -->
+		<SEQ TYPE="KEYWORD2">$`</SEQ>
+		<SEQ TYPE="KEYWORD2">$'</SEQ>
+
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
 			<BEGIN>${</BEGIN>
 			<END>}</END>

@@ -4,13 +4,18 @@ JEDIT 3.1 VERSION HISTORY
 
 + New Features
 
+- New 'Writing Macros' section in user's guide (John Gellene)
+- Lots more sample macros included (John Gellene)
 - Inform syntax highlighting (Matt Albrecht)
 - EditorExitRequested message sent when editor is about to exit but
   before settings are saved, buffers are closed, etc (Dirk Moebius)
 
 + Enhancements
 
-- Updated to gnu.regexp 1.1.1
+- Updated to gnu.regexp 1.1.1:
+  - Performance improvements
+  - \<, \> (word start/end anchors) supported
+  - \b, \B (word break, non-word break markers) supported
 - Gutter line highlight code now highlights (if the interval is set to 5)
   line 5, 10, 15, etc. Before it would highlight line 1, 6, 11, etc.
 - 'Find Selection' initially selects text in 'Find' field now
@@ -26,8 +31,11 @@ JEDIT 3.1 VERSION HISTORY
   the newline character used currently.
 
 - Markers can now be set in read only files
-- Fixed meaningless error message displayed when a plugin depends on another
-  one that cannot be loaded
+- Fixed meaningless error message displayed when a plugin depends on
+  another one that cannot be loaded
+- All edits performed by a macro are now batched into one compound edit
+- Minor tweak: Invoking 'Wing Comment' with nothing selected now
+  positions the caret between the command start and end strings
 
 + Neutral
 
@@ -52,6 +60,11 @@ JEDIT 3.1 VERSION HISTORY
   prevent jEdit from loading
 - Fixed minor display glitch with macros in tool bar and context menu
   option panes
+- Fixed minor syntax highlighting problem with Perl mode
+- Incremental regular expression search didn't always work
+- Various bugs when inserting and deleting text while narrowing is
+  active fixed
+- Scroll bar wasn't updated properly after a file load sometimes
 
 + API Changes
 

@@ -1,0 +1,30 @@
+// Go_to_Clipper.bsh -- opens (if necessary), shows
+// and sets focus to Clipper plugin
+
+if(jEdit.getPlugin("ClipperPlugin") == null)
+{
+    Macros.error(view,"You must install the Clipper plugin"
+        + " to use this macro.");
+}
+else
+{
+    clipperName = "clipper-dockable";
+    manager = view.getDockableWindowManager();
+    clipperWin = manager.getDockableWindow(clipperName);
+    if(clipperWin == null)
+    {
+        manager.addDockableWindow(clipperName);
+        clipperWin = manager.getDockableWindow(clipperName);
+    }
+    manager.showDockableWindow(clipperName);
+
+    clipper = clipperWin.getComponent();
+    clipper.requestFocus();
+
+    scrollPane = clipper.getComponent(1);
+    list = scrollPane.getComponent(0).getComponent(0);
+
+    list.requestFocus();
+}
+// end Go_to_Clipper.bsh
+

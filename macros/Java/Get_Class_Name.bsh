@@ -1,0 +1,9 @@
+// Get_Class_Name.bsh - gets class name from buffer name
+
+name = buffer.getName();
+index = name.lastIndexOf('.');
+textArea.setSelectedText( index != -1 ?
+	name.substring(0, index) : name);
+
+// end of Get_Class_Name.bsh
+

@@ -1,0 +1,15 @@
+// Close_Except_Active.bsh
+
+void closeBuffersExceptActive()
+{
+	buffers = jEdit.getBuffers();
+	for(i = 0; i < buffers.length; ++i)
+	{
+		if(buffers[i] != buffer)
+			jEdit.closeBuffer(view, buffers[i]);
+	}
+}
+
+closeBuffersExceptActive();
+
+// end of Close_Except_Active.bsh

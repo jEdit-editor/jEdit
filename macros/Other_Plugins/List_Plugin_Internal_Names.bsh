@@ -1,0 +1,26 @@
+// List_Plugin_Internal_Names.bsh
+
+EditPlugin[] ep =jEdit.getPlugins();
+if(ep == null)
+    Macros.message(view, "Plugin list not found");
+else
+{
+    jEdit.newFile(view);
+
+    Vector v = new Vector(20, 10);
+    for(int i = 0; i < ep.length; ++i)
+    {
+        v.addElement(ep[i].getClassName());
+    }
+    MiscUtilities.quicksort(v, new MiscUtilities.StringICaseCompare());
+    sb = new StringBuffer();
+    for(i = 0; i < v.size(); ++i)
+    {
+        sb.append((String)v.elementAt(i));
+        sb.append('\n');
+    }
+    textArea.setSelectedText(sb.toString());
+}
+
+// end of List_Plugin_Internal_Names.bsh
+

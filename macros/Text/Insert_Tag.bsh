@@ -1,0 +1,20 @@
+// insert_Tag.bsh
+
+
+void insertTag()
+{
+	caret = textArea.getCaretPosition();
+	tag = Macros.input(view, "Enter name of tag:");
+	if( tag == null || tag.length() == 0) return;
+	text = textArea.getSelectedText();
+	if(text == null) text = "";
+	sb = new StringBuffer();
+	sb.append("<").append(tag).append(">");
+	sb.append(text);
+	sb.append("</").append(tag).append(">");
+	textArea.setSelectedText(sb.toString());
+	if(text.length() == 0)
+		textArea.setCaretPosition(caret + tag.length() + 2);
+}
+
+insertTag();

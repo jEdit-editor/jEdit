@@ -1,18 +1,18 @@
 /*
  *  gnu/regexp/RETokenRepeated.java
- *  Copyright (C) 1998 Wes Biggs
+ *  Copyright (C) 1998-2001 Wes Biggs
  *
  *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Library General Public License as published
- *  by the Free Software Foundation; either version 2 of the License, or
+ *  it under the terms of the GNU Lesser General Public License as published
+ *  by the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Library General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
@@ -21,98 +21,139 @@ package gnu.regexp;
 import java.util.Vector;
 
 class RETokenRepeated extends REToken {
-  private REToken token;
-  private int min,max;
-  private boolean stingy;
-
-  RETokenRepeated(int f_subIndex, REToken f_token, int f_min, int f_max) {
-    super(f_subIndex);
-    token = f_token;
-    min = f_min;
-    max = f_max;
-  }
- 
-  void makeStingy() {
-    stingy = true;
-  }
-
-  int getMinimumLength() {
-    return (min * token.getMinimumLength());
-  }
-
-  int[] match(CharIndexed input, int index,int eflags,REMatch mymatch) {
-    int numRepeats = 0;
-    Vector positions = new Vector();
-    int[] newIndex = new int[] { index };
-    do {
-      // positions.elementAt(i) == position [] in input after <<i>> matches
-      positions.addElement(newIndex);
-      
-      // Check for stingy match for each possibility.
-      if (stingy && (numRepeats >= min)) {
-	for (int i = 0; i < newIndex.length; i++) {
-	  int[] s = next(input,newIndex[i],eflags,mymatch);
-	  if (s != null) return s;
-	}
-      }
-
-      int[] doables = new int[0];
-      int[] thisResult;
-      for (int i = 0; i < newIndex.length; i++) {
-	if ((thisResult = token.match(input,newIndex[i],eflags,mymatch)) != null) {
-	  // add to doables array
-	  int[] temp = new int[doables.length + thisResult.length];
-	  System.arraycopy(doables,0,temp,0,doables.length);
-	  for (int j = 0; j < thisResult.length; j++) {
-	    temp[doables.length + j] = thisResult[j];
-	  }
-	  doables = temp;
-	}
-      }
-      if (doables.length == 0) break;
-
-      newIndex = doables;
-    } while (numRepeats++ < max);
-
-    // If there aren't enough repeats, then fail
-    if (numRepeats < min) return null;
+    private REToken token;
+    private int min,max;
+    private boolean stingy;
     
-    // We're greedy, but ease off until a true match is found 
-    int posIndex = positions.size();
+    RETokenRepeated(int f_subIndex, REToken f_token, int f_min, int f_max) {
+	super(f_subIndex);
+	token = f_token;
+	min = f_min;
+	max = f_max;
+    }
     
-    // At this point we've either got too many or just the right amount.
-    // See if this numRepeats works with the rest of the regexp.
-    int[] doneIndex;
-    while (--posIndex >= min) {
-      newIndex = (int[]) positions.elementAt(posIndex);
-      // If rest of pattern matches
-      for (int i = 0; i < newIndex.length; i++) 
-	if ((doneIndex = next(input,newIndex[i],eflags,mymatch)) != null)
-	  return doneIndex;
-      
-      // else did not match rest of the tokens, try again on smaller sample
+    void makeStingy() {
+	stingy = true;
     }
-    return null;
-  }
+    
+    int getMinimumLength() {
+	return (min * token.getMinimumLength());
+    }
+    
+    boolean match(CharIndexed input, REMatch mymatch) {
+	int numRepeats = 0;
+	Vector positions = new Vector();
+	
+	// Possible positions for the next repeat to match at
+	REMatch newMatch = mymatch;
+	REMatch last = null;
+	REMatch current;
 
-  void dump(StringBuffer os) {
-    os.append('(');
-    if (token.m_subIndex == 0)
-      os.append("?:");
-    token.dumpAll(os);
-    os.append(')');
-    if ((max == Integer.MAX_VALUE) && (min <= 1))
-      os.append( (min == 0) ? '*' : '+' );
-    else if ((min == 0) && (max == 1))
-      os.append('?');
-    else {
-      os.append('{').append(min);
-      if (max > min) {
-	os.append(',');
-	if (max != Integer.MAX_VALUE) os.append(max);
-      }
-      os.append('}');
+	// Add the '0-repeats' index
+	// positions.elementAt(z) == position [] in input after <<z>> matches
+	positions.addElement(newMatch);
+	
+	do {
+	    // Check for stingy match for each possibility.
+	    if (stingy && (numRepeats >= min)) {
+		for (current = newMatch; current != null; current = current.next) {
+		    if (next(input, current)) {
+			mymatch.assignFrom(current);
+			return true;
+		    }
+		}
+	    }
+
+	    REMatch doables = null;
+	    REMatch doablesLast = null;
+
+	    // try next repeat at all possible positions
+	    for (current = newMatch; current != null; current = current.next) {
+		REMatch recurrent = (REMatch) current.clone();
+		if (token.match(input, recurrent)) {
+		    // add all items in current to doables array
+		    if (doables == null) {
+			doables = recurrent;
+			doablesLast = recurrent;
+		    } else {
+			// Order these from longest to shortest
+			// Start by assuming longest (more repeats)
+			
+			doablesLast.next = recurrent;
+		    }
+		    // Find new doablesLast
+		    while (doablesLast.next != null) {
+			doablesLast = doablesLast.next;
+		    }
+		}
+	    }
+	    // if none of the possibilities worked out, break out of do/while
+	    if (doables == null) break;
+	    
+	    // reassign where the next repeat can match
+	    newMatch = doables;
+	    
+	    // increment how many repeats we've successfully found
+	    ++numRepeats;
+	    
+	    positions.addElement(newMatch);
+	} while (numRepeats < max);
+	
+	// If there aren't enough repeats, then fail
+	if (numRepeats < min) return false;
+	
+	// We're greedy, but ease off until a true match is found 
+	int posIndex = positions.size();
+	
+	// At this point we've either got too many or just the right amount.
+	// See if this numRepeats works with the rest of the regexp.
+	REMatch doneIndex = null;
+	REMatch doneIndexLast = null;
+	while (--posIndex >= min) {
+	    newMatch = (REMatch) positions.elementAt(posIndex);
+	    // If rest of pattern matches
+	    for (current = newMatch; current != null; current = current.next) {
+		REMatch recurrent = (REMatch) current.clone();
+		if (next(input, recurrent)) {
+		    // add all items in current to doneIndex array
+		    if (doneIndex == null) {
+			doneIndex = recurrent;
+			doneIndexLast = recurrent;
+		    } else {
+			doneIndexLast.next = recurrent;
+		    }
+		    // Find new doneIndexLast
+		    while (doneIndexLast.next != null) {
+			doneIndexLast = doneIndexLast.next;
+		    }
+		}
+	    }
+	    // else did not match rest of the tokens, try again on smaller sample
+	}
+	if (doneIndex == null) {
+	    return false;
+	} else {
+	    mymatch.assignFrom(doneIndex);
+	    return true;
+	}
     }
-    if (stingy) os.append('?');
-  }
+
+    void dump(StringBuffer os) {
+	os.append("(?:");
+	token.dumpAll(os);
+	os.append(')');
+	if ((max == Integer.MAX_VALUE) && (min <= 1))
+	    os.append( (min == 0) ? '*' : '+' );
+	else if ((min == 0) && (max == 1))
+	    os.append('?');
+	else {
+	    os.append('{').append(min);
+	    if (max > min) {
+		os.append(',');
+		if (max != Integer.MAX_VALUE) os.append(max);
+	    }
+	    os.append('}');
+	}
+	if (stingy) os.append('?');
+    }
 }

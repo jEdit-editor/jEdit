@@ -50,8 +50,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			name = null;
 		else
 		{
-			name = MiscUtilities.getFileName(path);
-			path = MiscUtilities.getParentOfPath(path);
+			VFS vfs = VFSManager.getVFSForPath(path);
+			name = vfs.getFileName(path);
+			path = vfs.getParentOfPath(path);
 		}
 
 		browser = new VFSBrowser(view,path,mode,multipleSelection);

@@ -90,7 +90,7 @@ public class BufferIORequest extends WorkRequest
 		this.path = path;
 
 		markersPath = vfs.getParentOfPath(path)
-			+ '.' + MiscUtilities.getFileName(path)
+			+ '.' + vfs.getFileName(path)
 			+ ".marks";
 	}
 
@@ -152,7 +152,7 @@ public class BufferIORequest extends WorkRequest
 		{
 			try
 			{
-				String[] args = { MiscUtilities.getFileName(path) };
+				String[] args = { vfs.getFileName(path) };
 				setStatus(jEdit.getProperty("vfs.status.load",args));
 				setAbortable(true);
 				setProgressValue(0);
@@ -185,7 +185,7 @@ public class BufferIORequest extends WorkRequest
 
 			try
 			{
-				String[] args = { MiscUtilities.getFileName(path) };
+				String[] args = { vfs.getFileName(path) };
 				setStatus(jEdit.getProperty("vfs.status.load-markers",args));
 				setAbortable(true);
 
@@ -523,7 +523,7 @@ public class BufferIORequest extends WorkRequest
 
 		try
 		{
-			String[] args = { MiscUtilities.getFileName(path) };
+			String[] args = { vfs.getFileName(path) };
 			setStatus(jEdit.getProperty("vfs.status.save",args));
 
 			// the entire save operation can be aborted...
@@ -609,7 +609,7 @@ public class BufferIORequest extends WorkRequest
 
 		try
 		{
-			String[] args = { MiscUtilities.getFileName(path) };
+			String[] args = { vfs.getFileName(path) };
 			setStatus(jEdit.getProperty("vfs.status.autosave",args));
 
 			// the entire save operation can be aborted...
@@ -722,7 +722,7 @@ public class BufferIORequest extends WorkRequest
 		{
 			try
 			{
-				String[] args = { MiscUtilities.getFileName(path) };
+				String[] args = { vfs.getFileName(path) };
 				setStatus(jEdit.getProperty("vfs.status.load",args));
 				setAbortable(true);
 

@@ -1,0 +1,40 @@
+// Find_Matching_File.bsh
+
+boolean findMatchFile(String ext1, String ext2)
+{
+    strPath = buffer.getPath();
+    index = strPath.lastIndexOf('.');
+    if( index < 0 || strPath.length() < index + 2)
+    {
+        return false;
+    }
+    strExt = strPath.substring( index + 1);
+    strNew = strPath.substring( 0, index + 1);
+    if( strExt.compareTo(ext1) == 0)
+    {
+        strNew += ext2;
+    }
+    else if( strExt.compareTo(ext2) == 0)
+    {
+        strNew += ext1;
+    }
+    else
+    {
+        return false;
+    }
+    // if you do not want a new file opened,
+    // uncomment the following code before the
+    // call to openFile()
+//  file = new File(strNew);
+//  if(!file.exists())
+//  {
+//      return false;
+//  }
+    jEdit.openFile( view, strNew);
+    return true;
+}
+
+if(!findMatchFile("cpp", "h"))
+    Macros.error(view, "Could not find matching file.");
+
+// end of Find_Matching_File.bsh

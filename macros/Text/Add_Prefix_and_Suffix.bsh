@@ -1,0 +1,137 @@
+/*
+ * add_prefix_and_suffix.bsh - a BeanShell macro script
+ * for use in the jEdit text editor program;
+ * obtains and processes input for prefix and suffix text to be
+ * inserted in selected lines in the current editing buffer
+ *
+ * Copyright (C) 2001 John Gellene
+ * email: jgellene@nyc.rr.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the jEdit program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * version 1.0 - Sat Mar 03 08:48:06 EST 2001
+ * tested on jEdit 3.1pre1, JDK1.3
+ *
+ * Notes on use:
+ *
+ * If no text is selected, the macro will operate on the current line.
+ *
+ * The caret position is part of the selected text; if the caret is at
+ * the beginning of a line, the macro will operate on that line.
+ *
+ * The use of HistoryTextField objects allows the macro to 'remember'
+ * past entries for the prefix and suffix.
+ *
+ */
+
+// beginning of Add_suffix_and_prefix.bsh
+
+// import statements
+import javax.swing.*;
+import javax.swing.border.*;
+import org.gjt.sp.jedit.gui.HistoryTextField;
+
+// main routine
+void prefixSuffixDialog()
+{
+    // create dialog object and set its features
+    title = "Add prefix and suffix to selected lines";
+    dialog = new JDialog(view, title, false);
+    content = new JPanel(new BorderLayout());
+    content.setBorder(new EmptyBorder(5, 10, 10, 10));
+    content.setPreferredSize(new Dimension(320, 160));
+    dialog.setContentPane(content);
+
+    // add to the dialog a panel containing the text fields for
+    // entry of the prefix and suffix text
+    fieldPanel = new JPanel(new GridLayout( 4, 1, 0, 5));
+    prefixField = new HistoryTextField("macro.add-prefix");
+    prefixLabel = new JLabel("Prefix to add:");
+    suffixField = new HistoryTextField("macro.add-suffix");
+    suffixLabel = new JLabel("Suffix to add:");
+    fieldPanel.add(prefixLabel);
+    fieldPanel.add(prefixField);
+    fieldPanel.add(suffixLabel);
+    fieldPanel.add(suffixField);
+    content.add(fieldPanel, "Center");
+
+    // add a panel containing the buttons
+    buttonPanel = new JPanel(new BorderLayout(0, 0));
+    buttonPanel.setBorder(new EmptyBorder(15, 50, 0, 50));
+    ok = new JButton("OK");
+    cancel = new JButton("Cancel");
+    ok.setPreferredSize(cancel.getPreferredSize());
+    dialog.getRootPane().setDefaultButton(ok);
+    buttonPanel.add(ok, "West");
+    buttonPanel.add(cancel, "East");
+    content.add(buttonPanel, "South");
+
+    // register this method as an ActionListener for
+    // the buttons and text fields
+    ok.addActionListener(this);
+    cancel.addActionListener(this);
+    prefixField.addActionListener(this);
+    suffixField.addActionListener(this);
+
+    // locate the dialog in the center of the
+    // editing pane and activates
+    dialog.pack();
+    dialog.setLocationRelativeTo(view);
+    dialog.setVisible(true);
+
+    // this method will be called when a button is clicked
+    // or when ENTER or ESCAPE is pressed
+    void actionPerformed(e)
+    {
+        if(e.getSource() != cancel)
+        {
+            processText();
+        }
+        dialog.dispose();
+    }
+
+    // this is where the work gets done to insert
+    // the prefix and suffix
+    void processText()
+    {
+        prefix = prefixField.getText();
+        suffix = suffixField.getText();
+        if(prefix.length() == 0 && suffix.length() == 0)
+            return;
+        if(prefix.length() != 0)
+            prefixField.addCurrentToHistory();
+        if(suffix.length() != 0)
+            suffixField.addCurrentToHistory();
+
+        // text manipulation begins here using calls
+        // to jEdit methods
+        end = textArea.getSelectionEndLine() + 1;
+        for(line = textArea.getSelectionStartLine(); line < end; ++line)
+        {
+            offsetBOL = textArea.getLineStartOffset(line);
+            textArea.setCaretPosition(offsetBOL);
+            textArea.goToStartOfWhiteSpace(false);
+            textArea.goToEndOfWhiteSpace(true);
+            text = textArea.getSelectedText();
+            if(text == null) text = "";
+            textArea.setSelectedText(prefix + text + suffix);
+        }
+    }
+}
+
+// this single line of code is the script's main routine
+// it calls the methods and exits
+prefixSuffixDialog();
+

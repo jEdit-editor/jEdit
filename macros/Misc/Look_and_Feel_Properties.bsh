@@ -1,0 +1,25 @@
+// Look_and_Feel_Properties.bsh
+
+// version 1.0 Fri Mar 23 23:54:30 EST 2001 @246 /Internet Time/
+
+import javax.swing.*;
+import java.util.*;
+
+keys = UIManager.getLookAndFeelDefaults().keys();
+Vector v = new Vector(600);
+while(keys.hasMoreElements())
+{
+    v.addElement(keys.nextElement());
+}
+MiscUtilities.quicksort(v, new MiscUtilities.StringICaseCompare());
+sb = new StringBuffer("--listing look and feel property names--\n");
+for(int i = 0; i < v.size(); ++i)
+{
+    sb.append((String)v.elementAt(i));
+    sb.append('\n');
+}
+jEdit.newFile(view);
+textArea.setSelectedText(sb.toString());
+
+// end of Look_and_Feel_Properties.bsh
+

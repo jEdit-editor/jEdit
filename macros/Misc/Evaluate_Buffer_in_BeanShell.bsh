@@ -1,0 +1,7 @@
+// Evaluate_Buffer_in_BeanShell.bsh
+
+jEdit.newFile(view);
+BeanShell.runScript(view, buffer.getPath(), false, false);
+
+// end of Evaluate_Buffer_in_BeanShell.bsh
+

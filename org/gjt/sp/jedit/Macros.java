@@ -220,7 +220,19 @@ public class Macros
 				public void invoke(View view)
 				{
 					lastMacro = path;
-					BeanShell.runScript(view,path,true,false);
+					Buffer buffer = view.getBuffer();
+
+					try
+					{
+						buffer.beginCompoundEdit();
+
+						BeanShell.runScript(view,path,
+							true,false);
+					}
+					finally
+					{
+						buffer.endCompoundEdit();
+					}
 				}
 			};
 		}
@@ -358,7 +370,17 @@ public class Macros
 			jEdit.getSettingsDirectory(),"macros",
 			"Temporary_Macro.bsh");
 
-		BeanShell.runScript(view,lastMacro,true,false);
+		Buffer buffer = view.getBuffer();
+
+		try
+		{
+			buffer.beginCompoundEdit();
+			BeanShell.runScript(view,lastMacro,true,false);
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
 	}
 
 	/**

@@ -134,14 +134,14 @@
    <programlisting>&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE MODE SYSTEM "xmode.dtd"&gt;</programlisting>
   </sect2>
-  <sect2 id=mode-tag><title>The MODE Tag</>
+  <sect2 id=mode-tag><title>The <literal>MODE</> Tag</>
    <para>
     Each mode definition must contain at least one <literal>MODE</>
     tag. All other tags (<literal>PROPS</>, <literal>RULES</>) must be
     placed inside the <literal>MODE</> tag.
    </para>
   </sect2>
-  <sect2 id=mode-tag-props><title>The PROPS Tag</>
+  <sect2 id=mode-tag-props><title>The <literal>PROPS</> Tag</>
    <para>
     The <literal>PROPS</> tag and the <literal>PROPERTY</> tags inside it
     are used to define mode-specific
@@ -204,7 +204,7 @@
     &lt;PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" /&gt;
 &lt;/PROPS&gt;</>
   </sect2>
-  <sect2 id=mode-tag-rules><title>The RULES Tag</>
+  <sect2 id=mode-tag-rules><title>The <literal>RULES</> Tag</>
    <para>
     <literal>RULES</> tags must be placed inside the <literal>MODE</> tag.
     Each <literal>RULES</> tag defines a <firstterm>ruleset</>.
@@ -268,7 +268,7 @@
     of each line affects highlighting. 
    </para>
   </sect3>
-  <sect3 id=mode-rule-whitespace><title>WHITESPACE Rule</title>
+  <sect3 id=mode-rule-whitespace><title><literal>WHITESPACE</> Rule</title>
    <para>
     The <literal>WHITESPACE</> rule specifies characters which are to
     be treated as keyword delimiters.
@@ -278,7 +278,7 @@
    <programlisting>&lt;WHITESPACE&gt; &lt;/WHITESPACE&gt;
 &lt;WHITESPACE&gt;        &lt;/WHITESPACE&gt;</>
   </sect3>
-  <sect3 id=mode-rule-span><title>SPAN Rule</title>
+  <sect3 id=mode-rule-span><title><literal>SPAN</> Rule</title>
    <para>
     The <literal>SPAN</> rule highlights text between a start
     and end string. The start and end strings are specified inside
@@ -334,7 +334,7 @@
    &lt;END&gt;&amp;lt;/style&amp;gt;&lt;/END&gt;
 &lt;/SPAN&gt;</programlisting>
   </sect3>
-  <sect3 id=mode-rule-eol-span><title>EOL_SPAN Rule</title>
+  <sect3 id=mode-rule-eol-span><title><literal>EOL_SPAN</> Rule</title>
    <para>
     An <literal>EOL_SPAN</> is similar to a <literal>SPAN</> except that
     highlighting stops at the end of the line, not after the end sequence
@@ -404,7 +404,7 @@
    </para>
    <programlisting>&lt;MARK_FOLLOWING TYPE="KEYWORD2"&gt;$&lt;/MARK_FOLLOWING&gt;</>
   </sect3>
-  <sect3 id=mode-rule-seq><title>SEQ Rule</title>
+  <sect3 id=mode-rule-seq><title><literal>SEQ</> Rule</title>
    <para>
     The <literal>SEQ</> rule highlights fixed sequences of text. The text
     to highlight is specified between opening and closing <literal>SEQ</>
@@ -515,7 +515,8 @@
 <!DOCTYPE CATALOG SYSTEM "catalog.dtd">
 
 <MODES>
-    <MODE NAME="shellscript" FILE="shellscript.xml" FILE_NAME_GLOB="*.sh"
+    <MODE NAME="shellscript" FILE="shellscript.xml"
+        FILE_NAME_GLOB="*.sh"
         FIRST_LINE_GLOB="#!/*sh*" />
 </MODES>]]></programlisting>
   <para>

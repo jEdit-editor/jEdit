@@ -80,6 +80,7 @@ public class View extends JFrame implements EBComponent
 
 		searchBar.setHyperSearch(false);
 		searchBar.getField().setText(getTextArea().getSelectedText());
+		searchBar.getField().selectAll();
 		searchBar.getField().requestFocus();
 	}
 
@@ -97,6 +98,7 @@ public class View extends JFrame implements EBComponent
 
 		searchBar.setHyperSearch(true);
 		searchBar.getField().setText(getTextArea().getSelectedText());
+		searchBar.getField().selectAll();
 		searchBar.getField().requestFocus();
 	}
 
@@ -1034,7 +1036,7 @@ public class View extends JFrame implements EBComponent
 				.elementAt(i)).path;
 			VFS vfs = VFSManager.getVFSForPath(path);
 			JMenuItem menuItem = new JMenuItem(
-				MiscUtilities.getFileName(path) + " ("
+				vfs.getFileName(path) + " ("
 				+ vfs.getParentOfPath(path) + ")");
 			menuItem.setActionCommand(path);
 			menuItem.addActionListener(listener);

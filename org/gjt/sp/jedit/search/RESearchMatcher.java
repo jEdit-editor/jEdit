@@ -34,8 +34,9 @@ public class RESearchMatcher implements SearchMatcher
 	 * Perl5 syntax with character classes enabled.
 	 * @since jEdit 3.0pre5
 	 */
-	public static final RESyntax RE_SYNTAX_JEDIT = new RESyntax(
-		RESyntax.RE_SYNTAX_PERL5).set(RESyntax.RE_CHAR_CLASSES);
+	public static final RESyntax RE_SYNTAX_JEDIT
+		= new RESyntax(RESyntax.RE_SYNTAX_PERL5)
+		.set(RESyntax.RE_CHAR_CLASSES);
 
 	/**
 	 * Creates a new regular expression string matcher.

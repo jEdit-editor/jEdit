@@ -21,6 +21,9 @@ CDATA DSSSL> ]>
 (element guimenu ($bold-seq$))
 (element guimenuitem ($bold-seq$))
 (element guisubmenu ($bold-seq$))
+(element application ($mono-seq$))
+(element glossterm ($bold-seq$))
+(element (funcdef function) ($bold-seq$))
 
 ;; wordaround for stupid Swing HTML limitation - it can't display
 ;; DocBook's quotes properly

@@ -1,0 +1,16 @@
+// Go_to_File_System_Browser.bsh -- opens (if necessary), shows
+// and sets focus to VFSBrowser plugin
+
+manager = view.getDockableWindowManager();
+browser = manager.getDockableWindow("vfs.browser");
+if(browser == null)
+{
+    manager.addDockableWindow("vfs.browser");
+    browser = manager.getDockableWindow("vfs.browser");
+}
+manager.showDockableWindow("vfs.browser");
+
+browser.getBrowserView().getDefaultFocusComponent().grabFocus();
+
+// end Go_to_File_System_Browser.bsh
+

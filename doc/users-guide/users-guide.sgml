@@ -1,5 +1,5 @@
 <!-- jEdit documentation, (C) 1999, 2000, 2001 Slava Pestov -->
-<!-- Released under the GNU General Public License; see COPYING.txt -->
+<!-- Portions copyright (C) 2001 John Gellene -->
 
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
@@ -12,9 +12,7 @@
 <!ENTITY modes SYSTEM "modes.sgml">
 <!ENTITY sourceedit SYSTEM "source-edit.sgml">
 <!ENTITY customizing SYSTEM "customizing.sgml">
-<!ENTITY macros SYSTEM "macros.sgml">
 <!ENTITY usingplugins SYSTEM "using-plugins.sgml">
-<!ENTITY develplugins SYSTEM "devel-plugins.sgml">
 
 <!ENTITY shortcuts SYSTEM "shortcuts.sgml">
 <!ENTITY history SYSTEM "history.sgml">
@@ -23,46 +21,59 @@
 <!ENTITY activitylog SYSTEM "activity-log.sgml">
 <!ENTITY cliusage SYSTEM "cli-usage.sgml">
 
-<!ENTITY index SYSTEM "index.sgml"> ]>
+<!ENTITY macro-intro SYSTEM "macro-intro.sgml">
+<!ENTITY simple-macros SYSTEM "simple-macros.sgml">
+<!ENTITY dialog-macro SYSTEM "dialog-macro.sgml">
+<!ENTITY api-guide SYSTEM "api-guide.sgml">
+<!ENTITY macro-index SYSTEM "macro-index.sgml"> ]>
 
 <book>
 
 <bookinfo>
  <title>jEdit 3.1 User's Guide</>
- <author><firstname>Slava</><surname>Pestov</></author>
+ <authorgroup>
+  <author><firstname>Slava</><surname>Pestov</></author>
+  <author><firstname>John</><surname>Gellene</></author>
+ </authorgroup>
+
+ <copyright><year>1998-2001</year><holder>Slava Pestov</holder></copyright>
+ <copyright><year>2001</year><holder>John Gellene</holder></copyright>
  <legalnotice><title>Legal Notice</>
   <para>
-   jEdit is released under the GNU General Public License. A copy
-   of the GPL is available in the <filename>COPYING.txt</> file
-   supplied with jEdit.
-  </para>
-  <para>
-   jEdit comes with ABSOLUTELY NO WARRANTY OF ANY KIND; see
-   section 11 and 12 of the GPL for details.
+   Permission is granted to copy, distribute and/or modify this document
+   under the terms of the GNU Free Documentation License, Version 1.1 or
+   any later version published by the Free Software Foundation; with no
+   <quote>Invariant Sections</>, <quote>Front-Cover Texts</> or
+   <quote>Back-Cover Texts</>, each as defined in the license. A copy of
+   the license is included in the file <filename>COPYING.DOC.txt</>
+   included with jEdit.
   </para>
  </legalnotice>
- <copyright><year>1998-2001</year><holder>Slava Pestov</holder></copyright>
 </bookinfo>
 
-&basics;
-&files;
-&textedit;
-&modes;
-&sourceedit;
-&customizing;
-&macros;
-&usingplugins;
+<part id="using-jedit"><title>Using jEdit</>
+ &basics;
+ &files;
+ &textedit;
+ &modes;
+ &sourceedit;
+ &customizing;
+ &usingplugins;
 
-<!-- not yet written
-develplugins -->
+ &shortcuts;
+ &history;
+ &globs;
+ &regexps;
+ &activitylog;
+ &cliusage;
+</part>
 
-&shortcuts;
-&history;
-&globs;
-&regexps;
-&activitylog;
-&cliusage;
-
-<!-- &index; -->
+<part id="macros"><title>Extending jEdit With Macros</>
+ &macro-intro;
+ &simple-macros;
+ &dialog-macro;
+ &api-guide;
+ &macro-index;
+</part>
 
 </book>

@@ -180,6 +180,9 @@ public class SearchAndReplace
 		if(search == null || "".equals(search))
 			return null;
 
+		// replace must not be null
+		String replace = (SearchAndReplace.replace == null ? "" : SearchAndReplace.replace);
+
 		if(regexp)
 			matcher = new RESearchMatcher(search,replace,ignoreCase);
 		else

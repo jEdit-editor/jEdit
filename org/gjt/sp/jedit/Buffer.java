@@ -2138,6 +2138,11 @@ loop:				for(int i = 0; i < count; i++)
 		int start = 0;
 		int end = virtualLineCount - 1;
 
+		if(lineNo < virtualLines[start])
+			return start;
+		else if(lineNo > virtualLines[end])
+			return end;
+
 		// funky binary search
 		for(;;)
 		{
@@ -2374,7 +2379,11 @@ loop:				for(int i = 0; i < count; i++)
 
 		// I forgot to do this at first and it took me ages to
 		// figure out
-		int virtualLine = physicalToVirtual(start);
+		int virtualLine;
+		if(start > virtualLines[virtualLineCount - 1])
+			virtualLine = virtualLineCount;
+		else
+			virtualLine = physicalToVirtual(start);
 
 		//System.err.println("virtual start is " + virtualLine
 		//	+ ", physical start is " + start);
@@ -2912,9 +2921,10 @@ loop:				for(int i = 0; i < count; i++)
 	private void setPath(String path)
 	{
 		this.path = path;
-		name = MiscUtilities.getFileName(path);
 
 		vfs = VFSManager.getVFSForPath(path);
+		name = vfs.getFileName(path);
+
 		if(vfs instanceof FileVFS)
 		{
 			file = new File(path);
@@ -3080,6 +3090,49 @@ loop:				for(int i = 0; i < count; i++)
 	{
 		if(lines <= 0)
 			return;
+
+		LineInfo prev = lineInfo[index - 1];
+
+		int virtualLine;
+		// special case
+		if(index == lineCount)
+			virtualLine = virtualLineCount;
+		else
+			virtualLine = physicalToVirtual(index);
+
+		int virtualLength;
+
+		/* update the virtual -> physical mapping if the newly
+		 * inserted lines are actually visible */
+		if(prev.visible)
+		{
+			virtualLineCount += lines;
+
+			if(virtualLines.length <= virtualLineCount)
+			{
+				int[] virtualLinesN = new int[
+					(virtualLineCount + 1) * 2];
+				System.arraycopy(virtualLines,0,
+					virtualLinesN,0,
+					virtualLines.length);
+				virtualLines = virtualLinesN;
+			}
+
+			virtualLength = virtualLine + lines;
+
+			System.arraycopy(virtualLines,virtualLine,
+				virtualLines,virtualLength,
+				virtualLines.length - virtualLength);
+
+			for(int i = 0; i < lines; i++)
+				virtualLines[virtualLine + i] = index + i;
+		}
+		else
+			virtualLength = virtualLine + 1;
+
+		for(int i = virtualLength; i < virtualLineCount; i++)
+			virtualLines[i] += lines;
+
 		lineCount += lines;
 
 		if(lineInfo.length <= lineCount)
@@ -3090,11 +3143,9 @@ loop:				for(int i = 0; i < count; i++)
 			lineInfo = lineInfoN;
 		}
 
-		int len = index + lines;
-		System.arraycopy(lineInfo,index,lineInfo,len,
-			lineInfo.length - len);
-
-		LineInfo prev = lineInfo[index - 1];
+		int length = index + lines;
+		System.arraycopy(lineInfo,index,lineInfo,length,
+			lineInfo.length - length);
 
 		ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
 		for(int i = 0; i < lines; i++)
@@ -3104,55 +3155,6 @@ loop:				for(int i = 0; i < count; i++)
 			info.visible = prev.visible;
 			lineInfo[index + i] = info;
 		}
-
-		/* update the virtual -> physical mapping if the newly
-		 * inserted lines are actually visible */
-		int virtualLine;
-		if(index < virtualLines[0])
-		{
-			// I would document why this has to be like this,
-			// but I forgot
-			virtualLine = 1;
-		}
-		else if(index > virtualLines[virtualLineCount - 1])
-			virtualLine = virtualLineCount;
-		else
-			virtualLine = physicalToVirtual(index);
-
-		if(prev.visible)
-		{
-			virtualLineCount += lines;
-
-			if(virtualLines.length <= virtualLineCount)
-			{
-				int[] virtualLinesN = new int[
-					(virtualLineCount + 1) * 2];
-				System.arraycopy(virtualLines,0,
-					virtualLinesN,0,virtualLines.length);
-				virtualLines = virtualLinesN;
-			}
-
-			len = virtualLine + lines;
-			//System.err.println("len=" + len + ", copy from "
-			//	+ virtualLine + " to " + len);
-			//System.err.println("map to " + index + ":" + lines);
-
-			System.arraycopy(virtualLines,virtualLine,
-				virtualLines,len,virtualLines.length - len);
-
-			for(int i = 0; i < lines; i++)
-			{
-				//if(lines < 100)
-				//	System.err.println((virtualLine + i) + " maps to " + (index + i));
-				virtualLines[virtualLine + i] = index + i;
-			}
-		}
-		else
-			len = virtualLine - 1;
-
-		//System.err.println("incr from " + (len + 1) + " by " + lines);
-		for(int i = len; i < virtualLineCount; i++)
-			virtualLines[i] += lines;
 	}
 
 	/**
@@ -3166,43 +3168,28 @@ loop:				for(int i = 0; i < count; i++)
 		if (lines <= 0)
 			return;
 
-		int lastVisibleLine = virtualLines[virtualLineCount - 1];
-		int virtualLine;
-		if(index > lastVisibleLine)
-			virtualLine = virtualLineCount - 1;
-		else
-			virtualLine = physicalToVirtual(index);
+		int length = index + lines;
+		int virtualLine = physicalToVirtual(index);
+		int virtualLength = physicalToVirtual(length);
 
-		int len;
-		if(index + lines > lastVisibleLine)
-			len = virtualLineCount - 1;
-		else
-			len = physicalToVirtual(index + lines);
-
-		for(int i = (virtualLine == len ? len + 1 : len);
-			i < virtualLineCount; i++)
+		if(length <= virtualLines[virtualLineCount - 1])
 		{
-			System.err.println(i + " maps to " + (virtualLines[i] - lines));
-			virtualLines[i] -= lines;
+			System.arraycopy(virtualLines,virtualLength,
+				virtualLines,virtualLine,
+				virtualLines.length - virtualLength);
+
+			for(int i = virtualLine;
+				i < virtualLineCount
+				- (virtualLength - virtualLine);
+				i++)
+				virtualLines[i] -= lines;
 		}
 
-		// physicalToVirtual() returns lines which we do not
-		// want to remap if the input is out of bounds
-		if(virtualLine != len)
-		{
-			virtualLineCount -= (len - virtualLine);
-
-			System.err.println((len - virtualLine) + " vlines deleted from "
-				+ index + ":" + lines);
-
-			System.err.println("copy from " + len + " to " + virtualLine);
-			System.arraycopy(virtualLines,len,virtualLines,
-				virtualLine,virtualLines.length - len);
-		}
+		virtualLineCount -= (virtualLength - virtualLine);
 
 		lineCount -= lines;
-		System.arraycopy(lineInfo,index + lines,lineInfo,
-			index,lineInfo.length - index - lines);
+		System.arraycopy(lineInfo,length,lineInfo,
+			index,lineInfo.length - length);
 	}
 
 	/**

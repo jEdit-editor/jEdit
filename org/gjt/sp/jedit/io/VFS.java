@@ -106,6 +106,18 @@ public abstract class VFS
 	}
 
 	/**
+	 * Returns the file name component of the specified path. The
+	 * default implementation calls
+	 * <code>MiscUtilities.getFileName()</code>
+	 * @param path The path
+	 * @since jEdit 3.1pre4
+	 */
+	public String getFileName(String path)
+	{
+		return MiscUtilities.getFileName(path);
+	}
+
+	/**
 	 * Returns the parent of the specified path. This must be
 	 * overridden to return a non-null value for browsing of this
 	 * filesystem to work.

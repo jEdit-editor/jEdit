@@ -370,14 +370,14 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 
 	public void rename(String from)
 	{
-		String filename = MiscUtilities.getFileName(from);
+		VFS vfs = VFSManager.getVFSForPath(from);
+
+		String filename = vfs.getFileName(from);
 		String[] args = { filename };
 		String to = GUIUtilities.input(this,"vfs.browser.rename",
 			args,filename);
 		if(to == null)
 			return;
-
-		VFS vfs = VFSManager.getVFSForPath(from);
 
 		to = vfs.constructPath(vfs.getParentOfPath(from),to);
 

@@ -1,7 +1,7 @@
 ### plugin properties
 plugin.PluginManagerPlugin.name=Plugin Manager
 plugin.PluginManagerPlugin.author=Slava Pestov
-plugin.PluginManagerPlugin.version=0.6.1
+plugin.PluginManagerPlugin.version=0.6.2
 plugin.PluginManagerPlugin.depend.0=jedit 02.07.02.00
 
 ### URL to download plugin list from

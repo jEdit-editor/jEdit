@@ -1,0 +1,30 @@
+/*
+ * Run_last_Console_Command.bsh
+ *
+ * runs last executed Console command
+ * uses code from generic function 'runCommandInConsole()'
+ * supplied with jEdit installation
+ */
+
+void runLastConsoleCommand()
+{
+	if(jEdit.getPlugin("console.ConsolePlugin") == null)
+	{
+		Macros.error(view,"You must install the Console plugin"
+			+ " to use this macro.");
+		return;
+	}
+	view.getDockableWindowManager().addDockableWindow("console");
+	console = view.getDockableWindowManager().getDockableWindow("console");
+	console.setShell("Console");
+	history = HistoryModel.getModel("console.Console");
+	if(history == null || history.getSize() == 0)
+	{
+		Macros.error(view, "No history list for Console.");
+		return;
+	}
+	console.run(history.getItem(0));
+}
+
+runLastConsoleCommand();
+

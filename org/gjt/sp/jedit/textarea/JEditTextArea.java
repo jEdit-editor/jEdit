@@ -2841,7 +2841,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			buffer.endCompoundEdit();
 		}
 
-		selectNone();
+		if(selectionStart == selectionEnd)
+			setCaretPosition(selectionStart + commentStart.length());
+		else
+			selectNone();
 	}
 
 	/**

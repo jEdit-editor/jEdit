@@ -13,31 +13,15 @@ cmd_jar = "jar";
 ### gnu.regexp
 ###
 
-# gnu.regexp files have to be compiled in a certain order,
-# otherwise javac fails
-
 re_pkg = "gnu/regexp";
+re_srcs = (subst ".java", ".class", (glob (cat re_pkg "/*.java")));
 
-re_srcs = "gnu/regexp/RESyntax.class"
-    "gnu/regexp/CharIndexed.class"
-    "gnu/regexp/REMatch.class"
-    "gnu/regexp/REToken.class"
-    "gnu/regexp/REException.class"
-    "gnu/regexp/RETokenChar.class"
-    "gnu/regexp/RETokenRange.class"
-    "gnu/regexp/RETokenPOSIX.class"
-    "gnu/regexp/RETokenOneOf.class"
-    "gnu/regexp/RETokenAny.class"
-    "gnu/regexp/RETokenRepeated.class"
-    "gnu/regexp/RETokenBackRef.class"
-    "gnu/regexp/CharIndexedString.class"
-    "gnu/regexp/CharIndexedCharArray.class"
-    "gnu/regexp/CharIndexedStringBuffer.class"
-    "gnu/regexp/CharIndexedInputStream.class"
-    "gnu/regexp/RE.class"
-    "gnu/regexp/RETokenStart.class"
-    "gnu/regexp/RETokenEnd.class"
-    "gnu/regexp/REMatchEnumeration.class";
+###
+### BeanShell
+###
+
+bsh_pkgs = "bsh" "bsh/lib" "bsh/commands";
+bsh_srcs = (subst ".java", ".class", (glob (join bsh_pkgs, "/*.java")));
 
 ###
 ### jEdit
@@ -64,9 +48,6 @@ jedit_srcs = (subst ".java", ".class", (glob (join jedit_pkgs, "/*.java")));
 jedit_mf = (cat jedit_pkg "/jedit.manifest");
 doc_pgks = (subst "/", ".", jedit_pkgs);
 
-bsh_pkgs = "bsh" "bsh/lib" "bsh/commands";
-bsh_srcs = (subst ".java", ".class", (glob (join bsh_pkgs, "/*.java")));
-
 # All source directories
 pkgs = re_pkg bsh_pkgs jedit_pkgs "org/gjt/sp/jedit/icons";
 
@@ -91,8 +72,8 @@ jar = "jedit.jar";
         "org/gjt/sp/jedit/actions.dtd"
         "org/gjt/sp/jedit/catalog.dtd"
         "org/gjt/sp/jedit/xmode.dtd"
-	"bsh/lib/defaultImports"
-	"bsh/lib/javaPackages");
+        "bsh/lib/defaultImports"
+        "bsh/lib/javaPackages");
 }
 
 "%.class" : "%.java";
@@ -103,7 +84,7 @@ jar = "jedit.jar";
 "javadoc":;
 {
     -mkdir "doc/api";
-      exec "javadoc" "-d" "doc/api" doc_pgks;
+    exec "javadoc" "-d" "doc/api" doc_pgks;
 }
 
 ".PHONY": "all" "javadoc" "everything";

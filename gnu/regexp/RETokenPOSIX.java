@@ -1,24 +1,23 @@
 /*
  *  gnu/regexp/RETokenPOSIX.java
- *  Copyright (C) 1998 Wes Biggs
+ *  Copyright (C) 1998-2001 Wes Biggs
  *
  *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Library General Public License as published
- *  by the Free Software Foundation; either version 2 of the License, or
+ *  it under the terms of the GNU Lesser General Public License as published
+ *  by the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Library General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 package gnu.regexp;
-import java.util.Hashtable;
 
 class RETokenPOSIX extends REToken {
   int m_type;
@@ -59,58 +58,64 @@ class RETokenPOSIX extends REToken {
     m_negated = f_negated;
   }
 
-  int getMinimumLength() {
-    return 1;
-  }
+    int getMinimumLength() {
+	return 1;
+    }
 
-  int[] match(CharIndexed input, int index, int eflags,REMatch mymatch) {
-    char ch = input.charAt(index);
+    boolean match(CharIndexed input, REMatch mymatch) {
+    char ch = input.charAt(mymatch.index);
     if (ch == CharIndexed.OUT_OF_BOUNDS)
-      return null;
+      return false;
     
     boolean retval = false;
     switch (m_type) {
     case ALNUM:
-      retval = Character.isLetterOrDigit(ch);
-      break;
+	// Note that there is some debate over whether '_' should be included
+	retval = Character.isLetterOrDigit(ch) || (ch == '_');
+	break;
     case ALPHA:
-      retval = Character.isLetter(ch);
-      break;
+	retval = Character.isLetter(ch);
+	break;
     case BLANK:
-      retval = ((ch == ' ') || (ch == '\t'));
-      break;
+	retval = ((ch == ' ') || (ch == '\t'));
+	break;
     case CNTRL:
-      retval = Character.isISOControl(ch);
-      break;
+	retval = Character.isISOControl(ch);
+	break;
     case DIGIT:
-      retval = Character.isDigit(ch);
-      break;
+	retval = Character.isDigit(ch);
+	break;
     case GRAPH:
-      retval = (!(Character.isWhitespace(ch) || Character.isISOControl(ch)));
-      break;
+	retval = (!(Character.isWhitespace(ch) || Character.isISOControl(ch)));
+	break;
     case LOWER:
-      retval = ((m_insens && Character.isLetter(ch)) || Character.isLowerCase(ch));
-      break;
+	retval = ((m_insens && Character.isLetter(ch)) || Character.isLowerCase(ch));
+	break;
     case PRINT:
-      retval = Character.isLetterOrDigit(ch);
-      break;
+	retval = (!(Character.isWhitespace(ch) || Character.isISOControl(ch)))
+	    || (ch == ' ');
+	break;
     case PUNCT:
-      retval = ("`~!@#$%^&*()-_=+[]{}\\|;:'\"/?,.<>".indexOf(ch)!=-1);
-      break;
+	// This feels sloppy, especially for non-U.S. locales.
+	retval = ("`~!@#$%^&*()-_=+[]{}\\|;:'\"/?,.<>".indexOf(ch)!=-1);
+	break;
     case SPACE:
-      retval = Character.isWhitespace(ch);
-      break;
+	retval = Character.isWhitespace(ch);
+	break;
     case UPPER:
-      retval = ((m_insens && Character.isLetter(ch)) || Character.isUpperCase(ch));
-      break;
+	retval = ((m_insens && Character.isLetter(ch)) || Character.isUpperCase(ch));
+	break;
     case XDIGIT:
-      retval = (Character.isDigit(ch) || ("abcdefABCDEF".indexOf(ch)!=-1));
-      break;
+	retval = (Character.isDigit(ch) || ("abcdefABCDEF".indexOf(ch)!=-1));
+	break;
     }
 
     if (m_negated) retval = !retval;
-    if (retval) return next(input,index+1,eflags,mymatch);
-    else return null;
+    if (retval) {
+	++mymatch.index;
+	return next(input, mymatch);
+    }
+    else return false;
   }
 
   void dump(StringBuffer os) {

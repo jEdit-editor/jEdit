@@ -1,0 +1,14 @@
+// Search_Buffer.bsh
+
+void searchCurrentBuffer()
+{
+	SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+	jEdit.setBooleanProperty("search.hypersearch.toggle", false);
+	jEdit.setBooleanProperty("search.keepDialog.toggle", true);
+	SearchAndReplace.showSearchDialog(view, null);
+}
+
+searchCurrentBuffer();
+
+// end of Search_Buffer.bsh
+

@@ -1,0 +1,92 @@
+/*
+ * Run_Perl_Script.bsh - a BeanShell script for executing perl scripts
+ * in jEdit using the Console plugin
+ * Copyright (C) 2001 John Gellene
+ * jgellene@nyc.rr.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the distribution of the jEdit program;
+ * if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+/*
+ * Requirements: jEdit 3.0, Console plugin 2.4.3 (and perl, of course)
+ *
+ * Notes on use:
+ *
+ * This script will execute the current file as a perl script
+ * provided it has a 'pl' file extension.  Perl must be on
+ * the path of the shell used by Console (if you can execute perl
+ * scripts by typing 'perl ...' at a command prompt, the script
+ * should work).
+ *
+ * Before running perl, the macro will save all open buffers without
+ * seeking confirmation.  The script contains a comment with an
+ * alternative if you only want to save the script file before
+ * executing it
+ *
+ * This version runs perl without command line options;
+ * if you typically run perl with options, add them to the
+ * string at line 75.
+ *
+ * Output from stdout and stderr (including compliation errors)
+ * will be displayed in the console window unless redirected
+ * by the perl script.
+ *
+ * This macro illustrates input and error handling within jEdit
+ * as well as how to access the Console plugin.
+*/
+
+
+import javax.swing.JOptionPane;
+import console.Console;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
+
+{
+	Buffer b = view.getBuffer();
+	String strName = b.getName();
+	String strPath = b.getPath();
+	if( !strPath.endsWith(".pl"))
+	{
+		Macros.error(view,"Current file is not a perl script");
+		return;
+	}
+	String strParams =
+		JOptionPane.showInputDialog(view,"Enter command line parameters for script",
+									"Run perl script:  " + strName,
+									JOptionPane.QUESTION_MESSAGE,null,null,null);
+	if( strParams == null)
+	{
+		Macros.error(view,"Execution of " + strName + " cancelled.");
+		return;
+	}
+	// add default command line option to following line
+	String strCmd = new String("perl \"" + strPath + "\" " + strParams);
+
+	jEdit.saveAllBuffers( view, false);
+	// if you want to save only the script file before execution,
+	// use the next line instead
+	// b.save(view, null);
+
+	DockableWindowManager wm = view.getDockableWindowManager();
+	console = wm.getDockableWindow("console");
+	if(console != null)
+	{
+		console.setShell("Console");
+		console.run(strCmd);
+	}
+	else
+		Macros.message(view, "Console plugin not found.");
+}
+

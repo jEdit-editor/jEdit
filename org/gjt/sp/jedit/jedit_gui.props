@@ -513,6 +513,9 @@ help-menu=about \
      help-todo \
      help-changes \
      help-copying \
+     help-copying-doc \
+     - \
+     help-api \
      -
 help-menu.label=$Help
 about.label=About jEdit...
@@ -522,6 +525,8 @@ help-news.label=Major Changes in jEdit 3.0
 help-todo.label=Changes Planned for jEdit 3.1
 help-changes.label=Version History
 help-copying.label=GNU General Public License
+help-copying-doc.label=GNU Free Documentation License
+help-api.label=jEdit API Quick Reference
 
 ###
 ### MACRO STRINGS

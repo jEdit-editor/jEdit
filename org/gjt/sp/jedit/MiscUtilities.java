@@ -139,7 +139,8 @@ public class MiscUtilities
 	}
 
 	/**
-	 * Returns the last component of the specified path.
+	 * For use with local files only - returns the last component
+	 * of the specified path.
 	 * @param path The path name
 	 */
 	public static String getFileName(String path)
@@ -160,7 +161,8 @@ public class MiscUtilities
 	}
 
 	/**
-	 * Returns the parent of the specified path.
+	 * For use with local files only - returns the parent of the
+	 * specified path.
 	 * @param path The path name
 	 * @since jEdit 2.6pre5
 	 */
@@ -433,7 +435,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 * Escapes newlines, tabs, backslashes, quotes in the specified
 	 * string.
 	 * @param str The string
-	 * @param history jEdit histrory files require additional escaping
+	 * @param history jEdit history files require additional escaping
 	 * @since jEdit 2.7pre2
 	 */
 	public static String charsToEscapes(String str, boolean history)

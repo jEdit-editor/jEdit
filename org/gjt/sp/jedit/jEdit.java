@@ -1822,8 +1822,7 @@ public class jEdit
 		// if background mode is off
 		reallyExit |= !background;
 
-		if(settingsDirectory != null)
-			saveOpenFiles();
+		saveOpenFiles();
 
 		// Close all buffers
 		if(!closeAllBuffers(view,reallyExit))

@@ -1,0 +1,21 @@
+// Display_Console_Output.bsh
+
+void displayConsoleOutput()
+{
+	console = view.getDockableWindowManager()
+		.getDockableWindow("console");
+	if(console == null)
+	{
+		Macros.message(view,
+			"The Console plugin is not available.");
+		return;
+	}
+	scrollPane = console.getComponent(1);
+	text = scrollPane.getViewport().getView().getText();
+	jEdit.newFile(view);
+	textArea.setSelectedText(text);
+}
+
+displayConsoleOutput();
+
+// end of Display_Console_Output.bsh

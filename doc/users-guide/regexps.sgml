@@ -14,6 +14,10 @@
  <itemizedlist>
   <listitem><para><literal>^</> matches at the beginning of a line</></listitem>
   <listitem><para><literal>$</> matches at the end of a line</></listitem>
+  <listitem><para><literal>\b</> matches at a word break</></listitem>
+  <listitem><para><literal>\B</> matches at a non-word break</></listitem>
+  <listitem><para><literal>\&lt;</> matches at the start of a word</></listitem>
+  <listitem><para><literal>\&gt;</> matches at the end of a word</></listitem>
  </itemizedlist>
  <bridgehead renderas=sect3>One-Character Operators</>
  <itemizedlist>

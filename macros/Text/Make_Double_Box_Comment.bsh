@@ -1,0 +1,86 @@
+/*
+ * Make_Double_Box_Comment.bsh - a BeanShell macro for
+ * the jEdit text editor - makes a individual "wing" style
+ * comment of equal width from each of the selected lines
+ * in the current text buffer
+ * Copyright (C) 2001 John Gellene
+ * jgellene@nyc.rr.com
+ *
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * Version 1.1 - Tue Mar 27 17:10:43 EST 2001 @965 /Internet Time/
+ * Some loop optimizations from the version sent to jEdit-users mailing list.
+ */
+
+// Make_Double_Box_Comment.bsh
+
+void makeDoubleBoxComment()
+{
+    startComment = buffer.getMode().getProperty("commentStart");
+    endComment = buffer.getMode().getProperty("commentEnd");
+
+    if(startComment == null || endComment == null)
+    {
+        Macros.message(view,
+            "The buffer's editing mode does not support comments.");
+        return;
+    }
+
+    endLine = textArea.getSelectionEndLine() + 1;
+    startLine = textArea.getSelectionStartLine();
+
+    Vector lines = new Vector( endLine - startLine);
+
+    maxLineLength = 0;
+
+    for(line = startLine; line < endLine; ++line)
+    {
+        fullLine = TextUtilities.tabsToSpaces( textArea.getLineText(line),
+            buffer.getTabSize());
+        maxLineLength = Math.max(maxLineLength, fullLine.length());
+        lines.addElement(fullLine);
+    }
+
+    newLineLength = maxLineLength + startComment.length() +
+        endComment.length() + 2;  // two additional spaces
+
+    sb = new StringBuffer(startComment);
+
+    for(line = startLine; line < endLine; ++line)
+    {
+        oldLine = lines.elementAt(line - startLine).toString();
+        extraSpaces = maxLineLength - oldLine.length();
+        sb.append(' ')
+          .append(oldLine);
+        while( --extraSpaces != -1)
+            sb.append(' ');
+        sb.append(' ')
+          .append(endComment);
+        offsetBOL = textArea.getLineStartOffset(line);
+        textArea.setCaretPosition(offsetBOL);
+        textArea.goToEndOfLine(true);
+        textArea.setSelectedText(sb.toString());
+/*      use this instead if you want tabs back in:           */
+/*      textArea.setSelectedText(TextUtilities.spacesToTabs( */
+/*          sb.toString(), buffer.getTabSize());             */
+        sb.setLength(startComment.length());
+    }
+}
+
+makeDoubleBoxComment();
+
+// end of Make_Double_Box_Comment.bsh
+

@@ -338,6 +338,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="help-api">
+	<CODE>
+		HelpViewer.gotoFile("users-guide/api-guide.html");
+	</CODE>
+</ACTION>
+
 <ACTION NAME="help-changes">
 	<CODE>
 		HelpViewer.gotoFile("CHANGES.txt");
@@ -347,6 +353,12 @@
 <ACTION NAME="help-copying">
 	<CODE>
 		HelpViewer.gotoFile("COPYING.txt");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="help-copying-doc">
+	<CODE>
+		HelpViewer.gotoFile("COPYING.DOC.txt");
 	</CODE>
 </ACTION>
 

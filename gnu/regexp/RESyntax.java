@@ -1,23 +1,24 @@
 /*
  *  gnu/regexp/RESyntax.java
- *  Copyright (C) 1998 Wes Biggs
+ *  Copyright (C) 1998-2001 Wes Biggs
  *
  *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Library General Public License as published
- *  by the Free Software Foundation; either version 2 of the License, or
+ *  it under the terms of the GNU Lesser General Public License as published
+ *  by the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Library General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 package gnu.regexp;
+import java.io.Serializable;
 import java.util.BitSet;
 
 /**
@@ -31,8 +32,17 @@ import java.util.BitSet;
  * @author <A HREF="mailto:wes@cacas.org">Wes Biggs</A>
  */
 
-public class RESyntax {
-  private BitSet bits;
+public class RESyntax implements Serializable {
+    static final String DEFAULT_LINE_SEPARATOR = System.getProperty("line.separator");
+
+    private static final String SYNTAX_IS_FINAL = "Syntax has been declared final and cannot be modified";
+
+    private BitSet bits;
+
+    // true for the constant defined syntaxes
+    private boolean isFinal = false;
+
+    private String lineSeparator = DEFAULT_LINE_SEPARATOR;
 
   // Values for constants are bit indexes
 
@@ -268,109 +278,124 @@ public class RESyntax {
   public static final RESyntax RE_SYNTAX_PERL5_S;
   
   static {
-    // Define syntaxes
+      // Define syntaxes
+      
+      RE_SYNTAX_EMACS = new RESyntax().makeFinal();
+      
+      RESyntax RE_SYNTAX_POSIX_COMMON = new RESyntax()
+	  .set(RE_CHAR_CLASSES)
+	  .set(RE_DOT_NEWLINE)
+	  .set(RE_DOT_NOT_NULL)
+	  .set(RE_INTERVALS)
+	  .set(RE_NO_EMPTY_RANGES)
+	  .makeFinal();
+      
+      RE_SYNTAX_POSIX_BASIC = new RESyntax(RE_SYNTAX_POSIX_COMMON)
+	  .set(RE_BK_PLUS_QM)
+	  .makeFinal();
+      
+      RE_SYNTAX_POSIX_EXTENDED = new RESyntax(RE_SYNTAX_POSIX_COMMON)
+	  .set(RE_CONTEXT_INDEP_ANCHORS)
+	  .set(RE_CONTEXT_INDEP_OPS)
+	  .set(RE_NO_BK_BRACES)
+	  .set(RE_NO_BK_PARENS)
+	  .set(RE_NO_BK_VBAR)
+	  .set(RE_UNMATCHED_RIGHT_PAREN_ORD)
+	  .makeFinal();
 
-    RE_SYNTAX_EMACS = new RESyntax();
-
-    RESyntax RE_SYNTAX_POSIX_COMMON = new RESyntax()
-      .set(RE_CHAR_CLASSES)
-      .set(RE_DOT_NEWLINE)
-      .set(RE_DOT_NOT_NULL)
-      .set(RE_INTERVALS)
-      .set(RE_NO_EMPTY_RANGES);
-
-    RE_SYNTAX_POSIX_BASIC = new RESyntax(RE_SYNTAX_POSIX_COMMON)
-      .set(RE_BK_PLUS_QM);
-
-    RE_SYNTAX_POSIX_EXTENDED = new RESyntax(RE_SYNTAX_POSIX_COMMON)
-      .set(RE_CONTEXT_INDEP_ANCHORS)
-      .set(RE_CONTEXT_INDEP_OPS)
-      .set(RE_NO_BK_BRACES)
-      .set(RE_NO_BK_PARENS)
-      .set(RE_NO_BK_VBAR)
-      .set(RE_UNMATCHED_RIGHT_PAREN_ORD);
-
-    RE_SYNTAX_AWK = new RESyntax()
-      .set(RE_BACKSLASH_ESCAPE_IN_LISTS)
-      .set(RE_DOT_NOT_NULL)
-      .set(RE_NO_BK_PARENS)
-      .set(RE_NO_BK_REFS)
-      .set(RE_NO_BK_VBAR)
-      .set(RE_NO_EMPTY_RANGES)
-      .set(RE_UNMATCHED_RIGHT_PAREN_ORD);
+      RE_SYNTAX_AWK = new RESyntax()
+	  .set(RE_BACKSLASH_ESCAPE_IN_LISTS)
+	  .set(RE_DOT_NOT_NULL)
+	  .set(RE_NO_BK_PARENS)
+	  .set(RE_NO_BK_REFS)
+	  .set(RE_NO_BK_VBAR)
+	  .set(RE_NO_EMPTY_RANGES)
+	  .set(RE_UNMATCHED_RIGHT_PAREN_ORD)
+	  .makeFinal();
+      
+      RE_SYNTAX_POSIX_AWK = new RESyntax(RE_SYNTAX_POSIX_EXTENDED)
+	  .set(RE_BACKSLASH_ESCAPE_IN_LISTS)
+	  .makeFinal();
+      
+      RE_SYNTAX_GREP = new RESyntax()
+	  .set(RE_BK_PLUS_QM)
+	  .set(RE_CHAR_CLASSES)
+	  .set(RE_HAT_LISTS_NOT_NEWLINE)
+	  .set(RE_INTERVALS)
+	  .set(RE_NEWLINE_ALT)
+	  .makeFinal();
+      
+      RE_SYNTAX_EGREP = new RESyntax()
+	  .set(RE_CHAR_CLASSES)
+	  .set(RE_CONTEXT_INDEP_ANCHORS)
+	  .set(RE_CONTEXT_INDEP_OPS)
+	  .set(RE_HAT_LISTS_NOT_NEWLINE)
+	  .set(RE_NEWLINE_ALT)
+	  .set(RE_NO_BK_PARENS)
+	  .set(RE_NO_BK_VBAR)
+	  .makeFinal();
     
-    RE_SYNTAX_POSIX_AWK = new RESyntax(RE_SYNTAX_POSIX_EXTENDED)
-      .set(RE_BACKSLASH_ESCAPE_IN_LISTS);
+      RE_SYNTAX_POSIX_EGREP = new RESyntax(RE_SYNTAX_EGREP)
+	  .set(RE_INTERVALS)
+	  .set(RE_NO_BK_BRACES)
+	  .makeFinal();
     
-    RE_SYNTAX_GREP = new RESyntax()
-      .set(RE_BK_PLUS_QM)
-      .set(RE_CHAR_CLASSES)
-      .set(RE_HAT_LISTS_NOT_NEWLINE)
-      .set(RE_INTERVALS)
-      .set(RE_NEWLINE_ALT);
-
-    RE_SYNTAX_EGREP = new RESyntax()
-      .set(RE_CHAR_CLASSES)
-      .set(RE_CONTEXT_INDEP_ANCHORS)
-      .set(RE_CONTEXT_INDEP_OPS)
-      .set(RE_HAT_LISTS_NOT_NEWLINE)
-      .set(RE_NEWLINE_ALT)
-      .set(RE_NO_BK_PARENS)
-      .set(RE_NO_BK_VBAR);
+      /* P1003.2/D11.2, section 4.20.7.1, lines 5078ff.  */
     
-    RE_SYNTAX_POSIX_EGREP = new RESyntax(RE_SYNTAX_EGREP)
-      .set(RE_INTERVALS)
-      .set(RE_NO_BK_BRACES);
+      RE_SYNTAX_ED = new RESyntax(RE_SYNTAX_POSIX_BASIC)
+	  .makeFinal();
     
-    /* P1003.2/D11.2, section 4.20.7.1, lines 5078ff.  */
-    
-    RE_SYNTAX_ED = new RESyntax(RE_SYNTAX_POSIX_BASIC);
-    
-    RE_SYNTAX_SED = new RESyntax(RE_SYNTAX_POSIX_BASIC);
-    
-    RE_SYNTAX_POSIX_MINIMAL_BASIC = new RESyntax(RE_SYNTAX_POSIX_COMMON)
-      .set(RE_LIMITED_OPS);
-    
-    /* Differs from RE_SYNTAX_POSIX_EXTENDED in that RE_CONTEXT_INVALID_OPS
-       replaces RE_CONTEXT_INDEP_OPS and RE_NO_BK_REFS is added. */
-
-    RE_SYNTAX_POSIX_MINIMAL_EXTENDED = new RESyntax(RE_SYNTAX_POSIX_COMMON)
-      .set(RE_CONTEXT_INDEP_ANCHORS)
-      .set(RE_CONTEXT_INVALID_OPS)
-      .set(RE_NO_BK_BRACES)
-      .set(RE_NO_BK_PARENS)
-      .set(RE_NO_BK_REFS)
-      .set(RE_NO_BK_VBAR)
-      .set(RE_UNMATCHED_RIGHT_PAREN_ORD);
-    
-    /* There is no official Perl spec, but here's a "best guess" */
-    
-    RE_SYNTAX_PERL4 = new RESyntax()
-      .set(RE_BACKSLASH_ESCAPE_IN_LISTS)
-      .set(RE_CONTEXT_INDEP_ANCHORS)
-      .set(RE_CONTEXT_INDEP_OPS)          // except for '{', apparently
-      .set(RE_INTERVALS)
-      .set(RE_NO_BK_BRACES)
-      .set(RE_NO_BK_PARENS)
-      .set(RE_NO_BK_VBAR)
-      .set(RE_NO_EMPTY_RANGES)
-      .set(RE_CHAR_CLASS_ESCAPES);    // \d,\D,\w,\W,\s,\S
-
-    RE_SYNTAX_PERL4_S = new RESyntax(RE_SYNTAX_PERL4)
-      .set(RE_DOT_NEWLINE);
-    
-    RE_SYNTAX_PERL5 = new RESyntax(RE_SYNTAX_PERL4)
-      .set(RE_PURE_GROUPING)          // (?:)
-      .set(RE_STINGY_OPS)             // *?,??,+?,{}?
-      .set(RE_LOOKAHEAD)              // (?=)(?!) not implemented
-      .set(RE_STRING_ANCHORS)         // \A,\Z
-      .set(RE_CHAR_CLASS_ESC_IN_LISTS)// \d,\D,\w,\W,\s,\S within []
-      .set(RE_COMMENTS);              // (?#)
-    
-    RE_SYNTAX_PERL5_S = new RESyntax(RE_SYNTAX_PERL5)
-      .set(RE_DOT_NEWLINE);
+      RE_SYNTAX_SED = new RESyntax(RE_SYNTAX_POSIX_BASIC)
+	  .makeFinal();
+      
+      RE_SYNTAX_POSIX_MINIMAL_BASIC = new RESyntax(RE_SYNTAX_POSIX_COMMON)
+	  .set(RE_LIMITED_OPS)
+	  .makeFinal();
+      
+      /* Differs from RE_SYNTAX_POSIX_EXTENDED in that RE_CONTEXT_INVALID_OPS
+	 replaces RE_CONTEXT_INDEP_OPS and RE_NO_BK_REFS is added. */
+      
+      RE_SYNTAX_POSIX_MINIMAL_EXTENDED = new RESyntax(RE_SYNTAX_POSIX_COMMON)
+	  .set(RE_CONTEXT_INDEP_ANCHORS)
+	  .set(RE_CONTEXT_INVALID_OPS)
+	  .set(RE_NO_BK_BRACES)
+	  .set(RE_NO_BK_PARENS)
+	  .set(RE_NO_BK_REFS)
+	  .set(RE_NO_BK_VBAR)
+	  .set(RE_UNMATCHED_RIGHT_PAREN_ORD)
+	  .makeFinal();
+      
+      /* There is no official Perl spec, but here's a "best guess" */
+      
+      RE_SYNTAX_PERL4 = new RESyntax()
+	  .set(RE_BACKSLASH_ESCAPE_IN_LISTS)
+	  .set(RE_CONTEXT_INDEP_ANCHORS)
+	  .set(RE_CONTEXT_INDEP_OPS)          // except for '{', apparently
+	  .set(RE_INTERVALS)
+	  .set(RE_NO_BK_BRACES)
+	  .set(RE_NO_BK_PARENS)
+	  .set(RE_NO_BK_VBAR)
+	  .set(RE_NO_EMPTY_RANGES)
+	  .set(RE_CHAR_CLASS_ESCAPES)    // \d,\D,\w,\W,\s,\S
+	  .makeFinal();
+      
+      RE_SYNTAX_PERL4_S = new RESyntax(RE_SYNTAX_PERL4)
+	  .set(RE_DOT_NEWLINE)
+	  .makeFinal();
+      
+      RE_SYNTAX_PERL5 = new RESyntax(RE_SYNTAX_PERL4)
+	  .set(RE_PURE_GROUPING)          // (?:)
+	  .set(RE_STINGY_OPS)             // *?,??,+?,{}?
+	  .set(RE_LOOKAHEAD)              // (?=)(?!) not implemented
+	  .set(RE_STRING_ANCHORS)         // \A,\Z
+	  .set(RE_CHAR_CLASS_ESC_IN_LISTS)// \d,\D,\w,\W,\s,\S within []
+	  .set(RE_COMMENTS)              // (?#)
+	  .makeFinal();
+      
+      RE_SYNTAX_PERL5_S = new RESyntax(RE_SYNTAX_PERL5)
+	  .set(RE_DOT_NEWLINE)
+	  .makeFinal();
   }
-
 
   /**
    * Construct a new syntax object with all bits turned off.
@@ -379,6 +404,19 @@ public class RESyntax {
   public RESyntax() {
     bits = new BitSet(BIT_TOTAL);
   }
+
+    /**
+     * Called internally when constructing predefined syntaxes
+     * so their interpretation cannot vary.  Conceivably useful
+     * for your syntaxes as well.  Causes IllegalAccessError to
+     * be thrown if any attempt to modify the syntax is made.
+     *
+     * @returns this object for convenient chaining
+     */
+    public RESyntax makeFinal() {
+	isFinal = true;
+	return this;
+    }
 
   /**
    * Construct a new syntax object with all bits set the same 
@@ -396,11 +434,57 @@ public class RESyntax {
   }
 
   /**
-   * Set a given bit in this syntax.  Returns a reference to this syntax
-   * for easy chaining.
+   * Set a given bit in this syntax. 
+   *
+   * @param index the constant (RESyntax.RE_xxx) bit to set.
+   * @returns a reference to this object for easy chaining.
    */
   public RESyntax set(int index) {
+      if (isFinal) throw new IllegalAccessError(SYNTAX_IS_FINAL);
     bits.set(index);
     return this;
   }
+
+  /**
+   * Clear a given bit in this syntax. 
+   *
+   * @param index the constant (RESyntax.RE_xxx) bit to clear.
+   * @returns a reference to this object for easy chaining.
+   */
+  public RESyntax clear(int index) {
+      if (isFinal) throw new IllegalAccessError(SYNTAX_IS_FINAL);
+      bits.clear(index);
+      return this;
+  }
+
+    /**
+     * Changes the line separator string for regular expressions
+     * created using this RESyntax.  The default separator is the
+     * value returned by the system property "line.separator", which
+     * should be correct when reading platform-specific files from a
+     * filesystem.  However, many programs may collect input from
+     * sources where the line separator is differently specified (for
+     * example, in the applet environment, the text box widget
+     * interprets line breaks as single-character newlines,
+     * regardless of the host platform.
+     *
+     * Note that setting the line separator to a character or
+     * characters that have specific meaning within the current syntax
+     * can cause unexpected chronosynclastic infundibula.
+     *
+     * @returns this object for convenient chaining 
+     */
+    public RESyntax setLineSeparator(String aSeparator) {
+	if (isFinal) throw new IllegalAccessError(SYNTAX_IS_FINAL);
+	lineSeparator = aSeparator;
+	return this;
+    }
+
+    /**
+     * Returns the currently active line separator string.  The default
+     * is the platform-dependent system property "line.separator".
+     */
+    public String getLineSeparator() {
+	return lineSeparator;
+    }
 }

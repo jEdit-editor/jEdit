@@ -128,8 +128,10 @@ public class SearchBar extends JPanel
 		{
 			Log.log(Log.ERROR,this,bl);
 		}
-		catch(Exception ia)
+		catch(Exception e)
 		{
+			Log.log(Log.DEBUG,this,e);
+
 			// invalid regexp, ignore
 			// return true to avoid annoying beeping while
 			// typing a re

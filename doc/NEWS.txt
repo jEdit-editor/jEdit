@@ -2,10 +2,12 @@ MAJOR CHANGES IN JEDIT 3.1 SINCE 3.0
 
 - Folding
 - Startup macro
+- Macro guide and more sample macros
 - File permissions on Unix
 - Sessions moved to BufferList plugin
 - Tabs in abbrevs
 - All fonts available
 - Improved shortcuts option pane
 - Mode catalog
+- New gnu.regexp
 - Improved undo

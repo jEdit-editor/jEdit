@@ -92,6 +92,9 @@ actually a Java bug, or a well-known problem.
   much I can do about this until Sun fixes several outstanding bugs in
   Java.
 
+- Aborting I/O operations in the I/O Progress Monitor doesn't always
+  work.
+
 - Edit modes you write will not be available in the editor until you add
   an entry to the `catalog' file in the appropriate modes directory.
 
@@ -107,7 +110,7 @@ actually a Java bug, or a well-known problem.
   paste between jEdit and other programs. This is mainly because Java
   can only access the system clipboard, and not the primary selection
   (which some programs use instead of the clipboard). The XClipboard
-  plugin available from <http://jedit.standmed.com> solves part of the
+  plugin available from <http://plugins.jedit.org> solves part of the
   problem by allowing read-only access to the primary selection.
 
 - Because jEdit is written in Java, it will always be slower than a
@@ -193,6 +196,10 @@ Jason Ginchereau:
 
 Jerry McBride:
 	- NetRexx syntax highlighting
+
+John Gellene:
+	- 'Writing macros' section of user's guide
+	- A large number of sample macros
 
 Jonathan Revusky:
 	- Python syntax highlighting

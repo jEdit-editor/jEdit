@@ -1,0 +1,20 @@
+// Go_to_Console.bsh -- opens (if necessary), shows
+// and sets focus to the "Console" shell in the Console plugin
+
+if(jEdit.getPlugin("console.ConsolePlugin") == null)
+{
+    Macros.error(view,"You must install the Console plugin"
+        + " to use this macro.");
+}
+else
+{
+    view.getDockableWindowManager().addDockableWindow("console");
+    console = view.getDockableWindowManager().getDockableWindow("console");
+    console.setShell("Console");
+    c = console.getComponent(0).getComponent(1).getComponent(1);
+    c.requestFocus();
+}
+
+// end Go_to_Console.bsh
+
+
