@@ -10,52 +10,52 @@
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo></keycap>
+      <entry><keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo></entry>
       <entry>New file.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>O</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>O</keycap></keycombo></entry>
       <entry>Open file.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo></entry>
       <entry>Close buffer.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo></entry>
       <entry>Close all buffers.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></entry>
       <entry>Save buffer.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></entry>
       <entry>Save all buffers.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></entry>
       <entry>Print buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Page Up</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>Page Up</keycap></keycombo></entry>
       <entry>Go to previous buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Page Down</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>Page Down</keycap></keycombo></entry>
       <entry>Go to next buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo></entry>
       <entry>Go to recent buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Q</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>Q</keycap></keycombo></entry>
       <entry>Exit jEdit.</entry>
      </row>
     </tbody>
@@ -68,31 +68,31 @@
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo></entry>
       <entry>Toggle gutter (line numbering).</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>2</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>2</keycap></keycombo></entry>
       <entry>Split view horizontally.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>3</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>3</keycap></keycombo></entry>
       <entry>Split view vertically.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>1</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>1</keycap></keycombo></entry>
       <entry>Unsplit.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Page Up</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Alt</keycap><keycap>Page Up</keycap></keycombo></entry>
       <entry>Go to previous text area.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Page Down</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Alt</keycap><keycap>Page Down</keycap></keycombo></entry>
       <entry>Go to next text area.</entry>
      </row>
      <row>
@@ -111,7 +111,7 @@
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
@@ -133,10 +133,10 @@
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycap><replaceable>Arrow</keycap></keycap></entry>
+      <entry><keycap><replaceable>Arrow</replaceable></keycap></entry>
       <entry>Move caret one character or line.</entry>
      </row>
      <row>
@@ -191,7 +191,7 @@
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Shift</keycap>
@@ -258,7 +258,7 @@
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
@@ -277,7 +277,7 @@
      </row>
      <row>
       <entry><keycombo><keycap>Alt</keycap><keycap>'</keycap></keycombo>;
-      <keycombo><keycap>Alt</keycap><keycap>/</keycap></keycombo></keycombo>
+      <keycombo><keycap>Alt</keycap><keycap>/</keycap></keycombo></entry>
       <entry>Scroll up; down one page.</entry>
      </row>
     </tbody>
@@ -291,7 +291,7 @@
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>Z</keycap></keycombo></entry>
@@ -308,7 +308,7 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>Backspace</keycap></keycombo>;
-      <keycombo><keycap>Control</keycap><keycap>Delete</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>Delete</keycap></keycombo></entry>
       <entry>Delete word before; after caret.</entry>
      </row>
      <row>
@@ -347,11 +347,11 @@
 
  <bridgehead renderas="sect1">Clipboard and Registers</bridgehead>
   <para>
-   For details, see <xref linkend="text-transfer">.
+   For details, see <xref linkend="text-transfer" />.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo></entry>
@@ -382,21 +382,21 @@
       <keycombo><keycap>Control</keycap><keycap>X</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Cut selected text to register <replaceable>key</entry>.</entry>
+      <entry>Cut selected text to register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>C</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Copy selected text to register <replaceable>key</entry>.</entry>
+      <entry>Copy selected text to register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>U</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Append selected text to register <replaceable>key</entry>,
+      <entry>Append selected text to register <replaceable>key</replaceable>,
       removing it from the buffer.</entry>
      </row>
      <row>
@@ -404,7 +404,7 @@
       <keycombo><keycap>Control</keycap><keycap>A</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Append selected text to register <replaceable>key</entry>,
+      <entry>Append selected text to register <replaceable>key</replaceable>,
       leaving it in the buffer.</entry>
      </row>
      <row>
@@ -412,7 +412,7 @@
       <keycombo><keycap>Control</keycap><keycap>V</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Paste contents of register <replaceable>key</entry>.</entry>
+      <entry>Paste contents of register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
@@ -426,11 +426,11 @@
 
  <bridgehead renderas="sect1">Markers</bridgehead>
   <para>
-   For details, see <xref linkend="markers">.
+   For details, see <xref linkend="markers" />.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
@@ -443,25 +443,25 @@
       <entry><keycombo><keycap>Control</keycap><keycap>T</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Add marker with shortcut <replaceable>key</entry>.</entry>
+      <entry>Add marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>Y</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Go to marker with shortcut <replaceable>key</entry>.</entry>
+      <entry>Go to marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>U</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Select to marker with shortcut <replaceable>key</entry>.</entry>
+      <entry>Select to marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>K</keycap>
       </keycombo>
       <keycap><replaceable>key</keycap></keycap></entry>
-      <entry>Go to marker with shortcut <replaceable>key</entry>, and
+      <entry>Go to marker with shortcut <replaceable>key</replaceable>, and
       move the marker to the previous caret position.</entry>
      </row>
      <row>
@@ -475,55 +475,55 @@
 
  <bridgehead renderas="sect1">Search and Replace</bridgehead>
   <para>
-   For details, see <xref linkend="search-replace">.
+   For details, see <xref linkend="search-replace" />.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo></entry>
       <entry>Open search and replace dialog box.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>G</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>G</keycap></keycombo></entry>
       <entry>Find next.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>H</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>H</keycap></keycombo></entry>
       <entry>Find previous.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo></entry>
       <entry>Find selection.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo></entry>
       <entry>Search in open buffers.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo></entry>
       <entry>Search in directory.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo></entry>
       <entry>Replace in selection.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>G</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>G</keycap></keycombo></entry>
       <entry>Replace in selection and find next.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo></entry>
       <entry>Quick incremental search.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo></keycombo>
+      <entry><keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo></entry>
       <entry>Quick HyperSearch.</entry>
      </row>
     </tbody>
@@ -532,12 +532,12 @@
 
  <bridgehead renderas="sect1">Source Code Editing</bridgehead>
   <para>
-   For details, see <xref linkend="abbrevs">, <xref linkend="indent">
-   and <xref linkend="commenting">.
+   For details, see <xref linkend="abbrevs" />, <xref linkend="indent" />
+   and <xref linkend="commenting" />.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>;</keycap></keycombo></entry>
@@ -576,11 +576,11 @@
 
  <bridgehead renderas="sect1">Folding and Narrowing</bridgehead>
   <para>
-   For details, see <xref linkend="folding"> and <xref linkend="narrowing">.
+   For details, see <xref linkend="folding" /> and <xref linkend="narrowing" />.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo></entry>
@@ -625,35 +625,35 @@
 
  <bridgehead renderas="sect1">Macros</bridgehead>
   <para>
-   For details, see <xref linkend="macros">.
+   For details, see <xref linkend="macros" />.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
-    <colspec colnum="1" colwidth="2.2in">
+    <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo></entry>
       <entry>Record macro.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo></entry>
       <entry>Record temporary macro.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></entry>
       <entry>Stop recording.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></entry>
       <entry>Run temporary macro.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo></entry>
       <entry>Run most recently played or recorded macro.</entry>
      </row>
     </tbody>

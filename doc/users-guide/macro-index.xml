@@ -1,11 +1,12 @@
-<!-- jEdit 3.1 Macro Guide, (C) 2001 John Gellene -->
+<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene      -->
+<!-- Thu Jun 21 23:51:34 EDT 2001 @202 /Internet Time/ -->
 
-<!-- jEdit buffer-local properties: -->
+<!-- jEdit buffer-local properties:                    -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
 
-<!-- covers index to installed macro set -->
+<!-- covers index to installed macro set               -->
 
-<appendix id=macro-index><title>Macros Included With jEdit</>
+<appendix id="macro-index"><title>Macros Included With jEdit</title>
 
 <para>
     jEdit comes with a large number of sample
@@ -14,7 +15,7 @@
     usage notes.
 </para>
 
-<sect1 id=macros-files><title>File Management Macros</>
+<sect1 id="macros-files"><title>File Management Macros</title>
 <para>
     These macros automate the opening and closing of files.
 </para>
@@ -22,15 +23,15 @@
 <itemizedlist>
 
 <listitem>
-    <para><filename>Browse_Directory.bsh</></para>
+    <para><filename>Browse_Directory.bsh</filename></para>
     <abstract><para>
-        Opens
-        a directory supplied by the user in the file system browser.
+        Opens a directory supplied by the user in the file system
+        browser.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Close_Except_Active.bsh</></para>
+    <para><filename>Close_Except_Active.bsh</filename></para>
     <abstract><para>
         Closes all files except the current buffer.
     </para></abstract>
@@ -40,14 +41,14 @@
 </listitem>
 
 <listitem>
-    <para><filename>Open_Path.bsh</></para>
+    <para><filename>Open_Path.bsh</filename></para>
     <abstract><para>
         Opens the file supplied by the user in an input dialog.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Open_Selection.bsh</></para>
+    <para><filename>Open_Selection.bsh</filename></para>
     <abstract><para>
         Opens the file named by the current buffer's selected text.
     </para></abstract>
@@ -58,7 +59,7 @@
 
 </sect1>
 
-<sect1 id=macros-text><title>Text Macros</>
+<sect1 id="macros-text"><title>Text Macros</title>
 <para>
     These macros generate various forms of formatted text.
 </para>
@@ -66,50 +67,48 @@
 <itemizedlist>
 
 <listitem>
-    <para><filename>Add_Prefix_and_Suffix.bsh</></para>
+    <para><filename>Add_Prefix_and_Suffix.bsh</filename></para>
     <abstract><para>
-        Adds user-supplied <quote>prefix</> and <quote>suffix</> text to each line
-        in a group of selected lines.
+        Adds user-supplied <quote>prefix</quote> and <quote>suffix</quote>
+        text to each line in a group of selected lines.
     </para></abstract>
     <para>
         Text is added after leading whitespace and before trailing whitespace.
-        A dialog window receives input and <quote>remembers</> past entries.
+        A dialog window receives input and <quote>remembers</quote> past entries.
     </para>
 </listitem>
 
 <listitem>
-    <para><filename>Insert_Date.bsh</></para>
+    <para><filename>Insert_Date.bsh</filename></para>
     <abstract><para>
         Inserts the current date and time in the current buffer.
     </para></abstract>
     <para>
         The inserted text includes a representation of the time in the
-        <quote>Internet Time</> format.
+        <quote>Internet Time</quote> format.
     </para>
 </listitem>
 
-
-
 <listitem>
-    <para><filename>Insert_Tag.bsh</></para>
+    <para><filename>Insert_Tag.bsh</filename></para>
     <abstract><para>
         Inserts a balanced pair of markup tags as supplied in a input dialog.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Toggle_Line_Comment.bsh</filename></para>
-    <abstract><para>
-		Toggles line comments, alternately inserting and deleting them
-		at the beginning of each selected line.
-    </para></abstract>
+  <para><filename>Toggle_Line_Comment.bsh</filename></para>
+  <abstract><para>
+	  Toggles line comments, alternately inserting and deleting them
+    at the beginning of each selected line.
+  </para></abstract>
 	<para>
 		If there is no selection, the macro operates on the current line.
 	</para>
 </listitem>
 
 <listitem>
-    <para><filename>Make_Double_Box_Comments.bsh</></para>
+    <para><filename>Make_Double_Box_Comments.bsh</filename></para>
     <abstract><para>
         Makes a individual wing style comment of equal width for each
         selected line in the current buffer.
@@ -128,14 +127,14 @@
 
 
 <listitem>
-    <para><filename>Reverse.bsh</></para>
+    <para><filename>Reverse.bsh</filename></para>
     <abstract><para>
         Reverses the selected text in the current buffer.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Rot13.bsh</></para>
+    <para><filename>Rot13.bsh</filename></para>
     <abstract><para>
         Replaces the selected text with the text encoded by the Rot13 protocol.
     </para></abstract>
@@ -170,7 +169,7 @@
 </itemizedlist>
 </sect1>
 
-<sect1 id=macros-java><title>Java Code Macros</>
+<sect1 id="macros-java"><title>Java Code Macros</title>
 <para>
     These macros handle text formatting and generation tasks that are
     particularly useful in writing Java code.
@@ -179,14 +178,14 @@
 <itemizedlist>
 
 <listitem>
-    <para><filename>Get_Class_Name.bsh</></para>
+    <para><filename>Get_Class_Name.bsh</filename></para>
     <abstract><para>
         Inserts a Java class name based upon the buffer's file name.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Get_Package_Name.bsh</></para>
+    <para><filename>Get_Package_Name.bsh</filename></para>
     <abstract><para>
         Inserts a plauisble Java package name for the current buffer.
     </para></abstract>
@@ -201,13 +200,13 @@
 </listitem>
 
 <listitem>
-    <para><filename>Make_Get_and_Set_Methods.bsh</></para>
+    <para><filename>Make_Get_and_Set_Methods.bsh</filename></para>
     <abstract><para>
         Creates <function>getXXX()</function> or <function>setXXX()</function>
         methods that can be pasted into the buffer text.
     </para></abstract>
     <para>
-        This macro presents a dialog that will <quote>grab</> the names
+        This macro presents a dialog that will <quote>grab</quote> the names
         of instance variables from the caret line of the current buffer
         and paste a corresponding <function>getXXX()</function> or
         <function>setXXX()</function> method to one of two text areas in the
@@ -227,9 +226,9 @@
 </listitem>
 
 <listitem>
-    <para><filename>Tidy_Block_Comments.bsh</></para>
+    <para><filename>Tidy_Block_Comments.bsh</filename></para>
     <abstract><para>
-    Formats all end-of-line <quote>block</> comments to begin at a fixed
+    Formats all end-of-line <quote>block</quote> comments to begin at a fixed
     column.
     </para></abstract>
     <para>
@@ -254,7 +253,7 @@
 </sect1>
 
 
-<sect1 id=macros-search><title>Search Macros</>
+<sect1 id="macros-search"><title>Search Macros</title>
 <para>
     These macros provide various shortcuts to search methods.  A group
     of macros in this category allow the user to search of other
@@ -265,10 +264,10 @@
 <itemizedlist>
 
 <listitem>
-    <para><filename>Find_Matching_File.bsh</></para>
+    <para><filename>Find_Matching_File.bsh</filename></para>
     <abstract><para>
-        Switches between C++ header (<filename>.h</>) and source
-        (<filename>.cpp</>) files with the same name in the same
+        Switches between C++ header (<filename>.h</filename>) and source
+        (<filename>.cpp</filename>) files with the same name in the same
         directory.
     </para></abstract>
     <note><para>
@@ -277,7 +276,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Next_Char.bsh</></para>
+    <para><filename>Next_Char.bsh</filename></para>
     <abstract><para>
         Finds next occurence of character on current line.
     </para></abstract>
@@ -292,19 +291,20 @@
         <function>InputHandler.readNextChar()</function> as a means of
         obtaining user input.
     </para>
+ </listitem>
 
 
 <listitem>
-    <para><filename>Write_HyperSearch_Results.bsh</></para>
+    <para><filename>Write_HyperSearch_Results.bsh</filename></para>
     <abstract><para>
         This macro writes the contents of the <quote>HyperSearch
-        Results</> window to a new text buffer.
+        Results</quote> window to a new text buffer.
     </para></abstract>
     <para>
         The macro employs a simple text report format. Since
         the HyperSearch window's object does not maintain the search
         settings that produced the displayed results, the macro examines the
-        current settings in the <classname>SearchAndReplace</> object.
+        current settings in the <classname>SearchAndReplace</classname> object.
         It confirms that the HyperSearch option is selected before writing
         the report. However, the only way to be sure that the report's contents
         are completely accurate is to run the macro immediately after a
@@ -314,7 +314,7 @@
 
 </itemizedlist>
 
-<sect2 id=macros-search-findx-group><title>The Find_Occurrence Macro Group</>
+<sect2 id="macros-search-findx-group"><title>The Find_Occurrence Macro Group</title>
 <para>
     This is a group of macros that enable searches in a text buffer for
     another occurrence of the word situated at or immediately
@@ -328,7 +328,7 @@
     Because the searching routine for each procedure has common code, the
     set of macros consists of four macros that set a temporary jEdit
     property and then call the main search macro,
-    <filename>Find_Occurrence.bsh</>. That macro reads the
+    <filename>Find_Occurrence.bsh</filename>. That macro reads the
     temporary property, executes the corresponding search procedure, and
     erases the property. If the property cannot be found, the search routine
     looks for the next succeeding occurrence of the search term.
@@ -341,7 +341,7 @@
 
 <itemizedlist>
 <listitem>
-    <para><filename>Find_Occurrence.bsh</></para>
+    <para><filename>Find_Occurrence.bsh</filename></para>
     <abstract><para>
         This macro runs the search routine corresponding to the property set
         by one of its companion macros.
@@ -356,43 +356,43 @@
 </listitem>
 
 <listitem>
-    <para><filename>Find_First_Occurrence.bsh</></para>
+    <para><filename>Find_First_Occurrence.bsh</filename></para>
     <abstract><para>
-        Calls <filename>Find_Occurrence</> to find the first
+        Calls <filename>Find_Occurrence</filename> to find the first
         occurrence of the word on or to the left of the editing caret.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Find_Previous_Occurrence.bsh</></para>
+    <para><filename>Find_Previous_Occurrence.bsh</filename></para>
     <abstract><para>
-        Calls <filename>Find_Occurrence</> to find the immediately
+        Calls <filename>Find_Occurrence</filename> to find the immediately
         preceding occurrence of the word on or to the left of the editing
         caret.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Find_Next_Occurrence.bsh</></para>
+    <para><filename>Find_Next_Occurrence.bsh</filename></para>
     <abstract><para>
-        Calls <filename>Find_Occurrence</> to find the next
+        Calls <filename>Find_Occurrence</filename> to find the next
         occurrence of the word on or to the left of the editing caret.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Find_Last_Occurrence.bsh</></para>
+    <para><filename>Find_Last_Occurrence.bsh</filename></para>
     <abstract><para>
-        Calls <filename>Find_Occurrence</> to find the last
+        Calls <filename>Find_Occurrence</filename> to find the last
         occurrence of the word on or to the left of the editing caret.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Return_From_Find.bsh</></para>
+    <para><filename>Return_From_Find.bsh</filename></para>
     <abstract><para>
         Returns the user to the buffer and location specified in the
-        bookmark created by <filename>Find_Occurrence</>,
+        bookmark created by <filename>Find_Occurrence</filename>,
         reopening a file if necessary.
     </para></abstract>
     <para>
@@ -411,7 +411,7 @@
 
 </sect1>
 
-<sect1 id=macros-console><title>Console Plugin Macros</title>
+<sect1 id="macros-console"><title>Console Plugin Macros</title>
 <para>
     The Console plugin allows the user to run commands in various available
     shells and view output in a dedicated text window.  The following macros
@@ -424,7 +424,7 @@
 
 <itemizedlist>
 <!-- <listitem>
-    <para><filename>Compile_in_New_Thread.bsh</></para>
+    <para><filename>Compile_in_New_Thread.bsh</filename></para>
     <abstract><para>
         Executes a designated compiler in a separate thread.
     </para></abstract>
@@ -441,16 +441,16 @@
 </listitem> -->
 
 <listitem>
-    <para><filename>Display_Console_Output.bsh</></para>
+    <para><filename>Display_Console_Output.bsh</filename></para>
     <abstract><para>
         Copies contents of Console's output window to a new text buffer.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Go_to_Console.bsh</></para>
+    <para><filename>Go_to_Console.bsh</filename></para>
     <abstract><para>
-        Sets the input focus to the <quote>Console</> shell.
+        Sets the input focus to the <quote>Console</quote> shell.
     </para></abstract>
     <para>
         The plugin is opened if necessary.  Binding this macro to a shortcut
@@ -459,7 +459,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Run_java.bsh</></para>
+    <para><filename>Run_java.bsh</filename></para>
     <abstract><para>
         Runs <application>java</application> on the current buffer in
         the Console plugin.
@@ -472,7 +472,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Run_javac.bsh</></para>
+    <para><filename>Run_javac.bsh</filename></para>
     <abstract><para>
         Runs <application>javac</application> on the current buffer in the
         Console plugin.
@@ -484,7 +484,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Run_jikes.bsh</></para>
+    <para><filename>Run_jikes.bsh</filename></para>
     <abstract><para>
         Runs <application>jikes</application> on the current buffer in the
         Console plugin.
@@ -498,7 +498,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Run_jmk.bsh</></para>
+    <para><filename>Run_jmk.bsh</filename></para>
     <abstract><para>
         Runs <application>jmk</application> in the Console plugin
         on a target supplied by the user in an input dialog.
@@ -510,7 +510,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Run_make.bsh</></para>
+    <para><filename>Run_make.bsh</filename></para>
     <abstract><para>
         Runs <application>make</application> in the Console plugin on a target
         supplied by the user in an input dialog.
@@ -518,14 +518,14 @@
 </listitem>
 
 <listitem>
-    <para><filename>Run_Last_Console_Command.bsh</></para>
+    <para><filename>Run_Last_Console_Command.bsh</filename></para>
     <abstract><para>
         Reruns the last command run in the Console shell.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Run_Perl_Script.bsh</></para>
+    <para><filename>Run_Perl_Script.bsh</filename></para>
     <abstract><para>
     Runs the current buffer in a Perl interpreter and displays output
     in the Console plugin.
@@ -533,7 +533,7 @@
     <para>
         The Perl interpreter must be supplied by the user.  The macro will
         display an error mesage if the buffer's filename does not have a
-        <filename>.pl</> extension.  The macro also prompts for any command
+        <filename>.pl</filename> extension.  The macro also prompts for any command
         line parameters to be passed to the Perl interpreter.
     </para>
 </listitem>
@@ -543,28 +543,28 @@
 
 </sect1>
 
-<sect1 id=macros-other-plugins><title>Macros for Other Plugins</>
+<sect1 id="macros-other-plugins"><title>Macros for Other Plugins</title>
 <para>These macros work with other plugins written for jEdit.
 </para>
 
 <itemizedlist>
 
 <listitem>
-    <para><filename>Go_to_Clipper.bsh</></para>
+    <para><filename>Go_to_Clipper.bsh</filename></para>
     <abstract><para>
         Sets the input focus to the Clipper plugin.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Go_to_File_System_Browser.bsh</></para>
+    <para><filename>Go_to_File_System_Browser.bsh</filename></para>
     <abstract><para>
         Sets the input focus to the file system browser.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>List_Plugin_Internal_Names.bsh</></para>
+    <para><filename>List_Plugin_Internal_Names.bsh</filename></para>
     <abstract><para>
         Writes a sorted list of installed plugins to the current buffer.
     </para></abstract>
@@ -579,7 +579,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Show_Dual_Diff.bsh</></para>
+    <para><filename>Show_Dual_Diff.bsh</filename></para>
     <abstract><para>
         Runs the JDiff plugin on two files supplied to a dialog.
     </para></abstract>
@@ -589,7 +589,7 @@
 
 </sect1>
 
-<sect1 id=macros-properties><title>Macros for Listing Properties</title>
+<sect1 id="macros-properties"><title>Macros for Listing Properties</title>
 <para>
     These macros produce lists or tables containing properties
     used by the Java platform or jEdit itself.
@@ -599,14 +599,14 @@
 <itemizedlist>
 
 <listitem>
-    <para><filename>jEdit_Properties.bsh</></para>
+    <para><filename>jEdit_Properties.bsh</filename></para>
     <abstract><para>
        Writes an unsorted list of jEdit properties in a new buffer.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>System_Properties.bsh</></para>
+    <para><filename>System_Properties.bsh</filename></para>
     <abstract><para>
         Writes an unsorted list of all Java system properties in a new
         buffer.
@@ -614,7 +614,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Look_and_Feel_Properties.bsh</></para>
+    <para><filename>Look_and_Feel_Properties.bsh</filename></para>
     <abstract><para>
         Writes an unsorted list of the names of Java Look and Feel
         properties in a new buffer.
@@ -625,7 +625,7 @@
 
 </sect1>
 
-<sect1 id=macros-misc><title>Miscellaneous Macros</title>
+<sect1 id="macros-misc"><title>Miscellaneous Macros</title>
 <para>
     While these macros do not fit easily into the other categories, they all provide
     interesting and useful functions.
@@ -645,18 +645,18 @@
 </listitem>
 
 <listitem>
-    <para><filename>Copy_Mode_Abbrevs.bsh</></para>
+    <para><filename>Copy_Mode_Abbrevs.bsh</filename></para>
     <abstract><para>
         Copies all abbreviations from one editing mode to another, overwriting
         any duplicate entries.
     </para></abstract>
     <para>
         A number of jEdit editing modes target languages that share keywords,
-        tags or other features.  Examples include <quote>java</>
-        and <quote>beanshell</>, and <quote>c</> and <quote>c++</>. This macro
+        tags or other features.  Examples include <quote>java</quote>
+        and <quote>beanshell</quote>, and <quote>c</quote> and <quote>c++</quote>. This macro
         saves the trouble of manually editing abbreviations sets to share
         abbreviations between editing modes.  The macro will also permit
-        copying of a mode's abbreviations to the <quote>global</> abbreviation
+        copying of a mode's abbreviations to the <quote>global</quote> abbreviation
         set that is available in all buffers regardless of editing mode.
     </para>
     <para>
@@ -668,7 +668,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Display_Abbreviations.bsh</></para>
+    <para><filename>Display_Abbreviations.bsh</filename></para>
     <abstract><para>
         Displays the abbreviations registered for each of jEdit's
         editing modes.
@@ -685,14 +685,14 @@
 </listitem>
 
 <listitem>
-    <para><filename>Display_Shortcuts.bsh</></para>
+    <para><filename>Display_Shortcuts.bsh</filename></para>
     <abstract><para>
         Displays a sorted list of the keyboard shortcuts currently in effect.
     </para></abstract>
     <para>
         The macro provides a read-only view of the combined contents of
-        <quote>Command Shortcuts</>, <quote>Macro Shortcuts</> and
-        <quote>Plugin Shortcuts</> option panes. Pressing a letter key will
+        <quote>Command Shortcuts</quote>, <quote>Macro Shortcuts</quote> and
+        <quote>Plugin Shortcuts</quote> option panes. Pressing a letter key will
         scroll the table to the first entry beginning with that letter.
         A further option is provided to write the shortcut assignments in a
         text buffer for printing as a reference. Notes in the source code
@@ -702,7 +702,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Evaluate_Buffer_in_BeanShell.bsh</></para>
+    <para><filename>Evaluate_Buffer_in_BeanShell.bsh</filename></para>
     <abstract><para>
         Evaluates contents of current buffer as BeanShell script.  Opens new
         buffer to receive any text output.
@@ -753,14 +753,14 @@
 </listitem>
 
 <listitem>
-    <para><filename>Run_Macro_at_Caret.bsh</></para>
+    <para><filename>Run_Macro_at_Caret.bsh</filename></para>
     <abstract><para>
         Executes the macro whose name appears at the editing caret.
     </para></abstract>
     <para>
         When used with abbreviations for macro name, this macro allows the user to
         execute any macro script from the keyboard by typing its name, without
-        the <filename>.bsh</> extension.
+        the <filename>.bsh</filename> extension.
         It will search for the requested script in both the system and user
         macro directories, in each case using the caret text as a relative
         path.
@@ -773,12 +773,13 @@
     </para>
 
     <procedure>
-        <step><para>In the <quote>Macro Shortcuts</> option pane, Associate
-        <filename>Run_Macro_at_Caret</> with the shortcut
-        <keycombo><keycap>Control</><keycap>Space</></>.</para></step>
+        <step><para>In the <quote>Macro Shortcuts</quote> option pane, Associate
+        <filename>Run_Macro_at_Caret</filename> with the shortcut
+        <keycombo><keycap>Control</keycap><keycap>Space</keycap>
+        </keycombo>.</para></step>
 
-        <step><para>In the <quote>global</> abbreviation group, associate the
-        abbreviation <quote>dtt</> with the text <quote>/Text/Insert_Date</>.
+        <step><para>In the <quote>global</quote> abbreviation group, associate the
+        abbreviation <quote>dtt</quote> with the text <quote>/Text/Insert_Date</quote>.
         The leading forward slash character is necessary and should be used
         regardless of one's operating system.  Make sure that the abbreviation
         option pane has the checkbox <guilabel>Space bar expands
@@ -790,9 +791,10 @@
         <step><para>Press the space bar to expand <userinput>ddt</userinput> to
         <userinput>/Text/Insert_Date</userinput></para></step>
 
-        <step><para>Press <keycombo><keycap>Control</><keycap>Space</></> to
+        <step><para>Press <keycombo><keycap>Control</keycap>
+        <keycap>Space</keycap></keycombo> to
         run the macro. The text <userinput>/Text/Insert_Date</userinput> will
-        be replaced by the output of the <filename>Insert_Date</>
+        be replaced by the output of the <filename>Insert_Date</filename>
         macro.</para></step>
     </procedure>
 
@@ -804,7 +806,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Show_Free_Memory.bsh</></para>
+    <para><filename>Show_Free_Memory.bsh</filename></para>
     <abstract><para>
         Runs the Java garbage collection routine to free unneeded memory.
     </para></abstract>

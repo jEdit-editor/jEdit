@@ -69,13 +69,13 @@
  &cliusage;
 </part>
 
-<!-- <part id="macros"><title>Extending jEdit With Macros</title>
+<part id="macros"><title>Extending jEdit With Macros</title>
  &macro-basics;
  &simple-macros;
  &dialog-macro;
  &macro-tips;
  &api-guide;
  &macro-index;
-</part> -->
+</part>
 
 </book>

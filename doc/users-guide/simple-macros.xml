@@ -1,7 +1,9 @@
-<!-- jEdit 3.1 Macro Guide, (C) 2001 John Gellene -->
+<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene -->
 
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
+
+<!-- Tue Jun 19 18:36:20 EDT 2001 @983 /Internet Time/ -->
 
 <!-- This file covers the chapter "A few simple macros",        -->
 <!-- which introduces BeanShell through a "Hello world" script. -->
@@ -11,10 +13,9 @@
 
 <chapter id="simple-macros"><title>A Few Simple Macros</title>
  <para>
-  <!-- As you might expect, the power of BeanShell goes far beyond
-  performing simple arithmetic. -->
-  Now we'll look at some simple macro scripts and show you how they
-  work.
+  We now move from macro housekeeping to the actual writing of
+  BeanShell scripts. We will look at some simple macros and show you
+  how they work.
  </para>
 
  <sect1 id="first-example"><title>The Mandatory First Example</title>
@@ -24,7 +25,7 @@
   <para>
    Running this one line script causes jEdit to display a message
    box (more precisely, a <classname>JOptionPane</classname> object) with
-   the famous beginner's message and an <guilabel>OK</guilabel> button.
+   the traditional beginner's message and an <guilabel>OK</guilabel> button.
    Let's see what is happening here.
   </para>
   <para>
@@ -40,16 +41,19 @@
    <listitem>
     <para>
      An <glossterm>object</glossterm> is a collection of data that can be
-     initialized, accessed and manipulated in certain defined
-     ways.
+     initialized, accessed and manipulated in certain defined ways.
     </para>
    </listitem>
 
    <listitem>
     <para>
      A <glossterm>class</glossterm> is a specification of what data an object
-     contains and what methods can be used to work with the data. <!-- Java has
-     a rich set of classes defined as part of the Java platform. -->
+     contains and what methods can be used to work with the data. A Java
+     application consists of one or more classes (in the case of jEdit over
+     200 classes) written by the programmer that defines the application's
+     behavior. A BeanShell macro uses these classes, along with built-in
+     classes that are supplied with the Java platform, to define its own
+     behavior.
     </para>
    </listitem>
 
@@ -58,7 +62,10 @@
      A <glossterm>subclass</glossterm> (or child class) is a class which
      uses (or <quote>inherits</quote>) the data and methods of its parent
      class along with additions or modifications that alter the subclass's
-     behavior.
+     behavior.  Classes are typically organized in hierarchies of parent
+     and child classes to organize program code, to define common
+     behavior in shared parent class code, and to specify the types of
+     similar behavior that child classes will perform in their own specific ways.
     </para>
    </listitem>
 
@@ -163,7 +170,7 @@
   </para>
 
   <para>
-   Sometimes it is unclear if an <function>import</> statement is
+   Sometimes it is unclear if an <function>import</function> statement is
    required. You will rarely go wrong if you keep a few
    points in mind:
   </para>
@@ -177,7 +184,7 @@
     <para>When you are constructing a new object in a macro (for
     example, a dialog window or other GUI elements) you will need
     use import statements or fully qualified class names for those
-    components - see <xref linkend="dialog-macro"> for details.</para>
+    components - see <xref linkend="dialog-macro"/> for details.</para>
    </listitem>
    <listitem>
     <para>If you try to use a class that is not imported and
@@ -193,7 +200,8 @@
     used to bundle together a number of files so that their classes become
     visible to one another. Packages are not part of BeanShell. With the
     exception of a designated startup macro (see <xref
-    linkend="organizing-macros">), variables defined in a BeanShell script
+    linkend="organizing-macros"/>), and a macro that calls another,
+    nested macro, variables defined in a BeanShell script
     (other than the script's return value) are visible only within the
     script. You don't need to know anything about Java packages to write
     BeanShell macros.
@@ -255,22 +263,9 @@
 
   </itemizedlist>
 
-  <!-- XXX: word this better, without GJT reference -->
-
   <para>
-    If this format is unfamiliar to you, here is a short explanation. The
-    format is used in defining the methods in the source code of the
-    <classname>Macros</classname> class. It is also found in a format called
-    <glossterm>javadoc</glossterm> that extracts information from source
-    code to provide online documentation to the class. For example, you can
-    find the javadoc for jEdit's <classname>Macros</classname> class on
-    the <ulink url="http://www.gjt.org/javadoc/org/gjt/sp/jedit/Macros.html">
-    Giant Java Tree web site</ulink>.
-  </para>
-
-  <para>
-    The first three words for each of these
-    <glossterm>declarations</glossterm> tell you how the method is used. The
+    The format of these four <glossterm>declarations</glossterm> provides a
+    concise reference to the way in which the methods may be used. The
     keyword <function>public</function> means that the method can be used
     outside the <classname>Macros</classname> class. The alternatives are
     <function>private</function> and <function>protected</function>. For
@@ -290,26 +285,26 @@
    <function>message()</function> but displays an error icon in the message
    box. The <function>input()</function> method furnishes a text field for
    input, an <guilabel>OK</guilabel> button and a
-   <guilabel>Cancel</guilabel> button.
-   If <quote>Cancel</quote> is pressed,
-   the method returns <constant>null</constant>, if <guilabel>OK</guilabel>
+   <guilabel>Cancel</guilabel> button. If <quote>Cancel</quote> is pressed,
+   the method returns <constant>null</constant>. If <guilabel>OK</guilabel>
    is pressed, a <classname>String</classname> containing the contents of
-   the text field is returned. Note that there are two forms
-   of the <function>input()</> method; the first displays an empty
-   input field initially, the other lets you specify a default value.
+   the text field is returned. Note that there are two forms of the
+   <function>input()</function> method; the first form with two parameters
+   displays an empty input field, the other lets you specify an initial
+   default value.
   </para>
   <para>
-   For those without Java experience, it is
-   important to know that <constant>null</constant> is
-   <emphasis>not</emphasis> the same as an empty,
-   <quote>zero-length</quote> <classname>String</classname>. It is Java's
-   way of saying that there is no object associated with this variable.
-   Whenever you seek to use a return value from
+   For those without Java experience, it is important to know that
+   <constant>null</constant> is <emphasis>not</emphasis> the same as an
+   empty, <quote>zero-length</quote> <classname>String</classname>. It is
+   Java's way of saying that there is no object associated with this
+   variable. Whenever you seek to use a return value from
    <function>input()</function> in your macro, you should test it to see if
    it is <constant>null</constant>. BeanShell will complain if you call any
-   methods on the <constant>null</constant> object. In most cases, you will
+   methods on a <constant>null</constant> object. In most cases, you will
    want to exit gracefully from the script with a
-   <function>return</function> statement, because the user intended to
+   <function>return</function> statement, because the presence of a null
+   value for an input varaible usually means that the user intended to
    cancel macro execution.
   </para>
 
@@ -332,21 +327,20 @@ String result = Macros.input(view, "What is your name?",
   <para>
     In the last two examples, placing the word <classname>String</classname>
     before the variable name <varname>result</varname> tells BeanShell that
-    the variable refers to a <classname>String</classname> object, even 
-    before a particular <classname>String</classname>
-    object is assigned to it. In BeanShell, this declaration of the
-    <glossterm>type</glossterm> of <varname>result</varname> is not
-    necessary; BeanShell can figure it out when the macro runs. This is good
-    if you are not comfortable with types and classes; just use your
-    variables and let BeanShell worry about it.
+    the variable refers to a <classname>String</classname> object, even
+    before a particular <classname>String</classname> object is assigned to
+    it. In BeanShell, this declaration of the <glossterm>type</glossterm> of
+    <varname>result</varname> is not necessary; BeanShell can figure it out
+    when the macro runs. This can be helpful if you are not comfortable with
+    types and classes; justuse your variables and let BeanShell worry about it.
   </para>
 
   <para>
     Without an explicit <glossterm>type declaration</glossterm> like
-    <classname>String</classname> <varname>result</varname>, BeanShell variables can
-    change their type at runtime depending on the object or data assigned to
-    it. This dynamic typing allows you to write code like this (if you
-    really wanted to):
+    <classname>String</classname> <varname>result</varname>, BeanShell
+    variables can change their type at runtime depending on the object or
+    data assigned to it. This dynamic typing allows you to write code like
+    this (if you really wanted to):
   </para>
 
   <informalexample><!-- <title>Dynamic typing of variables</title> -->
@@ -404,18 +398,29 @@ textArea.setSelectedText(newText);</programlisting>
     <varname>view</varname>. The variable <varname>buffer</varname>
     represents a jEdit <varname>Buffer</varname> object, and
     <varname>textArea</varname> represents a
-    <classname>JEditTextArea</classname> object. A
-    <classname>Buffer</classname> represents the contents of an open text
-    file. It is derived from Java's
-    <classname>PlainDocument</classname> class. The variable
-    <varname>buffer</varname> is predefined as the current buffer.
-    A <classname>JEditTextArea</classname> is the visible
-    component that displays the file being edited. It is derived from the
-    <classname>JComponent</>
-    class. The variable <varname>textArea</varname> represents
-    the current <classname>JEditTextArea</classname> object, which in
-    turn displays the current buffer.
+    <classname>JEditTextArea</classname> object.
   </para>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        A <classname>Buffer</classname> represents the contents of an open text
+        file. It is derived from Java's <classname>PlainDocument</classname>
+        class. The variable <varname>buffer</varname> is predefined as the
+        current buffer.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        A <classname>JEditTextArea</classname> is the visible component that
+        displays the file being edited. It is derived from the
+        <classname>JComponent</classname> class. The variable
+        <varname>textArea</varname> represents the current
+        <classname>JEditTextArea</classname> object, which in turn displays
+        the current buffer.
+      </para>
+    </listitem>
+  </itemizedlist>
 
   <para>
     Unlike in our first macro example, here we are calling class methods on
@@ -429,9 +434,8 @@ textArea.setSelectedText(newText);</programlisting>
   <para>
     In precise terms, the <function>setSelectedText()</function> method
     substitutes the text currently selected with the contents of the
-    String parameter. If no text is selected,
-    the effect of this operation is to insert text at the caret
-    position.
+    <classname>String</classname> parameter. If no text is selected, the
+    effect of this operation is to insert text at the caret position.
   </para>
 
   <para>
@@ -531,7 +535,7 @@ String result = df.format(d);
 	   <para>
        <function>getLineCount()</function> is a method in jEdit's
        <classname>JEditTextArea</classname> class. It returns an
-       <classname>int</classname> representing the number of lines in the
+       <type>int</type> representing the number of lines in the
        current text buffer. We call it on <varname>textArea</varname>, the
        pre-defined, current <classname>JEditTextArea</classname> object.
       </para>
@@ -541,25 +545,32 @@ String result = df.format(d);
 	   <para>
        The use of the <function>+</function> operator (which can be chained,
        as here) appends objects and string
-       literals to return a concatenated <classname>String</classname>.
+       literals to return a single, concatenated <classname>String</classname>.
        </para>
 	  </listitem>
 	 </itemizedlist>
+   </para>
    </listitem>
   </itemizedlist>
 
-  <sidebar><title>One more pre-defined variable</>
+  <sidebar><title>The other pre-defined variable</title>
    <para>
-    In addition to <varname>view</>, <varname>buffer</> and
-    <varname>textArea</>,
-    there is one more pre-defined variable available for use in macros
-    -- <varname>editPane</>, which is set to the current
-    <classname>EditPane</> instance. An edit pane contains a text area
-    and buffer switcher, and among other things, contains methods for
-    selecting the buffer to edit. Views can contain multiple edit panes
-    if they are split. Edit panes will not be discussed any futher
-    because they are not particularly useful from a macro writer's
-    perspective.
+    In addition to <varname>view</varname>, <varname>buffer</varname> and
+    <varname>textArea</varname>, there is one more pre-defined variable
+    available for use in macros -- <varname>editPane</varname>. That
+    variable is set to the current <classname>EditPane</classname> instance.
+    An <classname>EditPane</classname> object contains a text area and
+    buffer switcher. A view can be split and resplit to display multiple
+    buffers, each in its own edit pane. Among other things, the
+    <classname>EditPane</classname> class contains methods for selecting
+    the buffer to edit.
+   </para>
+   <para>
+    Most of the time your macros will manipulate the <varname>buffer</varname>
+    or the <varname>textArea</varname>. Sometimes you will need to use
+    <varname>view</varname> as a parameter in a method call. You will probably
+    only need to use <varname>editPane</varname> if your macros works with
+    split views.
    </para>
   </sidebar>
  </sect1>

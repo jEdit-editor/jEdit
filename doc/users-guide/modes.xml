@@ -1,32 +1,34 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
-<chapter id=modes><title>Edit Modes</>
+<chapter id="modes"><title>Edit Modes</title>
  <para>
-  An <firstterm>edit mode</> is an editor configuration intended to
+  An <firstterm>edit mode</firstterm> is an editor configuration intended to
   edit a specific type of file. Edit modes can specify syntax highlighting
   rules, auto indent behavior, and various useful customizations.
  </para>
- <sect1 id=mode-selection><title>Mode Selection</>
-  <para>   When a file is opened, jEdit first checks the file name against a list
-   of known patterns. For example, files whose names end with <quote>.c</>
-   are edited in C mode, and files named <filename>Makefile</> are edited in
-   Makefile mode. If a suitable match based on file name cannot be found,
-   jEdit checks the first line of the file. For example, files whose first
-   line is <quote>#!/bin/sh</> are edited in shell script mode.
+ <sect1 id="mode-selection"><title>Mode Selection</title>
+  <para>
+   When a file is opened, jEdit first checks the file name against a list
+   of known patterns. For example, files whose names end with <quote>.c</quote>
+   are edited in C mode, and files named <filename>Makefile</filename> are
+   edited in Makefile mode. If a suitable match based on file name cannot be
+   found, jEdit checks the first line of the file. For example, files whose
+   first line is <quote>#!/bin/sh</quote> are edited in shell script mode.
   </para>
   <para>
    If automatic mode selection is not appropriate, the edit mode can
    be specified manually. To set the current buffer's edit mode
    on a one-time basis, specify it in the
-   <guimenu>Utilities</>&gt;<guimenuitem>Buffer Options</> dialog box.
-   To have a buffer open with a specific edit mode every time,
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+   dialog box. To have a buffer open with a specific edit mode every time,
    place the following in one of the first 10 lines of the buffer,
-   where <replaceable>edit mode</> is the name of the desired edit mode:
+   where <replaceable>edit mode</replaceable> is the name of the desired edit
+   mode:
   </para>
-  <screen>:mode=<replaceable>edit mode</>:</screen>
+  <screen>:mode=<replaceable>edit mode</replaceable>:</screen>
  </sect1>
- <sect1 id=syntax-hilite><title>Syntax Highlighting</>
+ <sect1 id="syntax-hilite"><title>Syntax Highlighting</title>
   <para>
    Syntax highlighting is the display of programming language
    tokens using different fonts and colors. This makes the code
@@ -36,8 +38,9 @@
   </para>
   <para>
    The colors and styles used to highlight syntax tokens can be changed
-   in the <guibutton>Styles</> pane of the
-   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
+   in the <guibutton>Styles</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box.
   </para>
   <para>
    Syntax highlighting can be enabled or disabled in one of
@@ -46,43 +49,41 @@
   <itemizedlist>
    <listitem><para>On a global or mode-specific
    basis in the
-   <guibutton>Editing</> and <guibutton>Mode-Specific</> panes of the
-   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
-   dialog box.</para></listitem>
+   <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
+   of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+   Options</guimenuitem> dialog box.</para></listitem>
    <listitem><para>In the current buffer
    for the duration of the editing session in the
-   <guimenu>Utilities</>&gt;<guimenuitem>Buffer Options</> dialog box.
-   </para></listitem>
-   <listitem><para>In the current buffer
-   for future editing sessions, by placing
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+   dialog box.</para></listitem>
+   <listitem><para>In the current buffer for future editing sessions, by placing
    the following in one of the first 10 lines of the buffer, where
-   <replaceable>flag</> is either <quote>true</> or <quote>false</>:
+   <replaceable>flag</replaceable> is either <quote>true</quote> or
+   <quote>false</quote>:
    </para>
-   <screen>:syntax=<replaceable>flag</>:</screen>
+   <screen>:syntax=<replaceable>flag</replaceable>:</screen>
    </listitem>
   </itemizedlist>
-  <!-- <figure><title>Syntax highlighting in action</>
-   <graphic scale=50 fileref=window-editor-syntax></>
-  </figure> -->
  </sect1>
- <sect1 id=writing-modes><title>Writing Edit Modes</>
+ <sect1 id="writing-modes"><title>Writing Edit Modes</title>
   <para>
    Edit modes are defined using XML, the <firstterm>extensible markup
-   language</>; mode files have the extension <filename>.xml</>.
-   XML is a very simple language, and as a result edit modes are easy to
-   create and modify. This section will
+   language</firstterm>; mode files have the extension
+   <filename>.xml</filename>. XML is a very simple language, and as a result
+   edit modes are easy to create and modify. This section will
    start with a short XML primer, followed by detailed information about
    each supported tag and highlighting rule.
   </para>
   <sidebar><title>Reload Edit Modes command</title>
    <para>
-    <guimenu>Utilities</>&gt;<guimenuitem>Reload Edit Modes</> reloads all edit
-    mode XML files from disk. It is very useful when writing edit modes because
-    it lets you see changes take effect without having to restart jEdit.
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
+    reloads all edit mode XML files from disk. It is very useful when writing
+    edit modes because it lets you see changes take effect without having to
+    restart jEdit.
    </para>
   </sidebar>
 
-  <sect2 id=xml-primer><title>An XML Primer</title>
+  <sect2 id="xml-primer"><title>An XML Primer</title>
   <para>
    A very simple edit mode looks like so:
   </para>
@@ -106,102 +107,105 @@
   <para>
    Note that each opening tag must have a corresponding closing tag.
    If there is nothing between the opening and closing tags, for example
-   <literal>&lt;TAG&gt;&lt;/TAG&gt;</>, the shorthand notation
-   <literal>&lt;TAG /&gt;</> may be used. An example of this shorthand
-   is the <literal>&lt;PROPERTY&gt;</> tag above.
+   <literal>&lt;TAG&gt;&lt;/TAG&gt;</literal>, the shorthand notation
+   <literal>&lt;TAG /&gt;</literal> may be used. An example of this shorthand
+   is the <literal>&lt;PROPERTY&gt;</literal> tag above.
   </para>
   <para>
-   XML is case sensitive. <literal>Span</> or <literal>span</>
-   is not the same as <literal>SPAN</>.
+   XML is case sensitive. <literal>Span</literal> or <literal>span</literal>
+   is not the same as <literal>SPAN</literal>.
   </para>
   <para>
    To insert a special character such as &lt; or &gt; literally in XML
    (for example, inside an attribute value), you must write it as
-   an <firstterm>entity</>. An
+   an <firstterm>entity</firstterm>. An
    entity consists of the character's symbolic name enclosed with
-   <quote>&amp;</> and <quote>;</>. A full list of entities is out of
+   <quote>&amp;</quote> and <quote>;</quote>. A full list of entities is out of
    the scope of this section, but the most important are:
   </para>
   <itemizedlist>
-   <listitem><para><literal>&amp;lt;</> - The less-than (&lt;) character</></>
-   <listitem><para><literal>&amp;gt;</> - The greater-than (&gt;) character</></>
-   <listitem><para><literal>&amp;amp;</> - The ampersand (&amp;) character</></>
+   <listitem><para><literal>&amp;lt;</literal> - The less-than (&lt;)
+   character</para></listitem>
+   <listitem><para><literal>&amp;gt;</literal> - The greater-than (&gt;)
+   character</para></listitem>
+   <listitem><para><literal>&amp;amp;</literal> - The ampersand (&amp;)
+   character</para></listitem>
   </itemizedlist>
   <para>
    For example, the following will cause a syntax error:
   </para>
-  <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;&amp;&lt;/SEQ&gt;</>
+  <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;&amp;&lt;/SEQ&gt;</programlisting>
   <para>
    Instead, you must write:
   </para>
-  <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;&amp;amp;&lt;/SEQ&gt;</>
+  <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;&amp;amp;&lt;/SEQ&gt;</programlisting>
   <para>
    Now that the basics of XML have been covered, the rest of this
    section will cover each construct in detail.
   </para>
   </sect2>
-  <sect2 id=mode-preamble><title>The Preamble</>
+  <sect2 id="mode-preamble"><title>The Preamble</title>
    <para>
     Each mode definition must begin with the following:
    </para>
    <programlisting>&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE MODE SYSTEM "xmode.dtd"&gt;</programlisting>
   </sect2>
-  <sect2 id=mode-tag><title>The MODE Tag</>
+  <sect2 id="mode-tag"><title>The MODE Tag</title>
    <para>
-    Each mode definition must contain at least one <literal>MODE</>
-    tag. All other tags (<literal>PROPS</>, <literal>RULES</>) must be
-    placed inside the <literal>MODE</> tag.
+    Each mode definition must contain at least one <literal>MODE</literal>
+    tag. All other tags (<literal>PROPS</literal>, <literal>RULES</literal>)
+    must be placed inside the <literal>MODE</literal> tag.
    </para>
   </sect2>
-  <sect2 id=mode-tag-props><title>The PROPS Tag</>
+  <sect2 id="mode-tag-props"><title>The PROPS Tag</title>
    <para>
-    The <literal>PROPS</> tag and the <literal>PROPERTY</> tags inside it
-    are used to define mode-specific
-    properties. Each <literal>PROPERTY</> tag must have a
-    <literal>NAME</> attribute set to the property's name, and a
-    <literal>VALUE</> attribute with the property's value.
+    The <literal>PROPS</literal> tag and the <literal>PROPERTY</literal> tags
+    inside it are used to define mode-specific
+    properties. Each <literal>PROPERTY</literal> tag must have a
+    <literal>NAME</literal> attribute set to the property's name, and a
+    <literal>VALUE</literal> attribute with the property's value.
    </para>
    <para>
-    All buffer-local properties listed in <xref linkend=buffer-local>
+    All buffer-local properties listed in <xref linkend="buffer-local" />
     may be given values in edit modes. In addition, the following mode
     properties have no buffer-local equivalent:
    </para>
    <itemizedlist>
-    <listitem><para><literal>indentCloseBrackets</> -
+    <listitem><para><literal>indentCloseBrackets</literal> -
     A list of characters (usually brackets) that subtract indent from
-    the <emphasis>current</> line. For example, in Java mode this
-    property is set to <quote>}</>.</para></listitem>
-    <listitem><para><literal>indentOpenBrackets</> -
+    the <emphasis>current</emphasis> line. For example, in Java mode this
+    property is set to <quote>}</quote>.</para></listitem>
+    <listitem><para><literal>indentOpenBrackets</literal> -
     A list of characters (usually brackets) that add indent to
-    the <emphasis>next</> line. For example, in Java mode this
-    property is set to <quote>{</>.</para></listitem>
-    <listitem><para><literal>indentPrevLine</> -
+    the <emphasis>next</emphasis> line. For example, in Java mode this
+    property is set to <quote>{</quote>.</para></listitem>
+    <listitem><para><literal>indentPrevLine</literal> -
     When indenting a line, jEdit checks if the previous line matches
     the regular expression stored in this property. If it does, a level
     of indent is added. For example, in Java mode this regular expression
     matches language constructs such as
-    <quote>if</>, <quote>else</>, <quote>while</>, etc.</para>
+    <quote>if</quote>, <quote>else</quote>, <quote>while</quote>, etc.</para>
     </listitem>
-    <listitem><para><literal>doubleBracketIndent</> -
-    If a line matches the <literal>indentPrevLine</> regular
+    <listitem><para><literal>doubleBracketIndent</literal> -
+    If a line matches the <literal>indentPrevLine</literal> regular
     expression and the next line contains an opening bracket,
     a level of indent will not be added to the next line, unless
-    this property is set to <quote>true</>. For example, with this
-    property set to <quote>false</>, Java code will be indented like so:
+    this property is set to <quote>true</quote>. For example, with this
+    property set to <quote>false</quote>, Java code will be indented like so:
     <programlisting>while(objects.hasMoreElements())
 {
         ((Drawable)objects.nextElement()).draw();
-}</>
+}</programlisting>
       On the other hand, settings this property to <quote>true</> will
       give the following result:
       <programlisting>while(objects.hasMoreElements())
         {
                 ((Drawable)objects.nextElement()).draw();
-        }</></para></listitem>
+        }</programlisting></para></listitem>
    </itemizedlist>
    <para>
-    Here is the complete <literal>&lt;PROPS&gt;</> tag for Java mode:
+    Here is the complete <literal>&lt;PROPS&gt;</literal> tag for Java mode:
    </para>
    <programlisting>&lt;PROPS&gt;
     &lt;PROPERTY NAME="indentOpenBrackets" VALUE="{" /&gt;
@@ -216,7 +220,7 @@
     &lt;PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" /&gt;
 &lt;/PROPS&gt;</>
   </sect2>
-  <sect2 id=mode-tag-rules><title>The RULES Tag</>
+  <sect2 id="mode-tag-rules"><title>The RULES Tag</title>
    <para>
     <literal>RULES</> tags must be placed inside the <literal>MODE</> tag.
     Each <literal>RULES</> tag defines a <firstterm>ruleset</>.
@@ -503,7 +507,7 @@
   </sect3>
   </sect2>
  </sect1>
- <sect1 id=mode-catalog><title>Installing Edit Modes</title>
+ <sect1 id="mode-catalog"><title>Installing Edit Modes</title>
   <para>
    There are two locations where new
    edit modes can be installed; the <filename>modes</> subdirectory of

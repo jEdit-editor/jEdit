@@ -21,6 +21,15 @@ TO DO
 - get web start to work
 - test edit server
 - jEditLauncher
+- docking improvements:
+  - multiple instances of a dockable
+  - make dockable menu items not be toggles.
+    - if floating, open new instance.
+    - if docked, go to existing instance, if not open, then open
+  - create non-menu 'toggle' actions, for those who want them
+  - each dockable has a close box in its tool bar; or a button that
+    shows a menu, with commands for moving the dockable, making it
+    floating, toggling auto-open, etc.
 
 + before 3.2final:
 

@@ -39,7 +39,7 @@
  </sect1>
  <sect1 id="selection"><title>Selecting Text</title>
   <para>
-   A <firsterm>selection</firsterm> is a a block of text marked for further
+   A <firstterm>selection</firstterm> is a a block of text marked for further
    manipulation. Unlike many other applications, jEdit supports both
    range and rectangular selections, and several chunks of text can be
    selected simultaneously.
@@ -440,7 +440,7 @@
  <sect1 id="text-transfer"><title>Transferring Text</title>
   <para>
    jEdit provides a rich set of commands for moving and copying text. Text is
-   transferred using <firsterm>registers</firsterm>. A register is a holding
+   transferred using <firstterm>registers</firstterm>. A register is a holding
    area with a single-character name that can hold once piece of text at a time.
   </para>
   <para>
@@ -577,7 +577,7 @@
  </sect1>
  <sect1 id="markers"><title>Markers</title>
   <para>
-   Each buffer can have any number of <firsterm>markers</firsterm> defined,
+   Each buffer can have any number of <firstterm>markers</firstterm> defined,
    pointing to
    specific locations within that buffer. Each line in a buffer can have
    at most one marker set pointing to it. Markers are persistent; they are
@@ -862,7 +862,7 @@
     search or replacement can be done from the search bar.
    </para>
    <para>
-    Initially, the search bar is in <firsterm>incremental search</firsterm>
+    Initially, the search bar is in <firstterm>incremental search</firstterm>
     mode. In incremental search mode, the first occurrence of the search
     string is located in the current buffer as is it is being typed.
     Subsequent occurrences can be located by pressing <keycap>Enter</keycap>

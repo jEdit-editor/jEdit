@@ -1,31 +1,31 @@
-<!-- jEdit 3.1 Macro Guide, (C) 2001 John Gellene -->
-<!-- Prepared Sat Apr 14 12:33:44 EDT 2001 @731 /Internet Time/ -->
+<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene             -->
+<!-- Wed Jun 20 16:56:26 EDT 2001 @914 /Internet Time/        -->
+<!--                                                          -->
+<!-- jEdit buffer-local properties:                           -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:        -->
+<!--                                                          -->
+<!-- This file covers the chapter "Macro tips and techniques" -->
 
-<!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
+<chapter id="macro-tips"><title>Macro Tips and Techniques</title>
 
-<!-- This file covers the chapter "Macro tips and techniques"   -->
-
-<chapter id=macro-tips><title>Macro Tips and Techniques</title>
-
-<sect1 id=macro-tips-input>
+<sect1 id="macro-tips-input">
 <title>Getting Input for a Macro</title>
 
   <para>
-    The dialog-based macro discussed in <xref linkend="dialog-macro">
-    reflects an approach to obtaining input that is conventional from a Java
-    perspective. Nevertheless, it can be too lengthy or tedious for someone
+    The dialog-based macro discussed in <xref linkend="dialog-macro"/>
+    reflects a conventional approach to obtaining input in a Java program.
+    Nevertheless, it can be too lengthy or tedious for someone
     trying to write a macro quickly. Not every macro needs a user interface
     specified in such detail; some macros require only a single keystroke or
     no input at all. In this section we outline some other techniques for
     obtaining input that will help you write macros quickly.
   </para>
 
-<sect2 id=macro-tips-input-single-line>
+<sect2 id="macro-tips-input-single-line">
 <title>Getting a Single Line of Text</title>
 
   <para>
-    As mentioned earlier in <xref linkend="helpful-methods">, the method
+    As mentioned earlier in <xref linkend="helpful-methods"/>, the method
     <function>Macros.input()</function> offers a convenient way to obtain
     a single line of text input. Here is an example that inserts a pair
     of HTML markup tags specified by the user.
@@ -55,7 +55,7 @@ insertTag();
 
   <para>
     Here the call to <function>Macros.input()</function> seeks the name
-    of the markup tag.  This method sets the message box title to a fixed string,
+    of the markup tag. This method sets the message box title to a fixed string,
     <quote>Macro input</quote>, but the specific message <guilabel>Enter name
     of tag</guilabel> provides all the information necessary. The return value
     <varname>tag</varname> must be tested to see if it is null.  This would
@@ -64,7 +64,7 @@ insertTag();
   </para>
 </sect2>
 
-<sect2 id=macro-tips-input-multiple-data><title>Getting Multiple Data Items</title>
+<sect2 id="macro-tips-input-multiple-data"><title>Getting Multiple Data Items</title>
   <para>
     If more than one item of input is needed, a succession of calls to
     <function>Macros.input()</function> is a possible, but awkward approach,
@@ -112,18 +112,18 @@ import javax.swing.SwingConstants;
 
 // *****portions of macro script omitted*****
 
-title = "Write file header";
+title = <quote>Write file header</quote>;
 
 currentName = buffer.getName();
 
 nameField = new JTextField(currentName);
-authorField = new JTextField("Your name here");
-descField = new JTextField("", 25);
+authorField = new JTextField(<quote>Your name here</quote>);
+descField = new JTextField(<quote></quote>, 25);
 
 namePanel = new JPanel(new GridLayout(1, 2));
-nameLabel = new JLabel("Name of file:", SwingConstants.LEFT);
+nameLabel = new JLabel(<quote>Name of file:</quote>, SwingConstants.LEFT);
 nameLabel.setForeground(Color.black);
-saveField = new JCheckBox("Save file when done",
+saveField = new JCheckBox(<quote>Save file when done</quote>,
     !buffer.isNewFile());
 namePanel.add(nameLabel);
 namePanel.add(saveField);
@@ -133,10 +133,10 @@ message = new Object[9];
 message[0] = namePanel;
 message[1] = nameField;
 message[2] = Box.createVerticalStrut(10);
-message[3] = "Author's name:";
+message[3] = <quote>Author's name:</quote>;
 message[4] = authorField;
 message[5] = Box.createVerticalStrut(10);
-message[6] = "Enter description:";
+message[6] = <quote>Enter description:</quote>;
 message[7] = descField;
 message[8] = Box.createVerticalStrut(5);
 
@@ -166,7 +166,6 @@ if( JOptionPane.OK_OPTION !=
         in a macro, the global statement <function>import javax.swing.*;
         </function>will work just as well.
       </para>
-
     </listitem>
 
     <listitem>
@@ -186,8 +185,8 @@ if( JOptionPane.OK_OPTION !=
         The macro uses <classname>JTextField</classname> objects to
         obtain most of the input data.  The fields <varname>nameField</varname>
         and <varname>authorField</varname> are created with constructors
-        that take the initial text to be displayed in the field as a
-        parameter.  When the message box is displayed, the initial text
+        that take the initial, default text to be displayed in the field as a
+        parameter.  When the message box is displayed, the default text
         will appear and can be altered or deleted by the user.
       </para>
     </listitem>
@@ -199,9 +198,10 @@ if( JOptionPane.OK_OPTION !=
         the text field component, expressed as the number of characters of
         <quote>average</quote> width. When
         <function>showConfirmDialog()</function> prepares the layout of the
-        message box, it sets the width wide enough to accomodate
-        <varname>descField</varname>. This technique produces a message box and
-        input text fields that are wide enough for your data with one line of code.
+        message box, it sets the width wide enough to accomodate the
+        designated with of <varname>descField</varname>. This technique produces
+        a message box and input text fields that are wide enough for your data
+        with one line of code.
       </para>
     </listitem>
 
@@ -241,11 +241,11 @@ if( JOptionPane.OK_OPTION !=
         <classname>Box</classname> class is a sophisticated layout class
         that gives the user great flexibility in sizing and positioning
         components. Here we use a <function>static</function> method of
-        the <classname>Box</classname> class that produces a
-        transparent component whose width expands to fill its parent
-        component (in this case, the message box).  The single parameter
-        indicates the fixed height of the spacing <quote>strut</quote>
-        in pixels.  The final call to
+        the <classname>Box</classname> class that produces a vertical
+        <glossterm>struct</glossterm>.  This is a transparent component
+        whose width expands to fill its parent component (in this case,
+        the message box).  The single parameter indicates the fixed height
+        of the spacing <quote>strut</quote> in pixels.  The last call to
         <function>createVerticalStrut()</function> separates the
         description text field from the <guilabel>OK</guilabel> and
         <guilabel>Cancel</guilabel> buttons that are automatically added
@@ -255,7 +255,7 @@ if( JOptionPane.OK_OPTION !=
 
     <listitem>
       <para>
-        Finally, the call to <function>showConfirmDialog</function> uses
+        Finally, the call to <function>showConfirmDialog()</function> uses
         the defined constants the option type (using <guilabel>OK</guilabel>
         and <guilabel>Cancel</guilabel> buttons) and the message type (a
         <constant>QUERY_MESSAGE</constant> that causes the message box
@@ -276,7 +276,7 @@ if( JOptionPane.OK_OPTION !=
   </itemizedlist>
 </sect2>
 
-<sect2 id=tips-macro-input-combo><title>Selecting Input From a List</title>
+<sect2 id="tips-macro-input-combo"><title>Selecting Input From a List</title>
 <para>
   Another useful way to get user input for a macro is to use a combo box
   containing a number of pre-set options. If this is the only input
@@ -384,7 +384,7 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
 </sect2>
 
 
-<sect2 id=macro-tips-single-char><title>Using a Single Keypress as Input</title>
+<sect2 id="macro-tips-single-char"><title>Using a Single Keypress as Input</title>
 
   <para>
     Some macros may choose to emulate the style of character-based text
@@ -504,14 +504,13 @@ view.getInputHandler().readNextChar("Enter a character",script.toString());
 </sect1>
 
 
-<sect1 id=startup-macro><title>Using a Startup Macro</title>
+<sect1 id="startup-macro"><title>Using a Startup Macro</title>
 
   <para>
     One useful feature in jEdit allows the user to run a macro script at startup
     near the end of the program's initialization routine. The name of
     the macro script must be <filename>Startup.bsh</filename> (capitalization
-    matters!) and it must be located in one of the two macro
-    directories.
+    matters!) and it must be located in one of the two macro directories.
   </para>
 
   <para>
@@ -526,7 +525,8 @@ view.getInputHandler().readNextChar("Enter a character",script.toString());
     library of methods and objects that can be accessed at any time during the
     editing session in another macro, the BeanShell shell of the Console
     plugin, or menu items such as
-    <guimenu>Utilities</>&gt;<guimenuitem>Evaluate BeanShell Expression</>.
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
+    BeanShell Expression</guimenuitem>.
   </para>
 
 
@@ -558,7 +558,7 @@ orphanMessage = <quote>This is from Startup.bsh </quote>
 startup2 = Macros.getMacro(<quote>Startup2</quote>);
 if(startup2 != null)
 {
-    BeanShell.runScript(view, startup2.path, false, false);
+    BeanShell.runScript(null, startup2.path, false, false);
     orphanMessage += <quote>\nStartup2 was found.</quote>;
 }
 else
@@ -569,7 +569,7 @@ else
 // end of Startup.bsh
 </programlisting></informalexample>
 
-<formalpara><title><filename>Startup2.bsh</></>
+<formalpara><title><filename>Startup2.bsh</filename></title>
 
   <para>
     This macro is called by the startup macro. It adds its own method and
@@ -738,16 +738,60 @@ This is from Startup2.bsh but is not part of a scripted object.
     session.
   </para>
 
+  <para>
+    We close this discussion with an example of a versatile method that
+    can save typing time and provide a useful shorthand in other macros.
+    This method, <function>runCommandInConsole()</function>, takes two
+    parameters, a <classname>View</classname> representing the current
+    view and a <classname>String</classname> representing the text of a
+    command that will be executed in the Console's default shell.
+  </para>
+
+  <informalexample><programlisting>runCommandInConsole(View view, String cmd)
+{
+    // check if the plugin is installed.
+    if(jEdit.getPlugin("console.ConsolePlugin") == null)
+    {
+        Macros.error(view,"You must install the Console plugin"
+            + " to use this macro.");
+        return;
+    }
+    manager = view.getDockableWindowManager();
+    // Open the console if it isn't already open
+    manager.addDockableWindow("console");
+    // Obtain the console instance
+    console = manager.getDockableWindow("console");
+    // Ensure we are using the console shell
+    console.setShell("Console");
+    // Call its run() method
+    console.run(command);
+}</programlisting></informalexample>
+
+  <para>
+    If you have looked at the code for some of jEdit's installed macros, you
+    may recognize this method as similar to those contained in many macros
+    that use the Console plugin. The one significant difference is that this
+    startup method takes the current <classname>View</classname> as an
+    explicit parameter. This is because jEdit executes the startup macro
+    before creating an initial <classname>View</classname>, so it cannot use
+    the values of <varname>view</varname>, <varname>editPane</varname>,
+    <varname>textArea</varname> or <varname>buffer</varname> that are
+    normally defined in the macro's namespace. During an editing session,
+    however, you can call this method with <varname>view</varname> as the
+    first parameter just as you would call any other method, but without a
+    Java classname or a object variable as a prefix.
+  </para>
+
 </sect1>
 
-<sect1 id=macro-tips-debugging><title>Debugging Macros</title>
+<sect1 id="macro-tips-debugging"><title>Debugging Macros</title>
 
   <para>
     Here are a few techniques that can prove helpful in debugging
     macros.
   </para>
 
-<sect2 id=macro-tips-debugging-exceptions>
+<sect2 id="macro-tips-debugging-exceptions">
 <title>Identifying Exceptions</title>
 
   <para>
@@ -766,7 +810,7 @@ This is from Startup2.bsh but is not part of a scripted object.
   <para>
     Exceptions thrown while BeanShell runs a macro script, like other
     exceptions occuring during jEdit execution, result in entries being
-    written to jEdit's activity log, see <xref linkend="activity-log">.
+    written to jEdit's activity log, see <xref linkend="activity-log"/>.
     There are two broad categories of errors that will result in
     exceptions:
   </para>
@@ -816,7 +860,7 @@ This is from Startup2.bsh but is not part of a scripted object.
 
 </sect2>
 
-<sect2 id=macro-tips-debugging-message>
+<sect2 id="macro-tips-debugging-message">
 <title>Using a Message Box As a Tracing Tool</title>
 
   <para>
@@ -846,14 +890,14 @@ This is from Startup2.bsh but is not part of a scripted object.
 
 </sect2>
 
-<sect2 id=macro-tips-debugging-log>
+<sect2 id="macro-tips-debugging-log">
 <title>Writing Trace Messages to the Activity Log</title>
   <para>
       The most laborious, but often the most effective technique, is to
       insert code in the macro that writes additional messages to the
       activity log before the exception occurs, then to examine the
       activity log by choosing
-      <guimenu>Utilities</>&gt;<guimenuitem>View Activity Log</guimenuitem>
+      <guimenu>Utilities</guimenu>&gt;<guimenuitem>View Activity Log</guimenuitem>
       after
       the macro completes execution.  The messages would trace program
       execution and, when desired, report the value of significant variables.

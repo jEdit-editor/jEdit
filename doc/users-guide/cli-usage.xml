@@ -14,7 +14,7 @@
 <prompt>$ </prompt><userinput>jedit thesis.tex +marker:chapter5</userinput></screen>
 <informaltable>
   <tgroup cols="2">
-   <colspec colnum="1" colwidth="1.5in">
+   <colspec colnum="1" colwidth="1.5in" />
    <thead>
     <row><entry>Switch</entry><entry>Effect</entry></row>
    </thead>
@@ -24,7 +24,7 @@
      <entry>Runs jEdit in background mode. In background mode,
      the edit server will continue listening for
      client connections even after all views are closed.
-     See <xref linkend=starting />.</entry>
+     See <xref linkend="starting" />.</entry>
     </row>
     <row>
      <entry>-newview</entry>
@@ -52,17 +52,17 @@
      <entry>-noserver</entry>
      <entry>Disables the edit server. Does not attempt to
      connect to the server, and does not start one either. For
-     information about the edit server, see <xref linkend=starting />.</entry>
+     information about the edit server, see <xref linkend="starting" />.</entry>
     </row>
     <row>
      <entry>-nosettings</entry>
      <entry>Starts jEdit without loading user-specific settings.
-     See <xref linkend=settings-directory />.</entry>
+     See <xref linkend="settings-directory" />.</entry>
     </row>
     <row>
      <entry>-nostartupmacro</entry>
      <entry>Does not run the startup macro if one is present.
-     See <xref linkend=startup-macro />.
+     See <xref linkend="startup-macro" />.
      Has no effect
      when connecting to another instance via the edit server.</entry>
     </row>

@@ -20,6 +20,6 @@
  <para>
   Character class expressions (<command>[abc]</command>, etc) are supported in globs
   and behave exactly like regular expression character classes; see
-  <xref linkend=regexps /> for details.
+  <xref linkend="regexps" /> for details.
  </para>
 </appendix>
