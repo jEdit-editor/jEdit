@@ -10,6 +10,16 @@ JEDIT 3.2 VERSION HISTORY
   Now, a confirmation dialog is displayed for large character inputs
   too.
 - Documentation updates
+- Updated set of sample macros (John Gellene)
+
++ Neutral
+
+- The functionality of the following macros has been moved to the
+  corresponding plugins:
+
+  - Go_to_Clipper (to Clipper plugin)
+  - Go_to_Console (to Console plugin)
+  - Show_Dual_Diff (to JDiff plugin)
 
 + Bug Fixes
 
@@ -19,6 +29,7 @@ JEDIT 3.2 VERSION HISTORY
 - In an abbrev expansion, $$1 will now be replaced by a dollar, followed
   by the value of the first positional parameter. Previously, the first
   dollar sign would cause problems
+- 'Quick HyperSearch' command didn't work
 
 * Version 3.2pre5
 

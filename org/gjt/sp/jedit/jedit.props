@@ -239,6 +239,10 @@ view.style.literal2=color:#404040
 view.style.markup=color:#5e5e5e style:b
 view.style.operator=style:b
 
+# Java 2 only
+view.antiAlias=false
+view.fracFontMetrics=false
+
 # Docking
 view.docking.alternateLayout=false
 view.docking.tabsPos=0

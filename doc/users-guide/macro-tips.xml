@@ -487,7 +487,7 @@ view.getInputHandler().readNextChar("Enter a character",
 
   <para>
     On startup, jEdit runs any BeanShell scripts located in the
-    <filename>startup</filename> subdirectory of the jEdit installation or
+    <filename>startup</filename> subdirectory of the jEdit installation and
     user settings directories (see <xref linkend="settings-directory" />). As
     with macros, the scripts must have a <filename>.bsh</filename> file name
     extension. Startup scripts are run near the end of the startup sequence,
@@ -496,32 +496,41 @@ view.getInputHandler().readNextChar("Enter a character",
   </para>
 
   <para>
-    The startup routine will run scripts in the installation directory first,
-    followed by scripts in the user settings directory. In each case, scripts
-    will be executed in alphabetical order, applied without regard to
-    whether the file name contains upper or lower case characters.
+    Startup scripts can perform initialization tasks that cannot be handled
+    by command line options or ordinary configuration options, such as
+    customizing jEdit's user interface by
+    changing entries in the Java platform's
+    <classname>UIManager</classname> class.
+  </para>
+
+  <para>
+    Startup scripts have an additonal feature that can help you further
+    customize jEdit. Unlike with macros, variables and methods defined in a
+    startup script are available in all instances of the BeanShell
+    interpreter created in jEdit. This allows you to create a personal
+    library of methods and objects that can be accessed at any time during
+    the editing session in another macro, the BeanShell shell of the Console
+    plugin, or menu items such as
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
+    Expression</guimenuitem>.
+  </para>
+
+  <para>
+    The startup script routine will run script files in the installation
+    directory first, followed by scripts in the user settings directory. In
+    each case, scripts will be executed in alphabetical order, applied
+    without regard to whether the file name contains upper or lower case
+    characters.
   </para>
 
   <para>
     If a startup script throws an exception (becuase, for example,
     it attempts to call a method on a <constant>null</constant> object).
     jEdit will show an error dialog box and move on to the next
-    startup script.  If script bugs are causing jEdit to crash or
+    startup script. If script bugs are causing jEdit to crash or
     hang on startup, you can use the
     <command>-nostartupscripts</command> command line option to
     disable them for that editing session.
-  </para>
-
-  <para>
-    Unlike with macros,
-    variables and methods defined in a startup script are available in
-    all instances of the BeanShell interpreter in jEdit, including
-    other macros, search and replace operations, the Console plugin, and
-    the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
-    Expression</guimenuitem>.
-    Because of this, one possible use of startup scripts is to build
-    up a library of useful BeanShell routines. Startup scripts can also
-    be used for other purposes, such as UI customization.
   </para>
 
   <para>
@@ -550,7 +559,7 @@ view.getInputHandler().readNextChar("Enter a character",
     using
   </para>
 
-  <informalexample><programlisting>doSomethingWithView(view,"something");</programlisting></informalexample>
+  <informalexample><programlisting>doSomethingWithView(view, "something");</programlisting></informalexample>
 </sect1>
 
 <sect1 id="macro-tips-BeanShell"><title>Advanced BeanShell Techniques</title>
@@ -682,7 +691,7 @@ bottom</screen>
   Swing event listener interfaces contained in the
   <literal>java.awt.event</literal> and <literal>javax.swing.event</literal>
   packages, and the <classname>java.lang.Runnable</classname> interface.
-  If running under Java 1.3, any interface can be implemented.
+  If running under Java 1.3 or 1.4, any interface can be implemented.
 </para>
 
 <para>
@@ -691,13 +700,13 @@ bottom</screen>
   object. Under Java 1.2 and below, BeanShell will automatically
   ignore calls on unimplemented members of an interface.  Under Java 1.3
   and above,
-  however, the reflection mechanism will throw an excpetion for any
+  however, the reflection mechanism will throw an exception for any
   missing interface methods, which will result in an error dialog box
   being shown when your macro runs; not a pretty sight.
   The solution is to implement the <function>invoke()</function> method,
   which is called when an undefined method is invoked on a scripted
   object. Typically, the implementation of this method will do nothing,
-  like in the following example:
+  as in the following example:
 </para>
 
 <informalexample><programlisting>invoke(method, args) {}</programlisting>
@@ -840,12 +849,13 @@ bottom</screen>
   </itemizedlist>
 
   <para>
-   Note that the urgency merely changes the string prefixed to the log
-   message; it does not change the logging behavior in any other way.
+   Note that the <parameter>urgency</parameter> parameter merely changes
+   the string prefixed to the log message; it does not change the logging
+   behavior in any other way.
   </para>
 
   <para>
-   The parameter <varname>source</varname> can either be an object or
+   The parameter <varname>source</varname> can be either an object or a
    class instance. When writing log messages from macros, set
    this parameter to <literal>BeanShell.class</literal> to make macro
    errors easier to spot in the activity log.

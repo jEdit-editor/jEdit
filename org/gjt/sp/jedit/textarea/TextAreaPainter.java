@@ -57,9 +57,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		setFont(new Font("Monospaced",Font.PLAIN,14));
 		setForeground(Color.black);
 		setBackground(Color.white);
-
-		cols = 80;
-		rows = 25;
 	}
 
 	/**
@@ -315,6 +312,46 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	}
 
 	/**
+	 * Sets if anti-aliasing should be enabled. Has no effect when
+	 * running on Java 1.1.
+	 * @since jEdit 3.2pre6
+	 */
+	public void setAntiAliasEnabled(boolean antiAlias)
+	{
+		this.antiAlias = antiAlias;
+		textArea.getRenderingManager().fontChanged(textArea);
+	}
+
+	/**
+	 * Returns if anti-aliasing is enabled.
+	 * @since jEdit 3.2pre6
+	 */
+	public boolean isAntiAliasEnabled()
+	{
+		return antiAlias;
+	}
+
+	/**
+	 * Sets if fractional font metrics should be enabled. Has no effect when
+	 * running on Java 1.1.
+	 * @since jEdit 3.2pre6
+	 */
+	public void setFractionalFontMetricsEnabled(boolean fracFontMetrics)
+	{
+		this.fracFontMetrics = fracFontMetrics;
+		textArea.getRenderingManager().fontChanged(textArea);
+	}
+
+	/**
+	 * Returns if fractional font metrics are enabled.
+	 * @since jEdit 3.2pre6
+	 */
+	public boolean isFractionalFontMetricsEnabled()
+	{
+		return fracFontMetrics;
+	}
+
+	/**
 	 * Adds a custom highlight painter.
 	 * @param highlight The highlight
 	 */
@@ -366,6 +403,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		textArea.recalculateVisibleLines();
 
 		updateTabSize();
+
+		textArea.getRenderingManager().fontChanged(textArea);
 	}
 
 	/**
@@ -375,6 +414,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public void paintComponent(Graphics gfx)
 	{
 		updateTabSize();
+
+		textArea.getRenderingManager().setupGraphics(textArea,gfx);
 
 		Buffer buffer = textArea.getBuffer();
 
@@ -469,8 +510,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public Dimension getPreferredSize()
 	{
 		Dimension dim = new Dimension();
-		dim.width = fm.charWidth('w') * cols;
-		dim.height = fm.getHeight() * rows;
+		dim.width = fm.charWidth('w') * 80;
+		dim.height = fm.getHeight() * 25;
 		return dim;
 	}
 
@@ -517,8 +558,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private boolean bracketHighlight;
 	private boolean eolMarkers;
 	private boolean wrapGuide;
-	private int cols;
-	private int rows;
+	private boolean antiAlias;
+	private boolean fracFontMetrics;
 
 	private int tabSize;
 	private int maxLineLen;
@@ -549,8 +590,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int baseLine = y + fm.getHeight()
 				- fm.getLeading() - fm.getDescent();
 
-			x = buffer.paintSyntaxLine(physicalLine,styles,
-				this,true,true,gfx,getBackground(),x,baseLine);
+			x = buffer.paintSyntaxLine(physicalLine,gfx,x,baseLine,
+				this,true,true,getBackground(),styles,
+				textArea.getRenderingManager());
 
 			if(eolMarkers)
 			{

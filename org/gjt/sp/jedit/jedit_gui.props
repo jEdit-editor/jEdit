@@ -826,14 +826,14 @@ hypersearch-results.title=HyperSearch Results
 hypersearch.status=HyperSearch
 
 hypersearch-no-results.title=HyperSearch Complete
-hypersearch-no-results.message=No occurences of the search string were found.
+hypersearch-no-results.message=No occurrences of the search string were found.
 
 hypersearch-done.title=HyperSearch Complete
-hypersearch-done.message=Found {0} occurence(s) in {1} file(s).
+hypersearch-done.message=Found {0} occurrence(s) in {1} file(s).
 
 # Replace all results
 replace-results.title=Replacement Complete
-replace-results.message=Replaced {0} occurence(s) in {1} file(s).
+replace-results.message=Replaced {0} occurrence(s) in {1} file(s).
 
 # Search and replace error dialog
 searcherror.title=Search and Replace Error
@@ -1059,6 +1059,9 @@ options.textarea.blinkCaret=Blinking caret
 options.textarea.blockCaret=Block caret
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.homeEnd="Smart" home/end key behaviour
+options.textarea.antiAlias=Smooth text
+options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
+	text display)
 
 options.gutter.label=Gutter
 options.gutter.font=Gutter font:
@@ -1277,7 +1280,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=43
+tip.count=44
 
 # Activity log
 log-viewer.title=Activity Log

@@ -1,21 +1,39 @@
 TO DO
 
-+ before 3.2final:
++ would be nice to have before pre6:
 
+- cvs add TextRenderingManager, AWTTextRenderingManager,
+  TextRenderingManager2D, tip43.html
+- don't show replace all results when running from macro
+- pre6 will be the last pre-release before 3.2final.
+- console: add go to console action
+- console 3.0: MUST FINISH!!!
+- document new macro layout!!!
+- mention using Macros.message() in macro-tips
+- some macros removed:
+  Go_to_Clipper
+  Go_to_JBrowse
+  Go_to_Console
+  Show_Dual_Diff
+- reload: preserve caret position
+- finish duplicate shortcut code
 - FTP plugin: investigate soft links
 - FTP plugin: better error messages
-- make XML plugin more respectable
+- FTP plugin: improve it in general before 3.2
 - installing source for already installed plugins
-- finish duplicate shortcut code
+
++ lower priority/later:
+
+- make XML plugin more respectable
 - get web start to work, and document differences between web start and
   stand-alone version
-- reload: preserve caret position
 - next time i'm making an RPM, fix the shell script
 - jEditLauncher
-- a line consisting entirely of spaces & word wrap
 
 + bugs that need to be fixed at some stage:
 
+- a line consisting entirely of spaces & word wrap
+- switching option panes real fast
 - fix '... is not a function name' when running openjade
 - popup menus; make sure they are on-screen? GUIUtilities method?
 - does loading and saving user settings take a long time?

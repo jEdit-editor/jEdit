@@ -153,39 +153,48 @@
   </para>
 
   <para>
-    Finally,
-    there are no <function>import</function> statements in this script. In Java,
-    an <function>import</function> statement makes public classes from other
-    packages visible without having to specify a fully qualified class
-    name.
-    Without an import statement or a fully qualified name, Java cannot identify
-    most classes using a single name as an identifier.
+    Finally, there are no <function>import</function> statements in this
+    script. In Java, an <function>import</function> statement makes public
+    classes from other packages visible within the file in which the
+    statement occurs without having to specify a fully
+    qualified class name. Without an import statement or a fully qualified
+    name, Java cannot identify most classes using a single name as an identifier.
   </para>
 
   <para>
-   jEdit automatically imports a number of commonly-used packages, so
-   recorded macros, and most BeanShell scripts you write will not require
-   <function>import</function> statements.
+   jEdit automatically imports a number of commonly-used packages into the
+   namespace of every BeanShell script. Because of this, the script output
+   of a recorded macro does not contain <function>import</function>
+   statements. For the same reason, most BeanShell scripts you write will
+   not require <function>import</function> statements.
   </para>
 
   <para>
-    If you try to use a class that is not imported, the BeanShell
-    interpreter will complain with an error message
-    relating to the offending line of code.
+    Java requires <literal>import</literal> statement at the beginning of a
+    source file. BeanShell allows you to place <literal>import</literal>
+    statements anywhere in a script, including inside of block of
+    statements. The <literal>import</literal> statement will cover all names
+    used following the statement in the enclosing block.
+  </para>
+
+  <para>
+    If you try to use a class that is not imported without its
+    fully-qualified name, the BeanShell interpreter will complain with an
+    error message relating to the offending line of code.
   </para>
 
   <sidebar>
    <para>
     Here is the full list of packages automatically imported by jEdit:
    </para>
-   <programlisting>javax.swing
-javax.swing.event
-java.awt
+   <programlisting>java.awt
 java.awt.event
 java.net
 java.util
 java.io
 java.lang
+javax.swing
+javax.swing.event
 org.gjt.sp.jedit
 org.gjt.sp.jedit.browser
 org.gjt.sp.jedit.gui
@@ -285,6 +294,7 @@ org.gjt.sp.util</programlisting>
    displays an empty input field, the other lets you specify an initial
    default value.
   </para>
+
   <para>
    For those without Java experience, it is important to know that
    <constant>null</constant> is <emphasis>not</emphasis> the same as an
@@ -472,7 +482,8 @@ String newText = "This file contains "
       several methods. You could write it this way:
     </para>
 
-<programlisting>Date d = new Date();
+<programlisting>import java.text.DateFormat;
+Date d = new Date();
 DateFormat df = DateFormat.getDateInstance();
 String result = df.format(d);
 </programlisting>

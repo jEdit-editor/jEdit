@@ -49,7 +49,7 @@
    in learning more about BeanShell generally, consult the <ulink
    url="http://www.beanshell.org">BeanShell web site</ulink>. Information
    on how to run and organize macros, whether included with the jEdit
-   installation or written by you, can be found
+   installation or written by you, can be found in
    <xref linkend="using-macros"/>.
   </para>
 

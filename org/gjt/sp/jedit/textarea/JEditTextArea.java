@@ -58,6 +58,7 @@ public class JEditTextArea extends JComponent
 
 		// Initialize some misc. stuff
 		selection = new Vector();
+		renderingManager = TextRenderingManager.createTextRenderingManager();
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(view,this);
 		documentHandler = new DocumentHandler();
@@ -540,6 +541,16 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Returns the text rendering manager. You probably don't need to
+	 * use this class directly.
+	 * @since jEdit 3.2pre6
+	 */
+	public TextRenderingManager getRenderingManager()
+	{
+		return renderingManager;
+	}
+
+	/**
 	 * Converts an offset in a line into an x co-ordinate.
 	 * @param line The line
 	 * @param offset The offset, from the start of the line
@@ -548,12 +559,12 @@ public class JEditTextArea extends JComponent
 	{
 		Token tokens = buffer.markTokens(line).getFirstToken();
 
-		FontMetrics fm;
-
 		getLineText(line,lineSegment);
 
-		int segmentOffset = lineSegment.offset;
-		int x = horizontalOffset;
+		char[] text = lineSegment.array;
+		int off = lineSegment.offset;
+
+		float x = (float)horizontalOffset;
 
 		Toolkit toolkit = painter.getToolkit();
 		Font defaultFont = painter.getFont();
@@ -563,30 +574,29 @@ public class JEditTextArea extends JComponent
 		{
 			byte id = tokens.id;
 			if(id == Token.END)
-			{
-				return x;
-			}
+				return (int)x;
 
+			Font font;
 			if(id == Token.NULL)
-				fm = painter.getFontMetrics();
+				font = defaultFont;
 			else
-				fm = painter.getFontMetrics(styles[id].getStyledFont(defaultFont));
+				font = styles[id].getStyledFont(defaultFont);
 
-			int length = tokens.length;
+			int len = tokens.length;
 
-			if(offset + segmentOffset < lineSegment.offset + length)
+			if(offset < len)
 			{
-				lineSegment.count = offset - (lineSegment.offset - segmentOffset);
-				return x + Utilities.getTabbedTextWidth(
-					lineSegment,fm,x,painter,0);
+				return (int)(x + renderingManager.charsWidth(
+					text,off,offset,font,x,painter));
 			}
 			else
 			{
-				lineSegment.count = length;
-				x += Utilities.getTabbedTextWidth(
-					lineSegment,fm,x,painter,0);
-				lineSegment.offset += length;
+				x += renderingManager.charsWidth(
+					text,off,len,font,x,painter);
+				off += len;
+				offset -= len;
 			}
+
 			tokens = tokens.next;
 		}
 	}
@@ -4114,6 +4124,8 @@ forward_scan:		do
 
 	private static boolean multi;
 	private boolean overwrite;
+
+	private TextRenderingManager renderingManager;
 
 	private static void quicksort(int[] obj, int _start, int _end)
 	{

@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -284,8 +284,8 @@ public class Buffer extends PlainDocument implements EBComponent
 				x += lineNumberWidth + fm.charWidth('0');
 			}
 
-			paintSyntaxLine(i,styles,expander,style,color,
-				gfx,Color.white,x,y);
+			paintSyntaxLine(i,gfx,x,y,expander,style,color,
+				Color.white,styles,new AWTTextRenderingManager());
 
 			int bottomOfPage = pageHeight - bottomMargin - lineHeight;
 			if(printFooter)
@@ -1732,23 +1732,16 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	/**
 	 * Paints the specified line onto the graphics context.
-	 * @param buffer The buffer
-	 * @param lineIndex The line
-	 * @param styles The syntax style list
-	 * @param expander The tab expander used to determine tab stops. May
-	 * be null
-	 * @param style True if the output should be syntax styled
-	 * @param color True if the output should be syntax colored
-	 * @param gfx The graphics context
-	 * @param x The x co-ordinate
-	 * @param y The y co-ordinate
-	 * @return The x co-ordinate, plus the width of the painted string
-	 * @since jEdit 3.1pre1
+	 * @since jEdit 3.2pre6
 	 */
-	public int paintSyntaxLine(int lineIndex, SyntaxStyle[] styles,
+	public int paintSyntaxLine(int lineIndex, Graphics gfx, int _x, int _y,
 		TabExpander expander, boolean style, boolean color,
-		Graphics gfx, Color background, int x, int y)
+		Color background, SyntaxStyle[] styles,
+		TextRenderingManager renderer)
 	{
+		float x = (float)_x;
+		float y = (float)_y;
+
 		LineInfo info = lineInfo[lineIndex];
 
 		if(info.tokensValid)
@@ -1772,23 +1765,21 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		Token tokens = info.firstToken;
 
-		// the above should leave the text in the 'line' segment
+		// the above should leave the text in the 'seg' segment
+		char[] text = seg.array;
 
 		Font defaultFont = gfx.getFont();
 		Color defaultColor = gfx.getColor();
 
-		int originalOffset = seg.offset;
-		int originalCount = seg.count;
+		int off = seg.offset;
 
-		int offset = 0;
 		for(;;)
 		{
 			byte id = tokens.id;
 			if(id == Token.END)
 				break;
 
-			int length = tokens.length;
-			seg.count = length;
+			Color bg = null;
 			if(id == Token.NULL)
 			{
 				gfx.setColor(defaultColor);
@@ -1796,39 +1787,29 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 			else
 			{
-				Color bg = styles[id].getBackgroundColor();
-				if(color && bg != null)
-				{
-					FontMetrics fm = gfx.getFontMetrics(style ?
-						styles[id].getStyledFont(defaultFont)
-						: defaultFont);
-					int width   = Utilities.getTabbedTextWidth(seg, fm, x, expander, 0); 
-					int height  = fm.getHeight();
-					int descent = fm.getDescent();
-					int leading = fm.getLeading();
-					gfx.setColor(background);
-					gfx.setXORMode(bg);
-					gfx.fillRect(x, y - height + descent + leading, width, height);
-					gfx.setPaintMode();
-				}
+				if(color)
+					bg = styles[id].getBackgroundColor();
 
 				if(style)
 					gfx.setFont(styles[id].getStyledFont(defaultFont));
+				else
+					gfx.setFont(defaultFont);
+
 				if(color)
 					gfx.setColor(styles[id].getForegroundColor());
+				else
+					gfx.setColor(defaultColor);
 			}
 
-			x = Utilities.drawTabbedText(seg,x,y,gfx,expander,0);
-			seg.offset += length;
-			offset += length;
+			int len = tokens.length;
+			x = renderer.drawChars(text,off,len,gfx,x,y,expander,bg);
+
+			off += len;
 
 			tokens = tokens.next;
 		}
 
-		seg.offset = originalOffset;
-		seg.count = originalCount;
-
-		return x;
+		return (int)x;
 	}
 
 	/**

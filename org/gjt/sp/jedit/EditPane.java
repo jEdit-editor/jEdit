@@ -332,6 +332,10 @@ public class EditPane extends JPanel implements EBComponent
 			"view.lineHighlight"));
 		painter.setLineHighlightColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.lineHighlightColor")));
+		painter.setAntiAliasEnabled(jEdit.getBooleanProperty(
+			"view.antiAlias"));
+		painter.setFractionalFontMetricsEnabled(jEdit.getBooleanProperty(
+			"view.fracFontMetrics"));
 
 		Gutter gutter = textArea.getGutter();
 		gutter.setExpanded(jEdit.getBooleanProperty(
