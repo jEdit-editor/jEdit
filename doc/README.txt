@@ -1,4 +1,4 @@
-JEDIT README
+JEDIT 2.4 README
 
 * About jEdit
 
@@ -9,13 +9,13 @@ regular expressions, and multiple file search and replace.
 
 jEdit requires either Java 1.1 with Swing 1.1, or Java 2 to work.
 
-jEdit is released under the GNU General Public License, which can be
+jEdit is released under the _GNU General Public License_, which can be
 found in the COPYING.txt file. jEdit comes with ABSOLUTELY NO WARRANTY
 OF ANY KIND; see section 11 and 12 of the GPL for details.
 
 jEdit uses gnu.regexp by the Free Software Foundation. gnu.regexp is
-released under the GNU General Public License. Only the parts of
-gnu.regexp used by jEdit are included - the complete package can be
+released under the _GNU Lesser General Public License_. Only the parts
+of gnu.regexp used by jEdit are included - the complete package can be
 found at <http://www.cacas.org/java/gnu/regexp/>.
 
 jEdit also uses the AElfred XML parser by Microstar corporation. This
@@ -58,8 +58,9 @@ Acrobat.
 Before reporting a problem with jEdit, please make sure it is not
 actually a Java bug, or a well-known problem.
 
-- Printing doesn't work very well, especially on Java 2 This is almost
+- Printing doesn't work very well, especially on Java 2. This is almost
   entirely Sun's fault. Their printing implementation is very buggy.
+  I hear printing works better with Java 2 version 1.3, though.
 
 - Some Java versions, especially early Java 2 versions and some Linux
   ports, have broken key binding handling; Alt-key mnemonics might not
@@ -72,15 +73,16 @@ actually a Java bug, or a well-known problem.
   these problems, but I'm not sure.
 
 - The buffer tabs component has problems with focus handling sometimes;
-  jEdit 2.4pre7 fixes most of these, but some remain, especially when
+  jEdit 2.4 fixes most of these, but some remain, especially when
   working with splits.
 
 - The Swing HTML component used by jEdit's help viewer is very buggy.
-  Although it has been getting better with recent Swing releases, it
-  still renders some HTML incorrectly and runs very slowly.
+  Although recent releases are getting better, it still renders some
+  HTML incorrectly and runs very slowly.
 
-- On Unix, file permissions are reset to the defaults on save. There is
-  no easy way to fix this except with native code.
+- On Unix, file permissions are reset to the defaults on save if backups
+  are enabled. There is no easy way to fix this except with native code.
+  If this really bugs you, disable backups in Utilities->Global Options.
 
 - On Unix systems with X Windows, you might not be able to copy and
   paste between jEdit and other programs. This is mainly because Java
@@ -90,14 +92,14 @@ actually a Java bug, or a well-known problem.
   some of the problems by allowing read-only access to the primary
   selection buffer.
 
-- If you get a 'ClassNotFoundException: javax/swing/JWindow' or similar
-  when starting jEdit, chances are you don't have Swing installed
-  properly. Download Swing from <http://java.sun.com/products/jfc>.
-  Alternatively, upgrade to Java 2, which doesn't require you to install
-  Swing separately.
+- If you are using Java 1.1 and get a `ClassNotFoundException:
+  javax/swing/JWindow' or similar exception when starting jEdit,
+  chances are you don't have Swing installed properly. Download Swing
+  from <http://java.sun.com/products/jfc>. Alternatively, upgrade to
+  Java 2, which doesn't require you to install Swing separately.
 
 - If a newly installed edit mode doesn't work, you probably need to
-  rebuild the edit mode cache with `Utilities->Reload Edit Modes'.
+  rebuild the edit mode cache with Utilities->Reload Edit Modes.
 
 - Because jEdit is written in Java, it will always be slower than a
   native application. The performance gap can be narrowed by installing
@@ -119,7 +121,7 @@ The following people contributed edit modes:
 
 Andre Kaplan - ASP, JavaScript, VBScript
 Artur Biesiadowski - Eiffel
-Clancy Malcolm - Original version of PHP3
+Clancy Malcolm - Original version of PHP3 mode
 Ian Maclean - Ruby
 Jonathan Revusky - Python
 Juha Lindfors - IDL

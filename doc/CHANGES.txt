@@ -1,15 +1,17 @@
-JEDIT VERSION HISTORY
+JEDIT 2.4 VERSION HISTORY
 
 * Version 2.4final
 
 + Enhancements
 
 - The text area should now retain focus when switching windows
+- Documentation updates
 
 + Bug Fixes
 
 - Context menus were not added to newly created text areas when splitting
   (since 2.4pre7)
+- TeX mode didn't highlight \', \" or \` very well (since 2.4pre2)
 
 * Version 2.4pre7
 

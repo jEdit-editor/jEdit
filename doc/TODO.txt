@@ -8,19 +8,19 @@ JEDIT TO DO
   - regexps
 - Editable toolbar
 - Add macros to context menu and toolbar
-- XML-driven auto indent
 - Plugin devel manual needs more work:
   - document views, buffers
   - how to write text area and gutter hilites
 - Mode editor
-- Piece content
-- Maybe cursor beyond EOL?
 - Buffer tabs:
   - trunicate long file names (should be configurable)
   - customizable font size?
 - Customizable undo queue size
 - 'input' action: eg: 'input@a@Enter your name:' would store the user's
   input in register 'a', or clear it if they clicked 'Cancel'
+- Pluggable 'Storage' interfaces. We could have 'FTPStorage',
+  'FileStorage', 'URLStorage', 'SSHStorage', 'ZIPStorage', 'CVSStorage', etc
+- Threaded HyperSearch
 
 Later:
 
@@ -28,11 +28,9 @@ Later:
 - Folding
 - Word wrap
 - Reverse search
-- Files should be opened and saved in a background thread. HyperSearch should
-  be threaded as well
 - i18n support - bidi, input methods, localizable GUI, etc
-- Pluggable 'Storage' interfaces. We could have 'FTPStorage',
-  'FileStorage', 'URLStorage', 'SSHStorage', 'ZIPStorage', 'CVSStorage', etc
+- Maybe cursor beyond EOL?
+- XML-driven auto indent?
 
 When we switch to Java 2:
 - drag and drop

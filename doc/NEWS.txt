@@ -22,9 +22,9 @@ do this was contributed by Andre Kaplan <ak@village.uunet.be>.
 
 * Auto indent improvements
 
-In C-like edit modes (C, C++, Java, JavaScript, IDL), the indent will
-be shifted accordingly if the previous line contains an 'if', 'else',
-'for', 'while' or 'case' statement.
+In C-like edit modes (BeanShell, C, C++, Java, JavaScript, IDL), the
+indent will be shifted accordingly if the previous line contains an
+'if', 'else', 'for', 'while' or 'case' statement.
 
 * Search and replace improvements
 
@@ -36,8 +36,8 @@ to the current buffer's filename extension.
 
 * Editable context menu
 
-The text area's right-click menu can now be edited in the Global
-Options dialog box.
+The text area's right-click menu can now be edited in the Global Options
+dialog box.
 
 * Autosave recovery
 
