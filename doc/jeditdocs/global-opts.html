@@ -1,0 +1,617 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The Global Options Dialog Box</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Customizing jEdit"
+HREF="customizing.html"><LINK
+REL="PREVIOUS"
+TITLE="Buffer-Local Properties"
+HREF="buffer-local.html"><LINK
+REL="NEXT"
+TITLE="Using Plugins"
+HREF="plugins.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="plugins.html"
+>Next</A
+>, <A
+HREF="buffer-local.html"
+>Prev</A
+></P
+><H2
+>Chapter 8. Customizing jEdit</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="GLOBAL-OPTS"
+>The Global Options Dialog Box</A
+></H1
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> displays the
+   global options dialog box. A whole slew of settings can be
+   customized here. The dialog box is divided into several panes,
+   each pane containing a set of related options. To switch between
+   panes, use the list on the left of the dialog box. Only panes
+   created by jEdit are described here; some plugins add their own option
+   panes, and information about them can be found in the plugin documentation.
+  </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2500"
+>The General Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>General</SPAN
+> pane allows you to change the following settings:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+>The Swing look and feel - changes to this settings only
+    take effect after jEdit is restarted</P
+></LI
+><LI
+><P
+>Number of recent files to list in the
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Open Recent</SPAN
+> menu</P
+></LI
+><LI
+><P
+>The file encoding used when loading and saving files -
+    you can enter any encoding supported by your Java version here, not just
+    the ones in the list</P
+></LI
+><LI
+><P
+>The autosave frequency, in seconds - see
+    <A
+HREF="saving.html"
+>the section called <I
+>Saving Files</I
+> in Chapter 3</A
+></P
+></LI
+><LI
+><P
+>The maximum number of entires to store in a history list.
+    History lists are used by the search and replace features to store
+    previously entered search strings. They are also used to store previously
+    pasted strings. See <A
+HREF="history.html"
+>the section called <I
+>History Text Fields</I
+> in Chapter 7</A
+>, <A
+HREF="clipboard.html"
+>the section called <I
+>The Clipboard</I
+> in Chapter 4</A
+> and
+    <A
+HREF="registers.html"
+>the section called <I
+>Registers</I
+> in Chapter 5</A
+>.</P
+></LI
+><LI
+><P
+>Number of backups to make when saving buffers - if this
+    is set to "0", no backups will be made at all. If set to
+    "1", only one backup will be made. Values higher than
+    "1" will cause numbered backups to be enabled, with higher numbers
+    being the older versions</P
+></LI
+><LI
+><P
+>The backup directory - if not set, backups will be
+    created in the current directory</P
+></LI
+><LI
+><P
+>Backup filename prefix - if set, the specified string will
+    be prepended to backup filenames</P
+></LI
+><LI
+><P
+>Backup filename suffix - if set, the specified string will
+    be suffixed to backup filenames - at least one of the backup prefix
+    and suffix must be set, otherwise interesting things will happen...
+    </P
+></LI
+><LI
+><P
+>Default line separator - the line separator/end of line
+    characters that will be used for new files. Existing files will always use
+    whatever line separator they were found to have on loading. See
+    <A
+HREF="saving.html"
+>the section called <I
+>Saving Files</I
+> in Chapter 3</A
+></P
+></LI
+><LI
+><P
+>If the current session should be automatically saved
+    and restored when jEdit exits and starts up, respectively. See
+    <A
+HREF="sessions.html"
+>the section called <I
+>Saving and Loading Sessions</I
+> in Chapter 5</A
+></P
+></LI
+><LI
+><P
+>If the tool bar/QuickSearch text field should be shown
+    </P
+></LI
+><LI
+><P
+>If buffer switching tabs should be shown
+    </P
+></LI
+><LI
+><P
+>If the full path of buffers should be shown in view
+    title bars, instead of just the name</P
+></LI
+><LI
+><P
+>If the buffer list should be sorted</P
+></LI
+><LI
+><P
+>If the buffer list should be sorted by file name,
+    rather than full path name</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2554"
+>The Editor Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Editor</SPAN
+> pane allows you to change the following settings:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+>Default edit mode for new files</P
+></LI
+><LI
+><P
+>Default text font</P
+></LI
+><LI
+><P
+>Default font style</P
+></LI
+><LI
+><P
+>Default font size</P
+></LI
+><LI
+><P
+>Default tab width - see <A
+HREF="indent.html#INDENT-TABS"
+>the section called <I
+>Changing the Tab Width</I
+> in Chapter 6</A
+></P
+></LI
+><LI
+><P
+>If the line with the caret should be drawn with a
+    different background</P
+></LI
+><LI
+><P
+>If matching brackets should be highlighted</P
+></LI
+><LI
+><P
+>If a faint dot should be drawn at the end of each line</P
+></LI
+><LI
+><P
+>If lines that are visible but are not actually in the
+    buffer should be drawn as red tildes - if not set, they will be drawn
+    as empty lines</P
+></LI
+><LI
+><P
+>If syntax highlighting should be performed</P
+></LI
+><LI
+><P
+>If the current line should be indented when
+    <B
+CLASS="KEYCAP"
+>Tab</B
+> is pressed - see <A
+HREF="indent.html#AUTOINDENT"
+>the section called <I
+>Automatic Indent</I
+> in Chapter 6</A
+></P
+></LI
+><LI
+><P
+>If the correct indentation should automatically be
+    inserted when
+    <B
+CLASS="KEYCAP"
+>Enter</B
+> is pressed - see <A
+HREF="indent.html#AUTOINDENT"
+>the section called <I
+>Automatic Indent</I
+> in Chapter 6</A
+></P
+></LI
+><LI
+><P
+>If spaces should be used instead of "real" tabs
+    for indentation - see <A
+HREF="indent.html#INDENT-SOFTTABS"
+>the section called <I
+>Soft Tabs</I
+> in Chapter 6</A
+></P
+></LI
+><LI
+><P
+>If the caret should blink</P
+></LI
+><LI
+><P
+>If the caret should be drawn as a block or a vertical
+    line</P
+></LI
+><LI
+><P
+>If placing the caret on the first three or last three
+    visible lines should automatically scroll</P
+></LI
+><LI
+><P
+>In the <B
+CLASS="KEYCAP"
+>Home</B
+> and <B
+CLASS="KEYCAP"
+>End</B
+> should move
+    the caret to the start/end of the viewport and buffer when pressed
+    repeatedly - see <A
+HREF="basic-text-edit.html#CARET"
+>the section called <I
+>The Caret</I
+> in Chapter 4</A
+></P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2619"
+>The Gutter Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Gutter</SPAN
+> pane allows you to change various settings
+    used by the gutter. Colors used by the gutter can be set in the
+    <SPAN
+CLASS="GUIBUTTON"
+>Colors &amp; Styles</SPAN
+> option pane.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2626"
+>The Colors &amp; Styles Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Colors &amp; Styles</SPAN
+> pane allows you to change various
+    colors used by the text area, and the text styles used by syntax
+    highlighting. Clicking on a color or style will display the appropriate
+    editor for changing it.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2646"
+>The File Filters Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>File Filters</SPAN
+> pane allows you to add custom file filters
+    to the open file and save dialog boxes. Note that the file filters
+    built into jEdit (the ones for the standard editing modes) cannot
+    be changed; only user-defined file filters can be added and changed.
+   </P
+><P
+>    Filters are added and removed in a rather peculiar fashion in this pane.
+    Changing the last line in the list (which is always blank) will add
+    another blank line. Lines with empty names or globs will
+    be ignored when the filters are being saved.
+   </P
+><P
+>    The glob patterns are case insensitive. For information about
+    glob patterns, which are a simplified form of regular expressions,
+    see <A
+HREF="globs.html"
+>Appendix C</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="OPTIONS-SHORTCUTS"
+>The Shortcut Editing Panes</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Command Shortcuts</SPAN
+> pane allows you to change key
+    bindings for jEdit's commands. The <SPAN
+CLASS="GUIBUTTON"
+>Macro Shortcuts</SPAN
+> pane
+    allows you to change macro key bindings.
+   </P
+><P
+>    Internally, jEdit stores key bindings in the form
+    <TT
+CLASS="REPLACEABLE"
+><I
+>modifiers</I
+></TT
+>+<TT
+CLASS="REPLACEABLE"
+><I
+>key</I
+></TT
+> where <TT
+CLASS="REPLACEABLE"
+><I
+>modifiers</I
+></TT
+>
+    is a list of modifiers, with C being Control, A being Alt, and S being
+    Shift. <TT
+CLASS="REPLACEABLE"
+><I
+>key</I
+></TT
+> is either an alphanumeric character, or a
+    named key stroke such as <B
+CLASS="KEYCAP"
+>PAGE_UP</B
+>. A full list of named
+    key strokes is available in the API documentation for the
+    <TT
+CLASS="FILENAME"
+>java.awt.event.KeyEvent</TT
+> class.
+   </P
+><P
+>    jEdit also allows multiple keystroke bindings; for example,
+    <SPAN
+CLASS="GUIMENUITEM"
+>Open URL</SPAN
+> is bound to <B
+CLASS="KEYCAP"
+>C+e C+o</B
+>. Any number
+    of keystrokes can be present in a key binding. If you are having
+    trouble finding an unused key binding, try using one of the function
+    keys plus a modifier such as <B
+CLASS="KEYCAP"
+>Control</B
+> or <B
+CLASS="KEYCAP"
+>Alt</B
+>.
+   </P
+><P
+>    Changes to the key bindings take effect immediately, but due to a
+    quirk in jEdit's menu bar implementation, menu item labels will contain
+    the old shortcuts until jEdit is restarted.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2674"
+>The Abbreviations Pane</A
+></H2
+><P
+>    The <SPAN
+CLASS="GUIBUTTON"
+>Abbreviations</SPAN
+> pane allows you to enable or disable
+    automatic abbreviation expansion, and edit the defined abbrevs.
+   </P
+><P
+>    The combo box labelled "Abbrev set" is used to choose the
+    abbrev set to edit. The first entry, "global", allows you to
+    edit abbrevs available in all edit modes. The subsequent
+    entries allow you to edit abbrevs on a per-mode basis.
+   </P
+><P
+>    Abbrevs are added and removed in a rather peculiar fashion in this pane.
+    Changing the last line in the list (which is always blank) will add
+    another blank line. Lines with empty abbrevs or expansions will
+    be ignored when the abbrevs are being saved.
+   </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-2. The General pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-general.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-3. The Editor pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-editor.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-4. The Gutter pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-gutter.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-5. The Colors &amp; Styles pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-styles.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-6. The File Filters pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-filters.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-7. The Command Shortcuts pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-cmd-shortcuts.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-8. The Macro Shortcuts pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-mac-shortcuts.gif"></P
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 8-9. The Abbreviations pane of the Global Options dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-options-abbrevs.gif"></P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="customizing.html"
+>Up</A
+><BR><A
+HREF="buffer-local.html"
+>Prev</A
+>: Buffer-Local Properties<BR><A
+HREF="plugins.html"
+>Next</A
+>: Using Plugins<BR></DIV
+></BODY
+></HTML
+>

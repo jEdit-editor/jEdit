@@ -1,0 +1,368 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Saving Files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Basic File Operations"
+HREF="basic-file-ops.html"><LINK
+REL="PREVIOUS"
+TITLE="Opening Files"
+HREF="opening.html"><LINK
+REL="NEXT"
+TITLE="Printing and Sending Files"
+HREF="printing-sending.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="printing-sending.html"
+>Next</A
+>, <A
+HREF="opening.html"
+>Prev</A
+></P
+><H2
+>Chapter 3. Basic File Operations</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="SAVING"
+>Saving Files</A
+></H1
+><P
+>   
+   
+   Any changes made to a buffer aren't actually stored to disk immediately
+   (but see autosave below); instead, they are stored in the computer's high
+   speed memory (RAM) until they are <I
+CLASS="FIRSTTERM"
+>saved</I
+>.
+  </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN386"
+>Autosave and Backups</A
+></H2
+><P
+>    
+    jEdit has an autosave feature that should protect
+    against possible disasters, such as computer crashes.
+    Every 15 seconds, all buffers with changes are
+    written out to their respective file names, enclosed in hash
+    ("#") characters. For example, <TT
+CLASS="FILENAME"
+>program.c</TT
+> will
+    be autosaved to <TT
+CLASS="FILENAME"
+>#program.c#</TT
+>. These autosave files do
+    not clutter up your disk; they are deleted when the buffer is explicitly
+    saved.
+    The point of autosaving is so that if jEdit crashes, it should be
+    reasonably easy to recover your work - just open the autosave file(s)
+    and copy over the autosaved data.
+   </P
+><P
+>    
+    Another useful safety feature is file backups. When you save a buffer
+    for the first time after opening it, its original contents are
+    saved to the buffer's file name suffixed with a tilde ("~").
+    For example, <TT
+CLASS="FILENAME"
+>paper.tex</TT
+> is backed up to <TT
+CLASS="FILENAME"
+>paper.tex~</TT
+>.
+    The point of backups so that if you make extensive changes to a file, and then
+    change your mind, you can go back to the previous version.
+   </P
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>     The autosave interval and various backup-related
+     settings can be changed in the
+     <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+     see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN405"
+>Line Separator Characters</A
+></H2
+><P
+>    
+    
+    
+    
+    The three major operating systems use different conventions to mark
+    line endings in text files.
+    The MacOS uses Carriage-Return (\r, ^M) for that purpose. Unix
+    uses Newline (\n, ^J). DOS and Windows use Carriage-Return-Newline
+    (\r\n, ^M^J). jEdit can handle all three file formats.
+   </P
+><P
+>    When a file is loaded, jEdit tries to guess the line separators used
+    in that file. When a file is being saved, it uses the line separator it
+    found while loading the file. The line separator can be changed manually
+    on a per-buffer
+    basis in the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Buffer Options</SPAN
+> dialog box;
+    see <A
+HREF="customizing.html#BUFFER-OPTS"
+>the section called <I
+>The Buffer Options Dialog Box</I
+> in Chapter 8</A
+>.
+    The default for new files can be changed in the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+    see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN423"
+>When Another Application Modifies the File</A
+></H2
+><P
+>    If you go to save a buffer and jEdit notices that another application
+    has changed it on disk, a warning message is displayed. You may
+    continue with the save, but the changes by the other application
+    will be lost.
+   </P
+><P
+>    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Reload</SPAN
+> (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>F2</B
+>) will reload the file from disk. If the buffer has unsaved
+    changes,
+    you will be asked for confirmation first.
+   </P
+><P
+>    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Reload All Buffers</SPAN
+> (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>Shift</B
+>-<B
+CLASS="KEYCAP"
+>F2</B
+>) will discard your
+    changes in <I
+CLASS="EMPHASIS"
+>all open buffers</I
+>
+    and reload them from disk. This command will ask for confirmation first.
+    It is useful after performing a CVS checkin or similar; CVS inserts
+    version info in all files it commits, hence they must be re-read from
+    disk.
+   </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 3-4. Warning message displayed when another application
+   changed the file on disk</B
+></P
+><P
+><IMG
+SRC="../images/dialog-diskmod.gif"></P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN444"
+>Saving Files With the Save Command</A
+></H2
+><P
+>    
+    
+    
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save</SPAN
+> (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>S</B
+>)
+    will immediately save the buffer to disk, unless the buffer is a
+    new file created with the <SPAN
+CLASS="GUIMENU"
+>New File</SPAN
+> command, in which
+    case the standard save file dialog box will be
+    displayed, prompting for a file name and destination directory.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN459"
+>Saving Files With the Save As Command</A
+></H2
+><P
+>    
+    
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save As</SPAN
+>
+    will prompt for an alternate file name to save the buffer to.
+    Note that if you make some changes and "Save As", the old
+    file will not contain the changes, but the new one will.
+    This can be used to create a new version of the file, etc.
+   </P
+><P
+>    The file type popup menu in the save as dialog box contains a list of file
+    types; selecting one will make only files of that type visible in
+    the file list. This is handy when navigating directories with lots
+    of files of different types. The filters can be changed in the
+    <SPAN
+CLASS="GUIBUTTON"
+>File Filters</SPAN
+> pane of the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+    dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN474"
+>Saving All Open Files</A
+></H2
+><P
+>    
+    
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save All Buffers</SPAN
+>
+    (keyboard equivalent:
+    <B
+CLASS="KEYCAP"
+>F3</B
+>) will save all buffers;
+    a confirmation dialog box is issued first.
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="basic-file-ops.html"
+>Up</A
+><BR><A
+HREF="opening.html"
+>Prev</A
+>: Opening Files<BR><A
+HREF="printing-sending.html"
+>Next</A
+>: Printing and Sending Files<BR></DIV
+></BODY
+></HTML
+>

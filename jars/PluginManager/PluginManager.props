@@ -1,0 +1,115 @@
+### plugin properties
+plugin.PluginManagerPlugin.name=Plugin Manager
+plugin.PluginManagerPlugin.author=Slava Pestov
+plugin.PluginManagerPlugin.version=0.1
+plugin.PluginManagerPlugin.docs=PluginManager.html
+plugin.PluginManagerPlugin.depend.0=jedit 02.03.04.00
+
+### URL to download plugin list from
+plugin-manager.url=http://jedit.standmed.com/export/plugin_manager
+
+### Message shown when jEdit is first run
+first-time.title=Welcome to jEdit
+first-time.message=Thank you for installing jEdit!\n\
+	\n\
+	While jEdit is very useful on its own, it can be made even more\n\
+	powerful by installing "plugins". Plugins are modules of code\n\
+	that add features to jEdit.\n\
+	\n\
+	Would you like to see a list of available plugins and download\n\
+	any that interest you? (This requires an Internet connection.)\n\
+	\n\
+	Note that you can install plugins at any other time by selecting\n\
+	Plugins->Plugin Manager->Install New Plugins.
+
+new-version.title=New Version Installed
+new-version.message=You have just upgraded from jEdit version {0} to {1}.\n\
+	Because this new version might have introduced plugin-related\n\
+	changes, it is recommended that you update all your plugins to\n\
+	their latest versions to avoid any problems.\n\
+	\n\
+	Would you like to update your plugins now? (This requires an\n\
+	Internet connection.)\n\
+	\n\
+	Note that you can update plugins at any other time by selecting\n\
+	Plugins->Plugin Manager->Update Plugins.
+
+### Plugin manager menu item
+plugin-manager.label=Plugin Manager
+
+### installed plugins dialog box
+plugin-manager.title=Plugin Manager
+plugin-manager.loaded=Installed and loaded
+plugin-manager.not-loaded=Installed but not loaded
+
+plugin-manager.info.path=JAR file path:\ 
+plugin-manager.info.name=Plugin name:\ 
+plugin-manager.info.author=Author:\ 
+plugin-manager.info.version=Version:\ 
+plugin-manager.info.unknown=Unknown
+plugin-manager.info.not-loaded=Can only get info for loaded plugins
+
+plugin-manager.remove=Remove Selected Plugins
+plugin-manager.update=Update Plugins
+plugin-manager.install=Install New Plugins
+
+### plugin removal
+remove-plugins.title=Plugin Removal
+remove-plugins.message=Are you sure you want to remove the following\n\
+	plugins? You will need to re-install them if you ever want to\n\
+	use them again.\n\
+	\n\
+	{0}
+remove-plugins.done.title=Plugins Removed
+remove-plugins.done.message=You must restart jEdit for the plugin removal\n\
+	to take effect.
+remove-plugins.error.title=Cannot remove plugin
+remove-plugins.error.message=The plugin {0} cannot be removed because\n\
+	an error occurred.
+
+### plugin installation
+install-plugins.title=Install New Plugins
+install-plugins.caption=Available plugins:
+install-plugins.loading=Loading plugin list from server; please wait...
+install-plugins.info.name=Name:\ 
+install-plugins.info.author=Author:\ 
+install-plugins.info.version=Version:\ 
+install-plugins.info.updated=Last updated:\ 
+install-plugins.info.requires=Requires:\ 
+install-plugins.info.description=Description:\ 
+
+install-plugins.user=Install in user plugin directory ({0})
+install-plugins.none=none
+install-plugins.system=Install in system plugin directory ({0})
+install-plugins.install=Install
+
+install-plugins.done.title=Plugins Installed
+install-plugins.done.message=You must now restart jEdit to be use the\n\
+	newly installed plugins.
+install-plugins.error.title=Cannot install plugin
+install-plugins.error.message=The plugin {0} cannot be installed because\n\
+	an error occurred. ({1})
+
+### plugin updating
+update-plugins.title=Update Plugins
+update-plugins.caption=New versions of the following plugins are available:
+update-plugins.loading=Loading plugin list from server; please wait...
+update-plugins.info.name=Name:\ 
+update-plugins.info.author=Author:\ 
+update-plugins.info.current-version=Installed version:\ 
+update-plugins.info.latest-version=Latest version:\ 
+update-plugins.info.updated=Last updated:\ 
+update-plugins.info.requires=Requires:\ 
+update-plugins.info.description=Description:\ 
+
+update-plugins.update=Update
+
+update-plugins.done.title=Plugins Updated
+update-plugins.done.message=You must now restart jEdit to be use the\n\
+	updated plugins.
+
+### download progress
+download-progress.title=Installing Plugins
+download-progress.downloading=Downloading {0}
+download-progress.installing=Installing {0}
+download-progress.stop=Stop

@@ -1,6 +1,6 @@
 /*
- * version_check_now.java
- * Copyright (C) 1999 Slava Pestov
+ * version_check.java
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,15 +20,15 @@
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
 
-public class version_check_now extends EditAction
+public class version_check extends EditAction
 {
-	public version_check_now()
+	public version_check()
 	{
-		super("version-check-now");
+		super("version-check");
 	}
 
 	public void actionPerformed(ActionEvent evt)
 	{
-		LatestVersionPlugin.doVersionCheck(getView(evt));
+		new VersionCheckThread(getView(evt));
 	}
 }

@@ -28,6 +28,7 @@ public class VersionCheckThread extends Thread
 	public VersionCheckThread(View view)
 	{
 		this.view = view;
+		start();
 	}
 
 	public void run()
@@ -68,9 +69,6 @@ public class VersionCheckThread extends Thread
 						new NewVersionAvailable(version,url));
 				}
 			}
-
-			jEdit.setProperty("version-check.last-time",String.valueOf(
-				System.currentTimeMillis()));
 		}
 		catch(Exception e)
 		{

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Rectangular Selection</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Text Editing"
+HREF="advanced-text-edit.html"><LINK
+REL="PREVIOUS"
+TITLE="Repeating Commands"
+HREF="repeats.html"><LINK
+REL="NEXT"
+TITLE="Registers"
+HREF="registers.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="registers.html"
+>Next</A
+>, <A
+HREF="repeats.html"
+>Prev</A
+></P
+><H2
+>Chapter 5. Advanced Text Editing</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="RECT-SELECT"
+>Rectangular Selection</A
+></H1
+><P
+>   
+   Not only is it possible to select continuous runs of text, but
+   columns of text can also be selected.
+  </P
+><P
+>   There are three ways to create a rectangular selection. The simplest
+   way is to drag the mouse from one corner of the rectangle to another
+   while holding down the <B
+CLASS="KEYCAP"
+>Control</B
+> key.
+  </P
+><P
+>   Clicking the mouse button while holding down <B
+CLASS="KEYCAP"
+>Shift</B
+>-<B
+CLASS="KEYCAP"
+>Control</B
+> will create a rectangle from the caret
+   position to where the mouse was clicked.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Rectangular
+   Selection</SPAN
+> (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>\</B
+>)
+   will toggle the current selection between continuous and rectangular mode.
+  </P
+><P
+>   It is possible to select a rectangle with zero width, but non-zero height.
+   For example, this can be used to insert a column between two existing
+   columns. Such selections are shown as a thin vertical line.
+  </P
+><P
+>   Deleting, replacing, copying, pasting, and so on works as expected on
+   rectangles. Some plugins might not be rectangle-aware, and
+   cause problems. All commands built in to jEdit should work, however.
+  </P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>    Because rectangles rely on character offsets, rather than absolute
+    screen positions, they may behave strangely when proportional-width
+    fonts, or tabs, are used. Try to use monospaced fonts and soft tabs
+    when editing columnar files.
+   </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 5-3. A rectangular selection</B
+></P
+><P
+><IMG
+SRC="../images/window-editor-rect-sel.gif"></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="advanced-text-edit.html"
+>Up</A
+><BR><A
+HREF="repeats.html"
+>Prev</A
+>: Repeating Commands<BR><A
+HREF="registers.html"
+>Next</A
+>: Registers<BR></DIV
+></BODY
+></HTML
+>

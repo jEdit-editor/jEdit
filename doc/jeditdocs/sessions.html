@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Saving and Loading Sessions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Text Editing"
+HREF="advanced-text-edit.html"><LINK
+REL="PREVIOUS"
+TITLE="The Edit Server"
+HREF="server.html"><LINK
+REL="NEXT"
+TITLE="Markers"
+HREF="markers.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="markers.html"
+>Next</A
+>, <A
+HREF="server.html"
+>Prev</A
+></P
+><H2
+>Chapter 5. Advanced Text Editing</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="SESSIONS"
+>Saving and Loading Sessions</A
+></H1
+><P
+>   
+   
+   
+   When working on a project, it can sometimes be convenient to save
+   the list of open files, and re-open those files at a later time.
+   jEdit's saved sessions can do this.
+  </P
+><P
+>   jEdit sessions are plain text files with the extension
+   <TT
+CLASS="FILENAME"
+>.session</TT
+>, stored in the
+   <TT
+CLASS="FILENAME"
+>$HOME/.jedit/sessions</TT
+> directory. The session named
+   <TT
+CLASS="FILENAME"
+>default.session</TT
+> is loaded on startup, and the list of
+   open files is recorded into it when jEdit exits. The end result is
+   that open files are retained across editing sessions. This
+   "default" session can be disabled in the
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+   dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+  </P
+><P
+>   A session to load can be specified on the command line using the
+   <B
+CLASS="COMMAND"
+>-session</B
+> switch. For example, the following will open
+   all files in the <TT
+CLASS="FILENAME"
+>website</TT
+> session (the <TT
+CLASS="FILENAME"
+>.session</TT
+>
+   suffix, if left off, is appended to session names automatically):
+   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>$</TT
+> <TT
+CLASS="USERINPUT"
+><B
+>jedit -session=website</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+   The <B
+CLASS="COMMAND"
+>-nosession</B
+> command line switch will instruct jEdit
+   not to load a session, and instead open an <TT
+CLASS="FILENAME"
+>Untitled</TT
+>
+   file.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Load Session</SPAN
+> loads
+   a session while jEdit is running from a file specified in a file
+   selection dialog box.
+  </P
+><P
+>   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Save Session</SPAN
+> saves the list of
+   all open files to a session specified in a file selection dialog box.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="advanced-text-edit.html"
+>Up</A
+><BR><A
+HREF="server.html"
+>Prev</A
+>: The Edit Server<BR><A
+HREF="markers.html"
+>Next</A
+>: Markers<BR></DIV
+></BODY
+></HTML
+>

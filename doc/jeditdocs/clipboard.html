@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The Clipboard</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Basic Text Editing"
+HREF="basic-text-edit.html"><LINK
+REL="PREVIOUS"
+TITLE="Undo and Redo"
+HREF="undo-redo.html"><LINK
+REL="NEXT"
+TITLE="Advanced Text Editing"
+HREF="advanced-text-edit.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="advanced-text-edit.html"
+>Next</A
+>, <A
+HREF="undo-redo.html"
+>Prev</A
+></P
+><H2
+>Chapter 4. Basic Text Editing</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CLIPBOARD"
+>The Clipboard</A
+></H1
+><P
+>   
+   The clipboard is a storage area where text and other data can be
+   temporarily stored. It is system-wide, and hence can be used to transfer
+   data between applications.
+  </P
+><P
+>   
+   
+   On Unix systems with the X Window System, there are two clipboards;
+   one is used by many applications to store the currently selected
+   text, and the other is used with the Cut, Copy and Paste commands.
+   jEdit only uses the latter; in fact, it is the only clipboard Java
+   allows access to.
+  </P
+><P
+>   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Copy</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>C</B
+>)
+   copies the selected text into the clipboard.
+  </P
+><P
+>   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Cut</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>X</B
+>)
+   copies the selected text into the clipboard and deletes it from the
+   document.
+  </P
+><P
+>   
+   <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Paste</SPAN
+>
+   (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>V</B
+>)
+   will insert the most recently copied or cut text at the caret position
+   (replacing the selection if there is one).
+  </P
+><P
+>   
+   <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Paste Previous</SPAN
+> (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>F5</B
+>) will display a list of previously pasted strings, most
+   recent first.
+   The last 25 are listed. Selecting one will insert it at the caret
+   position.
+  </P
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>    The number of pasted strings to remember can be changed in the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+    see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+   </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 4-2. The Paste Previous dialog box</B
+></P
+><P
+><IMG
+SRC="../images/dialog-pasteprev.gif"></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="basic-text-edit.html"
+>Up</A
+><BR><A
+HREF="undo-redo.html"
+>Prev</A
+>: Undo and Redo<BR><A
+HREF="advanced-text-edit.html"
+>Next</A
+>: Advanced Text Editing<BR></DIV
+></BODY
+></HTML
+>

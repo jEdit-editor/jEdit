@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The Edit Server</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Text Editing"
+HREF="advanced-text-edit.html"><LINK
+REL="PREVIOUS"
+TITLE="The Gutter"
+HREF="gutter.html"><LINK
+REL="NEXT"
+TITLE="Saving and Loading Sessions"
+HREF="sessions.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="sessions.html"
+>Next</A
+>, <A
+HREF="gutter.html"
+>Prev</A
+></P
+><H2
+>Chapter 5. Advanced Text Editing</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="SERVER"
+>The Edit Server</A
+></H1
+><P
+>   When jEdit is
+   started, it attempts to connect to another running jEdit instance.
+   If the connection
+   was
+   successful, it transfers control to that running instance, passing it any
+   necessary file names. Only if no other running instance can be found does
+   jEdit start up for real. This saves startup time if another instance is
+   already running.
+  </P
+><P
+>   The edit server is implemented using TCP/IP
+   sockets. When a server is started, it
+   picks a random port number and authorization key and writes it to a
+   <I
+CLASS="FIRSTTERM"
+>port file</I
+> (usually in a well-known location). Client instances
+   of jEdit then read the port file and connect to the specified port, passing
+   it the authorization key.
+  </P
+><P
+>   The authorization key is required to prevent malicious remote attackers from
+   opening files
+   on your compiler.
+  </P
+><P
+>   
+   
+   
+   The <B
+CLASS="COMMAND"
+>-noserver</B
+> command line switch disables the server features
+   entirely;
+   no connection will be attempted, and no sever will be started. The
+   <B
+CLASS="COMMAND"
+>-server</B
+> command line switch can be used to change the file
+   where port information is stored. This can be used when
+   you want to run more than one copy of jEdit at once. For example:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>$</TT
+> <TT
+CLASS="USERINPUT"
+><B
+>jedit -server=my-server-2</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+><P
+>   The same <B
+CLASS="COMMAND"
+>-server</B
+> parameter must be passed to <I
+CLASS="EMPHASIS"
+>both</I
+>
+   the server and client.
+  </P
+><P
+>   
+   
+   
+   
+   All jEdit command line parameters except those that affect initial
+   startup (<B
+CLASS="COMMAND"
+>-nosettings</B
+>, <B
+CLASS="COMMAND"
+>-settings</B
+>
+   and <B
+CLASS="COMMAND"
+>-nosplash</B
+>) are handled appropriately by the server.
+  </P
+><P
+>   
+   In some circumstances, it might be desirable for the client instance
+   to open the files in an existing view, rather than creating a new one.
+   The <B
+CLASS="COMMAND"
+>-reuseview</B
+> switch can be used for that purpose.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="advanced-text-edit.html"
+>Up</A
+><BR><A
+HREF="gutter.html"
+>Prev</A
+>: The Gutter<BR><A
+HREF="sessions.html"
+>Next</A
+>: Saving and Loading Sessions<BR></DIV
+></BODY
+></HTML
+>

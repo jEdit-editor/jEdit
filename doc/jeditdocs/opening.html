@@ -1,0 +1,479 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Opening Files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Basic File Operations"
+HREF="basic-file-ops.html"><LINK
+REL="PREVIOUS"
+TITLE="The Activity Log"
+HREF="activity-log.html"><LINK
+REL="NEXT"
+TITLE="Saving Files"
+HREF="saving.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="saving.html"
+>Next</A
+>, <A
+HREF="activity-log.html"
+>Prev</A
+></P
+><H2
+>Chapter 3. Basic File Operations</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="OPENING"
+>Opening Files</A
+></H1
+><P
+>   Before a file can be edited, it must first be <I
+CLASS="FIRSTTERM"
+>opened</I
+>.
+   When a file is opened, its contents are read into memory and placed in a
+   new <I
+CLASS="FIRSTTERM"
+>buffer</I
+>.
+   In this manual, a <I
+CLASS="FIRSTTERM"
+>file</I
+> is the file itself, on disk;
+   a <I
+CLASS="FIRSTTERM"
+>buffer</I
+> is an open file as it exists in memory,
+   with any unsaved changes, etc.
+  </P
+><P
+>   All open buffers are listed in the <SPAN
+CLASS="GUIMENU"
+>Buffers</SPAN
+> menu; selecting
+   one will display that buffer in the current view. The tabs that run
+   along the top of the text area can also be used to switch between
+   buffers. If you don't like the tabs, they can be disabled in
+   <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>; see
+   <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+> for details.
+  </P
+><P
+>   The title bar of views, as well as the entries in the
+   <SPAN
+CLASS="GUIMENU"
+>Buffers</SPAN
+> menu display various strings depending on the
+   status of the buffer. If "(modified)" is displayed, the
+   buffer has unsaved changes that have not yet been written to disk
+   (or <I
+CLASS="FIRSTTERM"
+>saved</I
+>). If "(new)" is displayed, the
+   buffer is new; it doesn't exist on disk yet. If "(read only)" is
+   displayed,
+   no changes can be made to that buffer. Markers can
+   be set in read only files but they will not be saved.
+  </P
+><P
+>   Files that you do not have write access to are automatically opened
+   read only. Files can also be forced to open read only from the command line
+   by specifying the <TT
+CLASS="USERINPUT"
+><B
+>-readonly</B
+></TT
+> option.
+  </P
+><P
+>   To make a read only buffer read-write, save it.
+   If the save was successful, the read only flag will be cleared (the
+   rationale behind this is that if the save was successful, you have
+   write access to the file, hence you can make changes).
+  </P
+><P
+>   If you edit non-ASCII files, you can select the file
+   encoding used by jEdit in
+   the 
+     <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+     see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+  </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="OPENCLI"
+>Opening Files From the Command Line</A
+></H2
+><P
+>    
+    
+    
+    
+    Any file names passed on the command line are opened by jEdit.
+    It is possible to have the caret positioned on a specific line
+    after the buffer is opened. For example, to open <TT
+CLASS="FILENAME"
+>paper.tex</TT
+>
+    and go to line number 247, you would invoke:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>$</TT
+> <TT
+CLASS="USERINPUT"
+><B
+>jedit paper.tex#+247</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+><P
+>    It is also possible to move the caret to a specific marker.
+    For example, to open <TT
+CLASS="FILENAME"
+>Kernel.java</TT
+> and go to
+    the marker named <TT
+CLASS="FILENAME"
+>getCommandStack</TT
+>, you would invoke:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>$</TT
+> <TT
+CLASS="USERINPUT"
+><B
+>jedit Kernel.java#getCommandStack</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+><P
+>    If your file name includes a dash ("-"), you will need
+    to specify the <TT
+CLASS="USERINPUT"
+><B
+>--</B
+></TT
+> (dash-dash) command line parameter before
+    it so that it is not treated as a command line switch. For
+    example:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>$</TT
+> <TT
+CLASS="USERINPUT"
+><B
+>jedit -- -file-name-starting-with-a-dash</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN299"
+>Opening Files With the Open File Command</A
+></H2
+><P
+>    
+    
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Open File</SPAN
+>
+    (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>O</B
+>)
+    will display the open file dialog box. Double clicking (or single
+    clicking and then clicking <SPAN
+CLASS="GUIBUTTON"
+>Open</SPAN
+>) on a file will open
+    it. Double clicking on a directory will list that directory.
+   </P
+><P
+>    The file type popup menu in the open file dialog box contains a list of file
+    types; selecting one will make only files of that type visible in
+    the file list. This is handy when navigating directories with lots
+    of files of different types. The filters can be changed in the
+    <SPAN
+CLASS="GUIBUTTON"
+>File Filters</SPAN
+> pane of the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+    dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="OPENURL"
+>Opening Files With the Open URL Command</A
+></H2
+><P
+>    
+    
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Open URL</SPAN
+>
+    (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>O</B
+>)
+    will display the Open URL dialog box. A URL or a file path name
+    (relative path names are prefixed with the current buffer's parent
+    directory) can be
+    entered. Most Java implementations support the <TT
+CLASS="FILENAME"
+>ftp:</TT
+>
+    and <TT
+CLASS="FILENAME"
+>http:</TT
+> URL protocols, so jEdit can open files from
+    the Internet directly. However, saving to URLs is not supported.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="RECENT"
+>Recently Opened Files</A
+></H2
+><P
+>    
+    
+    The <SPAN
+CLASS="GUISUBMENU"
+>Recent Files</SPAN
+> submenu of the <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+> menu
+    lists the 8 most recently opened files. When a buffer is closed,
+    it is added to this list.
+   </P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>     The number of recent files can be changed in the
+     <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+     see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN348"
+>Current Directory Menu</A
+></H2
+><P
+>    
+    
+    The <SPAN
+CLASS="GUISUBMENU"
+>Current Directory</SPAN
+> submenu of the
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+> menu lists all files in the frontmost buffer's
+    directory. Opening files with this menu can be quicker than using
+    the <SPAN
+CLASS="GUIMENUITEM"
+>Open File</SPAN
+> dialog box.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN358"
+>Creating New Files</A
+></H2
+><P
+>    Sometimes, you want to create a blank, new file, instead of editing
+    an existing one. There are two ways to do this:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+>     <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>New File</SPAN
+> (keyboard equivalent:
+     <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>N</B
+>) will create a new
+     "Untitled" file.
+     
+    </P
+></LI
+><LI
+><P
+>     Open a non-existent file. If you open a
+     non-existent file using any technique described in this
+     section, a new file with that name will be created when the buffer
+     is first saved.
+    </P
+></LI
+></UL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="basic-file-ops.html"
+>Up</A
+><BR><A
+HREF="activity-log.html"
+>Prev</A
+>: The Activity Log<BR><A
+HREF="saving.html"
+>Next</A
+>: Saving Files<BR></DIV
+></BODY
+></HTML
+>

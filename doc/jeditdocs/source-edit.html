@@ -1,0 +1,481 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Source Code Editing</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Miscellaneous Commands"
+HREF="misc-commands.html"><LINK
+REL="NEXT"
+TITLE="Bracket Matching"
+HREF="bracket-matching.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="bracket-matching.html"
+>Next</A
+>, <A
+HREF="misc-commands.html"
+>Prev</A
+></P
+><HR></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="SOURCE-EDIT"
+>Chapter 6. Source Code Editing</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="source-edit.html#MODES"
+>Edit Modes</A
+></DT
+><DT
+><A
+HREF="bracket-matching.html"
+>Bracket Matching</A
+></DT
+><DT
+><A
+HREF="indent.html"
+>Tabbing and Indentation</A
+></DT
+><DT
+><A
+HREF="commenting.html"
+>Commenting Out Code</A
+></DT
+><DT
+><A
+HREF="syntax-hilite.html"
+>Syntax Highlighting</A
+></DT
+></DL
+></DIV
+><P
+>  Most often, a text editor is used to edit files with some sort
+  of structure, like program source code, or HTML, TeX, and so on.
+  jEdit has several features for making this easier, including edit modes,
+  bracket matching, various indentation commands, auto indent,
+  commands for commenting source, and syntax highlighting.
+ </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MODES"
+>Edit Modes</A
+></H1
+><P
+>   Because it is impossible to provide optimal editing for all types of
+   files at once, jEdit provides various <I
+CLASS="FIRSTTERM"
+>edit modes</I
+>. An edit mode
+   is an editor configuration suitable for editing a specific
+   type of file. Edit modes can specify syntax highlighting, auto indent,
+   and various other settings for editing a file type.
+  </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1611"
+>Automatic Mode Selection</A
+></H2
+><P
+>    
+    When a file is opened, jEdit first checks the file name against a list
+    of known patterns. For example, files whose names end with ".c"
+    are edited in C mode, and files named <TT
+CLASS="FILENAME"
+>Makefile</TT
+> are edited in
+    Makefile mode. If a suitable match based on file name cannot be found,
+    jEdit checks the first line of the file. For example, files whose first
+    line is "#!/bin/sh" are edited in shell script mode.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1619"
+>Manually Setting the Edit Mode</A
+></H2
+><P
+>    If automatic mode selection is not appropriate, the edit mode can
+    be specified manually. To set the current buffer's edit mode
+    on a one-time basis, select the edit mode in the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Buffer Options</SPAN
+> dialog box;
+    see <A
+HREF="customizing.html#BUFFER-OPTS"
+>the section called <I
+>The Buffer Options Dialog Box</I
+> in Chapter 8</A
+>.
+    To have a buffer open with a specific edit mode every time,
+    set the "mode" buffer-local property to the
+    name of the desired edit mode by placing
+    the following text in one of the first 10 lines of the buffer:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:mode=<TT
+CLASS="REPLACEABLE"
+><I
+>edit mode</I
+></TT
+>:</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1631"
+>Available Edit Modes</A
+></H2
+><DIV
+CLASS="TABLE"
+><P
+><B
+>Table 6-1. Table of edit modes</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Mode name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Comments</TH
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>bat</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>MS-DOS Batch File edit mode. Automatically selected for
+       files with extension ".bat".</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>c</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>C source code edit mode. Automatically selected for
+       files with extension ".c" or ".h".</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>cc</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>C++ source code edit mode. Automatically selected for
+       files with a variety of C++ extensions.</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>eiffel</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Eiffel source code edit mode. Automatically
+       selected for files with extension ".e".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>html</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>HTML source code edit mode. Automatically selected for
+       files with extension ".html", ".shtml" or ".htm".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>idl</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>CORBA IDL (Interface Definition Language) edit mode.
+       Automatically selected for
+       files with extension ".idl".</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>java</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Java source code edit mode. Automatically selected for
+       files with extension ".java".</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>javascript</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>JavaScript source code edit mode. Automatically selected for
+       files with extension ".js".</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>make</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Makefile edit mode. Automatically selected for files named
+       "Makefile" or "GNUmakefile".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>patch</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Edit mode for Unix diffs and patches. Automatically selected
+       for files with extension ".diff" or ".patch".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>perl</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Perl edit mode. Automatically selected for files with
+       extension ".pl" or ".pm", and whose first line
+       contains "#!" and "perl".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>php3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>PHP3 edit mode. Automatically selected for files with
+       extension ".php3", ".php",
+       ".phtml" or ".inc".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>postscript</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>PostScript edit mode. Automatically
+       selected for files with extension ".ps".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>props</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Java property file and MS-DOS INI edit mode. Automatically
+       selected for files with extension ".props" or ".ini",
+       and files named "config.sys" or "properties".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>python</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Python script edit mode. Automatically
+       selected for files with extension ".py" or whose first line
+       contains "#!" and "python".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>shell</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Unix shell script edit mode. Automatically selected for files
+       with extension ".sh" or ".csh",
+       and files whose first line is
+       "#!" followed by one of the various Unix shell names.
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>tex</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>TeX edit mode. Automatically selected for files with
+       extension ".tex".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>text</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Default edit mode. Does nothing special.</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>tsql</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Transact-SQL edit mode. Automatically selected for files with
+       extension ".sql".
+       </TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="TOP"
+>xml</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>XML and SGML source code edit mode. Automatically selected for
+       files with extension "dtd",
+       "rdf",
+       "rss",
+       "sgm",
+       "sgml",
+       "xml",
+       "xsd"
+       or "xsl".
+       </TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+><BR><A
+HREF="misc-commands.html"
+>Prev</A
+>: Miscellaneous Commands<BR><A
+HREF="bracket-matching.html"
+>Next</A
+>: Bracket Matching<BR></DIV
+></BODY
+></HTML
+>

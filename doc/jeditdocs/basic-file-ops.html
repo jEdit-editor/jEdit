@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Basic File Operations</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Keyboard Shortcuts"
+HREF="shortcuts.html"><LINK
+REL="NEXT"
+TITLE="The Activity Log"
+HREF="activity-log.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="activity-log.html"
+>Next</A
+>, <A
+HREF="shortcuts.html"
+>Prev</A
+></P
+><HR></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="BASIC-FILE-OPS"
+>Chapter 3. Basic File Operations</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="basic-file-ops.html#STARTING"
+>Starting jEdit</A
+></DT
+><DT
+><A
+HREF="activity-log.html"
+>The Activity Log</A
+></DT
+><DT
+><A
+HREF="opening.html"
+>Opening Files</A
+></DT
+><DT
+><A
+HREF="saving.html"
+>Saving Files</A
+></DT
+><DT
+><A
+HREF="printing-sending.html"
+>Printing and Sending Files</A
+></DT
+><DT
+><A
+HREF="closing-exiting.html"
+>Closing Files and Exiting jEdit</A
+></DT
+></DL
+></DIV
+><P
+>  This chapter describes jEdit's basic file-related operations, such as
+  opening, saving, printing, and so on.
+ </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="STARTING"
+>Starting jEdit</A
+></H1
+><P
+>   Exactly how jEdit is started depends on the operating system;
+   most often you would type "jedit" at the command line
+   or double click on the jEdit icon (or select it from a menu,
+   or whatever). Once started, it will display a "splash
+   screen" with the jEdit logo and a progress bar that advances
+   while jEdit loads. After a short delay, the editor window will
+   appear.
+   </P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>    jEdit accepts various command line parameters; see
+    <A
+HREF="cli-usage.html"
+>Appendix A</A
+>.
+   </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>    When started with no file names on the command line, jEdit will
+    open any files that were open in the previous session; see
+    <A
+HREF="sessions.html"
+>the section called <I
+>Saving and Loading Sessions</I
+> in Chapter 5</A
+> for details.
+    </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 3-1. The editor window</B
+></P
+><P
+><IMG
+SRC="../images/window-editor.gif"></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="MENUBAR"
+>The Menu Bar</A
+></H2
+><P
+>    The labels that run across
+    the top of the editor window are called <I
+CLASS="FIRSTTERM"
+>menus</I
+>. Generally,
+    <SPAN
+CLASS="GUIMENU"
+>File</SPAN
+> contains global file-related commands,
+    <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+> contains editing commands, and
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+> contains miscellaneous commands.
+    <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+> and <SPAN
+CLASS="GUIMENU"
+>Macros</SPAN
+>
+    contain commands for the respective jEdit features.
+    <SPAN
+CLASS="GUIMENU"
+>Plugins</SPAN
+> contains menus and menu items created
+    by plugins.
+    </P
+><P
+>    Pressing <B
+CLASS="KEYCAP"
+>Alt</B
+> in addition to an underlined character in the
+    menu bar will display the respective menu. Once a menu is open,
+    <B
+CLASS="KEYCAP"
+>Alt</B
+> in addition to an underlined character in a menu item
+    label will invoke that menu item.
+    While a menu is open, the arrow keys can be used to navigate the menu bar;
+    <B
+CLASS="KEYCAP"
+>Left Arrow</B
+> and <B
+CLASS="KEYCAP"
+>Right Arrow</B
+> open the previous
+    and next menu, respectively, and <B
+CLASS="KEYCAP"
+>Up Arrow</B
+> and <B
+CLASS="KEYCAP"
+>Down Arrow</B
+>
+    move up and down in the currently open menu.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="TOOLBAR"
+>The Tool Bar</A
+></H2
+><P
+>    The strip of buttons underneath the menu bar is called the
+    <I
+CLASS="FIRSTTERM"
+>tool bar</I
+>. Moving the mouse pointer over a
+    button and holding it still will display a
+    <I
+CLASS="FIRSTTERM"
+>tooltip</I
+> - a brief description of the button.
+   </P
+><DIV
+CLASS="FIGURE"
+><P
+><B
+>Figure 3-2. A tooltip</B
+></P
+><P
+><IMG
+SRC="../images/window-editor-tooltip.gif"></P
+></DIV
+><P
+>    The text field labelled "Find" on the tool bar can be used
+    to quickly search for a string without displaying the
+    Search and Replace dialog box; see <A
+HREF="search-replace.html#QUICKSEARCH"
+>the section called <I
+>Searching for Text</I
+> in Chapter 7</A
+>.
+   </P
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>     If you don't use the tool bar, disable it in the
+     <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box to save
+     memory and startup time (the images won't be loaded if it is disabled).
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="TEXTAREA"
+>The Text Area</A
+></H2
+><P
+>    Most of the editor window is occupied by the text area. The text area
+    displays the contents of the currently opened buffer.
+    The two scroll bars can be used to move around the buffer when there
+    is more text than can fit on the screen. The blinking red line
+    is called the <I
+CLASS="FIRSTTERM"
+>caret</I
+>. Most text editing commands
+    operate on the text at the caret.
+   </P
+><P
+>    Notice how the line with the caret is highlighted, and a
+    faint blue dot appears at the end of each line. The current line highlighting
+    aids in locating the caret, and the dot is an <I
+CLASS="FIRSTTERM"
+>end of
+    line marker</I
+>.
+   </P
+><P
+>    The lines painted with red tildes ("~")
+    are <I
+CLASS="FIRSTTERM"
+>invalid lines</I
+> - they are visible for one
+    reason or another,
+    but don't actually exist in the document.
+   </P
+><P
+>    The text area never allows the caret to be positioned on the first or
+    last visible line. If It is moved closer than 3 lines to the top or
+    bottom, the viewscreen will shift in the appropriate direction to
+    make 3 lines above and below the caret
+    visible. Having some "context" always visible helps when
+    programming, for example. This feature
+    is called <I
+CLASS="FIRSTTERM"
+>electric scrolling</I
+>.
+   </P
+><P
+>    Clicking the text area with the right mouse button will
+    display a menu of frequently-used
+    editing commands.
+   </P
+><DIV
+CLASS="TIP"
+><BLOCKQUOTE
+CLASS="TIP"
+><P
+><B
+>Tip: </B
+>     The behaviour of the text area can be customized in the
+     <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+     see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="STATUS"
+>The Status Area</A
+></H2
+><P
+>    The status area is at the bottom left of the editor window. It
+    displays information in the following format:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>col 42 line 7/10 70%</PRE
+></TD
+></TR
+></TABLE
+><P
+>    The first number is the <I
+CLASS="FIRSTTERM"
+>column position</I
+>, or how
+    far the caret is from the start of the line. The second pair of
+    numbers is the current line, and the total number of lines in
+    the buffer. The third number is the ratio of the current line
+    to the total number of lines; ie, where the caret is positioned,
+    relative to the size of the buffer.
+   </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+><BR><A
+HREF="shortcuts.html"
+>Prev</A
+>: Keyboard Shortcuts<BR><A
+HREF="activity-log.html"
+>Next</A
+>: The Activity Log<BR></DIV
+></BODY
+></HTML
+>

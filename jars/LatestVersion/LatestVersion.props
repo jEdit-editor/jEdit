@@ -1,42 +1,14 @@
 plugin.LatestVersionPlugin.name=Latest Version Check
 plugin.LatestVersionPlugin.author=Slava Pestov
-plugin.LatestVersionPlugin.version=1.1.4
-plugin.LatestVersionPlugin.docs=index.html
+plugin.LatestVersionPlugin.version=1.2
+plugin.LatestVersionPlugin.docs=LatestVersion.html
 
-plugin.LatestVersionPlugin.depend.0=jdk 1.1
-plugin.LatestVersionPlugin.depend.1=jedit 02.02.06.00
+plugin.LatestVersionPlugin.depend.0=jedit 02.02.06.00
 
-version-check.menu=version-check-now version-check-settings
-version-check.menu.label=Automatic Release Notification
+version-check.label=Check jEdit Version
 
-version-check-now.label=Do Version Check Now
-version-check-settings.label=Enable/Disable Notification...
-
-version-check.confirm.title=Automatic Release Notification
-version-check.confirm.message=\
-	The LatestVersion plugin that can automatically check if a newer\n\
-	version of jEdit is available at specified intervals.\n\
-	\n\
-	If enabled, jEdit will connect to the following URL every {0} days\n\
-	to fetch version data:\n\
-	\n\
-	{1}\n\
-	\n\
-	A message will be displayed if a newer version of jEdit exists\n\
-	than what is currently running.\n\
-	\n\
-	This is totally transparent, does not affect the operation of jEdit,\n\
-	and will do nothing if you are not connected to the Internet at the\n\
-	time of the check.\n\
-	\n\
-	Do you want to enable automatic release notification?
-
-version-check.new-version.title=Automatic Release Notification
+version-check.new-version.title=New jEdit Version Available
 version-check.new-version.message=\
-	jEdit {0} is now available. Would you like to see more information?\n\
-	\n\
-	(Automatic release notification can be disabled by selecting\n\
-	Plugins->Automatic Release Notification->Enable/Disable Notification).
+	jEdit {0} is now available. Would you like to see more information?
 
 version-check.url=http://www.geocities.com/slava_pestov/jEdit-version.txt
-version-check.interval=7

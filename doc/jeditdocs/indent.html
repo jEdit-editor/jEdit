@@ -1,0 +1,590 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Tabbing and Indentation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Source Code Editing"
+HREF="source-edit.html"><LINK
+REL="PREVIOUS"
+TITLE="Bracket Matching"
+HREF="bracket-matching.html"><LINK
+REL="NEXT"
+TITLE="Commenting Out Code"
+HREF="commenting.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="commenting.html"
+>Next</A
+>, <A
+HREF="bracket-matching.html"
+>Prev</A
+></P
+><H2
+>Chapter 6. Source Code Editing</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="INDENT"
+>Tabbing and Indentation</A
+></H1
+><P
+>   A <I
+CLASS="FIRSTTERM"
+>tab</I
+> is a special character that moves the caret to
+   the next tab stop. Many programming languages rely
+   on tabs to indent lines of source depending on how deeply they
+   are nested in the code. jEdit has several features that make
+   tabs and indentation easier to deal width.
+  </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="INDENT-TABS"
+>Changing the Tab Width</A
+></H2
+><P
+>    Many believe that the One True Tab Size is 8, others think that
+    all code should be indented with a tab width of 4, and the GNU
+    Project refuses to accept code with a tab width of anything but 2.
+   </P
+><P
+>    There are three ways to change the tab size:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+>The tab size can be changed on a global basis in
+    the Editor pane of the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+> dialog box;
+    see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.</P
+></LI
+><LI
+><P
+>The tab size can be changed in the current buffer
+    for the duration of the editing session in the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Buffer Options</SPAN
+> dialog box;
+   see <A
+HREF="customizing.html#BUFFER-OPTS"
+>the section called <I
+>The Buffer Options Dialog Box</I
+> in Chapter 8</A
+>.
+    </P
+></LI
+><LI
+><P
+>The tab size can be changed in the current buffer
+    for future editing sessions by setting the "tabSize"
+    buffer-local property to the desired tab size, by placing the
+    following in one of the first 10 lines of the buffer:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:tabSize=<TT
+CLASS="REPLACEABLE"
+><I
+>n</I
+></TT
+>:</PRE
+></TD
+></TR
+></TABLE
+><P
+>    Where <TT
+CLASS="REPLACEABLE"
+><I
+>n</I
+></TT
+> is of course the desired tab size.
+    </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="INDENT-SOFTTABS"
+>Soft Tabs</A
+></H2
+><P
+>    
+    
+    Sometimes, it is preferrable to multiple spaces, instead of
+    "real" tabs to indent code. The main advantage of doing so is that
+    the file will look the same if viewed with a different default
+    tab size. jEdit supports this with its "Soft Tabs"
+    feature. If the <B
+CLASS="KEYCAP"
+>Tab</B
+> key is pressed with soft tabs enabled,
+    the number of spaces necessary to move the caret to the next tab
+    stop will be inserted, instead of a "real" tab.
+   </P
+><P
+>    There are three ways to use soft tabs:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+>You can specify if soft tabs should be used
+    on a global basis in the
+    Editor pane of the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+    dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.</P
+></LI
+><LI
+><P
+>You can specify if soft tabs should be used
+    in the current buffer for
+    the duration of the editing session in the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Buffer Options</SPAN
+> dialog box;
+   see <A
+HREF="customizing.html#BUFFER-OPTS"
+>the section called <I
+>The Buffer Options Dialog Box</I
+> in Chapter 8</A
+>.
+    </P
+></LI
+><LI
+><P
+>You can specify if soft tabs should be used
+    in the current buffer for
+    future editing sessions by placing the following in one of the first
+    10 lines of the buffer, where <TT
+CLASS="REPLACEABLE"
+><I
+>flag</I
+></TT
+> is either
+    <B
+CLASS="COMMAND"
+>yes</B
+> or <B
+CLASS="COMMAND"
+>no</B
+>:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:noTabs=<TT
+CLASS="REPLACEABLE"
+><I
+>flag</I
+></TT
+>:</PRE
+></TD
+></TR
+></TABLE
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1868"
+>Indentation-Related Commands</A
+></H2
+><P
+>    
+    
+    
+    <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Indent
+    Selected Lines</SPAN
+>
+    (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>I</B
+>)
+    will indent all selected lines (or the current line if there is no
+    selection) using the auto indent rules; see
+    <A
+HREF="indent.html#AUTOINDENT"
+>the section called <I
+>Automatic Indent</I
+></A
+> for details.
+   </P
+><P
+>    
+    <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Go to End Indent</SPAN
+>
+    (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>I</B
+>)
+    will move the caret to the first non-whitespace character of the current
+    line.
+   </P
+><P
+>    
+    <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Shift Indent Left</SPAN
+>
+    (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Alt</B
+>-<B
+CLASS="KEYCAP"
+>Left Arrow</B
+>)
+    will remove one level of indent (a tab, or the number of spaces equivalent
+    to a tab) from the start of the current line, or every line in the
+    selection, if there is one.
+   </P
+><P
+>    
+    <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Lines</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Shift Indent Right</SPAN
+>
+    (keyboard equivalent: <B
+CLASS="KEYCAP"
+>Alt</B
+>-<B
+CLASS="KEYCAP"
+>Right Arrow</B
+>)
+    will add one level of indent (a tab, or the number of spaces equivalent
+    to a tab if soft tabs are enabled) to the start of the current line,
+    or every line in the selection, if there is one.
+   </P
+><P
+>    
+    
+    <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Spaces to Tabs</SPAN
+>
+    will convert
+    consecutive spaces to tabs in the selection.
+    If no selection is active, it will beep.
+   </P
+><P
+>    
+    
+    <SPAN
+CLASS="GUIMENU"
+>Edit</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Selection</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Tabs to Spaces</SPAN
+>
+    will convert
+    tabs to soft tabs (multiple spaces) in the selection.
+    If no selection is active, it will beep.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AUTOINDENT"
+>Automatic Indent</A
+></H2
+><P
+>    Pressing <B
+CLASS="KEYCAP"
+>Tab</B
+> or <B
+CLASS="KEYCAP"
+>Space</B
+> at the start of every
+    line to create the appropriate indent is very tedious, so jEdit has
+    an auto indent feature.
+   </P
+><P
+>    If indent on enter is enabled, pressing the <B
+CLASS="KEYCAP"
+>Enter</B
+> key
+    will create a new line, and insert the appropriate amount of
+    indent automatically. This is similar to the way
+    <SPAN
+CLASS="APPLICATION"
+>VIM</SPAN
+> performs indentation.
+   </P
+><P
+>    If indent on tab is enabled, pressing the <B
+CLASS="KEYCAP"
+>Tab</B
+> key on
+    an unindented line will insert the appropriate amount of
+    indentation. Pressing it again will insert an actual tab.
+    This is similar to the way <SPAN
+CLASS="APPLICATION"
+>Emacs</SPAN
+> performs
+    indentation.
+   </P
+><P
+>    By default, indent on enter is enabled and indent on tab is
+    disabled. There are three ways to specify when indentation should be
+    performed:
+   </P
+><P
+></P
+><UL
+><LI
+><P
+>Indent on enter and indent on tab can be set on a global
+    basis in the Editor pane of the <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Global Options</SPAN
+>
+    dialog box; see <A
+HREF="global-opts.html"
+>the section called <I
+>The Global Options Dialog Box</I
+> in Chapter 8</A
+>.</P
+></LI
+><LI
+><P
+>Indent on enter and indent on tab can be set in the
+    current buffer for the duration of the editing session in the
+    <SPAN
+CLASS="GUIMENU"
+>Utilities</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Buffer Options</SPAN
+> dialog box;
+   see <A
+HREF="customizing.html#BUFFER-OPTS"
+>the section called <I
+>The Buffer Options Dialog Box</I
+> in Chapter 8</A
+>.
+    </P
+></LI
+><LI
+><P
+>Indent on enter and indent on tab can be set in the
+    current buffer for future editing sessions using buffer-local
+    properties by placing the following in the first 10 lines of a buffer,
+    where <TT
+CLASS="REPLACEABLE"
+><I
+>flag</I
+></TT
+> is either "on" or "off":
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>:indentOnEnter=<TT
+CLASS="REPLACEABLE"
+><I
+>flag</I
+></TT
+>:indentOnTab=<TT
+CLASS="REPLACEABLE"
+><I
+>flag</I
+></TT
+>:</PRE
+></TD
+></TR
+></TABLE
+></LI
+></UL
+><P
+>    Auto indent rules are mode-specific. In most edit modes,
+    the indent of the previous line is simply copied over.
+    However, in C-like languages (C, C++, IDL, Java, JavaScript),
+    if the previous line contains an open
+    curly bracket ("{") and you auto indent, an extra tab
+    (or soft tab) is inserted.
+    Similarly, if you type a
+    closing curly bracket ("}"), a level of indentation is
+    removed.
+   </P
+><P
+>    If you want to insert a literal tab or newline while indent on tab
+    or indent on enter is enabled, prefix the tab or newline with
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>V</B
+>. For example,
+    to create a new line without any indentation, type
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+    <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>V</B
+> <B
+CLASS="KEYCAP"
+>Enter</B
+>.
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="source-edit.html"
+>Up</A
+><BR><A
+HREF="bracket-matching.html"
+>Prev</A
+>: Bracket Matching<BR><A
+HREF="commenting.html"
+>Next</A
+>: Commenting Out Code<BR></DIV
+></BODY
+></HTML
+>

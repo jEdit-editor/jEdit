@@ -2,6 +2,11 @@ JEDIT VERSION HISTORY
 
 * Version 2.3pre5
 
++ New Features
+
+- New 'plugin manager' plugin simplifies plugin removal, updating and
+  installation
+
 + Enhancements
 
 - Options dialog box looks better (Mike Dillon)

@@ -1,0 +1,333 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>The Global Options Dialog Box</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Developing Plugins"
+HREF="developing-plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="The Plugins Menu"
+HREF="plugin-menus.html"><LINK
+REL="NEXT"
+TITLE="Canned Dialog Boxes"
+HREF="plugin-dialogs.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="plugin-dialogs.html"
+>Next</A
+>, <A
+HREF="plugin-menus.html"
+>Prev</A
+></P
+><H2
+>Chapter 10. Developing Plugins</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PLUGIN-OPTIONS"
+>The Global Options Dialog Box</A
+></H1
+><P
+>   The Global Options dialog box is a common location for changing editor-wide
+   settings, including plugin settings.
+   Plugins can add panes, as well as groups of panes to this dialog box.
+   If your plugin has lots of options that can be
+   set, it might be a good idea to create multiple option panes and
+   group them.
+  </P
+><P
+>   Each pane in an implementation of the
+   <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.OptionPane</TT
+> interface - though most plugins
+   will subclass the <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.AbstractOptionPane</TT
+> class
+   which provides a default layout implementation. Groups of option panes
+   are implemented using the <TT
+CLASS="CLASSNAME"
+>org.gjt.sp.jedit.OptionGroup</TT
+>
+   class. Option groups are containers to which other option panes and
+   groups can be added.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>OptionPane class</H4
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public abstract class AbstractOptionPane extends JPanel
+implements OptionPane
+{
+        public OptionPane(String name);
+        public void save();
+        public void addComponent(String label, Component comp);
+        public void addComponent(Component comp);
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>   Because
+   most plugins will want to use the <TT
+CLASS="CLASSNAME"
+>AbstractOptionPane</TT
+> class,
+   instead of the <TT
+CLASS="CLASSNAME"
+>OptionPane</TT
+> interface; only the former will
+   be covered here.
+   Each <TT
+CLASS="CLASSNAME"
+>AbstractOptionPane</TT
+> instance, like many other jEdit objects,
+   has a unique
+   "name" which is used to query properties.
+   The only option pane property currently used is
+   <SPAN
+CLASS="PROPERTY"
+>options.<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>.label</SPAN
+>, which stores
+   the label for the option pane in the options dialog box.
+  </P
+><P
+>   The two <TT
+CLASS="FUNCTION"
+>addComponent()</TT
+> methods can be used to add components
+   to the option pane using the default layout manager. Nothing prevents you
+   from calling <TT
+CLASS="FUNCTION"
+>setLayout()</TT
+> and <TT
+CLASS="FUNCTION"
+>add()</TT
+> to implement
+   your own appearance, though.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>OptionsDialog.addOptionPane() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.OptionPane;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public void addOptionPane</CODE
+>(OptionPane pane);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   The <TT
+CLASS="FUNCTION"
+>addOptionPane()</TT
+> method adds the specified option pane to an
+   options dialog instance. You will almost always call this method from a
+   plugin's <TT
+CLASS="FUNCTION"
+>createOptionPanes()</TT
+> method, which is invoked every
+   time the Global Options dialog box is displayed.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>OptionGroup class</H4
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>public class OptionGroup
+implements OptionGroup
+{
+        public OptionGroup(String name);
+        public void addOptionPane(OptionPane pane);
+        public void addOptionGroup(OptionGroup group);
+}</PRE
+></TD
+></TR
+></TABLE
+><P
+>   Like option panes, each option group has a label which is obtained
+   from the <SPAN
+CLASS="PROPERTY"
+>options.<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>.label</SPAN
+> property.
+   Option panes and other groups can be added using the
+   <TT
+CLASS="FUNCTION"
+>addOptionPane()</TT
+> and <TT
+CLASS="FUNCTION"
+>addOptionGroup()</TT
+> methods.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>OptionsDialog.addOptionGroup() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.OptionGroup;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public void addOptionGroup</CODE
+>(OptionGroup group);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   The <TT
+CLASS="FUNCTION"
+>addOptionGroup()</TT
+> method adds the specified option
+   group to an
+   options dialog instance. You will almost always call this method from a
+   plugin's <TT
+CLASS="FUNCTION"
+>createOptionPanes()</TT
+> method, which is invoked every
+   time the Global Options dialog box is displayed.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>EditPlugin.createOptionPanes() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.OptionsDialog;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public void createOptionPanes</CODE
+>(OptionsDialog dialog);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   The Plugin Options dialog box invokes the
+   <TT
+CLASS="FUNCTION"
+>createOptionPanes()</TT
+> method of each plugin when it is being
+   displayed. The canonical implementation
+   would add an<TT
+CLASS="CLASSNAME"
+>OptionPane</TT
+> or <TT
+CLASS="CLASSNAME"
+>OptionGroup</TT
+> instance
+   to the options dialog
+   using the <TT
+CLASS="FUNCTION"
+>addOptionPane()</TT
+> or  <TT
+CLASS="FUNCTION"
+>addOptionGroup()</TT
+>
+   methods.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="developing-plugins.html"
+>Up</A
+><BR><A
+HREF="plugin-menus.html"
+>Prev</A
+>: The Plugins Menu<BR><A
+HREF="plugin-dialogs.html"
+>Next</A
+>: Canned Dialog Boxes<BR></DIV
+></BODY
+></HTML
+>

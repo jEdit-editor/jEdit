@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Markers</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Text Editing"
+HREF="advanced-text-edit.html"><LINK
+REL="PREVIOUS"
+TITLE="Saving and Loading Sessions"
+HREF="sessions.html"><LINK
+REL="NEXT"
+TITLE="Repeating Commands"
+HREF="repeats.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="repeats.html"
+>Next</A
+>, <A
+HREF="sessions.html"
+>Prev</A
+></P
+><H2
+>Chapter 5. Advanced Text Editing</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MARKERS"
+>Markers</A
+></H1
+><P
+>   
+   
+   
+   A marker is a named location in a buffer. There can be any number
+   of markers defined. Markers are preserved across editing sessions;
+   markers for file <TT
+CLASS="FILENAME"
+>filename</TT
+> are saved to
+   <TT
+CLASS="FILENAME"
+>.filename.marks</TT
+>. The dot prefix is necessary to make
+   the file hidden on Unix systems.
+  </P
+><P
+>   Markers are kept sorted according to their position in the
+   buffer. Combined with the fact that they are saved across editing
+   sessions, this makes them very useful for marking chapters in an online book,
+   etc.
+  </P
+><P
+>   
+   
+   
+   <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+>&gt;<SPAN
+CLASS="GUIMENUITEM"
+>Set Marker</SPAN
+> (keyboard equivalent:
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>E</B
+>
+   <B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>M</B
+>) will prompt for
+   a marker name (the default being the selected text) and set a
+   marker at the caret position.
+  </P
+><P
+>   
+   
+   The <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Go to Marker</SPAN
+> menu lists all
+   markers defined in the current buffer. Selecting a marker will move the
+   caret to that marker.
+  </P
+><P
+>   
+   The <SPAN
+CLASS="GUIMENU"
+>Search</SPAN
+>&gt;<SPAN
+CLASS="GUISUBMENU"
+>Clear Marker</SPAN
+> menu lists all
+   markers defined in the current buffer. Selecting a marker will delete
+   it from the buffer.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="advanced-text-edit.html"
+>Up</A
+><BR><A
+HREF="sessions.html"
+>Prev</A
+>: Saving and Loading Sessions<BR><A
+HREF="repeats.html"
+>Next</A
+>: Repeating Commands<BR></DIV
+></BODY
+></HTML
+>

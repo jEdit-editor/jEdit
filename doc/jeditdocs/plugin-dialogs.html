@@ -1,0 +1,380 @@
+<!DOCTYPE HTML PUBLIC "-//Norman Walsh//DTD DocBook HTML 1.0//EN">
+<HTML
+><HEAD
+><TITLE
+>Canned Dialog Boxes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet"><LINK
+REL="HOME"
+TITLE="jEdit 2.3 User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Developing Plugins"
+HREF="developing-plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="The Global Options Dialog Box"
+HREF="plugin-options.html"><LINK
+REL="NEXT"
+TITLE="The Activity Log"
+HREF="plugin-logging.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+><DIV
+CLASS="NAVHEADER"
+><H1
+>jEdit 2.3 User's Guide</H1
+><P
+><A
+HREF="plugin-logging.html"
+>Next</A
+>, <A
+HREF="plugin-options.html"
+>Prev</A
+></P
+><H2
+>Chapter 10. Developing Plugins</H2
+><HR></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PLUGIN-DIALOGS"
+>Canned Dialog Boxes</A
+></H1
+><P
+>   The Swing <TT
+CLASS="CLASSNAME"
+>JOptionPane</TT
+> class is a great way to present
+   simple
+   messages and errors to the user, but it has two drawbacks:
+  </P
+><P
+></P
+><UL
+><LI
+><P
+>No support for localization; you must call
+   <TT
+CLASS="FUNCTION"
+>jEdit.getProperty()</TT
+> manually for each element of
+   the message</P
+></LI
+><LI
+><P
+>Too complicated; the various methods of the
+   <TT
+CLASS="CLASSNAME"
+>JOptionPane</TT
+> class have too many parameters which
+   are hard to get right</P
+></LI
+></UL
+><P
+>   To solve this, jEdit has a number of wrappers around the
+   <TT
+CLASS="CLASSNAME"
+>JOptionPane</TT
+> class in the <TT
+CLASS="CLASSNAME"
+>GUIUtilities</TT
+> class
+   that simplify creation of canned dialog boxes.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>GUIUtilities.message() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import java.awt.Frame;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void message</CODE
+>(Frame frame, String name, Object[] args);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method displays a message dialog box with title obtained from the
+   property
+   <SPAN
+CLASS="PROPERTY"
+><TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>.title</SPAN
+> and
+   message from the property <SPAN
+CLASS="PROPERTY"
+><TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>.message</SPAN
+>.
+   Elements of the <TT
+CLASS="PARAMETER"
+><I
+>args</I
+></TT
+> array are substituted into
+   the message; see <A
+HREF="plugin-props.html"
+>the section called <I
+>Plugin Properties</I
+></A
+> for details.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>GUIUtilities.error() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import java.awt.Frame;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void error</CODE
+>(Frame frame, String name, Object[] args);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method displays an error dialog box. The only difference
+   between a message and error dialog box is the icon
+   displayed. Otherwise it is exactly the same as a message.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>GUIUtilities.input() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import java.awt.Frame;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static String input</CODE
+>(Frame frame, String name, String defaultValue);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method displays an input dialog box with title obtained from the
+   property
+   <SPAN
+CLASS="PROPERTY"
+><TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>.title</SPAN
+> and
+   message from the property <SPAN
+CLASS="PROPERTY"
+><TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>.message</SPAN
+>.
+   An input dialog box is similar to a message, except that a text field is
+   added where the user can type a one-line string.
+   The <TT
+CLASS="PARAMETER"
+><I
+>defaultValue</I
+></TT
+> parameter is the
+   initial contents of the text field.
+   When the user enters a value and clicks <SPAN
+CLASS="GUIBUTTON"
+>OK</SPAN
+>,
+   the currently entered
+   value is returned. If they click <SPAN
+CLASS="GUIBUTTON"
+>Cancel</SPAN
+>, the
+   method returns <B
+CLASS="COMMAND"
+>null</B
+>.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>GUIUtilities.inputProperty() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import java.awt.Frame;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static String inputProperty</CODE
+>(Frame frame, String name, String property);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method is exactly the same as <TT
+CLASS="FUNCTION"
+>input()</TT
+> except that
+   the value entered by the user is automatically stored in
+   the property named <TT
+CLASS="PARAMETER"
+><I
+>property</I
+></TT
+>.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>GUIUtilities.showFileDialog() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>import org.gjt.sp.jedit.View;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static String showFileDialog</CODE
+>(View view, String file, int type);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method is a wrapper around the <TT
+CLASS="CLASSNAME"
+>JFileChooser</TT
+> class.
+   It displays a file chooser dialog, with the file named
+   <TT
+CLASS="PARAMETER"
+><I
+>file</I
+></TT
+> selected. The <TT
+CLASS="PARAMETER"
+><I
+>type</I
+></TT
+> parameter is
+   either <B
+CLASS="COMMAND"
+>JFileChooser.OPEN_DIALOG</B
+> or
+   <B
+CLASS="COMMAND"
+>JFileChooser.SAVE_DIALOG</B
+>. This method returns
+   <B
+CLASS="COMMAND"
+>null</B
+> if the user clicks <SPAN
+CLASS="GUIBUTTON"
+>Cancel</SPAN
+>, otherwise the
+   selected pathname is returned.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR><A
+HREF="index.html"
+>Home</A
+>, <A
+HREF="developing-plugins.html"
+>Up</A
+><BR><A
+HREF="plugin-options.html"
+>Prev</A
+>: The Global Options Dialog Box<BR><A
+HREF="plugin-logging.html"
+>Next</A
+>: The Activity Log<BR></DIV
+></BODY
+></HTML
+>
