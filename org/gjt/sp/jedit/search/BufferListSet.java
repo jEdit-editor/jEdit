@@ -30,7 +30,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public abstract class BufferListSet implements SearchFileSet
+public class BufferListSet implements SearchFileSet
 {
 	/**
 	 * Creates a new buffer list search set. This constructor is
@@ -138,6 +138,14 @@ public abstract class BufferListSet implements SearchFileSet
 	public boolean isValid()
 	{
 		return files.size() != 0;
+	}
+
+	/**
+	 * Returns the BeanShell code to recreate this fileset.
+	 */
+	public String getCode()
+	{
+		return "null /* not supported */";
 	}
 
 	// private members

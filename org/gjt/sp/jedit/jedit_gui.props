@@ -879,8 +879,8 @@ plugin.dep-plugin.no-version.message=The plugin {0} requires version {1} or late
 	but {2} does not appear to be installed.
 
 plugin.dep-plugin.broken.title=Unsatisfied Dependency
-plugin.dep-plugin.broken.message=The plugin {0} requires version {1} or later of {2},\n\
-	but an error prevented {2} from being loaded.
+plugin.dep-plugin.broken.message=The plugin {0} requires the plugin {1},\n\
+	but an error prevented {1} from being loaded.
 
 plugin.dep-plugin.title=Unsatisfied Dependency
 plugin.dep-plugin.message=The plugin {0} requires version {1} or later of {2},\n\

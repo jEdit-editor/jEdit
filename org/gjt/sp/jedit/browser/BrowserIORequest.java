@@ -130,22 +130,19 @@ public class BrowserIORequest extends WorkRequest
 	private void listDirectory()
 	{
 		VFS.DirectoryEntry[] directory = null;
+		String[] args = { path1 };
+		setStatus(jEdit.getProperty("vfs.status.listing-directory",args));
 
 		try
 		{
 			setAbortable(true);
-			String[] args = { path1 };
-			setStatus(jEdit.getProperty("vfs.status.listing-directory",args));
-
-			try
-			{
-				directory = vfs._listDirectory(session,path1,browser);
-			}
-			catch(IOException io)
-			{
-				args[0] = io.getMessage();
-				VFSManager.error(browser,"ioerror",args);
-			}
+			directory = vfs._listDirectory(session,path1,browser);
+		}
+		catch(IOException io)
+		{
+			setAbortable(false);
+			args[0] = io.getMessage();
+			VFSManager.error(browser,"ioerror",args);
 		}
 		catch(WorkThread.Abort a)
 		{
@@ -158,7 +155,8 @@ public class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
-				String[] args = { io.getMessage() };
+				setAbortable(false);
+				args[0] = io.getMessage();
 				VFSManager.error(browser,"ioerror",args);
 			}
 		}

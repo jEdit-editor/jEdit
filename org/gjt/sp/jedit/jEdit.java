@@ -389,6 +389,16 @@ public class jEdit
 	}
 
 	/**
+	 * Returns the properties object which contains all known
+	 * jEdit properties.
+	 * @since jEdit 3.1pre4
+	 */
+	public static final Properties getProperties()
+	{
+		return props;
+	}
+
+	/**
 	 * Fetches a property, returning null if it's not defined.
 	 * @param name The property
 	 */

@@ -201,11 +201,19 @@ public class GUIUtilities
 		if(name.startsWith("play-macro@"))
 		{
 			Macros.Macro macro = Macros.getMacro(name.substring(11));
-			label = macro.name;
-			int index = label.lastIndexOf('/');
-			label = label.substring(index + 1)
-				.replace('_',' ');
-			action = macro.action;
+			if(macro != null)
+			{
+				label = macro.name;
+				int index = label.lastIndexOf('/');
+				label = label.substring(index + 1)
+					.replace('_',' ');
+				action = macro.action;
+			}
+			else
+			{
+				label = name.substring(11);
+				action = null;
+			}
 		}
 		else
 		{
@@ -299,11 +307,20 @@ public class GUIUtilities
 		if(name.startsWith("play-macro@"))
 		{
 			Macros.Macro macro = Macros.getMacro(name.substring(11));
-			label = macro.name;
-			int index = label.lastIndexOf('/');
-			label = label.substring(index + 1)
-				.replace('_',' ');
-			action = macro.action;
+
+			if(macro != null)
+			{
+				label = macro.name;
+				int index = label.lastIndexOf('/');
+				label = label.substring(index + 1)
+					.replace('_',' ');
+				action = macro.action;
+			}
+			else
+			{
+				label = name.substring(11);
+				action = null;
+			}
 		}
 		else
 		{

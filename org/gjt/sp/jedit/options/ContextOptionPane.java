@@ -143,8 +143,8 @@ public class ContextOptionPane extends AbstractOptionPane
 			if(actionName.startsWith("play-macro@"))
 			{
 				int index = Math.max(11,actionName
-					.indexOf('/'));
-				return actionName.substring(index + 1)
+					.indexOf('/') + 1);
+				return actionName.substring(index)
 					.replace('_',' ');
 			}
 			else
@@ -382,44 +382,3 @@ class ContextAddDialog extends EnhancedDialog
 		}
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.12  2001/03/01 11:03:27  sp
- * Improved folding, vfs bug fix
- *
- * Revision 1.11  2001/01/23 09:23:48  sp
- * code cleanups, misc tweaks
- *
- * Revision 1.10  2000/08/10 08:30:41  sp
- * VFS browser work, options dialog work, more random tweaks
- *
- * Revision 1.9  2000/07/12 09:11:38  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.8  2000/05/21 03:00:51  sp
- * Code cleanups and bug fixes
- *
- * Revision 1.7  2000/05/20 07:02:04  sp
- * Documentation updates, tool bar editor finished, a few other enhancements
- *
- * Revision 1.6  2000/05/16 10:47:40  sp
- * More work on toolbar editor, -gui command line switch
- *
- * Revision 1.5  2000/05/06 05:53:46  sp
- * HyperSearch bug fix
- *
- * Revision 1.4  2000/04/23 03:58:00  sp
- * ContextOptionPane didn't compile, hack to let JBrowse and QuickFile work
- *
- * Revision 1.3  2000/04/23 03:36:39  sp
- * Minor fixes
- *
- * Revision 1.2  2000/04/18 11:44:31  sp
- * Context menu editor finished
- *
- * Revision 1.1  2000/04/18 08:27:52  sp
- * Context menu editor started
- *
- */

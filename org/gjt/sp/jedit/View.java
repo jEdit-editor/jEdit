@@ -677,8 +677,9 @@ public class View extends JFrame implements EBComponent
 		help = GUIUtilities.loadMenu(this,"help-menu");
 		plugins = GUIUtilities.loadMenu(this,"plugins");
 
-		Component comp = restoreSplitConfig(buffer,
-			jEdit.getProperty("view.splits"));
+		// finish persistent splits later
+		Component comp = restoreSplitConfig(buffer,"+");
+			/* jEdit.getProperty("view.splits") */;
 		dockableWindowManager.add(comp);
 
 		updateMarkerMenus();
@@ -888,7 +889,7 @@ public class View extends JFrame implements EBComponent
 	 * stuff to the end, so the bottom-most nodes end up at the
 	 * end
 	 */
-	public void saveSplitConfig(JSplitPane splitPane,
+	private void saveSplitConfig(JSplitPane splitPane,
 		StringBuffer splitConfig)
 	{
 		splitConfig.append(splitPane.getOrientation()
@@ -907,7 +908,7 @@ public class View extends JFrame implements EBComponent
 			splitConfig.append('+');
 	}
 
-	public Component restoreSplitConfig(Buffer buffer, String splitConfig)
+	private Component restoreSplitConfig(Buffer buffer, String splitConfig)
 	{
 		Stack stack = new Stack();
 

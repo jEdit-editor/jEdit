@@ -10,6 +10,7 @@ JEDIT 3.1 VERSION HISTORY
 
 + Enhancements
 
+- Updated to gnu.regexp 1.1.1
 - Gutter line highlight code now highlights (if the interval is set to 5)
   line 5, 10, 15, etc. Before it would highlight line 1, 6, 11, etc.
 - 'Find Selection' initially selects text in 'Find' field now
@@ -25,6 +26,8 @@ JEDIT 3.1 VERSION HISTORY
   the newline character used currently.
 
 - Markers can now be set in read only files
+- Fixed meaningless error message displayed when a plugin depends on another
+  one that cannot be loaded
 
 + Neutral
 
@@ -41,11 +44,21 @@ JEDIT 3.1 VERSION HISTORY
 - Minor 'New File' command bug fixed
 - Fixed minor mapping bug in JEditTextArea.invalidateLineRange() which
   caused gutter repaint problems when deleting lines
+- Fixed minor bug with 'Browse User Macros' and 'Browse System Macros'
+  methods
+- Plugin manager's plugin update and install dialog boxes would throw
+  exceptions if the check box next to the 'loading' message was clicked
+- Deleting a macro bound to a context menu item or tool bar button would
+  prevent jEdit from loading
+- Fixed minor display glitch with macros in tool bar and context menu
+  option panes
 
 + API Changes
 
 - GUIUtilities.showFileDialog() officially deprecated. Use
   GUIUtilities.showVFSFileDialog() instead
+- ogsj.search.BufferListSet no longer abstract to simplify matters for
+  advanced macros
 
 * Version 3.1pre3
 

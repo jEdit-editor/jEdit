@@ -2138,21 +2138,6 @@ loop:				for(int i = 0; i < count; i++)
 		int start = 0;
 		int end = virtualLineCount - 1;
 
-		// funky hack
-		if(lineNo < virtualLines[start])
-		{
-			// for proper insertLines() operation
-			return 1;
-		}
-		else if(lineNo > virtualLines[end])
-		{
-			// for proper invalidateLineRange() operation
-			// return virtualLineCount + (lineNo - lineCount);
-
-			// for great justice (all your base are belong to us)
-			return virtualLineCount;
-		}
-
 		// funky binary search
 		for(;;)
 		{
@@ -2823,7 +2808,7 @@ loop:				for(int i = 0; i < count; i++)
 			int index = ch.getIndex();
 			int len = ch.getChildrenAdded().length -
 				ch.getChildrenRemoved().length;
-			insertLines(ch.getIndex() + 1,len);
+			addLinesToMap(ch.getIndex() + 1,len);
 			linesChanged(index,lineCount - index);
 			index += (len + 1);
 		}
@@ -2852,7 +2837,7 @@ loop:				for(int i = 0; i < count; i++)
 			int index = ch.getIndex();
 			int len = ch.getChildrenRemoved().length -
 				ch.getChildrenAdded().length;
-			deleteLines(index,len);
+			removeLinesFromMap(index,len);
 			linesChanged(index,lineCount - index);
 		}
 		else
@@ -3086,12 +3071,12 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
-	 * Informs the token marker that lines have been inserted into
-	 * the document.
+	 * Inserts the specified line range into the virtual to physical
+	 * mapping and line info array.
 	 * @param index The first line number
 	 * @param lines The number of lines 
 	 */
-	private void insertLines(int index, int lines)
+	private void addLinesToMap(int index, int lines)
 	{
 		if(lines <= 0)
 			return;
@@ -3122,7 +3107,18 @@ loop:				for(int i = 0; i < count; i++)
 
 		/* update the virtual -> physical mapping if the newly
 		 * inserted lines are actually visible */
-		int virtualLine = physicalToVirtual(index);
+		int virtualLine;
+		if(index < virtualLines[0])
+		{
+			// I would document why this has to be like this,
+			// but I forgot
+			virtualLine = 1;
+		}
+		else if(index > virtualLines[virtualLineCount - 1])
+			virtualLine = virtualLineCount;
+		else
+			virtualLine = physicalToVirtual(index);
+
 		if(prev.visible)
 		{
 			virtualLineCount += lines;
@@ -3160,35 +3156,48 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
-	 * Informs the token marker that lines have been deleted from
-	 * the document. This removes the lines in question from the
-	 * <code>lineInfo</code> array.
+	 * Deletes the specified line range from the virtual to physical
+	 * mapping and line info array.
 	 * @param index The first line number
 	 * @param lines The number of lines
 	 */
-	private void deleteLines(int index, int lines)
+	private void removeLinesFromMap(int index, int lines)
 	{
 		if (lines <= 0)
 			return;
 
-		/* update the virtual -> physical mapping if the deleted
-		 * lines are actually visible */
-		int virtualLine = physicalToVirtual(index);
+		int lastVisibleLine = virtualLines[virtualLineCount - 1];
+		int virtualLine;
+		if(index > lastVisibleLine)
+			virtualLine = virtualLineCount - 1;
+		else
+			virtualLine = physicalToVirtual(index);
 
-		int len = physicalToVirtual(index + lines);
-		virtualLineCount -= (len - virtualLine);
+		int len;
+		if(index + lines > lastVisibleLine)
+			len = virtualLineCount - 1;
+		else
+			len = physicalToVirtual(index + lines);
 
-		//System.err.println((len - virtualLine) + " vlines deleted from "
-		//	+ index + ":" + lines);
-
-		//System.err.println("copy from " + len + " to " + virtualLine);
-		System.arraycopy(virtualLines,len,virtualLines,
-			virtualLine,virtualLines.length - len);
-
-		for(int i = virtualLine; i < virtualLineCount; i++)
+		for(int i = (virtualLine == len ? len + 1 : len);
+			i < virtualLineCount; i++)
 		{
-			//System.err.println(i + " maps to " + (virtualLines[i] - lines));
+			System.err.println(i + " maps to " + (virtualLines[i] - lines));
 			virtualLines[i] -= lines;
+		}
+
+		// physicalToVirtual() returns lines which we do not
+		// want to remap if the input is out of bounds
+		if(virtualLine != len)
+		{
+			virtualLineCount -= (len - virtualLine);
+
+			System.err.println((len - virtualLine) + " vlines deleted from "
+				+ index + ":" + lines);
+
+			System.err.println("copy from " + len + " to " + virtualLine);
+			System.arraycopy(virtualLines,len,virtualLines,
+				virtualLine,virtualLines.length - len);
 		}
 
 		lineCount -= lines;
@@ -3197,8 +3206,8 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
-	 * Informs the token marker that lines have changed. This will
-	 * invalidate any cached tokens.
+	 * Called when the specified lines change. This invalidates
+	 * cached syntax tokens and fold level.
 	 * @param index The first line number
 	 * @param lines The number of lines
 	 */

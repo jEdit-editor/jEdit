@@ -93,11 +93,17 @@ public class Macros
 			= view.getDockableWindowManager();
 
 		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
-		VFSBrowser browser = (VFSBrowser)dockableWindowManager
+		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
 			.getDockableWindow(VFSBrowser.NAME);
 
-		browser.setDirectory(MiscUtilities.constructPath(
-			jEdit.getJEditHome(),"macros"));
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				browser.setDirectory(MiscUtilities.constructPath(
+					jEdit.getJEditHome(),"macros"));
+			}
+		});
 	}
 
 	/**
@@ -107,7 +113,7 @@ public class Macros
 	 */
 	public static void browseUserMacros(View view)
 	{
-		String settings = jEdit.getSettingsDirectory();
+		final String settings = jEdit.getSettingsDirectory();
 
 		if(settings == null)
 		{
@@ -119,10 +125,17 @@ public class Macros
 			= view.getDockableWindowManager();
 
 		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
-		VFSBrowser browser = (VFSBrowser)dockableWindowManager
+		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
 			.getDockableWindow(VFSBrowser.NAME);
 
-		browser.setDirectory(MiscUtilities.constructPath(settings,"macros"));
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				browser.setDirectory(MiscUtilities.constructPath(
+					settings,"macros"));
+			}
+		});
 	}
 
 	/**
