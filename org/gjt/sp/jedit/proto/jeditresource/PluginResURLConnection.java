@@ -44,7 +44,7 @@ public class PluginResURLConnection extends URLConnection
 		resource = file.substring(index + 1);
 	}
 
-	public void connect()
+	public void connect() throws IOException
 	{
 		if(!connected)
 		{

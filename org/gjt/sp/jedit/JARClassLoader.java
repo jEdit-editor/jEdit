@@ -94,7 +94,7 @@ public class JARClassLoader extends ClassLoader
 	{
 		ZipEntry entry = zipFile.getEntry(name);
 		if(entry == null)
-			return getSystemResourceAsStream(name);
+			return getSystemResource(name);
 
 		try
 		{
@@ -408,6 +408,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2000/04/06 00:55:39  sp
+ * didn't compile
+ *
  * Revision 1.33  2000/04/06 00:28:14  sp
  * Resource handling bugs fixed, minor token marker tweaks
  *
