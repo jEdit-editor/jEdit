@@ -1,5 +1,5 @@
 /*
- * ContextOptionPane.java - Abbrevs options panel
+ * ContextOptionPane.java - Context menu options panel
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -334,6 +334,9 @@ class AddDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/05/06 05:53:46  sp
+ * HyperSearch bug fix
+ *
  * Revision 1.4  2000/04/23 03:58:00  sp
  * ContextOptionPane didn't compile, hack to let JBrowse and QuickFile work
  *

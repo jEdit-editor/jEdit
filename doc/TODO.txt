@@ -7,8 +7,8 @@ JEDIT TO DO
 - Abortable I/O
 - Write VFS docs - user and developer
 - Editable toolbar
-- Add macros to context menu and toolbar - hack loadMenuItem() to handle
-  play-macro@... specially
+- Add macros to context menu and toolbar
+- Optional disabling of tokenizeLines() to speed up file loading
 
 2.5:
 

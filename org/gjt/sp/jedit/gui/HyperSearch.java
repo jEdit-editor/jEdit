@@ -328,7 +328,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		public Buffer getBuffer()
 		{
 			if(buffer == null)
-				jEdit.openFile(null,path);
+				buffer = jEdit.openFile(null,path);
 			return buffer;
 		}
 
@@ -366,18 +366,17 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 			if(results.isSelectionEmpty() || evt.getValueIsAdjusting())
 				return;
 
-			SearchResult result = (SearchResult)results.getSelectedValue();
+			final SearchResult result = (SearchResult)results.getSelectedValue();
 			final Buffer buffer = result.getBuffer();
 
 			if(buffer == null)
 				return;
 
-			final int pos = result.linePos.getOffset();
-
 			VFSManager.runInAWTThread(new Runnable()
 			{
 				public void run()
 				{
+					int pos = result.linePos.getOffset();
 					view.setBuffer(buffer);
 					view.getTextArea().setCaretPosition(pos);
 				}
@@ -389,6 +388,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.58  2000/05/06 05:53:46  sp
+ * HyperSearch bug fix
+ *
  * Revision 1.57  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

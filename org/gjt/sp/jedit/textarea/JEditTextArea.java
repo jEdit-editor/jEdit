@@ -1420,7 +1420,8 @@ public class JEditTextArea extends JComponent
 			document.addDocumentListener(documentHandler);
 		}
 
-		recalculateVisibleLines();
+		if(isValid())
+			recalculateVisibleLines();
 	}
 
 	/**
@@ -2193,6 +2194,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.59  2000/05/06 05:53:46  sp
+ * HyperSearch bug fix
+ *
  * Revision 1.58  2000/05/04 10:37:04  sp
  * Wasting time
  *
