@@ -25,6 +25,9 @@ import org.gjt.sp.jedit.*;
 /**
  * The editor event listener interface.
  *
+ * Because this interface changes from time to time, implementing
+ * it is not a good idea. Extend EditorAdapter instead
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -60,6 +63,7 @@ public interface EditorListener extends EventListener
 	/**
 	 * Method invoked when the list of available macros has
 	 * changed.
+	 * @since jEdit 2.2pre4
 	 */
 	public void macrosChanged(EditorEvent evt);
 }
@@ -67,6 +71,9 @@ public interface EditorListener extends EventListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/11/10 10:43:01  sp
+ * Macros can now have shortcuts, various miscallaneous updates
+ *
  * Revision 1.7  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

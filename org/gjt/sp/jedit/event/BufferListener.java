@@ -25,6 +25,9 @@ import org.gjt.sp.jedit.*;
 /**
  * The buffer event listener interface.
  *
+ * Because this interface changes from time to time, implementing
+ * it is not a good idea. Extend EditorAdapter instead
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -58,6 +61,9 @@ public interface BufferListener extends EventListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/11/10 10:43:01  sp
+ * Macros can now have shortcuts, various miscallaneous updates
+ *
  * Revision 1.6  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

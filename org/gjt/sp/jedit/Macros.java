@@ -49,14 +49,14 @@ public class Macros
 	{
 		macros = new Vector();
 
-		loadMacros(macros,new File(MiscUtilities.constructPath(
+		loadMacros(macros,"",new File(MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"macros")));
 
 		String settings = jEdit.getSettingsDirectory();
 
 		if(settings != null)
 		{
-			loadMacros(macros,new File(MiscUtilities.constructPath(
+			loadMacros(macros,"",new File(MiscUtilities.constructPath(
 				settings,"macros")));
 		}
 
@@ -76,13 +76,37 @@ public class Macros
 	 */
 	public static class Macro
 	{
+		public String label;
 		public String name;
 		public String path;
 
-		public Macro(String name, String path)
+		public Macro(String label, String name, final String path)
 		{
+			this.label = label;
 			this.name = name;
 			this.path = path;
+
+			String binding = jEdit.getProperty(name + ".shortcut");
+			if(binding != null)
+			{
+				final EditAction action = jEdit.getAction("play-macro");
+				jEdit.getInputHandler().addKeyBinding(binding,new ActionListener()
+				{
+					public void actionPerformed(ActionEvent evt)
+					{
+						action.actionPerformed(
+							new ActionEvent(
+							evt.getSource(),
+							evt.getID(),path));
+					}
+				});
+			}
+		}
+
+		// for debugging
+		public String toString()
+		{
+			return label + ":" + name + ":" + path;
 		}
 	}
 
@@ -195,7 +219,7 @@ public class Macros
 	private static Vector macros;
 	private static String lastMacro;
 
-	private static void loadMacros(Vector vector, File directory)
+	private static void loadMacros(Vector vector, String path, File directory)
 	{
 		String[] macroFiles = directory.list();
 		if(macroFiles == null)
@@ -209,14 +233,14 @@ public class Macros
 			File file = new File(directory,name);
 			if(name.toLowerCase().endsWith(".macro"))
 			{
-				name = name.substring(0,name.length() - 6);
-				vector.addElement(new Macro(name,file.getPath()));
+				String label = name.substring(0,name.length() - 6);
+				vector.addElement(new Macro(label,path + label,file.getPath()));
 			}
 			else if(file.isDirectory())
 			{
 				Vector submenu = new Vector();
 				submenu.addElement(name);
-				loadMacros(submenu,file);
+				loadMacros(submenu,path + name + '/',file);
 				vector.addElement(submenu);
 			}
 		}
@@ -276,12 +300,8 @@ public class Macros
 			return ((EditAction)listener).getName();
 		else
 		{
-			String retVal = InputHandler.getActionName(listener);
-			if(retVal != null)
-				return retVal;
+			return InputHandler.getActionName(listener);
 		}
-
-		throw new InternalError("Unknown action: " + listener);
 	}
 
 	static class BufferRecorder implements InputHandler.MacroRecorder
@@ -298,6 +318,11 @@ public class Macros
 			String actionCommand)
 		{
 			String name = getActionName(listener);
+			if(name == null)
+			{
+				// eg, Macros$1 action
+				return;
+			}
 
 			// Collapse multiple insert-char's
 			if(name.equals("insert-char"))
@@ -373,6 +398,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  1999/11/10 10:43:01  sp
+ * Macros can now have shortcuts, various miscallaneous updates
+ *
  * Revision 1.10  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

@@ -1578,6 +1578,11 @@
     <guimenu>Macros</>&gt;<guimenuitem>Rescan Macros</> command should be used
     to update the macros menu with the changes.
    </para>
+   <para>
+    Like all other menu item commands, macros can be assigned shortcuts in
+    the <guimenu>File</>&gt;<guimenuitem>Global Options</> dialog box;
+    see <xref id=global-opts>.
+   </para>
    <indexterm><primary>Play Last Macro command</></indexterm>
    <para>
     To play a macro, select it from the <guimenu>Macros</> menu. The
@@ -2755,7 +2760,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <secondary>customizing</></indexterm>
    <para>
     The <guibutton>Shortcuts</> tab allows you to change jEdit's key
-    bindings. To change a key binding, click in the cell next to its
+    bindings. All normal menu item commands, as well as macros (they are
+    prefixed with <quote>Macro:</>) are listed here.
+    To change a key binding, click in the cell next to its
     name.
    </para>
    <para>
@@ -2770,7 +2777,9 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    <para>
     jEdit also allows multiple keystroke bindings; for example,
     <guimenuitem>Open URL</> is bound to <keycap>C+e C+o</>. Any number
-    of keystrokes can be present in a key binding.
+    of keystrokes can be present in a key binding. If you are having
+    trouble finding an unused key binding, try using one of the function
+    keys plus a modifier such as <keycap>Control</> or <keycap>Alt</>.
    </para>
    <para>
     Changes to the key bindings take effect the next time jEdit is

@@ -14,6 +14,7 @@ As of this version, plugins are no longer part of the core distribution.
   menu item should be checked
 - The "smart" home/end key behaviour can now be set in the Global Options
   dialog box
+- Keyboard shortcuts can now be assigned to macros in the shortcut editor
 
 + Enhancements
 
@@ -21,12 +22,19 @@ As of this version, plugins are no longer part of the core distribution.
 - New version of Eiffel syntax highlighting
 - Java mode now highlights the 'native' keyword
 - Macro code cleanup
+- Reloading a file will reset the read only flag
 
 + Bug Fixes
 
 - *.e files were not opened in Eiffel mode (since 2.1final)
 - Temporary macro filename changed to '__temporary__.macro'. This should
   stop exceptions from being thrown while autosaving
+
++ API Changes
+
+- EditorListener interface changed; any plugins that directly implement it
+  will need to be updated. It might be a good idea to use adapters instead,
+  to protect against future changes.
 
 * Version 2.2pre3
 

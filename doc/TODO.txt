@@ -1,6 +1,8 @@
 JEDIT TO DO
 
-- Keyboard shortcuts for macros
+- Integrate EditBus if enough plugins take advantage of it. This will also
+  mean that jEdit will be able to take advantage of EditBus stuff; for
+  example, the buffers menu could display which buffers have errors
 - Do searching in a background thread. This will use the work request thread
   - For it to be fast, these methods would have to be thread safe:
     - jEdit.openFile()
@@ -10,9 +12,6 @@ JEDIT TO DO
     - JEditTextArea.select()
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
-- Integrate EditBus if enough plugins take advantage of it. This will also
-  mean that jEdit will be able to take advantage of EditBus stuff; for
-  example, the buffers menu could display which buffers have errors
 - Word wrap. True word-wrap would require significant changes to the text area,
   and would probably slow things down (think yToLine()). Maybe some sort of
   'soft wrap' that inserts newlines into the text could be implemented instead?

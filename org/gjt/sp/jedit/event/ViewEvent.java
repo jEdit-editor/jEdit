@@ -50,7 +50,7 @@ public class ViewEvent extends AbstractEditorEvent
 	 * Creates a new view event.
 	 * @param id The event type
 	 * @param view The view involved
-	 * @param buffer Only for BUFFER_CHANGED event type - the original buffer
+	 * @param buffer The original buffer
 	 */
 	public ViewEvent(int id, View view, Buffer buffer)
 	{
@@ -89,6 +89,9 @@ public class ViewEvent extends AbstractEditorEvent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/11/10 10:43:01  sp
+ * Macros can now have shortcuts, various miscallaneous updates
+ *
  * Revision 1.6  1999/07/08 06:06:04  sp
  * Bug fixes and miscallaneous updates
  *

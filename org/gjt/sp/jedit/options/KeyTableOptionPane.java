@@ -78,7 +78,7 @@ class KeyTableModel extends AbstractTableModel
 		Enumeration textActions = InputHandler.getActions();
 		EditAction[] actions = jEdit.getActions();
 
-		bindings = new Vector(actions.length + 20);
+		bindings = new Vector(actions.length + 30);
 
 		// Add text area key bindings
 		while(textActions.hasMoreElements())
@@ -104,6 +104,9 @@ class KeyTableModel extends AbstractTableModel
 			String shortcut = jEdit.getProperty(name + ".shortcut");
 			bindings.addElement(new KeyBinding(name,label,shortcut));
 		}
+
+		// Add macros
+		addMacroBindings(Macros.getMacros());
 
 		// Sort
 		MiscUtilities.quicksort(bindings,new KeyCompare());
@@ -168,6 +171,26 @@ class KeyTableModel extends AbstractTableModel
 		}
 	}
 
+	// private members
+	private void addMacroBindings(Vector macros)
+	{
+		for(int i = 0; i < macros.size(); i++)
+		{
+			Object obj = macros.elementAt(i);
+			if(obj instanceof Macros.Macro)
+			{
+				Macros.Macro macro = (Macros.Macro)obj;
+				bindings.addElement(new KeyBinding(macro.name,
+					"Macro: " + macro.name,
+					jEdit.getProperty(macro.name + ".shortcut")));
+			}
+			else if(obj instanceof Vector)
+			{
+				addMacroBindings((Vector)obj);
+			}
+		}
+	}
+		
 	class KeyCompare implements MiscUtilities.Compare
 	{
 		public int compare(Object obj1, Object obj2)
@@ -195,6 +218,9 @@ class KeyTableModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/11/10 10:43:01  sp
+ * Macros can now have shortcuts, various miscallaneous updates
+ *
  * Revision 1.7  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

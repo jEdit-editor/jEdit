@@ -645,10 +645,11 @@ public class View extends JFrame
 			if(obj instanceof Macros.Macro)
 			{
 				Macros.Macro macro = (Macros.Macro)obj;
-				String name = macro.name;
+				String label = macro.label;
 				String path = macro.path;
 				EnhancedMenuItem menuItem = new EnhancedMenuItem(
-					name,null,action,path);
+					label,jEdit.getProperty(macro.name + ".shortcut"),
+					action,path);
 				menu.add(menuItem);
 			}
 			else if(obj instanceof Vector)
@@ -856,6 +857,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.104  1999/11/10 10:43:01  sp
+ * Macros can now have shortcuts, various miscallaneous updates
+ *
  * Revision 1.103  1999/11/09 10:14:34  sp
  * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
  * word commands, check box menu item support

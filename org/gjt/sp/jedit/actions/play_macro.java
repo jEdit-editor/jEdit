@@ -24,7 +24,7 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class play_macro extends EditAction
-implements InputHandler.NonRepeatable
+implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
 	public play_macro()
 	{

@@ -767,8 +767,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 		if(!newFile)
 		{
-			if(file.exists())
-				setFlag(READ_ONLY,!file.canWrite());
 			if(autosaveFile.exists())
 			{
 				Object[] args = { autosaveFile.getPath() };
@@ -897,6 +895,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	
 	private void load(View view)
 	{
+		if(file.exists())
+			setFlag(READ_ONLY,!file.canWrite());
+
 		InputStream _in;
 		URLConnection connection = null;
 		StringBuffer sbuf = new StringBuffer(Math.max(
@@ -1376,6 +1377,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.103  1999/11/10 10:43:01  sp
+ * Macros can now have shortcuts, various miscallaneous updates
+ *
  * Revision 1.102  1999/11/07 06:51:42  sp
  * Check box menu items supported
  *
