@@ -21,6 +21,8 @@ package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.Segment;
 import java.util.*;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.util.Log;
 
 /**
@@ -75,11 +77,6 @@ public class TokenMarker implements Cloneable
 //	public static final int ACTION_TOKEN_29 = 1 << 29;
 //	public static final int ACTION_TOKEN_30 = 1 << 30;
 //	public static final int ACTION_TOKEN_31 = 1 << 31;
-
-	public static void addTokenMarker(String name, TokenMarker tokenMarker)
-	{
-		tokenMarkers.put(name,tokenMarker);
-	}
 
 	public TokenMarker()
 	{
@@ -271,8 +268,6 @@ public class TokenMarker implements Cloneable
 	}
 
 	// private members
-	private static Hashtable tokenMarkers = new Hashtable();
-
 	private static final int SOFT_SPAN = MARK_FOLLOWING | NO_WORD_BREAK;
 
 	private String name;
@@ -293,12 +288,20 @@ public class TokenMarker implements Cloneable
 
 	private static ParserRuleSet getExternalRuleSet(String modeName, String setName)
 	{
-		TokenMarker marker = (TokenMarker)tokenMarkers.get(modeName);
+		Mode mode = jEdit.getMode(modeName);
+		if(mode == null)
+		{
+			Log.log(Log.ERROR,TokenMarker.class,
+				"Unknown edit mode: " + modeName);
+			return null;
+		}
+
+		TokenMarker marker = mode.getTokenMarker();
 
 		if (marker == null)
 		{
 			Log.log(Log.ERROR,TokenMarker.class,
-				"Unresolved token marker: " + modeName);
+				"Cannot delegate to plain text mode");
 			return null;
 		}
 
@@ -908,6 +911,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.37  2000/04/01 12:21:27  sp
+ * mode cache implemented
+ *
  * Revision 1.36  2000/04/01 09:49:36  sp
  * multiline token highlight was messed up
  *

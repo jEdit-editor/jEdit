@@ -261,6 +261,7 @@ public class XModeHandler extends HandlerBase
 				mode = new Mode(modeName);
 				jEdit.addMode(mode);
 			}
+			mode.setProperty("grammar",path);
 		}
 		else if (tag == "KEYWORDS")
 		{
@@ -287,12 +288,18 @@ public class XModeHandler extends HandlerBase
 			{
 				mode.init();
 				mode.setTokenMarker(marker);
-				TokenMarker.addTokenMarker(modeName,
-					marker);
 			}
 			else if (tag == "PROPERTY")
 			{
-				mode.setProperty(propName,propValue);
+				try
+				{
+					mode.setProperty(propName,
+						new Integer(propValue));
+				}
+				catch(NumberFormatException nf)
+				{
+					mode.setProperty(propName,propValue);
+				}
 			}
 			else if (tag == "KEYWORDS")
 			{

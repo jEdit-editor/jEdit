@@ -6,7 +6,7 @@
 
 <MODE NAME="perl">
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="Perl Script" />
+		<PROPERTY NAME="label" VALUE="Perl" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.p[lm]" />
 		<PROPERTY NAME="firstlineGlob" VALUE="#!/*perl*" />

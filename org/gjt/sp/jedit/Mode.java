@@ -83,17 +83,34 @@ public class Mode
 	}
 
 	/**
-	 * Returns a <code>TokenMarker</code> for this mode. Can return null
-	 * if this mode doesn's support syntax highlighting. The default
-	 * implementation returns a copy of the token marker specified with
+	 * Returns a copy of the token marker specified with
 	 * <code>setTokenMarker()</code>.
 	 */
 	public TokenMarker createTokenMarker()
 	{
+		// load if necessary
+		TokenMarker marker = getTokenMarker();
+
 		if(marker == null)
 			return null;
 
 		return (TokenMarker)marker.clone();
+	}
+
+	/**
+	 * Returns the token marker specified with
+	 * <code>setTokenMarker()</code>. Should only be called by
+	 * <code>TokenMarker.getExternalRuleSet()</code>.
+	 */
+	public TokenMarker getTokenMarker()
+	{
+		if(marker == null)
+		{
+			String grammar = (String)getProperty("grammar");
+			if(grammar != null)
+				jEdit.loadMode(grammar);
+		}
+		return marker;
 	}
 
 	/**
@@ -195,6 +212,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/04/01 12:21:27  sp
+ * mode cache implemented
+ *
  * Revision 1.24  2000/04/01 09:49:36  sp
  * multiline token highlight was messed up
  *
@@ -224,11 +244,5 @@ public class Mode
  *
  * Revision 1.15  1999/10/24 06:04:00  sp
  * QuickSearch in tool bar, auto indent updates, macro recorder updates
- *
- * Revision 1.14  1999/10/24 02:06:41  sp
- * Miscallaneous pre1 stuff
- *
- * Revision 1.13  1999/10/23 03:48:22  sp
- * Mode system overhaul, close all dialog box, misc other stuff
  *
  */

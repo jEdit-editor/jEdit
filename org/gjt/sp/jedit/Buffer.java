@@ -51,12 +51,7 @@ import org.gjt.sp.util.Log;
  * use this property when reading/writing to the disk
  * </ul>
  *
- * Various other properties are also used by jEdit and plugin actions.<p>
- *
- * To improve jEdit's perceived speed, buffers are not loaded from disk
- * until the user first interacts with them. Because of this, plugins and
- * other jEdit modules must call the <code>loadIfNecessary()</code> method
- * of a buffer before doing anything with it.
+ * Various other properties are also used by jEdit and plugin actions.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -96,20 +91,10 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
-	 * Loads a buffer from disk if it is not loaded already.
-	 * To make jEdit seem faster, files are not actually loaded
-	 * disk when opened. They are only loaded when they are used
-	 * for the first time.<p>
-	 *
-	 * This method must be called before doing anything with a buffer.
-	 * @param view The view
-	 *
-	 * @since 2.2pre7
+	 * @deprecated No longer needed. Do not call this method.
 	 */
 	public void loadIfNecessary(View view)
 	{
-		if(!getFlag(LOADED) && !getFlag(CLOSED))
-			load(view);
 	}
 
 	/**
@@ -126,14 +111,14 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(!getFlag(NEW_FILE))
 		{
 			// Only on initial load
-			if(autosaveFile.exists() && !getFlag(LOADED))
+			if(autosaveFile.exists())
 			{
 				Object[] args = { autosaveFile.getPath() };
 				GUIUtilities.message(view,"autosaveexists",args);
 			}
 		}
 
-		setFlag(LOADED,false);
+		setFlag(LOADING,true);
 
 		undo = null;
 
@@ -155,7 +140,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(view != null)
 			view.hideWaitCursor();
 
-		setFlag(LOADED,true);
+		setFlag(LOADING,false);
 
 		View _view = jEdit.getFirstView();
 		while(_view != null)
@@ -248,10 +233,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public boolean save(View view, String path)
 	{
-		// Do nothing if not loaded
-		if(!getFlag(LOADED))
-			return true;
-
 		if(path == null && getFlag(NEW_FILE))
 			return saveAs(view);
 
@@ -443,11 +424,11 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
-	 * Returns true if this buffer has been loaded from disk.
+	 * @deprecated Always returns true. Should no longer be called.
 	 */
 	public final boolean isLoaded()
 	{
-		return getFlag(LOADED);
+		return true;
 	}
 
 	/**
@@ -492,7 +473,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		if(d)
 		{
-			if(!getFlag(LOADED) || getFlag(READ_ONLY))
+			if(getFlag(LOADING) || getFlag(READ_ONLY))
 				return;
 			if(getFlag(DIRTY) && getFlag(AUTOSAVE_DIRTY))
 				return;
@@ -588,8 +569,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void addUndoableEdit(UndoableEdit edit)
 	{
-		if(undo == null || getFlag(UNDO_IN_PROGRESS)
-			|| !getFlag(LOADED))
+		if(undo == null || getFlag(UNDO_IN_PROGRESS) || getFlag(LOADING))
 			return;
 
 		// Ignore insificant edits if the redo queue is non-empty.
@@ -958,7 +938,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		boolean added = false;
 
 		// don't sort markers while buffer is being loaded
-		if(getFlag(LOADED))
+		if(!getFlag(LOADING))
 		{
 			for(int i = 0; i < markers.size(); i++)
 			{
@@ -1100,17 +1080,13 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 		setFlag(NEW_FILE,newFile);
 
-		// New files are initialized immediately since it
-		// only takes 1 ms or so
-		if(newFile)
-			loadIfNecessary(null);
+		load(null);
 	}
 
 	void commitTemporary()
 	{
 		setFlag(TEMPORARY,false);
-		if(getFlag(LOADED))
-			EditBus.addToBus(this);
+		EditBus.addToBus(this);
 	}
 
 	void close()
@@ -1118,9 +1094,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		setFlag(CLOSED,true);
 		autosaveFile.delete();
 
-		// Unloaded buffers are not on the bus
-		if(getFlag(LOADED))
-			EditBus.removeFromBus(this);
+		EditBus.removeFromBus(this);
 	}
 
 	// private members
@@ -1139,7 +1113,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	}
 
 	private static final int CLOSED = 0;
-	private static final int LOADED = 1;
+	private static final int LOADING = 1;
 	private static final int NEW_FILE = 2;
 	private static final int UNTITLED = 3;
 	private static final int AUTOSAVE_DIRTY = 4;
@@ -1777,6 +1751,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.132  2000/04/01 12:21:27  sp
+ * mode cache implemented
+ *
  * Revision 1.131  2000/04/01 09:49:36  sp
  * multiline token highlight was messed up
  *

@@ -253,7 +253,7 @@ loop:			for(;;)
 
 	/**
 	 * Finds the next instance of the search string in the specified
-	 * buffer. This calls <code>loadIfNecessary()</code> on the buffer.
+	 * buffer.
 	 * @param view The view
 	 * @param buffer The buffer
 	 * @param start Location where to start the search
@@ -265,9 +265,6 @@ loop:			for(;;)
 		throws BadLocationException, IllegalArgumentException
 	{
 		SearchMatcher matcher = getSearchMatcher();
-
-		// Load buffer if necessary
-		buffer.loadIfNecessary(view);
 
 		String text = buffer.getText(start,
 			buffer.getLength() - start);
@@ -399,7 +396,7 @@ loop:			for(;;)
 
 	/**
 	 * Replaces all occurances of the search string with the replacement
-	 * string. This calls <code>loadIfNecessary()</code> on the buffer.
+	 * string.
 	 * @param view The view
 	 * @param buffer The buffer
 	 * @return True if the replace operation was successful, false
@@ -414,9 +411,6 @@ loop:			for(;;)
 		SearchMatcher matcher = getSearchMatcher();
 		if(matcher == null)
 			return 0;
-
-		// Load buffer if necessary
-		buffer.loadIfNecessary(view);
 
 		int lineCount = 0;
 		Element map = buffer.getDefaultRootElement();
@@ -511,6 +505,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.26  2000/04/01 12:21:27  sp
+ * mode cache implemented
+ *
  * Revision 1.25  2000/01/31 05:04:48  sp
  * C+e C+x will ask to add abbrev if not found, other minor updates
  *

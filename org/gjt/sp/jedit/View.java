@@ -79,17 +79,13 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Sets the buffer being edited by this view. This calls
-	 * <code>loadIfNecessary()</code> on the buffer.
+	 * Sets the buffer being edited by this view.
 	 * @param buffer The buffer to edit.
 	 */
 	public void setBuffer(Buffer buffer)
 	{
 		if(this.buffer == buffer)
 			return;
-
-		// Ensure new buffer is valid
-		buffer.loadIfNecessary(this);
 
 		recentBuffer = this.buffer;
 		if(recentBuffer != null)
@@ -1420,6 +1416,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.148  2000/04/01 12:21:27  sp
+ * mode cache implemented
+ *
  * Revision 1.147  2000/04/01 03:17:41  sp
  * Tiny fixes here and there
  *

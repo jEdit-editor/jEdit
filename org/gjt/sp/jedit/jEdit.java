@@ -230,7 +230,6 @@ public class jEdit
 		SearchAndReplace.load();
 		Abbrevs.load();
 		initActions();
-		GUIUtilities.setProgressText("Loading edit modes");
 		initModes();
 		initKeyBindings();
 		Macros.loadMacros();
@@ -253,7 +252,7 @@ public class jEdit
 			server = new EditServer(portFile);
 
 		// Load files specified on the command line
-		GUIUtilities.setProgressText("Creating initial view");
+		GUIUtilities.setProgressText("Opening files");
 
 		for(int i = 0; i < args.length; i++)
 		{
@@ -280,6 +279,7 @@ public class jEdit
 		// Create the view and hide the splash screen.
 		final Buffer _buffer = buffer;
 
+		GUIUtilities.setProgressText("Creating view");
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
@@ -570,6 +570,157 @@ public class jEdit
 	}
 
 	/**
+	 * Loads a mode cache file.
+	 * @param path The mode cache file
+	 * @return true if the cache file was loaded, false if not
+	 */
+	public static boolean loadModeCache(String path)
+	{
+		Log.log(Log.NOTICE,jEdit.class,"Loading mode cache file " + path);
+
+		File file = new File(path);
+		if(!file.exists())
+			return false;
+
+		GUIUtilities.setProgressText("Loading edit mode cache");
+
+		BufferedReader in = null;
+		try
+		{
+			in = new BufferedReader(new FileReader(path));
+			String line;
+			while((line = in.readLine()) != null)
+			{
+				if(line.startsWith("version "))
+				{
+					String version = line.substring(8);
+					if(!version.equals(getBuild()))
+						return false;
+				}
+				else if(line.startsWith("mode "))
+				{
+					StringTokenizer st = new StringTokenizer(
+						line.substring(5),"\t");
+					String name = st.nextToken();
+					Mode mode = new Mode(name);
+					String[] props = { "label", "filenameGlob",
+						"firstlineGlob", "grammar" };
+					for(int i = 0; i < props.length; i++)
+					{
+						String value = st.nextToken();
+						if(!value.equals("\0"))
+							mode.setProperty(props[i],value);
+					}
+					mode.init();
+					addMode(mode);
+				}
+			}
+
+			return true;
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,jEdit.class,"Error loading mode cache:");
+			Log.log(Log.ERROR,jEdit.class,e);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Reloads all modes and recreates the cache file.
+	 * @param path The mode cache file path
+	 */
+	public static void createModeCache(String path)
+	{
+		// remove existing modes
+		modes = new Vector();
+
+		Mode text = new Mode("text");
+		text.setProperty("label",getProperty("mode.text.label"));
+		addMode(text);
+
+		loadModes(MiscUtilities.constructPath(getJEditHome(),"modes"));
+
+		if(settingsDirectory != null)
+		{
+			String directory = MiscUtilities.constructPath(
+				settingsDirectory,"modes");
+			new File(directory).mkdirs();
+			loadModes(directory);
+		}
+
+		/* Sort mode list */
+		MiscUtilities.quicksort(modes,new ModeCompare());
+
+		if(path == null)
+			return;
+
+		Log.log(Log.NOTICE,jEdit.class,"Creating mode cache file: " + path);
+
+		BufferedWriter out = null;
+		try
+		{
+			out = new BufferedWriter(new FileWriter(path));
+			out.write("version " + getBuild() + '\n');
+			for(int i = 0; i < modes.size(); i++)
+			{
+				Mode mode = (Mode)modes.elementAt(i);
+				out.write("mode ");
+				out.write(mode.getName());
+				String[] props = { "label", "filenameGlob",
+					"firstlineGlob", "grammar" };
+				for(int j = 0; j < props.length; j++)
+				{
+					out.write('\t');
+					Object prop = mode.getProperty(props[j]);
+					if(prop != null)
+						out.write(prop.toString());
+					else
+						out.write('\0');
+				}
+				out.write('\n');
+			}
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,jEdit.class,"Error saving mode cache:");
+			Log.log(Log.ERROR,jEdit.class,e);
+		}
+		finally
+		{
+			try
+			{
+				if(out != null)
+					out.close();
+			}
+			catch(IOException io)
+			{
+			}
+		}
+	}
+
+	static class ModeCompare implements MiscUtilities.Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			return ((Mode)obj1).getName().compareTo(
+				((Mode)obj2).getName());
+		}
+	}
+
+	/**
 	 * Loads XML edit modes from the specified directory.
 	 * @param directory The directory
 	 */
@@ -585,39 +736,21 @@ public class jEdit
 		if(grammars == null)
 			return;
 
-		String grammar, fileName;
-
-		FileReader reader;
-
 		for(int i = 0; i < grammars.length; i++)
 		{
-			grammar = grammars[i];
+			String grammar = grammars[i];
 			if(!grammar.toLowerCase().endsWith(".xml"))
 				continue;
 
-			fileName = directory + File.separator + grammar;
-
-			reader = null;
-			try
-			{
-				reader = new FileReader(new File(fileName));
-			}
-			catch (FileNotFoundException e)
-			{
-				// should not happen
-			}
-
-			if (reader != null)
-				loadMode(reader, fileName);
+			loadMode(directory + File.separator + grammar);
 		}
 	}
 
 	/**
 	 * Loads an XML-defined edit mode from the specified reader.
-	 * @param grammar The reader
 	 * @param fileName The file name
 	 */
-	public static void loadMode(Reader grammar, String fileName)
+	public static void loadMode(String fileName)
 	{
 		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
 
@@ -626,6 +759,7 @@ public class jEdit
 		parser.setHandler(xmh);
 		try
 		{
+			Reader grammar = new BufferedReader(new FileReader(fileName));
 			parser.parse(null, null, grammar);
 		}
 		catch (Exception e)
@@ -1477,29 +1611,17 @@ public class jEdit
 		 * copying */
 		modes = new Vector(40);
 
-		addMode(new Mode("text"));
-
-		loadModes(MiscUtilities.constructPath(getJEditHome(),"modes"));
-
+		// try loading cache file
+		String path = MiscUtilities.constructPath(
+			settingsDirectory,"mode-cache");
 		if(settingsDirectory != null)
 		{
-			String path = MiscUtilities.constructPath(
-				settingsDirectory,"modes");
-			new File(path).mkdirs();
-			loadModes(path);
+			if(loadModeCache(path))
+				return;
 		}
 
-		/* Sort mode list */
-		MiscUtilities.quicksort(modes,new ModeCompare());
-	}
-
-	static class ModeCompare implements MiscUtilities.Compare
-	{
-		public int compare(Object obj1, Object obj2)
-		{
-			return ((Mode)obj1).getName().compareTo(
-				((Mode)obj2).getName());
-		}
+		GUIUtilities.setProgressText("Creating edit mode cache");
+		createModeCache(path);
 	}
 
 	/**
@@ -1594,6 +1716,7 @@ public class jEdit
 		addAction("redo");
 		addAction("reload");
 		addAction("reload-all");
+		addAction("reload-modes");
 		addAction("replace-all");
 		addAction("replace-in-selection");
 		addAction("rescan-macros");
@@ -1751,9 +1874,6 @@ public class jEdit
 	{
 		if(marker.length() == 0)
 			return;
-
-		// load buffer if necessary
-		buffer.loadIfNecessary(view);
 
 		int start, end;
 
@@ -1938,6 +2058,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.206  2000/04/01 12:21:27  sp
+ * mode cache implemented
+ *
  * Revision 1.205  2000/04/01 08:40:54  sp
  * Streamlined syntax highlighting, Perl mode rewritten in XML
  *

@@ -3,11 +3,9 @@ JEDIT TO DO
 - <delegate escape><char><delegate end> not highlighted properly
 - XMode:
   - better error reporting
-  - faster loading of modes
   - faster tokenizing of files
   - write docs
-  - finish perl mode
-- Get rid of loadIfNecessary() crap?
+  - regexps
 - JARClassLoader: use GUIUtilities.error() to display errors
 - Option pane for changing mode-specific tab size, indent, comment
   characters, and so on

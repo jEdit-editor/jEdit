@@ -5,6 +5,13 @@ JEDIT VERSION HISTORY
 jEdit 2.4pre3 is being released so soon after 2.4pre2 because an installer
 error prevented 2.4pre2 from being installed properly.
 
++ New Features
+
+- Previously, jEdit loaded all XML mode files on startup. This could take
+  a long time. Now, we write only read a cache file, which can be loaded
+  much faster. The cache file needs to be recreated when new edit modes
+  are installed; invoke 'Utilities->Reload Edit Modes' to recreate it
+
 + Enhancements
 
 - Ruby mode updates (Mike Dillon)

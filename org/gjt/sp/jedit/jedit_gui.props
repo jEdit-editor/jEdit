@@ -303,7 +303,9 @@ utils=new-view \
       log-viewer \
       - \
       buffer-options \
-      global-options
+      global-options \
+      - \
+      reload-modes
 utils.label=$Utilities
 load-session.label=$Load Session...
 save-session.label=$Save Session...
@@ -319,6 +321,7 @@ toggle-line-numbers.label=Line Nu$mbering
 log-viewer.label=$Activity Log...
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
+reload-modes.label=Rel$oad Edit Modes
 
 ### Macros menu
 macros=record-macro \
@@ -825,3 +828,8 @@ helpviewer.forward=Forward
 log-viewer.title=Activity Log
 log-viewer.clear=Clear Log
 log-viewer.save=Save Log
+
+###
+### MISC
+###
+mode.text.label=Plain Text

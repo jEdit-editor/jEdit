@@ -229,8 +229,6 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 	{
 		boolean retVal = false;
 
-		buffer.loadIfNecessary(null);
-
 		Element map = buffer.getDefaultRootElement();
 		int lines = map.getElementCount();
 		for(int i = 0; i < lines; i++)
@@ -303,7 +301,6 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		public void bufferOpened(Buffer buffer)
 		{
 			this.buffer = buffer;
-			buffer.loadIfNecessary(null);
 			Element map = buffer.getDefaultRootElement();
 			Element elem = map.getElement(line);
 			if(elem == null)
@@ -378,6 +375,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.51  2000/04/01 12:21:27  sp
+ * mode cache implemented
+ *
  * Revision 1.50  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes
