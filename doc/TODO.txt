@@ -1,17 +1,19 @@
 JEDIT 2.2 TO DO
 
-- Directory list set is slow; investigate exactly what happends in openFile()
-  and closeBuffer(). Also; memory leaks?
+------- pre2 -------
+
 - Low-priority background thread that plugins can use to do background
   parsing, etc: jEdit.addWorkRequest(Runnable r), WorkerThread
+- Directory list set is slow; investigate exactly what happends in openFile()
+  and closeBuffer()
 - On some Java implementations, scrolling doesn't stop after mouse is released
-- Autoindent pasted text
+
+------- pre3+ -------
+
 - Reverse search
 - Integrate XMode
 - Integrate EditBus if enough plugins take advantage of it
 - Word wrap
-- Pass -session= to server
-- HyperSearch: call doneWithBuffer() for all buffers
 - XML GUI. For example:
   <textfield id=find text=search.find.value />
   <button id=ok text=common.ok>
@@ -22,9 +24,9 @@ JEDIT 2.2 TO DO
 
 ------- Installer -------
 
-- Text mode install
-- Finish simtool
-- Package and release separately
+- Package and release
+- Check version of existing 'simlaunch' program before overwriting
+- Store human-readable strings in a property file for easier localization
 
 ------- Ideas for plugins -------
 

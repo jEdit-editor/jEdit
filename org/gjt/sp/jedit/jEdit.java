@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.02.01.00";
+		return "02.02.02.00";
 	}
 
 	/**
@@ -155,6 +155,8 @@ public class jEdit
 				out.write(String.valueOf(key));
 				out.write('\n');
 
+				if(!defaultSession && session != null)
+					out.write("session=" + session + "\n");
 				if(readOnly)
 					out.write("readonly\n");
 				if(reuseView)
@@ -1066,6 +1068,9 @@ public class jEdit
 			+ " exit");
 		System.err.println("	-usage: Print this message and exit");
 		System.err.println("	-readonly: Open files read-only");
+		System.err.println("	-nosession: Don't load default session");
+		System.err.println("	-session=<name>: Load session from"
+			+ " $HOME/.jedit/sessions/<name>");
 		System.err.println("	-noserver: Don't start editor server");
 		System.err.println("	-server=<name>: Reads/writes server"
 			+ " info to $HOME/.jedit/<name>");
@@ -1076,14 +1081,10 @@ public class jEdit
 			+ " settings");
 		System.err.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
-		System.err.println("	-nosession: Don't load default session");
-		System.err.println("	-session=<name>: Load session from"
-			+ " $HOME/.jedit/sessions/<name>");
 		System.err.println("	-nosplash: Don't show splash screen");
 		System.err.println();
 		System.err.println("Client-only options:");
-		System.err.println("	-reuseview: Don't open new view in"
-			+ " server jEdit");
+		System.err.println("	-reuseview: Don't open new view in");
 
 		System.err.println();
 		System.err.println("Report bugs to Slava Pestov <sp@gjt.org>.");
@@ -1537,6 +1538,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.147  1999/10/30 02:44:18  sp
+ * Miscallaneous stuffs
+ *
  * Revision 1.146  1999/10/28 09:07:21  sp
  * Directory list search
  *

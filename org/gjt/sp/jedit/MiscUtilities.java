@@ -68,18 +68,18 @@ public class MiscUtilities
 	{
 		// absolute pathnames
 		if(path.startsWith(File.separator))
-			return canonPath(path);
+			return path;
 		// windows pathnames, eg C:\document
 		else if(path.length() >= 3 && path.charAt(1) == ':')
-			return canonPath(path);
+			return path;
 		// relative pathnames
 		else if(parent == null)
 			parent = System.getProperty("user.dir");
 		// do it!
 		if(parent.endsWith(File.separator))
-			return canonPath(parent + path);
+			return parent + path;
 		else
-			return canonPath(parent + File.separator + path);
+			return parent + File.separator + path;
 	}
 
 	/**
@@ -326,7 +326,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	// private members
 	private MiscUtilities() {}
-
+/*
 	private static String canonPath(String path)
 	{
 		try
@@ -338,7 +338,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return path;
 		}
 	}
-
+*/
 	private static void quicksort(Object[] obj, int _start, int _end,
 		Compare compare)
 	{
@@ -417,6 +417,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  1999/10/30 02:44:18  sp
+ * Miscallaneous stuffs
+ *
  * Revision 1.20  1999/10/28 09:07:21  sp
  * Directory list search
  *

@@ -1,5 +1,35 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2pre2
+
++ Enhancements
+
+- The -session switch is now passed to server instances of jEdit
+- An error message is displayed if saving a backup failed
+- Buffers no longer use boolean to store flags, instead there is
+  one integer storing a bit mask
+
++ Bug Fixes
+
+- Fixed minor bug in load-session action (Mike Dillon) (since 2.2pre1)
+- Fixed ClassCastException when loading files on JDK 1.3 (since 2.2pre1)
+- MiscUtilities.constructPath() no longer calls File.getCanonicalPath()
+  which seems to cause problems for some people (since 0.x)
+- BufferListSet and DirectoryListSet had problems with find-next
+  (since 2.1pre4)
+- Fixed a memory leak where closed buffers were never reclamed
+  (not sure when this was introduced)
+
++ Plugin Updates
+
+- Console 1.7.2
+
++ Installer Updates
+
+- Text-only install now supported; specify the "text" parameter on the
+  command line
+- Directories are now created with the correct permissions on Unix
+
 * Version 2.2pre1
 
 + New Features

@@ -56,7 +56,13 @@ public class Buffer extends SyntaxDocument
 	 */
 	public void propertiesChanged()
 	{
-		syntaxColorizing = "on".equals(getProperty("syntax"));
+		setFlag(SYNTAX,"on".equals(getProperty("syntax")));
+		Integer tabSize = (Integer)mode.getProperty("tabSize");
+		if(tabSize != null)
+			putProperty("tabSize",tabSize);
+		else
+			putProperty("tabSize",new Integer(jEdit.getProperty(
+				"buffer.tabSize")));
 	}
 
 	/**
@@ -64,7 +70,7 @@ public class Buffer extends SyntaxDocument
 	 */
 	public void autosave()
 	{
-		if(adirty)
+		if(getFlag(AUTOSAVE_DIRTY))
 		{
 			try
 			{
@@ -75,7 +81,7 @@ public class Buffer extends SyntaxDocument
 				autosaveFile.delete();
 				autosaveTmp.renameTo(autosaveFile);
 				/* XXX race alert if setDirty() runs here */
-				adirty = false;
+				setFlag(AUTOSAVE_DIRTY,false);
 			}
 			catch(FileNotFoundException fnf)
 			{
@@ -114,7 +120,7 @@ public class Buffer extends SyntaxDocument
 	 */
 	public boolean save(View view, String path)
 	{
-		if(path == null && newFile)
+		if(path == null && getFlag(NEW_FILE))
 			return saveAs(view);
 
 		boolean returnValue;
@@ -161,7 +167,7 @@ public class Buffer extends SyntaxDocument
 
 		fireBufferEvent(BufferEvent.BUFFER_SAVING);
 
-		backup(saveFile);
+		backup(view,saveFile);
 
 		try
 		{
@@ -182,9 +188,12 @@ public class Buffer extends SyntaxDocument
 			file = saveFile;
 			setPath();
 			saveMarkers();
-			if(newFile || mode.getName().equals("text")) // XXX
+			if(getFlag(NEW_FILE) || mode.getName().equals("text"))
 				setMode();
-			adirty = dirty = readOnly = newFile = false;
+			setFlag(AUTOSAVE_DIRTY,false);
+			setFlag(DIRTY,false);
+			setFlag(READ_ONLY,false);
+			setFlag(NEW_FILE,false);
 
 			autosaveFile.delete();
 			modTime = file.lastModified();
@@ -226,7 +235,7 @@ public class Buffer extends SyntaxDocument
 		autosaveFile.delete();
 
 		// This is so that `dirty' isn't set
-		init = true;
+		setFlag(INIT,true);
 
 		load(view);
 		loadMarkers();
@@ -237,7 +246,7 @@ public class Buffer extends SyntaxDocument
 		tokenizeLines();
 
 		// Clear dirty flag
-		dirty = false;
+		setFlag(DIRTY,false);
 
 		// Hide the wait cursor
 		if(view != null)
@@ -245,7 +254,7 @@ public class Buffer extends SyntaxDocument
 
 		fireBufferEvent(BufferEvent.DIRTY_CHANGED);
 
-		init = false;
+		setFlag(INIT,false);
 	}
 
 	/**
@@ -294,7 +303,7 @@ public class Buffer extends SyntaxDocument
 	 */
 	public final boolean isClosed()
 	{
-		return closed;
+		return getFlag(CLOSED);
 	}
 
 	/**
@@ -302,7 +311,7 @@ public class Buffer extends SyntaxDocument
 	 */
 	public final boolean isNewFile()
 	{
-		return newFile;
+		return getFlag(NEW_FILE);
 	}
 	
 	/**
@@ -311,7 +320,7 @@ public class Buffer extends SyntaxDocument
 	 */
 	public final boolean isDirty()
 	{
-		return dirty;
+		return getFlag(DIRTY);
 	}
 	
 	/**
@@ -319,9 +328,9 @@ public class Buffer extends SyntaxDocument
 	 */
 	public final boolean isReadOnly()
 	{
-		return readOnly;
+		return getFlag(READ_ONLY);
 	}
-	
+
 	/**
 	 * Sets the `dirty' (changed since last save) flag of this buffer.
 	 */
@@ -329,14 +338,15 @@ public class Buffer extends SyntaxDocument
 	{
 		if(d)
 		{
-			if(init || readOnly)
+			if(getFlag(INIT) || getFlag(READ_ONLY))
 				return;
-			if(dirty && adirty)
+			if(getFlag(DIRTY) && getFlag(AUTOSAVE_DIRTY))
 				return;
-			dirty = adirty = true;
+			setFlag(DIRTY,true);
+			setFlag(AUTOSAVE_DIRTY,true);
 		}
 		else
-			dirty = false;
+			setFlag(DIRTY,false);
 		fireBufferEvent(BufferEvent.DIRTY_CHANGED);
 	}
 
@@ -350,9 +360,9 @@ public class Buffer extends SyntaxDocument
 	{
 		try
 		{
-			undoInProgress = true;
+			setFlag(UNDO_IN_PROGRESS,true);
 			undo.undo();
-			undoInProgress = false;
+			setFlag(UNDO_IN_PROGRESS,false);
 			return true;
 		}
 		catch(CannotUndoException cu)
@@ -371,9 +381,9 @@ public class Buffer extends SyntaxDocument
 	{
 		try
 		{
-			undoInProgress = true;
+			setFlag(UNDO_IN_PROGRESS,true);
 			undo.redo();
-			undoInProgress = false;
+			setFlag(UNDO_IN_PROGRESS,false);
 			return true;
 		}
 		catch(CannotRedoException cr)
@@ -397,7 +407,7 @@ public class Buffer extends SyntaxDocument
 	 */
 	public void addUndoableEdit(UndoableEdit edit)
 	{
-		if(undoInProgress)
+		if(getFlag(UNDO_IN_PROGRESS))
 			return;
 
 		// Ignore insificant edits if the redo queue is non-empty.
@@ -448,6 +458,15 @@ public class Buffer extends SyntaxDocument
 				undo.addEdit(compoundEdit);
 			compoundEdit = null;
 		}
+	}
+
+	/**
+	 * Returns the tab size used in this buffer. This is equivalent
+	 * to calling getProperty("tabSize").
+	 */
+	public int getTabSize()
+	{
+		return ((Integer)getProperty("tabSize")).intValue();
 	}
 
 	/**
@@ -551,7 +570,7 @@ public class Buffer extends SyntaxDocument
 	 */
 	public final TokenMarker getTokenMarker()
 	{
-		if(syntaxColorizing)
+		if(getFlag(SYNTAX))
 			return tokenMarker;
 		else
 			return null;
@@ -573,9 +592,8 @@ public class Buffer extends SyntaxDocument
 	 */
 	public void addMarker(String name, int start, int end)
 	{
-		if(readOnly && !init)
-			return;
-		dirty = !init;
+		setDirty(true);
+
 		name = name.replace(';',' ');
 		Marker markerN;
 		try
@@ -588,7 +606,7 @@ public class Buffer extends SyntaxDocument
 			return;
 		}
 		boolean added = false;
-		if(!init)
+		if(!getFlag(INIT))
 		{
 			for(int i = 0; i < markers.size(); i++)
 			{
@@ -619,9 +637,8 @@ public class Buffer extends SyntaxDocument
 	 */
 	public void removeMarker(String name)
 	{
-		if(readOnly)
-			return;
-		dirty = !init;
+		setDirty(true);
+
 loop:		for(int i = 0; i < markers.size(); i++)
 		{
 			Marker marker = (Marker)markers.elementAt(i);
@@ -649,18 +666,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	}
 
 	/**
-	 * Returns the tab size.
-	 */
-	public int getTabSize()
-	{
-		Integer i = (Integer)getProperty(tabSizeAttribute);
-		if(i != null)
-			return i.intValue();
-		else
-			return 8;
-	}
-	
-	/**
 	 * Returns the saved selection start.
 	 */
 	public final int getSavedSelStart()
@@ -681,7 +686,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 */
 	public final boolean isSelectionRectangular()
 	{
-		return rectSelect;
+		return getFlag(RECT_SELECT);
 	}
 	/**
 	 * Adds a buffer event listener to this buffer.
@@ -732,12 +737,12 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 	Buffer(View view, URL url, String path, boolean readOnly, boolean newFile)
 	{
-		init = true;
+		setFlag(INIT,true);
 
 		this.url = url;
 		this.path = path;
-		this.newFile = newFile;
-		this.readOnly = readOnly;
+		setFlag(NEW_FILE,newFile);
+		setFlag(READ_ONLY,readOnly);
 
 		setDocumentProperties(new BufferProps());
 		putProperty("i18n",Boolean.FALSE);
@@ -758,7 +763,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		if(!newFile)
 		{
 			if(file.exists())
-				this.readOnly |= !file.canWrite();
+				setFlag(READ_ONLY,!file.canWrite());
 			if(autosaveFile.exists())
 			{
 				Object[] args = { autosaveFile.getPath() };
@@ -771,15 +776,16 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		setMode();
 
 		addUndoableEditListener(new UndoHandler());
-		jEdit.addEditorListener(new EditorHandler());
+		jEdit.addEditorListener(editorHandler = new EditorHandler());
 		
-		init = false;
+		setFlag(INIT,false);
 	}
 
 	void close()
 	{
-		closed = true;
+		setFlag(CLOSED,true);
 		autosaveFile.delete();
+		jEdit.removeEditorListener(editorHandler);
 	}
 
 	void setCaretInfo(int savedSelStart, int savedSelEnd,
@@ -787,10 +793,37 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	{
 		this.savedSelStart = savedSelStart;
 		this.savedSelEnd = savedSelEnd;
-		this.rectSelect = rectSelect;
+		setFlag(RECT_SELECT,rectSelect);
 	}
 
 	// private members
+	private void setFlag(int flag, boolean value)
+	{
+		if(value)
+			flags |= (1 << flag);
+		else
+			flags &= ~(1 << flag);
+	}
+
+	private boolean getFlag(int flag)
+	{
+		int mask = (1 << flag);
+		return (flags & mask) == mask;
+	}
+
+	private static final int CLOSED = 0;
+	private static final int INIT = 1;
+	private static final int NEW_FILE = 2;
+	private static final int AUTOSAVE_DIRTY = 3;
+	private static final int DIRTY = 4;
+	private static final int READ_ONLY = 5;
+	private static final int BACKED_UP = 6;
+	private static final int SYNTAX = 7;
+	private static final int UNDO_IN_PROGRESS = 8;
+	private static final int RECT_SELECT = 9;
+
+	private int flags;
+
 	private File file;
 	private long modTime;
 	private File autosaveFile;
@@ -799,23 +832,14 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	private URL markersUrl;
 	private String name;
 	private String path;
-	private boolean closed;
-	private boolean init;
-	private boolean newFile;
-	private boolean adirty; /* Has file changed since last *auto* save? */
-	private boolean dirty;
-	private boolean readOnly;
-	private boolean alreadyBackedUp;
-	private boolean syntaxColorizing;
 	private Mode mode;
 	private UndoManager undo;
-	private boolean undoInProgress;
 	private CompoundEdit compoundEdit;
 	private int compoundEditCount;
 	private Vector markers;
 	private int savedSelStart;
 	private int savedSelEnd;
-	private boolean rectSelect;
+	private EditorHandler editorHandler;
 	private EventListenerList listenerList;
 
 	private void fireBufferEvent(int id)
@@ -955,7 +979,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			remove(0,getLength());
 
 			insertString(0,sbuf.toString(),null);
-			newFile = false;
+			setFlag(NEW_FILE,false);
 			modTime = file.lastModified();
 
 			// One day, we should interleave this code into
@@ -979,7 +1003,7 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		}
 		catch(FileNotFoundException fnf)
 		{
-			newFile = true;
+			setFlag(NEW_FILE,true);
 		}
 		catch(IOException io)
 		{
@@ -1183,11 +1207,11 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		o.close();
 	}
 
-	private void backup(File file)
+	private void backup(View view, File file)
 	{
-		if(alreadyBackedUp)
+		if(getFlag(BACKED_UP))
 			return;
-		alreadyBackedUp = true;
+		setFlag(BACKED_UP,true);
 		
 		// Fetch properties
 		int backups;
@@ -1221,10 +1245,12 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		
 		String name = file.getName();
 
+		boolean ok = true;
+
 		// If backups is 1, create ~ file
 		if(backups == 1)
 		{
-			file.renameTo(new File(backupDirectory,
+			ok &= file.renameTo(new File(backupDirectory,
 				backupPrefix + name + backupSuffix));
 		}
 		// If backups > 1, move old ~n~ files, create ~1~ file
@@ -1240,14 +1266,20 @@ loop:		for(int i = 0; i < markers.size(); i++)
 					backupPrefix + name + backupSuffix
 					+ i + backupSuffix);
 
-				backup.renameTo(new File(backupDirectory,
+				ok &= backup.renameTo(new File(backupDirectory,
 					backupPrefix + name + backupSuffix
 					+ (i+1) + backupSuffix));
 			}
 
-			file.renameTo(new File(backupDirectory,
+			ok &= file.renameTo(new File(backupDirectory,
 				backupPrefix + name + backupSuffix
 				+ "1" + backupSuffix));
+		}
+
+		if(!ok)
+		{
+			String[] args = { file.getPath() };
+			GUIUtilities.error(view,"backup-failed",args);
 		}
 	}
 
@@ -1259,6 +1291,11 @@ loop:		for(int i = 0; i < markers.size(); i++)
 			Object o = super.get(key);
 			if(o != null)
 				return o;
+
+			// JDK 1.3 likes to use non-string objects
+			// as keys
+			if(!(key instanceof String))
+				return null;
 
 			// Now try mode.<mode>.<property>
 			o = mode.getProperty((String)key);
@@ -1323,6 +1360,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.99  1999/10/30 02:44:18  sp
+ * Miscallaneous stuffs
+ *
  * Revision 1.98  1999/10/24 02:06:40  sp
  * Miscallaneous pre1 stuff
  *

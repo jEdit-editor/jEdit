@@ -43,7 +43,7 @@ public class load_session extends EditAction
 
 		String path = GUIUtilities.showFileDialog(
 			view,MiscUtilities.constructPath(settingsDirectory,
-			"sessions"),JFileChooser.SAVE_DIALOG);
+			"sessions"),JFileChooser.OPEN_DIALOG);
 
 		if(path != null)
 		{

@@ -329,6 +329,9 @@ public class Mode
 	public Object getProperty(String key)
 	{
 		String value = jEdit.getProperty("mode." + name + "." + key);
+		if(value == null)
+			return null;
+
 		try
 		{
 			return new Integer(value);
@@ -387,6 +390,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  1999/10/30 02:44:18  sp
+ * Miscallaneous stuffs
+ *
  * Revision 1.15  1999/10/24 06:04:00  sp
  * QuickSearch in tool bar, auto indent updates, macro recorder updates
  *

@@ -68,9 +68,18 @@ public class BufferListSet implements SearchFileSet
 	 */
 	public Buffer getNextBuffer(View view, Buffer buffer)
 	{
-		System.out.println(buffer);
 		if(buffer == null)
-			return getBuffer((String)files.elementAt(0));
+		{
+			buffer = view.getBuffer();
+
+			for(int i = 0; i < files.size() - 1; i++)
+			{
+				if(files.elementAt(i).equals(buffer.getPath()))
+					return buffer;
+			}
+
+			return getFirstBuffer(view);
+		}
 		else
 		{
 			// -1 so that the last isn't checked
@@ -115,6 +124,9 @@ public class BufferListSet implements SearchFileSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  1999/10/30 02:44:18  sp
+ * Miscallaneous stuffs
+ *
  * Revision 1.9  1999/10/28 09:07:21  sp
  * Directory list search
  *

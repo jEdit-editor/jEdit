@@ -171,6 +171,26 @@ class EditServer extends Thread
 		return retVal[0];
 	}
 
+	// Thread-safe wrapper for Sessions.loadSession()
+	private Buffer TSloadSession(final String session)
+	{
+		final Buffer[] retVal = new Buffer[1];
+		try
+		{
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run()
+				{
+					retVal[0] = Sessions.loadSession(session,false);
+				}
+			});
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return retVal[0];
+	}
+
 	// Thread-safe wrapper for View.setBuffer()
 	private void TSsetBuffer(final View view, final Buffer buffer)
 	{
@@ -188,6 +208,7 @@ class EditServer extends Thread
 		boolean readOnly = false;
 		boolean reuseView = false;
 		String parent = null;
+		String session = null;
 		boolean endOpts = false;
 
 		View view = null;
@@ -208,13 +229,18 @@ class EditServer extends Thread
 					reuseView = true;
 				else if(command.startsWith("parent="))
 					parent = command.substring(7);
+				else if(command.startsWith("session="))
+					session = command.substring(8);
 				else
 					System.err.println(client + ": unknown server"
 						+ " command: " + command);
 			}
 		}
 
-		// If nothing was opened, create new file
+		// If nothing was opened, try loading session, then new file
+		if(buffer == null && session != null)
+			buffer = TSloadSession(session);
+
 		if(buffer == null)
 			buffer = TSnewFile();
 
@@ -232,6 +258,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  1999/10/30 02:44:18  sp
+ * Miscallaneous stuffs
+ *
  * Revision 1.2  1999/10/04 06:13:52  sp
  * Repeat counts now supported
  *

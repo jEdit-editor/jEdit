@@ -409,7 +409,11 @@ about.message=jEdit version {0} (Java {1}, {2} {3})\n\
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
 # {0} - the error message
-ioerror.message=An I/O error occured ({0})
+ioerror.message=An I/O error ocurred ({0})
+
+# Backup failed dialog, {0}=file name
+backup-failed.title=Backup Failed
+backup-failed.message=An error ocurred while backing up {0}.
 
 # Open URL dialog
 openurl.title=Open URL
