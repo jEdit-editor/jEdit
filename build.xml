@@ -279,6 +279,8 @@
 			<fileset dir="." includes="installer/jedit-*"/>
 		</delete>
 		<delete dir="doc/api"/>
+		<delete dir="jEdit.app"/>
+		<delete file="jEdit.dmg"/>
 	</target>
 
 	<!-- Generate tags using 'ctags' program from ctags.sourceforge.net -->
