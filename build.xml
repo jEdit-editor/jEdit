@@ -60,7 +60,7 @@
 		</jar>
 	</target>
 
-	<target name="webstart" depends="compile">
+	<!-- <target name="webstart" depends="compile">
 		<jar
 			jarfile="jedit_webstart.jar"
 			manifest="org/gjt/sp/jedit/jedit.manifest"
@@ -97,7 +97,7 @@
 				<include name="modes/*.xml"/>
 			</fileset>
 		</jar>
-	</target>
+	</target> -->
 
 	<!-- Generate HTML docs with xsltproc tool from www.xmlsoft.org -->
 	<target name="docs-html-xsltproc">
