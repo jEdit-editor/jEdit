@@ -160,14 +160,14 @@ public class VFSManager
 	/**
 	 * For use by VFS implementations and IO requests. Displays the
 	 * specified error in the AWT thread.
-	 * @since jEdit 2.5pre1
+	 * @since jEdit 3.0pre1
 	 */
-	public static void error(final View view, final String error, final Object[] args)
+	public static void error(final Component comp, final String error, final Object[] args)
 	{
 		// if we are already in the AWT thread, take a shortcut
 		if(SwingUtilities.isEventDispatchThread())
 		{
-			GUIUtilities.error(view,error,args);
+			GUIUtilities.error(comp,error,args);
 			return;
 		}
 
@@ -185,10 +185,10 @@ public class VFSManager
 			{
 				VFSManager.error = false;
 
-				if(view == null || !view.isShowing())
+				if(comp == null || !comp.isShowing())
 					GUIUtilities.error(null,error,args);
 				else
-					GUIUtilities.error(view,error,args);
+					GUIUtilities.error(comp,error,args);
 			}
 		});
 	}
@@ -212,6 +212,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.9  2000/06/12 02:43:29  sp
  * pre6 almost ready
  *

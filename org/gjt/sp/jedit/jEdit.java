@@ -234,10 +234,14 @@ public class jEdit
 		initUserProperties();
 		if(settingsDirectory != null)
 		{
-			String history = MiscUtilities.constructPath(
-				settingsDirectory,"history");
+			File history = new File(MiscUtilities.constructPath(
+				settingsDirectory,"history"));
+			if(history.exists())
+				historyModTime = history.lastModified();
 			HistoryModel.loadHistory(history);
 		}
+
+		Abbrevs.load();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -249,9 +253,6 @@ public class jEdit
 		initRecent();
 		initPLAF();
 		SearchAndReplace.load();
-		Abbrevs.load();
-
-		GUIUtilities.advanceSplashProgress();
 
 		initActions();
 		initModes();
@@ -737,8 +738,6 @@ public class jEdit
 		File file = new File(path);
 		if(!file.exists())
 			return false;
-
-		GUIUtilities.advanceSplashProgress();
 
 		BufferedReader in = null;
 		try
@@ -1534,15 +1533,25 @@ public class jEdit
 			}
 			unsetProperty("recent." + maxRecent);
 
-			HistoryModel.saveHistory(MiscUtilities.constructPath(
+			File file = new File(MiscUtilities.constructPath(
 				settingsDirectory, "history"));
+			if(file.lastModified() != historyModTime)
+			{
+				Log.log(Log.WARNING,jEdit.class,file + " changed"
+					+ " on disk; will not save history");
+			}
+			else
+			{
+				HistoryModel.saveHistory(file);
+			}
+			historyModTime = file.lastModified();
 
 			SearchAndReplace.save();
 			Abbrevs.save();
 
-			File file = new File(MiscUtilities.constructPath(
+			file = new File(MiscUtilities.constructPath(
 				settingsDirectory,"properties"));
-			if(file.lastModified() > propsModTime)
+			if(file.lastModified() != propsModTime)
 			{
 				Log.log(Log.WARNING,jEdit.class,file + " changed"
 					+ " on disk; will not save user properties");
@@ -1656,7 +1665,7 @@ public class jEdit
 	// private members
 	private static String jEditHome;
 	private static String settingsDirectory;
-	private static long propsModTime;
+	private static long propsModTime, historyModTime;
 	private static String session;
 	private static Properties defaultProps;
 	private static Properties props;
@@ -1836,7 +1845,6 @@ public class jEdit
 		else
 			path = null;
 
-		GUIUtilities.advanceSplashProgress();
 		createModeCache(path);
 	}
 
@@ -2298,6 +2306,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.254  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.253  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
  *

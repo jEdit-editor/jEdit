@@ -924,8 +924,9 @@ public class View extends JFrame implements EBComponent
 		{
 			EditPlugin plugin = plugins[i];
 			// don't include broken plugins in list
-			if(plugin instanceof EditPlugin.Broken)
-				continue;
+			// ... why?
+			//if(plugin instanceof EditPlugin.Broken)
+			//	continue;
 
 			String name = plugin.getClassName();
 
@@ -1045,6 +1046,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.184  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.183  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
  *

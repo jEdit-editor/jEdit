@@ -292,10 +292,10 @@ search=find \
        toolbar-isearch \
        - \
        set-marker \
-       %clear-marker \
-       %goto-marker \
        prev-marker \
-       next-marker
+       next-marker \
+       %clear-marker \
+       %goto-marker
 search.label=$Search
 find.label=$Find...
 find-next.label=Fin$d Next
@@ -308,11 +308,11 @@ multifile-search.label=M$ultifile Search Settings...
 toolbar-find.label=$Toolbar Find
 toolbar-isearch.label=Toolbar $Incremental Search
 set-marker.label=Set $Marker...
-clear-marker.label=Clear Marker
-goto-marker.label=Go to Marker
 no-markers.label=No Markers Defined
 prev-marker.label=Go to $Previous Marker
 next-marker.label=Go to $Next Marker
+clear-marker.label=Clear Marker
+goto-marker.label=Go to Marker
 
 ### View menu
 

@@ -123,16 +123,16 @@ public class HistoryModel
 	/**
 	 * Loads the history from the specified file. jEdit calls this
 	 * on startup.
-	 * @param path The file path
+	 * @param The file
 	 */
-	public static void loadHistory(String path)
+	public static void loadHistory(File file)
 	{
 		if(models == null)
 			models = new Hashtable();
 
 		try
 		{
-			BufferedReader in = new BufferedReader(new FileReader(path));
+			BufferedReader in = new BufferedReader(new FileReader(file));
 
 			HistoryModel currentModel = null;
 			String line;
@@ -181,15 +181,15 @@ public class HistoryModel
 	/**
 	 * Saves the history to the specified file. jEdit calls this when
 	 * it is exiting.
-	 * @param path The file path
+	 * @param file The file
 	 */
-	public static void saveHistory(String path)
+	public static void saveHistory(File file)
 	{
 		String lineSep = System.getProperty("line.separator");
 		try
 		{
 			BufferedWriter out = new BufferedWriter(
-				new FileWriter(path));
+				new FileWriter(file));
 
 			if(models == null)
 			{
@@ -239,6 +239,9 @@ public class HistoryModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.11  1999/12/21 06:50:51  sp
  * Documentation updates, abbrevs option pane finished, bug fixes
  *

@@ -53,9 +53,8 @@ public class MacroShortcutsOptionPane extends ShortcutsOptionPane
 		for(int i = 0; i < macroList.size(); i++)
 		{
 			String name = (String)macroList.elementAt(i);
-			String actionName = "play-macro@" + name;
-			bindings.addElement(new KeyBinding(actionName,name,
-				jEdit.getProperty(actionName + ".shortcut")));
+			bindings.addElement(new KeyBinding(name,name,
+				jEdit.getProperty(name + ".shortcut")));
 		}
 
 		return bindings;
@@ -65,6 +64,9 @@ public class MacroShortcutsOptionPane extends ShortcutsOptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.4  2000/07/12 09:11:38  sp
  * macros can be added to context menu and tool bar, menu bar layout improved
  *

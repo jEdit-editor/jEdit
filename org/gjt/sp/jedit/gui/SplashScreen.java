@@ -41,7 +41,7 @@ public class SplashScreen extends JWindow
 				BorderLayout.CENTER);
 		}
 
-		progress = new JProgressBar(0,9);
+		progress = new JProgressBar(0,7);
 		progress.setStringPainted(true);
 		progress.setBorderPainted(false);
 		progress.setString("jEdit " + jEdit.getVersion()

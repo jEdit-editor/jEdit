@@ -81,6 +81,8 @@ public class DirectoryListSet extends BufferListSet
 		if(_files == null)
 			return;
 
+		MiscUtilities.quicksort(_files,new MiscUtilities.StringICaseCompare());
+
 		for(int i = 0; i < _files.length; i++)
 		{
 			File file = new File(directory,_files[i]);
@@ -102,6 +104,9 @@ public class DirectoryListSet extends BufferListSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.2  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *

@@ -119,7 +119,7 @@ public class Macros
 			this.name = name;
 			this.path = path;
 
-			String binding = jEdit.getProperty("play-macro@" + name + ".shortcut");
+			String binding = jEdit.getProperty(name + ".shortcut");
 			if(binding != null)
 			{
 				final EditAction action = jEdit.getAction("play-macro");
@@ -497,6 +497,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.30  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
  *

@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import javax.swing.SwingUtilities;
 import java.io.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.util.Log;
@@ -225,6 +226,9 @@ public class Sessions
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.17  2000/05/07 05:48:30  sp
  * You can now edit several buffers side-by-side in a split view
  *

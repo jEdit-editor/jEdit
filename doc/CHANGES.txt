@@ -31,6 +31,10 @@ JEDIT 3.0 VERSION HISTORY
 - Shortcut of 'Exit' command changed to C+q
 - 'Exit' command now asks for confirmation (can be disabled in
   Utilities->Global Options)
+- The directory search feature now sorts file names before searching
+- Abbreviations and history files are not saved if they are changed on disk
+  while jEdit is running
+- The 'Help' menu now displays documentation for plugins that didn't load
 
 + Bug Fixes
 
@@ -38,14 +42,6 @@ JEDIT 3.0 VERSION HISTORY
   have been seeing on certain platforms
 - Fixed minor cosmetic problem in status bar when entering repeat counts
   where the first digit is '1'
-
-+ Incompatibilities
-
-- Macro shortcuts are now stored in properties named "play-macro@<macro
-  name>.shortcut". As a result, old macro key bindings will no longer
-  work; you will need to reassign them. Yes, this change is annoying,
-  but supporting the old scheme with the new menu bar code would be more
-  effort than it's worth.
 
 + API Changes
 
@@ -59,3 +55,5 @@ JEDIT 3.0 VERSION HISTORY
   TokenMarker.LineInfo
 - EditActions can now be invoked without a view (of course the action
   will still fail if it calls EditAction.getView())
+- Signature of VFSManager.error() is now void error(Component comp,
+  String msg, Object[] args)

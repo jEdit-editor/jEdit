@@ -49,6 +49,12 @@ public class EnhancedMenuItem extends JMenuItem
 			addActionListener(action);
 			if(actionCommand == null)
 				keyBindingProp = action.getName() + ".shortcut";
+			else if(action.getName().equals("play-macro"))
+			{
+				// for backwards compatibility with jEdit 2.5
+				// and earlier
+				keyBindingProp = actionCommand + ".shortcut";
+			}
 			else
 			{
 				keyBindingProp = action.getName() + "@"

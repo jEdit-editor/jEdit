@@ -192,11 +192,12 @@ public class Abbrevs
 		String settings = jEdit.getSettingsDirectory();
 		if(settings != null)
 		{
-			String path = MiscUtilities.constructPath(settings,"abbrevs");
+			File file = new File(MiscUtilities.constructPath(settings,"abbrevs"));
+			abbrevsModTime = file.lastModified();
 
 			try
 			{
-				loadAbbrevs(new FileReader(path));
+				loadAbbrevs(new FileReader(file));
 				loaded = true;
 			}
 			catch(FileNotFoundException fnf)
@@ -204,7 +205,7 @@ public class Abbrevs
 			}
 			catch(Exception e)
 			{
-				Log.log(Log.ERROR,Abbrevs.class,"Error while loading " + path);
+				Log.log(Log.ERROR,Abbrevs.class,"Error while loading " + file);
 				Log.log(Log.ERROR,Abbrevs.class,e);
 			}
 		}
@@ -232,21 +233,30 @@ public class Abbrevs
 		String settings = jEdit.getSettingsDirectory();
 		if(settings != null)
 		{
-			String path = MiscUtilities.constructPath(settings,"abbrevs");
-
-			try
+			File file = new File(MiscUtilities.constructPath(settings,"abbrevs"));
+			if(file.exists() && file.lastModified() != abbrevsModTime)
 			{
-				saveAbbrevs(new FileWriter(path));
+				Log.log(Log.WARNING,Abbrevs.class,file + " changed on disk;"
+					+ " will not save abbrevs");
 			}
-			catch(Exception e)
+			else
 			{
-				Log.log(Log.ERROR,Abbrevs.class,"Error while saving " + path);
-				Log.log(Log.ERROR,Abbrevs.class,e);
+				try
+				{
+					saveAbbrevs(new FileWriter(file));
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,Abbrevs.class,"Error while saving " + file);
+					Log.log(Log.ERROR,Abbrevs.class,e);
+				}
+				abbrevsModTime = file.lastModified();
 			}
 		}
 	}
 
 	// private members
+	private static long abbrevsModTime;
 	private static boolean expandOnInput;
 	private static Hashtable globalAbbrevs;
 	private static Hashtable modes;
@@ -377,6 +387,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/07/19 08:35:58  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.11  2000/04/27 08:32:56  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

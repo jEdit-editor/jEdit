@@ -105,6 +105,8 @@ public abstract class VFS
 	{
 	}
 
+	// the remaining methods are only called from the I/O thread
+
 	/**
 	 * A buffer has been loaded. This method is called from the I/O
 	 * thread.
@@ -152,6 +154,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/07/19 08:35:59  sp
+ * plugin devel docs updated, minor other changes
+ *
  * Revision 1.6  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *
