@@ -4,6 +4,7 @@ JEDIT VERSION HISTORY
 
 + New Features
 
+- (!) Graphical installer
 - Simple keyboard macros
   - Macros are stored as files with extension '.macro' in $HOME/.jedit/macros
   - Only keystrokes are recorded, not menu item selections
@@ -19,6 +20,8 @@ JEDIT VERSION HISTORY
 - Globs are now used instead of regexps for file filters
 - Plugin updates:
   Console 1.7 included
+  HTML 2.0 included
+- New splash screen
 
 + API Changes
 
