@@ -10,6 +10,7 @@
 
 	<target name="init">
 		<available property="jdk14" classname="java.awt.KeyboardFocusManager" />
+		<available property="jdk15" classname="javax.swing.plaf.metal.OceanTheme" />
 		<delete file="doc/docbook-wrapper.xsl" />
 		<echo file="doc/docbook-wrapper.xsl"
 			message="&lt;xsl:stylesheet"/>
