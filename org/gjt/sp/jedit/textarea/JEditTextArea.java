@@ -3482,6 +3482,45 @@ forward_scan:		do
 		hasFocus();
 	}
 
+	// protected members
+	public void processKeyEvent(KeyEvent evt)
+	{
+		evt = KeyEventWorkaround.processKeyEvent(evt);
+		if(evt == null)
+			return;
+
+		// Ignore
+		if(view.isClosed())
+			return;
+
+		InputHandler inputHandler = view.getInputHandler();
+		KeyListener keyEventInterceptor = view.getKeyEventInterceptor();
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_TYPED:
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyTyped(evt);
+			else
+				inputHandler.keyTyped(evt);
+			break;
+		case KeyEvent.KEY_PRESSED:
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyPressed(evt);
+			else
+				inputHandler.keyPressed(evt);
+			break;
+		case KeyEvent.KEY_RELEASED:
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyReleased(evt);
+			else
+				inputHandler.keyReleased(evt);
+			break;
+		}
+
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
+	}
+
 	// package-private members
 	Segment lineSegment;
 	MouseHandler mouseHandler;
@@ -3528,45 +3567,6 @@ forward_scan:		do
 				0,maxHorizontalScrollWidth
 				+ painter.getFontMetrics().charWidth('w'));
 		}
-	}
-
-	// protected members
-	protected void processKeyEvent(KeyEvent evt)
-	{
-		evt = KeyEventWorkaround.processKeyEvent(evt);
-		if(evt == null)
-			return;
-
-		// Ignore
-		if(view.isClosed())
-			return;
-
-		InputHandler inputHandler = view.getInputHandler();
-		KeyListener keyEventInterceptor = view.getKeyEventInterceptor();
-		switch(evt.getID())
-		{
-		case KeyEvent.KEY_TYPED:
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyTyped(evt);
-			else
-				inputHandler.keyTyped(evt);
-			break;
-		case KeyEvent.KEY_PRESSED:
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyPressed(evt);
-			else
-				inputHandler.keyPressed(evt);
-			break;
-		case KeyEvent.KEY_RELEASED:
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyReleased(evt);
-			else
-				inputHandler.keyReleased(evt);
-			break;
-		}
-
-		if(!evt.isConsumed())
-			super.processKeyEvent(evt);
 	}
 
 	// private members
@@ -3681,6 +3681,8 @@ forward_scan:		do
 		if(getCaretPosition() != end - 1)
 			return false;
 
+		boolean returnValue = false;
+
 		int tabSize = buffer.getTabSize();
 
 		String wordBreakChars = (String)buffer.getProperty("wordBreakChars");
@@ -3736,8 +3738,12 @@ forward_scan:		do
 			}
 
 			int insertNewLineAt;
-			if(spaceInserted && logicalLength == maxLineLen)
+			if(spaceInserted && logicalLength == maxLineLen
+				&& i == len - 1)
+			{
 				insertNewLineAt = end - 1;
+				returnValue = true;
+			}
 			else if(logicalLength >= maxLineLen && lastWordOffset != -1)
 				insertNewLineAt = lastWordOffset + start;
 			else
@@ -3784,7 +3790,9 @@ forward_scan:		do
 				buffer.endCompoundEdit();
 			}
 
-			return true;
+			/* only ever return true if space was pressed
+			 * with logicalLength == maxLineLen */
+			return returnValue;
 		}
 
 		return false;

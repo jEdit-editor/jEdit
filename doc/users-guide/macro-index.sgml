@@ -1,19 +1,17 @@
 <!-- jEdit 3.1 Macro Guide, (C) 2001 John Gellene -->
 
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes:maxLineLen=72: -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
 
 <!-- covers index to installed macro set -->
 
-<appendix id=macro-index><title>Macros Included by Default</>
+<appendix id=macro-index><title>Macros Included With jEdit</>
 
 <para>
-The jEdit installation package currently comes with a large number of
-macros that perform a various of tasks. The installation program places them in
-the <filename>macros</> subdirectory of jEdit's home directory,
-organized by category in eight subdirectories. The following index
-provides short descriptions of each macro, in some cases accompanied by
-usage notes.
+    jEdit comes with a large number of sample
+    macros that perform a variety of tasks. The following index
+    provides short descriptions of each macro, in some cases accompanied by
+    usage notes.
 </para>
 
 <sect1 id=macros-files><title>File Management Macros</>
@@ -116,17 +114,16 @@ usage notes.
         Makes a individual wing style comment of equal width for each
         selected line in the current buffer.
     </para></abstract>
-    <para>
-    <informalexample><programlisting>
-/*     This is an example of the kind                */
-/*     of comment (for Java or C/C++) produced       */
-/*     by this macro. It has uniform width           */
-/*     regardless of the width of the several lines. */
+
+   <informalexample>
+   <programlisting>/*  This is an example of the kind                */
+/*  of comment (for Java or C/C++) produced       */
+/*  by this macro. It has uniform width           */
+/*  regardless of the width of the several lines. */
 
 &lt;!-- HTML or SGML code                         --&gt;
-&lt;!-- will look like this when the macro is run --&gt;
-</programlisting></informalexample>
-    </para>
+&lt;!-- will look like this when the macro is run --&gt;</programlisting>
+    </informalexample>
 </listitem>
 
 
@@ -157,12 +154,11 @@ usage notes.
     </para></abstract>
     <para>
         This macro asks for the name of the file, the author and a brief
-        description of its contents.  It also askss whether the file
+        description of its contents.  It also asks whether the file
         should be saved immediately after the header is inserted.  The
         header will be set off with block comments based upon the
-        editing mode of the file; if the user has not selected an
-        editing, the macro will select one based upon the file
-        extension.
+        editing mode of the buffer; if the user has not set an editing
+        mode, the macro will select one based upon the file extension.
     </para>
     <note><para>
         The notes accompanying the source code describe how the macro
@@ -223,7 +219,10 @@ usage notes.
     <para>
         As explained in the notes accompanying the source code, the macro
         uses a global variable which can be set to configure the macro to work
-        with either Java or C++ code.
+        with either Java or C++ code.  When set for use with C++ code,
+        the macro will also write (in commented text) definitions of
+        <function>getXXX()</function> or <function>setXXX()</function>
+        suitable for inclusion in a header file.
     </para>
 </listitem>
 
@@ -278,6 +277,23 @@ usage notes.
 </listitem>
 
 <listitem>
+    <para><filename>Next_Char.bsh</></para>
+    <abstract><para>
+        Finds next occurence of character on current line.
+    </para></abstract>
+    <para>
+        The macro takes the next character typed after macro execution
+        as the character being searched.  That character is not
+        displayed.  If the character does not appear in the balance of
+        the current line, no action occurs.
+    </para>
+    <para>
+        This macro illustrates the use of
+        <function>InputHandler.readNextChar()</function> as a means of
+        obtaining user input.
+    </para>
+
+<listitem>
     <para><filename>Search_Buffer.bsh</></para>
     <abstract><para>
         Presets search settings for current buffer and displays search
@@ -315,7 +331,7 @@ usage notes.
 
 </itemizedlist>
 
-<sect2 id=macros-search-findx-group><title>The Find_Occurence Macro Group</>
+<sect2 id=macros-search-findx-group><title>The Find_Occurrence Macro Group</>
 <para>
     This is a group of macros that enable searches in a text buffer for
     another occurrence of the word situated at or immediately
@@ -542,7 +558,6 @@ usage notes.
 </itemizedlist>
 
 
-
 </sect1>
 
 <sect1 id=macros-other-plugins><title>Macros for Other Plugins</>
@@ -554,14 +569,14 @@ usage notes.
 <listitem>
     <para><filename>Go_to_Clipper.bsh</></para>
     <abstract><para>
-    Sets the input focus to the Clipper plugin.
+        Sets the input focus to the Clipper plugin.
     </para></abstract>
 </listitem>
 
 <listitem>
-    <para><filename>Go_to_File_Browser.bsh</></para>
+    <para><filename>Go_to_File_System_Browser.bsh</></para>
     <abstract><para>
-    Sets the input focus to the file system browser.
+        Sets the input focus to the file system browser.
     </para></abstract>
 </listitem>
 
@@ -591,7 +606,6 @@ usage notes.
 
 </sect1>
 
-
 <sect1 id=macros-properties><title>Macros for Listing Properties</title>
 <para>
     These macros produce lists or tables containing properties
@@ -600,40 +614,6 @@ usage notes.
 
 
 <itemizedlist>
-
-<listitem>
-    <para><filename>Display_Abbreviations.bsh</></para>
-    <abstract><para>
-        Displays the abbreviations registered for each of jEdit's
-        editing modes.
-    </para></abstract>
-    <para>
-        The macro provides a read-only view of the abbreviations
-        contained in the <quote>Abbreviations</quote> option pane.  Pressing
-        a letter key will scroll the table to the first entry beginning with
-        that letter.  A further option is provided to write a selected mode's
-        abbreviations or all abbreviations in a text buffer for printing as a
-        reference. Notes in the source code listing point out some display options
-        that are configured by modifying global variables.
-    </para>
-</listitem>
-
-<listitem>
-    <para><filename>Display_Shortcuts.bsh</></para>
-    <abstract><para>
-        Displays a sorted list of the keyboard shortcuts currently in effect.
-    </para></abstract>
-    <para>
-        The macro provides a read-only view of the combined contents of
-        <quote>Command Shortcuts</>, <quote>Macro Shortcuts</> and
-        <quote>Plugin Shortcuts</> option panes. Pressing a letter key will
-        scroll the table to the first entry beginning with that letter.
-        A further option is provided to write the shortcut assignments in a
-        text buffer for printing as a reference. Notes in the source code
-        listing point out some display options that are configured by
-        modifying global variables.
-    </para>
-</listitem>
 
 <listitem>
     <para><filename>jEdit_Properties.bsh</></para>
@@ -679,6 +659,17 @@ usage notes.
 <itemizedlist>
 
 <listitem>
+    <para><filename>Cascade_jEdit_Windows.bsh</filename></para>
+    <abstract><para>
+        Rearranges view and floating plugin windows.
+    </para></abstract>
+    <para>
+        The windows are arranged in an overlapping <quote>cascade</quote>
+        pattern beginning near the upper left corner of the display.
+    </para>
+</listitem>
+
+<listitem>
     <para><filename>Copy_Mode_Abbrevs.bsh</></para>
     <abstract><para>
         Copies all abbreviations from one editing mode to another, overwriting
@@ -702,6 +693,40 @@ usage notes.
 </listitem>
 
 <listitem>
+    <para><filename>Display_Abbreviations.bsh</></para>
+    <abstract><para>
+        Displays the abbreviations registered for each of jEdit's
+        editing modes.
+    </para></abstract>
+    <para>
+        The macro provides a read-only view of the abbreviations
+        contained in the <quote>Abbreviations</quote> option pane.  Pressing
+        a letter key will scroll the table to the first entry beginning with
+        that letter.  A further option is provided to write a selected mode's
+        abbreviations or all abbreviations in a text buffer for printing as a
+        reference. Notes in the source code listing point out some display options
+        that are configured by modifying global variables.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Display_Shortcuts.bsh</></para>
+    <abstract><para>
+        Displays a sorted list of the keyboard shortcuts currently in effect.
+    </para></abstract>
+    <para>
+        The macro provides a read-only view of the combined contents of
+        <quote>Command Shortcuts</>, <quote>Macro Shortcuts</> and
+        <quote>Plugin Shortcuts</> option panes. Pressing a letter key will
+        scroll the table to the first entry beginning with that letter.
+        A further option is provided to write the shortcut assignments in a
+        text buffer for printing as a reference. Notes in the source code
+        listing point out some display options that are configured by
+        modifying global variables.
+    </para>
+</listitem>
+
+<listitem>
     <para><filename>Evaluate_Buffer_in_BeanShell.bsh</></para>
     <abstract><para>
         Evaluates contents of current buffer as BeanShell script.  Opens new
@@ -718,6 +743,26 @@ usage notes.
 </listitem>
 
 <listitem>
+    <para><filename>Go_to_Text_Area.bsh</filename></para>
+    <abstract><para>
+        Sets the input focus to the text editing area.
+    </para></abstract>
+    <para>
+        Linked to a keyboard shortcut, this macro can quickly return
+        input focus to the text area after executing macros like
+        <filename>Go_to_Console.bsh</filename> or
+        <filename>Go_to_Clipper.bsh</filename>.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Notepad.bsh</filename></para>
+    <abstract><para>
+        Displays a tabbed set of text windows in a floating frame.
+    </para></abstract>
+</listitem>
+
+<listitem>
     <para><filename>Run_Macro_at_Caret.bsh</></para>
     <abstract><para>
         Executes the macro whose name appears at the editing caret.
@@ -731,8 +776,6 @@ usage notes.
         path.
     </para>
 
-    <!-- John: C+ENTER is already bound to 'repeat'. I'll update these
-         instructions later.
     <para>
         The full utility of this macro can be acheived when it is combined
         with abbreviations for commonly used macros. To try it out, follow these
@@ -742,7 +785,7 @@ usage notes.
     <procedure>
         <step><para>In the <quote>Macro Shortcuts</> option pane, Associate
         <filename>Run_Macro_at_Caret</> with the shortcut
-        <keycombo><keycap>Control</><keycap>Enter</></>.</para></step>
+        <keycombo><keycap>Control</><keycap>Space</></>.</para></step>
 
         <step><para>In the <quote>global</> abbreviation group, associate the
         abbreviation <quote>dtt</> with the text <quote>/Text/Insert_Date</>.
@@ -757,7 +800,7 @@ usage notes.
         <step><para>Press the space bar to expand <userinput>ddt</userinput> to
         <userinput>/Text/Insert_Date</userinput></para></step>
 
-        <step><para>Press <keycombo><keycap>Control</><keycap>Enter</></> to
+        <step><para>Press <keycombo><keycap>Control</><keycap>Space</></> to
         run the macro. The text <userinput>/Text/Insert_Date</userinput> will
         be replaced by the output of the <filename>Insert_Date</>
         macro.</para></step>
@@ -766,7 +809,7 @@ usage notes.
     <para>
         Repeating this procedure allows the user to execute macros from the
         keyboard using shortcut names instead of keystrokes.
-    </para> -->
+    </para>
 
 </listitem>
 

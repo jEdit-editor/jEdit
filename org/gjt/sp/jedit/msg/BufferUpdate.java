@@ -1,6 +1,6 @@
 /*
  * BufferUpdate.java - Buffer update message
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,9 +76,11 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	 * @param buffer The buffer
 	 * @param what What happened
 	 */
-	public BufferUpdate(Buffer buffer, Object what)
+	public BufferUpdate(Buffer buffer, View view, Object what)
 	{
 		super(buffer);
+
+		this.view = view;
 
 		if(what == null)
 			throw new NullPointerException("What must be non-null");
@@ -102,12 +104,21 @@ public class BufferUpdate extends EBMessage.NonVetoable
 		return (Buffer)getSource();
 	}
 
+	/**
+	 * Returns the view involved, which may be null.
+	 */
+	public View getView()
+	{
+		return view;
+	}
+
 	public String paramString()
 	{
-		return super.paramString() + ",what=" + what;
+		return super.paramString() + ",what=" + what
+			+ ",view=" + view;
 	}
 
 	// private members
 	private Object what;
-	private Buffer buffer;
+	private View view;
 }

@@ -554,7 +554,7 @@
     <colspec colnum=1 colwidth=2.2in>
     <tbody>
      <row>
-      <entry><keycombo><keycap>Alt</><keycap>Backspace</></keycombo>;</entry>
+      <entry><keycombo><keycap>Alt</><keycap>Backspace</></keycombo></entry>
       <entry>Collapse fold containing caret.</entry>
      </row>
      <row>

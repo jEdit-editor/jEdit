@@ -261,16 +261,31 @@ public class SearchBar extends JPanel
 	{
 		public void keyPressed(KeyEvent evt)
 		{
-			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+			switch(evt.getKeyCode())
 			{
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_DOWN:
+				if(!hyperSearch.isSelected())
+				{
+					evt.consume();
+					view.getEditPane().focusOnTextArea();
+					view.getEditPane().getTextArea()
+						.processKeyEvent(evt);
+				}
+				break;
+			case KeyEvent.VK_ESCAPE:
 				evt.consume();
 				view.getEditPane().focusOnTextArea();
-			}
-			else if(evt.getKeyCode() == KeyEvent.VK_ENTER
-				&& evt.getModifiers() == InputEvent.SHIFT_MASK)
-			{
-				evt.consume();
-				find(true);
+				break;
+			case KeyEvent.VK_ENTER:
+				if(evt.getModifiers() == InputEvent.SHIFT_MASK)
+				{
+					evt.consume();
+					find(true);
+				}
+				break;
 			}
 		}
 	}

@@ -429,6 +429,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.24  2001/04/18 03:09:45  sp
+ * GJT was down for a long time
+ *
  * Revision 1.23  2001/01/23 09:23:48  sp
  * code cleanups, misc tweaks
  *

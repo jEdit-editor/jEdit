@@ -20,7 +20,7 @@ highlighting, auto indent, abbreviation expansion, registers, macros,
 folding, regular expressions, and multiple file search and replace.
 
 jEdit is free software, and you are welcome to redistribute it under the
-terms of the GNU General Public License. See thefile COPYING.txt for
+terms of the GNU General Public License. See the file COPYING.txt for
 details.
 
 jEdit requires Java 2 (or Java 1.1 with Swing 1.1) in order to work.

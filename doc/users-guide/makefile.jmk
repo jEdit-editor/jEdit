@@ -13,7 +13,7 @@
 # jEdit buffer-local properties:
 # :indentSize=4:noTabs=true:
 
-"all": "htmldocs" "pdfdocs";
+"all": "htmldocs" "pdfdocs" "pdfdocs-a4";
 
 "htmldocs":;
 {
@@ -26,6 +26,16 @@
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";
     exec "pdfjadetex" "users-guide.tex";
+    rename "users-guide.pdf" "users-guide-letter.pdf";
 }
 
-".PHONY" : "all" "htmldocs" "pdfdocs";
+"pdfdocs-a4":;
+{
+    exec "openjade" "-d" "jeditprint-a4.dsl" "-t" "tex" "users-guide.sgml";
+    exec "pdfjadetex" "users-guide.tex";
+    exec "pdfjadetex" "users-guide.tex";
+    exec "pdfjadetex" "users-guide.tex";
+    rename "users-guide.pdf" "users-guide-a4.pdf";
+}
+
+".PHONY" : "all" "htmldocs" "pdfdocs" "pdfdocs-a4";

@@ -24,6 +24,7 @@
 <!ENTITY macro-basics SYSTEM "macro-basics.sgml">
 <!ENTITY simple-macros SYSTEM "simple-macros.sgml">
 <!ENTITY dialog-macro SYSTEM "dialog-macro.sgml">
+<!ENTITY macro-tips SYSTEM "macro-tips.sgml">
 <!ENTITY api-guide SYSTEM "api-guide.sgml">
 <!ENTITY macro-index SYSTEM "macro-index.sgml"> ]>
 
@@ -72,6 +73,7 @@
  &macro-basics;
  &simple-macros;
  &dialog-macro;
+ &macro-tips;
  &api-guide;
  &macro-index;
 </part>

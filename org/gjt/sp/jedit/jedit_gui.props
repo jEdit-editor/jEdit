@@ -1,6 +1,6 @@
 ###
 ### jEdit user interface definitions
-### By Slava Pestov <sp@gjt.org>
+### Copyright (C) 1998, 2001 Slava Pestov
 ###
 
 # Default user catalog file
@@ -599,7 +599,7 @@ print.page=Page {0}
 
 # About dialog
 about.title=About jEdit
-about.version=jEdit version: {0}
+about.version=jEdit version {0}
 about.caption=jEdit web site: <http://www.jedit.org>
 
 # IO Error dialog, {0}=the error message
@@ -1174,7 +1174,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=33
+tip.count=34
 
 # Activity log
 log-viewer.title=Activity Log

@@ -1,7 +1,7 @@
 <!-- jEdit 3.1 Macro Guide, (C) 2001 John Gellene -->
 
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes:maxLineLen=72: -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
 
 <!-- This file covers the chapter "A few simple macros",        -->
 <!-- which introduces BeanShell through a "Hello world" script. -->
@@ -48,8 +48,8 @@
    <listitem>
     <para>
      A <glossterm>class</glossterm> is a specification of what data an object
-     contains and what methods can be used to work with the data. Java has
-     a rich set of classes defined as part of the Java platform.
+     contains and what methods can be used to work with the data. <!-- Java has
+     a rich set of classes defined as part of the Java platform. -->
     </para>
    </listitem>
 
@@ -85,14 +85,13 @@
 
   <para>
    Java has a rich set of classes defined as part of the Java platform.
-   Like all Java applications, jEdit is
-   organized as a set of classes that are themselves derived from the Java
-   platform's classes. We will refer to <firstterm>Java classes</firstterm>
-   and <firstterm>jEdit classes</firstterm> to make this distinction. Some
-   of jEdit's classes (such as those dealing with regular expressions and
-   XML) are derived from or make use of classes in other open-source Java
-   packages. Except for BeanShell itself, we won't be discussing them in
-   this guide.
+   Like all Java applications, jEdit is organized as a set of classes that
+   are themselves derived from the Java platform's classes. We will refer
+   to <firstterm>Java classes</firstterm> and <firstterm>jEdit
+   classes</firstterm> to make this distinction. Some of jEdit's classes
+   (such as those dealing with regular expressions and XML) are derived
+   from or make use of classes in other open-source Java packages. Except
+   for BeanShell itself, we won't be discussing them in this guide.
   </para>
 
   <para>
@@ -123,8 +122,8 @@
    object. Normally, if you want to create an object in Java or BeanShell,
    you must construct the object using the <function>new</function> keyword
    and a <firstterm>constructor</firstterm> method that is part of the
-   object's class.&nbsp; We'll show an example of that later. However, Java
-   and BeanShell lets you use a string literal anytime a method's parameter
+   object's class. We'll show an example of that later. However, both Java
+   and BeanShell let you use a string literal anytime a method's parameter
    calls for a <classname>String</classname>.
   </para>
 
@@ -132,7 +131,9 @@
    If you are a Java programmer, you might wonder about a few things
    missing from this one line program. There is no class definition, for
    example. You can think of a BeanShell script as an implicit definition
-   of a <function>main()</function> method in an anonymous class. If you
+   of a <function>main()</function> method in an anonymous class. That is
+   in fact how BeanShell is implemented; the class is derived from
+   a BeanShell class called <classname>XThis</classname>. If you
    don't find that helpful, just think of a script as one or more blocks of
    procedural statements conforming to Java syntax rules. You will also get
    along fine (for the most part) with C or C++ syntax if you leave out
@@ -141,41 +142,115 @@
   </para>
 
   <para>
-   There are no <function>import</function>
-   statements in this script, and many BeanShell scripts written for jEdit
-   will not require them. In Java, an <function>import</function> statement
-   makes public classes from other files visible without a full
-   specification of the class's classpath. In implementing BeanShell, jEdit
-   causes a number of <function>import</function> statements to be read
-   into the BeanShell interpreter everytime a script runs. These
-   <quote>hidden</quote> import statements make the jEdit editor core
-   classes available without specifying a full classpath. If you have
-   downloaded the jEdit source code, you can find the automatically
-   imported classes in the file
+    There are no <function>import</function> statements in this script, and
+    many BeanShell scripts written for jEdit will not require them. In Java,
+    an <function>import</function> statement makes public classes from other
+    files visible without a full specification of the class's classpath.
+    Without an import statement or a fully qualified name, Java cannot identify
+    most classes using a single name as an identifier. The
+    <function>import</function> statement operates similarly to the
+    <function>using</function> statement in C++.
+  </para>
+
+  <!-- John smokes too much crack
+
+  <para>
+    For example, the fully qualified name of jEdit's <classname>View</classname>
+    class is <classname>org.gjt.sp.jedit.View</classname>. Each element of
+    this <glossterm>classpath</glossterm> corresponds to a nested directory of
+    source code files used by the class's author. The Java Swing class
+    <classname>JOptionPane</classname> (a component used in displaying
+    simple messages) has a fully qualified name of
+    <classname>javax.swing.JOptionPane</classname>. Normally, these classes
+    can be referenced with the names <classname>View</classname> and
+    <classname>JOptionPane</classname> if the following statements appear
+    at the beginning of a source code file:
+  </para>
+
+  <informalexample><programlisting>import org.gjt.sp.jedit.View;
+import javax.swing.JOptionPane;
+  </programlisting></informalexample>
+
+  <para>
+    You can also import the names for all of the sibling classes of
+    <classname>View</classname> using a wild card character:
+  </para>
+
+  <informalexample><programlisting>import org.gjt.sp.jEdit.*;
+  </programlisting></informalexample>
+
+  <para>
+    BeanShell works behind the scenes to make these statements unncessary in
+    many circumstances. In general, when a variable is defined in a
+    BeanShell script, BeanShell searches for the full class name using a
+    predefined <glossterm>classpath</glossterm>. If the class is found,
+    the methods that can be called on that variable without any need for an
+    <function>import</function> statement.
+
+    <remark>
+      jEdit3.1pre5 does not appear to perform as advertised in the
+      following text: -->
+
+  <para>
+   In implementing BeanShell, jEdit causes a number of
+   <function>import</function> statements to be read into the BeanShell
+   interpreter everytime a script runs. These <quote>hidden</quote> import
+   statements make the jEdit editor core classes available without
+   specifying a full classpath. If you have downloaded the jEdit source
+   code, you can find the automatically imported classes in the file
    <filename>org/gjt/sp/jedit/jedit.bsh</filename>.
   </para>
 
   <para>
-   If you are constructing a dialog window or other GUI elements in your
-   macro, you will need to import the necessary Java classes - see <xref
-   linkend="dialog-macro"> for details. If you are
-   using classes defined in any of jEdit's plugins, you will have to
-   <function>import</function> those classes as well. If you try to use a
-   class that is not imported and is not specified by its full classpath,
-   the BeanShell interpreter will complain with an error message relating
-   to the offending line of code.
+    In some circumstances, BeanShell's class name rules may seem
+    difficult to discern. You will rarely go wrong if you keep a few
+    points in mind:
+    <itemizedlist>
+        <!-- remember kids, crack doesn't smoke itself -->
+        <!-- <listitem>
+            <para>You will not need an import statement for a macro that
+            simply inserts or deletes text, moves the editing caret or
+            opens and closes files.</para>
+        </listitem> -->
+        <listitem>
+            <para>You will not need an import statement for any macro that
+            you record.</para>
+        </listitem>
+        <listitem>
+            <para>When you are constructing a new object in a macro (for
+            example, a dialog window or other GUI elements) you will need
+            use import statements or fully qualified class names for those
+            components - see <xref linkend="dialog-macro"> for details.</para>
+        </listitem>
+        <listitem>
+            <para>If you are using classes defined in any of jEdit's plugins,
+            you will have to <function>import</function> those classes
+            as well or use fully qualified names.</para>
+        </listitem>
+        <!-- whoa, there goes an 8-ball -->
+        <!-- <listitem>
+            <para>It almost never hurts to use an import statement.  When in
+            doubt, use one.</para>
+        </listitem> -->
+        <listitem>
+            <para>If you try to use a class that is not imported and
+            is not specified by its full classpath, the BeanShell
+            interpreter will complain, usually with an error message
+            relating to the offending line of code.</para>
+        </listitem>
+      </itemizedlist>
   </para>
 
   <para>
-   Another missing item from a Java perspective is a
-   <function>package</function> statement. In Java, such a statement is
-   used to bundle together a number of files so that their classes become
-   visible to one another. Packages are not part of BeanShell. With the
-   exception of a designated startup macro (see
-   <xref linkend="organizing-macros">),
-   variables defined in a BeanShell script (other than the
-   script's return value) are visible only within the script. You don't
-   need to know anything about Java packages to write BeanShell macros.
+    Another missing item from a Java perspective is a
+    <function>package</function> statement. In Java, such a statement is
+    used to bundle together a number of files so that their classes become
+    visible to one another. Packages are not part of BeanShell. With the
+    exception of a designated startup macro (see <xref
+    linkend="organizing-macros">), variables defined in a BeanShell script
+    (other than the script's return value) are visible only within the
+    script. You don't need to know anything about Java packages to write
+    BeanShell macros.
   </para>
  </sect1>
 
@@ -186,64 +261,71 @@
    Including <function>message()</function>, there are three static methods
    in the <classname>Macros</classname> class that allow you to converse
    easily with your macros. They all encapsulate calls to methods of the
-   <classname>JOptionPane</classname>
-   class.
+   <classname>JOptionPane</classname> class.
   </para>
 
-  <itemizedlist><listitem>
-  <funcsynopsis>
-	 <funcprototype>
-	  <funcdef>public static void <function>message</function></funcdef>
-	  <paramdef>View <parameter>view</parameter></paramdef>
-      <paramdef>String <parameter>message</parameter></paramdef>
-	 </funcprototype>
-	</funcsynopsis></listitem>
-<listitem>
-	<funcsynopsis>
-	 <funcprototype>
-	  <funcdef>public static void <function>error</function></funcdef>
-	  <paramdef>View <parameter>view</parameter></paramdef>
-      <paramdef>String <parameter>message</parameter></paramdef>
-	 </funcprototype>
-	</funcsynopsis>
-</listitem><listitem>
-    <funcsynopsis>
-     <funcprototype>
-      <funcdef>public static String <function>input</function></funcdef>
-      <paramdef>View <parameter>view</parameter></paramdef>
-      <paramdef>String <parameter>prompt</parameter></paramdef>
-     </funcprototype>
-    </funcsynopsis>
-</listitem></itemizedlist>
+  <itemizedlist>
+
+    <listitem>
+      <funcsynopsis>
+         <funcprototype>
+           <funcdef>public static void <function>message</function></funcdef>
+           <paramdef>View <parameter>view</parameter></paramdef>
+           <paramdef>String <parameter>message</parameter></paramdef>
+         </funcprototype>
+       </funcsynopsis>
+     </listitem>
+
+     <listitem>
+       <funcsynopsis>
+         <funcprototype>
+          <funcdef>public static void <function>error</function></funcdef>
+          <paramdef>View <parameter>view</parameter></paramdef>
+          <paramdef>String <parameter>message</parameter></paramdef>
+         </funcprototype>
+       </funcsynopsis>
+     </listitem>
+
+     <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static String <function>input</function></funcdef>
+          <paramdef>View <parameter>view</parameter></paramdef>
+          <paramdef>String <parameter>prompt</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+     </listitem>
+
+  </itemizedlist>
+
+  <!-- XXX: word this better, without GJT reference -->
+
   <para>
-   If this format is unfamiliar to you, here is a short explanation. The
-   format is used in defining the methods in the source code of the
-   <classname>Macros</classname> class. It is also found in a format called
-   <glossterm>javadoc</glossterm> that extracts information from source
-   code to provide online documentation to the class. For example, you can
-   find the javadoc for jEdit's <classname>Macros</classname> class
-   <ulink url="http://www.gjt.org/javadoc/org/gjt/sp/jedit/Macros.html">
-   on the Giant Java Tree web site</ulink>.
-   <!-- XXX: haven't yet incorporated appendix into user's guide -->
-   <!-- See <xref linkend="macro-info"> for links
-   to javadocs and other jEdit macro resources. -->
+    If this format is unfamiliar to you, here is a short explanation. The
+    format is used in defining the methods in the source code of the
+    <classname>Macros</classname> class. It is also found in a format called
+    <glossterm>javadoc</glossterm> that extracts information from source
+    code to provide online documentation to the class. For example, you can
+    find the javadoc for jEdit's <classname>Macros</classname> class on
+    the <ulink url="http://www.gjt.org/javadoc/org/gjt/sp/jedit/Macros.html">
+    Giant Java Tree web site</ulink>.
   </para>
 
   <para>
-   The first three words for each of these
-   <glossterm>declarations</glossterm> tell you how the method is used. The
-   keyword <function>public</function> means that the method can be used
-   outside the <classname>Macros</classname> class. The alternatives are
-   <function>private</function> and <function>protected</function>. For
-   purposes of BeanShell, you just have to know that BeanShell can only use
-   public methods of other Java classes. The keyword
-   <function>static</function> we have already discussed. It means that the
-   method does not operate on a particular object. You call a static
-   function using the name of the class (like
-   <classname>Macros</classname>) rather than the name of a particular
-   object (like <varname>view</varname>). The third word is the type of the
-   value returned by the method. The keyword <function>void</function> is
-   Java's way of saying the the method does not have a return value.
+    The first three words for each of these
+    <glossterm>declarations</glossterm> tell you how the method is used. The
+    keyword <function>public</function> means that the method can be used
+    outside the <classname>Macros</classname> class. The alternatives are
+    <function>private</function> and <function>protected</function>. For
+    purposes of BeanShell, you just have to know that BeanShell can only use
+    public methods of other Java classes. The keyword
+    <function>static</function> we have already discussed. It means that the
+    method does not operate on a particular object. You call a static
+    function using the name of the class (like
+    <classname>Macros</classname>) rather than the name of a particular
+    object (like <varname>view</varname>). The third word is the type of the
+    value returned by the method. The keyword <function>void</function> is
+    Java's way of saying the the method does not have a return value.
   </para>
 
   <para>
@@ -282,22 +364,22 @@ String result = Macros.input(view, "Type something here.");</programlisting>
   </informalexample>
 
   <para>
-   In the second example, placing the word <classname>String</classname>
-   before the variable name <varname>result</varname> tells BeanShell that
-   the variable refers to a String object, even before a particular String
-   object is assigned to it. In BeanShell, this declaration of the
-   <glossterm>type</glossterm> of <varname>result</varname> is not
-   necessary; BeanShell can figure it out when the macro runs. This is good
-   if you are not comfortable with types and classes; just use your
-   variables and let BeanShell worry about it.
+    In the second example, placing the word <classname>String</classname>
+    before the variable name <varname>result</varname> tells BeanShell that
+    the variable refers to a String object, even before a particular String
+    object is assigned to it. In BeanShell, this declaration of the
+    <glossterm>type</glossterm> of <varname>result</varname> is not
+    necessary; BeanShell can figure it out when the macro runs. This is good
+    if you are not comfortable with types and classes; just use your
+    variables and let BeanShell worry about it.
   </para>
 
   <para>
-   Without an explicit <glossterm>type declaration</glossterm> like
-   <type>String</type> <varname>result</varname>, BeanShell variables can
-   change their type at runtime depending on the object or data assigned to
-   it. This dynamic typing allows you to write code like this (if you
-   really wanted to):
+    Without an explicit <glossterm>type declaration</glossterm> like
+    <classname>String</classname> <varname>result</varname>, BeanShell variables can
+    change their type at runtime depending on the object or data assigned to
+    it. This dynamic typing allows you to write code like this (if you
+    really wanted to):
   </para>
 
   <informalexample><!-- <title>Dynamic typing of variables</title> -->
@@ -307,24 +389,24 @@ result = Macros.input(view, <quote>Type something here.</quote>);
 // this is our predefined, current View
 result = view;
 
-// this is an "int" (for integer);
+// this is an <quote>int</quote> (for integer);
 // in Java and BeanShell, int is one of a small number
-// of "primitive" data types which are not classes
+// of <quote>primitive</quote> data types which are not classes
 result = 14;</programlisting>
   </informalexample>
 
   <para>
-   However, if you declared <varname>result</varname> to be type
-   <classname>String</classname> and and then tried these reassignments,
-   BeanShell would complain.
+    However, if you declared <varname>result</varname> to be type
+    <classname>String</classname> and and then tried these reassignments,
+    BeanShell would complain.
   </para>
 
   <para>
-   One last thing before we bury our first macro. The double slashes in the
-   examples just above signify that everything following them on that line
-   should be ignored by BeanShell as a comment. As in Java and C/C++, you
-   can also embed comments in your BeanShell code by setting them off with
-   pairs of <userinput>/* */</userinput> as in the following example:
+    One last thing before we bury our first macro. The double slashes in the
+    examples just above signify that everything following them on that line
+    should be ignored by BeanShell as a comment. As in Java and C/C++, you
+    can also embed comments in your BeanShell code by setting them off with
+    pairs of <userinput>/* */</userinput>, as in the following example:
   </para>
 
 
@@ -338,8 +420,8 @@ many lines it covers */</programlisting>
  <sect1 id="something-useful"><title>Now For Something Useful</title>
 
   <para>
-  Here is a macro that inserts the path of the current file in
-  that file's edit buffer:
+    Here is a macro that inserts the path of the current file in
+    that file's edit buffer:
   </para>
 
 
@@ -351,44 +433,45 @@ textArea.setSelectedText(newText);</programlisting>
 
 
   <para>
-  Two of the new names we see here, <varname>buffer</varname> and
-  <varname>textArea</varname>, are predefined variables like
-  <varname>view</varname>. The variable <varname>buffer</varname>
-  represents a jEdit <varname>Buffer</varname> object, and
-  <varname>textArea</varname> represents a
-  <classname>JEditTextArea</classname> object. A
-  <classname>Buffer</classname> represents the contents of an open text
-  file as it is maintained in the computer's memory (as opposed to how it
-  is stored on a disk). It is derived from Java's
-  <classname>PlainDocument</classname> class. The variable
-  <varname>buffer</varname> is predefined as the current View's current
-  text buffer. A <classname>JEditTextArea</classname> is the visible
-  component that displays the file being edited. It is derived from the
-  JComponent class. The variable <varname>textArea</varname> represents
-  the current View's <classname>JEditTextArea</classname> object, which in
-  turns displays the View's current text buffer.
+    Two of the new names we see here, <varname>buffer</varname> and
+    <varname>textArea</varname>, are predefined variables like
+    <varname>view</varname>. The variable <varname>buffer</varname>
+    represents a jEdit <varname>Buffer</varname> object, and
+    <varname>textArea</varname> represents a
+    <classname>JEditTextArea</classname> object. A
+    <classname>Buffer</classname> represents the contents of an open text
+    file as it is maintained in the computer's memory (as opposed to how it
+    is stored on a disk). It is derived from Java's
+    <classname>PlainDocument</classname> class. The variable
+    <varname>buffer</varname> is predefined as the current View's current
+    text buffer. A <classname>JEditTextArea</classname> is the visible
+    component that displays the file being edited. It is derived from the
+    <classname>JComponent</>
+    class. The variable <varname>textArea</varname> represents
+    the current View's <classname>JEditTextArea</classname> object, which in
+    turns displays the View's current text buffer.
   </para>
 
   <para>
-  Unlike in our first macro example, here we are calling class methods on
-  particular objects. First, we call <function>getPath()</function> on the
-  current <classname>Buffer</classname> object to get the full path of the
-  text file currently being edited. Next, we call
-  <function>setSelectedText()</function> on the current text display
-  component, specifying the text to be inserted as a parameter.
+    Unlike in our first macro example, here we are calling class methods on
+    particular objects. First, we call <function>getPath()</function> on the
+    current <classname>Buffer</classname> object to get the full path of the
+    text file currently being edited. Next, we call
+    <function>setSelectedText()</function> on the current text display
+    component, specifying the text to be inserted as a parameter.
   </para>
 
   <para>
-  In precise terms, the <function>setSelectedText()</function> method
-  substitutes the text currently selected with the contents of the
-  String parameter. If no text is highlighted as being selected,
-  the effect of this operation is to insert text at the editing
-  caret.
+    In precise terms, the <function>setSelectedText()</function> method
+    substitutes the text currently selected with the contents of the
+    String parameter. If no text is highlighted as being selected,
+    the effect of this operation is to insert text at the editing
+    caret.
   </para>
 
   <para>
-  Here's a few alternatives to the full file path that you could
-  use to insert various useful things:
+    Here's a few alternatives to the full file path that you could
+    use to insert various useful things:
   </para>
 
 
@@ -408,64 +491,68 @@ String newText = "This file contains "
 </informalexample>
 
   <para>
-  Here are brief comments on each:
+    Here are brief comments on each:
   </para>
 
   <itemizedlist>
    <listitem>
     <para>
-	In the first, the call to <function>getName()</function> invokes
-	another method of the <classname>Buffer</classname> class.
-	</para>
+      In the first, the call to <function>getName()</function> invokes
+      another method of the <classname>Buffer</classname> class.
+    </para>
    </listitem>
 
    <listitem>
     <para>
-	The syntax of the second example chains the results of
-	several methods. You could write it this way:
+      The syntax of the second example chains the results of
+      several methods. You could write it this way:
     </para>
 
 <programlisting>Date d = new Date();
 DateFormat df = DateFormat.getDateInstance();
-String result = df.format(d);</programlisting>
+String result = df.format(d);
+</programlisting>
 
-	<para>Taking the pieces in order:</para>
+   <para>
+	  Taking the pieces in order:
+   </para>
 
-	 <itemizedlist>
-	  <listitem>
-	   <para>
-       A Java <classname>Date</classname> object is created using the
-       <function>new</function> keyword. The empty parenthesis after
-       <classname>Date</classname> signify a call on the constructor method
-       of <classname>Date</classname> having no parameters; here, a
-       <classname>Date</classname> is created representing the current
-       date and time.
+   <itemizedlist>
+	   <listitem>
+	     <para>
+         A Java <classname>Date</classname> object is created using the
+         <function>new</function> keyword. The empty parenthesis after
+         <classname>Date</classname> signify a call on the constructor method
+         of <classname>Date</classname> having no parameters; here, a
+         <classname>Date</classname> is created representing the current
+         date and time.
+       </para>
+	   </listitem>
+
+	   <listitem>
+	     <para>
+         <function>DateFormat.getDateInstance()</function> is a static method
+         that creates and returns a <classname>DateFormat</classname> object. As
+         the name implies, <classname>DateFormat</classname> is a Java class
+         that takes <classname>Date</classname> objects and produces readable
+         text. The method <function>getDateInstance()</function> returns a
+         <classname>DateFormat</classname> object that parses and formats dates.
+         It will use the default <glossterm>locale</glossterm> or text format
+         specified in the user's Java installation.
        </para>
 	  </listitem>
 
 	  <listitem>
-	   <para>
-       <function>DateFormat.getDateInstance()</function> is a static method
-       that creates and returns a <classname>DateFormat</classname> object. As
-       the name implies, <classname>DateFormat</classname> is a Java class that
-       takes <classname>Date</classname> objects and produces readable text.
-       The method <function>getDateInstance()</function> returns a
-       <classname>DateFormat</classname> object that parses and formats dates.
-       It will use the default <glossterm>locale</glossterm> or text format
-       specified in the user's Java installation.
-       </para>
+	    <para>
+        Finally, <classname>DateFormat.format()</classname> is called on the
+        new <classname>DateFormat</classname> object using the
+        <classname>Date</classname> object as a parameter. The result is a
+        <classname>String</classname> containing the date in the default
+        locale.
+      </para>
 	  </listitem>
 
-	  <listitem>
-	   <para>
-       Finally, <classname>DateFormat.format()</classname> is called on the
-       new <classname>DateFormat</classname> object using the
-       <classname>Date</classname> object as a parameter. The result is a
-       <classname>String</classname> containing the date in the default
-       locale.
-       </para>
-	  </listitem>
-	 </itemizedlist>
+	</itemizedlist>
 
    </listitem>
 
@@ -480,7 +567,7 @@ String result = df.format(d);</programlisting>
        <classname>int</classname> representing the number of lines in the
        current text buffer. We call it on <varname>textArea</varname>, the
        pre-defined, current <classname>JEditTextArea</classname> object.
-       </para>
+      </para>
 	  </listitem>
 
 	  <listitem>
@@ -499,7 +586,6 @@ String result = df.format(d);</programlisting>
        </para>
 	  </listitem>
 	 </itemizedlist>
-	</para>
    </listitem>
   </itemizedlist>
  </sect1>

@@ -58,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.01.05.00";
+		return "03.01.99.00";
 	}
 
 	/**
@@ -1217,7 +1217,7 @@ public class jEdit
 
 		addBufferToList(newBuffer);
 
-		EditBus.send(new BufferUpdate(newBuffer,BufferUpdate.CREATED));
+		EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
 
 		if(view != null)
 			view.setBuffer(newBuffer);
@@ -1288,7 +1288,7 @@ public class jEdit
 		addBufferToList(buffer);
 		buffer.commitTemporary();
 
-		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CREATED));
+		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.CREATED));
 	}
 
 	/**
@@ -1409,7 +1409,7 @@ public class jEdit
 		removeBufferFromList(buffer);
 		buffer.close();
 
-		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
+		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSED));
 
 		// Create a new file when the last is closed
 		if(buffersFirst == null && buffersLast == null)
@@ -1478,7 +1478,10 @@ public class jEdit
 
 			buffer.close();
 			if(!isExiting)
-				EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
+			{
+				EditBus.send(new BufferUpdate(buffer,view,
+					BufferUpdate.CLOSED));
+			}
 			buffer = buffer.next;
 		}
 
@@ -1994,7 +1997,7 @@ public class jEdit
 		System.out.println("command line parameter"
 			+ " (1-9, 1 = debug, 9 = error)");
 		System.out.println();
-		System.out.println("Report bugs to Slava Pestov <sp@gjt.org>.");
+		System.out.println("Report bugs to Slava Pestov <slava@jedit.org>.");
 	}
 
 	private static void version()
@@ -2301,7 +2304,7 @@ public class jEdit
 		{
 			Buffer oldBuffersFirst = buffersFirst;
 			buffersFirst = buffersLast = buffer;
-			EditBus.send(new BufferUpdate(oldBuffersFirst,
+			EditBus.send(new BufferUpdate(oldBuffersFirst,null,
 				BufferUpdate.CLOSED));
 			return;
 		}

@@ -62,7 +62,6 @@ ourStringBuffer.append(country);</programlisting></informalexample>
 "explain-imports">)
 import javax.swing.*;
 import javax.swing.border.*;
-import org.gjt.sp.jedit.gui.HistoryTextField;
 
 <anchor id="main-routine">// main routine
 void prefixSuffixDialog()
@@ -78,7 +77,7 @@ void prefixSuffixDialog()
 
 <anchor id="fields-panel">    // add the text fields (see <xref linkend=
 "explain-fields-panel">)
-    fieldPanel = new JPanel(new GridLayout( 4, 1, 0, 5));
+    fieldPanel = new JPanel(new GridLayout(4, 1, 0, 5));
     prefixField = new HistoryTextField(&quot;macro.add-prefix&quot;);
     prefixLabel = new JLabel(&quot;Prefix to add:&quot;);
     suffixField = new HistoryTextField(&quot;macro.add-suffix&quot;);
@@ -197,10 +196,10 @@ packages.</para>
 classes defined in one of jEdit's plugin applications. We do not
 use any such classes in this macro.</para>
 
-<para>We do need one more import statement for a jEdit class:</para>
+<!-- <para>We do need one more import statement for a jEdit class:</para>
 <programlisting>import org.gjt.sp.jedit.gui.HistoryTextField;</programlisting>
 <para>This lets us use <classname>HistoryTextField</classname>, jEdit's enhanced
-substitute for Java's <classname>JTextField</classname>.</para>
+substitute for Java's <classname>JTextField</classname>.</para> -->
 </sect2>
 
 <sect2 id="explain-create-dialog"><title>Create the Dialog</>
@@ -244,8 +243,11 @@ the components inside. We then attach the <classname>JPanel</classname> as
 the dialog's content pane.</para>
 
 <para>A <classname>BorderLayout</classname> is one of the simpler layout
-schemes available for Java Swing objects. It is also available
-for the older style AWT objects. A <classname>BorderLayout</classname>
+schemes available for Java Swing objects. <!--
+XXX: who cares about AWT?
+
+It is also available
+for the older style AWT objects. --> A <classname>BorderLayout</classname>
 divides the container into five sections: North, South, East,
 West and Center. Components are added to the layout using the
 container's <function>add</function> method, specifying the component to
@@ -269,9 +271,9 @@ input fields.</para>
 Swing class <classname>JTextField</classname>. This class offers the
 enhancement of a stored list of prior values used as text input.
 The up and down keys scroll through the prior values for the
-variable. The prior values are stored in a file named
+variable. <!-- The prior values are stored in a file named
 <filename>history</filename> located in the directory in which jEdit
-stores various user data.</para>
+stores various user data. --></para>
 
 <para>To create the <classname>HistoryTextField</classname> objects we use a
 constructor method that takes a single parameter: the name of the
@@ -320,7 +322,7 @@ dialog's content pane.</para>
 </sect2>
 
 <sect2 id="explain-add-listeners">
-<title>Register the Action Listeners</> 
+<title>Register the Action Listeners</>
 
 
 <para>In order to specify the action to be taken upon clicking a
@@ -337,8 +339,7 @@ be implemented:</para>
  <funcprototype>
   <funcdef>public void <function>actionPerformed</function>
   </funcdef>
-  <paramdef>ActionEvent <parameter>e</parameter>
-  </paramdef>
+  <paramdef>ActionEvent <parameter>e</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 
@@ -457,9 +458,9 @@ in the macro that is not inside an enclosing block. BeanShell
 treats such code as a top-level <function>main</function> method and
 begins execution with it.</para>
 
-<para>Our analysis of <filename>Add_suffix_and_prefix.bsh</filename> is now
-complete. In the next section, we identify groups of useful
-methods in some of jEdit's principal classes.
+<para>Our analysis of <filename>Add_Prefix_and_Suffix.bsh</filename> is now
+complete. In the next section, we look at other ways in which a macro
+can obtain user input.
 </para>
 
 </sect2>

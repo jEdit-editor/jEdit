@@ -1,5 +1,5 @@
 [global]
-EMAIL|sp@gjt.org
+EMAIL|slava@jedit.org
 JEDIT|http://www.jedit.org
 
 [java]
@@ -50,8 +50,8 @@ logm|Log.log(Log.MESSAGE,this,\|);
 logd|Log.log(Log.DEBUG,this,\|);
 
 [html]
-EMAILLINK|<a href="mailto:sp@gjt.org">sp@gjt.org</a>
-JEDITLINK|<a href="http://jedit.sourceforge.net">jEdit</a>
+EMAILLINK|<a href="mailto:slava@jedit.org">slava@jedit.org</a>
+JEDITLINK|<a href="http://www.jedit.org">jEdit</a>
 
 [sgml]
 Ykeycap|<keycap>\|</>

@@ -627,8 +627,13 @@ loop:		for(;;)
 		jEdit.setProperty("search.replace.value",replace);
 		jEdit.setBooleanProperty("search.ignoreCase.toggle",ignoreCase);
 		jEdit.setBooleanProperty("search.regexp.toggle",regexp);
+		jEdit.setBooleanProperty("search.reverse.toggle",reverse);
 
-		jEdit.setProperty("search.fileset.value",fileset.getCode());
+		String code = fileset.getCode();
+		if(code != null)
+			jEdit.setProperty("search.fileset.value",code);
+		else
+			jEdit.unsetProperty("search.fileset.value");
 	}
 
 	// private members

@@ -10,7 +10,7 @@ CDATA DSSSL> ]>
 (define %shade-verbatim% #t)
 (define %root-filename% "index")
 (define %use-id-as-filename% #t)
-(define %body-attr% 
+(define %body-attr%
 	(list
 		(list "BGCOLOR" "#FFFFFF")))
 
@@ -28,7 +28,10 @@ CDATA DSSSL> ]>
 (element (funcdef function) ($bold-seq$))
 (element funcsynopsis (process-children))
 
-;; wordaround for stupid Swing HTML limitation - it can't display
+;; abstract is used to tag data, not to render output
+(element (listitem abstract) (process-children))
+
+;; workaround for stupid Swing HTML limitation - it can't display
 ;; DocBook's quotes properly
 
 (element quote
@@ -40,6 +43,41 @@ CDATA DSSSL> ]>
 ;; Swing HTML doesn't support tables properly
 
 (define %gentext-nav-use-tables% #f)
+
+;; another Swing HTML fix: "WIDTH" hard-coded here at 100%
+
+(element (listitem informalexample)
+  (let ((id (element-id))
+  	(rule-before? %informalexample-rules%)
+	(rule-after? %informalexample-rules%))
+    (make element gi: "DIV"
+	  attributes: (list
+			(list "BORDER" "0")
+			(list "BGCOLOR" "#E0E0E0")
+			(list "WIDTH" "100%"))
+	  (if id
+	      (make element gi: "A"
+		    attributes: (list (list "NAME" id))
+		    (empty-sosofo))
+	      (empty-sosofo))
+
+	  (if %spacing-paras%
+	      (make element gi: "P" (empty-sosofo))
+	      (empty-sosofo))
+
+	  (if rule-before?
+	      (make empty-element gi: "HR")
+	      (empty-sosofo))
+
+	  (process-children)
+
+	  (if rule-after?
+	      (make empty-element gi: "HR")
+	      (empty-sosofo))
+
+	  (if %spacing-paras%
+	      (make element gi: "P" (empty-sosofo))
+	      (empty-sosofo)))))
 
 (root
 	(make sequence

@@ -1,5 +1,29 @@
 JEDIT 3.1 VERSION HISTORY
 
+* Version 3.1final
+
++ Enhancements
+
+- Documentation updates (John Gellene)
+- Sample macro updates (John Gellene)
+- Pressing any one of the arrow keys in the quick search field will now
+  return focus to the text area (unless HyperSearch is enabled)
+- DSSSL stylesheet updates (John Gellene)
+- Documentation is now generated using modular DSSSL stylesheets 1.64
+- Both A4 and US letter versions of the PDF user's guide are now
+  available
+
++ Bug Fixes
+
+- Fixed minor word warp bug with very long lines
+- The setting of the 'Reverse Search' flag was not saved
+- Fixed typo in welcome message displayed when jEdit run for the first
+  time
+
++ API Changes
+
+- BufferUpdate.getView() method added. This may return null.
+
 * Version 3.1pre5
 
 + New Features

@@ -1,0 +1,952 @@
+<!-- jEdit 3.1 Macro Guide, (C) 2001 John Gellene -->
+<!-- Prepared Sat Apr 14 12:33:44 EDT 2001 @731 /Internet Time/ -->
+
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
+
+<!-- This file covers the chapter "Macro tips and techniques"   -->
+
+<chapter id=macro-tips><title>Macro Tips and Techniques</title>
+
+<sect1 id=macro-tips-input>
+<title>Getting Input for a Macro</title>
+
+  <para>
+    The dialog-based macro discussed in <xref linkend="dialog-macro">
+    reflects an approach to obtaining input that is conventional from a Java
+    perspective. Nevertheless, it can be too lengthy or tedious for someone
+    trying to write a macro quickly. Not every macro needs a user interface
+    specified in such detail; some macros require only a single keystroke or
+    no input at all. In this section we outline some other techniques for
+    obtaining input that will help you write macros quickly.
+  </para>
+
+<sect2 id=macro-tips-input-single-line>
+<title>Getting a Single Line of Text</title>
+
+  <para>
+    As mentioned earlier in <xref linkend="helpful-methods">, the method
+    <function>Macros.input()</function> offers a convenient way to obtain
+    a single line of text input. Here is an example that inserts a pair
+    of markup tags specified by the user.
+  </para>
+
+<informalexample><programlisting>// Insert_Tag.bsh
+
+void insertTag()
+{
+    caret = textArea.getCaretPosition();
+    tag = Macros.input(view, <quote>Enter name of tag:</quote>);
+    if( tag == null || tag.length() == 0) return;
+    text = textArea.getSelectedText();
+    if(text == null) text = <quote></quote>;
+    sb = new StringBuffer();
+    sb.append(<quote>&lt;</quote>).append(tag).append(<quote>&gt;</quote>);
+    sb.append(text);
+    sb.append(<quote>&lt;/</quote>).append(tag).append(<quote>&gt;</quote>);
+    textArea.setSelectedText(sb.toString());
+    if(text.length() == 0)
+        textArea.setCaretPosition(caret + tag.length() + 2);
+}
+
+insertTag();
+
+// end Insert_Tag.bsh</programlisting></informalexample>
+
+  <para>
+    Here the call to <function>Macros.input()</function> seeks the name
+    of the markup tag.  This method sets the message box title to a fixed string,
+    <quote>Macro input</quote>, but the specific message <guilabel>Enter name
+    of tag</guilabel> provides all the information necessary. The return value
+    <varname>tag</varname> must be tested to see if it is null.  This would
+    occur if the user presses the <guilabel>Cancel</guilabel> button or
+    closes the dialog window displayed by <function>Macros.input()</function>.
+  </para>
+</sect2>
+
+<sect2 id=macro-tips-input-multiple-data><title>Getting Multiple Data Items</title>
+  <para>
+    If more than one item of input is needed, a succession of calls to
+    <function>Macros.input()</function> is a possible, but awkward approach,
+    because it would not be possible to correct early input after the
+    corresponding message box is dismissed.  Where more is required,
+    but a full dialog layout is either unnecessary or too much work,
+    the Java method <function>JOptionPane.showConfirmDialog()</function>
+    is available. The version to use has the following prototype:
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static int <function>showConfirmDialog</function>
+          </funcdef>
+          <paramdef>Component <parameter>parentComponent</parameter></paramdef>
+          <paramdef>Object <parameter>message</parameter></paramdef>
+          <paramdef>String <parameter>title</parameter></paramdef>
+          <paramdef>int <parameter>optionType</parameter></paramdef>
+          <paramdef>int <parameter>messageType</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+  </itemizedlist>
+
+  <para>
+    The usefulness of this method arises from the fact that the
+    <varname>message</varname> parameter can be an object of any
+    Java class (since all clases are derived from
+    <classname>Object</classname>), or any array of objects.  The
+    following example shows how this feature can be used.
+  </para>
+
+  <informalexample><programlisting>// excerpt from Write_File_Header.bsh
+
+// *****import statements for excerpt*****
+
+import javax.swing.Box;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+// *****portions of macro script omitted*****
+
+    title = "Write file header";
+
+    currentName = buffer.getName();
+
+    nameField = new JTextField(currentName);
+    authorField = new JTextField("Your name here");
+    descField = new JTextField("", 25);
+
+    namePanel = new JPanel(new GridLayout(1, 2));
+    nameLabel = new JLabel("Name of file:", SwingConstants.LEFT);
+    nameLabel.setForeground(Color.black);
+    saveField = new JCheckBox("Save file when done",
+        !buffer.isNewFile());
+    namePanel.add(nameLabel);
+    namePanel.add(saveField);
+
+
+    message = new Object[9];
+    message[0] = namePanel;
+    message[1] = nameField;
+    message[2] = Box.createVerticalStrut(10);
+    message[3] = "Author's name:";
+    message[4] = authorField;
+    message[5] = Box.createVerticalStrut(10);
+    message[6] = "Enter description:";
+    message[7] = descField;
+    message[8] = Box.createVerticalStrut(5);
+
+    if( JOptionPane.OK_OPTION !=
+        JOptionPane.showConfirmDialog(view, message, title,
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE))
+        return null;
+
+// *****balance of macro script omitted*****
+
+// end excerpt from Write_File_Header.bsh</programlisting></informalexample>
+
+  <para>
+    This macro takes several items of user input and produces a formatted
+    file header at the begining of the buffer. The full macro is included in
+    the set of macros installed by jEdit. There are a number of input
+    features of this excerpt worth noting.
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        The macro takes the approach of listing every <quote>imported</quote>
+        class in a separate <function>import</function> statement. If
+        you don't feel a need to keep track of which classes you are using
+        in a macro, the global statement <function>import javax.swing.*;
+        </function>will work just as well.
+      </para>
+
+    </listitem>
+
+    <listitem>
+      <para>
+        The macro uses a total of seven visible components. Two of them are
+        created behind the scenes by <function>showConfirmDialog()</function>,
+        the rest are made by the macro. To arrange them, the script creates an
+        array of <classname>Object</classname> objects and assigns components to
+        each location in the array. This translates to a fixed, top-to-bottom
+        arrangement in the message box created by
+        <function>showConfirmDialog()</function>.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        The macro uses <classname>JTextField</classname> objects to
+        obtain most of the input data.  The fields <varname>nameField</varname>
+        and <varname>authorField</varname> are created with constructors
+        that take the initial text to be displayed in the field as a
+        parameter.  When the message box is displayed, the initial text
+        will appear and can be altered or deleted by the user.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        The text field <varname>descField</varname> uses an empty string for its
+        initial value. The second parameter in its constructor sets the width of
+        the text field component, expressed as the number of characters of
+        <quote>average</quote> width. When
+        <function>showConfirmDialog()</function> prepares the layout of the
+        message box, it sets the width wide enough to accomodate
+        <varname>descField</varname>. This technique produces a message box and
+        input text fields that are wide enough for your data with one line of code.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        The displayed message box includes a <classname>JCheckBox</classname>
+        component that determines whether the buffer will be saved to disk
+        immediately after the file header is written. To conserve space
+        in the message box, we want to display the check box to the
+        right of the label <guilabel>Name of file:</guilabel>. To do that,
+        we create a <classname>JPanel</classname> object and populate it with
+        the label and the checkbox in a left-to-right
+        <classname>GridLayout</classname>.  The <classname>JPanel</classname>
+        containing the two components is then added to the beginning of
+        <varname>message</varname> array.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        The two visible components created by
+        <function>showConfirmDialog()</function> appear at positions 3 and 6 of
+        the <varname>message</varname> array. Only the text is required; they
+        are rendered as text labels. Note that it was necessary to set the
+        foreground color <varname>nameLabel</varname> to black. The default text
+        color of <classname>JLabel</classname> objects is gray for Java's
+        default look-and-feel, so the color was reset for consistency with
+        the rest of the message box.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        There are three invisible components created by
+        <function>showConfirmDialog()</function>.  Each of them involves
+        a call to <function>Box.createVerticalStrut()</function>.  The
+        <classname>Box</classname> class is a sophisticated layout class
+        that gives the user great flexibility in sizing and positioning
+        components. Here we use a <function>static</function> method of
+        the <classname>Box</classname> class that produces a
+        transparent component whose width expands to fill its parent
+        component (in this case, the message box).  The single parameter
+        indicates the fixed height of the spacing <quote>strut</quote>
+        in pixels.  The final call to
+        <function>createVerticalStrut()</function> separates the
+        description text field from the <guilabel>OK</guilabel> and
+        <guilabel>Cancel</guilabel> buttons that are automatically added
+        by <function>showConfirmDialog()</function>.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        Finally, the call to <function>showConfirmDialog</function> uses
+        the defined constants the option type (using <guilabel>OK</guilabel>
+        and <guilabel>Cancel</guilabel> buttons) and the message type (a
+        <constant>QUERY_MESSAGE</constant> that causes the message box
+        to display a question mark icon.  The return value of the method
+        is tested against the value <constant>OK_OPTION</constant>.  If
+        the return value is something else (because the
+        <guilabel>Cancel</guilabel> button was pressed or because the
+        message box window was closed without a button press), a
+        <constant>null</constant> value is returned to a calling function,
+        signalling that the user cancelled macro execution.  If the return
+        value is <constant>OK_OPTION</constant>, each of the input components
+        can yield their contents for further processing by calls to
+        <function>JTextField.getText()</function> (or, in the case of
+        the check box, <function>JCheckBox.isSelected()</function>).
+      </para>
+    </listitem>
+
+  </itemizedlist>
+</sect2>
+
+<sect2 id=tips-macro-input-combo><title>Selecting Input From a List</title>
+<para>
+  Another useful way to get user input for a macro is to use a combo box
+  containing a number of pre-set options. If this is the only input
+  required, one of the versions of <function>showInputDialog()</function>
+  in the <classname>JOptionPane</classname> class provides a shortcut.
+  Here is its prototype:
+</para>
+
+  <itemizedlist>
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static Object <function>showInputDialog</function>
+          </funcdef>
+          <paramdef>Component <parameter>parentComponent</parameter></paramdef>
+          <paramdef>Object <parameter>message</parameter></paramdef>
+          <paramdef>String <parameter>title</parameter></paramdef>
+          <paramdef>int <parameter>messageType</parameter></paramdef>
+          <paramdef>Icon <parameter>icon</parameter></paramdef>
+          <paramdef>Object[] <parameter>selectionValues</parameter></paramdef>
+          <paramdef>Object <parameter>initialSelectionValue</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+  </itemizedlist>
+
+  <para>
+    This method creates a message box containing a drop-down list of the
+    options specified in the method's parameters, along with
+    <guilabel>OK</guilabel> and <guilabel>Cancel</guilabel> buttons.
+    Compared to <function>showConfirmDialog()</function>, this method lacks
+    an <varname>optionType</varname> parameter and has three additional
+    parameters: an <varname>icon</varname> to display in the dialog
+    (which can be set to <constant>null</constant>), an array of
+    <varname>selectionValues</varname> objects, and a reference to one
+    of the options as the <varname>initialSelectionValue</varname> to be
+    displayed. In addition, instead of returning an <type>int</type>
+    representing the user's action, <function>showInputDialog()</function>
+    returns the <classname>Object</classname> corresponding to the user's
+    selection, or <constant>null</constant> if the selection is cancelled.
+  </para>
+
+  <para>
+    The following macro fragment illustrates the use of this method.
+  </para>
+
+  <informalexample>
+  <programlisting>// fragment illustrating use of showInputDialog()
+
+import javax.swing.JOptionPane;
+
+options = new Object[5];
+options[0] = "JLabel";
+options[1] = "JTextField";
+options[2] = "JCheckBox";
+options[3] = "HistoryTextField";
+options[4} = "-- other --";
+
+result = JOptionPane.showInputDialog(view,
+    "Choose component class",
+    "Select class for input component",
+    JOptionPane.QUESTION_MESSAGE,
+    null, options, options[0]);</programlisting>
+  </informalexample>
+
+  <para>
+    The return value <varname>result</varname> will contain either the
+    <classname>String</classname> object representing the selected text
+    item or <constant>null</constant> representing no selection.  Any
+    further use of this fragment would have to test the value of
+    <varname>result</varname> and likely exit from the macro if the value
+    equalled <constant>null</constant>.
+  </para>
+
+
+  <para>
+    A set of options can be similarly placed in a
+    <classname>JComboBox</classname> component created as part of a larger
+    dialog or <function>showMessageDialog()</function> layout.  Here are some
+    code fragments showing this approach:
+  </para>
+
+  <informalexample>
+  <programlisting>// fragments from Display_Abbreviations.bsh
+// import statements and other code omitted
+
+// from main routine, a method returning an array of Strings
+// representing the names of abbreviation sets
+
+abbrevSets = getActiveSets();
+
+
+// from showAbbrevs() method
+
+combo = new JComboBox(abbrevSets);
+// set width to uniform size regardless of combobox contents
+Dimension dim = combo.getPreferredSize();
+dim.width = Math.max(dim.width, 120);
+combo.setPreferredSize(dim);
+combo.setSelectedItem(STARTING_SET); // defined as "global"
+
+// end fragments</programlisting>
+  </informalexample>
+
+</sect2>
+
+
+<sect2 id=macro-tips-single-char><title>Using a Single Keypress As Input</title>
+
+  <para>
+    Some macros may choose to emulate the style of character-based text
+    editors such as <application>emacs</application> or
+    <application>vi</application>. They will require only a single keypress
+    as input that would be handled by the macro but not displayed on the
+    screen. If the keypress corresponds to a character value, jEdit can pass
+    the character value as a parameter to a BeanShell script.
+  </para>
+
+  <para>
+    The jEdit class <classname>InputHandler</classname> is an abstract class
+    that that manages associations between keyboard input and editing
+    actions, along with the recording of macros. Keyboard input
+    in jEdit is normally managed by the derived class
+    <classname>DefaultInputHandler</classname>. One of the methods in
+    the <classname>InputHandler</classname> class handles input from a
+    single keypress:
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public void <function>readNextChar</function>
+          </funcdef>
+          <paramdef>String <parameter>code</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+  </itemizedlist>
+
+  <para>
+    The contents of the <varname>code</varname> parameter will be run as
+    a BeanShell script, with one important modification. The first time the
+    string <varname>__char__</varname> appears in the parameter script, it
+    will be substituted by the character value of the next key pressed after
+    <function>readNextChar()</function> is called. The value of the key
+    pressed is <quote>eaten</quote> by <function>readNextChar()</function>.
+    It will not be displayed on the screen or otherwise processed by jEdit.
+  </para>
+
+  <para>
+    Using <function>readNextChar()</function> requires a macro within the
+    macro, formatted as a single, potentially lengthy string literal. The
+    following macro illustrates this technique. It selects a line of text
+    from the current caret position to the first occurrence of the character
+    next typed by the user. If the character does not appear on the line, no
+    new selection occurs and the display remains unchanged.
+  </para>
+
+  <informalexample>
+  <programlisting>// Next_Char.bsh
+
+script = new StringBuffer(512);
+script.append( "start = textArea.getCaretPosition();"         );
+script.append( "line = textArea.getCaretLine();"              );
+script.append( "end = textArea.getLineEndOffset(line) + 1;"   );
+script.append( "seg = new javax.swing.text.Segment();"        );
+script.append( "buffer.getText(start, end - start, seg);"     );
+script.append( "ch = __char__;"                               );
+script.append( "match = seg.toString().indexOf(ch, 1);"       );
+script.append( "if(match != -1) {"                            );
+script.append(   "if(ch != '\\n') ++match;"                   );
+script.append(   "textArea.select(start, start + match - 1);" );
+script.append( "}"                                            );
+
+view.getInputHandler().readNextChar(script.toString());
+
+// end Next_Char.bsh</programlisting>
+  </informalexample>
+
+  <para>
+    Once again, here are a few comments on the macro's design.
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        A <classname>StringBuffer</classname> object is used for efficiency; it
+        obviates multiple creation of fixed-length <classname>String</classname>
+        objects. The parameter to the constructor of <varname>script</varname>
+        specifies the initial size of the buffer that will receive the contents
+        of the child script.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        Besides the quoting of the script code, the formatting of the macro is
+        entirely optional but (hopefully) makes it easier to read.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        It is important that the child script be self-contained.  It does
+        not run in the same namespace as the <quote>parent</quote> macro
+        <filename>Next_Char.bsh</filename> and therefore does not share
+        variables, methods, or scripted objects defined in the parent
+        macro.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        It is also important that the child script define and set a local
+        variable equal to the <varname>__char__</varname> if the value
+        will be used more than once.  This is because
+        <varname>__char__</varname> is not a true variable but a
+        placeholder token in the child script string.  The implementation
+        of <!-- <classname>InputHandler</classname> triggered by -->
+        <function>readNextChar</function> substitutes
+        the character value of the keypress for <varname>__char__</varname>
+        the first time it occurs in the child script string; then it
+        executes the resulting string as a macro.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        The use of Java's <classname>Segment</classname> class is invoked with a
+        fully qualified name instead of an <function>import</function>
+        statement. A <classname>Segment</classname> refers to a portion of a
+        character array, such as the buffer encapsulated by a
+        <classname>String</classname>. It is used by jEdit in its
+        <function>View.getText()</function> method to identify a portion of a
+        text buffer efficiently, without allocating memory for an additional
+        character array.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        Finally, access to the <classname>InputHandler</classname> object used
+        by jEdit is available by calling
+        <function>View.getInputHandler()</function> on the current view.
+      </para>
+    </listitem>
+
+  </itemizedlist>
+
+</sect2>
+
+</sect1>
+
+
+<sect1 id=tips-macro-startup><title>Using a Startup Macro</title>
+
+  <para>
+    One useful feature in jEdit allows the user to run a macro script at startup
+    near the end of the program's initialization routine. The name of
+    the macro script must be <filename>Startup.bsh</filename> (capitalization
+    matters!) and it must be located in one of the two macro
+    directories.
+  </para>
+
+  <para>
+    The startup macro can perform additional initialization that cannot be
+    handled by command line options or ordinary configuration options. It
+    could, for example, open a designated file (whether or not it was open
+    at the close of the preceding jEdit session). It could write logging
+    information to jEdit's activity log or an external file, or activate
+    another application. It can also add variables, methods and scripted
+    object to the namespace used by the BeanShell interpreter when running
+    other macro scripts. This last feature allows you to create a personal
+    library of methods and objects that can be accessed at any time during the
+    editing session in another macro, the BeanShell shell of the Console
+    plugin, or menu items such as
+    <guimenu>Utilities</>&gt;<guimenuitem>Evaluate BeanShell Expression</>.
+  </para>
+
+
+  <para>
+    Here are a few short scripts that illustrate the startup macro process.
+  </para>
+
+  <formalpara><title><filename>Startup.bsh</filename></title>
+
+  <para>
+    This macro defines a method and several variables, and looks for a
+    second startup macro. If the second macro can be found, it is executed
+    and the variable <varname>orphanMessage</varname> is modified.
+  </para>
+</formalpara>
+
+    <informalexample><programlisting>// Startup.bsh
+
+foo()
+{
+    fooMessage = <quote>This is from Startup.bsh and </quote>
+        + <quote>is part of a foo() object.</quote>;
+    return this;
+}
+
+orphanMessage = <quote>This is from Startup.bsh </quote>
+    + <quote>but is not part of a scripted object.</quote>;
+
+startup2 = Macros.getMacro(<quote>Startup2</quote>);
+if(startup2 != null)
+{
+    BeanShell.runScript(view, startup2.path, false, true);
+    orphanMessage += <quote>\nStartup2 was found.</quote>;
+}
+else
+{
+    orphanMessage += <quote>\nStartup2 was not found.</quote>;
+}
+
+// end of Startup.bsh
+</programlisting></informalexample>
+
+<formalpara><title><filename>Startup2.bsh</></>
+
+  <para>
+    This macro is called by the startup macro. It adds its own method and
+    variable, and modifies one of the variables defined in
+    <filename>Startup.bsh</filename> if it can find it.
+  </para>
+</formalpara>
+
+<informalexample><programlisting>// Startup2.bsh
+
+bar()
+{
+    barMessage = <quote>This is from Startup2.bsh and </quote>
+        + <quote>is part of a bar() object.</quote>;
+    return this;
+}
+
+orphanMessage2 = <quote>This is from Startup2.bsh </quote>
+    + <quote>but is not part of a scripted object.</quote>;
+
+if(orphanMessage != null)
+    orphanMessage = orphanMessage.toUpperCase();
+
+// end of Startup2.bsh
+</programlisting></informalexample>
+
+<formalpara><title>Namespace_Test.bsh</title>
+
+  <para>
+    We will run this macro manually after startup.  Among other things,
+    it obtains the BeanShell namespace through successive calls to
+    jEdit's <function>BeanShell.getInterpreter()</function> and BeanShell's own
+    <function>Interpreter.getNamespace()</function> methods.  The names and
+    values of variables in the namespace are obtained by calls to BeanShell's
+    <function>Namespace.getVariableNames()</function> and
+    <function>Namespace.getVariable()</function> methods.  The rest of the
+    script formats output and displays the result in a new buffer.
+  </para>
+</formalpara>
+
+<informalexample><programlisting>// Namespace_Test.bsh
+
+jEdit.newFile(view);
+
+namespace = BeanShell.getInterpreter().getNameSpace();
+v = namespace.getVariableNames();
+
+sb = new StringBuffer();
+
+sb.append(&quot;***** begin test of startup &quot;);
+sb.append(&quot;macro namespace capability *****\n\n&quot;);
+sb.append(&quot;List of BeanShell namespace variables:\n\n&quot;);
+
+for (i = 0; i &lt; v.length; ++i)
+{
+    sb.append(v[i] + &quot;\n&quot;);
+    o = namespace.getVariable(v[i]);
+    if(o != null)
+    {
+        sb.append(o)
+          .append(&quot;\n\n&quot;);
+    }
+    else
+    {
+        sb.append(&quot;Value of variable &quot;)
+          .append(String.valueOf(i))
+          .append(&quot; is null.\n&quot;);
+    }
+}
+sb.append(&quot;***** end variable list *****\n\n&quot;);
+textArea.setSelectedText(sb.toString());
+
+f = foo();
+b = bar();
+
+sb.setLength(0);
+
+sb.append(<quote>\n\n</quote>)
+  .append(<quote>foo().fooMessage = \n</quote>)
+  .append(f.fooMessage)
+  .append(<quote>\n\n</quote>);
+
+sb.append(<quote>bar().barMessage = \n</quote>)
+  .append(b.barMessage)
+  .append(<quote>\n\n</quote>);
+
+sb.append(<quote>orphanMessage = \n</quote>)
+  .append(this.orphanMessage)
+  .append(<quote>\n\n</quote>);
+
+sb.append(<quote>orphanMessage2 = \n</quote>)
+  .append(this.orphanMessage2)
+  .append(<quote>\n\n</quote>);
+
+sb.append(<quote>***** end test *****\n</quote>);
+
+textArea.setSelectedText(sb.toString());
+
+// end of Namespace_Test.bsh
+</programlisting></informalexample>
+
+<formalpara><title>The results</title>
+
+  <para>
+    Here are the result of running <filename>Namespace_Test.bsh</filename>
+    after startup occurs:
+  </para>
+</formalpara>
+
+  <informalexample>
+  <programlisting>***** begin test of startup macro namespace capability *****
+
+List of BeanShell namespace variables:
+
+startup2
+Startup2
+
+classLoader
+org.gjt.sp.jedit.JARClassLoader@3bc473
+
+orphanMessage
+THIS IS FROM STARTUP.BSH BUT IS NOT PART OF A SCRIPTED OBJECT.
+Startup2 was found.
+
+bsh
+'this' reference (XThis) to Bsh object: Bsh System Object
+
+orphanMessage2
+This is from Startup2.bsh but is not part of a scripted object.
+
+***** end variable list *****
+
+
+
+foo().fooMessage =
+This is from Startup.bsh and is part of a foo() object.
+
+bar().barMessage =
+This is from Startup2.bsh and is part of a bar() object.
+
+orphanMessage =
+THIS IS FROM STARTUP.BSH BUT IS NOT PART OF A SCRIPTED OBJECT.
+Startup2 was found.
+
+orphanMessage2 =
+This is from Startup2.bsh but is not part of a scripted object.
+
+***** end test *****
+</programlisting></informalexample>
+
+  <para>
+    You will see that objects and variables from both macros were available
+    to the test macro when it ran after startup. In addition, the script in
+    <filename>Startup2.bsh</filename> altered the variable
+    <varname>orphanMessage</varname> defined in
+    <filename>Startup.bsh</filename> by capitalizing the string contents.
+    After that, control returned to <filename>Startup.bsh</filename>, which
+    added additional lower casetext to <varname>orphanMessage</varname>.
+  </para>
+
+  <para>
+    This example shows that the startup macro feature can provide additional
+    opportunities for controlling jEdit's behavior. It also allows the
+    creation of customized variables and methods that a user can apply in
+    other macros or BeanShell code executed during the editing
+    session.
+  </para>
+
+</sect1>
+
+<sect1 id=macro-tips-debugging><title>Debugging Macro Scripts</title>
+
+  <para>
+    Because BeanShell is an interpreted and not a compiled dialect of
+    Java, there are no separate tools for debugging a macro script.
+    Here are a few techniques that can prove helpful.
+  </para>
+
+<sect2 id=macro-tips-debugging-exceptions>
+<title>Identifying Exceptions</title>
+
+  <para>
+    An <glossterm>exception</glossterm> is a condition reflecting an error
+    or other unusual result of program execution that requires interruption
+    of normal program flow and some kind of special handling. Java has a
+    rich (and extendable) collection of exception classes which represent
+    such conditions. Exceptions that are not handled within an application
+    will usually result in an abrupt exit from the program. BeanShell saves
+    a jEdit session from an untimely demise by catchng any exceptions thrown
+    by a macro and halting macro execution. When a BeanShell macro throws an
+    exception in this fashion, it almost certainly means there is a bug in
+    the macro.
+  </para>
+
+  <para>
+    Exceptions thrown while BeanShell runs a macro script, like other
+    exceptions occuring during jEdit execution, result in entries being
+    written to jEdit's activity log, see <xref linkend="activity-log">.
+    There are two broad categories of errors that will result in
+    exceptions:
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        <emphasis>Interpreter errors</emphasis>, which may arise from typing
+        mistakes like mismatched brackets or missing semicolons, or from
+        BeanShell's failure to find a class corresponding to a particular
+        variable;
+      </para>
+    </listitem>
+    <listitem>
+    <para>
+        <emphasis>Execution errors</emphasis>, which result from
+        runtime exceptions thrown by the Java platform when macro code is
+        executed.
+    </para>
+    </listitem>
+  </itemizedlist>
+
+  <para>
+    An execution error will usually cause two exceptions to be written to
+    the activity log: an exception tied to the
+    <classname>AWT-EventQueue</classname> that orchestrates program
+    execution, and an exception tied to BeanShell itself. An interpreter
+    error results in only a single exception thrown by BeanShell. Usually
+    the interpreter error is the subject of a message box.
+  </para>
+
+  <para>
+    The error messages emitted by BeanShell can often seem cryptic. The
+    <firstterm>stack trace</firstterm> written by jEdit for an unhandled
+    exception often refers to unrevealing methods like
+    <function>Interpreter.eval()</function>. Nevertheless, examining the
+    contents of the activity log may reveals clues as to the cause of a
+    macro bug. If only an interpreter exception appears, it is a good idea
+    to look for typing mistakes, uninitialized variables, or class names
+    that are neither fully qualified nor subjects of an
+    <function>import</function> statement. If there is an underlying Java
+    exception thrown as well, the Java exception message may offer better
+    clues as to the source of the error. The clues may include the type of
+    exception thrown and the type of the object that the macro was
+    manipulating when the exception occurred.
+  </para>
+
+</sect2>
+
+<sect2 id=macro-tips-debugging-message>
+<title>Using a Message Box As a Tracing Tool</title>
+
+  <para>
+    Sometimes the Activity Log or other information will tell you
+    what kind of error occurred but not where it arose in the macro script.
+    If the error causes the display of an error box, there is a simple technique
+    that will often pinpoint or narrow the range of offending code, without
+    requiring repeated consultation of the Activity Log.  Insert the following
+    line of code at some point in the macro near the suspected error:
+  </para>
+
+  <informalexample>
+    <programlisting>Macros.message(view, <quote>tracing</quote>);</programlisting>
+  </informalexample>
+
+  <para>
+    Of course, the message can be as descriptive as you like, and multiple
+    messages can be used at different points in the macro code.  It would be
+    helpful to use a common tag as part of each function call, or in adjacent
+    comments, so the messages can be easily found and removed from the finished
+    macro script. If a <quote>tracing</quote> message pops up during macro
+    execution, you know that the macro got that far in the script safely. If the
+    BeanShell message appears first, the error is occurring before the
+    <quote>tracing</quote> message box command is reached.  Iteration of
+    these steps will usually identify the location of a macro error.
+  </para>
+
+</sect2>
+
+<sect2 id=macro-tips-debugging-log>
+<title>Writing Trace Messages to the Activity Log</title>
+  <para>
+      The most laborious, but often the most effective technique, is to
+      insert code in the macro that writes additional messages to the
+      Activity Log before the exception occurs, then to examine the
+      Activity Log by choosing
+      <guimenuitem>Utilities&gt;View Activity Log</guimenuitem> after
+      the macro completes execution.  The messages would trace program
+      execution and, when desired, report the value of significant variables.
+      To write a message to the Activity Log,
+      use the folllowing method of the <classname>Log</classname>
+      class:
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static void <function>log</function></funcdef>
+          <paramdef>int <parameter>urgency</parameter></paramdef>
+          <paramdef>Object <parameter>source</parameter></paramdef>
+          <paramdef>Object <parameter>message</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+  </itemizedlist>
+
+  <para>
+    The parameter <varname>urgency</varname> can take the defined
+    values <constant>Log.DEBUG</constant>, <constant>Log.MESSAGE</constant>,
+    <constant>Log.NOTICE</constant>, <constant>Log.WARNING</constant> or
+    <constant>Log.ERROR</constant>.  The <function>log()</function> method
+    will write a formatted string that contains the level of urgency and
+    representations of the <varname>source</varname> and
+    <varname>message</varname> parameters.
+  </para>
+
+  <para>
+    The following code would send a typical debugging message to the
+    Activity Log:
+  </para>
+
+    <informalexample>
+    <programlisting>Log.log(Log.DEBUG, BeanShell.class,
+    "counter = " + String.valueOf(counter)
+    + "; line = " + line);</programlisting>
+    </informalexample>
+
+  <para>
+    The corresponding Activity Log entry might read as follows:
+  </para>
+
+    <informalexample>
+    <programlisting>[debug] BeanShell: counter = 15; line = The corresponding
+    activity log entry might read as follows:</programlisting>
+    </informalexample>
+
+  <!-- <para>
+    The fully qualified name of the <classname>Log</classname> class is
+    <classname>org.gjt.sp.util.Log</classname>. The corresponding
+    <function>import</function> statement would be:
+    <informalexample>
+    <programlisting>import org.gjt.sp.util.Log;</programlisting>
+    </informalexample>
+    Either expression would be necessary to use the <function>log()</function>
+    method in macro code.
+  </para> -->
+
+</sect2>
+
+</sect1>
+
+</chapter>

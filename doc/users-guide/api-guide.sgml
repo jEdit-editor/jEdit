@@ -1,10 +1,11 @@
-<!-- jEdit 3.1 Macro Guide, (C) 2001 John Gellene -->
+<!-- jEdit 3.1 Macro Guide, (C) 2001 John Gellene                -->
+<!-- Revised Mon Apr 16 15:25:13 EDT 2001 @850 /Internet Time/   -->
+<!--                                                             -->
+<!-- jEdit buffer-local properties:                              -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
+<!--                                                             -->
+<!-- This file contains the jEdit API Quick Reference            -->
 
-<!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes: -->
-
-<!-- This file contains the first half of the guided tour -->
-<!-- of the principal jEdit classes                         -->
 
 <appendix id=api-guide><title>jEdit API Quick Reference</>
 
@@ -14,7 +15,7 @@
     expression package).  Embedding a BeanShell interpreter within jEdit
     makes most of those classes available to the user to help customize and
     extend the program.  For the vast majority of circumstances, however,
-    only a handful of classes will be needed for any writing a macro script.
+    only a handful of classes will be needed for writing a macro script.
     The following is a quick guide to some of the principal jEdit classes
     that are useful in writing macros.
 </para>
@@ -98,7 +99,7 @@
 <funcsynopsis>
  <funcprototype>
   <funcdef>public static boolean <function>closeAllBuffers</></>
-  <paramdef>View  <parameter>view</></>
+  <paramdef>View <parameter>view</></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -111,9 +112,9 @@
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static void <function>exit</></>
-  <paramdef>View  <parameter>view</></>
-  <paramdef>boolean  <parameter>reallyExit</></>
+  <funcdef>public static void <function>exit</></>
+  <paramdef>View <parameter>view</></>
+  <paramdef>boolean <parameter>reallyExit</></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -140,7 +141,7 @@
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static final boolean <function>getBooleanProperty</></>
+  <funcdef>public static final boolean <function>getBooleanProperty</></>
   <paramdef>String <parameter>name</>
   </>
  </funcprototype>
@@ -157,8 +158,8 @@
 <funcsynopsis>
  <funcprototype>
   <funcdef>public static final void <function>setProperty</></>
-  <paramdef>String  <parameter>name</></>
-  <paramdef>String  <parameter>property</></>
+  <paramdef>String <parameter>name</></>
+  <paramdef>String <parameter>property</></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -171,8 +172,8 @@
 <funcsynopsis>
  <funcprototype>
   <funcdef>public static final void <function>setBooleanProperty</></>
-  <paramdef>String  <parameter>name</></>
-  <paramdef>boolean  <parameter>value</></>
+  <paramdef>String <parameter>name</></>
+  <paramdef>boolean <parameter>value</></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -186,8 +187,8 @@
 <funcsynopsis>
  <funcprototype>
   <funcdef>public static final void <function>setTemporaryProperty</></>
-  <paramdef>String  <parameter>name</></>
-  <paramdef>String  <parameter>property</></>
+  <paramdef>String <parameter>name</></>
+  <paramdef>String <parameter>property</></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -329,8 +330,8 @@ a macro may need to use. They include the following:</para>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static Mode <function>getMode</></>
-  <paramdef>String  <parameter>name</></>
+  <funcdef>public static Mode <function>getMode</></>
+  <paramdef>String <parameter>name</></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -354,7 +355,7 @@ a macro may need to use. They include the following:</para>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static EditPlugin <function>getPlugin</></>
+  <funcdef>plugin static EditPlugin <function>getPlugin</></>
   <paramdef>String <parameter>name</></>
  </funcprototype>
 </funcsynopsis>
@@ -463,6 +464,96 @@ a macro may need to use. They include the following:</para>
 </listitem>
 
 </itemizedlist>
+
+</sect1>
+
+<!-- LaTeX spews with id's that are too long? -->
+<sect1 id=class-DockableWindowManager><title>Class DockableWindowManager</title>
+
+    <para>
+        Plugin windows conforming to jEdit's docking API can appear in window
+        <quote>panes</quote> located above, below or to the left or right of the
+        main editing pane. They can also be displayed in <quote>floating</quote>
+        frame windows. A <classname>DockableWindowManager</classname> keeps
+        track of the applications associated with a particular
+        <classname>View</classname>. Each <classname>View</classname> object
+        contains an instance of this class.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public DockableWindow <function>getDockableWindow</function>
+            </funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+        <para>
+          This method returns the <classname>DockableWindow</classname>
+          object named by the <varname>name</varname> parameter.  The name of a
+          <classname>DockableWindow</classname> is a required property of the
+          plugin.  If there is no <classname>DockableWindow</classname> bearing the
+          requested name, the method return <constant>null</constant>.
+        </para>
+       </listitem>
+
+       <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public void <function>addDockableWindow</function>
+            </funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+        <para>
+          If the <classname>DockableWindow</classname> named by the
+          <varname>name</varname> parameter does not exist, a message is
+          sent to the associated plugin application to create it.  The
+          <classname>DockableWindow</classname> is then made visible.
+        </para>
+       </listitem>
+
+       <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public void <function>showDockableWindow</function>
+            </funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+       </listitem>
+
+       <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public void <function>removeDockableWindow</function>
+            </funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+       </listitem>
+
+       <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public void <function>toggleDockableWindow</function>
+            </funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+       <para>
+         These methods, respectively show, hide and toggle the visibility
+         of the <classname>DockableWindow</classname> object named by
+         the <varname>name</varname> parameter.  If the
+         <classname>DockableWindowManager</classname> does not contain a
+         reference to the window, these methods send an error message to the
+         activity log and have no other effect.  Only
+         <function>addDockableWindow()</function> can cause the creation
+         of a <classname>DockableWindow</classname>.
+         </para>
+       </listitem>
+    </itemizedlist>
 
 </sect1>
 
@@ -632,8 +723,7 @@ Returns the line containing the position of the selection's beginning or end.
 <funcsynopsis>
  <funcprototype>
   <funcdef>public final void <function>setSelectionStart</></>
-  <paramdef>int <parameter>selectionStart</>
-  </>
+  <paramdef>int <parameter>selectionStart</></>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -642,8 +732,7 @@ Returns the line containing the position of the selection's beginning or end.
 <funcsynopsis>
  <funcprototype>
   <funcdef>public final void <function>setSelectionEnd</></>
-  <paramdef>int <parameter>selectionEnd</>
-  </>
+  <paramdef>int <parameter>selectionEnd</></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -1022,8 +1111,8 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>pulic void <function>deleteWord</></>
-  <paramdef> </>
+  <funcdef>public void <function>deleteWord</></>
+  <paramdef></>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -1031,8 +1120,8 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>pulic void <function>deleteLine</></>
-  <paramdef> </>
+  <funcdef>public void <function>deleteLine</></>
+  <paramdef></>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -1040,8 +1129,8 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>pulic void <function>deleteParagraph</></>
-  <paramdef> </>
+  <funcdef>public void <function>deleteParagraph</></>
+  <paramdef></>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -1049,8 +1138,8 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>pulic void <function>deleteToStartOfLine</></>
-  <paramdef> </>
+  <funcdef>public void <function>deleteToStartOfLine</></>
+  <paramdef></>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -1058,8 +1147,8 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>pulic void <function>deleteToEndOfLine</></>
-  <paramdef> </>
+  <funcdef>public void <function>deleteToEndOfLine</></>
+  <paramdef></>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -1077,8 +1166,7 @@ Returns the line containing the position of the selection's beginning or end.
 <funcsynopsis>
  <funcprototype>
   <funcdef>public final int <function>getBufferLength</></>
-  <paramdef>
-  <parameter></></>
+  <paramdef></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -1090,8 +1178,7 @@ Returns the line containing the position of the selection's beginning or end.
 <funcsynopsis>
  <funcprototype>
   <funcdef>public final int <function>getLineCount</></>
-  <paramdef>
-  <parameter></></>
+  <paramdef></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -1103,8 +1190,7 @@ Returns the line containing the position of the selection's beginning or end.
 <funcsynopsis>
  <funcprototype>
   <funcdef>public final int <function>getLineLength</></>
-  <paramdef>
-  <parameter></></>
+  <paramdef></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -1183,6 +1269,35 @@ Returns the line containing the position of the selection's beginning or end.
     Gets and sets the editing mode for the buffer.
 </para>
 </listitem>
+
+</itemizedlist>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getIndentSize</function></funcdef>
+        <paramdef></>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getTabSize</function></funcdef>
+        <paramdef></>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      These method returns the size of an inital indentation at the beginning
+      of a line and the distance between tab stops, each measured in
+      character columns. If these propoerties are not individually set for
+      a specific buffer, they are inherited from the properties of the buffer's
+      associated editing mode.
+    </para>
+  </listitem>
 
 </itemizedlist>
 
@@ -1357,6 +1472,53 @@ Returns the line containing the position of the selection's beginning or end.
 
 </itemizedlist>
 
+  <para>
+    The following methods are inherited by <classname>Buffer</classname>
+    from its parent class.  They are useful in extracting text from a
+    <classname>Buffer</classname> object for searching purposes or other
+    manipulation.
+  </para>
+
+  <itemizedlist>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public String <function>getText()</function></funcdef>
+          <paramdef>int <parameter>offset</parameter></paramdef>
+          <paramdef>int <parameter>length</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public void <function>getText()</function></funcdef>
+          <paramdef>int <parameter>offset</parameter></paramdef>
+          <paramdef>int <parameter>length</parameter></paramdef>
+          <paramdef>Segment <parameter>text</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+     <para>
+       These methods extract a portion of buffer text having length
+       <varname>length</varname> beginning at offset position
+       <varname>offset</varname>.  The first method returns a newly
+       created <classname>String</classname> containing the requested
+       excerpt.  The second version initializes an existing
+       <classname>Segment</classname> object with the location of the
+       requested excerpt.  The <classname>Segment</classname> object
+       represents array locations within the <classname>Buffer</classname>
+       object's data and should be used on a read-only basis; calling
+       <function>toString()</function> on the <classname>Segment</classname>
+       will create a new object suitable for manipulation.
+     </para>
+    </listitem>
+
+    </itemizedlist>
+
+
+
 </sect1>
 
 <sect1 id=class-Macros><title>Class Macros</>
@@ -1435,7 +1597,7 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static void <function>setSearchString</></>
+  <funcdef>public static void <function>setSearchString</></>
   <paramdef>String <parameter>search</></>
  </funcprototype>
 </funcsynopsis>
@@ -1445,7 +1607,7 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static String <function>getSearchString</></>
+  <funcdef>public static String <function>getSearchString</></>
   <paramdef></>
  </funcprototype>
 </funcsynopsis>
@@ -1454,7 +1616,7 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static void <function>setReplaceString</></>
+  <funcdef>public static void <function>setReplaceString</></>
   <paramdef>String <parameter>replace</></>
  </funcprototype>
 </funcsynopsis>
@@ -1463,7 +1625,7 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static String <function>getReplaceString</></>
+  <funcdef>public static String <function>getReplaceString</></>
   <paramdef></>
  </funcprototype>
 </funcsynopsis>
@@ -1472,9 +1634,8 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static void <function>setIgnoreCase</></>
-  <paramdef>boolean <parameter>ignoreCase</>
-  </>
+  <funcdef>public static void <function>setIgnoreCase</></>
+  <paramdef>boolean <parameter>ignoreCase</></>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -1493,9 +1654,8 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static void <function>setRegexp</></>
-  <paramdef>boolean <parameter>regexp</>
-  </>
+  <funcdef>public static void <function>setRegexp</></>
+  <paramdef>boolean <parameter>regexp</></>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -1503,7 +1663,7 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static boolean <function>getRegexp</></>
+  <funcdef>public static boolean <function>getRegexp</></>
   <paramdef></>
  </funcprototype>
 </funcsynopsis>
@@ -1515,7 +1675,30 @@ Returns the line containing the position of the selection's beginning or end.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>static void <function>setSearchFileSet</></>
+  <funcdef>public static void <function>setReverseSearch</></>
+  <paramdef>boolean <parameter>reverse</></>
+ </funcprototype>
+</funcsynopsis>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public static boolean <function>getReverseSearch</></>
+  <paramdef></>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Determines whether a reverse search will conducted from the current
+    position to the beginning of a buffer.  Currently, only literal
+    reverse searches are supported.
+</para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public static void <function>setSearchFileSet</></>
   <paramdef>SearchFileSet <parameter>fileset</></>
  </funcprototype>
 </funcsynopsis>
@@ -1546,15 +1729,18 @@ Returns the line containing the position of the selection's beginning or end.
  </funcprototype>
 </funcsynopsis>
 <para>
-    The parameter <parameter>glob</> is the mask that determines which files from the
-    directory will be selected, and <parameter>recurse</> determines whether the
+    The parameter <parameter>glob</> is the glob pattern
+    that determines which files from the
+    directory will be selected (see <xref linkend=globs> for
+    information about glob patterns),
+    and <parameter>recurse</> determines whether the
     selection will recurse into subdirectories.
 </para>
 </listitem>
 </itemizedlist>
 
 <para>
-<emphasis>class <classname>AllBufferSet</></emphasis>
+<emphasis>class AllBufferSet</emphasis>
 </para>
 
 <para>
@@ -1581,6 +1767,17 @@ Returns the line containing the position of the selection's beginning or end.
     This class represents a buffer set consisting of the current buffer only.
     The constructor has no parameters.
 </para>
+
+<itemizedlist mark=disc>
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public <function>CurrentBufferSet</></>
+  <paramdef></>
+ </funcprototype>
+</funcsynopsis>
+</listitem>
+</itemizedlist>
 
 </listitem>
 
@@ -1692,7 +1889,7 @@ Returns the line containing the position of the selection's beginning or end.
 <sect1 id=class-GUIUtilities><title>Class GUIUtilities</>
 
 <para>
-    Two <type>static</> methods in this class encapsulate the creation and
+    One <type>static</> method in this class encapsulates the creation and
     display of file selection dialogs.
 </para>
 
@@ -1730,7 +1927,7 @@ The <parameter>type</> parameter can either be <constant>JFileChooser.OPEN_DIALO
 <para>
     This method displays the <!-- enhanced, more versatile -->
     <classname>VFSFileChooserDialog</> provided by jEdit.  <!-- In this case, -->
-    Ff <parameter>path</> is set to <constant>null</>, the dialog
+    If <parameter>path</> is set to <constant>null</>, the dialog
     will display the directory of the current buffer.  The final parameter
     determines whether multiple selection of files is permitted.
 </para>
@@ -1873,25 +2070,13 @@ This class is another collection of <type>static</> utility methods.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static String <function>getFileParent</></>
-  <paramdef>String <parameter>path</>
-  </>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the directory in which the file is located.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
   <funcdef>public static String <function>getParentOfFile</></>
   <paramdef>String <parameter>path</></>
  </funcprototype>
 </funcsynopsis>
 <para>
-    Returns the parent directory of the file's directory.
+    Returns the directory containing the specified file.
+    <!-- XXX: for local files only -->
 </para>
 </listitem>
 
@@ -1970,7 +2155,7 @@ This class is another collection of <type>static</> utility methods.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>int <function>compare</></>
+  <funcdef>public int <function>compare</></>
   <paramdef>Object <parameter>obj1</></>
   <paramdef>Object <parameter>obj2</></>
  </funcprototype>
@@ -2000,8 +2185,8 @@ This class is another collection of <type>static</> utility methods.
     Calling <function>quicksort</> on a <classname>Vector</> of
     <classname>String</> objects could therefore take the following form:
 </para>
-<informalexample><programlisting>    MiscUtilities.quicksort( myVectorOfStrings,
-        new StringICaseCompare());</programlisting></informalexample>
+<informalexample><programlisting>MiscUtilities.quicksort(myVectorOfStrings,
+    new StringICaseCompare());</programlisting></informalexample>
 <para>
     There is no return value, but the <classname>Vector</> provided
     as the first parameter will be now be sorted on a case-insensitive basis.

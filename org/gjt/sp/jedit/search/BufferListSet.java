@@ -145,7 +145,8 @@ public class BufferListSet implements SearchFileSet
 	 */
 	public String getCode()
 	{
-		return "null /* not supported */";
+		// not supported for arbitriary filesets
+		return null;
 	}
 
 	// private members

@@ -362,7 +362,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		// view text areas temporarily blank out while a buffer is
 		// being loaded, to indicate to the user that there is no
 		// data available yet.
-		EditBus.send(new BufferUpdate(this,BufferUpdate.LOAD_STARTED));
+		EditBus.send(new BufferUpdate(this,view,BufferUpdate.LOAD_STARTED));
 
 		undo = null;
 		final boolean loadAutosave;
@@ -472,9 +472,9 @@ public class Buffer extends PlainDocument implements EBComponent
 				if(!getFlag(TEMPORARY))
 				{
 					EditBus.send(new BufferUpdate(Buffer.this,
-						BufferUpdate.LOADED));
+						view,BufferUpdate.LOADED));
 					EditBus.send(new BufferUpdate(Buffer.this,
-						BufferUpdate.MARKERS_CHANGED));
+						view,BufferUpdate.MARKERS_CHANGED));
 				}
 
 				try
@@ -654,7 +654,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		setFlag(IO,true);
-		EditBus.send(new BufferUpdate(this,BufferUpdate.SAVING));
+		EditBus.send(new BufferUpdate(this,view,BufferUpdate.SAVING));
 
 		if(path == null)
 			path = this.path;
@@ -727,7 +727,7 @@ public class Buffer extends PlainDocument implements EBComponent
 						modTime = file.lastModified();
 
 					EditBus.send(new BufferUpdate(Buffer.this,
-						BufferUpdate.DIRTY_CHANGED));
+						view,BufferUpdate.DIRTY_CHANGED));
 				}
 			}
 		});
@@ -768,7 +768,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(READ_ONLY,newReadOnly);
 			EditBus.send(new BufferUpdate(this,
-				BufferUpdate.DIRTY_CHANGED));
+				view,BufferUpdate.DIRTY_CHANGED));
 		}
 
 		if(!jEdit.getBooleanProperty("view.checkModStatus"))
@@ -785,7 +785,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			{
 				setFlag(NEW_FILE,true);
 				EditBus.send(new BufferUpdate(this,
-					BufferUpdate.DIRTY_CHANGED));
+					view,BufferUpdate.DIRTY_CHANGED));
 				Object[] args = { path };
 				GUIUtilities.message(view,"filedeleted",args);
 				return;
@@ -971,7 +971,10 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		if(d != old_d)
-			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
+		{
+			EditBus.send(new BufferUpdate(this,null,
+				BufferUpdate.DIRTY_CHANGED));
+		}
 	}
 
 	/**
@@ -1373,7 +1376,10 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		// don't fire it for initial mode set
 		if(oldMode != null)
-			EditBus.send(new BufferUpdate(this,BufferUpdate.MODE_CHANGED));
+		{
+			EditBus.send(new BufferUpdate(this,null,
+				BufferUpdate.MODE_CHANGED));
+		}
 	}
 
 	/**
@@ -2617,7 +2623,10 @@ loop:				for(int i = 0; i < count; i++)
 			markers.addElement(markerN);
 
 		if(!getFlag(LOADING))
-			EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
+		{
+			EditBus.send(new BufferUpdate(this,null,
+				BufferUpdate.MARKERS_CHANGED));
+		}
 	}
 
 	/**
@@ -2636,7 +2645,10 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		if(!getFlag(LOADING))
-			EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
+		{
+			EditBus.send(new BufferUpdate(this,null,
+				BufferUpdate.MARKERS_CHANGED));
+		}
 	}
 
 	/**
@@ -2650,7 +2662,10 @@ loop:				for(int i = 0; i < count; i++)
 		markers.removeAllElements();
 
 		if(!getFlag(LOADING))
-			EditBus.send(new BufferUpdate(this,BufferUpdate.MARKERS_CHANGED));
+		{
+			EditBus.send(new BufferUpdate(this,null,
+				BufferUpdate.MARKERS_CHANGED));
+		}
 	}
 
 	/**
