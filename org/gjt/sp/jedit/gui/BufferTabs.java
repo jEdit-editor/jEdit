@@ -106,26 +106,34 @@ public class BufferTabs extends JTabbedPane
 
 	public void updateBufferTab(Buffer buffer)
 	{
+		int index = buffer.getIndex();
+
 		// if dirty is now true, we just update the tab's icon,
 		// otherwise, the name might have changed (dirty = false
 		// means just saved)
 		if(buffer.isDirty())
 		{
-			int index = buffer.getIndex();
 			setIconAt(index,getIcon(buffer));
 		}
 		else
 		{
-			updating = true;
+			int oldIndex = buffers.indexOf(buffer);
 
-			removeBufferTab(buffer);
-			addBufferTab(buffer);
-// 			selectBufferTab(buffer);
+			if(index != oldIndex)
+			{
+				updating = true;
 
-			updating = false;
+				removeBufferTab(buffer);
+				addBufferTab(buffer);
 
-			if(view.getBuffer() == buffer)
-				selectBufferTab(buffer);
+				updating = false;
+
+				if(view.getBuffer() == buffer)
+					selectBufferTab(buffer);
+			}
+			else
+				setIconAt(index,getIcon(buffer));
+
 		}
 	}
 

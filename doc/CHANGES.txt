@@ -25,6 +25,7 @@ JEDIT VERSION HISTORY
   the file had been modified on disk (since 2.4pre1)
 - All mode files were invalid because their first line was not
   '<?xml version="1.0"?>' (since 2.4pre2)
+- The text area no longer loses focus when saving (since 2.3pre3)
 
 + API Changes
 
