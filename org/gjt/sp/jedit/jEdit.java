@@ -470,6 +470,9 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,"Cannot load"
 					+ " plugin " + plugin);
 				Log.log(Log.ERROR,jEdit.class,io);
+
+				String[] args = { plugin, io.toString() };
+				GUIUtilities.error(null,"plugin.load-error",args);
 			}
 		}
 	}
@@ -2061,6 +2064,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.211  2000/04/06 09:28:08  sp
+ * Better plugin error reporting, search bar updates
+ *
  * Revision 1.210  2000/04/06 02:22:12  sp
  * Incremental search, documentation updates
  *

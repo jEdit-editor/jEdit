@@ -132,7 +132,7 @@ public class SearchBar extends JPanel
 		{
 			Log.log(Log.ERROR,this,bl);
 		}
-		catch(IllegalArgumentException ia)
+		catch(Exception ia)
 		{
 			// invalid regexp, ignore
 		}
@@ -243,6 +243,9 @@ public class SearchBar extends JPanel
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.3  2000/04/06 09:28:08  sp
+ * Better plugin error reporting, search bar updates
+ *
  * Revision 1.2  2000/04/06 02:22:12  sp
  * Incremental search, documentation updates
  *

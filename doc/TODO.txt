@@ -25,7 +25,6 @@ JEDIT TO DO
 + Enhancements
 
 - Update window-editor-* shots
-- JARClassLoader: use GUIUtilities.error() to display errors
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
   to 'Advanced Features'
 - EditPlugin.getName()/Version()/Author(), getPath(), getClassName(), etc

@@ -20,6 +20,8 @@ JEDIT VERSION HISTORY
 - If the plugin list cannot be loaded, the plugin manager now displays a more
   helpful error message telling the user to install the Firewall plugin if they
   are behind a firewall
+- JARClassLoader now displays error messages in more friendly dialog boxes,
+  instead of printing stuff to the activity log
 
 + Bug Fixes
 

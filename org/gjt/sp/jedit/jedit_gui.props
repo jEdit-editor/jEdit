@@ -703,6 +703,51 @@ xmode-parse.title=XML Parse Error
 xmode-parse.message=An error occured while parsing {0}, line {1}:\n\
 	{2}
 
+# JARClassLoader errors
+plugin.load-error.title=Cannot Load Plugin
+plugin.load-error.message=The plugin {0} cannot be loaded\n\
+	({1}).\n\
+	The most likely reason is that the JAR file is corrupt; try\n\
+	reinstalling it. See the activity log for a full stack trace.
+
+plugin.start-error.title=Cannot Start Plugin
+plugin.start-error.message=The plugin {0} cannot be started\n\
+	({1}).\n\
+	Possible reasons include:\n\
+	- the plugin is incompatible with this jEdit release; try installing\n\
+	a new version\n\
+	- a plugin that this one depends on is not installed. Consult the\n\
+	plugin documentation to find out which plugins this one requires.\n\
+	- there is a bug in this plugin. If you suspect this is the case,\n\
+	e-mail the stack trace printed in the activity log to the plugin\n\
+	author.
+
+plugin.already-loaded.title=Plugin Already Loaded
+plugin.already-loaded.message=You have two copies of the {0} plugin.\n\
+	Please remove one of the two copies.
+
+plugin.dep-jdk.title=Unsatisfied Dependency
+plugin.dep-jdk.message=The plugin {0} requires Java {1} or later,\n\
+	but you only have version {2}.
+
+plugin.dep-jedit.title=Unsatisfied Dependency
+plugin.dep-jedit.message=The plugin {0} requires jEdit {1} or later,\n\
+	but you only have version {2}. Download new\n\
+	jEdit versions from <http://jedit.sourceforge.net>.
+
+plugin.dep-plugin.no-version.title=Unsatisfied Dependency
+plugin.dep-plugin.no-version.message=The plugin {0} requires version {1} or later of {2},\n\
+	but {2} does not have any version information. Your version of\n\
+	{2} is probably too old; try installing a new version.
+
+plugin.dep-plugin.title=Unsatisfied Dependency
+plugin.dep-plugin.message=The plugin {0} requires version {1} or later of {2},\n\
+	but you only have {1} version {3}.
+
+plugin.dep-class.title=Unsatisfied Dependency
+plugin.dep-class.message=The plugin {0} requires the class {1}.\n\
+	Try installing the appropriate plugin or class library.
+
 # Buffer options dialog
 buffer_options.title=Buffer Options
 buffer_options.mode=Edit mode:\ 
