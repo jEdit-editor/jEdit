@@ -30,7 +30,7 @@ public class replace_all extends EditAction
 	{
 		View view = getView(evt);
 		Buffer buffer = view.getBuffer();
-		SearchAndReplace.replaceAll(view);
+		SearchAndReplace.replaceAll(view,view);
 	}
 
 	public boolean isRecordable()

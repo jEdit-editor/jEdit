@@ -61,7 +61,9 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void popStatus()
 	{
-		statusMsg.pop();
+		if(!statusMsg.isEmpty())
+			statusMsg.pop();
+
 		JEditTextArea[] textAreas = getTextAreas();
 		for(int i = 0 ; i < textAreas.length; i++)
 			textAreas[i].getStatus().repaint();
@@ -361,12 +363,16 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Shows the wait cursor.
+	 * Shows the wait cursor and glass pane.
 	 */
 	public synchronized void showWaitCursor()
 	{
 		if(waitCount++ == 0)
 		{
+			glassPane.setVisible(true);
+
+			// still needed even though glass pane
+			// has a wait cursor
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 			setCursor(cursor);
 			JEditTextArea[] textAreas = getTextAreas();
@@ -379,7 +385,7 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Hides the wait cursor.
+	 * Hides the wait cursor and glass pane.
 	 */
 	public synchronized void hideWaitCursor()
 	{
@@ -388,6 +394,10 @@ public class View extends JFrame implements EBComponent
 
 		if(waitCount == 0)
 		{
+			glassPane.setVisible(false);
+
+			// still needed even though glass pane
+			// has a wait cursor
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 			setCursor(cursor);
 			cursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
@@ -506,6 +516,9 @@ public class View extends JFrame implements EBComponent
 
 		getContentPane().add(BorderLayout.NORTH,toolBars);
 
+		glassPane = new GlassPane();
+		getRootPane().setGlassPane(glassPane);
+
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
 	}
@@ -535,6 +548,12 @@ public class View extends JFrame implements EBComponent
 	 */
 	protected void processKeyEvent(KeyEvent evt)
 	{
+		if(glassPane.isVisible())
+		{
+			super.processKeyEvent(evt);
+			return;
+		}
+
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_TYPED:
@@ -580,6 +599,7 @@ public class View extends JFrame implements EBComponent
 	private JEditTextArea textArea;
 
 	private InputHandler inputHandler;
+	private GlassPane glassPane;
 
 	private int waitCount;
 
@@ -1342,7 +1362,6 @@ public class View extends JFrame implements EBComponent
 		}
 	}
 
-	// event listeners
 	class CaretHandler implements CaretListener
 	{
 		public void caretUpdate(CaretEvent evt)
@@ -1379,6 +1398,18 @@ public class View extends JFrame implements EBComponent
 		public void windowClosing(WindowEvent evt)
 		{
 			jEdit.closeView(View.this);
+		}
+	}
+
+	class GlassPane extends JComponent
+	{
+		GlassPane()
+		{
+			GlassPane.this.enableEvents(AWTEvent.KEY_EVENT_MASK);
+			GlassPane.this.enableEvents(AWTEvent.MOUSE_EVENT_MASK);
+			GlassPane.this.setOpaque(false);
+			GlassPane.this.setCursor(Cursor.getPredefinedCursor(
+				Cursor.WAIT_CURSOR));
 		}
 	}
 
@@ -1440,6 +1471,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.166  2000/05/04 10:37:04  sp
+ * Wasting time
+ *
  * Revision 1.165  2000/05/01 11:53:23  sp
  * More icons added to toolbar, minor updates here and there
  *
@@ -1466,20 +1500,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.157  2000/04/15 04:14:47  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
- *
- * Revision 1.156  2000/04/14 11:57:38  sp
- * Text area actions moved to org.gjt.sp.jedit.actions package
- *
- * Revision 1.155  2000/04/09 03:14:14  sp
- * Syntax token backgrounds can now be specified
- *
- * Revision 1.154  2000/04/08 09:34:58  sp
- * Documentation updates, minor syntax changes
- *
- * Revision 1.153  2000/04/08 06:10:51  sp
- * Digit highlighting, search bar bug fix
- *
- * Revision 1.152  2000/04/08 02:39:33  sp
- * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
  *
  */

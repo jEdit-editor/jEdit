@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.search;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.JOptionPane;
+import java.awt.Component;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
@@ -191,9 +192,10 @@ public class SearchAndReplace
 	/**
 	 * Finds the next occurance of the search string.
 	 * @param view The view
+	 * @param comp The component to display dialog boxes for
 	 * @return True if the operation was successful, false otherwise
 	 */
-	public static boolean find(View view)
+	public static boolean find(View view, Component comp)
 	{
 		boolean repeat = false;
 		Buffer buffer = fileset.getNextBuffer(view,null);
@@ -237,7 +239,7 @@ loop:			for(;;)
 					return false;
 				}
 
-				int result = JOptionPane.showConfirmDialog(view,
+				int result = JOptionPane.showConfirmDialog(comp,
 					jEdit.getProperty("keepsearching.message"),
 					jEdit.getProperty("keepsearching.title"),
 					JOptionPane.YES_NO_OPTION,
@@ -258,7 +260,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
+			GUIUtilities.error(comp,"searcherror",args);
 		}
 		finally
 		{
@@ -308,9 +310,10 @@ loop:			for(;;)
 	/**
 	 * Replaces the current selection with the replacement string.
 	 * @param view The view
+	 * @param comp The component
 	 * @return True if the operation was successful, false otherwise
 	 */
-	public static boolean replace(View view)
+	public static boolean replace(View view, Component comp)
 	{
 		JEditTextArea textArea = view.getTextArea();
 
@@ -356,7 +359,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
+			GUIUtilities.error(comp,"searcherror",args);
 		}
 
 		return false;
@@ -365,8 +368,9 @@ loop:			for(;;)
 	/**
 	 * Replaces all occurances of the search string with the replacement
 	 * string.
+	 * @param comp The component
 	 */
-	public static boolean replaceAll(View view)
+	public static boolean replaceAll(View view, Component comp)
 	{
 		int lineCount = 0;
 		int fileCount = 0;
@@ -409,7 +413,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
+			GUIUtilities.error(comp,"searcherror",args);
 		}
 		finally
 		{
@@ -537,6 +541,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/05/04 10:37:04  sp
+ * Wasting time
+ *
  * Revision 1.31  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *
@@ -567,14 +574,5 @@ loop:			for(;;)
  *
  * Revision 1.22  1999/12/10 03:22:47  sp
  * Bug fixes, old loading code is now used again
- *
- * Revision 1.21  1999/12/05 03:01:05  sp
- * Perl token marker bug fix, file loading is deferred, style option pane fix
- *
- * Revision 1.20  1999/11/29 02:45:50  sp
- * Scroll bar position saved when switching buffers
- *
- * Revision 1.19  1999/11/28 00:33:07  sp
- * Faster directory search, actions slimmed down, faster exit/close-all
  *
  */

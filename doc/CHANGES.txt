@@ -1,5 +1,17 @@
 JEDIT 2.5 VERSION HISTORY
 
+* Version 2.5pre2
+
++ Enhancements
+
+- User input is blocked while I/O is in progress
+
++ Bug Fixes
+
+- Fixed possible EmptyStackException in View.popStatus() (since 2.5pre1)
+- Possible fix for IBM JDK 1.3 for Linux NPE in
+  EnhancedCheckBoxMenuItem.Model.isSelected()
+
 * Version 2.5pre1
 
 + New Features
@@ -64,7 +76,8 @@ JEDIT 2.5 VERSION HISTORY
   - add a runnable to the I/O thread with VFSManager.runInAWTThread().
     Runnables added with this method are executed after all I/O requests
     are completed.
-- jEdit.openFile() may now return a null value, if, for example, an invalid URL   was specified. This is different from previous jEdit versions, where this
+- jEdit.openFile() may now return a null value, if, for example, an invalid URL
+  was specified. This is different from previous jEdit versions, where this
   method would always return a value.
 - Plugins whose option panes don't implement the init() will no longer work.
   Previously, this method was called with reflection, but now it has been

@@ -166,7 +166,7 @@ public class SearchBar extends JPanel
 					find.addCurrentToHistory();
 					find.setText(null);
 					SearchAndReplace.setSearchString(text);
-					SearchAndReplace.find(view);
+					SearchAndReplace.find(view,SearchBar.this);
 					view.focusOnTextArea();
 				}
 			}
@@ -244,6 +244,9 @@ public class SearchBar extends JPanel
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.6  2000/05/04 10:37:04  sp
+ * Wasting time
+ *
  * Revision 1.5  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

@@ -112,7 +112,7 @@ public class SearchDialog extends EnhancedDialog
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 		save();
-		if(SearchAndReplace.find(view))
+		if(SearchAndReplace.find(view,SearchDialog.this))
 			disposeOrKeepDialog();
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -187,7 +187,7 @@ public class SearchDialog extends EnhancedDialog
 			else if(source == replaceSelection)
 			{
 				save();
-				if(SearchAndReplace.replace(view))
+				if(SearchAndReplace.replace(view,SearchDialog.this))
 					disposeOrKeepDialog();
 				else
 					getToolkit().beep();
@@ -197,7 +197,7 @@ public class SearchDialog extends EnhancedDialog
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 				save();
-				if(SearchAndReplace.replaceAll(view))
+				if(SearchAndReplace.replaceAll(view,SearchDialog.this))
 					disposeOrKeepDialog();
 				else
 					getToolkit().beep();
@@ -222,6 +222,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/05/04 10:37:04  sp
+ * Wasting time
+ *
  * Revision 1.9  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

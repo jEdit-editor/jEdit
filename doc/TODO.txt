@@ -1,23 +1,26 @@
 JEDIT TO DO
 
-2.5:
+2.5pre2:
 
 - Closed views leak memory a rusty bucket
-- Block user input while loading/saving
 - Plugin manager: use swing centering code, JARClassLoader.getLoaded() method
-- Annoying BufferTabs flicker
-- Make HyperSearch a JFrame
 - Abortable I/O
 - Write VFS docs - user and developer
+- Editable toolbar
+- Add macros to context menu and toolbar - hack loadMenuItem() to handle
+  play-macro@... specially
+- $x in macro action command will expand to contents of register 'x'
+
+2.5:
+
+- Annoying BufferTabs flicker
+- Make HyperSearch a JFrame
 - Improve FtpBrowser; add bookmarks, filtering, etc
 - text area doesn't lose focus sometimes
 - TokenMarker: MARK_PREVIOUS should mark to lastOffset not lastKeyword
 - XMode:
   - better error reporting
   - regexps
-- Editable toolbar
-- Add macros to context menu and toolbar - hack loadMenuItem() to handle
-  play-macro@... specially
 - Plugin devel manual needs more work:
   - document views, buffers
   - how to write text area and gutter hilites
@@ -27,7 +30,6 @@ JEDIT TO DO
   - customizable font size?
 - Threaded HyperSearch
 - set dirty to false when all undos undone
-- GUIUtilities.<message,error,input>(Component,String,Object[])
 
 Later:
 

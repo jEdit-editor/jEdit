@@ -29,7 +29,7 @@ public class replace_in_selection extends EditAction
 	{
 		View view = getView(evt);
 		Buffer buffer = view.getBuffer();
-		SearchAndReplace.replace(view);
+		SearchAndReplace.replace(view,view);
 	}
 
 	public boolean isRecordable()

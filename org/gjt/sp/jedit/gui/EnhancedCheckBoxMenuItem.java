@@ -127,6 +127,9 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		public boolean isSelected()
 		{
+			if(!isShowing())
+				return false;
+
 			return action.isSelected(EnhancedCheckBoxMenuItem.this);
 		}
 

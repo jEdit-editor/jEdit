@@ -210,16 +210,16 @@ public class GUIUtilities
 	 * from the <code><i>name</i>.message</code> property. The message
 	 * is formatted by the property manager with <code>args</code> as
 	 * positional parameters.
-	 * @param frame The frame to display the dialog for
+	 * @param comp The component to display the dialog for
 	 * @param name The name of the dialog
 	 * @param args Positional parameters to be substituted into the
 	 * message text
 	 */
-	public static void message(Frame frame, String name, Object[] args)
+	public static void message(Component comp, String name, Object[] args)
 	{
 		hideSplashScreen();
 
-		JOptionPane.showMessageDialog(frame,
+		JOptionPane.showMessageDialog(comp,
 			jEdit.getProperty(name.concat(".message"),args),
 			jEdit.getProperty(name.concat(".title"),args),
 			JOptionPane.INFORMATION_MESSAGE);
@@ -232,16 +232,16 @@ public class GUIUtilities
 	 * from the <code><i>name</i>.message</code> property. The message
 	 * is formatted by the property manager with <code>args</code> as
 	 * positional parameters.
-	 * @param frame The frame to display the dialog for
+	 * @param comp The component to display the dialog for
 	 * @param name The name of the dialog
 	 * @param args Positional parameters to be substituted into the
 	 * message text
 	 */
-	public static void error(Frame frame, String name, Object[] args)
+	public static void error(Component comp, String name, Object[] args)
 	{
 		hideSplashScreen();
 
-		JOptionPane.showMessageDialog(frame,
+		JOptionPane.showMessageDialog(comp,
 			jEdit.getProperty(name.concat(".message"),args),
 			jEdit.getProperty(name.concat(".title"),args),
 			JOptionPane.ERROR_MESSAGE);
@@ -252,15 +252,15 @@ public class GUIUtilities
 	 * The title of the dialog is fetched from
 	 * the <code><i>name</i>.title</code> property. The message is fetched
 	 * from the <code><i>name</i>.message</code> property.
-	 * @param frame The frame to display the dialog for
+	 * @param comp The component to display the dialog for
 	 * @param name The name of the dialog
 	 * @param def The text to display by default in the input field
 	 */
-	public static String input(Frame frame, String name, Object def)
+	public static String input(Component comp, String name, Object def)
 	{
 		hideSplashScreen();
 
-		String retVal = (String)JOptionPane.showInputDialog(frame,
+		String retVal = (String)JOptionPane.showInputDialog(comp,
 			jEdit.getProperty(name.concat(".message")),
 			jEdit.getProperty(name.concat(".title")),
 			JOptionPane.QUESTION_MESSAGE,null,null,def);
@@ -272,15 +272,15 @@ public class GUIUtilities
 	 * The title of the dialog is fetched from
 	 * the <code><i>name</i>.title</code> property. The message is fetched
 	 * from the <code><i>name</i>.message</code> property.
-	 * @param frame The frame to display the dialog for
+	 * @param comp The component to display the dialog for
 	 * @param name The name of the dialog
 	 * @param def The property whose text to display in the input field
 	 */
-	public static String inputProperty(Frame frame, String name, String def)
+	public static String inputProperty(Component comp, String name, String def)
 	{
 		hideSplashScreen();
 
-		String retVal = (String)JOptionPane.showInputDialog(frame,
+		String retVal = (String)JOptionPane.showInputDialog(comp,
 			jEdit.getProperty(name.concat(".message")),
 			jEdit.getProperty(name.concat(".title")),
 			JOptionPane.QUESTION_MESSAGE,
@@ -718,6 +718,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.57  2000/05/04 10:37:04  sp
+ * Wasting time
+ *
  * Revision 1.56  2000/04/28 09:29:11  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

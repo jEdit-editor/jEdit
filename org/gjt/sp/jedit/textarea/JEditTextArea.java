@@ -30,6 +30,7 @@ import java.util.Vector;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.Log;
 
 /**
@@ -1589,8 +1590,14 @@ public class JEditTextArea extends JComponent
 	 */
 	protected void processKeyEvent(KeyEvent evt)
 	{
-		InputHandler inputHandler = EditAction.getView(evt)
-			.getInputHandler();
+		View view = EditAction.getView(evt);
+		if(view.getRootPane().getGlassPane().isVisible())
+		{
+			super.processKeyEvent(evt);
+			return;
+		}
+
+		InputHandler inputHandler = view.getInputHandler();
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_TYPED:
@@ -2186,6 +2193,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.58  2000/05/04 10:37:04  sp
+ * Wasting time
+ *
  * Revision 1.57  2000/04/30 07:27:14  sp
  * Ftp VFS hacking, bug fixes
  *

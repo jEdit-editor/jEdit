@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.MacrosChanged;
 import org.gjt.sp.util.Log;
@@ -230,6 +231,10 @@ public class Macros
 		view.getInputHandler().executeAction(_action,view.getTextArea(),
 			actionCommand);
 
+		// wait for all I/O to complete before going on to the
+		// next action
+		VFSManager.waitForRequests();
+
 		return true;
 	}
 
@@ -381,6 +386,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/05/04 10:37:04  sp
+ * Wasting time
+ *
  * Revision 1.22  2000/04/28 09:29:11  sp
  * Key binding handling improved, VFS updates, some other stuff
  *
