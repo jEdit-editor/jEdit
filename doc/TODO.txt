@@ -2,28 +2,20 @@ TO DO
 
 + would be nice to have before pre6:
 
-- new xToOffset()
-- don't show replace all results when running from macro
-- pre6 will be the last pre-release before 3.2final.
 - console: add go to console action
 - console 3.0: MUST FINISH!!!
-- document new macro layout!!!
+- new xToOffset()
 - mention using Macros.message() in macro-tips
-- some macros removed:
-  Go_to_Clipper
-  Go_to_JBrowse
-  Go_to_Console
-  Show_Dual_Diff
 - reload: preserve caret position
 - finish duplicate shortcut code
-- FTP plugin: investigate soft links
-- FTP plugin: better error messages
-- FTP plugin: improve it in general before 3.2
-- installing source for already installed plugins
 
 + lower priority/later:
 
+- installing source for already installed plugins
 - make XML plugin more respectable
+- FTP plugin: investigate soft links
+- FTP plugin: better error messages
+- FTP plugin: improve it in general before 3.2
 - get web start to work, and document differences between web start and
   stand-alone version
 - next time i'm making an RPM, fix the shell script

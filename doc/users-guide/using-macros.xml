@@ -108,7 +108,7 @@
     Macros supplied with jEdit, as well as macros that you record or write,
     are displayed under the <guimenu>Macros</guimenu> menu item in a
     hierarchical structure. The jEdit installation includes about 50 macros
-    provided in seven major categories. Each category corresponds to a
+    divided into several major categories. Each category corresponds to a
     nested submenu under the <guimenu>Macros</guimenu> menu. An index of
     these macros containing short descriptions and usage notes is found in
     <xref linkend="macro-index"/>.
