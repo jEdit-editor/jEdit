@@ -112,6 +112,9 @@ class Roster
 			if(srcFile.exists())
 				ok &= deleteRecursively(srcFile);
 
+			String[] args = { plugin };
+			if(!ok)
+				GUIUtilities.error(progress,"plugin-manager.remove-failed",args);
 			return ok;
 		}
 
@@ -178,6 +181,11 @@ class Roster
 				install(progress,path,installDirectory);
 
 				return true;
+			}
+			catch(InterruptedIOException iio)
+			{
+				// do nothing, user clicked 'Stop'
+				return false;
 			}
 			catch(IOException io)
 			{

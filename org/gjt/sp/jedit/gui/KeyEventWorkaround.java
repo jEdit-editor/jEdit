@@ -122,35 +122,3 @@ public class KeyEventWorkaround
 		lastKeyTime = System.currentTimeMillis();
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.9  2000/11/26 01:43:35  sp
- * x86 assembly mode, various other stuff
- *
- * Revision 1.8  2000/11/13 11:19:27  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.7  2000/11/12 05:36:50  sp
- * BeanShell integration started
- *
- * Revision 1.6  2000/10/28 00:36:58  sp
- * ML mode, Haskell mode
- *
- * Revision 1.5  2000/10/05 04:30:10  sp
- * *** empty log message ***
- *
- * Revision 1.4  2000/09/26 10:19:47  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.3  2000/09/23 03:01:10  sp
- * pre7 yayayay
- *
- * Revision 1.2  2000/09/09 04:00:34  sp
- * 2.6pre6
- *
- * Revision 1.1  2000/09/07 04:46:08  sp
- * bug fixes
- *
- */

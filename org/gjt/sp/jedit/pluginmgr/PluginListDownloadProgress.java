@@ -24,6 +24,7 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.InterruptedIOException;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -52,7 +53,7 @@ class PluginListDownloadProgress extends JDialog
 		content.add(BorderLayout.CENTER,box);
 
 		addWindowListener(new WindowHandler());
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(window);
 		setResizable(false);
@@ -75,6 +76,10 @@ class PluginListDownloadProgress extends JDialog
 			try
 			{
 				list = new PluginList();
+			}
+			catch(InterruptedIOException iio)
+			{
+				// do nothing, user clicked Stop
 			}
 			catch(XmlException xe)
 			{
@@ -109,8 +114,7 @@ class PluginListDownloadProgress extends JDialog
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			thread.stop();
-			dispose();
+			thread.interrupt();
 		}
 	}
 
@@ -126,6 +130,11 @@ class PluginListDownloadProgress extends JDialog
 			done = true;
 			thread = new DownloadThread();
 			thread.start();
+		}
+
+		public void windowClosing(WindowEvent evt)
+		{
+			thread.interrupt();
 		}
 	}
 }

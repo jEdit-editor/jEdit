@@ -60,17 +60,16 @@
      See <xref linkend=settings-directory>.</entry>
     </row>
     <row>
-     <entry>-nosplash</>
-     <entry>Starts jEdit without displaying the splash screen.
-     Has no effect
-     when connecting to another instance via the edit server.</entry>
-    </row>
-    <row>
      <entry>-nostartupmacro</>
      <entry>Does not run the startup macro if one is present.
      See <xref linkend=startup-macro>.
      Has no effect
      when connecting to another instance via the edit server.</entry>
+    </row>
+    <row>
+     <entry>-server</entry>
+     <entry>Stores the server port info in the file named <filename>server</>
+     inside the settings directory.</entry>
     </row>
     <row>
      <entry>-server=<replaceable>name</></entry>

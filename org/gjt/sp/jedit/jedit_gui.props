@@ -959,7 +959,7 @@ options.plugins.label=Plugin Options
 options.general.label=General
 options.general.lf.note=Restart jEdit for look & feel changes to take effect
 options.general.lf=Swing look & feel:
-options.general.history=Maximum history list length:
+options.general.history=History entries to remember:
 options.general.saveCaret=Save caret positions in recent file list
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort buffer list by file name, instead of path name
@@ -969,6 +969,7 @@ options.general.showFullPath=Show full path of buffer in title bar
 options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher
 options.general.showTips=Show tips on startup
+options.general.showSplash=Show splash screen on startup
 
 options.loadsave.label=Loading & Saving
 options.loadsave.encoding=File encoding:
@@ -1422,5 +1423,6 @@ plugin-manager.done.title=Operations Complete
 plugin-manager.done.message=You must restart jEdit for plugin installation\n\
 	and removal to take effect.
 
-plugin-manager.failed.title=Operations Failed
-plugin-manager.failed.message=One or more operations could not be completed.
+plugin-manager.remove-failed.title=Remove Failed
+plugin-manager.remove-failed.message=The plugin {0}\n\
+	could not be removed.

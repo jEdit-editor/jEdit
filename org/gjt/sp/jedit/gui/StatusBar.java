@@ -48,35 +48,50 @@ public class StatusBar extends JPanel
 {
 	public StatusBar(View view)
 	{
-		super(new BorderLayout());
+		super(new BorderLayout(3,3));
+		setBorder(new EmptyBorder(3,0,0,0));
 
 		this.view = view;
 
+		Border border = new BevelBorder(BevelBorder.LOWERED);
+
 		caretStatus = new VICaretStatus();
+		caretStatus.setFont(UIManager.getFont("Label.font"));
+		caretStatus.setBorder(border);
 		add(BorderLayout.WEST,caretStatus);
 
-		Font font = new Font("Dialog",Font.BOLD,10);
 		message = new JLabel();
 		message.setForeground(UIManager.getColor("Button.foreground"));
-		message.setFont(font);
+		message.setBorder(border);
 		add(BorderLayout.CENTER,message);
 
 		Box box = new Box(BoxLayout.X_AXIS);
-		ioProgress = new MiniIOProgress();
-		box.add(Box.createHorizontalStrut(3));
-		box.add(ioProgress);
 		multiSelect = new JLabel("multi");
-		multiSelect.setFont(font);
+		multiSelect.setBorder(border);
 		box.add(multiSelect);
 		box.add(Box.createHorizontalStrut(3));
 		overwrite = new JLabel("over");
-		overwrite.setFont(font);
+		overwrite.setBorder(border);
 		box.add(overwrite);
 		box.add(Box.createHorizontalStrut(3));
 		narrow = new JLabel("narrow");
-		narrow.setFont(font);
+		narrow.setBorder(border);
 		box.add(narrow);
+
 		updateMiscStatus();
+
+		box.add(Box.createHorizontalStrut(3));
+		ioProgress = new MiniIOProgress();
+		ioProgress.setBorder(border);
+		box.add(ioProgress);
+
+
+		// UI hack because BoxLayout does not give all components the
+		// same height
+		Dimension dim = multiSelect.getPreferredSize();
+		dim.width = 40;
+		// dim.height = <same as all other components>
+		ioProgress.setPreferredSize(dim);
 
 		add(BorderLayout.EAST,box);
 	}
@@ -149,17 +164,6 @@ public class StatusBar extends JPanel
 		{
 			VICaretStatus.this.setForeground(UIManager.getColor("Button.foreground"));
 			VICaretStatus.this.setBackground(UIManager.getColor("Label.background"));
-
-			Font font = new Font("Dialog", Font.BOLD, 10);
-			VICaretStatus.this.setFont(font);
-
-			FontMetrics fm = VICaretStatus.this.getToolkit()
-				.getFontMetrics(font);
-			size = new Dimension(fm.stringWidth(testStr) + 4,
-				fm.getHeight());
-
-			VICaretStatus.this.setPreferredSize(size);
-			VICaretStatus.this.setMaximumSize(size);
 		}
 
 		public void paintComponent(Graphics g)
@@ -215,8 +219,19 @@ public class StatusBar extends JPanel
 				buf.append('%');
 			}
 
-			g.drawString(buf.toString(), 2,
+			g.drawString(buf.toString(),
+				VICaretStatus.this.getBorder().getBorderInsets(this).left + 1,
 				(VICaretStatus.this.getHeight() + fm.getAscent()) / 2 - 1);
+		}
+
+		public Dimension getPreferredSize()
+		{
+			FontMetrics fm = VICaretStatus.this.getToolkit()
+				.getFontMetrics(VICaretStatus.this.getFont());
+			size = new Dimension(fm.stringWidth(testStr) + 6,
+				fm.getHeight());
+
+			return size;
 		}
 
 		// private members
@@ -295,15 +310,17 @@ public class StatusBar extends JPanel
 			else
 			{
 				icon.paintIcon(this,g,MiniIOProgress.this.getWidth()
-					- icon.getIconWidth() - 2,
+					- icon.getIconWidth() - 3,
 					(MiniIOProgress.this.getHeight()
 					- icon.getIconHeight()) / 2);
 			}
 
-			int progressHeight = MiniIOProgress.this.getHeight()
+			Insets insets = MiniIOProgress.this.getBorder().getBorderInsets(this);
+
+			int progressHeight = (MiniIOProgress.this.getHeight() - insets.top - insets.bottom)
 				/ ioThreadPool.getThreadCount();
 			int progressWidth = MiniIOProgress.this.getWidth()
-				- icon.getIconWidth() - 8;
+				- icon.getIconWidth() - insets.left - insets.right - 2;
 
 			for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
 			{
@@ -320,19 +337,14 @@ public class StatusBar extends JPanel
 				// than progressMaximum (file size)
 				progressRatio = Math.min(progressRatio,1.0);
 
-				g.fillRect(0,progressHeight / 2 + i * progressHeight,
-					(int)(progressRatio * progressWidth),1);
+				g.fillRect(insets.left,insets.top + i * progressHeight,
+					(int)(progressRatio * progressWidth),progressHeight);
 			}
 		}
 
 		public Dimension getPreferredSize()
 		{
 			return new Dimension(40,icon.getIconHeight());
-		}
-
-		public Dimension getMaximumSize()
-		{
-			return getPreferredSize();
 		}
 
 		// private members

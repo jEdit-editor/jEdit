@@ -8,6 +8,15 @@ JEDIT 3.2 VERSION HISTORY
 - Specifying a repeat count greater than 20 displays a confirmation
   dialog box
 - C+ENTER displays a prompt now
+- On MacOS X, jEdit's menus are now placed into the system menu bar,
+  not in a fake 'menu bar' inside views
+- Status bar has a new look
+- jEdit no longer uses hard-coded fonts for the buffer switcher, search
+  bar and status bar
+- -nosplash command line switch removed, splash screen can now be
+  enabled and disabled in the Utilities->Global Options dialog box
+- Expanding a fold will now attempt to scroll the text area in order to
+  make the fold visible, if possible
 
 + Bug Fixes
 
@@ -17,6 +26,10 @@ JEDIT 3.2 VERSION HISTORY
   on Windows. This caused problems when saving files, for example,
   because #<filename>#save# would never be renamed to <filename>
 - Fixed several bugs in the 'scroll to caret' code
+- Partial fix for Java 1.4 key event problems
+- The recent file list was being reversed each time jEdit was run!!!
+- Improved handling of 'Stop' button in plugin manager progress dialog
+  boxes
 
 * Version 3.2pre2
 

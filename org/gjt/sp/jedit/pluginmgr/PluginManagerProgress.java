@@ -135,8 +135,10 @@ public class PluginManagerProgress extends JDialog
 						}
 						else
 						{
-							GUIUtilities.message(PluginManagerProgress.this,
-								"plugin-manager.failed",null);
+							// user will see an error in any case
+
+							//GUIUtilities.message(PluginManagerProgress.this,
+							//	"plugin-manager.failed",null);
 						}
 					}
 				});

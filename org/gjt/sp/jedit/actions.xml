@@ -275,13 +275,13 @@
 
 <ACTION NAME="expand-fold">
 	<CODE>
-		buffer.expandFoldAt(textArea.getCaretLine(),true);
+		buffer.expandFoldAt(textArea.getCaretLine(),true,textArea);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="expand-one-level">
 	<CODE>
-		buffer.expandFoldAt(textArea.getCaretLine(),false);
+		buffer.expandFoldAt(textArea.getCaretLine(),false,textArea);
 	</CODE>
 </ACTION>
 

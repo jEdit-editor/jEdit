@@ -37,17 +37,17 @@ public class SearchBar extends JPanel
 
 		this.view = view;
 
-		Font boldFont = new Font("Dialog",Font.BOLD,10);
-		Font plainFont = new Font("Dialog",Font.PLAIN,10);
+		//Font boldFont = new Font("Dialog",Font.BOLD,12);
+		//Font plainFont = new Font("Dialog",Font.PLAIN,12);
 
 		JLabel label = new JLabel(jEdit.getProperty("view.search.find"));
-		label.setFont(boldFont);
+		//label.setFont(boldFont);
 		label.setBorder(new EmptyBorder(0,2,0,12));
 		add(label,BorderLayout.WEST);
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
 		box.add(find = new HistoryTextField("find"));
-		find.setFont(plainFont);
+		//find.setFont(plainFont);
 		Dimension min = find.getPreferredSize();
 		min.width = Integer.MAX_VALUE;
 		find.setMaximumSize(min);
@@ -64,19 +64,19 @@ public class SearchBar extends JPanel
 		buttons.add(Box.createHorizontalStrut(12));
 		buttons.add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.case")));
-		ignoreCase.setFont(boldFont);
+		//ignoreCase.setFont(boldFont);
 		ignoreCase.addActionListener(actionHandler);
 		ignoreCase.setMargin(margin);
 		buttons.add(Box.createHorizontalStrut(2));
 		buttons.add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
-		regexp.setFont(boldFont);
+		//regexp.setFont(boldFont);
 		regexp.addActionListener(actionHandler);
 		regexp.setMargin(margin);
 		buttons.add(Box.createHorizontalStrut(2));
 		buttons.add(hyperSearch = new JCheckBox(jEdit.getProperty(
 			"search.hypersearch")));
-		hyperSearch.setFont(boldFont);
+		//hyperSearch.setFont(boldFont);
 		hyperSearch.addActionListener(actionHandler);
 		hyperSearch.setMargin(margin);
 
@@ -306,7 +306,7 @@ public class SearchBar extends JPanel
 				view.getEditPane().focusOnTextArea();
 				break;
 			case KeyEvent.VK_ENTER:
-				if(evt.getModifiers() == InputEvent.SHIFT_MASK)
+				if(evt.isShiftDown())
 				{
 					evt.consume();
 					find(true);

@@ -102,30 +102,28 @@ public class GrabKeyDialog extends JDialog
 		if(shortcut.getDocument().getLength() != 0)
 			keyString.append(' ');
 
-		int modifiers = evt.getModifiers();
 		boolean appendPlus = false;
 
-		if((modifiers & InputEvent.CTRL_MASK) != 0)
+		if(evt.isControlDown())
 		{
 			keyString.append('C');
 			appendPlus = true;
 		}
 
-		if((modifiers & InputEvent.ALT_MASK) != 0)
+		if(evt.isAltDown())
 		{
 			keyString.append('A');
 			appendPlus = true;
 		}
 
-		if((modifiers & InputEvent.META_MASK) != 0)
+		if(evt.isMetaDown())
 		{
 			keyString.append('M');
 			appendPlus = true;
 		}
 
 		// don't want Shift+'d' recorded as S+D
-		if(evt.getID() != KeyEvent.KEY_TYPED
-			&& (modifiers & InputEvent.SHIFT_MASK) != 0)
+		if(evt.getID() != KeyEvent.KEY_TYPED && evt.isShiftDown())
 		{
 			keyString.append('S');
 			appendPlus = true;

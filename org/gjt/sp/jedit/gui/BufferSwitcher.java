@@ -33,7 +33,7 @@ public class BufferSwitcher extends JComboBox
 	{
 		this.editPane = editPane;
 
-		setFont(new Font("Dialog",Font.BOLD,10));
+		//setFont(new Font("Dialog",Font.BOLD,10));
 		setRenderer(new BufferCellRenderer());
 		setMaximumRowCount(10);
 		addActionListener(new ActionHandler());

@@ -408,7 +408,7 @@ public class JEditTextArea extends JComponent
 	public void scrollToCaret(boolean doElectricScroll)
 	{
 		if(!buffer.isLineVisible(caretLine))
-			buffer.expandFoldAt(caretLine,true);
+			buffer.expandFoldAt(caretLine,true,this);
 
 		int offset = caret - getLineStartOffset(caretLine);
 		int virtualCaretLine = buffer.physicalToVirtual(caretLine);
@@ -4910,12 +4910,11 @@ forward_scan:		do
 
 		private void doSingleClick(MouseEvent evt)
 		{
-			if((evt.getModifiers() & InputEvent.SHIFT_MASK) != 0)
+			if(evt.isShiftDown())
 			{
 				// XXX: getMarkPosition() deprecated!
 				resizeSelection(getMarkPosition(),dragStart,
-					(evt.getModifiers()
-					& InputEvent.CTRL_MASK) != 0);
+					evt.isControlDown());
 
 				moveCaretPosition(dragStart,false);
 
@@ -5008,7 +5007,7 @@ forward_scan:		do
 				|| (popup != null && popup.isVisible()))
 				return;
 
-			boolean rect = ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0);
+			boolean rect = evt.isControlDown();
 
 			switch(clickCount)
 			{

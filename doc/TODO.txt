@@ -1,34 +1,41 @@
 TO DO
 
-- large selections make the text area trip
-- plugin manager: aborts not handled gracefully
-- plugin manager: clicking stop in plugin list progress shouldn't leak fds
+before pre3:
+
+- get web start to work
+- enter:
+  {
+	foo
+  }
+  Collapse { line, put caret at start, delete line, undo.
+- encoding option in VFS browser
+- catch MalformedInputException and display a better error message
+- console: windows built-ins don't work?
+
+later:
+
+- mode, line sep, encoding in status
+- server property
+- reuseview property
+- background property
 - narrow indicator in status
-- encoding indicator in status (or buffer selector)
+- Java 1.4 key events: DefaultInputHandler
+- Java 1.4 key events: KeyEventWorkaround (not needed with Java 1.4!!!)
+- large selections make the text area trip
 - replace in sel doesn't work if rect
 - test edit server
 - broken reverse search
 - italics font metrics bugs
 - vfs browser: >1 request error when clicking 'up'?
 - text style bugs
-- find again and multiple files?
-- Java 1.4 bugs
-- expand fold: scroll to last line of fold
-- get web start to work
 - macros in web start version
 - caret event not always fired
 - XThis: don't throw exceptions for non-existent methods
 - need to track down s.end < s.start cases
 - jEditLauncher
 - scroll lock key toggles 'scroll mode'
-- on OS X, make macos l&f the default
 - folding paint up bug
 - prev line fold gutter bug
-- enter:
-  {
-	foo
-  }
-  Collapse { line, put caret at start, delete line, undo.
 - tabbing to text area fails
 - rewritten folding: Fold object, pointer to next of curr. level, each
   text area has visibility hashtable
@@ -41,8 +48,6 @@ TO DO
 - regexps in XMode
 - improve handling of DIGIT sequences
 - DELEGATE in EOL_SPAN
-- encoding option in VFS browser
-- catch MalformedInputException and display a better error message
 - failed saves should not clear the dirty flag
 - reverse regexp search
 - finish persistent splits

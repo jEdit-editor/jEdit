@@ -469,15 +469,9 @@ public class HelpViewer extends JFrame
 				super.processMouseEvent(evt);
 				break;
 			case MouseEvent.MOUSE_CLICKED:
-				if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+				TreePath path = getPathForLocation(evt.getX(),evt.getY());
+				if(path != null)
 				{
-					TreePath path = getPathForLocation(evt.getX(),evt.getY());
-					if(path == null)
-					{
-						super.processMouseEvent(evt);
-						break;
-					}
-
 					if(!isPathSelected(path))
 						setSelectionPath(path);
 

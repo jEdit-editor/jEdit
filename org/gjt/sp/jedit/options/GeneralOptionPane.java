@@ -21,7 +21,9 @@ package org.gjt.sp.jedit.options;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class GeneralOptionPane extends AbstractOptionPane
 {
@@ -103,11 +105,21 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"view.showBufferSwitcher"));
 		addComponent(showBufferSwitcher);
 
-		/* Show buffer switcher */
+		/* Show tip of the day */
 		showTips = new JCheckBox(jEdit.getProperty(
 			"options.general.showTips"));
 		showTips.setSelected(jEdit.getBooleanProperty("tip.show"));
 		addComponent(showTips);
+
+		/* Show splash screen */
+		showSplash = new JCheckBox(jEdit.getProperty(
+			"options.general.showSplash"));
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			showSplash.setSelected(true);
+		else
+			showSplash.setSelected(!new File(settingsDirectory,"nosplash").exists());
+		addComponent(showSplash);
 	}
 
 	protected void _save()
@@ -127,6 +139,30 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.showBufferSwitcher",
 			showBufferSwitcher.isSelected());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
+
+		// this is handled a little differently from other jEdit settings
+		// as the splash screen flag needs to be known very early in the
+		// startup sequence, before the user properties have been loaded
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory != null)
+		{
+			File file = new File(settingsDirectory,"nosplash");
+			if(showSplash.isSelected())
+				file.delete();
+			else
+			{
+				try
+				{
+					FileOutputStream out = new FileOutputStream(file);
+					out.write('\n');
+					out.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,this,io);
+				}
+			}
+		}
 	}
 
 	// private members
@@ -141,4 +177,5 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox showSearchbar;
 	private JCheckBox showBufferSwitcher;
 	private JCheckBox showTips;
+	private JCheckBox showSplash;
 }

@@ -92,7 +92,6 @@ public class jEdit
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
 		boolean restore = true;
-		boolean showSplash = true;
 		boolean showGUI = true;
 		boolean noStartupMacro = false;
 
@@ -125,6 +124,8 @@ public class jEdit
 					settingsDirectory = arg.substring(10);
 				else if(arg.startsWith("-noserver"))
 					portFile = null;
+				else if(arg.equals("-server"))
+					portFile = "server";
 				else if(arg.startsWith("-server="))
 					portFile = arg.substring(8);
 				else if(arg.startsWith("-background"))
@@ -133,8 +134,6 @@ public class jEdit
 					showGUI = false;
 				else if(arg.equals("-norestore"))
 					restore = false;
-				else if(arg.equals("-nosplash"))
-					showSplash = false;
 				else if(arg.equals("-nostartupmacro"))
 					noStartupMacro = true;
 				else if(arg.equals("-newview"))
@@ -210,11 +209,17 @@ public class jEdit
 			}
 		}
 
-		// Show the kool splash screen
-		if(showSplash)
-			GUIUtilities.showSplashScreen();
+		// MacOS X GUI hacks
+		if(System.getProperty("os.name").indexOf("MacOS X") != -1)
+		{
+			// put the menu bar at the top of the screen, as opposed to
+			// inside the jEdit window
+			System.getProperties().put("com.apple.macos.useScreenMenuBar","true");
+		}
 
 		// Initialize activity log and settings directory
+		boolean showSplash = true;
+
 		Writer stream;
 		if(settingsDirectory != null)
 		{
@@ -237,11 +242,20 @@ public class jEdit
 				e.printStackTrace();
 				stream = null;
 			}
+
+			// don't show splash screen if there is a file named
+			// 'nosplash' in the settings directory
+			if(new File(settingsDirectory,"nosplash").exists())
+				showSplash = false;
 		}
 		else
 		{
 			stream = null;
 		}
+
+		// Show the kool splash screen
+		if(showSplash)
+			GUIUtilities.showSplashScreen();
 
 		Log.init(true,level,stream);
 		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
@@ -1140,6 +1154,11 @@ public class jEdit
 				out.write(lineSep);
 				buffer = buffer.next;
 			}
+
+			out.write("splits\t");
+			out.write(view.getSplitConfig());
+			out.write(lineSep);
+
 			out.close();
 		}
 		catch(IOException io)
@@ -2072,6 +2091,8 @@ public class jEdit
 		System.out.println("	-usage: Print this message and exit");
 		System.out.println("	-norestore: Don't restore previously open files");
 		System.out.println("	-noserver: Don't start edit server");
+		System.out.println("	-server: Read/write server"
+			+ " info from/to $HOME/.jedit/server");
 		System.out.println("	-server=<name>: Read/write server"
 			+ " info from/to $HOME/.jedit/<name>");
 
@@ -2080,7 +2101,6 @@ public class jEdit
 			+ " settings");
 		System.out.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
-		System.out.println("	-nosplash: Don't show splash screen");
 		System.out.println("	-nostartupmacro: Don't run startup macro");
 		System.out.println("	-background: Run in background mode");
 		System.out.println("	-nogui: Don't create initial view in background mode");

@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
 /**
@@ -2298,10 +2299,11 @@ loop:				for(int i = 0; i < count; i++)
 	 * @param line The first line number of the fold
 	 * @param fully If true, fold will be expanded fully, otherwise
 	 * only one level will be expanded
+	 * @param textArea Text area for scrolling purposes
 	 * @return False if there are no folds in the buffer
-	 * @since jEdit 3.1pre2
+	 * @since jEdit 3.3pre3
 	 */
-	public boolean expandFoldAt(int line, boolean fully)
+	public boolean expandFoldAt(int line, boolean fully, JEditTextArea textArea)
 	{
 		int initialFoldLevel = getFoldLevel(line);
 
@@ -2430,6 +2432,17 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		fireFoldStructureChanged();
+
+		if(textArea != null)
+		{
+			int firstLine = textArea.getFirstLine();
+			int visibleLines = textArea.getVisibleLines();
+			if(virtualLine + delta >= firstLine + visibleLines
+				&& delta < visibleLines)
+			{
+				textArea.setFirstLine(virtualLine + delta - visibleLines - 1);
+			}
+		}
 
 		return true;
 	}

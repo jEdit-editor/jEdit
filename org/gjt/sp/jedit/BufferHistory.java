@@ -88,7 +88,7 @@ public class BufferHistory
 					selection = line.substring(index2 + 1);
 				}
 
-				addEntry(new Entry(path,caret,selection));
+				history.addElement(new Entry(path,caret,selection));
 			}
 
 			in.close();
