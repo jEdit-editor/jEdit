@@ -150,8 +150,8 @@
 		<exec executable="pdfjadetex" dir="doc/users-guide">
 			<arg value="users-guide.tex"/>
 		</exec>
-		<move src="doc/users-guide/users-guide.pdf"
-			dest="doc/users-guide/users-guide-letter.pdf"/>
+		<move file="doc/users-guide/users-guide.pdf"
+			tofile="doc/users-guide/users-guide-letter.pdf" />
 	</target>
 
 	<target name="docs-pdf-openjade-a4">
@@ -172,8 +172,8 @@
 		<exec executable="pdfjadetex" dir="doc/users-guide">
 			<arg value="users-guide.tex"/>
 		</exec>
-		<move src="doc/users-guide/users-guide.pdf"
-			dest="doc/users-guide/users-guide-a4.pdf"/>
+		<move file="doc/users-guide/users-guide.pdf"
+			tofile="doc/users-guide/users-guide-a4.pdf" />
 	</target>
 
 	<target name="javadoc"
