@@ -692,6 +692,10 @@ public class View extends JFrame implements EBComponent
 		{
 			textArea.setElectricScroll(0);
 		}
+
+		// Set up the right-click popup menu
+		textArea.setRightClickPopup(GUIUtilities
+			.loadPopupMenu(this,"view.context"));
 	}
 
 	private void loadStyles()
@@ -835,10 +839,6 @@ public class View extends JFrame implements EBComponent
 
 		// Add the line number display
 		textArea.add(JEditTextArea.LEFT_OF_SCROLLBAR,new StatusBar(textArea));
-
-		// Set up the right-click popup menu
-		textArea.setRightClickPopup(GUIUtilities
-			.loadPopupMenu(this,"view.context"));
 
 		textArea.getGutter().setContextMenu(GUIUtilities
 			.loadPopupMenu(this,"gutter.context"));
@@ -1366,6 +1366,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.158  2000/04/18 08:27:52  sp
+ * Context menu editor started
+ *
  * Revision 1.157  2000/04/15 04:14:47  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
  *

@@ -248,14 +248,14 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionPane(new GutterOptionPane(), jEditGroup);
 		addOptionPane(new StyleOptionPane(), jEditGroup);
 		addOptionPane(new FileFilterOptionPane(), jEditGroup);
+		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
+		addOptionPane(new ContextOptionPane(), jEditGroup);
 
 		// create the Shortcuts sub-branch
 		OptionGroup shortcutsGroup = new OptionGroup("shortcuts");
 		shortcutsGroup.addOptionPane(new CommandShortcutsOptionPane());
 		shortcutsGroup.addOptionPane(new MacroShortcutsOptionPane());
 		addOptionGroup(shortcutsGroup, jEditGroup);
-
-		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
 
 		addOptionGroup(jEditGroup, rootGroup);
 
@@ -578,6 +578,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/04/18 08:27:52  sp
+ * Context menu editor started
+ *
  * Revision 1.19  2000/04/16 08:56:24  sp
  * Option pane updates
  *

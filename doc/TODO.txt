@@ -2,17 +2,15 @@ JEDIT TO DO
 
 2.4:
 
-- CVS: remove appendix02-regexp, appendix03-glob, appendix04-history
-  add: appendix02-server, appendix03-regexp, appendix04-glob, appendix05-history
-  add: window-splash.gif
 - do MARK_PREVIOUS after markKeyword()
+- finish context menu editor
 
 2.5:
 
 - XMode:
   - better error reporting
   - regexps
-- Editable toolbar and context menu
+- Editable toolbar
 - XML-driven auto indent
 - Plugin devel manual needs more work:
   - document views, buffers

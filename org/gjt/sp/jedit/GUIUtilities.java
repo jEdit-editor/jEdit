@@ -96,6 +96,16 @@ public class GUIUtilities
 	}
 
 	/**
+	 * Instructs jEdit to reload this menu model the next time it is
+	 * requested.
+	 * @param name The menu name
+	 */
+	public static void invalidateMenuModel(String name)
+	{
+		menus.remove(name);
+	}
+
+	/**
 	 * Creates a menu.
 	 * @param view The view to load the menu for
 	 * @param name The menu name
@@ -688,6 +698,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.55  2000/04/18 08:27:51  sp
+ * Context menu editor started
+ *
  * Revision 1.54  2000/04/17 07:40:51  sp
  * File dialog loaded in a background thread
  *
