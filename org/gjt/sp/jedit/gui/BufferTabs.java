@@ -96,12 +96,6 @@ public class BufferTabs extends JTabbedPane
 
 			setSelectedIndex(selectedIndex);
 		}
-		else if(index == selectedIndex)
-		{
-			/*Magic comp = (Magic)getSelectedComponent();
-			if(comp != null)
-				comp.update();*/
-		}
 	}
 
 	public void updateBufferTab(Buffer buffer)
@@ -119,21 +113,15 @@ public class BufferTabs extends JTabbedPane
 		{
 			int oldIndex = buffers.indexOf(buffer);
 
-			if(index != oldIndex)
-			{
-				updating = true;
+//			updating = true;
 
-				removeBufferTab(buffer);
-				addBufferTab(buffer);
+			removeBufferTab(buffer);
+			addBufferTab(buffer);
 
-				updating = false;
+			updating = false;
 
-				if(view.getBuffer() == buffer)
-					selectBufferTab(buffer);
-			}
-			else
-				setIconAt(index,getIcon(buffer));
-
+			if(view.getBuffer() == buffer)
+				selectBufferTab(buffer);
 		}
 	}
 

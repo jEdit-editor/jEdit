@@ -1,5 +1,21 @@
 JEDIT VERSION HISTORY
 
+* Version 2.4pre7
+
++ Enhancements
+
+- Firewall plugin sources moved to their own fileset
+
++ Bug Fixes
+
+- JEditTextArea.addNotify() now sets focusedComponent if hasFocus() returns
+  true (this should finally solve the 'caret losing focus' problem) (since
+  1.7pre5)
+- Sometimes a 'Save As' wouldn't update the buffer tab (since 2.4pre6)
+- TokenMarker.linesChanged() tweaked once again -- this should result in more
+  accurate syntax highlighting when lines are being deleted, for example
+  (since 2.4pre1)
+
 * Version 2.4pre6
 
 + New Features

@@ -64,8 +64,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public JEditTextArea()
 	{
-		// Enable the necessary events
-		enableEvents(AWTEvent.KEY_EVENT_MASK);
+		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 
 		// Initialize some misc. stuff
 		painter = new TextAreaPainter(this);
@@ -96,7 +95,7 @@ public class JEditTextArea extends JComponent
 		editable = true;
 
 		// We don't seem to get the initial focus event?
-		focusedComponent = this;
+		//focusedComponent = this;
 	}
 
 	/**
@@ -1497,6 +1496,15 @@ public class JEditTextArea extends JComponent
 	{
 		super.addNotify();
 
+		//System.err.println("addNotify(): " + hasFocus());
+		if(hasFocus())
+		{
+			setCaretVisible(true);
+			focusedComponent = this;
+		}
+
+		ToolTipManager.sharedInstance().registerComponent(painter);
+
 		if(!documentHandlerInstalled)
 		{
 			documentHandlerInstalled = true;
@@ -1512,8 +1520,14 @@ public class JEditTextArea extends JComponent
 	public void removeNotify()
 	{
 		super.removeNotify();
+
+		ToolTipManager.sharedInstance().unregisterComponent(painter);
+
 		if(focusedComponent == this)
+		{
+			//System.err.println("removeNotify(): focused = null");
 			focusedComponent = null;
+		}
 
 		if(documentHandlerInstalled)
 		{
@@ -2082,8 +2096,8 @@ public class JEditTextArea extends JComponent
 			requestFocus();
 
 			// Focus events not fired sometimes?
-			setCaretVisible(true);
-			focusedComponent = JEditTextArea.this;
+			/*setCaretVisible(true);
+			focusedComponent = JEditTextArea.this;*/
 
 			if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0
 				&& popup != null)
@@ -2249,6 +2263,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.52  2000/04/17 06:34:24  sp
+ * More focus debugging, linesChanged() tweaked
+ *
  * Revision 1.51  2000/04/09 03:14:14  sp
  * Syntax token backgrounds can now be specified
  *
@@ -2280,14 +2297,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.42  2000/02/01 06:12:33  sp
  * Gutter added (still not fully functional)
- *
- * Revision 1.41  2000/01/29 03:27:20  sp
- * Split window functionality added
- *
- * Revision 1.40  2000/01/29 01:56:51  sp
- * Buffer tabs updates, some other stuff
- *
- * Revision 1.39  2000/01/28 00:20:58  sp
- * Lots of stuff
  *
  */

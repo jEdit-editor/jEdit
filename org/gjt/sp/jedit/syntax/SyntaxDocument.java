@@ -146,16 +146,10 @@ public class SyntaxDocument extends PlainDocument
 				int index = ch.getIndex();
 				int len = ch.getChildrenAdded().length -
 					ch.getChildrenRemoved().length;
-//				System.err.println("ch:" + index + ":" + 1);
-				tokenMarker.linesChanged(index,1);
-//				System.err.println("insert:" + (index + 1) + ":" + len);
+				tokenMarker.linesChanged(index,
+					tokenMarker.getLineCount() - index);
 				tokenMarker.insertLines(ch.getIndex() + 1,len);
 				index += (len + 1);
-				if(index < tokenMarker.getLineCount())
-				{
-//					System.err.println("ch:" + index + ":" + 1);
-					tokenMarker.linesChanged(index,1);
-				}
 			}
 			else
 			{
@@ -183,9 +177,8 @@ public class SyntaxDocument extends PlainDocument
 				int index = ch.getIndex();
 				int len = ch.getChildrenRemoved().length -
 					ch.getChildrenAdded().length;
-				System.err.println("ch:" + index + ":" + 1);
-				tokenMarker.linesChanged(index,1);
-				System.err.println("remove:" + (index + 1) + ":" + len);
+				tokenMarker.linesChanged(index,
+					tokenMarker.getLineCount() - index);
 				tokenMarker.deleteLines(index + 1,len);
 			}
 			else
@@ -202,6 +195,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/04/17 06:34:24  sp
+ * More focus debugging, linesChanged() tweaked
+ *
  * Revision 1.23  2000/04/16 08:56:24  sp
  * Option pane updates
  *
@@ -232,8 +228,5 @@ public class SyntaxDocument extends PlainDocument
  *
  * Revision 1.14  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.13  1999/12/10 03:22:47  sp
- * Bug fixes, old loading code is now used again
  *
  */

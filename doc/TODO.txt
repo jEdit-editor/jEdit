@@ -5,7 +5,6 @@ JEDIT TO DO
 - do MARK_PREVIOUS before markKeyword()
 - write 'indentPrevLine' regexp for a few other modes
 - double-click drag doesn't work backwards
-- linesChanged() still broken?
 - caret move on undo still screwed?
 
 2.5:

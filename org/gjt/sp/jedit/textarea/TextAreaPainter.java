@@ -41,13 +41,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public TextAreaPainter(JEditTextArea textArea)
 	{
+		enableEvents(AWTEvent.FOCUS_EVENT_MASK
+			| AWTEvent.KEY_EVENT_MASK
+			| AWTEvent.MOUSE_EVENT_MASK);
+
 		this.textArea = textArea;
 
 		setAutoscrolls(true);
 		setDoubleBuffered(true);
 		setOpaque(true);
-
-		ToolTipManager.sharedInstance().registerComponent(this);
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
@@ -656,6 +658,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/04/17 06:34:24  sp
+ * More focus debugging, linesChanged() tweaked
+ *
  * Revision 1.31  2000/04/09 03:14:14  sp
  * Syntax token backgrounds can now be specified
  *
