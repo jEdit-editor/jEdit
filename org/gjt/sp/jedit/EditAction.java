@@ -164,6 +164,29 @@ public abstract class EditAction implements ActionListener
 		return false;
 	}
 
+	/**
+	 * Returns if this edit action can be repeated. Returns true
+	 * by default.
+	 */
+	public boolean isRepeatable()
+	{
+		return true;
+	}
+
+	/**
+	 * Returns if this edit action can be recorded. Returns true
+	 * by default.
+	 */
+	public boolean isRecordable()
+	{
+		return true;
+	}
+
+	public boolean isWrapper()
+	{
+		return false;
+	}
+
 	// private members
 	private String name;
 
@@ -243,6 +266,11 @@ public abstract class EditAction implements ActionListener
 				return action.isSelected(comp);
 		}
 
+		public boolean isWrapper()
+		{
+			return true;
+		}
+
 		/**
 		 * Loads the action if necessary.
 		 */
@@ -280,6 +308,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/04/14 11:57:38  sp
+ * Text area actions moved to org.gjt.sp.jedit.actions package
+ *
  * Revision 1.23  2000/04/03 10:22:24  sp
  * Search bar
  *
@@ -310,9 +341,4 @@ public abstract class EditAction implements ActionListener
  * Revision 1.14  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *
- * Revision 1.13  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.12  1999/10/02 01:12:36  sp
- * Search and replace updates (doesn't work yet), some actions moved to TextTools
  */

@@ -1,6 +1,6 @@
 /*
- * find_next.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * select_prev_page.java
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,21 +19,10 @@
 
 package org.gjt.sp.jedit.actions;
 
-import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.SearchAndReplace;
-import org.gjt.sp.jedit.*;
-
-public class find_next extends EditAction
+public class select_prev_page extends prev_page
 {
-	public void actionPerformed(ActionEvent evt)
+	public select_prev_page()
 	{
-		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		SearchAndReplace.find(view);
-	}
-
-	public boolean isRecordable()
-	{
-		return false;
+		super(true);
 	}
 }

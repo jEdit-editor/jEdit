@@ -1,6 +1,6 @@
 /*
- * find_next.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * document_home.java
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,20 +20,30 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.SearchAndReplace;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
-public class find_next extends EditAction
+public class document_home extends EditAction
 {
+	private boolean select;
+
+	public document_home()
+	{
+		this(false);
+	}
+
+	public document_home(boolean select)
+	{
+		this.select = select;
+	}
+
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		SearchAndReplace.find(view);
-	}
-
-	public boolean isRecordable()
-	{
-		return false;
+		JEditTextArea textArea = view.getTextArea();
+		if(select)
+			textArea.select(textArea.getMarkPosition(),0);
+		else
+			textArea.setCaretPosition(0);
 	}
 }

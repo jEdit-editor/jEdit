@@ -27,7 +27,6 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 public class goto_line extends EditAction
-implements InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -62,5 +61,10 @@ implements InputHandler.NonRepeatable
 
 		Element element = map.getElement(line - 1);
 		view.getTextArea().setCaretPosition(element.getStartOffset());
+	}
+
+	public boolean isRepeatable()
+	{
+		return false;
 	}
 }

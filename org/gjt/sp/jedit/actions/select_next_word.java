@@ -1,6 +1,6 @@
 /*
- * find_next.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * select_next_word.java
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,21 +19,10 @@
 
 package org.gjt.sp.jedit.actions;
 
-import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.SearchAndReplace;
-import org.gjt.sp.jedit.*;
-
-public class find_next extends EditAction
+public class select_next_word extends next_word
 {
-	public void actionPerformed(ActionEvent evt)
+	public select_next_word()
 	{
-		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		SearchAndReplace.find(view);
-	}
-
-	public boolean isRecordable()
-	{
-		return false;
+		super(true);
 	}
 }

@@ -231,7 +231,6 @@ public class jEdit
 		Abbrevs.load();
 		initActions();
 		initModes();
-		initKeyBindings();
 		Macros.loadMacros();
 
 		// Start plugins
@@ -1209,9 +1208,6 @@ public class jEdit
 				inputHandler.addKeyBinding(shortcut,action);
 		}
 
-		// load text area bindings
-		initKeyBindings();
-
 		// load mode-specific keys
 		Mode[] modes = getModes();
 		for(int i = 0; i < modes.length; i++)
@@ -1655,6 +1651,8 @@ public class jEdit
 
 		addAction("about");
 		addAction("append-string-register");
+		addAction("backspace");
+		addAction("backspace-word");
 		addAction("block-comment");
 		addAction("box-comment");
 		addAction("buffer-options");
@@ -1668,11 +1666,16 @@ public class jEdit
 		addAction("copy-string-register");
 		addAction("cut");
 		addAction("cut-string-register");
+		addAction("delete");
 		addAction("delete-end-line");
 		addAction("delete-line");
 		addAction("delete-paragraph");
 		addAction("delete-start-line");
+		addAction("delete-word");
+		addAction("document-end");
+		addAction("document-home");
 		addAction("edit-macro");
+		addAction("end");
 		addAction("exchange-caret-register");
 		addAction("exit");
 		addAction("expand-abbrev");
@@ -1685,6 +1688,7 @@ public class jEdit
 		addAction("goto-marker");
 		addAction("goto-register");
 		addAction("help");
+		addAction("home");
 		addAction("hypersearch");
 		addAction("hypersearch-selection");
 		addAction("indent-lines");
@@ -1701,21 +1705,30 @@ public class jEdit
 		addAction("new-view");
 		addAction("next-bracket-exp");
 		addAction("next-buffer");
+		addAction("next-char");
+		addAction("next-line");
+		addAction("next-page");
 		addAction("next-paragraph");
 		addAction("next-split");
+		addAction("next-word");
 		addAction("open-file");
 		addAction("open-path");
 		addAction("open-url");
+		addAction("overwrite");
 		addAction("paste");
 		addAction("paste-previous");
 		addAction("paste-string-register");
 		addAction("play-last-macro");
-		addAction("play-temp-macro");
 		addAction("play-macro");
+		addAction("play-temp-macro");
 		addAction("prev-bracket-exp");
 		addAction("prev-buffer");
+		addAction("prev-char");
+		addAction("prev-line");
+		addAction("prev-page");
 		addAction("prev-paragraph");
 		addAction("prev-split");
+		addAction("prev-word");
 		addAction("print");
 		addAction("recent-buffer");
 		addAction("record-macro");
@@ -1724,6 +1737,7 @@ public class jEdit
 		addAction("reload");
 		addAction("reload-all");
 		addAction("reload-modes");
+		addAction("repeat");
 		addAction("replace-all");
 		addAction("replace-in-selection");
 		addAction("rescan-macros");
@@ -1737,20 +1751,32 @@ public class jEdit
 		addAction("select-block");
 		addAction("select-buffer");
 		addAction("select-caret-register");
+		addAction("select-document-end");
+		addAction("select-document-home");
+		addAction("select-end");
+		addAction("select-home");
 		addAction("select-line");
 		addAction("select-line-range");
+		addAction("select-next-char");
+		addAction("select-next-line");
+		addAction("select-next-page");
 		addAction("select-next-paragraph");
+		addAction("select-next-word");
 		addAction("select-none");
 		addAction("select-paragraph");
+		addAction("select-prev-char");
+		addAction("select-prev-line");
+		addAction("select-prev-page");
 		addAction("select-prev-paragraph");
+		addAction("select-prev-word");
 		addAction("select-word");
+		addAction("send");
 		addAction("set-caret-register");
 		addAction("set-filename-register");
+		addAction("set-marker");
 		addAction("set-replace-string");
 		addAction("set-search-parameters");
 		addAction("set-search-string");
-		addAction("send");
-		addAction("set-marker");
 		addAction("shift-left");
 		addAction("shift-right");
 		addAction("split-horizontal");
@@ -1853,25 +1879,6 @@ public class jEdit
 			String recentFile = getProperty("recent." + i);
 			if(recentFile != null)
 				recent.addElement(recentFile);
-		}
-	}
-
-	/**
-	 * Loads the text area key bindings.
-	 */
-	private static void initKeyBindings()
-	{
-		Enumeration textActions = InputHandler.getActions();
-		while(textActions.hasMoreElements())
-		{
-			String name = (String)textActions.nextElement();
-			String binding = jEdit.getProperty(
-				name + ".shortcut");
-			if(binding != null)
-			{
-				inputHandler.addKeyBinding(binding,
-					InputHandler.getAction(name));
-			}
 		}
 	}
 
@@ -2064,6 +2071,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.217  2000/04/14 11:57:38  sp
+ * Text area actions moved to org.gjt.sp.jedit.actions package
+ *
  * Revision 1.216  2000/04/14 07:02:42  sp
  * Better error handling, XML files updated
  *

@@ -683,8 +683,6 @@ public class View extends JFrame implements EBComponent
 		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
 			"view.caretBlink")));
 
-		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
-			new Boolean("yes".equals(jEdit.getProperty("view.homeEnd"))));
 		try
 		{
 			textArea.setElectricScroll(Integer.parseInt(jEdit
@@ -794,8 +792,6 @@ public class View extends JFrame implements EBComponent
 		myGutter.setCurrentLineForeground(gutter.getCurrentLineForeground());
 
 		textArea.setCaretBlinkEnabled(copy.isCaretBlinkEnabled());
-		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
-			copy.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
 		textArea.setElectricScroll(copy.getElectricScroll());
 
 		myPainter.setStyles(painter.getStyles());
@@ -1312,9 +1308,7 @@ public class View extends JFrame implements EBComponent
 			int numLines = StatusBar.this.textArea.getLineCount();
 
 			String str;
-			if(!status.isEmpty())
-				str = (String)status.peek();
-			else if(textArea.getInputHandler().isRepeatEnabled())
+			if(textArea.getInputHandler().isRepeatEnabled())
 			{
 				int repeatCount = textArea.getInputHandler()
 					.getRepeatCount();
@@ -1325,6 +1319,8 @@ public class View extends JFrame implements EBComponent
 				Object[] args = { str };
 				str = jEdit.getProperty("view.status.repeat",args);
 			}
+			else if(!status.isEmpty())
+				str = (String)status.peek();
 			else
 			{
 				str = ("col " + ((dot - start) + 1) + " line "
@@ -1370,6 +1366,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.156  2000/04/14 11:57:38  sp
+ * Text area actions moved to org.gjt.sp.jedit.actions package
+ *
  * Revision 1.155  2000/04/09 03:14:14  sp
  * Syntax token backgrounds can now be specified
  *

@@ -20,13 +20,11 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 public class insert_char extends EditAction
-implements InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -59,5 +57,10 @@ implements InputHandler.NonRepeatable
 		{
 			view.getToolkit().beep();
 		}
+	}
+
+	public boolean isRepeatable()
+	{
+		return false;
 	}
 }

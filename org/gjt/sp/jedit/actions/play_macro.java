@@ -24,7 +24,6 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class play_macro extends EditAction
-implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -42,5 +41,15 @@ implements InputHandler.NonRecordable, InputHandler.NonRepeatable
 		{
 			Macros.playMacro(view,macro);
 		}
+	}
+
+	public boolean isRepeatable()
+	{
+		return false;
+	}
+
+	public boolean isRecordable()
+	{
+		return false;
 	}
 }

@@ -25,7 +25,6 @@ import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.*;
 
 public class paste_string_register extends EditAction
-implements InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -79,5 +78,10 @@ implements InputHandler.NonRepeatable
 				HistoryModel.getModel("clipboard").addItem(selection);
 			}
 		}
+	}
+
+	public boolean isRepeatable()
+	{
+		return false;
 	}
 }

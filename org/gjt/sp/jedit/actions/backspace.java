@@ -1,6 +1,6 @@
 /*
- * find_next.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * backspace.java
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,20 +20,45 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.SearchAndReplace;
+import javax.swing.text.BadLocationException;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
-public class find_next extends EditAction
+public class backspace extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		SearchAndReplace.find(view);
-	}
+		JEditTextArea textArea = view.getTextArea();
 
-	public boolean isRecordable()
-	{
-		return false;
+		if(!textArea.isEditable())
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
+		if(textArea.getSelectionStart()
+		   != textArea.getSelectionEnd())
+		{
+			textArea.setSelectedText("");
+		}
+		else
+		{
+			int caret = textArea.getCaretPosition();
+			if(caret == 0)
+			{
+				view.getToolkit().beep();
+				return;
+			}
+			try
+			{
+				view.getBuffer().remove(caret - 1,1);
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+		}
 	}
 }

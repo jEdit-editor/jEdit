@@ -24,7 +24,6 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class copy_string_register extends EditAction
-implements InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -60,5 +59,10 @@ implements InputHandler.NonRepeatable
 
 			Registers.setRegister(ch,new Registers.StringRegister(selection));
 		}
+	}
+
+	public boolean isRepeatable()
+	{
+		return false;
 	}
 }

@@ -21,15 +21,18 @@ package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
 public class find extends EditAction
-implements InputHandler.NonRecordable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
 		new SearchDialog(view,null);
+	}
+
+	public boolean isRecordable()
+	{
+		return false;
 	}
 }

@@ -47,24 +47,10 @@ public class CommandShortcutsOptionPane extends ShortcutsOptionPane
 
 	protected Vector createBindings()
 	{
-		Enumeration textActions = InputHandler.getActions();
 		EditAction[] actions = jEdit.getActions();
 
-		Vector bindings = new Vector(actions.length + 40);
+		Vector bindings = new Vector(actions.length);
 
-		// Add text area key bindings
-		while(textActions.hasMoreElements())
-		{
-			String name = (String)textActions.nextElement();
-			String label = jEdit.getProperty(name + ".label");
-			// Skip certain actions this way (ENTER, TAB)
-			if(label == null)
-				continue;
-			String shortcut = jEdit.getProperty(name + ".shortcut");
-			bindings.addElement(new KeyBinding(name,label,shortcut));
-		}
-
-		// Add menu item key bindings
 		for(int i = 0; i < actions.length; i++)
 		{
 			String name = actions[i].getName();
@@ -84,6 +70,9 @@ public class CommandShortcutsOptionPane extends ShortcutsOptionPane
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/04/14 11:57:39  sp
+ * Text area actions moved to org.gjt.sp.jedit.actions package
+ *
  * Revision 1.1  1999/12/19 08:12:34  sp
  * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
  *

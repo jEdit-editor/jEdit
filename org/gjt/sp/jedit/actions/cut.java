@@ -24,7 +24,6 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
 public class cut extends EditAction
-implements InputHandler.NonRepeatable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -33,5 +32,10 @@ implements InputHandler.NonRepeatable
 			textArea.cut();
 		else
 			textArea.getToolkit().beep();
+	}
+
+	public boolean isRepeatable()
+	{
+		return false;
 	}
 }

@@ -24,6 +24,7 @@ import java.awt.event.*;
 import java.awt.Toolkit;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.util.Log;
 
 /**
@@ -56,48 +57,6 @@ public class DefaultInputHandler extends InputHandler
 	}
 
 	/**
-	 * Sets up the default key bindings.
-	 */
-	public void addDefaultKeyBindings()
-	{
-		addKeyBinding("BACK_SPACE",BACKSPACE);
-		addKeyBinding("C+BACK_SPACE",BACKSPACE_WORD);
-		addKeyBinding("DELETE",DELETE);
-		addKeyBinding("C+DELETE",DELETE_WORD);
-
-		addKeyBinding("INSERT",OVERWRITE);
-
-		addKeyBinding("HOME",HOME);
-		addKeyBinding("END",END);
-		addKeyBinding("S+HOME",SELECT_HOME);
-		addKeyBinding("S+END",SELECT_END);
-		addKeyBinding("C+HOME",DOCUMENT_HOME);
-		addKeyBinding("C+END",DOCUMENT_END);
-		addKeyBinding("CS+HOME",SELECT_DOC_HOME);
-		addKeyBinding("CS+END",SELECT_DOC_END);
-
-		addKeyBinding("PAGE_UP",PREV_PAGE);
-		addKeyBinding("PAGE_DOWN",NEXT_PAGE);
-		addKeyBinding("S+PAGE_UP",SELECT_PREV_PAGE);
-		addKeyBinding("S+PAGE_DOWN",SELECT_NEXT_PAGE);
-
-		addKeyBinding("LEFT",PREV_CHAR);
-		addKeyBinding("S+LEFT",SELECT_PREV_CHAR);
-		addKeyBinding("C+LEFT",PREV_WORD);
-		addKeyBinding("CS+LEFT",SELECT_PREV_WORD);
-		addKeyBinding("RIGHT",NEXT_CHAR);
-		addKeyBinding("S+RIGHT",SELECT_NEXT_CHAR);
-		addKeyBinding("C+RIGHT",NEXT_WORD);
-		addKeyBinding("CS+RIGHT",SELECT_NEXT_WORD);
-		addKeyBinding("UP",PREV_LINE);
-		addKeyBinding("S+UP",SELECT_PREV_LINE);
-		addKeyBinding("DOWN",NEXT_LINE);
-		addKeyBinding("S+DOWN",SELECT_NEXT_LINE);
-
-		addKeyBinding("C+ENTER",REPEAT);
-	}
-
-	/**
 	 * Adds a key binding to this input handler. The key binding is
 	 * a list of white space separated key strokes of the form
 	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
@@ -106,7 +65,7 @@ public class DefaultInputHandler extends InputHandler
 	 * @param keyBinding The key binding
 	 * @param action The action
 	 */
-	public void addKeyBinding(String keyBinding, ActionListener action)
+	public void addKeyBinding(String keyBinding, EditAction action)
 	{
 	        Hashtable current = bindings;
 
@@ -202,11 +161,11 @@ public class DefaultInputHandler extends InputHandler
 				currentBindings = bindings;
 				return;
 			}
-			else if(o instanceof ActionListener)
+			else if(o instanceof EditAction)
 			{
 				currentBindings = bindings;
 
-				executeAction(((ActionListener)o),
+				executeAction(((EditAction)o),
 					evt.getSource(),null);
 
 				evt.consume();
@@ -242,10 +201,10 @@ public class DefaultInputHandler extends InputHandler
 					currentBindings = (Hashtable)o;
 					return;
 				}
-				else if(o instanceof ActionListener)
+				else if(o instanceof EditAction)
 				{
 					currentBindings = bindings;
-					executeAction((ActionListener)o,
+					executeAction((EditAction)o,
 						evt.getSource(),
 						String.valueOf(c));
 					return;
@@ -357,6 +316,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/04/14 11:57:39  sp
+ * Text area actions moved to org.gjt.sp.jedit.actions package
+ *
  * Revision 1.23  2000/04/02 06:38:28  sp
  * Bug fixes
  *
@@ -388,29 +350,5 @@ public class DefaultInputHandler extends InputHandler
  *
  * Revision 1.14  1999/10/26 07:43:59  sp
  * Session loading and saving, directory list search started
- *
- * Revision 1.13  1999/10/24 02:06:41  sp
- * Miscallaneous pre1 stuff
- *
- * Revision 1.12  1999/10/17 04:16:28  sp
- * Bug fixing
- *
- * Revision 1.11  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
- *
- * Revision 1.10  1999/10/06 08:39:46  sp
- * Fixes to repeating and macro features
- *
- * Revision 1.9  1999/10/05 10:55:29  sp
- * File dialogs open faster, and experimental keyboard macros
- *
- * Revision 1.8  1999/10/05 04:43:58  sp
- * Minor bug fixes and updates
- *
- * Revision 1.7  1999/10/04 06:13:52  sp
- * Repeat counts now supported
- *
- * Revision 1.6  1999/09/30 12:21:05  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
  *
  */

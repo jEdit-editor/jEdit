@@ -1,6 +1,6 @@
 /*
- * find_next.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * repeat.java
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,16 +20,27 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.SearchAndReplace;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
-public class find_next extends EditAction
+public class repeat extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		SearchAndReplace.find(view);
+		JEditTextArea textArea = view.getTextArea();
+		textArea.getInputHandler().setRepeatEnabled(true);
+		String actionCommand = evt.getActionCommand();
+		if(actionCommand != null)
+		{
+			textArea.getInputHandler().setRepeatCount(
+				Integer.parseInt(actionCommand));
+		}
+	}
+
+	public boolean isRepeatable()
+	{
+		return false;
 	}
 
 	public boolean isRecordable()

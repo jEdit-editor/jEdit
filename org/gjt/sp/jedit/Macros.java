@@ -98,7 +98,7 @@ public class Macros
 			if(binding != null)
 			{
 				final EditAction action = jEdit.getAction("play-macro");
-				jEdit.getInputHandler().addKeyBinding(binding,new ActionListener()
+				jEdit.getInputHandler().addKeyBinding(binding,new EditAction()
 				{
 					public void actionPerformed(ActionEvent evt)
 					{
@@ -106,6 +106,11 @@ public class Macros
 							new ActionEvent(
 							evt.getSource(),
 							evt.getID(),path));
+					}
+
+					public boolean isWrapper()
+					{
+						return true;
 					}
 				});
 			}
@@ -213,11 +218,9 @@ public class Macros
 			actionCommand = line.substring(index + 1);
 		}
 
-		ActionListener _action = jEdit.getAction(action);
-		if(_action == null)
-			_action = InputHandler.getAction(action);
+		EditAction _action = jEdit.getAction(action);
 
-		if(_action /* still */ == null)
+		if(_action == null)
 		{
 			Object[] args = { macro, new Integer(lineNo), action };
 			GUIUtilities.error(view,"macro-error",args);
@@ -319,18 +322,6 @@ public class Macros
 		}
 	}
 
-	private static String getActionName(ActionListener listener)
-	{
-		// IMPORANT: check EditActions first so that jEdit can
-		// override insert-char to do macro expansion, etc
-		if(listener instanceof EditAction)
-			return ((EditAction)listener).getName();
-		else
-		{
-			return InputHandler.getActionName(listener);
-		}
-	}
-
 	static class BufferRecorder implements InputHandler.MacroRecorder
 	{
 		View view;
@@ -343,8 +334,7 @@ public class Macros
 			this.buffer = buffer;
 		}
 
-		public void actionPerformed(ActionListener listener,
-			String actionCommand)
+		public void actionPerformed(EditAction action, String actionCommand)
 		{
 			if(buffer.isClosed())
 			{
@@ -354,13 +344,7 @@ public class Macros
 				return;
 			}
 
-			String name = getActionName(listener);
-
-			if(name == null)
-			{
-				// eg, Macros$1 action
-				return;
-			}
+			String name = action.getName();
 
 			// Collapse multiple insert-char's
 			if(name.equals("insert-char"))
@@ -399,6 +383,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/04/14 11:57:38  sp
+ * Text area actions moved to org.gjt.sp.jedit.actions package
+ *
  * Revision 1.20  2000/04/01 12:21:27  sp
  * mode cache implemented
  *
@@ -428,21 +415,5 @@ public class Macros
  *
  * Revision 1.11  1999/11/10 10:43:01  sp
  * Macros can now have shortcuts, various miscallaneous updates
- *
- * Revision 1.10  1999/11/09 10:14:34  sp
- * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
- * word commands, check box menu item support
- *
- * Revision 1.9  1999/11/07 06:51:43  sp
- * Check box menu items supported
- *
- * Revision 1.8  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.7  1999/10/28 09:07:21  sp
- * Directory list search
- *
- * Revision 1.6  1999/10/19 09:10:13  sp
- * pre5 bug fixing
  *
  */

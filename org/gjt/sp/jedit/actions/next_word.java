@@ -1,5 +1,5 @@
 /*
- * cut_string_register.java
+ * next_word.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -23,54 +23,51 @@ import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
-public class cut_string_register extends EditAction
+public class next_word extends EditAction
 {
+	private boolean select;
+
+	public next_word()
+	{
+		this(false);
+	}
+
+	public next_word(boolean select)
+	{
+		this.select = select;
+	}
+
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
+		int caret = textArea.getCaretPosition();
+		int line = textArea.getCaretLine();
+		int lineStart = textArea.getLineStartOffset(line);
+		caret -= lineStart;
 
-		if(!textArea.isEditable())
+		String lineText = textArea.getLineText(textArea
+			.getCaretLine());
+
+		if(caret == lineText.length())
 		{
-			view.getToolkit().beep();
-			return;
-		}
-
-		String selection = textArea.getSelectedText();
-
-		if(selection == null)
-			return;
-
-		String actionCommand = evt.getActionCommand();
-		if(actionCommand == null || actionCommand.length() != 1)
-		{
-			view.pushStatus(jEdit.getProperty("view.status.cut-string-register"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
-		}
-		else
-		{
-			view.popStatus();
-
-			char ch = actionCommand.charAt(0);
-			if(ch == '\0')
+			if(lineStart + caret == textArea.getDocumentLength())
 			{
 				view.getToolkit().beep();
 				return;
 			}
-
-			int repeatCount = textArea.getInputHandler().getRepeatCount();
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < repeatCount; i++)
-				buf.append(selection);
-			selection = buf.toString();
-
-			Registers.setRegister(ch,new Registers.StringRegister(selection));
-			textArea.setSelectedText(null);
+			caret++;
 		}
-	}
+		else
+		{
+			String noWordSep = (String)textArea.getDocument().getProperty("noWordSep");
+			caret = TextUtilities.findWordEnd(lineText,caret + 1,noWordSep);
+		}
 
-	public boolean isRepeatable()
-	{
-		return false;
+		if(select)
+			textArea.select(textArea.getMarkPosition(),
+				lineStart + caret);
+		else
+			textArea.setCaretPosition(lineStart + caret);
 	}
 }

@@ -22,12 +22,10 @@ package org.gjt.sp.jedit.actions;
 import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 public class record_temp_macro extends EditAction
-implements InputHandler.NonRecordable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -61,5 +59,10 @@ implements InputHandler.NonRecordable
 
 		view.pushStatus(jEdit.getProperty("view.status.recording"));
 		Macros.beginRecording(view,null,buffer);
+	}
+
+	public boolean isRecordable()
+	{
+		return false;
 	}
 }

@@ -1,6 +1,6 @@
 /*
- * find_next.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * prev_char.java
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,20 +20,38 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.SearchAndReplace;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
-public class find_next extends EditAction
+public class prev_char extends EditAction
 {
+	private boolean select;
+
+	public prev_char()
+	{
+		this(false);
+	}
+
+	public prev_char(boolean select)
+	{
+		this.select = select;
+	}
+
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
-		SearchAndReplace.find(view);
-	}
+		JEditTextArea textArea = view.getTextArea();
+		int caret = textArea.getCaretPosition();
+		if(caret == 0)
+		{
+			view.getToolkit().beep();
+			return;
+		}
 
-	public boolean isRecordable()
-	{
-		return false;
+		if(select)
+			textArea.select(textArea.getMarkPosition(),
+				caret - 1);
+		else
+			textArea.setCaretPosition(caret - 1);
 	}
 }

@@ -128,6 +128,8 @@ edit=undo \
      goto-line \
      select-line-range \
      - \
+     repeat \
+     - \
      %select \
      %line \
      %paragraph \
@@ -147,6 +149,7 @@ complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
 goto-line.label=$Go to Line...
 select-line-range.label=$Select Line Range...
+repeat.label=Repea$t Next Command
 
 ### Selection menu
 select=select-word \
@@ -174,6 +177,7 @@ untab.label=Tabs to Spaces
 wing-comment.label=Wing Comment
 box-comment.label=Box Comment
 block-comment.label=Block Comment
+toggle-rect.label=Rectangular Selection
 
 ### Line menu
 line=indent-lines \
@@ -384,9 +388,10 @@ macro.header=# This is a recorded macro. First, check over the\n\
              # Macros menu.
 
 ###
-### TEXT AREA KEY BINDING NAMES
+### COMMANDS THAT DON'T APPEAR IN MENUS
 ###
 
+insert-literal.label=Insert Without Expanding
 backspace.label=Delete Previous Character
 backspace-word.label=Delete Previous Word
 delete.label=Delete Next Character
@@ -416,14 +421,6 @@ prev-line.label=Previous Line
 select-prev-line.label=Select Previous Line
 next-line.label=Next Line
 select-next-line.label=Select Next Line
-toggle-rect.label=Rectangular Selection
-repeat.label=Enter Repeat Count
-
-###
-### OTHER ACTIONS NOT LISTED IN MENUS
-###
-
-insert-literal.label=Insert Without Expanding
 
 ###
 ### VIEW STUFF

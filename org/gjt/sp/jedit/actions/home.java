@@ -1,5 +1,5 @@
 /*
- * insert_literal.java - Action
+ * home.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -22,48 +22,54 @@ package org.gjt.sp.jedit.actions;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 
-public class insert_literal extends EditAction
+public class home extends EditAction
 {
+	private boolean select;
+
+	public home()
+	{
+		this(false);
+	}
+
+	public home(boolean select)
+	{
+		this.select = select;
+	}
+
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
 		JEditTextArea textArea = view.getTextArea();
 
-		String str = evt.getActionCommand();
+		int caret = textArea.getCaretPosition();
 
-		if(str == null)
+		int firstLine = textArea.getFirstLine();
+
+		int firstOfLine = textArea.getLineStartOffset(
+			textArea.getCaretLine());
+		int firstVisibleLine = (firstLine == 0 ? 0 :
+			firstLine + textArea.getElectricScroll());
+		int firstVisible = textArea.getLineStartOffset(
+			firstVisibleLine);
+
+		if(caret == 0)
 		{
-			view.pushStatus(jEdit.getProperty("view.status.insert-literal"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
+			view.getToolkit().beep();
 			return;
 		}
+		else if(!"yes".equals(jEdit.getProperty("view.homeEnd")))
+			caret = firstOfLine;
+		else if(caret == firstVisible)
+			caret = 0;
+		else if(caret == firstOfLine)
+			caret = firstVisible;
 		else
-		{
-			view.popStatus();
+			caret = firstOfLine;
 
-			if(!str.equals("\0"))
-			{
-				int repeatCount = textArea.getInputHandler().getRepeatCount();
-
-				if(textArea.isEditable())
-				{
-					StringBuffer buf = new StringBuffer();
-					for(int i = 0; i < repeatCount; i++)
-						buf.append(str);
-					textArea.overwriteSetSelectedText(buf.toString());
-					return;
-				}
-			}
-		}
-
-		view.getToolkit().beep();
-	}
-
-	public boolean isRepeatable()
-	{
-		return false;
+		if(select)
+			textArea.select(textArea.getMarkPosition(),caret);
+		else
+			textArea.setCaretPosition(caret);
 	}
 }

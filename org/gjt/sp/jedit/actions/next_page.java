@@ -1,5 +1,5 @@
 /*
- * insert_literal.java - Action
+ * next_page.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -22,48 +22,43 @@ package org.gjt.sp.jedit.actions;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 
-public class insert_literal extends EditAction
+public class next_page extends EditAction
 {
+	private boolean select;
+
+	public next_page()
+	{
+		this(false);
+	}
+
+	public next_page(boolean select)
+	{
+		this.select = select;
+	}
+
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		Buffer buffer = view.getBuffer();
 		JEditTextArea textArea = view.getTextArea();
+		int lineCount = textArea.getLineCount();
+		int firstLine = textArea.getFirstLine();
+		int visibleLines = textArea.getVisibleLines();
+		int line = textArea.getCaretLine();
 
-		String str = evt.getActionCommand();
+		firstLine += visibleLines;
 
-		if(str == null)
-		{
-			view.pushStatus(jEdit.getProperty("view.status.insert-literal"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
-			return;
-		}
+		if(firstLine + visibleLines >= lineCount - 1)
+			firstLine = lineCount - visibleLines;
+
+		textArea.setFirstLine(firstLine);
+
+		int caret = textArea.getLineStartOffset(
+			Math.min(textArea.getLineCount() - 1,
+			line + visibleLines));
+		if(select)
+			textArea.select(textArea.getMarkPosition(),caret);
 		else
-		{
-			view.popStatus();
-
-			if(!str.equals("\0"))
-			{
-				int repeatCount = textArea.getInputHandler().getRepeatCount();
-
-				if(textArea.isEditable())
-				{
-					StringBuffer buf = new StringBuffer();
-					for(int i = 0; i < repeatCount; i++)
-						buf.append(str);
-					textArea.overwriteSetSelectedText(buf.toString());
-					return;
-				}
-			}
-		}
-
-		view.getToolkit().beep();
-	}
-
-	public boolean isRepeatable()
-	{
-		return false;
+			textArea.setCaretPosition(caret);
 	}
 }

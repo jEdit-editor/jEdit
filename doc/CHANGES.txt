@@ -15,6 +15,11 @@ JEDIT VERSION HISTORY
 - If an error occurred while loading or saving a file, jEdit would claim that
   the file had been modified on disk (since 2.4pre1)
 
++ API Changes
+
+- InputHandler.addKeyBinding() and executeAction() now take EditActions, not
+  ActionListeners as parameters
+
 * Version 2.4pre5
 
 + New Features

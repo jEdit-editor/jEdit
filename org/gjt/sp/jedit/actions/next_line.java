@@ -1,5 +1,5 @@
 /*
- * cut_string_register.java
+ * next_line.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,57 +20,49 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
-public class cut_string_register extends EditAction
+public class next_line extends EditAction
 {
+	private boolean select;
+
+	public next_line()
+	{
+		this(false);
+	}
+
+	public next_line(boolean select)
+	{
+		this.select = select;
+	}
+
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
+		int caret = textArea.getCaretPosition();
+		int line = textArea.getCaretLine();
 
-		if(!textArea.isEditable())
+		if(line == textArea.getLineCount() - 1)
 		{
 			view.getToolkit().beep();
 			return;
 		}
 
-		String selection = textArea.getSelectedText();
-
-		if(selection == null)
-			return;
-
-		String actionCommand = evt.getActionCommand();
-		if(actionCommand == null || actionCommand.length() != 1)
+		int magic = textArea.getMagicCaretPosition();
+		if(magic == -1)
 		{
-			view.pushStatus(jEdit.getProperty("view.status.cut-string-register"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
+			magic = textArea.offsetToX(line,
+				caret - textArea.getLineStartOffset(line));
 		}
+
+		caret = textArea.getLineStartOffset(line + 1)
+			+ textArea.xToOffset(line + 1,magic + 1);
+		if(select)
+			textArea.select(textArea.getMarkPosition(),caret);
 		else
-		{
-			view.popStatus();
-
-			char ch = actionCommand.charAt(0);
-			if(ch == '\0')
-			{
-				view.getToolkit().beep();
-				return;
-			}
-
-			int repeatCount = textArea.getInputHandler().getRepeatCount();
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < repeatCount; i++)
-				buf.append(selection);
-			selection = buf.toString();
-
-			Registers.setRegister(ch,new Registers.StringRegister(selection));
-			textArea.setSelectedText(null);
-		}
-	}
-
-	public boolean isRepeatable()
-	{
-		return false;
+			textArea.setCaretPosition(caret);
+		textArea.setMagicCaretPosition(magic);
 	}
 }

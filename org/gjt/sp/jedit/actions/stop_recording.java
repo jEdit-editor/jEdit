@@ -22,10 +22,7 @@ package org.gjt.sp.jedit.actions;
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.*;
 
-// Implements NonRecordable because we don't want the stop-recording to
-// be part of the macro
 public class stop_recording extends EditAction
-implements org.gjt.sp.jedit.textarea.InputHandler.NonRecordable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
@@ -38,5 +35,10 @@ implements org.gjt.sp.jedit.textarea.InputHandler.NonRecordable
 
 		view.popStatus();
 		Macros.endRecording(view);
+	}
+
+	public boolean isRecordable()
+	{
+		return false;
 	}
 }

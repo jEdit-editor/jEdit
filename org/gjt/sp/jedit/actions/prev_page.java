@@ -1,5 +1,5 @@
 /*
- * multifile_search.java
+ * prev_page.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,22 +20,41 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.gui.MultiFileSearchDialog;
-import org.gjt.sp.jedit.search.*;
-import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.*;
 
-public class multifile_search extends EditAction
+public class prev_page extends EditAction
 {
-	public void actionPerformed(ActionEvent evt)
+	private boolean select;
+
+	public prev_page()
 	{
-		SearchFileSet fileset = new MultiFileSearchDialog(getView(evt),
-			SearchAndReplace.getSearchFileSet()).getSearchFileSet();
-		if(fileset != null)
-			SearchAndReplace.setSearchFileSet(fileset);
+		this(false);
 	}
 
-	public boolean isRecordable()
+	public prev_page(boolean select)
 	{
-		return false;
+		this.select = select;
+	}
+
+	public void actionPerformed(ActionEvent evt)
+	{
+		View view = getView(evt);
+		JEditTextArea textArea = view.getTextArea();
+		int firstLine = textArea.getFirstLine();
+		int visibleLines = textArea.getVisibleLines();
+		int line = textArea.getCaretLine();
+
+		if(firstLine < visibleLines)
+			firstLine = visibleLines;
+
+		textArea.setFirstLine(firstLine - visibleLines);
+
+		int caret = textArea.getLineStartOffset(
+			Math.max(0,line - visibleLines));
+		if(select)
+			textArea.select(textArea.getMarkPosition(),caret);
+		else
+			textArea.setCaretPosition(caret);
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * cut_string_register.java
+ * backspace_word.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,57 +20,56 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
+import javax.swing.text.BadLocationException;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
-public class cut_string_register extends EditAction
+public class backspace_word extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
 		JEditTextArea textArea = view.getTextArea();
-
-		if(!textArea.isEditable())
+		int start = textArea.getSelectionStart();
+		if(start != textArea.getSelectionEnd())
 		{
-			view.getToolkit().beep();
+			textArea.setSelectedText("");
 			return;
 		}
 
-		String selection = textArea.getSelectedText();
+		int line = textArea.getCaretLine();
+		int lineStart = textArea.getLineStartOffset(line);
+		int caret = start - lineStart;
 
-		if(selection == null)
-			return;
+		String lineText = textArea.getLineText(textArea
+			.getCaretLine());
 
-		String actionCommand = evt.getActionCommand();
-		if(actionCommand == null || actionCommand.length() != 1)
+		if(caret == 0)
 		{
-			view.pushStatus(jEdit.getProperty("view.status.cut-string-register"));
-			textArea.getInputHandler().grabNextKeyStroke(this);
-		}
-		else
-		{
-			view.popStatus();
-
-			char ch = actionCommand.charAt(0);
-			if(ch == '\0')
+			if(lineStart == 0)
 			{
 				view.getToolkit().beep();
 				return;
 			}
-
-			int repeatCount = textArea.getInputHandler().getRepeatCount();
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < repeatCount; i++)
-				buf.append(selection);
-			selection = buf.toString();
-
-			Registers.setRegister(ch,new Registers.StringRegister(selection));
-			textArea.setSelectedText(null);
+			caret--;
 		}
-	}
+		else
+		{
+			String noWordSep = (String)view.getBuffer()
+				.getProperty("noWordSep");
+			caret = TextUtilities.findWordStart(lineText,
+				caret-1,noWordSep);
+		}
 
-	public boolean isRepeatable()
-	{
-		return false;
+		try
+		{
+			view.getBuffer().remove(caret + lineStart,
+					start - (caret + lineStart));
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+		}
 	}
 }
