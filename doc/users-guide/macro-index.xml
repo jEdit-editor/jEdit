@@ -209,9 +209,9 @@
         The macro compares the buffer's path name with the elements of the
         classpath being used by the jEdit session.  An error message will be
         displayed if no suitable package name is found. This macro will not
-        work if jEdit is being run as a jar file without specifying a
+        work if jEdit is being run as a JAR file without specifying a
         classpath.  In that case the classpath seen by the macro consists
-        solely of the jar file.
+        solely of the JAR file.
     </para>
 </listitem>
 
@@ -305,7 +305,8 @@
     <para>
         This macro illustrates the use of
         <function>InputHandler.readNextChar()</function> as a means of
-        obtaining user input.
+        obtaining user input. See <xref linkend="macro-tips-single-char"
+        />.
     </para>
  </listitem>
 
@@ -528,9 +529,8 @@
         Displays a sorted list of the keyboard shortcuts currently in effect.
     </para></abstract>
     <para>
-        The macro provides a read-only view of the combined contents of
-        <quote>Command Shortcuts</quote>, <quote>Macro Shortcuts</quote> and
-        <quote>Plugin Shortcuts</quote> option panes. Pressing a letter key will
+        The macro provides a combined read-only view of command, macro
+        and plugin shortcuts. Pressing a letter key will
         scroll the table to the first entry beginning with that letter.
         A further option is provided to write the shortcut assignments in a
         text buffer for printing as a reference. Notes in the source code
@@ -563,9 +563,8 @@
     </para></abstract>
     <para>
         Linked to a keyboard shortcut, this macro can quickly return
-        input focus to the text area after executing macros like
-        <filename>Go_to_Console.bsh</filename> or
-        <filename>Go_to_Clipper.bsh</filename>.
+        input focus to the text area after invoking a command that
+        shifts focus to a docked plugin window.
     </para>
 </listitem>
 

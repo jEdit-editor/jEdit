@@ -316,6 +316,12 @@
    or create a settings directory. Default settings will be used instead.
   </para>
   <para>
+   If you are using <application>jEditLauncher</application>
+   to start jEdit on Windows, these parameters cannot be specified on the
+   MS-DOS prompt command line when starting jedit; they must be set as described
+   in <xref linkend="launcher-starting" />.
+  </para>
+  <para>
    jEdit creates the following files and directories
    inside the settings directory; plugins may add more:
   </para>

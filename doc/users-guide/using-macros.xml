@@ -106,7 +106,7 @@
 
   <para>
     Macros supplied with jEdit, as well as macros that you record or write,
-    are displayed under the <guimenu>Macros</guimenu> menu item in a
+    are displayed under the <guimenu>Macros</guimenu> menu in a
     hierarchical structure. The jEdit installation includes about 50 macros
     divided into several major categories. Each category corresponds to a
     nested submenu under the <guimenu>Macros</guimenu> menu. An index of
@@ -157,7 +157,7 @@
    disk and can be edited as a text file. The file names of macros
    must have a <filename>.bsh</filename> extension.
    By default, jEdit associates a
-   <filename>.bsh</filename> file with the <quote>beanshell</quote> edit
+   <filename>.bsh</filename> file with the BeanShell edit
    mode for purposes of syntax highlighting, indentation and other
    formatting. However, BeanShell syntax does not impose any indentation or
    line break requirements.

@@ -22,7 +22,7 @@
   </para>
   <para>
    To remove plugins, select them (multiple plugins can be selected by
-   holding down <keycap>Control</keycap> and click <guibutton>Remove
+   holding down <keycap>Control</keycap>) and click <guibutton>Remove
    Plugins</guibutton>. This will display a confirmation dialog box first.
   </para>
  </sect1>

@@ -464,7 +464,7 @@ public class JEditTextArea extends JComponent
 			Selection s = getSelectionAtOffset(caret);
 			if(s == null)
 			{
-				startLine = endLine = buffer.physicalToVirtual(caretLine);
+				startLine = endLine = virtualCaretLine;
 			}
 			else
 			{

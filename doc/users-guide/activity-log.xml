@@ -9,8 +9,8 @@
  <para>
   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Activity Log</guimenuitem> displays
   the last 500 lines of the activity log. By default, the activity is shown in
-  a floating window;
-  it can be set to dock into the view in the <guibutton>Docking</guibutton> pane of the
+  a floating window. It can be set to dock into the view in the
+  <guibutton>Docking</guibutton> pane of the
   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
   dialog box; see <xref linkend="docking" />.
   The complete

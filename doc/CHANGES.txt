@@ -9,6 +9,10 @@ JEDIT 3.2 VERSION HISTORY
   tag automatically. Note that the actual character is not inserted, so
   the macro would need to insert '>' first itself.
 
++ Enhancements
+
+- Documentation updates
+
 + Bug Fixes
 
 - Fixed a few bugs in the shortcuts option pane (Dirk Moebius)

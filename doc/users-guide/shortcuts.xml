@@ -78,7 +78,7 @@
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo></entry>
-      <entry>Toggle gutter (line numbering).</entry>
+      <entry>Turn gutter (line numbering) on and off.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>2</keycap></keycombo></entry>
@@ -603,9 +603,9 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>Enter</keycap> <keycap><replaceable>level</replaceable></keycap>
+      <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap>
       </entry>
-      <entry>Expand folds with level less than <replaceable>level</replaceable>,
+      <entry>Expand folds with level less than <replaceable>key</replaceable>,
       collapse all others.
       </entry>
      </row>

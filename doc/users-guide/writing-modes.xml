@@ -44,7 +44,8 @@
    If there is nothing between the opening and closing tags, for example
    <literal>&lt;TAG&gt;&lt;/TAG&gt;</literal>, the shorthand notation
    <literal>&lt;TAG /&gt;</literal> may be used. An example of this shorthand
-   is the <literal>&lt;PROPERTY&gt;</literal> tag above.
+   can be seen
+   in the <literal>&lt;PROPERTY&gt;</literal> tags above.
   </para>
   <para>
    XML is case sensitive. <literal>Span</literal> or <literal>span</literal>

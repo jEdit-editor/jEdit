@@ -461,7 +461,7 @@ void actionPerformed(e)
     <classname>ActionListener</classname> interface. It looks at the source
     of the <classname>ActionEvent</classname>, determined by a call to
     <function>getSource()</function>. What we do with this return value is
-    straighforward: if the source is not the <quote>Cancel</quote> button, we
+    straighforward: if the source is not the <guibutton>Cancel</guibutton> button, we
     call the <function>processText()</function> method to insert the prefix
     and suffix text. Then the dialog is closed by calling its
     <function>dispose()</function> method.
@@ -476,7 +476,7 @@ void actionPerformed(e)
     interfaces with multiple methods, however, there are some details to
     deal with that will vary depending on the version of the Java
     platform that you are running.  These techniques are discussed in
-    the next chapter.  <!-- Insert xref here -->
+    the next chapter; see <xref linkend="macro-tips-BeanShell-interface" />.
   </para>
 
 </sect2>

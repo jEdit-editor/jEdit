@@ -2755,7 +2755,9 @@ loop:		for(int i = 0; i < list.length; i++)
 			String path = MiscUtilities.constructPath(directory,plugin);
 
 			if(plugin.equals("EditBuddy.jar")
-				|| plugin.equals("PluginManager.jar"))
+				|| plugin.equals("PluginManager.jar")
+				|| plugin.equals("jaxp.jar")
+				|| plugin.equals("crimson.jar"))
 			{
 				String[] args = { plugin };
 				GUIUtilities.error(null,"plugin.obsolete",args);

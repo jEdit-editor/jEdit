@@ -431,7 +431,8 @@
    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
    All Folds</guimenuitem> (keyboard shortcut:
    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycap>Enter</keycap>) reads the next character entered at the keyboard, and
+   <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap>)
+   reads the next character entered at the keyboard, and
    expands all folds in the buffer
    with a fold level less than that specified, and collapsed all others.
   </para>

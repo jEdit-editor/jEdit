@@ -535,14 +535,14 @@
     register name to be typed at the keyboard after the command is
     invoked, and subsequently operate on that register.
     Pressing <keycap>Escape</keycap> instead of specifying a register name
-    invoking a command will cancel the operation.
+    will cancel the operation.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Cut
     to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>
-    <keycap><replaceable>register</replaceable></keycap>)
+    <keycap><replaceable>key</replaceable></keycap>)
     stores the selected text in the specified
     register, removing it from the buffer.
    </para>
@@ -551,7 +551,7 @@
     to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>
-    <keycap><replaceable>register</replaceable></keycap>)
+    <keycap><replaceable>key</replaceable></keycap>)
     stores the selected text in the specified
     register, leaving it in the buffer.
    </para>
@@ -560,7 +560,7 @@
     Append to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>
-    <keycap><replaceable>register</replaceable></keycap>)
+    <keycap><replaceable>key</replaceable></keycap>)
     adds the selected text to the existing contents of the specified
     register, and removes it from the buffer.
    </para>
@@ -569,7 +569,7 @@
     Append to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>
-    <keycap><replaceable>register</replaceable></keycap>)
+    <keycap><replaceable>key</replaceable></keycap>)
     adds the selected text to the existing contents of the specified
     register, without removing it from the buffer.
    </para>
@@ -578,7 +578,7 @@
     from Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>
-    <keycap><replaceable>register</replaceable></keycap>) 
+    <keycap><replaceable>key</replaceable></keycap>) 
     replaces the selection with the
     contents of the specified register.
    </para>
@@ -609,8 +609,8 @@
    saved to
    <filename>.<replaceable>filename</replaceable>.marks</filename>, where
    <filename><replaceable>filename</replaceable></filename> is the file
-   name<footnote><para>The dot prefix
-   makes the markers file hidden on Unix systems.</para></footnote>. Marker
+   name. (The dot prefix
+   makes the markers file hidden on Unix systems.) Marker
    saving can be
    disabled in the <guibutton>Loading and Saving</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
@@ -642,7 +642,8 @@
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Add Marker With
    Shortcut</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo>)
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo>
+   <keycap><replaceable>key</replaceable></keycap>)
    reads the next character entered at the keyboard, and adds a marker with that
    shortcut pointing to the current line. If a previously-defined marker already
    has that shortcut, it will no longer have that shortcut, but will remain
@@ -651,7 +652,8 @@
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Go to Marker</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>Y</keycap></keycombo>)
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>Y</keycap></keycombo>
+   <keycap><replaceable>key</replaceable></keycap>)
    reads the next character entered at the keyboard, and moves the caret to the
    location of the marker with that shortcut. Pressing <keycap>Escape</keycap>
    instead of specifying a marker
@@ -659,7 +661,8 @@
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Select to Marker</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>)
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>
+   <keycap><replaceable>key</replaceable></keycap>)
    reads the next character entered at the keyboard, and extends
    the selection to the location of the marker with that shortcut.
     Pressing <keycap>Escape</keycap> instead of specifying a marker
@@ -668,7 +671,8 @@
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Swap Caret and
    Marker</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>)
+   <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>
+   <keycap><replaceable>key</replaceable></keycap>)
    reads the next character entered at the keyboard, and swaps the
    position of the caret with the location of the marker with that shortcut.
    Pressing <keycap>Escape</keycap> instead of specifying a marker
@@ -746,7 +750,7 @@
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo>) displays
     the search and replace dialog box with the currently selected text
-    entered in the <guibutton>Search for:</guibutton> text field.
+    entered in the <guibutton>Search for</guibutton> text field.
    </para>
   </sect2>
   <sect2><title>Replacing Text</title>
@@ -877,7 +881,7 @@
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) displays
     the search and replace dialog box, and selects the <guibutton>All
-    Buffers</guibutton> radio button.
+    buffers</guibutton> radio button.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Search in Directory</guimenuitem>
