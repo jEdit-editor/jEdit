@@ -767,6 +767,8 @@ public class jEdit
 		}
 		catch (Exception e)
 		{
+			Log.log(Log.ERROR, jEdit.class, e);
+
 			if (e instanceof XmlException)
 			{
 				XmlException xe = (XmlException) e;
@@ -776,8 +778,6 @@ public class jEdit
 				Object[] args = { fileName, new Integer(line), message };
 				GUIUtilities.error(null,"xmode-parse",args);
 			}
-
-			Log.log(Log.ERROR, jEdit.class, e);
 		}
 	}
 
@@ -2064,6 +2064,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.215  2000/04/13 05:16:31  sp
+ * Documentation updates
+ *
  * Revision 1.214  2000/04/10 08:46:16  sp
  * Autosave recovery support, documentation updates
  *

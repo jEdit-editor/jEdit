@@ -1,20 +1,12 @@
 JEDIT TO DO
 
-2.4pre5:
-
-- Proofread chapter 6 onwards
-- do MARK_PREVIOUS before markKeyword()
-- Untitled files not replaced sometimes?
-- Double-click drag doesn't work backwards
-
-Later:
-
 + Features
 
 - XMode:
   - better error reporting
   - regexps
   - graphical mode/grammar editor
+  - do MARK_PREVIOUS before markKeyword()
 - 'Uncomment' command that removes comment strings from selected text
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Write custom 'document' class; Swing implementation has a few
@@ -38,6 +30,8 @@ Later:
 
 - Fix focus breakage, C+TAB/CS+TAB to navigate around all view components
   except for tool bar buttons
+- Double-click drag doesn't work backwards
+- Untitled files not replaced sometimes?
 
 When we switch to JDK 1.2, do this:
 - drag and drop of files and text

@@ -72,7 +72,7 @@ public class EditorOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editor.fontsize"),size);
 
 		/* Tab size */
-		String[] tabSizes = { "8", "4" };
+		String[] tabSizes = { "2", "4", "8" };
 		tabSize = new JComboBox(tabSizes);
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(jEdit.getProperty("buffer.tabSize"));
