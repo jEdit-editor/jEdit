@@ -4,7 +4,6 @@ JEDIT TO DO
 
 - Block user input while loading/saving
 - Background mode memory leak
-- FTP VFS GUI
 
 2.5:
 
@@ -13,7 +12,7 @@ JEDIT TO DO
 - Make HyperSearch a JFrame
 - Abortable I/O
 - Write VFS docs - user and developer
-- Ftp bookmarks
+- Improve FtpBrowser; add bookmarks, filtering, etc
 - text area doesn't lose focus sometimes
 - TokenMarker: MARK_PREVIOUS should mark to lastOffset not lastKeyword
 - XMode:
@@ -34,6 +33,7 @@ JEDIT TO DO
 
 Later:
 
+- Pluggable input handlers
 - New document model
 - Folding
 - Word wrap

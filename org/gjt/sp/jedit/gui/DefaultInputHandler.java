@@ -119,6 +119,14 @@ public class DefaultInputHandler extends InputHandler
 	}
 
 	/**
+	 * Returns if a prefix key has been pressed.
+	 */
+	public boolean isPrefixActive()
+	{
+		return super.isPrefixActive() || (bindings != currentBindings);
+	}
+
+	/**
 	 * Handle a key pressed event. This will look up the binding for
 	 * the key stroke and execute it.
 	 */
@@ -207,6 +215,7 @@ public class DefaultInputHandler extends InputHandler
 				if(o instanceof Hashtable)
 				{
 					currentBindings = (Hashtable)o;
+					evt.consume();
 					return;
 				}
 				else if(o instanceof EditAction)
@@ -215,6 +224,7 @@ public class DefaultInputHandler extends InputHandler
 					executeAction((EditAction)o,
 						evt.getSource(),
 						String.valueOf(c));
+					evt.consume();
 					return;
 				}
 
@@ -223,6 +233,7 @@ public class DefaultInputHandler extends InputHandler
 				if(grabAction != null)
 				{
 					handleGrabAction(evt);
+					evt.consume();
 					return;
 				}
 
@@ -231,11 +242,13 @@ public class DefaultInputHandler extends InputHandler
 				{
 					setRepeatCount(repeatCount * 10
 						+ (c - '0'));
+					evt.consume();
 					return;
 				}
 
 				executeAction(inputAction,evt.getSource(),
 					String.valueOf(evt.getKeyChar()));
+				evt.consume();
 
 				repeatCount = 0;
 				repeat = false;
@@ -324,6 +337,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/04/30 07:27:13  sp
+ * Ftp VFS hacking, bug fixes
+ *
  * Revision 1.1  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

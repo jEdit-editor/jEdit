@@ -70,6 +70,14 @@ public abstract class InputHandler extends KeyAdapter
 	public abstract void removeAllKeyBindings();
 
 	/**
+	 * Returns if a prefix key has been pressed.
+	 */
+	public boolean isPrefixActive()
+	{
+		return (grabAction != null || repeat);
+	}
+
+	/**
 	 * Grabs the next key typed event and invokes the specified
 	 * action with the key as a the action command.
 	 * @param action The action
@@ -278,6 +286,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  2000/04/30 07:27:13  sp
+ * Ftp VFS hacking, bug fixes
+ *
  * Revision 1.1  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

@@ -139,7 +139,11 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				// checks (if the file is a directory, etc)
 				// fail
 				if(!vfs.load(view,this,path))
+				{
+					if(!getFlag(TEMPORARY) && view != null)
+						view.hideWaitCursor();
 					return false;
+				}
 			}
 		}
 
@@ -1793,6 +1797,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.146  2000/04/30 07:27:13  sp
+ * Ftp VFS hacking, bug fixes
+ *
  * Revision 1.145  2000/04/29 03:07:37  sp
  * Indentation rules updated, VFS displays wait cursor properly, background mode
  *

@@ -1603,6 +1603,9 @@ public class JEditTextArea extends JComponent
 			inputHandler.keyReleased(evt);
 			break;
 		}
+
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
 	}
 
 	// private members
@@ -2183,6 +2186,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.57  2000/04/30 07:27:14  sp
+ * Ftp VFS hacking, bug fixes
+ *
  * Revision 1.56  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

@@ -56,34 +56,33 @@ public class FtpBrowser extends JDialog
 			password = address.password;
 			if(password == null)
 				password = (String)buffer.getProperty(FtpVFS.PASSWORD_PROPERTY);
-			path = MiscUtilities.getFileParent(address.path);
+			path = address.path;
+			if(type == OPEN)
+				path = MiscUtilities.getFileParent(path);
 		}
 		else
 		{
-			host = null;
-			user = null;
+			host = jEdit.getProperty("vfs.ftp.browser.host.value");
+			user = jEdit.getProperty("vfs.ftp.browser.user.value");
 			password = null;
 			path = null;
 		}
 
 		JPanel topPanel = new JPanel(new BorderLayout());
 
-		JPanel topLabels = new JPanel(new GridLayout(4,1));
+		JPanel topLabels = new JPanel(new GridLayout(3,1));
 		topLabels.add(new JLabel(jEdit.getProperty("vfs.ftp.browser.host"),
 			SwingConstants.RIGHT));
 		topLabels.add(new JLabel(jEdit.getProperty("vfs.ftp.browser.username"),
 			SwingConstants.RIGHT));
 		topLabels.add(new JLabel(jEdit.getProperty("vfs.ftp.browser.password"),
 			SwingConstants.RIGHT));
-		topLabels.add(new JLabel(jEdit.getProperty("vfs.ftp.browser.path"),
-			SwingConstants.RIGHT));
 		topPanel.add(BorderLayout.WEST,topLabels);
 
-		JPanel topFields = new JPanel(new GridLayout(4,1));
+		JPanel topFields = new JPanel(new GridLayout(3,1));
 		topFields.add(hostField = new JTextField(host));
 		topFields.add(userField = new JTextField(user));
 		topFields.add(passwordField = new JPasswordField(password));
-		topFields.add(pathField = new JTextField(path));
 		topPanel.add(BorderLayout.CENTER,topFields);
 
 		getContentPane().add(BorderLayout.NORTH,topPanel);
@@ -98,9 +97,9 @@ public class FtpBrowser extends JDialog
 		select.addActionListener(actionHandler);
 		buttons.add(select);
 
-		home = new JButton(jEdit.getProperty("vfs.ftp.browser.home"));
-		home.addActionListener(actionHandler);
-		buttons.add(home);
+		up = new JButton(jEdit.getProperty("vfs.ftp.browser.up"));
+		up.addActionListener(actionHandler);
+		buttons.add(up);
 		refresh = new JButton(jEdit.getProperty("vfs.ftp.browser.refresh"));
 		refresh.addActionListener(actionHandler);
 		buttons.add(refresh);
@@ -108,12 +107,25 @@ public class FtpBrowser extends JDialog
 		cancel.addActionListener(actionHandler);
 		buttons.add(cancel);
 
+		JPanel centerPanel = new JPanel(new BorderLayout());
 		list = new JList();
-		list.setVisibleRowCount(16);
+		list.setVisibleRowCount(10);
 		list.addListSelectionListener(new ListHandler());
-		getContentPane().add(BorderLayout.CENTER,new JScrollPane(list));
+		list.addMouseListener(new MouseHandler());
+		list.setCellRenderer(new FileCellRenderer());
+		centerPanel.add(BorderLayout.CENTER,new JScrollPane(list));
 
+		JPanel pathPanel = new JPanel(new BorderLayout());
+		pathPanel.add(BorderLayout.WEST,new JLabel(jEdit.getProperty(
+			"vfs.ftp.browser.path"),SwingConstants.RIGHT));
+		pathPanel.add(BorderLayout.CENTER,pathField = new JTextField(path));
+		centerPanel.add(BorderLayout.SOUTH,pathPanel);
+
+		getContentPane().add(BorderLayout.CENTER,centerPanel);
 		getContentPane().add(BorderLayout.SOUTH,buttons);
+
+		addWindowListener(new WindowHandler());
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		update();
 
@@ -144,7 +156,7 @@ public class FtpBrowser extends JDialog
 	private JTextField hostField, userField, pathField;
 	private JPasswordField passwordField;
 	private JList list;
-	private JButton select, home, refresh, cancel;
+	private JButton select, up, refresh, cancel;
 
 	private boolean connected;
 	private String path;
@@ -157,16 +169,14 @@ public class FtpBrowser extends JDialog
 		hostField.setEnabled(!connected);
 		userField.setEnabled(!connected);
 		passwordField.setEnabled(!connected);
-		pathField.setEnabled(connected);
 
 		if(connected)
 		{
 			select.setText(jEdit.getProperty("vfs.ftp.browser."
 				+ (type == OPEN ? "open" : "save")));
-			select.setEnabled(pathField.getText() != null);
 		}
 
-		home.setEnabled(connected);
+		up.setEnabled(connected);
 		refresh.setEnabled(connected);
 	}
 
@@ -192,16 +202,26 @@ public class FtpBrowser extends JDialog
 
 		String password = new String(passwordField.getPassword());
 
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
 		client = FtpVFS.createFtpClient(view,host,port,user,password,false);
 		if(client != null)
 		{
 			connected = true;
-			refresh();
+			String path = pathField.getText();
+			if(path != null && path.length() != 0)
+			{
+				if(path.endsWith("/"))
+					changeDirectory(path);
+				else
+				{
+					changeDirectory(MiscUtilities
+						.getFileParent(path));
+					list.setSelectedValue(MiscUtilities
+						.getFileName(path),true);
+				}
+			}
+			else
+				refresh();
 		}
-		else
-			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
 		update();
 	}
@@ -224,19 +244,44 @@ public class FtpBrowser extends JDialog
 		connected = false;
 	}
 
+	private void changeDirectory(String directory)
+	{
+		try
+		{
+			client.changeWorkingDirectory(directory);
+			if(!client.getResponse().isPositiveCompletion())
+			{
+				String[] args = { directory, client.getResponse().toString() };
+				GUIUtilities.error(view,"vfs.ftp.cd-error",args);
+			}
+			else
+				refresh();
+		}
+		catch(IOException io)
+		{
+			String[] args = { io.getMessage() };
+			GUIUtilities.error(view,"ioerror",args);
+		}
+	}
 	private void refresh()
 	{
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
 		list.setListData(new Object[0]);
 
 		BufferedReader in = null;
 		try
 		{
+			// get current directory
+			client.printWorkingDirectory();
+			path = extractPath(client.getResponse().getMessage());
+			if(!path.endsWith("/"))
+				path = path + '/';
+			pathField.setText(path);
+
+			client.dataPort();
 			Reader _in = client.list();
 			if(_in == null)
 			{
-				String[] args = { client.getResponse().toString() };
+				String[] args = { path, client.getResponse().toString() };
 				GUIUtilities.error(view,"vfs.ftp.list-error",args);
 				return;
 			}
@@ -246,16 +291,12 @@ public class FtpBrowser extends JDialog
 			String line;
 			while((line = in.readLine()) != null)
 			{
-				boolean directory = (line.charAt(0) == 'd');
-				// XXX: what about filenames with spaces?
-				int index = line.lastIndexOf(' ');
-				line = line.substring(index + 1);
-				if(directory)
-					line = line.concat("/");
-				fileList.addElement(line);
+				if(line.startsWith("total"))
+					continue;
+
+				fileList.addElement(getShortName(line));
 			}
-			MiscUtilities.quicksort(fileList,new MiscUtilities
-				.StringICaseCompare());
+			MiscUtilities.quicksort(fileList,new FileCompare());
 			list.setListData(fileList);
 		}
 		catch(IOException io)
@@ -278,16 +319,106 @@ public class FtpBrowser extends JDialog
 				}
 			}
 		}
-
-		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	private void select()
+	class FileCompare implements MiscUtilities.Compare
+	{
+		public int compare(Object obj1, Object obj2)
+		{
+			String str1 = (String)obj1;
+			String str2 = (String)obj2;
+			if(str1.endsWith("/"))
+			{
+				if(str2.endsWith("/"))
+					return str1.compareTo(str2);
+				else
+					return -1;
+			}
+			else
+			{
+				if(str2.endsWith("/"))
+					return 1;
+				else
+					return str1.compareTo(str2);
+			}
+		}
+	}
+
+	// PWD returns a string of the form '250 "foo" is current directory'
+	private String extractPath(String line)
+	{
+		int start = line.indexOf('"') + 1;
+		int end = line.lastIndexOf('"');
+		return line.substring(start,end);
+	}
+
+	// LIST returns a file listing where the last field is the
+	// file name
+	private String getShortName(String line)
+	{
+		boolean directory = (line.charAt(0) == 'd');
+		int fieldCount = 0;
+		boolean lastWasSpace = false;
+		int i;
+		for(i = 0; i < line.length(); i++)
+		{
+			if(line.charAt(i) == ' ')
+			{
+				if(lastWasSpace)
+					continue;
+				else
+				{
+					lastWasSpace = true;
+					fieldCount++;
+				}
+			}
+			else
+			{
+				lastWasSpace = false;
+				if(fieldCount == 8)
+					break;
+			}
+		}
+
+		line = line.substring(i);
+		if(directory)
+			line = line + '/';
+		return line;
+	}
+
+	private void up()
+	{
+		try
+		{
+			client.changeToParentDirectory();
+			if(!client.getResponse().isPositiveCompletion())
+			{
+				String[] args = { path, client.getResponse().toString() };
+				GUIUtilities.error(view,"vfs.ftp.cd-error",args);
+			}
+			else
+				refresh();
+		}
+		catch(IOException io)
+		{
+			String[] args = { io.getMessage() };
+			GUIUtilities.error(view,"ioerror",args);
+		}
+	}
+
+	private void selectPath()
 	{
 		String path = pathField.getText();
+
+		if(path == null)
+		{
+			view.getToolkit().beep();
+			return;
+		}
+
 		if(path.endsWith("/"))
 		{
-			// cd ...
+			changeDirectory(path);
 			return;
 		}
 
@@ -307,7 +438,7 @@ public class FtpBrowser extends JDialog
 		buf.append(host);
 		buf.append(path);
 
-		path = buf.toString();
+		this.path = buf.toString();
 		isOK = true;
 
 		disconnect();
@@ -319,6 +450,9 @@ public class FtpBrowser extends JDialog
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
+
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
 			if(source == select)
 			{
 				if(!connected)
@@ -327,17 +461,50 @@ public class FtpBrowser extends JDialog
 					return;
 				}
 
-				select();
+				selectPath();
 			}
 			else if(source == refresh)
 			{
 				refresh();
+			}
+			else if(source == up)
+			{
+				up();
 			}
 			else if(source == cancel)
 			{
 				disconnect();
 				dispose();
 			}
+
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+
+	class FileCellRenderer extends DefaultListCellRenderer
+	{
+		Icon directoryIcon = UIManager.getIcon("FileView.directoryIcon");
+		Icon fileIcon = UIManager.getIcon("FileView.fileIcon");
+
+		public Component getListCellRendererComponent(JList list,
+			Object value, int index, boolean isSelected,
+			boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list,value,index,
+				isSelected,cellHasFocus);
+
+			String str = (String)value;
+			Icon icon;
+			if(str.endsWith("/"))
+			{
+				icon = directoryIcon;
+				setText(str.substring(0,str.length() - 1));
+			}
+			else
+				icon = fileIcon;
+			setIcon(icon);
+
+			return this;
 		}
 	}
 
@@ -350,7 +517,33 @@ public class FtpBrowser extends JDialog
 
 			Object selected = list.getSelectedValue();
 			if(selected != null)
-				pathField.setText(selected.toString());
+				pathField.setText(path + selected);
+		}
+	}
+
+	class MouseHandler extends MouseAdapter
+	{
+		public void mousePressed(MouseEvent evt)
+		{
+			if(evt.getClickCount() == 2)
+			{
+				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				selectPath();
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			}
+		}
+	}
+
+	class WindowHandler extends WindowAdapter
+	{
+		public void windowClosed(WindowEvent evt)
+		{
+			String host = hostField.getText();
+			if(host != null)
+				jEdit.setProperty("vfs.ftp.browser.host.value",host);
+			String user = userField.getText();
+			if(user != null)
+				jEdit.setProperty("vfs.ftp.browser.user.value",user);
 		}
 	}
 }
@@ -358,6 +551,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/04/30 07:27:13  sp
+ * Ftp VFS hacking, bug fixes
+ *
  * Revision 1.3  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

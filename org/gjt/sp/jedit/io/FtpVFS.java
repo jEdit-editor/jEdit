@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.io;
 import com.fooware.net.*;
 import java.io.*;
 import java.net.*;
+import java.util.Hashtable;
 import org.gjt.sp.jedit.gui.LoginDialog;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -56,8 +57,9 @@ public class FtpVFS extends VFS
 		if(!browser.isOK())
 			return null;
 
-		buffer.putProperty(PASSWORD_PROPERTY,browser.getPassword());
-		return jEdit.openFile(view,null,browser.getPath(),false,false);
+		Hashtable props = new Hashtable();
+		props.put(PASSWORD_PROPERTY,browser.getPassword());
+		return jEdit.openFile(view,null,browser.getPath(),false,false,props);
 	}
 
 	/**
@@ -187,6 +189,7 @@ public class FtpVFS extends VFS
 		if(client == null)
 			return null;
 
+		client.dataPort();
 		InputStream in = client.retrieveStream(address.path);
 		if(in == null)
 		{
@@ -220,6 +223,7 @@ public class FtpVFS extends VFS
 		if(client == null)
 			return null;
 
+		client.dataPort();
 		OutputStream out = client.storeStream(address.path);
 		if(out == null)
 		{
@@ -280,7 +284,6 @@ public class FtpVFS extends VFS
 				return null;
 			}
 
-			client.dataPort();
 			client.representationType(FtpClient.IMAGE_TYPE);
 
 			return client;

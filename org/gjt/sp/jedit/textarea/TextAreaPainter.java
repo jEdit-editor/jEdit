@@ -466,9 +466,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		Color defaultColor = getForeground();
 
 		int y = textArea.lineToY(line);
-		paintHighlight(gfx,line,y);
 
-		if(line < 0 || line >= textArea.getLineCount())
+		boolean invalid = (!textArea.getDocument().isLoaded() || line < 0
+			|| line >= textArea.getLineCount());
+		paintHighlight(gfx,line,y,invalid);
+
+		if(invalid)
 		{
 			if(paintInvalid)
 			{
@@ -523,9 +526,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 	}
 
-	protected void paintHighlight(Graphics gfx, int line, int y)
+	protected void paintHighlight(Graphics gfx, int line, int y, boolean invalid)
 	{
-		if(line >= textArea.getSelectionStartLine()
+		// only paint plugin highlights on invalid lines
+		if(!invalid && line >= textArea.getSelectionStartLine()
 			&& line <= textArea.getSelectionEndLine())
 			paintLineHighlight(gfx,line,y);
 
@@ -535,7 +539,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(bracketHighlight && line == textArea.getBracketLine())
 			paintBracketHighlight(gfx,line,y);
 
-		if(line == textArea.getCaretLine())
+		if(!invalid && line == textArea.getCaretLine())
 			paintCaret(gfx,line,y);
 	}
 
@@ -654,6 +658,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2000/04/30 07:27:14  sp
+ * Ftp VFS hacking, bug fixes
+ *
  * Revision 1.33  2000/04/27 08:32:58  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature

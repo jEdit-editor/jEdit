@@ -193,6 +193,7 @@ public class View extends JFrame implements EBComponent
 				public void run()
 				{
 					newSplitPane.setDividerLocation(0.5);
+					textArea.requestFocus();
 				}
 			});
 		}
@@ -210,9 +211,8 @@ public class View extends JFrame implements EBComponent
 			}
 
 			newSplitPane.setDividerLocation(oldParent.getHeight() / 2);
+			textArea.requestFocus();
 		}
-
-		textArea.requestFocus();
 	}
 
 	/**
@@ -363,7 +363,7 @@ public class View extends JFrame implements EBComponent
 	/**
 	 * Shows the wait cursor.
 	 */
-	public void showWaitCursor()
+	public synchronized void showWaitCursor()
 	{
 		if(waitCount++ == 0)
 		{
@@ -381,7 +381,7 @@ public class View extends JFrame implements EBComponent
 	/**
 	 * Hides the wait cursor.
 	 */
-	public void hideWaitCursor()
+	public synchronized void hideWaitCursor()
 	{
 		if(waitCount > 0)
 			waitCount--;
@@ -537,6 +537,10 @@ public class View extends JFrame implements EBComponent
 	{
 		switch(evt.getID())
 		{
+		case KeyEvent.KEY_TYPED:
+			if(inputHandler.isPrefixActive())
+				inputHandler.keyTyped(evt);
+			break;
 		case KeyEvent.KEY_PRESSED:
 			inputHandler.keyPressed(evt);
 			break;
@@ -544,6 +548,9 @@ public class View extends JFrame implements EBComponent
 			inputHandler.keyReleased(evt);
 			break;
 		}
+
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
 	}
 
 	// private members
@@ -1431,6 +1438,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.164  2000/04/30 07:27:13  sp
+ * Ftp VFS hacking, bug fixes
+ *
  * Revision 1.163  2000/04/29 09:17:07  sp
  * VFS updates, various fixes
  *

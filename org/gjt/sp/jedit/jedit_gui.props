@@ -958,7 +958,7 @@ vfs.ftp.browser.path=Path:\
 vfs.ftp.browser.connect=Connect
 vfs.ftp.browser.open=Open
 vfs.ftp.browser.save=Save
-vfs.ftp.browser.home=Home
+vfs.ftp.browser.up=Up
 vfs.ftp.browser.refresh=Refresh
 
 # Menu item label
@@ -990,6 +990,12 @@ vfs.ftp.upload-error.message=An error occurred while uploading {0}:{1}{2}.\n\
 
 # File list error
 vfs.ftp.list-error.title=Cannot List Directory
-vfs.ftp.list-error.message=An error occurred while listing a directory.\n\
-	{0}\n\
+vfs.ftp.list-error.message=An error occurred while listing {0}.\n\
+	{1}\n\
+	See Utilities->Activity Log for a full connection trace.
+
+# Change directory error
+vfs.ftp.cd-error.title=Cannot Change Directory
+vfs.ftp.cd-error.message=An error occurred while changing to {0}.\n\
+	{1}\n\
 	See Utilities->Activity Log for a full connection trace.
