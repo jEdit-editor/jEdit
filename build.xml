@@ -11,7 +11,6 @@
 	<property file="build.properties"/>
 
 	<target name="init">
-		<available property="jdk14" classname="java.awt.KeyboardFocusManager" />
 		<available property="jdk15" classname="javax.swing.plaf.metal.OceanTheme" />
 		<mkdir dir="${build.directory}"/>
 	</target>
@@ -24,33 +23,19 @@
 			includeJavaRuntime="yes"
 			debug="yes"
 			encoding="UTF8" 
+			source="1.4"
+			target="1.4"
 		>
 			<include name="bsh/**/*.java"/>
 			<include name="com/microstar/xml/*.java"/>
 			<include name="gnu/regexp/*.java"/>
 			<include name="installer/*.java"/>
 			<include name="org/gjt/sp/jedit/**/*.java"/>
-			<exclude name="org/gjt/sp/jedit/Java14.java"/>
-			<exclude name="org/gjt/sp/jedit/print/BufferPrinter1_4.java"/>
 			<include name="org/gjt/sp/util/*.java"/>
 		</javac>
 	</target>
 
-	<target name="compile14" depends="init" if="jdk14">
-		<javac
-			srcdir="."
-			destdir="${build.directory}"
-			deprecation="on"
-			includeJavaRuntime="yes"
-			debug="yes"
-			encoding="UTF8" 
-		>
-			<include name="org/gjt/sp/jedit/Java14.java"/>
-			<include name="org/gjt/sp/jedit/print/BufferPrinter1_4.java"/>
-		</javac>
-	</target>
-
-	<target name="dist" depends="compile,compile14" description="Compile and package jEdit.">
+	<target name="dist" depends="compile" description="Compile and package jEdit.">
 		<jar
 			jarfile="jedit.jar"
 			manifest="org/gjt/sp/jedit/jedit.manifest"
