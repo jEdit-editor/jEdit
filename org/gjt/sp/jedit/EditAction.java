@@ -27,9 +27,7 @@ import java.util.EventObject;
 import org.gjt.sp.util.Log;
 
 /**
- * The class all jEdit actions must extend. It is an
- * <code>ActionListener</code> implementation with support for finding out
- * the view and buffer that invoked the action.<p>
+ * The class all jEdit actions must extend.<p>
  *
  * The <i>internal</i> name of an action is the string passed to the
  * EditAction constructor. An action instance can be obtained from it's
@@ -61,16 +59,9 @@ import org.gjt.sp.util.Log;
  * @see jEdit#addAction(org.gjt.sp.jedit.EditAction)
  * @see GUIUtilities#loadMenuItem(org.gjt.sp.jedit.View,String)
  */
-public abstract class EditAction implements ActionListener 
+public abstract class EditAction
+implements ActionListener // this will not implement ActionListener for long!!!
 {
-	/**
-	 * Creates a new <code>EditAction</code>. This constructor
-	 * should be used by jEdit's own actions only.
-	 */
-	public EditAction()
-	{
-	}
-
 	/**
 	 * Creates a new <code>EditAction</code>.
 	 * @param name The name of the action
@@ -85,19 +76,31 @@ public abstract class EditAction implements ActionListener
 	 */
 	public final String getName()
 	{
-		if(name == null)
-		{
-			String clazz = getClass().getName();
-			clazz = clazz.substring("org.gjt.sp.jedit.actions.".length());
-			clazz = clazz.replace('_','-');
-			name = clazz;
-		}
-
 		return name;
 	}
 
 	/**
-	 * Determines the view to use for the action.
+	 * Invokes the action.
+	 * @param view The view
+	 * @since jEdit 2.7pre2
+	 */
+	public void invoke(View view)
+	{
+		// default implementation
+		ActionEvent evt = new ActionEvent(view,
+			ActionEvent.ACTION_PERFORMED,
+			null);
+
+		actionPerformed(evt);
+	}
+
+	/**
+	 * @deprecated Extend invoke() instead
+	 */
+	public void actionPerformed(ActionEvent evt) {}
+
+	/**
+	 * @deprecated No longer necessary.
 	 */
 	public static View getView(EventObject evt)
 	{
@@ -112,7 +115,7 @@ public abstract class EditAction implements ActionListener
 	}
 
 	/**
-	 * Determines the buffer to use for the action.
+	 * @deprecated No longer necessary.
 	 */
 	public static Buffer getBuffer(EventObject evt)
 	{
@@ -188,42 +191,21 @@ public abstract class EditAction implements ActionListener
 	 */
 	public String getCode()
 	{
-		return "view.getInputHandler().executeAction("
-			+ "jEdit.getAction(\"" + name + "\"),view,null)";
+		return "view.getInputHandler().invokeAction("
+			+ "jEdit.getAction(\"" + name + "\"))";
 	}
 
 	// private members
 	private String name;
 
 	/**
-	 * jEdit wraps all EditActions in this wrapper so that they can
-	 * be recorded to macros and repeated. The wrapper also handles
-	 * autoloading of built-in actions.<p>
-	 *
-	 * This class should never be used directly. The
-	 * <code>jEdit.addAction()</code> method creates instances of
-	 * this class automatically.
+	 * 'Wrap' EditActions in this class to turn them into AWT
+	 * ActionListeners, that can be attached to buttons, menu items, etc.
 	 */
-	public static class Wrapper extends EditAction
+	public static class Wrapper implements ActionListener
 	{
-		/**
-		 * Creates a new wrapper that will autoload the built-in
-		 * action with the specified name.
-		 * @param name
-		 */
-		public Wrapper(String name)
-		{
-			super(name);
-		}
-
-		/**
-		 * Creates a new wrapper that will autoload the specified
-		 * plugin action.
-		 * @param action The plugin action
-		 */
 		public Wrapper(EditAction action)
 		{
-			super(action.name);
 			this.action = action;
 		}
 
@@ -238,76 +220,10 @@ public abstract class EditAction implements ActionListener
 		 */
 		public void actionPerformed(ActionEvent evt)
 		{
-			loadIfNecessary();
-
-			View view = EditAction.getView(evt);
-
-			if(view == null)
-			{
-				// Only EditBuddy should be doing this.
-				// just invoke the action directly.
-				action.actionPerformed(evt);
-			}
-			else
-			{
-				// Let input handler do recording, repeating,
-				// etc.
-				view.getInputHandler().executeAction(action,
-					evt.getSource(),evt.getActionCommand());
-			}
-		}
-
-		/**
-		 * Delegates to the underlying action. Note that
-		 * built-in/autoloaded actions cannot be toggles.
-		 */
-		public boolean isToggle()
-		{
-			if(action == null)
-				return false;
-			else
-				return action.isToggle();
-		}
-
-		/**
-		 * Delegates to the underlying action. Note that
-		 * built-in/autoloaded actions cannot be toggles.
-		 */
-		public boolean isSelected(Component comp)
-		{
-			if(action == null)
-				return false;
-			else
-				return action.isSelected(comp);
-		}
-
-		/**
-		 * Loads the action if necessary.
-		 */
-		public void loadIfNecessary()
-		{
-			if(action != null)
-				return;
-
-			String className = "org.gjt.sp.jedit.actions."
-				+ Wrapper.this.getName().replace('-','_');
-
-			try
-			{
-				Class clazz;
-				ClassLoader loader = getClass().getClassLoader();
-				if(loader == null)
-					clazz = Class.forName(className);
-				else
-					clazz = loader.loadClass(className);
-
-				action = (EditAction)clazz.newInstance();
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,"Cannot load action " + className);
-				Log.log(Log.ERROR,this,e);
-			}
+			// Let input handler do recording, repeating,
+			// etc.
+			EditAction.getView(evt).getInputHandler()
+				.invokeAction(action);
 		}
 
 		// private members
@@ -318,6 +234,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  2000/11/17 11:15:59  sp
+ * Actions removed, documentation updates, more BeanShell work
+ *
  * Revision 1.31  2000/11/16 10:25:16  sp
  * More macro work
  *
@@ -347,20 +266,5 @@ public abstract class EditAction implements ActionListener
  *
  * Revision 1.22  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
- *
- * Revision 1.21  2000/01/14 04:23:50  sp
- * 2.3pre2 stuff
- *
- * Revision 1.20  1999/12/13 03:40:29  sp
- * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.19  1999/12/10 03:22:46  sp
- * Bug fixes, old loading code is now used again
- *
- * Revision 1.18  1999/12/07 06:30:48  sp
- * Compile errors fixed, new 'new view' icon
- *
- * Revision 1.17  1999/12/06 00:06:14  sp
- * Bug fixes
  *
  */

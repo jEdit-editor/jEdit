@@ -81,9 +81,9 @@ class ActionListHandler extends HandlerBase
 		String tag = peekElement();
 		String text = new String(c, off, len);
 
-		if (tag == "ACTION_PERFORMED")
+		if (tag == "CODE")
 		{
-			actionPerformed = text;
+			code = text;
 		}
 		else if (tag == "IS_SELECTED")
 		{
@@ -97,7 +97,7 @@ class ActionListHandler extends HandlerBase
 
 		if (tag == "ACTION")
 		{
-			actionPerformed = null;
+			code = null;
 			isSelected = null;
 		}
 	}
@@ -114,7 +114,7 @@ class ActionListHandler extends HandlerBase
 			if(tag == "ACTION")
 			{
 				jEdit.addAction(new BeanShellAction(actionName,
-					actionPerformed,isSelected,noRepeat,
+					code,isSelected,noRepeat,
 					noRecord));
 			}
 
@@ -144,7 +144,7 @@ class ActionListHandler extends HandlerBase
 	private String path;
 
 	private String actionName;
-	private String actionPerformed;
+	private String code;
 	private String isSelected;
 
 	private boolean noRepeat;

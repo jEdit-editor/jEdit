@@ -46,6 +46,19 @@ import org.gjt.sp.util.Log;
 public class Macros
 {
 	/**
+	 * Utility method that can be used to prompt for input in a macro.
+	 * @param view The view
+	 * @param prompt The prompt string
+	 * @since jEdit 2.7pre2
+	 */
+	public static String input(View view, String prompt)
+	{
+		return (String)JOptionPane.showInputDialog(view,prompt,
+			jEdit.getProperty("macro-input.title"),
+			JOptionPane.QUESTION_MESSAGE,null,null,null);
+	}
+
+	/**
 	 * Opens the system macro directory in a VFS browser.
 	 * @param view The view
 	 * @since jEdit 2.7pre2
@@ -279,7 +292,9 @@ public class Macros
 		InputHandler inputHandler = view.getInputHandler();
 		Recorder recorder = view.getMacroRecorder();
 
-		if(recorder != null)
+		if(recorder == null)
+			GUIUtilities.error(view,"macro-not-recording",null);
+		else
 		{
 			view.setMacroRecorder(null);
 			if(lastMacro != null)
@@ -425,6 +440,7 @@ public class Macros
 	{
 		View view;
 		Buffer buffer;
+		boolean lastWasInput;
 
 		public Recorder(View view, Buffer buffer)
 		{
@@ -435,6 +451,12 @@ public class Macros
 
 		public void record(String code)
 		{
+			if(lastWasInput)
+			{
+				lastWasInput = false;
+				append("\");");
+			}
+
 			append("\n");
 			append(code);
 		}
@@ -456,7 +478,18 @@ public class Macros
 		{
 			String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
 
-			record(repeat,"textArea.userInput(\"" + charStr + "\");");
+			if(repeat == 1)
+			{
+				if(lastWasInput)
+					append(charStr);
+				else
+				{
+					append("\ntextArea.userInput(\"" + charStr);
+					lastWasInput = true;
+				}
+			}
+			else
+				record(repeat,"textArea.userInput(\"" + charStr + "\");");
 		}
 
 		public void handleMessage(EBMessage msg)
@@ -495,6 +528,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.45  2000/11/17 11:15:59  sp
+ * Actions removed, documentation updates, more BeanShell work
+ *
  * Revision 1.44  2000/11/16 10:25:16  sp
  * More macro work
  *

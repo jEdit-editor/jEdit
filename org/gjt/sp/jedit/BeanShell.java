@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit;
 
 import bsh.Interpreter;
+import bsh.NameSpace;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.JFileChooser;
@@ -111,7 +112,8 @@ public class BeanShell
 		{
 			running = true;
 
-			interp.eval(in);
+			NameSpace namespace = new NameSpace("global");
+			interp.eval(in,namespace,path);
 		}
 		catch(Throwable e)
 		{
@@ -187,9 +189,10 @@ public class BeanShell
 	{
 		Log.log(Log.DEBUG,BeanShell.class,"Initializing BeanShell"
 			+ " interpreter");
-		interp = new Interpreter();
+
 		try
 		{
+			interp = new Interpreter();
 			interp.eval(new BufferedReader(new InputStreamReader(
 				BeanShell.class.getResourceAsStream("jedit.bsh"))));
 		}

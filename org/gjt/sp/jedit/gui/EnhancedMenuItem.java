@@ -46,7 +46,7 @@ public class EnhancedMenuItem extends JMenuItem
 		if(action != null)
 		{
 			setEnabled(true);
-			addActionListener(action);
+			addActionListener(new EditAction.Wrapper(action));
 			if(actionCommand == null)
 				keyBindingProp = action.getName() + ".shortcut";
 			else if(action.getName().equals("play-macro"))

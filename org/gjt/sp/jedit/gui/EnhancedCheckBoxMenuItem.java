@@ -44,7 +44,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 		if(action != null)
 		{
 			setEnabled(true);
-			addActionListener(action);
+			addActionListener(new EditAction.Wrapper(action));
 			if(actionCommand == null)
 				keyBindingProp = action.getName() + ".shortcut";
 			else

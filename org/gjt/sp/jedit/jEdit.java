@@ -724,7 +724,7 @@ public class jEdit
 	public static void addAction(EditAction action)
 	{
 		String name = action.getName();
-		actionHash.put(name,new EditAction.Wrapper(action));
+		actionHash.put(name,action);
 
 		// Register key binding
 		String binding = getProperty(name + ".shortcut");
@@ -2098,40 +2098,15 @@ public class jEdit
 	}
 
 	/**
-	 * Registers an action with the editor. This is for internal
-	 * use only.
-	 * @param action The action
-	 */
-	private static void addAction(String name)
-	{
-		EditAction.Wrapper action = new EditAction.Wrapper(name);
-		actionHash.put(name,action);
-
-		// Register key binding
-		String binding = getProperty(name + ".shortcut");
-		if(binding != null)
-			inputHandler.addKeyBinding(binding,action);
-	}
-
-	/**
 	 * Load actions.
 	 */
 	private static void initActions()
 	{
 		actionHash = new Hashtable();
 
-		long start = System.currentTimeMillis();
-
 		Reader in = new BufferedReader(new InputStreamReader(
 			jEdit.class.getResourceAsStream("actions.xml")));
 		loadActions("actions.xml",in);
-
-		System.err.println(System.currentTimeMillis() - start);
-
-		addAction("end");
-		addAction("home");
-		addAction("select-end");
-		addAction("select-home");
 	}
 
 	/**
@@ -2459,6 +2434,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.295  2000/11/17 11:15:59  sp
+ * Actions removed, documentation updates, more BeanShell work
+ *
  * Revision 1.294  2000/11/16 10:25:16  sp
  * More macro work
  *

@@ -430,7 +430,7 @@ public class JEditTextArea extends JComponent
 
 		int _firstLine = firstLine + electricScroll;
 		int _lastLine = firstLine + visibleLines - electricScroll;
-		if(caretLine > _firstLine && caretLine < _lastLine)
+		if(caretLine > _firstLine && caretLine <= _lastLine)
 		{
 			// vertical scroll position is correct already
 		}
@@ -2371,6 +2371,204 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	}
 
 	/**
+	 * On subsequent invocations, first moves the caret to the first
+	 * non-whitespace character of the line, then the beginning of the
+	 * line, then to the first visible line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void smartHome(boolean select)
+	{
+		if(!jEdit.getBooleanProperty("view.homeEnd"))
+			goToStartOfLine(select);
+		else
+		{
+			switch(view.getInputHandler().getLastActionCount())
+			{
+			case 1:
+				goToStartOfWhiteSpace(select);
+				break;
+			case 2:
+				goToStartOfLine(select);
+				break;
+			default: //case 3:
+				goToFirstVisibleLine(select);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * On subsequent invocations, first moves the caret to the last
+	 * non-whitespace character of the line, then the end of the
+	 * line, then to the last visible line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void smartEnd(boolean select)
+	{
+		if(!jEdit.getBooleanProperty("view.homeEnd"))
+			goToEndOfLine(select);
+		else
+		{
+			switch(view.getInputHandler().getLastActionCount())
+			{
+			case 1:
+				goToEndOfWhiteSpace(select);
+				break;
+			case 2:
+				goToEndOfLine(select);
+				break;
+			default: //case 3:
+				goToLastVisibleLine(select);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Moves the caret to the beginning of the current line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToStartOfLine(boolean select)
+	{
+		// do this here, for weird reasons
+		Macros.Recorder recorder = view.getMacroRecorder();
+		if(recorder != null)
+			recorder.record("textArea.goToStartOfLine(" + select + ")");
+
+		if(select)
+		{
+			select(getMarkPosition(),getLineStartOffset(
+				getCaretLine()));
+		}
+		else
+			setCaretPosition(getLineStartOffset(getCaretLine()));
+	}
+
+	/**
+	 * Moves the caret to the end of the current line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToEndOfLine(boolean select)
+	{
+		// do this here, for weird reasons
+		Macros.Recorder recorder = view.getMacroRecorder();
+		if(recorder != null)
+			recorder.record("textArea.goToEndOfLine(" + select + ")");
+
+		if(select)
+		{
+			select(getMarkPosition(),getLineEndOffset(
+				getCaretLine()) - 1);
+		}
+		else
+			setCaretPosition(getLineEndOffset(getCaretLine()) - 1);
+	}
+
+	/**
+	 * Moves the caret to the first non-whitespace character of the current
+	 * line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToStartOfWhiteSpace(boolean select)
+	{
+		// do this here, for weird reasons
+		Macros.Recorder recorder = view.getMacroRecorder();
+		if(recorder != null)
+			recorder.record("textArea.goToStartOfWhiteSpace(" + select + ")");
+
+		int line = getCaretLine();
+		int firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
+		int firstOfLine = getLineStartOffset(line);
+
+		firstIndent = firstOfLine + firstIndent;
+		if(firstIndent == getLineEndOffset(line) - 1)
+			firstIndent = firstOfLine;
+
+		if(select)
+			select(getMarkPosition(),firstIndent);
+		else
+			setCaretPosition(firstIndent);
+	}
+
+	/**
+	 * Moves the caret to the last non-whitespace character of the current
+	 * line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToEndOfWhiteSpace(boolean select)
+	{
+		// do this here, for weird reasons
+		Macros.Recorder recorder = view.getMacroRecorder();
+		if(recorder != null)
+			recorder.record("textArea.goToEndOfWhiteSpace(" + select + ")");
+
+		int line = getCaretLine();
+		int lastIndent = MiscUtilities.getTrailingWhiteSpace(getLineText(line));
+		int lastOfLine = getLineEndOffset(line) - 1;
+
+		lastIndent = lastOfLine - lastIndent;
+		if(lastIndent == getLineStartOffset(line))
+			lastIndent = lastOfLine;
+
+		if(select)
+			select(getMarkPosition(),lastIndent);
+		else
+			setCaretPosition(lastIndent);
+	}
+
+	/**
+	 * Moves the caret to the first visible line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToFirstVisibleLine(boolean select)
+	{
+		// do this here, for weird reasons
+		Macros.Recorder recorder = view.getMacroRecorder();
+		if(recorder != null)
+			recorder.record("textArea.goToFirstVisibleLine(" + select + ")");
+
+		int firstVisibleLine = (firstLine <= electricScroll) ? 0 :
+			firstLine + electricScroll;
+		if(firstVisibleLine >= getLineCount())
+			firstVisibleLine = getLineCount() - 1;
+
+		int firstVisible = getLineEndOffset(firstVisibleLine) - 1;
+
+		if(select)
+			select(getMarkPosition(),firstVisible);
+		else
+			setCaretPosition(firstVisible);
+	}
+
+	/**
+	 * Moves the caret to the last visible line.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToLastVisibleLine(boolean select)
+	{
+		// do this here, for weird reasons
+		Macros.Recorder recorder = view.getMacroRecorder();
+		if(recorder != null)
+			recorder.record("textArea.goToLastVisibleLine(" + select + ")");
+
+		int lastVisibleLine = firstLine + visibleLines;
+
+		if(lastVisibleLine >= getLineCount())
+			lastVisibleLine = getLineCount() - 1;
+		else if(lastVisibleLine <= electricScroll)
+			lastVisibleLine = 0;
+		else
+			lastVisibleLine -= electricScroll;
+
+		int lastVisible = getLineEndOffset(lastVisibleLine) - 1;
+
+		if(select)
+			select(getMarkPosition(),lastVisible);
+		else
+			setCaretPosition(lastVisible);
+	}
+
+	/**
 	 * Prepends each line of the selection with the block comment string.
 	 * @since jEdit 2.7pre2
 	 */
@@ -2720,7 +2918,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	{
 		int start = selectionStart;
 		int end = selectionEnd;
-		String text = textArea.getText(0,buffer.getLength());
+		String text = getText(0,buffer.getLength());
 
 		// Scan backwards, trying to find a bracket
 		int count = 1;
@@ -4039,6 +4237,9 @@ forward_scan:		do
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.100  2000/11/17 11:16:05  sp
+ * Actions removed, documentation updates, more BeanShell work
+ *
  * Revision 1.99  2000/11/16 10:25:19  sp
  * More macro work
  *

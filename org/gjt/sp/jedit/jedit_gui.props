@@ -433,7 +433,7 @@ macros=record-macro \
        -
 macros.label=$Macros
 record-macro.label=$Record Macro...
-record-temp-macro.label=Record $to Temporary Buffer
+record-temp-macro.label=Record $Temporary Macro
 stop-recording.label=$Stop Recording
 run-temp-macro.label=Run Tem$porary Macro
 run-last-macro.label=Run $Last Macro
@@ -817,13 +817,6 @@ plugin.dep-class.message=The plugin {0} requires the class {1}.\n\
 
 # Macro input dialog
 macro-input.title=Macro Input
-macro-input.caption=This action lets you prompt the user for input in macro.
-macro-input.prompt=Prompt to display:
-macro-input.register=Store in register:
-
-macro-input.no-record.title=Not Recording
-macro-input.no-record.message=This command is only useful while recording\n\
-	a macro.
 
 # BeanShell stuff
 
@@ -844,6 +837,9 @@ beanshell-eval-input.message=BeanShell expression:
 
 beanshell-eval.title=BeanShell Evaluation Result
 beanshell-eval.message={0}
+
+macro-not-recording.title=Not Recording
+macro-not-recording.message=A macro is not currently being recorded.
 
 # Buffer options dialog
 buffer-options.title=Buffer Options

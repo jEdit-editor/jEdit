@@ -36,7 +36,7 @@ public class EnhancedButton extends JButton
 		if(action != null)
 		{
 			setEnabled(true);
-			addActionListener(action);
+			addActionListener(new EditAction.Wrapper(action));
 		}
 		else
 			setEnabled(false);

@@ -146,27 +146,13 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	/**
-	 * Executes the specified action, repeating and recording it as
+	 * Invokes the specified action, repeating and recording it as
 	 * necessary.
 	 * @param action The action
 	 * @param source The event source
-	 * @param actionCommand The action command
 	 */
-	public void executeAction(EditAction action, Object source,
-		String actionCommand)
+	public void invokeAction(EditAction action)
 	{
-		// create event
-		ActionEvent evt = new ActionEvent(source,
-			ActionEvent.ACTION_PERFORMED,
-			actionCommand);
-
-		// don't do anything if the action is a wrapper
-		if(action instanceof EditAction.Wrapper)
-		{
-			action.actionPerformed(evt);
-			return;
-		}
-
 		// remember the last executed action
 		if(lastAction == action)
 			lastActionCount++;
@@ -182,7 +168,7 @@ public abstract class InputHandler extends KeyAdapter
 
 		// execute the action
 		if(action.noRepeat() || _repeatCount == 1)
-			action.actionPerformed(evt);
+			action.invoke(view);
 		else
 		{
 			Buffer buffer = view.getBuffer();
@@ -192,7 +178,7 @@ public abstract class InputHandler extends KeyAdapter
 				buffer.beginCompoundEdit();
 	
 				for(int i = 0; i < _repeatCount; i++)
-					action.actionPerformed(evt);
+					action.invoke(view);
 			}
 			finally
 			{
@@ -229,6 +215,30 @@ public abstract class InputHandler extends KeyAdapter
 
 	protected String readNextChar;
 
+	protected void userInput(char ch)
+	{
+		lastAction = null;
+
+		if(readNextChar != null)
+			invokeReadNextChar(ch);
+		else
+		{
+			StringBuffer buf = new StringBuffer();
+			int _repeatCount = getRepeatCount();
+			for(int i = 0; i < _repeatCount; i++)
+				buf.append(ch);
+
+			view.getTextArea().userInput(buf.toString());
+
+			Macros.Recorder recorder = view.getMacroRecorder();
+
+			if(recorder != null)
+				recorder.record(_repeatCount,ch);
+		}
+
+		setRepeatEnabled(false);
+	}
+
 	protected void invokeReadNextChar(char ch)
 	{
 		String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
@@ -264,33 +274,14 @@ public abstract class InputHandler extends KeyAdapter
 
 		readNextChar = null;
 	}
-
-	protected void userInput(char ch)
-	{
-		if(readNextChar != null)
-			invokeReadNextChar(ch);
-		else
-		{
-			StringBuffer buf = new StringBuffer();
-			int _repeatCount = getRepeatCount();
-			for(int i = 0; i < _repeatCount; i++)
-				buf.append(ch);
-
-			view.getTextArea().userInput(buf.toString());
-
-			Macros.Recorder recorder = view.getMacroRecorder();
-
-			if(recorder != null)
-				recorder.record(_repeatCount,ch);
-		}
-
-		setRepeatEnabled(false);
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/11/17 11:16:04  sp
+ * Actions removed, documentation updates, more BeanShell work
+ *
  * Revision 1.18  2000/11/16 10:25:18  sp
  * More macro work
  *
@@ -320,14 +311,5 @@ public abstract class InputHandler extends KeyAdapter
  *
  * Revision 1.9  2000/07/15 10:10:18  sp
  * improved printing
- *
- * Revision 1.8  2000/05/27 05:52:06  sp
- * Improved home/end actions
- *
- * Revision 1.7  2000/05/24 07:56:05  sp
- * bug fixes
- *
- * Revision 1.6  2000/05/23 04:04:52  sp
- * Marker highlight updates, next/prev-marker actions
  *
  */

@@ -24,12 +24,12 @@ import java.awt.*;
 
 public class BeanShellAction extends EditAction
 {
-	public BeanShellAction(String name, String actionPerformed,
+	public BeanShellAction(String name, String code,
 		String isSelected, boolean noRepeat, boolean noRecord)
 	{
 		super(name);
 
-		this.actionPerformed = actionPerformed;
+		this.code = code;
 		this.noRepeat = noRepeat;
 		this.noRecord = noRecord;
 
@@ -41,15 +41,15 @@ public class BeanShellAction extends EditAction
 		}
 	}
 
-	public void actionPerformed(ActionEvent evt)
+	public void invoke(View view)
 	{
-		if(cachedActionPerformed == null)
+		if(cachedCode == null)
 		{
-			cachedActionPerformed = "_action" + counter++ + "()";
-			BeanShell.eval(null,cachedActionPerformed + "{"
-				+ actionPerformed + "}");
+			cachedCode = "_action" + counter++ + "()";
+			BeanShell.eval(null,cachedCode + "{"
+				+ code + "}");
 		}
-		BeanShell.eval(getView(evt),cachedActionPerformed);
+		BeanShell.eval(view,cachedCode);
 	}
 
 	public boolean isToggle()
@@ -78,7 +78,7 @@ public class BeanShellAction extends EditAction
 
 	public String getCode()
 	{
-		return actionPerformed.trim();
+		return code.trim();
 	}
 
 	// private members
@@ -86,7 +86,7 @@ public class BeanShellAction extends EditAction
 
 	private boolean noRepeat;
 	private boolean noRecord;
-	private String actionPerformed;
-	private String cachedActionPerformed;
+	private String code;
+	private String cachedCode;
 	private String cachedIsSelected;
 }

@@ -176,8 +176,7 @@ public class DefaultInputHandler extends InputHandler
 			{
 				currentBindings = bindings;
 
-				executeAction(((EditAction)o),
-					evt.getSource(),null);
+				invokeAction((EditAction)o);
 
 				evt.consume();
 				return;
@@ -212,9 +211,7 @@ public class DefaultInputHandler extends InputHandler
 			else if(o instanceof EditAction)
 			{
 				currentBindings = bindings;
-				executeAction((EditAction)o,
-					evt.getSource(),
-					String.valueOf(c));
+				invokeAction((EditAction)o);
 				return;
 			}
 
@@ -311,6 +308,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/11/17 11:16:04  sp
+ * Actions removed, documentation updates, more BeanShell work
+ *
  * Revision 1.9  2000/11/16 10:25:17  sp
  * More macro work
  *

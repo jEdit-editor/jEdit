@@ -2,6 +2,20 @@ JEDIT 2.7 VERSION HISTORY
 
 * Version 2.7pre2
 
++ New Features
+
+- BeanShell scripting is now in the core.
+  - Replaces old macro system
+  - Recording is still supported (and better than before)
+  - New commands in 'Utilities' menu for evaluating an arbitriary command, the
+    selection, or a script
+  - The hundreds of classes in the org.gjt.sp.jedit.actions package are now
+    gone; instead, actions are now written in BeanShell -- see the actions.xml
+    file in the jEdit source
+  - There is a new EditAction API. Because the new API offers no compelling
+    advantages at this point in time, I do not suggest that plugins are
+    updated for the new API until after jEdit 2.7final is out.
+
 + Enhancements
 
 - Electric scrolling is now only performed when moving the caret using
@@ -12,6 +26,7 @@ JEDIT 2.7 VERSION HISTORY
 - The caret status has been moved to the bottom-left corner of the text area.
   So the jEdit 2.7pre2 GUI looks very similar to the old jEdit 2.4 GUI now.
   What goes around, comes around ;-)
+- Documentation updates
 
 + Neutral
 
@@ -35,6 +50,14 @@ JEDIT 2.7 VERSION HISTORY
   overwrite...' warning
 - The 'Edit System Macros' and 'Edit User Macros' commands threw exceptions
   if the filesystem browser wasn't open
+
++ API Changes
+
+- Plugins which depend on the macro system, such as XInsert, will need to be
+  updated to support BeanShell
+- Action commands can no longer be passed to EditActions. So plugins that rely
+  on this (for example, Templates) will need to be changed to instead use
+  JMenuItems with custom action listeners
 
 * Version 2.7pre1
 
