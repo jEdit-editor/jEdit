@@ -21,12 +21,13 @@
 			message="&lt;xsl:import href='${docbook.xsl}/html/chunk.xsl'/&gt;"/>
 		<echo file="doc/docbook-wrapper.xsl" append="true"
 			message="&lt;/xsl:stylesheet&gt;"/>
+		<mkdir dir="${build.directory}"/>
 	</target>
 
 	<target name="compile" depends="init">
 		<javac
 			srcdir="."
-			destdir="."
+			destdir="${build.directory}"
 			deprecation="on"
 			includeJavaRuntime="yes"
 			debug="yes"
@@ -45,7 +46,7 @@
 	<target name="compile14" depends="init" if="jdk14">
 		<javac
 			srcdir="."
-			destdir="."
+			destdir="${build.directory}"
 			deprecation="on"
 			debug="yes"
 			includeJavaRuntime="yes"
@@ -61,12 +62,14 @@
 			manifest="org/gjt/sp/jedit/jedit.manifest"
 			compress="false"
 		>
-			<fileset dir=".">
+			<fileset dir="${build.directory}">
 				<include name="bsh/**/*.class"/>
 				<include name="com/**/*.class"/>
 				<include name="gnu/**/*.class"/>
 				<include name="org/**/*.class"/>
+			</fileset>
 
+			<fileset dir=".">
 				<include name="bsh/commands/*.bsh"/>
 
 				<include name="gnu/regexp/MessagesBundle.properties"/>
@@ -202,7 +205,7 @@
 
 	<target name="clean" description="Clean old stuff.">
 		<delete>
-			<fileset dir="." includes="**/*.class"/>
+			<fileset dir="${build.directory}" includes="**/*.class"/>
 			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
 			<fileset dir="." includes="**/#*#" defaultexcludes="no"/>
 			<fileset dir="." includes="**/*.rej"/>
