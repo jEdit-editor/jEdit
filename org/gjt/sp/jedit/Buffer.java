@@ -696,10 +696,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 			Mode[] modes = jEdit.getModes();
 
-			// Plugin modes will appear last in the list
-			// (initPlugins() is called after initModes())
-			// so we start from the end
-			for(int i = modes.length - 1; i >= 0; i--)
+			for(int i = 0; i < modes.length; i++)
 			{
 				if(modes[i].accept(this,nogzName,line))
 				{
@@ -1752,6 +1749,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.134  2000/04/09 09:27:51  sp
+ * XMode docs finished
+ *
  * Revision 1.133  2000/04/03 10:22:24  sp
  * Search bar
  *

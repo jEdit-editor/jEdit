@@ -10,11 +10,6 @@ JEDIT TO DO
   - document GUIUtilities.load/saveGeometry
   - how to write text area and gutter hilites
   - each section should have some sample source code
-- Finish XMode docs:
-  - PROPS tag
-  - Delegation
-  - MARK_PREVIOUS, MARK_FOLLOWING
-  - keywords
 - Redo window-editor-* screenshots
 
 Later:
