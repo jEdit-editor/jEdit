@@ -20,7 +20,7 @@
    supplied with jEdit.
   </para>
  </legalnotice>
- <copyright><year>1999</year><holder>Slava Pestov</holder></copyright>
+ <copyright><year>1999, 2000</year><holder>Slava Pestov</holder></copyright>
 </bookinfo>
 
 <chapter id=general-info><title>General Information</title>
@@ -487,8 +487,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     directory) can be
     entered. Most Java implementations support the <filename>ftp:</>
     and <filename>http:</> URL protocols, so jEdit can open files from
-    the Internet directly. However, saving to URLs is not supported on any
-    current Java version.
+    the Internet directly. However, saving to URLs is not supported.
    </para>
   </sect2>
   <sect2 id=recent><title>Opening Files With the Open Recent Menu</>
@@ -658,16 +657,6 @@ http://www.sourceforge.net/mail/?group_id=588</>.
     dialog box; see <xref linkend=global-opts>.
    </para>
   </sect2>
-  <sect2><title>Saving Files With the Save to URL Command</>
-   <para>
-    <indexterm><primary>Save to URL command</></indexterm>
-    <indexterm><primary>File menu</></indexterm>
-    <guimenu>File</>&gt;<guimenuitem>Save to URL</>
-    will prompt for a URL to save the buffer to. At the moment, this
-    command does nothing useful. It is a placeholder until real URL
-    saving is supported by Java.
-   </para>
-  </sect2>
   <sect2><title>Saving All Open Files</>
    <para>
     <indexterm><primary>Save All Buffers command</></indexterm>
@@ -760,192 +749,11 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   this section more carefully; Several things in jEdit are done differently
   from those text editors.
  </para>
- <sect1 id=moving-caret><title>Moving the Caret</>
+ <sect1 id=caret><title>The Caret and Text Selection</>
   <para>
-   <indexterm><primary>caret</></indexterm>
-   <indexterm><primary>moving the caret</>
-   <secondary>by clicking the mouse</></indexterm>
-   Recall that the caret is the location where most text insertion and
-   deletion takes place. Moving the caret is one of the most
-   frequently performed operations; there are many different ways
-   to do it.
+   Mouse clicks to move, Left, Right, Up, Down, PageUp, PageDown,
+   Home, End, C+Home, C+End, C+a, Escape, Go to line, Select line range
   </para>
-  <para>
-   Clicking the left or middle mouse button will move the caret to
-   the mouse position. This is most useful when moving the caret over
-   large distances, where doing it from the keyboard is impractical.
-  </para>
-  <para>
-   <indexterm><primary>moving the caret</>
-   <secondary>with the arrow keys</></indexterm>
-   Pressing one of the arrow keys will move the caret in the
-   respective direction. The <keycap>Up Arrow</> and <keycap>Down Arrow</>
-   arrow keys remember the original caret position; for example, if
-   the caret is on position 48 of a line, and it is moved up to a line
-   which is only 30 characters long, it will end up on position 30.
-   If it is <emphasis>immediately</> moved up again to a line that
-   is 50 characters long, it will end up back at position 48. The arrow
-   keys should be used to move the caret by a few characters or lines.
-  </para>
-  <para>
-   <indexterm><primary>moving the caret</>
-   <secondary>a word at a time</></indexterm>
-   <indexterm><primary>moving the caret</>
-   <secondary>a paragraph at a time</></indexterm>
-   Pressing one of the arrow keys while holding down <keycap>Control</>
-   will move backwards or forwards by one word in the case of
-   <keycap>Left Arrow</> and <keycap>Right Arrow</>, or backwards or
-   forwards by one paragraph in the case of <keycap>Up Arrow</> and
-   <keycap>Down Arrow</>. A paragraph is defined as a run of text
-   delimited by double newlines. jEdit has no support for indented
-   paragraphs, HTML <command>&lt;p&gt;</> tags, etc. These commands
-   can be used for moving over longer distances when you want to
-   keep your hands on the keyboard.
-  </para>
-  <para>
-   <indexterm><primary>moving the caret</>
-   <secondary>to the start of the line</></indexterm>
-   <indexterm><primary>moving the caret</>
-   <secondary>to the first visible position</></indexterm>
-   <indexterm><primary>moving the caret</>
-   <secondary>to the start of the buffer</></indexterm>
-   <indexterm><primary>moving the caret</>
-   <secondary>to the end of the line</></indexterm>
-   <indexterm><primary>moving the caret</>
-   <secondary>to the last visible position</></indexterm>
-   <indexterm><primary>moving the caret</>
-   <secondary>to the end of the buffer</></indexterm>
-   In most text editors, the <keycap>Home</> key moves the caret to the first
-   character of the current line, and the <keycap>End</> key moves the
-   caret to the last character of the current line. jEdit takes this
-   one step further - if the caret is <emphasis>already</> on the first
-   or last character of the line, it will be moved to the first or last
-   <firstterm>visible position</>, respectively. If it already on the first
-   or last visible position, it will be moved to the start or end of
-   the buffer.
-  </para>
-  <para>
-   Another way of going to the beginning or end of a buffer is to press
-   <keycombo><keycap>Control</><keycap>Home</>
-   </keycombo> or <keycombo><keycap>Control</><keycap>End</>
-   </keycombo>, respectively..
-  </para>
-  <tip>
-   <para>
-    If the overloaded behavior of <keycap>Home</> and <keycap>End</>
-    bothers you, disable it in the <guimenu>File</>&gt;<guimenuitem>Global
-    Options</> dialog box;
-    see <xref linkend=global-opts>.
-   </para>
-  </tip>
-  <para>
-   <indexterm><primary>moving the caret</>
-   <secondary>by screenfuls</></indexterm>
-   <keycap>Page Up</> will move the caret up by one screenful.
-   <keycap>Page Down</> will move the caret down by one screenful.
-  </para>
-  <para>
-   <indexterm><primary>moving the caret</>
-   <secondary>to a line number</></indexterm>
-   <indexterm><primary>Go to Line command</></indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
-   <guimenu>Edit</>&gt;<guimenuitem>Go to Line</> (keyboard
-   equivalent: <keycombo><keycap>Control</><keycap>L</></keycombo>)
-   will display a dialog box where a line number can be entered. The caret
-   will then be moved to that line.
-  </para>
- </sect1>
- <sect1 id=selecting-text><title>Selecting Text</>
-  <para>
-   <indexterm><primary>selection</></indexterm>
-   Often it is necessary to move, delete, or otherwise operate on an
-   arbitrary range of characters. With the exception of the line and
-   paragraph oriented features, all text editing commands operate on
-   the current <firstterm>selection</>. Selected text
-   is drawn with a highlight.
-  </para>
-  <para>
-   <indexterm><primary>caret</></indexterm>
-   <indexterm><primary>mark</></indexterm>
-   A selection is defined as the range of text between the caret and
-   the <firstterm>mark</>; when no selection is active, the mark and the
-   caret have the same position. When text is selected,
-   the mark is at the start of the selection, and the caret is at the
-   end.
-  </para>
-  <para>
-   <indexterm><primary>selecting</>
-   <secondary>by dragging</></indexterm>
-   The simplest way to select text is by dragging from the start of the
-   desired region to the end with
-   the left or middle mouse button (dragging means pressing the mouse button,
-   and moving the mouse without releasing it).
-  </para>
-  <para>
-   <indexterm><primary>selecting</>
-   <secondary>words by double-clicking</></indexterm>
-   Double clicking the left or middle mouse button will select the
-   word at the mouse position. A <firstterm>word</> is defined as a
-   run of alphanumeric characters.
-  </para>
-  <para>
-   <indexterm><primary>selecting</><secondary>lines by
-   triple-clicking</></indexterm>
-   Triple clicking the left or middle mouse button will select the
-   line at the mouse position. The newline character at the end of
-   the line is <emphasis>not</> selected.
-  </para>
-  <para>
-   <indexterm><primary>selecting</>
-   <secondary>changing the selection</></indexterm>
-   Once you have selected some text, it is sometimes necessary to
-   move the caret but not the mark; in other words, enlarge (or shrink)
-   the selection. The easiest way to achieve this is to click where you
-   want to relocate the caret (end of the selection) while
-   holding down the <keycap>Shift</> key. This can also be used
-   to create a selection if none is active; Shift-clicking at a
-   location will create a selection from the previous caret position
-   to where you
-   clicked.
-  </para>
-  <para>
-   Holding down <keycap>Shift</> in addition to one of the caret
-   movement commands (the arrow keys, <keycap>Home</>, <keycap>End</>,
-   etc) will extend the selection, instead of just moving the caret.
-   Again, this can be used to create a selection if none is active.
-  </para>
-  <para>
-   <indexterm><primary>selecting</><secondary>ranges of lines</>
-   </indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
-   <indexterm><primary>Select Line Range command</></indexterm>
-   <guimenu>Edit</>&gt;<guimenuitem>Select Line Range</> (keyboard
-   equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-   <keycombo><keycap>Control</><keycap>L</></keycombo>) will display
-   a dialog box where the starting line and end line can be entered.
-   The specified range of lines will be selected.
-  </para>
-  <para>
-   <indexterm><primary>selecting</><secondary>the entire buffer
-   </></indexterm>
-   <indexterm><primary>Select All command</></indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
-   <guimenu>Edit</>&gt;<guimenuitem>Select All</>
-   (keyboard equivalent: <keycombo><keycap>Control</><keycap>A</> </keycombo>)
-   will select the entire buffer.
-  </para>
-  <para>
-   <indexterm><primary>selecting</><secondary>the entire buffer
-   </></indexterm>
-   <indexterm><primary>Select None command</></indexterm>
-   <indexterm><primary>Edit menu</></indexterm>
-   <guimenu>Edit</>&gt;<guimenuitem>Select None</>
-   (keyboard equivalent: <keycap>Escape</>)
-   will deselect the currently selected region, if any.
-  </para>
-  <figure><title>A sample selection</>
-   <graphic scale=75 fileref=window-editor-select></>
-  </figure>
  </sect1>
  <sect1 id=entering-text><title>Entering Text</>
   <indexterm><primary>overstrike mode</></indexterm>
@@ -1104,6 +912,21 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   jEdit goes far beyond the basics when it comes to text editing; this
   chapter covers some more advanced features.
  </para>
+ <sect1 id=words><title>Working With Words</>
+  <para>
+   C+Left, C+Right, C+Backsp, C+Delete, Select-word, double-click
+  </para>
+ </sect1>
+ <sect1 id=lines><title>Working With Lines</>
+  <para>
+   C+d, CS+Backsp, CS+Delete, C+e C+j, C+j
+  </para>
+ </sect1>
+ <sect1 id=paragraphs><title>Working With Paragraphs</>
+  <para>
+   C+Up, C+Down, C+e C+d, Select-paragraph
+  </para>
+ </sect1>
  <sect1 id=views><title>Editing With Multiple Views</>
   <para>
    <indexterm><primary>view</></indexterm>
@@ -1314,8 +1137,13 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <keycap>Control</></keycombo> will create a rectangle from the caret
    position to where the mouse was clicked.
   </para>
+  <indexterm><primary>Rectangular Selection command</></indexterm>
+  <indexterm><primary>Edit menu</></indexterm>
+  <indexterm><primary>Selection menu</></indexterm>
   <para>
-   Finally, pressing <keycombo><keycap>Control</><keycap>\</></keycombo>
+   <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Rectangular
+   Selection</> (keyboard equivalent:
+   <keycombo><keycap>Control</><keycap>\</></keycombo>)
    will toggle the current selection between continuous and rectangular mode.
   </para>
   <para>
@@ -1673,19 +1501,6 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    defy categorization, yet are useful in some circumstances. This section
    will describe them.
   </para>
-  <sect2><title>Open Selection</>
-   <para>
-    <indexterm><primary>Open Selection command</></indexterm>
-    <indexterm><primary>File menu</></indexterm>
-    <indexterm><primary>selection</></indexterm>
-    <guimenu>File</>&gt;<guimenuitem>Open Selection</> (keyboard equivalent:
-    <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>S</></keycombo>)
-    opens the file or
-    URL specified by the selected text. If there is no selection, it will
-    beep.
-   </para>
-  </sect2>
   <sect2><title>Word Count</>
    <para>
     <indexterm><primary>Word Count command</></indexterm>
@@ -2112,18 +1927,18 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <para>
     <indexterm><primary>soft tabs</></indexterm>
     <indexterm><primary>Spaces to Tabs command</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Spaces to Tabs</>
+    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Spaces to Tabs</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>T</></keycombo>) will convert
+    <keycap>T</><keycap>T</>) will convert
     consecutive spaces to tabs in the selection.
     If no selection is active, it will beep.
    </para>
    <para>
     <indexterm><primary>soft tabs</></indexterm>
     <indexterm><primary>Tabs to Spaces command</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Tabs to Spaces</>
+    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Tabs to Spaces</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>U</></keycombo>) will convert
+    <keycap>T</><keycap>U</>) will convert
     tabs to soft tabs (multiple spaces) in the selection.
     If no selection is active, it will beep.
    </para>
@@ -2207,13 +2022,13 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <sect2><title>Wing Comments</>
    <para>
     <indexterm><primary>Wing Comment command</></indexterm>
-    <indexterm><primary>Source Code menu</></indexterm>
+    <indexterm><primary>Selection menu</></indexterm>
     <indexterm><primary>Edit menu</></indexterm>
     <indexterm><primary>buffer-local properties</>
     <secondary>commentStart</></indexterm>
     <indexterm><primary>buffer-local properties</>
     <secondary>commentEnd</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Wing Comment</>
+    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Wing Comment</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>C</></keycombo>) will enclose the
     selection with comment start and end strings. An example of C++
@@ -2239,7 +2054,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     <secondary>commentEnd</></indexterm>
     <indexterm><primary>buffer-local properties</>
     <secondary>boxComment</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Box Comment</>
+    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Box Comment</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>B</></keycombo>) will enclose the
     selection with comment start and end strings, and places the box
@@ -2262,7 +2077,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     <indexterm><primary>Block Comment command</></indexterm>
     <indexterm><primary>buffer-local properties</>
     <secondary>blockComment</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Source Code</>&gt;<guimenuitem>Block Comment</>
+    <guimenu>Edit</>&gt;<guisubmenu>Selection</>&gt;<guimenuitem>Block Comment</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>K</></keycombo>) will place the
     block comment character at the start of each line in the selection.
@@ -2836,7 +2651,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
     visible lines should automatically scroll</para></listitem>
     <listitem><para>In the <keycap>Home</> and <keycap>End</> should move
     the caret to the start/end of the viewport and buffer when pressed
-    repeatedly - see <xref linkend=moving-caret></para></listitem>
+    repeatedly - see <xref linkend=caret></para></listitem>
    </itemizedlist>
   </sect2>
   <sect2><title>The Colors &amp; Styles Tab</>

@@ -64,7 +64,6 @@ file=new-file \
      new-view \
      open-file \
      open-url \
-     open-selection \
      %open-recent \
      - \
      reload \
@@ -76,7 +75,6 @@ file=new-file \
      - \
      save \
      save-as \
-     save-url \
      save-all \
      - \
      send \
@@ -95,7 +93,6 @@ new-file.label=$New File
 new-view.label=New $View
 open-file.label=$Open File...
 open-url.label=Open $URL...
-open-selection.label=Open Sele$ction
 open-recent.label=O$pen Recent
 no-recent.label=No Recent Files
 reload.label=$Reload
@@ -105,7 +102,6 @@ close-all.label=Close All $Buffers
 close-view.label=Close Vie$w
 save.label=$Save
 save-as.label=Sa$ve As...
-save-url.label=Save $to URL...
 save-all.label=Save A$ll Buffers...
 send.label=Sen$d...
 print.label=$Print...
@@ -131,13 +127,12 @@ edit=undo \
      goto-line \
      select-line-range \
      - \
-     tab \
-     untab \
      word-count \
      - \
      complete-word \
      expand-abbrev \
      - \
+     %select \
      %line \
      %paragraph \
      %block
@@ -152,11 +147,36 @@ select-all.label=Select $All
 select-none.label=Select $None
 goto-line.label=$Go to Line...
 select-line-range.label=Select L$ine Range...
-tab.label=$Spaces to Tabs
-untab.label=$Tabs to Spaces
 word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
+
+### Selection menu
+select=select-word \
+       select-line \
+       select-paragraph \
+       - \
+       to-lower \
+       to-upper \
+       tab \
+       untab \
+       - \
+       wing-comment \
+       box-comment \
+       block-comment \
+       - \
+       toggle-rect
+select.label=Selection
+select-word.label=Select Word
+select-line.label=Select Line
+select-paragraph.label=Select Paragraph
+to-lower.label=To Lower Case
+to-upper.label=To Upper Case
+tab.label=Spaces to Tabs
+untab.label=Tabs to Spaces
+wing-comment.label=Wing Comment
+box-comment.label=Box Comment
+block-comment.label=Block Comment
 
 ### Line menu
 line=indent-line \
@@ -166,6 +186,8 @@ line=indent-line \
      delete-line \
      delete-start-line \
      delete-end-line \
+     remove-trailing-ws \
+     - \
      join-lines \
      - \
      shift-left \
@@ -178,6 +200,7 @@ delete-line.label=Delete Line
 delete-start-line.label=Delete to Start of Line
 delete-end-line.label=Delete to End of Line
 join-lines.label=Join Lines
+remove-trailing-ws.label=Remove Trailing Whitespace
 shift-left.label=Shift Indent Left
 shift-right.label=Shift Indent Right
 
@@ -201,19 +224,12 @@ block=select-block \
       locate-bracket \
       - \
       prev-bracket-exp \
-      next-bracket-exp \
-      - \
-      wing-comment \
-      box-comment \
-      block-comment
+      next-bracket-exp
 block.label=Source Code
 select-block.label=Select Code Block
 locate-bracket.label=Locate Bracket
 prev-bracket-exp.label=Go to Previous Bracket
 next-bracket-exp.label=Go to Next Bracket
-wing-comment.label=Wing Comment
-box-comment.label=Box Comment
-block-comment.label=Block Comment
 
 ### Registers menu
 registers=cut-string-register \
@@ -339,7 +355,7 @@ backspace.label=Delete Previous Character
 backspace-word.label=Delete Previous Word
 delete.label=Delete Next Character
 delete-word.label=Delete Next Word
-overwrite.label=Overwrite Mode On/Off
+overwrite.label=Overwrite Mode
 home.label=Beginning of Line
 document-home.label=Beginning of Document
 select-doc-home.label=Select Beginning of Document
@@ -364,7 +380,7 @@ prev-line.label=Previous Line
 select-prev-line.label=Select Previous Line
 next-line.label=Next Line
 select-next-line.label=Select Next Line
-toggle-rect.label=Rectangle Select On/Off
+toggle-rect.label=Rectangular Selection
 repeat.label=Enter Repeat Count
 
 ###

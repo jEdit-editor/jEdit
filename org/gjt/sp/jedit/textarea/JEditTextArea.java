@@ -2033,7 +2033,6 @@ public class JEditTextArea extends JComponent
 				&& noWordSep.indexOf(ch) == -1);
 
 			int wordStart = 0;
-
 			for(int i = offset - 1; i >= 0; i--)
 			{
 				ch = lineText.charAt(i);
@@ -2142,6 +2141,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.37  2000/01/14 04:23:50  sp
+ * 2.3pre2 stuff
+ *
  * Revision 1.36  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

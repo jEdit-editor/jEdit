@@ -1,5 +1,5 @@
 /*
- * regexp.java
+ * select_paragraph.java
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,25 +20,36 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.*;
-import org.gjt.sp.jedit.textarea.InputHandler;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditAction;
 
-public class regexp extends EditAction
-implements InputHandler.NonRecordable
+public class select_paragraph extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		SearchAndReplace.setRegexp(!SearchAndReplace.getRegexp());
-	}
+		JEditTextArea textArea = getView(evt).getTextArea();
+		int caretLine = textArea.getCaretLine();
 
-	public boolean isToggle()
-	{
-		return true;
-	}
+		int start = caretLine;
+		int end = caretLine;
 
-	public boolean isSelected(java.awt.Component comp)
-	{
-		return SearchAndReplace.getRegexp();
+		while(start >= 0)
+		{
+			if(textArea.getLineLength(start) == 0)
+				break;
+			else
+				start--;
+		}
+
+		while(end < textArea.getLineCount())
+		{
+			if(textArea.getLineLength(end) == 0)
+				break;
+			else
+				end++;
+		}
+
+		textArea.select(textArea.getLineStartOffset(start + 1),
+			textArea.getLineEndOffset(end - 1) - 1);
 	}
 }

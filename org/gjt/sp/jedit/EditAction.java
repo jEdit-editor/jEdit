@@ -211,11 +211,10 @@ public abstract class EditAction implements ActionListener
 		 */
 		public void actionPerformed(ActionEvent evt)
 		{
+			loadIfNecessary();
+
 			View view = EditAction.getView(evt);
 			JEditTextArea textArea = view.getTextArea();
-
-			if(action == null)
-				loadAction();
 
 			textArea.getInputHandler().executeAction(action,
 				textArea,evt.getActionCommand());
@@ -245,15 +244,14 @@ public abstract class EditAction implements ActionListener
 				return action.isSelected(comp);
 		}
 
-		// private members
-		private EditAction action;
-
 		/**
-		 * Called by <code>actionPerformed()</code> if the
-		 * action is null. Loads the action.
+		 * Loads the action if necessary.
 		 */
-		private void loadAction()
+		public void loadIfNecessary()
 		{
+			if(action != null)
+				return;
+
 			String className = "org.gjt.sp.jedit.actions."
 				+ Wrapper.this.getName().replace('-','_');
 
@@ -278,12 +276,18 @@ public abstract class EditAction implements ActionListener
 				Log.log(Log.ERROR,this,e);
 			}
 		}
+
+		// private members
+		private EditAction action;
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  2000/01/14 04:23:50  sp
+ * 2.3pre2 stuff
+ *
  * Revision 1.20  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

@@ -1,5 +1,33 @@
 JEDIT VERSION HISTORY
 
+* Version 2.3pre2
+
++ New Features
+
+- Edit->Selection menu, added, with the following commands:
+  - Select Word/Line/Paragraph (useful in macros)
+  - To Lower Case/To Upper Case (formely in TextTools plugin)
+  - Tabs to Spaces/Spaces to Tabs (formely in Edit menu)
+  - Wing/Box/Block Comment (formely in Edit->Source Code menu)
+  - Rectangular Selection (formely only accessable with its keyboard
+    shortcut, C+\)
+- Remove Trailing Whitespace command from TextTools plugin added
+
++ Enhancements
+
+- Useless 'Save to URL' command removed (URL saving is not suppported in
+  Java, all the current protocols return 'operation not supported')
+- Macro updates
+
++ Bug Fixes
+
+- Splash screen wasn't displayed (since 2.3pre1)
+- The search and replace setting buttons on the tool bar were always off by
+  default (since 2.3pre1)
+- Blank entries should no longer be printed in the log when printing stack
+  traces, etc (since 2.2pre2)
+- Files weren't added to the recent file list on exiting (since 2.2pre7)
+
 * Version 2.3pre1
 
 + New Features

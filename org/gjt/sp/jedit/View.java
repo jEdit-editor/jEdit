@@ -724,6 +724,7 @@ public class View extends JFrame implements EBComponent
 				box.add(quicksearch);
 				box.add(Box.createVerticalGlue());
 				toolBar.add(box);
+
 				toolBar.add(ignoreCase = GUIUtilities.loadToolButton(
 					"ignore-case"));
 				toolBar.add(regexp = GUIUtilities.loadToolButton(
@@ -951,6 +952,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.120  2000/01/14 04:23:50  sp
+ * 2.3pre2 stuff
+ *
  * Revision 1.119  1999/12/22 06:36:40  sp
  * 2.3pre1 stuff
  *

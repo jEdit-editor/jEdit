@@ -1,6 +1,6 @@
 /*
- * open_selection.java
- * Copyright (C) 1998 Slava Pestov
+ * toggle_rect.java
+ * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,17 +20,27 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.search.*;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.EditAction;
 
-public class open_selection extends EditAction
+public class toggle_rect extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		View view = getView(evt);
-		String selection = view.getTextArea().getSelectedText();
-		if(selection == null)
-			view.getToolkit().beep();
-		else
-			jEdit.openFile(view,null,selection,false,false);
+		JEditTextArea textArea = getView(evt).getTextArea();
+		textArea.setSelectionRectangular(
+			!textArea.isSelectionRectangular());
+	}
+
+	public boolean isToggle()
+	{
+		return true;
+	}
+
+	public boolean isSelected(java.awt.Component comp)
+	{
+		JEditTextArea textArea = getView(comp).getTextArea();
+		return textArea.isSelectionRectangular();
 	}
 }

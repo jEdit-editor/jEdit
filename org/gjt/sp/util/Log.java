@@ -218,7 +218,7 @@ public class Log
 			synchronized(LOCK)
 			{
 				StringTokenizer st = new StringTokenizer(
-					_message,"\n",true);
+					_message,"\r\n");
 				while(st.hasMoreTokens())
 				{
 					_log(urgency,_source,st.nextToken());
@@ -275,18 +275,7 @@ public class Log
 	private static void _log(int urgency, String source,
 		String message)
 	{
-		String lineSeparator = System.getProperty("line.separator");
-		if(message.endsWith(lineSeparator) || (message.charAt(message
-			.length() - 1) == '\n'))
-		{
-			if(message.length() == lineSeparator.length()
-				|| message.length() == 1)
-				return;
-		}
-		else
-			message = message.concat("\n");
-
-		message = source + ": " + message;
+		message = source + ": " + message + '\n';
 		_log(urgency,message);
 
 		if(urgency >= WARNING)
@@ -330,6 +319,9 @@ public class Log
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/01/14 04:23:50  sp
+ * 2.3pre2 stuff
+ *
  * Revision 1.6  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

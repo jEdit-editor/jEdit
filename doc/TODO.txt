@@ -1,9 +1,36 @@
 JEDIT TO DO
 
+Get rid of URL saving from Buffer.java
+
 ------- Stuff for 2.3pre2 -------
 
+- CaretUndo acts weird on 'redo' sometimes
+- 'Uncomment' command, removes comment strings from selected text
+- HyperSearch - when doing a directory search, all buffers with matches
+  are kept open, they should be closed
+  - to fix this, HyperSearch should check if getNextBuffer() returns a
+    temporary buffer, if so, it shouldn't create any positions, and
+    instead wait for the buffer created event (if there will be one)
+  - if the buffer is not temporary, create positions cos it's going stay
+    open
+- Beef up 'Marker' class to support this sort of file/line number/message
+  thing, EditBus will also use it for errors
+- Write an InputHandler subclass that displays the current repeat count,
+  if any, in the view's status bar
+- Tool bar ideas:
+  - show file status on tool bar, instead of (modified) in title bar, etc
+  - a button that displays a menu of buffer options to replace the buffer
+    options dialog box?
+  - a button that displays a menu of markers
+
+------- Stuff for 2.3pre3 -------
+
+- Double-click/drag
 - Need to redo window-editor-* snapshots in icewm
 - better ignore case, regexp icons
+- Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
+  to TextAreaHighlight and use that same interface to paint stuff in the
+  gutter
 - Clean way of embedding token markers in one another, so that HTMLTokenMarker
   can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
   -- TokenMarker.markTokensImpl changed to:
@@ -23,22 +50,6 @@ JEDIT TO DO
      calls markTokensImpl() of child
   -- more than one level of embedding will require a major reworking of the
      syntax system, so don't do it for now
-- CaretUndo acts weird on 'redo' sometimes
-- 'Uncomment' command, removes comment strings from selected text
-- Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
-  to TextAreaHighlight and use that same interface to paint stuff in the
-  gutter
-- HyperSearch - when doing a directory search, all buffers with matches
-  are kept open, they should be closed
-  - to fix this, HyperSearch should check if getNextBuffer() returns a
-    temporary buffer, if so, it shouldn't create any positions, and
-    instead wait for the buffer created event (if there will be one)
-  - if the buffer is not temporary, create positions cos it's going stay
-    open
-- Beef up 'Marker' class to support this sort of file/line number/message
-  thing, EditBus will also use it for errors
-- Write an InputHandler subclass that displays the current repeat count,
-  if any, in the view's status bar
 
 ------- Maybe in 2.3 -------
 

@@ -95,13 +95,20 @@ set-marker.shortcut=C+e C+m
 new-view.shortcut=C+e C+n
 open-url.shortcut=C+e C+o
 exit.shortcut=C+e C+q
-open-selection.shortcut=C+e C+s
-tab.shortcut=C+e C+t
-untab.shortcut=C+e C+u
+remove-trailing-ws.shortcut=C+e C+s
 insert-literal.shortcut=C+e C+v
 close-view.shortcut=C+e C+w
 redo.shortcut=C+e C+z
 expand-abbrev.shortcut=C+e C+x
+
+# C+e x x
+to-lower.shortcut=C+e c l
+to-upper.shortcut=C+e c u
+select-line.shortcut=C+e s l
+select-paragraph.shortcut=C+e s p
+select-word.shortcut=C+e s w
+tab.shortcut=C+e t t
+untab.shortcut=C+e t u
 
 # C+m
 play-last-macro.shortcut=C+m C+l

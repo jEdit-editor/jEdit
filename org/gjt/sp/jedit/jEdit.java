@@ -1,6 +1,6 @@
 /*
  * jEdit.java - Main class of the jEdit editor
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.03.01.00";
+		return "02.03.02.00";
 	}
 
 	/**
@@ -780,14 +780,7 @@ public class jEdit
 		buffer.close();
 
 		if(!buffer.isNewFile())
-		{
-			String path = buffer.getPath();
-			if(recent.contains(path))
-				recent.removeElement(path);
-			recent.insertElementAt(path,0);
-			if(recent.size() > maxRecent)
-				recent.removeElementAt(maxRecent);
-		}
+			addRecent(buffer.getPath());
 
 		EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
 
@@ -824,21 +817,22 @@ public class jEdit
 				return false;
 		}
 
-		if(isExiting)
-			return true;
-
 		// close remaining buffers (the close dialog only deals with
 		// dirty ones)
-		Buffer[] remaining = jEdit.getBuffers();
+
+		buffer = buffersFirst;
+		while(buffer != null)
+		{
+			if(!buffer.isNewFile())
+				addRecent(buffer.getPath());
+			buffer.close();
+			if(!isExiting)
+				EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
+			buffer = buffer.next;
+		}
+
 		buffersFirst = buffersLast = null;
 		bufferCount = 0;
-
-		for(int i = 0; i < remaining.length; i++)
-		{
-			buffer = remaining[i];
-			buffer.close();
-			EditBus.send(new BufferUpdate(buffer,BufferUpdate.CLOSED));
-		}
 
 		newFile(view);
 
@@ -1394,7 +1388,6 @@ public class jEdit
 		addAction("next-paragraph");
 		addAction("open-file");
 		addAction("open-path");
-		addAction("open-selection");
 		addAction("open-url");
 		addAction("paste");
 		addAction("paste-previous");
@@ -1413,6 +1406,7 @@ public class jEdit
 		addAction("reload");
 		addAction("reload-all");
 		addAction("regexp");
+		addAction("remove-trailing-ws");
 		addAction("replace-all");
 		addAction("replace-in-selection");
 		addAction("rescan-macros");
@@ -1421,17 +1415,19 @@ public class jEdit
 		addAction("save-as");
 		addAction("save-log");
 		addAction("save-session");
-		addAction("save-url");
 		addAction("scroll-line");
 		addAction("search-and-replace");
 		addAction("select-all");
 		addAction("select-block");
 		addAction("select-buffer");
 		addAction("select-caret-register");
+		addAction("select-line");
 		addAction("select-line-range");
 		addAction("select-next-paragraph");
 		addAction("select-none");
+		addAction("select-paragraph");
 		addAction("select-prev-paragraph");
+		addAction("select-word");
 		addAction("set-caret-register");
 		addAction("set-filename-register");
 		addAction("set-replace-string");
@@ -1443,6 +1439,9 @@ public class jEdit
 		addAction("shift-right");
 		addAction("stop-recording");
 		addAction("tab");
+		addAction("to-lower");
+		addAction("to-upper");
+		addAction("toggle-rect");
 		addAction("undo");
 		addAction("untab");
 		addAction("view-editbus");
@@ -1453,6 +1452,13 @@ public class jEdit
 		// this is the default action. We override the text area's
 		// one to handle abbrev expansion
 		inputHandler.setInputAction(getAction("insert-char"));
+
+		// Preload these actions so that isToggle()
+		// will always return the correct value
+		((EditAction.Wrapper)getAction("ignore-case")).loadIfNecessary();
+		((EditAction.Wrapper)getAction("multifile-search")).loadIfNecessary();
+		((EditAction.Wrapper)getAction("regexp")).loadIfNecessary();
+		((EditAction.Wrapper)getAction("toggle-rect")).loadIfNecessary();
 	}
 
 	/**
@@ -1676,6 +1682,15 @@ public class jEdit
 		}
 	}
 
+	private static void addRecent(String path)
+	{
+		if(recent.contains(path))
+			recent.removeElement(path);
+		recent.insertElementAt(path,0);
+		if(recent.size() > maxRecent)
+			recent.removeElementAt(maxRecent);
+	}
+
 	// Since window closing is handled by the editor itself,
 	// and is the same for all views, it is ok to do it here
 	static class WindowHandler extends WindowAdapter
@@ -1690,6 +1705,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.176  2000/01/14 04:23:50  sp
+ * 2.3pre2 stuff
+ *
  * Revision 1.175  1999/12/24 01:20:20  sp
  * Bug fixing and other stuff for 2.3pre1
  *
