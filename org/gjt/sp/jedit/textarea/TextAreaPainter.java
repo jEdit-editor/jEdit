@@ -318,6 +318,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		super.setFont(font);
 		fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
 		textArea.recalculateVisibleLines();
+
+		updateTabSize();
 	}
 
 	/**
@@ -326,9 +328,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paint(Graphics gfx)
 	{
-		tabSize = fm.charWidth(' ') * ((Integer)textArea
-			.getDocument().getProperty(
-			PlainDocument.tabSizeAttribute)).intValue();
+		updateTabSize();
 
 		Rectangle clipRect = gfx.getClipBounds();
 
@@ -433,6 +433,17 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public Dimension getMinimumSize()
 	{
 		return getPreferredSize();
+	}
+
+	// package-private members
+	void updateTabSize()
+	{
+		if(textArea.getDocument() == null)
+			return;
+
+		tabSize = fm.charWidth(' ') * ((Integer)textArea
+			.getDocument().getProperty(
+			PlainDocument.tabSizeAttribute)).intValue();
 	}
 
 	// private members
@@ -658,6 +669,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.38  2000/06/24 06:24:56  sp
+ * work thread bug fixes
+ *
  * Revision 1.37  2000/05/23 04:04:53  sp
  * Marker highlight updates, next/prev-marker actions
  *

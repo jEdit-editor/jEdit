@@ -623,6 +623,8 @@ public class JEditTextArea extends JComponent
 		document.addDocumentListener(documentHandler);
 		documentHandlerInstalled = true;
 
+		painter.updateTabSize();
+
 		select(0,0);
 		updateScrollBars();
 		painter.repaint();
@@ -2182,6 +2184,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.70  2000/06/24 06:24:55  sp
+ * work thread bug fixes
+ *
  * Revision 1.69  2000/06/02 08:43:03  sp
  * Printing fixes and enhancements, other bug fixes
  *

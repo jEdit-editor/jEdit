@@ -23,6 +23,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -175,11 +176,26 @@ public class HelpViewer extends EnhancedFrame
 	public void cancel()
 	{
 		GUIUtilities.saveGeometry(this,"helpviewer");
+		viewer.setText("");
+		viewer.getDocument().putProperty(Document.StreamDescriptionProperty,
+			DUMMY_URL);
 		setVisible(false);
 	}
 
 	// private members
+	private static URL DUMMY_URL;
 	private static HelpViewer helpViewer;
+
+	static
+	{
+		try
+		{
+			DUMMY_URL = new URL("file:/");
+		}
+		catch(MalformedURLException mf)
+		{
+		}
+	}
 
 	private JButton back;
 	private JButton forward;
@@ -254,6 +270,9 @@ public class HelpViewer extends EnhancedFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/06/24 06:24:55  sp
+ * work thread bug fixes
+ *
  * Revision 1.24  2000/06/24 03:46:48  sp
  * VHDL mode, bug fixing
  *

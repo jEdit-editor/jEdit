@@ -89,17 +89,17 @@ public class WorkThread extends Thread
 					Log.log(Log.ERROR,this,ie);
 				}
 			}
+		}
 
-			// FIXME: when called from a non-AWT thread,
-			// waitForRequests() will return before all
-			// AWT runnables have completed
-			if(SwingUtilities.isEventDispatchThread())
-			{
-				Log.log(Log.DEBUG,this,"waitForRequests() running"
-					+ " remaining AWT requests");
-				// do any queued AWT runnables
-				doAWTRequests();
-			}
+		// FIXME: when called from a non-AWT thread,
+		// waitForRequests() will return before all
+		// AWT runnables have completed
+		if(SwingUtilities.isEventDispatchThread())
+		{
+			Log.log(Log.DEBUG,this,"waitForRequests() running"
+				+ " remaining AWT requests");
+			// do any queued AWT runnables
+			doAWTRequests();
 		}
 	}
 
@@ -174,7 +174,7 @@ public class WorkThread extends Thread
 		if(request.inAWT)
 		{
 			Log.log(Log.DEBUG,this,"Adding request to AWT queue: "
-				+ request.run);
+				+ request);
 
 			synchronized(lock)
 			{
@@ -197,7 +197,7 @@ public class WorkThread extends Thread
 		else
 		{
 			Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: "
-				+ request.run);
+				+ request);
 			try
 			{
 				request.run.run();
@@ -214,7 +214,7 @@ public class WorkThread extends Thread
 
 	public void doAWTRequest(Request request)
 	{
-		Log.log(Log.DEBUG,this,"Running in AWT thread: " + request.run);
+		Log.log(Log.DEBUG,this,"Running in AWT thread: " + request);
 
 		try
 		{
@@ -235,14 +235,11 @@ public class WorkThread extends Thread
 
 	private void queueAWTRunner()
 	{
-		synchronized(lock)
+		if(!awtRunnerQueued)
 		{
-			if(!awtRunnerQueued)
-			{
-				awtRunnerQueued = true;
-				SwingUtilities.invokeLater(new RunRequestsInAWTThread());
-				Log.log(Log.DEBUG,this,"AWT runner queued");
-			}
+			awtRunnerQueued = true;
+			SwingUtilities.invokeLater(new RunRequestsInAWTThread());
+			Log.log(Log.DEBUG,this,"AWT runner queued");
 		}
 	}
 
@@ -258,27 +255,60 @@ public class WorkThread extends Thread
 			if(request.alreadyRun)
 				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
 			request.alreadyRun = true;
+
+			Log.log(Log.DEBUG,this,"getNextRequest() returning " + request);
+
+			StringBuffer buf = new StringBuffer("request queue is now: ");
+			Request _request = request.next;
+			while(_request != null)
+			{
+				buf.append(_request.id);
+				if(_request.next != null)
+					buf.append(",");
+				_request = _request.next;
+			}
+			Log.log(Log.DEBUG,this,buf.toString());
+
 			return request;
 		}
 	}
 
 	private Request getNextAWTRequest()
 	{
-		// no need to sync on lock since our only caller already
-		// does it
-		Request request = firstAWTRequest;
-		firstAWTRequest = firstAWTRequest.next;
-		if(firstAWTRequest == null)
-			lastAWTRequest = null;
+		synchronized(lock)
+		{
+			Request request = firstAWTRequest;
+			firstAWTRequest = firstAWTRequest.next;
+			if(firstAWTRequest == null)
+				lastAWTRequest = null;
 
-		if(request.alreadyRun)
+			if(request.alreadyRun)
 				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
 			request.alreadyRun = true;
-		return request;
+
+			Log.log(Log.DEBUG,this,"getNextAWTRequest() returning " + request);
+
+			StringBuffer buf = new StringBuffer("AWT request queue is now: ");
+			Request _request = request.next;
+			while(_request != null)
+			{
+				buf.append(_request.id);
+				if(_request.next != null)
+					buf.append(",");
+				_request = _request.next;
+			}
+			Log.log(Log.DEBUG,this,buf.toString());
+
+			return request;
+		}
 	}
 
-	class Request
+	static int ID;
+
+	static class Request
 	{
+		int id = ++ID;
+
 		Runnable run;
 		boolean inAWT;
 
@@ -291,6 +321,11 @@ public class WorkThread extends Thread
 			this.run = run;
 			this.inAWT = inAWT;
 		}
+
+		public String toString()
+		{
+			return "[id=" + id + ",run=" + run + "]";
+		}
 	}
 
 	class RunRequestsInAWTThread implements Runnable
@@ -298,9 +333,7 @@ public class WorkThread extends Thread
 		public void run()
 		{
 			awtRunnerQueued = false;
-
-			if(awtRequestCount != 0)
-				doAWTRequests();
+			doAWTRequests();
 		}
 	}
 }
@@ -308,6 +341,9 @@ public class WorkThread extends Thread
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/06/24 06:24:56  sp
+ * work thread bug fixes
+ *
  * Revision 1.10  2000/06/24 03:46:48  sp
  * VHDL mode, bug fixing
  *

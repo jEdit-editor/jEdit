@@ -17,6 +17,7 @@ JEDIT 2.5 VERSION HISTORY
 - Another attempt to fix the 'async requests executed twice' bug (since 2.5pre6)
 - The help viewer would not work properly after being closed and reopened
   (since 2.5pre7)
+- Fixed possible divide by zero in JEditTextArea.offsetToX()
 
 * Version 2.5pre7
 
