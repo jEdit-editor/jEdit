@@ -119,7 +119,7 @@ CLASS="FUNCDEF"
 ></P
 ></DIV
 ><P
->   This method returns the value of the named property. If the second form
+>   This method returns the value of the specified property. If the second form
    is used, elements of <TT
 CLASS="PARAMETER"
 ><I
@@ -175,6 +175,34 @@ CLASS="CLASSNAME"
   </P
 ><H4
 CLASS="BRIDGEHEAD"
+>jEdit.getBooleanProperty() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static boolean getBooleanProperty</CODE
+>(String name);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method returns the value of the named property as a boolean; if
+   its value is "true", "on" or "yes" it will
+   return <TT
+CLASS="CLASSNAME"
+>true</TT
+>, otherwise it will return <TT
+CLASS="CLASSNAME"
+>false</TT
+>.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
 >jEdit.setProperty() method</H4
 ><DIV
 CLASS="FUNCSYNOPSIS"
@@ -191,7 +219,7 @@ CLASS="FUNCDEF"
 ></P
 ></DIV
 ><P
->   This method sets the value of the specified named property. Once a
+>   This method sets the value of the specified property. Once a
    property is set with this method, it will be saved to the user
    properties file (the original property files in the JAR are never
    modified) and its value will be persistent for future sessions.
@@ -222,6 +250,44 @@ CLASS="FUNCTION"
    sets the property in the default property list, which means it will not
    be saved to the user properties file. This can be used to set properties
    that are only to remain for the duration of the current editing session.
+  </P
+><H4
+CLASS="BRIDGEHEAD"
+>jEdit.setBooleanProperty() method</H4
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>public static void setBooleanProperty</CODE
+>(String name, boolean value);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>   This method sets the value of the specified property to
+   <TT
+CLASS="CLASSNAME"
+>true</TT
+> if <TT
+CLASS="PARAMETER"
+><I
+>value</I
+></TT
+> is "true",
+   and <TT
+CLASS="CLASSNAME"
+>false</TT
+> if <TT
+CLASS="PARAMETER"
+><I
+>value</I
+></TT
+> is "false".
   </P
 ></DIV
 ><DIV

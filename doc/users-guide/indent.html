@@ -152,7 +152,7 @@ NAME="INDENT-SOFTTABS"
 ><P
 >    
     
-    Sometimes, it is preferrable to use multiple spaces instead of
+    Sometimes, it is preferable to use multiple spaces instead of
     "real" tabs to indent code. The main advantage of doing so is that
     the file will look the same if viewed with a different default
     tab size. jEdit supports this with its "Soft Tabs"
@@ -220,10 +220,10 @@ CLASS="REPLACEABLE"
 > is either
     <B
 CLASS="COMMAND"
->yes</B
+>true</B
 > or <B
 CLASS="COMMAND"
->no</B
+>false</B
 >:
     </P
 ><TABLE
@@ -370,19 +370,7 @@ CLASS="KEYCAP"
     an auto indent feature.
    </P
 ><P
->    If indent on enter is enabled, pressing <B
-CLASS="KEYCAP"
->Enter</B
->
-    will create a new line with the appropriate amount of
-    indent automatically.  If indent on tab is enabled, pressing
-    <B
-CLASS="KEYCAP"
->Tab</B
-> on
-    an unindented line will insert the appropriate amount of
-    indentation. Pressing it again will insert an actual tab.
-    <SPAN
+>    <SPAN
 CLASS="GUIMENU"
 >Edit</SPAN
 >&gt;<SPAN
@@ -409,6 +397,18 @@ CLASS="KEYCAP"
 >)
     will indent all selected lines, or the current line if there is no
     selection.
+    If indent on enter is enabled, pressing <B
+CLASS="KEYCAP"
+>Enter</B
+>
+    will create a new line with the appropriate amount of
+    indent automatically.  If indent on tab is enabled, pressing
+    <B
+CLASS="KEYCAP"
+>Tab</B
+> on
+    an unindented line will insert the appropriate amount of
+    indentation. Pressing it again will insert an actual tab.
    </P
 ><P
 >    By default, indent on enter is enabled and indent on tab is
@@ -464,7 +464,7 @@ CLASS="REPLACEABLE"
 ><I
 >flag</I
 ></TT
-> is either "on" or "off":
+> is either "true" or "false":
     </P
 ><TABLE
 BORDER="0"
@@ -499,7 +499,8 @@ CLASS="REPLACEABLE"
     (or soft tab) is inserted.
     Similarly, when you type a
     closing curly bracket ("}"), a level of indentation is
-    removed.
+    removed. Also, "if", "else", "while" and
+    so on create an extra level of indent on the next line.
    </P
 ><P
 >    If you want to insert a literal tab or newline without performing

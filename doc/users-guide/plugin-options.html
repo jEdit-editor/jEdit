@@ -16,7 +16,7 @@ REL="PREVIOUS"
 TITLE="The Plugins Menu"
 HREF="plugin-menus.html"><LINK
 REL="NEXT"
-TITLE="Canned Dialog Boxes"
+TITLE="Useful UI Methods"
 HREF="plugin-dialogs.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
@@ -84,7 +84,8 @@ CLASS="PROGRAMLISTING"
 implements OptionPane
 {
         public OptionPane(String name);
-        public void save();
+        public void _init();
+        public void _save();
         public void addComponent(String label, Component comp);
         public void addComponent(Component comp);
 }</PRE
@@ -119,6 +120,16 @@ CLASS="REPLACEABLE"
 >.label</SPAN
 >, which stores
    the label for the option pane in the options dialog box.
+  </P
+><P
+>   The <TT
+CLASS="FUNCTION"
+>_init()</TT
+> method should create the option pane's user
+   interface. <TT
+CLASS="FUNCTION"
+>_save()</TT
+> should save any settings to the properties.
   </P
 ><P
 >   The two <TT
@@ -188,7 +199,6 @@ WIDTH="100%"
 ><PRE
 CLASS="PROGRAMLISTING"
 >public class OptionGroup
-implements OptionGroup
 {
         public OptionGroup(String name);
         public void addOptionPane(OptionPane pane);
@@ -327,7 +337,7 @@ HREF="plugin-menus.html"
 >: The Plugins Menu<BR><A
 HREF="plugin-dialogs.html"
 >Next</A
->: Canned Dialog Boxes<BR></DIV
+>: Useful UI Methods<BR></DIV
 ></BODY
 ></HTML
 >

@@ -63,13 +63,15 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->:noTabs=yes:tabSize=8:mode=perl:</PRE
+>:noTabs=true:tabSize=8:mode=perl:</PRE
 ></TD
 ></TR
 ></TABLE
 ><P
 >   Buffer-local properties take effect the next time the file is opened.
    The following table lists all valid properties.
+   
+   
    
    
    
@@ -181,11 +183,71 @@ HREF="commenting.html"
 WIDTH="144"
 ALIGN="LEFT"
 VALIGN="TOP"
+>doubleBracketIndent</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>If a line matches the <SPAN
+CLASS="PROPERTY"
+>indentPrevLine</SPAN
+> regular
+      expression and the next line contains an opening bracket,
+      a level of indent will not be added to the next line, unless
+      this property is set to "true". For example, with this
+      property set to "false", Java code will be indented like so:
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>while(objects.hasMoreElements())
+{
+        ((Drawable)objects.nextElement()).draw();
+
+        if(gfxError)
+                return false;
+}</PRE
+></TD
+></TR
+></TABLE
+>
+      On the other hand, settings this property to "true" will
+      give the following result:
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>while(objects.hasMoreElements())
+        {
+                ((Drawable)objects.nextElement()).draw();
+
+                if(gfxError)
+                        return false;
+        }</PRE
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
 >indentOnEnter</TD
 ><TD
 ALIGN="LEFT"
 VALIGN="TOP"
->If set to "on", indentation will be performed when
+>If set to "true", indentation will be performed when
       the <B
 CLASS="KEYCAP"
 >Enter</B
@@ -205,32 +267,11 @@ VALIGN="TOP"
 ><TD
 ALIGN="LEFT"
 VALIGN="TOP"
->If set to "on", indentation will be performed when
+>If set to "true", indentation will be performed when
       the <B
 CLASS="KEYCAP"
 >Tab</B
 > key is pressed. See <A
-HREF="indent.html"
->the section called <I
->Tabbing and Indentation</I
-> in Chapter 6</A
->.</TD
-></TR
-><TR
-><TD
-WIDTH="144"
-ALIGN="LEFT"
-VALIGN="TOP"
->indentOpenBrackets</TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
->A list of characters (usually brackets) that add indent to
-      the <I
-CLASS="EMPHASIS"
->next line</I
->. For example, in Java mode the default value is
-      "{". See <A
 HREF="indent.html"
 >the section called <I
 >Tabbing and Indentation</I
@@ -251,12 +292,37 @@ VALIGN="TOP"
 CLASS="EMPHASIS"
 >current</I
 > line. For example, in Java mode the default value is
-      "}". See <A
-HREF="indent.html"
->the section called <I
->Tabbing and Indentation</I
-> in Chapter 6</A
->.</TD
+      "}".</TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+>indentOpenBrackets</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>A list of characters (usually brackets) that add indent to
+      the <I
+CLASS="EMPHASIS"
+>next line</I
+>. For example, in Java mode the default value is
+      "{".</TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+>indentPrevLine</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>When indenting a line, jEdit checks if the previous line matches
+      the regular expression stored in this property. If it does, a level
+      of indent is added. For example, in Java mode this regular expression
+      matches "if", "else", "while", etc.</TD
 ></TR
 ><TR
 ><TD
@@ -282,7 +348,7 @@ VALIGN="TOP"
 ><TD
 ALIGN="LEFT"
 VALIGN="TOP"
->If set to "yes", soft tabs (multiple space characters)
+>If set to "true", soft tabs (multiple space characters)
       will be used instead of "real" tabs. See <A
 HREF="indent.html"
 >the section called <I
@@ -314,7 +380,7 @@ VALIGN="TOP"
 ><TD
 ALIGN="LEFT"
 VALIGN="TOP"
->If set to "on", syntax highlighting will be performed.
+>If set to "true", syntax highlighting will be performed.
       See <A
 HREF="syntax-hilite.html"
 >the section called <I

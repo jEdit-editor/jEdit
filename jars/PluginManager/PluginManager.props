@@ -119,7 +119,9 @@ download-progress.stop=Stop
 plugin-list.ioerror.title=I/O Error
 plugin-list.ioerror.message=An I/O error occurred ({0})\n\
 	\n\
-	If you are connected to the Internet through a firewall,\n\
-	you should download and install the Firewall plugin from\n\
-	jEdit plugin central (<http://jedit.standmed.com>) before\n\
-	using the plugin manager.
+	If you are using Java 2 and are connected to the Internet\n\
+	through a firewall, you should configure the Firewall plugin\n\
+	in Utilities->Global Options.\n\
+	\n\
+	If you chose not to install the Firewall plugin when installing\n\
+	jEdit, you can download it from <http://jedit.standmed.com>.
