@@ -323,6 +323,8 @@ public class Macros
 
 	private static String getActionName(ActionListener listener)
 	{
+		// IMPORANT: check EditActions first so that jEdit can
+		// override insert-char to do macro expansion, etc
 		if(listener instanceof EditAction)
 			return ((EditAction)listener).getName();
 		else
@@ -350,7 +352,7 @@ public class Macros
 			{
 				view.getTextArea().getInputHandler()
 					.setMacroRecorder(null);
-				view.showStatus(null);
+				view.popStatus();
 				return;
 			}
 
@@ -399,6 +401,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  1999/12/19 11:14:28  sp
+ * Static abbrev expansion started
+ *
  * Revision 1.18  1999/12/13 03:40:29  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

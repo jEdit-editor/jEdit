@@ -41,12 +41,12 @@ implements InputHandler.NonRepeatable
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
-			view.showStatus(jEdit.getProperty("view.status.paste-string-register"));
+			view.pushStatus(jEdit.getProperty("view.status.paste-string-register"));
 			textArea.getInputHandler().grabNextKeyStroke(this);
 		}
 		else
 		{
-			view.showStatus(null);
+			view.popStatus();
 
 			char ch = actionCommand.charAt(0);
 			if(ch == '\0')

@@ -10,6 +10,9 @@ JEDIT VERSION HISTORY
 - Changes to the key bindings take effect immediately; no need to restart
 - Shortcuts option pane split into 'command shortcuts' and 'macro
   shortcuts' option panes
+- View status bar code improvements
+- New methods in MiscUtilities class: charsToEscapes() and escapesToChars()
+- Cancelling a 'save as' when exiting from jEdit now aborts the exit
 
 + Bug Fixes
 

@@ -235,6 +235,23 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	/**
+	 * Returns the action used to handle text input.
+	 */
+	public ActionListener getInputAction()
+	{
+		return inputAction;
+	}
+
+	/**
+	 * Sets the action used to handle text input.
+	 * @param inputAction The new input action
+	 */
+	public void setInputAction(ActionListener inputAction)
+	{
+		this.inputAction = inputAction;
+	}
+	
+	/**
 	 * Returns the macro recorder. If this is non-null, all executed
 	 * actions should be forwarded to the recorder.
 	 */
@@ -356,6 +373,11 @@ public abstract class InputHandler extends KeyAdapter
 	}
 
 	// protected members
+	protected ActionListener inputAction = INSERT_CHAR;
+	protected ActionListener grabAction;
+	protected boolean repeat;
+	protected int repeatCount;
+	protected InputHandler.MacroRecorder recorder;
 
 	/**
 	 * If a key is being grabbed, this method should be called with
@@ -371,12 +393,6 @@ public abstract class InputHandler extends KeyAdapter
 		executeAction(_grabAction,evt.getSource(),
 			String.valueOf(evt.getKeyChar()));
 	}
-
-	// protected members
-	protected ActionListener grabAction;
-	protected boolean repeat;
-	protected int repeatCount;
-	protected InputHandler.MacroRecorder recorder;
 
 	/**
 	 * If an action implements this interface, it should not be repeated.
@@ -1083,6 +1099,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  1999/12/19 11:14:29  sp
+ * Static abbrev expansion started
+ *
  * Revision 1.14  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

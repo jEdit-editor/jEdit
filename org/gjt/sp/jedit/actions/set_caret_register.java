@@ -33,12 +33,12 @@ public class set_caret_register extends EditAction
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
-			view.showStatus(jEdit.getProperty("view.status.set-caret-register"));
+			view.pushStatus(jEdit.getProperty("view.status.set-caret-register"));
 			textArea.getInputHandler().grabNextKeyStroke(this);
 		}
 		else
 		{
-			view.showStatus(null);
+			view.popStatus();
 
 			char ch = actionCommand.charAt(0);
 			if(ch == '\0')

@@ -267,7 +267,7 @@ public class DefaultInputHandler extends InputHandler
 					return;
 				}
 
-				executeAction(INSERT_CHAR,evt.getSource(),
+				executeAction(inputAction,evt.getSource(),
 					String.valueOf(evt.getKeyChar()));
 
 				repeatCount = 0;
@@ -354,12 +354,16 @@ public class DefaultInputHandler extends InputHandler
 	private DefaultInputHandler(DefaultInputHandler copy)
 	{
 		bindings = currentBindings = copy.bindings;
+		inputAction = copy.inputAction;
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  1999/12/19 11:14:29  sp
+ * Static abbrev expansion started
+ *
  * Revision 1.18  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

@@ -23,6 +23,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 
 /**
@@ -155,8 +156,8 @@ public class HistoryModel
 				}
 				else
 				{
-					currentModel.addItemToEnd(
-						escapesToChars(line));
+					currentModel.addItemToEnd(MiscUtilities
+						.escapesToChars(line));
 				}
 			}
 	
@@ -207,7 +208,8 @@ public class HistoryModel
 
 				for(int i = 0; i < model.getSize(); i++)
 				{
-					out.write(charsToEscapes(model.getItem(i)));
+					out.write(MiscUtilities.charsToEscapes(
+						model.getItem(i)));
 					out.write("\r\n");
 				}
 			}
@@ -230,83 +232,14 @@ public class HistoryModel
 	{
 		data.addElement(item);
 	}
-
-	private static String escapesToChars(String str)
-	{
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < str.length(); i++)
-		{
-			char c = str.charAt(i);
-			switch(c)
-			{
-			case '\\':
-				if(i == str.length() - 1)
-				{
-					buf.append('\\');
-					break;
-				}
-				c = str.charAt(++i);
-				switch(c)
-				{
-				case 'n':
-					buf.append('\n');
-					break;
-				case 'r':
-					buf.append('\r');
-					break;
-				case 't':
-					buf.append('\t');
-					break;
-				default:
-					buf.append(c);
-					break;
-				}
-				break;
-			default:
-				buf.append(c);
-			}
-		}
-		return buf.toString();
-	}
-
-	private static String charsToEscapes(String str)
-	{
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < str.length(); i++)
-		{
-			char c = str.charAt(i);
-			switch(c)
-			{
-			case '\n':
-				buf.append("\\n");
-				break;
-			case '\r':
-				buf.append("\\r");
-				break;
-			case '\t':
-				buf.append("\\t");
-				break;
-			case '[':
-				buf.append("\\[");
-				break;
-			case ']':
-				buf.append("\\]");
-				break;
-			case '\\':
-				buf.append("\\\\");
-				break;
-			default:
-				buf.append(c);
-				break;
-			}
-		}
-		return buf.toString();
-	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  1999/12/19 11:14:29  sp
+ * Static abbrev expansion started
+ *
  * Revision 1.9  1999/11/21 07:59:30  sp
  * JavaDoc updates
  *

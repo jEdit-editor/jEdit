@@ -123,6 +123,9 @@ view.electricBorders=3
 # Smart home/end
 view.homeEnd=yes
 
+# Expand abbrevs when user finishes typing a word
+view.expandOnInput=yes
+
 # Syntax styles
 view.style.comment1=style:i
 view.style.comment2=color:#990033 style:i
@@ -245,7 +248,6 @@ mode.php3.label=PHP3 Files
 mode.php3.filenameGlob=*.{php3,phtml,inc}
 mode.php3.commentStart=<!--
 mode.php3.commentEnd=-->
-mode.php3.tokenMarker=org.gjt.sp.jedit.syntax.PHPTokenMarker
 
 # Props mode
 mode.props.label=Property Files

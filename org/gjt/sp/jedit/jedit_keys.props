@@ -100,6 +100,7 @@ tab.shortcut=C+e C+t
 untab.shortcut=C+e C+u
 close-view.shortcut=C+e C+w
 redo.shortcut=C+e C+z
+expand-abbrev.shortcut=C+e C+x
 
 # C+m
 play-last-macro.shortcut=C+m C+l

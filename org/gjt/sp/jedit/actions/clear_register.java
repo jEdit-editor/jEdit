@@ -31,13 +31,13 @@ public class clear_register extends EditAction
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null || actionCommand.length() != 1)
 		{
-			view.showStatus(jEdit.getProperty("view.status.clear-register"));
+			view.pushStatus(jEdit.getProperty("view.status.clear-register"));
 			view.getTextArea().getInputHandler()
 				.grabNextKeyStroke(this);
 		}
 		else
 		{
-			view.showStatus(null);
+			view.popStatus();
 
 			char ch = actionCommand.charAt(0);
 			if(ch == '\0')

@@ -1,28 +1,21 @@
 JEDIT TO DO
 
-CVS: jedit_logo.jpg
-CVS: complete-word
+CVS: Abbrevs.java, default.abbrevs, insert-char in actions package
 
 ------- Stuff for 2.3pre1 -------
 
 + Cleanups / Fixes
 
-- Higlight.paintHighlight(): instead of passing y co-ordinate, pass a
-  rectangle with line bounds. Maybe rework TextAreaPainter internals to
-  use a rectangle also, it could simplify some things. If one rectangle
-  instance is stored and reused, it would not slow things down
-
-- HyperSearch - don't call matchesFound() on all buffers
-
-- Beef up 'Marker' class to support this sort of file/line number/message
-  thing, EditBus will also use it for errors
-
 - CaretUndo acts weird on 'redo' sometimes
 
 + Features
 
-- Abbreviation expansion (use TypeSaver code). Newly inserted abbrevs will
-  be indented relative to current line
+- [REMIND]: before releasing pre1, disable abbrevs by default as not to
+  confuse users
+
+- Edit abbrevs in global options
+
+- Document static abbrevs
 
 - Integrate BufferTabs into the core
 
@@ -33,10 +26,16 @@ CVS: complete-word
 - Write an InputHandler subclass that displays the current repeat count,
   if any, in the view's status bar
 
-- Stackable status messages
-
 ------- After 2.3pre1 -------
 
+- (??? WHY?) Higlight.paintHighlight(): instead of passing y co-ordinate,
+  pass a rectangle with line bounds. Maybe rework TextAreaPainter internals
+  to use a rectangle also, it could simplify some things. If one rectangle
+  instance is stored and reused, it would not slow things down
+- Beef up 'Marker' class to support this sort of file/line number/message
+  thing, EditBus will also use it for errors
+- HyperSearch - when doing a directory search, all buffers with matches
+  are kept open, they should be closed (fixing this is non-trivial!)
 - Clean way of embedding token markers in one another, so that HTMLTokenMarker
   can be used to color PHP, ASP, VBScript, etc in addition to JavaScript
 - Macros -- \n, \t in action command, indent-on-enter/-tab record themselves

@@ -313,10 +313,19 @@ public class View extends JFrame implements EBComponent
 	 * Displays the specified string in the status area of this view.
 	 * @param str The string to display
 	 */
-	public void showStatus(String str)
+	public void pushStatus(String str)
 	{
-		status.showStatus(str);
+		status.pushStatus(str);
 	}
+
+	/**
+	 * Displays the previous status bar message.
+	 */
+	public void popStatus()
+	{
+		status.popStatus();
+	}
+
 
 	/**
 	 * Updates the title bar and read only status of the text
@@ -852,21 +861,33 @@ public class View extends JFrame implements EBComponent
 
 	class StatusBar extends JComponent
 	{
-		String status;
+		Stack status;
 
 		StatusBar()
 		{
+			status = new Stack();
+
 			StatusBar.this.setDoubleBuffered(true);
 			StatusBar.this.setFont(UIManager.getFont("Label.font"));
 			StatusBar.this.setForeground(UIManager.getColor("Label.foreground"));
 			StatusBar.this.setBackground(UIManager.getColor("Label.background"));
 		}
 
-		void showStatus(String status)
+		void pushStatus(String str)
 		{
-			StatusBar.this.status = status;
+			status.push(str);
 			StatusBar.this.repaint();
 		}
+
+		void popStatus()
+		{
+			if(status.isEmpty())
+				return;
+
+			status.pop();
+			StatusBar.this.repaint();
+		}
+
 
 		public void paint(Graphics g)
 		{
@@ -878,14 +899,18 @@ public class View extends JFrame implements EBComponent
 			int start = textArea.getLineStartOffset(currLine);
 			int numLines = textArea.getLineCount();
 
-			String status = (StatusBar.this.status != null
-				? StatusBar.this.status
-				: "col " + ((dot - start) + 1) + " line "
-				+ (currLine + 1) + "/"
-				+ numLines + " "
-				+ (((currLine + 1) * 100) / numLines) + "%");
+			String str;
+			if(status.isEmpty())
+			{
+				str = ("col " + ((dot - start) + 1) + " line "
+					+ (currLine + 1) + "/"
+					+ numLines + " "
+					+ (((currLine + 1) * 100) / numLines) + "%");
+			}
+			else
+				str = (String)status.peek();
 
-			g.drawString(status,0,(StatusBar.this.getHeight()
+			g.drawString(str,0,(StatusBar.this.getHeight()
 				+ fm.getAscent()) / 2);
 		}
 
@@ -899,6 +924,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.116  1999/12/19 11:14:28  sp
+ * Static abbrev expansion started
+ *
  * Revision 1.115  1999/12/11 06:34:39  sp
  * Bug fixes
  *

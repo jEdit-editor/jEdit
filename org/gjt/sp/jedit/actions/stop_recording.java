@@ -36,7 +36,7 @@ implements org.gjt.sp.jedit.textarea.InputHandler.NonRecordable
 			GUIUtilities.error(view,"not-recording",new String[0]);
 		}
 
-		view.showStatus(null);
+		view.popStatus();
 		Macros.endRecording(view);
 	}
 }

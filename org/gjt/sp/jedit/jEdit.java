@@ -219,6 +219,7 @@ public class jEdit
 		initRecent();
 		initPLAF();
 		SearchAndReplace.load();
+		Abbrevs.load();
 		GUIUtilities.advanceProgress("Loading actions and modes...");
 		initActions();
 		initModes();
@@ -1366,6 +1367,7 @@ public class jEdit
 		addAction("edit-macro");
 		addAction("exchange-caret-register");
 		addAction("exit");
+		addAction("expand-abbrev");
 		addAction("find");
 		addAction("find-next");
 		addAction("find-selection");
@@ -1380,6 +1382,7 @@ public class jEdit
 		addAction("indent-line");
 		addAction("indent-on-enter");
 		addAction("indent-on-tab");
+		addAction("insert-char");
 		addAction("join-lines");
 		addAction("load-session");
 		addAction("locate-bracket");
@@ -1446,6 +1449,10 @@ public class jEdit
 		addAction("view-registers");
 		addAction("wing-comment");
 		addAction("word-count");
+
+		// this is the default action. We override the text area's
+		// one to handle abbrev expansion
+		inputHandler.setInputAction(getAction("insert-char"));
 	}
 
 	/**
@@ -1683,6 +1690,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.172  1999/12/19 11:14:28  sp
+ * Static abbrev expansion started
+ *
  * Revision 1.171  1999/12/19 08:12:34  sp
  * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
  *

@@ -128,10 +128,12 @@ edit=undo \
      goto-line \
      select-line-range \
      - \
-     complete-word \
      tab \
      untab \
      word-count \
+     - \
+     complete-word \
+     expand-abbrev \
      - \
      %line \
      %paragraph \
@@ -147,10 +149,11 @@ select-all.label=Select $All
 select-none.label=Select $None
 goto-line.label=$Go to Line...
 select-line-range.label=Select L$ine Range...
-complete-word.label=Co$mplete Word
 tab.label=$Spaces to Tabs
 untab.label=$Tabs to Spaces
 word-count.label=$Word Count...
+complete-word.label=Co$mplete Word
+expand-abbrev.label=E$xpand Abbreviation
 
 ### Line menu
 line=indent-line \

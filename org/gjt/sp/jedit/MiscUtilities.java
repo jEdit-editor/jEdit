@@ -245,6 +245,84 @@ loop:		for(int i = 0; i < str.length(); i++)
 	}
 
 	/**
+	 * Converts "\n" and "\t" escapes in the specified string to
+	 * newlines and tabs.
+	 * @param str The string
+	 * @since jEdit 2.3pre1
+	 */
+	public static String escapesToChars(String str)
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < str.length(); i++)
+		{
+			char c = str.charAt(i);
+			switch(c)
+			{
+			case '\\':
+				if(i == str.length() - 1)
+				{
+					buf.append('\\');
+					break;
+				}
+				c = str.charAt(++i);
+				switch(c)
+				{
+				case 'n':
+					buf.append('\n');
+					break;
+				case 't':
+					buf.append('\t');
+					break;
+				default:
+					buf.append(c);
+					break;
+				}
+				break;
+			default:
+				buf.append(c);
+			}
+		}
+		return buf.toString();
+	}
+
+	/**
+	 * Converts newlines and tabs in the specified string to
+	 * "\n" and "\t".
+	 * @param str The string
+	 * @since jEdit 2.3pre1
+	 */
+	public static String charsToEscapes(String str)
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < str.length(); i++)
+		{
+			char c = str.charAt(i);
+			switch(c)
+			{
+			case '\n':
+				buf.append("\\n");
+				break;
+			case '\t':
+				buf.append("\\t");
+				break;
+			case '[':
+				buf.append("\\[");
+				break;
+			case ']':
+				buf.append("\\]");
+				break;
+			case '\\':
+				buf.append("\\\\");
+				break;
+			default:
+				buf.append(c);
+				break;
+			}
+		}
+		return buf.toString();
+	}
+
+	/**
 	 * Sorts the specified array.
 	 * @param obj The array
 	 * @param compare Compares the objects
@@ -418,6 +496,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  1999/12/19 11:14:28  sp
+ * Static abbrev expansion started
+ *
  * Revision 1.24  1999/11/28 00:33:06  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
  *

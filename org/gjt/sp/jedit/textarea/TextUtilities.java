@@ -139,6 +139,8 @@ public class TextUtilities
 	 * Locates the start of the word at the specified position.
 	 * @param line The text
 	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
 	 */
 	public static int findWordStart(String line, int pos, String noWordSep)
 	{
@@ -168,6 +170,8 @@ public class TextUtilities
 	 * Locates the end of the word at the specified position.
 	 * @param line The text
 	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
 	 */
 	public static int findWordEnd(String line, int pos, String noWordSep)
 	{
@@ -196,6 +200,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  1999/12/19 11:14:29  sp
+ * Static abbrev expansion started
+ *
  * Revision 1.4  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
  *

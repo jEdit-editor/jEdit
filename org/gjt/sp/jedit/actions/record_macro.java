@@ -66,7 +66,7 @@ implements InputHandler.NonRecordable
 			Log.log(Log.ERROR,this,bl);
 		}
 
-		view.showStatus(jEdit.getProperty("view.status.recording"));
+		view.pushStatus(jEdit.getProperty("view.status.recording"));
 		Macros.beginRecording(view,name,buffer);
 	}
 }
