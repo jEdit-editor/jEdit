@@ -30,6 +30,8 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		this.textArea = textArea;
 
+		setDoubleBuffered(true);
+
 		GutterMouseListener ml = new GutterMouseListener();
 		addMouseListener(ml);
 		addMouseMotionListener(ml);
@@ -52,7 +54,7 @@ public class Gutter extends JComponent implements SwingConstants
 		}
 	}
 
-	protected void paintLineNumbers(Graphics gfx)
+	private void paintLineNumbers(Graphics gfx)
 	{
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
 		int lineHeight = pfm.getHeight();
@@ -122,7 +124,7 @@ public class Gutter extends JComponent implements SwingConstants
 		}
 	}
 
-	protected void paintCustomHighlights(Graphics gfx)
+	private void paintCustomHighlights(Graphics gfx)
 	{
 		int lineHeight = textArea.getPainter().getFontMetrics()
 			.getHeight();
@@ -145,11 +147,9 @@ public class Gutter extends JComponent implements SwingConstants
 	*/
 	public final void invalidateLine(int line)
 	{
-		repaint();
-		/*
-		repaint(0,textArea.lineToY(line) + fm.getDescent() + fm.getLeading(),
-			getWidth(),fm.getHeight());
-		*/
+		FontMetrics pfm = textArea.getPainter().getFontMetrics();
+		repaint(0,textArea.lineToY(line) + pfm.getDescent() + pfm.getLeading(),
+			getWidth(),pfm.getHeight());
 	}
 
 	/**
@@ -159,11 +159,9 @@ public class Gutter extends JComponent implements SwingConstants
 	*/
 	public final void invalidateLineRange(int firstLine, int lastLine)
 	{
-		repaint();
-		/*
-		repaint(0,textArea.lineToY(firstLine) + fm.getDescent() + fm.getLeading(),
-			getWidth(),(lastLine - firstLine + 1) * fm.getHeight());
-		*/
+		FontMetrics pfm = textArea.getPainter().getFontMetrics();
+		repaint(0,textArea.lineToY(firstLine) + pfm.getDescent() + pfm.getLeading(),
+			getWidth(),(lastLine - firstLine + 1) * pfm.getHeight());
 	}
 
 	/**

@@ -1471,64 +1471,64 @@ public class JEditTextArea extends JComponent
 	// package-private members
 	Segment lineSegment;
 
-	// protected members
-	protected static String CENTER = "center";
-	protected static String RIGHT = "right";
-	protected static String LEFT = "left";
-	protected static String BOTTOM = "bottom";
+	// private members
+	private static String CENTER = "center";
+	private static String RIGHT = "right";
+	private static String LEFT = "left";
+	private static String BOTTOM = "bottom";
 
-	protected static JEditTextArea focusedComponent;
-	protected static Timer caretTimer;
+	private static JEditTextArea focusedComponent;
+	private static Timer caretTimer;
 	
-	protected TextAreaPainter painter;
+	private TextAreaPainter painter;
 
-	protected Gutter gutter;
+	private Gutter gutter;
 
-	protected JPopupMenu popup;
+	private JPopupMenu popup;
 
-	protected EventListenerList listenerList;
-	protected MutableCaretEvent caretEvent;
+	private EventListenerList listenerList;
+	private MutableCaretEvent caretEvent;
 
-	protected boolean caretBlinks;
-	protected boolean caretVisible;
-	protected boolean blink;
+	private boolean caretBlinks;
+	private boolean caretVisible;
+	private boolean blink;
 
-	protected boolean editable;
+	private boolean editable;
 
-	protected int firstLine;
-	protected int visibleLines;
-	protected int electricScroll;
+	private int firstLine;
+	private int visibleLines;
+	private int electricScroll;
 
-	protected int horizontalOffset;
+	private int horizontalOffset;
 	
-	protected JScrollBar vertical;
-	protected JScrollBar horizontal;
-	protected boolean scrollBarsInitialized;
+	private JScrollBar vertical;
+	private JScrollBar horizontal;
+	private boolean scrollBarsInitialized;
 
-	protected SyntaxDocument document;
-	protected DocumentHandler documentHandler;
-	protected boolean documentHandlerInstalled;
+	private SyntaxDocument document;
+	private DocumentHandler documentHandler;
+	private boolean documentHandlerInstalled;
 
-	protected int selectionStart;
-	protected int selectionStartLine;
-	protected int selectionEnd;
-	protected int selectionEndLine;
-	protected boolean biasLeft;
+	private int selectionStart;
+	private int selectionStartLine;
+	private int selectionEnd;
+	private int selectionEndLine;
+	private boolean biasLeft;
 
-	protected int bracketPosition;
-	protected int bracketLine;
+	private int bracketPosition;
+	private int bracketLine;
 
-	protected int magicCaret;
+	private int magicCaret;
 
 	// Offset where drag was started; used by double-click drag (word
 	// selection)
-	protected int dragStartLine;
-	protected int dragStartOffset;
+	private int dragStartLine;
+	private int dragStartOffset;
 
-	protected boolean overwrite;
-	protected boolean rectSelect;
+	private boolean overwrite;
+	private boolean rectSelect;
 
-	protected void fireCaretEvent()
+	private void fireCaretEvent()
 	{
 		Object[] listeners = listenerList.getListenerList();
 		for(int i = listeners.length - 2; i >= 0; i--)
@@ -1540,7 +1540,7 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	protected void fireScrollEvent(int id)
+	private void fireScrollEvent(int id)
 	{
 		ScrollEvent evt = null;
 		Object[] listeners = listenerList.getListenerList();
@@ -1566,7 +1566,7 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	protected void updateBracketHighlight(int newCaretPosition)
+	private void updateBracketHighlight(int newCaretPosition)
 	{
 		if(!painter.isBracketHighlightEnabled())
 			return;
@@ -1602,7 +1602,7 @@ public class JEditTextArea extends JComponent
 		bracketLine = bracketPosition = -1;
 	}
 
-	protected void documentChanged(DocumentEvent evt)
+	private void documentChanged(DocumentEvent evt)
 	{
 		DocumentEvent.ElementChange ch = evt.getChange(
 			document.getDefaultRootElement());
@@ -1633,10 +1633,7 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	/**
-	 * "Me and my crew were out breakin' windows" -- Beastie Boys
-	 */
-	protected void processKeyEvent(KeyEvent evt)
+	private void processKeyEvent(KeyEvent evt)
 	{
 		View view = EditAction.getView(evt);
 
@@ -2232,6 +2229,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.66  2000/05/23 04:04:52  sp
+ * Marker highlight updates, next/prev-marker actions
+ *
  * Revision 1.65  2000/05/22 12:05:45  sp
  * Markers are highlighted in the gutter, bug fixes
  *

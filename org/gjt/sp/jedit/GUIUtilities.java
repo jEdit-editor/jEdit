@@ -755,6 +755,11 @@ public class GUIUtilities
 
 			chooser.setFileFilter(chooser.getAcceptAllFileFilter());
 
+			// increase preferred size a little bit
+			Dimension size = chooser.getPreferredSize();
+			size.width *= 1.25;
+			chooser.setPreferredSize(size);
+
 			if(view != null)
 				view.hideWaitCursor();
 		}
@@ -766,6 +771,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.63  2000/05/23 04:04:52  sp
+ * Marker highlight updates, next/prev-marker actions
+ *
  * Revision 1.62  2000/05/21 06:06:43  sp
  * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
  *

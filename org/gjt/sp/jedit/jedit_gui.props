@@ -308,7 +308,9 @@ search=find \
        - \
        set-marker \
        %clear-marker \
-       %goto-marker
+       %goto-marker \
+       prev-marker \
+       next-marker
 search.label=$Search
 find.label=$Find...
 find-next.label=Fin$d Next
@@ -324,6 +326,8 @@ set-marker.label=Set $Marker...
 clear-marker.label=Clear Marker
 goto-marker.label=Go to Marker
 no-markers.label=No Markers Defined
+prev-marker.label=Go to $Previous Marker
+next-marker.label=Go to $Next Marker
 
 ### Utilities menu
 utils=new-view \

@@ -9,6 +9,7 @@ JEDIT 2.5 VERSION HISTORY
   Enter/Escape key handling for JFrames
 - New RegistersChanged message is sent when the value of a register changes
 - Position registers and markers are highlighted in the gutter
+- 'Go to Next Marker' and 'Go to Previous Marker' commands added
 
 + Enhancements
 
@@ -18,6 +19,8 @@ JEDIT 2.5 VERSION HISTORY
 - HyperSearch is now a frame, not a dialog box
 - Documentation updates
 - PHP mode now highlights statements with '@' better
+- The gutter now only repaints lines which really need repainting
+- File chooser is now a little bit wider
 
 + Bug Fixes
 

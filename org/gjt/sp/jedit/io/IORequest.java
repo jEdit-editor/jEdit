@@ -93,9 +93,6 @@ public class IORequest implements Runnable
 				break;
 			}
 		}
-		catch(WorkThread.Abort a)
-		{
-		}
 		finally
 		{
 			if(views != null)
@@ -129,120 +126,89 @@ public class IORequest implements Runnable
 
 		try
 		{
-			try
-			{
-				in = vfs._createInputStream(view,buffer,path,false);
-				if(in == null)
-					return;
+			in = vfs._createInputStream(view,buffer,path,false);
+			if(in == null)
+				return;
 
-				if(path.endsWith(".gz"))
-					in = new GZIPInputStream(in);
+			if(path.endsWith(".gz"))
+				in = new GZIPInputStream(in);
 
-				buffer._read(in);
-			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				Object[] args = { io.toString() };
-				VFSManager.error(view,"ioerror",args);
-			}
-
-			try
-			{
-				in = vfs._createInputStream(view,buffer,markersPath,true);
-				if(in != null)
-					buffer._readMarkers(in);
-			}
-			catch(IOException io)
-			{
-				// ignore
-			}
-
-			try
-			{
-				vfs._loadComplete(buffer);
-			}
-			catch(IOException io)
-			{
-			}
+			buffer._read(in);
 		}
-		catch(WorkThread.Abort a)
+		catch(BadLocationException bl)
 		{
+			Log.log(Log.ERROR,this,bl);
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+			Object[] args = { io.toString() };
+			VFSManager.error(view,"ioerror",args);
+		}
+
+		try
+		{
+			in = vfs._createInputStream(view,buffer,markersPath,true);
 			if(in != null)
-			{
-				try
-				{
-					in.close();
-				}
-				catch(Exception e)
-				{
-				}
-			}
+				buffer._readMarkers(in);
+		}
+		catch(IOException io)
+		{
+			// ignore
+		}
+
+		try
+		{
+			vfs._loadComplete(buffer);
+		}
+		catch(IOException io)
+		{
 		}
 	}
 
 	private void save()
 	{
 		OutputStream out = null;
+
 		try
 		{
-			try
-			{
-				out = vfs._createOutputStream(view,buffer,path);
-				if(out == null)
-					return;
+			out = vfs._createOutputStream(view,buffer,path);
+			if(out == null)
+				return;
 
-				if(path.endsWith(".gz"))
-					out = new GZIPOutputStream(out);
+			if(path.endsWith(".gz"))
+				out = new GZIPOutputStream(out);
 
-				buffer._write(out);
+			buffer._write(out);
 
-				// We only save markers to VFS's that support deletion.
-				// Otherwise, we will accumilate stale marks files.
-				if(vfs.canDelete() && buffer.getMarkerCount() != 0)
-				{
-					out = vfs._createOutputStream(view,buffer,markersPath);
-					if(out != null)
-						buffer._writeMarkers(out);
-				}
-				else
-					vfs.delete(markersPath);
-			}
-			catch(BadLocationException bl)
+			// We only save markers to VFS's that support deletion.
+			// Otherwise, we will accumilate stale marks files.
+			if(vfs.canDelete() && buffer.getMarkerCount() != 0)
 			{
-				Log.log(Log.ERROR,this,bl);
+				out = vfs._createOutputStream(view,buffer,markersPath);
+				if(out != null)
+					buffer._writeMarkers(out);
 			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				Object[] args = { io.toString() };
-				VFSManager.error(view,"ioerror",args);
-			}
-
-			try
-			{
-				vfs._saveComplete(buffer);
-			}
-			catch(IOException io)
-			{
-			}
+			else
+				vfs.delete(markersPath);
 		}
-		catch(WorkThread.Abort a)
+		catch(BadLocationException bl)
 		{
-			if(out != null)
-			{
-				try
-				{
-					out.close();
-				}
-				catch(Exception e)
-				{
-				}
-			}
+			Log.log(Log.ERROR,this,bl);
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+			Object[] args = { io.toString() };
+			VFSManager.error(view,"ioerror",args);
+		}
+
+		try
+		{
+			vfs._saveComplete(buffer);
+		}
+		catch(IOException io)
+		{
 		}
 	}
 }
@@ -250,6 +216,9 @@ public class IORequest implements Runnable
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/05/23 04:04:52  sp
+ * Marker highlight updates, next/prev-marker actions
+ *
  * Revision 1.8  2000/05/14 10:55:22  sp
  * Tool bar editor started, improved view registers dialog box
  *

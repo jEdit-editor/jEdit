@@ -1863,6 +1863,7 @@ public class jEdit
 		addAction("next-buffer");
 		addAction("next-char");
 		addAction("next-line");
+		addAction("next-marker");
 		addAction("next-page");
 		addAction("next-paragraph");
 		addAction("next-split");
@@ -1881,6 +1882,7 @@ public class jEdit
 		addAction("prev-buffer");
 		addAction("prev-char");
 		addAction("prev-line");
+		addAction("prev-marker");
 		addAction("prev-page");
 		addAction("prev-paragraph");
 		addAction("prev-split");
@@ -2304,6 +2306,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.242  2000/05/23 04:04:52  sp
+ * Marker highlight updates, next/prev-marker actions
+ *
  * Revision 1.241  2000/05/21 06:06:43  sp
  * Documentation updates, shell script mode bug fix, HyperSearch is now a frame
  *

@@ -2,27 +2,18 @@ JEDIT TO DO
 
 2.5:
 
-- MarkerHighlight: when a buffer changes, invalidate the highlight cache
-- Document MarkerHighlight
-- next/prev-marker commands
-- Buffer-local property to disable marker persistance
-- gutter repaints all lines, it should only repaint necessary ones
-- CVS: add RegistersChanged, ScrollEvent, ScrollListener, MarkerHighlight
 - Can't follow symlinks in FTP browser
-- Increase file chooser's preferred size
-- Annoying BufferTabs flicker
-- text area doesn't lose focus sometimes
 - Documentation:
   - document view, edit pane, buffer API
   - how to write text area and gutter hilites
   - write VFS developer docs
-  - document RegistersChanged
   - document EditBus plugin
-- Buffer tabs focus is still screwed with JDK 1.3
+  - proofread
 - Switch to DocBook 4.0 for the documentation
 
 Later:
 
+- Buffer-local property to disable marker persistance
 - Word wrap
 - Abortable I/O
 - get rid of EnhancedDialog, EnhancedFrame; write EnterEscapeHandler

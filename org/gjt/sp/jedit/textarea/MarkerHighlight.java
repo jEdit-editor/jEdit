@@ -24,32 +24,26 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 
-public class MarkerHighlight implements TextAreaHighlight, ScrollListener
+public class MarkerHighlight implements TextAreaHighlight
 {
 	public void init(JEditTextArea textArea, TextAreaHighlight next)
 	{
 		this.textArea = textArea;
 		this.next = next;
-
-		textArea.addScrollListener(this);
 	}
 
 	public void paintHighlight(Graphics gfx, int line, int y)
 	{
+		if(!isLineHighlighted(line))
+			return;
+
 		int firstLine = textArea.getFirstLine();
 		line -= firstLine;
 
-		if(line >= highlights.length)
-			return;
-
 		FontMetrics fm = textArea.getPainter().getFontMetrics();
-		String str = highlights[line];
-		if(str != null)
-		{
-			gfx.setColor(highlightColor);
-			gfx.fillRect(0,line * fm.getHeight(),textArea.getGutter()
-				.getWidth(),fm.getHeight());
-		}
+		gfx.setColor(highlightColor);
+		gfx.fillRect(0,line * fm.getHeight(),textArea.getGutter()
+			.getWidth(),fm.getHeight());
 
 		if(next != null)
 			next.paintHighlight(gfx,line,y);
@@ -58,77 +52,14 @@ public class MarkerHighlight implements TextAreaHighlight, ScrollListener
 	public String getToolTipText(MouseEvent evt)
 	{
 		FontMetrics fm = textArea.getPainter().getFontMetrics();
-		int line = evt.getY() / fm.getHeight();
-		if(line < highlights.length)
-		{
-			String str = highlights[line];
-			if(str != null)
-				return str;
-		}
-
-		if(next != null)
+		int line = textArea.getFirstLine() + evt.getY() / fm.getHeight();
+		String tooltip = getLineToolTip(line);
+		if(tooltip != null)
+			return tooltip;
+		else if(next != null)
 			return next.getToolTipText(evt);
 		else
 			return null;
-	}
-
-	public void verticalScrollUpdate(ScrollEvent evt)
-	{
-		updateHighlight();
-	}
-
-	public void horizontalScrollUpdate(ScrollEvent evt) {}
-
-	public void updateHighlight()
-	{
-		Buffer buffer = (Buffer)textArea.getDocument();
-		int firstLine = textArea.getFirstLine();
-		int visibleLines = textArea.getVisibleLines();
-
-		highlights = new String[visibleLines];
-		Registers.Register[] registers = Registers.getRegisters();
-
-		for(int i = 0; i < registers.length; i++)
-		{
-			Object obj = registers[i];
-			if(!(obj instanceof Registers.CaretRegister))
-				continue;
-
-			Registers.CaretRegister reg = (Registers.CaretRegister)obj;
-			if(reg.getBuffer() == buffer)
-			{
-				int line = textArea.getLineOfOffset(reg.getOffset());
-				if(line > firstLine && line < firstLine + visibleLines)
-				{
-					String str;
-					if(i == '\n')
-						str = "\\n";
-					else if(i == '\t')
-						str = "\\t";
-					else
-						str = String.valueOf((char)i);
-
-					String[] args = { str };
-					highlights[line - firstLine] = jEdit.getProperty(
-						"view.gutter.register",args);
-				}
-			}
-		}
-
-		Vector markers = buffer.getMarkers();
-		for(int i = 0; i < markers.size(); i++)
-		{
-			Marker marker = (Marker)markers.elementAt(i);
-			int line = textArea.getLineOfOffset(marker.getStart());
-			if(line > firstLine && line < firstLine + visibleLines)
-			{
-				String[] args = { marker.getName() };
-				highlights[line - firstLine] = jEdit.getProperty(
-					"view.gutter.marker",args);
-			}
-		}
-
-		textArea.getGutter().repaint();
 	}
 
 	public Color getHighlightColor()
@@ -146,5 +77,86 @@ public class MarkerHighlight implements TextAreaHighlight, ScrollListener
 	private TextAreaHighlight next;
 
 	private Color highlightColor;
-	private String[] highlights;
+
+	private boolean isLineHighlighted(int line)
+	{
+		Buffer buffer = (Buffer)textArea.getDocument();
+		Registers.Register[] registers = Registers.getRegisters();
+
+		for(int i = 0; i < registers.length; i++)
+		{
+			Object obj = registers[i];
+			if(!(obj instanceof Registers.CaretRegister))
+				continue;
+
+			Registers.CaretRegister reg = (Registers.CaretRegister)obj;
+			if(reg.getBuffer() == buffer)
+			{
+				if(line == textArea.getLineOfOffset(reg.getOffset()))
+					return true;
+			}
+		}
+
+		Vector markers = buffer.getMarkers();
+		for(int i = 0; i < markers.size(); i++)
+		{
+			Marker marker = (Marker)markers.elementAt(i);
+			if(line == textArea.getLineOfOffset(marker.getStart()))
+				return true;
+		}
+
+		return false;
+	}
+
+	private String getLineToolTip(int line)
+	{
+		Buffer buffer = (Buffer)textArea.getDocument();
+		Registers.Register[] registers = Registers.getRegisters();
+
+		for(int i = 0; i < registers.length; i++)
+		{
+			Object obj = registers[i];
+			if(!(obj instanceof Registers.CaretRegister))
+				continue;
+
+			Registers.CaretRegister reg = (Registers.CaretRegister)obj;
+			if(reg.getBuffer() == buffer)
+			{
+				if(line == textArea.getLineOfOffset(reg.getOffset()))
+				{
+					String str;
+					if(i == '\n')
+						str = "\\n";
+					else if(i == '\t')
+						str = "\\t";
+					else
+						str = String.valueOf((char)i);
+
+					String[] args = { str };
+					return jEdit.getProperty("view.gutter.register",args);
+				}
+			}
+		}
+
+		Vector markers = buffer.getMarkers();
+		for(int i = 0; i < markers.size(); i++)
+		{
+			Marker marker = (Marker)markers.elementAt(i);
+			if(line == textArea.getLineOfOffset(marker.getStart()))
+			{
+				String[] args = { marker.getName() };
+				return jEdit.getProperty("view.gutter.marker",args);
+			}
+		}
+
+		return null;
+	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.2  2000/05/23 04:04:53  sp
+ * Marker highlight updates, next/prev-marker actions
+ *
+ */

@@ -100,8 +100,6 @@ public class EditPane extends JPanel implements EBComponent
 				.BUFFER_CHANGED));
 		}
 
-		markerHighlight.updateHighlight();
-
 		// Only do this after all I/O requests are complete
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -156,7 +154,7 @@ public class EditPane extends JPanel implements EBComponent
 		if(msg instanceof PropertiesChanged)
 			propertiesChanged();
 		else if(msg instanceof RegistersChanged)
-			markerHighlight.updateHighlight();
+			textArea.getGutter().repaint();
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
 	}
@@ -572,7 +570,7 @@ public class EditPane extends JPanel implements EBComponent
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
 		{
 			if(_buffer == buffer)
-				markerHighlight.updateHighlight();
+				textArea.getGutter().repaint();
 		}
 		else if(msg.getWhat() == BufferUpdate.MODE_CHANGED)
 		{
@@ -585,6 +583,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/05/23 04:04:52  sp
+ * Marker highlight updates, next/prev-marker actions
+ *
  * Revision 1.5  2000/05/22 12:05:45  sp
  * Markers are highlighted in the gutter, bug fixes
  *
