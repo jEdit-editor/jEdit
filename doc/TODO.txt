@@ -1,9 +1,10 @@
 TO DO
 
-- write some tips
-- document restore.cli property
-- document new status
-- status: display overwrite, multi select
+- finish web start support
+- mention markers in gutter in dox
+- gap shown while I/O not being done in status bar is somewhat ugly
+- CVS: add tip38, 39, 40
+- status bar colors should be customizable
 - document new readNextChar()
 - catch MalformedInputException and display a better error message
 - scrollToCaret() doesn't always work

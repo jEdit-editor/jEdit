@@ -52,21 +52,33 @@ public class StatusBar extends JPanel
 
 		this.view = view;
 
-		JPanel panel = new JPanel(new BorderLayout());
 		caretStatus = new VICaretStatus();
-		panel.add(BorderLayout.WEST,caretStatus);
-		lineStatus = new VILineStatus();
-		panel.add(BorderLayout.EAST,lineStatus);
+		add(BorderLayout.WEST,caretStatus);
 
-		add(BorderLayout.WEST,panel);
-
+		Font font = new Font("Dialog",Font.BOLD,10);
 		message = new JLabel();
 		message.setForeground(UIManager.getColor("Button.foreground"));
-		message.setFont(new Font("Dialog",Font.BOLD,10));
+		message.setFont(font);
 		add(BorderLayout.CENTER,message);
 
+		Box box = new Box(BoxLayout.X_AXIS);
+		multiSelect = new JLabel("(multi)");
+		multiSelect.setFont(font);
+		box.add(multiSelect);
+		box.add(Box.createHorizontalStrut(3));
+		overwrite = new JLabel("(over)");
+		overwrite.setFont(font);
+		box.add(overwrite);
+		box.add(Box.createHorizontalStrut(3));
+		narrow = new JLabel("(narrow)");
+		narrow.setFont(font);
+		box.add(narrow);
+		box.add(Box.createHorizontalStrut(3));
+		updateMiscStatus();
 		ioProgress = new MiniIOProgress();
-		add(BorderLayout.EAST,ioProgress);
+		box.add(ioProgress);
+
+		add(BorderLayout.EAST,box);
 	}
 
 	public void setMessage(String message)
@@ -87,17 +99,40 @@ public class StatusBar extends JPanel
 		caretStatus.repaint();
 	}
 
-	public void repaintLineStatus()
+	public void updateMiscStatus()
 	{
-		lineStatus.repaint();
+		JEditTextArea textArea = view.getTextArea();
+
+		if(textArea.isMultipleSelectionEnabled())
+			multiSelect.setForeground(Color.black);
+		else
+		{
+			if(textArea.getSelectionCount() > 1)
+			{
+				multiSelect.setForeground(UIManager.getColor(
+					"Label.foreground"));
+			}
+			else
+				multiSelect.setForeground(Color.gray);
+		}
+
+		if(textArea.isOverwriteEnabled())
+			overwrite.setForeground(Color.black);
+		else
+			overwrite.setForeground(Color.gray);
+
+		narrow.setForeground(Color.gray);
 	}
 
 	// private members
 	private View view;
 	private VICaretStatus caretStatus;
-	private VILineStatus lineStatus;
 	private JLabel message;
+	private JLabel multiSelect;
+	private JLabel overwrite;
+	private JLabel narrow;
 	private MiniIOProgress ioProgress;
+	/* package-private for speed */ StringBuffer buf = new StringBuffer();
 
 	public class VICaretStatus extends JComponent
 	{
@@ -145,15 +180,40 @@ public class StatusBar extends JPanel
 				buf.append(Integer.toString(virtualPosition + 1));
 			}
 
+			buf.append(' ');
+
+			int firstLine = textArea.getFirstLine();
+			int visible = textArea.getVisibleLines();
+			int lineCount = textArea.getVirtualLineCount();
+
+			if (visible >= lineCount)
+			{
+				buf.append("All");
+			}
+			else if (firstLine == 0)
+			{
+				buf.append("Top");
+			}
+			else if (firstLine + visible >= lineCount)
+			{
+				buf.append("Bot");
+			}
+			else
+			{
+				float percent = (float)firstLine / (float)lineCount
+					* 100.0f;
+				buf.append(Integer.toString((int)percent));
+				buf.append('%');
+			}
+
 			g.drawString(buf.toString(), 2,
 				(VICaretStatus.this.getHeight() + fm.getAscent()) / 2 - 1);
 		}
 
 		// private members
-		private static final String testStr = "9999, 999-999";
+		private static final String testStr = "9999, 999-999 99%";
 
 		private Dimension size;
-		private StringBuffer buf = new StringBuffer(testStr);
 		private Segment seg = new Segment();
 
 		private int getVirtualPosition(int dot, Buffer buffer, JEditTextArea textArea)
@@ -182,71 +242,6 @@ public class StatusBar extends JPanel
 
 			return virtualPosition;
 		}
-	}
-
-	public class VILineStatus extends JComponent
-	{
-		public VILineStatus()
-		{
-			VILineStatus.this.setForeground(UIManager.getColor("Button.foreground"));
-			VILineStatus.this.setBackground(UIManager.getColor("Label.background"));
-
-			Font font = new Font("Dialog", Font.BOLD, 10);
-			VILineStatus.this.setFont(font);
-
-			FontMetrics fm = VILineStatus.this.getToolkit()
-				.getFontMetrics(font);
-			size = new Dimension(fm.stringWidth(testStr) + 4,
-				fm.getHeight());
-
-			VILineStatus.this.setPreferredSize(size);
-			VILineStatus.this.setMaximumSize(size);
-		}
-
-		public void paintComponent(Graphics g)
-		{
-			if(!view.getBuffer().isLoaded())
-				return;
-
-			FontMetrics fm = g.getFontMetrics();
-
-			JEditTextArea textArea = view.getTextArea();
-
-			int firstLine = textArea.getFirstLine();
-			int visible = textArea.getVisibleLines();
-			int lineCount = textArea.getVirtualLineCount();
-
-			buf.setLength(0);
-
-			if (visible >= lineCount)
-			{
-				buf.append("All");
-			}
-			else if (firstLine == 0)
-			{
-				buf.append("Top");
-			}
-			else if (firstLine + visible >= lineCount)
-			{
-				buf.append("Bot");
-			}
-			else
-			{
-				float percent = (float)firstLine / (float)lineCount
-					* 100.0f;
-				buf.append(Integer.toString((int)percent));
-				buf.append('%');
-			}
-
-			g.drawString(buf.toString(), 2,
-				(VILineStatus.this.getHeight() + fm.getAscent()) / 2 - 1);
-		}
-
-		// private members
-		private static final String testStr = "999%";
-
-		private Dimension size;
-		private StringBuffer buf = new StringBuffer(testStr);
 	}
 
 	class MiniIOProgress extends JComponent
@@ -328,7 +323,7 @@ public class StatusBar extends JPanel
 
 		public Dimension getMaximumSize()
 		{
-			return new Dimension(40,Integer.MAX_VALUE);
+			return getPreferredSize();
 		}
 
 		// private members

@@ -1305,6 +1305,16 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Returns the number of selections. This is primarily for use by the
+	 * the status bar.
+	 * @since jEdit 3.2pre2
+	 */
+	public int getSelectionCount()
+	{
+		return selection.size();
+	}
+
+	/**
 	 * Returns the current selection.
 	 * @since jEdit 3.2pre1
 	 */
@@ -1901,6 +1911,7 @@ public class JEditTextArea extends JComponent
 	{
 		this.overwrite = overwrite;
 		invalidateLine(caretLine);
+		view.getStatus().updateMiscStatus();
 	}
 
 	/**
@@ -1911,6 +1922,7 @@ public class JEditTextArea extends JComponent
 	{
 		overwrite = !overwrite;
 		invalidateLine(caretLine);
+		view.getStatus().updateMiscStatus();
 	}
 
 	/**
@@ -3887,7 +3899,7 @@ forward_scan:		do
 	 * Returns if multiple selection is enabled.
 	 * @since jEdit 3.2pre1
 	 */
-	public static final boolean isMultipleSelectionEnabled()
+	public final boolean isMultipleSelectionEnabled()
 	{
 		return multi;
 	}
@@ -3896,9 +3908,10 @@ forward_scan:		do
 	 * Toggles multiple selection.
 	 * @since jEdit 3.2pre1
 	 */
-	public static final void toggleMultipleSelectionEnabled()
+	public final void toggleMultipleSelectionEnabled()
 	{
 		multi = !multi;
+		view.getStatus().updateMiscStatus();
 	}
 
 	/**
@@ -3906,9 +3919,10 @@ forward_scan:		do
 	 * @param multi Should multiple selection be enabled?
 	 * @since jEdit 3.2pre1
 	 */
-	public static final void setMultipleSelectionEnabled(boolean multi)
+	public final void setMultipleSelectionEnabled(boolean multi)
 	{
 		JEditTextArea.multi = multi;
+		view.getStatus().updateMiscStatus();
 	}
 
 	// protected members

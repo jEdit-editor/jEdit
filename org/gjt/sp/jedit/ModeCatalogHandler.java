@@ -26,9 +26,10 @@ import org.gjt.sp.util.Log;
 
 class ModeCatalogHandler extends HandlerBase
 {
-	ModeCatalogHandler(String directory)
+	ModeCatalogHandler(String directory, boolean resource)
 	{
 		this.directory = directory;
+		this.resource = resource;
 	}
 
 	public Object resolveEntity(String publicId, String systemId)
@@ -89,8 +90,15 @@ class ModeCatalogHandler extends HandlerBase
 		{
 			Mode mode = new Mode(modeName);
 
-			mode.setProperty("file",MiscUtilities.constructPath(
-				directory,file));
+			Object path;
+			if(resource)
+			{
+				path = jEdit.class.getResource(directory
+					+ '/' + file);
+			}
+			else
+				path = MiscUtilities.constructPath(directory,file);
+			mode.setProperty("file",path);
 
 			if(filenameGlob != null)
 				mode.setProperty("filenameGlob",filenameGlob);
@@ -108,6 +116,7 @@ class ModeCatalogHandler extends HandlerBase
 
 	// private members
 	private String directory;
+	private boolean resource;
 
 	private String modeName;
 	private String file;

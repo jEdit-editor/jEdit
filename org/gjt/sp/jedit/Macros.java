@@ -100,6 +100,12 @@ public class Macros
 	 */
 	public static void browseSystemMacros(View view)
 	{
+		if(userMacroPath == null)
+		{
+			GUIUtilities.error(view,"no-webstart",null);
+			return;
+		}
+
 		DockableWindowManager dockableWindowManager
 			= view.getDockableWindowManager();
 
@@ -111,8 +117,7 @@ public class Macros
 		{
 			public void run()
 			{
-				browser.setDirectory(MiscUtilities.constructPath(
-					jEdit.getJEditHome(),"macros"));
+				browser.setDirectory(userMacroPath);
 			}
 		});
 	}
@@ -124,9 +129,7 @@ public class Macros
 	 */
 	public static void browseUserMacros(View view)
 	{
-		final String settings = jEdit.getSettingsDirectory();
-
-		if(settings == null)
+		if(userMacroPath == null)
 		{
 			GUIUtilities.error(view,"no-settings",null);
 			return;
@@ -143,8 +146,7 @@ public class Macros
 		{
 			public void run()
 			{
-				browser.setDirectory(MiscUtilities.constructPath(
-					settings,"macros"));
+				browser.setDirectory(userMacroPath);
 			}
 		});
 	}
@@ -160,9 +162,12 @@ public class Macros
 		macroHierarchy = new Vector();
 		macroHash = new Hashtable();
 
-		systemMacroPath = MiscUtilities.constructPath(
-			jEdit.getJEditHome(),"macros");
-		loadMacros(macroHierarchy,"",new File(systemMacroPath));
+		if(jEdit.getJEditHome() != null)
+		{
+			systemMacroPath = MiscUtilities.constructPath(
+				jEdit.getJEditHome(),"macros");
+			loadMacros(macroHierarchy,"",new File(systemMacroPath));
+		}
 
 		String settings = jEdit.getSettingsDirectory();
 
@@ -493,7 +498,8 @@ public class Macros
 			if(File.separatorChar == '\\' || File.separatorChar == ':')
 			{
 				path = path.toLowerCase();
-				if(path.startsWith(systemMacroPath.toLowerCase()))
+				if(systemMacroPath != null && path.startsWith(
+					systemMacroPath.toLowerCase()))
 					loadMacros();
 
 				if(userMacroPath != null && path.startsWith(
@@ -502,7 +508,7 @@ public class Macros
 			}
 			else
 			{
-				if(path.startsWith(systemMacroPath))
+				if(systemMacroPath != null && path.startsWith(systemMacroPath))
 					loadMacros();
 
 				if(userMacroPath != null && path.startsWith(userMacroPath))

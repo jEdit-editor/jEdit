@@ -950,7 +950,7 @@ public class View extends JFrame implements EBComponent
 	{
 		this.editPane = editPane;
 		status.repaintCaretStatus();
-		status.repaintLineStatus();
+		status.updateMiscStatus();
 	}
 
 	/**
@@ -1145,7 +1145,7 @@ public class View extends JFrame implements EBComponent
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
 			status.repaintCaretStatus();
-			status.repaintLineStatus();
+			status.updateMiscStatus();
 
 			if(!buffer.isDirty())
 			{
@@ -1170,7 +1170,7 @@ public class View extends JFrame implements EBComponent
 			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED)
 		{
 			status.repaintCaretStatus();
-			status.repaintLineStatus();
+			status.updateMiscStatus();
 		}
 	}
 
@@ -1179,6 +1179,7 @@ public class View extends JFrame implements EBComponent
 		public void caretUpdate(CaretEvent evt)
 		{
 			status.repaintCaretStatus();
+			status.updateMiscStatus();
 			if(evt.getDot() != evt.getMark())
 				Registers.setRegister('%',getTextArea().getSelectedText());
 		}
@@ -1207,7 +1208,7 @@ public class View extends JFrame implements EBComponent
 		public void scrolledVertically(JEditTextArea textArea)
 		{
 			if(getTextArea() == textArea)
-				status.repaintLineStatus();
+				status.repaintCaretStatus();
 		}
 
 		public void scrolledHorizontally(JEditTextArea textArea) {}

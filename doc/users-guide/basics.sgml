@@ -35,9 +35,7 @@
    on Unix systems, usually you would
    run the <quote>jedit</quote> command at the command line,
    or select jEdit from a menu; on Windows, you might
-   double click on the jEdit icon. Unless initial files to open were
-   specified on the command line or dropped onto jEdit's icon, jEdit
-   will load any files that were open in the previous editing session.
+   double click on the jEdit icon.
   </para>
   <para>
    If jEdit is started while another copy is already running, control is
@@ -56,6 +54,14 @@
    to wait for it to start up the first time. The downside of background
    mode is that jEdit will continue to consume memory when no windows
    are open.
+  </para>
+  <para>
+   Unlike other applications, jEdit automatically loads any files that were
+   open last time in was used, so you can get back to work immediately, without
+   having to find the files you are working on first. This feature can be
+   disabled in the <guibutton>Loading and Saving</> pane of the
+   <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
+   dialog box.
   </para>
   <para>
    For more information about command line switches that control the
@@ -167,6 +173,36 @@
    dialog box.
   </para>
   <para>
+   A <firstterm>status bar</> at the bottom of the view displays the following
+   information, from left to right:
+  </para>
+  <itemizedlist>
+   <listitem><para>The line number containing the caret</para></listitem>
+   <listitem><para>The column position of the caret, with the leftmost column
+   being 1.</para>
+   <para>
+    If the line contains tabs, the <firstterm>file</> position (where a hard
+    tab is counted as one column) is shown first, followed by the
+    <firstterm>screen</> position (where each tab counts for the number of
+    columns until the next tab stop).
+   </para>
+   </listitem>
+   <listitem><para>Prompts displayed by commands such as those dealing with
+   registers and markers (see <xref linkend=text-transfer> and <xref
+   linkend=markers>)</para></listitem>
+   <listitem><para>If multiple selection is enabled, the text
+   <literal>(multi)</> is shown in black, otherwise it will be grayed out. Pressing
+   <keycap>Caps Lock</> turns multiple selection on and off. See <xref
+   linkend=multi-select>.</para></listitem>
+   <listitem><para>If overwrite mode is enabled, the text <literal>(over)</> is
+   shown in black, otherwise it will be grayed out. Pressing
+   <keycap>Insert</> turns overwrite mode on and off. See <xref
+   linkend=entering-text>.</para></listitem>
+   <listitem><para>If input/output operations are in progress, a small disk icon
+   and progress bars for each running operation are displayed. See <xref
+   linkend=threaded-io>.</para></listitem>
+  </itemizedlist>
+  <para>
    The file system browser, HyperSearch results window, and many plugin
    windows can optionally be docked into the view. This can be
    configured in the <guibutton>Docking</> pane of the
@@ -206,11 +242,6 @@
    Both these features can be disabled in the <guibutton>Text Area</>
    pane of the <guimenu>Utilities</>&gt;<guimenuitem>Global Options</>
    dialog box.
-  </para>
-  <para>
-   The column and line number
-   containing the caret, as well as the total number of lines in the buffer,
-   is shown in the bottom-left corner of the text area.
   </para>
   <para>
    The strip on the left of the text area is called a <firstterm>gutter</>.

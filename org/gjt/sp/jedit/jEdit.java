@@ -270,7 +270,10 @@ public class jEdit
 		initSystemProperties();
 		BeanShell.init();
 		GUIUtilities.advanceSplashProgress();
-		initSiteProperties();
+
+		if(jEditHome != null)
+			initSiteProperties();
+
 		initUserProperties();
 		initActions();
 		initPlugins();
@@ -607,18 +610,21 @@ public class jEdit
 	{
 		Vector returnValue = new Vector();
 
-		String systemPluginDir = MiscUtilities
-			.constructPath(jEditHome,"jars");
+		if(jEditHome != null)
+		{
+			String systemPluginDir = MiscUtilities
+				.constructPath(jEditHome,"jars");
 
-		String[] list = new File(systemPluginDir).list();
-		if(list != null)
-			getNotLoadedPluginJARs(returnValue,systemPluginDir,list);
+			String[] list = new File(systemPluginDir).list();
+			if(list != null)
+				getNotLoadedPluginJARs(returnValue,systemPluginDir,list);
+		}
 
 		if(settingsDirectory != null)
 		{
 			String userPluginDir = MiscUtilities
 				.constructPath(settingsDirectory,"jars");
-			list = new File(userPluginDir).list();
+			String[] list = new File(userPluginDir).list();
 			if(list != null)
 			{
 				getNotLoadedPluginJARs(returnValue,
@@ -846,7 +852,13 @@ public class jEdit
 		modes = new Vector(50);
 
 		// load the global catalog
-		loadModeCatalog(MiscUtilities.constructPath(jEditHome,"modes","catalog"));
+		if(jEditHome == null)
+			loadModeCatalog("/modes/catalog",true);
+		else
+		{
+			loadModeCatalog(MiscUtilities.constructPath(jEditHome,
+				"modes","catalog"),false);
+		}
 
 		// load user catalog
 		if(settingsDirectory != null)
@@ -873,7 +885,7 @@ public class jEdit
 				}
 			}
 
-			loadModeCatalog(userCatalog.getPath());
+			loadModeCatalog(userCatalog.getPath(),false);
 		}
 
 		Buffer buffer = buffersFirst;
@@ -882,6 +894,8 @@ public class jEdit
 			// This reloads the token marker and sends a message
 			// which causes edit panes to repaint their text areas
 			buffer.setMode();
+
+			buffer = buffer.next;
 		}
 	}
 
@@ -900,21 +914,25 @@ public class jEdit
 
 	/**
 	 * Loads a mode catalog file.
-	 * @param directory The directory containing the catalog file
+	 * @since jEdit 3.2pre2
 	 */
-	public static void loadModeCatalog(String path)
+	public static void loadModeCatalog(String path, boolean resource)
 	{
 		Log.log(Log.MESSAGE,jEdit.class,"Loading mode catalog file " + path);
 
 		ModeCatalogHandler handler = new ModeCatalogHandler(
-			MiscUtilities.getParentOfPath(path));
+			MiscUtilities.getParentOfPath(path),resource);
 		XmlParser parser = new XmlParser();
 		parser.setHandler(handler);
 		try
 		{
+			InputStream _in;
+			if(resource)
+				_in = jEdit.class.getResourceAsStream(path);
+			else
+				_in = new FileInputStream(path);
 			BufferedReader in = new BufferedReader(
-				new InputStreamReader(
-				new FileInputStream(path)));
+				new InputStreamReader(_in));
 			parser.parse(null, null, in);
 		}
 		catch(XmlException xe)
@@ -931,55 +949,33 @@ public class jEdit
 	}
 
 	/**
-	 * Reloads all edit modes.
-	 * @param view The view
-	 */
-	/* public static void reloadModes(View view)
-	{
-		view.showWaitCursor();
-
-		String path;
-		String settingsDirectory = jEdit.getSettingsDirectory();
-
-		if(settingsDirectory == null)
-			path = null;
-		else
-			path = MiscUtilities.constructPath(settingsDirectory,
-				"mode-cache");
-
-		jEdit.createModeCache(path);
-
-		Buffer[] buffers = jEdit.getBuffers();
-		for(int i = 0; i < buffers.length; i++)
-			buffers[i].setMode();
-
-		View[] views = jEdit.getViews();
-		for(int i = 0; i < views.length; i++)
-		{
-			EditPane[] editPanes = views[i].getEditPanes();
-			for(int j = 0; j < editPanes.length; j++)
-				editPanes[j].getTextArea().repaint();
-		}
-
-		view.hideWaitCursor();
-	} */
-
-	/**
 	 * Loads an XML-defined edit mode from the specified reader.
 	 * @param mode The edit mode
 	 */
 	public static void loadMode(Mode mode)
 	{
-		String fileName = (String)mode.getProperty("file");
+		Object fileName = mode.getProperty("file");
 
 		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
 
 		XmlParser parser = new XmlParser();
-		XModeHandler xmh = new XModeHandler(parser,mode.getName(),fileName);
+		XModeHandler xmh = new XModeHandler(parser,mode.getName(),fileName.toString());
 		parser.setHandler(xmh);
 		try
 		{
-			Reader grammar = new BufferedReader(new FileReader(fileName));
+			Reader grammar;
+			if(fileName instanceof URL)
+			{
+				grammar = new BufferedReader(
+					new InputStreamReader(
+					((URL)fileName).openStream()));
+			}
+			else
+			{
+				grammar = new BufferedReader(new FileReader(
+					(String)fileName));
+			}
+
 			parser.parse(null, null, grammar);
 		}
 		catch (Exception e)
@@ -1820,14 +1816,6 @@ public class jEdit
 	}
 
 	/**
-	 * Returns the jEdit documentation URL.
-	 * @since jEdit 3.1pre5
-	 */
-	public static String getDocumentationURL()
-	{
-		return docsHome;
-	}
-	/**
 	 * Returns the user settings directory.
 	 */
 	public static String getSettingsDirectory()
@@ -1993,7 +1981,6 @@ public class jEdit
 
 	// private members
 	private static String jEditHome;
-	private static String docsHome;
 	private static String settingsDirectory;
 	private static long propsModTime, historyModTime, recentModTime;
 	private static Properties defaultProps;
@@ -2102,24 +2089,10 @@ public class jEdit
 			}
 		}
 
+		Log.log(Log.MESSAGE,jEdit.class,"jEdit home directory is " + jEditHome);
+
 		if(jEditHome == null)
-		{
-			docsHome = jEdit.class.getResource("/doc/welcome.html")
-				.toString();
-			if(docsHome != null)
-			{
-				// this relies on the fact that the resource
-				// URL will be of the form <....>/welcome.html
-				docsHome = docsHome.substring(0,
-					docsHome.length() - 12);
-			}
-		}
-		else
-		{
-			docsHome = MiscUtilities.constructPath(jEditHome,"doc");
-			docsHome = "file:" + docsHome.replace(File.separatorChar,'/')
-				+ File.separatorChar;
-		}
+			Log.log(Log.DEBUG,jEdit.class,"Web start mode");
 
 		actionHash = new Hashtable();
 	}
@@ -2223,7 +2196,10 @@ public class jEdit
 	{
 		plugins = new EditPlugin.JAR(null,null);
 		jars = new Vector();
-		loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
+
+		if(jEditHome != null)
+			loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
+
 		if(settingsDirectory != null)
 		{
 			File jarsDirectory = new File(settingsDirectory,"jars");

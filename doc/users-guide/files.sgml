@@ -266,8 +266,8 @@
   <para>
    To improve responsiveness and perceived performance,
    jEdit executes all input/output operations asynchronously.
-   While I/O is in progress, a small disk icon is displayed in the menu bar,
-   in addition to progress meters for each running operation.
+   While I/O is in progress, a small disk icon and progress meters for each
+   running operation are shown in the status bar.
    The <guimenu>Utilities</>&gt;<guimenuitem>I/O Progress Monitor</> command
    displays a window with more detailed status information. Requests
    can also be aborted in this window. Note that aborting a buffer save can

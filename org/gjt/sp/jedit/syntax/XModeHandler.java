@@ -44,8 +44,6 @@ public class XModeHandler extends HandlerBase
 	{
 		if("xmode.dtd".equals(systemId))
 		{
-			String path = MiscUtilities.constructPath(
-				jEdit.getJEditHome(),"modes","xmode.dtd");
 			try
 			{
 				return new BufferedReader(new InputStreamReader(

@@ -43,21 +43,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="hypersearch" NO_RECORD="TRUE">
-	<CODE>
-		view.quickHyperSearch();
-	</CODE>
-</ACTION>
-
-<ACTION NAME="hypersearch-results">
-	<CODE>
-		view.getDockableWindowManager().toggleDockableWindow("hypersearch-results");
-	</CODE>
-	<IS_SELECTED>
-		return view.getDockableWindowManager().isDockableWindowVisible("hypersearch-results");
-	</IS_SELECTED>
-</ACTION>
-
 <ACTION NAME="browse-system-macros">
 	<CODE>
 		Macros.browseSystemMacros(view);
@@ -370,6 +355,21 @@
 	<CODE>
 		textArea.smartHome(false);
 	</CODE>
+</ACTION>
+
+<ACTION NAME="hypersearch" NO_RECORD="TRUE">
+	<CODE>
+		view.quickHyperSearch();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="hypersearch-results">
+	<CODE>
+		view.getDockableWindowManager().toggleDockableWindow("hypersearch-results");
+	</CODE>
+	<IS_SELECTED>
+		return view.getDockableWindowManager().isDockableWindowVisible("hypersearch-results");
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="indent-lines">
@@ -1022,7 +1022,7 @@
 
 <ACTION NAME="toggle-multi-select">
 	<CODE>
-		JEditTextArea.toggleMultipleSelectionEnabled();
+		textArea.toggleMultipleSelectionEnabled();
 	</CODE>
 </ACTION>
 

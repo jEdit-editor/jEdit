@@ -701,9 +701,14 @@ record.title=Record Macro
 record.message=Macro name:
 
 # Some features don't work with -nosettings dialog
-no-settings.title=Feature Unavailable
+no-settings.title=Feature Disabled
 no-settings.message=jEdit was started with the -nosettings switch.\n\
 	To use this feature, you must start jEdit without that switch.
+
+# Some features don't work with the web start version
+no-webstart.title=Feature Disabled
+no-webstart.message=This feature is not available in the WebStart version\n\
+	of jEdit.
 
 # Search and replace dialog
 search.title=Search And Replace
@@ -1191,7 +1196,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=38
+tip.count=41
 
 # Activity log
 log-viewer.title=Activity Log

@@ -55,6 +55,7 @@ public class HelpViewer extends JFrame
 	 */
 	public HelpViewer(URL url)
 	{
+		// XXX
 		this(url.toString());
 	}
 
@@ -153,15 +154,18 @@ public class HelpViewer extends JFrame
 		// stick around
 		viewer.setCursor(Cursor.getDefaultCursor());
 
-		if(!MiscUtilities.isURL(url))
-			url = jEdit.getDocumentationURL() + url;
-		else if(url.startsWith("file://"))
-			url = "file:" + url.substring(7);
-
+		URL _url = null;
 		try
 		{
-			urlField.setText(url);
-			viewer.setPage(new URL(url));
+			if(!MiscUtilities.isURL(url))
+				_url = getDocumentation(url);
+			else if(url.startsWith("file://"))
+				_url = new URL("file:" + url.substring(7));
+			else
+				_url = new URL(url);
+
+			urlField.setText(_url.toString());
+			viewer.setPage(_url);
 			if(addToHistory)
 			{
 				history[historyPos] = url;
@@ -180,29 +184,34 @@ public class HelpViewer extends JFrame
 			Log.log(Log.ERROR,this,mf);
 			String[] args = { url, mf.getMessage() };
 			GUIUtilities.error(this,"badurl",args);
+			return;
 		}
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,this,io);
 			String[] args = { io.getMessage() };
 			GUIUtilities.error(this,"ioerror",args);
+			return;
 		}
 
-		// select the appropriate tree node
-		if(url.startsWith(jEdit.getDocumentationURL()))
-		{
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-				nodes.get(url.substring(jEdit.getDocumentationURL()
-				.length()));
+		// select the appropriate tree node.
+		// messier than it needs to be due to stupid Web Start issues.
+		url = _url.toString();
+		int index = url.lastIndexOf("/doc/");
+		if(index == -1)
+			return;
 
-			if(node == null)
-				return;
+		url = url.substring(index + 5);
 
-			TreePath path = new TreePath(tocModel.getPathToRoot(node));
-			toc.expandPath(path);
-			toc.setSelectionPath(path);
-			toc.scrollPathToVisible(path);
-		}
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)nodes.get(url);
+
+		if(node == null)
+			return;
+
+		TreePath path = new TreePath(tocModel.getPathToRoot(node));
+		toc.expandPath(path);
+		toc.setSelectionPath(path);
+		toc.scrollPathToVisible(path);
 	}
 
 	public void dispose()
@@ -222,6 +231,26 @@ public class HelpViewer extends JFrame
 	private JTextField urlField;
 	private String[] history;
 	private int historyPos;
+
+	private URL getDocumentation(String doc)
+	{
+		if(jEdit.getJEditHome() == null)
+			return HelpViewer.class.getResource("/doc/" + doc);
+		else
+		{
+			String url = MiscUtilities.constructPath(jEdit.getJEditHome(),"doc");
+			url = "file:" + url.replace(File.separatorChar,'/') + '/' + doc;
+
+			try
+			{
+				return new URL(doc);
+			}
+			catch(MalformedURLException mf)
+			{
+				return null;
+			}
+		}
+	}
 
 	private void createTOC()
 	{
@@ -293,11 +322,11 @@ public class HelpViewer extends JFrame
 
 		try
 		{
-			parser.parse(null, null, new FileReader(
-				MiscUtilities.constructPath(
-				jEdit.getJEditHome(),"doc"
-				+ File.separator + "users-guide"
-				+ File.separator + "toc.xml")));
+			// use a URL here because with Web Start version,
+			// toc.xml is not a local file
+			parser.parse(null, null, new InputStreamReader(
+				getDocumentation("users-guide/toc.xml")
+				.openStream()));
 		}
 		catch(XmlException xe)
 		{
@@ -305,11 +334,6 @@ public class HelpViewer extends JFrame
 			String message = xe.getMessage();
 			Log.log(Log.ERROR,this,"toc.xml:" + line
 				+ ": " + message);
-		}
-		catch(FileNotFoundException fnfe)
-		{
-			// user didn't install HTML documentation.
-			// do nothing.
 		}
 		catch(Exception e)
 		{

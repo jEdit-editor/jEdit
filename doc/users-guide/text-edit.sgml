@@ -95,16 +95,23 @@
     </para>
    </note>
   </sect2>
-  <sect2><title>Multiple Selection</>
+  <sect2 id=multi-select><title>Multiple Selection</>
    <para>
     Pressing <keycap>Caps Lock</> turns multiple selection mode on and off. In
     multiple selection mode, multiple fragments of text can be selected and
-    operated on simultaneously.
+    operated on simultaneously. The text <literal>(multi)</> in the status bar
+    is grayed out if multiple selection mode is not active, and black if it is active.
+    Note that leaving multiple selection mode
+    while a fragmented selection exists will not deactive it, but it will
+    prevent you from making further fragmented selections. If a fragmented
+    selection exists but multiple selection mode is not active, the text
+    <literal>(multi)</> will be shown in dark blue.
    </para>
    <para>
     While multiple selection mode is active, clicking the mouse will reposition
     the caret without deactivation the selection, and dragging the mouse will
     create a new selection, in addition to the current one.
+   </para>
    <para>
     Various jEdit commands behave differently with multiple selections:
    </para>
@@ -138,11 +145,11 @@
  <sect1 id=entering-text><title>Inserting and Deleting Text</>
   <para>
    Text entered at the keyboard is inserted into the buffer. If
-   overstrike mode is on, one character is deleted from in
+   overwrite mode is on, one character is deleted from in
    front of the caret position for every character that is inserted.
-   To activate overstrike mode, press <keycap>Insert</>. The caret is
-   drawn as horizontal line while in overstrike
-   mode. This serves as a reminder of the differing behavior.
+   To activate overwrite mode, press <keycap>Insert</>. The caret is
+   drawn as horizontal line while in overwrite
+   mode; the text <literal>(over)</> also appears in the status bar.
   </para>
   <para>
    Inserting text while there is a selection will replace the selection
