@@ -1303,6 +1303,7 @@ public class jEdit
 		addMode("patch");
 		addMode("perl");
 		addMode("php3");
+		addMode("postscript");
 		addMode("props");
 		addMode("python");
 		addMode("shell");
@@ -1703,6 +1704,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.180  2000/01/22 22:25:07  sp
+ * PostScript edit mode, other misc updates
+ *
  * Revision 1.179  2000/01/17 07:03:42  sp
  * File->Current Dir menu, other stuff
  *

@@ -8,6 +8,7 @@ JEDIT TO DO
 - Buffer options: show buffer-local properties
 - Need to redo window-editor-* snapshots in icewm
 - Need to redo dialog-options-* snapshots as well
+- When a buffer is being closed, set buffer to previous rather than last
 
 ------- Stuff for 2.3pre3+ -------
 
@@ -45,6 +46,7 @@ JEDIT TO DO
 
 ------- Maybe later, in 2.4 -------
 
+- Option to keep buffer list sorted
 - Don't just blindly call updateBracketHighlight() all the time, only
   call it if bracket highlighted region becomes dirty
 - Write an InputHandler subclass that displays the current repeat count,

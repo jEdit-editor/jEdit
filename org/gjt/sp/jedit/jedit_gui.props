@@ -444,16 +444,20 @@ about.message=jEdit version {0}\n\
 	It is released under the GNU General Public License; see the\n\
 	README.txt file for more information.\n\
 	\n\
-	At the time this version of jEdit was released, the following people\n\
-	are known to have have written plugins or contributed code to jEdit:\n\
+	Many thanks to the following people, who have contributed code\n\
+	to jEdit's core:\n\
 	\n\
-	Andre Kaplan, Artur Biesiadowski, Aziz Sharif, Chris Laird,\n\
-	Clancy Malcolm, Dirk Moebius, George Latkiewicz, Greg Merrill,\n\
-	Henrik Falk, Jason Ginchereau, Jonathan Revusky, Juha Lindfors,\n\
-	Kevin A. Burton, Oliver Rutherford, Mike Dillon, Nathan Tenney,\n\
-	Romain Guy, Steve Jakob, Tal Davison and Valery Kondakoff.\n\
+	Artur Biesiadowski - Eiffel syntax highlighting\n\
+	Clancy Malcolm - PHP3 syntax highlighting\n\
+	Jonathan Revusky - Python syntax highlighting\n\
+	Juha Lindfors - IDL syntax highlighting\n\
+	Mike Dillon - TSQL syntax highlighting, faster literal search,\n\
+	options dialog updates, many bug fixes\n\
+	Ralf Engels - PostScript syntax highlighting\n\
+	Tal Davidson - Original syntax highlighting code\n\
 	\n\
-	If you have written a plugin and are not on this list, e-mail me!
+	Many others have also written plugins. If you are not on the\n\
+	above list but think you should be, e-mail me (<sp@gjt.org>).
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error

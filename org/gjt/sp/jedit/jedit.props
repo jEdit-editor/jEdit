@@ -250,6 +250,12 @@ mode.php3.commentStart=<!--
 mode.php3.commentEnd=-->
 mode.php3.tokenMarker=org.gjt.sp.jedit.syntax.PHPTokenMarker
 
+# PostScript mode (written by Ralf Engels)
+mode.ps.label=PostScript Files
+mode.ps.blockComment=%
+mode.ps.tokenMarker=org.gjt.sp.jedit.syntax.PostScriptTokenMarker
+mode.ps.filenameGlob=*.ps
+
 # Props mode
 mode.props.label=Property Files
 mode.props.blockComment=#
@@ -290,4 +296,4 @@ mode.xml.label=XML Files
 mode.xml.commentStart=<!--
 mode.xml.commentEnd=-->
 mode.xml.tokenMarker=org.gjt.sp.jedit.syntax.XMLTokenMarker
-mode.xml.filenameGlob=*.{dtd,rdf,rss,sgm,sgml,xml,xsd,xsl}
+mode.xml.filenameGlob=*.{dtd,rdf,rss,sgml,sgm,xml,xsd,xsl}

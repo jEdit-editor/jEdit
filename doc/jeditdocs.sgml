@@ -1836,6 +1836,12 @@ http://www.sourceforge.net/mail/?group_id=588</>.
        </entry>
       </row>
       <row>
+       <entry>postscript</>
+       <entry>PostScript edit mode. Automatically
+       selected for files with extension <quote>.ps</>.
+       </entry>
+      </row>
+      <row>
        <entry>props</>
        <entry>Java property file and MS-DOS INI edit mode. Automatically
        selected for files with extension <quote>.props</> or <quote>.ini</>,
