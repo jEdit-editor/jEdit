@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import com.microstar.xml.*;
 import javax.swing.text.Element;
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +30,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.syntax.GenericTokenMarker;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.textarea.DefaultInputHandler;
 import org.gjt.sp.jedit.textarea.InputHandler;
@@ -228,8 +230,8 @@ public class jEdit
 		initPLAF();
 		SearchAndReplace.load();
 		Abbrevs.load();
-		GUIUtilities.setProgressText("Loading actions and modes");
 		initActions();
+		GUIUtilities.setProgressText("Loading edit modes");
 		initModes();
 		initKeyBindings();
 		Macros.loadMacros();
@@ -568,12 +570,91 @@ public class jEdit
 	}
 
 	/**
-	 * Registers an edit mode with the editor.
-	 * @param mode The edit mode name
+	 * Loads XML edit modes from the specified directory.
+	 * @param directory The directory
 	 */
-	public static void addMode(String mode)
+	public static void loadModes(String directory)
 	{
-		modes.addElement(new Mode(mode));
+		File file = new File(directory);
+		if(!(file.exists() && file.isDirectory()))
+			return;
+
+		String[] grammars = file.list();
+		if(grammars == null)
+			return;
+
+		MiscUtilities.quicksort(grammars,new MiscUtilities.StringICaseCompare());
+
+		String grammar, fileName;
+
+		FileReader reader;
+
+		for(int i = 0; i < grammars.length; i++)
+		{
+			grammar = grammars[i];
+			if(!grammar.toLowerCase().endsWith(".xml"))
+				continue;
+
+			fileName = directory + File.separator + grammar;
+
+			reader = null;
+			try
+			{
+				reader = new FileReader(new File(fileName));
+			}
+			catch (FileNotFoundException e)
+			{
+				// should not happen
+			}
+
+			if (reader != null)
+			{
+				Mode newMode = loadMode(reader, fileName);
+				if (newMode != null)
+				{
+					GenericTokenMarker.addTokenMarker(
+						newMode.getName(),
+						newMode.createTokenMarker());
+					addMode(newMode);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Loads an XML-defined edit mode from the specified reader.
+	 * @param grammar The reader
+	 * @param fileName The file name
+	 */
+	public static Mode loadMode(Reader grammar, String fileName)
+	{
+		XModeHandler xmh = new XModeHandler();
+		XmlParser parser = new XmlParser();
+		parser.setHandler(xmh);
+		try
+		{
+			parser.parse(null, null, grammar);
+		}
+		catch (Exception e)
+		{
+			if (e instanceof XmlException)
+			{
+				XmlException xe = (XmlException) e;
+				int line = xe.getLine();
+				int col = xe.getColumn();
+				String message = xe.getMessage();
+
+				Log.log(Log.ERROR,jEdit.class,
+					"XMode parse error: " + fileName
+					+ ":" + line + ":" + message);
+			}
+			else
+			{
+				Log.log(Log.ERROR, jEdit.class, e);
+			}
+		}
+
+		return xmh.getMode();
 	}
 
 	/**
@@ -1407,30 +1488,20 @@ public class jEdit
 	{
 		/* Try to guess the eventual size to avoid unnecessary
 		 * copying */
-		modes = new Vector(19 /* modes built into jEdit */
-			+ 10 /* give plugins some space */);
+		modes = new Vector(30);
 
-		addMode("bat");
-		addMode("bsh");
-		addMode("c");
-		addMode("cc");
-		addMode("eiffel");
-		addMode("html");
-		addMode("idl");
-		addMode("java");
-		addMode("javascript");
-		addMode("makefile");
-		addMode("patch");
-		addMode("perl");
-		addMode("php3");
-		addMode("postscript");
-		addMode("props");
-		addMode("python");
-		addMode("shell");
-		addMode("tex");
-		addMode("text");
-		addMode("tsql");
-		addMode("xml");
+		addMode(new Mode("text"));
+		addMode(new Mode("perl"));
+
+		loadModes(MiscUtilities.constructPath(getJEditHome(),"modes"));
+
+		if(settingsDirectory != null)
+		{
+			String path = MiscUtilities.constructPath(
+				settingsDirectory,"modes");
+			new File(path).mkdirs();
+			loadModes(path);
+		}
 	}
 
 	/**
@@ -1869,6 +1940,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.199  2000/03/26 03:30:48  sp
+ * XMode integrated
+ *
  * Revision 1.198  2000/03/21 07:18:53  sp
  * bug fixes
  *

@@ -1,6 +1,7 @@
 /*
  * Mode.java - jEdit editing mode
  * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +78,9 @@ public class Mode
 	 * Returns a <code>TokenMarker</code> for this mode. Can return null
 	 * if this mode doesn's support syntax highlighting. The default
 	 * implementation creates a new instance of the class specified
-	 * by the "tokenMarker" mode property.
+	 * by the "tokenMarker" mode property, unless another token marker
+	 * has been specified with the <code>setTokenMarker()</code> method,
+	 * in which case a copy of that is returned.
 	 *
 	 * @see #getProperty(String)
 	 */
@@ -85,7 +88,21 @@ public class Mode
 	{
 		String clazz = (String)getProperty("tokenMarker");
 		if(clazz == null)
-			return null;
+		{
+			if (marker == null)
+				return null;
+			TokenMarker copy;
+
+			try
+			{
+				copy = (TokenMarker) marker.clone();
+			}
+			catch (CloneNotSupportedException e)
+			{
+				copy = null;
+			}
+			return copy;
+		}
 
 		try
 		{
@@ -104,6 +121,16 @@ public class Mode
 		}
 
 		return null;
+	}
+
+	/**
+	 * Sets the token marker for this mode. This token marker will be
+	 * cloned to obtain new instances.
+	 * @param marker The new token marker
+	 */
+	public void setTokenMarker(TokenMarker marker)
+	{
+		this.marker = marker;
 	}
 
 	/**
@@ -191,11 +218,15 @@ public class Mode
 	private String name;
 	private RE firstlineRE;
 	private RE filenameRE;
+	private TokenMarker marker;
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/03/26 03:30:48  sp
+ * XMode integrated
+ *
  * Revision 1.21  2000/03/20 06:06:36  sp
  * Mode internals cleaned up
  *
@@ -225,8 +256,5 @@ public class Mode
  *
  * Revision 1.12  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.11  1999/05/26 04:46:03  sp
- * Minor API change, soft tabs fixed ,1.7pre1
  *
  */

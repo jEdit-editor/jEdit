@@ -1,6 +1,6 @@
 /*
- * XMLTokenMarker.java - XML token marker
- * Copyright (C) 1999 Slava Pestov
+ * ParserRule.java - Sequence match rule for the GenericTokenMarker
+ * Copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,30 +16,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package org.gjt.sp.jedit.syntax;
 
-/**
- * XML token marker.
- *
- * @author Slava Pestov
- * @version $Id$
- */
-public class XMLTokenMarker extends HTMLTokenMarker
+public class ParserRule
 {
-	public XMLTokenMarker()
+	// public members
+	public final int[] sequenceLengths;
+	public final char[] searchChars;
+	public final int action;
+
+	// package-private members
+	ParserRule(char[] sc, int[] sl, int a)
 	{
-		super(false);
+		searchChars = sc;
+		sequenceLengths = sl;
+		action = a;
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.2  1999/12/13 03:40:30  sp
- * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.1  1999/11/06 02:49:53  sp
- * Added missing files
- *
- *
- */

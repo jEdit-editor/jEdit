@@ -36,7 +36,7 @@ import java.util.*;
  *
  * @see org.gjt.sp.jedit.syntax.Token
  */
-public abstract class TokenMarker
+public abstract class TokenMarker implements Cloneable
 {
 	/**
 	 * A wrapper for the lower-level <code>markTokensImpl</code> method
@@ -192,6 +192,11 @@ public abstract class TokenMarker
 		return nextLineRequested;
 	}
 
+	public Object clone() throws CloneNotSupportedException
+	{
+		return super.clone();
+	}
+
 	// protected members
 
 	/**
@@ -325,6 +330,9 @@ public abstract class TokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2000/03/26 03:30:48  sp
+ * XMode integrated
+ *
  * Revision 1.33  2000/03/20 03:42:55  sp
  * Smoother syntax package, opening an already open file will ask if it should be
  * reloaded, maybe some other changes

@@ -1,6 +1,11 @@
 JEDIT TO DO
 
-- Integrate XMode
+- XMode:
+  - better error reporting (show dialog boxes!)
+  - faster loading of modes
+  - faster tokenizing of files
+  - write docs
+- Get rid of loadIfNecessary() crap?
 - Option pane for changing mode-specific tab size, indent, comment
   characters, and so on
 - DOX: merge basic-file-opts and basic-editing, rename advanced-editing
@@ -17,7 +22,6 @@ JEDIT TO DO
 - Plugin devel manual needs more work:
   - document views, buffers
   - document GUIUtilities.load/saveGeometry
-  - how to write edit modes and token markers
   - how to write text area and gutter hilites
   - each section should have some sample source code
 

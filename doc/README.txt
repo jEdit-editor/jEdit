@@ -60,7 +60,7 @@ Dirk Moebius - Enhanced plugin versioning
 Jason Ginchereau - Buffer tabs code
 Jonathan Revusky - Python syntax highlighting
 Juha Lindfors - IDL syntax highlighting
-Mike Dillon - TSQL syntax highlighting, gutter, new options dialog box,
+Mike Dillon - XMode syntax highlighting engine, gutter, new options dialog box,
 faster literal search, many other patches
 Ralf Engels - PostScript syntax highlighting
 Tal Davidson - Original syntax highlighting engine
