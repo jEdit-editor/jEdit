@@ -240,6 +240,10 @@ loop:			for(;;)
 					return false;
 				}
 
+				/* Don't do this when playing a macro */
+				if(Macros.isMacroPlaying())
+					break loop;
+
 				int result = JOptionPane.showConfirmDialog(comp,
 					jEdit.getProperty("keepsearching.message"),
 					jEdit.getProperty("keepsearching.title"),
@@ -414,13 +418,17 @@ loop:			for(;;)
 			view.hideWaitCursor();
 		}
 
-		if(fileCount == 0)
-			view.getToolkit().beep();
-		else
+		/* Don't do this when playing a macro, cos it's annoying */
+		if(!Macros.isMacroPlaying())
 		{
-			Object[] args = { new Integer(lineCount),
-				new Integer(fileCount) };
-			GUIUtilities.message(view,"replace-results",args);
+			if(fileCount == 0)
+				view.getToolkit().beep();
+			else
+			{
+				Object[] args = { new Integer(lineCount),
+					new Integer(fileCount) };
+				GUIUtilities.message(view,"replace-results",args);
+			}
 		}
 
 		return (fileCount != 0);
@@ -535,6 +543,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.36  2000/10/13 06:57:20  sp
+ * Edit User/System Macros command, gutter mouse handling improved
+ *
  * Revision 1.35  2000/08/16 08:47:19  sp
  * Stuff
  *

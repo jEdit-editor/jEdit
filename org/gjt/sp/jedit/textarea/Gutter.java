@@ -34,7 +34,7 @@ public class Gutter extends JComponent implements SwingConstants
 
 		setDoubleBuffered(true);
 
-		GutterMouseListener ml = new GutterMouseListener();
+		MouseHandler ml = new MouseHandler();
 		addMouseListener(ml);
 		addMouseMotionListener(ml);
 	}
@@ -190,6 +190,8 @@ public class Gutter extends JComponent implements SwingConstants
 	 */
 	public void setBorder(int width, Color color1, Color color2, Color color3)
 	{
+		this.borderWidth = width;
+
 		focusBorder = new CompoundBorder(new MatteBorder(0,0,0,width,color3),
 			new MatteBorder(0,0,0,width,color1));
 		noFocusBorder = new CompoundBorder(new MatteBorder(0,0,0,width,color3),
@@ -481,13 +483,20 @@ public class Gutter extends JComponent implements SwingConstants
 	private boolean currentLineHighlightEnabled = false;
 	private boolean collapsed = false;
 
+	private int borderWidth;
 	private Border focusBorder, noFocusBorder;
 
-	class GutterMouseListener extends MouseAdapter
-		implements MouseMotionListener
+	class MouseHandler extends MouseAdapter implements MouseMotionListener
 	{
 		public void mouseClicked(MouseEvent e)
 		{
+			if(e.getX() >= getWidth() - borderWidth)
+			{
+				e.translatePoint(-getWidth(),0);
+				textArea.mouseHandler.mouseClicked(e);
+				return;
+			}
+
 			int count = e.getClickCount();
 			if (count == 1)
 			{
@@ -513,57 +522,60 @@ public class Gutter extends JComponent implements SwingConstants
 
 		public void mousePressed(MouseEvent e)
 		{
-			dragStart = e.getPoint();
+			if(e.getX() >= getWidth() - borderWidth)
+			{
+				e.translatePoint(-getWidth(),0);
+				textArea.mouseHandler.mousePressed(e);
+				//return;
+			}
 
+			dragStart = e.getPoint();
 			startWidth = gutterSize.width;
 		}
 
 		public void mouseDragged(MouseEvent e)
 		{
-			if (dragStart == null) return;
-
-			if (isCollapsed()) setCollapsed(false);
-
-			Point p = e.getPoint();
-
-			gutterSize.width = startWidth + p.x - dragStart.x;
-
-			if (gutterSize.width < collapsedSize.width)
+			if(collapsed || e.getX() >= getWidth() - borderWidth)
 			{
-				gutterSize.width = startWidth;
-				setCollapsed(true);
+				e.translatePoint(-getWidth(),0);
+				textArea.mouseHandler.mouseDragged(e);
+				return;
 			}
 
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run()
-				{
-					textArea.revalidate();
-				}
-			});
+			if (dragStart == null) return;
+
+			gutterSize.width = startWidth + e.getX() - dragStart.x;
+
+			if (gutterSize.width < collapsedSize.width)
+				gutterSize.width = startWidth;
+
+			textArea.revalidate();
 		}
 
-		public void mouseExited(MouseEvent e)
+		/* public void mouseExited(MouseEvent e)
 		{
 			if (dragStart != null && dragStart.x > e.getPoint().x)
 			{
 				setCollapsed(true);
 				gutterSize.width = startWidth;
 
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run()
-					{
-						textArea.revalidate();
-					}
-				});
+				textArea.revalidate();
 			}
 
 			//dragStart = null;
-		}
+		} */
 
 		public void mouseMoved(MouseEvent e) {}
 
 		public void mouseReleased(MouseEvent e)
 		{
+			if(collapsed || e.getX() >= getWidth() - borderWidth)
+			{
+				e.translatePoint(-getWidth(),0);
+				textArea.mouseHandler.mouseReleased(e);
+				return;
+			}
+
 			dragStart = null;
 		}
 

@@ -1,6 +1,6 @@
 /*
- * edit_macro.java
- * Copyright (C) 1999 Slava Pestov
+ * edit_system_macros.java
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,26 +22,25 @@ package org.gjt.sp.jedit.actions;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import org.gjt.sp.jedit.browser.*;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.*;
 
-public class edit_macro extends EditAction
+public class edit_system_macros extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
 
-		String settings = jEdit.getSettingsDirectory();
+		DockableWindowManager dockableWindowManager
+			= view.getDockableWindowManager();
 
-		if(settings == null)
-		{
-			GUIUtilities.error(view,"no-settings",new String[0]);
-			return;
-		}
+		dockableWindowManager.showDockableWindow(VFSBrowserDockable.NAME);
+		VFSBrowser browser = (VFSBrowser)dockableWindowManager
+			.getDockableWindow(VFSBrowserDockable.NAME)
+			.getComponent();
 
-		String path = GUIUtilities.showFileDialog(view,
-			MiscUtilities.constructPath(settings,"macros"),
-			JFileChooser.OPEN_DIALOG);
-		if(path != null)
-			jEdit.openFile(view,path);
+		browser.setDirectory(MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"macros"));
 	}
 }

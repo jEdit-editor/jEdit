@@ -102,8 +102,11 @@ public class JEditTextArea extends JComponent
 		vertical.addAdjustmentListener(new AdjustHandler());
 		horizontal.addAdjustmentListener(new AdjustHandler());
 		painter.addComponentListener(new ComponentHandler());
-		painter.addMouseListener(new MouseHandler());
-		painter.addMouseMotionListener(new DragHandler());
+
+		mouseHandler = new MouseHandler();
+		painter.addMouseListener(mouseHandler);
+		painter.addMouseMotionListener(mouseHandler);
+
 		addFocusListener(new FocusHandler());
 
 		caretVisible = true;
@@ -1429,6 +1432,7 @@ public class JEditTextArea extends JComponent
 
 	// package-private members
 	Segment lineSegment;
+	MouseHandler mouseHandler;
 
 	// protected members
 	protected void processKeyEvent(KeyEvent evt)
@@ -1936,110 +1940,6 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	class DragHandler implements MouseMotionListener
-	{
-		public void mouseDragged(MouseEvent evt)
-		{
-			if(popup != null && popup.isVisible())
-				return;
-
-			setSelectionRectangular((evt.getModifiers()
-				& InputEvent.CTRL_MASK) != 0);
-
-			switch(clickCount)
-			{
-			case 1:
-				doSingleDrag(evt);
-				break;
-			case 2:
-				doDoubleDrag(evt);
-				break;
-			case 3:
-				doTripleDrag(evt);
-				break;
-			}
-		}
-
-		public void mouseMoved(MouseEvent evt) {}
-
-		private void doSingleDrag(MouseEvent evt)
-		{
-			select(getMarkPosition(),xyToOffset(
-				evt.getX(),evt.getY()));
-		}
-
-		private void doDoubleDrag(MouseEvent evt)
-		{
-			int markLineStart = getLineStartOffset(dragStartLine);
-			int markLineLength = getLineLength(dragStartLine);
-			int mark = dragStartOffset;
-
-			int line = yToLine(evt.getY());
-			int lineStart = getLineStartOffset(line);
-			int lineLength = getLineLength(line);
-			int offset = xToOffset(line,evt.getX());
-
-			String lineText = getLineText(line);
-			String markLineText = getLineText(dragStartLine);
-			String noWordSep = (String)buffer.getProperty("noWordSep");
-
-			if(markLineStart + dragStartOffset > lineStart + offset)
-			{
-				if(offset != 0 && offset != lineLength)
-				{
-					offset = TextUtilities.findWordStart(
-						lineText,offset,noWordSep);
-				}
-
-				if(markLineLength != 0)
-				{
-					mark = TextUtilities.findWordEnd(
-						markLineText,mark,noWordSep);
-				}
-			}
-			else
-			{
-				if(offset != 0 && lineLength != 0)
-				{
-					offset = TextUtilities.findWordEnd(
-						lineText,offset,noWordSep);
-				}
-
-				if(mark != 0 && mark != markLineLength)
-				{
-					mark = TextUtilities.findWordStart(
-						markLineText,mark,noWordSep);
-				}
-			}
-
-			select(markLineStart + mark,lineStart + offset);
-		}
-
-		private void doTripleDrag(MouseEvent evt)
-		{
-			int mark = getMarkLine();
-			int mouse = yToLine(evt.getY());
-			int offset = xToOffset(mouse,evt.getX());
-			if(mark > mouse)
-			{
-				mark = getLineEndOffset(mark) - 1;
-				if(offset == getLineLength(mouse))
-					mouse = getLineEndOffset(mouse) - 1;
-				else
-					mouse = getLineStartOffset(mouse);
-			}
-			else
-			{
-				mark = getLineStartOffset(mark);
-				if(offset == 0)
-					mouse = getLineStartOffset(mouse);
-				else
-					mouse = getLineEndOffset(mouse) - 1;
-			}
-			select(mark,mouse);
-		}
-	}
-
 	class FocusHandler implements FocusListener
 	{
 		public void focusGained(FocusEvent evt)
@@ -2065,7 +1965,7 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	class MouseHandler extends MouseAdapter
+	class MouseHandler extends MouseAdapter implements MouseMotionListener
 	{
 		public void mousePressed(MouseEvent evt)
 		{
@@ -2171,6 +2071,107 @@ public class JEditTextArea extends JComponent
 			select(getLineStartOffset(dragStartLine),
 				getLineEndOffset(dragStartLine)-1);
 		}
+
+		public void mouseDragged(MouseEvent evt)
+		{
+			if(popup != null && popup.isVisible())
+				return;
+
+			setSelectionRectangular((evt.getModifiers()
+				& InputEvent.CTRL_MASK) != 0);
+
+			switch(clickCount)
+			{
+			case 1:
+				doSingleDrag(evt);
+				break;
+			case 2:
+				doDoubleDrag(evt);
+				break;
+			case 3:
+				doTripleDrag(evt);
+				break;
+			}
+		}
+
+		public void mouseMoved(MouseEvent evt) {}
+
+		private void doSingleDrag(MouseEvent evt)
+		{
+			select(getMarkPosition(),xyToOffset(
+				evt.getX(),evt.getY()));
+		}
+
+		private void doDoubleDrag(MouseEvent evt)
+		{
+			int markLineStart = getLineStartOffset(dragStartLine);
+			int markLineLength = getLineLength(dragStartLine);
+			int mark = dragStartOffset;
+
+			int line = yToLine(evt.getY());
+			int lineStart = getLineStartOffset(line);
+			int lineLength = getLineLength(line);
+			int offset = xToOffset(line,evt.getX());
+
+			String lineText = getLineText(line);
+			String markLineText = getLineText(dragStartLine);
+			String noWordSep = (String)buffer.getProperty("noWordSep");
+
+			if(markLineStart + dragStartOffset > lineStart + offset)
+			{
+				if(offset != 0 && offset != lineLength)
+				{
+					offset = TextUtilities.findWordStart(
+						lineText,offset,noWordSep);
+				}
+
+				if(markLineLength != 0)
+				{
+					mark = TextUtilities.findWordEnd(
+						markLineText,mark,noWordSep);
+				}
+			}
+			else
+			{
+				if(offset != 0 && lineLength != 0)
+				{
+					offset = TextUtilities.findWordEnd(
+						lineText,offset,noWordSep);
+				}
+
+				if(mark != 0 && mark != markLineLength)
+				{
+					mark = TextUtilities.findWordStart(
+						markLineText,mark,noWordSep);
+				}
+			}
+
+			select(markLineStart + mark,lineStart + offset);
+		}
+
+		private void doTripleDrag(MouseEvent evt)
+		{
+			int mark = getMarkLine();
+			int mouse = yToLine(evt.getY());
+			int offset = xToOffset(mouse,evt.getX());
+			if(mark > mouse)
+			{
+				mark = getLineEndOffset(mark) - 1;
+				if(offset == getLineLength(mouse))
+					mouse = getLineEndOffset(mouse) - 1;
+				else
+					mouse = getLineStartOffset(mouse);
+			}
+			else
+			{
+				mark = getLineStartOffset(mark);
+				if(offset == 0)
+					mouse = getLineStartOffset(mouse);
+				else
+					mouse = getLineEndOffset(mouse) - 1;
+			}
+			select(mark,mouse);
+		}
 	}
 
 	static class CaretUndo extends AbstractUndoableEdit
@@ -2241,6 +2242,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.87  2000/10/13 06:57:20  sp
+ * Edit User/System Macros command, gutter mouse handling improved
+ *
  * Revision 1.86  2000/10/12 09:28:27  sp
  * debugging and polish
  *

@@ -15,7 +15,7 @@ OF ANY KIND; see section 11 and 12 of the GPL for details.
 
 * Class Libraries
 
-jEdit depends on, and is bundled with the following class libraries:
+jEdit depends on, and comes bundled with the following class libraries:
 
 - gnu.regexp by the Free Software Foundation. This is used to implement
   regular expression search and replace, among other things. gnu.regexp
@@ -39,7 +39,8 @@ jEdit depends on, and is bundled with the following class libraries:
   saving buffers on FTP servers. This class library is released under
   the _GNU General Public License_. Get the complete package from
   <http://www.fooware.com>. Note that the version shipped with jEdit is
-  slightly different from the official one.
+  slightly different from the official one; several bugs have been
+  fixed, and support for passive-mode FTP was added.
 
 * jEdit on the Internet
 
@@ -78,6 +79,9 @@ Acrobat.
 Before reporting a problem with jEdit, please make sure it is not
 actually a Java bug, or a well-known problem.
 
+- If a newly installed edit mode doesn't work, you probably need to
+  rebuild the edit mode cache with Utilities->Reload Edit Modes.
+
 - Printing doesn't work very well, especially on Java 2. This is almost
   entirely Sun's fault. Their printing implementation is very buggy.
   I hear printing works better with Java 2 version 1.3, though.
@@ -89,13 +93,13 @@ actually a Java bug, or a well-known problem.
   experience them.
 
 - The AltGR key doesn't work for some people. I'm not sure if this is a
-  jEdit bug, a Java bug or both. Allegedly Java 1.1.8 and 1.2.2 fix
-  these problems, but I'm not sure. jEdit 2.6pre6 and later might fix
-  this problem.
+  jEdit bug, a Java bug or both. jEdit 2.6pre6 and later might fix this
+  problem.
 
-- On a related note, composed keys don't work either, so international
-  characters can be hard to type. I can't do anything about this until
-  someone submits code to add composed key support to jEdit.
+- On a related note, composed keys and input methods might not work
+  either, so international characters can be hard to type. I can't do
+  anything about this until someone submits code to add composed key
+  support to jEdit.
 
 - The buffer tabs component has minor problems with focus handling;
   jEdit 2.4 fixes most of these, but some remain, especially when
@@ -122,9 +126,6 @@ actually a Java bug, or a well-known problem.
   chances are you don't have Swing installed properly. Download Swing
   from <http://java.sun.com/products/jfc>. Alternatively, upgrade to
   Java 2, which doesn't require you to install Swing separately.
-
-- If a newly installed edit mode doesn't work, you probably need to
-  rebuild the edit mode cache with Utilities->Reload Edit Modes.
 
 - Because jEdit is written in Java, it will always be slower than a
   native application. The performance gap can be narrowed by installing

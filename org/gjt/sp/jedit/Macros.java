@@ -183,6 +183,15 @@ public class Macros
 	}
 
 	/**
+	 * Returns if a macro is currently being played.
+	 * @since jEdit 2.6pre9
+	 */
+	public static boolean isMacroPlaying()
+	{
+		return macroPlaying;
+	}
+
+	/**
 	 * Plays a macro.
 	 * @param view The view
 	 * @param name The macro name
@@ -197,33 +206,42 @@ public class Macros
 		int repeatCount = inputHandler.getRepeatCount();
 		inputHandler.setRepeatEnabled(false);
 
-		for(int i = repeatCount; i > 0; i--)
+		try
 		{
-			if(name == null)
+			macroPlaying = true;
+
+			for(int i = repeatCount; i > 0; i--)
 			{
-				Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
-					jEdit.getSettingsDirectory(),"macros","__temporary__.macro"));
-				if(buffer == null)
+				if(name == null)
 				{
-					view.getToolkit().beep();
-					return;
+					Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
+						jEdit.getSettingsDirectory(),"macros","__temporary__.macro"));
+					if(buffer == null)
+					{
+						view.getToolkit().beep();
+						return;
+					}
+		
+					playMacroFromBuffer(view,"__temporary__.macro",buffer);
 				}
-	
-				playMacroFromBuffer(view,"__temporary__.macro",buffer);
-			}
-			else
-			{
-				String fileName = MiscUtilities.constructPath(
-					jEdit.getSettingsDirectory(),"macros",name);
-
-				// Check if it's open
-				Buffer buffer = jEdit.getBuffer(fileName);
-
-				if(buffer == null)
-					playMacroFromFile(view,name,fileName);
 				else
-					playMacroFromBuffer(view,name,buffer);
+				{
+					String fileName = MiscUtilities.constructPath(
+						jEdit.getSettingsDirectory(),"macros",name);
+	
+					// Check if it's open
+					Buffer buffer = jEdit.getBuffer(fileName);
+	
+					if(buffer == null)
+						playMacroFromFile(view,name,fileName);
+					else
+						playMacroFromBuffer(view,name,buffer);
+				}
 			}
+		}
+		finally
+		{
+			macroPlaying = false;
 		}
 	}
 
@@ -319,6 +337,8 @@ public class Macros
 	private static Vector macroHierarchy;
 	private static Hashtable macrosHash;
 	private static String lastMacro;
+
+	private static boolean macroPlaying;
 
 	static
 	{
@@ -601,6 +621,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.39  2000/10/13 06:57:19  sp
+ * Edit User/System Macros command, gutter mouse handling improved
+ *
  * Revision 1.38  2000/10/12 09:28:26  sp
  * debugging and polish
  *
@@ -627,17 +650,5 @@ public class Macros
  *
  * Revision 1.30  2000/07/14 06:00:44  sp
  * bracket matching now takes syntax info into account
- *
- * Revision 1.29  2000/07/12 09:11:38  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.28  2000/06/04 08:57:35  sp
- * GUI updates, bug fixes
- *
- * Revision 1.27  2000/05/13 05:13:31  sp
- * Mode option pane
- *
- * Revision 1.26  2000/05/09 10:51:51  sp
- * New status bar, a few other things
  *
  */

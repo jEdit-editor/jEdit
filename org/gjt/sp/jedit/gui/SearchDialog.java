@@ -67,7 +67,7 @@ public class SearchDialog extends EnhancedDialog
 		replaceAll = new JButton(jEdit.getProperty("search.replaceAll"));
 		replaceAll.setMnemonic(jEdit.getProperty("search.replaceAll"
 			+ ".mnemonic").charAt(0));
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		close = new JButton(jEdit.getProperty("common.close"));
 
 		JPanel panel = new JPanel(new GridLayout(2,1));
 		JPanel panel2 = new JPanel(new BorderLayout());
@@ -107,7 +107,7 @@ public class SearchDialog extends EnhancedDialog
 		box.add(Box.createHorizontalStrut(6));
 		box.add(replaceAll);
 		box.add(Box.createHorizontalStrut(6));
-		box.add(cancel);
+		box.add(close);
 		box.add(Box.createGlue());
 		getRootPane().setDefaultButton(findBtn);
 		content.add(BorderLayout.SOUTH,box);
@@ -120,7 +120,7 @@ public class SearchDialog extends EnhancedDialog
 		findBtn.addActionListener(actionListener);
 		replaceSelection.addActionListener(actionListener);
 		replaceAll.addActionListener(actionListener);
-		cancel.addActionListener(actionListener);
+		close.addActionListener(actionListener);
 
 		GUIUtilities.requestFocus(this,find);
 
@@ -170,7 +170,7 @@ public class SearchDialog extends EnhancedDialog
 	private JButton findBtn;
 	private JButton replaceSelection;
 	private JButton replaceAll;
-	private JButton cancel;
+	private JButton close;
 	
 	private void save()
 	{
@@ -216,7 +216,7 @@ public class SearchDialog extends EnhancedDialog
 		{
 			Object source = evt.getSource();
 			Buffer buffer = view.getBuffer();
-			if(source == cancel)
+			if(source == close)
 				cancel();
 			else if(source == findBtn || source == find
 				|| source == replace)
@@ -261,6 +261,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.18  2000/10/13 06:57:20  sp
+ * Edit User/System Macros command, gutter mouse handling improved
+ *
  * Revision 1.17  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

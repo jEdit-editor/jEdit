@@ -1931,7 +1931,8 @@ public class jEdit
 		addAction("delete-word");
 		addAction("document-end");
 		addAction("document-home");
-		addAction("edit-macro");
+		addAction("edit-system-macros");
+		addAction("edit-user-macros");
 		addAction("end");
 		addAction("exchange-caret-register");
 		addAction("exit");
@@ -2364,6 +2365,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.282  2000/10/13 06:57:20  sp
+ * Edit User/System Macros command, gutter mouse handling improved
+ *
  * Revision 1.281  2000/10/12 09:28:27  sp
  * debugging and polish
  *

@@ -36,7 +36,7 @@ copy.icon=Copy24.gif
 paste.icon=Paste24.gif
 find.icon=Find24.gif
 find-next.icon=FindAgain24.gif
-new-view.icon=Applet24.gif
+new-view.icon=NewView24.gif
 unsplit.icon=Unsplit24.gif
 split-horizontal.icon=SplitHorizontal24.gif
 split-vertical.icon=SplitVertical24.gif
@@ -383,7 +383,9 @@ macros=record-macro \
        - \
        play-temp-macro \
        play-last-macro \
-       edit-macro \
+       - \
+       edit-system-macros \
+       edit-user-macros \
        - \
        rescan-macros \
        -
@@ -394,7 +396,8 @@ stop-recording.label=$Stop Recording
 input.label=Prompt for $Input...
 play-temp-macro.label=$Play Temporary Macro
 play-last-macro.label=P$lay Last Macro
-edit-macro.label=$Edit Macro...
+edit-system-macros.label=Edit S$ystem Macros
+edit-user-macros.label=Edit $User Macros
 rescan-macros.label=Resca$n Macros
 no-macros.label=No Macros
 

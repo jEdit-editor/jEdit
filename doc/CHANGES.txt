@@ -13,10 +13,20 @@ JEDIT 2.6 VERSION HISTORY
   long blocks of text, scrolling backwards in the buffer, and such
 - When changes are made in the 'Global Options' dialog box, the VFS browser
   now only updates itself if browser settings were changed. This avoids
-  unnecessary display 'flickering', disk activity, etc.
-- Clicking 'Cancel' in a macro input dialog box will now abort execution
-  of the macro
-- Several more sample macros included in download
+  unnecessary 'display flicker', disk activity, etc.
+
+- Macro improvements:
+  - Line numbers entered in "Go to Line" dialog box are now recorded
+  - Clicking 'Cancel' in a macro input dialog box will now abort execution
+    of the macro
+  - The dialog box showing the number of replacements made is no longer
+    displayed when playing back a "Replace All"
+  - Several more sample macros included in download
+  - 'Edit User Macros' and 'Edit System Macros' commands replace 'Edit
+    Macro' command
+
+- Clicks and drags in the space between the gutter and text area are now
+  handled
 
 + Bug Fixes
 

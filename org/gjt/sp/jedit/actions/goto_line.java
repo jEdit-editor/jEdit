@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.actions;
 import javax.swing.*;
 import javax.swing.text.Element;
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -44,6 +45,11 @@ public class goto_line extends EditAction
 		}
 		else
 		{
+			InputHandler.MacroRecorder recorder = view.getInputHandler()
+				.getMacroRecorder();
+			if(recorder != null)
+				recorder.actionPerformed(this,actionCommand);
+
 			try
 			{
 				line = Integer.parseInt(actionCommand);
@@ -63,5 +69,15 @@ public class goto_line extends EditAction
 
 		Element element = map.getElement(line - 1);
 		view.getTextArea().setCaretPosition(element.getStartOffset());
+	}
+
+	public boolean isRepeatable()
+	{
+		return false;
+	}
+
+	public boolean isRecordable()
+	{
+		return false;
 	}
 }
