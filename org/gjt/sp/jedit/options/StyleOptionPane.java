@@ -166,7 +166,7 @@ class ColorTableModel extends AbstractTableModel
 
 	ColorTableModel()
 	{
-		colorChoices = new Vector(12);
+		colorChoices = new Vector(17);
 		addColorChoice("options.styles.bgColor","view.bgColor");
 		addColorChoice("options.styles.fgColor","view.fgColor");
 		addColorChoice("options.styles.caretColor","view.caretColor");
@@ -178,6 +178,8 @@ class ColorTableModel extends AbstractTableModel
 			"view.bracketHighlightColor");
 		addColorChoice("options.styles.eolMarkerColor",
 			"view.eolMarkerColor");
+		addColorChoice("options.styles.wrapGuideColor",
+			"view.wrapGuideColor");
 		addColorChoice("options.styles.gutterBgColor",
 			"view.gutter.bgColor");
 		addColorChoice("options.styles.gutterFgColor",
@@ -588,6 +590,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/11/05 05:25:46  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.23  2000/10/30 07:14:04  sp
  * 2.7pre1 branched, GUI improvements
  *

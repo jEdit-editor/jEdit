@@ -261,6 +261,42 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	}
 
 	/**
+	 * Returns the wrap guide color.
+	 */
+	public final Color getWrapGuideColor()
+	{
+		return wrapGuideColor;
+	}
+
+	/**
+	 * Sets the wrap guide color.
+	 * @param wrapGuideColor The wrap guide color
+	 */
+	public final void setWrapGuideColor(Color wrapGuideColor)
+	{
+		this.wrapGuideColor = wrapGuideColor;
+		repaint();
+	}
+
+	/**
+	 * Returns true if the wrap guide is drawn, false otherwise.
+	 */
+	public final boolean getWrapGuidePainted()
+	{
+		return wrapGuide;
+	}
+
+	/**
+	 * Sets if the wrap guide is to be drawn.
+	 * @param wrapGuide True if the wrap guide should be drawn, false otherwise
+	 */
+	public final void setWrapGuidePainted(boolean wrapGuide)
+	{
+		this.wrapGuide = wrapGuide;
+		repaint();
+	}
+
+	/**
 	 * Adds a custom highlight painter.
 	 * @param highlight The highlight
 	 */
@@ -276,6 +312,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public String getToolTipText(MouseEvent evt)
 	{
+		int wrapGuidePos = maxLineLen + textArea.getHorizontalOffset();
+		if(Math.abs(evt.getX() - wrapGuidePos) < 5)
+		{
+			return String.valueOf(textArea.getBuffer()
+				.getProperty("maxLineLen"));
+		}
+
 		if(highlights != null)
 			return highlights.getToolTipText(evt);
 		else
@@ -317,6 +360,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		gfx.setColor(getBackground());
 		gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
 
+		int x = textArea.getHorizontalOffset();
+
 		// We don't use yToLine() here because that method doesn't
 		// return lines past the end of the buffer
 		int height = fm.getHeight();
@@ -331,7 +376,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		try
 		{
 			TokenMarker tokenMarker = textArea.getTokenMarker();
-			int x = textArea.getHorizontalOffset();
 			int maxWidth = textArea.maxHorizontalScrollWidth;
 
 			boolean updateMaxHorizontalScrollWidth = false;
@@ -439,6 +483,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		tabSize = fm.charWidth(' ') * ((Integer)textArea
 			.getBuffer().getProperty(
 			PlainDocument.tabSizeAttribute)).intValue();
+
+		int _maxLineLen = ((Integer)textArea.getBuffer()
+			.getProperty("maxLineLen")).intValue();
+
+		if(_maxLineLen <= 0)
+			maxLineLen = 0;
+		else
+			maxLineLen = fm.charWidth(' ') * _maxLineLen;
 	}
 
 	// private members
@@ -450,15 +502,18 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private Color lineHighlightColor;
 	private Color bracketHighlightColor;
 	private Color eolMarkerColor;
+	private Color wrapGuideColor;
 
 	private boolean blockCaret;
 	private boolean lineHighlight;
 	private boolean bracketHighlight;
 	private boolean eolMarkers;
+	private boolean wrapGuide;
 	private int cols;
 	private int rows;
-	
+
 	private int tabSize;
+	private int maxLineLen;
 	private FontMetrics fm;
 
 	private TextAreaHighlight highlights;
@@ -466,15 +521,24 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private int paintLine(Graphics gfx, TokenMarker tokenMarker,
 		boolean valid, int line, int x)
 	{
-		Font defaultFont = getFont();
-		Color defaultColor = getForeground();
-
 		int y = textArea.lineToY(line);
 
 		paintHighlight(gfx,line,y,valid);
 
+		if(maxLineLen != 0 && wrapGuide)
+		{
+			gfx.setColor(wrapGuideColor);
+			int firstLine = textArea.getFirstLine();
+			gfx.drawLine(x + maxLineLen,(line - firstLine) * fm.getHeight(),
+				x + maxLineLen,
+				(line - firstLine + 1) * fm.getHeight());
+		}
+
 		if(valid)
 		{
+			Font defaultFont = getFont();
+			Color defaultColor = getForeground();
+
 			gfx.setFont(defaultFont);
 			gfx.setColor(defaultColor);
 
@@ -635,6 +699,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.47  2000/11/05 05:25:46  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.46  2000/11/05 00:44:15  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

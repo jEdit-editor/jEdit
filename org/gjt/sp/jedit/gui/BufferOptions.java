@@ -1,6 +1,6 @@
 /*
  * BufferOptions.java - Buffer-specific options dialog
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,9 +127,31 @@ public class BufferOptions extends EnhancedDialog
 		layout.setConstraints(indentSize,cons);
 		panel.add(indentSize);
 
-		// Line separator
+		// Max line length
 		cons.gridx = 0;
 		cons.gridy = 3;
+		cons.weightx = 0.0f;
+		cons.insets = labelInsets;
+		label = new JLabel(jEdit.getProperty(
+			"options.editor.maxLineLen"),SwingConstants.RIGHT);
+		layout.setConstraints(label,cons);
+		panel.add(label);
+
+		String[] lineLengths = { "72", "76", "80" };
+
+		cons.gridx = 1;
+		cons.weightx = 1.0f;
+		cons.insets = nullInsets;
+		maxLineLen = new JComboBox(lineLengths);
+		maxLineLen.setEditable(true);
+		maxLineLen.setSelectedItem(buffer.getProperty("maxLineLen"));
+		maxLineLen.addActionListener(actionListener);
+		layout.setConstraints(maxLineLen,cons);
+		panel.add(maxLineLen);
+
+		// Line separator
+		cons.gridx = 0;
+		cons.gridy = 4;
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty("buffer-options.lineSeparator"),
@@ -159,7 +181,7 @@ public class BufferOptions extends EnhancedDialog
 
 		// Syntax highlighting
 		cons.gridx = 0;
-		cons.gridy = 4;
+		cons.gridy = 5;
 		cons.weightx = 0.0f;
 		cons.gridwidth = cons.REMAINDER;
 		cons.fill = GridBagConstraints.NONE;
@@ -172,7 +194,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(syntax);
 
 		// Indent on tab
-		cons.gridy = 5;
+		cons.gridy = 6;
 		indentOnTab = new JCheckBox(jEdit.getProperty(
 			"options.editor.indentOnTab"));
 		indentOnTab.setSelected(buffer.getBooleanProperty("indentOnTab"));
@@ -181,7 +203,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnTab);
 
 		// Indent on enter
-		cons.gridy = 6;
+		cons.gridy = 7;
 		indentOnEnter = new JCheckBox(jEdit.getProperty(
 			"options.editor.indentOnEnter"));
 		indentOnEnter.setSelected(buffer.getBooleanProperty("indentOnEnter"));
@@ -190,7 +212,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnEnter);
 
 		// Soft tabs
-		cons.gridy = 7;
+		cons.gridy = 8;
 		noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editor.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
@@ -199,7 +221,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(noTabs);
 
 		// Props label
-		cons.gridy = 8;
+		cons.gridy = 9;
 		cons.insets = new Insets(6,0,6,0);
 		label = new JLabel(jEdit.getProperty("buffer-options.props"));
 		layout.setConstraints(label,cons);
@@ -254,6 +276,15 @@ public class BufferOptions extends EnhancedDialog
 		{
 		}
 
+		try
+		{
+			buffer.putProperty("maxLineLen",new Integer(
+				maxLineLen.getSelectedItem().toString()));
+		}
+		catch(NumberFormatException nf)
+		{
+		}
+
 		int index = mode.getSelectedIndex();
 		buffer.setMode(modes[index]);
 
@@ -292,6 +323,7 @@ public class BufferOptions extends EnhancedDialog
 	private Buffer buffer;
 	private JComboBox tabSize;
 	private JComboBox indentSize;
+	private JComboBox maxLineLen;
 	private Mode[] modes;
 	private JComboBox mode;
 	private JComboBox lineSeparator;
@@ -305,13 +337,14 @@ public class BufferOptions extends EnhancedDialog
 
 	private void updatePropsField()
 	{
-		props.setText(":tabSize=" + tabSize.getSelectedItem()
+		props.setText(":mode=" + modes[mode.getSelectedIndex()].getName()
+			+ ":tabSize=" + tabSize.getSelectedItem()
 			+ ":indentSize=" + indentSize.getSelectedItem()
 			+ ":noTabs=" + noTabs.isSelected()
-			+ ":mode=" + modes[mode.getSelectedIndex()].getName()
 			+ ":indentOnTab=" + indentOnTab.isSelected()
 			+ ":indentOnEnter=" + indentOnEnter.isSelected()
 			+ ":syntax=" + syntax.isSelected()
+			+ ":maxLineLen=" + maxLineLen.getSelectedItem()
 			+ ":");
 	}
 
@@ -334,6 +367,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/11/05 05:25:46  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.19  2000/11/02 09:19:33  sp
  * more features
  *

@@ -39,6 +39,7 @@ public interface DockableWindowContainer
 	void saveDockableWindow(DockableWindow win);
 	void removeDockableWindow(DockableWindow win);
 	void showDockableWindow(DockableWindow win);
+	boolean isDockableWindowVisible(DockableWindow win);
 
 	/**
 	 * Tabbed pane container.
@@ -193,6 +194,11 @@ public interface DockableWindowContainer
 			win.getComponent().requestFocus();
 		}
 
+		public boolean isDockableWindowVisible(DockableWindow win)
+		{
+			return !collapsed;
+		}
+
 		class MouseHandler extends MouseAdapter implements MouseMotionListener
 		{
 			boolean canDrag;
@@ -326,6 +332,11 @@ public interface DockableWindowContainer
 			requestFocus();
 		}
 
+		public boolean isDockableWindowVisible(DockableWindow win)
+		{
+			return true;
+		}
+
 		public void dispose()
 		{
 			dockableWindowManager.removeDockableWindow(name);
@@ -341,6 +352,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.14  2000/11/05 05:25:46  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.13  2000/11/02 09:19:33  sp
  * more features
  *

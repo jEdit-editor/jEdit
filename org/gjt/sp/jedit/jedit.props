@@ -77,6 +77,9 @@ buffer.undoCount=100
 # Syntax highlighting
 buffer.syntax=true
 
+# Wrap column
+buffer.maxLineLen=80
+
 ###
 ### VIEW SETTINGS
 ###
@@ -112,8 +115,9 @@ view.bracketHighlightColor=#000000
 view.eolMarkers=true
 view.eolMarkerColor=#009999
 
-# Invalid lines
-view.paintInvalid=false
+# Wrap guide
+view.wrapGuide=true
+view.wrapGuideColor=#8080ff
 
 # Caret color
 view.caretColor=#ff0000

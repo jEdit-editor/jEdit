@@ -2006,6 +2006,7 @@ public class jEdit
 		addAction("find-next");
 		addAction("find-selection");
 		addAction("forget-passwords");
+		addAction("format-paragraph");
 		addAction("global-options");
 		addAction("goto-line");
 		addAction("goto-register");
@@ -2062,6 +2063,7 @@ public class jEdit
 		addAction("reload");
 		addAction("reload-all");
 		addAction("reload-modes");
+		addAction("remove-trailing-ws");
 		addAction("replace-all");
 		addAction("replace-and-find-next");
 		addAction("replace-in-selection");
@@ -2440,6 +2442,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.287  2000/11/05 05:25:45  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.286  2000/11/05 00:44:14  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

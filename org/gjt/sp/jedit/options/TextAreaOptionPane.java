@@ -79,6 +79,12 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		eolMarkers.setSelected(jEdit.getBooleanProperty("view.eolMarkers"));
 		addComponent(eolMarkers);
 
+		/* Wrap guide */
+		wrapGuide = new JCheckBox(jEdit.getProperty("options.textarea"
+			+ ".wrapGuide"));
+		wrapGuide.setSelected(jEdit.getBooleanProperty("view.wrapGuide"));
+		addComponent(wrapGuide);
+
 		/* Blinking caret */
 		blinkCaret = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".blinkCaret"));
@@ -189,6 +195,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.eolMarkers",eolMarkers
 			.isSelected());
+		jEdit.setBooleanProperty("view.wrapGuide",wrapGuide
+			.isSelected());
 		jEdit.setBooleanProperty("view.caretBlink",blinkCaret.isSelected());
 		jEdit.setBooleanProperty("view.blockCaret",blockCaret.isSelected());
 		jEdit.setProperty("view.electricBorders",electricBorders
@@ -231,6 +239,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox lineHighlight;
 	private JCheckBox bracketHighlight;
 	private JCheckBox eolMarkers;
+	private JCheckBox wrapGuide;
 	private JCheckBox blinkCaret;
 	private JCheckBox blockCaret;
 	private JCheckBox electricBorders;
@@ -249,6 +258,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/11/05 05:25:46  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.3  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *

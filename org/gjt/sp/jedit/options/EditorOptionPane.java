@@ -66,6 +66,17 @@ public class EditorOptionPane extends AbstractOptionPane
 		defaultIndentSize.setSelectedItem(jEdit.getProperty("buffer.indentSize"));
 		addComponent(jEdit.getProperty("options.editor.indentSize"),defaultIndentSize);
 
+		/* Max line length */
+		String[] lineLens = { "72", "76", "80" };
+		defaultMaxLineLen = new JComboBox(lineLens);
+		defaultMaxLineLen.setEditable(true);
+		defaultMaxLineLen.setSelectedItem(jEdit.getProperty("buffer.maxLineLen"));
+		addComponent(jEdit.getProperty("options.editor.maxLineLen"),defaultMaxLineLen);
+
+		/* Word break chars */
+		defaultWordBreakChars = new JTextField(jEdit.getProperty("buffer.wordBreakChars"));
+		addComponent(jEdit.getProperty("options.editor.wordBreakChars"),defaultWordBreakChars);
+
 		/* Undo queue size */
 		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
 		addComponent(jEdit.getProperty("options.editor.undoCount"),undoCount);
@@ -124,6 +135,12 @@ public class EditorOptionPane extends AbstractOptionPane
 			indentSize = new JComboBox(tabSizes));
 		indentSize.setEditable(true);
 
+		addComponent(jEdit.getProperty("options.editor.maxLineLen"),
+			maxLineLen = new JComboBox(lineLens));
+
+		addComponent(jEdit.getProperty("options.editor.wordBreakChars"),
+			wordBreakChars = new JTextField());
+
 		addComponent(jEdit.getProperty("options.editor.commentStart"),
 			commentStart = new JTextField());
 
@@ -162,6 +179,8 @@ public class EditorOptionPane extends AbstractOptionPane
 			.getSelectedItem());
 		jEdit.setProperty("buffer.indentSize",(String)defaultIndentSize
 			.getSelectedItem());
+		jEdit.setProperty("buffer.maxLineLen",(String)defaultMaxLineLen.getSelectedItem());
+		jEdit.setProperty("buffer.wordBreakChars",defaultWordBreakChars.getText());
 		jEdit.setProperty("buffer.undoCount",undoCount.getText());
 		jEdit.setBooleanProperty("buffer.syntax",defaultSyntax.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
@@ -182,6 +201,8 @@ public class EditorOptionPane extends AbstractOptionPane
 	private JComboBox defaultMode;
 	private JComboBox defaultTabSize;
 	private JComboBox defaultIndentSize;
+	private JComboBox defaultMaxLineLen;
+	private JTextField defaultWordBreakChars;
 	private JTextField undoCount;
 	private JCheckBox defaultSyntax;
 	private JCheckBox defaultIndentOnTab;
@@ -196,6 +217,8 @@ public class EditorOptionPane extends AbstractOptionPane
 	private JTextField firstlineGlob;
 	private JComboBox tabSize;
 	private JComboBox indentSize;
+	private JComboBox maxLineLen;
+	private JTextField wordBreakChars;
 	private JTextField commentStart;
 	private JTextField commentEnd;
 	private JTextField boxComment;
@@ -213,6 +236,8 @@ public class EditorOptionPane extends AbstractOptionPane
 		current.firstlineGlob = firstlineGlob.getText();
 		current.tabSize = (String)tabSize.getSelectedItem();
 		current.indentSize = (String)indentSize.getSelectedItem();
+		current.maxLineLen = (String)maxLineLen.getSelectedItem();
+		current.wordBreakChars = wordBreakChars.getText();
 		current.commentStart = commentStart.getText();
 		current.commentEnd = commentEnd.getText();
 		current.boxComment = boxComment.getText();
@@ -235,6 +260,8 @@ public class EditorOptionPane extends AbstractOptionPane
 		firstlineGlob.setText(current.firstlineGlob);
 		tabSize.setSelectedItem(current.tabSize);
 		indentSize.setSelectedItem(current.indentSize);
+		maxLineLen.setSelectedItem(current.maxLineLen);
+		wordBreakChars.setText(current.wordBreakChars);
 		commentStart.setText(current.commentStart);
 		commentEnd.setText(current.commentEnd);
 		boxComment.setText(current.boxComment);
@@ -255,6 +282,8 @@ public class EditorOptionPane extends AbstractOptionPane
 		firstlineGlob.setEnabled(enabled);
 		tabSize.setEnabled(enabled);
 		indentSize.setEnabled(enabled);
+		maxLineLen.setEnabled(enabled);
+		wordBreakChars.setEnabled(enabled);
 		commentStart.setEnabled(enabled);
 		commentEnd.setEnabled(enabled);
 		boxComment.setEnabled(enabled);
@@ -295,6 +324,8 @@ public class EditorOptionPane extends AbstractOptionPane
 		String firstlineGlob;
 		String tabSize;
 		String indentSize;
+		String maxLineLen;
+		String wordBreakChars;
 		String commentStart;
 		String commentEnd;
 		String boxComment;
@@ -325,6 +356,8 @@ public class EditorOptionPane extends AbstractOptionPane
 			firstlineGlob = (String)mode.getProperty("firstlineGlob");
 			tabSize = mode.getProperty("tabSize").toString();
 			indentSize = mode.getProperty("indentSize").toString();
+			maxLineLen = mode.getProperty("maxLineLen").toString();
+			wordBreakChars = (String)mode.getProperty("wordBreakChars");
 			commentStart = (String)mode.getProperty("commentStart");
 			commentEnd = (String)mode.getProperty("commentEnd");
 			boxComment = (String)mode.getProperty("boxComment");
@@ -352,6 +385,8 @@ public class EditorOptionPane extends AbstractOptionPane
 				jEdit.resetProperty(prefix + "firstlineGlob");
 				jEdit.resetProperty(prefix + "tabSize");
 				jEdit.resetProperty(prefix + "indentSize");
+				jEdit.resetProperty(prefix + "maxLineLen");
+				jEdit.resetProperty(prefix + "wordBreakChars");
 				jEdit.resetProperty(prefix + "commentStart");
 				jEdit.resetProperty(prefix + "commentEnd");
 				jEdit.resetProperty(prefix + "boxComment");
@@ -368,6 +403,8 @@ public class EditorOptionPane extends AbstractOptionPane
 				jEdit.setProperty(prefix + "firstlineGlob",firstlineGlob);
 				jEdit.setProperty(prefix + "tabSize",tabSize);
 				jEdit.setProperty(prefix + "indentSize",indentSize);
+				jEdit.setProperty(prefix + "maxLineLen",maxLineLen);
+				jEdit.setProperty(prefix + "wordBreakChars",wordBreakChars);
 				jEdit.setProperty(prefix + "commentStart",commentStart);
 				jEdit.setProperty(prefix + "commentEnd",commentEnd);
 				jEdit.setProperty(prefix + "boxComment",boxComment);
@@ -385,6 +422,9 @@ public class EditorOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.30  2000/11/05 05:25:46  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.29  2000/11/05 00:44:15  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

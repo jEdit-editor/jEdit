@@ -4,6 +4,15 @@ JEDIT 2.7 VERSION HISTORY
 
 + New Features
 
+- Word wrap:
+  - The maximum line length is set by the 'maxLineLen' buffer property.
+    The global default is 80; it can also be changed on a mode- and
+    buffer-specific basis.
+  - Setting it to zero disables word wrap.
+  - If, when typing, the line length exceeds the maximum, a line break
+    is inserted in the appropriate location.
+  - A 'wrap guide' is drawn in the text area at the wrap column. This
+    is similar to the LineGuides plugin
 - Ollie Rutherford's scrolling actions:
   - Scroll Up/Down Line: C+' and C+/
   - Scroll Up/Down Page: A+' and A+/
@@ -33,6 +42,8 @@ JEDIT 2.7 VERSION HISTORY
   files are loaded from it on jEdit startup before user-specific properties.
   This can be used to enforce site-wide key bindings, color schemes, etc
   on multi-user systems (Mike Dillon)
+- Format and Remove Trailing Whitespace actions from TextTools plugin
+  integrated into the core
 
 + Enhancements
 
@@ -53,6 +64,9 @@ JEDIT 2.7 VERSION HISTORY
   the register before appending
 - Slightly faster HyperSearch over a directory of files
 - HyperSearch now displays results in a tree format
+- Minor change to dockable window behavior. If a dockable is open but
+  it's container is collapsed, invoking the dockable's action will
+  expand the container
 
 + Neutral
 

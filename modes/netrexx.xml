@@ -15,6 +15,7 @@
 		<PROPERTY NAME="blockComment" VALUE="--" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.nrx" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
+		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->

@@ -300,6 +300,10 @@ public class EditPane extends JPanel implements EBComponent
 			"view.eolMarkers"));
 		painter.setEOLMarkerColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.eolMarkerColor")));
+		painter.setWrapGuidePainted(jEdit.getBooleanProperty(
+			"view.wrapGuide"));
+		painter.setWrapGuideColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.wrapGuideColor")));
 		painter.setCaretColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.caretColor")));
 		painter.setSelectionColor(GUIUtilities.parseColor(
@@ -466,6 +470,8 @@ public class EditPane extends JPanel implements EBComponent
 		myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
 		myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
 		myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
+		myPainter.setWrapGuidePainted(painter.getWrapGuidePainted());
+		myPainter.setWrapGuideColor(painter.getWrapGuideColor());
 		myPainter.setCaretColor(painter.getCaretColor());
 		myPainter.setSelectionColor(painter.getSelectionColor());
 		myPainter.setBackground(painter.getBackground());
@@ -600,6 +606,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.22  2000/11/05 05:25:45  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.21  2000/11/05 00:44:14  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

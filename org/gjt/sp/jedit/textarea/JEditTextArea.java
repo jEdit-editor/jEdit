@@ -221,10 +221,9 @@ public class JEditTextArea extends JComponent
 		int width = painter.getWidth();
 		if(horizontal != null && width != 0)
 		{
-			/* int maxHorizontalScrollWidth = getTokenMarker().getMaxLineWidth(
-				firstLine,visibleLines);
-			horizontal.setValues(-horizontalOffset,width,0,
-				maxHorizontalScrollWidth); */
+			maxHorizontalScrollWidth = 0;
+			painter.repaint();
+
 			horizontal.setUnitIncrement(painter.getFontMetrics()
 				.charWidth('w'));
 			horizontal.setBlockIncrement(width / 2);
@@ -2040,7 +2039,7 @@ public class JEditTextArea extends JComponent
 				{
 					int mark = getMarkPosition();
 					// Hack
-					if(bracket > mark)
+					if(bracket < mark)
 					{
 						bracket++;
 						mark--;
@@ -2246,6 +2245,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.93  2000/11/05 05:25:46  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.92  2000/11/05 00:44:15  sp
  * Improved HyperSearch, improved horizontal scroll, other stuff
  *

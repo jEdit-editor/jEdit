@@ -209,7 +209,8 @@ line=indent-lines \
      delete-start-line \
      delete-end-line \
      - \
-     join-lines
+     join-lines \
+     remove-trailing-ws
 line.label=Lines
 indent-lines.label=Indent Selected Lines
 shift-left.label=Shift Indent Left
@@ -218,6 +219,7 @@ delete-line.label=Delete Line
 delete-start-line.label=Delete to Start of Line
 delete-end-line.label=Delete to End of Line
 join-lines.label=Join Lines
+remove-trailing-ws.label=Remove Trailing Whitespace
 
 ### Paragraph menu
 paragraph=prev-paragraph \
@@ -226,13 +228,16 @@ paragraph=prev-paragraph \
 	  select-prev-paragraph \
 	  select-next-paragraph \
 	  - \
-	  delete-paragraph
+	  delete-paragraph \
+          - \
+          format-paragraph
 paragraph.label=Paragraphs
 prev-paragraph.label=Go to Previous Paragraph
 next-paragraph.label=Go to Next Paragraph
 select-prev-paragraph.label=Select Previous Paragraph
 select-next-paragraph.label=Select Next Paragraph
 delete-paragraph.label=Delete Paragraph
+format-paragraph.label=Format Paragraph
 
 ### Block menu
 brackets=select-block \
@@ -899,6 +904,7 @@ options.textarea.font=Text area font:
 options.textarea.lineHighlight=Current line highlighting
 options.textarea.bracketHighlight=Bracket highlighting
 options.textarea.eolMarkers=EOL markers
+options.textarea.wrapGuide=Wrap guide
 options.textarea.blinkCaret=Blinking caret
 options.textarea.blockCaret=Block-shaped caret
 options.textarea.electricBorders=Electric (auto scroll) borders
@@ -927,6 +933,7 @@ options.styles.selectionColor=Selection
 options.styles.lineHighlightColor=Line highlight
 options.styles.bracketHighlightColor=Bracket highlight
 options.styles.eolMarkerColor=EOL markers
+options.styles.wrapGuideColor=Wrap guide
 options.styles.gutterBgColor=Gutter background
 options.styles.gutterFgColor=Gutter foreground
 options.styles.gutterHighlightColor=Gutter highlight
@@ -955,6 +962,8 @@ options.editor.global=Default editor settings
 options.editor.defaultMode=Default edit mode:
 options.editor.tabSize=Tab width:
 options.editor.indentSize=Indent width:
+options.editor.maxLineLen=Wrap lines at column:
+options.editor.wordBreakChars=Break lines at these characters:
 options.editor.undoCount=Number of undos:
 options.editor.syntax=Highlight syntax tokens
 options.editor.indentOnTab=Indent line when Tab key is pressed

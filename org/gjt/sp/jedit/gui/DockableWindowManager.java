@@ -234,8 +234,7 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void toggleDockableWindow(String name)
 	{
-		Entry entry = (Entry)windows.get(name);
-		if(entry != null)
+		if(isDockableWindowVisible(name))
 			removeDockableWindow(name);
 		else
 			addDockableWindow(name);
@@ -260,7 +259,11 @@ public class DockableWindowManager extends JPanel
 	 */
 	public boolean isDockableWindowVisible(String name)
 	{
-		return windows.get(name) != null;
+		Entry entry = (Entry)windows.get(name);
+		if(entry == null)
+			return false;
+		else
+			return entry.container.isDockableWindowVisible(entry.win);
 	}
 
 	/**
@@ -420,6 +423,9 @@ public class DockableWindowManager extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/11/05 05:25:46  sp
+ * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
+ *
  * Revision 1.6  2000/11/02 09:19:33  sp
  * more features
  *
