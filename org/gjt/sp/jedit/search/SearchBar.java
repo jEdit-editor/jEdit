@@ -26,6 +26,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.HistoryTextField;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 public class SearchBar extends JPanel
@@ -129,9 +130,16 @@ public class SearchBar extends JPanel
 		{
 			// on enter, start search from end
 			// of current match to find next one
-			int start = reverse 
-				? view.getTextArea().getSelectionStart()
-				: view.getTextArea().getSelectionEnd();
+			int start;
+			JEditTextArea textArea = view.getTextArea();
+			Selection s = textArea.getSelectionAtOffset(
+				textArea.getCaretPosition());
+			if(s == null)
+				start = textArea.getCaretPosition();
+			else if(reverse)
+				start = s.getStart();
+			else 
+				start = s.getEnd();
 
 			if(!incrementalSearch(start,reverse))
 			{
@@ -215,8 +223,16 @@ public class SearchBar extends JPanel
 			// the current match until another match is found
 			if(!hyperSearch.isSelected())
 			{
-				if(!incrementalSearch(view.getTextArea()
-					.getSelectionStart(),false))
+				int start;
+				JEditTextArea textArea = view.getTextArea();
+				Selection s = textArea.getSelectionAtOffset(
+					textArea.getCaretPosition());
+				if(s == null)
+					start = textArea.getCaretPosition();
+				else 
+					start = s.getStart();
+
+				if(!incrementalSearch(start,false))
 				{
 					if(!incrementalSearch(0,false))
 					{
@@ -248,10 +264,15 @@ public class SearchBar extends JPanel
 					}
 					else
 					{
-						incrementalSearch(
-							view.getTextArea()
-							.getSelectionStart(),
-							true);
+						int start;
+						JEditTextArea textArea = view.getTextArea();
+						Selection s = textArea.getSelectionAtOffset(
+							textArea.getCaretPosition());
+						if(s == null)
+							start = textArea.getCaretPosition();
+						else 
+							start = s.getStart();
+						incrementalSearch(start,true);
 					}
 				}
 			}

@@ -25,7 +25,6 @@ import java.awt.Toolkit;
 import java.io.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.msg.RegistersChanged;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
 
@@ -210,8 +209,6 @@ public class Registers
 		}
 
 		registers[name] = newRegister;
-
-		EditBus.send(new RegistersChanged(null));
 	}
 
 	/**
@@ -239,8 +236,6 @@ public class Registers
 			else
 				registers[name] = new StringRegister(value);
 		}
-
-		EditBus.send(new RegistersChanged(null));
 	}
 
 	/**
@@ -257,8 +252,6 @@ public class Registers
 			register.setValue("");
 		else
 			registers[name] = null;
-
-		EditBus.send(new RegistersChanged(null));
 	}
 
 	/**

@@ -19,7 +19,7 @@
 
 <ACTION NAME="add-marker">
 	<CODE>
-		buffer.addMarker('\0',textArea.getCaretPosition());
+		textArea.addMarker();
 	</CODE>
 </ACTION>
 
@@ -862,7 +862,7 @@
 
 <ACTION NAME="select-none">
 	<CODE>
-		textArea.setSelection(null);
+		textArea.removeSelection(textArea.getCaretPosition());
 	</CODE>
 </ACTION>
 
@@ -982,6 +982,12 @@
 	<IS_SELECTED>
 		return textArea.getGutter().isExpanded();
 	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="toggle-multi-select">
+	<CODE>
+		JEditTextArea.toggleMultipleSelectionEnabled();
+	</CODE>
 </ACTION>
 
 <ACTION NAME="toggle-synchro-scroll">

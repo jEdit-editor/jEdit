@@ -5,20 +5,23 @@ implemented in jEdit 3.2. Some might appear in a future version, some
 might never be implemented at all.
 
 - reverse regexp search
-- hypersearch: select all found results using dicont. select
-- hypersearch: multiple results
+- hypersearch: select button, clear button
 - XThis: don't throw exceptions for non-existent methods
-- CVS: add tip34-37.html
-- CVS: add Selection.java
+- CVS: add pluginmgr, remove RegistersChanged
 - caret event not always fired
+- reload edit modes command
+- folding bug
+- most recently deleted text in ^ register?
+- replace in selection: restore selection
+- blockComment()
+- BeanShell replace: global variables!
+- update buffer history for multiple selection
+
+- web start version
 
 + editing
- - wing comment with rect sel active puts comment start/end at the
-    beginning/end of each selected chunk
  - improved rectangular selections
  - soft wrap
- - discontinuous selection
-   - Edit->Discontinuous Selection command
  - Bracket double click behavior is really annoying - make if configurable
 
 + folding
@@ -35,8 +38,7 @@ might never be implemented at all.
    update and install lists
  - zlib decompression errors in plugin manager
  - display all plugin errors, batched in one window on startup
- - plugin directory should be named 'plugins', not 'jars'
- - move latest version plugin into the core
+ - move latest version plugin into the core, improve latest version plugin
  - move plugin manager into the core
  - plugin manager: track dependencies, branches
 
@@ -64,9 +66,6 @@ might never be implemented at all.
  - The base Metal L&F font will be configurable.
  - use Dirk's VariableGridLayout more
  - escape in 'add abbrev' dialog
- - docked windows: discourage use of check box menu items, instead menu
-   item calls addDockableWindow() and right click on tab shows closes
- - View->Close Docked Window menu
  - fix dragStart handling in DockableWindowContainer.TabbedPane
  - C+i in shortcuts editor
  - 'new view' creates incorrectly sized views due to Java bugs
@@ -74,7 +73,6 @@ might never be implemented at all.
 
 + beanshell
  - improve handling of __char__
- - runmacro= switch, nomacro switch
 
 + documentation
  - get rid of final blank page of user's guide
@@ -82,8 +80,5 @@ might never be implemented at all.
  - update macro guide for misc. API changes:
    - markers, registers, should probably be mentioned?
    - s&r changes
- - document new search and replace features
+   - new select API
  - Include John's upcoming plugin guide
-
-+ misc
- - site-props directory should be named 'properties'

@@ -111,7 +111,7 @@ public class CurrentDirectoryMenu extends JMenu
 
 					if(current.getItemCount() >= 20)
 					{
-						current.addSeparator();
+						//current.addSeparator();
 						JMenu newCurrent = new JMenu(
 							jEdit.getProperty(
 							"common.more"));

@@ -4,6 +4,10 @@ JEDIT 3.2 VERSION HISTORY
 
 + New Features
 
+- Pressing Caps Lock toggles multiple selection on and off. In multiple
+  selection mode, any number of chunks can be selected, and the caret
+  position is independent of the selection. All jEdit built-in commands
+  support multiple selections. If they don't, it's a bug
 - Caret registers and markers merged:
   - 'Markers' top level menu contains commands for manipulating markers.
   - Markers can no longer be named -- the menu just shows the line of
@@ -34,11 +38,18 @@ JEDIT 3.2 VERSION HISTORY
   chooser dialog box
 - Marker saving can now be toggled in Utilities->Global Options->Loading
   and Saving
+- View->Scrolling->Scroll to Caret (C+e C+j) now expands the fold
+  containing the caret, if necessary
+- -nostartupmacro command line switch
 
 + Neutral
 
 - 'Append to Register' command renamed 'Copy Append to Register'
 - 'Replace All' no longer bound to C+e C+a
+- 'site-props' directory renamed to 'properties'
+- 'Rectangular Selection' command removed. Now, the only way to create
+  a rectangular selection is to either Control-drag and
+  Control-Shift-click
 
 + Bug Fixes
 
@@ -56,6 +67,9 @@ JEDIT 3.2 VERSION HISTORY
 - Notepad macro threw an exception when its window was closed
 - The 'Search in Current Buffer' and 'Search in Directory' macros didn't
   work
+- If the caret was at the beginning of the line, prev-word would move it
+  to the beginning of the previous line, not the end of the previous
+  line as you would expect
 
 + API Changes
 
@@ -64,3 +78,47 @@ JEDIT 3.2 VERSION HISTORY
   '%' register, instead of trapping middle mouse clicks directly.
 - Plugins are now loaded after the buffer history and macros are
   initialised
+- org.gjt.sp.jedit.msg.RegistersChanged message removed
+- Old text selection methods in JEditTextArea deprecated:
+  getSelectionStart()
+  getSelectionEnd()
+  getSelectionStartLine()
+  getSelectionEndLine()
+  getMarkPosition()
+  getMarkLine()
+  select()
+
+- New text selection API:
+  Selection[] getSelection()
+  setSelection(Selection[] selection)
+  setSelection(Selection selection)
+  addToSelection(Selection[] selection)
+  addToSelection(Selection selection)
+  removeFromSelection(Selection selection)
+  getSelectionAtOffset(int offset)
+  getSelectedText(Selection s)
+  setSelectedText(Selection s, String text)
+  getSelectedText(String separator) (returns all selections, separated
+    by the separator string)
+  getSelectedText() (returns all selections, separated by newlines)
+  moveCaretPosition() (moves caret without affecting selection)
+  setCaretPosition() (deactivates selection and moves caret)
+  resizeSelection(int offset, int end) (resizes the selection at
+    'offset' to 'end')
+  extendSelection(int offset, int end) (adds a selection spanning
+    'offset' to 'end', performing various tricks if there already is a
+    selection at 'offset')
+
+  org.gjt.sp.jedit.textarea.Selection is an abstract class. The two
+  concrete implementations are Selection.Range and Selection.Rect.
+  
+  Methods in Selection class:
+  Selection() (empty constructor)
+  Selection(Selection sel) (copy start/end from this selection)
+  Selection(int start, int end)
+  int getStart()
+  int getEnd()
+  int getStartLine()
+  int getEndLine()
+  int getStart(Buffer buffer, int line) (only useful with Selection.Rect)
+  int getEnd(Buffer buffer, int line) (ditto)

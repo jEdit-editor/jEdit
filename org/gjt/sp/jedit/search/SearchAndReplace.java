@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 import java.awt.Component;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -403,9 +403,15 @@ loop:			for(;;)
 
 					if(view.getBuffer() == buffer && !repeat)
 					{
-						start = reverse
-							? view.getTextArea().getSelectionStart()
-							: view.getTextArea().getSelectionEnd();
+						JEditTextArea textArea = view.getTextArea();
+						Selection s = textArea.getSelectionAtOffset(
+							textArea.getCaretPosition());
+						if(s == null)
+							start = textArea.getCaretPosition();
+						else if(reverse)
+							start = s.getStart();
+						else 
+							start = s.getEnd();
 					}
 					else
 					{
@@ -490,7 +496,10 @@ loop:			for(;;)
 		{
 			fileset.matchFound(buffer);
 			view.setBuffer(buffer);
-			view.getTextArea().select(start + match[0],start + match[1]);
+			JEditTextArea textArea = view.getTextArea();
+			textArea.setSelection(new Selection.Range(start + match[0],
+				start + match[1]));
+			textArea.moveCaretPosition(start + match[1]);
 			return true;
 		}
 		else
@@ -506,10 +515,8 @@ loop:			for(;;)
 	{
 		JEditTextArea textArea = view.getTextArea();
 
-		// setSelectedText() clears these values, so save them
-		int selStart = textArea.getSelectionStart();
-
-		if(selStart == textArea.getSelectionEnd())
+		Selection[] selection = textArea.getSelection();
+		if(selection.length == 0)
 		{
 			view.getToolkit().beep();
 			return false;
@@ -523,9 +530,35 @@ loop:			for(;;)
 		{
 			buffer.beginCompoundEdit();
 
-			int retVal = replaceAll(view,buffer,
-				textArea.getSelectionStart(),
-				textArea.getSelectionEnd());
+			int retVal = 0;
+
+			for(int i = 0; i < selection.length; i++)
+			{
+				Selection s = selection[i];
+
+				/* if an occurence occurs at the
+				beginning of the selection, the
+				selection start will get moved.
+				this sucks, so we hack to avoid it. */
+				int start = s.getStart();
+
+				retVal += replaceAll(view,buffer,
+					s.getStart(),s.getEnd());
+
+				// this has no effect if the selection
+				// no longer exists
+				textArea.removeFromSelection(s);
+				if(s instanceof Selection.Range)
+				{
+					textArea.addToSelection(new Selection.Range(
+						start,s.getEnd()));
+				}
+				else if(s instanceof Selection.Rect)
+				{
+					textArea.addToSelection(new Selection.Rect(
+						start,s.getEnd()));
+				}
+			}
 
 			if(retVal == 0)
 			{
@@ -533,7 +566,6 @@ loop:			for(;;)
 				return false;
 			}
 
-			textArea.setSelectionStart(selStart);
 			return true;
 		}
 		catch(Exception e)

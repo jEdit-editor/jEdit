@@ -91,6 +91,7 @@ public class jEdit
 		boolean restore = true;
 		boolean showSplash = true;
 		boolean showGUI = true;
+		boolean noStartupMacro = false;
 
 		for(int i = 0; i < args.length; i++)
 		{
@@ -131,6 +132,8 @@ public class jEdit
 					restore = false;
 				else if(arg.equals("-nosplash"))
 					showSplash = false;
+				else if(arg.equals("-nostartupmacro"))
+					noStartupMacro = true;
 				else if(arg.equals("-newview"))
 					newView = true;
 				else
@@ -321,6 +324,14 @@ public class jEdit
 			&& jEdit.getBooleanProperty("restore"))
 			buffer = restoreOpenFiles();
 
+		// execute startup macro
+		Macros.Macro macro = Macros.getMacro("Startup");
+		if(!noStartupMacro && macro != null)
+		{
+			Log.log(Log.NOTICE,jEdit.class,"Running startup macro");
+			BeanShell.runScript(null,macro.path,false,false);
+		}
+
 		// Create the view and hide the splash screen.
 		final boolean _showGUI = showGUI;
 		final Buffer _buffer = buffer;
@@ -344,14 +355,6 @@ public class jEdit
 					if(bufferCount == 0)
 						newFile(null);
 					newView(null,_buffer);
-				}
-
-				// execute startup macro
-				Macros.Macro macro = Macros.getMacro("Startup");
-				if(macro != null)
-				{
-					Log.log(Log.NOTICE,jEdit.class,"Running startup macro");
-					BeanShell.runScript(viewsFirst,macro.path,false,false);
 				}
 
 				// if there is a view around, show tip of the day
@@ -1982,6 +1985,7 @@ public class jEdit
 		System.out.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
 		System.out.println("	-nosplash: Don't show splash screen");
+		System.out.println("	-nostartupmacro: Don't run startup macro");
 		System.out.println("	-background: Run in background mode");
 		System.out.println("	-nogui: Don't create initial view in background mode");
 		System.out.println();
@@ -2079,7 +2083,7 @@ public class jEdit
 		// jEdit's system properties
 
 		String siteSettingsDirectory = MiscUtilities.constructPath(
-			jEditHome, "site-props");
+			jEditHome, "properties");
 		File siteSettings = new File(siteSettingsDirectory);
 
 		if (!(siteSettings.exists() && siteSettings.isDirectory()))

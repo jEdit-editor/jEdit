@@ -147,3 +147,4 @@ repeat.shortcut=C+ENTER
 collapse-fold.shortcut=A+BACK_SPACE
 expand-fold.shortcut=AS+ENTER
 expand-one-level.shortcut=A+ENTER
+toggle-multi-select.shortcut=CAPS_LOCK

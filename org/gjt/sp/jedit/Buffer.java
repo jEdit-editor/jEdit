@@ -1151,24 +1151,22 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Removes trailing whitespace from all lines in the specified range.
-	 * @param first The start line
-	 * @param last The end line
-	 * @since jEdit 2.7pre2
+	 * Removes trailing whitespace from all lines in the specified list.
+	 * @param list The line numbers
+	 * @since jEdit 3.2pre1
 	 */
-	public void removeTrailingWhiteSpace(int first, int last)
+	public void removeTrailingWhiteSpace(int[] lines)
 	{
-		int line, pos, lineStart, lineEnd, tail;
-
 		Element map = getDefaultRootElement();
-
 		try
 		{
 			beginCompoundEdit();
 
-			for (line = first; line <= last; line++)
+			for(int i = 0; i < lines.length; i++)
 			{
-				Element lineElement = map.getElement(line);
+				int pos, lineStart, lineEnd, tail;
+
+				Element lineElement = map.getElement(lines[i]);
 				getText(lineElement.getStartOffset(),
 					lineElement.getEndOffset()
 					- lineElement.getStartOffset() - 1,seg);
@@ -1190,8 +1188,7 @@ public class Buffer extends PlainDocument implements EBComponent
 				// no whitespace
 				if (tail == 0) continue;
 
-				remove(lineElement.getEndOffset() - 1 - tail,
-					tail);
+				remove(lineElement.getEndOffset() - 1 - tail,tail);
 			}
 		}
 		catch (BadLocationException ble)
@@ -1205,24 +1202,24 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Shifts the indent of each line in the specified range to the left.
-	 * @param first The first line
-	 * @param last The last line
+	 * Shifts the indent of each line in the specified list to the left.
+	 * @param lines The line numbers
+	 * @since jEdit 3.2pre1
 	 */
-	public void shiftIndentLeft(int first, int last)
+	public void shiftIndentLeft(int[] lines)
 	{
+		int tabSize = getTabSize();
+		int indentSize = getIndentSize();
+		boolean noTabs = getBooleanProperty("noTabs");
+		Element map = getDefaultRootElement();
+
 		try
 		{
 			beginCompoundEdit();
 
-			int tabSize = getTabSize();
-			int indentSize = getIndentSize();
-			boolean noTabs = getBooleanProperty("noTabs");
-			Element map = getDefaultRootElement();
-
-			for(int i = first; i <= last; i++)
+			for(int i = 0; i < lines.length; i++)
 			{
-				Element lineElement = map.getElement(i);
+				Element lineElement = map.getElement(lines[i]);
 				int lineStart = lineElement.getStartOffset();
 				String line = getText(lineStart,
 					lineElement.getEndOffset() - lineStart - 1);
@@ -1233,15 +1230,17 @@ public class Buffer extends PlainDocument implements EBComponent
 				int whiteSpaceWidth = Math.max(0,MiscUtilities
 					.getLeadingWhiteSpaceWidth(line,tabSize)
 					- indentSize);
+
 				remove(lineStart,whiteSpace);
 				insertString(lineStart,MiscUtilities
 					.createWhiteSpace(whiteSpaceWidth,
 					(noTabs ? 0 : tabSize)),null);
 			}
+
 		}
-		catch(BadLocationException bl)
+		catch (BadLocationException ble)
 		{
-			Log.log(Log.ERROR,this,bl);
+			Log.log(Log.ERROR, this, ble);
 		}
 		finally
 		{
@@ -1250,11 +1249,11 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	/**
-	 * Shifts the indent of each line in the specified range to the right.
-	 * @param first The first line
-	 * @param last The last line
+	 * Shifts the indent of each line in the specified list to the right.
+	 * @param lines The line numbers
+	 * @since jEdit 3.2pre1
 	 */
-	public void shiftIndentRight(int first, int last)
+	public void shiftIndentRight(int[] lines)
 	{
 		try
 		{
@@ -1264,9 +1263,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			int indentSize = getIndentSize();
 			boolean noTabs = getBooleanProperty("noTabs");
 			Element map = getDefaultRootElement();
-			for(int i = first; i <= last; i++)
+			for(int i = 0; i < lines.length; i++)
 			{
-				Element lineElement = map.getElement(i);
+				Element lineElement = map.getElement(lines[i]);
 				int lineStart = lineElement.getStartOffset();
 				String line = getText(lineStart,
 					lineElement.getEndOffset() - lineStart - 1);
@@ -1672,6 +1671,19 @@ public class Buffer extends PlainDocument implements EBComponent
 		beginCompoundEdit();
 		for(int i = start; i <= end; i++)
 			indentLine(i,true,true);
+		endCompoundEdit();
+	}
+
+	/**
+	 * Indents all specified lines.
+	 * @param lines The line numbers
+	 * @since jEdit 3.2pre1
+	 */
+	public void indentLines(int[] lines)
+	{
+		beginCompoundEdit();
+		for(int i = 0; i < lines.length; i++)
+			indentLine(lines[i],true,true);
 		endCompoundEdit();
 	}
 

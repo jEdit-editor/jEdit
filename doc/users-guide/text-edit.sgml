@@ -40,8 +40,9 @@
  <sect1 id=selection><title>Selecting Text</>
   <para>
    A <firstterm>selection</> is a a block of text marked for further
-   manipulation. A selection can either span a range of text or cover
-   a rectangular area.
+   manipulation. Unlike many other applications, jEdit supports both
+   range and rectangular selections, and several chunks of text can be
+   selected simultaneously.
   </para>
   <para>
    Dragging the mouse creates a range selection from where the mouse was
@@ -65,45 +66,45 @@
    <guimenu>Edit</>&gt;<guimenuitem>Select None</> (shortcut:
    <keycap>Escape</>) deactivates the selection.
   </para>
-  <!-- <figure><title>A range selection</>
-   <graphic fileref=window-editor-select scale=50></>
-  </figure> -->
-  <para>
-   Holding down <keycap>Control</> and dragging will create a rectangular
-   selection. Holding down
-   <keycap>Shift</> and <keycap>Control</> while clicking a location in
-   the buffer will create a rectangular selection from the caret position to
-   the clicked location.
-  </para>
-  <para>
-   It is possible to select a rectangle with zero width but non-zero height.
-   This can be used to insert a new column between two existing
-   columns, for example. Such zero-width selections are shown as a thin
-   vertical line.
-  </para>
-  <para>
-   Rectangles can be deleted, copied, pasted, and operated on using any
-   other command.
-  </para>
-  <para>
-   <guimenu>Edit</>&gt;<guimenuitem>Rectangular
-   Selection</> (shortcut:
-   <keycombo><keycap>Control</><keycap>\</></keycombo>)
-   toggles the current selection between range and rectangle mode.
-  </para>
-  <note>
+  <sect2><title>Rectangular Selection</>
    <para>
-    Rectangular selections are implemented using character offsets,
-    not absolute screen positions, so they might not behave as you might
-    expect if a proportional-width font is being used, or hard tabs are
-    enabled. For information about changing the font used in the text
-    area, see <xref linkend=global-opts>. For more information about
-    hard and soft tabs, see <xref linkend=soft-tabs>.
+    Holding down <keycap>Control</> and dragging will create a rectangular
+    selection. Holding down
+    <keycap>Shift</> and <keycap>Control</> while clicking a location in
+    the buffer will create a rectangular selection from the caret position to
+    the clicked location.
    </para>
-  </note>
-  <!-- <figure><title>A rectangular selection</>
-   <graphic scale=50 fileref=window-editor-rect-sel></>
-  </figure> -->
+   <para>
+    It is possible to select a rectangle with zero width but non-zero height.
+    This can be used to insert a new column between two existing
+    columns, for example. Such zero-width selections are shown as a thin
+    vertical line.
+   </para>
+   <para>
+    Rectangles can be deleted, copied, pasted, and operated on using ordinary
+    editing commands.
+   </para>
+   <note>
+    <para>
+     Rectangular selections are implemented using character offsets,
+     not absolute screen positions, so they might not behave as you might
+     expect if a proportional-width font is being used, or hard tabs are
+     enabled. For information about changing the font used in the text
+     area, see <xref linkend=global-opts>. For more information about
+     hard and soft tabs, see <xref linkend=soft-tabs>.
+    </para>
+   </note>
+  </sect2>
+  <sect2><title>Multiple Selection</>
+   <para>
+    Pressing <keycap>Caps Lock</> turns multiple selection mode on and off,
+    which allows several discontiguous chunks of text can be selected and
+    operated on.
+   </para>
+   <para>
+    All jEdit built-in commands support multiple selection, but some older
+    plugins may not.
+   </para>
  </sect1>
  <sect1 id=entering-text><title>Inserting and Deleting Text</>
   <para>
@@ -406,6 +407,12 @@
    access to two specific registers. A third set of commands allows access to
    all registers.
   </para>
+  <para>
+   All text transfer commands behave like you expect with multiple selections.
+   The copying commands place all selected text chunks, separated by line
+   breaks, into the relevant register. The pasting commands replace each
+   selected chunk with the contents of the relevant register.
+  </para>
   <sect2><title>Quick Copy</>
    <para>
     jEdit stores the most recently selected text in the <filename>%</> register.
@@ -567,7 +574,8 @@
    <guimenu>Markers</>&gt;<guimenuitem>Add Marker</> (shortcut:
    <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>M</></keycombo>) adds a marker without a
-   shortcut pointing to the current line.
+   shortcut pointing to the current line. If some text is selected,
+   markers are added to the first and last line of each selection.
   </para>
   <para>
    <guimenu>Markers</>&gt;<guimenuitem>Add Marker With Shortcut</>
@@ -670,19 +678,64 @@
   </sect2>
   <sect2><title>Replacing Text</>
    <para>
-    The replacement string can be entered in the <guibutton>Replace with</>
-    text field of the search and replace dialog box. Pressing the
-    <keycap>Up</> and <keycap>Down</> keys in this text field recalls
+    Occurrences of the search string can be replaced with either a replacement
+    string or the result of a BeanShell script snippet. The two radio buttons in
+    the search and replace dialog box control the replace mode.
+   </para>
+   <para>
+    Pressing the
+    <keycap>Up</> and <keycap>Down</> keys in the two text fields recalls
     previously entered strings; see <xref linkend=history> for details.
    </para>
    <para>
-    Clicking <guibutton>Replace</> will replace the current selection with the
-    replacement string.
-    Clicking <guibutton>Replace &amp; Find</> will replace the current
-    selection, and locate the next occurrence of the search string.
-    Clicking <guibutton>Replace All</> will replace all occurrences of the
-    search string with the replacement string.
+    Clicking <guibutton>Replace</> will perform a replacement in each text
+    selection.
+    Clicking <guibutton>Replace &amp; Find</> will perform a replacement in each
+    text selection and locate the next occurrence of the search string.
+    Clicking <guibutton>Replace All</> will perform a replacement in each buffer
+    to be searched.
    </para>
+   <para>
+    In text replacement mode, the search string is replaced with the replacement
+    string. If regular expressions are enabled, positional parameters
+    (<literal>$0</>, <literal>$1</>, and so on) are supported in the replacement
+    string; see <xref linkend=regexps> for information.
+   </para>
+   <para>
+    In BeanShell replacement mode, the search string is replaced with the return
+    value of a BeanShell snippet. The following variables can be used in the
+    snippet:
+   </para>
+   <itemizedlist><listitem><para><varname>_0</> -- the text to be replaced</para>
+   </listitem><listitem><para><varname>_1</> - <varname>_9</> -- if regular
+   expressions are enabled, these contain the values of saved subexpressions.
+   </para></listitem>
+   <para>
+    BeanShell syntax and features are covered in great detail in <xref
+    linkend=macros>, but here are some examples:
+   </para>
+   <informalexample>
+    <para>
+     To convert all HTML tags to lower case, search
+     for the following regular expression:
+    </para>
+    <programlisting><![CDATA[<(.*?)>]]></programlisting>
+    <para>
+     Replacing it with the following BeanShell snippet:
+    </para>
+    <programlisting><![CDATA["<" + _1.toLowerCase() + ">"]]></programlisting>
+   </informalexample>
+   <informalexample>
+    <para>
+     To replace arithmetic expression between curly braces with their result,
+     search for:
+    </para>
+    <programlisting><![CDATA[\{(.+)\}]]></programlisting>
+    <para>
+     Replacing it with the following BeanShell snippet:
+    </para>
+    <programlisting><![CDATA[eval(_1)]]></programlisting>
+   </informalexample>
   </sect2>
   <sect2><title>HyperSearch</>
    <para>

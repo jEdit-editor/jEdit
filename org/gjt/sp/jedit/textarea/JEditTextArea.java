@@ -407,6 +407,9 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollToCaret(boolean doElectricScroll)
 	{
+		if(!buffer.isLineVisible(caretLine))
+			buffer.expandFoldAt(caretLine,true);
+
 		int offset = caret - getLineStartOffset(caretLine);
 		int virtualCaretLine = buffer.physicalToVirtual(caretLine);
 
@@ -437,14 +440,21 @@ public class JEditTextArea extends JComponent
 		else if(_firstLine - virtualCaretLine > visibleLines
 			|| virtualCaretLine - _lastLine > visibleLines)
 		{
-			int virtualMarkLine = buffer.physicalToVirtual(getMarkLine());
+			int startLine, endLine;
+			Selection s = getSelectionAtOffset(caret);
+			if(s == null)
+				startLine = endLine = buffer.physicalToVirtual(caretLine);
+			else
+			{
+				startLine = buffer.physicalToVirtual(s.startLine);
+				endLine = buffer.physicalToVirtual(s.endLine);
+			}
 
 			// center {markLine,caretLine} on screen
-			firstLine = virtualMarkLine - (visibleLines
-				- virtualCaretLine + virtualMarkLine) / 2;
- 			firstLine = Math.max(virtualCaretLine - visibleLines
+			firstLine = (visibleLines + startLine - endLine) / 2;
+ 			firstLine = Math.max(startLine - visibleLines
 				+ electricScroll + 1,firstLine);
- 			firstLine = Math.min(virtualCaretLine /* + visibleLines */
+ 			firstLine = Math.min(endLine /* + visibleLines */
 				- electricScroll,firstLine);
 
 			changed = true;
@@ -957,7 +967,8 @@ public class JEditTextArea extends JComponent
 		int caretLine = getCaretLine();
 		int start = getLineStartOffset(caretLine);
 		int end = getLineEndOffset(caretLine) - 1;
-		select(start,end);
+		setSelection(new Selection.Range(start,end));
+		moveCaretPosition(end);
 	}
 
 	/**
@@ -993,8 +1004,11 @@ public class JEditTextArea extends JComponent
 				end++;
 		}
 
-		select(getLineStartOffset(start + 1),
-			getLineEndOffset(end - 1) - 1);
+		int selectionStart = getLineStartOffset(start + 1);
+		int selectionEnd = getLineEndOffset(end - 1) - 1;
+		setSelection(new Selection.Range(selectionStart,
+			selectionEnd));
+		moveCaretPosition(selectionEnd);
 	}
 
 	/**
@@ -1019,7 +1033,9 @@ public class JEditTextArea extends JComponent
 		int wordStart = TextUtilities.findWordStart(lineText,offset,noWordSep);
 		int wordEnd = TextUtilities.findWordEnd(lineText,offset+1,noWordSep);
 
-		select(lineStart + wordStart,lineStart + wordEnd);
+		setSelection(new Selection.Range(lineStart + wordStart,
+			lineStart + wordEnd));
+		moveCaretPosition(lineStart + wordEnd);
 	}
 
 	// OLD (NON-MULTI AWARE) SELECTION API
@@ -1112,10 +1128,10 @@ public class JEditTextArea extends JComponent
 		 */
 		public final int getMarkPosition()
 		{
-			if(selection.size() != 1)
+			Selection s = getSelectionAtOffset(caret);
+			if(s == null)
 				return caret;
 
-			Selection s = (Selection)selection.elementAt(0);
 			if(s.start == caret)
 				return s.end;
 			else if(s.end == caret)
@@ -1142,12 +1158,7 @@ public class JEditTextArea extends JComponent
 		}
 
 		/**
-		 * Selects from the start offset to the end offset. This is the
-		 * general selection method used by all other selecting methods.
-		 * The caret position will be start if start &lt; end, and end
-		 * if end &gt; start.
-		 * @param start The start offset
-		 * @param end The end offset
+		 * @deprecated Do not use.
 		 */
 		public void select(int start, int end)
 		{
@@ -1246,11 +1257,6 @@ public class JEditTextArea extends JComponent
 
 		caret = newCaret;
 		caretLine = newCaretLine;
-
-		// this ensures that the caret does not get "lost"
-		// inside a fold
-		if(!buffer.isLineVisible(caretLine))
-			buffer.expandFoldAt(caretLine,true);
 
 		if(focusedComponent == this)
 			scrollToCaret(doElectricScroll);
@@ -1411,7 +1417,10 @@ public class JEditTextArea extends JComponent
 
 	/**
 	 * Resizes the selection at the specified offset, or creates a new
-	 * one if there is no selection at the specified offset.
+	 * one if there is no selection at the specified offset. This is a
+	 * utility method that is mainly useful in the mouse event handler
+	 * because it handles the case of end being before offset gracefully
+	 * (unlike the rest of the selection API).
 	 * @param offset The offset
 	 * @param end The new selection end
 	 * @param rect Make the selection rectangular?
@@ -1440,6 +1449,46 @@ public class JEditTextArea extends JComponent
 			newSel = new Selection.Range(offset,end);
 
 		_addToSelection(newSel);
+		fireCaretEvent();
+	}
+
+	/**
+	 * Extends the selection at the specified offset, or creates a new
+	 * one if there is no selection at the specified offset. This is
+	 * different from resizing in that the new chunk is added to the
+	 * selection in question, instead of replacing it.
+	 * @param offset The offset
+	 * @param end The new selection end
+	 * @param rect Make the selection rectangular?
+	 * @since jEdit 3.2pre1
+	 */
+	public void extendSelection(int offset, int end)
+	{
+		Selection s = getSelectionAtOffset(offset);
+		if(s != null)
+		{
+			invalidateLineRange(s.startLine,s.endLine);
+			selection.removeElement(s);
+
+			if(offset == s.start)
+			{
+				offset = end;
+				end = s.end;
+			}
+			else if(offset == s.end)
+			{
+				offset = s.start;
+			}
+		}
+
+		if(end < offset)
+		{
+			int tmp = end;
+			end = offset;
+			offset = tmp;
+		}
+
+		_addToSelection(new Selection.Range(offset,end));
 		fireCaretEvent();
 	}
 
@@ -1590,27 +1639,28 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setSelectedText(String selectedText)
 	{
-		if(selection.size() != 1)
+		Selection[] selection = getSelection();
+		if(selection.length == 0)
 		{
-			if(selectedText != null)
+			// for compatibility with older jEdit versions
+			try
 			{
-				try
-				{
-					buffer.insertString(caret,selectedText,null);
-				}
-				catch(BadLocationException bl)
-				{
-					Log.log(Log.ERROR,this,bl);
-				}
+				buffer.insertString(caret,selectedText,null);
 			}
-
-			selectNone();
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
 		}
 		else
 		{
-			setSelectedText((Selection)selection.elementAt(0),
-				selectedText);
+			for(int i = 0; i < selection.length; i++)
+			{
+				setSelectedText(selection[i],selectedText);
+			}
 		}
+
+		selectNone();
 	}
 
 	/**
@@ -1893,11 +1943,9 @@ public class JEditTextArea extends JComponent
 			try
 			{
 				buffer.beginCompoundEdit();
-				for(int i = 0; i < selection.size(); i++)
-				{
-					Selection s = (Selection)selection.elementAt(i);
-					setSelectedText(s,null);
-				}
+				Selection[] selection = getSelection();
+				for(int i = 0; i < selection.length; i++)
+					setSelectedText(selection[i],null);
 			}
 			finally
 			{
@@ -1939,11 +1987,9 @@ public class JEditTextArea extends JComponent
 			try
 			{
 				buffer.beginCompoundEdit();
-				for(int i = 0; i < selection.size(); i++)
-				{
-					Selection s = (Selection)selection.elementAt(i);
-					setSelectedText(s,null);
-				}
+				Selection[] selection = getSelection();
+				for(int i = 0; i < selection.length; i++)
+					setSelectedText(selection[i],null);
 			}
 			finally
 			{
@@ -1999,11 +2045,9 @@ public class JEditTextArea extends JComponent
 			try
 			{
 				buffer.beginCompoundEdit();
-				for(int i = 0; i < selection.size(); i++)
-				{
-					Selection s = (Selection)selection.elementAt(i);
-					setSelectedText(s,null);
-				}
+				Selection[] selection = getSelection();
+				for(int i = 0; i < selection.length; i++)
+					setSelectedText(selection[i],null);
 			}
 			finally
 			{
@@ -2196,11 +2240,9 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			try
 			{
 				buffer.beginCompoundEdit();
-				for(int i = 0; i < selection.size(); i++)
-				{
-					Selection s = (Selection)selection.elementAt(i);
-					setSelectedText(s,null);
-				}
+				Selection[] selection = getSelection();
+				for(int i = 0; i < selection.length; i++)
+					setSelectedText(selection[i],null);
 			}
 			finally
 			{
@@ -2209,7 +2251,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		}
 
 		int lineStart = getLineStartOffset(caretLine);
-		int _caret = selectionStart - lineStart;
+		int _caret = caret - lineStart;
 
 		String lineText = getLineText(caretLine);
 
@@ -2264,9 +2306,10 @@ loop:		for(int i = 0; i < text.length(); i++)
 		else
 		{
 			if(select)
-				select(getMarkPosition(),caret);
-			else
-				setCaretPosition(caret);
+				extendSelection(caret,newCaret);
+			else if(!multi)
+				selectNone();
+			moveCaretPosition(newCaret);
 		}
 	}
 
@@ -2276,35 +2319,43 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextCharacter(boolean select)
 	{
-		if(!select && selectionStart != selectionEnd)
+		if(!select && selection.size() != 0)
 		{
-			setCaretPosition(selectionEnd);
-			return;
+			Selection s = getSelectionAtOffset(caret);
+			if(s != null)
+			{
+				if(!multi)
+					removeFromSelection(caret);
+				moveCaretPosition(s.end);
+				return;
+			}
 		}
 
-		int caret = getCaretPosition();
-		int line = getCaretLine();
 		if(caret == buffer.getLength())
 			getToolkit().beep();
 
-		if(caret == getLineEndOffset(line) - 1)
+		int newCaret;
+
+		if(caret == getLineEndOffset(caretLine) - 1)
 		{
-			line = buffer.getNextVisibleLine(line);
+			int line = buffer.getNextVisibleLine(caretLine);
 			if(line == -1)
 			{
 				getToolkit().beep();
 				return;
 			}
 
-			caret = getLineStartOffset(line);
+			newCaret = getLineStartOffset(line);
 		}
 		else
-			caret++;
+			newCaret = caret + 1;
 
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -2326,12 +2377,14 @@ loop:		for(int i = 0; i < text.length(); i++)
 			return;
 		}
 
-		caret = getLineStartOffset(nextLine)
+		int newCaret = getLineStartOffset(nextLine)
 			+ xToOffset(nextLine,magic + 1);
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+
+		moveCaretPosition(newCaret);
 		setMagicCaretPosition(magic);
 	}
 
@@ -2341,7 +2394,6 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextMarker(boolean select)
 	{
-		int caret = getCaretPosition();
 		Vector markers = buffer.getMarkers();
 		Marker marker = null;
 
@@ -2356,15 +2408,14 @@ loop:		for(int i = 0; i < text.length(); i++)
 		}
 
 		if(marker == null)
-			view.getToolkit().beep();
+			getToolkit().beep();
 		else
 		{
-			caret = marker.getPosition();
-
 			if(select)
-				select(getMarkPosition(),caret);
-			else
-				setCaretPosition(caret);
+				extendSelection(caret,marker.getPosition());
+			else if(!multi)
+				selectNone();
+			moveCaretPosition(marker.getPosition());
 		}
 	}
 
@@ -2375,8 +2426,6 @@ loop:		for(int i = 0; i < text.length(); i++)
 	public void goToNextPage(boolean select)
 	{
 		int lineCount = buffer.getVirtualLineCount();
-		int caret = getCaretPosition();
-		int line = getCaretLine();
 
 		int magic = getMagicCaretPosition();
 
@@ -2385,13 +2434,16 @@ loop:		for(int i = 0; i < text.length(); i++)
 		else
 			setFirstLine(firstLine + visibleLines);
 
-		line = buffer.virtualToPhysical(Math.min(lineCount - 1,
-			buffer.physicalToVirtual(line) + visibleLines));
-		caret = getLineStartOffset(line) + xToOffset(line,magic + 1);
+		int newLine = buffer.virtualToPhysical(Math.min(lineCount - 1,
+			buffer.physicalToVirtual(caretLine) + visibleLines));
+		int newCaret = getLineStartOffset(newLine)
+			+ xToOffset(newLine,magic + 1);
+
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 
 		setMagicCaretPosition(magic);
 	}
@@ -2404,7 +2456,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 	{
 		int lineNo = getCaretLine();
 
-		int caret = getBufferLength();
+		int newCaret = getBufferLength();
 
 		boolean foundBlank = false;
 
@@ -2425,7 +2477,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 				default:
 					if(foundBlank)
 					{
-						caret = getLineStartOffset(i);
+						newCaret = getLineStartOffset(i);
 						break loop;
 					}
 					else
@@ -2437,9 +2489,10 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			select(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -2448,35 +2501,33 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void goToNextWord(boolean select)
 	{
-		int caret = getCaretPosition();
-		int line = getCaretLine();
-		int lineStart = getLineStartOffset(line);
-		caret -= lineStart;
+		int lineStart = getLineStartOffset(caretLine);
+		int newCaret = caret - lineStart;
+		String lineText = getLineText(caretLine);
 
-		String lineText = getLineText(line);
-
-		if(caret == lineText.length())
+		if(newCaret == lineText.length())
 		{
-			int nextLine = buffer.getNextVisibleLine(line);
+			int nextLine = buffer.getNextVisibleLine(caretLine);
 			if(nextLine == -1)
 			{
 				getToolkit().beep();
 				return;
 			}
 
-			caret = getLineStartOffset(nextLine);
+			newCaret = getLineStartOffset(nextLine);
 		}
 		else
 		{
 			String noWordSep = (String)buffer.getProperty("noWordSep");
-			caret = TextUtilities.findWordEnd(lineText,caret + 1,noWordSep)
+			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,noWordSep)
 				+ lineStart;
 		}
 
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -2485,28 +2536,29 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void goToPrevBracket(boolean select)
 	{
-		String text = getText(0,getCaretPosition());
+		String text = getText(0,caret);
 
-		int caret = -1;
+		int newCaret = -1;
 
 loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		{
 			switch(text.charAt(i))
 			{
 			case '(': case '[': case '{':
-				caret = i;
+				newCaret = i;
 				break loop;
 			}
 		}
 
-		if(caret == -1)
+		if(newCaret == -1)
 			getToolkit().beep();
 		else
 		{
 			if(select)
-				select(getMarkPosition(),caret);
-			else
-				setCaretPosition(caret);
+				extendSelection(caret,newCaret);
+			else if(!multi)
+				selectNone();
+			moveCaretPosition(caret);
 		}
 	}
 
@@ -2516,32 +2568,38 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevCharacter(boolean select)
 	{
-		if(!select && selectionStart != selectionEnd)
+		if(!select && selection.size() != 0)
 		{
-			setCaretPosition(selectionStart);
-			return;
+			Selection s = getSelectionAtOffset(caret);
+			if(s != null)
+			{
+				if(!multi)
+					removeFromSelection(caret);
+				moveCaretPosition(s.start);
+				return;
+			}
 		}
 
-		int caret = getCaretPosition();
-		int line = getCaretLine();
+		int newCaret;
 
-		if(caret == getLineStartOffset(line))
+		if(caret == getLineStartOffset(caretLine))
 		{
-			line = buffer.getPrevVisibleLine(line);
+			int line = buffer.getPrevVisibleLine(caretLine);
 			if(line == -1)
 			{
 				getToolkit().beep();
 				return;
 			}
-			caret = getLineEndOffset(line) - 1;
+			newCaret = getLineEndOffset(line) - 1;
 		}
 		else
-			caret--;
+			newCaret = caret - 1;
 
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -2550,23 +2608,22 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevLine(boolean select)
 	{
-		int caret = getCaretPosition();
-		int line = getCaretLine();
-
 		int magic = getMagicCaretPosition();
 
-		int prevLine = buffer.getPrevVisibleLine(line);
+		int prevLine = buffer.getPrevVisibleLine(caretLine);
 		if(prevLine == -1)
 		{
 			getToolkit().beep();
 			return;
 		}
 
-		caret = getLineStartOffset(prevLine) + xToOffset(prevLine,magic + 1);
+		int newCaret = getLineStartOffset(prevLine) + xToOffset(prevLine,magic + 1);
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+
+		moveCaretPosition(newCaret);
 		setMagicCaretPosition(magic);
 	}
 
@@ -2576,8 +2633,6 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevMarker(boolean select)
 	{
-		int caret = getCaretPosition();
-
 		Vector markers = buffer.getMarkers();
 		Marker marker = null;
 		for(int i = markers.size() - 1; i >= 0; i--)
@@ -2594,12 +2649,11 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			getToolkit().beep();
 		else
 		{
-			caret = marker.getPosition();
-
 			if(select)
-				select(getMarkPosition(),caret);
-			else
-				setCaretPosition(caret);
+				extendSelection(caret,marker.getPosition());
+			else if(!multi)
+				selectNone();
+			moveCaretPosition(marker.getPosition());
 		}
 	}
 
@@ -2609,9 +2663,6 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevPage(boolean select)
 	{
-		int caret = getCaretPosition();
-		int line = getCaretLine();
-
 		if(firstLine < visibleLines)
 			setFirstLine(0);
 		else
@@ -2619,15 +2670,17 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		int magic = getMagicCaretPosition();
 
-		line = buffer.virtualToPhysical(Math.max(0,
-			buffer.physicalToVirtual(line) - visibleLines));
-		caret = getLineStartOffset(line) + xToOffset(line,magic + 1);
+		int newLine = buffer.virtualToPhysical(Math.max(0,
+			buffer.physicalToVirtual(caretLine) - visibleLines));
+		int newCaret = getLineStartOffset(newLine)
+			+ xToOffset(newLine,magic + 1);
 
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
 
+		moveCaretPosition(newCaret);
 		setMagicCaretPosition(magic);
 	}
 
@@ -2637,9 +2690,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevParagraph(boolean select)
 	{
-		int lineNo = getCaretLine();
-
-		int caret = 0;
+		int lineNo = caretLine;
+		int newCaret = 0;
 
 		boolean foundBlank = false;
 
@@ -2660,7 +2712,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				default:
 					if(foundBlank)
 					{
-						caret = getLineEndOffset(i) - 1;
+						newCaret = getLineEndOffset(i) - 1;
 						break loop;
 					}
 					else
@@ -2672,9 +2724,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -2683,14 +2736,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToPrevWord(boolean select)
 	{
-		int caret = getCaretPosition();
-		int line = getCaretLine();
-		int lineStart = getLineStartOffset(line);
-		caret -= lineStart;
+		int lineStart = getLineStartOffset(caretLine);
+		int newCaret = caret - lineStart;
+		String lineText = getLineText(caretLine);
 
-		String lineText = getLineText(line);
-
-		if(caret == 0)
+		if(newCaret == 0)
 		{
 			if(lineStart == 0)
 			{
@@ -2699,27 +2749,28 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			}
 			else
 			{
-				int prevLine = buffer.getPrevVisibleLine(line);
+				int prevLine = buffer.getPrevVisibleLine(caretLine);
 				if(prevLine == -1)
 				{
 					getToolkit().beep();
 					return;
 				}
 
-				caret = getLineStartOffset(prevLine);
+				newCaret = getLineEndOffset(prevLine) - 1;
 			}
 		}
 		else
 		{
 			String noWordSep = (String)buffer.getProperty("noWordSep");
-			caret = TextUtilities.findWordStart(lineText,caret - 1,noWordSep)
+			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,noWordSep)
 				+ lineStart;
 		}
 
 		if(select)
-			select(getMarkPosition(),caret);
-		else
-			setCaretPosition(caret);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -2787,13 +2838,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(recorder != null)
 			recorder.record("textArea.goToStartOfLine(" + select + ");");
 
+		int newCaret = getLineStartOffset(getCaretLine());
 		if(select)
-		{
-			select(getMarkPosition(),getLineStartOffset(
-				getCaretLine()));
-		}
-		else
-			setCaretPosition(getLineStartOffset(getCaretLine()));
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -2807,13 +2857,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(recorder != null)
 			recorder.record("textArea.goToEndOfLine(" + select + ");");
 
+		int newCaret = getLineEndOffset(getCaretLine()) - 1;
 		if(select)
-		{
-			select(getMarkPosition(),getLineEndOffset(
-				getCaretLine()) - 1);
-		}
-		else
-			setCaretPosition(getLineEndOffset(getCaretLine()) - 1);
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -2828,18 +2877,18 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(recorder != null)
 			recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");
 
-		int line = getCaretLine();
-		int firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
-		int firstOfLine = getLineStartOffset(line);
+		int firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(caretLine));
+		int firstOfLine = getLineStartOffset(caretLine);
 
 		firstIndent = firstOfLine + firstIndent;
-		if(firstIndent == getLineEndOffset(line) - 1)
+		if(firstIndent == getLineEndOffset(caretLine) - 1)
 			firstIndent = firstOfLine;
 
 		if(select)
-			select(getMarkPosition(),firstIndent);
-		else
-			setCaretPosition(firstIndent);
+			extendSelection(caret,firstIndent);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(firstIndent);
 	}
 
 	/**
@@ -2854,18 +2903,18 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(recorder != null)
 			recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
 
-		int line = getCaretLine();
-		int lastIndent = MiscUtilities.getTrailingWhiteSpace(getLineText(line));
-		int lastOfLine = getLineEndOffset(line) - 1;
+		int lastIndent = MiscUtilities.getTrailingWhiteSpace(getLineText(caretLine));
+		int lastOfLine = getLineEndOffset(caretLine) - 1;
 
 		lastIndent = lastOfLine - lastIndent;
-		if(lastIndent == getLineStartOffset(line))
+		if(lastIndent == getLineStartOffset(caretLine))
 			lastIndent = lastOfLine;
 
 		if(select)
-			select(getMarkPosition(),lastIndent);
-		else
-			setCaretPosition(lastIndent);
+			extendSelection(caret,lastIndent);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(lastIndent);
 	}
 
 	/**
@@ -2889,9 +2938,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		int firstVisible = getLineEndOffset(firstVisibleLine) - 1;
 
 		if(select)
-			select(getMarkPosition(),firstVisible);
-		else
-			setCaretPosition(firstVisible);
+			extendSelection(caret,firstVisible);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(firstVisible);
 	}
 
 	/**
@@ -2912,16 +2962,17 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else if(lastVisibleLine <= electricScroll)
 			lastVisibleLine = 0;
 		else
-			lastVisibleLine -= electricScroll;
+			lastVisibleLine -= (electricScroll + 1);
 
 		lastVisibleLine = buffer.virtualToPhysical(lastVisibleLine);
 
 		int lastVisible = getLineEndOffset(lastVisibleLine) - 1;
 
 		if(select)
-			select(getMarkPosition(),lastVisible);
-		else
-			setCaretPosition(lastVisible);
+			extendSelection(caret,lastVisible);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(lastVisible);
 	}
 
 	/**
@@ -2943,9 +2994,33 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		int pos = marker.getPosition();
 
 		if(select)
-			select(getMarkPosition(),pos);
-		else
-			setCaretPosition(pos);
+			extendSelection(caret,pos);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(pos);
+	}
+
+	/**
+	 * Adds a marker at the caret position.
+	 * @since jEdit 3.2pre1
+	 */
+	public void addMarker()
+	{
+		Selection[] selection = getSelection();
+		for(int i = 0; i < selection.length; i++)
+		{
+			Selection s = selection[i];
+			if(s.startLine != s.endLine)
+			{
+				if(s.startLine != caretLine)
+					buffer.addMarker('\0',s.startLine);
+			}
+
+			if(s.endLine != caretLine)
+				buffer.addMarker('\0',s.endLine);
+		}
+
+		buffer.addMarker('\0',caret);
 	}
 
 	/**
@@ -2986,11 +3061,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		buffer.beginCompoundEdit();
 
+		int[] lines = getSelectedLines();
+
 		try
 		{
-			for(int i = selectionStartLine; i <= selectionEndLine; i++)
+			for(int i = 0; i <= lines.length; i++)
 			{
-				buffer.insertString(getLineStartOffset(i),
+				buffer.insertString(getLineStartOffset(lines[i]),
 					comment,null);
 			}
 		}
@@ -3014,7 +3091,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void boxComment()
 	{
-		String commentStart = (String)buffer.getProperty("commentStart");
+		/* String commentStart = (String)buffer.getProperty("commentStart");
 		String commentEnd = (String)buffer.getProperty("commentEnd");
 		String boxComment = (String)buffer.getProperty("boxComment");
 		if(!buffer.isEditable() || commentStart == null
@@ -3059,7 +3136,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			buffer.endCompoundEdit();
 		}
 
-		selectNone();
+		selectNone(); */
 	}
 
 	/**
@@ -3081,11 +3158,48 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		commentStart = commentStart + ' ';
 		commentEnd = ' ' + commentEnd;
 
-		buffer.beginCompoundEdit();
 		try
 		{
-			buffer.insertString(selectionStart,commentStart,null);
-			buffer.insertString(selectionEnd,commentEnd,null);
+			buffer.beginCompoundEdit();
+
+			Selection[] selection = getSelection();
+
+			if(selection.length == 0)
+			{
+				int oldCaret = caret;
+				buffer.insertString(caret,
+					commentStart,null);
+				buffer.insertString(caret,
+					commentEnd,null);
+				setCaretPosition(oldCaret + commentStart.length());
+			}
+
+			for(int i = 0; i < selection.length; i++)
+			{
+				Selection s = selection[i];
+				if(s instanceof Selection.Range)
+				{
+					buffer.insertString(s.start,
+						commentStart,null);
+					buffer.insertString(s.end,
+						commentEnd,null);
+				}
+				else if(s instanceof Selection.Rect)
+				{
+					for(int j = s.startLine; j <= s.endLine; j++)
+					{
+						buffer.insertString(s.getStart(buffer,j),
+							commentStart,null);
+						int end = s.getEnd(buffer,j)
+							+ (j == s.endLine
+							? 0
+							: commentStart.length());
+						buffer.insertString(end,commentEnd,null);
+					}
+				}
+			}
+
+			selectNone();
 		}
 		catch(BadLocationException bl)
 		{
@@ -3095,11 +3209,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			buffer.endCompoundEdit();
 		}
-
-		if(selectionStart == selectionEnd)
-			setCaretPosition(selectionStart + commentStart.length());
-		else
-			selectNone();
 	}
 
 	/**
@@ -3121,9 +3230,20 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 
-		String text = getSelectedText();
-		if(text != null)
-			setSelectedText(TextUtilities.format(text,maxLineLength));
+		Selection[] selection = getSelection();
+		if(selection.length != 0)
+		{
+			buffer.beginCompoundEdit();
+
+			for(int i = 0; i < selection.length; i++)
+			{
+				Selection s = selection[i];
+				setSelectedText(s,TextUtilities.format(
+					getSelectedText(s),maxLineLength));
+			}
+
+			buffer.endCompoundEdit();
+		}
 		else
 		{
 			int lineNo = getCaretLine();
@@ -3174,7 +3294,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				buffer.beginCompoundEdit();
 
-				text = buffer.getText(start,end - start);
+				String text = buffer.getText(start,end - start);
 				buffer.remove(start,end - start);
 				buffer.insertString(start,TextUtilities.format(
 					text,maxLineLength),null);
@@ -3196,14 +3316,24 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void spacesToTabs()
 	{
-		if(!buffer.isEditable() || selectionStart == selectionEnd)
+		Selection[] selection = getSelection();
+
+		if(!buffer.isEditable() || selection.length == 0)
                 {
                 	getToolkit().beep();
                 	return;
                 }
 
-		setSelectedText(TextUtilities.spacesToTabs(getSelectedText(),
-			buffer.getTabSize()));
+		buffer.beginCompoundEdit();
+
+		for(int i = 0; i < selection.length; i++)
+		{
+			Selection s = selection[i];
+			setSelectedText(s,TextUtilities.spacesToTabs(
+				getSelectedText(s),buffer.getTabSize()));
+		}
+
+		buffer.endCompoundEdit();
 	}
 
 	/**
@@ -3212,14 +3342,24 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void tabsToSpaces()
 	{
-		if(!buffer.isEditable() || selectionStart == selectionEnd)
+		Selection[] selection = getSelection();
+
+		if(!buffer.isEditable() || selection.length == 0)
                 {
                 	getToolkit().beep();
                 	return;
                 }
 
-		setSelectedText(TextUtilities.tabsToSpaces(getSelectedText(),
-			buffer.getTabSize()));
+		buffer.beginCompoundEdit();
+
+		for(int i = 0; i < selection.length; i++)
+		{
+			Selection s = selection[i];
+			setSelectedText(s,TextUtilities.tabsToSpaces(
+				getSelectedText(s),buffer.getTabSize()));
+		}
+
+		buffer.endCompoundEdit();
 	}
 
 	/**
@@ -3228,10 +3368,23 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void toUpperCase()
 	{
-		if(!buffer.isEditable() || selectionStart == selectionEnd)
-			getToolkit().beep();
-		else
-			setSelectedText(getSelectedText().toUpperCase());
+		Selection[] selection = getSelection();
+
+		if(!buffer.isEditable() || selection.length == 0)
+                {
+                	getToolkit().beep();
+                	return;
+                }
+
+		buffer.beginCompoundEdit();
+
+		for(int i = 0; i < selection.length; i++)
+		{
+			Selection s = selection[i];
+			setSelectedText(s,getSelectedText(s).toUpperCase());
+		}
+
+		buffer.endCompoundEdit();
 	}
 
 	/**
@@ -3240,10 +3393,23 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void toLowerCase()
 	{
-		if(!buffer.isEditable() || selectionStart == selectionEnd)
-			getToolkit().beep();
-		else
-			setSelectedText(getSelectedText().toLowerCase());
+		Selection[] selection = getSelection();
+
+		if(!buffer.isEditable() || selection.length == 0)
+                {
+                	getToolkit().beep();
+                	return;
+                }
+
+		buffer.beginCompoundEdit();
+
+		for(int i = 0; i < selection.length; i++)
+		{
+			Selection s = selection[i];
+			setSelectedText(s,getSelectedText(s).toLowerCase());
+		}
+
+		buffer.endCompoundEdit();
 	}
 
 	/**
@@ -3256,8 +3422,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 		else
 		{
-			buffer.removeTrailingWhiteSpace(selectionStartLine,
-				selectionEndLine);
+			buffer.removeTrailingWhiteSpace(getSelectedLines());
 		}
 	}
 
@@ -3270,7 +3435,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(!buffer.isEditable())
 			getToolkit().beep();
 		else
-			buffer.indentLines(selectionStartLine,selectionEndLine);
+		{
+			buffer.indentLines(getSelectedLines());
+			selectNone();
+		}
 	}
 
 	/**
@@ -3283,8 +3451,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 		else
 		{
-			buffer.shiftIndentLeft(selectionStartLine,
-				selectionEndLine);
+			buffer.shiftIndentLeft(getSelectedLines());
 		}
 	}
 
@@ -3298,8 +3465,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 		else
 		{
-			buffer.shiftIndentRight(selectionStartLine,
-				selectionEndLine);
+			buffer.shiftIndentRight(getSelectedLines());
 		}
 	}
 
@@ -3310,8 +3476,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	public void joinLines()
 	{
 		Element map = buffer.getDefaultRootElement();
-		int lineNo = getCaretLine();
-		Element lineElement = map.getElement(lineNo);
+		Element lineElement = map.getElement(caretLine);
 		int start = lineElement.getStartOffset();
 		int end = lineElement.getEndOffset();
 		if(end > buffer.getLength())
@@ -3319,7 +3484,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 			return;
 		}
-		Element nextLineElement = map.getElement(lineNo+1);
+		Element nextLineElement = map.getElement(caretLine + 1);
 		int nextStart = nextLineElement.getStartOffset();
 		int nextEnd = nextLineElement.getEndOffset();
 		try
@@ -3339,13 +3504,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void goToMatchingBracket()
 	{
-		int line = getCaretLine();
-		int dot = getCaretPosition() - getLineStartOffset(line);
+		int dot = caret - getLineStartOffset(caretLine);
 
 		try
 		{
 			int bracket = TextUtilities.findMatchingBracket(
-				buffer,line,Math.max(0,dot - 1));
+				buffer,caretLine,Math.max(0,dot - 1));
 			if(bracket != -1)
 			{
 				setCaretPosition(bracket + 1);
@@ -3370,8 +3534,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void selectBlock()
 	{
-		int start = selectionStart;
-		int end = selectionEnd;
+		Selection s = getSelectionAtOffset(caret);
+		int start, end;
+		if(s == null)
+			start = end = caret;
+		else
+		{
+			start = s.start;
+			end = s.end;
+		}
+
 		String text = getText(0,buffer.getLength());
 
 		// Scan backwards, trying to find a bracket
@@ -3431,7 +3603,8 @@ forward_scan:		do
 			while(++end < buffer.getLength());
 		}
 
-		select(start,end);
+		setSelection(new Selection.Range(start,end));
+		moveCaretPosition(end);
 	}
 
 	/**
@@ -3508,9 +3681,8 @@ forward_scan:		do
 
 		// first, we get the word before the caret
 
-		int lineIndex = getCaretLine();
-		String line = getLineText(lineIndex);
-		int dot = getCaretPosition() - getLineStartOffset(lineIndex);
+		String line = getLineText(caretLine);
+		int dot = caret - getLineStartOffset(caretLine);
 		if(dot == 0)
 		{
 			getToolkit().beep();
@@ -3537,7 +3709,7 @@ forward_scan:		do
 
 			if(line.startsWith(word))
 			{
-				if(i == lineIndex && wordStart == 0)
+				if(i == caretLine && wordStart == 0)
 					continue;
 
 				String _word = completeWord(line,0,noWordSep);
@@ -3556,7 +3728,7 @@ forward_scan:		do
 				char c = line.charAt(j);
 				if(!Character.isLetterOrDigit(c) && noWordSep.indexOf(c) == -1)
 				{
-					if(i == lineIndex && wordStart == (j + 1))
+					if(i == caretLine && wordStart == (j + 1))
 						continue;
 
 					if(line.regionMatches(j + 1,word,0,wordLen))
@@ -3574,11 +3746,11 @@ forward_scan:		do
 		}
 
 		// sort completion list
-
 		MiscUtilities.quicksort(completions,new MiscUtilities.StringICaseCompare());
 
 		if(completions.size() == 0)
 			getToolkit().beep();
+
 		// if there is only one competion, insert in buffer
 		else if(completions.size() == 1)
 		{
@@ -3590,9 +3762,9 @@ forward_scan:		do
 		// show dialog box if > 1
 		else
 		{
-			Point location = new Point(offsetToX(lineIndex,wordStart),
+			Point location = new Point(offsetToX(caretLine,wordStart),
 				painter.getFontMetrics().getHeight()
-				* (buffer.physicalToVirtual(lineIndex)
+				* (buffer.physicalToVirtual(caretLine)
 				- firstLine + 1));
 			SwingUtilities.convertPointToScreen(location,painter);
 			new CompleteWord(view,word,completions,location);
@@ -3605,7 +3777,7 @@ forward_scan:		do
 	 */
 	public void selectFold()
 	{
-		selectFoldAt(getCaretLine());
+		selectFoldAt(caretLine);
 	}
 
 	/**
@@ -3642,7 +3814,9 @@ forward_scan:		do
 				end++;
 		}
 
-		select(getLineStartOffset(start),getLineEndOffset(end) - 1);
+		int newCaret = getLineEndOffset(end) - 1;
+		extendSelection(getLineStartOffset(start),newCaret);
+		moveCaretPosition(newCaret);
 	}
 
 	/**
@@ -3721,6 +3895,34 @@ forward_scan:		do
 		hasFocus();
 	}
 
+	/**
+	 * Returns if multiple selection is enabled.
+	 * @since jEdit 3.2pre1
+	 */
+	public static final boolean isMultipleSelectionEnabled()
+	{
+		return multi;
+	}
+
+	/**
+	 * Toggles multiple selection.
+	 * @since jEdit 3.2pre1
+	 */
+	public static final void toggleMultipleSelectionEnabled()
+	{
+		multi = !multi;
+	}
+
+	/**
+	 * Sets multiple selection.
+	 * @param multi Should multiple selection be enabled?
+	 * @since jEdit 3.2pre1
+	 */
+	public static final void setMultipleSelectionEnabled(boolean multi)
+	{
+		JEditTextArea.multi = multi;
+	}
+
 	// protected members
 	public void processKeyEvent(KeyEvent evt)
 	{
@@ -3759,9 +3961,6 @@ forward_scan:		do
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 	}
-
-	// REMOVE ME!!!!
-	private int selectionStart, selectionEnd, selectionStartLine, selectionEndLine;
 
 	// package-private members
 	Segment lineSegment;
@@ -3861,16 +4060,8 @@ forward_scan:		do
 
 	private int magicCaret;
 
-	// Offset where drag was started; used by double-click drag (word
-	// selection)
-	private int dragStartLine;
-	private int dragStartOffset;
-	private int dragStart;
-
+	private static boolean multi;
 	private boolean overwrite;
-
-	// for event handlers only
-	private int clickCount;
 
 	private void _addToSelection(Selection addMe)
 	{
@@ -3894,20 +4085,11 @@ forward_scan:		do
 			// try and merge existing selections one by
 			// one with the new selection
 			Selection s = (Selection)selection.elementAt(i);
-			if(s.start >= addMe.start
-				|| s.end <= addMe.end)
+			if((s.start < addMe.start && s.end >= addMe.start)
+				|| (s.end > addMe.end && s.start <= addMe.end))
 			{
 				addMe.start = Math.min(s.start,addMe.start);
 				addMe.end = Math.max(s.end,addMe.end);
-
-				// extending a selection of a different type?
-				if(addMe.getClass() != s.getClass())
-				{
-					if(s instanceof Selection.Range)
-						addMe = new Selection.Range(s);
-					else if(s instanceof Selection.Rect)
-						addMe = new Selection.Rect(s);
-				}
 
 				selection.removeElement(s);
 				i--;
@@ -3957,7 +4139,7 @@ forward_scan:		do
 					lineSegment.offset,
 					lineSegment.count);
 
-				if(i != selectionEndLine)
+				if(i != s.endLine)
 					buf.append('\n');
 			}
 
@@ -4520,14 +4702,14 @@ forward_scan:		do
 
 				boolean changed = false;
 
-				if(s.start > offset)
+				if(s.start >= offset)
 				{
 					s.start += length;
 					s.startLine = getLineOfOffset(s.start);
 					changed = true;
 				}
 
-				if(s.end > offset)
+				if(s.end >= offset)
 				{
 					s.end += length;
 					s.endLine = getLineOfOffset(s.end);
@@ -4590,6 +4772,7 @@ forward_scan:		do
 				if(s.start == s.end)
 				{
 					selection.removeElement(s);
+					invalidateLineRange(s.startLine,s.endLine);
 					i--;
 				}
 				else if(changed)
@@ -4647,6 +4830,11 @@ forward_scan:		do
 
 	class MouseHandler extends MouseAdapter implements MouseMotionListener
 	{
+		private int dragStartLine;
+		private int dragStartOffset;
+		private int dragStart;
+		private int clickCount;
+
 		public void mousePressed(MouseEvent evt)
 		{
 			buffer.endCompoundEdit();
@@ -4697,42 +4885,38 @@ forward_scan:		do
 			}
 		}
 
-		public void mouseReleased(MouseEvent evt)
-		{
-			int dot = xyToOffset(evt.getX(),evt.getY());
-
-			// if button 2 click (as opposed to button 2 drag,
-			// we differentiate my checking if the location of
-			// the click is the same as the location of the drag)
-			// insert contents of % register
-			if((evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0
-				&& dot == dragStart)
-			{
-				selectNone();
-
-				if(!isEditable())
-					getToolkit().beep();
-				else
-					Registers.paste(JEditTextArea.this,'%');
-			}
-		}
-
 		private void doSingleClick(MouseEvent evt)
 		{
 			if((evt.getModifiers() & InputEvent.SHIFT_MASK) != 0)
 			{
-				resizeSelection(caret,dragStart,
+				// XXX: getMarkPosition() deprecated!
+				resizeSelection(getMarkPosition(),dragStart,
 					(evt.getModifiers()
 					& InputEvent.CTRL_MASK) != 0);
-			}
-			else if((evt.getModifiers() & InputEvent.BUTTON2_MASK) == 0)
-			{
-				// clear selection unless user is going a
-				// button 2 drag
-				selectNone();
-			}
 
-			moveCaretPosition(dragStart,false);
+				moveCaretPosition(dragStart,false);
+
+				// so that shift-click-drag works
+				dragStartLine = getMarkLine();
+				dragStart = getMarkPosition();
+				dragStartOffset = dragStart
+					- getLineStartOffset(dragStartLine);
+			}
+			else
+			{
+				if(!multi)
+					selectNone();
+
+				moveCaretPosition(dragStart,false);
+
+				if((evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
+				{
+					if(!isEditable())
+						getToolkit().beep();
+					else
+						Registers.paste(JEditTextArea.this,'%');
+				}
+			}
 		}
 
 		private void doDoubleClick(MouseEvent evt)
@@ -4754,8 +4938,9 @@ forward_scan:		do
 					// Hack
 					if(bracket < mark)
 					{
-						bracket++;
-						mark--;
+						int tmp = bracket;
+						bracket = mark - 1;
+						mark = bracket + 1;
 					}
 					addToSelection(new Selection.Range(
 						mark,bracket));
@@ -4821,9 +5006,10 @@ forward_scan:		do
 		private void doSingleDrag(MouseEvent evt, boolean rect)
 		{
 			int dot = xyToOffset(evt.getX(),evt.getY());
+			if(dot == caret)
+				return;
 
 			resizeSelection(dragStart,dot,rect);
-
 			moveCaretPosition(dot,false);
 		}
 
@@ -4871,31 +5057,38 @@ forward_scan:		do
 				}
 			}
 
+			if(lineStart + offset == caret)
+				return;
+
 			resizeSelection(markLineStart + mark,lineStart + offset,rect);
 			moveCaretPosition(lineStart + offset,false);
 		}
 
 		private void doTripleDrag(MouseEvent evt, boolean rect)
 		{
-			int mark = getMarkLine();
-			int mouse = buffer.virtualToPhysical(yToLine(evt.getY()));
-			int offset = xToOffset(mouse,evt.getX());
-			if(mark > mouse)
+			int mouseLine = buffer.virtualToPhysical(yToLine(evt.getY()));
+			int offset = xToOffset(mouseLine,evt.getX());
+			int mark;
+			int mouse;
+			if(dragStartLine > mouseLine)
 			{
-				mark = getLineEndOffset(mark) - 1;
-				if(offset == getLineLength(mouse))
-					mouse = getLineEndOffset(mouse) - 1;
+				mark = getLineEndOffset(dragStartLine) - 1;
+				if(offset == getLineLength(mouseLine))
+					mouse = getLineEndOffset(mouseLine) - 1;
 				else
-					mouse = getLineStartOffset(mouse);
+					mouse = getLineStartOffset(mouseLine);
 			}
 			else
 			{
-				mark = getLineStartOffset(mark);
+				mark = getLineStartOffset(dragStartLine);
 				if(offset == 0)
-					mouse = getLineStartOffset(mouse);
+					mouse = getLineStartOffset(mouseLine);
 				else
-					mouse = getLineEndOffset(mouse) - 1;
+					mouse = getLineEndOffset(mouseLine) - 1;
 			}
+
+			if(mouse == caret)
+				return;
 
 			resizeSelection(mark,mouse,rect);
 			moveCaretPosition(mouse,false);
@@ -4905,7 +5098,6 @@ forward_scan:		do
 	static class CaretUndo extends AbstractUndoableEdit
 	{
 		private int caret;
-		private int end;
 
 		CaretUndo(int caret)
 		{

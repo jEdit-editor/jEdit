@@ -244,8 +244,8 @@
       <entry>Select line range.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</><keycap>\</></keycombo></entry>
-      <entry>Switch between range and rectangular selection mode.</entry>
+      <entry><keycap>Caps Lock</></entry>
+      <entry>Switch between single and multiple selection mode.</entry>
      </row>
     </tbody>
    </tgroup>

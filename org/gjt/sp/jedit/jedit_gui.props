@@ -308,13 +308,14 @@ prev-bracket.label=Go to Previous Bracket
 next-bracket.label=Go to Next Bracket
 
 ### Registers menu
-registers=cut-string-register \
+registers=view-registers \
+	  - \
+	  cut-string-register \
           copy-string-register \
 	  cut-append-string-register \
 	  copy-append-string-register \
 	  paste-string-register \
-	  - \
-	  view-registers
+	  -
 registers.label=Registers
 cut-string-register.label=Cut to Register [x]
 copy-string-register.label=Copy to Register [x]
