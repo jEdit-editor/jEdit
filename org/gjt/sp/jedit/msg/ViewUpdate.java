@@ -1,6 +1,6 @@
 /*
  * ViewUpdate.java - View update message
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.msg;
 
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -46,17 +47,35 @@ public class ViewUpdate extends EBMessage.NonVetoable
 	public static final Object BUFFER_CHANGED = "BUFFER_CHANGED";
 
 	/**
+	 * Text area created.
+	 */
+	public static final Object TEXTAREA_CREATED = "TEXTAREA_CREATED";
+
+	/**
 	 * Creates a new view update message.
 	 * @param view The view
+	 * @param textArea The text area
 	 * @param what What happened
 	 */
 	public ViewUpdate(View view, Object what)
+	{
+		this(view,null,what);
+	}
+
+	/**
+	 * Creates a new view update message.
+	 * @param view The view
+	 * @param textArea The text area
+	 * @param what What happened
+	 */
+	public ViewUpdate(View view, JEditTextArea textArea, Object what)
 	{
 		super(view);
 
 		if(what == null)
 			throw new NullPointerException("What must be non-null");
 
+		this.textArea = textArea;
 		this.what = what;
 	}
 
@@ -76,11 +95,20 @@ public class ViewUpdate extends EBMessage.NonVetoable
 		return (View)getSource();
 	}
 
+	/**
+	 * Returns the text area involved.
+	 */
+	public JEditTextArea getTextArea()
+	{
+		return textArea;
+	}
+
 	public String paramString()
 	{
 		return super.paramString() + ",what=" + what;
 	}
 
 	// private members
+	private JEditTextArea textArea;
 	private Object what;
 }

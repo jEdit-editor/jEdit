@@ -128,7 +128,8 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    followed by the menu item itself. All menu components are separated
    by greater-than symbols (<quote>&gt;</>). For example,
    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guimenuitem>Indent
-   Line</> refers to the <guimenuitem>Indent Line</> item of the
+   Selected Lines</> refers to the <guimenuitem>Indent Selected Lines</>
+   item of the
    <guisubmenu>Lines</> submenu of the <guimenu>Edit</> menu.
   </para>
   <para>
@@ -155,7 +156,7 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    <keycap>Modifier</> is the modifier key that must be pressed in
    addition to <keycap>Key</> to invoke that command. When multiple
    keystrokes are present in a binding, they will be listed in order,
-   for example the shortcut for <guimenuitem>Indent Line</> is
+   for example the shortcut for <guimenuitem>Indent Selected Lines</> is
    <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>I</></keycombo>.
   </para>
@@ -1134,34 +1135,62 @@ http://www.sourceforge.net/mail/?group_id=588</>.
    delete the paragraph containing the caret.
   </para>
  </sect1>
- <sect1 id=views><title>Editing With Multiple Views</>
+ <sect1 id=views><title>Working With Views</>
   <para>
    <indexterm><primary>view</></indexterm>
    <indexterm><primary>editor window</></indexterm>
    By default, jEdit only creates one editor window, or <firstterm>view</>.
    However, it is possible to have any number of views open at once, with
-   each buffer being edited in one or more views.
+   each buffer being edited in one or more views. Views can also be split
+   into multiple panes, for side-by-side viewing of two locations in a
+   single
+   buffer.
   </para>
   <para>
    <indexterm><primary>New View command</></indexterm>
-   <indexterm><primary>File menu</></indexterm>
-   <guimenu>File</>&gt;<guimenuitem>New View</>
+   <indexterm><primary>Utilities menu</></indexterm>
+   <guimenu>Utilities</>&gt;<guimenuitem>New View</>
    (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>N</></keycombo>) will create a new
    view. It will display the same buffer as the current view.
    A different buffer can also be selected from
    the <guimenu>Buffers</> menu.
-   When more than
-   one view edits a buffer, changes made in one view are immediately
-   visible in all others. 
   </para>
   <para>
    <indexterm><primary>Close View command</></indexterm>
-   <guimenu>File</>&gt;<guimenuitem>Close View</>
+   <guimenu>Utilities</>&gt;<guimenuitem>Close View</>
    (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
    <keycombo><keycap>Control</><keycap>N</></keycombo>) will close the
    current view. jEdit will then exit if no more views remain.
   </para>
+  <para>
+   <indexterm><primary>Split Vertically command</></indexterm>
+   <guimenu>Utilities</>&gt;<guimenuitem>Split Vertically</>
+   (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycap>2</>) will vertically split the current view.
+  </para>
+  <para>
+   <indexterm><primary>Split Horizonally command</></indexterm>
+   <guimenu>Utilities</>&gt;<guimenuitem>Split Horizonally</>
+   (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycap>3</>) will horizontally split the current view.
+  </para>
+  <para>
+   <indexterm><primary>Unsplit command</></indexterm>
+   <guimenu>Utilities</>&gt;<guimenuitem>Unsplit</>
+   (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
+   <keycap>1</>) will remove all splits from the current view.
+  </para>
+  <note>
+   <para>
+    A split view can still only display one buffer at a time. If you need
+    to simultaneously view two buffers at once, you must create a new
+    view.
+   </para>
+  </note>
+  <figure><title>A view split into two panes</>
+   <graphic scale=75 fileref=window-editor-split></>
+  </figure>
  </sect1>
  <sect1 id=server><title>The Edit Server</>
   <para>
@@ -2068,13 +2097,15 @@ http://www.sourceforge.net/mail/?group_id=588</>.
   <sect2><title>Indentation-Related Commands</>
   <indexterm><primary>selection</></indexterm>
    <para>
-    <indexterm><primary>Indent Line command</></indexterm>
+    <indexterm><primary>Indent Selected Lines command</></indexterm>
     <indexterm><primary>Lines menu</></indexterm>
     <indexterm><primary>Edit menu</></indexterm>
-    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guisubmenu>Indent Line</>
+    <guimenu>Edit</>&gt;<guisubmenu>Lines</>&gt;<guisubmenu>Indent
+    Selected Lines</>
     (keyboard equivalent: <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>I</></keycombo>)
-    will indent the current line using automatic indentation rules; see
+    will indent all selected lines (or the current line if there is no
+    selection) using the auto indent rules; see
     <xref linkend=autoindent> for details.
    </para>
    <para>
@@ -3957,6 +3988,10 @@ import org.gjt.sp.jedit.EditBus;</>
    </para>
    <itemizedlist><listitem><para><command>ViewUpdate.CREATED</> - a
    new view has been created</para></listitem>
+   <itemizedlist><listitem><para><command>ViewUpdate.TEXTAREA_CREATED</> - a
+   new text area has been created - this message is sent when the view
+   is split. The <function>getTextArea()</> method returns the new text
+   area</para></listitem>
    <listitem><para><command>ViewUpdate.BUFFER_CHANGED</> - a view
    is now editing a different buffer</para></listitem>
    <listitem><para><command>ViewUpdate.CLOSED</> - a view has been

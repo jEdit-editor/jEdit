@@ -5,7 +5,6 @@ JEDIT TO DO
 - Get dude to fix line-state problem in PostScript token marker
 - jikes segfaults with PSTokenMarker.java -- why?
 - Finish double click drag
-- Need to redo window-editor-* snapshots in icewm
 - BeanShell edit mode
 - Integrate Mike Dillon's "Gutter" code, rename TextAreaPainter.Highlight
   to TextAreaHighlight and use that same interface to paint stuff in the
@@ -21,9 +20,8 @@ JEDIT TO DO
     instead wait for the buffer created event (if there will be one)
   - if the buffer is not temporary, create positions cos it's going stay
     open
-- 'Uncomment' command, removes comment strings from selected text
+- 'Uncomment' command that removes comment strings from selected text
 - Incremental search
-- Indent selected lines function
 
 ------- Later -------
 

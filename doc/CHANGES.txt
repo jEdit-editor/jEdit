@@ -6,12 +6,16 @@ JEDIT VERSION HISTORY
 
 - Views can be split - C+e 1 unsplits, C+e 2 splits vertically,
   C+e 3 splits horizontally.
+- 'Indent Line' command replaced with 'Indent Selected Lines' -- it
+  indents all lines in the selection, or the current line if nothing
+  is selected
 
 + Enhancements
 
 - Buffer tabs position (top, left, right, bottom) can now be set
 - Buffer tabs now show tool tips with the full path of buffers
 - Better regexp and ignore case icons (Valery Kondakoff)
+- Documentation updates
 
 + Bug Fixes
 
@@ -19,6 +23,12 @@ JEDIT VERSION HISTORY
 - Fixed a very minor memory leak (buffers would sometimes retain pointers
   to closed views' text areas) (since 1.7pre5)
 - Docked plugins didn't work (Jason Ginchereau) (since 2.3pre2)
+
++ API Changes
+
+- Because of the split pane code, plugins should now add highlighters
+  when they receive the ViewUpdate.TEXTAREA_CREATED message, instead of
+  ViewUpdate.CREATED as before
 
 * Version 2.3pre2
 

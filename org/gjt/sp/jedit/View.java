@@ -161,6 +161,7 @@ public class View extends JFrame implements EBComponent
 			saveCaretInfo();
 			splitPane = new JSplitPane(orientation,textArea,
 				textArea = createTextArea());
+			initTextArea(textArea);
 			loadCaretInfo();
 			splitPane.setBorder(null);
 			if(bufferTabs != null)
@@ -510,6 +511,21 @@ public class View extends JFrame implements EBComponent
 		if(buffer != null)
 			updateTitle();
 
+		JEditTextArea[] textAreas = getTextAreas();
+		for(int i = 0; i < textAreas.length; i++)
+		{
+			initTextArea(textAreas[i]);
+		}
+
+		loadStyles();
+
+		updateRecentMenu();
+	}
+
+	private void initTextArea(JEditTextArea textArea)
+	{
+		TextAreaPainter painter = textArea.getPainter();
+
 		String family = jEdit.getProperty("view.font");
 		int size;
 		try
@@ -533,56 +549,46 @@ public class View extends JFrame implements EBComponent
 		}
 		Font font = new Font(family,style,size);
 
-		JEditTextArea[] textAreas = getTextAreas();
-		for(int i = 0; i < textAreas.length; i++)
+		painter.setFont(font);
+		painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
+			"view.lineHighlight")));
+		painter.setLineHighlightColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.lineHighlightColor")));
+		painter.setBracketHighlightEnabled("on".equals(jEdit.getProperty(
+			"view.bracketHighlight")));
+		painter.setBracketHighlightColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.bracketHighlightColor")));
+		painter.setEOLMarkersPainted("on".equals(jEdit.getProperty(
+			"view.eolMarkers")));
+		painter.setInvalidLinesPainted("on".equals(jEdit.getProperty(
+			"view.paintInvalid")));
+		painter.setEOLMarkerColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.eolMarkerColor")));
+		painter.setCaretColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.caretColor")));
+		painter.setSelectionColor(GUIUtilities.parseColor(
+			jEdit.getProperty("view.selectionColor")));
+		painter.setBackground(GUIUtilities.parseColor(
+			jEdit.getProperty("view.bgColor")));
+		painter.setForeground(GUIUtilities.parseColor(
+			jEdit.getProperty("view.fgColor")));
+		painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
+			"view.blockCaret")));
+
+		textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
+			"view.caretBlink")));
+
+		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
+			new Boolean("yes".equals(jEdit.getProperty("view.homeEnd"))));
+		try
 		{
-			TextAreaPainter painter = textArea.getPainter();
-
-			painter.setFont(font);
-			painter.setLineHighlightEnabled("on".equals(jEdit.getProperty(
-				"view.lineHighlight")));
-			painter.setLineHighlightColor(GUIUtilities.parseColor(
-				jEdit.getProperty("view.lineHighlightColor")));
-			painter.setBracketHighlightEnabled("on".equals(jEdit.getProperty(
-				"view.bracketHighlight")));
-			painter.setBracketHighlightColor(GUIUtilities.parseColor(
-				jEdit.getProperty("view.bracketHighlightColor")));
-			painter.setEOLMarkersPainted("on".equals(jEdit.getProperty(
-				"view.eolMarkers")));
-			painter.setInvalidLinesPainted("on".equals(jEdit.getProperty(
-				"view.paintInvalid")));
-			painter.setEOLMarkerColor(GUIUtilities.parseColor(
-				jEdit.getProperty("view.eolMarkerColor")));
-			painter.setCaretColor(GUIUtilities.parseColor(
-				jEdit.getProperty("view.caretColor")));
-			painter.setSelectionColor(GUIUtilities.parseColor(
-				jEdit.getProperty("view.selectionColor")));
-			painter.setBackground(GUIUtilities.parseColor(
-				jEdit.getProperty("view.bgColor")));
-			painter.setForeground(GUIUtilities.parseColor(
-				jEdit.getProperty("view.fgColor")));
-			painter.setBlockCaretEnabled("on".equals(jEdit.getProperty(
-				"view.blockCaret")));
-
-			textArea.setCaretBlinkEnabled("on".equals(jEdit.getProperty(
-				"view.caretBlink")));
-
-			textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
-				new Boolean("yes".equals(jEdit.getProperty("view.homeEnd"))));
-			try
-			{
-				textArea.setElectricScroll(Integer.parseInt(jEdit
-					.getProperty("view.electricBorders")));
-			}
-			catch(NumberFormatException nf)
-			{
-				textArea.setElectricScroll(0);
-			}
+			textArea.setElectricScroll(Integer.parseInt(jEdit
+				.getProperty("view.electricBorders")));
 		}
-
-		loadStyles();
-
-		updateRecentMenu();
+		catch(NumberFormatException nf)
+		{
+			textArea.setElectricScroll(0);
+		}
 	}
 
 	private void loadStyles()
@@ -635,32 +641,36 @@ public class View extends JFrame implements EBComponent
 		JEditTextArea[] textAreas = getTextAreas();
 		for(int i = 0; i < textAreas.length; i++)
 		{
-			JEditTextArea textArea = textAreas[i];
-			TextAreaPainter painter = view.textArea.getPainter();
-			TextAreaPainter myPainter = textArea.getPainter();
-			myPainter.setFont(painter.getFont());
-			myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
-			myPainter.setLineHighlightColor(painter.getLineHighlightColor());
-			myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
-			myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
-			myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
-			myPainter.setInvalidLinesPainted(painter.getInvalidLinesPainted());
-			myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
-			myPainter.setCaretColor(painter.getCaretColor());
-			myPainter.setSelectionColor(painter.getSelectionColor());
-			myPainter.setBackground(painter.getBackground());
-			myPainter.setForeground(painter.getForeground());
-			myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
-
-			textArea.setCaretBlinkEnabled(view.textArea.isCaretBlinkEnabled());
-			textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
-				view.textArea.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
-			textArea.setElectricScroll(view.textArea.getElectricScroll());
-
-			myPainter.setStyles(painter.getStyles());
+			initTextArea(textAreas[i],view.textArea);
 		}
 
 		updateRecentMenu();
+	}
+
+	private void initTextArea(JEditTextArea textArea, JEditTextArea copy)
+	{
+		TextAreaPainter painter = copy.getPainter();
+		TextAreaPainter myPainter = textArea.getPainter();
+		myPainter.setFont(painter.getFont());
+		myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
+		myPainter.setLineHighlightColor(painter.getLineHighlightColor());
+		myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
+		myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
+		myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
+		myPainter.setInvalidLinesPainted(painter.getInvalidLinesPainted());
+		myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
+		myPainter.setCaretColor(painter.getCaretColor());
+		myPainter.setSelectionColor(painter.getSelectionColor());
+		myPainter.setBackground(painter.getBackground());
+		myPainter.setForeground(painter.getForeground());
+		myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
+
+		textArea.setCaretBlinkEnabled(copy.isCaretBlinkEnabled());
+		textArea.putClientProperty(InputHandler.SMART_HOME_END_PROPERTY,
+			copy.getClientProperty(InputHandler.SMART_HOME_END_PROPERTY));
+		textArea.setElectricScroll(copy.getElectricScroll());
+
+		myPainter.setStyles(painter.getStyles());
 	}
 
 	private void loadToolBar()
@@ -713,6 +723,9 @@ public class View extends JFrame implements EBComponent
 
 		if(buffer != null)
 			textArea.setDocument(buffer);
+
+		EditBus.send(new ViewUpdate(this,textArea,
+			ViewUpdate.TEXTAREA_CREATED));
 
 		return textArea;
 	}
@@ -1216,6 +1229,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.130  2000/01/29 08:18:08  sp
+ * bug fixes, misc updates
+ *
  * Revision 1.129  2000/01/29 03:27:20  sp
  * Split window functionality added
  *

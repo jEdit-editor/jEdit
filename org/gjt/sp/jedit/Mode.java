@@ -376,7 +376,7 @@ public class Mode
 		String indentCloseBrackets = (String)getProperty("indentCloseBrackets");
 		if(indentCloseBrackets != null)
 		{
-			EditAction action = jEdit.getAction("indent-line");
+			EditAction action = jEdit.getAction("indent-lines");
 
 			for(int i = 0; i < indentCloseBrackets.length(); i++)
 			{
@@ -406,6 +406,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/01/29 08:18:08  sp
+ * bug fixes, misc updates
+ *
  * Revision 1.19  1999/12/19 08:12:34  sp
  * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
  *

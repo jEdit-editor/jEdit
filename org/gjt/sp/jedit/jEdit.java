@@ -1418,7 +1418,7 @@ public class jEdit
 		addAction("hypersearch");
 		addAction("hypersearch-selection");
 		addAction("ignore-case");
-		addAction("indent-line");
+		addAction("indent-lines");
 		addAction("indent-on-enter");
 		addAction("indent-on-tab");
 		addAction("insert-char");
@@ -1768,6 +1768,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.186  2000/01/29 08:18:08  sp
+ * bug fixes, misc updates
+ *
  * Revision 1.185  2000/01/29 03:27:20  sp
  * Split window functionality added
  *

@@ -18,11 +18,10 @@ lineSep.mac=MacOS (\\r)
 ###
 ### TOOLBAR
 ###
-view.toolbar=new-file new-view open-file close-file - save save-all - \
-	print - undo redo - cut copy paste - help
+view.toolbar=new-file open-file close-file - save save-all - \
+	print - undo redo - cut copy paste - new-view - help
 
 new-file.icon=New.gif
-new-view.icon=NewView.gif
 open-file.icon=Open.gif
 close-file.icon=Delete.gif
 save.icon=Save.gif
@@ -33,6 +32,7 @@ redo.icon=Redo.gif
 cut.icon=Cut.gif
 copy.icon=Copy.gif
 paste.icon=Paste.gif
+new-view.icon=NewView.gif
 help.icon=Help.gif
 ignore-case.icon=IgnoreCase.gif
 regexp.icon=Regexp.gif
@@ -168,7 +168,7 @@ box-comment.label=Box Comment
 block-comment.label=Block Comment
 
 ### Line menu
-line=indent-line \
+line=indent-lines \
      goto-end-indent \
      scroll-line \
      - \
@@ -181,7 +181,7 @@ line=indent-line \
      shift-left \
      shift-right
 line.label=Lines
-indent-line.label=Indent Line
+indent-lines.label=Indent Selected Lines
 goto-end-indent.label=Go to End of Indent
 scroll-line.label=Scroll to Current Line
 delete-line.label=Delete Line
@@ -426,16 +426,16 @@ view.title={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0
 
 # Status messages
 view.status.recording=Macro recording
-view.status.cut-string-register=Cut to register?
-view.status.copy-string-register=Copy to register?
-view.status.append-string-register=Append to register?
-view.status.paste-string-register=Paste from register?
-view.status.set-filename-register=Save file name to register?
-view.status.set-caret-register=Save caret to register?
-view.status.goto-register=Go to register?
-view.status.select-caret-register=Select to register?
-view.status.exchange-caret-register=Swap caret with register?
-view.status.clear-register=Clear register?
+view.status.cut-string-register=Cut to register
+view.status.copy-string-register=Copy to register
+view.status.append-string-register=Append to register
+view.status.paste-string-register=Paste from register
+view.status.set-filename-register=Save file name to register
+view.status.set-caret-register=Save caret to register
+view.status.goto-register=Go to register
+view.status.select-caret-register=Select to register
+view.status.exchange-caret-register=Swap caret with register
+view.status.clear-register=Clear register
 view.status.insert-literal=Insert without expanding
 
 ###
@@ -445,6 +445,7 @@ view.status.insert-literal=Insert without expanding
 # About dialog
 about.title=About jEdit
 about.message=jEdit version {0}\n\
+	http://www.gjt.org/~sp/jedit.html\n\
 	\n\
 	jEdit was written by Slava Pestov with the help of several\n\
 	others. It is released under the GNU General Public License;\n\
@@ -458,10 +459,10 @@ about.message=jEdit version {0}\n\
 	Jonathan Revusky - Python syntax highlighting\n\
 	Juha Lindfors - IDL syntax highlighting\n\
 	Mike Dillon - TSQL syntax highlighting, faster literal search,\n\
-	options dialog updates, many bug fixes\n\
+	options dialog stuff, various other things\n\
 	Ralf Engels - PostScript syntax highlighting\n\
 	Tal Davidson - Original syntax highlighting engine\n\
-	Valery Kondakoff - Complete word action\n\
+	Valery Kondakoff - Complete Word command\n\
 	\n\
 	If you are not on the above list but think you should be,\n\
 	e-mail me (<sp@gjt.org>).\n\
