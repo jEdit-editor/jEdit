@@ -700,7 +700,7 @@ xmode-invalid-doctype.message=The DOCTYPE of {0}\n\
 	but please ensure that this is a valid mode definition.
 
 xmode-parse.title=XML Parse Error
-xmode-parse.message=An error occured while parsing {0}, line {1}:\n\
+xmode-parse.message=An error occurred while parsing {0}, line {1}:\n\
 	{2}
 
 # JARClassLoader errors

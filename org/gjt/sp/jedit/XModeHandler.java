@@ -20,6 +20,9 @@
 package org.gjt.sp.jedit;
 
 import com.microstar.xml.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Stack;
 import org.gjt.sp.jedit.syntax.*;
@@ -34,6 +37,28 @@ public class XModeHandler extends HandlerBase
 	}
 
 	// begin HandlerBase implementation
+	public Object resolveEntity(String publicId, String systemId)
+	{
+		if("xmode.dtd".equals(systemId))
+		{
+			String path = MiscUtilities.constructPath(
+				jEdit.getJEditHome(),"modes","xmode.dtd");
+			System.err.println(path);
+			try
+			{
+				return new BufferedReader(new FileReader(path));
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,"Error while opening"
+					+ " xmode.dtd:");
+				Log.log(Log.ERROR,this,e);
+			}
+		}
+
+		return null;
+	}
+
 	public void attribute(String aname, String value, boolean isSpecified)
 	{
 		String tag = peekElement();

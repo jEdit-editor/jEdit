@@ -10,6 +10,7 @@ JEDIT TO DO
   - how to write text area and gutter hilites
   - each section should have some sample source code
 - Redo window-editor-* screenshots
+- Fix the DTD
 
 Later:
 

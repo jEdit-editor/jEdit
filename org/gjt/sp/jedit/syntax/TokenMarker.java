@@ -409,64 +409,47 @@ public class TokenMarker implements Cloneable
 				}
 			}
 
-			if (context.inRule != null &&
-				(context.inRule.action & SOFT_SPAN) == 0)
+			// if we are inside a span, check for its end sequence
+			rule = context.inRule;
+			if(rule != null && (rule.action & SPAN) == SPAN)
 			{
-				// we are in a hard span rule, so see if context.inRule matches
-				pattern.array = context.inRule.searchChars;
-				pattern.count = context.inRule.sequenceLengths[1];
-				pattern.offset = context.inRule.sequenceLengths[0];
+				pattern.array = rule.searchChars;
+				pattern.count = rule.sequenceLengths[1];
+				pattern.offset = rule.sequenceLengths[0];
 
-				handleRule(info, line, context.inRule);
-			}
-			else
-			{
-				// if we are inside a span, check for its end sequence
-				rule = context.inRule;
-				if(rule != null && (rule.action & SPAN) == SPAN)
+				// if we match the end of the span, or if this is a "hard" span,
+				// we continue to the next character; otherwise, we check all
+				// applicable rules below
+				if (!handleRule(info,line,rule)
+					|| (rule.action & SOFT_SPAN) == 0)
 				{
-					pattern.array = rule.searchChars;
+					escaped = false;
+					continue;
+				}
+			}
+
+			// now check every rule
+			rule = context.rules.getRules(line.array[pos]);
+			while(rule != null)
+			{
+				pattern.array = rule.searchChars;
+
+				if (context.inRule == rule && (rule.action & SPAN) == SPAN)
+				{
 					pattern.count = rule.sequenceLengths[1];
 					pattern.offset = rule.sequenceLengths[0];
-
-					handleRule(info,line,rule);
-
-					// if this is a NO_WORD_BREAK span,
-					// we need to check every rule in
-					// case whitespace comes up, etc.
-					// otherwise, we just continue onto
-					// the next character.
-					if((rule.action & NO_WORD_BREAK) != NO_WORD_BREAK)
-					{
-						escaped = true;
-						continue;
-					}
 				}
-
-				// now check every rule
-				rule = context.rules.getRules(line.array[pos]);
-
-				while(rule != null)
+				else
 				{
-					pattern.array = rule.searchChars;
-
-					if (context.inRule == rule && (rule.action & SPAN) == SPAN)
-					{
-						pattern.count = rule.sequenceLengths[1];
-						pattern.offset = rule.sequenceLengths[0];
-					}
-					else
-					{
-						pattern.count = rule.sequenceLengths[0];
-						pattern.offset = 0;
-					}
-
-					// stop checking rules if there was a match and go to next pos
-					if (!handleRule(info,line,rule))
-						break;
-
-					rule = rule.next;
+					pattern.count = rule.sequenceLengths[0];
+					pattern.offset = 0;
 				}
+
+				// stop checking rules if there was a match and go to next pos
+				if (!handleRule(info,line,rule))
+					break;
+
+				rule = rule.next;
 			}
 
 			escaped = false;
@@ -930,6 +913,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.47  2000/04/10 01:03:58  sp
+ * SPAN fixes, <!DOCTYPE MODE SYSTEM "xmode.dtd"> added to mode files
+ *
  * Revision 1.46  2000/04/09 10:41:26  sp
  * NO_WORD_BREAK SPANs fixed, action tokens removed
  *

@@ -13,7 +13,7 @@
 
 <!-- MODE attributes -->
 <!ATTLIST MODE
-	name ( #PCDATA ) #REQUIRED >
+	NAME #PCDATA #REQUIRED >
 
 <!-- MODE children -->
 <!-- PROPS element -->
