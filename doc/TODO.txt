@@ -12,6 +12,8 @@ JEDIT TO DO
 
 - Slow scrolling
 
+- getSelectedText() if end > lineLength
+
 * 2.2+ TODO:
 
 - Macro recorder

@@ -134,13 +134,13 @@
    Console by Slava Pestov
    </para></listitem>
    <listitem><para>
+   HTML by Romain Guy and Slava Pestov
+   </para></listitem>
+   <listitem><para>
    JBrowse by George Latkiewicz
    </para></listitem>
    <listitem><para>
    QuickFile by Jason Ginchereau
-   </para></listitem>
-   <listitem><para>
-   WWWBrowser by Slava Pestov
    </para></listitem>
   </itemizedlist></listitem>
   <listitem><para>
@@ -3163,7 +3163,7 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
    If your plugin uses the old API, many older releases will also work,
    but pinpointing which one it was is rather tricky, so just specify
    that it requires 2.0final (build 02.00.99.00).
-  </itemizedlist>
+  </para>
  </sect1>
  <sect1 id=plugin-actions><title>Plugin Actions</>
   <para>

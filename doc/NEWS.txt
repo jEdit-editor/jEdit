@@ -28,9 +28,9 @@ list can be found in the file named CHANGES.txt.
 
 - Bundled plugins. The following plugins are now included with jEdit:
   - Console by Slava Pestov
+  - HTML by Romain Guy and Slava Pestov
   - JBrowse by George Latkiewicz
   - QuickFile by Jason Ginchereau
-  - WWWBrowser by Slava Pestov
 
 - Several areas of jEdit have been optimized for speed:
   - C, HTML syntax highlighting is more efficent
