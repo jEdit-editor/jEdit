@@ -89,7 +89,7 @@ class KeyTableModel extends AbstractTableModel
 			if(label == null)
 				continue;
 			String shortcut = jEdit.getProperty(name + ".shortcut");
-			addKeyBinding(new KeyBinding(name,label,shortcut));
+			bindings.addElement(new KeyBinding(name,label,shortcut));
 		}
 
 		// Add menu item key bindings
@@ -102,8 +102,11 @@ class KeyTableModel extends AbstractTableModel
 				continue;
 			label = GUIUtilities.prettifyMenuLabel(label);
 			String shortcut = jEdit.getProperty(name + ".shortcut");
-			addKeyBinding(new KeyBinding(name,label,shortcut));
+			bindings.addElement(new KeyBinding(name,label,shortcut));
 		}
+
+		// Sort
+		MiscUtilities.quicksort(bindings,new KeyCompare());
 	}
 
 	public int getColumnCount()
@@ -165,20 +168,13 @@ class KeyTableModel extends AbstractTableModel
 		}
 	}
 
-	/* This is slow */
-	private void addKeyBinding(KeyBinding binding)
+	class KeyCompare implements MiscUtilities.Compare
 	{
-		for(int i = 0; i < bindings.size(); i++)
+		public int compare(Object obj1, Object obj2)
 		{
-			KeyBinding b = (KeyBinding)bindings.elementAt(i);
-			if(b.label.compareTo(binding.label) >= 0)
-			{
-				bindings.insertElementAt(binding,i);
-				return;
-			}
+			return ((KeyBinding)obj1).label.compareTo(
+				((KeyBinding)obj2).label);
 		}
-
-		bindings.addElement(binding);
 	}
 
 	class KeyBinding
@@ -199,6 +195,9 @@ class KeyTableModel extends AbstractTableModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  1999/10/11 07:14:22  sp
+ * doneWithBuffer()
+ *
  * Revision 1.5  1999/10/04 03:20:51  sp
  * Option pane change, minor tweaks and bug fixes
  *

@@ -17,6 +17,10 @@ JEDIT VERSION HISTORY
   MiscUtilities.StringICaseCompare are the two provided implementations
   of this interface
 
+- Plugin updates:
+  QuickFile 0.6
+  JBrowse 0.9.9
+
 + Bug Fixes
 
 - Rectangles at the end of lines had minor problems regarding newlines
@@ -25,6 +29,8 @@ JEDIT VERSION HISTORY
 - The tool bar was broken with the Windows look and feel
 - The look and feel selector in 'Global Options' would always display
   'Metal'
+- Installer threw an exception on OSes other than Windows and Unix
+  (MacOS, OS/2, etc)
 
 * Version 2.1pre3
 

@@ -195,6 +195,7 @@ loop:			for(;;)
 						GUIUtilities.hideWaitCursor(view);
 						return true;
 					}
+					fileset.doneWithBuffer(buffer);
 					repeat = false;
 				}
 
@@ -330,6 +331,8 @@ loop:			for(;;)
 						fileCount++;
 						lineCount += retVal;
 					}
+					else
+						fileset.doneWithBuffer(buffer);
 				}
 				finally
 				{
@@ -440,6 +443,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.15  1999/10/11 07:14:22  sp
+ * doneWithBuffer()
+ *
  * Revision 1.14  1999/10/06 05:52:34  sp
  * Macros were being played twice, dialog box shows how many replacements
  * 'replace all' made, tab command bug fix, documentation updates

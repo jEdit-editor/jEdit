@@ -158,7 +158,8 @@ public class HyperSearch extends JDialog
 
 			do
 			{
-				doHyperSearch(buffer,matcher);
+				if(!doHyperSearch(buffer,matcher))
+					fileset.doneWithBuffer(buffer);
 			}
 			while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 	
@@ -175,9 +176,11 @@ public class HyperSearch extends JDialog
 		}
 	}
 
-	private void doHyperSearch(Buffer buffer, SearchMatcher matcher)
+	private boolean doHyperSearch(Buffer buffer, SearchMatcher matcher)
 		throws Exception
 	{
+		boolean retVal = false;
+
 		Element map = buffer.getDefaultRootElement();
 		int lines = map.getElementCount();
 		for(int i = 1; i <= lines; i++)
@@ -193,8 +196,11 @@ public class HyperSearch extends JDialog
 					new SearchResult(buffer,
 					buffer.createPosition(start + match[0]),
 					buffer.createPosition(start + match[1])));
+				retVal = true;
 			}
 		}
+
+		return retVal;
 	}
 
 	private void showMultiFileDialog()
@@ -321,6 +327,9 @@ public class HyperSearch extends JDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.38  1999/10/11 07:14:22  sp
+ * doneWithBuffer()
+ *
  * Revision 1.37  1999/10/02 01:12:36  sp
  * Search and replace updates (doesn't work yet), some actions moved to TextTools
  *
