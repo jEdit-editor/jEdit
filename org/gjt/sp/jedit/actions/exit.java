@@ -26,6 +26,6 @@ public class exit extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		jEdit.exit(getView(evt));
+		jEdit.exit(getView(evt),true);
 	}
 }

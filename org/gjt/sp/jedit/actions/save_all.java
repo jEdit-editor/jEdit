@@ -22,13 +22,14 @@ package org.gjt.sp.jedit.actions;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
 public class save_all extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		View view = getView(evt);
+		final View view = getView(evt);
 
 		int result = JOptionPane.showConfirmDialog(view,
 			jEdit.getProperty("saveall.message"),
@@ -38,6 +39,8 @@ public class save_all extends EditAction
 		if(result != JOptionPane.YES_OPTION)
 			return;
 
+		view.showWaitCursor();
+
 		Buffer[] buffers = jEdit.getBuffers();
 		for(int i = 0; i < buffers.length; i++)
 		{
@@ -45,5 +48,14 @@ public class save_all extends EditAction
 			if(buffer.isDirty())
 				buffer.save(view,null);
 		}
+
+		// hide wait cursor after all I/O is complete
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				view.hideWaitCursor();
+			}
+		});
 	}
 }

@@ -12,12 +12,15 @@ JEDIT 2.5 VERSION HISTORY
   - The 'File', 'Url' and 'Ftp' VFS's are included with the core. More can
     be added as plugins
   - The code is still a bit rough. User input isn't blocked while saving or
-    loading, and there is no way to abort a request. Also, the wait cursor
-    handling isn't fully sorted out yet. This will be all be fixed in
+    loading, and there is no way to abort a request. This will be be fixed in
     future releases.
 - Undo queue size can be set
 - You can now prompt the user for input in macros; try invoking
   'Macros->Prompt User for Input' while recording
+- Background mode; if jEdit is started with the -background switch, it will
+  not create an initial view and instead wait for client connections. Also,
+  closing all views in background mode will not exit jEdit; to exit a
+  backgrounded instance, invoke 'File->Exit'.
 
 + Enhancements
 
@@ -43,6 +46,7 @@ JEDIT 2.5 VERSION HISTORY
   changes
 - Sometimes when files were opened the text area wouldn't update its internal
   count of visible lines. This caused problems with scrolling
+- In C-like edit modes, 'for' statements weren't indented properly
 
 + API Changes
 

@@ -1,24 +1,22 @@
 JEDIT TO DO
 
+2.5pre1:
+
+- Block user input while loading/saving
+- Background mode memory leak
+
 2.5:
 
-- GlassPane.setBounds(0,0,getWidth(),getHeight())
 - Plugin manager: use swing centering code, JARClassLoader.getLoaded() method
-- CVS: add dialog-macro-input
-- CVS: remove textarea/*InputHandler, add gui
 - Annoying BufferTabs flicker
 - Make HyperSearch a JFrame
 - VFS:
-  - Show wait cursor
-  - Abortable FTP
+  - Abortable I/O
   - FTP VFS GUI
   - If an error occurs while saving, we shouldn't clear the dirty flag
     (VFSManager.waitForRequests() returns a boolean value. If it is false,
     _closeFile() doesn't close the buffer. VFS.error() sets this flag)
   - Write VFS docs - user and developer
-  - Filter events in view to implement ESCAPE, etc
-  - move InputHandler to gui package and implement key handling in View
-    (but let child components handle events first!!!)
 - Load abbrevs from system abbrev file and user abbrev file, don't merge them
   on save
 - JEditTextArea.CaretUndo: set textArea reference to null when it is removed?
@@ -39,7 +37,6 @@ JEDIT TO DO
   - customizable font size?
 - Threaded HyperSearch
 - set dirty to false when all undos undone
-- Background mode
 
 Later:
 

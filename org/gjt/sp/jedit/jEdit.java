@@ -122,6 +122,10 @@ public class jEdit
 					portFile = null;
 				else if(arg.startsWith("-server="))
 					portFile = arg.substring(8);
+				else if(arg.startsWith("-background"))
+					background = true;
+				else if(arg.startsWith("-nobackground"))
+					background = false;
 				else if(arg.equals("-nosession"))
 					session = null;
 				else if(arg.startsWith("-session="))
@@ -172,8 +176,13 @@ public class jEdit
 				out.write(String.valueOf(key));
 				out.write('\n');
 
-				if(!defaultSession && session != null)
-					out.write("session=" + session + "\n");
+				if(!defaultSession)
+				{
+					if(session != null)
+						out.write("session=" + session + "\n");
+					else
+						out.write("nosession\n");
+				}
 				if(readOnly)
 					out.write("readonly\n");
 				if(reuseView)
@@ -268,17 +277,16 @@ public class jEdit
 		// specified buffers could not be opened
 		if(bufferCount == 0 && !error)
 		{
+			// don't load default session when in background mode
 			if(defaultSession)
 			{
-				if(session != null && getBooleanProperty("saveDesktop"))
+				if(!background && session != null
+					&& getBooleanProperty("saveDesktop"))
 					buffer = Sessions.loadSession(session,true);
 			}
 			else
 				buffer = Sessions.loadSession(session,true);
 		}
-
-		if(bufferCount == 0)
-			newFile(null);
 
 		// Create the view and hide the splash screen.
 		final Buffer _buffer = buffer;
@@ -289,16 +297,42 @@ public class jEdit
 			{
 				EditBus.send(new EditorStarted(null));
 
-				newView(null,_buffer);
+				// If no files to open were specified in
+				// background mode, don't create a view.
+				if(background)
+				{
+					if(bufferCount != 0)
+						newView(null,_buffer);
+				}
+				else
+				{
+					if(bufferCount == 0)
+						newFile(null);
+					newView(null,_buffer);
+				}
+
 				GUIUtilities.hideSplashScreen();
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
 					+ "complete");
+
+				// Show wait cursor while we do I/O
+				if(viewsFirst != null)
+					viewsFirst.showWaitCursor();
 
 				// Load filechooser in background
 				GUIUtilities.startLoadThread();
 
 				// Start I/O thread
 				VFSManager.start();
+			}
+		});
+
+		VFSManager.runInAWTThread(new Runnable() {
+			public void run()
+			{
+				// hide wait cursor once all I/O is complete
+				if(viewsFirst != null)
+					viewsFirst.hideWaitCursor();
 			}
 		});
 	}
@@ -1343,15 +1377,7 @@ public class jEdit
 	 */
 	public static void closeView(View view)
 	{
-		if(viewsFirst == viewsLast)
-			exit(view); /* exit does editor event & save */
-		else
-		{
-			EditBus.send(new ViewUpdate(view,ViewUpdate.CLOSED));
-
-			view.close();
-			removeViewFromList(view);
-		}
+		closeView(view,true);
 	}
 
 	/**
@@ -1449,8 +1475,6 @@ public class jEdit
 			}
 			else
 			{
-				propsModTime = file.lastModified();
-
 				try
 				{
 					OutputStream out = new FileOutputStream(file);
@@ -1461,6 +1485,8 @@ public class jEdit
 				{
 					Log.log(Log.ERROR,jEdit.class,io);
 				}
+
+				propsModTime = file.lastModified();
 			}
 		}
 	}
@@ -1469,8 +1495,11 @@ public class jEdit
 	 * Exits cleanly from jEdit, prompting the user if any unsaved files
 	 * should be saved first.
 	 * @param view The view from which this exit was called
+	 * @param reallyExit If background mode is enabled and this parameter
+	 * is true, then jEdit will close all open views instead of exiting
+	 * entirely.
 	 */
-	public static void exit(final View view)
+	public static void exit(final View view, final boolean reallyExit)
 	{
 		// Wait for all requests to finish
 		VFSManager.waitForRequests();
@@ -1481,7 +1510,7 @@ public class jEdit
 		{
 			public void run()
 			{
-				_exit(view);
+				_exit(view,reallyExit);
 			}
 		});
 	}
@@ -1517,6 +1546,7 @@ public class jEdit
 	private static Properties props;
 	private static Autosave autosave;
 	private static EditServer server;
+	private static boolean background;
 	private static Hashtable actionHash;
 	private static Vector plugins;
 	private static Vector brokenPlugins;
@@ -1567,9 +1597,11 @@ public class jEdit
 		System.out.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
 		System.out.println("	-nosplash: Don't show splash screen");
+		System.out.println("	-background: Run in background mode");
+		System.out.println("	-nobackground: Don't run in background mode");
 		System.out.println();
 		System.out.println("Client-only options:");
-		System.out.println("	-reuseview: Don't open new view in");
+		System.out.println("	-reuseview: Don't open new view");
 
 		System.out.println();
 		System.out.println("To set minimum activity log level,"
@@ -2093,6 +2125,12 @@ public class jEdit
 	{
 		viewCount--;
 
+		if(view == viewsFirst && view == viewsLast)
+		{
+			viewsFirst = viewsLast = null;
+			return;
+		}
+
 		if(view == viewsFirst)
 		{
 			viewsFirst = view.next;
@@ -2123,15 +2161,61 @@ public class jEdit
 			recent.removeElementAt(maxRecent);
 	}
 
-	// Exit bottom-half
-	private static void _exit(View view)
+	/**
+	 * closeView() used by _exit().
+	 */
+	private static void closeView(View view, boolean callExit)
 	{
+		if(viewsFirst == viewsLast && callExit)
+			exit(view,false); /* exit does editor event & save */
+		else
+		{
+			EditBus.send(new ViewUpdate(view,ViewUpdate.CLOSED));
+
+			view.close();
+			removeViewFromList(view);
+		}
+	}
+
+	// Exit bottom-half
+	private static void _exit(View view, boolean reallyExit)
+	{
+		// Even if reallyExit is false, we still exit properly
+		// if background mode is off
+		reallyExit = reallyExit || !background;
+
 		if(settingsDirectory != null && session != null)
 			Sessions.saveSession(view,session);
 
 		// Close all buffers
-		if(!closeAllBuffers(view,true))
+		if(!closeAllBuffers(view,reallyExit))
 			return;
+
+		// If we are running in background mode and
+		// reallyExit was not specified, then return here.
+		if(!reallyExit)
+		{
+			// in this case, we can't directly call
+			// view.close(); we have to call closeView()
+			// for all open views
+			view = viewsFirst;
+			while(view != null)
+			{
+				closeView(view,false);
+				view = view.next;
+			}
+
+			// Save settings in case user kills the backgrounded
+			// jEdit process
+			saveSettings();
+
+			return;
+		}
+
+		// Save view properties here - it unregisters
+		// listeners, and we would have problems if the user
+		// closed a view but cancelled an unsaved buffer close
+		view.close();
 
 		// Stop autosave thread
 		autosave.stop();
@@ -2139,11 +2223,6 @@ public class jEdit
 		// Stop server here
 		if(server != null)
 			server.stopServer();
-
-		// Save view properties here - save unregisters
-		// listeners, and we would have problems if the user
-		// closed a view but cancelled an unsaved buffer close
-		view.close();
 
 		// Stop all plugins
 		for(int i = 0; i < plugins.size(); i++)
@@ -2165,6 +2244,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.229  2000/04/29 03:07:37  sp
+ * Indentation rules updated, VFS displays wait cursor properly, background mode
+ *
  * Revision 1.228  2000/04/28 09:29:11  sp
  * Key binding handling improved, VFS updates, some other stuff
  *
@@ -2195,8 +2277,5 @@ public class jEdit
  *
  * Revision 1.219  2000/04/16 03:10:31  sp
  * getBooleanProperty() updated
- *
- * Revision 1.218  2000/04/15 04:14:47  sp
- * XML files updated, jEdit.get/setBooleanProperty() method added
  *
  */

@@ -1,6 +1,6 @@
 /*
  * EditServer.java - jEdit server
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,7 +214,8 @@ class EditServer extends Thread
 		boolean readOnly = false;
 		boolean reuseView = false;
 		String parent = null;
-		String session = null;
+		String session = (jEdit.getBooleanProperty("saveDesktop")
+			? "default" : null);
 		boolean endOpts = false;
 		boolean error = false;
 
@@ -244,6 +245,8 @@ class EditServer extends Thread
 					parent = command.substring(7);
 				else if(command.startsWith("session="))
 					session = command.substring(8);
+				else if(command.startsWith("nosession"))
+					session = null;
 				else
 					Log.log(Log.ERROR,this,client
 						+ ": unknown server"
@@ -252,9 +255,16 @@ class EditServer extends Thread
 		}
 
 		// Try loading session, then new file
-		if(session != null)
+		if("default".equals(session))
 		{
-			error = false;
+			if(buffer == null && !error)
+			{
+				// Load default session
+				buffer = TSloadSession(session);
+			}
+		}
+		else if(session != null)
+		{
 			buffer = TSloadSession(session);
 		}
 		else if(error)
@@ -269,8 +279,10 @@ class EditServer extends Thread
 
 		// Create new view
 		if(reuseView)
-		{
 			view = jEdit.getFirstView();
+
+		if(view != null)
+		{
 			TSsetBuffer(view,buffer);
 			view.requestFocus();
 			view.toFront();
@@ -283,6 +295,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/04/29 03:07:37  sp
+ * Indentation rules updated, VFS displays wait cursor properly, background mode
+ *
  * Revision 1.12  2000/04/27 08:32:57  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature
@@ -314,11 +329,5 @@ class EditServer extends Thread
  *
  * Revision 1.3  1999/10/30 02:44:18  sp
  * Miscallaneous stuffs
- *
- * Revision 1.2  1999/10/04 06:13:52  sp
- * Repeat counts now supported
- *
- * Revision 1.1  1999/10/01 07:31:39  sp
- * RMI server replaced with socket-based server, minor changes
  *
  */

@@ -108,7 +108,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 *
 	 * @since 2.5pre1
 	 */
-	public boolean load(View view, boolean reload)
+	public boolean load(final View view, boolean reload)
 	{
 		setFlag(LOADING,true);
 
@@ -116,6 +116,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 		if(!getFlag(NEW_FILE))
 		{
+			if(!getFlag(TEMPORARY) && view != null)
+				view.showWaitCursor();
+
 			if(file != null)
 				modTime = file.lastModified();
 
@@ -178,6 +181,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 					BufferUpdate.LOADED));
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.MARKERS_CHANGED));
+
+				if(view != null)
+					view.hideWaitCursor();
 			}
 		});
 
@@ -235,7 +241,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 * @param view The view
 	 * @param path The path name to save the buffer to
 	 */
-	public boolean save(View view, String path)
+	public boolean save(final View view, String path)
 	{
 		if(path == null && getFlag(NEW_FILE))
 			return saveAs(view);
@@ -257,6 +263,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			}
 		}
 
+		view.showWaitCursor();
+
 		setFlag(SAVING,true);
 		EditBus.send(new BufferUpdate(this,BufferUpdate.SAVING));
 
@@ -268,6 +276,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(!vfs.save(view,this,path))
 		{
 			setFlag(SAVING,false);
+			view.hideWaitCursor();
+
 			return false;
 		}
 
@@ -298,6 +308,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.DIRTY_CHANGED));
+
+				view.hideWaitCursor();
 			}
 		});
 
@@ -1781,6 +1793,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.145  2000/04/29 03:07:37  sp
+ * Indentation rules updated, VFS displays wait cursor properly, background mode
+ *
  * Revision 1.144  2000/04/28 09:29:11  sp
  * Key binding handling improved, VFS updates, some other stuff
  *
