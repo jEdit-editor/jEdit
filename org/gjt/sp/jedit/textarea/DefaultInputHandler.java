@@ -231,6 +231,7 @@ public class DefaultInputHandler extends InputHandler
 				}
 				else if(o instanceof ActionListener)
 				{
+					currentBindings = bindings;
 					executeAction((ActionListener)o,
 						evt.getSource(),
 						String.valueOf(c));
@@ -346,6 +347,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  1999/10/26 07:43:59  sp
+ * Session loading and saving, directory list search started
+ *
  * Revision 1.13  1999/10/24 02:06:41  sp
  * Miscallaneous pre1 stuff
  *

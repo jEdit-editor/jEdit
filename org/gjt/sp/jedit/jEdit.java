@@ -74,7 +74,8 @@ public class jEdit
 		settingsDirectory = System.getProperty("user.home") +
 			File.separator + ".jedit";
 		String portFile = "server";
-		boolean desktop = true;
+		boolean defaultSession = true;
+		session = "default";
 		boolean showSplash = true;
 
 		for(int i = 0; i < args.length; i++)
@@ -104,8 +105,13 @@ public class jEdit
 					portFile = null;
 				else if(arg.startsWith("-server="))
 					portFile = arg.substring(8);
-				else if(arg.equals("-nodesktop"))
-					desktop = false;
+				else if(arg.equals("-nosession"))
+					session = null;
+				else if(arg.startsWith("-session="))
+				{
+					session = arg.substring(9);
+					defaultSession = false;
+				}
 				else if(arg.equals("-nosplash"))
 					showSplash = false;
 				else if(arg.equals("-readonly"))
@@ -124,9 +130,12 @@ public class jEdit
 		}
 
 		if(settingsDirectory != null && portFile != null)
-			portFile = settingsDirectory + File.separator + portFile;
+			portFile = MiscUtilities.constructPath(settingsDirectory,portFile);
 		else
 			portFile = null;
+
+		if(session != null)
+			session = Sessions.createSessionFileName(session);
 
 		// Connect to server
 		String userDir = System.getProperty("user.dir");
@@ -216,8 +225,13 @@ public class jEdit
 		}
 		if(buffer == null)
 		{
-			if("on".equals(getProperty("saveDesktop")) && desktop)
-				buffer = loadDesktop();
+			if(defaultSession)
+			{
+				if("on".equals(getProperty("saveDesktop")))
+					buffer = Sessions.loadSession(session,true);
+			}
+			else
+				buffer = Sessions.loadSession(session,false);
 		}
 		if(buffer == null)
 			buffer = newFile(null);
@@ -901,7 +915,7 @@ public class jEdit
 	 * list.
 	 * @param listener The editor event listener
 	 */
-	public static final void addEditorListener(EditorListener listener)
+	public static void addEditorListener(EditorListener listener)
 	{
 		listenerList.add(EditorListener.class,listener);
 	}
@@ -923,38 +937,8 @@ public class jEdit
 	 */
 	public static void exit(View view)
 	{
-		// Save the `desktop'
-		if("on".equals(getProperty("saveDesktop")))
-		{
-			int bufNum = 0;
-			view.saveCaretInfo();
-			Buffer buffer = buffersFirst;
-			while(buffer != null)
-			{
-				if(buffer.isNewFile())
-				{
-					buffer = buffer.next;
-					continue;
-				}
-				setProperty("desktop." + bufNum + ".path",
-					buffer.getPath());
-				setProperty("desktop." + bufNum + ".mode",
-					buffer.getMode().getName());
-				setProperty("desktop." + bufNum + ".readOnly",
-					buffer.isReadOnly() ? "yes" : "no");
-				setProperty("desktop." + bufNum + ".rectSelect",
-					buffer.isSelectionRectangular() ? "yes" : "no");
-				setProperty("desktop." + bufNum + ".current",
-					view.getBuffer() == buffer ? "yes" : "no");
-				setProperty("desktop." + bufNum + ".selStart",
-					String.valueOf(buffer.getSavedSelStart()));
-				setProperty("desktop." + bufNum + ".selEnd",
-					String.valueOf(buffer.getSavedSelEnd()));
-				bufNum++;
-				buffer = buffer.next;
-			}
-			unsetProperty("desktop." + bufNum + ".path");
-		}
+		if(settingsDirectory != null && session != null)
+			Sessions.saveSession(view,session);
 
 		// Close all buffers
 		if(!closeAllBuffers(view))
@@ -967,7 +951,7 @@ public class jEdit
 		if(server != null)
 			server.stopServer();
 
-		// Only save view properties here - save unregisters
+		// Save view properties here - save unregisters
 		// listeners, and we would have problems if the user
 		// closed a view but cancelled an unsaved buffer close
 		view.close();
@@ -987,8 +971,11 @@ public class jEdit
 		unsetProperty("recent." + maxRecent);
 
 		// Save the history lists
-		HistoryModel.saveHistory(settingsDirectory + File.separator
-			+ "history");
+		if(settingsDirectory != null)
+		{
+			HistoryModel.saveHistory(MiscUtilities.constructPath(
+				settingsDirectory, "history"));
+		}
 
 		// Save search and replace state
 		SearchAndReplace.save();
@@ -1038,6 +1025,7 @@ public class jEdit
 	// private members
 	private static String jEditHome;
 	private static String settingsDirectory;
+	private static String session;
 	private static Properties defaultProps;
 	private static Properties props;
 	private static Autosave autosave;
@@ -1078,8 +1066,8 @@ public class jEdit
 		System.err.println("	-usage: Print this message and exit");
 		System.err.println("	-readonly: Open files read-only");
 		System.err.println("	-noserver: Don't start editor server");
-		System.err.println("	-server=<path>: Reads/writes server"
-			+ " info to file <path>");
+		System.err.println("	-server=<name>: Reads/writes server"
+			+ " info to $HOME/.jedit/<name>");
 
 		System.err.println();
 		System.err.println("Server-only options:");
@@ -1087,7 +1075,9 @@ public class jEdit
 			+ " settings");
 		System.err.println("	-settings=<path>: Load user-specific"
 			+ " settings from <path>");
-		System.err.println("	-nodesktop: Ignore saved desktop");
+		System.err.println("	-nosession: Don't load default session");
+		System.err.println("	-session=<name>: Load session from"
+			+ " $HOME/.jedit/sessions/<name>");
 		System.err.println("	-nosplash: Don't show splash screen");
 		System.err.println();
 		System.err.println("Client-only options:");
@@ -1142,10 +1132,13 @@ public class jEdit
 		{
 			File _settingsDirectory = new File(settingsDirectory);
 			if(!_settingsDirectory.exists())
-				_settingsDirectory.mkdir();
+				_settingsDirectory.mkdirs();
 			File _macrosDirectory = new File(settingsDirectory,"macros");
 			if(!_macrosDirectory.exists())
 				_macrosDirectory.mkdir();
+			File _sessionsDirectory = new File(settingsDirectory,"sessions");
+			if(!_sessionsDirectory.exists())
+				_sessionsDirectory.mkdir();
 		}
 	}
 
@@ -1251,6 +1244,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.indent_on_enter());
 		addAction(new org.gjt.sp.jedit.actions.indent_on_tab());
 		addAction(new org.gjt.sp.jedit.actions.join_lines());
+		addAction(new org.gjt.sp.jedit.actions.load_session());
 		addAction(new org.gjt.sp.jedit.actions.locate_bracket());
 		addAction(new org.gjt.sp.jedit.actions.multifile_search());
 		addAction(new org.gjt.sp.jedit.actions.new_file());
@@ -1283,6 +1277,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.save());
 		addAction(new org.gjt.sp.jedit.actions.save_all());
 		addAction(new org.gjt.sp.jedit.actions.save_as());
+		addAction(new org.gjt.sp.jedit.actions.save_session());
 		addAction(new org.gjt.sp.jedit.actions.save_url());
 		addAction(new org.gjt.sp.jedit.actions.scroll_line());
 		addAction(new org.gjt.sp.jedit.actions.search_and_replace());
@@ -1405,49 +1400,7 @@ public class jEdit
 		}
 	}
 
-	private static Buffer loadDesktop()
-	{
-		Buffer b = null;
-		try
-		{
-			int i = 0;
-			String path;
-			while((path = getProperty("desktop." + i + ".path")) != null)
-			{
-				String mode = getProperty("desktop." + i + ".mode");
-				boolean readOnly = "yes".equals(getProperty(
-					"desktop." + i + ".readOnly"));
-				boolean current = "yes".equals(getProperty(
-					"desktop." + i + ".current"));
-				int selStart = Integer.parseInt(getProperty(
-					"desktop." + i + ".selStart"));
-				int selEnd = Integer.parseInt(getProperty(
-					"desktop." + i + ".selEnd"));
-				boolean rectSelect = "yes".equals(getProperty(
-					"desktop." + i + ".rectSelect"));
-				Buffer buffer = openFile(null,null,path,readOnly,
-					false);
-				buffer.setCaretInfo(selStart,selEnd,rectSelect);
-				Mode m = getMode(mode);
-				if(m != null)
-					buffer.setMode(m);
-				if(current)
-					b = buffer;
-				i++;
-			}
-		}
-		catch(Exception e)
-		{
-			System.err.println("Error while loading desktop:");
-			e.printStackTrace();
-		}
-		if(b == null && buffersLast != null)
-			b = buffersLast;
-		return b;
-	}
-
-	private static void gotoMarker(Buffer buffer, View view,
-		String marker)
+	private static void gotoMarker(Buffer buffer, View view, String marker)
 	{
 		if(marker.length() == 0)
 			return;
@@ -1583,6 +1536,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.145  1999/10/26 07:43:59  sp
+ * Session loading and saving, directory list search started
+ *
  * Revision 1.144  1999/10/24 06:04:00  sp
  * QuickSearch in tool bar, auto indent updates, macro recorder updates
  *

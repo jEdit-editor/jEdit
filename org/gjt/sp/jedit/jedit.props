@@ -33,13 +33,6 @@ backup.prefix=
 backup.suffix=~
 
 ###
-### FILENAME FILTERS
-###
-
-filefilter.0.name=jEdit Macro Files
-filefilter.0.re=*.macro
-
-###
 ### BUFFER SETTINGS
 ### These can also be specified as buffer-local properties
 ###

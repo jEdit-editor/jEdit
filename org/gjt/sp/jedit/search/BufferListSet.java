@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.search;
 
+import java.util.Vector;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -34,6 +35,19 @@ public class BufferListSet implements SearchFileSet
 	 */
 	public BufferListSet(Object[] files)
 	{
+		this.files = new Vector(files.length);
+		for(int i = 0; i < files.length; i++)
+		{
+			this.files.addElement(files[i]);
+		}
+	}
+
+	/**
+	 * Creates a new buffer list search set.
+	 * @param files The path names to search
+	 */
+	public BufferListSet(Vector files)
+	{
 		this.files = files;
 	}
 
@@ -43,7 +57,7 @@ public class BufferListSet implements SearchFileSet
 	 */
 	public Buffer getFirstBuffer(View view)
 	{
-		return getBuffer((String)files[0]);
+		return getBuffer((String)files.elementAt(0));
 	}
 
 	/**
@@ -54,14 +68,14 @@ public class BufferListSet implements SearchFileSet
 	public Buffer getNextBuffer(View view, Buffer buffer)
 	{
 		if(buffer == null)
-			return getBuffer((String)files[0]);
+			return getBuffer((String)files.elementAt(0));
 		else
 		{
 			// -1 so that the last isn't checked
-			for(int i = 0; i < files.length - 1; i++)
+			for(int i = 0; i < files.size() - 1; i++)
 			{
-				if(files[i].equals(buffer.getPath()))
-					return getBuffer((String)files[i+1]);
+				if(files.elementAt(i).equals(buffer.getPath()))
+					return getBuffer((String)files.elementAt(i+1));
 			}
 
 			return null;
@@ -80,8 +94,8 @@ public class BufferListSet implements SearchFileSet
 	}
 
 	// private members
-	private Object[] files;
-	private static final String OPENED_PROP = "TheyKilledKenny";
+	private Vector files;
+	private static final String OPENED_PROP = "BufferListSet__opened";
 
 	private Buffer getBuffer(String path)
 	{
@@ -99,6 +113,9 @@ public class BufferListSet implements SearchFileSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  1999/10/26 07:43:59  sp
+ * Session loading and saving, directory list search started
+ *
  * Revision 1.7  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

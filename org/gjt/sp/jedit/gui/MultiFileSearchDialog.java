@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.border.TitledBorder;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -37,13 +38,16 @@ public class MultiFileSearchDialog extends JDialog
 	{
 		super(view,jEdit.getProperty("search.multifile.title"),true);
 
+		this.view = view;
+
 		ActionHandler actionListener = new ActionHandler();
 
 		getContentPane().setLayout(new BorderLayout());
 
-		JPanel panel = new JPanel(new GridLayout(4,1));
+		JPanel panel = new JPanel(new GridLayout(5,1));
 
-		panel.add(new JLabel(jEdit.getProperty("search.multifile.caption")));
+		JLabel caption = new JLabel(jEdit.getProperty("search.multifile.caption"));
+		panel.add(caption);
 
 		ButtonGroup grp = new ButtonGroup();
 		panel.add(current = new JRadioButton(jEdit.getProperty(
@@ -61,43 +65,25 @@ public class MultiFileSearchDialog extends JDialog
 		panel.add(selected = new JRadioButton(jEdit.getProperty(
 			"search.multifile.selected")));
 		grp.add(selected);
-		selected.getModel().setSelected(fileset instanceof BufferListSet);
+		selected.getModel().setSelected(fileset instanceof BufferListSet
+			&& !(fileset instanceof DirectoryListSet));
 		selected.addActionListener(actionListener);
+
+		panel.add(directory = new JRadioButton(jEdit.getProperty(
+			"search.multifile.directory")));
+		grp.add(directory);
+		directory.getModel().setSelected(fileset instanceof DirectoryListSet);
+		directory.addActionListener(actionListener);
 
 		getContentPane().add(BorderLayout.NORTH,panel);
 
-		DefaultListModel bufferListModel = new DefaultListModel();
+		options = new JPanel(new GridLayout(1,1));
+		options.setBorder(new TitledBorder(jEdit.getProperty(
+			"search.multifile.options")));
 
-		Buffer buffer = jEdit.getFirstBuffer();
-		while(buffer != null)
-		{
-			bufferListModel.addElement(buffer.getPath());
-			buffer = buffer.getNext();
-		}
+		getContentPane().add(BorderLayout.CENTER,options);
 
-		bufferList = new JList(bufferListModel);
-		bufferList.setSelectionMode(ListSelectionModel
-			.MULTIPLE_INTERVAL_SELECTION);
-
-		if(fileset instanceof BufferListSet)
-		{
-			bufferList.setEnabled(true);
-			buffer = fileset.getFirstBuffer(view);
-			do
-			{
-				for(int j = 0; j < bufferListModel.getSize(); j++)
-				{
-					if(bufferListModel.getElementAt(j) == buffer)
-						bufferList.addSelectionInterval(j,j);
-				}
-			}
-			while((buffer = buffer.getNext()) != null);
-		}
-		else
-			bufferList.setEnabled(false);
-
-		getContentPane().add(BorderLayout.CENTER,
-			new JScrollPane(bufferList));
+		updateOptions();
 
 		panel = new JPanel();
 		panel.add(ok = new JButton(jEdit.getProperty("common.ok")));
@@ -116,15 +102,6 @@ public class MultiFileSearchDialog extends JDialog
 			(screen.height - getSize().height) / 2);
 		show();
 	}
-
-	// private members
-	private boolean okClicked;
-	private JRadioButton current;
-	private JRadioButton all;
-	private JRadioButton selected;
-	private JList bufferList;
-	private JButton ok;
-	private JButton cancel;
 
 	public SearchFileSet getSearchFileSet()
 	{
@@ -146,16 +123,57 @@ public class MultiFileSearchDialog extends JDialog
 		return null;
 	}
 
+	// private members
+	private View view;
+
+	private boolean okClicked;
+	private JRadioButton current;
+	private JRadioButton all;
+	private JRadioButton selected;
+	private JRadioButton directory;
+
+	private JPanel options;
+
+	private JList bufferList;
+	private JTextField directoryPath;
+	private JButton directoryChoose;
+	private JCheckBox directoryRecurse;
+	private JButton ok;
+	private JButton cancel;
+
+	private void updateOptions()
+	{
+		for(int i = 0; i < options.getComponentCount(); i++)
+		{
+			options.remove(i);
+		}
+
+		if(selected.getModel().isSelected())
+			options.add(new BufferListOptions());
+		else if(directory.getModel().isSelected())
+			options.add(new DirectoryListOptions());
+		else
+			options.add(new JLabel(jEdit.getProperty(
+				"search.multifile.no-options")));
+
+		if(isShowing())
+		{
+			pack();
+			validate();
+		}
+	}
+
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
 
-			if(source == current || source == all)
-				bufferList.setEnabled(false);
-			else if(source == selected)
-				bufferList.setEnabled(true);
+			if(source == current || source == all
+				|| source == selected || source == directory)
+			{
+				updateOptions();
+			}
 			else if(source == ok)
 			{
 				okClicked = true;
@@ -184,4 +202,44 @@ public class MultiFileSearchDialog extends JDialog
 			}
 		}
 	}
+
+	class BufferListOptions extends JPanel
+	{
+		BufferListOptions()
+		{
+			super(new GridLayout(1,1));
+
+			DefaultListModel bufferListModel = new DefaultListModel();
+
+			Buffer buffer = jEdit.getFirstBuffer();
+			while(buffer != null)
+			{
+				bufferListModel.addElement(buffer.getPath());
+				buffer = buffer.getNext();
+			}
+
+			bufferList = new JList(bufferListModel);
+
+			SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+
+			if(fileset instanceof BufferListSet
+				&& !(fileset instanceof DirectoryListSet))
+			{
+				buffer = fileset.getFirstBuffer(view);
+				do
+				{
+					for(int j = 0; j < bufferListModel.getSize(); j++)
+					{
+						if(bufferListModel.getElementAt(j) == buffer)
+							bufferList.addSelectionInterval(j,j);
+					}
+				}
+				while((buffer = fileset.getNextBuffer(view,buffer)) != null);
+			}
+
+			add(new JScrollPane(bufferList));
+		}
+	}
+
+	class DirectoryListOptions extends JPanel {}
 }

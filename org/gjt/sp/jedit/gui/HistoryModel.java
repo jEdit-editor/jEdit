@@ -161,12 +161,12 @@ public class HistoryModel
 
 				out.write('[');
 				out.write(model.getName());
-				out.write("]\n");
+				out.write("]\r\n");
 
 				for(int i = 0; i < model.getSize(); i++)
 				{
 					out.write(charsToEscapes(model.getItem(i)));
-					out.write('\n');
+					out.write("\r\n");
 				}
 			}
 
@@ -266,6 +266,9 @@ public class HistoryModel
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  1999/10/26 07:43:59  sp
+ * Session loading and saving, directory list search started
+ *
  * Revision 1.6  1999/05/12 05:23:41  sp
  * Fixed compile % -vs- $ bug, also HistoryModel \ bug
  *

@@ -21,7 +21,7 @@ package org.gjt.sp.jedit;
 
 import gnu.regexp.*;
 import javax.swing.filechooser.FileFilter;
-import java.io.File;
+import java.io.*;
 
 /**
  * Regular expression filename filter.
@@ -29,13 +29,24 @@ import java.io.File;
  * @author Slava Pestov
  * @version $Id$
  */
-public class REFileFilter extends FileFilter
+public class REFileFilter extends FileFilter implements FilenameFilter
 {
+	public REFileFilter(String re)
+		throws REException
+	{
+		this(null,re);
+	}
+
 	public REFileFilter(String name, String re)
 		throws REException
 	{
 		this.name = name;
 		this.re = new RE(re,RE.REG_ICASE);
+	}
+
+	public boolean accept(File directory, String name)
+	{
+		return new File(directory,name).isDirectory() || re.isMatch(name);
 	}
 
 	public boolean accept(File file)
@@ -56,6 +67,9 @@ public class REFileFilter extends FileFilter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  1999/10/26 07:43:59  sp
+ * Session loading and saving, directory list search started
+ *
  * Revision 1.2  1999/10/07 04:57:13  sp
  * Images updates, globs implemented, file filter bug fix, close all command
  *

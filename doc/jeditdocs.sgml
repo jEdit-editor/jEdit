@@ -192,7 +192,7 @@
   multiple keystroke</></indexterm>
   <para>
    In jEdit, most operations can be performed from the keyboard.
-   Because there are quite a few commands, it is very difficult to
+   Because there are quite a few commands, it would be very difficult to
    make them all accessible with one keystroke. So jEdit supports
    multiple keystroke bindings. To invoke a command with a multiple
    keystroke binding, all keystrokes have to be pressed, in order,
@@ -238,9 +238,8 @@
   <tip>
    <para>
     When started with no file names on the command line, jEdit will
-    open any files that were open in the previous session. This can
-    be disabled in the <guimenu>File</>&gt;<guimenuitem>Global Options</>
-    dialog box; see <xref linkend=global-opts>.
+    open any files that were open in the previous session; see
+    <xref linkend=sessions> for details.
     </para>
   </tip>
   <figure><title>The editor window</title>
@@ -1163,6 +1162,44 @@
    The <command>-reuseview</> switch can be used for that purpose.
   </para>
  </sect1>
+ <sect1 id=sessions><title>Saving and Loading Sessions</>
+  <para>
+   <indexterm><primary>command line switches</><secondary>-nosession</></indexterm>
+   <indexterm><primary>command line switches</><secondary>-session</></indexterm>
+   When working on a project, it can sometimes be convinient to save
+   the list of open files, and re-open those files at a later time.
+   jEdit's saved sessions can do this.
+  </para>
+  <para>
+   jEdit sessions are plain text files with the extension
+   <filename>.session</>, stored in the
+   <filename>$HOME/.jedit/sessions</> directory. The session named
+   <filename>default.session</> is loaded on startup, and the list of
+   open files is recorded into it when jEdit exits. The end result is
+   that open files are retained across editing sessions. This
+   <quote>default</> session can be disabled in the Global Options
+   dialog box; see <xref linkend=global-opts>.
+  </para>
+  <para>
+   A session to load can be specified on the command line using the
+   <command>-session</> switch. For example, the following will open
+   all files in the <filename>website</> session (the <filename>.session</>
+   suffix, if left off, is appended to session names automatically):
+   <screen><prompt>$</> <userinput>jedit -session=website</></screen>
+   The <command>-nosession</> command line switch will instruct jEdit
+   not to load any session, and instead open an <filename>Untitled</>
+   file.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Load Session</> loads
+   a session while jEdit is running from a file specified in a file
+   selection dialog box.
+  </para>
+  <para>
+   <guimenu>File</>&gt;<guimenuitem>Save Session</> saves the list of
+   all open files to a session specified in a file selection dialog box.
+  </para>
+ </sect1>
  <sect1 id=markers><title>Markers</>
   <para>
    <indexterm><primary>Unix</></indexterm>
@@ -1479,8 +1516,8 @@
     <guimenu>Macros</>&gt;<guimenuitem>Play Last Macro</> command (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>M</></keycombo>
-    <keycombo><keycap>Control</><keycap>L</></keycombo>).
+    <keycap>M</>
+    <keycap>L</>
    </para>
   </sect2>
   <sect2 id=macro-record><title>Recording Macros</>
@@ -1490,8 +1527,8 @@
     <guimenu>Macros</>&gt;<guimenuitem>Record Macro</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>M</></keycombo>
-    <keycombo><keycap>Control</><keycap>R</></keycombo>) prompts for
+    <keycap>M</>
+    <keycap>R</>) prompts for
     a macro name, and begins recording to a file with that name
     suffixed with <quote>.macro</> in the user's home directory.
    </para>
@@ -1511,8 +1548,8 @@
     <guimenu>Macros</>&gt;<guimenuitem>Stop Recording</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>M</></keycombo>
-    <keycombo><keycap>Control</><keycap>S</></keycombo>) stops any
+    <keycap>M</>
+    <keycap>S</>) stops any
     recording currently in progress. It also switches to the buffer where
     the macro was being recorded, giving you a chance to check over the
     commands
@@ -1535,8 +1572,8 @@
     <guimenu>Macros</>&gt;<guimenuitem>Record Temporary Macro</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>M</></keycombo>
-    <keycombo><keycap>Control</><keycap>M</></keycombo>) works in a
+    <keycap>M</>
+    <keycap>M</>) works in a
     similar fashion to the <guimenuitem>Record Macro</> command, except that
     it records to a buffer named <filename>&lt;&lt; temporary macro &gt;&gt;</>.
     Once recording is complete, the buffer should not be saved.
@@ -1552,8 +1589,8 @@
     <guimenu>Macros</>&gt;<guimenuitem>Play Temporary Macro</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
-    <keycombo><keycap>Control</><keycap>M</></keycombo>
-    <keycombo><keycap>Control</><keycap>P</></keycombo>) plays the
+    <keycap>M</>
+    <keycap>P</>) plays the
     macro recorded to the <filename>&lt;&lt; temporary macro &gt;&gt;</> buffer.
    </para>
   </sect2>
@@ -2339,7 +2376,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   </para>
   <para>
    <guimenu>Search</>&gt;<guimenuitem>HyperSearch</> (keyboard equivalent:
-   <keycap>F7</>) displays the HyperSearch dialog box.
+   <keycap>F8</>) displays the HyperSearch dialog box.
   </para>
   <itemizedlist>
    <listitem><para>
@@ -3290,6 +3327,8 @@ implements OptionPane
  <indexterm><primary>command line switches</>
  <secondary>-settings</></indexterm>
  <indexterm><primary>command line switches</>
+ <secondary>-session</></indexterm>
+ <indexterm><primary>command line switches</>
  <secondary>-noserver</></indexterm>
  <indexterm><primary>command line switches</>
  <secondary>-server</></indexterm>
@@ -3298,7 +3337,7 @@ implements OptionPane
  <indexterm><primary>command line switches</>
  <secondary>-quit</></indexterm>
  <indexterm><primary>command line switches</>
- <secondary>-nodesktop</></indexterm>
+ <secondary>-nosessions</></indexterm>
  <indexterm><primary>command line switches</>
  <secondary>-nosplash</></indexterm>
  <indexterm><primary>command line switches</>
@@ -3317,20 +3356,18 @@ implements OptionPane
    </thead>
    <tbody>
     <row>
-     <entry>-nodesktop</>
-     <entry>If this switch is specified, jEdit will not open any files
-     from the last session. This switch is not usually used, because
-     the previously opened files are not opened if a file is
-     specified on the command line anyway. Session saving can be
-     disabled permanently in the <guimenu>File</>&gt;<guimenuitem>Global Options</>
-     dialog box; see <xref linkend=global-opts>. Has no effect when connecting to another instance.</entry>
-    </row>
-    <row>
      <entry>-noserver</>
      <entry>Disables the edit server. Does not attempt to
      connect to the server, and does not start one either.
      Can be used to force another instance of jEdit to start
      if one is already running.</entry>
+    </row>
+    <row>
+     <entry>-nosession</>
+     <entry>If this switch is specified, jEdit will not attempt to load
+     a saved session. Session saving can be
+     disabled permanently in the <guimenu>File</>&gt;<guimenuitem>Global Options</>
+     dialog box; see <xref linkend=global-opts>. Has no effect when connecting to another instance.</entry>
     </row>
     <row>
      <entry>-nosettings</>
@@ -3361,6 +3398,13 @@ implements OptionPane
      parameter are relative to the settings directory, <filename>$HOME/.jedit</>
      by default).
      Can be used to start more than one instance of jEdit.</entry>
+    </row>
+    <row>
+     <entry>-session=<replaceable>name</></entry>
+     <entry>Loads a previously-saved session from
+     <filename>$HOME/.jedit/sessions/<replaceable>name</></filename>.
+     Sessions can be saved with the <guimenu>File</>&gt;<guimenuitem>Save
+     Session</> command; see <xref linkend=sessions> for details.
     </row>
     <row>
      <entry>-settings=<replaceable>dir</></entry>

@@ -2,17 +2,24 @@ JEDIT 2.2 TO DO
 
 ------- pre1 -------
 
-- When pasting text, autoindent it
-
-- Recursive directory search
+- On some Java implementations, scrolling doesn't stop after mouse is released
+- Autoindent pasted text
+- Finish MultifileOptions
+- Low-priority background thread that plugins can use to do background
+  parsing, etc: jEdit.addWorkRequest(Runnable r), WorkerThread
 
 ------- pre2+ -------
 
-- Reverse search. This will require changes to gnu.regexp
-
+- Reverse search
 - Integrate XMode
-
 - Integrate EditBus if enough plugins take advantage of it
+- Word wrap
+
+------- Installer -------
+
+- Text mode install
+- Finish simtool
+- Package and release separately
 
 ------- Ideas for plugins -------
 

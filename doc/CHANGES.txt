@@ -13,6 +13,7 @@ JEDIT VERSION HISTORY
 - In C/C++/Java modes, typing '}' will immediately reindent the current line
 - 'QuickSearch' text field in the tool bar; no need to open Search&Replace
   dialog box to find a string
+- Multiple sessions/desktops can now be saved and loaded
 
 + Enhancements
 

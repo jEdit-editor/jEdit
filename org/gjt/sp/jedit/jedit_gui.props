@@ -66,12 +66,12 @@ view.context=undo redo - cut copy paste paste-previous - scroll-line - \
 view.mbar=buffers file edit registers search macros plugins help-menu
 
 ### Buffers menu
-buffers=next-buffer \
-	prev-buffer \
+buffers=prev-buffer \
+	next-buffer \
 	-
 buffers.label=$Buffers
-next-buffer.label=$Open Next Buffer
 prev-buffer.label=O$pen Previous Buffer
+next-buffer.label=$Open Next Buffer
 
 ### File menu
 file=new-file \
@@ -94,6 +94,9 @@ file=new-file \
      - \
      send \
      print \
+     - \
+     load-session \
+     save-session \
      - \
      buffer-options \
      global-options \
@@ -118,6 +121,8 @@ save-url.label=Save $to URL...
 save-all.label=Save All Buffers
 send.label=Sen$d...
 print.label=Pr$int...
+load-session.label=Load Session...
+save-session.label=Save Session...
 buffer-options.label=Buffer Options...
 global-options.label=Global Options...
 plugin-options.label=Plugin Options...
@@ -396,9 +401,9 @@ about.message=jEdit version {0} (Java {1}, {2} {3})\n\
 	disclamer.\n\
 	\n\
 	The following people have written plugins or contributed code to jEdit:\n\
-	Artur Biesiadowski, Aziz Sharif, Chris Laird, George Latkiewicz,\n\
-	Henrik Falk, Jason Ginchereau, Jonathan Revusky, Juha Lindfors,\n\
-	Mike Dillon, Nathan Tenney, Romain Guy and Tal Davison.\n\
+	Andreas Schaefer, Artur Biesiadowski, Aziz Sharif, Chris Laird,\n\
+	George Latkiewicz, Henrik Falk, Jason Ginchereau, Jonathan Revusky,\n\
+	Juha Lindfors, Mike Dillon, Nathan Tenney, Romain Guy and Tal Davison.\n\
 	Thanks for your help!
 
 # IO Error dialog, {0}=the error message
@@ -521,7 +526,20 @@ search.multifile.title=Multi File Search Settings
 search.multifile.caption=Search in the following buffer sets:
 search.multifile.current=Search in current buffer only
 search.multifile.all=Search in all buffers
-search.multifile.selected=Search in selected buffers:\ 
+search.multifile.selected=Search in selected buffers
+search.multifile.directory=Search in a directory
+search.multifile.options=Fileset options
+search.multifile.no-options=No options
+
+search.multifile.directory.path=Path:\ 
+search.multifile.directory.choose=Choose
+search.multifile.directory.filter=Filename filter:\ 
+search.multifile.directory.recurse=Search subdirectories
+
+search.multifile.directory.path=Directory:\ 
+search.multifile.directory.choose=Choose...
+search.multifile.directory.glob=*
+search.multifile.directory.recurse=Recurse into subdirectories
 
 # Keep searching dialog
 keepsearching.title=No More Matches Found
@@ -589,7 +607,7 @@ options.general.backupDirectory=Backup directory (none=current):\
 options.general.backupPrefix=Backup filename prefix:\ 
 options.general.backupSuffix=Backup filename suffix:\ 
 options.general.lineSeparator=Default line separator:\ 
-options.general.saveDesktop=Save session on exit
+options.general.saveDesktop=Save default session on exit
 options.general.saveGeometry=Save window and dialog positions
 options.general.showToolbar=Show toolbar
 options.general.showFullPath=Show full path of buffers in title bar
