@@ -1,26 +1,49 @@
 TO DO
 
 - FTP plugin: soft links???
-- console: deleting backup files
+
+- console plugin, version 3.0:
+  - sending processes to background:
+    %fg <n> - send <n> to foreground
+    %bg - send current to background
+    %kill <n>
+    %kill - kill <n> or current
+  - each console should be able to have it's own process
+  - deleting backup files
+  - aliases:
+    - option pane, or %alias/%unalias commands
+  - variables:
+    - each variable is a BeanShell snippet
+    - option pane, or %set/%unset commands
+  - include Java versions of ls, rm, mv, cp, maybe a few others
+    - names prefixed with %; %ls, %mv, etc?
+    - above always possible; option for not having to use % prefix
+  - wild cards
+  - what about \"foo\"?
+  - console.bsh script has runCommandInConsole() method
 
 + before pre4:
 
-- update macro guide:
-  - markers
-  - mention registers?
-  - s&r changes (removal of showSearchDialog(), beanshell replace)
-  - new select API
-  - convert to XML
+- jEditLauncher
+- finish NEWS.txt
+- get web start to work
+- fix 'is not a function name' when running openjade
+- grab latest macros from CVS
 - installing source for already installed plugins
-- C+\
-- help viewer: links to .txt files
-- finish converting docs to xml
 - non-existent files and caret history
 - encoding option in VFS browser
 - catch MalformedInputException and display a better error message
-- get web start to work
-- test edit server
-- jEditLauncher
+- macro guide:
+  - bce()/ece() not really needed
+  - mention registers
+  - runCommandInConsole()
+  - new startup script scheme
+
++ before 3.2final:
+
+- help viewer: links to .txt files?
+- C+\
+- edit server rewrite - BeanShell commands
 - docking improvements:
   - multiple instances of a dockable
   - make dockable menu items not be toggles.
@@ -30,9 +53,9 @@ TO DO
   - each dockable has a close box in its tool bar; or a button that
     shows a menu, with commands for moving the dockable, making it
     floating, toggling auto-open, etc.
-
-+ before 3.2final:
-
+- plugins should be able to run arbitriary .bsh scripts easily
+- use BeanShell 1.2 class loader instead of JARClassLoader
+- formatting problems in user's guide in table cells
 - expand-fold too aggressive
 - require that each dockable have a tool bar with a close button?
 - support middle mouse button clicks in JTextComponents

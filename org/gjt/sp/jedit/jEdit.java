@@ -333,6 +333,26 @@ public class jEdit
 				.startAllPlugins();
 		}
 
+		// Run startup scripts, after plugins, proeprties, etc
+		// are loaded
+		if(jEditHome != null)
+		{
+			String path = MiscUtilities.constructPath(settingsDirectory,"startup");
+			File file = new File(path);
+			if(file.exists())
+				runStartupScripts(file);
+		}
+
+		if(settingsDirectory != null)
+		{
+			String path = MiscUtilities.constructPath(settingsDirectory,"startup`");
+			File file = new File(path);
+			if(!file.exists())
+				file.mkdirs();
+			else
+				runStartupScripts(file);
+		}
+
 		// Must be after plugins are started!!!
 		propertiesChanged();
 
@@ -2315,6 +2335,34 @@ public class jEdit
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
+		}
+	}
+
+	/**
+	 * Runs scripts in the site startup directory, and user startup directory.
+	 */
+	private static void runStartupScripts(File directory)
+	{
+		if (!directory.isDirectory())
+			return;
+
+		String[] snippets = directory.list();
+		if (snippets == null)
+			return;
+
+		MiscUtilities.quicksort(snippets,
+			new MiscUtilities.StringICaseCompare());
+
+		for(int i = 0; i < snippets.length; ++i)
+		{
+			String snippet = snippets[i];
+			if(!snippet.toLowerCase().endsWith(".bsh"))
+				continue;
+
+			String path = new File(directory,snippet).getPath();
+			Log.log(Log.DEBUG,jEdit.class,"Running script: " + path);
+
+			BeanShell.runScript(null,path,false,false);
 		}
 	}
 

@@ -98,19 +98,17 @@
   <sect2 id="multi-select"><title>Multiple Selection</title>
    <para>
     Pressing <keycap>Caps Lock</keycap> turns multiple selection mode on and
-    off. In multiple selection mode, multiple fragments of text can be selected
-    and operated on simultaneously. The text <literal>multi</literal> in the
-    status bar is grayed out if multiple selection mode is not active, and black
-    if it is active. Note that leaving multiple selection mode
-    while a fragmented selection exists will not deactive it, but it will
-    prevent you from making further fragmented selections. If a fragmented
-    selection exists but multiple selection mode is not active, the text
-    <literal>multi</literal> will be shown in dark blue.
+    off. In multiple selection mode, the text <literal>multi</literal> is shown
+    in black in the status bar, and multiple fragments of text can be selected
+    and operated on simultaneously. Note that deactivating multiple selection
+    mode while a fragmented selection exists will leave the selection in place,
+    but it will prevent you from making further fragmented selections. If a
+    fragmented selection exists but multiple selection mode is not active, the
+    text <literal>multi</literal> will be shown in dark blue.
    </para>
    <para>
-    While multiple selection mode is active, clicking the mouse will reposition
-    the caret without deactivation the selection, and dragging the mouse will
-    create a new selection, in addition to the current one.
+    While multiple selection mode is active, you can click and drag the mouse
+    to reposition the caret and create new selections.
    </para>
    <para>
     Various jEdit commands behave differently with multiple selections:
@@ -119,11 +117,10 @@
     <listitem><para>Commands that copy text place the contents of
     each selection, separated by line breaks, in the specified register. Note
     that the selections are appended in the order they were created, not the
-    order they appear in the buffer. In other words, if you select a chunk of
+    order they appear in the buffer. For example, if you select a chunk of
     text near the end of the buffer, another near the beginning, then invoke
     <guimenuitem>Copy</guimenuitem>, the clipboard will contain the later chunk,
-    followed by a line break, followed by the earlier, but more recently
-    selected, chunk.
+    followed by a line break, followed by the earlier chunk.
     </para></listitem>
     <listitem><para>Commands that insert (or paste) text replace each selection
     with the entire text that is being inserted.</para></listitem>
@@ -442,6 +439,9 @@
    jEdit provides a rich set of commands for moving and copying text. Text is
    transferred using <firstterm>registers</firstterm>. A register is a holding
    area with a single-character name that can hold once piece of text at a time.
+   Registers are global to the editor; all buffers share the same set. With the
+   exception of the clipboard, register contents are only accessable inside
+   jEdit.
   </para>
   <para>
    jEdit has three sets of commands for working with registers.
@@ -490,14 +490,14 @@
     (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>)
     adds the selected text to the clipboard, with replacing the existing
-    clipboard contents, then removes the text from the buffer..
+    clipboard contents, then removes the text from the buffer.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Copy Append</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>)
     adds the selected text to the clipboard, with replacing the existing
-    clipboard contents, without removing the text from the buffer..
+    clipboard contents, without removing the text from the buffer.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste</guimenuitem>
@@ -724,8 +724,8 @@
   <sect2><title>Replacing Text</title>
    <para>
     Occurrences of the search string can be replaced with either a replacement
-    string or the result of a BeanShell script snippet. The two radio buttons in
-    the search and replace dialog box control the replace mode.
+    string or the result of a BeanShell script snippet. Two radio buttons in
+    the search and replace dialog box select between these two behaviors.
    </para>
    <para>
     Pressing the
@@ -744,8 +744,9 @@
    <para>
     In text replacement mode, the search string is replaced with the replacement
     string. If regular expressions are enabled, positional parameters
-    (<literal>$0</literal>, <literal>$1</literal>, and so on) are supported in
-    the replacement string; see <xref linkend="regexps" /> for information.
+    (<literal>$0</literal>, <literal>$1</literal>, <literal>$3</literal>, and so
+    on) can be used to insert the contents of matched subexpressions in the
+    replacement text; see <xref linkend="regexps" /> for information.
    </para>
    <para>
     In BeanShell replacement mode, the search string is replaced with the return
@@ -755,7 +756,7 @@
    <itemizedlist><listitem><para><varname>_0</varname> -- the text to be
    replaced</para>
    </listitem><listitem><para><varname>_1</varname> - <varname>_9</varname> --
-   if regular expressions are enabled, these contain the values of saved
+   if regular expressions are enabled, these contain the values of matched
    subexpressions.
    </para></listitem></itemizedlist>
    <para>

@@ -154,7 +154,17 @@ jEdit depends on, and comes bundled with the following libraries:
 
 - BeanShell scripting language, by Pat Niemeyer. This is used to
   implement macros, among other things. The version included with jEdit
-  is basically a stripped down BeanShell 1.01, with a few minor changes.
+  is basically a stripped down BeanShell 1.01, with the following
+  changes (don't worry if these mean nothing to you):
+
+  - getNameSpace() method added to class Interpreter
+  - BshMethod class made public
+  - NameSpace.classForName() now checks if a 'classLoader' variable is
+    set in that namespace, and if it is, uses that class loader to load
+    classes instead of calling Class.forName()
+  - Fixed a bug where imports in namespaces would shadow all imports
+    from their parent
+  - Allowed methods to be invoked with a different namespace
 
   The BeanShell homepage is <http://www.beanshell.org>.
 

@@ -16,8 +16,8 @@
    <guimenu>File</guimenu>&gt;<guimenuitem>Open File</guimenuitem> (shortcut:
    <keycombo><keycap>Control</keycap><keycap>O</keycap></keycombo>) displays
    a file selector dialog box and loads the specified file into a new
-   buffer. Multiple files to open can be selected by holding down
-   <keycap>Control</keycap>.
+   buffer. Multiple files can be opened at once by holding down
+   <keycap>Control</keycap> while clicking on them in the file system browser.
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Insert File</guimenuitem> displays

@@ -1,20 +1,27 @@
-// Import all jEdit packages for convinience
+/* This script is run on jEdit startup. It should be short and simple for
+ * performance reasons. */
+
+// Import all jEdit packages so that macros don't have to
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.msg.*; // not useful in macros?
+import org.gjt.sp.jedit.options.*; // ditto?
 import org.gjt.sp.jedit.pluginmgr.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.*;
 
+/* This function prints the specified object to the current console if one
+ * exists; otherwise, to the activity log. */
 print(arg)
 {
 	if(arg == null)
 		arg = "null";
 
-	if(arg instanceof Object [])
+	if(arg instanceof Object[])
 	{
 		len = arg.length;
 		print("Array: "+arg +" {");
@@ -31,4 +38,32 @@ print(arg)
 		else
 			Log.log(Log.WARNING,BeanShell.class,String.valueOf(arg));
 	}
+}
+
+/* This is a generic function that executes the specified command in the
+ * console. This saves a bit of code duplication in macros that use the
+ * console. Stuff like this doesn't really belong in the core at all...
+ * In the future, plugins should be allowed to run BeanShell scripts on
+ * startup. */
+runCommandInConsole(view,command)
+{
+	// firstly, check if the plugin is installed.
+	if(jEdit.getPlugin("console.ConsolePlugin") == null)
+	{
+		Macros.error(view,"You must install the Console plugin"
+			+ " to use the runCommandInConsole() function.");
+		return;
+	}
+
+	// Open the console if it isn't already open
+	view.getDockableWindowManager().addDockableWindow("console");
+
+	// Obtain the console instance
+	console = view.getDockableWindowManager().getDockableWindow("console");
+
+	// Ensure we are using the console shell
+	console.setShell("Console");
+
+	// Call its run() method
+	console.run(command);
 }

@@ -20,12 +20,22 @@ JEDIT 3.2 VERSION HISTORY
 - Experimental option to use jEdit text area colors in all text
   components. It doesn't work too well yet; see the to do list for a
   list of known issues
+- Startup macro feature replaced with startup scripts, which must have
+  a .bsh extension and can be put in the 'startup' subdirectory of the
+  user settings or jEdit home directories
 
 + Enhancements
 
 - You can now choose if you want to download plugin source, or only
   binaries
 - NEWS.txt written
+- Updated macro guide (John Gellene)
+- SGML documentation has been converted to XML. You now need the
+  DocBook-XML 4.1.2 DTD to parse it
+- The runCommandInConsole() method has been moved from the 'Console
+  Plugin' macros to the jedit.bsh file that is run on jEdit startup
+- Source code for three sample plugins now included with the jEdit source
+  download
 
 + Bug Fixes
 

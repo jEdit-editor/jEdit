@@ -262,17 +262,17 @@
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo></entry>
       <entry>Center current line on screen.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo></entry>
       <entry>Center caret on screen.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>'</keycap></keycombo>;
-      <keycombo><keycap>Control</keycap><keycap>/</keycap></keycombo></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>/</keycap></keycombo></entry>
       <entry>Scroll up; down one line.</entry>
      </row>
      <row>
@@ -381,21 +381,21 @@
       <entry><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>X</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Cut selected text to register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>C</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Copy selected text to register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>U</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Append selected text to register <replaceable>key</replaceable>,
       removing it from the buffer.</entry>
      </row>
@@ -403,7 +403,7 @@
       <entry><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>A</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Append selected text to register <replaceable>key</replaceable>,
       leaving it in the buffer.</entry>
      </row>
@@ -411,7 +411,7 @@
       <entry><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>V</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Paste contents of register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
@@ -436,31 +436,31 @@
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo></entry>
       <entry>Add marker with no shortcut.
-      Use the <guimenu>Markers</>guimenu menu to return to markers added
+      Use the <guimenu>Markers</guimenu> menu to return to markers added
       in this manner.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>T</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Add marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>Y</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Go to marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>U</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Select to marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>K</keycap>
       </keycombo>
-      <keycap><replaceable>key</keycap></keycap></entry>
+      <keycap><replaceable>key</replaceable></keycap></entry>
       <entry>Go to marker with shortcut <replaceable>key</replaceable>, and
       move the marker to the previous caret position.</entry>
      </row>
@@ -596,8 +596,9 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>Enter</keycap> <keycap><replaceable>level</keycap></keycap></entry>
-      <entry>Expand folds with level less than <replaceable>level</entry>,
+      <keycap>Enter</keycap> <keycap><replaceable>level</replaceable></keycap>
+      </entry>
+      <entry>Expand folds with level less than <replaceable>level</replaceable>,
       collapse all others.
       </entry>
      </row>

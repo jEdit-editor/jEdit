@@ -136,11 +136,12 @@
 <listitem>
     <para><filename>Rot13.bsh</filename></para>
     <abstract><para>
-        Replaces the selected text with the text encoded by the Rot13 protocol.
+        Replaces the selected text with the text encoded by the Rot13
+        <quote>encryption</quote> algorithm.
     </para></abstract>
     <para>
         Rot13 is a simple encoding scheme involving fixed character
-        substitution. A second application of the protocol restores the
+        substitution. A second application of the algorithm restores the
         original text.
     </para>
 </listitem>
@@ -187,7 +188,7 @@
 <listitem>
     <para><filename>Get_Package_Name.bsh</filename></para>
     <abstract><para>
-        Inserts a plauisble Java package name for the current buffer.
+        Inserts a plausible Java package name for the current buffer.
     </para></abstract>
     <para>
         The macro compares the buffer's path name with the elements of the

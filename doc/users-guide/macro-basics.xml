@@ -77,7 +77,7 @@
       modifications detailed in the file <filename>README.txt</filename>
       included in the jEdit distribution. At the time of writing, plans are
       being made for a beta release of BeanShell 1.2. The incorporation of a
-      new version of BeanShell into jEdit shouldnot require modification to
+      new version of BeanShell into jEdit should not require modification to
       existing macro code.
     </para>
   </sidebar>

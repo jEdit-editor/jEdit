@@ -57,7 +57,7 @@
  &basics;
  &files;
  &textedit;
- <!-- &modes; -->
+ &modes;
  &sourceedit;
  &customizing;
  &usingplugins;

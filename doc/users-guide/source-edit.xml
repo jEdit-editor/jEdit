@@ -12,7 +12,7 @@
    <keycombo><keycap>Control</keycap><keycap>;</keycap></keycombo>.
    Each abbreviation can either be global, in which case it will expand in all
    edit modes, or mode-specific. Abbreviations can be edited
-   in the <guibutton>Abbrevs</guibutton> pane of the
+   in the <guibutton>Abbreviations</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box. The Java, SGML and VHDL edit modes include some pre-defined
    abbreviations you might find useful.
@@ -25,7 +25,7 @@
   </para>
   <para>
    Automatic abbreviation expansion can be enabled in the
-   <guibutton>Abbrevs</guibutton> pane of the
+   <guibutton>Abbreviations</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box. If enabled, pressing the space bar will automatically expand
    the word before the caret, assuming it is a valid abbreviation.
@@ -56,7 +56,7 @@
    <para>
     Expansions can contain up to nine positional parameters. Note that a
     trailing hash character (<quote>#</quote>) must be entered when expanding an
-    abbrev with parameters.
+    abbreviation with parameters.
    </para>
   </sect2>
  </sect1>
@@ -277,7 +277,7 @@
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box, or on a buffer-specific basis using buffer-local
    properties. For example, placing the following in one of the first 10 lines
-   of a buffer will change the range comment strings to <quote>(*</quote> and
+   of a buffer will change the range comment strings to <literal>(*</literal> and
    <quote>*)</quote>:
   </para>
   <screen>:commentStart=(*:commentEnd=*):</screen>
@@ -295,29 +295,30 @@
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box, or on a buffer-specific basis using buffer-local
    properties. For example, placing the following in one of the first 10 lines
-   of a buffer will change the line comment string to <quote>#</quote>:
+   of a buffer will change the line comment string to <literal>#</literal>:
   </para>
   <screen>:lineComment=#:</screen>
  </sect1>
  <sect1 id="folding"><title>Folding</title>
   <para>
-   The folding feature allows lines to be hidden or shown, depending on their
+   The folding feature allows lines to be hidden or shown depending on their
    indent level. Since most programming languages use indentation to nest
    code, folding away lines with a lot of indent has the effect of displaying
-   an <quote>overview</quote> of the buffer only, while displaying
-   higher indent levels <quote>zooms in</quote> on the code
+   an <quote>overview</quote> of the file only, while displaying
+   higher indent levels <quote>zooms in</quote> on the contents
    and shows more <quote>detail</quote>.
   </para>
   <para>
    A set of consecutive lines with the same leading indent is referred to as
    a <firstterm>fold</firstterm>. The visibility of each fold can be set
-   independently.
+   independently. A fold that is hidden is said to be <quote>collapsed</quote>;
+   a visible fold is <quote>expanded</quote>.
    Text hidden by folding is still present in the buffer, and can be made
    visible again using the appropriate commands. Cursor movement commands
    skip over the hidden text, but text manipulation commands act on it.
   </para>
   <para>
-   The initial fold visibility level, in multiples of the current tab size,
+   The initial fold visibility level, in multiples of the indent width,
    can be specified on a mode-specific or global basis in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box. Folds
@@ -332,7 +333,7 @@
    expanded fold; a filled square next to a collapsed fold. Unless the
    <keycap>Shift</keycap> key is held down, clicking a filled square will expand
    the fold by one level only; nested folds will remain collapsed. Holding down
-   <keycap>Shift</keycap> while clicking will filly expand the fold and all nested
+   <keycap>Shift</keycap> while clicking will fully expand the fold and all nested
    folds.
   </para>
   <para>

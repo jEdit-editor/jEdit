@@ -129,7 +129,7 @@
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static final String <function>getProperty</function></funcdef>
+  <funcdef>public static String <function>getProperty</function></funcdef>
   <paramdef>String <parameter>name</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -142,7 +142,7 @@
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static final boolean <function>getBooleanProperty</function></funcdef>
+  <funcdef>public static boolean <function>getBooleanProperty</function></funcdef>
   <paramdef>String <parameter>name</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -157,7 +157,7 @@
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static final void <function>setProperty</function></funcdef>
+  <funcdef>public static void <function>setProperty</function></funcdef>
   <paramdef>String <parameter>name</parameter></paramdef>
   <paramdef>String <parameter>property</parameter></paramdef>
  </funcprototype>
@@ -171,7 +171,7 @@
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static final void <function>setBooleanProperty</function></funcdef>
+  <funcdef>public static void <function>setBooleanProperty</function></funcdef>
   <paramdef>String <parameter>name</parameter></paramdef>
   <paramdef>boolean <parameter>value</parameter></paramdef>
  </funcprototype>
@@ -186,7 +186,7 @@
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static final void <function>setTemporaryProperty</function></funcdef>
+  <funcdef>public static void <function>setTemporaryProperty</function></funcdef>
   <paramdef>String <parameter>name</parameter></paramdef>
   <paramdef>String <parameter>property</parameter></paramdef>
  </funcprototype>
@@ -272,7 +272,7 @@ a macro may need to use. They include the following:</para>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static final Properties <function>getProperties</function></funcdef>
+  <funcdef>public static Properties <function>getProperties</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -348,7 +348,7 @@ a macro may need to use. They include the following:</para>
  </funcprototype>
 </funcsynopsis>
 <para>
-    Returns an array containing all existing plugin applications.
+    Returns an array containing all existing plugins.
 </para>
 </listitem>
 
@@ -454,10 +454,10 @@ a macro may need to use. They include the following:</para>
  </funcprototype>
 </funcsynopsis>
 <para>
-    Beginning with jEdit 3.2, each <classname>View</classname> displays a
+    Eeach <classname>View</classname> displays a
     <classname>StatusBar</classname> at its bottom edge. It shows the
     current cursor position, the editing mode of the current buffer and
-    other information. The method <function>StatusBar.setMessage(String
+    other information. The method <function>setMessage(String
     message)</function> can be called on the return value of
     <function>getStatus()</function> to display reminders or updates during
     execution of a macro. The message remains until the method is called
@@ -475,10 +475,10 @@ a macro may need to use. They include the following:</para>
 <para>
     The object returned by this method keeps track of all plugins
     that can be contained in dockable windows above, below and to the left and
-    right of the editing pane. Calling this method followed by a call to
-    <function>DockableWindowManager.getDockableWindow(String pluginName)</function>
-    is an efficient way to access and (if necessary) activate a plugin
-    application.
+    right of the editing pane. Calling
+    <function>getDockableWindow(String pluginName)</function> on the
+    return value of this method
+    is an efficient way to access and (if necessary) activate a plugin.
 </para>
 </listitem>
 
@@ -503,8 +503,8 @@ a macro may need to use. They include the following:</para>
       <listitem>
         <funcsynopsis>
           <funcprototype>
-            <funcdef>public DockableWindow <function>getDockableWindow</function>
-            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
+            <funcdef>public DockableWindow <function>getDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
         <para>
@@ -519,14 +519,14 @@ a macro may need to use. They include the following:</para>
        <listitem>
         <funcsynopsis>
           <funcprototype>
-            <funcdef>public void <function>addDockableWindow</function>
-            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
+            <funcdef>public void <function>addDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
         <para>
           If the <classname>DockableWindow</classname> named by the
           <varname>name</varname> parameter does not exist, a message is
-          sent to the associated plugin application to create it.  The
+          sent to the associated plugin to create it.  The
           <classname>DockableWindow</classname> is then made visible.
         </para>
        </listitem>
@@ -534,8 +534,8 @@ a macro may need to use. They include the following:</para>
        <listitem>
         <funcsynopsis>
           <funcprototype>
-            <funcdef>public void <function>showDockableWindow</function>
-            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
+            <funcdef>public void <function>showDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
        </listitem>
@@ -543,8 +543,8 @@ a macro may need to use. They include the following:</para>
        <listitem>
         <funcsynopsis>
           <funcprototype>
-            <funcdef>public void <function>removeDockableWindow</function>
-            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
+            <funcdef>public void <function>removeDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
        </listitem>
@@ -552,8 +552,8 @@ a macro may need to use. They include the following:</para>
        <listitem>
         <funcsynopsis>
           <funcprototype>
-            <funcdef>public void <function>toggleDockableWindow</function>
-            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
+            <funcdef>public void <function>toggleDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
        <para>
@@ -741,14 +741,17 @@ JEditTextArea</title>
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public final void <function>setMultipleSelectionEnabled
+        <funcdef>public void <function>setMultipleSelectionEnabled
         </function></funcdef>
         <paramdef>boolean <parameter>multi</parameter></paramdef>
       </funcprototype>
     </funcsynopsis>
     <para>
       Set multiple selection on or off according to the value of
-      <parameter>multi</parameter>.
+      <parameter>multi</parameter>. This only affects the ability to
+      make multiple selections in the user interface; macros can
+      manipulate them regardless of the setting of this flag. In fact,
+      in most cases, calling this method should not be necessary.
     </para>
   </listitem>
 
@@ -1080,7 +1083,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final int <function>getCaretPosition</function></funcdef>
+  <funcdef>public int <function>getCaretPosition</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1092,7 +1095,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final void <function>setCaretPosition</function></funcdef>
+  <funcdef>public void <function>setCaretPosition</function></funcdef>
   <paramdef>int <parameter>caret</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1105,7 +1108,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final void <function>moveCaretPosition</function></funcdef>
+  <funcdef>public void <function>moveCaretPosition</function></funcdef>
   <paramdef>int <parameter>caret</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1119,7 +1122,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final int <function>getCaretLine</function></funcdef>
+  <funcdef>public int <function>getCaretLine</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1314,7 +1317,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final int <function>getLineOfOffset</function></funcdef>
+  <funcdef>public int <function>getLineOfOffset</function></funcdef>
   <paramdef>int <parameter>offset</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1359,7 +1362,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final String <function>getText</function></funcdef>
+  <funcdef>public String <function>getText</function></funcdef>
   <paramdef>int <parameter>start</parameter></paramdef>
   <paramdef>int <parameter>len</parameter></paramdef>
  </funcprototype>
@@ -1372,7 +1375,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final String <function>getLineText</function></funcdef>
+  <funcdef>public String <function>getLineText</function></funcdef>
   <paramdef>int <parameter>lineIndex</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1516,7 +1519,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final int <function>getBufferLength</function></funcdef>
+  <funcdef>public int <function>getBufferLength</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1528,7 +1531,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final int <function>getLineCount</function></funcdef>
+  <funcdef>public int <function>getLineCount</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1540,8 +1543,8 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final int <function>getLineLength</function></funcdef>
-  <paramdef></paramdef>
+  <funcdef>public int <function>getLineLength</function></funcdef>
+  <paramdef>int <parameter>line</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -1572,7 +1575,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final String <function>getName</function></funcdef>
+  <funcdef>public String <function>getName</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1581,7 +1584,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final String <function>getPath</function></funcdef>
+  <funcdef>public String <function>getPath</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1590,7 +1593,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final File <function>getFile</function></funcdef>
+  <funcdef>public File <function>getFile</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1599,7 +1602,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final boolean <function>isNewFile</function></funcdef>
+  <funcdef>public boolean <function>isNewFile</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1611,7 +1614,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final boolean <function>isDirty</function></funcdef>
+  <funcdef>public boolean <function>isDirty</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1623,7 +1626,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final boolean <function>isReadOnly</function></funcdef>
+  <funcdef>public boolean <function>isReadOnly</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1632,7 +1635,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final boolean <function>isUntitled</function></funcdef>
+  <funcdef>public boolean <function>isUntitled</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1649,7 +1652,7 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public final Mode <function>getMode</function></funcdef>
+  <funcdef>public Mode <function>getMode</function></funcdef>
   <paramdef></paramdef>
  </funcprototype>
 </funcsynopsis>
@@ -1701,7 +1704,7 @@ JEditTextArea</title>
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public final void <function>putProperty</function></funcdef>
+        <funcdef>public void <function>putProperty</function></funcdef>
         <paramdef>Object <parameter>key</parameter></paramdef>
         <paramdef>Object <parameter>value</parameter></paramdef>
       </funcprototype>
@@ -1711,19 +1714,20 @@ JEditTextArea</title>
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public final Object <function>getProperty</function></funcdef>
+        <funcdef>public Object <function>getProperty</function></funcdef>
         <paramdef>Object <parameter>key</parameter></paramdef>
       </funcprototype>
     </funcsynopsis>
     <para>
       The <classname>Buffer</classname> object maintains a table of
-      properties that describe a broad range of attributes.  The value of each
+      properties that describe a broad range of attributes. The value of each
       property is stored using a key for indexing purposes, usually a
       <classname>String</classname> that names the particular property.
       Property values can be set and retreived using these two methods.
       The <classname>Object</classname> returned by
       <function>getProperty()</function> usually has to be cast to a derived type
-      to be useful.
+      to be useful. Most of these properties are documented in <xref
+      linkend="buffer-local" />.
     </para>
   </listitem>
 </itemizedlist>
@@ -1744,7 +1748,7 @@ JEditTextArea</title>
 </funcsynopsis>
 <para>
   Reloads the buffer from disk into <parameter>view</parameter>, asking
-  for confirmation if the buffer is <quote>dirty</quote>.
+  for confirmation if the buffer has unsaved changes.
 </para>
 </listitem>
 
@@ -1762,9 +1766,9 @@ JEditTextArea</title>
 <funcsynopsis>
  <funcprototype>
   <funcdef>public boolean <function>save</function></funcdef>
-  <paramdef>final View <parameter>view</parameter></paramdef>
+  <paramdef>View <parameter>view</parameter></paramdef>
   <paramdef>String <parameter>path</parameter></paramdef>
-  <paramdef>final boolean <parameter>rename</parameter></paramdef>
+  <paramdef>boolean <parameter>rename</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -1814,7 +1818,7 @@ JEditTextArea</title>
 <funcsynopsis>
  <funcprototype>
   <funcdef>public void <function>removeTrailingWhiteSpace</function></funcdef>
-  <paramdef>int [] <parameter>lines</parameter></paramdef>
+  <paramdef>int[] <parameter>lines</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -1878,7 +1882,7 @@ JEditTextArea</title>
   <classname>Buffer</classname> to which it relates, the line number to which
   the marker refers, and an optional shortcut character.  The shortcut
   identifies the the key that can be pressed with the
-  <guimenu>Markers</guimenu>&gt; <guimenuitem>Go To Marker</guimenuitem>
+  <guimenu>Markers</guimenu>&gt;<guimenuitem>Go To Marker</guimenuitem>
   command to move the editing caret to the marker line location.
 </para>
 <para>
@@ -2016,7 +2020,7 @@ JEditTextArea</title>
       <parameter>fully</parameter> is true, all folds at the line will be
       expanded, otherwise only one level of folding will be expanded. The
       <parameter>textArea</parameter> parameter is provided to the method
-      to facilitiatescrolling after folds are expanded.
+      to facilitiate scrolling after folds are expanded.
     </para>
     <para>
       The method returns <constant>false</constant> if there are no folds in
@@ -2062,9 +2066,9 @@ JEditTextArea</title>
     </funcsynopsis>
     <para>
       Narrows the visible portion of the buffer to the specified
-      line range. To undo the narrowing, call the following:
+      line range. To undo the narrowing, call the
+      <function>Buffer.expandAllFolds()</function> method.
     </para>
-    <informalexample><programlisting>buffer.narrow(0, buffer.getLineCount() - 1);</programlisting></informalexample>
   </listitem>
 
 </itemizedlist>
@@ -2491,8 +2495,8 @@ JEditTextArea</title>
     following:
 </para>
 
-<programlisting>    jEdit.setBooleanProperty(<quote>search.hypersearch.toggle</quote>,true);
-    jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</programlisting>
+<programlisting>jEdit.setBooleanProperty(<quote>search.hypersearch.toggle</quote>,true);
+jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</programlisting>
 
 <para>
     If you are not using the dialog to undertake a search or replace, you may call
@@ -2511,7 +2515,7 @@ JEditTextArea</title>
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public  <function>SearchDialog</function></funcdef>
+        <funcdef>public <function>SearchDialog</function></funcdef>
         <paramdef>View <parameter>view</parameter></paramdef>
         <paramdef>String <parameter>searchString</parameter></paramdef>
         <paramdef>int <parameter>searchIn</parameter></paramdef>
@@ -2523,7 +2527,8 @@ JEditTextArea</title>
 <para>
   The parameter <parameter>searchIn</parameter> can take the defined
   constant values <constant>CURRENT_BUFFER</constant>,
-  <constant>ALL_BUFFERS</constant> or <constant>DIRECTORY</constant>.
+  <constant>ALL_BUFFERS</constant> or <constant>DIRECTORY</constant>,
+  defined in the <classname>SearchDialog</classname> class.
   The value should correspond to the type of
   <classname>SearchFileSet</classname> created for the search.
 </para>

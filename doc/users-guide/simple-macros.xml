@@ -560,7 +560,7 @@ String result = df.format(d);
     available for use in macros -- <varname>editPane</varname>. That
     variable is set to the current <classname>EditPane</classname> instance.
     An <classname>EditPane</classname> object contains a text area and
-    buffer switcher. A view can be split and resplit to display multiple
+    buffer switcher. A view can be split to display multiple
     buffers, each in its own edit pane. Among other things, the
     <classname>EditPane</classname> class contains methods for selecting
     the buffer to edit.
@@ -569,7 +569,7 @@ String result = df.format(d);
     Most of the time your macros will manipulate the <varname>buffer</varname>
     or the <varname>textArea</varname>. Sometimes you will need to use
     <varname>view</varname> as a parameter in a method call. You will probably
-    only need to use <varname>editPane</varname> if your macros works with
+    only need to use <varname>editPane</varname> if your macros work with
     split views.
    </para>
   </sidebar>

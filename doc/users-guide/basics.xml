@@ -33,7 +33,8 @@
    <para>
     When running on MacOS, the primary modifier key is <keycap>Command</keycap>,
     not <keycap>Control</keycap>. If you are a Mac user, mentally substitute
-    <keycap>Command</keycap> whenever you see <keycap>Control</keycap>.
+    <keycap>Command</keycap> whenever you see <keycap>Control</keycap> in this
+    guide.
    </para>
   </sidebar>
  </sect1>
@@ -64,16 +65,16 @@
    are open.
   </para>
   <para>
+   For more information about command line switches that control the
+   server feature, see <xref linkend="cli-usage" />.
+  </para>
+  <para>
    Unlike other applications, jEdit automatically loads any files that were
    open last time in was used, so you can get back to work immediately, without
    having to find the files you are working on first. This feature can be
    disabled in the <guibutton>Loading and Saving</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box.
-  </para>
-  <para>
-   For more information about command line switches that control the
-   server feature, see <xref linkend="cli-usage" />.
   </para>
   <sidebar><title>The edit server and security</title>
    <para>
