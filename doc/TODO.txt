@@ -2,8 +2,7 @@ TO DO
 
 + would be nice to have before pre6:
 
-- cvs add TextRenderingManager, AWTTextRenderingManager,
-  TextRenderingManager2D, tip43.html
+- new xToOffset()
 - don't show replace all results when running from macro
 - pre6 will be the last pre-release before 3.2final.
 - console: add go to console action

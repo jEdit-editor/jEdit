@@ -53,10 +53,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		setOpaque(true);
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-
-		setFont(new Font("Monospaced",Font.PLAIN,14));
-		setForeground(Color.black);
-		setBackground(Color.white);
 	}
 
 	/**
@@ -415,7 +411,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		updateTabSize();
 
-		textArea.getRenderingManager().setupGraphics(textArea,gfx);
+		textArea.getRenderingManager().setupGraphics(gfx);
 
 		Buffer buffer = textArea.getBuffer();
 

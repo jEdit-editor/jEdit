@@ -31,7 +31,7 @@ public class AWTTextRenderingManager extends TextRenderingManager
 		Graphics g, float x, float y)
 	{
 		g.drawChars(text,start,len,(int)x,(int)y);
-		return x + (float)g.getFontMetrics().charsWidth(text,start,len);
+		return (float)g.getFontMetrics().charsWidth(text,start,len);
 	}
 
 	public float _getWidth(char[] text, int start, int len, Font font)

@@ -53,7 +53,7 @@ public abstract class TextRenderingManager
 			return new AWTTextRenderingManager();
 	}
 
-	void setupGraphics(JEditTextArea textArea, Graphics g) {}
+	void setupGraphics(Graphics g) {}
 
 	void fontChanged(JEditTextArea textArea) {}
 
@@ -89,7 +89,7 @@ public abstract class TextRenderingManager
 			{
 				if(flushLen > 0)
 				{
-					x = _drawCharsAndGetWidth(text,flushIndex,
+					x += _drawCharsAndGetWidth(text,flushIndex,
 						flushLen,g,x,y);
 					flushLen = 0;
 				}
@@ -103,7 +103,7 @@ public abstract class TextRenderingManager
 		}
 
 		if(flushLen > 0)
-			x = _drawCharsAndGetWidth(text,flushIndex,flushLen,g,x,y);
+			x += _drawCharsAndGetWidth(text,flushIndex,flushLen,g,x,y);
 
 		return x;
 	}
