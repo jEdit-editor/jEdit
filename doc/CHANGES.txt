@@ -2,10 +2,16 @@ JEDIT 2.5 VERSION HISTORY
 
 * Version 2.5final
 
++ New Features
+
+- SHTML mode (Mike Dillon)
+
 + Bug Fixes
 
 - Adding buttons with icons loaded from external files didn't work on non-Unix
   systems
+- Fixed bug with highlighting SPAN statements with the EXCLUDE_MATCH flag set
+  (Mike Dillon)
 
 * Version 2.5pre8
 

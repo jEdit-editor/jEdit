@@ -600,18 +600,21 @@ public class TokenMarker implements Cloneable
 				break;
 			case SPAN:
 				context.inRule = checkRule;
-				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+
+				if ((checkRule.action & DELEGATE) != DELEGATE)
 				{
-					addToken(info,pattern.count,
-						context.rules.getDefault());
-					lastOffset = pos + pattern.count;
+					if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+					{
+						addToken(info,pattern.count,
+							context.rules.getDefault());
+						lastOffset = pos + pattern.count;
+					}
+					else
+					{
+						lastOffset = pos;
+					}
 				}
 				else
-				{
-					lastOffset = pos;
-				}
-
-				if ((checkRule.action & DELEGATE) == DELEGATE)
 				{
 					String setName = new String(checkRule.searchChars,
 						checkRule.sequenceLengths[0] + checkRule.sequenceLengths[1],
@@ -937,6 +940,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.51  2000/06/30 09:08:09  sp
+ * SHTML mode, SPAN+EXCLUDE_MATCH bug fix
+ *
  * Revision 1.50  2000/04/27 08:32:58  sp
  * VFS fixes, read only fixes, macros can prompt user for input, improved
  * backup directory feature
