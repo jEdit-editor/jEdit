@@ -138,7 +138,7 @@ public class SyntaxDocument extends PlainDocument
 	{
 		if(tokenMarker != null)
 		{
-			DocumentEvent.ElementChange ch = evt.getChange(
+			DefaultDocumentEvent.ElementChange ch = evt.getChange(
 				getDefaultRootElement());
 			if(ch != null)
 			{
@@ -160,7 +160,7 @@ public class SyntaxDocument extends PlainDocument
 	{
 		if(tokenMarker != null)
 		{
-			DocumentEvent.ElementChange ch = evt.getChange(
+			DefaultDocumentEvent.ElementChange ch = evt.getChange(
 				getDefaultRootElement());
 			if(ch != null)
 			{
@@ -177,6 +177,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  1999/12/07 08:16:55  sp
+ * Reload bug nailed to the wall
+ *
  * Revision 1.11  1999/11/07 06:51:43  sp
  * Check box menu items supported
  *
@@ -205,15 +208,5 @@ public class SyntaxDocument extends PlainDocument
  *
  * Revision 1.3  1999/04/19 05:38:20  sp
  * Syntax API changes
- *
- * Revision 1.2  1999/03/29 06:30:25  sp
- * Documentation updates, fixed bug in DefaultSyntaxDocument, fixed bug in
- * goto-line
- *
- * Revision 1.1  1999/03/22 04:35:48  sp
- * Syntax colorizing updates
- *
- * Revision 1.1  1999/03/13 09:11:46  sp
- * Syntax code updates, code cleanups
  *
  */

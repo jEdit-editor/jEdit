@@ -110,18 +110,23 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public void load(View view)
 	{
-		setFlag(LOADED,false);
-
 		if(view != null)
 			view.showWaitCursor();
 
 		if(!getFlag(NEW_FILE))
 		{
-			if(autosaveFile.exists())
+			// Only on initial load
+			if(autosaveFile.exists() && !getFlag(LOADED))
 			{
 				Object[] args = { autosaveFile.getPath() };
 				GUIUtilities.message(view,"autosaveexists",args);
 			}
+		}
+
+		setFlag(LOADED,false);
+
+		if(!getFlag(NEW_FILE))
+		{
 			read(view);
 			readMarkers();
 		}
@@ -958,6 +963,13 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 		((BranchElement)map).replace(0,map.getElementCount(),
 			elements);
+
+		DefaultDocumentEvent evt = new DefaultDocumentEvent(
+			0,lines.last,DocumentEvent.EventType.INSERT);
+		evt.addEdit(new ElementEdit(map,0,new Element[0],elements));
+		evt.end();
+
+		fireInsertUpdate(evt);
 	}
 
 	/*
@@ -1167,9 +1179,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 			getContent().insertString(0,sbuf.toString());
 			createElements(lines);
-
-			fireInsertUpdate(new DefaultDocumentEvent(0,lines.last,
-				DocumentEvent.EventType.INSERT));
 
 			setFlag(NEW_FILE,false);
 			setFlag(READ_ONLY,false);
@@ -1549,6 +1558,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.113  1999/12/07 08:16:55  sp
+ * Reload bug nailed to the wall
+ *
  * Revision 1.112  1999/12/07 07:19:36  sp
  * Buffer loading code cleaned up
  *
@@ -1579,21 +1591,4 @@ loop:		for(int i = 0; i < markers.size(); i++)
  * Revision 1.103  1999/11/10 10:43:01  sp
  * Macros can now have shortcuts, various miscallaneous updates
  *
- * Revision 1.102  1999/11/07 06:51:42  sp
- * Check box menu items supported
- *
- * Revision 1.101  1999/11/06 02:06:50  sp
- * Logging updates, bug fixing, icons, various other stuff
- *
- * Revision 1.100  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.99  1999/10/30 02:44:18  sp
- * Miscallaneous stuffs
- *
- * Revision 1.98  1999/10/24 02:06:40  sp
- * Miscallaneous pre1 stuff
- *
- * Revision 1.97  1999/10/23 03:48:22  sp
- * Mode system overhaul, close all dialog box, misc other stuff
  */
