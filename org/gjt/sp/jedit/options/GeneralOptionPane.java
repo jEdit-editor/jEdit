@@ -160,6 +160,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 		sortByName.getModel().setSelected("on".equals(jEdit.getProperty(
 			"sortByName")));
 		addComponent(sortByName);
+
+		/* Check mod status on focus */
+		checkModStatus = new JCheckBox(jEdit.getProperty(
+			"options.general.checkModStatus"));
+		checkModStatus.getModel().setSelected("yes".equals(jEdit.getProperty(
+			"view.checkModStatus")));
+		addComponent(checkModStatus);
 	}
 
 	public void save()
@@ -203,6 +210,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 			.isSelected() ? "on" : "off");
 		jEdit.setProperty("sortByName",sortByName.getModel()
 			.isSelected() ? "on" : "off");
+		jEdit.setProperty("view.checkModStatus",checkModStatus.getModel()
+			.isSelected() ? "yes" : "no");
 	}
 
 	// private members
@@ -224,4 +233,5 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox showFullPath;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
+	private JCheckBox checkModStatus;
 }

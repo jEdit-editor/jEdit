@@ -56,6 +56,8 @@ hypersearch.shortcut=F8
 hypersearch-selection.shortcut=F9
 prev-buffer.shortcut=F11
 next-buffer.shortcut=F12
+prev-split.shortcut=C+F11
+next-split.shortcut=C+F12
 
 # Single key
 select-all.shortcut=C+a
@@ -103,6 +105,7 @@ split-vertical.shortcut=C+e 3
 select-line.shortcut=C+e l
 select-paragraph.shortcut=C+e p
 select-word.shortcut=C+e w
+recent-buffer.shortcut=C+e TAB
 
 # C+m
 play-last-macro.shortcut=C+m C+l

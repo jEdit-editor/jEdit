@@ -202,7 +202,22 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		String file = GUIUtilities.showFileDialog(view,getPath(),
 			JFileChooser.SAVE_DIALOG);
 		if(file != null)
+		{
+			File _file = new File(file);
+			if(_file.exists())
+			{
+				Object[] args = { _file.getName() };
+				int result = JOptionPane.showConfirmDialog(view,
+					jEdit.getProperty("fileexists.message",
+					args),jEdit.getProperty("fileexists.title"),
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+				if(result != JOptionPane.YES_OPTION)
+					return false;
+			}
+
 			return save(view,file);
+		}
 		else
 			return false;
 	}
@@ -238,7 +253,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			{
 				Object[] args = { path };
 				int result = JOptionPane.showConfirmDialog(view,
-					jEdit.getProperty("filechanged.message",
+					jEdit.getProperty("filechanged-save.message",
 					args),jEdit.getProperty("filechanged.title"),
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE);
@@ -284,16 +299,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			save(out);
 			url = saveUrl;
 
-			// reposition in buffer list if it is sorted
-			if(!this.path.equals(path))
-			{
-				System.err.println("Repositioning buffer");
-				jEdit.updatePosition(this);
-				this.path = path;
-			}
-
 			file = saveFile;
+
+			String oldPath = this.path;
+			this.path = path;
 			setPath();
+
+			// reposition in buffer list if it is sorted
+			if(!oldPath.equals(path))
+				jEdit.updatePosition(this);
+
 			saveMarkers();
 			if(getFlag(NEW_FILE) || mode.getName().equals("text"))
 				setMode();
@@ -330,6 +345,41 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			view.hideWaitCursor();
 
 		return returnValue;
+	}
+
+	/**
+	 * Check if the buffer has changed on disk.
+	 */
+	public void checkModTime(View view)
+	{
+		long newModTime = file.lastModified();
+		if(newModTime > modTime)
+		{
+			String prop = (isDirty() ? "filechanged-dirty.message"
+				: "filechanged-focus.message");
+
+			Object[] args = { path };
+			int result = JOptionPane.showConfirmDialog(view,
+				jEdit.getProperty(prop,args),
+				jEdit.getProperty("filechanged.title"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+			if(result == JOptionPane.YES_OPTION)
+			{
+				view.saveCaretInfo();
+				load(view);
+
+				View[] views = jEdit.getViews();
+				for(int i = 0; i < views.length; i++)
+				{
+					if(view.getBuffer() == this)
+					{
+						view.unsplit();
+						view.loadCaretInfo();
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -390,13 +440,21 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	}
 
 	/**
-	 * Returns true if this is an untitled file, false otherwise.
+	 * Returns true if this file doesn't exist on disk.
 	 */
 	public final boolean isNewFile()
 	{
 		return getFlag(NEW_FILE);
 	}
 	
+	/**
+	 * Returns true if this file is 'untitled'.
+	 */
+	public final boolean isUntitled()
+	{
+		return getFlag(UNTITLED);
+	}
+
 	/**
 	 * Returns true if this file has changed since last save, false
 	 * otherwise.
@@ -865,6 +923,16 @@ loop:		for(int i = 0; i < markers.size(); i++)
 
 		setPath();
 
+		/* Magic: UNTITLED is only set of newFile param to
+		 * constructor is set, NEW_FILE is also set if file
+		 * doesn't exist on disk.
+		 *
+		 * This is so that we can tell apart files created
+		 * with jEdit.newFile(), and those that just don't
+		 * exist on disk.
+		 */
+		setFlag(UNTITLED,newFile);
+
 		if(url == null)
 			newFile |= !file.exists();
 
@@ -911,13 +979,14 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	private static final int CLOSED = 0;
 	private static final int LOADED = 1;
 	private static final int NEW_FILE = 2;
-	private static final int AUTOSAVE_DIRTY = 3;
-	private static final int DIRTY = 4;
-	private static final int READ_ONLY = 5;
-	private static final int BACKED_UP = 6;
-	private static final int SYNTAX = 7;
-	private static final int UNDO_IN_PROGRESS = 8;
-	private static final int TEMPORARY = 9;
+	private static final int UNTITLED = 3;
+	private static final int AUTOSAVE_DIRTY = 4;
+	private static final int DIRTY = 5;
+	private static final int READ_ONLY = 6;
+	private static final int BACKED_UP = 7;
+	private static final int SYNTAX = 8;
+	private static final int UNDO_IN_PROGRESS = 9;
+	private static final int TEMPORARY = 10;
 
 	private int flags;
 
@@ -1547,6 +1616,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.127  2000/03/14 06:22:24  sp
+ * Lots of new stuff
+ *
  * Revision 1.126  2000/03/04 03:39:54  sp
  * *** empty log message ***
  *

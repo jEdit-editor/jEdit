@@ -71,6 +71,14 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Returns the most recently edited buffer.
+	 */
+	public final Buffer getRecentBuffer()
+	{
+		return recentBuffer;
+	}
+
+	/**
 	 * Sets the buffer being edited by this view. This calls
 	 * <code>loadIfNecessary()</code> on the buffer.
 	 * @param buffer The buffer to edit.
@@ -83,11 +91,11 @@ public class View extends JFrame implements EBComponent
 		// Ensure new buffer is valid
 		buffer.loadIfNecessary(this);
 
-		Buffer oldBuffer = this.buffer;
-		if(oldBuffer != null)
+		recentBuffer = this.buffer;
+		if(recentBuffer != null)
 		{
 			saveCaretInfo();
-			Mode mode = oldBuffer.getMode();
+			Mode mode = recentBuffer.getMode();
 			if(mode != null)
 				mode.leaveView(this);
 		}
@@ -112,7 +120,7 @@ public class View extends JFrame implements EBComponent
 			mode.enterView(this);
 
 		// Don't fire event for the initial buffer set
-		if(oldBuffer != null)
+		if(recentBuffer != null)
 			EditBus.send(new ViewUpdate(this,ViewUpdate.BUFFER_CHANGED));
 
 		if(bufferTabs != null)
@@ -156,21 +164,32 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void split(int orientation)
 	{
-		if(splitPane == null)
+		saveCaretInfo();
+		JEditTextArea oldTextArea = textArea;
+		textArea = createTextArea();
+		initTextArea(textArea,oldTextArea);
+		loadCaretInfo();
+
+		JComponent oldParent = (JComponent)oldTextArea.getParent();
+
+		JSplitPane newSplitPane;
+
+		if(oldParent instanceof JSplitPane)
 		{
-			saveCaretInfo();
-
-			JEditTextArea oldTextArea = textArea;
-			textArea = createTextArea();
-			JComponent oldParent = (JComponent)oldTextArea.getParent();
-
-			splitPane = new JSplitPane(orientation,
-				oldTextArea,textArea);
-			splitPane.setBorder(null);
-			initTextArea(textArea,oldTextArea);
-
-			loadCaretInfo();
-
+			JSplitPane oldSplitPane = (JSplitPane)oldParent;
+			Component left = oldSplitPane.getLeftComponent();
+			newSplitPane = new JSplitPane(orientation,textArea,oldTextArea);
+			newSplitPane.setBorder(null);
+			if(left == oldTextArea)
+				oldSplitPane.setLeftComponent(newSplitPane);
+			else
+				oldSplitPane.setRightComponent(newSplitPane);
+		}
+		else
+		{
+			newSplitPane = splitPane = new JSplitPane(orientation,
+				textArea,oldTextArea);
+			newSplitPane.setBorder(null);
 			if(bufferTabs != null)
 				bufferTabs.update();
 			else
@@ -179,16 +198,6 @@ public class View extends JFrame implements EBComponent
 				oldParent.revalidate();
 			}
 		}
-		else
-			splitPane.setOrientation(orientation);
-
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run()
-			{
-				splitPane.setDividerLocation(0.5);
-				focusOnTextArea();
-			}
-		});
 	}
 
 	/**
@@ -199,11 +208,17 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane != null)
 		{
-			boolean left = (splitPane.getLeftComponent() == textArea);
-			JEditTextArea oldTextArea = (JEditTextArea)(left ?
-				splitPane.getRightComponent()
-				: splitPane.getLeftComponent());
-			JEditTextArea newTextArea = textArea;
+			JEditTextArea[] textAreas = getTextAreas();
+			for(int i = 0; i < textAreas.length; i++)
+			{
+				JEditTextArea _textArea = textAreas[i];
+				if(textArea != _textArea)
+				{
+					EditBus.send(new ViewUpdate(this,_textArea,
+						ViewUpdate.TEXTAREA_DESTROYED));
+				}
+			}
+
 			JComponent parent = (JComponent)splitPane.getParent();
 			parent.remove(splitPane);
 			splitPane = null;
@@ -211,19 +226,16 @@ public class View extends JFrame implements EBComponent
 				bufferTabs.update();
 			else
 			{
-				parent.add(newTextArea);
+				parent.add(textArea);
 				parent.revalidate();
 			}
-
-			EditBus.send(new ViewUpdate(this,oldTextArea,
-				ViewUpdate.TEXTAREA_DESTROYED));
 		}
 
 		focusOnTextArea();
 	}
 
 	/**
-	 * Returns the split pane.
+	 * Returns the top-level split pane, if any.
 	 * @since jEdit 2.3pre2
 	 */
 	public JSplitPane getSplitPane()
@@ -244,10 +256,10 @@ public class View extends JFrame implements EBComponent
 		}
 		else
 		{
-			JEditTextArea[] ta = {
-				(JEditTextArea)splitPane.getLeftComponent(),
-				(JEditTextArea)splitPane.getRightComponent()
-			};
+			Vector vec = new Vector();
+			getTextAreas(vec,splitPane);
+			JEditTextArea[] ta = new JEditTextArea[vec.size()];
+			vec.copyInto(ta);
 			return ta;
 		}
 	}
@@ -497,6 +509,7 @@ public class View extends JFrame implements EBComponent
 
 	// private members
 	private Buffer buffer;
+	private Buffer recentBuffer;
 	private boolean closed;
 
 	private JMenu buffers;
@@ -525,16 +538,30 @@ public class View extends JFrame implements EBComponent
 	private int waitCount;
 
 	private boolean showFullPath;
+	private boolean checkModStatus;
 
 	/**
 	 * Reloads various settings from the properties.
 	 */
+	private void getTextAreas(Vector vec, Component comp)
+	{
+		if(comp instanceof JEditTextArea)
+			vec.addElement(comp);
+		else if(comp instanceof JSplitPane)
+		{
+			JSplitPane split = (JSplitPane)comp;
+			getTextAreas(vec,split.getLeftComponent());
+			getTextAreas(vec,split.getRightComponent());
+		}
+	}
+
 	private void propertiesChanged()
 	{
 		loadToolBar();
 		initBufferTabs();
 
 		showFullPath = "on".equals(jEdit.getProperty("view.showFullPath"));
+		checkModStatus = "yes".equals(jEdit.getProperty("view.checkModStatus"));
 		if(buffer != null)
 			updateTitle();
 
@@ -735,6 +762,7 @@ public class View extends JFrame implements EBComponent
 		initBufferTabs();
 
 		showFullPath = view.showFullPath;
+		checkModStatus = view.checkModStatus;
 
 		JEditTextArea[] textAreas = getTextAreas();
 		for(int i = 0; i < textAreas.length; i++)
@@ -1180,6 +1208,8 @@ public class View extends JFrame implements EBComponent
 					setBuffer(newBuffer);
 				else if(jEdit.getBufferCount() != 0)
 					setBuffer(jEdit.getFirstBuffer());
+
+				recentBuffer = null;
 			}
 
 			updateRecentMenu();
@@ -1252,6 +1282,8 @@ public class View extends JFrame implements EBComponent
 		public void focusGained(FocusEvent evt)
 		{
 			textArea = (JEditTextArea)evt.getSource();
+			if(checkModStatus)
+				buffer.checkModTime(View.this);
 		}
 
 		public void focusLost(FocusEvent evt)
@@ -1346,6 +1378,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.141  2000/03/14 06:22:24  sp
+ * Lots of new stuff
+ *
  * Revision 1.140  2000/02/24 04:13:05  sp
  * Bug fixes, misc updates, etc
  *
@@ -1375,26 +1410,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.131  2000/01/29 10:12:43  sp
  * BeanShell edit mode, bug fixes
- *
- * Revision 1.130  2000/01/29 08:18:08  sp
- * bug fixes, misc updates
- *
- * Revision 1.129  2000/01/29 03:27:20  sp
- * Split window functionality added
- *
- * Revision 1.128  2000/01/29 01:56:51  sp
- * Buffer tabs updates, some other stuff
- *
- * Revision 1.127  2000/01/28 09:24:16  sp
- * Buffer tabs updated (uses better impl == less bugs)
- *
- * Revision 1.126  2000/01/28 00:20:58  sp
- * Lots of stuff
- *
- * Revision 1.125  2000/01/22 23:36:42  sp
- * Improved file close behaviour
- *
- * Revision 1.124  2000/01/21 00:35:29  sp
- * Various updates
  *
  */

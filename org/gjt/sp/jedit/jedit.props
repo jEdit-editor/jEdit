@@ -47,6 +47,7 @@ sortByName=off
 
 # Encoding
 # The OS default will be used if this is not specified
+#buffer.encoding=latin1
 
 # Tab width
 buffer.tabSize=8
@@ -60,9 +61,6 @@ buffer.indentOnEnter=on
 
 # Default edit mode
 buffer.defaultMode=text
-
-# Maximum line length (for Format command)
-buffer.maxLineLen=72
 
 # Print margins (these cannot be set on a per-buffer basis currently.
 # Not much point fixing this though)
@@ -89,6 +87,9 @@ view.bufferTabsPos=1
 
 # Show full path in title bar? (on/off)
 view.showFullPath=off
+
+# Check modification status on focus?
+view.checkModStatus=yes
 
 # Font
 view.font=Monospaced

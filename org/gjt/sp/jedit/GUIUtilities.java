@@ -561,10 +561,10 @@ public class GUIUtilities
 	}
 
 	// advances progress bar
-	static void advanceProgress(String message)
+	static void setProgressText(String message)
 	{
 		if(splash != null)
-			splash.advance(message);
+			splash.setTitle(message);
 	}
 
 	// private members
@@ -649,6 +649,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.51  2000/03/14 06:22:24  sp
+ * Lots of new stuff
+ *
  * Revision 1.50  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *
@@ -678,30 +681,5 @@ public class GUIUtilities
  *
  * Revision 1.41  1999/11/19 08:54:51  sp
  * EditBus integrated into the core, event system gone, bug fixes
- *
- * Revision 1.40  1999/11/16 08:21:20  sp
- * Various fixes, attempt at beefing up expand-abbrev
- *
- * Revision 1.39  1999/11/09 10:14:33  sp
- * Macro code cleanups, menu item and tool bar clicks are recorded now, delete
- * word commands, check box menu item support
- *
- * Revision 1.38  1999/11/07 06:51:43  sp
- * Check box menu items supported
- *
- * Revision 1.37  1999/11/06 02:06:50  sp
- * Logging updates, bug fixing, icons, various other stuff
- *
- * Revision 1.36  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.35  1999/10/24 06:04:00  sp
- * QuickSearch in tool bar, auto indent updates, macro recorder updates
- *
- * Revision 1.34  1999/10/23 03:48:22  sp
- * Mode system overhaul, close all dialog box, misc other stuff
- *
- * Revision 1.33  1999/10/10 06:38:45  sp
- * Bug fixes and quicksort routine
  *
  */

@@ -1,6 +1,6 @@
 /*
  * MultiFileSearchDialog.java - Multifile search and replace dialog
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,8 +262,8 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		Box box2 = new Box(BoxLayout.Y_AXIS);
 		box2.add(Box.createGlue());
-		directoryPath = new JTextField(jEdit.getProperty(
-			"multifile.directory.path.value"));
+		directoryPath = new JTextField(MiscUtilities.getFileParent(
+			view.getBuffer().getPath()));
 		Dimension dim = directoryPath.getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		directoryPath.setMaximumSize(dim);
@@ -286,6 +286,7 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		Mode[] modes = jEdit.getModes();
 		Vector globs = new Vector(modes.length);
+		globs.addElement("*");
 		for(int i = 0; i < modes.length; i++)
 		{
 			String glob = (String)modes[i].getProperty("filenameGlob");
@@ -303,8 +304,8 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		directoryGlob = new JComboBox(globs);
 		directoryGlob.setEditable(true);
-		directoryGlob.setSelectedItem(jEdit.getProperty(
-			"multifile.directory.glob.value"));
+		directoryGlob.setSelectedItem("*" + MiscUtilities.getFileExtension(
+			view.getBuffer().getName()));
 		dim = directoryGlob.getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		directoryGlob.setMaximumSize(dim);
@@ -356,6 +357,9 @@ public class MultiFileSearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/03/14 06:22:25  sp
+ * Lots of new stuff
+ *
  * Revision 1.9  2000/02/08 10:04:05  sp
  * Bug fixes, documentation updates
  *

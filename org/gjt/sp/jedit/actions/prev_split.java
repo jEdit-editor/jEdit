@@ -1,6 +1,6 @@
 /*
- * SplashScreen.java - Splash screen
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * prev_split.java
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,28 +17,30 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.actions;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.*;
 
-public class SplashScreen extends JFrame
+public class prev_split extends EditAction
 {
-	public SplashScreen()
+	public void actionPerformed(ActionEvent evt)
 	{
-		super("jEdit is starting up");
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-		JLabel label = new JLabel(new ImageIcon(getClass()
-			.getResource("/org/gjt/sp/jedit/jedit_logo.jpg")));
-		setContentPane(label);
-
-		Dimension screen = getToolkit().getScreenSize();
-		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
-		show();
-
-		label.paintImmediately(0,0,label.getWidth(),label.getHeight());
+		View view = getView(evt);
+		JEditTextArea[] textAreas = view.getTextAreas();
+		JEditTextArea textArea = view.getTextArea();
+		for(int i = 0; i < textAreas.length; i++)
+		{
+			if(textArea == textAreas[i])
+			{
+				if(i == 0)
+					textArea = textAreas[textAreas.length-1];
+				else
+					textArea = textAreas[i-1];
+				textArea.requestFocus();
+				break;
+			}
+		}
 	}
 }

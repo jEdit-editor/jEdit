@@ -60,10 +60,12 @@ view.mbar=buffers file edit search utils macros plugins help-menu
 ### Buffers menu
 buffers=prev-buffer \
 	next-buffer \
+	recent-buffer \
 	-
 buffers.label=$Buffers
-prev-buffer.label=O$pen Previous Buffer
-next-buffer.label=$Open Next Buffer
+prev-buffer.label=Go to $Previous Buffer
+next-buffer.label=Go to $Next Buffer
+recent-buffer.label=Go to $Last Edited Buffer
 
 ### File menu
 file=new-file \
@@ -289,6 +291,8 @@ utils=new-view \
       unsplit \
       split-horizontal \
       split-vertical \
+      prev-split \
+      next-split \
       - \
       toggle-gutter \
       toggle-line-numbers \
@@ -308,6 +312,8 @@ close-view.label=$Close View
 split-horizontal.label=Split $Horizontally
 split-vertical.label=Split $Vertically
 unsplit.label=Uns$plit
+prev-split.label=Go to P$revious Split
+next-split.label=Go to N$ext Split
 toggle-gutter.label=Gutter E$xpanded
 toggle-line-numbers.label=Line Nu$mbering
 log-viewer.label=$Activity Log...
@@ -620,11 +626,23 @@ pasteprev.title=Paste Previous
 pasteprev.caption=Previous clippings:
 pasteprev.insert=Insert
 
-# File changed on disk dialog
+# File changed on disk dialogs
 filechanged.title=File Changed on Disk
-filechanged.message=The file {0}\n\
+filechanged-save.message=The file {0}\n\
 	has been modified on disk by another program. Are you sure\n\
 	you want to continue saving it?
+filechanged-focus.message=The file {0}\n\
+	has been modified on disk by another program. You can reload it\n\
+	now to pick up the other program's changes. Would you like to\n\
+	reload it?
+filechanged-dirty.message=The file {0}\n\
+	has been modified on disk by another program. Would you like to\n\
+	reload it? IF YOU RELOAD, UNSAVED CHANGES WILL BE LOST.
+
+# File exists dialog
+fileexists.title=File Exists
+fileexists.message=The file {0} already exists. Are you sure you want\n\
+	to overwrite it?
 
 # Select line range
 selectlinerange.title=Select Line Range
@@ -681,6 +699,7 @@ options.general.bufferTabsPos=Buffer tabs position:\
 options.general.showFullPath=Show full path of buffers in title bar
 options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort by file name only (instead of full path)
+options.general.checkModStatus=Check file modification time on focus
 options.editor.label=Editor
 options.editor.defaultMode=Default edit mode:\ 
 options.editor.font=Text font:\ 

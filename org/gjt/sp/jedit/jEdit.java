@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.03.99.00";
+		return "02.04.01.00";
 	}
 
 	/**
@@ -208,9 +208,9 @@ public class jEdit
 		Log.init(true,level);
 		initMisc();
 		initSystemProperties();
-		GUIUtilities.advanceProgress("Loading plugins...");
+		GUIUtilities.setProgressText("Loading plugins");
 		initPlugins();
-		GUIUtilities.advanceProgress("Loading user properties...");
+		GUIUtilities.setProgressText("Loading user properties");
 		initUserProperties();
 		if(settingsDirectory != null)
 		{
@@ -228,18 +228,18 @@ public class jEdit
 		initPLAF();
 		SearchAndReplace.load();
 		Abbrevs.load();
-		GUIUtilities.advanceProgress("Loading actions and modes...");
+		GUIUtilities.setProgressText("Loading actions and modes");
 		initActions();
 		initModes();
 		initKeyBindings();
 		Macros.loadMacros();
 
 		// Start plugins
-		GUIUtilities.advanceProgress("Starting plugins...");
+		GUIUtilities.setProgressText("Starting plugins");
 		JARClassLoader.initPlugins();
 
 		// Preload menu and tool bar models
-		GUIUtilities.advanceProgress("Loading GUI...");
+		GUIUtilities.setProgressText("Loading user interface");
 
 		GUIUtilities.loadMenuBarModel("view.mbar");
 		GUIUtilities.loadMenuModel("view.context");
@@ -252,7 +252,7 @@ public class jEdit
 			server = new EditServer(portFile);
 
 		// Load files specified on the command line
-		GUIUtilities.advanceProgress("Opening files...");
+		GUIUtilities.setProgressText("Creating initial view");
 
 		for(int i = 0; i < args.length; i++)
 		{
@@ -276,10 +276,7 @@ public class jEdit
 		if(bufferCount == 0)
 			newFile(null);
 
-		GUIUtilities.advanceProgress("Creating initial view...");
-
 		// Create the view and hide the splash screen.
-		// Paranoid thread safety courtesy of Sun.
 		final Buffer _buffer = buffer;
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -749,6 +746,17 @@ public class jEdit
 	 */
 	public static Buffer newFile(View view)
 	{
+		// If only one new file is open which is clean, just close
+		// it, which will create an 'Untitled-1'
+		if(buffersFirst != null && buffersFirst == buffersLast
+			&& buffersFirst.isUntitled()
+			&& !buffersFirst.isDirty())
+		{
+			closeBuffer(view,buffersFirst);
+			// return the newly created 'untitled-1'
+			return buffersFirst;
+		}
+
 		// Find the highest Untitled-n file
 		int untitledCount = 0;
 		Buffer buffer = buffersFirst;
@@ -1461,6 +1469,7 @@ public class jEdit
 		addAction("next-bracket-exp");
 		addAction("next-buffer");
 		addAction("next-paragraph");
+		addAction("next-split");
 		addAction("open-file");
 		addAction("open-path");
 		addAction("open-url");
@@ -1473,7 +1482,9 @@ public class jEdit
 		addAction("prev-bracket-exp");
 		addAction("prev-buffer");
 		addAction("prev-paragraph");
+		addAction("prev-split");
 		addAction("print");
+		addAction("recent-buffer");
 		addAction("record-macro");
 		addAction("record-temp-macro");
 		addAction("redo");
@@ -1678,6 +1689,18 @@ public class jEdit
 
 	private static void addBufferToList(Buffer buffer)
 	{
+		// if only one, clean, 'untitled' buffer is open, we
+		// replace it
+		if(buffersFirst != null && buffersFirst == buffersLast
+			&& buffersFirst.isUntitled()
+			&& !buffersFirst.isDirty())
+		{
+			EditBus.send(new BufferUpdate(buffersFirst,
+				BufferUpdate.CLOSED));
+			buffersFirst = buffersLast = buffer;
+			return;
+		}
+
 		bufferCount++;
 
 		if(buffersFirst == null)
@@ -1799,6 +1822,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.196  2000/03/14 06:22:24  sp
+ * Lots of new stuff
+ *
  * Revision 1.195  2000/03/04 03:39:54  sp
  * *** empty log message ***
  *

@@ -96,6 +96,48 @@ public class MiscUtilities
 	}
 
 	/**
+	 * Returns the extension of the specified filename, or an empty
+	 * string if there is none.
+	 * @param name The file name
+	 */
+	public static String getFileExtension(String name)
+	{
+		int index = name.indexOf('.');
+		if(index == -1)
+			return "";
+		else
+			return name.substring(index);
+	}
+
+	/**
+	 * Returns the last component of the specified path.
+	 * @param path The path name
+	 */
+	public static String getFileName(String path)
+	{
+		int count = Math.max(0,path.length() - 2);
+		int index = path.lastIndexOf(File.separatorChar,count);
+		if(index == -1)
+			index = path.lastIndexOf('/',count);
+
+		return path.substring(index + 1);
+	}
+
+	/**
+	 * Returns the directory of the specified path.
+	 * @param path The path name
+	 */
+	public static String getFileParent(String path)
+	{
+		int count = Math.max(0,path.length() - 2);
+		int index = path.lastIndexOf(File.separatorChar,count);
+		if(index == -1)
+			index = path.lastIndexOf('/',count);
+
+		return path.substring(0,index + 1);
+	}
+
+	/**
 	 * Returns the number of leading white space characters in the
 	 * specified string.
 	 * @param str The string
@@ -563,6 +605,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/03/14 06:22:24  sp
+ * Lots of new stuff
+ *
  * Revision 1.26  2000/02/16 05:51:20  sp
  * Misc updates, dirk's changes integrated
  *

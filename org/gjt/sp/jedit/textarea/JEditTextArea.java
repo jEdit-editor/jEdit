@@ -1838,12 +1838,15 @@ public class JEditTextArea extends JComponent
 				rightWidth,
 				centerHeight);
 
-			Dimension dim = leftOfScrollBar.getPreferredSize();
-			leftOfScrollBar.setBounds(ileft,
-				itop + centerHeight,
-				dim.width,
-				bottomHeight);
-			ileft += dim.width;
+			if(leftOfScrollBar != null)
+			{
+				Dimension dim = leftOfScrollBar.getPreferredSize();
+				leftOfScrollBar.setBounds(ileft,
+					itop + centerHeight,
+					dim.width,
+					bottomHeight);
+				ileft += dim.width;
+			}
 
 			bottom.setBounds(
 				ileft,
@@ -2295,6 +2298,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.46  2000/03/14 06:22:25  sp
+ * Lots of new stuff
+ *
  * Revision 1.45  2000/02/27 00:39:51  sp
  * Misc changes
  *

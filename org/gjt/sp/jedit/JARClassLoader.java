@@ -149,9 +149,12 @@ public class JARClassLoader extends ClassLoader
 		for(int i = 0; i < pluginClasses.size(); i++)
 		{
 			String name = (String)pluginClasses.elementAt(i);
+			name = MiscUtilities.fileToClass(name);
 
 			try
 			{
+				GUIUtilities.setProgressText("Starting plugin "
+					+ name);
 				loadPluginClass(name);
 			}
 			catch(Throwable t)
@@ -167,8 +170,6 @@ public class JARClassLoader extends ClassLoader
 	private void loadPluginClass(String name)
 		throws Exception
 	{
-		name = MiscUtilities.fileToClass(name);
-
 		// Check if a plugin with the same name is already loaded
 		EditPlugin[] plugins = jEdit.getPlugins();
 
@@ -405,6 +406,9 @@ public class JARClassLoader extends ClassLoader
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  2000/03/14 06:22:24  sp
+ * Lots of new stuff
+ *
  * Revision 1.30  2000/02/27 00:39:50  sp
  * Misc changes
  *
