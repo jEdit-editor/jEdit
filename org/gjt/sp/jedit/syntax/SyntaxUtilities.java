@@ -1,6 +1,7 @@
 /*
  * SyntaxUtilities.java - Utility functions used by syntax highlighting
  * Copyright (C) 1999 Slava Pestov
+ * Portions copyright (C) 1999 Andre Kaplan
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,6 +166,9 @@ public class SyntaxUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/04/09 04:40:00  sp
+ * Documentation updates
+ *
  * Revision 1.12  2000/04/09 03:14:14  sp
  * Syntax token backgrounds can now be specified
  *
