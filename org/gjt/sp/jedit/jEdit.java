@@ -349,14 +349,27 @@ public class jEdit
 	 */
 	public static final boolean getBooleanProperty(String name)
 	{
+		return getBooleanProperty(name,false);
+	}
+
+	/**
+	 * Returns the value of a boolean property.
+	 * @param name The property
+	 * @param def The default value
+	 */
+	public static final boolean getBooleanProperty(String name, boolean def)
+	{
 		String value = getProperty(name);
 		if(value == null)
-			return false;
+			return def;
 		else if(value.equals("true") || value.equals("yes")
 			|| value.equals("on"))
 			return true;
-		else
+		else if(value.equals("false") || value.equals("no")
+			|| value.equals("off"))
 			return false;
+		else
+			return def;
 	}
 
 	/**
@@ -2097,6 +2110,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.219  2000/04/16 03:10:31  sp
+ * getBooleanProperty() updated
+ *
  * Revision 1.218  2000/04/15 04:14:47  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
  *
