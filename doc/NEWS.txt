@@ -48,9 +48,9 @@ in the View->Scrolling menu. (Contributed by Ollie Rutherfurd
 * New edit modes
 
 Syntax highlighting was added for the following file types, bringing the
-total number of edit modes up to 42:
+total number of edit modes up to 43:
 
-- Intel x86 assembly (contributed by Kristian Ovaska
+- MASM/NASM assembly (contributed by Kristian Ovaska
   <kristian.ovaska@helsinki.fi>)
 - C# (contributed by Ollie Rutherfurd <oliver@rutherfurd.net>)
 - DSSSL
