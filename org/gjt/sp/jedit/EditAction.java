@@ -1,6 +1,6 @@
 /*
  * EditAction.java - jEdit action listener
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -372,6 +372,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  2000/09/03 03:16:52  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.27  2000/09/01 11:31:00  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

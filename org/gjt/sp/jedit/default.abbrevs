@@ -12,8 +12,8 @@ Ve|Vector
 Ha|Hashtable
 hme|hasMoreElements()
 ne|nextElement()
-serr|System.err.println(\|)
-sout|System.out.println(\|)
+serr|System.err.println(\|);
+sout|System.out.println(\|);
 
 cg|Box.createGlue()
 chs|Box.createHorizontalStrut(\|)

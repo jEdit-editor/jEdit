@@ -48,20 +48,13 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	{
 		setLayout(new BorderLayout());
 
-		JPanel panel = new JPanel(new GridLayout(3,1));
+		JPanel panel = new JPanel(new GridLayout(2,1));
 
 		/* Show toolbar */
 		showToolbar = new JCheckBox(jEdit.getProperty(
 			"options.toolbar.showToolbar"));
 		showToolbar.setSelected(jEdit.getBooleanProperty("view.showToolbar"));
 		panel.add(showToolbar);
-
-		/* Show search bar */
-		showSearchbar = new JCheckBox(jEdit.getProperty(
-			"options.toolbar.showSearchbar"));
-		showSearchbar.setSelected(jEdit.getBooleanProperty(
-			"view.showSearchbar"));
-		panel.add(showSearchbar);
 
 		panel.add(new JLabel(jEdit.getProperty(
 			"options.toolbar.caption")));
@@ -173,8 +166,6 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	{
 		jEdit.setBooleanProperty("view.showToolbar",showToolbar
 			.isSelected());
-		jEdit.setBooleanProperty("view.showSearchbar",showSearchbar
-			.isSelected());
 
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < listModel.getSize(); i++)
@@ -192,7 +183,6 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 	// private members
 	private JCheckBox showToolbar;
-	private JCheckBox showSearchbar;
 	private DefaultListModel listModel;
 	private JList list;
 	private JButton add;
@@ -579,6 +569,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/09/03 03:16:53  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.9  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

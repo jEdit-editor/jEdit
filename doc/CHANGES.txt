@@ -4,6 +4,23 @@ JEDIT 2.6 VERSION HISTORY
 
 + New Features
 
+- New 'jEdit Command Line' consolidates a number of useful features.
+  - C+ENTER (or Utilities->jEdit Command Line) moves keyboard focus to it
+  - Typing numbers, followed by a keystroke or menu selection, will repeat
+    that keystroke/menu selection
+  - Typing an action name, followed by ENTER will execute that action.
+    If, while typing the action name, you pause for more than half a
+    second or so, a popup will be displayed showing possible completions
+    for the currently entered text. To navigate the popup, use either the
+    arrow keys and ENTER, or the mouse
+  - 'Go to line' now prompts for the line number in the command line, for
+    faster operation
+  - Some actions, such as open-file and vfs-browser, behave differently
+    when invoked from the command line. open-file prompts for a path name
+    instead of displaying the Open File dialog box, and vfs-browser prompts
+    for a directory to display in the browser
+  - Search toolbar removed; Search->Quick Search and Search->Incremental
+    Search now prompt for the search string in the command line
 - Rudimentary keyboard navigation added to VFS browser:
   - typing first few characters of a file's name selects it (only in list
     view)
@@ -14,7 +31,7 @@ JEDIT 2.6 VERSION HISTORY
     Up/Down to select the previous/next item in the list, etc
 - Activity log is now written to $HOME/.jedit/activity.log, and only the
   last 500 messages are kept in memory. This conserves resources because
-  the log could grow to a very large size if jEdit is open for a long
+  the log could grow to a very large size if jEdit was open for a long
   period of time
 
 + Enhancements
@@ -24,9 +41,9 @@ JEDIT 2.6 VERSION HISTORY
   makes it faster and less intrusive
 - Settings are now saved in the Search & Replace and HyperSearch dialog
   boxes even if 'Cancel' is clicked
-- New method: View.setKeyEventHandlingComponent(Component comp). If comp
-  is non-null, all key events will be forwarded to it. Useful when
-  displaying popup windows and such
+- New method: View.setKeyEventInterceptor(KeyListener listener). If the
+  listener is non-null, all key events will be forwarded to it. Useful
+  when displaying popup windows and such
 - Slightly tweaked auto indent
 - The offset of the caret from the beginning of the line is now preserved
   by the Page Up and Page Down keys
@@ -36,8 +53,8 @@ JEDIT 2.6 VERSION HISTORY
   saved. This was annoying, especially with autosave
 - Documentation updates
 - The window docking code is now slightly more resistent to broken dockables
-  being added
 - Undoing all changes up to a save now clears the dirty flag
+- 'Load Session' and 'Save Session' commands moved to 'File' menu
 
 + Bug Fixes
 
@@ -57,7 +74,7 @@ JEDIT 2.6 VERSION HISTORY
   while the dockable is visible and then closing the dockable would
   reset its position to what it was previously
 - Plugin manager would throw a NullPointerException when updating plugins
-  with no mail class, such as BuildTools
+  with no main class, such as BuildTools
 - jEdit would hang if buffer list sorting was enabled and a buffer was
   saved to a file name which would re-sort it to the beginning or end of
   the list
@@ -65,6 +82,8 @@ JEDIT 2.6 VERSION HISTORY
   properly sometimes
 - The last line of multi-line abbreviations wasn't indented
 - Under very rare circumstances, undos would throw IllegalArgumentExceptions
+- Bracket matching would fail when brackets surrounded a syntax token
+- Buffers menu was empty for initially opened views
 
 + API Changes
 

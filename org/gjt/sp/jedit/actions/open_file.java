@@ -34,7 +34,6 @@ public class open_file extends EditAction
 		if(path == null)
 		{
 			CommandLine commandLine = getCommandLine(evt);
-			System.err.println(commandLine);
 			if(commandLine != null)
 			{
 				commandLine.promptLine(jEdit.getProperty(

@@ -2122,23 +2122,17 @@ public class JEditTextArea extends JComponent
 		{
 			super.undo();
 
-			SwingUtilities.invokeLater(new Runnable()
+			if(focusedComponent != null)
 			{
-				public void run()
-				{
-					if(focusedComponent != null)
-					{
-						int length = focusedComponent
-							.getBuffer().getLength();
-						if(start < length && end < length)
-							focusedComponent.select(start,end);
-						else
-							Log.log(Log.WARNING,this,
-								start + " or " + end
-								+ " > " + length + "??!!");
-					}
-				}
-			});
+				int length = focusedComponent
+					.getBuffer().getLength();
+				if(start < length && end < length)
+					focusedComponent.select(start,end);
+				else
+					Log.log(Log.WARNING,this,
+						start + " or " + end
+						+ " > " + length + "??!!");
+			}
 		}
 
 		public boolean addEdit(UndoableEdit edit)
@@ -2171,6 +2165,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.81  2000/09/03 03:16:53  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.80  2000/09/01 11:31:01  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

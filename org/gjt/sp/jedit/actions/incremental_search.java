@@ -1,5 +1,5 @@
 /*
- * toolbar_isearch.java
+ * incremental_search.java
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,24 +20,15 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.gui.CommandLine;
 import org.gjt.sp.jedit.*;
 
-public class toolbar_isearch extends EditAction
+public class incremental_search extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		SearchBar searchBar = view.getSearchBar();
-		if(searchBar == null)
-			view.getToolkit().beep();
-		else
-		{
-			searchBar.setIncremental(true);
-			searchBar.getField().setText(view.getTextArea()
-				.getSelectedText());
-			searchBar.getField().requestFocus();
-		}
+		view.getCommandLine().setState(CommandLine.INCREMENTAL_SEARCH_STATE);
 	}
 
 	public boolean isRecordable()

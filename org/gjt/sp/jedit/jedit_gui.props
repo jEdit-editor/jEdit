@@ -1,4 +1,4 @@
-###
+s###
 ### jEdit user interface definitions
 ### By Slava Pestov <sp@gjt.org>
 ###
@@ -74,9 +74,6 @@ icons=\
       Unsplit.gif \
       blank-20.gif
 
-view.search.find=Find:
-view.search.incremental=Incremental
-
 ###
 ### CONTEXT MENUS
 ###
@@ -111,6 +108,9 @@ file=new-file \
      - \
      print \
      - \
+     load-session \
+     save-session \
+     - \
      exit
 file.label=$File
 new-file.label=$New File
@@ -127,6 +127,8 @@ save.label=$Save
 save-as.label=Sa$ve As...
 save-all.label=Save A$ll Buffers...
 print.label=$Print...
+load-session.label=Loa$d Session...
+save-session.label=Sav$e Session...
 exit.label=E$xit
 
 ### Edit menu
@@ -286,8 +288,8 @@ search=find \
        - \
        multifile-search \
        - \
-       toolbar-find \
-       toolbar-isearch \
+       quick-search \
+       incremental-search \
        - \
        set-marker \
        prev-marker \
@@ -303,8 +305,8 @@ replace-all.label=Replace $All
 hypersearch.label=$HyperSearch...
 hypersearch-selection.label=HyperSearch for Se$lection...
 multifile-search.label=M$ultifile Search Settings...
-toolbar-find.label=$Toolbar Find
-toolbar-isearch.label=Toolbar $Incremental Search
+quick-search.label=$Quick Search
+incremental-search.label=$Incremental Search
 set-marker.label=Set $Marker...
 no-markers.label=No Markers Defined
 prev-marker.label=Go to $Previous Marker
@@ -351,9 +353,6 @@ buffers.label=Current $Buffer
 ### Utilities menu
 utils=command-line \
       - \
-      load-session \
-      save-session \
-      - \
       vfs-browser \
       io-progress-monitor \
       clear-directory-cache \
@@ -368,14 +367,12 @@ utils=command-line \
       global-options
 utils.label=$Utilities
 command-line.label=$jEdit Command Line
-load-session.label=$Load Session...
-save-session.label=$Save Session...
 vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$View Activity Log...
-update-log.label=Up$date Activity Log on Disk
-clear-directory-cache.label=$Clear Remote Directory Cache
-forget-passwords.label=Forget Remote $Passwords
+update-log.label=Update Activity $Log on Disk
+clear-directory-cache.label=Clear Remote Directory Cache
+forget-passwords.label=Forget Remote Passwords
 reload-modes.label=$Reload Edit Modes
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
@@ -503,6 +500,8 @@ view.status.recording=Macro recording
 view.status.goto-line=Go to line:
 view.status.vfs-browser=Enter directory or URL to browse:
 view.status.open-file=Enter path or URL to open:
+view.status.quick-search=Quick search for:
+view.status.incremental-search=Incremental search for:
 
 view.command-line.top-level=Enter a repeat count or action name:
 view.command-line.repeat=Enter repeat count, followed by command to repeat:
@@ -632,7 +631,9 @@ search.find=Search for: (up arrow recalls previous)
 search.replace=Replace with:
 search.keepDialog=Keep Dialog 
 search.ignoreCase=Ignore Case
+search.ignoreCase.mnemonic=i
 search.regexp=Regexp
+search.regexp.mnemonic=r
 search.multifile=Multi File...
 search.findBtn=Find
 search.replaceSelection=Replace in Selection
@@ -734,7 +735,7 @@ close.discard.mnemonic=d
 
 # Confirm exit dialog
 confirm-exit.title=Confirm Exit
-confirm-exit.message=Are you sure you want to exit from jEdit?
+confirm-exit.message=Are you sure you want to exit jEdit?
 
 # Add abbrev dialog
 add-abbrev.title=Add Abbreviation
@@ -965,7 +966,6 @@ options.docking.autoOpen=Auto open
 
 options.toolbar.label=Tool Bar
 options.toolbar.showToolbar=Show tool bar
-options.toolbar.showSearchbar=Show search bar
 options.toolbar.caption=Buttons to display on tool bar:
 options.toolbar.add=Add...
 options.toolbar.remove=Remove

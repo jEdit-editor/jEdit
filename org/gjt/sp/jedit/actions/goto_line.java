@@ -1,6 +1,6 @@
 /*
  * goto_line.java
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,10 +63,5 @@ public class goto_line extends EditAction
 
 		Element element = map.getElement(line - 1);
 		view.getTextArea().setCaretPosition(element.getStartOffset());
-	}
-
-	public boolean isRepeatable()
-	{
-		return false;
 	}
 }

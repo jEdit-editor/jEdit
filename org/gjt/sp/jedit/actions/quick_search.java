@@ -1,6 +1,6 @@
 /*
- * open_path.java
- * Copyright (C) 1998, 2000 Slava Pestov
+ * quick_search.java
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,19 +20,19 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.CommandLine;
 import org.gjt.sp.jedit.*;
 
-public class open_path extends EditAction
+public class quick_search extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		String path = evt.getActionCommand();
+		view.getCommandLine().setState(CommandLine.QUICK_SEARCH_STATE);
+	}
 
-		if(path == null)
-			path = GUIUtilities.input(view,"openurl",null);
-
-		if(path != null)
-			jEdit.openFile(view,path);
+	public boolean isRecordable()
+	{
+		return false;
 	}
 }

@@ -623,6 +623,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 		if(bmsg.getWhat() == BufferUpdate.CREATED
 			|| bmsg.getWhat() == BufferUpdate.CLOSED)
 			browserView.updateFileView();
+		else if(bmsg.getWhat() == BufferUpdate.DIRTY_CHANGED)
+		{
+			// if a buffer becomes clean, it means it was
+			// saved. So we repaint the browser view, in
+			// case it was a 'save as'
+			if(!bmsg.getBuffer().isDirty())
+				browserView.updateFileView();
+		}
 	}
 
 	private void propertiesChanged()
@@ -871,6 +879,20 @@ public class VFSBrowser extends JPanel implements EBComponent
 				menuItem.addActionListener(new ActionHandler());
 				popup.add(menuItem);
 			}
+
+			popup.addSeparator();
+
+			JMenuItem clearDirectoryCache = new JMenuItem(jEdit.getProperty(
+				"clear-directory-cache.label"));
+			clearDirectoryCache.setActionCommand("clearDirectoryCache");
+			clearDirectoryCache.addActionListener(actionHandler);
+			popup.add(clearDirectoryCache);
+
+			JMenuItem forgetPasswords = new JMenuItem(jEdit.getProperty(
+				"forget-passwords.label"));
+			forgetPasswords.setActionCommand("forgetPasswords");
+			forgetPasswords.addActionListener(actionHandler);
+			popup.add(forgetPasswords);
 		}
 
 		class ActionHandler implements ActionListener
@@ -929,6 +951,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 					if(directory != null)
 						setDirectory(directory);
 				}
+				else if(actionCommand.equals("clearDirectoryCache"))
+					DirectoryCache.clearAllCachedDirectories();
+				else if(actionCommand.equals("forgetPasswords"))
+					VFSManager.forgetPasswords();
 			}
 		}
 
@@ -955,6 +981,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.20  2000/09/03 03:16:53  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.19  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

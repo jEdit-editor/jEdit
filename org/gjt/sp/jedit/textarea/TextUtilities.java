@@ -119,8 +119,7 @@ public class TextUtilities
 				if(i != line)
 				{
 					lineTokens = tokenMarker.markTokens(lineText,i).lastToken;
-					tokenListOffset = lineLength;
-					scanStartOffset = lineLength - 1;
+					tokenListOffset = scanStartOffset = lineLength - 1;
 				}
 				else
 				{
@@ -128,10 +127,10 @@ public class TextUtilities
  						tokenListOffset += lineTokens.length;
 					//lineTokens = lineInfo.lastToken;
 					scanStartOffset = offset;
-					/* System.err.println("sso=" + scanStartOffset + ",tlo=" + tokenListOffset);
+					/*System.err.println("sso=" + scanStartOffset + ",tlo=" + tokenListOffset);
 
 					Token __ = lineTokens;
-					for(;;)
+					 for(;;)
 					{
 						if(__ == null)
 							break;
@@ -150,6 +149,8 @@ public class TextUtilities
 						continue;
 					}
 
+					//System.err.println(lineTokens);
+
 					int len = lineTokens.length;
 					if(id == idOfBracket)
 					{
@@ -164,6 +165,7 @@ public class TextUtilities
 							} */
 
 							char ch = lineText.array[lineText.offset + j];
+							//System.err.print(ch);
 							if(ch == c)
 								count++;
 							else if(ch == cprime)
@@ -172,6 +174,7 @@ public class TextUtilities
 									return lineStart + j;
 							}
 						}
+						//System.err.println();
 					}
 
 					scanStartOffset = tokenListOffset = tokenListOffset - len;
@@ -304,6 +307,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/09/03 03:16:53  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.10  2000/07/26 07:48:45  sp
  * stuff
  *

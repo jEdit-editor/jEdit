@@ -1937,6 +1937,7 @@ public class jEdit
 		addAction("home");
 		addAction("hypersearch");
 		addAction("hypersearch-selection");
+		addAction("incremental-search");
 		addAction("indent-lines");
 		addAction("indent-on-enter");
 		addAction("indent-on-tab");
@@ -1976,6 +1977,7 @@ public class jEdit
 		addAction("prev-split");
 		addAction("prev-word");
 		addAction("print");
+		addAction("quick-search");
 		addAction("recent-buffer");
 		addAction("record-macro");
 		addAction("record-temp-macro");
@@ -2025,8 +2027,6 @@ public class jEdit
 		addAction("tab");
 		addAction("to-lower");
 		addAction("to-upper");
-		addAction("toolbar-find");
-		addAction("toolbar-isearch");
 		addAction("undo");
 		addAction("update-log");
 		addAction("unsplit");
@@ -2353,6 +2353,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.275  2000/09/03 03:16:53  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.274  2000/09/01 11:31:00  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

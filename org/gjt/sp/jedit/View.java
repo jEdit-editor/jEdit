@@ -80,15 +80,6 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Returns the search bar.
-	 * @since jEdit 2.4pre4
-	 */
-	public final SearchBar getSearchBar()
-	{
-		return searchBar;
-	}
-
-	/**
 	 * Returns the command line prompt.
 	 * @since jEdit 2.6pre5
 	 */
@@ -400,10 +391,7 @@ public class View extends JFrame implements EBComponent
 		else if(msg instanceof MacrosChanged)
 			updateMacrosMenu();
 		else if(msg instanceof SearchSettingsChanged)
-		{
-			if(searchBar != null)
-				searchBar.update();
-		}
+			commandLine.updateSearchSettings();
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
 	}
@@ -485,8 +473,6 @@ public class View extends JFrame implements EBComponent
 
 		dockableWindowManager = new DockableWindowManager(this);
 
-		editPane = createEditPane(null,buffer);
-
 		// Dynamic menus
 		buffers = GUIUtilities.loadMenu(this,"buffers");
 		recent = GUIUtilities.loadMenu(this,"recent-files");
@@ -496,9 +482,13 @@ public class View extends JFrame implements EBComponent
 		macros = GUIUtilities.loadMenu(this,"macros");
 		help = GUIUtilities.loadMenu(this,"help-menu");
 		plugins = GUIUtilities.loadMenu(this,"plugins");
+
+		editPane = createEditPane(null,buffer);
+
+		updateBuffersMenu();
 		updateMacrosMenu();
-		updateHelpMenu();
 		updatePluginsMenu();
+		updateHelpMenu();
 
 		EditBus.addToBus(this);
 
@@ -549,7 +539,7 @@ public class View extends JFrame implements EBComponent
 			= gotoMarker = macros = plugins = help = null;
 		toolBars = null;
 		toolBar = null;
-		searchBar = null;
+		commandLine = null;
 		status = null;
 		splitPane = null;
 		inputHandler = null;
@@ -679,7 +669,6 @@ public class View extends JFrame implements EBComponent
 
 	private Box toolBars;
 	private JToolBar toolBar;
-	private SearchBar searchBar;
 
 	private EditPane editPane;
 	private JSplitPane splitPane;
@@ -712,7 +701,7 @@ public class View extends JFrame implements EBComponent
 	 */
 	private void propertiesChanged()
 	{
-		loadToolBars();
+		loadToolBar();
 
 		showFullPath = jEdit.getBooleanProperty("view.showFullPath");
 		checkModStatus = jEdit.getBooleanProperty("view.checkModStatus");
@@ -723,7 +712,7 @@ public class View extends JFrame implements EBComponent
 		dockableWindowManager.propertiesChanged();
 	}
 
-	private void loadToolBars()
+	private void loadToolBar()
 	{
 		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
@@ -738,20 +727,6 @@ public class View extends JFrame implements EBComponent
 		{
 			removeToolBar(toolBar);
 			toolBar = null;
-		}
-
-		if(jEdit.getBooleanProperty("view.showSearchbar"))
-		{
-			if(searchBar == null)
-			{
-				searchBar = new SearchBar(this);
-				addToolBar(searchBar);
-			}
-		}
-		else if(searchBar != null)
-		{
-			removeToolBar(searchBar);
-			searchBar = null;
 		}
 	}
 
@@ -1068,6 +1043,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.196  2000/09/03 03:16:53  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.195  2000/09/01 11:31:00  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

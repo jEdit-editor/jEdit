@@ -84,9 +84,6 @@ buffer.syntax=true
 # Show toolbar?
 view.showToolbar=true
 
-# Show search bar?
-view.showSearchbar=true
-
 # Show buffer tabs?
 view.showBufferTabs=true
 

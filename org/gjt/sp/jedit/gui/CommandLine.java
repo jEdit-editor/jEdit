@@ -26,8 +26,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
+import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.*;
+import org.gjt.sp.util.Log;
 
 public class CommandLine extends JPanel
 {
@@ -36,6 +37,8 @@ public class CommandLine extends JPanel
 	public static final int REPEAT_STATE = 2;
 	public static final int PROMPT_ONE_CHAR_STATE = 3;
 	public static final int PROMPT_LINE_STATE = 4;
+	public static final int QUICK_SEARCH_STATE = 5;
+	public static final int INCREMENTAL_SEARCH_STATE = 6;
 
 	public CommandLine(View view)
 	{
@@ -43,16 +46,39 @@ public class CommandLine extends JPanel
 
 		this.view = view;
 
-		label = new JLabel();
-		label.setFont(new Font("Dialog",Font.BOLD,10));
-		label.setForeground(UIManager.getColor("Button.foreground"));
-		label.setBorder(new EmptyBorder(0,0,0,6));
-
 		add(BorderLayout.CENTER,textField = new CLITextField());
 		textField.setFont(new Font("Dialog",Font.PLAIN,10));
 
 		completionTimer = new Timer(0,new UpdateCompletions());
 		completionTimer.setRepeats(false);
+
+		Font font = new Font("Dialog",Font.BOLD,10);
+		Insets margin = new Insets(0,0,0,0);
+		ActionHandler actionHandler = new ActionHandler();
+		ignoreCase = new JCheckBox(jEdit.getProperty("search.ignoreCase"));
+		ignoreCase.setMnemonic(jEdit.getProperty("search.ignoreCase.mnemonic")
+			.charAt(0));
+		ignoreCase.setFont(font);
+		ignoreCase.setMargin(margin);
+		ignoreCase.setRequestFocusEnabled(false);
+		ignoreCase.addActionListener(actionHandler);
+		regexp = new JCheckBox(jEdit.getProperty("search.regexp"));
+		regexp.setMnemonic(jEdit.getProperty("search.regexp.mnemonic")
+			.charAt(0));
+		regexp.setFont(font);
+		regexp.setMargin(margin);
+		regexp.setRequestFocusEnabled(false);
+		regexp.addActionListener(actionHandler);
+
+		searchSettings = new JPanel();
+		searchSettings.setLayout(new BoxLayout(searchSettings,
+			BoxLayout.X_AXIS));
+		searchSettings.add(Box.createHorizontalStrut(6));
+		searchSettings.add(ignoreCase);
+		searchSettings.add(Box.createHorizontalStrut(6));
+		searchSettings.add(regexp);
+
+		updateSearchSettings();
 	}
 
 	public void setState(int state)
@@ -91,6 +117,40 @@ public class CommandLine extends JPanel
 			textField.setModel("cli.prompt");
 			reset();
 		}
+		else if(state == QUICK_SEARCH_STATE)
+		{
+			view.showStatus(jEdit.getProperty(
+				"view.status.quick-search"));
+			textField.setModel("find");
+			reset();
+
+			add(BorderLayout.EAST,searchSettings);
+
+			Dimension dim = searchSettings.getPreferredSize();
+			dim.height = textField.getHeight();
+			searchSettings.setPreferredSize(dim);
+
+			revalidate();
+
+			textField.requestFocus();
+		}
+		else if(state == INCREMENTAL_SEARCH_STATE)
+		{
+			view.showStatus(jEdit.getProperty(
+				"view.status.incremental-search"));
+			textField.setModel("find");
+			reset();
+
+			add(BorderLayout.EAST,searchSettings);
+
+			Dimension dim = searchSettings.getPreferredSize();
+			dim.height = textField.getHeight();
+			searchSettings.setPreferredSize(dim);
+
+			revalidate();
+
+			textField.requestFocus();
+		}
 	}
 
 	public JTextField getTextField()
@@ -128,9 +188,14 @@ public class CommandLine extends JPanel
 		textField.requestFocus();
 	}
 
+	public void updateSearchSettings()
+	{
+		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
+		regexp.setSelected(SearchAndReplace.getRegexp());
+	}
+
 	// private members
 	private View view;
-	private JLabel label;
 	private CLITextField textField;
 	private CompletionWindow window;
 	private EditAction[] actions;
@@ -141,19 +206,39 @@ public class CommandLine extends JPanel
 
 	private EditAction promptAction;
 
+	private JPanel searchSettings;
+	private JCheckBox ignoreCase, regexp;
+
 	private void reset()
 	{
-		remove(label);
 		textField.setText(null);
 		completionTimer.stop();
 		hideCompletionWindow();
+		remove(searchSettings);
+	}
+
+	private void getCompletions(String text)
+	{
+		if(actions == null)
+		{
+			actions = jEdit.getActions();
+			MiscUtilities.quicksort(actions,new ActionCompare());
+			completions = new Vector(actions.length);
+		}
+		else
+			completions.removeAllElements();
+
+		for(int i = 0; i < actions.length; i++)
+		{
+			EditAction action = actions[i];
+			String name = action.getName();
+			if(!action.needsActionCommand() && name.startsWith(text))
+				completions.addElement(name);
+		}
 	}
 
 	private void updateCompletions()
 	{
-		if(state != TOPLEVEL_STATE)
-			return;
-
 		if(window != null)
 		{
 			// if window is already visible, update them
@@ -173,6 +258,9 @@ public class CommandLine extends JPanel
 
 	private void updateCompletionsSafely()
 	{
+		if(state != TOPLEVEL_STATE)
+			return;
+
 		try
 		{
 			final String text = textField.getDocument().getText(0,
@@ -183,22 +271,7 @@ public class CommandLine extends JPanel
 				return;
 			}
 
-			if(actions == null)
-			{
-				actions = jEdit.getActions();
-				MiscUtilities.quicksort(actions,new ActionCompare());
-				completions = new Vector(actions.length);
-			}
-			else
-				completions.removeAllElements();
-
-			for(int i = 0; i < actions.length; i++)
-			{
-				EditAction action = actions[i];
-				String name = action.getName();
-				if(!action.needsActionCommand() && name.startsWith(text))
-					completions.addElement(name);
-			}
+			getCompletions(text);
 
 			if(completions.size() == 0)
 				hideCompletionWindow();
@@ -254,7 +327,16 @@ public class CommandLine extends JPanel
 	{
 		textField.addCurrentToHistory();
 
-		EditAction action = jEdit.getAction(actionName);
+		getCompletions(actionName);
+		EditAction action;
+		if(completions.size() != 0)
+		{
+			actionName = (String)completions.elementAt(0);
+			action = jEdit.getAction(actionName);
+		}
+		else
+			action = null;
+
 		if(action == null)
 		{
 			String[] args = { actionName };
@@ -265,6 +347,65 @@ public class CommandLine extends JPanel
 		{
 			view.getEditPane().focusOnTextArea();
 			view.getInputHandler().executeAction(action,this,null);
+		}
+	}
+
+	private void doQuickSearch()
+	{
+		String text = textField.getText();
+		if(text.length() != 0)
+		{
+			textField.addCurrentToHistory();
+			textField.setText(null);
+			SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+			SearchAndReplace.setSearchString(text);
+			SearchAndReplace.find(view,view);
+		}
+
+		setState(NULL_STATE);
+	}
+
+	private void doIncrementalSearch(int start)
+	{
+		String text = textField.getText();
+		if(text.length() != 0)
+		{
+			textField.addCurrentToHistory();
+			textField.setText(null);
+			SearchAndReplace.setSearchString(text);
+
+			try
+			{
+				if(SearchAndReplace.find(view,view.getBuffer(),start))
+					return;
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,this,bl);
+			}
+			catch(Exception ia)
+			{
+				// invalid regexp, ignore
+			}
+
+			getToolkit().beep();
+		}
+	}
+
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			if(evt.getSource() == ignoreCase)
+			{
+				SearchAndReplace.setIgnoreCase(ignoreCase
+					.isSelected());
+			}
+			else if(evt.getSource() == regexp)
+			{
+				SearchAndReplace.setRegexp(regexp
+					.isSelected());
+			}
 		}
 	}
 
@@ -314,7 +455,9 @@ public class CommandLine extends JPanel
 					evt.consume();
 					handlePromptOneChar(evt);
 				}
-				else if(state == PROMPT_LINE_STATE)
+				else if(state == PROMPT_LINE_STATE
+					|| state == QUICK_SEARCH_STATE
+					|| state == INCREMENTAL_SEARCH_STATE)
 					super.processKeyEvent(evt);
 				break;
 			case KeyEvent.KEY_PRESSED:
@@ -360,11 +503,39 @@ public class CommandLine extends JPanel
 						super.processKeyEvent(evt);
 					break;
 				}
-				// fall through if state is REPEAT_STATE
-			case KeyEvent.KEY_RELEASED:
-				if(state == REPEAT_STATE)
-					view.processKeyEvent(evt);
-				break;
+				else if(state == QUICK_SEARCH_STATE)
+				{
+					if(modifiers == 0 &&
+						keyCode == KeyEvent.VK_ENTER)
+					{
+						evt.consume();
+						doQuickSearch();
+					}
+					else
+						super.processKeyEvent(evt);
+					break;
+				}
+				else if(state == INCREMENTAL_SEARCH_STATE)
+				{
+					if(modifiers == 0 &&
+						keyCode == KeyEvent.VK_ENTER)
+					{
+						evt.consume();
+						doIncrementalSearch(view.getTextArea()
+							.getSelectionEnd());
+					}
+					else
+						super.processKeyEvent(evt);
+					break;
+				}
+				else if(state == REPEAT_STATE)
+				{
+					// set state to NULL if the key was
+					// handled
+					view.getInputHandler().keyPressed(evt);
+					if(evt.isConsumed())
+						setState(NULL_STATE);
+				}
 			}
 		}
 
@@ -458,12 +629,25 @@ public class CommandLine extends JPanel
 
 			public void insertUpdate(DocumentEvent evt)
 			{
-				updateCompletions();
+				if(state == TOPLEVEL_STATE)
+					updateCompletions();
+				else if(state == INCREMENTAL_SEARCH_STATE)
+				{
+					doIncrementalSearch(view.getTextArea()
+						.getSelectionStart());
+				}
 			}
 
 			public void removeUpdate(DocumentEvent evt)
 			{
-				updateCompletions();
+				if(state == TOPLEVEL_STATE)
+					updateCompletions();
+				else if(state == INCREMENTAL_SEARCH_STATE)
+				{
+					String text = textField.getText();
+					if(text.length() != 0)
+						doIncrementalSearch(0);
+				}
 			}
 		}
 
@@ -471,17 +655,13 @@ public class CommandLine extends JPanel
 		{
 			public void focusGained(FocusEvent evt)
 			{
-				if(state != REPEAT_STATE
-					&& state != PROMPT_ONE_CHAR_STATE
-					&& state != PROMPT_LINE_STATE)
+				if(state == NULL_STATE)
 					setState(TOPLEVEL_STATE);
 			}
 
 			public void focusLost(FocusEvent evt)
 			{
-				if(state != REPEAT_STATE
-					&& state != PROMPT_ONE_CHAR_STATE
-					&& state != PROMPT_LINE_STATE)
+				if(state == TOPLEVEL_STATE)
 					setState(NULL_STATE);
 			}
 		}
@@ -521,6 +701,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/09/03 03:16:53  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.1  2000/09/01 11:31:00  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

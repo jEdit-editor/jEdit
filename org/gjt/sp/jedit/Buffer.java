@@ -270,8 +270,11 @@ public class Buffer extends PlainDocument implements EBComponent
 	/**
 	 * Prompts the user for a file to save this buffer to.
 	 * @param view The view
+	 * @param rename True if the buffer's path should be changed, false
+	 * if only a copy should be saved to the specified filename
+	 * @since jEdit 2.6pre5
 	 */
-	public boolean saveAs(View view)
+	public boolean saveAs(View view, boolean rename)
 	{
 		String[] files = GUIUtilities.showVFSFileDialog(view,path,
 			VFSBrowser.SAVE_DIALOG,false);
@@ -281,16 +284,19 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(files == null)
 			return false;
 
-		return save(view,files[0]);
+		return save(view,files[0],rename);
 	}
 
 	/**
 	 * Saves this buffer to the specified path name, or the current path
 	 * name if it's null.
 	 * @param view The view
-	 * @param path The path name to save the buffer to
+	 * @param path The path name to save the buffer to, or null to use
+	 * the existing path
+	 * @param rename True if the buffer's path should be changed, false
+	 * if only a copy should be saved to the specified filename
 	 */
-	public boolean save(final View view, String path)
+	public boolean save(final View view, String path, final boolean rename)
 	{
 		if(getFlag(LOADING) || getFlag(SAVING))
 		{
@@ -299,7 +305,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		if(path == null && getFlag(NEW_FILE))
-			return saveAs(view);
+			return saveAs(view,rename);
 
 		if(path == null && file != null)
 		{
@@ -331,7 +337,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		final String oldPath = this.path;
-		setPath(path);
+		if(rename)
+			setPath(path);
 
 		// Once save is complete, do a few other things
 		VFSManager.runInAWTThread(new Runnable()
@@ -356,13 +363,16 @@ public class Buffer extends PlainDocument implements EBComponent
 				if(file != null)
 					modTime = file.lastModified();
 
-				if(!getPath().equals(oldPath))
-					jEdit.updatePosition(Buffer.this);
+				if(rename)
+				{
+					if(!getPath().equals(oldPath))
+						jEdit.updatePosition(Buffer.this);
 
-				// getPath() used since 'path' in containing
-				// method isn't final
-				if(getPath().toLowerCase().endsWith(".macro"))
-					Macros.loadMacros();
+					// getPath() used since 'path' in containing
+					// method isn't final
+					if(getPath().toLowerCase().endsWith(".macro"))
+						Macros.loadMacros();
+				}
 
 				EditBus.send(new BufferUpdate(Buffer.this,
 					BufferUpdate.DIRTY_CHANGED));
@@ -1695,6 +1705,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.177  2000/09/03 03:16:52  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.176  2000/08/31 02:54:00  sp
  * Improved activity log, bug fixes
  *

@@ -504,7 +504,7 @@ public class Macros
 		private void dispose()
 		{
 			view.getInputHandler().setMacroRecorder(null);
-			view.updateBufferStatus();
+			view.showStatus(null);
 			EditBus.removeFromBus(this);
 		}
 	}
@@ -513,6 +513,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  2000/09/03 03:16:52  sp
+ * Search bar integrated with command line, enhancements throughout
+ *
  * Revision 1.34  2000/08/11 09:06:51  sp
  * Browser option pane
  *
