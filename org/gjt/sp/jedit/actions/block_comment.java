@@ -40,6 +40,8 @@ public class block_comment extends EditAction
 			return;
 		}
 
+		comment = comment + ' ';
+
 		int startLine = textArea.getSelectionStartLine();
 		int endLine = textArea.getSelectionEndLine();
 

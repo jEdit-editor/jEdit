@@ -24,6 +24,9 @@
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
 
+		<!-- Silly comment -->
+		<SEQ TYPE="COMMENT1">/**/</SEQ>
+
 		<!-- Javadoc comment -->
 		<SPAN TYPE="COMMENT2" DELEGATE="JAVADOC">
 			<BEGIN>/**</BEGIN>

@@ -3,7 +3,7 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- IDL mode, by Slava Pestov
-  -- based on Java mode by Mike Dillon and IDLTokenMarker by Juha Lindfors -->
+     based on Java mode by Mike Dillon and IDLTokenMarker by Juha Lindfors -->
 <MODE NAME="idl">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="IDL" />

@@ -150,6 +150,38 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Unsplits the view.
+	 * @since jEdit 2.3pre2
+	 */
+	public void unsplit()
+	{
+		if(splitPane != null)
+		{
+			EditPane[] editPanes = getEditPanes();
+			for(int i = 0; i < editPanes.length; i++)
+			{
+				EditPane _editPane = editPanes[i];
+				if(editPane != _editPane)
+					_editPane.close();
+			}
+
+			JComponent parent = (JComponent)splitPane.getParent();
+			parent.remove(splitPane);
+			splitPane = null;
+			parent.add(editPane);
+			parent.revalidate();
+		}
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				editPane.focusOnTextArea();
+			}
+		});
+	}
+
+	/**
 	 * Returns the top-level split pane, if any.
 	 * @since jEdit 2.3pre2
 	 */
@@ -1024,6 +1056,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.170  2000/05/08 11:20:08  sp
+ * New file finder in open dialog box
+ *
  * Revision 1.169  2000/05/07 07:29:01  sp
  * Splitting fixes
  *

@@ -3,7 +3,7 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- Python mode, by Slava Pestov. Based on PythonTokenMarker by
-  -- Jonathan Revusky -->
+     Jonathan Revusky -->
 <MODE NAME="python">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="Python" />

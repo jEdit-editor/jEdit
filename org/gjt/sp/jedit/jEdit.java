@@ -1356,9 +1356,6 @@ public class jEdit
 		}
 
 		View newView = new View(buffer);
-		addViewToList(newView);
-
-		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 		// Do this crap here so that the view is created
 		// and added to the list before it is shown
@@ -1379,6 +1376,9 @@ public class jEdit
 		{
 			GUIUtilities.loadGeometry(newView,"view");
 		}
+
+		addViewToList(newView);
+		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 		newView.show();
 
@@ -2259,6 +2259,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.235  2000/05/08 11:20:08  sp
+ * New file finder in open dialog box
+ *
  * Revision 1.234  2000/05/07 07:29:01  sp
  * Splitting fixes
  *

@@ -43,6 +43,10 @@ public class box_comment extends EditAction
 			return;
 		}
 
+		commentStart = commentStart + ' ';
+		commentEnd = ' ' + commentEnd;
+		boxComment = boxComment + ' ';
+
 		int selectionStart = textArea.getSelectionStart();
 		int selectionEnd = textArea.getSelectionEnd();
 		int startLine = textArea.getSelectionStartLine();

@@ -496,6 +496,29 @@ no-write.title=Cannot Save File
 no-write.message=Cannot save to {0}.\n\
 	This probably means you have insufficent permissions.
 
+findAccessory.find=Find
+findAccessory.start=Start
+findAccessory.stop=Stop
+findAccessory.name=Name
+findAccessory.date=Date
+findAccessory.content=Content
+findAccessory.found=Found
+findAccessory.bang=The big bang
+findAccessory.crunch=The big crunch
+findAccessory.yesterday=Yesterday
+findAccessory.today=Today
+findAccessory.now=Now
+findAccessory.modified=Modified
+findAccessory.format=mm/dd/yyyy
+findAccessory.from=Between:\ 
+findAccessory.to=And:\ 
+findAccessory.pattern=Pattern
+findAccessory.contains=Contains
+findAccessory.is=Is
+findAccessory.starts=Starts with
+findAccessory.ends=Ends with
+findAccessory.ignorecase=Ignore case
+
 # Open URL dialog
 openurl.title=Open URL
 openurl.message=Enter a local path name or URL:
@@ -810,7 +833,7 @@ options.general.backupSuffix=Backup filename suffix:\
 options.general.lineSeparator=Default line separator:\ 
 options.general.saveDesktop=Save session on exit
 options.general.showToolbar=Show toolbar
-options.general.showSearchbar=Always show search bar
+options.general.showSearchbar=Show search bar
 options.general.showBufferTabs=Show buffer tabs
 options.general.bufferTabsPos=Buffer tabs position:\ 
 options.general.showFullPath=Show full path of buffers in title bar

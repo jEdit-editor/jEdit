@@ -3,7 +3,7 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- Eiffel mode, by Slava Pestov. Based on EiffelTokenMarker by
-  -- Artur Biesiadowski -->
+     Artur Biesiadowski -->
 <MODE NAME="eiffel">
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="Eiffel" />

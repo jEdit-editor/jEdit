@@ -2,7 +2,7 @@ JEDIT TO DO
 
 2.5pre2:
 
-- CVS: remove close-file, add close-buffer
+- Add FindAccessory.java
 - Status bar
 - Write VFS docs - user and developer
 - Document EditPaneUpdate message

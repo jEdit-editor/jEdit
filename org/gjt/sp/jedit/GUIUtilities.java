@@ -655,6 +655,7 @@ public class GUIUtilities
 				view.showWaitCursor();
 
 			chooser = new JFileChooser();
+			chooser.setAccessory(new FindAccessory(chooser));
 
 			// Create mode filename filters
 			Mode[] modes = jEdit.getModes();
@@ -718,6 +719,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.58  2000/05/08 11:20:07  sp
+ * New file finder in open dialog box
+ *
  * Revision 1.57  2000/05/04 10:37:04  sp
  * Wasting time
  *

@@ -41,6 +41,9 @@ public class wing_comment extends EditAction
 			return;
 		}
 
+		commentStart = commentStart + ' ';
+		commentEnd = ' ' + commentEnd;
+
 		buffer.beginCompoundEdit();
 		try
 		{
