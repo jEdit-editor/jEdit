@@ -131,8 +131,6 @@ public class ContextOptionPane extends AbstractOptionPane
 			buf.append(((MenuItem)listModel.elementAt(i)).actionName);
 		}
 		jEdit.setProperty("view.context",buf.toString());
-
-		GUIUtilities.invalidateMenuModels();
 	}
 
 	// package-private members
@@ -388,6 +386,9 @@ class ContextAddDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2001/01/23 09:23:48  sp
+ * code cleanups, misc tweaks
+ *
  * Revision 1.10  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *

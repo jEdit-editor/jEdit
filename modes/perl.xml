@@ -2,11 +2,9 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="perl">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="#" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.p[lm]" />
-		<PROPERTY NAME="firstlineGlob" VALUE="#!/*perl*" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 	</PROPS>

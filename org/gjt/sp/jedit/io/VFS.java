@@ -386,6 +386,17 @@ public abstract class VFS
 	}
 
 	/**
+	 * Called after a file has been saved.
+	 * @param session The VFS session
+	 * @param buffer The buffer
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException If an I/O error occurs
+	 * @since jEdit 3.1pre1
+	 */
+	public void _saveComplete(Object session, Buffer buffer, Component comp)
+		throws IOException {}
+
+	/**
 	 * Finishes the specified VFS session. This must be called
 	 * after all I/O with this VFS is complete, to avoid leaving
 	 * stale network connections and such.
@@ -406,6 +417,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.23  2001/01/23 09:23:48  sp
+ * code cleanups, misc tweaks
+ *
  * Revision 1.22  2000/11/11 02:59:31  sp
  * FTP support moved out of the core into a plugin
  *

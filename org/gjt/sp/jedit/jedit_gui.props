@@ -150,8 +150,6 @@ view.context=undo redo - cut copy paste paste-previous - select-all \
 	select-none - view-registers - to-upper to-lower - \
 	eval-selection
 
-view.gutter.context=toggle-gutter toggle-line-numbers save-gutter-size
-
 ###
 ### MENUBAR
 ###
@@ -222,10 +220,10 @@ edit=undo \
      goto-line \
      select-line-range \
      - \
-     %select \
-     %line \
-     %paragraph \
-     %brackets \
+     toggle-rect \
+     - \
+     %text \
+     %source \
      %registers
 edit.label=$Edit
 undo.label=$Undo
@@ -240,82 +238,63 @@ word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
 goto-line.label=$Go to Line...
-select-line-range.label=$Select Line Range...
+select-line-range.label=Select Line Range...
+toggle-rect.label=Rectangular $Selection
 
-### Selection menu
-select=select-word \
-       select-line \
-       select-paragraph \
-       - \
-       wing-comment \
-       box-comment \
-       block-comment \
-       - \
-       to-lower \
-       to-upper \
-       spaces-to-tabs \
-       tabs-to-spaces \
-       remove-trailing-ws \
-       - \
-       toggle-rect
-select.label=Selection
+### Text menu
+text=select-word \
+     - \
+     select-line \
+     delete-line \
+     delete-start-line \
+     delete-end-line \
+     remove-trailing-ws \
+     join-lines \
+     - \
+     select-paragraph \
+     format-paragraph \
+     delete-paragraph \
+     - \
+     to-lower \
+     to-upper \
+     spaces-to-tabs \
+     tabs-to-spaces
+text.label=Text
 select-word.label=Select Word
 select-line.label=Select Line
+delete-line.label=Delete Line
+delete-start-line.label=Delete to Start of Line
+delete-end-line.label=Delete to End of Line
+remove-trailing-ws.label=Remove Trailing Whitespace
+join-lines.label=Join Lines
 select-paragraph.label=Select Paragraph
-wing-comment.label=Wing Comment
-box-comment.label=Box Comment
-block-comment.label=Block Comment
+delete-paragraph.label=Delete Paragraph
+format-paragraph.label=Format Paragraph
 to-lower.label=To Lower Case
 to-upper.label=To Upper Case
 spaces-to-tabs.label=Spaces to Tabs
 tabs-to-spaces.label=Tabs to Spaces
-remove-trailing-ws.label=Remove Trailing Whitespace
-toggle-rect.label=Rectangular Selection
 
-### Line menu
-line=indent-lines \
-     shift-left \
-     shift-right \
-     - \
-     delete-line \
-     delete-start-line \
-     delete-end-line \
-     - \
-     join-lines
-line.label=Lines
+### Source menu
+source=wing-comment \
+       box-comment \
+       block-comment \
+       - \
+       indent-lines \
+       shift-left \
+       shift-right \
+       - \
+       select-block \
+       match-bracket \
+       prev-bracket \
+       next-bracket
+source.label=Source
+wing-comment.label=Wing Comment
+box-comment.label=Box Comment
+block-comment.label=Block Comment
 indent-lines.label=Indent Selected Lines
 shift-left.label=Shift Indent Left
 shift-right.label=Shift Indent Right
-delete-line.label=Delete Line
-delete-start-line.label=Delete to Start of Line
-delete-end-line.label=Delete to End of Line
-join-lines.label=Join Lines
-
-### Paragraph menu
-paragraph=prev-paragraph \
-	  next-paragraph \
-	  - \
-	  select-prev-paragraph \
-	  select-next-paragraph \
-	  - \
-	  delete-paragraph \
-          - \
-          format-paragraph
-paragraph.label=Paragraphs
-prev-paragraph.label=Go to Previous Paragraph
-next-paragraph.label=Go to Next Paragraph
-select-prev-paragraph.label=Select Previous Paragraph
-select-next-paragraph.label=Select Next Paragraph
-delete-paragraph.label=Delete Paragraph
-format-paragraph.label=Format Paragraph
-
-### Block menu
-brackets=select-block \
-         match-bracket \
-         - \
-         prev-bracket \
-         next-bracket
-brackets.label=Brackets
 select-block.label=Select Code Block
 match-bracket.label=Go to Matching Bracket
 prev-bracket.label=Go to Previous Bracket
@@ -388,9 +367,7 @@ goto-marker.label=Go to Marker
 view=new-view \
      close-view \
      - \
-     toggle-gutter \
      toggle-line-numbers \
-     save-gutter-size \
      - \
      prev-buffer \
      next-buffer \
@@ -402,9 +379,7 @@ view=new-view \
 view.label=$View
 new-view.label=New $View
 close-view.label=$Close View
-toggle-gutter.label=$Gutter Expanded
 toggle-line-numbers.label=$Line Numbering
-save-gutter-size.label=Save Gutter Size
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
@@ -457,8 +432,6 @@ utils=vfs-browser \
       log-viewer \
       update-log \
       - \
-      reload-modes \
-      - \
       eval \
       eval-selection \
       - \
@@ -469,7 +442,6 @@ vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$View Activity Log...
 update-log.label=Update Activity $Log on Disk
-reload-modes.label=$Reload Edit Modes
 eval.label=$Evaluate BeanShell Expression...
 eval-selection.label=E$valuate Selection
 buffer-options.label=$Buffer Options...
@@ -542,37 +514,41 @@ macro.header=// This is a recorded macro. First, check over the\n\
 ### COMMANDS THAT DON'T APPEAR IN MENUS
 ###
 
-backspace.label=Delete Previous Character
 backspace-word.label=Delete Previous Word
-delete.label=Delete Next Character
+backspace.label=Delete Previous Character
 delete-word.label=Delete Next Word
-overwrite.label=Overwrite Mode
-home.label=Beginning of Line
-document-home.label=Beginning of Document
-select-document-home.label=Select to Beginning of Document
-end.label=End of Line
+delete.label=Delete Next Character
 document-end.label=End of Document
-select-document-end.label=Select to End of Document
-select-home.label=Select to Beginning of Line
-select-end.label=Select to End of Line
-prev-page.label=Previous Page
-next-page.label=Next Page
-select-prev-page.label=Select Previous Page
-select-next-page.label=Select Next Page
-prev-char.label=Previous Character
-prev-word.label=Previous Word
-select-prev-char.label=Select Previous Character
-select-prev-word.label=Select Previous Word
-next-char.label=Next Character
-next-word.label=Next Word
-select-next-char.label=Select Next Character
-select-next-word.label=Select Next Word
-prev-line.label=Previous Line
-select-prev-line.label=Select Previous Line
-next-line.label=Next Line
-select-next-line.label=Select Next Line
-repeat.label=Repeat Next Command
+document-home.label=Beginning of Document
+end.label=End of Line
+home.label=Beginning of Line
 insert-literal.label=Insert Next Character Literally
+next-char.label=Next Character
+next-line.label=Next Line
+next-page.label=Next Page
+next-paragraph.label=Go to Next Paragraph
+next-word.label=Next Word
+overwrite.label=Overwrite Mode
+prev-char.label=Previous Character
+prev-line.label=Previous Line
+prev-page.label=Previous Page
+prev-paragraph.label=Go to Previous Paragraph
+prev-word.label=Previous Word
+repeat.label=Repeat Next Command
+select-document-end.label=Select to End of Document
+select-document-home.label=Select to Beginning of Document
+select-end.label=Select to End of Line
+select-home.label=Select to Beginning of Line
+select-next-char.label=Select Next Character
+select-next-line.label=Select Next Line
+select-next-page.label=Select Next Page
+select-next-paragraph.label=Select Next Paragraph
+select-next-word.label=Select Next Word
+select-prev-char.label=Select Previous Character
+select-prev-line.label=Select Previous Line
+select-prev-page.label=Select Previous Page
+select-prev-paragraph.label=Select Previous Paragraph
+select-prev-word.label=Select Previous Word
 
 ###
 ### VIEW STUFF
@@ -957,13 +933,12 @@ options.textarea.homeEnd="Smart" home/end key behaviour
 
 options.gutter.label=Gutter
 options.gutter.font=Gutter font:
-options.gutter.width=Gutter width:
 options.gutter.borderWidth=Gutter border width:
 options.gutter.numberAlignment=Line number alignment:
-options.gutter.expanded=Gutter expanded by default
 options.gutter.interval=Line highlight interval:
-options.gutter.lineNumbers=Line numbering enabled
+options.gutter.lineNumbers=Line numbering
 options.gutter.currentLineHighlight=Current line highlighting
+options.gutter.markerHighlight=Indicate markers and position registers
 
 options.color.label=Colors
 options.color.object=Object
@@ -1094,6 +1069,8 @@ options.keys.sort.label=Sort by label
 options.keys.sort.shortcut=Sort by shortcut
 
 options.command-keys.label=Command Shortcuts
+
+options.plugin-keys.label=Plugin Shortcuts
 
 options.macro-keys.label=Macro Shortcuts
 

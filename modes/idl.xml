@@ -4,7 +4,7 @@
 
 <!-- IDL mode, by Slava Pestov
      based on Java mode by Mike Dillon and IDLTokenMarker by Juha Lindfors -->
-<MODE NAME="idl">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
@@ -12,7 +12,6 @@
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE="*" />
 		<PROPERTY NAME="blockComment" VALUE="//" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.idl" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\">

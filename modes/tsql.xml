@@ -2,13 +2,12 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="tsql">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE="*" />
 		<PROPERTY NAME="blockComment" VALUE="--" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.sql" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">

@@ -5,13 +5,12 @@
 <!-- DSSSL is the Document Style Semantics Specification Language,
      used by the Jade SGML documentation generation tool -->
 
-<MODE NAME="dsssl">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />
 		<PROPERTY NAME="blockComment" VALUE=";" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{dsl,dsssl}" />
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<WHITESPACE> </WHITESPACE>

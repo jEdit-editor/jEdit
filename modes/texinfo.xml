@@ -2,9 +2,8 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="texinfo">
+<MODE>
 	<PROPS>
-		<PROPERTY NAME="filenameGlob" VALUE="*.texi" />
 		<PROPERTY NAME="blockComment" VALUE="@c" />
 	</PROPS>
 	<RULES>

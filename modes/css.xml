@@ -2,14 +2,13 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="css">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE=" *" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.css" />
 		<PROPERTY NAME="noWordSep" VALUE="-" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">

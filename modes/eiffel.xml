@@ -4,10 +4,9 @@
 
 <!-- Eiffel mode, by Slava Pestov. Based on EiffelTokenMarker by
      Artur Biesiadowski -->
-<MODE NAME="eiffel">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="--" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.e" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">

@@ -2,9 +2,8 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="csharp">
+<MODE>
 	<PROPS>
-		<PROPERTY NAME="label" VALUE="C-Sharp" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE=" *" />
@@ -13,7 +12,6 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="indentPrevLine" VALUE="\s*(((if|while)\s*\(|else|case)[^;]*|for\s*\(.*)" />
 		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.cs" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">

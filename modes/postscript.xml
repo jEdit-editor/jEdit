@@ -4,10 +4,9 @@
 
 <!-- PostScript mode, by Slava Pestov. Based on PostScriptTokenMarker by
      Ralf Engels -->
-<MODE NAME="postscript">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="%" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{ps,eps}" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->

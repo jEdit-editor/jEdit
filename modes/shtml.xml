@@ -2,11 +2,10 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="shtml">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{shtml,shtm}" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->

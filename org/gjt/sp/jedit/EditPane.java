@@ -1,6 +1,6 @@
 /*
- * EditPane.java - Text area and buffer
- * Copyright (C) 2000 Slava Pestov
+ * EditPane.java - Text area and buffer switcher
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,13 +277,8 @@ public class EditPane extends JPanel implements EBComponent
 		add(BorderLayout.CENTER,textArea);
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addCustomHighlight(markerHighlight);
-		textArea.getGutter().setContextMenu(GUIUtilities
-			.loadPopupMenu("view.gutter.context"));
 
-		if(editPane != null)
-			initTextArea(editPane.textArea);
-		else
-			propertiesChanged();
+		propertiesChanged();
 
 		if(buffer == null)
 		{
@@ -373,19 +368,7 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getProperty("view.lineHighlightColor")));
 
 		Gutter gutter = textArea.getGutter();
-		try
-		{
-			int width = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.width"));
-			gutter.setGutterWidth(width);
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default gutter width
-		}
-		gutter.setCollapsed(jEdit.getBooleanProperty(
-			"view.gutter.collapsed"));
-		gutter.setLineNumberingEnabled(jEdit.getBooleanProperty(
+		gutter.setExpanded(jEdit.getBooleanProperty(
 			"view.gutter.lineNumbers"));
 		try
 		{
@@ -409,6 +392,8 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getProperty("view.gutter.markerColor")));
 		markerHighlight.setRegisterHighlightColor(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.registerColor")));
+		markerHighlight.setHighlightEnabled(jEdit.getBooleanProperty(
+			"view.gutter.markerHighlight"));
 		gutter.setCurrentLineForeground(GUIUtilities.parseColor(
 			jEdit.getProperty("view.gutter.currentLineColor")));
 		String alignment = jEdit.getProperty(
@@ -425,6 +410,21 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			gutter.setLineNumberAlignment(Gutter.LEFT);
 		}
+
+		try
+		{
+			String fontname = jEdit.getProperty("view.gutter.font");
+			int fontsize = Integer.parseInt(jEdit.getProperty(
+				"view.gutter.fontsize"));
+			int fontstyle = Integer.parseInt(jEdit.getProperty(
+				"view.gutter.fontstyle"));
+			gutter.setFont(new Font(fontname,fontstyle,fontsize));
+		}
+		catch(NumberFormatException nf)
+		{
+			// retain the default font
+		}
+
 		try
 		{
 			int width = Integer.parseInt(jEdit.getProperty(
@@ -438,19 +438,6 @@ public class EditPane extends JPanel implements EBComponent
 		catch(NumberFormatException nf)
 		{
 			// retain the default border
-		}
-		try
-		{
-			String fontname = jEdit.getProperty("view.gutter.font");
-			int fontsize = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.fontsize"));
-			int fontstyle = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.fontstyle"));
-			gutter.setFont(new Font(fontname,fontstyle,fontsize));
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default font
 		}
 
 		textArea.setCaretBlinkEnabled(jEdit.getBooleanProperty(
@@ -512,66 +499,6 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			Log.log(Log.ERROR,this,e);
 		}
-	}
-
-	private void initTextArea(JEditTextArea copy)
-	{
-		TextAreaPainter painter = copy.getPainter();
-		TextAreaPainter myPainter = textArea.getPainter();
-		myPainter.setFont(painter.getFont());
-		myPainter.setBracketHighlightEnabled(painter.isBracketHighlightEnabled());
-		myPainter.setBracketHighlightColor(painter.getBracketHighlightColor());
-		myPainter.setEOLMarkersPainted(painter.getEOLMarkersPainted());
-		myPainter.setEOLMarkerColor(painter.getEOLMarkerColor());
-		myPainter.setWrapGuidePainted(painter.getWrapGuidePainted());
-		myPainter.setWrapGuideColor(painter.getWrapGuideColor());
-		myPainter.setCaretColor(painter.getCaretColor());
-		myPainter.setSelectionColor(painter.getSelectionColor());
-		myPainter.setBackground(painter.getBackground());
-		myPainter.setForeground(painter.getForeground());
-		myPainter.setBlockCaretEnabled(painter.isBlockCaretEnabled());
-		myPainter.setLineHighlightEnabled(painter.isLineHighlightEnabled());
-		myPainter.setLineHighlightColor(painter.getLineHighlightColor());
-		myPainter.setStyles(painter.getStyles());
-
-		Gutter myGutter = textArea.getGutter();
-		Gutter gutter = copy.getGutter();
-		myGutter.setGutterWidth(gutter.getGutterWidth());
-		myGutter.setCollapsed(gutter.isCollapsed());
-		myGutter.setLineNumberingEnabled(gutter.isLineNumberingEnabled());
-		myGutter.setHighlightInterval(gutter.getHighlightInterval());
-		myGutter.setCurrentLineHighlightEnabled(gutter.isCurrentLineHighlightEnabled());
-		myGutter.setLineNumberAlignment(gutter.getLineNumberAlignment());
-		myGutter.setFont(gutter.getFont());
-
-		try
-		{
-			int width = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.borderWidth"));
-			myGutter.setBorder(width, GUIUtilities.parseColor(
-				jEdit.getProperty("view.gutter.focusBorderColor")),
-				GUIUtilities.parseColor(jEdit.getProperty(
-				"view.gutter.noFocusBorderColor")),
-				gutter.getBackground());
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default border
-		}
-
-		myGutter.setBackground(gutter.getBackground());
-		myGutter.setForeground(gutter.getForeground());
-		myGutter.setHighlightedForeground(gutter.getHighlightedForeground());
-		myGutter.setCurrentLineForeground(gutter.getCurrentLineForeground());
-
-		textArea.setCaretBlinkEnabled(copy.isCaretBlinkEnabled());
-		textArea.setElectricScroll(copy.getElectricScroll());
-
-		myPainter.setStyles(painter.getStyles());
-
-		// Set up the right-click popup menu
-		textArea.setRightClickPopup(GUIUtilities
-			.loadPopupMenu("view.context"));
 	}
 
 	private void loadBufferSwitcher()
@@ -685,47 +612,3 @@ public class EditPane extends JPanel implements EBComponent
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.29  2000/12/08 04:03:42  sp
- * bug fixes
- *
- * Revision 1.28  2000/12/01 07:39:58  sp
- * Batch search renamed to HyperSearch, bug fixes
- *
- * Revision 1.27  2000/11/13 11:19:26  sp
- * Search bar reintroduced, more BeanShell stuff
- *
- * Revision 1.26  2000/11/12 05:36:48  sp
- * BeanShell integration started
- *
- * Revision 1.25  2000/11/11 02:59:29  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.24  2000/11/08 09:31:36  sp
- * Junk
- *
- * Revision 1.23  2000/11/07 10:08:31  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.22  2000/11/05 05:25:45  sp
- * Word wrap, format and remove-trailing-ws commands from TextTools moved into core
- *
- * Revision 1.21  2000/11/05 00:44:14  sp
- * Improved HyperSearch, improved horizontal scroll, other stuff
- *
- * Revision 1.20  2000/11/02 09:19:31  sp
- * more features
- *
- * Revision 1.19  2000/10/30 07:14:03  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.18  2000/09/26 10:19:45  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.17  2000/09/23 03:01:09  sp
- * pre7 yayayay
- *
- */

@@ -69,7 +69,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 		if(keyBinding != null)
 		{
 			d.width += (getToolkit().getFontMetrics(acceleratorFont)
-				.stringWidth(keyBinding) + 30);
+				.stringWidth(keyBinding) + 10);
 		}
 		return d;
 	}

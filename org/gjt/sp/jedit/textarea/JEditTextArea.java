@@ -487,7 +487,7 @@ public class JEditTextArea extends JComponent
 			updateScrollBars();
 			painter.repaint();
 
-			if(!gutter.isCollapsed())
+			if(gutter.isExpanded())
 				gutter.repaint();
 
 			view.synchroScrollVertical(this,firstLine);

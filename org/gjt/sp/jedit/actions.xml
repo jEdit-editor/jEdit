@@ -590,11 +590,11 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="reload-modes">
+<!-- <ACTION NAME="reload-modes">
 	<CODE>
 		jEdit.reloadModes(view);
 	</CODE>
-</ACTION>
+</ACTION> -->
 
 <ACTION NAME="remove-trailing-ws">
 	<CODE>
@@ -672,12 +672,6 @@
 <ACTION NAME="save-a-copy-as">
 	<CODE>
 		buffer.saveAs(view,false);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="save-gutter-size">
-	<CODE>
-		textArea.getGutter().saveGutterSize();
 	</CODE>
 </ACTION>
 
@@ -939,21 +933,12 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="toggle-gutter">
-	<CODE>
-		textArea.getGutter().toggleCollapsed();
-	</CODE>
-	<IS_SELECTED>
-		return !textArea.getGutter().isCollapsed();
-	</IS_SELECTED>
-</ACTION>
-
 <ACTION NAME="toggle-line-numbers">
 	<CODE>
-		textArea.getGutter().toggleLineNumberingEnabled();
+		textArea.getGutter().toggleExpanded();
 	</CODE>
 	<IS_SELECTED>
-		return textArea.getGutter().isLineNumberingEnabled();
+		return textArea.getGutter().isExpanded();
 	</IS_SELECTED>
 </ACTION>
 

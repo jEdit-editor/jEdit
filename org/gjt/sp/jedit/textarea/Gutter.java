@@ -41,7 +41,7 @@ public class Gutter extends JComponent implements SwingConstants
 
 	public void paintComponent(Graphics gfx)
 	{
-		if (!collapsed)
+		if (expanded)
 		{
 			// fill the background
 			Rectangle r = gfx.getClipBounds();
@@ -55,8 +55,8 @@ public class Gutter extends JComponent implements SwingConstants
 			// paint custom highlights, if there are any
 			if (highlights != null) paintCustomHighlights(gfx);
 
-			// paint line numbers, if they are enabled
-			if (lineNumberingEnabled) paintLineNumbers(gfx);
+			// paint line numbers
+			paintLineNumbers(gfx);
 		}
 	}
 
@@ -153,7 +153,7 @@ public class Gutter extends JComponent implements SwingConstants
 	*/
 	public final void invalidateLine(int line)
 	{
-		if(collapsed)
+		if(!expanded)
 			return;
 
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
@@ -168,7 +168,7 @@ public class Gutter extends JComponent implements SwingConstants
 	*/
 	public final void invalidateLineRange(int firstLine, int lastLine)
 	{
-		if(collapsed)
+		if(!expanded)
 			return;
 
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
@@ -248,7 +248,10 @@ public class Gutter extends JComponent implements SwingConstants
 			Insets insets = border.getBorderInsets(this);
 			ileft = insets.left;
 			collapsedSize.width = insets.left + insets.right;
-			collapsedSize.height = insets.top + insets.bottom;
+			collapsedSize.height = gutterSize.height
+				= insets.top + insets.bottom;
+			gutterSize.width = insets.left + insets.right
+				+ fm.stringWidth("12345");
 		}
 	}
 
@@ -262,6 +265,7 @@ public class Gutter extends JComponent implements SwingConstants
 		super.setFont(font);
 
 		fm = getFontMetrics(font);
+
 		baseline = fm.getAscent();
 	}
 
@@ -289,44 +293,16 @@ public class Gutter extends JComponent implements SwingConstants
 		currentLineHighlight = highlight;
  	}
 
-	/**
-	 * Set the width of the expanded gutter
-	 * @param width The gutter width
-	 */
-	public void setGutterWidth(int width)
-	{
-		if (width < collapsedSize.width) width = collapsedSize.width;
-
-		gutterSize.width = width;
-
-		// if the gutter is expanded, ask the text area to revalidate
-		// the layout to resize the gutter
-		if (!collapsed) textArea.revalidate();
-	}
-
-	/**
-	 * Get the width of the expanded gutter
-	 * @return The gutter width
-	 */
-	public int getGutterWidth()
-	{
-		return gutterSize.width;
-	}
-
 	/*
 	 * Component.getPreferredSize() is overridden here to support the
 	 * collapsing behavior.
 	 */
 	public Dimension getPreferredSize()
 	{
-		if (collapsed)
-		{
-			return collapsedSize;
-		}
-		else
-		{
+		if (expanded)
 			return gutterSize;
-		}
+		else
+			return collapsedSize;
 	}
 
 	public Dimension getMinimumSize()
@@ -338,38 +314,6 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		return (highlights == null) ? null :
 			highlights.getToolTipText(evt);
-	}
-
-	/**
-	 * Identifies whether or not the line numbers are drawn in the gutter
-	 * @return true if the line numbers are drawn, false otherwise
-	 */
-	public boolean isLineNumberingEnabled()
-	{
-		return lineNumberingEnabled;
-	}
-
-	/**
-	 * Turns the line numbering on or off and causes the gutter to be
-	 * repainted.
-	 * @param enabled true if line numbers are drawn, false otherwise
-	 */
-	public void setLineNumberingEnabled(boolean enabled)
-	{
-		if (lineNumberingEnabled == enabled) return;
-
-		lineNumberingEnabled = enabled;
-
-		repaint();
-	}
-
-	/**
-	 * Toggles line numbering.
-	 * @param enabled true if line numbers are drawn, false otherwise
-	 */
-	public void toggleLineNumberingEnabled()
-	{
-		setLineNumberingEnabled(!lineNumberingEnabled);
 	}
 
 	/**
@@ -396,24 +340,24 @@ public class Gutter extends JComponent implements SwingConstants
 
 	/**
 	 * Identifies whether the gutter is collapsed or expanded.
-	 * @return true if the gutter is collapsed, false if it is expanded
+	 * @return true if the gutter is expanded, false if it is collapsed
 	 */
-	public boolean isCollapsed()
+	public boolean isExpanded()
 	{
-		return collapsed;
+		return expanded;
 	}
 
 	/**
 	 * Sets whether the gutter is collapsed or expanded and force the text
 	 * area to update its layout if there is a change.
-	 * @param collapsed true if the gutter is collapsed,
-	 *                   false if it is expanded
+	 * @param collapsed true if the gutter is expanded,
+	 *                   false if it is collapsed
 	 */
-	public void setCollapsed(boolean collapsed)
+	public void setExpanded(boolean expanded)
 	{
-		if (this.collapsed == collapsed) return;
+		if (this.expanded == expanded) return;
 
-		this.collapsed = collapsed;
+		this.expanded = expanded;
 
 		textArea.revalidate();
 	}
@@ -421,19 +365,9 @@ public class Gutter extends JComponent implements SwingConstants
 	/**
 	 * Toggles whether the gutter is collapsed or expanded.
 	 */
-	public void toggleCollapsed()
+	public void toggleExpanded()
 	{
-		setCollapsed(!collapsed);
-	}
-
-	/**
-	 * Makes the gutter's current size the default for future sessions.
-	 * @since jEdit 2.7pre2
-	 */
-	public void saveGutterSize()
-	{
-		jEdit.setProperty("view.gutter.width", Integer.toString(
-			gutterSize.width));
+		setExpanded(!expanded);
 	}
 
 	/**
@@ -472,26 +406,14 @@ public class Gutter extends JComponent implements SwingConstants
 		repaint();
 	}
 
-	public JPopupMenu getContextMenu()
-	{
-		return context;
-	}
-
-	public void setContextMenu(JPopupMenu context)
-	{
-		this.context = context;
-	}
-
 	// private members
 	private View view;
 	private JEditTextArea textArea;
 
-	private JPopupMenu context;
-
 	private TextAreaHighlight highlights;
 
-	private int baseline = 0;
-	private int ileft = 0;
+	private int baseline;
+	private int ileft;
 
 	private Dimension gutterSize = new Dimension(0,0);
 	private Dimension collapsedSize = new Dimension(0,0);
@@ -503,10 +425,9 @@ public class Gutter extends JComponent implements SwingConstants
 
 	private int alignment;
 
-	private int interval = 0;
-	private boolean lineNumberingEnabled = true;
-	private boolean currentLineHighlightEnabled = false;
-	private boolean collapsed = false;
+	private int interval;
+	private boolean currentLineHighlightEnabled;
+	private boolean expanded;
 
 	private int borderWidth;
 	private Border focusBorder, noFocusBorder;
@@ -515,94 +436,27 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		public void mousePressed(MouseEvent e)
 		{
-			if(e.getX() >= getWidth() - borderWidth)
+			if(e.getClickCount() == 2)
+				toggleExpanded();
+			else
 			{
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mousePressed(e);
-				//return;
-			}
-			else if(context != null && (e.getModifiers()
-				& InputEvent.BUTTON3_MASK) != 0)
-			{
-				if(context.isVisible())
-					context.setVisible(false);
-				else
-				{
-					//XXX this is a hack to make sure the
-					//XXX actions get the right text area
-					textArea.requestFocus();
-
-					context.show(Gutter.this,
-						e.getX()+1, e.getY()+1);
-				}
-			}
-			else if(e.getClickCount() == 2)
-				toggleCollapsed();
-			else
-			{
-				dragStart = e.getPoint();
-				startWidth = gutterSize.width;
 			}
 		}
 
 		public void mouseDragged(MouseEvent e)
 		{
-			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
-				return;
-
-			if(collapsed || e.getX() >= getWidth() - borderWidth)
-			{
-				e.translatePoint(-getWidth(),0);
-				textArea.mouseHandler.mouseDragged(e);
-				return;
-			}
-
-			if (dragStart == null) return;
-
-			gutterSize.width = startWidth + e.getX() - dragStart.x;
-
-			if (gutterSize.width < collapsedSize.width)
-				gutterSize.width = startWidth;
-
-			textArea.revalidate();
+			e.translatePoint(-getWidth(),0);
+			textArea.mouseHandler.mouseDragged(e);
 		}
-
-		/* public void mouseExited(MouseEvent e)
-		{
-			if (dragStart != null && dragStart.x > e.getPoint().x)
-			{
-				setCollapsed(true);
-				gutterSize.width = startWidth;
-
-				textArea.revalidate();
-			}
-
-			//dragStart = null;
-		} */
 
 		public void mouseMoved(MouseEvent e) {}
 
 		public void mouseReleased(MouseEvent e)
 		{
-			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
-				return;
-
-			if(collapsed || e.getX() >= getWidth() - borderWidth)
-			{
-				e.translatePoint(-getWidth(),0);
-				textArea.mouseHandler.mouseReleased(e);
-				return;
-			}
-
-			dragStart = null;
+			e.translatePoint(-getWidth(),0);
+			textArea.mouseHandler.mouseReleased(e);
 		}
-
-		private Point dragStart = null;
-		private int startWidth = 0;
 	}
 }
-
-/*
- * ChangeLog:
- * $ Log$
- */

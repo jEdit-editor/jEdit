@@ -2,10 +2,9 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="ini">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE=";" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{ini,reg}" />
 	</PROPS>
 	<RULES HIGHLIGHT_DIGITS="TRUE">
 		<WHITESPACE> </WHITESPACE>

@@ -4,10 +4,7 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="text">
-	<PROPS>
-		<PROPERTY NAME="filenameGlob" VALUE="*.txt" />
-	</PROPS>
+<MODE>
 	<RULES>
 		<TERMINATE AT_CHAR="0" />
 	</RULES>

@@ -1,6 +1,7 @@
 /*
  * FileVFS.java - Local filesystem VFS
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Portions copyright (C) 1998, 1999, 2000 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +35,7 @@ import org.gjt.sp.util.Log;
 public class FileVFS extends VFS
 {
 	public static final String BACKED_UP_PROPERTY = "FileVFS__backedUp";
+	public static final String PERMISSIONS_PROPERTY = "FileVFS__perms";
 
 	public FileVFS()
 	{
@@ -144,7 +146,14 @@ public class FileVFS extends VFS
 		if(!path.equals(buffer.getPath()))
 			buffer.getDocumentProperties().remove(BACKED_UP_PROPERTY);
 
+		// On Unix, preserve permissions
+		int permissions = getPermissions(buffer.getPath());
+		Log.log(Log.DEBUG,this,buffer.getPath() + " has permissions 0"
+			+ Integer.toString(permissions,8));
+		buffer.putProperty(PERMISSIONS_PROPERTY,new Integer(permissions));
+
 		backup(buffer,file);
+
 		return super.save(view,buffer,path);
 	}
 
@@ -248,7 +257,6 @@ public class FileVFS extends VFS
 		return retVal;
 	}
 
-
 	public boolean _mkdir(Object session, String directory, Component comp)
 	{
 		boolean retVal = new File(directory).mkdir();
@@ -283,8 +291,48 @@ public class FileVFS extends VFS
 		return retVal;
 	}
 
+	public void _saveComplete(Object session, Buffer buffer, Component comp)
+	{
+		int permissions = ((Integer)buffer.getProperty(PERMISSIONS_PROPERTY))
+			.intValue();
+		setPermissions(buffer.getPath(),permissions);
+	}
+
 	// private members
 	private FileSystemView fsView;
+	private static boolean isUnix;
+
+	static
+	{
+		// If the file separator is '/', the OS is either Unix,
+		// MacOS X, or MacOS.
+		if(File.separatorChar == '/')
+		{
+			String osName = System.getProperty("os.name");
+			if(osName.indexOf("MacOS") != -1)
+			{
+				if(osName.indexOf("X") != -1)
+				{
+					// MacOS X is Unix.
+					isUnix = true;
+				}
+				else
+				{
+					// Classic MacOS is definately not Unix.
+					isUnix = false;
+				}
+			}
+			else
+			{
+				// Unix.
+				isUnix = true;
+			}
+		}
+
+		Log.log(Log.DEBUG,FileVFS.class,"Unix operating system "
+			+ (isUnix ? "detected; will" : "not detected; will not")
+			+ " use permission-preserving code");
+	}
 
 	// The BACKED_UP flag prevents more than one backup from being
 	// written per session (I guess this should be made configurable
@@ -369,48 +417,102 @@ public class FileVFS extends VFS
 				+ "1" + backupSuffix));
 		}
 	}
-}
 
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.29  2001/01/22 05:35:08  sp
- * bug fixes galore
- *
- * Revision 1.28  2000/12/02 02:44:41  sp
- * Documentation updates, complete icon set now included
- *
- * Revision 1.27  2000/11/11 02:59:30  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.26  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- * Revision 1.25  2000/11/02 09:19:33  sp
- * more features
- *
- * Revision 1.24  2000/10/12 09:28:27  sp
- * debugging and polish
- *
- * Revision 1.23  2000/09/26 10:19:47  sp
- * Bug fixes, spit and polish
- *
- * Revision 1.22  2000/08/31 02:54:00  sp
- * Improved activity log, bug fixes
- *
- * Revision 1.21  2000/08/29 07:47:13  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.20  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.19  2000/08/23 09:51:48  sp
- * Documentation updates, abbrev updates, bug fixes
- *
- * Revision 1.18  2000/08/22 07:25:01  sp
- * Improved abbrevs, bug fixes
- *
- * Revision 1.17  2000/08/20 07:29:31  sp
- * I/O and VFS browser improvements
- *
- */
+	/** Code borrowed from j text editor (http://www.armedbear.org) */
+	/** I made some changes to make it support suid, sgid and sticky files */
+	private int getPermissions(String path)
+	{
+		int permissions = 0;
+
+		if(isUnix)
+		{
+			String[] cmdarray = { "ls", "-ld", path };
+
+			try
+			{
+				Process process = Runtime.getRuntime().exec(cmdarray);
+
+				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+				String output = reader.readLine();
+
+				if(output != null)
+				{
+					String s = output.substring(1, 10);
+
+					if(s.length() == 9)
+					{
+						if(s.charAt(0) == 'r')
+							permissions += 0400;
+						if(s.charAt(1) == 'w')
+							permissions += 0200;
+						if(s.charAt(2) == 'x')
+							permissions += 0100;
+						else if(s.charAt(2) == 's')
+							permissions += 4100;
+						else if(s.charAt(2) == 'S')
+							permissions += 4000;
+						if(s.charAt(3) == 'r')
+							permissions += 040;
+						if(s.charAt(4) == 'w')
+							permissions += 020;
+						if(s.charAt(5) == 'x')
+							permissions += 010;
+						else if(s.charAt(5) == 's')
+							permissions += 2010;
+						else if(s.charAt(5) == 'S')
+							permissions += 2000;
+						if(s.charAt(6) == 'r')
+							permissions += 4;
+						if(s.charAt(7) == 'w')
+							permissions += 2;
+						if(s.charAt(8) == 'x')
+							permissions += 1;
+						else if(s.charAt(8) == 't')
+							permissions += 1001;
+						else if(s.charAt(8) == 'T')
+							permissions += 1000;
+					}
+				}
+			}
+
+			// Feb 4 2000 5:30 PM
+			// Catch Throwable here rather than Exception.
+			// Kaffe's implementation of Runtime.exec throws java.lang.InternalError.
+			catch (Throwable t)
+			{
+			}
+		}
+
+		return permissions;
+	}
+
+	private void setPermissions(String path, int permissions)
+	{
+		if(permissions != 0)
+		{
+			if(isUnix)
+			{
+				String[] cmdarray = { "chmod", Integer.toString(permissions, 8), path };
+
+				try
+				{
+					Process process = Runtime.getRuntime().exec(cmdarray);
+					process.getInputStream().close();
+					process.getOutputStream().close();
+					process.getErrorStream().close();
+					int exitCode = process.waitFor();
+					if(exitCode != 0)
+						Log.log(Log.NOTICE,this,"chmod exited with code " + exitCode);
+				}
+
+				// Feb 4 2000 5:30 PM
+				// Catch Throwable here rather than Exception.
+				// Kaffe's implementation of Runtime.exec throws java.lang.InternalError.
+				catch (Throwable t)
+				{
+				}
+			}
+		}
+	}
+}

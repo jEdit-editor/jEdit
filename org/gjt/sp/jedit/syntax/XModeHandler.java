@@ -31,8 +31,9 @@ import org.gjt.sp.util.Log;
 public class XModeHandler extends HandlerBase
 {
 	// public members
-	public XModeHandler (XmlParser parser, String path)
+	public XModeHandler (XmlParser parser, String modeName, String path)
 	{
+		this.modeName = modeName;
 		this.parser = parser;
 		this.path = path;
 		stateStack = new Stack();
@@ -68,16 +69,7 @@ public class XModeHandler extends HandlerBase
 
 		if (aname == "NAME")
 		{
-			// first NAME is the mode name
-			if(modeName == null)
-			{
-				modeName = value;
-				marker.setName(modeName);
-			}
-			else
-			{
-				propName = value;
-			}
+			propName = value;
 		}
 		else if (aname == "VALUE")
 		{
@@ -193,7 +185,6 @@ public class XModeHandler extends HandlerBase
 				mode = new Mode(modeName);
 				jEdit.addMode(mode);
 			}
-			mode.setProperty("grammar",path);
 		}
 		else if (tag == "KEYWORDS")
 		{
@@ -241,8 +232,8 @@ public class XModeHandler extends HandlerBase
 			}
 			else if (tag == "RULES")
 			{
-				marker.addRuleSet(lastSetName, rules);
 				rules.setKeywords(keywords);
+				marker.addRuleSet(lastSetName, rules);
 				keywords = null;
 				lastSetName = null;
 				lastEscape = null;
@@ -445,27 +436,21 @@ public class XModeHandler extends HandlerBase
 	public void startDocument()
 	{
 		marker = new TokenMarker();
+		marker.setName(modeName);
 
-		try
-		{
-			pushElement(null);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		pushElement(null);
 	}
 	// end HandlerBase implementation
 
 	// private members
 	private XmlParser parser;
+	private String modeName;
 	private String path;
 
 	private TokenMarker marker;
 	private KeywordMap keywords;
 	private Mode mode;
 	private Stack stateStack;
-	private String modeName;
 	private String propName;
 	private String propValue;
 	private String lastStart;

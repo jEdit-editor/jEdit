@@ -3,10 +3,9 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- VBScript mode by Andre Kaplan -->
-<MODE NAME="vbscript">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="'" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{vbs,bas,cls}" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 

@@ -2,13 +2,12 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="jmk">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.jmk" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->

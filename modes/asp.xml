@@ -3,12 +3,11 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- ASP mode by Andre Kaplan -->
-<MODE NAME="asp">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{asp,asa}" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE">

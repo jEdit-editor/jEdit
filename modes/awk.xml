@@ -3,12 +3,11 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- AWK mode, by Matthias Schneider -->
-<MODE NAME="awk">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.awk" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>

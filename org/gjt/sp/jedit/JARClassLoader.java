@@ -56,7 +56,7 @@ public class JARClassLoader extends ClassLoader
 			{
 				jEdit.loadActions(path + "!actions.xml",
 					new BufferedReader(new InputStreamReader(
-					zipFile.getInputStream(entry))));
+					zipFile.getInputStream(entry))),true);
 			}
 			else if(lname.endsWith(".props"))
 				jEdit.loadProps(zipFile.getInputStream(entry),true);

@@ -1,6 +1,7 @@
 /*
  * GutterOptionPane.java - Gutter options panel
  * Copyright (C) 2000 mike dillon
+ * Portions copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +34,12 @@ public class GutterOptionPane extends AbstractOptionPane
 
 	public void _init()
 	{
+		lineNumbersEnabled = new JCheckBox(jEdit.getProperty(
+			"options.gutter.lineNumbers"));
+		lineNumbersEnabled.setSelected(jEdit.getBooleanProperty(
+			"view.gutter.lineNumbers"));
+		addComponent(lineNumbersEnabled);
+
 		/* Font */
 		String _fontFamily = jEdit.getProperty("view.gutter.font");
 
@@ -59,11 +66,6 @@ public class GutterOptionPane extends AbstractOptionPane
 
 		addComponent(jEdit.getProperty("options.gutter.font"),gutterFont);
 
-		gutterWidth = new JTextField(jEdit.getProperty(
-			"view.gutter.width"));
-		addComponent(jEdit.getProperty("options.gutter.width"),
-			gutterWidth);
-
 		gutterBorderWidth = new JTextField(jEdit.getProperty(
 			"view.gutter.borderWidth"));
 		addComponent(jEdit.getProperty("options.gutter.borderWidth"),
@@ -88,23 +90,17 @@ public class GutterOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.gutter.numberAlignment"),
 			gutterNumberAlignment);
 
-		gutterExpanded = new JCheckBox(jEdit.getProperty(
-			"options.gutter.expanded"));
-		gutterExpanded.setSelected(!jEdit.getBooleanProperty(
-			"view.gutter.collapsed"));
-		addComponent(gutterExpanded);
-
-		lineNumbersEnabled = new JCheckBox(jEdit.getProperty(
-			"options.gutter.lineNumbers"));
-		lineNumbersEnabled.setSelected(jEdit.getBooleanProperty(
-			"view.gutter.lineNumbers"));
-		addComponent(lineNumbersEnabled);
-
 		gutterCurrentLineHighlightEnabled = new JCheckBox(jEdit.getProperty(
 			"options.gutter.currentLineHighlight"));
 		gutterCurrentLineHighlightEnabled.setSelected(jEdit.getBooleanProperty(
 			"view.gutter.highlightCurrentLine"));
 		addComponent(gutterCurrentLineHighlightEnabled);
+
+		gutterMarkerHighlightEnabled = new JCheckBox(jEdit.getProperty(
+			"options.gutter.markerHighlight"));
+		gutterMarkerHighlightEnabled.setSelected(jEdit.getBooleanProperty(
+			"view.gutter.markerHighlight"));
+		addComponent(gutterMarkerHighlightEnabled);
 	}
 
 	public void _save()
@@ -114,7 +110,6 @@ public class GutterOptionPane extends AbstractOptionPane
 		jEdit.setProperty("view.gutter.fontsize",String.valueOf(_font.getSize()));
 		jEdit.setProperty("view.gutter.fontstyle",String.valueOf(_font.getStyle()));
 
-		jEdit.setProperty("view.gutter.width", gutterWidth.getText());
 		jEdit.setProperty("view.gutter.borderWidth",
 			gutterBorderWidth.getText());
 		jEdit.setProperty("view.gutter.highlightInterval",
@@ -132,29 +127,20 @@ public class GutterOptionPane extends AbstractOptionPane
 			alignment = "left";
 		}
 		jEdit.setProperty("view.gutter.numberAlignment", alignment);
-		jEdit.setBooleanProperty("view.gutter.collapsed",
-			!gutterExpanded.isSelected());
 		jEdit.setBooleanProperty("view.gutter.lineNumbers", lineNumbersEnabled
 			.isSelected());
 		jEdit.setBooleanProperty("view.gutter.highlightCurrentLine",
 			gutterCurrentLineHighlightEnabled.isSelected());
+		jEdit.setBooleanProperty("view.gutter.markerHighlight",
+			gutterMarkerHighlightEnabled.isSelected());
 	}
 
 	// private members
 	private FontSelector gutterFont;
-	private JTextField gutterWidth;
 	private JTextField gutterBorderWidth;
 	private JTextField gutterHighlightInterval;
 	private JComboBox gutterNumberAlignment;
-	private JCheckBox gutterExpanded;
 	private JCheckBox lineNumbersEnabled;
 	private JCheckBox gutterCurrentLineHighlightEnabled;
+	private JCheckBox gutterMarkerHighlightEnabled;
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.7  2000/11/07 10:08:32  sp
- * Options dialog improvements, documentation changes, bug fixes
- *
- */

@@ -28,7 +28,7 @@
 <book>
 
 <bookinfo>
- <title>jEdit 3.0 User's Guide</>
+ <title>jEdit 3.1 User's Guide</>
  <author><firstname>Slava</><surname>Pestov</></author>
  <legalnotice><title>Legal Notice</>
   <para>
@@ -41,7 +41,7 @@
    section 11 and 12 of the GPL for details.
   </para>
  </legalnotice>
- <copyright><year>1998-2000</year><holder>Slava Pestov</holder></copyright>
+ <copyright><year>1998-2001</year><holder>Slava Pestov</holder></copyright>
 </bookinfo>
 
 &basics;

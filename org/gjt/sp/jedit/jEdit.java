@@ -58,7 +58,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "03.00.99.01";
+		return "03.01.01.00";
 	}
 
 	/**
@@ -719,13 +719,13 @@ public class jEdit
 
 	/**
 	 * Loads the specified action list.
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 3.1pre1
 	 */
-	public static boolean loadActions(String path, Reader in)
+	public static boolean loadActions(String path, Reader in, boolean plugin)
 	{
 		Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
 
-		ActionListHandler ah = new ActionListHandler(path);
+		ActionListHandler ah = new ActionListHandler(path,plugin);
 		XmlParser parser = new XmlParser();
 		parser.setHandler(ah);
 		try
@@ -793,81 +793,50 @@ public class jEdit
 	 */
 	public static void addMode(Mode mode)
 	{
+		Log.log(Log.DEBUG,jEdit.class,"Adding edit mode "
+			+ mode.getName());
+
+		mode.init();
 		modes.addElement(mode);
 	}
 
 	/**
-	 * Loads a mode cache file.
-	 * @param path The mode cache file
-	 * @return true if the cache file was loaded, false if not
+	 * Loads a mode catalog file.
+	 * @param directory The directory containing the catalog file
 	 */
-	public static boolean loadModeCache(String path)
+	public static void loadModeCatalog(String path)
 	{
-		Log.log(Log.MESSAGE,jEdit.class,"Loading mode cache file " + path);
+		Log.log(Log.MESSAGE,jEdit.class,"Loading mode catalog file " + path);
 
-		File file = new File(path);
-		if(!file.exists())
-			return false;
-
-		BufferedReader in = null;
+		ModeCatalogHandler handler = new ModeCatalogHandler(
+			MiscUtilities.getParentOfPath(path));
+		XmlParser parser = new XmlParser();
+		parser.setHandler(handler);
 		try
 		{
-			in = new BufferedReader(new FileReader(path));
-			String line;
-			while((line = in.readLine()) != null)
-			{
-				if(line.startsWith("version "))
-				{
-					String version = line.substring(8);
-					if(!version.equals(getBuild()))
-						return false;
-				}
-				else if(line.startsWith("mode "))
-				{
-					StringTokenizer st = new StringTokenizer(
-						line.substring(5),"\t");
-					String name = st.nextToken();
-					Mode mode = new Mode(name);
-					String[] props = { "filenameGlob",
-						"firstlineGlob", "grammar" };
-					for(int i = 0; i < props.length; i++)
-					{
-						String value = st.nextToken();
-						if(!value.equals("\0"))
-							mode.setProperty(props[i],value);
-					}
-					mode.init();
-					addMode(mode);
-				}
-			}
-
-			return true;
+			BufferedReader in = new BufferedReader(
+				new InputStreamReader(
+				new FileInputStream(path)));
+			parser.parse(null, null, in);
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,jEdit.class,path + ":" + line
+				+ ": " + message);
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,jEdit.class,"Error loading mode cache:");
 			Log.log(Log.ERROR,jEdit.class,e);
 		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-			}
-		}
-
-		return false;
 	}
 
 	/**
 	 * Reloads all edit modes.
 	 * @param view The view
 	 */
-	public static void reloadModes(View view)
+	/* public static void reloadModes(View view)
 	{
 		view.showWaitCursor();
 
@@ -895,122 +864,20 @@ public class jEdit
 		}
 
 		view.hideWaitCursor();
-	}
-
-	/**
-	 * Recreates the mode cache file.
-	 * @param path The mode cache file path
-	 */
-	public static void createModeCache(String path)
-	{
-		// remove existing modes
-		modes = new Vector();
-
-		loadModes(MiscUtilities.constructPath(getJEditHome(),"modes"));
-
-		if(settingsDirectory != null)
-		{
-			String directory = MiscUtilities.constructPath(
-				settingsDirectory,"modes");
-			new File(directory).mkdirs();
-			loadModes(directory);
-		}
-
-		/* Sort mode list */
-		MiscUtilities.quicksort(modes,new ModeCompare());
-
-		if(path == null)
-			return;
-
-		Log.log(Log.MESSAGE,jEdit.class,"Creating mode cache file: " + path);
-
-		BufferedWriter out = null;
-		try
-		{
-			out = new BufferedWriter(new FileWriter(path));
-			out.write("version " + getBuild() + '\n');
-			for(int i = 0; i < modes.size(); i++)
-			{
-				Mode mode = (Mode)modes.elementAt(i);
-				out.write("mode ");
-				out.write(mode.getName());
-				String[] props = { "filenameGlob",
-					"firstlineGlob", "grammar" };
-				for(int j = 0; j < props.length; j++)
-				{
-					out.write('\t');
-					Object prop = mode.getProperty(props[j]);
-					if(prop != null && prop.toString().length() > 0)
-						out.write(prop.toString());
-					else
-						out.write('\0');
-				}
-				out.write('\n');
-			}
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,jEdit.class,"Error saving mode cache:");
-			Log.log(Log.ERROR,jEdit.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(out != null)
-					out.close();
-			}
-			catch(IOException io)
-			{
-			}
-		}
-	}
-
-	static class ModeCompare implements MiscUtilities.Compare
-	{
-		public int compare(Object obj1, Object obj2)
-		{
-			return ((Mode)obj1).getName().compareTo(
-				((Mode)obj2).getName());
-		}
-	}
-
-	/**
-	 * Loads XML edit modes from the specified directory.
-	 * @param directory The directory
-	 */
-	public static void loadModes(String directory)
-	{
-		Log.log(Log.NOTICE,jEdit.class,"Loading edit modes from " + directory);
-
-		File file = new File(directory);
-		if(!(file.exists() && file.isDirectory()))
-			return;
-
-		String[] grammars = file.list();
-		if(grammars == null)
-			return;
-
-		for(int i = 0; i < grammars.length; i++)
-		{
-			String grammar = grammars[i];
-			if(!grammar.toLowerCase().endsWith(".xml"))
-				continue;
-
-			loadMode(directory + File.separator + grammar);
-		}
-	}
+	} */
 
 	/**
 	 * Loads an XML-defined edit mode from the specified reader.
-	 * @param fileName The file name
+	 * @param mode The edit mode
 	 */
-	public static void loadMode(String fileName)
+	public static void loadMode(Mode mode)
 	{
+		String fileName = (String)mode.getProperty("file");
+
 		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
 
 		XmlParser parser = new XmlParser();
-		XModeHandler xmh = new XModeHandler(parser,fileName);
+		XModeHandler xmh = new XModeHandler(parser,mode.getName(),fileName);
 		parser.setHandler(xmh);
 		try
 		{
@@ -2127,19 +1994,36 @@ public class jEdit
 		 * copying */
 		modes = new Vector(50);
 
-		// try loading cache file
-		String path;
+		// load the global catalog
+		loadModeCatalog(MiscUtilities.constructPath(jEditHome,"modes","catalog"));
+
+		// load user catalog
 		if(settingsDirectory != null)
 		{
-			path = MiscUtilities.constructPath(
-				settingsDirectory,"mode-cache");
-			if(loadModeCache(path))
-				return;
-		}
-		else
-			path = null;
+			File userModeDir = new File(MiscUtilities.constructPath(
+				settingsDirectory,"modes"));
+			if(!userModeDir.exists())
+				userModeDir.mkdirs();
 
-		createModeCache(path);
+			File userCatalog = new File(MiscUtilities.constructPath(
+				settingsDirectory,"modes","catalog"));
+			if(!userCatalog.exists())
+			{
+				// create dummy catalog
+				try
+				{
+					FileWriter out = new FileWriter(userCatalog);
+					out.write(jEdit.getProperty("defaultCatalog"));
+					out.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,jEdit.class,io);
+				}
+			}
+
+			loadModeCatalog(userCatalog.getPath());
+		}
 	}
 
 	/**
@@ -2149,7 +2033,7 @@ public class jEdit
 	{
 		Reader in = new BufferedReader(new InputStreamReader(
 			jEdit.class.getResourceAsStream("actions.xml")));
-		if(!loadActions("actions.xml",in))
+		if(!loadActions("actions.xml",in,false))
 			System.exit(1);
 	}
 

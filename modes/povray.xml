@@ -4,7 +4,7 @@
 
 <!-- Povray mode, by Slava Pestov
      based on PovrayTokenMarker, by Romain Guy -->
-<MODE NAME="povray">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
@@ -12,7 +12,6 @@
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE="*" />
 		<PROPERTY NAME="blockComment" VALUE="//" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{pov,povray}" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">

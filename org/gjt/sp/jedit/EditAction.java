@@ -1,6 +1,6 @@
 /*
  * EditAction.java - jEdit action listener
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,10 +65,28 @@ public abstract class EditAction
 	/**
 	 * Creates a new <code>EditAction</code>.
 	 * @param name The name of the action
+	 * @deprecated Create an actions.xml file instead of writing
+	 * EditAction implementations!
 	 */
 	public EditAction(String name)
 	{
+		// The only people who use this constructor are
+		// plugins written for the old action API, so
+		// we can safely assume that 'plugin' should be
+		// true.
+		this(name,true);
+	}
+
+	/**
+	 * Creates a new <code>EditAction</code>.
+	 * @param name The name of the action
+	 * @param plugin True if this is a plugin action
+	 * @since jEdit 3.1pre1
+	 */
+	/* package-private */ EditAction(String name, boolean plugin)
+	{
 		this.name = name;
+		this.plugin = plugin;
 	}
 
 	/**
@@ -77,6 +95,16 @@ public abstract class EditAction
 	public final String getName()
 	{
 		return name;
+	}
+
+	/**
+	 * Returns true if this action was loaded from a plugin, false
+	 * if it was loaded from the core.
+	 * @since jEdit 3.1pre1
+	 */
+	public boolean isPluginAction()
+	{
+		return plugin;
 	}
 
 	/**
@@ -95,8 +123,8 @@ public abstract class EditAction
 	}
 
 	/**
-	 * @deprecated Extend invoke() instead, or better yet, write
-	 * your actions in BeanShell
+	 * @deprecated Create an actions.xml file instead of writing
+	 * EditAction implementations!
 	 */
 	public void actionPerformed(ActionEvent evt) {}
 
@@ -198,6 +226,7 @@ public abstract class EditAction
 
 	// private members
 	private String name;
+	private boolean plugin;
 
 	/**
 	 * 'Wrap' EditActions in this class to turn them into AWT
@@ -234,6 +263,9 @@ public abstract class EditAction
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2001/01/23 09:23:46  sp
+ * code cleanups, misc tweaks
+ *
  * Revision 1.33  2000/11/21 02:58:03  sp
  * 2.7pre2 finished
  *

@@ -2,12 +2,11 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="sgml">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{dtd,sgml,sgm}" />
 	</PROPS>
 	<RULES>
 		<!-- whitespace: (space and tab) -->

@@ -3,10 +3,9 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- COBOL mode, by Matthias Schneider -->
-<MODE NAME="cobol">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="*" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.cbl" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">

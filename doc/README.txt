@@ -1,9 +1,11 @@
-JEDIT 3.0 README
+JEDIT 3.1 README
 
 * Contents
 
 - About jEdit
 - jEdit on the Internet
+- Reporting bugs
+- Suggesting features
 - Documentation
 - Common problems
 - Problems that occur with older Java versions
@@ -33,21 +35,26 @@ list that is very low traffic, a general discussion list, and a
 development discussion list. To subscribe, unsubscribe or view list
 archives, visit <http://www.sourceforge.net/mail/?group_id=588>.
 
-The preferred way to report bugs is to use our bug tracker;
+If you would like to discuss the BeanShell scripting language,
+subscribe to one of the BeanShell mailing lists by visiting
+<http://www.beanshell.org/contact.html>.
+
+Finally, you may contact me directly by e-mailing <sp@gjt.org>.
+
+* Reporting bugs
+
+Before reporting a bug, please read the `Common Problems' section below.
+If that doesn't answer your question, report a bug with our bug tracker;
 <http://www.sourceforge.net/bugs/?groups_id=588>. When writing a bug
 report, please try to be as specific as possible. You should specify
 your jEdit version, Java version, operating system, any relevant output
 from the activity log, and an e-mail address, in case we need further
 information to fix the bug.
 
+* Suggesting features
+
 The preferred way to suggest features is to post a message to the
 jEdit-users or jEdit-devel mailing list.
-
-If you would like to discuss the BeanShell scripting language,
-subscribe to one of the BeanShell mailing lists by visiting
-<http://www.beanshell.org/contact.html>.
-
-Finally, you may contact me directly by e-mailing <sp@gjt.org>.
 
 * Documentation
 
@@ -81,14 +88,12 @@ actually a Java bug, or a well-known problem.
   For best results, use a heap size of about 2.5 times the largest file
   size you plan to edit.
 
-- You must rebuild the mode cache with the `Utilities->Reload Edit Modes'
-  command after adding or removing edit modes, otherwise jEdit will not
-  notice the changes. Note that the mode cache is automatically rebuilt
-  after a new jEdit version is installed.
-
 - Printing doesn't work very well, especially on Java 2. There isn't
   much I can do about this until Sun fixes several outstanding bugs in
   Java.
+
+- Edit modes you write will not be available in the editor until you add
+  an entry to the 'catalog' file in the appropriate modes directory.
 
 - International keyboards, input methods, composed keys, etc. might not
   work properly. As I do not have an international keyboard, this will
@@ -97,10 +102,6 @@ actually a Java bug, or a well-known problem.
 - The Swing HTML component used by jEdit's help viewer is very buggy.
   Although the jEdit online help works around many of the bugs, it still
   renders some HTML incorrectly and runs very slowly.
-
-- On Unix, saving a file will reset its permissions to the defaults if
-  backups are enabled. There is no easy way to fix this. The only
-  workaround is to disable backups in Utilities->Global Options.
 
 - On Unix systems with X Windows, you might not be able to copy and
   paste between jEdit and other programs. This is mainly because Java
@@ -218,6 +219,10 @@ Nitsan Vardi:
 Ollie Rutherfurd:
 	- Some commands in View->Scrolling menu
 	- C# syntax highlighting
+
+Peter Graves:
+	- Code for preserving file permissions on Unix was taken from
+	  Peter's j text editor (http://www.armedbear.org)
 
 Ralf Engels:
 	- PostScript syntax highlighting

@@ -2,9 +2,8 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="rpmspec">
+<MODE>
 	<PROPS>
-		<PROPERTY NAME="filenameGlob" VALUE="*.spec" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
 	</PROPS>
 	<RULES>

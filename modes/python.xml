@@ -17,12 +17,11 @@
 <!--	  builtin type methods, File object methods, and special type -->
 <!--	  attributes as TYPE KEYWORD3. -->
 
-	<MODE NAME="python">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="indentOnEnter" VALUE="TRUE" />
 		<PROPERTY NAME="indentPrevLine" VALUE="\s*.{3,}:\s*(#.*)?" />
 		<PROPERTY NAME="blockComment" VALUE="#" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.py" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">

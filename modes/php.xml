@@ -2,14 +2,12 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="php">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{php3,php,phtml}" />
-		<PROPERTY NAME="firstlineGlob" VALUE="&lt;?php" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">

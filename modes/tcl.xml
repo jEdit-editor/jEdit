@@ -4,13 +4,12 @@
 
 <!-- Tcl mode by Michael Jacobson.
      cplusplus and pascal modes used as reference. -->
-<MODE NAME="tcl">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{tcl,tsh}" />
 	</PROPS>
 
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">

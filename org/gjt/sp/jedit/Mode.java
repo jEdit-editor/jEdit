@@ -117,7 +117,7 @@ public class Mode
 	public void loadIfNecessary()
 	{
 		if(marker == null)
-			jEdit.loadMode((String)getProperty("grammar"));
+			jEdit.loadMode(this);
 	}
 
 	/**

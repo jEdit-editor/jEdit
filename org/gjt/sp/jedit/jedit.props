@@ -36,6 +36,17 @@ backup.suffix=~
 sortBuffers=true
 sortByName=true
 
+# User catalog file
+defaultCatalog=<?xml version="1.0"?>\n\
+	<!DOCTYPE CATALOG SYSTEM "catalog.dtd">\n\
+	\n\
+	<MODES>\n\
+	\n\
+	<!-- Add lines like the following, one for each edit mode: -->\n\
+	<!-- <MODE NAME="foo" FILE="foo.xml" FILE_NAME_GLOB="*.foo" /> -->\n\
+	\n\
+	</MODES>
+
 ###
 ### BUFFER SETTINGS
 ### These can also be specified as buffer-local properties
@@ -178,17 +189,11 @@ view.gutter.fontstyle=0
 # Gutter font size
 view.gutter.fontsize=10
 
-# Gutter width
-view.gutter.width=40
-
 # Gutter border width
 view.gutter.borderWidth=3
 
-# Gutter collapsed/expanded by default
-view.gutter.collapsed=true
-
 # Gutter displays line numbers
-view.gutter.lineNumbers=true
+view.gutter.lineNumbers=false
 
 # Line numbers are drawn with this alignment (left, center, right)
 view.gutter.numberAlignment=right
@@ -198,6 +203,9 @@ view.gutter.highlightInterval=5
 
 # Gutter displays line numbers
 view.gutter.highlightCurrentLine=true
+
+# Marker highlight
+view.gutter.markerHighlight=true
 
 # Docking border color
 view.docking.borderColor=#ccccff

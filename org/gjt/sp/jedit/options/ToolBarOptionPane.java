@@ -178,8 +178,6 @@ public class ToolBarOptionPane extends AbstractOptionPane
 			jEdit.setProperty(button.actionName + ".icon",button.iconName);
 		}
 		jEdit.setProperty("view.toolbar",buf.toString());
-
-		GUIUtilities.invalidateMenuModels();
 	}
 
 	// private members
@@ -569,6 +567,9 @@ class ToolBarAddDialog extends EnhancedDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.13  2001/01/23 09:23:48  sp
+ * code cleanups, misc tweaks
+ *
  * Revision 1.12  2000/10/15 04:10:35  sp
  * bug fixes
  *

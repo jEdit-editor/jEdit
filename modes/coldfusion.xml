@@ -2,11 +2,10 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="coldfusion">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{cfm,dbm}" />
 		<PROPERTY NAME="tabSize" VALUE="2" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">

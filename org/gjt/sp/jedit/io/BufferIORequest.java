@@ -588,6 +588,7 @@ public class BufferIORequest extends WorkRequest
 		{
 			try
 			{
+				vfs._saveComplete(session,buffer,view);
 				vfs._endVFSSession(session,view);
 			}
 			catch(IOException io)

@@ -26,10 +26,10 @@ import java.awt.*;
 
 public class BeanShellAction extends EditAction
 {
-	public BeanShellAction(String name, String code,
+	public BeanShellAction(String name, boolean plugin, String code,
 		String isSelected, boolean noRepeat, boolean noRecord)
 	{
-		super(name);
+		super(name,plugin);
 
 		this.code = code;
 		this.noRepeat = noRepeat;

@@ -2,11 +2,10 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="xsl">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.xsl" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
 		<!-- WHITE SPACE ( SPACE, TAB ) -->

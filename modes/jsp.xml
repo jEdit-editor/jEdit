@@ -2,11 +2,10 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="jsp">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.jsp" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->
