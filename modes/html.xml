@@ -8,9 +8,9 @@
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 		<PROPERTY NAME="boxComment" VALUE="--" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.{htm,html}" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.{html,htm}" />
 	</PROPS>
-	<RULES>
+	<RULES IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
@@ -19,6 +19,12 @@
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- JavaScript -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
+			<END>&lt;/SCRIPT&gt;</END>
 		</SPAN>
 
 		<!-- markup tags -->

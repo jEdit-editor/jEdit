@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.syntax;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.swing.text.Segment;
+import org.gjt.sp.util.Log;
 
 /**
  * Generic token marker.
@@ -115,7 +116,7 @@ public class GenericTokenMarker extends TokenMarker
 
 		if (rules == null)
 		{
-			System.err.println("Unresolved delegate target: " + setName);
+			Log.log(Log.ERROR,this,"Unresolved delegate target: " + setName);
 		}
 
 		return rules;
@@ -154,8 +155,8 @@ public class GenericTokenMarker extends TokenMarker
 
 		if (marker == null)
 		{
-			System.err.println("Unresolved token marker: "
-				+ modeName);
+			Log.log(Log.ERROR,GenericTokenMarker.class,
+				"Unresolved token marker: " + modeName);
 			return null;
 		}
 

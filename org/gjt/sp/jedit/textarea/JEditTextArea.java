@@ -29,11 +29,12 @@ import java.awt.*;
 import java.util.Enumeration;
 import java.util.Vector;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.util.Log;
 
 /**
  * jEdit's text area component. It is more suited for editing program
  * source code than JEditorPane, because it drops the unnecessary features
- * (images, variable-width lines, and so on) and adds a whole bunch of
+ * (images, variable-height lines, and so on) and adds a whole bunch of
  * useful goodies such as:
  * <ul>
  * <li>More flexible key binding scheme
@@ -44,18 +45,7 @@ import org.gjt.sp.jedit.syntax.*;
  * <li>Command repetition
  * <li>Block caret can be enabled
  * </ul>
- * It is also faster and doesn't have as many problems. It can be used
- * in other applications; the only other part of jEdit it depends on is
- * the syntax package.<p>
- *
- * To use it in your app, treat it like any other component, for example:
- * <pre>JEditTextArea ta = new JEditTextArea();
- * ta.setTokenMarker(new JavaTokenMarker());
- * ta.setText("public class Test {\n"
- *     + "    public static void main(String[] args) {\n"
- *     + "        System.out.println(\"Hello World\");\n"
- *     + "    }\n"
- *     + "}");</pre>
+ * It is also faster and doesn't have as many bugs.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -1502,8 +1492,7 @@ public class JEditTextArea extends JComponent
 			catch(Exception e)
 			{
 				getToolkit().beep();
-				System.err.println("Clipboard does not"
-					+ " contain a string");
+				Log.log(Log.DEBUG,this,e);
 			}
 		}
 	}
@@ -2277,6 +2266,10 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.49  2000/03/27 07:31:23  sp
+ * We now use Log.log() in some places instead of System.err.println, HTML mode
+ * now supports <script> tags, external delegation bug fix
+ *
  * Revision 1.48  2000/03/21 07:18:53  sp
  * bug fixes
  *
@@ -2307,20 +2300,5 @@ public class JEditTextArea extends JComponent
  *
  * Revision 1.39  2000/01/28 00:20:58  sp
  * Lots of stuff
- *
- * Revision 1.38  2000/01/21 00:35:29  sp
- * Various updates
- *
- * Revision 1.37  2000/01/14 04:23:50  sp
- * 2.3pre2 stuff
- *
- * Revision 1.36  1999/12/13 03:40:30  sp
- * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.35  1999/12/06 00:06:15  sp
- * Bug fixes
- *
- * Revision 1.34  1999/12/03 23:48:11  sp
- * C+END/C+HOME, LOADING BufferUpdate message, misc stuff
  *
  */

@@ -1941,6 +1941,10 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.202  2000/03/27 07:31:22  sp
+ * We now use Log.log() in some places instead of System.err.println, HTML mode
+ * now supports <script> tags, external delegation bug fix
+ *
  * Revision 1.201  2000/03/26 05:12:59  sp
  * minor XMode updates
  *
@@ -1968,14 +1972,5 @@ public class jEdit
  *
  * Revision 1.193  2000/02/24 04:13:06  sp
  * Bug fixes, misc updates, etc
- *
- * Revision 1.192  2000/02/20 03:14:13  sp
- * jEdit.getBrokenPlugins() method
- *
- * Revision 1.191  2000/02/15 07:44:30  sp
- * bug fixes, doc updates, etc
- *
- * Revision 1.190  2000/02/07 06:35:53  sp
- * Options dialog box updates
  *
  */

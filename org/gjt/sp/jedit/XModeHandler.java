@@ -276,7 +276,7 @@ public class XModeHandler extends HandlerBase
 		{
 			if (tag == "MODE")
 			{
-				Mode mode = jEdit.getMode(modeName);
+				mode = jEdit.getMode(modeName);
 				if (mode == null)
 				{
 					mode = new Mode(modeName);

@@ -24,6 +24,7 @@ import java.awt.event.*;
 import java.awt.Toolkit;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+import org.gjt.sp.util.Log;
 
 /**
  * The default input handler. It maps sequences of keystrokes into actions
@@ -325,7 +326,8 @@ public class DefaultInputHandler extends InputHandler
 		}
 		else if(key.length() == 0)
 		{
-			System.err.println("Invalid key stroke: " + keyStroke);
+			Log.log(Log.ERROR,DefaultInputHandler.class,
+				"Invalid key stroke: " + keyStroke);
 			return null;
 		}
 		else
@@ -339,7 +341,8 @@ public class DefaultInputHandler extends InputHandler
 			}
 			catch(Exception e)
 			{
-				System.err.println("Invalid key stroke: "
+				Log.log(Log.ERROR,DefaultInputHandler.class,
+					"Invalid key stroke: "
 					+ keyStroke);
 				return null;
 			}
@@ -356,6 +359,10 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/03/27 07:31:22  sp
+ * We now use Log.log() in some places instead of System.err.println, HTML mode
+ * now supports <script> tags, external delegation bug fix
+ *
  * Revision 1.21  2000/03/18 05:45:25  sp
  * Complete word overhaul, various other changes
  *

@@ -24,6 +24,7 @@ import javax.swing.JPopupMenu;
 import java.awt.event.*;
 import java.awt.Component;
 import java.util.*;
+import org.gjt.sp.util.Log;
 
 /**
  * An input handler converts the user's key strokes into concrete actions.
@@ -356,9 +357,6 @@ public abstract class InputHandler extends KeyAdapter
 			}
 		}
 
-		// this shouldn't happen
-		System.err.println("BUG: getTextArea() returning null");
-		System.err.println("Report this to Slava Pestov <sp@gjt.org>");
 		return null;
 	}
 
@@ -1097,6 +1095,10 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/03/27 07:31:22  sp
+ * We now use Log.log() in some places instead of System.err.println, HTML mode
+ * now supports <script> tags, external delegation bug fix
+ *
  * Revision 1.22  2000/03/18 05:45:25  sp
  * Complete word overhaul, various other changes
  *
