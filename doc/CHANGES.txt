@@ -10,6 +10,8 @@ JEDIT VERSION HISTORY
 
 - Gutter option pane, new toggle-gutter and toggle-line-numbers
   actions
+- Improved options dialog box now uses a tree instead of a list, plugins
+  can add their own tree nodes (Mike Dillon)
 
 + Bug Fixes
 

@@ -7,10 +7,12 @@ JEDIT TO DO
 - Check file modification status on focus
 - Customizable gutter font and colors
 - Document gutter
+- Update window-editor-* screenshots
+- Update dialog-options-* screenshots
+- Ensure that the gutter is only repainted when really necessary
 
 ------- Later -------
 
-- Mark lines with caret registers on them in the gutter
 - Having more than 2 split panes should be possible
 - load/saveCaretInfo() save data in split.n.<property name> so that we
   don't have to unsplit when switching buffers, closing, reloading, etc
@@ -18,8 +20,6 @@ JEDIT TO DO
 - If there is > 1 possible match, complete-word should list them in a
   dialog box
 - 'Uncomment' command that removes comment strings from selected text
-- EnhancedDialog and EnhancedFrame that automatically load/save geometry
-  and/or center themselves on the screen
 - Beef up 'Marker' class to support file/line number/message stuff, EditBus
   will also use it for errors
 - Write an InputHandler subclass that displays the current repeat count,
