@@ -2,6 +2,11 @@ JEDIT 2.5 VERSION HISTORY
 
 * Version 2.5pre3
 
++ New Features
+
+- Various properties can now be set on a mode-specific basis in
+  Utilities->Global Options->Edit Modes
+
 + Enhancements
 
 - Documentation updates
@@ -16,6 +21,10 @@ JEDIT 2.5 VERSION HISTORY
 - The file finder in the open dialog box didn't support case-insensitive
   pattern matching (since 2.5pre2)
 - Wait cursor handling was broken in the FTP browser (since 2.5pre1)
+- The title bar wasn't updated after a view was unsplit (since 2.5pre2)
+- '$' characters in action commands were not escaped when recording macros
+  (since 2.5pre2)
+- *.idl files were not opened in IDL mode (since 2.4pre2)
 
 * Version 2.5pre2
 

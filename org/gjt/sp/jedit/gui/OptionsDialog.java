@@ -248,6 +248,7 @@ public class OptionsDialog extends EnhancedDialog
 
 		addOptionPane(new GeneralOptionPane(), jEditGroup);
 		addOptionPane(new EditorOptionPane(), jEditGroup);
+		addOptionPane(new ModeOptionPane(), jEditGroup);
 		addOptionPane(new GutterOptionPane(), jEditGroup);
 		addOptionPane(new StyleOptionPane(), jEditGroup);
 		addOptionPane(new FileFilterOptionPane(), jEditGroup);
@@ -581,6 +582,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/05/13 05:13:31  sp
+ * Mode option pane
+ *
  * Revision 1.23  2000/04/28 09:29:12  sp
  * Key binding handling improved, VFS updates, some other stuff
  *

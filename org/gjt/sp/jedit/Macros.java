@@ -399,6 +399,21 @@ public class Macros
 				return;
 			}
 
+			// Escape $ characters in action command
+			if(actionCommand != null)
+			{
+				StringBuffer buf = new StringBuffer();
+				for(int i = 0; i < actionCommand.length(); i++)
+				{
+					char ch = actionCommand.charAt(i);
+					if(ch == '$')
+						buf.append("\\$");
+					else
+						buf.append(ch);
+				}
+				actionCommand = buf.toString();
+			}
+
 			String name = action.getName();
 
 			// Collapse multiple insert-char's
@@ -438,6 +453,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.27  2000/05/13 05:13:31  sp
+ * Mode option pane
+ *
  * Revision 1.26  2000/05/09 10:51:51  sp
  * New status bar, a few other things
  *

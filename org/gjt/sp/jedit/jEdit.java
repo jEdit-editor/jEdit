@@ -500,6 +500,17 @@ public class jEdit
 	}
 
 	/**
+	 * Resets a property to its default value.
+	 * @param name The property
+	 *
+	 * @since jEdit 2.5pre3
+	 */
+	public static final void resetProperty(String name)
+	{
+		props.remove(name);
+	}
+
+	/**
 	 * Reloads various settings from the properties.
 	 */
 	public static void propertiesChanged()
@@ -2259,6 +2270,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.237  2000/05/13 05:13:31  sp
+ * Mode option pane
+ *
  * Revision 1.236  2000/05/12 11:07:39  sp
  * Bug fixes, documentation updates
  *

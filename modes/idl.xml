@@ -13,7 +13,7 @@
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE="*" />
 		<PROPERTY NAME="blockComment" VALUE="//" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.bsh" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.idl" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\">

@@ -51,8 +51,8 @@ public class wing_comment extends EditAction
 				commentStart,null);
 			buffer.insertString(textArea.getSelectionEnd(),
 				commentEnd,null);
-			textArea.select(textArea.getCaretPosition(),
-				textArea.getCaretPosition());
+			int caret = textArea.getCaretPosition() - commentEnd.length();
+			textArea.select(caret,caret);
 		}
 		catch(BadLocationException bl)
 		{

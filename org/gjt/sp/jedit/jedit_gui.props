@@ -826,6 +826,7 @@ options.title=Global Options
 options.jedit.label=jEdit Options
 options.plugins.label=Plugin Options
 options.shortcuts.label=Shortcuts
+
 options.general.label=General
 options.general.lf=Swing look & feel:\ 
 options.general.encoding=File encoding:\ 
@@ -847,6 +848,7 @@ options.general.sortBuffers=Sort buffer list
 options.general.sortByName=Sort by file name only (instead of full path)
 options.general.checkModStatus=Check file modification time on focus
 options.general.tokenize=Fully parse files for syntax info when loading
+
 options.editor.label=Editor
 options.editor.defaultMode=Default edit mode:\ 
 options.editor.font=Text font:\ 
@@ -870,6 +872,18 @@ options.editor.blockCaret=Block-shaped caret
 options.editor.electricBorders=Electric (auto scroll) borders
 options.editor.noTabs=Soft (emulated with spaces) tabs
 options.editor.homeEnd="Smart" home/end behaviour
+
+options.modes.label=Edit Modes
+options.modes.mode=Edit mode:\ 
+options.modes.useDefaults=Use default settings
+options.modes.filenameGlob=File name glob:\ 
+options.modes.firstlineGlob=First line glob:\ 
+options.modes.commentStart=Comment start:\ 
+options.modes.commentEnd=Comment end:\ 
+options.modes.boxComment=Box comment:\ 
+options.modes.blockComment=Block comment:\ 
+options.modes.noWordSep=Extra word characters:\ 
+
 options.gutter.label=Gutter
 options.gutter.expanded=Gutter expanded by default
 options.gutter.interval=Line highlight interval (0=none):\ 
@@ -881,6 +895,7 @@ options.gutter.numberAlignment=Line number alignment:\
 options.gutter.font=Gutter font:\ 
 options.gutter.fontsize=Gutter font size:\ 
 options.gutter.fontstyle=Gutter font style:\ 
+
 options.styles.label=Colors & Styles
 options.styles.colors=Colors:
 options.styles.styles=Styles:
@@ -912,9 +927,11 @@ options.styles.markupStyle=Markup
 options.styles.operatorStyle=Operator
 options.styles.digitStyle=Digit
 options.styles.invalidStyle=Invalid token
+
 options.filters.label=File Filters
 options.filters.name=Name
 options.filters.re=Glob pattern
+
 options.abbrevs.label=Abbreviations
 options.abbrevs.set=Abbrev set:
 options.abbrevs.expandOnInput=Auto-expand abbrevs
@@ -922,6 +939,7 @@ options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
 options.abbrevs.sort.abbrev=Sort by abbrev
 options.abbrevs.sort.expand=Sort by expansion
+
 options.context.label=Context Menu
 options.context.caption=Items in text area right click menu:
 options.context.add=Add...
@@ -932,11 +950,14 @@ options.context.add.title=Add Item
 options.context.add.caption=Add to context menu:
 options.context.add.separator=Separator
 options.context.add.action=Command:\ 
+
 options.keys.name=Command
 options.keys.binding=Keyboard shortcut
 options.keys.sort.label=Sort by label
 options.keys.sort.shortcut=Sort by shortcut
+
 options.command-keys.label=Commands
+
 options.macro-keys.label=Macros
 
 # Color chooser, used by options.styles

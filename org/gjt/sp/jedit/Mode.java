@@ -104,12 +104,7 @@ public class Mode
 	 */
 	public TokenMarker getTokenMarker()
 	{
-		if(marker == null)
-		{
-			String grammar = (String)getProperty("grammar");
-			if(grammar != null)
-				jEdit.loadMode(grammar);
-		}
+		loadIfNecessary();
 		return marker;
 	}
 
@@ -124,6 +119,20 @@ public class Mode
 	}
 
 	/**
+	 * Loads the mode from disk if it hasn't been loaded already.
+	 * @since jEdit 2.5pre3
+	 */
+	public void loadIfNecessary()
+	{
+		if(marker == null)
+		{
+			String grammar = (String)getProperty("grammar");
+			if(grammar != null)
+				jEdit.loadMode(grammar);
+		}
+	}
+
+	/**
 	 * Returns a mode property.
 	 * @param key The property name
 	 *
@@ -131,22 +140,59 @@ public class Mode
 	 */
 	public Object getProperty(String key)
 	{
-		String property = jEdit.getProperty("mode." + name + "." + key);
-		if(property != null)
+		String prefix = "mode." + name + ".";
+
+		if(jEdit.getBooleanProperty(prefix + "customSettings"))
 		{
-			Object value;
+			String property = jEdit.getProperty(prefix + key);
+			if(property != null)
+			{
+				Object value;
+				try
+				{
+					value = new Integer(property);
+				}
+				catch(NumberFormatException nf)
+				{
+					value = property;
+				}
+				return value;
+			}
+		}
+
+		Object value = props.get(key);
+		if(value != null)
+			return value;
+
+		String global = jEdit.getProperty("buffer." + key);
+		if(global != null)
+		{
 			try
 			{
-				value = new Integer(property);
+				return new Integer(global);
 			}
 			catch(NumberFormatException nf)
 			{
-				value = property;
+				return global;
 			}
-			return value;
 		}
+		else
+			return null;
+	}
 
-		return props.get(key);
+	/**
+	 * Returns the value of a boolean property.
+	 * @param key The property name
+	 *
+	 * @since jEdit 2.5pre3
+	 */
+	public boolean getBooleanProperty(String key)
+	{
+		Object value = getProperty(key);
+		if("true".equals(value) || "on".equals(value) || "yes".equals(value))
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -238,6 +284,9 @@ public class Mode
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.28  2000/05/13 05:13:31  sp
+ * Mode option pane
+ *
  * Revision 1.27  2000/05/12 11:07:38  sp
  * Bug fixes, documentation updates
  *
@@ -267,11 +316,5 @@ public class Mode
  *
  * Revision 1.18  1999/12/11 06:34:39  sp
  * Bug fixes
- *
- * Revision 1.17  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.16  1999/10/30 02:44:18  sp
- * Miscallaneous stuffs
  *
  */

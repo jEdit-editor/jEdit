@@ -53,31 +53,34 @@ public class SearchBar extends JToolBar
 
 		Insets margin = new Insets(1,1,1,1);
 
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER,5,0));
-		panel.add(Box.createHorizontalStrut(2));
-		panel.add(incremental = new JCheckBox(jEdit.getProperty(
+		Box buttons = new Box(BoxLayout.X_AXIS);
+		buttons.add(Box.createHorizontalStrut(5));
+		buttons.add(incremental = new JCheckBox(jEdit.getProperty(
 			"view.search.incremental")));
 		incremental.addActionListener(new ActionHandler());
 		incremental.setMargin(margin);
-		panel.add(ignoreCase = new JCheckBox(jEdit.getProperty(
+		buttons.add(Box.createHorizontalStrut(5));
+		buttons.add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.ignoreCase")));
 		ignoreCase.addActionListener(new ActionHandler());
 		ignoreCase.setMargin(margin);
-		panel.add(regexp = new JCheckBox(jEdit.getProperty(
+		buttons.add(Box.createHorizontalStrut(5));
+		buttons.add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
 		regexp.addActionListener(new ActionHandler());
 		regexp.setMargin(margin);
-		panel.add(multifile = new JCheckBox());
+		buttons.add(Box.createHorizontalStrut(5));
+		buttons.add(multifile = new JCheckBox());
 		multifile.addActionListener(new ActionHandler());
 		multifile.setMargin(margin);
-		panel.add(multifileBtn = new JButton(jEdit.getProperty(
+		buttons.add(multifileBtn = new JButton(jEdit.getProperty(
 			"search.multifile")));
 		multifileBtn.addActionListener(new ActionHandler());
 		multifileBtn.setMargin(margin);
 
 		update();
 
-		add(panel,BorderLayout.EAST);
+		add(buttons,BorderLayout.EAST);
 	}
 
 	public HistoryTextField getField()
@@ -252,6 +255,9 @@ public class SearchBar extends JToolBar
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.12  2000/05/13 05:13:31  sp
+ * Mode option pane
+ *
  * Revision 1.11  2000/05/12 11:07:39  sp
  * Bug fixes, documentation updates
  *

@@ -164,6 +164,7 @@ public class View extends JFrame implements EBComponent
 			splitPane = null;
 			parent.add(editPane);
 			parent.revalidate();
+			updateTitle();
 		}
 
 		SwingUtilities.invokeLater(new Runnable()
@@ -1004,6 +1005,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.173  2000/05/13 05:13:31  sp
+ * Mode option pane
+ *
  * Revision 1.172  2000/05/12 11:07:38  sp
  * Bug fixes, documentation updates
  *

@@ -14,7 +14,7 @@ JEDIT TO DO
   getPlugins()
 - Update plugin manager to use the above
 - Editable toolbar
-- Mode option pane for changing mode properties
+- Update dialog-options-* screenshots
 
 2.5:
 

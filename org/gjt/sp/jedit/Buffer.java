@@ -1756,25 +1756,23 @@ public class Buffer extends SyntaxDocument implements EBComponent
 
 			// Now try mode.<mode>.<property>
 			if(mode != null)
+				return mode.getProperty((String)key);
+			else
 			{
-				o = mode.getProperty((String)key);
-				if(o != null)
-					return o;
-			}
-
-			// Now try buffer.<property>
-			String value = jEdit.getProperty("buffer." + key);
-			if(value == null)
-				return null;
-
-			// Try returning it as an integer first
-			try
-			{
-				return new Integer(value);
-			}
-			catch(NumberFormatException nf)
-			{
-				return value;
+				// Now try buffer.<property>
+				String value = jEdit.getProperty("buffer." + key);
+				if(value == null)
+					return null;
+	
+				// Try returning it as an integer first
+				try
+				{
+					return new Integer(value);
+				}
+				catch(NumberFormatException nf)
+				{
+					return value;
+				}
 			}
 		}
 	}
@@ -1811,6 +1809,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.150  2000/05/13 05:13:31  sp
+ * Mode option pane
+ *
  * Revision 1.149  2000/05/12 11:07:38  sp
  * Bug fixes, documentation updates
  *
