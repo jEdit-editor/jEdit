@@ -6,8 +6,6 @@
 
 <project name="jEdit" default="dist" basedir=".">
 
-<property name="fop.dir" value="....path to your FOP jar files..."/>
-
 	<property file="build.properties"/>
 
 	<target name="init">
