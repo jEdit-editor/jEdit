@@ -50,6 +50,7 @@
 
 				<include name="doc/*.txt"/>
 				<include name="doc/welcome.html"/>
+				<include name="doc/jedit.gif"/>
 				<include name="doc/users-guide/*.html"/>
 				<include name="doc/users-guide/toc.xml"/>
 				<include name="doc/users-guide/word-index.xml"/>
