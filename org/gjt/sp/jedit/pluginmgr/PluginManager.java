@@ -35,7 +35,14 @@ public class PluginManager extends JDialog
 {
 	public static void pluginListDebug()
 	{
-		new PluginList().dump();
+		try
+		{
+			new PluginList().dump();
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,PluginManager.class,e);
+		}
 	}
 
 	public PluginManager(View view)
@@ -310,6 +317,14 @@ public class PluginManager extends JDialog
 				}
 
 				list.updatePlugins(roster,settingsDirectory);
+
+				if(roster.isEmpty())
+				{
+					GUIUtilities.message(PluginManager.this,
+						"plugin-manager.up-to-date",null);
+					return;
+				}
+
 				if(!roster.confirm(PluginManager.this))
 					return;
 
@@ -320,6 +335,20 @@ public class PluginManager extends JDialog
 				PluginList list = new PluginListDownloadProgress(PluginManager.this)
 					.getPluginList();
 				if(list == null)
+					return;
+
+				if(jEdit.getSettingsDirectory() == null
+					&& jEdit.getJEditHome() == null)
+				{
+					GUIUtilities.error(PluginManager.this,"no-settings",null);
+					return;
+				}
+
+				Roster roster = new Roster();
+				new InstallPluginsDialog(PluginManager.this,list)
+					.installPlugins(roster);
+
+				if(!roster.confirm(PluginManager.this))
 					return;
 
 				updateTree();

@@ -28,6 +28,13 @@
    press <keycombo><keycap>Control</><keycap>E</></keycombo>, followed by
    <keycombo><keycap>Control</><keycap>J</></keycombo>.
   </para>
+  <sidebar><title>MacOS</>
+   <para>
+    When running on the MacOS, the primary modifier key is <keycap>Command</>,
+    not <keycap>Control</>. If you are a Mac user, mentally substitute
+    <keycap>Command</> whenever you see <keycap>Control</>.
+   </para>
+  </sidebar>
  </sect1>
  <sect1 id=starting><title>Starting jEdit</>
   <para>

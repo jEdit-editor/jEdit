@@ -138,13 +138,18 @@ class EditServer extends Thread
 	private boolean ok;
 
 	// Thread-safe wrapper for jEdit.newView()
-	private void TSnewView(final Buffer buffer)
+	private void TSnewView(final Buffer buffer, final String splitConfig)
 	{
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
-				View view = jEdit.newView(jEdit.getFirstView(),
-					buffer);
+				View view;
+
+				if(buffer == null)
+					view = jEdit.newView(jEdit.getFirstView(),splitConfig);
+				else
+					view = jEdit.newView(jEdit.getFirstView(),buffer);
+
 				view.requestFocus();
 				view.toFront();
 			}
@@ -191,10 +196,10 @@ class EditServer extends Thread
 		return retVal[0];
 	}
 
-	// Thread-safe wrapper for Sessions.loadSession()
-	private Buffer TSrestoreOpenFiles()
+	// Thread-safe wrapper for jEdit.restoreOpenFiles()
+	private String TSrestoreOpenFiles()
 	{
-		final Buffer[] retVal = new Buffer[0];
+		final String[] retVal = new String[0];
 		try
 		{
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -266,11 +271,12 @@ class EditServer extends Thread
 		String[] _args = new String[args.size()];
 		args.copyInto(_args);
 		Buffer buffer = TSopenFiles(parent,_args);
+		String splitConfig = null;
 
 		if(restore)
 		{
 			if(buffer == null)
-				buffer = TSrestoreOpenFiles();
+				splitConfig = TSrestoreOpenFiles();
 			else if(jEdit.getBooleanProperty("restore.cli"))
 				TSrestoreOpenFiles();
 		}
@@ -289,6 +295,6 @@ class EditServer extends Thread
 			view.toFront();
 		}
 		else
-			TSnewView(buffer);
+			TSnewView(buffer,splitConfig);
 	}
 }

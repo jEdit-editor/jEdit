@@ -51,6 +51,9 @@ class Roster
 
 	boolean confirm(Component comp)
 	{
+		if(isEmpty())
+			return false;
+
 		String[] args = { toString() };
 
 		int result = GUIUtilities.confirm(comp,"plugin-manager.roster-confirm",

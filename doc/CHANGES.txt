@@ -43,6 +43,8 @@ JEDIT 3.2 VERSION HISTORY
   were specifed on the command line. This can be disabled in
   Utilities->Global Options->Loading and Saving
 - The 'Escape' key can now be used in the 'Add Abbreviation' dialog box
+- On MacOS and MacOS X, the primary modifier is Command, not Control now
+- On MacOS X, the default look and feel is now the 'MacOS Adaptive' look
 
 + Neutral
 

@@ -33,7 +33,11 @@ import org.gjt.sp.jedit.*;
  */
 class PluginList
 {
-	PluginList()
+	Vector plugins;
+	Hashtable pluginHash;
+	Vector pluginSets;
+
+	PluginList() throws Exception
 	{
 		plugins = new Vector();
 		pluginHash = new Hashtable();
@@ -44,22 +48,8 @@ class PluginList
 		XmlParser parser = new XmlParser();
 		parser.setHandler(handler);
 
-		try
-		{
-			parser.parse(null,null,new BufferedReader(new InputStreamReader(
-				new URL(path).openStream())));
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,this,path + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
+		parser.parse(null,null,new BufferedReader(new InputStreamReader(
+			new URL(path).openStream(),"UTF8")));
 	}
 
 	void addPlugin(Plugin plugin)
@@ -119,11 +109,6 @@ class PluginList
 			System.err.println();
 		}
 	}
-
-	// private members
-	private Vector plugins;
-	private Hashtable pluginHash;
-	private Vector pluginSets;
 
 	static class PluginSet
 	{
@@ -213,7 +198,8 @@ class PluginList
 
 		boolean canBeInstalled()
 		{
-			return getCompatibleBranch() != null;
+			Branch branch = getCompatibleBranch();
+			return branch != null && !branch.obsolete;
 		}
 
 		void install(Roster roster, String installDirectory)
@@ -239,10 +225,12 @@ class PluginList
 
 		public String toString()
 		{
-			return "[jar=" + jar + ",name=" + name + ",description="
+			return name;
+
+			/* return "[jar=" + jar + ",name=" + name + ",description="
 				+ description + ",author=" + author + ",branches="
 				+ branches + ",installed=" + installed
-				+ ",installedVersion=" + installedVersion + "]";
+				+ ",installedVersion=" + installedVersion + "]"; */
 		}
 	}
 

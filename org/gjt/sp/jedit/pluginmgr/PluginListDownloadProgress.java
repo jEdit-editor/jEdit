@@ -19,11 +19,13 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
+import com.microstar.xml.XmlException;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 class PluginListDownloadProgress extends JDialog
 {
@@ -70,7 +72,29 @@ class PluginListDownloadProgress extends JDialog
 	{
 		public void run()
 		{
-			list = new PluginList();
+			try
+			{
+				list = new PluginList();
+			}
+			catch(XmlException xe)
+			{
+				int line = xe.getLine();
+				String path = jEdit.getProperty("plugin-manager.url");
+				String message = xe.getMessage();
+				Log.log(Log.ERROR,this,path + ":" + line
+					+ ": " + message);
+				String[] pp = { path, String.valueOf(line), message };
+				GUIUtilities.error(PluginListDownloadProgress.this,
+					"plugin-list.xmlerror",pp);
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+				String[] pp = { e.toString() };
+				GUIUtilities.error(PluginListDownloadProgress.this,
+					"plugin-list.ioerror",pp);
+			}
+
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()

@@ -1371,3 +1371,33 @@ plugin-manager.roster-confirm.message=Are you sure you want to perform the \
 plugin-manager.progress.title=Downloading Plugin List
 plugin-manager.progress.caption=Downloading plugin list from server
 plugin-manager.progress.stop=Stop
+
+### error while loading plugin list
+plugin-list.ioerror.title=I/O Error
+plugin-list.ioerror.message=An I/O error occurred ({0})\n\
+	\n\
+	If you are using Java 2 and are connected to the Internet\n\
+	through a firewall, you should configure the Firewall plugin\n\
+	in Utilities->Global Options before using the plugin manager.
+
+plugin-list.xmlerror.title=XML Parser Error
+plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\
+	{2}
+
+### plugin update
+plugin-manager.up-to-date.title=Plugins Up to Date
+plugin-manager.up-to-date.message=All installed plugins are their latest versions.
+
+### plugin installation
+install-plugins.title=Install New Plugins
+install-plugins.caption=Click the check box next to plugins you wish to install:
+install-plugins.info.name=Name:
+install-plugins.info.author=Author:
+install-plugins.info.version=Version:
+install-plugins.info.updated=Last updated:
+install-plugins.info.description=Description:
+
+install-plugins.user=Install in user plugin directory ({0})
+install-plugins.system=Install in system plugin directory ({0})
+install-plugins.none=none
+install-plugins.install=Install

@@ -1,7 +1,5 @@
 TO DO
 
-- release new console and sendbuffer
-
 - Java 1.4 bugs
 - expand fold: scroll to last line of fold
 - get web start to work
@@ -11,7 +9,6 @@ TO DO
 - XThis: don't throw exceptions for non-existent methods
 - C+ENTER: display prompt
 - need to track down s.end < s.start cases
-
 - jEditLauncher
 - scroll lock key toggles 'scroll mode'
 - on OS X, make macos l&f the default
@@ -20,7 +17,7 @@ TO DO
 - plugin manager:
   - a combined roster confirm/progress dialog box
   - plugin update
-  - plugin install dialog
+  - write Roster.Install
 - enter:
   {
 	foo
