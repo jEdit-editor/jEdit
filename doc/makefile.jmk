@@ -28,7 +28,7 @@
     create @;
     exec "jade" "-t" "sgml" "-d" "dsssl/jedithtml.dsl" "-V" "html-index" <;
     delete (glob "*.html");
-    exec "perl" "scripts/collateindex.pl" "-i" "word-index" "-g" "-p" "-f"
+    exec "perl" "collateindex.pl" "-i" "word-index" "-g" "-p" "-f"
         "-o" @ "HTML.index";
 }
 

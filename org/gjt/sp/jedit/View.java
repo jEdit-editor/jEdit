@@ -158,16 +158,19 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane == null)
 		{
+			saveCaretInfo();
+
 			JEditTextArea oldTextArea = textArea;
 			textArea = createTextArea();
 			JComponent oldParent = (JComponent)oldTextArea.getParent();
 
-			saveCaretInfo();
 			splitPane = new JSplitPane(orientation,
 				oldTextArea,textArea);
 			splitPane.setBorder(null);
 			initTextArea(textArea,oldTextArea);
+
 			loadCaretInfo();
+
 			if(bufferTabs != null)
 				bufferTabs.update();
 			else
@@ -1345,6 +1348,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.139  2000/02/12 03:56:58  sp
+ * 2.3pre5 stuff
+ *
  * Revision 1.138  2000/02/07 06:35:52  sp
  * Options dialog box updates
  *

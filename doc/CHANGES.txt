@@ -6,6 +6,9 @@ JEDIT VERSION HISTORY
 
 - Options dialog box looks better (Mike Dillon)
 - Documentation updates
+- API documentation removed (a much better, Java 2-generated version is
+  available from the GJT site anyway)
+- SGML sources moved into a separate download
 
 + Bug Fixes
 

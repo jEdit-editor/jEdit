@@ -347,7 +347,6 @@ no-plugins.label=No Plugins
 ### Help menu
 help-menu=about \
      help \
-     help@api/packages.html \
      - \
      help@README.txt \
      help@NEWS.txt \
@@ -358,7 +357,6 @@ help-menu=about \
 help-menu.label=$Help
 about.label=About jEdit...
 help.label=jEdit User Guide
-help@api/packages.html.label=jEdit API Documentation
 help@README.txt.label=jEdit Read Me
 help@NEWS.txt.label=Major Changes in jEdit 2.3
 help@FAQ.txt.label=Frequenty Asked Questions
