@@ -1,11 +1,10 @@
 + grave
- - inserting text causes random problems with folding
  - undo causes problems sometimes (is this related to folding at all?)
- - sometimes fold markers are not repainted in gutter
  - scrolling bug
  - replace all fucks shit up
- - press enter on a fold start line fucks up
  - scrollbar bug
+ - if the first line of the buffer is a collapsed fold, delete, undo;
+   undo inaccessable until C+e x
 
 + important
  - document Startup macro

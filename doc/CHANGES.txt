@@ -33,6 +33,7 @@ JEDIT 3.1 VERSION HISTORY
   properly if the last virtual line was not the last physical one
 - The filesystem browser would display 'multiple request' errors when
   deleting an expanded directory with no files inside it
+- Pressing enter on the first line of a fold caused problems
 
 * Version 3.1pre2
 

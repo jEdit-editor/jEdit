@@ -2152,7 +2152,9 @@ loop:				for(int i = 0; i < count; i++)
 		int end = virtualLineCount - 1;
 
 		// funky hack
-		if(lineNo > virtualLines[end])
+		if(lineNo < virtualLines[start])
+			return 1; // for proper insertLines() operation
+		else if(lineNo > virtualLines[end])
 			return virtualLineCount;
 
 		// funky binary search
@@ -2388,9 +2390,6 @@ loop:				for(int i = 0; i < count; i++)
 				info.visible = true;
 			}
 		}
-
- 		System.err.println("expand from " + start + " to " + end
-			+ " with " + delta + " newly visible lines");
 
 		// I forgot to do this at first and it took me ages to
 		// figure out
@@ -2827,8 +2826,8 @@ loop:				for(int i = 0; i < count; i++)
 			int index = ch.getIndex();
 			int len = ch.getChildrenAdded().length -
 				ch.getChildrenRemoved().length;
-			linesChanged(index,lineCount - index);
 			insertLines(ch.getIndex() + 1,len);
+			linesChanged(index,lineCount - index);
 			index += (len + 1);
 		}
 		else
@@ -2856,8 +2855,8 @@ loop:				for(int i = 0; i < count; i++)
 			int index = ch.getIndex();
 			int len = ch.getChildrenRemoved().length -
 				ch.getChildrenAdded().length;
+			deleteLines(index,len);
 			linesChanged(index,lineCount - index);
-			deleteLines(index + 1,len);
 		}
 		else
 		{
@@ -3144,20 +3143,25 @@ loop:				for(int i = 0; i < count; i++)
 			}
 
 			len = virtualLine + lines;
-			System.err.println("len=" + len + ", copy from "
-				+ virtualLine + " to " + len);
-			System.err.println("map to " + index + ":" + lines);
+			//System.err.println("len=" + len + ", copy from "
+			//	+ virtualLine + " to " + len);
+			//System.err.println("map to " + index + ":" + lines);
 
 			System.arraycopy(virtualLines,virtualLine,
 				virtualLines,len,virtualLines.length - len);
 
 			for(int i = 0; i < lines; i++)
+			{
+				//if(lines < 100)
+				//	System.err.println((virtualLine + i) + " maps to " + (index + i));
 				virtualLines[virtualLine + i] = index + i;
+			}
 		}
 		else
 			len = virtualLine - 1;
 
-		for(int i = len + 1; i < virtualLineCount; i++)
+		//System.err.println("incr from " + (len + 1) + " by " + lines);
+		for(int i = len; i < virtualLineCount; i++)
 			virtualLines[i] += lines;
 	}
 
@@ -3173,20 +3177,15 @@ loop:				for(int i = 0; i < count; i++)
 		if (lines <= 0)
 			return;
 
-		int len = index + lines;
-
-		LineInfo info = lineInfo[index];
-
-		lineCount -= lines;
-		System.arraycopy(lineInfo,len,lineInfo,
-			index,lineInfo.length - len);
-
 		/* update the virtual -> physical mapping if the deleted
 		 * lines are actually visible */
 		int virtualLine = physicalToVirtual(index);
 
-		len = physicalToVirtual(len);
+		int len = physicalToVirtual(index + lines);
 		virtualLineCount -= (len - virtualLine);
+
+		//System.err.println((len - virtualLine) + " vlines deleted from "
+		//	+ index + ":" + lines);
 
 		//System.err.println("copy from " + len + " to " + virtualLine);
 		System.arraycopy(virtualLines,len,virtualLines,
@@ -3197,6 +3196,10 @@ loop:				for(int i = 0; i < count; i++)
 			//System.err.println(i + " maps to " + (virtualLines[i] - lines));
 			virtualLines[i] -= lines;
 		}
+
+		lineCount -= lines;
+		System.arraycopy(lineInfo,index + lines,lineInfo,
+			index,lineInfo.length - index - lines);
 	}
 
 	/**
