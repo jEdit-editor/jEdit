@@ -39,22 +39,16 @@ public class LogViewer extends JFrame
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(0,0,12,0));
-		panel.add(Box.createGlue());
-
-		clear = new JButton(jEdit.getProperty("log-viewer.clear"));
-		clear.addActionListener(new ActionHandler());
-		panel.add(clear);
-		panel.add(Box.createHorizontalStrut(6));
-
-		save = new JButton(jEdit.getProperty("log-viewer.save"));
-		save.addActionListener(new ActionHandler());
-		panel.add(save);
-		panel.add(Box.createGlue());
-
-		content.add(BorderLayout.NORTH,panel);
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory != null)
+		{
+			String[] args = { MiscUtilities.constructPath(
+				settingsDirectory, "activity.log") };
+			JLabel label = new JLabel(jEdit.getProperty(
+				"log-viewer.caption",args));
+			label.setBorder(new EmptyBorder(0,0,12,0));
+			content.add(BorderLayout.NORTH,label);
+		}
 
 		JTextArea textArea = new JTextArea(24,80);
 		textArea.setDocument(Log.getLogDocument());
@@ -73,39 +67,5 @@ public class LogViewer extends JFrame
 	{
 		GUIUtilities.saveGeometry(this,"log-viewer");
 		super.dispose();
-	}
-
-	// private members
-	private JButton clear, save;
-
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(evt.getSource() == clear)
-			{
-				Log.clearLog();
-			}
-			else
-			{
-				String path = GUIUtilities.showFileDialog(null,
-					MiscUtilities.constructPath(null,"jedit.log"),
-					JFileChooser.SAVE_DIALOG);
-
-				if(path != null)
-				{
-					try
-					{
-						Log.saveLog(path);
-					}
-					catch(IOException io)
-					{
-						Log.log(Log.ERROR,this,io);
-						String[] args = { io.getMessage() };
-						GUIUtilities.error(LogViewer.this,"ioerror",args);
-					}
-				}
-			}
-		}
 	}
 }

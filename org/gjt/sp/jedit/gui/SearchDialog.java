@@ -174,10 +174,16 @@ public class SearchDialog extends EnhancedDialog
 	
 	private void save()
 	{
-		find.addCurrentToHistory();
-		SearchAndReplace.setSearchString(find.getText());
-		replace.addCurrentToHistory();
-		SearchAndReplace.setReplaceString(replace.getText());
+		// so that opening and closing the dialog box with a blank
+		// search string doesn't stop find-next from working
+		if(find.getText().length() != 0)
+		{
+			find.addCurrentToHistory();
+			SearchAndReplace.setSearchString(find.getText());
+			replace.addCurrentToHistory();
+			SearchAndReplace.setReplaceString(replace.getText());
+		}
+
 		jEdit.setBooleanProperty("search.keepDialog.toggle",keepDialog
 			.isSelected());
 		SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
@@ -255,6 +261,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.16  2000/08/29 07:47:12  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

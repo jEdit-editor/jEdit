@@ -15,6 +15,11 @@ ne|nextElement()
 serr|System.err.println(\|)
 sout|System.out.println(\|)
 
+cg|Box.createGlue()
+chs|Box.createHorizontalStrut(\|)
+cvs|Box.createVerticalStrut(\|)
+Yil|SwingUtilities.invokeLater(new Runnable()\n{\npublic void run()\n{\n\|\n}\n});
+
 Yif|if(\|)\n;
 YYif|if(\|)\n{\n\n}
 Yelse|else(\|)\n;

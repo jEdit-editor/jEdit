@@ -715,12 +715,12 @@ public class View extends JFrame implements EBComponent
 	{
 		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
-			if(toolBar != null)
-				removeToolBar(toolBar);
-
-			toolBar = GUIUtilities.loadToolBar("view.toolbar");
-			toolBar.add(Box.createGlue());
-			addToolBar(toolBar);
+			if(toolBar == null)
+			{
+				toolBar = GUIUtilities.loadToolBar("view.toolbar");
+				toolBar.add(Box.createGlue());
+				addToolBar(toolBar);
+			}
 		}
 		else if(toolBar != null)
 		{
@@ -730,11 +730,11 @@ public class View extends JFrame implements EBComponent
 
 		if(jEdit.getBooleanProperty("view.showSearchbar"))
 		{
-			if(searchBar != null)
-				removeToolBar(searchBar);
-
-			searchBar = new SearchBar(this);
-			addToolBar(searchBar);
+			if(searchBar == null)
+			{
+				searchBar = new SearchBar(this);
+				addToolBar(searchBar);
+			}
 		}
 		else if(searchBar != null)
 		{
@@ -864,7 +864,6 @@ public class View extends JFrame implements EBComponent
 			plugins.removeAll();
 
 		// Query plugins for menu items
-		Vector pluginMenus = new Vector();
 		Vector pluginMenuItems = new Vector();
 
 		EditPlugin[] pluginArray = jEdit.getPlugins();
@@ -872,8 +871,26 @@ public class View extends JFrame implements EBComponent
 		{
 			try
 			{
-				pluginArray[i].createMenuItems(this,pluginMenus,
-					pluginMenuItems);
+				EditPlugin plugin = pluginArray[i];
+
+				// major hack to put 'Plugin Manager' at the
+				// top of the 'Plugins' menu
+				if(plugin.getClassName().equals("PluginManagerPlugin"))
+				{
+					Vector vector = new Vector();
+					plugin.createMenuItems(vector);
+					plugins.add((JMenuItem)vector.elementAt(0));
+					plugins.addSeparator();
+				}
+				else
+				{
+					// call old API
+					plugin.createMenuItems(this,pluginMenuItems,
+						pluginMenuItems);
+
+					// call new API
+					plugin.createMenuItems(pluginMenuItems);
+				}
 			}
 			catch(Throwable t)
 			{
@@ -883,32 +900,16 @@ public class View extends JFrame implements EBComponent
 			}
 		}
 
-		if(pluginMenus.isEmpty() && pluginMenuItems.isEmpty())
+		if(pluginMenuItems.isEmpty())
 		{
 			plugins.add(GUIUtilities.loadMenuItem("no-plugins"));
 			return;
 		}
 
 		// Sort them
-		MenuItemCompare comp = new MenuItemCompare();
-		MiscUtilities.quicksort(pluginMenus,comp);
-		MiscUtilities.quicksort(pluginMenuItems,comp);
+		MiscUtilities.quicksort(pluginMenuItems,new MenuItemCompare());
 
 		JMenu menu = plugins;
-		for(int i = 0; i < pluginMenus.size(); i++)
-		{
-			if(menu.getItemCount() >= 20)
-			{
-				menu.addSeparator();
-				JMenu newMenu = new JMenu(jEdit.getProperty(
-					"common.more"));
-				menu.add(newMenu);
-				menu = newMenu;
-			}
-
-			menu.add((JMenu)pluginMenus.elementAt(i));
-		}
-
 		for(int i = 0; i < pluginMenuItems.size(); i++)
 		{
 			if(menu.getItemCount() >= 20)
@@ -1055,6 +1056,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.194  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.193  2000/08/29 07:47:11  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

@@ -2122,6 +2122,8 @@ public class JEditTextArea extends JComponent
 		{
 			super.undo();
 
+			System.err.println(focusedComponent.getBuffer().getLength() + "," + this);
+
 			if(focusedComponent != null)
 				focusedComponent.select(start,end);
 		}
@@ -2130,11 +2132,7 @@ public class JEditTextArea extends JComponent
 		{
 			if(edit instanceof CaretUndo)
 			{
-//				CaretUndo cedit = (CaretUndo)edit;
-//				start = cedit.start;
-//				end = cedit.end;
-//				newStart = cedit.start;
-//				newEnd = cedit.end;
+				System.err.println("killing " + edit);
 				edit.die();
 
 				return true;
@@ -2161,6 +2159,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.79  2000/08/31 02:54:01  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.78  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

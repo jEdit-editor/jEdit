@@ -336,7 +336,11 @@ public class FtpVFS extends VFS
 			VFSManager.error(comp,"vfs.ftp.upload-error",args);
 		}
 
-		VFSManager.sendVFSUpdate(this,path,true);
+		// commented out for now, because updating VFS browsers
+		// every time file is saved gets annoying
+		//VFSManager.sendVFSUpdate(this,path,true);
+
+		DirectoryCache.clearCachedDirectory(getParentOfPath(path));
 
 		return out;
 	}
@@ -568,6 +572,9 @@ public class FtpVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.24  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

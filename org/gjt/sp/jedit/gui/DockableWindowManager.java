@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.gui;
 import org.gjt.sp.jedit.browser.VFSBrowserDockable;
 import org.gjt.sp.jedit.msg.CreateDockableWindow;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -110,8 +111,10 @@ public class DockableWindowManager extends JPanel
 	{
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null)
-			throw new IllegalArgumentException("No such window: "
-				+ name);
+		{
+			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
+			return;
+		}
 
 		entry.container.showDockableWindow(entry.win);
 	}
@@ -140,8 +143,10 @@ public class DockableWindowManager extends JPanel
 
 		DockableWindow win = msg.getDockableWindow();
 		if(win == null)
-			throw new IllegalArgumentException("Unknown dockable window: "
-				+ name);
+		{
+			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
+			return;
+		}
 
 		addDockableWindow(win,position);
 	}
@@ -193,6 +198,8 @@ public class DockableWindowManager extends JPanel
 				throw new InternalError("Unknown position: " + position);
 		}
 
+		Log.log(Log.DEBUG,this,"Adding " + win + " with position " + position);
+
 		container.addDockableWindow(win);
 		Entry entry = new Entry(win,position,container);
 		windows.put(name,entry);
@@ -207,11 +214,16 @@ public class DockableWindowManager extends JPanel
 	{
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null)
-			throw new IllegalArgumentException("This DockableWindowManager"
+		{
+			Log.log(Log.ERROR,this,"This DockableWindowManager"
 				+ " does not have a window named " + name);
+			return;
+		}
+
+		Log.log(Log.DEBUG,this,"Removing " + entry.win + " from "
+			+ entry.container);
 
 		entry.container.saveDockableWindow(entry.win);
-
 		entry.container.removeDockableWindow(entry.win);
 		windows.remove(name);
 	}
@@ -390,6 +402,9 @@ public class DockableWindowManager extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.5  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.4  2000/08/29 07:47:12  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

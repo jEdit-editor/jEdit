@@ -323,7 +323,7 @@ public class VFSManager
 
 			/* we do this here, and not in an EBComponent
 			 * inside DirectoryCache, to simplify matters */
-			DirectoryCache.flushCachedDirectory(path);
+			DirectoryCache.clearCachedDirectory(path);
 
 			synchronized(vfsUpdateLock)
 			{
@@ -409,6 +409,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.21  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.20  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

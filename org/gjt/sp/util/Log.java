@@ -20,22 +20,27 @@
 package org.gjt.sp.util;
 
 import javax.swing.text.*;
-import java.awt.Color;
 import java.io.*;
 import java.util.StringTokenizer;
 
 /**
  * This class provides methods for logging events. It has the same
  * purpose as System.out.println() and such, but more powerful.
- * All events are logged to a Swing document, and those with a
- * high urgency (warnings and errors) are also printed to the
- * standard error stream. This class can also optionally redirect
+ * All events are logged to a Swing document and optionally a stream,
+ * and those with a high urgency (warnings and errors) are also printed
+ * to the standard error stream. This class can also optionally redirect
  * standard output and error to the log.
  * @author Slava Pestov
  * @version $Id$
  */
 public class Log
 {
+	/**
+	 * The maximum number of log messages that will be kept in memory.
+	 * @since jEdit 2.6pre5
+	 */
+	public static final int MAXLINES = 500;
+
 	/**
 	 * Debugging message urgency. Should be used for messages only
 	 * useful when debugging a problem.
@@ -77,9 +82,10 @@ public class Log
 	 * sent to the log
 	 * @param level Messages with this log level or higher will
 	 * be printed to the system console
-	 * @since jEdit 2.3pre1
+	 * @param stream The stream to save log data to
+	 * @since jEdit 2.6pre5
 	 */
-	public static void init(boolean stdio, int level)
+	public static void init(boolean stdio, int level, Writer stream)
 	{
 		if(stdio)
 		{
@@ -91,13 +97,27 @@ public class Log
 		}
 
 		Log.level = level;
-		clearLog();
+		Log.stream = stream;
+
+		// Log some stuff
+		log(MESSAGE,Log.class,"When reporting bugs, please"
+			+ " include the following information:");
+		String[] props = {
+			"java.version", "java.vendor",
+			"java.compiler", "os.name", "os.version",
+			"os.arch", "user.home"
+			};
+		for(int i = 0; i < props.length; i++)
+		{
+			log(MESSAGE,Log.class,
+				props[i] + "=" + System.getProperty(props[i]));
+		}
 	}
 
 	/**
-	 * Returns the document where messages are logged. The document
-	 * of a Swing text area can be set to this to graphically view
-	 * log messages.
+	 * Returns the document where the most recent messages are stored.
+	 * The document of a Swing text area can be set to this to graphically
+	 * view log messages.
 	 * @since jEdit 2.2pre2
 	 */
 	public static Document getLogDocument()
@@ -106,83 +126,41 @@ public class Log
 	}
 
 	/**
-	 * Saves the log to a file.
-	 * @param path The file
-	 * @since jEdit 2.2pre2
+	 * Flushes the log stream.
+	 * @since jEdit 2.6pre5
 	 */
-	public static void saveLog(String path)
-		throws IOException
+	public static void flushStream()
 	{
-		saveLog(new FileWriter(path));
-	}
-
-	/**
-	 * Saves the log to the specified writer.
-	 * @param out The writer
-	 * @since jEdit 2.2pre2
-	 */
-	public static void saveLog(Writer out)
-		throws IOException
-	{
-		if(!(out instanceof BufferedWriter))
+		if(stream != null)
 		{
-			saveLog(new BufferedWriter(out));
-			return;
-		}
-
-		String lineSep = System.getProperty("line.separator");
-
-		Element map = logDocument.getDefaultRootElement();
-		for(int i = 0; i < map.getElementCount(); i++)
-		{
-			Element lineElement = map.getElement(i);
 			try
 			{
-				String text = logDocument.getText(
-					lineElement.getStartOffset(),
-					lineElement.getEndOffset()
-					- lineElement.getStartOffset() - 1);
-				out.write(text);
-				out.write(lineSep);
+				stream.flush();
 			}
-			catch(BadLocationException bl)
+			catch(IOException io)
 			{
-				log(ERROR,Log.class,bl);
+				io.printStackTrace(realErr);
 			}
 		}
-
-		out.close();
 	}
 
 	/**
-	 * Clears the log.
+	 * Closes the log stream. Should be done before your program exits.
+	 * @since jEdit 2.6pre5
 	 */
-	public static void clearLog()
+	public static void closeStream()
 	{
-		try
+		if(stream != null)
 		{
-			logDocument.remove(0,logDocument.getLength());
-
-			log(MESSAGE,Log.class,"To copy from the activity log, select"
-				+ " the appropriate text and press C+c");
-
-			// Log some stuff
-			log(MESSAGE,Log.class,"When reporting bugs, please"
-				+ " include the following information:");
-			String[] props = {
-				"java.version", "java.vendor",
-				"java.compiler", "os.name", "os.version",
-				"os.arch", "user.home"
-				};
-			for(int i = 0; i < props.length; i++)
+			try
 			{
-				log(MESSAGE,Log.class,
-					props[i] + "=" + System.getProperty(props[i]));
+				stream.close();
+				stream = null;
 			}
-		}
-		catch(BadLocationException bl)
-		{
-			log(ERROR,Log.class,bl);
+			catch(IOException io)
+			{
+				io.printStackTrace(realErr);
+			}
 		}
 	}
 
@@ -239,6 +217,8 @@ public class Log
 	private static Object LOCK = new Object();
 	private static Document logDocument;
 	private static int level;
+	private static Writer stream;
+	private static String lineSep;
 	private static PrintStream realOut;
 	private static PrintStream realErr;
 
@@ -248,6 +228,7 @@ public class Log
 		realErr = System.err;
 
 		logDocument = new PlainDocument();
+		lineSep = System.getProperty("line.separator");
 	}
 
 	private static PrintStream createPrintStream(final int urgency,
@@ -283,20 +264,38 @@ public class Log
 	private static void _log(int urgency, String source, String message)
 	{
 		String urgencyString = "[" + urgencyToString(urgency) + "] ";
-		message = message + '\n';
+
+		String fullMessage = urgencyString + source + ": " + message;
 
 		try
 		{
 			logDocument.insertString(logDocument.getLength(),
-				urgencyString + source + ": " + message,
-				null);
+				fullMessage,null);
+			logDocument.insertString(logDocument.getLength(),
+				"\n",null);
+
+			Element map = logDocument.getDefaultRootElement();
+			int lines = map.getElementCount();
+			if(lines > MAXLINES)
+			{
+				Element first = map.getElement(0);
+				Element last = map.getElement(lines - MAXLINES);
+				logDocument.remove(first.getStartOffset(),
+					last.getEndOffset());
+			}
+
+			if(stream != null)
+			{
+				stream.write(fullMessage);
+				stream.write(lineSep);
+			}
 		}
-		catch(BadLocationException bl)
+		catch(Exception e)
 		{
-			bl.printStackTrace();
+			e.printStackTrace(realErr);
 		}
 
-		message = urgencyString +  message;
+		message = urgencyString +  message + '\n';
 
 		if(urgency >= level)
 		{
@@ -330,6 +329,9 @@ public class Log
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/08/31 02:54:01  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.10  2000/02/24 04:13:06  sp
  * Bug fixes, misc updates, etc
  *

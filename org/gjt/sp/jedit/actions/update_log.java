@@ -1,5 +1,5 @@
 /*
- * flush_directory_cache.java
+ * update_log.java
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -20,18 +20,13 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.io.DirectoryCache;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.util.Log;
 
-public class flush_directory_cache extends EditAction
+public class update_log extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		View view = getView(evt);
-		view.showWaitCursor();
-
-		DirectoryCache.flushAllCachedDirectories();
-
-		view.hideWaitCursor();
+		Log.flushStream();
 	}
 }

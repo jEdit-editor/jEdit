@@ -230,10 +230,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 		reloadDirectory(false);
 	}
 
-	public void reloadDirectory(boolean flushCache)
+	public void reloadDirectory(boolean clearCache)
 	{
-		if(flushCache)
-			DirectoryCache.flushCachedDirectory(path);
+		if(clearCache)
+			DirectoryCache.clearCachedDirectory(path);
 
 		loadDirectory(path);
 	}
@@ -955,6 +955,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.19  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.18  2000/08/29 07:47:12  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

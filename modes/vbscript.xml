@@ -7,7 +7,8 @@
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="VBScript" />
 		<PROPERTY NAME="blockComment" VALUE="'" />
-		<PROPERTY NAME="filenameGlob" VALUE="*.vbs" />
+		<PROPERTY NAME="filenameGlob" VALUE="*.{vbs,bas,cls}" />
+		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
@@ -19,6 +20,11 @@
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
+
+		<!-- conditional compilation -->
+		<EOL_SPAN TYPE="KEYWORD2">#if</EOL_SPAN>
+		<EOL_SPAN TYPE="KEYWORD2">#else</EOL_SPAN>
+		<EOL_SPAN TYPE="KEYWORD2">#end</EOL_SPAN>
 
 		<EOL_SPAN TYPE="COMMENT1">'</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT1">rem</EOL_SPAN>
@@ -32,6 +38,7 @@
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
 		<!-- See in keywords: is -->
 
 		<!-- Arithmetic operators -->
@@ -51,8 +58,10 @@
 		<!-- See in keywords: and, or, not, xor, eqv -->
 
 		<!-- EOL Continuation -->
-		<SEQ TYPE="NULL">_</SEQ>
+<!--		<SEQ TYPE="NULL">_</SEQ>-->
 		<!-- Instruction separator -->
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
 		<SEQ TYPE="NULL">:</SEQ>
 
 		<KEYWORDS IGNORE_CASE="TRUE">
@@ -63,7 +72,7 @@
 			<KEYWORD1>elseif</KEYWORD1>
 			<KEYWORD1>select</KEYWORD1>
 			<KEYWORD1>case</KEYWORD1>
-	
+
 			<!-- Loop Statements -->
 			<!-- For..Next -->
 			<KEYWORD1>for</KEYWORD1>
@@ -80,11 +89,11 @@
 			<KEYWORD1>loop</KEYWORD1>
 			<!-- While..Wend -->
 			<KEYWORD1>wend</KEYWORD1>
-	
+
 			<!-- Closing, Exit Statements -->
 			<KEYWORD1>exit</KEYWORD1>
 			<KEYWORD1>end</KEYWORD1>
-	
+
 			<!-- Methods, Functions, Class, Properties, Variables -->
 			<KEYWORD1>function</KEYWORD1>
 			<KEYWORD1>sub</KEYWORD1>
@@ -92,17 +101,18 @@
 			<KEYWORD1>property</KEYWORD1>
 			<KEYWORD1>get</KEYWORD1>
 			<KEYWORD1>let</KEYWORD1>
-			<!-- property set : <KEYWORD1>set</KEYWORD1> -->
-	
+			<KEYWORD1>set</KEYWORD1>
+
 			<!-- Parameters passing -->
 			<KEYWORD1>byval</KEYWORD1>
 			<KEYWORD1>byref</KEYWORD1>
-	
+
 			<!-- Declaration -->
 			<KEYWORD1>const</KEYWORD1>
 			<KEYWORD1>dim</KEYWORD1>
 			<KEYWORD1>redim</KEYWORD1>
 			<KEYWORD1>preserve</KEYWORD1>
+			<KEYWORD1>as</KEYWORD1>
 			
 			<!-- Object Assignement/Instantiation -->
 			<KEYWORD1>set</KEYWORD1>
@@ -113,18 +123,19 @@
 			<KEYWORD1>public</KEYWORD1>
 			<KEYWORD1>default</KEYWORD1>
 			<KEYWORD1>private</KEYWORD1>
-	
+
 			<!-- Comments -->
 			<KEYWORD1>rem</KEYWORD1>
-	
+
 			<!-- Function Call - Dynamic Evaluation -->
 			<KEYWORD1>call</KEYWORD1>
 			<KEYWORD1>execute</KEYWORD1>
 			<KEYWORD1>eval</KEYWORD1>
-			
+
 			<!-- Miscellaneous -->
 			<KEYWORD1>on</KEYWORD1>
 			<KEYWORD1>error</KEYWORD1>
+			<KEYWORD1>goto</KEYWORD1>
 			<KEYWORD1>resume</KEYWORD1>
 			<KEYWORD1>option</KEYWORD1>
 			<KEYWORD1>explicit</KEYWORD1>
@@ -142,7 +153,7 @@
 			<OPERATOR>not</OPERATOR>
 			<OPERATOR>xor</OPERATOR>
 			<OPERATOR>imp</OPERATOR>
-	
+
 			<!-- Datatypes Constants/Literals -->
 			<KEYWORD3>false</KEYWORD3>
 			<KEYWORD3>true</KEYWORD3>
@@ -182,11 +193,12 @@
 			<LITERAL2>vbLongTime</LITERAL2>
 			<LITERAL2>vbShortTime</LITERAL2>
 
-			<!-- Miscellaneaous Constants -->
-<!--			<LITERAL2>vbObjectError</LITERAL2>
--->
+			<!-- Miscellaneous  -->
+			<LITERAL2>vbObjectError</LITERAL2>
+			<KEYWORD2>Err</KEYWORD2>
+
 			<!-- MsgBox Constants -->
-<!--			<LITERAL2>vbOKOnly</LITERAL2>
+			<LITERAL2>vbOKOnly</LITERAL2>
 			<LITERAL2>vbOKCancel</LITERAL2>
 			<LITERAL2>vbAbortRetryIgnore</LITERAL2>
 			<LITERAL2>vbYesNoCancel</LITERAL2>
@@ -209,12 +221,12 @@
 			<LITERAL2>vbIgnore</LITERAL2>
 			<LITERAL2>vbYes</LITERAL2>
 			<LITERAL2>vbNo</LITERAL2>
--->
+
 			<!-- Tristate Constants -->
-<!--			<LITERAL2>vbUseDefault</LITERAL2>
+			<LITERAL2>vbUseDefault</LITERAL2>
 			<LITERAL2>vbTrue</LITERAL2>
 			<LITERAL2>vbFalse</LITERAL2>
--->
+
 			<!-- String Constants -->
 			<LITERAL2>vbcr</LITERAL2>
 			<LITERAL2>vbcrlf</LITERAL2>
@@ -734,3 +746,4 @@
 		</KEYWORDS>
 	</RULES>
 </MODE>
+

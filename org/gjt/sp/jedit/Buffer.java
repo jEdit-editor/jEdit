@@ -196,7 +196,7 @@ public class Buffer extends PlainDocument implements EBComponent
 					}
 				}
 
-				undo = new UndoManager();
+				undo = new MyUndoManager();
 				setFlag(LOADING,false);
 
 				// if reloading a file, clear dirty flag
@@ -347,6 +347,8 @@ public class Buffer extends PlainDocument implements EBComponent
 				setFlag(UNTITLED,false);
 				setFlag(DIRTY,false);
 				setFlag(SAVING,false);
+
+				saveUndo = undo.editToBeUndone();
 
 				if(getFlag(NEW_FILE) || mode.getName().equals("text"))
 					setMode();
@@ -557,7 +559,13 @@ public class Buffer extends PlainDocument implements EBComponent
 			setFlag(AUTOSAVE_DIRTY,true);
 		}
 		else
+		{
+			// remember the undo associated with a clean buffer,
+			// so that if we ever return to that undo we can
+			// clear the dirty flag
+			saveUndo = undo.editToBeUndone();
 			setFlag(DIRTY,false);
+		}
 
 		if(d != old_d)
 			EditBus.send(new BufferUpdate(this,BufferUpdate.DIRTY_CHANGED));
@@ -608,7 +616,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,true);
 			undo.undo();
-			return true;
 		}
 		catch(CannotUndoException cu)
 		{
@@ -619,6 +626,12 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
 		}
+
+		UndoableEdit toUndo = undo.editToBeUndone();
+		if(toUndo == saveUndo)
+			setDirty(false);
+
+		return true;
 	}
 
 	/**
@@ -636,7 +649,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,true);
 			undo.redo();
-			return true;
 		}
 		catch(CannotRedoException cr)
 		{
@@ -647,6 +659,12 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
 		}
+
+		UndoableEdit toUndo = undo.editToBeUndone();
+		if(toUndo == saveUndo)
+			setDirty(false);
+
+		return true;
 	}
 
 	/**
@@ -1464,7 +1482,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	private String name;
 	private Mode mode;
 	private TokenMarker tokenMarker;
-	private UndoManager undo;
+	private MyUndoManager undo;
+	private UndoableEdit saveUndo;
 	private CompoundEdit compoundEdit;
 	private boolean compoundEditNonEmpty;
 	private int compoundEditCount;
@@ -1629,6 +1648,21 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 	}
 
+	// we need to call some protected methods, so override this class
+	// to make them public
+	class MyUndoManager extends UndoManager
+	{
+		public UndoableEdit editToBeUndone()
+		{
+			return super.editToBeUndone();
+		}
+
+		public UndoableEdit editToBeRedone()
+		{
+			return super.editToBeRedone();
+		}
+	}
+
 	// event handlers
 	class UndoHandler
 	implements UndoableEditListener
@@ -1661,6 +1695,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.176  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.175  2000/08/29 07:47:10  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *
@@ -1690,7 +1727,4 @@ public class Buffer extends PlainDocument implements EBComponent
  *
  * Revision 1.166  2000/07/30 09:04:18  sp
  * More VFS browser hacking
- *
- * Revision 1.165  2000/07/29 12:24:07  sp
- * More VFS work, VFS browser started
  */

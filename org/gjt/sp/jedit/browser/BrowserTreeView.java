@@ -232,6 +232,33 @@ public class BrowserTreeView extends BrowserView
 			super(model);
 		}
 
+		protected void processKeyEvent(KeyEvent evt)
+		{
+			if(evt.getID() == KeyEvent.KEY_PRESSED)
+			{
+				switch(evt.getKeyCode())
+				{
+				case KeyEvent.VK_ENTER:
+					browser.filesActivated();
+					evt.consume();
+					break;
+				case KeyEvent.VK_LEFT:
+					if(tree.getMinSelectionRow() == 0
+						|| tree.getMinSelectionRow() == 1)
+					{
+						String directory = browser.getDirectory();
+						browser.setDirectory(VFSManager.getVFSForPath(
+							directory).getParentOfPath(directory));
+						evt.consume();
+					}
+					break;
+				}
+			}
+
+			if(!evt.isConsumed())
+				super.processKeyEvent(evt);
+		}
+
 		protected void processMouseEvent(MouseEvent evt)
 		{
 			// don't pass double-clicks to tree, otherwise
@@ -325,6 +352,9 @@ public class BrowserTreeView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.9  2000/08/29 07:47:12  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

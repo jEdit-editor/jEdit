@@ -4,27 +4,39 @@ JEDIT 2.6 VERSION HISTORY
 
 + New Features
 
-- Rudimentary keyboard navigation added to VFS browser, only supported
-  in list view currently:
-  - typing first few characters of a file's name selects it
-  - 'Enter' or 'Right Arrow' opens the currently selected file/directory
-    (unless one of the two text fields has focus, of course)
+- Rudimentary keyboard navigation added to VFS browser:
+  - typing first few characters of a file's name selects it (only in list
+    view)
+  - 'Enter' opens the currently selected file/directory (unless one of
+    the two text fields has focus, of course)
   - 'Left' goes to parent directory (ditto)
   - This is in addition to the keys already supported by Swing, such as
     Up/Down to select the previous/next item in the list, etc
+- Activity log is now written to $HOME/.jedit/activity.log, and only the
+  last 500 messages are kept in memory. This conserves resources because
+  the log could grow to a very large size if jEdit is open for a long
+  period of time
 
 + Enhancements
 
-- The selection is preserved across directory reloads in the VFS browser
-- Slightly tweaked auto indent
-- New method: View.setKeyEventHandlingComponent(Component comp). If comp
-  is non-null, all key events will be forwarded to it. Useful when
-  displaying popup windows and such
 - The 'Complete Word' command now displays the list of completions in a
   popup window below the caret, instead of a separate dialog box. This
   makes it faster and less intrusive
 - Settings are now saved in the Search & Replace and HyperSearch dialog
   boxes even if 'Cancel' is clicked
+- New method: View.setKeyEventHandlingComponent(Component comp). If comp
+  is non-null, all key events will be forwarded to it. Useful when
+  displaying popup windows and such
+- Slightly tweaked auto indent
+- The offset of the caret from the beginning of the line is now preserved
+  by the Page Up and Page Down keys
+- Updated VBScript mode (Ollie Rutherfurd)
+- *.asa files are now opened in ASP mode
+- The VFS browser no longer reloads the file list every time a buffer is
+  saved. This was annoying, especially with autosave
+- Documentation updates
+- The window docking code is now slightly more resistent to broken dockables
+  being added
 
 + Bug Fixes
 
@@ -43,12 +55,19 @@ JEDIT 2.6 VERSION HISTORY
 - Changing a dockable window's position in the Global Options dialog box
   while the dockable is visible and then closing the dockable would
   reset its position to what it was previously
+- Plugin manager would throw a NullPointerException when updating plugins
+  with no mail class, such as BuildTools
+- jEdit would hang if buffer list sorting was enabled and a buffer was
+  saved to a file name which would re-sort it to the beginning or end of
+  the list
 
 + API Changes
 
 - Signature of Buffer.indentLine() method changed to:
   boolean indentLine(JEditTextArea textArea, int line,
           boolean canIncreaseIndent, boolean canDecreaseIndent)
+- EditPlugin.createMenuItems(View,Vector,Vector) deprecated; override
+  createMenuItems(Vector) instead
 
 * Version 2.6pre4
 

@@ -65,14 +65,18 @@ public abstract class EditPlugin
 	/**
 	 * Method called every time a view is created to set up the
 	 * Plugins menu. Menus and menu items should be loaded using the
-	 * methods in the GUIUtilities class, and added to the appropriate
-	 * lists.
-	 * @param view The view
-	 * @param menus Add submenus here
-	 * @param menuItems Add menuitems here
+	 * methods in the GUIUtilities class, and added to the vector.
+	 * @param menuItems Add menus and menu items here
 	 *
-	 * @see GUIUtilities#loadMenu(View,String)
-	 * @see GUIUtilities#loadMenuItem(View,String)
+	 * @see GUIUtilities#loadMenu(String)
+	 * @see GUIUtilities#loadMenuItem(String)
+	 *
+	 * @since jEdit 2.6pre5
+	 */
+	public void createMenuItems(Vector menuItems) {}
+
+	/**
+	 * @deprecated Override createMenuItems(Vector) instead
 	 *
 	 * @since jEdit 2.1pre1
 	 */
@@ -172,6 +176,9 @@ public abstract class EditPlugin
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.8  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.7  2000/06/03 07:28:25  sp
  * User interface updates, bug fixes
  *

@@ -63,38 +63,13 @@ public class BrowserListView extends BrowserView
 
 	public void directoryLoaded(Vector directory)
 	{
-		// preserve selected files so user won't be annoyed by
-		// automatic updates
-		VFS.DirectoryEntry[] selected = getSelectedFiles();
-		String[] selectedNames = new String[selected.length];
-		for(int i = 0; i < selected.length; i++)
-		{
-			selectedNames[i] = selected[i].name;
-		}
-
 		if(directory == null)
 			list.setListData(new Object[0]);
 		else
 			list.setListData(directory);
 
-		// restore selection
-		if(selectedNames.length != 0)
-		{
-			for(int i = 0; i < directory.size(); i++)
-			{
-				VFS.DirectoryEntry file = (VFS.DirectoryEntry)directory
-					.elementAt(i);
-				String name = file.name;
-				for(int j = 0; j < selectedNames.length; j++)
-				{
-					if(selectedNames[j].equals(name))
-					{
-						list.addSelectionInterval(i,i);
-						break;
-					}
-				}
-			}
-		}
+		timer.stop();
+		typeSelectBuffer.setLength(0);
 	}
 
 	public void updateFileView()
@@ -117,13 +92,21 @@ public class BrowserListView extends BrowserView
 	private JList list;
 	private JScrollPane scroller;
 
+	private StringBuffer typeSelectBuffer = new StringBuffer();
+	private Timer timer = new Timer(0,new ClearTypeSelect());
+
 	private static FileCellRenderer renderer = new FileCellRenderer();
+
+	class ClearTypeSelect implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			typeSelectBuffer.setLength(0);
+		}
+	}
 
 	class KeyHandler extends KeyAdapter
 	{
-		StringBuffer typeSelectBuffer = new StringBuffer();
-		Timer timer = new Timer(0,new ClearTypeSelect());
-
 		public void keyTyped(KeyEvent evt)
 		{
 			char ch = evt.getKeyChar();
@@ -149,6 +132,7 @@ public class BrowserListView extends BrowserView
 					.getDirectory());
 				browser.setDirectory(vfs.getParentOfPath(
 					browser.getDirectory()));
+				evt.consume();
 			}
 		}
 
@@ -163,17 +147,8 @@ public class BrowserListView extends BrowserView
 				{
 					list.setSelectedIndex(i);
 					list.ensureIndexIsVisible(i);
-					browser.filesSelected();
 					return;
 				}
-			}
-		}
-
-		class ClearTypeSelect implements ActionListener
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				typeSelectBuffer.setLength(0);
 			}
 		}
 	}
@@ -217,6 +192,9 @@ public class BrowserListView extends BrowserView
 /*
  * Change Log:
  * $Log$
+ * Revision 1.9  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.8  2000/08/29 07:47:12  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

@@ -358,10 +358,11 @@ utils=repeat \
       - \
       vfs-browser \
       io-progress-monitor \
-      flush-directory-cache \
+      clear-directory-cache \
       forget-passwords \
       - \
       log-viewer \
+      update-log \
       - \
       reload-modes \
       - \
@@ -373,8 +374,9 @@ load-session.label=$Load Session...
 save-session.label=$Save Session...
 vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
-log-viewer.label=$Activity Log...
-flush-directory-cache.label=Flush Remote Directory $Cache
+log-viewer.label=$View Activity Log...
+update-log.label=Update $Activity Log on Disk
+clear-directory-cache.label=$Clear Remote Directory Cache
 forget-passwords.label=Forget Remote $Passwords
 reload-modes.label=Reloa$d Edit Modes
 buffer-options.label=$Buffer Options...
@@ -1060,8 +1062,7 @@ helpviewer.forward=Forward
 
 # Activity log
 log-viewer.title=Activity Log
-log-viewer.clear=Clear Log
-log-viewer.save=Save Log
+log-viewer.caption=Full text of log is stored in {0}.
 
 ###
 ### MISC

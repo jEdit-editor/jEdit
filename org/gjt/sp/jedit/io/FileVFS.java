@@ -182,7 +182,8 @@ public class FileVFS extends VFS
 	public boolean _delete(VFSSession session, String path, Component comp)
 	{
 		boolean retVal = new File(path).delete();
-		VFSManager.sendVFSUpdate(this,path,true);
+		if(retVal)
+			VFSManager.sendVFSUpdate(this,path,true);
 		return retVal;
 	}
 
@@ -222,7 +223,10 @@ public class FileVFS extends VFS
 		Component comp) throws IOException
 	{
 		OutputStream retVal = new FileOutputStream(path);
-		VFSManager.sendVFSUpdate(this,path,true);
+
+		// commented out for now, because updating VFS browsers
+		// every time file is saved gets annoying
+		//VFSManager.sendVFSUpdate(this,path,true);
 		return retVal;
 	}
 
@@ -317,6 +321,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.21  2000/08/29 07:47:13  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *

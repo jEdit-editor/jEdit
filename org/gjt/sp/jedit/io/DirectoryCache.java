@@ -132,9 +132,9 @@ public class DirectoryCache
 	/**
 	 * Removes the cached listing of the specified directory.
 	 * @param url The URL
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.6pre5
 	 */
-	public static void flushCachedDirectory(String url)
+	public static void clearCachedDirectory(String url)
 	{
 		url = canon(url);
 
@@ -153,9 +153,9 @@ public class DirectoryCache
 
 	/**
 	 * Removes all cached directory listings.
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 2.6pre5
 	 */
-	public static void flushAllCachedDirectories()
+	public static void clearAllCachedDirectories()
 	{
 		synchronized(lock)
 		{
@@ -213,6 +213,9 @@ public class DirectoryCache
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.3  2000/08/20 07:29:31  sp
  * I/O and VFS browser improvements
  *

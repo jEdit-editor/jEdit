@@ -219,8 +219,30 @@ public class jEdit
 		if(showSplash)
 			GUIUtilities.showSplashScreen();
 
+		Writer stream;
+		if(settingsDirectory != null)
+		{
+			String logPath = MiscUtilities.constructPath(
+				settingsDirectory,"activity.log");
+
+			try
+			{
+				stream = new BufferedWriter(new FileWriter(logPath));
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				stream = null;
+			}
+		}
+		else
+		{
+			stream = null;
+		}
+
+		Log.init(true,level,stream);
+
 		// Get things rolling
-		Log.init(true,level);
 		initMisc();
 		initSystemProperties();
 		GUIUtilities.advanceSplashProgress();
@@ -1625,7 +1647,7 @@ public class jEdit
 		// Stop autosave timer
 		Autosave.stop();
 
-		// Stop server here
+		// Stop server
 		if(server != null)
 			server.stopServer();
 
@@ -1642,8 +1664,11 @@ public class jEdit
 		// Save settings
 		saveSettings();
 
-		// Remove cached directory listings
-		DirectoryCache.flushAllCachedDirectories();
+		// Clear cached directory listings
+		DirectoryCache.clearAllCachedDirectories();
+
+		// Close activity log stream
+		Log.closeStream();
 
 		// Byebye...
 		System.exit(0);
@@ -1877,6 +1902,7 @@ public class jEdit
 		addAction("block-comment");
 		addAction("box-comment");
 		addAction("buffer-options");
+		addAction("clear-directory-cache");
 		addAction("clear-marker");
 		addAction("clear-register");
 		addAction("close-all");
@@ -1903,7 +1929,6 @@ public class jEdit
 		addAction("find");
 		addAction("find-next");
 		addAction("find-selection");
-		addAction("flush-directory-cache");
 		addAction("forget-passwords");
 		addAction("global-options");
 		addAction("goto-line");
@@ -2012,6 +2037,7 @@ public class jEdit
 		addAction("toolbar-find");
 		addAction("toolbar-isearch");
 		addAction("undo");
+		addAction("update-log");
 		addAction("unsplit");
 		addAction("untab");
 		addAction("view-registers");
@@ -2244,6 +2270,10 @@ public class jEdit
 		{
 			buffer.next.prev = buffer.prev;
 		}
+
+		// fixes the hang that can occur if we 'save as' to a new
+		// filename which requires re-sorting
+		buffer.next = buffer.prev = null;
 	}
 
 	private static void addViewToList(View view)
@@ -2320,6 +2350,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.273  2000/08/31 02:54:00  sp
+ * Improved activity log, bug fixes
+ *
  * Revision 1.272  2000/08/29 07:47:11  sp
  * Improved complete word, type-select in VFS browser, bug fixes
  *
