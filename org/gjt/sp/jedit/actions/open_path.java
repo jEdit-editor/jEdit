@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
 public class open_path extends EditAction
@@ -30,12 +29,10 @@ public class open_path extends EditAction
 		View view = getView(evt);
 		String path = evt.getActionCommand();
 
+		if(path == null)
+			path = GUIUtilities.input(view,"openurl",null);
+
 		if(path != null)
 			jEdit.openFile(view,path);
-		else
-		{
-			VFSManager.getUrlVFS().showOpenDialog(view,view.getBuffer());
-			return;
-		}
 	}
 }

@@ -1972,7 +1972,6 @@ public class jEdit
 		addAction("next-split");
 		addAction("next-word");
 		addAction("open-file");
-		addAction("open-from");
 		addAction("open-path");
 		addAction("overwrite");
 		addAction("paste");
@@ -2005,7 +2004,6 @@ public class jEdit
 		addAction("save");
 		addAction("save-all");
 		addAction("save-as");
-		addAction("save-to");
 		addAction("save-gutter-size");
 		addAction("save-session");
 		addAction("scroll-line");
@@ -2344,6 +2342,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.260  2000/07/30 09:04:18  sp
+ * More VFS browser hacking
+ *
  * Revision 1.259  2000/07/29 12:24:07  sp
  * More VFS work, VFS browser started
  *

@@ -236,3 +236,9 @@ print.margin.top=0.5
 print.margin.left=0.5
 print.margin.bottom=0.5
 print.margin.right=0.5
+
+###
+### VFS BROWSER
+###
+
+vfs.browser.doubleClickClose=true

@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit.io;
 
-import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.io.*;
 import java.net.*;
@@ -36,20 +35,6 @@ public class UrlVFS extends VFS
 	public UrlVFS()
 	{
 		super("url");
-	}
-
-	public Buffer showOpenDialog(View view, Buffer buffer)
-	{
-		String path = GUIUtilities.input(view,"openurl",null);
-		if(path != null)
-			return jEdit.openFile(view,path);
-		else
-			return null;
-	}
-
-	public String showSaveDialog(View view, Buffer buffer)
-	{
-		return GUIUtilities.input(view,"saveurl",null);
 	}
 
 	public InputStream _createInputStream(VFSSession session,
@@ -90,6 +75,9 @@ public class UrlVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.6  2000/07/30 09:04:19  sp
+ * More VFS browser hacking
+ *
  * Revision 1.5  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

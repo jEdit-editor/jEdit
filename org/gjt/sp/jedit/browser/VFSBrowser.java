@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.browser;
 
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.EventListenerList;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -37,13 +38,33 @@ import org.gjt.sp.jedit.*;
 public class VFSBrowser extends JPanel implements EBComponent
 {
 	/**
+	 * Open file dialog mode. Equals JFileChooser.OPEN_DIALOG for
+	 * backwards compatibility.
+	 */
+	public static final int OPEN_DIALOG = 0;
+
+	/**
+	 * Save file dialog mode. Equals JFileChooser.SAVE_DIALOG for
+	 * backwards compatibility.
+	 */
+	public static final int SAVE_DIALOG = 1;
+
+	/**
+	 * Stand-alone browser mode.
+	 */
+	public static final int BROWSER = 2;
+
+	/**
 	 * Creates a new VFS browser.
 	 * @param view The view to open buffers in by default
 	 * @param path The path to display
+	 * @param mode The browser mode
 	 */
-	public VFSBrowser(View view, String path)
+	public VFSBrowser(View view, String path, int mode)
 	{
 		super(new BorderLayout());
+
+		listenerList = new EventListenerList();
 
 		this.view = view;
 
@@ -56,11 +77,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 		pathPanel.add(BorderLayout.CENTER,pathField);
 		add(BorderLayout.NORTH,pathPanel);
 
-		fileList = new JList();
-		fileList.setVisibleRowCount(8);
-		add(BorderLayout.CENTER,new JScrollPane(fileList));
+		browserView = new BrowserListView(this);
+		add(BorderLayout.CENTER,browserView);
 
-		gotoDirectory(path);
+		setDirectory(path);
 	}
 
 	public void addNotify()
@@ -83,7 +103,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 			handleBufferUpdate((BufferUpdate)msg);
 	}
 
-	public void gotoDirectory(String path)
+	public String getDirectory()
+	{
+		return path;
+	}
+
+	public void setDirectory(String path)
 	{
 		if(path.equals(this.path))
 			return;
@@ -108,6 +133,26 @@ public class VFSBrowser extends JPanel implements EBComponent
 			vfsSession,vfs,path));
 	}
 
+	public int getMode()
+	{
+		return mode;
+	}
+
+	public VFS.DirectoryEntry[] getSelectedFiles()
+	{
+		return browserView.getSelectedFiles();
+	}
+
+	public void addBrowserListener(BrowserListener l)
+	{
+		listenerList.add(BrowserListener.class,l);
+	}
+
+	public void removeBrowserListener(BrowserListener l)
+	{
+		listenerList.remove(BrowserListener.class,l);
+	}
+
 	// package-private members
 	void directoryLoaded(final VFS.DirectoryEntry[] list)
 	{
@@ -115,17 +160,86 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			public void run()
 			{
-				fileList.setListData(list);
+				browserView.directoryLoaded(path,list);
 			}
 		});
 	}
 
+	void filesSelected()
+	{
+		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
+
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = 0; i < listeners.length; i++)
+		{
+			if(listeners[i] == BrowserListener.class)
+			{
+				BrowserListener l = (BrowserListener)listeners[i+1];
+				l.filesSelected(this,selectedFiles);
+			}
+		}
+
+	}
+
+	void filesActivated()
+	{
+		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
+
+		for(int i = 0; i < selectedFiles.length; i++)
+		{
+			VFS.DirectoryEntry file = selectedFiles[i];
+			if(file.type == VFS.DirectoryEntry.DIRECTORY)
+				setDirectory(file.path);
+			else if(mode == BROWSER)
+			{
+				Buffer buffer = jEdit.getBuffer(file.path);
+				if(buffer != null)
+				{
+					if(jEdit.getBooleanProperty("vfs.browser.doubleClickClose"))
+					{
+						jEdit.closeBuffer(view,buffer);
+						continue;
+					}
+				}
+				else
+					buffer = jEdit.openFile(null,file.path);
+
+				if(buffer != null)
+				{
+					if(view == null)
+						view = jEdit.newView(null,buffer);
+					else
+						view.setBuffer(buffer);
+				}
+			}
+			else
+			{
+				// if a file is selected in OPEN_DIALOG or
+				// SAVE_DIALOG mode, just let the listener(s)
+				// handle it
+			}
+		}
+
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = 0; i < listeners.length; i++)
+		{
+			if(listeners[i] == BrowserListener.class)
+			{
+				BrowserListener l = (BrowserListener)listeners[i+1];
+				l.filesActivated(this,selectedFiles);
+			}
+		}
+
+	}
+
 	// private members
+	private EventListenerList listenerList;
 	private View view;
 	private String path;
 	private VFS vfs;
 	private HistoryTextField pathField;
-	private JList fileList;
+	private BrowserView browserView;
+	private int mode;
 
 	private void handleViewUpdate(ViewUpdate vmsg)
 	{
@@ -136,7 +250,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	private void handleBufferUpdate(BufferUpdate bmsg)
 	{
-		//
+		if(bmsg.getWhat() == BufferUpdate.CREATED
+			|| bmsg.getWhat() == BufferUpdate.CLOSED)
+			browserView.updateFileView();
 	}
 
 	class ActionHandler implements ActionListener
@@ -148,7 +264,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				pathField.addCurrentToHistory();
 				String path = pathField.getText();
 				if(path != null)
-					gotoDirectory(path);
+					setDirectory(path);
 			}
 		}
 	}

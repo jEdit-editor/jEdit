@@ -19,8 +19,6 @@
 
 package org.gjt.sp.jedit.io;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.io.*;
 import org.gjt.sp.jedit.*;
@@ -38,55 +36,6 @@ public class FileVFS extends VFS
 	public FileVFS()
 	{
 		super("file");
-	}
-
-	public Buffer showOpenDialog(View view, Buffer buffer)
-	{
-		String parent;
-		File file = buffer.getFile();
-		if(file == null)
-			parent = System.getProperty("user.dir");
-		else
-			parent = file.getParent();
-
-		String path = GUIUtilities.showFileDialog(view,parent,
-			JFileChooser.OPEN_DIALOG);
-		if(path != null)
-			return jEdit.openFile(view,path);
-		else
-			return null;
-	}
-
-	public String showSaveDialog(View view, Buffer buffer)
-	{
-		String path;
-		if(buffer.getFile() == null)
-			path = null;
-		else
-			path = buffer.getPath();
-
-		String file = GUIUtilities.showFileDialog(view,path,
-			JFileChooser.SAVE_DIALOG);
-
-		if(file != null)
-		{
-			File _file = new File(file);
-			if(_file.exists())
-			{
-				Object[] args = { _file.getName() };
-				int result = JOptionPane.showConfirmDialog(view,
-					jEdit.getProperty("fileexists.message",args),
-					jEdit.getProperty("fileexists.title"),
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.WARNING_MESSAGE);
-				if(result != JOptionPane.YES_OPTION)
-					return null;
-			}
-
-			return file;
-		}
-		else
-			return null;
 	}
 
 	public boolean load(View view, Buffer buffer, String path)
@@ -161,14 +110,15 @@ public class FileVFS extends VFS
 		for(int i = 0; i < list.length; i++)
 		{
 			String name = list[i];
-			File file = new File(directory,name);
+			String path = MiscUtilities.constructPath(url,name);
+			File file = new File(path);
 			int type;
 			if(file.isDirectory())
 				type = VFS.DirectoryEntry.DIRECTORY;
 			else
 				type = VFS.DirectoryEntry.FILE;
 
-			list2[i] = new VFS.DirectoryEntry(name,type,file.length());
+			list2[i] = new VFS.DirectoryEntry(name,path,type,file.length());
 		}
 
 		return list2;
@@ -297,6 +247,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  2000/07/30 09:04:19  sp
+ * More VFS browser hacking
+ *
  * Revision 1.9  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

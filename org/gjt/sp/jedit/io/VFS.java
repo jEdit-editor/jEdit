@@ -44,26 +44,12 @@ public abstract class VFS
 	/**
 	 * Returns this VFS's name. The name is used to obtain the
 	 * menu item label stored in the <code>vfs.<i>name</i>.label</code>
-	 * by the 'Open From' and 'Save To' menus.
+	 * property.
 	 */
 	public String getName()
 	{
 		return name;
 	}
-
-	/**
-	 * Displays an open dialog box and returns the selected pathname.
-	 * @param view The view
-	 * @param buffer The buffer
-	 */
-	public abstract Buffer showOpenDialog(View view, Buffer buffer);
-
-	/**
-	 * Displays a save dialog box and returns the selected pathname.
-	 * @param view The view
-	 * @param buffer The buffer
-	 */
-	public abstract String showSaveDialog(View view, Buffer buffer);
 
 	/**
 	 * Starts a VFS session. This method is called from the AWT thread,
@@ -145,19 +131,21 @@ public abstract class VFS
 		public static final int LINK = 2;
 
 		public String name;
+		public String path;
 		public int type;
 		public long length;
 
-		public DirectoryEntry(String name, int type, long length)
+		public DirectoryEntry(String name, String path, int type, long length)
 		{
 			this.name = name;
+			this.path = path;
 			this.type = type;
 			this.length = length;
 		}
 
 		public String toString()
 		{
-			return name + "," + type + "," + length;
+			return name;
 		}
 	}
 
@@ -276,6 +264,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/07/30 09:04:19  sp
+ * More VFS browser hacking
+ *
  * Revision 1.9  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

@@ -44,27 +44,6 @@ public class FtpVFS extends VFS
 		super("ftp");
 	}
 
-	public Buffer showOpenDialog(View view, Buffer buffer)
-	{
-		FtpBrowser browser = new FtpBrowser(view,buffer,FtpBrowser.OPEN);
-		if(!browser.isOK())
-			return null;
-
-		Hashtable props = new Hashtable();
-		props.put(PASSWORD_KEY,browser.getPassword());
-		return jEdit.openFile(view,null,browser.getPath(),false,false,props);
-	}
-
-	public String showSaveDialog(View view, Buffer buffer)
-	{
-		FtpBrowser browser = new FtpBrowser(view,buffer,FtpBrowser.SAVE);
-		if(!browser.isOK())
-			return null;
-
-		buffer.putProperty(PASSWORD_KEY,browser.getPassword());
-		return browser.getPath();
-	}
-
 	public boolean setupVFSSession(VFSSession session, Component comp)
 	{
 		super.setupVFSSession(session,comp);
@@ -144,6 +123,12 @@ public class FtpVFS extends VFS
 				VFS.DirectoryEntry entry = lineToDirectoryEntry(line);
 				if(entry.name.equals(".") || entry.name.equals(".."))
 					continue;
+
+				// prepend directory to create full path
+				if(url.endsWith("/"))
+					entry.path = url + entry.name;
+				else
+					entry.path = url + '/' + entry.name;
 
 				directoryVector.addElement(entry);
 			}
@@ -282,8 +267,7 @@ public class FtpVFS extends VFS
 		super._endVFSSession(session,comp);
 	}
 
-	// package-private members
-	static FtpClient createFtpClient(Component comp, String host, String port,
+	private static FtpClient createFtpClient(Component comp, String host, String port,
 		String user, String password, boolean ignoreErrors)
 	{
 		FtpClient client = new FtpClient();
@@ -431,13 +415,17 @@ public class FtpVFS extends VFS
 		if(line.charAt(0) == 'l')
 			name = name.substring(name.indexOf("-> "));
 
-		return new VFS.DirectoryEntry(name,type,length);
+		// path is null; it will be created later, by _listDirectory()
+		return new VFS.DirectoryEntry(name,null,type,length);
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/07/30 09:04:19  sp
+ * More VFS browser hacking
+ *
  * Revision 1.11  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *

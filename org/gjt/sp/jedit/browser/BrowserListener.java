@@ -1,5 +1,5 @@
 /*
- * SyntaxDocument.java - Backwards compatibility
+ * BrowserListener.java - VFS browser listener
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -17,18 +17,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.syntax;
+package org.gjt.sp.jedit.browser;
 
-import javax.swing.text.PlainDocument;
-import java.util.Hashtable;
-import org.gjt.sp.jedit.*;
+import java.util.EventListener;
+
+import org.gjt.sp.jedit.io.VFS;
 
 /**
- * This class has been merged with the Buffer class.
- * Do not use it directly. It will go away soon.
+ * A browser event listener.
  * @author Slava Pestov
  * @version $Id$
  */
-public class SyntaxDocument extends PlainDocument
+public interface BrowserListener extends EventListener
 {
+	/**
+	 * The user has selected a set of files.
+	 * @param browser The VFS browser
+	 * @param files The selected files
+	 */
+	void filesSelected(VFSBrowser browser, VFS.DirectoryEntry[] files);
+
+	/**
+	 * The user has double-clicked a set of files.
+	 * @param browser The VFS browser
+	 * @param files The selected files
+	 */
+	void filesActivated(VFSBrowser browser, VFS.DirectoryEntry[] files);
 }
+
+/*
+ * Change Log:
+ * $Log$
+ * Revision 1.1  2000/07/30 09:04:19  sp
+ * More VFS browser hacking
+ *
+ */

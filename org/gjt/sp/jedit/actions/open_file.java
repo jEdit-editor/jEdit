@@ -19,8 +19,8 @@
 
 package org.gjt.sp.jedit.actions;
 
+import javax.swing.JFileChooser;
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
 public class open_file extends EditAction
@@ -28,6 +28,9 @@ public class open_file extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		VFSManager.getFileVFS().showOpenDialog(view,view.getBuffer());
+		String path = GUIUtilities.showFileDialog(view,view.getBuffer()
+			.getPath(),JFileChooser.OPEN_DIALOG);
+		if(path != null)
+			jEdit.openFile(view,path);
 	}
 }

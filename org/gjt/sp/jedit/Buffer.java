@@ -55,7 +55,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class Buffer extends SyntaxDocument implements EBComponent
+public class Buffer extends PlainDocument implements EBComponent
 {
 	/**
 	 * Line separator property.
@@ -263,9 +263,32 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 */
 	public boolean saveAs(View view)
 	{
-		String file = VFSManager.getFileVFS().showSaveDialog(view,this);
-		if(file != null)
-			return save(view,file);
+		String path;
+		if(vfs instanceof FileVFS)
+			path = null;
+		else
+			path = this.path;
+
+		path = GUIUtilities.showFileDialog(view,path,
+			JFileChooser.SAVE_DIALOG);
+
+		if(path != null)
+		{
+			File _file = new File(path);
+			if(_file.exists())
+			{
+				Object[] args = { _file.getName() };
+				int result = JOptionPane.showConfirmDialog(view,
+					jEdit.getProperty("fileexists.message",args),
+					jEdit.getProperty("fileexists.title"),
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+				if(result != JOptionPane.YES_OPTION)
+					return false;
+			}
+
+			return save(view,path);
+		}
 		else
 			return false;
 	}
@@ -1664,6 +1687,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.166  2000/07/30 09:04:18  sp
+ * More VFS browser hacking
+ *
  * Revision 1.165  2000/07/29 12:24:07  sp
  * More VFS work, VFS browser started
  *

@@ -372,10 +372,6 @@ public class View extends JFrame implements EBComponent
 	{
 		if(name.equals("buffers"))
 			return buffers;
-		else if(name.equals("open-from-menu"))
-			return openFrom;
-		else if(name.equals("save-to-menu"))
-			return saveTo;
 		else if(name.equals("recent-files"))
 			return recent;
 		else if(name.equals("current-directory"))
@@ -406,8 +402,6 @@ public class View extends JFrame implements EBComponent
 
 		// Dynamic menus
 		buffers = GUIUtilities.loadMenu(this,"buffers");
-		openFrom = GUIUtilities.loadMenu(this,"open-from-menu");
-		saveTo = GUIUtilities.loadMenu(this,"save-to-menu");
 		recent = GUIUtilities.loadMenu(this,"recent-files");
 		currentDirectory = new CurrentDirectoryMenu(this);
 		clearMarker = GUIUtilities.loadMenu(this,"clear-marker");
@@ -415,7 +409,6 @@ public class View extends JFrame implements EBComponent
 		macros = GUIUtilities.loadMenu(this,"macros");
 		help = GUIUtilities.loadMenu(this,"help-menu");
 		plugins = GUIUtilities.loadMenu(this,"plugins");
-		updateVFSMenus();
 		updateMacrosMenu();
 		updateHelpMenu();
 		updatePluginsMenu();
@@ -454,9 +447,8 @@ public class View extends JFrame implements EBComponent
 
 		// null some variables so that retaining references
 		// to closed views won't hurt as much.
-		buffers = openFrom = saveTo = recent = currentDirectory
-			= clearMarker = gotoMarker = macros = plugins
-			= help = null;
+		buffers = recent = currentDirectory = clearMarker
+			= gotoMarker = macros = plugins = help = null;
 		toolBars = null;
 		toolBar = null;
 		searchBar = null;
@@ -613,8 +605,6 @@ public class View extends JFrame implements EBComponent
 	private boolean closed;
 
 	private JMenu buffers;
-	private JMenu openFrom;
-	private JMenu saveTo;
 	private JMenu recent;
 	private JMenu currentDirectory;
 	private JMenu clearMarker;
@@ -733,40 +723,6 @@ public class View extends JFrame implements EBComponent
 				return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Recreates the VFS open-from and save-to menus.
-	 */
-	private void updateVFSMenus()
-	{
-		EditAction openFromAction = jEdit.getAction("open-from");
-		EditAction saveToAction = jEdit.getAction("save-to");
-
-		Enumeration enum = VFSManager.getFilesystems();
-
-		Vector openFromItems = new Vector();
-		Vector saveToItems = new Vector();
-		while(enum.hasMoreElements())
-		{
-			VFS vfs = (VFS)enum.nextElement();
-			String name = vfs.getName();
-			String label = jEdit.getProperty("vfs." + name
-				+ ".label");
-			EnhancedMenuItem emi = new EnhancedMenuItem(label,
-				openFromAction,name);
-			openFromItems.addElement(emi);
-			emi = new EnhancedMenuItem(label,saveToAction,name);
-			saveToItems.addElement(emi);
-		}
-
-		MiscUtilities.quicksort(openFromItems,new MenuItemCompare());
-		MiscUtilities.quicksort(saveToItems,new MenuItemCompare());
-		for(int i = 0; i < openFromItems.size(); i++)
-		{
-			openFrom.add((JMenuItem)openFromItems.elementAt(i));
-			saveTo.add((JMenuItem)saveToItems.elementAt(i));
-		}
 	}
 
 	/**
@@ -1043,6 +999,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.189  2000/07/30 09:04:18  sp
+ * More VFS browser hacking
+ *
  * Revision 1.188  2000/07/26 07:48:44  sp
  * stuff
  *

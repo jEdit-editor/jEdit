@@ -103,6 +103,9 @@ public abstract class EnhancedDialog extends JDialog
 	{
 		public void keyPressed(KeyEvent evt)
 		{
+			if(evt.isConsumed())
+				return;
+
 			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
 			{
 				ok();

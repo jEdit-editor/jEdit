@@ -567,14 +567,6 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * @deprecated Call getBuffer() instead
-	 */
-	public final SyntaxDocument getDocument()
-	{
-		return buffer;
-	}
-
-	/**
 	 * Sets the buffer this text area is editing.
 	 * @param buffer The buffer
 	 */
@@ -621,14 +613,6 @@ public class JEditTextArea extends JComponent
 	 * <code>getBuffer().getLength()</code>.
 	 */
 	public final int getBufferLength()
-	{
-		return buffer.getLength();
-	}
-
-	/**
-	 * @deprecated Use getBufferLength() instead
-	 */
-	public final int getDocumentLength()
 	{
 		return buffer.getLength();
 	}
@@ -2179,6 +2163,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.76  2000/07/30 09:04:19  sp
+ * More VFS browser hacking
+ *
  * Revision 1.75  2000/07/26 07:48:45  sp
  * stuff
  *

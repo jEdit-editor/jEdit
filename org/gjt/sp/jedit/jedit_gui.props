@@ -53,6 +53,7 @@ icons=\
       Delete.gif \
       Document.gif \
       FingerRight.gif \
+      Folder.gif \
       Hammer.gif \
       Help.gif \
       New.gif \
@@ -91,7 +92,6 @@ view.mbar=file edit search view utils macros plugins help-menu
 file=new-file \
      open-file \
      open-path \
-     %open-from-menu \
      %recent-files \
      %current-directory \
      - \
@@ -103,7 +103,6 @@ file=new-file \
      - \
      save \
      save-as \
-     %save-to-menu \
      save-all \
      - \
      send \
@@ -114,7 +113,6 @@ file.label=$File
 new-file.label=$New File
 open-file.label=$Open File...
 open-path.label=Open Pa$th...
-open-from-menu.label=Open From
 recent-files.label=Recent Files
 current-directory.label=Current Directory
 current-directory.not-local=Cannot list directories on remote filesystems
@@ -125,7 +123,6 @@ close-buffer.label=$Close Buffer
 close-all.label=Close All $Buffers
 save.label=$Save
 save-as.label=Sa$ve As...
-save-to-menu.label=Save To
 save-all.label=Save A$ll Buffers...
 send.label=Sen$d...
 print.label=$Print...
@@ -370,7 +367,7 @@ utils.label=$Utilities
 repeat.label=$Repeat Next Command
 load-session.label=$Load Session...
 save-session.label=$Save Session...
-vfs-browser.label=$File System Browser
+vfs-browser.label=$File System Browser...
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$Activity Log...
 flush-directory-cache.label=Flush Remote Directory $Cache
@@ -1106,27 +1103,13 @@ login.caption=Enter user name and password for {0}:
 login.user=User name:
 login.password=Password:
 
-# VFS browser dialog box
+# VFS browser
 vfs.browser.title=File System Browser
 vfs.browser.directory=Directory:
 
-# Browser dialog box
-vfs.ftp.browser.open-title=Open from FTP Server
-vfs.ftp.browser.save-title=Save to FTP Server
-
-vfs.ftp.browser.host=FTP server:
-vfs.ftp.browser.username=User name:
-vfs.ftp.browser.password=Password:
-vfs.ftp.browser.path=Path:
-
-vfs.ftp.browser.connect=Connect
-vfs.ftp.browser.open=Open
-vfs.ftp.browser.save=Save
-vfs.ftp.browser.up=Up
-vfs.ftp.browser.refresh=Refresh
-
-# Menu item label
-vfs.ftp.label=FTP Server...
+vfs.browser.dialog.open=Open
+vfs.browser.dialog.save=Save
+vfs.browser.dialog.filename=File name:
 
 # Status bar messages
 vfs.status.load=Loading {0}
@@ -1135,6 +1118,9 @@ vfs.status.save=Saving {0}
 vfs.status.save-markers=Saving markers for {0}
 vfs.status.autosave=Autosaving {0}
 vfs.status.listing-directory=Listing {0}
+
+# FTP VFS label
+vfs.ftp.label=FTP Server...
 
 # Connect error
 vfs.ftp.connect-error.title=Cannot Connect
@@ -1163,11 +1149,5 @@ vfs.ftp.upload-error.message=An error occurred while uploading {0}:{1}{2}.\n\
 # File list error
 vfs.ftp.list-error.title=Cannot List Directory
 vfs.ftp.list-error.message=An error occurred while listing {0}.\n\
-	{1}\n\
-	See Utilities->Activity Log for a full connection trace.
-
-# Change directory error
-vfs.ftp.cd-error.title=Cannot Change Directory
-vfs.ftp.cd-error.message=An error occurred while changing to {0}.\n\
 	{1}\n\
 	See Utilities->Activity Log for a full connection trace.

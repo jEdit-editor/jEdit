@@ -36,7 +36,7 @@ public class VFSBrowserFrame extends JFrame
 	{
 		super(jEdit.getProperty("vfs.browser.title"));
 
-		getContentPane().add(new VFSBrowser(view,path));
+		getContentPane().add(new VFSBrowser(view,path,VFSBrowser.BROWSER));
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -48,12 +48,16 @@ public class VFSBrowserFrame extends JFrame
 	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,"vfs.browser");
+		super.dispose();
 	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/07/30 09:04:19  sp
+ * More VFS browser hacking
+ *
  * Revision 1.1  2000/07/29 12:24:08  sp
  * More VFS work, VFS browser started
  *
