@@ -5,9 +5,8 @@
 #
 # jEdit buffer-local properties:
 # :mode=makefile:tabSize=4:noTabs=yes:
-# :indentOpenBrackets={:indentCloseBrackets=}:
 
-cmd_javac = "jikes" "-deprecation" "-O" "+D" "+P";
+cmd_javac = "jikes" "-deprecation" "+D" "+P";
 #cmd_javac = "javac";
 cmd_jar = "jar";
 
@@ -85,7 +84,9 @@ jar: srcs;
     exec cmd_jar "cmf0" jedit_mf @ (glob
         (join pkgs, "/*.class")
         (join pkgs, "/*.gif")
-        (join pkgs, "/*.props"));
+        (join pkgs, "/*.jpg")
+        (join pkgs, "/*.props")
+	"org/gjt/sp/jedit/default.abbrevs");
 }
 
 "apidocs":;

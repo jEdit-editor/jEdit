@@ -11,23 +11,17 @@
 # Requires the TextTools plugin for the to-lower action.
 
 # Pick up word under the cursor and store it in @ register
-set-caret-register@!
-prev-word
-exchange-caret-register@!
-next-word
-select-caret-register@!
-clear-register@@
+select-word
 copy-string-register@@
 
 # Now convert selection to lowercase and store in !.
 # Tricky 'cos to-lower clears the selection
 
 # This is a total hack
-select-none
+prev-word
 select-next-char
 to-lower
-prev-word
-select-next-word
+select-word
 clear-register@!
 cut-string-register@!
 

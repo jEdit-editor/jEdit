@@ -1,21 +1,7 @@
 # This macro surrounds the word under the cursor with HTML <b> tags.
-# It uses the register ! for temporary storage.
 
-# Remember current position.
-set-caret-register@!
-
-# Go to start of word
-prev-word
-
+select-word
+cut-string-register@!
 insert-char@<b>
-
-# Go back
-goto-register@!
-
-# Go to end of word
-next-word
-
+paste-string-register@!
 insert-char@</b>
-
-# Go back
-goto-register@!

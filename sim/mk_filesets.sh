@@ -31,7 +31,6 @@ find gnu -type f -name \*.java -print > sim/jedit-source
 find org -type f \( -name \*.java -o -name \*.gif -o -name \*.props \) >> sim/jedit-source
 find jars/LatestVersion -type f -print >> sim/jedit-source
 echo makefile.jmk >> sim/jedit-source
-echo jars/template.jmk >> sim/jedit-source
 echo org/gjt/sp/jedit/jedit.manifest >> sim/jedit-source
 
 echo -n "jedit-source: "

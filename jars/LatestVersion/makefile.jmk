@@ -4,7 +4,6 @@
 #
 # jEdit buffer-local properties:
 # :mode=makefile:tabSize=4:noTabs=yes:
-# :indentOpenBrackets={:indentCloseBrackets=}:
 
 jar_name = "LatestVersion";
 
@@ -12,14 +11,20 @@ jar_name = "LatestVersion";
 # javac executable and args
 ##
 javac_bin = "javac";
+javac_opts = "-deprecation";
 
-# Uncomment the following line to pass options to javac; JMK uses ';'
-# as a generic file separator in classpaths ('/' for directories) then
-# converts to the native separators using the 'file.separator' and
-# 'path.separator' system properties
-#javac_opts = "-classpath" "../../jedit.jar;../EditBus.jar;.";
+#javac_bin = "jikes";
+#javac_opts = "-g" "-deprecation" "+E";
 
-cmd_javac = javac_bin javac_opts;
+# set up the class path
+new_class_path = "../../jedit.jar;../EditBus.jar;.";
+old_class_path = (getprop "java.class.path");
+
+# concatenate the old and new class paths
+if (equal "", old_class_path) then class_path = new_class_path;
+else class_path = (cat old_class_path ";" new_class_path); end
+
+cmd_javac = javac_bin "-classpath" class_path javac_opts;
 
 ##
 # jar executable and args
@@ -28,7 +33,9 @@ jar_bin = "jar";
 jar_opts = "cfM0";
 cmd_jar = jar_bin jar_opts;
 
-srcs = (subst ".java", ".class", (glob "*Plugin.java" "*.java"));
+srcs = (subst ".java", ".class", 
+	(glob (join (join (dirs "."), "/"), "*Plugin.java" "*.java"))
+);
 jar = (cat "../" jar_name ".jar");
 
 get_files = function (dummy)
