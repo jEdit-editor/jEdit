@@ -379,7 +379,8 @@ public class HelpViewer extends JFrame implements EBComponent
 			if(name.equals("TITLE"))
 			{
 				DefaultMutableTreeNode newNode = createNode(
-					"users-guide/" + href,title);
+					"jeditresource:/doc/users-guide/"
+					+ href,title);
 				node.add(newNode);
 				nodes.push(node);
 				node = newNode;

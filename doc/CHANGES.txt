@@ -1,5 +1,13 @@
 JEDIT 3.2 VERSION HISTORY
 
+* Version 3.2.1
+
++ Bug Fixes
+
+- Clicks in table of contents in help viewer didn't work
+- A few actions didn't record a trailing ; when recording a macro
+- Fixed another BeanShell performance problem
+
 * Version 3.2final
 
 + Enhancements

@@ -120,9 +120,12 @@ TO DO
   above)
 - folding:
   - needs to be improved, but I haven't thought about it yet
-.
+- plugin manager: show all dependencies, not just first-order ones
+- removing a plugin should offer to remove the ones that depend on it too
+
 + bugs:
 
+- if start is at the end of a line, .* always matches an empty string
 - formatting problems in user's guide in table cells
 - finish persistent splits code
 - complete word: keys to navigate don't work with some Java versions

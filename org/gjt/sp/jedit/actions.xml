@@ -27,7 +27,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.marker-prompt"),
-			"buffer.addMarker(__char__,textArea.getCaretPosition())");
+			"buffer.addMarker(__char__,textArea.getCaretPosition());");
 	</CODE>
 </ACTION>
 
@@ -347,7 +347,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.marker-prompt"),
-			"textArea.goToMarker(__char__,false)");
+			"textArea.goToMarker(__char__,false);");
 	</CODE>
 </ACTION>
 
@@ -866,7 +866,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.marker-prompt"),
-			"textArea.goToMarker(__char__,true)");
+			"textArea.goToMarker(__char__,true);");
 	</CODE>
 </ACTION>
 
@@ -1000,7 +1000,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.marker-prompt"),
-			"textArea.swapMarkerAndCaret(__char__)");
+			"textArea.swapMarkerAndCaret(__char__);");
 	</CODE>
 </ACTION>
 

@@ -882,7 +882,7 @@
     <guimenu>Search</guimenu>&gt;<guimenuitem>Search in Directory</guimenuitem>
     (shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) displays
+    <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo>) displays
     the search and replace dialog box, and selects the
     <guibutton>Directory</guibutton> radio button.
    </para>
