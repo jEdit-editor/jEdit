@@ -7,32 +7,21 @@ JEDIT TO DO
   flexible, so that BeanShell and friends can also have shortcuts (that
   can be edited in the shortcuts option pane!)
 - jEdit.getBooleanProperty() for yes/no stuff
-- Plugin loading and startup is slow
-- Update docs for shortcut pane changes
 
 ------- Features -------
 
 - Word wrap
+- Clean way of embedding token markers in one another, so that HTMLTokenMarker
+  can also colorize VBScript, etc
 - Document EditBus in plugin development docs
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Integrate XMode
 - Enhanced printing:
   - print selection only
   - print line numbers option
-- If the BeanShell plugin becomes mature enough, maybe replace built-in macro
-  system with it?
 
 ------- Installer -------
 
 - Check version of existing 'simlaunch' program before overwriting
 - Store human-readable strings in a property file for easier localization
 - Bad file number I/O error - file descriptor leak somewhere?
-
-------- Ideas for plugins -------
-
-- Version control
-- Localizations for specific languages
-- Generic EditBus-aware plugin for invoking other programs inside the JVM
-- Debugger front-end
-- VI key binding emulation
-- Spelling checker

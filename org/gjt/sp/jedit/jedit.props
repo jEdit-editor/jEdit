@@ -132,6 +132,7 @@ view.style.keyword3=color:#009600
 view.style.label=color:#990033 style:b
 view.style.literal1=color:#650099
 view.style.literal2=color:#650099 style:b
+view.style.operator=style:b
 view.style.invalid=color:red style:b
 
 ###

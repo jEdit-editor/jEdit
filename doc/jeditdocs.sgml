@@ -83,9 +83,94 @@
    2.1. A complete list can be found in the file named
    <filename>CHANGES.txt</>, which is part of the jEdit distribution.
   </para>
-  <para>
-   XXX - not done yet.
-  </para>
+
+<bridgehead renderas=sect3>Directory search</>
+<para>
+jEdit can now search inside all files in a directory. It can even
+recurse into subdirectories. The original implementation of this was
+written by Andreas Schaefer <email>andreas.schaefer@ubs.com</>, but I rewrote it
+from scratch because the original had a few problems.
+</para>
+<bridgehead renderas=sect3>Updated 'Expand Abbreviation' command</>
+<para>
+The 'Expand Abbreviation' command now cycles through all available
+matches, instead of only locating the first one. The code to do this was
+contributed by Valery Kondakoff <email>strauss@orc.ru</>.
+</para>
+<bridgehead renderas=sect3>New 'Close All' dialog box</>
+<para>
+Previously, exiting jEdit or closing all buffers would ask if each
+unsaved buffer should be saved, one-by-one. Now, all unsaved buffers are
+listed in one dialog box.
+</para>
+<bridgehead renderas=sect3>More intelligent auto indent</>
+<para>
+Pressing '}' in an edit mode that supports bracket indentation (C, C++,
+IDL, Java, JavaScript) now immediately re-indents the line accordingly.
+</para>
+<bridgehead renderas=sect3>QuickSearch on toolbar</>
+<para>
+The tool bar now has a text field for quick and easy searching, without
+having to bring up a Search and Replace dialog box.
+</para>
+<bridgehead renderas=sect3>Commands for deleting words</>
+<para>
+Two new commands, `Backspace Word' (C+BACK_SPACE) and `Delete Word'
+(C+DELETE) have been added. They delete the word before and after the
+caret, respectively.
+</para>
+<bridgehead renderas=sect3>Improved undo</>
+<para>
+Invoking 'Undo' or 'Redo' now moves the caret to the location of the
+change. Previously, there was no way to know exactly what was undone.
+</para>
+<bridgehead renderas=sect3>Session loading and saving</>
+<para>
+All jEdit versions since 1.3 could save the list of open files on exit,
+and restore those files the next time it was started. jEdit 2.2 takes
+this one step further, allowing you to create multiple such 'sessions',
+and load and save them while the editor is running.
+</para>
+<bridgehead renderas=sect3>Macro recorder updates</>
+<para>
+Previously, only key strokes were recorded in macros. Now, menu item
+selections, tool bar clicks, and even search and replace operations are
+recorded.
+</para>
+<bridgehead renderas=sect3>Extensible text area</>
+<para>
+jEdit's text area component now allows custom 'highlighters' to be
+added. A highlighter is a piece of code that is called each time a line
+is painted. The ErrorList plugin, for example, uses a highlighter to
+paint errors in the text as wavy red underlines.
+</para>
+<bridgehead renderas=sect3>EditBus message passing integrated</>
+<para>
+The EditBus system allows plugins to communicate and exchange data with
+one another by sending typed messages. Previously, the EditBus classes
+were distributed as a separate plugin. Now, most of EditBus has been
+moved into the core. The EditBus plugin still remains, however; it
+contains a few message types that are only used by plugins.
+</para>
+<para>
+The event system has been removed, because EditBus messages can be used
+to accomplish the same thing. Plugins that depend on the event system
+will no longer work with jEdit 2.2. Fortunately, most plugins that used
+the event system have been updated for EditBus already; check out jEdit
+Plugin Central <ulink url="http://www.icg-online.de/jedit">http://www.icg-online.de/jedit</>.
+</para>
+<bridgehead renderas=sect3>Activity log</>
+<para>
+jEdit now saves all thrown exceptions, as well as various informational
+messages, to an 'activity log'. The activity log can be viewed with
+the 'Help->Show Activity Log' command. It can also be saved to a file
+with 'Help->Save Activity Log'.
+</para>
+<bridgehead renderas=sect3>File encoding can be set</>
+<para>
+The file encoding used for reading and writing files can now be changed,
+so you can edit files written in non-Latin1 (human) languages.
+</para>
  </sect1>
  <sect1 id=features><title>jEdit Features</>
   <para>

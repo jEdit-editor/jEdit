@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.02.08.00";
+		return "02.02.09.00";
 	}
 
 	/**
@@ -1653,6 +1653,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.168  1999/12/10 03:22:46  sp
+ * Bug fixes, old loading code is now used again
+ *
  * Revision 1.167  1999/12/06 00:06:14  sp
  * Bug fixes
  *
@@ -1682,11 +1685,5 @@ public class jEdit
  *
  * Revision 1.158  1999/11/21 07:59:30  sp
  * JavaDoc updates
- *
- * Revision 1.157  1999/11/21 03:40:18  sp
- * Parts of EditBus not used by core moved to EditBus.jar
- *
- * Revision 1.156  1999/11/20 02:34:22  sp
- * more pre6 stuffs
  *
  */

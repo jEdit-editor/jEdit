@@ -73,12 +73,17 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public static final String LINESEP = "lineSeparator";
 
 	// caret info properties
+
+	/**
+	 * @since 2.2pre7
+	 */
 	public static final String SELECTION_START = "Buffer__selStart";
 	public static final String SELECTION_END = "Buffer__selEnd";
 	public static final String SELECTION_RECT = "Buffer__rect";
 	public static final String SCROLL_VERT = "Buffer__scrollVert";
 	public static final String SCROLL_HORIZ = "Buffer__scrollHoriz";
 	public static final String OVERWRITE = "Buffer__overwrite";
+
 	/**
 	 * Reloads settings from the properties. This should be called
 	 * after the <code>syntax</code> buffer-local property is
@@ -97,6 +102,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	 *
 	 * This method must be called before doing anything with a buffer.
 	 * @param view The view
+	 *
+	 * @since 2.2pre7
 	 */
 	public void loadIfNecessary(View view)
 	{
@@ -107,6 +114,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	/**
 	 * Loads the buffer from disk, even if it is loaded already.
 	 * @param view The view
+	 *
+	 * @since 2.2pre7
 	 */
 	public void load(View view)
 	{
@@ -274,9 +283,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			if(getFlag(NEW_FILE) || mode.getName().equals("text"))
 				setMode();
 			setFlag(AUTOSAVE_DIRTY,false);
-			setDirty(false);
 			setFlag(READ_ONLY,false);
 			setFlag(NEW_FILE,false);
+			setDirty(false);
 
 			autosaveFile.delete();
 			modTime = file.lastModified();
@@ -555,7 +564,11 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		if(mode == null)
 			throw new NullPointerException("Mode must be non-null");
 		if(this.mode == mode)
+		{
+			// this helps out with reloading and so on
+			tokenizeLines();
 			return;
+		}
 
 		View[] views = jEdit.getViews();
 
@@ -887,92 +900,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	}
 
 	/*
-	 * The read() method reads in blocks from the input stream and
-	 * marks out which offsets are line breaks. It uses an instance
-	 * of this class to record that information. Using a Vector
-	 * of Integer instances would also work, but 6000 objects
-	 * floating around for no reason is not my idea of fun :-)
-	 *
-	 * Why mark out line breaks in the first place? We could just
-	 * pass the text to PlainDocument.insertString(), but it
-	 * would slow things down; why parse the text for line breaks
-	 * first in read() (which must do it), and then in insertString()?
-	 *
-	 * Instead, as of 2.2pre7, we remember the line break offsets
-	 * from the read() method and create an element map ourselves.
-	 * This speeds up the file loading by about 30%.
-	 */
-	private class ReadHelper
-	{
-		int[] lines = new int[1000];
-		int last;
-
-		void add(int line)
-		{
-			if(last >= lines.length)
-				enlarge();
-			lines[last++] = line;
-		}
-
-		void enlarge()
-		{
-			int[] newlines = new int[lines.length * 2];
-			System.arraycopy(lines,0,newlines,0,lines.length);
-			lines = newlines;
-		}
-	}
-
-	/*
-	 * This is not very obvious in the Swing docs, but
-	 * elements[i].end == elements[i+1].start. This
-	 * method takes advantage of that fact.
-	 *
-	 * Also, we assume that the default root element is
-	 * an instance of AbstractDocument.BranchElement.
-	 * This is not specified anywhere in the Swing docs,
-	 * so it could break! However, there is no other way
-	 * to do it as far as I can see.
-	 *
-	 * Notice that we also interleave the buffer-local
-	 * property code in.
-	 */
-	private void createElements(ReadHelper lines)
-		throws BadLocationException
-	{
-		int last = lines.last;
-
-		Element map = getDefaultRootElement();
-		Element[] elements = new Element[last];
-		for(int i = 0; i < last; i++)
-		{
-			int start;
-			if(i == 0)
-				start = 0;
-			else
-				start = lines.lines[i-1];
-			int end = lines.lines[i];
-			elements[i] = createLeafElement(map,null,
-				start,end);
-			if(i < 10)
-			{
-				String line = getText(start,
-					end - start);
-				processProperty(line);
-			}
-		}
-
-		((BranchElement)map).replace(0,map.getElementCount(),
-			elements);
-
-		DefaultDocumentEvent evt = new DefaultDocumentEvent(
-			0,lines.last,DocumentEvent.EventType.INSERT);
-		evt.addEdit(new ElementEdit(map,0,new Element[0],elements));
-		evt.end();
-
-		fireInsertUpdate(evt);
-	}
-
-	/*
 	 * The most complicated method in this class :-) Read and understand
 	 * all these notes if you want to snarf this code for your own app;
 	 * it has a number of subtle behaviours which are not entirely
@@ -1002,10 +929,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 	 *   be set to \n, and the file will be saved as hello\nworld\n.
 	 *   Hence jEdit is not really appropriate for editing binary files.
 	 *
-	 * - We call getContent().insertString(), thus avoiding the slow
-	 *   PlainDocument.insertString(). But because Content.insertString()
-	 *   doesn't fire a document event, we have to create it ourselves
-	 *
 	 * - To make reloading a bit easier, this method automatically
 	 *   removes all data from the model before inserting it. This
 	 *   shouldn't cause any problems, as most documents will be
@@ -1027,11 +950,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 		URLConnection connection = null;
 		StringBuffer sbuf = new StringBuffer(Math.max(
 			(int)file.length(),IOBUFSIZE * 4));
-		ReadHelper lines = new ReadHelper();
 
 		try
 		{
-			
 			if(url != null)
 				_in = url.openStream();
 			else
@@ -1095,10 +1016,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 							lastLine);
 						sbuf.append('\n');
 
-						// Add the line end to the
-						// ReadHelper
-						lines.add(sbuf.length());
-
 						// This is i+1 to take the
 						// trailing \n into account
 						lastLine = i + 1;
@@ -1133,7 +1050,6 @@ loop:		for(int i = 0; i < markers.size(); i++)
 							sbuf.append(buf,lastLine,
 								i - lastLine);
 							sbuf.append('\n');
-							lines.add(sbuf.length());
 							lastLine = i + 1;
 						}
 						break;
@@ -1163,22 +1079,25 @@ loop:		for(int i = 0; i < markers.size(); i++)
 				putProperty(LINESEP,"\n");
 			in.close();
 
-			// Chop trailing newline (if any)
-                        if(sbuf.length() != 0 && sbuf.charAt(sbuf.length() - 1) == '\n')
-				sbuf.setLength(sbuf.length() - 1);
-
 			// For `reload' command
 			remove(0,getLength());
 
-			// The way remove() works, it fools token
-			// markers into thinking that there is
-			// actually one element left. So we remove
-			// that one element here.
-			if(tokenMarker != null)
-				tokenMarker.reset();
+			// Chop trailing newline (if any)
+			int length = sbuf.length();
+			if(length != 0 && sbuf.charAt(length - 1) == '\n')
+				sbuf.setLength(length - 1);
 
-			getContent().insertString(0,sbuf.toString());
-			createElements(lines);
+			insertString(0,sbuf.toString(),null);
+
+			// Process buffer-local properties
+			Element map = getDefaultRootElement();
+			for(int i = 0; i < Math.min(10,map.getElementCount()); i++)
+			{
+				Element line = map.getElement(i);
+				String text = getText(line.getStartOffset(),
+					line.getEndOffset() - line.getStartOffset() - 1);
+				processProperty(text);
+			}
 
 			setFlag(NEW_FILE,false);
 			setFlag(READ_ONLY,false);
@@ -1558,6 +1477,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.114  1999/12/10 03:22:46  sp
+ * Bug fixes, old loading code is now used again
+ *
  * Revision 1.113  1999/12/07 08:16:55  sp
  * Reload bug nailed to the wall
  *

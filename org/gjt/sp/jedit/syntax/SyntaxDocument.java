@@ -138,7 +138,7 @@ public class SyntaxDocument extends PlainDocument
 	{
 		if(tokenMarker != null)
 		{
-			DefaultDocumentEvent.ElementChange ch = evt.getChange(
+			DocumentEvent.ElementChange ch = evt.getChange(
 				getDefaultRootElement());
 			if(ch != null)
 			{
@@ -160,7 +160,7 @@ public class SyntaxDocument extends PlainDocument
 	{
 		if(tokenMarker != null)
 		{
-			DefaultDocumentEvent.ElementChange ch = evt.getChange(
+			DocumentEvent.ElementChange ch = evt.getChange(
 				getDefaultRootElement());
 			if(ch != null)
 			{
@@ -177,6 +177,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  1999/12/10 03:22:47  sp
+ * Bug fixes, old loading code is now used again
+ *
  * Revision 1.12  1999/12/07 08:16:55  sp
  * Reload bug nailed to the wall
  *

@@ -20,7 +20,7 @@ Before reporting a problem with jEdit, make sure it's not a JDK bug:
 - Bug #4159610 - Alt key menu mnemonics insert the mnemonic character
 into the text (the bug parade lists it as being fixed in a `non-public
 release', so it should appear in a new JDK soon)
-- Bug #4122687 - the AltGr key doesn't work (fixed in JDK 1.1.8 and 1.2)
+- Bug #4122687 - the AltGr key doesn't work (fixed in JDK 1.1.8 and 1.2.2)
 - Bug ???? - cursor handling in lightweight components is broken
 - Bug ???? - the HTMLEditorKit (hence the jEdit help viewer) is buggy
 and doesn't support some HTML
@@ -90,9 +90,6 @@ and/or Swing version. For those using JDK 1.1, Swing 1.1.1 seems to be
 faster than Swing 1.1final. Those using JDK 1.2 should try the early
 access version of JDK 1.3 with the new HotSpot VM: apparently it speeds
 up jEdit significantly.
-
-Linux users should try using the TYA JIT, which can be obtained from
-<ftp://gonzales.cyberus.ca/pub/Linux/java>.
 
 Finally, if your jEdit version is more than a couple of months old,
 chances are a newer version is already available. Improvements to

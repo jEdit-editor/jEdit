@@ -88,12 +88,3 @@ with 'Help->Save Activity Log'.
 
 The file encoding used for reading and writing files can now be changed,
 so you can edit files written in non-Latin1 (human) languages.
-
-* Speed improvements
-
-Various functions should now be performed faster:
-
-- Startup
-- File loading
-- New view creation
-- Exiting and closing all buffers

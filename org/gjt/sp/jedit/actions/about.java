@@ -26,10 +26,7 @@ public class about extends EditAction
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		Object[] aboutArgs = { jEdit.getVersion(),
-			System.getProperty("java.version"),
-			System.getProperty("os.name"),
-			System.getProperty("os.version")};
+		Object[] aboutArgs = { jEdit.getVersion() };
 		GUIUtilities.message(getView(evt),"about",aboutArgs);
 	}
 }

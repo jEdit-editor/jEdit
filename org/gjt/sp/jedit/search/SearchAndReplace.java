@@ -195,7 +195,6 @@ loop:			for(;;)
 					if(find(view,buffer,start))
 					{
 						fileset.matchFound(buffer);
-						view.hideWaitCursor();
 						return true;
 					}
 
@@ -232,8 +231,11 @@ loop:			for(;;)
 				args[0] = e.toString();
 			GUIUtilities.error(view,"searcherror",args);
 		}
+		finally
+		{
+			view.hideWaitCursor();
+		}
 
-		view.hideWaitCursor();
 		return false;
 	}
 
@@ -365,9 +367,10 @@ loop:			for(;;)
 				args[0] = e.toString();
 			GUIUtilities.error(view,"searcherror",args);
 		}
-
-		// Hide the wait cursor
-		view.hideWaitCursor();
+		finally
+		{
+			view.hideWaitCursor();
+		}
 
 		if(fileCount == 0)
 			view.getToolkit().beep();
@@ -495,6 +498,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  1999/12/10 03:22:47  sp
+ * Bug fixes, old loading code is now used again
+ *
  * Revision 1.21  1999/12/05 03:01:05  sp
  * Perl token marker bug fix, file loading is deferred, style option pane fix
  *

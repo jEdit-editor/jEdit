@@ -390,19 +390,15 @@ view.status.clear-register=Clear register?
 ###
 
 # About dialog
-# {0} - jEdit version
-# {1} - jEdit build
-# {2} - Java version
-# {3} - OS name
-# {4} - OS version
-# {5} - OS architecture
 about.title=About jEdit
-about.message=jEdit version {0} (Java {1}, {2} {3})\n\
+about.message=jEdit version {0}\n\
+	\n\
 	jEdit was written by Slava Pestov with the help of several others.\n\
 	See the README.txt file for redistribution information and warranty\n\
 	disclamer.\n\
 	\n\
 	The following people have written plugins or contributed code to jEdit:\n\
+	\n\
 	Andre Kaplan, Andreas Schaefer, Artur Biesiadowski, Aziz Sharif,\n\
 	Chris Laird, George Latkiewicz, Henrik Falk, Jason Ginchereau,\n\
 	Jonathan Revusky, Juha Lindfors, Kevin A. Burton, Mike Dillon,\n\

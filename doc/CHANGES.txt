@@ -1,5 +1,22 @@
 JEDIT VERSION HISTORY
 
+* Version 2.2pre9
+
++ Bug Fixes
+
+- Fixed minor bug with the DIRTY_CHANGED event (since 2.2pre?)
+- The new buffer loading code relied on Swing internals too much.
+  So for the sake of future compatibility, the old 2.2pre6 code
+  is now used
+- Files were not retokenized when reloaded, this could cause minor
+  problems with syntax highlighting (since 2.2pre7)
+- The wait cursor wasn't hidden after a find-next operation if
+  no matches were found (since 2.2pre7)
+- view.style.operator property was missing, this caused NPEs sometimes
+  (since 2.2pre8)
+- Fixed compile error with some javac's in SyntaxDocument.java and
+  EditAction.java (since 2.2pre7)
+
 * Version 2.2pre8
 
 + Enhancements

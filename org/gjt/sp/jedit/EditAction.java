@@ -248,9 +248,10 @@ public abstract class EditAction implements ActionListener
 		private void loadAction()
 		{
 			String className = "org.gjt.sp.jedit.actions."
-				+ name.replace('-','_');
+				+ Wrapper.this.getName().replace('-','_');
 
-			Log.log(Log.DEBUG,this,"Loading action " + name +
+			Log.log(Log.DEBUG,this,"Loading action " +
+				Wrapper.this.getName() +
 				" (class=" + className + ")");
 
 			try
@@ -276,6 +277,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  1999/12/10 03:22:46  sp
+ * Bug fixes, old loading code is now used again
+ *
  * Revision 1.18  1999/12/07 06:30:48  sp
  * Compile errors fixed, new 'new view' icon
  *
@@ -305,8 +309,5 @@ public abstract class EditAction implements ActionListener
  *
  * Revision 1.9  1999/03/24 05:45:27  sp
  * Juha Lidfors' backup directory patch, removed debugging messages from various locations, documentation updates
- *
- * Revision 1.8  1999/03/21 08:37:15  sp
- * Slimmer action system, history text field update
  *
  */

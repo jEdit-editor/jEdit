@@ -190,16 +190,6 @@ public abstract class TokenMarker
 	}
 
 	/**
-	 * Completely resets the token marker by removing all stored
-	 * line state.
-	 */
-	public void reset()
-	{
-		lastLine = -1;
-		length = 0;
-	}
-
-	/**
 	 * Returns the number of lines in this token marker.
 	 */
 	public int getLineCount()
@@ -261,7 +251,7 @@ public abstract class TokenMarker
 	 */
 	protected TokenMarker()
 	{
-		reset();
+		lastLine = -1;
 	}
 
 	/**
@@ -366,6 +356,9 @@ public abstract class TokenMarker
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  1999/12/10 03:22:47  sp
+ * Bug fixes, old loading code is now used again
+ *
  * Revision 1.30  1999/12/07 07:27:59  sp
  * TokenMarker.reset() fixed
  *
@@ -396,11 +389,5 @@ public abstract class TokenMarker
  *
  * Revision 1.21  1999/05/02 00:07:21  sp
  * Syntax system tweaks, console bugfix for Swing 1.1.1
- *
- * Revision 1.20  1999/05/01 00:55:11  sp
- * Option pane updates (new, easier API), syntax colorizing updates
- *
- * Revision 1.19  1999/04/30 23:20:38  sp
- * Improved colorization of multiline tokens
  *
  */
