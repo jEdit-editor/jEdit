@@ -115,7 +115,7 @@
 			<arg value="../jeditprint-letter.dsl"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
-			<arg value="/usr/share/sgml/xml.dcl"/>
+			<arg value="/usr/local/share/OpenSP/xml.dcl"/>
 			<arg value="users-guide.xml"/>
 		</exec>
 		<exec executable="pdfjadetex" dir="doc/users-guide">
@@ -135,9 +135,17 @@
 		<exec executable="openjade" dir="doc/users-guide">
 			<arg value="-d"/>
 			<arg value="../jeditprint-a4.dsl"/>
+			<arg value="-c"/>
+			<arg value="/usr/share/xml/docbook/xml-dtd-4.1.2/catalog"/>
+			<arg value="-c"/>
+			<arg value="/usr/local/share/dsssl/docbook-dsssl-1.77/catalog"/>
+			<arg value="-c"/>
+			<arg value="/usr/local/share/dsssl/docbook-dsssl-1.77/catalog"/>
+			<arg value="-c"/>
+			<arg value="/usr/local/share/dsssl/catalog"/>
 			<arg value="-t"/>
 			<arg value="tex"/>
-			<arg value="/usr/share/sgml/xml.dcl"/>
+			<arg value="/usr/local/share/OpenSP/xml.dcl"/>
 			<arg value="users-guide.xml"/>
 		</exec>
 		<exec executable="pdfjadetex" dir="doc/users-guide">
