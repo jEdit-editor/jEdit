@@ -16,7 +16,7 @@ quick access to frequently-used directories, basic file manipulation
 (delete, rename), a history of previously visited directories, and more
 flexible sorting. The VFS Browser supports non-blocking I/O.
 
-* Dockable window support added to core
+* Dockable windows
 
 For quite some time, the PluginHolder plugin has allowed external
 windows to be "docked" into views, to reduce clutter and make
@@ -42,12 +42,20 @@ position can be specified. Also, if automatic abbreviation expansion is
 enabled, only the space bar, not any non-alphanumeric character as
 before now expands abbrevs.
 
+* jEdit command line
+
+A new 'jEdit command line' at the bottom of each view merges the
+functionality of the search bar and command repeating feature. The
+command line is also used by various commands, such as the register
+commands and 'Go to Line' to prompt for input. Finally, it allows you
+to invoke editor actions, for quick access to any jEdit feature.
+
 * User interface improvements
 
 Macros can now be added to the tool bar and text area right-click menu,
-for even easier access to complicated and tedious operations. The view
-menu bar and global options dialog box have been streamlined to make
-them more intuitive for newbies and experts alike.
+for even easier access to complicated and tedious operations. The menu
+bar and global options dialog box have been streamlined to make them
+more intuitive to newbies and experts alike.
 
 * First-time and new-version wizards
 

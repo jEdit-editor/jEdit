@@ -25,7 +25,9 @@ import javax.swing.event.EventListenerList;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
@@ -981,6 +983,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.21  2000/09/06 04:39:47  sp
+ * bug fixes
+ *
  * Revision 1.20  2000/09/03 03:16:53  sp
  * Search bar integrated with command line, enhancements throughout
  *

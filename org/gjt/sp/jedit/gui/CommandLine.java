@@ -94,35 +94,26 @@ public class CommandLine extends JPanel
 			textField.setModel("cli");
 			// must return focus to text area after a repeat
 			view.getEditPane().focusOnTextArea();
-			reset();
 		}
 		else if(state == TOPLEVEL_STATE)
 		{
 			view.showStatus(jEdit.getProperty(
 				"view.command-line.top-level"));
 			textField.setModel("cli");
-			reset();
 		}
 		else if(state == REPEAT_STATE)
 		{
 			view.showStatus(jEdit.getProperty(
 				"view.command-line.repeat"));
 			textField.setModel(null);
-			reset();
 		}
-		else if(state == PROMPT_ONE_CHAR_STATE)
-			reset();
 		else if(state == PROMPT_LINE_STATE)
-		{
 			textField.setModel("cli.prompt");
-			reset();
-		}
 		else if(state == QUICK_SEARCH_STATE)
 		{
 			view.showStatus(jEdit.getProperty(
 				"view.status.quick-search"));
 			textField.setModel("find");
-			reset();
 
 			add(BorderLayout.EAST,searchSettings);
 
@@ -139,7 +130,6 @@ public class CommandLine extends JPanel
 			view.showStatus(jEdit.getProperty(
 				"view.status.incremental-search"));
 			textField.setModel("find");
-			reset();
 
 			add(BorderLayout.EAST,searchSettings);
 
@@ -151,6 +141,8 @@ public class CommandLine extends JPanel
 
 			textField.requestFocus();
 		}
+
+		reset();
 	}
 
 	public JTextField getTextField()
@@ -209,12 +201,22 @@ public class CommandLine extends JPanel
 	private JPanel searchSettings;
 	private JCheckBox ignoreCase, regexp;
 
+	private int savedRepeatCount = 1;
+
 	private void reset()
 	{
 		textField.setText(null);
 		completionTimer.stop();
 		hideCompletionWindow();
 		remove(searchSettings);
+		savedRepeatCount = view.getInputHandler().getRepeatCount();
+	}
+
+	private void setRepeatCount()
+	{
+		System.err.println(savedRepeatCount);
+		view.getInputHandler().setRepeatCount(savedRepeatCount);
+		savedRepeatCount = 1;
 	}
 
 	private void getCompletions(String text)
@@ -345,6 +347,7 @@ public class CommandLine extends JPanel
 		}
 		else
 		{
+			setRepeatCount();
 			view.getEditPane().focusOnTextArea();
 			view.getInputHandler().executeAction(action,this,null);
 		}
@@ -371,7 +374,6 @@ public class CommandLine extends JPanel
 		if(text.length() != 0)
 		{
 			textField.addCurrentToHistory();
-			textField.setText(null);
 			SearchAndReplace.setSearchString(text);
 
 			try
@@ -448,7 +450,11 @@ public class CommandLine extends JPanel
 					if(Character.isDigit(ch))
 						handleDigit(evt);
 					else
+					{
+						setRepeatCount();
+						setState(NULL_STATE);
 						view.processKeyEvent(evt);
+					}
 				}
 				else if(state == PROMPT_ONE_CHAR_STATE)
 				{
@@ -462,6 +468,22 @@ public class CommandLine extends JPanel
 				break;
 			case KeyEvent.KEY_PRESSED:
 				int keyCode = evt.getKeyCode();
+
+				if(keyCode == KeyEvent.VK_CONTROL ||
+					keyCode == KeyEvent.VK_SHIFT ||
+					keyCode == KeyEvent.VK_ALT ||
+					keyCode == KeyEvent.VK_META)
+					return;
+
+				if((modifiers & ~KeyEvent.SHIFT_MASK) == 0
+					&& !evt.isActionKey()
+					&& keyCode != KeyEvent.VK_BACK_SPACE
+					&& keyCode != KeyEvent.VK_DELETE
+					&& keyCode != KeyEvent.VK_ENTER
+					&& keyCode != KeyEvent.VK_TAB
+					&& keyCode != KeyEvent.VK_ESCAPE)
+					return;
+		
 				if(modifiers == 0 && keyCode == KeyEvent.VK_ESCAPE)
 				{
 					setState(NULL_STATE);
@@ -532,8 +554,15 @@ public class CommandLine extends JPanel
 				{
 					// set state to NULL if the key was
 					// handled
+					setRepeatCount();
+					view.getEditPane().focusOnTextArea();
 					view.getInputHandler().keyPressed(evt);
-					if(evt.isConsumed())
+					// ... but if the focus is returned
+					// to the command field by this key
+					// (eg, if the user presses C+ENTER
+					// 10 C+ENTER) we *do not* change
+					// state to NULL_STATE
+					if(!textField.hasFocus() && evt.isConsumed())
 						setState(NULL_STATE);
 				}
 			}
@@ -542,11 +571,8 @@ public class CommandLine extends JPanel
 		void handleDigit(KeyEvent evt)
 		{
 			InputHandler input = view.getInputHandler();
-			input.setRepeatEnabled(true);
-			int repeatCount = input.getRepeatCount();
-			repeatCount *= 10;
-			repeatCount += (evt.getKeyChar() - '0');
-			input.setRepeatCount(repeatCount);
+			savedRepeatCount *= 10;
+			savedRepeatCount += (evt.getKeyChar() - '0');
 
 			// in case we're in TOPLEVEL
 			setState(REPEAT_STATE);
@@ -560,11 +586,14 @@ public class CommandLine extends JPanel
 			if(window.isShowing())
 			{
 				int selected = window.list.getSelectedIndex();
-				if(selected != 1)
-				{
-					window.list.setSelectedIndex(selected - 1);
-					window.list.ensureIndexIsVisible(selected - 1);
-				}
+				if(selected == 0)
+					selected = window.list.getModel().getSize() - 1;
+				else
+					selected = selected - 1;
+
+				window.list.setSelectedIndex(selected);
+				window.list.ensureIndexIsVisible(selected);
+	
 				evt.consume();
 			}
 			else
@@ -575,13 +604,15 @@ public class CommandLine extends JPanel
 		{
 			if(window.isShowing())
 			{
-				int total = window.list.getModel().getSize();
 				int selected = window.list.getSelectedIndex();
-				if(selected != total - 1)
-				{
-					window.list.setSelectedIndex(selected + 1);
-					window.list.ensureIndexIsVisible(selected + 1);
-				}
+				if(selected == window.list.getModel().getSize() - 1)
+					selected = 0;
+				else
+					selected = selected + 1;
+
+				window.list.setSelectedIndex(selected);
+				window.list.ensureIndexIsVisible(selected);
+
 				evt.consume();
 			}
 			else
@@ -605,6 +636,7 @@ public class CommandLine extends JPanel
 			char ch = evt.getKeyChar();
 			String arg = String.valueOf(ch);
 			EditAction _promptAction = promptAction;
+			setRepeatCount();
 			setState(NULL_STATE);
 
 			view.getInputHandler().executeAction(_promptAction,
@@ -615,6 +647,7 @@ public class CommandLine extends JPanel
 		{
 			EditAction _promptAction = promptAction;
 			String text = textField.getText();
+			setRepeatCount();
 
 			textField.addCurrentToHistory();
 			setState(NULL_STATE);
@@ -677,6 +710,7 @@ public class CommandLine extends JPanel
 
 			list = new JList();
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			list.addMouseListener(new MouseHandler());
 			getContentPane().add(BorderLayout.CENTER,new JScrollPane(list));
 
 			setListData(items);
@@ -695,12 +729,23 @@ public class CommandLine extends JPanel
 			SwingUtilities.convertPointToScreen(loc,textField);
 			CompletionWindow.this.setLocation(loc);
 		}
+
+		class MouseHandler extends MouseAdapter
+		{
+			public void mouseClicked(MouseEvent evt)
+			{
+				executeAction((String)list.getSelectedValue());
+			}
+		}
 	}
 }
 
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/09/06 04:39:47  sp
+ * bug fixes
+ *
  * Revision 1.2  2000/09/03 03:16:53  sp
  * Search bar integrated with command line, enhancements throughout
  *

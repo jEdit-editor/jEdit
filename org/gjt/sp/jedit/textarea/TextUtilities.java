@@ -306,6 +306,9 @@ public class TextUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/09/06 04:39:47  sp
+ * bug fixes
+ *
  * Revision 1.12  2000/09/04 06:34:54  sp
  * bug fixes
  *

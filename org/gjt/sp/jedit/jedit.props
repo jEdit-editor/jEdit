@@ -98,7 +98,7 @@ view.checkModStatus=true
 
 # Font
 view.font=Monospaced
-view.fontsize=14
+view.fontsize=12
 # 0=plain, 1=bold, 2=italic, 3=boldItalic
 view.fontstyle=0
 

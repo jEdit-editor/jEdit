@@ -47,6 +47,7 @@ public interface DockableWindowContainer
 
 		String position;
 		int dimension;
+		boolean collapsed;
 
 		public TabbedPane(String position)
 		{
@@ -118,7 +119,15 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
 					 dimension = prefSize.height;
-				return prefSize;
+			}
+			else if(collapsed)
+			{
+				if(position.equals(DockableWindowManager.LEFT)
+					|| position.equals(DockableWindowManager.RIGHT))
+					prefSize.width = 3;
+				else if(position.equals(DockableWindowManager.TOP)
+					|| position.equals(DockableWindowManager.BOTTOM))
+					prefSize.height = 3;
 			}
 			else
 			{
@@ -128,8 +137,9 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
 					prefSize.height = dimension;
-				return prefSize;
 			}
+
+			return prefSize;
 		}
 
 		public void addDockableWindow(DockableWindow win)
@@ -168,6 +178,15 @@ public interface DockableWindowContainer
 				dragStart.y = (getHeight() - dragStart.y);
 			}
 
+			public void mouseClicked(MouseEvent evt)
+			{
+				if(evt.getClickCount() == 2)
+				{
+					collapsed = !collapsed;
+					revalidate();
+				}
+			}
+
 			public void mouseMoved(MouseEvent evt)
 			{
 				Border border = getBorder();
@@ -192,7 +211,7 @@ public interface DockableWindowContainer
 				}
 				else if(position.equals(DockableWindowManager.BOTTOM))
 				{
-					if(evt.getY() < insets.top)
+					if(evt.getY() <= insets.top)
 					{
 						cursor = Cursor.S_RESIZE_CURSOR;
 						canDrag = true;
@@ -200,7 +219,7 @@ public interface DockableWindowContainer
 				}
 				else if(position.equals(DockableWindowManager.RIGHT))
 				{
-					if(evt.getX() < insets.left)
+					if(evt.getX() <= insets.left)
 					{
 						cursor = Cursor.E_RESIZE_CURSOR;
 						canDrag = true;
@@ -212,6 +231,8 @@ public interface DockableWindowContainer
 
 			public void mouseDragged(MouseEvent evt)
 			{
+				collapsed = false;
+
 				if(position.equals(DockableWindowManager.TOP))
 					dimension = evt.getY() + dragStart.y;
 				else if(position.equals(DockableWindowManager.LEFT))
@@ -221,7 +242,7 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.RIGHT))
 					dimension = getWidth() - evt.getX();
 
-				dimension = Math.max(10,dimension);
+				dimension = Math.max(3,dimension);
 
 				revalidate();
 			}
@@ -290,6 +311,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.7  2000/09/06 04:39:47  sp
+ * bug fixes
+ *
  * Revision 1.6  2000/08/22 07:25:00  sp
  * Improved abbrevs, bug fixes
  *

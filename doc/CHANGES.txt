@@ -1,5 +1,29 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6pre6
+
++ Enhancements
+
+- While the complete word popup is visible, pressing any key except that
+  handled by the popup (Up, Down, Enter, Escape) will hide the popup and
+  pass the key to the view
+- Complete Word popup now scrolls the list, and the selection 'wraps'
+  (eg, pressing UP while the first word is selected will select the last
+  word)
+- Shortcut changes:
+  CS+DELETE becomes S+DELETE
+  CS+BACKSPACE becomes S+BACKSPACE
+- jEdit no longer prints exceptions to the console if errors occur with
+  the edit server. This is to avoid confusing newbies. They are still
+  printed to the activity log.
+- When windows are docked into a view, double-clicking on a separator bar
+  will collapse/expand it
+
++ Bug Fixes
+
+- Incremental search didn't work
+- Fixed compile error on JDK 1.3 in BrowserListView.java
+
 * Version 2.6pre5
 
 + New Features

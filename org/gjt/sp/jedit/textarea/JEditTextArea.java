@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.textarea;
 
+import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.undo.*;
@@ -63,6 +64,8 @@ public class JEditTextArea extends JComponent
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 
 		// Initialize some misc. stuff
+		//setBorder(UIManager.getBorder("ScrollPane.border"));
+
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(this);
 		documentHandler = new DocumentHandler();
@@ -1620,7 +1623,16 @@ public class JEditTextArea extends JComponent
 		public Dimension preferredLayoutSize(Container parent)
 		{
 			Dimension dim = new Dimension();
-			Insets insets = getInsets();
+			Border border = getBorder();
+			Insets insets;
+			if(border == null)
+				insets = new Insets(0,0,0,0);
+			else
+			{
+				insets = getBorder().getBorderInsets(
+					JEditTextArea.this);
+			}
+
 			dim.width = insets.left + insets.right;
 			dim.height = insets.top + insets.bottom;
 
@@ -2165,6 +2177,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.82  2000/09/06 04:39:47  sp
+ * bug fixes
+ *
  * Revision 1.81  2000/09/03 03:16:53  sp
  * Search bar integrated with command line, enhancements throughout
  *

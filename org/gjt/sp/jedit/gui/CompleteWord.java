@@ -44,10 +44,15 @@ public class CompleteWord extends JWindow
 		words.setSelectedIndex(0);
 		words.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		getContentPane().add(new JScrollPane(words), BorderLayout.CENTER);
+		JScrollPane scroller = new JScrollPane(words);
 
-//		addKeyListener(new KeyHandler());
+		getContentPane().add(scroller, BorderLayout.CENTER);
 
+		// possible workaround for a bug some people have been seeing?
+		Dimension dim = words.getPreferredSize();
+		dim.width += scroller.getVerticalScrollBar().getPreferredSize()
+			.width;
+		words.setPreferredSize(dim);
 		GUIUtilities.requestFocus(this,words);
 
 		pack();
@@ -91,17 +96,45 @@ public class CompleteWord extends JWindow
 				break;
 			case KeyEvent.VK_UP:
 				int selected = words.getSelectedIndex();
-				if(selected > 0)
-					words.setSelectedIndex(selected  - 1);
+				if(selected == 0)
+					selected = words.getModel().getSize() - 1;
+				else
+					selected = selected - 1;
+	
+				words.setSelectedIndex(selected);
+				words.ensureIndexIsVisible(selected);
+
 				evt.consume();
 				break;
 			case KeyEvent.VK_DOWN:
 				selected = words.getSelectedIndex();
-				if(selected < words.getModel().getSize() - 1)
-					words.setSelectedIndex(selected  + 1);
+				if(selected == words.getModel().getSize() - 1)
+					selected = 0;
+				else
+					selected = selected - 1;
+
+				words.setSelectedIndex(selected);
+				words.ensureIndexIsVisible(selected);
+
 				evt.consume();
 				break;
+			default:
+				dispose();
+				view.processKeyEvent(evt);
+				break;
 			}
+		}
+
+		public void keyTyped(KeyEvent evt)
+		{
+			char ch = evt.getKeyChar();
+			if(ch == KeyEvent.CHAR_UNDEFINED ||
+				ch < 0x20 || ch == 0x7f
+				|| (evt.getModifiers() & KeyEvent.ALT_MASK) != 0)
+				return;
+
+			dispose();
+			view.processKeyEvent(evt);
 		}
 	}
 

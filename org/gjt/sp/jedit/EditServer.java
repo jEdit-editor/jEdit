@@ -42,9 +42,10 @@ class EditServer extends Thread
 		{
 			socket = new ServerSocket(0); // Bind to any port
 			authKey = Math.abs(new Random().nextInt());
+			int port = socket.getLocalPort();
 
 			FileWriter out = new FileWriter(portFile);
-			out.write(String.valueOf(socket.getLocalPort()));
+			out.write(String.valueOf(port));
 			out.write("\n");
 			out.write(String.valueOf(authKey));
 			out.write("\n");
@@ -54,14 +55,19 @@ class EditServer extends Thread
 				+ socket.getLocalPort());
 			Log.log(Log.DEBUG,this,"Authorization key is "
 				+ authKey);
+
+			start();
 		}
 		catch(IOException io)
 		{
-			Log.log(Log.ERROR,this,io);
+			/* on some Windows versions, connections to localhost
+			 * fail if the network is not running. To avoid
+			 * confusing newbies with weird error messages, log
+			 * errors that occur while starting the server
+			 * as NOTICE, not ERROR */
+			Log.log(Log.NOTICE,this,io);
 			return;
 		}
-
-		start();
 	}
 
 	public void run()
@@ -286,6 +292,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  2000/09/06 04:39:47  sp
+ * bug fixes
+ *
  * Revision 1.15  2000/08/20 07:29:30  sp
  * I/O and VFS browser improvements
  *

@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.05.00";
+		return "02.06.06.00";
 	}
 
 	/**
@@ -203,15 +203,18 @@ public class jEdit
 			}
 			catch(Exception e)
 			{
-				System.err.println("An error occurred while connecting"
-					+ " to the jEdit server instance."
+				// ok, this one seems to confuse newbies
+				// endlessly, so log it as NOTICE, not
+				// ERROR
+				Log.log(Log.NOTICE,jEdit.class,"An error occurred"
+					+ " while connecting to the jEdit server instance."
 					+ " This probably");
-				System.err.println("means that jEdit crashed"
+				Log.log(Log.NOTICE,jEdit.class,"means that jEdit crashed"
 					+ " and/or exited abnormally the last"
 					+ " time it was run.");
-				System.err.println("If you don't"
+				Log.log(Log.NOTICE,jEdit.class,"If you don't"
 					+ " know what this means, don't worry.");
-				Log.log(Log.ERROR,jEdit.class,e);
+				Log.log(Log.NOTICE,jEdit.class,e);
 			}
 		}
 
@@ -2354,6 +2357,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.277  2000/09/06 04:39:47  sp
+ * bug fixes
+ *
  * Revision 1.276  2000/09/04 06:34:53  sp
  * bug fixes
  *
