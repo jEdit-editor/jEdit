@@ -15,6 +15,7 @@ JEDIT VERSION HISTORY
 - PHP, JSP, ColdFusion now support inline JavaScript
 - Updated VBScript and JavaScript modes (Andre Kaplan)
 - Improved Search & Replace and HyperSearch dialog boxes
+- Utilities->Reload Edit Modes now works with the -nosettings switch
 
 + Bug Fixes
 
@@ -23,6 +24,8 @@ JEDIT VERSION HISTORY
 - BufferTabs had problems when buffers were closed sometimes (since 2.4pre1)
 - If ruleset a::A delegated to b::B which delegated to C, jEdit would look
   for a::C instead of b::C (since 2.4pre2) (Mike Dillon)
+- Sources for AElfred XML parser were in the JAR but weren't installed
+  (since 2.4pre2)
 
 * Version 2.4pre3
 

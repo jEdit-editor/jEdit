@@ -30,14 +30,16 @@ public class reload_modes extends EditAction
 		View view = getView(evt);
 		view.showWaitCursor();
 
+		String path;
 		String settingsDirectory = jEdit.getSettingsDirectory();
+
 		if(settingsDirectory == null)
-		{
-			GUIUtilities.error(view,"no-settings",null);
-			return;
-		}
-		jEdit.createModeCache(MiscUtilities.constructPath(settingsDirectory,
-			"mode-cache"));
+			path = null;
+		else
+			path = MiscUtilities.constructPath(settingsDirectory,
+				"mode-cache");
+
+		jEdit.createModeCache(path);
 
 		Buffer[] buffers = jEdit.getBuffers();
 		for(int i = 0; i < buffers.length; i++)
