@@ -33,10 +33,12 @@ public class AboutDialog extends EnhancedDialog
 		super(view,jEdit.getProperty("about.title"),true);
 
 		JPanel content = new JPanel(new BorderLayout());
+		content.setBackground(Color.white);
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
 		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBackground(Color.white);
 		String[] args = { jEdit.getVersion() };
 		JLabel label = new JLabel(jEdit.getProperty("about.version",args),
 			SwingConstants.CENTER);
@@ -45,7 +47,7 @@ public class AboutDialog extends EnhancedDialog
 
 		JLabel splash = new JLabel(new ImageIcon(getClass().getResource(
 			"/org/gjt/sp/jedit/jedit_logo.gif")));
-		//splash.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		splash.setBorder(new MatteBorder(1,1,1,1,Color.black));
 		panel.add(BorderLayout.CENTER,splash);
 
 		label = new JLabel(jEdit.getProperty("about.caption"),

@@ -955,8 +955,8 @@ public class View extends JFrame implements EBComponent
 			EditPlugin plugin = plugins[i];
 			// don't include broken plugins in list
 			// ... why?
-			//if(plugin instanceof EditPlugin.Broken)
-			//	continue;
+			if(plugin instanceof EditPlugin.Broken)
+				continue;
 
 			String name = plugin.getClassName();
 

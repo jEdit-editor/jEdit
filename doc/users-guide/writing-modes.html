@@ -44,17 +44,9 @@ NAME="WRITING-MODES"
 >Writing Edit Modes</A
 ></H1
 ><P
->   In jEdit versions prior to 2.4, each syntax highlighting mode was
-   actually a Java class known as a <I
-CLASS="FIRSTTERM"
->token
-   marker</I
->. Token markers required a good knowledge of Java to write,
-   and were tricky to debug. In jEdit 2.4 and later, Mike Dillon's XMode plugin
-   is integrated into the core. XMode is a generic
-   syntax parser that reads
-   highlighting rules from XML files. XML files are much easier to
-   write, change and debug than token markers.
+>   New syntax highlighting modes are very easy to create. This section will
+   start with a short XML primer, followed by detailed information about each
+   supported highlighting rule.
   </P
 ><DIV
 CLASS="SECT2"
@@ -998,7 +990,7 @@ CLASS="MARKUP"
 ></LI
 ></UL
 ><P
->    Here is a rule that highlights labels in Java mode ("XXX:"):
+>    Here is a rule that highlights labels in Java mode (eg, "XXX:"):
    </P
 ><TABLE
 BORDER="0"

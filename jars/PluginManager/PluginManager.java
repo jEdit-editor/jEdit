@@ -164,7 +164,8 @@ public class PluginManager extends EnhancedDialog
 			if(!new File(path).exists())
 				continue;
 			notLoadedTree.insert(new DefaultMutableTreeNode(
-				new Entry(path,notLoaded[i]),false),i);
+				new Entry(path,notLoaded[i]),false),
+				notLoadedTree.getChildCount());
 		}
 
 		treeRoot.insert(loadedTree,0);

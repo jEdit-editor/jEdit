@@ -4,12 +4,16 @@ JEDIT 2.6 VERSION HISTORY
 
 + Enhancements
 
+- Better support for MacOS X in installer
 - Clicking 'Save' in the 'Save As' dialog box while a directory is
   selected in the list will save the buffer to the selected directory
 - The edit server is now initialized earlier in jEdit's startup
   sequence
 - Haskell mode (Kristian Ovaska)
 - ML mode (Dominic Stolerman)
+- Minor improvements to Colors & Styles option pane
+- Updated VHDL mode (Dante Fabrizio)
+- Minor fix to C++ mode (Dirk Moebius)
 
 + Bug Fixes
 
@@ -17,6 +21,15 @@ JEDIT 2.6 VERSION HISTORY
 - The 'Sort Buffers' option in global options didn't work
 - 'Save As' didn't update the title bar
 - Minor command line and text area focus bugs fixed
+- Up and down arrow keys would throw NullPointerExceptions in the command line
+  if nothing was entered
+- Fixed possible ArrayIndexOutOfBoundsException when removing plugins using
+  the plugin manager
+- jEdit would attempt to load sessions from an arbitriary directory if the
+  -nosettings command line switch was specified
+- Minor changes to MiscUtilities.constructPath() that should make
+  the Console plugin's 'cd' command work better
+- Minor fix to jEdit.setProperty() method
 
 * Version 2.6pre9
 

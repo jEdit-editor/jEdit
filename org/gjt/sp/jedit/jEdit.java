@@ -332,7 +332,7 @@ public class jEdit
 
 		Buffer buffer = openFiles(userDir,args);
 
-		if(bufferCount == 0)
+		if(bufferCount == 0 && settingsDirectory != null)
 		{
 			// don't load default session when in background mode
 			if(defaultSession)
@@ -478,7 +478,7 @@ public class jEdit
 		 * - if default equals value, ignore
 		 * - if default doesn't equal value, set user
 		 */
-		if(value == null || value.length() == 0)
+		if(value == null)
 		{
 			String prop = (String)defaultProps.get(name);
 			if(prop == null || prop.length() == 0)

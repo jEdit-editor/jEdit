@@ -70,8 +70,18 @@ public class MiscUtilities
 	{
 		if(new File(path).isAbsolute())
 			return canonPath(path);
-		else if(parent == null)
+
+		if(parent == null)
 			parent = System.getProperty("user.dir");
+
+		// have to handle these cases specially on windows.
+		if(File.separatorChar == '\\')
+		{
+			if(path.length() == 2 && path.charAt(1) == ':')
+				return path;
+			if(path.startsWith("/") || path.startsWith("\\"))
+				parent = parent.substring(0,2);
+		}
 
 		if(parent.endsWith(File.separator))
 			return parent + path;

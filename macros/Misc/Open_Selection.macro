@@ -1,0 +1,4 @@
+# Opens selected path name
+
+copy-to-register@$p
+open-file@$p

@@ -794,8 +794,7 @@ plugin.dep-jedit.message=The plugin {0} requires jEdit {1} or later,\n\
 
 plugin.dep-plugin.no-version.title=Unsatisfied Dependency
 plugin.dep-plugin.no-version.message=The plugin {0} requires version {1} or later of {2},\n\
-	but {2} does not have any version information. Your version of\n\
-	{2} is probably too old; try installing a new version.
+	but {2} does not appear to be installed.
 
 plugin.dep-plugin.title=Unsatisfied Dependency
 plugin.dep-plugin.message=The plugin {0} requires version {1} or later of {2},\n\
@@ -1164,7 +1163,7 @@ vfs.browser.rename-exists.message=A file named {0} already exists.
 
 vfs.browser.rename-error.title=Rename Error
 vfs.browser.rename-error.message=An error occurred while attempting\n\
-	to delete {0}.
+	to rename {0}.
 
 vfs.browser.mkdir.title=New Directory
 vfs.browser.mkdir.message=Create new directory named:

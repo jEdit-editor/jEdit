@@ -366,20 +366,23 @@ public class Buffer extends PlainDocument implements EBComponent
 				if(autosaveFile != null)
 					autosaveFile.delete();
 
-				setFlag(AUTOSAVE_DIRTY,false);
-				setFlag(READ_ONLY,false);
-				setFlag(NEW_FILE,false);
-				setFlag(UNTITLED,false);
-				setFlag(DIRTY,false);
-				setFlag(SAVING,false);
+				if(rename || oldPath.equals(getPath()))
+				{
+					setFlag(AUTOSAVE_DIRTY,false);
+					setFlag(READ_ONLY,false);
+					setFlag(NEW_FILE,false);
+					setFlag(UNTITLED,false);
+					setFlag(DIRTY,false);
+					setFlag(SAVING,false);
 
-				saveUndo = undo.editToBeUndone();
+					saveUndo = undo.editToBeUndone();
 
-				if(!getPath().equals(oldPath))
-					setMode();
+					if(!getPath().equals(oldPath))
+						setMode();
 
-				if(file != null)
-					modTime = file.lastModified();
+					if(file != null)
+						modTime = file.lastModified();
+				}
 
 				if(rename)
 				{

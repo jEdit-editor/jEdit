@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
@@ -63,6 +64,7 @@ public class cut_string_register extends EditAction
 			for(int i = 0; i < repeatCount; i++)
 				buf.append(selection);
 			selection = buf.toString();
+			HistoryModel.getModel("clipboard").addItem(selection);
 
 			Registers.setRegister(ch,new Registers.StringRegister(selection));
 			textArea.setSelectedText(null);

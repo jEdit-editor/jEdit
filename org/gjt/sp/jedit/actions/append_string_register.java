@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.*;
 
 public class append_string_register extends EditAction
@@ -31,6 +32,8 @@ public class append_string_register extends EditAction
 
 		if(selection == null)
 			return;
+
+		HistoryModel.getModel("clipboard").addItem(selection);
 
 		String actionCommand = evt.getActionCommand();
 		if(actionCommand == null)

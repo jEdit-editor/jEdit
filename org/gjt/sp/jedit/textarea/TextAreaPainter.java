@@ -511,7 +511,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		if(selectionStart == selectionEnd)
 		{
-			if(lineHighlight && textArea.isHighlightVisible())
+			if(lineHighlight)
 			{
 				gfx.setColor(lineHighlightColor);
 				gfx.fillRect(0,y,getWidth(),height);

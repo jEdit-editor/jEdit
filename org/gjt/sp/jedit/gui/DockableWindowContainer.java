@@ -244,6 +244,9 @@ public interface DockableWindowContainer
 
 			public void mouseDragged(MouseEvent evt)
 			{
+				if(!canDrag)
+					return;
+
 				collapsed = false;
 
 				if(position.equals(DockableWindowManager.TOP))

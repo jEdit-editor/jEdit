@@ -79,9 +79,11 @@ public class StyleOptionPane extends AbstractOptionPane
 	{
 		colorModel = createColorTableModel();
 		colorTable = new JTable(colorModel);
+		colorTable.setRowSelectionAllowed(false);
+		colorTable.setColumnSelectionAllowed(false);
+		colorTable.setCellSelectionEnabled(false);
 		colorTable.getTableHeader().setReorderingAllowed(false);
-		colorTable.getSelectionModel().addListSelectionListener(
-			new ListHandler(colorTable));
+		colorTable.addMouseListener(new MouseHandler(colorTable));
 		TableColumnModel tcm = colorTable.getColumnModel();
  		TableColumn colorColumn = tcm.getColumn(1);
 		colorColumn.setCellRenderer(new ColorTableModel.ColorRenderer());
@@ -101,9 +103,11 @@ public class StyleOptionPane extends AbstractOptionPane
 	{
 		styleModel = createStyleTableModel();
 		styleTable = new JTable(styleModel);
+		styleTable.setRowSelectionAllowed(false);
+		styleTable.setColumnSelectionAllowed(false);
+		styleTable.setCellSelectionEnabled(false);
 		styleTable.getTableHeader().setReorderingAllowed(false);
-		styleTable.getSelectionModel().addListSelectionListener(
-			new ListHandler(styleTable));
+		styleTable.addMouseListener(new MouseHandler(styleTable));
 		TableColumnModel tcm = styleTable.getColumnModel();
  		TableColumn styleColumn = tcm.getColumn(1);
 		styleColumn.setCellRenderer(new StyleTableModel.StyleRenderer());
@@ -119,39 +123,38 @@ public class StyleOptionPane extends AbstractOptionPane
 		return new StyleTableModel();
 	}
 
-	class ListHandler implements ListSelectionListener
+	class MouseHandler extends MouseAdapter
 	{
 		JTable table;
 
-		ListHandler(JTable table)
+		MouseHandler(JTable table)
 		{
 			this.table = table;
 		}
 
-		public void valueChanged(ListSelectionEvent evt)
+		public void mouseClicked(MouseEvent evt)
 		{
-			if(evt.getValueIsAdjusting())
+			int row = table.rowAtPoint(evt.getPoint());
+			if(row == -1)
 				return;
+
 			if(table == colorTable)
 			{
 				Color color = JColorChooser.showDialog(
 					StyleOptionPane.this,
 					jEdit.getProperty("colorChooser.title"),
-					(Color)colorModel.getValueAt(
-					table.getSelectedRow(),1));
+					(Color)colorModel.getValueAt(row,1));
 				if(color != null)
-					colorModel.setValueAt(color,table
-						.getSelectedRow(),1);
+					colorModel.setValueAt(color,row,1);
 			}
 			else if(table == styleTable)
 			{
 				SyntaxStyle style = new StyleEditor(
 					StyleOptionPane.this,
 					(SyntaxStyle)styleModel.getValueAt(
-					table.getSelectedRow(),1)).getStyle();
+					row,1)).getStyle();
 				if(style != null)
-					styleModel.setValueAt(style,table
-						.getSelectedRow(),1);
+					styleModel.setValueAt(style,row,1);
 			}
 		}
 	}

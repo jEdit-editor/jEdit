@@ -47,6 +47,8 @@ public abstract class OperatingSystem
 		String osName = System.getProperty("os.name");
 		if(osName.indexOf("Windows") != -1)
 			os = new Windows();
+		else if(osName.indexOf("MacOS X") != -1)
+			os = new MacOSX();
 		else if(osName.indexOf("Mac") != -1)
 			os = new MacOS();
 		else if(osName.indexOf("OS/2") != -1)
@@ -55,6 +57,19 @@ public abstract class OperatingSystem
 			os = new Unix();
 
 		return os;
+	}
+
+	public static class MacOSX extends OperatingSystem
+	{
+		public String getInstallDirectory(String name, String version)
+		{
+			return "/Applications/" + name + " " + version;
+		}
+
+		public String getShortcutDirectory()
+		{
+			return null;
+		}
 	}
 
 	public static class Unix extends OperatingSystem

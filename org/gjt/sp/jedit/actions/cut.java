@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.actions;
 
 import java.awt.datatransfer.*;
 import java.awt.event.ActionEvent;
+import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 
@@ -44,6 +45,7 @@ public class cut extends EditAction
 				buf.append(selection);
 
 			clipboard.setContents(new StringSelection(buf.toString()),null);
+			HistoryModel.getModel("clipboard").addItem(buf.toString());
 
 			textArea.setSelectedText("");
 		}

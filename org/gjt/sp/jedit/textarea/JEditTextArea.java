@@ -1937,8 +1937,6 @@ public class JEditTextArea extends JComponent
 	{
 		public void focusGained(FocusEvent evt)
 		{
-			blink = true;
-			focusedComponent = JEditTextArea.this;
 			painter.invalidateSelectedLines();
 
 			// repaint the gutter so that the border color

@@ -568,7 +568,7 @@ public class CommandLine extends JPanel
 
 		void handleTopLevelUp(KeyEvent evt)
 		{
-			if(window.isShowing())
+			if(window != null && window.isShowing())
 			{
 				int selected = window.list.getSelectedIndex();
 				if(selected == 0)
@@ -587,7 +587,7 @@ public class CommandLine extends JPanel
 
 		void handleTopLevelDown(KeyEvent evt)
 		{
-			if(window.isShowing())
+			if(window != null && window.isShowing())
 			{
 				int selected = window.list.getSelectedIndex();
 				if(selected == window.list.getModel().getSize() - 1)

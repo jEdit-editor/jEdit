@@ -254,5 +254,5 @@ vfs.browser.doubleClickClose=false
 # Can be one of: buffer, home, last
 vfs.browser.defaultPath=buffer
 
-# Can be either list or tree
+# Can be one of: list or tree
 vfs.browser.defaultView=list

@@ -88,10 +88,6 @@ public class EditPane extends JPanel implements EBComponent
 
 		updateTextArea();
 
-		// only do this if we are the current edit pane
-		if(view.getEditPane() == this)
-			focusOnTextArea();
-
 		if(!init)
 		{
 			view.updateTitle();
@@ -103,6 +99,10 @@ public class EditPane extends JPanel implements EBComponent
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
 				.BUFFER_CHANGED));
 		}
+
+		// only do this if we are the current edit pane
+		if(view.getEditPane() == this)
+			focusOnTextArea();
 
 		// Only do this after all I/O requests are complete
 		Runnable runnable = new Runnable()
