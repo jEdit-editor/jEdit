@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
+import org.gjt.sp.jedit.event.*;
 import org.gjt.sp.jedit.textarea.*;
 
 /**
@@ -41,8 +42,7 @@ public class Macros
 {
 	public static void beginRecording(View view, String name, Buffer buffer)
 	{
-		if(name != null) // it's null for temp. macros
-			lastMacro = name;
+		lastMacro = name;
 
 		view.getTextArea().getInputHandler().setMacroRecorder(
 			new BufferRecorder(buffer));
@@ -56,14 +56,48 @@ public class Macros
 
 		if(recorder != null)
 		{
-			view.setBuffer(recorder.buffer);
+			if(lastMacro != null)
+				view.setBuffer(recorder.buffer);
 			inputHandler.setMacroRecorder(null);
+		}
+	}
+
+	static
+	{
+		jEdit.addEditorListener(new EditorHandler());
+	}
+
+	static class EditorHandler extends EditorAdapter
+	{
+		public void bufferClosed(EditorEvent evt)
+		{
+			View view = evt.getView();
+
+			InputHandler inputHandler = view.getTextArea()
+				.getInputHandler();
+			BufferRecorder recorder = (BufferRecorder)inputHandler
+				.getMacroRecorder();
+
+			if(recorder != null)
+			{
+				if(evt.getBuffer() == recorder.buffer)
+					inputHandler.setMacroRecorder(null);
+				view.showStatus(null);
+			}
 		}
 	}
 
 	public static void playMacro(View view, String name)
 	{
 		lastMacro = name;
+
+		if(name == null)
+		{
+			Buffer buffer = jEdit.getBuffer(MiscUtilities.constructPath(
+				null,"<< temp macro >>"));
+			playMacroFromBuffer(view,"<< temp macro >>",buffer);
+			return;
+		}
 
 		String fileName = jEdit.getSettingsDirectory() + File.separator
 			+ "macros" + File.separator + name + ".macro";
@@ -77,7 +111,15 @@ public class Macros
 			playMacroFromBuffer(view,name,buffer);
 	}
 
-	public static void playMacroFromBuffer(View view, String macro,
+	public static String getLastMacro()
+	{
+		return lastMacro;
+	}
+
+	// private members
+	private static String lastMacro;
+
+	private static void playMacroFromBuffer(View view, String macro,
 		Buffer buffer)
 	{
 		try
@@ -99,14 +141,6 @@ public class Macros
 			bl.printStackTrace();
 		}
 	}
-
-	public static String getLastMacro()
-	{
-		return lastMacro;
-	}
-
-	// private members
-	private static String lastMacro;
 
 	private static void playMacroFromFile(View view, String macro, String path)
 	{
@@ -260,6 +294,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  1999/10/16 09:43:00  sp
+ * Final tweaking and polishing for jEdit 2.1final
+ *
  * Revision 1.3  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

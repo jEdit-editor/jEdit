@@ -777,12 +777,17 @@ public class JEditTextArea extends JComponent
 	{
 		try
 		{
+			document.beginCompoundEdit();
 			document.remove(0,document.getLength());
 			document.insertString(0,text,null);
 		}
 		catch(BadLocationException bl)
 		{
 			bl.printStackTrace();
+		}
+		finally
+		{
+			document.endCompoundEdit();
 		}
 	}
 
@@ -2028,6 +2033,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  1999/10/16 09:43:00  sp
+ * Final tweaking and polishing for jEdit 2.1final
+ *
  * Revision 1.22  1999/10/10 06:38:46  sp
  * Bug fixes and quicksort routine
  *

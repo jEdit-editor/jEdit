@@ -1,5 +1,26 @@
 JEDIT VERSION HISTORY
 
+* Version 2.1final
+
++ New Features
+
+- Directories in ~/.jedit/macros create submenus in the macros menu
+
++ Enhancements
+
+- Documentation updates
+- New plugin makefile template (Mike Dillon)
+- Buttons in the Paste Previous, Paste Predefined and View Registers are
+  enabled/disabled depending if something in selected in the list
+- Paste Predefined command removed. Use macros instead
+
++ Bug Fixes
+
+- JEditTextArea.setText() now uses SyntaxDocument.begin/endCompoundEdit()
+- Installer generated invalid batch files on Windows
+- Closing a macro buffer while a recording was in progress would cause
+  problems
+
 * Version 2.1pre4
 
 + API Changes

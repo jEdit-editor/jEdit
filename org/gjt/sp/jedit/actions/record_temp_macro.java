@@ -53,6 +53,6 @@ public class record_temp_macro extends EditAction
 		}
 
 		view.showStatus(jEdit.getProperty("view.status.recording"));
-		Macros.beginRecording(view,"<< temp macro >>",buffer);
+		Macros.beginRecording(view,null,buffer);
 	}
 }

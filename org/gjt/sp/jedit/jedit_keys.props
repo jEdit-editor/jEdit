@@ -43,10 +43,9 @@ close-all.shortcut=F2
 save-all.shortcut=F3
 send.shortcut=F4
 paste-previous.shortcut=F5
-paste-predefined.shortcut=F6
-view-registers.shortcut=F7
-hypersearch.shortcut=F8
-hypersearch-selection.shortcut=F9
+view-registers.shortcut=F6
+hypersearch.shortcut=F7
+hypersearch-selection.shortcut=F8
 prev-buffer.shortcut=F11
 next-buffer.shortcut=F12
 

@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -30,7 +31,6 @@ public class ViewRegisters extends JDialog
 	public ViewRegisters(View view)
 	{
 		super(view,jEdit.getProperty("view-registers.title"),true);
-		this.view = view;
 
 		Container content = getContentPane();
 
@@ -50,13 +50,11 @@ public class ViewRegisters extends JDialog
 			strings.addElement((char)i + ": " + value);
 		}
 
-		registerList = new JList(strings);
+		JList registerList = new JList(strings);
 		registerList.setVisibleRowCount(10);
 		registerList.setFont(view.getTextArea().getPainter().getFont());
-		registerList.addMouseListener(new MouseHandler());
 
-		viewBtn = new JButton(jEdit.getProperty("view-registers.view"));
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		close = new JButton(jEdit.getProperty("common.close"));
 
 		content.setLayout(new BorderLayout());
 
@@ -70,16 +68,14 @@ public class ViewRegisters extends JDialog
 		content.add(scroller, BorderLayout.CENTER);
 
 		JPanel panel = new JPanel();
-		panel.add(viewBtn);
-		panel.add(cancel);
+		panel.add(close);
 		content.add(panel, BorderLayout.SOUTH);
 
 		addKeyListener(new KeyHandler());
-		getRootPane().setDefaultButton(viewBtn);
+		getRootPane().setDefaultButton(close);
 
 		ActionHandler actionListener = new ActionHandler();
-		viewBtn.addActionListener(actionListener);
-		cancel.addActionListener(actionListener);
+		close.addActionListener(actionListener);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		Dimension screen = getToolkit().getScreenSize();
@@ -91,44 +87,13 @@ public class ViewRegisters extends JDialog
 	}
 
 	// private members
-	private View view;
-	private JList registerList;
-	private JButton viewBtn;
-	private JButton cancel;
-
-	private void doView()
-	{
-		if(registerList.getSelectedIndex() == -1)
-		{
-			view.getToolkit().beep();
-			return;
-		}
-
-		String selected = (String)registerList.getSelectedValue();
-		Registers.Register register = Registers.getRegister(
-			selected.charAt(selected.indexOf(':') - 1));
-
-		/* we don't check for the register to be null because that's
-		 * impossible. However they value can change in the case of
-		 * register '$' (the clipboard) */
-		String value = register.toString();
-		if(value == null)
-		{
-			view.getToolkit().beep();
-			return;
-		}
-
-		new ClippingEditor(view,value,true);
-	}
+	private JButton close;
 
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			Object source = evt.getSource();
-			if(source == viewBtn)
-				doView();
-			else if(source == cancel)
+			if(evt.getSource() == close)
 				dispose();
 		}
 	}
@@ -140,22 +105,9 @@ public class ViewRegisters extends JDialog
 			switch(evt.getKeyCode())
 			{
 			case KeyEvent.VK_ENTER:
-				doView();
-				break;
 			case KeyEvent.VK_ESCAPE:
 				dispose();
 				break;
-			}
-		}
-	}
-
-	class MouseHandler extends MouseAdapter
-	{
-		public void mouseClicked(MouseEvent evt)
-		{
-			if (evt.getClickCount() == 2)
-			{
-				doView();
 			}
 		}
 	}

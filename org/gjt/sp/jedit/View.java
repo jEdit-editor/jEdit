@@ -239,31 +239,10 @@ public class View extends JFrame
 
 		String settings = jEdit.getSettingsDirectory();
 
-		boolean noMacros = true;
-
 		if(settings != null)
-		{
-			EditAction action = jEdit.getAction("play-macro");
-
-			String[] macroFiles = new File(settings +
-				File.separator + "macros").list();
-			for(int i = 0; i < macroFiles.length; i++)
-			{
-				String name = macroFiles[i];
-				if(!name.toLowerCase().endsWith(".macro"))
-					continue;
-
-				noMacros = false;
-
-				name = name.substring(0,name.length() - 6);
-				JMenuItem menuItem = new JMenuItem(name);
-				menuItem.addActionListener(action);
-				menuItem.setActionCommand(name);
-				macros.add(menuItem);
-			}
-		}
-
-		if(noMacros)
+			createMacrosMenu(macros,new File(settings + File.separator
+				+ "macros"));
+		else
 			macros.add(GUIUtilities.loadMenuItem(this,"no-macros"));
 	}
 
@@ -599,6 +578,42 @@ public class View extends JFrame
 	private BufferListener bufferListener;
 	private EditorListener editorListener;
 
+	private void createMacrosMenu(JMenu menu, File directory)
+	{
+		boolean noMacros = true;
+
+		EditAction action = jEdit.getAction("play-macro");
+
+		String[] macroFiles = directory.list();
+
+		for(int i = 0; i < macroFiles.length; i++)
+		{
+			String name = macroFiles[i];
+			File file = new File(directory,name);
+			if(name.toLowerCase().endsWith(".macro"))
+			{
+				noMacros = false;
+
+				name = name.substring(0,name.length() - 6);
+				JMenuItem menuItem = new JMenuItem(name);
+				menuItem.addActionListener(action);
+				menuItem.setActionCommand(name);
+				menu.add(menuItem);
+			}
+			else if(file.isDirectory())
+			{
+				noMacros = false;
+
+				JMenu submenu = new JMenu(name);
+				createMacrosMenu(submenu,file);
+				menu.add(submenu);
+			}
+		}
+
+		if(noMacros)
+			menu.add(GUIUtilities.loadMenuItem(this,"no-macros"));
+	}
+
 	private void fireViewEvent(int id, Buffer buffer)
 	{
 		ViewEvent evt = null;
@@ -771,6 +786,9 @@ public class View extends JFrame
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.93  1999/10/16 09:43:00  sp
+ * Final tweaking and polishing for jEdit 2.1final
+ *
  * Revision 1.92  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

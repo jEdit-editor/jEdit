@@ -147,19 +147,6 @@
    </para></listitem>
   </itemizedlist></listitem>
   <listitem><para>
-   Several areas of jEdit have been optimized for speed:
-  </para><itemizedlist>
-   <listitem><para>
-    C, HTML syntax highlighting is more efficent
-   </para></listitem>
-   <listitem><para>
-    File selection dialog boxes should open faster
-   </para></listitem>
-   <listitem><para>
-    Text area should be more responsive when scrolling and entering text
-   </para></listitem>
-  </itemizedlist></listitem>
-  <listitem><para>
    Documentation updates. The plugin development section covers much more
    detail. The documentation is now available in PDF format.
   </para></listitem>
@@ -248,7 +235,7 @@
    <guisubmenu>Lines</> submenu of the <guimenu>Edit</> menu.
   </para>
   <para>
-   Menu items that end with an ellipisis (...) display a dialog
+   Menu items that end with an ellipsis (...) display a dialog
    box, and usually provide an option to cancel.
    Other menu items take effect immediately (but they may possibly
    show alerts or errors).
@@ -394,7 +381,7 @@
     The lines painted with red tildes (<quote>~</quote>)
     are <firstterm>invalid lines</firstterm> - they are visible for one
     reason or another,
-    but don't actually exist in the documentscreen.
+    but don't actually exist in the document.
    </para>
    <para>
     Clicking the text area with the right mouse button will
@@ -1333,7 +1320,7 @@
  <sect1 id=rect-select><title>Rectangular Selection</>
   <para>
    <indexterm><primary>selecting</><secondary>columns of text</></indexterm>
-   Not only is it possible to select continous runs of text, but
+   Not only is it possible to select continuous runs of text, but
    columns of text can also be selected.
   </para>
   <para>
@@ -1348,7 +1335,7 @@
   </para>
   <para>
    Finally, pressing <keycombo><keycap>Control</><keycap>\</></keycombo>
-   will toggle the current selection between continous and rectangular mode.
+   will toggle the current selection between continuous and rectangular mode.
   </para>
   <para>
    It is possible to select a rectangle with zero width, but non-zero height.
@@ -1402,7 +1389,7 @@
    <indexterm><primary>selection</></indexterm>
    <para>
     When you want to insert a text string multiple times in a buffer,
-    it may be inconvinient to use the clipboard; you might want to
+    it may be inconvenient to use the clipboard; you might want to
     preserve its contents, and so on.
    </para>
    <para>
@@ -1504,7 +1491,7 @@
    <para>
     Registers can also be used to store file names to visit. Internally,
     jEdit makes no distinction between a file name and string register;
-    they can be used interchangably.
+    they can be used interchangeably.
    </para>
    <para>
     <guimenu>Registers</>&gt;<guimenuitem>Save Filename to Register</>
@@ -1526,10 +1513,8 @@
    <indexterm><primary>View Registers command</></indexterm>
    <para>
     <guimenu>Registers</>&gt;<guimenuitem>View Registers</>
-    (keyboard equivalent: <keycap>F7</>) shows a
-    dialog box displaying all defined registers. Double clicking on a line,
-    or selecting it and clicking <guibutton>View</> will display its contents
-    in a new dialog box.
+    (keyboard equivalent: <keycap>F6</>) shows a
+    dialog box with a scrollable list of all defined registers.
    </para>
    <para>
     The contents of string registers are shown. For caret registers, the
@@ -1563,7 +1548,11 @@
    <indexterm><primary>Rescan Macros command</></indexterm>
    <para>
     The <guimenu>Macros</> menu lists all known macros, in addition
-    to commands for working with them. The
+    to commands for working with them. Creating subdirectories
+    in the macros directory works as expected; they
+    are displayed as submenus of the <guimenu>Macros</> menu. This can be
+    used to organize a large collection of macros.
+    The
     <guimenu>Macros</> menu is automatically
     refreshed when you update or create a macro file from within jEdit.
     Because macros are stored as ordinary files, they can be renamed,
@@ -1636,9 +1625,15 @@
     it records to a buffer named <filename>&lt;&lt; temporary macro &gt;&gt;</>.
     Once recording is complete, the buffer should not be saved.
    </para>
+   <indexterm><primary>Stop Recording command</></indexterm>
+   <para>
+    <guimenu>Macros</>&gt;<guimenuitem>Stop Recording</> stops recording the
+    temporary macro. This is the same command used to stop recording an
+    ordinary macro.
+   </para>
    <indexterm><primary>Play Temporary Macro command</></indexterm>
    <para>
-     <guimenu>Macros</>&gt;<guimenuitem>Play Temporary Macro</> (keyboard
+    <guimenu>Macros</>&gt;<guimenuitem>Play Temporary Macro</> (keyboard
     equivalent:
     <keycombo><keycap>Control</><keycap>E</></keycombo>
     <keycombo><keycap>Control</><keycap>M</></keycombo>
@@ -1669,42 +1664,14 @@
   <sect2><title>Word Count</>
    <para>
     <indexterm><primary>Word Count command</></indexterm>
-    <indexterm><primary>File menu</></indexterm>
-    <guimenu>File</>&gt;<guimenuitem>Word Count</>
+    <indexterm><primary>Edit menu</></indexterm>
+    <guimenu>Edit</>&gt;<guimenuitem>Word Count</>
     displays a dialog box with the number of characters,
     words and lines in the current buffer. A word is a string of text
     delimited by spaces.
    </para>
    <figure><title>The word count dialog box</>
     <graphic scale=75 fileref=dialog-wordcount></>
-   </figure>
-  </sect2>
-  <sect2><title>Inserting Predefined Strings</>
-   <para>
-    <indexterm><primary>Paste Predefined command</></indexterm>
-    <indexterm><primary>Edit menu</></indexterm>
-    <guimenu>Edit</>&gt;<guimenuitem>Paste Predefined</> (keyboard
-    equivalent: <keycap>F6</>) displays the paste predefined dialog box.
-    The paste predefined dialog box can be used for inserting frequently
-    used strings. It is similar to string registers, but the predefined
-    strings are preserved across editing sessions, and are not named.
-   </para>
-   <itemizedlist>
-    <listitem><para><guibutton>Insert</> inserts the currently selected
-    clip at the caret position and closes the dialog box. Double-clicking
-    on a clip has the same effect.</para></listitem>
-    <listitem><para><guibutton>Add</> displays a dialog box where a clip
-    can be entered, and adds it to the list.</para></listitem>
-    <listitem><para><guibutton>Remove</> removes the currently selected
-    clip.</para></listitem>
-    <listitem><para><guibutton>Edit</> displays a dialog box where the
-    currently selected clip can be edited.</para></listitem>
-    <listitem><para><guibutton>Cancel</> closes the dialog box. Any
-    changes made to the clippings are saved, even if you cancel.</para>
-    </listitem>
-   </itemizedlist>
-   <figure><title>The Paste Predefined dialog box</>
-    <graphic scale=75 fileref=dialog-pastepredef></>
    </figure>
   </sect2>
   <sect2><title>Line Related Commands</>
@@ -1780,7 +1747,7 @@
  <para>
   Most often, a text editor is used to edit files with some sort
   of structure, like program source code, or HTML, TeX, and so on.
-  jEdit has several features for making this easier, including
+  jEdit has several features for making this easier, including edit modes,
   bracket matching, various indentation commands, auto indent,
   commands for commenting source, and syntax highlighting.
  </para>
@@ -2465,7 +2432,7 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   </para>
   <para>
    <guimenu>Search</>&gt;<guimenuitem>HyperSearch</> (keyboard equivalent:
-   <keycap>F8</>) displays the HyperSearch dialog box.
+   <keycap>F7</>) displays the HyperSearch dialog box.
   </para>
   <itemizedlist>
    <listitem><para>
@@ -2502,14 +2469,6 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
    all matching lines. Clicking on a line will open the buffer
    where it was found and move the caret to the specified line.
   </para>
-  <indexterm><primary>old jEdit versions</></indexterm>
-  <sidebar>
-   <bridgehead renderas=sect3>jEdit 2.0 Users</>
-   <para>
-    In jEdit 2.0, <keycap>F7</> was bound to the <guimenuitem>HyperSearch</>
-    command. Now its shortcut is <keycap>F8</>.
-   </para>
-  </sidebar>
   <figure><title>The HyperSearch dialog box</>
    <graphic scale=75 fileref=dialog-hypersearch></>
   </figure>
@@ -2923,7 +2882,7 @@ The following is required to use this plugin:
 
 <chapter id=developing-plugins><title>Developing Plugins</>
  <para>
-  This chapter overviews jEdit plugin development. A knowlege
+  This chapter overviews jEdit plugin development. A knowledge
   of Java, Swing, and the core JDK tools (<application>javac</> and
   <application>jar</>, or equivalent) is assumed. This chapter
   is meant to be read together with the jEdit API documentation; the
@@ -2993,7 +2952,7 @@ The following is required to use this plugin:
    </funcprototype>
   </funcsynopsis>
   <para>
-   This method is reponsible for adding actions and edit modes to jEdit,
+   This method is responsible for adding actions and edit modes to jEdit,
    and doing other initialization tasks. It is called at the end of
    the startup sequence, after all plugins are loaded (so classes from
    other plugins are available, and so on). Most plugins will want to
@@ -3030,7 +2989,7 @@ The following is required to use this plugin:
 plugin.FooPlugin.name=Wonderful Foo Plugin
 plugin.FooPlugin.version=18.27beta9
 
-# Properties with arbitriary names can also be used by a plugin for
+# Properties with arbitrary names can also be used by a plugin for
 # storing strings and user preferences
 foo.baz=Hello World
 qux=$</programlisting>
@@ -3161,7 +3120,7 @@ plugin.BazPlugin.depend.1=jedit 02.02.03.00</>
   <para>
    How do you know exactly which jEdit version your plugin requires?
    The EditPlugin API was added in jEdit 2.1pre1 (build 02.01.01.00), so most
-   plugins will require that version. Futhermore, the option pane API changed
+   plugins will require that version. Furthermore, the option pane API changed
    in jEdit 2.1pre3 (build 02.01.03.00), so plugins
    using option panes will require that.
   </para>
@@ -3523,7 +3482,7 @@ implements OptionPane
     </row>
     <row>
      <entry>-reuseview</>
-     <entry>Only valid when connecing to another instance. When this
+     <entry>Only valid when connecting to another instance. When this
      switch is specified, instead of
      creating a new view, jEdit will open the files in the first existing
      view.</entry>
@@ -3694,10 +3653,11 @@ implements OptionPane
 
 <appendix id=globs><title>Glob Patterns</>
  <para>
-  jEdit uses glob patterns to implement file name filters in the Open and
-  Save As dialog boxes.
+  jEdit uses glob patterns similar to those in MS-DOS and the various
+  Unix shells to implement file name filters in the <guimenuitem>Open File</> and
+  <guimenuitem>Save As</> dialog boxes.
   Glob patterns are similar to regular expressions, but have a much simpler
-  syntax. The following characters have special meaning within a glob
+  syntax. The following character sequences have special meaning within a glob
   pattern:
  </para>
  <itemizedlist>

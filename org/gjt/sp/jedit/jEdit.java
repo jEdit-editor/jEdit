@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.01.04.00";
+		return "02.01.99.00";
 	}
 
 	/**
@@ -1223,7 +1223,6 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.open_selection());
 		addAction(new org.gjt.sp.jedit.actions.open_url());
 		addAction(new org.gjt.sp.jedit.actions.paste());
-		addAction(new org.gjt.sp.jedit.actions.paste_predefined());
 		addAction(new org.gjt.sp.jedit.actions.paste_previous());
 		addAction(new org.gjt.sp.jedit.actions.paste_string_register());
 		addAction(new org.gjt.sp.jedit.actions.play_last_macro());
@@ -1574,6 +1573,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.137  1999/10/16 09:43:00  sp
+ * Final tweaking and polishing for jEdit 2.1final
+ *
  * Revision 1.136  1999/10/10 06:38:45  sp
  * Bug fixes and quicksort routine
  *

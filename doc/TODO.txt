@@ -1,6 +1,12 @@
 JEDIT TO DO
 
-- Scrolling is too slow on certain JDKs
+- Remove paste-predef from CVS
+- remove dialog-pastepredef.gif
+- remove ClippingEditor.java
+
+- 'startup.action' property, executed when jEdit started with no files
+  on command line. Can be either 'new-file', 'open-file', 'load-desktop',
+  etc.
 
 - Macro recorder
   - Write the following actions:
@@ -15,6 +21,9 @@ JEDIT TO DO
     view
 
 - Recording and repeating menu items
+  - Could be implemented by giving menu items a 'proxy' action listener
+    that performed repetition and recording, and then passed the event
+    to the action
 
 - Recursive directory search
 

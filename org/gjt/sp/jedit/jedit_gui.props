@@ -9,10 +9,6 @@
 
 common.ok=OK
 common.cancel=Cancel
-common.insert=Insert
-common.add=Add
-common.delete=Delete
-common.edit=Edit
 common.close=Close
 
 lineSep.unix=Unix (\\n)
@@ -66,8 +62,7 @@ help.icon=Help.gif
 ###
 ### CONTEXT MENU
 ###
-view.context=undo redo - cut copy paste - \
-	paste-previous paste-predefined view-registers - \
+view.context=undo redo - cut copy paste paste-previous - view-registers - \
 	scroll-line
 
 ###
@@ -94,8 +89,6 @@ file=new-file \
      close-all \
      close-view \
      - \
-     word-count \
-     - \
      save \
      save-as \
      save-url \
@@ -121,7 +114,6 @@ reload.label=Re$load
 close-file.label=$Close File
 close-all.label=Close All $Buffers
 close-view.label=Close Vie$w
-word-count.label=Word Count...
 save.label=S$ave
 save-as.label=Sa$ve As...
 save-url.label=Save $to URL...
@@ -141,17 +133,17 @@ edit=undo \
      copy \
      paste \
      paste-previous \
-     paste-predefined \
+     - \
      select-all \
      select-none \
      - \
-     tab \
-     untab \
-     - \
-     expand-abbrev \
-     - \
      goto-line \
      select-line-range \
+     - \
+     expand-abbrev \
+     tab \
+     untab \
+     word-count \
      - \
      %line \
      %paragraph \
@@ -163,14 +155,14 @@ cut.label=$Cut
 copy.label=C$opy
 paste.label=$Paste
 paste-previous.label=Paste Pre$vious...
-paste-predefined.label=Paste Predef$ined...
-select-all.label=Se$lect All
+select-all.label=Select $All
 select-none.label=Select $None
-tab.label=$Spaces to Tabs
-untab.label=Ta$bs to Spaces
+goto-line.label=$Go to Line...
+select-line-range.label=Select L$ine Range...
 expand-abbrev.label=E$xpand Abbreviation
-goto-line.label=Go $to Line...
-select-line-range.label=Select Line Ran$ge...
+tab.label=$Spaces to Tabs
+untab.label=$Tabs to Spaces
+word-count.label=Word Count...
 
 ### Line menu
 line=goto-end-indent \
@@ -549,13 +541,7 @@ searcherror.message=An error occured while performing this operation. ({0})
 # Paste previous dialog
 pasteprev.title=Paste Previous
 pasteprev.caption=Previous clippings:
-
-# Paste predefined dialog
-pastepredef.title=Paste Predefined
-pastepredef.caption=Predefined clippings:
-
-# Clipping editor dialog
-clipedit.title=Clipping Editor
+pasteprev.insert=Insert
 
 # File changed on disk dialog
 filechanged.title=File Changed on Disk
@@ -572,7 +558,6 @@ selectlinerange.end=End line:\
 # View registers
 view-registers.title=Registers
 view-registers.caption=Defined registers:
-view-registers.view=View
 
 # Buffer options dialog
 buffer_options.title=Buffer Options

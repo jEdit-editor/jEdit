@@ -33,11 +33,6 @@ list can be found in the file named CHANGES.txt.
   - JBrowse by George Latkiewicz
   - QuickFile by Jason Ginchereau
 
-- Several areas of jEdit have been optimized for speed:
-  - C, HTML syntax highlighting is more efficent
-  - File selection dialog boxes should open faster
-  - Text area should be more responsive when scrolling and entering text
-
 - Documentation updates. The plugin development section covers much more
   detail. The documentation is now available in PDF format.
 

@@ -162,6 +162,7 @@ public class Buffer extends SyntaxDocument
 		fireBufferEvent(BufferEvent.BUFFER_SAVING);
 
 		backup(saveFile);
+
 		try
 		{
 			OutputStream out;
@@ -1264,6 +1265,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.96  1999/10/16 09:43:00  sp
+ * Final tweaking and polishing for jEdit 2.1final
+ *
  * Revision 1.95  1999/10/03 03:47:15  sp
  * Minor stupidity, IDL mode
  *

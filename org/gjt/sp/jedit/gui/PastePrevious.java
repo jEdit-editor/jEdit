@@ -20,13 +20,14 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 
 public class PastePrevious extends JDialog
-implements ActionListener, KeyListener, MouseListener
+implements ActionListener, KeyListener, ListSelectionListener, MouseListener
 {
 	public PastePrevious(View view)
 	{
@@ -51,7 +52,8 @@ implements ActionListener, KeyListener, MouseListener
 		clips.setFont(view.getTextArea().getPainter().getFont());
 
 		clips.addMouseListener(this);
-		insert = new JButton(jEdit.getProperty("common.insert"));
+		clips.addListSelectionListener(this);
+		insert = new JButton(jEdit.getProperty("pasteprev.insert"));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		content.setLayout(new BorderLayout());
 		content.add(new JLabel(jEdit.getProperty("pasteprev.caption")),
@@ -66,6 +68,8 @@ implements ActionListener, KeyListener, MouseListener
 		panel.add(insert);
 		panel.add(cancel);
 		content.add(panel, BorderLayout.SOUTH);
+		updateButtons();
+
 		addKeyListener(this);
 		getRootPane().setDefaultButton(insert);
 		insert.addActionListener(this);
@@ -117,6 +121,11 @@ implements ActionListener, KeyListener, MouseListener
 	public void mousePressed(MouseEvent evt) {}
 	public void mouseReleased(MouseEvent evt) {}
 
+	public void valueChanged(ListSelectionEvent evt)
+	{
+		updateButtons();
+	}
+
 	// private members
 	private View view;
 	private JList clips;
@@ -124,21 +133,26 @@ implements ActionListener, KeyListener, MouseListener
 	private JButton insert;
 	private JButton cancel;
 
+	private void updateButtons()
+	{
+		int selected = clips.getSelectedIndex();
+		insert.setEnabled(selected != -1);
+	}
+
 	private void doInsert()
 	{
 		int selected = clips.getSelectedIndex();
-		if(selected != -1)
-		{
-			String clip = clipHistory.getItem(selected);
 
-			int repeatCount = view.getTextArea().getInputHandler()
-				.getRepeatCount();
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < repeatCount; i++)
-				buf.append(clip);
+		String clip = clipHistory.getItem(selected);
 
-			view.getTextArea().setSelectedText(buf.toString());
-		}
+		int repeatCount = view.getTextArea().getInputHandler()
+			.getRepeatCount();
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < repeatCount; i++)
+			buf.append(clip);
+
+		view.getTextArea().setSelectedText(buf.toString());
+
 		dispose();
 	}
 }
