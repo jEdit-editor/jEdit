@@ -37,6 +37,7 @@ JEDIT 3.2 VERSION HISTORY
 - Opening a recent file could create a pseudo-random selection, due to a
   bug in the recent file handler
 - Replace all was a bit buggy
+- Ruby mode filename extension was wrong
 
 + API Changes
 

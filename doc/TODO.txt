@@ -107,3 +107,4 @@ TO DO
     shows a menu, with commands for moving the dockable, making it
     floating, toggling auto-open, etc.
   - require that each dockable have a tool bar with a close button?
+- per-mode encodings and line endings

@@ -105,7 +105,7 @@ public class Log
 		String[] props = {
 			"java.version", "java.vendor",
 			"java.compiler", "os.name", "os.version",
-			"os.arch", "user.home"
+			"os.arch", "user.home", "java.class.path",
 			};
 		for(int i = 0; i < props.length; i++)
 		{

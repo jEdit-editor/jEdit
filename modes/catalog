@@ -128,7 +128,7 @@
 				FILE_NAME_GLOB="*.spec" />
 
 <MODE NAME="ruby"		FILE="ruby.xml"
-				FILE_NAME_GLOB="*.ruby" />
+				FILE_NAME_GLOB="*.rb" />
 
 <!-- Note: same XML file as LISP mode -->
 <MODE NAME="scheme"		FILE="lisp.xml"
