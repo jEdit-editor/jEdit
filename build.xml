@@ -30,6 +30,7 @@
 			<include name="installer/*.java"/>
 			<include name="org/gjt/sp/jedit/**/*.java"/>
 			<include name="org/gjt/sp/util/*.java"/>
+			<include name="org/objectweb/asm/*.java"/>
 		</javac>
 	</target>
 
