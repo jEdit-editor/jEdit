@@ -1,22 +1,27 @@
 JEDIT TO DO
 
-+ Features
+2.4pre5:
 
-- XMode:
-  - better error reporting
-  - faster tokenizing of files
-  - write docs
-  - regexps
-  - graphical mode/grammar editor
-  - digit highlighting
-  - do MARK_PREVIOUS before markKeyword()
-  - get rid of WHITESPACE rule
-- 'Uncomment' command that removes comment strings from selected text
+- do MARK_PREVIOUS before markKeyword()
+- get rid of WHITESPACE rule
 - Plugin devel manual needs more work:
   - document views, buffers
   - document GUIUtilities.load/saveGeometry
   - how to write text area and gutter hilites
   - each section should have some sample source code
+- XMode docs
+- Redo window-editor-* screenshots
+
+Later:
+
++ Features
+
+- XMode:
+  - better error reporting
+  - faster tokenizing of files
+  - regexps
+  - graphical mode/grammar editor
+- 'Uncomment' command that removes comment strings from selected text
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Write custom 'document' class; Swing implementation has a few
   problems. With a custom document, folding and such becomes much cleaner
@@ -25,7 +30,6 @@ JEDIT TO DO
 
 + Enhancements
 
-- Update window-editor-*, dialog-options-styles shots
 - EditPlugin.getName()/Version()/Author(), getPath(), getClassName(), etc
   methods
 - BrokenPlugin extends EditPlugin, used as a placeholder for broken

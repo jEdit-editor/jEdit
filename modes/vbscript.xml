@@ -10,7 +10,7 @@
 		<PROPERTY NAME="filenameGlob" VALUE="*.vbs" />
 	</PROPS>
 
-	<RULES IGNORE_CASE="TRUE">
+	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

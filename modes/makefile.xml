@@ -10,7 +10,7 @@
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="filenameGlob" VALUE="*makefile*" />
 	</PROPS>
-	<RULES ESCAPE="\">
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

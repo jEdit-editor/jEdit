@@ -367,10 +367,7 @@ public class TokenMarker implements Cloneable
 						{
 							if (context.inRule == null)
 							{
-								if(context.rules.getKeywords() != null)
-								{
-									markKeyword(info,line, lastKeyword, pos);
-								}
+								markKeyword(info,line, lastKeyword, pos);
 
 								addToken(info,pos - lastOffset,
 									getActionToken(context.rules.getDefault()));
@@ -473,10 +470,8 @@ public class TokenMarker implements Cloneable
 		}
 
 		// check for keywords at the line's end
-		if(context.rules.getKeywords() != null && context.inRule == null)
-		{
+		if(context.inRule == null)
 			markKeyword(info, line, lastKeyword, lineLength);
-		}
 
 		// mark all remaining characters
 		if(lastOffset != lineLength)
@@ -588,10 +583,7 @@ public class TokenMarker implements Cloneable
 			 * sequence. */
 			if ((checkRule.action & MARK_PREVIOUS) != MARK_PREVIOUS)
 			{
-				if (context.rules.getKeywords() != null)
-				{
-					markKeyword(info,line, lastKeyword, pos);
-				}
+				markKeyword(info,line, lastKeyword, pos);
 
 				lastKeyword = pos + pattern.count;
 
@@ -736,19 +728,85 @@ public class TokenMarker implements Cloneable
 
 	private void markKeyword(LineInfo info, Segment line, int start, int end)
 	{
+		KeywordMap keywords = context.rules.getKeywords();
+
 		int len = end - start;
 
-		byte id = context.rules.getKeywords().lookup(line, start, len);
-
-		if(id != Token.NULL)
+		// do digits
+		if(context.rules.getHighlightDigits())
 		{
-			if(start != lastOffset)
+			boolean digit = true;
+			char[] array = line.array;
+			boolean octal = false;
+			boolean hex = false;
+	loop:		for(int i = 0; i < len; i++)
 			{
-				addToken(info,start - lastOffset, getActionToken(
-					context.rules.getDefault()));
+				char ch = array[start+i];
+				switch(ch)
+				{
+				case '0':
+					if(i == 0)
+						octal = true;
+					continue loop;
+				case '1': case '2': case '3':
+				case '4': case '5': case '6':
+				case '7': case '8': case '9':
+					continue loop;
+				case 'x': case 'X':
+					if(octal && i == 1)
+					{
+						hex = true;
+						continue loop;
+					}
+					else
+						break;
+				case 'a': case 'A': case 'b': case 'B':
+				case 'c': case 'C': case 'd': case 'D':
+				case 'e': case 'E': case 'f': case 'F':
+					if(hex)
+						continue loop;
+					else
+						break;
+				default:
+					break;
+				}
+
+				// if we ended up here, then we have found a
+				// non-digit character.
+				digit = false;
+				break loop;
 			}
-			addToken(info,len, id);
-			lastOffset = end;
+
+			// if we got this far with digit = true, then the keyword
+			// consists of all digits. Add it as such.
+			if(digit)
+			{
+				if(start != lastOffset)
+				{
+					addToken(info,start - lastOffset, getActionToken(
+						context.rules.getDefault()));
+				}
+				addToken(info,len,Token.DIGIT);
+				lastOffset = end;
+
+				return;
+			}
+		}
+
+		if(keywords != null)
+		{
+			byte id = keywords.lookup(line, start, len);
+
+			if(id != Token.NULL)
+			{
+				if(start != lastOffset)
+				{
+					addToken(info,start - lastOffset, getActionToken(
+						context.rules.getDefault()));
+				}
+				addToken(info,len, id);
+				lastOffset = end;
+			}
 		}
 	}
 
@@ -774,17 +832,6 @@ public class TokenMarker implements Cloneable
 		}
 	}
 
-	/**
-	 * Ensures that the <code>lineInfo</code> array can contain the
-	 * specified index. This enlarges it if necessary. No action is
-	 * taken if the array is large enough already.<p>
-	 *
-	 * It should be unnecessary to call this under normal
-	 * circumstances; <code>insertLine()</code> should take care of
-	 * enlarging the line info array automatically.
-	 *
-	 * @param index The array index
-	 */
 	private void ensureCapacity(int index)
 	{
 		if(lineInfo == null)
@@ -798,12 +845,6 @@ public class TokenMarker implements Cloneable
 		}
 	}
 
-	/**
-	 * Adds a token to the token list.
-	 * @param info The line to add the token to
-	 * @param length The length of the token
-	 * @param id The id of the token
-	 */
 	private void addToken(LineInfo info, int length, byte id)
 	{
 		if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
@@ -909,6 +950,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.44  2000/04/08 06:10:51  sp
+ * Digit highlighting, search bar bug fix
+ *
  * Revision 1.43  2000/04/08 02:39:33  sp
  * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
  *
@@ -938,12 +982,5 @@ public class TokenMarker implements Cloneable
  *
  * Revision 1.34  2000/03/26 03:30:48  sp
  * XMode integrated
- *
- * Revision 1.33  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
- *
- * Revision 1.32  1999/12/13 03:40:30  sp
- * Bug fixes, syntax is now mostly GPL'd
  *
  */

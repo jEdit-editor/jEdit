@@ -118,7 +118,7 @@
 		</SPAN>
 	</RULES>
 
-	<RULES SET="PHP" ESCAPE="\">
+	<RULES SET="PHP" ESCAPE="\" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

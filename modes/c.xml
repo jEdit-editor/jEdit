@@ -17,7 +17,7 @@
 		<PROPERTY NAME="filenameGlob" VALUE="*.{c,h}" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
-	<RULES ESCAPE="\">
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

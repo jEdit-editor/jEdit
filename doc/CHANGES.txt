@@ -1,5 +1,17 @@
 JEDIT VERSION HISTORY
 
+* Version 2.4pre5
+
++ New Features
+
+- Digits will be highlighted if the HIGHLIGHT_DIGITS attribute is set to
+  "TRUE" on a ruleset
+
++ Bug Fixes
+
+- Incremental search didn't beep if no match was found (since 2.4pre4)
+- xmode.dtd didn't define attributes of KEYWORDS tag (since 2.4pre2)
+
 * Version 2.4pre4
 
 + New Features

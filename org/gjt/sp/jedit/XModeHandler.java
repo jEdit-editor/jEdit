@@ -86,6 +86,11 @@ public class XModeHandler extends HandlerBase
 			lastIgnoreCase = (isSpecified) ? (value != "FALSE") :
 				true;
 		}
+		else if (aname == "HIGHLIGHT_DIGITS")
+		{
+			lastHighlightDigits = (isSpecified) ? (value != "FALSE") :
+				false;
+		}
 		else if (aname == "AT_CHAR")
 		{
 			try
@@ -174,6 +179,7 @@ public class XModeHandler extends HandlerBase
 		{
 			rules = new ParserRuleSet();
 			rules.setIgnoreCase(lastIgnoreCase);
+			rules.setHighlightDigits(lastHighlightDigits);
 			rules.setEscape(lastEscape);
 			rules.setDefault(lastDefaultID);
 		}
@@ -217,6 +223,7 @@ public class XModeHandler extends HandlerBase
 				lastSetName = null;
 				lastEscape = null;
 				lastIgnoreCase = true;
+				lastHighlightDigits = false;
 				lastDefaultID = TokenMarker.AC_NULL;
 				rules = null;
 			}
@@ -414,7 +421,8 @@ public class XModeHandler extends HandlerBase
 	private boolean lastNoWordBreak;
 	private boolean lastAtLineStart;
 	private boolean lastExcludeMatch;
-	private boolean lastIgnoreCase;
+	private boolean lastIgnoreCase = true;
+	private boolean lastHighlightDigits;
 
 	private int stringToToken(String value)
 	{

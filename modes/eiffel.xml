@@ -12,7 +12,7 @@
 		<PROPERTY NAME="filenameGlob" VALUE="*.e" />
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
-	<RULES ESCAPE="\">
+	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

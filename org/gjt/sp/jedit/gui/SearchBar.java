@@ -125,8 +125,8 @@ public class SearchBar extends JPanel
 
 		try
 		{
-			SearchAndReplace.find(view,view.getBuffer(),start);
-			return;
+			if(SearchAndReplace.find(view,view.getBuffer(),start))
+				return;
 		}
 		catch(BadLocationException bl)
 		{
@@ -243,6 +243,9 @@ public class SearchBar extends JPanel
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.4  2000/04/08 06:10:51  sp
+ * Digit highlighting, search bar bug fix
+ *
  * Revision 1.3  2000/04/06 09:28:08  sp
  * Better plugin error reporting, search bar updates
  *

@@ -1367,6 +1367,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.153  2000/04/08 06:10:51  sp
+ * Digit highlighting, search bar bug fix
+ *
  * Revision 1.152  2000/04/08 02:39:33  sp
  * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
  *
@@ -1393,18 +1396,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.144  2000/03/20 06:06:36  sp
  * Mode internals cleaned up
- *
- * Revision 1.143  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
- *
- * Revision 1.142  2000/03/18 05:45:25  sp
- * Complete word overhaul, various other changes
- *
- * Revision 1.141  2000/03/14 06:22:24  sp
- * Lots of new stuff
- *
- * Revision 1.140  2000/02/24 04:13:05  sp
- * Bug fixes, misc updates, etc
  *
  */

@@ -97,6 +97,16 @@ public class ParserRuleSet
 		keywords = km;
 	}
 
+	public boolean getHighlightDigits()
+	{
+		return highlightDigits;
+	}
+
+	public void setHighlightDigits(boolean highlightDigits)
+	{
+		this.highlightDigits = highlightDigits;
+	}
+
 	public ParserRule getEscapeRule()
 	{
 		return escapeRule;
@@ -143,12 +153,16 @@ public class ParserRuleSet
 	private Segment escapePattern;
 	private int terminateChar = -1;
 	private boolean ignoreCase = true;
+	private boolean highlightDigits;
 	private int defaultID;
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/04/08 06:10:51  sp
+ * Digit highlighting, search bar bug fix
+ *
  * Revision 1.3  2000/04/07 06:57:26  sp
  * Buffer options dialog box updates, API docs updated a bit in syntax package
  *

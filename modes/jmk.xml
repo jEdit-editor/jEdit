@@ -13,7 +13,7 @@
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.jmk" />
 	</PROPS>
-	<RULES ESCAPE="\">
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

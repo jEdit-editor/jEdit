@@ -15,7 +15,7 @@
 		<PROPERTY NAME="filenameGlob" VALUE="*.css" />
 		<PROPERTY NAME="noWordSep" VALUE="-" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="TRUE">
+	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
