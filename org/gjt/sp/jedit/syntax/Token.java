@@ -20,10 +20,9 @@ package org.gjt.sp.jedit.syntax;
 
 /**
  * A linked list of tokens. Each token has three fields - a token
- * identifier, which is a byte value that can be looked up in the
- * array returned by <code>SyntaxDocument.getColors()</code>
- * to get a color value, a length value which is the length of the
- * token in the text, and a pointer to the next token in the list.
+ * identifier, which can be mapped to a color or font style for
+ * painting, a length value which is the length of the token in the
+ * text, and a pointer to the next token in the list.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -90,6 +89,9 @@ public class Token
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.14  2000/04/07 06:57:26  sp
+ * Buffer options dialog box updates, API docs updated a bit in syntax package
+ *
  * Revision 1.13  2000/04/06 13:09:46  sp
  * More token types added
  *

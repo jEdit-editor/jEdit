@@ -33,10 +33,11 @@ public class BufferOptions extends EnhancedDialog
 {
 	public BufferOptions(View view)
 	{
-		super(view,jEdit.getProperty("buffer_options.title"),true);
+		super(view,jEdit.getProperty("buffer-options.title"),true);
 		this.view = view;
 		this.buffer = view.getBuffer();
 
+		ActionHandler actionListener = new ActionHandler();
 		JPanel panel = new JPanel();
 		GridBagLayout layout = new GridBagLayout();
 		panel.setLayout(layout);
@@ -56,10 +57,11 @@ public class BufferOptions extends EnhancedDialog
 
 		cons.gridx = 3;
 		cons.gridwidth = 1;
-		String[] tabSizes = { "8", "4" };
+		String[] tabSizes = { "2", "4", "8" };
 		tabSize = new JComboBox(tabSizes);
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(buffer.getProperty("tabSize"));
+		tabSize.addActionListener(actionListener);
 		layout.setConstraints(tabSize,cons);
 		panel.add(tabSize);
 
@@ -68,20 +70,27 @@ public class BufferOptions extends EnhancedDialog
 		cons.gridy = 1;
 		cons.gridwidth = 3;
 		label = new JLabel(jEdit.getProperty(
-			"buffer_options.mode"),SwingConstants.RIGHT);
+			"buffer-options.mode"),SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
 		cons.gridx = 3;
 		cons.gridwidth = 1;
 		modes = jEdit.getModes();
+		String bufferMode = buffer.getMode().getName();
+		int index = 0;
 		String[] modeNames = new String[modes.length];
 		for(int i = 0; i < modes.length; i++)
 		{
-			modeNames[i] = modes[i].getName();
+			Mode mode = modes[i];
+			modeNames[i] = mode.getName()
+				+ " (" + mode.getProperty("label") + ")";
+			if(bufferMode.equals(mode.getName()))
+				index = i;
 		}
 		mode = new JComboBox(modeNames);
-		mode.setSelectedItem(buffer.getMode().getName());
+		mode.setSelectedIndex(index);
+		mode.addActionListener(actionListener);
 		layout.setConstraints(mode,cons);
 		panel.add(mode);
 
@@ -89,7 +98,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.gridx = 0;
 		cons.gridy = 2;
 		cons.gridwidth = 3;
-		label = new JLabel(jEdit.getProperty("buffer_options.lineSeparator"),
+		label = new JLabel(jEdit.getProperty("buffer-options.lineSeparator"),
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
 		panel.add(label);
@@ -109,6 +118,7 @@ public class BufferOptions extends EnhancedDialog
 			lineSeparator.setSelectedIndex(1);
 		else if("\r".equals(lineSep))
 			lineSeparator.setSelectedIndex(2);
+		lineSeparator.addActionListener(actionListener);
 		layout.setConstraints(lineSeparator,cons);
 		panel.add(lineSeparator);
 
@@ -122,6 +132,7 @@ public class BufferOptions extends EnhancedDialog
 			"options.editor.syntax"));
 		syntax.getModel().setSelected("on".equals(
 			buffer.getProperty("syntax")));
+		syntax.addActionListener(actionListener);
 		layout.setConstraints(syntax,cons);
 		panel.add(syntax);
 
@@ -131,6 +142,7 @@ public class BufferOptions extends EnhancedDialog
 			"options.editor.indentOnTab"));
 		indentOnTab.getModel().setSelected("on".equals(
 			buffer.getProperty("indentOnTab")));
+		indentOnTab.addActionListener(actionListener);
 		layout.setConstraints(indentOnTab,cons);
 		panel.add(indentOnTab);
 
@@ -140,6 +152,7 @@ public class BufferOptions extends EnhancedDialog
 			"options.editor.indentOnEnter"));
 		indentOnEnter.getModel().setSelected("on".equals(
 			buffer.getProperty("indentOnEnter")));
+		indentOnEnter.addActionListener(actionListener);
 		layout.setConstraints(indentOnEnter,cons);
 		panel.add(indentOnEnter);
 
@@ -149,13 +162,24 @@ public class BufferOptions extends EnhancedDialog
 			"options.editor.noTabs"));
 		noTabs.getModel().setSelected("yes".equals(
 			buffer.getProperty("noTabs")));
+		noTabs.addActionListener(actionListener);
 		layout.setConstraints(noTabs,cons);
 		panel.add(noTabs);
 
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(BorderLayout.CENTER,panel);
+		// Props label
+		cons.gridy = 7;
+		label = new JLabel(jEdit.getProperty("buffer-options.props"));
+		layout.setConstraints(label,cons);
+		panel.add(label);
 
-		ActionHandler actionListener = new ActionHandler();
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(BorderLayout.NORTH,panel);
+
+		props = new JTextArea(4,30);
+		props.setLineWrap(true);
+		props.setWrapStyleWord(false);
+		getContentPane().add(BorderLayout.CENTER,new JScrollPane(props));
+		updatePropsField();
 
 		panel = new JPanel();
 		ok = new JButton(jEdit.getProperty("common.ok"));
@@ -188,7 +212,7 @@ public class BufferOptions extends EnhancedDialog
 
 		int index = mode.getSelectedIndex();
 		buffer.setMode(modes[index]);
-		
+
 		index = lineSeparator.getSelectedIndex();
 		String lineSep;
 		if(index == 0)
@@ -234,8 +258,24 @@ public class BufferOptions extends EnhancedDialog
 	private JCheckBox indentOnEnter;
 	private JCheckBox syntax;
 	private JCheckBox noTabs;
+	private JTextArea props;
 	private JButton ok;
 	private JButton cancel;
+
+	private void updatePropsField()
+	{
+		props.setText(":tabSize=" + tabSize.getSelectedItem()
+			+ ":noTabs=" + (noTabs.getModel().isSelected()
+			? "on" : "off")
+			+ ":mode=" + modes[mode.getSelectedIndex()].getName()
+			+ ":indentOnTab=" + (indentOnTab.getModel().isSelected()
+			? "on" : "off")
+			+ ":indentOnEnter=" + (indentOnEnter.getModel().isSelected()
+			? "on" : "off")
+			+ ":syntax=" + (syntax.getModel().isSelected()
+			? "on" : "off")
+			+ ":");
+	}
 
 	class ActionHandler implements ActionListener
 	{
@@ -246,6 +286,9 @@ public class BufferOptions extends EnhancedDialog
 				ok();
 			else if(source == cancel)
 				cancel();
+			else if(source instanceof JComboBox
+				|| source instanceof JCheckBox)
+				updatePropsField();
 		}
 	}
 }
@@ -253,6 +296,9 @@ public class BufferOptions extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/04/07 06:57:26  sp
+ * Buffer options dialog box updates, API docs updated a bit in syntax package
+ *
  * Revision 1.12  1999/11/26 07:37:11  sp
  * Escape/enter handling code moved to common superclass, bug fixes
  *
@@ -283,8 +329,5 @@ public class BufferOptions extends EnhancedDialog
  *
  * Revision 1.3  1999/04/02 02:39:46  sp
  * Updated docs, console fix, getDefaultSyntaxColors() method, hypersearch update
- *
- * Revision 1.2  1999/03/20 06:16:41  sp
- * Buffer options panel updates, color table option pane updates
  *
  */

@@ -6,11 +6,12 @@ JEDIT TO DO
   - better error reporting
   - faster tokenizing of files
   - write docs
-  - update ogsj.syntax API docs
   - regexps
   - graphical mode/grammar editor
-  - more modes
   - digit highlighting
+  - get rid of WHITESPACE rule
+  - maybe add highlight levels; the higher the level, the more stuff is
+    highlighted
 - Update existing modes to take advantage of new token types
 - 'Uncomment' command that removes comment strings from selected text
 - Plugin devel manual needs more work:
@@ -27,8 +28,6 @@ JEDIT TO DO
 + Enhancements
 
 - Update window-editor-*, dialog-options-styles shots
-- DOX: merge basic-file-opts and basic-editing, rename advanced-editing
-  to 'Advanced Features'
 - EditPlugin.getName()/Version()/Author(), getPath(), getClassName(), etc
   methods
 - BrokenPlugin extends EditPlugin, used as a placeholder for broken

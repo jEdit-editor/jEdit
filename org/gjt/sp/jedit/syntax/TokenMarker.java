@@ -911,6 +911,9 @@ public class TokenMarker implements Cloneable
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.42  2000/04/07 06:57:26  sp
+ * Buffer options dialog box updates, API docs updated a bit in syntax package
+ *
  * Revision 1.41  2000/04/06 13:09:46  sp
  * More token types added
  *
@@ -941,8 +944,5 @@ public class TokenMarker implements Cloneable
  *
  * Revision 1.32  1999/12/13 03:40:30  sp
  * Bug fixes, syntax is now mostly GPL'd
- *
- * Revision 1.31  1999/12/10 03:22:47  sp
- * Bug fixes, old loading code is now used again
  *
  */

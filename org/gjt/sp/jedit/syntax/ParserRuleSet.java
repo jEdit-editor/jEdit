@@ -136,7 +136,7 @@ public class ParserRuleSet
 		defaultID = def;
 	}
 
-	private static final int DEFAULT_RULE_VECTOR_SIZE = 16;
+	private static final int DEFAULT_RULE_VECTOR_SIZE = 48;
 	private KeywordMap keywords;
 	private Vector rules;
 	private ParserRule escapeRule;
@@ -149,6 +149,9 @@ public class ParserRuleSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/04/07 06:57:26  sp
+ * Buffer options dialog box updates, API docs updated a bit in syntax package
+ *
  * Revision 1.2  2000/04/01 08:40:55  sp
  * Streamlined syntax highlighting, Perl mode rewritten in XML
  *

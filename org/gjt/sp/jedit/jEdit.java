@@ -2064,6 +2064,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.212  2000/04/07 06:57:26  sp
+ * Buffer options dialog box updates, API docs updated a bit in syntax package
+ *
  * Revision 1.211  2000/04/06 09:28:08  sp
  * Better plugin error reporting, search bar updates
  *
@@ -2094,21 +2097,5 @@ public class jEdit
  * Revision 1.202  2000/03/27 07:31:22  sp
  * We now use Log.log() in some places instead of System.err.println, HTML mode
  * now supports <script> tags, external delegation bug fix
- *
- * Revision 1.201  2000/03/26 05:12:59  sp
- * minor XMode updates
- *
- * Revision 1.200  2000/03/26 03:35:32  sp
- * Minor updates
- *
- * Revision 1.199  2000/03/26 03:30:48  sp
- * XMode integrated
- *
- * Revision 1.198  2000/03/21 07:18:53  sp
- * bug fixes
- *
- * Revision 1.197  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
  *
  */

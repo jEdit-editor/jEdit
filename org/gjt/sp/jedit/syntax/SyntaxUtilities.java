@@ -1,5 +1,5 @@
 /*
- * SyntaxUtilities.java - Utility functions used by syntax colorizing
+ * SyntaxUtilities.java - Utility functions used by syntax highlighting
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ import javax.swing.text.*;
 import java.awt.*;
 
 /**
- * Class with several utility functions used by jEdit's syntax colorizing
+ * Class with several utility functions used by jEdit's syntax highlighting
  * subsystem.
  *
  * @author Slava Pestov
@@ -147,6 +147,9 @@ public class SyntaxUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/04/07 06:57:26  sp
+ * Buffer options dialog box updates, API docs updated a bit in syntax package
+ *
  * Revision 1.10  2000/04/06 13:09:46  sp
  * More token types added
  *
@@ -175,8 +178,5 @@ public class SyntaxUtilities
  *
  * Revision 1.2  1999/03/27 02:46:17  sp
  * SyntaxTextArea is now modular
- *
- * Revision 1.1  1999/03/13 09:11:46  sp
- * Syntax code updates, code cleanups
  *
  */

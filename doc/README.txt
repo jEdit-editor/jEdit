@@ -63,13 +63,12 @@ Acrobat.
 
 * Credits
 
-I would like to thank the following people who have contributed code to
-the jEdit core:
+I would like to thank the following people who have contributed major
+modules of code to the jEdit core:
 
-Dirk Moebius - Enhanced plugin versioning
 Jason Ginchereau - Buffer tabs code
-Mike Dillon - XMode syntax highlighting engine, gutter, new options dialog box,
-faster literal search, many other patches
+Mike Dillon - XMode syntax highlighting engine, gutter, new options
+dialog box, faster literal search, many other patches
 Tal Davidson - Original syntax highlighting engine
 Valery Kondakoff - Old Complete Word command
 

@@ -749,9 +749,11 @@ plugin.dep-class.message=The plugin {0} requires the class {1}.\n\
 	Try installing the appropriate plugin or class library.
 
 # Buffer options dialog
-buffer_options.title=Buffer Options
-buffer_options.mode=Edit mode:\ 
-buffer_options.lineSeparator=Line separator:\ 
+buffer-options.title=Buffer Options
+buffer-options.mode=Edit mode:\ 
+buffer-options.lineSeparator=Line separator:\ 
+buffer-options.props=Corresponding buffer-local properties: \
+	(C+c copies)
 
 # Global options dialog
 options.title=Global Options

@@ -19,6 +19,11 @@
 
 package org.gjt.sp.jedit.syntax;
 
+/**
+ * Creates parser rules.
+ * @author mike dillon
+ * @version $Id$
+ */
 public class ParserRuleFactory
 {
 	// public members
@@ -259,6 +264,9 @@ public class ParserRuleFactory
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/04/07 06:57:26  sp
+ * Buffer options dialog box updates, API docs updated a bit in syntax package
+ *
  * Revision 1.2  2000/04/01 08:40:55  sp
  * Streamlined syntax highlighting, Perl mode rewritten in XML
  *

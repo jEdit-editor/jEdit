@@ -33,8 +33,7 @@ public class SyntaxDocument extends PlainDocument
 {
 	/**
 	 * Returns the token marker that is to be used to split lines
-	 * of this document up into tokens. May return null if this
-	 * document is not to be colorized.
+	 * of this document up into tokens. May return null.
 	 */
 	public TokenMarker getTokenMarker()
 	{
@@ -43,8 +42,7 @@ public class SyntaxDocument extends PlainDocument
 
 	/**
 	 * Sets the token marker that is to be used to split lines of
-	 * this document up into tokens. May throw an exception if
-	 * this is not supported for this type of document.
+	 * this document up into tokens.
 	 * @param tm The new token marker
 	 */
 	public void setTokenMarker(TokenMarker tm)
@@ -203,6 +201,9 @@ public class SyntaxDocument extends PlainDocument
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.20  2000/04/07 06:57:26  sp
+ * Buffer options dialog box updates, API docs updated a bit in syntax package
+ *
  * Revision 1.19  2000/04/02 06:38:28  sp
  * Bug fixes
  *
@@ -233,8 +234,5 @@ public class SyntaxDocument extends PlainDocument
  *
  * Revision 1.10  1999/10/24 02:06:41  sp
  * Miscallaneous pre1 stuff
- *
- * Revision 1.9  1999/09/30 12:21:05  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
  *
  */

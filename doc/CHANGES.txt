@@ -4,20 +4,16 @@ JEDIT VERSION HISTORY
 
 + New Features
 
-- CSS mode added; HTML and friends now highlight CSS stylesheets inside
-  <style> tags (Mike Dillon)
-- Major ASP mode updates (Andre Kaplan)
 - New 'search bar' with incremental search support replaces QuickSearch
   field on toolbar
-- PHP mode updates (Mike Dillon)
-- JMK (Java Make) mode added
 - New token types added: Token.{CONSTANT,VARIABLE,FUNCTION,DATATYPE,DIGIT}
-- Pascal mode (Kristian Ovaska)
+- New edit modes:
+  - CSS (Mike Dillon)
+  - Pascal (Kristian Ovaska)
+  - JMK
 
 + Enhancements
 
-- PHP, JSP, ColdFusion now support inline JavaScript
-- Updated VBScript and JavaScript modes (Andre Kaplan)
 - Improved Search & Replace and HyperSearch dialog boxes
 - Utilities->Reload Edit Modes now works with the -nosettings switch
 - If the plugin list cannot be loaded, the plugin manager now displays a more
@@ -25,6 +21,11 @@ JEDIT VERSION HISTORY
   are behind a firewall
 - JARClassLoader now displays error messages in more friendly dialog boxes,
   instead of printing stuff to the activity log
+- Buffer Options dialog box improvements
+- Updated edit modes:
+  - PHP (Mike Dillon)
+  - PHP, JSP and ColdFusion now support inline JavaScript
+  - ASP, JavaScript, VBScript (Andre Kaplan)
 
 + Bug Fixes
 
