@@ -50,11 +50,14 @@ jedit_mf = (cat jedit_pkg "/jedit.manifest");
 doc_pgks = (subst "/", ".", jedit_pkgs);
 
 # All source directories
-pkgs = re_pkg bsh_pkgs jedit_pkgs "org/gjt/sp/jedit/icons"
-    "org/gjt/sp/jedit/tips";
+pkgs = re_pkg bsh_pkgs jedit_pkgs
+    "org/gjt/sp/jedit/icons"
+    "org/gjt/sp/jedit/tips"
+    "doc"
+    "doc/users-guide";
 
 # Additional stuff that is bundled into the web start version
-jnlp_pkgs = pkgs "doc" "doc/users-guide" "modes";
+jnlp_pkgs = pkgs "modes";
 
 # Installer sources
 installer_srcs = (subst ".java", ".class", (glob "installer/*.java"));
@@ -72,10 +75,8 @@ get_file_list = function(list)
         (join list, "/*.bsh")
         (join list, "/*.html")
         (join list, "/*.xml")
+        (join list, "/*.dtd")
         "org/gjt/sp/jedit/default.abbrevs"
-        "org/gjt/sp/jedit/actions.dtd"
-        "org/gjt/sp/jedit/catalog.dtd"
-        "org/gjt/sp/jedit/xmode.dtd"
         "bsh/lib/defaultImports"
         "bsh/lib/javaPackages")
 }
@@ -83,7 +84,7 @@ end;
 
 "all": srcs;
 {
-    exec cmd_jar "cmf0" jedit_mf "jedit.jar" (get_file_list pkgs);
+    exec cmd_jar "cmf" jedit_mf "jedit.jar" (get_file_list pkgs);
 }
 
 "webstart": srcs;

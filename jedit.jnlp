@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<jnlp spec="1.0+" codebase="ftp://jedit.sourceforge.net/pub/jedit/"
+<jnlp spec="1.0+" codebase="http://prdownloads.sourceforge.net/jedit/"
   href="http://www.jedit.org/jedit_devel.jnlp">
   <information>
     <title>jEdit</title>
@@ -8,9 +8,10 @@
     <vendor>Slava Pestov</vendor>
     <homepage href="http://www.jedit.org" />
 
-    <description>jEdit programmer's text editor</description>
+    <description>jEdit is a programmer's text editor that can be made into a
+    rather powerful IDE by installing various plugins.</description>
     <description kind="short">jEdit is a powerful programmer's text editor.</description>
-    <description kind="tooltip">jEdit programmer's text editor</description>
+    <description kind="tooltip">jEdit text editor</description>
 
     <!--icon href="icon.gif" width="32" height="32" /-->
 
@@ -19,8 +20,8 @@
 
   <resources>
     <j2se version="1.2+" />
-    <jar href="jedit32pre2webstart_aux1.jar" />
-    <jar href="jedit32pre2webstart.jar" />
+    <jar href="jedit32pre3webstart_aux1.jar" />
+    <jar href="jedit32pre3webstart.jar" />
   </resources>
 
   <security>
