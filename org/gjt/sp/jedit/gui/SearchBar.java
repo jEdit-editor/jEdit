@@ -199,17 +199,6 @@ public class SearchBar extends JPanel
 		}
 	}
 
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-			{
-				view.getEditPane().focusOnTextArea();
-			}
-		}
-	}
-
 	class DocumentHandler implements DocumentListener
 	{
 		public void insertUpdate(DocumentEvent evt)
@@ -239,11 +228,25 @@ public class SearchBar extends JPanel
 		{
 		}
 	}
+
+	class KeyHandler extends KeyAdapter
+	{
+		public void keyPressed(KeyEvent evt)
+		{
+			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+			{
+				view.getEditPane().focusOnTextArea();
+			}
+		}
+	}
 }
 
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.9  2000/05/07 07:29:02  sp
+ * Splitting fixes
+ *
  * Revision 1.8  2000/05/07 05:48:30  sp
  * You can now edit several buffers side-by-side in a split view
  *

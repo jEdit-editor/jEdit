@@ -85,7 +85,7 @@ buffer.syntax=true
 # Show toolbar?
 view.showToolbar=true
 
-# Show search bar?
+# Always show search bar, even when not in use?
 view.showSearchbar=true
 
 # Show buffer tabs?

@@ -131,7 +131,14 @@ public class View extends JFrame implements EBComponent
 			oldParent.add(splitPane);
 			oldParent.revalidate();
 
-			newSplitPane.setDividerLocation(oldParent.getHeight() / 2);
+			Dimension size;
+			if(oldParent instanceof JSplitPane)
+				size = oldParent.getSize();
+			else
+				size = oldEditPane.getSize();
+			newSplitPane.setDividerLocation(((orientation
+				== JSplitPane.VERTICAL_SPLIT) ? size.height
+				: size.width) / 2);
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()
@@ -140,38 +147,6 @@ public class View extends JFrame implements EBComponent
 				}
 			});
 		}
-	}
-
-	/**
-	 * Unsplits the view.
-	 * @since jEdit 2.3pre2
-	 */
-	public void unsplit()
-	{
-		if(splitPane != null)
-		{
-			EditPane[] editPanes = getEditPanes();
-			for(int i = 0; i < editPanes.length; i++)
-			{
-				EditPane _editPane = editPanes[i];
-				if(editPane != _editPane)
-					editPane.close();
-			}
-
-			JComponent parent = (JComponent)splitPane.getParent();
-			parent.remove(splitPane);
-			splitPane = null;
-			parent.add(editPane);
-			parent.revalidate();
-		}
-
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				editPane.focusOnTextArea();
-			}
-		});
 	}
 
 	/**
@@ -1049,6 +1024,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.169  2000/05/07 07:29:01  sp
+ * Splitting fixes
+ *
  * Revision 1.168  2000/05/07 05:48:30  sp
  * You can now edit several buffers side-by-side in a split view
  *

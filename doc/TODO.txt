@@ -2,10 +2,9 @@ JEDIT TO DO
 
 2.5pre2:
 
+- CVS: remove close-file, add close-buffer
 - Status bar
 - Write VFS docs - user and developer
-- Document buffer.tokenize
-- Document new view stuff
 - Document EditPaneUpdate message
 
 2.5:

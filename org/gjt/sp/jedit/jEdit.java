@@ -1770,7 +1770,7 @@ public class jEdit
 		addAction("clear-marker");
 		addAction("clear-register");
 		addAction("close-all");
-		addAction("close-file");
+		addAction("close-buffer");
 		addAction("close-view");
 		addAction("complete-word");
 		addAction("copy");
@@ -2259,6 +2259,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.234  2000/05/07 07:29:01  sp
+ * Splitting fixes
+ *
  * Revision 1.233  2000/05/07 05:48:30  sp
  * You can now edit several buffers side-by-side in a split view
  *

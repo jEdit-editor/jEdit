@@ -10,6 +10,7 @@ JEDIT 2.5 VERSION HISTORY
 - You can now disable file tokenization on load in Utilities->Global Options.
   This results in faster file loading, but slightly less accurate syntax
   highlighting
+- You can now edit more than one buffer at once in a split view
 
 + Enhancements
 
@@ -17,6 +18,7 @@ JEDIT 2.5 VERSION HISTORY
 - User input is blocked while I/O is in progress
 - Improved focus handling when splitting views
 - The 'Macros' menu now substitutes spaces for underscores in macro names
+- 'Close File' command renamed to 'Close Buffer' for consistency
 
 + Bug Fixes
 
@@ -26,6 +28,13 @@ JEDIT 2.5 VERSION HISTORY
 - HyperSearch didn't work with the directory list set properly (since 2.5pre1)
 - Fixed minor buffer list sorting bug
 - Fixed obscure buffer switching bug
+
++ API Changes
+
+- New EditPaneUpdate message; getWhat() method returns one of the following:
+  EditPaneUpdate.CREATED (replaces ViewUpdate.TEXTAREA_CREATED)
+  EditPaneUpdate.DESTROYED (replaces ViewUpdate.TEXTAREA_DESTROYED)
+  EditPaneUpdate.BUFFER_CHANGED (replaces ViewUpdate.BUFFER_CHANGED)
 
 * Version 2.5pre1
 

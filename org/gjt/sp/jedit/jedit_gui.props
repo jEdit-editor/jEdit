@@ -19,14 +19,14 @@ lineSep.mac=MacOS (\\r)
 ###
 ### TOOLBAR
 ###
-view.toolbar=new-file open-file save close-file print - \
+view.toolbar=new-file open-file save close-buffer print - \
 	undo redo cut copy paste - goto-line find - new-view unsplit \
 	split-horizontal split-vertical - buffer-options global-options - \
 	help
 
 new-file.icon=New.gif
 open-file.icon=Open.gif
-close-file.icon=Delete.gif
+close-buffer.icon=Delete.gif
 save.icon=Save.gif
 print.icon=Print.gif
 undo.icon=Undo.gif
@@ -84,7 +84,7 @@ file=new-file \
      reload \
      reload-all \
      - \
-     close-file \
+     close-buffer \
      close-all \
      - \
      save \
@@ -108,7 +108,7 @@ current-directory.not-local=Cannot list directories on remote filesystems
 no-recent.label=No Recent Files
 reload.label=$Reload
 reload-all.label=Reload $All Buffers...
-close-file.label=$Close File
+close-buffer.label=$Close Buffer
 close-all.label=Close All $Buffers
 save.label=$Save
 save-as.label=Sa$ve As...
@@ -810,7 +810,7 @@ options.general.backupSuffix=Backup filename suffix:\
 options.general.lineSeparator=Default line separator:\ 
 options.general.saveDesktop=Save session on exit
 options.general.showToolbar=Show toolbar
-options.general.showSearchbar=Show search bar
+options.general.showSearchbar=Always show search bar
 options.general.showBufferTabs=Show buffer tabs
 options.general.bufferTabsPos=Buffer tabs position:\ 
 options.general.showFullPath=Show full path of buffers in title bar
