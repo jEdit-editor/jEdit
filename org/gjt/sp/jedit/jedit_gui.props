@@ -91,6 +91,7 @@ file=new-file \
      reload \
      - \
      close-file \
+     close-all \
      close-view \
      - \
      word-count \
@@ -118,11 +119,12 @@ open-recent.label=O$pen Recent
 no-recent.label=No Recent Files
 reload.label=Re$load
 close-file.label=$Close File
+close-all.label=Close All $Buffers
 close-view.label=Close Vie$w
-word-count.label=Word Coun$t...
+word-count.label=Word Count...
 save.label=S$ave
 save-as.label=Sa$ve As...
-save-url.label=Save to URL...
+save-url.label=Save $to URL...
 save-all.label=Save All Buffers
 send.label=Sen$d...
 print.label=Pr$int...
@@ -643,7 +645,7 @@ options.keys.name=Command
 options.keys.binding=Keyboard shortcut
 options.filters.label=File Filters
 options.filters.name=Name
-options.filters.re=Regular Expression
+options.filters.re=Glob Pattern
 
 # Color chooser, used by options.styles
 colorChooser.title=Pick a Color

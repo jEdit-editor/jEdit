@@ -16,6 +16,7 @@ JEDIT VERSION HISTORY
   C+ENTER 4 0 C+l: moves caret to line 40 (if goto line command is invoked
   with a repeat count, it goes to that line, otherwise it displays the
   goto line dialog box)
+- Globs are now used instead of regexps for file filters
 - Plugin updates:
   Console 1.7 included
 
@@ -26,6 +27,8 @@ JEDIT VERSION HISTORY
   that use option panes.
 - Option pane support removed from old API plugins. Now if you want
   to use option panes, you MUST rewrite for the new API.
+- New MiscUtilities.globToRE() method: plugins using globs should
+  use this method
 
 + Enhancements
 
@@ -44,6 +47,8 @@ JEDIT VERSION HISTORY
 - 'Spaces to Tabs' command didn't work with column selections
 - The server would throw a FileNotFoundException if the -noserver or
   -nosettings switch was used
+- Several file filters didn't work because REFileFilter matched on
+  path names, rather than file names
 
 * Version 2.1pre2
 

@@ -10,10 +10,7 @@ JEDIT TO DO
   - Buffers
   - The text area
 
-- Update screenshots for macros menu (also view registers, paste predef,
-  paste prev)
-
-- tab action is broken with rectangles
+- Slow scrolling
 
 * 2.2+ TODO:
 

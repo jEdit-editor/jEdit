@@ -773,18 +773,14 @@
    <guibutton>No</> option discards the unsaved changes with no further
    ado. If you decide you didn't want to close the buffer after all,
    <guibutton>Cancel</> cancels the close operation and
-   returns to the editor. If you close all open buffers, a new <quote>Untitled</>
-   buffer will be created.
+   returns to the editor.
   </para>
-  <indexterm><primary>old jEdit versions</></indexterm>
-   <sidebar>
-    <bridgehead renderas=sect3>jEdit 2.0 Users</>
-    <para>
-     In jEdit 2.0, the editor would exit if all buffers were closed.
-     Now, jEdit will create a blank <quote>Untitled</> file so you can
-     continue editing.
-    </para>
-   </sidebar>
+  <para>
+   <indexterm><primary>Close All Buffers command</></indexterm>
+   <guimenu>File</>&gt;<guimenuitem>Close All Buffers</>
+   (keyboard equivalent: <keycap>F2</>)
+   will close all currently open buffers.
+  </para>
   <figure><title>The message displayed if a file has unsaved changes</>
    <graphic scale=75 fileref=dialog-unsaved></>
   </figure>
@@ -1784,10 +1780,12 @@
     The <guimenu>Macros</> menu lists all known macros, in addition
     to commands for working with them. The
     <guimenu>Macros</> menu is automatically
-    refreshed when you update or create a macro file from within jEdit;
-    it can also be manually refreshed with the
-    <guimenu>Macros</>&gt;<guimenuitem>Rescan Macros</> command, if for
-    example you wrote a macro in another editor.
+    refreshed when you update or create a macro file from within jEdit.
+    Because macros are stored as ordinary files, they can be renamed,
+    deleted and so on with your operating system's file manager. If you do
+    change a macro from outside jEdit, the
+    <guimenu>Macros</>&gt;<guimenuitem>Rescan Macros</> command should be used
+    to update the macros menu with the changes.
    </para>
    <indexterm><primary>Play Last Macro command</></indexterm>
    <para>
@@ -1887,8 +1885,8 @@
    <para>
     <indexterm><primary>Word Count command</></indexterm>
     <indexterm><primary>File menu</></indexterm>
-    <guimenu>File</>&gt;<guimenuitem>Word Count</> (keyboard equivalent:
-    <keycap>F2</>) displays a dialog box with the number of characters,
+    <guimenu>File</>&gt;<guimenuitem>Word Count</>
+    displays a dialog box with the number of characters,
     words and lines in the current buffer. A word is a string of text
     delimited by spaces.
    </para>
@@ -2828,18 +2826,18 @@ proc-&gt;getThread("__gui")-&gt;sendPulse(P_WAKE_UP); */</screen>
   <sect2><title>The File Filters Tab</>
    <para>
     The <guibutton>File Filters</> tab allows you to change the file filters
-    displayed in the open file and save dialog boxes. They can be disabled
-    altogether as well.
+    displayed in the open file and save dialog boxes.
    </para>
    <para>
     Filters are added and removed in a rather peculiar fashion in this tab.
     Changing the last line in the list (which is always blank) will add
-    another blank line. Lines with blank names or regular expressions will
+    another blank line. Lines with empty names or globs will
     be ignored when the filters are being saved.
    </para>
    <para>
-    The regular expressions are case insensitive. For information about
-    regular expressions, see <xref linkend=regexps>.
+    The glob patterns are case insensitive. For information about
+    glob patterns, which are a simplified form of regular expressions,
+    see <xref linkend=globs>.
    </para>
    <figure><title>The File Filters tab of the Global Options dialog box</>
     <graphic scale=75 fileref=dialog-options-filters></>
@@ -3432,7 +3430,6 @@ implements OptionPane
   remainder of the file name after the hash will be the name of
   the marker to move the caret to.
  </para>
- <indexterm><primary>RMI registry</></indexterm>
  <indexterm><primary>command line</></indexterm>
  <indexterm><primary>command line switches</>
  <secondary>-version</></indexterm>
@@ -3554,15 +3551,9 @@ implements OptionPane
 <appendix id=regexps><title>Regular Expressions</>
  <indexterm><primary>regular expressions</></indexterm>
  <para>
-  (This appendix is a slightly reformatted version of the
-  <command>gnu.regexp</> documentation.)
- </para>
- <para>
+  jEdit uses regular expressions to implement inexact search and replace.
   A regular expression consists of a character string where some
   characters are given special meaning with regard to pattern matching.
-  Regular expressions have been in use from the early days of computing,
-  and provide a powerful and efficient way to parse, interpret and
-  search and replace text within an application.
  </para>
  <sect1 id=regexps-supported><title>Supported Syntax</>
   <para>
@@ -3698,6 +3689,28 @@ implements OptionPane
    </itemizedlist>
   </para>
  </sect1>
+</appendix>
+
+<appendix id=globs><title>Glob Patterns</>
+ <para>
+  jEdit uses glob patterns to implement file name filters in the Open and
+  Save As dialog boxes.
+  Glob patterns are similar to regular expressions, but have a much simpler
+  syntax. The following characters have special meaning within a glob
+  pattern:
+ </para>
+ <itemizedlist>
+  <listitem><para><command>?</> matches any one character</para></listitem>
+  <listitem><para><command>*</> matches any number of characters</para></listitem>
+  <listitem><para><command>{<replaceable>a</>,<replaceable>b</>,<replaceable>c</></>
+  matches any one of <replaceable>a</>, <replaceable>b</> or
+  <replaceable>c</></para></listitem>
+ </itemizedlist>
+ <para>
+  Character class expressions (<command>[abc]</>, etc) are supported in globs
+  and behave exactly like regular expression character classes; see
+  <xref linkend=regexps> for details.
+ </para>
 </appendix>
 
 <appendix id=jedit-history><title>History of jEdit</>

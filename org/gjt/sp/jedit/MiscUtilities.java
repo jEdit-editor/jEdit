@@ -173,6 +173,63 @@ loop:		for(int i = 0; i < str.length(); i++)
 	}
 
 	/**
+	 * Converts a Unix-style glob to a regular expression.
+	 * ? becomes ., * becomes .*, {aa,bb} becomes (aa|bb).
+	 * @param glob The glob pattern
+	 */
+	public static String globToRE(String glob)
+	{
+		StringBuffer buf = new StringBuffer();
+		boolean backslash = false;
+		boolean insideGroup = false;
+
+		for(int i = 0; i < glob.length(); i++)
+		{
+			char c = glob.charAt(i);
+			if(backslash)
+			{
+				buf.append('\\');
+				buf.append(c);
+				backslash = false;
+				continue;
+			}
+
+			switch(c)
+			{
+			case '\\':
+				backslash = true;
+				break;
+			case '?':
+				buf.append('.');
+				break;
+			case '.':
+				buf.append("\\.");
+			case '*':
+				buf.append(".*");
+				break;
+			case '{':
+				buf.append('(');
+				insideGroup = true;
+				break;
+			case ',':
+				if(insideGroup)
+					buf.append('|');
+				else
+					buf.append(',');
+				break;
+			case '}':
+				buf.append(')');
+				insideGroup = false;
+				break;
+			default:
+				buf.append(c);
+			}
+		}
+
+		return buf.toString();
+	}
+
+	/**
 	 * Converts an internal version number (build) into a
 	 * `human-readable' form.
 	 * @param build The build
@@ -214,6 +271,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  1999/10/07 04:57:13  sp
+ * Images updates, globs implemented, file filter bug fix, close all command
+ *
  * Revision 1.16  1999/09/30 12:21:04  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *

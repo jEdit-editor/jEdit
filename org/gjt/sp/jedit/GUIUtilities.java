@@ -698,7 +698,8 @@ public class GUIUtilities
 				try
 				{
 					chooser.addChoosableFileFilter(new REFileFilter(name,
-						jEdit.getProperty("filefilter." + i + ".re")));
+						MiscUtilities.globToRE(jEdit.getProperty(
+						"filefilter." + i + ".re"))));
 				}
 				catch(REException re)
 				{
@@ -729,6 +730,9 @@ public class GUIUtilities
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.32  1999/10/07 04:57:13  sp
+ * Images updates, globs implemented, file filter bug fix, close all command
+ *
  * Revision 1.31  1999/10/05 10:55:29  sp
  * File dialogs open faster, and experimental keyboard macros
  *

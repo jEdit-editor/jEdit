@@ -651,6 +651,27 @@ public class jEdit
 	}
 
 	/**
+	 * Closes all open buffers.
+	 */
+	public static void closeAllBuffers(View view)
+	{
+		// Close all buffers
+		Buffer buffer = buffersFirst;
+		while(buffer != null)
+		{
+			if(!_closeBuffer(view,buffer))
+				return;
+			buffer.getAutosaveFile().delete();
+			buffer = buffer.next;
+		}
+
+		// Create a new untitled file
+		buffersFirst = buffersLast = null;
+		bufferCount = 0;
+		newFile(view);
+	}
+
+	/**
 	 * Returns the buffer with the specified path name.
 	 * @param path The path name
 	 */
@@ -852,10 +873,6 @@ public class jEdit
 	 */
 	public static void exit(View view)
 	{
-		// For RMI's sake
-		if(view == null)
-			view = viewsFirst;
-
 		// Save the `desktop'
 		if("on".equals(getProperty("saveDesktop")))
 		{
@@ -1165,6 +1182,7 @@ public class jEdit
 		addAction(new org.gjt.sp.jedit.actions.box_comment());
 		addAction(new org.gjt.sp.jedit.actions.buffer_options());
 		addAction(new org.gjt.sp.jedit.actions.clear_marker());
+		addAction(new org.gjt.sp.jedit.actions.close_all());
 		addAction(new org.gjt.sp.jedit.actions.close_file());
 		addAction(new org.gjt.sp.jedit.actions.close_view());
 		addAction(new org.gjt.sp.jedit.actions.copy());
@@ -1614,6 +1632,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.135  1999/10/07 04:57:13  sp
+ * Images updates, globs implemented, file filter bug fix, close all command
+ *
  * Revision 1.134  1999/10/06 08:39:46  sp
  * Fixes to repeating and macro features
  *

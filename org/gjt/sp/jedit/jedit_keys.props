@@ -39,7 +39,7 @@ repeat.shortcut=C+ENTER
 
 # Function keys
 help.shortcut=F1
-word-count.shortcut=F2
+close-all.shortcut=F2
 save-all.shortcut=F3
 send.shortcut=F4
 paste-previous.shortcut=F5

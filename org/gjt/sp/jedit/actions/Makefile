@@ -10,6 +10,7 @@ classes=org/gjt/sp/jedit/actions/about.class \
 	org/gjt/sp/jedit/actions/box_comment.class \
 	org/gjt/sp/jedit/actions/buffer_options.class \
 	org/gjt/sp/jedit/actions/clear_marker.class \
+	org/gjt/sp/jedit/actions/close_all.class \
 	org/gjt/sp/jedit/actions/close_file.class \
 	org/gjt/sp/jedit/actions/close_view.class \
 	org/gjt/sp/jedit/actions/copy.class \

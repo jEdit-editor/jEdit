@@ -40,7 +40,7 @@ public class REFileFilter extends FileFilter
 
 	public boolean accept(File file)
 	{
-		return file.isDirectory() || re.isMatch(file.getPath());
+		return file.isDirectory() || re.isMatch(file.getName());
 	}
 
 	public String getDescription()
@@ -56,6 +56,9 @@ public class REFileFilter extends FileFilter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.2  1999/10/07 04:57:13  sp
+ * Images updates, globs implemented, file filter bug fix, close all command
+ *
  * Revision 1.1  1999/10/03 04:13:25  sp
  * Forgot to add some files
  *
