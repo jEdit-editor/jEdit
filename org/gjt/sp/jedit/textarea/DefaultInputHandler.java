@@ -281,7 +281,7 @@ public class DefaultInputHandler implements InputHandler
 		 * when it is first invoked, its action command is null,
 		 * and then input is received from the keyboard.
 		 */
-		if(recorder != null && !(listener instanceof InputHandler.NonRecordable))
+		if(recorder != null)
 		{
 			int repeatCount = getRepeatCount();
 			if(repeatCount != 1)
@@ -289,7 +289,9 @@ public class DefaultInputHandler implements InputHandler
 				// XXX hardcoded
 				recorder.actionPerformed(REPEAT,String.valueOf(repeatCount));
 			}
-			recorder.actionPerformed(listener,actionCommand);
+
+			if(!(listener instanceof InputHandler.NonRecordable))
+				recorder.actionPerformed(listener,actionCommand);
 		}
 
 		ActionEvent evt = new ActionEvent(source,
@@ -308,7 +310,7 @@ public class DefaultInputHandler implements InputHandler
 
 		// If repeat was true originally, clear it
 		// Otherwise it might have been set by the action, etc
-		if(oldRepeat = true)
+		if(oldRepeat)
 		{
 			repeat = false;
 			repeatCount = 0;
@@ -1112,6 +1114,9 @@ public class DefaultInputHandler implements InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.10  1999/10/06 08:39:46  sp
+ * Fixes to repeating and macro features
+ *
  * Revision 1.9  1999/10/05 10:55:29  sp
  * File dialogs open faster, and experimental keyboard macros
  *

@@ -123,10 +123,14 @@ public class jEdit
 			}
 		}
 
-		String userDir = System.getProperty("user.dir");
-		portFile = settingsDirectory + File.separator + portFile;
+		if(settingsDirectory != null && portFile != null)
+			portFile = settingsDirectory + File.separator + portFile;
+		else
+			portFile = null;
 
 		// Connect to server
+		String userDir = System.getProperty("user.dir");
+
 		if(portFile != null && new File(portFile).exists())
 		{
 			int port, key;
@@ -1610,6 +1614,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.134  1999/10/06 08:39:46  sp
+ * Fixes to repeating and macro features
+ *
  * Revision 1.133  1999/10/05 10:55:29  sp
  * File dialogs open faster, and experimental keyboard macros
  *

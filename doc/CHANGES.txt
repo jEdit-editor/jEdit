@@ -42,6 +42,8 @@ JEDIT VERSION HISTORY
 - The key binding editor didn't work for built in actions
 - Help contents showed '{1}' for the files in the 'Miscellaenous' section
 - 'Spaces to Tabs' command didn't work with column selections
+- The server would throw a FileNotFoundException if the -noserver or
+  -nosettings switch was used
 
 * Version 2.1pre2
 

@@ -94,9 +94,73 @@
    2.0. A complete list can be found in the file named
    <filename>CHANGES.txt</>, which is part of the jEdit distribution.
   </para>
-  <para>
-   XXX - insert NEWS.txt here when done
+  <itemizedlist>
+  <listitem><para>
+   Keyboard macros. Complex actions can be recorded and played back as
+   many times as necessary. Macros are saved across editing sessions.
+  </para></listitem>
+  <listitem><para>
+   Rectangular selection. Columns of text can now be selected and
+   operated upon.
+  </para></listitem>
+  <listitem><para>
+   Registers for storing strings and positions inside a buffer. It's like
+   having multiple clipboards and anchors.
+  </para></listitem>
+  <listitem><para>
+   Command repeating. Keystrokes and macros can be repeated multiple
+   times automatically.
+  </para></listitem>
+  <listitem><para>
+   Python, XML and IDL syntax highlighting.
+  </para></listitem>
+  <listitem><para>
+   Filename filters in 'Open' and 'Save As' dialog boxes.
+  </para></listitem>
+  <listitem><para>
+   RMI server removed, replaced by simpler socket-based edit server. RMI
+   had too many quirks and required the user to run the 'rmiregistry'
+   daemon.
+  </para></listitem>
+  <listitem><para>
+   New plugin API brings improvements to option panes and Plugins menu
+   creation.
   </para>
+  </listitem>
+   <listitem><para>
+    Bundled plugins. The following plugins are now included with jEdit:
+   </para><itemizedlist>
+   <listitem><para>
+   Console by Slava Pestov
+   </para></listitem>
+   <listitem><para>
+   JBrowse by George Latkiewicz
+   </para></listitem>
+   <listitem><para>
+   QuickFile by Jason Ginchereau
+   </para></listitem>
+   <listitem><para>
+   WWWBrowser by Slava Pestov
+   </para></listitem>
+  </itemizedlist></listitem>
+  <listitem><para>
+   Several areas of jEdit have been optimized for speed:
+  </para><itemizedlist>
+   <listitem><para>
+    C, HTML syntax highlighting is more efficent
+   </para></listitem>
+   <listitem><para>
+    File selection dialog boxes should open faster
+   </para></listitem>
+   <listitem><para>
+    Text area should be more responsive when scrolling and entering text
+   </para></listitem>
+  </itemizedlist></listitem>
+  <listitem><para>
+   Documentation updates. The plugin development section covers much more
+   detail. The documentation is now available in PDF format.
+  </para></listitem>
+  </itemizedlist>
  </sect1>
  <sect1 id=features><title>jEdit Features</>
   <para>
@@ -116,6 +180,10 @@
    </para></listitem>
    <listitem><para>
     Bracket matching and highlighting
+   </para></listitem>
+   <listitem><para>
+    Keyboard macros and repeating commands for automating complex and
+    frequently performed operations
    </para></listitem>
    <listitem><para>
     Any number of <quote>registers</> can be used to store text strings and
@@ -140,14 +208,6 @@
    </para></listitem>
    <listitem><para>
     <quote>Markers</> can be used to rapidly move around long documents
-   </para></listitem>
-   <listitem><para>
-    Sending of files via E-mail
-   </para></listitem>
-   <listitem><para>
-    Transparent editing of GZipped files - useful for browsing Linux HOWTO
-    documents, which are usually GZipped, and for editing PostScript,
-    which again is often GZipped
    </para></listitem>
    <listitem><para>
     Comprehensive plugin system

@@ -384,7 +384,7 @@ public class JEditTextArea extends JComponent
 				newFirstLine = 0;
 		}
 
-		int x = offsetToX(line,offset);
+		int x = _offsetToX(line,offset);
 		int width = painter.getFontMetrics().charWidth('w');
 
 		if(x < 0)
@@ -425,11 +425,26 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Converts an offset in a line into an x co-ordinate.
+	 * Converts an offset in a line into an x co-ordinate. This is a
+	 * slow version that can be used any time.
 	 * @param line The line
 	 * @param offset The offset, from the start of the line
 	 */
-	public int offsetToX(int line, int offset)
+	public final int offsetToX(int line, int offset)
+	{
+		// don't use cached tokens
+		painter.currentLineTokens = null;
+		return _offsetToX(line,offset);
+	}
+
+	/**
+	 * Converts an offset in a line into an x co-ordinate. This is a
+	 * fast version that should only be used if no changes were made
+	 * to the text since the last repaint.
+	 * @param line The line
+	 * @param offset The offset, from the start of the line
+	 */
+	public int _offsetToX(int line, int offset)
 	{
 		TokenMarker tokenMarker = getTokenMarker();
 
@@ -2011,6 +2026,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.21  1999/10/06 08:39:46  sp
+ * Fixes to repeating and macro features
+ *
  * Revision 1.20  1999/10/04 06:13:52  sp
  * Repeat counts now supported
  *

@@ -535,10 +535,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(textArea.isSelectionRectangular())
 			{
 				int lineLen = textArea.getLineLength(line);
-				x1 = textArea.offsetToX(line,Math.min(lineLen,
+				x1 = textArea._offsetToX(line,Math.min(lineLen,
 					selectionStart - textArea.getLineStartOffset(
 					selectionStartLine)));
-				x2 = textArea.offsetToX(line,Math.min(lineLen,
+				x2 = textArea._offsetToX(line,Math.min(lineLen,
 					selectionEnd - textArea.getLineStartOffset(
 					selectionEndLine)));
 				if(x1 == x2)
@@ -546,21 +546,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 			else if(selectionStartLine == selectionEndLine)
 			{
-				x1 = textArea.offsetToX(line,
+				x1 = textArea._offsetToX(line,
 					selectionStart - lineStart);
-				x2 = textArea.offsetToX(line,
+				x2 = textArea._offsetToX(line,
 					selectionEnd - lineStart);
 			}
 			else if(line == selectionStartLine)
 			{
-				x1 = textArea.offsetToX(line,
+				x1 = textArea._offsetToX(line,
 					selectionStart - lineStart);
 				x2 = getWidth();
 			}
 			else if(line == selectionEndLine)
 			{
 				x1 = 0;
-				x2 = textArea.offsetToX(line,
+				x2 = textArea._offsetToX(line,
 					selectionEnd - lineStart);
 			}
 			else
@@ -582,7 +582,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(position == -1)
 			return;
 		y += fm.getLeading() + fm.getMaxDescent();
-		int x = textArea.offsetToX(line,position);
+		int x = textArea._offsetToX(line,position);
 		gfx.setColor(bracketHighlightColor);
 		// Hack!!! Since there is no fast way to get the character
 		// from the bracket matching routine, we use ( since all
@@ -597,7 +597,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			int offset = textArea.getCaretPosition() 
 				- textArea.getLineStartOffset(line);
-			int caretX = textArea.offsetToX(line,offset);
+			int caretX = textArea._offsetToX(line,offset);
 			int caretWidth = ((blockCaret ||
 				textArea.isOverwriteEnabled()) ?
 				fm.charWidth('w') : 1);
@@ -622,6 +622,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.16  1999/10/06 08:39:46  sp
+ * Fixes to repeating and macro features
+ *
  * Revision 1.15  1999/09/30 12:21:05  sp
  * No net access for a month... so here's one big jEdit 2.1pre1
  *
