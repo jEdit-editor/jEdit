@@ -152,8 +152,8 @@
    When opening files from the command line, a line number or marker to
    position the caret on can be specified like so:
   </para>
-  <screen><prompt>$ </prompt><userinput>jedit MyApplet.java +line:10</userinput><!--
-  --><prompt>$ </prompt><userinput>jedit thesis.tex +marker:chapter5</userinput></screen>
+  <screen><prompt>$ </prompt><userinput>jedit MyApplet.java +line:10</userinput>
+<prompt>$ </prompt><userinput>jedit thesis.tex +marker:c</userinput></screen>
   <para>
    A number of options can also be specified to control several obscure features.
    They are listed in the following table.
