@@ -44,22 +44,23 @@ public class CompleteWord extends JWindow
 		words.setSelectedIndex(0);
 		words.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JScrollPane scroller = new JScrollPane(words);
+		// stupid scrollbar policy is an attempt to work around
+		// bugs people have been seeing with IBM's JDK -- 7 Sep 2000
+		JScrollPane scroller = new JScrollPane(words,
+			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		getContentPane().add(scroller, BorderLayout.CENTER);
 
-		// possible workaround for a bug some people have been seeing?
-		Dimension dim = words.getPreferredSize();
-		dim.width += scroller.getVerticalScrollBar().getPreferredSize()
-			.width;
-		words.setPreferredSize(dim);
 		GUIUtilities.requestFocus(this,words);
 
 		pack();
 		setLocation(location);
 		show();
 
-		view.setKeyEventInterceptor(new KeyHandler());
+		KeyHandler keyHandler = new KeyHandler();
+		addKeyListener(keyHandler);
+		view.setKeyEventInterceptor(keyHandler);
 	}
 
 	public void dispose()
@@ -95,11 +96,14 @@ public class CompleteWord extends JWindow
 				evt.consume();
 				break;
 			case KeyEvent.VK_UP:
+				if(getFocusOwner() == words)
+					return;
+
 				int selected = words.getSelectedIndex();
 				if(selected == 0)
-					selected = words.getModel().getSize() - 1;
-				else
-					selected = selected - 1;
+					return;
+
+				selected = selected - 1;
 	
 				words.setSelectedIndex(selected);
 				words.ensureIndexIsVisible(selected);
@@ -107,11 +111,14 @@ public class CompleteWord extends JWindow
 				evt.consume();
 				break;
 			case KeyEvent.VK_DOWN:
+				if(getFocusOwner() == words)
+					return;
+
 				selected = words.getSelectedIndex();
 				if(selected == words.getModel().getSize() - 1)
-					selected = 0;
-				else
-					selected = selected - 1;
+					return;
+
+				selected = selected + 1;
 
 				words.setSelectedIndex(selected);
 				words.ensureIndexIsVisible(selected);
@@ -127,14 +134,14 @@ public class CompleteWord extends JWindow
 
 		public void keyTyped(KeyEvent evt)
 		{
-			char ch = evt.getKeyChar();
-			if(ch == KeyEvent.CHAR_UNDEFINED ||
-				ch < 0x20 || ch == 0x7f
-				|| (evt.getModifiers() & KeyEvent.ALT_MASK) != 0)
+			evt = KeyEventWorkaround.processKeyEvent(evt);
+			if(evt == null)
 				return;
-
-			dispose();
-			view.processKeyEvent(evt);
+			else
+			{
+				dispose();
+				view.processKeyEvent(evt);
+			}
 		}
 	}
 

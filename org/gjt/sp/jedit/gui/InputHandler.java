@@ -116,6 +116,7 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public void setRepeatCount(int repeatCount)
 	{
+		repeat = true;
 		this.repeatCount = repeatCount;
 	}
 
@@ -281,6 +282,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/09/07 04:46:08  sp
+ * bug fixes
+ *
  * Revision 1.11  2000/09/01 11:31:01  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

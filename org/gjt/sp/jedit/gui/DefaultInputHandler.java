@@ -135,12 +135,6 @@ public class DefaultInputHandler extends InputHandler
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 
-		if(keyCode == KeyEvent.VK_CONTROL ||
-			keyCode == KeyEvent.VK_SHIFT ||
-			keyCode == KeyEvent.VK_ALT ||
-			keyCode == KeyEvent.VK_META)
-			return;
-
 		if((modifiers & ~KeyEvent.SHIFT_MASK) != 0
 			|| evt.isActionKey()
 			|| keyCode == KeyEvent.VK_BACK_SPACE
@@ -196,38 +190,28 @@ public class DefaultInputHandler extends InputHandler
 	{
 		int modifiers = evt.getModifiers();
 		char c = evt.getKeyChar();
-		if(c != KeyEvent.CHAR_UNDEFINED &&
-			(modifiers & KeyEvent.ALT_MASK) == 0)
+
+		KeyStroke keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c));
+		Object o = currentBindings.get(keyStroke);
+
+		if(o instanceof Hashtable)
 		{
-			if(c >= 0x20 && c != 0x7f)
-			{
-				KeyStroke keyStroke = KeyStroke.getKeyStroke(
-					Character.toUpperCase(c));
-				Object o = currentBindings.get(keyStroke);
-
-				if(o instanceof Hashtable)
-				{
-					currentBindings = (Hashtable)o;
-					evt.consume();
-					return;
-				}
-				else if(o instanceof EditAction)
-				{
-					currentBindings = bindings;
-					executeAction((EditAction)o,
-						evt.getSource(),
-						String.valueOf(c));
-					evt.consume();
-					return;
-				}
-
-				currentBindings = bindings;
-
-				executeAction(inputAction,evt.getSource(),
-					String.valueOf(evt.getKeyChar()));
-				evt.consume();
-			}
+			currentBindings = (Hashtable)o;
+			return;
 		}
+		else if(o instanceof EditAction)
+		{
+			currentBindings = bindings;
+			executeAction((EditAction)o,
+				evt.getSource(),
+				String.valueOf(c));
+			return;
+		}
+
+		currentBindings = bindings;
+
+		executeAction(inputAction,evt.getSource(),String.valueOf(
+			evt.getKeyChar()));
 	}
 
 	/**
@@ -311,6 +295,9 @@ public class DefaultInputHandler extends InputHandler
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/09/07 04:46:08  sp
+ * bug fixes
+ *
  * Revision 1.3  2000/09/01 11:31:00  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

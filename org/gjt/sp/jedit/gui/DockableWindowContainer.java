@@ -44,7 +44,6 @@ public interface DockableWindowContainer
 	 */
 	public class TabbedPane extends JTabbedPane implements DockableWindowContainer
 	{
-
 		String position;
 		int dimension;
 		boolean collapsed;
@@ -57,10 +56,10 @@ public interface DockableWindowContainer
 
 			this.position = position;
 
-			int top = position.equals(DockableWindowManager.BOTTOM) ? 3 : 0;
-			int left = position.equals(DockableWindowManager.RIGHT) ? 3 : 0;
-			int bottom = position.equals(DockableWindowManager.TOP) ? 3 : 0;
-			int right = position.equals(DockableWindowManager.LEFT) ? 3 : 0;
+			int top = position.equals(DockableWindowManager.BOTTOM) ? 5 : 0;
+			int left = position.equals(DockableWindowManager.RIGHT) ? 5 : 0;
+			int bottom = position.equals(DockableWindowManager.TOP) ? 5 : 0;
+			int right = position.equals(DockableWindowManager.LEFT) ? 5 : 0;
 			setBorder(new MatteBorder(top,left,bottom,right,
 				UIManager.getColor("Label.foreground")));
 
@@ -73,6 +72,9 @@ public interface DockableWindowContainer
 			{
 				dimension = -1;
 			}
+
+			collapsed = jEdit.getBooleanProperty("view.dock."
+				+ position + ".collapsed");
 
 			MouseHandler mouseHandler = new MouseHandler();
 			addMouseListener(mouseHandler);
@@ -88,6 +90,8 @@ public interface DockableWindowContainer
 
 			jEdit.setProperty("view.dock." + position + ".dimension",
 				String.valueOf(dimension));
+			jEdit.setBooleanProperty("view.dock." + position
+				+ ".collapsed",collapsed);
 		}
 
 		public void propertiesChanged()
@@ -124,10 +128,10 @@ public interface DockableWindowContainer
 			{
 				if(position.equals(DockableWindowManager.LEFT)
 					|| position.equals(DockableWindowManager.RIGHT))
-					prefSize.width = 3;
+					prefSize.width = 5;
 				else if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
-					prefSize.height = 3;
+					prefSize.height = 5;
 			}
 			else
 			{
@@ -164,6 +168,11 @@ public interface DockableWindowContainer
 		public void showDockableWindow(DockableWindow win)
 		{
 			/* tabbedPane. */setSelectedComponent(win.getComponent());
+			if(collapsed)
+			{
+				collapsed = false;
+				revalidate();
+			}
 		}
 
 		class MouseHandler extends MouseAdapter implements MouseMotionListener
@@ -242,7 +251,7 @@ public interface DockableWindowContainer
 				else if(position.equals(DockableWindowManager.RIGHT))
 					dimension = getWidth() - evt.getX();
 
-				dimension = Math.max(3,dimension);
+				dimension = Math.max(5,dimension);
 
 				revalidate();
 			}
@@ -311,6 +320,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.8  2000/09/07 04:46:08  sp
+ * bug fixes
+ *
  * Revision 1.7  2000/09/06 04:39:47  sp
  * bug fixes
  *

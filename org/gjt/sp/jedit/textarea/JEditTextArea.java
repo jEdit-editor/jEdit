@@ -28,7 +28,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.Enumeration;
 import java.util.Vector;
-import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditAction;
@@ -1418,6 +1418,10 @@ public class JEditTextArea extends JComponent
 
 	protected void processKeyEvent(KeyEvent evt)
 	{
+		evt = KeyEventWorkaround.processKeyEvent(evt);
+		if(evt == null)
+			return;
+
 		View view = EditAction.getView(evt);
 
 		// Ignore
@@ -2177,6 +2181,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.83  2000/09/07 04:46:08  sp
+ * bug fixes
+ *
  * Revision 1.82  2000/09/06 04:39:47  sp
  * bug fixes
  *

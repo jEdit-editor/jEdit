@@ -7,17 +7,24 @@ JEDIT 2.6 VERSION HISTORY
 - While the complete word popup is visible, pressing any key except that
   handled by the popup (Up, Down, Enter, Escape) will hide the popup and
   pass the key to the view
-- Complete Word popup now scrolls the list, and the selection 'wraps'
-  (eg, pressing UP while the first word is selected will select the last
-  word)
 - Shortcut changes:
   CS+DELETE becomes S+DELETE
   CS+BACKSPACE becomes S+BACKSPACE
+  CA+[ becomes C+e [
+  CA+] becomes C+e ]
+  C+e C+x becomes C+/
+  F7 becomes C+,
+  F8 becomes C+.
+  'Gutter Expanded' is now bound to C+'
 - jEdit no longer prints exceptions to the console if errors occur with
   the edit server. This is to avoid confusing newbies. They are still
   printed to the activity log.
 - When windows are docked into a view, double-clicking on a separator bar
   will collapse/expand it
+- jEdit now attempts to work around bugs in the key event handling of
+  various Java implementations
+- Various workarounds to make complete-word and command line popups work
+  better
 
 + Bug Fixes
 

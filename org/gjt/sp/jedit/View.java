@@ -425,9 +425,6 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void processKeyEvent(KeyEvent evt)
 	{
-		if(evt.isConsumed())
-			return;
-
 		// JTextComponents don't consume events...
 		if(getFocusOwner() instanceof JTextComponent)
 		{
@@ -436,6 +433,13 @@ public class View extends JFrame implements EBComponent
 			if(keymap.getAction(KeyStroke.getKeyStrokeForEvent(evt)) != null)
 				return;
 		}
+
+		if(evt.isConsumed())
+			return;
+
+		evt = KeyEventWorkaround.processKeyEvent(evt);
+		if(evt == null)
+			return;
 
 		switch(evt.getID())
 		{
@@ -1043,6 +1047,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.197  2000/09/07 04:46:08  sp
+ * bug fixes
+ *
  * Revision 1.196  2000/09/03 03:16:53  sp
  * Search bar integrated with command line, enhancements throughout
  *

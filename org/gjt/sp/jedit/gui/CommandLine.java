@@ -86,7 +86,10 @@ public class CommandLine extends JPanel
 		if(this.state == state)
 			return;
 
+		System.err.println("Changing state to " + state);
 		this.state = state;
+
+		reset();
 
 		if(state == NULL_STATE)
 		{
@@ -141,8 +144,6 @@ public class CommandLine extends JPanel
 
 			textField.requestFocus();
 		}
-
-		reset();
 	}
 
 	public JTextField getTextField()
@@ -210,11 +211,12 @@ public class CommandLine extends JPanel
 		hideCompletionWindow();
 		remove(searchSettings);
 		savedRepeatCount = view.getInputHandler().getRepeatCount();
+		System.out.println("Reset: " + savedRepeatCount);
 	}
 
 	private void setRepeatCount()
 	{
-		System.err.println(savedRepeatCount);
+		System.err.println("Repeat count is " + savedRepeatCount);
 		view.getInputHandler().setRepeatCount(savedRepeatCount);
 		savedRepeatCount = 1;
 	}
@@ -425,16 +427,16 @@ public class CommandLine extends JPanel
 			if(state == NULL_STATE)
 				return;
 
+			evt = KeyEventWorkaround.processKeyEvent(evt);
+			if(evt == null)
+				return;
+
 			int modifiers = evt.getModifiers();
 
 			switch(evt.getID())
 			{
 			case KeyEvent.KEY_TYPED:
 				char ch = evt.getKeyChar();
-				if(ch == KeyEvent.CHAR_UNDEFINED ||
-					ch < 0x20 || ch == 0x7f
-					|| (modifiers & KeyEvent.ALT_MASK) != 0)
-					return;
 
 				if(state == TOPLEVEL_STATE)
 				{
@@ -453,7 +455,7 @@ public class CommandLine extends JPanel
 					{
 						setRepeatCount();
 						setState(NULL_STATE);
-						view.processKeyEvent(evt);
+						view.getInputHandler().keyTyped(evt);
 					}
 				}
 				else if(state == PROMPT_ONE_CHAR_STATE)
@@ -469,13 +471,8 @@ public class CommandLine extends JPanel
 			case KeyEvent.KEY_PRESSED:
 				int keyCode = evt.getKeyCode();
 
-				if(keyCode == KeyEvent.VK_CONTROL ||
-					keyCode == KeyEvent.VK_SHIFT ||
-					keyCode == KeyEvent.VK_ALT ||
-					keyCode == KeyEvent.VK_META)
-					return;
-
-				if((modifiers & ~KeyEvent.SHIFT_MASK) == 0
+				if((modifiers & (~ (InputEvent.SHIFT_MASK
+					| KeyEventWorkaround.ALT_GRAPH_MASK))) == 0
 					&& !evt.isActionKey()
 					&& keyCode != KeyEvent.VK_BACK_SPACE
 					&& keyCode != KeyEvent.VK_DELETE
@@ -483,7 +480,7 @@ public class CommandLine extends JPanel
 					&& keyCode != KeyEvent.VK_TAB
 					&& keyCode != KeyEvent.VK_ESCAPE)
 					return;
-		
+
 				if(modifiers == 0 && keyCode == KeyEvent.VK_ESCAPE)
 				{
 					setState(NULL_STATE);
@@ -552,25 +549,16 @@ public class CommandLine extends JPanel
 				}
 				else if(state == REPEAT_STATE)
 				{
-					// set state to NULL if the key was
-					// handled
 					setRepeatCount();
-					view.getEditPane().focusOnTextArea();
+					setState(NULL_STATE);
+					System.err.println(evt);
 					view.getInputHandler().keyPressed(evt);
-					// ... but if the focus is returned
-					// to the command field by this key
-					// (eg, if the user presses C+ENTER
-					// 10 C+ENTER) we *do not* change
-					// state to NULL_STATE
-					if(!textField.hasFocus() && evt.isConsumed())
-						setState(NULL_STATE);
 				}
 			}
 		}
 
 		void handleDigit(KeyEvent evt)
 		{
-			InputHandler input = view.getInputHandler();
 			savedRepeatCount *= 10;
 			savedRepeatCount += (evt.getKeyChar() - '0');
 
@@ -694,7 +682,10 @@ public class CommandLine extends JPanel
 
 			public void focusLost(FocusEvent evt)
 			{
-				if(state == TOPLEVEL_STATE)
+				if(state == TOPLEVEL_STATE && window == null)
+					setState(NULL_STATE);
+				else if(state == INCREMENTAL_SEARCH_STATE
+					|| state == QUICK_SEARCH_STATE)
 					setState(NULL_STATE);
 			}
 		}
@@ -710,8 +701,15 @@ public class CommandLine extends JPanel
 
 			list = new JList();
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			list.addKeyListener(new KeyHandler());
 			list.addMouseListener(new MouseHandler());
-			getContentPane().add(BorderLayout.CENTER,new JScrollPane(list));
+
+			// stupid scrollbar policy is an attempt to work around
+			// bugs people have been seeing with IBM's JDK -- 7 Sep 2000
+			JScrollPane scroller = new JScrollPane(list,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			getContentPane().add(BorderLayout.CENTER,scroller);
 
 			setListData(items);
 
@@ -730,6 +728,22 @@ public class CommandLine extends JPanel
 			CompletionWindow.this.setLocation(loc);
 		}
 
+		class KeyHandler extends KeyAdapter
+		{
+			public void keyPressed(KeyEvent evt)
+			{
+				if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+				{
+					hideCompletionWindow();
+					textField.requestFocus();
+				}
+				else if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+				{
+					executeAction((String)list.getSelectedValue());
+				}
+			}
+		}
+
 		class MouseHandler extends MouseAdapter
 		{
 			public void mouseClicked(MouseEvent evt)
@@ -743,6 +757,9 @@ public class CommandLine extends JPanel
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/09/07 04:46:08  sp
+ * bug fixes
+ *
  * Revision 1.3  2000/09/06 04:39:47  sp
  * bug fixes
  *
