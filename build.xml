@@ -184,9 +184,6 @@
 			sourcepath="."
 			classpath="."
 			destdir="doc/api"
-			author="true"
-			version="true"
-			windowtitle="jEdit API"
 			doctitle="jEdit API" />
 
 		<javadoc classpath="."
