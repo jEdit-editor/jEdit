@@ -5,19 +5,27 @@ JEDIT 3.2 VERSION HISTORY
 + New Features
 
 - Occam syntax highlighting (Richard Beton)
+- MIPS R2000 assembly syntax highlighting (Marc Rummel)
 - The icons in the file system browser can be toggled on and off
 - A dialog box is now displayed after a HyperSearch has been performed,
   showing the number of results found
 - 'Toggle Line Comment' macro (John Gellene)
 - Swing text fields and text areas now have the same font as the text
   area
-- MIPS R2000 assembly syntax highlighting (Marc Rummel)
-- gnu.regexp 1.1.3 is now included. Positive lookaheads (?=...) and
-  negative lookaheads (?!=...) are now supported
+- gnu.regexp 1.1.3 bundled. Positive lookaheads (?=...) and negative
+  lookaheads (?!=...) are now supported
+- Non-working 'narrow' indicator in status has been replaced with a
+  working 'fold' indicator that is on if portions of the buffer are
+  hidden from view
+- Experimental option to use jEdit text area colors in all text
+  components. It doesn't work too well yet; see the to do list for a
+  list of known issues
 
 + Enhancements
 
-- You can now choose if you want to download plugin source, or only binaries
+- You can now choose if you want to download plugin source, or only
+  binaries
+- NEWS.txt written
 
 + Bug Fixes
 
@@ -29,6 +37,7 @@ JEDIT 3.2 VERSION HISTORY
   had a leading indent and an initial fold level was specified
 - Possible fix for Tab key and C+i not working with some Java versions
   in 'grab key' dialog box used by shortcut option panes
+- Double-clicks to select bracketed blocks now work better
 
 * Version 3.2pre3
 

@@ -1,8 +1,8 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <appendix id="shortcuts"><title>Keyboard Shortcuts</title>
- <!-- TODO: C+r C+l, C+e v not documented here -->
+ <!-- TODO: C+e v not documented here -->
  <bridgehead renderas="sect1">Files</bridgehead>
   <para>
    For details, see <xref linkend="buffers" />,
@@ -97,7 +97,8 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>1</keycap>; <keycap>2</keycap>; <keycap>3</keycap>; <keycap>4</keycap></>
+      <keycap>1</keycap>; <keycap>2</keycap>; <keycap>3</keycap>;
+      <keycap>4</keycap></entry>
       <entry>Collapse/expand top; bottom; left; right docking area.</entry>
      </row>
     </tbody>
@@ -114,8 +115,8 @@
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-      <keycap><replaceable>number</keycap></keycap>
-      <keycap><replaceable>command</keycap></keycap></>
+      <keycap><replaceable>number</replaceable></keycap>
+      <keycap><replaceable>command</replaceable></keycap></entry>
       <entry>Repeat the command (it can be a keystroke, menu item selection or
       tool bar click) the specified number of times.
       </entry>
@@ -140,7 +141,7 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap>
-      <keycap><replaceable>Arrow</keycap></keycap></keycombo></>
+      <keycap><replaceable>Arrow</replaceable></keycap></keycombo></entry>
       <entry>Move caret one word or paragraph.</entry>
      </row>
      <row>
@@ -194,12 +195,12 @@
     <tbody>
      <row>
       <entry><keycombo><keycap>Shift</keycap>
-      <keycap><replaceable>Arrow</keycap></keycap></keycombo></>
+      <keycap><replaceable>Arrow</replaceable></keycap></keycombo></entry>
       <entry>Extend selection by one character or line.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap> <keycap>Shift</keycap>
-      <keycap><replaceable>Arrow</keycap></keycap></keycombo></>
+      <keycap><replaceable>Arrow</replaceable></keycap></keycombo></entry>
       <entry>Extend selection by one word or paragraph.</entry>
      </row>
      <row>
@@ -313,7 +314,7 @@
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo>;
       <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo> <keycap>D</keycap>
-      </>
+      </entry>
       <entry>Delete line; paragraph.</entry>
      </row>
      <row>
@@ -435,7 +436,7 @@
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo></entry>
       <entry>Add marker with no shortcut.
-      Use the <guimenu>Markers</> menu to return to markers added
+      Use the <guimenu>Markers</>guimenu menu to return to markers added
       in this manner.</entry>
      </row>
      <row>

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=yes: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <chapter id="basics"><title>Basic Concepts</title>
  <sect1 id="menu-items"><title>Conventions</title>
@@ -31,7 +31,7 @@
   </para>
   <sidebar><title>MacOS</title>
    <para>
-    When running on MacOS, the primary modifier key is <keycap>Command</>,
+    When running on MacOS, the primary modifier key is <keycap>Command</keycap>,
     not <keycap>Control</keycap>. If you are a Mac user, mentally substitute
     <keycap>Command</keycap> whenever you see <keycap>Control</keycap>.
    </para>
@@ -73,7 +73,7 @@
   </para>
   <para>
    For more information about command line switches that control the
-   server feature, see <xref linkend=cli-usage />.
+   server feature, see <xref linkend="cli-usage" />.
   </para>
   <sidebar><title>The edit server and security</title>
    <para>
@@ -90,9 +90,6 @@
     disabled by specifying the <command>-noserver</command> command line switch.
    </para>
   </sidebar>
-  <!-- <figure><title>The jEdit splash screen</>
-   <graphic scale=50 fileref=window-splash></>
-  </figure> -->
  </sect1>
  <sect1 id="buffers"><title>Buffers</title>
   <para>
@@ -137,7 +134,7 @@
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem> closes the
    current view. If only one view is open, closing it will exit jEdit,
-   unless background mode is on; see <xref linkend=starting /> for information
+   unless background mode is on; see <xref linkend="starting" /> for information
    about starting jEdit in background mode.
   </para>
   <para>
@@ -198,22 +195,26 @@
    </para>
    </listitem>
    <listitem><para>Prompts displayed by commands such as those dealing with
-   registers and markers (see <xref linkend=text-transfer /> and <xref
-   linkend=markers />)</para></listitem>
+   registers and markers (see <xref linkend="text-transfer" /> and <xref
+   linkend="markers" />)</para></listitem>
    <listitem><para>The current buffer's edit mode. See <xref
-   linkend=modes />.</para></listitem>
+   linkend="modes" />.</para></listitem>
    <listitem><para>If multiple selection is enabled, the text
    <literal>multi</literal> is shown in black, otherwise it will be grayed out.
    Pressing
    <keycap>Caps Lock</keycap> turns multiple selection on and off. See <xref
-   linkend=multi-select />.</para></listitem>
+   linkend="multi-select" />.</para></listitem>
    <listitem><para>If overwrite mode is enabled, the text <literal>over</literal> is
    shown in black, otherwise it will be grayed out. Pressing
    <keycap>Insert</keycap> turns overwrite mode on and off. See <xref
-   linkend=entering-text />.</para></listitem>
+   linkend="entering-text" />.</para></listitem>
+   <listitem><para>If portions of the buffer are invisible due to folding,
+   the text <literal>fold</literal> is
+   shown in black, otherwise it will be grayed out. See <xref
+   linkend="folding" />.</para></listitem>
    <listitem><para>If input/output operations are in progress, a small disk icon
    and progress bars for each running operation are displayed. See <xref
-   linkend=threaded-io />.</para></listitem>
+   linkend="threaded-io" />.</para></listitem>
   </itemizedlist>
   <para>
    The file system browser, HyperSearch results window, and many plugin
@@ -232,9 +233,6 @@
    respectively. Double-clicking on the borders of docking areas has
    the same effect.
   </para>
-  <!-- <figure><title>A view split into two panes</>
-   <graphic scale=50 fileref=window-editor-split></>
-  </figure> -->
  </sect1>
  <sect1 id="textarea"><title>The Text Area</title>
   <para>
@@ -266,9 +264,6 @@
    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
    <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo>) command is invoked.
   </para>
-  <!-- <figure><title>The editor window</title>
-   <graphic scale=50 fileref=window-editor></>
-  </figure> -->
  </sect1>
  <sect1 id="repeat"><title>Command Repetition</title>
   <para>

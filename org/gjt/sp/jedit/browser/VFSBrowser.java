@@ -742,43 +742,15 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 
 	private void propertiesChanged()
 	{
-		// only reload browser if necessary, to avoid annoying
-		// 'flickering'
-		boolean newShowHiddenFiles = jEdit.getBooleanProperty("vfs.browser.showHiddenFiles");
-		boolean newSortFiles = jEdit.getBooleanProperty("vfs.browser.sortFiles");
-		boolean newSortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
-		boolean newSortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
+		showHiddenFiles = jEdit.getBooleanProperty("vfs.browser.showHiddenFiles");
+		sortFiles = jEdit.getBooleanProperty("vfs.browser.sortFiles");
+		sortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
+		sortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
 		doubleClickClose = jEdit.getBooleanProperty("vfs.browser.doubleClickClose");
-
-		boolean reload = false;
-
-		if(newShowHiddenFiles != showHiddenFiles)
-		{
-			showHiddenFiles = newShowHiddenFiles;
-			reload = true;
-		}
-
-		if(newSortFiles != sortFiles)
-		{
-			sortFiles = newSortFiles;
-			reload = true;
-		}
-
-		if(newSortMixFilesAndDirs != sortMixFilesAndDirs)
-		{
-			sortMixFilesAndDirs = newSortMixFilesAndDirs;
-			reload = true;
-		}
-
-		if(newSortIgnoreCase != sortIgnoreCase)
-		{
-			sortIgnoreCase = newSortIgnoreCase;
-			reload = true;
-		}
 
 		browserView.propertiesChanged();
 
-		if(path != null && reload)
+		if(path != null)
 			reloadDirectory();
 	}
 

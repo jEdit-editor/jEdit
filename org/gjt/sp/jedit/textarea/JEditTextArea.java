@@ -4857,7 +4857,10 @@ forward_scan:		do
 
 			// repaint gutter and painter
 			gutter.repaint();
-			painter.repaint();
+
+			// this should really go elsewhere!!!
+			if(view.getTextArea() == JEditTextArea.this)
+				view.getStatus().updateFoldStatus();
 		}
 	}
 
@@ -4983,16 +4986,18 @@ forward_scan:		do
 
 				if(bracket != -1)
 				{
-					int mark = getMarkPosition();
 					// Hack
-					if(bracket < mark)
+					if(bracket < caret)
 					{
-						int tmp = bracket;
-						bracket = mark - 1;
-						mark = bracket + 1;
+						addToSelection(new Selection.Range(
+							bracket,caret));
 					}
-					addToSelection(new Selection.Range(
-						mark,bracket));
+					else
+					{
+						addToSelection(new Selection.Range(
+							caret - 1,++bracket));
+					}
+
 					moveCaretPosition(bracket,false);
 					return;
 				}

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :tabSize=1:indentSize=1:noTabs=yes: -->
+<!-- :indentSize=1:noTabs=yes: -->
 
 <appendix id="regexps"><title>Regular Expressions</title>
  <para>
@@ -34,7 +34,7 @@
   <listitem><para><literal>\\</literal> matches the backslash
   (<quote>\</quote>) character</para></listitem>
  </itemizedlist>
- <bridgehead renderas=sect3>Character Class Operator</bridgehead>
+ <bridgehead renderas="sect3">Character Class Operator</bridgehead>
  <itemizedlist>
   <listitem><para><literal>[<replaceable>abc</replaceable>]</literal> matches
   any character in
@@ -60,7 +60,7 @@
    <listitem><para><literal>[:digit:]</literal> A decimal digit</para></listitem>
    <listitem><para><literal>[:graph:]</literal> A non-space, non-control character</para></listitem>
    <listitem><para><literal>[:lower:]</literal> A lowercase letter</para></listitem>
-   <listitem><para><literal>[:print:]</literal> Same as <literal>[:graph:]</>, but also space and tab</para></listitem>
+   <listitem><para><literal>[:print:]</literal> Same as <literal>[:graph:]</literal>, but also space and tab</para></listitem>
    <listitem><para><literal>[:punct:]</literal> A punctuation character</para></listitem>
    <listitem><para><literal>[:space:]</literal> Any whitespace character, including newlines</para></listitem>
    <listitem><para><literal>[:upper:]</literal> An uppercase letter</para></listitem>
@@ -78,6 +78,13 @@
   save contents</para></listitem>
   <listitem><para><literal>(?#<replaceable>...</replaceable>)</literal> embedded
   comment, ignored by engine</para></listitem>
+  <listitem><para><literal>(?=<replaceable>...</replaceable>)</literal> positive
+  lookahead; the regular expression will match if the text in the brackets
+  matches, but that text will not be considered part of the match</para></listitem>
+  <listitem><para><literal>(?!<replaceable>...</replaceable>)</literal> negative
+  lookahead; the regular expression will match if the text in the brackets
+  does not
+  match, and that text will not be considered part of the match</para></listitem>
   <listitem><para><literal>\<replaceable>n</replaceable></literal> where 0 &lt;
   <replaceable>n</replaceable> &lt; 10,
   matches the same thing the <replaceable>n</replaceable>th

@@ -181,7 +181,19 @@ public class Registers
 			// same string at the start of multiple lines
 			int magic = textArea.getMagicCaretPosition();
 			textArea.setSelectedText(selection);
-			textArea.setMagicCaretPosition(magic);
+
+			if(textArea.getCaretPosition()
+				!= textArea.getLineEndOffset(textArea.getCaretLine()) - 1)
+			{
+				textArea.setMagicCaretPosition(magic);
+			}
+			else
+			{
+				// if user is pasting at end of line, chances are
+				// they want the caret to go the the end of the
+				// line again when they move it up or down
+			}
+
 			HistoryModel.getModel("clipboard").addItem(selection);
 		}
 	}

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :tabSize=1:indentSize=1:noTabs=yes: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <appendix id="activity-log"><title>The Activity Log</title>
  <para>
@@ -39,7 +39,4 @@
   Log on Disk</guimenuitem> command. The log file is also automatically updated on
   disk when jEdit exits.
  </para>
- <!-- <figure><title>The activity log</>
-  <graphic fileref=window-log scale=50></>
- </figure> -->
 </appendix>

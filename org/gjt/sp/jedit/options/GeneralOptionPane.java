@@ -120,6 +120,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 		else
 			showSplash.setSelected(!new File(settingsDirectory,"nosplash").exists());
 		addComponent(showSplash);
+
+		/* Global colors */
+		globalColors = new JCheckBox(jEdit.getProperty(
+			"options.general.globalColors"));
+		globalColors.setSelected(jEdit.getBooleanProperty("globalColors"));
+		addComponent(globalColors);
 	}
 
 	protected void _save()
@@ -163,6 +169,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 				}
 			}
 		}
+
+		jEdit.setBooleanProperty("globalColors",globalColors.isSelected());
 	}
 
 	// private members
@@ -178,4 +186,5 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox showBufferSwitcher;
 	private JCheckBox showTips;
 	private JCheckBox showSplash;
+	private JCheckBox globalColors;
 }

@@ -6,7 +6,7 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" [
 
 <!ENTITY basics SYSTEM "basics.xml">
 <!ENTITY files SYSTEM "files.xml">
@@ -53,11 +53,11 @@
  </legalnotice>
 </bookinfo>
 
-<part id="using-jedit"><title>Using jEdit</>
+<part id="using-jedit"><title>Using jEdit</title>
  &basics;
  &files;
  &textedit;
- &modes;
+ <!-- &modes; -->
  &sourceedit;
  &customizing;
  &usingplugins;
@@ -69,13 +69,13 @@
  &cliusage;
 </part>
 
-<part id="macros"><title>Extending jEdit With Macros</>
+<!-- <part id="macros"><title>Extending jEdit With Macros</title>
  &macro-basics;
  &simple-macros;
  &dialog-macro;
  &macro-tips;
  &api-guide;
  &macro-index;
-</part>
+</part> -->
 
 </book>

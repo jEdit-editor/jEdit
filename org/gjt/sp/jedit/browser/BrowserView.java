@@ -27,6 +27,7 @@ import java.awt.*;
 import java.util.Enumeration;
 import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 
 /**
@@ -59,6 +60,8 @@ public class BrowserView extends JPanel
 
 		setLayout(new BorderLayout());
 		add(BorderLayout.CENTER, scroller = new JScrollPane(tree));
+
+		propertiesChanged();
 	}
 
 	public VFS.DirectoryEntry[] getSelectedFiles()
@@ -162,7 +165,8 @@ public class BrowserView extends JPanel
 
 	public void propertiesChanged()
 	{
-		tree.revalidate();
+		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
+		renderer.propertiesChanged();
 	}
 
 	// private members
@@ -175,7 +179,9 @@ public class BrowserView extends JPanel
 	private DefaultMutableTreeNode currentlyLoadingTreeNode;
 	private BrowserPopupMenu popup;
 
-	private static FileCellRenderer renderer = new FileCellRenderer();
+	// used for tool tips
+	private boolean showIcons;
+	private FileCellRenderer renderer = new FileCellRenderer();
 
 	private StringBuffer typeSelectBuffer = new StringBuffer();
 	private Timer timer = new Timer(0,new ClearTypeSelect());
@@ -285,7 +291,8 @@ public class BrowserView extends JPanel
 				Rectangle cellRect = getPathBounds(path);
 				if(cellRect != null && !cellRectIsVisible(cellRect))
 				{
-					return new Point(cellRect.x + 20,cellRect.y + cellRect.height);
+					return new Point(cellRect.x + (showIcons ? 20 : 1),
+						cellRect.y + (showIcons ? 1 : -1));
 				}
 			}
 			return null;

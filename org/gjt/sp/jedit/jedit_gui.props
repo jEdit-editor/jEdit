@@ -976,6 +976,7 @@ options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher
 options.general.showTips=Show tips on startup
 options.general.showSplash=Show splash screen on startup
+options.general.globalColors=Use jEdit colors in all text components (experimental)
 
 options.loadsave.label=Loading & Saving
 options.loadsave.encoding=File encoding:

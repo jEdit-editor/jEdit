@@ -1183,6 +1183,7 @@ public class View extends JFrame implements EBComponent
 			status.repaintCaretStatus();
 			status.updateMode();
 			status.updateMiscStatus();
+			status.updateFoldStatus();
 		}
 	}
 

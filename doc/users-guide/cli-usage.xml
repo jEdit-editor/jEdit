@@ -12,7 +12,7 @@
  </para>
  <screen><prompt>$ </prompt><userinput>jedit MyApplet.java +line:10</userinput>
 <prompt>$ </prompt><userinput>jedit thesis.tex +marker:chapter5</userinput></screen>
-<informaltable><!-- <title>Table of command line switches</> -->
+<informaltable>
   <tgroup cols="2">
    <colspec colnum="1" colwidth="1.5in">
    <thead>

@@ -5,9 +5,6 @@ TO DO
 
 + before pre4:
 
-- Docs for positive/negative lookahead
-- filename glob for r2000 mode
-- JavaInsight sets the mode but it gets set back to 'text'?
 - update macro guide:
   - markers
   - mention registers?
@@ -18,34 +15,31 @@ TO DO
 - C+\
 - help viewer: links to .txt files
 - finish converting docs to xml
-- fs browser: tooltips are shown in the wrong location
 - non-existent files and caret history
-- double click: selection prob
-- double click should move caret to other bracket, not clicked one
 - encoding option in VFS browser
 - catch MalformedInputException and display a better error message
 - get web start to work
 - test edit server
-- fold indicator in status
-- 'globalFont' property?
-  - maybe don't give text fields a new font?...
+- jEditLauncher
 
 + before 3.2final:
 
+- expand-fold too aggressive
+- require that each dockable have a tool bar with a close button?
 - support middle mouse button clicks in JTextComponents
 - next time i'm making an RPM, fix the shell script
 - support jEdit keyboard shortcuts in JTextComponents
 - finish persistent splits: resize splits to make them in the middle
 - replace in sel doesn't work if rect
-- jEditLauncher
 - Include John's upcoming plugin guide
 - reload: preserve caret position
 - globalColors setting:
-  - add to global options
   - tree controls, file system browser icons, tool bar icons look a bit
     ugly with different backgrounds
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
+- 'globalFont' property?
+  - maybe don't give text fields a new font?...
 - swing font customization
 - support Shift-clicks in JTextComponents (impossible?)
 - 'appearance' option pane(s)?

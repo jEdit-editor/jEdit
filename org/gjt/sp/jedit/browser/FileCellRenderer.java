@@ -26,13 +26,17 @@ import javax.swing.tree.*;
 import javax.swing.border.*;
 
 import org.gjt.sp.jedit.io.VFS;
-import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 
-public final class FileCellRenderer extends DefaultTreeCellRenderer
+public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 {
 	public FileCellRenderer()
 	{
+		Font font = UIManager.getFont("Tree.font");
+		// make a non-UIResource copy so that updateUI() doesn't
+		// reset it
+		setFont(new Font(font.getFamily(),font.getStyle(),font.getSize()));
+
 		// use metal icons because not all looks and feels define these.
 		// note that metal is guaranteed to exist, so this shouldn't
 		// cause problems in the future.
@@ -43,28 +47,23 @@ public final class FileCellRenderer extends DefaultTreeCellRenderer
 		filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 		loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 
-		propertiesChanged();
-
-		/* pure genius. since only one instance of this class is ever
-		 * created, we can add a 'hard-coded' component to the editbus
-		 * to handle property changes.
-		 */
-		EditBus.addToBus(new EBComponent()
-		{
-			public void handleMessage(EBMessage msg)
-			{
-				if(msg instanceof PropertiesChanged)
-					propertiesChanged();
-			}
-		});
+		setOpaque(true);
 	}
 
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 		boolean sel, boolean expanded, boolean leaf, int row,
 		boolean focus)
 	{
-		super.getTreeCellRendererComponent(tree,value,sel,expanded,
-			leaf,row,focus);
+		if(sel)
+		{
+			setBackground(treeSelectionBackground);
+			setForeground(treeSelectionForeground);
+		}
+		else
+		{
+			setBackground(treeNoSelectionBackground);
+			setForeground(treeNoSelectionForeground);
+		}
 
 		DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)value;
 		Object userObject = treeNode.getUserObject();
@@ -132,18 +131,10 @@ public final class FileCellRenderer extends DefaultTreeCellRenderer
 			return fileIcon;
 	}
 
-	// private members
-	private boolean showIcons;
+	// package-private members
+	boolean showIcons;
 
-	private Icon fileIcon;
-	private Icon dirIcon;
-	private Icon filesystemIcon;
-	private Icon loadingIcon;
-
-	private Border closedBorder;
-	private Border openBorder;
-
-	private void propertiesChanged()
+	void propertiesChanged()
 	{
 		// bug in DefaultTreeCellRenderer?
 		setBackground(UIManager.getColor("Tree.textBackground"));
@@ -163,5 +154,24 @@ public final class FileCellRenderer extends DefaultTreeCellRenderer
 				UIManager.getColor("Tree.textForeground")),
 				new EmptyBorder(1,2,1,1));
 		}
+
+		treeSelectionForeground = UIManager.getColor("Tree.selectionForeground");
+		treeNoSelectionForeground = UIManager.getColor("Tree.textForeground");
+		treeSelectionBackground = UIManager.getColor("Tree.selectionBackground");
+		treeNoSelectionBackground = UIManager.getColor("Tree.textBackground");
 	}
+
+	// private members
+	private Icon fileIcon;
+	private Icon dirIcon;
+	private Icon filesystemIcon;
+	private Icon loadingIcon;
+
+	private Border closedBorder;
+	private Border openBorder;
+
+	private Color treeSelectionForeground;
+	private Color treeNoSelectionForeground;
+	private Color treeSelectionBackground;
+	private Color treeNoSelectionBackground;
 }
