@@ -2979,7 +2979,9 @@ loop:				for(int i = 0; i < count; i++)
 		ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
 		for(int i = 0; i < lineCount; i++)
 		{
-			lineInfo[i].context = new TokenMarker.LineContext(null,mainSet);
+			LineInfo info = lineInfo[i];
+			info.context = new TokenMarker.LineContext(null,mainSet);
+			info.tokensValid = false;
 		}
 	}
 

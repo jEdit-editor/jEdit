@@ -1,6 +1,6 @@
 /*
  * EnhancedButton.java - Check box button
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,7 @@ import org.gjt.sp.jedit.GUIUtilities;
 
 public class EnhancedButton extends JButton
 {
-	public EnhancedButton(Icon icon, String toolTip, EditAction action,
-		String actionCommand)
+	public EnhancedButton(Icon icon, String toolTip, EditAction action)
 	{
 		super(icon);
 
@@ -40,8 +39,6 @@ public class EnhancedButton extends JButton
 		}
 		else
 			setEnabled(false);
-
-		setActionCommand(actionCommand);
 
 		setToolTipText(toolTip);
 

@@ -1080,7 +1080,7 @@ public class View extends JFrame implements EBComponent
 					.replace('_',' ');
 
 				menu.add(new EnhancedMenuItem(label,
-					macro.action,null));
+					macro.action));
 			}
 			else if(obj instanceof Vector)
 			{

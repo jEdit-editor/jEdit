@@ -1,20 +1,16 @@
 * Before 3.1pre1
 
-- inserting text causes random problems with folding
-- undo causes problems sometimes (is this related to folding at all?)
-- sometimes fold markers are not repainted in gutter
-- finish persistent splits
-- The abbrev option pane will edit the currently selected abbrev in a
-  text area.
-- document folding
-- visibleLine handling a bit broken
-- shortcuts option pane: grabbing keys
-- > 1 shortcut per command
-- finish \t in abbrevs
+- cvs add EditAbbrevsDialog, GrabKeyDialog
 
 * Folding
 
 - expand-one-level command
+- inserting text causes random problems with folding
+- undo causes problems sometimes (is this related to folding at all?)
+- sometimes fold markers are not repainted in gutter
+- visibleLine handling a bit broken
+- setProperty("foo","") should set it to null if "foo" is not defined,
+  or ""
 
 * XMode rule inclusion
 
@@ -35,20 +31,20 @@ only then renamed to <filename> if the save was successful.
 * Minor changes
 
 - The File->Current Directory menu will not list backups and autosaves.
-
 - All available fonts will be shown in the font selector.
-
 - The base Metal L&F font will be configurable.
-
 - File system browser: change 'Open in new view' to 'Open in new split'
-
 - Make modifier code keyboard layout-neutral: handle modifier+key char
   in keyTyped()
-
 - Bracket double click behavior is really annoying - make if configurable
+- finish persistent splits
+- finish \t in abbrevs
+- initial open bug still exists with brackets
+- Binding to <any prefix> SPACE doesn't work
 
 * Two-pane view in filesystem browser
 
 * Documentation
 
 - Migrate to DocBook/XML
+- Update docs for 3.1 goodies

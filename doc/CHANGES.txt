@@ -7,7 +7,7 @@ JEDIT 3.1 VERSION HISTORY
 - File permissions are now preserved when saving files on Unix systems
 - Folding
   - Currently, only indent-based folding is supported. Support for more
-    folding algorithms will be added later
+    folding schemes will be added later
   - Folds can be collapsed an expanded in the gutter, or using the
     commands in the View->Folding menu
   - The default fold visibility level can be set in the `Global Options'
@@ -28,13 +28,15 @@ JEDIT 3.1 VERSION HISTORY
   - 'Gutter Expanded' and 'Line Numbering' commands merged into one
   - Marker/register highlighting can now be toggled
   - Gutter is repainted more efficently
-- Multiple subsequent insertions are now batched into one undo - no more
-  undoing character-by-character!
+- Consecutive insertions from the keyboard are now batched into one undo
 - Docking area separators now look like split pane dividers when running
   with the Metal look and feel
 - jEdit now notices if a file's read only status changes on disk
 - \t can now be used in abbreviation expansions to insert a tab
 - Improved 'Insert Date' macro (Valery Kondakoff)
+- Improved Abbreviations option pane
+- Commands can now be assigned up to two shortcuts
+- Improved Shortcuts option panes
 
 + API Changes
 
@@ -63,7 +65,7 @@ JEDIT 3.1 VERSION HISTORY
   - markTokens() method in TokenMarker class should not be called. Call
     Buffer.markTokens() instead
   - LineInfo inner class moved from TokenMarker to Buffer class
-- I promise there won't be any more API changes in the 3.1 version.
+- There won't be any more API changes in jEdit 3.1.
 
 + Bug Fixes
 
@@ -75,3 +77,4 @@ JEDIT 3.1 VERSION HISTORY
 - Tab characters in HyperSearch results caused display problems
 - Fixed scrolling problem if the text area was exceptionally small
 - Reloading a file would reset the line separator to the system default
+- Fixed bug with combo box enter handling in EnhancedDialog class

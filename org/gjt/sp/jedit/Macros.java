@@ -212,9 +212,13 @@ public class Macros
 				}
 			};
 
-			String binding = jEdit.getProperty(name + ".shortcut");
-			if(binding != null)
-				jEdit.getInputHandler().addKeyBinding(binding,action);
+			String shortcut1 = jEdit.getProperty(name + ".shortcut");
+			if(shortcut1 != null)
+				jEdit.getInputHandler().addKeyBinding(shortcut1,action);
+
+			String shortcut2 = jEdit.getProperty(name + ".shortcut2");
+			if(shortcut2 != null)
+				jEdit.getInputHandler().addKeyBinding(shortcut2,action);
 		}
 
 		// for debugging

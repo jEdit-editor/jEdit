@@ -58,8 +58,9 @@ public class CommandShortcutsOptionPane extends ShortcutsOptionPane
 				continue;
 
 			label = GUIUtilities.prettifyMenuLabel(label);
-			String shortcut = jEdit.getProperty(name + ".shortcut");
-			bindings.addElement(new KeyBinding(name,label,shortcut));
+			String shortcut1 = jEdit.getProperty(name + ".shortcut");
+			String shortcut2 = jEdit.getProperty(name + ".shortcut2");
+			bindings.addElement(new KeyBinding(name,label,shortcut1,shortcut2));
 		}
 
 		return bindings;

@@ -54,29 +54,10 @@ public class MacroShortcutsOptionPane extends ShortcutsOptionPane
 		{
 			String name = (String)macroList.elementAt(i);
 			bindings.addElement(new KeyBinding(name,name,
-				jEdit.getProperty(name + ".shortcut")));
+				jEdit.getProperty(name + ".shortcut"),
+				jEdit.getProperty(name + ".shortcut2")));
 		}
 
 		return bindings;
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.5  2000/07/19 08:35:59  sp
- * plugin devel docs updated, minor other changes
- *
- * Revision 1.4  2000/07/12 09:11:38  sp
- * macros can be added to context menu and tool bar, menu bar layout improved
- *
- * Revision 1.3  2000/04/28 09:29:12  sp
- * Key binding handling improved, VFS updates, some other stuff
- *
- * Revision 1.2  2000/04/16 08:56:24  sp
- * Option pane updates
- *
- * Revision 1.1  1999/12/19 08:12:34  sp
- * 2.3 started. Key binding changes  don't require restart, expand-abbrev renamed to complete-word, new splash screen
- *
- */

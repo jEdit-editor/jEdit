@@ -75,7 +75,8 @@ public class AbbrevEditor extends JPanel
 
 		for(int i = 0; i < beforeCaretText.length(); i++)
 		{
-			switch(beforeCaretText.charAt(i))
+			char ch = beforeCaretText.charAt(i);
+			switch(ch)
 			{
 			case '\n':
 				buf.append("\\n");
@@ -86,6 +87,9 @@ public class AbbrevEditor extends JPanel
 			case '\\':
 				buf.append("\\\\");
 				break;
+			default:
+				buf.append(ch);
+				break;
 			}
 		}
 
@@ -95,7 +99,8 @@ public class AbbrevEditor extends JPanel
 
 			for(int i = 0; i < afterCaretText.length(); i++)
 			{
-				switch(afterCaretText.charAt(i))
+				char ch = afterCaretText.charAt(i);
+				switch(ch)
 				{
 				case '\n':
 					buf.append("\\n");
@@ -105,6 +110,9 @@ public class AbbrevEditor extends JPanel
 					break;
 				case '\\':
 					buf.append("\\\\");
+					break;
+				default:
+					buf.append(ch);
 					break;
 				}
 			}
@@ -125,7 +133,7 @@ public class AbbrevEditor extends JPanel
 
 			if(ch == '\\' && i != expansion.length() - 1)
 			{
-				ch = expansion.charAt(i + 1);
+				ch = expansion.charAt(++i);
 				switch(ch)
 				{
 				case 't':
@@ -149,6 +157,8 @@ public class AbbrevEditor extends JPanel
 
 		if(beforeCaretText == null)
 			beforeCaretText = buf.toString();
+		else
+			afterCaretText = buf.toString();
 
 		beforeCaret.setText(beforeCaretText);
 		afterCaret.setText(afterCaretText);

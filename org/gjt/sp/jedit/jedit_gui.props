@@ -813,6 +813,10 @@ add-abbrev.caption=Enter an expansion for abbreviation "{0}":
 add-abbrev.mode=Add mode-specific
 add-abbrev.global=Add global
 
+# Edit abbrev dialog
+edit-abbrev.title=Edit Abbreviation
+edit-abbrev.caption=Enter an expansion for abbreviation "{0}":
+
 # Abbrev editor control
 abbrev-editor.before=Text to insert before caret:
 abbrev-editor.after=Text to insert after caret:
@@ -1088,7 +1092,12 @@ options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
 
 options.keys.name=Command
-options.keys.binding=Shortcut
+options.keys.shortcut1=Primary shortcut
+options.keys.shortcut2=Alternative shortcut
+
+grab-key.title=Specify Shortcut
+grab-key.caption=Press the sequence of keys you want associated \
+	with the command "{0}", then click OK.
 
 options.command-keys.label=Command Shortcuts
 

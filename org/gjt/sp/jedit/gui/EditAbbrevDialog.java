@@ -1,5 +1,5 @@
 /*
- * AddAbbrevDialog.java - Displayed when expanding unknown abbrev
+ * EditAbbrevDialog.java - Displayed when editing abbrevs
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -25,34 +25,32 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 
-public class AddAbbrevDialog extends EnhancedDialog
+public class EditAbbrevDialog extends EnhancedDialog
 {
-	public AddAbbrevDialog(View view, String abbrev)
+	public EditAbbrevDialog(Component comp, String abbrev, String expansion)
 	{
-		super(view,jEdit.getProperty("add-abbrev.title"),true);
+		super(JOptionPane.getFrameForComponent(comp),
+			jEdit.getProperty("edit-abbrev.title"),true);
 
-		this.view = view;
-		this.abbrev = abbrev;
+		this.comp = comp;
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
 		content.add(BorderLayout.NORTH,new JLabel(jEdit.getProperty(
-			"add-abbrev.caption", new String[] { abbrev })));
+			"edit-abbrev.caption", new String[] { abbrev })));
 		editor = new AbbrevEditor();
+		editor.setExpansion(expansion);
 		editor.setBorder(new EmptyBorder(0,0,12,0));
 		content.add(BorderLayout.CENTER,editor);
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createGlue());
-		global = new JButton(jEdit.getProperty("add-abbrev.global"));
-		global.addActionListener(new ActionHandler());
-		box.add(global);
-		box.add(Box.createHorizontalStrut(6));
-		modeSpecific = new JButton(jEdit.getProperty("add-abbrev.mode"));
-		modeSpecific.addActionListener(new ActionHandler());
-		box.add(modeSpecific);
+		ok = new JButton(jEdit.getProperty("common.ok"));
+		ok.addActionListener(new ActionHandler());
+		getRootPane().setDefaultButton(ok);
+		box.add(ok);
 		box.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(new ActionHandler());
@@ -62,13 +60,14 @@ public class AddAbbrevDialog extends EnhancedDialog
 
 		GUIUtilities.requestFocus(this,editor.getBeforeCaretTextArea());
 		pack();
-		setLocationRelativeTo(view);
+		setLocationRelativeTo(comp);
 		show();
 	}
 
 	public void ok()
 	{
-		// do nothing when Enter pressed
+		isOK = true;
+		dispose();
 	}
 
 	public void cancel()
@@ -76,32 +75,30 @@ public class AddAbbrevDialog extends EnhancedDialog
 		dispose();
 	}
 
+	public String getExpansion()
+	{
+		if(!isOK)
+			return null;
+
+		return editor.getExpansion();
+	}
+
 	// private members
-	private View view;
-	private String abbrev;
+	private Component comp;
 	private AbbrevEditor editor;
-	private JButton global;
-	private JButton modeSpecific;
+	private JButton ok;
 	private JButton cancel;
+	private boolean isOK;
 
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == global)
-			{
-				Abbrevs.addGlobalAbbrev(abbrev,editor.getExpansion());
-				Abbrevs.expandAbbrev(view,false);
-			}
-			else if(source == modeSpecific)
-			{
-				Abbrevs.addModeAbbrev(view.getBuffer().getMode().getName(),
-					abbrev,editor.getExpansion());
-				Abbrevs.expandAbbrev(view,false);
-			}
-
-			dispose();
+			if(source == ok)
+				ok();
+			else if(source == cancel)
+				cancel();
 		}
 	}
 }

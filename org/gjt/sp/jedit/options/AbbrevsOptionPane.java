@@ -1,6 +1,6 @@
 /*
  * AbbrevsOptionPane.java - Abbrevs options panel
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import org.gjt.sp.jedit.gui.EditAbbrevDialog;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -47,10 +48,17 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		JPanel panel = new JPanel(new BorderLayout());
 
 		JPanel panel2 = new JPanel();
+		panel2.setLayout(new BoxLayout(panel2,BoxLayout.X_AXIS));
+		panel2.setBorder(new EmptyBorder(0,0,6,0));
+
+		panel2.add(Box.createGlue());
 
 		expandOnInput = new JCheckBox(jEdit.getProperty("options.abbrevs"
 			+ ".expandOnInput"),Abbrevs.getExpandOnInput());
 		panel2.add(expandOnInput);
+
+		panel2.add(Box.createGlue());
+
 		panel.add(panel2,BorderLayout.NORTH);
 
 		JPanel panel3 = new JPanel();
@@ -79,7 +87,8 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		globalAbbrevs = new AbbrevsModel(Abbrevs.getGlobalAbbrevs());
 		abbrevsTable = new JTable(globalAbbrevs);
 		abbrevsTable.getTableHeader().setReorderingAllowed(false);
-		abbrevsTable.getTableHeader().addMouseListener(new MouseHandler());
+		abbrevsTable.getTableHeader().addMouseListener(new HeaderMouseHandler());
+		abbrevsTable.addMouseListener(new TableMouseHandler());
 		Dimension d = abbrevsTable.getPreferredSize();
 		d.height = Math.min(d.height,200);
 		JScrollPane scroller = new JScrollPane(abbrevsTable);
@@ -111,12 +120,10 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	private JComboBox setsComboBox;
 	private JCheckBox expandOnInput;
 	private JTable abbrevsTable;
-	private JButton abbrev;
-	private JButton expand;
 	private AbbrevsModel globalAbbrevs;
 	private Hashtable modeAbbrevs;
 
-	class MouseHandler extends MouseAdapter
+	class HeaderMouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
@@ -128,6 +135,26 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			case 1:
 				((AbbrevsModel)abbrevsTable.getModel()).sort(1);
 				break;
+			}
+		}
+	}
+
+	class TableMouseHandler extends MouseAdapter
+	{
+		public void mouseClicked(MouseEvent evt)
+		{
+			if(abbrevsTable.getSelectedColumn() == 1)
+			{
+				TableModel abbrevsModel = abbrevsTable.getModel();
+				int row = abbrevsTable.getSelectedRow();
+
+				String abbrev = (String)abbrevsModel.getValueAt(row,0);
+				String expansion = (String)abbrevsModel.getValueAt(row,1);
+
+				expansion = new EditAbbrevDialog(AbbrevsOptionPane.this,
+					abbrev,expansion).getExpansion();
+				if(expansion != null)
+					abbrevsModel.setValueAt(expansion,row,1);
 			}
 		}
 	}
@@ -232,7 +259,7 @@ class AbbrevsModel extends AbstractTableModel
 
 	public boolean isCellEditable(int row, int col)
 	{
-		return true;
+		return (col == 0);
 	}
 
 	public void setValueAt(Object value, int row, int col)
@@ -269,15 +296,6 @@ class AbbrevsModel extends AbstractTableModel
 			return null;
 		}
 	}
-
-	/* public void save()
-	{
-		for(int i = 0; i < bindings.size(); i++)
-		{
-			KeyBinding binding = (KeyBinding)bindings.elementAt(i);
-			jEdit.setProperty(binding.name + ".shortcut",binding.shortcut);
-		}
-	} */
 
 	class AbbrevCompare implements MiscUtilities.Compare
 	{
@@ -324,35 +342,3 @@ class Abbrev
 	String abbrev;
 	String expand;
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.9  2001/01/30 09:08:59  sp
- * More folding work, some option pane tweaking
- *
- * Revision 1.8  2000/12/14 01:01:57  sp
- * Bug fixes, 2 new edit modes
- *
- * Revision 1.7  2000/11/11 02:59:31  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.6  2000/07/15 10:10:18  sp
- * improved printing
- *
- * Revision 1.5  2000/05/21 03:00:51  sp
- * Code cleanups and bug fixes
- *
- * Revision 1.4  2000/04/16 08:56:24  sp
- * Option pane updates
- *
- * Revision 1.3  2000/01/14 22:11:24  sp
- * Enhanced options dialog box
- *
- * Revision 1.2  1999/12/21 06:50:51  sp
- * Documentation updates, abbrevs option pane finished, bug fixes
- *
- * Revision 1.1  1999/12/20 08:38:43  sp
- * Abbrevs option pane
- *
- */

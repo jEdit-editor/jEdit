@@ -228,9 +228,9 @@ public class GUIUtilities
 
 		JMenuItem mi;
 		if(action != null && action.isToggle())
-			mi = new EnhancedCheckBoxMenuItem(label,action,null);
+			mi = new EnhancedCheckBoxMenuItem(label,action);
 		else
-			mi = new EnhancedMenuItem(label,action,null);
+			mi = new EnhancedMenuItem(label,action);
 
 		if(setMnemonic && mnemonic != '\0')
 			mi.setMnemonic(mnemonic);
@@ -318,7 +318,7 @@ public class GUIUtilities
 		if(shortcut != null)
 			toolTip = toolTip + " (" + shortcut + ")";
 
-		return new EnhancedButton(icon,toolTip,action,null);
+		return new EnhancedButton(icon,toolTip,action);
 	}
 
 	/**

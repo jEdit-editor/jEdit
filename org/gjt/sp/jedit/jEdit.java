@@ -1523,10 +1523,16 @@ public class jEdit
 		for(int i = 0; i < actions.length; i++)
 		{
 			EditAction action = actions[i];
-			String shortcut = jEdit.getProperty(action.getName()
+
+			String shortcut1 = jEdit.getProperty(action.getName()
 				+ ".shortcut");
-			if(shortcut != null)
-				inputHandler.addKeyBinding(shortcut,action);
+			if(shortcut1 != null)
+				inputHandler.addKeyBinding(shortcut1,action);
+
+			String shortcut2 = jEdit.getProperty(action.getName()
+				+ ".shortcut2");
+			if(shortcut2 != null)
+				inputHandler.addKeyBinding(shortcut2,action);
 		}
 	}
 

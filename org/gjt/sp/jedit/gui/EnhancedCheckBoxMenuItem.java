@@ -1,6 +1,6 @@
 /*
  * EnhancedCheckBoxMenuItem.java - Check box menu item
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,16 +27,11 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 /**
- * Mega hackery in this class.
- * <ul>
- * <li>Painting of custom strings (for the multi-key accelerators)
- * <li>Support for null action commands
- * </ul>
+ * jEdit's custom menu item. It adds support for multi-key shortcuts.
  */
 public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
-	public EnhancedCheckBoxMenuItem(String label, EditAction action,
-		String actionCommand)
+	public EnhancedCheckBoxMenuItem(String label, EditAction action)
 	{
 		super(label);
 		this.action = action;
@@ -45,18 +40,12 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 		{
 			setEnabled(true);
 			addActionListener(new EditAction.Wrapper(action));
-			if(actionCommand == null)
-				keyBindingProp = action.getName() + ".shortcut";
-			else
-			{
-				keyBindingProp = action.getName() + "@"
-					+ actionCommand + ".shortcut";
-			}
+			shortcutProp1 = action.getName() + ".shortcut";
+			shortcutProp2 = action.getName() + ".shortcut2";
 		}
 		else
 			setEnabled(false);
 
-		setActionCommand(actionCommand);
 		setModel(new Model());
 	}
 
@@ -64,12 +53,12 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		Dimension d = super.getPreferredSize();
 
-		String keyBinding = getKeyBinding();
+		String shortcut = getShortcut();
 
-		if(keyBinding != null)
+		if(shortcut != null)
 		{
 			d.width += (getToolkit().getFontMetrics(acceleratorFont)
-				.stringWidth(keyBinding) + 10);
+				.stringWidth(shortcut) + 10);
 		}
 		return d;
 	}
@@ -78,9 +67,9 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		super.paint(g);
 
-		String keyBinding = getKeyBinding();
+		String shortcut = getShortcut();
 
-		if(keyBinding != null)
+		if(shortcut != null)
 		{
 			g.setFont(acceleratorFont);
 			g.setColor(getModel().isArmed() ?
@@ -88,8 +77,8 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 				acceleratorForeground);
 			FontMetrics fm = g.getFontMetrics();
 			Insets insets = getInsets();
-			g.drawString(keyBinding,getWidth() - (fm.stringWidth(
-				keyBinding) + insets.right + insets.left),
+			g.drawString(shortcut,getWidth() - (fm.stringWidth(
+				shortcut) + insets.right + insets.left),
 				getFont().getSize() + (insets.top - 1)
 				/* XXX magic number */);
 		}
@@ -101,18 +90,31 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	}
 
 	// private members
-	private String keyBindingProp;
+	private String shortcutProp1;
+	private String shortcutProp2;
 	private EditAction action;
 	private static Font acceleratorFont;
 	private static Color acceleratorForeground;
 	private static Color acceleratorSelectionForeground;
 
-	private String getKeyBinding()
+	private String getShortcut()
 	{
 		if(action == null)
 			return null;
 		else
-			return jEdit.getProperty(keyBindingProp);
+		{
+			String shortcut1 = jEdit.getProperty(shortcutProp1);
+			String shortcut2 = jEdit.getProperty(shortcutProp2);
+
+			if(shortcut1 == null && shortcut2 == null)
+				return null;
+			else if(shortcut1 != null && shortcut2 == null)
+				return shortcut1;
+			else if(shortcut1 == null && shortcut2 != null)
+				return shortcut2;
+			else
+				return shortcut1 + ", or " + shortcut2;
+		}
 	}
 
 	static

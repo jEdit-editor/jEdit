@@ -1,6 +1,6 @@
 /*
  * EnhancedDialog.java - Handles OK/Cancel for you
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,7 @@ public abstract class EnhancedDialog extends JDialog
 
 		((Container)getLayeredPane()).addContainerListener(
 			new ContainerHandler());
-		((Container)getContentPane()).addContainerListener(
-			new ContainerHandler());
+		getContentPane().addContainerListener(new ContainerHandler());
 
 		keyHandler = new KeyHandler();
 		addKeyListener(keyHandler);
@@ -115,7 +114,12 @@ public abstract class EnhancedDialog extends JDialog
 					if(comp instanceof JComboBox)
 					{
 						JComboBox combo = (JComboBox)comp;
-						combo.setSelectedItem(combo.getEditor().getItem());
+						if(combo.isEditable())
+						{
+							Object selected = combo.getEditor().getItem();
+							if(selected != null)
+								combo.setSelectedItem(selected);
+						}
 						break;
 					}
 
@@ -141,14 +145,3 @@ public abstract class EnhancedDialog extends JDialog
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.6  2000/12/08 04:03:43  sp
- * bug fixes
- *
- * Revision 1.5  2000/07/31 11:32:09  sp
- * VFS file chooser is now in a minimally usable state
- *
- */
