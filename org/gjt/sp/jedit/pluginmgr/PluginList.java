@@ -249,6 +249,7 @@ class PluginList
 	static class Branch
 	{
 		String version;
+		String date;
 		String download;
 		boolean obsolete;
 		Vector deps = new Vector();

@@ -326,14 +326,15 @@ public class jEdit
 
 		Buffer buffer = openFiles(userDir,args);
 
+		String splitConfig = null;
+
 		if(restore && !background
 			&& settingsDirectory != null
-			&& jEdit.getBooleanProperty("restore"))
+			&& jEdit.getBooleanProperty("restore")
+			&& (bufferCount == 0
+			|| jEdit.getBooleanProperty("restore.cli")))
 		{
-			if(bufferCount == 0)
-				buffer = restoreOpenFiles();
-			else if(jEdit.getBooleanProperty("restore.cli"))
-				/* buffer = */ restoreOpenFiles();
+			splitConfig = restoreOpenFiles();
 		}
 
 		// execute startup macro
@@ -347,6 +348,7 @@ public class jEdit
 		// Create the view and hide the splash screen.
 		final boolean _showGUI = showGUI;
 		final Buffer _buffer = buffer;
+		final String _splitConfig = splitConfig;
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -360,13 +362,22 @@ public class jEdit
 				if(background && !_showGUI)
 				{
 					if(bufferCount != 0)
-						newView(null,_buffer);
+					{
+						if(_buffer != null)
+							newView(null,_buffer);
+						else
+							newView(null,_splitConfig);
+					}
 				}
 				else
 				{
 					if(bufferCount == 0)
 						newFile(null);
-					newView(null,_buffer);
+
+					if(_buffer != null)
+						newView(null,_buffer);
+					else
+						newView(null,_splitConfig);
 				}
 
 				// if there is a view around, show tip of the day
@@ -380,16 +391,16 @@ public class jEdit
 					setBooleanProperty("firstTime",false);
 				}
 
-				GUIUtilities.hideSplashScreen();
-				Log.log(Log.MESSAGE,jEdit.class,"Startup "
-					+ "complete");
-
 				// Start I/O threads
 				VFSManager.start();
 
 				// Start edit server
 				if(server != null)
 					server.start();
+
+				GUIUtilities.hideSplashScreen();
+				Log.log(Log.MESSAGE,jEdit.class,"Startup "
+					+ "complete");
 			}
 		});
 	}
@@ -1061,9 +1072,9 @@ public class jEdit
 
 	/**
 	 * Opens files that were open last time.
-	 * @since jEdit 3.1pre4
+	 * @since jEdit 3.2pre2
 	 */
-	public static Buffer restoreOpenFiles()
+	public static String restoreOpenFiles()
 	{
 		if(settingsDirectory == null)
 			return null;
@@ -1074,7 +1085,8 @@ public class jEdit
 		if(!session.exists())
 			return null;
 
-		Buffer buffer = null;
+		String splitConfig = null;
+
 		try
 		{
 			BufferedReader in = new BufferedReader(new FileReader(
@@ -1083,18 +1095,10 @@ public class jEdit
 			String line;
 			while((line = in.readLine()) != null)
 			{
-				boolean current;
-				if(line.endsWith("\t*"))
-				{
-					line = line.substring(0,line.length() - 2);
-					current = true;
-				}
+				if(line.startsWith("splits\t"))
+					splitConfig = line.substring(7);
 				else
-					current = false;
-
-				Buffer _buffer = openFile(null,line);
-				if(current && _buffer != null)
-					buffer = _buffer;
+					openFile(null,line);
 			}
 
 			in.close();
@@ -1105,7 +1109,7 @@ public class jEdit
 			Log.log(Log.ERROR,jEdit.class,io);
 		}
 
-		return buffer;
+		return splitConfig;
 	}
 
 	/**
@@ -1722,8 +1726,7 @@ public class jEdit
 
 	/**
 	 * Creates a new view of a buffer.
-	 * @param view The view from which to take the geometry, buffer and
-	 * caret position from
+	 * @param view An existing view
 	 * @param buffer The buffer
 	 */
 	public static View newView(View view, Buffer buffer)
@@ -1731,11 +1734,59 @@ public class jEdit
 		if(view != null)
 		{
 			view.showWaitCursor();
-			view.saveSplitConfig();
 			view.getEditPane().saveCaretInfo();
 		}
 
-		View newView = new View(buffer);
+		View newView = new View(buffer,null);
+
+		// Do this crap here so that the view is created
+		// and added to the list before it is shown
+		// (for the sake of plugins that add stuff to views)
+		newView.pack();
+
+		// newView.setSize(view.getSize()) creates incorrectly
+		// sized views, for some reason...
+		if(view != null)
+		{
+			GUIUtilities.saveGeometry(view,"view");
+			view.hideWaitCursor();
+		}
+
+		GUIUtilities.loadGeometry(newView,"view");
+
+		addViewToList(newView);
+		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
+
+		newView.show();
+
+		return newView;
+	}
+
+	/**
+	 * Creates a new view.
+	 * @param view An existing view
+	 * @since jEdit 3.2pre2
+	 */
+	public static View newView(View view)
+	{
+		return newView(view,view.getSplitConfig());
+	}
+
+	/**
+	 * Creates a new view.
+	 * @param view An existing view
+	 * @param splitConfig The split configuration
+	 * @since jEdit 3.2pre2
+	 */
+	public static View newView(View view, String splitConfig)
+	{
+		if(view != null)
+		{
+			view.showWaitCursor();
+			view.getEditPane().saveCaretInfo();
+		}
+
+		View newView = new View(null,splitConfig);
 
 		// Do this crap here so that the view is created
 		// and added to the list before it is shown

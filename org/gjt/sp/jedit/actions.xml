@@ -436,7 +436,7 @@
 
 <ACTION NAME="new-view">
 	<CODE>
-		jEdit.newView(view,buffer);
+		jEdit.newView(view);
 	</CODE>
 </ACTION>
 

@@ -2985,6 +2985,9 @@ loop:				for(int i = 0; i < count; i++)
 
 	private boolean recoverAutosave(final View view)
 	{
+		if(!autosaveFile.canRead())
+			return false;
+
 		// this method might get called at startup
 		GUIUtilities.hideSplashScreen();
 

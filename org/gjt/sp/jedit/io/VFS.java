@@ -44,7 +44,10 @@ public abstract class VFS
 	public static final int WRITE_CAP = 1 << 1;
 
 	/**
-	 * VFS browser capability.
+	 * If set, a menu item for this VFS will appear in the browser's
+	 * 'More' menu. If not set, it will still be possible to type in
+	 * URLs in this VFS in the browser, but there won't be a user-visible
+	 * way of doing this.
 	 * @since jEdit 2.6pre2
 	 */
 	public static final int BROWSE_CAP = 1 << 2;
@@ -449,6 +452,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.28  2001/05/29 11:30:05  sp
+ * foo
+ *
  * Revision 1.27  2001/05/17 05:00:14  sp
  * Status bar, various minor tweaks
  *

@@ -1343,7 +1343,7 @@ vfs.not-supported.save.message=The {0} filesystem does not support\n\
 
 plugin-manager.title=Plugin Manager
 
-plugin-manager.url=file:///home/slava/test.xml
+plugin-manager.url=http://plugins.jedit.org/export/new_plugin_manager.php
 
 plugin-manager.caption=Installed plugins:
 

@@ -1,16 +1,19 @@
 TO DO
 
+- release new console and sendbuffer
+
+- Java 1.4 bugs
 - expand fold: scroll to last line of fold
-- CVS: add PluginListDownloadProgress.java
-- web start: macros
+- get web start to work
+- macros in web start version
 - scrollToCaret() doesn't always work
 - caret event not always fired
 - XThis: don't throw exceptions for non-existent methods
 - C+ENTER: display prompt
 - need to track down s.end < s.start cases
 
+- jEditLauncher
 - scroll lock key toggles 'scroll mode'
-- console shell: use StreamTokenizer
 - on OS X, make macos l&f the default
 - folding paint up bug
 - prev line fold gutter bug

@@ -65,6 +65,8 @@ class PluginListHandler extends HandlerBase
 			jar = value;
 		else if(aname == "VERSION")
 			version = value;
+		else if(aname == "DATE")
+			date = value;
 		else if(aname == "OBSOLETE")
 			obsolete = ("TRUE".equals(value));
 		else if(aname == "WHAT")
@@ -162,6 +164,7 @@ class PluginListHandler extends HandlerBase
 		else if(tag == "BRANCH")
 		{
 			branch.version = version;
+			branch.date = date;
 			branch.download = download;
 			branch.obsolete = obsolete;
 			plugin.branches.addElement(branch);
@@ -214,6 +217,7 @@ class PluginListHandler extends HandlerBase
 	private PluginList.Branch branch;
 	private boolean obsolete;
 	private String version;
+	private String date;
 	private String download;
 	private String depWhat;
 	private String depFrom;

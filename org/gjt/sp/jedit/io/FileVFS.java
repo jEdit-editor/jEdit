@@ -259,6 +259,7 @@ public class FileVFS extends VFS
 	{
 		boolean retVal = new File(from).renameTo(new File(to));
 		VFSManager.sendVFSUpdate(this,from,true);
+		VFSManager.sendVFSUpdate(this,to,true);
 		return retVal;
 	}
 

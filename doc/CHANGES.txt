@@ -2,6 +2,10 @@ JEDIT 3.2 VERSION HISTORY
 
 * Version 3.2pre2
 
+- The plugin manager still doesn't work in this release. While most of
+  the code is in place, the user interface is not finished, and the
+  server-side backend code isn't complete either.
+
 + New Features
 
 - This was actually added in 3.2pre1, not 3.2pre2, but I forgot to
@@ -79,6 +83,9 @@ JEDIT 3.2 VERSION HISTORY
   selected in the search and replace dialog box, but nothing was entered
   in the text field
 - CS+DOWN (select next paragraph) didn't work properly
+- print() in BeanShell didn't work for non-string arguments
+- jEdit will no longer attempt to recover an autosave file that you do
+  not have read access for
 
 + API Changes
 

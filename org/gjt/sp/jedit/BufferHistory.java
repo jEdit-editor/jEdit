@@ -85,7 +85,7 @@ public class BufferHistory
 				{
 					caret = Integer.parseInt(line.substring(
 							index1 + 1,index2));
-					selection = line.substring(index2);
+					selection = line.substring(index2 + 1);
 				}
 
 				addEntry(new Entry(path,caret,selection));
@@ -121,7 +121,7 @@ public class BufferHistory
 				out.write(String.valueOf(entry.caret));
 				out.write('\t');
 				if(entry.selection != null)
-					out.write(String.valueOf(entry.selection));
+					out.write(entry.selection);
 				out.write(lineSep);
 			}
 

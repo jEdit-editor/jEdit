@@ -1911,7 +1911,8 @@ public class JEditTextArea extends JComponent
 	{
 		this.overwrite = overwrite;
 		invalidateLine(caretLine);
-		view.getStatus().updateMiscStatus();
+		if(view.getStatus() != null)
+			view.getStatus().updateMiscStatus();
 	}
 
 	/**
@@ -1922,7 +1923,8 @@ public class JEditTextArea extends JComponent
 	{
 		overwrite = !overwrite;
 		invalidateLine(caretLine);
-		view.getStatus().updateMiscStatus();
+		if(view.getStatus() != null)
+			view.getStatus().updateMiscStatus();
 	}
 
 	/**
@@ -3911,7 +3913,8 @@ forward_scan:		do
 	public final void toggleMultipleSelectionEnabled()
 	{
 		multi = !multi;
-		view.getStatus().updateMiscStatus();
+		if(view.getStatus() != null)
+			view.getStatus().updateMiscStatus();
 	}
 
 	/**
@@ -3922,7 +3925,8 @@ forward_scan:		do
 	public final void setMultipleSelectionEnabled(boolean multi)
 	{
 		JEditTextArea.multi = multi;
-		view.getStatus().updateMiscStatus();
+		if(view.getStatus() != null)
+			view.getStatus().updateMiscStatus();
 	}
 
 	// protected members

@@ -393,6 +393,21 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
+	 * Returns a string that can be passed to the view constructor to
+	 * recreate the current split configuration in a new view.
+	 * @since jEdit 3.2pre2
+	 */
+	public String getSplitConfig()
+	{
+		StringBuffer splitConfig = new StringBuffer();
+		if(splitPane != null)
+			saveSplitConfig(splitPane,splitConfig);
+		else
+			splitConfig.append(getBuffer().getPath());
+		return splitConfig.toString();
+	}
+
+	/**
 	 * Updates the borders of all gutters in this view to reflect the
 	 * currently focused text area.
 	 * @since jEdit 2.6final
@@ -669,7 +684,7 @@ public class View extends JFrame implements EBComponent
 	View prev;
 	View next;
 
-	View(Buffer buffer)
+	View(Buffer buffer, String splitConfig)
 	{
 		setIconImage(GUIUtilities.getEditorIcon());
 
@@ -683,9 +698,7 @@ public class View extends JFrame implements EBComponent
 		help = GUIUtilities.loadMenu(this,"help-menu");
 		plugins = GUIUtilities.loadMenu(this,"plugins");
 
-		// finish persistent splits later
-		Component comp = restoreSplitConfig(buffer,"+");
-			/* jEdit.getProperty("view.splits") */;
+		Component comp = restoreSplitConfig(buffer,splitConfig);
 		dockableWindowManager.add(comp);
 
 		updateMacrosMenu();
@@ -712,24 +725,12 @@ public class View extends JFrame implements EBComponent
 		dockableWindowManager.init();
 	}
 
-	void saveSplitConfig()
-	{
-		StringBuffer splitConfig = new StringBuffer();
-		if(splitPane != null)
-			saveSplitConfig(splitPane,splitConfig);
-		else
-			splitConfig.append('+');
-		jEdit.setProperty("view.splits",splitConfig.reverse().toString());
-	}
-
 	void close()
 	{
 		closed = true;
 
 		// save dockable window geometry, and close 'em
 		dockableWindowManager.close();
-
-		saveSplitConfig();
 
 		GUIUtilities.saveGeometry(this,"view");
 		EditBus.removeFromBus(this);
@@ -825,61 +826,74 @@ public class View extends JFrame implements EBComponent
 
 	/*
 	 * The split config is recorded in a simple RPN "language":
-	 * + pushes a new edit pane onto the stack
-	 * - pops the two topmost elements off the stack, creates a
+	 * "vertical" pops the two topmost elements off the stack, creates a
 	 * vertical split
-	 * | pops the two topmost elements off the stack, creates a
+	 * "horizontal" pops the two topmost elements off the stack, creates a
 	 * horizontal split
-	 *
-	 * Note that after saveSplitConfig() is called, we have to
-	 * reverse the RPN "program" because this method appends
-	 * stuff to the end, so the bottom-most nodes end up at the
-	 * end
+	 * A path name creates an edit pane editing that buffer
 	 */
 	private void saveSplitConfig(JSplitPane splitPane,
 		StringBuffer splitConfig)
 	{
-		splitConfig.append(splitPane.getOrientation()
-			== JSplitPane.VERTICAL_SPLIT ? '-' : '|');
-
 		Component left = splitPane.getLeftComponent();
 		if(left instanceof JSplitPane)
 			saveSplitConfig((JSplitPane)left,splitConfig);
 		else
-			splitConfig.append('+');
+		{
+			splitConfig.append('\t');
+			splitConfig.append(((EditPane)left).getBuffer().getPath());
+		}
 
 		Component right = splitPane.getLeftComponent();
 		if(right instanceof JSplitPane)
 			saveSplitConfig((JSplitPane)right,splitConfig);
 		else
-			splitConfig.append('+');
+		{
+			splitConfig.append('\t');
+			splitConfig.append(((EditPane)right).getBuffer().getPath());
+		}
+
+		splitConfig.append(splitPane.getOrientation()
+			== JSplitPane.VERTICAL_SPLIT ? "\tvertical" : "\thorizontal");
 	}
 
 	private Component restoreSplitConfig(Buffer buffer, String splitConfig)
 	{
+		if(buffer != null)
+			return (editPane = createEditPane(buffer));
+		else if(splitConfig == null)
+			return (editPane = createEditPane(jEdit.getFirstBuffer()));
+
 		Stack stack = new Stack();
 
-		for(int i = 0; i < splitConfig.length(); i++)
+		StringTokenizer st = new StringTokenizer(splitConfig,"\t");
+
+		while(st.hasMoreTokens())
 		{
-			switch(splitConfig.charAt(i))
+			String token = st.nextToken();
+			if(token.equals("vertical"))
 			{
-			case '+':
-				stack.push(editPane = createEditPane(buffer));
-				break;
-			case '-':
 				stack.push(splitPane = new JSplitPane(
 					JSplitPane.VERTICAL_SPLIT,
 					(Component)stack.pop(),
 					(Component)stack.pop()));
 				splitPane.setBorder(null);
-				break;
-			case '|':
+			}
+			else if(token.equals("horizontal"))
+			{
 				stack.push(splitPane = new JSplitPane(
 					JSplitPane.HORIZONTAL_SPLIT,
 					(Component)stack.pop(),
 					(Component)stack.pop()));
 				splitPane.setBorder(null);
-				break;
+			}
+			else
+			{
+				buffer = jEdit.getBuffer(token);
+				if(buffer == null)
+					buffer = jEdit.getFirstBuffer();
+
+				stack.push(editPane = createEditPane(buffer));
 			}
 		}
 
