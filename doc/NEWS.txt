@@ -1,6 +1,12 @@
 MAJOR CHANGES IN JEDIT 2.7 SINCE 2.6
 
-
+Not yet written. Will need to mention:
+- new buffer switching UI
+- search and replace improvements
+- word wrap
+- scrolling actions
+- indent width -vs- tab width
+- FTP moved to a plugin
 
 -- Slava Pestov
 <sp@gjt.org>

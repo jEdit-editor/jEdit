@@ -292,6 +292,10 @@ public class Registers
 					.getContents(this).getTransferData(
 					DataFlavor.stringFlavor));
 
+				boolean trailingEOL = (selection.endsWith("\n")
+					|| selection.endsWith(System.getProperty(
+					"line.separator")));
+
 				// Some Java versions return the clipboard
 				// contents using the native line separator,
 				// so have to convert it here
@@ -305,7 +309,8 @@ public class Registers
 					buf.append('\n');
 				}
 				// remove trailing \n
-				buf.setLength(buf.length() - 1);
+				if(!trailingEOL)
+					buf.setLength(buf.length() - 1);
 				return buf.toString();
 			}
 			catch(Exception e)
@@ -399,6 +404,9 @@ public class Registers
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/11/11 05:37:52  sp
+ * paste bug fixed
+ *
  * Revision 1.11  2000/11/11 02:59:29  sp
  * FTP support moved out of the core into a plugin
  *
