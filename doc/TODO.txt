@@ -2,7 +2,6 @@ TO DO
 
 + before 3.2final:
 
-- cvs remove mode-tips.xml
 - FTP plugin: investigate soft links
 - FTP plugin: better error messages
 - make XML plugin more respectable
@@ -10,7 +9,6 @@ TO DO
 - finish duplicate shortcut code
 - get web start to work, and document differences between web start and
   stand-alone version
-- fix '... is not a function name' when running openjade
 - reload: preserve caret position
 - next time i'm making an RPM, fix the shell script
 - jEditLauncher
@@ -18,6 +16,7 @@ TO DO
 
 + bugs that need to be fixed at some stage:
 
+- fix '... is not a function name' when running openjade
 - popup menus; make sure they are on-screen? GUIUtilities method?
 - does loading and saving user settings take a long time?
 - only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>

@@ -100,18 +100,6 @@ insertTag();
 
   <informalexample><programlisting>// excerpt from Write_File_Header.bsh
 
-// *****import statements for excerpt*****
-
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-
-// *****portions of macro script omitted*****
-
 title = <quote>Write file header</quote>;
 
 currentName = buffer.getName();
@@ -158,16 +146,6 @@ if( JOptionPane.OK_OPTION !=
   </para>
 
   <itemizedlist>
-    <listitem>
-      <para>
-        The macro takes the approach of listing every <quote>imported</quote>
-        class in a separate <function>import</function> statement. If
-        you don't feel a need to keep track of which classes you are using
-        in a macro, the global statement <function>import javax.swing.*;
-        </function>will work just as well.
-      </para>
-    </listitem>
-
     <listitem>
       <para>
         The macro uses a total of seven visible components. Two of them are
@@ -293,8 +271,7 @@ if( JOptionPane.OK_OPTION !=
     <listitem>
       <funcsynopsis>
         <funcprototype>
-          <funcdef>public static Object <function>showInputDialog</function>
-          </funcdef>
+          <funcdef>public static Object <function>showInputDialog</function></funcdef>
           <paramdef>Component <parameter>parentComponent</parameter></paramdef>
           <paramdef>Object <parameter>message</parameter></paramdef>
           <paramdef>String <parameter>title</parameter></paramdef>
@@ -329,9 +306,6 @@ if( JOptionPane.OK_OPTION !=
 
   <informalexample>
   <programlisting>// fragment illustrating use of showInputDialog()
-
-import javax.swing.JOptionPane;
-
 options = new Object[5];
 options[0] = "JLabel";
 options[1] = "JTextField";
@@ -514,7 +488,7 @@ view.getInputHandler().readNextChar("Enter a character",
   <para>
     On startup, jEdit runs any BeanShell scripts located in the
     <filename>startup</filename> subdirectory of the jEdit installation or
-    user settings directories (see <xref linkend="settings-directory" />. As
+    user settings directories (see <xref linkend="settings-directory" />). As
     with macros, the scripts must have a <filename>.bsh</filename> file name
     extension. Startup scripts are run near the end of the startup sequence,
     after plugins, properties and such have been initialized, but before the
@@ -530,8 +504,8 @@ view.getInputHandler().readNextChar("Enter a character",
 
   <para>
     If a startup script throws an exception (becuase, for example,
-    it attempts to call a method on a <constant>null</constant>object).
-    jEdit will show a message box and attempt to move on to the next
+    it attempts to call a method on a <constant>null</constant> object).
+    jEdit will show an error dialog box and move on to the next
     startup script.  If script bugs are causing jEdit to crash or
     hang on startup, you can use the
     <command>-nostartupscripts</command> command line option to
@@ -539,27 +513,13 @@ view.getInputHandler().readNextChar("Enter a character",
   </para>
 
   <para>
-    A startup script can perform initialization tasks that cannot be
-    handled by command line options or ordinary configuration options. It
-    could, for example, open a designated file (whether or not it was open
-    at the close of the preceding jEdit session). It could write logging
-    information to jEdit's Activity Log or an external file, or activate
-    another application. It can also add variables, methods and scripted
-    objects to the namespace used by the BeanShell interpreter when running
-    other macro scripts. This last feature allows you to create a personal
-    library of methods and objects that can be accessed at any time during the
-    editing session in another macro, the BeanShell shell of the Console
-    plugin, or menu items such as
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
-    BeanShell Expression</guimenuitem>.
-  </para>
-
-  <para>
     Unlike with macros,
     variables and methods defined in a startup script are available in
     all instances of the BeanShell interpreter in jEdit, including
-    other macros, search and replace operations, and the Console plugin.
-    Because of this, the most common use of a startup script is to build
+    other macros, search and replace operations, the Console plugin, and
+    the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
+    Expression</guimenuitem>.
+    Because of this, one possible use of startup scripts is to build
     up a library of useful BeanShell routines. Startup scripts can also
     be used for other purposes, such as UI customization.
   </para>
@@ -568,42 +528,40 @@ view.getInputHandler().readNextChar("Enter a character",
     Another important difference between startup scripts and ordinary
     macros is that startup scripts cannot use the pre-defined variables
     <varname>view</varname>, <varname>textArea</varname>,
-    <varname>editPane</varname> and <varname>buffer</varname>.  This is
-    because they are executed before a view and the other objects are
-    created.  The pre-defined variables will be set to
-    <constant>null</constant> inside the method because they are
-    <constant>null</constant> at the time the source was interpreted by
-    BeanShell. If you are writing a method in a
-    startup script that will be part of your personal macro library, and
-    you wish to use pre-defined variables, use parameters of the
-    appropriate type in the method, so that a macro calling them after
-    startup can supply pre-defined values. For example, a startup script
+    <varname>editPane</varname> and <varname>buffer</varname>. This is
+    because they are executed before the initial view is created.
+  </para>
+
+  <para>
+    If you are writing a method in a
+    startup script and wish to use one of the above variables, pass
+    parameters of the
+    appropriate type to the method, so that a macro calling them after
+    startup can supply the appropriate values. For example, a startup script
     could include a method
-    <informalexample><programlisting>void doSomethingWithView(View v, String s)  {
+  </para>
+
+  <informalexample><programlisting>void doSomethingWithView(View v, String s)  {
     ...
 }</programlisting></informalexample>
+
+  <para>
     so that during the editing session another macro can call the method
     using
-    <informalexample><programlisting>doSomethingWithView(view, "something");
-</programlisting></informalexample>
-
   </para>
+
+  <informalexample><programlisting>doSomethingWithView(view,"something");</programlisting></informalexample>
 </sect1>
 
 <sect1 id="macro-tips-BeanShell"><title>Advanced BeanShell Techniques</title>
 
 <para>
-  Up to this point we have not discussed all of the options and features
-  of BeanShell, which is packaged as a standalone interpreter environment
-  as well as a scripting language. While many of those features are more
-  helpful when using BeanShell on its own, we will now mention a few
-  of them that can make writing macros easier. The latest documentation
-  on the entire BeanShell package is available from the
-  <ulink url="http://www.beanshell.org">BeanShell web site</ulink>.
+  BeanShell has a few advanced features that we haven't mentioned yet.
+  They will be discussed in this section.
 </para>
 
 <sect2 id="macro-tips-BeanShell-convenience">
-<title>BeanShell's <quote>Convenience</quote> Syntax</title>
+<title>BeanShell's Convenience Syntax</title>
 
 <para>
   We noted earlier that BeanShell syntax does not require that variables
@@ -614,32 +572,41 @@ view.getInputHandler().readNextChar("Enter a character",
   properties of JavaBeans.  They may be accessed or set as if they were
   data members. They may also be accessed using the name of the property
   enclosed in quotation marks and curly brackets.  For example, the following
-  statement are all equivalent for the AWT <classname>Button</classname>
-  object <varname>b</varname>:
+  statement are all equivalent, assuming <varname>btn</varname> is
+  a <classname>JButton</classname> instance:
 </para>
 
-<informalexample><programlisting>    b.setLebel("Choose");
-    b.label = "Choose";
-    b{"label"} = "Choose";
+<informalexample><programlisting>b.setText("Choose");
+b.text = "Choose";
+b{"text"} = "Choose";
 </programlisting></informalexample>
 
 <para>
   The last form can also be used to access a key-value pair of a
-  <classname>Hashtable</classname> object.  The following statements for
-  reading a buffer property are equivalent:
+  <classname>Hashtable</classname> object. It can even be used to obtain
+  the values of buffer-local properties; the following two statements
+  are equivalent:
 </para>
 
 <informalexample><programlisting>buffer.getProperty("tabSize")
-    buffer{"tabSize"}
+buffer{"tabSize"}
 </programlisting></informalexample>
+
+<!-- actually, the following requires the bsh.classpath package, which
+     is not included with jEdit at this point in time.
+
+     a future release of jEdit will use bsh.classpath, and hence support
+     'import *'
 
 <para>
   Finally, when importing classes, BeanShell permits the following form
   to import all classes lying within the interpreter's classpath:
 </para>
 
-<informalexample><programlisting>    import *;
+<informalexample><programlisting>import *;
 </programlisting></informalexample>
+
+-->
 
 </sect2>
 
@@ -673,19 +640,21 @@ view.getInputHandler().readNextChar("Enter a character",
 </itemizedlist>
 
 <para>
-  The following macro illustrates the use of these keywords:
+  The following script illustrates the use of these keywords:
 </para>
 
 <informalexample><programlisting>a = "top\n";
 foo() {
-	a = "middle\n";
-	bar() {
-		a = "bottom\n";
-		textArea.setSelectedText(global.a);
-		textArea.setSelectedText(super.a);
-		textArea.setSelectedText(a);
-	}
-	bar();
+    a = "middle\n";
+    bar() {
+        a = "bottom\n";
+        textArea.setSelectedText(global.a);
+        textArea.setSelectedText(super.a);
+        // equivalent to textArea.setSelectedText(this.a):
+        textArea.setSelectedText(a);
+    }
+
+    bar();
 }
 foo();</programlisting></informalexample>
 
@@ -694,9 +663,9 @@ foo();</programlisting></informalexample>
   buffer:
 </para>
 
-<informalexample><programlisting>top
+<screen>top
 middle
-bottom</programlisting></informalexample>
+bottom</screen>
 
 </sect2>
 
@@ -704,32 +673,39 @@ bottom</programlisting></informalexample>
 <title>Implementing Interfaces</title>
 
 <para>
-  As discussed in the dialog macro example in <xref
+  As discussed in the macro example in <xref
   linkend="dialog-macro"/>, scripted objects can implement Java
-  interfaces such as <classname>ActionListener</classname>.  The kinds
-  of interfaces that may be implemented varies depending upon the
-  version of the Java runtime environment being used.  If the version
-  is 1.2 or less, BeanShell objects can implement any of the AWT or
-  Swing listener interfaces, along with the Runnable interface,
-  using an inheritance mechanism.  If the
-  version if 1.3 or greater, scripted objects can implement any
-  arbitrary interface using reflection.
+  interfaces such as <classname>ActionListener</classname>.  Which
+  interfaces may be implemented varies depending upon the
+  version of the Java runtime environment being used. If running under
+  Java 1.1 or 1.2, BeanShell objects can only implement the AWT or
+  Swing event listener interfaces contained in the
+  <literal>java.awt.event</literal> and <literal>javax.swing.event</literal>
+  packages, and the <classname>java.lang.Runnable</classname> interface.
+  If running under Java 1.3, any interface can be implemented.
 </para>
 
 <para>
   Frequently it will not be necessary to implement all of the methods of
   a particular interface in order to specify the behavior of a scripted
-  object. Under JDK 1.2 and below, BeanShell will throw and internally handle
-  an exception for any unimplemented members of an interface, so it will not
-  be necessary to provide full implementations.  Under JDK 1.3 and above,
-  however, the reflection mechanism will throw an uncaught excpetion for any
-  missing interface methods.  The solution here is to provide a
-  <quote>no-op</quote> implementation of the following method:
+  object. Under Java 1.2 and below, BeanShell will automatically
+  ignore calls on unimplemented members of an interface.  Under Java 1.3
+  and above,
+  however, the reflection mechanism will throw an excpetion for any
+  missing interface methods, which will result in an error dialog box
+  being shown when your macro runs; not a pretty sight.
+  The solution is to implement the <function>invoke()</function> method,
+  which is called when an undefined method is invoked on a scripted
+  object. Typically, the implementation of this method will do nothing,
+  like in the following example:
 </para>
 
-<informalexample><programlisting>    invoke(method, args) {}
-</programlisting></informalexample>
+<informalexample><programlisting>invoke(method, args) {}</programlisting>
+</informalexample>
 
+<!-- I don't know... implementing all methods in an interface is
+     annoying in scripts, and if you care about performance, you will
+     be using JDK 1.3 or later anyway :-)
 <para>
   To avoid exceptions being thrown under JDK 1.2 and below and optimize
   macro performance, you can provide empty, <quote>no-op</quote>
@@ -741,19 +717,17 @@ bottom</programlisting></informalexample>
   implementations of missing interface methods should be used.
 </para>
 
+-->
 
 </sect2>
 
 <sect2 id="macro-tips-BeanShell-commands"><title>BeanShell Commands</title>
 
 <para>
-  BeanShell comes with a large number of built-in <quote>commands</quote>
-  which can write to the output stream of the current process, serialize
-  objects, run nested macros script, and perform a variety of other functions.
-  Most of these commands are themselves implemented as short beanShell scripts,
-  so they function as macro shortcuts.  A selection of commands that may be useful
-  in writing macros for jEdit is contained in <xref
-  linkend="BeanShell-commands"/>.
+  BeanShell comes with a large number of built-in scripted
+  <quote>commands</quote> that are useful in many circumstances.
+  Documentation for commands that are helpful when
+  writing macros can be found in <xref linkend="BeanShell-commands"/>.
 </para>
 
 </sect2>
@@ -775,111 +749,68 @@ bottom</programlisting></informalexample>
     or other unusual result of program execution that requires interruption
     of normal program flow and some kind of special handling. Java has a
     rich (and extendable) collection of exception classes which represent
-    such conditions. Exceptions that are not handled within an application
-    will usually result in an abrupt exit from the program. BeanShell saves
-    a jEdit session from an untimely demise by catching any exceptions thrown
-    by a macro and halting macro execution. When a BeanShell macro throws an
-    exception in this fashion, it almost certainly means there is a bug in
-    the macro.
+    such conditions.
   </para>
 
   <para>
-    Exceptions thrown while BeanShell runs a macro script, like other
-    exceptions occuring during jEdit execution, result in entries being
-    written to jEdit's activity log, see <xref linkend="activity-log"/>.
+    jEdit catches exceptions thrown by BeanShell scripts and displays
+    them in a dialog box. In addition, the full traceback is written to
+    the activity log (see <xref linkend="activity-log"/> for more
+    information about the activity log).
+  </para>
+
+  <para>
     There are two broad categories of errors that will result in
     exceptions:
   </para>
 
   <itemizedlist>
-    <listitem>
-      <para>
-        <emphasis>Interpreter errors</emphasis>, which may arise from typing
-        mistakes like mismatched brackets or missing semicolons, or from
-        BeanShell's failure to find a class corresponding to a particular
-        variable;
-      </para>
-    </listitem>
-    <listitem>
+   <listitem>
     <para>
-        <emphasis>Execution errors</emphasis>, which result from
-        runtime exceptions thrown by the Java platform when macro code is
-        executed.
+     <emphasis>Interpreter errors</emphasis>, which may arise from typing
+     mistakes like mismatched brackets or missing semicolons, or from
+     BeanShell's failure to find a class corresponding to a particular
+     variable.
     </para>
-    </listitem>
+    <para>
+     Interpreter errors are usually accompanied by the line number in
+     the script, along with the cause of the error.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <emphasis>Execution errors</emphasis>, which result from
+     runtime exceptions thrown by the Java platform when macro code is
+     executed.
+    </para>
+    <para>
+     Some exceptions thrown by the Java platform can often seem
+     cryptic. Nevertheless, examining the
+     contents of the activity log may reveals clues as to the cause of
+     the error.
+    </para>
+   </listitem>
   </itemizedlist>
-
-  <para>
-    An execution error will usually cause two exceptions to be written to
-    the activity log: an exception tied to the
-    <classname>AWT-EventQueue</classname> that orchestrates program
-    execution, and an exception tied to BeanShell itself. An interpreter
-    error results in only a single exception thrown by BeanShell. Usually
-    the interpreter error is the subject of a message box.
-  </para>
-
-  <para>
-    The error messages emitted by BeanShell can often seem cryptic. The
-    <firstterm>stack trace</firstterm> written by jEdit for an unhandled
-    exception often refers to unrevealing methods like
-    <function>Interpreter.eval()</function>. Nevertheless, examining the
-    contents of the activity log may reveals clues as to the cause of a
-    macro bug. If only an interpreter exception appears, it is a good idea
-    to look for typing mistakes, uninitialized variables, or class names
-    that are neither fully qualified nor subjects of an
-    <function>import</function> statement. If there is an underlying Java
-    exception thrown as well, the Java exception message may offer better
-    clues as to the source of the error. The clues may include the type of
-    exception thrown and the type of the object that the macro was
-    manipulating when the exception occurred.
-  </para>
 
 </sect2>
 
 <sect2 id="macro-tips-debugging-message">
-<title>Using a Message Box As a Tracing Tool</title>
+<title>Using the Activity Log as a Tracing Tool</title>
 
   <para>
-    Sometimes the activity log or other information will tell you
-    what kind of error occurred but not where it arose in the macro script.
-    If the error causes the display of an error box, there is a simple technique
-    that will often pinpoint or narrow the range of offending code, without
-    requiring repeated consultation of the activity log.  Insert the following
-    line of code at some point in the macro near the suspected error:
+    Sometimes exception tracebacks will say
+    what kind of error occurred but not where it arose in the script.
+    In those cases, you can insert calls that log messages to the
+    activity log in your macro. If the logged messages appear when the
+    macro is run, it means that up to that point the macro is fine;
+    but if an exception is logged first, it means the logging call is
+    located after the cause of the error.
   </para>
 
-  <informalexample>
-    <programlisting>Macros.message(view, <quote>tracing</quote>);</programlisting>
-  </informalexample>
-
   <para>
-    Of course, the message can be as descriptive as you like, and multiple
-    messages can be used at different points in the macro code.  It would be
-    helpful to use a common tag as part of each function call, or in adjacent
-    comments, so the messages can be easily found and removed from the finished
-    macro script. If a <quote>tracing</quote> message pops up during macro
-    execution, you know that the macro got that far in the script safely. If the
-    BeanShell message appears first, the error is occurring before the
-    <quote>tracing</quote> message box command is reached.  Iteration of
-    these steps will usually identify the location of a macro error.
-  </para>
-
-</sect2>
-
-<sect2 id="macro-tips-debugging-log">
-<title>Writing Trace Messages to the Activity Log</title>
-  <para>
-      The most laborious, but often the most effective technique, is to
-      insert code in the macro that writes additional messages to the
-      activity log before the exception occurs, then to examine the
-      activity log by choosing
-      <guimenu>Utilities</guimenu>&gt;<guimenuitem>View Activity Log</guimenuitem>
-      after
-      the macro completes execution.  The messages would trace program
-      execution and, when desired, report the value of significant variables.
-      To write a message to the activity log,
-      use the folllowing method of the <classname>Log</classname>
-      class:
+   To write a message to the activity log,
+   use the following method of the <classname>Log</classname>
+   class:
   </para>
 
   <itemizedlist>
@@ -896,33 +827,44 @@ bottom</programlisting></informalexample>
   </itemizedlist>
 
   <para>
-    The parameter <varname>urgency</varname> can take the defined
-    values <constant>Log.DEBUG</constant>, <constant>Log.MESSAGE</constant>,
-    <constant>Log.NOTICE</constant>, <constant>Log.WARNING</constant> or
-    <constant>Log.ERROR</constant>.  The <function>log()</function> method
-    will write a formatted string that contains the level of urgency and
-    representations of the <varname>source</varname> and
-    <varname>message</varname> parameters.
+   The parameter <varname>urgency</varname> can take one of the
+   following constant values:
+  </para>
+
+  <itemizedlist>
+   <listitem><para><constant>Log.DEBUG</constant></para></listitem>
+   <listitem><para><constant>Log.MESSAGE</constant></para></listitem>
+   <listitem><para><constant>Log.NOTICE</constant></para></listitem>
+   <listitem><para><constant>Log.WARNING</constant></para></listitem>
+   <listitem><para><constant>Log.ERROR</constant></para></listitem>
+  </itemizedlist>
+
+  <para>
+   Note that the urgency merely changes the string prefixed to the log
+   message; it does not change the logging behavior in any other way.
   </para>
 
   <para>
-    The following code would send a typical debugging message to the
+   The parameter <varname>source</varname> can either be an object or
+   class instance. When writing log messages from macros, set
+   this parameter to <literal>BeanShell.class</literal> to make macro
+   errors easier to spot in the activity log.
+  </para>
+
+  <para>
+    The following code sends a typical debugging message to the
     activity log:
   </para>
 
-    <informalexample>
-    <programlisting>Log.log(Log.DEBUG, BeanShell.class,
-    "counter = " + String.valueOf(counter)
-    + "; line = " + line);</programlisting>
-    </informalexample>
+    <informalexample><programlisting>Log.log(Log.DEBUG, BeanShell.class,
+    "counter = " + String.valueOf(counter));</programlisting></informalexample>
 
   <para>
     The corresponding activity log entry might read as follows:
   </para>
 
     <informalexample>
-    <programlisting>[debug] BeanShell: counter = 15; line = The corresponding
-    activity log entry might read as follows:</programlisting>
+    <programlisting>[debug] BeanShell: counter = 15</programlisting>
     </informalexample>
 
 </sect2>

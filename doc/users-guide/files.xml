@@ -157,11 +157,13 @@
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
    Options</guimenuitem> dialog box; see <xref linkend="buffer-opts" />.
   </para>
+  <para>
    By default, new files are saved with your operating system's native line
    separator. This can be changed in the
    <guibutton>Loading and Saving</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />.
+   dialog box; see <xref linkend="global-opts" />. Note that changing this
+   setting has no effect on existing files.
   </para>
  </sect1>
  <sect1 id="encodings"><title>Character Encodings</title>

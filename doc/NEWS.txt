@@ -24,9 +24,9 @@ disabled in the 'Global Options' dialog box.
 
 * Multiple selection
 
-Pressing the 'Caps Lock' key toggles multiple selection mode, where
-multiple independent ranges of text can be selected and operated upon at
-the same time.
+Pressing Control+\ toggles multiple selection mode, where multiple
+independent ranges of text can be selected and operated upon at the
+same time.
 
 * Quick copy
 
@@ -98,8 +98,8 @@ following:
 	for(int $1 = 0; $1 < $2; $1++)
 
 Now, simply entering "F" in the buffer and expanding it will insert the
-above text. However, if you expand "F#j#array.length#", the following
-will be inserted:
+above text as-is. However, if you expand "F#j#array.length#", the
+following will be inserted:
 
 	for(int j = 0; j < array.length; j++)
 
@@ -173,12 +173,6 @@ with the '-bshclient' command line switch while another instance is
 already running. This will read a BeanShell script from standard input
 and send it to the already running instance.
 
-* Sample plugins
-
-The three sample plugins that were formerly available from the jEdit web
-site (HelloWorld, HelloEditBus, HelloDockable) are now included in the
-source code download.
-
 * Better MacOS X support
 
 When running on MacOS X, jEdit automatically uses the Command key as the
@@ -188,11 +182,13 @@ MacOS applications do.
 
 * Java 1.4 compatibility
 
-jEdit is now fully compatible with the newly released Java 1.4, which is
-still beta at the time of writing.
+jEdit is now fully compatible with the newly released Java 1.4, which
+was still beta at the time of writing.
 
 * Improved documentation
 
 The user's guide has once again been restructured, expanded and revised.
-A new section on writing plugins has been added, and the section on
-writing macros has been greatly improved.
+The section on writing macros has been greatly improved, and a new
+section on writing plugins has been added. This section describes the
+construction of a sample plugin, QuickNotepad, the full source of which
+can be found in the jEdit source code download.

@@ -144,63 +144,60 @@
   </para>
 
   <para>
-    There are no <function>import</function> statements in this script, and
-    many BeanShell scripts written for jEdit will not require them. In Java,
-    an <function>import</function> statement makes public classes from other
-    files visible without a full specification of the class's classpath.
-    Without an import statement or a fully qualified name, Java cannot identify
-    most classes using a single name as an identifier. The
-    <function>import</function> statement operates similarly to the
-    <function>using</function> statement in C++.
-  </para>
-
-  <para>
-   In implementing BeanShell, jEdit causes a number of
-   <function>import</function> statements to be read into the BeanShell
-   interpreter everytime a script runs. These <quote>hidden</quote> import
-   statements make the jEdit editor core classes available without
-   specifying a full classpath. If you have downloaded the jEdit source
-   code, you can find the automatically imported classes in the file
-   <filename>org/gjt/sp/jedit/jedit.bsh</filename>.
-  </para>
-
-  <para>
-   Sometimes it is unclear if an <function>import</function> statement is
-   required. You will rarely go wrong if you keep a few
-   points in mind:
-  </para>
-
-  <itemizedlist>
-   <listitem>
-    <para>You will not need an import statement for any macro that
-    you record.</para>
-   </listitem>
-   <listitem>
-    <para>When you are constructing a new object in a macro (for
-    example, a dialog window or other GUI elements) you will need to
-    use import statements or fully qualified class names for those
-    components - see <xref linkend="dialog-macro"/> for details.</para>
-   </listitem>
-   <listitem>
-    <para>If you try to use a class that is not imported and
-    is not specified by its full classpath, the BeanShell
-    interpreter will complain, usually with an error message
-    relating to the offending line of code.</para>
-   </listitem>
-  </itemizedlist>
-
-  <para>
     Another missing item from a Java perspective is a
     <function>package</function> statement. In Java, such a statement is
     used to bundle together a number of files so that their classes become
-    visible to one another. Packages are not part of BeanShell. With the
-    exception of designated startup scripts (see <xref
-    linkend="startup-scripts"/>), and a macro that calls another,
-    nested macro, variables defined in a BeanShell script
-    (other than the script's return value) are visible only within the
-    script. You don't need to know anything about Java packages to write
+    visible to one another. Packages are not part of BeanShell,
+    and you don't need to know anything about them to write
     BeanShell macros.
   </para>
+
+  <para>
+    Finally,
+    there are no <function>import</function> statements in this script. In Java,
+    an <function>import</function> statement makes public classes from other
+    packages visible without having to specify a fully qualified class
+    name.
+    Without an import statement or a fully qualified name, Java cannot identify
+    most classes using a single name as an identifier.
+  </para>
+
+  <para>
+   jEdit automatically imports a number of commonly-used packages, so
+   recorded macros, and most BeanShell scripts you write will not require
+   <function>import</function> statements.
+  </para>
+
+  <para>
+    If you try to use a class that is not imported, the BeanShell
+    interpreter will complain with an error message
+    relating to the offending line of code.
+  </para>
+
+  <sidebar>
+   <para>
+    Here is the full list of packages automatically imported by jEdit:
+   </para>
+   <programlisting>javax.swing
+javax.swing.event
+java.awt
+java.awt.event
+java.net
+java.util
+java.io
+java.lang
+org.gjt.sp.jedit
+org.gjt.sp.jedit.browser
+org.gjt.sp.jedit.gui
+org.gjt.sp.jedit.io
+org.gjt.sp.jedit.msg
+org.gjt.sp.jedit.options
+org.gjt.sp.jedit.pluginmgr
+org.gjt.sp.jedit.search
+org.gjt.sp.jedit.syntax
+org.gjt.sp.jedit.textarea
+org.gjt.sp.util</programlisting>
+  </sidebar>
  </sect1>
 
  <sect1 id="helpful-methods"><title>Helpful Methods in the
@@ -316,7 +313,7 @@
 String result = Macros.input(view, "Type something here.");
 
 String result = Macros.input(view, "What is your name?",
-    "Slava Pestov");</programlisting>
+    "John Gellene");</programlisting>
   </informalexample>
 
   <para>
@@ -447,7 +444,6 @@ textArea.setSelectedText(newText);</programlisting>
 String newText = buffer.getName();
 
 // today's date
-import java.util.Date;
 import java.text.DateFormat;
 
 String newText = DateFormat.getDateInstance()
@@ -520,6 +516,16 @@ String result = df.format(d);
       </para>
 	  </listitem>
 
+    <listitem>
+      <para>
+        Note that the <classname>Date</classname> class is contained in
+        the <literal>java.util</literal> package, so an explicit import
+        statement is not required. However, <classname>DateFormat</classname>
+        is part of the <literal>java.text</literal> package, which is
+        not automatically imported, so an explicit
+        <function>import</function> statement must be used.
+      </para>
+    </listitem>
 	</itemizedlist>
 
    </listitem>

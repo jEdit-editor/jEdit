@@ -65,8 +65,7 @@
  <partintro>
   <para>
    This part of the user's guide covers jEdit's text editing commands, along
-   with basic usage of macros and plugins. Information about developing macros
-   and plugins can be found in subsequent parts of the user's guide.
+   with basic usage of macros and plugins.
   </para>
 
   <para>
@@ -94,9 +93,14 @@
 <part id="writing-modes-part"><title>Writing Edit Modes</title>
  <partintro>
   <para>
-   This part of the user's guide covers writing edit modes for jEdit. Edit modes
+   This part of the user's guide covers writing edit modes for jEdit.
+  </para>
+
+  <para>
+   Edit modes
    specify syntax highlighting rules, auto indent behavior, and various other
    customizations for editing different file types.
+   For general information about edit modes, see <xref linkend="modes" />.
   </para>
 
   <para>
@@ -113,8 +117,11 @@
  <partintro>
 
  <para>
-  This part of the user's guide is an introduction to using and writing
-  macros in jEdit. First, we will tell you a little about BeanShell,
+  This part of the user's guide covers writing macros for jEdit.
+ </para>
+
+ <para>
+  First, we will tell you a little about BeanShell,
   jEdit's macro scripting language. Next, we will walk through a few
   simple macros. We then present and analyze a dialog-based macro to
   illustrate additional macro writing techniques. Finally, we discuss
@@ -135,10 +142,7 @@
 <part id="writing-plugins-part"><title>Writing Plugins</title>
  <partintro>
   <para>
-   This part of the user's guide covers writing plugins for jEdit. A
-   <firstterm>plugin</firstterm> is an application which is loaded and runs
-   as part of another, host application. Plugins respond to user commands
-   and perform tasks that supplement the host application's features.
+   This part of the user's guide covers writing plugins for jEdit.
   </para>
 
   <para>

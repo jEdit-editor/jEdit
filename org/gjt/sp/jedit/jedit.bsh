@@ -2,10 +2,21 @@
  * performance reasons. */
 
 // We use the '__cruft' scripted object to store various junk.
-// do not remove this line.
 __cruft = object();
 
-// Import all jEdit packages so that macros don't have to
+/* By default, BeanShell imports the following packages:
+
+   - javax.swing.event
+   - javax.swing
+   - java.awt.event
+   - java.awt
+   - java.net
+   - java.util
+   - java.io
+   - java.lang
+
+   In addition to the above, we import jEdit's packages for convinience. */
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
@@ -46,4 +57,6 @@ print(arg)
 
 bsh.help.print = "usage: print ( arg )";
 
-Log.log(Log.DEBUG,this,"BeanShell interpreter version " + this.interpreter.VERSION);
+// Print a message once BeanShell initialization is complete
+Log.log(Log.DEBUG,BeanShell.class,"BeanShell interpreter version "
+	+ this.interpreter.VERSION);

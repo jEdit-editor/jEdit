@@ -3,10 +3,6 @@
 
 <chapter id="writing-modes"><title>Writing Edit Modes</title>
  <para>
-  For general information about edit modes, see <xref linkend="modes" />.
-  This section only covers writing your own edit modes.
- </para>
- <para>
   Edit modes are defined using XML, the <firstterm>extensible markup
   language</firstterm>; mode files have the extension
   <filename>.xml</filename>. XML is a very simple language, and as a result

@@ -53,13 +53,4 @@
    <xref linkend="using-macros"/>.
   </para>
 
- <para>
-  Throughout this part of the user's guide, we will be referring to some
-  of the plugins available for use with jEdit (in particular, the
-  <application>Console</application> plugin). If you have not installed
-  plugins, you really should consider doing so (see <xref
-  linkend="using-plugins"/> for information), but you will not need
-  plugins for most of what we discuss.
- </para>
-
 </chapter>
