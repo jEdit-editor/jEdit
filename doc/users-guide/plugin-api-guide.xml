@@ -9,19 +9,18 @@
 <chapter id="api-plugin-classes">
 <title>jEdit Plugin Classes</title>
 
+<para>
+  This is only a summary of selected classes and methods used in the
+  jEdit Plugin API. A more detailed discussion
+  is found in <xref linkend="plugin-api"/>
+</para>
+
 <sect1 id="class-EditPlugin"><title>Class EditPlugin</title>
 
 <para>
   This abstract class is the base for every plugin core class.  Its methods
   provide for basic interaction between the plugin and jEdit as a host
   application.
-</para>
-
-<sect2 id="class-EditPlugin-abstract"><title>Abstract Methods</title>
-
-<para>
-  The following are abstract methods of <classname>EditPlugin</classname>
-  that must be implemented by every derived plugin class:
 </para>
 
 <itemizedlist>
@@ -34,7 +33,8 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-      This method is called by jEdit as part of its startup routine.
+      This method is called by jEdit as part of its startup routine. It
+      is implemented as an empty <quote>no-op</quote>.
     </para>
   </listitem>
 
@@ -46,7 +46,8 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-      When jEdit exits, it calls this method on each plugin.
+      When jEdit exits, it calls this method on each plugin. It is implemented
+      as an empty <quote>no-op</quote>.
     </para>
   </listitem>
 
@@ -60,8 +61,9 @@
     <para>
       When a <classname>View</classname> object is created, it calls this
       method on each plugin to obtain entries to be displayed in the view's
-      <guimenu>Plugins</guimenu> menu section. The implementation typically
-      adds menu items to the <parameter>menuItems</parameter> parameter.
+      <guimenu>Plugins</guimenu> menu section. The collection of menu items
+      is contained in the <parameter>meniItems</parameter>. This method
+      is implemented as an empty <quote>no-op</quote>.
     </para>
   </listitem>
 
@@ -73,19 +75,13 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-      This method is called for each plugin during the creation of
+      This method is called for each plugin during the initialization of
       the options dialog that is displayed in response to the
       <guimenu>Utilities</guimenu>&gt;<guimenuitem>General Options</guimenuitem>
-      command.
+      command. It is implemented as an empty <quote>no-op</quote>
     </para>
   </listitem>
 
-</itemizedlist>
-
-</sect2>
-
-<sect2 id="class-EditPlugin-other"><title>Other Methods</title>
-<itemizedlist>
   <listitem>
     <funcsynopsis>
       <funcprototype>
@@ -94,7 +90,7 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-      This shortcut returns <function>getClass().getName()</function>.
+      This shortcut method returns <function>getClass().getName()</function>.
     </para>
   </listitem>
 
@@ -112,8 +108,6 @@
   </listitem>
 
 </itemizedlist>
-
-</sect2>
 
 </sect1>
 
@@ -205,10 +199,11 @@
 <sect1 id="class-EditBus"><title>Class EditBus</title>
 
   <para>
-    This singleton class provides a <quote>publish and subscribe</quote> messaging
-	system 	for all components that implement the
-	<classname>EBComponent</classname> 	interface, including
-	<classname>View</classname> and<classname>DockableWindow</classname> objects.
+    This class defines a singleton object providing a <quote>publish and
+    subscribe</quote> messaging system for all components that implement
+    the	<classname>EBComponent</classname> interface, including
+    <classname>View</classname> and<classname>DockableWindow</classname>
+    objects.
   </para>
 
 <itemizedlist>
@@ -290,7 +285,7 @@
       </funcprototype>
     </funcsynopsis>
     <para>
-        Send the specified message to all subscibers on the EditBus.
+        Send the specified message to all subscribers on the EditBus.
     </para>
   </listitem>
 
@@ -301,7 +296,7 @@
 <sect1 id="class-DockableWindow"><title>Interface DockableWindow</title>
 
   <para>
-    This interface provides the connection between the plugin's visible
+    This interface provides a connection between the plugin's visible
     components and a top-level <classname>View</classname> object of the
     host application.
   </para>
@@ -346,7 +341,7 @@
 <para>
   Depending upon the settings chosen by the user, the jEdit Plugin API
   will place the <classname>Component</classname> returned by the
-  <function>getComponent()</function> method in a floating frame
+  <function>DockableWindow.getComponent()</function> method in a floating frame
   window or in a tabbed window at the designated docking location. Both
   types of containing windows implement the interface
   <classname>DockableWindowContainer</classname> and are managed entirely
@@ -714,5 +709,5 @@
 
 </sect1>
 
-
 </chapter>
+
