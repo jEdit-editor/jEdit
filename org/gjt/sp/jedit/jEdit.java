@@ -1405,7 +1405,6 @@ public class jEdit
 		addAction("reload");
 		addAction("reload-all");
 		addAction("regexp");
-		addAction("remove-trailing-ws");
 		addAction("replace-all");
 		addAction("replace-in-selection");
 		addAction("rescan-macros");
@@ -1704,6 +1703,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.178  2000/01/16 01:45:51  sp
+ * Remove Trailing Whitespace going back to TextTools
+ *
  * Revision 1.177  2000/01/14 22:11:24  sp
  * Enhanced options dialog box
  *

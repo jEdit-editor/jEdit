@@ -4,8 +4,9 @@ JEDIT VERSION HISTORY
 
 + New Features
 
-- To Upper Case, To Lower Case and Remove Trailing Whitespace actions from
-  TextTools plugin moved into the core
+- To Upper Case, To Lower Case and Select Word actions from TextTools plugin
+  moved into the core
+- New Select Line, Select Paragraph actions (mainly useful in plugins)
 
 + Enhancements
 

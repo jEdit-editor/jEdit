@@ -93,7 +93,6 @@ set-marker.shortcut=C+e C+m
 new-view.shortcut=C+e C+n
 open-url.shortcut=C+e C+o
 exit.shortcut=C+e C+q
-remove-trailing-ws.shortcut=C+e C+s
 insert-literal.shortcut=C+e C+v
 close-view.shortcut=C+e C+w
 redo.shortcut=C+e C+z

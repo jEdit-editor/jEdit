@@ -175,7 +175,6 @@ line=indent-line \
      delete-line \
      delete-start-line \
      delete-end-line \
-     remove-trailing-ws \
      - \
      join-lines \
      - \
@@ -189,7 +188,6 @@ delete-line.label=Delete Line
 delete-start-line.label=Delete to Start of Line
 delete-end-line.label=Delete to End of Line
 join-lines.label=Join Lines
-remove-trailing-ws.label=Remove Trailing Whitespace
 shift-left.label=Shift Indent Left
 shift-right.label=Shift Indent Right
 
