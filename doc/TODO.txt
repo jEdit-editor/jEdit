@@ -1,99 +1,43 @@
 TO DO
 
-This list is a real mess... Note that not all these changes will be
-implemented in jEdit 3.2. Some might appear in a future version, some
-might never be implemented at all.
-
-- catch MalformedInputException and display a better error message
-- see if new beanshell fixes trailing \n bug
-- cvs add verilog.xml
-- a 'reinsertOnNextLine' regexp for word wrap?
-- reload edit modes command
-- start preparing for web start (handle jEditHome == null, jedit_jnlp.jar)
-- when loading a plugin, check if all the jars are present?
-- 'find' -vs- 'find in files'?
-- finish new plugin manager
-- scrollToCaret() doesn't always work
-- better docs about multiple selection & q copy
-- reverse regexp search
-- hypersearch: select button, clear button
-- XThis: don't throw exceptions for non-existent methods
-- caret event not always fired
-- folding bug
-- most recently deleted text in ^ register?
-- web start version
-- failed saves should not clear the dirty flag
 - enter:
-hello
 {
-	1
-	2
-	3
-	4
+	foo
 }
 
-Delete hello, then {
+Collapse { line, put caret at start, delete line, undo.
 
-+ editing
- - improved rectangular selections
- - soft wrap
- - Bracket double click behavior is really annoying - make if configurable
-
-+ folding
- - expand-fold doesn't expand narrowed regions
- - if the first line of the buffer is a collapsed fold: delete, undo,
-   text inaccessable until C+e x
- - Perhaps try an alternative implementation of narrowing
- - per-view fold visibility: bit-field used to store this in LineInfo
- - eliminate virtual line map with 'virtualLine' fields in LineInfo
-   and binary search in virtualToPhysical()
-
-+ plugins
- - if a plugin is removed and put in a new dir, it is shown in both the
-   update and install lists
- - zlib decompression errors in plugin manager
- - display all plugin errors, batched in one window on startup
- - move latest version plugin into the core, improve latest version plugin
- - move plugin manager into the core
- - plugin manager: track dependencies, branches
-
-+ syntax highlighting
- - only exit delegates at the top level (eg <?php "<?xml ...?>" ?> in PHP)
- - XMode rule inclusion
- - regexps in XMode
-
-+ io
- - can mini io progress, io progress command
- - display io progress automatically after > 1 sec I/O
- - move local fs-specific stuff from MiscUtilities to FileVFS (UrlVFS
-   calls getParentOfPath()?)
- - encoding option in VFS browser
- - when saving local files, save to .<filename>.save, then rename to
-   <filename>; maybe backups on non-local fs's (but then would have to
-   eliminate numbered backup support)
- - aborts not always fired
- - encoding option in VFS browser
- - Two-pane view in filesystem browser
-
-+ ui
- - ensure find field doesn't get too large
- - finish persistent splits
- - The base Metal L&F font will be configurable.
- - use Dirk's VariableGridLayout more
- - escape in 'add abbrev' dialog
- - fix dragStart handling in DockableWindowContainer.TabbedPane
- - C+i in shortcuts editor
- - 'new view' creates incorrectly sized views due to Java bugs
- - status bar for displaying readNextChar() prompts
-
-+ beanshell
- - improve handling of __char__
-
-+ documentation
- - get rid of final blank page of user's guide
- - Migrate documentation to DocBook/XML
- - update macro guide for misc. API changes:
-   - markers, registers, should probably be mentioned?
-   - s&r changes
-   - new select API
- - Include John's upcoming plugin guide
+- tabbing to text area fails
+- rewritten folding: Fold object, pointer to next of curr. level, each
+  text area has visibility hashtable
+- zlib decompression errors in plugin manager
+- when loading a plugin, check if all the jars are present?
+- finish new plugin manager
+- only exit delegates at the top level (eg <?php echo "<?xml ...?>" ?>
+  in PHP)
+- regexps in XMode
+- improve handling of DIGIT sequences
+- DELEGATE in EOL_SPAN
+- encoding option in VFS browser
+- failed saves should not clear the dirty flag
+- catch MalformedInputException and display a better error message
+- reverse regexp search
+- finish persistent splits
+- status bar for displaying readNextChar() prompts
+- scrollToCaret() doesn't always work
+- caret event not always fired
+- XThis: don't throw exceptions for non-existent methods
+- see if new beanshell fixes trailing \n bug
+- get rid of final blank page of user's guide
+- update macro guide for misc. API changes:
+  - markers
+  - mention registers?
+  - s&r changes (removal of showSearchDialog(), beanshell replace)
+  - new select API
+- Include John's upcoming plugin guide
+- improved rectangular selections
+- a 'reinsertOnNextLine' regexp for word wrap?
+- aborts not always fired
+- escape in 'add abbrev' dialog
+- fix dragStart handling in DockableWindowContainer.TabbedPane
+- C+i in shortcuts editor

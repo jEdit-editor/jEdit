@@ -297,7 +297,7 @@ public class jEdit
 		sortByName = getBooleanProperty("sortByName");
 
 		initPLAF();
-		initModes();
+		reloadModes();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -827,6 +827,56 @@ public class jEdit
 			actions[i++] = (EditAction)enum.nextElement();
 		}
 		return actions;
+	}
+
+	/**
+	 * Reloads all edit modes.
+	 * @since jEdit 3.2pre2
+	 */
+	public static void reloadModes()
+	{
+		/* Try to guess the eventual size to avoid unnecessary
+		 * copying */
+		modes = new Vector(50);
+
+		// load the global catalog
+		loadModeCatalog(MiscUtilities.constructPath(jEditHome,"modes","catalog"));
+
+		// load user catalog
+		if(settingsDirectory != null)
+		{
+			File userModeDir = new File(MiscUtilities.constructPath(
+				settingsDirectory,"modes"));
+			if(!userModeDir.exists())
+				userModeDir.mkdirs();
+
+			File userCatalog = new File(MiscUtilities.constructPath(
+				settingsDirectory,"modes","catalog"));
+			if(!userCatalog.exists())
+			{
+				// create dummy catalog
+				try
+				{
+					FileWriter out = new FileWriter(userCatalog);
+					out.write(jEdit.getProperty("defaultCatalog"));
+					out.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,jEdit.class,io);
+				}
+			}
+
+			loadModeCatalog(userCatalog.getPath());
+		}
+
+		Buffer buffer = buffersFirst;
+		while(buffer != null)
+		{
+			// This reloads the token marker and sends a message
+			// which causes edit panes to repaint their text areas
+			buffer.setMode();
+		}
 	}
 
 	/**
@@ -2021,7 +2071,10 @@ public class jEdit
 
 		inputHandler = new DefaultInputHandler(null);
 
-		// Determine installation directory
+		/* Determine installation directory.
+		 * If the jedit.home property is set, use that.
+		 * Then, look for jedit.jar in the classpath.
+		 * If that fails, assume this is the web start version. */
 		jEditHome = System.getProperty("jedit.home");
 		if(jEditHome == null)
 		{
@@ -2037,12 +2090,30 @@ public class jEdit
 					index - 1);
 			}
 			else
-				jEditHome = System.getProperty("user.dir");
+			{
+				// web start
+				jEditHome = null;
+			}
 		}
 
-		docsHome = MiscUtilities.constructPath(jEdit.getJEditHome(),"doc");
-		docsHome = "file:" + docsHome.replace(File.separatorChar,'/')
-			+ File.separatorChar;
+		if(jEditHome == null)
+		{
+			docsHome = jEdit.class.getResource("/doc/welcome.html")
+				.toString();
+			if(docsHome != null)
+			{
+				// this relies on the fact that the resource
+				// URL will be of the form <....>/welcome.html
+				docsHome = docsHome.substring(0,
+					docsHome.length() - 12);
+			}
+		}
+		else
+		{
+			docsHome = MiscUtilities.constructPath(jEditHome,"doc");
+			docsHome = "file:" + docsHome.replace(File.separatorChar,'/')
+				+ File.separatorChar;
+		}
 
 		actionHash = new Hashtable();
 	}
@@ -2125,47 +2196,6 @@ public class jEdit
 					+ snippet);
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
-		}
-	}
-
-	/**
-	 * Load edit modes.
-	 */
-	private static void initModes()
-	{
-		/* Try to guess the eventual size to avoid unnecessary
-		 * copying */
-		modes = new Vector(50);
-
-		// load the global catalog
-		loadModeCatalog(MiscUtilities.constructPath(jEditHome,"modes","catalog"));
-
-		// load user catalog
-		if(settingsDirectory != null)
-		{
-			File userModeDir = new File(MiscUtilities.constructPath(
-				settingsDirectory,"modes"));
-			if(!userModeDir.exists())
-				userModeDir.mkdirs();
-
-			File userCatalog = new File(MiscUtilities.constructPath(
-				settingsDirectory,"modes","catalog"));
-			if(!userCatalog.exists())
-			{
-				// create dummy catalog
-				try
-				{
-					FileWriter out = new FileWriter(userCatalog);
-					out.write(jEdit.getProperty("defaultCatalog"));
-					out.close();
-				}
-				catch(IOException io)
-				{
-					Log.log(Log.ERROR,jEdit.class,io);
-				}
-			}
-
-			loadModeCatalog(userCatalog.getPath());
 		}
 	}
 

@@ -74,6 +74,14 @@
    start with a short XML primer, followed by detailed information about
    each supported tag and highlighting rule.
   </para>
+  <sidebar><title>Reload Edit Modes command</title>
+   <para>
+    <guimenu>Utilities</>&gt;<guimenuitem>Reload Edit Modes</> reloads all edit
+    mode XML files from disk. It is very useful when writing edit modes because
+    it lets you see changes take effect without having to restart jEdit.
+   </para>
+  </sidebar>
+
   <sect2 id=xml-primer><title>An XML Primer</title>
   <para>
    A very simple edit mode looks like so:

@@ -499,6 +499,16 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
+      <keycombo><keycap>Control</><keycap>B</></keycombo></>
+      <entry>Search in open buffers.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
+      <keycombo><keycap>Control</><keycap>D</></keycombo></>
+      <entry>Search in directory.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</><keycap>E</></keycombo>
       <keycombo><keycap>Control</><keycap>R</></keycombo></>
       <entry>Replace in selection.</entry>
      </row>

@@ -418,11 +418,11 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
 
   <para>
     The contents of the <varname>code</varname> parameter will be run as
-    a BeanShell script, with one important modification. The first time the
+    a BeanShell script, with one important modification. Each time the
     string <varname>__char__</varname> appears in the parameter script, it
     will be substituted by the character value of the next key pressed after
-    <function>readNextChar()</function> is called. The value of the key
-    pressed is <quote>consumed</quote> by <function>readNextChar()</function>.
+    <function>readNextChar()</function> is called. The key press
+    is <quote>consumed</quote> by <function>readNextChar()</function>.
     It will not be displayed on the screen or otherwise processed by jEdit.
   </para>
 
@@ -443,10 +443,9 @@ script.append( "start = textArea.getCaretPosition();"         );
 script.append( "line = textArea.getCaretLine();"              );
 script.append( "end = textArea.getLineEndOffset(line) + 1;"   );
 script.append( "text = buffer.getText(start, end - start);"   );
-script.append( "ch = __char__;"                               );
-script.append( "match = text.indexOf(ch, 1);"                 );
+script.append( "match = text.indexOf(__char__, 1);"           );
 script.append( "if(match != -1) {"                            );
-script.append(   "if(ch != '\\n') ++match;"                   );
+script.append(   "if(__char__ != '\\n') ++match;"             );
 script.append(   "textArea.select(start, start + match - 1);" );
 script.append( "}"                                            );
 
@@ -484,21 +483,6 @@ view.getInputHandler().readNextChar(script.toString());
         <filename>Next_Char.bsh</filename> and therefore does not share
         variables, methods, or scripted objects defined in the parent
         macro.
-      </para>
-    </listitem>
-
-    <listitem>
-      <para>
-        It is also important that the child script define and set a local
-        variable equal to the <varname>__char__</varname> if the value
-        will be used more than once.  This is because
-        <varname>__char__</varname> is not a true variable but a
-        placeholder token in the child script string.  The implementation
-        of <!-- <classname>InputHandler</classname> triggered by -->
-        <function>readNextChar</function> substitutes
-        the character value of the keypress for <varname>__char__</varname>
-        the first time it occurs in the child script string; then it
-        executes the resulting string as a macro.
       </para>
     </listitem>
 

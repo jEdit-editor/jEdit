@@ -47,9 +47,11 @@ prev-textarea.shortcut=A+PAGE_UP
 next-textarea.shortcut=A+PAGE_DOWN
 
 # C+e
-# Unused b, d, e, f, h, n, p, q, x, y
+# Unused e, f, h, n, p, q, x, y
 copy-append.shortcut=C+e C+a
+search-in-open-buffers.shortcut=C+e C+b
 range-comment.shortcut=C+e C+c
+search-in-directory.shortcut=C+e C+d
 find-selection.shortcut=C+e C+f
 replace-and-find-next.shortcut=C+e C+g
 center-caret.shortcut=C+e C+i

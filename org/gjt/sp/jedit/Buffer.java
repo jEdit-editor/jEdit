@@ -65,8 +65,14 @@ public class Buffer extends PlainDocument implements EBComponent
 	public static final String LINESEP = "lineSeparator";
 
 	/**
+	 * Backed up property.
+	 * @since jEdit 3.2pre2
+	 */
+	public static final String BACKED_UP = "Buffer__backedUp";
+
+	/**
 	 * Caret info properties.
-	 * @since 3.2pre1
+	 * @since jEdit 3.2pre1
 	 */
 	public static final String CARET = "Buffer__caret";
 	public static final String SELECTION = "Buffer__selection";
@@ -356,7 +362,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		undo = null;
 		final boolean loadAutosave;
 
-		if(!getFlag(NEW_FILE))
+		if(reload || !getFlag(NEW_FILE))
 		{
 			if(file != null)
 				modTime = file.lastModified();
@@ -1416,6 +1422,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			Log.log(Log.ERROR,this,bl);
 		}
+
+		setMode(jEdit.getMode("text"));
 	}
 
 	/**
@@ -3327,9 +3335,6 @@ loop:				for(int i = 0; i < count; i++)
 		 */
 		public void addToken(int length, byte id)
 		{
-			if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
-				throw new InternalError("Invalid id: " + id);
-
 			if(length == 0 && id != Token.END)
 				return;
 

@@ -38,7 +38,32 @@ import org.gjt.sp.util.Log;
  */
 public class SearchDialog extends EnhancedDialog
 {
+	/**
+	 * Default file set.
+	 * @since jEdit 3.2pre2
+	 */
+	public static final int CURRENT_BUFFER = 0;
+	public static final int ALL_BUFFERS = 1;
+	public static final int DIRECTORY = 2;
+
+	/**
+	 * Creates a new search and replace dialog box.
+	 * @param view The view
+	 * @param searchString The search string
+	 */
 	public SearchDialog(View view, String searchString)
+	{
+		this(view,searchString,CURRENT_BUFFER);
+	}
+
+	/**
+	 * Creates a new search and replace dialog box.
+	 * @param view The view
+	 * @param searchString The search string
+	 * @param searchIn One of CURRENT_BUFFER, ALL_BUFFERS, or DIRECTORY
+	 * @since jEdit 3.2pre2
+	 */
+	public SearchDialog(View view, String searchString, int searchIn)
 	{
 		super(view,jEdit.getProperty("search.title"),false);
 
@@ -56,8 +81,13 @@ public class SearchDialog extends EnhancedDialog
 
 		content.add(BorderLayout.EAST,createButtonsPanel());
 
-		find.setText(searchString);
-		find.selectAll();
+		if(searchString != null && searchString.indexOf('\n') == -1)
+		{
+			find.setText(searchString);
+			find.selectAll();
+		}
+		else
+			// ???
 
 		replace.setText(null);
 		replaceScript.setText(null);
@@ -76,13 +106,14 @@ public class SearchDialog extends EnhancedDialog
 		else
 			stringReplace.setSelected(true);
 
-		fileset = SearchAndReplace.getSearchFileSet();
-		if(fileset instanceof CurrentBufferSet)
+		if(searchIn == CURRENT_BUFFER)
 			searchCurrentBuffer.setSelected(true);
-		else if(fileset instanceof AllBufferSet)
+		else if(searchIn == ALL_BUFFERS)
 			searchAllBuffers.setSelected(true);
-		else if(fileset instanceof DirectoryListSet)
+		else if(searchIn == DIRECTORY)
 			searchDirectory.setSelected(true);
+
+		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 
 		if(fileset instanceof DirectoryListSet)
 		{
@@ -135,6 +166,8 @@ public class SearchDialog extends EnhancedDialog
 		jEdit.unsetProperty("search.d-height");
 		GUIUtilities.loadGeometry(this,"search");
 		show();
+
+		GUIUtilities.requestFocus(this,find);
 	}
 
 	public void ok()
@@ -172,7 +205,6 @@ public class SearchDialog extends EnhancedDialog
 
 	// private members
 	private View view;
-	private SearchFileSet fileset;
 
 	// fields
 	private HistoryTextField find, replace, replaceScript;
@@ -222,7 +254,12 @@ public class SearchDialog extends EnhancedDialog
 		ButtonGroup grp = new ButtonGroup();
 		ReplaceActionHandler replaceActionHandler = new ReplaceActionHandler();
 
-		stringReplace = new JRadioButton(jEdit.getProperty(
+		// we use a custom JRadioButton subclass that returns
+		// false for isFocusTraversable() so that the user can
+		// tab from the search field to the replace field with
+		// one keystroke
+
+		stringReplace = new MyJRadioButton(jEdit.getProperty(
 			"search.string-replace-btn"));
 		stringReplace.setBorder(new EmptyBorder(3,0,3,0));
 		stringReplace.addActionListener(replaceActionHandler);
@@ -234,7 +271,7 @@ public class SearchDialog extends EnhancedDialog
 		label.setLabelFor(replace);
 		fieldPanel.add(replace);
 
-		beanShellReplace = new JRadioButton(jEdit.getProperty(
+		beanShellReplace = new MyJRadioButton(jEdit.getProperty(
 			"search.beanshell-replace-btn"));
 		beanShellReplace.setBorder(new EmptyBorder(6,0,3,0));
 		beanShellReplace.addActionListener(replaceActionHandler);
@@ -498,6 +535,8 @@ public class SearchDialog extends EnhancedDialog
 		if(filter.length() == 0)
 			filter = "*";
 
+		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+
 		if(searchCurrentBuffer.isSelected())
 			fileset = new CurrentBufferSet();
 		else if(searchAllBuffers.isSelected())
@@ -518,6 +557,11 @@ public class SearchDialog extends EnhancedDialog
 			}
 			else
 				fileset = new DirectoryListSet(directory,filter,recurse);
+		}
+		else
+		{
+			// can't happen
+			fileset = null;
 		}
 
 		jEdit.setBooleanProperty("search.keepDialog.toggle",
@@ -563,6 +607,22 @@ public class SearchDialog extends EnhancedDialog
 		{
 			GUIUtilities.saveGeometry(this,"search");
 			setVisible(false);
+		}
+	}
+
+	// used for the stringReplace and beanShell replace radio buttons,
+	// so that the user can press tab to go from the find field to the
+	// replace field in one go
+	class MyJRadioButton extends JRadioButton
+	{
+		MyJRadioButton(String label)
+		{
+			super(label);
+		}
+
+		public boolean isFocusTraversable()
+		{
+			return false;
 		}
 	}
 

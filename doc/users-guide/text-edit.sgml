@@ -97,14 +97,43 @@
   </sect2>
   <sect2><title>Multiple Selection</>
    <para>
-    Pressing <keycap>Caps Lock</> turns multiple selection mode on and off,
-    which allows several discontiguous chunks of text can be selected and
-    operated on.
+    Pressing <keycap>Caps Lock</> turns multiple selection mode on and off. In
+    multiple selection mode, multiple fragments of text can be selected and
+    operated on simultaneously.
    </para>
    <para>
-    All jEdit built-in commands support multiple selection, but some older
-    plugins may not.
+    While multiple selection mode is active, clicking the mouse will reposition
+    the caret without deactivation the selection, and dragging the mouse will
+    create a new selection, in addition to the current one.
+   <para>
+    Various jEdit commands behave differently with multiple selections:
    </para>
+   <itemizedlist>
+    <listitem><para>Commands that copy text place the contents of
+    each selection, separated by line breaks, in the specified register. Note
+    that the selections are appended in the order they were created, not the
+    order they appear in the buffer. In other words, if you select a chunk of
+    text near the end of the buffer, another near the beginning, then invoke
+    <guimenuitem>Copy</>, the clipboard will contain the later chunk, followed
+    by a line break, followed by the earlier, but more recently selected, chunk.
+    </para></listitem>
+    <listitem><para>Commands that insert (or paste) text replace each selection
+    with the entire text that is being inserted.</para></listitem>
+    <listitem><para>Commands that filter text (such as <guimenuitem>Spaces to
+    Tabs</>, <guimenuitem>Range Comment</>, and even <guimenuitem>Replace in
+    Selection</>) operate on each selection, in
+    turn.</para></listitem>
+    <listitem><para>Line-based commands (such as <guimenuitem>Shift Indent
+    Left</>, <guimenuitem>Shift Indent Right</>, and <guimenuitem>Line
+    Comment</>) operate on each line that contains at least one selection, in
+    addition to the line containing the caret.</para></listitem>
+    <listitem><para>Caret movement commands that would normally deactivate the
+    selection (such as the arrow keys, while <keycap>Shift</> is not being held
+    down), move the caret, leaving the selection as-is.</para></listitem>
+    <listitem><para>Some older plugins may not support multiple selection at
+    all.</para></listitem>
+   </itemizedlist>
+  </sect2>
  </sect1>
  <sect1 id=entering-text><title>Inserting and Deleting Text</>
   <para>
@@ -398,51 +427,40 @@
  </sect1>
  <sect1 id=text-transfer><title>Transferring Text</>
   <para>
-   jEdit provides a rich set of commands for moving and copying text.
-   Most applications support the concept of a single <firstterm>clipboard</>
-   that can hold one piece of information at a time. jEdit takes this to the
-   next step by supporting any number of clipboards, called
-   <firstterm>registers</>, with each register referred to by a single-character
-   name. The <quote>quick copy</> and system clipboard features allow easy
-   access to two specific registers. A third set of commands allows access to
-   all registers.
+   jEdit provides a rich set of commands for moving and copying text. Text is
+   transferred using <firstterm>registers</>. A register is a holding area with
+   a single-character name that can hold once piece of text at a time.
   </para>
   <para>
-   All text transfer commands behave like you expect with multiple selections.
-   The copying commands place all selected text chunks, separated by line
-   breaks, into the relevant register. The pasting commands replace each
-   selected chunk with the contents of the relevant register.
+   jEdit has three sets of commands for working with registers.
+   The <quote>quick copy</> and system clipboard features allow easy
+   access to two specific registers. A third set of commands allows access to
+   all other registers.
   </para>
   <sect2><title>Quick Copy</>
    <para>
-    jEdit stores the most recently selected text in the <filename>%</> register.
-    A middle mouse button click (or <keycap>Alt</>-click, if you do not have a
-    three-button mouse) inserts the contents of that register at the clicked
-    location.
+    Holding down the <keycap>Alt</> key and clicking the left mouse button
+    in the text area inserts the most recently
+    selected text at the clicked location. If you have a three-button mouse, you
+    can simply click the middle mouse button, without holding down
+    <keycap>Alt</>.
    </para>
    <para>
-    Therefore, the simplest way to copy text from one location to another is to
-    select it, then click in the location either with the middle mouse button
-    or while holding down <keycap>Alt</>.
+    Internally, this is implemented by storing the most recently selected text
+    in the <filename>%</> register (recall that registers have single-character
+    names).
    </para>
   </sect2>
   <sect2><title>The System Clipboard</>
    <para>
-    Quick copy is very useful in many situations, but has the following
-    disadvantages:
+    Quick copy is very useful in many situations, but it has a number of
+    drawbacks; it requires the use of the mouse, it cannot be used to replace an
+    existing selection, and it cannot be used to transfer text between different
+    applications.
    </para>
-   <itemizedlist>
-    <listitem><para>It requires the use of the mouse</para></listitem>
-    <listitem><para>It cannot be used to replace an existing selection,
-    because selecting text immediately places it in the <filename>%</>
-    register</para></listitem>
-    <listitem><para>It cannot be used to transfer text between applications,
-    only within jEdit</para></listitem>
-   </itemizedlist>
    <para>
-    The register <filename>$</> is the system clipboard. The system clipboard
-    can be used to share data with other applications, and jEdit offers a set of
-    commands for working with it.
+    The system clipboard, internally known as the <filename>$</> register, does
+    not have these limitations, but can be slightly less convinient to use.
    </para>
    <para>
     <guimenu>Edit</>&gt;<guimenuitem>Cut</>
@@ -771,6 +789,21 @@
     Pressing the <keycap>Up</> and <keycap>Down</> keys in the
     <guibutton>Filter</> and <guibutton>Directory</> text fields recalls
     previously entered strings; see <xref linkend=history> for details.
+   </para>
+   <para>
+    Two convinience commands are provided for performing multiple file searches.
+   </para>
+   <para>
+    <guimenu>Search</>&gt;<guimenuitem>Search in Open Buffers</> (shortcut:
+    <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>B</></keycombo>) displays the search and
+    replace dialog box, and selects the <guibutton>All Buffers</> radio button.
+   </para>
+   <para>
+    <guimenu>Search</>&gt;<guimenuitem>Search in Directory</> (shortcut:
+    <keycombo><keycap>Control</><keycap>E</></keycombo>
+    <keycombo><keycap>Control</><keycap>B</></keycombo>) displays the search and
+    replace dialog box, and selects the <guibutton>Directory</> radio button.
    </para>
   </sect2>
   <sect2><title>The Search Bar</>

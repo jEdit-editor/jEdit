@@ -2332,10 +2332,10 @@ loop:		for(int i = 0; i < text.length(); i++)
 		if(!select && selection.size() != 0)
 		{
 			Selection s = getSelectionAtOffset(caret);
-			if(s != null)
+			if(s != null && caret != s.end)
 			{
 				if(!multi)
-					removeFromSelection(caret);
+					removeFromSelection(s);
 				moveCaretPosition(s.end);
 				return;
 			}
@@ -2583,8 +2583,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			Selection s = getSelectionAtOffset(caret);
 			if(s != null)
 			{
-				if(!multi)
-					removeFromSelection(caret);
+				if(!multi && caret != s.start)
+					removeFromSelection(s);
 				moveCaretPosition(s.start);
 				return;
 			}

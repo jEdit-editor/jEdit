@@ -456,14 +456,33 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		this.showHiddenFiles = showHiddenFiles;
 	}
 
-	public RE getFilenameFilter()
+	/**
+	 * Returns the file name filter glob.
+	 * @since jEdit 3.2pre2
+	 */
+	public String getFilenameFilter()
 	{
-		return filenameFilter;
+		if(filterCheckbox.isSelected())
+		{
+			String filter = filterField.getText();
+			if(filter.length() == 0)
+				return "*";
+			else
+				return filter;
+		}
+		else
+			return "*";
 	}
 
-	public void setFilenameFilter(RE filenameFilter)
+	public void setFilenameFilter(String filter)
 	{
-		this.filenameFilter = filenameFilter;
+		if(filter == null || filter.length() == 0 || filter.equals("*"))
+			filterCheckbox.setSelected(false);
+		else
+		{
+			filterCheckbox.setSelected(true);
+			filterField.setText(filter);
+		}
 	}
 
 	public BrowserView getBrowserView()

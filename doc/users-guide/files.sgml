@@ -182,6 +182,12 @@
    <listitem><para><guimenuitem>New Directory</> - creates a new
    directory, prompting for the desired name
    </para></listitem>
+   <listitem><para><guimenuitem>Search in Directory</> - displays the search and
+   replace dialog box for searching in all files in the current directory that
+   match the current filename filter. See <xref linkend=search-replace>
+   for information
+   about the search and replace feature
+   </para></listitem>
    <listitem><para><guimenuitem>Add to Favorites</> - adds the currently
    selected (or the currently displayed, if there is nothing
    selected) directory to the favorites list</para></listitem>

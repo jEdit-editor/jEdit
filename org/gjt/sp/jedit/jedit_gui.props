@@ -327,6 +327,9 @@ search=find \
        find-next \
        find-prev \
        - \
+       search-in-open-buffers \
+       search-in-directory \
+       - \
        replace-in-selection \
        replace-and-find-next \
        replace-all \
@@ -337,9 +340,11 @@ search=find \
        hypersearch-results
 search.label=$Search
 find.label=$Find...
-find-next.label=Fin$d Next
+find-next.label=Fi$nd Next
 find-prev.label=Find Pre$vious
-find-selection.label=F$ind Selection...
+find-selection.label=Find Se$lection...
+search-in-open-buffers.label=Search in Open $Buffers...
+search-in-directory.label=Search in $Directory...
 replace-in-selection.label=$Replace in Selection
 replace-and-find-next.label=Re$place and Find Next
 replace-all.label=Replace $All
@@ -467,6 +472,8 @@ utils=vfs-browser \
       eval \
       eval-selection \
       - \
+      reload-modes \
+      - \
       buffer-options \
       global-options
 utils.label=$Utilities
@@ -476,6 +483,7 @@ log-viewer.label=$View Activity Log...
 update-log.label=Update Activity $Log on Disk
 eval.label=$Evaluate BeanShell Expression...
 eval-selection.label=E$valuate Selection
+reload-modes.label=$Reload Edit Modes
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 
@@ -1252,6 +1260,7 @@ vfs.browser.menu.rename.label=Rename...
 vfs.browser.menu.show-hidden-files.label=Show Hidden Files
 vfs.browser.menu.new-file.label=New File
 vfs.browser.menu.new-directory.label=New Directory...
+vfs.browser.menu.search-in-directory.label=Search in Directory...
 vfs.browser.menu.add-to-favorites.label=Add to Favorites
 vfs.browser.menu.go-to-favorites.label=Go to Favorites
 

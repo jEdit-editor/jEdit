@@ -1309,6 +1309,7 @@ Returns the line containing the position of the selection's beginning or end.
 
 </itemizedlist>
 
+<!--
 <itemizedlist>
 
 <listitem>
@@ -1346,6 +1347,7 @@ Returns the line containing the position of the selection's beginning or end.
 </listitem>
 
 </itemizedlist>
+-->
 
 <itemizedlist>
 
@@ -1847,6 +1849,7 @@ Returns the line containing the position of the selection's beginning or end.
 </para>
 </listitem>
 
+<!--
 <listitem>
 <funcsynopsis>
  <funcprototype>
@@ -1864,6 +1867,7 @@ Returns the line containing the position of the selection's beginning or end.
     corresponding field of the dialog.
 </para>
 </listitem>
+-->
 
 </itemizedlist>
 

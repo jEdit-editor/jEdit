@@ -88,6 +88,7 @@ class ModeCatalogHandler extends HandlerBase
 		if(name.equals("MODE"))
 		{
 			Mode mode = new Mode(modeName);
+
 			mode.setProperty("file",MiscUtilities.constructPath(
 				directory,file));
 

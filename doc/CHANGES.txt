@@ -10,12 +10,22 @@ JEDIT 3.2 VERSION HISTORY
   BeanShell code snippet. For example, you can use it to convert all
   tags in an HTML file to lower case.
 - Verilog syntax highlighting (Wojciech Stryjewski)
+- Utilities->Reload Edit Modes command
+- 'Search in Directory' command added to file system browser right click
+  menu
 
 + Enhancements
 
 - The current selection state is preserved in the buffer history (along
   with the caret position)
 - Improved PHP syntax highlighting (Daniel Beckham)
+- Files are now saved to #<filename>#save#, then renamed to <filename>.
+  This prevents data loss if, for example, the disk is full or jEdit
+  crashes while saving.
+- Search->Find always selects current buffer set.
+  Search->Search in Open Buffers (C+e C+b) selects 'All Buffers' file set.
+  Search->Search in Directory (C+e C+d) selects 'Directory' file set
+- 'Search Buffer' and 'Search Directory Tree' macros removed
 
 + Neutral
 
@@ -34,6 +44,19 @@ JEDIT 3.2 VERSION HISTORY
 - Ugly workaround for the bug where BeanShell would barf if a script did
   not end with a newline
 - JSP mode now highlights JSP comments correctly (<%-- ... --%>)
+- New files can now be reloaded
+- Fixed minor gutter mouse bug
+- Edit->Select None didn't work at all
+- Fixed minor bug in prev-char and next-char commands with multiple
+  selections
+- InputHandler.readNextChar() now substitutes every occurrence of
+  "__char__" with the typed character. Previously, it only substituted
+  the first occurrence
+
++ API Changes
+
+- SearchAndReplace.showSearchDialog() method removed. Simply create a
+  new SearchDialog instance instead
 
 * Version 3.2pre1
 

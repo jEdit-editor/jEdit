@@ -252,8 +252,9 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
 
-		int index = readNextChar.indexOf("__char__");
-		if(index != -1)
+		// this might be a bit slow if __char__ occurs a lot
+		int index;
+		while((index = readNextChar.indexOf("__char__")) != -1)
 		{
 			readNextChar = readNextChar.substring(0,index)
 				+ '\'' + charStr + '\''

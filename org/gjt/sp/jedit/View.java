@@ -78,8 +78,12 @@ public class View extends JFrame implements EBComponent
 			return;
 		}
 
+		String text = getTextArea().getSelectedText();
+		if(text != null && text.indexOf('\n') != -1)
+			text = null;
+
 		searchBar.setHyperSearch(false);
-		searchBar.getField().setText(getTextArea().getSelectedText());
+		searchBar.getField().setText(text);
 		searchBar.getField().selectAll();
 		searchBar.getField().requestFocus();
 	}
@@ -96,8 +100,12 @@ public class View extends JFrame implements EBComponent
 			return;
 		}
 
+		String text = getTextArea().getSelectedText();
+		if(text != null && text.indexOf('\n') != -1)
+			text = null;
+
 		searchBar.setHyperSearch(true);
-		searchBar.getField().setText(getTextArea().getSelectedText());
+		searchBar.getField().setText(text);
 		searchBar.getField().selectAll();
 		searchBar.getField().requestFocus();
 	}

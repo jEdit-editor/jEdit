@@ -299,7 +299,7 @@
 
 <ACTION NAME="find" NO_RECORD="TRUE">
 	<CODE>
-		new SearchDialog(view,null);
+		new SearchDialog(view,null,SearchDialog.CURRENT_BUFFER);
 	</CODE>
 </ACTION>
 
@@ -624,6 +624,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="reload-modes">
+	<CODE>
+		jEdit.reloadModes();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="remove-all-markers">
 	<CODE>
 		buffer.removeAllMarkers();
@@ -745,6 +751,18 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="search-in-open-buffers" NO_RECORD="TRUE">
+	<CODE>
+		new SearchDialog(view,null,SearchDialog.ALL_BUFFERS);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="search-in-directory" NO_RECORD="TRUE">
+	<CODE>
+		new SearchDialog(view,null,SearchDialog.DIRECTORY);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="select-all">
 	<CODE>
 		textArea.selectAll();
@@ -862,7 +880,7 @@
 
 <ACTION NAME="select-none">
 	<CODE>
-		textArea.removeSelection(textArea.getCaretPosition());
+		textArea.removeFromSelection(textArea.getCaretPosition());
 	</CODE>
 </ACTION>
 

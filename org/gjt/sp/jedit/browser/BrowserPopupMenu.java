@@ -1,7 +1,7 @@
 /*
  * BrowserPopupMenu.java - provides popup actions for rename, del, etc.
  * Copyright (C) 1999 Jason Ginchereau
- * Portions copyright (C) 2000 Slava Pestov
+ * Portions copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -81,6 +82,8 @@ public class BrowserPopupMenu extends JPopupMenu
 
 			addSeparator();
 		}
+		else
+			vfs = VFSManager.getVFSForPath(browser.getDirectory());
 
 		JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
 			jEdit.getProperty("vfs.browser.menu.show-hidden-files.label"));
@@ -94,6 +97,15 @@ public class BrowserPopupMenu extends JPopupMenu
 		add(createMenuItem("new-directory"));
 
 		addSeparator();
+
+		// note that we don't display the search in directory command
+		// in open and save dialog boxes
+		if(browser.getMode() == VFSBrowser.BROWSER
+			&& vfs instanceof FileVFS)
+		{
+			add(createMenuItem("search-in-directory"));
+			addSeparator();
+		}
 
 		add(createMenuItem("add-to-favorites"));
 		add(createMenuItem("go-to-favorites"));
@@ -194,6 +206,29 @@ public class BrowserPopupMenu extends JPopupMenu
 			}
 			else if(actionCommand.equals("new-directory"))
 				browser.mkdir();
+			else if(actionCommand.equals("search-in-directory"))
+			{
+				String path;
+
+				VFS.DirectoryEntry[] selected = browser.getSelectedFiles();
+				if(selected.length >= 1)
+				{
+					VFS.DirectoryEntry file = selected[0];
+					if(file.type == VFS.DirectoryEntry.DIRECTORY)
+						path = file.path;
+					else
+					{
+						VFS vfs = VFSManager.getVFSForPath(file.path);
+						path = vfs.getParentOfPath(file.path);
+					}
+				}
+				else
+					path = browser.getDirectory();
+
+				SearchAndReplace.setSearchFileSet(new DirectoryListSet(
+					path,browser.getFilenameFilter(),true));
+				new SearchDialog(browser.getView(),null,SearchDialog.DIRECTORY);
+			}
 			else if(actionCommand.equals("add-to-favorites"))
 			{
 				// if any directories are selected, add

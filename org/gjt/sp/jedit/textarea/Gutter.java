@@ -405,6 +405,7 @@ public class Gutter extends JComponent implements SwingConstants
 
 	class MouseHandler implements MouseListener, MouseMotionListener
 	{
+		boolean drag;
 		int toolTipInitialDelay, toolTipReshowDelay;
 
 		public void mouseEntered(MouseEvent e)
@@ -454,12 +455,13 @@ public class Gutter extends JComponent implements SwingConstants
 			{
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mousePressed(e);
+				drag = true;
 			}
 		}
 
 		public void mouseDragged(MouseEvent e)
 		{
-			if(e.getX() >= getWidth() - borderWidth * 2)
+			if(drag && e.getX() >= getWidth() - borderWidth * 2)
 			{
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mouseDragged(e);
@@ -470,11 +472,13 @@ public class Gutter extends JComponent implements SwingConstants
 
 		public void mouseReleased(MouseEvent e)
 		{
-			if(e.getX() >= getWidth() - borderWidth * 2)
+			if(drag && e.getX() >= getWidth() - borderWidth * 2)
 			{
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mouseReleased(e);
 			}
+
+			drag = false;
 		}
 
 		public void mouseClicked(MouseEvent e) {}

@@ -293,23 +293,6 @@
         obtaining user input.
     </para>
 
-<listitem>
-    <para><filename>Search_Buffer.bsh</></para>
-    <abstract><para>
-        Presets search settings for current buffer and displays search
-        and replace dialog.
-    </para></abstract>
-</listitem>
-
-<listitem>
-    <para><filename>Search_Directory_Tree.bsh</></para>
-    <abstract><para>
-        Presets search settings for <quote>HyperSearch</> in current
-        directory and subdirectories, then displays search and replace
-        dialog.
-    </para></abstract>
-</listitem>
-
 
 <listitem>
     <para><filename>Write_HyperSearch_Results.bsh</></para>

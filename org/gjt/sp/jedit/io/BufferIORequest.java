@@ -496,7 +496,22 @@ public class BufferIORequest extends WorkRequest
 			{
 				buffer.readLock();
 
-				out = vfs._createOutputStream(session,path,view);
+				/* if the VFS supports renaming files, we first
+				 * save to #<filename>#save#, then rename that
+				 * to <filename>, so that if the save fails,
+				 * data will not be lost */
+				String savePath;
+
+				if((vfs.getCapabilities() & VFS.RENAME_CAP) != 0)
+				{
+					savePath = vfs.getParentOfPath(path)
+						+ '#' + vfs.getFileName(path)
+						+ "#save#";
+				}
+				else
+					savePath = path;
+
+				out = vfs._createOutputStream(session,savePath,view);
 				if(out != null)
 				{
 					if(path.endsWith(".gz"))
@@ -505,20 +520,32 @@ public class BufferIORequest extends WorkRequest
 					write(buffer,out);
 				}
 
+				// Only backup once per session
+				if(buffer.getProperty(Buffer.BACKED_UP) == null)
+				{
+					vfs._backup(session,path,view);
+					buffer.putProperty(Buffer.BACKED_UP,Boolean.TRUE);
+				}
+
+				if((vfs.getCapabilities() & VFS.RENAME_CAP) != 0)
+					vfs._rename(session,savePath,path,view);
+
 				// We only save markers to VFS's that support deletion.
 				// Otherwise, we will accumilate stale marks files.
-				if(jEdit.getBooleanProperty("persistentMarkers")
-					&& (vfs.getCapabilities() & VFS.DELETE_CAP) != 0
-					&& buffer.getMarkers().size() != 0)
+				if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0)
 				{
-					setStatus(jEdit.getProperty("vfs.status.save-markers",args));
-					setProgressValue(0);
-					out = vfs._createOutputStream(session,markersPath,view);
-					if(out != null)
-						writeMarkers(buffer,out);
+					if(jEdit.getBooleanProperty("persistentMarkers")
+						&& buffer.getMarkers().size() != 0)
+					{
+						setStatus(jEdit.getProperty("vfs.status.save-markers",args));
+						setProgressValue(0);
+						out = vfs._createOutputStream(session,markersPath,view);
+						if(out != null)
+							writeMarkers(buffer,out);
+					}
+					else
+						vfs._delete(session,markersPath,view);
 				}
-				else
-					vfs._delete(session,markersPath,view);
 			}
 			catch(BadLocationException bl)
 			{

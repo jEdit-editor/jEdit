@@ -215,6 +215,14 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
+		/* When doing a 'save as', the path to save to (path)
+		 * will not be the same as the buffer's previous path
+		 * (buffer.getPath()). In that case, we want to create
+		 * a backup of the new path, even if the old path was
+		 * backed up as well (BACKED_UP property set) */
+		if(!path.equals(buffer.getPath()))
+			buffer.getDocumentProperties().remove(Buffer.BACKED_UP);
+
 		VFSManager.runInWorkThread(new BufferIORequest(
 			BufferIORequest.SAVE,view,buffer,session,this,path));
 		return true;
@@ -361,6 +369,20 @@ public abstract class VFS
 	}
 
 	/**
+	 * Backs up the specified file. This should only be overriden by
+	 * the local filesystem VFS.
+	 * @param session The VFS session
+	 * @param path The path
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurs
+	 * @since jEdit 3.2pre2
+	 */
+	public void _backup(Object session, String path, Component comp)
+		throws IOException
+	{
+	}
+
+	/**
 	 * Creates an input stream. This method is called from the I/O
 	 * thread.
 	 * @param session the VFS session
@@ -428,6 +450,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.26  2001/05/13 07:21:27  sp
+ * more stuff
+ *
  * Revision 1.25  2001/04/27 11:28:46  sp
  * new selection code started
  *

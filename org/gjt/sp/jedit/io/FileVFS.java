@@ -138,21 +138,11 @@ public class FileVFS extends VFS
 			return false;
 		}
 
-		/* When doing a 'save as', the path to save to (path)
-		 * will not be the same as the buffer's previous path
-		 * (buffer.getPath()). In that case, we want to create
-		 * a backup of the new path, even if the old path was
-		 * backed up as well (BACKED_UP property set) */
-		if(!path.equals(buffer.getPath()))
-			buffer.getDocumentProperties().remove(BACKED_UP_PROPERTY);
-
 		// On Unix, preserve permissions
 		int permissions = getPermissions(buffer.getPath());
 		Log.log(Log.DEBUG,this,buffer.getPath() + " has permissions 0"
 			+ Integer.toString(permissions,8));
 		buffer.putProperty(PERMISSIONS_PROPERTY,new Integer(permissions));
-
-		backup(buffer,file);
 
 		return super.save(view,buffer,path);
 	}
@@ -279,6 +269,83 @@ public class FileVFS extends VFS
 		return retVal;
 	}
 
+	public void _backup(Object session, String path, Component comp)
+		throws IOException
+	{
+		// Fetch properties
+		int backups;
+		try
+		{
+			backups = Integer.parseInt(jEdit.getProperty(
+				"backups"));
+		}
+		catch(NumberFormatException nf)
+		{
+			Log.log(Log.ERROR,this,nf);
+			backups = 1;
+		}
+
+		if(backups == 0)
+			return;
+
+		String backupPrefix = jEdit.getProperty("backup.prefix","");
+		String backupSuffix = jEdit.getProperty("backup.suffix","~");
+
+		File file = new File(path);
+
+		// Check for backup.directory property, and create that
+		// directory if it doesn't exist
+		String backupDirectory = jEdit.getProperty("backup.directory");
+		if(backupDirectory == null || backupDirectory.length() == 0)
+			backupDirectory = file.getParent();
+		else
+		{
+			backupDirectory = MiscUtilities.constructPath(
+				System.getProperty("user.home"),backupDirectory);
+
+			// Perhaps here we would want to guard with
+			// a property for parallel backups or not.
+			backupDirectory = MiscUtilities.concatPath(
+				backupDirectory,file.getParent());
+
+			File dir = new File(backupDirectory);
+
+			if (!dir.exists())
+				dir.mkdirs();
+		}
+
+		String name = file.getName();
+
+		// If backups is 1, create ~ file
+		if(backups == 1)
+		{
+			file.renameTo(new File(backupDirectory,
+				backupPrefix + name + backupSuffix));
+		}
+		// If backups > 1, move old ~n~ files, create ~1~ file
+		else
+		{
+			new File(backupDirectory,
+				backupPrefix + name + backupSuffix
+				+ backups + backupSuffix).delete();
+
+			for(int i = backups - 1; i > 0; i--)
+			{
+				File backup = new File(backupDirectory,
+					backupPrefix + name + backupSuffix
+					+ i + backupSuffix);
+
+				backup.renameTo(new File(backupDirectory,
+					backupPrefix + name + backupSuffix
+					+ (i+1) + backupSuffix));
+			}
+
+			file.renameTo(new File(backupDirectory,
+				backupPrefix + name + backupSuffix
+				+ "1" + backupSuffix));
+		}
+	}
+
 	public InputStream _createInputStream(Object session, String path,
 		boolean ignoreErrors, Component comp) throws IOException
 	{
@@ -347,90 +414,6 @@ public class FileVFS extends VFS
 		Log.log(Log.DEBUG,FileVFS.class,"Unix operating system "
 			+ (isUnix ? "detected; will" : "not detected; will not")
 			+ " use permission-preserving code");
-	}
-
-	// The BACKED_UP flag prevents more than one backup from being
-	// written per session (I guess this should be made configurable
-	// in the future)
-	//
-	// we don't fire a VFSUpdate in this message as _createOutputStream()
-	// will do it anyway
-	private void backup(Buffer buffer, File file)
-	{
-		if(buffer.getProperty(BACKED_UP_PROPERTY) != null)
-			return;
-		buffer.putProperty(BACKED_UP_PROPERTY,Boolean.TRUE);
-
-		// Fetch properties
-		int backups;
-		try
-		{
-			backups = Integer.parseInt(jEdit.getProperty(
-				"backups"));
-		}
-		catch(NumberFormatException nf)
-		{
-			Log.log(Log.ERROR,this,nf);
-			backups = 1;
-		}
-
-		if(backups == 0)
-			return;
-
-		String backupPrefix = jEdit.getProperty("backup.prefix","");
-		String backupSuffix = jEdit.getProperty("backup.suffix","~");
-
-		// Check for backup.directory property, and create that
-		// directory if it doesn't exist
-		String backupDirectory = jEdit.getProperty("backup.directory");
-		if(backupDirectory == null || backupDirectory.length() == 0)
-			backupDirectory = file.getParent();
-		else
-		{
-			backupDirectory = MiscUtilities.constructPath(
-				System.getProperty("user.home"),backupDirectory);
-
-			// Perhaps here we would want to guard with
-			// a property for parallel backups or not.
-			backupDirectory = MiscUtilities.concatPath(
-				backupDirectory,file.getParent());
-
-			File dir = new File(backupDirectory);
-
-			if (!dir.exists())
-				dir.mkdirs();
-		}
-
-		String name = file.getName();
-
-		// If backups is 1, create ~ file
-		if(backups == 1)
-		{
-			file.renameTo(new File(backupDirectory,
-				backupPrefix + name + backupSuffix));
-		}
-		// If backups > 1, move old ~n~ files, create ~1~ file
-		else
-		{
-			new File(backupDirectory,
-				backupPrefix + name + backupSuffix
-				+ backups + backupSuffix).delete();
-
-			for(int i = backups - 1; i > 0; i--)
-			{
-				File backup = new File(backupDirectory,
-					backupPrefix + name + backupSuffix
-					+ i + backupSuffix);
-
-				backup.renameTo(new File(backupDirectory,
-					backupPrefix + name + backupSuffix
-					+ (i+1) + backupSuffix));
-			}
-
-			file.renameTo(new File(backupDirectory,
-				backupPrefix + name + backupSuffix
-				+ "1" + backupSuffix));
-		}
 	}
 
 	/** Code borrowed from j text editor (http://www.armedbear.org) */
