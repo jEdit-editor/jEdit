@@ -1045,8 +1045,8 @@ login.user=User name:\
 login.password=Password:\ 
 
 # Browser dialog box
-vfs.ftp.browser.open-title=Open from FTP Site
-vfs.ftp.browser.save-title=Save to FTP Site
+vfs.ftp.browser.open-title=Open from FTP Server
+vfs.ftp.browser.save-title=Save to FTP Server
 
 vfs.ftp.browser.host=FTP server:\ 
 vfs.ftp.browser.username=User name:\ 

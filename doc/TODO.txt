@@ -3,7 +3,6 @@ JEDIT TO DO
 2.5:
 
 - Update window-editor-* screenshots
-- Apparently, FTP doesn't work on Linux
 - Can't follow symlinks in FTP browser
 - -session= parameter should work even if files were specified on the
   command line

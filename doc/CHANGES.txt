@@ -12,6 +12,10 @@ JEDIT 2.5 VERSION HISTORY
   select that file in the file chooser
 - Broken plugins will no longer prevent the 'Plugins' menu from appearing
 
++ Bug Fixes
+
+- FTP didn't work at all (since 2.5pre3)
+
 * Version 2.5pre3
 
 + New Features
