@@ -168,6 +168,15 @@ public class BeanShell
 
 			running = true;
 
+			/* if(ownNamespace)
+			{
+				// terrible hack
+				interp.eval(new InputStreamReader(
+					BeanShell.class.getResourceAsStream(
+					"/org/gjt/sp/jedit/jedit.bsh")),
+					namespace,"jedit.bsh");
+			} */
+
 			interp.eval(in,namespace,path);
 		}
 		catch(Throwable e)

@@ -19,6 +19,7 @@ JEDIT 3.1 VERSION HISTORY
 - The setting of the 'Reverse Search' flag was not saved
 - Fixed typo in welcome message displayed when jEdit run for the first
   time
+- Imports in macros would shadow all predefined imports!
 
 + API Changes
 

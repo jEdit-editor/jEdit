@@ -142,8 +142,7 @@
 <funcsynopsis>
  <funcprototype>
   <funcdef>public static final boolean <function>getBooleanProperty</></>
-  <paramdef>String <parameter>name</>
-  </>
+  <paramdef>String <parameter>name</></>
  </funcprototype>
 </funcsynopsis>
 <para>
@@ -471,11 +470,11 @@ a macro may need to use. They include the following:</para>
 <sect1 id=class-DockableWindowManager><title>Class DockableWindowManager</title>
 
     <para>
-        Plugin windows conforming to jEdit's docking API can appear in window
+        Windows conforming to jEdit's docking API can appear in window
         <quote>panes</quote> located above, below or to the left or right of the
         main editing pane. They can also be displayed in <quote>floating</quote>
         frame windows. A <classname>DockableWindowManager</classname> keeps
-        track of the applications associated with a particular
+        track of the plugins associated with a particular
         <classname>View</classname>. Each <classname>View</classname> object
         contains an instance of this class.
     </para>
@@ -485,8 +484,7 @@ a macro may need to use. They include the following:</para>
         <funcsynopsis>
           <funcprototype>
             <funcdef>public DockableWindow <function>getDockableWindow</function>
-            </funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
+            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
         <para>
@@ -502,8 +500,7 @@ a macro may need to use. They include the following:</para>
         <funcsynopsis>
           <funcprototype>
             <funcdef>public void <function>addDockableWindow</function>
-            </funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
+            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
         <para>
@@ -518,8 +515,7 @@ a macro may need to use. They include the following:</para>
         <funcsynopsis>
           <funcprototype>
             <funcdef>public void <function>showDockableWindow</function>
-            </funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
+            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
        </listitem>
@@ -528,8 +524,7 @@ a macro may need to use. They include the following:</para>
         <funcsynopsis>
           <funcprototype>
             <funcdef>public void <function>removeDockableWindow</function>
-            </funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
+            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
        </listitem>
@@ -538,8 +533,7 @@ a macro may need to use. They include the following:</para>
         <funcsynopsis>
           <funcprototype>
             <funcdef>public void <function>toggleDockableWindow</function>
-            </funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
+            </funcdef><paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
        <para>
@@ -1484,8 +1478,8 @@ Returns the line containing the position of the selection's beginning or end.
     <listitem>
       <funcsynopsis>
         <funcprototype>
-          <funcdef>public String <function>getText()</function></funcdef>
-          <paramdef>int <parameter>offset</parameter></paramdef>
+          <funcdef>public String <function>getText</function></funcdef><!--
+          --><paramdef>int <parameter>offset</parameter></paramdef>
           <paramdef>int <parameter>length</parameter></paramdef>
         </funcprototype>
       </funcsynopsis>
@@ -1494,8 +1488,8 @@ Returns the line containing the position of the selection's beginning or end.
     <listitem>
       <funcsynopsis>
         <funcprototype>
-          <funcdef>public void <function>getText()</function></funcdef>
-          <paramdef>int <parameter>offset</parameter></paramdef>
+          <funcdef>public void <function>getText</function></funcdef><!--
+          --><paramdef>int <parameter>offset</parameter></paramdef>
           <paramdef>int <parameter>length</parameter></paramdef>
           <paramdef>Segment <parameter>text</parameter></paramdef>
         </funcprototype>
@@ -1566,8 +1560,27 @@ Returns the line containing the position of the selection's beginning or end.
   </funcprototype>
  </funcsynopsis>
 <para>
-    Displays a the text of <parameter>prompt</>, a text input field, and a
+    Displays the text of <parameter>prompt</>, a text input field, and a
     question icon in the designated <parameter>view</>.  Returns the
+    contents of the text field if the dialog box is dismissed by pressing the
+    <guilabel>OK</> button, or <constant>null</> if the <guilabel>Cancel</>
+    button is pressed.
+</para>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+   <funcdef>public static String <function>input</function></funcdef>
+   <paramdef>View <parameter>view</parameter></paramdef>
+   <paramdef>String <parameter>prompt</parameter></paramdef>
+   <paramdef>String <parameter>defaultValue</parameter></paramdef>
+  </funcprototype>
+ </funcsynopsis>
+<para>
+    Displays the text of <parameter>prompt</>, a text input field, and a
+    question icon in the designated <parameter>view</>. The text field
+    will initially contain the text of <parameter>defaultValue</>. Returns the
     contents of the text field if the dialog box is dismissed by pressing the
     <guilabel>OK</> button, or <constant>null</> if the <guilabel>Cancel</>
     button is pressed.
@@ -1921,14 +1934,19 @@ The <parameter>type</> parameter can either be <constant>JFileChooser.OPEN_DIALO
   <paramdef>View <parameter>view</></>
   <paramdef>String <parameter>path</></>
   <paramdef>int <parameter>type</></>
-  <paramdef>boolean <parameter>multipleSelectiontype</></>
+  <paramdef>boolean <parameter>multipleSelection</></>
  </funcprototype>
 </funcsynopsis>
 <para>
     This method displays the <!-- enhanced, more versatile -->
     <classname>VFSFileChooserDialog</> provided by jEdit.  <!-- In this case, -->
     If <parameter>path</> is set to <constant>null</>, the dialog
-    will display the directory of the current buffer.  The final parameter
+    will display the directory of the current buffer. The
+    <parameter>type</> parameter can either be
+    <constant>JFileChooser.OPEN_DIALOG</>
+    or <constant>JFileChooser.SAVE_DIALOG</> (you might need to
+    import the <classname>JFileChooser</> class from the
+    <literal>javax.swing</> package). The final parameter
     determines whether multiple selection of files is permitted.
 </para>
 </listitem>
@@ -2219,13 +2237,23 @@ This class is another collection of <type>static</> utility methods.
 
 <para>
     This method runs the script file identified by <parameter>path</>.  Within
-    that script, references to <parameter>buffer</> and <parameter>textArea</> are
+    that script, references to <parameter>buffer</>, <parameter>textArea</>
+    and <parameter>editPane</> are
     determined with reference to the <parameter>view</> parameter.  If
     <parameter>rethrowBshErrors</> is set to true, any runtime exception thrown
     by the child script will be rethrown to the parent script and become
-    visible to the user.  The parameter <parameter>ownNamespace</>
+    visible to the user.
+</para>
+
+<para>
+    The parameter <parameter>ownNamespace</>
     determines whether a separate namespace will be established for the
-    BeanShell interpreter; it is generally set to <constant>false</>.
+    BeanShell interpreter. If set to <constant>false</>, methods and
+    variables defined in the script will be available to all future
+    uses of BeanShell; if set to <constant>true</>, they will be lost as
+    soon as the script finishes executing. jEdit uses a value of
+    <constant>false</> when running the startup macro, and a value of
+    <constant>true</> when running all other macros.
 </para>
 
 </sect1>

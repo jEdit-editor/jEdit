@@ -113,41 +113,41 @@ import javax.swing.SwingConstants;
 
 // *****portions of macro script omitted*****
 
-    title = "Write file header";
+title = "Write file header";
 
-    currentName = buffer.getName();
+currentName = buffer.getName();
 
-    nameField = new JTextField(currentName);
-    authorField = new JTextField("Your name here");
-    descField = new JTextField("", 25);
+nameField = new JTextField(currentName);
+authorField = new JTextField("Your name here");
+descField = new JTextField("", 25);
 
-    namePanel = new JPanel(new GridLayout(1, 2));
-    nameLabel = new JLabel("Name of file:", SwingConstants.LEFT);
-    nameLabel.setForeground(Color.black);
-    saveField = new JCheckBox("Save file when done",
-        !buffer.isNewFile());
-    namePanel.add(nameLabel);
-    namePanel.add(saveField);
+namePanel = new JPanel(new GridLayout(1, 2));
+nameLabel = new JLabel("Name of file:", SwingConstants.LEFT);
+nameLabel.setForeground(Color.black);
+saveField = new JCheckBox("Save file when done",
+    !buffer.isNewFile());
+namePanel.add(nameLabel);
+namePanel.add(saveField);
 
 
-    message = new Object[9];
-    message[0] = namePanel;
-    message[1] = nameField;
-    message[2] = Box.createVerticalStrut(10);
-    message[3] = "Author's name:";
-    message[4] = authorField;
-    message[5] = Box.createVerticalStrut(10);
-    message[6] = "Enter description:";
-    message[7] = descField;
-    message[8] = Box.createVerticalStrut(5);
+message = new Object[9];
+message[0] = namePanel;
+message[1] = nameField;
+message[2] = Box.createVerticalStrut(10);
+message[3] = "Author's name:";
+message[4] = authorField;
+message[5] = Box.createVerticalStrut(10);
+message[6] = "Enter description:";
+message[7] = descField;
+message[8] = Box.createVerticalStrut(5);
 
-    if( JOptionPane.OK_OPTION !=
-        JOptionPane.showConfirmDialog(view, message, title,
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE))
-        return null;
+if( JOptionPane.OK_OPTION !=
+    JOptionPane.showConfirmDialog(view, message, title,
+        JOptionPane.OK_CANCEL_OPTION,
+        JOptionPane.QUESTION_MESSAGE))
+    return null;
 
-// *****balance of macro script omitted*****
+// *****remainder of macro script omitted*****
 
 // end excerpt from Write_File_Header.bsh</programlisting></informalexample>
 
@@ -385,7 +385,7 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
 </sect2>
 
 
-<sect2 id=macro-tips-single-char><title>Using a Single Keypress As Input</title>
+<sect2 id=macro-tips-single-char><title>Using a Single Keypress as Input</title>
 
   <para>
     Some macros may choose to emulate the style of character-based text
@@ -522,7 +522,7 @@ view.getInputHandler().readNextChar(script.toString());
       <para>
         Finally, access to the <classname>InputHandler</classname> object used
         by jEdit is available by calling
-        <function>View.getInputHandler()</function> on the current view.
+        <function>getInputHandler()</function> on the current view.
       </para>
     </listitem>
 
@@ -533,7 +533,7 @@ view.getInputHandler().readNextChar(script.toString());
 </sect1>
 
 
-<sect1 id=tips-macro-startup><title>Using a Startup Macro</title>
+<sect1 id=startup-macro><title>Using a Startup Macro</title>
 
   <para>
     One useful feature in jEdit allows the user to run a macro script at startup
@@ -787,7 +787,7 @@ This is from Startup2.bsh but is not part of a scripted object.
     rich (and extendable) collection of exception classes which represent
     such conditions. Exceptions that are not handled within an application
     will usually result in an abrupt exit from the program. BeanShell saves
-    a jEdit session from an untimely demise by catchng any exceptions thrown
+    a jEdit session from an untimely demise by catching any exceptions thrown
     by a macro and halting macro execution. When a BeanShell macro throws an
     exception in this fashion, it almost certainly means there is a bug in
     the macro.
@@ -850,11 +850,11 @@ This is from Startup2.bsh but is not part of a scripted object.
 <title>Using a Message Box As a Tracing Tool</title>
 
   <para>
-    Sometimes the Activity Log or other information will tell you
+    Sometimes the activity log or other information will tell you
     what kind of error occurred but not where it arose in the macro script.
     If the error causes the display of an error box, there is a simple technique
     that will often pinpoint or narrow the range of offending code, without
-    requiring repeated consultation of the Activity Log.  Insert the following
+    requiring repeated consultation of the activity log.  Insert the following
     line of code at some point in the macro near the suspected error:
   </para>
 
@@ -881,12 +881,13 @@ This is from Startup2.bsh but is not part of a scripted object.
   <para>
       The most laborious, but often the most effective technique, is to
       insert code in the macro that writes additional messages to the
-      Activity Log before the exception occurs, then to examine the
-      Activity Log by choosing
-      <guimenuitem>Utilities&gt;View Activity Log</guimenuitem> after
+      activity log before the exception occurs, then to examine the
+      activity log by choosing
+      <guimenu>Utilities</>&gt;<guimenuitem>View Activity Log</guimenuitem>
+      after
       the macro completes execution.  The messages would trace program
       execution and, when desired, report the value of significant variables.
-      To write a message to the Activity Log,
+      To write a message to the activity log,
       use the folllowing method of the <classname>Log</classname>
       class:
   </para>

@@ -152,45 +152,6 @@
     <function>using</function> statement in C++.
   </para>
 
-  <!-- John smokes too much crack
-
-  <para>
-    For example, the fully qualified name of jEdit's <classname>View</classname>
-    class is <classname>org.gjt.sp.jedit.View</classname>. Each element of
-    this <glossterm>classpath</glossterm> corresponds to a nested directory of
-    source code files used by the class's author. The Java Swing class
-    <classname>JOptionPane</classname> (a component used in displaying
-    simple messages) has a fully qualified name of
-    <classname>javax.swing.JOptionPane</classname>. Normally, these classes
-    can be referenced with the names <classname>View</classname> and
-    <classname>JOptionPane</classname> if the following statements appear
-    at the beginning of a source code file:
-  </para>
-
-  <informalexample><programlisting>import org.gjt.sp.jedit.View;
-import javax.swing.JOptionPane;
-  </programlisting></informalexample>
-
-  <para>
-    You can also import the names for all of the sibling classes of
-    <classname>View</classname> using a wild card character:
-  </para>
-
-  <informalexample><programlisting>import org.gjt.sp.jEdit.*;
-  </programlisting></informalexample>
-
-  <para>
-    BeanShell works behind the scenes to make these statements unncessary in
-    many circumstances. In general, when a variable is defined in a
-    BeanShell script, BeanShell searches for the full class name using a
-    predefined <glossterm>classpath</glossterm>. If the class is found,
-    the methods that can be called on that variable without any need for an
-    <function>import</function> statement.
-
-    <remark>
-      jEdit3.1pre5 does not appear to perform as advertised in the
-      following text: -->
-
   <para>
    In implementing BeanShell, jEdit causes a number of
    <function>import</function> statements to be read into the BeanShell
@@ -202,44 +163,34 @@ import javax.swing.JOptionPane;
   </para>
 
   <para>
-    In some circumstances, BeanShell's class name rules may seem
-    difficult to discern. You will rarely go wrong if you keep a few
-    points in mind:
-    <itemizedlist>
-        <!-- remember kids, crack doesn't smoke itself -->
-        <!-- <listitem>
-            <para>You will not need an import statement for a macro that
-            simply inserts or deletes text, moves the editing caret or
-            opens and closes files.</para>
-        </listitem> -->
-        <listitem>
-            <para>You will not need an import statement for any macro that
-            you record.</para>
-        </listitem>
-        <listitem>
-            <para>When you are constructing a new object in a macro (for
-            example, a dialog window or other GUI elements) you will need
-            use import statements or fully qualified class names for those
-            components - see <xref linkend="dialog-macro"> for details.</para>
-        </listitem>
-        <listitem>
-            <para>If you are using classes defined in any of jEdit's plugins,
-            you will have to <function>import</function> those classes
-            as well or use fully qualified names.</para>
-        </listitem>
-        <!-- whoa, there goes an 8-ball -->
-        <!-- <listitem>
-            <para>It almost never hurts to use an import statement.  When in
-            doubt, use one.</para>
-        </listitem> -->
-        <listitem>
-            <para>If you try to use a class that is not imported and
-            is not specified by its full classpath, the BeanShell
-            interpreter will complain, usually with an error message
-            relating to the offending line of code.</para>
-        </listitem>
-      </itemizedlist>
+   In some circumstances, BeanShell's class name rules may seem
+   difficult to discern. You will rarely go wrong if you keep a few
+   points in mind:
   </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>You will not need an import statement for any macro that
+    you record.</para>
+   </listitem>
+   <listitem>
+    <para>When you are constructing a new object in a macro (for
+    example, a dialog window or other GUI elements) you will need
+    use import statements or fully qualified class names for those
+    components - see <xref linkend="dialog-macro"> for details.</para>
+   </listitem>
+   <listitem>
+    <para>If you are using classes defined in any of jEdit's plugins,
+    you will have to <function>import</function> those classes
+    as well or use fully qualified names.</para>
+   </listitem>
+   <listitem>
+    <para>If you try to use a class that is not imported and
+    is not specified by its full classpath, the BeanShell
+    interpreter will complain, usually with an error message
+    relating to the offending line of code.</para>
+   </listitem>
+  </itemizedlist>
 
   <para>
     Another missing item from a Java perspective is a
@@ -344,13 +295,13 @@ import javax.swing.JOptionPane;
    <function>message()</function> but displays an error icon in the message
    box. The <function>input()</function> method furnishes a text field for
    input, an <guilabel>OK</guilabel> button and a
-   <guilabel>Cancel</guilabel> button. Note that there are two forms
-   of the <function>input()</> method; the first displays an empty
-   input field initially, the other lets you specify a default value.
+   <guilabel>Cancel</guilabel> button.
    If <quote>Cancel</quote> is pressed,
    the method returns <constant>null</constant>, if <guilabel>OK</guilabel>
    is pressed, a <classname>String</classname> containing the contents of
-   the text field is returned.
+   the text field is returned. Note that there are two forms
+   of the <function>input()</> method; the first displays an empty
+   input field initially, the other lets you specify a default value.
   </para>
   <para>
    For those without Java experience, it is
@@ -379,13 +330,15 @@ import javax.swing.JOptionPane;
 
 String result = Macros.input(view, "Type something here.");
 
-String name = Macros.input(view, "What is your name?", "Slava Pestov");</programlisting>
+String result = Macros.input(view, "What is your name?",
+    "Slava Pestov");</programlisting>
   </informalexample>
 
   <para>
-    In the second example, placing the word <classname>String</classname>
+    In the last two examples, placing the word <classname>String</classname>
     before the variable name <varname>result</varname> tells BeanShell that
-    the variable refers to a String object, even before a particular String
+    the variable refers to a <classname>String</classname> object, even 
+    before a particular <classname>String</classname>
     object is assigned to it. In BeanShell, this declaration of the
     <glossterm>type</glossterm> of <varname>result</varname> is not
     necessary; BeanShell can figure it out when the macro runs. This is good
@@ -415,7 +368,7 @@ result = 14;</programlisting>
   </informalexample>
 
   <para>
-    However, if you declared <varname>result</varname> to be type
+    However, if you first declared <varname>result</varname> to be type
     <classname>String</classname> and and then tried these reassignments,
     BeanShell would complain.
   </para>
@@ -449,7 +402,6 @@ many lines it covers */</programlisting>
    <programlisting>String newText = buffer.getPath();
 textArea.setSelectedText(newText);</programlisting>
   </informalexample>
-
 
   <para>
     Two of the new names we see here, <varname>buffer</varname> and
@@ -609,6 +561,21 @@ String result = df.format(d);
 	 </itemizedlist>
    </listitem>
   </itemizedlist>
+
+  <sidebar><title>One more pre-defined variable</>
+   <para>
+    In addition to <varname>view</>, <varname>buffer</> and
+    <varname>textArea</>,
+    there is one more pre-defined variable available for use in macros
+    -- <varname>editPane</>, which is set to the current
+    <classname>EditPane</> instance. An edit pane contains a text area
+    and buffer switcher, and among other things, contains methods for
+    selecting the buffer to edit. Views can contain multiple edit panes
+    if they are split. Edit panes will not be discussed any futher
+    because they are not particularly useful from a macro writer's
+    perspective.
+   </para>
+  </sidebar>
  </sect1>
 </chapter>
 

@@ -33,12 +33,12 @@ commands act on it.
 
 The user's guide now has a large and detailed section and writing
 macros. A large collection of sample macros is now included. jEdit now
-checks if a macro named 'Startup' exists, and if so, runs it in startup.
+checks if a macro named 'Startup' exists, and if so, runs it at startup.
 
 * Search and replace improvements
 
 Reverse search is now supported, currently only for literal strings.
-Reverse regualar expression searching will be added in a future release.
+Reverse regular expression searching will be added in a future release.
 
 jEdit now includes version 1.1.2 of the gnu.regexp regular expression
 package. This version adds a number of new features, such as support for

@@ -19,35 +19,7 @@
  </para>
 
  <para>
-  <!-- This guide tries to be helpful to people who know little or
-  nothing about Java. You do not have to know anything about
-  Java to use jEdit as a text editor, although it is particularly
-  well suited to writing and working with Java code. --> The
-  premise of this guide is that you should not have to know
-  anything about Java to begin writing your own macros for
-  jEdit.
- <!-- </para>
-
- <para> -->
-  However, if you do know how to program in Java, you already
-  know how to write
-  BeanShell macros. If you program in any procedural language, you
-  are already more than halfway home. You will have to learn a
-  little about Java classes and syntax, but that's not a bad thing.
-  You will also have to learn a little (but not too much) about
-  some of the classes that are defined and used by the jEdit
-  program itself. That is in fact the major strength of using
-  BeanShell with a program written in Java: it allows the user to
-  customize the program's behavior by employing the same interfaces
-  designed and used by the program's developer.<!--  With a
-  well-designed program, BeanShell turns a tool into a powerful
-  toolkit. With a little effort (and hopefully some help from this
-  guide) you quickly can be writing and using your own BeanShell
-  macros. -->
- </para>
-
- <para>
-  Throughout this part of the users guide, we will be referring to some of
+  Throughout this part of the user's guide, we will be referring to some of
   the plugins available for use with jEdit (in particular, the
   <application>Console</application> plugin). If you have not installed
   plugins, you really should consider doing so (see <xref
@@ -57,10 +29,10 @@
 
  <sect1 id="whatis-beanshell"><title>What is BeanShell?</>
   <para>
-   <!-- Recall that macros in jEdit use an open source scripting language called
-   BeanShell. --> Here is how BeanShell's author, Pat Niemeyer,
+   Here is how BeanShell's author, Pat Niemeyer,
    describes his creation:
   </para>
+
   <blockquote>
    <para>
     <quote>BeanShell is a small, free, embeddable, Java source
@@ -71,25 +43,61 @@
     closures like those in Perl and JavaScript(tm).</quote>
    </para>
   </blockquote>
+
   <para>
-   As you might gather from even this short quote, BeanShell is more than a
-   scripting language. For example, the <application>Console</> plugin for
-   jEdit makes available a BeanShell command interpreter as an interactive
-   shell. This guide focuses on using BeanShell in macros. If you are
+   As you might gather from this short quote, BeanShell is very similar
+   to Java and is designed to be easy for Java programmers to pick up.
+   If you know how to program in Java, you already
+   know how to write BeanShell macros. Nonetheless, the
+   premise of this guide is that you should not have to know
+   anything about Java to begin writing your own macros for
+   jEdit.
+  </para>
+
+  <para>
+   If you are not a Java programmer, you will have to learn a
+   little about Java classes and syntax, but that's not a bad thing.
+   You will also have to learn a little (but not too much) about
+   some of the classes that are defined and used by the jEdit
+   program itself. That is in fact the major strength of using
+   BeanShell with a program written in Java: it allows the user to
+   customize the program's behavior by employing the same interfaces
+   designed and used by the program's developer. Thus, BeanShell can
+   turn a well-designed application into a powerful toolkit.
+  </para>
+
+  <para>
+   This guide focuses on using BeanShell in macros. If you are
    interested in learning more about BeanShell generally, consult the
-   <ulink url="http://www.beanshell.org"> BeanShell web site</ulink>.
+   <ulink url="http://www.beanshell.org">BeanShell web site</ulink>.
   </para>
  </sect1>
 
- <sect1 id="recording-macros"><title>Recording and Running Macros</title>
+ <sect1 id="recording-macros"><title>Recording Macros</title>
+  <para>
+   The simplest use of macros is to record a series of key strokes and
+   menu commands as a BeanShell script, and play them back at a later
+   time. While this doesn't let you take advantage of the full power of
+   BeanShell, it is still a great time saver and can even be used to
+   <quote>prototype</> more complicated macros.
+  </para>
+
   <para>
    <guimenu>Macros</>&gt;<guimenuitem>Record Macro</> (shortcut:
    <keycombo><keycap>Control</><keycap>M</></keycombo>
    <keycombo><keycap>Control</><keycap>R</></keycombo>) prompts for a macro
-   name and begins recording. While recording is in progress, the string
+   name and begins recording. The file name extension <quote>.bsh</> is
+   automatically appended to the macro name, and
+   all spaces are converted to underscore characters, in order to
+   make the macro name a valid file name. These two operations are
+   undone when macros are displayed in the <guimenu>Macros</> menu.
+   See <xref linkend=organizing-macros> for details.
+  </para>
+  <para>
+   While recording is in progress, the string
    <quote>(recording)</> is displayed in the menu bar. jEdit records
-   key strokes, commands invoked from the menu bar, tool bar clicks, and
-   search and replace operations. Mouse clicks in the text area are
+   key strokes, menu item commands, tool bar clicks, and search and
+   replace operations. Mouse clicks in the text area are
    <emphasis>not</> recorded; to record the equivalent of mouse operations,
    use the text selection commands or arrow keys.
   </para>
@@ -131,7 +139,9 @@
    name of your choice. The new name will then be displayed in the
    <guimenu>Macros</> menu.
   </para>
+ </sect1>
 
+ <sect1 id="organizing-macros"><title>How jEdit Organizes Macros</title>
   <para>
    Every macro, whether or not you originally recorded it, is stored on
    disk and can be edited as a text file. The file names of macros
@@ -142,10 +152,6 @@
    formatting. However, BeanShell syntax does not impose any indentation or
    line break requirements.
   </para>
-
- </sect1>
-
- <sect1 id="organizing-macros"><title>How jEdit Organizes Macros</title>
 
   <para>
    The <guimenu>Macros</guimenu> menu
@@ -186,7 +192,7 @@
    have only one macro named <filename>Startup.bsh</filename> (capitalization
    matters!), and place it in the either of the two macro directories.
    See <xref linkend=
-   "tips-macro-startup"> for a more detailed discussion on the use of a
+   "startup-startup"> for a more detailed discussion on the use of a
    startup macro.
   </para>
 
@@ -205,16 +211,18 @@
    <guimenu>Utilities</>&gt;<guimenuitem>Global Options</> dialog box.
   </para>
 
-  <para>
+  <sidebar><title>XInsert plugin</>
+   <para>
     The <application>XInsert</application> plugin has a feature that
     lists the title of macros, organized by subdirectories, as part of
     its tree list display.  Clicking on the leaf of the tree
     corresponding to a macro name causes jEdit to execute the macro
     immediately.  The plugin allows you to keep a list of macros and
     cut-and-paste text fragments available while editing
-    without opening menus.
-  </para>
-
+    without opening menus. For information about installing plugins, see
+    <xref linkend=plugins>.
+   </para>
+  </sidebar>
  </sect1>
 
  <sect1 id="single-macros"><title>Single Execution Macros</title>
@@ -249,12 +257,15 @@
     uses numbers and arithmetic operations in an ordinary, intuitive way.
   </para>
 
-  <informalexample><para>Try typing an expression like
-   <userinput>(3745*856)+74</userinput> in the buffer, select it, and
-   choose <guimenuitem>Utilities&gt;Evaluate Selection</guimenuitem>. The
-   selected text will be replaced by the answer,
-   <userinput>3205794</userinput>.</para></informalexample>
-
+  <informalexample>
+   <para>
+    Try typing an expression like <userinput>(3745*856)+74</userinput>
+    in the buffer, select it, and choose
+    <guimenu>Utilities</>&gt;<guimenuitem>Evaluate Selection</guimenuitem>.
+    The selected text will be replaced by the answer,
+    <userinput>3205794</userinput>.
+   </para>
+  </informalexample>
  </sect1>
 
 </chapter>

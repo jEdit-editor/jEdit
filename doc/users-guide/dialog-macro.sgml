@@ -7,6 +7,11 @@
 <!-- dialog-based macro example "Add_Prefix_and_Suffix.bsh" -->
 
 <chapter id="dialog-macro"><title>A Dialog-Based Macro</title>
+ <para>
+  Now we will look at a more complicated macro which will demonstrate
+  some useful techniques and BeanShell features.
+ </para>
+
  <sect1 id="dialog-macro-intro"><title>Use of the Macro</title>
   <para>
   Next we will look at a macro that adds prefix and suffix text
@@ -46,13 +51,17 @@ ourStringBuffer.append(addressSupp);
 ourStringBuffer.append(city);
 ourStringBuffer.append(&quot;state/province&quot;);
 ourStringBuffer.append(country);</programlisting></informalexample>
-
-    <para>
-    The macro script follows.
-    </para>
  </sect1>
 
 <sect1 id="add-prefix-and-suffix"><title>Listing of the Macro</title>
+
+   <para>
+    The macro script follows. You can find it in the jEdit
+    distribution in the <filename>Text</> subdirectory of the
+    <filename>macros</> directory. You can also try it out by invoking
+    <guimenu>Macros</>&gt;<guisubmenu>Text</>&gt;<guimenuitem>Add
+    Prefix and Suffix</>.
+   </para>
 
 <informalexample>
 <!-- <title>Add_Prefix_and_Suffix.bsh</title> -->
@@ -176,20 +185,22 @@ prefixSuffixDialog();
 import javax.swing.*;
 import javax.swing.border.*;</></informalexample>
 
-<para>These statements make the specified class names visible to the
-BeanShell interpreter without specifying the <glossterm>fully
-qualified class name</glossterm>. As
+<para>These statements make all classes in the specified packages
+visible to the
+BeanShell interpreter without having to use the <glossterm>fully
+qualified class name</glossterm> each time one of the classes
+is referenced. As
 we mentioned previously (see <xref linkend="first-example">),
 jEdit's implementation of BeanShell causes a number of classes to
 be automatically imported. Those classes that are not
 automatically imported must be named by a full qualified name or be the subject of an
-<function>import</function> statement. There are two types of situations
-that will call for <function>import</function> statements.</para>
+<function>import</function> statement.</para>
 
-<para>The first type of <function>import</function> statement covers classes
+<para>Most often, <function>import</function> statements are used
+when a macro needs classes
 that are part of the Java platform but which BeanShell does not
 implicitly import. These include GUI elements found in the Swing
-or AWT (Abstract Windowing Toolkit) packages. In this macro, we
+or AWT packages. In this macro, we
 are using a number of Swing classes: <classname>JDialog</classname>,
 <classname>JPanel</classname>, <classname>JLabel</classname>, <classname>JButton</classname>
 and <classname>EmptyBorder</classname>. We take a sweeping approach
@@ -197,14 +208,6 @@ for the sake of convenience by importing all of the classes in
 the <classname>javax.swing</classname> and <classname>javax.swing.border</classname>
 packages.</para>
 
-<para>The other type of <function>import</function> statement would cover
-classes defined in one of jEdit's plugins. We do not
-use any such classes in this macro.</para>
-
-<!-- <para>We do need one more import statement for a jEdit class:</para>
-<programlisting>import org.gjt.sp.jedit.gui.HistoryTextField;</programlisting>
-<para>This lets us use <classname>HistoryTextField</classname>, jEdit's enhanced
-substitute for Java's <classname>JTextField</classname>.</para> -->
 </sect2>
 
 <sect2 id="explain-create-dialog"><title>Create the Dialog</>
@@ -213,8 +216,7 @@ substitute for Java's <classname>JTextField</classname>.</para> -->
 title = &quot;Add prefix and suffix to selected lines&quot;;
 dialog = new JDialog(view, title, false);
 content = new JPanel(new BorderLayout());
-content.setBorder(new EmptyBorder(5, 10, 10, 10));
-content.setPreferredSize(new Dimension(320, 160));
+content.setBorder(new EmptyBorder(12, 12, 12, 12));
 dialog.setContentPane(content);</></informalexample>
 
 <para>To get input for the macro, we need a dialog that permits
@@ -248,18 +250,15 @@ lightweight container for other components that can be set to a
 given size and color. It also contains a <glossterm>layout</glossterm>
 scheme for arranging the size and position of its components.
 Here we are constructing a <classname>JPanel</classname> as a content pane
-with a <classname>BorderLayout</classname>. We set its size (expressed as a
-two-element <classname>Dimension</classname> object), and put a <classname>EmptyBorder</classname>
+with a <classname>BorderLayout</classname>. We
+put a <classname>EmptyBorder</classname>
 inside it to serve as a margin between the edge of the window and
 the components inside. We then attach the <classname>JPanel</classname> as
 the dialog's content pane.</para>
 
 <para>A <classname>BorderLayout</classname> is one of the simpler layout
-schemes available for Java Swing objects. <!--
-XXX: who cares about AWT?
-
-It is also available
-for the older style AWT objects. --> A <classname>BorderLayout</classname>
+schemes available for Java Swing objects.
+A <classname>BorderLayout</classname>
 divides the container into five sections: North, South, East,
 West and Center. Components are added to the layout using the
 container's <function>add</function> method, specifying the component to
@@ -274,7 +273,7 @@ member components. We have taken the first step by creating a
 Create the Text Fields</>
 
 <informalexample><programlisting>// add the text fields
-fieldPanel = new JPanel(new GridLayout(4, 1, 0, 5));
+fieldPanel = new JPanel(new GridLayout(4, 1, 0, 6));
 prefixField = new HistoryTextField(&quot;macro.add-prefix&quot;);
 prefixLabel = new JLabel(&quot;Prefix to add:&quot;);
 suffixField = new HistoryTextField(&quot;macro.add-suffix&quot;);
@@ -329,27 +328,32 @@ occupy the "Center" section of the content pane.</para>
 Create the Buttons</>
 
 <informalexample><programlisting>// add the buttons
-buttonPanel = new JPanel(new BorderLayout(0, 0));
-buttonPanel.setBorder(new EmptyBorder(15, 50, 0, 50));
+buttonPanel = new JPanel();
+buttonPanel.setLayout(new BoxLayout(buttonPanel,
+    BoxLayout.X_AXIS));
+buttonPanel.setBorder(new EmptyBorder(12, 50, 0, 50));
 ok = new JButton(&quot;OK&quot;);
 cancel = new JButton(&quot;Cancel&quot;);
 ok.setPreferredSize(cancel.getPreferredSize());
 dialog.getRootPane().setDefaultButton(ok);
-buttonPanel.add(ok, &quot;West&quot;);
-buttonPanel.add(cancel, &quot;East&quot;);
+buttonPanel.add(ok);
+buttonPanel.add(cancel);
+buttonPanel.add(Box.createHorizontalStrut(6));
 content.add(buttonPanel, &quot;South&quot;);</></informalexample>
 
 <para>Creating the buttons repeats the pattern we used in creating
 the text fields. First, we create a new, nested panel with a
-<classname>BorderLayout</classname>. We put an <classname>EmptyBorder</classname>
+<classname>BoxLayout</classname>. A <classname>BoxLayout</> places
+components either vertically or horizontally.
+We put an <classname>EmptyBorder</classname>
 in the new panel to set margins for placing the buttons. Then we
 create the buttons, using a <classname>JButton</classname> constructor that
 specifies the button text. After setting the size of the <guilabel>OK</guilabel>
 button to equal the size of the <guilabel>Cancel</guilabel> button, we designate the
 <guilabel>OK</guilabel> button as the default button in the dialog. This causes the
 <guilabel>OK</guilabel> button to be outlined as the default button. Finally, we
-place the button side by side in the <quote>West</> and <quote>East</> sections
-of the layout of <varname>buttonPanel</varname>, and we place the
+place the button side by side with a 6-pixel gap between them (for
+aesthetic reasons), and place the
 completed <varname>buttonPanel</varname> in the <quote>South</> section of the
 dialog's content pane.</para>
 </sect2>

@@ -8,7 +8,6 @@ TO DO
  - only exit delegates at the top level (eg <?php "<?xml ...?>" ?> in PHP)
  - improve handling of __char__
  - print() in BeanShell
- - check beanshell import stuff
  - magic caret code a bit annoying
  - fix dragStart handling in DockableWindowContainer.TabbedPane
  - wing comment with rect sel active puts comment start/end at the
@@ -30,7 +29,7 @@ TO DO
  - Migrate documentation to DocBook/XML
  - if the first line of the buffer is a collapsed fold: delete, undo,
    text inaccessable until C+e x
- - use Dirk's VariableGridLayout
+ - use Dirk's VariableGridLayout more
  - BeanShell class uses deprecated showFileDialog() method
  - XMode rule inclusion
  - when saving local files, save to .<filename>.save, then rename to
@@ -49,10 +48,23 @@ TO DO
  - 'new view' creates incorrectly sized views due to Java bugs
  - regexps in XMode
  - improved rectangular selections
+ - soft wrap
+ - search and replace: option to use BeanShell in replace string,
+   eg $0.toLowerCase(). That would be rather cool.
+ - s&r dialog:
 
+   Replace with ( ) string:
+   _________________________________________
+                ( ) script:
+                    ( ) to lower case
+                    ( ) to upper case
+                    ( ) other:
+   _________________________________________
+                ( ) macro: [combo of macros]
+
+ - runmacro= switch, -nomacro switch
 + minor cleanups:
  - plugin directory should be named 'plugins', not 'jars'
  - site-props directory should be named 'properties'
- - move modes into the JAR?
  - move latest version plugin into the core
  - move plugin manager into the core

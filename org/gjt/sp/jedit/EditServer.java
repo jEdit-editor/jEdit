@@ -265,7 +265,7 @@ class EditServer extends Thread
 		Buffer buffer = TSopenFiles(parent,_args);
 
 		if(buffer == null && restore)
-			TSrestoreOpenFiles();
+			buffer = TSrestoreOpenFiles();
 
 		if(buffer == null)
 			buffer = TSnewFile();
