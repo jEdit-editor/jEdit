@@ -232,7 +232,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 		else if(cIndex > fsIndex) // /tmp/RTF::read.pm
 			return null;
 
-		System.err.println("+++++++++" + path.substring(0,cIndex) + "+++++++++");
 		return path.substring(0,cIndex);
 	}
 
@@ -635,6 +634,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.31  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.30  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

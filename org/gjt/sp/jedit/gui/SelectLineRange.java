@@ -62,11 +62,11 @@ implements ActionListener
 		getContentPane().add(BorderLayout.SOUTH,panel);
 
 		getRootPane().setDefaultButton(ok);
-		Dimension screen = getToolkit().getScreenSize();
+
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(view);
 		show();
+
 		start.requestFocus();
 	}
 
@@ -133,6 +133,9 @@ implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.10  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *

@@ -166,7 +166,7 @@ class EditServer extends Thread
 				public void run()
 				{
 					retVal[0] = jEdit.openFile(null,
-						parent,path,readOnly,false,true);
+						parent,path,readOnly,false);
 				}
 			});
 		}
@@ -267,6 +267,9 @@ class EditServer extends Thread
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.11  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.10  2000/04/21 05:32:20  sp
  * Focus tweak
  *

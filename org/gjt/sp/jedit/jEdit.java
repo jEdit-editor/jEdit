@@ -256,7 +256,7 @@ public class jEdit
 		{
 			if(args[i] == null)
 				continue;
-			openFile(null,userDir,args[i],readOnly,false,false);
+			openFile(null,userDir,args[i],readOnly,false);
 		}
 
 		Buffer buffer = null;
@@ -868,7 +868,7 @@ public class jEdit
 	 */
 	public static Buffer openFile(View view, String path)
 	{
-		return openFile(view,null,path,false,false,true);
+		return openFile(view,null,path,false,false,null);
 	}
 
 	/**
@@ -878,28 +878,29 @@ public class jEdit
 	 * @param path The path name of the file
 	 * @param readOnly True if the file should be read only
 	 * @param newFile True if the file should not be loaded from disk
-	 */
-	public static Buffer openFile(View view, String parent, String path,
-		boolean readOnly, boolean newFile)
-	{
-		return openFile(view,parent,path,readOnly,newFile,true);
-	}
-
-	/**
-	 * Opens a file.
-	 * @param view The view to open the file in
-	 * @param parent The parent directory of the file
-	 * @param path The path name of the file
-	 * @param readOnly True if the file should be read only
-	 * @param newFile True if the file should not be loaded from disk
-	 * @param reloadIfOpen If true and buffer is already open, user will
 	 * be prompted if it should be reloaded
+	 */
+	public static Buffer openFile(View view, String parent,
+		String path, boolean readOnly, boolean newFile)
+	{
+		return openFile(view,parent,path,readOnly,newFile,null);
+	}
+
+	/**
+	 * Opens a file.
+	 * @param view The view to open the file in
+	 * @param parent The parent directory of the file
+	 * @param path The path name of the file
+	 * @param readOnly True if the file should be read only
+	 * @param newFile True if the file should not be loaded from disk
+	 * be prompted if it should be reloaded
+	 * @param props Buffer-local properties to set in the buffer
 	 *
-	 * @since jEdit 2.4pre1
+	 * @since JEdit 2.5pre1
 	 */
 	public static Buffer openFile(final View view, String parent,
 		String path, boolean readOnly, boolean newFile,
-		boolean reloadIfOpen)
+		Hashtable props)
 	{
 		if(view != null && parent == null)
 		{
@@ -932,9 +933,6 @@ public class jEdit
 				{
 					view.setBuffer(buffer);
 
-					if(!buffer.isDirty() && reloadIfOpen)
-						confirmReload(view,buffer);
-
 					if(marker != null)
 					{
 						VFSManager.runInAWTThread(new Runnable()
@@ -952,7 +950,7 @@ public class jEdit
 		}
 
 		final Buffer newBuffer = new Buffer(view,path,readOnly,
-			newFile,false);
+			newFile,false,props);
 		addBufferToList(newBuffer);
 
 		EditBus.send(new BufferUpdate(newBuffer,BufferUpdate.CREATED));
@@ -1011,7 +1009,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		return new Buffer(null,path,readOnly,newFile,true);
+		return new Buffer(null,path,readOnly,newFile,true,null);
 	}
 
 	/**
@@ -1072,7 +1070,7 @@ public class jEdit
 		}
 
 		return openFile(view,null,"Untitled-" + (untitledCount+1),
-			false,true,false);
+			false,true);
 	}
 
 	/**
@@ -2014,18 +2012,6 @@ public class jEdit
 		}
 	}
 
-	private static void confirmReload(View view, Buffer buffer)
-	{
-		String[] args = { buffer.getPath() };
-		int result = JOptionPane.showConfirmDialog(view,
-			getProperty("already-open.message",args),
-			getProperty("already-open.title"),
-			JOptionPane.YES_NO_OPTION,
-			JOptionPane.QUESTION_MESSAGE);
-		if(result == JOptionPane.YES_OPTION)
-			buffer.load(view,true);
-	}
-
 	private static void addViewToList(View view)
 	{
 		viewCount++;
@@ -2153,6 +2139,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.226  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.225  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

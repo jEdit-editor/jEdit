@@ -19,8 +19,10 @@
 
 package org.gjt.sp.jedit.io;
 
+import com.fooware.net.*;
 import java.io.*;
 import java.net.*;
+import org.gjt.sp.jedit.gui.LoginDialog;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -31,6 +33,9 @@ import org.gjt.sp.util.Log;
  */
 public class FtpVFS extends VFS
 {
+	public static final String USERNAME_PROPERTY = "FileVFS__username";
+	public static final String PASSWORD_PROPERTY = "FileVFS__password";
+
 	/**
 	 * Creates a new FTP virtual filesystem.
 	 */
@@ -44,8 +49,9 @@ public class FtpVFS extends VFS
 	 * @param view The view
 	 * @param buffer The buffer
 	 */
-	public String showOpenDialog(View view, Buffer buffer)
+	public Buffer showOpenDialog(View view, Buffer buffer)
 	{
+		new FtpBrowser(view,buffer,FtpBrowser.OPEN);
 		return null;
 	}
 
@@ -60,16 +66,106 @@ public class FtpVFS extends VFS
 	}
 
 	/**
+	 * Loads the specified buffer.
+	 * @param view The view
+	 * @param buffer The buffer
+	 * @param path The path
+	 */
+	public void load(View view, Buffer buffer, String path)
+	{
+		// since files may be loaded at startup, try to hide
+		// the splash screen first
+		GUIUtilities.hideSplashScreen();
+
+		path = doLogin(view,buffer,path);
+		if(path != null)
+			VFSManager.addIORequest(IORequest.LOAD,view,buffer,path,this);
+	}
+
+	/**
+	 * Saves the specifies buffer.
+	 * @param view The view
+	 * @param buffer The buffer
+	 * @param path The path
+	 */
+	public boolean save(View view, Buffer buffer, String path)
+	{
+		path = doLogin(view,buffer,path);
+		if(path != null)
+		{
+			VFSManager.addIORequest(IORequest.SAVE,view,buffer,path,this);
+			return true;
+		}
+		else
+			return false;
+	}
+
+	/**
+	 * Returns true if this VFS supports file deletion. This is required
+	 * for marker saving to work.
+	 */
+	public boolean canDelete()
+	{
+		return true;
+	}
+
+	/**
+	 * Deletes the specified file.
+	 */
+	public void delete(String path)
+	{
+		FtpAddress address = new FtpAddress(path);
+		FtpClient client = createFtpClient(null,address.host,
+			address.port,address.user,address.password,true);
+
+		try
+		{
+			if(client == null)
+				return;
+			client.delete(address.path);
+			client.logout();
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+		}
+	}
+
+	/**
 	 * Creates an input stream. This method is called from the I/O
 	 * thread.
 	 * @param view The view
 	 * @param path The path
+	 * @param ignoreErrors If true, file not found errors should be
+	 * ignored
 	 * @exception IOException If an I/O error occurs
 	 */
-	public InputStream _createInputStream(View view, String path)
-		throws IOException
+	public InputStream _createInputStream(View view, String path,
+		boolean ignoreErrors) throws IOException
 	{
-		return null;
+		FtpAddress address = new FtpAddress(path);
+		FtpClient client = createFtpClient(view,address.host,
+			address.port,address.user,address.password,ignoreErrors);
+		if(client == null)
+			return null;
+
+		client.dataPort();
+		client.representationType(FtpClient.IMAGE_TYPE);
+
+		InputStream in = client.retrieveStream(address.path);
+		if(in == null)
+		{
+			if(!ignoreErrors)
+			{
+				String[] args = { address.host, address.port, address.path,
+					client.getResponse().toString() };
+				VFSManager.error(view,"vfs.ftp.download-error",args);
+			}
+			client.logout();
+			return null;
+		}
+		else
+			return in;
 	}
 
 	/**
@@ -82,6 +178,122 @@ public class FtpVFS extends VFS
 	public OutputStream _createOutputStream(View view, String path)
 		throws IOException
 	{
-		return null;
+		FtpAddress address = new FtpAddress(path);
+		FtpClient client = createFtpClient(view,address.host,
+			address.port,address.user,address.password,false);
+		if(client == null)
+			return null;
+
+		client.dataPort();
+		client.representationType(FtpClient.IMAGE_TYPE);
+
+		OutputStream out = client.storeStream(address.path);
+		if(out == null)
+		{
+			String[] args = { address.host, address.port, address.path,
+				client.getResponse().toString() };
+			VFSManager.error(view,"vfs.ftp.upload-error",args);
+			client.logout();
+			return null;
+		}
+		else
+			return out;
+	}
+
+	// package-private members
+	FtpClient createFtpClient(View view, String host, String port,
+		String user, String password, boolean ignoreErrors)
+	{
+		FtpClient client = new FtpClient();
+
+		try
+		{
+			Log.log(Log.DEBUG,this,"Connecting to " + host + ":" + port);
+			client.connect(host,Integer.parseInt(port));
+			if(!client.getResponse().isPositiveCompletion())
+			{
+				if(!ignoreErrors)
+				{
+					String[] args = { host,port, client.getResponse().toString() };
+					VFSManager.error(view,"vfs.ftp.connect-error",args);
+				}
+				return null;
+			}
+
+			client.userName(user);
+			if(!client.getResponse().isPositiveIntermediary())
+			{
+				if(!ignoreErrors)
+				{
+					String[] args = { host, port, user,
+						client.getResponse().toString() };
+					VFSManager.error(view,"vfs.ftp.login-error",args);
+				}
+				client.logout();
+				return null;
+			}
+
+			client.password(password);
+			if(!client.getResponse().isPositiveCompletion())
+			{
+				if(!ignoreErrors)
+				{
+					String[] args = { host, port, user,
+						client.getResponse().toString() };
+					VFSManager.error(view,"vfs.ftp.login-error",args);
+				}
+				client.logout();
+				return null;
+			}
+
+			return client;
+		}
+		catch(SocketException se)
+		{
+			if(ignoreErrors)
+				return null;
+
+			String[] args = { host,port, client.getResponse().toString() };
+			VFSManager.error(view,"vfs.ftp.connect-error",args);
+			return null;
+		}
+		catch(IOException io)
+		{
+			if(ignoreErrors)
+				return null;
+
+			String[] args = { io.getMessage() };
+			VFSManager.error(view,"ioerror",args);
+			return null;
+		}
+	}
+
+	String doLogin(View view, Buffer buffer, String path)
+	{
+		String savedUser = (String)buffer.getProperty(USERNAME_PROPERTY);
+		String savedPassword = (String)buffer.getProperty(PASSWORD_PROPERTY);
+
+		FtpAddress address = new FtpAddress(path);
+
+		if(address.user == null)
+			address.user = savedUser;
+		if(address.password == null)
+			address.password = savedPassword;
+
+		if(address.user == null || address.password == null)
+		{
+			LoginDialog dialog = new LoginDialog(view,address.host,
+				address.user,address.password);
+			if(!dialog.isOK())
+				return null;
+
+			address.user = dialog.getUser();
+			address.password = dialog.getPassword();
+		}
+
+		buffer.putProperty(USERNAME_PROPERTY,address.user);
+		buffer.putProperty(PASSWORD_PROPERTY,address.password);
+
+		return address.toString();
 	}
 }

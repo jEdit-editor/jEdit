@@ -74,11 +74,10 @@ implements ActionListener, ListSelectionListener, MouseListener
 		insert.addActionListener(this);
 		cancel.addActionListener(this);
 
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(view);
 		show();
+
 		clips.requestFocus();
 	}
 

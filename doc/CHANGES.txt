@@ -16,6 +16,7 @@ JEDIT 2.5 VERSION HISTORY
 - MARK_PREVIOUS rules are now checked for after keywords
 - Function calls are highlighted in C-like modes (C, C++, Java, etc)
 - Sequences with a trailing 'd', 'f', or 'l' are now highlighted as digits
+- Modal dialog boxes are now centered relative to the current view
 
 + Bug Fixes
 
@@ -30,6 +31,10 @@ JEDIT 2.5 VERSION HISTORY
 - Marker goto (filename#marker) on the command line didn't work
 - 'Search->Toolbar Incremental Search' didn't disable the multifile
   button (since 2.4pre4)
+- jEdit should prompt to reload a file if the modification time becomes
+  older than when it was saved, as well
+- Auto indent would insert too much indentation if the same line contained
+  an 'indentPrevLine' statement and an opening bracket (since 2.4pre6)
 
 + API Changes
 

@@ -54,7 +54,7 @@ public abstract class VFS
 	 * @param view The view
 	 * @param buffer The buffer
 	 */
-	public abstract String showOpenDialog(View view, Buffer buffer);
+	public abstract Buffer showOpenDialog(View view, Buffer buffer);
 
 	/**
 	 * Displays a save dialog box and returns the selected pathname.
@@ -129,10 +129,12 @@ public abstract class VFS
 	 * thread.
 	 * @param view The view
 	 * @param path The path
+	 * @param ignoreErrors If true, file not found errors should be
+	 * ignored
 	 * @exception IOException If an I/O error occurs
 	 */
-	public abstract InputStream _createInputStream(View view, String path)
-		throws IOException;
+	public abstract  InputStream _createInputStream(View view, String path,
+		boolean ignoreErrors) throws IOException;
 
 	/**
 	 * Creates an output stream. This method is called from the I/O
@@ -151,6 +153,9 @@ public abstract class VFS
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.2  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

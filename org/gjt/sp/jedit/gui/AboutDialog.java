@@ -55,10 +55,8 @@ public class AboutDialog extends EnhancedDialog
 		panel.add(ok);
 		getContentPane().add(BorderLayout.SOUTH,panel);
 
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(view);
 		show();
 	}
 

@@ -300,7 +300,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		long oldModTime = modTime;
 		long newModTime = vfs.getLastModified(path);
 
-		if(newModTime > oldModTime)
+		if(newModTime !=  oldModTime)
 		{
 			modTime = newModTime;
 
@@ -318,6 +318,15 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				load(view,true);
 			}
 		}
+	}
+
+	/**
+	 * Returns the virtual filesystem responsible for loading and
+	 * saving this buffer.
+	 */
+	public VFS getVFS()
+	{
+		return vfs;
 	}
 
 	/**
@@ -812,7 +821,24 @@ public class Buffer extends SyntaxDocument implements EBComponent
 					prevLineBrackets = Math.max(
 						prevLineBrackets-1,0);
 				else if(openBrackets.indexOf(c) != -1)
+				{
+					/*
+					 * If supressBracketAfterIndent is true
+					 * and we have something that looks like:
+					 * if(bob)
+					 * {
+					 * then the 'if' will not shift the indent,
+					 * because of the {.
+					 *
+					 * If supressBracketAfterIndent is false,
+					 * the above would be indented like:
+					 * if(bob)
+					 *         {
+					 */
+					if(!doubleBracketIndent)
+						prevLineMatches = false;
 					prevLineBrackets++;
+				}
 				break;
 			}
 		}
@@ -861,19 +887,6 @@ public class Buffer extends SyntaxDocument implements EBComponent
 				}
 				else if(openBrackets.indexOf(c) != -1)
 				{
-					/*
-					 * If supressBracketAfterIndent is true
-					 * and we have something that looks like:
-					 * if(bob)
-					 * {
-					 * then the 'if' will not shift the indent,
-					 * because of the {.
-					 *
-					 * If supressBracketAfterIndent is false,
-					 * the above would be indented like:
-					 * if(bob)
-					 *         {
-					 */
 					if(!doubleBracketIndent)
 						prevLineMatches = false;
 					lineBrackets++;
@@ -1353,7 +1366,8 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		}
 		out.close();
 
-		autosaveFile.delete();
+		if(autosaveFile != null)
+			autosaveFile.delete();
 	}
 
 	/**
@@ -1431,7 +1445,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	Buffer next;
 
 	Buffer(View view, String path, boolean readOnly,
-		boolean newFile, boolean temp)
+		boolean newFile, boolean temp, Hashtable props)
 	{
 		setFlag(TEMPORARY,temp);
 		setFlag(READ_ONLY,readOnly);
@@ -1460,6 +1474,16 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			newFile |= !file.exists();
 
 		setFlag(NEW_FILE,newFile);
+
+		if(props != null)
+		{
+			Enumeration keys = props.keys();
+			Enumeration values = props.elements();
+			while(keys.hasMoreElements())
+			{
+				putProperty(keys.nextElement(),values.nextElement());
+			}
+		}
 
 		load(view,false);
 	}
@@ -1724,6 +1748,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.142  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.141  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

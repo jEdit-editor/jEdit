@@ -122,10 +122,8 @@ public class MultiFileSearchDialog extends EnhancedDialog
 
 		updateEnabled();
 
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(view);
 		show();
 	}
 
@@ -356,6 +354,9 @@ public class MultiFileSearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.11  2000/04/15 04:14:47  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
  *

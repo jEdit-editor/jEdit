@@ -133,7 +133,7 @@ public class IORequest implements Runnable
 		{
 			try
 			{
-				in = vfs._createInputStream(view,path);
+				in = vfs._createInputStream(view,path,false);
 				if(in == null)
 					return;
 				if(path.endsWith(".gz"))
@@ -154,7 +154,7 @@ public class IORequest implements Runnable
 
 			try
 			{
-				in = vfs._createInputStream(view,markersPath);
+				in = vfs._createInputStream(view,markersPath,true);
 				if(in == null)
 					return;
 				buffer._readMarkers(in);
@@ -241,6 +241,9 @@ public class IORequest implements Runnable
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.3  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

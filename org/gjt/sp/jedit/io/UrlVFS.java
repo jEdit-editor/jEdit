@@ -45,9 +45,13 @@ public class UrlVFS extends VFS
 	 * @param view The view
 	 * @param buffer The buffer
 	 */
-	public String showOpenDialog(View view, Buffer buffer)
+	public Buffer showOpenDialog(View view, Buffer buffer)
 	{
-		return GUIUtilities.input(view,"openurl",null);
+		String path = GUIUtilities.input(view,"openurl",null);
+		if(path != null)
+			return jEdit.openFile(view,path);
+		else
+			return null;
 	}
 
 	/**
@@ -65,10 +69,12 @@ public class UrlVFS extends VFS
 	 * thread.
 	 * @param view The view
 	 * @param path The path
+	 * @param ignoreErrors If true, file not found errors should be
+	 * ignored
 	 * @exception IOException If an I/O error occurs
 	 */
-	public InputStream _createInputStream(View view, String path)
-		throws IOException
+	public InputStream _createInputStream(View view, String path,
+		boolean ignoreErrors) throws IOException
 	{
 		try
 		{

@@ -107,10 +107,8 @@ public class OptionsDialog extends EnhancedDialog
 
 		view.hideWaitCursor();
 
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(view);
 		show();
 	}
 
@@ -590,6 +588,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.21  2000/04/23 03:58:00  sp
  * ContextOptionPane didn't compile, hack to let JBrowse and QuickFile work
  *

@@ -47,7 +47,7 @@ public class FileVFS extends VFS
 	 * @param view The view
 	 * @param buffer The buffer
 	 */
-	public String showOpenDialog(View view, Buffer buffer)
+	public Buffer showOpenDialog(View view, Buffer buffer)
 	{
 		String parent;
 		File file = buffer.getFile();
@@ -56,8 +56,12 @@ public class FileVFS extends VFS
 		else
 			parent = file.getParent();
 
-		return GUIUtilities.showFileDialog(view,parent,
+		String path = GUIUtilities.showFileDialog(view,parent,
 			JFileChooser.OPEN_DIALOG);
+		if(path != null)
+			return jEdit.openFile(view,path);
+		else
+			return null;
 	}
 
 	/**
@@ -128,7 +132,7 @@ public class FileVFS extends VFS
 		long modTime = buffer.getLastModified();
 		long newModTime = file.lastModified();
 
-		if(!buffer.isNewFile() && newModTime > modTime)
+		if(!buffer.isNewFile() && newModTime != modTime)
 		{
 			Object[] args = { path };
 			int result = JOptionPane.showConfirmDialog(view,
@@ -188,12 +192,24 @@ public class FileVFS extends VFS
 	 * thread.
 	 * @param view The view
 	 * @param path The path
+	 * @param ignoreErrors If true, file not found errors should be
+	 * ignored
 	 * @exception IOException If an I/O error occurs
 	 */
-	public InputStream _createInputStream(View view, String path)
-		throws IOException
+	public InputStream _createInputStream(View view, String path,
+		boolean ignoreErrors) throws IOException
 	{
-		return new FileInputStream(path);
+		try
+		{
+			return new FileInputStream(path);
+		}
+		catch(IOException io)
+		{
+			if(ignoreErrors)
+				return null;
+			else
+				throw io;
+		}
 	}
 
 	/**

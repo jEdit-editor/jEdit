@@ -36,16 +36,16 @@ public class SendDialog extends EnhancedDialog
 implements ActionListener, Runnable
 {
 	public static final String CRLF = "\r\n";
-	
+
 	public SendDialog(View view)
 	{
 		super(view,jEdit.getProperty("send.title"),true);
 		this.view = view;
-		
+
 		JPanel panel = new JPanel();
 		GridBagLayout layout = new GridBagLayout();
 		panel.setLayout(layout);
-		
+
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridwidth = constraints.gridheight = 1;
 		constraints.fill = constraints.BOTH;
@@ -54,14 +54,14 @@ implements ActionListener, Runnable
 			.getProperty("send.smtp"),SwingConstants.RIGHT);
 		layout.setConstraints(label,constraints);
 		panel.add(label);
-		
+
 		constraints.gridx = 1;
 		constraints.gridwidth = 2;
 		smtp = new JTextField(jEdit
 			.getProperty("send.smtp.value"),30);
 		layout.setConstraints(smtp,constraints);
 		panel.add(smtp);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.gridwidth = 1;
@@ -69,14 +69,14 @@ implements ActionListener, Runnable
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,constraints);
 		panel.add(label);
-		
+
 		constraints.gridx = 1;
 		constraints.gridwidth = 2;
 		from = new JTextField(jEdit
 			.getProperty("send.from.value"),30);
 		layout.setConstraints(from,constraints);
 		panel.add(from);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.gridwidth = 1;
@@ -84,13 +84,13 @@ implements ActionListener, Runnable
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,constraints);
 		panel.add(label);
-		
+
 		constraints.gridx = 1;
 		constraints.gridwidth = 2;
 		to = new JTextField(jEdit.getProperty("send.to.value"),30);
 		layout.setConstraints(to,constraints);
 		panel.add(to);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.gridwidth = 1;
@@ -98,13 +98,13 @@ implements ActionListener, Runnable
 			SwingConstants.RIGHT);
 		layout.setConstraints(label,constraints);
 		panel.add(label);
-		
+
 		constraints.gridx = 1;
 		constraints.gridwidth = 2;
 		subject = new JTextField(view.getBuffer().getPath(),30);
 		layout.setConstraints(subject,constraints);
 		panel.add(subject);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 4;
 		constraints.gridwidth = constraints.REMAINDER;
@@ -116,27 +116,24 @@ implements ActionListener, Runnable
 			jEdit.getBooleanProperty("send.selectionOnly.value"));
 		layout.setConstraints(selectionOnly,constraints);
 		panel.add(selectionOnly);
-		
+
 		getContentPane().add(BorderLayout.NORTH,panel);
 		getContentPane().add(BorderLayout.CENTER,new JSeparator());
-		
+
 		buttons = new JPanel();
 		send = new JButton(jEdit.getProperty("send.send"));
 		buttons.add(send);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		buttons.add(cancel);
-		
+
 		getContentPane().add(BorderLayout.SOUTH,buttons);
-		
-		Dimension screen = getToolkit().getScreenSize();
-		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
-		
 		getRootPane().setDefaultButton(send);
 		send.addActionListener(this);
 		cancel.addActionListener(this);
-		
+
+		pack();
+		setLocationRelativeTo(view);
+		show();
 		show();
 	}
 
@@ -196,7 +193,7 @@ implements ActionListener, Runnable
 			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
-			
+
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
@@ -205,7 +202,7 @@ implements ActionListener, Runnable
 			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
-			
+
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
@@ -214,7 +211,7 @@ implements ActionListener, Runnable
 			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
-			
+
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("250"))
@@ -223,12 +220,12 @@ implements ActionListener, Runnable
 			Log.log(Log.DEBUG,this,command);
 			out.write(command);
 			out.flush();
-			
+
 			response = in.readLine();
 			Log.log(Log.DEBUG,this,response);
 			if(!response.startsWith("354"))
 				error("badmsg");
-			
+
 			out.write("Subject: " + subject);
 			out.write(CRLF);
 			out.write("X-Mailer: jEdit " + jEdit.getVersion());
@@ -236,7 +233,7 @@ implements ActionListener, Runnable
 			out.write(CRLF);
 
 			Buffer buffer = view.getBuffer();
-			
+
 			int startLine, endLine;
 			if(selectionOnly)
 			{
@@ -248,7 +245,7 @@ implements ActionListener, Runnable
 				startLine = 0;
 				endLine = textArea.getLineCount() - 1;
 			}
-			
+
 			for(int i = startLine; i <= endLine; i++)
 			{
 				String line;
@@ -343,7 +340,7 @@ implements ActionListener, Runnable
 		GUIUtilities.error(view,msg,new Object[0]);
 		dispose();
 	}
-	
+
 	private void save()
 	{
 		jEdit.setProperty("send.smtp.value",smtp.getText());
@@ -352,7 +349,7 @@ implements ActionListener, Runnable
 		jEdit.setProperty("send.subject.value",subject.getText());
 		jEdit.setBooleanProperty("send.selectionOnly.value",
 			selectionOnly.getModel().isSelected());
-		
+
 		if(thread != null)
 			thread.stop();
 	}

@@ -28,10 +28,6 @@ public class open_file extends EditAction
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		String file = VFSManager.getFileVFS().showOpenDialog(view,
-			view.getBuffer());
-
-		if(file != null)
-			jEdit.openFile(view,file);
+		VFSManager.getFileVFS().showOpenDialog(view,view.getBuffer());
 	}
 }

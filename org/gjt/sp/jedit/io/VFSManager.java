@@ -43,6 +43,7 @@ public class VFSManager
 
 	/**
 	 * Returns the local filesystem VFS.
+	 * @since jEdit 2.5pre1
 	 */
 	public static VFS getFileVFS()
 	{
@@ -51,6 +52,7 @@ public class VFSManager
 
 	/**
 	 * Returns the URL VFS.
+	 * @since jEdit 2.5pre1
 	 */
 	public static VFS getUrlVFS()
 	{
@@ -60,6 +62,7 @@ public class VFSManager
 	/**
 	 * Returns the VFS for the specified protocol.
 	 * @param protocol The protocol
+	 * @since jEdit 2.5pre1
 	 */
 	public static VFS getVFSForProtocol(String protocol)
 	{
@@ -79,6 +82,7 @@ public class VFSManager
 	 * Registers a virtual filesystem.
 	 * @param protocol The protocol
 	 * @param vfs The VFS
+	 * @since jEdit 2.5pre1
 	 */
 	public static void registerVFS(String protocol, VFS vfs)
 	{
@@ -91,6 +95,7 @@ public class VFSManager
 	/**
 	 * Unregisters a virtual filesystem.
 	 * @param protocol The protocol
+	 * @since jEdit 2.5pre1
 	 */
 	public static void unregisterVFS(String protocol)
 	{
@@ -99,6 +104,7 @@ public class VFSManager
 
 	/**
 	 * Returns an enumeration of all registered filesystems.
+	 * @since jEdit 2.5pre1
 	 */
 	public static Enumeration getFilesystems()
 	{
@@ -107,6 +113,7 @@ public class VFSManager
 
 	/**
 	 * Returns when all pending requests are complete.
+	 * @since jEdit 2.5pre1
 	 */
 	public static void waitForRequests()
 	{
@@ -115,6 +122,7 @@ public class VFSManager
 
 	/**
 	 * Aborts the currently running I/O operation.
+	 * @since jEdit 2.5pre1
 	 */
 	public static void abortIO()
 	{
@@ -123,6 +131,7 @@ public class VFSManager
 
 	/**
 	 * Adds an I/O request to the work thread.
+	 * @since jEdit 2.5pre1
 	 */
 	public static void addIORequest(int type, View view, Buffer buffer,
 		String path, VFS vfs)
@@ -133,6 +142,7 @@ public class VFSManager
 	/**
 	 * Executes the specified runnable in the AWT thread once all
 	 * pending I/O requests are complete.
+	 * @since jEdit 2.5pre1
 	 */
 	public static void runInAWTThread(Runnable run)
 	{
@@ -142,6 +152,7 @@ public class VFSManager
 	/**
 	 * For use by VFS implementations and IO requests. Displays the
 	 * specified error in the AWT thread.
+	 * @since jEdit 2.5pre1
 	 */
 	public static void error(final View view, final String error, final Object[] args)
 	{
@@ -149,8 +160,9 @@ public class VFSManager
 		{
 			public void run()
 			{
-				GUIUtilities.error((view.isShowing() ? null : view),
-					error,args);
+				if(view != null && !view.isShowing())
+					view = null;
+				GUIUtilities.error(view,error,args);
 			}
 		});
 	}
@@ -173,6 +185,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/04/25 11:00:20  sp
+ * FTP VFS hacking, some other stuff
+ *
  * Revision 1.3  2000/04/25 03:32:40  sp
  * Even more VFS hacking
  *

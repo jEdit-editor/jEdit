@@ -84,11 +84,10 @@ public class ViewRegisters extends EnhancedDialog
 		ActionHandler actionListener = new ActionHandler();
 		close.addActionListener(actionListener);
 
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(view);
 		show();
+
 		registerList.requestFocus();
 	}
 

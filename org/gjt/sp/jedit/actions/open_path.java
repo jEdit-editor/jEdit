@@ -29,10 +29,13 @@ public class open_path extends EditAction
 	{
 		View view = getView(evt);
 		String path = evt.getActionCommand();
-		if(path == null)
-			path = VFSManager.getUrlVFS().showOpenDialog(view,view.getBuffer());
 
 		if(path != null)
 			jEdit.openFile(view,path);
+		else
+		{
+			VFSManager.getUrlVFS().showOpenDialog(view,view.getBuffer());
+			return;
+		}
 	}
 }

@@ -68,10 +68,8 @@ public class CloseDialog extends EnhancedDialog
 
 		getContentPane().add(BorderLayout.SOUTH,buttons);
 
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
+		setLocationRelativeTo(view);
 		show();
 	}
 

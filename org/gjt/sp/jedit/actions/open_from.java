@@ -30,8 +30,6 @@ public class open_from extends EditAction
 		View view = getView(evt);
 		Buffer buffer = view.getBuffer();
 		VFS vfs = VFSManager.getVFSForProtocol(evt.getActionCommand());
-		String path = vfs.showOpenDialog(view,buffer);
-		if(path != null)
-			jEdit.openFile(view,path);
+		vfs.showOpenDialog(view,buffer);
 	}
 }

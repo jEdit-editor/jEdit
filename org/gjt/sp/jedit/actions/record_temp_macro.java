@@ -45,7 +45,7 @@ public class record_temp_macro extends EditAction
 		}
 
 		Buffer buffer = jEdit.openFile(null,settings + File.separator
-			+ "macros","__temporary__.macro",false,true,false);
+			+ "macros","__temporary__.macro",false,true);
 
 		try
 		{

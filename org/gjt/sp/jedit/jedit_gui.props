@@ -670,11 +670,6 @@ filechanged-dirty.message=The file {0}\n\
 	has been modified on disk by another program. Would you like to\n\
 	reload it? IF YOU RELOAD, UNSAVED CHANGES WILL BE LOST.
 
-# File already open dialog
-already-open.title=File Already Open
-already-open.message=The file {0}\n\
-	is already open. Would you like to reload it from disk?
-
 # File exists dialog
 fileexists.title=File Exists
 fileexists.message=The file {0} already exists. Are you sure you want\n\
@@ -919,4 +914,55 @@ log-viewer.save=Save Log
 ###
 mode.text.label=Plain Text
 
+###
+### VFS STRINGS
+###
+
+# Login dialog box
+login.title=Log in
+login.caption=Enter user name and password for {0}:\ 
+login.user=User name:\ 
+login.password=Password:\ 
+
+# Browser dialog box
+vfs.ftp.browser.open-title=Open from FTP Site
+vfs.ftp.browser.save-title=Save to FTP Site
+
+vfs.ftp.browser.host=FTP server:\ 
+vfs.ftp.browser.username=User name:\ 
+vfs.ftp.browser.password=Password:\ 
+vfs.ftp.browser.path=Path:\ 
+
+vfs.ftp.browser.open=Open
+vfs.ftp.browser.save=Save
+vfs.ftp.browser.connect=Connect
+vfs.ftp.browser.disconnect=Disconnect
+vfs.ftp.browser.home=Home
+vfs.ftp.browser.refresh=Refresh
+
+# Menu item label
 vfs.ftp.label=FTP Server...
+
+# Connect error
+vfs.ftp.connect-error.title=Cannot Connect
+vfs.ftp.connect-error.message=Cannot connect to {0}:{1}.\n\
+	{2}\n\
+	See Utilities->Activity Log for a full connection trace.
+
+# Login error
+vfs.ftp.login-error.title=Cannot Log in
+vfs.ftp.login-error.message=Cannot log in to {0}:{1} with username {2}.\n\
+	{3}\n\
+	See Utilities->Activity Log for a full connection trace.
+
+# Download error
+vfs.ftp.download-error.title=Cannot Download File
+vfs.ftp.download-error.message=An error occurred while downloading {0}:{1}{2}.\n\
+	{3}\n\
+	See Utilities->Activity Log for a full connection trace.
+
+# Upload error
+vfs.ftp.upload-error.title=Cannot Upload File
+vfs.ftp.upload-error.message=An error occurred while uploading {0}:{1}{2}.\n\
+	{3}\n\
+	See Utilities->Activity Log for a full connection trace.

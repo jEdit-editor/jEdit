@@ -54,7 +54,7 @@ public class record_macro extends EditAction
 		Buffer buffer = jEdit.openFile(null,null,
 			MiscUtilities.constructPath(settings,"macros",
 			name + ".macro"),
-			false,true,false);
+			false,true);
 
 		try
 		{

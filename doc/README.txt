@@ -13,24 +13,31 @@ jEdit is released under the _GNU General Public License_, which can be
 found in the COPYING.txt file. jEdit comes with ABSOLUTELY NO WARRANTY
 OF ANY KIND; see section 11 and 12 of the GPL for details.
 
-jEdit uses gnu.regexp by the Free Software Foundation. gnu.regexp is
-released under the _GNU Lesser General Public License_. Only the parts
-of gnu.regexp used by jEdit are included - the complete package can be
-found at <http://www.cacas.org/java/gnu/regexp/>.
+* Class Libraries
 
-jEdit also uses the AElfred XML parser by Microstar corporation. This
-class library is released under its own, non-GPL license, which reads
-as follows:
+jEdit is bundled with the following class libraries:
 
-  AElfred is free for both commercial and non-commercial use and
+- gnu.regexp by the Free Software Foundation. gnu.regexp is released
+  under the _GNU Lesser General Public License_. Only the parts of
+  gnu.regexp used by jEdit are included - the complete package can be
+  found at <http://www.cacas.org/java/gnu/regexp/>.
+
+- AElfred XML parser by Microstar corporation. This class library is
+  released under its own, non-GPL license, which reads as follows:
+
+  "AElfred is free for both commercial and non-commercial use and
   redistribution, provided that Microstar's copyright and disclaimer are
   retained intact.  You are free to modify AElfred for your own use and
   to redistribute AElfred with your modifications, provided that the
-  modifications are clearly documented.
+  modifications are clearly documented."
 
-The complete AElfred package can be found at <http://www.microstar.com>.
+  The complete AElfred package can be found at <http://www.microstar.com>.
 
-The toolbar icons are (C) 1998 Dean S. Jones <dean@gallant.com>.
+- Fooware FTP client by Fooware. This class library is released under
+  the _GNU General Public License_. Get the complete package from
+  <http://www.fooware.com>.
+
+- The toolbar icons are (C) 1998 Dean S. Jones <dean@gallant.com>.
 
 * jEdit on the Internet
 
