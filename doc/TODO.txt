@@ -1,7 +1,10 @@
 JEDIT TO DO
 
+- Open -- replace untitled broken
+
 + Features
 
+- Incremental search
 - XMode:
   - better error reporting
   - faster tokenizing of files
@@ -16,7 +19,6 @@ JEDIT TO DO
   - document GUIUtilities.load/saveGeometry
   - how to write text area and gutter hilites
   - each section should have some sample source code
-- Incremental search
 - Reverse search. Until gnu.regexp supports this, it can't be done very easily
 - Write custom 'document' class; Swing implementation has a few
   problems. With a custom document, folding and such becomes much cleaner

@@ -177,7 +177,6 @@ public abstract class EditAction implements ActionListener
 	 * this class automatically.
 	 */
 	public static class Wrapper extends EditAction
-		implements InputHandler.Wrapper
 	{
 		/**
 		 * Creates a new wrapper that will autoload the built-in
@@ -281,6 +280,9 @@ public abstract class EditAction implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.23  2000/04/03 10:22:24  sp
+ * Search bar
+ *
  * Revision 1.22  2000/02/15 07:44:30  sp
  * bug fixes, doc updates, etc
  *

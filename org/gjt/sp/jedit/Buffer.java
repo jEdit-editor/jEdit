@@ -314,6 +314,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 			setFlag(AUTOSAVE_DIRTY,false);
 			setFlag(READ_ONLY,false);
 			setFlag(NEW_FILE,false);
+			setFlag(UNTITLED,false);
 			setFlag(DIRTY,false);
 
 			if(name.toLowerCase().endsWith(".macro"))
@@ -1751,6 +1752,9 @@ loop:		for(int i = 0; i < markers.size(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.133  2000/04/03 10:22:24  sp
+ * Search bar
+ *
  * Revision 1.132  2000/04/01 12:21:27  sp
  * mode cache implemented
  *

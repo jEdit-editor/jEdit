@@ -1690,6 +1690,7 @@ public class jEdit
 		addAction("load-session");
 		addAction("locate-bracket");
 		addAction("log-viewer");
+		addAction("multifile-search");
 		addAction("new-file");
 		addAction("new-view");
 		addAction("next-bracket-exp");
@@ -1726,7 +1727,6 @@ public class jEdit
 		addAction("save-gutter-size");
 		addAction("save-session");
 		addAction("scroll-line");
-		addAction("search-and-replace");
 		addAction("select-all");
 		addAction("select-block");
 		addAction("select-buffer");
@@ -1753,6 +1753,8 @@ public class jEdit
 		addAction("tab");
 		addAction("to-lower");
 		addAction("to-upper");
+		addAction("toolbar-find");
+		addAction("toolbar-isearch");
 		addAction("undo");
 		addAction("unsplit");
 		addAction("untab");
@@ -1766,9 +1768,6 @@ public class jEdit
 
 		// Preload these actions so that isToggle()
 		// will always return the correct value
-		addAction(new org.gjt.sp.jedit.actions.ignore_case());
-		addAction(new org.gjt.sp.jedit.actions.multifile_search());
-		addAction(new org.gjt.sp.jedit.actions.regexp());
 		addAction(new org.gjt.sp.jedit.actions.toggle_gutter());
 		addAction(new org.gjt.sp.jedit.actions.toggle_line_numbers());
 		addAction(new org.gjt.sp.jedit.actions.toggle_rect());
@@ -1919,6 +1918,7 @@ public class jEdit
 			&& buffersFirst.isUntitled()
 			&& !buffersFirst.isDirty())
 		{
+			System.err.println("replacing untitled");
 			EditBus.send(new BufferUpdate(buffersFirst,
 				BufferUpdate.CLOSED));
 			buffersFirst = buffersLast = buffer;
@@ -2058,6 +2058,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.208  2000/04/03 10:22:24  sp
+ * Search bar
+ *
  * Revision 1.207  2000/04/02 06:38:28  sp
  * Bug fixes
  *

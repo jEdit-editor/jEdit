@@ -30,10 +30,6 @@ implements InputHandler.NonRecordable
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		HistoryTextField quicksearch = view.getQuickSearch();
-		if(quicksearch == null)
-			new SearchDialog(view,null);
-		else
-			quicksearch.requestFocus();
+		new SearchDialog(view,null);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * SearchDialog.java - Search and replace dialog
- * Copyright (C) 1998, 1999 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,33 +65,10 @@ public class SearchDialog extends EnhancedDialog
 			+ ".mnemonic").charAt(0));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		getContentPane().setLayout(new BorderLayout());
-		JPanel panel = new JPanel();
-		GridBagLayout layout = new GridBagLayout();
-		panel.setLayout(layout);
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.gridwidth = constraints.gridheight = 1;
-		constraints.fill = constraints.BOTH;
-		JLabel label = new JLabel(jEdit.getProperty("search.find"),
-			SwingConstants.RIGHT);
-		layout.setConstraints(label,constraints);
-		panel.add(label);
-		constraints.gridx = 1;
-		constraints.gridwidth = constraints.REMAINDER;
-		constraints.weightx = 1.0f;
-		layout.setConstraints(find,constraints);
+		JPanel panel = new JPanel(new GridLayout(4,1));
+		panel.add(new JLabel(jEdit.getProperty("search.find")));
 		panel.add(find);
-		constraints.gridx = 0;
-		constraints.gridwidth = 1;
-		constraints.gridy = 1;
-		constraints.weightx = 0.0f;
-		label = new JLabel(jEdit.getProperty("search.replace"),
-			SwingConstants.RIGHT);
-		layout.setConstraints(label,constraints);
-		panel.add(label);
-		constraints.gridx = 1;
-		constraints.gridwidth = constraints.REMAINDER;
-		constraints.weightx = 1.0f;
-		layout.setConstraints(replace,constraints);
+		panel.add(new JLabel(jEdit.getProperty("search.replace")));
 		panel.add(replace);
 		getContentPane().add(BorderLayout.NORTH,panel);
 		panel = new JPanel();
@@ -116,11 +93,16 @@ public class SearchDialog extends EnhancedDialog
 		replaceSelection.addActionListener(actionListener);
 		replaceAll.addActionListener(actionListener);
 		cancel.addActionListener(actionListener);
-		
-		pack();
-		GUIUtilities.loadGeometry(this,"search");
 
+		pack();
+
+		// hack so that people upgrading from older jEdit don't
+		// get a wrong size dialog box
+		jEdit.unsetProperty("search.width");
+		jEdit.unsetProperty("search.height");
+		GUIUtilities.loadGeometry(this,"search");
 		show();
+
 		find.requestFocus();
 	}
 
@@ -240,6 +222,9 @@ public class SearchDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.7  2000/04/03 10:22:24  sp
+ * Search bar
+ *
  * Revision 1.6  1999/12/24 01:20:20  sp
  * Bug fixing and other stuff for 2.3pre1
  *

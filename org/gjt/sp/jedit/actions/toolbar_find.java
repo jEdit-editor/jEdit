@@ -1,6 +1,6 @@
 /*
- * search_and_replace.java
- * Copyright (C) 1999 Slava Pestov
+ * toolbar_find.java
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,12 +24,21 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
-public class search_and_replace extends EditAction
+public class toolbar_find extends EditAction
 implements InputHandler.NonRecordable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
-		new SearchDialog(getView(evt),null);
+		SearchBar searchBar = view.getSearchBar();
+		if(searchBar == null)
+			view.getToolkit().beep();
+		else
+		{
+			searchBar.setIncremental(false);
+			searchBar.getField().setText(view.getTextArea()
+				.getSelectedText());
+			searchBar.getField().requestFocus();
+		}
 	}
 }

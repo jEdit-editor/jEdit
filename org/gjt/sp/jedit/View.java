@@ -29,7 +29,6 @@ import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.textarea.*;
@@ -122,23 +121,20 @@ public class View extends JFrame implements EBComponent
 	}
 
 	/**
-	 * Returns the view's quicksearch text field, or null if the toolbar
-	 * is not showing.
-	 */
-	public final HistoryTextField getQuickSearch()
-	{
-		if(quicksearch.isShowing())
-			return quicksearch;
-		else
-			return null;
-	}
-
-	/**
 	 * Returns the view's text area.
 	 */
 	public final JEditTextArea getTextArea()
 	{
 		return textArea;
+	}
+
+	/**
+	 * Returns the search bar.
+	 * @since jEdit 2.4pre4
+	 */
+	public final SearchBar getSearchBar()
+	{
+		return searchBar;
 	}
 
 	/**
@@ -404,12 +400,8 @@ public class View extends JFrame implements EBComponent
 			updateMacrosMenu();
 		else if(msg instanceof SearchSettingsChanged)
 		{
-			if(toolBar != null)
-			{
-				ignoreCase.repaint();
-				regexp.repaint();
-				multifile.repaint();
-			}
+			if(searchBar != null)
+				searchBar.update();
 		}
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
@@ -464,13 +456,6 @@ public class View extends JFrame implements EBComponent
 
 		toolBars = new Box(BoxLayout.Y_AXIS);
 
-		quicksearch = new HistoryTextField("find");
-		Dimension dim = quicksearch.getPreferredSize();
-		dim.width = Integer.MAX_VALUE;
-		quicksearch.setMaximumSize(dim);
-		quicksearch.addActionListener(new ActionHandler());
-		quicksearch.addKeyListener(new KeyHandler());
-
 		textArea = createTextArea();
 
 		if(view == null)
@@ -521,13 +506,7 @@ public class View extends JFrame implements EBComponent
 
 	private Box toolBars;
 	private JToolBar toolBar;
-	private HistoryTextField quicksearch;
-
-	// we need to keep these instances so that we can call repaint()
-	// when search & replace settings change
-	private EnhancedButton ignoreCase;
-	private EnhancedButton regexp;
-	private EnhancedButton multifile;
+	private SearchBar searchBar;
 
 	private BufferTabs bufferTabs;
 	private JSplitPane splitPane;
@@ -555,7 +534,7 @@ public class View extends JFrame implements EBComponent
 
 	private void propertiesChanged()
 	{
-		loadToolBar();
+		loadToolBars();
 		initBufferTabs();
 
 		showFullPath = "on".equals(jEdit.getProperty("view.showFullPath"));
@@ -759,7 +738,7 @@ public class View extends JFrame implements EBComponent
 
 	private void loadPropertiesFromView(View view)
 	{
-		loadToolBar();
+		loadToolBars();
 		initBufferTabs();
 
 		showFullPath = view.showFullPath;
@@ -816,28 +795,14 @@ public class View extends JFrame implements EBComponent
 		myPainter.setStyles(painter.getStyles());
 	}
 
-	private void loadToolBar()
+	private void loadToolBars()
 	{
 		if("on".equals(jEdit.getProperty("view.showToolbar")))
 		{
 			if(toolBar == null)
 			{
 				toolBar = GUIUtilities.loadToolBar("view.toolbar");
-				toolBar.addSeparator();
-				toolBar.add(new JLabel(jEdit.getProperty("view.quicksearch")));
-				Box box = new Box(BoxLayout.Y_AXIS);
-				box.add(Box.createVerticalGlue());
-				box.add(quicksearch);
-				box.add(Box.createVerticalGlue());
-				toolBar.add(box);
-				toolBar.addSeparator();
-
-				toolBar.add(ignoreCase = GUIUtilities.loadToolButton(
-					"ignore-case"));
-				toolBar.add(regexp = GUIUtilities.loadToolButton(
-					"regexp"));
-				toolBar.add(multifile = GUIUtilities.loadToolButton(
-					"multifile-search"));
+				toolBar.add(Box.createGlue());
 			}
 			if(toolBar.getParent() == null)
 				addToolBar(toolBar);
@@ -846,6 +811,19 @@ public class View extends JFrame implements EBComponent
 		{
 			removeToolBar(toolBar);
 			toolBar = null;
+		}
+
+		if("on".equals(jEdit.getProperty("view.showSearchbar")))
+		{
+			if(searchBar == null)
+				searchBar = new SearchBar(this);
+			if(searchBar.getParent() == null)
+				addToolBar(searchBar);
+		}
+		else if(searchBar != null)
+		{
+			removeToolBar(searchBar);
+			searchBar = null;
 		}
 	}
 
@@ -1251,27 +1229,6 @@ public class View extends JFrame implements EBComponent
 	}
 
 	// event listeners
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(evt.getSource() == quicksearch)
-			{
-				String text = quicksearch.getText();
-				if(text != null && text.length() != 0)
-				{
-					quicksearch.addCurrentToHistory();
-					quicksearch.setText(null);
-					SearchAndReplace.setSearchString(text);
-					SearchAndReplace.find(View.this);
-					focusOnTextArea();
-				}
-				else
-					new SearchDialog(View.this,null);
-			}
-		}
-	}
-
 	class CaretHandler implements CaretListener
 	{
 		public void caretUpdate(CaretEvent evt)
@@ -1292,18 +1249,6 @@ public class View extends JFrame implements EBComponent
 
 		public void focusLost(FocusEvent evt)
 		{
-		}
-	}
-
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyPressed(KeyEvent evt)
-		{
-			if(evt.getSource() == quicksearch
-				&& evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-			{
-				focusOnTextArea();
-			}
 		}
 	}
 
@@ -1416,6 +1361,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.150  2000/04/03 10:22:24  sp
+ * Search bar
+ *
  * Revision 1.149  2000/04/02 06:38:28  sp
  * Bug fixes
  *
@@ -1446,11 +1394,5 @@ public class View extends JFrame implements EBComponent
  *
  * Revision 1.140  2000/02/24 04:13:05  sp
  * Bug fixes, misc updates, etc
- *
- * Revision 1.139  2000/02/12 03:56:58  sp
- * 2.3pre5 stuff
- *
- * Revision 1.138  2000/02/07 06:35:52  sp
- * Options dialog box updates
  *
  */

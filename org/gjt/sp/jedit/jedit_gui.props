@@ -39,7 +39,8 @@ ignore-case.icon=IgnoreCase.gif
 regexp.icon=Regexp.gif
 multifile-search.icon=Multifile.gif
 
-view.quicksearch=Find:\ 
+view.search.find=Search for:\ 
+view.search.incremental=Incremental
 
 ###
 ### CONTEXT MENUS
@@ -254,10 +255,9 @@ view-registers.label=View Registers...
 
 ### Search menu
 search=find \
-       find-next \
        find-selection \
+       find-next \
        - \
-       search-and-replace \
        replace-in-selection \
        replace-all \
        - \
@@ -266,11 +266,13 @@ search=find \
        - \
        multifile-search \
        - \
+       toolbar-find \
+       toolbar-isearch \
+       - \
        set-marker \
        %clear-marker \
        %goto-marker
 search.label=$Search
-search-and-replace.label=Sear$ch and Replace...
 find.label=$Find...
 find-next.label=Fin$d Next
 find-selection.label=F$ind Selection...
@@ -279,6 +281,8 @@ replace-all.label=Replace $All
 hypersearch.label=$HyperSearch...
 hypersearch-selection.label=HyperSearch for Se$lection...
 multifile-search.label=M$ultifile Search Settings...
+toolbar-find.label=$Toolbar Find
+toolbar-isearch.label=Toolbar $Incremental Search
 set-marker.label=Set $Marker...
 clear-marker.label=Clear Marker
 goto-marker.label=Go to Marker
@@ -421,8 +425,6 @@ repeat.label=Enter Repeat Count
 ### OTHER ACTIONS NOT LISTED IN MENUS
 ###
 
-ignore-case.label=Ignore Case
-regexp.label=Regular Expressions
 insert-literal.label=Insert Without Expanding
 
 ###
@@ -580,11 +582,11 @@ no-settings.message=jEdit was started with the -nosettings switch.\n\
 
 # Search and replace dialog
 search.title=Search And Replace
-search.find=Find:\ 
-search.replace=Replace With:\ 
+search.find=Search for: (up arrow recalls previous)
+search.replace=Replace with:
 search.keepDialog=Keep Dialog 
 search.ignoreCase=Ignore Case
-search.regexp=Regular Expression
+search.regexp=Regexp
 search.multifile=Multi File...
 search.findBtn=Find
 search.replaceSelection=Replace in Selection
@@ -614,7 +616,7 @@ keepsearching.message=No more matches were found. Continue search from\n\
 
 # Hypersearch dialog
 hypersearch.title=HyperSearch
-hypersearch.find=Search For:\ 
+hypersearch.find=Search for: (up arrow recalls previous)
 hypersearch.findBtn=Find All
 
 # Replace all results
@@ -724,6 +726,7 @@ options.general.backupSuffix=Backup filename suffix:\
 options.general.lineSeparator=Default line separator:\ 
 options.general.saveDesktop=Save session on exit
 options.general.showToolbar=Show toolbar
+options.general.showSearchbar=Show search bar
 options.general.showBufferTabs=Show buffer tabs
 options.general.bufferTabsPos=Buffer tabs position:\ 
 options.general.showFullPath=Show full path of buffers in title bar

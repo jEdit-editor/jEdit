@@ -77,7 +77,10 @@ buffer.syntax=on
 ###
 
 # Show toolbar? (on/off)
-view.showToolbar=on
+view.showToolbar=off
+
+# Show search bar? (on/off)
+view.showSearchbar=on
 
 # Show buffer tabs? (on/off)
 view.showBufferTabs=on

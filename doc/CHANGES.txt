@@ -7,11 +7,14 @@ JEDIT VERSION HISTORY
 - CSS mode added; HTML and friends now highlight CSS stylesheets inside
   <style> tags (Mike Dillon)
 - ASP mode (Andre Kaplan)
+- New 'search bar' with incremental search support replaces QuickSearch
+  field on toolbar
 
 + Enhancements
 
 - PHP, JSP, ColdFusion now support inline JavaScript
 - Updated VBScript and JavaScript modes (Andre Kaplan)
+- Improved Search & Replace and HyperSearch dialog boxes
 
 + Bug Fixes
 

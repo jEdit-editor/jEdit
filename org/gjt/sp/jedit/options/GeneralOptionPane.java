@@ -122,6 +122,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"view.showToolbar")));
 		addComponent(showToolbar);
 
+		/* Show search bar */
+		showSearchbar = new JCheckBox(jEdit.getProperty(
+			"options.general.showSearchbar"));
+		showSearchbar.getModel().setSelected("on".equals(jEdit.getProperty(
+			"view.showSearchbar")));
+		addComponent(showSearchbar);
+
 		/* Show buffer tabs */
 		showBufferTabs = new JCheckBox(jEdit.getProperty(
 			"options.general.showBufferTabs"));
@@ -200,6 +207,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("view.showToolbar",showToolbar.getModel()
 			.isSelected() ? "on" : "off");
+		jEdit.setProperty("view.showSearchbar",showSearchbar.getModel()
+			.isSelected() ? "on" : "off");
 		jEdit.setProperty("view.showBufferTabs",showBufferTabs.getModel()
 			.isSelected() ? "on" : "off");
 		jEdit.setProperty("view.bufferTabsPos",String.valueOf(
@@ -228,6 +237,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JComboBox lineSeparator;
 	private JCheckBox saveDesktop;
 	private JCheckBox showToolbar;
+	private JCheckBox showSearchbar;
 	private JCheckBox showBufferTabs;
 	private JComboBox bufferTabsPos;
 	private JCheckBox showFullPath;

@@ -21,21 +21,16 @@ package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.textarea.InputHandler;
 import org.gjt.sp.jedit.*;
 
 public class find_selection extends EditAction
+implements InputHandler.NonRecordable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
 		View view = getView(evt);
 		String selection = view.getTextArea().getSelectedText();
-		HistoryTextField quicksearch = view.getQuickSearch();
-		if(quicksearch == null)
-			new SearchDialog(view,selection);
-		else
-		{
-			quicksearch.requestFocus();
-			quicksearch.setText(selection);
-		}
+		new SearchDialog(view,selection);
 	}
 }

@@ -26,17 +26,12 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.GUIUtilities;
 
-/**
- * A button that becomes selected when EditAction.isSelected() returns true.
- */
-public class EnhancedButton extends JToggleButton
+public class EnhancedButton extends JButton
 {
 	public EnhancedButton(Icon icon, String toolTip, EditAction action,
 		String actionCommand)
 	{
 		super(icon);
-
-		this.action = action;
 
 		if(action != null)
 		{
@@ -49,7 +44,6 @@ public class EnhancedButton extends JToggleButton
 		setActionCommand(actionCommand);
 
 		setToolTipText(toolTip);
-		setModel(new Model());
 
 		Insets zeroInsets = new Insets(0,0,0,0);
 		setMargin(zeroInsets);
@@ -59,16 +53,5 @@ public class EnhancedButton extends JToggleButton
 	public String getActionCommand()
 	{
 		return getModel().getActionCommand();
-	}
-
-	// private members
-	private EditAction action;
-
-	class Model extends JToggleButton.ToggleButtonModel
-	{
-		public boolean isSelected()
-		{
-			return action.isSelected(EnhancedButton.this);
-		}
 	}
 }

@@ -35,10 +35,4 @@ implements InputHandler.NonRecordable
 		if(fileset != null)
 			SearchAndReplace.setSearchFileSet(fileset);
 	}
-
-	public boolean isSelected(java.awt.Component comp)
-	{
-		return !(SearchAndReplace.getSearchFileSet() instanceof
-			CurrentBufferSet);
-	}
 }

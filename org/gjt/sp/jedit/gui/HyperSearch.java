@@ -57,7 +57,7 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 		content.setLayout(new BorderLayout());
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(new JLabel(jEdit.getProperty("hypersearch.find")),
-			BorderLayout.WEST);
+			BorderLayout.NORTH);
 		find = new HistoryTextField("find");
 
 		panel.add(find, BorderLayout.CENTER);
@@ -375,6 +375,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.52  2000/04/03 10:22:24  sp
+ * Search bar
+ *
  * Revision 1.51  2000/04/01 12:21:27  sp
  * mode cache implemented
  *

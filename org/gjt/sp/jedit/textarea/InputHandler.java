@@ -24,6 +24,7 @@ import javax.swing.JPopupMenu;
 import java.awt.event.*;
 import java.awt.Component;
 import java.util.*;
+import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.util.Log;
 
 /**
@@ -279,8 +280,7 @@ public abstract class InputHandler extends KeyAdapter
 			actionCommand);
 
 		// don't do anything if the action is a wrapper
-		// (like EditAction.Wrapper)
-		if(listener instanceof Wrapper)
+		if(listener instanceof EditAction.Wrapper)
 		{
 			listener.actionPerformed(evt);
 			return;
@@ -399,12 +399,6 @@ public abstract class InputHandler extends KeyAdapter
 	 * by the macro recorder. Instead, it will do its own recording.
 	 */
 	public interface NonRecordable {}
-
-	/**
-	 * For use by EditAction.Wrapper only.
-	 * @since jEdit 2.2final
-	 */
-	public interface Wrapper {}
 
 	/**
 	 * Macro recorder.
@@ -1032,6 +1026,9 @@ public abstract class InputHandler extends KeyAdapter
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.25  2000/04/03 10:22:24  sp
+ * Search bar
+ *
  * Revision 1.24  2000/04/02 06:38:28  sp
  * Bug fixes
  *

@@ -1,6 +1,6 @@
 /*
- * regexp.java
- * Copyright (C) 1999 Slava Pestov
+ * toolbar_isearch.java
+ * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,25 +20,25 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import org.gjt.sp.jedit.search.*;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.InputHandler;
-import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.*;
 
-public class regexp extends EditAction
+public class toolbar_isearch extends EditAction
 implements InputHandler.NonRecordable
 {
 	public void actionPerformed(ActionEvent evt)
 	{
-		SearchAndReplace.setRegexp(!SearchAndReplace.getRegexp());
-	}
-
-	public boolean isToggle()
-	{
-		return true;
-	}
-
-	public boolean isSelected(java.awt.Component comp)
-	{
-		return SearchAndReplace.getRegexp();
+		View view = getView(evt);
+		SearchBar searchBar = view.getSearchBar();
+		if(searchBar == null)
+			view.getToolkit().beep();
+		else
+		{
+			searchBar.setIncremental(true);
+			searchBar.getField().setText(view.getTextArea()
+				.getSelectedText());
+			searchBar.getField().requestFocus();
+		}
 	}
 }
