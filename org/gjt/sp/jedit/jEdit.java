@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.03.03.00";
+		return "02.03.04.00";
 	}
 
 	/**
@@ -1489,6 +1489,8 @@ public class jEdit
 		addAction("tab");
 		addAction("to-lower");
 		addAction("to-upper");
+		addAction("toggle-gutter");
+		addAction("toggle-line-numbers");
 		addAction("toggle-rect");
 		addAction("undo");
 		addAction("unsplit");
@@ -1506,6 +1508,8 @@ public class jEdit
 		((EditAction.Wrapper)getAction("ignore-case")).loadIfNecessary();
 		((EditAction.Wrapper)getAction("multifile-search")).loadIfNecessary();
 		((EditAction.Wrapper)getAction("regexp")).loadIfNecessary();
+		((EditAction.Wrapper)getAction("toggle-gutter")).loadIfNecessary();
+		((EditAction.Wrapper)getAction("toggle-line-numbers")).loadIfNecessary();
 		((EditAction.Wrapper)getAction("toggle-rect")).loadIfNecessary();
 	}
 
@@ -1769,6 +1773,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.188  2000/02/02 06:23:44  sp
+ * Gutter changes from mike
+ *
  * Revision 1.187  2000/01/29 10:12:43  sp
  * BeanShell edit mode, bug fixes
  *
@@ -1798,20 +1805,5 @@ public class jEdit
  *
  * Revision 1.178  2000/01/16 01:45:51  sp
  * Remove Trailing Whitespace going back to TextTools
- *
- * Revision 1.177  2000/01/14 22:11:24  sp
- * Enhanced options dialog box
- *
- * Revision 1.176  2000/01/14 04:23:50  sp
- * 2.3pre2 stuff
- *
- * Revision 1.175  1999/12/24 01:20:20  sp
- * Bug fixing and other stuff for 2.3pre1
- *
- * Revision 1.174  1999/12/20 08:38:43  sp
- * Abbrevs option pane
- *
- * Revision 1.173  1999/12/20 06:05:26  sp
- * Search settings buttons on tool bar, static abbrevs
  *
  */

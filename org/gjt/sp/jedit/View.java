@@ -381,9 +381,12 @@ public class View extends JFrame implements EBComponent
 			updateMacrosMenu();
 		else if(msg instanceof SearchSettingsChanged)
 		{
-			ignoreCase.repaint();
-			regexp.repaint();
-			multifile.repaint();
+			if(toolBar != null)
+			{
+				ignoreCase.repaint();
+				regexp.repaint();
+				multifile.repaint();
+			}
 		}
 		else if(msg instanceof BufferUpdate)
 			handleBufferUpdate((BufferUpdate)msg);
@@ -797,6 +800,9 @@ public class View extends JFrame implements EBComponent
 				// but this will also work with other layouts.
 				parent.add(bufferTabs);
 			}
+
+			bufferTabs.setTabPlacement(Integer.parseInt(
+				jEdit.getProperty("view.bufferTabsPos")));
 		}
 		else
 		{
@@ -1265,6 +1271,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.135  2000/02/02 06:23:44  sp
+ * Gutter changes from mike
+ *
  * Revision 1.134  2000/02/01 06:49:39  sp
  * View.initTextArea() updated for gutter
  *

@@ -336,3 +336,11 @@ public class Gutter extends JComponent
 		}
 	}
 }
+
+/*
+ * ChangeLog:
+ * $Log$
+ * Revision 1.2  2000/02/02 06:23:44  sp
+ * Gutter changes from mike
+ *
+ */

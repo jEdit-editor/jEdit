@@ -12,6 +12,7 @@ Will need to mention:
 - better hypersearch
 - key bindings can be changed on the fly
 - double-click/drag
+- gutter
 
 -- Slava Pestov
 <sp@gjt.org>

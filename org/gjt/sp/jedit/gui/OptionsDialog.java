@@ -70,6 +70,7 @@ public class OptionsDialog extends EnhancedDialog
 
 		addOptionPane(new org.gjt.sp.jedit.options.GeneralOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.EditorOptionPane());
+		addOptionPane(new org.gjt.sp.jedit.options.GutterOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.StyleOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.FileFilterOptionPane());
 		addOptionPane(new org.gjt.sp.jedit.options.CommandShortcutsOptionPane());
@@ -179,6 +180,9 @@ public class OptionsDialog extends EnhancedDialog
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.12  2000/02/02 06:23:44  sp
+ * Gutter changes from mike
+ *
  * Revision 1.11  2000/01/30 04:23:23  sp
  * New about box, minor bug fixes and updates here and there
  *

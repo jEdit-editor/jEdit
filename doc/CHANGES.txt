@@ -1,5 +1,18 @@
 JEDIT VERSION HISTORY
 
+* Version 2.3pre4
+
++ Enhancements
+
+- Gutter option pane, new toggle-gutter and toggle-line-numbers
+  actions
+
++ Bug Fixes
+
+- Fixed NullPointerException when doing search and replace with tool bar
+  disabled (since 2.3pre1)
+- Buffer tabs position setting was broken (since 2.3pre3)
+
 * Version 2.3pre3
 
 + New Features

@@ -5,11 +5,13 @@ JEDIT TO DO
 - Double-click drag doesn't work backwards
 - CaretUndo doesn't work on 'redo'
 - Check file mod status on focus
-- Option pane for gutter, customizable gutter font
+- Customizable gutter font and colors
+- Document gutter
+- ViewUpdate.TEXTAREA_DESTROYED
 
 ------- Later -------
 
-- Integrate Mike Dillon's "Gutter" code
+- Mark lines with caret registers on them in the gutter
 - Having more than 2 split panes should be possible
 - Incremental search
 - If there is > 1 possible match, complete-word should list them in a

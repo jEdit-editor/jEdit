@@ -286,6 +286,9 @@ utils=new-view \
       split-vertical \
       split-horizontal \
       - \
+      toggle-gutter \
+      toggle-line-numbers \
+      - \
       load-session \
       save-session \
       - \
@@ -303,6 +306,8 @@ close-view.label=$Close View
 split-vertical.label=Split $Vertically
 split-horizontal.label=Split $Horizontally
 unsplit.label=Uns$plit
+toggle-gutter.label=Gutt$er E$xpanded
+toggle-line-numbers.label=Line Nu$mbering
 log-viewer.label=Show $Activity Log...
 save-log.label=Save Ac$tivity Log...
 clear-log.label=C$lear Activity Log
@@ -427,18 +432,18 @@ view.title=jEdit: {0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,c
 # Same as view.title but no leading 'jEdit:'
 view.buffer-label={0}{1,choice,0#|1# (read only)}{2,choice,0#|1# (modified)}{3,choice,0#|1# (new)}
 # Status messages
-view.status.recording=Macro recording
-view.status.cut-string-register=Cut to register
-view.status.copy-string-register=Copy to register
-view.status.append-string-register=Append to register
-view.status.paste-string-register=Paste from register
-view.status.set-filename-register=Save file name to register
-view.status.set-caret-register=Save caret to register
-view.status.goto-register=Go to register
-view.status.select-caret-register=Select to register
-view.status.exchange-caret-register=Swap caret with register
-view.status.clear-register=Clear register
-view.status.insert-literal=Insert without expanding
+view.status.recording=Macro recording:
+view.status.cut-string-register=Cut to register:
+view.status.copy-string-register=Copy to register:
+view.status.append-string-register=Append to register:
+view.status.paste-string-register=Paste from register:
+view.status.set-filename-register=Save file name to register:
+view.status.set-caret-register=Save caret to register:
+view.status.goto-register=Go to register:
+view.status.select-caret-register=Select to register:
+view.status.exchange-caret-register=Swap caret with register:
+view.status.clear-register=Clear register:
+view.status.insert-literal=Insert without expanding:
 
 ###
 ### VARIOUS DIALOGS
@@ -740,6 +745,11 @@ options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
 options.abbrevs.sort.abbrev=Sort by abbrev
 options.abbrevs.sort.expand=Sort by expansion
+options.gutter.label=Gutter
+options.gutter.expanded=Gutter expanded by default
+options.gutter.interval=Line number highlight interval (0 disables):\ 
+options.gutter.lineNumbers=Line numbering enabled
+options.gutter.width=Gutter width:\ 
 
 # Color chooser, used by options.styles
 colorChooser.title=Pick a Color
