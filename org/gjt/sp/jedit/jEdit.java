@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "03.00.01.00";
+		return "02.06.01.00";
 	}
 
 	/**
@@ -1209,6 +1209,11 @@ public class jEdit
 	 */
 	public static boolean closeBuffer(View view, Buffer buffer)
 	{
+		// Wait for pending I/O requests
+		VFSManager.waitForRequests();
+		if(VFSManager.errorOccurred())
+			return false;
+
 		if(buffer.isDirty())
 		{
 			Object[] args = { buffer.getName() };
@@ -1225,11 +1230,6 @@ public class jEdit
 			else if(result != JOptionPane.NO_OPTION)
 				return false;
 		}
-
-		// Wait for pending I/O requests
-		VFSManager.waitForRequests();
-		if(VFSManager.errorOccurred())
-			return false;
 
 		_closeBuffer(view,buffer);
 
@@ -2313,6 +2313,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.257  2000/07/22 12:37:38  sp
+ * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
+ *
  * Revision 1.256  2000/07/22 06:22:27  sp
  * I/O progress monitor done
  *

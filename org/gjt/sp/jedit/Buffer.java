@@ -101,13 +101,19 @@ public class Buffer extends PlainDocument implements EBComponent
 	/**
 	 * Loads the buffer from disk, even if it is loaded already.
 	 * @param view The view
-	 * @param reload If true, we automatically delete the autosave file,
-	 * otherwise we warn user
+	 * @param reload If true, user will not be asked to recover autosave
+	 * file, if any
 	 *
 	 * @since 2.5pre1
 	 */
 	public boolean load(final View view, final boolean reload)
 	{
+		if(getFlag(LOADING) || getFlag(SAVING))
+		{
+			GUIUtilities.error(view,"buffer-multiple-io",null);
+			return false;
+		}
+
 		setFlag(LOADING,true);
 
 		undo = null;
@@ -148,6 +154,34 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			public void run()
 			{
+				StringBuffer sbuf = (StringBuffer)getProperty(
+					IORequest.LOAD_DATA);
+				if(sbuf != null)
+				{
+					getDocumentProperties().remove(IORequest.LOAD_DATA);
+
+					try
+					{
+						// For `reload' command
+						remove(0,getLength());
+						insertString(0,sbuf.toString(),null);
+
+						// Process buffer-local properties
+						Element map = getDefaultRootElement();
+						for(int i = 0; i < Math.min(10,map.getElementCount()); i++)
+						{
+							Element line = map.getElement(i);
+							String text = getText(line.getStartOffset(),
+								line.getEndOffset() - line.getStartOffset() - 1);
+							processProperty(text);
+						}
+					}
+					catch(BadLocationException bl)
+					{
+						bl.printStackTrace();
+					}
+				}
+
 				undo = new UndoManager();
 				setFlag(LOADING,false);
 
@@ -239,6 +273,12 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean save(final View view, String path)
 	{
+		if(getFlag(LOADING) || getFlag(SAVING))
+		{
+			GUIUtilities.error(view,"buffer-multiple-io",null);
+			return false;
+		}
+
 		if(path == null && getFlag(NEW_FILE))
 			return saveAs(view);
 
@@ -1307,6 +1347,63 @@ public class Buffer extends PlainDocument implements EBComponent
 		EditBus.removeFromBus(this);
 	}
 
+	// protected members
+	
+	/**
+	 * We overwrite this method to update the token marker
+	 * state immediately so that any event listeners get a
+	 * consistent token marker.
+	 */
+	protected void fireInsertUpdate(DocumentEvent evt)
+	{
+		DocumentEvent.ElementChange ch = evt.getChange(
+			getDefaultRootElement());
+		if(ch != null)
+		{
+			int index = ch.getIndex();
+			int len = ch.getChildrenAdded().length -
+				ch.getChildrenRemoved().length;
+			tokenMarker.linesChanged(index,
+				tokenMarker.getLineCount() - index);
+			tokenMarker.insertLines(ch.getIndex() + 1,len);
+			index += (len + 1);
+		}
+		else
+		{
+			tokenMarker.linesChanged(getDefaultRootElement()
+				.getElementIndex(evt.getOffset()),1);
+		}
+
+		super.fireInsertUpdate(evt);
+	}
+	
+	/**
+	 * We overwrite this method to update the token marker
+	 * state immediately so that any event listeners get a
+	 * consistent token marker.
+	 */
+	protected void fireRemoveUpdate(DocumentEvent evt)
+	{
+		DocumentEvent.ElementChange ch = evt.getChange(
+			getDefaultRootElement());
+		if(ch != null)
+		{
+			int index = ch.getIndex();
+			int len = ch.getChildrenRemoved().length -
+				ch.getChildrenAdded().length;
+			tokenMarker.linesChanged(index,
+				tokenMarker.getLineCount() - index);
+			tokenMarker.deleteLines(index + 1,len);
+		}
+		else
+		{
+			tokenMarker.linesChanged(getDefaultRootElement()
+				.getElementIndex(evt.getOffset()),1);
+		}
+
+		super.fireRemoveUpdate(evt);
+	}
+
 	// private members
 	private void setFlag(int flag, boolean value)
 	{
@@ -1409,59 +1506,72 @@ public class Buffer extends PlainDocument implements EBComponent
 			return false;
 	}
 
-	/**
-	 * We overwrite this method to update the token marker
-	 * state immediately so that any event listeners get a
-	 * consistent token marker.
-	 */
-	protected void fireInsertUpdate(DocumentEvent evt)
-	{
-		DocumentEvent.ElementChange ch = evt.getChange(
-			getDefaultRootElement());
-		if(ch != null)
-		{
-			int index = ch.getIndex();
-			int len = ch.getChildrenAdded().length -
-				ch.getChildrenRemoved().length;
-			tokenMarker.linesChanged(index,
-				tokenMarker.getLineCount() - index);
-			tokenMarker.insertLines(ch.getIndex() + 1,len);
-			index += (len + 1);
-		}
-		else
-		{
-			tokenMarker.linesChanged(getDefaultRootElement()
-				.getElementIndex(evt.getOffset()),1);
-		}
-
-		super.fireInsertUpdate(evt);
-	}
 	
-	/**
-	 * We overwrite this method to update the token marker
-	 * state immediately so that any event listeners get a
-	 * consistent token marker.
-	 */
-	protected void fireRemoveUpdate(DocumentEvent evt)
-	{
-		DocumentEvent.ElementChange ch = evt.getChange(
-			getDefaultRootElement());
-		if(ch != null)
-		{
-			int index = ch.getIndex();
-			int len = ch.getChildrenRemoved().length -
-				ch.getChildrenAdded().length;
-			tokenMarker.linesChanged(index,
-				tokenMarker.getLineCount() - index);
-			tokenMarker.deleteLines(index + 1,len);
-		}
-		else
-		{
-			tokenMarker.linesChanged(getDefaultRootElement()
-				.getElementIndex(evt.getOffset()),1);
-		}
 
-		super.fireRemoveUpdate(evt);
+	private void processProperty(String prop)
+	{
+		StringBuffer buf = new StringBuffer();
+		String name = null;
+		boolean escape = false;
+		for(int i = 0; i < prop.length(); i++)
+		{
+			char c = prop.charAt(i);
+			switch(c)
+			{
+			case ':':
+				if(escape)
+				{
+					escape = false;
+					buf.append(':');
+					break;
+				}
+				if(name != null)
+				{
+					String value = buf.toString();
+					try
+					{
+						putProperty(name,new Integer(value));
+					}
+					catch(NumberFormatException nf)
+					{
+						putProperty(name,value);
+					}
+				}
+				buf.setLength(0);
+				break;
+			case '=':
+				if(escape)
+				{
+					escape = false;
+					buf.append('=');
+					break;
+				}
+				name = buf.toString();
+				buf.setLength(0);
+				break;
+			case '\\':
+				if(escape)
+					buf.append('\\');
+				escape = !escape;
+				break;
+			case 'n':
+				if(escape)
+				{	buf.append('\n');
+					escape = false;
+					break;
+				}
+			case 't':
+				if(escape)
+				{
+					buf.append('\t');
+					escape = false;
+					break;
+				}
+			default:
+				buf.append(c);
+				break;
+			}
+		}
 	}
 
 	// A dictionary that looks in the mode and editor properties
@@ -1535,6 +1645,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.163  2000/07/22 12:37:38  sp
+ * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
+ *
  * Revision 1.162  2000/07/22 06:22:26  sp
  * I/O progress monitor done
  *

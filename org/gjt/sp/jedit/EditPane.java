@@ -101,14 +101,19 @@ public class EditPane extends JPanel implements EBComponent
 		}
 
 		// Only do this after all I/O requests are complete
-		VFSManager.runInAWTThread(new Runnable()
+		Runnable runnable = new Runnable()
 		{
 			public void run()
 			{
 				loadCaretInfo();
 				buffer.checkModTime(view);
 			}
-		});
+		};
+
+		if(!buffer.isLoaded() || buffer.isSaving())
+			VFSManager.runInAWTThread(runnable);
+		else
+			runnable.run();
 	}
 
 	/**
@@ -603,6 +608,9 @@ public class EditPane extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/07/22 12:37:38  sp
+ * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
+ *
  * Revision 1.10  2000/07/22 03:27:03  sp
  * threaded I/O improved, autosave rewrite started
  *

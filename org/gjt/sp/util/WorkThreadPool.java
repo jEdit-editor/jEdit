@@ -94,6 +94,12 @@ public class WorkThreadPool
 				}
 
 				awtRequestCount++;
+
+				// if no requests are running, requestDone()
+				// will not be called, so we must queue the
+				// AWT runner ourselves.
+				if(requestCount == 0)
+					queueAWTRunner();
 			}
 			else
 			{
@@ -121,7 +127,7 @@ public class WorkThreadPool
 
 		synchronized(waitForAllLock)
 		{
-			while(firstRequest != null)
+			while(requestCount != 0)
 			{
 				try
 				{
@@ -396,6 +402,9 @@ public class WorkThreadPool
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.4  2000/07/22 12:37:39  sp
+ * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
+ *
  * Revision 1.3  2000/07/22 06:22:27  sp
  * I/O progress monitor done
  *

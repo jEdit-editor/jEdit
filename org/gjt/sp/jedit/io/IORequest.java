@@ -43,7 +43,12 @@ public class IORequest extends WorkRequest
 	/**
 	 * Number of lines per progress increment.
 	 */
-	public static final int SAVE_STEP = 100;
+	public static final int SAVE_STEP = 50;
+
+	/**
+	 * Property loaded data is stored in.
+	 */
+	public static final String LOAD_DATA = "IORequest__loadData";
 
 	/**
 	 * A file load request.
@@ -148,10 +153,6 @@ public class IORequest extends WorkRequest
 
 				read(buffer,in);
 			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
-			}
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
@@ -254,7 +255,7 @@ public class IORequest extends WorkRequest
 	 * </ul>
 	 */
 	public void read(Buffer buffer, InputStream _in)
-		throws IOException, BadLocationException
+		throws IOException
 	{
 		boolean trackProgress; // only true if the file size is known
 		int bufLength;
@@ -296,7 +297,7 @@ public class IORequest extends WorkRequest
 		// If we read a \n and this is true, we assume
 		// we have a DOS/Windows file
 		boolean lastWasCR = false;
-		
+
 		while((len = in.read(buf,0,buf.length)) != -1)
 		{
 			// Offset of previous line, relative to
@@ -390,9 +391,9 @@ public class IORequest extends WorkRequest
 			setProgressValue(sbuf.length());
 		}
 
-		// Can't abort the rest, otherwise the buffer may be
+		/* // Can't abort the rest, otherwise the buffer may be
 		// left in an inconsistent state
-		setAbortable(false);
+		setAbortable(false); */
 
 		if(CRLF)
 			buffer.putProperty(Buffer.LINESEP,"\r\n");
@@ -401,9 +402,6 @@ public class IORequest extends WorkRequest
 		else
 			buffer.putProperty(Buffer.LINESEP,"\n");
 		in.close();
-
-		// For `reload' command
-		buffer.remove(0,buffer.getLength());
 
 		// Chop trailing newline and/or ^Z (if any)
 		int length = sbuf.length();
@@ -417,86 +415,11 @@ public class IORequest extends WorkRequest
 				sbuf.setLength(length - 1);
 		}
 
-		buffer.insertString(0,sbuf.toString(),null);
-
-		// Process buffer-local properties
-		Element map = buffer.getDefaultRootElement();
-		for(int i = 0; i < Math.min(10,map.getElementCount()); i++)
-		{
-			Element line = map.getElement(i);
-			String text = buffer.getText(line.getStartOffset(),
-				line.getEndOffset() - line.getStartOffset() - 1);
-			processProperty(buffer,text);
-		}
-
+		// to avoid having to deal with read/write locks and such,
+		// we insert the loaded data into the buffer in the
+		// post-load cleanup runnable, which runs in the AWT thread.
+		buffer.putProperty(LOAD_DATA,sbuf);
 		buffer.setNewFile(false);
-	}
-			
-	private void processProperty(Buffer buffer, String prop)
-	{
-		StringBuffer buf = new StringBuffer();
-		String name = null;
-		boolean escape = false;
-		for(int i = 0; i < prop.length(); i++)
-		{
-			char c = prop.charAt(i);
-			switch(c)
-			{
-			case ':':
-				if(escape)
-				{
-					escape = false;
-					buf.append(':');
-					break;
-				}
-				if(name != null)
-				{
-					String value = buf.toString();
-					try
-					{
-						buffer.putProperty(name,new Integer(
-							value));
-					}
-					catch(NumberFormatException nf)
-					{
-						buffer.putProperty(name,value);
-					}
-				}
-				buf.setLength(0);
-				break;
-			case '=':
-				if(escape)
-				{
-					escape = false;
-					buf.append('=');
-					break;
-				}
-				name = buf.toString();
-				buf.setLength(0);
-				break;
-			case '\\':
-				if(escape)
-					buf.append('\\');
-				escape = !escape;
-				break;
-			case 'n':
-				if(escape)
-				{	buf.append('\n');
-					escape = false;
-					break;
-				}
-			case 't':
-				if(escape)
-				{
-					buf.append('\t');
-					escape = false;
-					break;
-				}
-			default:
-				buf.append(c);
-				break;
-			}
-		}
 	}
 
 	public void readMarkers(Buffer buffer, InputStream in)
@@ -577,6 +500,8 @@ public class IORequest extends WorkRequest
 
 			try
 			{
+				buffer.readLock();
+
 				out = vfs._createOutputStream(view,buffer,path);
 				if(out == null)
 					return;
@@ -607,6 +532,10 @@ public class IORequest extends WorkRequest
 				Log.log(Log.ERROR,this,io);
 				args[0] = io.toString();
 				VFSManager.error(view,"ioerror",args);
+			}
+			finally
+			{
+				buffer.readUnlock();
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -649,6 +578,8 @@ public class IORequest extends WorkRequest
 
 			try
 			{
+				buffer.readLock();
+
 				out = vfs._createOutputStream(view,buffer,path);
 				if(out == null)
 					return;
@@ -664,6 +595,10 @@ public class IORequest extends WorkRequest
 				Log.log(Log.ERROR,this,io);
 				/* args[0] = io.toString();
 				VFSManager.error(view,"ioerror",args); */
+			}
+			finally
+			{
+				buffer.readUnlock();
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -736,6 +671,9 @@ public class IORequest extends WorkRequest
 /*
  * Change Log:
  * $Log$
+ * Revision 1.14  2000/07/22 12:37:39  sp
+ * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
+ *
  * Revision 1.13  2000/07/22 06:22:27  sp
  * I/O progress monitor done
  *

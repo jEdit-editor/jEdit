@@ -38,6 +38,15 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 
+/*
+ * This class was originally written by Ken Klinner, for a JavaWorld Java Tip.
+ * Romain Guy then adopted it to his Jext text editor by changing hard-coded
+ * strings to propery accesses. I (Slava Pestov) then borrowed this class for
+ * use in my jEdit text editor. I removed the file content search (since
+ * jEdit's HyperSearch feature already does it), removed the custom font
+ * calls, and made a few other minor changes.
+ */
+
 /**
  * A threaded file search accessory for JFileChooser.
  * <P>
@@ -1288,6 +1297,9 @@ class FindByName extends JPanel implements FindFilterFactory
 /*
  * Change Log:
  * $Log$
+ * Revision 1.6  2000/07/22 12:37:39  sp
+ * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
+ *
  * Revision 1.5  2000/06/04 08:57:35  sp
  * GUI updates, bug fixes
  *

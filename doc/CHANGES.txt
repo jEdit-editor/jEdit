@@ -45,6 +45,9 @@ JEDIT 3.0 VERSION HISTORY
 - Improved JSP mode (Vicente Salvador)
 - Improved autosave feature -- dedicated autosave thread gone, and up to
   four files are autosaved at once
+- The 'Plugins' and 'Help' menus now display 'More' submenus if there are
+  a lot of items. This prevents them from being too long
+- FTP browser is now threaded
 
 + Bug Fixes
 
@@ -56,6 +59,7 @@ JEDIT 3.0 VERSION HISTORY
   always shift to the last (bottom or rightmost) split pane
 - JEditTextArea didn't unregister the gutter from the tooltip manager, this
   could result in memory leaks
+- C, C++, Java and JavaScript didn't indent 'default:' statements properly
 
 + API Changes
 

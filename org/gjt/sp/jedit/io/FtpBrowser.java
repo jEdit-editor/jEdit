@@ -175,9 +175,13 @@ public class FtpBrowser extends JDialog
 		content.add(BorderLayout.SOUTH,buttons);
 
 		addWindowListener(new WindowHandler());
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		update();
+
+		ftpThread = new FtpThread();
+		ftpThread.start();
+		ftpThreadNotify = new Object();
 
 		pack();
 		setLocationRelativeTo(view);
@@ -212,7 +216,27 @@ public class FtpBrowser extends JDialog
 	private String path;
 	private boolean isOK;
 
+	private FtpThread ftpThread;
+	private Object ftpThreadNotify;
+	private int ftpThreadRequest;
 	private FtpClient client;
+
+	// FTP thread requests
+	private static final int FTP_NONE = 0;
+	private static final int FTP_CONNECT = 1;
+	private static final int FTP_DISCONNECT = 2;
+	private static final int FTP_REFRESH = 3;
+	private static final int FTP_UP = 4;
+	private static final int FTP_SELECT = 5;
+
+	private void doFtpRequest(int ftpThreadRequest)
+	{
+		synchronized(ftpThreadNotify)
+		{
+			this.ftpThreadRequest = ftpThreadRequest;
+			ftpThreadNotify.notify();
+		}
+	}
 
 	private void update()
 	{
@@ -230,282 +254,6 @@ public class FtpBrowser extends JDialog
 		refresh.setEnabled(connected);
 	}
 
-	private void connect()
-	{
-		String host = hostField.getText();
-		String user = userField.getText();
-
-		if(host == null || user == null)
-		{
-			getToolkit().beep();
-			return;
-		}
-		String port;
-		int index = host.indexOf(':');
-		if(index != -1)
-		{
-			port = host.substring(index + 1);
-			host = host.substring(0,index);
-		}
-		else
-			port = "21";
-
-		String password = new String(passwordField.getPassword());
-
-		client = FtpVFS.createFtpClient(view,host,port,user,password,false);
-		if(client != null)
-		{
-			connected = true;
-			String path = pathField.getText();
-			if(path != null && path.length() != 0)
-			{
-				if(path.endsWith("/"))
-					changeDirectory(path);
-				else
-				{
-					changeDirectory(MiscUtilities
-						.getFileParent(path));
-					list.setSelectedValue(MiscUtilities
-						.getFileName(path),true);
-				}
-			}
-			else
-				refresh();
-		}
-
-		update();
-	}
-
-	private void disconnect()
-	{
-		if(client == null)
-			return;
-
-		try
-		{
-			client.logout();
-		}
-		catch(IOException io)
-		{
-			// can't do much about it...
-			Log.log(Log.ERROR,this,io);
-		}
-
-		connected = false;
-	}
-
-	private void changeDirectory(String directory)
-	{
-		try
-		{
-			client.changeWorkingDirectory(directory);
-			if(!client.getResponse().isPositiveCompletion())
-			{
-				String[] args = { directory, client.getResponse().toString() };
-				GUIUtilities.error(view,"vfs.ftp.cd-error",args);
-			}
-			else
-				refresh();
-		}
-		catch(IOException io)
-		{
-			String[] args = { io.getMessage() };
-			GUIUtilities.error(view,"ioerror",args);
-		}
-	}
-	private void refresh()
-	{
-		list.setListData(new Object[0]);
-
-		BufferedReader in = null;
-		try
-		{
-			// get current directory
-			client.printWorkingDirectory();
-			path = extractPath(client.getResponse().getMessage());
-			if(!path.endsWith("/"))
-				path = path + '/';
-			pathField.setText(path);
-
-			client.dataPort();
-			Reader _in = client.list();
-			if(_in == null)
-			{
-				String[] args = { path, client.getResponse().toString() };
-				GUIUtilities.error(view,"vfs.ftp.list-error",args);
-				return;
-			}
-
-			in = new BufferedReader(_in);
-			Vector fileList = new Vector();
-			String line;
-			while((line = in.readLine()) != null)
-			{
-				if(line.startsWith("total"))
-					continue;
-
-				String shortName = getShortName(line);
-				if(shortName.equals("./"))
-					continue;
-
-				fileList.addElement(shortName);
-			}
-			MiscUtilities.quicksort(fileList,new FileCompare());
-			list.setListData(fileList);
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
-			String[] args = { io.toString() };
-			GUIUtilities.error(view,"ioerror",args);
-		}
-		finally
-		{
-			if(in != null)
-			{
-				try
-				{
-					in.close();
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,e);
-				}
-			}
-		}
-	}
-
-	class FileCompare implements MiscUtilities.Compare
-	{
-		public int compare(Object obj1, Object obj2)
-		{
-			String str1 = (String)obj1;
-			String str2 = (String)obj2;
-			if(str1.endsWith("/"))
-			{
-				if(str2.endsWith("/"))
-					return str1.compareTo(str2);
-				else
-					return -1;
-			}
-			else
-			{
-				if(str2.endsWith("/"))
-					return 1;
-				else
-					return str1.compareTo(str2);
-			}
-		}
-	}
-
-	// PWD returns a string of the form '250 "foo" is current directory'
-	private String extractPath(String line)
-	{
-		int start = line.indexOf('"') + 1;
-		int end = line.lastIndexOf('"');
-		return line.substring(start,end);
-	}
-
-	// LIST returns a file listing where the last field is the
-	// file name
-	private String getShortName(String line)
-	{
-		boolean directory = (line.charAt(0) == 'd');
-		boolean symlink = (line.charAt(0) == 'l');
-		int fieldCount = 0;
-		boolean lastWasSpace = false;
-		int i;
-		for(i = 0; i < line.length(); i++)
-		{
-			if(line.charAt(i) == ' ')
-			{
-				if(lastWasSpace)
-					continue;
-				else
-				{
-					lastWasSpace = true;
-					fieldCount++;
-				}
-			}
-			else
-			{
-				lastWasSpace = false;
-				if(fieldCount == 8)
-					break;
-			}
-		}
-
-		line = line.substring(i);
-		if(symlink)
-		{
-			int index = line.lastIndexOf(" -> ");
-			if(index != 0)
-				line = line.substring(0,index);
-		}
-		else if(directory)
-			line = line + '/';
-		return line;
-	}
-
-	private void up()
-	{
-		try
-		{
-			client.changeToParentDirectory();
-			if(!client.getResponse().isPositiveCompletion())
-			{
-				String[] args = { path, client.getResponse().toString() };
-				GUIUtilities.error(view,"vfs.ftp.cd-error",args);
-			}
-			else
-				refresh();
-		}
-		catch(IOException io)
-		{
-			String[] args = { io.getMessage() };
-			GUIUtilities.error(view,"ioerror",args);
-		}
-	}
-
-	private void selectPath()
-	{
-		String path = pathField.getText();
-
-		if(path == null)
-		{
-			view.getToolkit().beep();
-			return;
-		}
-
-		if(path.endsWith("/"))
-		{
-			changeDirectory(path);
-			return;
-		}
-
-		StringBuffer buf = new StringBuffer("ftp://");
-		String user = userField.getText();
-		if(user != null)
-		{
-			buf.append(user);
-			buf.append('@');
-		}
-		String host = hostField.getText();
-		if(host == null || path == null)
-		{
-			getToolkit().beep();
-			return;
-		}
-		buf.append(host);
-		buf.append(path);
-
-		this.path = buf.toString();
-		isOK = true;
-
-		disconnect();
-		dispose();
-	}
-
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -517,22 +265,21 @@ public class FtpBrowser extends JDialog
 			if(source == select)
 			{
 				if(!connected)
-					connect();
+					doFtpRequest(FTP_CONNECT);
 				else
-					selectPath();
+					doFtpRequest(FTP_SELECT);
 			}
 			else if(source == refresh)
 			{
-				refresh();
+				doFtpRequest(FTP_REFRESH);
 			}
 			else if(source == up)
 			{
-				up();
+				doFtpRequest(FTP_UP);
 			}
 			else if(source == cancel)
 			{
-				disconnect();
-				dispose();
+				doFtpRequest(FTP_DISCONNECT);
 			}
 
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -586,7 +333,7 @@ public class FtpBrowser extends JDialog
 			if(evt.getClickCount() == 2)
 			{
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				selectPath();
+				doFtpRequest(FTP_SELECT);
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
@@ -602,6 +349,355 @@ public class FtpBrowser extends JDialog
 			String user = userField.getText();
 			if(user != null)
 				jEdit.setProperty("vfs.ftp.browser.user.value",user);
+
+			doFtpRequest(FTP_DISCONNECT);
+		}
+	}
+
+	class FtpThread extends Thread
+	{
+		public void run()
+		{
+			for(;;)
+			{
+				synchronized(ftpThreadNotify)
+				{
+					try
+					{
+						ftpThreadNotify.wait();
+					}
+					catch(InterruptedException i)
+					{
+					}
+
+					setCursor(Cursor.getPredefinedCursor(
+						Cursor.WAIT_CURSOR));
+
+					switch(ftpThreadRequest)
+					{
+					case FTP_CONNECT:
+						connect();
+						break;
+					case FTP_DISCONNECT:
+						disconnect();
+						break;
+					case FTP_REFRESH:
+						refresh();
+						break;
+					case FTP_UP:
+						up();
+						break;
+					case FTP_SELECT:
+						selectPath();
+						break;
+					default:
+						throw new InternalError("Invalid FTP request: "
+							+ ftpThreadRequest);
+					}
+
+					setCursor(Cursor.getPredefinedCursor(
+						Cursor.DEFAULT_CURSOR));
+
+				}
+			}
+		}
+
+		private void connect()
+		{
+			String host = hostField.getText();
+			String user = userField.getText();
+
+			if(host == null || user == null)
+			{
+				getToolkit().beep();
+				return;
+			}
+			String port;
+			int index = host.indexOf(':');
+			if(index != -1)
+			{
+				port = host.substring(index + 1);
+				host = host.substring(0,index);
+			}
+			else
+				port = "21";
+
+			String password = new String(passwordField.getPassword());
+
+			client = FtpVFS.createFtpClient(view,host,port,user,password,false);
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					if(client != null)
+					{
+						connected = true;
+						String path = pathField.getText();
+						if(path != null && path.length() != 0)
+						{
+							if(path.endsWith("/"))
+								changeDirectory(path);
+							else
+							{
+								changeDirectory(MiscUtilities
+									.getFileParent(path));
+								list.setSelectedValue(MiscUtilities
+									.getFileName(path),true);
+							}
+						}
+						else
+							refresh();
+					}
+				}
+			});
+
+			update();
+		}
+
+		private void disconnect()
+		{
+			if(client == null)
+				return;
+
+			try
+			{
+				client.logout();
+			}
+			catch(IOException io)
+			{
+				// can't do much about it...
+				Log.log(Log.ERROR,this,io);
+			}
+
+			connected = false;
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					dispose();
+				}
+			});
+
+			stop();
+		}
+
+		private void changeDirectory(String directory)
+		{
+			try
+			{
+				client.changeWorkingDirectory(directory);
+				if(!client.getResponse().isPositiveCompletion())
+				{
+					String[] args = { directory, client.getResponse().toString() };
+					VFSManager.error(FtpBrowser.this,"vfs.ftp.cd-error",args);
+				}
+				else
+					refresh();
+			}
+			catch(IOException io)
+			{
+				String[] args = { io.getMessage() };
+				VFSManager.error(FtpBrowser.this,"ioerror",args);
+			}
+		}
+
+		private void refresh()
+		{
+			BufferedReader in = null;
+			final Vector fileList = new Vector();
+			try
+			{
+				// get current directory
+				client.printWorkingDirectory();
+				path = extractPath(client.getResponse().getMessage());
+				if(!path.endsWith("/"))
+					path = path + '/';
+				pathField.setText(path);
+
+				client.dataPort();
+				Reader _in = client.list();
+				if(_in == null)
+				{
+					String[] args = { path, client.getResponse().toString() };
+					VFSManager.error(FtpBrowser.this,"vfs.ftp.list-error",args);
+					return;
+				}
+
+				in = new BufferedReader(_in);
+				String line;
+				while((line = in.readLine()) != null)
+				{
+					if(line.startsWith("total"))
+						continue;
+
+					String shortName = getShortName(line);
+					if(shortName.equals("./"))
+						continue;
+
+					fileList.addElement(shortName);
+				}
+				MiscUtilities.quicksort(fileList,new FileCompare());
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				String[] args = { io.toString() };
+				VFSManager.error(FtpBrowser.this,"ioerror",args);
+			}
+			finally
+			{
+				if(in != null)
+				{
+					try
+					{
+						in.close();
+					}
+					catch(Exception e)
+					{
+						Log.log(Log.ERROR,this,e);
+					}
+				}
+			}
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					list.setListData(fileList);
+				}
+			});
+		}
+
+		class FileCompare implements MiscUtilities.Compare
+		{
+			public int compare(Object obj1, Object obj2)
+			{
+				String str1 = (String)obj1;
+				String str2 = (String)obj2;
+				if(str1.endsWith("/"))
+				{
+					if(str2.endsWith("/"))
+						return str1.compareTo(str2);
+					else
+						return -1;
+				}
+				else
+				{
+					if(str2.endsWith("/"))
+						return 1;
+					else
+						return str1.compareTo(str2);
+				}
+			}
+		}
+
+		// PWD returns a string of the form '250 "foo" is current directory'
+		private String extractPath(String line)
+		{
+			int start = line.indexOf('"') + 1;
+			int end = line.lastIndexOf('"');
+			return line.substring(start,end);
+		}
+
+		// LIST returns a file listing where the last field is the
+		// file name
+		private String getShortName(String line)
+		{
+			boolean directory = (line.charAt(0) == 'd');
+			boolean symlink = (line.charAt(0) == 'l');
+			int fieldCount = 0;
+			boolean lastWasSpace = false;
+			int i;
+			for(i = 0; i < line.length(); i++)
+			{
+				if(line.charAt(i) == ' ')
+				{
+					if(lastWasSpace)
+						continue;
+					else
+					{
+						lastWasSpace = true;
+						fieldCount++;
+					}
+				}
+				else
+				{
+					lastWasSpace = false;
+					if(fieldCount == 8)
+						break;
+				}
+			}
+
+			line = line.substring(i);
+			if(symlink)
+			{
+				int index = line.lastIndexOf(" -> ");
+				if(index != 0)
+					line = line.substring(0,index);
+			}
+			else if(directory)
+				line = line + '/';
+			return line;
+		}
+
+		private void up()
+		{
+			try
+			{
+				client.changeToParentDirectory();
+				if(!client.getResponse().isPositiveCompletion())
+				{
+					String[] args = { path, client.getResponse().toString() };
+					VFSManager.error(FtpBrowser.this,"vfs.ftp.cd-error",args);
+				}
+				else
+					refresh();
+			}
+			catch(IOException io)
+			{
+				String[] args = { io.getMessage() };
+				VFSManager.error(FtpBrowser.this,"ioerror",args);
+			}
+		}
+
+		private void selectPath()
+		{
+			String path = pathField.getText();
+
+			if(path == null)
+			{
+				view.getToolkit().beep();
+				return;
+			}
+
+			if(path.endsWith("/"))
+			{
+				changeDirectory(path);
+				return;
+			}
+
+			StringBuffer buf = new StringBuffer("ftp://");
+			String user = userField.getText();
+			if(user != null)
+			{
+				buf.append(user);
+				buf.append('@');
+			}
+			String host = hostField.getText();
+			if(host == null || path == null)
+			{
+				getToolkit().beep();
+				return;
+			}
+			buf.append(host);
+			buf.append(path);
+
+			FtpBrowser.this.path = buf.toString();
+			isOK = true;
+
+			disconnect();
 		}
 	}
 }
@@ -609,6 +705,9 @@ public class FtpBrowser extends JDialog
 /*
  * Change Log:
  * $Log$
+ * Revision 1.10  2000/07/22 12:37:39  sp
+ * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
+ *
  * Revision 1.9  2000/06/04 08:57:35  sp
  * GUI updates, bug fixes
  *

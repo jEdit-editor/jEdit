@@ -882,23 +882,54 @@ public class View extends JFrame implements EBComponent
 		MiscUtilities.quicksort(pluginMenus,comp);
 		MiscUtilities.quicksort(pluginMenuItems,comp);
 
+		JMenu menu = plugins;
 		for(int i = 0; i < pluginMenus.size(); i++)
-			plugins.add((JMenu)pluginMenus.elementAt(i));
+		{
+			if(menu.getItemCount() >= 20)
+			{
+				menu.addSeparator();
+				JMenu newMenu = new JMenu(jEdit.getProperty(
+					"common.more"));
+				menu.add(newMenu);
+				menu = newMenu;
+			}
 
-		if(!pluginMenus.isEmpty() && !pluginMenuItems.isEmpty())
-			plugins.addSeparator();
+			menu.add((JMenu)pluginMenus.elementAt(i));
+		}
 
 		for(int i = 0; i < pluginMenuItems.size(); i++)
-			plugins.add((JMenuItem)pluginMenuItems.elementAt(i));
+		{
+			if(menu.getItemCount() >= 20)
+			{
+				menu.addSeparator();
+				JMenu newMenu = new JMenu(jEdit.getProperty(
+					"common.more"));
+				menu.add(newMenu);
+				menu = newMenu;
+			}
+
+			menu.add((JMenuItem)pluginMenuItems.elementAt(i));
+		}
 	}
 
 	private void updateHelpMenu()
 	{
 		EditAction action = jEdit.getAction("help");
 
+		JMenu menu = help;
+
 		EditPlugin[] plugins = jEdit.getPlugins();
 		for(int i = 0; i < plugins.length; i++)
 		{
+			if(menu.getItemCount() >= 20)
+			{
+				menu.addSeparator();
+				JMenu newMenu = new JMenu(jEdit.getProperty(
+					"common.more"));
+				menu.add(newMenu);
+				menu = newMenu;
+			}
+
 			EditPlugin plugin = plugins[i];
 			// don't include broken plugins in list
 			// ... why?
@@ -914,7 +945,7 @@ public class View extends JFrame implements EBComponent
 				java.net.URL docsURL = plugin.getClass().getResource(docs);
 				if(label != null && docsURL != null)
 				{
-					help.add(new EnhancedMenuItem(label,
+					menu.add(new EnhancedMenuItem(label,
 						action,docsURL.toString()));
 				}
 			}
@@ -1011,6 +1042,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.187  2000/07/22 12:37:38  sp
+ * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
+ *
  * Revision 1.186  2000/07/21 10:23:49  sp
  * Multiple work threads
  *

@@ -67,7 +67,6 @@ public class CurrentDirectoryMenu extends JMenu
 			addSeparator();
 
 			JMenu current = this;
-			int count = 0;
 			EditAction action = jEdit.getAction("open-path");
 			String[] list = dir.list();
 			if(list != null)
@@ -85,14 +84,14 @@ public class CurrentDirectoryMenu extends JMenu
 					mi = new EnhancedMenuItem(name,action,
 						file.getPath());
 
-					if(count++ > 20)
+					if(current.getItemCount() >= 20)
 					{
 						current.addSeparator();
-						JMenu newCurrent = new JMenu(jEdit.getProperty(
-							"current-directory.more.label"));
+						JMenu newCurrent = new JMenu(
+							jEdit.getProperty(
+							"common.more"));
 						current.add(newCurrent);
 						current = newCurrent;
-						count = 0;
 					}
 					current.add(mi);
 				}
