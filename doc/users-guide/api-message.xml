@@ -1,0 +1,655 @@
+<!-- jEdit 3.1 Plugin Guide, (C) 2001 John Gellene -->
+
+<!-- jEdit buffer-local properties:                           -->
+<!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
+
+<!-- covers links to additional information -->
+
+<chapter id="plugin-message-classes"><title>EditBus Message Classes</title>
+
+<para>
+    Here is a listing of the classes defined in jEdit that extends the
+    <classname>EBMessage</classname> abstract class.  A subscriber to the
+    EditBus will receive these messages as parameters to the subscriber's
+    <function>handleMessage()</function> method.  Constructors for each
+    of the messages are followed by methods retrieving their data
+    members.
+</para>
+
+<sect1 id="class-buffer-update"><title>Class BufferUpdate</title>
+<para>
+    This message is sent when the status of a buffer changes.  It may
+    not be vetoed by a subscriber, so that all subscribers are
+    assured of receiving it regardless of an individual subscriber's
+    response.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>BufferUpdate</function></funcdef>
+        <paramdef>Buffer <parameter>buffer</parameter></paramdef>
+        <paramdef>View <parameter>view</parameter></paramdef>
+        <paramdef>Object <parameter>what</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The parameter <parameter>what</parameter> is an <classname>Object</classname>
+      consisting of one of the following string literals:
+    </para>
+    <itemizedlist mark="bullet">
+      <listitem><para><constant>"CREATED"</constant></para></listitem>
+      <listitem><para><constant>"LOAD_STARTED"</constant></para></listitem>
+      <listitem><para><constant>"DIRTY_CHANGED"</constant> - a change in the buffer's
+        <quote>dirty</quote> status</para></listitem>
+      <listitem><para><constant>"MARKERS_CHANGED"</constant></para></listitem>
+      <listitem><para><constant>"MODE_CHANGED"</constant></para></listitem>
+      <listitem><para><constant>"ENCODING_CHANGED"</constant></para></listitem>
+      <listitem><para><constant>"SAVING"</constant></para></listitem>
+    </itemizedlist>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Buffer <function>getBuffer</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public View <function>getView</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getWhat</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      returns the string literal indicating the change in buffer status.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="plugin-class-createdockablewindow">
+<title>Class CreateDockableWindow</title>
+
+<para>
+  This message is sent to cause a plugin core object to create a plugin
+  window object.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>CreateDockableWindow</function></funcdef>
+        <paramdef>View <parameter>view</parameter></paramdef>
+        <paramdef>String <parameter>name</parameter></paramdef>
+        <paramdef>String <parameter>position</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The parameter <parameter>name</parameter> represnets the name of
+      the plugin and is ultimately drawn form the plugin's propoerties file.
+      The <parameter>position</parameter> is supplied by the plugin
+      management facility based upon user settings.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public View <function>getView</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getDockableWindowName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getPosition</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      returns the string literal indicating the change in buffer status.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public DockableWindow <function>getDockableWindow</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      returns the name of the <classname>DockableWindow</classname>
+      created in response to the message; it must be attached to the message
+      through a call to <function>setDockableWindow()</function> by the
+      plugin core object.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="plugins-class-editorexiting"><title>Class EditorExiting</title>
+
+<para>
+  This message signifies that the host application is about to exit.  It
+  cannot be vetoed.  The message has no parameters other than the source
+  and no methods other than the <function>getSource()</function> method
+  of <classname>EBMessage</classname>.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>EditorExiting</function></funcdef>
+        <paramdef>Component <parameter>source</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      inherited from <classname>EBMessage</classname>.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="plugins-class-editorexitrequested"><title>Class EditorExitRequested</title>
+
+<para>
+  This message signifies that a request has been made for the host application
+  to exit. The request is subject to cancellation in response to a request to
+  write a modified buffer to storage. It may not be vetoed.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>EditorExitRequested</function></funcdef>
+        <paramdef>View <parameter>view</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      the parameter <parameter>view</parameter> represent the view from
+      which the exit request originated.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public View <function>getView</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      inherited from <classname>EBMessage</classname>.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="plugins-class-editorstarted"><title>Class EditorStarted</title>
+
+<para>
+  This message signifies that the host application has styarted. The
+  message is sent before any views are created. The message has no
+  parameters other than the source and no methods other than the
+  <function>getSource()</function> method of <classname>EBMessage</classname>.
+  It may not be vetoed.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>EditorStarted</function></funcdef>
+        <paramdef>Component <parameter>source</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      inherited from <classname>EBMessage</classname>.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="class-editpane-update"><title>Class EditPaneUpdate</title>
+<para>
+    This message is sent when the status of a edit pane changes.  It may
+    not be vetoed.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>EditPaneUpdate</function></funcdef>
+        <paramdef>EditPane <parameter>editPane</parameter></paramdef>
+        <paramdef>Object <parameter>what</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The parameter <parameter>what</parameter> is an <classname>Object</classname>
+      consisting of one of the following string literals:
+    </para>
+    <itemizedlist mark="bullet">
+      <listitem><para><constant>"CREATED"</constant></para></listitem>
+      <listitem><para><constant>"DESTROYED"</constant></para></listitem>
+      <listitem><para><constant>"BUFFER_CHANGED"</constant> - a change in the buffer
+        displayed in the edit pane</para></listitem>
+    </itemizedlist>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EditPane <function>getEditPane</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getWhat</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      returns the string literal indicating the change in edit pane status.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+
+</sect1>
+
+<sect1 id="class-errorsourceupdate"><title>Class ErrorSourceUpdate</title>
+
+<para>
+  A <classname>DefaultErrorSource</classname> send this message after
+  an new error object is added to or removed from the source's error
+  collection, or when the error collection is cleared. It is handled by the
+  <application>ErrorList</application> plugin to update its display of
+  error information. It may be vetoed.
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>ErrorSourceUpdate</function></funcdef>
+        <paramdef>EBComponent <parameter>source</parameter></paramdef>
+        <paramdef>Object <parameter>what</parameter></paramdef>
+        <paramdef>ErrorSource <parameter>errorSource</parameter></paramdef>
+        <paramdef>ErrorSource.Error <parameter>error</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The parameter <parameter>what</parameter> is an <classname>Object</classname>
+      consisting of one of the following string literals:
+    </para>
+    <itemizedlist mark="bullet">
+      <listitem><para><constant>"ERROR_ADDED"</constant></para></listitem>
+      <listitem><para><constant>"ERROR_REMOVED"</constant></para></listitem>
+      <listitem><para><constant>"ERRORS_CLEARED"</constant></para></listitem>
+    </itemizedlist>
+  </listitem>
+</itemizedlist>
+
+<para>
+  The following methods retrieve the attributes of the message:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EBComponent <function>getSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getWhat</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the string literal indicating the change in view status.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public ErrorSource <function>getErrorSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public ErrorSource.Error <function>getError</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="plugins-class-macroschanged"><title>Class MacrosChanged</title>
+
+<para>
+  This message signifies that the list of available macros have changed.  It
+  cannot be vetoed.  The message has no parameters other than the source
+  and no methods other than the <function>getSource()</function> method
+  of <classname>EBMessage</classname>.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>MacrosChanged</function></funcdef>
+        <paramdef>Component <parameter>source</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      inherited from <classname>EBMessage</classname>.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="plugins-class-propertieschanged"><title>Class PropertiesChanged</title>
+
+<para>
+  This message is sent when configuration settings have been changed through
+  any of the option panes in the options dialog. The message
+  cannot be vetoed.  It has no parameters other than the source
+  and no methods other than the <function>getSource()</function> method
+  of <classname>EBMessage</classname>.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>PropertiesChanged</function></funcdef>
+        <paramdef>Component <parameter>source</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      inherited from <classname>EBMessage</classname>.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="plugins-class-searchsettingschanged">
+<title>Class SearchSettingsChanged</title>
+
+<para>
+  This message is sent when settings in the <quote>Search and
+  Replace</quote> dialog have changed. It cannot be vetoed. The message
+  has no parameters other than the source and no methods other than the
+  <function>getSource()</function> methodof <classname>EBMessage</classname>.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>SearchSettingsChanged</function></funcdef>
+        <paramdef>Component <parameter>source</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      inherited from <classname>EBMessage</classname>.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="class-vfsupdate"><title>Class VFSUpdate</title>
+<para>
+    This message is sent when the status of a file or directory changes.
+    This allows subscribers that display or operate upon files an
+    opportunity to adjust their state.  This message may be vetoed by a
+    subscriber.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>VFSUpdate</function></funcdef>
+        <paramdef>String <parameter>path</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The parameter <parameter>path</parameter> represents the path of
+      the file or directory that is the subject of the message,
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getPath</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+</itemizedlist>
+
+
+</sect1>
+
+<sect1 id="class-view-update"><title>Class ViewUpdate</title>
+<para>
+    This message is sent when the status of a view changes.  It may
+    not be vetoed.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>ViewUpdate</function></funcdef>
+        <paramdef>View <parameter>view</parameter></paramdef>
+        <paramdef>Object <parameter>what</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The parameter <parameter>what</parameter> is an <classname>Object</classname>
+      consisting of one of the following string literals:
+    </para>
+    <itemizedlist mark="bullet">
+      <listitem><para><constant>"CREATED"</constant></para></listitem>
+      <listitem><para><constant>"CLOSED"</constant></para></listitem>
+    </itemizedlist>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public View <function>getView</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getWhat</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      returns the string literal indicating the change in view status.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+</appendix>
+
+<appendix id="plugin-further-info"><title>Further Information</title>
+
+<sect1 id="links-plugin-api"><title>Documentation of the
+jEdit Plugin API</title>
+<para>
+Most of the jEdit plugin classes discussed in this guide are contained in
+the package <classname>org.gjt.sp.jedit</classname>.  The javadocs for
+the classes in this package can be found <ulink url=
+"http://www.gjt.org/javadoc/org/gjt/sp/jedit/package-summary.html">
+here</ulink>.
+</para>
+
+<para>
+The classes <classname>DockableWindow</classname> and
+<classname>DockableWindowContainer</classname> are in the package
+<classname>org.gjt.sp.jedit.gui</classname>.  Their javadocs are located
+<ulink url=
+"http://www.gjt.org/javadoc/org/gjt/sp/jedit/gui/package-summary.html">
+here</ulink>. The message classes
+derived from <classname>EBMessage</classname> are contained in
+package <classname>org.gjt.sp.jedit.msg</classname>. Their javadocs
+may be found <ulink url=
+"http://www.gjt.org/javadoc/org/gjt/sp/jedit/msg/package-summary.html">
+here</ulink>.
+</para>
+
+</sect1>
+
+
+<sect1 id="links-jedit-other"><title>Other jEdit Resources</title>
+
+<para>
+<ulink url="http://www.jedit.org">The jEdit home page</ulink>
+</para>
+
+<para>
+<ulink url="http://plugins.jedit.org">jEdit Plugin Central</ulink>
+</para>
+
+<para>
+<ulink url="http://www.jedit.org/index.php?page=lists">
+jEdit mailing list information</ulink>
+</para>
+
+</sect1>
+</chapter>
+

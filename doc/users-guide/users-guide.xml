@@ -37,7 +37,10 @@
 <!ENTITY plugin-api SYSTEM "plugin-api.xml">
 <!ENTITY plugin-implement SYSTEM "plugin-implement.xml">
 
-<!ENTITY api-guide SYSTEM "api-guide.xml"> ]>
+<!ENTITY bsh-commands SYSTEM "bsh-commands.xml">
+<!ENTITY api-guide SYSTEM "api-guide.xml">
+<!ENTITY plugin-api-guide SYSTEM "plugin-api-guide.xml">
+<!ENTITY api-message SYSTEM "api-message.xml"> ]>
 
 <book>
 
@@ -109,6 +112,22 @@
 </part>
 
 <part id="writing-macros-part"><title>Writing Macros</title>
+ <partintro>
+
+ <para>
+  This part of the user's guide is an introduction to using and writing
+  macros in jEdit. First, we will tell you a little about BeanShell,
+  jEdit's macro scripting language. Next, we will walk through a few
+  simple macros. We then present and analyze a dialog-based macro to
+  illustrate additional macro writing techniques. Finally, we discuss
+  several tips and techniques for writing and debugging macros.
+ </para>
+
+ <para>This part of the user's guide was written by John Gellene
+ (<email>jgellene@nyc.rr.com</email>).</para>
+
+ </partintro>
+
  &macro-basics;
  &simple-macros;
  &dialog-macro;
@@ -144,7 +163,30 @@
 </part>
 
 <part id="api-guide-part"><title>jEdit API Reference</title>
+ <partintro>
+  <para>
+   This part of the user's guide covers the jEdit <firstterm>application
+   programmer interface</firstterm>. The information in this part is only useful
+   to macro and plugin developers; you do not need to read it if you only want to
+   use jEdit.
+  </para>
+  <para>
+   The first two chapters deal with APIs which are primarily of use in macros,
+   but can be used in plugins as well.
+   The final two chapters deal with classes only used when developing plugins:
+   classes defining plugin objects and classes defining messages sent by jEdit's
+   EditBus subsystem.
+  </para>
+  <para>
+   This part of the user's guide was written by John Gellene
+   (<email>jgellene@nyc.rr.com</email>).
+  </para>
+ </partintro>
+
+ &bsh-commands;
  &api-guide;
+ &plugin-api-guide;
+ &api-message;
 </part>
 
 </book>

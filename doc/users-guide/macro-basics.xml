@@ -8,15 +8,6 @@
 
 <chapter id="macro-basics"><title>Introducing BeanShell</title>
 
- <para>
-  This part of the User's Guide is an introduction to using and writing
-  macros in jEdit. First, we will tell you a little about BeanShell,
-  jEdit's macro scripting language. Next, we will walk through a few
-  simple macros. We then present and analyze a dialog-based macro to
-  illustrate additional macro writing techniques. Finally, we discuss
-  several tips and techniques for writing and debugging macros.
- </para>
-
   <para>
    Here is how BeanShell's author, Pat Niemeyer, describes his creation:
   </para>
@@ -28,13 +19,13 @@
     Java. BeanShell executes standard Java statements and
     expressions, in addition to obvious scripting commands and
     syntax. BeanShell supports scripted objects as simple method
-    closures like those in Perl and JavaScript(tm).</quote>
+    closures like those in Perl and JavaScript.</quote>
    </para>
   </blockquote>
 
   <para>
    As you might gather from this short quote, BeanShell is very similar to
-   Java and is designed to be easy for Java programmers to pick up. If you
+   Java and is designed to be easy for Java programmers to learn. If you
    know how to program in Java, you already know how to write BeanShell
    macros. Nonetheless, the premise of this guide is that you should not
    have to know anything about Java to begin writing your own macros for
@@ -58,60 +49,17 @@
    in learning more about BeanShell generally, consult the <ulink
    url="http://www.beanshell.org">BeanShell web site</ulink>. Information
    on how to run and organize macros, whether included with the jEdit
-   installation or written by you, can be found in part I of the User
-   Guide in <xref linkend="using-macros"/>.
+   installation or written by you, can be found
+   <xref linkend="using-macros"/>.
   </para>
 
  <para>
-  Throughout this part of the User's Guide, we will be referring to some
+  Throughout this part of the user's guide, we will be referring to some
   of the plugins available for use with jEdit (in particular, the
   <application>Console</application> plugin). If you have not installed
   plugins, you really should consider doing so (see <xref
   linkend="using-plugins"/> for information), but you will not need
   plugins for most of what we discuss.
  </para>
-
- <sect1 id="single-macros"><title>Single Execution Macros</title>
-  <para>
-   There are two ways jEdit lets you use BeanShell quickly on a
-   <quote>one time only</quote> basis. You will find both of them in the
-   <guimenu>Utilities</guimenu> menu.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
-   Expression</guimenuitem> causes jEdit to display a text input dialog
-   that asks you to type a single line of BeanShell commands. You can type
-   more than one BeanShell statement so long as each of them ends with a
-   semicolon. If BeanShell successfully interprets your input, a message
-   box will appear with the return value of the last statement. You can do
-   the same thing using the BeanShell interpreter provided with the
-   <application>Console</application> plugin; the return value will appear
-   in the output window.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
-   evaluates the selected text as a BeanShell script and
-   replaces the selected text with the return value of the last BeanShell
-   statement.
-  </para>
-
-  <para>
-    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
-    easy way to do arithmetic calculations inline while editing. BeanShell
-    uses numbers and arithmetic operations in an ordinary, intuitive way.
-  </para>
-
-  <informalexample>
-   <para>
-    Try typing an expression like <userinput>(3745*856)+74</userinput>
-    in the buffer, select it, and choose
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>.
-    The selected text will be replaced by the answer,
-    <userinput>3205794</userinput>.
-   </para>
-  </informalexample>
- </sect1>
 
 </chapter>

@@ -1,0 +1,719 @@
+<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene                -->
+<!-- Thu Jun 21 23:49:14 EDT 2001 @200 /Internet Time/           -->
+<!--                                                             -->
+<!-- jEdit buffer-local properties:                              -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
+<!--                                                             -->
+<!-- This file continues the jEdit API Quick Reference            -->
+
+<chapter id="api-plugin-classes">
+<title>jEdit Plugin Classes</title>
+
+<sect1 id="api-class-EditPlugin"><title>Class EditPlugin</title>
+
+<para>
+  This abstract class is the base for every plugin core class.  Its methods
+  provide for basic interaction between the plugin and jEdit as a host
+  application.
+</para>
+
+<sect2 id="api-class-EditPlugin-abstract"><title>Abstract Methods</title>
+
+<para>
+  The following are abstract methods of <classname>EditPlugin</classname>
+  that must be implemented by every derived plugin class:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>start</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method is called by jEdit as part of its startup routine.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>stop</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      When jEdit exits, it calls this method on each plugin.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>createMenuItems</function></funcdef>
+        <paramdef>Vector <parameter>menuItems</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      When a <classname>View</classname> object is created, it calls this
+      method on each plugin to obtain entries to be displayed in the view's
+      <guimenu>Plugins</guimenu> menu section. The implementation typically
+      adds menu items to the <parameter>menuItems</parameter> parameter.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>createOptionsPane</function></funcdef>
+        <paramdef>OptionsDialog <parameter>od</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method is called for each plugin during the creation of
+      the options dialog that is displayed in response to the
+      <guimenu>Utilities</guimenu>&gt;<guimenuitem>General Options</guimenuitem>
+      command.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="api-class-EditPlugin-other"><title>Other Methods</title>
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getClassName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This shortcut returns <function>getClass().getName()</function>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EditPlugin.JAR <function>getJAR</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method returns the <classname>EditPlugin.JAR</classname> data
+      object associated with the plugin.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="api-class-EBComponent"><title>Class EBComponent</title>
+<para>
+  This interface is required for any class that subscribes to messages
+  published on the EditBus. It contains a single method.
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>handleMessage</function></funcdef>
+        <paramdef>EBMessage <parameter>message</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="api-class-EBMessage"><title>Class EBMessage</title>
+<para>
+    This abstract class defines a message that can be sent on the EditBus to
+    subscribing components.  It contains two attributes that can be obtained
+    with the following methods:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getSource</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public boolean <function>isVetoed</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>veto</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+        This sets the <parameter>vetoed</parameter> state to
+        <constant>true</constant>, which terminates circulation of the
+        message to subscribers on the EditBus.  To preven a message from being
+        vetoed, the message object must be dereived from the abstract class
+        <classname>EBMessage.NonVetoable</classname>.  An object of this class
+        will throw an <classname>InternalError</classname> if the
+        <function>veto()</function> method is called on it.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+<para>
+    A summary of classes derived from <classname>EBMessage</classname> is
+    provided in <xref linkend="api-messages"/>.
+</para>
+
+</sect1>
+
+
+<sect1 id="api-class-EBPlugin"><title>Class EBPlugin</title>
+
+<para>
+  This class, derived from <classname>EditPlugin</classname> and
+  <classname>EBComponent</classname>, is the base
+  class for every plugin class that uses the EditBus for messaging.
+  The constructor takes no parameters and adds the plugin to the
+  list of subscribers maintained by the EditBus. It implements no new methods.
+</para>
+
+</sect1>
+
+<sect1 id="api-class-EditBus"><title>Class EditBus</title>
+<title>Class EditBus</title>
+
+  <para>
+    This singleton class provides a <quote>publish and subscribe</quote> messaging
+	system 	for all components that implement the
+	<classname>EBComponent</classname> 	interface, including
+	<classname>View</classname> and<classname>DockableWindow</classname> objects.
+  </para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>addToBus</function></funcdef>
+        <paramdef>EBComponent <parameter>component</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>removeFromBus</function></funcdef>
+        <paramdef>EBComponent <parameter>component</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+	<para>
+		Adds or removes a subscribing component.
+	</para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>addToNamedList</function></funcdef>
+        <paramdef>Object <parameter>tag</parameter></paramdef>
+        <paramdef>Object <parameter>entry</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>removeFromNamedList</function></funcdef>
+        <paramdef>Object <parameter>tag</parameter></paramdef>
+        <paramdef>Object <parameter>entry</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+	<para>
+		Manages lists of plugin labels, error sources and other objects.
+	</para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>removeFromBus</function></funcdef>
+        <paramdef>EBComponent <parameter>component</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+	<para>
+		Adds or removes a subscribing component.
+	</para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EBComponent[] <function>getComponents</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+	<para>
+		Returns an array of references to all components connected to the
+		EditBus.
+	</para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>send</function></funcdef>
+        <paramdef>EBMessage <parameter>message</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+        Send the specified message to all subscibers on the EditBus.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="api-interface-DockableWindow"><title>Interface DockableWindow</title>
+
+  <para>
+    This interface provides the connection between the plugin's visible
+    components and a top-level <classname>View</classname> object of the
+    host application.
+  </para>
+
+  <itemizedlist>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>String  <function>getName</function></funcdef>
+          <paramdef></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        This method should return the internal working name of the
+        plugin window.
+      </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>Component <function>getComponent</function></funcdef>
+          <paramdef></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        This method should return the top-level visible component of the plugin.
+        Typically this component is a <classname>JPanel</classname> containing
+        other components, but any object derived from the
+        <classname>Component</classname> class will suffice.
+      </para>
+    </listitem>
+
+  </itemizedlist>
+
+</sect1>
+
+<sect1 id="interface-DockableWindowContainer">
+<title>Interface DockableWindowContainer</title>
+
+<para>
+  Depending upon the settings chosen by the user, the jEdit Plugin API
+  will place the <classname>Component</classname> returned by the
+  <function>getComponent()</function> method in a floating frame
+  window or in a tabbed window at the designated docking location. Both
+  types of containing windows implement the interface
+  <classname>DockableWindowContainer</classname> and are managed entirely
+  by the host application.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>
+      The <classname>DockableWindowContainer.Floating</classname> class is
+      derived from <classname>JFrame</classname> and uses a
+      <classname>BorderLayout</classname>.  The plugin window's component is
+      placed in the center position of the frame's content pane.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The <classname>DockableWindowContainer.TabbedPane</classname> class is
+      derived from <classname>JTabbedPane</classname>. Here the plugin
+      window's component is added to the container's collection of tabbed
+      components.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="interface-OptionPane"><title>Interface OptionPane</title>
+
+<para>
+  This interface defines a pane to be included in the
+  <guimenuitem>Global Options</guimenuitem> dialog. It
+  contains four basic methods that a plugin option pane
+  class must implement:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>String <function>getName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This should return the name for the
+      plugin that will be displayed in the dialog.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>Component <function>getComponent</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should return the top-level visible component of the option
+      pane. Like dockable windows, typically the top-level visible component
+      is a <classname>JPanel</classname> containing other components.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>init</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should create and layout the option pane's visible interface.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should save any settings that the user has changed.  The
+      options dialog will call this method when its <guilabel>OK</guilabel>
+      button is pressed to commit changed settings and dismiss the
+      entire dialog.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="class-AbstractOptionPane"><title>Class AbstractOptionPane</title>
+
+<para>
+  This default implementation of <classname>OptionPane</classname> is a
+  useful base class for a plugin's option pane class. It is also derived
+  from <classname>JPanel</classname>. It contains a
+  <classname>GridBagLayout</classname> object for component management,
+  but also contains shortcut methods to simplify layout.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>AbstractOptionPane</function></funcdef>
+        <paramdef>String <parameter>name</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The constructor's single parameter represents the name of the
+      option pane.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Implements <classname>OptionPane</classname>; returns the option
+      pane's name.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getComponent</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Implements <classname>OptionPane</classname>; returns
+      <varname>this</varname>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>init</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>protected void <function>_init</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The first method implements <classname>OptionPane</classname> and calls
+      the second method if the option pane has not yet been initialized. The
+      second method is implemented as an empty <quote>no-op</quote>. It should
+      be overriden in a derived class to perform initialization.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>protected void <function>_save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The first method implements <classname>OptionPane</classname> and calls
+      the second method if the option pane has been initialized. The second
+      method is implemented as an empty <quote>no-op</quote>. It should be
+      overriden in a derived class to save any plugin settings that have been
+      changed in the option pane.
+    </para>
+  </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addComponent</function></funcdef>
+          <paramdef>String <parameter>label</parameter></paramdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addComponent</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        These shortcut methods add components to the option pane in a
+        single vertical column, running top to bottom.  The first
+        displays the text of the <parameter>label</parameter> parameter
+        to the left of the <classname>Component</classname> represented
+        by <parameter>comp</parameter>.
+      </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addSeparator</function></funcdef>
+          <paramdef>String <parameter>label</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        This is another shortcut method that adds a text label between
+        two horizontal separators to the option pane.
+        The <parameter>label</parameter> parameter represents the name
+        of a property (typically a property defined in the plugin's
+        property file) whose value will be used as the separator text.
+      </para>
+    </listitem>
+
+</itemizedlist>
+
+
+</sect1>
+
+<sect1 id="class-OptionGroup"><title>Class OptionGroup</title>
+
+<para>
+  In those cases where a single option pane is inadequate to present all
+  of a plugin's configuration options, this class can be used to create a
+  group of options panes. The group will appear as a single node in the
+  options dialog tree-based index. The member option panes will appear as
+  leaf nodes under the group's node.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>OptionGroup</function></funcdef>
+        <paramdef>String <parameter>name</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The constructor's single parameter represents the name of the
+      option group.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getName</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the options group's name.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>addOptionPane</function></funcdef>
+        <paramdef>OptionPane <parameter>pane</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>addOptionGroup</function></funcdef>
+        <paramdef>OptionGroup <parameter>group</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      These methods add members to the option group.  The second method
+      permits option groups to be added and nested.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Enumeration <function>getMembers</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This methods facilitates iteration through members of an option group.
+      The loop must test each element to determine whether it is an
+      <classname>OptionPane</classname> or a nested<classname>OptionGroup</classname>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getMember</function></funcdef>
+        <paramdef>int <parameter>index</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getMemberIndex</function></funcdef>
+        <paramdef>Object <parameter>member</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public int <function>getMemberCount</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      These three methods allow random access to the members of an
+      <classname>OptionGroup</classname>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      Performs recursive iteration to call <function>save()</function>
+      on all member and nested option panes.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+
+</chapter>

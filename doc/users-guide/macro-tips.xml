@@ -606,9 +606,40 @@ view.getInputHandler().readNextChar("Enter a character",
 <title>BeanShell's <quote>Convenience</quote> Syntax</title>
 
 <para>
-  [To be supplied]
+  We noted earlier that BeanShell syntax does not require that variables
+  be declared or defined with their type, and that variables that are
+  not typed when first used can have values of differing types assigned
+  to them. In addition to this <quote>loose</quote> syntax, BeanShell
+  allows a <quote>convenience</quote> syntax for dealing with the
+  properties of JavaBeans.  They may be accessed or set as if they were
+  data members. They may also be accessed using the name of the property
+  enclosed in quotation marks and curly brackets.  For example, the following
+  statement are all equivalent for the AWT <classname>Button</classname>
+  object <varname>b</varname>:
 </para>
 
+<informalexample><programlisting>    b.setLebel("Choose");
+    b.label = "Choose";
+    b{"label"} = "Choose";
+</programlisting></informalexample>
+
+<para>
+  The last form can also be used to access a key-value pair of a
+  <classname>Hashtable</classname> object.  The following statements for
+  reading a buffer property are equivalent:
+</para>
+
+<informalexample><programlisting>buffer.getProperty("tabSize")
+    buffer{"tabSize"}
+</programlisting></informalexample>
+
+<para>
+  Finally, when importing classes, BeanShell permits the following form
+  to import all classes lying within the interpreter's classpath:
+</para>
+
+<informalexample><programlisting>    import *;
+</programlisting></informalexample>
 
 </sect2>
 
@@ -617,8 +648,55 @@ view.getInputHandler().readNextChar("Enter a character",
 <title>Special BeanShell Keywords</title>
 
 <para>
-  [To be supplied]
+  BeanShell uses special keywords to refer to variables or methods defined in
+  the current or an enclosing block's scope:
 </para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      The keyword <function>this</function> refers to the current scope.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The keyword <function>super</function> refers to the immediately
+      enclosing scope.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The keyword <function>global</function> refers to the top-level
+      scope of the macro script.
+    </para>
+  </listitem>
+</itemizedlist>
+
+<para>
+  The following macro illustrates the use of these keywords:
+</para>
+
+<informalexample><programlisting>a = "top\n";
+foo() {
+	a = "middle\n";
+	bar() {
+		a = "bottom\n";
+		textArea.setSelectedText(global.a);
+		textArea.setSelectedText(super.a);
+		textArea.setSelectedText(a);
+	}
+	bar();
+}
+foo();</programlisting></informalexample>
+
+<para>
+  When the script is run, the following text is inserted in the current
+  buffer:
+</para>
+
+<informalexample><programlisting>top
+middle
+bottom</programlisting></informalexample>
 
 </sect2>
 
@@ -626,7 +704,41 @@ view.getInputHandler().readNextChar("Enter a character",
 <title>Implementing Interfaces</title>
 
 <para>
-  [To be supplied]
+  As discussed in the dialog macro example in <xref
+  linkend="dialog-macro"/>, scripted objects can implement Java
+  interfaces such as <classname>ActionListener</classname>.  The kinds
+  of interfaces that may be implemented varies depending upon the
+  version of the Java runtime environment being used.  If the version
+  is 1.2 or less, BeanShell objects can implement any of the AWT or
+  Swing listener interfaces, along with the Runnable interface,
+  using an inheritance mechanism.  If the
+  version if 1.3 or greater, scripted objects can implement any
+  arbitrary interface using reflection.
+</para>
+
+<para>
+  Frequently it will not be necessary to implement all of the methods of
+  a particular interface in order to specify the behavior of a scripted
+  object. Under JDK 1.2 and below, BeanShell will throw and internally handle
+  an exception for any unimplemented members of an interface, so it will not
+  be necessary to provide full implementations.  Under JDK 1.3 and above,
+  however, the reflection mechanism will throw an uncaught excpetion for any
+  missing interface methods.  The solution here is to provide a
+  <quote>no-op</quote> implementation of the following method:
+</para>
+
+<informalexample><programlisting>    invoke(method, args) {}
+</programlisting></informalexample>
+
+<para>
+  To avoid exceptions being thrown under JDK 1.2 and below and optimize
+  macro performance, you can provide empty, <quote>no-op</quote>
+  implementation of each method in the relevant interface.  If you are writing
+  a macro script that may be run in either a JDK 1.2 or 1.3 environment,
+  including the <function>invoke()</function> methods will not create a problem,
+  but to avoid throwing exceptions during script execution, the
+  JDK 1.2 aproach of provding <quote>no-op</quote>
+  implementations of missing interface methods should be used.
 </para>
 
 
@@ -635,9 +747,14 @@ view.getInputHandler().readNextChar("Enter a character",
 <sect2 id="macro-tips-BeanShell-commands"><title>BeanShell Commands</title>
 
 <para>
-  [To be supplied]
+  BeanShell comes with a large number of built-in <quote>commands</quote>
+  which can write to the output stream of the current process, serialize
+  objects, run nested macros script, and perform a variety of other functions.
+  Most of these commands are themselves implemented as short beanShell scripts,
+  so they function as macro shortcuts.  A selection of commands that may be useful
+  in writing macros for jEdit is contained in <xref
+  linkend="api-BeanShell-commands"/>.
 </para>
-
 
 </sect2>
 
