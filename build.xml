@@ -29,7 +29,7 @@
 			destdir="."
 			deprecation="on"
 			includeJavaRuntime="yes"
-			debug="no"
+			debug="yes"
 		>
 			<include name="bsh/**/*.java"/>
 			<include name="com/microstar/xml/*.java"/>
@@ -47,6 +47,7 @@
 			srcdir="."
 			destdir="."
 			deprecation="on"
+			debug="yes"
 			includeJavaRuntime="yes"
 		>
 			<include name="org/gjt/sp/jedit/Java14.java"/>
