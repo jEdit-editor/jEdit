@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=3.2pre5
+app.version=3.2pre6
 
 # Info to display on first page of installer
 app.readme=readme.html
@@ -20,23 +20,23 @@ app.main.class=org.gjt.sp.jedit.jEdit
 comp.count=4
 
 comp.0.name=jEdit text editor
-comp.0.size=1766
+comp.0.size=1850
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
-comp.1.size=144
+comp.1.size=134
 comp.1.fileset=jedit-macros
 
 comp.2.name=HTTP firewall support (Java 2 only)
 comp.2.size=14
 comp.2.fileset=jedit-firewall
 
-#comp.3.name=Windows launcher and context menu addition (Windows only)
-#comp.3.size=12
-#comp.3.fileset=jedit-windows
-#comp.3.os=Windows
+comp.3.name=Windows launcher and context menu addition (Windows only)
+comp.3.size=176
+comp.3.fileset=jedit-windows
+comp.3.os=Windows
 
-comp.3.name=OS/2 start script (OS/2 only)
-comp.3.size=4
-comp.3.fileset=jedit-os2
-comp.3.os=HalfAnOS
+comp.4.name=OS/2 start script (OS/2 only)
+comp.4.size=4
+comp.4.fileset=jedit-os2
+comp.4.os=HalfAnOS

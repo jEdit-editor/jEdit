@@ -30,8 +30,6 @@
  *
  */
 
-import javax.swing.JOptionPane;
-
 void cascadeJEditWindows(int startOffset, int incrOffset, int maxWindows)
 {
 	offsetFromUpperLeft = startOffset;

@@ -151,30 +151,27 @@ public abstract class OperatingSystem
 			return "C:\\Program Files\\" + name + " " + version;
 		}
 
-		public String getShortcutDirectory(String name, String version)
-		{
-			return "C:\\Program Files\\" + name + " " + version;
-		}
-
 		public void createScript(Install installer,
 			String installDir, String binDir, String name)
 			throws IOException
 		{
-			// create app start script
-			String script = binDir + File.separatorChar
-				+ name + ".bat";
+			// run jEditLauncher installation
+			File executable = new File(installDir,"jedit.exe");
+			if(!executable.exists())
+				return;
 
-			FileWriter out = new FileWriter(script);
-			out.write("rem Java heap size, in megabytes (see doc/README.txt)\r\n");
-			out.write("@set JAVA_HEAP_SIZE=32\r\n");
-			out.write("\"" + System.getProperty("java.home")
-				+ "\\bin\\java\" -mx%JAVA_HEAP_SIZE%m"
-				+ " -classpath \"%CLASSPATH%;"
-				+ installDir + File.separator
-				+ name.toLowerCase() + ".jar\" "
-				+ installer.getProperty("app.main.class")
-				+ " %1 %2 %3 %4 %5 %6 %7 %8 %9\r\n");
-			out.close();
+			String[] args = { executable.getPath(), "/i",
+				System.getProperty("java.home")
+				+ File.separator
+				+ "bin" };
+
+			try
+			{
+				Runtime.getRuntime().exec(args).waitFor();
+			}
+			catch(InterruptedException ie)
+			{
+			}
 		}
 	}
 

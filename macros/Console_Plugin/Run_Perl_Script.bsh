@@ -51,9 +51,7 @@
 */
 
 
-import javax.swing.JOptionPane;
 import console.Console;
-import org.gjt.sp.jedit.gui.DockableWindowManager;
 
 runPerlScript()
 {

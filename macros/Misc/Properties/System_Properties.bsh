@@ -22,9 +22,6 @@
  * $Id$
  */
 
-import java.io.StringWriter;
-import java.io.PrintWriter;
-
 systemProperties()
 {
 	props = System.getProperties();

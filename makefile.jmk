@@ -72,6 +72,7 @@ get_file_list = function(dummy)
         (join pkgs, "/*.bsh")
         (join pkgs, "/*.html")
         (join pkgs, "/*.dtd")
+        (join pkgs, "/*.txt")
         "org/gjt/sp/jedit/actions.xml"
         "org/gjt/sp/jedit/default.abbrevs"
         "doc/users-guide/toc.xml"
@@ -86,7 +87,7 @@ end;
 
 "webstart": srcs;
 {
-    exec "/opt/jdk1.2.2/bin/jar" "cmf" jedit_mf "jedit_jnlp.jar" (get_file_list)
+    exec "/usr/java/jdk1.3.1/bin/jar" "cmf" jedit_mf "jedit_jnlp.jar" (get_file_list)
         (glob "modes/*.xml")
         "modes/catalog";
     exec "/home/slava/signjar" "jedit_jnlp.jar";

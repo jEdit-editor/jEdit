@@ -29,8 +29,6 @@
 
 // Wed Jan 31 03:12:33 AKST 2001 @550 /Internet Time/
 
-import java.util.*;
-
 void insertDate()
 {
 	Calendar rightNow = Calendar.getInstance();

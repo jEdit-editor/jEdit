@@ -27,7 +27,10 @@ echo -n "jedit-firewall: "
 ls -l `cat installer/jedit-firewall` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'
 
 # jedit-windows fileset
-echo > installer/jedit-windows
+echo jeshlstb.dll > installer/jedit-windows
+echo jedinstl.dll >> installer/jedit-windows
+echo jedinit.exe >> installer/jedit-windows
+echo jedit.exe >> installer/jedit-windows
 
 echo -n "jedit-windows: "
 ls -l `cat installer/jedit-windows` | awk 'BEGIN { size=0 } { size+=$5 } END { print size / 1024 }'

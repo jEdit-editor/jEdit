@@ -22,10 +22,6 @@
  */
 
 
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.Box;
-
 void showFreeMemory()
 {
 	createBar(int total, int value) {

@@ -25,7 +25,7 @@ void runJava()
 {
 	// Main routine: construct the command which will be executed
 
-	if(jEdit.getPlugin("JCompilerPlugin") != null)
+	if(jEdit.getPlugin("jcompiler.JCompilerPlugin") != null)
 	{
 		// If the JCompiler plugin is installed, we can use it to find out the full
 		// class name (including package) of the current Java file

@@ -35,7 +35,6 @@
  */
 
 import java.text.SimpleDateFormat;
-import javax.swing.JOptionPane;
 import javax.swing.tree.*;
 
 void writeHyperSearchResults()

@@ -22,9 +22,6 @@
  * $Id$
  */
 
-import org.gjt.sp.jedit.*;
-import java.awt.event.*;
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 boolean doCopy(String target, String source)

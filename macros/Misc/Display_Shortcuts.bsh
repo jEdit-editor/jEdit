@@ -21,7 +21,7 @@
  *
  * $Id$
  *
- * requires JDK 1.2, jEdit3.1pre3
+ * requires JDK 1.2, jEdit3.1pre5
  *
  * Notes on use:
  *
@@ -51,9 +51,6 @@
  *
  */
 
-import org.gjt.sp.jedit.*;
-import javax.swing.*;
-import java.awt.event.*;
 import javax.swing.table.*;
 
 /*

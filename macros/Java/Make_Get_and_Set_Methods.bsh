@@ -47,7 +47,6 @@
  * member is not being grabbed).
  */
 
-import javax.swing.*;
 import javax.swing.border.*;
 
 void makeGetSetDialog()

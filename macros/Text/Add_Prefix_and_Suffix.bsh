@@ -37,7 +37,6 @@
 // beginning of Add_suffix_and_prefix.bsh
 
 // import statements
-import javax.swing.*;
 import javax.swing.border.*;
 
 // main routine
