@@ -114,6 +114,14 @@ public class VFSManager
 	}
 
 	/**
+	 * Aborts the currently running I/O operation.
+	 */
+	public static void abortIO()
+	{
+		ioThread.abort();
+	}
+
+	/**
 	 * Adds an I/O request to the work thread.
 	 */
 	public static void addIORequest(int type, View view, Buffer buffer,
@@ -165,6 +173,9 @@ public class VFSManager
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.2  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

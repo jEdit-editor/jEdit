@@ -22,6 +22,7 @@ package org.gjt.sp.jedit.search;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.JOptionPane;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
@@ -213,6 +214,9 @@ loop:			for(;;)
 			{
 				while(buffer != null)
 				{
+					// Wait for the buffer to load
+					VFSManager.waitForRequests();
+
 					int start;
 					if(view.getBuffer() == buffer && !repeat)
 						start = view.getTextArea()
@@ -273,20 +277,27 @@ loop:			for(;;)
 	 * @exception IllegalArgumentException if regular expression search
 	 * is enabled, the search string or replacement string is invalid
 	 */
-	public static boolean find(View view, Buffer buffer, int start)
+	public static boolean find(final View view, final Buffer buffer, final int start)
 		throws BadLocationException, IllegalArgumentException
 	{
 		SearchMatcher matcher = getSearchMatcher();
 
 		String text = buffer.getText(start,
 			buffer.getLength() - start);
-		int[] match = matcher.nextMatch(text);
+		final int[] match = matcher.nextMatch(text);
 		if(match != null)
 		{
 			fileset.matchFound(buffer);
-			view.setBuffer(buffer);
-			view.getTextArea().select(start + match[0],
-					start + match[1]);
+			// Only do this once all I/O requests are complete
+			VFSManager.runInAWTThread(new Runnable()
+			{
+				public void run()
+				{
+					view.setBuffer(buffer);
+					view.getTextArea().select(start + match[0],
+							start + match[1]);
+				}
+			});
 			return true;
 		}
 		else
@@ -361,6 +372,9 @@ loop:			for(;;)
 			Buffer buffer = fileset.getFirstBuffer(view);
 			do
 			{
+				// Wait for buffer to finish loading
+				VFSManager.waitForRequests();
+
 				// Leave buffer in a consistent state if
 				// an error occurs
 				try
@@ -515,6 +529,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.29  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.28  2000/04/15 04:14:47  sp
  * XML files updated, jEdit.get/setBooleanProperty() method added
  *
@@ -544,62 +561,5 @@ loop:			for(;;)
  *
  * Revision 1.19  1999/11/28 00:33:07  sp
  * Faster directory search, actions slimmed down, faster exit/close-all
- *
- * Revision 1.18  1999/10/31 07:15:34  sp
- * New logging API, splash screen updates, bug fixes
- *
- * Revision 1.17  1999/10/24 06:04:00  sp
- * QuickSearch in tool bar, auto indent updates, macro recorder updates
- *
- * Revision 1.16  1999/10/23 03:48:22  sp
- * Mode system overhaul, close all dialog box, misc other stuff
- *
- * Revision 1.15  1999/10/11 07:14:22  sp
- * matchFound()
- *
- * Revision 1.14  1999/10/06 05:52:34  sp
- * Macros were being played twice, dialog box shows how many replacements
- * 'replace all' made, tab command bug fix, documentation updates
- *
- * Revision 1.13  1999/10/02 01:12:36  sp
- * Search and replace updates (doesn't work yet), some actions moved to TextTools
- *
- * Revision 1.12  1999/09/30 12:21:04  sp
- * No net access for a month... so here's one big jEdit 2.1pre1
- *
- * Revision 1.11  1999/07/16 23:45:49  sp
- * 1.7pre6 BugFree version
- *
- * Revision 1.10  1999/07/08 06:06:04  sp
- * Bug fixes and miscallaneous updates
- *
- * Revision 1.9  1999/07/05 04:38:39  sp
- * Massive batch of changes... bug fixes, also new text component is in place.
- * Have fun
- *
- * Revision 1.8  1999/06/12 02:30:27  sp
- * Find next can now perform multifile searches, multifile-search command added,
- * new style option pane
- *
- * Revision 1.7  1999/06/09 07:28:10  sp
- * Multifile search and replace tweaks, removed console.html
- *
- * Revision 1.6  1999/06/09 05:22:11  sp
- * Find next now supports multi-file searching, minor Perl mode tweak
- *
- * Revision 1.5  1999/06/06 05:05:25  sp
- * Search and replace tweaks, Perl/Shell Script mode updates
- *
- * Revision 1.4  1999/06/03 08:24:13  sp
- * Fixing broken CVS
- *
- * Revision 1.4  1999/05/31 04:38:51  sp
- * Syntax optimizations, HyperSearch for Selection added (Mike Dillon)
- *
- * Revision 1.3  1999/05/30 01:28:43  sp
- * Minor search and replace updates
- *
- * Revision 1.2  1999/05/29 08:06:56  sp
- * Search and replace overhaul
  *
  */

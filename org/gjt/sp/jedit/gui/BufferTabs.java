@@ -112,6 +112,14 @@ public class BufferTabs extends JTabbedPane
 		else
 		{
 			int oldIndex = buffers.indexOf(buffer);
+			/* this can happen if the file is a new file and
+			 * the Buffer.load() cleanup runnable runs before
+			 * jEdit.openFile() returns.
+			 *
+			 * If this is the case, then we just ignore the
+			 * update request and wait until we get the
+			 * BufferUpdate.CREATED message.
+			 */
 			if(oldIndex == -1)
 				return;
 

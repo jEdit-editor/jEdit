@@ -217,11 +217,14 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static String getFileProtocol(String path)
 	{
-		int fsIndex = path.indexOf(File.separatorChar);
+		int fsIndex = Math.max(path.indexOf(File.separatorChar),
+			path.indexOf('/'));
 		if(fsIndex == 0) // /etc/passwd
 			return null;
 		else if(fsIndex == 2) // C:\AUTOEXEC.BAT
 			return null;
+		else if(fsIndex == -1)
+			fsIndex = path.length();
 
 		int cIndex = path.indexOf(':');
 		if(cIndex <= 1) // D:\WINDOWS
@@ -240,7 +243,8 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static boolean isURL(String path)
 	{
-		int fsIndex = path.indexOf(File.separatorChar);
+		int fsIndex = Math.max(path.indexOf(File.separatorChar),
+			path.indexOf('/'));
 		if(fsIndex == 0) // /etc/passwd
 			return false;
 		else if(fsIndex == 2) // C:\AUTOEXEC.BAT
@@ -631,6 +635,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.30  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.29  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

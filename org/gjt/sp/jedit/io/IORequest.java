@@ -24,6 +24,7 @@ import java.io.*;
 import java.util.zip.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.WorkThread;
 
 /**
  * An I/O request.
@@ -69,18 +70,20 @@ public class IORequest implements Runnable
 	 */
 	public void run()
 	{
-		View[] views = jEdit.getViews();
-		String status = (type == LOAD ? "loading" : "saving");
-		String[] args = { MiscUtilities.getFileName(path) };
-		String message = jEdit.getProperty("view.status." + status,args);
-		for(int i = 0; i < views.length; i++)
-		{
-			views[i].showWaitCursor();
-			views[i].pushStatus(message);
-		}
+		View[] views = null;
 
 		try
 		{
+			views = jEdit.getViews();
+			String status = (type == LOAD ? "loading" : "saving");
+			String[] args = { MiscUtilities.getFileName(path) };
+			String message = jEdit.getProperty("view.status." + status,args);
+			for(int i = 0; i < views.length; i++)
+			{
+				views[i].showWaitCursor();
+				views[i].pushStatus(message);
+			}
+
 			switch(type)
 			{
 			case LOAD:
@@ -91,15 +94,19 @@ public class IORequest implements Runnable
 				break;
 			}
 		}
-		catch(Throwable t)
+		catch(WorkThread.Abort a)
 		{
-			Log.log(Log.ERROR,this,t);
 		}
-
-		for(int i = 0; i < views.length; i++)
+		finally
 		{
-			views[i].hideWaitCursor();
-			views[i].popStatus();
+			if(views != null)
+			{
+				for(int i = 0; i < views.length; i++)
+				{
+					views[i].hideWaitCursor();
+					views[i].popStatus();
+				}
+			}
 		}
 	}
 
@@ -120,11 +127,13 @@ public class IORequest implements Runnable
 
 	private void load()
 	{
+		InputStream in = null;
+
 		try
 		{
 			try
 			{
-				InputStream in = vfs._createInputStream(view,path);
+				in = vfs._createInputStream(view,path);
 				if(in == null)
 					return;
 				if(path.endsWith(".gz"))
@@ -145,7 +154,7 @@ public class IORequest implements Runnable
 
 			try
 			{
-				InputStream in = vfs._createInputStream(view,markersPath);
+				in = vfs._createInputStream(view,markersPath);
 				if(in == null)
 					return;
 				buffer._readMarkers(in);
@@ -153,6 +162,19 @@ public class IORequest implements Runnable
 			catch(IOException io)
 			{
 				// ignore
+			}
+		}
+		catch(WorkThread.Abort a)
+		{
+			if(in != null)
+			{
+				try
+				{
+					in.close();
+				}
+				catch(Exception e)
+				{
+				}
 			}
 		}
 		finally
@@ -163,9 +185,10 @@ public class IORequest implements Runnable
 
 	private void save()
 	{
+		OutputStream out = null;
 		try
 		{
-			OutputStream out = vfs._createOutputStream(view,path);
+			out = vfs._createOutputStream(view,path);
 			if(out == null)
 				return;
 			if(path.endsWith(".gz"))
@@ -177,7 +200,7 @@ public class IORequest implements Runnable
 			// Otherwise, we will accumilate stale marks files.
 			if(vfs.canDelete() && buffer.getMarkerCount() != 0)
 			{
-				OutputStream output = vfs._createOutputStream(view,markersPath);
+				out = vfs._createOutputStream(view,markersPath);
 				if(out == null)
 					return;
 				buffer._writeMarkers(out);
@@ -195,6 +218,19 @@ public class IORequest implements Runnable
 			Object[] args = { io.toString() };
 			VFSManager.error(view,"ioerror",args);
 		}
+		catch(WorkThread.Abort a)
+		{
+			if(out != null)
+			{
+				try
+				{
+					out.close();
+				}
+				catch(Exception e)
+				{
+				}
+			}
+		}
 		finally
 		{
 			vfs.saveCompleted(view,buffer,path);
@@ -205,6 +241,9 @@ public class IORequest implements Runnable
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.2  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

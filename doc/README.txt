@@ -30,6 +30,8 @@ as follows:
 
 The complete AElfred package can be found at <http://www.microstar.com>.
 
+The toolbar icons are (C) 1998 Dean S. Jones <dean@gallant.com>.
+
 * jEdit on the Internet
 
 The jEdit homepage, located at <http://jedit.sourceforge.net> contains

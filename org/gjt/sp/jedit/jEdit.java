@@ -484,7 +484,7 @@ public class jEdit
 	 */
 	public static void loadPlugins(String directory)
 	{
-		Log.log(Log.MESSAGE,jEdit.class,"Loading plugins from "
+		Log.log(Log.NOTICE,jEdit.class,"Loading plugins from "
 			+ directory);
 
 		File file = new File(directory);
@@ -622,7 +622,7 @@ public class jEdit
 	 */
 	public static boolean loadModeCache(String path)
 	{
-		Log.log(Log.NOTICE,jEdit.class,"Loading mode cache file " + path);
+		Log.log(Log.MESSAGE,jEdit.class,"Loading mode cache file " + path);
 
 		File file = new File(path);
 		if(!file.exists())
@@ -713,7 +713,7 @@ public class jEdit
 		if(path == null)
 			return;
 
-		Log.log(Log.NOTICE,jEdit.class,"Creating mode cache file: " + path);
+		Log.log(Log.MESSAGE,jEdit.class,"Creating mode cache file: " + path);
 
 		BufferedWriter out = null;
 		try
@@ -772,7 +772,7 @@ public class jEdit
 	 */
 	public static void loadModes(String directory)
 	{
-		Log.log(Log.MESSAGE,jEdit.class,"Loading edit modes from " + directory);
+		Log.log(Log.NOTICE,jEdit.class,"Loading edit modes from " + directory);
 
 		File file = new File(directory);
 		if(!(file.exists() && file.isDirectory()))
@@ -936,7 +936,15 @@ public class jEdit
 						confirmReload(view,buffer);
 
 					if(marker != null)
-						gotoMarker(buffer,view,marker);
+					{
+						VFSManager.runInAWTThread(new Runnable()
+						{
+							public void run()
+							{
+								gotoMarker(view.getBuffer(),view,marker);
+							}
+						});
+					}
 				}
 				return buffer;
 			}
@@ -1895,7 +1903,7 @@ public class jEdit
 			{
 				int line = Integer.parseInt(marker.substring(1));
 				Element lineElement = buffer.getDefaultRootElement()
-					.getElement(line + 1);
+					.getElement(line - 1);
 				start = end = lineElement.getStartOffset();
 			}
 			catch(Exception e)
@@ -2145,6 +2153,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.225  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.224  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

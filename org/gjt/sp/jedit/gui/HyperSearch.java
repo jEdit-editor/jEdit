@@ -206,6 +206,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 
 			do
 			{
+				// Wait for buffer to finish loading
+				VFSManager.waitForRequests();
+
 				doHyperSearch(buffer,matcher);
 			}
 			while((buffer = fileset.getNextBuffer(view,buffer)) != null);
@@ -382,6 +385,9 @@ public class HyperSearch extends EnhancedDialog implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.54  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.53  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

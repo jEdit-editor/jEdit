@@ -108,14 +108,15 @@ public class BufferListSet implements SearchFileSet
 
 	private Buffer getBuffer(String path)
 	{
-		Buffer buffer = jEdit.openTemporary(null,null,path,false,false);
-		VFSManager.waitForRequests();
-		return buffer;
+		return jEdit.openTemporary(null,null,path,false,false);
 	}
 }
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.13  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.12  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

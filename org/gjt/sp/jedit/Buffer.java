@@ -118,7 +118,7 @@ public class Buffer extends SyntaxDocument implements EBComponent
 		{
 			boolean doLoad;
 			// Only on initial load
-			if(!reload && autosaveFile.exists())
+			if(!reload && autosaveFile != null && autosaveFile.exists())
 				doLoad = recoverAutosave(view);
 			else
 				doLoad = true;
@@ -1096,8 +1096,12 @@ public class Buffer extends SyntaxDocument implements EBComponent
 	public void _read(InputStream _in)
 		throws IOException, BadLocationException
 	{
-		StringBuffer sbuf = new StringBuffer(Math.max(
-			(int)file.length(),IOBUFSIZE * 4));
+		int bufLength;
+		if(file != null)
+			bufLength = (int)file.length();
+		else
+			bufLength = IOBUFSIZE * 4;
+		StringBuffer sbuf = new StringBuffer(bufLength);
 
 		InputStreamReader in = new InputStreamReader(_in,
 			jEdit.getProperty("buffer.encoding",
@@ -1720,6 +1724,9 @@ public class Buffer extends SyntaxDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.141  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.140  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

@@ -3,19 +3,15 @@ JEDIT TO DO
 2.5:
 
 - VFS:
-  - abort I/O requests with special IOAbort throwable which IORequest
-    catches at top level
   - Show wait cursor only once for a set of requests
   - Filter events in view to implement ESCAPE, etc
-  - Marker saving doesn't work
-  - All stuff which moves caret after opening a file is broken (search and
-    replace, #<marker name> on command line)
   - FTP VFS
   - If an error occurs while saving, we shouldn't clear the dirty flag
-    (impossible?)
-  - MiscUtilities.getFileProtocol() doesn't work if indexOf('/') is -1
-  - above needs to check for '/' *and* File.separator
+    (VFSManager.waitForRequests() returns a boolean value. If it is false,
+    _closeFile() doesn't close the buffer)
+  - Write VFS docs - user and developer
 
+- JEditTextArea.CaretUndo: set textArea reference to null when it is removed?
 - text area doesn't lose focus sometimes
 - there are still problems with multiline tokens
 - TokenMarker: MARK_PREVIOUS should mark to lastOffset not lastKeyword
@@ -23,7 +19,8 @@ JEDIT TO DO
   - better error reporting
   - regexps
 - Editable toolbar
-- Add macros to context menu and toolbar
+- Add macros to context menu and toolbar - hack loadMenuItem() to handle
+  play-macro@... specially
 - Plugin devel manual needs more work:
   - document views, buffers
   - how to write text area and gutter hilites
@@ -35,6 +32,9 @@ JEDIT TO DO
   input in register 'a', or clear it if they clicked 'Cancel'
 - Threaded HyperSearch
 - Backup directory: preserve full paths
+- set dirty to false when all undos undone
+- move InputHandler to gui package and implement key handling in View
+  (but let child components handle events first!!!)
 
 Later:
 

@@ -317,13 +317,16 @@ public class View extends JFrame implements EBComponent
 		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
 		Boolean overwrite = (Boolean)buffer.getProperty(Buffer.OVERWRITE);
 
-		if(start != null && end != null
-			&& firstLine != null && horizontalOffset != null)
+		if(start != null && end != null)
 		{
 			textArea.select(Math.min(start.intValue(),
 				buffer.getLength()),
 				Math.min(end.intValue(),
 				buffer.getLength()));
+		}
+
+		if(firstLine != null && horizontalOffset != null)
+		{
 			textArea.setFirstLine(firstLine.intValue());
 			textArea.setHorizontalOffset(horizontalOffset.intValue());
 		}
@@ -1262,7 +1265,8 @@ public class View extends JFrame implements EBComponent
 			updateRecentMenu();
 			updateBuffersMenu();
 		}
-		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
+		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
+			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
 			if(_buffer == buffer)
 				updateTitle();
@@ -1441,6 +1445,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.161  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.160  2000/04/24 11:00:23  sp
  * More VFS hacking
  *

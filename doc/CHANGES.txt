@@ -25,6 +25,11 @@ JEDIT 2.5 VERSION HISTORY
   (since 2.4final)
 - XML mode firstlineGlob was incorrect (since 2.4pre6)
 - TeX mode didn't define the block comment property (since 2.4pre2)
+- Reloading a file didn't update the buffers menu or title bar when
+  necessary
+- Marker goto (filename#marker) on the command line didn't work
+- 'Search->Toolbar Incremental Search' didn't disable the multifile
+  button (since 2.4pre4)
 
 + API Changes
 

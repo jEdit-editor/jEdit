@@ -244,6 +244,9 @@ public class SearchBar extends JPanel
 /*
  * ActionLog:
  * $Log$
+ * Revision 1.5  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.4  2000/04/08 06:10:51  sp
  * Digit highlighting, search bar bug fix
  *

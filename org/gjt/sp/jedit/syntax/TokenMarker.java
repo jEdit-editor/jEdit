@@ -649,12 +649,12 @@ public class TokenMarker implements Cloneable
 
 				return false;
 			case MARK_PREVIOUS:
-				/*if (lastKeyword > lastOffset)
+				if (lastKeyword > lastOffset)
 				{
 					addToken(info, lastKeyword - lastOffset,
 						context.rules.getDefault());
 					lastOffset = lastKeyword;
-				}*/
+				}
 
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
@@ -667,7 +667,7 @@ public class TokenMarker implements Cloneable
 					addToken(info, pos - lastOffset + pattern.count,
 						checkRule.token);
 				}
-				lastOffset = lastKeyword = pos + pattern.count;
+				lastOffset = pos + pattern.count;
 
 				break;
 			case MARK_FOLLOWING:
@@ -930,6 +930,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.49  2000/04/25 03:32:40  sp
+ * Even more VFS hacking
+ *
  * Revision 1.48  2000/04/24 04:45:37  sp
  * New I/O system started, and a few minor updates
  *
@@ -962,17 +965,5 @@ loop:			for(int i = 0; i < len; i++)
  *
  * Revision 1.38  2000/04/02 02:17:59  sp
  * delegates bug fixes, mode updates
- *
- * Revision 1.37  2000/04/01 12:21:27  sp
- * mode cache implemented
- *
- * Revision 1.36  2000/04/01 09:49:36  sp
- * multiline token highlight was messed up
- *
- * Revision 1.35  2000/04/01 08:40:55  sp
- * Streamlined syntax highlighting, Perl mode rewritten in XML
- *
- * Revision 1.34  2000/03/26 03:30:48  sp
- * XMode integrated
  *
  */
