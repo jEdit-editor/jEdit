@@ -76,7 +76,13 @@ public class FtpVFS extends VFS
 
 	public String constructPath(String parent, String path)
 	{
-		if(parent.endsWith("/"))
+		if(path.startsWith("/"))
+		{
+			FtpAddress address = new FtpAddress(parent);
+			address.path = path;
+			return address.toString();
+		}
+		else if(parent.endsWith("/"))
 			return parent + path;
 		else
 			return parent + '/' + path;
@@ -176,18 +182,24 @@ public class FtpVFS extends VFS
 				if(entry.name.equals(".") || entry.name.equals(".."))
 					continue;
 
-				// prepend directory to create full path
-				if(url.endsWith("/"))
-					entry.path = url + entry.name;
-				else
-					entry.path = url + '/' + entry.name;
-
-				entry.deletePath = entry.path;
-
 				directoryVector.addElement(entry);
 			}
 
 			in.close();
+
+			for(int i = 0; i < directoryVector.size(); i++)
+			{
+				VFS.DirectoryEntry entry = (VFS.DirectoryEntry)
+					directoryVector.elementAt(i);
+				if(entry.type == __LINK)
+					resolveSymlink(session,url,entry,comp);
+				else
+				{
+					// prepend directory to create full path
+					entry.path = constructPath(url,entry.name);
+					entry.deletePath = entry.path;
+				}
+			}
 
 			directory = new VFS.DirectoryEntry[directoryVector.size()];
 			directoryVector.copyInto(directory);
@@ -270,7 +282,9 @@ public class FtpVFS extends VFS
 		return client.getResponse().isPositiveCompletion();
 	}
 
-	public DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
+	// this method is severely broken, and in many cases, most fields
+	// of the returned directory entry will not be filled in.
+	public VFS.DirectoryEntry _getDirectoryEntry(VFSSession session, String path,
 		Component comp)
 		throws IOException
 	{
@@ -292,7 +306,25 @@ public class FtpVFS extends VFS
 		reader.close();
 		if(line != null)
 		{
-			return lineToDirectoryEntry(line);
+			if(line.startsWith("total"))
+			{
+				// ok, this really sucks.
+				// we were asked to get the directory
+				// entry for a directory. This stupid
+				// implementation will only work for
+				// the resolveSymlink() method. A proper
+				// version will be written some other time.
+				return new VFS.DirectoryEntry(null,null,null,
+					VFS.DirectoryEntry.DIRECTORY,0L,false);
+			}
+			else
+			{
+				VFS.DirectoryEntry dirEntry = lineToDirectoryEntry(line);
+				if(dirEntry.type == __LINK)
+					resolveSymlink(session,getFileParent(path),
+						dirEntry,comp);
+				return dirEntry;
+			}
 		}
 		else
 			return null;
@@ -364,6 +396,8 @@ public class FtpVFS extends VFS
 	}
 
 	// private members
+	private static final int __LINK = 10;
+
 	private FtpClient _getFtpClient(VFSSession session, FtpAddress address,
 		boolean ignoreErrors, Component comp)
 	{
@@ -469,8 +503,8 @@ public class FtpVFS extends VFS
 			type = VFS.DirectoryEntry.DIRECTORY;
 			break;
 		case 'l':
-			// XXX: need to resolve link
-			// fall through for now
+			type = __LINK;
+			break;
 		default:
 			type = VFS.DirectoryEntry.FILE;
 			break;
@@ -515,18 +549,46 @@ public class FtpVFS extends VFS
 			}
 		}
 
-		if(line.charAt(0) == 'l')
-			name = name.substring(0,name.indexOf(" -> "));
-
 		// path is null; it will be created later, by _listDirectory()
 		return new VFS.DirectoryEntry(name,null,null,type,length,
 			name.charAt(0) == '.' /* isHidden */);
+	}
+
+	private void resolveSymlink(VFSSession session, String dir,
+		VFS.DirectoryEntry entry, Component comp) throws IOException
+	{
+		String name = entry.name;
+		int index = name.indexOf(" -> ");
+		String link = name.substring(index + " -> ".length());
+		link = constructPath(dir,link);
+		VFS.DirectoryEntry linkDirEntry = _getDirectoryEntry(
+			session,link,comp);
+		if(linkDirEntry == null)
+			entry.type = VFS.DirectoryEntry.FILE;
+		else
+			entry.type = linkDirEntry.type;
+
+		if(entry.type == __LINK)
+		{
+			// this link links to a link. Don't bother
+			// resolving any futher, otherwise we will
+			// have to handle symlinks loops, etc, and it
+			// will just complicate the code.
+			entry.type = VFS.DirectoryEntry.FILE;
+		}
+
+		entry.name = name.substring(0,index);
+		entry.path = link;
+		entry.deletePath = constructPath(dir,entry.name);
 	}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.19  2000/08/16 08:47:19  sp
+ * Stuff
+ *
  * Revision 1.18  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *

@@ -81,7 +81,7 @@ public class HelpfulJTree extends JTree implements MouseListener
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		toolTipInitialDelay = ttm.getInitialDelay();
 		toolTipReshowDelay = ttm.getReshowDelay();
-		ttm.setInitialDelay(400);
+		ttm.setInitialDelay(100);
 		ttm.setReshowDelay(0);
 	}
 
@@ -100,6 +100,9 @@ public class HelpfulJTree extends JTree implements MouseListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.2  2000/08/16 08:47:19  sp
+ * Stuff
+ *
  * Revision 1.1  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

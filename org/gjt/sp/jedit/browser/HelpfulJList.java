@@ -101,7 +101,7 @@ public class HelpfulJList extends JList implements MouseListener
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		toolTipInitialDelay = ttm.getInitialDelay();
 		toolTipReshowDelay = ttm.getReshowDelay();
-		ttm.setInitialDelay(400);
+		ttm.setInitialDelay(100);
 		ttm.setReshowDelay(0);
 	}
 
@@ -120,6 +120,9 @@ public class HelpfulJList extends JList implements MouseListener
 /*
  * Change Log:
  * $Log$
+ * Revision 1.3  2000/08/16 08:47:19  sp
+ * Stuff
+ *
  * Revision 1.2  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *

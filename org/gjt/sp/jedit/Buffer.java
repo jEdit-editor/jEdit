@@ -1515,11 +1515,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		vfsSession = (VFSSession)getProperty(VFS_SESSION_HACK);
 		if(vfsSession != null)
-		{
-			System.err.println(vfsSession);
 			vfsSession = (VFSSession)vfsSession.clone();
-			System.err.println(vfsSession);
-		}
 		else
 			vfsSession = new VFSSession();
 
@@ -1699,6 +1695,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.171  2000/08/16 08:47:18  sp
+ * Stuff
+ *
  * Revision 1.170  2000/08/15 08:07:10  sp
  * A bunch of bug fixes
  *

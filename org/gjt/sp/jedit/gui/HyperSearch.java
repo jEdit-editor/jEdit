@@ -411,7 +411,8 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 				do
 				{
 					// Wait for buffer to finish loading
-					VFSManager.waitForRequests();
+					if(!buffer.isLoaded())
+						VFSManager.waitForRequests();
 
 					doHyperSearch(buffer,matcher);
 
@@ -446,20 +447,28 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 		{
 			boolean retVal = false;
 
-			Element map = buffer.getDefaultRootElement();
-			int lines = map.getElementCount();
-			for(int i = 0; i < lines; i++)
+			try
 			{
-				Element lineElement = map.getElement(i);
-				int start = lineElement.getStartOffset();
-				String lineString = buffer.getText(start,
-					lineElement.getEndOffset() - start - 1);
-				int[] match = matcher.nextMatch(lineString);
-				if(match != null)
+				buffer.readLock();
+				Element map = buffer.getDefaultRootElement();
+				int lines = map.getElementCount();
+				for(int i = 0; i < lines; i++)
 				{
-					resultModel.addElement(new SearchResult(buffer,i));
-					retVal = true;
+					Element lineElement = map.getElement(i);
+					int start = lineElement.getStartOffset();
+					String lineString = buffer.getText(start,
+						lineElement.getEndOffset() - start - 1);
+					int[] match = matcher.nextMatch(lineString);
+					if(match != null)
+					{
+						resultModel.addElement(new SearchResult(buffer,i));
+						retVal = true;
+					}
 				}
+			}
+			finally
+			{
+				buffer.readUnlock();
 			}
 
 			return retVal;
@@ -470,6 +479,9 @@ public class HyperSearch extends EnhancedFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.66  2000/08/16 08:47:19  sp
+ * Stuff
+ *
  * Revision 1.65  2000/08/11 12:13:14  sp
  * Preparing for 2.6pre2 release
  *

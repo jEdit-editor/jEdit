@@ -810,6 +810,7 @@ public class jEdit
 
 		Mode text = new Mode("text");
 		text.setProperty("label",getProperty("mode.text.label"));
+		text.init();
 		addMode(text);
 
 		loadModes(MiscUtilities.constructPath(getJEditHome(),"modes"));
@@ -2327,6 +2328,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.268  2000/08/16 08:47:18  sp
+ * Stuff
+ *
  * Revision 1.267  2000/08/15 08:07:10  sp
  * A bunch of bug fixes
  *

@@ -218,7 +218,8 @@ loop:			for(;;)
 				while(buffer != null)
 				{
 					// Wait for the buffer to load
-					VFSManager.waitForRequests();
+					if(!buffer.isLoaded())
+						VFSManager.waitForRequests();
 
 					int start;
 					if(view.getBuffer() == buffer && !repeat)
@@ -377,7 +378,8 @@ loop:			for(;;)
 			do
 			{
 				// Wait for buffer to finish loading
-				VFSManager.waitForRequests();
+				if(!buffer.isLoaded() || buffer.isSaving())
+					VFSManager.waitForRequests();
 
 				// Leave buffer in a consistent state if
 				// an error occurs
@@ -533,6 +535,9 @@ loop:			for(;;)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  2000/08/16 08:47:19  sp
+ * Stuff
+ *
  * Revision 1.34  2000/06/12 02:43:30  sp
  * pre6 almost ready
  *

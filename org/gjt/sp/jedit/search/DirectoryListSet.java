@@ -86,8 +86,6 @@ public class DirectoryListSet extends BufferListSet
 		for(int i = 0; i < _files.length; i++)
 		{
 			String name = _files[i];
-			if(!filter.isMatch(name))
-				continue;
 
 			File file = new File(directory,name);
 			if(file.isDirectory())
@@ -97,6 +95,9 @@ public class DirectoryListSet extends BufferListSet
 			}
 			else
 			{
+				if(!filter.isMatch(name))
+					continue;
+
 				Log.log(Log.DEBUG,DirectoryListSet.class,file.getPath());
 				String canonPath;
 				try
@@ -116,6 +117,9 @@ public class DirectoryListSet extends BufferListSet
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.5  2000/08/16 08:47:19  sp
+ * Stuff
+ *
  * Revision 1.4  2000/08/01 11:44:15  sp
  * More VFS browser work
  *

@@ -6,6 +6,8 @@ JEDIT 2.6 VERSION HISTORY
 
 - When closing a buffer, jEdit now only blocks until I/O is complete if
   the buffer _being closed_ is currently being loaded or saved
+- If the default edit mode is not 'text', *.txt files are now opened in
+  text mode anyway
 
 + Bug Fixes
 
@@ -19,6 +21,10 @@ JEDIT 2.6 VERSION HISTORY
 - The 'Add to Favorites' button in the VFS browser would throw an NPE if the
   tree view was active (since 2.6pre2)
 - The VFS browser would prompt for FTP passwords twice (since 2.6pre2)
+- The FTP VFS now resolves symlinks, so links to directories should no
+  longer show up as plain files in the browser
+- The DirectoryListSet would reject directories whose names didn't match
+  the file name filter, and not check any files within them (since 2.6pre2)
 
 * Version 2.6pre2
 

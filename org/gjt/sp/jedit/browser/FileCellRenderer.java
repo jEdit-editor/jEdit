@@ -32,9 +32,8 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 	javax.swing.tree.TreeCellRenderer
 {
 	public FileCellRenderer() {
-		Font f = UIManager.getFont("Tree.font");
-		normalFont = new Font(f.getName(), Font.PLAIN, f.getSize());
-		openedFont = new Font(f.getName(), Font.BOLD , f.getSize());
+		font = UIManager.getFont("Tree.font");
+		font = new Font(font.getName(), Font.PLAIN, font.getSize());
 
 		treeSelectionForeground = UIManager.getColor("Tree.selectionForeground");
 		treeNoSelectionForeground = UIManager.getColor("Tree.textForeground");
@@ -42,6 +41,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		treeNoSelectionBackground = UIManager.getColor("Tree.textBackground");
 
 		fileIcon = GUIUtilities.loadToolBarIcon("Document.gif");
+		openFileIcon = GUIUtilities.loadToolBarIcon("DocumentIn.gif");
 		dirIcon = GUIUtilities.loadToolBarIcon("Folder.gif");
 		filesystemIcon = GUIUtilities.loadToolBarIcon("CD.gif");
 		loadingIcon = GUIUtilities.loadToolBarIcon("Reload.gif");
@@ -55,6 +55,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 			listCellRenderer = new JLabel();
 			listCellRenderer.setBorder(border);
 			listCellRenderer.setOpaque(true);
+			listCellRenderer.setFont(font);
 		}
 
 		VFS.DirectoryEntry file = (VFS.DirectoryEntry)value;
@@ -71,7 +72,6 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 			listCellRenderer.setForeground(list.getForeground());
 		}
 
-		listCellRenderer.setFont(getFontForFile(opened));
 		listCellRenderer.setIcon(getIconForFile(file));
 		listCellRenderer.setText(file.name);
 		listCellRenderer.setEnabled(list.isEnabled());
@@ -88,6 +88,7 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 			treeCellRenderer = new JLabel();
 			treeCellRenderer.setBorder(border);
 			treeCellRenderer.setOpaque(true);
+			treeCellRenderer.setFont(font);
 		}
 
 		if(sel)
@@ -111,19 +112,16 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 
 			boolean opened = (jEdit.getBuffer(file.path) != null);
 
-			treeCellRenderer.setFont(getFontForFile(opened));
 			treeCellRenderer.setIcon(getIconForFile(file));
 			treeCellRenderer.setText(file.name);
 		}
 		else if(userObject instanceof BrowserTreeView.LoadingPlaceholder)
 		{
-			treeCellRenderer.setFont(getFontForFile(false));
 			treeCellRenderer.setIcon(loadingIcon);
 			treeCellRenderer.setText(jEdit.getProperty("vfs.browser.tree.loading"));
 		}
 		else if(userObject instanceof String)
 		{
-			treeCellRenderer.setFont(getFontForFile(false));
 			treeCellRenderer.setIcon(dirIcon);
 			treeCellRenderer.setText((String)userObject);
 		}
@@ -132,11 +130,6 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 	}
 
 	// protected members
-	protected Font getFontForFile(boolean opened)
-	{
-		return opened ? openedFont : normalFont;
-	}
-
 	protected Icon getIconForFile(VFS.DirectoryEntry file)
 	{
 		if(file.type == VFS.DirectoryEntry.DIRECTORY)
@@ -144,17 +137,22 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
 			return filesystemIcon;
 		else
-			return fileIcon;
+		{
+			if(jEdit.getBuffer(file.path) != null)
+				return openFileIcon;
+			else
+				return fileIcon;
+		}
 	}
 
 	// private members
 	private JLabel listCellRenderer = null;
 	private JLabel treeCellRenderer = null;
 
-	private Font normalFont;
-	private Font openedFont;
+	private Font font;
 
 	private Icon fileIcon;
+	private Icon openFileIcon;
 	private Icon dirIcon;
 	private Icon filesystemIcon;
 	private Icon loadingIcon;
@@ -169,6 +167,9 @@ public final class FileCellRenderer implements javax.swing.ListCellRenderer,
 /*
  * Change Log:
  * $Log$
+ * Revision 1.4  2000/08/16 08:47:19  sp
+ * Stuff
+ *
  * Revision 1.3  2000/08/06 09:44:27  sp
  * VFS browser now has a tree view, rename command
  *

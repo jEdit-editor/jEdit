@@ -145,6 +145,7 @@ public class HistoryTextField extends JTextField
 
 	// private members
 	private HistoryModel historyModel;
+	private JPopupMenu popup;
 	private boolean instantPopups;
 	private String current;
 	private int index;
@@ -241,61 +242,19 @@ public class HistoryTextField extends JTextField
 		}
 	}
 
-	private void showFullMenu(int x, int y)
+	private void showPopupMenu(String text, int x, int y)
 	{
-		JPopupMenu popup = new JPopupMenu();
-		JMenuItem caption = new JMenuItem(historyModel.getName());
-		caption.getModel().setEnabled(false);
-		popup.add(caption);
-		popup.addSeparator();
-
-		ButtonGroup grp = new ButtonGroup();
-
-		ActionHandler actionListener = new ActionHandler();
-
-		if(index == -1)
-			current = getText();
-
-		if(current != null && current.length() != 0)
+		if(popup != null && popup.isVisible())
 		{
-			JRadioButtonMenuItem menuItem =
-				new JRadioButtonMenuItem(current);
-			menuItem.setActionCommand("-1");
-			menuItem.addActionListener(actionListener);
-			grp.add(menuItem);
-			popup.add(menuItem);
-			menuItem.getModel().setSelected(true);
-		}
-
-		for(int i = 0; i < historyModel.getSize(); i++)
-		{
-			JRadioButtonMenuItem menuItem =
-				new JRadioButtonMenuItem(historyModel.getItem(i));
-			menuItem.setActionCommand(String.valueOf(i));
-			menuItem.addActionListener(actionListener);
-			grp.add(menuItem);
-			popup.add(menuItem);
-			if(i == index)
-				menuItem.getModel().setSelected(true);
-		}
-
-		popup.show(this,x,y);
-	}
-
-	private void showPartialMenu(int x, int y)
-	{
-		String text = getText().substring(0,getSelectionStart());
-		if(text == null || text.length() == 0)
-		{
-			showFullMenu(x,y);
+			popup.setVisible(false);
 			return;
 		}
 
 		ActionHandler actionListener = new ActionHandler();
 
-		JPopupMenu popup = new JPopupMenu();
+		popup = new JPopupMenu();
 		JMenuItem caption = new JMenuItem(historyModel.getName()
-			+ "/" + text);
+			+ (text.length() == 0 ? "" : "/" + text));
 		caption.getModel().setEnabled(false);
 		popup.add(caption);
 		popup.addSeparator();
@@ -343,9 +302,12 @@ public class HistoryTextField extends JTextField
 		public void mousePressed(MouseEvent evt)
 		{
 			if((evt.getModifiers() & InputEvent.CTRL_MASK) != 0)
-				showPartialMenu(0,getHeight());
+			{
+				showPopupMenu(getText().substring(0,getSelectionStart()),
+					0,getHeight());
+			}
 			else if((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
-				showFullMenu(0,getHeight());
+				showPopupMenu("",0,getHeight());
 		}
 	}
 }
@@ -353,6 +315,9 @@ public class HistoryTextField extends JTextField
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.34  2000/08/16 08:47:19  sp
+ * Stuff
+ *
  * Revision 1.33  2000/07/31 11:32:09  sp
  * VFS file chooser is now in a minimally usable state
  *
@@ -382,8 +347,5 @@ public class HistoryTextField extends JTextField
  *
  * Revision 1.24  1999/05/04 04:51:25  sp
  * Fixed HistoryTextField for Swing 1.1.1
- *
- * Revision 1.23  1999/04/25 03:39:37  sp
- * Documentation updates, console updates, history text field updates
  *
  */
