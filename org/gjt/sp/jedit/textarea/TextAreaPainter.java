@@ -1,6 +1,6 @@
 /*
  * TextAreaPainter.java - Paints the text area
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -521,6 +521,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		if(eolMarkers)
 		{
+			gfx.setFont(defaultFont);
 			gfx.setColor(eolMarkerColor);
 			gfx.drawString(".",x,y);
 		}
@@ -658,6 +659,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.35  2000/05/10 08:22:21  sp
+ * EOL marker bug fix, documentation updates
+ *
  * Revision 1.34  2000/04/30 07:27:14  sp
  * Ftp VFS hacking, bug fixes
  *

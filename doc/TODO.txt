@@ -1,13 +1,10 @@
 JEDIT TO DO
 
-2.5pre2:
-
-- Write VFS docs - user and developer
-- Document EditPaneUpdate message
-- Increase file chooser's preferred size
-
 2.5:
 
+- Document 'find file' widget
+- Search bar is too tall
+- Increase file chooser's preferred size
 - Redo window-editor screenshots
 - Closed views leak memory a rusty bucket
 - Plugin manager: use swing centering code, JARClassLoader.getLoaded() method
@@ -23,12 +20,14 @@ JEDIT TO DO
   - better error reporting
   - regexps
 - Plugin devel manual needs more work:
-  - document views, buffers
+  - document views, edit panes, buffers
   - how to write text area and gutter hilites
+  - document VFS stuff
 - Mode editor
 - Buffer tabs:
   - trunicate long file names (should be configurable)
   - customizable font size?
+  - focus is still screwed with JDK 1.3
 - Threaded HyperSearch
 - set dirty to false when all undos undone
 
@@ -42,6 +41,9 @@ Later:
 - i18n support - bidi, input methods, localizable GUI, etc
 - Maybe cursor beyond EOL?
 - XML-driven auto indent?
+- Improve markers -- next/prev-marker commands, highlight markers and
+  registers in the gutter, buffer-local property to disable marker
+  persistance
 
 When we switch to Java 2:
 - drag and drop

@@ -35,6 +35,10 @@ JEDIT 2.5 VERSION HISTORY
 - Fixed minor buffer list sorting bug
 - Fixed obscure buffer switching bug
 - A few mode files had minor errors
+- Minor text area fix: EOL markers are now always painted with the default
+  font style
+- Very minor change to buffer tabs focus handling; might solve recently
+  reported JDK 1.3 focus problems
 
 + API Changes
 

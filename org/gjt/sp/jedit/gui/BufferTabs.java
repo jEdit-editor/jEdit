@@ -234,7 +234,13 @@ public class BufferTabs extends JTabbedPane
 			this.add(BorderLayout.CENTER,editPane.getTextArea());
 			this.revalidate();
 
-			editPane.focusOnTextArea();
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					editPane.focusOnTextArea();
+				}
+			});
 		}
 
 		public boolean isValidateRoot()
