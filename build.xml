@@ -161,9 +161,24 @@
 			tofile="doc/users-guide/users-guide-a4.pdf" />
 	</target>
 
+	<path id="doclet.class.path">
+		<pathelement location="${tools.jar}"/>
+		<pathelement location="."/>
+	</path>
+
 	<target name="javadoc">
 		<delete dir="doc/api"/>
 		<mkdir dir="doc/api"/>
+
+		<javac
+			srcdir="."
+			destdir="."
+			deprecation="on"
+			includeJavaRuntime="yes"
+		>
+			<classpath refid="doclet.class.path"/>
+			<include name="doclet/GenerateTocXML.java"/>
+		</javac>
 
 		<javadoc packagenames="bsh.*, com.*, gnu.*, org.*"
 			sourcepath="."
@@ -173,6 +188,12 @@
 			version="true"
 			windowtitle="jEdit API"
 			doctitle="jEdit API" />
+
+		<javadoc classpath="."
+			doclet="doclet.GenerateTocXML"
+			docletpath="."
+			packagenames="bsh.*, com.*, gnu.*, org.*"
+			sourcepath="."/>
 	</target>
 
 	<target name="clean">
