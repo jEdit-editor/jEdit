@@ -61,6 +61,15 @@ public class vfs_browser extends EditAction
 			VFSBrowser browser = (VFSBrowser)dockableWindowManager
 				.getDockableWindow(VFSBrowserDockable.NAME)
 				.getComponent();
+			if(actionCommand.equals("."))
+			{
+				Buffer buffer = view.getBuffer();
+				actionCommand = buffer.getVFS().getParentOfPath(
+					buffer.getPath());
+			}
+			else if(actionCommand.equals("~"))
+				actionCommand = System.getProperty("user.home");
+
 			browser.setDirectory(actionCommand);
 		}
 	}

@@ -1,5 +1,33 @@
 JEDIT 2.6 VERSION HISTORY
 
+* Version 2.6pre9
+
++ Enhancements
+
+- Due to popular demand, the 'buffer sort' option is now settable again
+- The border color of docked windows can now be set in the Global Options
+  dialog box
+- When a line with no syntax info is being painted, the token marker will
+  now backtrack up to 50 lines in the buffer in order to get accurate
+  syntax info. This should result in better highlighting when pasting
+  long blocks of text, scrolling backwards in the buffer, and such
+- When changes are made in the 'Global Options' dialog box, the VFS browser
+  now only updates itself if browser settings were changed. This avoids
+  unnecessary display 'flickering', disk activity, etc.
+- Clicking 'Cancel' in a macro input dialog box will now abort execution
+  of the macro
+- Several more sample macros included in download
+
++ Bug Fixes
+
+- Sample macros were left out of download
+- '\t' in macro expansion inserted a 't' instead of a tab in the text area
+- 'Up' button in VFS browser didn't always go to the list of drives if
+  the current location was the root of a drive on Windows
+- Bracket highlight no longer painted while buffer is being loaded (this
+  could cause minor visual quirks when reloading, for example)
+- Minor fix to makefile syntax highlighting
+
 * Version 2.6pre8
 
 + New Features

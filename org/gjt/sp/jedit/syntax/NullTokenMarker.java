@@ -18,10 +18,9 @@
  */
 package org.gjt.sp.jedit.syntax;
 
-import javax.swing.text.Segment;
+import javax.swing.text.*;
 import java.util.*;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -34,6 +33,17 @@ import org.gjt.sp.util.Log;
  */
 public class NullTokenMarker extends TokenMarker
 {
+	public LineInfo markTokens(Buffer buffer, int lineIndex)
+	{
+		Element lineElement = buffer.getDefaultRootElement()
+			.getElement(lineIndex);
+		nullLineInfo.lastToken = null;
+		addToken(nullLineInfo,lineElement.getEndOffset()
+			- lineElement.getStartOffset() - 1,Token.NULL);
+		addToken(nullLineInfo,0,Token.END);
+		return nullLineInfo;
+	}
+
 	public LineInfo markTokens(Segment line, int lineIndex)
 	{
 		nullLineInfo.lastToken = null;
@@ -74,11 +84,16 @@ public class NullTokenMarker extends TokenMarker
 	// private members
 	private static NullTokenMarker sharedInstance = new NullTokenMarker();
 	private LineInfo nullLineInfo = new LineInfo();
+
+	private NullTokenMarker() {}
 }
 
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.3  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.2  2000/07/26 07:48:45  sp
  * stuff
  *

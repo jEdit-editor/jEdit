@@ -49,6 +49,15 @@ public class FileVFS extends VFS
 
 	public String getParentOfPath(String path)
 	{
+		// handle Windows differently
+		if(File.separatorChar == '\\')
+		{
+			if(path.length() == 2 && path.charAt(1) == ':')
+				return FileRootsVFS.PROTOCOL + ":";
+			else if(path.length() == 3 && path.endsWith(":\\"))
+				return FileRootsVFS.PROTOCOL + ":";
+		}
+
 		File[] roots = fsView.getRoots();
 		for(int i = 0; i < roots.length; i++)
 		{
@@ -336,6 +345,9 @@ public class FileVFS extends VFS
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.24  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.23  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *

@@ -694,12 +694,11 @@ filechanged-save.message=The file {0}\n\
 	has been modified on disk by another program. Are you sure\n\
 	you want to continue saving it?
 filechanged-focus.message=The file {0}\n\
-	has been modified on disk by another program. You can reload it\n\
-	now to pick up the other program's changes. Would you like to\n\
-	reload it?
+	has been modified on disk by another program. Would you like to\n\
+	reload it from disk?
 filechanged-dirty.message=The file {0}\n\
 	has been modified on disk by another program. Would you like to\n\
-	reload it? IF YOU RELOAD, UNSAVED CHANGES WILL BE LOST.
+	reload it from disk? IF YOU RELOAD, UNSAVED CHANGES WILL BE LOST.
 
 # File exists dialog
 fileexists.title=File Exists
@@ -832,7 +831,8 @@ options.general.recent=Max recent files:
 options.general.history=Max history list length:
 options.general.confirmExit=Ask for confirmation before exiting
 options.general.saveDesktop=Save session on exit
-options.general.sortByName=Sort buffers by file name, instead of path name
+options.general.sortBuffers=Sort buffer list
+options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.checkModStatus=Check file modification time on focus
 options.general.passiveFTP=Use passive-mode FTP
 
@@ -899,6 +899,7 @@ options.styles.gutterMarkerColor=Markers in gutter
 options.styles.gutterRegisterColor=Registers in gutter
 options.styles.gutterFocusBorderColor=Focused gutter border
 options.styles.gutterNoFocusBorderColor=Unfocused gutter border
+options.styles.dockingBorderColor=Docked window border
 options.styles.comment1Style=Comment 1
 options.styles.comment2Style=Comment 2
 options.styles.literal1Style=Literal 1
@@ -1078,15 +1079,15 @@ abort.message=Are you sure you want to abort the currently executing\n\
 
 # Multiple I/O requst errors
 buffer-multiple-io.title=I/O Error
-buffer-multiple-io.message=You can only execute one input/output request per\n\
-	buffer simultaneously. Please wait until the current\n\
-	request finishes (or abort it in the I/O progress monitor)\n\
+buffer-multiple-io.message=Each buffer can only execute one input/output\n\
+	operation at a time. Please wait until the current\n\
+	operation finishes (or abort it in the I/O progress monitor)\n\
 	before starting another one.
 
 browser-multiple-io.title=I/O Error
-browser-multiple-io.message=You can only execute one input/output request per\n\
-	VFS browser simultaneously. Please wait until the current\n\
-	request finishes (or abort it in the I/O progress monitor)\n\
+browser-multiple-io.message=Each VFS browser can only execute one input/output\n\
+	operation at a time. Please wait until the current\n\
+	operation finishes (or abort it in the I/O progress monitor)\n\
 	before starting another one.
 
 # Login dialog box

@@ -407,7 +407,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		return dim;
 	}
 
-
 	/**
 	 * Returns the painter's minimum size.
 	 */
@@ -469,8 +468,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			textArea.getLineText(line,textArea.lineSegment);
 			x = SyntaxUtilities.paintSyntaxLine(textArea.lineSegment,
-				tokenMarker.markTokens(textArea.lineSegment,line).firstToken,
-				styles,this,gfx,getBackground(),x,y);
+				tokenMarker.markTokens(textArea.getBuffer(),line)
+				.firstToken,styles,this,gfx,getBackground(),x,y);
 
 			if(eolMarkers)
 			{
@@ -484,16 +483,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private void paintHighlight(Graphics gfx, int line, int y, boolean invalid)
 	{
 		// only paint plugin highlights on invalid lines
-		if(!invalid && line >= textArea.getSelectionStartLine()
-			&& line <= textArea.getSelectionEndLine())
-			paintLineHighlight(gfx,line,y);
+		if(!invalid)
+		{
+			if(line >= textArea.getSelectionStartLine()
+				&& line <= textArea.getSelectionEndLine())
+				paintLineHighlight(gfx,line,y);
+
+			if(bracketHighlight && line == textArea.getBracketLine())
+				paintBracketHighlight(gfx,line,y);
+		}
 
 		if(highlights != null)
 			highlights.paintHighlight(gfx,line,y);
 
-		if(bracketHighlight && line == textArea.getBracketLine())
-			paintBracketHighlight(gfx,line,y);
-
+		// don't do this in the 'if' above because plugin highlights
+		// need to be painted before the caret
 		if(!invalid && line == textArea.getCaretLine())
 			paintCaret(gfx,line,y);
 	}
@@ -613,6 +617,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.42  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.41  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *
@@ -643,25 +650,5 @@ public class TextAreaPainter extends JComponent implements TabExpander
  *
  * Revision 1.32  2000/04/17 06:34:24  sp
  * More focus debugging, linesChanged() tweaked
- *
- * Revision 1.31  2000/04/09 03:14:14  sp
- * Syntax token backgrounds can now be specified
- *
- * Revision 1.30  2000/04/08 02:39:33  sp
- * New Token.MARKUP type, remove Token.{CONSTANT,VARIABLE,DATATYPE}
- *
- * Revision 1.29  2000/04/06 13:09:46  sp
- * More token types added
- *
- * Revision 1.28  2000/03/27 07:31:23  sp
- * We now use Log.log() in some places instead of System.err.println, HTML mode
- * now supports <script> tags, external delegation bug fix
- *
- * Revision 1.27  2000/03/21 07:18:53  sp
- * bug fixes
- *
- * Revision 1.26  2000/03/20 03:42:55  sp
- * Smoother syntax package, opening an already open file will ask if it should be
- * reloaded, maybe some other changes
  *
  */

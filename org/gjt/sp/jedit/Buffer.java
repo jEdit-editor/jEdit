@@ -375,7 +375,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 				saveUndo = undo.editToBeUndone();
 
-				if(getFlag(NEW_FILE) || mode.getName().equals("text"))
+				if(!getPath().equals(oldPath))
 					setMode();
 
 				if(file != null)
@@ -1706,6 +1706,9 @@ public class Buffer extends PlainDocument implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.181  2000/10/12 09:28:26  sp
+ * debugging and polish
+ *
  * Revision 1.180  2000/09/26 10:19:45  sp
  * Bug fixes, spit and polish
  *

@@ -57,22 +57,6 @@ public interface DockableWindowContainer
 
 			this.position = position;
 
-			int top = position.equals(DockableWindowManager.BOTTOM) ? 5 : 0;
-			int left = position.equals(DockableWindowManager.RIGHT) ? 5 : 0;
-			int bottom = position.equals(DockableWindowManager.TOP) ? 5 : 0;
-			int right = position.equals(DockableWindowManager.LEFT) ? 5 : 0;
-
-			if(UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
-			{
-				setBorder(new MatteBorder(top,left,bottom,right,
-					MetalLookAndFeel.getPrimaryControl()));
-			}
-			else
-			{
-				setBorder(new MatteBorder(top,left,bottom,right,
-					Color.black));
-			}
-
 			try
 			{
 				dimension = Integer.parseInt(jEdit.getProperty(
@@ -106,6 +90,15 @@ public interface DockableWindowContainer
 
 		public void propertiesChanged()
 		{
+			int top = position.equals(DockableWindowManager.BOTTOM) ? 5 : 0;
+			int left = position.equals(DockableWindowManager.RIGHT) ? 5 : 0;
+			int bottom = position.equals(DockableWindowManager.TOP) ? 5 : 0;
+			int right = position.equals(DockableWindowManager.LEFT) ? 5 : 0;
+
+			setBorder(new MatteBorder(top,left,bottom,right,
+				GUIUtilities.parseColor(jEdit.getProperty(
+				"view.docking.borderColor"))));
+
 			int tabsPos = Integer.parseInt(jEdit.getProperty(
 				"view.docking.tabsPos"));
 			if(tabsPos == 0)
@@ -183,6 +176,7 @@ public interface DockableWindowContainer
 				collapsed = false;
 				revalidate();
 			}
+			win.getComponent().requestFocus();
 		}
 
 		class MouseHandler extends MouseAdapter implements MouseMotionListener
@@ -330,6 +324,9 @@ public interface DockableWindowContainer
 /*
  * Change Log:
  * $Log$
+ * Revision 1.11  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.10  2000/09/26 10:19:46  sp
  * Bug fixes, spit and polish
  *

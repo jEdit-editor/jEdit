@@ -449,16 +449,14 @@ public class JEditTextArea extends JComponent
 	public int offsetToX(int line, int offset)
 	{
 		TokenMarker tokenMarker = getTokenMarker();
+		Token tokens = tokenMarker.markTokens(buffer,line).firstToken;
 
-		/* Use painter's cached info for speed */
 		FontMetrics fm = painter.getFontMetrics();
 
 		getLineText(line,lineSegment);
 
 		int segmentOffset = lineSegment.offset;
 		int x = horizontalOffset;
-
-		Token tokens = tokenMarker.markTokens(lineSegment,line).firstToken;
 
 		Toolkit toolkit = painter.getToolkit();
 		Font defaultFont = painter.getFont();
@@ -504,8 +502,8 @@ public class JEditTextArea extends JComponent
 	public int xToOffset(int line, int x)
 	{
 		TokenMarker tokenMarker = getTokenMarker();
+		Token tokens = tokenMarker.markTokens(buffer,line).firstToken;
 
-		/* Use painter's cached info for speed */
 		FontMetrics fm = painter.getFontMetrics();
 
 		getLineText(line,lineSegment);
@@ -515,8 +513,6 @@ public class JEditTextArea extends JComponent
 		int segmentCount = lineSegment.count;
 
 		int width = horizontalOffset;
-
-		Token tokens = tokenMarker.markTokens(lineSegment,line).firstToken;
 
 		int offset = 0;
 		Toolkit toolkit = painter.getToolkit();
@@ -572,9 +568,14 @@ public class JEditTextArea extends JComponent
 	 */
 	public int xyToOffset(int x, int y)
 	{
-		int line = yToLine(y);
-		int start = getLineStartOffset(line);
-		return start + xToOffset(line,x);
+		FontMetrics fm = painter.getFontMetrics();
+		int height = fm.getHeight();
+		int line = y / height + firstLine;
+
+		if(line >= getLineCount())
+			return getBufferLength();
+		else
+			return getLineStartOffset(line) + xToOffset(line,x);
 	}
 
 	/**
@@ -1427,11 +1428,9 @@ public class JEditTextArea extends JComponent
 	}
 
 	// package-private members
-
 	Segment lineSegment;
 
 	// protected members
-
 	protected void processKeyEvent(KeyEvent evt)
 	{
 		evt = KeyEventWorkaround.processKeyEvent(evt);
@@ -1499,7 +1498,7 @@ public class JEditTextArea extends JComponent
 	private int electricScroll;
 
 	private int horizontalOffset;
-	
+
 	private JScrollBar vertical;
 	private JScrollBar horizontal;
 	private boolean scrollBarsInitialized;
@@ -2085,7 +2084,7 @@ public class JEditTextArea extends JComponent
 
 			dragStartLine = yToLine(evt.getY());
 			dragStartOffset = xToOffset(dragStartLine,evt.getX());
-			int dot = getLineStartOffset(dragStartLine) + dragStartOffset;
+			int dot = xyToOffset(evt.getX(),evt.getY());
 
 			clickCount = evt.getClickCount();
 			switch(clickCount)
@@ -2242,6 +2241,9 @@ public class JEditTextArea extends JComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.86  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.85  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *

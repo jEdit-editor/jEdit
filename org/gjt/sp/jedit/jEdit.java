@@ -56,7 +56,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major) (minor) (<99 = preX, 99 = final) (bug fix)
-		return "02.06.08.00";
+		return "02.06.09.00";
 	}
 
 	/**
@@ -279,6 +279,7 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 
 		// Buffer sort
+		sortBuffers = getBooleanProperty("sortBuffers");
 		sortByName = getBooleanProperty("sortByName");
 
 		propertiesChanged();
@@ -1709,8 +1710,11 @@ public class jEdit
 	 */
 	static void updatePosition(Buffer buffer)
 	{
-		removeBufferFromList(buffer);
-		addBufferToList(buffer);
+		if(sortBuffers)
+		{
+			removeBufferFromList(buffer);
+			addBufferToList(buffer);
+		}
 	}
 
 	// private members
@@ -1731,6 +1735,7 @@ public class jEdit
 	private static InputHandler inputHandler;
 
 	// buffer link list
+	private static boolean sortBuffers;
 	private static boolean sortByName;
 	private static int bufferCount;
 	private static Buffer buffersFirst;
@@ -2219,7 +2224,7 @@ public class jEdit
 			buffersFirst = buffersLast = buffer;
 			return;
 		}
-		else
+		else if(sortBuffers)
 		{
 			String name1 = (sortByName ? buffer.getName()
 				: buffer.getPath()).toLowerCase();
@@ -2359,6 +2364,9 @@ public class jEdit
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.281  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.280  2000/09/26 10:19:46  sp
  * Bug fixes, spit and polish
  *

@@ -999,10 +999,7 @@ public class View extends JFrame implements EBComponent
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
 			if(isOpen(buffer))
-			{
-				updateTitle();
 				status.updateBufferStatus();
-			}
 			updateBuffersMenu();
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
@@ -1064,6 +1061,9 @@ public class View extends JFrame implements EBComponent
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.200  2000/10/12 09:28:26  sp
+ * debugging and polish
+ *
  * Revision 1.199  2000/09/26 10:19:46  sp
  * Bug fixes, spit and polish
  *

@@ -20,10 +20,9 @@
 
 package org.gjt.sp.jedit.syntax;
 
-import javax.swing.text.Segment;
+import javax.swing.text.*;
 import java.util.*;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -133,6 +132,57 @@ public class TokenMarker implements Cloneable
 
 		this.name = name;
 		rulePfx = name.concat("::");
+	}
+
+	/**
+	 * Returns the syntax tokens for the specified line.
+	 * @param buffer The buffer
+	 * @param lineIndex The line number
+	 * @since jEdit 2.6pre9
+	 */
+	public LineInfo markTokens(Buffer buffer, int lineIndex)
+	{
+		LineInfo info = lineInfo[lineIndex];
+
+		/* If cached tokens are valid, return 'em */
+		if(info.tokensValid)
+			return info;
+
+		/*
+		 * Else, go up to 50 lines back, looking for a line with
+		 * cached tokens. Tokenize from that line to this line.
+		 */
+		int start = 0;
+
+		for(int i = lineIndex - 1; i > Math.max(0,lineIndex - 50); i--)
+		{
+			if(lineInfo[i].tokensValid)
+				break;
+			else
+				start = i;
+		}
+
+//		System.err.println("start=" + start);
+		Element map = buffer.getDefaultRootElement();
+
+		for(int i = start; i <= lineIndex; i++)
+		{
+			Element lineElement = map.getElement(i);
+			int lineStart = lineElement.getStartOffset();
+			try
+			{
+				buffer.getText(lineStart,lineElement.getEndOffset()
+					- lineStart - 1,lineFromBuffer);
+			}
+			catch(BadLocationException e)
+			{
+				e.printStackTrace();
+			}
+
+			info = markTokens(lineFromBuffer,i);
+		}
+
+		return info;
 	}
 
 	/**
@@ -275,6 +325,8 @@ public class TokenMarker implements Cloneable
 	private String name;
 	private String rulePfx;
 	private Hashtable ruleSets;
+
+	private Segment lineFromBuffer = new Segment(new char[0],0,0);
 
 	private LineInfo[] lineInfo;
 	private int length;
@@ -956,6 +1008,9 @@ loop:			for(int i = 0; i < len; i++)
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.54  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.53  2000/09/23 03:01:11  sp
  * pre7 yayayay
  *

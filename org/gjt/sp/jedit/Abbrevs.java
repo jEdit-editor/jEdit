@@ -188,6 +188,8 @@ public class Abbrevs
 						buf.append('\n');
 						lineCount++;
 					}
+					else if(ch == 't')
+						buf.append('\t');
 					else
 						buf.append(ch);
 				}
@@ -468,6 +470,9 @@ public class Abbrevs
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.17  2000/10/12 09:28:26  sp
+ * debugging and polish
+ *
  * Revision 1.16  2000/09/01 11:31:00  sp
  * Rudimentary 'command line', similar to emacs minibuf
  *

@@ -35,7 +35,8 @@ backup.directory=
 backup.prefix=
 backup.suffix=~
 
-# Sort buffer list by name, instead of path
+# Sort buffer list
+sortBuffers=true
 sortByName=true
 
 ###
@@ -187,6 +188,9 @@ view.gutter.highlightInterval=5
 
 # Gutter displays line numbers
 view.gutter.highlightCurrentLine=true
+
+# Docking border color
+view.docking.borderColor=#ccccff
 
 # Expand abbrevs when user finishes typing a word
 view.expandOnInput=false

@@ -21,6 +21,7 @@ package org.gjt.sp.jedit;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
+import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -255,23 +256,50 @@ public class Macros
 				index + 1));
 		}
 
-		EditAction _action = jEdit.getAction(action);
-
-		if(_action == null)
+		if(action.equals("input"))
 		{
-			Object[] args = { macro, new Integer(lineNo), action };
-			GUIUtilities.error(view,"macro-error",args);
-			return false;
+			char register;
+			index = actionCommand.indexOf('@');
+			if(index != 1)
+				register = '$';
+			else
+			{
+				register = actionCommand.charAt(0);
+				actionCommand = actionCommand.substring(2);
+			}
+
+			String retVal = (String)JOptionPane.showInputDialog(view,
+				actionCommand,jEdit.getProperty("macro-input.title"),
+				JOptionPane.QUESTION_MESSAGE);
+			if(retVal == null)
+				return false;
+			else
+			{
+				Registers.setRegister(register,new
+					Registers.StringRegister(retVal));
+				return true;
+			}
 		}
+		else
+		{
+			EditAction _action = jEdit.getAction(action);
 
-		view.getInputHandler().executeAction(_action,view.getTextArea(),
-			actionCommand);
+			if(_action == null)
+			{
+				Object[] args = { macro, new Integer(lineNo), action };
+				GUIUtilities.error(view,"macro-error",args);
+				return false;
+			}
 
-		// wait for all I/O to complete before going on to the
-		// next action
-		VFSManager.waitForRequests();
+			view.getInputHandler().executeAction(_action,view.getTextArea(),
+				actionCommand);
 
-		return true;
+			// wait for all I/O to complete before going on to the
+			// next action
+			VFSManager.waitForRequests();
+
+			return true;
+		}
 	}
 
 	/**
@@ -573,6 +601,9 @@ public class Macros
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.38  2000/10/12 09:28:26  sp
+ * debugging and polish
+ *
  * Revision 1.37  2000/10/05 04:30:09  sp
  * *** empty log message ***
  *

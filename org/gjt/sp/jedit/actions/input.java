@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.actions;
 
 import java.awt.event.ActionEvent;
-import javax.swing.JOptionPane;
 import org.gjt.sp.jedit.gui.MacroInputDialog;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.*;
@@ -32,46 +31,20 @@ public class input extends EditAction
 		View view = getView(evt);
 		String actionCommand = evt.getActionCommand();
 
-		if(actionCommand == null)
+		InputHandler.MacroRecorder recorder = view.getInputHandler()
+			.getMacroRecorder();
+		if(recorder == null)
 		{
-			InputHandler.MacroRecorder recorder = view.getInputHandler()
-				.getMacroRecorder();
-			if(recorder == null)
-			{
-				GUIUtilities.error(view,"macro-input.no-record",null);
-				return;
-			}
-
-			MacroInputDialog dialog = new MacroInputDialog(view);
-			if(dialog.isOK())
-			{
-				String prompt = dialog.getPrompt();
-				String register = dialog.getRegister();
-				recorder.actionPerformed(this,register + '@' + prompt);
-			}
+			GUIUtilities.error(view,"macro-input.no-record",null);
+			return;
 		}
-		else
-		{
-			char register;
-			int index = actionCommand.indexOf('@');
-			if(index != 1)
-				register = '$';
-			else
-			{
-				register = actionCommand.charAt(0);
-				actionCommand = actionCommand.substring(2);
-			}
 
-			String retVal = (String)JOptionPane.showInputDialog(view,
-				actionCommand,jEdit.getProperty("macro-input.title"),
-				JOptionPane.QUESTION_MESSAGE);
-			if(retVal == null)
-				Registers.clearRegister(register);
-			else
-			{
-				Registers.setRegister(register,new
-					Registers.StringRegister(retVal));
-			}
+		MacroInputDialog dialog = new MacroInputDialog(view);
+		if(dialog.isOK())
+		{
+			String prompt = dialog.getPrompt();
+			String register = dialog.getRegister();
+			recorder.actionPerformed(this,register + '@' + prompt);
 		}
 	}
 

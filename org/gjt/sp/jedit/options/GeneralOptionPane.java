@@ -55,6 +55,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 		confirmExit.setSelected(jEdit.getBooleanProperty("confirmExit"));
 		addComponent(confirmExit);
 
+		/* Sort buffers */
+		sortBuffers = new JCheckBox(jEdit.getProperty(
+			"options.general.sortBuffers"));
+		sortBuffers.setSelected(jEdit.getBooleanProperty("sortBuffers"));
+		addComponent(sortBuffers);
+
 		/* Sort buffers by names */
 		sortByName = new JCheckBox(jEdit.getProperty(
 			"options.general.sortByName"));
@@ -236,6 +242,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JTextField history;
 	private JCheckBox saveDesktop;
 	private JCheckBox confirmExit;
+	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
 	private JCheckBox passiveFTP;
@@ -258,6 +265,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 /*
  * Change Log:
  * $Log$
+ * Revision 1.44  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.43  2000/09/26 10:19:47  sp
  * Bug fixes, spit and polish
  *

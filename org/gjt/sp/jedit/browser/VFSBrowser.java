@@ -644,17 +644,57 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	private void propertiesChanged()
 	{
-		showHiddenFiles = jEdit.getBooleanProperty("vfs.browser.showHiddenFiles");
-		sortFiles = jEdit.getBooleanProperty("vfs.browser.sortFiles");
-		sortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
-		sortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
-		doubleClickClose = jEdit.getBooleanProperty("vfs.browser.doubleClickClose");
+		// only reload browser if necessary, to avoid annoying
+		// 'flickering'
+		boolean newShowHiddenFiles = jEdit.getBooleanProperty("vfs.browser.showHiddenFiles");
+		boolean newSortFiles = jEdit.getBooleanProperty("vfs.browser.sortFiles");
+		boolean newSortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
+		boolean newSortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
+		boolean newDoubleClickClose = jEdit.getBooleanProperty("vfs.browser.doubleClickClose");
+
+		boolean reload = false;
+
+		if(newShowHiddenFiles != showHiddenFiles)
+		{
+			showHiddenFiles = newShowHiddenFiles;
+			reload = true;
+		}
+
+		if(newSortFiles != sortFiles)
+		{
+			sortFiles = newSortFiles;
+			reload = true;
+		}
+
+		if(newSortMixFilesAndDirs != sortMixFilesAndDirs)
+		{
+			sortMixFilesAndDirs = newSortMixFilesAndDirs;
+			reload = true;
+		}
+
+		if(newSortIgnoreCase != sortIgnoreCase)
+		{
+			sortIgnoreCase = newSortIgnoreCase;
+			reload = true;
+		}
+
+		if(newDoubleClickClose != doubleClickClose)
+		{
+			doubleClickClose = newDoubleClickClose;
+			reload = true;
+		}
 
 		String defaultView = jEdit.getProperty("vfs.browser.defaultView");
 		if(defaultView.equals("tree"))
-			setBrowserView(new BrowserTreeView(this));
-		else // default
-			setBrowserView(new BrowserListView(this));
+		{
+			if(reload || !(browserView instanceof BrowserTreeView))
+				setBrowserView(new BrowserTreeView(this));
+		}
+		else if(defaultView.equals("list"))
+		{
+			if(reload || !(browserView instanceof BrowserListView))
+				setBrowserView(new BrowserListView(this));
+		}
 	}
 
 	/* We do this stuff because the browser is not able to handle
@@ -817,6 +857,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 /*
  * Change Log:
  * $Log$
+ * Revision 1.25  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.24  2000/10/05 04:30:10  sp
  * *** empty log message ***
  *

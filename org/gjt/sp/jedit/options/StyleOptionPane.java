@@ -191,6 +191,8 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.focusBorderColor");
 		addColorChoice("options.styles.gutterNoFocusBorderColor",
 			"view.gutter.noFocusBorderColor");
+		addColorChoice("options.styles.dockingBorderColor",
+			"view.docking.borderColor");
 	}
 
 	public int getColumnCount()
@@ -583,6 +585,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 /*
  * ChangeLog:
  * $Log$
+ * Revision 1.22  2000/10/12 09:28:27  sp
+ * debugging and polish
+ *
  * Revision 1.21  2000/08/10 08:30:41  sp
  * VFS browser work, options dialog work, more random tweaks
  *
