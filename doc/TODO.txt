@@ -4,9 +4,13 @@ TO DO
 - FTP plugin: make a 3.2 version with better error messages?
 - make xml plugin more respectable before 3.2final
 
-+ before 3.2final:
++ before 3.2pre5:
 
-- use something else instead of caps lock
+- don't use hacked BeanShell 1.1a18
+- installing source for already installed plugins
+- API guide changes from John
+
++ before 3.2final:
 
 - documentation:
   - update using-plugins
@@ -14,21 +18,14 @@ TO DO
   - formatting problems in user's guide in table cells
   - document differences between web start and stand-alone version
   - JOptionPane not a good idea for getting user input?
+  - proofread documentation
   - BSH command reference in API guide <part>
-  - proofread it
-
-- don't use hacked BeanShell 1.1a18
 - 'rem' in vbscript
-- installing source for already installed plugins
 - get web start to work
 - fix '... is not a function name' when running openjade
 - reload: preserve caret position
 - next time i'm making an RPM, fix the shell script
-
-- John Gellene:
-  - jEditLauncher docs
-  - jEditLauncher
-  - API guide
+- jEditLauncher
 
 + bugs that need to be fixed at some stage:
 

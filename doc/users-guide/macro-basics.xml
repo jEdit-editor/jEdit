@@ -71,4 +71,47 @@
   plugins for most of what we discuss.
  </para>
 
+ <sect1 id="single-macros"><title>Single Execution Macros</title>
+  <para>
+   There are two ways jEdit lets you use BeanShell quickly on a
+   <quote>one time only</quote> basis. You will find both of them in the
+   <guimenu>Utilities</guimenu> menu.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
+   Expression</guimenuitem> causes jEdit to display a text input dialog
+   that asks you to type a single line of BeanShell commands. You can type
+   more than one BeanShell statement so long as each of them ends with a
+   semicolon. If BeanShell successfully interprets your input, a message
+   box will appear with the return value of the last statement. You can do
+   the same thing using the BeanShell interpreter provided with the
+   <application>Console</application> plugin; the return value will appear
+   in the output window.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
+   evaluates the selected text as a BeanShell script and
+   replaces the selected text with the return value of the last BeanShell
+   statement.
+  </para>
+
+  <para>
+    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
+    easy way to do arithmetic calculations inline while editing. BeanShell
+    uses numbers and arithmetic operations in an ordinary, intuitive way.
+  </para>
+
+  <informalexample>
+   <para>
+    Try typing an expression like <userinput>(3745*856)+74</userinput>
+    in the buffer, select it, and choose
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>.
+    The selected text will be replaced by the answer,
+    <userinput>3205794</userinput>.
+   </para>
+  </informalexample>
+ </sect1>
+
 </chapter>

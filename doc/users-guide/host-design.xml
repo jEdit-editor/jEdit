@@ -24,6 +24,8 @@
   <function>initPlugins()</function> and
   <function>loadPlugins()</function>. This occurs after the
   application has done the following:
+</para>
+
   <itemizedlist>
     <listitem><para>
       parsed command line options;
@@ -38,6 +40,8 @@
       bar (as well as the toolbar and keyboard shortcuts);
     </para></listitem>
   </itemizedlist>
+
+<para>
   Plugin loading occurs before jEdit creates any windows or loads any files
   for editing. It also occurs before jEdit runs any <quote>startup</quote>
   macros.

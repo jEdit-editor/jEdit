@@ -632,7 +632,7 @@ view.getInputHandler().readNextChar("Enter a character",
 
 </sect2>
 
-<sect2 id="macro-tips-BeanShell"><title>BeanShell Commands</title>
+<sect2 id="macro-tips-BeanShell-commands"><title>BeanShell Commands</title>
 
 <para>
   [To be supplied]
