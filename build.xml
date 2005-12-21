@@ -6,6 +6,7 @@
 
 <project name="jEdit" default="dist" basedir=".">
 
+	<property file="../build.properties"/>
 	<property file="build.properties"/>
 
 	<target name="init">
