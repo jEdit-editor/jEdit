@@ -39,9 +39,7 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
-/**
- * @version $Id$
- */
+
 public class BufferOptionPane extends AbstractOptionPane
 {
 	JComboBox encoding;
