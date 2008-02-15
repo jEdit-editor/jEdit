@@ -1,5 +1,5 @@
 /*
- * JEditVisitorAdapter.java - A default JEditVisitor implementation
+ * JEditVisitor.java - A Visitor pattern for jEdit
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -20,42 +20,41 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit;
+package org.gjt.sp.jedit.visitors;
 
 //{{{ Imports
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 //}}}
 
 /**
  * A visitor that can visit a View, an EditPane or a JEditTextArea.
+ * You can also extends the default implementation JEditVisitorAdapter
+ * To use this visitor.
+ * @see jEdit#visit(JEditVisitor)
+ * @see View#visit(JEditVisitor)
  *
  * @author Matthieu Casanova
  * @version $Id$
  * @since jEdit 4.3pre13
  */
-public class JEditVisitorAdapter implements JEditVisitor
+public interface JEditVisitor
 {
 	/**
 	 * Visit a view.
 	 * @param view the visited view
 	 */
-	public void visit(View view)
-	{
-	}
+	void visit(View view);
 		   
 	/**
 	 * Visit an EditPane.
 	 * @param editPane the visited edit pane
 	 */
-	public void visit(EditPane editPane)
-	{
-	}
+	void visit(EditPane editPane);
 
 	/**
-	 * Visit a JEditTextArea.
+	 * Visit a view.
 	 * @param textArea the visited textArea
 	 */
-	public void visit(JEditTextArea textArea)
-	{
-	}
+	void visit(JEditTextArea textArea);
 }

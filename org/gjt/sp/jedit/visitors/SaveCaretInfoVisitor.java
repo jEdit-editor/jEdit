@@ -1,5 +1,6 @@
 /*
- * JEditVisitor.java - A Visitor pattern for jEdit
+ * SaveCaretInfoVisitor.java - A visitor that save the carets info of the edit
+ * panes
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -20,40 +21,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit;
+package org.gjt.sp.jedit.visitors;
 
-//{{{ Imports
-import org.gjt.sp.jedit.textarea.JEditTextArea;
-//}}}
+import org.gjt.sp.jedit.EditPane;
 
 /**
- * A visitor that can visit a View, an EditPane or a JEditTextArea.
- * You can also extends the default implementation JEditVisitorAdapter
- * To use this visitor.
- * @see jEdit#visit(JEditVisitor)
- * @see View#visit(JEditVisitor)
- *
  * @author Matthieu Casanova
- * @version $Id$
- * @since jEdit 4.3pre13
  */
-public interface JEditVisitor
+public class SaveCaretInfoVisitor extends JEditVisitorAdapter
 {
-	/**
-	 * Visit a view.
-	 * @param view the visited view
-	 */
-	void visit(View view);
-		   
-	/**
-	 * Visit an EditPane.
-	 * @param editPane the visited edit pane
-	 */
-	void visit(EditPane editPane);
-
-	/**
-	 * Visit a view.
-	 * @param textArea the visited textArea
-	 */
-	void visit(JEditTextArea textArea);
+	@Override
+	public void visit(EditPane editPane)
+	{
+		editPane.saveCaretInfo();
+	}
 }
