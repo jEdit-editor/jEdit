@@ -26,8 +26,13 @@ package org.gjt.sp.jedit;
  *
  * @author Matthieu Casanova
  * @version $Id$
+ * @deprecated
  */
 public class Options
 {
+	/*
+	This class is no longer used and is only retained for the unlikely
+	chance that some plugin might be using it.
+	*/
 	public static boolean SIMPLIFIED_KEY_HANDLING;
 }
