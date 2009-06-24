@@ -31,6 +31,7 @@ import java.awt.event.InputEvent;
 import java.awt.*;
 
 /**
+ * Standalone TextArea MouseHandler.
  * @author Matthieu Casanova
  * @version $Id$
  */
