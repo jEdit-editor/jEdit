@@ -1,4 +1,6 @@
-/jEdit.iws
-/build.properties
-/build
-/dist
+jars/*.jar
+jEdit.iws
+build.properties
+build
+dist
+
