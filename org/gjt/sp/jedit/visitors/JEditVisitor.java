@@ -27,9 +27,8 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 //}}}
 
-/**
- * A visitor that can visit a View, an EditPane or a JEditTextArea.
- * You can also extends the default implementation JEditVisitorAdapter
+/** A Visitor can visit a View, an EditPane or a JEditTextArea.
+ *  You can also extend the default implementation, JEditVisitorAdapter
  * To use this visitor.
  * @see jEdit#visit(JEditVisitor)
  * @see View#visit(JEditVisitor)
