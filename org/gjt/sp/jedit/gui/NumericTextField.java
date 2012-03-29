@@ -24,7 +24,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-/**
+/** A TextField that accepts only numeric values
  * @author Matthieu Casanova
  * @version $Id$
  * @since jEdit 4.3pre15
