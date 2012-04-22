@@ -2,3 +2,5 @@
 /build
 /dist
 /lib
+/.hg
+/.hgignore
