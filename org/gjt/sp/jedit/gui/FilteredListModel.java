@@ -41,7 +41,7 @@ import java.util.*;
  * @version $Id$
  * @since jEdit 4.3pre11
  */
-public abstract class FilteredListModel<E extends ListModel> extends AbstractListModel implements ListDataListener
+public abstract class FilteredListModel<E extends ListModel<?>> extends AbstractListModel implements ListDataListener
 {
 	/**
 	 * The delegated table model.
@@ -75,7 +75,7 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 	 *
 	 * @param list the list that uses the model
 	 */
-	public void setList(JList list)
+	public void setList(JList<?> list)
 	{
 		if (list.getModel() != this)
 			throw new IllegalArgumentException("The given list " + list + " doesn't use this model " + this);
