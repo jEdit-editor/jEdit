@@ -74,10 +74,12 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 
 - New edit mode for Dockerfile (Matthieu Casanova)
 
+- New edit mode for QDoc (Dale Anson)
+
 - Status bar encoding widget allow to choose between updating the encoding or reloading
   with a new encoding (Matthieu Casanova)
-  
-- Updated java mode for new keywords introduced up to Java 17. (Dale Anson)  
+
+- Updated java mode for new keywords introduced up to Java 17. (Dale Anson)
 
 }}}
 
