@@ -3,8 +3,8 @@
 
 
 <!--
-    This mode file describes the ANTLR 4 syntax definition language as
-    described in the book "The Definitive ANTLR 4 Reference" by Terrence Parr.
+    This mode file for QDoc, which is a documentation file format used by
+    The Qt Group, www.qt.io
 -->
 <MODE>
     <PROPS>
@@ -17,10 +17,10 @@
         <SPAN TYPE="FUNCTION" NO_LINE_BREAK="TRUE">
           <BEGIN>{</BEGIN>
           <END>}</END>
-        </SPAN>        
+        </SPAN>
         <KEYWORDS>
-            
-                        
+
+
             <!-- topic commands -->
             <KEYWORD1>\class</KEYWORD1>
             <KEYWORD1>\enum</KEYWORD1>
@@ -47,12 +47,12 @@
             <KEYWORD1>\typealias</KEYWORD1>
             <KEYWORD1>\typedef</KEYWORD1>
             <KEYWORD1>\variable</KEYWORD1>
-            
-            
-                        
-                        
-                        
-            <!-- context commands  -->           
+
+
+
+
+
+            <!-- context commands  -->
             <KEYWORD2>\abstract</KEYWORD2>
             <KEYWORD2>\default</KEYWORD2>
             <KEYWORD2>\deprecated</KEYWORD2>
@@ -80,9 +80,9 @@
             <KEYWORD2>\threadsafe</KEYWORD2>
             <KEYWORD2>\title</KEYWORD2>
             <KEYWORD2>\wrapper</KEYWORD2>
-                        
-            
-            
+
+
+
             <!-- markup commands -->
             <KEYWORD3>\a</KEYWORD3>
             <KEYWORD3>\annotatedlist</KEYWORD3>
@@ -151,9 +151,9 @@
             <KEYWORD3>\unicode</KEYWORD3>
             <KEYWORD3>\warning</KEYWORD3>
             <KEYWORD3>\\</KEYWORD3>
-            
+
             <INVALID>\qmlclass</INVALID>
         </KEYWORDS>
     </RULES>
-    
+
 </MODE>
