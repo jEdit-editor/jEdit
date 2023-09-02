@@ -88,6 +88,18 @@ public class UrlVFS extends VFS
 		}
 	} //}}}
 
+	//{{{ getFileName() method
+	@Override
+	public String getFileName(String path)
+	{
+		String result = super.getFileName(path);
+		int index = result.indexOf('?');
+		if (index == -1)
+			return result;
+		else
+			return result.substring(0, index);
+	} //}}}
+
 	//{{{ getFilePath() method
 	@Override
 	public String getFilePath(String vfsPath)
