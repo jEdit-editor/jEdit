@@ -26,14 +26,14 @@
 	<resolvers>
 		<ibiblio name="public" root="https://repo1.maven.org/maven2/" m2compatible="true"/>
 		<url name="jedit-plugins">
-			@jedit.plugins.artifact.patterns@
+			<artifact pattern="jar:https://sourceforge.net/projects/jedit-plugins/files/[artifact]/[revision]/[artifact]-[revision]-bin.zip/download!/[artifact].jar" />
 		</url>
 	</resolvers>
 	<modules>
 		<module organisation="org.jedit.plugins" resolver="jedit-plugins" />
 	</modules>
 
-	
+
 	<include url="${ivy.default.settings.dir}/ivysettings-shared.xml"/>
 	<include url="${ivy.default.settings.dir}/ivysettings-local.xml"/>
 	<include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml"/>

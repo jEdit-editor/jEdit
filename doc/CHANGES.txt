@@ -19,6 +19,8 @@ Thanks to Björn Kautler, Matthieu Casanova and Dale Anson for contributing to t
 
 - Status bar design updated with the ability to add widgets to the left and the right of the bar (Matthieu Casanova)
 
+- Make building possible when using Java 15+ (Björn Kautler)
+
 }}}
 {{{ API Changes
 
