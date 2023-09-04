@@ -4,11 +4,13 @@ jEdit 5.7 version history
 
 {{{ Version 5.7pre1
 
-Thanks to Björn Kautler, Matthieu Casanova and Dale Anson for contributing to this release.
+Thanks to Björn Kautler, Matthieu Casanova and Dale Anson for contributing to
+this release.
 
 {{{ Bug Fixes
 
-- Fix the installation of plugins trying to use invalid file names (Björn Kautler)
+- Fix the installation of plugins trying to use invalid file names
+  (Björn Kautler)
 
 - VFSManager.canReadFile() was returning true only for directories (#4102 - Matthieu Casanova)
 
@@ -75,6 +77,9 @@ Thanks to Björn Kautler, Matthieu Casanova and Dale Anson for contributing to t
 
 }}}
 {{{ Editing
+
+- Never mark buffers dirty if contents are unchanged is now also properly
+  supported for untitled buffers (Björn Kautler)
 
 - New edit mode for Dockerfile (Matthieu Casanova)
 

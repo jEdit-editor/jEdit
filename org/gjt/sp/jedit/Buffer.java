@@ -145,6 +145,8 @@ public class Buffer extends JEditBuffer
 	 * @since jEdit 4.0pre4
 	 */
 	public static final String GZIPPED = "gzipped";
+
+	private static final byte[] DUMMY_HASH = new byte[0];
 	//}}}
 
 	//{{{ Input/output methods
@@ -972,8 +974,7 @@ public class Buffer extends JEditBuffer
 		boolean old_d = isDirty();
 		if (d && getLength() == initialLength)
 		{
-			// for untitled, do not check if the content existed before
-			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation") && !isUntitled())
+			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
 				d = !Arrays.equals(calculateHash(), md5hash);
 		}
 		super.setDirty(d);
@@ -2203,9 +2204,8 @@ public class Buffer extends JEditBuffer
 	/** @return an MD5 hash of the contents of the buffer */
 	private byte[] calculateHash()
 	{
-		final byte[] dummy = new byte[1];
 		if (!jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
-			return dummy;
+			return DUMMY_HASH;
 		return StandardUtilities.md5(getSegment(0, getLength()));
 	}
 
@@ -2214,8 +2214,16 @@ public class Buffer extends JEditBuffer
 	 */
 	private void updateHash()
 	{
-		initialLength = getLength();
-		md5hash = calculateHash();
+		if (isUntitled())
+		{
+			initialLength = 0;
+			md5hash = StandardUtilities.md5("");
+		}
+		else
+		{
+			initialLength = getLength();
+			md5hash = calculateHash();
+		}
 	}
 
 	//{{{ finishLoading() method
