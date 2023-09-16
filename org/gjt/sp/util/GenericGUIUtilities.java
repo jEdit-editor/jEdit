@@ -69,12 +69,12 @@ public class GenericGUIUtilities
 	public static String prettifyMenuLabel(String label)
 	{
 		int index = label.indexOf('$');
+		var result = label;
 		if(index != -1)
 		{
-			label = label.substring(0,index)
-				.concat(label.substring(index + 1));
+			result = label.substring(0, index) + label.substring(index + 1);
 		}
-		return label;
+		return result;
 	} //}}}
 
 	//{{{ setAutoMnemonic() method
@@ -92,7 +92,7 @@ public class GenericGUIUtilities
 		if (index != -1 && label.length() - index > 1)
 		{
 			mnemonic = Character.toLowerCase(label.charAt(index + 1));
-			label = label.substring(0, index).concat(label.substring(++index));
+			label = label.substring(0, index) + label.substring(++index);
 		}
 		else
 		{
