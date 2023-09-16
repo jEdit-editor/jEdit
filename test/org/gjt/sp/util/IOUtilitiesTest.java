@@ -21,29 +21,29 @@
 
 package org.gjt.sp.util;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-class IOUtilitiesTest {
-
+public class IOUtilitiesTest {
     public static final String CONTENT = "Hello World";
 
     @Test
-    void moveFile() throws IOException {
+    public void moveFile() throws IOException {
         var source = buildTmpSourceFile();
         var target = new File(source.getParentFile(), "destination.txt");
         IOUtilities.moveFile(source, target);
-        assertFalse(source.exists(), "Source file still exists");
-        assertEquals(CONTENT, Files.readString(target.toPath()), "The destination file do not exist or has a different content");
+        assertFalse("Source file still exists", source.exists());
+        assertEquals("The destination file do not exist or has a different content", CONTENT, Files.readString(target.toPath()));
     }
 
     @Test
-    void testFileLength() throws IOException {
+    public void testFileLength() throws IOException {
         var source = buildTmpSourceFile();
         assertEquals(CONTENT.length(), IOUtilities.fileLength(source));
     }
