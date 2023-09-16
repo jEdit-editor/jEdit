@@ -2,7 +2,7 @@ package org.gjt.sp.util;
 
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
-import java.util.Iterator;
+import java.util.Deque;
 import java.util.LinkedList;
 
 /**
@@ -10,14 +10,12 @@ import java.util.LinkedList;
  * than Document when all you need is to store a single string.
  * 
  * @author ezust
- * 
  */
 public class StringModel
 {
+	private String theText;
 
-	String theText = null;
-
-	LinkedList<TextListener> listeners = new LinkedList<TextListener>();
+	private Deque<TextListener> listeners = new LinkedList<>();
 
 	public void addTextListener(TextListener tl)
 	{
