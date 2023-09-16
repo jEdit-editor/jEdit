@@ -141,8 +141,10 @@ public class MiscUtilities
 		{
 			String varName = m.group(2);
 			String expansion = System.getenv(varName);
-			if (expansion != null)
+			if (expansion != null) {
+				expansion = expansion.replace("\\", "\\\\");
 				return m.replaceFirst(expansion);
+			}
 		}
 		return unixPath;
 	}
