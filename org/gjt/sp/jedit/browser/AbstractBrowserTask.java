@@ -60,7 +60,7 @@ abstract class AbstractBrowserTask extends Task
 	protected String path;
 	//}}}
 
-	private class MyTaskListener extends TaskAdapter
+	private class MyTaskListener implements TaskListener
 	{
 		private final Runnable runnable;
 

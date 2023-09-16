@@ -526,7 +526,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ IoTaskListener class
-	private class IoTaskHandler extends TaskAdapter
+	private class IoTaskHandler implements TaskListener
 	{
 		private final Runnable cursorStatus = () ->
 		{

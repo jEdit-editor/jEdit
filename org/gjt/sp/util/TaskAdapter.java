@@ -3,7 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright © 2011 Matthieu Casanova
+ * Copyright © 2011-2023 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,9 @@ package org.gjt.sp.util;
 /**
  * @author Matthieu Casanova
  * @since jEdit 4.5pre1
+ * @deprecated use {@link TaskListener} instead as it now has default methods
  */
+@Deprecated
 public abstract class TaskAdapter implements TaskListener
 {
 	@Override

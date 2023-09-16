@@ -31,7 +31,7 @@ import org.gjt.sp.jedit.gui.statusbar.StatsBarWidgetPanel;
 import org.gjt.sp.jedit.gui.statusbar.StatusBarEventType;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Task;
-import org.gjt.sp.util.TaskAdapter;
+import org.gjt.sp.util.TaskListener;
 import org.gjt.sp.util.TaskManager;
 
 import javax.annotation.Nullable;
@@ -118,7 +118,7 @@ public class StatusBar extends JPanel
 	} //}}}
 
 	//{{{ TaskListener implementation
-	private class TaskHandler extends TaskAdapter
+	private class TaskHandler implements TaskListener
 	{
 		private final Runnable statusLineIo = new Runnable()
 		{

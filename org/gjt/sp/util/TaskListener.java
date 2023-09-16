@@ -3,7 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2010 Matthieu Casanova
+ * Copyright (C) 2010-2023 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,11 +28,11 @@ import java.util.EventListener;
  */
 public interface TaskListener extends EventListener
 {
-	void waiting(Task task);
-	void running(Task task);
-	void done(Task task);
+	default void waiting(Task task) {}
+	default void running(Task task) {}
+	default void done(Task task) {}
 
-	void statusUpdated(Task task);
-	void maximumUpdated(Task task);
-	void valueUpdated(Task task);
+	default void statusUpdated(Task task) {}
+	default void maximumUpdated(Task task) {}
+	default void valueUpdated(Task task) {}
 }
