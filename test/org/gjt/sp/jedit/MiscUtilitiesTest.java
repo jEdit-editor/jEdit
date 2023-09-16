@@ -30,6 +30,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -174,16 +175,14 @@ public class MiscUtilitiesTest
 		updateOS(WINDOWS_NT);
 		assertEquals(value, MiscUtilities.expandVariables("%" + key + '%'));
 	}
-
 	@Test
 	public void expandVariablesEnvWindowsAsUnix() throws Exception
 	{
-		Map<String, String> env = System.getenv();
-		Map.Entry<String, String> firstEntry = env.entrySet().iterator().next();
-		String key = firstEntry.getKey();
-		String value = firstEntry.getValue();
+		var key = "jEdit_TEST";
+		var value = "c:\\home\\jEdit";
+		setEnv(Map.of(key, value));
 		updateOS(UNIX);
-		assertEquals(value, MiscUtilities.expandVariables("%" + key + '%'));
+		assertEquals(value, MiscUtilities.expandVariables('%' + key + '%'));
 	}
 
 	@Test
@@ -195,6 +194,33 @@ public class MiscUtilitiesTest
 		String value = firstEntry.getValue();
 		updateOS(UNIX);
 		assertEquals(value, MiscUtilities.expandVariables("$" + key));
+	}
+
+	private static void setEnv(Map<String, String> newenv) throws Exception {
+		try {
+			var processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
+			Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
+			theEnvironmentField.setAccessible(true);
+			var env = (Map<String, String>) theEnvironmentField.get(null);
+			env.putAll(newenv);
+			Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+			theCaseInsensitiveEnvironmentField.setAccessible(true);
+			var cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
+			cienv.putAll(newenv);
+		} catch (NoSuchFieldException e) {
+			Class[] classes = Collections.class.getDeclaredClasses();
+			Map<String, String> env = System.getenv();
+			for(var cl : classes) {
+				if("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
+					Field field = cl.getDeclaredField("m");
+					field.setAccessible(true);
+					var obj = field.get(env);
+					var map = (Map<String, String>) obj;
+					map.clear();
+					map.putAll(newenv);
+				}
+			}
+		}
 	}
 
 	@Test
