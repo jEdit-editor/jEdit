@@ -164,16 +164,15 @@ public class BrowserCommandsMenu extends JPopupMenu
 			addSeparator();
 			add(createEncodingMenu());
 		}
-		JMenu customMenu = createCustomMenu();
-		if (customMenu != null)
-		{
+
+		createCustomMenu().ifPresent(customMenu -> {
 			addSeparator();
 			Component[] menuComponents = customMenu.getMenuComponents();
 			for (Component menuComponent : menuComponents)
 			{
 				add((JMenuItem) menuComponent);
 			}
-		}
+		});
 
 		addSeparator();
 		add(createPluginMenu(browser));
@@ -291,15 +290,15 @@ public class BrowserCommandsMenu extends JPopupMenu
 	} //}}}
 
 	//{{{ createCustomMenu() method
-	private static JMenu createCustomMenu()
+	private static Optional<JMenu> createCustomMenu()
 	{
 		if (!jEdit.getProperty("browser.custom.context", "").isEmpty())
 		{
 			JMenu custom = GUIUtilities.loadMenu(VFSBrowser.getActionContext(),
 				"browser.custom.context");
-			return custom;
+			return Optional.of(custom);
 		}
-		return null;
+		return Optional.empty();
 	} //}}}
 
 	//{{{ createPluginsMenu() method
