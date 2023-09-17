@@ -747,7 +747,7 @@ loop:		for(;;)
 			{
 				s = aSelection;
 				retVal += replaceInSelection(view, textArea, buffer,
-					matcher, smartCaseReplace, s);
+					matcher, smartCaseReplace, s, retVal);
 			}
 			
 			if(reverse)
@@ -825,7 +825,7 @@ loop:		for(;;)
 			int retVal = 0;
 
 			retVal += _replace(view,buffer,matcher,start,end,
-				smartCaseReplace);
+				smartCaseReplace, 0, 0);
 
 			if(retVal != 0)
 				return true;
@@ -926,7 +926,7 @@ loop:		while(path != null)
 					buffer.beginCompoundEdit();
 					retVal = _replace(view,buffer,matcher,
 						0,buffer.getLength(),
-						smartCaseReplace);
+						smartCaseReplace, 0, 0);
 				}
 				finally
 				{
@@ -1131,7 +1131,7 @@ loop:		while(path != null)
 	//{{{ replaceInSelection() method
 	private static int replaceInSelection(View view, TextArea textArea,
 		Buffer buffer, SearchMatcher matcher, boolean smartCaseReplace,
-		Selection s) throws Exception
+		Selection s, int indexInBuffer) throws Exception
 	{
 		/* if an occurence occurs at the
 		beginning of the selection, the
@@ -1145,7 +1145,7 @@ loop:		while(path != null)
 		{
 			returnValue = _replace(view,buffer,matcher,
 				s.getStart(),s.getEnd(),
-				smartCaseReplace);
+				smartCaseReplace, indexInBuffer, 0);
 
 			textArea.removeFromSelection(s);
 			textArea.addToSelection(new Selection.Range(
@@ -1165,7 +1165,7 @@ loop:		while(path != null)
 				returnValue += _replace(view,buffer,matcher,
 					getColumnOnOtherLine(buffer,j,startCol),
 					getColumnOnOtherLine(buffer,j,endCol),
-					smartCaseReplace);
+					smartCaseReplace, indexInBuffer, returnValue);
 			}
 			textArea.addToSelection(new Selection.Rect(
 				start,s.getEnd()));
@@ -1190,7 +1190,7 @@ loop:		while(path != null)
 	 */
 	private static int _replace(View view, JEditBuffer buffer,
 		SearchMatcher matcher, int start, int end,
-		boolean smartCaseReplace)
+		boolean smartCaseReplace, int indexInBuffer, int indexInSelection)
 		throws Exception
 	{
 		if(matcher.wholeWord)
@@ -1219,7 +1219,7 @@ loop:	for(int counter = 0; ; counter++)
 				occur.start, occur.end);
 
 			int length = replaceOne(view,buffer,occur,offset,
-				found,smartCaseReplace);
+				found,smartCaseReplace, indexInBuffer + indexInSelection + occurCount, indexInSelection + occurCount);
 			if(length == -1)
 				offset += occur.end;
 			else
@@ -1240,10 +1240,10 @@ loop:	for(int counter = 0; ; counter++)
 	 */
 	private static int replaceOne(View view, JEditBuffer buffer,
 		SearchMatcher.Match occur, int offset, CharSequence found,
-		boolean smartCaseReplace)
+		boolean smartCaseReplace, int indexInBuffer, int indexInSelection)
 		throws Exception
 	{
-		String subst = replaceOne(view,buffer,occur,found);
+		String subst = replaceOne(view,buffer,occur,found, indexInBuffer, indexInSelection);
 		if(smartCaseReplace && ignoreCase)
 		{
 			int strCase = TextUtilities.getStringCase(found);
@@ -1271,20 +1271,20 @@ loop:	for(int counter = 0; ; counter++)
 
 	//{{{ replaceOne() method
 	private static String replaceOne(View view, JEditBuffer buffer,
-		SearchMatcher.Match occur, CharSequence found)
+		SearchMatcher.Match occur, CharSequence found, int indexInBuffer, int indexInSelection)
 		throws Exception
 	{
 		if(regexp)
 		{
 			if(replaceMethod != null)
-				return regexpBeanShellReplace(view,buffer,occur);
+				return regexpBeanShellReplace(view,buffer,occur, indexInBuffer, indexInSelection);
 			else
 				return regexpReplace(occur,found);
 		}
 		else
 		{
 			if(replaceMethod != null)
-				return literalBeanShellReplace(view,buffer,found);
+				return literalBeanShellReplace(view,buffer,found, indexInBuffer, indexInSelection);
 			else
 				return replace;
 		}
@@ -1292,9 +1292,11 @@ loop:	for(int counter = 0; ; counter++)
 
 	//{{{ regexpBeanShellReplace() method
 	private static String regexpBeanShellReplace(View view,
-		JEditBuffer buffer, SearchMatcher.Match occur) throws Exception
+		JEditBuffer buffer, SearchMatcher.Match occur, int indexInBuffer, int indexInSelection) throws Exception
 	{
 		replaceNS.setVariable("buffer", buffer, false);
+		replaceNS.setVariable("indexInSel", indexInSelection);
+		replaceNS.setVariable("index", indexInBuffer);
 		for(int i = 0; i < occur.substitutions.length; i++)
 		{
 			replaceNS.setVariable("_" + i,
@@ -1411,10 +1413,12 @@ loop:	for(int counter = 0; ; counter++)
 
 	//{{{ literalBeanShellReplace() method
 	private static String literalBeanShellReplace(View view,
-		JEditBuffer buffer, CharSequence found)
+		JEditBuffer buffer, CharSequence found, int indexInBuffer, int indexInSelection)
 		throws Exception
 	{
 		replaceNS.setVariable("buffer",buffer);
+		replaceNS.setVariable("indexInSel", indexInSelection);
+		replaceNS.setVariable("index", indexInBuffer);
 		replaceNS.setVariable("_0",found);
 		Object obj = BeanShell.runCachedBlock(
 			replaceMethod,

@@ -1108,6 +1108,16 @@
                         if regular expressions are enabled, these contain the
                         values of matched subexpressions.</para>
                     </listitem>
+                    <listitem>
+                        <para><varname>index</varname> --
+                        if <guibutton>Replace All</guibutton> is used,
+                        the index (starting at 0) of the match in the buffer.</para>
+                    </listitem>
+                    <listitem>
+                        <para><varname>indexInSel</varname> --
+                        if <guibutton>Replace All</guibutton> is used,
+                        the index (starting at 0) of the match in the selection.</para>
+                    </listitem>
                 </itemizedlist>
 
                 <para>BeanShell syntax and features are covered in great detail
@@ -1167,6 +1177,25 @@
                     return b;}]]>
                     </programlisting>
                 </informalexample>
+
+                <informalexample>
+                    <para>To renumber items in a markdown list:</para>
+                    <programlisting>^(\s+)[0-9]+\. )</programlisting>
+
+                    <para>Replacing it with the following Beanshell snippet:</para>
+                    <programlisting>_1 + index + ". "</programlisting>
+                    <para>I you need to add padding, it looks like this:</para>
+                    <programlisting>String.format("%03d", new Object[]{index})</programlisting>
+                </informalexample>
+
+                <informalexample>
+                    <para>To add odd/even class to a table row:</para>
+                    <programlisting>&lt;tr&gt;</programlisting>
+
+                    <para>Replacing it with the following Beanshell snippet:</para>
+                    <programlisting><![CDATA["<tr class=\"" + (index % 2 == 0? "even" : "odd") + "\">"]]></programlisting>
+                </informalexample>
+
                 <para>These examples only scratch the surface; the possibilities
                 are endless.</para>
             </section>

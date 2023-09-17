@@ -92,6 +92,8 @@ this release.
 
 - Updated java mode for new keywords introduced up to Java 17. (Dale Anson)
 
+- FR #554 add match index to beanshell replace context
+
 }}}
 
 }}}
