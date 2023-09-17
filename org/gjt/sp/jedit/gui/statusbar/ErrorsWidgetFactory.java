@@ -29,6 +29,7 @@ import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.JEditEmbeddedTextArea;
@@ -217,19 +218,12 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			printStream = new PrintStream(byteArrayOutputStream);
 			throwables = Log.throwables.toArray(new Throwable[0]);
 			textArea = new JEditEmbeddedTextArea();
-			JEditActionSet<JEditBeanShellAction> actionSet = new StandaloneTextArea.StandaloneActionSet(jEdit.getPropertyManager(),
+			JEditActionSet<JEditBeanShellAction> actionSet = new StandaloneTextArea.StandaloneActionSet(new KeyMapPropertyManager(),
 																										textArea,
 																										TextArea.class.getResource("textarea.actions.xml"));
 			textArea.addActionSet(actionSet);
 			actionSet.load();
 			actionSet.initKeyBindings();
-			Keymap keymap = jEdit.getKeymapManager().getKeymap();
-			String shortcut = keymap.getShortcut("copy.shortcut");
-			if (shortcut != null)
-				textArea.getInputHandler().addKeyBinding(shortcut, "copy");
-			String shortcut2 = keymap.getShortcut("copy.shortcut2");
-			if (shortcut2 != null)
-				textArea.getInputHandler().addKeyBinding(shortcut2, "copy");
 
 			JPopupMenu menu = new JPopupMenu();
 			JMenuItem copy = new JMenuItem(jEdit.getProperty("copy.label").replace("$",""));
@@ -354,5 +348,23 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 				}
 			}
 		} //}}}
+	} //}}}
+	//{{{ KeyMapPropertyManager class
+	/**
+	 * Provide the StandaloneTextArea with current key bindings.
+	 * Otherwise moving left/right with the keyboard doesn't work.
+	 */
+	private static class KeyMapPropertyManager implements IPropertyManager
+	{
+		@Override
+		public String getProperty(String name)
+		{
+			String value = jEdit.getPropertyManager().getProperty(name);
+			if (value != null)
+			{
+				return value;
+			}
+			return jEdit.getKeymapManager().getKeymap().getShortcut(name);
+		}
 	} //}}}
 }

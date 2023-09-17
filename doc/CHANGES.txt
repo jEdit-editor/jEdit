@@ -16,6 +16,8 @@ this release.
 
 - Allow user to choose filename when printing to pdf (partial fix for #4115 - Dale Anson)
 
+- Bug #4128 key handling in the Errors dialog uses current keymap.
+
 }}}
 {{{ Miscellaneous
 
