@@ -28,6 +28,8 @@ import org.gjt.sp.util.StandardUtilities;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import static org.gjt.sp.util.StandardUtilities.EMPTY_STRING_ARRAY;
+
 /**
  * Manages a collection of action sets. There are two instances of this class
  * in jEdit:
@@ -152,13 +154,12 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 	{
 		if(actionNames == null)
 		{
-			List<String> vec = new LinkedList<String>();
+			var vec = new LinkedList<String>();
 			for(int i = 0; i < actionSets.size(); i++)
 				(actionSets.elementAt(i)).getActionNames(vec);
 
-			actionNames = vec.toArray(new String[vec.size()]);
-			Arrays.sort(actionNames,
-				new StandardUtilities.StringCompare<String>(true));
+			actionNames = vec.toArray(EMPTY_STRING_ARRAY);
+			Arrays.sort(actionNames, new StandardUtilities.StringCompare<>(true));
 		}
 
 		return Arrays.copyOf(actionNames, actionNames.length);
@@ -170,13 +171,13 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 	 * This map contains as key an action name, 
 	 * and as value the JEditActionSet that contains this action
 	 */
-	Hashtable<String, E> actionHash = new Hashtable<String, E>();
+	Hashtable<String, E> actionHash = new Hashtable<>();
 	
 	/** A map of built-in actions that were overridden by plugins. */
-	Hashtable<String, E> overriddenActions = new Hashtable<String, E>(); 
+	Hashtable<String, E> overriddenActions = new Hashtable<>();
 	//}}}
 
 	//{{{ Private members
-	private final Vector<E> actionSets = new Vector<E>();
+	private final Vector<E> actionSets = new Vector<>();
 	//}}}
 }

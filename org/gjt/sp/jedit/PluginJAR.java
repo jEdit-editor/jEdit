@@ -152,6 +152,7 @@ import static org.gjt.sp.jedit.EditBus.EBHandler;
  */
 public class PluginJAR
 {
+	public static final PluginDepends[] EMPTY_PLUGIN_DEPENDS_ARRAY = new PluginDepends[0];
 	//{{{ Instance variables
 	private final String path;
 	private String cachePath;
@@ -441,7 +442,7 @@ public class PluginJAR
 	 */
 	public static Set<String> getDependencySet(String className)
 	{
-		Set<String> retval = new LinkedHashSet<String>();
+		Set<String> retval = new LinkedHashSet<>();
 		PluginDepends[] deps = getPluginDepends(className);
 		for (PluginDepends pluginDepends : deps)
 		{
@@ -713,7 +714,7 @@ public class PluginJAR
 	//{{{ getPluginDepends() method
 	private static PluginDepends[] getPluginDepends(String classname) throws IllegalArgumentException
 	{
-		List<PluginDepends> ret = new ArrayList<PluginDepends>();
+		var ret = new ArrayList<PluginDepends>();
 		int i = 0;
 		String dep;
 		while((dep = jEdit.getProperty("plugin." + classname + ".depend." + i++)) != null)
@@ -744,7 +745,7 @@ public class PluginJAR
 				depends.name = arg.indexOf(' ') > 0 ? arg.substring(0, arg.indexOf(' ')) : arg;
 			ret.add(depends);
 		}
-		return ret.toArray(new PluginDepends[ret.size()]);
+		return ret.toArray(EMPTY_PLUGIN_DEPENDS_ARRAY);
 	} //}}}
 
 	//{{{ getDependencies() method
@@ -756,7 +757,7 @@ public class PluginJAR
 	@Nonnull
 	public static Set<String> getDependencies(String classname) throws IllegalArgumentException
 	{
-		Set<String> ret = new HashSet<>();
+		var ret = new HashSet<String>();
 		int i = 0;
 		String dep;
 		while((dep = jEdit.getProperty("plugin." + classname + ".depend." + i++)) != null)
@@ -780,7 +781,7 @@ public class PluginJAR
 	 */
 	public static Set<String> getOptionalDependencies(String classname) throws IllegalArgumentException
 	{
-		Set<String> ret = new HashSet<String>();
+		var ret = new HashSet<String>();
 		int i = 0;
 		String dep;
 		while((dep = jEdit.getProperty("plugin." + classname + ".depend." + i++)) != null)
@@ -1499,12 +1500,12 @@ public class PluginJAR
 		properties = new Properties();
 		localizationProperties = new HashMap<>();
 
-		List<String> classes = new LinkedList<>();
-		List<String> resources = new LinkedList<>();
+		var classes = new LinkedList<String>();
+		var resources = new LinkedList<String>();
 
 		ZipFile zipFile = getZipFile();
 
-		List<String> plugins = new LinkedList<>();
+		var plugins = new LinkedList<String>();
 
 		PluginCacheEntry cache = new PluginCacheEntry();
 		cache.modTime = file.lastModified();
@@ -1854,7 +1855,7 @@ public class PluginJAR
 				return false;
 
 			String cacheBuild = readString(din);
-			if(!cacheBuild.equals(jEdit.getBuild()))
+			if(!jEdit.getBuild().equals(cacheBuild))
 				return false;
 
 			long cacheModTime = din.readLong();

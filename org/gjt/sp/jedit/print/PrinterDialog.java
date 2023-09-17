@@ -1,4 +1,3 @@
-
 /*
  * PrinterDialog.java
  *
@@ -20,7 +19,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package org.gjt.sp.jedit.print;
-
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -53,14 +51,13 @@ import org.gjt.sp.util.Log;
 // https://docs.oracle.com/javase/7/docs/technotes/guides/jps/spec/JPSTOC.fm.html
 public class PrinterDialog extends JDialog implements ListSelectionListener
 {
-
     private View view;
-    private String jobName = null;
-    private PrintService selectedPrintService = null;
+    private String jobName;
+    private PrintService selectedPrintService;
     private PrintRequestAttributeSet attributes;
     private JTabbedPane tabs;
     private JList<PrintService> printers;
-    private JSpinner copies = null;
+    private JSpinner copies;
     private JComboBox<String> paperSize;
     private List<Media> paperSizes;
     private JComboBox<Priority> priority;
@@ -199,7 +196,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         return new ActionListener()
         {
 
-            public void actionPerformed( ActionEvent ae )
+            public void actionPerformed(ActionEvent ae)
             {
 
                 // check margins and so on
@@ -227,7 +224,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 try
                 {
                     PageRanges mergedRanges = mergeRanges( pr );
-                    if (mergedRanges != null) 
+                    if (mergedRanges != null)
                     {
                         PrinterDialog.this.attributes.add( mergedRanges );
                     }
@@ -519,7 +516,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
         // paper sizes
         value = categoryValueMap.get( Media.class );
-        Set<MediaSizeName> sizeNames = new HashSet<MediaSizeName>();
+        var sizeNames = new HashSet<MediaSizeName>();
         for ( Media m : ( Media[] )value )
         {
             if ( m instanceof MediaSizeName )
@@ -527,15 +524,8 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 sizeNames.add( ( MediaSizeName )m );
             }
         }
-        MediaSizeName[] sizes = sizeNames.toArray( new MediaSizeName [sizeNames.size()]  );
-        Arrays.sort( sizes, new Comparator<MediaSizeName>()
-        {
-
-            public int compare( MediaSizeName a, MediaSizeName b )
-            {
-                return a.toString().compareTo( b.toString() );
-            }
-        } );
+        MediaSizeName[] sizes = sizeNames.toArray(new MediaSizeName [0]);
+        Arrays.sort( sizes, Comparator.comparing(EnumSyntax::toString));
         Media previousPaper = ( Media )attributes.get( Media.class );
         MediaSizeName previousSize = null;
         if ( previousPaper instanceof MediaSizeName )
@@ -546,7 +536,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         if (paperSize != null)
         {
             String[] paperNames = new String [sizes.length];
-            paperSizes = new ArrayList<Media>();
+            paperSizes = new ArrayList<>();
             int index = -1;
             int letterSizeIndex = 0;
             for ( int i = 0; i < sizes.length; i++ )
@@ -682,7 +672,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             }
             else
             {
-                Set<MediaTray> trayNames = new HashSet<MediaTray>();
+                var trayNames = new HashSet<MediaTray>();
                 for ( Media m : ( Media[] )value )
                 {
                     if ( m instanceof MediaTray )
@@ -690,10 +680,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                         trayNames.add( ( MediaTray )m );
                     }
                 }
-                if ( trayNames.size() > 0 )
+                if (!trayNames.isEmpty())
                 {
-                    MediaTray[] trays = trayNames.toArray( new MediaTray [trayNames.size()]  );
-                    paperSource.setModel( new DefaultComboBoxModel<MediaTray>( trays ) );
+                    MediaTray[] trays = trayNames.toArray(new MediaTray [0]);
+                    paperSource.setModel( new DefaultComboBoxModel<>( trays ) );
                     paperSource.setEnabled( true );
                     MediaTray lastUsedTray = (MediaTray)attributes.get(MediaTray.class);
                     paperSource.setSelectedItem(lastUsedTray == null ? trays[0] : lastUsedTray);
@@ -704,7 +694,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 }
             }
         }
-
 
         // orientation, eg. portrait or landscape
         if (orientation != null)
@@ -725,23 +714,16 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         }
     }
 
-
-
     private abstract class PrinterPanel extends JPanel
     {
-
         public PrinterPanel()
         {
             super( new BorderLayout() );
             setBorder( BorderFactory.createEmptyBorder( 11, 11, 11, 11 ) );
         }
 
-
-        abstract AttributeSet getAttributes()
-        ;
+        abstract AttributeSet getAttributes();
     }
-
-
 
     private class GeneralPanel extends PrinterPanel
     {
@@ -753,7 +735,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         JCheckBox collate;
         JCheckBox reverse;
         JTextField pagesField;
-
 
         // DONE: current page and selection are not implemented yet. Note there
         // are no standard printer attributes to specify either of these, so I
@@ -825,35 +806,15 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             
             // install listeners
             printers.addListSelectionListener( PrinterDialog.this );
-            allPages.addActionListener( new ActionListener()
-            {
-
-                    public void actionPerformed( ActionEvent ae )
-                    {
-                        pagesField.setEnabled( pages.isSelected() );
-                    }
-                }
-            );
-            pages.addActionListener( new ActionListener()
-            {
-
-                    public void actionPerformed( ActionEvent ae )
-                    {
-                        pagesField.setEnabled( pages.isSelected() );
-                    }
-                }
-            );
-            copies.addChangeListener( new ChangeListener()
-            {
-
-                    public void stateChanged( ChangeEvent e )
-                    {
-                        JSpinner spinner = ( JSpinner )e.getSource();
-                        int value = ( int )spinner.getValue();
-                        collate.setEnabled( value > 1 );
-                        collate.setSelected( value > 1 );
-                    }
-                } );
+            allPages.addActionListener(ae -> pagesField.setEnabled(pages.isSelected()));
+            pages.addActionListener(ae -> pagesField.setEnabled(pages.isSelected()));
+            copies.addChangeListener(e ->
+	    {
+		JSpinner spinner = ( JSpinner )e.getSource();
+		int value = ( int )spinner.getValue();
+		collate.setEnabled( value > 1 );
+		collate.setSelected( value > 1 );
+	    });
             PrintService defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();
             // choose last used printer first, default printer if no last used, or first
             // item in print service list otherwise
@@ -933,12 +894,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 as.add( PrintRangeType.SELECTION );
             }
 
-
             if ( collate.isSelected() )
             {
                 as.add( SheetCollate.COLLATED );
             }
-
 
             as.add( new Copies( ( Integer )copies.getValue() ) );
             
@@ -953,10 +912,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
             return as;
         }
-
-
-
-
 
         // print service cell renderer
         class PrintServiceCellRenderer extends JLabel implements ListCellRenderer <PrintService>
@@ -1003,11 +958,8 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         }
     }
 
-
-
     private class PageSetupPanel extends PrinterPanel
     {
-
         private JComboBox<String> onlyPrint;
         private JComboBox<String> outputTray;
         NumericTextField topMarginField;
@@ -1015,10 +967,8 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         NumericTextField rightMarginField;
         NumericTextField bottomMarginField;
 
-
         public PageSetupPanel()
         {
-            super();
             JPanel layoutPanel = new JPanel( new VariableGridLayout( VariableGridLayout.FIXED_NUM_COLUMNS, 2, 6, 6 ) );
             layoutPanel.setBorder( BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), jEdit.getProperty( "print.dialog.Layout", "Layout" ) ), BorderFactory.createEmptyBorder( 11, 11, 11, 11 ) ) );
@@ -1116,42 +1066,18 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             add( content );
             
             // add listeners
-            pagesPerSide.addActionListener( new ActionListener()
-            {
-
-                    public void actionPerformed( ActionEvent ae )
+            pagesPerSide.addActionListener(ae ->
                     {
-                        NumberUp nu = ( NumberUp )pagesPerSide.getSelectedItem();
-                        if ( nu != null && nu.getValue() == 1 )
+                        NumberUp nu = (NumberUp) pagesPerSide.getSelectedItem();
+                        if (nu != null && nu.getValue() == 1)
                         {
-                            pageOrdering.setEnabled( false );
+                            pageOrdering.setEnabled(false);
                         }
                     }
-                }
             );
-            paperSize.addActionListener( new ActionListener()
-            {
-
-                    public void actionPerformed( ActionEvent ae )
-                    {
-                        PageSetupPanel.this.setDefaultMargins();
-                    }
-                }
-            );
-            orientation.addActionListener( new ActionListener()
-            {
-
-                    public void actionPerformed( ActionEvent ae )
-                    {
-                        PageSetupPanel.this.setDefaultMargins();
-                    }
-                }
-            );
-            
-            
+            paperSize.addActionListener(ae -> PageSetupPanel.this.setDefaultMargins());
+            orientation.addActionListener(ae -> PageSetupPanel.this.setDefaultMargins());
         }
-
-
 
         // sides renderer
         class SidesCellRenderer extends JLabel implements ListCellRenderer <Sides>
@@ -1174,10 +1100,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             }
         }
 
-
-
-
-
         // orientation renderer
         class OrientationCellRenderer extends JLabel implements ListCellRenderer <OrientationRequested>
         {
@@ -1199,10 +1121,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             }
         }
 
-
-
-
-
         // finishing renderer
         class FinishingCellRenderer extends JLabel implements ListCellRenderer <Finishings>
         {
@@ -1223,7 +1141,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 return this;
             }
         }
-
 
         public AttributeSet getAttributes()
         {
@@ -1265,7 +1182,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 as.add( ( OrientationRequested )orientation.getSelectedItem() );
             }
 
-
             Number topMargin = topMarginField.getValue();
             Number leftMargin = leftMarginField.getValue();
             Number rightMargin = rightMarginField.getValue();
@@ -1282,7 +1198,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             return as;
         }
 
-
         // recalculates the media printable area when the printer, paper size,
         // margin, or orientation changes
         // returns null on okay, error message otherwise
@@ -1292,7 +1207,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             {
                 return null;
             }
-
 
             // get the printable area for the selected paper size and orientation
             int units = getUnits();
@@ -1361,7 +1275,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             return null;
         }
 
-
         private MediaPrintableArea getSupportedPrintableArea()
         {
             MediaPrintableArea supportedArea = null;
@@ -1389,7 +1302,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
             return supportedArea;
         }
-
 
         private void rotateMargins( float topMargin, float leftMargin, float rightMargin, float bottomMargin, OrientationRequested orientationRequested )
         {
@@ -1421,9 +1333,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 bottomMargin = m;
             }
         }
-
-
-
 
         // set the values in the margin text fields to be either the minimum
         // supported by the printer or the last used margins or the currently
@@ -1468,8 +1377,8 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                     field.setText( integerOnly ? String.valueOf( value.intValue() ) : String.valueOf( value ) );
                 }
 
-                field.setMinValue( integerOnly ? Integer.valueOf( minMargin.intValue() ) : Float.valueOf( minMargin ) );
-                field.setMaxValue( integerOnly ? Integer.valueOf( maxMargin.intValue() ) : Float.valueOf( maxMargin ) );
+                field.setMinValue( integerOnly ? Integer.valueOf( minMargin.intValue() ) : minMargin);
+                field.setMaxValue( integerOnly ? Integer.valueOf( maxMargin.intValue() ) : maxMargin);
                 field.setToolTipText( "Min: " + minMargin + ", max: " + maxMargin );
             }
         }
@@ -1498,7 +1407,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 mediaSize = MediaSize.getMediaSizeForName( name );
             }
 
-
             float paperWidth = mediaSize.getX( units );
             float paperHeight = mediaSize.getY( units );
 
@@ -1523,7 +1431,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
         private float[] getMaximumMargins()
         {
-
             // get the printable area for the selected paper size and orientation
             int units = getUnits();
             boolean integerOnly = units == MediaPrintableArea.MM;
@@ -1563,7 +1470,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             return new float[] {topMargin, leftMargin, rightMargin, bottomMargin};
         }
 
-
         // returns INCH or MM depending on Locale
         // note that while Canada is mostly metric, Canadian paper sizes
         // are essentially US ANSI sizes rounded to the nearest 5 mm
@@ -1580,16 +1486,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         }
     }
 
-
-
     private class JobPanel extends PrinterPanel
     {
-
         private JRadioButton nowButton;
         private JRadioButton atButton;
         private JRadioButton holdButton;
         private JSpinner when;
-
 
         // need 3 subpanels, Job Details, Print Document, and Finishing
         public JobPanel()
@@ -1649,18 +1551,9 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             add( content, BorderLayout.NORTH );
 
             // add listeners
-            atButton.addActionListener( new ActionListener()
-            {
-
-                    public void actionPerformed( ActionEvent ae )
-                    {
-                        when.setEnabled( atButton.isSelected() );
-                    }
-                }
-            );
-            
+            atButton.addActionListener(ae -> when.setEnabled( atButton.isSelected() )
+	    );
         }
-
 
         public AttributeSet getAttributes()
         {
@@ -1675,7 +1568,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             Date holdUntil = new Date( 0L );    // print now
             if ( atButton.isSelected() )
             {
-
                 // print later
                 holdUntil = ( ( SpinnerDateModel )when.getModel() ).getDate();
             }
@@ -1689,17 +1581,13 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 holdUntil = later.getTime();
             }
 
-
             as.add( new JobHoldUntil( holdUntil ) );
             return as;
         }
     }
 
-
-
     private static class Priority
     {
-
         public static final Priority LOW = new Priority( 1, jEdit.getProperty( "print.dialog.Low", "Low" ) );
         public static final Priority MEDIUM = new Priority( 50, jEdit.getProperty( "print.dialog.Medium", "Medium" ) );
         public static final Priority HIGH = new Priority( 80, jEdit.getProperty( "print.dialog.High", "High" ) );
@@ -1714,13 +1602,11 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             this.name = name;
         }
 
-
         @Override
         public String toString()
         {
             return name;
         }
-
 
         public int getValue()
         {
@@ -1728,14 +1614,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         }
     }
 
-
-
     private class AdvancedPanel extends PrinterPanel
     {
-
         private JComboBox<PrintQuality> quality;
         private JComboBox<Chromaticity> chromaticity;
-
 
         public AdvancedPanel()
         {
@@ -1763,7 +1645,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             add( content, BorderLayout.NORTH );
         }
 
-
         public AttributeSet getAttributes()
         {
             AttributeSet as = new HashAttributeSet();
@@ -1772,19 +1653,13 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             return as;
         }
 
-
-
-
-
         // quality renderer
         class QualityCellRenderer extends JLabel implements ListCellRenderer <PrintQuality>
         {
-
             public QualityCellRenderer()
             {
                 setOpaque( true );
             }
-
 
             public Component getListCellRendererComponent( JList<? extends PrintQuality> list,
             PrintQuality value,
@@ -1797,19 +1672,13 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             }
         }
 
-
-
-
-
         // Chromaticity renderer
         class ChromaticityCellRenderer extends JLabel implements ListCellRenderer <Chromaticity>
         {
-
             public ChromaticityCellRenderer()
             {
                 setOpaque( true );
             }
-
 
             public Component getListCellRendererComponent( JList<? extends Chromaticity> list,
             Chromaticity value,
@@ -1823,18 +1692,14 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         }
     }
 
-
-
     private class jEditPanel extends PrinterPanel
     {
-
         private FontSelector font;
         private JCheckBox printHeader;
         private JCheckBox printFooter;
         private JCheckBox printLineNumbers;
         private JCheckBox printFolds;
         private JComboBox<String> tabSize;
-
 
         public jEditPanel()
         {
@@ -1882,7 +1747,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             add( content, BorderLayout.NORTH );
         }
 
-
         public AttributeSet getAttributes()
         {
             jEdit.setFontProperty( "print.font", font.getFont() );
@@ -1895,24 +1759,17 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         }
     }
 
-
-
-
-
     class MyButtonGroup extends ButtonGroup
     {
-
         // ButtonGroup should have this
         public MyButtonGroup( AbstractButton... buttons )
         {
-            super();
             for ( AbstractButton b : buttons )
             {
                 super.add( b );
             }
         }
     }
-
 
     // map to lookup the names returned from the print service as more human
     // readable names
@@ -2028,7 +1885,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         messageMap.put( "two-sided-long-edge", jEdit.getProperty( "print.dialog.two-sided-long-edge", "Two Sided, Long Edge" ) );
         messageMap.put( "two-sided-short-edge", jEdit.getProperty( "print.dialog.two-sided-short-edge", "Two Sided, Short Edge" ) );
     }
-
 
     private String getMessage( String key )
     {
