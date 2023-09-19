@@ -141,8 +141,9 @@ public class MiscUtilities
 		{
 			String varName = m.group(2);
 			String expansion = System.getenv(varName);
-			if (expansion != null) {
-				expansion = expansion.replace("\\", "\\\\");
+			if (expansion != null)
+			{
+				expansion = Matcher.quoteReplacement(expansion);
 				return m.replaceFirst(expansion);
 			}
 		}
