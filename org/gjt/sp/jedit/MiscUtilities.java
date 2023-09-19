@@ -140,7 +140,7 @@ public class MiscUtilities
 		if (m.find())
 		{
 			String varName = m.group(2);
-			String expansion = System.getenv(varName);
+			String expansion = jEdit.systemManager.getenv(varName);
 			if (expansion != null)
 			{
 				expansion = Matcher.quoteReplacement(expansion);
@@ -182,7 +182,7 @@ public class MiscUtilities
 				return arg;
 		}
 		String varName = m.group(2);
-		String expansion = System.getenv(varName);
+		String expansion = jEdit.systemManager.getenv(varName);
 		if (expansion == null) {
 			if (varName.equalsIgnoreCase("jedit_settings") && jEdit.getSettingsDirectory() != null) {
 				expansion = jEdit.getSettingsDirectory();

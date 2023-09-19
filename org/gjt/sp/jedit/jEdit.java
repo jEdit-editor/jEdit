@@ -56,6 +56,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import org.jedit.util.SystemManager;
 import org.xml.sax.SAXParseException;
 
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
@@ -147,7 +148,7 @@ public class jEdit
 				System.getProperty("user.home"), "Library/jEdit" );
 		else if (OperatingSystem.isWindows())
 		{
-			String appData = System.getenv("APPDATA");
+			String appData = systemManager.getenv("APPDATA");
 			if (appData != null)
 				settingsDirectory = MiscUtilities.constructPath(
 					appData, "jEdit");
@@ -3245,6 +3246,7 @@ public class jEdit
 	private static BufferManagerImpl bufferManager = new BufferManagerImpl();
 	private static ViewManagerImpl viewManager = new ViewManagerImpl();
 	private static EditPaneManager editPaneManager = new EditPaneManagerImpl(viewManager);
+	public static SystemManager systemManager = new SystemManager();
 
 	private static final Object editBusOrderingLock	= new Object();
 
