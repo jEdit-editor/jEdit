@@ -29,11 +29,13 @@ import org.jedit.io.HttpException;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -59,7 +61,7 @@ public class RemotePluginList
 
 	//{{{ openPluginListStream() method
 	@Nonnull
-	String getPluginList() throws IOException, MalformedURLException, HttpException
+	String getPluginList() throws IOException, URISyntaxException
 	{
 
 		progressObserver.setStatus(jEdit.getProperty("plugin-manager.list-download"));
@@ -72,24 +74,33 @@ public class RemotePluginList
 		 * - the host can't be reached (reported as internet access error)
 		 * Otherwise, only an error message is logged in the activity log.
 		 */
-
-		URL downloadURL = new URL(gzipURL);
-		HttpURLConnection httpURLConnection = (HttpURLConnection)downloadURL.openConnection();
-		int responseCode = httpURLConnection.getResponseCode();
-		if (responseCode == HttpURLConnection.HTTP_OK)
+		var start = System.currentTimeMillis();
+		var httpRequest = HttpRequest
+			.newBuilder(new URI(gzipURL))
+			.GET()
+			.build();
+		var httpClient = HttpClient.newHttpClient();
+		try
 		{
-			long start = System.currentTimeMillis();
-			try (InputStream inputStream = openPluginListStream(httpURLConnection.getInputStream()))
+			HttpResponse<byte[]> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
+			if (httpResponse.statusCode() == HttpURLConnection.HTTP_OK)
 			{
-				String xml = IOUtilities.toString(inputStream);
-				jEdit.setProperty("plugin-manager.mirror.cached-id", id);
-				Log.log(Log.MESSAGE, this, "Updated cached pluginlist " + (System.currentTimeMillis() - start));
-				return xml;
+				try (InputStream inputStream = openPluginListStream(new ByteArrayInputStream(httpResponse.body())))
+				{
+					String xml = IOUtilities.toString(inputStream);
+					jEdit.setProperty("plugin-manager.mirror.cached-id", id);
+					Log.log(Log.MESSAGE, this, "Updated cached pluginlist " + (System.currentTimeMillis() - start));
+					return xml;
+				}
+			}
+			else
+			{
+				throw new HttpException(httpResponse.statusCode(), new String(httpResponse.body()));
 			}
 		}
-		else
+		catch (InterruptedException e)
 		{
-			throw new HttpException(responseCode, httpURLConnection.getResponseMessage());
+			throw new RuntimeException(e);
 		}
 	} //}}}
 

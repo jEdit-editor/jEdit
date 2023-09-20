@@ -80,23 +80,22 @@ class PluginList extends Task
 		setStatus(jEdit.getProperty("plugin-manager.list-download-connect"));
 		try
 		{
-			String pluginListXml = cachePluginList.getPluginList();
-			if (pluginListXml != null)
+			Optional<String> pluginListXml = cachePluginList.getPluginList();
+			boolean loadedFromCache = false;
+			if (pluginListXml.isPresent())
 			{
 				try
 				{
-					loadPluginList(pluginListXml);
+					loadPluginList(pluginListXml.get());
+					loadedFromCache = true;
 				}
 				catch (SAXException | ParserConfigurationException | IOException e)
 				{
 					cachePluginList.deleteCache();
-					String newPluginList = remotePluginList.getPluginList();
-					loadPluginList(newPluginList);
-					cachePluginList.saveCache(newPluginList);
 				}
 			}
-			else
-			{
+
+			if (!loadedFromCache) {
 				String newPluginList = remotePluginList.getPluginList();
 				loadPluginList(newPluginList);
 				cachePluginList.saveCache(newPluginList);

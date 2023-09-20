@@ -48,18 +48,15 @@ class CachePluginList
 	} //}}}
 
 	//{{{ getPluginList() method
-	@Nullable
-	String getPluginList()
+	Optional<String> getPluginList()
 	{
 		if (!id.equals(jEdit.getProperty("plugin-manager.mirror.cached-id")))
-			return null;
+			return Optional.empty();
 
-		String xml = getCacheFile()
+		return getCacheFile()
 			.filter(Files::isReadable)
 			.filter(CachePluginList::isAcceptableCache)
-			.map(this::readCache)
-			.orElse(null);
-		return xml;
+			.flatMap(this::readCache);
 	} //}}}
 
 	//{{{ saveCache() method
@@ -121,23 +118,23 @@ class CachePluginList
 			}
 			catch (IOException e)
 			{
-				Log.log(Log.WARNING, PluginList.class, "Error while deleting cache file" + path, e);
+				Log.log(Log.WARNING, PluginList.class, "Error while deleting cache file " + path, e);
 			}
 		});
 	} //}}}
 
 	//{{{ readCache() method
-	private String readCache(Path path)
+	private Optional<String> readCache(Path path)
 	{
 		try
 		{
-			return Files.readString(path);
+			return Optional.of(Files.readString(path));
 		}
 		catch (IOException e)
 		{
 			Log.log(Log.ERROR, PluginList.class, "Unable to read stream", e);
 			deleteCache();
 		}
-		return null;
+		return Optional.empty();
 	} //}}}
 }
