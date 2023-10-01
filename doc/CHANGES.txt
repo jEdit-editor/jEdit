@@ -12,31 +12,39 @@ this release.
 - Fix the installation of plugins trying to use invalid file names
   (Björn Kautler)
 
-- VFSManager.canReadFile() was returning true only for directories (#4102 - Matthieu Casanova)
+- VFSManager.canReadFile() was returning true only for directories
+  (#4102 - Matthieu Casanova)
 
-- Allow user to choose filename when printing to pdf (partial fix for #4115 - Dale Anson)
+- Allow user to choose filename when printing to pdf
+  (partial fix for #4115 - Dale Anson)
 
 - Bug #4128 key handling in the Errors dialog uses current keymap.
 
 }}}
 {{{ Miscellaneous
 
-- Status bar design updated with the ability to add widgets to the left and the right of the bar (Matthieu Casanova)
+- Status bar design updated with the ability to add widgets to the left
+  and the right of the bar (Matthieu Casanova)
 
 - Make building possible when using Java 15+ (Björn Kautler)
 
 }}}
 {{{ API Changes
 
-- Added new methods in SegmentBuffer for append and insert text (Matthieu Casanova)
+- Added new methods in SegmentBuffer for append and insert text
+  (Matthieu Casanova)
 
-- New service org.jedit.util.CleanerService replacing use of finalize() (Matthieu Casanova)
+- New service org.jedit.util.CleanerService replacing use of finalize()
+  (Matthieu Casanova)
 
-- New methods JEditBuffer.getWordWrap() and JeditBuffer.setWordWrap() (Matthieu Casanova)
+- New methods JEditBuffer.getWordWrap() and JeditBuffer.setWordWrap()
+  (Matthieu Casanova)
 
-- New method DialogChooser.openChooserWindow() showing a chooser dialog (Matthieu Casanova)
+- New method DialogChooser.openChooserWindow() showing a chooser dialog
+  (Matthieu Casanova)
 
-- New method DialogChooser.openListChooserWindow() showing a chooser dialog list (Matthieu Casanova)
+- New method DialogChooser.openListChooserWindow() showing a chooser dialog list
+  (Matthieu Casanova)
 
 - New method Buffer.setLineSeparator() (Matthieu Casanova)
 
@@ -87,8 +95,8 @@ this release.
 
 - New edit mode for QDoc (Dale Anson)
 
-- Status bar encoding widget allow to choose between updating the encoding or reloading
-  with a new encoding (Matthieu Casanova)
+- Status bar encoding widget allow to choose between updating the encoding
+  or reloading with a new encoding (Matthieu Casanova)
 
 - Updated java mode for new keywords introduced up to Java 17. (Dale Anson)
 
