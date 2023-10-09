@@ -20,6 +20,9 @@ this release.
 
 - Bug #4128 key handling in the Errors dialog uses current keymap.
 
+- Bug #4125 Delete at the end of the line does not delete newline on java20,
+  java21
+
 }}}
 {{{ Miscellaneous
 

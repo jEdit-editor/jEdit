@@ -6314,10 +6314,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			int following = charBreaker.following(offset -
 					index0Offset);
-            if (following == BreakIterator.DONE || (Runtime.version().feature() >= 20 && following == offset - index0Offset))
+			if (following == BreakIterator.DONE || (Runtime.version().feature() >= 20 && following == offset - index0Offset))
 			{
-				// This means a end of line. Then it is
-				// safe to assume 1 code unit is a character.
+				// When offset is before a line break,
+				// pre java20 BreakIterator.DONE is returned by RuleBasedBreakIterator
+				// after java20, offset - index0Offset is returned by GraphemeBreakIterator.
+				// In either case it is safe to assume 1 code unit is a character.
 				// This may return an offset beyond the
 				// length of buffer. But it is a callers
 				// responsibility.
