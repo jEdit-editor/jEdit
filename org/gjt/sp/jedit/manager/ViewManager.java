@@ -23,7 +23,7 @@ package org.gjt.sp.jedit.manager;
 
 import org.gjt.sp.jedit.View;
 
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 

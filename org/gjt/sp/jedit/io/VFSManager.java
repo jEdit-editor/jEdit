@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.awt.EventQueue;

@@ -38,7 +38,7 @@ import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
 
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nullable;
 //}}}
 
 /**

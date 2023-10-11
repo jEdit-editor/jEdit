@@ -27,8 +27,8 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import java.io.Closeable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nonnull;
+import org.jedit.annotation.Nullable;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.*;
 

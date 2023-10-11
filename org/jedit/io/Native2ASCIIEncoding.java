@@ -35,8 +35,8 @@ import java.nio.CharBuffer;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nonnull;
+import org.jedit.annotation.Nullable;
 
 import org.gjt.sp.jedit.io.CharsetEncoding;
 import org.gjt.sp.jedit.io.Encoding;

@@ -26,7 +26,7 @@ package org.gjt.sp.jedit.browser;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.bsh.*;
 
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nullable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.*;

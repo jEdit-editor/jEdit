@@ -29,7 +29,7 @@ import java.util.Objects;
 
 import org.gjt.sp.jedit.*;
 
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 //}}}
 
 /** The default input handler maps sequences of keystrokes into actions and inserts key typed events into the text area.

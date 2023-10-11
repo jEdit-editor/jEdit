@@ -24,7 +24,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import org.gjt.sp.util.Log;
 
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;

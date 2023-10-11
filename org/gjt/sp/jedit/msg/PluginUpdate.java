@@ -24,8 +24,8 @@ package org.gjt.sp.jedit.msg;
 
 import java.io.File;
 import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nonnull;
+import org.jedit.annotation.Nullable;
 
 import org.gjt.sp.jedit.*;
 

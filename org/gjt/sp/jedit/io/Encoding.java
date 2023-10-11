@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 
 /**
  * An interface to represent an encoding.

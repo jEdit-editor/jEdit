@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nullable;
 //}}}
 
 /** An ordered list of buffers, normally attached to an EditPane

@@ -27,7 +27,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.jedit.io.HttpException;
 
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

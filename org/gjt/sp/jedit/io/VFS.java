@@ -44,8 +44,8 @@ import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.ThreadUtilities;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nonnull;
+import org.jedit.annotation.Nullable;
 //}}}
 
 /**

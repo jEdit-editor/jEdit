@@ -22,7 +22,7 @@
 package org.gjt.sp.util;
 
 //{{{ imports
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 //}}}

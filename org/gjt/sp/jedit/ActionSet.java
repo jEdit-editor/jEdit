@@ -31,7 +31,7 @@ import org.gjt.sp.util.StandardUtilities;
 import org.jedit.keymap.Keymap;
 import org.gjt.sp.util.Log;
 
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 //}}}
 
 /**

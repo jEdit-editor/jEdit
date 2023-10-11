@@ -25,8 +25,8 @@ package org.gjt.sp.util;
 import java.awt.EventQueue;
 import java.util.LinkedList;
 
-import javax.annotation.concurrent.GuardedBy;
-import javax.annotation.concurrent.ThreadSafe;
+import org.jedit.annotation.GuardedBy;
+import org.jedit.annotation.ThreadSafe;
 
 /**
  * A queue for runnables that should run in the EDT after all pending 

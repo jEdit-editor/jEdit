@@ -21,7 +21,7 @@
 
 package org.gjt.sp.jedit.buffer;
 
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 
 /**
  * A read-only text segment from a buffer. Allows concatenation using a

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 import javax.swing.JOptionPane;
 
 import org.gjt.sp.jedit.ActionSet;

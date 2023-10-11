@@ -31,7 +31,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 //}}}
 
 /**

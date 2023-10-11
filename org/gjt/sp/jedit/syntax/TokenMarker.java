@@ -24,7 +24,7 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 import javax.swing.text.Segment;
 import java.lang.ref.WeakReference;
 import java.util.*;

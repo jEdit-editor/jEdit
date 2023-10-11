@@ -26,7 +26,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.util.Log;
 
-import javax.annotation.Nullable;
+import org.jedit.annotation.Nullable;
 import javax.swing.*;
 import java.io.*;
 

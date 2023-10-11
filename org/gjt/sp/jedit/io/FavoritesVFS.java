@@ -30,7 +30,7 @@ import java.util.*;
 import org.gjt.sp.jedit.msg.DynamicMenuChanged;
 import org.gjt.sp.jedit.*;
 
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 //}}}
 
 /**

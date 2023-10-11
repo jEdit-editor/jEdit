@@ -21,7 +21,7 @@
 package org.gjt.sp.util;
 
 import java.io.Serializable;
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 import javax.swing.text.Segment;
 
 /**

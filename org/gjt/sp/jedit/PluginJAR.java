@@ -57,7 +57,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.annotation.Nonnull;
+import org.jedit.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
