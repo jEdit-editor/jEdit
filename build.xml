@@ -840,7 +840,6 @@
 					<tag name="todo" scope="all" description="To do:"/>
 					<tag name="example" scope="all" description="Example:"/>
 					<classpath id="classpath.javadoc">
-						<path refid="classpath.compile"/>
 						<pathelement location="${classes.dir}/core"/>
 					</classpath>
 				</javadoc>
