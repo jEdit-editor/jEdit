@@ -754,4 +754,18 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 	}
 	// }}}
+
+	//{{{ castUnchecked() method
+	/**
+	 * Casts the given argument to the needed return type.
+	 *
+	 * @param castee The object to be casted unchecked
+	 * @throws ClassCastException if the cast does not succeed
+	 * @since jEdit 5.7
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T castUnchecked(Object castee)
+	{
+		return (T) castee;
+	} //}}}
 }

@@ -33,6 +33,8 @@ import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.gui.DialogChooser;
 
 import javax.swing.*;
+
+import static org.gjt.sp.util.StandardUtilities.castUnchecked;
 //}}}
 
 /**
@@ -67,7 +69,7 @@ public class ModeWidgetFactory implements StatusWidgetFactory
 				currentMode,
 				listSelectionEvent -> EventQueue.invokeLater(() ->
 				{
-					JList<Mode> list = (JList<Mode>) listSelectionEvent.getSource();
+					JList<Mode> list = castUnchecked(listSelectionEvent.getSource());
 					buffer.setMode(list.getSelectedValue());
 				}),
 				modes);

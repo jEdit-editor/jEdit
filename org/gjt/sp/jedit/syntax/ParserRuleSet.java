@@ -25,8 +25,11 @@ package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
 import org.jedit.annotation.Nonnull;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Pattern;
+
+import static org.gjt.sp.util.StandardUtilities.castUnchecked;
 //}}}
 
 /**
@@ -54,7 +57,7 @@ public class ParserRuleSet
 		this.setName = setName;
 		allRules = new ArrayList<>();
 		rulesForNull = new ArrayList<>();
-		ruleArray = new List[BASE_CACHE];
+		ruleArray = castUnchecked(Array.newInstance(List.class, BASE_CACHE));
 		imports = new ArrayList<>();
 	} //}}}
 

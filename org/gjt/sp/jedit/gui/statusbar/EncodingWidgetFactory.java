@@ -38,11 +38,12 @@ import org.gjt.sp.jedit.msg.BufferUpdate;
 import javax.swing.*;
 
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
+import static org.gjt.sp.util.StandardUtilities.castUnchecked;
 //}}}
 
 /**
  * @author Matthieu Casanova
- * @since jEdit 4.3pre14 
+ * @since jEdit 4.3pre14
  */
 public class EncodingWidgetFactory implements StatusWidgetFactory
 {
@@ -73,7 +74,7 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 				currentEncoding,
 				listSelectionEvent -> EventQueue.invokeLater(() ->
 				{
-					JList<String> list = (JList<String>) listSelectionEvent.getSource();
+					JList<String> list = castUnchecked(listSelectionEvent.getSource());
 					String selectedValue = list.getSelectedValue();
 					int selectedOption = DialogChooser.openChooserWindow(view,
 						jEdit.getProperty("buffer.encoding.reload", new String[]{selectedValue}),

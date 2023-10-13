@@ -60,8 +60,8 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 		JButton stop = new JButton(jEdit.getProperty("plugin-manager.progress.stop"));
 		stop.addActionListener(e ->
 		{
-			// TODO: Thread.stop is deprecated, this should probably be Thread.interrupt
-			thread.stop();
+			roster.abortWorkThreadOperations();
+			thread.interrupt();
 			dispose();
 		});
 		JPanel panel = new JPanel(new FlowLayout(
@@ -172,12 +172,10 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 		}
 
 		@Override
-		@SuppressWarnings("deprecation")
 		public void windowClosing(WindowEvent evt)
 		{
-			// TODO: Thread.stop is deprecated, this should probably be Thread.interrupt
-			thread.stop();
-			dispose();
+			roster.abortWorkThreadOperations();
+			thread.interrupt();
 		}
 	} //}}}
 	//}}}

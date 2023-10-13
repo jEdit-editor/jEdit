@@ -51,6 +51,8 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.*;
 import org.gjt.sp.jedit.menu.MenuItemTextComparator;
+
+import static org.gjt.sp.util.StandardUtilities.castUnchecked;
 //}}}
 
 /**
@@ -731,7 +733,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			}
 
 			final Task task = new DeleteBrowserTask(this, session, vfs, files[i].getDeletePath());
-			TaskManager.instance.addTaskListener(new TaskAdapter()
+			TaskManager.instance.addTaskListener(new TaskListener()
 			{
 				@Override
 				public void done(Task t)
@@ -1037,7 +1039,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			return getSelectedFiles();
 		}
 	} //}}}
-	
+
 	//{{{ paste() method
 	/**
 	 * Paste the file contained in the clipboard.
@@ -1045,7 +1047,6 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	 * @param file the target, it can be a file, in that case it will be pasted to
 	 * the parent directory, or a directory.
 	 */
-	@SuppressWarnings({"unchecked"}) 
 	public void paste(VFSFile file) throws IOException, UnsupportedFlavorException
 	{
 		if (file == null)
@@ -1079,7 +1080,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			List<String> sources = new ArrayList<>();
 			if (transferable.isDataFlavorSupported(ListVFSFileTransferable.jEditFileList))
 			{
-				Iterable<VFSFile> copiedFiles = (Iterable<VFSFile>) transferable.getTransferData(ListVFSFileTransferable.jEditFileList);
+				Iterable<VFSFile> copiedFiles = castUnchecked(transferable.getTransferData(ListVFSFileTransferable.jEditFileList));
 				for (VFSFile copiedFile : copiedFiles)
 				{
 					sources.add(copiedFile.getPath());
@@ -1087,7 +1088,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			}
 			else if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			{
-				Iterable<File> copiedFiles = (Iterable<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+				Iterable<File> copiedFiles = castUnchecked(transferable.getTransferData(DataFlavor.javaFileListFlavor));
 				for (File copiedFile : copiedFiles)
 				{
 					sources.add(copiedFile.getAbsolutePath());
@@ -1797,7 +1798,7 @@ check_selected:
 				}
 			}
 		} //}}}
-		
+
 		//{{{ Action class
 		class Action extends AbstractAction
 		{
@@ -1887,7 +1888,7 @@ check_selected:
 
 		@Override
 		void doPopup()
-		{	
+		{
 			if (popup==null) createPopupMenu();
 			GenericGUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
 		}

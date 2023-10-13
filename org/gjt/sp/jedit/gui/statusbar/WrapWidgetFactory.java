@@ -37,6 +37,7 @@ import javax.swing.*;
 
 import static org.gjt.sp.jedit.buffer.WordWrap.none;
 import static org.gjt.sp.jedit.buffer.WordWrap.soft;
+import static org.gjt.sp.util.StandardUtilities.castUnchecked;
 //}}}
 
 /**
@@ -70,7 +71,7 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 				currentFoldingMode,
 				listSelectionEvent -> EventQueue.invokeLater(() ->
 				{
-					JList<WordWrap> list = (JList<WordWrap>) listSelectionEvent.getSource();
+					JList<WordWrap> list = castUnchecked(listSelectionEvent.getSource());
 					WordWrap selectedValue = list.getSelectedValue();
 					buffer.setWordWrap(selectedValue);
 					EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.PROPERTIES_CHANGED));

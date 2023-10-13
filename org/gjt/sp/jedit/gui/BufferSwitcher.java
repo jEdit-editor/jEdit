@@ -41,6 +41,8 @@ import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.ThreadUtilities;
+
+import static org.gjt.sp.util.StandardUtilities.castUnchecked;
 //}}}
 
 /** BufferSwitcher class
@@ -223,7 +225,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			Accessible acc = ui.getAccessibleChild(null, 0);
 			if (acc instanceof BasicComboPopup)
 			{
-				JList list = ((BasicComboPopup)acc).getList();
+				JList<Object> list = ((BasicComboPopup)acc).getList();
 				list.setDragEnabled(true);
 				list.setDropMode(DropMode.INSERT);
 				list.setTransferHandler(new BufferSwitcherTransferHandler());
@@ -444,7 +446,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 		@Override
 		public Transferable createTransferable(JComponent c)
 		{
-			JList<Buffer> list = (JList<Buffer>) c;
+			JList<Buffer> list = castUnchecked(c);
 			Buffer buffer = list.getSelectedValue();
 			if (buffer == null)
 			{
