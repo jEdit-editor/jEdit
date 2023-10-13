@@ -820,6 +820,7 @@
 					 packagenames="org.*"
 					 doclet="doclet.GenerateTocXML"
 					 docletpath="${classes.dir}/javadoc"
+					 additionalparam="-Xmaxwarns 2000"
 					 version="true"
 					 use="true"
 					 author="true"
