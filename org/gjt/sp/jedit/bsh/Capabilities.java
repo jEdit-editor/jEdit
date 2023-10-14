@@ -7,7 +7,7 @@
  *                                                                           *
  *  The contents of this file are subject to the Sun Public License Version  *
  *  1.0 (the "License"); you may not use this file except in compliance with *
- *  the License. A copy of the License is available at http://www.sun.com    * 
+ *  the License. A copy of the License is available at http://www.sun.com    *
  *                                                                           *
  *  The Original Code is BeanShell. The Initial Developer of the Original    *
  *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
@@ -42,12 +42,12 @@ import java.util.Hashtable;
 	This class should be independent of all other bsh classes!
 	<p>
 
-	Note that tests for class existence here do *not* use the 
-	BshClassManager, as it may require other optional class files to be 
-	loaded.  
+	Note that tests for class existence here do *not* use the
+	BshClassManager, as it may require other optional class files to be
+	loaded.
 */
 @SuppressWarnings("unchecked")
-public class Capabilities 
+public class Capabilities
 {
 	private static boolean accessibility = false;
 
@@ -65,38 +65,22 @@ public class Capabilities
 		If accessibility is enabled
 		determine if the accessibility mechanism exists and if we have
 		the optional bsh package to use it.
-		Note that even if both are true it does not necessarily mean that we 
+		Note that even if both are true it does not necessarily mean that we
 		have runtime permission to access the fields... Java security has
 	 	a say in it.
 		@see org.gjt.sp.jedit.bsh.ReflectManager
 	*/
-	public static boolean haveAccessibility() 
+	public static boolean haveAccessibility()
 	{
 		return accessibility;
 	}
 
-	public static void setAccessibility( boolean b ) 
+	public static void setAccessibility( boolean b )
 		throws Unavailable
-	{ 
-		if ( b == false )
-		{
-			accessibility = false;
-			return;
-		}
-
-		if ( !classExists( "java.lang.reflect.AccessibleObject" )
-			|| !classExists("org.gjt.sp.jedit.bsh.reflect.ReflectManagerImpl")  
-		)
-			throw new Unavailable( "Accessibility unavailable" );
-
-		// test basic access
-		try {
-			String.class.getDeclaredMethods();
-		} catch ( SecurityException e ) {
-			throw new Unavailable("Accessibility unavailable: "+e);
-		}
-
-		accessibility = true; 
+	{
+		if (b)
+			throw new Unavailable("Accessibility unavailable");
+		accessibility = false;
 	}
 
 	private static Hashtable classes = new Hashtable();
@@ -105,18 +89,18 @@ public class Capabilities
 		We should not use BshClassManager here because:
 			a) the systems using these tests would probably not load the
 			classes through it anyway.
-			b) bshclassmanager is heavy and touches other class files.  
+			b) bshclassmanager is heavy and touches other class files.
 			this capabilities code must be light enough to be used by any
 			system **including the remote applet**.
 	*/
-	public static boolean classExists( String name ) 
+	public static boolean classExists( String name )
 	{
 		Object c = classes.get( name );
 
 		if ( c == null ) {
 			try {
 				/*
-					Note: do *not* change this to 
+					Note: do *not* change this to
 					BshClassManager plainClassForName() or equivalent.
 					This class must not touch any other bsh classes.
 				*/
@@ -140,5 +124,3 @@ public class Capabilities
 		public Unavailable(String s ){ super(s); }
 	}
 }
-
-

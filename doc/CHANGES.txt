@@ -9,6 +9,12 @@ this release.
 
 {{{ Bug Fixes
 
+- BeanShell snippets and macros now work consistently and not suddenly change
+  behaviour anymore just because some BeanShell snippet defined a class.
+  This now disables reflective access to otherwise inaccessible fields through
+  simple syntax though, that used to work after a snippet with a class
+  definition was loaded. (#4118 - Björn Kautler)
+
 - Fix the installation of plugins trying to use invalid file names
   (Björn Kautler)
 
