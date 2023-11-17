@@ -93,6 +93,6 @@
 
 		<dependency org="com.google.code.findbugs" name="jsr305" rev="3.0.2"/>
 
-		<dependency org="com.evolvedbinary.appbundler" name="appbundler" rev="1.0.4" conf="appbundler"/>
+		<dependency org="com.evolvedbinary.appbundler" name="appbundler" rev="1.2.0" conf="appbundler"/>
 	</dependencies>
 </ivy-module>

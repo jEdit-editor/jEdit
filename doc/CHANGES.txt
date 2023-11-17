@@ -32,6 +32,8 @@ this release.
 }}}
 {{{ Miscellaneous
 
+- Update macOS app bundler to version 1.2.0 (Björn Kautler)
+
 - Status bar design updated with the ability to add widgets to the left
   and the right of the bar (Matthieu Casanova)
 
