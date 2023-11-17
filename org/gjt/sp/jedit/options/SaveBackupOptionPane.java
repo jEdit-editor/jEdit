@@ -210,7 +210,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 
 		// if autosave dir changed, we should issue to perform an autosave for all dirty and all untitled buffers
 		// to have the autosaves at the new location
-		if (!autosaveDirectoryOriginal.equals(autosaveDirectory.getText()))
+		if (!autosaveDirectory.getText().equals(autosaveDirectoryOriginal))
 		{
 			bufferManager.getDirtyBuffers().forEach(buffer -> buffer.autosave(true));
 		}

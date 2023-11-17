@@ -9,6 +9,9 @@ this release.
 
 {{{ Bug Fixes
 
+- Fix NullPointerException during saving autosave settings if no previous
+  autosave directory was set (Björn Kautler)
+
 - BeanShell snippets and macros now work consistently and not suddenly change
   behaviour anymore just because some BeanShell snippet defined a class.
   This now disables reflective access to otherwise inaccessible fields through
