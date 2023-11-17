@@ -974,7 +974,9 @@ public class Buffer extends JEditBuffer
 		boolean old_d = isDirty();
 		if (d && getLength() == initialLength)
 		{
-			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
+			if (isUntitled())
+				d = false;
+			else if (jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
 				d = !Arrays.equals(calculateHash(), md5hash);
 		}
 		super.setDirty(d);
@@ -2217,7 +2219,6 @@ public class Buffer extends JEditBuffer
 		if (isUntitled())
 		{
 			initialLength = 0;
-			md5hash = StandardUtilities.md5("");
 		}
 		else
 		{

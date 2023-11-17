@@ -102,6 +102,9 @@ this release.
 }}}
 {{{ Editing
 
+- Never mark empty untitled buffers dirty, independent of settings
+  (Björn Kautler)
+
 - Never mark buffers dirty if contents are unchanged is now also properly
   supported for untitled buffers (Björn Kautler)
 
