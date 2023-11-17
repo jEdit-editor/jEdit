@@ -72,7 +72,7 @@
 
 		<dependency org="org.apache.xmlgraphics" name="fop" rev="2.3" conf="fop"/>
 
-		<dependency org="net.sf.launch4j" name="launch4j" rev="3.12" conf="launch4j">
+		<dependency org="net.sf.launch4j" name="launch4j" rev="3.50" conf="launch4j">
 			<artifact name="launch4j" e:classifier="core"/>
 			<artifact name="launch4j" e:classifier="workdir-win32"/>
 			<artifact name="launch4j" e:classifier="workdir-mac"/>

@@ -32,6 +32,9 @@ this release.
 }}}
 {{{ Miscellaneous
 
+- Update launch4j to version 3.50 and also search in PATH environment
+  variable for a Java runtime from the EXE launcher (Björn Kautler)
+
 - Update macOS app bundler to version 1.2.0 (Björn Kautler)
 
 - Status bar design updated with the ability to add widgets to the left

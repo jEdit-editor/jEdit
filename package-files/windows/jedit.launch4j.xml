@@ -32,10 +32,8 @@
 	<stayAlive>true</stayAlive>
 	<icon>@base.dir@/icons/jedit.ico</icon>
 	<jre>
-		<path>%JAVA_HOME%</path>
-		<bundledJreAsFallback>true</bundledJreAsFallback>
+		<path>%JAVA_HOME%;%PATH%</path>
 		<minVersion>@target.java.version@</minVersion>
-		<jdkPreference>preferJdk</jdkPreference>
 	</jre>
 	<versionInfo>
 		<fileVersion>@jedit.build.number@</fileVersion>
