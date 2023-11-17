@@ -44,7 +44,7 @@ import java.util.*;
 import java.util.List;
 import java.lang.ref.SoftReference;
 
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;

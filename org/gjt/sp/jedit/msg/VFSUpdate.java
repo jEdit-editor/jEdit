@@ -21,7 +21,7 @@ package org.gjt.sp.jedit.msg;
 
 import org.gjt.sp.jedit.*;
 
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /**

@@ -24,7 +24,7 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Pattern;

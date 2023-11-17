@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;

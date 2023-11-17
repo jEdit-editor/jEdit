@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory;
 import org.gjt.sp.jedit.gui.statusbar.Widget;
 import org.gjt.sp.jedit.jEdit;
 
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;

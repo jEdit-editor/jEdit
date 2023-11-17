@@ -37,7 +37,7 @@ import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import javax.swing.text.Position;
 import javax.swing.text.Segment;
 import java.util.*;

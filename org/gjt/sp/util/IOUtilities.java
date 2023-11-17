@@ -25,7 +25,7 @@ package org.gjt.sp.util;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * IO tools that depend on JDK only.

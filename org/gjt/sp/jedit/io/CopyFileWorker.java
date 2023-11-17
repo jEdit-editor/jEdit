@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
-import org.jedit.annotation.Nonnull;
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;

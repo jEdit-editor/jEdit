@@ -173,6 +173,13 @@ General jEdit documentation can be found in the 'doc' directory.
 
 * Tips for Eclipse/NetBeans/IDE users:
 
+A file "jsr305.jar" contains definitions of the annotations
+used in jEdit source code. It is downloaded automatically by ivy
+as part of the ant build process, to your lib/compile subfolder.
+If you add that jar to the
+project properties - java build path - libraries, that will
+get rid of the compiler errors on the annotations.
+
 A file "tools.jar" from the JDK is also needed in your
 java build path.
 

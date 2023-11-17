@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;

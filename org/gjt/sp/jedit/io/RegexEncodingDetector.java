@@ -20,7 +20,7 @@
 
 package org.gjt.sp.jedit.io;
 
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;

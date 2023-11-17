@@ -44,8 +44,8 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.StringList;
 
-import org.jedit.annotation.Nonnull;
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 //}}}
 
 /**

@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import javax.swing.border.*;
 import javax.swing.*;
 

@@ -40,8 +40,8 @@ import java.awt.*;
 import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
 
-import org.jedit.annotation.Nonnull;
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;

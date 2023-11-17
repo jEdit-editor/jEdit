@@ -20,7 +20,7 @@
 
 package org.gjt.sp.util;
 
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 
 /**
  * Reversed view of a given CharSequence.

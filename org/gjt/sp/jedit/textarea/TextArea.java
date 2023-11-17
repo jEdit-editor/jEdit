@@ -28,7 +28,7 @@ import java.util.*;
 import java.text.BreakIterator;
 import java.text.CharacterIterator;
 
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.event.*;

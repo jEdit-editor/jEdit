@@ -24,8 +24,8 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import org.jedit.annotation.Nonnull;
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.text.*;
 import java.awt.font.*;
 import java.awt.geom.*;

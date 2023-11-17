@@ -34,7 +34,7 @@ import org.gjt.sp.util.Task;
 import org.gjt.sp.util.TaskListener;
 import org.gjt.sp.util.TaskManager;
 
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;

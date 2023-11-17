@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.AwtRunnableQueue;
 import org.gjt.sp.util.StandardUtilities;
 
-import org.jedit.annotation.GuardedBy;
+import javax.annotation.concurrent.GuardedBy;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;

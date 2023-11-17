@@ -33,7 +33,7 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 //}}}
 
 /**

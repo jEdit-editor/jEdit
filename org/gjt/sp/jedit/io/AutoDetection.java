@@ -34,7 +34,7 @@ import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.util.Log;
 
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 //}}}
 
 /**

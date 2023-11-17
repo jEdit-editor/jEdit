@@ -24,7 +24,7 @@
 package org.gjt.sp.jedit.textarea;
 
 // {{{ Imports
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
 import java.text.AttributedCharacterIterator;

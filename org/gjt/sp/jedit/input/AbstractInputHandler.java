@@ -29,8 +29,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import org.jedit.annotation.Nonnull;
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.gjt.sp.jedit.JEditAbstractEditAction;
 import org.gjt.sp.jedit.gui.ShortcutPrefixActiveEvent;

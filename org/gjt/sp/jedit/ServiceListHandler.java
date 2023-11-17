@@ -32,7 +32,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.XMLUtilities;
 
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 //}}}
 
 /**

@@ -16,7 +16,7 @@
 
 package org.gjt.sp.jedit.gui;
 
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;

@@ -220,7 +220,7 @@
 	</target>
 
 	<target name="compile"
-		depends="init">
+		depends="init,retrieve">
 		<mkdir dir="${classes.dir}/core"/>
 		<depend srcDir="${basedir}"
 			destDir="${classes.dir}/core"
@@ -239,6 +239,10 @@
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
+			<classpath id="classpath.compile">
+				<fileset dir="${lib.dir}/compile"
+					 includes="*.jar"/>
+			</classpath>
 			<include name="org/**"/>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
@@ -414,7 +418,7 @@
 	</target>
 
 	<target name="compile-textArea"
-		depends="init,prepare-textArea">
+		depends="init,retrieve,prepare-textArea">
 		<mkdir dir="${textAreaPackage}/build"/>
 		<javac srcdir="${textAreaPackage}/src"
 		       destdir="${textAreaPackage}/build"
@@ -426,6 +430,9 @@
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
+			<classpath id="classpath.compile">
+				<fileset dir="${lib.dir}/compile" includes="*.jar"/>
+			</classpath>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
@@ -841,6 +848,7 @@
 					<tag name="todo" scope="all" description="To do:"/>
 					<tag name="example" scope="all" description="Example:"/>
 					<classpath id="classpath.javadoc">
+						<path refid="classpath.compile"/>
 						<pathelement location="${classes.dir}/core"/>
 					</classpath>
 				</javadoc>

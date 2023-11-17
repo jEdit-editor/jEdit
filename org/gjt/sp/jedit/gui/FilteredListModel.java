@@ -21,7 +21,7 @@
  */
 package org.gjt.sp.jedit.gui;
 
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;

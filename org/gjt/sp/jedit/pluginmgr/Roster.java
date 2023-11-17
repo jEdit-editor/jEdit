@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.*;

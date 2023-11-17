@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.BorderLayout;

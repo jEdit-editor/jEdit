@@ -24,7 +24,7 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.util.*;
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 
 import org.gjt.sp.jedit.buffer.*;
 //}}}

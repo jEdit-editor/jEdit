@@ -39,8 +39,8 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.jedit.annotation.Nonnull;
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;

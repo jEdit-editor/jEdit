@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import javax.swing.text.Position;
 import java.util.*;
 import org.gjt.sp.util.Log;

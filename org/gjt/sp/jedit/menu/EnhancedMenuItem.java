@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
-import org.jedit.annotation.Nullable;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;

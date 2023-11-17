@@ -31,7 +31,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.jedit.annotation.Nonnull;
+import javax.annotation.Nonnull;
 
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.PluginJAR;
