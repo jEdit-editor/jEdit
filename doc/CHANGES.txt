@@ -9,6 +9,9 @@ this release.
 
 {{{ Bug Fixes
 
+- Bundle the new MacOS 1.5 plugin instead of the old MacOSX 1.3 plugin
+  to become compatible with newer Java versions (Björn Kautler)
+
 - Fix NullPointerException during saving autosave settings if no previous
   autosave directory was set (Björn Kautler)
 
