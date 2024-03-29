@@ -1888,7 +1888,6 @@ options.toolbar.reset.dialog.message=Are you sure you want to reset the toolbar 
 #{{{ View pane
 options.view.label=View
 options.view.viewLayout=View layout
-options.view.floatableToolbars=Floatable Toolbars
 options.view.alternateDockingLayout=Alternate docked window placement
 options.view.alternateToolBarLayout=Alternate tool bar placement
 options.view.abbreviatePaths=Abbreviate paths with environment variables when possible

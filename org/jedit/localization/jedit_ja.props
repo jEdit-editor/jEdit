@@ -1633,7 +1633,6 @@ options.toolbar.reset.dialog.message=本当にツールバーをインストー�
 #{{{ View pane
 options.view.label=ビュー
 options.view.viewLayout=ビューレイアウト
-options.view.floatableToolbars=フロート可能なツールバー
 options.view.alternateDockingLayout=別のドッキングウィンドウ配置
 options.view.alternateToolBarLayout=別のツールバー配置
 options.view.showFullPath=タイトルバーにバッファのフルパスを表示

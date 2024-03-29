@@ -1909,7 +1909,6 @@ options.toolbar.reset.dialog.message=Soll die Symbolleiste wirklich auf die Stan
 #{{{ View pane
 options.view.label=Ansicht
 options.view.viewLayout=Ansichtslayout
-options.view.floatableToolbars=Frei positionierbare Symbolleisten
 options.view.alternateDockingLayout=Alternatives Dock-Layout
 options.view.alternateToolBarLayout=Alternatives Symbolleisten-Layout
 options.view.abbreviatePaths=Pfade mit Namen von Umgebungsvariablen abkürzen, wenn möglich

@@ -1619,7 +1619,6 @@ options.toolbar.reset.dialog.message=你确定要重置工具栏到安装默认?
 #{{{ View pane
 options.view.label=视图
 options.view.viewLayout=查看布局
-options.view.floatableToolbars=流通工具栏
 options.view.alternateDockingLayout=备用停靠窗口位置
 options.view.alternateToolBarLayout=备用工具栏的位置
 options.view.abbreviatePaths=可能时，使用环境变量缩写路径

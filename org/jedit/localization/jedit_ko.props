@@ -1606,7 +1606,6 @@ options.toolbar.reset.dialog.message=설치시 기본값으로 초기화 하시�
 #{{{ View pane
 options.view.label=보기
 options.view.viewLayout=jEdit 뷰 레이아웃
-options.view.floatableToolbars=유동 툴바
 options.view.alternateDockingLayout=도킹 창 위치 전환
 options.view.alternateToolBarLayout=툴바 위치 전환
 options.view.abbreviatePaths=환경변수로 단축 경로 사용

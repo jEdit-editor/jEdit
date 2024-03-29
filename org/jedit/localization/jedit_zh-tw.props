@@ -1796,7 +1796,6 @@ options.toolbar.reset.dialog.message=您確定要重置工具欄到安裝預設?
 #{{{ View pane
 options.view.label=視窗
 options.view.viewLayout=查看佈局
-options.view.floatableToolbars=流通工具欄
 options.view.alternateDockingLayout=備用停靠視窗位置
 options.view.alternateToolBarLayout=備用工具欄的位置
 options.view.abbreviatePaths=可能時，使用環境變數縮寫路徑

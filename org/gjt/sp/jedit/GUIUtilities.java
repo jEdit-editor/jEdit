@@ -472,7 +472,6 @@ public class GUIUtilities
 		JToolBar toolB = new JToolBar();
 		toolB.setName(name);
 		toolB.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		toolB.setFloatable(jEdit.getBooleanProperty("view.toolbar.floatable"));
 
 		String buttons = jEdit.getProperty(name);
 		if(buttons != null)
@@ -956,7 +955,7 @@ public class GUIUtilities
 	 * @return an integer indicating the option selected by the user
 	 * @since jEdit 4.3pre12
 	 */
-	@SuppressWarnings({"unchecked"}) 
+	@SuppressWarnings({"unchecked"})
 	public static int listConfirm(final Component comp, final String name, final String[] args,
 		final Object[] listModel, final List selectedItems)
 	{
@@ -1873,7 +1872,7 @@ public class GUIUtilities
 					break;
 			}
 		} //}}}
-		
+
 		//{{{ cancelResizeSave() method
 		private void cancelResizeSave()
 		{

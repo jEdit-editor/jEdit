@@ -1640,7 +1640,6 @@ options.toolbar.reset.dialog.message=Opravdu chcete resetovat panel nástrojů d
 #{{{ View pane
 options.view.label=Pohled
 options.view.viewLayout=Rozmístění pohledu
-options.view.floatableToolbars=Plovoucí panely nástrojů
 options.view.alternateDockingLayout=Alternativní rozmístění dokovaných oken
 options.view.alternateToolBarLayout=Alternativní rozmístění panelů nástrojů
 options.view.showFullPath=Zobrazit úplnou cestu bufferu v panelu názvu
