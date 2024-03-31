@@ -75,7 +75,7 @@ void makeShortcutsVector(Vector p_v)
 		String label = action.getLabel();
 	if(label == null)
 			label = name;
-		else label = GUIUtilities.prettifyMenuLabel(label);
+		else label = GenericGUIUtilities.prettifyMenuLabel(label);
 		ActionSet actionSet = jEdit.getActionSetForAction(name);
 		String shortcut1 = actionSet.getProperty(name + ".shortcut");
 		if(shortcut1 == null)
@@ -158,7 +158,7 @@ void showShortcuts(View view)
 	Collections.sort(v, new StandardUtilities.StringCompare());
 
 	table = new JTable(v, makeRow( NameLabel, Shortcut1Label, Shortcut2Label));
-	table.setRowHeight(GUIUtilities.defaultRowHeight());
+	table.setRowHeight(GenericGUIUtilities.defaultRowHeight());
 	table.getColumnModel().getColumn(0).setPreferredWidth(200);
 	table.setRowSelectionAllowed(true);
 	/* 	The next line prevents the table from being edited.
