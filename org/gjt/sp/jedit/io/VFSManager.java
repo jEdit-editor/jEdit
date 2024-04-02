@@ -297,7 +297,7 @@ public class VFSManager
 				}
 			}
 		};
-		ThreadUtilities.runInDispatchThreadAndWait(r);
+		ThreadUtilities.runInDispatchThread(r);
 	} //}}}
 
 	//{{{ sendVFSUpdate() method

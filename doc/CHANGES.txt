@@ -35,6 +35,9 @@ this release.
 - Delete at the end of the line does not delete newline on java20, java21
   (#4125 - Eric Le Lay)
 
+- Freeze when deleting a directory and some children (race condition)
+  (#4132 - Eric Le Lay)
+
 }}}
 {{{ Miscellaneous
 
