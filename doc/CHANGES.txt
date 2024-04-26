@@ -9,6 +9,18 @@ this release.
 
 {{{ Bug Fixes
 
+- Support arm64 Java installations in the macOS launcher (#4123 - Björn Kautler)
+
+- Do not forward the --verbose parameter in the macOS launcher to jEdit
+  during investigating startup problems (Björn Kautler)
+
+- Show Temurin download link in macOS launcher if no compatible Java version
+  was found instead of java.com and oracle.com where Java 8 is promoted
+  (Björn Kautler)
+
+- Support Java installations with paths that are not following the old naming
+  conventions regarding their version in the macOS launcher (Björn Kautler)
+
 - Bundle the new MacOS 1.5 plugin instead of the old MacOSX 1.3 plugin
   to become compatible with newer Java versions (Björn Kautler)
 
@@ -41,10 +53,13 @@ this release.
 }}}
 {{{ Miscellaneous
 
+- Improve logging of startup errors in the macOS launcher with --verbose option
+  (Björn Kautler)
+
 - Update launch4j to version 3.50 and also search in PATH environment
   variable for a Java runtime from the EXE launcher (Björn Kautler)
 
-- Update macOS app bundler to version 1.2.0 (Björn Kautler)
+- Update macOS app bundler to version 1.3.0 (Björn Kautler)
 
 - Status bar design updated with the ability to add widgets to the left
   and the right of the bar (Matthieu Casanova)

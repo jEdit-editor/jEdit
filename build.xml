@@ -1230,6 +1230,13 @@
 					name="jEdit TEXT Document"
 					role="Editor"/>
 		</appbundler:create>
+		<!-- part of work-around for https://github.com/TheInfiniteKind/appbundler/pull/88 -->
+		<copy file="package-files/osx/jedit"
+		      todir="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/"
+		      overwrite="true"/>
+		<!-- part of work-around for https://github.com/TheInfiniteKind/appbundler/pull/88 -->
+		<chmod file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit"
+		       perm="+x"/>
 		<copy todir="${dist.dir}/classes/mac/jEdit.app/Contents/Java/"
 		      overwrite="true">
 			<fileset dir="${dist.dir}"
@@ -1241,6 +1248,11 @@
 					     properties/**
 					     startup/**"/>
 		</copy>
+		<replace file="${dist.dir}/classes/mac/jEdit.app/Contents/Info.plist"
+			 encoding="UTF-8"
+			 token="&lt;key&gt;IgnorePSN&lt;/key&gt;"
+			 value="&lt;key&gt;IgnoreVerbose&lt;/key&gt;&lt;true/&gt;&lt;key&gt;IgnorePSN&lt;/key&gt;"
+			 failonnoreplacements="true"/>
 		<copy todir="${dist.dir}/classes/mac/"
 		      overwrite="true">
 			<fileset dir="package-files/osx/"
