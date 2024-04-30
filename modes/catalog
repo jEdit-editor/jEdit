@@ -515,7 +515,7 @@
         FIRST_LINE_GLOB="#!*/*python*" />
 
 <MODE NAME="qdoc"   FILE="qdoc.xml"
-        FILE_NAME_GLOB="*.{qdoc}"
+        FILE_NAME_GLOB="*.{qdoc,qdocinc}"
         FIRST_LINE_GLOB="/*!" />
 
 <MODE NAME="rebol"		FILE="rebol.xml"
