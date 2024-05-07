@@ -143,6 +143,9 @@
             <KEYWORD3>\sup</KEYWORD3>
             <KEYWORD3>\table</KEYWORD3>
             <KEYWORD3>\endtable</KEYWORD3>
+            <KEYWORD3>\tab</KEYWORD3>
+            <KEYWORD3>\tabcontent</KEYWORD3>
+            <KEYWORD3>\endtabcontent</KEYWORD3>
             <KEYWORD3>\tableofcontents</KEYWORD3>
             <KEYWORD3>\target</KEYWORD3>
             <KEYWORD3>\tt</KEYWORD3>
