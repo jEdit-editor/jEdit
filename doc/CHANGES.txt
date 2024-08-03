@@ -2,7 +2,7 @@ jEdit 5.7 version history
        (changes since jEdit 5.6.0)
 :encoding=UTF-8:
 
-{{{ Version 5.7pre1
+{{{ Version 5.7.0
 
 Thanks to Björn Kautler, Matthieu Casanova, Dale Anson, and Eric Le Lay
 for contributing to this release.
