@@ -4,8 +4,8 @@ jEdit 5.7 version history
 
 {{{ Version 5.7pre1
 
-Thanks to Björn Kautler, Matthieu Casanova and Dale Anson for contributing to
-this release.
+Thanks to Björn Kautler, Matthieu Casanova, Dale Anson, and Eric Le Lay
+for contributing to this release.
 
 {{{ Bug Fixes
 
