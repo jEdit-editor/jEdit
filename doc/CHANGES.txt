@@ -4,10 +4,12 @@ jEdit 5.8 version history
 
 {{{ Version 5.8pre1
 
-Thanks to Björn Kautler for contributing to this release.
+Thanks to Björn Kautler and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
+- allow '(re)' glob in edit mode to contain alternative without enclosing
+ brackets (Eric Le Lay)
 
 }}}
 {{{ Miscellaneous

@@ -89,8 +89,11 @@ public class Mode
 				else
 				{
 					// glob is for a filename without path, prepend the regex with
-					// an optional path prefix to be able to match against full paths
-					filepathRE = String.format("(?:.*[/\\\\])?%s", filepathRE);
+					// an optional path prefix to be able to match against full paths.
+					// Enclose regexp in non-capturing group to work with 'a|b'
+					// regexp, where the path prefix would otherwise only match with
+					// the eft part of the alternative.
+					filepathRE = String.format("(?:.*[/\\\\])?(?:%s)", filepathRE);
 				}
 				this.filepathMatcher = Pattern.compile(filepathRE, Pattern.CASE_INSENSITIVE).matcher("");
 			}
