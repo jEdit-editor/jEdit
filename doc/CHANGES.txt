@@ -12,6 +12,7 @@ Thanks to Robert Schwenn, Björn Kautler and Eric Le Lay for contributing to thi
  brackets (Eric Le Lay)
 - fixes for GenericGUIUtilities in macros (patch #636, #637, #638, Robert
   Schwenn)
+- fix for SyntaxUtilities in Color_Picker macro (patch #639, Robert Schwenn)
 
 }}}
 {{{ Miscellaneous

@@ -27,7 +27,7 @@ final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.Err
 // Process 
 selection = textArea.getSelectedText();
 if (selection != null)
-    color = GUIUtilities.parseColor(selection);
+    color = SyntaxUtilities.parseColor(selection);
 else
     color = null;
 
