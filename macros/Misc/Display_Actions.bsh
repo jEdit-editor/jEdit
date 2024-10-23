@@ -52,7 +52,7 @@ for(i = 0; i < actionSets.length; i++)
 			if(label == null)
 				label = NoLabelLabel;
 			else
-				label = GUIUtilities.prettifyMenuLabel(label);
+				label = GenericGUIUtilities.prettifyMenuLabel(label);
 			buf.append(name + " : " + label + "\n");
 		}
 		buf.append("}}}\n\n");
