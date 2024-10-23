@@ -48,13 +48,16 @@ void runScript()
 		buffer.saveAs(view, true);
 	else
 		buffer.save(view, buffer.getPath());
+
 	mode = buffer.getMode().getName();
 	path = buffer.getPath() ;
 	os = System.getProperty("os.name");
 	if(os.indexOf("Windows") != -1)
 		path = "\"" + path + "\"";
+
 	if(mode.equals("beanshell")) {
-		source(path);
+		// Double quotes (under Windows, see above) prevent this from execution
+		source(buffer.getPath());
 	}
 	else if(mode.equals("awk")) {
 		execScript("awk", "awk -f " + path);
