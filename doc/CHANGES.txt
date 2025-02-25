@@ -4,7 +4,8 @@ jEdit 5.8 version history
 
 {{{ Version 5.8pre1
 
-Thanks to Robert Schwenn, Björn Kautler and Eric Le Lay for contributing to this release.
+Thanks to Robert Schwenn, Björn Kautler, Alan Ezust, and Eric Le Lay
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -14,6 +15,7 @@ Thanks to Robert Schwenn, Björn Kautler and Eric Le Lay for contributing to thi
   Schwenn)
 - fix for SyntaxUtilities in Color_Picker macro (patch #639, Robert Schwenn)
 - fix Run_Script macro beanshell under windows (patch #641, Robert Schwenn)
+- fix empty Default Line Separator combobox in EncodingOptionsPane (Alan Ezust)
 
 }}}
 {{{ Miscellaneous
