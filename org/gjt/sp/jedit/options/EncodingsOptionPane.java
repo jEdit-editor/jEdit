@@ -77,9 +77,9 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	{
 
 		/* Line separator */
-		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
-			jEdit.getProperty("lineSep.windows"),
-			jEdit.getProperty("lineSep.mac") };
+		String[] lineSeps = { jEdit.getProperty("lineSep.LF"),
+			jEdit.getProperty("lineSep.CRLF"),
+			jEdit.getProperty("lineSep.CR") };
 		lineSeparator = new JComboBox<String>(lineSeps);
 
 		String lineSep = jEdit.getProperty("buffer."+ JEditBuffer.LINESEP,

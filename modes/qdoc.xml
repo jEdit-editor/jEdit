@@ -4,7 +4,7 @@
 
 <!--
     This mode file is for QDoc, which is a documentation file format used by
-    The Qt Group, www.qt.io.
+    The Qt Group, www.qt.io. See https://doc.qt.io/qt/qdoc-index.html for details.
 -->
 <MODE>
     <PROPS>
