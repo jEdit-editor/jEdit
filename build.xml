@@ -1263,15 +1263,18 @@
 			<fileset dir="${dist.dir}"
 				 includes="*${mac.disk.image.filename}"/>
 		</delete>
-		<exec executable="hdiutil"
-		      failonerror="true">
-			<arg value="create"/>
-			<arg value="-volname"/>
-			<arg value="jEdit"/>
-			<arg value="-srcfolder"/>
-			<arg file="${dist.dir}/classes/mac"/>
-			<arg file="${dist.dir}/orig-${mac.disk.image.filename}"/>
-		</exec>
+		<!-- work-around for https://github.com/actions/runner-images/issues/7522 -->
+		<retry retrycount="3" retrydelay="1000">
+			<exec executable="hdiutil"
+				  failonerror="true">
+				<arg value="create"/>
+				<arg value="-volname"/>
+				<arg value="jEdit"/>
+				<arg value="-srcfolder"/>
+				<arg file="${dist.dir}/classes/mac"/>
+				<arg file="${dist.dir}/orig-${mac.disk.image.filename}"/>
+			</exec>
+		</retry>
 		<exec executable="hdiutil"
 		      failonerror="true">
 			<arg value="convert"/>
