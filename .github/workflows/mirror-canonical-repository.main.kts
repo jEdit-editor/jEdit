@@ -32,6 +32,11 @@ workflow(
             command = "git clone --bare git://git.code.sf.net/p/jedit/\${GITHUB_REPOSITORY#\$GITHUB_REPOSITORY_OWNER/} ."
         )
 
+        run(
+            name = "Fetch Notes Refs",
+            command = "git fetch origin refs/notes/*:refs/notes/*"
+        )
+
         val MIRROR_TOKEN by secrets
         run(
             name = "Push To Mirror Repository",

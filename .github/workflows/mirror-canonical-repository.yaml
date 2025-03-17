@@ -33,5 +33,8 @@ jobs:
       name: 'Clone Canonical Repository'
       run: 'git clone --bare git://git.code.sf.net/p/jedit/${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/} .'
     - id: 'step-1'
+      name: 'Fetch Notes Refs'
+      run: 'git fetch origin refs/notes/*:refs/notes/*'
+    - id: 'step-2'
       name: 'Push To Mirror Repository'
       run: 'git push --mirror https://x:${{ secrets.MIRROR_TOKEN }}@github.com/${{ github.repository }}'
