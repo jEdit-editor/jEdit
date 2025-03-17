@@ -167,6 +167,7 @@
 			          + (beta != 99 ? "pre" + beta : "." + micro);
 			project.setUserProperty("jedit.version", version);
 			project.setUserProperty("jedit.build.number", build);
+			project.setUserProperty("jedit.build.number.no.leading.zeros", major + "." + minor + "." + beta + "." + micro);
 			project.setUserProperty("jedit.version.final", Boolean.toString(beta == 99));
 		</script>
 		<property name="dist.jar.filename"
@@ -1416,6 +1417,8 @@
 					value="${jar.filename}"/>
 				<filter token="jedit.build.number"
 					value="${jedit.build.number}"/>
+				<filter token="jedit.build.number.no.leading.zeros"
+					value="${jedit.build.number.no.leading.zeros}"/>
 				<filter token="jedit.version"
 					value="${jedit.version}"/>
 				<filter token="target.java.version"

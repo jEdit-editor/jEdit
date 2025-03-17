@@ -36,11 +36,11 @@
 		<minVersion>@target.java.version@</minVersion>
 	</jre>
 	<versionInfo>
-		<fileVersion>@jedit.build.number@</fileVersion>
+		<fileVersion>@jedit.build.number.no.leading.zeros@</fileVersion>
 		<txtFileVersion>@jedit.version@</txtFileVersion>
 		<fileDescription>jEdit - Programmer&apos;s Text Editor</fileDescription>
 		<copyright>Copyright © 1998-@current.year@ Contributors</copyright>
-		<productVersion>@jedit.build.number@</productVersion>
+		<productVersion>@jedit.build.number.no.leading.zeros@</productVersion>
 		<txtProductVersion>@jedit.version@</txtProductVersion>
 		<productName>jEdit</productName>
 		<companyName>Contributors</companyName>
