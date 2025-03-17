@@ -1,0 +1,41 @@
+== The YAML workflow files vs. the `*.main.kts` files
+
+The YAML workflow files are generated from the `*.main.kts` files.
+
+These use the https://github.com/typesafegithub/github-workflows-kt[github-workflows-kt]
+Kotlin DSL library to conveniently and type-safely write GitHub Action workflow files.
+
+As there is no official built-in support in GitHub Actions yet until
+https://github.com/orgs/community/discussions/15904 is considered, the YAML files
+need to be generated manually.
+
+There is a safeguard check in all the generated files that this is not forgotten.
+Running a workflow where the according `*.main.kts` produces a different output will
+fail the execution. Additionally, a workflow that runs for pushes and pull requests
+checks the consistency of all the YAML files as not all might be run.
+
+
+
+== Ways to generate the YAML workflow files
+
+There are multiple ways to generate the YAML files and all of them are fine,
+but be aware of the last one of the caveats below if you are not using the Gradle method:
+
+* If you are in a `sh` derivate like e.g. `bash` and Kotlin is installed and
+  available in the `PATH`, you can just call the `*.main.kts` script like any
+  other shell script:
++
+[source,bash]
+----
+$ ./release.main.kts
+----
+
+* If Kotlin is installed somewhere you can call it with the `*.main.kts` script
+  as argument:
++
+[source,bash]
+----
+$ path/to/kotlin release.main.kts
+----
+
+* From the IDE you can create a run configuration that executes the `*.main.kts` script.
