@@ -79,7 +79,7 @@ import static org.gjt.sp.jedit.EditBus.EBHandler;
 /**
  * Loads and unloads plugins.<p>
  *
- * <h3>JAR file contents</h3>
+ * <h2>JAR file contents</h2>
  *
  * When loading a plugin, jEdit looks for the following resources:
  *
@@ -123,7 +123,7 @@ import static org.gjt.sp.jedit.EditBus.EBHandler;
  * {@link EditPlugin} and define a few required properties, otherwise it is
  * ignored.
  *
- * <h3>Dynamic and deferred loading</h3>
+ * <h2>Dynamic and deferred loading</h2>
  *
  * Unlike in prior jEdit versions, jEdit 4.2 and later allow
  * plugins to be added and removed to the resident set at any time using

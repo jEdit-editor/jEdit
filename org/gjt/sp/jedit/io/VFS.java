@@ -63,7 +63,7 @@ import javax.annotation.Nullable;
  *
  * See {@link org.gjt.sp.jedit.ServiceManager} for details.<p>
  *
- * <h3>Session objects:</h3>
+ * <h2>Session objects:</h2>
  *
  * A session is used to persist things like login information, any network
  * sockets, etc. File system implementations that do not need this kind of
@@ -83,7 +83,7 @@ import javax.annotation.Nullable;
  * When done, the session must be disposed of using
  * {@link #_endVFSSession(Object,Component)}.<p>
  *
- * <h3>Thread safety:</h3>
+ * <h2>Thread safety:</h2>
  *
  * The following methods cannot be called from an I/O thread:
  *
@@ -97,7 +97,7 @@ import javax.annotation.Nullable;
  *
  * All remaining methods are required to be thread-safe in subclasses.
  *
- * <h3>Implementing a VFS</h3>
+ * <h2>Implementing a VFS</h2>
  *
  * You can override as many or as few methods as you want. Make sure
  * {@link #getCapabilities()} returns a value reflecting the functionality

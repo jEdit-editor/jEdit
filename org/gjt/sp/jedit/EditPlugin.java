@@ -35,7 +35,7 @@ import java.io.*;
  * Alternatively, instead of extending this class, a plugin core class can
  * extend {@link EBPlugin} to automatically receive EditBus messages.
  *
- * <h3>Basic plugin information properties</h3>
+ * <h2>Basic plugin information properties</h2>
  *
  * Note that in all cases above where a <i>className</i> is needed, the fully
  * qualified class name, including the package name, if any, must be used.<p>
@@ -100,7 +100,7 @@ import java.io.*;
  * description.html are both located in the root directory of the plugin,
  * as well as the generated JAR. </p>
  *
- * <h3>Plugin dependency properties</h3>
+ * <h2>Plugin dependency properties</h2>
  *
  * <p>Plugin dependencies are also specified using properties.
  * Each dependency is defined in a property named with
@@ -136,7 +136,7 @@ plugin.console.ConsolePlugin.depend.2=plugin errorlist.ErrorListPlugin 1.4
 plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugin 2.1.0.92
 </pre>
 
- * <h3>Plugin menu item properties</h3>
+ * <h2>Plugin menu item properties</h2>
  *
  *<p> To add your plugin to the view's <b>Plugins</b> menu, define one of these two
  * properties: </p>
@@ -179,7 +179,7 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  * file, file system browser actions are defined in a
  * <code>browser.actions.xml</code> file; see {@link ActionSet}.
  *</p>
- * <h3>Plugin option pane properties</h3>
+ * <h2>Plugin option pane properties</h2>
  *
  * <p>To add your plugin to the <b>Plugin Options</b> dialog box, define one of
  * these two properties:
@@ -201,7 +201,7 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  * <li><code>options.<i>paneName</i>.code</code> - BeanShell code that
  * evaluates to an instance of the {@link OptionPane} class.</li>
  * </ul>
- * <h3>Example</h3>
+ * <h2>Example</h2>
  *
  * Here is an example set of plugin properties:
  *

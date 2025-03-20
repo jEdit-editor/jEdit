@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
  * A set of actions, either loaded from an XML file, or constructed at runtime
  * by a plugin.
  *
- * <h3>Action sets loaded from XML files</h3>
+ * <h2>Action sets loaded from XML files</h2>
  *
  * Action sets are read from these files inside the plugin JAR:
  * <ul>
@@ -104,14 +104,14 @@ import javax.annotation.Nonnull;
  * Each action must have a property <code><i>name</i>.label</code> containing
  * the action's menu item label.
  *
- * <h3>View actions</h3>
+ * <h2>View actions</h2>
  *
  * Actions defined in <code>actions.xml</code> can be added to the view's
  * <b>Plugins</b> menu; see {@link EditPlugin}.
  * The action code may use any standard predefined
  * BeanShell variable; see {@link BeanShell}.
  *
- * <h3>File system browser actions</h3>
+ * <h2>File system browser actions</h2>
  *
  * Actions defined in <code>actions.xml</code> can be added to the file
  * system browser's <b>Plugins</b> menu; see {@link EditPlugin}.
@@ -123,7 +123,7 @@ import javax.annotation.Nonnull;
  * File system browser actions should not define
  * <code>&lt;IS_SELECTED&gt;</code> blocks.
  *
- * <h3>Custom action sets</h3>
+ * <h2>Custom action sets</h2>
  *
  * Call {@link jEdit#addActionSet(ActionSet)} to add a custom action set to
  * jEdit's action context. You must also call {@link #initKeyBindings()} for new
