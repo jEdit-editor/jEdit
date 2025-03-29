@@ -126,7 +126,10 @@ public class EditServer extends Thread
 		while (true)
 		{
 			if(abort)
+			{
+				stopServer();
 				return;
+			}
 
 			try
 			{

@@ -21,6 +21,9 @@ for contributing to this release.
 
 - fix empty Default Line Separator combobox in EncodingOptionsPane (Alan Ezust)
 
+- Make sure socket is closed and server file deleted on edit server aborting
+  (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
