@@ -10,11 +10,15 @@ for contributing to this release.
 {{{ Bug Fixes
 
 - allow '(re)' glob in edit mode to contain alternative without enclosing
- brackets (Eric Le Lay)
+  brackets (Eric Le Lay)
+
 - fixes for GenericGUIUtilities in macros (patch #636, #637, #638, Robert
   Schwenn)
+
 - fix for SyntaxUtilities in Color_Picker macro (patch #639, Robert Schwenn)
+
 - fix Run_Script macro beanshell under windows (patch #641, Robert Schwenn)
+
 - fix empty Default Line Separator combobox in EncodingOptionsPane (Alan Ezust)
 
 }}}
