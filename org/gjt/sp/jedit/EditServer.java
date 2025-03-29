@@ -145,8 +145,7 @@ public class EditServer extends Thread
 				DataInputStream in = new DataInputStream(
 					client.getInputStream());
 
-				if(!handleClient(client,in))
-					abort = true;
+				handleClient(client, in);
 			}
 			catch(Exception e)
 			{
@@ -308,7 +307,7 @@ public class EditServer extends Thread
 	//}}}
 
 	//{{{ handleClient() method
-	private boolean handleClient(final Socket client, DataInputStream in)
+	private void handleClient(final Socket client, DataInputStream in)
 		throws Exception
 	{
 		int key = in.readInt();
@@ -319,8 +318,6 @@ public class EditServer extends Thread
 				+ ", expected " + authKey + ")");
 			in.close();
 			client.close();
-
-			return false;
 		}
 		else
 		{
@@ -363,8 +360,6 @@ public class EditServer extends Thread
 					}
 				}
 			});
-
-			return true;
 		}
 	} //}}}
 

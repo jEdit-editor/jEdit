@@ -24,6 +24,9 @@ for contributing to this release.
 - Make sure socket is closed and server file deleted on edit server aborting
   (Björn Kautler)
 
+- Do not abort edit server due to misbehaving client that is not following the
+  edit server protocol properly (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
