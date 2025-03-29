@@ -147,11 +147,15 @@ public class EditServer extends Thread
 
 				handleClient(client, in);
 			}
+			catch(SocketTimeoutException e)
+			{
+				if(!abort)
+					Log.log(Log.NOTICE,this,e);
+			}
 			catch(Exception e)
 			{
 				if(!abort)
 					Log.log(Log.ERROR,this,e);
-				abort = true;
 			}
 		}
 	} //}}}
