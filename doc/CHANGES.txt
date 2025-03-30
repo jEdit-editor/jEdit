@@ -37,6 +37,11 @@ for contributing to this release.
 - Fix the server killer in the installer to use the correct settings
   directory (Björn Kautler)
 
+- Improve reliability of the jEdit server protocol; it now does not hang
+  indefinitely anymore when connecting to a non-answering service and does
+  not do nothing anymore when connecting to a wrong-answering service
+  (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

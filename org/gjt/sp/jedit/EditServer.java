@@ -82,7 +82,7 @@ public class EditServer extends Thread
 			// Bind to any port on localhost; accept 2 simultaneous
 			// connection attempts before rejecting connections
 			socket = new ServerSocket(0, 2,
-				InetAddress.getByName(null));
+				InetAddress.getLoopbackAddress());
 			authKey = new Random().nextInt(Integer.MAX_VALUE);
 			int port = socket.getLocalPort();
 
@@ -90,7 +90,7 @@ public class EditServer extends Thread
 
 			try
 			{
-				out.write("b\n");
+				out.write("c\n");
 				out.write(String.valueOf(port));
 				out.write("\n");
 				out.write(String.valueOf(authKey));
@@ -142,10 +142,14 @@ public class EditServer extends Thread
 
 				Log.log(Log.MESSAGE,this,client + ": connected");
 
+				DataOutputStream out = new DataOutputStream(
+						client.getOutputStream());
+				out.writeInt(authKey);
+
 				DataInputStream in = new DataInputStream(
 					client.getInputStream());
 
-				handleClient(client, in);
+				handleClient(client, out, in);
 			}
 			catch(SocketTimeoutException e)
 			{
@@ -311,7 +315,7 @@ public class EditServer extends Thread
 	//}}}
 
 	//{{{ handleClient() method
-	private void handleClient(final Socket client, DataInputStream in)
+	private void handleClient(final Socket client, DataOutputStream out, DataInputStream in)
 		throws Exception
 	{
 		int key = in.readInt();
@@ -321,6 +325,7 @@ public class EditServer extends Thread
 				+ " authorization key (got " + key
 				+ ", expected " + authKey + ")");
 			in.close();
+			out.close();
 			client.close();
 		}
 		else

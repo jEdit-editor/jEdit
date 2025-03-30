@@ -292,45 +292,82 @@ public class jEdit
 		//{{{ Try connecting to another running jEdit instance
 		if(portFile != null && new File(portFile).exists())
 		{
-			BufferedReader in = null;
+			BufferedReader portFileIn = null;
+			DataInputStream in = null;
 			DataOutputStream out = null;
 			try
 			{
-				in = new BufferedReader(new FileReader(portFile));
-				String check = in.readLine();
-				if(!"b".equals(check))
+				portFileIn = new BufferedReader(new FileReader(portFile));
+				String protocolVersion = portFileIn.readLine();
+				if(!("b".equals(protocolVersion) || "c".equals(protocolVersion)))
 					throw new IllegalArgumentException("Wrong port file format");
 
-				int port = parseInt(in.readLine());
-				int key = parseInt(in.readLine());
+				int port = parseInt(portFileIn.readLine());
+				int keyFromPortFile = parseInt(portFileIn.readLine());
 
 				// socket is closed via BeanShell script below
 				@SuppressWarnings("resource")
-				Socket socket = new Socket(InetAddress.getByName(null),port);
-				out = new DataOutputStream(socket.getOutputStream());
-				out.writeInt(key);
+				Socket socket = new Socket(InetAddress.getLoopbackAddress(),port);
 
-				String script;
-				if(quit)
+				in = new DataInputStream(socket.getInputStream());
+
+				boolean correctService;
+				if("b".equals(protocolVersion))
 				{
-					script = "socket.close();\n"
-						+ "jEdit.exit(null,true);\n";
+					// with protocol "b" just assume we are talking to a jEdit server
+					// later protocols should answer with the auth key to make sure
+					// we are connected to a proper jEdit server and not some
+					// service that happens to listen on the port in a stale port file
+					correctService = true;
 				}
 				else
 				{
-					script = makeServerScript(wait,restore,
-						newView,newPlainView,args,
-						scriptFile);
+					// if the service does not answer at all, timeout after a second
+					socket.setSoTimeout(1000);
+					int keyByServer = in.readInt();
+					if(keyByServer != keyFromPortFile)
+					{
+						Log.log(Log.MESSAGE,jEdit.class, "The service" +
+								" answering on the server port did not follow" +
+								" the right protocol");
+						correctService = false;
+					}
+					else
+					{
+						correctService = true;
+					}
+					socket.setSoTimeout(0);
 				}
 
-				out.writeUTF(script);
+				// the listening service did not answer with the expected response
+				// so do not send it further bytes but start a new jEdit instance
+				if(correctService)
+				{
+					out = new DataOutputStream(socket.getOutputStream());
+					out.writeInt(keyFromPortFile);
 
-				Log.log(Log.DEBUG,jEdit.class,"Waiting for server");
+					String script;
+					if(quit)
+					{
+						script = "socket.close();\n"
+							+ "jEdit.exit(null,true);\n";
+					}
+					else
+					{
+						script = makeServerScript(wait,restore,
+							newView,newPlainView,args,
+							scriptFile);
+					}
 
-				// block until its closed
-				socket.getInputStream().read();
+					out.writeUTF(script);
 
-				System.exit(0);
+					Log.log(Log.DEBUG,jEdit.class,"Waiting for server");
+
+					// block until its closed
+					in.read();
+
+					System.exit(0);
+				}
 			}
 			catch(Exception e)
 			{
@@ -348,6 +385,7 @@ public class jEdit
 			}
 			finally
 			{
+				IOUtilities.closeQuietly(portFileIn);
 				IOUtilities.closeQuietly(in);
 				IOUtilities.closeQuietly(out);
 			}
