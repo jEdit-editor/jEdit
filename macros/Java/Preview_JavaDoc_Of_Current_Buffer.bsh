@@ -435,10 +435,11 @@ else
     String[] docletClassName = { "", "bp.doclet.Bouvard",
                                  "com.mf.doclet.docbook.DocBookDoclet",
                                  "codeinsight.xmldoclet.XMLDoclet",
-                                 "com.tarsec.javadoc.pdfdoclet.PDFDoclet"};
-    String[] docletClassPath = { "", "Bouvard.jar", "dbdoclet.jar",
-                                 "xmldoclet.jar",
-                                 "pdfdoclet.jar:itext.jar:/usr/lib/pkgs" };
+                                 "com.tarsec.javadoc.pdfdoclet.PDFDoclet" };
+    String[][] docletClassPath = { { "" }, { "Bouvard.jar" }, { "dbdoclet.jar" },
+                                   { "xmldoclet.jar" },
+                                   { "pdfdoclet.jar",
+                                     "itext.jar" + SYSTEM_PATH_SEPERATOR + "/usr/lib/pkgs" } };
     String PDFDocletConfigPropertiesFile = "pdfdoclet.config.properties";
     // Set the DEFAULT Doclet to the JavaDoclet
     String proceed = options[0];
@@ -481,8 +482,7 @@ else
       {
         // you might need some of the follwing if you want to add some
         // commandline parms
-        String jedit_userdir=System.getProperty("user.home") +
-          SYSTEM_FILE_SEPERATOR +".jedit";
+        String jedit_userdir=jEdit.getSettingsDirectory();
         String jedit_homedir=jEdit.getJEditHome();
         String currClassPath=System.getProperty("java.class.path");
         String java_home=System.getProperty("java.home");
@@ -501,11 +501,25 @@ else
           command.append(docletClassName[docletChoice]);
           command.append("\" ");
           command.append("-docletpath \"");
-          command.append(jedit_userdir);
-          command.append(SYSTEM_FILE_SEPERATOR);
-          command.append("jars");
-          command.append(SYSTEM_FILE_SEPERATOR);
-          command.append(docletClassPath[docletChoice]);
+          boolean separator = false;
+          for (entry : docletClassPath[docletChoice])
+          {
+            if (separator) {
+              command.append(SYSTEM_PATH_SEPERATOR);
+            }
+            separator = true;
+            command.append(jedit_userdir);
+            command.append(SYSTEM_FILE_SEPERATOR);
+            command.append("jars");
+            command.append(SYSTEM_FILE_SEPERATOR);
+            command.append(entry);
+            command.append(SYSTEM_PATH_SEPERATOR);
+            command.append(jedit_homedir);
+            command.append(SYSTEM_FILE_SEPERATOR);
+            command.append("jars");
+            command.append(SYSTEM_FILE_SEPERATOR);
+            command.append(entry);
+          }
           command.append("\" ");
           //}}}
 
@@ -570,7 +584,7 @@ else
 
         }
         else
-        { 
+        {
           //{{{ standard doclet parms
           if (addWindowTitle)
             command.append(windowTitle.toString());
@@ -594,7 +608,7 @@ else
           command.append("-d \"");
           command.append(outputDir);
           command.append("\" ");
-          
+
           //}}}
 
         }
@@ -686,7 +700,7 @@ System.out.println("************************************************************
         retVal = _returnSystemCommand(view, command.toString());
         if (retVal.indexOf("error") == -1)
         {
-            
+
           // Build the url for the Viewer
           // If you don't want to use the InfoViewer plugin...
           // easy, change the implementation in this macros _infoView method
@@ -820,4 +834,3 @@ Macro index data (in DocBook format)
 */
 
 // end Preview_JavaDoc_of_Buffer.bsh
-

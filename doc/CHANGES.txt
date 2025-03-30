@@ -30,6 +30,10 @@ for contributing to this release.
 - Do not abort edit server on exception, like timeout due to script-kiddie DoS
   protection (Björn Kautler)
 
+- Fix the Preview_JavaDoc_Of_Current_Buffer.bsh macro to use the correct
+  settings directory, also look in the installation directory for doclets,
+  and properly handle multiple doclet JARs (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
