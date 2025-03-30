@@ -145,7 +145,9 @@ public class ParserRuleSet
 			else
 			{
 				addRule(parserRule.upHashChar[0], parserRule);
-				addRule(Character.toLowerCase(parserRule.upHashChar[0]), parserRule);
+				char lowerHashChar = Character.toLowerCase(parserRule.upHashChar[0]);
+				if(lowerHashChar != parserRule.upHashChar[0])
+					addRule(lowerHashChar, parserRule);
 			}
 		}
 		else
@@ -153,7 +155,9 @@ public class ParserRuleSet
 			for (char upHashChar : parserRule.upHashChars)
 			{
 				addRule(upHashChar, parserRule);
-				addRule(Character.toLowerCase(upHashChar), parserRule);
+				char lowerHashChar = Character.toLowerCase(upHashChar);
+				if(lowerHashChar != upHashChar)
+					addRule(lowerHashChar, parserRule);
 			}
 		}
 	} //}}}

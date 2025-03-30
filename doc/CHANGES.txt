@@ -45,6 +45,8 @@ for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Do not check edit mode rules twice for hash chars that do not have upper- and
+  lowercase versions (Björn Kautler)
 
 }}}
 {{{ API Changes
