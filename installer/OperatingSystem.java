@@ -24,6 +24,10 @@ public abstract class OperatingSystem
 {
 	public abstract String getInstallDirectory(String name, String version);
 
+	public File getSettingsDirectory() {
+		return new File(System.getProperty("user.home"), ".jedit");
+	}
+
 	public abstract static class OSTask
 	{
 		protected Install installer;
@@ -284,6 +288,14 @@ public abstract class OperatingSystem
 			return "/Applications/" + name + " " + version;
 		}
 
+		public File getSettingsDirectory()
+		{
+			File result = new File(System.getProperty("user.home"), "Library/jEdit");
+			if(result.isDirectory())
+				return result;
+			return super.getSettingsDirectory();
+		}
+
 		public String getExtraClassPath()
 		{
 			return "/System/Library/Java/:";
@@ -305,6 +317,18 @@ public abstract class OperatingSystem
 				programDir = "%ProgramFiles%";
 			}
 			return programDir + "\\" + name + " " + version;
+		}
+
+		public File getSettingsDirectory()
+		{
+			String appData = System.getenv("APPDATA");
+			if(appData != null)
+			{
+				File result = new File(appData, "jEdit");
+				if(result.isDirectory())
+					return result;
+			}
+			return super.getSettingsDirectory();
 		}
 
 		public class JEditLauncherOSTask extends OSTask

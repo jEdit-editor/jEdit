@@ -34,6 +34,9 @@ for contributing to this release.
   settings directory, also look in the installation directory for doclets,
   and properly handle multiple doclet JARs (Björn Kautler)
 
+- Fix the server killer in the installer to use the correct settings
+  directory (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

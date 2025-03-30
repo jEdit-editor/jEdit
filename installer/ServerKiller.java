@@ -27,6 +27,8 @@ package installer;
 import java.io.*;
 import java.net.*;
 
+import static installer.OperatingSystem.getOperatingSystem;
+
 /**
  * Utility class to check for a running jEdit server,
  * and stop it.
@@ -39,7 +41,7 @@ import java.net.*;
  */
 public class ServerKiller
 {
-	
+
 	/**
 	 * try to contact a running instance of jEdit Server
 	 * and ask it to close.
@@ -48,14 +50,12 @@ public class ServerKiller
 	 */
 	public static boolean quitjEditServer()
 	{
-		
+
 		/* {{{ default server file location */
-		String settingsDirectory = System.getProperty("user.home");
-		File portFile;
-		File f = new File(settingsDirectory);
-		portFile = new File(f,".jedit/server");
+		File settingsDirectory = getOperatingSystem().getSettingsDirectory();
+		File portFile = new File(settingsDirectory,"server");
 		/* }}} */
-		
+
 		if(portFile.exists())
 		{
 			try
@@ -115,7 +115,7 @@ public class ServerKiller
 		}
 		return true;
 	}
-	
+
 	/**
 	 * try to connect to any running server instance and close it.
 	 * exit with an error code on failure, but not if no server was found.
@@ -129,5 +129,3 @@ public class ServerKiller
 		}
 	}
 }
-
- 	  	 
