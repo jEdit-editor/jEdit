@@ -45,6 +45,8 @@ for contributing to this release.
 - Consider context insensitivity of an edit mode also on first usage after
   reloading edit modes (#3812 - Björn Kautler)
 
+- Fix htaccess edit mode to be context sensitive (#3812 - Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
