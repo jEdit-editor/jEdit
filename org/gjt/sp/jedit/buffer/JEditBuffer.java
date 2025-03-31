@@ -1973,6 +1973,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		this.mode = mode;
 
+		mode.loadIfNecessary();
 		contextInsensitive = forceContextInsensitive ||
 			mode.getBooleanProperty("contextInsensitive");
 

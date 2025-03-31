@@ -42,6 +42,9 @@ for contributing to this release.
   not do nothing anymore when connecting to a wrong-answering service
   (Björn Kautler)
 
+- Consider context insensitivity of an edit mode also on first usage after
+  reloading edit modes (#3812 - Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
