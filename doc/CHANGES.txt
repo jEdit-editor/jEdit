@@ -53,6 +53,9 @@ for contributing to this release.
 - Do not check edit mode rules twice for hash chars that do not have upper- and
   lowercase versions (Björn Kautler)
 
+- Prevent multiple jEdit instances using the same settings directory using a
+  file lock (Björn Kautler)
+
 }}}
 {{{ API Changes
 

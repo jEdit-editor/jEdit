@@ -203,7 +203,7 @@ public class Buffer extends JEditBuffer
 	{
 		if(isPerformingIO())
 		{
-			GUIUtilities.error(view,"buffer-multiple-io",null);
+			GUIUtilities.error(view,"buffer-multiple-io",(Object[])null);
 			return false;
 		}
 
@@ -344,7 +344,7 @@ public class Buffer extends JEditBuffer
 	{
 		if(isPerformingIO())
 		{
-			GUIUtilities.error(view,"buffer-multiple-io",null);
+			GUIUtilities.error(view,"buffer-multiple-io",(Object[])null);
 			return false;
 		}
 
@@ -489,7 +489,7 @@ public class Buffer extends JEditBuffer
 	{
 		if(isPerformingIO())
 		{
-			GUIUtilities.error(view,"buffer-multiple-io",null);
+			GUIUtilities.error(view,"buffer-multiple-io",(Object[])null);
 			return false;
 		}
 

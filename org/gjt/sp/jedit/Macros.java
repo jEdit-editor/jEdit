@@ -649,7 +649,7 @@ public class Macros
 		Recorder recorder = view.getMacroRecorder();
 
 		if(recorder == null)
-			GUIUtilities.error(view,"macro-not-recording",null);
+			GUIUtilities.error(view,"macro-not-recording",(Object[])null);
 		else
 		{
 			view.setMacroRecorder(null);
@@ -671,7 +671,7 @@ public class Macros
 
 		if(settings == null)
 		{
-			GUIUtilities.error(view,"no-settings",null);
+			GUIUtilities.error(view,"no-settings",(Object[])null);
 			return;
 		}
 
@@ -681,7 +681,7 @@ public class Macros
 
 		if(jEdit.getBufferManager().getBuffer(path).isEmpty())
 		{
-			GUIUtilities.error(view,"no-temp-macro",null);
+			GUIUtilities.error(view,"no-temp-macro",(Object[])null);
 			return;
 		}
 

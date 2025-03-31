@@ -72,6 +72,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 //}}}
 
 /** Various GUI utility functions related to icons, menus, toolbars, keyboard shortcuts, etc.
@@ -672,26 +674,30 @@ public class GUIUtilities
 	 */
 	public static void error(final Component comp, final String name, final Object[] args)
 	{
+		error(comp,
+				jEdit.getProperty(name.concat(".title"),args),
+				jEdit.getProperty(name.concat(".message"),args));
+	}
+
+	/* package-private */ static void error(final Component comp, final String title, final String message)
+	{
 		if (EventQueue.isDispatchThread())
 		{
 			hideSplashScreen();
 
-			JOptionPane.showMessageDialog(comp,
-				jEdit.getProperty(name.concat(".message"),args),
-				jEdit.getProperty(name.concat(".title"),args),
-				JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(comp, message, title, ERROR_MESSAGE);
 		}
-                else
-                {
-                        try
-                        {
-                                EventQueue.invokeAndWait(() -> error(comp, name, args));
-                        }
-                        catch (Exception e)		// NOPMD
-                        {
-                                // ignored
-                        }
-                }
+		else
+		{
+			try
+			{
+				EventQueue.invokeAndWait(() -> error(comp, title, message));
+			}
+			catch (Exception e)        // NOPMD
+			{
+				// ignored
+			}
+		}
 	} //}}}
 
 	//{{{ input() method

@@ -46,6 +46,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -79,6 +81,8 @@ import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 
 import static java.lang.Integer.parseInt;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.WRITE;
 //}}}
 
 /**
@@ -398,10 +402,17 @@ public class jEdit
 			System.exit(0);
 		} //}}}
 
+		//{{{ Lock settings directory if it exists already
+		if ((settingsDirectory != null) &&
+				new File(settingsDirectory).isDirectory() &&
+				!lockSettingsDirectory())
+			return;
+		// }}}
+
 		// don't show splash screen if there is a file named
 		// 'nosplash' in the settings directory
 		logTime("before splash screen activation");
-		if(splash && (!new File(settingsDirectory,"nosplash").exists()))
+		if(splash && ((settingsDirectory == null) || !new File(settingsDirectory, "nosplash").exists()))
 			GUIUtilities.showSplashScreen();
 		logTime("after splash screen activation");
 		//{{{ Settings migration code.
@@ -418,9 +429,16 @@ public class jEdit
 		Writer stream;
 		if(settingsDirectory != null)
 		{
-			File _settingsDirectory = new File(settingsDirectory);
-			if(!_settingsDirectory.exists())
-				_settingsDirectory.mkdirs();
+			if(settingsLock == null)
+			{
+				File _settingsDirectory = new File(settingsDirectory);
+				if(!_settingsDirectory.exists())
+					_settingsDirectory.mkdirs();
+
+				// Lock settings directory if it was newly created or relocated
+				if (!lockSettingsDirectory()) return;
+			}
+
 			File _macrosDirectory = new File(settingsDirectory,"macros");
 			if(!_macrosDirectory.exists())
 				_macrosDirectory.mkdir();
@@ -649,6 +667,40 @@ public class jEdit
 		SyntaxUtilities.propertyManager = jEdit.propertyManager;
 		finishStartup(gui,restore,newPlainView,userDir,args);
 		logTime("main done");
+	} //}}}
+
+	//{{{ lockSettingsDirectory() method
+	private static boolean lockSettingsDirectory()
+	{
+		try
+		{
+			String settingsLockFileName = ".lock";
+			File settingsLockFile = new File(settingsDirectory, settingsLockFileName);
+			settingsLock = FileChannel.open(settingsLockFile.toPath(), CREATE, WRITE).tryLock();
+			System.err.println("Settings directory lock acquired: " + settingsLock);
+
+			if(settingsLock == null)
+			{
+				// Localization properties are not yet initialized, so we use a hard-coded message here
+				String errorMessage = "The settings directory " +
+						new File(settingsDirectory).getAbsolutePath() +
+						" is locked by another jEdit instance.\n" +
+						"If you are sure there is no other jEdit instance running," +
+						" delete the file named \"" + settingsLockFileName + "\".";
+				GUIUtilities.error(null,"Settings Directory is locked",errorMessage);
+				return false;
+			}
+			else
+			{
+				settingsLockFile.deleteOnExit();
+			}
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR, jEdit.class, "Error while trying to lock settings directory", e);
+			System.exit(1);
+		}
+		return true;
 	} //}}}
 
 	//{{{ Property methods
@@ -3262,6 +3314,7 @@ public class jEdit
 	//{{{ Static variables
 	private static String jEditHome;
 	private static String settingsDirectory;
+	private static FileLock settingsLock;
 	private static String jarCacheDirectory;
 	private static long propsModTime;
 	private static PropertyManager propMgr = new PropertyManager();
