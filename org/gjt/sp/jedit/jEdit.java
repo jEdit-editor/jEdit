@@ -3388,7 +3388,7 @@ public class jEdit
 		System.out.println("	-wait: Wait until the user closes the specified buffer in the server");
 		System.out.println("	 instance. Does nothing if passed to the initial jEdit instance.");
 		System.out.println();
-		System.out.println("Report bugs to http://sourceforge.net/tracker/?group_id=588&atid=100588");
+		System.out.println("Report bugs to https://sourceforge.net/p/jedit/bugs/");
 	} //}}}
 
 	//{{{ version() method

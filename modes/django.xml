@@ -3,7 +3,7 @@
 Original author Ollie Rutherfurd
 
 Django 1.2 templates edit mode
-<http://docs.djangoproject.com/en/dev/topics/templates/>
+<https://docs.djangoproject.com/en/dev/topics/templates/>
 
 Updated 2010-09-10 by Jakub Roztocil <jakub@webkitchen.cz>
 * Added missing filters, tags, operators, etc.
@@ -130,7 +130,7 @@ CSS & JS integration and tag highlighting inspired by the PHP mode.
 
 			<!--
 			Tags
-			<http://docs.djangoproject.com/en/1.2/ref/templates/builtins/#built-in-tag-reference>
+			<https://docs.djangoproject.com/en/1.8/ref/templates/builtins/#built-in-tag-reference>
 			-->
 			<KEYWORD1>cache</KEYWORD1>
 			<KEYWORD1>endcache</KEYWORD1>
@@ -189,7 +189,7 @@ CSS & JS integration and tag highlighting inspired by the PHP mode.
 
 			<!--
 			{% templatetag %} arguments
-			<http://docs.djangoproject.com/en/1.2/ref/templates/builtins/#templatetag>
+			<https://docs.djangoproject.com/en/1.8/ref/templates/builtins/#templatetag>
 			-->
 			<LITERAL3>Argument</LITERAL3>
 			<LITERAL3>openblock</LITERAL3>
@@ -203,7 +203,7 @@ CSS & JS integration and tag highlighting inspired by the PHP mode.
 
 			<!--
 			Filters
-			http://docs.djangoproject.com/en/1.2/ref/templates/builtins/#built-in-filter-reference
+			https://docs.djangoproject.com/en/1.8/ref/templates/builtins/#built-in-filter-reference
 			-->
 			<FUNCTION>add</FUNCTION>
 			<FUNCTION>addslashes</FUNCTION>

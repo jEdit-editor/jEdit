@@ -548,7 +548,7 @@ public class FileVFS extends VFS
 
 	//{{{ Permission preservation code
 
-	/* Code borrowed from j text editor (http://www.armedbear.org) */
+	/* Code borrowed from j text editor (https://armedbear-j.sourceforge.net/) */
 	/* I made some changes to make it support suid, sgid and sticky files */
 
 	//{{{ getPermissions() method

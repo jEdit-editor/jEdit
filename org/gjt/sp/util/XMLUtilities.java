@@ -70,7 +70,7 @@ public class XMLUtilities
 			char ch = str.charAt(i);
 
 			// control characters, excluding \t, \r and \n
-			// See: http://www.w3.org/International/questions/qa-controls
+			// See: https://www.w3.org/International/questions/qa-controls
 			if (((0x00 <= ch && ch <= 0x1F) || (0x7F <= ch && ch <= 0x9F))
 				&& ch != '\r' && ch != '\n' && ch != '\t')
 			{

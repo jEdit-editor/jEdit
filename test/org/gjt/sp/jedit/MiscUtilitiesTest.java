@@ -102,7 +102,7 @@ public class MiscUtilitiesTest
 	@Test
 	public void canonPathHomeUrl()
 	{
-		assertEquals("http://jedit.org/", MiscUtilities.canonPath("http://jedit.org/"));
+		assertEquals("https://jedit.org/", MiscUtilities.canonPath("https://jedit.org/"));
 	}
 
 	@Test
@@ -246,7 +246,7 @@ public class MiscUtilitiesTest
 	public void resolveSymlinksWindowsUrl() throws Exception
 	{
 		updateOS(WINDOWS_NT);
-		assertEquals("http://www.jedit.org", MiscUtilities.resolveSymlinks("http://www.jedit.org"));
+		assertEquals("https://www.jedit.org", MiscUtilities.resolveSymlinks("https://www.jedit.org"));
 	}
 
 	@Test
@@ -276,7 +276,7 @@ public class MiscUtilitiesTest
 	@Test
 	public void isAbsolutePathUrl()
 	{
-		assertTrue(MiscUtilities.isAbsolutePath("http://www.jedit.org"));
+		assertTrue(MiscUtilities.isAbsolutePath("https://www.jedit.org"));
 	}
 
 	@Test
@@ -364,7 +364,7 @@ public class MiscUtilitiesTest
 	@Test
 	public void constructPathAbsolute()
 	{
-		assertEquals("http://www.jedit.org", MiscUtilities.constructPath(null, "http://www.jedit.org"));
+		assertEquals("https://www.jedit.org", MiscUtilities.constructPath(null, "https://www.jedit.org"));
 	}
 
 	@Test
@@ -581,13 +581,13 @@ public class MiscUtilitiesTest
 	@Test
 	public void getProtocolOfURL()
 	{
-		assertEquals("http", MiscUtilities.getProtocolOfURL("http://www.jedit.org"));
+		assertEquals("https", MiscUtilities.getProtocolOfURL("https://www.jedit.org"));
 	}
 
 	@Test
 	public void isURL()
 	{
-		assertTrue(MiscUtilities.isURL("http://www.jedit.org"));
+		assertTrue(MiscUtilities.isURL("https://www.jedit.org"));
 	}
 
 	@Test
@@ -663,31 +663,31 @@ public class MiscUtilitiesTest
 	@Test
 	public void pathsEqual()
 	{
-		assertTrue(MiscUtilities.pathsEqual("http://www.jedit.org","http://www.jedit.org"));
+		assertTrue(MiscUtilities.pathsEqual("https://www.jedit.org","https://www.jedit.org"));
 	}
 
 	@Test
 	public void pathsEqual2()
 	{
-		assertTrue(MiscUtilities.pathsEqual("http://www.jedit.org","http://www.jedit.org/"));
+		assertTrue(MiscUtilities.pathsEqual("https://www.jedit.org","https://www.jedit.org/"));
 	}
 
 	@Test
 	public void pathsEqual3()
 	{
-		assertTrue(MiscUtilities.pathsEqual("http://www.jedit.org/","http://www.jedit.org"));
+		assertTrue(MiscUtilities.pathsEqual("https://www.jedit.org/","https://www.jedit.org"));
 	}
 
 	@Test
 	public void pathsEqual4()
 	{
-		assertTrue(MiscUtilities.pathsEqual("http://www.jedit.org/","http://www.jedit.org/"));
+		assertTrue(MiscUtilities.pathsEqual("https://www.jedit.org/","https://www.jedit.org/"));
 	}
 
 	@Test
 	public void pathsEqualFalse()
 	{
-		assertFalse(MiscUtilities.pathsEqual("http://www.jedit.org","c:/test.txt"));
+		assertFalse(MiscUtilities.pathsEqual("https://www.jedit.org","c:/test.txt"));
 	}
 
 	@Test

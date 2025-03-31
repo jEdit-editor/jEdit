@@ -69,7 +69,7 @@
 		<SEQ TYPE="OPERATOR">=</SEQ>
 
 		<KEYWORDS>
-			<!-- HTML/XHTML elements, taken from http://de.selfhtml.org/html/referenz/elemente.htm -->
+			<!-- HTML/XHTML elements, taken from https://wiki.selfhtml.org/wiki/HTML/Elemente -->
 			<!-- updated to include html5 elements. Obsolete and deprecated elements
 			are still here for backward compatibility. -->
 			<KEYWORD1>a</KEYWORD1>

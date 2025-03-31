@@ -13,7 +13,7 @@
  * "open, module, requires, transitive, exports, opens, to, uses, provides, and 
  * with are restricted keywords (i.e. they are keywords solely where they appear 
  * as terminals in ModuleDeclaration, and are identifiers everywhere else)."
- * Reference: http://download.oracle.com/otndocs/jcp/java_platform_module_system-0_1-edr-spec/index.html
+ * Reference: https://openjdk.org/projects/jigsaw/spec/
 -->
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
@@ -270,7 +270,7 @@
 		<!-- Note: the labels in comments are handled by SPANs above -->
 
 		<!-- Official javadoc tags:
-			 http://download.oracle.com/javase/6/docs/technotes/tools/windows/javadoc.html#javadoctags -->
+			 https://download.oracle.com/javase/6/docs/technotes/tools/windows/javadoc.html#javadoctags -->
 			<LABEL>@author</LABEL>
 			<LABEL>@deprecated</LABEL>
 		<!--<LABEL>@docRoot</LABEL>-->
@@ -293,8 +293,8 @@
 		<!--<LABEL>@code</LABEL>-->
 		<!--<LABEL>@literal</LABEL>-->
 
-		<!-- SUNs proposed tags:
-			 http://java.sun.com/j2se/javadoc/proposed-tags.html -->
+		<!-- Oracle's proposed tags:
+			 https://www.oracle.com/java/technologies/javase/proposed-javadoc-tags.html -->
 			<KEYWORD2>@category</KEYWORD2>
 			<KEYWORD2>@example</KEYWORD2>
 			<KEYWORD2>@exclude</KEYWORD2>

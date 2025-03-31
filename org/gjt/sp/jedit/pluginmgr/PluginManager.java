@@ -4,7 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2002-2013 Slava Pestov, Matthieu Casanova, Kris Kopicki,
- * 				Shlomy Reinstein, Alan Ezust, Björn "Vampire" Kautler
+ * 				Shlomy Reinstein, Alan Ezust, Björn Kautler
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -6,7 +6,7 @@
 <!--                                                      -->
 <!-- xsltproc -xinclude -output .\html\ faq.xsl faq.xml  -->
 <article class="faq" id="faq"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:noNamespaceSchemaLocation="https://www.docbook.org/xsd/4.4/docbook.xsd">
     <articleinfo>
 
         <author>
@@ -93,8 +93,8 @@
         </revhistory>
 
         <releaseinfo><emphasis>Note: </emphasis> This document incorporates some
-        material from the Interactive FAQ section of the <ulink
-        url="http://community.jedit.org/modules.php?op=modload&amp;name=faq&amp;file=index">jEdit
+        material from the forum of the <ulink
+        url="https://community.jedit.org/?q=forum">jEdit
         Community web site</ulink>.</releaseinfo>
     </articleinfo>
 

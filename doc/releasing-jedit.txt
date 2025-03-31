@@ -65,7 +65,7 @@ Workflow
 [iffinal]
 6.5. If you don't have Release.gpg, you didn't have setup a GPG secring. Either create a GPG secring, run
           ant dist-sign-deb-Release
-     , upload the public key to a public keyserver and make sure your key is mentioned on http://jedit.org/index.php?page=download&platform=unix#option_two so the users know the key is valid for signing jEdit releases. Alternatively send Release to someone whose key is already mentioned on the download page (e. g. Björn "Vampire" Kautler <Vampire@jEdit.org>) and ask him to put Release in the dist folder, to run
+     , upload the public key to a public keyserver and make sure your key is mentioned on https://jedit.org/index.php?page=download&platform=unix#option_two so the users know the key is valid for signing jEdit releases. Alternatively send Release to someone whose key is already mentioned on the download page (e. g. Björn Kautler <Vampire@jEdit.org>) and ask him to put Release in the dist folder, to run
           ant dist-sign-deb-Release
      and to hand over the resulting file Release.gpg to you. The second way is preferable if you only create a release once or from time to time as a new key means the user will get confused and has to react for verifying and installing the new key.
 [/iffinal]
@@ -109,7 +109,7 @@ Workflow
     - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/project-web/jedit/htdocs/devel.html e. g. in jEdit with installed FTP plugin and add a line for [version] in the Release Schedule
 
 10. Update the plugin wizard
-     - Go to http://plugins.jedit.org/wiz/release_list.php?package_id=24
+     - Go to https://plugins.jedit.org/wiz/release_list.php?package_id=24
      - Find or create the entry for this jEdit Release
           The entry may already exist but have an invalid date
           if a plugin was released that depends on it.

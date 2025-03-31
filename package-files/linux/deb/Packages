@@ -14,7 +14,7 @@ SHA1: @deb.sha1@
 SHA256: @deb.sha256@
 Section: contrib/editors
 Priority: optional
-Homepage: http://www.jedit.org/
+Homepage: https://www.jedit.org/
 Description: A plugin-based editor for programmers.
  As one of the most feature rich editors available, jEdit boasts support for
  syntax highlighting in more than 200 languages. jEdit combines the power of

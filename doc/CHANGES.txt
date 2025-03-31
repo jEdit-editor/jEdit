@@ -47,6 +47,8 @@ for contributing to this release.
 
 - Fix htaccess edit mode to be context sensitive (#3812 - Björn Kautler)
 
+- Replace outdated URLs and use HTTPS where possible (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

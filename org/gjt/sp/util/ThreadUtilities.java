@@ -109,7 +109,7 @@ public class ThreadUtilities
 	 * invokeAndWait() does not hold any locks that other threads might
 	 * need while the call is occurring.
 	 * From the article:
-	 * <a href="http://java.sun.com/products/jfc/tsc/articles/threads/threads1.html#event_dispatching">
+	 * <a href="https://docs.oracle.com/javase/tutorial/uiswing/concurrency/initial.html">
 	 * Threads and Swing</a>
 	 * @param runnable the runnable to run - it should return something meaningful from 
 	 *    toString() so that we can display it in the Task Monitor.

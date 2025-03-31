@@ -102,7 +102,7 @@
 		depends="init,check-ivy"
 		unless="ivy.jar.present">
 		<mkdir dir="${ivy.jar.dir}"/>
-		<get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${config.ivy.version}/ivy-${config.ivy.version}.jar"
+		<get src="https://repo.maven.apache.org/maven2/org/apache/ivy/ivy/${config.ivy.version}/ivy-${config.ivy.version}.jar"
 		     dest="${ivy.jar.file}"
 		     usetimestamp="true"/>
 	</target>

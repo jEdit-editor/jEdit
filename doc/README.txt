@@ -12,7 +12,7 @@ jEdit's 'Help' menu or point your web browser to the file named
 distribution.
 
 A PDF (Adobe Acrobat) version of the user's guide be downloaded from
-<http://www.jedit.org>.
+<https://www.jedit.org>.
 
 A list of people who contributed to jEdit, either by submitting code or
 edit modes to the core, or writing plugins can be viewed by selecting
@@ -43,9 +43,9 @@ the 'Libraries' section below.
 
 * jEdit on the Internet
 
-The jEdit homepage, located at <http://www.jedit.org> contains the
+The jEdit homepage, located at <https://www.jedit.org> contains the
 latest version of jEdit, along with plugin downloads. There is also a
-user-oriented site, <http://community.jedit.org>. Check it out.
+user-oriented site, <https://community.jedit.org>. Check it out.
 
 If you would like to report a bug, first take a look at the 'jEdit
 Frequently Asked Questions' document, accessible from either jEdit's
@@ -53,7 +53,7 @@ online help or by pointing your web browser to the file named
 'index.html' in the 'doc/FAQ/' directory of the jEdit distribution.
 
 If the FAQ doesn't answer your question, report a bug with our bug
-tracker, located at <http://www.jedit.org/?page=feedback>.
+tracker, located at <https://www.jedit.org/?page=feedback>.
 
 When writing a bug report, please try to be as specific as possible. You
 should specify your jEdit version, Java version, operating system, any
@@ -66,7 +66,7 @@ a bug report.
 
 If you would like to discuss jEdit and be informed when new versions are
 released, you should subscribe to the mailing lists; see
-<http://www.jedit.org/?page=feedback> for details.
+<https://www.jedit.org/?page=feedback> for details.
 
 If you would like to discuss the BeanShell scripting language, subscribe
 to one of the BeanShell mailing lists by visiting
@@ -74,7 +74,7 @@ to one of the BeanShell mailing lists by visiting
 
 Finally, if you want to chat about jEdit with other users and
 developers, come join the #jedit channel on irc.freenode.net. You
-can use the IRC plugin, available from <http://plugins.jedit.org>, for
+can use the IRC plugin, available from <https://plugins.jedit.org>, for
 this purpose.
 
 * Libraries
@@ -91,7 +91,7 @@ jEdit bundles the following libraries:
 
 - ASM bytecode generation library from Objectweb. This class library is
   released under the 'GNU Lesser General Public License'.
-  The ASM homepage can be found at <http://asm.objectweb.org/>.
+  The ASM homepage can be found at <https://asm.ow2.io/>.
   The library is in org/gjt/sp/jedit/bsh/org/objectweb/asm/.
 
 The jEdit installer bundles the following libraries:
@@ -101,7 +101,7 @@ The jEdit installer bundles the following libraries:
   doc/Apache.LICENSE.txt.
 
   The org.apache.excalibur.bzip2 web site is
-  <http://jakarta.apache.org/avalon/excalibur/bzip2/>.
+  <https://web.archive.org/web/20030220014523/https://jakarta.apache.org/avalon/excalibur/bzip2/>.
 
 - com.ice.tar, by Tim Endres. This code is in the public domain.
 

@@ -47,9 +47,9 @@
  *   - Includes the ability to use 'user selectable' doclets
  *     The following are already built in. (you just have to go get the doclet)
  *      > the DocBook doclet - dbdoclet  http://www.michael-a-fuchs.de
- *      > the Bouvard Doclet - http://web.tiscali.it/no-redirect-tiscali/farello/bp/intro.html
- *      > the XMLDoclet - http://
- *      > the pdfdoclet (Java API to PDF) - http://sourceforge.net/projects/pdfdoclet
+ *      > the Bouvard Doclet - https://web.archive.org/web/20040203110214/https://web.tiscali.it/no-redirect-tiscali/farello/bp/intro.html
+ *      > the XMLDoclet - https://
+ *      > the pdfdoclet (Java API to PDF) - https://sourceforge.net/projects/pdfdoclet
  *      > others
  *
  *   - easy selection of output dir (defaults to system temp dir)
@@ -279,7 +279,7 @@ else
     /* You should also Change the Header and Botton javadoc text down below */
     /* ********************************************************************** */
     // header message
-    String yourProductUrlStr = "http://www.yourProductURL.goes.here";
+    String yourProductUrlStr = "https://www.yourProductURL.goes.here";
     String yourProductNameStr = "My Java Product Name";
 
     // header message
@@ -364,10 +364,10 @@ else
     /* Footer Text */
     boolean addFooter = true;
     StringBuffer footer = new StringBuffer("-footer \"");
-    footer.append("Produced Using the <A href=&quot;http://www.jedit.org&quot;>");
+    footer.append("Produced Using the <A href=&quot;https://www.jedit.org&quot;>");
     footer.append("jEdit</A><BR>Preview Javadoc Beanshell Macro.<BR>");
     footer.append("Copyright &copy; 2001-2003, ");
-    footer.append("<A href=&quot;http://www.webarts.bc.ca&quot;>");
+    footer.append("<A href=&quot;https://www.webarts.ca/&quot;>");
     footer.append("Tom B. Gutwin</A>\" ");
 
     /* Bottom Text */

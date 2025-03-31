@@ -3,7 +3,7 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- Modula-3 mode, by Marcio Marchini mqm@magma.ca -->
-<!-- See http://www.research.compaq.com/SRC/m3defn/html/syntax.html -->
+<!-- See https://modula3.elegosoft.com/cm3/doc/reference/complete/html/2_8Syntax.html -->
 
 <MODE>
 	<PROPS>
@@ -154,7 +154,7 @@
 			<LITERAL2>SUBARRAY</LITERAL2>
 
 			<!-- Standard interfaces -->
-			<!--  http://www.research.compaq.com/SRC/m3defn/html/intfs.html -->
+			<!--  https://modula3.elegosoft.com/cm3/doc/help/interfaces.html -->
 			<KEYWORD2>Text</KEYWORD2>
 			<KEYWORD2>Thread</KEYWORD2>
 			<KEYWORD2>Word</KEYWORD2>
@@ -167,7 +167,7 @@
 			<KEYWORD2>FloatMode</KEYWORD2>
 
 			<!-- Recommended interfaces -->
-			<!--  http://www.research.compaq.com/SRC/m3defn/html/intfs.html -->
+			<!--  https://modula3.elegosoft.com/cm3/doc/help/interfaces.html -->
 			<KEYWORD3>Fmt</KEYWORD3>
 			<KEYWORD3>Lex</KEYWORD3>
 			<KEYWORD3>Pickle</KEYWORD3>

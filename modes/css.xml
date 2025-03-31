@@ -24,7 +24,7 @@
 
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 
-		<!-- TODO: selectors, see http://www.w3.org/TR/REC-CSS2/selector.html -->
+		<!-- TODO: selectors, see https://www.w3.org/TR/REC-CSS2/selector.html -->
 
 		<SEQ TYPE="OPERATOR" DELEGATE="PSEUDO">:</SEQ>
 		<SEQ TYPE="OPERATOR">,</SEQ>

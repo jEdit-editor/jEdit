@@ -1201,7 +1201,7 @@ else if(msg instanceof ViewUpdate) {
         <para>This build file imports another modular build file,
         <literal>plugin-build.xml</literal> from the <literal>build-support</literal>
         project. It is available as a package you can check out from subversion, or found online in the <ulink
-        url="https://jedit.svn.sourceforge.net/svnroot/jedit/build-support/trunk/">jEdit's
+        url="https://sourceforge.net/p/jedit/svn/HEAD/tree/build-support/trunk/">jEdit's
         SVN repository</ulink>. It contains the common build steps used to build the core jEdit plugins, and some example <literal>build.properties.sample</literal> files which you can adapt for use with your development environment.</para>
 
 
@@ -1232,7 +1232,7 @@ else if(msg instanceof ViewUpdate) {
 
         <tip> <para>For a full discussion of the <filename>Ant</filename> file
         format and command syntax, you should consult the <ulink
-        url="http://jakarta.apache.org/ant/manual/index.html">Ant
+        url="https://ant.apache.org/manual/index.html">Ant
         documentation</ulink>, also available through jEdit's help system if you
         installed the Ant Plugin. When editing Ant build files, the XML plugin
         gives you completion tips for both elements <emphasis>and</emphasis>

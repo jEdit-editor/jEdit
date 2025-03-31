@@ -596,9 +596,9 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				//   happens at closing "&ldquo;".
 				// Probably the cause is in the implementation
 				// of BreakIterator for line breaks. Some
-				// similer problems are also reported in
-				// bugs.sun.com.
-				// http://www.google.co.jp/search?q=site%3Abugs.sun.com+BreakIterator+getLineInstance
+				// similar problems are also reported in
+				// bugs.openjdk.org.
+				// https://bugs.openjdk.org/issues?jql=text%20~%20%22BreakIterator%20getLineInstance%22
 				// There seems to be some problems in handling
 				// of quotation marks.
 				&& !(prev == '’'
@@ -628,7 +628,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			// The following quotation marks are accumulated
 			// cases that exhibits the problem under a local
 			// test on JRE 7u3 with samples taken from Wikipedia.
-			// http://en.wikipedia.org/wiki/Non-English_usage_of_quotation_marks
+			// https://en.wikipedia.org/wiki/Quotation_mark#Summary_table
 			//
 			// The last check for enclosing whitespace avoids
 			// unwanted rejection of line breaks in CJK text

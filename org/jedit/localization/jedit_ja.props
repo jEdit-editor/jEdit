@@ -1091,7 +1091,7 @@ plugin-error.already-loaded=ふたつのコピーがインストールされて�
 	ふたつのコピーのうち一方を削除してください。
 plugin-error.dep-jdk=Java {0} かそれ以降が必要ですが、バージョン {1} しかありません。
 plugin-error.dep-jedit=jEdit {0} かそれ以降が必要ですが、バージョン {1} しかありません。\n\
-	新しいバージョンの jEdit を <http://www.jedit.org> からダウンロードしてください。.
+	新しいバージョンの jEdit を <https://www.jedit.org> からダウンロードしてください。.
 plugin-error.dep-plugin.no-version={1} のバージョン {0} かそれ以降が必要ですが、\
 	{1} はインストールされていません。
 plugin-error.dep-plugin.broken={0} が必要ですが、{0}\n\

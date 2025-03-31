@@ -43,9 +43,9 @@ import org.gjt.sp.jedit.io.Encoding;
 //}}}
 
 /**
- * ISO-8859-1 with unicode escapes as e. g. needed for http://download.oracle.com/javase/6/docs/api/java/util/Properties.html
+ * ISO-8859-1 with Unicode escapes as e.g. needed for https://docs.oracle.com/javase/6/docs/api/java/util/Properties.html
  *
- * @author Björn "Vampire" Kautler
+ * @author Björn Kautler
  * @since 5.1pre1
  */
 public class Native2ASCIIEncoding implements Encoding

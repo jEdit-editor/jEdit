@@ -3,20 +3,20 @@
 
 <!-- URL mode, by Kevin Hunter of caktusgroup.com (kevin@) for jEdit -->
 <!--
-Attempting to implement http://en.wikipedia.org/wiki/URI_scheme.  Most
+Attempting to implement https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Syntax.  Most
 schemes should work.  There are some commented out.  However, as of
 Wed, 11 Jun 2008, I'm still working out some kinks.  Specifically,
 these work
 
-http://www.example.com/
-http://www.example.com/path/to/file?id=true
-http://user@example.com/path/to/file
-http://user:pass@example.com/path/to/file
+https://www.example.com/
+https://www.example.com/path/to/file?id=true
+https://user@example.com/path/to/file
+https://user:pass@example.com/path/to/file
 
 and these don't work:
 
-http://www.example.com   (no trailing / messes it up)
-http://www.example.com/p/t/f?id=2&var=true ('&' and 'var' do not get marked) 
+https://www.example.com   (no trailing / messes it up)
+https://www.example.com/p/t/f?id=2&var=true ('&' and 'var' do not get marked)
 -->
 
 <MODE>

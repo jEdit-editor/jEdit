@@ -14,7 +14,7 @@ ________________________________________________________________________
 
 	This syntax highlighting package is primarily based on a list of well organized and easily processed control sequence names that can be obtained at:
 
-	http://www.math.upenn.edu/tex_docs/help/csname.txt
+	https://web.archive.org/web/20081017035745/https://www.math.upenn.edu/tex_docs/help/csname.txt
 
 	Control sequences contained in the aforementioned document are included here with some exceptions. I removed from this list any control sequence not supported by plain TeX. It is currently my belief that this document details the control sequences in some form of AMS TeX. There were some control sequences that contained the character '@'. It is my understanding that the intention behind using a '@' character in a control sequence is to signify that the control sequence is private. I have therefore removed all control sequences that include '@'.
 
@@ -87,7 +87,7 @@ Knuth, Donald. The TeXbook. Twentieth Printing. Addison-Wesley:
 
 	After absorbing the material in the TeXbook I found an excellent electronic reference manual through the ubiquitous internet. For someone that appreciates explicit, rigorous and thorough language definition this is an ideal programmer's companion. A printed copy can be purchased and the PDF version can be downloaded free of charge through the author's website.
 
-	http://eijkhout.net/texbytopic/texbytopic.html
+	https://www.eijkhout.net/tex/tex-by-topic.html
 
 Eijkhout, Victor. TeX by Topic. Reprinted 1993. Addison-Wesley:
 	UK, 1991.
@@ -95,7 +95,7 @@ Eijkhout, Victor. TeX by Topic. Reprinted 1993. Addison-Wesley:
 	As I am a prolific Googler, many random and forgettable forums, blogs, wikis, and all manner of dubiously monickered digital media were consulted while preparing this package. I think I can safely say that if I had confined myself to the following few websites I would have found everything I needed.
 
 The American Mathematical Society
-	http://www.ams.org/cmlhtml/texcodes.html
+	https://web.archive.org/web/20090626071524/https://www.ams.org/cmlhtml/texcodes.html
 
 CTAN
 
@@ -194,7 +194,7 @@ _______________________________________________________________________________
 
 	Highlight as KEYWORD2
 
-	http://www.ams.org/cmlhtml/texcodes.html
+	https://web.archive.org/web/20090626071524/https://www.ams.org/cmlhtml/texcodes.html
 	and Knuth: Chapter 8
 
 	The Escaped Versions of TeX's Reserved Characters

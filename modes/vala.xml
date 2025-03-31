@@ -191,7 +191,7 @@
 	</RULES>
 	
 	<!-- Copied from the Javadoc rules set -->
-	<!-- TODO: verify these when http://live.gnome.org/Valadoc gets updated -->
+	<!-- TODO: verify these when https://valadoc.org/markup.html gets updated -->
 	<RULES SET="VALADOC" DEFAULT="COMMENT3" IGNORE_CASE="TRUE">
 
 		<!-- so that *@param is highlighted -->
@@ -248,7 +248,7 @@
 		<!-- Note: the labels in comments are handled by SPANs above -->
 
 		<!-- Official javadoc tags:
-			 http://download.oracle.com/javase/6/docs/technotes/tools/windows/javadoc.html#javadoctags -->
+			 https://download.oracle.com/javase/6/docs/technotes/tools/windows/javadoc.html#javadoctags -->
 			<LABEL>@author</LABEL>
 			<LABEL>@deprecated</LABEL>
 		<!--<LABEL>@docRoot</LABEL>-->
@@ -271,8 +271,8 @@
 		<!--<LABEL>@code</LABEL>-->
 		<!--<LABEL>@literal</LABEL>-->
 
-		<!-- SUNs proposed tags:
-			 http://java.sun.com/j2se/javadoc/proposed-tags.html -->
+		<!-- Oracle's proposed tags:
+			 https://www.oracle.com/java/technologies/javase/proposed-javadoc-tags.html -->
 			<KEYWORD2>@category</KEYWORD2>
 			<KEYWORD2>@example</KEYWORD2>
 			<KEYWORD2>@exclude</KEYWORD2>

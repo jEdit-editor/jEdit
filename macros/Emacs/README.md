@@ -23,5 +23,5 @@ released under a BSD license.
 Emacs project or the Free Software Foundation, nor is it a part of, or
 endorsed by, the jEdit project.
 
-[jEdit]: http://jedit.org/
-[web site]: http://software.clapper.org/jedit-emacs/
+[jEdit]: https://jedit.org/
+[web site]: https://software.clapper.org/jedit-emacs/

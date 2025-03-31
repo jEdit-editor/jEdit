@@ -1316,7 +1316,7 @@ plugin-error.start-error=Fehler beim Starten: "{0}".\n\
 plugin-error.already-loaded=Zwei Kopien installiert. Bitte entferne Sie eine der beiden Kopien.
 plugin-error.dep-jdk=Erfordert Java {0} oder höher, aber Sie haben nur Version {1}.
 plugin-error.dep-jedit=Erfordert jEdit {0} oder höher, aber Sie haben nur Version {1}.\n\
-  Laden Sie neue Versionen von jEdit herunter von <http://www.jedit.org>.
+  Laden Sie neue Versionen von jEdit herunter von <https://www.jedit.org>.
 plugin-error.dep-plugin.no-version=Erfordert Version {0} \
 	oder später von {1},\n\
 	aber {1} ist nicht installiert.

@@ -1288,7 +1288,7 @@ plugin-error.already-loaded=Two copies installed. Please remove one of the \
 	two copies.
 plugin-error.dep-jdk=Requires Java {0} or later, but you only have version {1}.
 plugin-error.dep-jedit=Requires jEdit {0} or later, but you only have version {1}.\n\
-	Download new jEdit versions from <http://www.jedit.org>.
+	Download new jEdit versions from <https://www.jedit.org>.
 plugin-error.dep-plugin.no-version=Requires version {0} \
 	or later of {1},\n\
 	but {1} is not installed.

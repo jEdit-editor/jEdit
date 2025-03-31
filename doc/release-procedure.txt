@@ -36,16 +36,16 @@ Release procedure of jEdit
   The preview build is announced on jedit-devel, jedit-users,
   jedit-announce, with a clear notice saying it is for testing.
 
-  For this purpose, daily build can be used. Daily builds are provided
-  by Eric Berry (elberry), here.
-  http://www.tellurianring.com/projects/jedit-daily/
+  For this purpose, a continuous build can be used. Continuous builds are
+  provided by the GitHub mirror's action at
+  https://github.com/jEdit-editor/jEdit/actions/workflows/build.yaml
 
 5. Receive bugs for preview builds, and fix them.
 
   Basically, the fixes are first applied on the trunk. If it seems also
   good for a release branch, it can be submitted into the Merge Requests
   tracker.
-  http://sourceforge.net/tracker/?group_id=588&atid=1235750&status=1
+  https://sourceforge.net/p/jedit/merge-requests/
 
   If a fix can't be applied on trunk (for example, the target code
   doesn't exist in the trunk), it can be applied to a separate branch

@@ -4,9 +4,7 @@
 
 <MODE>
       <!-- Syntax highlighting mode for the Inform language. You can find out more about inform at
-           http://www.gnelson.demon.co.uk/inform.html
-           And an inform language guide at
-           http://www.gnelson.demon.co.uk/dman/index.html
+           https://ganelson.github.io/inform-website/
         -->
     <PROPS>
         <!--

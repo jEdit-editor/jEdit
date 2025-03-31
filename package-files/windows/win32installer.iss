@@ -2,7 +2,7 @@
 ; encoding=UTF-8Y
 ; (BOM seems the only way to let Inno Setup know the encoding)
 ;
-; Björn "Vampire" Kautler <Vampire@jEdit.org>
+; Björn Kautler <Vampire@jEdit.org>
 ;
 
 [Setup]
@@ -12,10 +12,10 @@ AppCopyright=Copyright © 1998-@current.year@ Contributors
 AppID=jEdit
 AppName=jEdit
 AppPublisher=Contributors
-AppPublisherURL=http://www.jEdit.org
+AppPublisherURL=https://www.jEdit.org
 AppReadmeFile={app}\doc\README.txt
-AppSupportURL=http://www.jEdit.org
-AppUpdatesURL=http://www.jEdit.org
+AppSupportURL=https://www.jEdit.org
+AppUpdatesURL=https://www.jEdit.org
 AppVerName=jEdit @jedit.version@
 AppVersion=@jedit.version@
 ArchitecturesInstallIn64BitMode=x64

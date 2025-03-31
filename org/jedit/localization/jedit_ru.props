@@ -1267,7 +1267,7 @@ plugin-error.already-loaded=Установлено две копии. Пожал
 	копий.
 plugin-error.dep-jdk=Требуется Java {0} или более новая, имеется версия {1}.
 plugin-error.dep-jedit=Требуется jEdit {0} или более новая, у Вас версия {1}.\n\
-	Скачайте новую версия jEdit с сайта <http://www.jedit.org>.
+	Скачайте новую версия jEdit с сайта <https://www.jedit.org>.
 plugin-error.dep-plugin.no-version=Требуется {1} версии {0} \
 	или новее,\n\
 	однако {1} не установлено.

@@ -3,7 +3,7 @@ Version: 5:@jedit.build.number@
 Architecture: all
 Maintainer: Contributors <jedit-devel@lists.sourceforge.net>
 Section: contrib/editors
-Homepage: http://www.jedit.org/
+Homepage: https://www.jedit.org/
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Recommends: default-jre | openjdk-11-jre

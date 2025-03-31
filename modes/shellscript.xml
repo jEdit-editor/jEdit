@@ -17,7 +17,7 @@
 		  1. electric enter and the bracket: ")&#xA;"
 		  2. letters ending unindent rules ")iec"
 		  3. all letters ")abcdefghijklmnopqrstuvwxyz"
-		  details: http://jedit.9.n6.nabble.com/jEdit-devel-electric-keys-for-shell-mode-tp4998749.html
+		  details: https://marc.info/?t=133775258000003
 		-->
 		<PROPERTY NAME="electricKeys" VALUE=")abcdefghijklmnopqrstuvwxyz" />
 	</PROPS>

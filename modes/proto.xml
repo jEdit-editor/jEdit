@@ -8,7 +8,7 @@
 
 	File name		:	proto.xml
 	Description		:	JEdit syntax mode for Google Protocol Buffer definitions
-	Related links	:	<https://developers.google.com/protocol-buffers>, <http://www.jedit.org>
+	Related links	:	<https://protobuf.dev/>, <https://www.jedit.org>
 
 	..........................................................................
 	Author			:	Tim Blackler                  <grepppo@users.sf.net>

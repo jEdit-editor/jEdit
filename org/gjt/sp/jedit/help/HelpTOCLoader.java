@@ -175,7 +175,7 @@ public class HelpTOCLoader {
 				Log.log(Log.NOTICE,this,
 					"The API docs for jEdit will not be available (reinstall jEdit if you want them)");
 				root.add(
-					createNode("http://www.jedit.org/api/overview-summary.html",
+					createNode("https://www.jedit.org/api/overview-summary.html",
 						jEdit.getProperty("helpviewer.toc.online-apidocs")));
 			}
 			else

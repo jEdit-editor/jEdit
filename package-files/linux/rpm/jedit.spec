@@ -18,9 +18,9 @@ Release: 1
 Serial: 32
 Copyright: GPL
 Group: Applications/Editors
-Source0: http://prdownloads.sourceforge.net/jedit/jedit41pre9source.tar.gz
+Source0: https://sourceforge.net/projects/jedit/files/jedit-devel/4.1pre9/jedit41pre9source.tar.gz/download
 Source1: jedit.sh.in
-URL: http://www.jEdit.org
+URL: https://www.jEdit.org
 Vendor: Slava Pestov <slava@jedit.org>
 Packager: Slava Pestov <slava@jedit.org>
 BuildArch: noarch

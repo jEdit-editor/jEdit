@@ -5,7 +5,7 @@
 ### :encoding=UTF-8:
 ###
 ### Copyright (C) 1998, 2005 Slava Pestov
-### French translation by Jojaba (http://jojaba.free.fr)
+### French translation by Jojaba (https://jojaba.fr/)
 
 #{{{ jEdit core
 
@@ -1089,7 +1089,7 @@ plugin-error.already-loaded=Deux copies installées. Veuillez supprimer une des 
 	deux copies.
 plugin-error.dep-jdk=Nécessite la version {0} de Java ou supérieure, or vous utilisez la version {1}.
 plugin-error.dep-jedit=Nécessite jEdit {0} ou supérieur, or vous utilisez la version {1}.\n\
-	Téléchargez une nouvelle version de jEdit sur <http://www.jedit.org>.
+	Téléchargez une nouvelle version de jEdit sur <https://www.jedit.org>.
 plugin-error.dep-plugin.no-version=Nécessite la version {0} \
 	ou supérieure de {1},\n\
 	cette version {1} doit être installée.

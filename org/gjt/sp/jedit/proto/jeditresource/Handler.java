@@ -31,9 +31,9 @@ import java.net.*;
  * This way, the Handler is automatically created in a lazy-fashion by the default
  * URLStreamHandlerFactory.
  *
- * see http://java.sun.com/developer/onlineTraining/protocolhandlers/
- * 
- * You should never need to create an instance of this class directly. 
+ * see https://web.archive.org/web/20120626010934/https://java.sun.com/developer/onlineTraining/protocolhandlers
+ *
+ * You should never need to create an instance of this class directly.
  *
  */
 public class Handler extends URLStreamHandler

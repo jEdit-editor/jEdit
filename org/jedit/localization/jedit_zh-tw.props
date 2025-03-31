@@ -1213,7 +1213,7 @@ plugin-error.already-loaded=安裝了兩個相同外掛\n\
 	請嘗試移除其中一個
 plugin-error.dep-jdk=需要 Java {0} 或者更新版本, 但您只有版本 {1}.
 plugin-error.dep-jedit=需要 jEdit {0} 或者更新版本, 但您只有版本 {1}.\n\
-	從<http://www.jedit.org>下載jEdit最新版本.
+	從<https://www.jedit.org>下載jEdit最新版本.
 plugin-error.dep-plugin.no-version=需要版本 {0} \
 	或者 {1}的最新版本,\n\
 	但是 {1} 沒有安裝.

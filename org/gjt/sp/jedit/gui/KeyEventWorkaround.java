@@ -288,7 +288,7 @@ public class KeyEventWorkaround
 				// we consume this to work around the bug
 				// where A+TAB window switching activates
 				// the menu bar on Windows.
-				// http://bugs.sun.com/view_bug.do?bug_id=6458497
+				// https://bugs.openjdk.org/browse/JDK-6458497
 				//
 				// This should be removed if the fix for the
 				// above problem became widely available, to

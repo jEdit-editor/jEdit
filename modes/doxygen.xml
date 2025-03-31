@@ -8,7 +8,7 @@
     </PROPS>
     <!-- just in case someone wonders just like me, what this set of rules is for,
          it's actually for doxygen configuration files, a sample of which can
-         be found here http://www.stack.nl/~dimitri/doxygen/config.html#cfg_extract_static
+         be found here https://www.doxygen.nl/manual/config.html
       -->
     <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
         <!-- Comment -->

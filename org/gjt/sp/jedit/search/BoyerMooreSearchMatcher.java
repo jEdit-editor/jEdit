@@ -108,8 +108,8 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	 *  a good introduction to the Boyer-Moore fast string matching
 	 *  algorithm may be found on Moore's website at:
 	 *
-	 *   http://www.cs.utexas.edu/users/moore/best-ideas/string-searching/
-	 * @throws InterruptedException 
+	 *   https://www.cs.utexas.edu/users/moore/best-ideas/string-searching/
+	 * @throws InterruptedException
 	 *
 	 * @since jEdit 4.3pre5
 	 */

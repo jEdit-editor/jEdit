@@ -16,7 +16,7 @@ Add a MODE entry in the catalog file for the following:
 ===================================================================
 
 Note 1: GCBASIC (Great Cow BASIC) is an open-source BASIC compiler for Microchip PIC microcontrollers.
-        For more information go here   http://gcbasic.sourceforge.net/
+        For more information go here   https://gcbasic.sourceforge.io/
 
 Note 2: It will not unindent as you type.
         However, if you do "Select All" (Ctrl-A), and then do "Indent Lines" (Ctrl-i),

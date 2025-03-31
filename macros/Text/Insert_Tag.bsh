@@ -2,9 +2,9 @@
  * Insert_Tag.bsh - a BeanShell macro script for the
  * jEdit text editor - inserts opening and closing tags
  * around selected text
- * Copyright (C) 2001-2010 
- * John Gellene <jgellene@nyc.rr.com>, Vadim Voituk <vadim@voituk.com> 
- * http://community.jedit.org
+ * Copyright (C) 2001-2010
+ * John Gellene <jgellene@nyc.rr.com>, Vadim Voituk <vadim@voituk.com>
+ * https://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

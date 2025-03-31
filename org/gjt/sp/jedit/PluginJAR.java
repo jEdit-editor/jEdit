@@ -113,7 +113,7 @@ import static org.gjt.sp.jedit.EditBus.EBHandler;
  * loaded from the other .props files.
  * Those files will be ignored by jEdit's versions older than 5.0 and do not
  * cause any problem
- * See <a href="http://sourceforge.net/apps/mediawiki/jedit/index.php?title=Localization">
+ * See <a href="https://web.archive.org/web/20130107051807/https://sourceforge.net/apps/mediawiki/jedit/index.php?title=Localization">
  *         jEdit's localization wiki</a>
  * </ul>
  *

@@ -285,8 +285,8 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 			   one can't connect to host.
 			   Calling setPage outside from the EDT violates
 			   the single-tread rule of Swing, but it's an experienced workaround
-			   (see merge request #2984022 - fix blocking HelpViewer
-			   https://sourceforge.net/tracker/?func=detail&aid=2984022&group_id=588&atid=1235750
+			   (see merge request #20 - fix blocking HelpViewer
+			   https://sourceforge.net/p/jedit/merge-requests/20/
 			   for discussion).
 			   Once jEdit sets JDK 7 as dependency, all this should be
 			   reverted to synchronous code.

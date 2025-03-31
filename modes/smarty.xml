@@ -4,9 +4,9 @@
 * @version		2.0.1 (2010-02-08)
 * @author		Mads Lie Jensen
 * @author		Rowan Collins
-* Improved Smarty highlighting mode, based on http://www.palustris.dk/jedit/smarty.xml
+* Improved Smarty highlighting mode, based on https://www.palustris.dk/jedit/smarty.xml
 *	and the built-in PHP mode from jEdit 4.3
-* @link http://rwec.co.uk/jedit for documentation and updates
+* @link https://rwec.co.uk/jedit for documentation and updates
 */
 
 To install, add this to the "catalog" file:

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- Mode file for Jamon templates. See http://www.jamon.org -->
+<!-- Mode file for Jamon templates. See https://www.jamon.org -->
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;%--" />

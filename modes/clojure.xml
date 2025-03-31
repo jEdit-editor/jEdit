@@ -4,7 +4,7 @@
 
 <!--
     This file is partially based on lisp.xml and mostly in
-    the documentation found at: http://clojure.org/
+    the documentation found at: https://clojure.org/
 
     Why are you looking at this file?
       Do the symbols handled by this file seem out of date?
@@ -164,7 +164,7 @@
             TYPE="MARKUP">#^</MARK_FOLLOWING>
 
             <!-- Based on convention discussed here:
-                     http://www.gigamonkeys.com/book/syntax-and-semantics.html -->
+                     https://www.gigamonkeys.com/book/syntax-and-semantics.html -->
             <EOL_SPAN TYPE="COMMENT4">;;;;</EOL_SPAN>
             <EOL_SPAN TYPE="COMMENT3">;;;</EOL_SPAN>
             <EOL_SPAN TYPE="COMMENT2">;;</EOL_SPAN>

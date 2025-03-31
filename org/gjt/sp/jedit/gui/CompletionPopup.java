@@ -161,7 +161,7 @@ public class CompletionPopup extends JWindow
 			// following one.
 			// "Frame does not receives focus after closing
 			// of the owned window"
-			// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4810575
+			// https://bugs.openjdk.org/browse/JDK-4810575
 			EventQueue.invokeLater(() -> view.getTextArea().requestFocus());
 		}
 	} //}}}

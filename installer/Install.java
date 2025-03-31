@@ -76,7 +76,7 @@ public class Install
 			errorAndExit(isGUI,
 					  "You are running the installer from a directory containing exclamation marks."
 					+ "\nIt is a known cause of failure of the installer"
-					+ "\n(http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4523159 for the curious ones)."
+					+ "\n(https://bugs.openjdk.org/browse/JDK-4523159 for the curious ones)."
 					+ "\nPlease move the installer somewhere else and run it again.");
 		}
 

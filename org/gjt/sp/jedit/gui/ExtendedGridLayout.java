@@ -39,13 +39,13 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * that column. </p>
   * <p>
   * This behavior is similar to
-  * <a href="http://download.oracle.com/javase/6/docs/api/java/awt/GridLayout.html">{@code java.awt.GridLayout}</a>
+  * <a href="https://docs.oracle.com/javase/6/docs/api/java/awt/GridLayout.html">{@code java.awt.GridLayout}</a>
   * but it supports different row heights and
   * column widths for each row/column. </p>
   * <p>
   * For example, the following is a Dialog that lays out ten buttons
   * exactly the same as in the example of the JavaDoc of
-  * <a href="http://download.oracle.com/javase/6/docs/api/java/awt/GridBagLayout.html">{@code java.awt.GridBagLayout}</a>
+  * <a href="https://docs.oracle.com/javase/6/docs/api/java/awt/GridBagLayout.html">{@code java.awt.GridBagLayout}</a>
   * with the difference of vertical and horizontal gaps that can be configured:
   * <hr>
   * <blockquote><pre><span style="color:#000000">
@@ -108,7 +108,7 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   *
   * <p>
   * If you want to reserve free space in a row inbetween components,
-  * add a <a href="http://download.oracle.com/javase/6/docs/api/javax/swing/Box.Filler.html">{@code javax.swing.Box.Filler}</a>
+  * add a <a href="https://docs.oracle.com/javase/6/docs/api/javax/swing/Box.Filler.html">{@code javax.swing.Box.Filler}</a>
   * to the layout if the free space is in the middle of a row,
   * or just don't add components if the free space
   * should be at the end of a row.</p>
@@ -120,11 +120,11 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * One instance of this class can be used to layout multiple
   * containers at the same time. </p>
   *
-  * @author Björn "Vampire" Kautler
+  * @author Björn Kautler
   * @version 1.0
   * @see ExtendedGridLayoutConstraints
-  * @see <a href="http://download.oracle.com/javase/6/docs/api/java/awt/Component.html"><code>java.awt.Component</code></a>
-  * @see <a href="http://download.oracle.com/javase/6/docs/api/javax/swing/Box.Filler.html"><code>javax.swing.Box.Filler</code></a>
+  * @see <a href="https://docs.oracle.com/javase/6/docs/api/java/awt/Component.html"><code>java.awt.Component</code></a>
+  * @see <a href="https://docs.oracle.com/javase/6/docs/api/javax/swing/Box.Filler.html"><code>javax.swing.Box.Filler</code></a>
   */
 public class ExtendedGridLayout implements LayoutManager2
 {

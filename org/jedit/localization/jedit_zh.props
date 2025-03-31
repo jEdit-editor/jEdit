@@ -1084,7 +1084,7 @@ plugin-error.already-loaded=安装了两个相同插\n\
 	请尝试移除其中一个
 plugin-error.dep-jdk=需要 Java {0} 或者更新版本, 但你只有版本 {1}.
 plugin-error.dep-jedit=需要 jEdit {0} 或者更新版本, 但你只有版本 {1}.\n\
-	从<http://www.jedit.org>下载jEdit最新版本.
+	从<https://www.jedit.org>下载jEdit最新版本.
 plugin-error.dep-plugin.no-version=需要版本 {0} \
 	或者 {1}的最新版本,\n\
 	但是 {1} 没有安装.

@@ -1092,7 +1092,7 @@ plugin-error.dep-jdk=Vyžaduje Java verze {0} nebo novější, ale vy máte pouz
 			verzi {1}.
 plugin-error.dep-jedit=Vyžaduje jEdit {0} nebo novější, ale vy máte pouze \n\
 		verzi {1}.\n\
-		Stáhněte si novou verzi z <http://www.jedit.org>.
+		Stáhněte si novou verzi z <https://www.jedit.org>.
 plugin-error.dep-plugin.no-version=Potřebná verze {0} \
 	nebo novější {1},\n\
 	ale {1} není naistalována.

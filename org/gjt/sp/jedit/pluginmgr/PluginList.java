@@ -524,7 +524,7 @@ class PluginList extends Task
 	private static String getAutoSelectedMirror()
 		throws java.io.IOException
 	{
-		final String samplerUrl = "http://sourceforge.net/projects/jedit/files/latest/download";
+		final String samplerUrl = "https://sourceforge.net/projects/jedit/files/latest/download";
 		final HttpURLConnection connection = (HttpURLConnection)((new URL(samplerUrl)).openConnection());
 		connection.setInstanceFollowRedirects(false);
 		final int response = connection.getResponseCode();

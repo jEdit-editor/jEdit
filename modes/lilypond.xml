@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- LilyPond (www.lilypond.org) mode by Bertalan Fodor <lilypondtool@organum.hu> & others at http://lily4jedit.sf.net
+<!-- LilyPond (https://lilypond.org) mode by Bertalan Fodor <lilypondtool@organum.hu> & others at https://sourceforge.net/projects/lily4jedit/ and https://lilypondtool.blogspot.com/
 	Requires jEdit 4.3pre6 or compatible
 Recommended jEdit/modes/catalog entry:
 	<MODE NAME="lilypond" FILE="lilypond.xml"

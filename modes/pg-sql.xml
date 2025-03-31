@@ -6,7 +6,7 @@
    Eric Le Lay, 2013
    mode for PosgreSQL 9.2 flavour of sql and PG-PL/SQL
    based on ora-sql.xml
-   checked against http://www.postgresql.org/docs/9.2/static
+   checked against https://www.postgresql.org/docs/9.2/
 -->
 
 <MODE>
@@ -151,9 +151,9 @@
          <KEYWORD1>COPY</KEYWORD1>
          <KEYWORD1>COST</KEYWORD1>
          <KEYWORD1>CREATE</KEYWORD1>
-         <KEYWORD1>CREATEDB</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
-         <KEYWORD1>CREATEROLE</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
-         <KEYWORD1>CREATEUSER</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
+         <KEYWORD1>CREATEDB</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
+         <KEYWORD1>CREATEROLE</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
+         <KEYWORD1>CREATEUSER</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
          <KEYWORD1>CROSS</KEYWORD1>
          <KEYWORD1>CSV</KEYWORD1>
          <KEYWORD1>CURRENT</KEYWORD1>
@@ -200,7 +200,7 @@
          <KEYWORD1>ENUM</KEYWORD1>
          <KEYWORD1>ESCAPE</KEYWORD1>
          <KEYWORD1>EXCEPT</KEYWORD1>
-         <KEYWORD1>EXCEPTION</KEYWORD1> <!-- http://docs.postgresql.fr/9.2/plpgsql-control-structures.html#plpgsql-error-trapping -->
+         <KEYWORD1>EXCEPTION</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/plpgsql-control-structures.html#PLPGSQL-ERROR-TRAPPING -->
          <KEYWORD1>EXCLUDE</KEYWORD1>
          <KEYWORD1>EXCLUDING</KEYWORD1>
          <KEYWORD1>EXCLUSIVE</KEYWORD1>
@@ -286,7 +286,7 @@
          <KEYWORD1>LOCALTIMESTAMP</KEYWORD1>-->
          <KEYWORD1>LOCATION</KEYWORD1>
          <KEYWORD1>LOCK</KEYWORD1>
-         <KEYWORD1>LOGIN</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
+         <KEYWORD1>LOGIN</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
          <KEYWORD1>MAPPING</KEYWORD1>
          <KEYWORD1>MATCH</KEYWORD1>
          <KEYWORD1>MAXVALUE</KEYWORD1>
@@ -300,16 +300,16 @@
          <KEYWORD1>NATIONAL</KEYWORD1>
          <KEYWORD1>NATURAL</KEYWORD1>
          <KEYWORD1>NCHAR</KEYWORD1>
-         <KEYWORD1>NEW</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/plpgsql-trigger.html -->
+         <KEYWORD1>NEW</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/plpgsql-trigger.html -->
          <KEYWORD1>NEXT</KEYWORD1>
          <KEYWORD1>NO</KEYWORD1>
-         <KEYWORD1>NOCREATEDB</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
-         <KEYWORD1>NOCREATEROLE</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
-         <KEYWORD1>NOCREATEUSER</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
-         <KEYWORD1>NOINHERIT</KEYWORD1>  <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
-         <KEYWORD1>NOLOGIN</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
+         <KEYWORD1>NOCREATEDB</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
+         <KEYWORD1>NOCREATEROLE</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
+         <KEYWORD1>NOCREATEUSER</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
+         <KEYWORD1>NOINHERIT</KEYWORD1>  <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
+         <KEYWORD1>NOLOGIN</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
          <KEYWORD1>NONE</KEYWORD1>
-         <KEYWORD1>NOSUPERUSER</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
+         <KEYWORD1>NOSUPERUSER</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
          <KEYWORD1>NOT</KEYWORD1>
          <KEYWORD1>NOTHING</KEYWORD1>
          <KEYWORD1>NOTIFY</KEYWORD1>
@@ -324,7 +324,7 @@
          <KEYWORD1>OFF</KEYWORD1>
          <KEYWORD1>OFFSET</KEYWORD1>
          <KEYWORD1>OIDS</KEYWORD1>
-         <KEYWORD1>OLD</KEYWORD1><!-- http://www.postgresql.org/docs/9.2/static/plpgsql-trigger.html -->
+         <KEYWORD1>OLD</KEYWORD1><!-- https://www.postgresql.org/docs/9.2/plpgsql-trigger.html -->
          <KEYWORD1>ON</KEYWORD1>
          <KEYWORD1>ONLY</KEYWORD1>
          <KEYWORD1>OPERATOR</KEYWORD1>
@@ -376,7 +376,7 @@
          <KEYWORD1>RESET</KEYWORD1>
          <KEYWORD1>RESTART</KEYWORD1>
          <KEYWORD1>RESTRICT</KEYWORD1>
-         <KEYWORD1>RETURN</KEYWORD1> <!-- http://docs.postgresql.fr/9.2/plpgsql-control-structures.html -->
+         <KEYWORD1>RETURN</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/plpgsql-control-structures.html -->
          <KEYWORD1>RETURNING</KEYWORD1>
          <KEYWORD1>RETURNS</KEYWORD1>
          <KEYWORD1>REVOKE</KEYWORD1>
@@ -419,7 +419,7 @@
          <KEYWORD1>STRICT</KEYWORD1>
          <KEYWORD1>STRIP</KEYWORD1>
          <KEYWORD1>SUBSTRING</KEYWORD1>
-         <KEYWORD1>SUPERUSER</KEYWORD1> <!-- http://www.postgresql.org/docs/9.2/static/sql-createrole.html -->
+         <KEYWORD1>SUPERUSER</KEYWORD1> <!-- https://www.postgresql.org/docs/9.2/sql-createrole.html -->
          <KEYWORD1>SYMMETRIC</KEYWORD1>
          <KEYWORD1>SYSID</KEYWORD1>
          <KEYWORD1>SYSTEM</KEYWORD1>

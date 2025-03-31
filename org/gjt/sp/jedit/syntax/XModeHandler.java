@@ -484,7 +484,7 @@ public abstract class XModeHandler extends DefaultHandler
 	private ParserRuleSet rules;
 	/**
 	 *  A list of modes to be reloaded at the end, loaded through DELEGATEs
-	 *  @see http://sourceforge.net/tracker/index.php?func=detail&aid=1742250&group_id=588&atid=100588
+	 *  @see <a href="https://sourceforge.net/p/jedit/bugs/2895/">https://sourceforge.net/p/jedit/bugs/2895/</a>
 	 */
 	private Vector<Mode> reloadModes;
 	//}}}

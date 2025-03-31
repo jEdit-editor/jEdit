@@ -7,7 +7,7 @@ Author:       Bernhard Walle <bernhard.walle@gmx.de>
 
 <MODE NAME="cmake" FILE="cmake.xml" FILE_NAME_GLOB="CMakeLists.txt"/>
 
-see http://jedit.org/users-guide/installing-modes.html
+see https://jedit.org/users-guide/installing-modes.html
 -->
 <MODE>
 	<PROPS>

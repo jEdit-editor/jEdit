@@ -24,7 +24,7 @@
 
 		<!--
 		  String Literals
-		  http://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/fundamentals.htm#i38404
+		  https://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/fundamentals.htm#i38404
 		  -->
 		<SPAN_REGEXP TYPE="LITERAL1" HASH_CHARS="nq">
 			<BEGIN>n?q'(.)</BEGIN>
@@ -48,7 +48,7 @@
 		
 		<!--
 		  PL/SQL Operators
-		  http://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/fundamentals.htm#CBJIIIEA
+		  https://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/fundamentals.htm#CBJIIIEA
 		  -->
 		<SEQ TYPE="OPERATOR">!=</SEQ>
 		<SEQ TYPE="OPERATOR">*</SEQ>
@@ -72,7 +72,7 @@
 		<KEYWORDS>
 			<!--
 			  PL/SQL reserved words
-			  http://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/reservewords.htm#CIHDHDCH
+			  https://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/reservewords.htm#CIHDHDCH
 			  -->
 			<KEYWORD1>ALL</KEYWORD1>
 			<KEYWORD1>ALTER</KEYWORD1>
@@ -164,7 +164,7 @@
 			
 			<!--
 			  PL/SQL keywords
-			  http://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/reservewords.htm#CIHFDHGB
+			  https://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/reservewords.htm#CIHFDHGB
 			  -->
 			<KEYWORD1>A</KEYWORD1>
 			<KEYWORD1>ADD</KEYWORD1>
@@ -408,7 +408,7 @@
 
 			<!--
 			  PL/SQL data types
-			  http://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/datatypes.htm
+			  https://download.oracle.com/docs/cd/B28359_01/appdev.111/b28370/datatypes.htm
 			  -->
 			<KEYWORD1>AL16UTF16</KEYWORD1>
 			<KEYWORD1>BFILE</KEYWORD1>
@@ -471,7 +471,7 @@
 
 			<!--
 			  Oracle functions
-			  http://download.oracle.com/docs/cd/B28359_01/server.111/b28286/functions001.htm
+			  https://download.oracle.com/docs/cd/B28359_01/server.111/b28286/functions001.htm
 			  -->
 			<KEYWORD2>ABS</KEYWORD2>
 			<KEYWORD2>ACOS</KEYWORD2>
@@ -714,7 +714,7 @@
 
 			<!--
 			  Oracle supplied packages
-			  http://download.oracle.com/docs/cd/B28359_01/appdev.111/b28419/toc.htm
+			  https://download.oracle.com/docs/cd/B28359_01/appdev.111/b28419/toc.htm
 			  -->
 			<KEYWORD3>APEX_APPLICATION</KEYWORD3>
 			<KEYWORD3>APEX_CUSTOM_AUTH</KEYWORD3>

@@ -22,7 +22,7 @@
                     <guimenuitem>Plugin Manager</guimenuitem> feature on jEdit's
                     <guimenu>Plugin</guimenu> menu. You can also get more
                     detailed descriptions of the plugins from the <ulink
-                    url="http://plugins.jedit.org">Plugin Central</ulink> web
+                    url="https://plugins.jedit.org">Plugin Central</ulink> web
                     site.</para>
                 </answer>
             </qandaentry>
@@ -70,7 +70,7 @@
                     features or user interface you might use as a model. The
                     <ulink url="mailto:jedit-devel@lists.sourceforge.net">jedit-devel mailing
                     list</ulink> and the message boards at <ulink
-                    url="http://community.jedit.org">jEdit Community</ulink> are
+                    url="https://community.jedit.org">jEdit Community</ulink> are
                     also available for specific questions.</para>
                 </answer>
             </qandaentry>
@@ -173,8 +173,8 @@
                 </question>
                 <answer>
                     <para>The FTP plugin allows remote editing of files over the
-                    <literal>SFTP://</literal> and <literal>FTP://</literal>
-                    protocols. <literal>HTTP://</literal> is supported natively
+                    <literal>sftp://</literal> and <literal>ftp://</literal>
+                    protocols. <literal>https://</literal> is supported natively
                     in jEdit. </para>
                 </answer>
             </qandaentry>

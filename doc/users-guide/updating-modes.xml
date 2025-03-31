@@ -12,9 +12,9 @@
             <listitem>
                 <para>All regular expressions in mode files were rewritten to
                 use <ulink
-                url="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html#sum">
+                url="https://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html#sum">
                 java.util.regex</ulink> instead of <ulink
-                url="http://nlp.stanford.edu/nlp/javadoc/gnu-regexp-docs/syntax.html">
+                url="https://web.archive.org/web/20090831101716/https://nlp.stanford.edu/nlp/javadoc/gnu-regexp-docs/syntax.html">
                 gnu.regexp</ulink>.</para>
             </listitem>
 

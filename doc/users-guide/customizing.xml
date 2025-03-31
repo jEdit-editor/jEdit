@@ -382,22 +382,22 @@
             <itemizedlist>
               <listitem><para>
                 <literal>BOM</literal>:
-                detects <ulink url="http://www.unicode.org/faq/utf_bom.html#BOM">
+                detects <ulink url="https://www.unicode.org/faq/utf_bom.html#BOM">
                 Byte Order Mark</ulink>.
               </para></listitem>
               <listitem><para>
                 <literal>XML-PI</literal>:
-                detects <ulink url="http://www.w3.org/TR/REC-xml/#charencoding">
+                detects <ulink url="https://www.w3.org/TR/REC-xml/#charencoding">
                 encoding declaration in XML Processing Instruction</ulink>.
               </para></listitem>
               <listitem><para>
                 <literal>html</literal>:
-                detects <ulink url="http://www.w3.org/TR/html4/struct/global.html#edef-META">
+                detects <ulink url="https://www.w3.org/TR/html4/struct/global.html#edef-META">
                 charset description in HTML META element</ulink>.
               </para></listitem>
               <listitem><para>
                 <literal>python</literal>:
-                detects <ulink url="http://docs.python.org/reference/lexical_analysis.html#encoding-declarations">
+                detects <ulink url="https://docs.python.org/reference/lexical_analysis.html#encoding-declarations">
                 various encoding declaration accepted in Python</ulink>. This
                 accepts encoding declarations for GNU Emacs or Bram Moolenaar's
                 VIM.

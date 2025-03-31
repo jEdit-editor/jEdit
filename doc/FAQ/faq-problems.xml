@@ -207,7 +207,7 @@ view.unsplitCurrent();
                     installation file is corrupt or incomplete. Check the file
                     name, download the installer again if necessary, and be sure
                     to follow any specific instructions for your operating
-                    system posted on the <ulink url="http://www.jedit.org">jEdit
+                    system posted on the <ulink url="https://www.jedit.org">jEdit
                     web site</ulink>.</para>
                 </answer>
             </qandaentry>
@@ -272,7 +272,7 @@ view.unsplitCurrent();
                       <para>
                       Another way to get a thread dump is to run jEdit as you
                       normally would, then run
-                      <ulink url="http://visualvm.java.net/">visualvm</ulink>.
+                      <ulink url="https://visualvm.github.io/">visualvm</ulink>.
                       You can right click on the jEdit process from within
                       visualvm and choose "thread dump".
                       </para>

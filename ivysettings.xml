@@ -24,7 +24,7 @@
 	<settings defaultResolver="default"/>
 
 	<resolvers>
-		<ibiblio name="public" root="https://repo1.maven.org/maven2/" m2compatible="true"/>
+		<ibiblio name="public" root="https://repo.maven.apache.org/maven2/" m2compatible="true"/>
 		<url name="jedit-plugins">
 			<artifact pattern="jar:https://sourceforge.net/projects/jedit-plugins/files/[artifact]/[revision]/[artifact]-[revision]-bin.zip/download!/[artifact].jar" />
 		</url>

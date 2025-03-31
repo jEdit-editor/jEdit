@@ -90,7 +90,7 @@ public class PatternSearchMatcher extends SearchMatcher
 	{
 		// "For the mean time, there is no way to automatically generate a sexeger"
 		//
-		// http://japhy.perlmonk.org/sexeger/sexeger.html
+		// https://www.perlmonks.org/?node_id=33410
 		//
 		// So ... for reverse regex searches we will search 
 		// the string in the forward direction and 

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE MODE SYSTEM "xmode.dtd"><!--
 
-  Markdown mode for jEdit by Peter Lynch (http://peterlynch.ca)
-  Original inspiration drawn from Ali Rantakari's jEdit mode at http://hasseg.org
-  Markdown home: http://daringfireball.net/projects/markdown/
+  Markdown mode for jEdit by Peter Lynch (https://blog.peterlynch.ca/)
+  Original inspiration drawn from Ali Rantakari's jEdit mode at https://hasseg.org
+  Markdown home: https://daringfireball.net/projects/markdown/
 
   Suggested Habits and limitations for using this syntax
   * first rule - avoid being 'lazy' as defined in the spec. This means not indenting lines 2 - n in unordered lists and

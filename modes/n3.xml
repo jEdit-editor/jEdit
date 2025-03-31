@@ -3,7 +3,7 @@
 Basic N3 mode by Jakub Roztočil <jakub@roztocil.name>
 
 	N3 (Notation3) is a shorthand non-XML serialization of RDF
-	<http://www.w3.org/DesignIssues/Notation3.html>
+	<https://www.w3.org/DesignIssues/Notation3.html>
 
 Catalog entry:
 
@@ -11,7 +11,7 @@ Catalog entry:
 
 TODO:
 	* different highlighting for subject, predicate and object
-	* higlight qnames, not only prefixes (prefix:qname)
+	* highlight qnames, not only prefixes (prefix:qname)
 
 -->
 <!DOCTYPE MODE SYSTEM "xmode.dtd">

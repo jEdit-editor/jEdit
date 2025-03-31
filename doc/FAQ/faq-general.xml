@@ -65,7 +65,7 @@
                 <answer>
                     <para>The short answer is, too many to list here. There is a
                     detailed list available on the <ulink
-                    url="http://www.jedit.org/index.php?page=features">jEdit web
+                    url="https://www.jedit.org/index.php?page=features">jEdit web
                     site</ulink>, but here are some of the major
                     features:</para>
                     <itemizedlist>
@@ -174,7 +174,7 @@
                     installed, and kept current from within jEdit's
                     <quote>Plugin Manager</quote>. There is also a section of
                     the jEdit web site called <ulink
-                    url="http://plugins.jedit.org/">Plugin Central</ulink> that
+                    url="https://plugins.jedit.org/">Plugin Central</ulink> that
                     maintains a descriptive index and download links for all
                     publicly available plugins.</para>
                     <para>Additional questions and answers regarding plugins may
@@ -190,7 +190,7 @@
                     <para>There is a comprehensive User's Guide available from
                     within the program using the <guimenu>Help</guimenu> menu.
                     The User's Guide can also be downloaded from the <ulink
-                    url="http://www.jedit.org/index.php?page=download&amp;platform=source">
+                    url="https://www.jedit.org/index.php?page=download&amp;platform=source">
                     jEdit web site</ulink> in Portable Document Format (PDF),
                     suitable for online display or printing.</para>
                 </answer>
@@ -207,20 +207,20 @@
                     <itemizedlist>
                         <listitem>
                             <para>The <ulink
-                            url="http://lists.sourceforge.net/lists/listinfo/jedit-users">
+                            url="https://lists.sourceforge.net/lists/listinfo/jedit-users">
                             jedit-users list</ulink>, for comments and questions
                             about using jEdit and its features</para>
                         </listitem>
                         <listitem>
                             <para>The <ulink
-                            url="http://lists.sourceforge.net/lists/listinfo/jedit-devel">
+                            url="https://lists.sourceforge.net/lists/listinfo/jedit-devel">
                             jedit-devel list</ulink>, for discussion of
                             development issues by members of the developer team
                             and other interested persons</para>
                         </listitem>
                         <listitem>
                             <para>The <ulink
-                            url="http://lists.sourceforge.net/lists/listinfo/jedit-announce">
+                            url="https://lists.sourceforge.net/lists/listinfo/jedit-announce">
                             jedit-announce list</ulink>, a low-volume list used
                             for announcing new releases of jEdit and
                             plugins</para>
@@ -231,14 +231,14 @@
                     groups of postings in a single email message.</para>
                     <para>If you are only interested in version announcements
                     and plugin updates, <ulink
-                    url="http://lists.sourceforge.net/lists/listinfo/jedit-announce">
+                    url="https://lists.sourceforge.net/lists/listinfo/jedit-announce">
                     subscribe to the jedit-announce list</ulink>. If you would
                     like to participate in discussion or ask questions regarding
                     jEdit, <ulink
-                    url="http://lists.sourceforge.net/lists/listinfo/jedit-users">subscribe
+                    url="https://lists.sourceforge.net/lists/listinfo/jedit-users">subscribe
                     to the jedit-users list</ulink>. If you are interested in
                     jEdit's development or want to write plugins, <ulink
-                    url="http://lists.sourceforge.net/lists/listinfo/jedit-devel">
+                    url="https://lists.sourceforge.net/lists/listinfo/jedit-devel">
                     subscribe to jedit-devel</ulink>.</para>
                     <para>Do not cross-post to both lists. All jEdit developers
                     are subscribed to both the jedit-users and jedit-devel
@@ -254,15 +254,15 @@
                 </question>
                 <answer>
                     <para>There are several. The official <ulink
-                    url="http://www.jedit.org">jEdit web site</ulink> contains
+                    url="https://www.jedit.org">jEdit web site</ulink> contains
                     extensive information on all things having to do with jEdit.
                     There are also resources available for those interested in
                     jEdit development on the <ulink
-                    url="http://sourceforge.net/projects/jedit">jEdit project
+                    url="https://sourceforge.net/projects/jedit">jEdit project
                     page</ulink> of the <ulink
-                    url="http://sourceforge.net">SourceForge web
+                    url="https://sourceforge.net">SourceForge web
                     site</ulink>.</para>
-                    <para>The <ulink url="http://community.jedit.org">jEdit
+                    <para>The <ulink url="https://community.jedit.org">jEdit
                     Community</ulink> web site has articles on jEdit and related
                     topics, user-submitted macros and other download resources,
                     and listings of web links of interest to jEdit users. It has
@@ -286,7 +286,7 @@
                 <answer>
                     <para>The jEdit application is free, <quote>Open
                     Source</quote> software released under the <ulink
-                    url="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">
+                    url="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">
                     GNU General Public License 2.0</ulink>. This ensures that
                     jEdit and its source code remains freely available for use
                     and distribution by the public. For specific copyright
@@ -298,9 +298,9 @@
                     License.</para>
                     <para>Plugin application that are available using jEdit's
                     Plugin Manager facility, as well as plugins available
-                    through the <ulink url="http://plugins.jedit.org">Plugin
+                    through the <ulink url="https://plugins.jedit.org">Plugin
                     Central</ulink> web site or <ulink
-                    url="http://community.jedit.org">jEdit Community</ulink>,
+                    url="https://community.jedit.org">jEdit Community</ulink>,
                     are governed either by the General Public License or another
                     commonly recognized <quote>Open Source</quote> software
                     license. This means that use of the application, including
@@ -328,7 +328,7 @@
                     Cobol, HTML, Java, Javascript, Lisp, Pascal, Perl, PHP,
                     Python, Ruby, TCL, Visual Basic and XML. The full list can
                     be found on the <ulink
-                    url="http://www.jedit.org/index.php?page=features">jEdit web
+                    url="https://www.jedit.org/index.php?page=features">jEdit web
                     site</ulink>.</para>
                 </answer>
             </qandaentry>
@@ -365,7 +365,7 @@
                     obtaining a JDK package.</para>
                     <para>The current version of jEdit requires a
                     Java runtime environment having a release version of 11 or greater. The <ulink
-                    url="http://www.jedit.org/index.php?page=compatibility">jEdit
+                    url="https://www.jedit.org/index.php?page=compatibility">jEdit
                     web site</ulink> contains a detailed discussion on the
                     compatibility of various publicly available JDKs for the
                     major operating systems.</para>
@@ -414,9 +414,9 @@
                         <listitem>
                             <para>The archives of jEdit's mailing lists. Archives
                             for both the <ulink
-                            url="http://www.geocrawler.com/redir-sf.php3?list=jedit-users">
+                            url="https://marc.info/?l=jedit-users">
                             jedit-users list</ulink> and the <ulink
-                            url="http://www.geocrawler.com/redir-sf.php3?list=jedit-devel">
+                            url="https://marc.info/?l=jedit-devel">
                             jedit-devel list</ulink> are available.</para>
                         </listitem>
                     </itemizedlist>
@@ -424,7 +424,7 @@
                     your question to the <ulink
                     url="mailto:jedit-users@lists.sourceforge.net"> jedit-users
                     list</ulink>. You will have to <ulink
-                    url="http://lists.sourceforge.net/lists/listinfo/jedit-users">
+                    url="https://lists.sourceforge.net/lists/listinfo/jedit-users">
                     subscribe to the mailing list</ulink> in order to post, but
                     it is well worth it, and you can elect to have daily bundles
                     of messages sent to you to keep email traffic down. Many
@@ -460,10 +460,10 @@
                 <answer>
                     <para>To be as helpful as possible to the jEdit developer
                     team and other users, you should use the <ulink
-                    url="http://sourceforge.net/tracker/index.php?group_id=588&amp;atid=100588">
+                    url="https://sourceforge.net/p/jedit/bugs/">
                     bug tracker database</ulink> that the jEdit project
                     maintains on the <ulink
-                    url="http://sourceforge.net/">SourceForge web site</ulink>.
+                    url="https://sourceforge.net/">SourceForge web site</ulink>.
                     You need to be a SourceForge member to post a bug
                     report.</para>
                     <para>Before posting a bug report, spend a few moments
@@ -518,11 +518,11 @@
                 <answer>
                     <para>If you know the bug report number, go to this web
                     address:
-                    <userinput>http://sourceforge.net/tracker/index.php?func=detail&amp;aid=######&amp;group_id=588&amp;atid=100588</userinput>,
+                    <userinput>https://sourceforge.net/p/jedit/bugs/######/</userinput>,
                     where <userinput>######</userinput> is the bug report
                     number. If you don't know the bug report number, you can
                     browse and search the <ulink
-                    url="http://sourceforge.net/tracker/index.php?group_id=588&amp;atid=100588">
+                    url="https://sourceforge.net/p/jedit/bugs/">
                     bug database</ulink> to find the problem in which you are
                     interested.</para>
                 </answer>
@@ -546,7 +546,7 @@
                     url="mailto:jedit-users@lists.sourceforge.net"> jedit-devel
                     list</ulink>. Email addresses for individual developers can
                     be found on the <ulink
-                    url="http://sourceforge.net/project/memberlist.php?group_id=588">
+                    url="https://sourceforge.net/p/jedit/_members/">
                     SourceForge web site</ulink>.</para>
                 </answer>
             </qandaentry>
@@ -571,11 +571,11 @@
                     number, as in <literal>4.5pre1</literal>.</para>
                     <para>The latest stable and development versions of jEdit
                     are always available from the <ulink
-                    url="http://www.jedit.org">jEdit web site</ulink> and from
+                    url="https://www.jedit.org">jEdit web site</ulink> and from
                     the <ulink
-                    url="http://sourceforge.net/         projects/jedit">jEdit
+                    url="https://sourceforge.net/projects/jedit">jEdit
                     project page</ulink> of the <ulink
-                    url="http://sourceforge.net">SourceForge web site</ulink>,
+                    url="https://sourceforge.net">SourceForge web site</ulink>,
                     which hosts jEdit's development resources.</para>
                     <para>In addition, a plugin named <application>Updater</application> can be run from
                     within jEdit by installing the Updater plugin,
@@ -583,9 +583,9 @@
                     from the application's <guimenu>Plugins</guimenu> menu. It has actions to update to the latest released version, or the latest daily build from the development branch. It queries the jEdit web site, compares chosen version information
                     with the version of the currently running instance of jEdit, and reports the result to the user in a message box. If an update is available, it will download the version, install it and shut down jEdit for you. </para>
                     <para>Finally, if you subscribe to the <ulink
-                    url="http://lists.sourceforge.net/lists/listinfo/jedit-announce">
+                    url="https://lists.sourceforge.net/lists/listinfo/jedit-announce">
                     jedit-announce</ulink> or <ulink
-                    url="http://lists.sourceforge.net/lists/listinfo/jedit-users">
+                    url="https://lists.sourceforge.net/lists/listinfo/jedit-users">
                     jedit-users</ulink> mailing lists, you will receive an email
                     whenever a new release of jEdit becomes available.</para>
                 </answer>
@@ -598,19 +598,23 @@
                 <answer>
                     <para>The latest version of jEdit's source code is available
                     from the <ulink
-                    url="http://www.jedit.org/index.php?page=download&amp;platform=source">
+                    url="https://www.jedit.org/index.php?page=download&amp;platform=source">
                     jEdit web site</ulink> or the <ulink
-                    url="http://sourceforge.net/project/showfiles.php?group_id=588">
+                    url="https://sourceforge.net/projects/jedit/files/">
                     SourceForge web site</ulink>. The web site provides the
                     source code for the latest stable and development version,
                     while the SourceForge site has a more extensive archive
                     covering earlier versions.</para>
                     <para>If you are interested in testing the absolutely latest
                     changes to jEdit, and you are familiar with compiling your
-                    own Java programs and working with Subversion, you can
+                    own Java programs and working with Git, you can
                     download the current code maintained in the <ulink
-                    url="http://jedit.svn.sourceforge.net/viewvc/jedit/">SourceForge
-                    SVN repository</ulink>.</para>
+                    url="https://sourceforge.net/p/jedit/jEdit/">SourceForge
+                    Git repository</ulink>.</para>
+                    <para>Alternatively, you can also get a continuous build
+                    of the latest source code from <ulink
+                    url="https://github.com/jEdit-editor/jEdit/actions/workflows/build.yaml">GitHub
+                    Actions continuous build for jEdit</ulink>.</para>
                 </answer>
             </qandaentry>
             <qandaentry>
@@ -620,7 +624,7 @@
                 </question>
                 <answer>
                     <para>The latest release of this document is available on
-                    the <ulink url="http://www.jedit.org/FAQ/index.html">jEdit
+                    the <ulink url="https://www.jedit.org/FAQ/index.html">jEdit
                     web site</ulink>.</para>
                 </answer>
             </qandaentry>

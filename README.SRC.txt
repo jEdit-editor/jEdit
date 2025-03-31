@@ -8,7 +8,7 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For all tasks:
 
-  - Apache Ant. Get it from <http://ant.apache.org>.
+  - Apache Ant. Get it from <https://ant.apache.org>.
     1.9.10 or newer has to be used.
   - The Ant Optional package. This is included in the download from ants website,
     as well as the AntPlugin from the Plugin Manager,
@@ -19,20 +19,20 @@ General jEdit documentation can be found in the 'doc' directory.
  For building jEdit, the API documentation or any of the
  distribution files except of the source package:
 
-  - A Java compiler of version 11, such as OpenJDK's javac which is
-    included in the JDK. Get it from <http://www.java.com/download>
-    or from your package manager - e. g. openjdk-11-jdk.
+  - A Java compiler of version 11, such as Temurin's javac which is included in
+    the JDK. Get it from <https://adoptium.net/de/temurin/releases/?version=11>
+    or from your package manager - e.g. openjdk-11-jdk.
 
  For building the API documentation:
 
-  - Sun's javadoc tool, which is included in the JDK.
-    Get it from <http://www.java.com/download> or from your package
-    manager - e. g. openjdk-11-jdk.
+  - Sun's javadoc tool, which is included in the JDK. Get it from
+    <https://adoptium.net/de/temurin/releases/?version=11> or from
+    your package manager - e.g. openjdk-11-jdk.
 
  For building the windows installer (for the final step):
 
-  - Inno Setup 6.0.0 or newer. Get it from <http://www.jrsoftware.org/isdl.php>
-  - A box running windows or wine, e. g. on *nix. If Inno Setup should be
+  - Inno Setup 6.0.0 or newer. Get it from <https://www.jrsoftware.org/isdl.php>
+  - A box running windows or wine, e.g. on *nix. If Inno Setup should be
     run via wine, a wine version of at least 1.3.10 is required because
     of a bug in earlier wine versions.
 

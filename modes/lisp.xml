@@ -36,7 +36,7 @@
 
 		<!--
 		Based on convention discussed here:
-			http://www.gigamonkeys.com/book/syntax-and-semantics.html
+			https://www.gigamonkeys.com/book/syntax-and-semantics.html
 		-->
 		<EOL_SPAN TYPE="COMMENT4">;;;;</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT3">;;;</EOL_SPAN>
@@ -50,7 +50,7 @@
 
 		<!--
 			keywords from j
-				(http://armedbear-j.sourceforge.net/)
+				(https://armedbear-j.sourceforge.net/)
                         Duplicates removed; KEYWORD1 and KEYWORD2
                           better aligned with Emacs Lisp mode
                         Missing Common Lisp symbols added; now 970 symbols total

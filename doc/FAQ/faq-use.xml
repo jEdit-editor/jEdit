@@ -193,7 +193,7 @@
 									the file.</para>
 
 									<para>There is a startup script in the <quote>Downloads</quote> area of
-									<ulink url="http://community.jedit.org">jEdit Community</ulink> named
+									<ulink url="https://community.jedit.org">jEdit Community</ulink> named
 									<filename>euro.bsh</filename> that can be used as a startup script to
 									help simplify the insertion of the Euro symbol if your keyboard
 									currently lacks a dedicated key.</para>
@@ -493,7 +493,7 @@
 										multi-layered DocBook elements.</para>
 
 										<para>There are other macros targeting DocBook available
-										from the <ulink url="http://community.jedit.org">jEdit
+										from the <ulink url="https://community.jedit.org">jEdit
 										Community</ulink> web site that you can use or adapt for
 										your own purposes.</para>
 								</answer>
@@ -557,7 +557,7 @@
 										<para>The implementation of BeanShell used in jEdit does not
 										use BeanShell's class loader. The script method contained in
 										loadJarClasses.bsh (found in the Downloads section of <ulink
-										url="http://community.jedit.org">jEdit Community</ulink>)
+										url="https://community.jedit.org">jEdit Community</ulink>)
 										should work if you know the path to a specific class file or
 										class archive.</para>
 								</answer>
