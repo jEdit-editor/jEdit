@@ -80,6 +80,7 @@ import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 
+import static java.lang.Boolean.FALSE;
 import static java.lang.Integer.parseInt;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.WRITE;
@@ -2811,6 +2812,65 @@ public class jEdit
 
 	//}}}
 
+	//{{{ GUI visibility methods
+
+	//{{{ toggleGUIVisibility() method
+	/**
+	 * Iconify to tray
+	 */
+	public static void toggleGUIVisibility()
+	{
+		if(getActiveView().isVisible())
+			hideGUI();
+		else
+			unhideGUI();
+	} //}}}
+
+	//{{{ hideGUI() method
+	public static void hideGUI()
+	{
+		if(!getActiveView().isVisible())
+			return;
+		for (Window window : Window.getOwnerlessWindows())
+		{
+			if (skipWindowHiding(window))
+				continue;
+			windowState.put(window, window.isVisible());
+			window.setVisible(false);
+		}
+	} //}}}
+
+	//{{{ unhideGUI() method
+	public static void unhideGUI()
+	{
+		if(getActiveView().isVisible())
+			return;
+		for (Window window : Window.getOwnerlessWindows())
+		{
+			if (skipWindowHiding(window))
+				continue;
+			Boolean previousState = windowState.get(window);
+			if (!FALSE.equals(previousState))
+				window.setVisible(true);
+		}
+		windowState.clear();
+		jEdit.getActiveView().toFront();
+	} //}}}
+
+	//{{{ skipWindowHiding method
+	/**
+	 * Check if a window should be hidden.
+	 *
+	 * @param window the window to check
+	 * @return true if the window should be hidden
+	 */
+	private static boolean skipWindowHiding(Window window)
+	{
+		return window.getClass().getName().contains("Tray");
+	} //}}}
+
+	//}}}
+
 	//{{{ Miscellaneous methods
 
 	//{{{ relocateSettings() method
@@ -3334,6 +3394,7 @@ public class jEdit
 
 	private static BufferSetManager bufferSetManager;
 	private static BufferManagerImpl bufferManager = new BufferManagerImpl();
+	private static final Map<Window,Boolean> windowState = new HashMap<>();
 	private static ViewManagerImpl viewManager = new ViewManagerImpl();
 	private static EditPaneManager editPaneManager = new EditPaneManagerImpl(viewManager);
 	public static SystemManager systemManager = new SystemManager();

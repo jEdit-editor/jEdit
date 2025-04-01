@@ -22,14 +22,10 @@
 package org.gjt.sp.jedit.gui.tray;
 
 //{{{ Imports
-import java.awt.Frame;
-import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -84,7 +80,7 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 			setToolTip(String.join(" | ", sl));
 		}
 	}
-	
+
 	//{{{ setTrayIconArgs() method
 	@Override
 	void setTrayIconArgs(boolean restore, String userDir, String[] args)
@@ -97,60 +93,15 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 	//{{{ MyMouseAdapter class
 	private class MyMouseAdapter extends MouseAdapter
 	{
-		private final Map<Window,Boolean> windowState = new HashMap<>();
-
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
 			if (e.getButton() != MouseEvent.BUTTON1)
 				return;
 			if (jEdit.getViewCount() == 0)
-			{
 				EditServer.handleClient(restore, true, false, userDir, args);
-			}
 			else
-			{
-				boolean newVisibilityState = !jEdit.getActiveView().isVisible();
-				if (newVisibilityState)
-				{
-					for (Window window : Window.getOwnerlessWindows())
-					{
-						if (skipWindow(window))
-							continue;
-						Boolean previousState = windowState.get(window);
-						if (previousState == null)
-							window.setVisible(true);
-						else if (previousState)
-							window.setVisible(previousState);
-					}
-					windowState.clear();
-					if (jEdit.getActiveView().getState() == Frame.ICONIFIED)
-						jEdit.getActiveView().setState(Frame.NORMAL);
-					jEdit.getActiveView().toFront();
-				}
-				else
-				{
-					for (Window window : Window.getOwnerlessWindows())
-					{
-						if (skipWindow(window))
-							continue;
-						windowState.put(window, window.isVisible());
-						window.setVisible(false);
-					}
-				}
-			}
+				jEdit.toggleGUIVisibility();
 		}
-
-		//{{{ skipWindow method
-		/**
-		 * Check if a window is not top level or systray icon
-		 * @param window the checked window
-		 * @return true if it is not toplevel or systray icon
-		 */
-		private boolean skipWindow(Window window)
-		{
-			return window.getClass().getName().contains("Tray");
-		} //}}}
-
 	} //}}}
 }
