@@ -1003,8 +1003,8 @@ vfs.browser.open-in=vfs.browser.open-view \
 #}}}
 
 #{{{ Plugin manager
-plugin-manager.export-url=http://plugins.jedit.org/export/gzip_plugin_manager.php
-plugin-manager.mirror-url=http://plugins.jedit.org/export/mirror_list.php
+plugin-manager.export-url=https://plugins.jedit.org/export/gzip_plugin_manager.php
+plugin-manager.mirror-url=https://plugins.jedit.org/export/mirror_list.php
 
 #{{{ Plugin management
 manage-plugins.restore.icon=22x22/actions/document-open.png

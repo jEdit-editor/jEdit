@@ -447,9 +447,9 @@ class Roster
 		{
 			try
 			{
-				String host = jEdit.getProperty("plugin-manager.mirror.id");
-				if (host == null || host.equals(MirrorList.Mirror.NONE))
-					host = "default";
+				String mirror = jEdit.getProperty("plugin-manager.mirror.id");
+				if (mirror == null || mirror.equals(MirrorList.Mirror.NONE))
+					mirror = "default";
 
 				// follow HTTP redirects
 				boolean finalUrlFound = false;
@@ -465,7 +465,7 @@ class Roster
 					int responseCode = httpConn.getResponseCode();
 					String locationHeader = httpConn.getHeaderField("Location");
 					if ((responseCode >= 300) && (responseCode < 400) && (locationHeader != null))
-						finalUrl = locationHeader.replaceFirst("^https:", "http:");
+						finalUrl = locationHeader;
 					else
 						finalUrlFound = true;
 				}
@@ -475,8 +475,8 @@ class Roster
 				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
 				Matcher hostMatcher = HOST_REGEX.matcher(finalUrl);
 				if (hostMatcher.find())
-					host = hostMatcher.group();
-				String progressMessage = jEdit.getProperty("plugin-manager.progress", new String[]{fileName, host});
+					mirror = hostMatcher.group();
+				String progressMessage = jEdit.getProperty("plugin-manager.progress", new String[]{fileName, mirror});
 				progress.setStatus(progressMessage);
 				try (InputStream in = conn.getInputStream();
 				     FileOutputStream out = new FileOutputStream(path))

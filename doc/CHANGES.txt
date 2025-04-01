@@ -60,6 +60,9 @@ for contributing to this release.
 - Prevent multiple jEdit instances using the same settings directory using a
   file lock (Björn Kautler)
 
+- Use HTTPS to download mirror list, plugin list, and plugins
+  (#4043 - Björn Kautler)
+
 }}}
 {{{ API Changes
 
