@@ -253,26 +253,8 @@ public class EditServer extends Thread
 		{
 			// no background mode, and reusing existing view
 			View view = jEdit.getActiveView();
-
 			Buffer buffer = jEdit.openFiles(view,parent,args);
-
-			// Hack done to fix bringing the window to the front.
-			// At least on windows, Frame.toFront() doesn't cut it.
-			// Remove the isWindows check if it's broken under other
-			// OSes too.
-			if (jEdit.getBooleanProperty("server.brokenToFront"))
-				view.setState(java.awt.Frame.ICONIFIED);
-
-			// un-iconify using JDK 1.3 API
-			view.setState(java.awt.Frame.NORMAL);
-			view.requestFocus();
 			view.toFront();
-			// In some platforms (e.g. Windows), only setAlwaysOnTop works
-			if (! view.isAlwaysOnTop())
-			{
-				view.setAlwaysOnTop(true);
-				view.setAlwaysOnTop(false);
-			}
 			return buffer;
 		}
 	} //}}}

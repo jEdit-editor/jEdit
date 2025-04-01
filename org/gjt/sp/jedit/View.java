@@ -1237,6 +1237,26 @@ public class View extends JFrame implements InputHandlerProvider
 		this.waitSocket = waitSocket;
 	} //}}}
 
+	//{{{ toFront() method
+	@Override
+	public void toFront()
+	{
+		// Hack done to fix bringing the window to the front.
+		if (jEdit.getBooleanProperty("server.brokenToFront"))
+			setState(ICONIFIED);
+
+		// un-iconify using JDK 1.3 API
+		setState(NORMAL);
+		requestFocus();
+		super.toFront();
+		// In some platforms (e.g. Windows), only setAlwaysOnTop works
+		if (!isAlwaysOnTop())
+		{
+			setAlwaysOnTop(true);
+			setAlwaysOnTop(false);
+		}
+	} //}}}
+
 	//{{{ toString() method
 	@Override
 	public String toString()
