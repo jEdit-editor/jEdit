@@ -677,7 +677,6 @@ public class jEdit
 			String settingsLockFileName = ".lock";
 			File settingsLockFile = new File(settingsDirectory, settingsLockFileName);
 			settingsLock = FileChannel.open(settingsLockFile.toPath(), CREATE, WRITE).tryLock();
-			System.err.println("Settings directory lock acquired: " + settingsLock);
 
 			if(settingsLock == null)
 			{
