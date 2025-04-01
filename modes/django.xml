@@ -7,9 +7,9 @@ Django 1.2 templates edit mode
 
 Updated 2010-09-10 by Jakub Roztocil <jakub@webkitchen.cz>
 * Added missing filters, tags, operators, etc.
-* Higlight Django syntax inside tags and attributes
-* Higlight CSS (and to some extent also Django tags) inside <style>
-* Higlight JavaScript inside <script>
+* Highlight Django syntax inside tags and attributes
+* Highlight CSS (and to some extent also Django tags) inside <style>
+* Highlight JavaScript inside <script>
 
 CSS & JS integration and tag highlighting inspired by the PHP mode.
 

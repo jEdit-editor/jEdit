@@ -58,5 +58,4 @@ afficionado will ever use. The result is these hacky instructions. In attempting
 an elegant laziness I perhaps doom future maintainers to editing two files.
 Mea culpa. Feel free to patch in a project.clj file or whatever.
 
-Regarding instructions for Windows, Mac, whatever. Please feel free to add some.
-
+Regarding instructions for Windows, macOS, whatever. Please feel free to add some.

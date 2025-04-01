@@ -562,8 +562,8 @@ public class GUIUtilities
 	//{{{ getPlatformShortcutLabel() method
 	/**
 	* Translates a shortcut description string (e.g. "CS+SEMICOLON") to
-	* a platform-localized description.  On OS X this puts in the pretty
-	* unicode characters for Shift, Cmd, etc.
+	* a platform-localized description. On macOS this puts in the pretty
+	* Unicode characters for Shift, Cmd, etc.
 	*/
 	public static String getPlatformShortcutLabel(String label)
 	{
@@ -1184,7 +1184,7 @@ public class GUIUtilities
 		}
 		catch(Exception e)
 		{
-			/* Workaround for OS X bug. */
+			/* Workaround for macOS bug. */
 			Log.log(Log.ERROR,GUIUtilities.class,e);
 		}
 
@@ -1716,8 +1716,8 @@ public class GUIUtilities
 	private static HashMap<String, String> macKeySymbols = null;
 
 	/*
-	 * Create a list of unicode characters to be used in displaying keyboard shortcuts
-	 * on Mac OS X.
+	 * Create a list of Unicode characters to be used in displaying keyboard shortcuts
+	 * on macOS.
 	 */
 	static
 	{

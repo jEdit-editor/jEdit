@@ -48,7 +48,7 @@ class SettingsReloader
 		String jEditHome = jEdit.getJEditHome();
 		String settingsDirectory = jEdit.getSettingsDirectory();
 
-		// On Windows and MacOS, path names are case insensitive
+		// On Windows and macOS, path names are case insensitive
 		if((VFSManager.getVFSForPath(path).getCapabilities()
 			& VFS.CASE_INSENSITIVE_CAP) != 0)
 		{

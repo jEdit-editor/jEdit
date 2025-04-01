@@ -180,7 +180,7 @@ public abstract class BufferIORequest extends IoTask
 		// means this is a DOS/Windows file
 		boolean CRLF = false;
 
-		// A \r was read, hence a MacOS file
+		// A \r was read, hence a macOS file
 		boolean CROnly = false;
 
 		// Was the previous read character a \r?
@@ -210,7 +210,7 @@ public abstract class BufferIORequest extends IoTask
 				case '\r':
 					// If we read a \r and
 					// lastWasCR is also true,
-					// it is probably a Mac file
+					// it is probably a macOS file
 					// (\r\r in stream)
 					if(lastWasCR)
 					{
@@ -268,7 +268,7 @@ public abstract class BufferIORequest extends IoTask
 				default:
 					/*  If we find some other character that follows
 					 a \r, so it is not a Windows file, and probably
-					 a Mac file */
+					 a macOS file */
 					if(lastWasCR)
 					{
 						CROnly = true;

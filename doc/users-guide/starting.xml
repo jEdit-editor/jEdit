@@ -25,11 +25,11 @@
     having to wait for it to start the first time. The downside of this is
     increased memory usage.</para>
 
-    <para>When running on MacOS X, the <userinput>-background</userinput>
+    <para>When running on macOS, the <userinput>-background</userinput>
     command-line switch is active by default, so that jEdit conforms to the
     platform convention that programs should stay open until the
     <guimenuitem>Quit</guimenuitem> command is explicitly invoked by the user,
-    even if all windows are closed. To disable background mode on MacOS X, use
+    even if all windows are closed. To disable background mode on macOS, use
     the <userinput>-nobackground</userinput> switch.</para>
 
     <para>For more information about command line switches that control the
@@ -398,7 +398,7 @@
       directory as <literal>jEdit.exe</literal> and place one JVM option per
       line. </para>
 
-      <para> On Mac OS X, the jEdit.app bundle gets JVM options from a file called
+      <para> On macOS, the jEdit.app bundle gets JVM options from a file called
       <literal>Contents/Info.plist</literal>, which can be edited with a text editor.
       </para>
 

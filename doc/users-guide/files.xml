@@ -206,7 +206,7 @@
         <title>Line Separators</title>
 
         <para>Unix systems use newlines (<literal>\n</literal>) to mark line
-        endings in text files. The MacOS uses carriage-returns
+        endings in text files. The macOS uses carriage-returns
         (<literal>\r</literal>). Windows uses a carriage-return followed by a
         newline (<literal>\r\n</literal>). jEdit can read and write files in all
         three formats.</para>
@@ -276,9 +276,9 @@
         <guimenuitem>Options</guimenuitem>
         dialog box; see <xref linkend="encodings-pane" />.
         Unless you change this setting, it will be your operating system's
-        native encoding, for example <literal>MacRoman</literal> on the MacOS,
-        <literal>windows-1252</literal> on Windows, and
-        <literal>ISO-8859-1</literal> on Unix.</para>
+        native encoding, for example <literal>MacRoman</literal> on macOS,
+        <literal>windows-1252</literal> on many Windows installations, and
+        <literal>UTF-8</literal> on many Linux installations.</para>
 
         <para>An encoding can be explicitly set when opening a file in the file
         system browser's
@@ -494,7 +494,7 @@
                 <listitem>
                     <para><guimenuitem>Root Directory</guimenuitem> - on Unix,
                     goes to the root directory (<filename>/</filename>). On
-                    Windows and MacOS X, lists all mounted drives and network
+                    Windows and macOS, lists all mounted drives and network
                     shares. The forward slash (/) achieves this too. </para>
                 </listitem>
 

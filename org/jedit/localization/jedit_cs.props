@@ -38,9 +38,9 @@ common.clearAll=Vyčistit vše
 common.selectAll=Označit vše
 common.selectNone=Odznačit vše
 
-lineSep.LF=Unix/MacOS (\\n)
+lineSep.LF=Unix/macOS (\\n)
 lineSep.CRLF=DOS/Windows (\\r\\n)
-lineSep.CR=Classic MacOS (\\r)
+lineSep.CR=Classic macOS (\\r)
 #}}}
 
 #{{{ Miscellaneous
@@ -2186,7 +2186,7 @@ macro.rs.OpenPath.PathName.label=Název cesty:
 
 #{{{Toggle ReadOnly
 macro.rs.ToggleReadOnly.OnlyLocalFiles.error=Toto makro funguje pouze s lokálními soubory-
-macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=Toto makro funguje pouze na OS Windows, Unix, & MacOS X.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=Toto makro funguje pouze na OS Windows, Unix, & macOS.
 #}}}
 
 #}}}

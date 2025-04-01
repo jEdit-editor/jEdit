@@ -129,14 +129,14 @@ public class KeyEventTranslator
 			int ignoreMods;
 			if(Debug.ALT_KEY_PRESSED_DISABLED)
 			{
-				/* on MacOS, A+ can be user input */
+				/* on macOS, A+ can be user input */
 				ignoreMods = InputEvent.SHIFT_DOWN_MASK
 					| InputEvent.ALT_GRAPH_DOWN_MASK
 					| InputEvent.ALT_DOWN_MASK;
 			}
 			else
 			{
-				/* on MacOS, A+ can be user input */
+				/* on macOS, A+ can be user input */
 				ignoreMods = InputEvent.SHIFT_DOWN_MASK
 					| InputEvent.ALT_GRAPH_DOWN_MASK;
 			}

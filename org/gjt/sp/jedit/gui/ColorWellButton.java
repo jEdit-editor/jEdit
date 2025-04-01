@@ -48,7 +48,7 @@ public class ColorWellButton extends JButton
 		setMargin(new Insets(2, 2, 2, 2));
 		addActionListener(new ActionHandler());
 
-		// according to krisk this looks better on OS X...
+		// according to krisk this looks better on macOS...
 		if(OperatingSystem.isMacOSLF())
 			putClientProperty("JButton.buttonType","toolbar");
 	} //}}}

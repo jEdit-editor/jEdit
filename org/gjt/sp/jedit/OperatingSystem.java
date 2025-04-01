@@ -187,7 +187,7 @@ public class OperatingSystem
 
 	//{{{ isUnix() method
 	/**
-	 * Returns if we're running Unix (this includes MacOS X).
+	 * Returns if we're running Unix (this includes macOS).
 	 */
 	public static boolean isUnix()
 	{
@@ -196,7 +196,7 @@ public class OperatingSystem
 
 	//{{{ isMacOS() method
 	/**
-	 * Returns if we're running MacOS X.
+	 * Returns if we're running macOS.
 	 */
 	public static boolean isMacOS()
 	{
@@ -225,7 +225,7 @@ public class OperatingSystem
 
 	//{{{ isMacOSLF() method
 	/**
-	* Returns if we're running MacOS X and using the native look and feel.
+	* Returns if we're running macOS and using the native look and feel.
 	*/
 	public static boolean isMacOSLF()
 	{
@@ -234,7 +234,7 @@ public class OperatingSystem
 
 	//{{{ hasScreenMenuBar() method
 	/**
-	 * Returns whether the screen menu bar on Mac OS X is in use.
+	 * Returns whether the screen menu bar on macOS is in use.
 	 * @since jEdit 4.2pre1
 	*/
 	public static boolean hasScreenMenuBar()

@@ -1264,7 +1264,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 		StringBuilder title = new StringBuilder();
 
-		/* On Mac OS X, apps are not supposed to show their name in the
+		/* On macOS, apps are not supposed to show their name in the
 		title bar. */
 		if(!OperatingSystem.isMacOS())
 		{
@@ -1363,7 +1363,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
-		// OS X users expect a preview of the window rather than an icon
+		// macOS users expect a preview of the window rather than an icon
 		if (!OperatingSystem.isMacOS())
 			setIconImage(GUIUtilities.getEditorIcon());
 

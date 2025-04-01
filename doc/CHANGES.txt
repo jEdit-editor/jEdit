@@ -49,6 +49,8 @@ for contributing to this release.
 
 - Replace outdated URLs and use HTTPS where possible (Björn Kautler)
 
+- Use correct macOS name everywhere consistently (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

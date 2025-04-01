@@ -53,11 +53,11 @@ Workflow
       - Release
       - Release.gpg
 [/iffinal]
-6.2. If you have jedit[version]-dist-win-finish.tar.bz2 in your [tag]/dist folder you probably don't run a Windows box and don't have wine installed and set up, so please hand over this file to someone (e. g. <Björn "Vampire" Kautler> Vampire@jEdit.org) who does and ask him to unpack the file and run
+6.2. If you have jedit[version]-dist-win-finish.tar.bz2 in your [tag]/dist folder you probably don't run a Windows box and don't have wine installed and set up, so please hand over this file to someone (e. g. <Björn Kautler> Vampire@jEdit.org) who does and ask him to unpack the file and run
           ant dist-win-finish
      and to hand over the resulting file jedit[version]install.exe to you. The requirements for this are described in README.SRC.txt
 
-6.3. If you have jedit[version]-dist-mac-finish.tar.bz2 in your [tag]/dist folder you probably don't run a Mac OS X box, so please hand over this file to someone (e. g. Björn "Vampire" Kautler <Vampire@jEdit.org>) who does and ask him to unpack the file and run
+6.3. If you have jedit[version]-dist-mac-finish.tar.bz2 in your [tag]/dist folder you probably don't run a macOS box, so please hand over this file to someone (e. g. Björn Kautler <Vampire@jEdit.org>) who does and ask him to unpack the file and run
           ant dist-mac-finish
      and to hand over the resulting file jedit[version]install.dmg to you. The requirements for this are described in README.SRC.txt
 
@@ -92,7 +92,7 @@ Workflow
             - Download Button: Manual in A4 Paper size
             - Default Download For: <none>
         - jedit[version]install.dmg
-            - Download Button: Mac OS X Installer
+            - Download Button: macOS Installer
             - Default Download For: [ifdevel]<none>[/ifdevel][iffinal]mac[/iffinal]
         - jedit[version]install.exe
             - Download Button: Windows Installer

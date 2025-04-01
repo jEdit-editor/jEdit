@@ -51,7 +51,7 @@ public class HelpTOCPanel extends JPanel
 
 		toc = new TOCTree();
 
-		// looks bad with the OS X L&F, apparently...
+		// looks bad with the macOS L&F, apparently...
 		if(!OperatingSystem.isMacOSLF())
 			toc.putClientProperty("JTree.lineStyle", "Angled");
 

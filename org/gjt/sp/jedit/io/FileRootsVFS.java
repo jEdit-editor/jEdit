@@ -92,7 +92,7 @@ public class FileRootsVFS extends VFS
 		{
 			// Nasty hardcoded values
 			File[] volumes = new File("/Volumes").listFiles();
-			assert volumes != null : "Volumes cannot be null on MacOS";
+			assert volumes != null : "Volumes cannot be null on macOS";
 			LinkedList<File> roots = new LinkedList<>();
 
 			roots.add(new File("/"));

@@ -124,17 +124,17 @@
 				</qandadiv>
 
 				<qandadiv id="install-mac">
-						<title>Installing jEdit on MacOS</title>
+						<title>Installing jEdit on macOS</title>
 
 						<qandaentry>
 								<question id="install.mac9-basic">
-										<para>How do I install jEdit on MacOS 8 or MacOS 9? s</para>
+										<para>How do I install jEdit on macOS 8 or macOS 9?</para>
 								</question>
 
 								<answer>
 										<para>The latest version of jEdit requires
-										MacOS X (preferably 10.5 or later), because the Java
-										platforms of earlier MacOS version are outdated.</para>
+										macOS (preferably 10.5 or later), because the Java
+										platforms of earlier macOS version are outdated.</para>
 
 										<para>Once you have completed installing jEdit locate the
 										jedit.jar file and do the following:</para>
@@ -167,16 +167,14 @@
 
 						<qandaentry>
 								<question>
-										<para>How do I uninstall jEdit for Mac OS?</para>
+										<para>How do I uninstall jEdit for macOS?</para>
 								</question>
 
 								<answer>
 										<para>There are no system files, so simply drop the jEdit
 										folder in the trash. If you want to remove the settings
 										directory used by jEdit you will find it at
-										<filename>~/.jedit</filename>. It is hidden, so you will
-										need to remove it from the command line, or use one of the
-										various uilities available that will let you see it.</para>
+										<filename>~/Library/jEdit</filename>.</para>
 								</answer>
 						</qandaentry>
 				</qandadiv>

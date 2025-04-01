@@ -40,9 +40,9 @@ common.selectNone=Select None
 common.loading=Loading...
 common.reset=Reset
 
-lineSep.LF=Unix/MacOS (\\n)
+lineSep.LF=Unix/macOS (\\n)
 lineSep.CRLF=DOS/Windows (\\r\\n)
-lineSep.CR=Classic MacOS (\\r)
+lineSep.CR=Classic macOS (\\r)
 #}}}
 
 #{{{ Miscellaneous
@@ -2443,7 +2443,7 @@ macro.rs.OpenPath.PathName.label=Path name:
 
 #{{{Toggle ReadOnly
 macro.rs.ToggleReadOnly.OnlyLocalFiles.error=This macro only works on local files.
-macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=This macro only works on Windows, Unix, & MacOS X.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=This macro only works on Windows, Unix, & macOS.
 #}}}
 
 #}}}

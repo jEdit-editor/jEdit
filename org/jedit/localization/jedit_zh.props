@@ -38,9 +38,9 @@ common.clearAll=全部清除
 common.selectAll=全选
 common.selectNone=反选
 
-lineSep.LF=Unix/MacOS (\\n)
+lineSep.LF=Unix/macOS (\\n)
 lineSep.CRLF=DOS/Windows (\\r\\n)
-lineSep.CR=Classic MacOS (\\r)
+lineSep.CR=Classic macOS (\\r)
 #}}}
 
 #{{{ Miscellaneous
@@ -2168,7 +2168,7 @@ macro.rs.OpenPath.PathName.label=路径名:
 
 #{{{Toggle ReadOnly
 macro.rs.ToggleReadOnly.OnlyLocalFiles.error=这个宏仅适用于本地文件.
-macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=这个宏仅适用于 Windows, Unix, 以及 MacOS X.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=这个宏仅适用于 Windows, Unix, 以及 macOS.
 #}}}
 
 #}}}

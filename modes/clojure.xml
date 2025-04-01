@@ -11,7 +11,7 @@
       Want to do something about it?
       Do you know Clojure?
       Do you use linux?
-        (or are you knowledgeable enought to translate to your os?)
+        (or are you knowledgeable enough to translate to your os?)
 
     Verify file coverage of Clojure namespace symbols using code in:
       misc/clojure

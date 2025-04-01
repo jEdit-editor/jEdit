@@ -23,8 +23,8 @@
 
 // Localization
 final static String OnlyLocalFilesError = jEdit.getProperty("macro.rs.ToggleReadOnly.OnlyLocalFiles.error", "This macro only works on local files.");
-final static String OnlyWindowsUnixMacosError = jEdit.getProperty("macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error", "This macro only works on Windows, Unix, & MacOS X.");
-	
+final static String OnlyWindowsUnixMacosError = jEdit.getProperty("macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error", "This macro only works on Windows, Unix, & macOS.");
+
 //Process
 CmdThread(cmd, view)
 {
@@ -80,7 +80,7 @@ ToggleReadOnly(view);
 <listitem>
 	<para><filename>Toggle_ReadOnly.bsh</filename></para>
 	<abstract><para>
-	Toggles a local file's read-only flag. Uses platform-specific commands, so it only works on Windows, Unix and MacOS X.
+	Toggles a local file's read-only flag. Uses platform-specific commands, so it only works on Windows, Unix and macOS.
 	</para></abstract>
 </listitem>
 

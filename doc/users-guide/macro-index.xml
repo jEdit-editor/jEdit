@@ -367,7 +367,7 @@
 
                 <para>Toggles a local file's read-only flag. Uses
                 platform-specific commands, so it only works on Windows, Unix
-                and MacOS X.</para>
+                and macOS.</para>
             </listitem>
         </itemizedlist>
     </section>

@@ -11,7 +11,7 @@ delete-line.shortcut=C+d
 # C+e is a prefix
 find.shortcut=C+f
 find-next.shortcut=F3
-# C+h is not usable on MacOS X
+# C+h is not usable on macOS
 indent-lines.shortcut=C+i
 join-lines.shortcut=C+j
 swap-marker.shortcut=C+k

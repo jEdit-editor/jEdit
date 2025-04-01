@@ -682,7 +682,7 @@
         <para>The location of the settings directory is system-specific
         <footnote><para> On Linux, it is <literal>~/.jedit</literal>.
            On Windows, you will find it in <literal>%APPDATA%\jEdit</literal>.
-           On the Mac, it is <literal>~/Library/jEdit</literal>.
+           On macOS, it is <literal>~/Library/jEdit</literal>.
         </para></footnote>.
         It is printed to the activity log
         (<guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Activity

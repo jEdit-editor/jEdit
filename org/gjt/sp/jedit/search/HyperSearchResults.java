@@ -111,7 +111,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		//so we remove this keystroke binding bug #1955140
 		KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 		resultTree.getInputMap().remove(keyStroke);
-		// looks bad with the OS X L&F, apparently...
+		// looks bad with the macOS L&F, apparently...
 		if(!OperatingSystem.isMacOSLF())
 			resultTree.putClientProperty("JTree.lineStyle", "Angled");
 

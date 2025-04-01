@@ -38,9 +38,9 @@ common.clearAll=全部清除
 common.selectAll=全部選取
 common.selectNone=全部清除
 
-lineSep.LF=Unix/MacOS (\\n)
+lineSep.LF=Unix/macOS (\\n)
 lineSep.CRLF=DOS/Windows (\\r\\n)
-lineSep.LF=MacOS (\\r)
+lineSep.CR=Classic macOS (\\r)
 #}}}
 
 #{{{ Miscellaneous
@@ -2349,7 +2349,7 @@ macro.rs.OpenPath.PathName.label=路徑名:
 
 #{{{Toggle ReadOnly
 macro.rs.ToggleReadOnly.OnlyLocalFiles.error=這個巨集僅適用於本機檔案.
-macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=這個巨集僅適用於 Windows, Unix, 以及 MacOS X.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=這個巨集僅適用於 Windows, Unix, 以及 macOS.
 #}}}
 
 #}}}

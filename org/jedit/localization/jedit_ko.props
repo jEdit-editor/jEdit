@@ -39,9 +39,9 @@ common.selectAll=전체 선택
 common.selectNone=선택 해제
 common.loading=로딩...
 
-lineSep.LF=Unix/MacOS (\\n)
+lineSep.LF=Unix/macOS (\\n)
 lineSep.CRLF=DOS/Windows (\\r\\n)
-lineSep.CR=Classic MacOS (\\r)
+lineSep.CR=Classic macOS (\\r)
 #}}}
 
 #{{{ Miscellaneous
@@ -2152,7 +2152,7 @@ macro.rs.OpenPath.PathName.label=경로 이름:
 
 #{{{Toggle ReadOnly
 macro.rs.ToggleReadOnly.OnlyLocalFiles.error=이 매크로는 내부 파일만 지원합니다.
-macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=이 매크로는 Windows, Unix, & MacOS X에서만 지원합니다.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=이 매크로는 Windows, Unix, & macOS에서만 지원합니다.
 #}}}
 
 #}}}

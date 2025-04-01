@@ -46,11 +46,11 @@ comp.3.real-size=@jedit-windows.realsize@
 comp.3.fileset=jedit-windows
 comp.3.os=Windows
 
-comp.4.name=MacOS desktop integration
+comp.4.name=macOS desktop integration
 comp.4.disk-size=@jedit-mac.disksize@
 comp.4.real-size=@jedit-mac.realsize@
 comp.4.fileset=jedit-mac
-comp.4.os=MacOS
+comp.4.os=macOS
 
 comp.5.name=OS/2 start script
 comp.5.disk-size=@jedit-os2.disksize@

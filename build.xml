@@ -512,7 +512,7 @@
 		</copy>
 		<copy todir="${jar.location}/jars">
 			<fileset dir="${lib.dir}/default-plugins">
-				<exclude name="MacOSX.jar"/>
+				<exclude name="MacOS.jar"/>
 			</fileset>
 		</copy>
 		<contrib:if>
@@ -520,7 +520,7 @@
 			<contrib:then>
 				<copy todir="${jar.location}/jars">
 					<fileset dir="${lib.dir}/default-plugins">
-						<include name="MacOSX.jar"/>
+						<include name="MacOS.jar"/>
 					</fileset>
 				</copy>
 			</contrib:then>
@@ -598,7 +598,7 @@
 				       osfamily="mac"/>
 			</contrib:case>
 			<contrib:default>
-				<fail message="Unsupported OS family (${osfamily}). If you are on Windows, *nix or MacOS, please report this as bug, if not, please report it as a feature request"/>
+				<fail message="Unsupported OS family (${osfamily}). If you are on Windows, *nix or macOS, please report this as bug, if not, please report it as a feature request"/>
 			</contrib:default>
 		</contrib:switch>
 		<taskdef name="create"
@@ -1018,7 +1018,7 @@
 					      startup/**
 					      ${jar.filename}"
 				    excludes="doc/api/**
-					      jars/MacOSX.jar"/>
+					      jars/MacOS.jar"/>
 		</tar>
 		<tar destfile="${dist.dir}/jedit-windows.tar.bz2"
 		     longfile="gnu"
@@ -1032,7 +1032,7 @@
 		     compression="bzip2">
 			<tarfileset id="jedit-mac"
 				    dir="${dist.dir}"
-				    includes="jars/MacOSX.jar"/>
+				    includes="jars/MacOS.jar"/>
 		</tar>
 		<tar destfile="${dist.dir}/jedit-api.tar.bz2"
 		     longfile="gnu"
@@ -1184,8 +1184,8 @@
 
 	<target name="dist-mac-finish"
 		depends="init,retrieve,setup"
-		description="finish building the Mac OS X disk image (DMG-file) on Mac OS X">
-		<fail message="The disk image (DMG-file) for easy distribution on Mac OS X can only be built on Mac OS X currently">
+		description="finish building the macOS disk image (DMG-file) on macOS">
+		<fail message="The disk image (DMG-file) for easy distribution on macOS can only be built on macOS currently">
 			<condition>
 				<not>
 					<os family="mac"/>
@@ -1325,7 +1325,7 @@
 
 	<target name="dist-mac"
 		depends="init,retrieve,setup,prepare-dist-files"
-		description="build the Mac OS X disk image (DMG-file)">
+		description="build the macOS disk image (DMG-file)">
 		<contrib:if>
 			<os family="mac"/>
 			<contrib:then>
@@ -1519,7 +1519,7 @@
 					      properties/**
 					      startup/**
 					      ${jar.filename}"
-				    excludes="jars/MacOSX.jar"
+				    excludes="jars/MacOS.jar"
 				    username="root"
 				    group="root"
 				    prefix="usr/share/jedit-${jedit.version}/"/>
@@ -1655,7 +1655,7 @@
 					   properties/**
 					   startup/**
 					   ${jar.filename}"
-				 excludes="jars/MacOSX.jar"/>
+				 excludes="jars/MacOS.jar"/>
 		</mod:calculatesize>
 		<copy todir="${dist.dir}/classes/package-files/linux/deb"
 		      encoding="UTF-8"
@@ -1717,7 +1717,7 @@
 			<datafileset file="."
 				     fullpath="usr/share/jEdit/jars/"/>
 			<datafileset dir="${dist.dir}/jars"
-				     excludes="MacOSX.jar"
+				     excludes="MacOS.jar"
 				     prefix="usr/share/jEdit/jars/"/>
 			<datafileset file="."
 				     fullpath="usr/share/man/"/>
@@ -2055,7 +2055,7 @@ Press Return key to continue...
 					       ${config.dist.dir}/modes/**
 					       ${config.dist.dir}/properties/**
 					       ${config.dist.dir}/startup/**"
-				     excludes="${config.dist.dir}/jars/MacOSX.jar"
+				     excludes="${config.dist.dir}/jars/MacOS.jar"
 				     compression="bzip2"/>
 			</contrib:else>
 		</contrib:if>

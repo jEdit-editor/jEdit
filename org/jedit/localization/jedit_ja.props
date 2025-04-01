@@ -38,9 +38,9 @@ common.clearAll=すべてクリア
 common.selectAll=すべて選択
 common.selectNone=選択解除
 
-lineSep.LF=Unix/MacOS (\\n)
+lineSep.LF=Unix/macOS (\\n)
 lineSep.CRLF=DOS/Windows (\\r\\n)
-lineSep.CR=Classic MacOS (\\r)
+lineSep.CR=Classic macOS (\\r)
 #}}}
 
 #{{{ Miscellaneous
@@ -2182,7 +2182,7 @@ macro.rs.OpenPath.PathName.label=パス名:
 
 #{{{Toggle ReadOnly
 macro.rs.ToggleReadOnly.OnlyLocalFiles.error=このマクロはローカルファイルでしか動きません。
-macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=このマクロは Windows か Unix か MacOS X でしか動きません。
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=このマクロは Windows か Unix か macOS でしか動きません。
 #}}}
 
 #}}}

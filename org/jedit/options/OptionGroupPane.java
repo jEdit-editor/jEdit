@@ -301,7 +301,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 
 		stage = new JPanel(new BorderLayout());
 
-		// looks bad with the OS X L&F, apparently...
+		// looks bad with the macOS L&F, apparently...
 		if (!OperatingSystem.isMacOSLF())
 			paneTree.putClientProperty("JTree.lineStyle", "Angled");
 

@@ -146,7 +146,7 @@ public class jEdit
 
 		settingsDirectory = MiscUtilities.constructPath(
 				System.getProperty("user.home"), ".jedit");
-		// On mac, different rules (should) apply
+		// On macOS, different rules (should) apply
 		if(OperatingSystem.isMacOS())
 			settingsDirectory = MiscUtilities.constructPath(
 				System.getProperty("user.home"), "Library/jEdit" );
@@ -157,7 +157,7 @@ public class jEdit
 				settingsDirectory = MiscUtilities.constructPath(
 					appData, "jEdit");
 		}
-		// MacOS users expect the app to keep running after all windows
+		// macOS users expect the app to keep running after all windows
 		// are closed
 		background = OperatingSystem.isMacOS();
 
@@ -417,7 +417,7 @@ public class jEdit
 		logTime("after splash screen activation");
 		//{{{ Settings migration code.
 		// Windows check introduced in 5.0pre1.
-		// MacOS check introduced in 4.3.
+		// macOS check introduced in 4.3.
 		if((OperatingSystem.isMacOS() || OperatingSystem.isWindows())
 			&& shouldRelocateSettings && settingsDirectory != null)
 		{

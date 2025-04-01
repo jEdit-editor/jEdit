@@ -103,11 +103,11 @@ public class Debug
 	 * Logs messages when BeanShell code is evaluated.
 	 */
 	public static boolean BEANSHELL_DEBUG;
-	
+
 	/**
 	 * If true, A+ shortcuts are disabled. If you use this, you should also
-	 * remap the the modifiers so that A+ is actually something else.
-	 * <b>On by default on MacOS.</b>
+	 * remap the modifiers so that A+ is actually something else.
+	 * <b>On by default on macOS.</b>
 	 */
 	public static boolean ALT_KEY_PRESSED_DISABLED = OperatingSystem.isMacOS();
 
@@ -133,7 +133,7 @@ public class Debug
 
 	/**
 	 * Create new search dialogs instead of reusing instances.
-	 * <b> Off by default on Mac OS because it can cause search dialogs to
+	 * <b> Off by default on macOS because it can cause search dialogs to
 	 * show up on the wrong space. </b>
 	 */
 	public static boolean DISABLE_SEARCH_DIALOG_POOL = OperatingSystem.isMacOS();

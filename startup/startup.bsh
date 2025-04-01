@@ -74,14 +74,14 @@ s(search,replace,flags)
 //	InputEvent.ALT_MASK, InputEvent.META_MASK,
 //	InputEvent.SHIFT_MASK);
 
-/* ... and this the MacOS default: */
+/* ... and this the macOS default: */
 //KeyEventTranslator.setModifierMapping(InputEvent.META_MASK,  /* == C+ */
 //	InputEvent.CTRL_MASK,  /* == A+ */
 //	InputEvent.ALT_MASK,   /* == M+ */
 //	InputEvent.SHIFT_MASK  /* == S+ */);
 
-/* ... if you want MacOS keyboard to behave like a Linux or Windows keyboard
-   (This is also a MacOSX plugin option): */
+/* ... if you want macOS keyboard to behave like a Linux or Windows keyboard
+   (This is also a MacOS plugin option): */
 
 // KeyEventTranslator.setModifierMapping(InputEvent.CTRL_MASK,
 //	InputEvent.META_MASK, InputEvent.ALT_MASK,

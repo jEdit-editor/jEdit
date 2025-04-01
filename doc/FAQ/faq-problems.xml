@@ -42,7 +42,7 @@
                     <para>If jEdit does load using this procedure, you need to
                     examine the <quote>shortcut</quote> loading mechanism you
                     wish to use.</para>
-                    <para>On Linux and MacOS X, you need to find and examine the
+                    <para>On Linux and macOS, you need to find and examine the
                     <filename>jedit</filename> shell script provided by the
                     installation routine to confirm that the script's commands
                     target the correct files and locations, and that variables
@@ -71,7 +71,7 @@
                     settings, unsupported plugins) in your jEdit
                     settings directory (<literal>~/.jedit</literal> on Linux,
                     <literal>%APPDATA%\jEdit</literal> on Windows, or
-                    <literal>~/Library/jEdit</literal> on MacOS).
+                    <literal>~/Library/jEdit</literal> on macOS).
                     You may want to try renaming the offending directory
                     to something else, and restarting jEdit with fresh settings.
                     You can later copy things from your old settings back
@@ -242,7 +242,7 @@ view.unsplitCurrent();
                     solve. Depending on your platform, there should be
                     information logged about what caused the crash to occur. For
                     Unix type systems you will likely get an error in the
-                    console (and for Mac OS X you may also get a report in
+                    console (and for macOS you may also get a report in
                     ~/Library/Logs/CrashReporter/JavaApplicationStub.crash.log).
 					</para>
                 </answer>

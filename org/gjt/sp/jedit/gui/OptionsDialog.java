@@ -285,7 +285,7 @@ public abstract class OptionsDialog extends EnhancedDialog implements TreeSelect
 		paneTree.setVisibleRowCount(1);
 		paneTree.setCellRenderer(new PaneNameRenderer());
 
-		// looks bad with the OS X L&F, apparently...
+		// looks bad with the macOS L&F, apparently...
 		if(!OperatingSystem.isMacOSLF())
 			paneTree.putClientProperty("JTree.lineStyle", "Angled");
 

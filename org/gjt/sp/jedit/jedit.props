@@ -35,7 +35,7 @@ helpviewer.fontstyle=0
 decorate.frames=false
 decorate.dialogs=false
 
-# Draw multi-key shortcuts on screen menu bar? (OS X only)
+# Draw multi-key shortcuts on screen menu bar? (macOS only)
 menu.multiShortcut=false
 
 # If true, welcome screen will be displayed.
@@ -158,7 +158,7 @@ largefilemode=ask
 # The OS default will be used if this is not specified
 # Unix=\n
 # Windows=\r\n
-# MacOS=\r
+# macOS=\r
 #buffer.lineSeparator=\n
 
 # Encoding
@@ -503,7 +503,6 @@ plugin-manager.showAll=true
 plugin-manager.mirror.id=NONE
 plugin-manager.deleteDownloads=true
 plugin-manager.hide-libraries.toggle=true
-plugin-blacklist.MacOS.jar=true
 #}}}
 
 #{{{ Hidden settings

@@ -447,7 +447,7 @@ public class FileVFS extends VFS
 			toCanonPath = to;
 		}
 
-		// this is needed because on OS X renaming to a non-existent
+		// this is needed because on macOS renaming to a non-existent
 		// directory causes problems
 		File parent = new File(_to.getParent());
 		if(parent.exists())
