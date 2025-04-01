@@ -1241,6 +1241,9 @@ public class View extends JFrame implements InputHandlerProvider
 	@Override
 	public void toFront()
 	{
+		// In case we are for example hidden to tray icon
+		jEdit.unhideGUI();
+
 		// Hack done to fix bringing the window to the front.
 		if (jEdit.getBooleanProperty("server.brokenToFront"))
 			setState(ICONIFIED);

@@ -51,6 +51,9 @@ for contributing to this release.
 
 - Use correct macOS name everywhere consistently (Björn Kautler)
 
+- Deiconify from tray when necessary like when sending commands to the edit
+  server that should show some GUI (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
