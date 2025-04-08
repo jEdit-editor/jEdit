@@ -56,7 +56,7 @@ for contributing to this release.
 
 - Fix TAB-completion in file system browser dialogs (Björn Kautler)
 
-- Improve type-completion in file system browser dialogs (Björn Kautler)
+- Fix type-completion in file system browser dialogs (Björn Kautler)
 
 }}}
 {{{ Miscellaneous

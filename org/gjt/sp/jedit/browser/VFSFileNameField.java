@@ -28,6 +28,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.Set;
 
+import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
@@ -138,7 +139,11 @@ public class VFSFileNameField extends HistoryTextField
 				String path = getText();
 				BrowserView view = browser.getBrowserView();
 
-				if(MiscUtilities.getLastSeparatorIndex(path) == -1)
+				if((MiscUtilities.getLastSeparatorIndex(path) == -1)
+						&& (!(OperatingSystem.isWindows()
+								&& (path.length() == 2)
+								&& (path.charAt(1) == ':'))
+							|| (browser.getDirectory().equals("roots:"))))
 				{
 					int mode = browser.getMode();
 					// fix for bug #765507
