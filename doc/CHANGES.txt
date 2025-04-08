@@ -84,6 +84,9 @@ for contributing to this release.
 - Correct the result when using the reset button in the custom context menu
   option pane for the file system browser (Björn Kautler)
 
+- Correctly show "/" on *nix and properly add it to file system browser history
+  (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

@@ -1352,8 +1352,8 @@ check_selected:
 			VFSBrowser.this.path = path;
 			if(!pathField.getText().equals(path))
 				pathField.setText(path);
-			if(path.endsWith("/") ||
-				path.endsWith(File.separator))
+			if((path.endsWith("/") || path.endsWith(File.separator))
+					&& (path.length() > 1))
 			{
 				// ensure consistent history;
 				// eg we don't want both
