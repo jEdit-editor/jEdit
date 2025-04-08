@@ -88,6 +88,9 @@ for contributing to this release.
 
 - jar: URLs on file: URLs are no longer considered remote files (Björn Kautler)
 
+- Show leading path separators in root node of file system browser parents view
+  for UNC paths (Björn Kautler)
+
 }}}
 {{{ API Changes
 

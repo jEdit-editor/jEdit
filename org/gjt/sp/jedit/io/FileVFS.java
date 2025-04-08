@@ -64,6 +64,18 @@ public class FileVFS extends VFS
 			EA_TYPE });
 	} //}}}
 
+	//{{{ getFileName() method
+	@Override
+	public String getFileName(String path)
+	{
+		if(OperatingSystem.isWindows() && MiscUtilities.getLastSeparatorIndex(path, true) == 1)
+		{
+			return "\\\\" + super.getFileName(path);
+		}
+		else
+			return super.getFileName(path);
+	} //}}}
+
 	//{{{ getParentOfPath() method
 	@Override
 	@Nonnull
