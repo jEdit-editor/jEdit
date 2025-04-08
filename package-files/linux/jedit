@@ -23,4 +23,4 @@ ANTIALIAS_ALL="-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
 
 
 # Launch application.
-exec "${JAVA}" ${ANTIALIAS_ALL} -jar "/usr/share/jEdit/@jar.filename@" -reuseview "$@"
+exec "${JAVA}" ${ANTIALIAS_ALL} --add-opens java.desktop/sun.awt.shell=ALL-UNNAMED -jar "/usr/share/jEdit/@jar.filename@" -reuseview "$@"

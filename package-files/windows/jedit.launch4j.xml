@@ -34,6 +34,8 @@
 	<jre>
 		<path>%JAVA_HOME%;%PATH%</path>
 		<minVersion>@target.java.version@</minVersion>
+		<opt>--add-opens</opt>
+		<opt>java.desktop/sun.awt.shell=ALL-UNNAMED</opt>
 	</jre>
 	<versionInfo>
 		<fileVersion>@jedit.build.number.no.leading.zeros@</fileVersion>

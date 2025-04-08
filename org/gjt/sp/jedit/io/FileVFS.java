@@ -34,6 +34,7 @@ import javax.swing.*;
 
 import java.awt.Component;
 import java.io.*;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.text.*;
 import java.util.Date;
@@ -41,6 +42,9 @@ import java.util.Date;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
+
+import static org.gjt.sp.jedit.MiscUtilities.isUncPath;
+import static org.gjt.sp.util.StandardUtilities.castUnchecked;
 //}}}
 
 /**
@@ -90,9 +94,7 @@ public class FileVFS extends VFS
 					&& (path.charAt(1) == ':')
 					&& ((path.charAt(2) == File.separatorChar) || (path.charAt(2) == '/')))
 				return FileRootsVFS.PROTOCOL + ':';
-			else if((path.length() >= 2)
-					&& (((path.charAt(0) == File.separatorChar) && (path.charAt(1) == File.separatorChar))
-						|| ((path.charAt(0) == '/') && (path.charAt(1) == '/')))
+			else if(isUncPath(path)
 					&& (MiscUtilities.getLastSeparatorIndex(path, true) == 1))
 				return path;
 		}
@@ -388,7 +390,45 @@ public class FileVFS extends VFS
 
 		File directory = new File(path);
 		File[] list = null;
-		if(directory.exists()) 
+		if(!directory.exists())
+		{
+			String directoryName = directory.getName();
+			directory = null;
+			if(OperatingSystem.isWindows()
+					&& isUncPath(path)
+					&& (MiscUtilities.getLastSeparatorIndex(path, true) == 1))
+			{
+				try
+				{
+					Class<?> win32ShellFolderManager2 = Class.forName("sun.awt.shell.Win32ShellFolderManager2");
+					Method getDesktop = win32ShellFolderManager2.getDeclaredMethod("getDesktop");
+					getDesktop.setAccessible(true);
+					Object desktop = getDesktop.invoke(null);
+					Class<?> win32ShellFolder2 = Class.forName("sun.awt.shell.Win32ShellFolder2");
+					Method parseDisplayName = win32ShellFolder2.getDeclaredMethod("parseDisplayName", String.class);
+					parseDisplayName.setAccessible(true);
+					Long pidl = castUnchecked(parseDisplayName.invoke(desktop, "\\\\" + directoryName));
+					if(pidl != 0)
+						try
+						{
+							Method createShellFolderFromRelativePIDL = win32ShellFolderManager2.getDeclaredMethod("createShellFolderFromRelativePIDL", win32ShellFolder2, long.class);
+							createShellFolderFromRelativePIDL.setAccessible(true);
+							directory = castUnchecked(createShellFolderFromRelativePIDL.invoke(null, desktop, pidl));
+						}
+						finally
+						{
+							Method releasePIDL = win32ShellFolder2.getDeclaredMethod("releasePIDL", long.class);
+							releasePIDL.setAccessible(true);
+							releasePIDL.invoke(null, pidl);
+						}
+				}
+				catch (Exception e)
+				{
+					Log.log(Log.DEBUG,this,"Error trying to list network drive shares", e);
+				}
+			}
+		}
+		if(directory != null)
 		{
 			if (fsView == null)
 				fsView = FileSystemView.getFileSystemView();

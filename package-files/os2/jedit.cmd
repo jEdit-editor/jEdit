@@ -20,9 +20,9 @@ arguments = "-settings=%HOME%\.jedit -server=%HOME%\.jedit\server"
 jedit_dir = GetExecPath()
 
 if (iMajor = 1 & iMid <= 1) then
-    'java -Xmx192M -classpath %classpath%;'jedit_dir'\jedit.jar org.gjt.sp.jedit.jEdit 'arguments
+    'java -Xmx192M --add-opens java.desktop/sun.awt.shell=ALL-UNNAMED -classpath %classpath%;'jedit_dir'\jedit.jar org.gjt.sp.jedit.jEdit 'arguments
   else
-    'java -Xmx192M -jar 'jedit_dir'\jedit.jar 'arguments
+    'java -Xmx192M --add-opens java.desktop/sun.awt.shell=ALL-UNNAMED -jar 'jedit_dir'\jedit.jar 'arguments
 
 return 0
 

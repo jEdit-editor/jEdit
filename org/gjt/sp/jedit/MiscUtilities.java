@@ -598,6 +598,19 @@ public class MiscUtilities
 		}
 	} //}}}
 
+	// {{{ isUncPath() method
+	/**
+	 * Checks if the specified string is a UNC path.
+	 * @param str The string to check
+	 * @return {@code true} if the string is a UNC path, {@code false} otherwise
+	 */
+	public static boolean isUncPath(@Nonnull String str)
+	{
+		return (str.length() >= 2)
+				&& (((str.charAt(0) == File.separatorChar) && (str.charAt(1) == File.separatorChar))
+				|| ((str.charAt(0) == '/') && (str.charAt(1) == '/')));
+	} //}}}
+
 	//{{{ getNthBackupFile method
 	/**
 	 * Gets the file to store the Nth backup of the given file.

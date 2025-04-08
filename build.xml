@@ -643,6 +643,8 @@
 		<java jar="${jar.location}/${jar.filename}"
 		      fork="true"
 		      spawn="true">
+			<jvmarg value="--add-opens"/>
+			<jvmarg value="java.desktop/sun.awt.shell=ALL-UNNAMED"/>
 			<arg value="-settings=${build.dir}/settings"/>
 		</java>
 	</target>
@@ -654,6 +656,8 @@
 		      fork="true"
 		      spawn="true">
 			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=localhost:5005,timeout=60000"/>
+			<jvmarg value="--add-opens"/>
+			<jvmarg value="java.desktop/sun.awt.shell=ALL-UNNAMED"/>
 			<arg value="-settings=${build.dir}/settings"/>
 		</java>
 	</target>

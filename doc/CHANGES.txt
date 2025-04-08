@@ -74,6 +74,8 @@ for contributing to this release.
 
 - Properly handle problems during file renaming in file VFS (Björn Kautler)
 
+- Fix listing of UNC paths without a given share (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
@@ -110,6 +112,9 @@ for contributing to this release.
 
 - A new IOUtilities.closeQuietly overload accepting AutoCloseable was added that
   unifies the existing three methods into one, deprecating the old methods
+  (Björn Kautler)
+
+- Added MiscUtilities.isUncPath to determine whether a given path is a UNC path
   (Björn Kautler)
 
 }}}
