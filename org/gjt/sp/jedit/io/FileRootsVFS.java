@@ -116,14 +116,14 @@ public class FileRootsVFS extends VFS
 		else
 		{
 			File[] roots = File.listRoots();
-			File[] desktop = fsView.getRoots();
+			File[] fsViewRoots = fsView.getRoots();
 
-			if(desktop == null)
+			if(fsViewRoots == null)
 				return roots;
 
-			File[] rootsPlus = new File[roots.length + desktop.length];
-			System.arraycopy(desktop, 0, rootsPlus, 0, desktop.length);
-			System.arraycopy(roots, 0, rootsPlus, 1, roots.length);
+			File[] rootsPlus = new File[roots.length + fsViewRoots.length];
+			System.arraycopy(fsViewRoots, 0, rootsPlus, 0, fsViewRoots.length);
+			System.arraycopy(roots, 0, rootsPlus, fsViewRoots.length, roots.length);
 			return rootsPlus;
 		}
 	} //}}}
