@@ -137,7 +137,6 @@ public class VFSFileNameField extends HistoryTextField
 				super.processKeyEvent(evt);
 				String path = getText();
 				BrowserView view = browser.getBrowserView();
-				view.selectNone();
 
 				if(MiscUtilities.getLastSeparatorIndex(path) == -1)
 				{
@@ -153,6 +152,8 @@ public class VFSFileNameField extends HistoryTextField
 						mode == VFSBrowser
 						.SAVE_DIALOG);
 				}
+				else
+					view.selectNone();
 			}
 			else
 				super.processKeyEvent(evt);
@@ -238,7 +239,6 @@ public class VFSFileNameField extends HistoryTextField
 		}
 
 		BrowserView view = browser.getBrowserView();
-		view.selectNone();
 		view.getTable().doTypeSelect(currentText,
 			browser.getMode() == VFSBrowser
 			.CHOOSE_DIRECTORY_DIALOG);

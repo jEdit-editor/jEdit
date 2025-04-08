@@ -133,7 +133,7 @@ public class VFSDirectoryEntryTable extends JTable
 			doTypeSelect(str,0,getRowCount(),dirsOnly);
 		else
 		{
-			int start = getSelectionModel().getMaxSelectionIndex();
+			int start = getSelectionModel().getMinSelectionIndex();
 			boolean retVal = doTypeSelect(str,start,getRowCount(),
 				dirsOnly);
 
@@ -505,7 +505,10 @@ public class VFSDirectoryEntryTable extends JTable
 			return true;
 		}
 		else
+		{
+			clearSelection();
 			return false;
+		}
 	} //}}}
 
 	//{{{ resizeColumns() method
