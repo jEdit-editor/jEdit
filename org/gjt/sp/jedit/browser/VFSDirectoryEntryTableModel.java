@@ -463,7 +463,8 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 
 			if(!sortMixFilesAndDirs)
 			{
-				if(file1.getType() != file2.getType())
+				if(((file1.getType() == VFSFile.FILE) || (file2.getType() == VFSFile.FILE))
+						&& (file1.getType() != file2.getType()))
 					return file2.getType() - file1.getType();
 			}
 

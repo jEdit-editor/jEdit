@@ -63,6 +63,9 @@ for contributing to this release.
 
 - Do not show protocol node twice for URL file system (Björn Kautler)
 
+- Treat file systems like directories always during sorting in file system
+  browser (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
