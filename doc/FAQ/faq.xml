@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <!-- jEdit buffer-local properties:                       -->
 <!-- :indentSize=2   -->
 <!-- jEdit FAQ                                            -->
 <!-- Command line for processing:                         -->
 <!--                                                      -->
 <!-- xsltproc -xinclude -output .\html\ faq.xsl faq.xml  -->
-<article class="faq" id="faq"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:noNamespaceSchemaLocation="https://www.docbook.org/xsd/4.4/docbook.xsd">
+<article class="faq" id="faq" xmlns:xi="http://www.w3.org/2001/XInclude">
     <articleinfo>
 
         <author>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <!-- :xml.root=users-guide.xml:                               -->
 <appendix id="launcher-guide">
     <title>jEditLauncher for Windows</title>

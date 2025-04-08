@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article id="whatsnewarticle"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:noNamespaceSchemaLocation="https://www.docbook.org/xsd/4.4/docbook.xsd">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article id="whatsnewarticle">
 
     <title> What's new in jEdit 5.7 </title>
     <articleinfo>

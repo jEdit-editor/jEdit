@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <appendix id="activity-log">
     <!-- jEdit buffer-local properties: -->
     <!-- :indentSize=2:noTabs=true: -->
@@ -55,7 +55,7 @@
     The <guibutton>Settings</guibutton> button in the Activity Log window
     shows a dialog that lets
     you adjust the output colors, filter the messages by type, and lets you set
-    the maximum number of lines to display.  Note that larger numbers will 
+    the maximum number of lines to display.  Note that larger numbers will
     decrease the overall performance of jEdit since these lines are kept in
     memory.
     </para>
@@ -65,7 +65,7 @@
     It allows for catching problems right after they show up.
     Each error message entry is accompanied by a system beep.
     Lower priority entries may be alerted this way, if the
-    <userinput>log</userinput> option is used, 
+    <userinput>log</userinput> option is used,
     see <xref linkend="cli-usage" />.
     </para>
 </appendix>

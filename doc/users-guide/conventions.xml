@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <chapter id="conventions">
     <title>Conventions</title>
     <!-- jEdit buffer-local properties: -->
@@ -92,7 +93,7 @@
                     Pressing this letter in combination with the
                     <keycap>Alt</keycap> key activates the associated user
                     interface widget. The "F10" key can also be pressed to put
-                    focus on the menu bar, it has the same functionality as the 
+                    focus on the menu bar, it has the same functionality as the
                     Alt key in Windows. Note that this functionality is not
                     available on macOS with the <quote>macOS Adaptive</quote>
                     look and feel. See <xref linkend="appearance-pane" /> for
