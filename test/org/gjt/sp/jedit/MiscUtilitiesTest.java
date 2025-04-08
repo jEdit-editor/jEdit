@@ -36,6 +36,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -114,9 +115,8 @@ public class MiscUtilitiesTest
 	@Test
 	public void canonPathFileWindows()
 	{
-		// this test doesn't work on linux
-		if (OperatingSystem.isWindows())
-			assertEquals("C:\\Users\\jedit-dev\\blabla\\", MiscUtilities.canonPath("file://C:\\Users\\jedit-dev/blabla/"));
+		assumeTrue("depends on final File.separatorChar", OperatingSystem.isWindows());
+		assertEquals("C:\\Users\\jedit-dev\\blabla\\", MiscUtilities.canonPath("file://C:\\Users\\jedit-dev/blabla/"));
 	}
 
 	@Test
@@ -266,11 +266,8 @@ public class MiscUtilitiesTest
 	@Test
 	public void resolveSymlinksWindows3() throws Exception
 	{
-		if (OperatingSystem.isWindows())
-		{
-			// no idea how to test  that on linux
-			assertEquals("C:\\bla", MiscUtilities.resolveSymlinks("c:\\bla"));
-		}
+		assumeTrue("depends on File.getCanonicalPath", OperatingSystem.isWindows());
+		assertEquals("C:\\bla", MiscUtilities.resolveSymlinks("c:\\bla"));
 	}
 
 	@Test
@@ -483,9 +480,8 @@ public class MiscUtilitiesTest
 	@Test
 	public void getFirstSeparatorWindows4() throws Exception
 	{
-		// this test doesn't work on linux
-		if (OperatingSystem.isWindows())
-			assertEquals(7, MiscUtilities.getFirstSeparatorIndex("c:\\yoyo\\tata\\aaa.txt"));
+		assumeTrue("depends on final File.separatorChar", OperatingSystem.isWindows());
+		assertEquals(7, MiscUtilities.getFirstSeparatorIndex("c:\\yoyo\\tata\\aaa.txt"));
 	}
 
 	@Test
