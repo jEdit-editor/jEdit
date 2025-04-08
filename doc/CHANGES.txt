@@ -79,6 +79,8 @@ for contributing to this release.
 - Do not consider a directory with dot to have an extension in file system
   browser, for example when sorting by type (Björn Kautler)
 
+- Restore lost search indexing error title and message (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

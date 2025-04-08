@@ -2031,6 +2031,9 @@ helpviewer.toc.online-apidocs=jEdit API-Referenz (Online)
 
 helpviewer.search.label=Suche
 helpviewer.search.caption=Suchen nach:
+helpviewer.search.error.title=Indizierungsfehler
+helpviewer.search.error.message=Während des aufbauen des Hilfeindexes ist ein Fehler aufgetreten.\n\
+	({0})
 helpviewer.searching=Suchen...
 helpviewer.no-results=Keine Ergebnisse
 #}}}
